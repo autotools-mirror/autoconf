@@ -26,13 +26,22 @@ include(m4sugar.m4)#                                        -*- Autoconf -*-
 
 m4_include([m4sh.m4])
 
-# M4sugar and M4sh use exclusively the `m4_' prefix, but Autoconf,
-# for historical reasons, uses the old names.
+m4_copy_unm4([m4_define])
+
+m4_include([acversion.m4])
+m4_include([acgeneral.m4])
+m4_include([aclang.m4])
+m4_include([acfunctions.m4])
+m4_include([acspecific.m4])
+m4_include([acoldnames.m4])
+
+# We discourage the use of the non prefixed macro names: M4sugar maps
+# them all into `m4_'.  Autoconf has been converted to these names
+# too.  But users may still depend upon these, so reestablish them.
 
 m4_copy_unm4([m4_builtin])
 m4_copy_unm4([m4_changequote])
 m4_copy_unm4([m4_decr])
-m4_copy_unm4([m4_define])
 m4_copy_unm4([m4_defn])
 m4_copy_unm4([m4_incr])
 m4_copy_unm4([m4_index])
@@ -49,10 +58,3 @@ m4_copy_unm4([m4_traceoff])
 m4_copy_unm4([m4_traceon])
 m4_copy_unm4([m4_translit])
 m4_copy_unm4([m4_undefine])
-
-m4_include([acversion.m4])
-m4_include([acgeneral.m4])
-m4_include([aclang.m4])
-m4_include([acfunctions.m4])
-m4_include([acspecific.m4])
-m4_include([acoldnames.m4])

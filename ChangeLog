@@ -1,5 +1,14 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.m4: Instead of reactivating the macros before reading
+	Autoconf's file, do it afterwards, so that Autoconf promotes the
+	right use, but users still can use the old names.
+	Of course this revealed numerous non updated uses of old macros in
+	Autoconf's files.  Adjust them.
+	But for the time being, keep `define' alive for Autoconf.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	AC_REQUIRE and AC_DEFUN_ONCE don't work properly together. This
 	caused strange messages about AC_ARG_PROGRAM.
 	Reported by Jim Meyering.

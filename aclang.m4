@@ -104,7 +104,7 @@ define([AC_LANG_CASE],
 # unavailable.
 define([_AC_LANG_DISPATCH],
 [ifdef([$1($2)],
-       [indir([$1($2)], m4_shiftn(2, $@))],
+       [m4_indir([$1($2)], m4_shiftn(2, $@))],
        [AC_FATAL([$1: unknown language: $2])])])
 
 
@@ -421,31 +421,31 @@ $1])
 # AC_LANG_PROGRAM(C++)([PROLOGUE], [BODY])
 # ----------------------------------------
 # Same as C.
-define([AC_LANG_PROGRAM(C++)], defn([AC_LANG_PROGRAM(C)]))
+define([AC_LANG_PROGRAM(C++)], m4_defn([AC_LANG_PROGRAM(C)]))
 
 
 # AC_LANG_CALL(C++)(PROLOGUE, FUNCTION)
 # -------------------------------------
 # Same as C.
-define([AC_LANG_CALL(C++)], defn([AC_LANG_CALL(C)]))
+define([AC_LANG_CALL(C++)], m4_defn([AC_LANG_CALL(C)]))
 
 
 # AC_LANG_FUNC_LINK_TRY(C++)(FUNCTION)
 # ------------------------------------
 # Same as C.
-define([AC_LANG_FUNC_LINK_TRY(C++)], defn([AC_LANG_FUNC_LINK_TRY(C)]))
+define([AC_LANG_FUNC_LINK_TRY(C++)], m4_defn([AC_LANG_FUNC_LINK_TRY(C)]))
 
 
 # AC_LANG_BOOL_COMPILE_TRY(C++)(PROLOGUE, EXPRESSION)
 # ---------------------------------------------------
 # Same as C.
-define([AC_LANG_BOOL_COMPILE_TRY(C++)], defn([AC_LANG_BOOL_COMPILE_TRY(C)]))
+define([AC_LANG_BOOL_COMPILE_TRY(C++)], m4_defn([AC_LANG_BOOL_COMPILE_TRY(C)]))
 
 
 # AC_LANG_INT_SAVE(C++)(PROLOGUE, EXPRESSION)
 # -------------------------------------------
 # Same as C.
-define([AC_LANG_INT_SAVE(C++)], defn([AC_LANG_INT_SAVE(C)]))
+define([AC_LANG_INT_SAVE(C++)], m4_defn([AC_LANG_INT_SAVE(C)]))
 
 
 
@@ -503,7 +503,7 @@ define([AC_LANG_COMPILER],
 # Ensure we have a compiler for the current LANG.
 AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
 [_AC_REQUIRE([AC_LANG_COMPILER(]_AC_LANG[)],
-             [indir([AC_LANG_COMPILER(]_AC_LANG[)])])])
+             [m4_indir([AC_LANG_COMPILER(]_AC_LANG[)])])])
 
 
 # AC_REQUIRE_CPP
@@ -1739,7 +1739,7 @@ case $ac_cv_f77_mangling in
   *)      ac_val="unknown" ;;
 esac
 case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
-ifelse(index([$1],[_]),-1,[],
+ifelse(m4_index([$1],[_]),-1,[],
 [case $ac_cv_f77_mangling in *," extra underscore"*) ac_val="$ac_val"_ ;; esac
 ])
 m4_default([$2],[$1])="$ac_val"

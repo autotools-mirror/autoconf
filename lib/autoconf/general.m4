@@ -229,7 +229,7 @@ define([AC_BEFORE],
 #
 # - BODY-TO-EXPAND == m4_indir([NAME-TO-CHECK])
 #   In the case of macros with irregular names.  For instance:
-#     _AC_REQUIRE([AC_LANG_COMPILER(C)], [indir([AC_LANG_COMPILER(C)])])
+#     _AC_REQUIRE([AC_LANG_COMPILER(C)], [m4_indir([AC_LANG_COMPILER(C)])])
 #   which means `if the macro named `AC_LANG_COMPILER(C)' (the parens are
 #   part of the name, it is not an argument) has not been run, then
 #   call it.'
@@ -370,7 +370,7 @@ define([AH_TEMPLATE],
 # ------------
 # Output TEXT at the top of `config.h.in'.
 define([AH_TOP],
-[define([_AH_COUNTER], incr(_AH_COUNTER))dnl
+[define([_AH_COUNTER], m4_incr(_AH_COUNTER))dnl
 AH_VERBATIM([0000]_AH_COUNTER, [$1])])
 
 
@@ -378,7 +378,7 @@ AH_VERBATIM([0000]_AH_COUNTER, [$1])])
 # ---------------
 # Output TEXT at the bottom of `config.h.in'.
 define([AH_BOTTOM],
-[define([_AH_COUNTER], incr(_AH_COUNTER))dnl
+[define([_AH_COUNTER], m4_incr(_AH_COUNTER))dnl
 AH_VERBATIM([zzzz]_AH_COUNTER, [$1])])
 
 # Initialize.
@@ -603,7 +603,8 @@ define([AC_FOREACH],
 #
 define([AC_HELP_STRING],
 [m4_pushdef([AC_Prefix], m4_default([$3], [                          ]))dnl
-m4_pushdef([AC_Prefix_Format], [  %-]m4_eval(len(AC_Prefix) - 3)[s ])dnl [  %-23s ]
+m4_pushdef([AC_Prefix_Format],
+           [  %-]m4_eval(m4_len(AC_Prefix) - 3)[s ])dnl [  %-23s ]
 m4_text_wrap([$2], AC_Prefix, m4_format(AC_Prefix_Format, [$1]))dnl
 m4_popdef([AC_Prefix_Format])dnl
 m4_popdef([AC_Prefix])dnl
@@ -663,7 +664,8 @@ $1])dnl
 # The second quote in the translit is just to cope with font-lock-mode
 # which sees the opening of a string.
 define([AC_REVISION],
-[m4_divert([REVISION], [@%:@ From configure.in translit([$1], $"").])dnl
+[m4_divert([REVISION],
+           [@%:@ From configure.in m4_translit([$1], $"").])dnl
 ])
 
 
@@ -679,23 +681,23 @@ define([AC_REVISION],
 # Update this `AC_PREREQ' statement to require the current version of
 # Autoconf.  But fail if ever this autoupdate is too old.
 #
-# Note that `defn([AC_ACVERSION])' below are expanded before calling
+# Note that `m4_defn([AC_ACVERSION])' below are expanded before calling
 # `AU_DEFUN', i.e., it is hard coded.  Otherwise it would be quite
 # complex for autoupdate to import the value of `AC_ACVERSION'.  We
 # could `AU_DEFUN' `AC_ACVERSION', but this would replace all its
 # occurrences with the current version of Autoconf, which is certainly
 # not what mean the user.
 AU_DEFUN([AC_PREREQ],
-[ifelse(m4_version_compare(]defn([AC_ACVERSION])[, [$1]), -1,
+[ifelse(m4_version_compare(]m4_defn([AC_ACVERSION])[, [$1]), -1,
     [m4_fatal([Autoconf version $1 or higher is required for this script])])dnl
-[AC_PREREQ(]]defn([AC_ACVERSION])[[)]])
+[AC_PREREQ(]]m4_defn([AC_ACVERSION])[[)]])
 
 
 # AC_PREREQ(VERSION)
 # ------------------
 # Complain and exit if the Autoconf version is less than VERSION.
 define([AC_PREREQ],
-[ifelse(m4_version_compare(defn([AC_ACVERSION]), [$1]), -1,
+[ifelse(m4_version_compare(m4_defn([AC_ACVERSION]), [$1]), -1,
      [AC_FATAL([Autoconf version $1 or higher is required for this script])])])
 
 
@@ -3657,7 +3659,7 @@ define([AC_LIST_COMMANDS_COMMANDS])
 # clashes :(  On the other hand, I'd like to avoid weird keys (e.g.,
 # depending upon __file__ or the pid).
 AU_DEFUN([AC_OUTPUT_COMMANDS],
-[define([_AC_OUTPUT_COMMANDS_CNT], incr(_AC_OUTPUT_COMMANDS_CNT))dnl
+[define([_AC_OUTPUT_COMMANDS_CNT], m4_incr(_AC_OUTPUT_COMMANDS_CNT))dnl
 dnl Double quoted since that was the case in the original macro.
 AC_CONFIG_COMMANDS([default-]_AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
 ])
@@ -3775,7 +3777,7 @@ define([AC_LIST_LINKS_COMMANDS])
 AU_DEFUN([AC_LINK_FILES],
 [ifelse($#, 2, ,
         [m4_fatal([$0: incorrect number of arguments])])dnl
-define([_AC_LINK_FILES_CNT], incr(_AC_LINK_FILES_CNT))dnl
+define([_AC_LINK_FILES_CNT], m4_incr(_AC_LINK_FILES_CNT))dnl
 ac_sources="$1"
 ac_dests="$2"
 while test -n "$ac_sources"; do

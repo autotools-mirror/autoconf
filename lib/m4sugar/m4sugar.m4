@@ -632,7 +632,7 @@ m4_define([_m4_foreach],
 # return makeNUMBER.
 m4_define([_m4_divert],
 [ifdef([_m4_divert($1)],
-       [indir([_m4_divert($1)])],
+       [m4_indir([_m4_divert($1)])],
        [$1])])
 
 
