@@ -550,7 +550,7 @@ EOF
 	echo t90-cray-unicos${UNAME_RELEASE}
 	exit 0 ;;
     CRAY*T3E:*:*:*)
-	echo t3e-cray-unicosmk${UNAME_RELEASE}
+	echo alpha-cray-unicosmk${UNAME_RELEASE}
 	exit 0 ;;
     CRAY-2:*:*:*)
 	echo cray2-cray-unicos

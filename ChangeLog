@@ -1,3 +1,7 @@
+1999-07-11  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Cray T3E has an Alpha CPU.
+
 1999-07-04  Mark Elbrecht  <snowball3@bigfoot.com>
 
 	* acspecific.m4 (AC_PROG_CXX): Look for gpp after g++. gpp is the
