@@ -1,3 +1,10 @@
+2004-12-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/mdate-sh: Don't use "set - x`$ls_command /`", as zsh mishandles
+	the spaces inside $ls_command.  Problem reported by Loulou Pouchet in
+	<http://lists.gnu.org/archive/html/autoconf/2004-12/msg00074.html>.
+	Don't use "set - x"; plain "set x" is enough, and simplifies debugging.
+
 2004-12-07  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_GETMNTENT): Fix typo in previous
