@@ -1,3 +1,8 @@
+2004-08-12  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/Autom4te/General.pm (END): Return correct exit status even
+	if unlink succeeds and sets $?.  Needed with Solaris 8's perl 5.00503.
+
 2004-08-09  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/torture.at (Deep Package): Use configure.in, not configure.ac,
