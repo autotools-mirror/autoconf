@@ -1371,7 +1371,7 @@ AC_CACHE_VAL(ac_cv_path_$1,
   /*)
   ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
   ;;
-  ?:/*)			 
+  ?:/*)
   ac_cv_path_$1="[$]$1" # Let the user override the test with a dos path.
   ;;
   *)
@@ -1544,10 +1544,10 @@ AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
 [ac_func_search_save_LIBS="$LIBS"
 ac_cv_search_$1="no"
 AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
-test "$ac_cv_search_$1" = "no" && for i in $2; do
-LIBS="-l$i $5 $ac_func_search_save_LIBS"
+test "$ac_cv_search_$1" = "no" && for ac_lib in $2; do
+LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
 AC_TRY_LINK_FUNC([$1],
-[ac_cv_search_$1="-l$i"
+[ac_cv_search_$1="-l$ac_lib"
 break])
 done
 LIBS="$ac_func_search_save_LIBS"])
