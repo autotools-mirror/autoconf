@@ -1,3 +1,8 @@
+2001-06-01  Akim Demaille  <akim@epita.fr>
+
+	* m4sugar.m4 (m4_defn, m4_undefine, m4_popdef): Clarify the error
+	message.
+
 2001-05-31  Akim Demaille  <akim@epita.fr>
 
 	* acfunctions, acheaders, acidentifiers, acmakevars, acprograms:

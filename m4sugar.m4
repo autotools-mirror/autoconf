@@ -455,7 +455,7 @@ m4_define([m4_default],
 # undefined.
 m4_define([m4_defn],
 [m4_ifndef([$1],
-           [m4_fatal([$0: undefined: $1])])dnl
+           [m4_fatal([$0: undefined macro: $1])])dnl
 m4_builtin([defn], $@)])
 
 
@@ -493,7 +493,7 @@ _m4_dumpdefs_down([$1])])
 # undefined.
 m4_define([m4_popdef],
 [m4_ifndef([$1],
-           [m4_fatal([$0: undefined: $1])])dnl
+           [m4_fatal([$0: undefined macro: $1])])dnl
 m4_builtin([popdef], $@)])
 
 
@@ -538,7 +538,7 @@ m4_define([_m4_shiftn],
 # undefined.
 m4_define([m4_undefine],
 [m4_ifndef([$1],
-           [m4_fatal([$0: undefined: $1])])dnl
+           [m4_fatal([$0: undefined macro: $1])])dnl
 m4_builtin([undefine], $@)])
 
 
