@@ -4286,6 +4286,34 @@ separately in a standard environment.  Many implementations have
 know of any implementation that has @file{stdint.h} but not
 @file{inttypes.h}.  Nor do I know of any free software that includes
 @file{stdint.h}; @file{stdint.h} seems to be a creation of the committee.
+
+@item @file{net/if.h}
+On Darwin, this file requires that @file{sys/socket.h} be included
+beforehand.  One should run:
+
+@example
+AC_CHECK_HEADERS([sys/socket.h])
+AC_CHECK_HEADERS([net/if.h], [], [],
+[#include <stdio.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_SYS_SOCKET_H
+# include <sys/socket.h>
+#endif
+])
+@end example
+
+@item @file{stdlib.h}
+On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
+
+@item @file{sys/socket.h}
+On Darwin, @file{stdlib.h} is a prerequisite.
 @end table
 
 
@@ -14853,6 +14881,9 @@ checking for gcc option to accept ANSI C... none needed
 checking for number.h... yes
 checking for pi.h... yes
 @end example
+
+See @ref{Particular Headers}, for a list of headers with their
+prerequisite.
 
 @c ===================================================== History of Autoconf.
 

@@ -1,12 +1,17 @@
+2003-04-08  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Particular Headers): Some about sys/socket.h,
+	net/if.h, stdlib.h.
+
 2003-04-01  Derek Price  <derek@ximbiot.com>
 
 	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Correct syntax error
-	from Akim's checkin of 3-29.
-	
+	from Akim's checkin of 2003-03-29.
+
 2003-04-01  Derek Price  <derek@ximbiot.com>
 
 	* tests/torture.at (Configuring subdirectories): Add missing
-	close-quote for Akim's change from 3-28.
+	close-quote for Akim's change from 2003-03-28.
 
 2003-04-01  Akim Demaille  <akim@epita.fr>
 
@@ -20,8 +25,8 @@
 
 2003-03-31  Derek Price  <derek@ximbiot.com>
 
-	* lib/autotest/general.m4: Revert the checkin from 3-27 which removed
-	the main loop.
+	* lib/autotest/general.m4: Revert the checkin from 2003-03-27
+	which removed the main loop.
 	Thanks to Akim Demaille.
 
 2003-03-29  Akim Demaille  <akim@epita.fr>
