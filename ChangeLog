@@ -1,3 +1,9 @@
+2002-06-07  Akim Demaille  <akim@epita.fr>
+
+	* tests/tools.at (autoconf: forbidden tokens, basic)
+	(autoconf: forbidden tokens, exceptions): Adjust to the change of
+	words in autom4te.in.
+
 2002-06-07  Peter Eisentraut  <peter_e@gmx.net>
 
 	* lib/autoconf/c.m4 (AC_LANG_PROGRAM(C)): Use

@@ -252,6 +252,8 @@ _AS_BAR
 
 AT_DATA_M4SH([experr],
 [[configure.ac:2: error: possibly undefined macro: m4_foo
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
 configure.ac:3: error: possibly undefined macro: _m4_bar
 configure.ac:4: error: possibly undefined macro: AS_FOO
 configure.ac:5: error: possibly undefined macro: _AS_BAR
@@ -291,6 +293,8 @@ It would be very bad if Autoconf forgot to expand [AS_]INIT!
 
 AT_DATA_M4SH([experr],
 [[configure.ac:1: error: possibly undefined macro: AS_INIT
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
 configure.ac:7: error: possibly undefined macro: AS_ALLOWED_NOT
 configure.ac:10: error: possibly undefined macro: FORBIDDEN
 configure.ac:14: error: possibly undefined macro: AS_THIS_IS_INVALID
