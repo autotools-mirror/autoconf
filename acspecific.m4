@@ -1464,40 +1464,38 @@ int     ng, np, s, child;
 int
 main ()
 {
-        pid = getpid();
-        pg1 = getpgrp(0);
-        pg2 = getpgrp();
-        pg3 = getpgrp(pid);
-        pg4 = getpgrp(1);
+  pid = getpid ();
+  pg1 = getpgrp (0);
+  pg2 = getpgrp ();
+  pg3 = getpgrp (pid);
+  pg4 = getpgrp (1);
 
-        /*
-         * If all of these values are the same, it's pretty sure that
-         * we're on a system that ignores getpgrp's first argument.
-         */
-        if (pg2 == pg4 && pg1 == pg3 && pg2 == pg3)
-                exit(0);
+  /* If all of these values are the same, it's pretty sure that we're
+     on a system that ignores getpgrp's first argument.  */
+  if (pg2 == pg4 && pg1 == pg3 && pg2 == pg3)
+    exit (0);
 
-        child = fork();
-        if (child < 0)
-                exit(1);
-        else if (child == 0) {
-                np = getpid();
-                /*
-                 * If this is Sys V, this will not work; pgrp will be
-                 * set to np because setpgrp just changes a pgrp to be
-                 * the same as the pid.
-                 */
-                setpgrp(np, pg1);
-                ng = getpgrp(0);        /* Same result for Sys V and BSD */
-                if (ng == pg1) {
-                        exit(1);
-                } else {
-                        exit(0);
-                }
-        } else {
-                wait(&s);
-                exit(s>>8);
-        }
+  child = fork ();
+  if (child < 0)
+    exit(1);
+  else if (child == 0)
+    {
+      np = getpid ();
+      /*  If this is Sys V, this will not work; pgrp will be set to np
+	 because setpgrp just changes a pgrp to be the same as the
+	 pid.  */
+      setpgrp (np, pg1);
+      ng = getpgrp (0);        /* Same result for Sys V and BSD */
+      if (ng == pg1)
+  	exit (1);
+      else
+  	exit (0);
+    }
+  else
+    {
+      wait (&s);
+      exit (s>>8);
+    }
 }], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
    AC_MSG_ERROR(cannot check getpgrp if cross compiling))
 ])

@@ -359,9 +359,9 @@ define(AC_TR_SH,
 
 
 
-## --------------------------- ##
-## Implementing Autoconf loops ##
-## --------------------------- ##
+## ----------------------------- ##
+## Implementing Autoconf loops.  ##
+## ----------------------------- ##
 
 
 # AC_FOREACH(VARIABLE, LIST, EXPRESSION)
@@ -394,9 +394,9 @@ AC_DEFUN(AC_SPECIALIZE,
        [indir([$1], m4_shift($@))])])
 
 
-## --------------------------------- ##
-## Helping macros to display strings ##
-## --------------------------------- ##
+## ----------------------------------- ##
+## Helping macros to display strings.  ##
+## ----------------------------------- ##
 
 
 # AC_HELP_STRING(LHS, RHS[, COLUMN])
@@ -448,9 +448,11 @@ popdef([AC_Prefix_Format])dnl
 popdef([AC_Prefix])dnl
 ])
 
-## -------------- ##
-## Initialization ##
-## -------------- ##
+
+
+## ---------------- ##
+## Initialization.  ##
+## ---------------- ##
 
 
 # AC_INIT_NOTICE
@@ -3320,8 +3322,9 @@ ifset([AC_LIST_COMMANDS],
       [AC_OUTPUT_COMMANDS_COMMANDS()])dnl
 
 cat >>$CONFIG_STATUS <<EOF
+
 #
-# AC_OUTPUT_COMMANDS section.
+# CONFIG_COMMANDS section.
 #
 
 undivert(AC_DIVERSION_ICMDS)dnl

@@ -1,5 +1,10 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Formatting changes.
+	* acspecific.m4: Likewise.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Use the style we promote.
 
 	* doc/autoconf.texi (Header Templates): Promote #if over #ifdef;
