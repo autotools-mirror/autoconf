@@ -896,14 +896,16 @@ define(AC_RSH,
 
 dnl ### Checks for header files
 
-
+dnl AC_HEADER_STDC
+dnl --------------
 AC_DEFUN(AC_HEADER_STDC,
 [AC_REQUIRE_CPP()dnl
 AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
 [AC_TRY_CPP([#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <float.h>], ac_cv_header_stdc=yes, ac_cv_header_stdc=no)
+#include <float.h>
+], ac_cv_header_stdc=yes, ac_cv_header_stdc=no)
 
 if test $ac_cv_header_stdc = yes; then
   # SunOS 4.x string.h does not declare mem*, contrary to ANSI.
@@ -936,12 +938,16 @@ fi])
 if test $ac_cv_header_stdc = yes; then
   AC_DEFINE(STDC_HEADERS, 1, [Define if you have the ANSI C header files.])
 fi
-])
+])dnl AC_HEADER_STDC
 
+
+dnl AC_HEADER_MAJOR
+dnl ---------------
 AC_DEFUN(AC_HEADER_MAJOR,
 [AC_CACHE_CHECK(whether sys/types.h defines makedev,
   ac_cv_header_sys_types_h_makedev,
-[AC_TRY_LINK([#include <sys/types.h>], [return makedev(0, 0);],
+[AC_TRY_LINK([#include <sys/types.h>
+], [return makedev(0, 0);],
   ac_cv_header_sys_types_h_makedev=yes, ac_cv_header_sys_types_h_makedev=no)
 ])
 
@@ -958,7 +964,8 @@ AC_CHECK_HEADER(sys/mkdev.h,
                                 declared in <sysmacros.h>.])])
   fi
 fi
-])
+])dnl AC_HEADER_MAJOR
+
 
 dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
 dnl ----------------------------------------------------
@@ -969,7 +976,8 @@ AC_DEFUN(AC_CHECK_HEADER_DIRENT,
 AC_MSG_CHECKING([for $1 that defines DIR])
 AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
 [AC_TRY_COMPILE([#include <sys/types.h>
-#include <$1>], [DIR *dirp = 0;],
+#include <$1>
+], [DIR *dirp = 0;],
   eval "ac_cv_header_dirent_$ac_safe=yes",
   eval "ac_cv_header_dirent_$ac_safe=no")])dnl
 if eval "test \"`echo '$ac_cv_header_dirent_'$ac_safe`\" = yes"; then
@@ -1802,9 +1810,10 @@ else
   AC_CHECK_HEADER(nlist.h,
   [AC_DEFINE(NLIST_STRUCT, 1, [Define if you have <nlist.h>.])
   AC_CACHE_CHECK([for n_un in struct nlist], ac_cv_struct_nlist_n_un,
-  [AC_TRY_COMPILE([#include <nlist.h>],
-  [struct nlist n; n.n_un.n_name = 0;],
-  ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])
+  [AC_TRY_COMPILE([#include <nlist.h>
+],
+                  [struct nlist n; n.n_un.n_name = 0;],
+                  ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])
   if test $ac_cv_struct_nlist_n_un = yes; then
     AC_DEFINE(NLIST_NAME_UNION, 1,
               [Define if your `struct nlist' has an `n_un' member.])
@@ -1921,6 +1930,8 @@ fi
 ])dnl AC_FUNC_SETVBUF_REVERSED
 
 
+dnl AC_FUNC_GETMNTENT
+dnl -----------------
 AC_DEFUN(AC_FUNC_GETMNTENT,
 [# getmntent is in -lsun on Irix 4, -lseq on Dynix/PTX, -lgen on Unixware.
 AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
@@ -1931,6 +1942,8 @@ AC_CHECK_FUNC(getmntent,
                          [Define if you have the `getmntent' function.])])])
 
 
+dnl AC_FUNC_MKTIME
+dnl --------------
 AC_DEFUN(AC_FUNC_MKTIME,
 [AC_REQUIRE([AC_HEADER_TIME])dnl
 AC_CHECK_HEADERS(sys/time.h unistd.h)
@@ -2091,8 +2104,11 @@ ac_cv_func_working_mktime=no)])
 if test $ac_cv_func_working_mktime = no; then
   LIBOBJS="$LIBOBJS mktime.${ac_objext}"
 fi
-])
+])dnl AC_FUNC_MKTIME
 
+
+dnl AC_FUNC_STRFTIME
+dnl ----------------
 AC_DEFUN(AC_FUNC_STRFTIME,
 [AC_CHECK_FUNC(strftime,
                [AC_DEFINE(HAVE_STRFTIME, 1,
@@ -2101,8 +2117,12 @@ AC_DEFUN(AC_FUNC_STRFTIME,
 AC_CHECK_LIB(intl, strftime,
 [AC_DEFINE(HAVE_STRFTIME, 1,
            [Define if you have the `strftime' function.])
-LIBS="-lintl $LIBS"])])])
+LIBS="-lintl $LIBS"])])dnl
+])dnl AC_FUNC_STRFTIME
 
+
+dnl AC_FUNC_MEMCMP
+dnl --------------
 AC_DEFUN(AC_FUNC_MEMCMP,
 [AC_CACHE_CHECK(for 8-bit clean memcmp, ac_cv_func_memcmp_clean,
 [AC_TRY_RUN([
@@ -2115,8 +2135,11 @@ main()
 ac_cv_func_memcmp_clean=no)])
 test $ac_cv_func_memcmp_clean = no && LIBOBJS="$LIBOBJS memcmp.${ac_objext}"
 AC_SUBST(LIBOBJS)dnl
-])
+])dnl AC_FUNC_MEMCMP
 
+
+dnl AC_FUNC_SELECT_ARGTYPES
+dnl -----------------------
 AC_DEFUN(AC_FUNC_SELECT_ARGTYPES,
 [AC_MSG_CHECKING([types of arguments for select()])
  AC_CACHE_VAL(ac_cv_func_select_arg234,dnl
@@ -2158,24 +2181,28 @@ extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_sel
                     [Define to the type of args 2, 3 and 4 for `select'.])
  AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5, ($ac_cv_func_select_arg5),
                     [Define to the type of arg5 for `select'.])
-])
+])dnl AC_FUNC_SELECT_ARGTYPES
 
 
 dnl ### Checks for structure members
 
 
+dnl AC_HEADER_TIME
+dnl --------------
 AC_DEFUN(AC_HEADER_TIME,
 [AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
   ac_cv_header_time,
 [AC_TRY_COMPILE([#include <sys/types.h>
 #include <sys/time.h>
-#include <time.h>],
+#include <time.h>
+],
 [struct tm *tp;], ac_cv_header_time=yes, ac_cv_header_time=no)])
 if test $ac_cv_header_time = yes; then
   AC_DEFINE(TIME_WITH_SYS_TIME, 1,
             [Define if you can safely include both <sys/time.h> and <time.h>.])
 fi
-])
+])dnl AC_HEADER_TIME
+
 
 dnl AC_STRUCT_TM
 dnl ------------
@@ -2185,19 +2212,24 @@ AC_DEFUN(AC_STRUCT_TM,
 [AC_CACHE_CHECK([whether struct tm is in sys/time.h or time.h],
   ac_cv_struct_tm,
 [AC_TRY_COMPILE([#include <sys/types.h>
-#include <time.h>],
+#include <time.h>
+],
 [struct tm *tp; tp->tm_sec;],
   ac_cv_struct_tm=time.h, ac_cv_struct_tm=sys/time.h)])
 if test $ac_cv_struct_tm = sys/time.h; then
   AC_DEFINE(TM_IN_SYS_TIME, 1,
             [Define if your <sys/time.h> declares `struct tm'.])
 fi
-])
+])dnl AC_STRUCT_TM
 
+
+dnl AC_STRUCT_TIMEZONE
+dnl ------------------
 AC_DEFUN(AC_STRUCT_TIMEZONE,
 [AC_REQUIRE([AC_STRUCT_TM])dnl
 AC_C_STRUCT_MEMBER(tm_zone, [#include <sys/types.h>
-#include <$ac_cv_struct_tm>], [struct tm], tm_zone)
+#include <$ac_cv_struct_tm>
+], [struct tm], tm_zone)
 if test "$ac_cv_c_struct_member_tm_zone" = yes; then
   AC_DEFINE(HAVE_TM_ZONE, 1,
             [Define if your `struct tm' has `tm_zone'.])
@@ -2217,20 +2249,28 @@ changequote([, ])dnl
                array `tzname'.])
   fi
 fi
-])
+])dnl AC_STRUCT_TIMEZONE
 
+
+dnl AC_STRUCT_ST_BLKSIZE
+dnl --------------------
 AC_DEFUN(AC_STRUCT_ST_BLKSIZE,
 [AC_C_STRUCT_MEMBER(st_blksize, [#include <sys/types.h>
-#include <sys/stat.h>], [struct stat], st_blksize)
+#include <sys/stat.h>
+], [struct stat], st_blksize)
 if test $ac_cv_c_struct_member_st_blksize = yes; then
   AC_DEFINE(HAVE_ST_BLKSIZE, 1,
             [Define if your `struct stat' has `st_blksize'.])
 fi
-])
+])dnl AC_STRUCT_ST_BLKSIZE
 
+
+dnl AC_STRUCT_ST_BLOCKS
+dnl -------------------
 AC_DEFUN(AC_STRUCT_ST_BLOCKS,
 [AC_C_STRUCT_MEMBER(st_blocks, [#include <sys/types.h>
-#include <sys/stat.h>], [struct stat], st_blocks)
+#include <sys/stat.h>
+], [struct stat], st_blocks)
 if test $ac_cv_c_struct_member_st_blocks = yes; then
   AC_DEFINE(HAVE_ST_BLOCKS, 1,
             [Define if your `struct stat' has `st_blocks'.])
@@ -2238,16 +2278,20 @@ else
   LIBOBJS="$LIBOBJS fileblocks.${ac_objext}"
 fi
 AC_SUBST(LIBOBJS)dnl
-])
+])dnl AC_STRUCT_ST_BLOCKS
 
+
+dnl AC_STRUCT_ST_RDEV
+dnl -----------------
 AC_DEFUN(AC_STRUCT_ST_RDEV,
 [AC_C_STRUCT_MEMBER(st_rdev, [#include <sys/types.h>
-#include <sys/stat.h>], [struct stat], st_rdev)
+#include <sys/stat.h>
+], [struct stat], st_rdev)
 if test $ac_cv_c_struct_member_st_rdev = yes; then
   AC_DEFINE(HAVE_ST_RDEV, 1,
             [Define if your `struct stat' has `st_rdev'.])
 fi
-])
+])dnl AC_STRUCT_ST_RDEV
 
 
 dnl ### Checks for compiler characteristics
@@ -2316,15 +2360,19 @@ AC_DEFUN(AC_C_BIGENDIAN,
 [ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
 AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/param.h>], [
-#if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
+#include <sys/param.h>
+],
+[#if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
  bogus endian macros
-#endif], [# It does; now see whether it defined to BIG_ENDIAN or not.
+#endif
+],
+[# It does; now see whether it defined to BIG_ENDIAN or not.
 AC_TRY_COMPILE([#include <sys/types.h>
-#include <sys/param.h>], [
-#if BYTE_ORDER != BIG_ENDIAN
+#include <sys/param.h>
+], [#if BYTE_ORDER != BIG_ENDIAN
  not big endian
-#endif], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
+#endif
+], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
 if test $ac_cv_c_bigendian = unknown; then
 AC_TRY_RUN([main () {
   /* Are we little or big endian?  From Harbison&Steele.  */

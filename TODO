@@ -48,15 +48,7 @@ Its entry in autoheader.m4 should be removed.
 ** Generalize the association of commands to an output file.
 See AC_CONFIG_FILES: it is possible to associate a command which is
 run when the file is creating.  This should be extended to all the
-other AC_CONFIG entities.  But then there is a question: should the
-commands associated to a HEADER be in config.status's HEADER section,
-ran right after the file is created, or we should just plug the
-commands in the section of tagged AC_OUTPUT_COMMANDS.  There are two
-issues here: if we want to display the commands ran, then we want them
-to appear after `creating ...', not at the end.  It is also better wrt
-trapping (since files are finalized sooner, there are less files to
-remove when C-c is caught).  On the other hand, it is a bit less
-pleasant to program in Autoconf.
+other AC_CONFIG entities.
 
 ** Rename AC_CONFIG_HEADER as AC_CONFIG_HEADERS?
 See the FIXME note in the code.
@@ -77,9 +69,6 @@ name: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
 This is what is needed for LTLIBOBJS and others.
 
 ** Document GNATS?
-
-** gettext (This is more for Automake, but I'm afraid to forget --akim)
-There a nsl_cv_ which is actually nls_cv_.
 
 ** fnmatch
 From: Stanislav Brabec <utx@k332.feld.cvut.cz>

@@ -1,5 +1,9 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4: Formating changes.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Formating changes.
 	* acspecific.m4: Likewise.
 

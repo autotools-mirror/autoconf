@@ -2465,8 +2465,8 @@ AC_VAR_POPDEF([ac_Lib])dnl
 
 
 
-dnl AC_HAVE_LIBRARY(LIBRARY, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl                 [, OTHER-LIBRARIES]]])
+dnl AC_HAVE_LIBRARY
+dnl ---------------
 AC_DEFUN(AC_HAVE_LIBRARY,
 [AC_HASBEEN([$0], [; instead use AC_CHECK_LIB])])
 
