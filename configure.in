@@ -14,14 +14,14 @@ AC_SUBST(PROGS)dnl
 if test "$PERL" != no-perl; then
   PROGS=autoscan
 else
-  AC_VERBOSE(autoscan will not be built since perl is not found)
+  AC_WARN(autoscan will not be built since perl is not found)
 fi
 
 AC_PROGRAM_CHECK(BASH, bash, no-bash)
 if test "$BASH" != no-bash; then
   PROGS="$PROGS shindent"
 else
-  AC_VERBOSE(shindent will not be built since bash is not found)
+  AC_WARN(shindent will not be built since bash is not found)
 fi
 
 AC_PROG_INSTALL

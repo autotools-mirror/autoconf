@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.97
-@set VERSION 1.97
+@set EDITION 1.98
+@set VERSION 1.98
 @set UPDATED August 1994
 
 @iftex
@@ -1472,8 +1472,8 @@ a sequence of arguments with the same type to be accessed as if they
 were an array of values.
 @end defmac
 
-@defmac AC_TRY_CROSS
-@maindex TRY_CROSS
+@defmac AC_C_CROSS
+@maindex C_CROSS
 If the C compiler being used does not produce executables that can run
 on the system where @code{configure} is being run, set the shell
 variable @code{cross_compiling} to @samp{yes}, otherwise @samp{no}.
@@ -2111,7 +2111,7 @@ If the optional argument @var{action-if-cross-compiling} is given and
 the C compiler being used does not produce executables that run on the
 system where @code{configure} is being run, then the test program is not
 run.  Instead, the shell commands @var{action-if-cross-compiling} are
-run.  If that argument is given, this macro calls @code{AC_TRY_CROSS}
+run.  If that argument is given, this macro calls @code{AC_C_CROSS}
 if it has not already been called (@pxref{Compiler Characteristics}).
 @end defmac
 
@@ -2339,14 +2339,24 @@ easy to change how and when each kind of message is printed; such
 changes need only be made to the macro definitions, and all of the
 callers change automatically.
 
+@defmac AC_CHECKING (@var{feature-description})
+@maindex CHECKING
+This macro is similar to @code{AC_MSG_CHECKING}, except that it prints a
+newline after the @var{feature-description}.  It is considered obsolete.
+@end defmac
+
 @defmac AC_MSG_CHECKING (@var{feature-description})
 @maindex MSG_CHECKING
 Notify the user that @code{configure} is checking for a particular
-feature.  This macro prints a message that starts with @samp{checking }.
-It prints nothing if @code{configure} is run with the @samp{--silent} or
-@samp{--quiet} option.  The @var{feature-description} should be
-something like @samp{whether the Fortran compiler accepts C++ comments}
-or @samp{for c89}.
+feature.  This macro prints a message that starts with @samp{checking }
+and ends with @samp{...} and no newline.  It must be followed by a call
+to @code{AC_MSG_RESULT} to print the result of the check and the
+newline.  The @var{feature-description} should be something like
+@samp{whether the Fortran compiler accepts C++ comments} or @samp{for
+c89}.
+
+This macro prints nothing if @code{configure} is run with the
+@samp{--quiet} or @samp{--silent} option.
 @end defmac
 
 @defmac AC_MSG_ERROR (@var{error-description})
@@ -2360,10 +2370,15 @@ $HOME for \$HOME}.
 
 @defmac AC_MSG_RESULT (@var{result-description})
 @maindex MSG_RESULT
-Notify the user of the results of a check.  This information is
-only printed if @code{configure} is run with the @samp{--verbose}
-option.  @var{result-description} should be something like @samp{setting
-ADA to $ADA}.
+Notify the user of the results of a check.  @var{result-description} is
+almost always the value of the cache variable for the check, typically
+@samp{yes}, @samp{no}, or a file name.  This macro should follow a call
+to @code{AC_MSG_CHECKING}, and the @var{result-description} should be
+the completion of the message printed by the call to
+@code{AC_MSG_CHECKING}.
+
+This macro prints nothing if @code{configure} is run with the
+@samp{--quiet} or @samp{--silent} option.
 @end defmac
 
 @defmac AC_MSG_WARN (@var{problem-description})
@@ -2374,6 +2389,13 @@ continues running afterward, so macros that call @code{AC_MSG_WARN} should
 provide a default (back-up) behavior for the situations they warn about.
 @var{problem-description} should be something like @samp{ln -s seems to
 make hard links}.
+@end defmac
+
+@defmac AC_VERBOSE (@var{result-description})
+@maindex VERBOSE
+This macro is similar to @code{AC_MSG_RESULT}, except that it is meant to
+follow a call to @code{AC_CHECKING} instead of @code{AC_MSG_CHECKING}.
+It is considered obsolete.
 @end defmac
 
 @node Language Choice, Macro Ordering, Printing Messages, General Purpose Macros
@@ -3031,17 +3053,19 @@ it had to perform all of the checks every time.
 @maindex CACHE_VAL
 Ensure that the results of the check identified by @var{cache-id} are
 available.  If the results of the check were in the cache file that was
-read, print a verbose message saying so; otherwise, run the shell
-commands @var{commands-to-set-it}.  Those commands should have no side
-effects except for setting the variable @var{cache-id}.  In particular,
-they should not call @code{AC_DEFINE}; the code that follows the call to
-@code{AC_CACHE_VAL} should do that, based on the cached value.  Also,
-they should not print any messages, for example with @code{AC_MSG_CHECKING};
-do that before calling @code{AC_CACHE_VAL}, so the messages are printed
-regardless of whether the results of the check are retrieved from the
-cache or determined by running the shell commands.  If the shell
-commands are run to determine the value, the value will be saved in the
-cache file just before @code{configure} creates its output files.
+read, and @code{configure} was not given the @samp{--quiet} or
+@samp{--silent} option, print a message saying so; otherwise, run the
+shell commands @var{commands-to-set-it}.  Those commands should have no
+side effects except for setting the variable @var{cache-id}.  In
+particular, they should not call @code{AC_DEFINE}; the code that follows
+the call to @code{AC_CACHE_VAL} should do that, based on the cached
+value.  Also, they should not print any messages, for example with
+@code{AC_MSG_CHECKING}; do that before calling @code{AC_CACHE_VAL}, so
+the messages are printed regardless of whether the results of the check
+are retrieved from the cache or determined by running the shell
+commands.  If the shell commands are run to determine the value, the
+value will be saved in the cache file just before @code{configure}
+creates its output files.
 @end defmac
 
 @menu
@@ -3134,7 +3158,7 @@ the base names of programs
 C structures
 
 @item sys
-operating systems
+operating system features
 
 @item type
 C types
@@ -3491,14 +3515,6 @@ for backward compatibility, the old names are considered obsolete.
 @vindex PREPARE
 @vindex INIT_PREPARE
 @code{AC_INIT_PREPARE}
-@item AC_CHECKING
-@vindex CHECKING
-@vindex MSG_CHECKING
-@code{AC_MSG_CHECKING}
-@item AC_VERBOSE
-@vindex VERBOSE
-@vindex MSG_RESULT
-@code{AC_MSG_RESULT}
 @item AC_WARN
 @vindex WARN
 @vindex MSG_WARN
@@ -3689,8 +3705,8 @@ for backward compatibility, the old names are considered obsolete.
 @code{AC_STRUCT_ST_RDEV}
 @item AC_CROSS_CHECK
 @vindex CROSS_CHECK
-@vindex TRY_CROSS
-@code{AC_TRY_CROSS}
+@vindex C_CROSS
+@code{AC_C_CROSS}
 @item AC_CHAR_UNSIGNED
 @vindex CHAR_UNSIGNED
 @vindex C_CHAR_UNSIGNED

@@ -18,7 +18,7 @@ Required for 2.0:
 
 ------------------------------------------------------------------------------
 
-* Fix AC_ARG_{ENABLE,WITH}.
+* Fix AC_ARG_{ENABLE,WITH} and AC_PATH_X*.
 
 ------------------------------------------------------------------------------
 
@@ -92,9 +92,5 @@ in a dnl comment.  (Seems to be hard.)
 
 * Cache consistency checking: ignore cache if environment
 (CC or PATH) differs.
-
-------------------------------------------------------------------------------
-
-* Print verbose messages in all cases, whether or not things are found.
 
 ------------------------------------------------------------------------------

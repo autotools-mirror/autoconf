@@ -174,10 +174,6 @@ Do not print messages saying which checks are being made.
 Look for the package's source code in directory @var{dir}.  Usually
 @code{configure} can determine that directory automatically.
 
-@item --verbose
-@itemx -v
-Print the results of the checks.
-
 @item --version
 Print the version of Autoconf used to generate the @code{configure}
 script, and exit.

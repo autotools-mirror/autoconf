@@ -16,6 +16,9 @@ Major changes in release 2.0:
 * AC_CONFIG_SUBDIRS to recursively configure a source tree.
 * AC_CHECK_TYPE, which checks whether sys/types.h defines a given type.
 * AC_TRY_LINK, which obsoletes AC_COMPILE_CHECK.
+* AC_MSG_CHECKING and AC_MSG_RESULT to print test results, on a single line,
+  whether or not the test succeeds.  They obsolete AC_CHECKING and AC_VERBOSE.
+  configure --verbose no longer has any effect.
 * AC_PREFIX_PROGRAM, which obsoletes AC_PREFIX.
 * AC_HEADER_DIRENT, which obsoletes AC_DIR_HEADER.
 * AC_ARG_ENABLE and AC_ARG_WITH, which obsolete AC_ENABLE and AC_WITH.
@@ -32,6 +35,9 @@ Major changes in release 2.0:
 * AC_OUTPUT and AC_CONFIG_HEADER allow you to override the input-file names.
 * AC_PROG_INSTALL looks for install.sh in the directory specified by
   AC_CONFIG_AUXDIR, or srcdir or srcdir/.. or srcdir/../.. by default.
+* AC_DEFINE no longer prints anything, because of the new result reporting
+  mechanism (AC_MSG_CHECKING and AC_MSG_RESULT).
+* AC_VERBOSE pays attention to --quiet/--silent, not --verbose.
 
 ** New utilities:
 * autoscan to generate a preliminary configure.in for a package by

@@ -29,18 +29,19 @@ define(AC_PROG_CC,
 AC_PROVIDE([$0])dnl
 AC_CHECK_PROG(CC, gcc, gcc, cc)
 
-# Find out if we are using GNU C, under whatever name.
+AC_MSG_CHECKING(whether we are using GNU C)
 AC_CACHE_VAL(ac_cv_prog_gcc,
 [cat > conftest.c <<EOF
 #ifdef __GNUC__
   yes
 #endif
 EOF
-if ${CC-cc} -E conftest.c 2>&6 | egrep yes >/dev/null 2>&1; then
+if ${CC-cc} -E conftest.c 2>&5 | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
 fi])dnl
+AC_MSG_RESULT($ac_cv_prog_gcc)
 if test $ac_cv_prog_gcc = yes; then GCC=yes; else GCC= ; fi
 ])dnl
 dnl
@@ -56,7 +57,7 @@ AC_CACHE_VAL(ac_cv_prog_gxx,
   yes
 #endif
 EOF
-if ${CXX-gcc} -E conftest.C 2>&6 | egrep yes >/dev/null 2>&1; then
+if ${CXX-gcc} -E conftest.C 2>&5 | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no
@@ -81,9 +82,9 @@ Autoconf TIOCGETP'
 Autoconf TCGETA'
     AC_EGREP_CPP($ac_pattern, $ac_prog, ac_cv_prog_gcc_traditional=yes)
   fi])dnl
+  AC_MSG_RESULT($ac_cv_prog_gcc_traditional)
   if test $ac_cv_prog_gcc_traditional = yes; then
     CC="$CC -traditional"
-    AC_MSG_RESULT(setting CC to $CC)
   fi
 fi
 ])dnl
@@ -101,15 +102,15 @@ echo 'foo(){}' > conftest.c
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-if ${CC-cc} -c conftest.c -o conftest.o 1>&6 2>&6 &&
-  test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o 1>&6 2>&6
+if ${CC-cc} -c conftest.c -o conftest.o 1>&5 2>&5 &&
+  test -f conftest.o && ${CC-cc} -c conftest.c -o conftest.o 1>&5 2>&5
 then
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if cc -c conftest.c 1>&6 2>&6
+    if cc -c conftest.c 1>&5 2>&5
     then
-      if cc -c conftest.c -o conftest2.o 1>&6 2>&6 &&
-        test -f conftest2.o && cc -c conftest.c -o conftest2.o 1>&6 2>&6
+      if cc -c conftest.c -o conftest2.o 1>&5 2>&5 &&
+        test -f conftest2.o && cc -c conftest.c -o conftest2.o 1>&5 2>&5
       then
         eval ac_cv_prog_cc_${ac_cc}_c_o=yes
       fi
@@ -118,7 +119,10 @@ then
 fi
 rm -f conftest*
 ])dnl
-if test $ac_cv_prog_cc_${ac_cc}_c_o = no; then
+if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
   AC_DEFINE(NO_MINUS_C_MINUS_O)
 fi
 ])dnl
@@ -128,7 +132,7 @@ define(AC_PROG_MAKE_SET,
 [AC_MSG_CHECKING(whether ${MAKE-make} sets \$MAKE)
 set dummy ${MAKE-make}; ac_make=[$]2
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
-[cat > conftestmake <<'EOF'
+[cat > conftestmake <<\EOF
 all:
 	@echo 'ac_maketemp="${MAKE}"'
 EOF
@@ -142,11 +146,12 @@ else
   eval ac_cv_prog_make_${ac_make}_set=no
 fi
 rm -f conftestmake])dnl
-if test $ac_cv_prog_make_${ac_make}_set = yes; then
+if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
+  AC_MSG_RESULT(yes)
   SET_MAKE=
 else
+  AC_MSG_RESULT(no)
   SET_MAKE="MAKE=${MAKE-make}"
-  AC_MSG_RESULT(setting MAKE to ${MAKE-make} in Makefiles)
 fi
 AC_SUBST([SET_MAKE])dnl
 ])dnl
@@ -175,7 +180,7 @@ Syntax Error], , CPP=/lib/cpp))
   ac_cv_prog_CPP="$CPP"])dnl
 fi
 CPP="$ac_cv_prog_CPP"
-AC_MSG_RESULT(setting CPP to $CPP)
+AC_MSG_RESULT($CPP)
 AC_SUBST(CPP)dnl
 ])dnl
 dnl
@@ -192,7 +197,7 @@ AC_LANG_CPLUSPLUS[]dnl
 AC_LANG_RESTORE[]dnl
 fi])dnl
 CXXCPP="$ac_cv_prog_CXXCPP"
-AC_MSG_RESULT(setting CXXCPP to $CXXCPP)
+AC_MSG_RESULT($CXXCPP)
 AC_SUBST(CXXCPP)dnl
 ])dnl
 dnl
@@ -204,6 +209,7 @@ dnl
 define(AC_PROG_LEX,
 [AC_PROVIDE([$0])dnl
 AC_CHECK_PROG(LEX, flex, flex, lex)
+AC_MSG_CHECKING(for $LEX library)
 if test -z "$LEXLIB"
 then
   case "$LEX" in
@@ -211,7 +217,7 @@ then
   *) LEXLIB="-ll" ;;
   esac
 fi
-AC_MSG_RESULT(setting LEXLIB to $LEXLIB)
+AC_MSG_RESULT($LEXLIB)
 AC_SUBST(LEXLIB)])dnl
 dnl
 define(AC_DECL_YYTEXT,
@@ -241,6 +247,7 @@ LIBS="$LIBS $LEXLIB"
 AC_TRY_LINK(`cat $LEX_OUTPUT_ROOT.c`, ac_cv_prog_lex_yytext_pointer=yes)
 LIBS="$ac_save_LIBS"
 rm -f "${LEX_OUTPUT_ROOT}.c"])dnl
+AC_MSG_RESULT($ac_cv_prog_lex_yytext_pointer)
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
   AC_DEFINE(YYTEXT_POINTER)
 fi
@@ -295,18 +302,16 @@ AC_CACHE_VAL(ac_cv_path_install,
   test -z "$ac_cv_path_install" && ac_cv_path_install="$ac_install_sh"])dnl
   INSTALL="$ac_cv_path_install"
 fi
+AC_MSG_RESULT($INSTALL)
 AC_SUBST(INSTALL)dnl
-AC_MSG_RESULT(setting INSTALL to $INSTALL)
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
 # It thinks the first close brace ends the variable substitution.
 test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
 AC_SUBST(INSTALL_PROGRAM)dnl
-AC_MSG_RESULT(setting INSTALL_PROGRAM to $INSTALL_PROGRAM)
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 AC_SUBST(INSTALL_DATA)dnl
-AC_MSG_RESULT(setting INSTALL_DATA to $INSTALL_DATA)
 ])dnl
 dnl
 define(AC_PROG_LN_S,
@@ -322,9 +327,9 @@ else
 fi])dnl
 LN_S="$ac_cv_prog_LN_S"
 if test "$ac_cv_prog_LN_S" = "ln -s"; then
-  AC_MSG_RESULT(ln -s is supported)
+  AC_MSG_RESULT(yes)
 else
-  AC_MSG_RESULT(ln -s is not supported)
+  AC_MSG_RESULT(no)
 fi
 AC_SUBST(LN_S)dnl
 ])dnl
@@ -332,7 +337,7 @@ dnl
 define(AC_PROG_RSH,
 [AC_MSG_CHECKING(for remote shell)
 AC_CACHE_VAL(ac_cv_path_RSH,
-[ac_cv_path_RSH=true
+[ac_cv_path_RSH=no
 for ac_file in \
   /usr/ucb/rsh /usr/bin/remsh /usr/bin/rsh /usr/bsd/rsh /usr/bin/nsh
 do
@@ -342,11 +347,10 @@ do
   fi
 done])dnl
 RSH="$ac_cv_path_RSH"
+AC_MSG_RESULT($RSH)
 if test $RSH != true; then
-  AC_MSG_RESULT(found remote shell $RSH)
   RTAPELIB=rtapelib.o
 else
-  AC_MSG_RESULT(found no remote shell)
   AC_CHECK_HEADER(netdb.h, [RTAPELIB=rtapelib.o AC_DEFINE(HAVE_NETDB_H)],
     [RTAPELIB= AC_DEFINE(NO_REMOTE)])
 fi
@@ -388,6 +392,7 @@ if (XOR (islower (i), ISLOWER (i)) || toupper (i) != TOUPPER (i)) exit(2);
 exit (0); }
 ], , ac_stdc_headers=no)
 fi])dnl
+AC_MSG_RESULT($ac_cv_header_stdc)
 if test $ac_cv_header_stdc = yes; then
   AC_DEFINE(STDC_HEADERS)
 fi])dnl
@@ -401,16 +406,19 @@ define(AC_USG,
   [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])dnl
 AC_MSG_CHECKING([for BSD string and memory functions])
 AC_TRY_LINK([#include <strings.h>], [rindex(0, 0); bzero(0, 0);], ,
-  AC_DEFINE(USG))])dnl
+  [AC_MSG_RESULT(yes); AC_DEFINE(USG)], [AC_MSG_RESULT(no)])])dnl
 dnl
 dnl
 dnl If memchr and the like aren't declared in <string.h>, include <memory.h>.
 dnl To avoid problems, don't check for gcc2 built-ins.
 define(AC_MEMORY_H,
-[AC_OBSOLETE([$0], [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])AC_MSG_CHECKING(whether string.h declares mem functions)
-AC_EGREP_HEADER(memchr, string.h, ,
-  [AC_CHECK_HEADER(memory.h, AC_DEFINE(NEED_MEMORY_H))])]
-)dnl
+[AC_OBSOLETE([$0], [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])dnl
+AC_MSG_CHECKING(whether string.h declares mem functions)
+AC_EGREP_HEADER(memchr, string.h, ac_found=yes, ac_found=no)
+AC_MSG_RESULT($ac_found)
+if test $ac_found = no; then
+  AC_CHECK_HEADER(memory.h, [AC_DEFINE(NEED_MEMORY_H)])
+fi])dnl
 dnl
 define(AC_HEADER_MAJOR,
 [AC_MSG_CHECKING([for major, minor and makedev header])
@@ -423,6 +431,7 @@ fi
 if test $ac_cv_header_major = no; then
 AC_CHECK_HEADER(sys/sysmacros.h, ac_cv_header_major=sys/sysmacros.h)
 fi])dnl
+AC_MSG_RESULT($ac_cv_header_major)
 case "$ac_cv_header_major" in
 sys/mkdev.h) AC_DEFINE(MAJOR_IN_MKDEV) ;;
 sys/sysmacros.h) AC_DEFINE(MAJOR_IN_SYSMACROS) ;;
@@ -441,6 +450,7 @@ AC_TRY_LINK([#include <sys/types.h>
 #include <$ac_hdr>], [DIR *dirp = 0;], ac_cv_header_dir=$ac_hdr; break)
 done])dnl
 
+AC_MSG_RESULT($ac_cv_header_dir)
 case "$ac_cv_header_dir" in
 dirent.h) AC_DEFINE(HAVE_DIRENT_H) ;;
 sys/ndir.h) AC_DEFINE(HAVE_SYS_NDIR_H) ;;
@@ -448,12 +458,13 @@ sys/dir.h) AC_DEFINE(HAVE_SYS_DIR_H) ;;
 ndir.h) AC_DEFINE(HAVE_NDIR_H) ;;
 esac
 
-AC_MSG_CHECKING(for closedir return value)
+AC_MSG_CHECKING(whether closedir returns void)
 AC_CACHE_VAL(ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
 #include <$ac_cv_header_dir>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
   ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
+AC_MSG_RESULT($ac_cv_func_closedir_void)
 if test $ac_cv_func_closedir_void = yes; then
   AC_DEFINE(CLOSEDIR_VOID)
 fi
@@ -471,6 +482,7 @@ AC_TRY_LINK([#include <sys/types.h>
 #include <$ac_hdr>], [DIR *dirp = 0;], ac_cv_header_dir=$ac_hdr; break)
 done])dnl
 
+AC_MSG_RESULT($ac_cv_header_dir)
 case "$ac_cv_header_dir" in
 dirent.h) AC_DEFINE(DIRENT) ;;
 sys/ndir.h) AC_DEFINE(SYSNDIR) ;;
@@ -478,12 +490,13 @@ sys/dir.h) AC_DEFINE(SYSDIR) ;;
 ndir.h) AC_DEFINE(NDIR) ;;
 esac
 
-AC_MSG_CHECKING(for closedir return value)
+AC_MSG_CHECKING(whether closedir returns void)
 AC_CACHE_VAL(ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
 #include <$ac_cv_header_dir>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
   ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
+AC_MSG_RESULT($ac_cv_func_closedir_void)
 if test $ac_cv_func_closedir_void = yes; then
   AC_DEFINE(VOID_CLOSEDIR)
 fi
@@ -515,6 +528,7 @@ You lose.
 #endif
 #endif /* S_ISSOCK */
 ], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])dnl
+AC_MSG_RESULT($ac_cv_header_stat_broken)
 if test $ac_cv_header_stat_broken = yes; then
   AC_DEFINE(STAT_MACROS_BROKEN)
 fi
@@ -530,6 +544,7 @@ AC_CACHE_VAL(ac_cv_decl_sys_siglist,
 #include <unistd.h>
 #endif], [char *msg = *(sys_siglist + 1);],
   ac_cv_decl_sys_siglist=yes, ac_cv_decl_sys_siglist=no)])dnl
+AC_MSG_RESULT($ac_cv_decl_sys_siglist)
 if test $ac_cv_decl_sys_siglist = yes; then
   AC_DEFINE(SYS_SIGLIST_DECLARED)
 fi
@@ -541,7 +556,7 @@ dnl
 dnl
 define(AC_TYPE_GETGROUPS,
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
-AC_MSG_CHECKING(for type of array argument to getgroups)
+AC_MSG_CHECKING(type of array argument to getgroups)
 AC_CACHE_VAL(ac_cv_type_getgroups,
 [changequote(, )dnl
 dnl Do not put single quotes in the C program text!
@@ -568,6 +583,7 @@ main()
 changequote([, ])dnl
 AC_TRY_RUN([$ac_prog],
   ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int)])dnl
+AC_MSG_RESULT($ac_cv_type_getgroups)
 AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups)
 ])dnl
 dnl
@@ -577,6 +593,7 @@ AC_MSG_CHECKING(for uid_t in sys/types.h)
 AC_CACHE_VAL(ac_cv_type_uid_t,
 [AC_EGREP_HEADER(uid_t, sys/types.h,
   ac_cv_type_uid_t=yes, ac_cv_type_uid_t=no)])dnl
+AC_MSG_RESULT($ac_cv_type_uid_t)
 if test $ac_cv_type_uid_t = no; then
   AC_DEFINE(uid_t, int)
   AC_DEFINE(gid_t, int)
@@ -605,6 +622,7 @@ AC_CACHE_VAL(ac_cv_type_signal,
 #endif
 extern void (*signal ()) ();],
 [int i;], ac_cv_type_signal=void, ac_cv_type_signal=int)])dnl
+AC_MSG_RESULT($ac_cv_type_signal)
 AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal)
 ])dnl
 dnl
@@ -682,6 +700,7 @@ main()
   exit(0);
 }
 ], ac_cv_func_mmap=yes, ac_cv_func_mmap=no)])dnl
+AC_MSG_RESULT($ac_cv_func_mmap)
 if test $ac_cv_func_mmap = yes; then
   AC_DEFINE(HAVE_MMAP)
 fi
@@ -800,6 +819,7 @@ main() {
 	 );
   }
 }], ac_cv_func_vfork=yes, ac_cv_func_vfork=no)])dnl
+AC_MSG_RESULT($ac_cv_func_vfork)
 if test $ac_cv_func_vfork = no; then
   AC_DEFINE(vfork, fork)
 fi
@@ -835,6 +855,7 @@ main() {
 	 && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
   }
 }], ac_cv_func_wait3=yes, ac_cv_func_wait3=no)])dnl
+AC_MSG_RESULT($ac_cv_func_wait3)
 if test $ac_cv_func_wait3 = yes; then
   AC_DEFINE(HAVE_WAIT3)
 fi
@@ -847,6 +868,7 @@ AC_MSG_CHECKING([for working alloca.h])
 AC_CACHE_VAL(ac_cv_header_alloca_h,
 [AC_TRY_LINK([#include <alloca.h>], [char *p = alloca(2 * sizeof(int));],
   ac_cv_header_alloca_h=yes, ac_cv_header_alloca_h=no)])dnl
+AC_MSG_RESULT($ac_cv_header_alloca_h)
 if test $ac_cv_header_alloca_h = yes; then
   AC_DEFINE(HAVE_ALLOCA_H)
 fi
@@ -870,6 +892,7 @@ char *alloca ();
 #endif
 ], [char *p = (char *) alloca(1);],
   ac_cv_func_alloca=yes, ac_cv_func_alloca=no)])dnl
+AC_MSG_RESULT($ac_cv_func_alloca)
 if test $ac_cv_func_alloca = yes; then
   AC_DEFINE(HAVE_ALLOCA)
 fi
@@ -882,17 +905,21 @@ if test $ac_cv_func_alloca = no; then
   ALLOCA=alloca.o
   AC_DEFINE(C_ALLOCA)
 
-AC_MSG_CHECKING(whether Cray hooks are needed for C alloca)
-AC_EGREP_CPP(webecray,
+AC_MSG_CHECKING(whether alloca needs Cray hooks)
+AC_CACHE_VAL(ac_cv_os_cray,
+[AC_EGREP_CPP(webecray,
 [#if defined(CRAY) && ! defined(CRAY2)
 webecray
 #else
 wenotbecray
 #endif
-],
+], ac_cv_os_cray=yes, ac_cv_os_cray=no)])dnl
+AC_MSG_RESULT($ac_cv_os_cray)
+if test $ac_cv_os_cray = yes; then
 AC_CHECK_FUNC([_getb67], AC_DEFINE(CRAY_STACKSEG_END, _getb67),
 AC_CHECK_FUNC([GETB67], AC_DEFINE(CRAY_STACKSEG_END, GETB67),
-AC_CHECK_FUNC([getb67], AC_DEFINE(CRAY_STACKSEG_END, getb67)))))
+AC_CHECK_FUNC([getb67], AC_DEFINE(CRAY_STACKSEG_END, getb67))))
+fi
 
 AC_MSG_CHECKING(stack direction for C alloca)
 AC_CACHE_VAL(ac_cv_c_stack_direction,
@@ -913,6 +940,7 @@ main ()
   exit (find_stack_direction() < 0);
 }], ac_cv_c_stack_direction=1, ac_cv_c_stack_direction=-1,
   ac_cv_c_stack_direction=0)])dnl
+AC_MSG_RESULT($ac_cv_c_stack_direction)
 AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 fi
 AC_SUBST(ALLOCA)dnl
@@ -974,6 +1002,7 @@ AC_CACHE_VAL(ac_cv_struct_nlist_n_un,
 [AC_TRY_LINK([#include <nlist.h>],
 [struct nlist n; n.n_un.n_name = 0;],
 ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])dnl
+AC_MSG_RESULT($ac_cv_struct_nlist_n_un)
 if test $ac_cv_struct_nlist_n_un = yes; then
   AC_DEFINE(NLIST_NAME_UNION)
 fi
@@ -987,6 +1016,7 @@ AC_CACHE_VAL(ac_cv_func_getloadavg_setgid,
 Yowza Am I SETGID yet
 #endif],
   ac_cv_func_getloadavg_setgid=yes, ac_cv_func_getloadavg_setgid=no)])dnl
+AC_MSG_RESULT($ac_cv_func_getloadavg_setgid)
 if test $ac_cv_func_getloadavg_setgid = yes; then
   NEED_SETGID=true AC_DEFINE(GETLOADAVG_PRIVILEGED)
 fi
@@ -1008,13 +1038,13 @@ AC_CACHE_VAL(ac_cv_group_kmem,
 changequote([, ])dnl
 ])dnl
   KMEM_GROUP=$ac_cv_group_kmem
-  AC_MSG_RESULT(/dev/kmem is owned by $KMEM_GROUP)
+  AC_MSG_RESULT($KMEM_GROUP)
 fi
 AC_SUBST(KMEM_GROUP)dnl
 ])dnl
 dnl
 define(AC_FUNC_UTIME_NULL,
-[AC_MSG_CHECKING(utime with null argument)
+[AC_MSG_CHECKING(whether utime accepts a null argument)
 AC_CACHE_VAL(ac_cv_func_utime_null,
 [rm -f conftestdata; > conftestdata
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
@@ -1027,6 +1057,7 @@ exit(!(stat ("conftestdata", &s) == 0 && utime("conftestdata", (long *)0) == 0
 && t.st_mtime - s.st_mtime < 120));
 }], ac_cv_func_utime_null=yes, ac_cv_func_utime_null=no)
 rm -f core])dnl
+AC_MSG_RESULT($ac_cv_func_utime_null)
 if test $ac_cv_func_utime_null = yes; then
   AC_DEFINE(HAVE_UTIME_NULL)
 fi
@@ -1042,6 +1073,7 @@ main ()
 	strcoll ("ABC", "DEF") >= 0 ||
 	strcoll ("123", "456") >= 0);
 }], ac_cv_func_strcoll=yes, ac_cv_func_strcoll=no)])dnl
+AC_MSG_RESULT($ac_cv_func_strcoll)
 if test $ac_cv_func_strcoll = yes; then
   AC_DEFINE(HAVE_STRCOLL)
 fi
@@ -1062,6 +1094,7 @@ main () {
   exit(0);			/* Non-reversed systems segv here.  */
 }], ac_cv_func_setvbuf_reversed=yes, ac_cv_func_setvbuf_reversed=no)
 rm -f core])dnl
+AC_MSG_RESULT($ac_cv_func_setvbuf_reversed)
 if test $ac_cv_func_setvbuf_reversed = yes; then
   AC_DEFINE(SETVBUF_REVERSED)
 fi
@@ -1073,12 +1106,13 @@ dnl
 dnl
 define(AC_STRUCT_TM,
 [AC_PROVIDE([$0])dnl
-AC_MSG_CHECKING([for struct tm in sys/time.h instead of time.h])
+AC_MSG_CHECKING([whether struct tm is in sys/time.h or time.h])
 AC_CACHE_VAL(ac_cv_struct_tm,
 [AC_TRY_LINK([#include <sys/types.h>
 #include <time.h>],
 [struct tm *tp; tp->tm_sec;],
   ac_cv_struct_tm=time.h, ac_cv_struct_tm=sys/time.h)])dnl
+AC_MSG_RESULT($ac_cv_struct_tm)
 if test $ac_cv_struct_tm = sys/time.h; then
   AC_DEFINE(TM_IN_SYS_TIME)
 fi
@@ -1091,6 +1125,7 @@ AC_CACHE_VAL(ac_cv_header_time,
 #include <sys/time.h>
 #include <time.h>],
 [struct tm *tp;], ac_cv_header_time=yes, ac_cv_header_time=no)])dnl
+AC_MSG_RESULT($ac_cv_header_time)
 if test $ac_cv_header_time = yes; then
   AC_DEFINE(TIME_WITH_SYS_TIME)
 fi
@@ -1103,6 +1138,7 @@ AC_CACHE_VAL(ac_cv_struct_tm_zone,
 [AC_TRY_LINK([#include <sys/types.h>
 #include <$ac_cv_struct_tm>], [struct tm tm; tm.tm_zone;],
   ac_cv_struct_tm_zone=yes, ac_cv_struct_tm_zone=no)])dnl
+AC_MSG_RESULT($ac_cv_struct_tm_zone)
 if test "$ac_cv_struct_tm_zone" = yes; then
   AC_DEFINE(HAVE_TM_ZONE)
 else
@@ -1114,6 +1150,7 @@ AC_CACHE_VAL(ac_cv_var_tzname,
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #endif>>, changequote([, ])dnl
 [atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])dnl
+  AC_MSG_RESULT($ac_cv_var_tzname)
   if test $ac_cv_var_tzname = yes; then
     AC_DEFINE(HAVE_TZNAME)
   fi
@@ -1126,6 +1163,7 @@ AC_CACHE_VAL(ac_cv_struct_st_blocks,
 [AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_blocks;],
 ac_cv_struct_st_blocks=yes, ac_cv_struct_st_blocks=no)])dnl
+AC_MSG_RESULT($ac_cv_struct_st_blocks)
 if test $ac_cv_struct_st_blocks = yes; then
   AC_DEFINE(HAVE_ST_BLOCKS)
 else
@@ -1140,6 +1178,7 @@ AC_CACHE_VAL(ac_cv_struct_st_blksize,
 [AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_blksize;],
 ac_cv_struct_st_blksize=yes, ac_cv_struct_st_blksize=no)])dnl
+AC_MSG_RESULT($ac_cv_struct_st_blksize)
 if test $ac_cv_struct_st_blksize = yes; then
   AC_DEFINE(HAVE_ST_BLKSIZE)
 fi
@@ -1151,6 +1190,7 @@ AC_CACHE_VAL(ac_cv_struct_st_rdev,
 [AC_TRY_LINK([#include <sys/types.h>
 #include <sys/stat.h>], [struct stat s; s.st_rdev;],
 ac_cv_struct_st_rdev=yes, ac_cv_struct_st_rdev=no)])dnl
+AC_MSG_RESULT($ac_cv_struct_st_rdev)
 if test $ac_cv_struct_st_rdev = yes; then
   AC_DEFINE(HAVE_ST_RDEV)
 fi
@@ -1160,21 +1200,18 @@ dnl
 dnl ### Checks for compiler characteristics
 dnl
 dnl
-define(AC_TRY_CROSS,
+define(AC_C_CROSS,
 [AC_PROVIDE([$0])dnl
 # If we cannot run a trivial program, we must be cross compiling.
 AC_MSG_CHECKING(whether cross-compiling)
 AC_CACHE_VAL(ac_cv_c_cross,
 [AC_TRY_RUN([main(){exit(0);}], ac_cv_c_cross=no, ac_cv_c_cross=yes)])dnl
 cross_compiling=$ac_cv_c_cross
-if test $ac_cv_c_cross = yes; then
-  AC_MSG_RESULT(we are cross-compiling)
-else
-  AC_MSG_RESULT(we are not cross-compiling)
-fi])dnl
+AC_MSG_RESULT($ac_cv_c_cross)
+])dnl
 dnl
 define(AC_C_CHAR_UNSIGNED,
-[AC_MSG_CHECKING(for unsigned characters)
+[AC_MSG_CHECKING(whether char is unsigned)
 AC_CACHE_VAL(ac_cv_c_char_unsigned,
 [AC_TRY_RUN(
 [/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
@@ -1188,6 +1225,7 @@ main() {
   volatile char c = 255; exit(c < 0);
 #endif
 }], ac_cv_c_char_unsigned=yes, ac_cv_c_char_unsigned=no)])dnl
+AC_MSG_RESULT($ac_cv_c_char_unsigned)
 if test $ac_cv_c_char_unsigned = yes; then
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi
@@ -1207,6 +1245,7 @@ long double foo = 0.0;
 exit(sizeof(long double) < sizeof(double)); }],
 ac_cv_c_long_double=yes, ac_cv_c_long_double=no)
 fi])dnl
+AC_MSG_RESULT($ac_cv_c_long_double)
 if test $ac_cv_c_long_double = yes; then
   AC_DEFINE(HAVE_LONG_DOUBLE)
 fi
@@ -1216,18 +1255,20 @@ define(AC_INT_16_BITS,
 [AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(int)])
 AC_MSG_CHECKING(integer size)
 AC_TRY_RUN([main() { exit(sizeof(int) != 2); }],
- AC_DEFINE(INT_16_BITS))
+ [AC_MSG_RESULT(16 bits)
+ AC_DEFINE(INT_16_BITS)], AC_MSG_RESULT(not 16 bits))
 ])dnl
 dnl
 define(AC_LONG_64_BITS,
 [AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(long)])
 AC_MSG_CHECKING(for 64-bit long ints)
 AC_TRY_RUN([main() { exit(sizeof(long int) != 8); }],
- AC_DEFINE(LONG_64_BITS))
+ [AC_MSG_RESULT(64 bits)
+ AC_DEFINE(LONG_64_BITS)], AC_MSG_RESULT(not 64 bits))
 ])dnl
 dnl
 define(AC_C_BIGENDIAN,
-[AC_MSG_CHECKING(byte ordering)
+[AC_MSG_CHECKING(whether byte ordering is bigendian)
 AC_CACHE_VAL(ac_cv_c_bigendian,
 [AC_TRY_RUN([main () {
   /* Are we little or big endian?  From Harbison&Steele.  */
@@ -1239,6 +1280,7 @@ AC_CACHE_VAL(ac_cv_c_bigendian,
   u.l = 1;
   exit (u.c[sizeof (long) - 1] == 1);
 }], ac_cv_c_bigendian=no, ac_cv_c_bigendian=yes)])dnl
+AC_MSG_RESULT($ac_cv_c_bigendian)
 if test $ac_cv_c_bigendian = yes; then
   AC_DEFINE(WORDS_BIGENDIAN)
 fi
@@ -1259,6 +1301,7 @@ y(a, b) int *b; {
   return a == 1 && b[0] == 2 && b[1] == 3 && b[2] == 4;
 }], ac_cv_c_arg_array=no, ac_cv_c_arg_array=yes)
 rm -f core])dnl
+AC_MSG_RESULT($ac_cv_c_arg_array)
 if test $ac_cv_c_arg_array = no; then
   AC_DEFINE(NO_ARG_ARRAY)
 fi
@@ -1273,13 +1316,15 @@ AC_TRY_LINK(, [} inline foo() {], ac_cv_c_inline=yes, ac_cv_c_inline=no)
 else
   ac_cv_c_inline=no
 fi])dnl
+AC_MSG_RESULT($ac_cv_c_inline)
 if test $ac_cv_c_inline = no; then
   AC_DEFINE(inline, __inline)
 fi
 ])dnl
 define(AC_C_CONST,
-[dnl Do not "break" this again.
-AC_MSG_CHECKING([for lack of working const])
+[dnl This message is consistent in form with the other checking messages,
+dnl and with the result message.
+AC_MSG_CHECKING([for working const])
 AC_CACHE_VAL(ac_cv_c_const,
 [changequote(, )dnl
 dnl Do not put single quotes in the C program text!
@@ -1323,6 +1368,7 @@ ccp = (char const *const *) p;
 }'
 changequote([, ])dnl
 AC_TRY_LINK(, [$ac_prog], ac_cv_c_const=yes, ac_cv_c_const=no)])dnl
+AC_MSG_RESULT($ac_cv_c_const)
 if test $ac_cv_c_const = no; then
   AC_DEFINE(const, )
 fi
@@ -1346,6 +1392,7 @@ else
    ac_cv_sys_interpreter=no
 fi
 rm -f conftest])dnl
+AC_MSG_RESULT($ac_cv_sys_interpreter)
 if test $ac_cv_sys_interpreter = yes; then
   ifelse([$1], , :, [$1])
 ifelse([$2], , , [else
@@ -1354,13 +1401,14 @@ ifelse([$2], , , [else
 fi
 ])dnl
 define(AC_SYS_REMOTE_TAPE,
-[AC_MSG_CHECKING(for remote tape and socket header files)
-AC_CHECK_HEADER(sys/mtio.h, AC_DEFINE(HAVE_SYS_MTIO_H))
+[AC_CHECK_HEADER(sys/mtio.h, AC_DEFINE(HAVE_SYS_MTIO_H))
 
 if test "$ac_cv_header_mtio_h" = yes; then
+AC_MSG_CHECKING(for remote tape header files)
 AC_CACHE_VAL(ac_cv_header_rmt,
 [AC_TRY_CPP([#include <sgtty.h>
 #include <sys/socket.h>], ac_cv_header_rmt=yes, ac_cv_header_rmt=no)])dnl
+ AC_MSG_RESULT($ac_cv_header_rmt)
  if test $ac_cv_header_rmt = yes; then
     PROGS="$PROGS rmt"
   fi
@@ -1393,6 +1441,7 @@ for ac_dir in `eval echo . /tmp /var/tmp /usr/tmp $prefix/lib $exec_prefix/lib` 
   fi
   rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2> /dev/null
 done])dnl
+AC_MSG_RESULT($ac_cv_sys_long_file_names)
 if test $ac_cv_sys_long_file_names = yes; then
   AC_DEFINE(HAVE_LONG_FILE_NAMES)
 fi
@@ -1417,6 +1466,7 @@ main () {
   exit (status == -1);
 }
 ], ac_cv_sys_restartable_syscalls=yes, ac_cv_sys_restartable_syscalls=no)])dnl
+AC_MSG_RESULT($ac_cv_sys_restartable_syscalls)
 if test $ac_cv_sys_restartable_syscalls = yes; then
   AC_DEFINE(HAVE_RESTARTABLE_SYSCALLS)
 fi
@@ -1435,7 +1485,7 @@ test -n "$x_includes" && ac_cv_x_includes="$x_includes"
 test -n "$x_libraries" && ac_cv_x_includes="$x_libraries"
 if test "${ac_cv_x_includes+set}" = set &&
   test "${ac_cv_x_libraries+set}" = set; then
-  AC_MSG_RESULT(using cached values for ac_cv_x_includes and ac_cv_x_libraries)
+  AC_VERBOSE(using cached values for ac_cv_x_includes and ac_cv_x_libraries)
 else
 AC_PATH_X_XMKMF
 fi
@@ -1455,14 +1505,14 @@ if test -z "$x_libraries" && test "$ac_cv_x_libraries" != NONE; then
   x_libraries="$ac_cv_x_libraries"
 fi
 
-test -n "$x_includes" && AC_MSG_RESULT(X11 headers are in $x_includes)
-test -n "$x_libraries" && AC_MSG_RESULT(X11 libraries are in $x_libraries)
+test -n "$x_includes" && AC_VERBOSE(X11 headers are in $x_includes)
+test -n "$x_libraries" && AC_VERBOSE(X11 libraries are in $x_libraries)
 fi # No --with-x=no.
 ])dnl
 dnl
 dnl Internal subroutine of AC_PATH_X.
 define(AC_PATH_X_XMKMF,
-[AC_MSG_CHECKING(for X include and library files with xmkmf)
+[AC_CHECKING(for X include and library files with xmkmf)
 rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
@@ -1496,7 +1546,7 @@ fi
 dnl
 dnl Internal subroutine of AC_PATH_X.
 define(AC_PATH_X_DIRECT,
-[AC_MSG_CHECKING(for X include and library files directly)
+[AC_CHECKING(for X include and library files directly)
 test -z "$x_direct_TRY_library" && x_direct_TRY_library=Xt
 test -z "$x_direct_TRY_include" && x_direct_TRY_include=X11/Intrinsic.h
 AC_TRY_CPP([#include <$x_direct_TRY_include>], no_x=,
@@ -1597,7 +1647,7 @@ dnl Find additional X libraries, magic flags, etc.
 define(AC_PATH_XTRA,
 [AC_REQUIRE([AC_OS_ISC])dnl
 AC_REQUIRE([AC_PATH_X])dnl
-AC_MSG_CHECKING(for additional X libraries and flags)
+AC_CHECKING(for additional X libraries and flags)
 if test -n "$x_includes"; then
   X_CFLAGS="$X_CFLAGS -I$x_includes"
 elif test "$no_x" = yes; then 
@@ -1637,9 +1687,9 @@ else
   fi
 fi
 #
-AC_MSG_RESULT(X compiler flags: $X_CFLAGS)
-AC_MSG_RESULT(X library flags: $X_LIBS)
-AC_MSG_RESULT(extra X libraries: $X_EXTRA_LIBS)
+AC_VERBOSE(X compiler flags: $X_CFLAGS)
+AC_VERBOSE(X library flags: $X_LIBS)
+AC_VERBOSE(extra X libraries: $X_EXTRA_LIBS)
 AC_SUBST(X_CFLAGS)dnl
 AC_SUBST(X_LIBS)dnl
 AC_SUBST(X_EXTRA_LIBS)dnl
@@ -1651,15 +1701,15 @@ dnl These are kludges; we need a more systematic approach.
 dnl
 dnl
 define(AC_OS_AIX,
-[AC_MSG_CHECKING(for AIX)
-AC_BEFORE([$0], [AC_TRY_LINK])dnl
+[AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_BEFORE([$0], [AC_TRY_CPP])dnl
+AC_MSG_CHECKING(for AIX)
 AC_EGREP_CPP(yes,
 [#ifdef _AIX
   yes
 #endif
-], AC_DEFINE(_ALL_SOURCE))
+], [AC_MSG_RESULT(yes); AC_DEFINE(_ALL_SOURCE)], AC_MSG_RESULT(no))
 ])dnl
 dnl
 define(AC_OS_MINIX,
@@ -1667,7 +1717,7 @@ define(AC_OS_MINIX,
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_BEFORE([$0], [AC_TRY_CPP])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
-# The Minix shell ca not assign to the same variable on the same line!
+# The Minix shell can not assign to the same variable on the same line!
 if test "$MINIX" = yes; then
   AC_DEFINE(_POSIX_SOURCE)
   AC_DEFINE(_POSIX_1_SOURCE, 2)
@@ -1684,6 +1734,7 @@ AC_MSG_CHECKING(for POSIXized ISC)
 if test -d /etc/conf/kconfig.d &&
   grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1
 then
+  AC_MSG_RESULT(yes)
   ISC=yes # If later tests want to check for ISC.
   AC_DEFINE(_POSIX_SOURCE)
   if test "$GCC" = yes; then
@@ -1692,6 +1743,7 @@ then
     CC="$CC -Xp"
   fi
 else
+  AC_MSG_RESULT(no)
   ISC=
 fi
 ])dnl
@@ -1703,7 +1755,7 @@ AC_EGREP_CPP(yes,
 [#if defined(M_XENIX) && !defined(M_UNIX)
   yes
 #endif
-], XENIX=yes, XENIX=)
+], [XENIX=yes AC_MSG_RESULT(yes)], [XENIX= AC_MSG_RESULT(no)])
 if test "$XENIX" = yes; then
   LIBS="$LIBS -lx"
   case "$DEFS" in
