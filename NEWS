@@ -4,7 +4,7 @@ Major changes in release 1.8:
   AC_PROG_CXX, AC_PROG_CXXCPP, AC_REQUIRE_CPP
   for checking both C++ and C features in one configure script.
 * New macros AC_CHECKING, AC_VERBOSE, AC_WARN, AC_ERROR for printing messages.
-* New macros AC_FIND_XTRA, AC_MMAP, AC_SIZEOF_TYPE.
+* New macros AC_FIND_XTRA, AC_MMAP, AC_SIZEOF_TYPE, AC_PREREQ.
 * AC_FIND_X looks for X in more places.
 * AC_PROG_INSTALL defaults to install.sh instead of cp, if it's in srcdir.
   install.sh is distributed with Autoconf.
@@ -12,6 +12,7 @@ Major changes in release 1.8:
 * Relative srcdir values are not made absolute.
 * configure accepts --help, --version, --silent/--quiet options.
 * config.status accepts --help, --version options.
+* Autoconf library files are installed in ${datadir}/autoconf, not ${datadir}.
 * Namespace cleanup: all shell variables used internally by Autoconf
   have names beginning with `ac_'.
 
