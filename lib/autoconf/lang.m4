@@ -408,7 +408,7 @@ AC_DEFUN([AC_OBJEXT],   [])
 # Beware of `expr' that may return `0' or `'.  Since this macro is
 # the first one in touch with the compiler, it should also check that
 # it compiles properly.
-# 
+#
 # On OpenVMS 7.1 system, the DEC C 5.5 compiler when called through a
 # GNV (gnv.sourceforge.net) cc wrapper, produces the output file named
 # `a_out.exe'.
@@ -422,6 +422,10 @@ AS_IF([AC_TRY_EVAL(ac_link_default)],
 [# Find the output, starting from the most likely.  This scheme is
 # not robust to junk in `.', hence go to wildcards (a.*) only as a last
 # resort.
+
+# Be careful to initialize this variable, since it used to be cached.
+# Otherwise an old cache value of `no' led to `EXEEXT = no' in a Makefile.
+ac_cv_exeext=
 for ac_file in `ls a_out.exe a.exe conftest.exe 2>/dev/null;
                 ls a.out conftest 2>/dev/null;
                 ls a.* conftest.* 2>/dev/null`; do
