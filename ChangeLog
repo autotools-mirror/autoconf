@@ -1,3 +1,8 @@
+2001-10-23  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* doc/autoconf.texi (Shellology): Mention the problems with bash
+	2.05's use of ANSI quoting in its `set' builtin.
+
 2001-10-22  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_STRERROR_R):

@@ -7507,6 +7507,15 @@ To detect whether you are running @command{bash}, test if
 Mode,, Bash @sc{posix} Mode, bash, The GNU Bash Reference Manual}, for
 details.
 
+@item Bash 2.05 and later
+@cindex Bash 2.05 and later
+Versions 2.05 and later of @command{bash} use a different format for the
+output of the @command{set} builtin, designed to make evaluating this
+output easier.  However, this output is not compatible with earlier
+versions of @command{bash} (or with many other shells, probably).  So if
+you use @command{bash} 2.05 or higher to execute @command{configure},
+you'll need to use @command{bash} 2.05 for all other build tasks as well.
+
 @item @command{/usr/xpg4/bin/sh} on Solaris
 @prindex @command{/usr/xpg4/bin/sh} on Solaris
 The @sc{posix}-compliant Bourne shell on a Solaris system is
