@@ -6821,6 +6821,7 @@ parameters based on the canonical system name (@pxref{Manual
 Configuration}).  Alternatively, set up a test results cache file with
 the correct values for the host system (@pxref{Caching Results}).
 
+@ovindex cross_compiling
 To provide a default for calls of @code{AC_RUN_IFELSE} that are embedded
 in other macros, including a few of the ones that come with Autoconf,
 you can test whether the shell variable @code{cross_compiling} is set to
@@ -12372,7 +12373,6 @@ the type of system on which the package is being configured and
 compiled.  It defaults to the result of running @command{config.guess}.
 
 @item --host=@var{host-type}
-@ovindex cross_compiling
 the type of system on which the package will run.  By default it is the
 same as the build machine.  Specifying it enables the cross-compilation
 mode.
