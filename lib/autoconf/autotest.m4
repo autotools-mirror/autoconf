@@ -87,13 +87,13 @@ AC_CONFIG_COMMANDS([$1/atconfig],
 
 # The test suite will define top_srcdir=$at_top_srcdir/../.. etc.
 at_testdir='$1'
-buildpath='$ac_buildpath'
+abs_builddir='$ac_abs_builddir'
 at_srcdir='$ac_srcdir'
-srcpath='$ac_srcpath'
+abs_srcdir='$ac_abs_srcdir'
 at_top_srcdir='$ac_top_srcdir'
-top_srcpath='$ac_top_srcpath'
+abs_top_srcdir='$ac_abs_top_srcdir'
 at_top_builddir='$ac_top_builddir'
-top_buildpath='$ac_top_buildpath'
+abs_top_builddir='$ac_abs_top_builddir'
 
 AUTOTEST_PATH='m4_default([$2], [$1])'
 

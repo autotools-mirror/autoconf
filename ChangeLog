@@ -1,19 +1,29 @@
+2001-12-13  Peter Eisentraut  <peter_e@gmx.net>
+
+	* lib/autoconf/status.m4 (_AC_SRCPATHS): Rename buildpath to
+	abs_builddir, top_buildpath to abs_top_builddir, srcpath to
+	abs_srcdir, top_srcpath to abs_top_srcdir.
+	(_AC_OUTPUT_FILES): Adjust.
+	* NEWS, doc/autoconf.texi, lib/autoconf/autotest.m4,
+	* tests/atspecific.m4, tests/autoreconf.in, tests/tools.at,
+	* tests/wrappl.in, tests/wrapsh.in: Adjust.
+
 2001-12-12  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_F77_V_OUTPUT): Fix failed
 	C/Fortran linking on HP/UX, by extracting the Fortran library
 	search path from the LPATH line in the $F77 -v output.
-	
+
 2001-12-12  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (File Descriptors): Use a clearer layout for the
 	forbidden file descriptors table.
-	
+
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoscan.in (%c_keywords): Build it at top level.
 	Map to 1 in order to simplify its uses.
-	
+
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoscan.in (&scan_c_file, &scan_sh_file, &scan_makefile):
@@ -25,7 +35,7 @@
 	because of `lex$U.$(OBJEXT)'.
 	(&scan_files): Use "@list" instead of join.
 	* doc/Makefile.am (CLEANFILES): Add *.fns.
-	
+
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
 	* tests/autoreconf.in, tests/autom4te.in, tests/autoupdate.in:
@@ -39,7 +49,7 @@
 
 	* bin/autoscan.in (used): New.
 	Use it.
-	
+
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoscan.in (&scan_c_file): Better parsing of CPP
@@ -47,13 +57,13 @@
 	(&scan_sh_file): Remove a duplicate pattern.
 	(&check_configure_ac): Use long options.
 	* lib/autoscan/headers (alloca.h): Check with AC_FUNC_ALLOCA.
-	
+
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoscan.in (scan_c_file): Fix the handling of C comments.
 	Before, having a line containing the opening of a multi line
 	comment made the whole line be ignored.
-	
+
 2001-11-26  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Using an Autotest Test Suite): New.

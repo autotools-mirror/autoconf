@@ -133,7 +133,7 @@
 # - `ac_srcdir' is `build -> src'.
 # - `ac_top_srcdir' is `build -> top-src'.
 #
-# and `ac_buildpath' etc., the absolute paths.
+# and `ac_abs_builddir' etc., the absolute paths.
 m4_define([_AC_SRCPATHS],
 [ac_builddir=.
 
@@ -162,10 +162,10 @@ case $srcdir in
 esac
 # Don't blindly perform a `cd $1/$ac_foo && pwd` since $ac_foo can be
 # absolute.
-ac_buildpath=`cd $1 && cd $ac_builddir && pwd`
-ac_top_buildpath=`cd $1 && cd $ac_top_builddir && pwd`
-ac_srcpath=`cd $1 && cd $ac_srcdir && pwd`
-ac_top_srcpath=`cd $1 && cd $ac_top_srcdir && pwd`
+ac_abs_builddir=`cd $1 && cd $ac_builddir && pwd`
+ac_abs_top_builddir=`cd $1 && cd $ac_top_builddir && pwd`
+ac_abs_srcdir=`cd $1 && cd $ac_srcdir && pwd`
+ac_abs_top_srcdir=`cd $1 && cd $ac_top_srcdir && pwd`
 ])# _AC_SRCPATHS
 
 
@@ -965,13 +965,13 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 [/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
 s,@configure_input@,$configure_input,;t t
 s,@srcdir@,$ac_srcdir,;t t
-s,@srcpath@,$ac_srcpath,;t t
+s,@abs_srcdir@,$ac_abs_srcdir,;t t
 s,@top_srcdir@,$ac_top_srcdir,;t t
-s,@top_srcpath@,$ac_top_srcpath,;t t
+s,@abs_top_srcdir@,$ac_abs_top_srcdir,;t t
 s,@builddir@,$ac_builddir,;t t
-s,@buildpath@,$ac_buildpath,;t t
+s,@abs_builddir@,$ac_abs_builddir,;t t
 s,@top_builddir@,$ac_top_builddir,;t t
-s,@top_buildpath@,$ac_top_buildpath,;t t
+s,@abs_top_builddir@,$ac_abs_top_builddir,;t t
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s,@INSTALL@,$ac_INSTALL,;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.

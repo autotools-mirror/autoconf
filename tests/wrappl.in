@@ -9,21 +9,21 @@ me=`echo "$0" | sed -e 's,.*[\\/],,'`
 # autoconf which runs autom4te) because by themselves, they try to use
 # subtools from the same directory (i.e., foo/autoheader will run
 # foo/autoconf etc.).
-autom4te_perllibdir=@top_srcpath@/lib
+autom4te_perllibdir=@abs_top_srcdir@/lib
 export autom4te_perllibdir
 
 case $me in
   ifnames)
      # Does not have lib files.
-     exec @top_buildpath@/bin/$me ${1+"$@"}
+     exec @abs_top_builddir@/bin/$me ${1+"$@"}
      ;;
   autom4te)
-     AUTOM4TE_CFG=@top_buildpath@/lib/autom4te.cfg
+     AUTOM4TE_CFG=@abs_top_builddir@/lib/autom4te.cfg
      export AUTOM4TE_CFG
      ;;
 esac
 
 # We might need files from build (frozen files), in addition of src files.
-exec @top_buildpath@/bin/$me \
-     -I @top_buildpath@/lib \
-     -I @top_srcpath@/lib ${1+"$@"}
+exec @abs_top_builddir@/bin/$me \
+     -I @abs_top_builddir@/lib \
+     -I @abs_top_srcdir@/lib ${1+"$@"}

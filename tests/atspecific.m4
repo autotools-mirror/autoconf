@@ -185,10 +185,10 @@ m4_define([AT_CHECK_AUTOHEADER],
 #                    [EXIT-STATUS = 0],
 #                    [SDOUT = IGNORE], STDERR)
 # --------------------------------------------
-# `top_srcpath' is needed so that `./configure' finds install-sh.
+# `abs_top_srcdir' is needed so that `./configure' finds install-sh.
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
-[AT_CHECK([top_srcdir=$top_srcpath ./configure $1],
+[AT_CHECK([top_srcdir=$abs_top_srcdir ./configure $1],
           [$2],
           m4_default([$3], [ignore]), [$4],
           [test $at_verbose = echo && echo "$srcdir/AT_LINE: config.log" && cat config.log])])

@@ -25,8 +25,8 @@
   pressure over control version archives.
   Automatic replacement for shells that don't support this feature.
 - New output variables
-  @builddir@, @top_builddir@, @srcpath@, @top_srcpath@, @buildpath@,
-  @top_buildpath@.
+  @builddir@, @top_builddir@, @abs_srcdir@, @abs_top_srcdir@, @abs_builddir@,
+  @abs_top_builddir@.
 
 ** Emacs
 
@@ -76,8 +76,8 @@
 
 - AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS.
   Provide the user with srcdir, ac_srcdir, ac_top_srcdir, ac_builddir,
-  ac_top_builddir, ac_srcpath, ac_top_srcpath, ac_buildpath,
-  ac_top_buildpath.
+  ac_top_builddir, ac_abs_srcdir, ac_abs_top_srcdir, ac_abs_builddir,
+  ac_abs_top_builddir.
 
 - AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS and AC_OUTPUT.
   Are much less expensive when using long lists of files.

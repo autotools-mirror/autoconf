@@ -2039,8 +2039,8 @@ programs to test for C, C++ and Fortran 77 features.
 Rigorously equal to @samp{.}.  Added for symmetry only.
 @end defvar
 
-@defvar buildpath
-@ovindex buildpath
+@defvar abs_builddir
+@ovindex abs_builddir
 Absolute path of @code{builddir}.
 @end defvar
 
@@ -2050,8 +2050,8 @@ The relative path to the top-level of the current build tree.  In the
 top-level directory, this is the same as @code{srcbuild}.
 @end defvar
 
-@defvar top_buildpath
-@ovindex top_buildpath
+@defvar abs_top_builddir
+@ovindex abs_top_builddir
 Absolute path of @code{top_builddir}.
 @end defvar
 
@@ -2061,8 +2061,8 @@ The relative path to the directory that contains the source code for
 that @file{Makefile}.
 @end defvar
 
-@defvar srcpath
-@ovindex srcpath
+@defvar abs_srcdir
+@ovindex abs_srcdir
 Absolute path of @code{srcdir}.
 @end defvar
 
@@ -2072,8 +2072,8 @@ The relative path to the top-level source code directory for the
 package.  In the top-level directory, this is the same as @code{srcdir}.
 @end defvar
 
-@defvar top_srcpath
-@ovindex top_srcpath
+@defvar abs_top_srcdir
+@ovindex abs_top_srcdir
 Absolute path of @code{top_srcdir}.
 @end defvar
 
