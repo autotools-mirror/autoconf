@@ -1,5 +1,18 @@
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): When there were no
+	CONFIG_FILES, we had to expand _AC_OUTPUT_FILES into the KILL
+	diversion, because it is AC_OUTPUT_FILES which undiverted the
+	AC_SUBST sed script at its proper place, otherwise it would have
+	been undiverted at the end of `configure', leading to an sh syntax
+	error.
+	Now that we no longer use a diversion, we don't need to call
+	AC_OUTPUT_FILES if useless.
+	(AC_OUTPUT_FILES): Rename as _AC_OUTPUT_FILES.
+	(AC_OUTPUT_LINKS): Rename as _AC_OUTPUT_LINKS.
+
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
 	AC_ARG_PROGRAM must not be expanded twice, which is likely since
 	Automake calls it, and usually users do too.  If it happens,
 	`--program-prefix=g' actually prepend two (or more) `g'.

@@ -1847,7 +1847,7 @@ define([_AC_SUBST_SED_PROGRAM])
 # empty value, not an empty second argument.
 #
 # Beware that if you change this macro, you also have to change the
-# sed script at the top of AC_OUTPUT_FILES.
+# sed script at the top of _AC_OUTPUT_FILES.
 define([AC_SUBST],
 [ifval([$2], [$1=$2
 ])[]dnl
@@ -3782,23 +3782,12 @@ _AC_OUTPUT_COMMANDS_INIT()
 EOF])
 
 
-dnl The following three sections are in charge of their own here
+dnl The following four sections are in charge of their own here
 dnl documenting into $CONFIG_STATUS.
-
-dnl Because AC_OUTPUT_FILES is in charge of undiverting the AC_SUBST
-dnl section, it is better to divert it to void and *call it*, rather
-dnl than not calling it at all
-ifset([AC_LIST_FILES],
-      [AC_OUTPUT_FILES()],
-      [AC_DIVERT_PUSH([KILL])dnl
-       AC_OUTPUT_FILES()dnl
-       AC_DIVERT_POP()])dnl
-ifset([AC_LIST_HEADERS],
-      [_AC_OUTPUT_HEADERS()])dnl
-ifset([AC_LIST_LINKS],
-      [AC_OUTPUT_LINKS()])dnl
-ifset([AC_LIST_COMMANDS],
-      [_AC_OUTPUT_COMMANDS()])dnl
+ifset([AC_LIST_FILES],    [_AC_OUTPUT_FILES()])dnl
+ifset([AC_LIST_HEADERS],  [_AC_OUTPUT_HEADERS()])dnl
+ifset([AC_LIST_LINKS],    [_AC_OUTPUT_LINKS()])dnl
+ifset([AC_LIST_COMMANDS], [_AC_OUTPUT_COMMANDS()])dnl
 
 cat >>$CONFIG_STATUS <<\EOF
 
@@ -3844,14 +3833,14 @@ rm -f conftest.defs
 ]])# AC_OUTPUT_MAKE_DEFS
 
 
-# AC_OUTPUT_FILES
-# ---------------
+# _AC_OUTPUT_FILES
+# ----------------
 # Do the variable substitutions to create the Makefiles or whatever.
 # This is a subroutine of AC_OUTPUT.
 #
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
-define(AC_OUTPUT_FILES,
+define(_AC_OUTPUT_FILES,
 [cat >>$CONFIG_STATUS <<EOF
 
 #
@@ -4019,7 +4008,7 @@ AC_LIST_FILES_COMMANDS()dnl
 fi; done
 rm -f $ac_cs_root.s*
 EOF
-])# AC_OUTPUT_FILES
+])# _AC_OUTPUT_FILES
 
 
 # _AC_OUTPUT_HEADERS
@@ -4059,7 +4048,7 @@ EOF
 # Optimization 4.  Once a substitution performed, since there can be
 # only one per line, immediately restart the script on the next input
 # line (using the `t' sed instruction).  Divides by about 2.
-# *Note:* In the case of the AC_SUBST sed script (AC_OUTPUT_FILES)
+# *Note:* In the case of the AC_SUBST sed script (_AC_OUTPUT_FILES)
 # this optimization cannot be applied as is, because there can be
 # several substitutions per line.
 #
@@ -4241,13 +4230,13 @@ EOF
 ])# _AC_OUTPUT_HEADERS
 
 
-# AC_OUTPUT_LINKS
-# ---------------
+# _AC_OUTPUT_LINKS
+# ----------------
 # This is a subroutine of AC_OUTPUT.
 #
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
-define(AC_OUTPUT_LINKS,
+define(_AC_OUTPUT_LINKS,
 [cat >>$CONFIG_STATUS <<\EOF
 
 #
@@ -4303,7 +4292,7 @@ AC_LIST_LINKS_COMMANDS()dnl
 ])dnl
 fi; done
 EOF
-])# AC_OUTPUT_LINKS
+])# _AC_OUTPUT_LINKS
 
 
 # _AC_OUTPUT_COMMANDS
