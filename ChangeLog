@@ -1,5 +1,12 @@
 2001-09-18  Paul Eggert  <eggert@twinsun.com>
 
+	* lib/autoconf/c.m4:
+	(AC_LANG_INT_SAVE(C)): Also support negative values, down to LONG_MIN.
+
+	* lib/autoconf/general.m4 (_AC_COMPUTE_INT_COMPILE):
+	Do not pass a first argument with leading '-'
+	to expr, by parenthesizing initial integers that might be negative.
+
 	* doc/autoconf.texi (Particular Functions): AC_FUNC_GETPGRP
 	now merely checks whether it is an error to pass an argument
 	to getpgrp.
