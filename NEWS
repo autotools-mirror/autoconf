@@ -15,6 +15,9 @@
 ** Generic macros
 - AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to
   specify pre-includes.
+
+** Specific Macros
+- AC_PATH_XTRA only adds -ldnet to $LIBS if it's needed to link.
 
 * Major changes in Autoconf 2.50
 
