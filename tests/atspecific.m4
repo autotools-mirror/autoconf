@@ -97,7 +97,7 @@ dnl The problem is that currently some warnings are spread on several
 dnl lines, so grepping -v warning is not enough.
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0,, ignore)
-AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, ignore)
+AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [])
 test -n "$at_verbose" && echo "--- config.log" && cat config.log
 
 dnl Some tests might exit prematurely when they find a problem, in

@@ -1,8 +1,14 @@
 2000-09-20  Pavel Roskin  <proski@gnu.org>
 
+	* tests/Makefile.am: AC_PREFIX_PROGRAM and AC_F77_FUNC excluded
+	from testing because they require an argument.
+	* tests/atspecific.m4: Make sure that configure doesn't write
+	anything to stderr.
+
 	* acspecific.m4 (_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H): Cache
 	variable wasn't always set inside AC_CACHE_CHECK.
 	(_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL): Likewise.
+	From Nicolas Joly.
 
 	* libm4.m4 (m4_ifvanl): Don't output a newline for empty
 	arguments.

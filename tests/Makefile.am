@@ -47,8 +47,8 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 # and some are already tested elsewhere.  EGREP_EXCLUDE must filter out
 # the macros we don't want to test in syntax.m4.
 #
-# - AC_CANONICALIZE
-#   Needs an argument.
+# - AC_CANONICALIZE, AC_PREFIX_PROGRAM
+#   Need an argument.
 # - AC_CHECK decl, file, func, header, lib, member, prog, sizeof, type
 #   Performed in the semantics tests.
 # - AC_CONFIG
@@ -58,7 +58,7 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 #   infinite m4 recursion if AC_INIT it used twice.
 # - AC_LANG*
 #   Heavily used by other macros.
-# - AC_PATH_PROGS?
+# - AC_PATH_PROGS?, AC_F77_FUNC
 #   They produce `= val' because $1, the variable used to store the result,
 #   is empty.
 # - AC_TRY, AC_.*_IFELSE
@@ -81,6 +81,7 @@ FILTER_MACROS = egrep -v -e \
 ^AC_CANONICALIZE$$\
 ^AC_CHECK_(DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|TOOL|TYPE)S?$$\
 ^AC_CONFIG\
+^AC_F77_FUNC$$\
 ^AC_INIT\
 ^AC_LANG\
 ^AC_LINKER_OPTION$$\
@@ -88,6 +89,7 @@ FILTER_MACROS = egrep -v -e \
 ^AC_LIST_MEMBER_OF$$\
 ^AC_OUTPUT$$\
 ^AC_PATH_(TOOL|PROG)S?$$\
+^AC_PREFIX_PROGRAM$$\
 ^AC_REPLACE_FUNCS$$\
 ^AC_SEARCH_LIBS$$\
 ^AC_TRY\
