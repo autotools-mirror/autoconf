@@ -1,3 +1,8 @@
+2004-01-13  Eric Blake  <ebb9@byu.net>
+
+	* doc/autoconf.texi (Obsolete Macros): In AC_TRY_COMPILE and
+	AC_TRY_LINK, s/AC_LANG_SOURCE/AC_LANG_PROGRAM/.  (trivial change)
+
 2004-01-10  Jim Meyering  <jim@meyering.net>
 
 	* doc/autoconf.texi (Running the Preprocessor): Correct grammar.
@@ -5,8 +10,8 @@
 2004-01-09  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/general.m4: Fix bug: AC_CHECK_SIZEOF evokes a warning
-	with `autoconf -Wall,error'.  Bug reported by Eric Blake in
-	<http://mail.gnu.org/archive/html/autoconf-patches/2004-01/msg00000.html>.
+	with `autoconf -Wall,error'.  Bug reported by Eric Blake in:
+	http://mail.gnu.org/archive/html/autoconf-patches/2004-01/msg00000.html
 	(_AC_COMPUTE_INT_COMPILE): Invoke _AC_COMPILE_IFELSE, not
 	AC_COMPILE_IFELSE, since we now assume our caller invokes
 	AC_LANG_COMPILER_REQUIRE, for symmetry with _AC_COMPUTE_INT_RUN.
