@@ -24,7 +24,21 @@
 # and Paul Eggert <eggert@twinsun.com>.
 
 usage="\
-Usage: ifnames [-h] [--help] [-m dir] [--macrodir=dir] [--version] [file...]"
+Usage: ifnames [OPTION] ...  [FILE] ...
+
+Scan all of the C source FILES (or the standard input, if none are
+given) and write to the standard output a sorted list of all the
+identifiers that appear in those files in \`#if', \`#elif', \`#ifdef', or
+\`#ifndef' directives.  Print each identifier on a line, followed by a
+space-separated list of the files in which that identifier occurs.
+
+  -m, --macrodir=DIR    directory storing macro files
+  -v, --verbose         verbosely report processing
+  -h, --help            print this help, then exit
+  --version             print version number, then exit
+
+Report bugs to <bug-autoconf@gnu.org>."
+
 show_version=no
 
 : ${AC_MACRODIR=@datadir@}

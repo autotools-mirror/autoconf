@@ -18,9 +18,31 @@
 # 02111-1307, USA.
 
 usage="\
-Usage: autoreconf [-f] [-h] [--help] [-m dir] [--macrodir=dir]
-       [-l dir] [--localdir=dir] [--force] [--verbose] [--version]
-       [--cygnus] [--foreign] [--gnits] [--gnu] [-i] [--include-deps]"
+Usage: autoreconf [OPTION] ... [TEMPLATE-FILE]
+
+Run \`autoconf' (and \`autoheader' and \`automake', where appropriate)
+repeatedly to remake the Autoconf \`configure' scripts and
+configuration header templates in the directory tree rooted at the
+current directory.  By default, it only remakes those files that are
+older than their predecessors.  If you install a new version of
+Autoconf, running \`autoreconf' remakes all of the files by giving it
+the \`--force' option.
+
+  -m, --macrodir=DIR    directory storing macro files
+  -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
+  -f, --force           consider every files are obsolete
+  -v, --verbose         verbosely report processing
+  -h, --help            print this help, then exit
+  --version             print version number, then exit
+
+The following options are passed to \`automake':
+  --cygnus              assume program is part of Cygnus-style tree
+  --foreign             set strictness to foreign
+  --gnits               set strictness to gnits
+  --gnu                 set strictness to gnu
+  -i, --include-deps    include generated dependencies in Makefile.in
+
+Report bugs to <bug-autoconf@gnu.org>."
 
 localdir=
 verbose=no

@@ -39,8 +39,21 @@ exit 0;
 # Process any command line arguments.
 sub parse_args
 {
-    local ($usage) =
-	"Usage: autoscan [--macrodir=dir] [--help] [--verbose] [--version] [srcdir]\n"; 
+    local ($usage) = << 'EOD';
+Usage: autoscan [OPTION] ... [SRCDIR]
+
+Examine source files in the directory tree rooted at SRCDIR, or the
+current directory if none is given.  Search the source files for
+common portability problems and create a file `configure.scan' which
+is a preliminary `configure.in' for that package.
+
+  -m, --macrodir=DIR    directory storing data files
+  -v, --verbose         verbosely report processing
+  --help                print this help, then exit
+  --version             print version number, then exit
+
+Report bugs to <bug-autoconf@gnu.org>.
+EOD
 
     foreach $_ (@ARGV) {
 	if (/^--m[a-z]*=(.*)/) {

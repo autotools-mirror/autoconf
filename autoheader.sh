@@ -24,8 +24,19 @@
 # the given template file.
 
 usage="\
-Usage: autoheader [-h] [--help] [-m dir] [--macrodir=dir]
-       [-l dir] [--localdir=dir] [--version] [template-file]"
+Usage: autoheader [OPTION] ... [TEMPLATE-FILE]
+
+Create a template file of C \`#define' statements for \`configure' to
+use.  To this end, scan TEMPLATE-FILE, or \`configure.in' if none
+given.
+
+  -m, --macrodir=DIR    directory storing macro files
+  -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
+  -v, --verbose         verbosely report processing
+  -h, --help            print this help, then exit
+  --version             print version number, then exit
+
+Report bugs to <bug-autoconf@gnu.org>."
 
 # NLS nuisances.
 # Only set these to C if already set.  These must not be set unconditionally

@@ -22,8 +22,19 @@
 # the given template file.
 
 usage="\
-Usage: autoconf [-h] [--help] [-m dir] [--macrodir=dir]
-       [-l dir] [--localdir=dir] [--version] [template-file]"
+Usage: autoconf [OPTION] ... [TEMPLATE-FILE]
+
+Generate a configuration script from a TEMPLATE-FILE if given, or
+\`configure.in' by default.  Output is sent to the standard output if
+TEMPLATE-FILE is given, else into \`configure'.
+
+  -m, --macrodir=DIR    directory storing macro files
+  -l, --localdir=DIR    directory storing the \`aclocal.m4' file
+  -v, --verbose         verbosely report processing
+  -h, --help            print this help, then exit
+  --version             print version number, then exit
+
+Report bugs to <bug-autoconf@gnu.org>."
 
 # NLS nuisances.
 # Only set these to C if already set.  These must not be set unconditionally

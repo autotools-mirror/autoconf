@@ -1,5 +1,18 @@
 1999-01-08  Ben Elliston  <bje@cygnus.com>
 
+	* autoconf.sh: More useful and up-to-date help from the --help
+	option. Contributed by Akim Demaille <demaille@inf.enst.fr>.
+
+	* autoheader.sh: Likewise.
+
+	* autoreconf.sh: Likewise.
+
+	* autoscan.pl: Likewise.
+
+	* autoupdate.sh: Likewise.
+
+	* ifnames.sh: Likewise.
+
 	* config.guess: Detect Cray T3E and NEC SX-4, SX-5 machines.
 	Contributed by Andreas Schott <schott@rzg.mpg.de>.
 
