@@ -1759,8 +1759,7 @@ AC_DEFUN([AC_FUNC_LSTAT], [_AC_FUNC_STAT(lstat)])
 # AC_FUNC_STRERROR_R
 # ------------------
 AC_DEFUN([AC_FUNC_STRERROR_R],
-[# Check strerror_r
-AC_CHECK_FUNCS([strerror_r])
+[AC_CHECK_FUNCS([strerror_r])
 if test $ac_cv_func_strerror_r = yes; then
   AC_CHECK_HEADERS(string.h)
   AC_CACHE_CHECK([for working strerror_r],
@@ -1779,12 +1778,11 @@ if test $ac_cv_func_strerror_r = yes; then
      ],
      ac_cv_func_strerror_r_works=yes,
      ac_cv_func_strerror_r_works=no
-    )
-    if test $ac_cv_func_strerror_r_works = yes; then
-      AC_DEFINE_UNQUOTED(HAVE_WORKING_STRERROR_R, 1,
-        [Define to 1 if `strerror_r' returns a string.])
-    fi
-  ])
+    )])
+  if test $ac_cv_func_strerror_r_works = yes; then
+    AC_DEFINE_UNQUOTED(HAVE_WORKING_STRERROR_R, 1,
+                       [Define to 1 if `strerror_r' returns a string.])
+  fi
 fi
 ])# AC_FUNC_STRERROR_R
 
