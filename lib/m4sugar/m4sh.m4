@@ -159,8 +159,7 @@ m4_foreach([_AS_var],
   [LANG, LC_ALL, LC_TIME, LC_CTYPE, LANGUAGE,
    LC_COLLATE, LC_NUMERIC, LC_MESSAGES],
   [(set +x; test -n "`(_AS_var=C; export _AS_var) 2>&1`") &&
-    { $as_unset _AS_var || test "${_AS_var+set}" != set; } ||
-      { _AS_var=C; export _AS_var; }
+    { AS_UNSET(_AS_var, C); }
 ])
 
 # Required to use basename.
@@ -206,7 +205,7 @@ as_nl='
 IFS=" 	$as_nl"
 
 # CDPATH.
-AS_UNSET([CDPATH], [$PATH_SEPARATOR])
+$as_unset CDPATH
 ])
 
 
