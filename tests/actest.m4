@@ -19,7 +19,7 @@ AC_DEFUN(AC_ENV_SAVE,
   egrep -v '^INSTALL(_(DATA|PROGRAM|SCRIPT))?=' |
   egrep -v '^(CYGWIN|ISC|MINGW32|MINIX|EMXOS2|EXEEXT|OBJEXT)=' |
   egrep -v '^(NEED_SETGID|KMEM_GROUP)=' |
-  egrep -v '^(X_(CFLAGS|LIBS|PRE_LIBS)|x_(includes|libraries)|have_x)=' |
+  egrep -v '^(X_(CFLAGS|(|EXTRA_|PRE_)LIBS)|x_(includes|libraries)|have_x)=' |
   egrep -v '^(host|build|target)(_(alias|cpu|vendor|os))?=' |
   egrep -v '^(cross_compiling)=' |
   egrep -v '^(interpval)=' |

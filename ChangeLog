@@ -1,3 +1,9 @@
+2000-02-16  Akim Demaille  <akim@epita.fr>
+
+	* tests/actest.m4 (AC_ENV_SAVE): X_EXTRA_LIBS can be changed by
+	AC_PATH_EXTRA.
+	Reported by Erez Zadok.
+
 2000-02-15  Akim Demaille  <akim@epita.fr>
 
 	Define HAVE_DECL_FOO both to 1 if found and 0 otherwise.
