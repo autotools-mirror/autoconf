@@ -1,3 +1,12 @@
+2000-09-25  Pavel Roskin  <proski@gnu.org>
+
+	* autoheader.sh: Don't check status of variable assignments -
+	* it's undefined in ash 0.2.
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* autoconf.sh: Likewise. Also eliminated command substitution
+	inside variable expansion - ash 0.2 coredumps on it.
+
 2000-09-21  Pavel Roskin  <proski@gnu.org>
 
 	* tests/atspecific.m4 (_AT_CHECK_AC_MACRO): Check stderr from

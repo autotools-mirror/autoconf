@@ -105,7 +105,8 @@ esac
 
 # Variables.
 : ${autoconf_dir=${AC_MACRODIR=@datadir@}}
-: ${AC_ACLOCALDIR=`(aclocal --print-ac-dir) 2>/dev/null`}
+test -z "$AC_ACLOCALDIR" &&
+  AC_ACLOCALDIR=`(aclocal --print-ac-dir) 2>/dev/null`
 : ${AWK=@AWK@}
 debug=false
 # Trace Autoconf's initialization?
@@ -244,7 +245,8 @@ $debug ||
   test -n "$tmp" && test -d "$tmp"
 } ||
 {
-  tmp=$TMPDIR/ac$$ && (umask 077 && mkdir $tmp)
+  tmp=$TMPDIR/ac$$
+  (umask 077 && mkdir $tmp)
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2

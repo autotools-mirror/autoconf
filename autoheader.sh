@@ -189,7 +189,8 @@ $debug ||
   test -n "$tmp" && test -d "$tmp"
 }  ||
 {
-  tmp=$TMPDIR/ah$$ && (umask 077 && mkdir $tmp)
+  tmp=$TMPDIR/ah$$
+  (umask 077 && mkdir $tmp)
 } ||
 {
    echo "$me: cannot create a temporary directory in $TMPDIR" >&2
