@@ -658,7 +658,7 @@ do
     ac_feature=`echo "$ac_option"|sed -e 's/-*disable-//'`
     # Reject names that are not valid shell variable names.
     if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR($ac_feature: invalid feature name)[
+      ]AC_MSG_ERROR(invalid feature: $ac_feature)[
     fi
     ac_feature=`echo $ac_feature| sed 's/-/_/g'`
     eval "enable_${ac_feature}=no" ;;
@@ -667,7 +667,7 @@ do
     ac_feature=`echo "$ac_option"|sed -e 's/-*enable-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
     if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR($ac_feature: invalid feature name)[
+      ]AC_MSG_ERROR(invalid feature: $ac_feature)[
     fi
     ac_feature=`echo $ac_feature| sed 's/-/_/g'`
     case "$ac_option" in
@@ -918,7 +918,7 @@ Some influent environment variables:$ac_arg_var_help"
     ac_package=`echo "$ac_option"|sed -e 's/-*with-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
     if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR($ac_package: invalid package name)[
+      ]AC_MSG_ERROR(invalid package: $ac_package)[
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     case "$ac_option" in
@@ -931,7 +931,7 @@ Some influent environment variables:$ac_arg_var_help"
     ac_package=`echo "$ac_option"|sed -e 's/-*without-//'`
     # Reject names that are not valid shell variable names.
     if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR($ac_package: invalid package name)[
+      ]AC_MSG_ERROR(invalid package: $ac_package)[
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     eval "with_${ac_package}=no" ;;
@@ -954,14 +954,15 @@ Some influent environment variables:$ac_arg_var_help"
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
     x_libraries="$ac_optarg" ;;
 
-  -*) ]AC_MSG_ERROR([$ac_option: invalid option; use --help to show usage])[
+  -*) ]AC_MSG_ERROR([unrecognized option: $ac_option
+Try `configure --help' for more information.])[
     ;;
 
   *=*)
     ac_envvar=`echo "$ac_option" | sed -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
     if echo "$ac_envvar" | grep '[^a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR($ac_envvar: invalid variable name)[
+      ]AC_MSG_ERROR(invalid variable name: $ac_envvar)[
     fi
     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
     eval "$ac_envvar='$ac_optarg'"
@@ -969,7 +970,7 @@ Some influent environment variables:$ac_arg_var_help"
 
   *)
     if echo "$ac_feature" | grep '[^-a-zA-Z0-9.]' >/dev/null 2>&1; then
-      ]AC_MSG_WARN($ac_option: invalid host type)[
+      ]AC_MSG_WARN(invalid host type: $ac_option)[
     fi
     if test "x$nonopt" != xNONE; then
       ]AC_MSG_ERROR(can only configure for one host and one target at a time)[
@@ -3276,7 +3277,7 @@ AC_OUTPUT_COMMANDS_PRE()dnl
 
 : ${CONFIG_STATUS=./config.status}
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
-AC_OUTPUT_CONFIG_STATUS()dnl
+_AC_OUTPUT_CONFIG_STATUS()dnl
 rm -fr confdefs* $ac_clean_files
 trap 'exit 1' 1 2 15
 
@@ -3306,12 +3307,12 @@ ifval([$2$3],
 [`AC_OUTPUT' should be used without arguments.])
 
 
-# AC_OUTPUT_CONFIG_STATUS
-# -----------------------
+# _AC_OUTPUT_CONFIG_STATUS
+# ------------------------
 # Produce config.status.  Called by AC_OUTPUT.
 # Pay special attention not to have too long here docs: some old
 # shells die.  Unfortunately the limit is not known precisely...
-define(AC_OUTPUT_CONFIG_STATUS,
+define(_AC_OUTPUT_CONFIG_STATUS,
 [echo creating $CONFIG_STATUS
 cat >$CONFIG_STATUS <<EOF
 #! /bin/sh
@@ -3426,7 +3427,8 @@ dnl FIXME: This line is suspicious, it contains "" inside a "`...`".
     echo "[\$]ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    echo "$CONFIG_STATUS: ambiguous option: [\$]ac_option"; exit 1 ;;
+    echo "$CONFIG_STATUS: ambiguous option: [\$]ac_option
+Try \\\`$CONFIG_STATUS --help' for more information."; exit 1 ;;
   -help | --help | --hel )
     echo "[\$]ac_cs_usage"; exit 0 ;;
   --file | --fil | --fi | --f )
@@ -3457,7 +3459,8 @@ AC_FOREACH([AC_File], AC_LIST_HEADERS,
 ])dnl
 
   # This is an error.
-  -*) echo "$CONFIG_STATUS: invalid option: [\$]1"; exit 1 ;;
+  -*) echo "$CONFIG_STATUS: unrecognized option: [\$]1
+Try \\\`$CONFIG_STATUS --help' for more information."; exit 1 ;;
   *) echo "$CONFIG_STATUS: invalid argument: [\$]1"; exit 1 ;;
   esac
   shift
@@ -3531,7 +3534,7 @@ undivert(AC_DIVERSION_CMDS)dnl
 exit 0
 EOF
 chmod +x $CONFIG_STATUS
-])# AC_OUTPUT_CONFIG_STATUS
+])# _AC_OUTPUT_CONFIG_STATUS
 
 
 # AC_OUTPUT_MAKE_DEFS
