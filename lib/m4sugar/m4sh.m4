@@ -314,6 +314,33 @@ done; }
 
 # This section is lexicographically sorted.
 
+
+# AS_BOX(MESSAGE, [FRAME-CHARACTER = `='])
+# ----------------------------------------
+# Output MESSAGE, a single line text, framed with FRAME-CHARACTER (which
+# must not be `/').
+m4_define([AS_BOX],
+[AS_LITERAL_IF([$1],
+               [_AS_BOX_LITERAL($@)],
+               [_AS_BOX_INDIR($@)])])
+
+# _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = `='])
+# -------------------------------------------------
+m4_define([_AS_BOX_LITERAL],
+[cat <<\_ASBOX
+m4_patsubst([$1], [.], m4_if([$2], [], [[=]], [[$2]]))
+$1
+m4_patsubst([$1], [.], m4_if([$2], [], [[=]], [[$2]]))
+_ASBOX])
+
+# _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = `='])
+# -----------------------------------------------
+m4_define([_AS_BOX_INDIR],
+[sed 'h;s/./m4_default([$2], [=])/g;p;x;p;x' <<_ASBOX
+$1
+_ASBOX])
+
+
 # AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
 # -----------------------------------------------------
 # If EXPRESSION has shell indirections ($var or `expr`), expand

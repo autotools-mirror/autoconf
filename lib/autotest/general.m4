@@ -192,15 +192,9 @@ fi
 # over files, the full test suite cleans up both before and after test groups.
 
 if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
-  at_banner="Testing suite for $at_package, version $at_version"
-  at_dashes=`echo $at_banner | sed s/./=/g`
-  echo "$at_dashes"
-  echo "$at_banner"
-  echo "$at_dashes"
+  AS_BOX([Testing suite for $at_package, version $at_version])
 else
-  echo '======================================================='
-  echo 'ERROR: Not using the proper version, no tests performed'
-  echo '======================================================='
+  AS_BOX([ERROR: Not using the proper version, no tests performed])
   exit 1
 fi
 
@@ -277,11 +271,7 @@ elif test $at_debug = false; then
     at_banner="ERROR: Suite unsuccessful, $at_fail_count of $at_test_count tests failed"
   fi
 fi
-at_dashes=`echo $at_banner | sed s/./=/g`
-echo
-echo "$at_dashes"
-echo "$at_banner"
-echo "$at_dashes"
+AS_BOX($at_banner)
 
 if test $at_debug = false && test -n "$at_failed_list"; then
   echo
