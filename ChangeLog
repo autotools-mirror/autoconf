@@ -1,3 +1,21 @@
+2002-03-18  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Programming in M4sh): Add AS_MKDIR_P.
+	(Limitations of Usual Tools): Add mkdir section.
+
+	* lib/m4sugar/m4sh.m4 (_AS_MKDIR_P_PREPARE): New macro.
+	(AS_MKDIR_P): Require it.  Use mkdir -p if available, falling
+	back on AS_DIRNAME to compute prefixes otherwise; this is
+	roughly what mkinstalldirs does.  That way, we need not have
+	our own filename disassembler.  The old disassembler did not
+	work with Solaris 8 dtksh, which is ksh Version M-12/28/93d.
+
+	* lib/autotest/general.m4 (AT_INIT, AT_CLEANUP):
+	Create at_test_all by a series of assignments,
+	not by a single assignment of a long string.  The latter causes ksh
+	version 11/16/88g to silently misbehave on OpenServer 5.0.6a,
+	presumably because of a buffer overrun.
+
 2002-03-14  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autotest/general.m4 (at_times_skip):
