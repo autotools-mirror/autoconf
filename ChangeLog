@@ -1,3 +1,8 @@
+1999-03-10  Ben Elliston  <bje@cygnus.com>
+
+	* config.guess: Recognise HP 9000/800. Merged from the master
+	FSF version of this file.
+
 1999-02-28  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_FUNC_VFORK): Allow test to behave correctly
