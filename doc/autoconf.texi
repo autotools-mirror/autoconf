@@ -4768,14 +4768,14 @@ start with a dash, since @code{test} might interpret its argument as an
 option (e.g., @samp{@var{string} = "-n"}).
 
 Contrary to a common belief, @samp{test -n @var{string}} and @samp{test
--z @var{string}} @strong{are} portable, nevertheless many shells (e.g.,
-FIXME: AIX IIRC) have bizarre precedence and may be confused if
-@var{string} looks like an operator:
+-z @var{string}} @strong{are} portable, nevertheless many shells (such
+as Solaris 2.5, AIX 3.2, UNICOS 10.0.0.6, Digital Unix 4 etc.) have
+bizarre precedence and may be confused if @var{string} looks like an
+operator:
 
 @example
-@c FIXME: Hm, IIRC:
-$ test -n "="
-error: missing argument
+$ test -n =
+test: argument expected
 @end example
 
 If there are risks, use @samp{test "x@var{string}" = x} or @samp{test

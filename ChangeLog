@@ -1,5 +1,10 @@
 2000-05-23  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Builtins): More details on
+	`test -n ='.
+
+2000-05-23  Akim Demaille  <akim@epita.fr>
+
 	Simplify the interface: users shouldn't need to explicitly check
 	for special environments.
 
