@@ -4162,40 +4162,8 @@ add these Fortran 77 libraries.  Hence, the macro
 libraries.
 @end defmac
 
-@defmac AC_F77_NAME_MANGLING
-@maindex F77_NAME_MANGLING
-Test for the name mangling scheme used by the Fortran 77 compiler.  This
-macro is used by @code{AC_F77_FUNC_WRAPPER} (@pxref{Fortran 77 Compiler
-Characteristics}, for more information).
-
-Two variables are set by this macro:
-
-@table @code
-@item f77_case
-Set to either @samp{upper} or @samp{lower}, depending on whether the
-Fortran 77 compiler translates the case of identifiers to either
-uppercase or lowercase.
-
-@item f77_underscore
-Set to either @samp{no}, @samp{single} or @samp{double}, depending on
-how the Fortran 77 compiler appends underscores (i.e. @code{_}) to
-identifiers, if at all.
-
-If no underscores are appended, then the value is @samp{no}.
-
-If a single underscore is appended, even with identifiers which already
-contain an underscore somewhere in their name, then the value is
-@samp{single}.
-
-If a single underscore is appended @emph{and} two underscores are
-appended to identifiers which already contain an underscore somewhere in
-their name, then the value is @samp{double}.
-
-@end table
-@end defmac
-
-@defmac AC_F77_FUNC_WRAPPER
-@maindex F77_FUNC_WRAPPER
+@defmac AC_F77_WRAPPERS
+@maindex F77_WRAPPERS
 @cvindex F77_FUNC
 @cvindex F77_FUNC_
 Defines C macros @code{F77_FUNC(name,NAME)} and
@@ -4209,7 +4177,7 @@ To call a Fortran 77 subroutine from C or to write a C function that is
 callable from Fortran 77, the C program must explicitly use identifiers
 in the format expected by the Fortran 77 compiler.  In order to do this,
 one simply wraps all C identifiers in one of the macros provided by
-@code{AC_F77_FUNC_WRAPPER}.  For example, suppose you have the following
+@code{AC_F77_WRAPPERS}.  For example, suppose you have the following
 Fortran 77 subroutine:
 
 @example
@@ -4257,9 +4225,6 @@ If the Fortran 77 identifier contains an underscore
 (e.g. @code{foo_bar}), you should use @code{F77_FUNC_} instead of
 @code{F77_FUNC} (with the same arguments).  This is because some Fortran
 77 compilers mangle names differently if they contain an underscore.
-The @code{AC_F77_FUNC_WRAPPER} macro uses the
-@code{AC_F77_NAME_MANGLING} macro to determine this automatically
-(@pxref{Fortran 77 Compiler Characteristics}, for more information).
 @end defmac
 
 @node System Services, UNIX Variants, Fortran 77 Compiler Characteristics, Existing Tests

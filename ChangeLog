@@ -1,3 +1,16 @@
+2000-07-19  Martin Wilck  <martin@tropos.de>
+
+	* aclang.m4 (AC_F77_NAME_MANGLING): Obsolete, becomes
+	_AC_F77_NAME_MANGLING.
+	(_AC_F77_NAME_MANGLING): Use independent checks for the
+	name mangling of symbols with and without underscores.
+	Use algorithm with for loops instead of recursive macro calls.
+	(AC_F77_WRAPPERS): Adapt to changes in _AC_F77_NAME_MANGLING.
+	* doc/autoconf.texi (Fortran 77 Compiler Characteristics):
+	Remove documentation of AC_F77_NAME_MANGLING.
+	Remove documentation of f77_case and f77_underscore.
+	Replace AC_F77_FUNC_WRAPPER with AC_F77_WRAPPERS.
+
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
 	* NEWS: Fresh air.

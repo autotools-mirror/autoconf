@@ -933,8 +933,7 @@ AC_DEFUN([AC_PROG_F77_C_O],
 AC_CACHE_CHECK([whether $F77 understand -c and -o together],
                [ac_cv_prog_f77_c_o],
 [cat >conftest.f <<EOF
-       program conftest
-       end
+AC_LANG_PROGRAM([])
 EOF
 # We do the `AC_TRY_EVAL' test twice because some compilers refuse to
 # overwrite an existing `.o' file with `-o', although they will create
@@ -945,8 +944,7 @@ if AC_TRY_EVAL(ac_try) && test -f conftest.o && AC_TRY_EVAL(ac_try); then
 else
   ac_cv_prog_f77_c_o=no
 fi
-rm -f conftest*
-])dnl
+rm -f conftest*])
 if test $ac_cv_prog_f77_c_o = yes; then
   AC_DEFINE(F77_NO_MINUS_C_MINUS_O, 1,
             [Define if your Fortran 77 compiler doesn't accept -c and -o together.])
@@ -1487,31 +1485,21 @@ AC_SUBST(FLIBS)
 ])# AC_F77_LIBRARY_LDFLAGS
 
 
-# AC_F77_NAME_MANGLING
+# _AC_F77_NAME_MANGLING
 # --------------------
 # Test for the name mangling scheme used by the Fortran 77 compiler.
-# Two variables are set by this macro:
 #
-#	 f77_case: Set to either "upper" or "lower", depending on the
-#		   case of the name mangling.
+# Sets ac_cv_f77_mangling. The value contains three fields, separated by commas:
 #
-#  f77_underscore: Set to either "no", "single" or "double", depending
-#		   on how underscores (i.e. "_") are appended to
-#		   identifiers, if at all.
+# lower case / upper case:
+#    case translation of the Fortan 77 symbols
+# underscore / no underscore:
+#    whether the compiler appends "_" to symbol names
+# extra underscore / no extra underscore:
+#    whether the compiler appends an extra "_" to symbol names already
+#    containing at least one underscore
 #
-#		   If no underscores are appended, then the value is
-#		   "no".
-#
-#		   If a single underscore is appended, even with
-#		   identifiers which already contain an underscore
-#		   somewhere in their name, then the value is
-#		   "single".
-#
-#		   If a single underscore is appended *and* two
-#		   underscores are appended to identifiers which
-#		   already contain an underscore somewhere in their
-#		   name, then the value is "double".
-AC_DEFUN([AC_F77_NAME_MANGLING],
+AC_DEFUN([_AC_F77_NAME_MANGLING],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_F77])dnl
 AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
@@ -1532,32 +1520,51 @@ AC_COMPILE_IFELSE(
   ac_save_LIBS=$LIBS
   LIBS="cf77_test.${ac_objext} $FLIBS $LIBS"
 
-  f77_case=
-  f77_underscore=
+  ac_success=no
+  for ac_foobar in foobar FOOBAR; do
+    for ac_underscore in "" "_"; do
+      ac_func="$ac_foobar$ac_underscore"
+      AC_TRY_LINK_FUNC($ac_func,
+         [ac_success=yes; break 2])
+    done
+  done
 
-  AC_TRY_LINK_FUNC(foobar,
-    f77_case=lower
-    f77_underscore=no
-    ac_foo_bar=foo_bar_,
-    AC_TRY_LINK_FUNC(foobar_,
-      f77_case=lower
-      f77_underscore=single
-      ac_foo_bar=foo_bar__,
-      AC_TRY_LINK_FUNC(FOOBAR,
-        f77_case=upper
-        f77_underscore=no
-        ac_foo_bar=FOO_BAR_,
-        AC_TRY_LINK_FUNC(FOOBAR_,
-          f77_case=upper
-          f77_underscore=single
-          ac_foo_bar=FOO_BAR__))))
+  if test "$ac_success" = "yes"; then
+     case $ac_foobar in
+        foobar)
+           ac_case=lower
+           ac_foo_bar=foo_bar
+           ;;
+        FOOBAR)
+           ac_case=upper
+           ac_foo_bar=FOO_BAR
+           ;;
+     esac
 
-  AC_TRY_LINK_FUNC(${ac_foo_bar}, f77_underscore=double)
+     ac_success_extra=no
+     for ac_extra in "" "_"; do
+        ac_func="$ac_foo_bar$ac_underscore$ac_extra"
+        AC_TRY_LINK_FUNC($ac_func,
+        [ac_success_extra=yes; break])
+     done
 
-  if test -z "$f77_case" || test -z "$f77_underscore"; then
-    ac_cv_f77_mangling="unknown"
+     if test "$ac_success_extra" = "yes"; then
+	ac_cv_f77_mangling="$ac_case case"
+        if test -z "$ac_underscore"; then
+           ac_cv_f77_mangling="$ac_cv_f77_mangling, no underscore"
+	else
+           ac_cv_f77_mangling="$ac_cv_f77_mangling, underscore"
+        fi
+        if test -z "$ac_extra"; then
+           ac_cv_f77_mangling="$ac_cv_f77_mangling, no extra underscore"
+	else
+           ac_cv_f77_mangling="$ac_cv_f77_mangling, extra underscore"
+        fi
+      else
+	ac_cv_f77_mangling="unknown"
+      fi
   else
-    ac_cv_f77_mangling="$f77_case case, $f77_underscore underscores"
+     ac_cv_f77_mangling="unknown"
   fi
 
   LIBS=$ac_save_LIBS
@@ -1565,10 +1572,10 @@ AC_COMPILE_IFELSE(
   rm -f cf77_test*])
 AC_LANG_POP()dnl
 ])
-f77_case=`echo "$ac_cv_f77_mangling" | sed 's/ case.*$//'`
-f77_underscore=`echo "$ac_cv_f77_mangling" | sed 's/^.*, \(.*\) .*$/\1/'`
-])# AC_F77_NAME_MANGLING
+])# _AC_F77_NAME_MANGLING
 
+# The replacement is empty.
+AU_DEFUN([AC_F77_NAME_MANGLING], [])
 
 # AC_F77_WRAPPERS
 # ---------------
@@ -1577,29 +1584,35 @@ f77_underscore=`echo "$ac_cv_f77_mangling" | sed 's/^.*, \(.*\) .*$/\1/'`
 # underscores, respectively, so that they match the name mangling
 # scheme used by the Fortran 77 compiler.
 AC_DEFUN([AC_F77_WRAPPERS],
-[AC_REQUIRE([AC_F77_NAME_MANGLING])dnl
+[AC_REQUIRE([_AC_F77_NAME_MANGLING])dnl
 AH_TEMPLATE([F77_FUNC],
     [Define to a macro mangling the given C identifier (in lower and upper
      case), which must not contain underscores, for linking with Fortran.])dnl
 AH_TEMPLATE([F77_FUNC_],
     [As F77_FUNC, but for C identifiers containing underscores.])dnl
-case $f77_case,$f77_underscore in
-  lower,no)
+case $ac_cv_f77_mangling in
+  "lower case, no underscore, no extra underscore")
           AC_DEFINE([F77_FUNC(name,NAME)],  [name])
           AC_DEFINE([F77_FUNC_(name,NAME)], [name]) ;;
-  lower,single)
+  "lower case, no underscore, extra underscore")
+          AC_DEFINE([F77_FUNC(name,NAME)],  [name])
+          AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _]) ;;
+  "lower case, underscore, no extra underscore")
           AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
           AC_DEFINE([F77_FUNC_(name,NAME)], [name ## _]) ;;
-  lower,double)
+  "lower case, underscore, extra underscore")
           AC_DEFINE([F77_FUNC(name,NAME)],  [name ## _])
           AC_DEFINE([F77_FUNC_(name,NAME)], [name ## __]) ;;
-  upper,no)
+  "upper case, no underscore, no extra underscore")
           AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
           AC_DEFINE([F77_FUNC_(name,NAME)], [NAME]) ;;
-  upper,single)
+  "upper case, no underscore, extra underscore")
+          AC_DEFINE([F77_FUNC(name,NAME)],  [NAME])
+          AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _]) ;;
+  "upper case, underscore, no extra underscore")
           AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
           AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## _]) ;;
-  upper,double)
+  "upper case, underscore, extra underscore")
           AC_DEFINE([F77_FUNC(name,NAME)],  [NAME ## _])
           AC_DEFINE([F77_FUNC_(name,NAME)], [NAME ## __]) ;;
   *)
