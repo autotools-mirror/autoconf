@@ -1,9 +1,3 @@
-Issues to resolve before release:
-
-Test the new features: AC_PROG_CC_WORKS on Solaris, AC_CACHE_SAVE
-with spaces in var values on HP-UX, AC_FUNC_SETPGRP, AC_PATH_XTRA on
-Solaris, sed command splitting on HP-UX (many AC_SUBST's), AC_FUNC_FNMATCH.
-
 Major changes in release 2.11:
 
 * AC_PROG_CC and AC_PROG_CXX check whether the compiler works.

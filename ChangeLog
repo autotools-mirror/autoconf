@@ -1,5 +1,13 @@
 Wed Nov 13 10:07:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
+	* acspecific.m4 (AC_PROG_CC, AC_PROG_CXX): Check whether the
+	compiler works before checking whether it's a GNU compiler.
+	(AC_FUNC_VFORK): Call _exit after perror.
+	(AC_PATH_XTRA): Go back to using -R, as setting an env var as part
+	of CC doesn't get eval'd correctly to actually work.
+	Directly test whether a space is needed after -R.
+	Don't add "-L" to LDFLAGS if $x_libraries is empty.
+
 	* Test release 2.10.3.
 
 	* testsuite/Makefile.in (dejacheck): New target, suggested by Tom

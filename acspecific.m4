@@ -78,6 +78,7 @@ if test -z "$CC"; then
   test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 fi
 
+AC_PROG_CC_WORKS
 AC_CACHE_CHECK(whether we are using GNU C, ac_cv_prog_gcc,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
 cat > conftest.c <<EOF
@@ -119,14 +120,13 @@ else
   GCC=
   test "${CFLAGS+set}" = set || CFLAGS="-g"
 fi
-
-AC_PROG_CC_WORKS
 ])
 
 AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx cc++, gcc)
 
+AC_PROG_CXX_WORKS
 AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
 cat > conftest.C <<EOF
@@ -168,8 +168,6 @@ else
   GXX=
   test "${CXXFLAGS+set}" = set || CXXFLAGS="-g"
 fi
-
-AC_PROG_CXX_WORKS
 ])
 
 AC_DEFUN(AC_PROG_CC_WORKS,
@@ -1069,8 +1067,10 @@ sparc_address_test (arg) int arg;
   static pid_t child;
   if (!child) {
     child = vfork ();
-    if (child < 0)
+    if (child < 0) {
       perror ("vfork");
+      _exit(2);
+    }
     if (!child) {
       arg = getpid();
       write(-1, "", 0);
@@ -2008,11 +2008,27 @@ else
     X_LIBS="$X_LIBS -L$x_libraries"
 dnl FIXME banish uname from this macro!
     # For Solaris; some versions of Sun CC require a space after -R and
-    # others require no space, so we take a different approach.
-    if test "`(uname) 2>/dev/null`" = SunOS &&
-      uname -r | grep '^5' >/dev/null; then
-      CC="LD_RUN_PATH=$x_libraries $CC"
-    fi
+    # others require no space.  Words are not sufficient . . . .
+    case "`(uname -sr) 2>/dev/null`" in
+    "SunOS 5"*)
+      AC_MSG_CHECKING(whether -R must be followed by a space)
+      ac_xsave_LIBS="$LIBS"; LIBS="$LIBS -R$x_libraries"
+      AC_TRY_LINK(, , ac_R_nospace=yes, ac_R_nospace=no)
+      if test $ac_R_nospace = yes; then
+	AC_MSG_RESULT(no)
+	X_LIBS="$X_LIBS -R$x_libraries"
+      else
+	LIBS="$ac_xsave_LIBS -R $x_libraries"
+	AC_TRY_LINK(, , ac_R_space=yes, ac_R_space=no)
+	if test $ac_R_space = yes; then
+	  AC_MSG_RESULT(yes)
+	  X_LIBS="$X_LIBS -R $x_libraries"
+	else
+	  AC_MSG_RESULT(neither works)
+	fi
+      fi
+      LIBS="$ac_xsave_LIBS"
+    esac
   fi
 
   # Check for system-dependent libraries X programs must link with.
@@ -2028,7 +2044,7 @@ dnl FIXME banish uname from this macro!
     AC_CHECK_LIB(dnet, dnet_ntoa, [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet"])
     if test $ac_cv_lib_dnet_dnet_ntoa = no; then
       AC_CHECK_LIB(dnet_stub, dnet_ntoa,
-        [X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
+	[X_EXTRA_LIBS="$X_EXTRA_LIBS -ldnet_stub"])
     fi
 
     # msh@cis.ufl.edu says -lnsl (and -lsocket) are needed for his 386/AT,
@@ -2070,7 +2086,7 @@ dnl FIXME banish uname from this macro!
 
   # Check for libraries that X11R6 Xt/Xaw programs need.
   ac_save_LDFLAGS="$LDFLAGS"
-  LDFLAGS="$LDFLAGS -L$x_libraries"
+  test -n "$x_libraries" && LDFLAGS="$LDFLAGS -L$x_libraries"
   # SM needs ICE to (dynamically) link under SunOS 4.x (so we have to
   # check for ICE first), but we must link in the order -lSM -lICE or
   # we get undefined symbols.  So assume we have SM if we have ICE.
