@@ -79,11 +79,11 @@ all: ${PROGS}
 
 .sh:
 	rm -f $@ $@.tmp
-	$(editsh) $< > $@.tmp && mv $@.tmp $@ && chmod +x $@
+	$(editsh) $< > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
 
 .pl:
 	rm -f $@ $@.tmp
-	$(editpl) $< > $@.tmp && mv $@.tmp $@ && chmod +x $@
+	$(editpl) $< > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
 
 info: autoconf.info @standards_info@ INSTALL
 
@@ -159,8 +159,7 @@ configure: configure.in $(M4FILES)
 	cd $(srcdir); \
 	rm -f $@ $@.tmp; \
 	$(M4) autoconf.m4 configure.in > $@.tmp && \
-	mv $@.tmp $@ && \
-	chmod +x $@
+	chmod +x $@.tmp && mv $@.tmp $@
 Makefile: Makefile.in config.status
 	./config.status
 config.status: configure
