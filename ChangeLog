@@ -1,5 +1,14 @@
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Fix various typos.
+	(Limitations of Usual Tools) <sed>: Anchors and groups.
+	(Language Choice): Don't mention cross_compiling here, do it...
+	(Specifying Names) <--host>: here.
+	(Obsoleting Macros): Don't document AC_DEFUNCT, it's going to be
+	removed anyway, obsoleted itself by AU_DEFUN.
+
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CACHE_VAL): Swap the arguments of `regexp'.
 	Reported by Alexandre Oliva.
 

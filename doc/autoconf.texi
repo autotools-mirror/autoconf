@@ -956,7 +956,7 @@ The line number from where @var{macro} is called.
 
 @item $d
 The depth of the @var{macro} call.  This is an @code{m4} technical
-details which you probably don't want to know about.
+detail which you probably don't want to know about.
 
 @item $n
 The name of the @var{macro}.
@@ -1008,7 +1008,7 @@ The example below highlights the difference between @samp{$@@},
 % cat configure.in
 AC_DEFINE(This, is, [an
 [example]])
-% autoconf -t 'AC_DEFINE:@: $@
+% autoconf -t 'AC_DEFINE:@@: $@@
 *: $*
 %: $%'
 @@: [This],[is],[an
@@ -3621,9 +3621,9 @@ AC_CHECK_TYPES([unsigned long long, uintmax_t])
 Autoconf, up to 2.13, used to provide to another version of
 @code{AC_CHECK_TYPE}, broken by design.  In order to keep backward
 compatibility, a simple heuristics, quite safe but not totally, is
-implemented.  In case of doubt, the reader is strongly encourage to read
-the documentation of the former @code{AC_CHECK_TYPE}, see @ref{Obsolete
-Macros}.
+implemented.  In case of doubt, the reader is strongly encouraged to
+read the documentation of the former @code{AC_CHECK_TYPE}, see
+@ref{Obsolete Macros}.
 
 
 @node Compilers and Preprocessors, C Compiler Characteristics, Types, Existing Tests
@@ -4993,7 +4993,7 @@ Alas, negated character classes are probably not portable, although no
 shell is known not to support the @sc{posix.2} syntax @samp{[!...]}
 (when in interactive mode, @command{zsh} is confused by the
 @samp{[!...]} syntax and looks for an event in its history because of
-@samp{!}).  Many shell do not support the alternative syntax
+@samp{!}).  Many shells do not support the alternative syntax
 @samp{[^...]} (Solaris, Digital Unix etc.).
 
 One solution can be:
@@ -5116,6 +5116,10 @@ Nested groups are extremely portable, but there is at least one
 @command{sed} (System V/68 Base Operating System R3V7.1) which does not
 support it.
 
+Anchors (@samp{^} and @samp{$}) inside groups are not portable.
+@c FIXME: I know Solaris is guilty, but I don't remember how.
+
+
 @item @command{sed} (@samp{t})
 @cindex @command{sed} (@samp{t})
 Some old systems have @command{sed} which ``forget'' to reset their
@@ -5234,30 +5238,22 @@ compiler is used in tests that follow in @file{configure.in}.
 
 @defmac AC_LANG (@var{language})
 Do compilation tests using the compiler, preprocessor and file
-extensions for the @var{language}.  Set the shell variable
-@code{cross_compiling} to @samp{yes} or @samp{no} if the compiler is
-known to be a cross compiler, empty otherwise.
+extensions for the @var{language}.
 
 Support languages are:
 
 @table @samp
 @item C
 Do compilation tests using @code{CC} and @code{CPP} and use extension
-@file{.c} for test programs.  Set the shell variable
-@code{cross_compiling} to the value computed by @code{AC_PROG_CC} if it
-has been run, empty otherwise.
+@file{.c} for test programs.
 
 @item C++
 Do compilation tests using @code{CXX} and @code{CXXCPP} and use
-extension @file{.C} for test programs.  Set the shell variable
-@code{cross_compiling} to the value computed by @code{AC_PROG_CXX} if
-it has been run, empty otherwise.
+extension @file{.C} for test programs.
 
 @item Fortran 77
 Do compilation tests using @code{F77} and use extension @file{.f} for
-test programs.  Set the shell variable @code{cross_compiling} to the
-value computed by @code{AC_PROG_F77} if it has been run, empty
-otherwise.
+test programs.
 @end table
 @end defmac
 
@@ -6445,18 +6441,6 @@ replaced by the modern @var{implementation}.  The additional
 @var{message} is then printed.
 @end defmac
 
-Supporting old macros can quickly become a maintenance nightmare, so the
-temptation of removing obsolete macros is high.  The following macro
-intends to free the maintainer from this nightmare while still report an
-error to the users.
-
-@defmac AC_DEFUNCT (@var{macro-name}, @ovar{suggestion})
-@maindex DEFUNCT
-Define @var{macro-name} to be a macro which is no longer supported,
-i.e., die as soon as it is used.  This is the destiny of macros which
-have been left obsolete for a long time.
-@end defmac
-
 
 @c ================================================== Manual Configuration
 
@@ -6502,7 +6486,12 @@ the type of system on which the package is being configured and
 compiled (rarely needed).
 
 @item --host=@var{host-type}
-the type of system on which the package will run.
+@ovindex cross_compiling
+the type of system on which the package will run.  When this option is
+specified, @command{configure} enters the cross compilation mode
+(@code{cross_compiling} is set @samp{yes} instead of @samp{no}), i.e.,
+it can compile and link, but cannot run compiled programs to check the
+host system features.
 
 @item --target=@var{target-type}
 the type of system for which any compiler tools in the package will
@@ -7339,7 +7328,7 @@ individual @file{config.h.in}.
 
 
 @node autoupdate Invocation, Obsolete Macros, acconfig.h, Obsolete Constructs
-@section Using @code{autoupdate} to Modernize @code{configure}
+@section Using @code{autoupdate} to Modernize @file{configure.in}
 @cindex @code{autoupdate}
 
 The @code{autoupdate} program updates a @file{configure.in} file that
@@ -8066,7 +8055,7 @@ running @sc{xenix} on which you should not depend:
 @example
 AC_MSG_CHECKING(for Xenix)
 AC_EGREP_CPP(yes,
-[#if defined(M_XENIX) && !defined(M_UNIX)
+[#if defined M_XENIX && !defined M_UNIX
   yes
 #endif],
              [AC_MSG_RESULT(yes); XENIX=yes],
