@@ -9667,7 +9667,7 @@ may use comes with Autoconf.
 * configure Invocation::        Changing how @code{configure} runs
 @end menu
 
-@set autoconf_manual
+@set autoconf
 @include install.texi
 
 

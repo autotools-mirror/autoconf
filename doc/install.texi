@@ -1,7 +1,7 @@
 @c This file is included by autoconf.texi and is used to produce
 @c the INSTALL file.
 
-@ifclear autoconf_manual
+@ifclear autoconf
 
 Copyright 1994, 1995, 1996, 1999, 2000, 2001 Free Software Foundation,
 Inc.

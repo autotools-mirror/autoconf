@@ -1,5 +1,10 @@
 2001-08-17  Akim Demaille  <akim@epita.fr>
 
+	* doc/install.texi, doc/autoconf.texi: Use `autoconf', not
+	`autoconf_manual', as texinfo.tex 2001-06-21.10 chokes on it.
+
+2001-08-17  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Refer to `$as_me.log', not
 	`$0.log' as for projects where testsuite is in src, we'd have
 	testsuite.log created in src.
