@@ -1059,6 +1059,11 @@ comments in the source.  The relevant data will be in variables, which
 are easy to examine with the debugger, so there is no point moving them
 elsewhere.
 
+Do not use a count of errors as the exit status for a program.
+@emph{That does not work}, because exit status values are limited to 8
+bits (0 through 255).  A single run of the program might have 256
+errors; if you try to return 256 as the exit status, the parent process
+will see 0 as the status, and it will appear that the program succeeded.
 
 @node Errors
 @chapter Formatting Error Messages
