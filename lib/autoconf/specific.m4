@@ -217,7 +217,7 @@ AC_DEFUN(AC_PROG_CXX_WORKS,
 [AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
-AC_TRY_COMPILER([main(){return(0);}], ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
+AC_TRY_COMPILER([int main(){return(0);}], ac_cv_prog_cxx_works, ac_cv_prog_cxx_cross)
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_cv_prog_cxx_works)
 if test $ac_cv_prog_cxx_works = no; then

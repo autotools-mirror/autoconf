@@ -1,3 +1,8 @@
+1999-01-01  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_PROG_CXX_WORKS): Specify an explicit return
+	type for `main' to keep modern C++ compilers happy.
+
 1998-12-27  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (AC_PROG_INSTALL): Update.
