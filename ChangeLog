@@ -1,5 +1,12 @@
 2001-08-20  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/general.m4 (_AC_INIT_PACKAGE): Warn if the
+	arguments are not literals.
+	* doc/autoconf.texi (Input) <AC_INIT>: Arguments must be literals.
+	Specify the output variables, and macros defined.
+
+2001-08-20  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Examining Declarations) <AC_TRY_CPP>:
 	(Examining Syntax) <AC_TRY_COMPILE>
 	(Examining Libraries) <AC_TRY_LINK>

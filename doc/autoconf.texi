@@ -1591,6 +1591,37 @@ Process any command-line arguments and perform various initializations
 and verifications.  Set the name of the @var{package} and its
 @var{version}.  The optional argument @var{bug-report-address} should be
 the email to which users should send bug reports.
+
+These three arguments must be @emph{static}, i.e., there must not be any
+shell computation, but they can be computed by M4.  The following macros
+and output variables are then defined:
+
+@table @asis
+@item @code{AC_PACKAGE_NAME}, @code{PACKAGE_NAME}
+@acindex PACKAGE_NAME
+@ovindex PACKAGE_NAME
+Exactly @var{package}.
+
+@item @code{AC_PACKAGE_TARNAME}, @code{PACKAGE_TARNAME}
+@acindex PACKAGE_TARNAME
+@ovindex PACKAGE_TARNAME
+@var{package} once @samp{GNU } strip, and lower cased.
+
+@item @code{AC_PACKAGE_VERSION}, @code{PACKAGE_VERSION}
+@acindex PACKAGE_VERSION
+@ovindex PACKAGE_VERSION
+Exactly @var{version}.
+
+@item @code{AC_PACKAGE_STRING}, @code{PACKAGE_STRING}
+@acindex PACKAGE_STRING
+@ovindex PACKAGE_STRING
+Exactly @samp{@var{package} @var{version}}.
+
+@item @code{AC_PACKAGE_BUGREPORT}, @code{PACKAGE_BUGREPORT}
+@acindex PACKAGE_BUGREPORT
+@ovindex PACKAGE_BUGREPORT
+Exactly @var{bug-report-address}.
+@end table
 @end defmac
 
 @defmac AC_CONFIG_SRCDIR (@var{unique-file-in-source-dir})

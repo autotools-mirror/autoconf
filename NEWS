@@ -1,8 +1,15 @@
 * Major changes in Autoconf 2.52c                       -*- outline -*-
 ** Licensing
-  The autoconf manual is now distributed under the terms of the GNU FDL.
+  The Autoconf manual is now distributed under the terms of the GNU FDL.
 ** Requirements
   Perl 5.005 is now required to run Autoconf.
+** Documentation
+- AC_INIT
+  Argument requirements, output variables, defined macros.
+- Autotest
+  First sketch of its documentation.
+- Double quoting macros
+  AC_TRY_CPP, AC_TRY_COMPILE, AC_TRY_LINK and AC_TRY_RUN.
 ** autom4te
   New executable, used by the Autoconf suite to cache and speed up
   some processing.

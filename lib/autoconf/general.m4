@@ -452,12 +452,13 @@ m4_popdef([AC_Prefix])dnl
 
 
 
-# _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION,
-#                  [BUG-REPORT],
-#                  [TAR-NAME = unGNU'd lower case PACKAGE-NAME])
-# --------------------------------------------------------------
+# _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION, BUG-REPORT)
+# ---------------------------------------------------
 m4_define([_AC_INIT_PACKAGE],
-[m4_define([AC_PACKAGE_NAME],     [$1])
+[AS_LITERAL_IF([$1], [], [m4_warn([syntax], [AC_INIT: not a literal: $1])])
+AS_LITERAL_IF([$2], [],  [m4_warn([syntax], [AC_INIT: not a literal: $2])])
+AS_LITERAL_IF([$3], [],  [m4_warn([syntax], [AC_INIT: not a literal: $3])])
+m4_define([AC_PACKAGE_NAME],     [$1])
 m4_define([AC_PACKAGE_TARNAME],
           m4_tolower(m4_patsubst([[[$1]]], [GNU ])))
 m4_define([AC_PACKAGE_VERSION],   [$2])
