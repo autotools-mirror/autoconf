@@ -1,5 +1,9 @@
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl ($dir, $autoconf): New.
+
+2001-01-22  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl ($headers, $functions, $identifiers, $libraries):
 	Also register locations of their requirement instead of a simple
 	counter.

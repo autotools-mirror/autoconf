@@ -22,7 +22,24 @@
 require "find.pl";
 use Getopt::Long;
 
+# Find the lib files and autoconf.
 $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
+($dir = $0) =~ s,[^/]*$,,;
+$autoconf = '';
+# We test "$dir/autoconf" in case we are in the build tree, in which case
+# the names are not transformed yet.
+foreach $file ("$ENV{AUTOCONF}" || '',
+	       "$dir/@autoconf-name@",
+	       "$dir/autoconf",
+	       "@bindir@/@autoconf-name@")
+  {
+    if (-f $file)
+      {
+	$autoconf = $file;
+	last;
+      }
+  }
+
 ($me = $0) =~ s,.*/,,;
 $verbose = 0;
 
@@ -538,7 +555,7 @@ sub check_configure_ac
       $trace_option .= " -t $macro";
     }
 
-  open (TRACES, "/home/akim/src/ace/autoconf -A $datadir $trace_option $configure_ac|") ||
+  open (TRACES, "$autoconf -A $datadir $trace_option $configure_ac|") ||
     die "$me: cannot create read traces: $!\n";
 
   while (<TRACES>)
