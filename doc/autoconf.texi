@@ -188,7 +188,7 @@ a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
 
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
-2001, 2002, 2003 Free Software Foundation, Inc.
+2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -584,6 +584,7 @@ Indices
 
 @node Introduction
 @chapter Introduction
+@cindex Introduction
 
 @flushright
 A physicist, an engineer, and a computer scientist were discussing the
@@ -687,6 +688,7 @@ Peter Simons}.
 
 @node The GNU Build System
 @chapter The @acronym{GNU} Build System
+@cindex GNU build system
 
 Autoconf solves an important problem---reliable discovery of
 system-specific build and run-time information---but this is only one
@@ -1639,6 +1641,7 @@ Exactly @var{bug-report}.
 
 @node Notices
 @section Notices in @command{configure}
+@cindex Notices in @command{configure}
 
 The following macros manage version numbers for @command{configure}
 scripts.  Using them is optional.
@@ -1778,6 +1781,7 @@ declaration before @option{--trace} can be called safely.
 
 @node Output
 @section Outputting Files
+@cindex Outputting files
 
 Every Autoconf script, e.g., @file{configure.ac}, should finish by
 calling @code{AC_OUTPUT}.  That is the macro that generates and runs
@@ -1842,6 +1846,7 @@ that runs @code{MAKE} on other directories:
 
 @node Configuration Actions
 @section Performing Configuration Actions
+@cindex Configuration actions
 
 @file{configure} is designed so that it appears to do everything itself,
 but there is actually a hidden slave: @file{config.status}.
@@ -1983,6 +1988,8 @@ All these macros can be called multiple times, with different
 
 @node Configuration Files
 @section Creating Configuration Files
+@cindex Creating configuration files
+@cindex Configuration file creation
 
 Be sure to read the previous section, @ref{Configuration Actions}.
 
@@ -2026,6 +2033,8 @@ to prepend and/or append boilerplate to the file.
 
 @node Makefile Substitutions
 @section Substitutions in Makefiles
+@cindex Substitutions in makefiles
+@cindex Makefile substitutions
 
 Each subdirectory in a distribution that contains something to be
 compiled or installed should come with a file @file{Makefile.in}, from
@@ -2060,6 +2069,7 @@ before compiling it.
 
 @node Preset Output Variables
 @subsection Preset Output Variables
+@cindex Output variables
 
 Some output variables are preset by the Autoconf macros.  Some of the
 Autoconf macros set additional output variables, which are mentioned in
@@ -2234,6 +2244,8 @@ Absolute path of @code{top_srcdir}.
 
 @node Installation Directory Variables
 @subsection Installation Directory Variables
+@cindex Installation directories
+@cindex Directories, installation
 
 The following variables specify the directories where the package will
 be installed, see @ref{Directory Variables,, Variables for
@@ -2428,6 +2440,8 @@ support separated builds.
 
 @node Build Directories
 @subsection Build Directories
+@cindex Build directories
+@cindex Directories, build
 
 You can support compiling a software package for several architectures
 simultaneously from the same copy of the source code.  The object files
@@ -2471,6 +2485,8 @@ time.info: time.texinfo
 
 @node Automatic Remaking
 @subsection Automatic Remaking
+@cindex Automatic remaking
+@cindex Remaking automatically
 
 You can put rules like the following in the top-level @file{Makefile.in}
 for a package to automatically update the configuration information when
@@ -2593,6 +2609,7 @@ to prepend and/or append boilerplate to the file.
 @node Header Templates
 @subsection Configuration Header Templates
 @cindex Configuration Header Template
+@cindex Header templates
 @cindex @file{config.h.in}
 
 Your distribution should contain a template file that looks as you want
@@ -2746,6 +2763,7 @@ disable warnings falling into @var{category}
 
 @node Autoheader Macros
 @subsection Autoheader Macros
+@cindex Autoheader macros
 
 @command{autoheader} scans @file{configure.ac} and figures out which C
 preprocessor symbols it might define.  It knows how to generate
@@ -2820,6 +2838,8 @@ Include @var{text} at the bottom of the header template file.
 
 @node Configuration Commands
 @section Running Arbitrary Configuration Commands
+@cindex Configuration commands
+@cindex Commands for configuration
 
 You can execute arbitrary commands before, during, and after
 @file{config.status} is run.  The three following macros accumulate the
@@ -2866,6 +2886,8 @@ Execute the @var{cmds} right after creating @file{config.status}.
 
 @node Configuration Links
 @section Creating Configuration Links
+@cindex Configuration links
+@cindex Links for configuration
 
 You may find it convenient to create links whose destinations depend upon
 results of tests.  One can use @code{AC_CONFIG_COMMANDS} but the
@@ -2909,6 +2931,8 @@ to create the links.
 
 @node Subdirectories
 @section Configuring Other Packages in Subdirectories
+@section Configure subdirectories
+@section Subdirectory configure
 
 In most situations, calling @code{AC_OUTPUT} is sufficient to produce
 @file{Makefile}s in subdirectories.  However, @command{configure} scripts
@@ -2985,6 +3009,8 @@ This macro may be called multiple times.
 
 @node Default Prefix
 @section Default Prefix
+@cindex Install prefix
+@cindex Prefix for install
 
 By default, @command{configure} sets the prefix for files it installs to
 @file{/usr/local}.  The user of @command{configure} can select a different
@@ -3059,6 +3085,7 @@ Symbols}, for how to get those symbol definitions into your program.
 
 @node Common Behavior
 @section Common Behavior
+@cindex Common autoconf behavior
 
 Much effort has been expended to make Autoconf easy to learn.  The most
 obvious way to reach this goal is simply to enforce standard interfaces
@@ -3074,6 +3101,7 @@ rules.
 
 @node Standard Symbols
 @subsection Standard Symbols
+@cindex Standard symbols
 
 All the generic macros that @code{AC_DEFINE} a symbol as a result of
 their test transform their @var{argument}s to a standard alphabet.
@@ -3094,6 +3122,7 @@ succeeds.
 
 @node Default Includes
 @subsection Default Includes
+@cindex Default includes
 @cindex Includes, default
 
 Several tests depend upon a set of header files.  Since these headers
@@ -3537,6 +3566,8 @@ it, then you can use one of the general function-check macros.
 
 @node Function Portability
 @subsection Portability of C Functions
+@cindex Portability of C functions
+@cindex C function portability
 
 Most usual functions can either be missing, or be buggy, or be limited
 on some architectures.  This section tries to make an inventory of these
@@ -4373,6 +4404,8 @@ it, then you can use one of the general header-file check macros.
 
 @node Header Portability
 @subsection Portability of Headers
+@cindex Portability of headers
+@cindex Header portability
 
 This section tries to collect knowledge about common headers, and the
 problems they cause.  By definition, this list will always require
@@ -5039,6 +5072,8 @@ AC_CHECK_MEMBERS([struct stat.st_rdev, struct stat.st_blksize])
 
 @node Types
 @section Types
+@cindex Types
+@cindex C types
 
 The following macros check for C types, either builtin or typedefs.  If
 there is no macro specifically defined to check for a type you need, and
@@ -5166,6 +5201,8 @@ implemented.  In case of doubt, read the documentation of the former
 
 @node Compilers and Preprocessors
 @section Compilers and Preprocessors
+@cindex Compilers
+@cindex Preprocessors
 
 @ovindex EXEEXT
 All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
@@ -5637,6 +5674,8 @@ it is not known whether such broken preprocessors exist for C++.
 
 @node Fortran Compiler
 @subsection Fortran Compiler Characteristics
+@cindex Fortran
+@cindex F77
 
 The Autoconf Fortran support is divided into two categories: legacy
 Fortran 77 macros (@code{F77}), and modern Fortran macros (@code{FC}).
@@ -5989,6 +6028,7 @@ The following macros check for operating system services or capabilities.
 
 @defmac AC_PATH_X
 @acindex{PATH_X}
+@cindex X Window System
 Try to locate the X Window System include files and libraries.  If the
 user gave the command line options @option{--x-includes=@var{dir}} and
 @option{--x-libraries=@var{dir}}, use those directories.  If either or
@@ -6043,6 +6083,8 @@ if the system supports @samp{#!}, @samp{no} if not.
 @cvindex _FILE_OFFSET_BITS
 @cvindex _LARGE_FILES
 @ovindex CC
+@cindex Large file support
+@cindex LFS
 Arrange for
 @href{http://www.unix-systems.org/version2/whatsnew/lfs20mar.html,
 large-file support}.  On some hosts, one must use special compiler
@@ -6709,6 +6751,7 @@ of calling the macros.
 
 @node Systemology
 @section Systemology
+@cindex Systemology
 
 This section aims at presenting some systems and pointers to
 documentation.  It may help you addressing particular problems reported
@@ -6910,6 +6953,7 @@ AC_CHECK_HEADER(elf.h, [AC_DEFINE(SVR4); LIBS="$LIBS -lelf"])
 
 @node Setting Output Variables
 @section Setting Output Variables
+@cindex Output variables
 
 Another way to record the results of tests is to set @dfn{output
 variables}, which are shell variables whose values are substituted into
@@ -7357,6 +7401,7 @@ make hard links}.
 
 @node Programming in M4
 @chapter Programming in M4
+@cindex M4
 
 Autoconf is written on top of two layers: @dfn{M4sugar}, which provides
 convenient macros for pure M4 programming, and @dfn{M4sh}, which
@@ -7375,6 +7420,7 @@ and their interface might change in the future.  As a matter of fact,
 
 @node M4 Quotation
 @section M4 Quotation
+@cindex M4 quotation
 @cindex quotation
 
 @c FIXME: Grmph, yet another quoting myth: quotation has *never*
@@ -7654,6 +7700,7 @@ it's an exception that should be avoided in Autoconf.
 
 @node Changequote is Evil
 @subsection @code{changequote} is Evil
+@cindex @code{changequote}
 
 The temptation is often high to bypass proper quotation, in particular
 when it's late at night.  Then, many experienced Autoconf hackers
@@ -8410,6 +8457,8 @@ $1 = [a],[b], $@@ = [[a],[b]]
 
 @node Forbidden Patterns
 @subsection Forbidden Patterns
+@cindex Forbidden patterns
+@cindex Patterns, forbidden
 
 M4sugar provides a means to define suspicious patterns, patterns
 describing tokens which should not be found in the output.  For
@@ -8685,6 +8734,7 @@ When the user runs @samp{autoconf -W error}, warnings from
 
 @node Dependencies Between Macros
 @section Dependencies Between Macros
+@cindex Dependencies between macros
 
 Some Autoconf macros depend on other macros having been called first in
 order to work correctly.  Autoconf provides a way to ensure that certain
@@ -8698,6 +8748,8 @@ called in an order that might cause incorrect operation.
 
 @node Prerequisite Macros
 @subsection Prerequisite Macros
+@cindex Prerequisite macros
+@cindex Macros, prerequisites
 
 A macro that you write might need to use values that have previously
 been computed by other macros.  For example, @code{AC_DECL_YYTEXT}
@@ -8796,6 +8848,8 @@ macro.  You can use @code{dnl} to avoid the empty lines they leave.
 
 @node Suggested Ordering
 @subsection Suggested Ordering
+@cindex Macros, ordering
+@cindex Ordering macros
 
 Some macros should be run before another macro if both are called, but
 neither @emph{requires} that the other be called.  For example, a macro
@@ -8834,6 +8888,8 @@ that it has been called.
 
 @node Obsoleting Macros
 @section Obsoleting Macros
+@cindex Obsoleting macros
+@cindex Macros, obsoleting
 
 Configuration and portability technology has evolved over the years.
 Often better ways of solving a particular problem are developed, or
@@ -8860,6 +8916,7 @@ replaced by the modern @var{implementation}.  In the future,
 
 @node Coding Style
 @section Coding Style
+@cindex Coding style
 
 The Autoconf macros follow a strict coding style.  You are encouraged to
 follow this style, especially if you intend to distribute your macro,
@@ -9070,6 +9127,7 @@ test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
 
 @node Portable Shell
 @chapter Portable Shell Programming
+@cindex Portable shell programming
 
 When writing your own checks, there are some shell-script programming
 techniques you should avoid in order to make your code portable.  The
@@ -9124,6 +9182,7 @@ There are other sources of documentation about shells.  See for instance
 
 @node Shellology
 @section Shellology
+@cindex Shellology
 
 There are several families of shells, most prominently the Bourne family
 and the C shell family which are deeply incompatible.  If you want to
@@ -9187,8 +9246,9 @@ you use @command{bash} 2.05 or higher to execute @command{configure},
 you'll need to use @command{bash} 2.05 for all other build tasks as well.
 
 @item Ksh
-@prindex Ksh
-@prindex Korn shell
+@cindex Ksh
+@cindex Korn shell
+@prindex @samp{ksh}
 @prindex @samp{ksh88}
 @prindex @samp{ksh93}
 The Korn shell is compatible with the Bourne family and it mostly
@@ -9253,6 +9313,8 @@ So while most modern systems do have a shell @emph{somewhere} that meets the
 
 @node Here-Documents
 @section Here-Documents
+@cindex Here documents
+@cindex Shell here documents
 
 Don't rely on @samp{\} being preserved just because it has no special
 meaning together with the next symbol.  In the native @command{/bin/sh}
@@ -9329,6 +9391,9 @@ executing the macro at all.
 
 @node File Descriptors
 @section File Descriptors
+@cindex Descriptors
+@cindex File descriptors
+@cindex Shell file descriptors
 
 Some file descriptors shall not be used, since some systems, admittedly
 arcane, use them for special purpose:
@@ -9398,6 +9463,7 @@ bar}; see @ref{Limitations of Builtins}, @command{mv} for more details.
 
 @node File System Conventions
 @section File System Conventions
+@cindex File system conventions
 
 While @command{autoconf} and friends will usually be run on some Unix
 variety, it can and will be used on other systems, most notably @acronym{DOS}
@@ -9513,6 +9579,7 @@ include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
 
 @node Shell Substitutions
 @section Shell Substitutions
+@cindex Shell substitutions
 
 Contrary to a persistent urban legend, the Bourne shell does not
 systematically split variables and back-quoted expressions, in particular
@@ -9761,6 +9828,7 @@ confusion, insert a space between the two opening parentheses.
 
 @node Assignments
 @section Assignments
+@cindex Shell assignments
 
 When setting several variables in a row, be aware that the order of the
 evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
@@ -9844,6 +9912,7 @@ for the rationale.
 
 @node Parentheses
 @section Parentheses in Shell Scripts
+@cindex Shell parentheses
 
 Beware of two opening parentheses in a row, as some shell
 implementations mishandle them.  For example, @samp{pdksh} 5.2.14
@@ -9875,6 +9944,8 @@ shell implementations.  It can be omitted safely.
 
 @node Special Shell Variables
 @section Special Shell Variables
+@cindex Shell variables
+@cindex Special shell variables
 
 Some shell variables should not be used, since they can have a deep
 influence on the behavior of the shell.  In order to recover a sane
@@ -10132,6 +10203,8 @@ the time.  This can be observed by using @command{set}.
 
 @node Limitations of Builtins
 @section Limitations of Shell Builtins
+@cindex Shell builtins
+@cindex Limitations of shell builtins
 
 No, no, we are serious: some shells do have limitations!  :)
 
@@ -10698,6 +10771,7 @@ the case of environment variables.
 
 @node Limitations of Usual Tools
 @section Limitations of Usual Tools
+@cindex Limitations of usual tools
 
 The small set of tools you can expect to find on any machine can still
 include some limitations you should be aware of.
@@ -10765,6 +10839,7 @@ non-printing characters, @emph{seems} portable, though.
 
 @item @command{cc}
 @c ---------------
+@prindex @command{cc}
 When a compilation such as @samp{cc foo.c -o foo} fails, some compilers
 (such as @sc{cds} on Reliant @sc{unix}) leave a @file{foo.o}.
 
@@ -11037,6 +11112,7 @@ replacement @code{grep -F}.  To work around this problem, invoke
 
 @item @command{find}
 @c -----------------
+@prindex @command{find}
 The option @option{-maxdepth} seems to be @acronym{GNU} specific.
 Tru64 v5.1, Net@acronym{BSD} 1.5 and Solaris 2.5 @command{find}
 commands do not understand it.
@@ -11350,6 +11426,8 @@ fails to work on SunOS 4.1.3 when the empty file is on an
 
 @node Limitations of Make
 @section Limitations of Make
+@prindex @command{make}
+@cindex Limitations of @command{make}
 
 @command{make} itself suffers a great number of limitations, only a few
 of which are listed here.  First of all, remember that since commands
@@ -12129,6 +12207,7 @@ Autoconf provides a uniform method for handling unguessable features.
 
 @node Specifying Names
 @section Specifying the System Type
+@cindex System type
 
 Like other @acronym{GNU} @command{configure} scripts, Autoconf-generated
 @command{configure} scripts can make decisions based on a canonical name
@@ -12194,6 +12273,8 @@ interface; see @ref{Hosts and Cross-Compilation}.
 
 @node Canonicalizing
 @section Getting the Canonical System Type
+@cindex System type
+@cindex Canonical system type
 
 The following macros make the system type available to @command{configure}
 scripts.
@@ -12380,6 +12461,7 @@ options.
 
 @node External Software
 @section Working With External Software
+@cindex External software
 
 Some packages require, or can optionally use, other software packages
 that are already installed.  The user can give @command{configure}
@@ -12461,6 +12543,8 @@ support providing a help string.
 
 @node Package Options
 @section Choosing Package Options
+@cindex Package options
+@cindex Options, package
 
 If a software package has optional compile-time features, the user can
 give @command{configure} command line options to specify whether to
@@ -12530,6 +12614,7 @@ support providing a help string.
 
 @node Pretty Help Strings
 @section Making Your Help Strings Look Pretty
+@cindex Help strings
 
 Properly formatting the @samp{help strings} which are used in
 @code{AC_ARG_WITH} (@pxref{External Software}) and @code{AC_ARG_ENABLE}
@@ -12581,6 +12666,7 @@ AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)])
 
 @node Site Details
 @section Configuring Site Details
+@cindex Site details
 
 Some software packages require complex site-specific information.  Some
 examples are host names to use for certain services, company names, and
@@ -12602,6 +12688,8 @@ Standards}, for more information on where to put data files.
 
 @node Transforming Names
 @section Transforming Program Names When Installing
+@cindex Transforming program names
+@cindex Program names, transforming
 
 Autoconf supports changing the names of programs when installing them.
 In order to use these transformations, @file{configure.ac} must call the
@@ -12723,6 +12811,7 @@ manuals.
 
 @node Site Defaults
 @section Setting Site Defaults
+@cindex Site defaults
 
 Autoconf-generated @command{configure} scripts allow your site to provide
 default values for some configuration values.  You do this by creating
@@ -12959,6 +13048,7 @@ The calling convention of @file{config.status} has changed; see
 
 @node Obsolete Constructs
 @chapter Obsolete Constructs
+@cindex Obsolete constructs
 
 Autoconf changes, and throughout the years some constructs have been
 obsoleted.  Most of the changes involve the macros, but in some cases
@@ -13999,6 +14089,8 @@ AC_EGREP_CPP(yes,
 
 @node Autoconf 1
 @section Upgrading From Version 1
+@cindex Upgrading autoconf
+@cindex Autoconf upgrading
 
 Autoconf version 2 is mostly backward compatible with version 1.
 However, it introduces better ways to do some things, and doesn't
@@ -14181,6 +14273,8 @@ encapsulate them into macros that you can share.
 
 @node Autoconf 2.13
 @section Upgrading From Version 2.13
+@cindex Upgrading autoconf
+@cindex Autoconf upgrading
 
 The introduction of the previous section (@pxref{Autoconf 1}) perfectly
 suits this section@enddots{}
@@ -14335,6 +14429,7 @@ $
 
 @node Hosts and Cross-Compilation
 @subsection Hosts and Cross-Compilation
+@cindex Cross compilation
 
 Based on the experience of compiler writers, and after long public
 debates, many aspects of the cross-compilation chain have changed:
@@ -15143,6 +15238,7 @@ are addressed.
 
 @node Distributing
 @section Distributing @command{configure} Scripts
+@cindex License
 
 @display
 What are the restrictions on distributing @command{configure}
@@ -15195,6 +15291,7 @@ installed, since they prefer them.
 
 @node Bootstrapping
 @section How Can I Bootstrap?
+@cindex Bootstrap
 
 @display
 If Autoconf requires @acronym{GNU} M4 and @acronym{GNU} M4 has an Autoconf
@@ -15210,6 +15307,7 @@ people have to do (mainly its maintainer).
 
 @node Why Not Imake
 @section Why Not Imake?
+@cindex Imake
 
 @display
 Why not use Imake instead of @command{configure} scripts?
@@ -15524,6 +15622,7 @@ prerequisite.
 
 @node History
 @chapter History of Autoconf
+@cindex History of autoconf
 
 You may be wondering, Why was Autoconf originally written?  How did it
 get into its present form?  (Why does it look like gorilla spit?)  If
@@ -15730,6 +15829,7 @@ have free time again.  I think.  Yeah, right.)
 
 @node Copying This Manual
 @appendix Copying This Manual
+@cindex License
 
 @menu
 * GNU Free Documentation License::  License for copying this manual
