@@ -1,3 +1,51 @@
+2005-02-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sugar.m4 (m4_re_escape): Escape ?, ^, \, $ too;
+	this fixes a bug tickled by the AT_CAPTURE_FILE change noted below.
+
+	Try not to generated lines of unlimited length, as POSIX places a
+	2047-byte limit on line length of portable text files.
+	* lib/autoconf/general.m4 (AC_SUBST, AC_SUBST_FILE):
+	Use newline as a separator, not space.
+	* lib/autotest/general.m4 (AT_TESTED, AT_KEYWORDS): Likewise.
+	(AT_CAPTURE_FILE): Use space-backslash-newline as a separator, not
+	space.
+
+2005-02-03  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_WORK): Move func_* to
+	as_func_*.  Add test to check whether positional parameters
+	are restored after function return.
+
+2005-02-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Special Shell Variables): Mention _,
+	BIN_SH, DUALCASE.  Say that variables other than "status" are safe
+	if they contain a lower-case letter.  The DUALCASE problem was
+	reported by Ralf Wildenhues.
+
+	* bin/autoconf.as: Don't exit with status 0 after write failure
+	with --help or --version.
+	* lib/autoconf/general.m4 (_AC_INIT_HELP, _AC_INIT_VERSION): Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Likewise.
+
+2005-02-02  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Limitations of Usual Tools):
+	Unicos 9 sed limitations.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Try cf77 before fort77
+	to get the option-enhanced interface on older Crays.  Try ftn for
+	Fortran 95 (newer Crays).
+
+2005-02-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* man/Makefile.am (.x.1): Go back to the simple solution, but take
+	care to echo the commands, so the user knows what's going on.
+	Modified from a suggestion by Stepan Kasal.
+
+	* doc/autoconf.texi (autoreconf Invocation): Mention autopoint,
+	with a cross reference.  Derived from a suggestion by Bruce Korb.
+
 2005-01-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (config.status Invocation): Warn about
