@@ -2700,10 +2700,10 @@ built in another directory than its sources.
 @cindex Links
 Make @code{AC_OUTPUT} link each of the existing files @var{source} to
 the corresponding link name @var{dest}.  Makes a symbolic link if
-possible, otherwise a hard link.  The @var{dest} and @var{source} names
-should be relative to the top level source or build directory.  This
-macro is one of the instantiating macros, see @ref{Configuration
-Actions}.
+possible, otherwise a hard link if possible, otherwise a copy.  The
+@var{dest} and @var{source} names should be relative to the top level
+source or build directory.  This macro is one of the instantiating
+macros, see @ref{Configuration Actions}.
 
 For example, this call:
 
@@ -9849,7 +9849,7 @@ extended regular expressions and alternation.
 @prindex @command{ln}
 @cindex Symbolic links
 Don't rely on @command{ln} having a @option{-f} option.  Symbolic links
-are not available on old systems, use @samp{ln} as a fall back.
+are not available on old systems; use @samp{$(LN_S)} as a portable substitute.
 
 For versions of the DJGPP before 2.04, @command{ln} emulates soft links
 for executables by generating a stub that in turn calls the real
