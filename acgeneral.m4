@@ -1998,10 +1998,12 @@ changequote([,]), [#include <sys/types.h>
 #if STDC_HEADERS
 #include <stdlib.h>
 #include <stddef.h>
-#endif], ac_cv_type_$1=yes, ac_cv_type_$1=no)])dnl
-AC_MSG_RESULT($ac_cv_type_$1)
-if test $ac_cv_type_$1 = no; then
-  AC_DEFINE($1, $2)
+#endif], eval "ac_cv_type_$1=yes", eval "ac_cv_type_$1=no")])dnl
+if eval "test \"`echo '$ac_cv_type_'$1`\" = yes"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_DEFINE_UNQUOTED($1, $2)
 fi
 ])
 

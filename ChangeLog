@@ -1,3 +1,8 @@
+1999-04-11  Paul Eggert  <eggert@twinsun.com>
+
+	* acgeneral.m4 (AC_CHECK_TYPE): Allow first argument to be a
+	shell variable.
+
 1999-04-11  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_C_STRUCT_MEMBER): New macro.
