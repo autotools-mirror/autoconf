@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.4.2)
+define(AC_ACVERSION, 2.5)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -130,7 +130,7 @@ dnl it will bring back all the code accumulated in the diversion stack.
 dnl This, combined with AC_REQUIRE, achieves the topological ordering of
 dnl macros.  We don't use this macro to define some frequently called
 dnl macros that are not involved in ordering constraints, to save m4
-dnl processing. 
+dnl processing.
 dnl AC_DEFUN(NAME, EXPANSION)
 define([AC_DEFUN],
 [define($1, [AC_PRO([$1])$2[]AC_EPI()])])
@@ -533,7 +533,7 @@ changequote([, ])dnl
   -*) AC_MSG_ERROR([$ac_option: invalid option; use --help to show usage])
     ;;
 
-  *) 
+  *)
 changequote(, )dnl
     if test -n "`echo $ac_option| sed 's/[-a-z0-9.]//g'`"; then
 changequote([, ])dnl
@@ -858,7 +858,7 @@ AC_BEFORE([$0], [AC_ARG_PROGRAM])
 #
 # The rules are:
 # 1. You are not allowed to specify --host, --target, and nonopt at the
-#    same time. 
+#    same time.
 # 2. Host defaults to nonopt.
 # 3. If nonopt is not specified, then host defaults to the current host,
 #    as determined by config.guess.
@@ -1314,7 +1314,7 @@ fi
 dnl AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR[, VALUE-IF-NOT-FOUND [, PATH]])
 AC_DEFUN(AC_CHECK_TOOL,
 [AC_REQUIRE([AC_CHECK_TOOL_PREFIX])dnl
-AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2, 
+AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
 	      ifelse([$3], , [$2], ), $4)
 ifelse([$3], , , [
 if test -z "$ac_cv_prog_$1"; then
@@ -1370,7 +1370,7 @@ LIBS="$ac_save_LIBS"
 ])dnl
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   AC_MSG_RESULT(yes)
-  ifelse([$3], , 
+  ifelse([$3], ,
 [changequote(, )dnl
   ac_tr_lib=HAVE_LIB`echo $1 | tr 'abcdedfghijklmnopqrstuvwxyz' 'ABCDEDFGHIJKLMNOPQRSTUVWXYZ'`
 changequote([, ])dnl
@@ -1402,7 +1402,7 @@ LIBS="$ac_save_LIBS"
 ])dnl
 AC_MSG_RESULT($AC_CV_NAME)
 if test "$AC_CV_NAME" = yes; then
-  ifelse([$2], , 
+  ifelse([$2], ,
 [AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
   LIBS="-l[]AC_LIB_NAME[] $LIBS"
 ], [$2])
@@ -1628,7 +1628,7 @@ dnl select.  Similarly for bzero.
 extern "C"
 #endif
 ])dnl
-[char $1(); 
+[char $1();
 ], [
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
@@ -1814,7 +1814,7 @@ changequote([, ])dnl
 AC_OUTPUT_FILES($1)
 ifdef([AC_LIST_HEADER], [AC_OUTPUT_HEADER(AC_LIST_HEADER)])dnl
 ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_FILES, AC_LIST_LINKS)])dnl
-ifelse([$3], , , 
+ifelse([$3], , ,
 [EOF
 cat >> $CONFIG_STATUS <<EOF
 $3
@@ -1855,9 +1855,9 @@ dnl This is a subroutine of AC_OUTPUT.  It is called inside an unquoted
 dnl here document whose contents are going into config.status.
 dnl AC_OUTPUT_FILES(FILE...)
 define(AC_OUTPUT_FILES,
-[# Protect against being on the right side of a sed subst in config.status. 
+[# Protect against being on the right side of a sed subst in config.status.
 changequote(, )dnl
-sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\\\&%]/\\\\&/g; 
+sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\\\&%]/\\\\&/g;
  s/@@/%@/; s/@@/@%/; s/@g$/%g/' > conftest.subs <<\CEOF
 changequote([, ])dnl
 dnl These here document variables are unquoted when configure runs
@@ -1990,7 +1990,7 @@ EOF
 
 # Transform confdefs.h into a sed script conftest.vals that substitutes
 # the proper values into config.h.in to produce config.h.  And first:
-# Protect against being on the right side of a sed subst in config.status. 
+# Protect against being on the right side of a sed subst in config.status.
 # Protect against being in an unquoted here document in config.status.
 rm -f conftest.vals
 dnl Using a here document instead of a string reduces the quoting nightmare.
