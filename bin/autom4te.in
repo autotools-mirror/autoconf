@@ -465,15 +465,20 @@ sub load_configuration ($)
       my $type = shift @words;
       if ($type eq 'begin-language:')
 	{
+	  error "$file:$.: end-language missing for: $lang"
+	    if defined $lang;
 	  $lang = lc $words[0];
 	}
       elsif ($type eq 'end-language:')
 	{
 	  error "$file:$.: end-language mismatch: $lang"
 	    if $lang ne lc $words[0];
+	  $lang = undef;
 	}
       elsif ($type eq 'args:')
 	{
+	  error "$file:$.: no current language"
+	    unless defined $lang;
 	  push @{$language{$lang}}, @words;
 	}
       else

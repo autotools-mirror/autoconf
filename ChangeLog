@@ -1,5 +1,10 @@
 2002-10-31  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (load_configuration): Reject #args out of any
+	language.
+
+2002-10-31  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (_AC_MSG_LOG_CONFTEST): New.
 	(_AC_PREPROC_IFELSE, _AC_COMPILE_IFELSE, _AC_LINK_IFELSE)
 	(_AC_RUN_IFELSE): Use it.
