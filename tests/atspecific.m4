@@ -22,10 +22,12 @@ divert(-1)						-*- Autoconf -*-
 
 include(atgeneral.m4)divert(-1)
 
-# Until the day Autotest, Ad'HoC and Autoconf share the same m4sugar, we
+# Until the day Autotest, Ad'HoC and Autoconf share the same M4sugar, we
 # have to reinstall some m4 builtins that atgeneral.m4 undefined.
 AT_DEFINE([m4_shift],
 [builtin([shift], $@)])
+AT_DEFINE([m4_patsubst],
+[builtin([patsubst], $@)])
 AT_DEFINE([define],
 [builtin([define], $@)])
 

@@ -24,20 +24,23 @@ include(m4sugar.m4)#                                        -*- Autoconf -*-
 # yet when Autoconf is frozen.
 # Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
 
-m4_include(m4sh.m4)
+m4_include([m4sh.m4])
 
 # M4sugar and M4sh use exclusively the `m4_' prefix, but Autoconf,
 # for historical reasons, uses the old names.
 
-m4_copy([m4_define],   [define])
-m4_copy([m4_defn],     [defn])
-m4_copy([m4_popdef],   [popdef])
-m4_copy([m4_pushdef],  [pushdef])
-m4_copy([m4_undefine], [undefine])
+m4_copy_unm4([m4_define])
+m4_copy_unm4([m4_defn])
+m4_copy_unm4([m4_patsubst])
+m4_copy_unm4([m4_popdef])
+m4_copy_unm4([m4_pushdef])
+m4_copy_unm4([m4_regexp])
+m4_copy_unm4([m4_translit])
+m4_copy_unm4([m4_undefine])
 
-m4_include(acversion.m4)
-m4_include(acgeneral.m4)
-m4_include(aclang.m4)
-m4_include(acfunctions.m4)
-m4_include(acspecific.m4)
-m4_include(acoldnames.m4)
+m4_include([acversion.m4])
+m4_include([acgeneral.m4])
+m4_include([aclang.m4])
+m4_include([acfunctions.m4])
+m4_include([acspecific.m4])
+m4_include([acoldnames.m4])

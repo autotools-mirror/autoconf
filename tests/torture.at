@@ -34,7 +34,7 @@ define(DEFINE_Description,
 # this is admittedly a bug, but it would be too hard to fix this.
 # There is really no point in AC_DEFINE a var named ac_d.*.
 define(AT_DUMMY_VAR,
-[ac_Dummy_[]patsubst([000$1], [.*\(...\)$], [\1])])
+[ac_Dummy_[]m4_patsubst([000$1], [.*\(...\)$], [\1])])
 
 dnl This call was quite delicate to write because we didn't want to
 dnl produce the 100 commands by hand.  Be very careful if you want to

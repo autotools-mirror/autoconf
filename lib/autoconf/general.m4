@@ -366,7 +366,7 @@ define([AH_VERBATIM],
 # DESCRIPTION (properly wrapped), and then #undef KEY.
 define([AH_TEMPLATE],
 [AH_VERBATIM([$1],
-             m4_wrap([$2 */], [   ], [/* ])[
+             m4_text_wrap([$2 */], [   ], [/* ])[
 #undef $1])])
 
 
@@ -409,7 +409,7 @@ define([_AH_COUNTER], [0])
 # If EXPRESSION has shell indirections ($var or `expr`), expand
 # IF-INDIR, else IF-NOT-INDIR.
 define([AC_VAR_INDIR_IFELSE],
-[ifelse(regexp([$1], [[`$]]),
+[ifelse(m4_regexp([$1], [[`$]]),
         -1, [$3],
         [$2])])
 
@@ -431,7 +431,7 @@ define([AC_VAR_SET],
 # else into the appropriate `eval' sequence.
 define([AC_VAR_GET],
 [AC_VAR_INDIR_IFELSE([$1],
-                     [`eval echo '${'patsubst($1, [[\\`]], [\\\&])'}'`],
+                     [`eval echo '${'m4_patsubst($1, [[\\`]], [\\\&])'}'`],
                      [$[]$1])])
 
 
@@ -516,10 +516,10 @@ define([AC_VAR_POPDEF],
 define([AC_TR_CPP],
 [AC_VAR_INDIR_IFELSE([$1],
                      [`echo "$1" | $ac_tr_cpp`],
-                     [patsubst(translit([[$1]],
-                                        [*abcdefghijklmnopqrstuvwxyz],
-                                        [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
-                               [[^A-Z0-9_]], [_])])])
+                     [m4_patsubst(m4_translit([[$1]],
+                                              [*abcdefghijklmnopqrstuvwxyz],
+                                              [PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
+                                  [[^A-Z0-9_]], [_])])])
 
 
 # AC_TR_SH(EXPRESSION)
@@ -530,8 +530,8 @@ define([AC_TR_CPP],
 define([AC_TR_SH],
 [AC_VAR_INDIR_IFELSE([$1],
                      [`echo "$1" | $ac_tr_sh`],
-                     [patsubst(translit([[$1]], [*+], [pp]),
-                               [[^a-zA-Z0-9_]], [_])])])
+                     [m4_patsubst(m4_translit([[$1]], [*+], [pp]),
+                                  [[^a-zA-Z0-9_]], [_])])])
 
 
 
@@ -608,7 +608,7 @@ define([AC_FOREACH],
 define([AC_HELP_STRING],
 [m4_pushdef([AC_Prefix], m4_default([$3], [                          ]))dnl
 m4_pushdef([AC_Prefix_Format], [  %-]m4_eval(len(AC_Prefix) - 3)[s ])dnl [  %-23s ]
-m4_wrap([$2], AC_Prefix, m4_format(AC_Prefix_Format, [$1]))dnl
+m4_text_wrap([$2], AC_Prefix, m4_format(AC_Prefix_Format, [$1]))dnl
 m4_popdef([AC_Prefix_Format])dnl
 m4_popdef([AC_Prefix])dnl
 ])
@@ -651,10 +651,10 @@ define([AC_PACKAGE_BUGREPORT], [$3])dnl
 # would have not been evaluated.  Another solution, a bit fragile,
 # would have be to use m4_quote to force an evaluation:
 #
-#     patsubst(m4_quote($1), [^], [# ])
+#     m4_patsubst(m4_quote($1), [^], [# ])
 define([AC_COPYRIGHT],
 [m4_divert([NOTICE],
-[patsubst([
+[m4_patsubst([
 $1], [^], [@%:@ ])])dnl
 m4_divert([VERSION_BEGIN],
 [
@@ -1632,8 +1632,8 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])dnl
 AC_DIVERT_ONCE([HELP_ENABLE], [$2])dnl
 # Check whether --enable-$1 or --disable-$1 was given.
-if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
-  enableval="[$enable_]patsubst([$1], -, _)"
+if test "[${enable_]m4_patsubst([$1], -, _)+set}" = set; then
+  enableval="[$enable_]m4_patsubst([$1], -, _)"
   $3
 m4_ifvanl([$4], [else
   $4])dnl
@@ -1660,8 +1660,8 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
 AC_DIVERT_ONCE([HELP_WITH], [$2])dnl
 # Check whether --with-$1 or --without-$1 was given.
-if test "[${with_]patsubst([$1], -, _)+set}" = set; then
-  withval="[$with_]patsubst([$1], -, _)"
+if test "[${with_]m4_patsubst([$1], -, _)+set}" = set; then
+  withval="[$with_]m4_patsubst([$1], -, _)"
   $3
 m4_ifvanl([$4], [else
   $4])dnl
@@ -2072,8 +2072,8 @@ rm -f confcache[]dnl
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
 define([AC_CACHE_VAL],
-[ifelse(regexp([$2], [AC_DEFINE]), [-1], [],
-               [AC_DIAGNOSE(syntax,
+[ifelse(m4_regexp([$2], [AC_DEFINE]), [-1], [],
+        [AC_DIAGNOSE(syntax,
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AC_VAR_SET_IFELSE([$1],
@@ -2227,8 +2227,8 @@ define([AC_FATAL],
 # Otherwise it's modern.
 # We use two quotes in the pattern to keep highlighting tools at peace.
 define([_AC_SH_QUOTE_IFELSE],
-[ifelse(regexp([$1], [\\[\\$]]),
-        [-1], [ifelse(regexp([$1], [\\[`""]]),
+[ifelse(m4_regexp([$1], [\\[\\$]]),
+        [-1], [ifelse(m4_regexp([$1], [\\[`""]]),
                       [-1], [$2],
                       [$3])],
         [$2])])
@@ -2243,7 +2243,7 @@ define([_AC_SH_QUOTE_IFELSE],
 # the transition (for Libtool for instance).
 define([_AC_SH_QUOTE],
 [_AC_SH_QUOTE_IFELSE([$1],
-                     [patsubst([$1], [\([`""]\)], [\\\1])],
+                     [m4_patsubst([$1], [\([`""]\)], [\\\1])],
                      [AC_DIAGNOSE([obsolete],
            [backquotes and double quotes should not be backslashed in: $1])dnl
 $1])])
@@ -2432,7 +2432,7 @@ define([AC_INCLUDES_DEFAULT],
 AC_DEFUN([AC_CHECK_MEMBER],
 [AC_VAR_INDIR_IFELSE([$1],
                      [AC_FATAL([$0: requires literal arguments])])dnl
-ifelse(regexp([$1], [\.]), -1,
+ifelse(m4_regexp([$1], [\.]), -1,
        [AC_FATAL([$0: Did not see any dot in `$1'])])dnl
 AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
@@ -2440,9 +2440,9 @@ dnl Extract the aggregate name, and the member name
 AC_CACHE_CHECK([for $1], ac_Member,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [dnl AGGREGATE foo;
-patsubst([$1], [\..*]) foo;
+m4_patsubst([$1], [\..*]) foo;
 dnl foo.MEMBER;
-foo.patsubst([$1], [^[^.]*\.]);])],
+foo.m4_patsubst([$1], [^[^.]*\.]);])],
                 AC_VAR_SET(ac_Member, yes),
                 AC_VAR_SET(ac_Member, no))])
 AS_IFELSE([test AC_VAR_GET(ac_Member) = yes],
@@ -2460,8 +2460,9 @@ AC_DEFUN([AC_CHECK_MEMBERS],
 [m4_foreach([AC_Member], [$1],
   [AC_CHECK_MEMBER(AC_Member,
          [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Member), 1,
-                            [Define if `]patsubst(AC_Member, [^[^.]*\.])[' is
-                             member of `]patsubst(AC_Member, [\..*])['.])
+                            [Define if `]m4_patsubst(AC_Member,
+                                                     [^[^.]*\.])[' is
+                             member of `]m4_patsubst(AC_Member, [\..*])['.])
 $2],
                  [$3],
                  [$4])])])
@@ -2804,7 +2805,9 @@ define([AH_CHECK_LIB],
 # it must be a literal name.
 AU_DEFUN([AC_HAVE_LIBRARY],
 [m4_pushdef([AC_Lib_Name],
-         patsubst(patsubst([[$1]], [lib\([^\.]*\)\.a], [\1]), [-l], []))dnl
+            m4_patsubst(m4_patsubst([[$1]],
+                                    [lib\([^\.]*\)\.a], [\1]),
+                        [-l], []))dnl
 AC_CHECK_LIB(AC_Lib_Name, main, [$2], [$3], [$4])dnl
 ac_cv_lib_[]AC_Lib_Name()=ac_cv_lib_[]AC_Lib_Name()_main
 m4_popdef([AC_Lib_Name])dnl
@@ -3413,7 +3416,7 @@ define([_AC_CHECK_TYPE_OLD],
 # Because many people have used `off_t' and `size_t' too, they are added
 # for better common-useward backward compatibility.
 define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
-[ifelse(regexp([$1],
+[ifelse(m4_regexp([$1],
                [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|size_t\|off_t\)\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
 	0, 1, 0)dnl
 ])# _AC_CHECK_TYPE_REPLACEMENT_TYPE_P
@@ -3423,7 +3426,7 @@ define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 # -----------------------------------
 # Return `1' if STRING looks like a C/C++ type.
 define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
-[ifelse(regexp([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
+[ifelse(m4_regexp([$1], [^[_a-zA-Z0-9 ]+\([_a-zA-Z0-9() *]\|\[\|\]\)*$]),
 	0, 1, 0)dnl
 ])# _AC_CHECK_TYPE_MAYBE_TYPE_P
 
@@ -3540,8 +3543,8 @@ AC_DEFUN([AC_CHECK_TYPE],
 # matching.  The big problem is then that the active characters should
 # be quoted.  Currently `+*.' are quoted.
 define([AC_CONFIG_IF_MEMBER],
-[ifelse(regexp($2, [\(^\| \)]patsubst([$1],
-                                      [\([+*.]\)], [\\\1])[\(:\| \|$\)]),
+[ifelse(m4_regexp($2, [\(^\| \)]m4_patsubst([$1],
+                                            [\([+*.]\)], [\\\1])[\(:\| \|$\)]),
         -1, [$4], [$3])])
 
 
@@ -3568,7 +3571,7 @@ define([_AC_CONFIG_DEPENDENCY],
 define([_AC_CONFIG_DEPENDENCIES],
 [m4_divert_push([KILL])
 AC_FOREACH([AC_File], [$1],
-  [_AC_CONFIG_DEPENDENCY(patsubst(AC_File, [:], [,]))])
+  [_AC_CONFIG_DEPENDENCY(m4_patsubst(AC_File, [:], [,]))])
 m4_divert_pop()dnl
 ])
 
@@ -3585,7 +3588,7 @@ m4_divert_pop()dnl
 define([_AC_CONFIG_UNIQUE],
 [m4_divert_push([KILL])
 AC_FOREACH([AC_File], [$1],
-[m4_pushdef([AC_Dest], patsubst(AC_File, [:.*]))
+[m4_pushdef([AC_Dest], m4_patsubst(AC_File, [:.*]))
 AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_HEADER or AC_CONFIG_HEADERS.])])
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_LINKS],
@@ -3630,7 +3633,7 @@ m4_append([AC_LIST_COMMANDS], [ $1])
 
 ifelse([$2],,, [AC_FOREACH([AC_Name], [$1],
 [m4_append([AC_LIST_COMMANDS_COMMANDS],
-[    ]patsubst(AC_Name, [:.*])[ ) $2 ;;
+[    ]m4_patsubst(AC_Name, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop()dnl
@@ -3708,7 +3711,7 @@ m4_append([AC_LIST_HEADERS], [ $1])
 dnl Register the commands
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_HEADERS_COMMANDS],
-[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+[    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop()dnl
@@ -3739,13 +3742,13 @@ AC_DEFUN([AC_CONFIG_LINKS],
 [m4_divert_push([KILL])
 _AC_CONFIG_UNIQUE([$1])
 _AC_CONFIG_DEPENDENCIES([$1])
-ifelse(regexp([$1], [^\.:\| \.:]), -1,,
+ifelse(m4_regexp([$1], [^\.:\| \.:]), -1,,
        [AC_FATAL([$0: invalid destination: `.'])])
 m4_append([AC_LIST_LINKS], [ $1])
 dnl Register the commands
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_LINKS_COMMANDS],
-[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+[    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop()dnl
@@ -3816,7 +3819,7 @@ m4_append([AC_LIST_FILES], [ $1])
 dnl Register the commands.
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
 [m4_append([AC_LIST_FILES_COMMANDS],
-[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+[    ]m4_patsubst(AC_File, [:.*])[ ) $2 ;;
 ])])])
 _AC_CONFIG_COMMANDS_INIT([$3])
 m4_divert_pop()dnl
@@ -4070,19 +4073,19 @@ Try \`$me --help' for more information."; exit 1 ;;
 
   # Handling of arguments.
 AC_FOREACH([AC_File], AC_LIST_FILES,
-[  'patsubst(AC_File, [:.*])' )dnl
+[  'm4_patsubst(AC_File, [:.*])' )dnl
  CONFIG_FILES="$CONFIG_FILES AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_LINKS,
-[  'patsubst(AC_File, [:.*])' )dnl
+[  'm4_patsubst(AC_File, [:.*])' )dnl
  CONFIG_LINKS="$CONFIG_LINKS AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_COMMANDS,
-[  'patsubst(AC_File, [:.*])' )dnl
+[  'm4_patsubst(AC_File, [:.*])' )dnl
  CONFIG_COMMANDS="$CONFIG_COMMANDS AC_File" ;;
 ])dnl
 AC_FOREACH([AC_File], AC_LIST_HEADERS,
-[  'patsubst(AC_File, [:.*])' )dnl
+[  'm4_patsubst(AC_File, [:.*])' )dnl
  CONFIG_HEADERS="$CONFIG_HEADERS AC_File" ;;
 ])dnl
 

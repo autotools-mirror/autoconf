@@ -1,3 +1,17 @@
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
+	* m4sugar.m4 (m4_rename_m4, m4_copy_unm4): New macros.
+	Use them.
+	(debugfile, debugmode, m4exit, m4wrap, maketemp, patsubst, regexp)
+	(substr, translit, m4_wrap): Rename as...
+	(m4_debugfile, m4_debugmode, m4_exit, m4_wrap, m4_maketemp)
+	(m4_patsubst, m4_regexp, m4_substr, m4_translit, m4_text_wrap): these.
+	Adjust all dependencies.
+	* acgeneral.m4: Adjust.
+	* tests/m4sugar.at: Adjust.
+	* autoconf.m4 (m4exit, patsubst, regexp, substr, translit):
+	Reestablish them.
+
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
 	The documentation is not clear about the obsoleteness of

@@ -91,14 +91,38 @@ m4_define([m4_copy],
 m4_define([m4_rename],
 [m4_copy([$1], [$2])m4_undefine([$1])])
 
+
+# m4_rename_m4(MACRO-NAME)
+# ------------------------
+# Rename MACRO-NAME as m4_MACRO-NAME.
+m4_define([m4_rename_m4],
+[m4_rename([$1], [m4_$1])])
+
+
+# m4_copy_unm4(m4_MACRO-NAME)
+# ---------------------------
+# Copy m4_MACRO-NAME as MACRO-NAME.
+m4_define([m4_copy_unm4],
+[m4_copy([$1], m4_patsubst([[$1]], [[m4_]]))])
+
+
 # Some m4 internals have names colliding with tokens we might use.
 # Rename them a` la `m4 --prefix-builtins'.
-m4_rename([eval],    [m4_eval])
-m4_rename([format],  [m4_format])
-m4_rename([popdef],    [m4_popdef])
-m4_rename([pushdef],   [m4_pushdef])
-m4_rename([shift],   [m4_shift])
-m4_rename([symbols], [m4_symbols])
+m4_rename_m4([debugfile])
+m4_rename_m4([debugmode])
+m4_rename_m4([eval])
+m4_rename_m4([format])
+m4_rename([m4exit], [m4_exit])
+m4_rename([m4wrap], [m4_wrap])
+m4_rename_m4([maketemp])
+m4_rename_m4([patsubst])
+m4_rename_m4([popdef])
+m4_rename_m4([pushdef])
+m4_rename_m4([regexp])
+m4_rename_m4([shift])
+m4_rename_m4([substr])
+m4_rename_m4([symbols])
+m4_rename_m4([translit])
 
 
 ## ------------------- ##
@@ -131,7 +155,7 @@ m4_define([m4_warning],
 m4_define([m4_fatal],
 [m4_errprint(m4_location[: error: $1])dnl
 m4_expansion_stack_dump()dnl
-m4exit(ifelse([$2],, 1, [$2]))])
+m4_exit(ifelse([$2],, 1, [$2]))])
 
 
 # m4_assert( EXPRESSION [, EXIT-STATUS = 1 ])
@@ -359,7 +383,7 @@ m4_define([m4_match],
 [ifelse([$#], 0, [],
 	[$#], 1, [],
 	[$#], 2, [$2],
-        regexp([$1], [$2]), -1, [m4_match([$1], m4_shiftn(3, $@))],
+        m4_regexp([$1], [$2]), -1, [m4_match([$1], m4_shiftn(3, $@))],
         [$3])])
 
 
@@ -1151,14 +1175,14 @@ m4_define([m4_provide_ifelse],
 # ------------------
 # These macros lowercase and uppercase strings.
 m4_define([m4_tolower],
-[translit([$1],
-          [ABCDEFGHIJKLMNOPQRSTUVWXYZ],
-          [abcdefghijklmnopqrstuvwxyz])])
+[m4_translit([$1],
+             [ABCDEFGHIJKLMNOPQRSTUVWXYZ],
+             [abcdefghijklmnopqrstuvwxyz])])
 
 m4_define([m4_toupper],
-[translit([$1],
-          [abcdefghijklmnopqrstuvwxyz],
-          [ABCDEFGHIJKLMNOPQRSTUVWXYZ])])
+[m4_translit([$1],
+             [abcdefghijklmnopqrstuvwxyz],
+             [ABCDEFGHIJKLMNOPQRSTUVWXYZ])])
 
 
 # m4_split(STRING, [REGEXP])
@@ -1190,9 +1214,9 @@ m4_define(<<m4_split>>,
 <<changequote(``, '')dnl
 [dnl Can't use m4_default here instead of ifelse, because m4_default uses
 dnl [ and ] as quotes.
-patsubst(````$1'''',
-	  ifelse(``$2'',, ``[ 	]+'', ``$2''),
-	  ``], ['')]dnl
+m4_patsubst(````$1'''',
+	    ifelse(``$2'',, ``[ 	]+'', ``$2''),
+	    ``], ['')]dnl
 changequote([, ])>>)
 changequote([, ])
 
@@ -1209,7 +1233,7 @@ changequote([, ])
 #    ive])end
 #    => active activeend
 m4_define([m4_join],
-[translit(patsubst([[[$1]]], [\\
+[m4_translit(m4_patsubst([[[$1]]], [\\
 ]), [
 ], [ ])])
 
@@ -1236,7 +1260,7 @@ m4_define([m4_join],
 # the *third* character, since there are two leading `['; Equally for
 # the outer patsubst.
 m4_define([m4_strip],
-[patsubst(patsubst(patsubst([[[[$1]]]],
+[m4_patsubst(m4_patsubst(m4_patsubst([[[[$1]]]],
                             [[ 	]+], [ ]),
                    [^\(..\) ], [\1]),
           [ \(.\)$], [\1])])
@@ -1302,8 +1326,8 @@ m4_define([_m4_foreach_quoted],
                                                                [$3])])])
 
 
-# m4_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
-# --------------------------------------------------
+# m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
+# -------------------------------------------------------
 # Expands into STRING wrapped to hold in WIDTH columns (default = 79).
 # If prefix is set, each line is prefixed with it.  If FIRST-PREFIX is
 # specified, then the first line is prefixed with it.  As a special
@@ -1312,21 +1336,21 @@ m4_define([_m4_foreach_quoted],
 #
 # Typical outputs are:
 #
-# m4_wrap([Short string */], [   ], [/* ], 20)
+# m4_text_wrap([Short string */], [   ], [/* ], 20)
 #  => /* Short string */
 #
-# m4_wrap([Much longer string */], [   ], [/* ], 20)
+# m4_text_wrap([Much longer string */], [   ], [/* ], 20)
 #  => /* Much longer
 #  =>    string */
 #
-# m4_wrap([Short doc.], [          ], [  --short ], 30)
+# m4_text_wrap([Short doc.], [          ], [  --short ], 30)
 #  =>   --short Short doc.
 #
-# m4_wrap([Short doc.], [          ], [  --too-wide ], 30)
+# m4_text_wrap([Short doc.], [          ], [  --too-wide ], 30)
 #  =>   --too-wide
 #  =>           Short doc.
 #
-# m4_wrap([Super long documentation.], [          ], [  --too-wide ], 30)
+# m4_text_wrap([Super long documentation.], [          ], [  --too-wide ], 30)
 #  =>   --too-wide
 #  => 	  Super long
 #  => 	  documentation.
@@ -1339,7 +1363,7 @@ m4_define([_m4_foreach_quoted],
 # what complicates it a bit.  The algorithm is stupid simple: all the
 # words are preceded by m4_Separator which is defined to empty for the
 # first word, and then ` ' (single space) for all the others.
-m4_define([m4_wrap],
+m4_define([m4_text_wrap],
 [m4_pushdef([m4_Prefix], m4_default([$2], []))dnl
 m4_pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
 m4_pushdef([m4_Width], m4_default([$4], 79))dnl
@@ -1430,15 +1454,15 @@ m4_define([m4_list_cmp],
 # This macro is absolutely not robust to active macro, it expects
 # reasonable version numbers and is valid up to `z', no double letters.
 m4_define([m4_version_unletter],
-[translit(patsubst(patsubst(patsubst([$1],
-                                     [\([0-9]+\)\([abcdefghi]\)],
-                                     [m4_eval(\1 + 1).-1.\2]),
-                            [\([0-9]+\)\([jklmnopqrs]\)],
-                            [m4_eval(\1 + 1).-1.1\2]),
-          [\([0-9]+\)\([tuvwxyz]\)],
-          [m4_eval(\1 + 1).-1.2\2]),
-          abcdefghijklmnopqrstuvwxyz,
-          12345678901234567890123456)])
+[m4_translit(m4_patsubst(m4_patsubst(m4_patsubst([$1],
+                                                 [\([0-9]+\)\([abcdefghi]\)],
+                                                 [m4_eval(\1 + 1).-1.\2]),
+                                     [\([0-9]+\)\([jklmnopqrs]\)],
+                                     [m4_eval(\1 + 1).-1.1\2]),
+                         [\([0-9]+\)\([tuvwxyz]\)],
+                         [m4_eval(\1 + 1).-1.2\2]),
+             [abcdefghijklmnopqrstuvwxyz],
+             [12345678901234567890123456])])
 
 
 # m4_version_compare(VERSION-1, VERSION-2)
