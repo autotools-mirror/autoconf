@@ -561,7 +561,7 @@ define([AC_BEFORE],
 # macro expansion.  Once expanded, emit it in _AC_DIVERT_DUMP.
 define([AC_REQUIRE],
 [ifndef([_AC_DIVERT_DUMP],
-        [AC_FATAL([$0: cannot be used out of an AC_DEFUN'd macro])])dnl
+        [AC_FATAL([$0: cannot be used outside of an AC_DEFUN'd macro])])dnl
 AC_PROVIDE_IFELSE([$1],
                   [],
                   [AC_DIVERT_PUSH(m4_eval(_AC_DIVERT_DIVERSION - 1))dnl
