@@ -7504,8 +7504,8 @@ define([car], [$1])
 @noindent
 The two pairs of quotes above are not part of the arguments of
 @code{define}; rather, they are understood by the top level when it
-tries to find the arguments of @code{define}.  Therefore, it is
-equivalent to write:
+tries to find the arguments of @code{define}.  Therefore, assuming
+@code{car} is not already defined, it is equivalent to write:
 
 @example
 define(car, $1)
@@ -7548,7 +7548,7 @@ car([#])
 @result{}#
 @end example
 
-The reader will easily understand the following examples:
+Here are more examples:
 
 @example
 car(foo, bar)
@@ -7559,9 +7559,19 @@ car((foo, bar))
 @result{}(foo, bar)
 car([(foo], [bar)])
 @result{}(foo
-car([], [])
+define([a], [b])car(a)
+@result{}b
+car([a])
+@result{}b
+car([[a]])
+@result{}a
+car([[[a]]])
+@result{}[a]
+car([])
 @result{}
-car([[]], [[]])
+car([[]])
+@result{}
+car([[[]]])
 @result{}[]
 @end example
 
