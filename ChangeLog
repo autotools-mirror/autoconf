@@ -1,6 +1,7 @@
 2002-07-19  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Function Portability): `exit'.
+	(Programming in M4sh): Ethymology of M4sh.
 
 2002-07-19  Akim Demaille  <akim@epita.fr>
 

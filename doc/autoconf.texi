@@ -7600,8 +7600,29 @@ Any token matching @var{pattern} is allowed, including if it matches an
 @c FIXME: Eventually will become a chapter, as it is not related to
 @c programming in M4 per se.
 
-M4sh is aiming at producing portable Bourne shell scripts.  For the time
-being, it is not mature enough to be widely used.
+M4sh, pronounce ``mash'', is aiming at producing portable Bourne shell
+scripts.  This name was coined by Lars J. Aas, who notes thats,
+according to the Webster's Revised Unabridged Dictionary (1913):
+
+@quotation
+Mash \Mash\, n. [Akin to G. meisch, maisch, meische, maische, mash,
+wash, and prob. to AS. miscian to mix. See ``Mix''.]
+
+@enumerate 1
+@item
+A mass of mixed ingredients reduced to a soft pulpy state by beating or
+pressure@enddots{}
+
+@item
+A mixture of meal or bran and water fed to animals.
+
+@item
+A mess; trouble. [Obs.] --Beau. & Fl.
+@end enumerate
+@end quotation
+
+
+For the time being, it is not mature enough to be widely used.
 
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
