@@ -289,6 +289,26 @@ AU_DEFUN([AM_TYPE_PTRDIFF_T],
 [AC_CHECK_TYPES(ptrdiff_t)])
 
 
+# AC_TYPE_MBSTATE_T
+# -----------------
+AC_DEFUN([AC_TYPE_MBSTATE_T],
+  [AC_CACHE_CHECK([for mbstate_t], ac_cv_type_mbstate_t,
+     [AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM(
+	   [AC_INCLUDES_DEFAULT
+#	    include <wchar.h>],
+	   [mbstate_t x; return sizeof x;])],
+	[ac_cv_type_mbstate_t=yes],
+	[ac_cv_type_mbstate_t=no])])
+   if test $ac_cv_type_mbstate_t = yes; then
+     AC_DEFINE([HAVE_MBSTATE_T], 1,
+	       [Define to 1 if <wchar.h> declares mbstate_t.])
+   else
+     AC_DEFINE([mbstate_t], int,
+	       [Define to a type if <wchar.h> does not define.])
+   fi])
+
+
 # AC_TYPE_UID_T
 # -------------
 # FIXME: Rewrite using AC_CHECK_TYPE.
