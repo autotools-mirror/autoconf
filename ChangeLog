@@ -1,5 +1,10 @@
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Invoking autoconf): Update documentation of
+	`autoconf --trace'.
+
+2000-03-13  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (tmpbase): New var.  Adjust trap code and other tmp
 	file names.
 	(translate_awk::BEGIN): Set RS to "\0" so that the whole file be a

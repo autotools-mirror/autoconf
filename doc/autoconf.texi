@@ -706,20 +706,111 @@ option overrides the environment variable.
 @itemx -V
 Print the version number of Autoconf and exit.
 
-@item --trace=@var{macro}
-@itemx -t @var{macro}
-List the calls to @var{macro}.  Multiple calls to @samp{--trace} list
-several macros.  It is often needed to check the content of a
-@file{configure.in} file, but it is extremely fragile and error prone to
-try to parse it.  It is suggested to rely upon @samp{--trace} to scan
-@file{configure.in}.
+@item --trace=@var{macro}[:@var{format}]
+@itemx -t @var{macro}[:@var{format}]
+List the calls to @var{macro} according to the @var{format}.  Multiple
+@samp{--trace} list several macros.  Multiple @samp{--trace} for a
+single macro do not accumulate, nevertheless, @var{format} can be
+arbitrarily long.
 
-The output is composed of separated lines for each macro call.  Each
-line follows this model:
+It is often needed to check the content of a @file{configure.in} file,
+but it is extremely fragile and error prone to try to parse it.  It is
+suggested to rely upon @samp{--trace} to scan @file{configure.in}.
+
+The @var{format} is a regular string, with new lines if wanted.  It
+defaults to @samp{$f:$l:$n:$@@}.  Some special escapes are recognized:
+
+@table @samp
+@item $$
+The character @samp{$}.
+
+@item $f
+The filename from where @var{macro} is called.
+
+@item $l
+The line number from where @var{macro} is called.
+
+@item $d
+The depth of the @var{macro} call.  This is an @code{m4} technical
+details which you probably don't want to know about.
+
+@item $n
+The name of the @var{macro}.
+
+@item $@var{num}
+The @var{num}th argument of the call to @var{macro}.
+
+@item $@@
+@itemx $@var{sep}@@
+@itemx $@{@var{separator}@}@@
+All the arguments given to the @var{macro} separated by the character
+@var{sep} or the string @var{separator}, @samp{,} by default.  Each
+argument is quoted, i.e. enclosed in a pair of square bracket.
+
+@item $*
+@itemx $@var{sep}*
+@itemx $@{@var{separator}@}*
+As above, but the arguments are not quoted, all new line characters in
+the arguments are smashed, and the default separator is @samp{:}.
+
+The escape @samp{$*} produces traces that hold in a single line (unless
+you put new lines in the @samp{separator}), while @samp{$@@} does not.
+@end table
+
+For instance, to know the list of variables which are substituted:
+
 @example
-% ./autoconf -t AC_INIT -t AM_INIT_AUTOMAKE
-configure.in:2:AC_INIT:acgeneral.m4
-configure.in:3:AM_INIT_AUTOMAKE:autoconf, 2.14a
+@group
+% autoconf -t AC_INIT
+configure.in:2:AC_SUBST:ECHO_C
+configure.in:2:AC_SUBST:ECHO_N
+configure.in:2:AC_SUBST:ECHO_T
+@i{More traces deleted}
+@end group
+@end example
+
+@noindent
+The example below highlights the difference between @samp{$@@} and
+@samp{$*} wrt white spaces.  One line was wrapped by hand to cope with
+the high standards set in typography which state that no line should be
+wider that the sheet, but in real life it is not.
+
+@example
+@group
+% autoconf -t 'AC_OUTPUT:$@@'
+[acversion.m4 Makefile m4/Makefile man/Makefile doc/Makefile
+          tests/Makefile tests/atconfig]
+% autoconf -m . -t 'AC_OUTPUT:$*'
+acversion.m4 Makefile m4/Makefile man/Makefile doc/Make
+file tests/Makefile tests/atconfig
+@end group
+@end example
+
+@noindent
+Much freedom is given over the @var{format}:
+
+@example
+@group
+% autoconf -t 'AC_SUBST:ac_subst@{"$1"@} = "$f:$l";'
+ac_subst@{"ECHO_C"@} = "configure.in:2";
+ac_subst@{"ECHO_N"@} = "configure.in:2";
+ac_subst@{"ECHO_T"@} = "configure.in:2";
+@i{More traces deleted}
+@end group
+@end example
+
+@noindent
+The long @var{separator}s can be used to ease parsing of complex
+structures:
+
+@example
+@group
+% autoconf -t 'AM_MISSING_PROG:$@{:::::::@}*'
+ACLOCAL:::::::aclocal:::::::$missing_dir
+AUTOCONF:::::::autoconf:::::::$missing_dir
+AUTOMAKE:::::::automake:::::::$missing_dir
+@i{More traces deleted}
+@end group
 @end example
 
 @item --output=@var{file}
