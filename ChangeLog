@@ -1,3 +1,14 @@
+2004-05-10  Eric Sunshine  <sunshine@sunshineco.com>
+
+	* programs.m4 (_AC_PROG_GREP): Fixed bug where PATH argument handed to
+	_AC_PATH_PROG_FEATURE_CHECK contained leading whitespace (i.e.
+	"        $PATH:/usr/xpg4/bin"). This resulted in bogus tests, such as
+	`test -f "        /usr/bin/grep"', which _always_ failed.
+	(AC_PROG_SED): Ditto bogus PATH fix.
+	* autoconf.texi (AC_PROG_GREP): Properly document that this macro
+	requires that grep correctly supports _multiple_ `-e' options, rather
+	than stating only that grep should accept `-e'.
+
 2004-05-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Port to C99, which requires that 'exit' be declared.

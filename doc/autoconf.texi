@@ -3240,10 +3240,11 @@ best implementation.
 @ovindex GREP
 On AIX the default @code{grep} silently truncates long lines on the
 input before matching.  On Solaris 9 @code{/usr/bin/grep} does not
-understand the @option{-e} option.  This macro looks for @sc{gnu} Grep or
+understand the @option{-e} option.  On NeXT, @code{grep} understands only a
+single @option{-e} option.  This macro looks for @sc{gnu} Grep or
 else the best available @code{grep} or @code{ggrep} in the user's
-@code{$PATH}, which accepts the longest input lines possible and which
-accepts @option{-e}.  Set the
+@code{$PATH} which accepts the longest input lines possible, and which
+accepts and respects multiple @option{-e} options.  Set the
 output variable @code{GREP} to whatever is chosen.
 @end defmac
 

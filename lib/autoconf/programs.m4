@@ -391,21 +391,25 @@ AC_CACHE_CHECK([for fgrep], ac_cv_path_FGREP,
 # AC_PROG_GREP
 # ------------
 # Check for a fully functional grep program that handles
-# the longest lines possible.  Prefer GNU grep if found.
+# the longest lines possible and which respects multiple -e options.
+# Prefer GNU grep if found.
 AC_DEFUN([AC_PROG_GREP],
 [AC_CACHE_CHECK([for grep that handles long lines and -e], ac_cv_path_GREP,
    [_$0(GREP, [grep ggrep], [-e 'GREP$' -e '-(cannot match)-'])])
  GREP="$ac_cv_path_GREP"
  AC_SUBST([GREP])
 ])
+
+
 # _AC_PROG_GREP(VARIABLE, PROGNAME-LIST, PROG-ARGUMENTS)
+# ------------------------------------------------------
+# Solaris 9 /usr/xpg4/bin/*grep is suitable, but /usr/bin/*grep lacks -e.
+# AIX silently truncates long lines before matching.
+# NeXT understands only one -e and truncates long lines.
 m4_define([_AC_PROG_GREP],
 [_AC_PATH_PROG_FEATURE_CHECK([$1], [$2],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_$1], [ac_cv_path_$1],
-		["$ac_path_$1" $3], [$1])],
-	dnl Add /usr/xpg4/bin/*grep as it is typically found on Solaris
-	dnl along with a /usr/bin/*grep that lacks -e.
-	[$PATH:/usr/xpg4/bin])
+		["$ac_path_$1" $3], [$1])], [$PATH:/usr/xpg4/bin])
 ])
 
 
@@ -717,14 +721,13 @@ adjust the code.])
 # -----------
 # Check for a fully functional sed program that truncates
 # as few characters as possible.  Prefer GNU sed if found.
+#
+# Solaris /usr/xpg4/bin/sed is suitable, but /usr/bin/sed truncates output.
 AC_DEFUN([AC_PROG_SED],
 [AC_CACHE_CHECK([for a sed that does not truncate output], ac_cv_path_SED,
     [_AC_PATH_PROG_FEATURE_CHECK(SED, [sed gsed],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_SED], [ac_cv_path_SED],
-		["$ac_path_SED" -e 's/a$//'])],
-	dnl Add /usr/xpg4/bin/sed as it is typically found on Solaris
-	dnl along with a /usr/bin/sed that truncates output.
-	[$PATH:/usr/xpg4/bin])])
+		["$ac_path_SED" -e 's/a$//'])], [$PATH:/usr/xpg4/bin])])
  SED="$ac_cv_path_SED"
  AC_SUBST([SED])
 ])# AC_PROG_SED

@@ -2399,7 +2399,7 @@ $debug ||
 ac_path_GREP_found=false
 # Loop through the user's path and test for each of PROGNAME-LIST
 as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-as_dummy="		$PATH:/usr/xpg4/bin"
+as_dummy="$PATH:/usr/xpg4/bin"
 for as_dir in $as_dummy
 do
   IFS=$as_save_IFS
@@ -2449,8 +2449,8 @@ fi
 
 GREP="$ac_cv_path_GREP"
 if test -z "$GREP"; then
-  { { echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in 		$PATH:/usr/xpg4/bin" >&5
-echo "$as_me: error: no acceptable $ac_prog_name could be found in 		$PATH:/usr/xpg4/bin" >&2;}
+  { { echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in $PATH:/usr/xpg4/bin" >&5
+echo "$as_me: error: no acceptable $ac_prog_name could be found in $PATH:/usr/xpg4/bin" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
