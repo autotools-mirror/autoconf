@@ -4569,15 +4569,17 @@ which are shell variables whose values are substituted into files that
 variables.  @xref{Preset Output Variables}, for a list of output
 variables that are always available.
 
-@defmac AC_SUBST (@var{variable})
+@defmac AC_SUBST (@var{variable}, @ovar{value})
 @maindex SUBST
 Create an output variable from a shell variable.  Make @code{AC_OUTPUT}
 substitute the variable @var{variable} into output files (typically one
 or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
 replace instances of @samp{@@@var{variable}@@} in input files with the
 value that the shell variable @var{variable} has when @code{AC_OUTPUT}
-is called.  The value of @var{variable} should not contain literal
+is called.  This value of @var{variable} should not contain literal
 newlines.
+
+If @var{value} is given, in addition assign it to @samp{variable}.
 @end defmac
 
 @defmac AC_SUBST_FILE (@var{variable})

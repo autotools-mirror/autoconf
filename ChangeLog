@@ -1,3 +1,13 @@
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
+	Introduce AC_SUBST(VAR, VAL).
+
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Stop global double quoting,
+	failed experiment.
+	Merge all the var=val AC_SUBST(var) into AC_SUBST(var, val).
+	(AC_SUBST): Implement support for 2nd arg.
+	* doc/autoconf.texi (Setting Output Variables): Adjust.
+
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
 	Simplify the diversions naming system.

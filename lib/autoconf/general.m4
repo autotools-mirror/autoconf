@@ -659,7 +659,7 @@ AC_DIVERT_POP()])
 # -------------------
 AC_DEFUN(_AC_INIT_PARSE_ARGS,
 [AC_DIVERT_PUSH([INIT_PARSE_ARGS])dnl
-[
+
 # Initialize some variables set by options.
 ac_init_help=false
 ac_init_version=false
@@ -667,51 +667,51 @@ ac_init_version=false
 # dashes changed to underlines.
 build=NONE
 cache_file=./config.cache
-exec_prefix=NONE
+AC_SUBST(exec_prefix, NONE)dnl
 host=NONE
 no_create=
 nonopt=NONE
 no_recursion=
-prefix=NONE
+AC_SUBST(prefix, NONE)dnl
 program_prefix=NONE
 program_suffix=NONE
-program_transform_name=s,x,x,
+AC_SUBST(program_transform_name, [s,x,x,])dnl
 silent=
 site=
 srcdir=
 target=NONE
 verbose=
 x_includes=NONE
-x_libraries=NONE]]
+x_libraries=NONE
 dnl Installation directory options.
 dnl These are left unexpanded so users can "make install exec_prefix=/foo"
 dnl and all the variables that are supposed to be based on exec_prefix
 dnl by default will actually change.
 dnl Use braces instead of parens because sh, perl, etc. also accept them.
-[[bindir='${exec_prefix}/bin'
-sbindir='${exec_prefix}/sbin'
-libexecdir='${exec_prefix}/libexec'
-datadir='${prefix}/share'
-sysconfdir='${prefix}/etc'
-sharedstatedir='${prefix}/com'
-localstatedir='${prefix}/var'
-libdir='${exec_prefix}/lib'
-includedir='${prefix}/include'
-oldincludedir='/usr/include'
-infodir='${prefix}/info'
-mandir='${prefix}/man'
+AC_SUBST(bindir,         '${exec_prefix}/bin')dnl
+AC_SUBST(sbindir,        '${exec_prefix}/sbin')dnl
+AC_SUBST(libexecdir,     '${exec_prefix}/libexec')dnl
+AC_SUBST(datadir,        '${prefix}/share')dnl
+AC_SUBST(sysconfdir,     '${prefix}/etc')dnl
+AC_SUBST(sharedstatedir, '${prefix}/com')dnl
+AC_SUBST(localstatedir,  '${prefix}/var')dnl
+AC_SUBST(libdir,         '${exec_prefix}/lib')dnl
+AC_SUBST(includedir,     '${prefix}/include')dnl
+AC_SUBST(oldincludedir,  '/usr/include')dnl
+AC_SUBST(infodir,        '${prefix}/info')dnl
+AC_SUBST(mandir,         '${prefix}/man')dnl
 
 # Initialize some other variables.
 subdirs=
 MFLAGS= MAKEFLAGS=
-SHELL=${CONFIG_SHELL-/bin/sh}
-# Maximum number of lines to put in a shell here document.]]
+AC_SUBST(SHELL, ${CONFIG_SHELL-/bin/sh})dnl
+# Maximum number of lines to put in a shell here document.
 dnl This variable seems obsolete.  It should probably be removed, and
 dnl only ac_max_sed_lines should be used.
-[[: ${ac_max_here_lines=48}
+: ${ac_max_here_lines=48}
 # Sed expression to map a string onto a valid sh and CPP variable names.
-ac_tr_sh='sed -e y%*+%pp%;s%[^a-zA-Z0-9_]%_%g'
-ac_tr_cpp='sed -e y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[^A-Z0-9_]%_%g'
+ac_tr_sh='sed -e y%*+%pp%;s%[[^a-zA-Z0-9_]]%_%g'
+ac_tr_cpp='sed -e y%*abcdefghijklmnopqrstuvwxyz%PABCDEFGHIJKLMNOPQRSTUVWXYZ%;s%[[^A-Z0-9_]]%_%g'
 
 ac_prev=
 for ac_option
@@ -723,7 +723,7 @@ do
     continue
   fi
 
-  ac_optarg=`echo "$ac_option" | sed -n 's/^[^=]*=//p'`
+  ac_optarg=`echo "$ac_option" | sed -n 's/^[[^=]]*=//p'`
 
   # Accept the important Cygnus configure options, so we can diagnose typos.
 
@@ -755,8 +755,8 @@ do
   -disable-* | --disable-*)
     ac_feature=`echo "$ac_option"|sed -e 's/-*disable-//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR(invalid feature: $ac_feature)[
+    if echo "$ac_feature" | grep '[[^-a-zA-Z0-9_]]' >/dev/null 2>&1; then
+      AC_MSG_ERROR(invalid feature: $ac_feature)
     fi
     ac_feature=`echo $ac_feature| sed 's/-/_/g'`
     eval "enable_${ac_feature}=no" ;;
@@ -764,8 +764,8 @@ do
   -enable-* | --enable-*)
     ac_feature=`echo "$ac_option"|sed -e 's/-*enable-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR(invalid feature: $ac_feature)[
+    if echo "$ac_feature" | grep '[[^-a-zA-Z0-9_]]' >/dev/null 2>&1; then
+      AC_MSG_ERROR(invalid feature: $ac_feature)
     fi
     ac_feature=`echo $ac_feature| sed 's/-/_/g'`
     case "$ac_option" in
@@ -941,8 +941,8 @@ do
   -with-* | --with-*)
     ac_package=`echo "$ac_option"|sed -e 's/-*with-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_package" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR(invalid package: $ac_package)[
+    if echo "$ac_package" | grep '[[^-a-zA-Z0-9_]]' >/dev/null 2>&1; then
+      AC_MSG_ERROR(invalid package: $ac_package)
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     case "$ac_option" in
@@ -954,8 +954,8 @@ do
   -without-* | --without-*)
     ac_package=`echo "$ac_option"|sed -e 's/-*without-//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_package" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR(invalid package: $ac_package)[
+    if echo "$ac_package" | grep '[[^-a-zA-Z0-9_]]' >/dev/null 2>&1; then
+      AC_MSG_ERROR(invalid package: $ac_package)
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     eval "with_${ac_package}=no" ;;
@@ -978,26 +978,26 @@ do
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
     x_libraries="$ac_optarg" ;;
 
-  -*) ]AC_MSG_ERROR([unrecognized option: $ac_option
-Try `configure --help' for more information.])[
+  -*) AC_MSG_ERROR([unrecognized option: $ac_option
+Try `configure --help' for more information.])
     ;;
 
   *=*)
     ac_envvar=`echo "$ac_option" | sed -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_envvar" | grep '[^a-zA-Z0-9_]' >/dev/null 2>&1; then
-      ]AC_MSG_ERROR(invalid variable name: $ac_envvar)[
+    if echo "$ac_envvar" | grep '[[^a-zA-Z0-9_]]' >/dev/null 2>&1; then
+      AC_MSG_ERROR(invalid variable name: $ac_envvar)
     fi
     ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
     eval "$ac_envvar='$ac_optarg'"
     export $ac_envvar ;;
 
   *)
-    if echo "$ac_option" | grep '[^-a-zA-Z0-9.]' >/dev/null 2>&1; then
-      ]AC_MSG_WARN(invalid host type: $ac_option)[
+    if echo "$ac_option" | grep '[[^-a-zA-Z0-9.]]' >/dev/null 2>&1; then
+      AC_MSG_WARN(invalid host type: $ac_option)
     fi
     if test "x$nonopt" != xNONE; then
-      ]AC_MSG_ERROR(can only configure for one host and one target at a time)[
+      AC_MSG_ERROR(can only configure for one host and one target at a time)
     fi
     nonopt="$ac_option"
     ;;
@@ -1006,9 +1006,8 @@ Try `configure --help' for more information.])[
 done
 
 if test -n "$ac_prev"; then
-  ]AC_MSG_ERROR(missing argument to --`echo $ac_prev | sed 's/_/-/g'`)[
+  AC_MSG_ERROR(missing argument to --`echo $ac_prev | sed 's/_/-/g'`)
 fi
-]dnl
 AC_DIVERT_POP()dnl
 ])# _AC_INIT_PARSE_ARGS
 
@@ -1254,7 +1253,6 @@ ac_includes_default="\
 
 _AC_PROG_ECHO()dnl
 dnl Substitute for predefined variables.
-AC_SUBST(SHELL)dnl
 AC_SUBST(CFLAGS)dnl
 AC_SUBST(CPPFLAGS)dnl
 AC_SUBST(CXXFLAGS)dnl
@@ -1262,22 +1260,6 @@ AC_SUBST(FFLAGS)dnl
 AC_SUBST(DEFS)dnl
 AC_SUBST(LDFLAGS)dnl
 AC_SUBST(LIBS)dnl
-AC_SUBST(exec_prefix)dnl
-AC_SUBST(prefix)dnl
-AC_SUBST(program_transform_name)dnl
-dnl Installation directory options.
-AC_SUBST(bindir)dnl
-AC_SUBST(sbindir)dnl
-AC_SUBST(libexecdir)dnl
-AC_SUBST(datadir)dnl
-AC_SUBST(sysconfdir)dnl
-AC_SUBST(sharedstatedir)dnl
-AC_SUBST(localstatedir)dnl
-AC_SUBST(libdir)dnl
-AC_SUBST(includedir)dnl
-AC_SUBST(oldincludedir)dnl
-AC_SUBST(infodir)dnl
-AC_SUBST(mandir)dnl
 AC_DIVERT_POP()dnl
 ])# _AC_INIT_PREPARE
 
@@ -1843,12 +1825,19 @@ m4_append([_AC_SUBST_SED_PROGRAM],
 define([_AC_SUBST_SED_PROGRAM])
 
 
-# AC_SUBST(VARIABLE)
-# ------------------
+# AC_SUBST(VARIABLE, [VALUE])
+# ---------------------------
+# Create an output variable from a shell VARIABLE.  If VALUE is given
+# assign it to VARIABLE.  Use `""' is you want to set VARIABLE to an
+# empty value, not an empty second argument.
+#
 # Beware that if you change this macro, you also have to change the
 # sed script at the top of AC_OUTPUT_FILES.
-define(AC_SUBST,
-[_AC_SUBST([$1], [s%@$1@%[$]$1%;t t])])
+define([AC_SUBST],
+[ifval([$2], [$1=$2
+])[]dnl
+_AC_SUBST([$1], [s%@$1@%[$]$1%;t t])dnl
+])# AC_SUBST
 
 
 # AC_SUBST_FILE(VARIABLE)
