@@ -1,3 +1,9 @@
+2000-12-19  Akim Demaille  <akim@epita.fr>, Mo DeJong  <mdejong@cygnus.com>
+
+	* aclang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): New.
+	(_AC_COMPILER_EXEEXT_O): Extracted from...
+	(_AC_COMPILER_EXEEXT): here.  Adjust.
+
 2000-12-19  Akim Demaille  <akim@epita.fr>
 
 	* tests/atgeneral.m4 (AT_CHECK): Make exit status report more

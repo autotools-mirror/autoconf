@@ -652,30 +652,65 @@ AC_DEFUN([AC_EXEEXT],   [])
 AC_DEFUN([AC_OBJEXT],   [])
 
 
+# _AC_COMPILER_EXEEXT_DEFAULT
+# ---------------------------
+# Check for the extension used for the default name for executables.
+m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
+[# Try without -o first, disregard a.out.
+ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
+AS_IFELSE([AC_TRY_EVAL(ac_link_default)],
+[for ac_file in `ls a.exe conftest.exe a.* conftest conftest.* 2>/dev/null`; do
+  case $ac_file in
+    *.$ac_ext | *.out | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    *) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+       break;;
+  esac
+done],
+          [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD])
+rm -f a.out a.exe conftest$ac_cv_exeext
+])# _AC_COMPILER_EXEEXT_DEFAULT
+
+
+# _AC_COMPILER_EXEEXT_O
+# ---------------------
+# Check for the extension used when `-o foo'.  Try to see if ac_cv_exeext,
+# as computed by _AC_COMPILER_EXEEXT_DEFAULT is OK.
+m4_define([_AC_COMPILER_EXEEXT_O],
+[# We have not set ac_exeext yet which is needed by `ac_link'.
+ac_exeext=$ac_cv_exeext
+_AC_LINK_IFELSE([],
+[# If both `conftest.exe' and `conftest' are `present' (well, observable)
+# catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
+# work properly (i.e., refer to `conftest.exe'), while it won't with
+# `rm'.
+for ac_file in `ls conftest$ac_exeext conftest.exe conftest conftest.* \
+                  2>/dev/null`; do
+  case $ac_file in
+    *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    *) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+       break;;
+  esac
+done],
+              [AC_MSG_ERROR([cannot compute EXEEXT: cannot compile and link])])
+rm -f conftest.$ac_ext conftest$ac_cv_exeext
+])# _AC_COMPILER_EXEEXT_O
+
+
 # _AC_COMPILER_EXEEXT
 # -------------------
 # Check for the extension used for executables.  It compiles a test
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
 #
-# This macro is called by AC_LANG_COMPILER, the latter being required
-# by the AC_LINK_IFELSE macros, so use _AC_LINK_IFELSE.
+# Note that some compilers (cross or not), strictly obey to `-o foo' while
+# the host requires `foo.exe', so we should not depend upon `-o' to
+# test EXEEXT.  But then, be sure no to destroy user files.
 m4_define([_AC_COMPILER_EXEEXT],
 [AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
-[_AC_LINK_IFELSE([AC_LANG_PROGRAM()],
-[# If both `conftest.exe' and `conftest' are `present' (well, observable)
-# catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
-# work properly (i.e., refer to `conftest.exe'), while it won't with
-# `rm'.
-for ac_file in `ls conftest.exe conftest conftest.* 2>/dev/null`; do
-  case $ac_file in
-    *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
-    *) ac_cv_exeext=`expr "$ac_file" : 'conftest\(.*\)'`
-       break;;
-  esac
-done],
-              [AC_MSG_ERROR([cannot compute EXEEXT: cannot compile and link])])
-rm -f conftest$ac_cv_exeext])
+                [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+_AC_COMPILER_EXEEXT_DEFAULT
+_AC_COMPILER_EXEEXT_O])
 AC_SUBST([EXEEXT], [$ac_cv_exeext])dnl
 ac_exeext=$EXEEXT
 ])# _AC_COMPILER_EXEEXT
