@@ -2790,10 +2790,13 @@ define([_AC_SH_QUOTE_IFELSE],
 # --------------------
 # If there are quoted (via backslash) backquotes do nothing, else
 # backslash all the quotes.
+# FIXME: In a distant future (2.51 or +), this warning should be
+# classified as `syntax'.  It is claissified as `obsolete' to ease
+# the transition (for Libtool for instance).
 define([_AC_SH_QUOTE],
 [_AC_SH_QUOTE_IFELSE([$1],
                      [patsubst([$1], [\([`""]\)], [\\\1])],
-                     [AC_DIAGNOSE([syntax],
+                     [AC_DIAGNOSE([obsolete],
            [backquotes and double quotes should not be backslashed in: $1])dnl
 $1])])
 

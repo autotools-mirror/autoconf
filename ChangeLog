@@ -1,5 +1,10 @@
 2000-10-12  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_SH_QUOTE): Issue an `obsolete' warning for use
+	of backquotes, instead of a `syntax' warning.
+
+2000-10-12  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_VAR_IN_INDIR, AC_VAR_IF_SET): Rename as...
 	(AC_VAR_INDIR_IFELSE, AC_VAR_SET_IFELSE): this.
 
