@@ -1,5 +1,11 @@
 2001-02-25  Akim Demaille  <akim@epita.fr>
 
+	* autoupdate.in (&mktmpdir): New.
+	(&END): Remove $tmp.
+	(&parse_args): Handle -d and -l.
+
+2001-02-25  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PREPARE): Remove conf$$* on exit.
 	* m4sh.m4 (_AS_LN_S_PREPARE, _AS_BROKEN_TEST_PREPARE):
 	s/conftest/conf$$/ to avoid race conditions.

@@ -28,23 +28,40 @@ use strict;
 
 # Lib files.
 my $autoconf_dir = $ENV{"AC_MACRODIR"} || "@datadir@";
-
 my $autoconf = '';
 my $debug = 0;
 my $localdir = '.';
 # m4.
 my $m4 = $ENV{"M4"} || "@M4@";
-my $status = 0;
-# FIXME: Ahem....
-my $tmp = '/tmp/autoupdate.tmp';
-mkdir $tmp, 0700;
 my $verbose = 0;
 my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
+my $tmp;
 
 
 ## ---------- ##
 ## Routines.  ##
 ## ---------- ##
+
+
+# &mktmpdir ()
+# ------------
+sub mktmpdir ()
+{
+  my $TMPDIR = $ENV{'TMPDIR'} || '/tmp';
+
+  # If mktemp supports dirs, use it to please Marc E.
+  $tmp = `(umask 077 && mktemp -d -q "$TMPDIR/auXXXXXX") 2>/dev/null`;
+
+  if (!$tmp || !-d $tmp)
+    {
+      $tmp = "$TMPDIR/au" . int (rand 10000) . ".$$";
+      mkdir $tmp, 0700
+	or die "$me: cannot create $tmp: $!\n";
+    }
+
+  print STDERR "$me:$$: working in $tmp\n"
+    if $debug;
+}
 
 
 # END
@@ -53,6 +70,15 @@ my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
 sub END
 {
   use POSIX qw (_exit);
+
+  if (!$debug && -d $tmp)
+    {
+      unlink <$tmp/*>
+	or die "$me: cannot empty $tmp: $!\n";
+      rmdir $tmp
+	or die "$me: cannot remove $tmp: $!\n";
+    }
+
   # This is required if the code might send any output to stdout
   # E.g., even --version or --help.  So it's best to do it unconditionally.
   close STDOUT
@@ -80,11 +106,11 @@ Operation modes:
 
 Library directories:
   -A, --autoconf-dir=ACDIR  Autoconf's macro files location (rarely needed)
-  -l, --localdir=DIR        location of \`aclocal.m4' and \`acconfig.h'
+  -l, --localdir=DIR        location of \`aclocal.m4'
 
 Environment variables:
-  M4         GNU M4 is required.
-  AUTOCONF   autoconf.
+  M4         GNU M4 1.4 or above
+  AUTOCONF   autoconf @VERSION@
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";
@@ -143,6 +169,8 @@ sub parse_args ()
   @ARGV = grep !/^-$/, @ARGV;
   Getopt::Long::config ("bundling");
   Getopt::Long::GetOptions ('A|autoconf-dir|m|macrodir=s' => \$autoconf_dir,
+			    'l|localdir=s' => \$localdir,
+			    'd|debug'      => \$debug,
 			    'h|help'    => \&print_usage,
 			    'V|version' => \&print_version,
 			    'v|verbose' => \$verbose)
@@ -192,8 +220,9 @@ sub find_slaves ()
 ## -------------- ##
 find_slaves;
 parse_args;
-$autoconf .= " -l $localdir";
-$ENV{'autoconf_dir'} = $autoconf_dir;
+mktmpdir;
+$autoconf .= " --autoconf-dir $autoconf_dir --localdir $localdir";
+
 
 # @M4_BUILTINS -- M4 builtins and a useful comment.
 open M4_BUILTINS, "echo dumpdef | $m4 2>&1 >/dev/null |"
@@ -402,10 +431,11 @@ EOF
     $input_m4 =~ s/^      //mg;
 
     # prepared input -- input, but reenables the quote before each AU macro.
-    open INPUT_M4, ">$tmp/input.m4";
-    print INPUT_M4 "$input_m4";
+    open INPUT_M4, ">$tmp/input.m4"
+       or die "$me: cannot open: $!\n";
     open FILE, "<$file"
        or die "$me: cannot open: $!\n";
+    print INPUT_M4 "$input_m4";
     while (<FILE>)
        {
 	 eval $au_changequote;
@@ -417,7 +447,7 @@ EOF
        or die "$me: cannot close: $!\n";
 
     # Now ask m4 to perform the update.
-    print STDERR "$me: running $m4 $tmp/input.m4"
+    print STDERR "$me: running $m4 $tmp/input.m4\n"
        if $verbose;
     if (system ("$m4 $tmp/input.m4 >$tmp/updated"))
        {
@@ -445,7 +475,7 @@ EOF
 	   }
 	 else
 	   {
-	     die "$me: cannot update \`$file'";
+	     die "$me: cannot update \`$file'\n";
 	   }
        }
   }
