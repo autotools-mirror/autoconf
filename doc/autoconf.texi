@@ -360,9 +360,9 @@ Using version 1.3 or later will be much faster than 1.1 or 1.2.
 @xref{History}, for the story of Autoconf's development.
 @xref{Questions}, for answers to some common questions about Autoconf.
 
-Mail suggestions and bug reports for Autoconf to
-@code{bug-gnu-utils@@prep.ai.mit.edu}.  Please include the Autoconf version
-number, which you can get by running @samp{autoconf --version}.
+Mail suggestions and bug reports for Autoconf to @code{autoconf@@gnu.org}.
+Please include the Autoconf version number, which you can get by running
+@samp{autoconf --version}.
 
 @node Making configure Scripts, Setup, Introduction, Top
 @chapter Making @code{configure} Scripts

@@ -1,3 +1,9 @@
+1999-01-21  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (Introduction): Update bug reporting address.
+
+	* config.guess: Likewise.
+
 1999-01-19  Pavel Roskin  <pavel_roskin@geocities.com>
 
 	* ifnames.sh: Source lines ending with backslash are prepended to

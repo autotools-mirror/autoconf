@@ -23,6 +23,7 @@
 
 # Written by Per Bothner <bothner@cygnus.com>.
 # The master version of this file is at the FSF in /home/gd/gnu/lib.
+# Please send patches to the Autoconf mailing list <autoconf@gnu.org>.
 #
 # This script attempts to guess a canonical system name similar to
 # config.sub.  If it succeeds, it prints the system name on stdout, and
