@@ -1,5 +1,17 @@
 2000-10-05  Akim Demaille  <akim@epita.fr>
 
+	Check that updated scripts are valid scripts.
+
+	* tests/mktests.sh: Generate `syntax.m4' directly.
+	* tests/macros.m4: Remove.
+	Adjust dependencies.
+	* tests/mktests.sh: Generate `update.m4' too.
+	* tests/update.m4: New generated file.
+	Adjust dependencies.
+	* tests/atspecific.m4 (AT_CHECK_UPDATE): New macro.
+
+2000-10-05  Akim Demaille  <akim@epita.fr>
+
 	* tests/mktests.sh: New file, which replaces the code inlined in
 	Makefile.am.
 	* src/Makefile.am (macros.m4): Use `mktests.sh'.

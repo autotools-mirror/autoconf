@@ -31,3 +31,6 @@ AT_INCLUDE(torture.m4)
 
 # Checking all the AC_DEFUN'd macros.
 AT_INCLUDE(syntax.m4)
+
+# Checking that updatiing an obsolete macro produces a valid configure.in
+AT_INCLUDE(update.m4)

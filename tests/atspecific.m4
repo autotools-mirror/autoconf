@@ -72,8 +72,8 @@ define(_m4_foreach,
 ## ---------------------------------------- ##
 
 
-# _AT_CHECK_AC_MACRO(AC-BODY)
-# ---------------------------
+# _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS)
+# --------------------------------------
 # Create a minimalist configure.in running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
@@ -90,7 +90,7 @@ $1
 AC_ENV_SAVE(env-after)
 AC_OUTPUT
 ])
-
+$2
 AT_CHECK([autoconf -W none --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, [])
@@ -118,6 +118,25 @@ _AT_CHECK_AC_MACRO([ifelse([$2],,[$1], [$2])])
 $3
 AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
 ])# AT_CHECK_MACRO
+
+
+# AT_CHECK_UPDATE(NAME-OF-THE-MACRO)
+# ----------------------------------
+# Create a minimalist configure.in running the macro named
+# NAME-OF-THE-MACRO, autoupdate this script, check that autoconf runs
+# on that script, and that the shell runs correctly the configure.
+# TOP_SRCDIR is needed to set the auxdir (some macros need
+# `install-sh', `config.guess' etc.).
+AT_DEFINE([AT_CHECK_UPDATE],
+[AT_SETUP([$1])
+
+_AT_CHECK_AC_MACRO([$1],
+[AT_CHECK([autoupdate --autoconf-dir ..], 0,
+          [], [autoupdate: `configure.in' is updated
+])])
+
+AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
+])# AT_CHECK_UPDATE
 
 
 # AT_CHECK_DEFINES(CONTENT)

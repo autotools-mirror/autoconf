@@ -20,18 +20,17 @@
 
 AUTOMAKE_OPTIONS = gnits
 
-SUITE = torture.m4 semantics.m4 syntax.m4 base.m4 tools.m4
+SUITE = base.m4 tools.m4 semantics.m4 torture.m4 syntax.m4 update.m4
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = atgeneral.m4 atspecific.m4 suite.m4 macros.m4 aclocal.m4 \
-             $(SUITE) \
-             mktests.sh
+EXTRA_DIST = atgeneral.m4 atspecific.m4 suite.m4 aclocal.m4 \
+             $(SUITE) mktests.sh
 
 check-local: atconfig testsuite
 	$(SHELL) testsuite
 
-testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
+testsuite: atgeneral.m4 atspecific.m4 suite.m4 $(SUITE)
 	$(M4) -I $(srcdir) atspecific.m4 suite.m4 | \
           sed -e 's/[ 	]*$$//' | \
 	  sed -e '/^$$/N;/\n$$/D' > $@-tmp
@@ -43,8 +42,11 @@ testsuite: atgeneral.m4 atspecific.m4 suite.m4 macros.m4 $(SUITE)
 MACRO_FILES = $(top_srcdir)/acgeneral.m4   $(top_srcdir)/acspecific.m4 \
               $(top_srcdir)/acfunctions.m4 $(top_srcdir)/aclang.m4
 
-macros.m4: $(MACRO_FILES) $(srcdir)/Makefile.am
-	./mktests.sh $@ $(MACRO_FILES)
+syntax.m4: mktests.sh $(MACRO_FILES)
+	./mktests.sh $(MACRO_FILES)
+
+update.m4: mktests.sh $(MACRO_FILES)
+	./mktests.sh $(MACRO_FILES)
 
 CLEANFILES = debug-*.sh macro configure configure.in config.status \
 config.cache config.log config.h.in config.h
