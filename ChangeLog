@@ -1,13 +1,68 @@
+2005-02-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/foreign.at (Libtool): Don't overquote AT_SETUP arg.
+	* tests/m4sh.at (AS_DIRNAME, AS_BASENAME, AS_MKDIR_P, AS_HELP_STRING):
+	Likewise.
+	* tests/semantics.at (AC_C_BIGENDIAN, AC_PATH_PROG & AC_PATH_PROGS):
+	Likewise.
+
 2005-02-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Mention AT_COPYRIGHT.
+
+	* tests/local.at (AT_CMP): Use diff directly on input files rather
+	than copying them.
 
 	* lib/autoconf/programs.m4 (AC_PROG_SED): Don't look in
 	/usr/xpg4/bin since that sed dumps core (at least on Solaris 8).
 
 2005-02-04  Noah Misch  <noah@cs.caltech.edu>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/autotest.at (Empty test suite): New test.
+	* tests/torture.at (Substitute and define special characters)
+	(Substitute a 2000-byte string, Define to a 2000-byte string)
+	(Substitute a newline, Define a newline): New tests.
+
+2005-02-04  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/m4sugar/m4sugar.m4 (m4_re_string, m4_re_word): Revert 2002-03-04.
+	* tests/local.at (AT_CHECK_M4SUGAR): Add `m4sugar' to keywords.
+	(AT_CHECK_ENV): Ignore LTLIBOBJS, FC variables, EGREP, FGREP, and SED.
+	* tests/m4sugar.at (AT_CHECK_M4SUGAR_TEXT, AT_CHECK_M4RE): New macros.
+	(Standard regular expressions): New test.
+	(m4_warn, m4_require: circular dependencies, m4_text_wrap): Strip
+	excess test name quoting.
+	* tests/semantics.at (AC_CHECK_HEADERS_OLD, AC_CHECK_HEADERS_NEW): Pass
+	CPPFLAGS to `configure' instead of setting it in `configure'.
 
 	* lib/m4sugar/m4sh.m4 (AS_UNAME): Try only /usr/bin/hostinfo, not
 	any `hostinfo' in $PATH, since hostinfo.exe is a popular file name
 	on some platforms.
+
+	* lib/autoconf/fortran.m4 (AC_LANG(Fortran), AC_FC_SRCEXT):
+	s/FC_SRCEXT/ac_fc_srcext/; s/FCFLAGS_SRCEXT/ac_fcflags_srcext/.
+
+	* tests/local.at (AT_CMP): New macro.
+	(AT_DATA_AUTOCONF): Do not call AC_PROG_GREP.
+	(AC_SAVE_STATE): Move environment grep...
+	(AT_CHECK_ENV): to here.  Filter out `'$''.  Use AT_CMP.
+	(AT_CONFIG_CMP): New macro.
+	(AT_CHECK_MACRO): Run `configure' twice with cache and compare results.
+	* tests/c.at (Extensions): Do not exit early.
+	* tests/atlocal.in: Inherit $GREP.
+
+	* lib/autoconf/c.m4 (_AC_C_STD_TRY): New macro.
+	(_AC_PROG_CC_C89, _AC_PROG_CC_C99): Use it.
+
+	* lib/autoconf/general.m4 (_AC_INIT_COPYRIGHT): Update for 2005.
+	(AC_COPYRIGHT): Factor header comment portion out and move into...
+	* lib/m4sugar/m4sh.m4 (AS_COPYRIGHT): This.
+	* lib/autotest/general.at (AT_COPYRIGHT): New macro.
+	(AT_INIT): Add Autotest copyright notice.  Display copyright notices in
+	--version output.
+	* tests/local.at: Add Autoconf test suite copyright notice.
+	* doc/autoconf.texi (Writing testsuite.at): Document AT_COPYRIGHT.
 
 2005-02-04  Bruno Haible <bruno@clisp.org>
 	and Paul Eggert  <eggert@cs.ucla.edu>
