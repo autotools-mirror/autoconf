@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in -*-Makefile-*-
 
 ## Makefile for Autoconf.
-## Copyright 2001 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2004 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ MAINTAINERCLEANFILES = $(dist_man_MANS)
 # Depend on configure.ac to get version number changes.
 common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x
 binsrcdir = $(top_srcdir)/bin
-autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(binsrcdir)/autoconf.in
+autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(binsrcdir)/autoconf.as
 autoheader.1: $(common_dep) $(srcdir)/autoheader.x $(binsrcdir)/autoheader.in
 autom4te.1:   $(common_dep) $(srcdir)/autom4te.x   $(binsrcdir)/autom4te.in
 autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(binsrcdir)/autoreconf.in
