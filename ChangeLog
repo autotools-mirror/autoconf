@@ -1,3 +1,8 @@
+2001-09-21  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.maint (AUTOM4TE): Neutralize autom4te.
+	Suggested by Jim Meyering.
+
 2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
 
 	* lib/autoconf/programs.m4: Use extensions listed in

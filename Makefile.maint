@@ -222,6 +222,7 @@ cvs-dist: local-check cvs-check maintainer-distcheck
 null_AM_MAKEFLAGS = \
   ACLOCAL=false \
   AUTOCONF=false \
+  AUTOM4TE=false \
   AUTOMAKE=false \
   AUTOHEADER=false \
   MAKEINFO=false
