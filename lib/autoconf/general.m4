@@ -2623,12 +2623,14 @@ AC_DEFUN([AC_SEARCH_LIBS],
 [ac_func_search_save_LIBS=$LIBS
 ac_cv_search_$1=no
 AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
-test "$ac_cv_search_$1" = no && for ac_lib in $2; do
-LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
-AC_TRY_LINK_FUNC([$1],
-[ac_cv_search_$1="-l$ac_lib"
+if test "$ac_cv_search_$1" = no; then
+  for ac_lib in $2; do
+    LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
+    AC_TRY_LINK_FUNC([$1],
+                     [ac_cv_search_$1="-l$ac_lib"
 break])
-done
+  done
+fi
 LIBS=$ac_func_search_save_LIBS])
 AS_IF([test "$ac_cv_search_$1" != no],
   [test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
