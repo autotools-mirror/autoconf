@@ -1,3 +1,8 @@
+Sat Mar 16 15:53:22 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
+
+	* Version 2.9 released.
+	* acgeneral.m4 (AC_ACVERSION): Updated to 2.9.
+
 Wed Mar 13 12:49:51 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_OUTPUT_HEADER): Undo last change to $ac_dB,
