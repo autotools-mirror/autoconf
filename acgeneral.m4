@@ -33,7 +33,7 @@ dnl
 dnl ### Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.9.3)dnl
+define(AC_ACVERSION, 1.9.4)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -852,7 +852,7 @@ define(AC_OBSOLETE,
 )])dnl
 dnl
 dnl
-dnl ### Checking for kinds of features
+dnl ### Checking for files - fundamental (no caching)
 dnl
 dnl
 define(AC_PROGRAM_CHECK,
@@ -877,15 +877,6 @@ test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
 dnl
-define(AC_PROGRAMS_CHECK,
-[for ac_prog in $2
-do
-AC_PROGRAM_CHECK($1, [$]ac_prog, [$]ac_prog, )
-test -n "[$]$1" && break
-done
-ifelse([$3],,, [test -n "[$]$1" || $1="$3"
-])])dnl
-dnl
 define(AC_PROGRAM_PATH,
 [if test -z "[$]$1"; then
   AC_CACHE_USE(ac_cv_program_$1,
@@ -907,6 +898,20 @@ $1="$ac_cv_program_$1"
 test -n "[$]$1" && AC_VERBOSE(setting $1 to [$]$1)
 AC_SUBST($1)dnl
 ])dnl
+dnl
+dnl
+dnl ### Checking for files - derived (caching)
+dnl
+dnl
+define(AC_PROGRAMS_CHECK,
+[for ac_prog in $2
+do
+AC_PROGRAM_CHECK($1, [$]ac_prog, [$]ac_prog, )
+test -n "[$]$1" && break
+done
+ifelse([$3],,, [test -n "[$]$1" || $1="$3"
+])])dnl
+dnl
 define(AC_PROGRAMS_PATH,
 [for ac_prog in $2
 do
@@ -915,6 +920,35 @@ test -n "[$]$1" && break
 done
 ifelse([$3],,, [test -n "[$]$1" || $1="$3"
 ])])dnl
+dnl
+define(AC_HAVE_LIBRARY, [dnl
+changequote(/,/)dnl
+define(/AC_LIB_NAME/, dnl
+patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
+changequote([,])dnl
+ac_save_LIBS="${LIBS}"
+LIBS="${LIBS} -l[]AC_LIB_NAME[]"
+ac_have_lib=""
+AC_COMPILE_CHECK([-l[]AC_LIB_NAME[]], , [main();], [ac_have_lib="1"])dnl
+LIBS="${ac_save_LIBS}"
+ifelse($#, 1, [dnl
+if test -n "${ac_have_lib}"; then
+   AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
+   LIBS="${LIBS} -l[]AC_LIB_NAME[]"
+fi
+undefine(AC_LIB_NAME)dnl
+], [dnl
+if test -n "${ac_have_lib}"; then
+   :; $2
+else
+   :; $3
+fi
+])])dnl
+dnl
+dnl
+dnl ### Checking for C features - fundamental (no caching)
+dnl
+dnl
 define(AC_HEADER_EGREP,
 [AC_REQUIRE_CPP()AC_PROVIDE([$0])echo '#include "confdefs.h"
 #include <$2>' > conftest.${ac_ext}
@@ -949,12 +983,6 @@ ifelse([$4], , , [else
 ])dnl
 fi
 rm -f conftest*
-])dnl
-dnl
-define(AC_HEADER_CHECK,
-[AC_CHECKING([for $1])
-ifelse([$3], , [AC_TEST_CPP([#include <$1>], [$2])],
-[AC_TEST_CPP([#include <$1>], [$2], [$3])])
 ])dnl
 dnl
 define(AC_COMPILE_CHECK,
@@ -1023,21 +1051,22 @@ ifelse([$3], , , [else
 fi
 rm -f conftest*])dnl
 dnl
+dnl
+dnl ### Checking for C features - derived (caching)
+dnl
+dnl
+define(AC_HEADER_CHECK,
+[AC_CHECKING([for $1])
+ifelse([$3], , [AC_TEST_CPP([#include <$1>], [$2])],
+[AC_TEST_CPP([#include <$1>], [$2], [$3])])
+])dnl
+dnl
 define(AC_REPLACE_FUNCS,
 [for ac_func in $1
 do
-AC_COMPILE_CHECK([${ac_func}], [#include <ctype.h>], [
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_${ac_func}) || defined (__stub___${ac_func})
-choke me
-#else
-/* Override any gcc2 internal prototype to avoid an error.  */
-extern char ${ac_func}(); ${ac_func}();
-#endif
-], , [LIBOBJS="$LIBOBJS ${ac_func}.o"
-AC_VERBOSE(using ${ac_func}.o instead)])
+AC_FUNC_CHECK(${ac_func}, ,
+[LIBOBJS="$LIBOBJS ${ac_func}.o"
+AC_VERBOSE(using ${ac_func}.o instead)])dnl
 done
 AC_SUBST(LIBOBJS)dnl
 ])dnl
@@ -1090,30 +1119,6 @@ AC_HEADER_CHECK(${ac_hdr},
 AC_DEFINE(${ac_tr_hdr}))dnl
 done
 ])dnl
-dnl
-define(AC_HAVE_LIBRARY, [dnl
-changequote(/,/)dnl
-define(/AC_LIB_NAME/, dnl
-patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
-changequote([,])dnl
-ac_save_LIBS="${LIBS}"
-LIBS="${LIBS} -l[]AC_LIB_NAME[]"
-ac_have_lib=""
-AC_COMPILE_CHECK([-l[]AC_LIB_NAME[]], , [main();], [ac_have_lib="1"])dnl
-LIBS="${ac_save_LIBS}"
-ifelse($#, 1, [dnl
-if test -n "${ac_have_lib}"; then
-   AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
-   LIBS="${LIBS} -l[]AC_LIB_NAME[]"
-fi
-undefine(AC_LIB_NAME)dnl
-], [dnl
-if test -n "${ac_have_lib}"; then
-   :; $2
-else
-   :; $3
-fi
-])])dnl
 dnl
 define(AC_SIZEOF_TYPE,
 [AC_CHECKING(size of $1)
