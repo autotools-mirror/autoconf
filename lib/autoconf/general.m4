@@ -2922,7 +2922,7 @@ AC_DEFUN(AC_CHECK_TYPE,
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
-[AC_EGREP_CPP(dnl
+[AC_EGREP_CPP(
 changequote(<<,>>)dnl
 <<(^|[^a-zA-Z_0-9])$1[^a-zA-Z_0-9]>>dnl
 changequote([,]),
@@ -2936,7 +2936,7 @@ m4_default([$3], [#include <stdio.h>
 AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,,
                 [AC_DEFINE_UNQUOTED($1, $2,
                                     [Define to `$2' if <sys/types.h>
-                                     does not define `$1'.])])dnl
+                                     does not define.])])dnl
 AC_VAR_POPDEF([ac_Type])dnl
 ])dnl AC_CHECK_TYPE
 
@@ -3254,16 +3254,16 @@ dnl so uname gets run too.
 
 # Files that config.status was made for.
 ifset([AC_LIST_FILES], [config_files="\\
-AC_WRAP(AC_LIST_FILES, [    ])"
+AC_WRAP(AC_LIST_FILES, [  ])"
 ])dnl
 ifset([AC_LIST_HEADERS], [config_headers="\\
-AC_WRAP(AC_LIST_HEADERS, [    ])"
+AC_WRAP(AC_LIST_HEADERS, [  ])"
 ])dnl
 ifset([AC_LIST_LINKS], [config_links="\\
-AC_WRAP(AC_LIST_LINKS, [    ])"
+AC_WRAP(AC_LIST_LINKS, [  ])"
 ])dnl
 ifset([AC_LIST_COMMANDS], [config_commands="\\
-AC_WRAP(AC_LIST_COMMANDS, [    ])"
+AC_WRAP(AC_LIST_COMMANDS, [  ])"
 ])dnl
 
 ac_cs_usage="\\
@@ -3396,6 +3396,10 @@ ifset([AC_LIST_COMMANDS],
       [AC_OUTPUT_COMMANDS_COMMANDS()])dnl
 
 cat >>$CONFIG_STATUS <<EOF
+#
+# AC_OUTPUT_COMMANDS section.
+#
+
 undivert(AC_DIVERSION_ICMDS)dnl
 EOF
 cat >>$CONFIG_STATUS <<\EOF

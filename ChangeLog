@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Formatting changes.
+	* acspecific.m4: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CONFIG_LINKS): Allow a second argument,
 	commands to run, as AC_CONFIG_FILES and HEADERS.
 	(AC_LIST_LINKS_COMMANDS): New growing string.  Initialize.

@@ -167,12 +167,10 @@ else
 fi
 ])
 
-dnl AC_PROG_F77 takes an optional first argument which, if specified,
-dnl must be a space separated list of Fortran 77 compilers to search
-dnl for.  This just gives the user an opportunity to specify an
-dnl alternative search list for the Fortran 77 compiler.
-dnl
-dnl AC_PROG_F77()
+dnl AC_PROG_F77([COMPILERS...])
+dnl ---------------------------
+dnl COMPILERS is a space separated list of Fortran 77 compilers to search
+dnl for.
 AC_DEFUN(AC_PROG_F77,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_CHECK_PROGS(F77,
@@ -239,7 +237,7 @@ fi
 AC_MSG_CHECKING([whether the C++ compiler ($CXX $CXXFLAGS $CPPFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_cxx_cross)
 cross_compiling=$ac_cv_prog_cxx_cross
-])
+])dnl AC_PROG_CXX_WORKS
 
 
 dnl AC_PROG_F77_WORKS
@@ -252,7 +250,7 @@ AC_DEFUN(AC_PROG_F77_WORKS,
 [AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_FORTRAN77
-AC_TRY_COMPILER(dnl
+AC_TRY_COMPILER(
 [      program conftest
       end
 ], ac_cv_prog_f77_works, ac_cv_prog_f77_cross)
@@ -264,7 +262,7 @@ fi
 AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) is a cross-compiler])
 AC_MSG_RESULT($ac_cv_prog_f77_cross)
 cross_compiling=$ac_cv_prog_f77_cross
-])
+])dnl AC_PROG_F77_WORKS
 
 
 dnl AC_PROG_CC_GNU
@@ -281,7 +279,8 @@ if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gcc=yes
 else
   ac_cv_prog_gcc=no
-fi])])
+fi])dnl
+])
 
 
 dnl AC_PROG_CXX_GNU
@@ -298,7 +297,8 @@ if AC_TRY_COMMAND(${CXX-g++} -E conftest.C) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_gxx=yes
 else
   ac_cv_prog_gxx=no
-fi])])
+fi])dnl
+])
 
 
 dnl AC_PROG_F77_GNU
@@ -2014,7 +2014,7 @@ changequote(<<, >>)dnl
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>
 # include <time.h>
- #else
+#else
 # if HAVE_SYS_TIME_H
 #  include <sys/time.h>
 # else
