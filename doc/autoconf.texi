@@ -10334,8 +10334,12 @@ this is test
 @end example
 
 @item Trailing backslash in macro
-HP-UX 11.20 on IA-64 will read multiple newlines following a
-backslash, continuing to the next non-empty line.  For example,
+@c  This has been seen on ia64 hpux 11.20, and on one hppa hpux 10.20,
+@c  but another hppa hpux 10.20 didn't have it.  Bob Proulx
+@c  <bob@proulx.com> thinks it was in hpux 8.0 too.
+On some versions of HP-UX, @command{make} will read multiple newlines
+following a backslash, continuing to the next non-empty line.  For
+example,
 
 @example
 FOO = one \

@@ -1,3 +1,9 @@
+2002-09-05  Kevin Ryde  <user42@zip.com.au>
+
+	* hpmake/autoconf.texi (Limitations of Make): HP-UX trailing
+	backslashes doesn't seem to be confined to ia64, just say "some
+	versions".
+
 2002-09-04  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.am, doc/Makefile.am: Remove pdf targets, handled by
