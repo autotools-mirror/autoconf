@@ -1,5 +1,14 @@
 2001-10-01  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT) <--help>: Catch up with reality.
+	No longer output the list of tests.
+	<--list>: New option.
+	<--full-help>: Remove.
+	Complete the short/long options duality.
+	Various small adjustments.
+
+2001-10-01  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Use @kbd for user input.
 	Always use `$' as shell prompt.
 

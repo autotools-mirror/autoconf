@@ -92,7 +92,7 @@ m4_define([AT_INIT],
 m4_pattern_forbid([^_?AT_])
 m4_pattern_forbid([PACKAGE_(BUGREPORT|STRING)$])
 m4_define([AT_TESTSUITE_NAME],
-          m4_defn([PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1])[.])
+          m4_defn([PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_data_files], [stdout expout at-* stderr experr])
@@ -122,15 +122,17 @@ at_times=:
 # CLI Arguments to pass to the debugging scripts.
 at_debug_args=
 # -e sets to true
-at_stop_on_error=false
+at_errexit_p=false
 # Shall we be verbose?
 at_verbose=:
 at_quiet=echo
 # Shall we keep the debug scripts?  Must be `:' when test suite is
 # run by a debug script, so that the script doesn't remove itself.
-at_debug=false
+at_debug_p=false
 # Display help message?
-at_help=no
+at_help_p=false
+# List tests?
+at_list_p=false
 # Tests to run
 at_tests=
 m4_wrap([m4_divert_text([DEFAULT],
@@ -148,13 +150,15 @@ m4_divert([OPTIONS])
 
 while test $[@%:@] -gt 0; do
   case $[1] in
-    --help | -h) at_help=short
+    --help | -h )
+        at_help_p=:
         ;;
 
-    --full-help | -H ) at_help=long
+    --list | -l )
+        at_list_p=:
         ;;
 
-    --version)
+    --version | -V )
         echo "$as_me (PACKAGE_STRING)"
         exit 0
         ;;
@@ -166,17 +170,21 @@ while test $[@%:@] -gt 0; do
         exit 0
         ;;
 
-    -d) at_debug=:
+    --debug | -d )
+        at_debug_p=:
         ;;
 
-    -e) at_debug=:
-        at_stop_on_error=:
+    --errexit | -e )
+        at_debug_p=:
+        at_errexit_p=:
         ;;
 
-    -v) at_verbose=echo; at_quiet=:
+    --verbose | -v )
+        at_verbose=echo; at_quiet=:
         ;;
 
-    -x) at_traceon='set -vx'; at_traceoff='set +vx'
+    --trace | -x )
+        at_traceon='set -vx'; at_traceoff='set +vx'
         ;;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
@@ -248,50 +256,69 @@ while test $[@%:@] -gt 0; do
   shift
 done
 
+# Selected tests.
+test -z "$at_tests" && at_tests=$at_tests_all
+
 # Help message.
-if test "$at_help" != no; then
-  # If tests were specified, display only their title.
-  if test -z "$at_tests"; then
-    cat <<_ATEOF
-Usage: $[0] [[OPTION]]... [[TESTS]] [[VAR=VALUE]]
+if $at_help_p; then
+  cat <<_ATEOF
+Usage: $[0] [[OPTION]... [VARIABLE=VALUE]... [TESTS]]
 
-Run all the tests, or the selected TESTS.
+Run all the tests, or the selected TESTS, and save a detailed log file.
+Upon failure, create debugging scripts.
 
-Options:
-  -h  Display this help message and the description of TESTS
-  -c  Remove all the files this test suite might create and exit
-  -e  Abort the test suite as soon as a test fails; implies -d
-  -v  Force more detailed output, default for debugging scripts
-  -d  Inhibit clean up and debug script creation, default for debugging scripts
-  -x  Have the shell trace command execution
+You should not change environment variables unless explicitly passed
+as command line arguments.  Set \`AUTOTEST_PATH' to select the executables
+to exercise.  Each relative directory is expanded as build and source
+directories relatively to the top level of this distribution.  E.g.,
 
-Tests:
+  $ $[0] AUTOTEST_PATH=bin
+
+possibly amounts into
+
+  PATH=/tmp/foo-1.0/bin:/src/foo-1.0/bin:\$PATH
+
+Operation modes:
+  -h, --help     print the help message, then exit
+  -V, --version  print version number, then exit
+  -c, --clean    remove all the files this test suite might create and exit
+  -l, --list     describes all the tests, or the selected TESTS
+
+Execution tuning:
+  -k, --keywords=KEYWORDS
+                 select the tests matching all the comma separated KEYWORDS
+                 accumulates
+  -e, --errexit  abort as soon as a test fails; implies --debug
+  -v, --verbose  force more detailed output
+                 default for debugging scripts
+  -d, --debug    inhibit clean up and debug script creation
+                 default for debugging scripts
+  -x, --trace    enable tests shell tracing
+
+Report bugs to <PACKAGE_BUGREPORT>.
 _ATEOF
-  else
-    # "  1 42  45 " => "^(1|42|45);"
-    at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;s/  */|/g'`
-    at_tests_pattern="^(${at_tests_pattern});"
-  fi
-  case $at_help in
-  short)
-    echo "$at_help_all" |
-      egrep -e "$at_tests_pattern" |
-      awk 'BEGIN { FS = ";" }
-           { if ($[1]) printf " %3d: %s\n", $[1], $[3] } ';;
-  long)
-    echo "$at_help_all" |
-      egrep -e "$at_tests_pattern" |
-      awk 'BEGIN { FS = ";" }
-           { if ($[1]) printf " %3d: %-18s %s\n", $[1], $[2], $[3]
-             if ($[4]) printf "      %s\n", $[4] } ';;
-  esac
-  echo
-  echo "Report bugs to <PACKAGE_BUGREPORT>."
   exit 0
 fi
 
-# Tests to run.
-test -z "$at_tests" && at_tests=$at_tests_all
+# List of tests.
+if $at_list_p; then
+  cat <<_ATEOF
+AT_TESTSUITE_NAME tests:
+
+ NUM: FILENAME:LINE      TEST-GROUP-NAME
+      KEYWORDS
+
+_ATEOF
+  # "  1 42  45 " => "^(1|42|45);"
+  at_tests_pattern=`echo "$at_tests" | sed 's/^  *//;s/  *$//;s/  */|/g'`
+  at_tests_pattern="^(${at_tests_pattern});"
+  echo "$at_help_all" |
+    egrep -e "$at_tests_pattern" |
+    awk 'BEGIN { FS = ";" }
+         { if ($[1]) printf " %3d: %-18s %s\n", $[1], $[2], $[3]
+           if ($[4]) printf "      %s\n", $[4] } '
+  exit 0
+fi
 
 # Don't take risks: use only absolute directories in PATH.
 #
@@ -362,16 +389,16 @@ fi
 
 # 6 is the log file.  To be preserved if `-d'.
 m4_define([AS_MESSAGE_LOG_FD], [6])
-if $at_debug; then
+if $at_debug_p; then
   exec AS_MESSAGE_LOG_FD>/dev/null
 else
   exec AS_MESSAGE_LOG_FD>$as_me.log
 fi
 
 # Banners and logs.
-AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
+AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
 {
-  AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
+  AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
   echo
 
   echo "$as_me: command line was:"
@@ -448,7 +475,7 @@ dnl Tests inserted here (TESTS).
 m4_divert([TAIL])[]dnl
 
   * )
-    echo $as_me: no such test: $at_test
+    echo "$as_me: no such test: $at_test" >&2
     continue
     ;;
   esac
@@ -480,7 +507,7 @@ _ATEOF
       # If the test failed, at-times is not available.
       test -f at-times && at_log_msg="$at_log_msg	(`sed 1d at-times`)"
       echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
-      $at_stop_on_error && test -n "$at_fail_list" && break
+      $at_errexit_p && test -n "$at_fail_list" && break
       ;;
   esac
 done
@@ -499,7 +526,7 @@ if test "$at_duration" != "h m s"; then
 fi
 
 # Cleanup everything unless the user wants the files.
-$at_debug || rm -rf $at_data_files
+$at_debug_p || rm -rf $at_data_files
 
 # Wrap up the test suite with summary statistics.
 at_skip_count=`set dummy $at_skip_list; shift; echo $[@%:@]`
@@ -510,8 +537,8 @@ if test $at_fail_count = 0; then
   else
     AS_BOX([All $at_test_count tests were successful ($at_skip_count skipped).])
   fi
-elif test $at_debug = false; then
-  if $at_stop_on_error; then
+elif test $at_debug_p = false; then
+  if $at_errexit_p; then
     AS_BOX([ERROR: One of the tests failed, inhibiting subsequent tests.])
   else
     AS_BOX([ERROR: Suite unsuccessful, $at_fail_count of $at_test_count tests failed.])
@@ -520,22 +547,24 @@ elif test $at_debug = false; then
   # Remove any debugging script resulting from a previous run.
   rm -f $as_me.[[0-9]] $as_me.[[0-9][0-9]] $as_me.[[0-9][0-9][0-9]]
 
+  # Normalize the names so that `ls' lists them in order.
+  at_format=`echo $at_last_test | sed 's/././g'`
+  at_NNN=`expr "NNN$at_group" : ".*\($at_format\)"`
   echo
-  echo $ECHO_N "Writing \`$as_me.NN' scripts, with NN =$ECHO_C"
+  echo $ECHO_N "Writing \`$as_me.$at_NNN' scripts, with $at_NNN =$ECHO_C"
   for at_group in $at_fail_list
   do
-    # Normalize the names so that `ls' lists them in order.
-    at_format=`echo $at_last_test | sed 's/././g'`
     at_number=`expr "000$at_group" : ".*\($at_format\)"`
     echo $ECHO_N " $at_number$ECHO_C"
-    ( echo "#! /bin/sh"
+    {
+      echo "#! /bin/sh"
       echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
            '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
       echo 'exit 1'
-    ) >$as_me.$at_number
+    } >$as_me.$at_number
     chmod +x $as_me.$at_number
   done
-  echo ', done'
+  echo ', done.'
   echo
   echo 'You may investigate any problem if you feel able to do so, in which'
   echo 'case the test suite provides a good starting point.'
@@ -551,17 +580,17 @@ elif test $at_debug = false; then
     # Summary of failed and skipped tests.
     if test $at_fail_count != 0; then
       echo "Failed tests:"
-      $SHELL $[0] $at_fail_list --help
+      $SHELL $[0] $at_fail_list --list
       echo
     fi
     if test $at_skip_count != 0; then
       echo "Skipped tests:"
-      $SHELL $[0] $at_skip_list --help
+      $SHELL $[0] $at_skip_list --list
       echo
     fi
     echo
 
-    AS_BOX([Verbosely re-running the failing tests])
+    AS_BOX([Verbosely re-running the failing tests.])
     echo
   } >&AS_MESSAGE_LOG_FD
 
