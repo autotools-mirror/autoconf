@@ -42,7 +42,6 @@ BEGIN
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
 use Autom4te::FileUtils;
-use Autom4te::FileUtils;
 use Autom4te::General;
 use Autom4te::XFile;
 use strict;
