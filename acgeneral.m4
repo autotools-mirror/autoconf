@@ -103,18 +103,13 @@ ac_usage="Usage: configure [options] [host]
 Options: [defaults in brackets]
 --enable-FEATURE[=VAL]	enable FEATURE (optional parameter VAL)
 --exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
---gas			obsolete form of --with-gnu-as
 --help			print this message
---nfp			do not use a floating point processor [use it]
 --prefix=PREFIX		install host independent files in PREFIX [/usr/local]
---program-prefix=PREF	install programs with PREF prepended to their names []
---program-suffix=SUFF	install programs with SUFF appended to their names []
 --quiet, --silent	do not print \`checking for...' messages
 --srcdir=DIR		find the sources in DIR [. or ..]
 --verbose		print results of checks
 --version		print the version of autoconf that created configure
---with-PACKAGE[=VAL]	external PACKAGE is available (optional parameter VAL)
---x			obsolete form of --with-x"
+--with-PACKAGE[=VAL]	external PACKAGE is available (optional parameter VAL)"
 changequote([,])dnl
 
 # Get the option argument from the current or next ARGV element.
@@ -172,7 +167,7 @@ changequote([,])dnl
   | --exec=* | --exe=* | --ex=*)
     eval "$ac_get_optarg"; exec_prefix="$ac_optarg" ;;
 
-  -gas | --gas | --ga | --g) with_gnu_as=1 ;;
+  -gas | --gas | --ga | --g) with_gnu_as=1 ;; # Obsolete; use --with-gas.
 
   -help | --help | --hel | --he)
     cat << EOF
@@ -184,7 +179,7 @@ EOF
   | -host=* | --host=* | --hos=* | --ho=*)
     eval "$ac_get_optarg" ;;
 
-  -nfp | --nfp | --nf) floating_point=no ;;
+  -nfp | --nfp | --nf) floating_point=no ;; # Obsolete; use --with-fp=no.
 
   -norecursion | --norecursion | --norecursio | --norecursi \
   | --norecurs | --norecur | --norecu | --norec | --nore | --nor | --no)
@@ -276,7 +271,7 @@ changequote([,])dnl
     ac_package=`echo $ac_package| sed 's/-/_/g'`
     eval "with_${ac_package}=no" ;;
 
-  --x) with_x=1 ;;
+  --x) with_x=1 ;; # Obsolete; use --with-x.
 
   -*) AC_WARN([$ac_option: invalid option; use --help to show usage])
     ;;
@@ -370,7 +365,7 @@ dnl set `prefix' to /usr/local/gnu.
 define(AC_PREFIX,
 [if test -z "$prefix"
 then
-  AC_CHECKING(for $1 to derive installation directory prefix)
+  AC_CHECKING([for $1 to derive installation directory prefix])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="$IFS:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
@@ -584,7 +579,7 @@ define(AC_PROGRAM_CHECK,
 [if test -z "[$]$1"; then
   # Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
-  AC_CHECKING(for $ac_word)
+  AC_CHECKING([for $ac_word])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
@@ -613,7 +608,7 @@ define(AC_PROGRAM_PATH,
 [if test -z "[$]$1"; then
   # Extract the first word of `$2', so it can be a program name with args.
   set ac_dummy $2; ac_word=[$]2
-  AC_CHECKING(for $ac_word)
+  AC_CHECKING([for $ac_word])
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     test -z "$ac_dir" && ac_dir=.
@@ -673,14 +668,14 @@ rm -f conftest*
 ])dnl
 dnl
 define(AC_HEADER_CHECK,
-[AC_CHECKING(for $1)
+[AC_CHECKING([for $1])
 ifelse([$3], , [AC_TEST_CPP([#include <$1>], [$2])],
 [AC_TEST_CPP([#include <$1>], [$2], [$3])])
 ])dnl
 dnl
 define(AC_COMPILE_CHECK,
 [AC_PROVIDE([$0])dnl
-ifelse([$1], , , [AC_CHECKING(for $1)]
+ifelse([$1], , , [AC_CHECKING([for $1])]
 )dnl
 dnl We use return because because C++ requires a prototype for exit.
 cat > conftest.${ac_ext} <<EOF
