@@ -66,6 +66,61 @@ English should write it.
 We must find a solution for this macro which needs to find
 `getloadavg.c'.
 
+** AC_PATH_X
+Hi Robert,
+
+> Hi, autoconf people.  While packaging plotutils-2.2 (just released),
+> I noticed what looks like a small error in the autoconf-2.13 texinfo
+> documentation, the entry for AC_PATH_XTRA, in particular.
+
+> The documentation says that AC_PATH_XTRA
+> 	... adds the C compiler flags that X needs to output variable
+> 	`X_CFLAGS', and the X linker flags to `X_LIBS'.  If X is not
+> 	available, adds `-DX_DISPLAY_MISSING' to `X_CFLAGS'.
+
+> It doesn't seem to add -DX_DISPLAY_MISSING to X_CFLAGS.  X_DISPLAY_MISSING
+> ends up defined in config.h, instead.
+
+That's only because you're no doubt using AC_CONFIG_HEADER(..) to send
+your defines to a config.h-style file.  If you were to not use
+AC_CONFIG_HEADER and X was not available, then you would see
+-DX_DISPLAY_MISSING being added to @DEFS@ as your output files were being
+generated.
+
+But you are right--the documentation is not clear about this.  I'll change
+it.
+
+> In fact it looks to me as if right now, X_CFLAGS is used only for
+> specifying directories where X include files are stored, via the `-I' option.
+> Maybe it should really be called X_CPPFLAGS?
+
+Well, perhaps.  If you feel strongly about this, feel free to submit a
+change-request.  There is a hyperlink to the bug tracking database from
+http://sourceware.cygnus.com/autoconf/.  With the way it reads in the
+manual right now, it's designed to allow the user to set additional flags
+in the environment prior to running configure--and these don't need to be
+limited to just -I flags.  Nevertheless, I can see a few clean ways to
+improve this.
+
+
+** AC_SEARCH_LIBS
+From: Tom Tromey <tromey@cygnus.com>
+Subject: AC_SEARCH_LIBS
+
+I think AC_SEARCH_LIBS has an unfortunate interface.
+
+ACTION-IF-FOUND is run in addition to the default action.  Most
+autoconf macros don't work this way.  This is confusing.
+
+In my case I can't use this macro because it always appends to LIBS.
+I don't want that.  Instead I want to use ACTION-IF-FOUND to set my
+own macro.
+
+Also there is no documentation on the format of library names expected
+by the macro.  Even a reference to some other function (e.g., "the
+library name can have the same forms as with AC_HAVE_LIBRARY" (if that
+is true, which I haven't looked up) would be fine.
+
 ** Revamp the language support
 We should probably have a language for C89, and C99.  We must give the
 means to the users to specify some needs over the compilers, and
