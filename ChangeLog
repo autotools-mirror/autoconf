@@ -1,5 +1,15 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	Factor part of the prologue of the tests.
+
+	* tests/atgeneral.m4 (AT_SETUP, AT_CLEANUP): No longer handle
+	at_stop_on_error.
+	(AT_INIT): After having checked whether the test failed, break out
+	of the loop if requested (-e).
+
+	
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_SETUP): Don't build at-check-line, that's
 	AT_CHECK's job.
 	Remove the code depending upon `at_skip_mode': it's unused.

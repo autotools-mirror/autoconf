@@ -174,6 +174,9 @@ m4_divert_push(3)[]dnl
        at_failed_list="$at_failed_list $test"
        ;;
   esac
+  if $at_stop_on_error && test -n "$at_failed_list"; then
+   break
+  fi
 done
 
 # Wrap up the testing suite with summary statistics.
@@ -258,21 +261,20 @@ m4_pushdef([AT_data_expout], )
 m4_pushdef([AT_data_experr], )
 m4_divert_pop()dnl
   AT_ordinal )
-    if $at_stop_on_error && test -n "$at_failed_list"; then :; else
 dnl Here will be inserted the `rm' corresponding to AT_CLEANUP.
 m4_divert(2)[]dnl
-      echo AT_LINE > at-setup-line
-      if $at_verbose; then
-  	echo 'testing $1'
-  	echo $at_n "     $at_c"
-      fi
-      if $at_verbose; then
-        echo "AT_ordinal. $srcdir/AT_LINE..."
-      else
-         echo $at_n "m4_substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
-      fi
-      (
-$at_traceon
+    echo AT_LINE > at-setup-line
+    if $at_verbose; then
+      echo 'testing $1'
+      echo $at_n "     $at_c"
+    fi
+    if $at_verbose; then
+      echo "AT_ordinal. $srcdir/AT_LINE..."
+    else
+      echo $at_n "m4_substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
+    fi
+    (
+      $at_traceon
 ])
 
 
@@ -282,17 +284,16 @@ $at_traceon
 # created within the test.  There is no need to list stdout, stderr,
 # nor files created with AT_DATA.
 AT_DEFINE([AT_CLEANUP],
-$at_traceoff
-[      )
-      at_status=$?
-      at_test_count=`expr 1 + $at_test_count`
-      if $at_stop_on_error && test -n "$at_failed_list"; then :; else
+[      $at_traceoff
+    )
+    at_status=$?
+    at_test_count=`expr 1 + $at_test_count`
+    if $at_stop_on_error && test -n "$at_failed_list"; then :; else
 m4_divert(1)[]dnl
 
     rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
 m4_undivert(2)[]dnl
-        rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
-      fi
+      rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
     fi
     ;;
 
