@@ -456,8 +456,8 @@ else
   as_mkdir_p=false
 fi
 
-# Find out how to test for executable files. Don't use a zero-byte file,
-# as systems may use methods other than mode bits to determine executability.
+# Find out whether ``test -x'' works.  Don't use a zero-byte file, as
+# systems may use methods other than mode bits to determine executability.
 cat >conf$$.file <<_ASEOF
 #! /bin/sh
 exit 0
@@ -2820,8 +2820,8 @@ else
   as_mkdir_p=false
 fi
 
-# Find out how to test for executable files. Don't use a zero-byte file,
-# as systems may use methods other than mode bits to determine executability.
+# Find out whether ``test -x'' works.  Don't use a zero-byte file, as
+# systems may use methods other than mode bits to determine executability.
 cat >conf$$.file <<_ASEOF
 #! /bin/sh
 exit 0
