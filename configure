@@ -225,7 +225,7 @@ _ASEOF
 }; then
   CONFIG_SHELL=$as_shell
 	       as_have_required=yes
-	       if { ($as_shell) 2> /dev/null <<\_ASEOF
+	       if { $as_shell 2> /dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
