@@ -7525,12 +7525,14 @@ be removed} at any moment (especially if for some reason
 @command{autom4te} considers it is trashed).
 
 @table @option
-@item --cache=[@var{directory}]
-@itemx -C
-@itemx -C@var{directory}
+@item --cache=@var{directory}
+@itemx -C @var{directory}
 Specify the name of the directory where the result should be cached.
 Passing an empty value disables caching.  Be sure to pass a relative
 path name, as for the time being, global caches are not supported.
+
+@item --no-cache
+Don't cache the results.
 
 @item --force
 @itemx -f
@@ -7684,7 +7686,7 @@ globally, include the following lines in @file{~/.autom4te.cfg}:
 ## ------------------ ##
 
 begin-language: "Autoconf"
-args: --cache ''
+args: --no-cache
 end-language: "Autoconf"
 @end verbatim
 

@@ -367,7 +367,8 @@ Operation modes:
   -f, --force              don\'t rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
   -l, --language=LANG      specify the set of M4 macros to use
-  -C, --cache=[DIRECTORY]  preserve results for future runs in DIRECTORY
+  -C, --cache=DIRECTORY    preserve results for future runs in DIRECTORY
+      --no-cache           disable the cache
   -m, --mode=OCTAL         change the non trace output file mode (0666)
   -M, --melt               don\'t use M4 frozen files
 
@@ -546,6 +547,7 @@ sub parse_args ()
 
      # Caching.
      "C|cache=s" => \$cache,
+     "no-cache"  => sub { $cache = undef; },
     );
 
   error "too few arguments

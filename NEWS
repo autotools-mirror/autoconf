@@ -30,15 +30,17 @@ Release tips:
 
 - Supports -W/--warnings.
 
+** autom4te
+
+- Supports --cache, and --no-cache.
+
+- ~/.autom4te.cfg makes it possible to disable the caching mechanism
+  (autom4te.cache).  See `Customizing autom4te' in the documentation.
+
 ** Obsolete options
 
   Support for the obsoleted options -m, --macrodir, -l, --localdir is
   dropped in favor of the safer --include/--prepend-include scheme.
-
-** Customization
-
-- ~/.autom4te.cfg makes it possible to disable the caching mechanism
-  (autom4te.cache).  See `Customizing autom4te' in the documentation.
 
 ** Macros
 
