@@ -264,11 +264,50 @@ announcement: NEWS ChangeLog $(rel-files)
 	      -e 'print "\n"."*"x70 ."\n"; s///; print; print "*"x70 ."\n"'; \
 	)
 
+
+## ---------------- ##
+## Updating files.  ##
+## ---------------- ##
+
 WGET = wget
 ftp-gnu = ftp://ftp.gnu.org/gnu
 
 # Use mv, if you don't have/want move-if-change.
 move_if_change ?= move-if-change
+
+
+# --------------------- #
+# Updating everything.  #
+# --------------------- #
+
+.PHONY: update
+local_updates ?= wget-update cvs-update po-update
+update: $(local_updates)
+
+
+# ------------------- #
+# Updating PO files.  #
+# ------------------- #
+
+po_repo = http://www.iro.umontreal.ca/contrib/po/maint/$(PACKAGE)
+.PHONY: do-po-update po-update
+do-po-update:
+	tmppo=/tmp/$(PACKAGE)-$(VERSION)-po &&\
+	rm -rf $$tmppo && \
+	mkdir $$tmppo && \
+	(cd $$tmppo && $(WGET) -r -l1 -nd --no-parent -A '*.po' $(po_repo)) &&\
+	cp $$tmppo/*.po po
+	cd po && $(MAKE) update-po
+	$(MAKE) po-check
+
+po-update:
+	if test -d "po"; then \
+	  $(MAKE) do-po-update; \
+	fi
+
+# -------------------------- #
+# Updating GNU build tools.  #
+# -------------------------- #
 
 # The following pseudo table associates a local directory and a URL
 # with each of the files that belongs to some other package and is
@@ -302,6 +341,9 @@ cvs_files ?= $(srcdir)/config/depcomp $(srcdir)/config/missing $(srcdir)/config/
 automake_repo=:pserver:anoncvs:anoncvs@sources.redhat.com:/cvs/automake
 .PHONY: wget-update
 wget-update: $(get-targets)
+
+.PHONY: cvs-update
+cvs-update:
 	for f in $(cvs_files); do				      \
 	  test -f $$f || { echo "*** skipping $$f" 1>&2; continue; }; \
 	  file=$$(basename $$f);				      \

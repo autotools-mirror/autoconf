@@ -1,3 +1,10 @@
+2002-11-07  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am (cvs_files): Add elisp-comp, mdate-sh.
+	(local_updates): New.
+	* Makefile.maint: Update, from CVS Bison.
+	(local_updates): New.
+
 2002-11-06  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY): Wrap the `f'
