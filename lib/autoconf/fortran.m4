@@ -149,9 +149,9 @@ ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 # AC_LANG(Fortran)
 # ----------------
 m4_define([AC_LANG(Fortran)],
-[ac_ext=${FC_SRCEXT-f}
-ac_compile='$FC -c $FCFLAGS $FCFLAGS_SRCEXT conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $FCFLAGS_SRCEXT conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+[ac_ext=${ac_fc_srcext-f}
+ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_fc_compiler_gnu
 ])
 
@@ -1121,9 +1121,8 @@ AC_LANG_POP(Fortran)dnl
 # call ACTION-IF-FAILURE, which defaults to failing with an error
 # message.
 #
-# (The flags for the current source-code extension, if any, are stored
-# in the FCFLAGS_SRCEXT variable and are automatically used in subsequent
-# autoconf tests.)
+# (The flags for the current source-code extension, if any, are stored in
+# $ac_fcflags_srcext and used automatically in subsequent autoconf tests.)
 #
 # For ordinary extensions like f90, etcetera, the modified FCFLAGS
 # are currently needed for IBM's xlf* and Intel's ifc (grrr).  Unfortunately,
@@ -1140,25 +1139,25 @@ AC_DEFUN([AC_FC_SRCEXT],
 AC_CACHE_CHECK([for Fortran flag to compile .$1 files],
                 ac_cv_fc_srcext_$1,
 [ac_ext=$1
-ac_fc_srcext_FCFLAGS_SRCEXT_save=$FCFLAGS_SRCEXT
-FCFLAGS_SRCEXT=""
+ac_fcflags_srcext_save=$ac_fcflags_srcext
+ac_fcflags_srcext=
 ac_cv_fc_srcext_$1=unknown
 for ac_flag in none -qsuffix=f=$1 -Tf; do
-  test "x$ac_flag" != xnone && FCFLAGS_SRCEXT="$ac_flag"
+  test "x$ac_flag" != xnone && ac_fcflags_srcext="$ac_flag"
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [ac_cv_fc_srcext_$1=$ac_flag; break])
 done
 rm -f conftest.$ac_objext conftest.$1
-FCFLAGS_SRCEXT=$ac_fc_srcext_FCFLAGS_SRCEXT_save
+ac_fcflags_srcext=$ac_fcflags_srcext_save
 ])
 if test "x$ac_cv_fc_srcext_$1" = xunknown; then
   m4_default([$3],[AC_MSG_ERROR([Fortran could not compile .$1 files])])
 else
-  FC_SRCEXT=$1
+  ac_fc_srcext=$1
   if test "x$ac_cv_fc_srcext_$1" = xnone; then
-    FCFLAGS_SRCEXT=""
+    ac_fcflags_srcext=""
     FCFLAGS_[]$1[]=""
   else
-    FCFLAGS_SRCEXT=$ac_cv_fc_srcext_$1
+    ac_fcflags_srcext=$ac_cv_fc_srcext_$1
     FCFLAGS_[]$1[]=$ac_cv_fc_srcext_$1
   fi
   AC_SUBST(FCFLAGS_[]$1)
