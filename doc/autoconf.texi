@@ -3342,6 +3342,17 @@ The ISO C standard says @code{sprintf} and @code{vsprintf} return the
 number of bytes written, but on some old systems (SunOS 4 for
 instance) they return the buffer pointer instead.
 
+@item @code{sscanf}
+@c @fuindex sscanf
+@prindex @code{sscanf}
+On various old systems, e.g. HP-UX 9, @code{sscanf} requires that its
+input string is writable (though it doesn't actually change it).  This
+can be a problem when using @command{gcc} since it normally puts
+constant strings in read-only memory
+(@pxref{Incompatibilities,Incompatibilities of GCC,,gcc,Using and
+Porting the GNU Compiler Collection}).  Apparently in some cases even
+having format strings read-only can be a problem.
+
 @item @code{unlink}
 @c @fuindex unlink
 @prindex @code{unlink}
