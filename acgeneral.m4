@@ -156,6 +156,7 @@ Directory and file names:
   --srcdir=DIR            find the sources in DIR [configure dir or ..]
   --program-prefix=PREFIX prepend PREFIX to installed program names
   --program-suffix=SUFFIX append SUFFIX to installed program names
+  --program-transform-name=PROGRAM run sed PROGRAM on installed program names
 Host type:
   --build=BUILD           configure for building on BUILD [BUILD=HOST]
   --host=HOST             configure for HOST [guessed]
@@ -1140,7 +1141,7 @@ undefine([AC_VAR_NAME])dnl
 dnl ### Checking for libraries
 
 
-dnl AC_CHECK_LIB(LIBRARY, FUNCTION, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
+dnl AC_CHECK_LIB(LIBRARY, FUNCTION [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl              [, OTHER-LIBRARIES]]])
 AC_DEFUN(AC_CHECK_LIB,
 [AC_MSG_CHECKING([for -l$1])
