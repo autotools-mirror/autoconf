@@ -1,5 +1,22 @@
 * Major changes in Autoconf 2.59c
 
+** Directory variables adjusted to recent changes in the GNU Coding Standards.
+  The following directory variables are new:
+
+    datarootdir   read-only architecture-independent data root [PREFIX/share]
+    localedir     locale-specific message catalogs [DATAROOTDIR/locale]
+    docdir        documentation root [DATAROOTDIR/doc/PACKAGE]
+    htmldir       html documentation [DOCDIR]
+    dvidir        dvi documentation [DOCDIR]
+    pdfdir        pdf documentation [DOCDIR]
+    psdir         ps documentation [DOCDIR]
+
+  The following variables have new default values:
+
+    datadir       read-only architecture-independent data [DATAROOTDIR]
+    infodir       info documentation [DATAROOTDIR/info]
+    mandir        man documentation [DATAROOTDIR/man]
+
 ** AC_PROG_CC_C89, AC_PROG_CC_C99
   New macros for ISO C99 support.  AC_PROG_CC_C89 and AC_PROG_CC_C99
   check for ANSI C89 and ISO C99 support respectively.

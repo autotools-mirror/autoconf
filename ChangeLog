@@ -1,3 +1,12 @@
+2005-01-05  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Define datarootdir,
+	docdir, htmldir, dvidir, pdfdir, psdir, and localdir.  Update
+	datadir, infodir, and mandir.  Adjust argument parsing code.
+	(_AC_INIT_HELP): Update help text.
+	* doc/autoconf.texi (Installation Directory Variables): Document
+	new variables.
+
 2005-01-04  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): If the Make program does

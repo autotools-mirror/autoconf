@@ -2271,7 +2271,25 @@ The directory for installing executables that users run.
 
 @defvar datadir
 @ovindex datadir
-The directory for installing read-only architecture-independent data.
+The directory for installing ideosyncratic read-only
+architecture-independent data.
+@end defvar
+
+@defvar datarootdir
+@ovindex datarootdir
+The root of the directory tree for read-only architecture-independent
+data files.
+@end defvar
+
+@defvar docdir
+@ovindex docdir
+The directory for installing documentation files (other than Info and
+man).
+@end defvar
+
+@defvar dvidir
+@ovindex dvidir
+The directory for installing documentation files in DVI format.
 @end defvar
 
 @defvar exec_prefix
@@ -2281,6 +2299,11 @@ it's the same as @var{prefix}.  You should avoid installing anything
 directly to @var{exec_prefix}.  However, the default value for
 directories containing architecture-dependent files should be relative
 to @var{exec_prefix}.
+@end defvar
+
+@defvar htmldir
+@ovindex htmldir
+The directory for installing HTML documentation.
 @end defvar
 
 @defvar includedir
@@ -2303,6 +2326,13 @@ The directory for installing object code libraries.
 The directory for installing executables that other programs run.
 @end defvar
 
+@defvar localedir
+@ovindex localedir
+The directory for installing locale-dependent but
+architecture-independent data, such as message catalogs.  This directory
+usually has a subdirectory per locale.
+@end defvar
+
 @defvar localstatedir
 @ovindex localstatedir
 The directory for installing modifiable single-machine data.
@@ -2318,11 +2348,21 @@ The top-level directory for installing documentation in man format.
 The directory for installing C header files for non-GCC compilers.
 @end defvar
 
+@defvar pdfdir
+@ovindex pdfdir
+The directory for installing PDF documentation.
+@end defvar
+
 @defvar prefix
 @ovindex prefix
 The common installation prefix for all files.  If @var{exec_prefix}
 is defined to a different value, @var{prefix} is used only for
 architecture-independent files.
+@end defvar
+
+@defvar psdir
+@ovindex psdir
+The directory for installing PostScript documentation.
 @end defvar
 
 @defvar sbindir
@@ -2344,8 +2384,9 @@ The directory for installing read-only single-machine data.
 
 Most of these variables have values that rely on @code{prefix} or
 @code{exec_prefix}.  It is deliberate that the directory output
-variables keep them unexpanded: typically @samp{@@datadir@@} will be
-replaced by @samp{$@{prefix@}/share}, not @samp{/usr/local/share}.
+variables keep them unexpanded: typically @samp{@@datarootdir@@} will be
+replaced by @samp{$@{prefix@}/share}, not @samp{/usr/local/share}, and
+@samp{@@datadir@@} will be replaced by @samp{$@{datarootdir@}}.
 
 This behavior is mandated by the @acronym{GNU} coding standards, so that when
 the user runs:
@@ -2365,9 +2406,9 @@ the files of a package grouped together, and then install links from
 the final locations to there.
 @end table
 
-In order to support these features, it is essential that @code{datadir}
-remains being defined as @samp{$@{prefix@}/share} to depend upon the
-current value of @code{prefix}.
+In order to support these features, it is essential that
+@code{datarootdir} remains being defined as @samp{$@{prefix@}/share} to
+depend upon the current value of @code{prefix}.
 
 A corollary is that you should not use these variables except in
 Makefiles.  For instance, instead of trying to evaluate @code{datadir}

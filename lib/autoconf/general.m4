@@ -529,18 +529,28 @@ x_libraries=NONE
 # and all the variables that are supposed to be based on exec_prefix
 # by default will actually change.
 # Use braces instead of parens because sh, perl, etc. also accept them.
+# (The list follows the same order as the GNU Coding Standards.)
 AC_SUBST([bindir],         ['${exec_prefix}/bin'])dnl
 AC_SUBST([sbindir],        ['${exec_prefix}/sbin'])dnl
 AC_SUBST([libexecdir],     ['${exec_prefix}/libexec'])dnl
-AC_SUBST([datadir],        ['${prefix}/share'])dnl
+AC_SUBST([datarootdir],    ['${prefix}/share'])dnl
+AC_SUBST([datadir],        ['${datarootdir}'])dnl
 AC_SUBST([sysconfdir],     ['${prefix}/etc'])dnl
 AC_SUBST([sharedstatedir], ['${prefix}/com'])dnl
 AC_SUBST([localstatedir],  ['${prefix}/var'])dnl
-AC_SUBST([libdir],         ['${exec_prefix}/lib'])dnl
 AC_SUBST([includedir],     ['${prefix}/include'])dnl
 AC_SUBST([oldincludedir],  ['/usr/include'])dnl
-AC_SUBST([infodir],        ['${prefix}/info'])dnl
-AC_SUBST([mandir],         ['${prefix}/man'])dnl
+AC_SUBST([docdir],         [m4_ifset([AC_PACKAGE_TARNAME],
+                                     ['${datarootdir}/doc/${PACKAGE_TARNAME}'],
+                                     ['${datarootdir}/doc/${PACKAGE}'])])dnl
+AC_SUBST([infodir],        ['${datarootdir}/info'])dnl
+AC_SUBST([htmldir],        ['${docdir}'])dnl
+AC_SUBST([dvidir],         ['${docdir}'])dnl
+AC_SUBST([pdfdir],         ['${docdir}'])dnl
+AC_SUBST([psdir],          ['${docdir}'])dnl
+AC_SUBST([libdir],         ['${exec_prefix}/lib'])dnl
+AC_SUBST([localedir],      ['${datarootdir}/locale'])dnl
+AC_SUBST([mandir],         ['${datarootdir}/man'])dnl
 
 ac_prev=
 ac_dashdash=
@@ -581,11 +591,17 @@ do
   --config-cache | -C)
     cache_file=config.cache ;;
 
-  -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
+  -datadir | --datadir | --datadi | --datad)
     ac_prev=datadir ;;
-  -datadir=* | --datadir=* | --datadi=* | --datad=* | --data=* | --dat=* \
-  | --da=*)
+  -datadir=* | --datadir=* | --datadi=* | --datad=*)
     datadir=$ac_optarg ;;
+
+  -datarootdir | --datarootdir | --datarootdi | --datarootd | --dataroot \
+  | --dataroo | --dataro | --datar)
+    ac_prev=datarootdir ;;
+  -datarootdir=* | --datarootdir=* | --datarootdi=* | --datarootd=* \
+  | --dataroot=* | --dataroo=* | --dataro=* | --datar=*)
+    datarootdir=$ac_optarg ;;
 
   -disable-* | --disable-*)
     ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
@@ -594,6 +610,11 @@ do
       AC_MSG_ERROR([invalid feature name: $ac_feature])
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
     eval "enable_$ac_feature=no" ;;
+
+  -dvidir | --dvidir | --dvidi | --dvid | --dvi | --dv)
+    ac_prev=dvidir ;;
+  -dvidir=* | --dvidir=* | --dvidi=* | --dvid=* | --dvi=* | --dv=*)
+    dvidir=$ac_optarg ;;
 
   -enable-* | --enable-*)
     ac_feature=`expr "x$ac_option" : 'x-*enable-\([[^=]]*\)'`
@@ -632,6 +653,12 @@ do
   -host=* | --host=* | --hos=* | --ho=*)
     host_alias=$ac_optarg ;;
 
+  -htmldir | --htmldir | --htmldi | --htmld | --html | --htm | --ht)
+    ac_prev=htmldir ;;
+  -htmldir=* | --htmldir=* | --htmldi=* | --htmld=* | --html=* | --htm=* \
+  | --ht=*)
+    htmldir=$ac_optarg ;;
+
   -includedir | --includedir | --includedi | --included | --include \
   | --includ | --inclu | --incl | --inc)
     ac_prev=includedir ;;
@@ -656,13 +683,16 @@ do
   | --libexe=* | --libex=* | --libe=*)
     libexecdir=$ac_optarg ;;
 
+  -localedir | --localedir | --localedi | --localed | --locale)
+    ac_prev=localedir ;;
+  -localedir=* | --localedir=* | --localedi=* | --localed=* | --locale=*)
+    localedir=$ac_optarg ;;
+
   -localstatedir | --localstatedir | --localstatedi | --localstated \
-  | --localstate | --localstat | --localsta | --localst \
-  | --locals | --local | --loca | --loc | --lo)
+  | --localstate | --localstat | --localsta | --localst | --locals)
     ac_prev=localstatedir ;;
   -localstatedir=* | --localstatedir=* | --localstatedi=* | --localstated=* \
-  | --localstate=* | --localstat=* | --localsta=* | --localst=* \
-  | --locals=* | --local=* | --loca=* | --loc=* | --lo=*)
+  | --localstate=* | --localstat=* | --localsta=* | --localst=* | --locals=*)
     localstatedir=$ac_optarg ;;
 
   -mandir | --mandir | --mandi | --mand | --man | --ma | --m)
@@ -726,6 +756,16 @@ do
   | --program-trans=* | --program-tran=* \
   | --progr-tra=* | --program-tr=* | --program-t=*)
     program_transform_name=$ac_optarg ;;
+
+  -pdfdir | --pdfdir | --pdfdi | --pdfd | --pdf | --pd)
+    ac_prev=pdfdir ;;
+  -pdfdir=* | --pdfdir=* | --pdfdi=* | --pdfd=* | --pdf=* | --pd=*)
+    pdfdir=$ac_optarg ;;
+
+  -psdir | --psdir | --psdi | --psd | --ps)
+    ac_prev=psdir ;;
+  -psdir=* | --psdir=* | --psdi=* | --psd=* | --ps=*)
+    psdir=$ac_optarg ;;
 
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil)
@@ -854,8 +894,10 @@ do
 done
 
 # Be sure to have absolute directory names.
-for ac_var in bindir sbindir libexecdir datadir sysconfdir sharedstatedir \
-	      localstatedir libdir includedir oldincludedir infodir mandir
+for ac_var in bindir sbindir libexecdir datarootdir datadir sysconfdir \
+              sharedstatedir localstatedir includedir oldincludedir \
+              docdir infodir htmldir dvidir pdfdir psdir libdir \
+              localedir mandir
 do
   eval ac_val=$`echo $ac_var`
   case $ac_val in
@@ -946,15 +988,22 @@ Fine tuning of the installation directories:
   --bindir=DIR           user executables [EPREFIX/bin]
   --sbindir=DIR          system admin executables [EPREFIX/sbin]
   --libexecdir=DIR       program executables [EPREFIX/libexec]
-  --datadir=DIR          read-only architecture-independent data [PREFIX/share]
   --sysconfdir=DIR       read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR   modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR    modifiable single-machine data [PREFIX/var]
   --libdir=DIR           object code libraries [EPREFIX/lib]
   --includedir=DIR       C header files [PREFIX/include]
   --oldincludedir=DIR    C header files for non-gcc [/usr/include]
-  --infodir=DIR          info documentation [PREFIX/info]
-  --mandir=DIR           man documentation [PREFIX/man]
+  --datarootdir=DIR      read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR          read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR          info documentation [DATAROOTDIR/info]
+  --localedir=DIR        locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR           man documentation [DATAROOTDIR/man]
+  --docdir=DIR           documentation root ]@<:@DATAROOTDIR/doc/m4_ifset([AC_PACKAGE_TARNAME], [AC_PACKAGE_TARNAME], [PACKAGE])@:>@[
+  --htmldir=DIR          html documentation [DOCDIR]
+  --dvidir=DIR           dvi documentation [DOCDIR]
+  --pdfdir=DIR           pdf documentation [DOCDIR]
+  --psdir=DIR            ps documentation [DOCDIR]
 _ACEOF
 
   cat <<\_ACEOF]
