@@ -231,8 +231,11 @@ AC_DIVERT_POP()dnl
 
 # AC_PROVIDE(MACRO-NAME)
 # ----------------------
+# We use `m4_define' and not `define' to avoid the cost of the name
+# space machinery.  It makes no difference for any of the name
+# spaces.
 define(AC_PROVIDE,
-[define([AC_PROVIDE_$1])])
+[m4_define([AC_PROVIDE_$1])])
 
 
 
