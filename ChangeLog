@@ -1,5 +1,12 @@
 2001-02-25  Akim Demaille  <akim@epita.fr>
 
+	* m4sh.m4 (_AS_TEST_PREPARE): Rename as...
+	(_AS_BROKEN_TEST_PREPARE): this.
+	(_AS_TEST_PREPARE): New dummy but working version of this macro.
+	* acspecific.m4 (AC_PROG_INSTALL): Use AS_EXECUTABLE_P.
+
+2001-02-25  Akim Demaille  <akim@epita.fr>
+
 	* autoupdate.in (&parse_args): Support `-'.
 
 	
