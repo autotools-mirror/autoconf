@@ -317,6 +317,8 @@ popdef([AT_group_description])])
 
 # Initialize an input data FILE with given CONTENTS, which should end with
 # an end of line.
+# This macro is not robust to active symbols in CONTENTS *on purpose*.
+# If you don't want CONTENT to be evaluated, quote it twice.
 
 AT_DEFINE(AT_DATA,
 [AT_DEFINE([AT_data_files], AT_data_files[ ]$1)
