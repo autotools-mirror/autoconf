@@ -210,12 +210,12 @@ sub name
 
 sub lock
 {
-  use Fcntl qw(:DEFAULT :flock);
-  my ($fh) = shift;
-  if (!flock ($fh, @_))
+  my ($fh, $mode) = @_;
+  # Cannot use @_ here.
+  if (!flock ($fh, $mode))
     {
       my $file = $fh->name;
-      croak "$me: cannot lock $file with @_: $!\n";
+      croak "$me: cannot lock $file with mode $mode: $!\n";
     }
 }
 
@@ -240,11 +240,11 @@ sub seek
 
 sub truncate
 {
-  my ($fh) = shift;
-  if (!truncate ($fh, @_))
+  my ($fh, $len) = @_;
+  if (!truncate ($fh, $len))
     {
       my $file = $fh->name;
-      croak "$me: cannot truncate $file with @_: $!\n";
+      croak "$me: cannot truncate $file at $len: $!\n";
     }
 }
 

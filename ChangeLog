@@ -1,3 +1,8 @@
+2003-05-07  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/Autom4te/XFile.pm (lock, truncate): Do not pass @_ to flock
+	and truncate.
+
 2003-05-06  Akim Demaille  <akim@epita.fr>
 
 	Don't try to be smart with aclocal 1.8+ because (i) aclocal no
