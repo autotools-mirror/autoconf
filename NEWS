@@ -11,10 +11,15 @@
 
 ** Macros
 
+- AC_FUNC_FNMATCH now tests only for POSIX compatibility, reverting to
+  Autoconf 2.13 behavior.  The new macro AC_FUNC_FNMATCH_GNU also tests for
+  GNU extensions to fnmatch.  Both macros now accept an optional argument
+  specifying the directory that contains the replacement fnmatch source code.
 - AC_FUNC_GETLOADAVG now has an optional argument specifying the directory
   that contains getloadavg.c, and it tests whether getloadavg.c exists.
 - AC_FUNC_SETVBUF_REVERSED no longer fails when cross-compiling.
 - AC_PROG_CC_STDC is integrated into AC_PROG_CC.
+- New macro: AC_GNU_SOURCE.
 
 ** Bug fixes
 
