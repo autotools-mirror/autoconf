@@ -10070,6 +10070,22 @@ works for executables, so @samp{cp -p} is used instead for these
 systems.  DJGPP versions 2.04 and later have full symlink support.
 
 
+@item @command{ls}
+@c ---------------
+@prindex @command{ls}
+@cindex Listing directories
+The portable options are @option{-acdilrtu}.  Modern practice is for
+@option{-l} to output both owner and group, but traditional
+@command{ls} omits the group.
+
+Modern practice is for all diagnostics to go to standard error, but
+traditional @samp{ls foo} prints the message @samp{foo not found} to
+standard output if @file{foo} does not exist.  Be careful when writing
+shell commands like @samp{sources=`ls *.c 2>/dev/null`}, since with
+traditional @command{ls} this is equivalent to @samp{sources="*.c not
+found"} if there are no @samp{.c} files.
+
+
 @item @command{mkdir}
 @c ------------------
 @prindex @command{mkdir}
