@@ -70,19 +70,24 @@ else
 fi
 ])
 
+dnl AC_PROG_CC takes an optional first argument which, if specified,
+dnl must be a space separated list of C compilers to search for.  This
+dnl just gives the user an opportunity to specify an alternative search
+dnl list for the C compiler.
 AC_DEFUN(AC_PROG_CC,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
-AC_CHECK_PROG(CC, gcc, gcc)
-if test -z "$CC"; then
-  AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
+ifelse([$1], ,
+[
+  AC_CHECK_PROG(CC, gcc, gcc)
   if test -z "$CC"; then
-    case "`uname -s`" in
-    *win32* | *WIN32* | *CYGWIN*)
-      AC_CHECK_PROG(CC, cl, cl) ;;
-    esac
+    AC_CHECK_PROG(CC, cc, cc, , , /usr/ucb/cc)
+    if test -z "$CC"; then
+      AC_CHECK_PROGS(CC, cl)
+    fi
   fi
-  test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
-fi
+], [AC_CHECK_PROGS(CC, [$1])])
+
+test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
 AC_PROG_CC_WORKS
 AC_PROG_CC_GNU
@@ -117,9 +122,13 @@ else
 fi
 ])
 
+dnl AC_PROG_CXX takes an optional first argument which, if specified,
+dnl must be a space separated list of C++ compilers to search for.  This
+dnl just gives the user an opportunity to specify an alternative search
+dnl list for the C++ compiler.
 AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
-AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx cc++ cl, gcc)
+AC_CHECK_PROGS(CXX, $CCC ifelse([$1], , [c++ g++ gcc CC cxx cc++ cl], [$1]), gcc)
 
 AC_PROG_CXX_WORKS
 AC_PROG_CXX_GNU
@@ -154,24 +163,15 @@ else
 fi
 ])
 
-dnl Determine a Fortran 77 compiler to use.  If `F77' is not already set
-dnl in the environment, check for `g77', `f77' and `f2c', in that order.
-dnl Set the output variable `F77' to the name of the compiler found.
-dnl 
-dnl If using `g77' (the GNU Fortran 77 compiler), then `AC_PROG_F77'
-dnl will set the shell variable `G77' to `yes', and empty otherwise.  If
-dnl the output variable `FFLAGS' was not already set in the environment,
-dnl then set it to `-g -02' for `g77' (or `-O2' where `g77' does not
-dnl accept `-g').  Otherwise, set `FFLAGS' to `-g' for all other Fortran
-dnl 77 compilers.
+dnl AC_PROG_F77 takes an optional first argument which, if specified,
+dnl must be a space separated list of Fortran 77 compilers to search
+dnl for.  This just gives the user an opportunity to specify an
+dnl alternative search list for the Fortran 77 compiler.
 dnl 
 dnl AC_PROG_F77()
 AC_DEFUN(AC_PROG_F77,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
-if test -z "$F77"; then
-  AC_CHECK_PROGS(F77, g77 f77 f2c)
-    test -z "$F77" && AC_MSG_ERROR([no acceptable Fortran 77 compiler found in \$PATH])
-fi
+AC_CHECK_PROGS(F77, ifelse([$1], , [g77 f77 xlf cf77 fl32 fort77 f90 xlf90 f2c], [$1]))
 
 AC_PROG_F77_WORKS
 AC_PROG_F77_GNU
