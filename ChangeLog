@@ -1,5 +1,16 @@
 2000-04-11  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl: Reindent using 2 spaces, not 4.
+	Use `#' to denote Autoconf comments, not `dnl'.
+	Put a few `\' here and there to avoid misfontification and
+	misindentation.
+	Use your base name when reporting errors.
+	(parse_args::usage): Use $0, use the same order as the other
+	executables.
+	(parse_args): Don't dump `--help' on cmd line errors.
+
+2000-04-11  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_PROVIDE_IF): Rename as...
 	(AC_PROVIDE_IFELSE): this.  Change all callers.
 	Spread the use of AC_PROVIDE_IFELSE, no macro should know how
