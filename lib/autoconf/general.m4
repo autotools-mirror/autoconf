@@ -3859,6 +3859,11 @@ changequote([, ])dnl
 # Don't redirect the output to AC_FILE directly: use `mv' so that updating
 # is atomic, and doesn't need trapping.
   ac_file_inputs=`echo $ac_file_in | sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+  for ac_file_input in $ac_file_inputs;
+  do
+    test -f "$ac_file_input" ||
+        AC_MSG_ERROR(cannot find input file `$ac_file_input')
+  done
 EOF
 cat >>$CONFIG_STATUS <<EOF
   sed -e "$ac_comsub
@@ -3944,6 +3949,11 @@ changequote([, ])dnl
 
   rm -f $ac_cs_root.frag $ac_cs_root.in $ac_cs_root.out
   ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+    for ac_file_input in $ac_file_inputs;
+  do
+    test -f "$ac_file_input" ||
+        AC_MSG_ERROR(cannot find input file `$ac_file_input')
+  done
   # Remove the trailing spaces.
   sed -e 's/@BKL@ 	@BKR@*$//' $ac_file_inputs >$ac_cs_root.in
 
