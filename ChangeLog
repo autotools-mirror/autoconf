@@ -1,3 +1,25 @@
+2001-02-03  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_LIBOBJ_DECL): Remove.
+	(AC_LIBSOURCES, AC_LIBSOURCE): New.
+
+	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Remove configure.ac
+
+<<<<<<< ChangeLog
+2001-02-02  Akim Demaille  <akim@epita.fr>
+
+	* tests/base.at (AC_TRY_COMMAND): Fix the test.
+	From Nicolas Joly.
+
+	The following patch went into Autoconf between the two previous
+	entries:
+
+	* acgeneral.m4 (AC_TRY_COMMAND): Use the old code, using a tmp
+	variable, to recover multiline robustness.
+	Reported by Tim Van Holder.
+	* tests/base.at (AC_TRY_COMMAND): New.
+
+=======
 2001-02-02  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (_AC_COMPUTE_INT_COMPILE): Rename all occurences
@@ -12,6 +34,7 @@
 	(scan_sh_file): Likewise.
 	Thanks to Jim Meyering for improved implementation.
 
+>>>>>>> 1.1270
 2001-02-01  Pavel Roskin  <proski@gnu.org>
 
 	* autoreconf.sh: Fix the case when the verbose output was not
@@ -19,7 +42,7 @@
 
 2001-01-30  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
-	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Remove configure.ac 
+	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Remove configure.ac
 	from check for ac_sub_configure.
 
 2001-01-30  Akim Demaille  <akim@epita.fr>

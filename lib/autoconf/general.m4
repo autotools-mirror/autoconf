@@ -2983,10 +2983,18 @@ $3],
 ## -------------------------------- ##
 
 
-# AC_LIBOBJ_DECL(FILENAME-NOEXT)
-# ------------------------------
-# Announce we might need the file `FILENAME-NOEXT.c'.
-m4_define([AC_LIBOBJ_DECL], [])
+# AC_LIBSOURCE(FILENAME)
+# ----------------------
+# Announce we might need the file `FILENAME'.
+m4_define([AC_LIBSOURCE], [])
+
+
+# AC_LIBSOURCES([FILENAME1, ...])
+# -------------------------------
+# Announce we might need these files.
+m4_define([AC_LIBSOURCES],
+[m4_foreach([_AC_FILENAME], [$1],
+            [AC_LIBSOURCE(_AC_FILENAME)])])
 
 
 # _AC_LIBOBJ(FILENAME-NOEXT, ACTION-IF-INDIR)
@@ -2995,7 +3003,7 @@ m4_define([AC_LIBOBJ_DECL], [])
 # We don't use AC_SUBST/2 because it forces an unneeded eol.
 m4_define([_AC_LIBOBJ],
 [AS_LITERAL_IF([$1],
-               [AC_LIBOBJ_DECL([$1])],
+               [AC_LIBSOURCE([$1])],
                [$2])dnl
 AC_SUBST([LIBOBJS])dnl
 LIBOBJS="$LIBOBJS $1.$ac_objext"])
