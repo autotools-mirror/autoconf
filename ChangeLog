@@ -1,3 +1,7 @@
+2001-02-23  Jim Meyering  <meyering@lucent.com>
+
+	* acgeneral.m4 (_AC_INIT_PREPARE_FS_SEPARATORS): Fix typo: s/;/:/
+
 2001-02-22  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi: Typos and formatting changes.
