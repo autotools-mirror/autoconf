@@ -3,6 +3,7 @@
 	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): Set BIN_SH, for
 	Tru64.
 	* doc/autoconf.texi (Shellology): Mention BIN_SH.
+	Document problem with "`""`" in pdksh POSIX mode.
 
 2004-07-27  Paul Eggert  <eggert@cs.ucla.edu>
 
