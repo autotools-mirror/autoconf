@@ -1132,11 +1132,13 @@ if test "$ac_cv_struct_tm_zone" = yes; then
 else
   AC_MSG_CHECKING([for tzname])
 AC_CACHE_VAL(ac_cv_var_tzname,
-[AC_TRY_LINK(changequote(<<, >>)dnl
+[AC_TRY_LINK(
+changequote(<<, >>)dnl
 <<#include <time.h>
 #ifndef tzname /* For SGI.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
-#endif>>, changequote([, ])dnl
+#endif>>,
+changequote([, ])dnl
 [atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)])dnl
   AC_MSG_RESULT($ac_cv_var_tzname)
   if test $ac_cv_var_tzname = yes; then
@@ -1238,18 +1240,18 @@ fi
 dnl
 AC_DEFUN(AC_INT_16_BITS,
 [AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(int)])
-AC_MSG_CHECKING(integer size)
+AC_MSG_CHECKING(whether int is 16 bits)
 AC_TRY_RUN([main() { exit(sizeof(int) != 2); }],
- [AC_MSG_RESULT(16 bits)
- AC_DEFINE(INT_16_BITS)], AC_MSG_RESULT(not 16 bits))
+ [AC_MSG_RESULT(yes)
+ AC_DEFINE(INT_16_BITS)], AC_MSG_RESULT(no))
 ])dnl
 dnl
 AC_DEFUN(AC_LONG_64_BITS,
 [AC_OBSOLETE([$0], [; instead use AC_CHECK_SIZEOF(long)])
-AC_MSG_CHECKING(for 64-bit long ints)
+AC_MSG_CHECKING(whether long int is 64 bits)
 AC_TRY_RUN([main() { exit(sizeof(long int) != 8); }],
- [AC_MSG_RESULT(64 bits)
- AC_DEFINE(LONG_64_BITS)], AC_MSG_RESULT(not 64 bits))
+ [AC_MSG_RESULT(yes)
+ AC_DEFINE(LONG_64_BITS)], AC_MSG_RESULT(no))
 ])dnl
 dnl
 AC_DEFUN(AC_C_BIGENDIAN,
@@ -1365,8 +1367,7 @@ dnl
 dnl ### Checks for operating system services
 dnl
 dnl
-dnl This macro is an oddball -- the only specific test that takes args.
-AC_DEFUN(AC_HAVE_POUNDBANG,
+AC_DEFUN(AC_SYS_INTERPRETER,
 [AC_MSG_CHECKING(whether [#]! works in shell scripts)
 AC_CACHE_VAL(ac_cv_sys_interpreter,
 [echo '#!/bin/cat
@@ -1381,12 +1382,6 @@ else
 fi
 rm -f conftest])dnl
 AC_MSG_RESULT($ac_cv_sys_interpreter)
-if test $ac_cv_sys_interpreter = yes; then
-  ifelse([$1], , :, [$1])
-ifelse([$2], , , [else
-  $2
-])dnl
-fi
 ])dnl
 dnl
 AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
@@ -1726,10 +1721,9 @@ AC_EGREP_CPP(yes,
 ], [AC_MSG_RESULT(yes); XENIX=yes], [AC_MSG_RESULT(no); XENIX=])
 if test "$XENIX" = yes; then
   LIBS="$LIBS -lx"
-  case "$DEFS" in
-  *SYSNDIR*) ;;
-  *) LIBS="-ldir $LIBS" ;; # Make sure -ldir precedes any -lx.
-  esac
+  if test $ac_header_dir != sys/ndir.h; then
+    LIBS="-ldir $LIBS" # Make sure -ldir precedes -lx.
+  fi
 fi
 ])dnl
 dnl

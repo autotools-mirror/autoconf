@@ -1508,13 +1508,13 @@ that define @code{__STDC__} do not support @code{long double}.
 
 The following macros check for operating system services:
 
-@defmac AC_HAVE_POUNDBANG (@var{action-if-supported} @r{[},
-@var{action-if-not-supported}@r{]})
-@maindex HAVE_POUNDBANG
+@defmac AC_SYS_INTERPRETER
+@maindex SYS_INTERPRETER
 Check whether the system supports starting shell scripts with a line of
-the form @samp{#!/bin/csh} to select the shell to use.  If @samp{#!}
-works, execute shell commands @var{action-if-supported}; if not, execute
-@var{action-if-not-supported}.
+the form @samp{#!/bin/csh} to select the shell to use.  After running
+this macro, shell code in @code{configure.in} can check the variable
+@code{ac_cv_sys_interpreter}; it will be set to @samp{yes} if the system
+supports @samp{#!}, @samp{no} if not.
 @end defmac
 
 @defmac AC_PATH_X
@@ -2788,20 +2788,21 @@ newlines or calls to other macros, as well.
 Autoconf (in @file{acgeneral.m4}) changes the @code{m4} quote characters
 from the default @samp{`} and @samp{'} to @samp{[} and @samp{]}, because
 many of the macros use @samp{`} and @samp{'}, mismatched.  However, in a
-few places the macros need to use brackets.  In those places, they use
-the @code{m4} builtin command @code{changequote} to temporarily disable
-quoting before the code that uses brackets, like this:
+few places the macros need to use brackets (usually in C program text or
+regular expressions).  In those places, they use the @code{m4} builtin
+command @code{changequote} to temporarily change the quote characters to
+@samp{<<} and @samp{>>}.  Sometimes, if they don't need to quote
+anything, they disable quoting entirely instead.  Here is an example:
 
 @example
-changequote(, )dnl
-@end example
-
-@noindent
-Then they turn quoting back on again with another call to
-@code{changequote}:
-
-@example
+AC_TRY_LINK(
+changequote(<<, >>)dnl
+<<#include <time.h>
+#ifndef tzname /* For SGI.  */
+extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
+#endif>>,
 changequote([, ])dnl
+[atoi(*tzname);], ac_cv_var_tzname=yes, ac_cv_var_tzname=no)
 @end example
 
 When you create a @code{configure} script using newly written macros,
@@ -3488,62 +3489,70 @@ for backward compatibility, the old names are considered obsolete.
 @xref{Macro Naming}, for a description of the new naming scheme.
 
 @table @code
-@item AC_NOTICE
-@vindex NOTICE
-@vindex INIT_NOTICE
-@code{AC_INIT_NOTICE}
-@item AC_PREPARE
-@vindex PREPARE
-@vindex INIT_PREPARE
-@code{AC_INIT_PREPARE}
-@item AC_WARN
-@vindex WARN
-@vindex MSG_WARN
-@code{AC_MSG_WARN}
+@item AC_AIX
+@vindex AIX
+@vindex OS_AIX
+@code{AC_OS_AIX}
+@item AC_ALLOCA
+@vindex ALLOCA
+@vindex FUNC_ALLOCA
+@code{AC_FUNC_ALLOCA}
+@item AC_ARG_ARRAY
+@vindex ARG_ARRAY
+@vindex C_ARG_ARRAY
+@code{AC_C_ARG_ARRAY}
+@item AC_CHAR_UNSIGNED
+@vindex CHAR_UNSIGNED
+@vindex C_CHAR_UNSIGNED
+@code{AC_C_CHAR_UNSIGNED}
+@item AC_CONST
+@vindex CONST
+@vindex C_CONST
+@code{AC_C_CONST}
+@item AC_CROSS_CHECK
+@vindex CROSS_CHECK
+@vindex C_CROSS
+@code{AC_C_CROSS}
+@item AC_DYNIX_SEQ
+@vindex DYNIX_SEQ
+@vindex OS_DYNIX
+@code{AC_OS_DYNIX}
 @item AC_ERROR
 @vindex ERROR
 @vindex MSG_ERROR
 @code{AC_MSG_ERROR}
-@item AC_PROGRAM_CHECK
-@vindex PROGRAM_CHECK
-@vindex CHECK_PROG
-@code{AC_CHECK_PROG}
-@item AC_PROGRAM_PATH
-@vindex PROGRAM_PATH
-@vindex PATH_PROG
-@code{AC_PATH_PROG}
-@item AC_PROGRAMS_CHECK
-@vindex PROGRAMS_CHECK
-@vindex CHECK_PROGS
-@code{AC_CHECK_PROGS}
-@item AC_PROGRAMS_PATH
-@vindex PROGRAMS_PATH
-@vindex PATH_PROGS
-@code{AC_PATH_PROGS}
-@item AC_HEADER_EGREP
-@vindex HEADER_EGREP
-@vindex EGREP_HEADER
-@code{AC_EGREP_HEADER}
-@item AC_PROGRAM_EGREP
-@vindex PROGRAM_EGREP
-@vindex EGREP_CPP
-@code{AC_EGREP_CPP}
-@item AC_TEST_PROGRAM
-@vindex TEST_PROGRAM
-@vindex TRY_RUN
-@code{AC_TRY_RUN}
-@item AC_TEST_CPP
-@vindex TEST_CPP
-@vindex TRY_CPP
-@code{AC_TRY_CPP}
-@item AC_HEADER_CHECK
-@vindex HEADER_CHECK
-@vindex CHECK_HEADER
-@code{AC_CHECK_HEADER}
+@item AC_FIND_X
+@vindex FIND_X
+@vindex PATH_X
+@code{AC_PATH_X}
+@item AC_FIND_XTRA
+@vindex FIND_XTRA
+@vindex PATH_XTRA
+@code{AC_PATH_XTRA}
+@item AC_FIND_X_DIRECT
+@vindex FIND_X_DIRECT
+@vindex PATH_X_DIRECT
+@code{AC_PATH_X_DIRECT}
+@item AC_FIND_X_XMKMF
+@vindex FIND_X_XMKMF
+@vindex PATH_X_XMKMF
+@code{AC_PATH_X_XMKMF}
 @item AC_FUNC_CHECK
 @vindex FUNC_CHECK
 @vindex CHECK_FUNC
 @code{AC_CHECK_FUNC}
+@item AC_GCC_TRADITIONAL
+@vindex GCC_TRADITIONAL
+@vindex PROG_GCC_TRADITIONAL
+@code{AC_PROG_GCC_TRADITIONAL}
+@item AC_GETGROUPS_T
+@vindex GETGROUPS_T
+@vindex TYPE_GETGROUPS
+@code{AC_TYPE_GETGROUPS}
+@item AC_GETLOADAVG
+@vindex GETLOADAVG
+@vindex FUNC_GETLOADAVG
+@code{AC_FUNC_GETLOADAVG}
 @item AC_HAVE_FUNCS
 @vindex HAVE_FUNCS
 @vindex CHECK_FUNCS
@@ -3552,217 +3561,213 @@ for backward compatibility, the old names are considered obsolete.
 @vindex HAVE_HEADERS
 @vindex CHECK_HEADERS
 @code{AC_CHECK_HEADERS}
-@item AC_SIZEOF_TYPE
-@vindex SIZEOF_TYPE
-@vindex CHECK_SIZEOF
-@code{AC_CHECK_SIZEOF}
-@item AC_GCC_TRADITIONAL
-@vindex GCC_TRADITIONAL
-@vindex PROG_GCC_TRADITIONAL
-@code{AC_PROG_GCC_TRADITIONAL}
-@item AC_MINUS_C_MINUS_O
-@vindex MINUS_C_MINUS_O
-@vindex PROG_CC_C_O
-@code{AC_PROG_CC_C_O}
-@item AC_SET_MAKE
-@vindex SET_MAKE
-@vindex PROG_MAKE_SET
-@code{AC_PROG_MAKE_SET}
-@item AC_YYTEXT_POINTER
-@vindex YYTEXT_POINTER
-@vindex DECL_YYTEXT
-@code{AC_DECL_YYTEXT}
-@item AC_LN_S
-@vindex LN_S
-@vindex PROG_LN_S
-@code{AC_PROG_LN_S}
-@item AC_RSH
-@vindex RSH
-@vindex PROG_RSH
-@code{AC_PROG_RSH}
-@item AC_STDC_HEADERS
-@vindex STDC_HEADERS
-@vindex HEADER_STDC
-@code{AC_HEADER_STDC}
-@item AC_MAJOR_HEADER
-@vindex MAJOR_HEADER
-@vindex HEADER_MAJOR
-@code{AC_HEADER_MAJOR}
-@item AC_STAT_MACROS_BROKEN
-@vindex STAT_MACROS_BROKEN
-@vindex HEADER_STAT
-@code{AC_HEADER_STAT}
-@item AC_SYS_SIGLIST_DECLARED
-@vindex SYS_SIGLIST_DECLARED
-@vindex DECL_SYS_SIGLIST
-@code{AC_DECL_SYS_SIGLIST}
-@item AC_GETGROUPS_T
-@vindex GETGROUPS_T
-@vindex TYPE_GETGROUPS
-@code{AC_TYPE_GETGROUPS}
-@item AC_UID_T
-@vindex UID_T
-@vindex TYPE_UID_T
-@code{AC_TYPE_UID_T}
-@item AC_SIZE_T
-@vindex SIZE_T
-@vindex TYPE_SIZE_T
-@code{AC_TYPE_SIZE_T}
-@item AC_PID_T
-@vindex PID_T
-@vindex TYPE_PID_T
-@code{AC_TYPE_PID_T}
-@item AC_OFF_T
-@vindex OFF_T
-@vindex TYPE_OFF_T
-@code{AC_TYPE_OFF_T}
-@item AC_MODE_T
-@vindex MODE_T
-@vindex TYPE_MODE_T
-@code{AC_TYPE_MODE_T}
-@item AC_RETSIGTYPE
-@vindex RETSIGTYPE
-@vindex TYPE_SIGNAL
-@code{AC_TYPE_SIGNAL}
-@item AC_MMAP
-@vindex MMAP
-@vindex FUNC_MMAP
-@code{AC_FUNC_MMAP}
-@item AC_VPRINTF
-@vindex VPRINTF
-@vindex FUNC_VPRINTF
-@code{AC_FUNC_VPRINTF}
-@item AC_VFORK
-@vindex VFORK
-@vindex FUNC_VFORK
-@code{AC_FUNC_VFORK}
-@item AC_WAIT3
-@vindex WAIT3
-@vindex FUNC_WAIT3
-@code{AC_FUNC_WAIT3}
-@item AC_ALLOCA
-@vindex ALLOCA
-@vindex FUNC_ALLOCA
-@code{AC_FUNC_ALLOCA}
-@item AC_GETLOADAVG
-@vindex GETLOADAVG
-@vindex FUNC_GETLOADAVG
-@code{AC_FUNC_GETLOADAVG}
-@item AC_UTIME_NULL
-@vindex UTIME_NULL
-@vindex FUNC_UTIME_NULL
-@code{AC_FUNC_UTIME_NULL}
-@item AC_STRCOLL
-@vindex STRCOLL
-@vindex FUNC_STRCOLL
-@code{AC_FUNC_STRCOLL}
-@item AC_SETVBUF_REVERSED
-@vindex SETVBUF_REVERSED
-@vindex FUNC_SETVBUF_REVERSED
-@code{AC_FUNC_SETVBUF_REVERSED}
-@item AC_TIME_WITH_SYS_TIME
-@vindex TIME_WITH_SYS_TIME
-@vindex HEADER_TIME
-@code{AC_HEADER_TIME}
-@item AC_TIMEZONE
-@vindex TIMEZONE
-@vindex STRUCT_TIMEZONE
-@code{AC_STRUCT_TIMEZONE}
-@item AC_ST_BLOCKS
-@vindex ST_BLOCKS
-@vindex STRUCT_ST_BLOCKS
-@code{AC_STRUCT_ST_BLOCKS}
-@item AC_ST_BLKSIZE
-@vindex ST_BLKSIZE
-@vindex STRUCT_ST_BLKSIZE
-@code{AC_STRUCT_ST_BLKSIZE}
-@item AC_ST_RDEV
-@vindex ST_RDEV
-@vindex STRUCT_ST_RDEV
-@code{AC_STRUCT_ST_RDEV}
-@item AC_CROSS_CHECK
-@vindex CROSS_CHECK
-@vindex C_CROSS
-@code{AC_C_CROSS}
-@item AC_CHAR_UNSIGNED
-@vindex CHAR_UNSIGNED
-@vindex C_CHAR_UNSIGNED
-@code{AC_C_CHAR_UNSIGNED}
-@item AC_LONG_DOUBLE
-@vindex LONG_DOUBLE
-@vindex C_LONG_DOUBLE
-@code{AC_C_LONG_DOUBLE}
-@item AC_WORDS_BIGENDIAN
-@vindex WORDS_BIGENDIAN
-@vindex C_BIGENDIAN
-@code{AC_C_BIGENDIAN}
-@item AC_ARG_ARRAY
-@vindex ARG_ARRAY
-@vindex C_ARG_ARRAY
-@code{AC_C_ARG_ARRAY}
+@item AC_HAVE_POUNDBANG
+@vindex HAVE_POUNDBANG
+@vindex SYS_INTERPRETER
+@code{AC_SYS_INTERPRETER} (different calling convention)
+@item AC_HEADER_CHECK
+@vindex HEADER_CHECK
+@vindex CHECK_HEADER
+@code{AC_CHECK_HEADER}
+@item AC_HEADER_EGREP
+@vindex HEADER_EGREP
+@vindex EGREP_HEADER
+@code{AC_EGREP_HEADER}
 @item AC_INLINE
 @vindex INLINE
 @vindex C_INLINE
 @code{AC_C_INLINE}
-@item AC_CONST
-@vindex CONST
-@vindex C_CONST
-@code{AC_C_CONST}
-@item AC_REMOTE_TAPE
-@vindex REMOTE_TAPE
-removed
-@item AC_LONG_FILE_NAMES
-@vindex LONG_FILE_NAMES
-@vindex SYS_LONG_FILE_NAMES
-@code{AC_SYS_LONG_FILE_NAMES}
-@item AC_RESTARTABLE_SYSCALLS
-@vindex RESTARTABLE_SYSCALLS
-@vindex SYS_RESTARTABLE_SYSCALLS
-@code{AC_SYS_RESTARTABLE_SYSCALLS}
-@item AC_FIND_X
-@vindex FIND_X
-@vindex PATH_X
-@code{AC_PATH_X}
-@item AC_FIND_X_XMKMF
-@vindex FIND_X_XMKMF
-@vindex PATH_X_XMKMF
-@code{AC_PATH_X_XMKMF}
-@item AC_FIND_X_DIRECT
-@vindex FIND_X_DIRECT
-@vindex PATH_X_DIRECT
-@code{AC_PATH_X_DIRECT}
-@item AC_FIND_XTRA
-@vindex FIND_XTRA
-@vindex PATH_XTRA
-@code{AC_PATH_XTRA}
-@item AC_AIX
-@vindex AIX
-@vindex OS_AIX
-@code{AC_OS_AIX}
-@item AC_MINIX
-@vindex MINIX
-@vindex OS_MINIX
-@code{AC_OS_MINIX}
-@item AC_ISC_POSIX
-@vindex ISC_POSIX
-@vindex OS_ISC
-@code{AC_OS_ISC}
-@item AC_XENIX_DIR
-@vindex XENIX_DIR
-@vindex OS_XENIX
-@code{AC_OS_XENIX}
-@item AC_SCO_INTL
-@vindex SCO_INTL
-@vindex OS_SCO
-@code{AC_OS_SCO}
 @item AC_IRIX_SUN
 @vindex IRIX_SUN
 @vindex OS_IRIX
 @code{AC_OS_IRIX}
-@item AC_DYNIX_SEQ
-@vindex DYNIX_SEQ
-@vindex OS_DYNIX
-@code{AC_OS_DYNIX}
+@item AC_ISC_POSIX
+@vindex ISC_POSIX
+@vindex OS_ISC
+@code{AC_OS_ISC}
+@item AC_LN_S
+@vindex LN_S
+@vindex PROG_LN_S
+@code{AC_PROG_LN_S}
+@item AC_LONG_DOUBLE
+@vindex LONG_DOUBLE
+@vindex C_LONG_DOUBLE
+@code{AC_C_LONG_DOUBLE}
+@item AC_LONG_FILE_NAMES
+@vindex LONG_FILE_NAMES
+@vindex SYS_LONG_FILE_NAMES
+@code{AC_SYS_LONG_FILE_NAMES}
+@item AC_MAJOR_HEADER
+@vindex MAJOR_HEADER
+@vindex HEADER_MAJOR
+@code{AC_HEADER_MAJOR}
+@item AC_MINIX
+@vindex MINIX
+@vindex OS_MINIX
+@code{AC_OS_MINIX}
+@item AC_MINUS_C_MINUS_O
+@vindex MINUS_C_MINUS_O
+@vindex PROG_CC_C_O
+@code{AC_PROG_CC_C_O}
+@item AC_MMAP
+@vindex MMAP
+@vindex FUNC_MMAP
+@code{AC_FUNC_MMAP}
+@item AC_MODE_T
+@vindex MODE_T
+@vindex TYPE_MODE_T
+@code{AC_TYPE_MODE_T}
+@item AC_NOTICE
+@vindex NOTICE
+@vindex INIT_NOTICE
+@code{AC_INIT_NOTICE}
+@item AC_OFF_T
+@vindex OFF_T
+@vindex TYPE_OFF_T
+@code{AC_TYPE_OFF_T}
+@item AC_PID_T
+@vindex PID_T
+@vindex TYPE_PID_T
+@code{AC_TYPE_PID_T}
+@item AC_PREPARE
+@vindex PREPARE
+@vindex INIT_PREPARE
+@code{AC_INIT_PREPARE}
+@item AC_PROGRAMS_CHECK
+@vindex PROGRAMS_CHECK
+@vindex CHECK_PROGS
+@code{AC_CHECK_PROGS}
+@item AC_PROGRAMS_PATH
+@vindex PROGRAMS_PATH
+@vindex PATH_PROGS
+@code{AC_PATH_PROGS}
+@item AC_PROGRAM_CHECK
+@vindex PROGRAM_CHECK
+@vindex CHECK_PROG
+@code{AC_CHECK_PROG}
+@item AC_PROGRAM_EGREP
+@vindex PROGRAM_EGREP
+@vindex EGREP_CPP
+@code{AC_EGREP_CPP}
+@item AC_PROGRAM_PATH
+@vindex PROGRAM_PATH
+@vindex PATH_PROG
+@code{AC_PATH_PROG}
+@item AC_REMOTE_TAPE
+@vindex REMOTE_TAPE
+removed because of limited usefulness
+@item AC_RESTARTABLE_SYSCALLS
+@vindex RESTARTABLE_SYSCALLS
+@vindex SYS_RESTARTABLE_SYSCALLS
+@code{AC_SYS_RESTARTABLE_SYSCALLS}
+@item AC_RETSIGTYPE
+@vindex RETSIGTYPE
+@vindex TYPE_SIGNAL
+@code{AC_TYPE_SIGNAL}
+@item AC_RSH
+@vindex RSH
+@vindex PROG_RSH
+@code{AC_PROG_RSH}
+@item AC_SCO_INTL
+@vindex SCO_INTL
+@vindex OS_SCO
+@code{AC_OS_SCO}
+@item AC_SETVBUF_REVERSED
+@vindex SETVBUF_REVERSED
+@vindex FUNC_SETVBUF_REVERSED
+@code{AC_FUNC_SETVBUF_REVERSED}
+@item AC_SET_MAKE
+@vindex SET_MAKE
+@vindex PROG_MAKE_SET
+@code{AC_PROG_MAKE_SET}
+@item AC_SIZEOF_TYPE
+@vindex SIZEOF_TYPE
+@vindex CHECK_SIZEOF
+@code{AC_CHECK_SIZEOF}
+@item AC_SIZE_T
+@vindex SIZE_T
+@vindex TYPE_SIZE_T
+@code{AC_TYPE_SIZE_T}
+@item AC_STAT_MACROS_BROKEN
+@vindex STAT_MACROS_BROKEN
+@vindex HEADER_STAT
+@code{AC_HEADER_STAT}
+@item AC_STDC_HEADERS
+@vindex STDC_HEADERS
+@vindex HEADER_STDC
+@code{AC_HEADER_STDC}
+@item AC_STRCOLL
+@vindex STRCOLL
+@vindex FUNC_STRCOLL
+@code{AC_FUNC_STRCOLL}
+@item AC_ST_BLKSIZE
+@vindex ST_BLKSIZE
+@vindex STRUCT_ST_BLKSIZE
+@code{AC_STRUCT_ST_BLKSIZE}
+@item AC_ST_BLOCKS
+@vindex ST_BLOCKS
+@vindex STRUCT_ST_BLOCKS
+@code{AC_STRUCT_ST_BLOCKS}
+@item AC_ST_RDEV
+@vindex ST_RDEV
+@vindex STRUCT_ST_RDEV
+@code{AC_STRUCT_ST_RDEV}
+@item AC_SYS_SIGLIST_DECLARED
+@vindex SYS_SIGLIST_DECLARED
+@vindex DECL_SYS_SIGLIST
+@code{AC_DECL_SYS_SIGLIST}
+@item AC_TEST_CPP
+@vindex TEST_CPP
+@vindex TRY_CPP
+@code{AC_TRY_CPP}
+@item AC_TEST_PROGRAM
+@vindex TEST_PROGRAM
+@vindex TRY_RUN
+@code{AC_TRY_RUN}
+@item AC_TIMEZONE
+@vindex TIMEZONE
+@vindex STRUCT_TIMEZONE
+@code{AC_STRUCT_TIMEZONE}
+@item AC_TIME_WITH_SYS_TIME
+@vindex TIME_WITH_SYS_TIME
+@vindex HEADER_TIME
+@code{AC_HEADER_TIME}
+@item AC_UID_T
+@vindex UID_T
+@vindex TYPE_UID_T
+@code{AC_TYPE_UID_T}
+@item AC_UTIME_NULL
+@vindex UTIME_NULL
+@vindex FUNC_UTIME_NULL
+@code{AC_FUNC_UTIME_NULL}
+@item AC_VFORK
+@vindex VFORK
+@vindex FUNC_VFORK
+@code{AC_FUNC_VFORK}
+@item AC_VPRINTF
+@vindex VPRINTF
+@vindex FUNC_VPRINTF
+@code{AC_FUNC_VPRINTF}
+@item AC_WAIT3
+@vindex WAIT3
+@vindex FUNC_WAIT3
+@code{AC_FUNC_WAIT3}
+@item AC_WARN
+@vindex WARN
+@vindex MSG_WARN
+@code{AC_MSG_WARN}
+@item AC_WORDS_BIGENDIAN
+@vindex WORDS_BIGENDIAN
+@vindex C_BIGENDIAN
+@code{AC_C_BIGENDIAN}
+@item AC_XENIX_DIR
+@vindex XENIX_DIR
+@vindex OS_XENIX
+@code{AC_OS_XENIX}
+@item AC_YYTEXT_POINTER
+@vindex YYTEXT_POINTER
+@vindex DECL_YYTEXT
+@code{AC_DECL_YYTEXT}
 @end table
 
 @node Example, History, Old Macro Names, Top
