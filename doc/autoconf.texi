@@ -5415,6 +5415,35 @@ alternately @samp{foo} and @samp{bar}, although it should only print
 Therefore you should @command{export} again each environment variable
 you update.
 
+@item @command{for}
+@cindex @command{for}
+To loop over positional arguments, use
+
+@example
+for arg
+do
+  echo "$arg"
+done
+@end example
+
+@noindent
+You may @emph{not} leave the @code{do} on the same line as @code{for},
+since some shells improperly grok
+
+@example
+for arg; do
+  echo "$arg"
+done
+@end example
+
+If you want to explicitly refer to the positional arguments, given the
+@samp{$@@} bug (@pxref{Shell Substitutions}), use:
+
+@example
+for arg in ${1+"$@@"}; do
+  echo "$arg"
+done
+
 @item @command{if}
 @cindex @command{if}
 Using @samp{!} is not portable.  Instead of
