@@ -1,3 +1,7 @@
+2001-06-18  Akim Demaille  <akim@epita.fr>
+
+	* acfunctions.m4 (AC_FUNC_FORK): Fix typos.
+
 2001-06-18  Rüdiger Kuhlmann  <autoconf-list-xf3QB=cvz1AP@ruediger-kuhlmann.de>
 
 	* acfunctions.m4: (AC_FUNC_VFORK) rename as...

@@ -1418,42 +1418,42 @@ AU_ALIAS([AC_UTIME_NULL], [AC_FUNC_UTIME_NULL])
 # AC_FUNC_FORK
 # -------------
 AC_DEFUN([AC_FUNC_FORK],
-  [AC_REQUIRE([AC_TYPE_PID_T])dnl
-  AC_CHECK_HEADERS(unistd.h vfork.h)
-  AC_CHECK_FUNCS(fork vfork)
-  ac_cv_func_fork_works=$ac_cv_func_fork
-  if test "x$ac_cv_func_fork" = xyes; then
-    _AC_FUNC_FORK
-  fi
-  if test "x$ac_cv_func_fork_works" = xcross"; then
-    case "$host" in
-      *-*-amigaos* | *-*-msdosdjgpp*)
-        # Override, as these systems have only a dummy fork() stub
-        ac_cv_func_fork_works=no
-        ;;
-      *)
-        ac_cv_func_fork_works=yes
-        ;;
-    esac
-    AC_MSG_WARN(CROSS: Result $ac_cv_func_fork_works guessed due to cross-compiling.)
-  fi
-  ac_cv_func_vfork_works=$ac_cv_func_vfork
-  if test "x$ac_cv_func_vfork" = xyes; then
-    _AC_FUNC_VFORK
-  fi;
-  if test "x$ac_cv_func_fork_works" = xcross"; then
-    ac_cv_func_vfork_works=ac_cv_func_vfork
-    AC_MSG_WARN(CROSS: Result $ac_cv_func_vfork_works guessed due to cross-compiling.)
-  fi
-  
-  if test "x$ac_cv_func_vfork_works" = xyes; then
-    AC_DEFINE(HAVE_WORKING_VFORK, 1, [Define if `vfork' works.])
-  else
-    AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
-  fi
-  if test "x$ac_cv_func_fork_works" = xyes; then
-    AC_DEFINE(HAVE_WORKING_FORK, 1, [Define if `fork' works.])
-  endif
+[AC_REQUIRE([AC_TYPE_PID_T])dnl
+AC_CHECK_HEADERS(unistd.h vfork.h)
+AC_CHECK_FUNCS(fork vfork)
+ac_cv_func_fork_works=$ac_cv_func_fork
+if test "x$ac_cv_func_fork" = xyes; then
+  _AC_FUNC_FORK
+fi
+if test "x$ac_cv_func_fork_works" = xcross; then
+  case $host in
+    *-*-amigaos* | *-*-msdosdjgpp*)
+      # Override, as these systems have only a dummy fork() stub
+      ac_cv_func_fork_works=no
+      ;;
+    *)
+      ac_cv_func_fork_works=yes
+      ;;
+  esac
+  AC_MSG_WARN(CROSS: Result $ac_cv_func_fork_works guessed due to cross-compiling.)
+fi
+ac_cv_func_vfork_works=$ac_cv_func_vfork
+if test "x$ac_cv_func_vfork" = xyes; then
+  _AC_FUNC_VFORK
+fi;
+if test "x$ac_cv_func_fork_works" = xcross; then
+  ac_cv_func_vfork_works=ac_cv_func_vfork
+  AC_MSG_WARN(CROSS: Result $ac_cv_func_vfork_works guessed due to cross-compiling.)
+fi
+
+if test "x$ac_cv_func_vfork_works" = xyes; then
+  AC_DEFINE(HAVE_WORKING_VFORK, 1, [Define if `vfork' works.])
+else
+  AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
+fi
+if test "x$ac_cv_func_fork_works" = xyes; then
+  AC_DEFINE(HAVE_WORKING_FORK, 1, [Define if `fork' works.])
+fi
 ])# AC_FUNC_FORK
 
 
