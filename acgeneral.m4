@@ -886,38 +886,38 @@ dnl of LHS and RHS (the new, pretty-printed "help string").
 dnl
 dnl The resulting string in HELP-STRING is suitable for use in other
 dnl macros that require a help string (e.g. AC_ARG_WITH).
-dnl 
+dnl
 AC_DEFUN(AC_HELP_STRING,
 [
-dnl 
+dnl
 dnl Here is the sample string from the Autoconf manual (Node: External
 dnl Software) which shows the proper spacing for help strings.
-dnl 
+dnl
 dnl    --with-readline         support fancy command line editing
-dnl  ^ ^                       ^ 
+dnl  ^ ^                       ^
 dnl  | |                       |
-dnl  | column 2                column 26     
+dnl  | column 2                column 26
 dnl  |
 dnl  column 0
-dnl 
+dnl
 dnl A help string is made up of a "left hand side" (LHS) and a "right
 dnl hand side" (RHS).  In the example above, the LHS is
 dnl "--with-readline", while the RHS is "support fancy command line
 dnl editing".
-dnl 
+dnl
 dnl If the LHS extends past column 24, then the LHS is terminated with a
 dnl newline so that the RHS is on a line of its own beginning in column
 dnl 26.
-dnl 
+dnl
 dnl Therefore, if the LHS were instead "--with-readline-blah-blah-blah",
 dnl then the MDL_PRETTY_HELP_STRING macro would expand into:
 dnl
 dnl
 dnl    --with-readline-blah-blah-blah
 dnl  ^ ^                       support fancy command line editing
-dnl  | |                       ^ 
+dnl  | |                       ^
 dnl  | column 2                |
-dnl  column 0                  column 26     
+dnl  column 0                  column 26
 
 dnl We divert everything to AC_DIVERSION_NOTICE (which gets output very
 dnl early in the configure script) because we want the user's help
@@ -977,7 +977,7 @@ changequote([, ])dnl
 
 $3="$lhs
 ${rhs_pad}${rhs}"
-fi 
+fi
 AC_DIVERT_POP()dnl
 ])
 
@@ -1120,11 +1120,11 @@ test "$host_alias" != "$target_alias" &&
 ])
 
 dnl Subroutines of AC_CANONICAL_SYSTEM.
-  
+
 dnl Worker routine for AC_CANONICAL_{HOST TARGET BUILD}.  THING is one of
 dnl `host', `target', or `build'.  Canonicalize the appropriate thing,
 dnl generating the variables THING, THING_{alias cpu vendor os}, and the
-dnl associated cache entries.  We also redo the cache entries if the user 
+dnl associated cache entries.  We also redo the cache entries if the user
 dnl specifies something different from ac_cv_$THING_alias on the command line.
 
 dnl AC_CANONICAL_THING(THING)
@@ -1613,7 +1613,7 @@ AC_CACHE_VAL(ac_cv_path_$1,
   /*)
   ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
   ;;
-  ?:/*)			 
+  ?:/*)
   ac_cv_path_$1="[$]$1" # Let the user override the test with a dos path.
   ;;
   *)
@@ -1622,7 +1622,7 @@ dnl $ac_dummy forces splitting on constant user-supplied paths.
 dnl POSIX.2 word splitting is done only on the output of word expansions,
 dnl not every word.  This closes a longstanding sh security hole.
   ac_dummy="ifelse([$4], , $PATH, [$4])"
-  for ac_dir in $ac_dummy; do 
+  for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
       ac_cv_path_$1="$ac_dir/$ac_word"
@@ -1721,7 +1721,7 @@ dnl CROSS-VAR to `yes' if the compiler and linker produce non-native
 dnl executables, otherwise set it to `no'.  Before calling
 dnl `AC_TRY_COMPILER()', call `AC_LANG_*' to set-up for the right
 dnl language.
-dnl 
+dnl
 dnl AC_TRY_COMPILER(TEST-PROGRAM, WORKING-VAR, CROSS-VAR)
 AC_DEFUN(AC_TRY_COMPILER,
 [cat > conftest.$ac_ext << EOF
@@ -2602,9 +2602,9 @@ cat > conftest.hdr <<\EOF
 changequote(<<, >>)dnl
 s/[\\&%]/\\&/g
 s%[\\$`]%\\&%g
-s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*$\)%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
+s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\(\([^ 	(][^ 	(]*\)([^)]*)\)[ 	]*\(.*\)$%${ac_dA}\2${ac_dB}\1${ac_dC}\3${ac_dD}%gp
 t cleanup
-s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*$\)% ${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
+s%^[ 	]*<<#>>[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\)$% ${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD}%gp
 : cleanup
 s%ac_d%ac_u%gp
 s%ac_u%ac_e%gp
