@@ -1016,7 +1016,7 @@ if test "$ac_init_help" = "recursive"; then
     else
       AC_MSG_WARN([no configuration information is in $ac_dir])
     fi
-    cd $ac_popdir
+    cd "$ac_popdir"
   done
 fi
 
