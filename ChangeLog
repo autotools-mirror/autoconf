@@ -11,6 +11,8 @@
 	Solaris.
 	* tests/local.at (AC_STATE_SAVE): Use $GREP, not grep.
 	Define it with AC_PROG_GREP.
+	* configure.ac (AC_PROG_GREP): Add.
+	* lib/freeze.mk (GREP): New macro.
 
 2004-05-02  Eric Sunshine <sunshine@sunshineco.com>
 

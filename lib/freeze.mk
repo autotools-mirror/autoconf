@@ -1,6 +1,6 @@
 ## Freeze M4 files.
 
-## Copyright (C) 2002 Free Software Foundation, Inc.
+## Copyright (C) 2002, 2004 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -113,13 +113,20 @@ ETAGS_FOR_AUTOCONF = \
   --regex='/AN_\(FUNCTION\|HEADER\|IDENTIFIER\|LIBRARY\|MAKEVAR\|PROGRAM\)(\[\([^]]*\)\]/\2/'
 
 
+## ---------- ##
+## Run GREP.  ##
+## ---------- ##
+
+GREP = @GREP@
+
+
 ## -------------------------------- ##
 ## Looking for forbidden patterns.  ##
 ## -------------------------------- ##
 
 check-forbidden-patterns:
 	if (cd $(srcdir) && \
-	    grep $(forbidden_patterns) $(forbidden_patterns_files)) \
+	    $(GREP) $(forbidden_patterns) $(forbidden_patterns_files)) \
 	    >forbidden.log; then \
 	  echo "ERROR: forbidden patterns were found:" >&2; \
 	  sed "s,^,$*.m4: ," <forbidden.log >&2; \
