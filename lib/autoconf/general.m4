@@ -35,7 +35,7 @@ Install it before installing Autoconf or set the
 M4 environment variable to its path name.
 )m4exit(2)])dnl
 dnl
-define(AC_ACVERSION, 1.105)dnl
+define(AC_ACVERSION, 1.106)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [Autoconf version AC_ACVERSION
 m4exit(0)])dnl
@@ -546,7 +546,7 @@ dnl                   PRINTABLE2)
 AC_DEFUN(AC_PREREQ_COMPARE,
 [ifelse(builtin([eval],
 [$3 + $2 * 100 + $1 * 10000 < $6 + $5 * 100 + $4 * 10000]), 1,
-[errprint(Autoconf version $7 or higher is required
+[errprint(Autoconf version $7 or higher is required for this script
 )m4exit(3)])])dnl
 dnl
 dnl Complain and exit if the Autoconf version is less than VERSION.
