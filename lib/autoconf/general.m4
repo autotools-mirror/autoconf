@@ -1338,7 +1338,7 @@ AC_DIVERT_POP()dnl
 @%:@ Check whether --enable-[$1] or --disable-[$1] was given.
 if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
   enableval="[$enable_]patsubst([$1], -, _)"
-  ifelse([$3], , :, [$3])
+  $3
 ifval([$4], [else
   $4
 ])dnl
@@ -1370,7 +1370,7 @@ AC_DIVERT_POP()dnl
 @%:@ Check whether --with-[$1] or --without-[$1] was given.
 if test "[${with_]patsubst([$1], -, _)+set}" = set; then
   withval="[$with_]patsubst([$1], -, _)"
-  ifelse([$3], , :, [$3])
+  $3
 ifval([$4], [else
   $4
 ])dnl
@@ -2274,7 +2274,7 @@ ifelse([$2], [$4],
 [  else
     # Default is a loser.
     AC_MSG_ERROR([$1=$6 unacceptable, but no other $4 found in dnl
-ifelse([$5], , [\$]PATH, [$5])])
+m4_default([$5], [\$PATH])])
 ])dnl
   fi
 fi
@@ -2323,7 +2323,7 @@ AC_CACHE_VAL(ac_cv_path_$1,
 dnl $ac_dummy forces splitting on constant user-supplied paths.
 dnl POSIX.2 word splitting is done only on the output of word expansions,
 dnl not every word.  This closes a longstanding sh security hole.
-  ac_dummy="ifelse([$4], , $PATH, [$4])"
+  ac_dummy="m4_default([$4], [$PATH])"
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
     if test -f "$ac_dir/$ac_word"; then
@@ -2805,7 +2805,7 @@ EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
 dnl Don't remove the temporary files here, so they can be examined.
-  ifelse([$2], , :, [$2])
+  m4_default([$2], [:])
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC

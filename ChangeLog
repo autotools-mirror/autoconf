@@ -1,5 +1,11 @@
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: Replace some ifelse with ifval or m4_default, or
+	even nothing when not needed.
+	* acspecific.m4: Likewise.
+
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PREPARE): Insert the Autoconf version in
 	config.log, and the command line which ran configure.
 	Kill a couple of useless quote around dollars.

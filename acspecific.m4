@@ -89,7 +89,8 @@ AC_SUBST(ECHO_T)dnl
 AC_DEFUN(AC_PROG_CC,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_ARG_VAR([CFLAGS], [Extra flags for the C compiler])
-ifelse([$1], ,
+ifval([$1],
+      [AC_CHECK_PROGS(CC, [$1])],
 [
   AC_CHECK_PROG(CC, gcc, gcc)
   if test -z "$CC"; then
@@ -98,7 +99,7 @@ ifelse([$1], ,
       AC_CHECK_PROGS(CC, cl)
     fi
   fi
-], [AC_CHECK_PROGS(CC, [$1])])
+])
 
 test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 
