@@ -5464,6 +5464,13 @@ your script might be suspended waiting for data on its standard input.
 @evindex status
 This variable is an alias to @samp{$?} for @code{zsh} (at least 3.1.6),
 hence read-only.  Do not use it.
+
+@item RANDOM
+@evindex RANDOM
+Many shells provide @code{RANDOM}, a variable which returns a different
+integer when used.  Most of the time it values does not change when not
+used, but on @sc{irix 6.5}, the value changes all the time.  This can be
+oberved using @command{set}.
 @end table
 
 

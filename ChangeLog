@@ -1,5 +1,9 @@
 2000-11-30  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Special Shell Variables): Document RANDOM.
+
+2000-11-30  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Usual Tools): Some about cp
 	and mv, thanks to Ian.
 
