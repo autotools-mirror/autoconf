@@ -2306,8 +2306,15 @@ AC_CHECK_HEADERS(stdlib.h string.h memory.h strings.h inttypes.h unistd.h)
 # -------------------------------
 # If INCLUDES is empty, expand in default includes, otherwise in
 # INCLUDES.
+# In most cases INCLUDES is not double quoted as it should, and if
+# for instance INCLUDES = `#include <stdio.h>' then unless we force
+# a newline, the hash will swallow the closing paren etc. etc.
+# The usual failure.
+# Take no risk: for the newline.
 AC_DEFUN([AC_INCLUDES_DEFAULT],
-[m4_default([$1], [AC_REQUIRE([_AC_INCLUDES_DEFAULT_REQUIREMENTS])dnl
+[m4_ifval([$1], [$1
+],
+          [AC_REQUIRE([_AC_INCLUDES_DEFAULT_REQUIREMENTS])dnl
 $ac_includes_default])])
 
 

@@ -1,5 +1,11 @@
 2001-01-18  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_INCLUDES_DEFAULT): Force the newline to avoid
+	bad surprises.
+	Reported by Jim.
+
+2001-01-18  Akim Demaille  <akim@epita.fr>
+
 	Require a perfect divert push/pop balance.
 
 	* m4sugar.m4 (m4_divert, m4_divert_push, m4_divert_pop): Keep
