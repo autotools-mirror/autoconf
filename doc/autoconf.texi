@@ -10405,10 +10405,31 @@ Some shell variables should not be used, since they can have a deep
 influence on the behavior of the shell.  In order to recover a sane
 behavior from the shell, some variables should be unset, but
 @command{unset} is not portable (@pxref{Limitations of Builtins}) and a
-fallback value is needed.  We list these values below.
+fallback value is needed.
+
+As a general rule, shell variable names containing a lower-case letter
+are safe; you can define and use these variables without worrying about
+their effect on the underlying system, and without worrying about
+whether the shell will change them unexpectedly.  (The exception is the
+shell variable @code{status}, as described below.)
+
+Here is a list of names that are known to cause trouble.  This list is
+not exhaustive, but you should be safe if you avoid the name
+@code{status} and names containing only upper-case letters and
+underscores.
 
 @c Alphabetical order, case insensitive, `A' before `a'.
 @table @code
+@item _
+Many shells reserve @samp{$_} for various purposes, e.g., the name of
+the last command executed.
+
+@item BIN_SH
+@evindex BIN_SH
+In Tru64, if @env{BIN_SH} is set to @code{xpg4}, subsidiary invocations of
+the standard shell conform to Posix.
+Autoconf-generated scripts export this variable when they start up.
+
 @item CDPATH
 @evindex CDPATH
 When this variable is set it specifies a list of directories to search
@@ -10430,6 +10451,12 @@ In practice the shells that have this problem also support
 
 Autoconf-generated scripts automatically unset @code{CDPATH} if
 possible, so you need not worry about this problem in those scripts.
+
+@item DUALCASE
+@evindex DUALCASE
+In the MKS shell, case statements and file name generation are
+case-insensitive unless @code{DUALCASE} is nonzero.
+Autoconf-generated scripts export this variable when they start up.
 
 @item IFS
 @evindex IFS
