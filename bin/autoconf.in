@@ -399,55 +399,83 @@ EOF
   ## Trace macros.  ##
   ## -------------- ##
   trace)
+
   # trace.m4
   # --------
   # Routines to process formatted m4 traces.
-  cat >$tmp/trace.m4 <<\EOF
-divert(-1)
+  sed 's/^  //' >$tmp/trace.m4 <<\EOF
+  divert(-1)
   changequote([, ])
-  # _MODE(SEPARATOR, ELT1, ELT2...)
-  # -------------------------------
+  # _at_MODE(SEPARATOR, ELT1, ELT2...)
+  # ----------------------------------
   # List the elements, separating then with SEPARATOR.
   # MODE can be:
   #  `at'       -- the elements are enclosed in brackets.
   #  `star'     -- the elements are listed as are.
   #  `percent'  -- the elements are `smashed': spaces are singled out,
   #                and no new line remains.
-  define([_at],
-         [ifelse([$#], [1], [],
-                 [$#], [2], [[[$2]]],
-                 [[[$2]][$1]$0([$1], shift(shift($@)))])])
-  define([_percent],
-         [ifelse([$#], [1], [],
-                 [$#], [2], [smash([$2])],
-                 [smash([$2])[$1]$0([$1], shift(shift($@)))])])
-  define([_star],
-         [ifelse([$#], [1], [],
-                 [$#], [2], [[$2]],
-                 [[$2][$1]$0([$1], shift(shift($@)))])])
+  define([_at_at],
+         [at_ifelse([$#], [1], [],
+                    [$#], [2], [[[$2]]],
+                    [[[$2]][$1]$0([$1], at_shift(at_shift($@)))])])
+  define([_at_percent],
+         [at_ifelse([$#], [1], [],
+                    [$#], [2], [at_smash([$2])],
+                    [at_smash([$2])[$1]$0([$1], at_shift(at_shift($@)))])])
+  define([_at_star],
+         [at_ifelse([$#], [1], [],
+                    [$#], [2], [[$2]],
+                    [[$2][$1]$0([$1], at_shift(at_shift($@)))])])
 
   # Smash quotes its result.
-  define([smash],
-         [patsubst(patsubst(patsubst([[[$1]]],
-                                     [\\
-]),
-                            [[
+  define([at_smash],
+         [at_patsubst(at_patsubst(at_patsubst([[[$1]]],
+                                              [\\
+  ]),
+                                  [[
      ]+],
-                            [ ]),
-    		   [^ *\(.*\) *$], [[\1]])])
-  define([args],    [shift(shift(shift(shift(shift($@)))))])
-  define([at],      [_$0([$1], args($@))])
-  define([percent], [_$0([$1], args($@))])
-  define([star],    [_$0([$1], args($@))])
+                                  [ ]),
+    		      [^ *\(.*\) *$], [[\1]])])
+
+  define([at_args],    [at_shift(at_shift(at_shift(at_shift(at_shift($@)))))])
+  define([at_at],      [_$0([$1], at_args($@))])
+  define([at_percent], [_$0([$1], at_args($@))])
+  define([at_star],    [_$0([$1], at_args($@))])
+
 EOF
+
+  # If you trace `define', then on `define([m4_exit], defn([m4exit])' you
+  # will produce
+  #
+  #    AT_define([m4sugar.m4], [115], [1], [define], [m4_exit], <m4exit>)
+  #
+  # Since `<m4exit>' is not quoted, the outter m4, when processing
+  # `trace.m4' will exit prematurely.  Hence, move all the builtins to
+  # the `at_' name space.
+  echo '# Copy the builtins.' >>$tmp/trace.m4
+  echo "dumpdef" |
+    $M4 2>&1 >/dev/null |
+    sed 's/^\([^:]*\):.*/define([at_\1], defn([\1]))/' >>$tmp/trace.m4
+  echo >>$tmp/trace.m4
+
+  echo '# Disable the builtins.' >>$tmp/trace.m4
+  echo "dumpdef" |
+    $M4 2>&1 >/dev/null |
+    sed 's/^\([^:]*\):.*/at_undefine([\1])/' >>$tmp/trace.m4
+  echo >>$tmp/trace.m4
+
 
   # trace2m4.sed
   # ------------
   # Transform the traces from m4 into an m4 input file.
   # Typically, transform:
+  #
   # | m4trace:configure.in:3: -1- AC_SUBST([exec_prefix], [NONE])
+  #
   # into
+  #
   # | AT_AC_SUBST([configure.in], [3], [1], [AC_SUBST], [exec_prefix], [NONE])
+  #
   # Pay attention that the file name might include colons, if under DOS
   # for instance, so we don't use `[^:][^:]*'.
   # The first s/// catches multiline traces, the second, traces as above.
@@ -481,13 +509,13 @@ EOF
 
     # $@, list of quoted effective arguments.
     if (arg == "@")
-      return "]at([" (separator ? separator : ",") "], $@)["
+      return "]at_at([" (separator ? separator : ",") "], $@)["
     # $*, list of unquoted effective arguments.
     if (arg == "*")
-      return "]star([" (separator ? separator : ",") "], $@)["
+      return "]at_star([" (separator ? separator : ",") "], $@)["
     # $%, list of smashed unquoted effective arguments.
     if (arg == "%")
-      return "]percent([" (separator ? separator : ":") "], $@)["
+      return "]at_percent([" (separator ? separator : ":") "], $@)["
   }
 
   function error (message)
@@ -557,17 +585,26 @@ EOF
       }
 
     # Produce the definition of AT_<MACRO> = the translation of the request.
-    print "define([AT_" macro "], [[" res "]])"
+    print "at_define([AT_" macro "],"
+    print "[[" res "]])"
+    print ""
     close("cat >&2")
   }
 EOF
 
 
   # Extract both the m4 program and the m4 options from TRACES.
+  echo "## ------------------------- ##" >>$tmp/trace.m4
+  echo "## Trace processing macros.  ##" >>$tmp/trace.m4
+  echo "## ------------------------- ##" >>$tmp/trace.m4
+  echo >>$tmp/trace.m4
+
   eval set dummy "$traces"
   shift
   for trace
   do
+    echo "# $trace" >>$tmp/trace.m4
+
     # The request may be several lines long, hence sed has to quit.
     macro_name=`echo "$trace" | sed 's/:.*//;q'`
     # If for instance TRACE is `define', be sure to have an empty
@@ -625,8 +662,14 @@ EOF
         $AWK -f $tmp/translate.awk >>$tmp/trace.m4 ||
           { (exit 1); exit; }
     fi
+    echo >>$tmp/trace.m4
   done
-  echo "divert(0)dnl" >>$tmp/trace.m4
+
+  echo "## ------------------- ##" >>$tmp/trace.m4
+  echo "## Traces to process.  ##" >>$tmp/trace.m4
+  echo "## ------------------- ##" >>$tmp/trace.m4
+  echo >>$tmp/trace.m4
+  echo "at_divert(0)at_dnl" >>$tmp/trace.m4
 
   # Do we trace the initialization?
   # `errprint' must be silent, otherwise there can be warnings mixed
@@ -654,7 +697,11 @@ EOF
 	s/@:>@/]/g
 	s/@S|@/$/g
 	s/@%:@/#/g
-	' >&4
+	' >&4 ||
+      {
+        echo "$me: tracing failed" >&2
+	(exit 1); exit
+      }
   ;;
 
 

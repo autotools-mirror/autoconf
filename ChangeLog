@@ -1,5 +1,10 @@
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.sh (trace.m4): Move all the M4 builtins into `at_'.
+	Catch the failures of the big pipe.
+
+2000-11-02  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.at (Tracing M4 builtins): New test.
 	* autoconh.sh (trace_format): Fix its computation.
 
