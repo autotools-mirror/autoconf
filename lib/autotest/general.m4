@@ -771,7 +771,7 @@ else
 
     # Some unexpected failures
     0:*:0) at_result="$at_result $at_were run,
-$at_xfail_count failed unexpectedly." ;;
+$at_fail_count failed unexpectedly." ;;
 
     # Some failures, both expected and unexpected
     0:*:1) at_result="$at_result $at_were run,
