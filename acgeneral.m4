@@ -1728,6 +1728,7 @@ test "$host_alias" != "$target_alias" &&
   program_prefix=${target_alias}-
 ])
 
+
 dnl Subroutines of AC_CANONICAL_SYSTEM.
 
 dnl Worker routine for AC_CANONICAL_{HOST TARGET BUILD}.  THING is one of
@@ -2555,12 +2556,11 @@ char $1();
 [$3]))
 
 
-dnl AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS
-dnl                [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl                [, OTHER-LIBRARIES]]])
+dnl AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS,
+dnl                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+dnl                [OTHER-LIBRARIES])
 dnl --------------------------------------------------------
 dnl Search for a library defining FUNC, if it's not already available.
-
 AC_DEFUN(AC_SEARCH_LIBS,
 [AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
 [ac_func_search_save_LIBS="$LIBS"
@@ -2855,8 +2855,8 @@ AC_VAR_POPDEF([ac_Header])dnl
 
 
 dnl AC_CHECK_HEADERS(HEADER-FILE...
-dnl                  [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-dnl -------------------------------------------------------------
+dnl                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+dnl ----------------------------------------------------------
 AC_DEFUN(AC_CHECK_HEADERS,
 [for ac_header in $1
 do
@@ -2983,7 +2983,11 @@ AC_SHELL_IFELSE(test AC_VAR_GET(ac_var) = yes,
 AC_VAR_POPDEF([ac_var])dnl
 ])dnl AC_CHECK_FUNC
 
-dnl AC_CHECK_FUNCS(FUNCTION... [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+
+dnl AC_CHECK_FUNCS(FUNCTION..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+dnl ---------------------------------------------------------------------
+dnl FIXME: Should we die if there are not enough arguments, or just
+dnl ignore?
 AC_DEFUN(AC_CHECK_FUNCS,
 [for ac_func in $1
 do
@@ -3004,8 +3008,8 @@ AC_SUBST(LIBOBJS)dnl
 dnl ### Checking compiler characteristics
 
 
-dnl AC_CHECK_SIZEOF(TYPE [, CROSS-SIZE, [INCLUDES]])
-dnl ------------------------------------------------
+dnl AC_CHECK_SIZEOF(TYPE, [CROSS-SIZE], [INCLUDES])
+dnl -----------------------------------------------
 dnl This macro will probably be obsoleted by the macros of Kaveh.  In
 dnl addition `CHECK' is not a proper name (is not boolean). And finally:
 dnl shouldn't we use the default INCLUDES?
