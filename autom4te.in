@@ -1,0 +1,955 @@
+#! @PERL@ -w
+# -*- perl -*-
+# @configure_input@
+
+eval 'exec @PERL@ -S $0 ${1+"$@"}'
+    if 0;
+
+# autom4te - Wrapper around M4 libraries.
+# Copyright 2001 Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+require 5.005;
+use File::Basename;
+
+my $me = basename ($0);
+
+## --------- ##
+## Request.  ##
+## --------- ##
+
+package Request;
+
+BEGIN
+{
+  my $prefix = "@prefix@";
+  # FIXME: Import Struct into Autoconf.
+  my $perllibdir = $ENV{'perllibdir'} || "@datadir@/automake";
+  unshift @INC, "$perllibdir";
+}
+
+use Data::Dumper;
+use Automake::Struct;
+use Carp;
+use Getopt::Long;
+use IO::File;
+use strict;
+
+# List of requests
+my @request;
+
+struct
+  (
+   # The key of the cache file.
+   'cache' => "\$",
+   # True if the cache file is up to date.
+   'valid' => "\$",
+   # The include path.
+   'path' => '@',
+   # The set of source files.
+   'source' => '@',
+   # The set of included files.
+   'includes' => '@',
+   # The set of macros currently traced.
+   'macro' => '%',
+  );
+
+
+# Find a request with the same path and source.
+sub retrieve
+{
+  my ($self, %attr) = @_;
+
+  foreach (@request)
+    {
+      # Same path.
+      next
+	if join ("\n", @{$_->path}) ne join ("\n", @{$attr{path}});
+
+      # Same sources.
+      next
+	if join ("\n", @{$_->source}) ne join ("\n", @{$attr{source}});
+
+      # Found it.
+      return $_;
+    }
+
+  return undef;
+}
+
+# NEW should not be called directly.
+sub register
+{
+  my ($self, %attr) = @_;
+
+  # path and source are the only ID for a request object.
+  my $obj = $self->new ('path'   => $attr{path},
+			'source' => $attr{source});
+  push @request, $obj;
+
+  # Assign a cache file.
+  $obj->cache ("traces.$#request");
+
+  return $obj;
+}
+
+
+# request(%REQUEST)
+# -----------------
+# Return a request corresponding to $REQUEST{path} and $REQUEST{source},
+# using a cache value if it exists.
+sub request
+{
+  my ($self, %request) = @_;
+
+  my $obj = Request->retrieve (%request) || Request->register (%request);
+
+  # If there are new traces to produce, then we are not valid.
+  foreach (@{$request{'macro'}})
+    {
+      if (! exists ${$obj->macro}{$_})
+        {
+	  ${$obj->macro}{$_} = 1;
+          $obj->valid (0);
+	}
+    }
+
+  return $obj;
+}
+
+# Serialize a request or all the current requests.
+sub marshall
+{
+  my ($caller) = @_;
+  my $res = '';
+
+  if (ref ($caller))
+    {
+      # CALLER is an object: instance method.
+      my $marshall = Data::Dumper->new ([$caller]);
+      $marshall->Indent(2)->Terse(0);
+      $res = $marshall->Dump . "\n";
+    }
+  else
+    {
+      # CALLER is the package: class method.
+      my $marshall = Data::Dumper->new ([\@request], [qw (*request)]);
+      $marshall->Indent(2)->Terse(0);
+      $res = $marshall->Dump . "\n";
+    }
+
+  return $res;
+}
+
+
+# includes_p (@MACRO)
+# -------------------
+# Does this request covers all the @MACRO.
+sub includes_p
+{
+  my ($self, @macro) = @_;
+
+  foreach (@macro)
+    {
+      return 0
+	if ! exists ${$self->macro}{$_};
+    }
+  return 1;
+}
+
+
+# SAVE ($FILENAME)
+# ----------------
+sub save
+{
+  my ($self, $filename) = @_;
+
+  croak "$me: cannot save a single request\n"
+    if ref ($self);
+
+  my $requests = new IO::File ("> $filename");
+  print $requests
+    "# This file was created by $me.\n",
+    "# It contains the lists of macros which have been traced.\n",
+    "# It can be safely removed.\n",
+    "\n",
+    $self->marshall;
+}
+
+
+# LOAD ($FILENAME)
+# ----------------
+sub load
+{
+  my ($self, $filename) = @_;
+
+  croak "$me: cannot load a single request\n"
+    if ref ($self);
+
+  do "$filename"
+    or croak "$me: cannot source $filename: $!\n";
+}
+
+
+## ---------- ##
+## Autom4te.  ##
+## ---------- ##
+
+package Autom4te;
+
+use Getopt::Long;
+use File::Basename;
+use IO::File;
+use strict;
+
+# Our tmp dir.
+my $tmp;
+
+# The macros we always trace.
+my @required_trace =
+  (
+   # We need `include' to find the dependencies.
+   'include',
+   # These are wanted by autoheader.
+   'AC_CONFIG_HEADERS',
+   'AH_OUTPUT',
+   'AC_DEFINE_TRACE_LITERAL',
+   # These will be traced by Automake.
+   'AC_SUBST',
+   'AC_LIBSOURCE',
+  );
+
+# The macros to trace mapped to their format, as specified by the
+# user.
+my %trace;
+
+my $verbose = 0;
+my $debug = 0;
+my $output = '-';
+my @warning;
+
+my @include;
+
+# $M4.
+my $m4 = $ENV{"M4"} || '@M4@';
+# Some non-GNU m4's don't reject the --help option, so give them /dev/null.
+die "$me: need GNU m4 1.4 or later: $m4\n"
+  if system "$m4 --help </dev/null 2>&1 | fgrep reload-state >/dev/null";
+
+# @M4_BUILTINS -- M4 builtins and a useful comment.
+my @m4_builtins = `echo dumpdef | $m4 2>&1 >/dev/null`;
+map { s/:.*//;s/\W// } @m4_builtins;
+
+
+## ---------- ##
+## Routines.  ##
+## ---------- ##
+
+
+# mktmpdir ($SIGNATURE)
+# ---------------------
+# Create a temporary directory which name is based on $SIGNATURE.
+sub mktmpdir ($)
+{
+  my ($signature) = @_;
+  my $TMPDIR = $ENV{'TMPDIR'} || '/tmp';
+
+  # If mktemp supports dirs, use it.
+  $tmp = `(umask 077 &&
+           mktemp -d -q "$TMPDIR/${signature}XXXXXX") 2>/dev/null`;
+
+  if (!$tmp || ! -d $tmp)
+    {
+      $tmp = "$TMPDIR/$signature" . int (rand 10000) . ".$$";
+      mkdir $tmp, 0700
+	or die "$me: cannot create $tmp: $!\n";
+    }
+
+  print STDERR "$me:$$: working in $tmp\n"
+    if $debug;
+}
+
+
+# verbose
+# -------
+sub verbose (@)
+{
+  print STDERR "$me: ", @_, "\n"
+    if $verbose;
+}
+
+
+# END
+# ---
+# Exit nonzero whenever closing STDOUT fails.
+sub END
+{
+  use POSIX qw (_exit);
+
+  my ($q) = ($?);
+
+  # FIXME: Heelp!  Can't find a means to properly catch system's
+  # exit status (without hair I mean).
+  # my $status = $? >> 8;
+
+  if (!$debug && defined $tmp && -d $tmp)
+    {
+      unlink <$tmp/*>
+	or warn ("$me: cannot empty $tmp: $!\n"), _exit (1);
+      rmdir $tmp
+	or warn ("$me: cannot remove $tmp: $!\n"), _exit (1);
+    }
+
+  # This is required if the code might send any output to stdout
+  # E.g., even --version or --help.  So it's best to do it unconditionally.
+  close STDOUT
+    or (warn "$me: closing standard output: $!\n"), _exit (1);
+
+  ($!, $?) = (0, $q);
+}
+
+
+# xsystem ($COMMAND)
+# ------------------
+sub xsystem ($)
+{
+  my ($command) = @_;
+
+  verbose "running: $command";
+
+  (system $command) == 0
+    or die ("$me: "
+	    . (split (' ', $command))[0]
+	    . " failed with exit status: $?\n");
+}
+
+# print_usage ()
+# --------------
+# Display usage (--help).
+sub print_usage ()
+{
+  print <<EOF;
+Usage: $0 [OPTION] ... [TEMPLATE-FILE]
+
+Generate a configuration script from a TEMPLATE-FILE if given, or
+`configure.ac' if present, or else `configure.in'.  Output is sent
+to the standard output if TEMPLATE-FILE is given, else into
+`configure'.
+
+Operation modes:
+  -h, --help               print this help, then exit
+  -V, --version            print version number, then exit
+  -v, --verbose            verbosely report processing
+  -d, --debug              don't remove temporary files
+  -o, --output=FILE        save output in FILE (stdout is the default)
+  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
+
+Warning categories include:
+  `cross'         cross compilation issues
+  `obsolete'      obsolete constructs
+  `syntax'        dubious syntactic constructs
+  `all'           all the warnings
+  `no-CATEGORY'   turn off the warnings on CATEGORY
+  `none'          turn off all the warnings
+  `error'         warnings are error
+
+The environment variable `WARNINGS' is honored.
+
+Library directories:
+  -I, --include=DIR  look in DIR.  Several invocations accumulate
+
+Tracing:
+  -t, --trace=MACRO  report the MACRO invocations
+
+Report bugs to <bug-autoconf\@gnu.org>.
+EOF
+  # Help font-lock: `
+  exit 0;
+}
+
+
+# print_version ()
+# ----------------
+# Display version (--version).
+sub print_version
+{
+  print <<EOF;
+autom4te (@PACKAGE_NAME@) @VERSION@
+Written by Akim Demaille.
+
+Copyright 2001 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+EOF
+
+  exit 0;
+}
+
+
+# parse_args ()
+# -------------
+# Process any command line arguments.
+sub parse_args ()
+{
+  my @trace;
+
+  Getopt::Long::config ("bundling");
+  GetOptions
+    (
+     # Operation modes:
+     "h|help"       => \&print_usage,
+     "V|version"    => \&print_version,
+     "v|verbose"    => \$verbose,
+     "d|debug"      => \$debug,
+     "o|output=s"   => \$output,
+     "w|warnings=s" => \@warning,
+
+     # Library directories:
+     "I|include=s" => \@include,
+
+     # Tracing:
+     # Using a hash for traces is seducing.  Unfortunately, upon `-t FOO',
+     # instead of mapping `FOO' to undef, Getopt maps it to `1', preventing
+     # us from distinguishing `-t FOO' from `-t FOO=1'.  So let's do it
+     # by hand.
+     "t|trace=s"        => \@trace,
+    )
+      or exit 1;
+
+  # Convert @trace to %trace.
+  # The default format is `$f:$l:$n:$*'.
+  foreach (@trace)
+    {
+      /^([^:]+)(?::(.*))?$/;
+      $trace{$1} = defined $2 ? $2 : '$f:$l:$n:$*';
+    }
+
+  die "$me: too few arguments
+Try `$me --help' for more information.\n"
+    unless @ARGV;
+}
+
+
+# handle_m4 ($REQ, @TRACE)
+# ------------------------
+# Run m4 on the input files, and save the traces on the @TRACE macros.
+sub handle_m4 ($%)
+{
+  my ($req, @trace) = @_;
+
+  # *.m4f files have to be reloaded.
+  my $files;
+  foreach (@ARGV)
+    {
+      $files .= ' ';
+      $files .= '--reload-state='
+	if /\.m4f$/;
+      $files .= "$_";
+    }
+
+  # GNU m4 appends when using --error-output.
+  unlink ("$me.cache/" . $req->cache);
+
+  # Run m4.
+  xsystem ("$m4"
+	   . " --define m4_tmpdir=$tmp"
+	   . " --define m4_warnings=" # FIXME: Pass the warnings.
+	   . ' --debug=aflq'
+	   . " --error-output=$me.cache/" . $req->cache
+	   . join (' --trace=',   '', @trace)
+	   . join (' --include=', '', @include)
+	   . $files
+	   . " >$tmp/output");
+}
+
+
+# handle_output ($OUTPUT)
+# -----------------------
+# Run m4 on the input files, perform quadrigraphs substitution, check for
+# forbidden tokens, and save into $OUTPUT.
+sub handle_output ($)
+{
+  my ($output) = @_;
+
+  verbose "creating $output";
+
+  # Load the forbidden/allowed patterns.
+  my $forbidden;
+  if (-f "$tmp/forbidden.rx")
+    {
+      my $fh = new IO::File ("$tmp/forbidden.rx");
+      $forbidden = join ('|', grep { chop } $fh->getlines);
+    }
+  my $allowed = "^\$";
+  if (-f "$tmp/allowed.rx")
+    {
+      my $fh = new IO::File ("$tmp/allowed.rx");
+      $allowed = join ('|', grep { chop } $fh->getlines);
+    }
+
+  my $out = new IO::File (">$output")
+    or die "$me: cannot open $output: $!\n";
+  my $in = new IO::File ("$tmp/output")
+    or die "$me: cannot read $tmp/output: $!\n";
+
+  my $separate = 0;
+  my $oline = 0;
+  my %prohibited;
+  while ($_ = $in->getline)
+    {
+      s/\s+$//;
+      if (/^$/)
+	{
+	  $separate = 1;
+	  next;
+	}
+
+      if ($separate)
+	{
+	  $oline++;
+	  print $out "\n";
+	}
+      $separate = 0;
+
+      $oline++;
+      s/__oline__/$oline/g;
+      s/\@<:\@/[/g;
+      s/\@:>\@/]/g;
+      s/\@\$\|\@/\$/g;
+      s/\@%:\@/#/g;
+
+      print $out "$_\n";
+
+      foreach (split ('\W+'))
+	{
+	  $prohibited{$_} = $oline
+	    if /$forbidden/ && !/$allowed/;
+	}
+    }
+
+  if (%prohibited)
+    {
+      my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
+      my $in = new IO::File ($ARGV[$#ARGV])
+        or die "$me: cannot open $ARGV[$#ARGV]: $!\n";
+
+      while ($_ = $in->getline)
+        {
+	  if (/$prohibited/)
+	    {
+	      warn "$ARGV[$#ARGV]: $.: undefined macro: $1\n"
+		if exists $prohibited{$1};
+	      delete $prohibited{$1};
+	    }
+	}
+      foreach (keys %prohibited)
+	{
+	  warn "$output: $prohibited{$_}: undefined macro: $_\n";
+	}
+    }
+}
+
+
+## --------------------- ##
+## Handling the traces.  ##
+## --------------------- ##
+
+
+# %REQUEST
+# trace_requests (%TRACE)
+# -----------------------
+sub trace_requests
+{
+  my (%trace) = @_;
+  my %res;
+
+  for my $macro (keys %trace)
+    {
+      $res{$macro} = 1;
+      $macro =~ s/^m4_//;
+      # See &handle_traces for an explanation for this paragraph.
+      if (grep /^$macro$/, @m4_builtins)
+	{
+	  $res{$macro} = 1;
+	  $res{"m4_$macro"} = 1;
+	}
+    }
+
+  return %res;
+}
+
+
+# $M4_MACRO
+# trace_format_to_m4 ($FORMAT)
+# ----------------------------
+# Convert a trace $FORMAT into a M4 trace processing macro's body.
+sub trace_format_to_m4 ($)
+{
+  my ($format) = @_;
+  my %escape = (# File name.
+		'f' => '$1',
+		# Line number.
+		'l' => '$2',
+		# Depth.
+		'd' => '$3',
+		# Name (also available as $0).
+		'n' => '$4',
+		# Escaped dollar.
+		'$' => '$');
+
+  my $res = '';
+  $_ = $format;
+  while ($_)
+    {
+      # $n -> $(n + 4)
+      if (s/^\$(\d+)//)
+	{
+	  $res .= "\$" . ($1 + 4);
+	}
+      # $x, no separator given.
+      elsif (s/^\$([fldn\$])//)
+        {
+	  $res .= $escape{$1};
+	}
+      # $.x or ${sep}x.
+      elsif (s/^\$\{([^}]*)\}([@*%])//
+	    || s/^\$(.?)([@*%])//)
+	{
+	  # $@, list of quoted effective arguments.
+	  if ($2 eq '@')
+	    {
+	      $res .= ']at_at([' . ($1 ? $1 : ',') . '], $@)[';
+	    }
+	  # $*, list of unquoted effective arguments.
+	  elsif ($2 eq '*')
+	    {
+	      $res .= ']at_star([' . ($1 ? $1 : ',') . '], $@)[';
+	    }
+	  # $%, list of flattened unquoted effective arguments.
+	  elsif ($2 eq '%')
+	    {
+	      $res .= ']at_percent([' . ($1 ? $1 : ':') . '], $@)[';
+	    }
+	}
+      elsif (/^(\$.)/)
+        {
+	  die "$me: invalid escape: $1\n";
+        }
+      else
+        {
+	  s/^([^\$]+)//;
+	  $res .= $1;
+        }
+    }
+
+  return '[[' . $res . ']]';
+}
+
+
+# handle_traces($REQ, $OUTPUT, %TRACE)
+# ------------------------------------
+# We use M4 itself to process the traces.  But to avoid name clashes when
+# processing the traces, the builtins are disabled, and moved into `at_'.
+# Actually, all the low level processing macros are in `at_' (and `_at_').
+# To avoid clashes between user macros and `at_' macros, the macros which
+# implement tracing are in `AT_'.
+#
+# Having $REQ is needed to neutralize the macros which have been traced,
+# but are not wanted now.
+sub handle_traces ($$%)
+{
+  my ($req, $output, %trace) = @_;
+
+  # GNU M4 1.4's tracing of builtins is buggy.  When run on this input:
+  #
+  # | divert(-1)
+  # | changequote([, ])
+  # | define([m4_eval], defn([eval]))
+  # | eval(1)
+  # | m4_eval(2)
+  # | undefine([eval])
+  # | m4_eval(3)
+  #
+  # it behaves this way:
+  #
+  # | % m4 input.m4 -da -t eval
+  # | m4trace: -1- eval(1)
+  # | m4trace: -1- m4_eval(2)
+  # | m4trace: -1- m4_eval(3)
+  # | %
+  #
+  # Conversely:
+  #
+  # | % m4 input.m4 -da -t m4_eval
+  # | %
+  #
+  # So we will merge them, i.e.  tracing `BUILTIN' or tracing
+  # `m4_BUILTIN' will be the same: tracing both, but honoring the
+  # *last* trace specification.
+  # FIXME: This is not enough: in the output `$0' will be `BUILTIN'
+  # sometimes and `m4_BUILTIN' at others.  We should return a unique name,
+  # the one specified by the user.
+  foreach my $macro (keys %trace)
+    {
+      my $format = $trace{$macro};
+      $macro =~ s/^m4_//;
+      if (grep /^$macro$/, @m4_builtins)
+	{
+	  $trace{$macro} = $format;
+	  $trace{"m4_$macro"} = $format;
+	}
+    }
+
+  verbose "formatting traces for `$output': ", join (', ', keys %trace);
+
+  # Processing the traces.
+  my $trace_m4 = new IO::File (">$tmp/traces.m4")
+    or die "$me: cannot create $tmp/traces.m4: $!\n";
+
+  $_ = <<'EOF';
+  divert(-1)
+  changequote([, ])
+  # _at_MODE(SEPARATOR, ELT1, ELT2...)
+  # ----------------------------------
+  # List the elements, separating then with SEPARATOR.
+  # MODE can be:
+  #  `at'       -- the elements are enclosed in brackets.
+  #  `star'     -- the elements are listed as are.
+  #  `percent'  -- the elements are `flattened': spaces are singled out,
+  #                and no new line remains.
+  define([_at_at],
+  [at_ifelse([$#], [1], [],
+             [$#], [2], [[[$2]]],
+             [[[$2]][$1]$0([$1], at_shift(at_shift($@)))])])
+
+  define([_at_percent],
+  [at_ifelse([$#], [1], [],
+             [$#], [2], [at_flatten([$2])],
+             [at_flatten([$2])[$1]$0([$1], at_shift(at_shift($@)))])])
+
+  define([_at_star],
+  [at_ifelse([$#], [1], [],
+             [$#], [2], [[$2]],
+             [[$2][$1]$0([$1], at_shift(at_shift($@)))])])
+
+  # FLATTEN quotes its result.
+  # Note that the second pattern is `newline, tab or space'.  Don't lose
+  # the tab!
+  define([at_flatten],
+  [at_patsubst(at_patsubst(at_patsubst([[[$1]]], [\\\n]),
+                           [[\n\t ]+], [ ]),
+               [^ *\(.*\) *$], [[\1]])])
+
+  define([at_args],    [at_shift(at_shift(at_shift(at_shift(at_shift($@)))))])
+  define([at_at],      [_$0([$1], at_args($@))])
+  define([at_percent], [_$0([$1], at_args($@))])
+  define([at_star],    [_$0([$1], at_args($@))])
+
+EOF
+  s/^  //mg;s/\\t/\t/mg;s/\\n/\n/mg;
+  print $trace_m4 $_;
+
+  # If you trace `define', then on `define([m4_exit], defn([m4exit])' you
+  # will produce
+  #
+  #    AT_define([m4sugar.m4], [115], [1], [define], [m4_exit], <m4exit>)
+  #
+  # Since `<m4exit>' is not quoted, the outer m4, when processing
+  # `trace.m4' will exit prematurely.  Hence, move all the builtins to
+  # the `at_' name space.
+
+  print $trace_m4 "# Copy the builtins.\n";
+  map { print $trace_m4 "define([at_$_], defn([$_]))\n" } @m4_builtins;
+  print $trace_m4 "\n";
+
+  print $trace_m4 "# Disable them.\n";
+  map { print $trace_m4 "at_undefine([$_])\n" } @m4_builtins;
+  print $trace_m4 "\n";
+
+
+  # Neutralize traces: we don't want traces of cached requests (%REQUEST).
+  print $trace_m4
+   "## -------------------------------------- ##\n",
+   "## By default neutralize all the traces.  ##\n",
+   "## -------------------------------------- ##\n",
+   "\n";
+  print $trace_m4 "at_define([AT_$_], [at_dnl])\n"
+    foreach (keys %{$req->macro});
+  print $trace_m4 "\n";
+
+  # Implement traces for current requests (%TRACE).
+  print $trace_m4
+    "## ------------------------- ##\n",
+    "## Trace processing macros.  ##\n",
+    "## ------------------------- ##\n",
+    "\n";
+  foreach my $key (keys %trace)
+    {
+      print $trace_m4 "at_define([AT_$key],\n";
+      print $trace_m4 trace_format_to_m4 ($trace{$key}) . ")\n\n";
+    }
+  print $trace_m4 "\n";
+
+  # Reenable output.
+  print $trace_m4 "at_divert(0)at_dnl\n";
+
+  # Transform the traces from m4 into an m4 input file.
+  # Typically, transform:
+  #
+  # | m4trace:configure.ac:3: -1- AC_SUBST([exec_prefix], [NONE])
+  #
+  # into
+  #
+  # | AT_AC_SUBST([configure.ac], [3], [1], [AC_SUBST], [exec_prefix], [NONE])
+  #
+  # Pay attention that the file name might include colons, if under DOS
+  # for instance, so we don't use `[^:]+'.
+  my $traces = new IO::File ("$me.cache/" . $req->cache)
+    or die "$me: cannot open $me.cache/" . $req->cache . ": $!\n";
+  while ($_ = $traces->getline)
+    {
+      # Multiline traces.
+      s{^m4trace:(.+):(\d+): -(\d+)- ([^(]+)\((.*)$}
+       {AT_$4([$1], [$2], [$3], [$4], $5};
+      # Single line traces, as the example above.
+      s{^m4trace:(.+):(\d+): -(\d+)- (.*)$}
+       {AT_$4([$1], [$2], [$3], [$4]};
+
+      print $trace_m4 "$_";
+    }
+  $trace_m4->close;
+
+  my $in = new IO::File ("$m4 $tmp/traces.m4 |")
+    or die "$me: cannot run $m4: $!\n";
+  my $out = new IO::File (">$output")
+    or die "$me: cannot run open $output: $!\n";
+  while ($_ = $in->getline)
+    {
+      # It makes no sense to try to transform __oline__.
+      s/\@<:\@/[/g;
+      s/\@:>\@/]/g;
+      s/\@\$\|\@/\$/g;
+      s/\@%:\@/#/g;
+      print $out $_;
+    }
+}
+
+
+# $BOOL
+# up_to_date_p ($REQ, $FILE)
+# --------------------------
+# If $FILE up to date?
+# We need $REQ since we check $FILE against all its dependencies,
+# and we use the traces on `include' to find them.
+sub up_to_date_p ($$)
+{
+  my ($req, $file) = @_;
+
+  # If STDOUT or doesn't exist, it sure is outdated!
+  return 0
+    if $file eq '-' || ! -f $file;
+
+  # We can't answer properly if the traces are not computed since we
+  # need to know what other files were included.
+  return 0
+    if ! -f "$me.cache/" . $req->cache;
+
+  # We depend at least upon the arguments.
+  my @dep = @ARGV;
+
+  # Files may include others.  We can use traces since we just checked
+  # if they are available.
+  handle_traces ($req, "$tmp/dependencies", ('include' => '$1'));
+  my $deps = new IO::File ("$tmp/dependencies");
+  while ($_ = $deps->getline)
+    {
+      chop;
+      push @dep, $_;
+    }
+
+  # If $FILE is younger than one of its dependencies, it is outdated.
+  my $mtime = (stat ($file))[9];
+  foreach (@dep)
+    {
+      if ($mtime < (stat ($_))[9])
+	{
+	  verbose "$file depends on $_ which is more recent";
+	  return 0;
+	}
+    }
+
+  # Well, really, it's fine!
+  return 1;
+}
+
+
+## -------------- ##
+## Main program.  ##
+## -------------- ##
+
+parse_args;
+mktmpdir ('t4');
+
+# We need our cache directory.
+if (! -d "$me.cache")
+  {
+    mkdir "$me.cache", 0755
+      or die "$me: cannot create $me.cache: $!\n";
+  }
+
+Request->load ("$me.cache/requests")
+  if -f "$me.cache/requests";
+
+# Add the new trace requests.
+my $req = Request->request ('source' => \@ARGV,
+			    'path' => \@include,
+			    'macro' => [keys %trace, @required_trace]);
+
+# We need to run M4 if
+# - for traces
+#   + there is no cache, or
+#   + it does not include the traces we need, or
+#   + it exists but is outdated
+# - for output if it is not /dev/null and
+#   + it doesn't exist, or
+#   + it is outdated
+handle_m4 ($req, keys %{$req->macro})
+  if (! $req->valid
+      || ! up_to_date_p ($req, "$me.cache/" . $req->cache)
+      || (! %trace && ! up_to_date_p ($req, "$output")));
+
+if (%trace)
+  {
+    # Producing traces.
+    # Trying to produce the output only when needed is very
+    # error prone here, as you'd have to check that the trace
+    # requests have not changed etc.
+    handle_traces ($req, $output, %trace);
+  }
+else
+  {
+    # Actual M4 expansion.
+    handle_output ($output)
+      if ! up_to_date_p ($req, $output);
+  }
+
+# All went fine, the cache is valid.
+$req->valid (1);
+
+Request->save ("$me.cache/requests");
+
+exit 0;

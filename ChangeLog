@@ -1,3 +1,7 @@
+2001-06-02  Akim Demaille  <akim@epita.fr>
+
+	* autom4te.in: New.
+
 2001-06-02  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (_AC_INIT_PREPARE): Don't rely on $? in the traps
