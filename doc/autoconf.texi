@@ -11618,9 +11618,9 @@ later) @command{make} will diagnose these uses and error out.
 
 @item Command execution
 Since 1992 @acronym{POSIX} has required that @command{make} must invoke
-each command with the equivalent of @samp{sh -c} subshell.  However,
-many @command{make} implementations, including BSD make through circa
-2004, use @samp{sh -e -c} instead, and the @option{-e} option causes the
+each command with the equivalent of a @samp{sh -c} subshell.  However,
+many @command{make} implementations, including BSD make through 2004,
+use @samp{sh -e -c} instead, and the @option{-e} option causes the
 subshell to exit immediately if a subsidiary simple-command fails.  For
 example, the command @samp{touch T; rm -f U} will always attempt to
 remove @file{U} with @acronym{POSIX} make, but incompatible
