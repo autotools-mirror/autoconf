@@ -2431,11 +2431,11 @@ IFS=$ac_save_ifs
 # -----------------------------------------------------
 AC_DEFUN(AC_CHECK_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
-set dummy $2; ac_word=[$]2
+set dummy $2; ac_word=$[2]
 AC_MSG_CHECKING([for $ac_word])
 AC_CACHE_VAL(ac_cv_prog_$1,
-[if test -n "[$]$1"; then
-  ac_cv_prog_$1="[$]$1" # Let the user override the test.
+[if test -n "$$1"; then
+  ac_cv_prog_$1="$$1" # Let the user override the test.
 else
 ifval([$6], [  ac_prog_rejected=no
 ])dnl
@@ -2451,16 +2451,16 @@ ifval([$6],
   done
 ifval([$6], [if test $ac_prog_rejected = yes; then
   # We found a bogon in the path, so make sure we never use it.
-  set dummy [$]ac_cv_prog_$1
+  set dummy $ac_cv_prog_$1
   shift
-  if test [$]# -gt 0; then
+  if test $[#] -gt 0; then
     # We chose a different compiler from the bogus one.
     # However, it has the same basename, so the bogon will be chosen
     # first if we set $1 to just the basename; use the full file name.
     shift
-    set dummy "$ac_path" "[$]@"
+    set dummy "$ac_path" ${1+"$[@]"}
     shift
-    ac_cv_prog_$1="[$]@"
+    ac_cv_prog_$1="$[@]"
 ifelse([$2], [$4],
 [  else
     # Default is a loser.
@@ -2472,14 +2472,14 @@ fi
 ])dnl
 dnl If no 4th arg is given, leave the cache variable unset,
 dnl so AC_CHECK_PROGS will keep looking.
-ifval([$4], [  test -z "[$]ac_cv_prog_$1" && ac_cv_prog_$1="$4"
+ifval([$4], [  test -z "$ac_cv_prog_$1" && ac_cv_prog_$1="$4"
 ])dnl
 fi])dnl
 $1=$ac_cv_prog_$1
-if test -n "[$]$1"; then
-  AC_MSG_RESULT([$]$1)
+if test -n "$$1"; then
+  AC_MSG_RESULT([$$1])
 else
-  AC_MSG_RESULT(no)
+  AC_MSG_RESULT([no])
 fi
 AC_SUBST($1)dnl
 ])# AC_CHECK_PROG
@@ -2491,10 +2491,10 @@ AC_SUBST($1)dnl
 AC_DEFUN(AC_CHECK_PROGS,
 [for ac_prog in $2
 do
-AC_CHECK_PROG([$1], [$]ac_prog, [$]ac_prog, , [$4])
-test -n "[$]$1" && break
+AC_CHECK_PROG([$1], $ac_prog, $ac_prog, , [$4])
+test -n "$$1" && break
 done
-ifval([$3], [test -n "[$]$1" || $1="$3"
+ifval([$3], [test -n "$$1" || $1="$3"
 ])])
 
 

@@ -1,3 +1,14 @@
+2000-05-05  Akim Demaille  <akim@epita.fr>
+
+	AC_CHECK_PROG macro fails if REJECT value is set under Digital
+	Unix 4.0x and 5.0 because `"$@"' expands into an empty parameter
+	(instead of nothing) when there are no positional parameters.
+	From Nicolas Joly.
+
+	* acgeneral.m4 (AC_CHECK_PROG, AC_CHECK_PROGS): Prefer
+	`$$1' to `[$]$1', `$foo' to `[$]foo', `$[1]' to `[$]1', and
+	`${1+"$[@]"}' to `"[$]@"'.
+
 2000-05-04  Akim Demaille  <akim@epita.fr>
 
 	AC_PREREQ understands `2.14a' as `2.141'.
