@@ -1,4 +1,4 @@
-# Definition of macro sets.                              -*- Makefile -*-
+# Definition of Autom4te option sets.                     -*- Makefile -*-
 #
 # Copyright 2001, 2002 Free Software Foundation, Inc.
 #
@@ -126,8 +126,6 @@ end-language: "Autoscan-preselections"
 ## ---------- ##
 
 begin-language: "Autoconf"
-# patterns: "*.ac"
-# patterns: "configure.in"
 args: --include @datadir@
 args: autoconf/autoconf.m4f
 args: acsite.m4?
@@ -147,7 +145,6 @@ end-language: "Autoconf"
 ## -------- ##
 
 begin-language: "Autotest"
-# patterns: *.at
 args: --include @datadir@
 args: autotest/autotest.m4f
 args: package.m4?
@@ -162,7 +159,6 @@ end-language: "Autotest"
 ## ---- ##
 
 begin-language: "M4sh"
-# patterns: *.as
 args: --include @datadir@
 args: m4sugar/m4sh.m4f
 args: --mode 777
@@ -176,7 +172,6 @@ end-language: "M4sh"
 ## ------- ##
 
 begin-language: "M4sugar"
-# patterns: *.msh
 args: --include @datadir@
 args: m4sugar/m4sugar.m4f
 args: --warning syntax

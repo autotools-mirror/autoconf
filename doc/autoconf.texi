@@ -312,6 +312,7 @@ Caching Results
 Programming in M4
 
 * M4 Quotation::                Protecting macros from unwanted expansion
+* Invoking autom4te::           The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
 * Programming in M4sh::         Common Shell Constructs
 
@@ -6368,6 +6369,7 @@ and their interface might change in the future.  As a matter of fact,
 
 @menu
 * M4 Quotation::                Protecting macros from unwanted expansion
+* Invoking autom4te::           The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
 * Programming in M4sh::         Common Shell Constructs
 @end menu
@@ -6868,6 +6870,340 @@ However, it's also possible to put on too many layers of quotes.  If
 this happens, the resulting @command{configure} script will contain
 unexpanded macros.  The @command{autoconf} program checks for this problem
 by doing @samp{grep AC_ configure}.
+
+@node Invoking autom4te
+@section Invoking @command{autom4te}
+
+The Autoconf suite, including M4sugar, M4sh, and Autotest in addition to
+Autoconf per se, heavily rely on M4.  All these different uses revealed
+common needs factored into a layer over @command{m4}:
+@command{autom4te}@footnote{
+@c
+Yet another great name for Lars J. Aas.
+@c
+}.
+
+@command{autom4te} should basically considered as a replacement of
+@command{m4} itself.  In particular, its handling of command line
+arguments is modeled after M4's:
+
+@example
+autom4te @var{options} @var{files}
+@end example
+
+@noindent
+where the @var{files} are directly passed to @command{m4}.  In addition
+to the regular expansion, it handles the replacement of the quadrigraphs
+(@pxref{Quadrigraphs}), and of @samp{__oline__}, the current line in the
+output.  It supports an extended syntax for the @var{files}:
+
+@table @file
+@item @var{file}.m4f
+This file is an M4 frozen file.  Note that @emph{all the previous files
+are ignored}.  See the option @option{--melt} for the rationale.
+
+@item @var{file}?
+If found in the library path, the @var{file} is included for expansion,
+otherwise it is ignored instead of triggering a failure.
+@end table
+
+@sp 1
+
+Of course, it supports the Autoconf common subset of options:
+
+@table @option
+@item --help
+@itemx -h
+Print a summary of the command line options and exit.
+
+@item --version
+@itemx -V
+Print the version number of Autoconf and exit.
+
+@item --verbose
+@itemx -v
+Report processing steps.
+
+@item --debug
+@itemx -d
+Don't remove the temporary files and be even more verbose.
+
+@item --include=@var{dir}
+@itemx -I @var{dir}
+Also look for input files in @var{dir}.  Multiple invocations
+accumulate.  Contrary to M4 but in agreement with common sense,
+directories are browsed from last to first.
+
+@item --output=@var{file}
+@itemx -o @var{file}
+Save output (script or trace) to @var{file}.  The file @option{-} stands
+for the standard output.
+@end table
+
+@sp 1
+
+As an extension of @command{m4}, it includes the following options:
+
+@table @option
+@item --warnings=@var{category}
+@itemx -W @var{category}
+@evindex WARNINGS
+@c FIXME: Point to the M4sugar macros, not Autoconf's.
+Report the warnings related to @var{category} (which can actually be a
+comma separated list).  @xref{Reporting Messages}, macro
+@code{AC_DIAGNOSE}, for a comprehensive list of categories.  Special
+values include:
+
+@table @samp
+@item all
+report all the warnings
+
+@item none
+report none
+
+@item error
+treats warnings as errors
+
+@item no-@var{category}
+disable warnings falling into @var{category}
+@end table
+
+Warnings about @samp{syntax} are enabled by default, and the environment
+variable @code{WARNINGS}, a comma separated list of categories, is
+honored. @command{autom4te -W @var{category}} will actually
+behave as if you had run:
+
+@example
+autom4te --warnings=syntax,$WARNINGS,@var{category}
+@end example
+
+@noindent
+If you want to disable @command{autom4te}'s defaults and
+@code{WARNINGS}, but (for example) enable the warnings about obsolete
+constructs, you would use @option{-W none,obsolete}.
+
+@cindex Back trace
+@cindex Macro invocation stack
+@command{autom4te} displays a back trace for errors, but not for
+warnings; if you want them, just pass @option{-W error}.  For instance,
+on this @file{configure.ac}:
+
+@example
+AC_DEFUN([INNER],
+[AC_TRY_RUN([exit (0)])])
+
+AC_DEFUN([OUTER],
+[INNER])
+
+AC_INIT
+OUTER
+@end example
+
+@noindent
+you get:
+
+@example
+$ @kbd{autom4te -l autoconf -Wcross}
+configure.ac:8: warning: AC_TRY_RUN called without default \
+to allow cross compiling
+$ @kbd{autom4te -l autoconf -Wcross,error}
+configure.ac:8: error: AC_TRY_RUN called without default \
+to allow cross compiling
+acgeneral.m4:3044: AC_TRY_RUN is expanded from...
+configure.ac:2: INNER is expanded from...
+configure.ac:5: OUTER is expanded from...
+configure.ac:8: the top level
+@end example
+
+@item --melt
+@itemx -m
+Do not use frozen files.  Any argument @code{@var{file}.m4f} will be
+replaced with @code{@var{file}.m4}.  This helps tracing the macros which
+are executed only when the files are frozen, typically
+@code{m4_define}.  For instance, running:
+
+@example
+autom4te --melt 1.m4 2.m4f 3.m4 4.m4f input.m4
+@end example
+
+@noindent
+is roughly equivalent to running:
+
+@example
+m4 1.m4 2.m4 3.m4 4.m4 input.m4
+@end example
+
+@noindent
+while
+
+@example
+autom4te 1.m4 2.m4f 3.m4 4.m4f input.m4
+@end example
+
+@noindent
+is equivalent to:
+
+@example
+m4 --reload-state=4.m4f input.m4
+@end example
+
+@item --freeze
+@itemx -f
+Produce a frozen state file.  @command{autom4te} freezing is stricter
+than M4's: it must produce no warnings, and no output other than empty
+lines (a line with white spaces is @emph{not} empty) and comments
+(starting with @samp{#}).  Please, note that contrary to @command{m4},
+this options takes no argument:
+
+@example
+autom4te 1.m4 2.m4 3.m4 --freeze --output=3.m4f
+@end example
+
+@noindent
+corresponds to
+
+@example
+m4 1.m4 2.m4 3.m4 --freeze-state=3.m4f
+@end example
+
+@item --mode=@var{octal-mode}
+@itemx -m @var{octal-mode}
+Set the mode of the non traces output to @var{octal-mode}.  By default,
+@samp{0666}.
+@end table
+
+@sp 1
+
+@cindex @file{autom4te.cache}
+As another additional feature over @command{m4}, @command{autom4te}
+caches its results.  GNU M4 is able to produce a regular output and
+traces at the same time.  Traces are heavily used in the GNU Build
+System: @command{autoheader} uses them to build @file{config.h.in},
+@command{autoreconf} to determine what GNU Build System components are
+used, @command{automake} to ``parse'' @file{configure.ac} etc.  To save
+the long runs of @command{m4}, traces are cached while performing
+regular expansion, and conversely.  This cache is (actually, the caches
+are) stored in the directory @file{autom4te.cache}.  @emph{It can safely
+be removed} at any moment (especially if for some reason
+@command{autom4te} considers it is trashed).
+
+@table @option
+@item --force
+@itemx -f
+Do not consider the cache (but update it anyway).
+@end table
+
+@sp 1
+
+Because traces are so important to the GNU Build System,
+@command{autom4te} provides high level tracing features as compared to
+M4, and helps exploiting the cache:
+
+@table @option
+@item --trace=@var{macro}[:@var{format}]
+@itemx -t @var{macro}[:@var{format}]
+Trace the invocations to @var{macro} according to the @var{format}.
+Multiple @option{--trace} arguments can be used to list several macros.
+Multiple @option{--trace} arguments for a single macro are not
+cumulative; instead, you should just make @var{format} as long as
+needed.
+
+The @var{format} is a regular string, with newlines if desired, and
+several special escape codes.  It defaults to @samp{$f:$l:$n:$%}. It can
+use the following special escapes:
+
+@table @samp
+@item $$
+The character @samp{$}.
+
+@item $f
+The filename from which @var{macro} is called.
+
+@item $l
+The line number from which @var{macro} is called.
+
+@item $d
+The depth of the @var{macro} call.  This is an M4 technical detail that
+you probably don't want to know about.
+
+@item $n
+The name of the @var{macro}.
+
+@item $@var{num}
+The @var{num}th argument of the call to @var{macro}.
+
+@item $@@
+@itemx $@var{sep}@@
+@itemx $@{@var{separator}@}@@
+All the arguments passed to @var{macro}, separated by the character
+@var{sep} or the string @var{separator} (@samp{,} by default).  Each
+argument is quoted, i.e. enclosed in a pair of square brackets.
+
+@item $*
+@itemx $@var{sep}*
+@itemx $@{@var{separator}@}*
+As above, but the arguments are not quoted.
+
+@item $%
+@itemx $@var{sep}%
+@itemx $@{@var{separator}@}%
+As above, but the arguments are not quoted, all new line characters in
+the arguments are smashed, and the default separator is @samp{:}.
+
+The escape @samp{$%} produces single-line trace outputs (unless you put
+newlines in the @samp{separator}), while @samp{$@@} and @samp{$*} do
+not.
+@end table
+
+@xref{autoconf Invocation}, for examples of trace uses.
+
+@item --preselect=@var{macro}
+@itemx -p @var{macro}
+Cache the traces of @var{macro}, but do not enable traces.  This is
+especially important to save cpu cycles in the future.  For instance,
+when invoked, @command{autoconf} preselects all the macros that
+@command{autoheader}, @code{automake}, @code{autoreconf} etc. will
+trace, so that running @command{m4} is not needed to trace them: the
+cache suffices.  This results in a huge speed-up.
+@end table
+
+@sp 1
+
+@cindex Autom4te Library
+Finally, @command{autom4te} introduces the concept of @dfn{Autom4te
+libraries}.  They consists in a powerful yet extremely simple feature:
+sets of combined command line arguments:
+
+@table @option
+@item --language=@var{language}
+@itemx -l =@var{language}
+Use the @var{language} Autom4te library.  Current languages include:
+
+@table @code
+@item M4sugar
+create M4sugar output.
+
+@item M4sh
+create M4sh executable shell scripts.
+
+@item Autotest
+create Autotest executable test suites.
+
+@item Autoconf
+create Autoconf executable configure scripts.
+@end table
+@end table
+
+@cindex @file{autom4te.cfg}
+As an example, if Autoconf is installed in its default location,
+@file{/usr/local}, running @samp{autom4te -l m4sugar foo.m4} is strictly
+equivalent to running @samp{autom4te --include /usr/local/share/autoconf
+m4sugar/m4sugar.m4f --warning syntax foo.m4}.  Recursive expansion
+applies: running @samp{autom4te -l m4sh foo.m4}, is the same as
+@samp{autom4te --language M4sugar m4sugar/m4sh.m4f foo.m4}, i.e.,
+@samp{autom4te --include /usr/local/share/autoconf m4sugar/m4sugar.m4f
+m4sugar/m4sh.m4f --mode 777 foo.m4}.  The definition of the languages is
+stored in @file{autom4te.cfg}.
 
 
 @node Programming in M4sugar
@@ -11890,18 +12226,10 @@ tool testing, which is probably its main limitation.
 
 Generating testing or validation suites using Autotest is rather easy.
 The whole validation suite is held in a file to be processed through
-@command{autom4te}@footnote{@c
-@c
-@cindex @command{autom4te}
-It is on purpose that we don't document @command{autom4te} which is yet
-another forthcoming Autoconf feature: it is being developed and
-polished.  It will be documented when ready for wide spread use.  Do not
-use it without at least being member of the Autoconf mailing lists.
-@c
-}, itself using GNU @code{m4} under the scene, to produce a stand-alone
-Bourne shell script which then gets distributed.  Neither
-@command{autom4te} nor GNU @code{m4} are not needed anymore at the
-installer end.
+@command{autom4te}, itself using GNU @code{m4} under the scene, to
+produce a stand-alone Bourne shell script which then gets distributed.
+Neither @command{autom4te} nor GNU @code{m4} are not needed anymore at
+the installer end.
 
 @cindex test group
 Each test of the validation suite should be part of some test group.  A

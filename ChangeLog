@@ -1,3 +1,7 @@
+2002-03-08  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Invoking autom4te): New.
+
 2002-03-05  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Specifying Names): Clarification suggested by
