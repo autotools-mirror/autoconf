@@ -802,11 +802,6 @@ ac_cr_alnum=$ac_cr_az$ac_cr_AZ$ac_cr_09
 ac_tr_sh="sed y%*+%pp%;s%[[^_$ac_cr_alnum]]%_%g"
 ac_tr_cpp="sed y%*$ac_cr_az%P$ac_cr_AZ%;s%[[^_$ac_cr_alnum]]%_%g"
 
-# By default always use an empty string as the executable extension.
-ac_exeext=
-# By default assume that objects files use an extension of .o.
-ac_objext=o
-
 m4_divert_pop([DEFAULTS])dnl
 ])# _AC_INIT_DEFAULTS
 
@@ -2789,7 +2784,8 @@ AC_DEFUN([AC_EGREP_HEADER],
 m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
-AS_IF([AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext],
+AS_IF([AC_TRY_EVAL(ac_compile) &&
+         AC_TRY_COMMAND([test -s conftest.$ac_objext])],
       [$2],
       [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
