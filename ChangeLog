@@ -1,7 +1,14 @@
+2003-03-29  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): The
+	documentation to read is Autoconf's.
+	Suggested by Paul Eggert.
+
 2003-03-28  Akim Demaille  <akim@epita.fr>
 
-	* lib/autoconf/headers.m4: Suggest reading the section "Present
-	But Cannot Be Compiled" when the header causes problems.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): Suggest
+	reading the section "Present But Cannot Be Compiled" when the
+	header causes problems.
 
 2003-03-28  Akim Demaille  <akim@epita.fr>
 
