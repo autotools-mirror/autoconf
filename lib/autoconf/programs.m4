@@ -267,12 +267,14 @@ AC_DEFUN([AC_PROG_AWK],
 # AC_PROG_EGREP
 # -------------
 AC_DEFUN([AC_PROG_EGREP],
-[AC_CACHE_CHECK([for egrep], [ac_cv_prog_egrep],
-   [if echo a | (grep -E '(a|b)') >/dev/null 2>&1
-    then ac_cv_prog_egrep='grep -E'
-    else ac_cv_prog_egrep='egrep'
-    fi])
- EGREP=$ac_cv_prog_egrep
+[AC_REQUIRE([AC_PROG_GREP])dnl
+AC_CACHE_CHECK([for egrep], ac_cv_path_EGREP,
+   [if echo a | ($GREP -E '(a|b)') >/dev/null 2>&1
+   then ac_cv_path_EGREP="$GREP -E"
+   else
+     _AC_PROG_GREP(EGREP, egrep)
+   fi])
+ EGREP="$ac_cv_path_EGREP"
  AC_SUBST([EGREP])
 ])# AC_PROG_EGREP
 
@@ -280,14 +282,122 @@ AC_DEFUN([AC_PROG_EGREP],
 # AC_PROG_FGREP
 # -------------
 AC_DEFUN([AC_PROG_FGREP],
-[AC_CACHE_CHECK([for fgrep], [ac_cv_prog_fgrep],
-   [if echo 'ab*c' | (grep -F 'ab*c') >/dev/null 2>&1
-    then ac_cv_prog_fgrep='grep -F'
-    else ac_cv_prog_fgrep='fgrep'
-    fi])
- FGREP=$ac_cv_prog_fgrep
+[AC_REQUIRE([AC_PROG_GREP])dnl
+AC_CACHE_CHECK([for fgrep], ac_cv_path_FGREP,
+   [if echo 'ab*c' | ($GREP -F 'ab*c') >/dev/null 2>&1
+   then ac_cv_path_FGREP="$GREP -F"
+   else
+     _AC_PROG_GREP(FGREP, fgrep)
+   fi])
+ FGREP="$ac_cv_path_FGREP"
  AC_SUBST([FGREP])
 ])# AC_PROG_FGREP
+
+
+# AC_PROG_GREP
+# ------------
+# Check for a fully functional grep program that handles
+# the longest lines possible.  Prefer GNU grep if found.
+AC_DEFUN([AC_PROG_GREP],
+[AC_CACHE_CHECK([for grep that handles long lines], oc_cv_path_GREP,
+   [_$0(GREP, [grep ggrep])])
+ GREP="$ac_cv_path_GREP"
+ AC_SUBST([GREP])
+])
+m4_define([_AC_PROG_GREP],
+[_AC_PATH_PROG_FEATURE_CHECK([$1], [$2],
+	[_AC_FEATURE_CHECK_LENGTH([ac_path_$1], [ac_cv_path_$1],
+		["$ac_path_$1" '$1$'], [$1])])
+])
+
+
+# _AC_PATH_PROG_FEATURE_CHECK(VARIABLE, PROGNAME-LIST, FEATURE-TEST, [PATH])
+# --------------------------------------------------------------------------
+# FEATURE-TEST is called repeatedly with $ac_path_VARIABLE set to the
+# path to a program named in PROGNAME-LIST.  FEATURE-TEST must set
+# $ac_cv_path_VARIABLE to the path of an acceptable program, or else
+# _AC_PATH_PROG_FEATURE_CHECK will report that no acceptable program
+# was found, and abort.  If a suitable $ac_path_VARIABLE is found,
+# `break 2' will accept it without any further checks.
+m4_define([_AC_PATH_PROG_FEATURE_CHECK],
+[# Extract the first word of "$2" to use in msg output
+if test -z "$$1"; then
+set dummy $2; ac_prog_name=$[2]
+AC_CACHE_VAL([ac_cv_path_$1],
+[AS_TMPDIR([$1])
+# Loop through the user's path and test for each of PROGNAME-LIST
+_AS_PATH_WALK([$4],
+[for ac_prog in $2; do
+  for ac_exec_ext in '' $ac_executable_extensions; do
+    ac_path_$1="$as_dir/$ac_prog$ac_exec_ext"
+    test -f "$ac_path_$1" || continue
+    $3
+  done
+done])
+rm -rf "$tmp"
+])
+$1="$ac_cv_path_$1"
+if test -z "$$1"; then
+  AC_MSG_ERROR([no acceptable $ac_prog_name could be found in dnl
+m4_default([$4], [\$PATH])])
+fi
+AC_SUBST([$1])
+fi
+])
+
+
+# _AC_FEATURE_CHECK_LENGTH(PROGPATH, CACHE-VAR, CHECK-CMD, [MATCH-STRING])
+# ------------------------------------------------------------------------
+# For use as the FEATURE-TEST argument to _AC_PATH_PROG_FEATURE_TEST.
+# On each iteration run CHECK-CMD on an input file, storing the value
+# of PROGPATH in CACHE-VAR if the CHECK-CMD succeeds.  The input file
+# is always one line, starting with only 10 characters, and doubling
+# in length at each iteration until approx 10000 characters or the
+# feature check succeeds.  The feature check is called at each
+# iteration by appending (optionally, MATCH-STRING and) a newline
+# to the file, and using the result as input to CHECK-CMD.
+m4_define([_AC_FEATURE_CHECK_LENGTH],
+[if AS_EXECUTABLE_P(["$$1"]); then
+  # Check for GNU $1 and select it if it is found.
+  _AC_PATH_PROG_FLAVOR_GNU([$$1],
+    [$2="$$1"
+    break 2
+  ])
+
+  ac_count=0
+  echo $ECHO_N "0123456789$ECHO_C" >"$tmp/conftest.in"
+  while :
+  do
+    cat "$tmp/conftest.in" "$tmp/conftest.in" >"$tmp/conftest.tmp"
+    mv "$tmp/conftest.tmp" "$tmp/conftest.in"
+    cp "$tmp/conftest.in" "$tmp/conftest.nl"
+    echo '$4' >> "$tmp/conftest.nl"
+    $3 < "$tmp/conftest.nl" >"$tmp/conftest.out" || break
+   diff "$tmp/conftest.out" "$tmp/conftest.nl" >/dev/null 2>&1 || break
+    ac_count=`expr $ac_count + 1`
+    if test $ac_count -gt ${ac_max-0}; then
+      # Best one so far, save it but keep looking for a better one
+      $2="$$1"
+      ac_max=$ac_count
+    fi
+    # 10*(2^10) chars as input seems more than enough
+    test $ac_count -gt 10 && break
+  done
+fi
+])
+
+
+# _AC_PATH_PROG_FLAVOR_GNU(PROGRAM-PATH, IF-SUCCESS, [IF-FAILURE])
+# ----------------------------------------------------------------
+m4_define([_AC_PATH_PROG_FLAVOR_GNU],
+[# Check for GNU $1
+if "$1" --version 2>&1 < /dev/null | grep 'GNU' >/dev/null; then
+  $2
+m4_ifval([$3],
+[else
+  $3
+])fi
+])# _AC_PATH_PROG_FLAVOR_GNU
 
 
 # AC_PROG_INSTALL
@@ -506,56 +616,16 @@ Remove this warning when you adjust the code.])])
 # Check for a fully functional sed program that truncates
 # as few characters as possible.  Prefer GNU sed if found.
 AC_DEFUN([AC_PROG_SED],
-[AC_MSG_CHECKING([for a sed that does not truncate output])
-if test -z "$SED"; then
-AC_CACHE_VAL(ac_cv_path_sed,
-[AS_TMPDIR([sed])
-ac_max=0
-# Loop through the user's path and test for sed and gsed.
-# Add /usr/xpg4/bin/sed as it is typically found on Solaris
-# along with a /bin/sed that truncates output.
-_AS_PATH_WALK([$PATH:/usr/xpg4/bin],
-[ac_fini=false
-for ac_prog in sed gsed; do
-  for ac_exec_ext in '' $ac_executable_extensions; do
-    ac_sed="$as_dir/$ac_prog$ac_exec_ext"
-    if test -f "$ac_sed" && AS_EXECUTABLE_P(["$ac_sed"]); then
-      # Check for GNU sed and select it if it is found.
-      if "$ac_sed" --version 2>&1 < /dev/null | grep 'GNU' >/dev/null; then
-        ac_cv_path_sed="$ac_sed"
-	ac_fini=:
-        break
-      fi
-
-      ac_count=0
-      echo $ECHO_N "0123456789$ECHO_C" >conftest.in
-      while :
-      do
-        cat conftest.in conftest.in >conftest.tmp
-        mv conftest.tmp conftest.in
-        cp conftest.in conftest.nl
-        echo '' >> conftest.nl
-        "$ac_sed" -e 's/a$//' < conftest.nl >conftest.out || break
-        diff conftest.out conftest.nl >/dev/null 2>&1 || break
-        ac_count=`expr $ac_count + 1`
-        if test $ac_count -gt $ac_max; then
-          ac_max=$ac_count
-          ac_cv_path_sed="$ac_sed"
-        fi
-        # 10*(2^10) chars as input seems more than enough
-        test $ac_count -gt 10 && break
-      done
-    fi
-  done
-  $ac_fini && break
-done])
-rm -rf "$tmp"
-])
-fi
-SED="$ac_cv_path_sed"
-AC_SUBST([SED])
-AC_MSG_RESULT([$SED])
-])
+[AC_CACHE_CHECK([for a sed that does not truncate output], ac_cv_path_SED,
+    [_AC_PATH_PROG_FEATURE_CHECK(SED, [sed gsed],
+	[_AC_FEATURE_CHECK_LENGTH([ac_path_SED], [ac_cv_path_SED],
+		["$ac_path_SED" -e 's/a$//'])],
+	dnl Add /usr/xpg4/bin/sed as it is typically found on Solaris
+	dnl along with a /bin/sed that truncates output.
+	[$PATH:/usr/xpg4/bin])])
+ SED="$ac_cv_path_SED"
+ AC_SUBST([SED])
+])# AC_PROG_SED
 
 
 # AC_PROG_YACC

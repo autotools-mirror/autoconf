@@ -1,3 +1,21 @@
+2004-01-27  Gary V. Vaugan  <gary@gnu.org>
+	    Albert Chin-A-Young <china@thewrittenword.com>
+
+	* lib/autoconf/programs.m4 (AC_PROG_GREP): New macro to test for a
+	grep or ggrep program in PATH that accepts as long lines as
+	possible.
+	* lib/autoconf/programs.m4 (_AC_PROG_GREP): Factor out the core of
+	AC_PROG_GREP.
+	(AC_PROG_EGREP, AC_PROG_FGREP): Use it to find best available
+	egrep and fgrep respectively if $GREP -E/-F don't work.
+	(_AC_PATH_PROG_FEATURE_CHECK): Factor out the common core of
+	_AC_PROG_GREP, and AC_PROG_SED.
+	(_AC_FEATURE_CHECK_LENGTH): New helper macro for finding the
+	longest input length accepted by a command.
+	(AC_PROG_SED): Use it.
+	* doc/autoconf.texi (Particular Programs): Document the changes.
+	* NEWS: Updated.
+
 2004-01-27  Paul Eggert  <eggert@twinsun.com>
 
 	* bin/autoconf.as ($version): Update copyright from 2003 to 2004.

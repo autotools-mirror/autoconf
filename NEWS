@@ -1,5 +1,14 @@
 * Major changes in Autoconf 2.59a
 
+** AC_PROG_GREP
+  New macro that tests for a grep program that accepts as a long a line
+  as possible.
+
+** AC_PROG_EGREP, AC_PROG_FGREP
+  These macros now require AC_PROG_GREP, and try EGREP="$GREP -E" and
+  FGREP="$GREP -F" respectively if possible, or else run a path search for
+  a program that accepts as long a line as possible.
+
 ** AC_PROG_SED
   New macro that tests for a sed program that truncates as few characters
   as possible.

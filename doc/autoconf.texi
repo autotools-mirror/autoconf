@@ -3235,18 +3235,32 @@ It tries @code{gawk} first because that is reported to be the
 best implementation.
 @end defmac
 
+@defmac AC_PROG_GREP
+@acindex{PROG_GREP}
+@ovindex GREP
+On AIX the default @code{grep} silently truncates long lines on the
+input before matching.  This macro looks for @sc{gnu} Grep or
+else the best available @code{grep} or @code{ggrep} in the user's
+@code{$PATH}, which accepts the longest input lines possible.  Set the
+output variable @code{GREP} to whatever is chosen.
+@end defmac
+
 @defmac AC_PROG_EGREP
 @acindex{PROG_EGREP}
 @ovindex EGREP
-Check for @code{grep -E} and @code{egrep}, in that order, and set
-output variable @code{EGREP} to the first one that is found.
+Check whether @code{$GREP -E} works, or else search the user's
+@code{$PATH} for @code{egrep}, and @code{gegrep}, in that order, and set
+output variable @code{EGREP} to the one which accepts the longest input
+lines.
 @end defmac
 
 @defmac AC_PROG_FGREP
 @acindex{PROG_FGREP}
 @ovindex FGREP
-Check for @code{grep -F} and @code{fgrep}, in that order, and set
-output variable @code{FGREP} to the first one that is found.
+Check whether @code{$GREP -F} works, or else search the user's
+@code{$PATH} for @code{fgrep}, and @code{gfgrep}, in that order, and set
+output variable @code{FGREP} to the one which accepts the longest input
+lines.
 @end defmac
 
 @defmac AC_PROG_INSTALL
@@ -3369,7 +3383,7 @@ is found, and otherwise to @samp{:} (do nothing).
 @acindex {PROG_SED}
 @ovindex SED
 Set output variable @code{SED} to a @code{sed} on @samp{PATH} that
-truncates as few characters as possible.  If @sc{GNU} Sed is found,
+truncates as few characters as possible.  If @sc{gnu} Sed is found,
 use that instead.
 @end defmac
 
