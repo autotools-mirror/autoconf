@@ -47,7 +47,6 @@ dnl
 dnl m4 diversions:
 define(AC_DIVERSION_NORMAL, 0)dnl	normal output
 define(AC_DIVERSION_SED, 1)dnl		sed substitutions for config.status
-define(AC_DIVERSION_VAR, 2)dnl		variable assignments for config.status
 define(AC_DIVERSION_HELP, 3)dnl		--enable/--with help strings
 define(AC_DIVERSION_ARG, 4)dnl		--enable/--with actions
 divert(AC_DIVERSION_NORMAL)dnl
@@ -918,8 +917,6 @@ AC_DEFUN(AC_SUBST,
 [define([AC_SUBST_$1], )dnl
 divert(AC_DIVERSION_SED)dnl
 s%@$1@%[$]$1%g
-divert(AC_DIVERSION_VAR)dnl
-$1='[$]$1'
 divert(AC_DIVERSION_NORMAL)dnl
 ])])dnl
 dnl
@@ -939,8 +936,6 @@ AC_DEFUN(AC_INSERT_FILE,
 divert(AC_DIVERSION_SED)dnl
 /@$1@/r [$]$1
 s%@$1@%%g
-divert(AC_DIVERSION_VAR)dnl
-$1='$2'
 divert(AC_DIVERSION_NORMAL)dnl
 ])])dnl
 dnl
@@ -971,7 +966,7 @@ AC_DEFUN(AC_MSG_WARN,
 dnl
 dnl AC_MSG_ERROR(ERROR-DESCRIPTION)
 AC_DEFUN(AC_MSG_ERROR,
-[echo "configure: $1" 1>&2; exit 1])dnl
+[{ echo "configure: $1" 1>&2; exit 1; }])dnl
 dnl
 dnl
 dnl ### Selecting which language to use for testing
@@ -1315,10 +1310,11 @@ dnl AC_CHECK_FUNCS(FUNCTION... [, ACTION])
 AC_DEFUN(AC_CHECK_FUNCS,
 [for ac_func in $1
 do
-changequote(, )dnl
-ac_tr_func=HAVE_`echo $ac_func | tr '[a-z]' '[A-Z]'`
+AC_CHECK_FUNC(${ac_func},
+[changequote(, )dnl
+  ac_tr_func=HAVE_`echo $ac_func | tr '[a-z]' '[A-Z]'`
 changequote([, ])dnl
-AC_CHECK_FUNC(${ac_func}, AC_DEFINE(${ac_tr_func}) $2)dnl
+  AC_DEFINE(${ac_tr_func}) $2])dnl
 done
 ])dnl
 dnl
@@ -1327,10 +1323,11 @@ AC_DEFUN(AC_CHECK_HEADERS,
 [AC_REQUIRE_CPP()dnl Make sure the cpp check happens outside the loop.
 for ac_hdr in $1
 do
-changequote(, )dnl
-ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
+AC_CHECK_HEADER(${ac_hdr},
+[changequote(, )dnl
+  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
 changequote([, ])dnl
-AC_CHECK_HEADER(${ac_hdr}, AC_DEFINE(${ac_tr_hdr}) $2)dnl
+  AC_DEFINE(${ac_tr_hdr}) $2])dnl
 done
 ])dnl
 dnl
@@ -1408,8 +1405,6 @@ rm -f conftest.def
 # Substitute for predefined variables.
 changequote([, ])dnl
 AC_SUBST(LIBS)dnl
-AC_SUBST(srcdir)dnl
-AC_SUBST(top_srcdir)dnl
 AC_SUBST(prefix)dnl
 AC_SUBST(exec_prefix)dnl
 dnl Substituting for DEFS would confuse sed if it contains multiple lines.
@@ -1418,12 +1413,7 @@ ifdef([AC_LIST_HEADERS],
 s%@DEFS@%-DHAVE_CONFIG_H%],
 [divert(AC_DIVERSION_SED)dnl
 s%@DEFS@%$DEFS%
-divert(AC_DIVERSION_VAR)dnl
-DEFS='$DEFS'
 ])dnl
-divert(AC_DIVERSION_VAR)dnl
-ac_vpsub='$ac_vpsub'
-extrasub='$extrasub'
 divert(AC_DIVERSION_NORMAL)dnl
 
 # Without the "./", some shells look in PATH for config.status.
@@ -1467,13 +1457,10 @@ done
 ifdef([AC_LIST_HEADERS],
 [trap 'rm -fr $1 AC_LIST_HEADERS conftest*; exit 1' 1 2 15],
 [trap 'rm -f $1; exit 1' 1 2 15])
-dnl Insert the variable assignments.
-undivert(AC_DIVERSION_VAR)dnl
-EOF
-cat >> ${CONFIG_STATUS} <<\EOF
 
 ac_given_srcdir=$srcdir
-ac_given_INSTALL=$INSTALL
+EOF
+cat >> ${CONFIG_STATUS} <<\EOF
 
 CONFIG_FILES=${CONFIG_FILES-"$1"}
 for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
@@ -1510,18 +1497,19 @@ changequote([, ])dnl
     top_srcdir="$ac_dots$ac_given_srcdir" ;;
   esac
 
-  case "$ac_given_INSTALL" in
+ifdef([AC_PROVIDE_AC_PROG_INSTALL],
+[  case "$ac_given_INSTALL" in
 changequote(, )dnl
   [/$]*) INSTALL="$ac_given_INSTALL" ;;
 changequote([, ])dnl
   *)  INSTALL="$ac_dots$ac_given_INSTALL" ;;
   esac
-
+])dnl
   echo creating "$ac_file"
   rm -f "$ac_file"
   comment_str="Generated automatically from `echo $ac_file_in|sed 's|.*/||'` by configure."
   case "$ac_file" in
-    *.c | *.h | *.C | *.cc | *.m )
+    *.c | *.h | *.C | *.cc | *.cpp | *.hpp | *.m )
     ac_comsub="1i\\
 /* $comment_str */" ;;
     * ) # Add the comment on the second line of scripts, first line of others.
@@ -1541,11 +1529,19 @@ a\\
   esac
   sed -e "
 $ac_comsub
+EOF
+cat >> ${CONFIG_STATUS} <<EOF
 $ac_vpsub
 dnl Shell code in configure.in might set extrasub.
 $extrasub
-dnl Insert the sed substitutions.
-undivert(AC_DIVERSION_SED)dnl
+dnl Insert the sed substitutions of variables.
+undivert(AC_DIVERSION_SED)
+s%@srcdir@%\$srcdir%g
+s%@top_srcdir@%\$top_srcdir%g
+ifdef([AC_PROVIDE_AC_PROG_INSTALL], [s%@INSTALL@%\$INSTALL%g
+])dnl
+EOF
+cat >> ${CONFIG_STATUS} <<\EOF
 " $ac_given_srcdir/$ac_file_in > $ac_file
 fi; done
 ifdef([AC_LIST_HEADERS], [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl

@@ -90,4 +90,4 @@ s,/\*[^/]*,,g
 ' $arg | sort -u | sed 's,$, '$arg','
 done | awk '
 { files[$1] = files[$1] " " $2 }
-END { for (n in files) print n files[n] }' | sort
+END { for (sym in files) print sym files[sym] }' | sort

@@ -271,29 +271,21 @@ AC_SUBST(LEX_OUTPUT_ROOT)dnl
 dnl
 AC_DEFUN(AC_PROG_INSTALL,
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-# Make sure to not get the incompatible SysV /etc/install and
-# /usr/sbin/install, which might be in PATH before a BSD-like install,
-# or the SunOS /usr/etc/install directory, or the AIX /bin/install,
-# or the AFS install, which mishandles nonexistent args, or
-# /usr/ucb/install on SVR4, which tries to use the nonexistent group
-# "staff", or /sbin/install on IRIX which has incompatible command-line
-# syntax.  Sigh.
-#
-#     On most BSDish systems install is in /usr/bin, not /usr/ucb
-#     anyway.
-# This turns out not to be true, so the mere pathname is not an indication
-# of whether the program works.  What we really need is a set of tests for
-# the install program to see if it actually works in all the required ways.
-#
-# Avoid using ./install, which might have been erroneously created
-# by make from ./install.sh.
+# Make sure to not get an incompatible install:
+# SysV /etc/install, /usr/sbin/install
+# SunOS /usr/etc/install
+# IRIX /sbin/install
+# AIX /bin/install
+# AFS /usr/afsws/bin/install, which mishandles nonexistent args
+# SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+# ./install, which can be erroneously created by make from ./install.sh.
 AC_MSG_CHECKING(for a BSD compatible install)
 if test -z "${INSTALL}"; then
 AC_CACHE_VAL(ac_cv_path_install,
 [  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
   for ac_dir in $PATH; do
     case "$ac_dir" in
-    ''|.|/etc|/sbin|/usr/sbin|/usr/etc|/usr/afsws/bin|/usr/ucb) ;;
+    ''|.|/etc|/usr/sbin|/usr/etc|/sbin|/usr/afsws/bin|/usr/ucb) ;;
     *)
       # OSF1 and SCO ODT 3.0 have their own names for install.
       for ac_prog in ginstall installbsd scoinst install; do
@@ -317,8 +309,9 @@ AC_CACHE_VAL(ac_cv_path_install,
   test -z "$ac_cv_path_install" && ac_cv_path_install="$ac_install_sh"])dnl
   INSTALL="$ac_cv_path_install"
 fi
+dnl We do this instead of AC_SUBST, to get relative paths right.
+ac_given_INSTALL=$INSTALL
 AC_MSG_RESULT($INSTALL)
-AC_SUBST(INSTALL)dnl
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
 # It thinks the first close brace ends the variable substitution.

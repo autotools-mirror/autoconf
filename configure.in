@@ -5,23 +5,23 @@ dnl We use a path for GNU m4 so even if users have another m4 first in
 dnl their path, the installer can configure with a path that has GNU m4
 dnl first and get that path embedded in the installed autoconf and
 dnl autoheader scripts.
-AC_PROGRAMS_PATH(M4, gnum4 gm4 m4, m4)
+AC_PATH_PROGS(M4, gnum4 gm4 m4, m4)
 
 dnl We use a path for perl so the #! line in autoscan will work.
-AC_PROGRAM_PATH(PERL, perl, no-perl)
+AC_PATH_PROG(PERL, perl, no-perl)
 AC_SUBST(PERL)dnl
 AC_SUBST(PROGS)dnl
 if test "$PERL" != no-perl; then
   PROGS=autoscan
 else
-  AC_WARN(autoscan will not be built since perl is not found)
+  AC_MSG_WARN(autoscan will not be built since perl is not found)
 fi
 
-AC_PROGRAM_CHECK(BASH, bash, no-bash)
+AC_CHECK_PROG(BASH, bash, no-bash)
 if test "$BASH" != no-bash; then
   PROGS="$PROGS shindent"
 else
-  AC_WARN(shindent will not be built since bash is not found)
+  AC_MSG_WARN(shindent will not be built since bash is not found)
 fi
 
 AC_PROG_INSTALL
