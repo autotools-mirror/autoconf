@@ -182,8 +182,11 @@ local (%verbatim, %symbol);
 debug "$me: \`do'ing $tmp/traces.pl:\n" . `sed 's/^/| /' $tmp/traces.pl`;
 do "$tmp/traces.pl";
 warn "couldn't parse $tmp/traces.pl: $@" if $@;
-error "error: AC_CONFIG_HEADERS not found in $ARGV[0]"
-  unless $config_h;
+unless ($config_h)
+  {
+    error "error: AC_CONFIG_HEADERS not found in $ARGV[0]";
+    exit 1;
+  }
 
 # We template only the first CONFIG_HEADER.
 $config_h =~ s/ .*//;
