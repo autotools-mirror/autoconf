@@ -1268,6 +1268,7 @@ else
   fi
   # lieder@skyler.mavd.honeywell.com says without -lsocket,
   # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
+  # But -lsocket is broken on IRIX, according to kb@cs.umb.edu.
   if test "`uname 2>/dev/null`" != IRIX; then
     AC_HAVE_LIBRARY(socket,
       [x_extra_libs="$x_extra_libs -lsocket"
