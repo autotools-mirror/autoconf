@@ -50,7 +50,7 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
-# This files handles about all the preparation aspects for
+# This file handles about all the preparation aspects for
 # `config.status': registering the configuration files, the headers,
 # the links, and the commands `config.status' will run.  There is a
 # little mixture though of things actually handled by `configure',
@@ -133,9 +133,9 @@
 # - `ac_top_srcdir' is `build -> top-src'
 m4_define([_AC_SRCPATHS],
 [if test $1 != .; then
-  ac_dir_suffix=/`echo $1 | sed 's,^\./,,'`
+  ac_dir_suffix=/`echo $1 | sed 's,^\.[[\\/]],,'`
   # A "../" for each directory in $ac_dir_suffix.
-  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[[^/]]*,../,g'`
+  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[[^\\/]]*,../,g'`
 else
   ac_dir_suffix= ac_top_builddir=
 fi
