@@ -190,7 +190,7 @@
 
 	* doc/autoconf.texi (Limitations of Builtins): Some information
 	about `trap'.
-	Document the Free BSD bug observed by Pavel.
+	Document the FreeBSD bug observed by Pavel.
 
 2000-11-10  Pavel Roskin  <proski@gnu.org>
 
