@@ -201,6 +201,7 @@ account when designing your program.
 @menu
 * Compatibility::		Compatibility with Other Implementations
 * Using Extensions::		Using Non-standard Features
+* ANSI C::                      Using ANSI C features
 * Source Language::		Using Languages Other Than C
 * Portability::			Portability As It Applies to GNU
 @end menu
@@ -208,16 +209,16 @@ account when designing your program.
 @node Compatibility
 @section Compatibility with Other Implementations
 
-@c ADR: What are the exceptions?
-With certain exceptions, utility programs and libraries for GNU should
-be upward compatible with those in Berkeley Unix, and upward compatible
-with @sc{ANSI} C if @sc{ANSI} C specifies their behavior, and upward
-compatible with @sc{POSIX} if @sc{POSIX} specifies their behavior.
+With occasional exceptions, utility programs and libraries for GNU
+should be upward compatible with those in Berkeley Unix, and upward
+compatible with @sc{ansi} C if @sc{ansi} C specifies their behavior, and
+upward compatible with @sc{POSIX} if @sc{POSIX} specifies their
+behavior.
 
 When these standards conflict, it is useful to offer compatibility
 modes for each of them.
 
-@sc{ANSI} C and @sc{POSIX} prohibit many kinds of extensions.  Feel
+@sc{ansi} C and @sc{POSIX} prohibit many kinds of extensions.  Feel
 free to make the extensions anyway, and include a @samp{--ansi},
 @samp{--posix}, or
 @samp{--compatible} option to turn them off.  However, if the extension
@@ -272,10 +273,51 @@ order to bootstrap the GNU compilation facilities.  If these require
 the GNU compiler, then no one can compile them without having them
 installed already.  That would be no good.
 
-Since most computer systems do not yet implement @sc{ANSI} C, using the
-@sc{ANSI} C features is effectively using a GNU extension, so the
-same considerations apply.  (Except for @sc{ANSI} features that we
-discourage, such as trigraphs---don't ever use them.)
+@node ANSI C
+@section @sc{ansi} C and pre-@sc{ansi} C
+
+Do not ever use the ``trigraph'' feature of @sc{ansi} C.
+
+@sc{ansi} C is widespread enough now that it is ok to write new programs
+that use @sc{ansi} C features (and therefore will not work in
+non-@sc{ansi} compilers).  And if a program is already written in
+@sc{ansi} C, there's no need to convert it to support non-@sc{ansi}
+compilers.
+
+However, it is easy to support non-@sc{ansi} compilers in most programs,
+so you might still consider doing so when you write a program.  Instead
+of writing function definitions in @sc{ansi} prototype form,
+
+@example
+int
+foo (int x, int y)
+@dots{}
+@end example
+
+@noindent
+write the definition in pre-@sc{ansi} style like this,
+
+@example
+int
+foo (x, y)
+     int x, y;
+@dots{}
+@end example
+
+@noindent
+and use a separate declaration to specify the argument prototype:
+
+@example
+int foo (int, int);
+@end example
+
+You need such a declaration anyway, in a header file, to get the benefit
+of @sc{ansi} C prototypes in all the files where the function is called.
+And once you have it, you lose nothing by writing the function
+definition in the pre-@sc{ansi} style.
+
+If you don't know non-@sc{ansi} C, there's no need to learn it; just
+write in @sc{ansi} C.
 
 @node Source Language
 @section Using Languages Other Than C
@@ -1714,7 +1756,7 @@ concat (s1, s2)        /* Name starts in column zero here */
 @end example
 
 @noindent
-or, if you want to use @sc{ANSI} C, format the definition like this:
+or, if you want to use @sc{ansi} C, format the definition like this:
 
 @example
 static char *
@@ -1724,7 +1766,7 @@ concat (char *s1, char *s2)
 @}
 @end example
 
-In @sc{ANSI} C, if the arguments don't fit nicely on one line,
+In @sc{ansi} C, if the arguments don't fit nicely on one line,
 split it like this:
 
 @example
@@ -2046,14 +2088,12 @@ this.  @code{doschk} also tests for potential name conflicts if the
 files were loaded onto an MS-DOS file system---something you may or may
 not care about.
 
-
-
 @node System Functions
 @section Calling System Functions
 
-C implementations differ substantially.  ANSI C reduces but does not
+C implementations differ substantially.  @sc{ansi} C reduces but does not
 eliminate the incompatibilities; meanwhile, many users wish to compile
-GNU software with pre-ANSI compilers.  This chapter gives
+GNU software with pre-@sc{ansi} compilers.  This chapter gives
 recommendations for how to use the more or less standard C library
 functions to avoid unnecessary loss of portability.
 
@@ -2077,7 +2117,7 @@ contrast, actual declarations have frequently caused actual conflicts.
 
 @item
 If you must declare a system function, don't specify the argument types.
-Use an old-style declaration, not an ANSI prototype.  The more you
+Use an old-style declaration, not an @sc{ansi} prototype.  The more you
 specify about the function, the more likely a conflict.
 
 @item
@@ -2109,7 +2149,7 @@ figure out which file to include, or don't include either file.
 If you don't include either strings file, you can't get declarations for
 the string functions from the header file in the usual way.
 
-That causes less of a problem than you might think.  The newer ANSI
+That causes less of a problem than you might think.  The newer @sc{ansi}
 string functions are off-limits anyway because many systems still don't
 support them.  The string functions you can use are these:
 
@@ -2139,11 +2179,12 @@ names, but neither pair works on all systems.
 
 You should pick a single pair of names and use it throughout your
 program.  (Nowadays, it is better to choose @code{strchr} and
-@code{strrchr}.)  Declare both of those names as functions returning
-@code{char *}.  On systems which don't support those names, define them
-as macros in terms of the other pair.  For example, here is what to put
-at the beginning of your file (or in a header) if you want to use the
-names @code{strchr} and @code{strrchr} throughout:
+@code{strrchr}, since those are the standard @sc{ansi} names.)  Declare
+both of those names as functions returning @code{char *}.  On systems
+which don't support those names, define them as macros in terms of the
+other pair.  For example, here is what to put at the beginning of your
+file (or in a header) if you want to use the names @code{strchr} and
+@code{strrchr} throughout:
 
 @example
 #ifndef HAVE_STRCHR
