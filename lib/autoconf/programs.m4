@@ -457,12 +457,12 @@ fi
 AN_MAKEVAR([MAKE], [AC_PROG_MAKE_SET])
 AN_PROGRAM([make], [AC_PROG_MAKE_SET])
 AC_DEFUN([AC_PROG_MAKE_SET],
-[AC_MSG_CHECKING([whether ${MAKE-make} sets \${MAKE}])
+[AC_MSG_CHECKING([whether ${MAKE-make} sets \$(MAKE)])
 set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,./+-,__p_,'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftest.make <<\_ACEOF
 all:
-	@echo 'ac_maketemp="${MAKE}"'
+	@echo 'ac_maketemp="$(MAKE)"'
 _ACEOF
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
 eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`

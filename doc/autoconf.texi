@@ -1688,9 +1688,10 @@ following macro allows you to use it even with those versions.
 @defmac AC_PROG_MAKE_SET
 @acindex PROG_MAKE_SET
 @ovindex SET_MAKE
-If @command{make} predefines the variable @code{MAKE}, define output
-variable @code{SET_MAKE} to be empty.  Otherwise, define @code{SET_MAKE}
-to contain @samp{MAKE=make}.  Calls @code{AC_SUBST} for @code{SET_MAKE}.
+If @command{make} predefines the Make variable @code{MAKE}, define
+output variable @code{SET_MAKE} to be empty.  Otherwise, define
+@code{SET_MAKE} to contain @samp{MAKE=make}.  Calls @code{AC_SUBST} for
+@code{SET_MAKE}.
 @end defmac
 
 If you use this macro, place a line like this in each @file{Makefile.in}

@@ -1,5 +1,12 @@
 2002-10-31  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): Use and display
+	`$(MAKE)' instead of '${MAKE}' to emphasize that we refer to the
+	Make variable, not a shell variable.
+	Suggested by Bruno Haible.
+
+2002-10-31  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (load_configuration): Reject #args out of any
 	language.
 
