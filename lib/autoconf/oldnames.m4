@@ -3,13 +3,13 @@ dnl This file is part of Autoconf.
 dnl
 dnl General macros.
 dnl
-AC_DEFUN(AC_PREFIX, [indir([AC_PREFIX_PROGRAM], $@)])dnl
-AC_DEFUN(AC_WARN, [indir([AC_MSG_WARN], $@)])dnl
-AC_DEFUN(AC_ERROR, [indir([AC_MSG_ERROR], $@)])dnl
+define(AC_WARN, [indir([AC_MSG_WARN], $@)])dnl
+define(AC_ERROR, [indir([AC_MSG_ERROR], $@)])dnl
 AC_DEFUN(AC_PROGRAM_CHECK, [indir([AC_CHECK_PROG], $@)])dnl
 AC_DEFUN(AC_PROGRAM_PATH, [indir([AC_PATH_PROG], $@)])dnl
 AC_DEFUN(AC_PROGRAMS_CHECK, [indir([AC_CHECK_PROGS], $@)])dnl
 AC_DEFUN(AC_PROGRAMS_PATH, [indir([AC_PATH_PROGS], $@)])dnl
+AC_DEFUN(AC_PREFIX, [indir([AC_PREFIX_PROGRAM], $@)])dnl
 AC_DEFUN(AC_HEADER_EGREP, [indir([AC_EGREP_HEADER], $@)])dnl
 AC_DEFUN(AC_PROGRAM_EGREP, [indir([AC_EGREP_CPP], $@)])dnl
 AC_DEFUN(AC_TEST_PROGRAM, [indir([AC_TRY_RUN], $@)])dnl
