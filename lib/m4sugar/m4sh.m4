@@ -884,7 +884,7 @@ rm -f conf$$.file
 # ----------------
 m4_defun([_AS_TEST_PREPARE],
 [as_executable_p="test -f"
-])# _AS_BROKEN_TEST_PREPARE
+])# _AS_TEST_PREPARE
 
 
 # AS_SET_CATFILE(VAR, DIR-NAME, FILE-NAME)
