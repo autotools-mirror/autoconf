@@ -1203,34 +1203,22 @@ fi
 if test "$ac_init_help" = "recursive"; then
   # If there are subdirs, report their specific --help.
   ac_popdir=`pwd`
-  for ac_subdir in : $ac_subdirs_all; do test "x$ac_subdir" = x: && continue
-    cd $ac_subdir
-    # A "../" for each directory in /$ac_subdir.
-    ac_dots=`echo $ac_subdir |
-             sed 's,^\./,,;s,[[^/]]$,&/,;s,[[^/]]*/,../,g'`
-
-    case $srcdir in
-    .) # No --srcdir option.  We are building in place.
-      ac_sub_srcdir=$srcdir ;;
-    [[\\/]]* | ?:[[\\/]]* ) # Absolute path.
-      ac_sub_srcdir=$srcdir/$ac_subdir ;;
-    *) # Relative path.
-      ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
-    esac
-
+  for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
+    cd $ac_dir
+    _AC_SRCPATHS(["$ac_dir"])
     # Check for guested configure; otherwise get Cygnus style configure.
-    if test -f $ac_sub_srcdir/configure.gnu; then
+    if test -f $ac_srcdir/configure.gnu; then
       echo
-      $SHELL $ac_sub_srcdir/configure.gnu  --help=recursive
-    elif test -f $ac_sub_srcdir/configure; then
+      $SHELL $ac_srcdir/configure.gnu  --help=recursive
+    elif test -f $ac_srcdir/configure; then
       echo
-      $SHELL $ac_sub_srcdir/configure  --help=recursive
-    elif test -f $ac_sub_srcdir/configure.ac ||
-           test -f $ac_sub_srcdir/configure.in; then
+      $SHELL $ac_srcdir/configure  --help=recursive
+    elif test -f $ac_srcdir/configure.ac ||
+           test -f $ac_srcdir/configure.in; then
       echo
       $ac_configure --help
     else
-      AC_MSG_WARN([no configuration information is in $ac_subdir])
+      AC_MSG_WARN([no configuration information is in $ac_dir])
     fi
     cd $ac_popdir
   done

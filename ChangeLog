@@ -1,5 +1,14 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/status.m4 (_AC_SRCPATHS): New.
+	(_AC_OUTPUT_LINKS, _AC_OUTPUT_FILES, _AC_OUTPUT_SUBDIRS): Use it.
+	Standardize the var names (ac_sub_srcdir -> ac_srcdir, ac_subdir
+	-> ac_dir).
+	(_AC_OUTPUT_HEADERS): AS_DIRNAME always return a dir name.
+	* lib/autoconf/general.m4 (_AC_INIT_HELP): Ditto.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/autoconf.m4 (AC_CONFIG_COMMANDS)
 	(AC_CONFIG_COMMANDS_POST, AC_CONFIG_COMMANDS_PRE, AC_CONFIG_FILES)
 	(AC_CONFIG_HEADER, AC_CONFIG_HEADERS, AC_CONFIG_IF_MEMBER)

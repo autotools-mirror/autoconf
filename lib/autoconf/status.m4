@@ -116,6 +116,48 @@
 # AC_CONFIG_COMMANDS_POST.
 
 
+## ------------------ ##
+## Auxiliary macros.  ##
+## ------------------ ##
+
+# _AC_SRCPATHS(BUILD-DIR-NAME)
+# ----------------------------
+# Inputs:
+#   - BUILD-DIR-NAME is `top-build -> build' and `top-src -> src'
+#   - `$srcdir' is `top-build -> top-src'
+#
+# Ouputs:
+# - `ac_dots' is `build -> top_build'.  If not empty, has a trailing slash.
+# - `ac_srcdir' is `build -> src'.
+# - `ac_top_srcdir' is `build -> top-srcdir'
+m4_define([_AC_SRCPATHS],
+[if test $1 != .; then
+  ac_dir_suffix=/`echo $1 | sed 's,^\./,,'`
+  # A "../" for each directory in $ac_dir_suffix.
+  ac_dots=`echo "$ac_dir_suffix" | sed 's,/[[^/]]*,../,g'`
+else
+  ac_dir_suffix= ac_dots=
+fi
+
+case $srcdir in
+  .)  # No --srcdir option.  We are building in place.
+    ac_srcdir=.
+    if test -z "$ac_dots"; then
+       ac_top_srcdir=.
+    else
+       ac_top_srcdir=`echo $ac_dots | sed 's,/$,,'`
+    fi ;;
+  [[\\/]]* | ?:[[\\/]]* )  # Absolute path.
+    ac_srcdir=$srcdir$ac_dir_suffix;
+    ac_top_srcdir=$srcdir ;;
+  *) # Relative path.
+    ac_srcdir=$ac_dots$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_dots$srcdir ;;
+esac
+])# _AC_SRCPATHS
+
+
+
 ## ---------------------------------- ##
 ## Ensuring the unicity of the tags.  ##
 ## ---------------------------------- ##
@@ -581,9 +623,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF
       AC_MSG_NOTICE([$ac_file is unchanged])
     else
       ac_dir=`AS_DIRNAME(["$ac_file"])`
-      if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-        AS_MKDIR_P(["$ac_dir"])
-      fi
+      AS_MKDIR_P(["$ac_dir"])
       rm -f $ac_file
       mv $tmp/config.h $ac_file
     fi
@@ -702,14 +742,8 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
 
   # Make relative symlinks.
   ac_dest_dir=`AS_DIRNAME(["$ac_dest"])`
-  if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
-    AS_MKDIR_P(["$ac_dest_dir"])
-    ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's,^\./,,'`"
-    # A "../" for each directory in $ac_dest_dir_suffix.
-    ac_dots=`echo $ac_dest_dir_suffix|sed 's,/[[^/]]*,../,g'`
-  else
-    ac_dest_dir_suffix= ac_dots=
-  fi
+  AS_MKDIR_P(["$ac_dest_dir"])
+  _AC_SRCPATHS(["$ac_dest_dir"])
 
   case $srcdir in
   [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$srcdir/$ac_source ;;
@@ -767,6 +801,8 @@ ac_config_files="$ac_config_files m4_normalize([$1])"
 # Initialize the lists.
 m4_define([AC_LIST_FILES])
 m4_define([AC_LIST_FILES_COMMANDS])
+
+
 
 # _AC_OUTPUT_FILES
 # ----------------
@@ -856,29 +892,8 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
 
   # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
   ac_dir=`AS_DIRNAME(["$ac_file"])`
-  if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
-    AS_MKDIR_P(["$ac_dir"])
-    ac_dir_suffix="/`echo $ac_dir|sed 's,^\./,,'`"
-    # A "../" for each directory in $ac_dir_suffix.
-    ac_dots=`echo "$ac_dir_suffix" | sed 's,/[[^/]]*,../,g'`
-  else
-    ac_dir_suffix= ac_dots=
-  fi
-
-  case $srcdir in
-  .)  ac_srcdir=.
-      if test -z "$ac_dots"; then
-         ac_top_srcdir=.
-      else
-         ac_top_srcdir=`echo $ac_dots | sed 's,/$,,'`
-      fi ;;
-  [[\\/]]* | ?:[[\\/]]* )
-      ac_srcdir=$srcdir$ac_dir_suffix;
-      ac_top_srcdir=$srcdir ;;
-  *) # Relative path.
-    ac_srcdir=$ac_dots$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_dots$srcdir ;;
-  esac
+  AS_MKDIR_P(["$ac_dir"])
+  _AC_SRCPATHS(["$ac_dir"])
 
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [  case $INSTALL in
@@ -1042,40 +1057,28 @@ if test "$no_recursion" != yes; then
   # in subdir configurations.
   ac_sub_configure_args="--prefix=$prefix $ac_sub_configure_args"
 
-  for ac_subdir in : $subdirs; do test "x$ac_subdir" = x: && continue
+  for ac_dir in : $subdirs; do test "x$ac_dir" = x: && continue
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
-    test -d $srcdir/$ac_subdir || continue
+    test -d $srcdir/$ac_dir || continue
 
-    AC_MSG_NOTICE([configuring in $ac_subdir])
-    AS_MKDIR_P(["./$ac_subdir"])
+    AC_MSG_NOTICE([configuring in $ac_dir])
+    AS_MKDIR_P(["$ac_dir"])
 
     ac_popdir=`pwd`
-    cd $ac_subdir
-
-    # A "../" for each directory in /$ac_subdir.
-    ac_dots=`echo $ac_subdir |
-             sed 's,^\./,,;s,[[^/]]$,&/,;s,[[^/]]*/,../,g'`
-
-    case $srcdir in
-    .) # No --srcdir option.  We are building in place.
-      ac_sub_srcdir=$srcdir ;;
-    [[\\/]]* | ?:[[\\/]]* ) # Absolute path.
-      ac_sub_srcdir=$srcdir/$ac_subdir ;;
-    *) # Relative path.
-      ac_sub_srcdir=$ac_dots$srcdir/$ac_subdir ;;
-    esac
+    cd $ac_dir
+    _AC_SRCPATHS(["$ac_dir"])
 
     # Check for guested configure; otherwise get Cygnus style configure.
-    if test -f $ac_sub_srcdir/configure.gnu; then
-      ac_sub_configure="$SHELL '$ac_sub_srcdir/configure.gnu'"
-    elif test -f $ac_sub_srcdir/configure; then
-      ac_sub_configure="$SHELL '$ac_sub_srcdir/configure'"
-    elif test -f $ac_sub_srcdir/configure.in; then
+    if test -f $ac_srcdir/configure.gnu; then
+      ac_sub_configure="$SHELL '$ac_srcdir/configure.gnu'"
+    elif test -f $ac_srcdir/configure; then
+      ac_sub_configure="$SHELL '$ac_srcdir/configure'"
+    elif test -f $ac_srcdir/configure.in; then
       ac_sub_configure=$ac_configure
     else
-      AC_MSG_WARN([no configuration information is in $ac_subdir])
+      AC_MSG_WARN([no configuration information is in $ac_dir])
       ac_sub_configure=
     fi
 
@@ -1088,11 +1091,11 @@ if test "$no_recursion" != yes; then
         ac_sub_cache_file=$ac_dots$cache_file ;;
       esac
 
-      AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir])
+      AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir])
       # The eval makes quoting arguments work.
       eval $ac_sub_configure $ac_sub_configure_args \
-           --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir ||
-        AC_MSG_ERROR([$ac_sub_configure failed for $ac_subdir])
+           --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir ||
+        AC_MSG_ERROR([$ac_sub_configure failed for $ac_dir])
     fi
 
     cd $ac_popdir
