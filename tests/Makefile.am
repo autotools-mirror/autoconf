@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf testsuite.
-## Copyright 2000, 2001 Free Software Foundation, Inc.
+## Copyright 2000, 2001, 2002 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -21,12 +21,32 @@
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
 EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
-             atlocal.in
+             atlocal.in package.m4
 
 # Running the uninstalled scripts.
 WRAPPERS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
 DISTCLEANFILES = atconfig atlocal package.m4 $(TESTSUITE) $(WRAPPERS)
+
+## ------------ ##
+## package.m4.  ##
+## ------------ ##
+
+$(srcdir)/package.m4: $(top_srcdir)/configure.ac
+	{					\
+	  echo '# Signature of the current package.'; \
+	  echo 'm4_define([AT_PACKAGE_NAME],      [@PACKAGE_NAME@])'; \
+	  echo 'm4_define([AT_PACKAGE_TARNAME],   [@PACKAGE_TARNAME@])'; \
+	  echo 'm4_define([AT_PACKAGE_VERSION],   [@PACKAGE_VERSION@])'; \
+	  echo 'm4_define([AT_PACKAGE_STRING],    [@PACKAGE_STRING@])'; \
+	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
+	} >$(srcdir)/package.m4
+
+
+
+## ------------ ##
+## Test suite.  ##
+## ------------ ##
 
 TESTSUITE_GENERATED_AT = \
 	aclang.at acc.at acfortran.at \
@@ -54,7 +74,7 @@ $(TESTSUITE): $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
            $(top_srcdir)/lib/autotest/autotest.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \
-	   package.m4 \
+	   $(srcdir)/package.m4 \
 	   atspecific.m4 \
            $(TESTSUITE_AT)
 	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp

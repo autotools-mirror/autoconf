@@ -11573,11 +11573,11 @@ subfile-n.at ->'                       >-- autom4te* -->testsuite
 Files used in configuring a software package:
 
 @example
-                                     .-> package.m4
+                                     .--> atconfig
                                     /
-[atlocal.in] -->  config.status* --<---> atconfig
+[atlocal.in] -->  config.status* --<
                                     \
-                                     `-> [atlocal]
+                                     `--> [atlocal]
 @end example
 
 @noindent
