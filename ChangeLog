@@ -1,5 +1,14 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh: Clarify the difference between the location of
+	`aclocal.m4' and that of the location Autoconf extensions.
+	(-M, --m4dir): New option.
+	(aclocal_flags): Do not use $localdir, but $m4dir.
+	(localdir_opt): Remove, since $autoconf, $autoheader already
+	include `-l $localdir'.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (task install): We no longer use AC_INCLUDE.
 
 2000-07-10  Akim Demaille  <akim@epita.fr>

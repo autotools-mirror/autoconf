@@ -30,13 +30,20 @@ older than their predecessors.  If you install a new version of
 Autoconf, running \`autoreconf' remakes all of the files by giving it
 the \`--force' option.
 
-  -h, --help            print this help, then exit
-  -V, --version         print version number, then exit
-  -v, --verbose         verbosely report processing
-  -d, --debug           don't remove temporary files
-  -m, --macrodir=DIR    directory storing macro files
-  -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
-  -f, --force           consider every files are obsolete
+Operation modes:
+  -h, --help      print this help, then exit
+  -V, --version   print version number, then exit
+  -v, --verbose   verbosely report processing
+  -d, --debug     don't remove temporary files
+  -f, --force     consider every files are obsolete
+
+Library directories:
+  -m, --macrodir=ACDIR  Autoconf's macro files location (rarely needed)
+  -l, --localdir=DIR    location of \`aclocal.m4' and \`acconfig.h'
+  -M, --m4dir=M4DIR     this package's Autoconf extensions
+
+Unless specified, heuristics try to compute \`M4DIR' from the \`Makefile.am',
+or defaults to \`m4' if it exists.
 
 The following options are passed to \`automake':
      --cygnus          assume program is part of Cygnus-style tree
@@ -83,6 +90,8 @@ debug=false
 dir=`echo "$0" | sed -e 's/[^/]*$//'`
 force=false
 localdir=.
+# m4dir -- local Autoconf extensions.  Typically `m4'.
+m4dir=
 verbose=:
 
 # Looking for autoconf.
@@ -109,6 +118,7 @@ done
 
 # Parse command line.
 while test $# -gt 0; do
+  optarg=`expr "$1" : '-[^=]*=\(.*\)'`
   case "$1" in
     --version | --vers* | -V )
        echo "$version" ; exit 0 ;;
@@ -122,7 +132,7 @@ while test $# -gt 0; do
        debug=:; shift ;;
 
     --localdir=* | --l*=* )
-       localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
+       localdir=$optarg
        shift ;;
     --localdir | --l* | -l )
        test $# = 1 && eval "$exit_missing_arg"
@@ -130,13 +140,22 @@ while test $# -gt 0; do
        localdir=$1
        shift ;;
 
-    --macrodir=* | --m*=* )
-       AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
+    --macrodir=* )
+       AC_MACRODIR=$optarg
        shift ;;
-    --macrodir | --m* | -m )
+    --macrodir | -m )
        test $# = 1 && eval "$exit_missing_arg"
        shift
        AC_MACRODIR=$1
+       shift ;;
+
+    --m4dir=* )
+       m4dir=$optarg
+       shift ;;
+    --m4dir | -M )
+       test $# = 1 && eval "$exit_missing_arg"
+       shift
+       m4dir=$1
        shift ;;
 
      --force | -f )
@@ -239,10 +258,8 @@ while read dir; do
   esac
 
   case "$localdir" in
-  /*)  localdir_opt="--localdir=$localdir"
-       aclocal_m4=$localdir/aclocal.m4 ;;
-  *)   localdir_opt="--localdir=$dots$localdir"
-       aclocal_m4=$dots$localdir/aclocal.m4 ;;
+  /*)  aclocal_m4=$localdir/aclocal.m4 ;;
+  *)   aclocal_m4=$dots$localdir/aclocal.m4 ;;
   esac
 
 
@@ -262,9 +279,17 @@ while read dir; do
        $update $aclocal_m4 $aclocal_dir/acinclude.m4; } then
      # If there are flags for aclocal in Makefile.am, use them.
      aclocal_flags=`sed -f $tmp/alflags.sed Makefile.am 2>/dev/null`
-     if test x"$aclocal_dir" != x.; then
-       aclocal_flags="$aclocal_flags -I $aclocal_dir"
-     fi
+
+     # If m4dir no specified and these flags do not specify the
+     # location of the local Autoconf extensions, default to `m4'.
+     case $m4dir,$aclocal_flags in
+       ,*"-I "* ) ;; # Not overriden and specified.
+       ,*) # Not specified at all.
+           test -d "m4" && aclocal_flags="$aclocal_flags -I m4";;
+       * ) # Specified by the user.
+           aclocal_flags="$aclocal_flags -I $m4dir";;
+     esac
+
      $verbose running $aclocal $aclocal_flags --output=$aclocal_m4 in $dir
      $aclocal $aclocal_flags --output=$aclocal_m4
   fi
@@ -293,8 +318,8 @@ while read dir; do
 
   if $force ||
      $update configure configure.in $aclocal_m4; then
-    $verbose running $autoconf $localdir_opt in $dir
-    $autoconf $localdir_opt
+    $verbose running $autoconf in $dir
+    $autoconf
   fi
 
 
@@ -303,7 +328,7 @@ while read dir; do
   # -------------------- #
 
   # templates -- arguments of AC_CONFIG_HEADERS.
-  templates=`$autoconf $localdir_opt -t 'AC_CONFIG_HEADERS:$1'`
+  templates=`$autoconf -t 'AC_CONFIG_HEADERS:$1'`
   if test -n "$templates"; then
     tcount=`set -- $templates; echo $#`
     template=`set -- $templates; echo $1 | sed '
@@ -316,8 +341,7 @@ while read dir; do
     template_dir=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`
     stamp_num=`test "$tcount" -gt 1 && echo "$tcount"`
     stamp=$template_dir/stamp-h$stamp_num.in
-    acconfig_h=`echo $localdir_opt | sed -e 's/--localdir=//' \
-                                         -e '/./ s%$%/%'`acconfig.h
+    acconfig_h=$localdir/acconfig.h
     uses_autoheader=false;
     grep autoheader "$template" >/dev/null 2>&1 &&
        uses_autoheader=:
@@ -325,8 +349,8 @@ while read dir; do
        { $force ||
          $update $template configure.in $aclocal_m4 $acconfig_h ||
          $update $stamp    configure.in $aclocal_m4 $acconfig_h; } then
-      $verbose running $autoheader $localdir_opt in $dir
-      $autoheader $localdir_opt &&
+      $verbose running $autoheader in $dir
+      $autoheader &&
       $verbose "touching $stamp" &&
       touch $stamp
     fi
