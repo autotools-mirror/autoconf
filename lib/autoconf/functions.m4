@@ -1066,6 +1066,28 @@ fi
 AU_ALIAS([AC_MMAP], [AC_FUNC_MMAP])
 
 
+# AC_FUNC_OBSTACK
+# ---------------
+# Ensure obstack support.  Yeah, this is not exactly a `FUNC' check.
+AC_DEFUN([AC_FUNC_OBSTACK],
+[AC_CACHE_CHECK([for obstacks], ac_cv_func_obstack,
+ [AC_TRY_LINK([@%:@include "obstack.h"],
+              [struct obstack *mem;obstack_free(mem,(char *) 0)],
+              ac_cv_func_obstack=yes,
+              ac_cv_func_obstack=no)])
+if test $ac_cv_func_obstack = yes; then
+  AC_DEFINE(HAVE_OBSTACK, 1, [Define if libc includes obstacks.])
+else
+  AC_LIBOBJ(obstack)
+fi
+])# AC_FUNC_OBSTACK
+
+
+# AU::AM_FUNC_OBSTACK
+# -------------------
+AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
+
+
 # AC_FUNC_SELECT_ARGTYPES
 # -----------------------
 # Determine the correct type to be passed to each of the `select'

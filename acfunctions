@@ -24,6 +24,7 @@ memset		AC_HEADER_STDC
 minor		AC_HEADER_MAJOR
 mktime		AC_FUNC_MKTIME
 mmap		AC_FUNC_MMAP
+obstack_init	AC_FUNC_OBSTACK
 rindex		AC_HEADER_STDC
 setpgrp		AC_FUNC_SETPGRP
 setvbuf		AC_FUNC_SETVBUF_REVERSED

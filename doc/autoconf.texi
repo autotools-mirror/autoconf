@@ -3076,6 +3076,14 @@ If the @code{mmap} function exists and works correctly, define
 memory.
 @end defmac
 
+@defmac AC_FUNC_OBSTACK
+@maindex FUNC_OBSTACK
+@cvindex HAVE_OBSTACK
+@cindex obstack
+If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
+@code{AC_LIBOBJ} replacement for @samp{obstack}.
+@end defmac
+
 @defmac AC_FUNC_SELECT_ARGTYPES
 @maindex FUNC_SELECT_ARGTYPES
 @cvindex SELECT_TYPE_ARG1

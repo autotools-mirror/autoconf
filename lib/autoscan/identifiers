@@ -10,6 +10,7 @@ sys_siglist	AC_DECL_SYS_SIGLIST
 # Types.
 gid_t		AC_TYPE_UID_T
 mode_t		AC_TYPE_MODE_T
+obstack		AC_FUNC_OBSTACK
 off_t		AC_TYPE_OFF_T
 pid_t		AC_TYPE_PID_T
 size_t		AC_TYPE_SIZE_T
