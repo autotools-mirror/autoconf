@@ -17,9 +17,32 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this file; if not, write to the Free Software
 dnl Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 dnl
-dnl As a special exception, using parts of this file in a
-dnl configure script does not cause the resulting script to
-dnl be covered by the GNU General Public License.
+dnl As a special exception, the Free Software Foundation gives unlimited
+dnl permission to copy, distribute and modify the configure scripts that
+dnl are the output of Autoconf.  You need not follow the terms of the GNU
+dnl General Public License when using or distributing such scripts, even
+dnl though portions of the text of Autoconf appear in them.  The GNU
+dnl General Public License (GPL) does govern all other use of the material
+dnl that constitutes the Autoconf program.
+dnl
+dnl Certain portions of the Autoconf source text are designed to be copied
+dnl (in certain cases, depending on the input) into the output of
+dnl Autoconf.  We call these the "data" portions.  The rest of the Autoconf
+dnl source text consists of comments plus executable code that decides which
+dnl of the data portions to output in any given case.  We call these
+dnl comments and executable code the "non-data" portions.  Autoconf never
+dnl copies any of the non-data portions into its output.
+dnl
+dnl This special exception to the GPL applies to versions of Autoconf
+dnl released by the Free Software Foundation.  When you make and
+dnl distribute a modified version of Autoconf, you may extend this special
+dnl exception to the GPL to apply to your modified version well, *unless*
+dnl your modified version has the potential to copy into its output some
+dnl of text that was the non-data portion of the version that you started
+dnl with.  (In other words, unless your change moves or copies text from
+dnl the non-data portions to the data portions.)  If your modification has
+dnl such potential, you must delete any notice of this special exception
+dnl to the GPL from your modified version.
 dnl
 dnl Written by David MacKenzie, with help from
 dnl Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
@@ -28,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 1.121)
+define(AC_ACVERSION, 1.122)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -122,8 +145,8 @@ AC_DEFUN(AC_INIT_NOTICE,
 # Generated automatically using autoconf version] AC_ACVERSION [
 # Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 #
-# This configure script is free software; there are no restrictions on
-# how you can redistribute it and/or modify it.
+# This configure script is free software; the Free Software Foundation
+# gives unlimited permission to copy, distribute and modify it.
 
 ac_help=])
 
@@ -700,9 +723,8 @@ AC_BEFORE([$0], [AC_ARG_PROGRAM])
 # 2. Host defaults to nonopt.
 # 3. If nonopt is not specified, then host defaults to the current host,
 #    as determined by config.guess.
-# 4. Target defaults to nonopt.
-# 5. If nonopt is not specified, then target defaults to host.
-# 6. build defaults to empty (but implicitly to host).
+# 4. Target and build default to nonopt.
+# 5. If nonopt is not specified, then target and build default to host.
 
 # The aliases save the names the user supplied, while $host etc.
 # will get canonicalized.
@@ -788,14 +810,17 @@ AC_MSG_CHECKING(build system type)
 
 build_alias=$build
 case "$build_alias" in
-NONE) build= build_alias= ;;
-*)
+NONE)
+  case $nonopt in
+  NONE) build_alias=$host_alias ;;
+  *) build_alias=$nonopt ;;
+  esac ;;
+esac
+
 build=`$ac_config_sub $build_alias`
 build_cpu=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\1/'`
 build_vendor=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\2/'`
 build_os=`echo $build | sed 's/^\(.*\)-\(.*\)-\(.*\)$/\3/'`
-;;
-esac
 AC_MSG_RESULT($build)
 AC_SUBST(build)dnl
 AC_SUBST(build_alias)dnl
