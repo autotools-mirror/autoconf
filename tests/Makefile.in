@@ -119,6 +119,7 @@ EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 # Running the uninstalled scripts.
 check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
+MAINTAINERCLEANFILES = Makefile.in  $(srcdir)/wrapper.in $(TESTSUITE_GENERATED_AT)
 SUFFIXES = .m4 .m4f
 
 # Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
@@ -203,7 +204,6 @@ TESTSUITE = ./testsuite
 # Don't use AUTOM4TE since `make alpha' makes it unavailable although
 # we are allowed to use it (since we ship it).
 AUTOTEST = ./autom4te --language=autotest
-MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE_GENERATED_AT)
 
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
 # here since below we explicitly `cd' to $srcdir.  As for the dependencies,
@@ -445,7 +445,7 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
 	} >$(srcdir)/package.m4
 
-$(srcdir)/wrapper.in: $(srcdir)/wrapper.as
+$(srcdir)/wrapper.in: $(srcdir)/wrapper.as $(m4sh_m4f_dependencies)
 	./autom4te --language=M4sh $(srcdir)/wrapper.as -o $@
 $(TESTSUITE): $(srcdir)/package.m4 \
 	      local.at \
