@@ -64,6 +64,7 @@ Operation modes:
   -f, --force              consider all files obsolete
   -i, --install            copy missing auxiliary files
   -s, --symlink            with -i, install symbolic links instead of copies
+  -m, --make               when applicable, re-run ./configure && make
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
 
 Warning categories include:
@@ -109,18 +110,17 @@ my $autopoint  = $ENV{'AUTOPOINT'}  || 'autopoint';
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
-my @prepend_include;
-my @include;
-my $status = 0;
 # symlink -- when --install, use symlinks instead.
 my $symlink = 0;
 
-# The directory where autoreconf was run.
-my $cwd = cwd;
+my @prepend_include;
+my @include;
 
 # List of warnings.
 my @warning;
 
+# Rerun `./configure && make'?
+my $make = 0;
 
 ## ---------- ##
 ## Routines.  ##
@@ -138,7 +138,8 @@ sub parse_args ()
 	  'I|include=s'          => \@include,
 	  'B|prepend-include=s'	 => \@prepend_include,
 	  'i|install'            => \$install,
-	  's|symlink'            => \$symlink);
+	  's|symlink'            => \$symlink,
+	  'm|make'               => \$make);
 
   # Split the warnings as a list of elements instead of a list of
   # lists.
@@ -210,21 +211,12 @@ sub parse_args ()
 }
 
 
-# &autoreconf ($DIRECTORY)
-# ------------------------
-# Reconf the $DIRECTORY.
-sub autoreconf ($)
+# &autoreconf_current_directory
+# -----------------------------
+sub autoreconf_current_directory ()
 {
-  my ($directory) = @_;
-
-  # The format for this message is not free: taken from Emacs, itself
-  # using GNU Make's format.
-  verbose "Entering directory `$directory'";
-  chdir $directory
-    or error "cannot chdir to $directory: $!";
-
   my $configure_ac = find_configure_ac;
-  error "cannot find `configure.ac' in `$directory'"
+  error "cannot find `configure.ac'"
     unless $configure_ac;
 
   # ---------------------- #
@@ -362,6 +354,7 @@ sub autoreconf ($)
   my $uses_libtool;
   my $uses_autoheader;
   my @subdir;
+  verbose "$configure_ac: tracing";
   my $traces = new Autom4te::XFile
     ("$autoconf"
      . join (' --trace=', '',
@@ -389,7 +382,7 @@ sub autoreconf ($)
       if (-d)
 	{
 	  verbose "$configure_ac: subdirectory $_ to autoreconf";
-	  push @ARGV, catfile ($directory, $_);
+	  autoreconf ($_);
 	}
       else
 	{
@@ -536,6 +529,50 @@ sub autoreconf ($)
       xsystem ($automake);
     }
 
+
+  # -------------- #
+  # Running make.  #
+  # -------------- #
+
+  if ($make)
+    {
+      if (!-f "config.status")
+	{
+	  verbose "no config.status: cannot re-make";
+	}
+      else
+	{
+	  xsystem ("./config.status --recheck");
+	  xsystem ("./config.status");
+	  if (!-f "Makefile")
+	    {
+	      verbose "no Makefile: cannot re-make";
+	    }
+	  else
+	    {
+	      xsystem ("make");
+	    }
+	}
+    }
+}
+
+
+# &autoreconf ($DIRECTORY)
+# ------------------------
+# Reconf the $DIRECTORY.
+sub autoreconf ($)
+{
+  my ($directory) = @_;
+  my $cwd = cwd;
+
+  # The format for this message is not free: taken from Emacs, itself
+  # using GNU Make's format.
+  verbose "Entering directory `$directory'";
+  chdir $directory
+    or error "cannot chdir to $directory: $!";
+
+  autoreconf_current_directory;
+
   # The format is not free: taken from Emacs, itself using GNU Make's
   # format.
   verbose "Leaving directory `$directory'";
@@ -556,8 +593,10 @@ parse_args;
 
 # Autoreconf all the given configure.ac.  A while loop, not a for,
 # since the list can change at runtime because of AC_CONFIG_SUBDIRS.
-autoreconf (shift @ARGV)
-  while (@ARGV);
+for my $directory (@ARGV)
+  {
+    autoreconf ($directory);
+  }
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:

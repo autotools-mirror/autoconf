@@ -1385,6 +1385,12 @@ This option triggers calls to @samp{automake --add-missing},
 When used with @option{--install}, install symbolic links to the missing
 auxiliary files instead of copying them.
 
+@item --make
+@itemx -m
+When the directories were configured, update the configuration by
+running @samp{./config.status --recheck && ./config.status}, and then
+run @samp{make}.
+
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Append @var{dir} to the include path.  Multiple invocations accumulate.

@@ -30,6 +30,10 @@ Release tips:
 
 - Supports -W/--warnings.
 
+- -m/--make
+  Once the GNU Build System reinstalled, run `./config.status
+  --recheck && ./config.status && make' if possible.
+
 ** autom4te
 
 - Supports --cache, and --no-cache.
