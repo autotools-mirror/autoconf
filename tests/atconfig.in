@@ -1,6 +1,6 @@
 # @configure_input@					-*- shell-script -*-
 # Configurable variable values for building test suites.
-# Copyright (C) 2000 Free Software Foundation, Inc.
+# Copyright 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -52,27 +52,10 @@ at_package=@PACKAGE@
 at_version=@VERSION@
 at_n=@ECHO_N@
 at_c='@ECHO_C@'
-test -f atlocal && . ./atlocal
-
-# LC_MESSAGES is always shadowed by LC_ALL.  Here are the only cases:
-# - GNU:       LANGUAGE -> LC_ALL -> LC_MESSAGES -> LANG
-# - POSIX:     LC_ALL -> LC_MESSAGES -> LANG
-# - XPG4:      LC_ALL -> LANG
-# - SysV/XPG2: LANG
-export LANGUAGE; LANGUAGE=C
-export LANG; LANG=C
-export LC_ALL; LC_ALL=C
 
 srcdir=@srcdir@
 top_srcdir=@top_srcdir@
-# Use absolute file notations, as the test might change directories.
-at_srcdir=`cd @srcdir@ && pwd`
-at_top_srcdir=`cd @top_srcdir@ && pwd`
-if test -n "@AUTOTEST_PATH@"; then
-  export PATH; PATH=`pwd`:`cd @AUTOTEST_PATH@ && pwd`:$PATH
-else
-  export PATH; PATH=`pwd`:$PATH
-fi
+AUTOTEST_PATH=@AUTOTEST_PATH@
 
 # We need GNU m4.
 M4=@M4@

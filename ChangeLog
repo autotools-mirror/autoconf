@@ -1,5 +1,11 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	* tests/atconfig.in: Move code into...
+	* tests/atgeneral.m4 (AT_INIT): here.
+	Use AS_SHELL_SANITIZE.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	Have the test suite list of the test groups and their references.
 
 	* tests/atgeneral.m4 (_m4_divert(SUITE_PRO)): Remove, replaced

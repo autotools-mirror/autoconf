@@ -102,7 +102,22 @@ AT_DEFINE([AT_INIT],
 [AT_DEFINE([AT_ordinal], 0)
 m4_divert_push([DEFAULT])dnl
 #! /bin/sh
+
+AS_SHELL_SANITIZE
+
 . ./atconfig
+# Use absolute file notations, as the test might change directories.
+at_srcdir=`cd "$srcdir" && pwd`
+at_top_srcdir=`cd "$top_srcdir" && pwd`
+
+if test -n "$AUTOTEST_PATH"; then
+  export PATH; PATH=`pwd`:`cd "$AUTOTEST_PATH" && pwd`:$PATH
+else
+  export PATH; PATH=`pwd`:$PATH
+fi
+
+test -f atlocal && . ./atlocal
+
 # -e sets to true
 at_stop_on_error=false;
 # Shall we save and check stdout and stderr?
