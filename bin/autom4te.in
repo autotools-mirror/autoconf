@@ -999,9 +999,9 @@ EOF
   my $in = new Autom4te::XFile ("$m4 $tmp/traces.m4 |");
   my $out = new Autom4te::XFile (">$output");
 
-  # FIXME: Hm... This is dubious: should we really transform the
-  # quadrigraphs in traces?  It might break balanced [ ] etc. in the
-  # output.
+  # This is dubious: should we really transform the quadrigraphs in
+  # traces?  It might break balanced [ ] etc. in the output.  The
+  # consensus seeems to be that traces are more useful this way.
   while ($_ = $in->getline)
     {
       # It makes no sense to try to transform __oline__.
@@ -1009,6 +1009,7 @@ EOF
       s/\@:>\@/]/g;
       s/\@\$\|\@/\$/g;
       s/\@%:\@/#/g;
+      s/\@&t\@//g;
       print $out $_;
     }
 }

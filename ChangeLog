@@ -1,5 +1,10 @@
 2002-10-23  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (handle_traces): Handle @&t@ in traces.
+	Reported by Peter Eisentraut.
+
+2002-10-23  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/headers.m4 (AC_HEADER_STDBOOL): Also look for the
 	type _Bool.
 	Fix a typo.
