@@ -5458,16 +5458,18 @@ else
   check this
   check that
   check something else
+  @dots{}
   on and on forever
+  @dots{}
 fi
 @end group
 @end example
 
 A shell parses the whole @code{if}/@code{fi} construct, creating
 temporary files for each here document in it.  Some shells create links
-for such here-documents on every @code{fork ()}, so that the clean-up
-code they had installed correctly removes them.  It is creating the
-links that the shell can take forever.
+for such here-documents on every @code{fork}, so that the clean-up code
+they had installed correctly removes them.  It is creating the links
+that the shell can take forever.
 
 Moving the tests out of the @code{if}/@code{fi}, or creating multiple
 @code{if}/@code{fi} constructs, would improve the performance
