@@ -5,7 +5,6 @@
 	* man/Makefile.am: Find and update manual pages in $(srcdir).
 
 2004-12-24  Eric Blake  <ebb9@byu.net>
-       and  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Test candidate
 	shells in subshell, to avoid noise from ash.  (trivial change)
