@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate June 27, 2000
+@set lastupdate July 25, 2000
 @c %**end of header
 
 @ifinfo
@@ -16,6 +16,12 @@ END-INFO-DIR-ENTRY
 
 @c @setchapternewpage odd
 @setchapternewpage off
+
+@c Put everything in one index (arbitrarily chosen to be the concept index).
+@syncodeindex fn cp
+@syncodeindex ky cp
+@syncodeindex pg cp
+@syncodeindex vr cp
 
 @c This is used by a cross ref in make-stds.texi
 @set CODESTD  1
@@ -446,8 +452,9 @@ command line interface, and how libraries should behave.
 * User Interfaces::             Standards about interfaces generally
 * Graphical Interfaces::        Standards for graphical interfaces
 * Command-Line Interfaces::     Standards for command line interfaces
-* Option Table::                Table of long options.
+* Option Table::                Table of long options
 * Memory Usage::                When and how to care about memory needs
+* File Usage::                  Which files to use, and where
 @end menu
 
 @node Semantics
@@ -1194,7 +1201,7 @@ Used to ask for brief usage information.
 @samp{-q} in @code{ls}.
 
 @item html
-In @code{makeinfo}, output HTML.
+In @code{makeinfo}, output HTML.  
 
 @item idle
 @samp{-u} in @code{who}.
@@ -1950,6 +1957,22 @@ files that are bigger than will fit in core all at once.
 
 If your program creates complicated data structures, just make them in
 core and give a fatal error if @code{malloc} returns zero.
+
+@node File Usage
+@section File Usage
+
+Programs should be prepared to operate when @file{/usr} and @file{/etc}
+are read-only file systems.  Thus, if the program manages log files,
+lock files, backup files, score files, or any other files which are
+modified for internal purposes, these files should not be stored in
+@file{/usr} or @file{/etc}.
+
+There are two exceptions.  @file{/etc} is used to store system
+configuration information; it is reasonable for a program to modify
+files in @file{/etc} when its job is to update the system configuration.
+Also, if the user explicitly asks to modify one file in a directory, it
+is reasonable for the program to store other files in the same
+directory.
 
 @node Writing C
 @chapter Making The Best Use of C
@@ -2890,10 +2913,10 @@ inconsistencies between different parts of a program, by giving you a
 history of how the conflicting concepts arose and who they came from.
 
 @menu
-* Change Log Concepts::
-* Style of Change Logs::
-* Simple Changes::
-* Conditional Changes::
+* Change Log Concepts::         
+* Style of Change Logs::        
+* Simple Changes::              
+* Conditional Changes::         
 * Indicating the Part Changed::
 @end menu
 
@@ -3223,27 +3246,16 @@ to work with @var{package}.
 @c  Giving an optional @var{parameter} of
 @c @samp{no} should omit @var{package}, if it is used by default.
 
-Possible values of @var{package} include
+Possible values of @var{package} include 
 @samp{gnu-as} (or @samp{gas}), @samp{gnu-ld}, @samp{gnu-libc},
 @samp{gdb},
-@samp{x},
+@samp{x}, 
 and
 @samp{x-toolkit}.
 
 Do not use a @samp{--with} option to specify the file name to use to
 find certain files.  That is outside the scope of what @samp{--with}
 options are for.
-
-@item --nfp
-The target machine has no floating point processor.
-
-@item --gas
-The target machine assembler is GAS, the GNU assembler.
-This is obsolete; users should use @samp{--with-gnu-as} instead.
-
-@item --x
-The target machine has the X Window System installed.
-This is obsolete; users should use @samp{--with-x} instead.
 @end table
 
 All @code{configure} scripts should accept all of these ``detail''
@@ -3259,27 +3271,36 @@ you might think of.  That is deliberate.  We want to limit the possible
 configuration options in GNU software.  We do not want GNU programs to
 have idiosyncratic configuration options.
 
-Packages that perform part of the compilation process may support cross-compilation.
-In such a case, the host and target machines for the program may be
-different.  The @code{configure} script should normally treat the
-specified type of system as both the host and the target, thus producing
-a program which works for the same type of machine that it runs on.
+Packages that perform part of the compilation process may support
+cross-compilation.  In such a case, the host and target machines for the
+program may be different.
 
-The way to build a cross-compiler, cross-assembler, or what have you, is
-to specify the option @samp{--host=@var{hosttype}} when running
-@code{configure}.  This specifies the host system without changing the
-type of target system.  The syntax for @var{hosttype} is the same as
-described above.
+The @code{configure} script should normally treat the specified type of
+system as both the host and the target, thus producing a program which
+works for the same type of machine that it runs on.
+
+To configure a cross-compiler, cross-assembler, or what have you, you
+should specify a target different from the host, using the configure
+option @samp{--target=@var{targettype}}.  The syntax for
+@var{targettype} is the same as for the host type.  So the command would
+look like this:
+
+@example
+./configure @var{hosttype} --target=@var{targettype}
+@end example
+
+Programs for which cross-operation is not meaningful need not accept the
+@samp{--target} option, because configuring an entire operating system for
+cross-operation is not a meaningful operation.
 
 Bootstrapping a cross-compiler requires compiling it on a machine other
 than the host it will run on.  Compilation packages accept a
-configuration option @samp{--build=@var{hosttype}} for specifying the
-configuration on which you will compile them, in case that is different
-from the host.
-
-Programs for which cross-operation is not meaningful need not accept the
-@samp{--host} option, because configuring an entire operating system for
-cross-operation is not a meaningful thing.
+configuration option @samp{--build=@var{buildtype}} for specifying the
+configuration on which you will compile them, but the configure script
+should normally guess the build machine type (using
+@file{config.guess}), so this option is probably not necessary.  The
+host and target types normally default from the build type, so in
+bootstrapping a cross-compiler you must specify them both explicitly.
 
 Some programs have ways of configuring themselves automatically.  If
 your program is set up to do this, your @code{configure} script can simply

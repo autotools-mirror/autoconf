@@ -140,7 +140,7 @@ installation should not use any utilities directly except these:
 
 @c dd find
 @c gunzip gzip md5sum
-@c mkfifo mknod tee uname
+@c mkfifo mknod tee uname 
 
 @example
 cat cmp cp diff echo egrep expr false grep install-info
