@@ -121,8 +121,6 @@ edit = sed \
 # autoconf is written in M4sh.
 AUTOM4SH = $(top_builddir)/tests/autom4te --language M4sh
 
-SUFFIXES = .in
-
 TAGS_DEPENDENCIES = $(EXTRA_DIST)
 
 letters = abcdefghijklmnopqrstuvwxyz
@@ -147,7 +145,6 @@ DIST_COMMON = Makefile.am Makefile.in
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .in
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  bin/Makefile
@@ -346,12 +343,48 @@ uninstall-am: uninstall-binSCRIPTS uninstall-info-am
 
 $(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 	$(AUTOM4SH) $(srcdir)/autoconf.as -o $@
-autoconf autoheader autoreconf autoupdate ifnames autoscan autom4te: Makefile
-.in:
-	rm -f $@ $@.tmp
-	$(edit) $< >$@.tmp
-	chmod +x $@.tmp
-	mv $@.tmp $@
+
+autoconf: autoconf.in Makefile
+	rm -f autoconf autoconf.tmp
+	$(edit) autoconf.in >autoconf.tmp
+	chmod +x autoconf.tmp
+	mv autoconf.tmp autoconf
+
+autoheader: autoheader.in Makefile
+	rm -f autoheader autoheader.tmp
+	$(edit) autoheader.in >autoheader.tmp
+	chmod +x autoheader.tmp
+	mv autoheader.tmp autoheader
+
+autom4te: autom4te.in Makefile
+	rm -f autom4te autom4te.tmp
+	$(edit) autom4te.in >autom4te.tmp
+	chmod +x autom4te.tmp
+	mv autom4te.tmp autom4te
+
+autoreconf: autoreconf.in Makefile
+	rm -f autoreconf autoreconf.tmp
+	$(edit) autoreconf.in >autoreconf.tmp
+	chmod +x autoreconf.tmp
+	mv autoreconf.tmp autoreconf
+
+autoscan: autoscan.in Makefile
+	rm -f autoscan autoscan.tmp
+	$(edit) autoscan.in >autoscan.tmp
+	chmod +x autoscan.tmp
+	mv autoscan.tmp autoscan
+
+autoupdate: autoupdate.in Makefile
+	rm -f autoupdate autoupdate.tmp
+	$(edit) autoupdate.in >autoupdate.tmp
+	chmod +x autoupdate.tmp
+	mv autoupdate.tmp autoupdate
+
+ifnames: ifnames.in Makefile
+	rm -f ifnames ifnames.tmp
+	$(edit) ifnames.in >ifnames.tmp
+	chmod +x ifnames.tmp
+	mv ifnames.tmp ifnames
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -1,3 +1,13 @@
+2002-09-26  Akim Demaille  <akim@epita.fr>
+
+	Single suffix rules and seperated dependencies are not portable.
+
+	* doc/autoconf.texi (Installation Directory Variables): Update.
+	(Limitations of Make): Some about `Single Suffix Rules and
+	Separated Dependencies'.
+	* bin/Makefile.am (autoconf, autoheader, autoreconf, autoupdate)
+	(ifnames, autoscan, autom4te): Un-factor into several rules.
+
 2002-09-25  Paul Eggert  <eggert@twinsun.com>
 
 	* BUGS (Interoperability bugs): New section.  Mention libtool

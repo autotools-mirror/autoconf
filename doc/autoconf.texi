@@ -2245,17 +2245,24 @@ edit = sed \
         -e 's,@@prefix\@@,$(prefix),g'
 @end group
 
-autoconf autoheader: Makefile
 @group
-.in:
-        rm -f $@@ $@@.tmp
-        $(edit) $< >$@@.tmp
-        chmod +x $@@.tmp
-        mv $@@.tmp $@@
+autoconf: Makefile autoconf.in
+        rm -f autoconf autoconf.tmp
+        $(edit) $< >autoconf.tmp
+        chmod +x autoconf.tmp
+        mv autoconf.tmp autoconf
+@end group
+
+@group
+autoheader: Makefile autoheader.in
+        rm -f autoheader autoheader.tmp
+        $(edit) $< >autoheader.tmp
+        chmod +x autoheader.tmp
+        mv autoheader.tmp autoheader
 @end group
 @end example
 
-Five details are noteworthy:
+Some details are noteworthy:
 
 @table @samp
 @item @@datadir\@@
@@ -2276,16 +2283,22 @@ Since @code{edit} uses values that depend on the configuration specific
 values (@code{prefix} etc.) and not only on @code{VERSION} and so forth,
 the output depends on @file{Makefile}, not @file{configure.ac}.
 
-@item Separated dependency
-Don't write
+@item Separated dependencies and Single Suffix Rules
+You can't use them!  The above snippet cannot be (portably) rewritten
+as:
 
 @example
-.in: Makefile
-        @dots{}
+autoconf autoheader: Makefile
+@group
+.in:
+        rm -f $@@ $@@.tmp
+        $(edit) $< >$@@.tmp
+        chmod +x $@@.tmp
+        mv $@@.tmp $@@
+@end group
 @end example
 
-@noindent
-unless you really mean to create the file @file{.in} from @file{Makefile}.
+@xref{Limitations of Make}, for details.
 @end table
 
 
@@ -2395,15 +2408,16 @@ configuration-related dependencies.
 @cindex Configuration Header
 @cindex @file{config.h}
 
-When a package contains more than a few tests that define C preprocessor symbols, the command
-lines to pass @option{-D} options to the compiler can get quite long.
-This causes two problems.  One is that the @command{make} output is hard to
-visually scan for errors.  More seriously, the command lines can exceed
-the length limits of some operating systems.  As an alternative to
-passing @option{-D} options to the compiler, @command{configure} scripts can
-create a C header file containing @samp{#define} directives.  The
-@code{AC_CONFIG_HEADERS} macro selects this kind of output.  It should
-be called right after @code{AC_INIT}.
+When a package contains more than a few tests that define C preprocessor
+symbols, the command lines to pass @option{-D} options to the compiler
+can get quite long.  This causes two problems.  One is that the
+@command{make} output is hard to visually scan for errors.  More
+seriously, the command lines can exceed the length limits of some
+operating systems.  As an alternative to passing @option{-D} options to
+the compiler, @command{configure} scripts can create a C header file
+containing @samp{#define} directives.  The @code{AC_CONFIG_HEADERS}
+macro selects this kind of output.  It should be called right after
+@code{AC_INIT}.
 
 The package should @samp{#include} the configuration header file before
 any other header files, to prevent inconsistencies in declarations (for
@@ -10957,8 +10971,71 @@ cp ../bar.x bar.y
 % @kbd{pmake}       # BSD make
 cp ../bar.x bar.y
 @end example
-
 @end table
+@c end item about VPATH
+
+@item Single Suffix Rules and Separated Dependencies
+@cindex Single Suffix Inference Rule
+@cindex Rule, Single Suffix Inference
+A @dfn{Single Suffix Rule} is basically a usual suffix (inference) rule
+(@samp{.from.to:}), but which @emph{destination} suffix is empty
+(@samp{.from:}).
+
+@cindex Separated Dependencies
+@dfn{Separated dependencies} simply refers to listing the prerequisite
+of a target, without defining a rule.  Usually one can list on the one
+hand side, the rules, and on the other hand side, the dependencies.
+
+Solaris @command{make} does not support separated dependencies for
+targets defined by single suffix rules:
+
+@example
+$ @kbd{cat Makefile}
+.SUFFIXES: .in
+foo: foo.in
+.in:
+        cp $< $@
+$ @kbd{touch foo.in}
+$ @kbd{make}
+$ @kbd{ls}
+Makefile  foo.in
+@end example
+
+@noindent
+while @acronym{GNU} Make does:
+
+@example
+$ @kbd{gmake}
+cp foo.in foo
+$ @kbd{ls}
+Makefile  foo       foo.in
+@end example
+
+Note it works without the @samp{foo: foo.in} dependency.
+
+@example
+$ @kbd{cat Makefile}
+.SUFFIXES: .in
+.in:
+        cp $< $@
+$ @kbd{make foo}
+cp foo.in foo
+@end example
+
+@noindent
+and it works with double suffix inference rules:
+
+@example
+$ @kbd{cat Makefile}
+foo.out: foo.in
+.SUFFIXES: .in .out
+.in.out:
+        cp $< $@
+$ @kbd{make}
+cp foo.in foo.out
+@end example
+
+As a result, in such a case, you have to write target rules.
 @end table
 
 

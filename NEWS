@@ -1,5 +1,10 @@
 * Major changes in Autoconf 2.54a                       -*- outline -*-
 
+
+** Bug Fixes
+
+- Portability of the Autoconf package to Solaris.
+
 * Major changes in Autoconf 2.54
 
   Released September 13th, 2002.

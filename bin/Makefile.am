@@ -54,11 +54,47 @@ $(srcdir)/autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 
 ## All the files below depend on Makefile so that they are rebuilt
 ## when the prefix etc. changes.
-autoconf autoheader autoreconf autoupdate ifnames autoscan autom4te: Makefile
-	rm -f $@ $@.tmp
-	$(edit) $@.in >$@.tmp
-	chmod +x $@.tmp
-	mv $@.tmp $@
+autoconf: autoconf.in Makefile
+	rm -f autoconf autoconf.tmp
+	$(edit) autoconf.in >autoconf.tmp
+	chmod +x autoconf.tmp
+	mv autoconf.tmp autoconf
+
+autoheader: autoheader.in Makefile
+	rm -f autoheader autoheader.tmp
+	$(edit) autoheader.in >autoheader.tmp
+	chmod +x autoheader.tmp
+	mv autoheader.tmp autoheader
+
+autom4te: autom4te.in Makefile
+	rm -f autom4te autom4te.tmp
+	$(edit) autom4te.in >autom4te.tmp
+	chmod +x autom4te.tmp
+	mv autom4te.tmp autom4te
+
+autoreconf: autoreconf.in Makefile
+	rm -f autoreconf autoreconf.tmp
+	$(edit) autoreconf.in >autoreconf.tmp
+	chmod +x autoreconf.tmp
+	mv autoreconf.tmp autoreconf
+
+autoscan: autoscan.in Makefile
+	rm -f autoscan autoscan.tmp
+	$(edit) autoscan.in >autoscan.tmp
+	chmod +x autoscan.tmp
+	mv autoscan.tmp autoscan
+
+autoupdate: autoupdate.in Makefile
+	rm -f autoupdate autoupdate.tmp
+	$(edit) autoupdate.in >autoupdate.tmp
+	chmod +x autoupdate.tmp
+	mv autoupdate.tmp autoupdate
+
+ifnames: ifnames.in Makefile
+	rm -f ifnames ifnames.tmp
+	$(edit) ifnames.in >ifnames.tmp
+	chmod +x ifnames.tmp
+	mv ifnames.tmp ifnames
 
 
 
