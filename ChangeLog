@@ -1,5 +1,14 @@
 2001-01-18  Akim Demaille  <akim@epita.fr>
 
+	* m4sugar.m4 (m4_defn, m4_undefine, m4_popdef): Unlike the
+	builtin, fail on undefined symbols.
+	* tests/torture.at (Torturing config.status): Stop playing nasty
+	tricks with changequote.
+	(AC_DEFUBST): Move here from...
+	* tests/aclocal.m4: there.
+
+2001-01-18  Akim Demaille  <akim@epita.fr>
+
 	Various cleanups and consistency checks.
 
 	* m4sugar.m4: Formatting changes.

@@ -449,19 +449,14 @@ m4_define([m4_default],
 [m4_ifval([$1], [$1], [$2])])
 
 
-# m4_shiftn(N, ...)
-# -----------------
-# Returns ... shifted N times.  Useful for recursive "varargs" constructs.
-m4_define([m4_shiftn],
-[m4_assert(($1 >= 0) && ($# > $1))dnl
-_m4_shiftn($@)])
-
-m4_define([_m4_shiftn],
-[m4_if([$1], 0,
-       [m4_shift($@)],
-       [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
-
-
+# m4_defn(NAME)
+# -------------
+# Unlike to the original, don't tolerate popping something which is
+# undefined.
+m4_define([m4_defn],
+[m4_ifndef([$1],
+           [m4_fatal([$0: undefined: $1])])dnl
+m4_builtin([defn], $@)])
 
 
 # _m4_dumpdefs_up(NAME)
@@ -497,7 +492,7 @@ _m4_dumpdefs_down([$1])])
 # Unlike to the original, don't tolerate popping something which is
 # undefined.
 m4_define([m4_popdef],
-[m4_ifndef([$1]
+[m4_ifndef([$1],
            [m4_fatal([$0: undefined: $1])])dnl
 m4_builtin([popdef], $@)])
 
@@ -524,12 +519,25 @@ m4_define([m4_noquote],
 [m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
 
 
+# m4_shiftn(N, ...)
+# -----------------
+# Returns ... shifted N times.  Useful for recursive "varargs" constructs.
+m4_define([m4_shiftn],
+[m4_assert(($1 >= 0) && ($# > $1))dnl
+_m4_shiftn($@)])
+
+m4_define([_m4_shiftn],
+[m4_if([$1], 0,
+       [m4_shift($@)],
+       [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
+
+
 # m4_undefine(NAME)
 # -----------------
 # Unlike to the original, don't tolerate undefining something which is
 # undefined.
 m4_define([m4_undefine],
-[m4_ifndef([$1]
+[m4_ifndef([$1],
            [m4_fatal([$0: undefined: $1])])dnl
 m4_builtin([undefine], $@)])
 
