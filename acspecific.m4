@@ -1593,13 +1593,20 @@ AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
 [ac_cv_sys_long_file_names=yes
 # Test for long file names in all the places we know might matter:
 #      .		the current directory, where building will happen
-#      /tmp		where it might want to write temporary files
-#      /var/tmp		likewise
-#      /usr/tmp		likewise
 #      $prefix/lib	where we will be installing things
 #      $exec_prefix/lib	likewise
 # eval it to expand exec_prefix.
-for ac_dir in `eval echo . /tmp /var/tmp /usr/tmp $prefix/lib $exec_prefix/lib` ; do
+#      $TMPDIR		if set, where it might want to write temporary files
+# if $TMPDIR is not set:
+#      /tmp		where it might want to write temporary files
+#      /var/tmp		likewise
+#      /usr/tmp		likewise
+if test -n "$TMPDIR" && test -d "$TMPDIR" && test -w "$TMPDIR"; then
+  ac_tmpdirs="$TMPDIR"
+else
+  ac_tmpdirs='/tmp /var/tmp /usr/tmp'
+fi
+for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
   test -d $ac_dir || continue
   test -w $ac_dir || continue # It is less confusing to not echo anything here.
   (echo 1 > $ac_dir/conftest9012345) 2>/dev/null
