@@ -997,7 +997,7 @@ One way to get them properly defined is to use Autoconf.
 @chapter Program Behavior for All Programs
 
 Avoid arbitrary limits on the length or number of @emph{any} data
-structure, including filenames, lines, files, and symbols, by allocating
+structure, including file names, lines, files, and symbols, by allocating
 all data structures dynamically.  In most Unix utilities, ``long lines
 are silently truncated''.  This is not acceptable in a GNU utility.
 
@@ -1093,7 +1093,7 @@ input from a source other than a terminal, it is not interactive and
 would do best to print error messages using the noninteractive style.)
 
 The string @var{message} should not begin with a capital letter when
-it follows a program name and/or filename.  Also, it should not end
+it follows a program name and/or file name.  Also, it should not end
 with a period.
 
 Error messages from interactive programs, and other messages such as
