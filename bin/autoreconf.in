@@ -371,7 +371,7 @@ while read dir; do
   # -------------------- #
 
   # templates -- arguments of AC_CONFIG_HEADERS.
-  $verbose $me: running $autoconf -t 'AC_CONFIG_HEADERS:$1'
+  $verbose $me: running $autoconf -t 'AC_CONFIG_HEADERS:$1' >&2
   templates=`$autoconf -t 'AC_CONFIG_HEADERS:$1'`
   if test -n "$templates"; then
     tcount=`set -- $templates; echo $#`

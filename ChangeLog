@@ -1,3 +1,8 @@
+2001-02-01  Pavel Roskin  <proski@gnu.org>
+
+	* autoreconf.sh: Fix the case when the verbose output was not
+	redirected to stderr as everywhere else.
+
 2001-01-30  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
 
 	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Remove configure.ac 
