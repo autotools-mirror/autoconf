@@ -1,3 +1,10 @@
+2005-01-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/c.m4 (AC_LANG_INT_SAVE(C)): Declare longval and
+	ulongval to be static, to avoid unwanted GCC warning.  Problem
+	reported by Michael Jennings via Daniel Reed; see
+	<https://bugzilla.redhat.com/beta/show_bug.cgi?id=143852>.
+
 2005-01-05  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Define datarootdir,
