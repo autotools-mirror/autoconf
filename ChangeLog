@@ -1,3 +1,8 @@
+2002-07-17  Russ Allbery  <rra@stanford.edu>
+
+	* doc/autoconf.texi (Initializing configure): Clarify the
+	description of the tarname default.
+
 2002-07-17  Andreas Buening  <andreas.buening@nexgo.de>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_FORK): Don't set
