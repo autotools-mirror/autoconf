@@ -26,6 +26,11 @@
   Use of Libtool 1.5 and higher is encouraged.  Compatibility with
   Libtool pre-1.4 is not checked.
 
+** Autotest
+  autotest no longer reruns failed tests in verbose mode; instead,
+  failures are logged while the test is run.  Note that this might
+  cause unexpected failures when you are using shell tracing (-x)
+  and checking the stderr output of the test cases.
 
 * Major changes in Autoconf 2.57
 

@@ -14127,15 +14127,23 @@ The validation scripts that Autotest produces are by convention called
 @command{testsuite}.  When run, @command{testsuite} executes each test
 group in turn, producing only one summary line per test to say if that
 particular test succeeded or failed.  At end of all tests, summarizing
-counters get printed.  If any test failed, one debugging script gets
-automatically generated for each test group which failed.  These
-debugging scripts are named @file{testsuite.@var{nn}}, where @var{nn} is
-the sequence number of the test group.  In the ideal situation, none of
-the tests fail, and consequently, no debugging script is generated out
-of validation.
+counters get printed.  One debugging directory is left for each test
+group which failed, if any: such directories are named
+@file{testsuite.dir/@var{nn}}, where @var{nn} is the sequence number of
+the test group, and they include:
 
-The automatic generation of debugging scripts for failed test has the
-purpose of easing the chase for bugs.
+@itemize @bullet
+@item a debugging script named @file{run} which reruns the test in
+@dfn{debug mode} (@pxref{testsuite Invocation}).  The automatic generation
+of debugging scripts has the purpose of easing the chase for bugs.
+
+@item all the files created with @code{AT_DATA}
+
+@item a log of the run, named @file{testsuite.log}
+@end itemize
+
+In the ideal situation, none of the tests fail, and consequently, no
+debugging directory is left out of validation.
 
 It often happens in practice that individual tests in the validation
 suite need to get information coming out of the configuration process.
@@ -14182,7 +14190,7 @@ atconfig -->.                    .--> testsuite.log
 	     \                  /
 	      >-- testsuite* --<
 	     /                  \
-[atlocal] ->'                    `--> [testsuite.@var{nn}*]
+[atlocal] ->'                    `--> [testsuite.dir]
 @end example
 
 
@@ -14201,14 +14209,8 @@ A very bad Unix habit which is unfortunately wide spread consists of
 setting environment variables before the command, such as in
 @samp{CC=my-home-grown-cc ./testsuite}.  This results in the test suite
 not knowing this change, hence (i) it can't report it to you, and (ii)
-it cannot preserve the value of @code{CC} for subsequent runs@footnote{
-@c
-When a failure occurs, the test suite is rerun, verbosely, and the user
-is asked to ``play'' with this failure to provide better information.
-It is important to keep the same environment between the first run, and
-bug-tracking runs.
-@c
-}.  Autoconf faced exactly the same problem, and solved it by asking
+it cannot preserve the value of @code{CC} for subsequent runs.
+Autoconf faced exactly the same problem, and solved it by asking
 users to pass the variable definitions as command line arguments.
 Autotest requires this rule too, but has no means to enforce it; the log
 then contains a trace of the variables the user changed.
@@ -14348,7 +14350,7 @@ Similarly for @var{stderr} with @samp{expout} and @samp{stderr}.
 
 Autotest test suites support the following arguments:
 
-@table @samp
+@table @option
 @item --help
 @itemx -h
 Display the list of options and exit successfully.
@@ -14430,7 +14432,8 @@ Do not remove the files after a test group was performed ---but they are
 still removed @emph{before}, therefore using this option is sane when
 running several test groups.  Do not create debugging scripts.  Do not
 log (in order to preserve supposedly existing full log file).  This is
-the default for debugging scripts.
+the default for debugging scripts, but it can also be useful to debug
+the testsuite itself.
 
 @item --trace
 @itemx -x

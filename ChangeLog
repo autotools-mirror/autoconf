@@ -1,5 +1,31 @@
 2003-05-22  Paolo Bonzini  <bonzini@gnu.org>
 
+	Overhaul Autotest's logging: generate separate log files
+	in testsuite.dir/NNN/testsuite.log, and append them to
+	testsuite.log instead of re-running the test verbosely.
+
+	* lib/autotest/general.m4 (AT_INIT): Use a single redirected
+	file descriptor, write 0 to at_status_file instead of setting
+	at_status=0, initialize some new variables (at_status_file,
+	at_group_log, at_suite_log, at_tee_pipe).  Remove the cruft
+	to rerun the tests, instead append the at_group_log to the
+	at_suite_log when a test fails.
+	(AT_SETUP): pipe the test case's output into at_tee_pipe,
+	with the AS_MESSAGE_LOG_FD redirected to stdout.
+	(AT_CLEANUP): save the output status in $at_status_file
+	and restore it, redirect the AS_MESSAGE_LOG_FD back to
+	its original place.
+	(AT_CHECK): since tests are run with a redirected stdout,
+	and used to be re-run in verbose mode, turn some $at_verbose
+	into echo, and don't redirect the output of testing stdout
+	and stderr.
+
+	* lib/autotest/autoconf.texi (testsuite Scripts): Update
+	the name of the debugging directory and information about
+	its contents.
+
+2003-05-22  Paolo Bonzini  <bonzini@gnu.org>
+
 	* lib/m4sugar/m4sh.m4 [AS_REQUIRE]: actually use the 2nd
 	parameter
 

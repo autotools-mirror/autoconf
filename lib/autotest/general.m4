@@ -184,8 +184,12 @@ at_dir=`pwd`
 # The directory the whole suite works in.
 # Should be absolutely to let the user `cd' at will.
 at_suite_dir=$at_dir/$as_me.dir
+# The file containing the suite.
+at_suite_log=$at_dir/$as_me.log
 # The file containing the location of the last AT_CHECK.
 at_check_line_file=$at_suite_dir/at-check-line
+# The file containing the exit status of the last command.
+at_status_file=$at_suite_dir/at-status
 # The files containing the output of the tested commands.
 at_stdout=$at_suite_dir/at-stdout
 at_stder1=$at_suite_dir/at-stder1
@@ -237,7 +241,7 @@ do
 	;;
 
     --clean | -c )
-	rm -rf $at_suite_dir $as_me.log
+	rm -rf $at_suite_dir $at_suite_log
 	exit 0
 	;;
 
@@ -377,13 +381,13 @@ cat <<_ATEOF
 
 Execution tuning:
   -k, --keywords=KEYWORDS
-		 select the tests matching all the comma separated KEYWORDS
-		 accumulates
+	         select the tests matching all the comma separated KEYWORDS
+	         accumulates
   -e, --errexit  abort as soon as a test fails; implies --debug
   -v, --verbose  force more detailed output
-		 default for debugging scripts
+	         default for debugging scripts
   -d, --debug    inhibit clean up and debug script creation
-		 default for debugging scripts
+	         default for debugging scripts
   -x, --trace    enable tests shell tracing
 _ATEOF
 m4_divert_pop([HELP_TUNING])dnl
@@ -451,8 +455,8 @@ _AS_PATH_WALK([$at_path],
 [as_dir=`(cd "$as_dir" && pwd) 2>/dev/null`
 test -d "$as_dir" || continue
 case $PATH in
-		  $as_dir                 | \
-		  $as_dir$PATH_SEPARATOR* | \
+	          $as_dir                 | \
+	          $as_dir$PATH_SEPARATOR* | \
   *$PATH_SEPARATOR$as_dir                 | \
   *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR* ) ;;
 
@@ -462,20 +466,10 @@ esac])
 export PATH
 
 # Setting up the FDs.
-# 5 is stdout conditioned by verbosity.
-if test $at_verbose = echo; then
-  exec 5>&1
-else
-  exec 5>/dev/null
-fi
-
-# 6 is the log file.  To be preserved if `-d'.
-m4_define([AS_MESSAGE_LOG_FD], [6])
-if $at_debug_p; then
-  exec AS_MESSAGE_LOG_FD>/dev/null
-else
-  exec AS_MESSAGE_LOG_FD>$as_me.log
-fi
+# 5 is the log file.  Not to be overwritten if `-d'.
+m4_define([AS_MESSAGE_LOG_FD], [5])
+$at_debug_p && at_suite_log=/dev/null
+exec AS_MESSAGE_LOG_FD>$at_suite_log
 
 # Banners and logs.
 AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
@@ -535,7 +529,7 @@ do
 done
 
 {
-  AS_BOX([Silently running the tests.])
+  AS_BOX([Running the tests.])
 } >&AS_MESSAGE_LOG_FD
 
 at_start_date=`date`
@@ -575,29 +569,43 @@ do
   cd $at_suite_dir
 
   case $at_group in
-    banner-*) ;;
+    banner-*)
+      at_group_log=$at_suite_log
+      ;;
+
     *)
-     # Skip tests we already run (using --keywords makes it easy to get
-     # duplication).
-     case " $at_pass_test $at_skip_test $at_fail_test " in
-       *" $at_group "* ) continue;;
-     esac
+      # Skip tests we already run (using --keywords makes it easy to get
+      # duplication).
+      case " $at_pass_test $at_skip_test $at_fail_test " in
+	*" $at_group "* ) continue;;
+      esac
 
-     # Normalize the test group number.
-     at_group_normalized=`expr "00000$at_group" : ".*\($at_format\)"`
+      # Normalize the test group number.
+      at_group_normalized=`expr "00000$at_group" : ".*\($at_format\)"`
 
-     # Create a fresh directory for the next test group, and enter.
-     at_group_dir=$at_suite_dir/$at_group_normalized
-     rm -rf $at_group_dir
-     mkdir $at_group_dir ||
-       AS_ERROR([cannot create $at_group_dir])
-     cd $at_group_dir
-    ;;
+      # Create a fresh directory for the next test group, and enter.
+      at_group_dir=$at_suite_dir/$at_group_normalized
+      at_group_log=$at_group_dir/$as_me.log
+      rm -rf $at_group_dir
+      mkdir $at_group_dir ||
+	AS_ERROR([cannot create $at_group_dir])
+      cd $at_group_dir
+      ;;
   esac
 
-  at_status=0
+  echo 0 > $at_status_file
+
   # Clearly separate the test groups when verbose.
   test $at_group_count != 0 && $at_verbose
+
+  # In verbose mode, append to the log file *and* show on
+  # the standard output; in quiet mode only write to the log
+  if test $at_verbose = echo; then
+    at_tee_pipe="tee -a $at_group_log"
+  else
+    at_tee_pipe="cat >> $at_group_log"
+  fi
+
   case $at_group in
 dnl Test groups inserted here (TESTS).
 m4_divert_pop([TESTS])[]dnl
@@ -626,45 +634,59 @@ _ATEOF
       fi
       at_group_count=`expr 1 + $at_group_count`
       $at_verbose $ECHO_N "$at_group. $at_setup_line: $ECHO_C"
+      echo $ECHO_N "$at_group. $at_setup_line: $ECHO_C" >> $at_group_log
       case $at_status in
 	0)  at_msg="ok"
 	    at_pass_list="$at_pass_list $at_group"
-	    # Cleanup the group directory, unless the user wants the files.
-	    $at_debug_p || rm -rf $at_group_dir
 	    ;;
 	77) at_msg="ok (skipped near \``cat $at_check_line_file`')"
 	    at_skip_list="$at_skip_list $at_group"
-	    # Cleanup the group directory, unless the user wants the files.
-	    $at_debug_p || rm -rf $at_group_dir
 	    ;;
 	*)  at_msg="FAILED near \``cat $at_check_line_file`'"
 	    at_fail_list="$at_fail_list $at_group"
-	    # Up failure, keep the group directory for autopsy.
-	    # Create the debugging script.
-	    {
-	      echo "#! /bin/sh"
-	      echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
-	      echo "cd $at_dir"
-	      echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
-		   '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
-	      echo 'exit 1'
-	    } >$at_group_dir/run
-	    chmod +x $at_group_dir/run
 	    ;;
       esac
       echo $at_msg
       at_log_msg="$at_group. $at_setup_line: $at_msg"
-      # If the group failed, $at_times_file is not available.
-      test -f $at_times_file &&
-	at_log_msg="$at_log_msg	(`sed 1d $at_times_file`)"
-      echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
-      $at_errexit_p && test -n "$at_fail_list" && break
+      case $at_status in
+	0|77)
+	  # $at_times_file is only available if the group succeeded or was skipped.
+	  # We're not including the group log, so the success message is written
+	  # in the global log separately.  But we also write to the group log in
+	  # case they're using -d.
+	  at_log_msg="$at_log_msg	(`sed 1d $at_times_file`)"
+	  echo "$at_log_msg" >> $at_group_log
+	  echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
+
+	  # Cleanup the group directory, unless the user wants the files.
+	  $at_debug_p || rm -rf $at_group_dir
+	  ;;
+	*)
+	  # Upon failure, include the log into the testsuite's global log.
+	  # The failure message is written in the group log and then included
+	  # in the global log.
+	  echo "$at_log_msg" >> $at_group_log
+	  cat $at_group_log >&AS_MESSAGE_LOG_FD
+
+	  # Upon failure, keep the group directory for autopsy, and
+	  # create the debugging script.
+	  {
+	    echo "#! /bin/sh"
+	    echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
+	    echo "cd $at_dir"
+	    echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
+	         '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
+	    echo 'exit 1'
+	  } >$at_group_dir/run
+	  chmod +x $at_group_dir/run
+	  $at_errexit_p && break
+	  ;;
+      esac
       ;;
   esac
 done
 
-# Back to the top directory, in particular because we might
-# rerun the suite verbosely.
+# Back to the top directory.
 cd $at_dir
 
 # Compute the duration of the suite.
@@ -697,12 +719,10 @@ elif test $at_debug_p = false; then
     AS_BOX([ERROR: Suite unsuccessful, $at_fail_count of $at_group_count tests failed.])
   fi
 
-  # Normalize the names so that `ls' lists them in order.
   echo 'You may investigate any problem if you feel able to do so, in which'
   echo 'case the test suite provides a good starting point.'
   echo
-  echo 'Now, failed tests will be executed again, verbosely, and logged'
-  echo 'in the file '$as_me'.log.'
+  echo 'Failed tests have been logged in the file '$as_me'.log.'
 
   {
     echo
@@ -720,18 +740,6 @@ elif test $at_debug_p = false; then
       $SHELL $[0] $at_skip_list --list
       echo
     fi
-    echo
-
-    AS_BOX([Verbosely re-running the failing tests.])
-    echo
-  } >&AS_MESSAGE_LOG_FD
-
-  exec AS_MESSAGE_LOG_FD>/dev/null
-  $SHELL $[0] -v -d $at_debug_args $at_fail_list 2>&1 | tee -a $as_me.log
-  exec AS_MESSAGE_LOG_FD>>$as_me.log
-
-  {
-    echo
     if test -n "$at_top_srcdir"; then
       AS_BOX([Configuration logs.])
       echo
@@ -789,10 +797,10 @@ m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TESTS])dnl
   AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): $1
     at_setup_line='m4_defn([AT_line])'
-    $at_verbose "AT_ordinal. m4_defn([AT_line]): testing $1..."
     $at_quiet $ECHO_N "m4_format([[%3d: %-18s]],
-		       AT_ordinal, m4_defn([AT_line]))[]$ECHO_C"
+	               AT_ordinal, m4_defn([AT_line]))[]$ECHO_C"
     (
+      echo "AT_ordinal. m4_defn([AT_line]): testing $1..."
       $at_traceon
 ])
 
@@ -812,9 +820,10 @@ m4_define([AT_CLEANUP],
 at_help_all=$at_help_all'm4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 '
 )dnl
-    $at_times_skip || times >$at_times_file
-    )
-    at_status=$?
+      $at_traceoff
+      $at_times_skip || times >$at_times_file
+    ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
+    at_status=`cat $at_status_file`
     ;;
 
 m4_divert_pop([TESTS])dnl Back to KILL.
@@ -919,7 +928,7 @@ $2[]_ATEOF
 #
 m4_define([AT_CHECK],
 [$at_traceoff
-$at_verbose "AT_LINE: AS_ESCAPE([$1])"
+echo "AT_LINE: AS_ESCAPE([$1])"
 echo AT_LINE >$at_check_line_file
 ( $at_traceon; $1 ) >$at_stdout 2>$at_stder1
 at_status=$?
@@ -928,33 +937,35 @@ grep -v '^ *+' $at_stder1 >$at_stderr
 at_failed=false
 dnl Check stderr.
 m4_case([$4],
-	stderr, [(echo stderr:; tee stderr <$at_stderr) >&5],
-	ignore, [(echo stderr:; cat $at_stderr) >&5],
-	experr, [$at_diff experr $at_stderr >&5 || at_failed=:],
-	[],     [$at_diff $at_devnull $at_stderr >&5 || at_failed=:],
-	[echo >>$at_stderr; echo "AS_ESCAPE([$4])" | $at_diff - $at_stderr >&5 || at_failed=:])
+	stderr, [echo stderr:; tee stderr <$at_stderr],
+	ignore, [echo stderr:; cat $at_stderr],
+	experr, [$at_diff experr $at_stderr || at_failed=:],
+	[],     [$at_diff $at_devnull $at_stderr || at_failed=:],
+	[echo >>$at_stderr; echo "AS_ESCAPE([$4])" | $at_diff - $at_stderr || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
-	stdout, [(echo stdout:; tee stdout <$at_stdout) >&5],
-	ignore, [(echo stdout:; cat $at_stdout) >&5],
-	expout, [$at_diff expout $at_stdout >&5 || at_failed=:],
-	[],     [$at_diff $at_devnull $at_stdout >&5 || at_failed=:],
-	[echo >>$at_stdout; echo "AS_ESCAPE([$3])" | $at_diff - $at_stdout >&5 || at_failed=:])
+	stdout, [echo stdout:; tee stdout <$at_stdout],
+	ignore, [echo stdout:; cat $at_stdout],
+	expout, [$at_diff expout $at_stdout || at_failed=:],
+	[],     [$at_diff $at_devnull $at_stdout || at_failed=:],
+	[echo >>$at_stdout; echo "AS_ESCAPE([$3])" | $at_diff - $at_stdout || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
 m4_case([$2],
   [77],
     [],
-    [   77) exit 77;;
+    [   77) echo 77 > $at_status_file
+            exit 77;;
 ])dnl
 m4_case([$2],
   [ignore],
     [   *);;],
     [   m4_default([$2], [0])) ;;
-   *) $at_verbose "AT_LINE: exit code was $at_status, expected m4_default([$2], [0])" >&2
+   *) echo "AT_LINE: exit code was $at_status, expected m4_default([$2], [0])"
       at_failed=:;;])
 esac
-AS_IF($at_failed, [$5], [$6])
-$at_failed && exit 1
+AS_IF($at_failed, [$5
+  echo 1 > $at_status_file
+  exit 1], [$6])
 $at_traceon
 ])# AT_CHECK
