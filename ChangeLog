@@ -4,6 +4,10 @@
 
 2002-04-22  Akim Demaille  <akim@epita.fr>
 
+	* tests/m4sh.at (LINENO): Fix the Zsh skip pattern.
+
+2002-04-22  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Pretty Help Strings): Remove a spurious
 	comma.
 	Reported by Gregory Giannoni.

@@ -28,6 +28,12 @@ m4_pattern_allow([^AS_EXIT$])
 
 AT_SETUP([LINENO])
 
+# We cannot unset LINENO with Zsh, yet this test case relies on
+# unsetting LINENO to compare its result when (i) LINENO is supported
+# and when (ii) it is not.
+# So just skip if the shell is ZSH.
+AT_CHECK([test -n "${ZSH_VERSION+set}" && exit 77])
+
 # AT_DATA_LINENO(FILENAME,
 #                UNSET-LINENO = true | false, COUNTER, COUNTER-RE)
 # ----------------------------------------------------------------
@@ -45,11 +51,6 @@ m4_define([AT_DATA_LINENO],
 [AT_DATA([$1],
 [[AS@&t@_INIT
 if $2; then
-  # We cannot unset LINENO with Zsh, yet this test case relies on
-  # unsetting LINENO to compare its result when (i) LINENO is supported
-  # and when (ii) it is not.
-  # So just skip is the shell is ZSH.
-  test -n "${ZSH_VERSION+set}" && AS@&t@_ERROR([cannot unset LINENO], 77)
   AS@&t@_UNSET([LINENO])
 fi
 _AS@&t@_PREPARE
