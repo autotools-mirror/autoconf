@@ -4056,15 +4056,6 @@ All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
 the output of the compiler, typically to the empty string if Unix and
 @samp{.exe} if Win32 or OS/2.
 
-@c FIXME:
-@c @ovindex CYGWIN
-@c @ovindex EMXOS2
-@c @ovindex MINGW32
-@c They also set the shell variable @code{CYGWIN} to @samp{yes} if run in
-@c the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX
-@c environment on OS/2, and @code{MINGW32} to @samp{yes} with the MingW32
-@c compiler.
-
 @ovindex OBJEXT
 They also define the output variable @code{OBJEXT} based on the
 output of the compiler, after .c files have been excluded, typically
@@ -8876,9 +8867,18 @@ Same as @code{AC_C_CROSS}, which is obsolete too, and does nothing
 
 @defmac AC_CYGWIN
 @maindex CYGWIN
-Checked for the Cygwin environment in which case the shell variable
-@code{CYGWIN} is set to @samp{yes}.  @code{AC_EXEEXT} now handles this
-task.
+Check for the Cygwin environment in which case the shell variable
+@code{CYGWIN} is set to @samp{yes}.  Don't use this macro, the dignified
+means to check the nature of the host is using
+@code{AC_CANONICAL_HOST}.  As a matter of fact this macro is defined as:
+
+@example
+AC_REQUIRE([AC_CANONICAL_HOST])[]dnl
+case $host_os in
+  *cygwin* ) CYGWIN=yes;;
+         * ) CYGWIN=no;;
+esac
+@end example
 @end defmac
 
 @defmac AC_DECL_YYTEXT
@@ -8921,26 +8921,15 @@ now it is just @code{AC_FUNC_GETMNTENT}.
 @defmac AC_EXEEXT
 @maindex EXEEXT
 @ovindex EXEEXT
-@ovindex CYGWIN
-@ovindex EMXOS2
-@ovindex MINGW32
 Defined the output variable @code{EXEEXT} based on the output of the
-compiler.  Typically set to empty string if Unix and @samp{.exe} if
-Win32 or OS/2.
-
-This macro sets the shell variable @code{CYGWIN} to @samp{yes} if run in
-the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX
-environment on OS/2, and @code{MINGW32} to @samp{yes} with the MingW32
-compiler.
-
-Now handled by the macros checking for the compiler.
+compiler, which is now done automatically.  Typically set to empty
+string if Unix and @samp{.exe} if Win32 or OS/2.
 @end defmac
 
 @defmac AC_EMXOS2
 @maindex EMXOS2
-Checks for the EMX environment on OS/2 in which case the shell variable
-@code{EMXOS2} is set to @samp{yes}.  @code{AC_EXEEXT} now handles this
-task.
+Similar to @code{AC_CYGWIN} but checks for the EMX environment on OS/2
+and sets @code{EMXOS2}.
 @end defmac
 
 @defmac AC_ERROR
@@ -9142,9 +9131,8 @@ Symbols}.
 
 @defmac AC_MINGW32
 @maindex MINGW32
-Checked for the MingW32 compiler environment, in which case the shell
-variable @code{MINGW32} is set to @samp{yes}.  @code{AC_EXEEXT} now
-handles this task.
+Similar to @code{AC_CYGWIN} but checks for the MingW32 compiler
+environment and sets @code{MINGW32}.
 @end defmac
 
 @defmac AC_MINUS_C_MINUS_O
@@ -9168,7 +9156,7 @@ handles this task.
 Defined the output variable @code{OBJEXT} based on the output of the
 compiler, after .c files have been excluded.  Typically set to @samp{o}
 if Unix, @samp{obj} if Win32.  Now the compiler checking macros handle
-this.
+this automatically.
 @end defmac
 
 @defmac AC_OBSOLETE (@var{this-macro-name}, @ovar{suggestion})

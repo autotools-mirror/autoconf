@@ -1,3 +1,14 @@
+2000-12-14  Akim Demaille  <akim@epita.fr>
+
+	Put back AC_CYGWIN etc. under the responsibility of the
+	configure.in maintainer, but discourage its use.
+
+	* acspecific.m4 (_AC_CYGWIN, _AC_MINGW32, _AC_EMXOS2): Rename as...
+	(AC_CYGWIN, AC_MINGW32, AC_EMXOS2): these.
+	AU defined on top of AC_CANONICAL_HOST and $host_os.
+	* tests/mktests.sh (update_exclude_list): Add AC_CYGWIN,
+	AC_MINGW32, and AC_EMXOS2.
+
 2000-12-13  Pavel Roskin  <proski@gnu.org>
 
 	* m4sugar.m4 (m4_file_append): Add a newline after _m4eof,

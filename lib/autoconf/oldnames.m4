@@ -77,6 +77,7 @@ AU_ALIAS([AC_UID_T],		[AC_TYPE_UID_T])
 AU_ALIAS([AC_WORDS_BIGENDIAN],	[AC_C_BIGENDIAN])
 AU_ALIAS([AC_YYTEXT_POINTER],	[AC_DECL_YYTEXT])
 AU_ALIAS([AM_CYGWIN32],		[AC_CYGWIN32])
+AU_ALIAS([AC_CYGWIN32],         [AC_CYGWIN])
 AU_ALIAS([AM_EXEEXT],		[AC_EXEEXT])
 # We cannot do this, because in libtool.m4 yet they provide
 # this update.  Some solution is needed.

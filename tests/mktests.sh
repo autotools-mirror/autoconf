@@ -171,9 +171,12 @@ mv syntax.tat syntax.at
 #    need arguments and are tested elsewhere.
 # AC_INIT and AC_OUTPUT
 #    are already in `configure.in'.
+# AC_CYGWIN, AC_MINGW32, AC_EMXOS2
+#    are using AC_REQUIRE.
 update_exclude_list='^AC_LANG_RESTORE$
 ^AC_LINK_FILES|AC_PREREQ$
-^AC_(INIT|OUTPUT)$'
+^AC_(INIT|OUTPUT)$
+^AC_(CYGWIN|MINGW32|EMXOS2)$'
 
 # syntax_exclude_egrep --
 # Build a single egrep pattern out of filter_macros_list.
