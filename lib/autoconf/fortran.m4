@@ -336,17 +336,17 @@ AC_DEFUN([_AC_FC_DIALECT_YEAR],
 #  gfortran: putative GNU Fortran 95+ compiler (in progress)
 #  fort77: native F77 compiler under HP-UX (and some older Crays)
 #  frt: Fujitsu F77 compiler
-#  pgf77/pgf90/pgf95: Portland Group F77/F90/F95 compilers
+#  pgf77/pgf90/pghpf/pgf95: Portland Group F77/F90/F95 compilers
 #  xlf/xlf90/xlf95: IBM (AIX) F77/F90/F95 compilers
 #  lf95: Lahey-Fujitsu F95 compiler
 #  fl32: Microsoft Fortran 77 "PowerStation" compiler
 #  af77: Apogee F77 compiler for Intergraph hardware running CLIX
 #  epcf90: "Edinburgh Portable Compiler" F90
 #  fort: Compaq (now HP) Fortran 90/95 compiler for Tru64 and Linux/Alpha
-#  ifc: Intel Fortran 95 compiler for Linux/x86
+#  ifort, previously ifc: Intel Fortran 95 compiler for Linux/x86
 #  efc: Intel Fortran 95 compiler for IA64
-m4_define([_AC_F95_FC], [f95 fort xlf95 ifc efc pgf95 lf95 gfortran])
-m4_define([_AC_F90_FC], [f90 xlf90 pgf90 epcf90])
+m4_define([_AC_F95_FC], [f95 fort xlf95 ifort ifc efc pgf95 lf95 gfortran])
+m4_define([_AC_F90_FC], [f90 xlf90 pgf90 pghpf epcf90])
 m4_define([_AC_F77_FC], [g77 f77 xlf frt pgf77 fort77 fl32 af77])
 AC_DEFUN([_AC_PROG_FC],
 [_AC_FORTRAN_ASSERT()dnl
@@ -538,6 +538,9 @@ ac_[]_AC_LANG_ABBREV[]_v_output="`echo $ac_[]_AC_LANG_ABBREV[]_v_output |
 	grep 'LPATH is:' |
 	sed 's,.*LPATH is\(: *[[^ ]]*\).*,\1,;s,: */, -L/,g'` $ac_[]_AC_LANG_ABBREV[]_v_output"
 
+# FIXME: we keep getting bitten by quoted arguments; a more general fix
+#        that detects unbalanced quotes in FLIBS should be implemented
+#        and (ugh) tested at some point.
 case $ac_[]_AC_LANG_ABBREV[]_v_output in
   # If we are using xlf then replace all the commas with spaces.
   *xlfentry*)
@@ -546,13 +549,16 @@ case $ac_[]_AC_LANG_ABBREV[]_v_output in
   # With Intel ifc, ignore the quoted -mGLOB_options_string stuff (quoted
   # $LIBS confuse us, and the libraries appear later in the output anyway).
   *mGLOB_options_string*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/\"-mGLOB[[^\"]]*\"/ /g'` ;;
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/"-mGLOB[[^"]]*"/ /g'` ;;
+
+  # Portland Group compiler has quoted -cmdline argument
+  *-cmdline*)
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/-cmdline  *"[[^"]]*"/ /g'` ;;
 
   # If we are using Cray Fortran then delete quotes.
   # Use "\"" instead of '"' for font-lock-mode.
-  # FIXME: a more general fix for quoted arguments with spaces?
   *cft90*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed "s/\"//g"` ;;
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/"//g'` ;;
 esac
 
 ])# _AC_PROG_FC_V_OUTPUT
