@@ -23,7 +23,8 @@ AUTOMAKE_OPTIONS = gnits
 SUITE = suite.at \
         m4sugar.at m4sh.at \
         base.at tools.at torture.at compile.at semantics.at \
-	acgeneral.at acspecific.at acfunctions.at aclang.at acheaders.at
+	acgeneral.at acspecific.at acfunctions.at aclang.at acheaders.at \
+	actypes.at \
 	foreign.at
 
 # We don't actually distribute the testsuite, since one only
@@ -50,7 +51,8 @@ MACRO_FILES = $(top_srcdir)/acgeneral.m4 \
               $(top_srcdir)/acspecific.m4 \
               $(top_srcdir)/acfunctions.m4 \
               $(top_srcdir)/aclang.m4 \
-              $(top_srcdir)/acheaders.m4
+              $(top_srcdir)/acheaders.m4 \
+              $(top_srcdir)/actypes.m4
 
 acgeneral.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
@@ -65,6 +67,9 @@ aclang.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 acheaders.at: mktests.sh $(MACRO_FILES)
+	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
+
+actypes.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 CLEANFILES = debug-*.sh macro configure configure.in configure.ac \
