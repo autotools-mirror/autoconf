@@ -1,5 +1,12 @@
 2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
 
+	* lib/autoconf/general.m4: Fix a small Englisho.
+	* lib/autoconf/status.m4: Fix a small typo.  Handle DOS paths when
+	setting up ac_dir_suffix and ac_top_builddir.
+	* lib/m4sugar/m4sh.m4: Default CDPATH to $PATH_SEPARATOR, not ':'.
+
+2001-09-20  Tim Van Holder  <tim.van.holder@pandora.be>
+
 	* doc/autoconf.texi (File System Conventions): Clarify the use of
 	PATH_SEPARATOR.
 	(Special Shell Variables[PATH_SEPARATOR]): Ditto.
