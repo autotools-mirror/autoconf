@@ -1,5 +1,10 @@
 2001-03-19  Akim Demaille  <akim@epita.fr>
 
+	* acfunctions.m4 (AC_FUNC_STRERROR_R): Update to
+	fileutils-4.0.42's.
+
+2001-03-19  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_INIT): Don't always create `empty', rather
 	do it only when diffing `/dev/null' is not supported.
 	And use `at-devnull' instead of `empty'.
