@@ -212,6 +212,7 @@ sub autoreconf ($)
   my $uses_gettext;
   my $uses_libtool;
   my $uses_autoheader;
+  my $uses_aclocal;
   while ($_ = $configure_ac_file->getline)
      {
        $uses_autoconf = 1
@@ -254,9 +255,13 @@ sub autoreconf ($)
     {
       verbose "$configure_ac: not running gettextize: `intl' is already present";
     }
-  else
+  elsif ($install)
     {
       xsystem ($gettextize);
+    }
+  else
+    {
+      verbose "$configure_ac: not running gettextize: --install not given";
     }
 
 
@@ -268,9 +273,13 @@ sub autoreconf ($)
     {
       verbose "$configure_ac: not using Libtool";
     }
-  else
+  elsif ($install)
     {
       xsystem ($libtoolize);
+    }
+  else
+    {
+      verbose "$configure_ac: not running libtoolize: --install not given";
     }
 
 
@@ -278,27 +287,47 @@ sub autoreconf ($)
   # Running aclocal.  #
   # ----------------- #
 
-  # Always run aclocal.  Tracking its sources for up-to-dateness
-  # is too complex and too error prone.  The best we can do is
-  # avoiding nuking the time stamp.
+  # Always run aclocal.  Tracking its sources for up-to-dateness is
+  # too complex and too error prone.  The best we can do is avoiding
+  # nuking the time stamp.
+  $uses_aclocal = 1;
+
+  # Nevertheless, if aclocal.m4 exists and is not made by aclocal,
+  # don't run aclocal.
+
+  if (-f 'aclocal.m4')
+    {
+      my $aclocal_m4 = new Autom4te::XFile 'aclocal.m4';
+      $_ = $aclocal_m4->getline;
+      $uses_aclocal = 0
+	unless /generated.*by aclocal/;
+    }
 
   # If there are flags for aclocal in Makefile.am, use them.
-  my $aclocal_flags;
+  my $aclocal_flags = '';
   if (-f 'Makefile.am')
     {
-      my $aclocal_m4 = new Autom4te::XFile 'Makefile.am';
-      while ($_ = $aclocal_m4->getline)
+      my $makefile = new Autom4te::XFile 'Makefile.am';
+      while ($_ = $makefile->getline)
 	{
 	  if (/^ACLOCAL_[A-Z_]*FLAGS\s*=\s*(.*)/)
 	    {
 	      $aclocal_flags = $1;
+	      $uses_aclocal = 1;
 	      last;
 	    }
 	}
     }
 
-  xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
-  update_file ('aclocal.m4t', 'aclocal.m4');
+  if (!$uses_aclocal)
+    {
+      verbose "$configure_ac: not using aclocal";
+    }
+  else
+    {
+      xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
+      update_file ('aclocal.m4t', 'aclocal.m4');
+    }
 
   # ------------------ #
   # Running automake.  #

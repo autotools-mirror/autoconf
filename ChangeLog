@@ -1,10 +1,17 @@
+2001-11-02  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoreconf.in (&autoreconf): Set `$aclocal_flags' to ''.
+	Don't run aclocal when aclocal.m4 is not from aclocal.
+	From Ezra Peisach.
+	Don't run libtoolize and gettextize if --install is not given.
+
 2001-11-01  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): _AS_CR_PREPARE needs to
 	be invoked before _AS_LINENO_PREPARE.
         (_AS_LINENO_PREPARE): Use as_cr_digits and as_cr_alnum rather
 	than character ranges.
-	
+
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Fix NLS before
 	invoking AS_BASENAME.  Set the locale variables to 'C' if
 	possible, as POSIX requires this to get the traditional
