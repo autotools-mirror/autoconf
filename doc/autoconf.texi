@@ -5065,16 +5065,38 @@ foo
 
 @command{egrep} also suffers the limitations of @command{grep}.
 
+
 @item @command{expr}
 @cindex @command{expr}
-Don't use @samp{\?}, @samp{\+} and @samp{\|} in patterns, they are
-not supported on Solaris.
-
 No @command{expr} keyword starts with @samp{x}, so use @samp{expr
 x"@var{word}" : '@var{regex}'} to keep @command{expr} from
 misinterpreting @var{word}.
 
+You can use @samp{|}.  There is one portability problem occuring when
+you @samp{|} together the empty string (or zero) with the empty string.
+For example:
+
+@example
+expr '' \| ''
+@end example
+
+@sc{gnu}/Linux and @sc{posix.2} return the empty string for this case,
+but traditional Unix returns @samp{0}.  In the latest @sc{posix} draft,
+the specification has been changed to match traditional Unix's behavior
+(which is bizarre, but it's too late to fix this).
+
+Avoid this portability problem by avoiding the empty string.
+
+
+
 Don't use @code{length}, @code{substr}, @code{match} and @code{index}.
+
+@item @command{expr} (@samp{:})
+@cindex @command{expr}
+Don't use @samp{\?}, @samp{\+} and @samp{\|} in patterns, they are
+not supported on Solaris.
+
+
 
 @item @command{grep}
 @cindex @command{grep}

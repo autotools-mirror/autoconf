@@ -779,9 +779,30 @@ done; }
 # ---------------------------
 # Simulate running `dirname(1)' on PATHNAME, not all systems have it.
 # This macro must be usable from inside ` `.
+#
+# Paul Eggert answers:
+# Question: Under UN*X, should `//1' give `/'?
+#
+# No, under some older flavors of Unix, leading // is a special path
+# name: it refers to a "super-root" and is used to access other
+# machines' files.  Leading ///, ////, etc. are equivalent to /; but
+# leading // is special.  I think this tradition started with Apollo
+# Domain/OS, an OS that is still in use on some older hosts.
+#
+# POSIX.2 allows but does not require the special treatment for //.
+# It says that the behavior of dirname on path names of the form
+# //([^/]+/*)? is implementation defined.  In these cases, GNU dirname
+# returns /, but it's more portable to return // as this works even on
+# those older flavors of Unix.
+#
+# I have heard rumors that this special treatment of // may be dropped
+# in future versions of POSIX, but for now it's still the standard.
 define([_AC_SHELL_DIRNAME],
-[echo $1 | sed '/^\/*$/!s,//*$,,;s,[[^/]]*$,,;s,//*$,/,;/^\/$/!s,/$,,;s,^$,.,'])
-
+[expr "X$dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+      "X$dir" : 'X\(//\)[^/]' \| \
+      "X$dir" : 'X\(//\)$' \| \
+      "X$dir" : 'X\(/\)' \| \
+      .       : '\(.\)'])
 
 
 ## --------------------------------------------------- ##

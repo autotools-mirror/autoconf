@@ -1,5 +1,13 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_DIRNAME): Use an `expr' solution instead of
+	echo|sed.
+	From Paul Eggert.
+	* doc/autoconf.texi (Limitations of Usual Tools): Include the
+	words from Paul about `|' with expr(1).
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* aclang.m4: Promote s,,, over s%%%, and `sed prog' over `sed -e
 	prog'.
 	* acgeneral.m4: Likewise.
