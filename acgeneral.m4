@@ -387,7 +387,7 @@ define(AC_LANG_SAVE, [pushdef([AC_LANG_STACK], AC_LANG)])dnl
 dnl
 dnl Restore the current language from the stack.
 define(AC_LANG_RESTORE,
-[ifelse(AC_LANG_STACK,C,[AC_LANG_C],[AC_LANG_CPLUSPLUS])[]popdef([AC_LANG_STACK])])dnl
+[ifelse(AC_LANG_STACK,C,[ifelse(AC_LANG,C,,[AC_LANG_C])],[ifelse(AC_LANG,CPLUSPLUS,,[AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])dnl
 dnl
 dnl
 dnl Checks for kinds of features
