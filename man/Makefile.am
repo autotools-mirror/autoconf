@@ -30,17 +30,17 @@ MAINTAINERCLEANFILES = $(dist_man_MANS)
 # Depend on configure.ac to get version number changes.
 common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x
 binsrcdir = $(top_srcdir)/bin
-autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(binsrcdir)/autoconf.as
-autoheader.1: $(common_dep) $(srcdir)/autoheader.x $(binsrcdir)/autoheader.in
-autom4te.1:   $(common_dep) $(srcdir)/autom4te.x   $(binsrcdir)/autom4te.in
-autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(binsrcdir)/autoreconf.in
-autoscan.1:   $(common_dep) $(srcdir)/autoscan.x   $(binsrcdir)/autoscan.in
-autoupdate.1: $(common_dep) $(srcdir)/autoupdate.x $(binsrcdir)/autoupdate.in
-ifnames.1:    $(common_dep) $(srcdir)/ifnames.x    $(binsrcdir)/ifnames.in
+autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
+autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
+autom4te.1:   $(common_dep) $(binsrcdir)/autom4te.in
+autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
+autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
+autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
+ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
 
 # Independent from this package.
-config.guess.1: $(srcdir)/config.guess.x  $(top_srcdir)/config/config.guess
-config.sub.1:   $(srcdir)/config.sub.x    $(top_srcdir)/config/config.sub
+config.guess.1: $(top_srcdir)/config/config.guess
+config.sub.1:   $(top_srcdir)/config/config.sub
 
 SUFFIXES = .x .1
 
