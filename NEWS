@@ -1,4 +1,6 @@
 * Major changes in Autoconf 2.52c                       -*- outline -*-
+** Licensing
+  The autoconf manual is now distributed under the terms of the GNU FDL.
 ** Requirements
   Perl 5.005 is now required to run Autoconf.
 ** autom4te

@@ -1,3 +1,16 @@
+2001-08-11  Paul Eggert  <eggert@twinsun.com>
+
+	* NEWS: The autoconf manual now is distributed under the terms
+	of the GNU Free Documentation License.
+
+	* doc/autoconf.texi: Switch from old style copyright notice to FDL.
+	Add an appendix "Copying This Manual" for the FDL.
+
+	* doc/fdl.texi: New file, from
+	<http://www.gnu.org/licenses/fdl.texi>.
+
+	* doc/Makefile.am (autoconf_TEXINFOS): Add fdl.texi.
+
 2001-08-10  Paul Eggert  <eggert@twinsun.com>
 
 	* AUTHORS, BUGS, ChangeLog, ChangeLog.0, ChangeLog.1,

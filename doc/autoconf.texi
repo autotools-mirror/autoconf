@@ -58,26 +58,13 @@ package.
 Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001 Free
 Software Foundation, Inc.
 
-Permission is granted to make and distribute verbatim copies of this
-manual provided the copyright notice and this permission notice are
-preserved on all copies.
-
-@ignore
-Permission is granted to process this file through TeX and print the
-results, provided the printed document carries copying permission notice
-identical to this one except for the removal of this paragraph (this
-paragraph not being relevant to the printed manual).
-
-@end ignore
-Permission is granted to copy and distribute modified versions of this
-manual under the conditions for verbatim copying, provided that the
-entire resulting derived work is distributed under the terms of a
-permission notice identical to this one.
-
-Permission is granted to copy and distribute translations of this manual
-into another language, under the above conditions for modified versions,
-except that this permission notice may be stated in a translation
-approved by the Foundation.
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, with no
+Front-Cover Texts, and with no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU
+Free Documentation License''.
 @end ifinfo
 
 @titlepage
@@ -93,19 +80,13 @@ approved by the Foundation.
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
 2001 Free Software Foundation, Inc.
 
-Permission is granted to make and distribute verbatim copies of this
-manual provided the copyright notice and this permission notice are
-preserved on all copies.
-
-Permission is granted to copy and distribute modified versions of this
-manual under the conditions for verbatim copying, provided that the
-entire resulting derived work is distributed under the terms of a
-permission notice identical to this one.
-
-Permission is granted to copy and distribute translations of this manual
-into another language, under the above conditions for modified versions,
-except that this permission notice may be stated in a translation
-approved by the Foundation.
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, with no
+Front-Cover Texts, and with no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU
+Free Documentation License''.
 @end titlepage
 
 @c Define an environment variable index.
@@ -150,6 +131,7 @@ package.  This is edition @value{EDITION}, for Autoconf version
 * Obsolete Constructs::         Kept for backward compatibility
 * Questions::                   Questions about Autoconf, with answers
 * History::                     History of Autoconf
+* Copying This Manual::         How to make copies of this manual
 * Environment Variable Index::  Index of environment variables used
 * Output Variable Index::       Index of variables set in output files
 * Preprocessor Symbol Index::   Index of C preprocessor symbols defined
@@ -407,6 +389,10 @@ History of Autoconf
 * Leviticus::                   The priestly code of portability arrives
 * Numbers::                     Growth and contributors
 * Deuteronomy::                 Approaching the promises of easy configuration
+
+Copying This Manual
+
+* GNU Free Documentation License::  License for copying this manual
 
 @end detailmenu
 @end menu
@@ -11184,7 +11170,7 @@ duplicated, even though they normally are in @code{configure} setups.
 
 @c ===================================================== History of Autoconf.
 
-@node History, Environment Variable Index, Questions, Top
+@node History, Copying This Manual, Questions, Top
 @chapter History of Autoconf
 
 You may be wondering, Why was Autoconf originally written?  How did it
@@ -11390,7 +11376,16 @@ have free time again.  I think.  Yeah, right.)
 
 @c ========================================================== Appendices
 
-@node Environment Variable Index, Output Variable Index, History, Top
+@node Copying This Manual, Environment Variable Index, History, Top
+@appendix Copying This Manual
+
+@menu
+* GNU Free Documentation License::  License for copying this manual
+@end menu
+
+@include fdl.texi
+
+@node Environment Variable Index, Output Variable Index, Copying This Manual, Top
 @unnumbered Environment Variable Index
 
 This is an alphabetical list of the environment variables that Autoconf

@@ -70,7 +70,7 @@ MAKEINFO = @MAKEINFO@ --no-split
 TEXI2HTML = texi2html
 
 info_TEXINFOS = autoconf.texi standards.texi
-autoconf_TEXINFOS = install.texi
+autoconf_TEXINFOS = fdl.texi install.texi
 standards_TEXINFOS = make-stds.texi
 
 # Files from texi2dvi that should be removed, but which Automake does
