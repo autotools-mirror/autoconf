@@ -353,11 +353,11 @@ _AT_CHECK_AC_MACRO(
   [cross_compiling=yes
    AC_C_BIGENDIAN([ac_endian=big],[ac_endian=little],[ac_endian=unknown])
    ac_prevendian=`cat at-endian`
-   # Chech we have found the same result as in the previous run
+   # Check that we have found the same result as in the previous run
    # or unknown (because the cross-compiling check is allowed to fail;
    # although it might be interesting to suppress this comparison, just
    # to know on which system it fails if it ever does).
-   if test $ac_endian != $ac_prevendian -a $ac_endian != unknown; then
+   if test $ac_endian != $ac_prevendian && test $ac_endian != unknown; then
      AC_MSG_ERROR([unexpected endianness: first run found '$ac_prevendian' but second run found '$ac_endian'])
    fi
 ])
