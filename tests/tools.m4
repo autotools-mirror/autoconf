@@ -17,7 +17,7 @@ dnl `configure.in' function properly.
 AT_SETUP(AH_DEFUN)
 
 AT_DATA(configure.in,
-[AC_INCLUDE(actest.m4)
+[[AC_INCLUDE(actest.m4)
 AH_DEFUN(AC_ANAKIN,
 [AH_TEMPLATE(Anakin, [The future Darth Vador?])])
 AC_INIT
@@ -25,12 +25,10 @@ AC_TATOOINE
 AC_ANAKIN
 AC_CONFIG_HEADERS(config.h:config.hin)
 AC_OUTPUT
-])
+]])
 
-# The user must know the macro is obsolete.
+# Checking `autoheader'.
 AT_CHECK([../autoheader -m .. -l $at_srcdir], 0)
-
-# And autoupdate should update it properly.
 AT_CHECK([cat config.hin], 0,
 [/* config.hin.  Generated automatically from configure.in by autoheader.  */
 
@@ -42,3 +40,32 @@ AT_CHECK([cat config.hin], 0,
 ])
 
 AT_CLEANUP(config.hin)
+
+
+
+dnl autoupdate
+dnl ----------
+dnl
+dnl Check that AC_LINK_FILES and AC_OUTPUT are properly updated.
+AT_SETUP(autoupdate)
+
+AT_DATA(configure.in,
+[[AC_INIT
+AC_LINK_FILES(from1 from2, to1 to2)
+dnl The doc says 27 is a valid fubar.
+fubar=27
+AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
+]])
+
+# Checking `autoupdate'.
+AT_CHECK([../autoupdate -m .. -l $at_srcdir -<configure.in], 0,
+[[AC_INIT
+AC_CONFIG_LINKS(to1:from1)AC_CONFIG_LINKS(to2:from2)
+dnl The doc says 27 is a valid fubar.
+fubar=27
+AC_CONFIG_FILES(Makefile)
+AC_CONFIG_COMMANDS(default, [echo $fubar], [fubar=$fubar])
+AC_OUTPUT
+]], ignore)
+
+AT_CLEANUP

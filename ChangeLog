@@ -1,5 +1,21 @@
 2000-02-09  Akim Demaille  <akim@epita.fr>
 
+	Clean up `make clean'.
+
+	* doc/Makefile.am (CLEANFILES): Added autoconf.tmp.
+	* Makefile.am (CLEANFILES): Added autoupdate.m4f.
+	* tests/torture.m4: Rm dummy and dummy.in.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
+	Test `autoupdate'.
+
+	* tests/tools.m4 (AH_DEFUN): Fix the comments.
+	Quote properly.
+	(autoupdate): New test.
+
+2000-02-09  Akim Demaille  <akim@epita.fr>
+
 	AU_ glue code for AC_OUTPUT with arguments.
 
 	* acgeneral.m4 (AU_DEFINE): New macros, pulled out from AU_DEFUN.
