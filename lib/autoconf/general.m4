@@ -2859,7 +2859,7 @@ AS_IF([AC_TRY_EVAL(ac_link) &&
       [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 m4_ifvaln([$3], [$3])dnl])[]dnl
-rm -f conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
+rm -f conftest.$ac_objext conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 
 
