@@ -4,6 +4,10 @@
 	writing to a full disk.
 	* autoscan.pl (END): New function.
 
+	* autoscan.pl: Misc. clean-up:
+	Move declarations of variables into the scope where they're used.
+	Use `qw'.  Don't use `$_'.
+
 2001-02-06  Paul Eggert  <eggert@twinsun.com>
 
 	* acspecific.m4 (AC_SYS_LARGEFILE_TEST_INCLUDES): Don't reject
