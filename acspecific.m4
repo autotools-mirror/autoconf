@@ -1227,7 +1227,8 @@ AC_MSG_RESULT($ac_cv_c_cross)
 ])dnl
 dnl
 define(AC_C_CHAR_UNSIGNED,
-[AC_MSG_CHECKING(whether char is unsigned)
+[AC_REQUIRE([AC_PROG_CC])dnl
+AC_MSG_CHECKING(whether char is unsigned)
 AC_CACHE_VAL(ac_cv_c_char_unsigned,
 [AC_TRY_RUN(
 [/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
@@ -1235,14 +1236,11 @@ AC_CACHE_VAL(ac_cv_c_char_unsigned,
 #define volatile
 #endif
 main() {
-#ifdef __CHAR_UNSIGNED__
-  exit(1); /* No need to redefine it.  */
-#else
   volatile char c = 255; exit(c < 0);
-#endif
 }], ac_cv_c_char_unsigned=yes, ac_cv_c_char_unsigned=no)])dnl
 AC_MSG_RESULT($ac_cv_c_char_unsigned)
-if test $ac_cv_c_char_unsigned = yes; then
+if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
+  # gcc predefines this symbol on systems where it applies.
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi
 ])dnl
