@@ -43,18 +43,18 @@ define(AC_GCC_TRADITIONAL,
 [AC_REQUIRE([AC_PROG_CC])AC_REQUIRE([AC_PROG_CPP])if test -n "$GCC"; then
   echo checking whether -traditional is needed
 changequote(,)dnl
-  pattern="Autoconf.*'x'"
+  ac_pattern="Autoconf.*'x'"
 changequote([,])dnl
-  prog='#include <sgtty.h>
+  ac_prog='#include <sgtty.h>
 Autoconf TIOCGETP'
-  AC_PROGRAM_EGREP($pattern, $prog, need_trad=1)
+  AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=1)
 
-  if test -z "$need_trad"; then
-    prog='#include <termio.h>
+  if test -z "$ac_need_trad"; then
+    ac_prog='#include <termio.h>
 Autoconf TCGETA'
-    AC_PROGRAM_EGREP($pattern, $prog, need_trad=1)
+    AC_PROGRAM_EGREP($ac_pattern, $ac_prog, ac_need_trad=1)
   fi
-  test -n "$need_trad" && CC="$CC -traditional"
+  test -n "$ac_need_trad" && CC="$CC -traditional"
 fi
 ])dnl
 dnl
@@ -105,7 +105,8 @@ Syntax Error], ,
   AC_TEST_CPP([#include <stdio.h>
 Syntax Error], ,CPP=/lib/cpp))
 fi
-test ".${verbose}" != "." && echo "	setting CPP to $CPP"
+CPP="$CPP \$CFLAGS"
+test ".${ac_verbose}" != "." && echo "	setting CPP to $CPP"
 AC_SUBST(CPP)dnl
 ])dnl
 dnl
@@ -138,13 +139,13 @@ changequote(,)dnl
     echo "Can't find output from $LEX; assuming lex.yy.c." 1>&2
     LEX_OUTPUT_ROOT=lex.yy
   fi
-  AC_SUBST(LEX_OUTPUT_ROOT)dnl
   DECLARE_YYTEXT=`eval ${CPP} "${LEX_OUTPUT_ROOT}.c" |
     sed -n '/extern.*yytext[^a-zA-Z0-9_]/s/^.*extern/extern/p'`
   rm -f "${LEX_OUTPUT_ROOT}.c"
 changequote([,])dnl
 fi
-AC_DEFINE_UNQUOTED(DECLARE_YYTEXT, \"$DECLARE_YYTEXT\")dnl
+AC_SUBST(LEX_OUTPUT_ROOT)dnl
+AC_DEFINE_UNQUOTED(DECLARE_YYTEXT, $DECLARE_YYTEXT)dnl
 ])dnl
 dnl
 define(AC_PROG_INSTALL,
@@ -161,25 +162,27 @@ define(AC_PROG_INSTALL,
 # This turns out not to be true, so the mere pathname isn't an indication
 # of whether the program works.  What we really need is a set of tests for
 # the install program to see if it actually works in all the required ways.
+#
+# Avoid using ./install, which might have been erroneously created
+# by make from ./install.sh.
 if test "z${INSTALL}" = "z" ; then
   echo checking for install
-  IFS="${IFS= 	}"; saveifs="$IFS"; IFS="${IFS}:"
-  for dir in $PATH; do
-    #test -z "$dir" && dir=.
-    case "$dir" in
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    case "$ac_dir" in
     ''|.|/etc|/sbin|/usr/sbin|/usr/etc|/usr/afsws/bin|/usr/ucb) ;;
     *)
-      if test -f $dir/installbsd; then
-	INSTALL="$dir/installbsd -c" # OSF1
+      if test -f $ac_dir/installbsd; then
+	INSTALL="$ac_dir/installbsd -c" # OSF1
 	INSTALL_PROGRAM='$(INSTALL)'
 	INSTALL_DATA='$(INSTALL) -m 644'
 	break
       fi
-      if test -f $dir/install; then
-	if grep dspmsg $dir/install >/dev/null 2>&1; then
+      if test -f $ac_dir/install; then
+	if grep dspmsg $ac_dir/install >/dev/null 2>&1; then
 	  : # AIX
 	else
-	  INSTALL="$dir/install -c"
+	  INSTALL="$ac_dir/install -c"
 	  INSTALL_PROGRAM='$(INSTALL)'
 	  INSTALL_DATA='$(INSTALL) -m 644'
 	  break
@@ -188,7 +191,7 @@ if test "z${INSTALL}" = "z" ; then
       ;;
     esac
   done
-  IFS="$saveifs"
+  IFS="$ac_save_ifs"
 fi
 if test -z "$INSTALL"; then
   if test -f ${srcdir}/install.sh; then
@@ -202,13 +205,13 @@ if test -z "$INSTALL"; then
   fi
 fi
 AC_SUBST(INSTALL)dnl
-test -n "$verbose" && echo "	setting INSTALL to $INSTALL"
+test -n "$ac_verbose" && echo "	setting INSTALL to $INSTALL"
 INSTALL_PROGRAM=${INSTALL_PROGRAM-'$(INSTALL)'}
 AC_SUBST(INSTALL_PROGRAM)dnl
-test -n "$verbose" && echo "	setting INSTALL_PROGRAM to $INSTALL_PROGRAM"
+test -n "$ac_verbose" && echo "	setting INSTALL_PROGRAM to $INSTALL_PROGRAM"
 INSTALL_DATA=${INSTALL_DATA-'$(INSTALL)'}
 AC_SUBST(INSTALL_DATA)dnl
-test -n "$verbose" && echo "	setting INSTALL_DATA to $INSTALL_DATA"
+test -n "$ac_verbose" && echo "	setting INSTALL_DATA to $INSTALL_DATA"
 ])dnl
 dnl Defined separately so a configure.in can redefine if necessary.
 define(AC_PROG_INSTALL_INSTALL_SH, ["${srcdir}/install.sh -c"])dnl
@@ -283,18 +286,18 @@ dnl
 define(AC_MAJOR_HEADER,
 [AC_COMPILE_CHECK([major, minor and makedev header],
 [#include <sys/types.h>],
-[return makedev(0, 0);], makedev=1)
-if test -z "$makedev"; then
-AC_HEADER_CHECK(sys/mkdev.h, AC_DEFINE(MAJOR_IN_MKDEV) makedev=1)
+[return makedev(0, 0);], ac_makedev=1)
+if test -z "$ac_makedev"; then
+AC_HEADER_CHECK(sys/mkdev.h, AC_DEFINE(MAJOR_IN_MKDEV) ac_makedev=1)
 fi
-if test -z "$makedev"; then
+if test -z "$ac_makedev"; then
 AC_HEADER_CHECK(sys/sysmacros.h, AC_DEFINE(MAJOR_IN_SYSMACROS))
 fi]
 )dnl
 dnl
 define(AC_DIR_HEADER,
 [AC_PROVIDE([$0])echo checking for directory library header
-dirheader=
+ac_dir_header=
 AC_DIR_HEADER_CHECK(dirent.h, DIRENT)
 AC_DIR_HEADER_CHECK(sys/ndir.h, SYSNDIR)
 AC_DIR_HEADER_CHECK(sys/dir.h, SYSDIR)
@@ -302,7 +305,7 @@ AC_DIR_HEADER_CHECK(ndir.h, NDIR)
 
 echo checking for closedir return value
 AC_TEST_PROGRAM([#include <sys/types.h>
-#include <$dirheader>
+#include <$ac_dir_header>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }], ,
 AC_DEFINE(VOID_CLOSEDIR))
 ])dnl
@@ -311,13 +314,13 @@ dnl ??? I tried to put this define inside AC_DIR_HEADER, but when I did
 dnl that, $1 and $2 did not get expanded. --roland
 dnl Check if $1 is the winning directory library header file.
 dnl It must not only exist, but also correctly define the `DIR' type.
-dnl If it is really winning, define $2 and set shell var `dirheader' to $1.
+dnl If it is really winning, define $2 and set shell var `ac_dir_header' to $1.
 define(AC_DIR_HEADER_CHECK, [dnl
-if test -z "$dirheader"; then
+if test -z "$ac_dir_header"; then
   AC_COMPILE_CHECK($1, [#include <sys/types.h>
 #include <]$1[>],
 	  	   [DIR *dirp = 0;],
-		   AC_DEFINE($2) dirheader=$1)dnl
+		   AC_DEFINE($2) ac_dir_header=$1)dnl
 fi])dnl
 dnl
 dnl
@@ -329,7 +332,7 @@ define(AC_GETGROUPS_T,
 echo checking for type of array argument to getgroups
 changequote(,)dnl
 dnl Do not put single quotes in the C program text!!
-prog='/* Thanks to Mike Rendell for this test.  */
+ac_prog='/* Thanks to Mike Rendell for this test.  */
 #include <sys/types.h>
 #define NGID 256
 #undef MAX
@@ -350,7 +353,7 @@ main()
   exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
 }'
 changequote([,])dnl
-AC_TEST_PROGRAM([$prog],
+AC_TEST_PROGRAM([$ac_prog],
 		AC_DEFINE(GETGROUPS_T, gid_t),
 		AC_DEFINE(GETGROUPS_T, int))
 ])dnl
@@ -395,8 +398,8 @@ dnl
 dnl
 define(AC_VPRINTF,
 [AC_COMPILE_CHECK([vprintf], , [vprintf();], AC_DEFINE(HAVE_VPRINTF),
-vprintf_missing=1)
-if test -n "$vprintf_missing"; then
+ac_vprintf_missing=1)
+if test -n "$ac_vprintf_missing"; then
 AC_COMPILE_CHECK([_doprnt], , [_doprnt();], AC_DEFINE(HAVE_DOPRNT))
 fi
 ])dnl
@@ -523,7 +526,7 @@ define(AC_ALLOCA,
 # for constant arguments.  Useless!
 AC_COMPILE_CHECK(working alloca.h, [#include <alloca.h>],
   [char *p = alloca(2 * sizeof(int));], AC_DEFINE(HAVE_ALLOCA_H))
-decl="#ifdef __GNUC__
+ac_decl="#ifdef __GNUC__
 #define alloca __builtin_alloca
 #else
 #if HAVE_ALLOCA_H
@@ -537,9 +540,9 @@ char *alloca ();
 #endif
 #endif
 "
-AC_COMPILE_CHECK([alloca], $decl,
+AC_COMPILE_CHECK([alloca], $ac_decl,
 [char *p = (char *) alloca(1);], [AC_DEFINE([HAVE_ALLOCA])], [dnl
-alloca_missing=1
+ac_alloca_missing=1
 AC_PROGRAM_EGREP(winnitude, [
 #if defined(CRAY) && ! defined(CRAY2)
 winnitude
@@ -551,7 +554,7 @@ AC_FUNC_CHECK([_getb67],AC_DEFINE([CRAY_STACKSEG_END],[_getb67]),
 AC_FUNC_CHECK([GETB67],AC_DEFINE([CRAY_STACKSEG_END],[GETB67]),
 AC_FUNC_CHECK([getb67],AC_DEFINE([CRAY_STACKSEG_END],[getb67])))))
 ])
-if test -n "$alloca_missing"; then
+if test -n "$ac_alloca_missing"; then
   # The SVR3 libPW and SVR4 libucb both contain incompatible functions
   # that cause trouble.  Some versions do not even contain alloca or
   # contain a buggy version.  If you still want to use their alloca,
@@ -585,19 +588,19 @@ dnl
 define(AC_GETLOADAVG,
 [# Some definitions of getloadavg require that the program be installed setgid.
 AC_SUBST(NEED_SETGID)NEED_SETGID=false
-need_func=true
+ac_need_func=true
 
 # Check for the 4.4BSD definition of getloadavg.
-AC_HAVE_LIBRARY(util, LIBS="$LIBS -lutil" need_func=false)
+AC_HAVE_LIBRARY(util, LIBS="$LIBS -lutil" ac_need_func=false)
 # Some systems with -lutil have (and need) -lkvm as well, some do not.
 AC_HAVE_LIBRARY(kvm, LIBS="$LIBS -lkvm")
 
-if $need_func; then
+if $ac_need_func; then
 # There is a commonly available library for RS/6000 AIX.
 # Since it is not a standard part of AIX, it might be installed locally.
 LIBS_old="$LIBS"
 LIBS="-L/usr/local/lib $LIBS"
-AC_HAVE_LIBRARY(getloadavg, LIBS="$LIBS -lgetloadavg" need_func=false,
+AC_HAVE_LIBRARY(getloadavg, LIBS="$LIBS -lgetloadavg" ac_need_func=false,
 	LIBS="$LIBS_old")
 fi
 
@@ -606,26 +609,26 @@ AC_REPLACE_FUNCS(getloadavg)
 
 case "$LIBOBJS" in
 *getloadavg*)
-need_func=true
+ac_need_func=true
 AC_HEADER_CHECK(sys/dg_sys_info.h, [dnl
-AC_DEFINE(DGUX) need_func=false
+AC_DEFINE(DGUX) ac_need_func=false
 # Some versions of DGUX need -ldgc for dg_sys_info.
 AC_HAVE_LIBRARY(dgc)])
-if $need_func; then
+if $ac_need_func; then
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
 # uses stabs), but it's still SVR4.  We cannot check for <elf.h> because
 # Irix 4.0.5F has the header but not the library.
-AC_HAVE_LIBRARY(elf, AC_DEFINE(SVR4) LIBS="$LIBS -lelf" need_func=false
+AC_HAVE_LIBRARY(elf, AC_DEFINE(SVR4) LIBS="$LIBS -lelf" ac_need_func=false
   AC_HAVE_LIBRARY(kvm, LIBS="$LIBS -lkvm"))
 fi
-if $need_func; then
+if $ac_need_func; then
 AC_HEADER_CHECK(inq_stats/cpustats.h, AC_DEFINE(UMAX4_3) AC_DEFINE(UMAX)
-  need_func=false)
+  ac_need_func=false)
 fi
-if $need_func; then
-AC_HEADER_CHECK(sys/cpustats.h, AC_DEFINE(UMAX) need_func=false)
+if $ac_need_func; then
+AC_HEADER_CHECK(sys/cpustats.h, AC_DEFINE(UMAX) ac_need_func=false)
 fi
-if $need_func; then
+if $ac_need_func; then
 AC_HAVE_HEADERS(mach/mach.h)
 fi
 
@@ -651,10 +654,10 @@ if $NEED_SETGID; then
   # The installed program will need to be setgid and owned by that group.
 changequote(,)dnl
   # On Solaris, /dev/kmem is a symlink.  Get info on the real file.
-  ls_output=`ls -lgL /dev/kmem 2>/dev/null`
+  ac_ls_output=`ls -lgL /dev/kmem 2>/dev/null`
   # If we got an error (system does not support symlinks), try without -L.
-  test -z "$ls_output" && ls_output=`ls -lg /dev/kmem`
-  KMEM_GROUP=`echo $ls_output \
+  test -z "$ac_ls_output" && ac_ls_output=`ls -lg /dev/kmem`
+  KMEM_GROUP=`echo $ac_ls_output \
     | sed -ne 's/[ 	][ 	]*/ /g;
 	       s/^.[sSrwx-]* *[0-9]* *\([^0-9]*\)  *.*/\1/;
 	       / /s/.* //;p;'`
@@ -719,19 +722,19 @@ define(AC_TIME_WITH_SYS_TIME,
 [struct tm *tp;], AC_DEFINE(TIME_WITH_SYS_TIME))])dnl
 dnl
 define(AC_TIMEZONE,
-[AC_REQUIRE([AC_STRUCT_TM])decl='#include <sys/types.h>
+[AC_REQUIRE([AC_STRUCT_TM])ac_decl='#include <sys/types.h>
 '
 case "$DEFS" in
-  *TM_IN_SYS_TIME*) decl="$decl
+  *TM_IN_SYS_TIME*) ac_decl="$ac_decl
 #include <sys/time.h>
 " ;;
-  *) decl="$decl
+  *) ac_decl="$ac_decl
 #include <time.h>
 " ;;
 esac
-AC_COMPILE_CHECK([tm_zone in struct tm], $decl,
-[struct tm tm; tm.tm_zone;], AC_DEFINE(HAVE_TM_ZONE), no_tm_zone=1)
-if test -n "$no_tm_zone"; then
+AC_COMPILE_CHECK([tm_zone in struct tm], $ac_decl,
+[struct tm tm; tm.tm_zone;], AC_DEFINE(HAVE_TM_ZONE), ac_no_tm_zone=1)
+if test -n "$ac_no_tm_zone"; then
 AC_COMPILE_CHECK(tzname, changequote(<<,>>)dnl
 <<#include <time.h>
 #ifndef tzname /* For SGI.  */
@@ -852,7 +855,7 @@ fi
 define(AC_CONST,
 [changequote(,)dnl
 dnl Do not put single quotes in the C program text!!
-prog='/* Ultrix mips cc rejects this.  */
+ac_prog='/* Ultrix mips cc rejects this.  */
 typedef int charset[2]; const charset x;
 /* SunOS 4.1.1 cc rejects this.  */
 char const *const *ccp;
@@ -892,7 +895,7 @@ ccp = (char const *const *) p;
 }'
 changequote([,])dnl
 AC_COMPILE_CHECK([dnl Do not "break" this again.
-lack of working const], , [$prog], , AC_DEFINE(const,))])dnl
+lack of working const], , [$ac_prog], , AC_DEFINE(const,))])dnl
 dnl
 dnl
 dnl checks for operating system services
@@ -914,8 +917,8 @@ rm -f conftest
 ])dnl
 define(AC_REMOTE_TAPE,
 [echo checking for remote tape and socket header files
-AC_HEADER_CHECK(sys/mtio.h, AC_DEFINE(HAVE_SYS_MTIO_H) have_mtio=1)
-if test -n "$have_mtio"; then
+AC_HEADER_CHECK(sys/mtio.h, AC_DEFINE(HAVE_SYS_MTIO_H) ac_have_mtio_h=1)
+if test -n "$ac_have_mtio_h"; then
 AC_TEST_CPP([#include <sgtty.h>
 #include <sys/socket.h>], PROGS="$PROGS rmt")
 fi
@@ -923,7 +926,7 @@ fi
 dnl
 define(AC_LONG_FILE_NAMES,
 [echo checking for long file names
-some_dir_failed=false
+ac_some_dir_failed=false
 # Test for long file names in all the places we know might matter:
 #      .		the current directory, where building will happen
 #      /tmp		where it might want to write temporary files
@@ -932,16 +935,16 @@ some_dir_failed=false
 #      $prefix/lib	where we will be installing things
 #      $exec_prefix/lib	likewise
 # eval it to expand exec_prefix.
-for dir in `eval echo . /tmp /var/tmp /usr/tmp $prefix/lib $exec_prefix/lib` ; do
-  test -d $dir || continue
-  test -w $dir || continue # It's less confusing to not echo anything here.
-  (echo 1 > $dir/conftest9012345) 2>/dev/null
-  (echo 2 > $dir/conftest9012346) 2>/dev/null
-  val=`cat $dir/conftest9012345 2>/dev/null`
-  test -f $dir/conftest9012345 && test "$val" = 1 || some_dir_failed=true
-  rm -f $dir/conftest9012345 $dir/conftest9012346 2> /dev/null
+for ac_dir in `eval echo . /tmp /var/tmp /usr/tmp $prefix/lib $exec_prefix/lib` ; do
+  test -d $ac_dir || continue
+  test -w $ac_dir || continue # It's less confusing to not echo anything here.
+  (echo 1 > $ac_dir/conftest9012345) 2>/dev/null
+  (echo 2 > $ac_dir/conftest9012346) 2>/dev/null
+  val=`cat $ac_dir/conftest9012345 2>/dev/null`
+  test -f $ac_dir/conftest9012345 && test "$val" = 1 || ac_some_dir_failed=true
+  rm -f $ac_dir/conftest9012345 $ac_dir/conftest9012346 2> /dev/null
 done
-$some_dir_failed || AC_DEFINE(HAVE_LONG_FILE_NAMES)
+$ac_some_dir_failed || AC_DEFINE(HAVE_LONG_FILE_NAMES)
 ])dnl
 dnl
 define(AC_RESTARTABLE_SYSCALLS,
@@ -965,13 +968,13 @@ main () {
 ])dnl
 dnl
 define(AC_FIND_X,
-[# If we find X, set shell vars x_includes and x_libraries to the paths.
+[AC_PROVIDE([$0])# If we find X, set shell vars x_includes and x_libraries to the paths.
 no_x=true
 AC_FIND_X_XMKMF
-if test -z "$im_usrlibdir"; then
+if test -z "$ac_imake_usrlibdir"; then
 AC_FIND_X_DIRECT
 fi
-if test -n "$verbose"; then
+if test -n "$ac_verbose"; then
   test -n "$x_includes" && echo "	found X11 headers in $x_includes"
   test -n "$x_libraries" && echo "	found X11 libraries in $x_libraries"
 fi])dnl
@@ -984,23 +987,23 @@ if mkdir conftestdir; then
   cd conftestdir
   cat > Imakefile <<'EOF'
 acfindx:
-	@echo 'im_incroot="$(INCROOT)"; im_usrlibdir="$(USRLIBDIR)"; im_libdir="$(LIBDIR)"'
+	@echo 'ac_imake_incroot="$(INCROOT)"; ac_imake_usrlibdir="$(USRLIBDIR)"; ac_imake_libdir="$(LIBDIR)"'
 EOF
   if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
     no_x=
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
     eval `make acfindx 2>/dev/null | grep -v make`
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
-    if test ! -f $im_usrlibdir/libX11.a && test -f $im_libdir/libX11.a; then
-      im_usrlibdir=$im_libdir
+    if test ! -f $ac_imake_usrlibdir/libX11.a && test -f $ac_imake_libdir/libX11.a; then
+      ac_imake_usrlibdir=$ac_imake_libdir
     fi
-    case "$im_incroot" in
+    case "$ac_imake_incroot" in
 	/usr/include) ;;
-	*) x_includes="$im_incroot" ;;
+	*) x_includes="$ac_imake_incroot" ;;
     esac
-    case "$im_usrlibdir" in
+    case "$ac_imake_usrlibdir" in
 	/usr/lib | /lib) ;;
-	*) x_libraries="$im_usrlibdir" ;;
+	*) x_libraries="$ac_imake_usrlibdir" ;;
     esac
   fi
   cd ..
@@ -1018,7 +1021,7 @@ if test ".$x_direct_test_include" = . ; then
    x_direct_test_include='X11/Intrinsic.h'
 fi
 AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
-  for dir in                  \
+  for ac_dir in               \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
     /usr/X11R4/include        \
@@ -1055,8 +1058,8 @@ AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
     /usr/lpp/Xamples/include  \
     ; \
   do
-    if test -r "$dir/$x_direct_test_include"; then
-      x_includes=$dir; no_x=
+    if test -r "$ac_dir/$x_direct_test_include"; then
+      x_includes=$ac_dir; no_x=
       break
     fi
   done)
@@ -1064,7 +1067,7 @@ AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
 # Check for the libraries.  First see if replacing the `include' by
 # `lib' works.
 AC_HAVE_LIBRARY("$x_direct_test_library", no_x=,
-for dir in `echo "$x_includes" | sed s/include/lib/` \
+for ac_dir in `echo "$x_includes" | sed s/include/lib/` \
     /usr/X11R6/lib        \
     /usr/X11R5/lib        \
     /usr/X11R4/lib        \
@@ -1101,13 +1104,62 @@ for dir in `echo "$x_includes" | sed s/include/lib/` \
     /usr/lpp/Xamples/lib  \
     ; \
 do
-  for extension in a so sl; do
-    if test -r $dir/lib${x_direct_test_library}.$extension; then
-      x_libraries=$dir; no_x=
+  for ac_extension in a so sl; do
+    if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
+      x_libraries=$ac_dir; no_x=
       break 2
     fi
   done
 done)])dnl
+dnl
+dnl Find additional X libraries, magic flags, etc.
+define(AC_FIND_XTRA, [AC_REQUIRE(AC_FIND_X)AC_REQUIRE(AC_ISC_POSIX)
+if test -n "$x_includes"; then
+  X_CFLAGS="$X_CFLAGS -I$x_includes"
+elif test -n "$no_x"; then 
+  # Not all programs may use this symbol, but it won't hurt to define it.
+  X_CFLAGS="$X_CFLAGS -DX_DISPLAY_MISSING"
+fi
+
+# It would be nice to have a more robust check for the -R ld option than
+# just checking for Solaris.
+# It would also be nice to do this for all -L options, not just this one.
+if test -n "$x_libraries"; then
+  X_LIBS="$X_LIBS -L$x_libraries"
+  if test "`uname 2>/dev/null`" = SunOS \
+     && uname -r | grep '^5' >/dev/null; then
+    X_LIBS="$X_LIBS -R$x_libraries"
+  fi
+fi
+
+# Check for additional X libraries.
+
+if test -n "$ISC"; then
+  X_LIBS="$X_LIBS -lnsl_s -linet"
+  test -n "$ac_verbose" && echo "	adding -lnsl_s -linet to X_LIBS"
+else
+  # Martyn.Johnson@cl.cam.ac.uk says this is needed for Ultrix, if the X
+  # libraries were built with DECnet support.  And karl@cs.umb.edu's Alpha
+  # needs dnet_stub.
+  AC_HAVE_LIBRARY(dnet,
+    [X_LIBS="$X_LIBS -ldnet"
+     ac_have_dnet=t
+     test -n "$ac_verbose" && echo "	adding -ldnet to X_LIBS"])
+  if test -z "$ac_have_dnet"; then
+    AC_HAVE_LIBRARY(dnet_stub,
+      [X_LIBS="$X_LIBS -ldnet_stub"
+       test -n "$ac_verbose" && echo "	adding -ldnet_stub to X_LIBS"])
+  fi
+  # lieder@skyler.mavd.honeywell.com says without -lsocket,
+  # socket/setsockopt and other routines are undefined under SCO ODT 2.0.
+  AC_HAVE_LIBRARY(socket,
+    [X_LIBS="$X_LIBS -lsocket"
+     test -n "$ac_verbose" && echo "	adding -lsocket to X_LIBS"])
+fi
+#
+AC_SUBST(X_CFLAGS)dnl
+AC_SUBST(X_LIBS)dnl
+])dnl
 dnl
 dnl
 dnl checks for UNIX variants
@@ -1133,7 +1185,7 @@ fi
 ])dnl
 dnl
 define(AC_ISC_POSIX,
-[AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([$0], [AC_HEADER_EGREP])AC_BEFORE([$0], [AC_TEST_CPP])echo checking for POSIXized ISC
+[AC_PROVIDE([$0])AC_BEFORE([$0], [AC_COMPILE_CHECK])AC_BEFORE([$0], [AC_TEST_PROGRAM])AC_BEFORE([$0], [AC_HEADER_EGREP])AC_BEFORE([$0], [AC_TEST_CPP])echo checking for POSIXized ISC
 if test -d /etc/conf/kconfig.d &&
   grep _POSIX_VERSION [/usr/include/sys/unistd.h] >/dev/null 2>&1
 then
