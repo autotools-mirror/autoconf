@@ -1,3 +1,8 @@
+1999-10-02  Akim Demaille  <demaille@inf.enst.fr>
+
+	* acgeneral.m4: Instead of just undefining eval, format, include
+	and shift, rename them to m4_eval, etc.
+
 1999-09-29  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_FUNC_GETLOADAVG): Check for the kstat_open()
