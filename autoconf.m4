@@ -1,30 +1,29 @@
-dnl This file is part of Autoconf.                       -*- Autoconf -*-
-dnl Driver that loads the Autoconf macro files.
-dnl Requires GNU m4.
-dnl Copyright (C) 1994 Free Software Foundation, Inc.
-dnl
-dnl This program is free software; you can redistribute it and/or modify
-dnl it under the terms of the GNU General Public License as published by
-dnl the Free Software Foundation; either version 2, or (at your option)
-dnl any later version.
-dnl
-dnl This program is distributed in the hope that it will be useful,
-dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
-dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-dnl GNU General Public License for more details.
-dnl
-dnl You should have received a copy of the GNU General Public License
-dnl along with this program; if not, write to the Free Software
-dnl Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-dnl 02111-1307, USA.
-dnl
-dnl Written by David MacKenzie.
-dnl
-include(libm4.m4)dnl
-m4_include(acversion.m4)dnl
-m4_include(acgeneral.m4)dnl
-m4_include(acspecific.m4)dnl
-m4_include(acoldnames.m4)dnl
-dnl Do not sinclude acsite.m4 here, because it may not be installed
-dnl yet when Autoconf is frozen.
-dnl Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
+include(libm4.m4)#                                        -*- Autoconf -*-
+# This file is part of Autoconf.
+# Driver that loads the Autoconf macro files.
+# Copyright (C) 1994, 1999 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Written by David MacKenzie.
+#
+# Do not sinclude acsite.m4 here, because it may not be installed
+# yet when Autoconf is frozen.
+# Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
+m4_include(acversion.m4)
+m4_include(acgeneral.m4)
+m4_include(acspecific.m4)
+m4_include(acoldnames.m4)

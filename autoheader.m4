@@ -1,4 +1,4 @@
-include(libm4.m4)dnl                                          -*- Autoconf -*-
+include(libm4.m4)#                                          -*- Autoconf -*-
 # This file is part of Autoconf.
 # Driver and redefinitions of some Autoconf macros for autoheader.
 # Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
@@ -20,6 +20,9 @@ include(libm4.m4)dnl                                          -*- Autoconf -*-
 #
 # Originally written by Roland McGrath.
 #
+# Do not sinclude acsite.m4 here, because it may not be installed
+# yet when Autoconf is frozen.
+# Do not sinclude ./aclocal.m4 here, to prevent it from being frozen.
 m4_include(acversion.m4)
 m4_include(acgeneral.m4)
 m4_include(acspecific.m4)
