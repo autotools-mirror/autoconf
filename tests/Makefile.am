@@ -20,13 +20,17 @@
 
 AUTOMAKE_OPTIONS = gnits
 
+SUITE_GENERATED = \
+	aclang.at acc.at acfortran.at \
+	acgeneral.at acspecific.at acfunctions.at acheaders.at actypes.at \
+	aclibs.at
+
 SUITE = suite.at \
         m4sugar.at m4sh.at \
         base.at tools.at torture.at \
 	compile.at \
-	aclang.at acc.at acfortran.at \
+	$(SUITE_GENERATED) \
 	semantics.at \
-	acgeneral.at acspecific.at acfunctions.at acheaders.at actypes.at \
 	foreign.at
 
 # We don't actually distribute the testsuite, since one only
@@ -62,30 +66,10 @@ MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4 \
               $(top_srcdir)/lib/autoconf/c.m4 \
               $(top_srcdir)/lib/autoconf/fortran.m4 \
               $(top_srcdir)/lib/autoconf/headers.m4 \
+              $(top_srcdir)/lib/autoconf/libs.m4 \
               $(top_srcdir)/lib/autoconf/types.m4
 
-acgeneral.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acspecific.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acfunctions.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-aclang.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acc.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acfortran.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acheaders.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-actypes.at: mktests.sh $(MACRO_FILES)
+$(SUITE_GENERATED): mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 CLEANFILES = 				\

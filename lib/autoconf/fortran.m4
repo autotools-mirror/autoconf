@@ -50,6 +50,70 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
+# _AC_LIST_MEMBER_IF(ELEMENT, LIST, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# ---------------------------------------------------------------------------
+#
+# Processing the elements of a list is tedious in shell programming,
+# as lists tend to be implemented as space delimited strings.
+#
+# This macro searches LIST for ELEMENT, and executes ACTION-IF-FOUND
+# if ELEMENT is a member of LIST, otherwise it executes
+# ACTION-IF-NOT-FOUND.
+AC_DEFUN([_AC_LIST_MEMBER_IF],
+[dnl Do some sanity checking of the arguments.
+m4_if([$1], , [AC_FATAL([$0: missing argument 1])])dnl
+m4_if([$2], , [AC_FATAL([$0: missing argument 2])])dnl
+  ac_exists=false
+  for ac_i in $2; do
+    if test x"$1" = x"$ac_i"; then
+      ac_exists=true
+      break
+    fi
+  done
+
+  AS_IF([test x"$ac_exists" = xtrue], [$3], [$4])[]dnl
+])# _AC_LIST_MEMBER_IF
+
+
+# _AC_LINKER_OPTION(LINKER-OPTIONS, SHELL-VARIABLE)
+# -------------------------------------------------
+#
+# Specifying options to the compiler (whether it be the C, C++ or
+# Fortran 77 compiler) that are meant for the linker is compiler
+# dependent.  This macro lets you give options to the compiler that
+# are meant for the linker in a portable, compiler-independent way.
+#
+# This macro take two arguments, a list of linker options that the
+# compiler should pass to the linker (LINKER-OPTIONS) and the name of
+# a shell variable (SHELL-VARIABLE).  The list of linker options are
+# appended to the shell variable in a compiler-dependent way.
+#
+# For example, if the selected language is C, then this:
+#
+#   _AC_LINKER_OPTION([-R /usr/local/lib/foo], foo_LDFLAGS)
+#
+# will expand into this if the selected C compiler is gcc:
+#
+#   foo_LDFLAGS="-Xlinker -R -Xlinker /usr/local/lib/foo"
+#
+# otherwise, it will expand into this:
+#
+#   foo_LDFLAGS"-R /usr/local/lib/foo"
+#
+# You are encouraged to add support for compilers that this macro
+# doesn't currently support.
+# FIXME: Get rid of this macro.
+AC_DEFUN([_AC_LINKER_OPTION],
+[if test "$ac_compiler_gnu" = yes; then
+  for ac_link_opt in $1; do
+    $2="[$]$2 -Xlinker $ac_link_opt"
+  done
+else
+  $2="[$]$2 $1"
+fi[]dnl
+])# _AC_LINKER_OPTION
+
+
 
 ## ----------------------- ##
 ## 1. Language selection.  ##
@@ -409,12 +473,12 @@ while test $[@%:@] != 1; do
   ac_arg=$[1]
   case $ac_arg in
         [[\\/]]*.a | ?:[[\\/]]*.a)
-          AC_LIST_MEMBER_OF($ac_arg, $ac_cv_flibs, ,
+          _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
               ac_cv_flibs="$ac_cv_flibs $ac_arg")
           ;;
         -bI:*)
-          AC_LIST_MEMBER_OF($ac_arg, $ac_cv_flibs, ,
-             [AC_LINKER_OPTION([$ac_arg], ac_cv_flibs)])
+          _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
+             [_AC_LINKER_OPTION([$ac_arg], ac_cv_flibs)])
           ;;
           # Ignore these flags.
         -lang* | -lcrt0.o | -lc | -lgcc | -libmil | -LANG:=*)
@@ -437,14 +501,14 @@ while test $[@%:@] != 1; do
           ;;
         -YP,*)
           for ac_j in `echo $ac_arg | sed -e 's/-YP,/-L/;s/:/ -L/g'`; do
-            AC_LIST_MEMBER_OF($ac_j, $ac_cv_flibs, ,
-                            [ac_arg="$ac_arg $ac_j"
-                             ac_cv_flibs="$ac_cv_flibs $ac_j"])
+            _AC_LIST_MEMBER_IF($ac_j, $ac_cv_flibs, ,
+                               [ac_arg="$ac_arg $ac_j"
+                               ac_cv_flibs="$ac_cv_flibs $ac_j"])
           done
           ;;
         -[[lLR]]*)
-          AC_LIST_MEMBER_OF($ac_arg, $ac_cv_flibs, ,
-                          ac_cv_flibs="$ac_cv_flibs $ac_arg")
+          _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_flibs, ,
+                             ac_cv_flibs="$ac_cv_flibs $ac_arg")
           ;;
           # Ignore everything else.
   esac
@@ -460,7 +524,7 @@ case `(uname -sr) 2>/dev/null` in
       ac_ld_run_path=`echo $ac_f77_v_output |
                         sed -n 's,^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$,-R\1,p'`
       test "x$ac_ld_run_path" != x &&
-        AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_flibs)
+        _AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_flibs)
       ;;
 esac
 fi # test "x$FLIBS" = "x"

@@ -59,6 +59,7 @@ m4_include([autoconf/fortran.m4])
 m4_include([autoconf/functions.m4])
 m4_include([autoconf/headers.m4])
 m4_include([autoconf/types.m4])
+m4_include([autoconf/libs.m4])
 m4_include([autoconf/specific.m4])
 m4_include([autoconf/oldnames.m4])
 

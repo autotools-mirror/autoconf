@@ -70,6 +70,7 @@ m4_include([acspecific.at])
 m4_include([acheaders.at])
 m4_include([actypes.at])
 m4_include([acfunctions.at])
+m4_include([aclibs.at])
 
 # Compatibility with foreign tools.
 m4_include([foreign.at])

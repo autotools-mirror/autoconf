@@ -97,6 +97,15 @@ AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ($ac_func)])
 ])
 
 
+# AC_TRY_LINK_FUNC(FUNC, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
+# ------------------------------------------------------------
+# Try to link a program that calls FUNC, handling GCC builtins.  If
+# the link succeeds, execute ACTION-IF-FOUND; otherwise, execute
+# ACTION-IF-NOT-FOUND.
+AC_DEFUN([AC_TRY_LINK_FUNC],
+[AC_LINK_IFELSE([AC_LANG_CALL([], [$1])], [$2], [$3])])
+
+
 # AU::AC_FUNC_CHECK
 # -----------------
 AU_ALIAS([AC_FUNC_CHECK], [AC_CHECK_FUNC])

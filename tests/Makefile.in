@@ -68,7 +68,10 @@ VERSION = @VERSION@
 
 AUTOMAKE_OPTIONS = gnits
 
-SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at torture.at 	compile.at 	aclang.at acc.at acfortran.at 	semantics.at 	acgeneral.at acspecific.at acfunctions.at acheaders.at actypes.at 	foreign.at
+SUITE_GENERATED =  	aclang.at acc.at acfortran.at 	acgeneral.at acspecific.at acfunctions.at acheaders.at actypes.at 	aclibs.at
+
+
+SUITE = suite.at         m4sugar.at m4sh.at         base.at tools.at torture.at 	compile.at 	$(SUITE_GENERATED) 	semantics.at 	foreign.at
 
 
 # We don't actually distribute the testsuite, since one only
@@ -82,7 +85,7 @@ AUTOM4TE = autom4te_perllibdir='$(top_srcdir)/lib' ../bin/autom4te
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
 # here since below we explicitly `cd' to $srcdir.  As for the dependencies,
 # thanks God for VPATH.  Hm...
-MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4               $(top_srcdir)/lib/autoconf/specific.m4               $(top_srcdir)/lib/autoconf/functions.m4               $(top_srcdir)/lib/autoconf/lang.m4               $(top_srcdir)/lib/autoconf/c.m4               $(top_srcdir)/lib/autoconf/fortran.m4               $(top_srcdir)/lib/autoconf/headers.m4               $(top_srcdir)/lib/autoconf/types.m4
+MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4               $(top_srcdir)/lib/autoconf/specific.m4               $(top_srcdir)/lib/autoconf/functions.m4               $(top_srcdir)/lib/autoconf/lang.m4               $(top_srcdir)/lib/autoconf/c.m4               $(top_srcdir)/lib/autoconf/fortran.m4               $(top_srcdir)/lib/autoconf/headers.m4               $(top_srcdir)/lib/autoconf/libs.m4               $(top_srcdir)/lib/autoconf/types.m4
 
 
 CLEANFILES =  	debug-*.sh state-* at-* stderr stdout 	script.s4g script.as script				configure configure.in configure.ac config.status config.cache 	config.log config.h.in config.hin config.h 	config.guess config.sub install-sh		expr						libtool ltconfig ltmain.sh
@@ -208,28 +211,7 @@ testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	chmod +x $@.tmp
 	mv $@.tmp $@
 
-acgeneral.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acspecific.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acfunctions.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-aclang.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acc.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acfortran.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-acheaders.at: mktests.sh $(MACRO_FILES)
-	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
-
-actypes.at: mktests.sh $(MACRO_FILES)
+$(SUITE_GENERATED): mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 maintainer-check: maintainer-check-posix maintainer-check-c++

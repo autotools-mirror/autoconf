@@ -21,7 +21,7 @@ distautoconflibdir = $(pkgdatadir)/autoconf
 distautoconflib_DATA = autoconf.m4 \
                        general.m4 oldnames.m4 specific.m4 \
 		       lang.m4 c.m4 fortran.m4 \
-                       functions.m4 headers.m4 types.m4
+                       functions.m4 headers.m4 types.m4 libs.m4
 nodistautoconflibdir = $(pkgdatadir)/autoconf
 # The order matters: we need version.m4 to build autoconf.m4f.
 nodistautoconflib_DATA = version.m4 autoconf.m4f
@@ -131,7 +131,8 @@ autoconf.m4f: $(srclibdir)/m4sugar/m4sugar.m4	\
               $(srclibdir)/autoconf/fortran.m4	\
               $(srclibdir)/autoconf/functions.m4 \
               $(srclibdir)/autoconf/headers.m4	\
-              $(srclibdir)/autoconf/types.m4
+              $(srclibdir)/autoconf/types.m4	\
+              $(srclibdir)/autoconf/libs.m4
 
 # Files that should be removed, but which Automake does not know.
 CLEANFILES = autoconf.m4f
