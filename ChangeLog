@@ -1,3 +1,8 @@
+2001-04-05  Lars J. Aas  <larsa@sim.no>
+
+	* Makefile.am: Manual addition of @VERSION@ substitution variable
+	as a temporary Automake fix.  Reported by Raja R Harinath.
+
 2001-04-04  Lars J. Aas  <larsa@sim.no>
 
 	* acgeneral (_AC_INIT_CONFIG_LOG): New macro for setting up the

@@ -33,6 +33,7 @@ EXTRA_SCRIPTS = autoscan autoupdate
 # FIXME: Current Automakes are blind and cannot see inner AC_SUBST,
 # so help it.
 PACKAGE_NAME = @PACKAGE_NAME@
+VERSION = @VERSION@
 
 # FIXME:
 # s/distpackageDATA/dist_pkgdata_DATA/
