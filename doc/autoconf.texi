@@ -1227,10 +1227,10 @@ OUTER
 you get:
 
 @example
-$ autoconf -Wcross
+$ @kbd{autoconf -Wcross}
 configure.ac:8: warning: AC_TRY_RUN called without default \
 to allow cross compiling
-$ autoconf -Wcross,error
+$ @kbd{autoconf -Wcross,error}
 configure.ac:8: error: AC_TRY_RUN called without default \
 to allow cross compiling
 acgeneral.m4:3044: AC_TRY_RUN is expanded from...
@@ -1314,7 +1314,7 @@ For instance, to find the list of variables that are substituted, use:
 
 @example
 @group
-$ autoconf -t AC_SUBST
+$ @kbd{autoconf -t AC_SUBST}
 configure.ac:2:AC_SUBST:ECHO_C
 configure.ac:2:AC_SUBST:ECHO_N
 configure.ac:2:AC_SUBST:ECHO_T
@@ -1328,10 +1328,10 @@ The example below highlights the difference between @samp{$@@},
 
 @example
 @group
-$ cat configure.ac
+$ @kbd{cat configure.ac}
 AC_DEFINE(This, is, [an
 [example]])
-$ autoconf -t 'AC_DEFINE:@@: $@@
+$ @kbd{autoconf -t 'AC_DEFINE:@@: $@@}
 *: $*
 $: $%'
 @@: [This],[is],[an
@@ -1347,7 +1347,7 @@ The @var{format} gives you a lot of freedom:
 
 @example
 @group
-$ autoconf -t 'AC_SUBST:$$ac_subst@{"$1"@} = "$f:$l";'
+$ @kbd{autoconf -t 'AC_SUBST:$$ac_subst@{"$1"@} = "$f:$l";'}
 $ac_subst@{"ECHO_C"@} = "configure.ac:2";
 $ac_subst@{"ECHO_N"@} = "configure.ac:2";
 $ac_subst@{"ECHO_T"@} = "configure.ac:2";
@@ -1362,7 +1362,7 @@ character is suitable as a separator)):
 
 @example
 @group
-$ autoconf -t 'AM_MISSING_PROG:$@{|:::::|@}*'
+$ @kbd{autoconf -t 'AM_MISSING_PROG:$@{|:::::|@}*'}
 ACLOCAL|:::::|aclocal|:::::|$missing_dir
 AUTOCONF|:::::|autoconf|:::::|$missing_dir
 AUTOMAKE|:::::|automake|:::::|$missing_dir
@@ -5925,8 +5925,8 @@ CC=bizarre-cc}, it is impossible to notice it in @samp{CC=bizarre-cc
 @command{configure} runs.  For instance:
 
 @example
-$ ./configure --silent --config-cache
-$ CC=cc ./configure --silent --config-cache
+$ @kbd{./configure --silent --config-cache}
+$ @kbd{CC=cc ./configure --silent --config-cache}
 configure: error: `CC' was not set in the previous run
 configure: error: changes in the environment can compromise \
 the build
@@ -5944,8 +5944,8 @@ and similarly if the variable is unset, or if its content is changed.
 line argument, including when no cache is used:
 
 @example
-$ CC=/usr/bin/cc ./configure undeclared_var=raboof --silent
-$ ./config.status --recheck
+$ @kbd{CC=/usr/bin/cc ./configure undeclared_var=raboof --silent}
+$ @kbd{./config.status --recheck}
 running /bin/sh ./configure undeclared_var=raboof --silent \
   CC=/usr/bin/cc  --no-create --no-recursion
 @end example
@@ -7584,9 +7584,9 @@ With OpenBSD 2.7's @command{/bin/sh}
 
 @example
 @group
-$ cat <<EOF
+$ @kbd{cat <<EOF
 > \" \\
-> EOF
+> EOF}
 " \
 @end group
 @end example
@@ -7596,9 +7596,9 @@ and with Bash:
 
 @example
 @group
-bash-2.04$ cat <<EOF
+bash-2.04$ @kbd{cat <<EOF
 > \" \\
-> EOF
+> EOF}
 \" \
 @end group
 @end example
@@ -7663,11 +7663,11 @@ to failure under Ultrix.
 @example
 ULTRIX V4.4 (Rev. 69) System #31: Thu Aug 10 19:42:23 GMT 1995
 UWS V4.4 (Rev. 11)
-$ eval 'echo matter >fullness' >void
+$ @kbd{eval 'echo matter >fullness' >void}
 illegal io
-$ eval '(echo matter >fullness)' >void
+$ @kbd{eval '(echo matter >fullness)' >void}
 illegal io
-$ (eval '(echo matter >fullness)') >void
+$ @kbd{(eval '(echo matter >fullness)') >void}
 Ambiguous output redirect.
 @end example
 
@@ -7688,19 +7688,19 @@ stderr, even for sub-shells.  This might result in undesired content
 if you meant to capture the standard-error output of the inner command:
 
 @example
-$ ash -x -c '(eval "echo foo >&2") 2>stderr'
-$ cat stderr
+$ @kbd{ash -x -c '(eval "echo foo >&2") 2>stderr'}
+$ @kbd{cat stderr}
 + eval echo foo >&2
 + echo foo
 foo
-$ bash -x -c '(eval "echo foo >&2") 2>stderr'
-$ cat stderr
+$ @kbd{bash -x -c '(eval "echo foo >&2") 2>stderr'}
+$ @kbd{cat stderr}
 + eval 'echo foo >&2'
 ++ echo foo
 foo
-$ zsh -x -c '(eval "echo foo >&2") 2>stderr'
+$ @kbd{zsh -x -c '(eval "echo foo >&2") 2>stderr'}
 @i{# Traces on startup files deleted here.}
-$ cat stderr
+$ @kbd{cat stderr}
 +zsh:1> eval echo foo >&2
 +zsh:1> echo foo
 foo
@@ -7896,15 +7896,15 @@ when the affected variable was already set.  This bug can be exercised
 by running:
 
 @example
-$ unset foo
-$ foo=$@{foo='@}'@}
-$ echo $foo
+$ @kbd{unset foo}
+$ @kbd{foo=$@{foo='@}'@}}
+$ @kbd{echo $foo}
 @}
-$ foo=$@{foo='@}'   # no error; this hints to what the bug is
-$ echo $foo
+$ @kbd{foo=$@{foo='@}'   # no error; this hints to what the bug is}
+$ @kbd{echo $foo}
 @}
-$ foo=$@{foo='@}'@}
-$ echo $foo
+$ @kbd{foo=$@{foo='@}'@}}
+$ @kbd{echo $foo}
 @}@}
  ^ ugh!
 @end example
@@ -7930,16 +7930,16 @@ each char will be set. You won't observe the phenomenon using a simple
 expands $var.  Here are two means to make this shell confess its sins:
 
 @example
-$ cat -v <<EOF
+$ @kbd{cat -v <<EOF
 $var
-EOF
+EOF}
 @end example
 
 @noindent
 and
 
 @example
-$ set | grep '^var=' | cat -v
+$ @kbd{set | grep '^var=' | cat -v}
 @end example
 
 One classic incarnation of this bug is:
@@ -7989,9 +7989,9 @@ For instance, if you wanted to check that @command{cd} is silent, do not
 use @samp{test -z "`cd /`"} because the following can happen:
 
 @example
-$ pwd
+$ @kbd{pwd}
 /tmp
-$ test -n "`cd /`" && pwd
+$ @kbd{test -n "`cd /`" && pwd}
 /
 @end example
 
@@ -8007,18 +8007,18 @@ Unfortunately it is not yet widely supported.  Most notably, even recent
 releases of Solaris don't support it:
 
 @example
-$ showrev -c /bin/sh | grep version
+$ @kbd{showrev -c /bin/sh | grep version}
 Command version: SunOS 5.8 Generic 109324-02 February 2001
-$ echo $(echo blah)
+$ @kbd{echo $(echo blah)}
 syntax error: `(' unexpected
 @end example
 
 @noindent
 nor does @sc{irix} 6.5's Bourne shell:
 @example
-$ uname -a
+$ @kbd{uname -a}
 IRIX firebird-image 6.5 07151432 IP22
-$ echo $(echo blah)
+$ @kbd{echo $(echo blah)}
 $(echo blah)
 @end example
 @end table
@@ -8036,9 +8036,9 @@ Don't rely on the exit status of an assignment: Ash 0.2 does not change
 the status and propagates that of the last statement:
 
 @example
-$ false || foo=bar; echo $?
+$ @kbd{false || foo=bar; echo $?}
 1
-$ false || foo=`:`; echo $?
+$ @kbd{false || foo=`:`; echo $?}
 0
 @end example
 
@@ -8047,7 +8047,7 @@ and to make things even worse, @sc{qnx 4.25} just sets the exit status
 to 0 in any case:
 
 @example
-$ foo=`exit 1`; echo $?
+$ @kbd{foo=`exit 1`; echo $?}
 0
 @end example
 
@@ -8117,12 +8117,12 @@ A simple path separator is enough except for @code{zsh}, which prefers a
 leading dot:
 
 @example
-zsh-3.1.6 % mkdir foo && (CDPATH=: cd foo)
+zsh-3.1.6$ @kbd{mkdir foo && (CDPATH=: cd foo)}
 /tmp/foo
-zsh-3.1.6 % (CDPATH=:. cd foo)
+zsh-3.1.6$ @kbd{(CDPATH=:. cd foo)}
 /tmp/foo
-zsh-3.1.6 % (CDPATH=.: cd foo)
-zsh-3.1.6 %
+zsh-3.1.6$ @kbd{(CDPATH=.: cd foo)}
+zsh-3.1.6$
 @end example
 
 @noindent
@@ -8133,9 +8133,9 @@ Life wouldn't be so much fun if @command{bash} and @command{zsh} had the
 same behavior:
 
 @example
-bash-2.02 % mkdir foo && (CDPATH=: cd foo)
-bash-2.02 % (CDPATH=:. cd foo)
-bash-2.02 % (CDPATH=.: cd foo)
+bash-2.02$ @kbd{mkdir foo && (CDPATH=: cd foo)}
+bash-2.02$ @kbd{(CDPATH=:. cd foo)}
+bash-2.02$ @kbd{(CDPATH=.: cd foo)}
 /tmp/foo
 @end example
 
@@ -8203,7 +8203,7 @@ the case of sub shells:
 
 @example
 @group
-$ cat lineno
+$ @kbd{cat lineno}
 echo 1. $LINENO
 cat <<EOF
 3. $LINENO
@@ -8213,7 +8213,7 @@ EOF
 eval 'echo 7. $LINENO'
 @end group
 @group
-$ ash lineno
+$ @kbd{ash lineno}
 1.
 3.
 4.
@@ -8221,7 +8221,7 @@ $ ash lineno
 7.
 @end group
 @group
-$ bash-2.03 lineno
+$ @kbd{bash-2.03 lineno}
 1. 1
 3. 2
 4. 2
@@ -8229,7 +8229,7 @@ $ bash-2.03 lineno
 7. 1
 @end group
 @group
-$ zsh-3.1.9 lineno
+$ @kbd{zsh-3.1.9 lineno}
 1. 1
 3. 2
 4. 2
@@ -8237,7 +8237,7 @@ $ zsh-3.1.9 lineno
 7. 7
 @end group
 @group
-$ pdksh-5.2.14 lineno
+$ @kbd{pdksh-5.2.14 lineno}
 1. 1
 3. 2
 4. 2
@@ -8344,7 +8344,7 @@ Because of a bug in its @code{fnmatch}, @command{bash} fails to properly
 handle backslashes in character classes:
 
 @example
-bash-2.02$ case /tmp in [/\\]*) echo OK;; esac
+bash-2.02$ @kbd{case /tmp in [/\\]*) echo OK;; esac}
 bash-2.02$
 @end example
 
@@ -8354,9 +8354,9 @@ handle @sc{unix} or @sc{ms-dos} absolute paths.  To work around this
 bug, always put the backslash first:
 
 @example
-bash-2.02$ case '\TMP' in [\\/]*) echo OK;; esac
+bash-2.02$ @kbd{case '\TMP' in [\\/]*) echo OK;; esac}
 OK
-bash-2.02$ case /tmp in [\\/]*) echo OK;; esac
+bash-2.02$ @kbd{case /tmp in [\\/]*) echo OK;; esac}
 OK
 @end example
 
@@ -8402,11 +8402,11 @@ unfortunately, some shells, such as the DJGPP port of Bash 2.04, just
 perform @samp{exit 0}.
 
 @example
-bash-2.04$ foo=`exit 1` || echo fail
+bash-2.04$ @kbd{foo=`exit 1` || echo fail}
 fail
-bash-2.04$ foo=`(exit 1)` || echo fail
+bash-2.04$ @kbd{foo=`(exit 1)` || echo fail}
 fail
-bash-2.04$ foo=`(exit 1); exit` || echo fail
+bash-2.04$ @kbd{foo=`(exit 1); exit` || echo fail}
 bash-2.04$
 @end example
 
@@ -8517,7 +8517,7 @@ fi
 There are shells that do not reset the exit status from an @command{if}:
 
 @example
-$ if (exit 42); then true; fi; echo $?
+$ @kbd{if (exit 42); then true; fi; echo $?}
 42
 @end example
 
@@ -8599,7 +8599,7 @@ bizarre precedence and may be confused if @var{string} looks like an
 operator:
 
 @example
-$ test -n =
+$ @kbd{test -n =}
 test: argument expected
 @end example
 
@@ -8679,12 +8679,12 @@ Solaris 8 @command{sh} consider that when the trap is run it is
 that the trap receives:
 
 @example
-$ cat trap.sh
+$ @kbd{cat trap.sh}
 trap 'echo $?' 0
 (exit 42); exit 0
-$ zsh trap.sh
+$ @kbd{zsh trap.sh}
 42
-$ bash trap.sh
+$ @kbd{bash trap.sh}
 0
 @end example
 
@@ -8697,10 +8697,10 @@ The shell in FreeBSD 4.0 has the following bug: @samp{$?} is reset to 0
 by empty lines if the code is inside @command{trap}.
 
 @example
-$ trap 'false
+$ @kbd{trap 'false}
 
 echo $?' 0
-$ exit
+$ @kbd{exit}
 0
 @end example
 
@@ -8761,12 +8761,12 @@ Don't leave white spaces before the parentheses in user functions calls,
 @sc{gnu} awk will reject it:
 
 @example
-$ gawk 'function die () @{ print "Aaaaarg!"  @}
-        BEGIN @{ die () @}'
+$ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
+        BEGIN @{ die () @}'}
 gawk: cmd. line:2:         BEGIN @{ die () @}
 gawk: cmd. line:2:                      ^ parse error
-$ gawk 'function die () @{ print "Aaaaarg!"  @}
-        BEGIN @{ die() @}'
+$ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
+        BEGIN @{ die() @}'}
 Aaaaarg!
 @end example
 
@@ -8774,17 +8774,17 @@ If you want your program to be deterministic, don't depend on @code{for}
 on arrays:
 
 @example
-$ cat for.awk
+$ @kbd{cat for.awk}
 END @{
   arr["foo"] = 1
   arr["bar"] = 1
   for (i in arr)
     print i
 @}
-$ gawk -f for.awk </dev/null
+$ @kbd{gawk -f for.awk </dev/null}
 foo
 bar
-$ nawk -f for.awk </dev/null
+$ @kbd{nawk -f for.awk </dev/null}
 bar
 foo
 @end example
@@ -8793,12 +8793,12 @@ Some AWK, such as HPUX 11.0's native one, have regex engines fragile to
 inner anchors:
 
 @example
-$ echo xfoo | $AWK '/foo|^bar/ @{ print @}'
-$ echo bar | $AWK '/foo|^bar/ @{ print @}'
+$ @kbd{echo xfoo | $AWK '/foo|^bar/ @{ print @}'}
+$ @kbd{echo bar | $AWK '/foo|^bar/ @{ print @}'}
 bar
-$ echo xfoo | $AWK '/^bar|foo/ @{ print @}'
+$ @kbd{echo xfoo | $AWK '/^bar|foo/ @{ print @}'}
 xfoo
-$ echo bar | $AWK '/^bar|foo/ @{ print @}'
+$ @kbd{echo bar | $AWK '/^bar|foo/ @{ print @}'}
 bar
 @end example
 
@@ -8857,9 +8857,9 @@ and unfortunately, instead of complaining, they just pass them through,
 and exit with success:
 
 @example
-$ uname -a
+$ @kbd{uname -a}
 OSF1 medusa.sis.pasteur.fr V5.1 732 alpha
-$ date "+%s"
+$ @kbd{date "+%s"}
 %s
 @end example
 
@@ -8995,14 +8995,14 @@ the empty string, has a funny behavior in its exit status: it's always 1
 when parentheses are used!
 
 @example
-$ val=`expr 'a' : 'a'`; echo "$?: $val"
+$ @kbd{val=`expr 'a' : 'a'`; echo "$?: $val"}
 0: 1
-$ val=`expr 'a' : 'b'`; echo "$?: $val"
+$ @kbd{val=`expr 'a' : 'b'`; echo "$?: $val"}
 1: 0
 
-$ val=`expr 'a' : '\(a\)'`; echo "?: $val"
+$ @kbd{val=`expr 'a' : '\(a\)'`; echo "?: $val"}
 1: a
-$ val=`expr 'a' : '\(b\)'`; echo "?: $val"
+$ @kbd{val=`expr 'a' : '\(b\)'`; echo "?: $val"}
 1: 0
 @end example
 
@@ -9012,7 +9012,7 @@ of @command{expr} programs with some other method (such as using
 @command{sed}), since you may get twice the result.  For instance
 
 @example
-$ expr 'a' : '\(a\)' || echo 'a' | sed 's/^\(a\)$/\1/'
+$ @kbd{expr 'a' : '\(a\)' || echo 'a' | sed 's/^\(a\)$/\1/'}
 @end example
 
 @noindent
@@ -9031,8 +9031,8 @@ exactly @emph{@{@}}, not if it's only a part of an argument.  For
 instance on DU, and HP-UX 10.20 and HP-UX 11:
 
 @example
-$ touch foo
-$ find . -name foo -exec echo "@{@}-@{@}" \;
+$ @kbd{touch foo}
+$ @kbd{find . -name foo -exec echo "@{@}-@{@}" \;}
 @{@}-@{@}
 @end example
 
@@ -9115,7 +9115,7 @@ Don't include extra @samp{;}, as some @command{sed}, such as NetBSD
 1.4.2's, try to interpret the second as a command:
 
 @example
-$ echo a | sed 's/x/x/;;s/x/x/'
+$ @kbd{echo a | sed 's/x/x/;;s/x/x/'}
 sed: 1: "s/x/x/;;s/x/x/": invalid command code ;
 @end example
 
@@ -9263,20 +9263,17 @@ Some Make don't support leading underscores in macro names, such as on
 NEWS-OS 4.2R.
 
 @example
-$ cat Makefile
+$ @kbd{cat Makefile}
 _am_include = #
 _am_quote =
 all:; @@echo this is test
-
-% make
+$ @kbd{make}
 Make: Must be a separator on rules line 2.  Stop.
-
-$ cat Makefile2
+$ @kbd{cat Makefile2}
 am_include = #
 am_quote =
 all:; @@echo this is test
-
-$ make -f Makefile2
+$ @kbd{make -f Makefile2}
 this is test
 @end example
 
@@ -11273,7 +11270,7 @@ AC_OUTPUT
 Autoconf 2.13 simply ignores it:
 
 @example
-$ autoconf-2.13; ./configure --silent
+$ @kbd{autoconf-2.13; ./configure --silent}
 creating cache ./config.cache
 configure: error: cannot find foo.h
 $
@@ -11283,7 +11280,7 @@ $
 while Autoconf 2.50 will produce a broken @file{configure}:
 
 @example
-$ autoconf-2.50; ./configure --silent
+$ @kbd{autoconf-2.50; ./configure --silent}
 configure: error: cannot find foo.h
 ./configure: exit: bad non-numeric arg `bailing'
 ./configure: exit: bad non-numeric arg `bailing'
@@ -11304,20 +11301,20 @@ Many many (and many more) Autoconf macros were lacking proper quotation,
 including no less than... @code{AC_DEFUN} itself!
 
 @example
-$ cat configure.in
+$ @kbd{cat configure.in}
 AC_DEFUN([AC_PROG_INSTALL],
 [# My own much better version
 ])
 AC_INIT
 AC_PROG_INSTALL
 AC_OUTPUT
-$ autoconf-2.13
+$ @kbd{autoconf-2.13}
 autoconf: Undefined macros:
 ***BUG in Autoconf--please report*** AC_FD_MSG
 ***BUG in Autoconf--please report*** AC_EPI
 configure.in:1:AC_DEFUN([AC_PROG_INSTALL],
 configure.in:5:AC_PROG_INSTALL
-$ autoconf-2.50
+$ @kbd{autoconf-2.50}
 $
 @end example
 
@@ -11342,11 +11339,11 @@ Fortunately Autoconf catches pre-@code{AC_INIT} expansions, and will
 complain, in its own words:
 
 @example
-$ cat configure.in
+$ @kbd{cat configure.in}
 AC_INIT
 AM_TYPE_PTRDIFF_T
-$ aclocal-1.4
-$ autoconf
+$ @kbd{aclocal-1.4}
+$ @kbd{autoconf}
 ./aclocal.m4:17: error: m4_defn: undefined macro: _m4_divert_diversion
 actypes.m4:289: AM_TYPE_PTRDIFF_T is expanded from...
 ./aclocal.m4:17: the top level
@@ -11360,17 +11357,17 @@ now: do not depend upon macros from Automake as it is simply not its job
 to provide macros (but the one it requires by itself):
 
 @example
-$ cat configure.in
+$ @kbd{cat configure.in}
 AC_INIT
 AM_TYPE_PTRDIFF_T
-$ rm aclocal.m4
-$ autoupdate
+$ @kbd{rm aclocal.m4}
+$ @kbd{autoupdate}
 autoupdate: `configure.in' is updated
-$ cat configure.in
+$ @kbd{cat configure.in}
 AC_INIT
 AC_CHECK_TYPES([ptrdiff_t])
-$ aclocal-1.4
-$ autoconf
+$ @kbd{aclocal-1.4}
+$ @kbd{autoconf}
 $
 @end example
 

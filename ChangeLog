@@ -1,3 +1,8 @@
+2001-10-01  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi: Use @kbd for user input.
+	Always use `$' as shell prompt.
+
 2001-09-30  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/status.m4 (AC_OUTPUT_MAKE_DEFS):
