@@ -1,5 +1,12 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.m4: Insert -*- Autoconf -*-.
+	* acgeneral.m4: Likewise.
+	* acspecific.m4: Likewise.
+	* acoldnames.m4: Likewise.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Create AC_CONFIG_HEADERS which has the same interface as the other
 	AC_CONFIG_*S.
 
@@ -27,7 +34,7 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
 	config.status: Speed up the creation of config headers (about four
- 	times faster on Linux).
+	times faster on Linux).
 
 	The previous scheme had three sed commands for each AC_DEFINE: one
 	for #define templates, and two for #undef templates (with or
@@ -42,22 +49,22 @@
 	#undef script.
 
 	Note that this way, users that don't use #define templates don't
- 	pay too much the overhead, since the sed script `realizes' quickly
- 	there are no #define lines.  My test case runs in 0.32s with
- 	#define templates, and 0.24s without.  To improve this common
- 	case, the whole code for #define templates is conditionalized by a
- 	proper egrep call.  The result runs is 0.24s, i.e., almost no cost
- 	at all.
+	pay too much the overhead, since the sed script `realizes' quickly
+	there are no #define lines.  My test case runs in 0.32s with
+	#define templates, and 0.24s without.  To improve this common
+	case, the whole code for #define templates is conditionalized by a
+	proper egrep call.  The result runs is 0.24s, i.e., almost no cost
+	at all.
 
 	I made one dangerous change that I carefully evaluated before
- 	commiting: the sed scripts are cut at 48 lines instead of 12 as
- 	before.  This produces here docs of about 4Kb.  I checked many
- 	`configure's and they all have big here documents, much bigger
- 	than the 12 lines (for instance AC_FUNC_MMAP produces a 150 lines
- 	long, 3800+ character here document).  So I moved to the well
- 	known HP UX sed limitations: no more than 100 commands, and there
- 	are two commands per line now, plus a two command preamble.  The
- 	speed up is noticeable.
+	commiting: the sed scripts are cut at 48 lines instead of 12 as
+	before.  This produces here docs of about 4Kb.  I checked many
+	`configure's and they all have big here documents, much bigger
+	than the 12 lines (for instance AC_FUNC_MMAP produces a 150 lines
+	long, 3800+ character here document).  So I moved to the well
+	known HP UX sed limitations: no more than 100 commands, and there
+	are two commands per line now, plus a two command preamble.  The
+	speed up is noticeable.
 
 	* acgeneral.m4 (AC_OUTPUT_HEADERS): Remove the ac_e
 	family.
@@ -67,7 +74,7 @@
 	create `conftest.defines' with the ac_d family, and then
 	`conftest.undefs' for the ac_e family.
 	Break up both `conftest.defines' and `conftest.undefs'.  Insert a
- 	top label and a global test for `#defines' and `#undef' before.
+	top label and a global test for `#defines' and `#undef' before.
 	Call `conftest.defines' if there are #define in the input.
 	Call `conftest.undefs'.
 
@@ -89,7 +96,7 @@
 	IF-FOUND, IF-NOT-FOUND.
 	(AC_NEED_DECLS, AC_CHECK_DECLS): Likewise.
 	* autoconf.texi (Generic Declarations): Document the changes
- 	aforementioned.
+	aforementioned.
 	* autoheader.m4 (AH_NEED_DECLS): Renamed as
 	(AH_CHECK_DECLS): This.
 	(AH_HOOKS): Hook AH_CHECK_DECLS on AC_CHECK_DECLS instead of
@@ -115,7 +122,7 @@
 	* acgeneral.m4: (AC_OUTPUT_CONFIG_STATUS): New macro, pulled out
 	from...
 	(AC_OUTPUT): Instead of using $1, $2 and $3, pass them to the
-	official macros (AC_CONFIG_FILES, AC_OUTPUT_COMMANTS).
+	official macros (AC_CONFIG_FILES, AC_OUTPUT_COMMANDS).
 	Call AC_OUTPUT_CONFIG_STATUS.
 	(option handling): Use the case-esac to recognize arguments.
 	(AC_OUTPUT_COMMANDS): Fix the missing fi;done.
@@ -143,7 +150,7 @@
 
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
-      	New macro: AC_CONFIG_FILES which is very much like AC_OUTPUT but
+   	New macro: AC_CONFIG_FILES which is very much like AC_OUTPUT but
 	that one associates commands to run when a config file is created.
 	For instance for a shell script `foo', one uses
 	AC_CONFIG_FILES(foo, chmod +x foo).
@@ -222,14 +229,14 @@
 	Use Automake.  Based on files from Ben Elliston.
 
 	* acgeneral.m4: No longer define AC_ACVERSION, include
- 	acversion.m4.
+	acversion.m4.
 	* acversion.m4.in: New AC_CONFIG_FILE.
 	* acspecific.m4: Few formating changes.
 	* autoconf.texi: No longer define EDITION, VERSION and UPDATED:
 	include version.texi.
 	AC_OUTPUT the Makefiles mentioned below and acversion.m4.
 	* configure.in: Use AM_INIT_AUTOMAKE.
- 	Do not AC_ARG_PROGRAM: AM_INIT_AUTOMAKE does it.
+	Do not AC_ARG_PROGRAM: AM_INIT_AUTOMAKE does it.
 	* Makefile.am: New file.
 	* mdate-sh: Likewise.
 	* missing: Likewise.
@@ -339,9 +346,9 @@
 	Reported by H.J. Lu.
 
 	* acgeneral.m4 (m4_split): Support a second optional argument: a
- 	regexp to specify where to split.
+	regexp to specify where to split.
 	(m4_compare): New macro, compares arbitrary long m4 lists of
- 	integers.
+	integers.
 	(AC_PREREQ_SPLIT, AC_PREREQ_CANON, AC_PREREQ_COMPARE): Removed,
 	replaced by more generic macros.
 	(AC_PREREQ): Reimplemented, using m4_compare and m4_split.
@@ -360,7 +367,7 @@
 	* autoheader.m4: Restablish the hook for AC_CHECK_HEADERS_DIRENT.
 
 	* acspecific.m4 (AC_CHECK_HEADERS_DIRENT, AC_CHECK_HEADER_DIRENT):
- 	Reinserted.
+	Reinserted.
 
 1999-10-02  Akim Demaille  <demaille@inf.enst.fr>
 
@@ -374,7 +381,7 @@
 	* acspecific.m4 (AC_DIR_HEADER): Raised from obsolete to hasbeen.
 
 	* acspecific.m4 (AC_CHECK_HEADERS_DIRENT, AC_CHECK_HEADER_DIRENT):
- 	Removed, were used only by AC_DIR_HEADER and were not documented.
+	Removed, were used only by AC_DIR_HEADER and were not documented.
 
 	* autoheader.m4: Remove the hooks for AC_CHECK_HEADERS_DIRENT.
 
@@ -414,7 +421,7 @@
 	separated list of DEST:SOURCES arguments.
 
 	* acgeneral.m4: Rename each occurence of AC_LIST_HEADER as
- 	AC_LIST_HEADERS for consistency.
+	AC_LIST_HEADERS for consistency.
 
 	* acgeneral.m4 (AC_OUTPUT, config.status prologue): Move the
 	definition of config_files and config_headers to the top.
@@ -438,17 +445,17 @@
 	config.h.in.
 
 	* autoheader.m4: Major rewrite: introduction of a set of macros
- 	AH_ that produce code into config.h.in.  There are two sets of
- 	macros: generic macros, or specialized, documented below.  The
- 	basic idea is that an AC_FOO macro which needs an entry in
- 	config.h.in should have a sibling AH_FOO which expands into that
- 	entry.  In a near future, these macros will be moved next to their
+	AH_ that produce code into config.h.in.  There are two sets of
+	macros: generic macros, or specialized, documented below.  The
+	basic idea is that an AC_FOO macro which needs an entry in
+	config.h.in should have a sibling AH_FOO which expands into that
+	entry.  In a near future, these macros will be moved next to their
 	siblings.
 
 	* autoheader.m4 (AH_VERBATIM, AH_DEFINE, AH_DEFINE, AH_NEED_DECLS,
- 	AH_CHECK_SIZEOF, AH_CHECK_FUNCS, AH_CHECK_HEADERS,
- 	AH_CHECK_HEADERS, AH_CHECK_LIB, AH_PROG_LEX, AH_FUNC_ALLOCA,
- 	AH_C_CHAR_UNSIGNED, AH_AIX, AH_F77_WRAPPERS): New macros.
+	AH_CHECK_SIZEOF, AH_CHECK_FUNCS, AH_CHECK_HEADERS,
+	AH_CHECK_HEADERS, AH_CHECK_LIB, AH_PROG_LEX, AH_FUNC_ALLOCA,
+	AH_C_CHAR_UNSIGNED, AH_AIX, AH_F77_WRAPPERS): New macros.
 
 	* autoheader.m4 (End section): Bind AC_ macros to their
 	AH_siblings.
@@ -468,11 +475,11 @@
 
 	* acconfig.h: Completely emptied, the remaining templates
 	(_ALL_SOURCE, __CHAR_UNSIGNED__, F77_FUNC, F77_FUNC_,
- 	HAVE_STRINGIZE, and STACK_DIRECTION) are now either associated to
- 	their AC_DEFINE, or to one of the new AH_ macros.
+	HAVE_STRINGIZE, and STACK_DIRECTION) are now either associated to
+	their AC_DEFINE, or to one of the new AH_ macros.
 
 	* acgeneral.m4: Reordering of the m4 macros which are not specific
- 	to Autoconf.
+	to Autoconf.
 
 	* acgeneral.m4 (AC_HAVE_LIB): Promoted from obsolete to hasbeen.
 
@@ -512,29 +519,29 @@
 	same number of times.
 
 	* acconfig.h (_ALLOCA, CLOSEDIR_VOID, const, CRAY_STACKSEG_END,
- 	DGUX, DIRENT, GETGROUPS_T, GETLOADAVG_PRIVILEGED, GETPGRP_VOID,
- 	gid_t, HAVE_ALLOCA, HAVE_ALLOCA_H, HAVE_DOPRNT, HAVE_FNMATCH,
- 	HAVE_GETLOADAVG, HAVE_GETMNTENT, HAVE_LONG_DOUBLE,
- 	HAVE_LONG_FILE_NAMES, HAVE_MMAP, HAVE_RESTARTABLE_SYSCALLS,
- 	HAVE_ST_BLKSIZE, HAVE_ST_BLOCKS, HAVE_STRCOLL, HAVE_ST_RDEV,
- 	HAVE_STRFTIME, HAVE_SYS_WAIT_H, HAVE_TM_ZONE, HAVE_TZNAME,
- 	HAVE_UNISTD_H, HAVE_UTIME_NULL, HAVE_VFORK_H, HAVE_VPRINTF,
- 	HAVE_WAIT3, inline, INT_16_BITS, LONG_64_BITS, MAJOR_IN_MKDEV,
- 	MAJOR_IN_SYSMACROS, _MINIX, NDIR, NEED_MEMORY_H, NLIST_NAME_UNION,
- 	NLIST_STRUCT, NO_MINUS_C_MINUS_O, F77_NO_MINUS_C_MINUS_O,
- 	_POSIX_1_SOURCE, _POSIX_SOURCE, RETSIGTYPE, SELECT_TYPE_ARG1,
- 	SELECT_TYPE_ARG234, SELECT_TYPE_ARG5, SETPGRP_VOID,
- 	SETVBUF_REVERSED, STAT_MACROS_BROKEN, STDC_HEADERS, SVR4, SYSDIR,
- 	SYSNDIR, SYS_SIGLIST_DECLARED, TIME_WITH_SYS_TIME, TM_IN_SYS_TIME,
- 	uid_t, UMAX, UMAX4_3, USG, vfork, VOID_CLOSEDIR, WORDS_BIGENDIAN,
- 	X_DISPLAY_MISSING, YYTEXT_POINTER): Removed their autoheader
- 	template.  They are now documented with their own AC_DEFINE.
+	DGUX, DIRENT, GETGROUPS_T, GETLOADAVG_PRIVILEGED, GETPGRP_VOID,
+	gid_t, HAVE_ALLOCA, HAVE_ALLOCA_H, HAVE_DOPRNT, HAVE_FNMATCH,
+	HAVE_GETLOADAVG, HAVE_GETMNTENT, HAVE_LONG_DOUBLE,
+	HAVE_LONG_FILE_NAMES, HAVE_MMAP, HAVE_RESTARTABLE_SYSCALLS,
+	HAVE_ST_BLKSIZE, HAVE_ST_BLOCKS, HAVE_STRCOLL, HAVE_ST_RDEV,
+	HAVE_STRFTIME, HAVE_SYS_WAIT_H, HAVE_TM_ZONE, HAVE_TZNAME,
+	HAVE_UNISTD_H, HAVE_UTIME_NULL, HAVE_VFORK_H, HAVE_VPRINTF,
+	HAVE_WAIT3, inline, INT_16_BITS, LONG_64_BITS, MAJOR_IN_MKDEV,
+	MAJOR_IN_SYSMACROS, _MINIX, NDIR, NEED_MEMORY_H, NLIST_NAME_UNION,
+	NLIST_STRUCT, NO_MINUS_C_MINUS_O, F77_NO_MINUS_C_MINUS_O,
+	_POSIX_1_SOURCE, _POSIX_SOURCE, RETSIGTYPE, SELECT_TYPE_ARG1,
+	SELECT_TYPE_ARG234, SELECT_TYPE_ARG5, SETPGRP_VOID,
+	SETVBUF_REVERSED, STAT_MACROS_BROKEN, STDC_HEADERS, SVR4, SYSDIR,
+	SYSNDIR, SYS_SIGLIST_DECLARED, TIME_WITH_SYS_TIME, TM_IN_SYS_TIME,
+	uid_t, UMAX, UMAX4_3, USG, vfork, VOID_CLOSEDIR, WORDS_BIGENDIAN,
+	X_DISPLAY_MISSING, YYTEXT_POINTER): Removed their autoheader
+	template.  They are now documented with their own AC_DEFINE.
 
 	* acgeneral.m4 (AC_HASBEEN): New macro.  Same as AC_OBSOLETE, but
 	dies.
 
 	* acspecific.m4 (AC_UNISTD_H, AC_USG, AC_MEMORY_H, AC_INT_16_BITS,
- 	AC_LONG_64_BITS): Promoted from obsolete to hasbeen.
+	AC_LONG_64_BITS): Promoted from obsolete to hasbeen.
 
 	* autoheader.m4 (AC_DEFINE_UNQUOTED): Define via AC_DEFINE, so
 	that we program things only once.
@@ -649,7 +656,7 @@
 1999-09-25  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4: Rename the occurences of the variable `confstat'
- 	as `ac_cs_root'.  The previous name was breaking the naming
+	as `ac_cs_root'.  The previous name was breaking the naming
 	scheme.
 
 	* TODO: Updated.
@@ -772,7 +779,7 @@
 	* acgeneral.m4 (AC_CHECK_LIB): Use AC_VAR_*.
 
 	* acgeneral.m4: Use `m4_BUILTIN' instead of indirection via
- 	`builtin'.
+	`builtin'.
 
 1999-09-21  Akim Demaille  <akim@epita.fr>
 
@@ -786,10 +793,10 @@
 1999-09-21  Kaveh R. Ghazi  <ghazi@caip.rutgers.edu>
 
 	* acgeneral.m4 (AC_CHECK_FUNC_DECL, AC_CHECK_FUNC_DECLS): New
- 	macros.
+	macros.
 
 	* autoconf.texi (AC_CHECK_FUNC_DECL, AC_CHECK_FUNC_DECLS):
- 	Document.
+	Document.
 
 	* autoheader.m4: Add support for AC_CHECK_FUNC_DECLS.
 
@@ -802,14 +809,14 @@
 	(AC_CHECK_FUNC): Likewise.
 
 	* Makefile.in (${srcdir}/configure): Use autoconf.sh to build
- 	Autoconf's configure.  Before the building was performed running
- 	m4 at hand, but much was not done (e.g., __oline__,
- 	@BKL@... expansion)
+	Autoconf's configure.  Before the building was performed running
+	m4 at hand, but much was not done (e.g., __oline__,
+	@BKL@... expansion)
 
 1999-09-20  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_OUTPUT): Don't remove the CONFIG_HEADERS
- 	unconditionaly: it breaks the `config.h has not changed' trick.
+	unconditionaly: it breaks the `config.h has not changed' trick.
 
 1999-09-20  Ben Elliston  <bje@cygnus.com>
 
@@ -837,33 +844,33 @@
 	* acgeneral.m4 (AC_OUTPUT): Change the root of filenames of
 	config.status from $conftest to $confstat.
 	The previous patch to make config.status reentrant was wrong,
- 	because it changed some `conftest' that are used by configure into
- 	`$conftest', while it was for config.status only.  To avoid
- 	another confusion like this, all the filenames of config.status
- 	should be `$confstat*', and those of configure should be
- 	`conftest*'.
+	because it changed some `conftest' that are used by configure into
+	`$conftest', while it was for config.status only.  To avoid
+	another confusion like this, all the filenames of config.status
+	should be `$confstat*', and those of configure should be
+	`conftest*'.
 	(AC_OUTPUT): Rename the uses of `ac_file' for the sed fragments as
 	`ac_sed_frag'.
 
 	* acgeneral.m4 (AC_OUTPUT): This macro used to open the here
- 	documents that configure uses to generate config.status, included
- 	that of the submacros.  Now, it no longer handles the here
- 	documents for its subroutines (it was far to hard to track).
+	documents that configure uses to generate config.status, included
+	that of the submacros.  Now, it no longer handles the here
+	documents for its subroutines (it was far to hard to track).
 	(AC_OUTPUT_FILES): Open and close your here documents to
 	$CONFIG_STATUS.
 	(AC_OUTPUT_HEADER): Likewise.
 	(AC_OUTPUT_LINKS): Likewise.
 
 	* acgeneral.m4 (AC_OUTPUT_FILES): Move $ac_vpsub and $extrasub
- 	from the AC_SUBST substitutions (i.e., that of @SHELL@ etc.) to
- 	the specific section (that of @srcdir@ etc.).
+	from the AC_SUBST substitutions (i.e., that of @SHELL@ etc.) to
+	the specific section (that of @srcdir@ etc.).
 	Now the ``general substitution'' section is absolutely uniform.
 
 	* acgeneral.m4 (AC_SUBST): Change sed call from `s%@from@%to%g'
- 	into `s%@from@%to%;t t'.
+	into `s%@from@%to%;t t'.
 	(AC_SUBST_FILE): Likewise.
 	(AC_OUTPUT_FILES): Optimize the sed scripts by branching if there
- 	are no `@' on the line. Impressive speed up.
+	are no `@' on the line. Impressive speed up.
 
 	* Makefile.in (DISTFILES): Add THANKS.
 
@@ -908,14 +915,14 @@
 1999-09-14  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_HELP_STRING): Rewrite in m4.  Have m4 work, and
- 	give a break to sh.
+	give a break to sh.
 	(_AC_FOREACH): Be careful not to evaluate the arguments.  A loop
 	over *quoted* macro names should loop over the macro names, not
 	upon their expansion.
 	(_AC_COMMATIZE): Also swallow end of lines.
 
 	* autoconf.texi (Pretty Help Strings): Updated to reflect the
- 	changes.
+	changes.
 
 1999-09-13  Akim Demaille  <akim@epita.fr>
 
@@ -926,8 +933,8 @@
 	to allow parallel builds.
 
 	* autoconf.sh: Substitute also /@BKL@/[/ /@BKR@/]/ /@DLR@/$/ so
- 	that these characters are more easily accessible from m4 without
- 	turning changequote juggling into a nightmare.
+	that these characters are more easily accessible from m4 without
+	turning changequote juggling into a nightmare.
 
 	* acgeneral.m4 (AC_WRAP): New macro, for word wrapping.
 
@@ -1009,40 +1016,40 @@
 	experimental branch from the main trunk.
 
 	* acgeneral.m4 (AC_FOREACH_COMMA): New macro, to perform m4 loops
- 	on m4 lists (i.e., list='(item_1, item_2, ..., item_n)').
+	on m4 lists (i.e., list='(item_1, item_2, ..., item_n)').
 	(AC_FOREACH): New macro, to perform m4 loops on shell lists (i.e.,
- 	list='item_1 item_2 ... item_n').
+	list='item_1 item_2 ... item_n').
 
 	* acgeneral.m4 (AC_DEFUN): Now accept two other optionnal
- 	parameters: the name of the macro which is specialized here, and
- 	the name of the first argument.  For instance `AC_CHECK_FNMATCH'
- 	should be declared as specializing `AC_CHECK_FUNC' for `fnmatch'
- 	as first argument.
+	parameters: the name of the macro which is specialized here, and
+	the name of the first argument.  For instance `AC_CHECK_FNMATCH'
+	should be declared as specializing `AC_CHECK_FUNC' for `fnmatch'
+	as first argument.
 
 	* acgeneral.m4 (AC_CHECK_FILES): Use AC_FOREACH for looping,
- 	instead of the shell's loop.
+	instead of the shell's loop.
 
 	* acgeneral.m4 (AC_TR): In addition to transliteration, provide a
- 	mean to specify the valid destination alphabet and a default
- 	character for aliens characters.  This is in order to remove
+	mean to specify the valid destination alphabet and a default
+	character for aliens characters.  This is in order to remove
 	characters such as `+:-' etc. that may appear in file names,
 	but are not valid for shell variables or #defines.
 	(AC_TR_DEFINE): New macro, maps anything to a valid uppercase
- 	#define rhs.
+	#define rhs.
 	(AC_TR_UPCASE_NAME): Replaced by AC_TR_DEFINE.  All callers
- 	changed.
+	changed.
 	(AC_TR_UPCASE_FILE): Likewise.
 
 	* acgeneral.m4 (AC_TR_SH): Don't use the generic AC_TR: there is a
- 	difficult problem of quoting between m4 and sh.  Use the variable
- 	$ac_tr_sh to work around this difficulty.
+	difficult problem of quoting between m4 and sh.  Use the variable
+	$ac_tr_sh to work around this difficulty.
 	(AC_VAR_TEST_SET): New macro, which tests if a variable is set.
 	(AC_VAR_IF_SET): New `ifelse' macro.
 	(AC_CACHE_VAL): Use AC_VAR_IF_SET.
 	(AC_INIT_NOTICE): Define $ac_tr_sh.
 
 	* acgeneral.m4 (AC_CHECK_FILE): Converted to use AC_TR and AC_VAR
- 	families.
+	families.
 
 	* acgeneral.m4: Fixed the regular expressions: `$' shall not be
 	portably in a sed \(\) group.
@@ -1080,7 +1087,7 @@
 	argument to AC_PROG_CC, AC_PROG_CXX and AC_PROG_F77.  Document
 	additions to the Fortran 77 compiler search list.
 
- 	* acspecific.m4 (AC_PROG_F77): Add more Fortran 77 compilers to
+	* acspecific.m4 (AC_PROG_F77): Add more Fortran 77 compilers to
 	the search list.  Contributed by Steven G. Johnson
 	<stevenj@alum.mit.edu>.
 
@@ -1558,7 +1565,7 @@
 1999-01-19  Pavel Roskin  <pavel_roskin@geocities.com>
 
 	* ifnames.sh: Source lines ending with backslash are prepended to
- 	the following line before further processing.
+	the following line before further processing.
 
 1999-01-19  Ben Elliston  <bje@cygnus.com>
 
@@ -1684,9 +1691,9 @@
 	  (AC_SEARCH_LIBS, AC_CHECK_FILE, AC_CHECK_FILES,
 	   AC_TRY_LINK_FUNC): Document.
 	  (AC_CHECK_LIB): Indicate the absence of
-	  	action-if-not-found will not kill default action.
+		action-if-not-found will not kill default action.
 	  (AC_SYS_INTERPRETER): Alphabetize with rest of section,
-	  	s/ac_cv_sys_interpreter/interpval/
+		s/ac_cv_sys_interpreter/interpval/
 
 	* acgeneral.m4:
 	  (AC_TRY_LINK_FUNC): Fix arg transposition.
@@ -1695,7 +1702,7 @@
 
 	* acspecific.m4:
 	  (AC_SYS_INTERPRETER): New shell var 'interpval' stores
-	  	internal var ac_cv_sys_interpreter.
+		internal var ac_cv_sys_interpreter.
 
 1998-12-27  Ben Elliston  <bje@cygnus.com>
 
@@ -1997,7 +2004,7 @@ Tue Nov 18 14:21:38 1997  Eric Mumpower  <nocturne@cygnus.com>
 Fri Oct  3 18:10:39 1997  Ian Lance Taylor  <ian@cygnus.com>
 
 	* acgeneral.m4 (AC_CACHE_SAVE): Add a grep when checking whether
- 	set quotes correctly, to avoid a cache overflow on HP-UX 9.
+	set quotes correctly, to avoid a cache overflow on HP-UX 9.
 	* configure: Rebuild.
 
 Wed Sep 11 15:35:19 1997  Chris Provenzano  <proven@cygnus.com>
@@ -2127,7 +2134,7 @@ Sun Nov 17 20:12:05 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 Thu Nov 14 11:15:27 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acheaders: Add entry for malloc.h.  Make the strings.h entry
- 	suggest AC_CHECK_HEADERS instead of AC_HEADER_STDC.
+	suggest AC_CHECK_HEADERS instead of AC_HEADER_STDC.
 
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Move initialization of
 	ac_max_here_lines here from AC_OUTPUT_HEADER.
@@ -2178,8 +2185,8 @@ Tue Nov 12 00:06:14 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 	of -O.  Suggested by fnf@ninemoons.com (Fred Fish).
 
 	* acgeneral.m4 (AC_OUTPUT_HEADER): Support passing
- 	AC_CONFIG_HEADER a value containing shell variables.  Suggested by
- 	Markku Savela <msa@msa.tte.vtt.fi> and Julian Onions
+	AC_CONFIG_HEADER a value containing shell variables.  Suggested by
+	Markku Savela <msa@msa.tte.vtt.fi> and Julian Onions
 	<j.onions@nexor.co.uk>.
 	* acgeneral.m4 (AC_TRY_RUN_NATIVE, AC_TRY_LINK, AC_TRY_COMPILE,
 	AC_TRY_CPP): Show the test program in config.log if the test fails.
@@ -2381,9 +2388,9 @@ Wed Mar 13 12:49:51 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 Tue Mar 12 02:51:24 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_OUTPUT_HEADER): Apply Jan 15 fix to
- 	AC_OUTPUT_MAKE_DEFS here too: Match `#define foo' without trailing
- 	space in confdefs.h.  Before configure would lose if all its trailing
- 	whitespace got stripped, and that can happen in mail.
+	AC_OUTPUT_MAKE_DEFS here too: Match `#define foo' without trailing
+	space in confdefs.h.  Before configure would lose if all its trailing
+	whitespace got stripped, and that can happen in mail.
 
 Sun Mar 10 20:30:09 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
@@ -2653,8 +2660,8 @@ Wed Mar  8 12:44:34 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 Tue Mar  7 11:48:19 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_FUNC_ALLOCA): Keep sh variable namespace
- 	clean.  Put newline after AC_DEFINE_UNQUOTED call to avoid Irix
- 	syntax error.
+	clean.  Put newline after AC_DEFINE_UNQUOTED call to avoid Irix
+	syntax error.
 
 Mon Mar  6 15:07:00 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
@@ -2683,13 +2690,13 @@ Fri Mar  3 11:41:01 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 Sat Feb 25 01:56:57 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acspecific.m4 (AC_C_BIGENDIAN): Check for BYTE_ORDER macro from
- 	sys/param.h before trying the test program which cannot be
- 	cross-compiled.
+	sys/param.h before trying the test program which cannot be
+	cross-compiled.
 
 Fri Feb 24 20:02:08 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_FUNC): Include errno.h instead of ctype.h
- 	in test program.
+	in test program.
 
 Wed Feb 22 18:01:27 1995  David J. MacKenzie  <djm@geech.gnu.ai.mit.edu>
 
@@ -2711,22 +2718,22 @@ Tue Feb 21 13:00:07 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 Mon Feb 13 18:13:11 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acspecific.m4 (AC_PROG_CC_C_O): Use sed filter to make sure
- 	${ac_cc} is always a valid shell variable name.
+	${ac_cc} is always a valid shell variable name.
 	(AC_PROG_MAKE_SET): Remove gratuitous backslashes in checking message.
 
 Sun Feb 12 18:42:35 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_TOOL_PREFIX): Require AC_CANONICAL_BUILD,
- 	so both $build and $host are definitely set before we compare
- 	them.
+	so both $build and $host are definitely set before we compare
+	them.
 
 Sat Feb 11 04:37:30 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_TOOL): Rewritten.  Take optional third
- 	arg VALUE-IF-NOT-FOUND.  Check for
- 	${ac_tool_prefix}PROG-TO-CHECK-FOR first.  If not found and third
- 	arg given, and ${ac_tool_prefix} is nonempty, check for unadorned
- 	PROG-TO-CHECK-FOR as well.  Last choice use VALUE-IF-NOT-FOUND.
+	arg VALUE-IF-NOT-FOUND.  Check for
+	${ac_tool_prefix}PROG-TO-CHECK-FOR first.  If not found and third
+	arg given, and ${ac_tool_prefix} is nonempty, check for unadorned
+	PROG-TO-CHECK-FOR as well.  Last choice use VALUE-IF-NOT-FOUND.
 
 Fri Feb 10 17:45:53 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
@@ -3321,10 +3328,10 @@ Fri Aug 26 00:34:11 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 	code after AC_OUTPUT (needed for Emacs).
 
 	* acgeneral.m4 (AC_CANONICAL_SYSTEM): Move setting of alias vars
- 	into submacros.
+	into submacros.
 
 	* acspecific.m4 (AC_PROG_CPP): If $CPP is set and is a directory,
- 	ignore it.
+	ignore it.
 
 Thu Aug 25 09:26:36 1994  David J. MacKenzie  (djm@vortex.eng.umd.edu)
 

@@ -1,5 +1,5 @@
+dnl This file is part of Autoconf.                       -*- Autoconf -*-
 dnl Driver and redefinitions of some Autoconf macros for autoheader.
-dnl This file is part of Autoconf.
 dnl Copyright (C) 1994, 1995, 1999 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify

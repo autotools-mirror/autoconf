@@ -1,6 +1,6 @@
+dnl This file is part of Autoconf.                       -*- Autoconf -*-
 dnl Driver that loads the Autoconf macro files.
 dnl Requires GNU m4.
-dnl This file is part of Autoconf.
 dnl Copyright (C) 1994 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify

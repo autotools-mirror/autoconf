@@ -1,5 +1,5 @@
+dnl This file is part of Autoconf.                       -*- Autoconf -*-
 dnl Map old names of Autoconf macros to new regularized names.
-dnl This file is part of Autoconf.
 dnl Copyright (C) 1994 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify

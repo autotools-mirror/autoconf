@@ -57,12 +57,20 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+AMDEP = @AMDEP@
+AMTAR = @AMTAR@
 AWK = @AWK@
+CC = @CC@
+CPP = @CPP@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+DEPDIR = @DEPDIR@
 M4 = @M4@
 PACKAGE = @PACKAGE@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
 VERSION = @VERSION@
+install_sh = @install_sh@
 standards_texi = @standards_texi@
 
 AUTOMAKE_OPTIONS = check-news
@@ -76,7 +84,7 @@ SUFFIXES = .m4 .m4f .pl .sh
 bin_SCRIPTS = autoconf autoheader autoreconf autoupdate ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan
 
-pkgdata_DATA = acfunctions acheaders acidentifiers acmakevars                acprograms acconfig.h autoconf.m4f autoheader.m4f                acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4                autoheader.m4 acversion.m4
+pkgdata_DATA = acfunctions acheaders acidentifiers acmakevars                acprograms autoconf.m4f autoheader.m4f                acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4                autoheader.m4 acversion.m4
 
 
 info_TEXINFOS = autoconf.texi standards.texi
@@ -84,7 +92,7 @@ autoconf_TEXINFOS = install.texi
 standards_TEXINFOS = make-stds.texi
 
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
-EXTRA_DIST = $(OLDCHANGELOGS)             acfunctions acheaders acidentifiers acmakevars              acprograms acconfig.h acgeneral.m4 acoldnames.m4              acspecific.m4 autoconf.m4 autoheader.m4 acversion.m4.in 	     autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh 	     ifnames.sh autoscan.pl INSTALL.txt
+EXTRA_DIST = $(OLDCHANGELOGS)             acfunctions acheaders acidentifiers acmakevars              acprograms acgeneral.m4 acoldnames.m4              acspecific.m4 autoconf.m4 autoheader.m4 acversion.m4.in 	     autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh 	     ifnames.sh autoscan.pl INSTALL.txt
 
 
 # Files that should be removed, but which Automake does not know.
@@ -466,7 +474,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

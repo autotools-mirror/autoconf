@@ -1,5 +1,5 @@
+dnl This file is part of Autoconf.                       -*- Autoconf -*-
 dnl Macros that test for specific features.
-dnl This file is part of Autoconf.
 dnl Copyright (C) 1992, 93, 94, 95, 96, 98, 1999 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
