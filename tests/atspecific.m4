@@ -1,5 +1,5 @@
-divert(-1)						-*- Autoconf -*-
-# `m4' macros used in building Autoconf test suites.
+include(atgeneral.m4)					-*- Autoconf -*-
+# M4 macros used in building Autoconf test suites.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,9 +16,6 @@ divert(-1)						-*- Autoconf -*-
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-include(atgeneral.m4)m4_divert(-1)
-
-
 
 ## ---------------------------------------- ##
 ## Macros specialized in testing Autoconf.  ##
@@ -27,21 +24,21 @@ include(atgeneral.m4)m4_divert(-1)
 
 # AT_CHECK_AUTOCONF
 # -----------------
-AT_DEFINE([AT_CHECK_AUTOCONF],
+m4_define([AT_CHECK_AUTOCONF],
 [AT_CLEANUP_FILES(configure)dnl
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])])
 
 
 # AT_CHECK_AUTOHEADER
 # -------------------
-AT_DEFINE([AT_CHECK_AUTOHEADER],
+m4_define([AT_CHECK_AUTOHEADER],
 [AT_CLEANUP_FILES(config.hin)dnl
 AT_CHECK([autoheader --autoconf-dir .. -l $at_srcdir], 0, [], [])])
 
 
 # AT_CHECK_CONFIGURE
 # -------------------
-AT_DEFINE([AT_CHECK_CONFIGURE],
+m4_define([AT_CHECK_CONFIGURE],
 [AT_CLEANUP_FILE_IFELSE([config.hin],
                         [AT_CLEANUP_FILE(config.h)])dnl
 AT_CLEANUP_FILES(config.log config.status config.cache)dnl
@@ -56,7 +53,7 @@ test $at_verbose = echo && echo "--- config.log" && cat config.log])
 # and that the shell runs correctly the configure.
 # TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
 # `config.guess' etc.).
-AT_DEFINE([_AT_CHECK_AC_MACRO],
+m4_define([_AT_CHECK_AC_MACRO],
 [dnl Produce the configure.in
 AT_CLEANUP_FILES(env-after state*)dnl
 AT_DATA([configure.in],
@@ -91,7 +88,7 @@ fi
 # and that the shell runs correctly the configure.
 # TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
 # `config.guess' etc.).
-AT_DEFINE([AT_CHECK_MACRO],
+m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
 
 _AT_CHECK_AC_MACRO([ifelse([$2],,[$1], [$2])])
@@ -107,7 +104,7 @@ AT_CLEANUP()dnl
 # on that script, and that the shell runs correctly the configure.
 # TOP_SRCDIR is needed to set the auxdir (some macros need
 # `install-sh', `config.guess' etc.).
-AT_DEFINE([AT_CHECK_UPDATE],
+m4_define([AT_CHECK_UPDATE],
 [AT_SETUP([the autoupdating of $1])
 
 _AT_CHECK_AC_MACRO([$1],
@@ -125,5 +122,5 @@ AT_CLEANUP()dnl
 # Stripping consists of keeping CPP lines (i.e. containing a hash),
 # but those of automatically checked features (STDC_HEADERS etc.).
 # AT_CHECK_HEADER is a better name, but too close from AC_CHECK_HEADER.
-AT_DEFINE(AT_CHECK_DEFINES,
+m4_define([AT_CHECK_DEFINES],
 [AT_CHECK([[fgrep '#' config.h | grep -v 'STDC_HEADERS']],, [$1])])

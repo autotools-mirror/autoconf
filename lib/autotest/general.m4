@@ -46,13 +46,6 @@ include(m4sh.m4)					    -*- Autoconf -*-
 # version.
 
 
-m4_define([AT_DEFINE], m4_defn([m4_define]))
-m4_define([AT_INCLUDE], m4_defn([m4_include]))
-m4_define([AT_SHIFT], m4_defn([m4_shift]))
-m4_define([AT_UNDEFINE], m4_defn([m4_undefine]))
-
-
-
 # Use of diversions:
 #
 #  - DEFAULT
@@ -90,7 +83,7 @@ m4_divert_push([KILL])
 # AT_LINE
 # -------
 # Return the current file sans directory, a colon, and the current line.
-AT_DEFINE([AT_LINE],
+m4_define([AT_LINE],
 [m4_patsubst(__file__, ^.*/\(.*\), \1):__line__])
 
 
@@ -98,8 +91,8 @@ AT_DEFINE([AT_LINE],
 # ----------------
 # Begin testing suite, using PROGRAM to check version.  The search path
 # should be already preset so the proper executable will be selected.
-AT_DEFINE([AT_INIT],
-[AT_DEFINE([AT_ordinal], 0)
+m4_define([AT_INIT],
+[m4_define([AT_ordinal], 0)
 m4_divert_push([DEFAULT])dnl
 #! /bin/sh
 
@@ -132,7 +125,8 @@ at_debug=false
 at_help=false
 # Tests to run
 at_tests=
-m4_divert([OPTIONS])dnl Other vars inserted here.
+dnl Other vars inserted here (DEFAULT).
+m4_divert([OPTIONS])
 
 while test $[#] -gt 0; do
   case $[1] in
@@ -228,6 +222,7 @@ for at_test in $at_tests
 do
   at_status=0;
   case $at_test in
+dnl Tests inserted here (TESTS).
 m4_divert([TAIL])[]dnl
   esac
   at_test_count=`expr 1 + $at_test_count`
@@ -310,8 +305,8 @@ at_tests_all="m4_for([i], 1, AT_ordinal, 1, [i ])"])])dnl
 # ---------------------
 # Start a group of related tests, all to be executed in the same subshell.
 # The group is testing what DESCRIPTION says.
-AT_DEFINE([AT_SETUP],
-[m4_define([AT_ordinal], m4_eval(AT_ordinal + 1))
+m4_define([AT_SETUP],
+[m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_divert_text([HELP],
                [m4_format([ %3d: %-15s %s], AT_ordinal, AT_LINE, [$1])])
 m4_pushdef([AT_data_files], [stdout stderr ])
@@ -335,7 +330,7 @@ m4_divert([TEST])[]dnl
 
 # AT_CLEANUP_FILE_IFELSE(FILE, IF-REGISTERED, IF-NOT-REGISTERED)
 # --------------------------------------------------------------
-AT_DEFINE([AT_CLEANUP_FILE_IFELSE],
+m4_define([AT_CLEANUP_FILE_IFELSE],
 [ifelse(m4_regexp(AT_data_files, m4_patsubst([ $1 ], [\([\[\]*.]\)], [\\\1])),
         -1,
         [$3], [$2])])
@@ -344,7 +339,7 @@ AT_DEFINE([AT_CLEANUP_FILE_IFELSE],
 # AT_CLEANUP_FILE(FILE)
 # ---------------------
 # Register FILE for AT_CLEANUP.
-AT_DEFINE([AT_CLEANUP_FILE],
+m4_define([AT_CLEANUP_FILE],
 [AT_CLEANUP_FILE_IFELSE([$1], [],
                         [m4_append([AT_data_files], [$1 ])])])
 
@@ -352,7 +347,7 @@ AT_DEFINE([AT_CLEANUP_FILE],
 # AT_CLEANUP_FILES(FILES)
 # -----------------------
 # Declare a list of FILES to clean.
-AT_DEFINE([AT_CLEANUP_FILES],
+m4_define([AT_CLEANUP_FILES],
 [m4_foreach([AT_File], m4_quote(m4_patsubst([$1], [  *], [,])),
             [AT_CLEANUP_FILE(AT_File)])])
 
@@ -362,7 +357,7 @@ AT_DEFINE([AT_CLEANUP_FILES],
 # Complete a group of related tests, recursively remove those FILES
 # created within the test.  There is no need to list stdout, stderr,
 # nor files created with AT_DATA.
-AT_DEFINE([AT_CLEANUP],
+m4_define([AT_CLEANUP],
 [AT_CLEANUP_FILES([$1])dnl
       $at_traceoff
     )
@@ -382,7 +377,7 @@ m4_divert_pop()dnl
 # an end of line.
 # This macro is not robust to active symbols in CONTENTS *on purpose*.
 # If you don't want CONTENT to be evaluated, quote it twice.
-AT_DEFINE([AT_DATA],
+m4_define([AT_DATA],
 [AT_CLEANUP_FILES([$1])dnl
 cat >$1 <<'_ATEOF'
 $2[]_ATEOF
@@ -400,14 +395,14 @@ $2[]_ATEOF
 # STATUS is not checked if it is empty.
 # STDOUT and STDERR can be the special value `ignore', in which case
 # their content is not checked.
-AT_DEFINE([AT_CHECK],
+m4_define([AT_CHECK],
 [$at_traceoff
 $at_verbose "$srcdir/AT_LINE: m4_patsubst([$1], [\([\"`$]\)], \\\1)"
 echo AT_LINE >at-check-line
 $at_check_stds && exec 5>&1 6>&2 1>stdout 2>stderr
 $at_traceon
 $1
-ifelse([$2], [], [],
+m4_ifval([$2],
 [at_status=$?
 if test $at_status != $2; then
   $at_verbose "Exit code was $at_status, expected $2" >&6

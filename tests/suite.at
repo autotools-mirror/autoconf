@@ -17,32 +17,32 @@ EOF
 # the most selective to the easiest.
 
 # M4sugar.
-AT_INCLUDE([m4sugar.at])
+m4_include([m4sugar.at])
 
 # M4sh.m4.
-AT_INCLUDE([m4sh.at])
+m4_include([m4sh.at])
 
 # Autoconf base macros.
-AT_INCLUDE([base.at])
+m4_include([base.at])
 
 # The executables.
-AT_INCLUDE([tools.at])
+m4_include([tools.at])
 
 # Testing config.status
 # ---------------------
 # Actually should be named config.status.at but I fear problems with
 # the name.  Does no `checking...' at all, but exercises only code
 # which following section use too.  Hence, run it first.
-AT_INCLUDE([torture.at])
+m4_include([torture.at])
 
 # Checking AC_PROG_CC, AC_COMPILE_IFELSE etc.
-AT_INCLUDE([compile.at])
+m4_include([compile.at])
 
 # Checking that AC_CHECK_FOO macros work properly.
-AT_INCLUDE([semantics.at])
+m4_include([semantics.at])
 
 # Checking all the AC_DEFUN'd macros.
-AT_INCLUDE([syntax.at])
+m4_include([syntax.at])
 
 # Checking that updating an obsolete macro produces a valid configure.in
-AT_INCLUDE([update.at])
+m4_include([update.at])

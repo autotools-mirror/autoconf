@@ -179,8 +179,8 @@ m4_expansion_stack_dump()dnl
 m4_exit(ifelse([$2],, 1, [$2]))])
 
 
-# m4_assert( EXPRESSION [, EXIT-STATUS = 1 ])
-# -------------------------------------------
+# m4_assert(EXPRESSION, [EXIT-STATUS = 1])
+# ----------------------------------------
 # This macro ensures that EXPRESSION evaluates to true, and exits if
 # EXPRESSION evaluates to false.
 m4_define([m4_assert],

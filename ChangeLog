@@ -1,5 +1,10 @@
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
+	* tests/atgeneral.m4 (AT_DEFINE, AT_UNDEFINE, AT_SHIFT)
+	(AT_INCLUDE): Remove, use the m4_ macros.
+
+2000-11-29  Akim Demaille  <akim@epita.fr>
+
 	* m4sugar.m4 (ifval, ifset, ifdef, ifndef, m4_ifvanl): Rename as...
 	(m4_ifval, m4_ifset, m4_ifdef, m4_ifndef, m4_ifvaln): this.
 	(m4_n): New macro.
