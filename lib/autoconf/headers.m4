@@ -730,10 +730,7 @@ AU_DEFUN([AC_UNISTD_H],
 # ----------
 # Define `USG' if string functions are in strings.h.
 AU_DEFUN([AC_USG],
-[AC_DIAGNOSE([obsolete],
-[$0: Remove `AC_MSG_CHECKING', `AC_LINK_IFELSE' and this `AC_DIAGNOSE'
-when you adjust your code to use HAVE_STRING_H.])dnl
-AC_MSG_CHECKING([for BSD string and memory functions])
+[AC_MSG_CHECKING([for BSD string and memory functions])
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <strings.h>]],
 				[[rindex(0, 0); bzero(0, 0);]])],
 	       [AC_MSG_RESULT(yes)],
@@ -742,8 +739,9 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <strings.h>]],
 			  [Define to 1 if you do not have <strings.h>, index,
 			   bzero, etc... This symbol is obsolete, you should
 			   not depend upon it.])])
-AC_CHECK_HEADERS(string.h)
-])# AU::AC_USG
+AC_CHECK_HEADERS(string.h)],
+[Remove `AC_MSG_CHECKING', `AC_LINK_IFELSE' and this warning
+when you adjust your code to use HAVE_STRING_H.])
 
 
 # AU::AC_MEMORY_H
@@ -760,14 +758,13 @@ AC_CHECK_HEADERS(string.h)
 # But it is better to check for both headers, and alias NEED_MEMORY_H to
 # HAVE_MEMORY_H.
 AU_DEFUN([AC_MEMORY_H],
-[AC_DIAGNOSE([obsolete], [$0: Remove this `AC_DIAGNOSE' and
-`AC_CHECK_HEADER(memory.h, AC_DEFINE(...))' when you adjust your code to
-use and HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])dnl
-AC_CHECK_HEADER(memory.h,
+[AC_CHECK_HEADER(memory.h,
 		[AC_DEFINE([NEED_MEMORY_H], 1,
 			   [Same as `HAVE_MEMORY_H', don't depend on me.])])
-AC_CHECK_HEADERS(string.h memory.h)
-])
+AC_CHECK_HEADERS(string.h memory.h)],
+[Remove this warning and
+`AC_CHECK_HEADER(memory.h, AC_DEFINE(...))' when you adjust your code to
+use HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])
 
 
 # AU::AC_DIR_HEADER
@@ -778,9 +775,6 @@ AC_CHECK_HEADERS(string.h memory.h)
 AU_DEFUN([AC_DIR_HEADER],
 [AC_HEADER_DIRENT
 AC_FUNC_CLOSEDIR_VOID
-AC_DIAGNOSE([obsolete],
-[$0: Remove this `AC_DIAGNOSE' and the four `AC_DEFINE' when you
-adjust your code to use `AC_HEADER_DIRENT'.])
 test ac_cv_header_dirent_dirent_h &&
   AC_DEFINE([DIRENT], 1, [Same as `HAVE_DIRENT_H', don't depend on me.])
 test ac_cv_header_dirent_sys_ndir_h &&
@@ -788,5 +782,6 @@ test ac_cv_header_dirent_sys_ndir_h &&
 test ac_cv_header_dirent_sys_dir_h &&
   AC_DEFINE([SYSDIR], 1, [Same as `HAVE_SYS_DIR_H', don't depend on me.])
 test ac_cv_header_dirent_ndir_h &&
-  AC_DEFINE([NDIR], 1, [Same as `HAVE_NDIR_H', don't depend on me.])
-])
+  AC_DEFINE([NDIR], 1, [Same as `HAVE_NDIR_H', don't depend on me.])],
+[Remove this warning and the four `AC_DEFINE' when you
+adjust your code to use `AC_HEADER_DIRENT'.])

@@ -97,16 +97,14 @@ interpval=$ac_cv_sys_interpreter
 
 
 AU_DEFUN([AC_HAVE_POUNDBANG],
-[AC_SYS_INTERPRETER
-AC_DIAGNOSE([obsolete],
-[$0: Remove this warning when you adjust your code to use
-      `AC_SYS_INTERPRETER'.])])
+[AC_SYS_INTERPRETER],
+[Remove this warning when you adjust your code to use
+`AC_SYS_INTERPRETER'.])
 
 
-AU_DEFUN([AC_ARG_ARRAY],
-[AC_DIAGNOSE([obsolete],
-[$0: no longer implemented: don't do unportable things
-with arguments. Remove this warning when you adjust your code.])])
+AU_DEFUN([AC_ARG_ARRAY], [],
+[$0 is no longer implemented: don't do unportable things
+with arguments. Remove this warning when you adjust your code.])
 
 
 # _AC_SYS_LARGEFILE_TEST_INCLUDES
@@ -354,13 +352,12 @@ AC_DEFINE([_GNU_SOURCE])
 # EXEEXT.
 AU_DEFUN([AC_CYGWIN],
 [AC_CANONICAL_HOST
-AC_DIAGNOSE([obsolete],
-	    [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os matches *cygwin*])dnl
 case $host_os in
   *cygwin* ) CYGWIN=yes;;
 	 * ) CYGWIN=no;;
 esac
-])# AC_CYGWIN
+], [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os
+matches *cygwin*])# AC_CYGWIN
 
 
 # AC_EMXOS2
@@ -369,13 +366,12 @@ esac
 # for EXEEXT.
 AU_DEFUN([AC_EMXOS2],
 [AC_CANONICAL_HOST
-AC_DIAGNOSE([obsolete],
-	    [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os matches *emx*])dnl
 case $host_os in
   *emx* ) EMXOS2=yes;;
       * ) EMXOS2=no;;
 esac
-])# AC_EMXOS2
+], [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os
+matches *emx*])# AC_EMXOS2
 
 
 # AC_MINGW32
@@ -384,13 +380,12 @@ esac
 # EXEEXT.
 AU_DEFUN([AC_MINGW32],
 [AC_CANONICAL_HOST
-AC_DIAGNOSE([obsolete],
-	    [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os matches *mingw32*])dnl
 case $host_os in
   *mingw32* ) MINGW32=yes;;
 	  * ) MINGW32=no;;
 esac
-])# AC_MINGW32
+], [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os
+matches *mingw32*])# AC_MINGW32
 
 
 
@@ -453,9 +448,8 @@ AC_DEFUN([AC_ISC_POSIX], [AC_SEARCH_LIBS(strerror, cposix)])
 
 # AC_XENIX_DIR
 # ------------
-AU_DEFUN(AC_XENIX_DIR,
-[# You shouldn't need to depend upon XENIX.  Remove this test if useless.
-AC_MSG_CHECKING([for Xenix])
+AU_DEFUN([AC_XENIX_DIR],
+[AC_MSG_CHECKING([for Xenix])
 AC_EGREP_CPP(yes,
 [#if defined(M_XENIX) && !defined(M_UNIX)
   yes
@@ -464,7 +458,10 @@ AC_EGREP_CPP(yes,
 	     [AC_MSG_RESULT([no]); XENIX=])
 
 AC_HEADER_DIRENT[]dnl
-])
+],
+[You shouldn't need to depend upon XENIX.  Remove the
+`AC_MSG_CHECKING', `AC_EGREP_CPP', and this warning if this part
+of the test is useless.])
 
 
 # AC_DYNIX_SEQ

@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Type related macros: existence, sizeof, and structure members.
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -415,29 +415,25 @@ AC_DEFINE_UNQUOTED(AS_TR_CPP(sizeof_$1), $AS_TR_SH([ac_cv_sizeof_$1]),
 # What a great name :)
 AU_DEFUN([AC_INT_16_BITS],
 [AC_CHECK_SIZEOF([int])
-AC_DIAGNOSE([obsolete], [$0:
-	your code should no longer depend upon `INT_16_BITS', but upon
-	`SIZEOF_INT == 2'.  Remove this warning and the `AC_DEFINE' when you
-	adjust the code.])dnl
 test $ac_cv_sizeof_int = 2 &&
   AC_DEFINE(INT_16_BITS, 1,
 	    [Define to 1 if `sizeof (int)' = 2.  Obsolete, use `SIZEOF_INT'.])
-])
+], [your code should no longer depend upon `INT_16_BITS', but upon
+`SIZEOF_INT == 2'.  Remove this warning and the `AC_DEFINE' when you
+adjust the code.])
 
 
 # AU::AC_LONG_64_BITS
 # -------------------
 AU_DEFUN([AC_LONG_64_BITS],
 [AC_CHECK_SIZEOF([long int])
-AC_DIAGNOSE([obsolete], [$0:
-	your code should no longer depend upon `LONG_64_BITS', but upon
-	`SIZEOF_LONG_INT == 8'.  Remove this warning and the `AC_DEFINE' when
-	you adjust the code.])dnl
 test $ac_cv_sizeof_long_int = 8 &&
   AC_DEFINE(LONG_64_BITS, 1,
 	    [Define to 1 if `sizeof (long int)' = 8.  Obsolete, use
 	     `SIZEOF_LONG_INT'.])
-])
+], [your code should no longer depend upon `LONG_64_BITS', but upon
+`SIZEOF_LONG_INT == 8'.  Remove this warning and the `AC_DEFINE' when
+you adjust the code.])
 
 
 
@@ -515,16 +511,14 @@ AN_IDENTIFIER([st_rdev],    [AC_CHECK_MEMBERS([struct stat.st_rdev])])
 # AC_STRUCT_ST_BLKSIZE
 # --------------------
 AU_DEFUN([AC_STRUCT_ST_BLKSIZE],
-[AC_DIAGNOSE([obsolete], [$0:
-	your code should no longer depend upon `HAVE_ST_BLKSIZE', but
-	`HAVE_STRUCT_STAT_ST_BLKSIZE'.  Remove this warning and
-	the `AC_DEFINE' when you adjust the code.])
-AC_CHECK_MEMBERS([struct stat.st_blksize],
+[AC_CHECK_MEMBERS([struct stat.st_blksize],
 		 [AC_DEFINE(HAVE_ST_BLKSIZE, 1,
 			    [Define to 1 if your `struct stat' has
 			     `st_blksize'.  Deprecated, use
 			     `HAVE_STRUCT_STAT_ST_BLKSIZE' instead.])])
-])# AC_STRUCT_ST_BLKSIZE
+], [your code should no longer depend upon `HAVE_ST_BLKSIZE', but
+`HAVE_STRUCT_STAT_ST_BLKSIZE'.  Remove this warning and
+the `AC_DEFINE' when you adjust the code.])# AC_STRUCT_ST_BLKSIZE
 
 
 # AC_STRUCT_ST_BLOCKS
@@ -555,16 +549,14 @@ AC_DEFUN([AC_STRUCT_ST_BLOCKS],
 # AC_STRUCT_ST_RDEV
 # -----------------
 AU_DEFUN([AC_STRUCT_ST_RDEV],
-[AC_DIAGNOSE([obsolete], [$0:
-	your code should no longer depend upon `HAVE_ST_RDEV', but
-	`HAVE_STRUCT_STAT_ST_RDEV'.  Remove this warning and
-	the `AC_DEFINE' when you adjust the code.])
-AC_CHECK_MEMBERS([struct stat.st_rdev],
+[AC_CHECK_MEMBERS([struct stat.st_rdev],
 		 [AC_DEFINE(HAVE_ST_RDEV, 1,
 			    [Define to 1 if your `struct stat' has `st_rdev'.
 			     Deprecated, use `HAVE_STRUCT_STAT_ST_RDEV'
 			     instead.])])
-])# AC_STRUCT_ST_RDEV
+], [your code should no longer depend upon `HAVE_ST_RDEV', but
+`HAVE_STRUCT_STAT_ST_RDEV'.  Remove this warning and
+the `AC_DEFINE' when you adjust the code.])# AC_STRUCT_ST_RDEV
 
 
 # AC_STRUCT_TM

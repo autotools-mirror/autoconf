@@ -747,18 +747,9 @@ while test -n "$ac_sources"; do
 done
 AC_CONFIG_LINKS($[ac_config_links_]_AC_LINK_FILES_CNT)dnl
 ],
-dnl FIXME: Macros such as AC_USG put messages like this into an
-dnl AC_DIAGNOSE macro, in the first parameter of AU_DEFUN.  We cannot
-dnl do the same with this one, because it makes no sense to print it
-dnl when running `autoconf -W obsolete' on a configure script that uses
-dnl AC_LINK_FILES.  Instead, only `autoupdate' should print it (it may
-dnl be acceptable that autoupdated configure scripts print this message
-dnl when running `autoconf -W obsolete').  As of 2003-11-25, the third
-dnl argument to AU_DEFUN is broken, so this is never seen by the user.
-[
-  It is technically impossible to `autoupdate' cleanly from AC_LINK_FILES
-  to AC_CONFIG_FILES.  `autoupdate' provides a functional but inelegant
-  update, you should probably tune the result yourself.])# AC_LINK_FILES
+[It is technically impossible to `autoupdate' cleanly from AC_LINK_FILES
+to AC_CONFIG_FILES.  `autoupdate' provides a functional but inelegant
+update, you should probably tune the result yourself.])# AC_LINK_FILES
 
 
 # Initialize.

@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -160,10 +160,9 @@ m4_popdef([$0 OLD])dnl
 # ------------
 # Save the current language, but don't change language.
 AU_DEFUN([AC_LANG_SAVE],
-[AC_DIAGNOSE([obsolete],
-	     [instead of using `AC_LANG', `AC_LANG_SAVE',
-and `AC_LANG_RESTORE', you should use `AC_LANG_PUSH' and `AC_LANG_POP'.])
-m4_pushdef([_AC_LANG], _AC_LANG)])
+[m4_pushdef([_AC_LANG], _AC_LANG)],
+[Instead of using `AC_LANG', `AC_LANG_SAVE', and `AC_LANG_RESTORE',
+you should use `AC_LANG_PUSH' and `AC_LANG_POP'.])
 
 
 # AC_LANG_RESTORE

@@ -56,17 +56,19 @@
 ## ---------------------------------- ##
 
 
+# AU_DEFINE(NAME, CODE)
+# ---------------------
+# Define the macro NAME so that it expand to CODE only when
+# autoupdate is running.  This is achieved with traces in
+# autoupdate itself, so this macro expands to nothing.
+#
+m4_define([AU_DEFINE], [])
+
 # AU_DEFUN(NAME, NEW-CODE, [MESSAGE])
 # -----------------------------------
 # Declare that the macro NAME is now obsoleted, and should be replaced
 # by NEW-CODE.  Tell the user she should run autoupdate, and include
 # the additional MESSAGE.
-#
-# FIXME: MESSAGE should be grabbed with autom4te traces, and that's
-# why it is never used in the body of the macro; however, as of 2003-11-25
-# it is never used and it seems that it never was.  Also, MESSAGE is
-# used only once in AC_LINK_FILES, it may be the case to remove it from
-# there.  See the FIXME in AC_LINK_FILES as well.
 #
 # Also define NAME as a macro which code is NEW-CODE.
 #
@@ -74,7 +76,14 @@
 # and to update a configure.ac.
 # See `acobsolete.m4' for a longer description.
 m4_define([AU_DEFUN],
-[AC_DEFUN([$1],
+[AU_DEFINE([$1],
+[m4_ifval([$3], [_au_warn_$1[]AC_DIAGNOSE([obsolete], [$3])d[]nl
+])dnl
+$2])
+AU_DEFINE([_au_warn_$1],
+[m4_warning([$3])dnl
+m4_define([_au_warn_$1], [])])
+AC_DEFUN([$1],
 	   [AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
 You should run autoupdate.])dnl
 $2])])

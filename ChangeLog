@@ -1,3 +1,27 @@
+2003-11-26  Paolo Bonzini  <bonzini@bogus.example.com>
+
+	* bin/autoupdate.in: Trace AU_DEFINE instead of AU_DEFUN.
+	* doc/autoconf.texi: Don't say that the third parameter
+	is broken.
+	* lib/autoconf/autoupdate.m4 (AU_DEFINE): New dummy macro.
+	(AU_DEFUN): Honor the third parameter, create autoupdate
+	macros with AU_DEFINE.
+	* lib/autoconf/headers.m4 (AC_USG, AC_MEMORY_H,
+	AC_DIR_HEADER): Use AU_DEFUN's third parameter.
+	* lib/autoconf/lang.m4 (AC_LANG_SAVE): Likewise.
+	* lib/autoconf/programs.m4 (AC_RSH): Likewise.
+	* lib/autoconf/specific.m4 (AC_HAVE_POUNDBANG,
+	AC_ARG_ARRAY, AC_CYGWIN, AC_EMXOS2, AC_MINGW32,
+	AC_XENIX_DIR): Likewise.
+	* lib/autoconf/types.m4 (AC_INT_16_BITS, AC_LONG_64_BITS,
+	AC_STRUCT_ST_BLKSIZE, AC_STRUCT_ST_RDEV): Likewise.
+	* lib/autoconf/status.m4: Remove FIXME.
+	* tests/local.at (AT_CHECK_AU_MACRO): Ignore stderr, check
+	that the macro is not present anymore in the updated
+	configure.ac.
+	* tests/tools.at (autoupdate AC_LINK_FILES): Ignore stderr
+	of autoupdate.
+
 2004-01-28  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Add 2004 to

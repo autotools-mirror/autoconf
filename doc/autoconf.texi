@@ -8940,8 +8940,8 @@ with @code{AC_DEFUN} is that the user will be warned that
 @var{old-macro} is now obsolete.
 
 If she then uses @command{autoupdate}, the call to @var{old-macro} will be
-replaced by the modern @var{implementation}.  In the future,
-@command{autoupdate} will then print the additional @var{message}.
+replaced by the modern @var{implementation}.  @command{autoupdate} will
+then print the additional @var{message}.
 @end defmac
 
 @node Coding Style

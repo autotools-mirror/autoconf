@@ -1,7 +1,7 @@
 #! @PERL@ -w
 # -*- perl -*-
 # autoupdate - modernize an Autoconf file.
-# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2003
+# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2003, 2004
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -172,7 +172,7 @@ my (%ac_macros, %au_macros);
 sub handle_autoconf_macros ()
 {
   my $macros = new Autom4te::XFile ("$autoconf"
-				    . " --trace AU_DEFUN:'AU:\$f:\$1'"
+				    . " --trace AU_DEFINE:'AU:\$f:\$1'"
 				    . " --trace define:'AC:\$f:\$1'"
 				    . " --melt /dev/null |");
   while ($_ = $macros->getline)
@@ -251,7 +251,7 @@ my $au_changequote =
   's/\b(' . join ('|', keys %au_macros) . ')\b/_au_changequote([,])$1/g';
 
 # au.m4 -- definitions the AU macros.
-xsystem ("$autoconf --trace AU_DEFUN:'_au_defun(\@<:\@\$1\@:>\@,
+xsystem ("$autoconf --trace AU_DEFINE:'_au_defun(\@<:\@\$1\@:>\@,
 \@<:\@\$2\@:>\@)' --melt /dev/null "
 	. ">$tmp/au.m4");
 

@@ -606,9 +606,9 @@ AC_DEFUN([AC_PROG_RANLIB],
 # AC_RSH
 # ------
 # I don't know what it used to do, but it no longer does.
-AU_DEFUN([AC_RSH],
-[AC_DIAGNOSE([obsolete], [$0: is no longer supported.
-Remove this warning when you adjust the code.])])
+AU_DEFUN([AC_RSH], [],
+[$0 is no longer supported.  Remove this warning when you
+adjust the code.])
 
 
 # AC_PROG_SED

@@ -2,7 +2,7 @@
 
 AT_BANNER([Executables (autoheader, autoupdate...).])
 
-# Copyright (C) 2000, 2001, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2003, 2004 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -540,7 +540,7 @@ AT_DATA([dst2], dst2
 )
 
 # Checking `autoupdate'.
-AT_CHECK_AUTOUPDATE
+AT_CHECK_AUTOUPDATE([], 0, [], ignore)
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 AT_CHECK([cat src1], 0, [dst1
