@@ -441,15 +441,12 @@ po-update:
 wget_files ?= \
   $(srcdir)/config/config.guess \
   $(srcdir)/config/config.sub \
-  $(srcdir)/config/texinfo.tex \
-  $(srcdir)/src/ansi2knr.c
+  $(srcdir)/config/texinfo.tex
 
 get-targets = $(patsubst %, get-%, $(wget_files))
 
 config.guess-url_prefix = $(ftp-gnu)/config/
 config.sub-url_prefix = $(ftp-gnu)/config/
-
-ansi2knr.c-url_prefix = ftp://ftp.cs.wisc.edu/ghost/
 
 texinfo.tex-url_prefix = $(ftp-gnu)/texinfo/
 
@@ -468,8 +465,7 @@ cvs_files ?= \
   $(srcdir)/config/depcomp \
   $(srcdir)/config/install-sh \
   $(srcdir)/config/missing \
-  $(srcdir)/config/mkinstalldirs \
-  $(srcdir)/src/ansi2knr.c
+  $(srcdir)/config/mkinstalldirs
 automake_repo=:pserver:anoncvs:anoncvs@sources.redhat.com:/cvs/automake
 .PHONY: wget-update
 wget-update: $(get-targets)
@@ -487,7 +483,7 @@ cvs-update:
 	  $(CVS) -d $(automake_repo) co -p automake/lib/$$file> $$f.t	\
 	    && $(move_if_change) $$f.t $$f;				\
 	done;								\
-	test "$$fail" && exit 1
+	test -z "$$fail"
 
 define emit-upload-commands
 	echo =====================================
