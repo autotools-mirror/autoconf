@@ -1,3 +1,12 @@
+1999-11-01  Akim Demaille  <akim@epita.fr>
+
+	Update autoupdate.
+
+	* acoldnames.m4:  Sort the two sections.
+	* acoldnames.m4 (AM_CYGWIN32, AM_EXEEXT, AM_FUNC_FNMATCH,
+ 	AM_FUNC_MKTIME, AM_PROG_LIBTOOL, AM_MINGW32, AM_PROG_INSTALL,
+ 	fp_FUNC_FNMATCH): Added their new names.
+
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
 	Create man pages for the executables.
