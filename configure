@@ -901,8 +901,8 @@ cat > $CONFIG_STATUS <<EOF
 # configure, is in ./config.log if it exists.
 
 ac_cs_usage="\\
-\\\`$CONFIG_STATUS' configures files from templates according to the current
-configuration.
+\\\`$CONFIG_STATUS' instanciates files from templates according to the
+current configuration.
 
 Usage: $CONFIG_STATUS [OPTIONS] FILE...
 
@@ -910,10 +910,9 @@ Usage: $CONFIG_STATUS [OPTIONS] FILE...
   --version    Print the version of Autoconf and exit
   --help       Display this help and exit
 
-By default the following files will updated.
+Files to instanciate:
   Configuration files:
     Makefile testsuite/Makefile 
-
 Report bugs to <bug-autoconf@gnu.org>."
 
 ac_cs_version="\
@@ -923,7 +922,6 @@ Configured on host `(hostname || uname -n) 2>/dev/null | sed 1q` by running
 
 # Root of the tmp file names.  Use pid to allow concurrent executions.
 ac_cs_root=cs\$\$
-
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
@@ -979,6 +977,7 @@ rm -fr \`echo "\$CONFIG_FILES" | sed "s/:[^ ]*//g"\`
 trap 'rm -fr \$ac_cs_root*; exit 1' 1 2 15
 
 EOF
+
 
 cat >>$CONFIG_STATUS <<EOF
 # Protect against being on the right side of a sed subst in config.status.
@@ -1129,7 +1128,6 @@ s%@INSTALL@%$INSTALL%;t t
 fi; done
 rm -f $ac_cs_root.s*
 EOF
-
 
 cat >> $CONFIG_STATUS <<EOF
 

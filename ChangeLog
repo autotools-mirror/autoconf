@@ -1,5 +1,12 @@
 1999-09-27  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_OUTPUT): Divert AC_OUTPUT_FILE to
+	AC_DIVERSION_KILL if there are no CONFIG_FILES.
+	(AC_OUTPUT, ac_cs_usage): Output the list of files to instanciate
+	only if there are.
+
+1999-09-27  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CHECK_DECL): Renamed as...
 	(AC_NEED_DECL): This.
 	(AC_CHECK_DECLS): Renamed as...

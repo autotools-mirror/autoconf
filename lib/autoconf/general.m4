@@ -2703,7 +2703,7 @@ AC_SUBST(subdirs)dnl
 ])
 
 dnl AC_OUTPUT([CONFIG_FILES...] [, EXTRA-CMDS] [, INIT-CMDS])
-dnl -------------------------------------------------
+dnl ---------------------------------------------------------
 dnl The big finish.
 dnl Produce config.status, config.h, and links; and configure subdirs.
 dnl The CONFIG_HEADERS are defined in the m4 variable AC_LIST_HEADER.
@@ -2751,8 +2751,8 @@ dnl so uname gets run too.
 # configure, is in ./config.log if it exists.
 
 ac_cs_usage="\\
-\\\`$CONFIG_STATUS' configures files from templates according to the current
-configuration.
+\\\`$CONFIG_STATUS' instanciates files from templates according to the
+current configuration.
 
 Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
 
@@ -2760,14 +2760,17 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
   --version    Print the version of Autoconf and exit
   --help       Display this help and exit
 
-By default the following files will updated.
+dnl Output this only if there are files to instanciate.
+ifset(ifdef([AC_LIST_HEADER], 1)$1,
+[Files to instanciate:
 ifset($1, [  Configuration files:
 AC_WRAP($1, [    ])
 ])dnl
 ifdef([AC_LIST_HEADER], [  Configuration headers:
-AC_WRAP(AC_LIST_HEADER, [    ])]
-)dnl
+AC_WRAP(AC_LIST_HEADER, [    ])
+])dnl
 
+])dnl
 Report bugs to <bug-autoconf@gnu.org>."
 
 ac_cs_version="\
@@ -2781,16 +2784,15 @@ dnl files used by configure, and `ac_cs_root' which is the root of the
 dnl files of config.status.
 # Root of the tmp file names.  Use pid to allow concurrent executions.
 ac_cs_root=cs\$\$
-
 ac_given_srcdir=$srcdir
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
 ])dnl
 
 # Files that config.status was made for.
-AC_WRAP([config_files="]$1["]
-)
-ifdef([AC_LIST_HEADER], [AC_WRAP([config_headers="]AC_LIST_HEADER["])]
-)dnl
+ifset([$1], [AC_WRAP([config_files="]$1["])
+])dnl
+ifdef([AC_LIST_HEADER], [AC_WRAP([config_headers="]AC_LIST_HEADER["])
+])dnl
 
 for ac_option
 do
@@ -2830,10 +2832,13 @@ done
 
 EOF
 
-cat >> $CONFIG_STATUS <<EOF
+dnl Issue this section only if there were actually config files.
+ifset(ifdef([AC_LIST_HEADER], 1)[$1],
+[cat >> $CONFIG_STATUS <<EOF
 # If there were arguments, don't assign a default value.
 if test \$[#] = 0; then
-  : \${CONFIG_FILES="\$config_files"}
+ifset([$1], [  : \${CONFIG_FILES="\$config_files"}
+])dnl
 ifdef([AC_LIST_HEADER], [  : \${CONFIG_HEADERS="\$config_headers"}
 ])dnl
 fi
@@ -2845,10 +2850,19 @@ rm -fr \`echo "\$CONFIG_FILES" | sed "s/:@BKL@^ @BKR@*//g"\`
 trap 'rm -fr \$ac_cs_root*; exit 1' 1 2 15
 
 EOF
+])[]dnl
 
 dnl The following three sections are in charge of their own here
 dnl documenting into $CONFIG_STATUS.
-AC_OUTPUT_FILES($1)
+
+dnl Because AC_OUTPUT_FILES is in charge of undiverting the AC_SUBST
+dnl section, it is better to divert it to void and *call it*, rather
+dnl than not calling it at all
+ifset([$1],
+      [AC_OUTPUT_FILES([$1])],
+      [AC_DIVERT_PUSH(AC_DIVERSION_KILL)dnl
+AC_OUTPUT_FILES([$1])dnl
+AC_DIVERT_POP()])dnl
 ifdef([AC_LIST_HEADER], [AC_OUTPUT_HEADER(AC_LIST_HEADER)])dnl
 ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_FILES, AC_LIST_LINKS)])dnl
 
