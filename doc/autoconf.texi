@@ -303,6 +303,7 @@ M4 Quotation
 
 Programming in M4sugar
 
+* Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Forbidden Patterns::          Catching unexpanded macros
 
 Writing Autoconf Macros
@@ -6296,10 +6297,47 @@ coined by Lars J. Aas: ``Readability And Greater Understanding Stands 4
 M4sugar''.
 
 @menu
+* Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Forbidden Patterns::          Catching unexpanded macros
 @end menu
 
-@node Forbidden Patterns,  , Programming in M4sugar, Programming in M4sugar
+@node Redefined M4 Macros, Forbidden Patterns, Programming in M4sugar, Programming in M4sugar
+@subsection Redefined M4 Macros
+
+All the M4 native macros are moved in the @samp{m4_} pseudo-namespace,
+e.g., M4sugar renames @code{define} as @code{m4_define} etc.  There is
+one exception: @code{dnl} kept its original name, and no @code{m4_dnl}
+is defined.
+
+M4sugar redefines some M4 macros, and made them slightly incompatible
+with their native equivalent.
+
+@defmac m4_defn (@var{macro})
+@msindex defn
+Contrary to the M4 builtin, this macro fails if @var{macro} is not
+defined.  See @code{m4_undefine}.
+@end defmac
+
+@defmac m4_undefine (@var{macro})
+@msindex undefine
+Contrary to the M4 builtin, this macro fails if @var{macro} is not
+defined.  Use
+
+@example
+m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
+@end example
+
+@noindent
+to recover the behavior of the builtin.
+@end defmac
+
+@defmac m4_popdef (@var{macro})
+@msindex defn
+Contrary to the M4 builtin, this macro fails if @var{macro} is not
+defined.  See @code{m4_undefine}.
+@end defmac
+
+@node Forbidden Patterns,  , Redefined M4 Macros, Programming in M4sugar
 @subsection Forbidden Patterns
 
 M4sugar provides a means to define suspicious patterns, patterns
