@@ -91,7 +91,8 @@ dnl m4 output diversions.  We let m4 output them all in order at the end,
 dnl except that we explicitly undivert AC_DIVERSION_SED, AC_DIVERSION_CMDS,
 dnl and AC_DIVERSION_ICMDS.
 
-dnl AC_DIVERSION_NOTICE - 1 (= 0)	AC_REQUIRE'd #! /bin/sh line
+define(AC_DIVERSION_KILL, -1)dnl	suppress output
+define(AC_DIVERSION_BINSH, 0)dnl	AC_REQUIRE'd #! /bin/sh line
 define(AC_DIVERSION_NOTICE, 1)dnl	copyright notice & option help strings
 define(AC_DIVERSION_INIT, 2)dnl		initialization code
 define(AC_DIVERSION_NORMAL_4, 3)dnl	AC_REQUIRE'd code, 4 level deep
@@ -119,8 +120,8 @@ divert(AC_DIVERSION_CURRENT)dnl
 
 dnl Initialize the diversion setup.
 define([AC_DIVERSION_CURRENT], AC_DIVERSION_NORMAL)
-dnl This will be popped by AC_REQUIRE in AC_INIT.
-pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_NOTICE)
+dnl Throw away output until AC_INIT is called.
+pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_KILL)
 
 dnl The prologue for Autoconf macros.
 dnl AC_PRO(MACRO-NAME)
@@ -1073,7 +1074,9 @@ dnl Try to have only one #! line, so the script doesn't look funny
 dnl for users of AC_REVISION.
 dnl AC_INIT_BINSH()
 AC_DEFUN(AC_INIT_BINSH,
-[#! /bin/sh
+[AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
+#! /bin/sh
+AC_DIVERT_POP()dnl to KILL
 ])
 
 dnl AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
@@ -1083,7 +1086,9 @@ AC_DEFUN(AC_INIT,
 [sinclude(acsite.m4)dnl
 sinclude(./aclocal.m4)dnl
 AC_REQUIRE([AC_INIT_BINSH])dnl
+AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 AC_INIT_NOTICE
+AC_DIVERT_POP()dnl to KILL
 AC_DIVERT_POP()dnl to NORMAL
 AC_DIVERT_PUSH(AC_DIVERSION_INIT)dnl
 AC_INIT_PARSE_ARGS
@@ -1346,7 +1351,10 @@ dnl ### Version numbers
 dnl AC_REVISION(REVISION-INFO)
 AC_DEFUN(AC_REVISION,
 [AC_REQUIRE([AC_INIT_BINSH])dnl
-[# From configure.in] translit([$1], $")])
+AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
+[# From configure.in] translit([$1], $")
+AC_DIVERT_POP()dnl to KILL
+])
 
 dnl Subroutines of AC_PREREQ.
 

@@ -1,3 +1,15 @@
+1999-09-23  Pavel Roskin  <pavel_roskin@geocities.com>
+
+	Avoid that comments from aclocal.m4 show up in configure when
+	using AC_REVISION.
+
+	* acgeneral.m4: New diversion levels AC_DIVERSION_KILL and
+	AC_DIVERSION_BINSH introduced. Use AC_DIVERSION_KILL as the
+	initial value for AC_DIVERSION_CURRENT.
+	(AC_INIT_BINSH): Set AC_DIVERSION_BINSH explicitly
+	(AC_REVISION): Likewise.
+	(AC_INIT): Set AC_DIVERSION_NOTICE when calling AC_INIT_NOTICE.
+
 1999-09-23  Akim Demaille  <akim@epita.fr>
 
 	* NEWS: Document AC_ARG_VAR.
