@@ -1,3 +1,7 @@
+2000-10-24  Pavel Roskin  <proski@gnu.org>
+
+	* m4sugar.m4 (m4_quote): Comment change.
+
 2000-10-24  Akim Demaille  <akim@epita.fr>
 
 	Start avoiding dependence upon character ranges.

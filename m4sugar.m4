@@ -472,7 +472,7 @@ define([_m4_foreach],
 # ----------------
 # Return STRING quoted.
 #
-# It is important to realize the difference between `quote(exp)' and
+# It is important to realize the difference between `m4_quote(exp)' and
 # `[exp]': in the first case you obtain the quoted *result* of the
 # expansion of EXP, while in the latter you just obtain the string
 # `exp'.
