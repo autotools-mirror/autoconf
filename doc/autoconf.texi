@@ -5020,7 +5020,7 @@ man pages}.
 
 When writing your own checks, there are some shell script programming
 techniques you should avoid in order to make your code portable.  The
-Bourne shell and upward-compatible shells like Bash and the Korn shell
+Bourne shell and upward-compatible shells like the Korn shell and Bash
 have evolved over the years, but to prevent trouble, do not take
 advantage of features that were added after @sc{unix} version 7, circa
 1977.  You should not use shell functions, aliases, negated character
