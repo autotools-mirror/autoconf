@@ -2988,7 +2988,7 @@ else
 m4_ifvanl([$6],
 [  ac_prog_rejected=no])dnl
   AC_SHELL_PATH_WALK([$5],
-[test -f $ac_dir/$ac_word || continue
+[test -f "$ac_dir/$ac_word" || continue
 m4_ifvanl([$6],
 [if test "$ac_dir/$ac_word" = "$6"; then
   ac_prog_rejected=yes
@@ -3058,7 +3058,7 @@ AC_CACHE_VAL(ac_cv_path_$1,
   *)
   AC_SHELL_PATH_WALK([$4],
 [if test -f "$ac_dir/$ac_word"; then
-   ac_cv_path_$1=$ac_dir/$ac_word
+   ac_cv_path_$1="$ac_dir/$ac_word"
    break
 fi])
 dnl If no 3rd arg is given, leave the cache variable unset,

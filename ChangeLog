@@ -1,5 +1,11 @@
 2000-09-27  Pavel Roskin  <proski@gnu.org>
 
+	* acgeneral.m4 (AC_CHECK_PROG): Added protection against spaces
+	in $PATH.
+	* acspecific.m4 (AC_PROG_INSTALL): Likewise.
+
+2000-09-27  Pavel Roskin  <proski@gnu.org>
+
 	* acgeneral.m4 (AC_CHECK_LIB): only call AH_CHECK_LIB if
 	ACTION-IF-TRUE is not given.
 	(AH_CHECK_LIB): related comment changes.

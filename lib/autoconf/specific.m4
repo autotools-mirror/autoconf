@@ -221,13 +221,13 @@ AC_CACHE_VAL(ac_cv_path_install,
       # Don't use installbsd from OSF since it installs stuff as root
       # by default.
       for ac_prog in ginstall scoinst install; do
-        if test -f $ac_dir/$ac_prog; then
+        if test -f "$ac_dir/$ac_prog"; then
 	  if test $ac_prog = install &&
-            grep dspmsg $ac_dir/$ac_prog >/dev/null 2>&1; then
+            grep dspmsg "$ac_dir/$ac_prog" >/dev/null 2>&1; then
 	    # AIX install.  It has an incompatible calling convention.
 	    :
 	  elif test $ac_prog = install &&
-	    grep pwplus $ac_dir/$ac_prog >/dev/null 2>&1; then
+	    grep pwplus "$ac_dir/$ac_prog" >/dev/null 2>&1; then
 	    # program-specific install script used by HP pwplus--don't use.
 	    :
 	  else
