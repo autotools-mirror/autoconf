@@ -628,6 +628,30 @@ AC_DEFUN([AC_PREFIX_DEFAULT],
 [m4_divert_text([DEFAULTS], [ac_default_prefix=$1])])
 
 
+# AC_PREFIX_PROGRAM(PROGRAM)
+# --------------------------
+# Guess the value for the `prefix' variable by looking for
+# the argument program along PATH and taking its parent.
+# Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
+# set `prefix' to /usr/local/gnu.
+# This comes too late to find a site file based on the prefix,
+# and it might use a cached value for the path.
+# No big loss, I think, since most configures don't use this macro anyway.
+AC_DEFUN([AC_PREFIX_PROGRAM],
+[dnl Get an upper case version of $[1].
+m4_pushdef([AC_Prog], m4_toupper([$1]))dnl
+if test "x$prefix" = xNONE; then
+dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
+  echo $ECHO_N "checking for prefix by $ECHO_C" >&AS_MESSAGE_FD
+  AC_PATH_PROG(m4_quote(AC_Prog), [$1])
+  if test -n "$ac_cv_path_[]AC_Prog"; then
+    prefix=`AS_DIRNAME(["$ac_cv_path_[]AC_Prog"])`
+  fi
+fi
+m4_popdef([AC_Prog])dnl
+])# AC_PREFIX_PROGRAM
+
+
 # AC_CONFIG_SRCDIR([UNIQUE-FILE-IN-SOURCE-DIR])
 # ---------------------------------------------
 # UNIQUE-FILE-IN-SOURCE-DIR is a filename unique to this package,
@@ -2267,244 +2291,6 @@ AC_DEFUN([AC_INCLUDES_DEFAULT],
 ],
           [AC_REQUIRE([_AC_INCLUDES_DEFAULT_REQUIREMENTS])dnl
 $ac_includes_default])])
-
-
-
-
-## ----------------------- ##
-## Checking for programs.  ##
-## ----------------------- ##
-
-
-# AC_SHELL_PATH_WALK([PATH = $PATH], BODY)
-# ----------------------------------------
-# Walk through PATH running BODY for each `ac_dir'.
-#
-# `$ac_dummy' forces splitting on constant user-supplied paths.
-# POSIX.2 word splitting is done only on the output of word
-# expansions, not every word.  This closes a longstanding sh security
-# hole.
-m4_define([AC_SHELL_PATH_WALK],
-[ac_save_IFS=$IFS; IFS=$ac_path_separator
-ac_dummy="m4_default([$1], [$PATH])"
-for ac_dir in $ac_dummy; do
-  IFS=$ac_save_IFS
-  test -z "$ac_dir" && ac_dir=.
-  $2
-done
-])
-
-
-# AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR,
-#               [VALUE-IF-FOUND], [VALUE-IF-NOT-FOUND],
-#               [PATH], [REJECT])
-# -----------------------------------------------------
-AC_DEFUN([AC_CHECK_PROG],
-[# Extract the first word of "$2", so it can be a program name with args.
-set dummy $2; ac_word=$[2]
-AC_MSG_CHECKING([for $ac_word])
-AC_CACHE_VAL(ac_cv_prog_$1,
-[if test -n "$$1"; then
-  ac_cv_prog_$1="$$1" # Let the user override the test.
-else
-m4_ifvaln([$6],
-[  ac_prog_rejected=no])dnl
-  AC_SHELL_PATH_WALK([$5],
-[AS_EXECUTABLE_P("$ac_dir/$ac_word") || continue
-m4_ifvaln([$6],
-[if test "$ac_dir/$ac_word" = "$6"; then
-  ac_prog_rejected=yes
-  continue
-fi])dnl
-ac_cv_prog_$1="$3"
-echo "$as_me:__oline__: found $ac_dir/$ac_word" >&AS_MESSAGE_LOG_FD
-break])
-m4_ifvaln([$6],
-[if test $ac_prog_rejected = yes; then
-  # We found a bogon in the path, so make sure we never use it.
-  set dummy $ac_cv_prog_$1
-  shift
-  if test $[@%:@] != 0; then
-    # We chose a different compiler from the bogus one.
-    # However, it has the same basename, so the bogon will be chosen
-    # first if we set $1 to just the basename; use the full file name.
-    shift
-    set dummy "$ac_dir/$ac_word" ${1+"$[@]"}
-    shift
-    ac_cv_prog_$1="$[@]"
-m4_if([$2], [$4],
-[  else
-    # Default is a loser.
-    AC_MSG_ERROR([$1=$6 unacceptable, but no other $4 found in dnl
-m4_default([$5], [\$PATH])])
-])dnl
-  fi
-fi])dnl
-dnl If no 4th arg is given, leave the cache variable unset,
-dnl so AC_CHECK_PROGS will keep looking.
-m4_ifvaln([$4],
-[  test -z "$ac_cv_prog_$1" && ac_cv_prog_$1="$4"])dnl
-fi])dnl
-$1=$ac_cv_prog_$1
-if test -n "$$1"; then
-  AC_MSG_RESULT([$$1])
-else
-  AC_MSG_RESULT([no])
-fi
-AC_SUBST($1)dnl
-])# AC_CHECK_PROG
-
-
-# AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
-#                [PATH])
-# ------------------------------------------------------------------
-AC_DEFUN([AC_CHECK_PROGS],
-[for ac_prog in $2
-do
-  AC_CHECK_PROG([$1], [$ac_prog], [$ac_prog], , [$4])
-  test -n "$$1" && break
-done
-m4_ifvaln([$3], [test -n "$$1" || $1="$3"])])
-
-
-# AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
-# -----------------------------------------------------------------------
-AC_DEFUN([AC_PATH_PROG],
-[# Extract the first word of "$2", so it can be a program name with args.
-set dummy $2; ac_word=$[2]
-AC_MSG_CHECKING([for $ac_word])
-AC_CACHE_VAL([ac_cv_path_$1],
-[case $$1 in
-  [[\\/]]* | ?:[[\\/]]*)
-  ac_cv_path_$1="$$1" # Let the user override the test with a path.
-  ;;
-  *)
-  AC_SHELL_PATH_WALK([$4],
-[if AS_EXECUTABLE_P("$ac_dir/$ac_word"); then
-   ac_cv_path_$1="$ac_dir/$ac_word"
-   echo "$as_me:__oline__: found $ac_dir/$ac_word" >&AS_MESSAGE_LOG_FD
-   break
-fi])
-dnl If no 3rd arg is given, leave the cache variable unset,
-dnl so AC_PATH_PROGS will keep looking.
-m4_ifvaln([$3],
-[  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"])dnl
-  ;;
-esac])dnl
-AC_SUBST([$1], [$ac_cv_path_$1])
-if test -n "$$1"; then
-  AC_MSG_RESULT([$$1])
-else
-  AC_MSG_RESULT([no])
-fi
-])# AC_PATH_PROG
-
-
-# AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
-#               [PATH])
-# -----------------------------------------------------------------
-AC_DEFUN([AC_PATH_PROGS],
-[for ac_prog in $2
-do
-  AC_PATH_PROG([$1], [$ac_prog], , [$4])
-  test -n "$$1" && break
-done
-m4_ifvaln([$3], [test -n "$$1" || $1="$3"])dnl
-])
-
-
-
-
-## -------------------- ##
-## Checking for tools.  ##
-## -------------------- ##
-
-
-# AC_CHECK_TOOL_PREFIX
-# --------------------
-AU_DEFUN([AC_CHECK_TOOL_PREFIX])
-
-
-# AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
-# -----------------------------------------------------------------------
-# (Use different variables $1 and ac_pt_$1 so that cache vars don't conflict.)
-AC_DEFUN([AC_PATH_TOOL],
-[if test -n "$ac_tool_prefix"; then
-  AC_PATH_PROG([$1], [${ac_tool_prefix}$2], , [$4])
-fi
-if test -z "$ac_cv_path_$1"; then
-  ac_pt_$1=$$1
-  AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
-  $1=$ac_pt_$1
-else
-  $1="$ac_cv_path_$1"
-fi
-])# AC_PATH_TOOL
-
-
-# AC_CHECK_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
-# ------------------------------------------------------------------------
-# (Use different variables $1 and ac_ct_$1 so that cache vars don't conflict.)
-AC_DEFUN([AC_CHECK_TOOL],
-[if test -n "$ac_tool_prefix"; then
-  AC_CHECK_PROG([$1], [${ac_tool_prefix}$2], [${ac_tool_prefix}$2], , [$4])
-fi
-if test -z "$ac_cv_prog_$1"; then
-  ac_ct_$1=$$1
-  AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
-  $1=$ac_ct_$1
-else
-  $1="$ac_cv_prog_$1"
-fi
-])# AC_CHECK_TOOL
-
-
-# AC_CHECK_TOOLS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
-#                [PATH])
-# ------------------------------------------------------------------
-# Check for each tool in PROGS-TO-CHECK-FOR with the cross prefix. If
-# none can be found with a cross prefix, then use the first one that
-# was found without the cross prefix.
-AC_DEFUN([AC_CHECK_TOOLS],
-[if test -n "$ac_tool_prefix"; then
-  for ac_prog in $2
-  do
-    AC_CHECK_PROG([$1],
-                  [$ac_tool_prefix$ac_prog], [$ac_tool_prefix$ac_prog],,
-                  [$4])
-    test -n "$$1" && break
-  done
-fi
-if test -z "$$1"; then
-  ac_ct_$1=$$1
-  AC_CHECK_PROGS([ac_ct_$1], [$2], [$3], [$4])
-  $1=$ac_ct_$1
-fi
-])# AC_CHECK_TOOLS
-
-
-# AC_PREFIX_PROGRAM(PROGRAM)
-# --------------------------
-# Guess the value for the `prefix' variable by looking for
-# the argument program along PATH and taking its parent.
-# Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
-# set `prefix' to /usr/local/gnu.
-# This comes too late to find a site file based on the prefix,
-# and it might use a cached value for the path.
-# No big loss, I think, since most configures don't use this macro anyway.
-AC_DEFUN([AC_PREFIX_PROGRAM],
-[dnl Get an upper case version of $[1].
-m4_pushdef([AC_Prog], m4_toupper([$1]))dnl
-if test "x$prefix" = xNONE; then
-dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
-  echo $ECHO_N "checking for prefix by $ECHO_C" >&AS_MESSAGE_FD
-  AC_PATH_PROG(m4_quote(AC_Prog), [$1])
-  if test -n "$ac_cv_path_[]AC_Prog"; then
-    prefix=`AS_DIRNAME(["$ac_cv_path_[]AC_Prog"])`
-  fi
-fi
-m4_popdef([AC_Prog])dnl
-])# AC_PREFIX_PROGRAM
 
 
 

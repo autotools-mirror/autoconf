@@ -23,7 +23,7 @@ AUTOMAKE_OPTIONS = gnits
 SUITE_GENERATED = \
 	aclang.at acc.at acfortran.at \
 	acgeneral.at acspecific.at acfunctions.at acheaders.at actypes.at \
-	aclibs.at
+	aclibs.at acprograms.at
 
 SUITE = suite.at \
         m4sugar.at m4sh.at \
@@ -67,7 +67,8 @@ MACRO_FILES = $(top_srcdir)/lib/autoconf/general.m4 \
               $(top_srcdir)/lib/autoconf/fortran.m4 \
               $(top_srcdir)/lib/autoconf/headers.m4 \
               $(top_srcdir)/lib/autoconf/libs.m4 \
-              $(top_srcdir)/lib/autoconf/types.m4
+              $(top_srcdir)/lib/autoconf/types.m4	\
+              $(top_srcdir)/lib/autoconf/programs.m4
 
 $(SUITE_GENERATED): mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)

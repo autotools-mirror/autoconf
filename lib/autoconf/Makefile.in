@@ -67,7 +67,7 @@ PERL = @PERL@
 VERSION = @VERSION@
 
 distautoconflibdir = $(pkgdatadir)/autoconf
-distautoconflib_DATA = autoconf.m4                        general.m4 oldnames.m4 specific.m4 		       lang.m4 c.m4 fortran.m4                        functions.m4 headers.m4 types.m4 libs.m4
+distautoconflib_DATA = autoconf.m4                        general.m4 oldnames.m4 specific.m4 		       lang.m4 c.m4 fortran.m4                        functions.m4 headers.m4 types.m4 libs.m4 programs.m4
 
 nodistautoconflibdir = $(pkgdatadir)/autoconf
 # The order matters: we need version.m4 to build autoconf.m4f.
@@ -339,7 +339,8 @@ autoconf.m4f: $(srclibdir)/m4sugar/m4sugar.m4	\
               $(srclibdir)/autoconf/functions.m4 \
               $(srclibdir)/autoconf/headers.m4	\
               $(srclibdir)/autoconf/types.m4	\
-              $(srclibdir)/autoconf/libs.m4
+              $(srclibdir)/autoconf/libs.m4	\
+              $(srclibdir)/autoconf/programs.m4
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -53,6 +53,7 @@ changequote()changequote([, ])include(m4sugar/m4sh.m4)#      -*- Autoconf -*-
 
 m4_include([autoconf/version.m4])
 m4_include([autoconf/general.m4])
+m4_include([autoconf/programs.m4])
 m4_include([autoconf/lang.m4])
 m4_include([autoconf/c.m4])
 m4_include([autoconf/fortran.m4])

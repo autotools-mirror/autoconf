@@ -1,5 +1,21 @@
 2001-08-22  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/general.m4 (AC_SHELL_PATH_WALK, AC_CHECK_PROG)
+	(AC_CHECK_PROGS, AC_PATH_PROG, AC_PATH_PROGS, AC_CHECK_TOOL_PREFIX)
+	(AC_PATH_TOOL, AC_CHECK_TOOL, AC_CHECK_TOOLS): Move to...
+	* lib/autoconf/programs.m4: here.
+	* lib/autoconf/specific.m4 (_AC_PROG_ECHO, AC_PROG_MAKE_SET)
+	(AC_PROG_RANLIB, AC_PROG_YACC, AC_PROG_LEX, _AC_DECL_YYTEXT)
+	(AC_PROG_INSTALL, AC_PROG_LN_S, AC_RSH): Move to...
+	* lib/autoconf/programs.m4: here.
+	(_AC_DECL_YYTEXT): Rename as...
+	(_AC_PROG_LEX_YYTEXT_DECL): this.
+	* lib/autoconf/autoconf.m4, lib/autoconf/Makefile.am
+	* tests/Makefile.am, tests/suite.am: Adjust.
+
+	
+2001-08-22  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/general.m4 (AC_LIST_MEMBER_OF, AC_LINKER_OPTION):
 	Move to...
 	* lib/autoconf/fortran.m4 (_AC_LIST_MEMBER_IF, _AC_LINKER_OPTION):
