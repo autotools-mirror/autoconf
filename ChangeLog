@@ -1,3 +1,9 @@
+2000-05-22  unknown
+
+	* acgeneral.m4: Quote the names being m4-defined.
+	* acspecific.m4: Likewise.
+	* aclang.m4: Likewise.
+
 2000-05-22  Akim Demaille  <akim@epita.fr>
 
 	Factor the AC_PROG_<compiler>_WORKS macros.

@@ -94,7 +94,7 @@
 # ------------------------------------------------------------
 # Expand into IF-LANG1 if the current language is LANG1 etc. else
 # into default.
-define(AC_LANG_CASE,
+define([AC_LANG_CASE],
 [m4_case(_AC_LANG, $@)])
 
 
@@ -405,7 +405,7 @@ AC_MSG_ERROR([_AC_LANG compiler cannot create executables], 77)])[]dnl
 
 # AC_PROG_CPP
 # -----------
-AC_DEFUN(AC_PROG_CPP,
+AC_DEFUN([AC_PROG_CPP],
 [AC_MSG_CHECKING(how to run the C preprocessor)
 # On Suns, sometimes $CPP names a directory.
 if test -n "$CPP" && test -d "$CPP"; then
@@ -443,7 +443,7 @@ AC_SUBST(CPP)dnl
 # COMPILER ... is a space separated list of C compilers to search for.
 # This just gives the user an opportunity to specify an alternative
 # search list for the C compiler.
-AC_DEFUN(AC_PROG_CC,
+AC_DEFUN([AC_PROG_CC],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_LANG_PUSH(C)
 AC_ARG_VAR([CFLAGS], [Extra flags for the C compiler])
@@ -515,7 +515,7 @@ fi[]dnl
 
 # AC_PROG_CC_G
 # ------------
-AC_DEFUN(AC_PROG_CC_G,
+AC_DEFUN([AC_PROG_CC_G],
 [AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_cc_g,
 [echo 'void f(){}' >conftest.c
 if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
@@ -529,7 +529,7 @@ rm -f conftest*
 
 # AC_PROG_GCC_TRADITIONAL
 # -----------------------
-AC_DEFUN(AC_PROG_GCC_TRADITIONAL,
+AC_DEFUN([AC_PROG_GCC_TRADITIONAL],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_CPP])dnl
 if test $ac_cv_prog_gcc = yes; then
@@ -554,7 +554,7 @@ fi
 
 # AC_PROG_CC_C_O
 # --------------
-AC_DEFUN(AC_PROG_CC_C_O,
+AC_DEFUN([AC_PROG_CC_C_O],
 [if test "x$CC" != xcc; then
   AC_MSG_CHECKING(whether $CC and cc understand -c and -o together)
 else
@@ -610,7 +610,7 @@ fi
 
 # AC_PROG_CXXCPP
 # --------------
-AC_DEFUN(AC_PROG_CXXCPP,
+AC_DEFUN([AC_PROG_CXXCPP],
 [AC_MSG_CHECKING(how to run the C++ preprocessor)
 if test -z "$CXXCPP"; then
 AC_CACHE_VAL(ac_cv_prog_CXXCPP,
@@ -634,7 +634,7 @@ AC_SUBST(CXXCPP)dnl
 # for (if not specified, a default list is used).  This just gives the
 # user an opportunity to specify an alternative search list for the C++
 # compiler.
-AC_DEFUN(AC_PROG_CXX,
+AC_DEFUN([AC_PROG_CXX],
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
 AC_LANG_PUSH(C++)
 AC_CHECK_PROGS(CXX, $CCC m4_default([$1], [c++ g++ gpp CC cxx cc++ cl]), g++)
@@ -694,7 +694,7 @@ fi[]dnl
 
 # AC_PROG_CXX_G
 # -------------
-AC_DEFUN(AC_PROG_CXX_G,
+AC_DEFUN([AC_PROG_CXX_G],
 [AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_cxx_g,
 [echo 'void f(){}' >conftest.cc
 if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
@@ -716,7 +716,7 @@ rm -f conftest*
 # ---------------------------
 # COMPILERS is a space separated list of Fortran 77 compilers to search
 # for.
-AC_DEFUN(AC_PROG_F77,
+AC_DEFUN([AC_PROG_F77],
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
 AC_LANG_PUSH(Fortran 77)
 AC_CHECK_PROGS(F77,
@@ -780,7 +780,7 @@ fi[]dnl
 # -------------
 # Test whether the Fortran 77 compiler can accept the `-g' option to
 # enable debugging.
-AC_DEFUN(AC_PROG_F77_G,
+AC_DEFUN([AC_PROG_F77_G],
 [AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
 [cat >conftest.f <<EOF
        program conftest
@@ -803,7 +803,7 @@ rm -f conftest*
 # The usefulness of this macro is questionable, as I can't really see
 # why anyone would use it.  The only reason I include it is for
 # completeness, since a similar test exists for the C compiler.
-AC_DEFUN(AC_PROG_F77_C_O,
+AC_DEFUN([AC_PROG_F77_C_O],
 [AC_BEFORE([$0], [AC_PROG_F77])dnl
 AC_MSG_CHECKING(whether $F77 understand -c and -o together)
 set dummy $F77; ac_f77=`echo $[2] |
@@ -853,7 +853,7 @@ fi
 # various options that select ANSI C on some system or another.  It
 # considers the compiler to be in ANSI C mode if it handles function
 # prototypes correctly.
-AC_DEFUN(AC_PROG_CC_STDC,
+AC_DEFUN([AC_PROG_CC_STDC],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_BEFORE([$0], [AC_C_INLINE])dnl
 AC_BEFORE([$0], [AC_C_CONST])dnl
@@ -926,13 +926,13 @@ esac
 
 
 
-AC_DEFUN(AC_C_CROSS,
+AC_DEFUN([AC_C_CROSS],
 [AC_OBSOLETE([$0], [; it has been merged into AC_PROG_CC])])
 
 
 # AC_C_CHAR_UNSIGNED
 # ------------------
-AC_DEFUN(AC_C_CHAR_UNSIGNED,
+AC_DEFUN([AC_C_CHAR_UNSIGNED],
 [AH_VERBATIM([__CHAR_UNSIGNED__],
 [/* Define if type `char' is unsigned and you are not using gcc.  */
 #ifndef __CHAR_UNSIGNED__
@@ -967,7 +967,7 @@ fi
 
 # AC_C_LONG_DOUBLE
 # ----------------
-AC_DEFUN(AC_C_LONG_DOUBLE,
+AC_DEFUN([AC_C_LONG_DOUBLE],
 [AC_CACHE_CHECK(for long double, ac_cv_c_long_double,
 [if test "$GCC" = yes; then
   ac_cv_c_long_double=yes
@@ -993,7 +993,7 @@ fi
 
 # AC_C_BIGENDIAN
 # --------------
-AC_DEFUN(AC_C_BIGENDIAN,
+AC_DEFUN([AC_C_BIGENDIAN],
 [AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
 [ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
@@ -1040,7 +1040,7 @@ fi
 # Do nothing if the compiler accepts the inline keyword.
 # Otherwise define inline to __inline__ or __inline if one of those work,
 # otherwise define inline to be empty.
-AC_DEFUN(AC_C_INLINE,
+AC_DEFUN([AC_C_INLINE],
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 [ac_cv_c_inline=no
@@ -1065,7 +1065,7 @@ esac
 
 # AC_C_CONST
 # ----------
-AC_DEFUN(AC_C_CONST,
+AC_DEFUN([AC_C_CONST],
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
@@ -1133,7 +1133,7 @@ fi
 # optimizations that could break the user's code.  So, do not #define
 # volatile away unless it is really necessary to allow the user's code
 # to compile cleanly.  Benign compiler failures should be tolerated.
-AC_DEFUN(AC_C_VOLATILE,
+AC_DEFUN([AC_C_VOLATILE],
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [
@@ -1154,7 +1154,7 @@ fi
 # --------------
 # Checks if `#' can be used to glue strings together at the CPP level.
 # Defines HAVE_STRINGIZE if positive.
-AC_DEFUN(AC_C_STRINGIZE,
+AC_DEFUN([AC_C_STRINGIZE],
 [AC_REQUIRE([AC_PROG_CPP])dnl
 AC_MSG_CHECKING([for preprocessor stringizing operator])
 AC_CACHE_VAL(ac_cv_c_stringize,
@@ -1175,14 +1175,14 @@ AC_MSG_RESULT([${ac_cv_c_stringize}])
 # ---------------
 # Check if the C compiler supports prototypes, included if it needs
 # options.
-AC_DEFUN(AC_C_PROTOTYPES,
+AC_DEFUN([AC_C_PROTOTYPES],
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_REQUIRE([AC_PROG_CPP])dnl
 AC_MSG_CHECKING([for function prototypes])
 if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT(yes)
   AC_DEFINE(PROTOTYPES, 1,
-            [Define if the compiler supports function prototypes.])
+            [Define if the C compiler supports function prototypes.])
 else
   AC_MSG_RESULT(no)
 fi
@@ -1451,7 +1451,7 @@ f77_underscore=`echo "$ac_cv_f77_mangling" | sed 's/^.*, \(.*\) .*$/\1/'`
 # properly mangle the names of C identifiers, and C identifiers with
 # underscores, respectively, so that they match the name mangling
 # scheme used by the Fortran 77 compiler.
-AC_DEFUN(AC_F77_WRAPPERS,
+AC_DEFUN([AC_F77_WRAPPERS],
 [AC_REQUIRE([AC_F77_NAME_MANGLING])dnl
 AH_TEMPLATE([F77_FUNC],
     [Define to a macro mangling the given C identifier (in lower and upper

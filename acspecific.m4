@@ -63,7 +63,7 @@
 # display the checking message.  In addition, caching something used once
 # has little interest.
 # Idea borrowed from dist 3.0.
-AC_DEFUN(_AC_PROG_ECHO,
+AC_DEFUN([_AC_PROG_ECHO],
 [if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   # Stardent Vistra SVR4 grep lacks -e, says Kaveh R. Ghazi.
   if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -84,7 +84,7 @@ AC_SUBST(ECHO_T)dnl
 # AC_PROG_GNU_M4
 # --------------
 # Check for GNU m4, at least 1.3 (supports frozen files).
-AC_DEFUN(AC_PROG_GNU_M4,
+AC_DEFUN([AC_PROG_GNU_M4],
 [AC_PATH_PROGS(M4, gm4 gnum4 m4, m4)
 AC_CACHE_CHECK(whether m4 supports frozen files, ac_cv_prog_gnu_m4,
 [ac_cv_prog_gnu_m4=no
@@ -98,7 +98,7 @@ fi])])
 # AC_PROG_MAKE_SET
 # ----------------
 # Define SET_MAKE to set ${MAKE} if make doesn't.
-AC_DEFUN(AC_PROG_MAKE_SET,
+AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING(whether ${MAKE-make} sets \${MAKE})
 set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y%./+-%__p_%'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
@@ -125,18 +125,18 @@ AC_SUBST([SET_MAKE])dnl
 ])# AC_PROG_MAKE_SET
 
 
-AC_DEFUN(AC_PROG_RANLIB,
+AC_DEFUN([AC_PROG_RANLIB],
 [AC_CHECK_PROG(RANLIB, ranlib, ranlib, :)])
 
 
 # Check for mawk first since it's generally faster.
-AC_DEFUN(AC_PROG_AWK,
+AC_DEFUN([AC_PROG_AWK],
 [AC_CHECK_PROGS(AWK, mawk gawk nawk awk, )])
 
 
 # AC_PROG_YACC
 # ------------
-AC_DEFUN(AC_PROG_YACC,
+AC_DEFUN([AC_PROG_YACC],
 [AC_CHECK_PROGS(YACC, 'bison -y' byacc, yacc)])
 
 
@@ -208,7 +208,7 @@ AU_DEFUN([AC_DECL_YYTEXT],
 
 # AC_PROG_INSTALL
 # ---------------
-AC_DEFUN(AC_PROG_INSTALL,
+AC_DEFUN([AC_PROG_INSTALL],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -283,7 +283,7 @@ AC_SUBST(INSTALL_DATA)dnl
 
 # AC_PROG_LN_S
 # ------------
-AC_DEFUN(AC_PROG_LN_S,
+AC_DEFUN([AC_PROG_LN_S],
 [AC_MSG_CHECKING(whether ln -s works)
 AC_CACHE_VAL(ac_cv_prog_LN_S,
 [rm -f conftestdata
@@ -304,7 +304,7 @@ AC_SUBST(LN_S)dnl
 ])# AC_PROG_LN_S
 
 
-AC_DEFUNCT(AC_RSH, [; replace it with equivalent code])
+AC_DEFUNCT([AC_RSH], [; replace it with equivalent code])
 
 
 
@@ -316,7 +316,7 @@ AC_DEFUNCT(AC_RSH, [; replace it with equivalent code])
 
 # AC_DECL_SYS_SIGLIST
 # -------------------
-AC_DEFUN(AC_DECL_SYS_SIGLIST,
+AC_DEFUN([AC_DECL_SYS_SIGLIST],
 [AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
   ac_cv_decl_sys_siglist,
 [AC_COMPILE_IFELSE(
@@ -374,7 +374,7 @@ define([AH_CHECK_HEADERS_DIRENT],
 
 # AC_HEADER_DIRENT
 # ----------------
-AC_DEFUN(AC_HEADER_DIRENT,
+AC_DEFUN([AC_HEADER_DIRENT],
 [AH_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h)
 ac_header_dirent=no
 for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
@@ -393,7 +393,7 @@ fi
 
 # AC_HEADER_MAJOR
 # ---------------
-AC_DEFUN(AC_HEADER_MAJOR,
+AC_DEFUN([AC_HEADER_MAJOR],
 [AC_CACHE_CHECK(whether sys/types.h defines makedev,
   ac_cv_header_sys_types_h_makedev,
 [AC_TRY_LINK([#include <sys/types.h>
@@ -420,7 +420,7 @@ fi
 # AC_HEADER_STAT
 # --------------
 # FIXME: Shouldn't this be named AC_HEADER_SYS_STAT?
-AC_DEFUN(AC_HEADER_STAT,
+AC_DEFUN([AC_HEADER_STAT],
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
   ac_cv_header_stat_broken,
 [AC_EGREP_CPP([You lose], [#include <sys/types.h>
@@ -460,7 +460,7 @@ fi
 
 # AC_HEADER_STDC
 # --------------
-AC_DEFUN(AC_HEADER_STDC,
+AC_DEFUN([AC_HEADER_STDC],
 [AC_REQUIRE_CPP()dnl
 AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
 [AC_TRY_CPP([#include <stdlib.h>
@@ -513,7 +513,7 @@ fi
 
 # AC_HEADER_SYS_WAIT
 # ------------------
-AC_DEFUN(AC_HEADER_SYS_WAIT,
+AC_DEFUN([AC_HEADER_SYS_WAIT],
 [AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
   ac_cv_header_sys_wait_h,
 [AC_COMPILE_IFELSE(
@@ -540,7 +540,7 @@ fi
 
 # AC_HEADER_TIME
 # --------------
-AC_DEFUN(AC_HEADER_TIME,
+AC_DEFUN([AC_HEADER_TIME],
 [AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
   ac_cv_header_time,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
@@ -561,14 +561,14 @@ fi
 
 # A few hasbeen'd macros.
 
-AC_DEFUNCT(AC_UNISTD_H, [; instead use AC_CHECK_HEADERS(unistd.h)])
+AC_DEFUNCT([AC_UNISTD_H], [; instead use AC_CHECK_HEADERS(unistd.h)])
 
-AC_DEFUNCT(AC_USG,
+AC_DEFUNCT([AC_USG],
            [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])
 
 # If memchr and the like aren't declared in <string.h>, include <memory.h>.
 # To avoid problems, don't check for gcc2 built-ins.
-AC_DEFUNCT(AC_MEMORY_H,
+AC_DEFUNCT([AC_MEMORY_H],
            [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])
 
 
@@ -576,7 +576,7 @@ AC_DEFUNCT(AC_MEMORY_H,
 # defines a different set of C preprocessor macros to indicate which
 # header file is found.  This macro and the names it defines are
 # considered obsolete.
-AC_DEFUNCT(AC_DIR_HEADER,
+AC_DEFUNCT([AC_DIR_HEADER],
 [; instead use AC_HEADER_DIRENT])
 
 
@@ -591,7 +591,7 @@ AC_DEFUNCT(AC_DIR_HEADER,
 
 # AC_TYPE_GETGROUPS
 # -----------------
-AC_DEFUN(AC_TYPE_GETGROUPS,
+AC_DEFUN([AC_TYPE_GETGROUPS],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_CACHE_CHECK(type of array argument to getgroups, ac_cv_type_getgroups,
 [AC_TRY_RUN(
@@ -634,7 +634,7 @@ AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
 # AC_TYPE_UID_T
 # -------------
 # FIXME: Rewrite using AC_CHECK_TYPE.
-AC_DEFUN(AC_TYPE_UID_T,
+AC_DEFUN([AC_TYPE_UID_T],
 [AC_CACHE_CHECK(for uid_t in sys/types.h, ac_cv_type_uid_t,
 [AC_EGREP_HEADER(uid_t, sys/types.h,
   ac_cv_type_uid_t=yes, ac_cv_type_uid_t=no)])
@@ -645,26 +645,26 @@ fi
 ])
 
 # FIXME: AU_DEFUN these guys?
-AC_DEFUN(AC_TYPE_SIZE_T,
+AC_DEFUN([AC_TYPE_SIZE_T],
 [AC_CHECK_TYPE(size_t, unsigned)])
 
-AC_DEFUN(AC_TYPE_PID_T,
+AC_DEFUN([AC_TYPE_PID_T],
 [AC_CHECK_TYPE(pid_t, int)])
 
-AC_DEFUN(AC_TYPE_OFF_T,
+AC_DEFUN([AC_TYPE_OFF_T],
 [AC_CHECK_TYPE(off_t, long)])
 
-AC_DEFUN(AC_TYPE_MODE_T,
+AC_DEFUN([AC_TYPE_MODE_T],
 [AC_CHECK_TYPE(mode_t, int)])
 
-AC_DEFUNCT(AC_INT_16_BITS, [; instead use AC_CHECK_SIZEOF(int)])
-AC_DEFUNCT(AC_LONG_64_BITS, [; instead use AC_CHECK_SIZEOF(long)])
+AC_DEFUNCT([AC_INT_16_BITS], [; instead use AC_CHECK_SIZEOF(int)])
+AC_DEFUNCT([AC_LONG_64_BITS], [; instead use AC_CHECK_SIZEOF(long)])
 
 
 # AC_TYPE_SIGNAL
 # --------------
 # Note that identifiers starting with SIG are reserved by ANSI C.
-AC_DEFUN(AC_TYPE_SIGNAL,
+AC_DEFUN([AC_TYPE_SIGNAL],
 [AC_CACHE_CHECK([return type of signal handlers], ac_cv_type_signal,
 [AC_COMPILE_IFELSE(
 [AC_LANG_PROGRAM([#include <sys/types.h>
@@ -696,7 +696,7 @@ AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 
 # AC_FUNC_ALLOCA
 # --------------
-AC_DEFUN(AC_FUNC_ALLOCA,
+AC_DEFUN([AC_FUNC_ALLOCA],
 [AH_VERBATIM([STACK_DIRECTION],
 [/* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
@@ -806,7 +806,7 @@ AC_SUBST(ALLOCA)dnl
 # ---------------------
 # Check whether closedir returns void, and #define CLOSEDIR_VOID in
 # that case.
-AC_DEFUN(AC_FUNC_CLOSEDIR_VOID,
+AC_DEFUN([AC_FUNC_CLOSEDIR_VOID],
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_CACHE_CHECK(whether closedir returns void, ac_cv_func_closedir_void,
 [AC_TRY_RUN(
@@ -832,7 +832,7 @@ fi
 # AC_FUNC_FNMATCH
 # ---------------
 # We look for fnmatch.h to avoid that the test fails in C++.
-AC_DEFUN(AC_FUNC_FNMATCH,
+AC_DEFUN([AC_FUNC_FNMATCH],
 [AC_CHECK_HEADERS(fnmatch.h)
 AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch_works,
 # Some versions of Solaris or SCO have a broken fnmatch function.
@@ -995,7 +995,7 @@ AC_SUBST(GETLOADAVG_LIBS)dnl
 
 # AC_FUNC_GETMNTENT
 # -----------------
-AC_DEFUN(AC_FUNC_GETMNTENT,
+AC_DEFUN([AC_FUNC_GETMNTENT],
 [# getmntent is in -lsun on Irix 4, -lseq on Dynix/PTX, -lgen on Unixware.
 AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
   [AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS",
@@ -1007,7 +1007,7 @@ AC_CHECK_FUNC(getmntent,
 
 # AC_FUNC_GETPGRP
 # ---------------
-AC_DEFUN(AC_FUNC_GETPGRP,
+AC_DEFUN([AC_FUNC_GETPGRP],
 [AC_CACHE_CHECK(whether getpgrp takes no argument, ac_cv_func_getpgrp_void,
 [AC_TRY_RUN(
 [/*
@@ -1070,7 +1070,7 @@ fi
 
 # AC_FUNC_MKTIME
 # --------------
-AC_DEFUN(AC_FUNC_MKTIME,
+AC_DEFUN([AC_FUNC_MKTIME],
 [AC_REQUIRE([AC_HEADER_TIME])dnl
 AC_CHECK_HEADERS(sys/time.h unistd.h)
 AC_CHECK_FUNCS(alarm)
@@ -1231,7 +1231,7 @@ fi
 
 # AC_FUNC_MMAP
 # ------------
-AC_DEFUN(AC_FUNC_MMAP,
+AC_DEFUN([AC_FUNC_MMAP],
 [AC_CHECK_HEADERS(stdlib.h unistd.h sys/stat.h)
 AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
@@ -1377,7 +1377,7 @@ fi
 
 # AC_FUNC_MEMCMP
 # --------------
-AC_DEFUN(AC_FUNC_MEMCMP,
+AC_DEFUN([AC_FUNC_MEMCMP],
 [AC_CACHE_CHECK(for 8-bit clean memcmp, ac_cv_func_memcmp_clean,
 [AC_TRY_RUN(
 [int
@@ -1397,7 +1397,7 @@ test $ac_cv_func_memcmp_clean = no && AC_LIBOBJ([memcmp])
 # Determine the correct type to be passed to each of the `select'
 # function's arguments, and define those types in `SELECT_TYPE_ARG1',
 # `SELECT_TYPE_ARG234', and `SELECT_TYPE_ARG5'.
-AC_DEFUN(AC_FUNC_SELECT_ARGTYPES,
+AC_DEFUN([AC_FUNC_SELECT_ARGTYPES],
 [AC_CACHE_CHECK([types of arguments for select],
 [ac_cv_func_select_args],
 [for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
@@ -1437,7 +1437,7 @@ AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5, ($[3]),
 
 # AC_FUNC_SETPGRP
 # ---------------
-AC_DEFUN(AC_FUNC_SETPGRP,
+AC_DEFUN([AC_FUNC_SETPGRP],
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
 AC_TRY_RUN(
 [#if HAVE_UNISTD_H
@@ -1466,7 +1466,7 @@ fi
 
 # AC_FUNC_STRFTIME
 # ----------------
-AC_DEFUN(AC_FUNC_STRFTIME,
+AC_DEFUN([AC_FUNC_STRFTIME],
 [AC_CHECK_FUNC(strftime,
                [AC_DEFINE(HAVE_STRFTIME, 1,
                           [Define if you have the `strftime' function.])],
@@ -1480,7 +1480,7 @@ LIBS="-lintl $LIBS"])])dnl
 
 # AC_FUNC_VFORK
 # -------------
-AC_DEFUN(AC_FUNC_VFORK,
+AC_DEFUN([AC_FUNC_VFORK],
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
 AC_CHECK_HEADER(vfork.h,
                 AC_DEFINE(HAVE_VFORK_H, 1,
@@ -1593,7 +1593,7 @@ fi
 # That the logical name!  In addition, why doesn't it use
 # AC_CHECK_FUNCS(vprintf)?  Because old Autoconf uses sh for loops.
 # FIXME: To be changed in Autoconf 3?
-AC_DEFUN(AC_FUNC_VPRINTF,
+AC_DEFUN([AC_FUNC_VPRINTF],
 [AC_CHECK_FUNC(vprintf,
                AC_DEFINE(HAVE_VPRINTF, 1,
                [Define if you have the `vprintf' function.]))
@@ -1608,7 +1608,7 @@ fi
 
 # AC_FUNC_WAIT3
 # -------------
-AC_DEFUN(AC_FUNC_WAIT3,
+AC_DEFUN([AC_FUNC_WAIT3],
 [AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
 [AC_TRY_RUN(
 [#include <sys/types.h>
@@ -1654,7 +1654,7 @@ fi
 
 # AC_FUNC_UTIME_NULL
 # ------------------
-AC_DEFUN(AC_FUNC_UTIME_NULL,
+AC_DEFUN([AC_FUNC_UTIME_NULL],
 [AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
 [rm -f conftestdata; >conftestdata
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
@@ -1683,7 +1683,7 @@ fi
 
 # AC_FUNC_STRCOLL
 # ---------------
-AC_DEFUN(AC_FUNC_STRCOLL,
+AC_DEFUN([AC_FUNC_STRCOLL],
 [AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
 [AC_TRY_RUN([#include <string.h>
 int
@@ -1704,7 +1704,7 @@ fi
 
 # AC_FUNC_SETVBUF_REVERSED
 # ------------------------
-AC_DEFUN(AC_FUNC_SETVBUF_REVERSED,
+AC_DEFUN([AC_FUNC_SETVBUF_REVERSED],
 [AC_CACHE_CHECK(whether setvbuf arguments are reversed,
   ac_cv_func_setvbuf_reversed,
 [AC_TRY_RUN([#include <stdio.h>
@@ -1742,7 +1742,7 @@ fi
 # ------------
 # FIXME: This macro is badly named, it should be AC_CHECK_TYPE_STRUCT_TM.
 # Or something else, but what? AC_CHECK_TYPE_STRUCT_TM_IN_SYS_TIME?
-AC_DEFUN(AC_STRUCT_TM,
+AC_DEFUN([AC_STRUCT_TM],
 [AC_CACHE_CHECK([whether struct tm is in sys/time.h or time.h],
   ac_cv_struct_tm,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
@@ -1763,7 +1763,7 @@ fi
 # Figure out how to get the current timezone.  If `struct tm' has a
 # `tm_zone' member, define `HAVE_TM_ZONE'.  Otherwise, if the
 # external array `tzname' is found, define `HAVE_TZNAME'.
-AC_DEFUN(AC_STRUCT_TIMEZONE,
+AC_DEFUN([AC_STRUCT_TIMEZONE],
 [AC_REQUIRE([AC_STRUCT_TM])dnl
 AC_CHECK_MEMBERS([struct tm.tm_zone],,,[#include <sys/types.h>
 #include <$ac_cv_struct_tm>
@@ -1798,7 +1798,7 @@ fi
 
 # AC_STRUCT_ST_BLKSIZE
 # --------------------
-AU_DEFUN(AC_STRUCT_ST_BLKSIZE,
+AU_DEFUN([AC_STRUCT_ST_BLKSIZE],
 [AC_WARNING([$0:
         your code should no longer depend upon `HAVE_ST_BLKSIZE', but
         `HAVE_STRUCT_STAT_ST_BLKSIZE'.  Remove this AC_WARNING and
@@ -1828,7 +1828,7 @@ AC_CHECK_MEMBERS([struct stat.st_blksize],
 # Please note that it will define `HAVE_STRUCT_STAT_ST_BLOCKS',
 # and not `HAVE_ST_BLOCKS'.])dnl
 #
-AC_DEFUN(AC_STRUCT_ST_BLOCKS,
+AC_DEFUN([AC_STRUCT_ST_BLOCKS],
 [AC_CHECK_MEMBERS([struct stat.st_blocks],
                   [AC_DEFINE(HAVE_ST_BLOCKS, 1,
                              [Define if your `struct stat' has
@@ -1843,7 +1843,7 @@ AC_DEFUN(AC_STRUCT_ST_BLOCKS,
 
 # AC_STRUCT_ST_RDEV
 # -----------------
-AU_DEFUN(AC_STRUCT_ST_RDEV,
+AU_DEFUN([AC_STRUCT_ST_RDEV],
 [AC_WARNING([$0:
         your code should no longer depend upon `HAVE_ST_RDEV', but
         `HAVE_STRUCT_STAT_ST_RDEV'.  Remove this AC_WARNING and
@@ -1869,7 +1869,7 @@ AC_CHECK_MEMBERS([struct stat.st_rdev],
 
 # AC_SYS_INTERPRETER
 # ------------------
-AC_DEFUN(AC_SYS_INTERPRETER,
+AC_DEFUN([AC_SYS_INTERPRETER],
 [AC_CACHE_CHECK(whether @%:@! works in shell scripts, ac_cv_sys_interpreter,
 [echo '#! /bin/cat
 exit 69
@@ -1885,8 +1885,8 @@ rm -f conftest])
 interpval=$ac_cv_sys_interpreter
 ])
 
-AC_DEFUNCT(AC_HAVE_POUNDBANG, [;use AC_SYS_INTERPRETER, taking no arguments])
-AC_DEFUNCT(AC_ARG_ARRAY, [; don't do unportable things with arguments])
+AC_DEFUNCT([AC_HAVE_POUNDBANG], [;use AC_SYS_INTERPRETER, taking no arguments])
+AC_DEFUNCT([AC_ARG_ARRAY], [; don't do unportable things with arguments])
 
 
 # AC_SYS_LONG_FILE_NAMES
@@ -1902,7 +1902,7 @@ AC_DEFUNCT(AC_ARG_ARRAY, [; don't do unportable things with arguments])
 # use of `mktemp' is probably inappropriate here since it would fail in
 # attempting to create different file names differing after the 14th
 # character on file systems without long file names.
-AC_DEFUN(AC_SYS_LONG_FILE_NAMES,
+AC_DEFUN([AC_SYS_LONG_FILE_NAMES],
 [AC_CACHE_CHECK(for long file names, ac_cv_sys_long_file_names,
 [ac_cv_sys_long_file_names=yes
 # Test for long file names in all the places we know might matter:
@@ -1948,7 +1948,7 @@ fi
 # ---------------------------
 # If the system automatically restarts a system call that is
 # interrupted by a signal, define `HAVE_RESTARTABLE_SYSCALLS'.
-AC_DEFUN(AC_SYS_RESTARTABLE_SYSCALLS,
+AC_DEFUN([AC_SYS_RESTARTABLE_SYSCALLS],
 [AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
 AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
@@ -2016,7 +2016,7 @@ fi
 # paths, otherwise set no_x=yes.
 # Uses ac_ vars as temps to allow command line to override cache and checks.
 # --without-x overrides everything else, but does not touch the cache.
-AC_DEFUN(AC_PATH_X,
+AC_DEFUN([AC_PATH_X],
 [AC_REQUIRE_CPP()dnl Set CPP; we run _AC_PATH_X_DIRECT conditionally.
 AC_MSG_CHECKING(for X)
 
@@ -2074,7 +2074,7 @@ fi
 # ---------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
-AC_DEFUN(_AC_PATH_X_XMKMF,
+AC_DEFUN([_AC_PATH_X_XMKMF],
 [rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
@@ -2115,7 +2115,7 @@ fi
 # ----------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
-AC_DEFUN(_AC_PATH_X_DIRECT,
+AC_DEFUN([_AC_PATH_X_DIRECT],
 [if test "$ac_x_includes" = NO; then
   # Guess where to find include files, by looking for this one X11 .h file.
   test -z "$ac_x_direct_test_include" &&
@@ -2239,7 +2239,7 @@ fi # $ac_x_libraries = NO
 # AC_PATH_XTRA
 # ------------
 # Find additional X libraries, magic flags, etc.
-AC_DEFUN(AC_PATH_XTRA,
+AC_DEFUN([AC_PATH_XTRA],
 [AC_REQUIRE([AC_PATH_X])dnl
 if test "$no_x" = yes; then
   # Not all programs may use this symbol, but it does not hurt to define it.
@@ -2364,7 +2364,7 @@ AC_SUBST(X_EXTRA_LIBS)dnl
 ## ------------------------------------ ##
 
 # The old Cygwin32 macro is deprecated.
-AU_DEFUN(AC_CYGWIN32,
+AU_DEFUN([AC_CYGWIN32],
 [AC_CYGWIN])
 
 
@@ -2372,7 +2372,7 @@ AU_DEFUN(AC_CYGWIN32,
 # ---------
 # Check for Cygwin.  This is a way to set the right value for
 # EXEEXT.
-AC_DEFUN(AC_CYGWIN,
+AC_DEFUN([AC_CYGWIN],
 [AC_CACHE_CHECK(for Cygwin environment, ac_cv_cygwin,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
 [#ifndef __CYGWIN__
@@ -2389,7 +2389,7 @@ test "$ac_cv_cygwin" = yes && CYGWIN=yes])
 # ----------
 # Check for mingw32.  This is another way to set the right value for
 # EXEEXT.
-AC_DEFUN(AC_MINGW32,
+AC_DEFUN([AC_MINGW32],
 [AC_CACHE_CHECK(for mingw32 environment, ac_cv_mingw32,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __MINGW32__;])],
                    [ac_cv_mingw32=yes],
@@ -2402,7 +2402,7 @@ test "$ac_cv_mingw32" = yes && MINGW32=yes])
 # ---------
 # Check for EMX on OS/2.  This is another way to set the right value
 # for EXEEXT.
-AC_DEFUN(AC_EMXOS2,
+AC_DEFUN([AC_EMXOS2],
 [AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
                    [ac_cv_emxos2=yes],
@@ -2417,7 +2417,7 @@ test "$ac_cv_emxos2" = yes && EMXOS2=yes])
 # add .exe for Cygwin or mingw32.  Otherwise, it compiles a test
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
-AC_DEFUN(AC_EXEEXT,
+AC_DEFUN([AC_EXEEXT],
 [AC_REQUIRE([AC_CYGWIN])dnl
 AC_REQUIRE([AC_MINGW32])dnl
 AC_REQUIRE([AC_EMXOS2])dnl
@@ -2456,7 +2456,7 @@ AC_SUBST(EXEEXT)dnl
 # Check the object extension used by the compiler: typically .o or
 # .obj.  If this is called, some other behaviour will change,
 # determined by ac_objext.
-AC_DEFUN(AC_OBJEXT,
+AC_DEFUN([AC_OBJEXT],
 [AC_MSG_CHECKING([for object suffix])
 AC_CACHE_VAL(ac_cv_objext,
 [rm -f conftest*
@@ -2490,7 +2490,7 @@ AC_SUBST(OBJEXT)])
 
 # AC_AIX
 # ------
-AC_DEFUN(AC_AIX,
+AC_DEFUN([AC_AIX],
 [AH_VERBATIM([_ALL_SOURCE],
 [/* Define if on AIX 3.
    System headers sometimes define this.
@@ -2514,7 +2514,7 @@ AC_MSG_RESULT(no))
 
 # AC_MINIX
 # --------
-AC_DEFUN(AC_MINIX,
+AC_DEFUN([AC_MINIX],
 [AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
@@ -2533,7 +2533,7 @@ fi
 
 # AC_ISC_POSIX
 # ------------
-AC_DEFUN(AC_ISC_POSIX,
+AC_DEFUN([AC_ISC_POSIX],
 [AC_REQUIRE([AC_PROG_CC])dnl
 AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
@@ -2557,8 +2557,8 @@ else
 fi
 ])# AC_ISC_POSIX
 
-AC_DEFUNCT(AC_XENIX_DIR, [; instead use AC_HEADER_DIRENT])
-AC_DEFUNCT(AC_DYNIX_SEQ, [; instead use AC_FUNC_GETMNTENT])
-AC_DEFUNCT(AC_IRIX_SUN,
+AC_DEFUNCT([AC_XENIX_DIR], [; instead use AC_HEADER_DIRENT])
+AC_DEFUNCT([AC_DYNIX_SEQ], [; instead use AC_FUNC_GETMNTENT])
+AC_DEFUNCT([AC_IRIX_SUN],
            [; instead use AC_FUNC_GETMNTENT or AC_CHECK_LIB(sun, getpwnam)])
-AC_DEFUNCT(AC_SCO_INTL, [; instead use AC_FUNC_STRFTIME])
+AC_DEFUNCT([AC_SCO_INTL], [; instead use AC_FUNC_STRFTIME])
