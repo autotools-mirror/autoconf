@@ -9277,6 +9277,7 @@ especially important, as it is used to join the arguments in @samp{@@*}.
 @itemx LC_COLLATE
 @itemx LC_CTYPE
 @itemx LC_MESSAGES
+@itemx LC_MONETARY
 @itemx LC_NUMERIC
 @itemx LC_TIME
 @evindex LANG
@@ -9284,16 +9285,17 @@ especially important, as it is used to join the arguments in @samp{@@*}.
 @evindex LC_COLLATE
 @evindex LC_CTYPE
 @evindex LC_MESSAGES
+@evindex LC_MONETARY
 @evindex LC_NUMERIC
 @evindex LC_TIME
 
 Autoconf-generated scripts normally set all these variables to
 @samp{C} because so much configuration code assumes the C locale and
-@sc{posix} requires that @env{LC_ALL} be set to @samp{C} if the C
-locale is desired.  However, some older, nonstandard systems (notably
-@sc{sco}) break if @env{LC_ALL} is set to @samp{C}, so when running on
-these systems Autoconf-generated scripts unset the
-variables instead.
+@acronym{POSIX} requires that locale environment variables be set to
+@samp{C} if the C locale is desired.  However, some older, nonstandard
+systems (notably @acronym{SCO}) break if locale environment variables
+are set to @samp{C}, so when running on these systems
+Autoconf-generated scripts unset the variables instead.
 
 @item LANGUAGE
 @evindex LANGUAGE
@@ -9301,6 +9303,23 @@ variables instead.
 @env{LANGUAGE} is not specified by @sc{posix}, but it is a @sc{gnu}
 extension that overrides @env{LC_ALL} in some cases, so
 Autoconf-generated scripts set it too.
+
+@item LC_ADDRESS
+@itemx LC_IDENTIFICATION
+@itemx LC_MEASUREMENT
+@itemx LC_NAME
+@itemx LC_PAPER
+@itemx LC_TELEPHONE
+@evindex LC_ADDRESS
+@evindex LC_IDENTIFICATION
+@evindex LC_MEASUREMENT
+@evindex LC_NAME
+@evindex LC_PAPER
+@evindex LC_TELEPHONE
+
+These locale environment variables are @acronym{GNU} extensions.  They
+are treated like their @acronym{POSIX} brethren (@env{LC_COLLATE},
+etc.)@: as described above.
 
 @item LINENO
 @evindex LINENO
