@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for programs.
-# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -92,9 +92,7 @@ m4_ifvaln([$6],
     # However, it has the same basename, so the bogon will be chosen
     # first if we set $1 to just the basename; use the full file name.
     shift
-    set dummy "$as_dir/$ac_word" ${1+"$[@]"}
-    shift
-    ac_cv_prog_$1="$[@]"
+    ac_cv_prog_$1="$as_dir/$ac_word${1+' '}$[@]"
 m4_if([$2], [$4],
 [  else
     # Default is a loser.
