@@ -2928,8 +2928,10 @@ dnl ----------------------------------
 dnl Verify that there is no double definition of an output file
 dnl (precisely, guarantees there is no common elements between
 dnl CONFIG_HEADERS, CONFIG_FILES, CONFIG_LINKS, and CONFIG_SUBDIRS).
+dnl This macro should output nothing, so we divert to /dev/null.
 define(AC_CONFIG_UNIQUE,
-[AC_FOREACH([AC_File], [$1],
+[AC_DIVERT_PUSH(AC_DIVERSION_KILL)
+AC_FOREACH([AC_File], [$1],
  [AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_HEADERS],
      [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_HEADER or AC_CONFIG_HEADERS.])])
   AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_LINKS],
@@ -2939,7 +2941,8 @@ define(AC_CONFIG_UNIQUE,
   AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_COMMANDS],
      [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_COMMANDS.])])
   AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_FILES],
-     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_FILES or AC_OUTPUT.])])])dnl
+     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_FILES or AC_OUTPUT.])])])
+AC_DIVERT_POP()dnl
 ])
 
 
