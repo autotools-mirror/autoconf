@@ -1,3 +1,7 @@
+2005-04-04  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): Fix a typo.
+
 2005-04-01  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Generic Programs): Fix a typo.

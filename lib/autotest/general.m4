@@ -1337,7 +1337,7 @@ dnl
 m4_ifval(m4_defn([at_reason]),
 [echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'],
 [m4_bmatch([$1], [\$],
-dnl COMMANDS may contain parameter expansions; expand them an runtime.
+dnl COMMANDS may contain parameter expansions; expand them at runtime.
 [case "AS_ESCAPE([$1], [`"\])" in
         *'
 '*) echo 'Not enabling shell tracing (command contains an embedded newline)' ;;
