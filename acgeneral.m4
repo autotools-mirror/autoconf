@@ -1534,7 +1534,7 @@ dnl ACTION-IF-NOT-FOUND.
 
 AC_DEFUN(AC_TRY_LINK_FUNC,
 AC_TRY_LINK(dnl
-ifelse([$1], [main], , dnl Avoid conflicting decl of main.
+ifelse([$2], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
 ]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
 extern "C"
@@ -1549,41 +1549,26 @@ char $1();
 [$3]))
 
 
-dnl AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND
-dnl		[, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
+dnl AC_SEARCH_LIBS(func, searchlibs, [action-if-found], [action-if-not-found])
 dnl Search for a library defining FUNC, if it's not already available.
 
 AC_DEFUN(AC_SEARCH_LIBS,
-[AC_PREREQ([2.13])
+[AC_PREREQ([2.12])
 AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
 [ac_func_search_save_LIBS="$LIBS"
 ac_cv_search_$1="no"
 AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
 test "$ac_cv_search_$1" = "no" && for i in $2; do
-LIBS="-l$i $5 $ac_func_search_save_LIBS"
+LIBS="-l$i $ac_func_search_save_LIBS"
 AC_TRY_LINK_FUNC([$1],
-[ac_cv_search_$1="$i"
+[ac_cv_search_$1="-l$i"
 break])
 done
 LIBS="$ac_func_search_save_LIBS"])
 if test "$ac_cv_search_$1" != "no"; then
-  if test "$ac_cv_search_$1" = "none required"; then
-    searchval="NONE"
-    $3
-  else
-    searchval="$ac_cv_search_$1"
-    ifelse([$3], , 
-      [changequote(, )dnl
-      ac_tr_lib=HAVE_LIB`echo $ac_cv_search_$1 | sed -e 's/[^a-zA-Z0-9_]/_/g' \
-           -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/'`
-      changequote([, ])dnl
-      AC_DEFINE_UNQUOTED($ac_tr_lib)
-      LIBS="-l$ac_cv_search_$1 $LIBS",
-      [$3])
-
-  fi
+  test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
+  $3
 else :
-  searchval=
   $4
 fi])
 
@@ -1920,7 +1905,7 @@ AC_DEFUN(AC_CHECK_FILES,
 do
 AC_CHECK_FILE($ac_file,
 [changequote(, )dnl
-  ac_tr_file=HAVE_`echo $ac_file | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
+  ac_tr_file=HAVE`echo $ac_file | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_file) $2], $3)dnl
 done

@@ -2225,7 +2225,6 @@ else
    ac_cv_sys_interpreter=no
 fi
 rm -f conftest])
-interpval="$ac_cv_sys_interpreter"
 ])
 
 define(AC_HAVE_POUNDBANG,

@@ -5,27 +5,6 @@
 	* acspecific.m4 (AC_PROG_CXX_WORKS): Specify an explicit return
 	type for `main' to keep modern C++ compilers happy.
 
-1998-12-28  Jeff Garzik  <jgarzik@pobox.com>
-
-	* autoconf.texi:
-	  (AC_SEARCH_LIBS, AC_CHECK_FILE, AC_CHECK_FILES,
-	   AC_TRY_LINK_FUNC): Document.
-	  (AC_CHECK_LIB): Indicate the absence of
-	  	action-if-not-found will not kill default action.
-	  (AC_SYS_INTERPRETER): Alphabetize with rest of section,
-	  	s/ac_cv_sys_interpreter/interpval/
-
-	* acgeneral.m4:
-	  (AC_TRY_LINK_FUNC): Fix arg transposition.
-	  (AC_SEARCH_LIBS): Require autoconf 2.13, add other-libs arg,
-	  	default action now similar to AC_CHECK_LIB, returns
-		'searchval' shell var indicating which lib matched.
-	  (AC_CHECK_FILES): Add underscore to HAVE_file define.
-
-	* acspecific.m4:
-	  (AC_SYS_INTERPRETER): New shell var 'interpval' stores
-	  	internal var ac_cv_sys_interpreter.
-
 1998-12-27  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (AC_PROG_INSTALL): Update.
