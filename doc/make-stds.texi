@@ -8,6 +8,17 @@
 @cindex conventions for makefiles
 @cindex standards for makefiles
 
+@c Copyright 1992, 1993, 1994, 1995, 1996, 1997, 1998, 2000, 2001 Free
+@c Software Foundation, Inc.
+
+@c Permission is granted to copy, distribute and/or modify this document
+@c under the terms of the GNU Free Documentation License, Version 1.1
+@c or any later version published by the Free Software Foundation;
+@c with no Invariant Sections, with no
+@c Front-Cover Texts, and with no Back-Cover Texts.
+@c A copy of the license is included in the section entitled ``GNU
+@c Free Documentation License''.
+
 This
 @ifinfo
 node
@@ -25,11 +36,11 @@ Using Automake will help you write a Makefile that follows these
 conventions.
 
 @menu
-* Makefile Basics::		General Conventions for Makefiles
-* Utilities in Makefiles::	Utilities in Makefiles
-* Command Variables::		Variables for Specifying Commands
-* Directory Variables::		Variables for Installation Directories
-* Standard Targets::		Standard Targets for Users
+* Makefile Basics::             General Conventions for Makefiles
+* Utilities in Makefiles::      Utilities in Makefiles
+* Command Variables::           Variables for Specifying Commands
+* Directory Variables::         Variables for Installation Directories
+* Standard Targets::            Standard Targets for Users
 * Install Command Categories::  Three categories of commands in the `install'
                                   rule: normal, pre-install and post-install.
 @end menu
@@ -140,7 +151,7 @@ installation should not use any utilities directly except these:
 
 @c dd find
 @c gunzip gzip md5sum
-@c mkfifo mknod tee uname 
+@c mkfifo mknod tee uname
 
 @example
 cat cmp cp diff echo egrep expr false grep install-info

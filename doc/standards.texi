@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate March 23, 2001
+@set lastupdate August 17, 2001
 @c %**end of header
 
 @ifinfo
@@ -36,50 +36,31 @@ END-INFO-DIR-ENTRY
 GNU Coding Standards
 Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001 Free Software Foundation, Inc.
 
-Permission is granted to make and distribute verbatim copies of
-this manual provided the copyright notice and this permission notice
-are preserved on all copies.
-
-@ignore
-Permission is granted to process this file through TeX and print the
-results, provided the printed document carries copying permission
-notice identical to this one except for the removal of this paragraph
-(this paragraph not being relevant to the printed manual).
-@end ignore
-
-Permission is granted to copy and distribute modified versions of this
-manual under the conditions for verbatim copying, provided that the entire
-resulting derived work is distributed under the terms of a permission
-notice identical to this one.
-
-Permission is granted to copy and distribute translations of this manual
-into another language, under the above conditions for modified versions,
-except that this permission notice may be stated in a translation approved
-by the Free Software Foundation.
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, with no
+Front-Cover Texts, and with no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU
+Free Documentation License''.
 @end ifinfo
 
 @titlepage
 @title GNU Coding Standards
-@author Richard Stallman
+@author Richard Stallman, et al.
 @author last updated @value{lastupdate}
 @page
 
 @vskip 0pt plus 1filll
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001 Free Software Foundation, Inc.
 
-Permission is granted to make and distribute verbatim copies of
-this manual provided the copyright notice and this permission notice
-are preserved on all copies.
-
-Permission is granted to copy and distribute modified versions of this
-manual under the conditions for verbatim copying, provided that the entire
-resulting derived work is distributed under the terms of a permission
-notice identical to this one.
-
-Permission is granted to copy and distribute translations of this manual
-into another language, under the above conditions for modified versions,
-except that this permission notice may be stated in a translation approved
-by the Free Software Foundation.
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, with no
+Front-Cover Texts, and with no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU
+Free Documentation License''.
 @end titlepage
 
 @ifinfo
@@ -90,15 +71,17 @@ Last updated @value{lastupdate}.
 @end ifinfo
 
 @menu
-* Preface::                 About the GNU Coding Standards
-* Legal Issues::            Keeping Free Software Free
-* Design Advice::           General Program Design
-* Program Behavior::        Program Behavior for All Programs
-* Writing C::               Making The Best Use of C
-* Documentation::           Documenting Programs
-* Managing Releases::       The Release Process
-* References::              References to Non-Free Software or Documentation
-* Index::
+* Preface::                     About the GNU Coding Standards
+* Legal Issues::                Keeping Free Software Free
+* Design Advice::               General Program Design
+* Program Behavior::            Program Behavior for All Programs
+* Writing C::                   Making The Best Use of C
+* Documentation::               Documenting Programs
+* Managing Releases::           The Release Process
+* References::                  References to Non-Free Software or Documentation
+* Copying This Manual::         How to Make Copies of This Manual
+* Index::                       
+
 @end menu
 
 @node Preface
@@ -272,6 +255,7 @@ account when designing your program.
 * Compatibility::               Compatibility with other implementations
 * Using Extensions::            Using non-standard features
 * Standard C::                  Using Standard C features
+* Conditional Compilation::     Compiling Code Only If A Conditional is True
 @end menu
 
 @node Source Language
@@ -462,6 +446,54 @@ prototypes, you may want to use a preprocessor macro like this:
 #define P_(proto) ()
 #endif
 @end example
+
+@node Conditional Compilation
+@section Conditional Compilation
+
+When supporting configuration options already known when building your
+program we prefer using @code{if (... )} over conditional compilation,
+as in the former case the compiler is able to perform more extensive
+checking of all possible code paths.
+
+For example, please write
+
+@smallexample
+  if (HAS_FOO)
+    ...
+  else
+    ...
+@end smallexample
+
+instead of:
+
+@smallexample
+  #ifdef HAS_FOO
+    ...
+  #else
+    ...
+  #endif
+@end smallexample
+
+A modern compiler such as GCC will generate exactly the same code in
+both cases, and we have been using similar techniques with good success
+in several projects.
+
+While this is not a silver bullet solving all portability problems,
+following this policy would have saved the GCC project alone many person
+hours if not days per year.
+
+In the case of function-like macros like @code{REVERSIBLE_CC_MODE} in
+GCC which cannot be simply used in @code{if( ...)} statements, there is
+an easy workaround.  Simply introduce another macro
+@code{HAS_REVERSIBLE_CC_MODE} as in the following example:
+
+@smallexample
+  #ifdef REVERSIBLE_CC_MODE
+  #define HAS_REVERSIBLE_CC_MODE 1
+  #else
+  #define HAS_REVERSIBLE_CC_MODE 0
+  #endif
+@end smallexample
 
 @node Program Behavior
 @chapter Program Behavior for All Programs
@@ -1258,7 +1290,7 @@ Used to ask for brief usage information.
 @samp{-q} in @code{ls}.
 
 @item html
-In @code{makeinfo}, output HTML.  
+In @code{makeinfo}, output HTML.
 
 @item idle
 @samp{-u} in @code{who}.
@@ -2043,7 +2075,7 @@ when writing GNU software.
 * Formatting::                  Formatting Your Source Code
 * Comments::                    Commenting Your Work
 * Syntactic Conventions::       Clean Use of C Constructs
-* Names::                       Naming Variables and Functions
+* Names::                       Naming Variables, Functions, and Files
 * System Portability::          Portability between different operating systems
 * CPU Portability::             Supporting the range of CPU types
 * System Functions::            Portability and ``standard'' library functions
@@ -2437,9 +2469,9 @@ casts to @code{void}.  Zero without a cast is perfectly fine as a null
 pointer constant, except when calling a varargs function.
 
 @node Names
-@section Naming Variables and Functions
+@section Naming Variables, Functions, and Files
 
-@cindex names of variables and functions
+@cindex names of variables, functions, and files
 The names of global variables and functions in a program serve as
 comments of a sort.  So don't choose terse names---instead, look for
 names that give useful information about the meaning of the variable or
@@ -3354,7 +3386,7 @@ all GNU software.
 
 @menu
 * Configuration::               How Configuration Should Work
-* Makefile Conventions::	Makefile Conventions
+* Makefile Conventions::        Makefile Conventions
 * Releases::                    Making Releases
 @end menu
 
@@ -3463,10 +3495,10 @@ to work with @var{package}.
 @c  Giving an optional @var{parameter} of
 @c @samp{no} should omit @var{package}, if it is used by default.
 
-Possible values of @var{package} include 
+Possible values of @var{package} include
 @samp{gnu-as} (or @samp{gas}), @samp{gnu-ld}, @samp{gnu-libc},
 @samp{gdb},
-@samp{x}, 
+@samp{x},
 and
 @samp{x-toolkit}.
 
@@ -3639,6 +3671,15 @@ with free software is now a major focus of the GNU project; to show that
 we are serious about the need for free documentation, we must not
 undermine our position by recommending use of documentation that isn't
 free.
+
+@node Copying This Manual
+@appendix Copying This Manual
+
+@menu
+* GNU Free Documentation License::  License for copying this manual
+@end menu
+
+@include fdl.texi
 
 @node Index
 @unnumbered Index
