@@ -1,9 +1,16 @@
+2000-07-12 Martin Wilck <martin@tropos.de>
+
+	* aclang.m4 (AC_PROG_F77): Delete AC_BEFORE(AC_PROG_CPP) that
+	leads to unnecessary warnings if both C and Fortran are checked.
+	(AC_PROG_F77_C_O): AC_REQUIRE AC_PROG_F77 instead of pretend you
+	need to be AC_BEFORE it.
+
 2000-07-12  Akim Demaille  <akim@epita.fr>
 
 	* autoconf.sh (_ac_warnings): Fix call to tr.
 	Reported by Johan Danielsson.
 
-2000-07-10  Martin Wilck <martin@tropos.de>
+2000-07-11  Martin Wilck <martin@tropos.de>
 
 	* aclang.m4 (_AC_PROG_F77_V): New macro to determine the flag that
 	causes the compiler to output verbose linking information.

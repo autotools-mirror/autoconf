@@ -657,7 +657,8 @@ fi
 # AC_PROG_CC_C_O
 # --------------
 AC_DEFUN([AC_PROG_CC_C_O],
-[if test "x$CC" != xcc; then
+[AC_REQUIRE([AC_PROG_F77])dnl
+if test "x$CC" != xcc; then
   AC_MSG_CHECKING(whether $CC and cc understand -c and -o together)
 else
   AC_MSG_CHECKING(whether cc understands -c and -o together)
@@ -843,8 +844,7 @@ fi[]dnl
 # pgf77 is the Portland Group f77 compiler.
 # lf95 is the Lahey-Fujitsu compiler.
 AC_DEFUN([AC_PROG_F77],
-[AC_BEFORE([$0], [AC_PROG_CPP])dnl
-AC_LANG_PUSH(Fortran 77)
+[AC_LANG_PUSH(Fortran 77)
 AC_ARG_VAR([F77], [Fortran 77 compiler command])
 AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])
 AC_CHECK_TOOLS(F77,
@@ -929,8 +929,7 @@ fi[]dnl
 # why anyone would use it.  The only reason I include it is for
 # completeness, since a similar test exists for the C compiler.
 AC_DEFUN([AC_PROG_F77_C_O],
-[AC_BEFORE([$0], [AC_PROG_F77])dnl
-AC_MSG_CHECKING(whether $F77 understand -c and -o together)
+[AC_MSG_CHECKING(whether $F77 understand -c and -o together)
 set dummy $F77; ac_f77=`echo $[2] |
 sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_f77_${ac_f77}_c_o,
