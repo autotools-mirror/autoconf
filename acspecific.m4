@@ -3038,7 +3038,6 @@ for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
   test -d $ac_dir || continue
   test -w $ac_dir || continue # It is less confusing to not echo anything here.
   ac_xdir=$ac_dir/cf$$
-  test -e $ac_xdir && continue
   (umask 077 && mkdir $ac_xdir 2>/dev/null) || continue
   ac_tf1=$ac_xdir/conftest9012345
   ac_tf2=$ac_xdir/conftest9012346
