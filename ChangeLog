@@ -1,5 +1,12 @@
 2003-10-08  Steven G. Johnson  <stevenj@alum.mit.edu>
 
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Omit quoted
+	-mGLOB_options_string stuff for Intel ifc, which can cause
+	_AC_FC_LIBRARY_LDFLAGS to fail.  Use (faster) case for
+	pattern-matching instead of grep.
+
+2003-10-08  Steven G. Johnson  <stevenj@alum.mit.edu>
+
 	* doc/autoconf.texi: Document new FC Fortran macros.
 
 2003-10-08  Gary V. Vaughan  <gary@gnu.org>

@@ -523,11 +523,6 @@ _AC_LANG_PREFIX[]FLAGS=$ac_save_FFLAGS
 
 rm -f conftest*
 
-# If we are using xlf then replace all the commas with spaces.
-if echo $ac_[]_AC_LANG_ABBREV[]_v_output | grep xlfentry >/dev/null 2>&1; then
-  ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/,/ /g'`
-fi
-
 # On HP/UX there is a line like: "LPATH is: /foo:/bar:/baz" where
 # /foo, /bar, and /baz are search directories for the Fortran linker.
 # Here, we change these into -L/foo -L/bar -L/baz (and put it first):
@@ -535,12 +530,23 @@ ac_[]_AC_LANG_ABBREV[]_v_output="`echo $ac_[]_AC_LANG_ABBREV[]_v_output |
 	grep 'LPATH is:' |
 	sed 's,.*LPATH is\(: *[[^ ]]*\).*,\1,;s,: */, -L/,g'` $ac_[]_AC_LANG_ABBREV[]_v_output"
 
-# If we are using Cray Fortran then delete quotes.
-# Use "\"" instead of '"' for font-lock-mode.
-# FIXME: a more general fix for quoted arguments with spaces?
-if echo $ac_[]_AC_LANG_ABBREV[]_v_output | grep cft90 >/dev/null 2>&1; then
-  ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed "s/\"//g"`
-fi[]dnl
+case $ac_[]_AC_LANG_ABBREV[]_v_output in
+  # If we are using xlf then replace all the commas with spaces.
+  *xlfentry*)
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/,/ /g'` ;;
+
+  # With Intel ifc, ignore the quoted -mGLOB_options_string stuff (quoted
+  # $LIBS confuse us, and the libraries appear later in the output anyway).
+  *mGLOB_options_string*)
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/\"-mGLOB[[^\"]]*\"/ /g'` ;;
+
+  # If we are using Cray Fortran then delete quotes.
+  # Use "\"" instead of '"' for font-lock-mode.
+  # FIXME: a more general fix for quoted arguments with spaces?
+  *cft90*)
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed "s/\"//g"` ;;
+esac
+
 ])# _AC_PROG_FC_V_OUTPUT
 
 
