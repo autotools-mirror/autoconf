@@ -8311,6 +8311,12 @@ Don't rely on any option.  The option @option{-v}, which displays
 non-printing characters, @emph{seems} portable, though.
 
 
+@item @command{cc}
+@c ---------------
+When a compilation such as @samp{cc foo.c -o foo} fails, some compilers
+(such as @sc{cds} on Reliant Unix) leave a @file{foo.o}.
+
+
 @item @command{cmp}
 @c ----------------
 @cindex @command{cmp}

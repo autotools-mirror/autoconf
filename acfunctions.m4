@@ -1613,8 +1613,10 @@ main ()
     case 0: /* Child.  */
       sleep(1); /* Give up the CPU.  */
       _exit(0);
+      break;
     case -1: /* What can we do?  */
       _exit(0);
+      break;
     default: /* Parent.  */
       wait3(&i, 0, &r);
       /* Avoid "text file busy" from rm on fast HP-UX machines.  */

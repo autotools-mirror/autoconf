@@ -2807,6 +2807,8 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 # ------------------------------------------------------------
 # Compile, link, and run.
 # This macro can be used during the selection of a compiler.
+# We also remove conftest.o as if the compilation fails, some compilers
+# don't remove it.
 m4_define([_AC_RUN_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest$ac_exeext
@@ -2816,7 +2818,7 @@ AS_IF([AC_TRY_EVAL(ac_link) && AC_TRY_COMMAND(./conftest$ac_exeext)],
 echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 m4_ifvaln([$3], [$3])dnl])[]dnl
-rm -f core core.* *.core conftest$ac_exeext m4_ifval([$1],
+rm -f core core.* *.core conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
                                                      [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 

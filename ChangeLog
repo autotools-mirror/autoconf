@@ -1,5 +1,15 @@
 2001-07-04  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_RUN_IFELSE): Remove conftest.o when cleaning
+	up.
+	* acfunctions.m4 (AC_FUNC_WAIT3): Use `break' to silent some
+	warnings from compilers.
+	* aclang.m4 (_AC_LANG_COMPILER_GNU): Log the version information
+	for all the compilers, not only GNU.  Hence move from here...
+	(AC_PROG_CC, AC_PROG_CXX, AC_PROG_F77): to here.
+
+2001-07-04  Akim Demaille  <akim@epita.fr>
+
 	* acfunctions.m4 (AC_FUNC_STRTOD, AC_FUNC_STRERROR_R)
 	(AC_FUNC_STRCOLL, AC_FUNC_WAIT3): Use AC_RUN_IFELSE and
 	AC_COMPILE_IFELSE.

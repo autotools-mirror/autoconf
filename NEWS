@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.50b                       -*- outline -*-
+* Major changes in Autoconf 2.50c                       -*- outline -*-
 ** Documentation
 - AC_ARG_VAR
 - Quadrigraphs
@@ -38,8 +38,7 @@
   specify pre-includes.
 - AC_ARG_VAR refuses to run configure when precious variables have
   changed.
-- When a GNU compiler is found, its characteristics are dumped in the
-  log.
+- Versions of compilers are dumped in the logs.
 
 ** Specific Macros
 - AC_PATH_XTRA only adds -ldnet to $LIBS if it's needed to link.
@@ -51,6 +50,7 @@
 - AC_F77_DUMMY_MAIN, AC_F77_MAIN: new macros to detect whether
   a main-like routine is required/possible when linking C/C++ with
   Fortran.  Users of e.g. AC_F77_WRAPPERS should be aware of these.
+[2.50b]
 
 * Major changes in Autoconf 2.50
 
