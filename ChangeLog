@@ -1,5 +1,13 @@
 1998-10-24  Ben Elliston  <bje@cygnus.com>
 
+	* acspecific.m4 (AC_FUNC_SELECT_ARGTYPES): New macro. Detects the
+	types of formal arguments to select(). Contributed by Lars Hecking
+	<lhecking@nmrc.ucc.ie>.
+	
+	* acconfig.h (SELECT_TYPE_ARG1): Add.
+	(SELECT_TYPE_ARG234): Likewise.
+	(SELECT_TYPE_ARG5): Likewise.
+
 	* config.guess: Hide warnings emitted by the HP linker when
 	generating a PA 2.0 object file. Contributed by Marcus Thiessel
 	<marcus@xemacs.org>.
