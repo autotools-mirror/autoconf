@@ -4718,6 +4718,11 @@ If the value is a literal string, it should be quoted:
 otherwise some shells, such as on Digital Unix V 5.0, will die because
 of a @emph{bad substitution}.
 
+When setting several variables in a row, be aware that the order of the
+evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
+gives @samp{1} with sh on Solaris, but @samp{2} with bash.  You must use
+@samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
+
 Contrary to a persistent urban legend, the Bourne shell does not
 systematically split variables and backquoted expressions, in
 particular, the following code:

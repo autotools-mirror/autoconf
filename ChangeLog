@@ -1,3 +1,11 @@
+2000-06-07  Philippe De Muyter  <phdm@macqel.be>
+
+	`foo=1 foo=2 cmd' has an undefined behavior.
+
+	* acgeneral.m4 (_AC_COMPUTE_INT_COMPILE): Do not put two shell
+	variable assignments in one shell command.
+	* doc/autoconf.texi (Shell Substitutions): Document.
+
 2000-06-07  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Fix problem on Cray due to
