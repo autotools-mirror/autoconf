@@ -3757,15 +3757,18 @@ variable @code{POW_LIB} to the extra library needed.
 @defmac AC_FUNC_STRERROR_R
 @acindex FUNC_STRERROR_R
 @cvindex HAVE_STRERROR_R
-@cvindex HAVE_WORKING_STRERROR_R
+@cvindex HAVE_DECL_STRERROR_R
+@cvindex STRERROR_R_CHAR_P
 @c @fuindex strerror_r
 @prindex @code{strerror_r}
-If @code{strerror_r} is available, define @code{HAVE_STRERROR_R}.  If
-its implementation correctly returns a @code{char *}, define
-@code{HAVE_WORKING_STRERROR_R}.  On at least DEC UNIX 4.0[A-D] and HP-UX
-B.10.20, @code{strerror_r} returns @code{int}.  Actually, this tests
-only whether it returns a scalar or an array, but that should be enough.
-This is used by the common @file{error.c}.
+If @code{strerror_r} is available, define @code{HAVE_STRERROR_R}, and if
+it is declared, define @code{HAVE_DECL_STRERROR_R}.  If it returns a
+@code{char *} message, define @code{STRERROR_R_CHAR_P}; otherwise it
+returns an @code{int} error number.  The Thread-Safe Functions option of
+@sc{posix-200x} requires @code{strerror_r} to return @code{int}, but
+many systems (including, for example, version 2.2.4 of the GNU C
+Library) return a @code{char *} value that is not necessarily equal to
+the buffer argument.
 @end defmac
 
 @defmac AC_FUNC_STRFTIME
