@@ -1,5 +1,10 @@
 2001-08-29  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in, lib/autom4te.in, bin/autoconf.in:
+	s/--set/--language/.
+
+2001-08-29  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Strip the @nodes.
 	Suggested by Paul Eggert.
 	(Initializing configure): Typo.

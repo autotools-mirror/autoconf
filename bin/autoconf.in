@@ -233,7 +233,7 @@ run_autom4te="$autom4te "\
 `$verbose "--verbose "`\
 `$debug && echo "--debug "`\
 `$force && echo "--force "`\
-"--set=autoconf "\
+"--language=autoconf "\
 "--include=$localdir "\
 `test -n "$warnings" && echo "--warning=$warnings "`\
 "--output=$outfile "\

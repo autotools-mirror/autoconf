@@ -245,7 +245,7 @@ testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
            $(top_srcdir)/lib/autotest/general.m4 \
 	   atspecific.m4 \
            $(SUITE)
-	$(AUTOM4TE) --set=autotest -I $(srcdir) -I $(top_srcdir)/lib \
+	$(AUTOM4TE) --language=autotest -I $(srcdir) -I $(top_srcdir)/lib \
 	  suite.at -o $@.tmp
 	mv $@.tmp $@
 

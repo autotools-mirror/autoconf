@@ -240,9 +240,9 @@ use strict;
 my $datadir = $ENV{'AC_MACRODIR'} || '@datadir@';
 my $autom4te_cfg = $ENV{'AUTOM4TE_CFG'} || "$datadir/autom4te.cfg";
 
-# $SET{$SET} is the list of automatic options for $SET.
-my %set;
-my $set;
+# $LANGUAGE{$LANGUAGE} is the list of automatic options for $LANGUAGE.
+my %language;
+my $language;
 
 my $output = '-';
 
@@ -409,11 +409,11 @@ Operation modes:
       --normalize          smash successive empty lines
   -f, --force              don\'t rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
-  -s, --set=SET            specify the set of M4 macros to use
+  -s, --language=LANG      specify the set of M4 macros to use
   -m, --mode=OCTAL         change the non trace output file mode (0666)
   -M, --melt               don\'t use M4 frozen files
 
-Sets include:
+Languages include:
   \`Autoconf\'   create Autoconf configure scripts
   \`Autotest\'   create Autotest test suites
   \`M4sh\'       create M4sh shell scripts
@@ -470,7 +470,7 @@ sub load_configuration ()
 
   my $cfg = new IO::File ($autom4te_cfg)
     or die "$me: cannot read $autom4te_cfg: $!\n";
-  my $set;
+  my $lang;
   while ($_ = $cfg->getline)
     {
       chomp;
@@ -480,18 +480,18 @@ sub load_configuration ()
 
       my @words = shellwords ($_);
       my $type = shift @words;
-      if ($type eq 'begin-set:')
+      if ($type eq 'begin-language:')
 	{
-	  $set = lc $words[0];
+	  $lang = lc $words[0];
 	}
-      elsif ($type eq 'end-set:')
+      elsif ($type eq 'end-language:')
 	{
-	  die "$me: $autom4te_cfg:$.: end-set mismatch: $set\n"
-	    if $set ne lc $words[0];
+	  die "$me: $autom4te_cfg:$.: end-language mismatch: $lang\n"
+	    if $lang ne lc $words[0];
 	}
       elsif ($type eq 'args:')
 	{
-	  push @{$set{$set}}, @words;
+	  push @{$language{$lang}}, @words;
 	}
       else
 	{
@@ -515,14 +515,14 @@ sub parse_args ()
 	      "h|help"     => \&print_usage,
 	      "V|version"  => \&print_version,
 
-	      "s|set=s"    => \$set,
-	      "v|verbose"  => \$verbose,
-	      "d|debug"    => \$debug,
+	      "s|language=s" => \$language,
+	      "v|verbose"    => \$verbose,
+	      "d|debug"      => \$debug,
 	     )
     or exit 1;
   Getopt::Long::Configure ("defaults");
-  unshift @ARGV, @{$set{$set}}
-    if $set;
+  unshift @ARGV, @{$language{$language}}
+    if $language;
 
   verbose "arguments: @ARGV\n"
     if $debug;

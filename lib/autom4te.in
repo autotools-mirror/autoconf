@@ -23,7 +23,7 @@
 ## Autoconf.  ##
 ## ---------- ##
 
-begin-set: "Autoconf"
+begin-language: "Autoconf"
 # patterns: "*.ac"
 # patterns: "configure.in"
 args: --include @datadir@
@@ -98,39 +98,39 @@ args: --preselect AC_TYPE_PID_T
 args: --preselect AC_TYPE_SIGNAL
 args: --preselect AC_TYPE_SIZE_T
 args: --preselect AC_TYPE_UID_T
-end-set: "Autoconf"
+end-language: "Autoconf"
 
 ## -------- ##
 ## Autotest ##
 ## -------- ##
 
-begin-set: "Autotest"
+begin-language: "Autotest"
 # patterns: *.at
 args: --include @datadir@
 args: autotest/autotest.m4
 args: --mode 777
 args: --warning syntax
-end-set: "Autotest"
+end-language: "Autotest"
 
 ## ---- ##
 ## M4sh ##
 ## ---- ##
 
-begin-set: "M4sh"
+begin-language: "M4sh"
 # patterns: *.as
 args: --include @datadir@
 args: m4sugar/m4sh.m4
 args: --mode 777
 args: --warning syntax
-end-set: "M4sh"
+end-language: "M4sh"
 
 ## ------- ##
 ## M4sugar ##
 ## ------- ##
 
-begin-set: "M4sugar"
+begin-language: "M4sugar"
 # patterns: *.msh
 args: --include @datadir@
 args: m4sugar/m4sugar.m4
 args: --warning syntax
-end-set: "M4sugar"
+end-language: "M4sugar"
