@@ -624,7 +624,8 @@ dnl ### Checks for functions
 AC_DEFUN(AC_FUNC_MMAP,
 [AC_MSG_CHECKING(for working mmap)
 AC_CACHE_VAL(ac_cv_func_mmap,
-[AC_TRY_RUN([/* Thanks to Mike Haertel and Jim Avera for this test. */
+[AC_TRY_RUN([
+/* Thanks to Mike Haertel and Jim Avera for this test. */
 #include <sys/types.h>
 #include <fcntl.h>
 #include <sys/mman.h>
@@ -686,7 +687,7 @@ main()
       exit(1);
   lseek(fd, (long)i, 0);
   read(fd, buf2, i); /* read into mapped memory -- file should not change */
-  /* (it does in i386 SVR4.0 - Jim Avera) */
+  /* (it does in i386 SVR4.0 - Jim Avera, jima@netcom.com) */
   lseek(fd, (long)0, 0);
   read(fd, buf3, i2);
   for (j = 0; j < i2; ++j)

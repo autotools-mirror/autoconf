@@ -40,7 +40,7 @@ undefine([shift])
 undefine([format])
 
 
-dnl ### Controlling Autoconf operation
+dnl ### Defining macros
 
 
 dnl m4 output diversions.  We let m4 output them all in order at the end,
@@ -101,10 +101,16 @@ dnl so the macro automatically switches expansion to the diversion
 dnl stack if it is not already using it.  In this case, once finished,
 dnl it will bring back all the code accumulated in the diversion stack.
 dnl This, combined with AC_REQUIRE, achieves the topological ordering of
-dnl macros.
+dnl macros.  We don't use this macro to define some frequently called
+dnl macros that are not involved in ordering constraints, to save m4
+dnl processing. 
 dnl AC_DEFUN(NAME, EXPANSION)
 define([AC_DEFUN],
 [define($1, [AC_PRO([$1])$2[]AC_EPI()])])
+
+
+dnl ### Controlling Autoconf operation
+
 
 dnl AC_INIT_NOTICE()
 AC_DEFUN(AC_INIT_NOTICE,
@@ -204,8 +210,7 @@ changequote([, ])dnl
   *) ac_optarg= ;;
   esac
 
-  # Accept (but ignore some of) the important Cygnus configure
-  # options, so we can diagnose typos.
+  # Accept the important Cygnus configure options, so we can diagnose typos.
 
   case "$ac_option" in
 
@@ -514,16 +519,21 @@ dnl Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
 AC_CACHE_LOAD
 AC_LANG_C
+AC_PROG_ECHO_N
 dnl Substitute for predefined variables.
-AC_SUBST(LIBS)dnl
-AC_SUBST(prefix)dnl
-AC_SUBST(exec_prefix)dnl
-AC_SUBST(DEFS)dnl
 AC_SUBST(CFLAGS)dnl
-AC_SUBST(CXXFLAGS)dnl
 AC_SUBST(CPPFLAGS)dnl
+AC_SUBST(CXXFLAGS)dnl
+AC_SUBST(DEFS)dnl
 AC_SUBST(LDFLAGS)dnl
+AC_SUBST(LIBS)dnl
+AC_SUBST(exec_prefix)dnl
+AC_SUBST(prefix)dnl
 ])
+
+
+dnl ### Selecting optional features
+
 
 dnl AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
 AC_DEFUN(AC_ARG_ENABLE,
@@ -567,9 +577,9 @@ AC_DEFUN(AC_WITH,
 AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])dnl
 ])
 
-dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
-AC_DEFUN(AC_CONFIG_HEADER,
-[define(AC_LIST_HEADER, $1)])
+
+dnl ### Version numbers
+
 
 dnl AC_REVISION(REVISION-INFO)
 AC_DEFUN(AC_REVISION,
@@ -580,19 +590,19 @@ dnl Subroutines of AC_PREREQ.
 
 dnl Change the dots in NUMBER into commas.
 dnl AC_PREREQ_SPLIT(NUMBER)
-AC_DEFUN(AC_PREREQ_SPLIT,
+define(AC_PREREQ_SPLIT,
 [translit($1, ., [, ])])
 
 dnl Default the ternary version number to 0 (e.g., 1, 7 -> 1, 7, 0).
 dnl AC_PREREQ_CANON(MAJOR, MINOR [,TERNARY])
-AC_DEFUN(AC_PREREQ_CANON,
+define(AC_PREREQ_CANON,
 [$1, $2, ifelse([$3], , 0, [$3])])
 
 dnl Complain and exit if version number 1 is less than version number 2.
 dnl PRINTABLE2 is the printable version of version number 2.
 dnl AC_PREREQ_COMPARE(MAJOR1, MINOR1, TERNARY1, MAJOR2, MINOR2, TERNARY2,
 dnl                   PRINTABLE2)
-AC_DEFUN(AC_PREREQ_COMPARE,
+define(AC_PREREQ_COMPARE,
 [ifelse(builtin([eval],
 [$3 + $2 * 100 + $1 * 10000 < $6 + $5 * 100 + $4 * 10000]), 1,
 [errprint(Autoconf version $7 or higher is required for this script
@@ -600,42 +610,9 @@ AC_DEFUN(AC_PREREQ_COMPARE,
 
 dnl Complain and exit if the Autoconf version is less than VERSION.
 dnl AC_PREREQ(VERSION)
-AC_DEFUN(AC_PREREQ,
+define(AC_PREREQ,
 [AC_PREREQ_COMPARE(AC_PREREQ_CANON(AC_PREREQ_SPLIT(AC_ACVERSION)),
 AC_PREREQ_CANON(AC_PREREQ_SPLIT([$1])), [$1])])
-
-dnl Run configure in subdirectories DIR...
-dnl Not actually done until AC_OUTPUT_SUBDIRS.
-dnl AC_CONFIG_SUBDIRS(DIR ...)
-AC_DEFUN(AC_CONFIG_SUBDIRS,
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-define([AC_LIST_SUBDIRS], [$1])dnl
-subdirs="AC_LIST_SUBDIRS"
-AC_SUBST(subdirs)dnl
-])
-
-dnl Guess the value for the `prefix' variable by looking for
-dnl the argument program along PATH and taking its parent.
-dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
-dnl set `prefix' to /usr/local/gnu.
-dnl This comes too late to find a site file based on the prefix,
-dnl and it might use a cached value for the path.
-dnl No big loss, I think, since most configures don't use this macro anyway.
-dnl AC_PREFIX_PROGRAM(PROGRAM)
-AC_DEFUN(AC_PREFIX_PROGRAM,
-[if test "x$prefix" = xNONE; then
-changequote(<<, >>)dnl
-define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
-changequote([, ])dnl
-AC_PATH_PROG(AC_VAR_NAME, $1)
-changequote(<<, >>)dnl
-  if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
-    prefix=`echo $ac_cv_path_<<>>AC_VAR_NAME|sed 's%/[^/][^/]*/[^/][^/]*$%%'`
-changequote([, ])dnl
-  fi
-fi
-undefine([AC_VAR_NAME])dnl
-])
 
 
 dnl ### Canonicalizing the system type
@@ -801,7 +778,7 @@ dnl ### Caching test results
 
 dnl Look for site or system specific initialization scripts.
 dnl AC_SITE_LOAD()
-AC_DEFUN(AC_SITE_LOAD,
+define(AC_SITE_LOAD,
 [# Prefer explicitly selected file to automatically selected ones.
 if test ! -r "$CONFIG_SITE"; then
   if test "x$prefix" != xNONE; then
@@ -823,7 +800,7 @@ done
 ])
 
 dnl AC_CACHE_LOAD()
-AC_DEFUN(AC_CACHE_LOAD,
+define(AC_CACHE_LOAD,
 [if test -r "$cache_file"; then
   echo "loading cache $cache_file"
   . $cache_file
@@ -834,7 +811,7 @@ fi
 ])
 
 dnl AC_CACHE_SAVE()
-AC_DEFUN(AC_CACHE_SAVE,
+define(AC_CACHE_SAVE,
 [if test -w $cache_file; then
 echo "updating cache $cache_file"
 cat > $cache_file <<\EOF
@@ -864,9 +841,8 @@ fi
 
 dnl The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 dnl AC_CACHE_VAL(CACHE-ID, COMMANDS-TO-SET-IT)
-AC_DEFUN(AC_CACHE_VAL,
-[AC_REQUIRE([AC_PROG_ECHO_N])dnl
-dnl We used to use the below line, but it fails if the 1st arg is a
+define(AC_CACHE_VAL,
+[dnl We used to use the below line, but it fails if the 1st arg is a
 dnl shell variable, so we need the eval.
 dnl if test "${$1+set}" = set; then
 if eval "test \"`echo '${'$1'+set}'`\" = set"; then
@@ -882,14 +858,14 @@ dnl ### Setting variables
 
 dnl Set VARIABLE to VALUE, verbatim, or 1.
 dnl AC_DEFINE(VARIABLE [, VALUE])
-AC_DEFUN(AC_DEFINE,
+define(AC_DEFINE,
 [cat >> confdefs.h <<\EOF
 [#define] $1 ifelse($#, 2, [$2], 1)
 EOF
 ])
 
 dnl Similar, but perform shell substitutions $ ` \ once on VALUE.
-AC_DEFUN(AC_DEFINE_UNQUOTED,
+define(AC_DEFINE_UNQUOTED,
 [cat >> confdefs.h <<EOF
 [#define] $1 ifelse($#, 2, [$2], 1)
 EOF
@@ -898,7 +874,7 @@ EOF
 dnl This macro protects VARIABLE from being diverted twice
 dnl if this macro is called twice for it.
 dnl AC_SUBST(VARIABLE)
-AC_DEFUN(AC_SUBST,
+define(AC_SUBST,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
 AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
@@ -907,7 +883,7 @@ AC_DIVERT_POP()dnl
 ])])
 
 dnl AC_SUBST_FILE(VARIABLE)
-AC_DEFUN(AC_SUBST_FILE,
+define(AC_SUBST_FILE,
 [ifdef([AC_SUBST_$1], ,
 [define([AC_SUBST_$1], )dnl
 AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
@@ -921,30 +897,28 @@ dnl ### Printing messages
 
 
 dnl AC_MSG_CHECKING(FEATURE-DESCRIPTION)
-AC_DEFUN(AC_MSG_CHECKING,
-[AC_REQUIRE([AC_PROG_ECHO_N])dnl
-echo $ac_n "checking $1""... $ac_c" 1>&AC_FD_MSG])
+define(AC_MSG_CHECKING,
+[echo $ac_n "checking $1""... $ac_c" 1>&AC_FD_MSG])
 
 dnl AC_CHECKING(FEATURE-DESCRIPTION)
-AC_DEFUN(AC_CHECKING,
+define(AC_CHECKING,
 [echo "checking $1" 1>&AC_FD_MSG])
 
 dnl AC_MSG_RESULT(RESULT-DESCRIPTION)
-AC_DEFUN(AC_MSG_RESULT,
-[AC_REQUIRE([AC_PROG_ECHO_N])dnl
-echo "$ac_t""$1" 1>&AC_FD_MSG])
+define(AC_MSG_RESULT,
+[echo "$ac_t""$1" 1>&AC_FD_MSG])
 
 dnl AC_VERBOSE(RESULT-DESCRIPTION)
-AC_DEFUN(AC_VERBOSE,
+define(AC_VERBOSE,
 [AC_OBSOLETE([$0], [; instead use AC_MSG_RESULT])dnl
 echo "	$1" 1>&AC_FD_MSG])
 
 dnl AC_MSG_WARN(PROBLEM-DESCRIPTION)
-AC_DEFUN(AC_MSG_WARN,
+define(AC_MSG_WARN,
 [echo "configure: warning: $1" 1>&2])
 
 dnl AC_MSG_ERROR(ERROR-DESCRIPTION)
-AC_DEFUN(AC_MSG_ERROR,
+define(AC_MSG_ERROR,
 [{ echo "configure: $1" 1>&2; exit 1; }])
 
 
@@ -970,14 +944,13 @@ ac_compile='${CXX-gcc} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.${ac_ext} -o confte
 ])
 
 dnl Push the current language on a stack.
-
 dnl AC_LANG_SAVE()
-AC_DEFUN(AC_LANG_SAVE,
+define(AC_LANG_SAVE,
 [pushdef([AC_LANG_STACK], AC_LANG)])
 
 dnl Restore the current language from the stack.
 dnl AC_LANG_RESTORE()
-AC_DEFUN(AC_LANG_RESTORE,
+define(AC_LANG_RESTORE,
 [ifelse(AC_LANG_STACK, C, [ifelse(AC_LANG, C, , [AC_LANG_C])], [ifelse(AC_LANG, CPLUSPLUS, , [AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])
 
 
@@ -1097,6 +1070,29 @@ test -n "[$]$1" && break
 done
 ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 ])])
+
+dnl Guess the value for the `prefix' variable by looking for
+dnl the argument program along PATH and taking its parent.
+dnl Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
+dnl set `prefix' to /usr/local/gnu.
+dnl This comes too late to find a site file based on the prefix,
+dnl and it might use a cached value for the path.
+dnl No big loss, I think, since most configures don't use this macro anyway.
+dnl AC_PREFIX_PROGRAM(PROGRAM)
+AC_DEFUN(AC_PREFIX_PROGRAM,
+[if test "x$prefix" = xNONE; then
+changequote(<<, >>)dnl
+define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
+changequote([, ])dnl
+AC_PATH_PROG(AC_VAR_NAME, $1)
+changequote(<<, >>)dnl
+  if test -n "$ac_cv_path_<<>>AC_VAR_NAME"; then
+    prefix=`echo $ac_cv_path_<<>>AC_VAR_NAME|sed 's%/[^/][^/]*/[^/][^/]*$%%'`
+changequote([, ])dnl
+  fi
+fi
+undefine([AC_VAR_NAME])dnl
+])
 
 dnl AC_CHECK_LIB(LIBRARY, FUNCTION, [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
 dnl              [, OTHER-LIBRARIES]]])
@@ -1403,12 +1399,25 @@ fi
 ])
 
 
-dnl ### The big finish
+dnl ### Controlling Autoconf output
 
 
+dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
+AC_DEFUN(AC_CONFIG_HEADER,
+[define(AC_LIST_HEADER, $1)])
+
+dnl AC_CONFIG_SUBDIRS(DIR ...)
+AC_DEFUN(AC_CONFIG_SUBDIRS,
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+define([AC_LIST_SUBDIRS], [$1])dnl
+subdirs="AC_LIST_SUBDIRS"
+AC_SUBST(subdirs)dnl
+])
+
+dnl The big finish.
 dnl Produce config.status, config.h, and links, and configure subdirs.
 dnl AC_OUTPUT([FILE...] [, EXTRA-CMDS] [, INIT-CMDS])
-AC_DEFUN(AC_OUTPUT,
+define(AC_OUTPUT,
 [AC_CACHE_SAVE
 
 test "x$prefix" = xNONE && prefix=/usr/local
@@ -1495,7 +1504,7 @@ ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
 dnl This is a subroutine of AC_OUTPUT.
 dnl It is called inside configure, outside of config.status.
 dnl AC_OUTPUT_MAKE_DEFS()
-AC_DEFUN(AC_OUTPUT_MAKE_DEFS,
+define(AC_OUTPUT_MAKE_DEFS,
 [# Transform confdefs.h into DEFS.
 dnl Using a here document instead of a string reduces the quoting nightmare.
 cat > conftest.defs <<\EOF
@@ -1516,7 +1525,7 @@ rm -f conftest.defs
 dnl This is a subroutine of AC_OUTPUT.  It is called inside an unquoted
 dnl here document whose contents are going into config.status.
 dnl AC_OUTPUT_FILES(FILE...)
-AC_DEFUN(AC_OUTPUT_FILES,
+define(AC_OUTPUT_FILES,
 [# Protect against being on the right side of a sed subst in config.status. 
 changequote(, )dnl
 sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\\\&%]/\\\\&/g; 
@@ -1615,7 +1624,7 @@ rm -f conftest.subs
 dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
 dnl here document whose contents are going into config.status.
 dnl AC_OUTPUT_HEADER(HEADER-FILE...)
-AC_DEFUN(AC_OUTPUT_HEADER,
+define(AC_OUTPUT_HEADER,
 [changequote(<<, >>)dnl
 # These sed commands are passed to sed as "A NAME B NAME C VALUE D", where
 # NAME is the cpp macro being defined and VALUE is the value it is being given.
@@ -1726,7 +1735,7 @@ fi; done
 dnl This is a subroutine of AC_OUTPUT.  It is called inside a quoted
 dnl here document whose contents are going into config.status.
 dnl AC_OUTPUT_LINKS(DEST..., SOURCE...)
-AC_DEFUN(AC_OUTPUT_LINKS,
+define(AC_OUTPUT_LINKS,
 [EOF
 
 cat >> ${CONFIG_STATUS} <<EOF
@@ -1756,7 +1765,7 @@ done
 ])
 
 dnl AC_OUTPUT_SUBDIRS(DIRECTORY...)
-AC_DEFUN(AC_OUTPUT_SUBDIRS,
+define(AC_OUTPUT_SUBDIRS,
 [
 if test "${no_recursion}" != yes; then
 
