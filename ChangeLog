@@ -1,3 +1,9 @@
+2001-04-11  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.sh (Task script): Be sure that `forbidden.rx' and
+	`allowed.rx' exist when AWK loads then.
+	Reported by Rainer Orth.
+
 2001-04-11  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* doc/autoconf.texi: A few more minor modifications for clarity,
@@ -7,7 +13,7 @@
 
 	* Makefile.am: AC_SUBST fixes for PACKAGE_NAME, VERSION, PACKAGE...
 	* configure.in: Moved here.
-	Suggested by Akim Demaille and Raja R Harinath.  
+	Suggested by Akim Demaille and Raja R Harinath.
 
 2001-04-10  Lars J. Aas  <larsa@sim.no>
 
@@ -56,7 +62,7 @@
 
 	* Makefile.am: Manual addition of @PACKAGE@ substitution variable
 	needed by dist rules.  Added explanatory comment.
-	Problem reported and comment suggested by Raja R Harinath.  
+	Problem reported and comment suggested by Raja R Harinath.
 
 2001-04-06  Lars J. Aas  <larsa@sim.no>
 

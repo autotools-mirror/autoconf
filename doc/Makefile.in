@@ -61,8 +61,11 @@ AWK = @AWK@
 EXPR = @EXPR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
+PACKAGE = @PACKAGE@
+PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
+VERSION = @VERSION@
 standards_texi = @standards_texi@
 
 MAKEINFO = @MAKEINFO@ --no-split
@@ -86,12 +89,9 @@ DIST_COMMON =  $(autoconf_TEXINFOS) $(standards_TEXINFOS) Makefile.am \
 Makefile.in mdate-sh stamp-vti texinfo.tex version.texi
 
 
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
-
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
@@ -270,7 +270,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pr $$d/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \

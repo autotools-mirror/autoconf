@@ -312,6 +312,8 @@ case $task in
   ## --------------------------------- ##
   script)
   # M4 expansion.
+  : >$tmp/forbidden.rx
+  : >$tmp/allowed.rx
   $run_m4f -Dm4_warnings=$m4_warnings $infile >$tmp/configure ||
     { (exit 1); exit; }
 

@@ -61,8 +61,11 @@ AWK = @AWK@
 EXPR = @EXPR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
+PACKAGE = @PACKAGE@
+PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
+VERSION = @VERSION@
 standards_texi = @standards_texi@
 
 AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
@@ -75,10 +78,6 @@ WGET = wget
 
 bin_SCRIPTS = autoconf autoheader autoreconf ifnames @PERLSCRIPTS@
 EXTRA_SCRIPTS = autoscan autoupdate
-
-# FIXME: Current Automakes are blind and cannot see inner AC_SUBST,
-# so help it.
-PACKAGE_NAME = @PACKAGE_NAME@
 
 # FIXME:
 # s/distpackageDATA/dist_pkgdata_DATA/
@@ -118,9 +117,6 @@ DIST_COMMON =  README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
 Makefile.in NEWS README-alpha THANKS TODO aclocal.m4 config.guess \
 config.sub configure configure.in install-sh missing mkinstalldirs
 
-
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 

@@ -61,8 +61,11 @@ AWK = @AWK@
 EXPR = @EXPR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
+PACKAGE = @PACKAGE@
+PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
+VERSION = @VERSION@
 standards_texi = @standards_texi@
 
 AUTOMAKE_OPTIONS = gnits
@@ -86,11 +89,8 @@ CLEANFILES = debug-*.sh macro configure configure.in configure.ac              c
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES =  atconfig
-DIST_COMMON =  README Makefile.am Makefile.in atconfig.in
+DIST_COMMON =  README Makefile.am Makefile.in atconfig.in configure
 
-
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 

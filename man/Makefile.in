@@ -61,8 +61,11 @@ AWK = @AWK@
 EXPR = @EXPR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
+PACKAGE = @PACKAGE@
+PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
+VERSION = @VERSION@
 standards_texi = @standards_texi@
 
 man_MANS = autoconf.1 autoreconf.1 autoheader.1 autoupdate.1 ifnames.1 autoscan.1 config.guess.1 config.sub.1
@@ -86,9 +89,6 @@ MANS = $(man_MANS)
 NROFF = nroff
 DIST_COMMON =  Makefile.am Makefile.in
 
-
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 

@@ -61,8 +61,11 @@ AWK = @AWK@
 EXPR = @EXPR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
+PACKAGE = @PACKAGE@
+PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 PERLSCRIPTS = @PERLSCRIPTS@
+VERSION = @VERSION@
 standards_texi = @standards_texi@
 
 EXTRA_DIST =  atconfig.m4 init.m4 m4.m4 missing.m4 sanity.m4
@@ -71,9 +74,6 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_CLEAN_FILES = 
 DIST_COMMON =  Makefile.am Makefile.in
 
-
-PACKAGE = @PACKAGE@
-VERSION = @VERSION@
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
