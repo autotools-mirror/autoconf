@@ -2614,9 +2614,6 @@ AS_IF([test "$ac_cv_search_$1" != no],
 AC_DEFUN([AC_CHECK_LIB],
 [m4_ifval([$3], , [AH_CHECK_LIB([$1])])dnl
 AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
-AC_ARG_VAR([LDFLAGS],
-           [linker flags, e.g. -L<lib dir> if you have libraries in a
-            nonstandard directory <lib dir>])
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 [ac_check_lib_save_LIBS=$LIBS
 LIBS="-l$1 $5 $LIBS"

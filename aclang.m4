@@ -813,10 +813,10 @@ fi])])# _AC_PROG_PREPROC_WORKS
 # between the AC_LANG_COMPILER_REQUIRE family and that of AC_PROG_CC.
 AC_DEFUN([AC_PROG_CPP],
 [AC_REQUIRE([AC_PROG_CC])dnl
-AC_ARG_VAR([CPP],      [C preprocessor])
+AC_ARG_VAR([CPP],      [C preprocessor])dnl
 AC_ARG_VAR([CPPFLAGS],
            [C/C++ preprocessor flags, e.g. -I<include dir> if you have
-            headers in a nonstandard directory <include dir>])
+            headers in a nonstandard directory <include dir>])dnl
 AC_LANG_PUSH(C)dnl
 AC_MSG_CHECKING([how to run the C preprocessor])
 # On Suns, sometimes $CPP names a directory.
@@ -871,8 +871,11 @@ AU_DEFUN([ac_cv_prog_gcc],
 # search list for the C compiler.
 AC_DEFUN([AC_PROG_CC],
 [AC_LANG_PUSH(C)dnl
-AC_ARG_VAR([CC],     [C compiler command])
-AC_ARG_VAR([CFLAGS], [C compiler flags])
+AC_ARG_VAR([CC],     [C compiler command])dnl
+AC_ARG_VAR([CFLAGS], [C compiler flags])dnl
+AC_ARG_VAR([LDFLAGS],
+           [linker flags, e.g. -L<lib dir> if you have libraries in a
+            nonstandard directory <lib dir>])dnl
 m4_ifval([$1],
       [AC_CHECK_TOOLS(CC, [$1])],
 [AC_CHECK_TOOL(CC, gcc)
@@ -1030,10 +1033,10 @@ AC_DEFUN([AC_LANG_PREPROC(C++)],
 # between the AC_LANG_COMPILER_REQUIRE family and that of AC_PROG_CXX.
 AC_DEFUN([AC_PROG_CXXCPP],
 [AC_REQUIRE([AC_PROG_CXX])dnl
-AC_ARG_VAR([CXXCPP],   [C++ preprocessor])
+AC_ARG_VAR([CXXCPP],   [C++ preprocessor])dnl
 AC_ARG_VAR([CPPFLAGS],
            [C/C++ preprocessor flags, e.g. -I<include dir> if you have
-            headers in a nonstandard directory <include dir>])
+            headers in a nonstandard directory <include dir>])dnl
 AC_LANG_PUSH(C++)dnl
 AC_MSG_CHECKING([how to run the C++ preprocessor])
 if test -z "$CXXCPP"; then
@@ -1090,8 +1093,11 @@ AU_DEFUN([ac_cv_prog_gxx],
 # xlC	AIX C Set++
 AC_DEFUN([AC_PROG_CXX],
 [AC_LANG_PUSH(C++)dnl
-AC_ARG_VAR([CXX],      [C++ compiler command])
-AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])
+AC_ARG_VAR([CXX],      [C++ compiler command])dnl
+AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])dnl
+AC_ARG_VAR([LDFLAGS],
+           [linker flags, e.g. -L<lib dir> if you have libraries in a
+            nonstandard directory <lib dir>])dnl
 AC_CHECK_TOOLS(CXX,
                [$CCC m4_default([$1],
                           [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC])],
@@ -1213,8 +1219,11 @@ AU_DEFUN([ac_cv_prog_g77],
 # lf95 is the Lahey-Fujitsu compiler.
 AC_DEFUN([AC_PROG_F77],
 [AC_LANG_PUSH(Fortran 77)dnl
-AC_ARG_VAR([F77],    [Fortran 77 compiler command])
-AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])
+AC_ARG_VAR([F77],    [Fortran 77 compiler command])dnl
+AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])dnl
+AC_ARG_VAR([LDFLAGS],
+           [linker flags, e.g. -L<lib dir> if you have libraries in a
+            nonstandard directory <lib dir>])dnl
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
                   [g77 f77 xlf cf77 pgf77 fl32 fort77 f90 xlf90 f95 lf95 pgf90 fc])])
