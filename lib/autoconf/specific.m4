@@ -2657,8 +2657,14 @@ AU_DEFUN([AC_CYGWIN32], [])
 AU_DEFUN([AC_EMXOS2],   [])
 AU_DEFUN([AC_MING32],   [])
 
-AU_DEFUN([AC_EXEEXT],   [])
-AU_DEFUN([AC_OBJEXT],   [])
+
+# We must not AU define them, because autoupdate would them remove
+# them, which is right, but Automake 1.4 would remove the support for
+# $(EXEEXT) etc.
+# FIXME: Remove this once Automake fixed.
+AC_DEFUN([AC_EXEEXT],   [])
+AC_DEFUN([AC_OBJEXT],   [])
+
 
 # _AC_EXEEXT
 # -_--------
