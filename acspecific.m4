@@ -559,7 +559,8 @@ define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
   yes
 #endif
 ],
-                ac_cv_sys_tiocgwinsz_in_termios_h=yes)])
+                ac_cv_sys_tiocgwinsz_in_termios_h=yes,
+                ac_cv_sys_tiocgwinsz_in_termios_h=no)])
 ])# _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
 
 
@@ -575,7 +576,8 @@ define([_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL],
   yes
 #endif
 ],
-                ac_cv_sys_tiocgwinsz_in_sys_ioctl_h=yes)])
+                ac_cv_sys_tiocgwinsz_in_sys_ioctl_h=yes,
+                ac_cv_sys_tiocgwinsz_in_sys_ioctl_h=no)])
 ])# _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
 
 

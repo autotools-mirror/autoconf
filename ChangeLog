@@ -1,7 +1,11 @@
 2000-09-20  Pavel Roskin  <proski@gnu.org>
 
+	* acspecific.m4 (_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H): Cache
+	variable wasn't always set inside AC_CACHE_CHECK.
+	(_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL): Likewise.
+
 	* libm4.m4 (m4_ifvanl): Don't output a newline for empty
-	arguments
+	arguments.
 
 2000-09-19  Akim Demaille  <akim@epita.fr>
 
