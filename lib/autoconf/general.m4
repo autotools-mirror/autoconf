@@ -120,15 +120,16 @@
 # of little macros, but it then takes twice longer to run `autoconf'!
 #
 # From M4sugar:
-# -1. KILL
+#    -1. KILL
+# 10000. GROW
 #
 # From M4sh:
-#  0. BINSH
-#  1. HEADER-REVISION
-#  2. HEADER-COMMENT
-#  3. HEADER-COPYRIGHT
-#  4. M4SH-INIT
-
+#    0. BINSH
+#    1. HEADER-REVISION
+#    2. HEADER-COMMENT
+#    3. HEADER-COPYRIGHT
+#    4. M4SH-INIT
+# 1000. BODY
 m4_define([_m4_divert(DEFAULTS)],        10)
 m4_define([_m4_divert(PARSE_ARGS)],      20)
 
@@ -146,8 +147,6 @@ m4_define([_m4_divert(VERSION_USER)],   202)
 m4_define([_m4_divert(VERSION_END)],    203)
 
 m4_define([_m4_divert(INIT_PREPARE)],   300)
-
-m4_define([_m4_divert(BODY)],           400)
 
 
 
@@ -1263,26 +1262,6 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 ])
 
 
-# AC_PLAIN_SCRIPT
-# ---------------
-# Simulate AC_INIT, i.e., pretend this is the beginning of the `configure'
-# generation.  This is used by some tests, and lets `autoconf' be used to
-# generate other scripts than `configure'.
-m4_define([AC_PLAIN_SCRIPT],
-[AS_INIT
-
-# Forbidden tokens and exceptions.
-m4_pattern_forbid([^_?A[CHUM]_])
-m4_pattern_forbid([_AC_])
-# Actually reserved by M4sh.
-m4_pattern_allow([^AS_FLAGS$])
-
-m4_divert_push([BODY])dnl
-m4_wrap([m4_divert_pop([BODY])[]])dnl
-])
-
-
-
 # AC_INIT([PACKAGE, VERSION, [BUG-REPORT])
 # ----------------------------------------
 # Include the user macro files, prepare the diversions, and output the
@@ -1290,9 +1269,13 @@ m4_wrap([m4_divert_pop([BODY])[]])dnl
 # Note that the order is important: first initialize, then set the
 # AC_CONFIG_SRCDIR.
 m4_define([AC_INIT],
-[AC_PLAIN_SCRIPT
+[# Forbidden tokens and exceptions.
+m4_pattern_forbid([^_?A[CHUM]_])
+m4_pattern_forbid([_AC_])
+# Actually reserved by M4sh.
+m4_pattern_allow([^AS_FLAGS$])
+AS_INIT
 m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
-m4_divert_text([BINSH], [@%:@! /bin/sh])
 _AC_INIT_DEFAULTS
 _AC_INIT_PARSE_ARGS
 _AC_INIT_SRCDIR

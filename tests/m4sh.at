@@ -98,7 +98,7 @@ m4_pattern_allow([^AS_DIRNAME(_SED)?$])
 AT_SETUP([[AS_DIRNAME & AS_DIRNAME_SED]])
 
 AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT()#! /bin/sh
+[[AS@&t@_INIT
 
 _AS@&t@_EXPR_PREPARE
 
@@ -153,7 +153,7 @@ m4_pattern_allow([^AS_BASENAME(_SED)?$])
 AT_SETUP([[AS_BASENAME & AS_BASENAME_SED]])
 
 AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT()#! /bin/sh
+[[AS@&t@_INIT
 
 _AS@&t@_EXPR_PREPARE
 
@@ -213,7 +213,7 @@ m4_pattern_allow([^AS_MKDIR_P$])
 AT_SETUP([[AS_MKDIR_P]])
 
 AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT()#! /bin/sh
+[[AS@&t@_INIT
 
 pwd=`pwd`
 set -e
@@ -246,7 +246,7 @@ AT_CLEANUP(configure 1 a)
 AT_SETUP([Negated classes in globbing])
 
 AT_DATA([configure.ac],
-[[AC_PLAIN_SCRIPT()#! /bin/sh
+[[AS@&t@_INIT
 
 case 'with!two!bangs' in
   *[[!a-z]]*) ;;

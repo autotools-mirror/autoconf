@@ -66,7 +66,9 @@ changequote()changequote([, ])include(m4sugar/m4sugar.m4)#  -*- Autoconf -*-
 #   Copyright notice(s)
 # - M4SH-INIT
 #   M4sh's initializations
-
+#
+# - BODY
+#   The body of the script.
 
 
 # _m4_divert(DIVERSION-NAME)
@@ -80,6 +82,7 @@ m4_define([_m4_divert(HEADER-REVISION)],   1)
 m4_define([_m4_divert(HEADER-COMMENT)],    2)
 m4_define([_m4_divert(HEADER-COPYRIGHT)],  3)
 m4_define([_m4_divert(M4SH-INIT)],         4)
+m4_define([_m4_divert(BODY)],           1000)
 
 # Aaarg.  Yet it starts with compatibility issues...  Libtool wants to
 # use NOTICE to insert its own LIBTOOL-INIT stuff.  People should ask
@@ -924,4 +927,11 @@ m4_define([AS_INIT],
 
 # Forbidden tokens and exceptions.
 m4_pattern_forbid([^_?AS_])
+
+# Bangshe.
+m4_divert_text([BINSH], [@%:@! /bin/sh])
+
+# Let's go!
+m4_wrap([m4_divert_pop([BODY])[]])
+m4_divert_push([BODY])[]dnl
 ])

@@ -88,15 +88,14 @@ m4_define([AT_LINE],
 # -------------------------
 # Begin test suite.
 m4_define([AT_INIT],
-[AS_INIT
-m4_pattern_forbid([^_?AT_])
+[m4_pattern_forbid([^_?AT_])
 m4_pattern_forbid([PACKAGE_(BUGREPORT|STRING)$])
 m4_define([AT_TESTSUITE_NAME],
           m4_defn([PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_data_files], [stdout expout at-* stderr experr])
-m4_divert_text([BINSH], [@%:@! /bin/sh])
+AS_INIT
 m4_divert_push([DEFAULT])dnl
 
 AS_SHELL_SANITIZE

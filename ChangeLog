@@ -1,3 +1,18 @@
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/general.m4 (_m4_divert(BODY)): Move to...
+	* lib/m4sugar/m4sh.m4: here.
+	(AS_INIT): Push the BODY diversion, set the #! /bin/sh line.
+	* lib/autoconf/general.m4 (AC_PLAIN_SCRIPT) : Remove.
+	(AT_INIT): Replace AC_PLAIN_SCRIPT with AS_INIT invocation,
+	include handle the m4_pattern_*, no longer push the
+	BODY diversion nor set the /bin/sh line, AS_INIT does it.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* tests/base.at: Adjust the tests to use AS_INIT.
+	* tests/tools.at (AT_DATA_FORBIDDEN): New.
+	(autoconf: forbidden tokens): Adjust to work on M4sh instead of
+	Autoconf.
+
 2001-10-07  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (config.status Invocation):
