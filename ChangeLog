@@ -1,3 +1,23 @@
+Fri Nov  8 16:02:08 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acspecific.m4 (AC_PATH_X_DIRECT): Search for /usr/X11 before
+	/usr/X11Rn, etc.  From bostic@bsdi.com (Keith Bostic).
+
+	* acgeneral.m4 (AC_CHECK_TYPE) [STDC_HEADERS]: Check in stddef.h, too.
+	From "Glenn P. Davis" <davis@unidata.ucar.edu>.
+	(AC_TRY_RUN): Remove the test files before executing the "failure"
+	case code.
+
+	* acspecific.m4 (AC_PROG_CXX): Check for cc++ for NexT.
+	From Carl Edman <cedman@princeton.edu>.
+	(AC_ISC_POSIX): Require AC_PROG_CC, since it uses $GCC.
+	From gvran@uddeborg.pp.se.
+	(AC_PROG_CC, AC_PROG_CXX): Check whether -g works even if
+	C[XX]FLAGS is set.  From T.E.Dickey <dickey@clark.net>
+	(AC_FUNC_FNMATCH): New macro.
+	
+	* acgeneral.m4 (AC_REPLACE_FUNCS): Call AC_CHECK_FUNCS to do the work.
+	
 Thu Oct 10 22:29:37 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acgeneral.m4 (AC_CANONICAL_HOST, AC_CANONICAL_TARGET,
@@ -43,7 +63,7 @@ Sun May 26 19:07:15 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
 
 Tue May  7 13:20:33 1996  Roland McGrath  <roland@delasyd.gnu.ai.mit.edu>
 
-	* acgeneral.m4: Verion 2.10 released.
+	* acgeneral.m4: Version 2.10 released.
 
 Tue Mar 26 13:03:12 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 

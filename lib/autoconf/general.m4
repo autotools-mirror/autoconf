@@ -52,7 +52,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.10)
+define(AC_ACVERSION, 2.10.1)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -185,6 +185,9 @@ verbose=
 x_includes=NONE
 x_libraries=NONE
 dnl Installation directory options.
+dnl These are left unexpanded so users can "make install exec_prefix=/foo"
+dnl and all the variables that are supposed to be based on exec_prefix
+dnl by default will actually change.
 bindir='${exec_prefix}/bin'
 sbindir='${exec_prefix}/sbin'
 libexecdir='${exec_prefix}/libexec'
@@ -1638,6 +1641,7 @@ AC_TRY_EVAL(ac_link)
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
   ifelse([$2], , :, [$2])
 ifelse([$3], , , [else
+  rm -fr conftest*
   $3
 ])dnl
 fi
@@ -1733,12 +1737,9 @@ changequote([, ])dnl
 done
 ])
 
-dnl AC_REPLACE_FUNCS(FUNCTION-NAME...)
+dnl AC_REPLACE_FUNCS(FUNCTION...)
 AC_DEFUN(AC_REPLACE_FUNCS,
-[for ac_func in $1
-do
-AC_CHECK_FUNC($ac_func, , [LIBOBJS="$LIBOBJS ${ac_func}.o"])
-done
+[AC_CHECK_FUNCS([$1], , [LIBOBJS="$LIBOBJS ${ac_func}.o"])
 AC_SUBST(LIBOBJS)dnl
 ])
 
@@ -1785,6 +1786,7 @@ $1[^a-zA-Z_0-9] dnl
 changequote([,]), [#include <sys/types.h>
 #if STDC_HEADERS
 #include <stdlib.h>
+#include <stddef.h>
 #endif], ac_cv_type_$1=yes, ac_cv_type_$1=no)])dnl
 AC_MSG_RESULT($ac_cv_type_$1)
 if test $ac_cv_type_$1 = no; then

@@ -1,3 +1,11 @@
+Major changes in release 2.11:
+
+* AC_CHECK_LIB can handle any funny characters in library names.
+* AC_REPLACE_FUNCS defines HAVE_FUNCTION if the system has the function.
+* New macro: AC_FUNC_FNMATCH.
+* config.sub and config.guess recognize more system types.
+* Other bug fixes.
+
 Major changes in release 2.10:
 
 * Bug fixes.

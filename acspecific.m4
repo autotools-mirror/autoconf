@@ -90,10 +90,16 @@ if AC_TRY_COMMAND(${CC-cc} -E conftest.c) | egrep yes >/dev/null 2>&1; then
 else
   ac_cv_prog_gcc=no
 fi])
+
 if test $ac_cv_prog_gcc = yes; then
   GCC=yes
-  if test "${CFLAGS+set}" != set; then
-    AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_gcc_g,
+dnl Check whether -g works even if CFLAGS is set, in case the package
+dnl plays around with CFLAGS (such as to build both debugging and
+dnl normal versions of a library), tasteless as that idea is.
+  ac_test_CFLAGS="${CFLAGS+set}"
+  ac_save_CFLAGS="$CFLAGS"
+  CFLAGS=
+  AC_CACHE_CHECK(whether ${CC-cc} accepts -g, ac_cv_prog_gcc_g,
 [echo 'void f(){}' > conftest.c
 if test -z "`${CC-cc} -g -c conftest.c 2>&1`"; then
   ac_cv_prog_gcc_g=yes
@@ -102,11 +108,12 @@ else
 fi
 rm -f conftest*
 ])
-    if test $ac_cv_prog_gcc_g = yes; then
-      CFLAGS="-g -O"
-    else
-      CFLAGS="-O"
-    fi
+  if test "$ac_test_CFLAGS" = set; then
+    CFLAGS="$ac_save_CFLAGS"
+  elif test $ac_cv_prog_gcc_g = yes; then
+    CFLAGS="-g -O"
+  else
+    CFLAGS="-O"
   fi
 else
   GCC=
@@ -116,7 +123,7 @@ fi
 
 AC_DEFUN(AC_PROG_CXX,
 [AC_BEFORE([$0], [AC_PROG_CXXCPP])dnl
-AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx, gcc)
+AC_CHECK_PROGS(CXX, $CCC c++ g++ gcc CC cxx cc++, gcc)
 
 AC_CACHE_CHECK(whether we are using GNU C++, ac_cv_prog_gxx,
 [dnl The semicolon is to pacify NeXT's syntax-checking cpp.
@@ -132,8 +139,13 @@ else
 fi])
 if test $ac_cv_prog_gxx = yes; then
   GXX=yes
-  if test "${CXXFLAGS+set}" != set; then
-    AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_gxx_g,
+dnl Check whether -g works even if CXXFLAGS is set, in case the package
+dnl plays around with CXXFLAGS (such as to build both debugging and
+dnl normal versions of a library), tasteless as that idea is.
+  ac_test_CXXFLAGS="${CXXFLAGS+set}"
+  ac_save_CXXFLAGS="$CXXFLAGS"
+  CXXFLAGS=
+  AC_CACHE_CHECK(whether ${CXX-g++} accepts -g, ac_cv_prog_gxx_g,
 [echo 'void f(){}' > conftest.cc
 if test -z "`${CXX-g++} -g -c conftest.cc 2>&1`"; then
   ac_cv_prog_gxx_g=yes
@@ -143,11 +155,12 @@ fi
 rm -f conftest*
 ])
 dnl
-    if test $ac_cv_prog_gxx_g = yes; then
-      CXXFLAGS="-g -O"
-    else
-      CXXFLAGS="-O"
-    fi
+  if test "$ac_test_CXXFLAGS" = set; then
+    CXXFLAGS="$ac_save_CXXFLAGS"
+  elif test $ac_cv_prog_gxx_g = yes; then
+    CXXFLAGS="-g -O"
+  else
+    CXXFLAGS="-O"
   fi
 else
   GXX=
@@ -763,6 +776,21 @@ int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
 if test $ac_cv_func_closedir_void = yes; then
   AC_DEFINE(CLOSEDIR_VOID)
 fi
+])
+
+AC_DEFUN(AC_FUNC_FNMATCH,
+[AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch,
+# Some versions of Solaris or SCO have a broken fnmatch function.
+# So we run a test program.  If we are cross-compiling, take no chance.
+# Thanks to John Oleynick and Franc,ois Pinard for this test.
+[AC_TRY_RUN([main() { exit (fnmatch ("a*", "abc", 0) != 0); }],
+ac_cv_func_fnmatch=yes, ac_cv_func_fnmatch=no, ac_cv_func_fnmatch=no)])
+if test $ac_cv_func_fnmatch = yes; then
+  AC_DEFINE(HAVE_FNMATCH)
+else
+  LIBOBJS="$LIBOBJS fnmatch.o"
+fi
+AC_SUBST(LIBOBJS)dnl
 ])
 
 AC_DEFUN(AC_FUNC_MMAP,
@@ -1746,26 +1774,25 @@ AC_TRY_CPP([#include <$x_direct_test_include>],
 ac_x_includes=],
 [# Look for the header file in a standard set of common directories.
   for ac_dir in               \
+    /usr/X11/include          \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
     /usr/X11R4/include        \
                               \
+    /usr/include/X11          \
     /usr/include/X11R6        \
     /usr/include/X11R5        \
     /usr/include/X11R4        \
                               \
+    /usr/local/X11/include    \
     /usr/local/X11R6/include  \
     /usr/local/X11R5/include  \
     /usr/local/X11R4/include  \
                               \
+    /usr/local/include/X11    \
     /usr/local/include/X11R6  \
     /usr/local/include/X11R5  \
     /usr/local/include/X11R4  \
-                              \
-    /usr/X11/include          \
-    /usr/include/X11          \
-    /usr/local/X11/include    \
-    /usr/local/include/X11    \
                               \
     /usr/X386/include         \
     /usr/x386/include         \
@@ -1806,26 +1833,25 @@ ac_x_libraries=],
 [LIBS="$ac_save_LIBS"
 # First see if replacing the include by lib works.
 for ac_dir in `echo "$ac_x_includes" | sed s/include/lib/` \
+    /usr/X11/lib          \
     /usr/X11R6/lib        \
     /usr/X11R5/lib        \
     /usr/X11R4/lib        \
                           \
+    /usr/lib/X11          \
     /usr/lib/X11R6        \
     /usr/lib/X11R5        \
     /usr/lib/X11R4        \
                           \
+    /usr/local/X11/lib    \
     /usr/local/X11R6/lib  \
     /usr/local/X11R5/lib  \
     /usr/local/X11R4/lib  \
                           \
+    /usr/local/lib/X11    \
     /usr/local/lib/X11R6  \
     /usr/local/lib/X11R5  \
     /usr/local/lib/X11R4  \
-                          \
-    /usr/X11/lib          \
-    /usr/lib/X11          \
-    /usr/local/X11/lib    \
-    /usr/local/lib/X11    \
                           \
     /usr/X386/lib         \
     /usr/x386/lib         \
@@ -1955,7 +1981,8 @@ fi
 ])
 
 AC_DEFUN(AC_ISC_POSIX,
-[AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
+[AC_REQUIRE([AC_PROG_CC])dnl
+AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
 AC_BEFORE([$0], [AC_TRY_LINK])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for POSIXized ISC)

@@ -122,7 +122,7 @@ $M4 -I$AC_MACRODIR $use_localdir $r autoconf.m4$f $infile > $tmpout ||
   { rm -f $tmpin $tmpout; exit 2; }
 
 # You could add your own prefixes to pattern if you wanted to check for
-# them too, e.g. pattern="AC_\|ILT_", except that UNIX sed doesn't do
+# them too, e.g. pattern='\(AC_\|ILT_\)', except that UNIX sed doesn't do
 # alternation.
 pattern="AC_"
 

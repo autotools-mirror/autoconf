@@ -61,11 +61,6 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 ------------------------------------------------------------------------------
 
-* Add a Makefile generator that supports the standard GNU targets.
-  (Being worked on.)
-
-------------------------------------------------------------------------------
-
 * Mike Haertel's suggestions:
 
 ** Provide header files containing decls for alloca, strings, etc.
@@ -94,7 +89,6 @@ in a dnl comment.  (Seems to be hard.)
 * Look at user contributed macros:
 	prototypes
 	IEEE double precision math
-	shared libraries
 
 ------------------------------------------------------------------------------
 
@@ -307,7 +301,7 @@ From Paul Eggert.
 
 ------------------------------------------------------------------------------
 
-Make easy macros for checking for X functions and libraries.
+Make easy macros for checking for X functions and libraries, such as Motif.
 
 ------------------------------------------------------------------------------
 
@@ -328,3 +322,55 @@ From: tom@vlsivie.tuwien.ac.AT (Thomas Winder)
    and so does AC_CONFIG_HEADER when autoconf is run.
 
 ------------------------------------------------------------------------------
+
+Autoheader in autoconf-2.4 doesn't produce entries for:
+
+        AC_CHECK_TYPE(ssize_t, int)
+
+and it seems like it could easily do so.
+
+In general, it seems to me like autoconf isn't set up to
+let me periodically run autoheader, and then include my
+"local" tests -- autoheader gets most stuff right, I'd like
+to rerun it periodically without losing my local changes
+to config.h.in.
+
+One of the things that I need is to know is the type to use
+for a fixed size on disk, e.g., what is the system's name
+for an unsigned-32-bit integer?
+
+I can use:
+
+        AC_CHECK_SIZEOF(unsigned int)
+
+and, in fact, that's what I do.  But I still have to build
+sets of #if tests to get from there to the name of the type.
+
+From:    bostic@bsdi.com (Keith Bostic)
+
+------------------------------------------------------------------------------
+
+There are basically three ways to lock files
+        lockf, fnctl, flock
+I'd be interested in adding a macro to pick the "right one" if you're
+interested.
+
+From:    Rich Salz <rsalz@osf.org>
+
+------------------------------------------------------------------------------
+
+It is IMHO a bug that `config.status' cannot handle multiple
+simultaneous invocations.  It should include the process id (`$$' in sh)
+as part of the name of any temporary files it creates.
+
+From:    fjh@kryten.cs.mu.oz.au (Fergus Henderson)
+
+------------------------------------------------------------------------------
+
+I think it would be useful to be able to have the variables expanded in
+AC_CONFIG_HEADER just like AC_OUTPUT allows.
+
+From:    Julian Onions <j.onions@nexor.co.uk>
+
+------------------------------------------------------------------------------
+
