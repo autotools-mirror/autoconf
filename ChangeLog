@@ -1,3 +1,9 @@
+2001-06-19  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* doc/autoconf.texi (Functions Portability): Rename as...
+	(Function Portability): this.
+	(Function Portability): Document potential problems with unlink().
+
 2001-06-19  Paul Eggert  <eggert@twinsun.com>
 
 	* NEWS, doc/autoconf.texi: Document quadrigraphs.
