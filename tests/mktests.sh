@@ -249,7 +249,7 @@ MK_EOF
   # preserves the old version of the file.  If there is nothing to
   # check, output /rien du tout/[1].
   if grep AT_CHECK ac$base.tat >/dev/null 2>&1; then
-    mv ac$base.tat ac$base.at
+    mv -f ac$base.tat ac$base.at
     # Help people not to update these files by hand.
     chmod a-w ac$base.at
   else

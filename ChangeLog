@@ -2,6 +2,18 @@
 
 	Version 2.57d.
 
+	* bin/Makefile.am (edit): Handle '@configure_input@'.
+	(autoconf, autoheader, autom4te, autoreconf, autoscan, autoupdate)
+	(ifnames): chmod -w.
+	* tests/wrapper.as (AUTOCONF, AUTOM4TE, ): Point to tests/
+	executables, not bin/ executables!  Otherwise all the magic needed
+	to find non installed files is turned off.  This caused a failure
+	of test 40 and 41 that ran aclocal 1.8 which in turn ran autom4te
+	as found in its environment (sent by tests/autoreconf): pointing
+	to bin/autom4te that could not find its files.
+	* tests/mktests.sh: Force the replacement of generated files, for
+	the sake of "mv" program that are interactive when overwriting a
+	-w file.
 	* config/install-sh: Upgrade from CVS Automake.
 
 2003-09-23  Paul Eggert  <eggert@twinsun.com>

@@ -15,7 +15,7 @@ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
 fi
 
 # Support unset when possible.
-if (as_foo=foo; unset as_foo) >/dev/null 2>&1; then
+if ((MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
   as_unset=unset
 else
   as_unset=false
@@ -58,9 +58,9 @@ fi
 # Name of the executable.
 as_me=`$as_basename "$0" ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
-	X"$0" : 'X\(//\)$' \| \
-	X"$0" : 'X\(/\)$' \| \
-	.     : '\(.\)' 2>/dev/null ||
+	 X"$0" : 'X\(//\)$' \| \
+	 X"$0" : 'X\(/\)$' \| \
+	 .     : '\(.\)' 2>/dev/null ||
 echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
   	  /^X\/\(\/\/\)$/{ s//\1/; q; }
@@ -68,12 +68,11 @@ echo X/"$0" |
   	  s/.*/./; q'`
 
 
-# @configure_input@
-# Running `$0' as if it were installed.
 
-AUTOCONF=@abs_top_builddir@/bin/autoconf
-AUTOHEADER=@abs_top_builddir@/bin/autoheader
-AUTOM4TE=@abs_top_builddir@/bin/autom4te
+testdir=@abs_top_builddir@/tests
+AUTOCONF=$testdir/autoconf
+AUTOHEADER=$testdir/autoheader
+AUTOM4TE=$testdir/autom4te
 AUTOM4TE_CFG=@abs_top_builddir@/lib/autom4te.cfg
 autom4te_perllibdir=@abs_top_srcdir@/lib
 export AUTOCONF AUTOHEADER AUTOM4TE AUTOM4TE_CFG autom4te_perllibdir

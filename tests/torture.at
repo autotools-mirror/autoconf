@@ -602,7 +602,9 @@ AC_CONFIG_SUBDIRS([inner])
 AC_OUTPUT
 ]])
 
-AT_CHECK([autoreconf])
+# If there are improperly quoted AC_DEFUN installed in share/aclocal,
+# they trigger warnings from aclocal 1.8, so ignore stderr.
+AT_CHECK([autoreconf], [], [], [ignore])
 AT_CHECK([test -f inner/configure])
 
 # Running the outer configure recursively should provide the innermost
