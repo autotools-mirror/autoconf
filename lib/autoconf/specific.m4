@@ -143,7 +143,9 @@ AC_DEFUN(AC_PROG_YACC,
 # AC_PROG_LEX
 # -----------
 AC_DEFUN(AC_PROG_LEX,
-[AC_CHECK_PROG(LEX, flex, flex, lex)
+[AH_CHECK_LIB(fl)dnl
+AH_CHECK_LIB(l)dnl
+AC_CHECK_PROG(LEX, flex, flex, lex)
 if test -z "$LEXLIB"
 then
   case "$LEX" in
@@ -359,7 +361,8 @@ fi
 # Like AC_CHECK_HEADERS, except succeed only for a HEADER-FILE that
 # defines `DIR'.
 define(_AC_CHECK_HEADERS_DIRENT,
-[for ac_hdr in $1
+[AH_CHECK_HEADERS([$1])dnl
+for ac_hdr in $1
 do
 _AC_CHECK_HEADER_DIRENT($ac_hdr,
 [changequote(, )dnl
@@ -683,7 +686,15 @@ AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 # AC_FUNC_ALLOCA
 # --------------
 AC_DEFUN(AC_FUNC_ALLOCA,
-[AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
+[AH_VERBATIM([STACK_DIRECTION],
+[/* If using the C implementation of alloca, define if you know the
+   direction of stack growth for your system; otherwise it will be
+   automatically deduced at run-time.
+        STACK_DIRECTION > 0 => grows toward higher addresses
+        STACK_DIRECTION < 0 => grows toward lower addresses
+        STACK_DIRECTION = 0 => direction of growth unknown */
+@%:@undef STACK_DIRECTION])dnl
+AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
 # The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
@@ -2448,7 +2459,14 @@ AC_SUBST(OBJEXT)])
 # AC_AIX
 # ------
 AC_DEFUN(AC_AIX,
-[AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
+[AH_VERBATIM([_ALL_SOURCE],
+[/* Define if on AIX 3.
+   System headers sometimes define this.
+   We just want to avoid a redefinition error message.  */
+#ifndef _ALL_SOURCE
+# undef _ALL_SOURCE
+#endif])dnl
+AC_BEFORE([$0], [AC_TRY_COMPILE])dnl
 AC_BEFORE([$0], [AC_TRY_RUN])dnl
 AC_MSG_CHECKING(for AIX)
 AC_EGREP_CPP(yes,

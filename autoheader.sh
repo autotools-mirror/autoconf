@@ -71,19 +71,6 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # would break.
 ac_LF_and_DOT=`echo; echo .`
 
-# Find GNU m4.
-# Handle the case that m4 has moved since we were configured.
-# It may have been found originally in a build directory.
-: ${M4=@M4@}
-case "$M4" in
-/*) test -f "$M4" || M4=m4 ;;
-esac
-# Some non-GNU m4's don't reject the --help option, so give them /dev/null.
-case `$M4 --help </dev/null 2>&1` in
-*reload-state*);;
-*) echo "$me: Autoconf requires GNU m4 1.4 or later" >&2; exit 1 ;;
-esac
-
 # Variables.
 : ${AC_MACRODIR=@datadir@}
 debug=false
@@ -139,11 +126,6 @@ while test $# -gt 0 ; do
   esac
 done
 
-# Running m4.
-test -n "$localdir" && use_localdir="-I$localdir"
-run_m4="$M4 $use_localdir -I $AC_MACRODIR autoheader.m4"
-run_m4f="$M4 $use_localdir --reload $AC_MACRODIR/autoheader.m4f"
-
 acconfigs=
 test -r $localdir/acconfig.h && acconfigs="$acconfigs $localdir/acconfig.h"
 
@@ -168,21 +150,14 @@ $debug ||
 config_h=
 syms=
 
-# Extract assignments of `ah_verbatim_SYMBOL' from the modified
-# autoconf processing of the input file.  The sed hair is necessary to
-# win for multi-line macro invocations.
-$run_m4f $infile >$tmpbase.exp
-sed -n -e '
-	: again
-	/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
-	/^@@@/{
-		s/^@@@//p
-		n
-		s/^/@@@/
-		b again
-	}' $tmpbase.exp >$tmpbase.decls
+# Source what the traces are trying to tell us.
+autoconf=`echo "$0" | sed -e 's/autoheader$/autoconf/'`
+test -n "$localdir" && autoconf="$autoconf -l $localdir"
+export AC_MACRODIR
+$autoconf --trace AH_OUTPUT:'$1' --trace AC_CONFIG_HEADERS:'config_h="$1"' \
+  $infile >$tmpbase.decls
 . $tmpbase.decls
-$debug || rm -f $tmpbase.exp $tmpbase.decls
+$debug || rm -f $tmpbase.decls
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
@@ -190,6 +165,9 @@ $debug || rm -f $tmpbase.exp $tmpbase.decls
 # is a substring of it.
 syms=`for sym in $syms; do echo $sym; done | sort | uniq | sed 's@^@ @'`
 
+
+# We template only the first CONFIG_HEADER.
+config_h=`echo "$config_h" | sed -e 's/ .*//'`
 # Support "outfile[:infile]", defaulting infile="outfile.in".
 case "$config_h" in
 "") echo "$me: error: AC_CONFIG_HEADERS not found in $infile" >&2; exit 1 ;;
@@ -197,6 +175,7 @@ case "$config_h" in
      config_h=`echo "$config_h" | sed 's/:.*//'` ;;
 *) config_h_in="$config_h.in" ;;
 esac
+
 
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.

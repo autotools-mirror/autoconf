@@ -912,7 +912,12 @@ AC_DEFUN(AC_C_CROSS,
 # AC_C_CHAR_UNSIGNED
 # ------------------
 AC_DEFUN(AC_C_CHAR_UNSIGNED,
-[AC_CACHE_CHECK(whether char is unsigned, ac_cv_c_char_unsigned,
+[AH_VERBATIM([__CHAR_UNSIGNED__],
+[/* Define if type `char' is unsigned and you are not using gcc.  */
+#ifndef __CHAR_UNSIGNED__
+# undef __CHAR_UNSIGNED__
+#endif])dnl
+AC_CACHE_CHECK(whether char is unsigned, ac_cv_c_char_unsigned,
 [if test "$GCC" = yes; then
   # GCC predefines this symbol on systems where it applies.
 AC_EGREP_CPP(yes,
@@ -1436,7 +1441,17 @@ AC_LANG_RESTORE()dnl
 # underscores, respectively, so that they match the name mangling
 # scheme used by the Fortran 77 compiler.
 AC_DEFUN(AC_F77_WRAPPERS,
-[AC_CACHE_CHECK([if we can define Fortran 77 name-mangling macros],
+[AH_TEMPLATE([F77_FUNC],
+             [Define to a macro that performs the appropriate name
+              mangling on its argument to make the C identifier, which
+              *does not* contain underscores, match the name mangling
+              scheme of the Fortran 77 compiler.])dnl
+AH_TEMPLATE([F77_FUNC_],
+             [Define to a macro that performs the appropriate name
+              mangling on its argument to make the C identifier, which
+              *does* contain underscores, match the name mangling
+              scheme of the Fortran 77 compiler.])dnl
+AC_CACHE_CHECK([if we can define Fortran 77 name-mangling macros],
                  ac_cv_f77_wrappers,
 [# Be optimistic at first.
 ac_cv_f77_wrappers="yes"

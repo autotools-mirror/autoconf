@@ -368,6 +368,44 @@ AU_DEFINE([$1], [$2], [$3])dnl
 
 
 
+## ------------------------- ##
+## Interface to autoheader.  ##
+## ------------------------- ##
+
+
+# AH_OUTPUT(TEXT)
+# ---------------
+# Pass TEXT to autoheader.
+# This macro is `read' only via `autoconf --trace', it outputs nothing.
+define([AH_OUTPUT], [])
+
+
+# AH_VERBATIM(KEY, TEMPLATE)
+# --------------------------
+# If KEY is direct (i.e., no indirection such as in KEY=$my_func which
+# may occur if there is AC_CHECK_FUNCS($my_func)), issue an autoheader
+# TEMPLATE associated to the KEY.  Otherwise, do nothing.  TEMPLATE is
+# output as is, with no formating.
+define([AH_VERBATIM],
+[AC_VAR_IF_INDIR([$1],,
+[#
+AH_OUTPUT(ac_verbatim_$1="\
+_AC_SH_QUOTE([$2])"
+)
+])])
+
+
+# AH_TEMPLATE(KEY, DESCRIPTION)
+# -----------------------------
+# Issue an autoheader template for KEY, i.e., a comment composed of
+# DESCRIPTION (properly wrapped), and then #undef KEY.
+define([AH_TEMPLATE],
+[AH_VERBATIM([$1],
+             m4_wrap([$2 */], [   ], [/* ])[
+#undef $1])])
+
+
+
 ## --------------------- ##
 ## Some /bin/sh idioms.  ##
 ## --------------------- ##
@@ -1924,7 +1962,8 @@ AC_MSG_RESULT_UNQUOTED(AC_VAR_GET([$2]))])
 # and if VARIABLE is affected the same VALUE, do nothing, else
 # die.  The third argument is used by autoheader.
 define(AC_DEFINE,
-[cat >>confdefs.h <<\EOF
+[ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
+cat >>confdefs.h <<\EOF
 [#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
@@ -1935,7 +1974,8 @@ EOF
 # ----------------------------------------------------
 # Similar, but perform shell substitutions $ ` \ once on VALUE.
 define(AC_DEFINE_UNQUOTED,
-[cat >>confdefs.h <<EOF
+[ifval([$3], [AH_TEMPLATE([$1], [$3])])dnl
+cat >>confdefs.h <<EOF
 [#define] $1 ifelse($#, 2, [$2], $#, 3, [$2], 1)
 EOF
 ])
@@ -2237,7 +2277,9 @@ AC_VAR_POPDEF([ac_Member])dnl
 AC_DEFUN(AC_CHECK_MEMBERS,
 [m4_foreach([AC_Member], [$1],
   [AC_SPECIALIZE([AC_CHECK_MEMBER], AC_Member,
-                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Member))
+         [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Member), 1,
+                            [Define if `]patsubst(AC_Member, [.*\.])[' is
+                             member of `]patsubst(AC_Member, [\.[^.]*])['.])
 $2],
                  [$3],
                  [$4])])])
@@ -2551,7 +2593,8 @@ AC_SHELL_IFELSE([test "$ac_cv_search_$1" != "no"],
 # whatever the FUNCTION, in addition to not being a *S macro.  Note
 # that the cache does depend upon the function we are looking for.
 AC_DEFUN(AC_CHECK_LIB,
-[AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
+[AH_CHECK_LIB([$1])dnl
+AC_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])dnl
 AC_CACHE_CHECK([for $2 in -l$1], ac_Lib,
 [ac_save_LIBS="$LIBS"
 LIBS="-l$1 $5 $LIBS"
@@ -2561,13 +2604,21 @@ AC_TRY_LINK_FUNC([$2],
 LIBS="$ac_save_LIBS"])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
                 [m4_default([$3],
-                           [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
+                            [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
 ])],
                 [$4])dnl
 AC_VAR_POPDEF([ac_Lib])dnl
 ])# AC_CHECK_LIB
 
+
+# AH_CHECK_LIB(LIBNAME)
+# ---------------------
+# FIXME: To be rigorous, this should not be systematic: depending
+# upon the arguments of AC_CHECK_LIB, we might not AC_DEFINE.
+define([AH_CHECK_LIB],
+[AH_TEMPLATE(AC_TR_CPP(HAVE_LIB$1),
+             [Define if you have the `]$1[' library (-l]$1[).])])
 
 
 # AC_HAVE_LIBRARY(LIBRARY,
@@ -2803,11 +2854,17 @@ AC_VAR_POPDEF([ac_Header])dnl
 ])# AC_CHECK_HEADER
 
 
+define(AH_CHECK_HEADERS,
+[AC_FOREACH([AC_Header], [$1],
+  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Header),
+               [Define if you have the <]AC_Header[> header file.])])])
+
 # AC_CHECK_HEADERS(HEADER-FILE...
 #                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ----------------------------------------------------------
 AC_DEFUN(AC_CHECK_HEADERS,
-[for ac_header in $1
+[AH_CHECK_HEADERS([$1])dnl
+for ac_header in $1
 do
 AC_CHECK_HEADER($ac_header,
                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_$ac_header)) $2],
@@ -2848,7 +2905,8 @@ AC_VAR_POPDEF([ac_File])dnl
 AC_DEFUN(AC_CHECK_FILES,
 [AC_FOREACH([AC_FILE_NAME], [$1],
   [AC_SPECIALIZE([AC_CHECK_FILE], AC_FILE_NAME,
-                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_FILE_NAME))
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_FILE_NAME), 1,
+                                   [Define if you have the file `]AC_File['.])
 $2],
                  [$3])])])
 
@@ -2888,7 +2946,9 @@ AC_VAR_POPDEF([ac_Symbol])dnl
 AC_DEFUN([AC_CHECK_DECLS],
 [m4_foreach([AC_Symbol], [$1],
   [AC_SPECIALIZE([AC_CHECK_DECL], AC_Symbol,
-                 [AC_DEFINE_UNQUOTED(AC_TR_CPP([HAVE_DECL_]AC_Symbol), 1)
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP([HAVE_DECL_]AC_Symbol), 1,
+                                     [Define to 1 if you have the declaration
+                                     of `]AC_Symbol[', and to 0 if you don't.])
 $2],
                  [AC_DEFINE_UNQUOTED(AC_TR_CPP([HAVE_DECL_]AC_Symbol), 0)
 $3],
@@ -2942,7 +3002,10 @@ AC_VAR_POPDEF([ac_var])dnl
 # FIXME: Should we die if there are not enough arguments, or just
 # ignore?
 AC_DEFUN(AC_CHECK_FUNCS,
-[for ac_func in $1
+[AC_FOREACH([AC_Func], [$1],
+  [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Func),
+               [Define if you have the `]AC_Func[' function.])])dnl
+for ac_func in $1
 do
 AC_CHECK_FUNC($ac_func,
               [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_$ac_func)) $2],
@@ -2984,7 +3047,9 @@ main ()
   AC_VAR_SET(ac_Sizeof, `cat conftestval`),
   AC_VAR_SET(ac_Sizeof, 0),
   ifval([$2], AC_VAR_SET(ac_Sizeof, $2)))])
-AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1), AC_VAR_GET(ac_Sizeof))
+AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1),
+                   AC_VAR_GET(ac_Sizeof),
+                   [The number of bytes in a `]$1['.])
 AC_VAR_POPDEF([ac_Sizeof])dnl
 ])
 
@@ -3102,7 +3167,9 @@ AC_VAR_POPDEF([ac_Type])dnl
 AC_DEFUN([AC_CHECK_TYPES],
 [m4_foreach([AC_Type], [$1],
   [AC_SPECIALIZE([_AC_CHECK_TYPE_NEW], AC_Type,
-                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Type))
+                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Type), 1,
+                                     [Define if the system has the type
+                                      `]AC_Type['.])
 $2],
                  [$3],
                  [$4])])])
@@ -3115,7 +3182,8 @@ $2],
 # have to clean this up.
 AC_DEFUN([_AC_CHECK_TYPE_OLD],
 [_AC_CHECK_TYPE_NEW([$1],,
-                    [AC_DEFINE_UNQUOTED([$1], [$2])])dnl
+   [AC_DEFINE_UNQUOTED([$1], [$2],
+                       [Define to `$2' if <sys/types.h> does not define.])])dnl
 ])# _AC_CHECK_TYPE_OLD
 
 

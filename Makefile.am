@@ -36,10 +36,10 @@ EXTRA_SCRIPTS = autoscan
 
 distpkgdataDATA = \
 acfunctions acheaders acidentifiers acmakevars acprograms \
-libm4.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 autoheader.m4 \
+libm4.m4 acgeneral.m4 acoldnames.m4 acspecific.m4 autoconf.m4 \
 autoupdate.m4 aclang.m4
 
-nodistpkgdataDATA = autoconf.m4f autoheader.m4f autoupdate.m4f acversion.m4
+nodistpkgdataDATA = autoconf.m4f autoupdate.m4f acversion.m4
 
 pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
@@ -51,7 +51,7 @@ $(distpkgdataDATA)
 
 # Files that should be removed, but which Automake does not know:
 # the frozen files and the scripts.
-CLEANFILES = autoconf.m4f autoheader.m4f autoupdate.m4f \
+CLEANFILES = autoconf.m4f autoupdate.m4f \
              $(bin_SCRIPTS)
 
 # INSTALL is a special case.  Automake seems to have a single name space
@@ -98,5 +98,4 @@ common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4 \
          aclang.m4
 
 autoconf.m4f: autoconf.m4 $(common)
-autoheader.m4f: autoheader.m4 $(common)
 autoupdate.m4f: autoupdate.m4 $(common)

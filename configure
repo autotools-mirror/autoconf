@@ -819,9 +819,13 @@ VERSION=2.14a
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
 fi
+#
+
 cat >>confdefs.h <<EOF
 #define PACKAGE "$PACKAGE"
 EOF
+
+#
 
 cat >>confdefs.h <<EOF
 #define VERSION "$VERSION"
@@ -829,7 +833,7 @@ EOF
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ECHO_N "checking for working aclocal... $ECHO_C" 1>&6
-echo "configure:738: checking for working aclocal" 1>&5
+echo "configure:740: checking for working aclocal" 1>&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -842,7 +846,7 @@ else
 fi
 
 echo $ECHO_N "checking for working autoconf... $ECHO_C" 1>&6
-echo "configure:750: checking for working autoconf" 1>&5
+echo "configure:752: checking for working autoconf" 1>&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -855,7 +859,7 @@ else
 fi
 
 echo $ECHO_N "checking for working automake... $ECHO_C" 1>&6
-echo "configure:762: checking for working automake" 1>&5
+echo "configure:764: checking for working automake" 1>&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -868,7 +872,7 @@ else
 fi
 
 echo $ECHO_N "checking for working autoheader... $ECHO_C" 1>&6
-echo "configure:774: checking for working autoheader" 1>&5
+echo "configure:776: checking for working autoheader" 1>&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -881,7 +885,7 @@ else
 fi
 
 echo $ECHO_N "checking for working makeinfo... $ECHO_C" 1>&6
-echo "configure:786: checking for working makeinfo" 1>&5
+echo "configure:788: checking for working makeinfo" 1>&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -900,7 +904,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ECHO_N "checking for $ac_word... $ECHO_C" 1>&6
-echo "configure:803: checking for $ac_word" 1>&5
+echo "configure:805: checking for $ac_word" 1>&5
 if test "${ac_cv_path_M4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6
 else
@@ -934,7 +938,7 @@ done
 test -n "$M4" || M4="m4"
 
 echo $ECHO_N "checking whether m4 supports frozen files... $ECHO_C" 1>&6
-echo "configure:835: checking whether m4 supports frozen files" 1>&5
+echo "configure:837: checking whether m4 supports frozen files" 1>&5
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6
 else
@@ -955,7 +959,7 @@ do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 echo $ECHO_N "checking for $ac_word... $ECHO_C" 1>&6
-echo "configure:855: checking for $ac_word" 1>&5
+echo "configure:857: checking for $ac_word" 1>&5
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6
 else
@@ -988,7 +992,7 @@ test -n "$AWK" && break
 done
 
 echo $ECHO_N "checking for working help2man... $ECHO_C" 1>&6
-echo "configure:886: checking for working help2man" 1>&5
+echo "configure:888: checking for working help2man" 1>&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -1003,7 +1007,7 @@ fi
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
 echo $ECHO_N "checking for $ac_word... $ECHO_C" 1>&6
-echo "configure:900: checking for $ac_word" 1>&5
+echo "configure:902: checking for $ac_word" 1>&5
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6
 else
@@ -1051,7 +1055,7 @@ fi
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" 1>&6
-echo "configure:946: checking for a BSD compatible install" 1>&5
+echo "configure:948: checking for a BSD compatible install" 1>&5
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" 1>&6

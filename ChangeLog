@@ -1,5 +1,21 @@
 2000-03-29  Akim Demaille  <akim@epita.fr>
 
+	Rewrite the autoheader chain on top of `autoconf --trace'.
+
+	* autoheader.m4: Dispatch the prototypes next to there AC_
+	siblings.
+	(AH_TEMPLATE, AH_VERBATIM): Move to...
+	* acgeneral.m4: here.
+	(AH_OUTPUT): New macro.
+	* autoheader.sh: Run `autoconf --trace' instead of `m4 autoheader.m4'.
+	* autoheader.m4: Remove.
+	* Makefile.am: Adjust.
+	* tests/tools.m4 (AH_DEFUN): Remove, no longer makes sense.
+	* tests/actests.m4 (autoheader::AC_TATOOINE): Remove, was used by
+	the test above.
+
+2000-03-29  Akim Demaille  <akim@epita.fr>
+
 	silent.m4 depends upon the current quotation in m4, which changes
 	if `-i' is used or not.
 
