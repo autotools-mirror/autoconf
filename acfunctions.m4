@@ -343,20 +343,18 @@ fi
 # ---------------
 # We look for fnmatch.h to avoid that the test fails in C++.
 AC_DEFUN([AC_FUNC_FNMATCH],
-[AC_CHECK_HEADERS(fnmatch.h)
-AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch_works,
-# Some versions of Solaris or SCO have a broken fnmatch function.
+[AC_CACHE_CHECK(for working GNU-style fnmatch, ac_cv_func_fnmatch_works,
+# Some versions of Solaris, SCO, and the GNU C Library
+# have a broken or incompatible fnmatch.
 # So we run a test program.  If we are cross-compiling, take no chance.
-# Thanks to John Oleynick and Franc,ois Pinard for this test.
-[AC_TRY_RUN(
-[#if HAVE_FNMATCH_H
-# include <fnmatch.h>
-#endif
-
-int
-main ()
-{
-  exit (fnmatch ("a*", "abc", 0) != 0);
+# Thanks to John Oleynick, Franc,ois Pinard, and Paul Eggert for this test.
+[AC_TRY_RUN([#include <fnmatch.h>
+main() {
+  exit (fnmatch ("a*", "abc", 0) != 0
+	|| fnmatch("d*/*1", "d/s/1", FNM_FILE_NAME) != FNM_NOMATCH
+	|| fnmatch("*", "x", FNM_FILE_NAME | FNM_LEADING_DIR) != 0
+	|| fnmatch("x*", "x/y/z", FNM_FILE_NAME | FNM_LEADING_DIR) != 0
+	|| fnmatch("*c*", "c/x", FNM_FILE_NAME | FNM_LEADING_DIR) != 0);
 }],
 ac_cv_func_fnmatch_works=yes, ac_cv_func_fnmatch_works=no,
 ac_cv_func_fnmatch_works=no)])
