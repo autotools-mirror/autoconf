@@ -22,6 +22,23 @@ include(atgeneral.m4)					-*- Autoconf -*-
 ## ---------------------------------------- ##
 
 
+# AT_CONFIGURE_AC(BODY)
+# ---------------------
+# Create a full configure.ac running BODY, with a config header set up,
+# AC_OUTPUT, and environement checking hooks.
+m4_define([AT_CONFIGURE_AC],
+[AT_CLEANUP_FILES(env-after state*)dnl
+AT_DATA([configure.ac],
+[AC_INIT
+AC_CONFIG_AUX_DIR($top_srcdir)
+AC_CONFIG_HEADER(config.h:config.hin)
+AC_STATE_SAVE(before)
+$1
+AC_STATE_SAVE(after)
+AC_OUTPUT
+])])
+
+
 # AT_CHECK_AUTOCONF(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # -----------------------------------------------------------
 # Also remove `configure.in', just in case one remained from a previous
@@ -55,33 +72,14 @@ AT_CHECK([top_srcdir=$top_srcdir ./configure $1],
          [test $at_verbose = echo && echo "$srcdir/AT_LINE: config.log" && cat config.log])])
 
 
-# _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS)
-# --------------------------------------
-# Create a minimalist configure.ac running the macro named
-# NAME-OF-THE-MACRO, check that autoconf runs on that script,
-# and that the shell runs correctly the configure.
-# TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
-# `config.guess' etc.).
-m4_define([_AT_CHECK_AC_MACRO],
-[dnl Produce the configure.ac
-AT_CLEANUP_FILES(env-after state*)dnl
-AT_DATA([configure.ac],
-[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir)
-AC_CONFIG_HEADER(config.h:config.hin)
-AC_STATE_SAVE(before)
-$1
-AC_STATE_SAVE(after)
-AC_OUTPUT
-])
-$2
-AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
-AT_CHECK_CONFIGURE
-
-dnl Some tests might exit prematurely when they find a problem, in
-dnl which case `env-after' is probably missing.  Don't check it then.
-if test -f state-env.before -a -f state-env.after; then
+# AT_CHECK_ENV
+# ------------
+# Check that the full configure run remained in its variable name space,
+# and cleaned up tmp files.
+# me tests might exit prematurely when they find a problem, in
+# which case `env-after' is probably missing.  Don't check it then.
+m4_define([AT_CHECK_ENV],
+[if test -f state-env.before -a -f state-env.after; then
   mv -f state-env.before expout
   AT_CHECK([cat state-env.after], 0, expout)
 fi
@@ -89,42 +87,7 @@ if test -f state-ls.before -a -f state-ls.after; then
   mv -f state-ls.before expout
   AT_CHECK([cat state-ls.after], 0, expout)
 fi
-])# _AT_CHECK_AC_MACRO
-
-
-# AT_CHECK_MACRO(NAME-OF-THE-MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
-# -----------------------------------------------------------------
-# Create a minimalist configure.ac running the macro named
-# NAME-OF-THE-MACRO, check that autoconf runs on that script,
-# and that the shell runs correctly the configure.
-# TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
-# `config.guess' etc.).
-m4_define([AT_CHECK_MACRO],
-[AT_SETUP([$1])
-
-_AT_CHECK_AC_MACRO([m4_default([$2], [$1])])
-$3
-AT_CLEANUP()dnl
-])# AT_CHECK_MACRO
-
-
-# AT_CHECK_UPDATE(NAME-OF-THE-MACRO)
-# ----------------------------------
-# Create a minimalist configure.ac running the macro named
-# NAME-OF-THE-MACRO, autoupdate this script, check that autoconf runs
-# on that script, and that the shell runs correctly the configure.
-# TOP_SRCDIR is needed to set the auxdir (some macros need
-# `install-sh', `config.guess' etc.).
-m4_define([AT_CHECK_UPDATE],
-[AT_SETUP([autoupdating $1])
-
-_AT_CHECK_AC_MACRO([$1],
-[AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir], 0,
-          [], [autoupdate: `configure.ac' is updated
-])])
-
-AT_CLEANUP()dnl
-])# AT_CHECK_UPDATE
+])
 
 
 # AT_CHECK_DEFINES(CONTENT)
@@ -136,3 +99,84 @@ AT_CLEANUP()dnl
 m4_define([AT_CHECK_DEFINES],
 [AT_CHECK([[fgrep '#' config.h |
    egrep -v 'STDC_HEADERS|STDLIB|INTTYPES|MEMORY|STRING|UNISTD']],, [$1])])
+
+
+# AT_CHECK_AUTOUPDATE
+# -------------------
+m4_define([AT_CHECK_AUTOUPDATE],
+[AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir], 0,
+          [], [autoupdate: `configure.ac' is updated
+])])
+
+
+# _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS)
+# --------------------------------------
+# Create a minimalist configure.ac running the macro named
+# NAME-OF-THE-MACRO, check that autoconf runs on that script,
+# and that the shell runs correctly the configure.
+# TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
+# `config.guess' etc.).
+m4_define([_AT_CHECK_AC_MACRO],
+[AT_CONFIGURE_AC([$1])
+$2
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+])# _AT_CHECK_AC_MACRO
+
+
+# AT_CHECK_MACRO(MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
+# -----------------------------------------------------
+# Create a minimalist configure.ac running the macro named
+# NAME-OF-THE-MACRO, check that autoconf runs on that script,
+# and that the shell runs correctly the configure.
+# TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
+# `config.guess' etc.).
+#
+# New macros are not expected to depend upon obsolete macros.
+m4_define([AT_CHECK_MACRO],
+[AT_SETUP([$1])
+AT_CONFIGURE_AC([m4_default([$2], [$1])])
+
+AT_CHECK_AUTOCONF([-W obsolete])
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+$3
+AT_CLEANUP()dnl
+])# AT_CHECK_MACRO
+
+
+# AT_CHECK_AU_MACRO(MACRO)
+# ------------------------
+# Create a minimalist configure.ac running the macro named
+# NAME-OF-THE-MACRO, autoupdate this script, check that autoconf runs
+# on that script, and that the shell runs correctly the configure.
+# TOP_SRCDIR is needed to set the auxdir (some macros need
+# `install-sh', `config.guess' etc.).
+#
+# Updated configure.ac shall not depend upon obsolete macros, which votes
+# in favor of `-W obsolete', but since many of these macros leave a message
+# to be removed by the user once her code ajusted, let's not check.
+#
+# Remove config.hin to avoid `autoheader: config.hin is unchanged'.
+m4_define([AT_CHECK_AU_MACRO],
+[AT_SETUP([$1])
+AT_CONFIGURE_AC([$1])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+
+rm config.hin
+AT_CHECK_AUTOUPDATE
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+
+AT_CLEANUP()dnl
+])# AT_CHECK_UPDATE

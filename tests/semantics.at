@@ -47,19 +47,6 @@ AT_CHECK_MACRO([AC_CHECK_FUNCS],
 ])])
 
 
-# AC_HAVE_FUNCS
-# -------------
-# This macro is an obsolete version of AC_CHECK_FUNCS.  Running this
-# test allows to check that AU_ALIAS'ed macros work properly.
-AT_CHECK_MACRO([AC_HAVE_FUNCS],
-[AC_HAVE_FUNCS(printf autoconf_ftnirp)],
-[AT_CHECK_DEFINES(
-[/* #undef HAVE_AUTOCONF_FTNIRP */
-#define HAVE_PRINTF 1
-])])
-
-
-
 # AC_CHECK_HEADERS
 # ----------------
 # Check that it performs the correct actions:
@@ -70,7 +57,6 @@ AT_CHECK_MACRO([AC_CHECK_HEADERS],
 [/* #undef HAVE_AUTOCONF_IO_H */
 #define HAVE_STDIO_H 1
 ])])
-
 
 
 # AC_CHECK_MEMBERS
@@ -128,7 +114,6 @@ AT_CHECK_MACRO([AC_CHECK_TYPES],
 ])])
 
 
-
 # AC_CHECK_TYPES
 # --------------
 # Check that we properly dispatch properly to the old implementation
@@ -165,7 +150,6 @@ NEW
 ])
 
 AT_CLEANUP
-
 
 
 # AC_CHECK_FILES

@@ -22,8 +22,9 @@ AUTOMAKE_OPTIONS = gnits
 
 SUITE = suite.at \
         m4sugar.at m4sh.at \
-        base.at tools.at torture.at compile.at semantics.at syntax.at \
-	update.at foreign.at
+        base.at tools.at torture.at compile.at semantics.at \
+	acgeneral.at acspecific.at acfunctions.at aclang.at acheaders.at
+	foreign.at
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
@@ -45,13 +46,25 @@ testsuite: $(top_srcdir)/m4sugar.m4 $(top_srcdir)/m4sh.m4 \
 
 
 # The files which contains macro we check for syntax.
-MACRO_FILES = ../acgeneral.m4   ../acspecific.m4 \
-              ../acfunctions.m4 ../aclang.m4 ../acheaders.m4
+MACRO_FILES = $(top_srcdir)/acgeneral.m4 \
+              $(top_srcdir)/acspecific.m4 \
+              $(top_srcdir)/acfunctions.m4 \
+              $(top_srcdir)/aclang.m4 \
+              $(top_srcdir)/acheaders.m4
 
-syntax.at: mktests.sh $(MACRO_FILES)
+acgeneral.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
-update.at: mktests.sh $(MACRO_FILES)
+acspecific.at: mktests.sh $(MACRO_FILES)
+	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
+
+acfunctions.at: mktests.sh $(MACRO_FILES)
+	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
+
+aclang.at: mktests.sh $(MACRO_FILES)
+	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
+
+acheaders.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
 
 CLEANFILES = debug-*.sh macro configure configure.in configure.ac \

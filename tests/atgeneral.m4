@@ -218,6 +218,11 @@ do
   case $at_test in
 dnl Tests inserted here (TESTS).
 m4_divert([TAIL])[]dnl
+
+  * )
+    echo $as_me: no such test: $at_test
+    continue
+    ;;
   esac
   case $at_test in
     banner-*) ;;

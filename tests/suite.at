@@ -9,8 +9,8 @@
 AT_INIT([autoconf])
 
 AT_BANNER(
-[Some tests might be ignored if you don't have the software which the
-macros are supposed to test (e.g., a Fortran compiler).])
+[Some tests might be skipped if you don't have the software which the
+macros check (e.g., a Fortran compiler).])
 
 # Run the tests from the lowest level to the highest level, and from
 # the most selective to the easiest.
@@ -41,11 +41,12 @@ m4_include([compile.at])
 # Checking that AC_CHECK_FOO macros work properly.
 m4_include([semantics.at])
 
-# Checking all the AC_DEFUN'd macros.
-m4_include([syntax.at])
-
-# Checking that updating an obsolete macro produces a valid configure.ac
-m4_include([update.at])
+# Blind testing the macros.
+m4_include([acgeneral.at])
+m4_include([acspecific.at])
+m4_include([acfunctions.at])
+m4_include([aclang.at])
+m4_include([acheaders.at])
 
 # Compatibility with foreign tools.
 m4_include([foreign.at])
