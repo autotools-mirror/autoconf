@@ -1,3 +1,8 @@
+2003-05-19  Paul Eggert  <eggert@twinsun.com>
+
+	* ChangeLog, ChangeLog.2, THANKS, lib/m4sugar/m4sugar.m4:
+	Remove non-ASCII characters.
+
 2003-05-18  Paolo Bonzini  <bonzini@gnu.org>
 
         * tests/semantics.at (AC_SEARCH_LIBS): New test.
