@@ -158,6 +158,7 @@ do
 m4_divert_pop[]dnl
 m4_divert_push(3)[]dnl
   esac
+  at_test_count=`expr 1 + $at_test_count`
   $at_verbose $at_n "     $test. $srcdir/`cat at-setup-line`: $at_c"
   case $at_status in
     0) echo ok
@@ -167,11 +168,10 @@ m4_divert_push(3)[]dnl
         ;;
     *) echo "FAILED near \``cat at-check-line`'"
        at_failed_list="$at_failed_list $test"
+       $at_stop_on_error && break
        ;;
   esac
-  if $at_stop_on_error && test -n "$at_failed_list"; then
-   break
-  fi
+  $at_debug || rm -rf $at_data_files
 done
 
 # Wrap up the testing suite with summary statistics.
@@ -251,8 +251,9 @@ AT_DEFINE([AT_SETUP],
 m4_pushdef([AT_data_files], [stdout stderr ])
 m4_divert_pop()dnl
   AT_ordinal )
-dnl Here will be inserted the `rm' corresponding to AT_CLEANUP.
+dnl Here will be inserted the definition of at_data_files.
 m4_divert(2)[]dnl
+    rm -rf $at_data_files
     echo AT_LINE > at-setup-line
     $at_verbose 'testing $1'
     $at_verbose $at_n "     $at_c"
@@ -300,13 +301,9 @@ AT_DEFINE([AT_CLEANUP],
       $at_traceoff
     )
     at_status=$?
-    at_test_count=`expr 1 + $at_test_count`
-    if $at_stop_on_error && test -n "$at_failed_list"; then :; else
-      rm -rf AT_data_files
-    fi
     ;;
 m4_divert(1)[]dnl
-    rm -rf AT_data_files
+    at_data_files="AT_data_files"
 m4_undivert(2)[]dnl
 m4_popdef([AT_data_files])dnl
 m4_divert_push([KILL])dnl
