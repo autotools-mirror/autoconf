@@ -155,7 +155,7 @@ if test "x$as_lineno_1"  = "x$as_lineno_2" ||
   # Don't try to exec as it changes $[0], causing all sort of problems
   # (the dirname of $[0] is not the place where we might find the
   # original and so on.  Autoconf is especially sensible to this).
-  source ./$as_me.lineno
+  . ./$as_me.lineno
   exit 0
 fi
 
