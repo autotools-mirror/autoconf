@@ -43,6 +43,7 @@ BEGIN
 }
 
 use Data::Dumper;
+use Autom4te::General;
 use Autom4te::Struct;
 use Carp;
 use Getopt::Long;
@@ -225,13 +226,11 @@ sub load
 
 package Autom4te;
 
+use Autom4te::General;
 use Getopt::Long;
 use File::Basename;
 use IO::File;
 use strict;
-
-# Our tmp dir.
-my $tmp;
 
 # The macros we always trace.
 my @required_trace =
@@ -251,8 +250,6 @@ my @required_trace =
 # user.
 my %trace;
 
-my $verbose = 0;
-my $debug = 0;
 my $output = '-';
 my @warning;
 
@@ -281,40 +278,6 @@ map { s/:.*//;s/\W// } @m4_builtins;
 ## ---------- ##
 ## Routines.  ##
 ## ---------- ##
-
-
-# mktmpdir ($SIGNATURE)
-# ---------------------
-# Create a temporary directory which name is based on $SIGNATURE.
-sub mktmpdir ($)
-{
-  my ($signature) = @_;
-  my $TMPDIR = $ENV{'TMPDIR'} || '/tmp';
-
-  # If mktemp supports dirs, use it.
-  $tmp = `(umask 077 &&
-           mktemp -d -q "$TMPDIR/${signature}XXXXXX") 2>/dev/null`;
-  chomp $tmp;
-
-  if (!$tmp || ! -d $tmp)
-    {
-      $tmp = "$TMPDIR/$signature" . int (rand 10000) . ".$$";
-      mkdir $tmp, 0700
-	or die "$me: cannot create $tmp: $!\n";
-    }
-
-  print STDERR "$me:$$: working in $tmp\n"
-    if $debug;
-}
-
-
-# verbose
-# -------
-sub verbose (@)
-{
-  print STDERR "$me: ", @_, "\n"
-    if $verbose;
-}
 
 
 # END
@@ -347,23 +310,6 @@ sub END
     or (warn "$me: closing standard output: $!\n"), _exit (1);
 
   ($!, $?) = (0, $q);
-}
-
-
-# xsystem ($COMMAND)
-# ------------------
-sub xsystem ($)
-{
-  my ($command) = @_;
-
-  verbose "running: $command";
-
-  (system $command) == 0
-    or die ("$me: "
-	    . (split (' ', $command))[0]
-	    . " failed with exit status: "
-	    . ($? >> 8)
-	    . "\n");
 }
 
 

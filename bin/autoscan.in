@@ -21,16 +21,23 @@
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>.
 
 use 5.005;
+
+BEGIN
+{
+  my $prefix = "@prefix@";
+  # FIXME: Import Struct into Autoconf.
+  my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
+  unshift @INC, "$perllibdir";
+}
+
 use File::Basename;
 use File::Find;
 use Getopt::Long;
 use IO::File;
+use Autom4te::General;
 use strict;
 
 use vars qw(@cfiles @makefiles @shfiles %c_keywords %printed);
-
-my $me = basename ($0);
-my $verbose = 0;
 
 # $USED{KIND}{ITEM} is set if ITEM is used in the program.
 # It is set to its list of locations.
@@ -67,7 +74,7 @@ my $log = new IO::File ">$me.log"
   or die "$me: cannot open $me.log: $!\n";
 
 # Autoconf and lib files.
-my $autoconf;
+my $autoconf = find_peer ('autoconf', "@bindir@", 'autoconf-name');
 my $datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
 
 # Exit nonzero whenever closing STDOUT fails.
@@ -149,50 +156,6 @@ Try `$me --help' for more information.\n"
 
   print "srcdir=$srcdir\n" if $verbose;
   chdir $srcdir || die "$me: cannot cd to $srcdir: $!\n";
-}
-
-
-# find_autoconf
-# -------------
-# Find the lib files and autoconf.
-sub find_autoconf
-{
-  my $dir = dirname ($0);
-  # We test "$dir/autoconf" in case we are in the build tree, in which case
-  # the names are not transformed yet.
-  foreach my $file ($ENV{"AUTOCONF"} || '',
-		    "$dir/@autoconf-name@",
-		    "$dir/autoconf",
-		    "@bindir@/@autoconf-name@")
-    {
-      if (-x $file)
-	{
-	  $autoconf = $file;
-	  last;
-	}
-    }
-}
-
-
-# $CONFIGURE_AC
-# &find_configure_ac ()
-# ---------------------
-sub find_configure_ac ()
-{
-  if (-f 'configure.ac')
-    {
-      if (-f 'configure.in')
-	{
-	  warn "warning: `configure.ac' and `configure.in' both present.\n";
-	  warn "warning: proceeding with `configure.ac'.\n";
-	}
-      return 'configure.ac';
-    }
-  elsif (-f 'configure.in')
-    {
-      return 'configure.in';
-    }
-  return;
 }
 
 
@@ -642,8 +605,6 @@ sub check_configure_ac ($)
 ## -------------- ##
 
 parse_args;
-# Find the lib files and autoconf.
-find_autoconf;
 my $configure_ac = find_configure_ac;
 init_tables;
 scan_files;

@@ -22,58 +22,32 @@
 # Rewritten by Akim Demaille <akim@freefriends.org>.
 
 use 5.005;
+
+BEGIN
+{
+  my $prefix = "@prefix@";
+  # FIXME: Import Struct into Autoconf.
+  my $perllibdir = $ENV{'autom4te_perllibdir'} || "@datadir@";
+  unshift @INC, "$perllibdir";
+}
+
 use Getopt::Long;
 use File::Basename;
+use Autom4te::General;
 use strict;
-
-(my $me = $0) =~ s,.*[\\/],,;
 
 # Lib files.
 my $autoconf_dir = $ENV{"AC_MACRODIR"} || "@datadir@";
-my $autoconf = '';
-my $debug = 0;
+my $autoconf = find_peer ('autoconf', "@bindir@", 'autoconf-name');
 my $localdir = '.';
 # m4.
 my $m4 = $ENV{"M4"} || "@M4@";
-my $verbose = 0;
 my $SIMPLE_BACKUP_SUFFIX = $ENV{'SIMPLE_BACKUP_SUFFIX'} || '~';
-my $tmp = '';
 
 
 ## ---------- ##
 ## Routines.  ##
 ## ---------- ##
-
-
-# &mktmpdir ()
-# ------------
-sub mktmpdir ()
-{
-  my $TMPDIR = $ENV{'TMPDIR'} || '/tmp';
-
-  # If mktemp supports dirs, use it to please Marc E.
-  $tmp = `(umask 077 && mktemp -d -q "$TMPDIR/auXXXXXX") 2>/dev/null`;
-  chomp $tmp;
-
-  if (!$tmp || !-d $tmp)
-    {
-      $tmp = "$TMPDIR/au" . int (rand 10000) . ".$$";
-      mkdir $tmp, 0700
-	or die "$me: cannot create $tmp: $!\n";
-    }
-
-  print STDERR "$me:$$: working in $tmp\n"
-    if $debug;
-}
-
-
-# verbose
-# -------
-sub verbose (@)
-{
-  print STDERR "$me: ", @_, "\n"
-    if $verbose;
-}
 
 
 # END
@@ -103,23 +77,6 @@ sub END
     or (warn "$me: closing standard output: $!\n"), _exit (1);
 
   ($!, $?) = (0, $q);
-}
-
-
-# xsystem ($COMMAND)
-# ------------------
-sub xsystem ($)
-{
-  my ($command) = @_;
-
-  verbose "running: $command";
-
-  (system $command) == 0
-    or die ("$me: "
-	    . (split (' ', $command))[0]
-	    . " failed with exit status: "
-	    . ($? >> 8)
-	    . "\n");
 }
 
 
@@ -172,28 +129,6 @@ END
 }
 
 
-# $CONFIGURE_AC
-# &find_configure_ac ()
-# ---------------------
-sub find_configure_ac ()
-{
-  if (-f 'configure.ac')
-    {
-      if (-f 'configure.in')
-	{
-	  warn "warning: `configure.ac' and `configure.in' both present.\n";
-	  warn "warning: proceeding with `configure.ac'.\n";
-	}
-      return 'configure.ac';
-    }
-  elsif (-f 'configure.in')
-    {
-      return 'configure.in';
-    }
-  return;
-}
-
-
 # parse_args ()
 # -------------
 # Process any command line arguments.
@@ -226,45 +161,11 @@ sub parse_args ()
 }
 
 
-# find_slaves
-# -----------
-# Find the lib files and autoconf.
-sub find_slaves ()
-{
-  # Some non-GNU m4's don't reject the --help option, so give them /dev/null.
-  die "Autoconf requires GNU m4 1.4 or later\n"
-    if system "$m4 --help </dev/null 2>&1 | fgrep reload-state >/dev/null";
-
-  # autoconf.
-  (my $dir = $0) =~ s,[^\\/]*$,,;
-
-  # We test "$dir/autoconf" in case we are in the build tree, in which case
-  # the names are not transformed yet.
-  foreach my $file ($ENV{"AUTOCONF"} || '',
-		    "$dir/@autoconf-name@",
-		    "$dir/autoconf",
-		    "@bindir@/@autoconf-name@")
-    {
-      if (-x $file)
-	{
-	  $autoconf = $file;
-	  last;
-	}
-    }
-
-  # This is needed because perl's '-x' isn't a smart as bash's; that
-  # is, it won't find autoconf.sh.
-  $autoconf = 'autoconf'
-    if !$autoconf;
-}
-
-
 ## -------------- ##
 ## Main program.  ##
 ## -------------- ##
-find_slaves;
 parse_args;
-mktmpdir;
+mktmpdir ('au');
 $autoconf .= " --autoconf-dir $autoconf_dir --localdir $localdir ";
 $autoconf .= "--debug " if $debug;
 $autoconf .= "--verbose " if $verbose;
@@ -278,11 +179,11 @@ map { s/:.*//;s/\W// } @m4_builtins;
 # unm4.m4 -- disable the m4 builtins.
 # savem4.m4 -- save the m4 builtins.
 open M4_M4, ">$tmp/m4.m4"
-  or die "$me: cannot open: $!\n";
+  or die "$me: cannot open $tmp/m4.m4: $!\n";
 open UNM4_M4, ">$tmp/unm4.m4"
-  or die "$me: cannot open: $!\n";
+  or die "$me: cannot open $tmp/unm4.m4: $!\n";
 open M4SAVE_M4, ">$tmp/m4save.m4"
-  or die "$me: cannot open: $!\n";
+  or die "$me: cannot open $tmp/unm4.m4: $!\n";
 foreach (@m4_builtins)
   {
     print M4_M4     "_au_define([$_], _au_defn([_au_$_]))\n";

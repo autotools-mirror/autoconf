@@ -1,5 +1,14 @@
 2001-08-01  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/General.pm: New.
+	* bin/autom4te.in (Autom4te::General): Use it.
+	($me, $tmp, $verbose, $debug, &mktmpdir, &verbose, &xsystem)
+	(&find_configure_ac, &find_slave): Remove.
+	* bin/autoscan.in: Likewise.
+	* bin/autoupdate.in: Likewise.
+
+2001-08-01  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.in, autom4te.in, autoscan.in, ifnames.in,
 	* autoheader.in, autoreconf.in, autoupdate.in: Move to...
 	* bin: here, new directory.
