@@ -27,7 +27,7 @@ Autom4te::ChannelDefs - channel definitions for Automake and helper functions
 
   use Autom4te::ChannelDefs;
 
-  Autom4te::ChannelDefs::usage ();
+  print Autom4te::ChannelDefs::usage (), "\n";
   prog_error ($MESSAGE, [%OPTIONS]);
   error ($WHERE, $MESSAGE, [%OPTIONS]);
   error ($MESSAGE);
@@ -36,7 +36,7 @@ Autom4te::ChannelDefs - channel definitions for Automake and helper functions
   verb ($MESSAGE, [%OPTIONS]);
   switch_warning ($CATEGORY);
   parse_WARNINGS ();
-  parse_warning ($OPTION, $ARGUMENT);
+  parse_warnings ($OPTION, $ARGUMENT);
   Autom4te::ChannelDefs::set_strictness ($STRICTNESS_NAME);
 
 =head1 DESCRIPTION
@@ -80,7 +80,7 @@ Errors related to GNU Standards.
 
 =item C<error-gnu/warn>
 
-Errors related to GNU Standards that should be warnings in `foreign' mode.
+Errors related to GNU Standards that should be warnings in "foreign" mode.
 
 =item C<error-gnits>
 
@@ -89,6 +89,10 @@ Errors related to GNITS Standards (silent by default).
 =item C<automake>
 
 Internal errors.  Use C<&prog_error> to send messages over this channel.
+
+=item C<cross>
+
+Constructs compromising the cross-compilation of the package.
 
 =item C<gnu>
 
@@ -142,6 +146,7 @@ register_channel 'automake', type => 'fatal', backtrace => 1,
 	     "####################\n"),
   footer => "\nPlease contact <bug-automake\@gnu.org>.";
 
+register_channel 'cross', type => 'warning', silent => 1;
 register_channel 'gnu', type => 'warning';
 register_channel 'obsolete', type => 'warning', silent => 1;
 register_channel 'override', type => 'warning', silent => 1;
@@ -158,13 +163,14 @@ register_channel 'note', type => 'debug', silent => 0;
 
 =item C<usage ()>
 
-Display warning categories.
+Return the warning category descriptions.
 
 =cut
 
 sub usage ()
 {
-  print "Warning categories include:
+  return "Warning categories include:
+  `cross'         cross compilation issues
   `gnu'           GNU coding standards (default in gnu and gnits modes)
   `obsolete'      obsolete features or constructions
   `override'      user redefinitions of Automake rules or variables
@@ -174,8 +180,7 @@ sub usage ()
   `all'           all the warnings
   `no-CATEGORY'   turn off warnings in CATEGORY
   `none'          turn off all the warnings
-  `error'         treat warnings as errors
-";
+  `error'         treat warnings as errors";
 }
 
 =item C<prog_error ($MESSAGE, [%OPTIONS])>
@@ -234,7 +239,7 @@ sub verb ($;%)
 =item C<switch_warning ($CATEGORY)>
 
 If C<$CATEGORY> is C<mumble>, turn on channel C<mumble>.
-If it's C<no-mumble>, turn C<mumble> off.
+If it is C<no-mumble>, turn C<mumble> off.
 Else handle C<all> and C<none> for completeness.
 
 =cut
@@ -293,21 +298,22 @@ sub parse_WARNINGS ()
     }
 }
 
-=item C<parse_warning ($OPTION, $ARGUMENT)>
+=item C<parse_warnings ($OPTION, @ARGUMENT)>
 
 Parse the argument of C<--warning=CATEGORY> or C<-WCATEGORY>.
 
-C<$OPTIONS> is C<"--warning"> or C<"-W">, C<$ARGUMENT> is C<CATEGORY>.
+C<$OPTIONS> is C<"--warning"> or C<"-W">, C<@ARGUMENT> is a list of
+C<CATEGORY>.
 
-This is meant to be used as a argument to C<Getopt>.
+This can be used as a argument to C<Getopt>.
 
 =cut
 
-sub parse_warnings ($$)
+sub parse_warnings ($@)
 {
-  my ($opt, $categories) = @_;
+  my ($opt, @categories) = @_;
 
-  foreach my $cat (split (',', $categories))
+  foreach my $cat (map { split ',' } @categories)
     {
       msg 'unsupported', "unknown warning category `$cat'"
 	if switch_warning $cat;

@@ -83,7 +83,7 @@ sub find_file ($@)
       return undef;
     }
 
-  foreach my $path (reverse @include)
+  foreach my $path (@include)
     {
       return File::Spec->canonpath (File::Spec->catfile ($path, $filename))
 	if -e File::Spec->catfile ($path, $filename)

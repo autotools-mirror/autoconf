@@ -1,5 +1,14 @@
 2003-08-21  Akim Demaille  <akim@epita.fr>
 
+	* lib/Autom4te/FileUtils.pm (&find_file): Walk the @include in
+	forward order.
+	* lib/Autom4te/ChannelDefs.pm: Doc typos.
+	(&parse_warnings): Accept a list of warning requests.
+	(&usage): Return a string, not a side effect.
+	(cross): New warning category.
+
+2003-08-21  Akim Demaille  <akim@epita.fr>
+
 	* lib/Autom4te/Configure_ac.pm (&find_configure_ac)
 	(&require_configure_ac): Accept an optional directory argument.
 	($configure_ac): Remove.
