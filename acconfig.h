@@ -207,7 +207,10 @@
 /* Define if `sys_siglist' is declared by <signal.h>.  */
 #undef SYS_SIGLIST_DECLARED
 
-/* Define if your sys/time.h declares struct tm.  */
+/* Define if you can safely include both <sys/time.h> and <time.h>.  */
+#undef TIME_WITH_SYS_TIME
+
+/* Define if your <sys/time.h> declares struct tm.  */
 #undef TM_IN_SYS_TIME
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
