@@ -3940,7 +3940,8 @@ fi
 
 # Trap to remove the temp files.
 dnl FIXME: Should we check that there are files to remove?
-trap 'rm -fr $ac_cs_root*; exit 1' 1 2 15
+trap 'status=$?; rm -rf $ac_cs_root* && exit $status' 0
+trap 'exit $?' 1 2 13 15
 
 EOF
 ])[]dnl ifval
