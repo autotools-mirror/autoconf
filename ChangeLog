@@ -1,5 +1,12 @@
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Fix copy n' paste typos in
+	`--with-*', `--without-*' and `*' decoding.
+	Reported by Raja R Harinath.
+	Fixes autoconf/119.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	Don't dump AC_ARG_PROGRAM help messages if not used.
 
 	* acgeneral.m4 (_AC_INIT_HELP): Don't.

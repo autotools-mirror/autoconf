@@ -883,7 +883,7 @@ do
   -with-* | --with-*)
     ac_package=`echo "$ac_option"|sed -e 's/-*with-//' -e 's/=.*//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
+    if echo "$ac_package" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
       ]AC_MSG_ERROR(invalid package: $ac_package)[
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
@@ -896,7 +896,7 @@ do
   -without-* | --without-*)
     ac_package=`echo "$ac_option"|sed -e 's/-*without-//'`
     # Reject names that are not valid shell variable names.
-    if echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
+    if echo "$ac_package" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1; then
       ]AC_MSG_ERROR(invalid package: $ac_package)[
     fi
     ac_package=`echo $ac_package| sed 's/-/_/g'`
@@ -935,7 +935,7 @@ Try `configure --help' for more information.])[
     export $ac_envvar ;;
 
   *)
-    if echo "$ac_feature" | grep '[^-a-zA-Z0-9.]' >/dev/null 2>&1; then
+    if echo "$ac_option" | grep '[^-a-zA-Z0-9.]' >/dev/null 2>&1; then
       ]AC_MSG_WARN(invalid host type: $ac_option)[
     fi
     if test "x$nonopt" != xNONE; then
