@@ -3,7 +3,9 @@
 	* acspecific.m4 (AC_EMXOS2): New macro. Contributed by Ryuji Abe
 	<raeva@t3.rim.or.jp>.
 	(AC_EXEEXT): Handle case for OS/2.
-	
+	(AC_PROG_CC_WORKS): Show $CPPFLAGS when running the compiler.
+	(AC_PROG_CXX_WORKS): Likewise.
+
 	* autoconf.texi (AC_EMXOS2): Document.
 	(AC_EXEEXT): Mention OS/2.
 	(AC_MINGW32): Move.
