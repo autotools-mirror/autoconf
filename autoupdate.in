@@ -71,18 +71,26 @@ sub END
 {
   use POSIX qw (_exit);
 
+  my ($q) = ($?);
+
+  # FIXME: Heelp!  Can't find a means to properly catch system's
+  # exit status (without hair I mean).
+  # my $status = $? >> 8;
+
   if (!$debug && -d $tmp)
     {
       unlink <$tmp/*>
-	or die "$me: cannot empty $tmp: $!\n";
+	or warn ("$me: cannot empty $tmp: $!\n"), _exit (1);
       rmdir $tmp
-	or die "$me: cannot remove $tmp: $!\n";
+	or warn ("$me: cannot remove $tmp: $!\n"), _exit (1);
     }
 
   # This is required if the code might send any output to stdout
   # E.g., even --version or --help.  So it's best to do it unconditionally.
   close STDOUT
     or (warn "$me: closing standard output: $!\n"), _exit (1);
+
+  ($!, $?) = (0, $q);
 }
 
 
@@ -225,11 +233,7 @@ $autoconf .= " --autoconf-dir $autoconf_dir --localdir $localdir";
 
 
 # @M4_BUILTINS -- M4 builtins and a useful comment.
-open M4_BUILTINS, "echo dumpdef | $m4 2>&1 >/dev/null |"
-  or die "$me: cannot open: $!\n";
-my @m4_builtins = <M4_BUILTINS>;
-close M4_BUILTINS
-  or die "$me: cannot close: $!\n";
+my @m4_builtins = `echo dumpdef | $m4 2>&1 >/dev/null`;
 map { s/:.*//;s/\W// } @m4_builtins;
 
 
@@ -280,7 +284,7 @@ close MACROS
 # Don't keep AU macros in @AC_MACROS.
 delete $ac_macros{$_}
   foreach (keys %au_macros);
-if ($verbose)
+if ($debug)
   {
     print STDERR "Current Autoconf macros:\n";
     print STDERR join (' ', sort keys %ac_macros) . "\n\n";
@@ -451,8 +455,8 @@ EOF
        if $verbose;
     if (system ("$m4 $tmp/input.m4 >$tmp/updated"))
        {
-	 # Don't let `die' with random errno.
-	 $! = 1;
+	 # FIXME: This guy is supposed to exit with a proper
+	 # exit status, but it does not.  Help is needed.
 	 die "$me: cannot update \`$filename'\n";
        };
 

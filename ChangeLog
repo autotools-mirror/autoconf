@@ -1,5 +1,11 @@
 2001-02-25  Akim Demaille  <akim@epita.fr>
 
+	* autoupdate.in (&END): Try to preserve the exit status.
+	Use backquotes where more readable.
+	Internal details should be dumped when $debug, not when $verbose.
+
+2001-02-25  Akim Demaille  <akim@epita.fr>
+
 	* autoupdate.in (&mktmpdir): New.
 	(&END): Remove $tmp.
 	(&parse_args): Handle -d and -l.
