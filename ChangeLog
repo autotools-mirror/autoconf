@@ -1,5 +1,7 @@
 1999-10-27  Ben Elliston  <bje@cygnus.com>
 
+	* THANKS: Updated Alexandre's address.
+
 	* autoconf.texi (Generic Programs): @defmac for AC_PATH_TOOL may
 	not span multiple lines.
 
