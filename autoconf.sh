@@ -260,7 +260,8 @@ $debug ||
 # Running m4.
 test -f "$autoconf_dir/acsite.m4" && acsite_m4="$autoconf_dir/acsite.m4"
 test -f "$localdir/aclocal.m4"   && aclocal_m4="$localdir/aclocal.m4"
-m4_common="$acsite_m4 $aclocal_m4 -I $autoconf_dir -I $localdir"
+m4_common="$acsite_m4 $aclocal_m4 -I $autoconf_dir -I $localdir \
+           -Dm4_tmpdir=\"$tmp\""
 run_m4="$M4           $autoconf_dir/autoconf.m4  $m4_common"
 run_m4f="$M4 --reload $autoconf_dir/autoconf.m4f $m4_common"
 
@@ -314,11 +315,40 @@ case $task in
   # helpful.  Because quoting can sometimes get really painful in m4,
   # there are special @tokens@ to substitute.
   cat >$tmp/finalize.awk <<EOF
+    # Load the list of tokens which escape the forbidden patterns.
+    BEGIN {
+      # Be sure the read GAWK documentation to understand the parens
+      # around \`tmp "/tokens_allowed"'.
+      while ((getline token < (tmp "/tokens_allowed")) > 0)
+      	{
+          if (verbose)
+            print "$0: token \`" token "' is allowed" | "cat >&2"
+          tokens_allowed[token] = 1
+      	}
+      close (tmp "/tokens_allowed")
+    }
+
     function undefined (file, line, macro)
     {
       print file ":" line ": error: undefined macro: " macro | "cat >&2"
     }
 
+    # If the token in CODE_PART from BEGIN to END is forbidden,
+    # register it for further complains.
+    function check_pattern (pattern, offset)
+    {
+      if (match (code_part, pattern))
+        {
+    	  token = substr (code_part, RSTART + offset, RLENGTH - offset)
+    	  if (! tokens_allowed[token])
+    	    {
+    	      macros [token] = oline
+    	      some_macros_were_not_expanded = 1
+    	    }
+    	}
+    }
+
+    # Body.
     {
       sub(/[         ]*$/, "")
       if (\$0 == "")
@@ -351,21 +381,9 @@ case $task in
       # We don't \`if ... else if ...' because a single line may contain
       # several unexpanded names.  That's also why the last two \`match'
       # are not grouped together.
-      if (match (code_part, /[^$WORDCHAR](A[$ALPHABET]|m4)_[$WORDCHAR]*/))
-        {
-           macros [substr (code_part, RSTART + 1, RLENGTH - 1)] = oline
-           some_macros_were_not_expanded = 1
-        }
-      if (match (code_part, /^(A[$ALPHABET]|m4)_[$WORDCHAR]*/))
-        {
-           macros [substr (code_part, RSTART, RLENGTH)] = oline
-           some_macros_were_not_expanded = 1
-        }
-      if (match (code_part, /[$WORDCHAR]*_A[$ALPHABET]_[$WORDCHAR]*/))
-        {
-           macros [substr (code_part, RSTART, RLENGTH)] = oline
-           some_macros_were_not_expanded = 1
-        }
+      check_pattern("[^$WORDCHAR](A[$ALPHABET]|m4)_[$WORDCHAR]*", 1)
+      check_pattern("^(A[$ALPHABET]|m4)_[$WORDCHAR]*", 0)
+      check_pattern("[$WORDCHAR]*_A[$ALPHABET]_[$WORDCHAR]*", 0)
       print
     }
 
@@ -379,11 +397,11 @@ case $task in
             {
               line++
               for (macro in macros)
-              if (index (\$0, macro))
-                {
-                  delete macros [macro]
-                  undefined("$infile", line, macro)
-                }
+                if (index (\$0, macro))
+                  {
+                    delete macros [macro]
+                    undefined("$infile", line, macro)
+                  }
             }
           close ("$infile")
           for (macro in macros)
@@ -392,7 +410,10 @@ case $task in
         }
     }
 EOF
-    $AWK -f $tmp/finalize.awk <$tmp/configure >&4 || { (exit 1); exit; }
+    $AWK -v tmp="$tmp" \
+         `$verbose "-v verbose=1"` \
+         -f $tmp/finalize.awk <$tmp/configure >&4 ||
+      { (exit 1); exit; }
   ;; # End of the task script.
 
 
@@ -711,7 +732,7 @@ EOF
   ## Unknown task ##
   ## ------------ ##
 
-  *)echo "$me: internal error: unknown task: $task" >&2
+  *) echo "$me: internal error: unknown task: $task" >&2
     (exit 1); exit
 esac
 

@@ -1,3 +1,15 @@
+2000-11-16  Akim Demaille  <akim@epita.fr>
+
+	Provide a means for escaping the forbidden patterns test.
+
+	* tests/tools.at (Forbidden tokens): Test m4_token_allow.
+	* m4sugar.m4 (m4_file_append, m4_token_allow): New macros.
+	* autoconf.sh (task script): Pass `tmp' and `verbose' to
+	finalize.awk.
+	(finalize.awk::check_patterns): Eve out from the body.
+	(finalize.awk): Read `$tmp/tokens_allowed', and don't complain for
+	these exceptions.
+
 2000-11-14  Paul Eggert  <eggert@twinsun.com>
 
 	* acspecific.m4 (AC_SYS_LARGEFILE): Don't worry about

@@ -334,11 +334,11 @@ AT_CLEANUP
 
 
 
-## ----------------------------------------------- ##
-## autoconf's ability to catch unexpanded macros.  ##
-## ----------------------------------------------- ##
+## ------------------ ##
+## Forbidden tokens.  ##
+## ------------------ ##
 
-AT_SETUP([unexpanded macros])
+AT_SETUP([Forbidden tokens])
 
 AT_DATA([configure.in],
 [[AC_PLAIN_SCRIPT()dnl
@@ -349,12 +349,19 @@ and_AZ_that_too
 BAC_DEFINE
 # AC_THIS_IS_A_COMMENT so just shut up.
 It would be very bad if Autoconf forgot to expand [AC_]OUTPUT!
+
+# This is allowed in spite of the name.
+m4_token_allow([AC_UNDEFINED])
+AC_UNDEFINED
+# But it does not allow this,
+MY_AC_UNDEFINED
 ]])
 
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir], 1, [],
 [[configure.in:2: error: undefined macro: AB_THIS_IS_PROBABLY_NOT_DEFINED
 configure.in:3: error: undefined macro: AND_AZ_THAT_EITHER
 configure.in:4: error: undefined macro: and_AZ_that_too
+configure.in:14: error: undefined macro: MY_AC_UNDEFINED
 configure:7: error: undefined macro: AC_OUTPUT
 ]])
 

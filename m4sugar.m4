@@ -667,6 +667,7 @@ m4_divert_pop()dnl
 ])
 
 
+
 ## -------------------------------------------- ##
 ## 8. Defining macros with bells and whistles.  ##
 ## -------------------------------------------- ##
@@ -1085,6 +1086,14 @@ m4_define([$1],
                              [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])])
 
 
+# m4_token_allow(TOKEN)
+# ---------------------
+# Declare TOKEN is allowed in the output, even if it matches the forbidden
+# patterns such as `m4_*'.
+m4_define([m4_token_allow],
+[m4_file_append(m4_defn([m4_tmpdir])/tokens_allowed, [$1])])
+
+
 ## ----------------------------- ##
 ## Dependencies between macros.  ##
 ## ----------------------------- ##
@@ -1485,3 +1494,22 @@ m4_define([m4_version_unletter],
 m4_define([m4_version_compare],
 [m4_list_cmp((m4_split(m4_version_unletter([$1]), [\.])),
              (m4_split(m4_version_unletter([$2]), [\.])))])
+
+
+
+## ------------------- ##
+## 12. File handling.  ##
+## ------------------- ##
+
+
+# It is a real pity that M4 comes with no macros to bind a diversion
+# to a file.  So we have to deal without, which makes us a lot more
+# fragile that we should.
+
+
+# m4_file_append(FILE-NAME, CONTENT)
+# ----------------------------------
+m4_define([m4_file_append],
+[m4_syscmd([cat >>$1 <<_m4eof
+$2
+_m4eof])])
