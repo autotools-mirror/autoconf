@@ -1828,11 +1828,10 @@ name of the library; e.g., to check for @samp{-lmp}, use @samp{mp} as
 the @var{library} argument.
 
 @var{action-if-found} is a list of shell commands to run if the link
-with the library succeeds; @var{action-if-not-found} is a list of shell
-commands to run if the link fails.  If @var{action-if-found} and
-@var{action-if-not-found} are not specified, the default action is to
-add @samp{-l@var{library}} to @code{LIBS} and define
-@samp{HAVE_LIB@var{library}} (in all capitals).
+with the library succeeds; @var{action-if-not-found} is a list of
+shell commands to run if the link fails.  If @var{action-if-found} is
+not specified, the default action will add @samp{-l@var{library}} to
+@code{LIBS} and define @samp{HAVE_LIB@var{library}} (in all capitals).
 
 If linking with @var{library} results in unresolved symbols, which would
 be resolved by linking with additional libraries, give those libraries
@@ -1850,6 +1849,23 @@ be written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In
 all of those cases, the compiler is passed @samp{-lfoo}.  However,
 @var{library} can not be a shell variable; it must be a literal name.
 This macro is considered obsolete.
+@end defmac
+
+@defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
+@maindex SEARCH_LIBS
+Search for a library defining @var{function}, if it's not already
+available.  This equates to calling @code{AC_TRY_LINK_FUNC} first
+with no libraries, then for each library listed in @var{search-libs}.
+
+If the function is found, run @var{action-if-found}, otherwise run
+@var{action-if-not-found}.
+
+If linking with @var{library} results in unresolved symbols, which would
+be resolved by linking with additional libraries, give those libraries
+as the @var{other-libraries} argument, separated by spaces: @samp{-lXt
+-lX11}.  Otherwise this macro will fail to detect that @var{function} is
+present, because linking the test program will always fail with
+unresolved symbols.
 @end defmac
 
 @node Library Functions, Header Files, Libraries, Existing Tests
@@ -2743,13 +2759,26 @@ libraries.
 
 The following macros check for operating system services or capabilities.
 
-@defmac AC_SYS_INTERPRETER
-@maindex SYS_INTERPRETER
-Check whether the system supports starting scripts with a line of the
-form @samp{#! /bin/csh} to select the interpreter to use for the script.
-After running this macro, shell code in @code{configure.in} can check
-the variable @code{ac_cv_sys_interpreter}; it will be set to @samp{yes}
-if the system supports @samp{#!}, @samp{no} if not.
+
+@defmac AC_CHECK_FILE (@var{file}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex CHECK_FILE
+Checks for the existence of @var{file} in the native file system.
+This macro will generate a fatal error if cross-compiling.
+
+If the file is found and readable, run shell commands
+@var{action-if-found}, otherwise run @var{action-if-not-found}.
+@end defmac
+
+@defmac AC_CHECK_FILES (@var{files}, @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex CHECK_FILES
+Checks for the existence of @var{files} in the native file system.
+This is equivalent to running @code{AC_CHECK_FILE} for each file
+in @var{files}.  This macro will generate a fatal error if
+cross-compiling.
+
+For each readable file found, run shell commands @var{action-if-found}
+and define @samp{HAVE_@var{file}} (in all capitals), otherwise run
+@var{action-if-not-found}.
 @end defmac
 
 @defmac AC_PATH_X
@@ -2791,6 +2820,15 @@ found to the output variable @code{X_PRE_LIBS}.
 @c If you need to check for other X functions or libraries yourself, then
 @c after calling this macro, add the contents of @code{X_EXTRA_LIBS} to
 @c @code{LIBS} temporarily, like this:
+@end defmac
+
+@defmac AC_SYS_INTERPRETER
+@maindex SYS_INTERPRETER
+Check whether the system supports starting scripts with a line of the
+form @samp{#! /bin/csh} to select the interpreter to use for the script.
+After running this macro, shell code in @code{configure.in} can check
+the shell variable @code{interpval}; it will be set to @samp{yes}
+if the system supports @samp{#!}, @samp{no} if not.
 @end defmac
 
 @defmac AC_SYS_LONG_FILE_NAMES
@@ -3046,6 +3084,16 @@ selected language, as well as @code{CPPFLAGS}, when compiling.  If
 Fortran 77 is the currently selected language then @code{FFLAGS} will be
 used when compiling.  However, both @code{LDFLAGS} and @code{LIBS} will
 be used during linking in all cases.
+
+If the file compiles and links successfully, run shell commands
+@var{action-if-found}, otherwise run @var{action-if-not-found}.
+@end defmac
+
+@defmac AC_TRY_LINK_FUNC (@var{function}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex TRY_LINK_FUNC
+Depending on the current language (@pxref{Language Choice}), create a
+test program to see whether a program whose body consists of
+a prototype of and a call to @var{function} can be compiled and linked.
 
 If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.
