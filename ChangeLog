@@ -1,5 +1,10 @@
 2004-04-20  Gary V. Vaughan  <gary@gnu.org>
 
+	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Make the
+	best tool so far counter rely on the tool path variable name to
+	avoid checks for one tool being affected by the results of running
+	the length check on a previous tool.
+
 	* lib/autoconf/programs.m4 (_AC_PROG_GREP): Take an additional
 	match expression argument, as different greps have different
 	regular expression flavours.

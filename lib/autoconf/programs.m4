@@ -468,12 +468,15 @@ m4_define([_AC_FEATURE_CHECK_LENGTH],
     cp "$tmp/conftest.in" "$tmp/conftest.nl"
     echo '$4' >> "$tmp/conftest.nl"
     $3 < "$tmp/conftest.nl" >"$tmp/conftest.out" || break
-   diff "$tmp/conftest.out" "$tmp/conftest.nl" >/dev/null 2>&1 || break
+    diff "$tmp/conftest.out" "$tmp/conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
-    if test $ac_count -gt ${ac_max-0}; then
+    if test $ac_count -gt ${$1_max-0}; then
       # Best one so far, save it but keep looking for a better one
       $2="$$1"
-      ac_max=$ac_count
+dnl   # Using $1_max so that each tool feature checked gets its
+dnl   # own variable.  Don't reset it otherwise the implied search
+dnl   # for best performing tool in a list breaks down.
+      $1_max=$ac_count
     fi
     # 10*(2^10) chars as input seems more than enough
     test $ac_count -gt 10 && break
