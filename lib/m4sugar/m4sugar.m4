@@ -699,7 +699,7 @@ m4_define([_m4_foreach],
 # _m4_divert(DIVERSION-NAME or NUMBER)
 # ------------------------------------
 # If DIVERSION-NAME is the name of a diversion, return its number,
-# otherwise if is a NUMBER return it.
+# otherwise if it is a NUMBER return it.
 m4_define([_m4_divert],
 [m4_ifdef([_m4_divert($1)],
 	  [m4_indir([_m4_divert($1)])],
@@ -709,13 +709,19 @@ m4_define([_m4_divert],
 m4_define([_m4_divert(KILL)],           -1)
 
 
+# _m4_divert_n_stack
+# ------------------
+# Print m4_divert_stack with newline prepended, if it's nonempty.
+m4_define([_m4_divert_n_stack],
+[m4_ifdef([m4_divert_stack], [
+m4_defn([m4_divert_stack])])])
+
+
 # m4_divert(DIVERSION-NAME)
 # -------------------------
 # Change the diversion stream to DIVERSION-NAME.
 m4_define([m4_divert],
-[m4_define([m4_divert_stack],
-	   m4_location[: $0: $1]m4_ifdef([m4_divert_stack], [
-m4_defn([m4_divert_stack])]))dnl
+[m4_define([m4_divert_stack], m4_location[: $0: $1]_m4_divert_n_stack)dnl
 m4_builtin([divert], _m4_divert([$1]))dnl
 ])
 
@@ -724,11 +730,9 @@ m4_builtin([divert], _m4_divert([$1]))dnl
 # ------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 m4_define([m4_divert_push],
-[m4_pushdef([m4_divert_stack],
-	    m4_location[: $0: $1]m4_ifdef([m4_divert_stack], [
-m4_defn([m4_divert_stack])]))dnl
+[m4_pushdef([m4_divert_stack], m4_location[: $0: $1]_m4_divert_n_stack)dnl
 m4_pushdef([_m4_divert_diversion], [$1])dnl
-m4_builtin([divert], _m4_divert(_m4_divert_diversion))dnl
+m4_builtin([divert], _m4_divert([$1]))dnl
 ])
 
 
@@ -736,18 +740,19 @@ m4_builtin([divert], _m4_divert(_m4_divert_diversion))dnl
 # -------------------------------
 # Change the diversion stream to its previous value, unstacking it.
 # If specified, verify we left DIVERSION-NAME.
+# When we pop the last value from the stack, we divert to -1.
 m4_define([m4_divert_pop],
-[m4_ifval([$1],
-     [m4_if(_m4_divert([$1]), m4_divnum, [],
-	    [m4_fatal([$0($1): diversion mismatch: ]
-m4_defn([m4_divert_stack]))])])dnl
+[m4_ifndef([_m4_divert_diversion],
+           [m4_fatal([too many m4_divert_pop])])dnl
+m4_if([$1], [], [],
+      [$1], m4_defn([_m4_divert_diversion]), [],
+      [m4_fatal([$0($1): diversion mismatch: ]_m4_divert_n_stack)])dnl
+m4_popdef([m4_divert_stack])dnl
 m4_popdef([_m4_divert_diversion])dnl
-dnl m4_ifndef([_m4_divert_diversion],
-dnl           [m4_fatal([too many m4_divert_pop])])dnl
 m4_builtin([divert],
 	   m4_ifdef([_m4_divert_diversion],
-		    [_m4_divert(_m4_divert_diversion)], -1))dnl
-m4_popdef([m4_divert_stack])dnl
+		    [_m4_divert(m4_defn([_m4_divert_diversion]))],
+		    -1))dnl
 ])
 
 
@@ -1172,7 +1177,7 @@ m4_divert_push([GROW])])dnl
 # the PRO/EPI pairs.
 m4_define([_m4_defun_epi],
 [m4_divert_pop()dnl
-m4_if(_m4_divert_dump, _m4_divert_diversion,
+m4_if(m4_defn([_m4_divert_dump]), m4_defn([_m4_divert_diversion]),
       [m4_undivert([GROW])dnl
 m4_undefine([_m4_divert_dump])])dnl
 m4_expansion_stack_pop()dnl
@@ -1275,16 +1280,24 @@ m4_ifndef([_m4_divert_dump],
 	  [m4_fatal([$0: cannot be used outside of an m4_defun'd macro])])dnl
 m4_provide_if([$1],
 	      [],
-	      [m4_divert_push(m4_eval(m4_divnum - 1))dnl
+	      [_m4_require_call([$1], [$2])])dnl
+m4_expansion_stack_pop()dnl
+])
+
+
+# _m4_require_call(BODY-TO-EXPAND)
+# --------------------------------
+# If m4_require decides to expand the body, it calls this macro.
+m4_define([_m4_require_call],
+[m4_divert_push(m4_eval(m4_divnum - 1))dnl
 m4_default([$2], [$1])
-m4_divert(m4_defn([_m4_divert_dump]))dnl
-m4_undivert(m4_defn([_m4_divert_diversion]))dnl
-m4_divert_pop(m4_defn([_m4_divert_dump]))])dnl
 m4_provide_if([$1],
 	      [],
 	      [m4_warn([syntax],
-		       [$1 is m4_require'd but is not m4_defun'd])])dnl
-m4_expansion_stack_pop()dnl
+		       [$1 is m4_require'd but not m4_defun'd])])dnl
+m4_divert(m4_defn([_m4_divert_dump]))dnl
+m4_undivert(m4_defn([_m4_divert_diversion]))dnl
+m4_divert_pop()dnl
 ])
 
 
@@ -1774,8 +1787,7 @@ m4_pattern_forbid([^dnl$])
 
 # Check the divert push/pop perfect balance.
 m4_wrap([m4_ifdef([_m4_divert_diversion],
-		  [m4_fatal([$0: unbalanced m4_divert_push:]
-m4_defn([m4_divert_stack]))])[]])
+	   [m4_fatal([$0: unbalanced m4_divert_push:]_m4_divert_n_stack)])[]])
 
 m4_divert_push([KILL])
 m4_wrap([m4_divert_pop([KILL])[]])

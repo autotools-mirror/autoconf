@@ -1,3 +1,21 @@
+2005-01-03  Stepan Kasal  <kasal@ucw.cz>
+
+	A cleanup of the diversion support in m4sugar.
+
+	* lib/m4sugar/m4sugar.m4 (_m4_divert): A typo in description.
+	(_m4_divert_n_stack): New macro; the expansion is
+	  <newline>m4_divert_stack, if m4_divert_stack is defined, and void
+	  otherwise.
+	(m4_divert, m4_divert_push, m4_divert_pop, m4_init): Use it.
+	(m4_divert_push, m4_divert_pop, _m4_defun_epi): Don't expand the word
+	  stored in _m4_divert_diversion or _m4_divert_dump.
+	(m4_divert_pop): When the parameter is given, compare the symbolic
+	  name with the last diversion pushed on the stack.  Previously, the
+	  current diversion was compared with the numeric value of the
+	  diversion given as the parameter.
+	(m4_require): If the macro hasn't been expanded yet, call ...
+	(_m4_require_call): this new macro.
+
 2005-01-03  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE, _AC_ARG_VAR_VALIDATE):
