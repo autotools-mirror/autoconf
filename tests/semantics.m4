@@ -19,7 +19,7 @@ AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
 # ------------
 # Well, I can't imagine a system where `cos' is neither in libc, nor
 # in libm.  Nor can I imagine a lib more likely to exists than libm.
-# But there are system without libm, on which we don't want to have
+# But there are systems without libm, on which we don't want to have
 # this test fail, so exit successfully if `cos' is in libc.
 AT_TEST_MACRO(AC_CHECK_LIB,
 [AC_TRY_LINK_FUNC(cos, exit 0)
@@ -68,23 +68,19 @@ AT_TEST_MACRO(AC_CHECK_HEADERS,
 # AC_CHECK_MEMBERS
 # ----------------
 # Check that it performs the correct actions.
-# Must define HAVE_STRUCT_YES_YES, but not HAVE_STRUCT_YES_NO.
+# Must define HAVE_STRUCT_YES_S_YES, but not HAVE_STRUCT_YES_S_NO.
 AT_TEST_MACRO(AC_CHECK_MEMBERS,
-[AC_CHECK_MEMBERS((struct yes.yes, struct yes.no),,,
-                  [struct yes { int yes ;} ;])],
+[AC_CHECK_MEMBERS((struct yes_s.yes, struct yes_s.no),,,
+                  [struct yes_s { int yes ;} ;])],
 [AT_CHECK_DEFINES(
-[/* #undef HAVE_STRUCT_YES_NO */
-#define HAVE_STRUCT_YES_YES 1
+[/* #undef HAVE_STRUCT_YES_S_NO */
+#define HAVE_STRUCT_YES_S_YES 1
 ])])
 
 
 
 # AC_CHECK_SIZEOF
-# --------------
-# Check that it performs the correct actions.
-# Must define HAVE_STRUCT_YES, HAVE_INT, but not HAVE_STRUCT_NO.
-# `int' and `struct yes' are both checked to test both the compiler
-# builtin types, and defined types.
+# ---------------
 AT_TEST_MACRO(AC_CHECK_SIZEOF,
 [AC_CHECK_SIZEOF(char)
 AC_CHECK_SIZEOF(charchar,,
@@ -104,17 +100,18 @@ typedef struct
 # AC_CHECK_TYPES
 # --------------
 # Check that it performs the correct actions.
-# Must define HAVE_STRUCT_YES, HAVE_INT, but not HAVE_STRUCT_NO.
-# `int' and `struct yes' are both checked to test both the compiler
+# Must define HAVE_STRUCT_YES_S, HAVE_INT, but not HAVE_STRUCT_NO_S.
+# `int' and `struct yes_s' are both checked to test both the compiler
 # builtin types, and defined types.
 AT_TEST_MACRO(AC_CHECK_TYPES,
-[AC_CHECK_TYPES((int, struct yes, struct no),,,
-                [struct yes { int yes ;} ;])],
+[AC_CHECK_TYPES((int, struct yes_s, struct no_s),,,
+                [struct yes_s { int yes ;} ;])],
 [AT_CHECK_DEFINES(
 [#define HAVE_INT 1
-/* #undef HAVE_STRUCT_NO */
-#define HAVE_STRUCT_YES 1
+/* #undef HAVE_STRUCT_NO_S */
+#define HAVE_STRUCT_YES_S 1
 ])])
+
 
 
 # AC_CHECK_TYPES

@@ -1,5 +1,15 @@
 2000-04-11  Akim Demaille  <akim@epita.fr>
 
+	Have `make check' succeed with CC=g++.
+
+	* tests/atspecific.m4 (AT_TEST_MACRO): Don't check `env-after' if
+	the file does not exist, which may happen when a `configure' exits
+	brutally.
+	* tests/semantics.m4 (AC_CHECK_MEMBERS, AC_CHECK_TYPES): ANSI C++
+	forbids members named like their hosting struct, so don't do it.
+
+2000-04-11  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl: Reindent using 2 spaces, not 4.
 	Use `#' to denote Autoconf comments, not `dnl'.
 	Put a few `\' here and there to avoid misfontification and

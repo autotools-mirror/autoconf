@@ -102,7 +102,12 @@ AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([../autoheader -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([top_srcdir=$top_srcdir ./configure], 0, ignore, ignore)
 test -n "$at_verbose" && echo "--- config.log" && cat config.log
-AT_CHECK([cat env-after], 0, expout)
+
+dnl Some tests might exit prematurely when they find a problem, in
+dnl which case `env-after is probably missing.  Don't check it then.
+if test -f env-after; then
+  AT_CHECK([cat env-after], 0, expout)
+fi
 $3
 AT_CLEANUP(configure config.status config.log config.cache config.hin config.h env-after)dnl
 ])dnl AT_TEST_MACRO
