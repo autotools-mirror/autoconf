@@ -52,7 +52,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 2.12.2)
+define(AC_ACVERSION, 2.13)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -1249,9 +1249,9 @@ dnl AC_LANG_FORTRAN77()
 AC_DEFUN(AC_LANG_FORTRAN77,
 [define([AC_LANG], [FORTRAN77])dnl
 ac_ext=f
-ac_compile='${FC-f77} -c $FFLAGS conftest.$ac_ext 1>&AC_FD_CC'
-ac_link='${FC-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
-cross_compiling=$ac_cv_prog_fc_cross
+ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext 1>&AC_FD_CC'
+ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+cross_compiling=$ac_cv_prog_f77_cross
 ])
 
 dnl Push the current language on a stack.
@@ -1534,7 +1534,7 @@ dnl ACTION-IF-NOT-FOUND.
 
 AC_DEFUN(AC_TRY_LINK_FUNC,
 AC_TRY_LINK(dnl
-ifelse([$2], [main], , dnl Avoid conflicting decl of main.
+ifelse([$1], [main], , dnl Avoid conflicting decl of main.
 [/* Override any gcc2 internal prototype to avoid an error.  */
 ]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
 extern "C"
@@ -1549,17 +1549,18 @@ char $1();
 [$3]))
 
 
-dnl AC_SEARCH_LIBS(func, searchlibs, [action-if-found], [action-if-not-found])
+dnl AC_SEARCH_LIBS(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND
+dnl            [, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
 dnl Search for a library defining FUNC, if it's not already available.
 
 AC_DEFUN(AC_SEARCH_LIBS,
-[AC_PREREQ([2.12])
+[AC_PREREQ([2.13])
 AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
 [ac_func_search_save_LIBS="$LIBS"
 ac_cv_search_$1="no"
 AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
 test "$ac_cv_search_$1" = "no" && for i in $2; do
-LIBS="-l$i $ac_func_search_save_LIBS"
+LIBS="-l$i $5 $ac_func_search_save_LIBS"
 AC_TRY_LINK_FUNC([$1],
 [ac_cv_search_$1="-l$i"
 break])
@@ -1905,7 +1906,7 @@ AC_DEFUN(AC_CHECK_FILES,
 do
 AC_CHECK_FILE($ac_file,
 [changequote(, )dnl
-  ac_tr_file=HAVE`echo $ac_file | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
+  ac_tr_file=HAVE_`echo $ac_file | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_file) $2], $3)dnl
 done

@@ -1,7 +1,88 @@
+1999-01-05  Ben Elliston  <bje@cygnus.com>
+
+	* Version 2.13.
+
+1999-01-04  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (AC_CHECK_FILE): Document.
+	(AC_CHECK_FILES): Likewise.
+	(AC_SEARCH_LIBS): Likewise.
+	(AC_FUNC_SELECT_ARGTYPES): Use Jeff Garzik's version.
+	(AC_C_STRINGIZE): Likewise.
+	(AC_CYGWIN): Document.
+	(AC_EXEEXT): Likewise.
+	(AC_OBJEXT): Likewise.
+	(AC_MINGW32): Likewise.
+	(AC_TRY_LINK_FUNC): Likewise.
+	(AC_VALIDATE_CACHED_SYSTEM_TUPLE): Likewise.
+	
+1999-01-01  Ben Elliston  <bje@cygnus.com>
+
+	* NEWS: Update.
+
+	* acspecific.m4 (AC_PROG_CXX_WORKS): Specify an explicit return
+	type for `main' to keep modern C++ compilers happy.
+
+1998-12-28  Jeff Garzik  <jgarzik@pobox.com>
+
+	* autoconf.texi:
+	  (AC_SEARCH_LIBS, AC_CHECK_FILE, AC_CHECK_FILES,
+	   AC_TRY_LINK_FUNC): Document.
+	  (AC_CHECK_LIB): Indicate the absence of
+	  	action-if-not-found will not kill default action.
+	  (AC_SYS_INTERPRETER): Alphabetize with rest of section,
+	  	s/ac_cv_sys_interpreter/interpval/
+
+	* acgeneral.m4:
+	  (AC_TRY_LINK_FUNC): Fix arg transposition.
+	  (AC_SEARCH_LIBS): Require autoconf 2.13, add other-libs arg.
+	  (AC_CHECK_FILES): Add underscore to HAVE_file define.
+
+	* acspecific.m4:
+	  (AC_SYS_INTERPRETER): New shell var 'interpval' stores
+	  	internal var ac_cv_sys_interpreter.
+
 1998-12-27  Ben Elliston  <bje@cygnus.com>
 
-	* config.guess: Handle BSD/OS variants for non-x86 machines.
-	Contributed by Chris P. Ross <cross@uu.net>.
+	* autoconf.texi (AC_PROG_INSTALL): Update.
+	(AC_FUNC_ALLOCA): Correct code fragment.
+	(AC_FUNC_SELECT_ARGTYPES): Document.
+	(AC_C_STRINGIZE): Likewise.
+	(AC_VALIDATE_CACHED_SYSTEM_TUPLE): Likewise.
+	
+	* acspecific.m4 (AC_CYGWIN): Rename from `AC_CYGWIN32'.
+	(AC_CYGWIN32): Warn about deprecated usage. Forward to AC_CYGWIN.
+
+	* config.sub: Drop `32' from `Cygwin32'.
+
+	* config.guess: Likewise.
+	Handle BSD/OS variants for non-x86 machines. Contributed by Chris
+	P. Ross <cross@uu.net>.
+
+	* NEWS: Update.
+
+	* configure: Rebuild.
+	
+1998-12-26  Ben Elliston  <bje@cygnus.com>
+
+	* autoreconf.sh (stamp): Add missing quote.
+
+	* mkinstalldirs: Write output which is not diagnostic to standard
+	output and not standard error. Suggested by Steve Robbins
+	<steve@nyongwa.montreal.qc.ca>.
+
+1998-12-11  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+	
+	* acconfig.h, acgeneral.m4, acspecific.m4, autoconf.texi: Change
+	all of the Fortran 77 code to use the new `F77' prefix instead of
+	the older `FC' prefix.
+
+1998-12-11  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_ACVERSION): Bump to 2.13.
+
+	* autoconf.texi (EDITION): Likewise.
+	(VERSION): Likewise.
 
 1998-10-30  Jeff Garzik <jgarzik@pobox.com>
 

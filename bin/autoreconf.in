@@ -127,7 +127,7 @@ while read dir; do
   then
      run_aclocal=yes
   else
-     if test -f `echo $aclocal | sed 's,/[^/]*,,;s,^$,.,'`/acinclude.m4
+     if test -f `echo $aclocal | sed 's,/*[^/]*$,,;s,^$,.,'`/acinclude.m4
      then
 	run_aclocal=yes
      fi
@@ -136,14 +136,14 @@ while read dir; do
   then
      if test $force = no &&
         ls -lt configure.in $aclocal \
-	       `echo $aclocal | sed 's,/[^/]*,,;s,^$,.,'`/acinclude.m4 |
+	       `echo $aclocal | sed 's,/*[^/]*$,,;s,^$,.,'`/acinclude.m4 |
 	  sed 1q |
           grep 'aclocal\.m4$' > /dev/null
      then
 	:
      else
 	test $verbose = yes && echo running aclocal in $dir, creating $aclocal
-	aclocal --output=$aclocal -I `echo $aclocal | sed 's,/[^/]*,,;s,^$,.,'`
+	aclocal --output=$aclocal -I `echo $aclocal | sed 's,/*[^/]*$,,;s,^$,.,'`
      fi
   fi
 
@@ -183,12 +183,12 @@ while read dir; do
 	: colon
 	s/:.*//
       '`
-    stamp=`echo $template | sed 's,/[^/]*$,,;s,^$,.,`/stamp-h`test "$tcount" -gt 1 && echo "$tcount"`.in
+    stamp=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`/stamp-h`test "$tcount" -gt 1 && echo "$tcount"`.in
     if test ! -f "$template" || grep autoheader "$template" >/dev/null; then
       if test $force = no && test -f $template &&
 	 ls -lt $template configure.in $aclocal $stamp 2>/dev/null \
-	        `echo $localdir_opt | sed 's/--localdir=//
-		                           s%\(.\)$%\1/%'`acconfig.h |
+	        `echo $localdir_opt | sed -e 's/--localdir=//' \
+		                          -e '/./ s%$%/%'`acconfig.h |
 	   sed 1q | egrep "$template$|$stamp$" > /dev/null
       then
         :

@@ -6,9 +6,9 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.12
-@set VERSION 2.12
-@set UPDATED November 1996
+@set EDITION 2.13
+@set VERSION 2.13
+@set UPDATED December 1998
 
 @iftex
 @finalout
@@ -56,12 +56,12 @@ by the Foundation.
 @subtitle Creating Automatic Configuration Scripts
 @subtitle Edition @value{EDITION}, for Autoconf version @value{VERSION}
 @subtitle @value{UPDATED}
-@author by David MacKenzie
+@author by David MacKenzie and Ben Elliston
 @c I think I've rewritten all of Noah and Roland's contributions by now.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 93, 94, 95, 96 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, 93, 94, 95, 96, 98 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -1056,7 +1056,7 @@ C++ features.
 @ovindex FFLAGS
 Debugging and optimization options for the Fortran 77 compiler.  If it
 is not set in the environment when @code{configure} runs, the default
-value is set when you call @code{AC_PROG_FC} (or empty if you don't).
+value is set when you call @code{AC_PROG_F77} (or empty if you don't).
 @code{configure} uses this variable when compiling programs to test for
 Fortran 77 features.
 @end defvar
@@ -1623,17 +1623,17 @@ calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
 @code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
 @end defmac
 
-@defmac  AC_PROG_FC
+@defmac  AC_PROG_F77
 @maindex PROG_FORTRAN
-@ovindex FC
+@ovindex F77
 @ovindex FFLAGS
-Determine a Fortran 77 compiler to use.  If @code{FC} is not already set
-in the environment, check for @code{g77}, @code{f77} and @code{f2c}, in
-that order.  Set the output variable @code{FC} to the name of the
+Determine a Fortran 77 compiler to use.  If @code{F77} is not already
+set in the environment, check for @code{g77}, @code{f77} and @code{f2c},
+in that order.  Set the output variable @code{F77} to the name of the
 compiler found.
 
 If using @code{g77} (the GNU Fortran 77 compiler), then
-@code{AC_PROG_FC} will set the shell variable @code{G77} to @samp{yes},
+@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes},
 and empty otherwise.  If the output variable @code{FFLAGS} was not
 already set in the environment, then set it to @samp{-g -02} for
 @code{g77} (or @samp{-O2} where @code{g77} does not accept @samp{-g}).
@@ -1641,11 +1641,11 @@ Otherwise, set @code{FFLAGS} to @samp{-g} for all other Fortran 77
 compilers.
 @end defmac
 
-@defmac AC_PROG_FC_C_O
-@maindex PROG_FC_C_O
-@cvindex FC_NO_MINUS_C_MINUS_O
+@defmac AC_PROG_F77_C_O
+@maindex PROG_F77_C_O
+@cvindex F77_NO_MINUS_C_MINUS_O
 Test if the Fortran 77 compiler accepts the options @samp{-c} and
-@samp{-o} simultaneously, and define @code{FC_NO_MINUS_C_MINUS_O} if it
+@samp{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
 does not.
 @end defmac
 
@@ -1665,13 +1665,14 @@ is becoming a less prevalent problem.
 @ovindex INSTALL
 @ovindex INSTALL_PROGRAM
 @ovindex INSTALL_DATA
+@ovindex INSTALL_SCRIPT
 Set output variable @code{INSTALL} to the path of a BSD compatible
 @code{install} program, if one is found in the current @code{PATH}.
 Otherwise, set @code{INSTALL} to @samp{@var{dir}/install-sh -c},
 checking the directories specified to @code{AC_CONFIG_AUX_DIR} (or its
 default directories) to determine @var{dir} (@pxref{Output}).  Also set
-the variable @code{INSTALL_PROGRAM} to @samp{$@{INSTALL@}} and
-@code{INSTALL_DATA} to @samp{$@{INSTALL@} -m 644}.
+the variables @code{INSTALL_PROGRAM} and @code{INSTALL_SCRIPT} to
+@samp{$@{INSTALL@}} and @code{INSTALL_DATA} to @samp{$@{INSTALL@} -m 644}.
 
 This macro screens out various instances of @code{install} known to not
 work.  It prefers to find a C program rather than a shell script, for
@@ -1745,7 +1746,7 @@ to @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 @end defmac
 
 @node Generic Programs,  , Particular Programs, Alternative Programs
-@subsection Generic Program Checks
+@subsection Generic Program and File Checks
 
 These macros are used to find programs not covered by the particular
 test macros.  If you need to check the behavior of a program as well as
@@ -1759,6 +1760,19 @@ instead, like this:
 AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd,
   $PATH:/usr/libexec:/usr/sbin:/usr/etc:etc)
 @end example
+
+@defmac AC_CHECK_FILE (@var{file} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex CHECK_FILE
+Check whether file @var{file} exists on the native system.
+If it is found, execute @var{action-if-found}, otherwise do
+@var{action-if-not-found}, if given.
+@end defmac
+
+@defmac AC_CHECK_FILES (@var{files}@r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex CHECK_FILES
+Executes @code{AC_CHECK_FILE} once for each file listed in @var{files}.
+Additionally, defines @samp{HAVE@var{file}} for each file found, set to 1.
+@end defmac
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found} @r{[}, @var{path}, @r{[} @var{reject} @r{]]]})
 @maindex CHECK_PROG
@@ -1827,11 +1841,10 @@ name of the library; e.g., to check for @samp{-lmp}, use @samp{mp} as
 the @var{library} argument.
 
 @var{action-if-found} is a list of shell commands to run if the link
-with the library succeeds; @var{action-if-not-found} is a list of shell
-commands to run if the link fails.  If @var{action-if-found} and
-@var{action-if-not-found} are not specified, the default action is to
-add @samp{-l@var{library}} to @code{LIBS} and define
-@samp{HAVE_LIB@var{library}} (in all capitals).
+with the library succeeds; @var{action-if-not-found} is a list of
+shell commands to run if the link fails.  If @var{action-if-found} is
+not specified, the default action will add @samp{-l@var{library}} to
+@code{LIBS} and define @samp{HAVE_LIB@var{library}} (in all capitals).
 
 If linking with @var{library} results in unresolved symbols, which would
 be resolved by linking with additional libraries, give those libraries
@@ -1849,6 +1862,32 @@ be written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In
 all of those cases, the compiler is passed @samp{-lfoo}.  However,
 @var{library} can not be a shell variable; it must be a literal name.
 This macro is considered obsolete.
+@end defmac
+
+@defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs} @r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found} @r{[}, @var{other-libraries}@r{]]]})
+@maindex SEARCH_LIBS
+Search for a library defining @var{function}, if it's not already
+available.  This equates to calling @code{AC_TRY_LINK_FUNC} first
+with no libraries, then for each library listed in @var{search-libs}.
+
+If the function is found, run @var{action-if-found}, otherwise run
+@var{action-if-not-found}.
+
+If linking with @var{library} results in unresolved symbols, which would
+be resolved by linking with additional libraries, give those libraries
+as the @var{other-libraries} argument, separated by spaces: @samp{-lXt
+-lX11}.  Otherwise this macro will fail to detect that @var{function} is
+present, because linking the test program will always fail with
+unresolved symbols.
+@end defmac
+
+@defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}@r{[}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex SEARCH_LIBS
+This macro is equivalent to calling @code{AC_TRY_LINK_FUNC} once for each
+library listed in @var{search-libs}.  Add @samp{-l@var{library}} to
+@code{LIBS} for the first library found to contain @var{function}, and
+execute @var{action-if-found}.  Otherwise execute
+@var{action-if-not-found}.
 @end defmac
 
 @node Library Functions, Header Files, Libraries, Existing Tests
@@ -1906,9 +1945,7 @@ rather than choke on it.
 @example
 @group
 /* AIX requires this to be the first thing in the file.  */
-#ifdef __GNUC__
-# define alloca __builtin_alloca
-#else
+#ifndef __GNUC__
 # if HAVE_ALLOCA_H
 #  include <alloca.h>
 # else
@@ -2019,6 +2056,19 @@ variable @code{LIBOBJS}.
 If the @code{mmap} function exists and works correctly, define
 @code{HAVE_MMAP}.  Only checks private fixed mapping of already-mapped
 memory.
+@end defmac
+
+@defmac AC_FUNC_SELECT_ARGTYPES
+@maindex FUNC_SELECT_ARGTYPES
+@cvindex SELECT_TYPE_ARG1
+@cvindex SELECT_TYPE_ARG234
+@cvindex SELECT_TYPE_ARG5
+Determines the correct type to be passed to each of the
+@code{select} function's arguments, and defines those types
+in @code{SELECT_TYPE_ARG1}, @code{SELECT_TYPE_ARG234}, and
+@code{SELECT_TYPE_ARG5} respectively.  @code{SELECT_TYPE_ARG1} defaults
+to @samp{int}, @code{SELECT_TYPE_ARG234} defaults to @samp{int *},
+and @code{SELECT_TYPE_ARG5} defaults to @samp{struct timeval *}.
 @end defmac
 
 @defmac AC_FUNC_SETPGRP
@@ -2653,6 +2703,18 @@ If the C compiler supports the @code{long double} type, define
 that define @code{__STDC__} do not support @code{long double}.
 @end defmac
 
+@defmac AC_C_STRINGIZE
+@maindex C_STRINGIZE
+@cvindex HAVE_STRINGIZE
+If the C preprocessor supports the stringizing operator, define
+@code{HAVE_STRINGIZE}.  The stringizing operator is @samp{#} and is
+found in macros such as this:
+
+@example
+#define x(y) #y
+@end example
+@end defmac
+
 @defmac AC_CHECK_SIZEOF (@var{type} @r{[}, @var{cross-size}@r{]})
 @maindex CHECK_SIZEOF
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
@@ -2729,13 +2791,34 @@ libraries.
 
 The following macros check for operating system services or capabilities.
 
-@defmac AC_SYS_INTERPRETER
-@maindex SYS_INTERPRETER
-Check whether the system supports starting scripts with a line of the
-form @samp{#! /bin/csh} to select the interpreter to use for the script.
-After running this macro, shell code in @code{configure.in} can check
-the variable @code{ac_cv_sys_interpreter}; it will be set to @samp{yes}
-if the system supports @samp{#!}, @samp{no} if not.
+@defmac AC_CYGWIN
+@maindex CYGWIN
+Checks for the Cygwin environment.  If present, sets shell variable
+@code{CYGWIN} to @samp{yes}.  If not present, sets @code{CYGWIN}
+to the empty string.
+@end defmac
+
+@defmac AC_EXEEXT
+@maindex EXEEXT
+@ovindex EXEEXT
+Defines substitute variable @code{EXEEXT} based on the output of the
+compiler, after .c, .o, and .obj files have been excluded.  Typically
+set to empty string if Unix, @samp{.exe} or @samp{.EXE} if Win32.
+@end defmac
+
+@defmac AC_OBJEXT
+@maindex OBJEXT
+@ovindex OBJEXT
+Defines substitute variable @code{OBJEXT} based on the output of the
+compiler, after .c files have been excluded.  Typically
+set to @samp{.o} if Unix, @samp{.obj} if Win32.
+@end defmac
+
+@defmac AC_MINGW32
+@maindex MINGW32
+Checks for the MingW32 compiler environment.  If present, sets shell
+variable @code{MINGW32} to @samp{yes}.  If not present, sets
+@code{MINGW32} to the empty string.
 @end defmac
 
 @defmac AC_PATH_X
@@ -2776,7 +2859,16 @@ found to the output variable @code{X_PRE_LIBS}.
 @c This is an incomplete kludge.  Make a real way to do it.
 @c If you need to check for other X functions or libraries yourself, then
 @c after calling this macro, add the contents of @code{X_EXTRA_LIBS} to
-@c @code{LIBS} temporarily, like this:
+@c @code{LIBS} temporarily, like this: (FIXME - add example)
+@end defmac
+
+@defmac AC_SYS_INTERPRETER
+@maindex SYS_INTERPRETER
+Check whether the system supports starting scripts with a line of the
+form @samp{#! /bin/csh} to select the interpreter to use for the script.
+After running this macro, shell code in @code{configure.in} can check
+the shell variable @code{interpval}; it will be set to @samp{yes}
+if the system supports @samp{#!}, @samp{no} if not.
 @end defmac
 
 @defmac AC_SYS_LONG_FILE_NAMES
@@ -3035,6 +3127,24 @@ be used during linking in all cases.
 
 If the file compiles and links successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.
+@end defmac
+
+@defmac AC_TRY_LINK_FUNC (@var{function}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex TRY_LINK_FUNC
+Depending on the current language (@pxref{Language Choice}), create a
+test program to see whether a program whose body consists of
+a prototype of and a call to @var{function} can be compiled and linked.
+
+If the file compiles and links successfully, run shell commands
+@var{action-if-found}, otherwise run @var{action-if-not-found}.
+@end defmac
+
+@defmac AC_TRY_LINK_FUNC (@var{function}, @r{[}@var{action-if-found} @r{[}, @var{action-if-not-found}@r{]]})
+@maindex TRY_LINK_FUNC
+Attempt to compile and link a small program that links with
+@var{function}.  If the file compiles and links successfully,
+run shell commands @var{action-if-found}, otherwise run
+@var{action-if-not-found}.
 @end defmac
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
@@ -3323,9 +3433,10 @@ it has been run, empty otherwise.
 
 @defmac AC_LANG_FORTRAN77
 @maindex LANG_FORTRAN77
-Do compilation tests using @code{FC} and use extension @file{.f} for
+Do compilation tests using @code{F77} and use extension @file{.f} for
 test programs.  Set the shell variable @code{cross_compiling} to the
-value computed by @code{AC_PROG_FC} if it has been run, empty otherwise.
+value computed by @code{AC_PROG_F77} if it has been run, empty
+otherwise.
 @end defmac
 
 @defmac AC_LANG_SAVE
@@ -4135,6 +4246,13 @@ the variables this macro sets.
 Perform only the subset of @code{AC_CANONICAL_SYSTEM} relevant to the
 host type.  This is all that is needed for programs that are not part of
 a compiler toolchain.
+@end defmac
+
+@defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@var{cmd})
+@maindex VALIDATE_CACHED_SYSTEM_TUPLE
+If the cache file is inconsistent with the current host,
+target and build system types, execute @var{cmd} or print a default
+error message.
 @end defmac
 
 @node System Type Variables, Using System Type, Canonicalizing, Manual Configuration
