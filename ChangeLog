@@ -1,5 +1,18 @@
 2001-08-03  Akim Demaille  <akim@epita.fr>
 
+	Clean up the handling of the M4 builtins tracing exception.
+
+	* bin/autom4te.in (Request::request): Don't complete M4 builtins
+	trace requests.
+	(@m4_builtins): Rename as...
+	(@m4_builtin): this.
+	(%m4_builtin_alternate_name): New.
+	(&parse_args): Complete the trace requests with alternate names.
+	(&handle_traces): Hence no longer do it here.
+	(&trace_requests): Remove, unused.
+
+2001-08-03  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Redefined M4 Macros): Document m4_exit,
 	m4_if, and m4_wrap.
 
