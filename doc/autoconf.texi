@@ -3397,8 +3397,9 @@ specific files, and then program as if you were in a @sc{posix}
 environment.  Some functions may be missing or unfixable, and your
 package must be ready to replace them.
 
-Use the first two following macros to specify a function to be replaced,
-and use the third one to check for and replace the function if needed.
+Use the first three of the following macros to specify a function to be
+replaced, and the last one (@code{AC_REPLACE_FUNCS}) to check for and
+replace the function if needed.
 
 @defmac AC_LIBOBJ (@var{function})
 @maindex LIBOBJ
@@ -3406,45 +3407,61 @@ and use the third one to check for and replace the function if needed.
 Specify that @samp{@var{function}.c} must be included in the executables
 to replace a missing or broken implementation of @var{function}.
 
-Technically it adds @samp{@var{function}.$ac_objext} to the output
-variable @code{LIBOBJS}, nevertheless you must not directly change
-@code{LIBOBJS} since this is not traceable.
+Technically, it adds @samp{@var{function}.$ac_objext} to the output
+variable @code{LIBOBJS} and calls @code{AC_LIBSOURCE} for
+@samp{@var{function}.c}.  You should not directly change @code{LIBOBJS},
+since this is not traceable.
 @end defmac
 
-@defmac AC_LIBOBJ_DECL (@var{function})
-@maindex LIBOBJ_DECL
-@ovindex LIBOBJS
-Specify that @samp{@var{function}.c} might be needed to compile the
-project.  You must use this macro when you are calling @code{AC_LIBOBJ}
-with a shell variable, since shell variables cannot be traced
-statically.  @var{function} must be a literal.
+@defmac AC_LIBSOURCE (@var{file})
+@maindex LIBSOURCE
+Specify that @var{file} might be needed to compile the project.  If you
+need to know what files might be needed by a @file{configure.ac}, you
+should trace @code{AC_LIBSOURCE}.  @var{file} must be a literal.
 
-For instance you might need to:
+This macro is called automatically from @code{AC_LIBOBJ}, but you must
+call it explicitly if you pass a shell variable to @code{AC_LIBOBJ}.  In
+that case, since shell variables cannot be traced statically, you must
+pass to @code{AC_LIBSOURCE} any possible files that the shell variable
+might cause @code{AC_LIBOBJ} to need.  For example, if you want to pass
+a variable @code{$foo_or_bar} to @code{AC_LIBOBJ} that holds either
+@code{"foo"} or @code{"bar"}, you should do:
 
 @example
-AC_LIBOBJ_DECL(foo)
-AC_LIBOBJ_DECL(bar)
+AC_LIBSOURCE(foo.c)
+AC_LIBSOURCE(bar.c)
 AC_LIBOBJ($foo_or_bar)
 @end example
 
 @noindent
-nevertheless, there is always a means to avoid this, and you are
-encouraged to always uses literals with @code{AC_LIBOBJ}.
+There is usually a way to avoid this, however, and you are encouraged to
+simply call @code{AC_LIBOBJ} with literal arguments.
 
-Conversely, if you need to know what are the files that might be needed
-by a @file{configure.ac}, you should trace @code{AC_LIBOBJ_DECL}.
+Note that this macro replaces the obsolete @code{AC_LIBOBJ_DECL}, with
+slightly different semantics: the old macro took the function name,
+e.g. @code{foo}, as its argument rather than the file name.
 @end defmac
 
+@defmac AC_LIBSOURCES (@var{files})
+@maindex LIBSOURCES
+Like @code{AC_LIBSOURCE}, but accepts one or more @var{files} in a
+comma-separated M4 list.  Thus, the above example might be rewritten:
+
+@example
+AC_LIBSOURCES([foo.c, bar.c])
+AC_LIBOBJ($foo_or_bar)
+@end example
+@end defmac
 
 @defmac AC_REPLACE_FUNCS (@var{function}@dots{})
 @maindex REPLACE_FUNCS
 @ovindex LIBOBJS
-Like calling @code{AC_CHECK_FUNCS}, but using
-@samp{AC_LIBOBJ(@var{function})} as @var{action-if-not-found}.  You can
-declare your replacement function by enclosing the prototype in
-@samp{#if !HAVE_@var{function}}.  If the system has the function, it
-probably declares it in a header file you should be including, so you
-shouldn't redeclare it lest your declaration conflict.
+Like @code{AC_CHECK_FUNCS}, but uses @samp{AC_LIBOBJ(@var{function})} as
+@var{action-if-not-found}.  You can declare your replacement function by
+enclosing the prototype in @samp{#if !HAVE_@var{function}}.  If the
+system has the function, it probably declares it in a header file you
+should be including, so you shouldn't redeclare it lest your declaration
+conflict.
 @end defmac
 
 @node Header Files, Declarations, Library Functions, Existing Tests
