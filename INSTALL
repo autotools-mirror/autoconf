@@ -13,9 +13,10 @@ file `config.log' containing compiler output (useful mainly for
 debugging `configure').
 
    It can also use an optional file (typically called `config.cache'
-and enabled with `--cache-file=./config.cache') that saves the results
-of its tests to speed up reconfiguring.  (Caching is disabled by
-default to prevent problems with accidental use of stale cache files.)
+and enabled with `--cache-file=./config.cache' or simply `-C') that
+saves the results of its tests to speed up reconfiguring.  (Caching is
+disabled by default to prevent problems with accidental use of stale
+cache files.)
 
    If you need to do unusual things to compile the package, please try
 to figure out how `configure' could check whether to do them, and mail
@@ -65,6 +66,7 @@ for details on some of the pertinent environment variables.
 
    You can give `configure' initial values for variables by setting
 them in the environment.  You can do that on the command line like this:
+
      ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
 
    *Note Environment Variables::, for more details.
@@ -132,17 +134,22 @@ automatically, but needs to determine by the type of host the package
 will run on.  Usually `configure' can figure that out, but if it prints
 a message saying it cannot guess the host type, give it the
 `--host=TYPE' option.  TYPE can either be a short name for the system
-type, such as `sun4', or a canonical name with three fields:
+type, such as `sun4', or a canonical name which has the form:
+
      CPU-COMPANY-SYSTEM
 
-See the file `config.sub' for the possible values of each field.  If
+where SYSTEM can have one of these forms:
+
+     OS
+     KERNEL-OS
+
+   See the file `config.sub' for the possible values of each field.  If
 `config.sub' isn't included in this package, then this package doesn't
 need to know the host type.
 
    If you are building compiler tools for cross-compiling, you can also
 use the `--target=TYPE' option to select the type of system they will
-produce code for and the `--build=TYPE' option to select the type of
-system on which you are compiling the package.
+produce code for.
 
 Sharing Defaults
 ================
@@ -169,18 +176,8 @@ them in the `configure' command line, using `VAR=value'.  For example:
 will cause the specified gcc to be used as the C compiler (unless it is
 overridden in the site shell script).
 
-   Please, note that the former interface:
-
-     CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-
-or
-
-     env CC=c89 CFLAGS=-O2 LIBS=-lposix ./configure
-
-should be avoided.
-
-Operation Controls
-==================
+`configure' Invocation
+======================
 
    `configure' recognizes the following options to control how it
 operates.
@@ -198,6 +195,10 @@ operates.
      Enable the cache: use and save the results of the tests in FILE,
      traditionally `./config.cache'.  FILE defaults to `/dev/null' to
      disable caching.
+
+`--config-cache'
+`-C'
+     Alias for `--cache-file=config.cache'.
 
 `--quiet'
 `--silent'

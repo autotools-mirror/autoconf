@@ -797,7 +797,7 @@ encountered.  Lines starting with @samp{#} are comments.
 @code{autoscan} is only installed if you already have Perl installed.
 @code{autoscan} accepts the following options:
 
-@table @code
+@table @option
 @item --help
 Print a summary of the command line options and exit.
 
@@ -839,7 +839,7 @@ space-separated list of the files in which that identifier occurs.
 @noindent
 @code{ifnames} accepts the following options:
 
-@table @code
+@table @option
 @item --help
 @itemx -h
 Print a summary of the command line options and exit.
@@ -859,7 +859,7 @@ To create @code{configure} from @file{configure.in}, run the
 Autoconf macros.  If you give @code{autoconf} an argument, it reads that
 file instead of @file{configure.in} and writes the configuration script
 to the standard output instead of to @code{configure}.  If you give
-@code{autoconf} the argument @samp{-}, it reads the standard input
+@code{autoconf} the argument @option{-}, it reads the standard input
 instead of @file{configure.in} and writes the configuration script on
 the standard output.
 
@@ -875,7 +875,7 @@ definition it reads overrides the earlier ones.
 
 @code{autoconf} accepts the following options:
 
-@table @code
+@table @option
 @item --help
 @itemx -h
 Print a summary of the command line options and exit.
@@ -906,7 +906,7 @@ instead of in the current directory.
 
 @item --output=@var{file}
 @itemx -o @var{file}
-Save output (script or trace) to @var{file}.  The file @samp{-} stands
+Save output (script or trace) to @var{file}.  The file @option{-} stands
 for the standard output.
 
 @item --warnings=@var{category}
@@ -920,13 +920,13 @@ treats warnings as errors.
 
 The soon-do-be-standard environment variable @code{WARNINGS} is
 supported: it consists in a comma separated list of categories.  It is
-honored iff @samp{--warnings} was not used.
+honored iff @option{--warnings} was not used.
 
 @item --trace=@var{macro}[:@var{format}]
 @itemx -t @var{macro}[:@var{format}]
 Do not create the @code{configure} script, but list the calls to
-@var{macro} according to the @var{format}.  Multiple @samp{--trace} list
-several macros.  Multiple @samp{--trace} for a single macro do not
+@var{macro} according to the @var{format}.  Multiple @option{--trace} list
+several macros.  Multiple @option{--trace} for a single macro do not
 accumulate, nevertheless, @var{format} can be arbitrarily long.
 
 The @var{format} is a regular string, with new lines if wanted.  It
@@ -935,7 +935,7 @@ defaults to @samp{$f:$l:$n:$%}, see below for details on the
 
 @item --initialization
 @itemx -i
-By default @samp{--trace} does not trace the initialization of the
+By default @option{--trace} does not trace the initialization of the
 Autoconf macros (typically the @code{AC_DEFUN} definitions).  This
 results in a noticeable speedup, but can be disabled by this option.
 @end table
@@ -943,9 +943,9 @@ results in a noticeable speedup, but can be disabled by this option.
 
 It is often needed to check the content of a @file{configure.in} file,
 but it is extremely fragile and error prone to try to parse it.  It is
-suggested to rely upon @samp{--trace} to scan @file{configure.in}.
+suggested to rely upon @option{--trace} to scan @file{configure.in}.
 
-The @var{format} of @samp{--trace} can use the following special
+The @var{format} of @option{--trace} can use the following special
 escapes:
 
 @table @samp
@@ -1065,10 +1065,10 @@ default, it only remakes those files that are older than their
 the file wouldn't be changing, this is not necessarily the minimum
 amount of work.  If you install a new version of Autoconf, you can make
 @code{autoreconf} remake @emph{all} of the files by giving it the
-@samp{--force} option.
+@option{--force} option.
 
-If you give @code{autoreconf} the @samp{--macrodir=@var{dir}} or
-@samp{--localdir=@var{dir}} options, it passes them down to
+If you give @code{autoreconf} the @option{--macrodir=@var{dir}} or
+@option{--localdir=@var{dir}} options, it passes them down to
 @code{autoconf} and @code{autoheader} (with relative paths adjusted
 properly).
 
@@ -1077,20 +1077,20 @@ both directories that are parts of a larger package (sharing
 @file{aclocal.m4} and @file{acconfig.h}), and directories that are
 independent packages (each with their own @file{aclocal.m4} and
 @file{acconfig.h}).  It assumes that they are all part of the same
-package, if you use @samp{--localdir}, or that each directory is a
+package, if you use @option{--localdir}, or that each directory is a
 separate package, if you don't use it.  This restriction may be removed
 in the future.
 
 @xref{Automatic Remaking}, for @file{Makefile} rules to automatically
 remake @code{configure} scripts when their source files change.  That
 method handles the timestamps of configuration header templates
-properly, but does not pass @samp{--macrodir=@var{dir}} or
-@samp{--localdir=@var{dir}}.
+properly, but does not pass @option{--macrodir=@var{dir}} or
+@option{--localdir=@var{dir}}.
 
 @noindent
 @code{autoreconf} accepts the following options:
 
-@table @code
+@table @option
 @item --help
 @itemx -h
 Print a summary of the command line options and exit.
@@ -1232,7 +1232,7 @@ the email to which users should send bug reports.
 source directory; @code{configure} checks for this file's existence to
 make sure that the directory that it is told contains the source code in
 fact does.  Occasionally people accidentally specify the wrong directory
-with @samp{--srcdir}; this is a safety check.  @xref{configure
+with @option{--srcdir}; this is a safety check.  @xref{configure
 Invocation}, for more information.
 @end defmac
 
@@ -1583,7 +1583,7 @@ uses this variable when compiling programs to test for C features.
 
 @defvar CPPFLAGS
 @ovindex CPPFLAGS
-Header file search directory (@samp{-I@var{dir}}) and any other
+Header file search directory (@option{-I@var{dir}}) and any other
 miscellaneous options for the C and C++ preprocessors and compilers.  If
 it is not set in the environment when @code{configure} runs, the default
 value is empty.  @code{configure} uses this variable when compiling or
@@ -1630,9 +1630,9 @@ Fortran 77 features.
 
 @defvar DEFS
 @ovindex DEFS
-@samp{-D} options to pass to the C compiler.  If @code{AC_CONFIG_HEADERS}
+@option{-D} options to pass to the C compiler.  If @code{AC_CONFIG_HEADERS}
 is called, @code{configure} replaces @samp{@@DEFS@@} with
-@samp{-DHAVE_CONFIG_H} instead (@pxref{Configuration Headers}).  This
+@option{-DHAVE_CONFIG_H} instead (@pxref{Configuration Headers}).  This
 variable is not defined while @code{configure} is performing its tests,
 only when creating the output files.  @xref{Setting Output Variables}, for
 how to check the results of previous tests.
@@ -1640,7 +1640,7 @@ how to check the results of previous tests.
 
 @defvar LDFLAGS
 @ovindex LDFLAGS
-Stripping (@samp{-s}), path (@samp{-L}), and any other miscellaneous
+Stripping (@option{-s}), path (@option{-L}), and any other miscellaneous
 options for the linker.  If it is not set in the environment when
 @code{configure} runs, the default value is empty.  @code{configure}
 uses this variable when linking programs to test for C features.
@@ -1648,7 +1648,7 @@ uses this variable when linking programs to test for C features.
 
 @defvar LIBS
 @ovindex LIBS
-@samp{-l} options to pass to the linker.
+@option{-l} options to pass to the linker.
 @end defvar
 
 @node Build Directories, Automatic Remaking, Preset Output Variables, Makefile Substitutions
@@ -1755,11 +1755,11 @@ configuration-related dependencies.
 @cindex @file{config.h}
 
 When a package tests more than a few C preprocessor symbols, the command
-lines to pass @samp{-D} options to the compiler can get quite long.
+lines to pass @option{-D} options to the compiler can get quite long.
 This causes two problems.  One is that the @code{make} output is hard to
 visually scan for errors.  More seriously, the command lines can exceed
 the length limits of some operating systems.  As an alternative to
-passing @samp{-D} options to the compiler, @code{configure} scripts can
+passing @option{-D} options to the compiler, @code{configure} scripts can
 create a C header file containing @samp{#define} directives.  The
 @code{AC_CONFIG_HEADERS} macro selects this kind of output.  It should
 be called right after @code{AC_INIT}.
@@ -1768,7 +1768,7 @@ The package should @samp{#include} the configuration header file before
 any other header files, to prevent inconsistencies in declarations (for
 example, if it redefines @code{const}).  Use @samp{#include <config.h>}
 instead of @samp{#include "config.h"}, and pass the C compiler a
-@samp{-I.} option (or @samp{-I..}; whichever directory contains
+@option{-I.} option (or @option{-I..}; whichever directory contains
 @file{config.h}).  That way, even if the source directory is configured
 itself (perhaps to make a distribution), other build directories can
 also be configured without finding the @file{config.h} from the source
@@ -1780,7 +1780,7 @@ directory.
 Make @code{AC_OUTPUT} create the file(s) in the whitespace-separated
 list @var{header} containing C preprocessor @code{#define} statements,
 and replace @samp{@@DEFS@@} in generated files with
-@samp{-DHAVE_CONFIG_H} instead of the value of @code{DEFS}.  The usual
+@option{-DHAVE_CONFIG_H} instead of the value of @code{DEFS}.  The usual
 name for @var{header} is @file{config.h}.
 
 If @var{header} already exists and its contents are identical to what
@@ -1872,12 +1872,12 @@ arguments are given, the first one is used.  Otherwise,
 If you give @code{autoheader} an argument, it uses that file instead of
 @file{configure.in} and writes the header file to the standard output
 instead of to @file{config.h.in}.  If you give @code{autoheader} an
-argument of @samp{-}, it reads the standard input instead of
+argument of @option{-}, it reads the standard input instead of
 @file{configure.in} and writes the header file to the standard output.
 
 @code{autoheader} accepts the following options:
 
-@table @code
+@table @option
 @item --help
 @itemx -h
 Print a summary of the command line options and exit.
@@ -1922,7 +1922,7 @@ treats warnings as errors
 
 The soon-do-be-standard environment variable @code{WARNINGS} is
 supported: it consists in a comma separated list of categories.  It is
-honored iff @samp{--warnings} was not used.
+honored iff @option{--warnings} was not used.
 @end table
 
 @node Autoheader Macros,  , autoheader Invocation, Configuration Headers
@@ -2151,7 +2151,7 @@ times.
 
 By default, @code{configure} sets the prefix for files it installs to
 @file{/usr/local}.  The user of @code{configure} can select a different
-prefix using the @samp{--prefix} and @samp{--exec-prefix} options.
+prefix using the @option{--prefix} and @option{--exec-prefix} options.
 There are two ways to change the default: when creating
 @code{configure}, and when running it.
 
@@ -2172,7 +2172,7 @@ have already installed.  If you wish to do that, you can call
 @defmac AC_PREFIX_PROGRAM (@var{program})
 @maindex PREFIX_PROGRAM
 If the user did not specify an installation prefix (using the
-@samp{--prefix} option), guess a value for it by looking for
+@option{--prefix} option), guess a value for it by looking for
 @var{program} in @code{PATH}, the way the shell does.  If @var{program}
 is found, set the prefix to the parent of the directory containing
 @var{program}; otherwise leave the prefix specified in
@@ -2389,9 +2389,9 @@ not found in standard @code{install} programs, there is no reason to use
 @cvindex YYTEXT_POINTER
 @ovindex LEX_OUTPUT_ROOT
 If @code{flex} is found, set output variable @code{LEX} to @samp{flex}
-and @code{LEXLIB} to @samp{-lfl}, if that library is in a standard
+and @code{LEXLIB} to @option{-lfl}, if that library is in a standard
 place.  Otherwise set @code{LEX} to @samp{lex} and @code{LEXLIB} to
-@samp{-ll}.
+@option{-ll}.
 
 Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
 of a @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
@@ -2566,13 +2566,13 @@ Depending on the current language(@pxref{Language Choice}), try to
 ensure that the C, C++ or Fortran 77 function @var{function} is
 available by checking whether a test program can be linked with the
 library @var{library} to get the function.  @var{library} is the base
-name of the library; e.g., to check for @samp{-lmp}, use @samp{mp} as
+name of the library; e.g., to check for @option{-lmp}, use @samp{mp} as
 the @var{library} argument.
 
 @var{action-if-found} is a list of shell commands to run if the link
 with the library succeeds; @var{action-if-not-found} is a list of shell
 commands to run if the link fails.  If @var{action-if-found} is not
-specified, the default action will prepend @samp{-l@var{library}} to
+specified, the default action will prepend @option{-l@var{library}} to
 @code{LIBS} and define @samp{HAVE_LIB@var{library}} (in all
 capitals). This macro is intended to support building of @code{LIBS} in
 a right-to-left (least-dependent to most-dependent) fashion such that
@@ -2583,7 +2583,7 @@ detection of libraries.
 
 If linking with @var{library} results in unresolved symbols, which would
 be resolved by linking with additional libraries, give those libraries
-as the @var{other-libraries} argument, separated by spaces: @samp{-lXt
+as the @var{other-libraries} argument, separated by spaces: @option{-lXt
 -lX11}.  Otherwise this macro will fail to detect that @var{library} is
 present, because linking the test program will always fail with
 unresolved symbols. The @var{other-libraries} argument should be limited
@@ -2598,13 +2598,13 @@ Search for a library defining @var{function}, if it's not already
 available.  This equates to calling @code{AC_TRY_LINK_FUNC} first
 with no libraries, then for each library listed in @var{search-libs}.
 
-Add @samp{-l@var{library}} to @code{LIBS} for the first library found
+Add @option{-l@var{library}} to @code{LIBS} for the first library found
 to contain @var{function}, and run @var{action-if-found}.  If the
 function is not found, run @var{action-if-not-found}.
 
 If linking with @var{library} results in unresolved symbols, which would
 be resolved by linking with additional libraries, give those libraries
-as the @var{other-libraries} argument, separated by spaces: @samp{-lXt
+as the @var{other-libraries} argument, separated by spaces: @option{-lXt
 -lX11}.  Otherwise this macro will fail to detect that @var{function} is
 present, because linking the test program will always fail with
 unresolved symbols.
@@ -2688,7 +2688,7 @@ char *alloca ();
 @defmac AC_FUNC_CHOWN
 @maindex FUNC_CHOWN
 If the @code{chown} function is available and works (in particular it
-should accept @samp{-1} for @code{uid} and @code{gid}), define
+should accept @option{-1} for @code{uid} and @code{gid}), define
 @code{HAVE_CHOWN}.
 @end defmac
 
@@ -3663,14 +3663,14 @@ AC_PROG_CC(cl egcs gcc cc)
 
 If using the @sc{gnu} C compiler, set shell variable @code{GCC} to
 @samp{yes}.  If output variable @code{CFLAGS} was not already set, set
-it to @samp{-g -O2} for the @sc{gnu} C compiler (@samp{-O2} on systems
-where GCC does not accept @samp{-g}), or @samp{-g} for other compilers.
+it to @option{-g -O2} for the @sc{gnu} C compiler (@option{-O2} on systems
+where GCC does not accept @option{-g}), or @option{-g} for other compilers.
 @end defmac
 
 @defmac AC_PROG_CC_C_O
 @maindex PROG_CC_C_O
 @cvindex NO_MINUS_C_MINUS_O
-If the C compiler does not accept the @samp{-c} and @samp{-o} options
+If the C compiler does not accept the @option{-c} and @option{-o} options
 simultaneously, define @code{NO_MINUS_C_MINUS_O}.  This macro actually
 tests both the compiler found by @code{AC_PROG_CC}, and, if different,
 the first @code{cc} in the path.  The test fails if one fails.  This
@@ -3735,8 +3735,8 @@ AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
 
 If using the @sc{gnu} C++ compiler, set shell variable @code{GXX} to
 @samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
-it to @samp{-g -O2} for the @sc{gnu} C++ compiler (@samp{-O2} on systems
-where G++ does not accept @samp{-g}), or @samp{-g} for other compilers.
+it to @option{-g -O2} for the @sc{gnu} C++ compiler (@option{-O2} on systems
+where G++ does not accept @option{-g}), or @option{-g} for other compilers.
 @end defmac
 
 @defmac AC_PROG_CXXCPP
@@ -3776,25 +3776,25 @@ AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90)
 If using @code{g77} (the @sc{gnu} Fortran 77 compiler), then
 @code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes}.
 If the output variable @code{FFLAGS} was not already set in the
-environment, then set it to @samp{-g -02} for @code{g77} (or @samp{-O2}
-where @code{g77} does not accept @samp{-g}).  Otherwise, set
-@code{FFLAGS} to @samp{-g} for all other Fortran 77 compilers.
+environment, then set it to @option{-g -02} for @code{g77} (or @option{-O2}
+where @code{g77} does not accept @option{-g}).  Otherwise, set
+@code{FFLAGS} to @option{-g} for all other Fortran 77 compilers.
 @end defmac
 
 @defmac AC_PROG_F77_C_O
 @maindex PROG_F77_C_O
 @cvindex F77_NO_MINUS_C_MINUS_O
-Test if the Fortran 77 compiler accepts the options @samp{-c} and
-@samp{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
+Test if the Fortran 77 compiler accepts the options @option{-c} and
+@option{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
 does not.
 @end defmac
 
 @defmac AC_PROG_GCC_TRADITIONAL
 @maindex PROG_GCC_TRADITIONAL
 @ovindex CC
-Add @samp{-traditional} to output variable @code{CC} if using the
+Add @option{-traditional} to output variable @code{CC} if using the
 @sc{gnu} C compiler and @code{ioctl} does not work properly without
-@samp{-traditional}.  That usually happens when the fixed header files
+@option{-traditional}.  That usually happens when the fixed header files
 have not been installed on an old system.  Since recent versions of the
 @sc{gnu} C compiler fix the header files automatically when installed,
 this is becoming a less prevalent problem.
@@ -3970,7 +3970,7 @@ making sure to first set the current language to Fortran 77
 @defmac AC_F77_LIBRARY_LDFLAGS
 @maindex F77_LIBRARY_LDFLAGS
 @ovindex FLIBS
-Determine the linker flags (e.g. @samp{-L} and @samp{-l}) for the
+Determine the linker flags (e.g. @option{-L} and @option{-l}) for the
 @dfn{Fortran 77 intrinsic and run-time libraries} that are required to
 successfully link a Fortran 77 program or shared library.  The output
 variable @code{FLIBS} is set to these flags.
@@ -4002,7 +4002,6 @@ Characteristics}, for more information).
 Two variables are set by this macro:
 
 @table @code
-
 @item f77_case
 Set to either @samp{upper} or @samp{lower}, depending on whether the
 Fortran 77 compiler translates the case of identifiers to either
@@ -4102,8 +4101,8 @@ The following macros check for operating system services or capabilities.
 @defmac AC_PATH_X
 @maindex PATH_X
 Try to locate the X Window System include files and libraries.  If the
-user gave the command line options @samp{--x-includes=@var{dir}} and
-@samp{--x-libraries=@var{dir}}, use those directories.  If either or
+user gave the command line options @option{--x-includes=@var{dir}} and
+@option{--x-libraries=@var{dir}}, use those directories.  If either or
 both were not given, get the missing values by running @code{xmkmf} on a
 trivial @file{Imakefile} and examining the @file{Makefile} that it
 produces.  If that fails (such as if @code{xmkmf} is not present), look
@@ -4113,7 +4112,7 @@ method is successful, set the shell variables @code{x_includes} and
 the compiler searches by default.
 
 If both methods fail, or the user gave the command line option
-@samp{--without-x}, set the shell variable @code{no_x} to @samp{yes};
+@option{--without-x}, set the shell variable @code{no_x} to @samp{yes};
 otherwise set it to the empty string.
 @end defmac
 
@@ -4125,13 +4124,13 @@ otherwise set it to the empty string.
 @ovindex X_PRE_LIBS
 An enhanced version of @code{AC_PATH_X}.  It adds the C compiler flags that
 X needs to output variable @code{X_CFLAGS}, and the X linker flags to
-@code{X_LIBS}.  If X is not available, adds @samp{-DX_DISPLAY_MISSING} to
+@code{X_LIBS}.  If X is not available, adds @option{-DX_DISPLAY_MISSING} to
 @code{X_CFLAGS}.
 
 This macro also checks for special libraries that some systems need in
 order to compile X programs.  It adds any that the system needs to
 output variable @code{X_EXTRA_LIBS}.  And it checks for special X11R6
-libraries that need to be linked with before @samp{-lX11}, and adds any
+libraries that need to be linked with before @option{-lX11}, and adds any
 found to the output variable @code{X_PRE_LIBS}.
 
 @c This is an incomplete kludge.  Make a real way to do it.
@@ -4213,7 +4212,7 @@ functions.  Should be called before any macros that run the C compiler.
 @cvindex _POSIX_SOURCE
 @ovindex CC
 If on a POSIXized ISC @sc{unix}, define @code{_POSIX_SOURCE} and add
-@samp{-posix} (for the @sc{gnu} C compiler) or @samp{-Xp} (for other C
+@option{-posix} (for the @sc{gnu} C compiler) or @option{-Xp} (for other C
 compilers) to output variable @code{CC}.  This allows the use of
 @sc{posix} facilities.  Must be called after @code{AC_PROG_CC} and
 before any other macros that run the C compiler.
@@ -4288,7 +4287,7 @@ while processing it, run shell commands @var{action-if-true}.  Otherwise
 run shell commands @var{action-if-false}.
 
 This macro uses @code{CPPFLAGS}, but not @code{CFLAGS}, because
-@samp{-g}, @samp{-O}, etc. are not valid options to many C
+@option{-g}, @option{-O}, etc. are not valid options to many C
 preprocessors.
 @end defmac
 
@@ -4382,7 +4381,7 @@ However, some of them can be given options that make the exit status
 correct.  This is a problem that Autoconf does not currently handle
 automatically.  If users encounter this problem, they might be able to
 solve it by setting @code{LDFLAGS} in the environment to pass whatever
-options the linker needs (for example, @samp{-Wl,-dn} on MIPS RISC/OS).
+options the linker needs (for example, @option{-Wl,-dn} on MIPS RISC/OS).
 
 @code{AC_TRY_LINK} is used to compile test programs to test for
 functions and global variables.  It is also used by @code{AC_CHECK_LIB}
@@ -4827,7 +4826,7 @@ The simple @code{echo} is probably the most surprising source of
 portability troubles.
 
 Don't expect any option.  @xref{Preset Output Variables}, @code{ECHO_N}
-etc. for a means to simulate @samp{-c}.
+etc. for a means to simulate @option{-c}.
 
 Do not use backslashes in the arguments, as there is no consensus on
 their handling:
@@ -4907,8 +4906,8 @@ that name in Autoconf code is asking for trouble since it is an
 
 If you need to make multiple checks using @code{test}, combine them with
 the shell operators @samp{&&} and @samp{||} instead of using the
-@code{test} operators @samp{-a} and @samp{-o}.  On System V, the
-precedence of @samp{-a} and @samp{-o} is wrong relative to the unary
+@code{test} operators @option{-a} and @option{-o}.  On System V, the
+precedence of @option{-a} and @option{-o} is wrong relative to the unary
 operators; consequently, @sc{posix} does not specify them, so using them
 is nonportable.  If you combine @samp{&&} and @samp{||} in the same
 statement, keep in mind that they have equal precedence.
@@ -5066,14 +5065,14 @@ redirect the standard output and standard error (in case the file
 doesn't exist) of @code{grep} to @file{/dev/null}.  Check the exit
 status of @code{grep} to determine whether it found a match.
 
-Don't use multiple regexps with @samp{-e}, as some @code{grep} will only
+Don't use multiple regexps with @option{-e}, as some @code{grep} will only
 honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Anyway,
-Stardent Vistra SVR4 @code{grep} lacks @samp{-e}...  Instead, use
+Stardent Vistra SVR4 @code{grep} lacks @option{-e}...  Instead, use
 alternation and @code{egrep}.
 
 @item @command{ln}
 @cindex @command{ln}
-Don't rely on @command{ln} having a @samp{-f} option.  Symbolic links
+Don't rely on @command{ln} having a @option{-f} option.  Symbolic links
 are not available on old systems, use @samp{ln} as a fall back.
 
 The @sc{djgpp} @command{ln} emulates soft links for executables by
@@ -5217,7 +5216,7 @@ calling @code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED}.
 
 By default, @code{AC_OUTPUT} places the symbols defined by these macros
 into the output variable @code{DEFS}, which contains an option
-@samp{-D@var{symbol}=@var{value}} for each symbol defined.  Unlike in
+@option{-D@var{symbol}=@var{value}} for each symbol defined.  Unlike in
 Autoconf version 1, there is no variable @code{DEFS} defined while
 @code{configure} is running.  To check whether Autoconf macros have
 already defined a certain C preprocessor symbol, test the value of the
@@ -5366,8 +5365,8 @@ it had to perform all of the checks every time.
 @maindex CACHE_VAL
 Ensure that the results of the check identified by @var{cache-id} are
 available.  If the results of the check were in the cache file that was
-read, and @code{configure} was not given the @samp{--quiet} or
-@samp{--silent} option, print a message saying that the result was
+read, and @code{configure} was not given the @option{--quiet} or
+@option{--silent} option, print a message saying that the result was
 cached; otherwise, run the shell commands @var{commands-to-set-it}.
 Those commands should have no side effects except for setting the
 variable @var{cache-id}.  In particular, they should not call
@@ -5464,20 +5463,20 @@ and configure runs.  It is not useful on other systems.  If its contents
 are invalid for some reason, the user may delete or edit it.
 
 By default, configure uses no cache file (technically, it uses
-@samp{--cache-file=/dev/null}), so as to forestall problems caused by
+@option{--cache-file=/dev/null}), so as to forestall problems caused by
 accidental use of stale cache files.
 
 To enable caching, @code{configure} accepts
-@samp{--cache-file=@var{file}} where @var{file} is the name of the cache
+@option{--cache-file=@var{file}} where @var{file} is the name of the cache
 file to use, traditionally @file{./config.cache}.  The cache file is
 created if it does not exist already.  When @code{configure} calls
 @code{configure} scripts in subdirectories, it uses the
-@samp{--cache-file} argument so that they share the same cache.
+@option{--cache-file} argument so that they share the same cache.
 @xref{Subdirectories}, for information on configuring subdirectories
 with the @code{AC_CONFIG_SUBDIRS} macro.
 
 @file{config.status} only pays attention to the cache file if it is
-given the @samp{--recheck} option, which makes it rerun
+given the @option{--recheck} option, which makes it rerun
 @code{configure}.
 
 It is wrong to try to distribute cache files for particular system types.
@@ -5551,7 +5550,7 @@ newline.  The @var{feature-description} should be something like
 c89}.
 
 This macro prints nothing if @code{configure} is run with the
-@samp{--quiet} or @samp{--silent} option.
+@option{--quiet} or @option{--silent} option.
 @end defmac
 
 @defmac AC_MSG_RESULT (@var{result-description})
@@ -5564,7 +5563,7 @@ the completion of the message printed by the call to
 @code{AC_MSG_CHECKING}.
 
 This macro prints nothing if @code{configure} is run with the
-@samp{--quiet} or @samp{--silent} option.
+@option{--quiet} or @option{--silent} option.
 @end defmac
 
 @defmac AC_MSG_ERROR (@var{error-description}, @ovar{exit-status})
@@ -6177,7 +6176,7 @@ with this kind of dependency appear out of order in a
 @code{configure}.
 
 For example, @code{AC_PROG_CPP} checks whether the C compiler
-can run the C preprocessor when given the @samp{-E} option.  It should
+can run the C preprocessor when given the @option{-E} option.  It should
 therefore be called after any macros that change which C compiler is
 being used, such as @code{AC_PROG_CC}.  So @code{AC_PROG_CC} contains:
 
@@ -6287,7 +6286,7 @@ arguments to @code{configure}.  Doing so is necessary when
 cross-compiling.  In the most complex case of cross-compiling, three
 system types are involved.  The options to specify them are:
 
-@table @code
+@table @option
 @item --build=@var{build-type}
 the type of system on which the package is being configured and
 compiled (rarely needed).
@@ -6303,7 +6302,7 @@ produce code (rarely needed).
 By default, the build system type is guessed (by @code{config.guess}),
 the host system is the build system, and the target is the host system.
 
-Using @samp{--host=@var{host-type}} enables cross-compilation.
+Using @option{--host=@var{host-type}} enables cross-compilation.
 line, e.g.,
 
 @example
@@ -6334,28 +6333,28 @@ must distribute those two shell scripts along with your source code.
 @xref{Output}, for information about the @code{AC_CONFIG_AUX_DIR} macro
 which you can use to control which directory @code{configure} looks for
 those scripts in.  If you do not use either of these macros,
-@code{configure} ignores any @samp{--host}, @samp{--target}, and
-@samp{--build} options given to it.
+@code{configure} ignores any @option{--host}, @option{--target}, and
+@option{--build} options given to it.
 
 
 @defmac AC_CANONICAL_BUILD
 @maindex CANONICAL_BUILD
 Compute the @samp{build} system type variables, see @ref{System Type
-Variables}.  Unless specified to @code{configure} via @samp{--build},
+Variables}.  Unless specified to @code{configure} via @option{--build},
 the build system is guessed by running @code{config.guess}.
 @end defmac
 
 @defmac AC_CANONICAL_HOST
 @maindex CANONICAL_HOST
 Compute the @samp{host} system type variables, see @ref{System Type
-Variables}.  Unless specified to @code{configure} via @samp{--host}, the
+Variables}.  Unless specified to @code{configure} via @option{--host}, the
 host system is the build system.
 @end defmac
 
 @defmac AC_CANONICAL_TARGET
 @maindex CANONICAL_TARGET
 Compute the @samp{target} system type variables, see @ref{System Type
-Variables}.  Unless specified to @code{configure} via @samp{--target},
+Variables}.  Unless specified to @code{configure} via @option{--target},
 the target system is the host system.
 
 This macro only makes sense for compilers, debuggers etc. which might
@@ -6469,8 +6468,8 @@ The options have one of these forms:
 --without-@var{package}
 @end example
 
-For example, @samp{--with-gnu-ld} means work with the @sc{gnu} linker
-instead of some other linker.  @samp{--with-x} means work with The X
+For example, @option{--with-gnu-ld} means work with the @sc{gnu} linker
+instead of some other linker.  @option{--with-x} means work with The X
 Window System.
 
 The user can give an argument by following the package name with
@@ -6480,11 +6479,11 @@ package.  An argument that is neither @samp{yes} nor @samp{no} could
 include a name or number of a version of the other package, to specify
 more precisely which other package this program is supposed to work
 with.  If no argument is given, it defaults to @samp{yes}.
-@samp{--without-@var{package}} is equivalent to
-@samp{--with-@var{package}=no}.
+@option{--without-@var{package}} is equivalent to
+@option{--with-@var{package}=no}.
 
 @code{configure} scripts do not complain about
-@samp{--with-@var{package}} options that they do not support.  This
+@option{--with-@var{package}} options that they do not support.  This
 behavior permits configuring a source tree containing multiple packages
 with a top-level @code{configure} script when the packages support
 different options, without spurious error messages about options that
@@ -6499,8 +6498,8 @@ and which arguments are valid, is up to you.
 
 @defmac AC_ARG_WITH (@var{package}, @var{help-string}, @ovar{action-if-given}, @ovar{action-if-not-given})
 @maindex ARG_WITH
-If the user gave @code{configure} the option @samp{--with-@var{package}}
-or @samp{--without-@var{package}}, run shell commands
+If the user gave @code{configure} the option @option{--with-@var{package}}
+or @option{--without-@var{package}}, run shell commands
 @var{action-if-given}.  If neither option was given, run shell commands
 @var{action-if-not-given}.  The name @var{package} indicates another
 software package that this program should work with.  It should consist
@@ -6509,7 +6508,7 @@ only of alphanumeric characters and dashes.
 The option's argument is available to the shell commands
 @var{action-if-given} in the shell variable @code{withval}, which is
 actually just the value of the shell variable @code{with_@var{package}},
-with any @samp{-} characters changed into @samp{_}.  You may use that
+with any @option{-} characters changed into @samp{_}.  You may use that
 variable instead, if you wish.
 
 The argument @var{help-string} is a description of the option which
@@ -6547,7 +6546,7 @@ compile them.  The options have one of these forms:
 @end example
 
 These options allow users to choose which optional features to build and
-install.  @samp{--enable-@var{feature}} options should never make a
+install.  @option{--enable-@var{feature}} options should never make a
 feature behave differently or cause one feature to replace another.
 They should only cause parts of the program to be built rather than left
 out.
@@ -6555,12 +6554,12 @@ out.
 The user can give an argument by following the feature name with
 @samp{=} and the argument.  Giving an argument of @samp{no} requests
 that the feature @emph{not} be made available.  A feature with an
-argument looks like @samp{--enable-debug=stabs}.  If no argument is
-given, it defaults to @samp{yes}.  @samp{--disable-@var{feature}} is
-equivalent to @samp{--enable-@var{feature}=no}.
+argument looks like @option{--enable-debug=stabs}.  If no argument is
+given, it defaults to @samp{yes}.  @option{--disable-@var{feature}} is
+equivalent to @option{--enable-@var{feature}=no}.
 
 @code{configure} scripts do not complain about
-@samp{--enable-@var{feature}} options that they do not support.
+@option{--enable-@var{feature}} options that they do not support.
 This behavior permits configuring a source tree containing multiple
 packages with a top-level @code{configure} script when the packages
 support different options, without spurious error messages about options
@@ -6576,7 +6575,7 @@ which arguments are valid, is up to you.
 @defmac AC_ARG_ENABLE (@var{feature}, @var{help-string}, @ovar{action-if-given}, @ovar{action-if-not-given})
 @maindex ARG_ENABLE
 If the user gave @code{configure} the option
-@samp{--enable-@var{feature}} or @samp{--disable-@var{feature}}, run
+@option{--enable-@var{feature}} or @option{--disable-@var{feature}}, run
 shell commands @var{action-if-given}.  If neither option was given, run
 shell commands @var{action-if-not-given}.  The name @var{feature}
 indicates an optional user-level facility.  It should consist only of
@@ -6585,7 +6584,7 @@ alphanumeric characters and dashes.
 The option's argument is available to the shell commands
 @var{action-if-given} in the shell variable @code{enableval}, which is
 actually just the value of the shell variable
-@code{enable_@var{feature}}, with any @samp{-} characters changed into
+@code{enable_@var{feature}}, with any @option{-} characters changed into
 @samp{_}.  You may use that variable instead, if you wish.  The
 @var{help-string} argument is like that of @code{AC_ARG_WITH}
 (@pxref{External Software}).
@@ -6688,8 +6687,8 @@ Place in output variable @code{program_transform_name} a sequence of
 
 If any of the options described below are given to @code{configure},
 program names are transformed accordingly.  Otherwise, if
-@code{AC_CANONICAL_TARGET} has been called and a @samp{--target} value
-is given that differs from the host type (specified with @samp{--host}),
+@code{AC_CANONICAL_TARGET} has been called and a @option{--target} value
+is given that differs from the host type (specified with @option{--host}),
 the target type followed by a dash is used as a prefix.  Otherwise, no
 program name transformation is done.
 @end defmac
@@ -6706,7 +6705,7 @@ program name transformation is done.
 You can specify name transformations by giving @code{configure} these
 command line options:
 
-@table @code
+@table @option
 @item --program-prefix=@var{prefix}
 prepend @var{prefix} to the names;
 
@@ -6723,14 +6722,14 @@ perform @code{sed} substitution @var{expression} on the names.
 These transformations are useful with programs that can be part of a
 cross-compilation development environment.  For example, a
 cross-assembler running on a Sun 4 configured with
-@samp{--target=i960-vxworks} is normally installed as
+@option{--target=i960-vxworks} is normally installed as
 @file{i960-vxworks-as}, rather than @file{as}, which could be confused
 with a native Sun 4 assembler.
 
 You can force a program name to begin with @file{g}, if you don't want
 @sc{gnu} programs installed on your system to shadow other programs with
 the same name.  For example, if you configure @sc{gnu} @code{diff} with
-@samp{--program-prefix=g}, then when you run @samp{make install} it is
+@option{--program-prefix=g}, then when you run @samp{make install} it is
 installed as @file{/usr/local/bin/gdiff}.
 
 As a more sophisticated example, you could use
@@ -6747,7 +6746,7 @@ set up to use this feature.)
 One way to install multiple versions of some programs simultaneously is
 to append a version number to the name of one or both.  For example, if
 you want to keep Autoconf version 1 around for awhile, you can configure
-Autoconf version 2 using @samp{--program-suffix=2} to install the
+Autoconf version 2 using @option{--program-suffix=2} to install the
 programs as @file{/usr/local/bin/autoconf2},
 @file{/usr/local/bin/autoheader2}, etc.  Nevertheless, pay attention
 that only the binaries are renamed, therefore you'd have problems with
@@ -6821,12 +6820,12 @@ particular compiler, but many systems have several available.
 You can examine or override the value set by a command line option to
 @code{configure} in a site file; options set shell variables that have
 the same names as the options, with any dashes turned into underscores.
-The exceptions are that @samp{--without-} and @samp{--disable-} options
-are like giving the corresponding @samp{--with-} or @samp{--enable-}
-option and the value @samp{no}.  Thus, @samp{--cache-file=localcache}
+The exceptions are that @option{--without-} and @option{--disable-} options
+are like giving the corresponding @option{--with-} or @option{--enable-}
+option and the value @samp{no}.  Thus, @option{--cache-file=localcache}
 sets the variable @code{cache_file} to the value @samp{localcache};
-@samp{--enable-warnings=no} or @samp{--disable-warnings} sets the variable
-@code{enable_warnings} to the value @samp{no}; @samp{--prefix=/usr} sets the
+@option{--enable-warnings=no} or @option{--disable-warnings} sets the variable
+@code{enable_warnings} to the value @samp{no}; @option{--prefix=/usr} sets the
 variable @code{prefix} to the value @samp{/usr}; etc.
 
 Site files are also good places to set default values for other output
@@ -6933,7 +6932,7 @@ not
 
 The supported @var{option}s are:
 
-@table @code
+@table @option
 @item --help
 @itemx -h
 Print a summary of the command line options, the list of the template
@@ -6967,10 +6966,10 @@ Require that @var{file} be instantiated as if
 Ask @file{config.status} to update itself and exit (no instantiation).
 This option is useful if you change @code{configure}, so that the
 results of some tests might be different from the previous run.  The
-@samp{--recheck} option re-runs @code{configure} with the same arguments
-you used before, plus the @samp{--no-create} option, which prevent
+@option{--recheck} option re-runs @code{configure} with the same arguments
+you used before, plus the @option{--no-create} option, which prevent
 @code{configure} from running @file{config.status} and creating
-@file{Makefile} and other files, and the @samp{--no-recursion} option,
+@file{Makefile} and other files, and the @option{--no-recursion} option,
 which prevents @code{configure} from running other @code{configure}
 scripts in subdirectories.  (This is so other @file{Makefile} rules can
 run @file{config.status} when it changes; @pxref{Automatic Remaking},
@@ -6982,7 +6981,7 @@ can alter its behavior:
 
 @defvar CONFIG_SHELL
 @evindex CONFIG_SHELL
-The shell with which to run @code{configure} for the @samp{--recheck}
+The shell with which to run @code{configure} for the @option{--recheck}
 option.  It must be Bourne-compatible.  The default is @file{/bin/sh}.
 @end defvar
 
@@ -7125,7 +7124,7 @@ An alternate way to produce the same effect is to create the files
 its output.  Their use is discouraged because they have file names that
 contain two periods, and so cannot be stored on MS-DOS; also, they are
 two more files to clutter up the directory.  But if you use the
-@samp{--localdir=@var{dir}} option to use an @file{acconfig.h} in
+@option{--localdir=@var{dir}} option to use an @file{acconfig.h} in
 another directory, they give you a way to put custom boilerplate in each
 individual @file{config.h.in}.
 
@@ -7155,7 +7154,7 @@ standard output.
 @noindent
 @code{autoupdate} accepts the following options:
 
-@table @code
+@table @option
 @item --help
 @itemx -h
 Print a summary of the command line options and exit.
@@ -7337,7 +7336,7 @@ Does nothing, now integrated in @code{AC_PROG_LEX}.
 
 @defmac AC_DYNIX_SEQ
 @maindex DYNIX_SEQ
-If on Dynix/PTX (Sequent @sc{unix}), add @samp{-lseq} to output variable
+If on Dynix/PTX (Sequent @sc{unix}), add @option{-lseq} to output variable
 @code{LIBS}.  This macro used to be defined as
 
 @example
@@ -7424,8 +7423,8 @@ task.
 @maindex HAVE_LIBRARY
 This macro is equivalent to calling @code{AC_CHECK_LIB} with a
 @var{function} argument of @code{main}.  In addition, @var{library} can
-be written as any of @samp{foo}, @samp{-lfoo}, or @samp{libfoo.a}.  In
-all of those cases, the compiler is passed @samp{-lfoo}.  However,
+be written as any of @samp{foo}, @option{-lfoo}, or @samp{libfoo.a}.  In
+all of those cases, the compiler is passed @option{-lfoo}.  However,
 @var{library} cannot be a shell variable; it must be a literal name.
 @end defmac
 
@@ -7462,7 +7461,7 @@ AC_CONFIG_SRCDIR(@var{unique-file-in-source-dir})
 
 @defmac AC_IRIX_SUN
 @maindex IRIX_SUN
-If on IRIX (Silicon Graphics @sc{unix}), add @samp{-lsun} to output
+If on IRIX (Silicon Graphics @sc{unix}), add @option{-lsun} to output
 @code{LIBS}.  If you were using it to get @code{getmntent}, use
 @code{AC_FUNC_GETMNTENT} instead.  If you used it for the NIS versions
 of the password and group functions, use @samp{AC_CHECK_LIB(sun,
@@ -7717,7 +7716,7 @@ removed because of limited usefulness
 @defmac AC_SCO_INTL
 @maindex SCO_INTL
 @ovindex LIBS
-If on SCO UNIX, add @samp{-lintl} to output variable @code{LIBS}.  This
+If on SCO UNIX, add @option{-lintl} to output variable @code{LIBS}.  This
 macro used to
 
 @example
@@ -7849,9 +7848,9 @@ is considered obsolete.
 @defmac AC_XENIX_DIR
 @maindex XENIX_DIR
 @ovindex LIBS
-This macro used to add @samp{-lx} to output variable @code{LIBS} if on
+This macro used to add @option{-lx} to output variable @code{LIBS} if on
 Xenix.  Also, if @file{dirent.h} is being checked for, added
-@samp{-ldir} to @code{LIBS}.  Now it is merely an alias of
+@option{-ldir} to @code{LIBS}.  Now it is merely an alias of
 @code{AC_HEADER_DIRENT} instead, plus some code to detect whether
 running @sc{xenix} on which you should not depend:
 
@@ -8268,7 +8267,7 @@ then let there be light@dots{}
 
 In June 1991 I was maintaining many of the @sc{gnu} utilities for the
 Free Software Foundation.  As they were ported to more platforms and
-more programs were added, the number of @samp{-D} options that users had
+more programs were added, the number of @option{-D} options that users had
 to select in the @file{Makefile} (around 20) became burdensome.
 Especially for me---I had to test each new release on a bunch of
 different systems.  So I wrote a little shell script to guess some of
@@ -8365,7 +8364,7 @@ Pixley, who suggested running the compiler instead of searching the file
 system to find include files and symbols, for more accurate results;
 Karl Berry, who got Autoconf to configure @TeX{} and added the
 macro index to the documentation; and Ian Taylor, who added support for
-creating a C header file as an alternative to putting @samp{-D} options
+creating a C header file as an alternative to putting @option{-D} options
 in a @file{Makefile}, so he could use Autoconf for his UUCP package.  The
 alpha testers cheerfully adjusted their files again and again as the
 names and calling conventions of the Autoconf macros changed from
@@ -8405,8 +8404,8 @@ Pinard made it diagnose invalid arguments.  Jim Blandy bravely coerced
 it into configuring @sc{gnu} Emacs, laying the groundwork for several
 later improvements.  Roland McGrath got it to configure the @sc{gnu} C
 Library, wrote the @code{autoheader} script to automate the creation of
-C header file templates, and added a @samp{--verbose} option to
-@code{configure}.  Noah Friedman added the @samp{--macrodir} option and
+C header file templates, and added a @option{--verbose} option to
+@code{configure}.  Noah Friedman added the @option{--macrodir} option and
 @code{AC_MACRODIR} environment variable.  (He also coined the term
 @dfn{autoconfiscate} to mean ``adapt a software package to use
 Autoconf''.)  Roland and Noah improved the quoting protection in
@@ -8423,8 +8422,8 @@ revision of Autoconf.  I added most of the features of the Cygnus
 @code{configure} that Autoconf had lacked, largely by adapting the
 relevant parts of Cygnus @code{configure} with the help of david zuhn
 and Ken Raeburn.  These features include support for using
-@file{config.sub}, @file{config.guess}, @samp{--host}, and
-@samp{--target}; making links to files; and running @code{configure}
+@file{config.sub}, @file{config.guess}, @option{--host}, and
+@option{--target}; making links to files; and running @code{configure}
 scripts in subdirectories.  Adding these features enabled Ken to convert
 @sc{gnu} @code{as}, and Rob Savoye to convert DejaGNU, to using
 Autoconf.

@@ -16,10 +16,10 @@ current configuration, and a file @file{config.log} containing compiler
 output (useful mainly for debugging @code{configure}).
 
 It can also use an optional file (typically called @file{config.cache}
-and enabled with @samp{--cache-file=./config.cache} or simply @samp{-C})
-that saves the results of its tests to speed up reconfiguring.  (Caching
-is disabled by default to prevent problems with accidental use of stale
-cache files.)
+and enabled with @option{--cache-file=./config.cache} or simply
+@option{-C}) that saves the results of its tests to speed up
+reconfiguring.  (Caching is disabled by default to prevent problems with
+accidental use of stale cache files.)
 
 If you need to do unusual things to compile the package, please try to
 figure out how @code{configure} could check whether to do them, and mail
@@ -77,6 +77,7 @@ Some systems require unusual options for compilation or linking that the
 
 You can give @code{configure} initial values for variables by setting
 them in the environment.  You can do that on the command line like this:
+
 @example
 ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
 @end example
@@ -108,38 +109,39 @@ another architecture.
 By default, @samp{make install} will install the package's files in
 @file{/usr/local/bin}, @file{/usr/local/man}, etc.  You can specify an
 installation prefix other than @file{/usr/local} by giving
-@code{configure} the option @samp{--prefix=@var{path}}.
+@code{configure} the option @option{--prefix=@var{path}}.
 
 You can specify separate installation prefixes for architecture-specific
 files and architecture-independent files.  If you give @code{configure}
-the option @samp{--exec-prefix=@var{path}}, the package will use
+the option @option{--exec-prefix=@var{path}}, the package will use
 @var{path} as the prefix for installing programs and libraries.
 Documentation and other data files will still use the regular prefix.
 
 In addition, if you use an unusual directory layout you can give options
-like @samp{--bindir=@var{path}} to specify different values for
+like @option{--bindir=@var{path}} to specify different values for
 particular kinds of files.  Run @samp{configure --help} for a list of
 the directories you can set and what kinds of files go in them.
 
 If the package supports it, you can cause programs to be installed with
 an extra prefix or suffix on their names by giving @code{configure} the
-option @samp{--program-prefix=@var{PREFIX}} or
-@samp{--program-suffix=@var{SUFFIX}}.
+option @option{--program-prefix=@var{PREFIX}} or
+@option{--program-suffix=@var{SUFFIX}}.
 
 @node Optional Features
 @section Optional Features
 
-Some packages pay attention to @samp{--enable-@var{feature}} options to
-@code{configure}, where @var{feature} indicates an optional part of the
-package.  They may also pay attention to @samp{--with-@var{package}}
-options, where @var{package} is something like @samp{gnu-as} or @samp{x}
-(for the X Window System).  The @file{README} should mention any
-@samp{--enable-} and @samp{--with-} options that the package recognizes.
+Some packages pay attention to @option{--enable-@var{feature}} options
+to @code{configure}, where @var{feature} indicates an optional part of
+the package.  They may also pay attention to
+@option{--with-@var{package}} options, where @var{package} is something
+like @samp{gnu-as} or @samp{x} (for the X Window System).  The
+@file{README} should mention any @option{--enable-} and @option{--with-}
+options that the package recognizes.
 
 For packages that use the X Window System, @code{configure} can usually
 find the X include and library files automatically, but if it doesn't,
-you can use the @code{configure} options @samp{--x-includes=@var{dir}}
-and @samp{--x-libraries=@var{dir}} to specify their locations.
+you can use the @code{configure} options @option{--x-includes=@var{dir}}
+and @option{--x-libraries=@var{dir}} to specify their locations.
 
 @node System Type
 @section Specifying the System Type
@@ -148,9 +150,9 @@ There may be some features @code{configure} cannot figure out
 automatically, but needs to determine by the type of host the package
 will run on.  Usually @code{configure} can figure that out, but if it
 prints a message saying it cannot guess the host type, give it the
-@samp{--host=@var{type}} option.  @var{type} can either be a short name
-for the system type, such as @samp{sun4}, or a canonical name which has
-the form:
+@option{--host=@var{type}} option.  @var{type} can either be a short
+name for the system type, such as @samp{sun4}, or a canonical name which
+has the form:
 
 @example
 @var{cpu}-@var{company}-@var{system}
@@ -169,7 +171,7 @@ If @file{config.sub} isn't included in this package, then this package
 doesn't need to know the host type.
 
 If you are building compiler tools for cross-compiling, you can also use
-the @samp{--target=@var{type}} option to select the type of system they
+the @option{--target=@var{type}} option to select the type of system they
 will produce code for.
 
 @node Sharing Defaults
@@ -210,7 +212,7 @@ overridden in the site shell script).
 @code{configure} recognizes the following options to control how it
 operates.
 
-@table @code
+@table @option
 @item --help
 @itemx -h
 Print a summary of the options to @code{configure}, and exit.
@@ -228,7 +230,7 @@ traditionally @file{./config.cache}.  @var{file} defaults to
 
 @item --config-cache
 @itemx -C
-Alias for @samp{--cache-file=config.cache}.
+Alias for @option{--cache-file=config.cache}.
 
 @item --quiet
 @itemx --silent

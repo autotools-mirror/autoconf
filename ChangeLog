@@ -1,3 +1,9 @@
+2000-06-09  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi: Use `@option' for options, not `@samp' nor
+	`@code'.
+	* doc/install.texi: Likewise.
+
 2000-06-09  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Don't require AC_CYGWIN.
