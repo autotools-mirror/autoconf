@@ -81,8 +81,9 @@ dnl [#] by AC_USER@AC_HOST on AC_DATE
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # Usage: configure [--srcdir=DIR] [--prefix=PREFIX] [--exec-prefix=PREFIX]
-#        [--with-PACKAGE[=VALUE]]
-# Ignores all other arguments.
+#        [--with-PACKAGE[=VALUE]] [--quiet] [--silent] [--verbose]
+#        [--version] [--help] [host]
+# Ignores all other options.
 
 # Save the original args to write them into config.status later.
 ac_configure_args="[$]*"
@@ -90,81 +91,107 @@ ac_prog=[$]0
 ])dnl
 dnl
 define(AC_PARSEARGS,
-[while test $[#] -ge 1; do
-  ac_arg="$[1]"
-  case "$ac_arg" in
-     # For backward compatibility, recognize -exec-prefix and --exec_prefix.
-     -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* | --exec-pref=* | --exec-pre=* | --exec-pr=* | --exec-p=* | --exec-=* | --exec=* | --exe=* | --ex=* | --e=*)
-changequote(,)dnl
-	exec_prefix=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
+[changequote(,)dnl
+ac_usage="Usage: configure [options] [host]
+Options: [defaults in brackets]
+--srcdir=DIR		find the sources in DIR [. or ..]
+--prefix=PREFIX		configure to install host independent files in PREFIX
+			[/usr/local]
+--exec-prefix=PREFIX	configure to install host dependent files in PREFIX
+			[/usr/local]
+--with-PACKAGE[=VALUE]	use PACKAGE (with parameter VALUE)
+--quiet, --silent	do not print \`checking for' messages
+--verbose		print results of checks
+--version		print the version number of autoconf used
+--help			print this message"
 changequote([,])dnl
-     -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- | --exec | --exe | --ex | --e)
-	if test $[#] -eq 1; then
-	  AC_ERROR(missing argument to $ac_arg)
-        else shift; exec_prefix=$[1]; fi ;;
 
-     -gas | --gas | --ga | --g) ;;
+ac_get_optarg='
+if test -z "$ac_optarg"; then
+  if test $[#] -eq 0; then
+    AC_ERROR(missing argument to $ac_option)
+  else
+    ac_optarg=$[1]; shift
+  fi
+fi
+'
 
-     -host=* | --host=* | --hos=* | --ho=* | --h=*) ;;
-     -host | --host | --hos | --ho | --h)
-	if test $[#] -eq 1; then
-	  AC_ERROR(missing argument to $ac_arg)
-        else shift; fi ;;
+while :
+do
+  case $[#] in
+  0) break ;;
+  esac
+  ac_option="$[1]"
+  shift
 
-     -nfp | --nfp | --nf) ;;
-
-     -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
+  case "$ac_option" in
 changequote(,)dnl
-	prefix=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
+  -*=*) ac_optarg=`echo $ac_option | sed 's/[-a-z_]*=//'`
 changequote([,])dnl
-     -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
-	if test $[#] -eq 1; then
-	  AC_ERROR(missing argument to $ac_arg)
-        else shift; prefix=$[1]; fi ;;
-
-     -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=* | --s=*)
-changequote(,)dnl
-	srcdir=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
-changequote([,])dnl
-     -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
-	if test $[#] -eq 1; then
-	  AC_ERROR(missing argument to $ac_arg)
-        else shift; srcdir=$[1]; fi ;;
-
-     -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*) ;;
-     -target | --target | --targe | --targ | --tar | --ta | --t)
-	if test $[#] -eq 1; then
-	  AC_ERROR(missing argument to $ac_arg)
-        else shift; fi ;;
-
-     -with-* | --with-*)
-       ac_package=`echo $ac_arg|sed -e 's/-*with-//' -e 's/=.*//'`
-       # Reject names that aren't valid shell variable names.
-changequote(,)dnl
-       if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
-changequote([,])dnl
-         AC_ERROR($ac_package: invalid package name)
-       fi
-       ac_package=`echo $ac_package| sed 's/-/_/g'`
-       case "$ac_arg" in
-changequote(,)dnl
-         *=*) ac_val="`echo $ac_arg|sed 's/[^=]*=//'`" ;;
-changequote([,])dnl
-         *) ac_val=1 ;;
-       esac
-       eval "with_$ac_package='$ac_val'" ;;
-
-     -v | -verbose | --verbose | --verbos | --verbo | --verb | --ver | --ve | --v)
-       ac_verbose=yes ;;
-
-     -q | -quiet | --quiet | --quie | --qui | --qu | --q \
-	| -silent | --silent | --silen | --sile | --sil | --si)
-       ac_silent=yes ;;
-
-     *) ;;
+        ac_option=`echo $ac_option | sed 's/=.*//'`
+    ;;
+  *) ac_optarg= ;;
   esac
 
-  shift
+  case "$ac_option" in
+
+  # For backward compatibility, recognize -exec-prefix and --exec_prefix.
+  -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
+  | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- | --exec \
+  | --exe | --ex | --e)
+    eval "$ac_get_optarg"; exec_prefix="$ac_optarg" ;;
+
+  -gas | --gas | --ga | --g) ;;
+
+  -help | --help | --hel | --he)
+    echo "$ac_usage"; exit 0 ;;
+
+  -host | --host | --hos | --ho)
+    eval "$ac_get_optarg" ;;
+
+  -nfp | --nfp | --nf | --n) ;;
+
+  -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+    eval "$ac_get_optarg"; prefix="$ac_optarg" ;;
+
+  -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+    eval "$ac_get_optarg"; srcdir="$ac_optarg" ;;
+
+  -target | --target | --targe | --targ | --tar | --ta | --t)
+    eval "$ac_get_optarg" ;;
+
+  -with-* | --with-*)
+    ac_package=`echo $ac_option|sed -e 's/-*with-//'`
+    # Reject names that aren't valid shell variable names.
+changequote(,)dnl
+    if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
+changequote([,])dnl
+      AC_ERROR($ac_package: invalid package name)
+    fi
+    ac_package=`echo $ac_package| sed 's/-/_/g'`
+    test -z "$ac_optarg" && ac_optarg=1
+    eval "with_$ac_package='$ac_optarg'" ;;
+
+  -v | -verbose | --verbose | --verbos | --verbo | --verb)
+      ac_verbose=yes ;;
+
+  -version | --version | --versio | --versi | --vers)
+    echo "configure generated by autoconf version AC_ACVERSION"
+    exit 0 ;;
+
+  -q | -quiet | --quiet | --quie | --qui | --qu | --q \
+     | -silent | --silent | --silen | --sile | --sil | --si)
+    ac_silent=yes ;;
+
+  *) 
+changequote(,)dnl
+    if test -n "`echo $ac_option| sed 's/[-a-z0-9]//g'`"; then
+changequote([,])dnl
+      AC_ERROR($ac_option: invalid host type)
+    fi
+    ;;
+
+  esac
 done
 ])dnl
 dnl
@@ -752,13 +779,21 @@ dnl so uname gets run too.
 #
 [#] [$]0 [$]ac_configure_args
 
-for ac_arg
+changequote(,)dnl
+ac_cs_usage="Usage: config.status [--recheck] [--version] [--help]"
+changequote([,])dnl
+for ac_option
 do
-  case "[\$]ac_arg" in
-    -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
+  case "[\$]ac_option" in
+  -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
     echo running [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args
     exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args ;;
-    *) echo "Usage: config.status [--recheck]" 2>&1; exit 1 ;;
+  -version | --version | --versio | --versi | --vers | --ver | --ve | --v)
+    echo "config.status generated by autoconf version AC_ACVERSION"
+    exit 0 ;;
+  -help | --help | --hel | --he | --h)
+    echo "[\$]ac_cs_usage"; exit 0 ;;
+  *) echo "[\$]ac_cs_usage"; exit 1 ;;
   esac
 done
 
