@@ -1150,12 +1150,18 @@ dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
 [  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
     ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
   esac
-  case " $ac_configure_args " in
-    *" '$ac_arg' "*) ;; # Avoid dups.  Use of quotes ensures accuracy.
-    *) ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
-       ac_sep=" " ;;
-  esac
+dnl If trying to remove duplicates, be sure to (i) keep the *last*
+dnl value (e.g. --prefix=1 --prefix=2 --prefix=1 might keep 2 only),
+dnl and (ii) not to strip long options (--prefix foo --prefix bar might
+dnl give --prefix foo bar).
+dnl   case " $ac_configure_args " in
+dnl     *" '$ac_arg' "*) ;; # Avoid dups.  Use of quotes ensures accuracy.
+dnl     *) ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
+dnl        ac_sep=" " ;;
+dnl   esac
+  ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
   # Get rid of the leading space.
+  ac_sep=" "
 done
 
 # When interrupted or exit'd, cleanup temporary files, and complete

@@ -1,5 +1,15 @@
 2002-09-09  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Keep the
+	`duplicates', since the algorithm was too naive and could keep
+	`--prefix=1 --prefix=2 --prefix=1' as `--prefix=1 --prefix=2', and
+	keep `--prefix foo --prefix bar' as `--prefix foo bar'.
+	Reported by Ralf Corsepius.
+	* tests/torture.at (Configuring subdirectories): Exercise these
+	cases.
+
+2002-09-09  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/functions.m4 (AC_FUNC_GETLOADAVG): Use $srcdir when
 	looking for a replacement file.
 	* lib/autoconf/general.m4 (AC_CHECK_DECLS): Check that the

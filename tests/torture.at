@@ -579,7 +579,10 @@ AT_DATA([inner/configure.in],
 [AC_INIT(GNU Inner, 1.0)
 AC_CONFIG_SRCDIR([innermost/config.in])
 AC_ARG_VAR([INNER], [an inner variable])
-AC_SUBST([INNER], "inner")
+AC_SUBST([INNER])
+if test "x$INNER" = x; then
+  INNER=inner
+fi
 AC_CONFIG_FILES([innermost/config])
 AC_OUTPUT
 ])
@@ -588,6 +591,7 @@ AT_DATA([inner/innermost/config.in],
 [INNER=@INNER@
 srcdir=@srcdir@
 top_srcdir=@top_srcdir@
+prefix=@prefix@
 ])
 
 # The contents of `.'
@@ -617,6 +621,7 @@ AT_CHECK([cat inner/innermost/config], 0,
 [INNER=inner
 srcdir=.
 top_srcdir=..
+prefix=/usr/local
 ])
 
 # The same, but from a builddir.
@@ -626,7 +631,17 @@ AT_CHECK([cat builddir/inner/innermost/config], 0,
 [INNER=inner
 srcdir=../../../inner/innermost
 top_srcdir=../../../inner
+prefix=/usr/local
 ])
 
+# Make sure precious variables and command line options are properly
+# passed, even when there are duplicates.
+AT_CHECK([cd builddir && ../configure --prefix /bad --prefix /good INNER=bad INNER=good], 0, [ignore])
+AT_CHECK([cat builddir/inner/innermost/config], 0,
+[INNER=good
+srcdir=../../../inner/innermost
+top_srcdir=../../../inner
+prefix=/good
+])
 
 AT_CLEANUP
