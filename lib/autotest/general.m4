@@ -629,6 +629,11 @@ fi
 
 exit 0
 m4_divert_pop([TAIL])dnl
+dnl End of AT_INIT: divert to KILL, only test groups are to be
+dnl output, the rest is ignored.  Current diversion is BODY, inherited
+dnl from M4sh.
+m4_divert_push([KILL])
+m4_wrap([m4_divert_pop([KILL])[]])
 ])# AT_INIT
 
 
