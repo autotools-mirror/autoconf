@@ -33,7 +33,7 @@ dnl
 dnl Utility functions for stamping the configure script.
 dnl
 dnl
-define(AC_ACVERSION, 1.7.1)dnl
+define(AC_ACVERSION, 1.7.2)dnl
 dnl This is defined by the --version option of the autoconf script.
 ifdef([AC_PRINT_VERSION], [errprint(Autoconf version AC_ACVERSION
 )])dnl
@@ -202,12 +202,6 @@ if test ! -r $srcdir/$unique_file; then
   fi
   exit 1
 fi
-# Preserve a srcdir of `.' to avoid automounter screwups with pwd.
-# But we can't avoid them for `..', to make subdirectories work.
-case $srcdir in
-  .|/*|~*) ;;
-  *) srcdir=`cd $srcdir; pwd` ;; # Make relative path absolute.
-esac
 
 dnl This is effectively disabled because it is a nuisance if not using
 dnl a configuration header file.
@@ -733,15 +727,29 @@ top_srcdir=$srcdir
 
 CONFIG_FILES=${CONFIG_FILES-"$1"}
 for file in .. ${CONFIG_FILES}; do if test "x$file" != x..; then
-  srcdir=$top_srcdir
   # Remove last slash and all that follows it.  Not all systems have dirname.
 changequote(,)dnl
   dir=`echo $file|sed 's%/[^/][^/]*$%%'`
 changequote([,])dnl
   if test "$dir" != "$file"; then
-    test "$top_srcdir" != . && srcdir=$top_srcdir/$dir
+    # The file is in a subdirectory.
     test ! -d "$dir" && mkdir "$dir"
+    dirsuffix="/$dir"
+  else
+    dirsuffix=
   fi
+
+  case "$top_srcdir" in
+  .)  srcdir=. ;;
+  /*) srcdir="$top_srcdir$dirsuffix" ;;
+  *)
+    # Relative path.  Prepend a "../" for each directory in $dirsuffix.
+changequote(,)dnl
+    dots=`echo $dirsuffix|sed 's%/[^/]*%../%g'`
+changequote([,])dnl
+    srcdir="$dots$top_srcdir$dirsuffix" ;;
+  esac
+
   echo creating "$file"
   rm -f "$file"
   comment_str="Generated automatically from `echo $file|sed 's|.*/||'`.in by configure."
