@@ -113,7 +113,7 @@ AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
 src_libdir = $(top_srcdir)/lib
 build_libdir = $(top_builddir)/lib
 
-m4f_dependencies = $(AUTOM4TE) $(AUTOM4TE_CFG)
+m4f_dependencies = $(MY_AUTOM4TE) $(AUTOM4TE_CFG)
 
 m4sugar_m4f_dependencies = \
 	$(m4f_dependencies)			\
