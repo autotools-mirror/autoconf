@@ -384,6 +384,13 @@ if echo $ac_f77_v_output | grep xlfentry >/dev/null 2>&1; then
   ac_f77_v_output=`echo $ac_f77_v_output | sed 's/,/ /g'`
 fi
 
+# On HP/UX there is a line like: "LPATH is: /foo:/bar:/baz" where
+# /foo, /bar, and /baz are search directories for the Fortran linker.
+# Here, we change these into -L/foo -L/bar -L/baz:
+ac_f77_v_output="`echo $ac_f77_v_output | 
+	grep 'LPATH is:' |
+	sed 's,.*LPATH is\(: *[[^ ]]*\).*,\1,;s,: */, -L/,g'` $ac_f77_v_output"
+
 # If we are using Cray Fortran then delete quotes.
 # Use "\"" instead of '"' for font-lock-mode.
 # FIXME: a more general fix for quoted arguments with spaces?
