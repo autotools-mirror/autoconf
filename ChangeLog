@@ -1,5 +1,18 @@
 2000-02-04  Akim Demaille  <akim@epita.fr>
 
+	Hide AH_HOOK behind AH_DEFUN.
+
+	* autoheader.m4 (AH_DEFUN): New macro.  Combination of define and
+	AH_HOOK.
+	(AC_TRY_RUN, AC_DEFINE, AC_DEFINE_UNQUOTED, AC_CHECK_LIB,
+	AC_CHECK_HEADERS, AC_CHECK_HEADERS_DIRENT, AC_CHECK_DECLS,
+	AC_CHECK_FUNCS, AC_CHECK_SIZEOF, AC_PROG_LEX, AC_CHECK_MEMBERS,
+	AC_CHECK_TYPE, AC_FUNC_ALLOCA, AC_CHECK_TYPES, AC_C_CHAR_UNSIGNED,
+	AC_AIX, AC_F77_WRAPPERS, AC_CONFIG_HEADER): All the former calls
+	to define and AH_HOOK in autoheader.m4 are replaced by AH_DEFUN.
+
+2000-02-04  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_RSH, AC_ARG_ARRAY, AC_HAVE_POUNDBANG): No use
 	to hide, you are DEFUNCT.
 

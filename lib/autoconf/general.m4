@@ -3189,7 +3189,7 @@ dnl      esac
 AC_DEFUN(AC_CONFIG_LINKS,
 [AC_CONFIG_UNIQUE([$1])dnl
 ifelse(regexp([$1], [^\.:\| \.:]), -1,,
-        [AC_FATAL([$0: invalid destination: `.'])])dnl
+       [AC_FATAL([$0: invalid destination: `.'])])dnl
 m4_append([AC_LIST_LINKS], [$1])dnl
 dnl Register the commands
 ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
