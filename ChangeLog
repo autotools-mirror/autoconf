@@ -75,7 +75,7 @@
 	(&print_unique): For the time being register in %needed_macros
 	only argument less macros.
 
-2001-01-22  Lars J. Aas  <somelarsa@sim.no>
+2001-01-22  Lars J. Aas  <larsa@sim.no>
 
 	* aclang.m4 (_AC_PROG_CXX_EXIT_DECLARATION): First try no declaration,
 	then '#include <stdlib.h>', before trying the explicit declarations.
