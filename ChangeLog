@@ -1,5 +1,14 @@
 2000-11-11  Pavel Roskin  <proski@gnu.org>
 
+	* acfunctions.m4 (AC_CHECK_FUNCS): Add missing m4 quotes.
+	(AC_FUNC_GETPGRP): Likewise.
+	* acspecific.m4 (AC_AIX): Likewise.
+	* m4/init.m4 (AM_INIT_AUTOMAKE): Likewise.
+	* m4/missing.m4 (AM_MISSING_PROG): Likewise.
+	* m4/sanity.m4 (AM_SANITY_CHECK): Likewise.
+
+2000-11-11  Pavel Roskin  <proski@gnu.org>
+
 	* acfunctions.m4: Always quote first argument of AC_MSG_ERROR,
 	AC_MSG_WARN, AC_MSG_CHECKING, AC_MSG_RESULT,
 	AC_MSG_RESULT_UNQUOTED.

@@ -39,4 +39,4 @@ else
 Check your system clock])
 fi
 rm -f conftest*
-AC_MSG_RESULT(yes)])
+AC_MSG_RESULT([yes])])

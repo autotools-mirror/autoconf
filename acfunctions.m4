@@ -84,7 +84,7 @@ AC_DEFUN([AC_CHECK_FUNCS],
 for ac_func in $1
 do
 AC_CHECK_FUNC($ac_func,
-              [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_$ac_func)) $2],
+              [AC_DEFINE_UNQUOTED([AC_TR_CPP([HAVE_$ac_func])]) $2],
               [$3])dnl
 done
 ])
@@ -629,7 +629,7 @@ main ()
       exit (s>>8);
     }
 }], ac_cv_func_getpgrp_void=yes, ac_cv_func_getpgrp_void=no,
-   AC_MSG_ERROR([cannot check getpgrp if cross compiling]))
+   [AC_MSG_ERROR([cannot check getpgrp if cross compiling])])
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
   AC_DEFINE(GETPGRP_VOID, 1,

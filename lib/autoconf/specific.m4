@@ -1637,7 +1637,7 @@ AC_EGREP_CPP(yes,
 ],
 [AC_MSG_RESULT([yes])
 AC_DEFINE(_ALL_SOURCE)],
-AC_MSG_RESULT([no]))
+[AC_MSG_RESULT([no])])
 ])# AC_AIX
 
 
