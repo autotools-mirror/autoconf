@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.121
-@set VERSION 1.121
+@set EDITION 1.122
+@set VERSION 1.122
 @set UPDATED October 1994
 
 @iftex
@@ -318,11 +318,18 @@ needs adjustment for some reason, it needs to be changed in only one
 place; all of the configuration scripts can be regenerated
 automatically to take advantage of the updated code.
 
-Larry Wall's Metaconfig package is similar in purpose to Autoconf, but
+The Metaconfig package is similar in purpose to Autoconf, but
 the scripts it produces require manual user intervention, which is quite
 inconvenient when configuring large source trees.  Unlike Metaconfig
 scripts, Autoconf scripts can support cross-compiling, if some care is
 taken in writing them.
+
+There are several jobs related to making portable software packages
+that Autoconf currently does not do.  Among these are automatically
+creating @file{Makefile} files with all of the standard targets, and
+supplying replacements for standard library functions and header files on
+systems that lack them.  Work is in progress to add those features in
+the future.
 
 Autoconf imposes some restrictions on the names of macros used with
 @code{#ifdef} in C programs (@pxref{Preprocessor Symbol Index}).
@@ -2594,7 +2601,7 @@ been called already.
 
 To check for a library, a function, or a global variable, Autoconf
 @code{configure} scripts try to compile and link a small program that
-uses it.  This is unlike Larry Wall's Metaconfig, which uses @code{nm}
+uses it.  This is unlike Metaconfig, which uses @code{nm}
 or @code{ar} on the C library to try to figure out which functions are
 available.  Trying to link with the function is usually a more reliable
 approach because it avoids dealing with the variations in the options
@@ -3634,7 +3641,8 @@ those scripts in.  If you do not use either of these macros,
 @defmac AC_CANONICAL_SYSTEM
 @maindex CANONICAL_SYSTEM
 Determine the system type and set output variables to the names of the
-canonical system types.
+canonical system types.  @xref{System Type Variables}, for details about
+the variables this macro sets.
 @end defmac
 
 @defmac AC_CANONICAL_HOST
@@ -4578,16 +4586,17 @@ on having a different @code{configure} made from each
 @file{configure.in} by a preprocessor.  That approach also offered more
 control and flexibility.
 
-I looked briefly into using Larry Wall's Metaconfig program, but I
-decided not to for several reasons.  The @code{Configure} scripts it
-produces are interactive, which I find quite inconvenient; I didn't like
-the ways it checked for some features (such as library functions); it
-was not being maintained at that time, and its scripts didn't work on
-many modern systems (such as System V R4 and NeXT); it wasn't very
-flexible in what it could do in response to a feature's presence or
-absence; I found it confusing to learn; and it was too big and complex
-for my needs (I didn't realize then how much Autoconf would eventually
-have to grow).
+I looked briefly into using the Metaconfig package, by Larry Wall,
+Harlan Stenn, and Raphael Manfredi, but I decided not to for several
+reasons.  The @code{Configure} scripts it produces are interactive,
+which I find quite inconvenient; I didn't like the ways it checked for
+some features (such as library functions); I didn't know whether it was
+being maintained at that time, and the @code{Configure} scripts I had
+seen didn't work on many modern systems (such as System V R4 and NeXT);
+it wasn't very flexible in what it could do in response to a feature's
+presence or absence; I found it confusing to learn; and it was too big
+and complex for my needs (I didn't realize then how much Autoconf would
+eventually have to grow).
 
 I considered using Perl to generate my style of @code{configure} scripts,
 but decided that @code{m4} was better suited to the job of simple
