@@ -412,14 +412,16 @@ m4_define([_AC_PROG_GREP],
 # path to a program named in PROGNAME-LIST.  FEATURE-TEST must set
 # $ac_cv_path_VARIABLE to the path of an acceptable program, or else
 # _AC_PATH_PROG_FEATURE_CHECK will report that no acceptable program
-# was found, and abort.  If a suitable $ac_path_VARIABLE is found,
-# `break 3' will accept it without any further checks.
+# was found, and abort.  If a suitable $ac_path_VARIABLE is found in the
+# FEATURE-TEST macro, it can set $ac_path_VARIABLE_found=':' to accept
+# that value without any further checks.
 m4_define([_AC_PATH_PROG_FEATURE_CHECK],
 [# Extract the first word of "$2" to use in msg output
 if test -z "$$1"; then
 set dummy $2; ac_prog_name=$[2]
 AC_CACHE_VAL([ac_cv_path_$1],
 [AS_TMPDIR([$1])
+ac_path_$1_found=false
 # Loop through the user's path and test for each of PROGNAME-LIST
 _AS_PATH_WALK([$4],
 [for ac_prog in $2; do
@@ -427,8 +429,10 @@ _AS_PATH_WALK([$4],
     ac_path_$1="$as_dir/$ac_prog$ac_exec_ext"
     test -f "$ac_path_$1" || continue
     $3
+    $ac_path_$1_found && break 3
   done
-done])
+done
+])
 rm -rf "$tmp"
 ])
 $1="$ac_cv_path_$1"
@@ -452,14 +456,11 @@ fi
 # iteration by appending (optionally, MATCH-STRING and) a newline
 # to the file, and using the result as input to CHECK-CMD.
 m4_define([_AC_FEATURE_CHECK_LENGTH],
-[if AS_EXECUTABLE_P(["$$1"]); then
+[$$1_found || if AS_EXECUTABLE_P(["$$1"]); then
   # Check for GNU $1 and select it if it is found.
   _AC_PATH_PROG_FLAVOR_GNU([$$1],
-    [$2="$$1"
-    break 3
-  ])
-
-  ac_count=0
+    [$2="$$1" $1_found=:],
+  [ac_count=0
   echo $ECHO_N "0123456789$ECHO_C" >"$tmp/conftest.in"
   while :
   do
@@ -480,7 +481,7 @@ dnl   # for best performing tool in a list breaks down.
     fi
     # 10*(2^10) chars as input seems more than enough
     test $ac_count -gt 10 && break
-  done
+  done])
 fi
 ])
 

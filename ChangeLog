@@ -1,3 +1,13 @@
+2004-04-22  Albert Chin-A-Young <china@thewrittenword.com>,
+	    Gary V. Vaughan  <gary@gnu.org>
+
+	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Don't guess
+	how deeply nested we are when a suitable tool is found, set the
+	ac_path_TOOL_found flag.
+	(_AC_PATH_PROG_FEATURE_CHECK): Encapsulate knowledge of how deeply
+	nested we are in this macro.  Break out of all 3 nested loops if
+	ac_path_TOOL_found is set.
+
 2004-04-21  Gary V. Vaughan  <gary@gnu.org>
 
 	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Break out
