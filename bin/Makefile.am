@@ -99,9 +99,13 @@ autom4te: $(srcdir)/autom4te.in $(top_srcdir)/configure.ac
 
 TAGS_DEPENDENCIES = $(EXTRA_DIST)
 
+letters = abcdefghijklmnopqrstuvwxyz
+LETTERS = ABCDEFGHIJKLMNOPQRSTUVWXYZ
+DIGITS = 0123456789
+WORD_REGEXP = [$(LETTERS)$(letters)_][$(LETTERS)$(letters)$(DIGITS)_]*
 ETAGS_PERL = --lang=perl \
   autoreconf.in autoupdate.in autoscan.in autom4te.in
-ETAGS_SH = --lang=none --regex='/\([a-zA-Z_][a-zA-Z_0-9]*\)=/\1/' \
+ETAGS_SH = --lang=none --regex='/\($(WORD_REGEXP)\)=/\1/' \
   autoconf.in autoheader.in ifnames.in
 
 ETAGS_ARGS = $(ETAGS_PERL) $(ETAGS_SH)

@@ -1,5 +1,13 @@
 2001-09-23  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Dump config.log last.
+	Pass $at_debug_args to the rerun test suite.
+	* lib/m4sugar/Makefile.am (DISTCLEANFILES): New.
+	* bin/Makefile.am (ETAGS_SH): Don't use characters ranges.
+	From Paul Eggert.
+
+2001-09-23  Akim Demaille  <akim@epita.fr>
+
 	* bin/autom4te.in (@my_warning): Remove, handled by `autom4te.cfg'.
 
 2001-09-23  Akim Demaille  <akim@epita.fr>

@@ -389,15 +389,6 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME]))
 
     AS_UNAME
     echo
-
-    AS_BOX([Configuration logs.])
-    echo
-    for at_file in `find "$top_srcdir" -name config.log -print`
-    do
-      echo "$as_me: $at_file:"
-      sed 's/^/| /;10q' $at_file
-      echo
-    done
   fi
 
   # Inform about the contents of the config files.
@@ -569,7 +560,23 @@ elif test $at_debug = false; then
     echo
   } >&AS_MESSAGE_LOG_FD
 
-  $SHELL $[0] -v -d $at_fail_list 2>&1 | tee -a $as_me.log
+  $SHELL $[0] -v -d $at_debug_args $at_fail_list 2>&1 | tee -a $as_me.log
+
+  {
+    echo
+    if test -n "$top_srcdir"; then
+      AS_BOX([Configuration logs.])
+      echo
+      for at_file in `find "$top_srcdir" -name config.log -print`
+      do
+  	echo "$as_me: $at_file:"
+  	sed 's/^/| /;10q' $at_file
+  	echo
+      done
+    fi
+  } >&AS_MESSAGE_LOG_FD
+
+
   AS_BOX([$as_me.log is created.])
 
   echo

@@ -66,6 +66,7 @@ VERSION = @VERSION@
 m4sugarlibdir = $(pkgdatadir)/m4sugar
 dist_m4sugarlib_DATA = m4sugar.m4 m4sh.m4
 nodist_m4sugarlib_DATA = version.m4
+DISTCLEANFILES = $(nodist_m4sugarlib_DATA)
 
 TAGS_FILES = $(dist_m4sugarlib_DATA)
 
@@ -205,6 +206,7 @@ clean-generic:
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"

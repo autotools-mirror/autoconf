@@ -3,6 +3,7 @@
 m4sugarlibdir = $(pkgdatadir)/m4sugar
 dist_m4sugarlib_DATA = m4sugar.m4 m4sh.m4
 nodist_m4sugarlib_DATA = version.m4
+DISTCLEANFILES         = $(nodist_m4sugarlib_DATA)
 
 ## ------------ ##
 ## version.m4.  ##
