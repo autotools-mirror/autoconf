@@ -1,3 +1,7 @@
+2000-10-25  Pavel Roskin  <proski@gnu.org>
+
+	* Makefile.am: Add acversion.m4.in to EXTRA_DIST.
+
 2000-10-25  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (AC_SHELL_DIRNAME): The sed fall back was producing

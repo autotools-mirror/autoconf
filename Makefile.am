@@ -45,7 +45,7 @@ pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
 EXTRA_DIST = $(OLDCHANGELOGS) \
-autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
+acversion.m4.in autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh \
 ifnames.sh autoscan.pl INSTALL.txt \
 $(distpkgdataDATA)
 
