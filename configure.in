@@ -8,6 +8,16 @@ dnl their path, the installer can configure with a path that has GNU m4
 dnl first and get that path embedded in the installed autoconf and
 dnl autoheader scripts.
 AC_PATH_PROGS(M4, gm4 gnum4 m4, m4)
+AC_CACHE_CHECK(whether we are using GNU m4, acac_cv_gnu_m4,
+[acac_cv_gnu_m4=no
+if test x"$M4" != x; then
+  case `$M4 --help < /dev/null 2>&1` in
+    *traditional*) acac_cv_gnu_m4=yes ;;
+  esac
+fi])
+if test x"$acac_cv_gnu_m4" != xyes; then
+  AC_ERROR([GNU m4 is required])
+fi
 AC_PROG_AWK
 
 dnl We use a path for perl so the #! line in autoscan will work.
