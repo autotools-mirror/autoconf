@@ -214,7 +214,7 @@ sub load
   (my $return) = do "$file";
 
   croak "$me: cannot parse $file: $@\n" if $@;
-  croak "$me: cannot do $file: $!\n"    if $!;
+  croak "$me: cannot do $file: $!\n"    unless defined $return;
   croak "$me: cannot run $file\n"       unless $return;
 }
 
