@@ -2437,8 +2437,8 @@ Makefile snippet similar to:
 @example
 @group
 edit = sed \
-        -e 's,@@datadir\@@,$(pkgdatadir),g' \
-        -e 's,@@prefix\@@,$(prefix),g'
+        -e 's|@@datadir[@@]|$(pkgdatadir)|g' \
+        -e 's|@@prefix[@@]|$(prefix)|g'
 @end group
 
 @group
@@ -2461,9 +2461,11 @@ autoheader: Makefile $(srcdir)/autoheader.in
 Some details are noteworthy:
 
 @table @samp
-@item @@datadir\@@
-The backslash prevents @command{configure} from replacing
+@item @@datadir[@@]
+The brackets prevent @command{configure} from replacing
 @samp{@@datadir@@} in the sed expression itself.
+Brackets are preferable to a backslash here, since
+Posix says @samp{\@@} is not portable.
 
 @item $(pkgdatadir)
 Don't use @samp{@@pkgdatadir@@}!  Use the matching makefile variable
@@ -9944,6 +9946,26 @@ bar}; see @ref{Limitations of Builtins}, @command{mv} for more details.
 @node File System Conventions
 @section File System Conventions
 @cindex File system conventions
+
+Autoconf uses shell-script processing extensively, so the file names
+that it processes should not contain characters that are special to the
+shell.  Special characters include space, tab, newline, @sc{nul}, and
+the following:
+
+@example
+" # $ & ' ( ) * ; < = > ? [ \ ` |
+@end example
+
+Also, file names should not begin with @samp{~} or @samp{-}, and should
+not contain @samp{-} immediately after @samp{/}.
+
+These restrictions apply not only to the files that you distribute, but
+also to the absolute file names of your source, build, and destination
+directories.  Autoconf-generated @command{configure} scripts warn of
+violations to the above restrictions.
+
+On some Posix-like platforms, @samp{!} and @samp{^} are special too, so
+they should be avoided.
 
 While @command{autoconf} and friends will usually be run on some Posix
 variety, it can and will be used on other systems, most notably @acronym{DOS}

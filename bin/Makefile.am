@@ -2,7 +2,7 @@
 
 ## Makefile for Autoconf.
 
-## Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Free Software
+## Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Free Software
 ## Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
@@ -37,19 +37,19 @@ MOSTLYCLEANFILES = $(bin_SCRIPTS) autoconf.in *.tmp
 ## ------------- ##
 
 edit = sed \
-	-e 's,@SHELL\@,$(SHELL),g' \
-	-e 's,@PERL\@,$(PERL),g' \
-	-e 's,@bindir\@,$(bindir),g' \
-	-e 's,@datadir\@,$(pkgdatadir),g' \
-	-e 's,@prefix\@,$(prefix),g' \
-	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
-	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
-	-e 's,@autom4te-name\@,'`echo autom4te | sed '$(transform)'`',g' \
-	-e 's,@M4\@,$(M4),g' \
-	-e 's,@AWK\@,$(AWK),g' \
-	-e 's,@VERSION\@,$(VERSION),g' \
-	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g' \
-	-e 's,@configure_input\@,Generated from $@.in; do not edit by hand.,g'
+	-e 's|@SHELL[@]|$(SHELL)|g' \
+	-e 's|@PERL[@]|$(PERL)|g' \
+	-e 's|@bindir[@]|$(bindir)|g' \
+	-e 's|@datadir[@]|$(pkgdatadir)|g' \
+	-e 's|@prefix[@]|$(prefix)|g' \
+	-e 's|@autoconf-name[@]|'`echo autoconf | sed '$(transform)'`'|g' \
+	-e 's|@autoheader-name[@]|'`echo autoheader | sed '$(transform)'`'|g' \
+	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
+	-e 's|@M4[@]|$(M4)|g' \
+	-e 's|@AWK[@]|$(AWK)|g' \
+	-e 's|@VERSION[@]|$(VERSION)|g' \
+	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \
+	-e 's|@configure_input[@]|Generated from $@.in; do not edit by hand.|g'
 
 # autoconf is written in M4sh.
 autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)

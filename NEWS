@@ -1,5 +1,9 @@
 * Major changes in Autoconf 2.59c
 
+** The configure command now warns you if you attempt to use a directory
+  whose name contains a special character like space, newline, or "\".
+  Such names are not supported, and can cause "configure" to crash.
+
 ** The configure command now redirects standard input from /dev/null,
   to help avoid problems with subsidiary commands that might mistakenly
   read standard input.  AS_ORIGINAL_STDIN_FD points to the original

@@ -415,7 +415,7 @@ AT_DATA([configure.ac],
 [[AC_INIT
 pwd=`pwd`
 p="1${PATH_SEPARATOR}2${PATH_SEPARATOR}3${PATH_SEPARATOR}4${PATH_SEPARATOR}5${PATH_SEPARATOR}6"
-path=`echo $p | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
+path=`echo $p | sed -e 's|\([[0-9]]\)|'"$pwd"'/path/\1|g'`
 fail=false
 
 AC_CHECK_PROG(TOOL1, tool, found, not-found, $path)
@@ -426,7 +426,7 @@ AC_CHECK_PROG(TOOL2, tool,, not-found, $path)
 test "$TOOL2" = not-found || fail=:
 
 AC_CHECK_PROG(TOOL3, tool, tool, not-found, $path, $pwd/path/1/tool)
-test "$TOOL3" = $pwd/path/2/tool || fail=:
+test "$TOOL3" = "$pwd/path/2/tool" || fail=:
 
 AC_CHECK_PROG(TOOL4, better, better, not-found, $path, $pwd/path/1/tool)
 test "$TOOL4" = better || fail=:
@@ -501,14 +501,14 @@ AT_DATA([configure.ac],
 [[AC_INIT
 pwd=`pwd`
 p="1${PATH_SEPARATOR}2${PATH_SEPARATOR}3${PATH_SEPARATOR}4${PATH_SEPARATOR}5${PATH_SEPARATOR}6"
-path=`echo $p | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
+path=`echo $p | sed -e 's|\([[0-9]]\)|'"$pwd"'/path/\1|g'`
 fail=false
 
 AC_PATH_PROG(TOOL1, tool, not-found, $path)
-test "$TOOL1" = $pwd/path/1/tool || fail=:
+test "$TOOL1" = "$pwd/path/1/tool" || fail=:
 
 AC_PATH_PROG(TOOL2, better, not-found, $path)
-test "$TOOL2" = $pwd/path/6/better || fail=:
+test "$TOOL2" = "$pwd/path/6/better" || fail=:
 
 # When a tool is not found, and no value is given for not-found,
 # the variable is left empty.
@@ -516,7 +516,7 @@ AC_PATH_PROGS(TOOL3, missing,, $path)
 test -z "$TOOL3" || fail=:
 
 AC_PATH_PROGS(TOOL4, missing tool better,, $path)
-test "$TOOL4" = $pwd/path/1/tool || fail=:
+test "$TOOL4" = "$pwd/path/1/tool" || fail=:
 
 # No AC-OUTPUT, we don't need config.status.
 $fail &&

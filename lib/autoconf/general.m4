@@ -462,6 +462,49 @@ AC_DEFUN([AC_CONFIG_SRCDIR],
 [m4_divert_text([DEFAULTS], [ac_unique_file="$1"])])
 
 
+# _AC_INIT_DIRCHECK
+# -----------------
+# Set ac_pwd, and sanity-check it and the source and installation directories.
+m4_define([_AC_INIT_DIRCHECK],
+[m4_divert_push([PARSE_ARGS])dnl
+
+ac_pwd=`pwd` && test -n "$ac_pwd" ||
+  AC_MSG_ERROR([Working directory cannot be determined])
+
+ac_pat="[[\$][{][_$as_cr_Letters][_$as_cr_alnum]*[}]]"
+
+for ac_dir in "$ac_pwd" "$srcdir" \
+  "$bindir" "$sbindir" "$libexecdir" "$datarootdir" "$datadir" \
+  "$sysconfdir" "$sharedstatedir" "$localstatedir" "$includedir" \
+  "$oldincludedir" "$docdir" "$infodir" "$htmldir" "$dvidir" "$pdfdir" \
+  "$psdir" "$libdir" "$localedir" "$mandir"
+do
+  # Remove references to shell or make variables.
+  ac_dirx=$ac_dir
+  while :
+  do
+    case $ac_dirx in
+    *\${*}*)
+      ac_dirx=`
+	expr "X$ac_dirx" : "X\\(.*\\)$ac_pat"`X`
+	expr "X$ac_dirx" : "X.*$ac_pat\\(.*\\)"`;;
+    *) break;;
+    esac
+  done
+
+  # Check for newline, tab, space, and other weird possibilities.
+  # Preserve that tab character below!
+  case $ac_dirx in
+  '' | -* | */-* | *'
+'* | *'	'* | *' '* | *\"* | *\#* | *\$* | *\&* | *\'* | *\(* | *\)* | \
+  *\** | *\;* | *\<* | *\=* | *\>* | *\?* | *\@<:@* | *\\* | *\`* | \
+  *\|* | \~*)
+    AC_MSG_WARN([Directory name `$ac_dir' contains special characters]);;
+  esac
+done
+m4_divert_pop([PARSE_ARGS])dnl
+])# _AC_INIT_DIRCHECK
+
 # _AC_INIT_SRCDIR
 # ---------------
 # Compute `srcdir' based on `$ac_unique_file'.
@@ -1047,7 +1090,6 @@ fi
 
 if test "$ac_init_help" = "recursive"; then
   # If there are subdirs, report their specific --help.
-  ac_popdir=`pwd`
   for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
     test -d $ac_dir || continue
     _AC_SRCDIRS(["$ac_dir"])
@@ -1066,7 +1108,7 @@ if test "$ac_init_help" = "recursive"; then
     else
       AC_MSG_WARN([no configuration information is in $ac_dir])
     fi || ac_status=$?
-    cd "$ac_popdir" || { ac_status=$?; break; }
+    cd "$ac_pwd" || { ac_status=$?; break; }
   done
 fi
 
@@ -1321,6 +1363,7 @@ m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
 _AC_INIT_DEFAULTS
 _AC_INIT_PARSE_ARGS
 _AC_INIT_SRCDIR
+_AC_INIT_DIRCHECK
 _AC_INIT_HELP
 _AC_INIT_VERSION
 _AC_INIT_CONFIG_LOG
@@ -1517,10 +1560,10 @@ Program names:
   --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
 m4_divert_pop([HELP_BEGIN])dnl
 test "$program_prefix" != NONE &&
-  program_transform_name="s,^,$program_prefix,;$program_transform_name"
+  program_transform_name="s|^|$program_prefix|;$program_transform_name"
 # Use a double $ so make ignores it.
 test "$program_suffix" != NONE &&
-  program_transform_name="s,\$,$program_suffix,;$program_transform_name"
+  program_transform_name="s|\$|$program_suffix|;$program_transform_name"
 # Double any \ or $.  echo might interpret backslashes.
 # By default was `s,x,x', remove it if useless.
 cat <<\_ACEOF >conftest.sed

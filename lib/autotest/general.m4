@@ -698,12 +698,12 @@ _ATEOF
 	    at_errexit=false
 	    ;;
 	yes:*)
-	    at_msg='expected failure ('`cat $at_check_line_file`')'
+	    at_msg='expected failure ('`cat "$at_check_line_file"`')'
 	    at_xfail_list="$at_xfail_list $at_group"
 	    at_errexit=false
 	    ;;
 	no:*)
-	    at_msg='FAILED ('`cat $at_check_line_file`')'
+	    at_msg='FAILED ('`cat "$at_check_line_file"`')'
 	    at_fail_list="$at_fail_list $at_group"
 	    at_errexit=$at_errexit_p
 	    ;;

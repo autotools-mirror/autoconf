@@ -1,7 +1,8 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf testsuite.
-## Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+## Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005
+## Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -27,7 +28,7 @@ EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
-MAINTAINERCLEANFILES = Makefile.in 
+MAINTAINERCLEANFILES = Makefile.in
 
 # Import the dependencies on Autotest and M4sh.
 include ../lib/freeze.mk
@@ -60,10 +61,10 @@ wrapper.in: $(srcdir)/wrapper.as $(m4sh_m4f_dependencies)
 	$(MY_AUTOM4TE) --language=M4sh $(srcdir)/wrapper.as -o $@
 
 edit = sed \
-	-e 's,@wrap_program\@,$@,g' \
-	-e 's,@abs_top_srcdir\@,@abs_top_srcdir@,g' \
-	-e 's,@abs_top_builddir\@,@abs_top_builddir@,g' \
-	-e 's,@configure_input\@,Generated from $<.,g'
+	-e 's|@wrap_program[@]|$@|g' \
+	-e 's|@abs_top_srcdir[@]|@abs_top_srcdir@|g' \
+	-e 's|@abs_top_builddir[@]|@abs_top_builddir@|g' \
+	-e 's|@configure_input[@]|Generated from $<.|g'
 
 $(wrappers): wrapper.in
 	rm -f $@ $@.tmp

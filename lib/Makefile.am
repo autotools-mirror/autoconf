@@ -1,6 +1,6 @@
 ## Process this file with automake to create Makefile.in
 
-## Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -22,18 +22,18 @@ nodist_pkgdata_DATA = autom4te.cfg
 EXTRA_DIST = autom4te.in freeze.mk
 
 edit = sed \
-	-e 's,@SHELL\@,$(SHELL),g' \
-	-e 's,@PERL\@,$(PERL),g' \
-	-e 's,@bindir\@,$(bindir),g' \
-	-e 's,@datadir\@,$(pkgdatadir),g' \
-	-e 's,@prefix\@,$(prefix),g' \
-	-e 's,@autoconf-name\@,'`echo autoconf | sed '$(transform)'`',g' \
-	-e 's,@autoheader-name\@,'`echo autoheader | sed '$(transform)'`',g' \
-	-e 's,@autom4te-name\@,'`echo autom4te | sed '$(transform)'`',g' \
-	-e 's,@M4\@,$(M4),g' \
-	-e 's,@AWK\@,$(AWK),g' \
-	-e 's,@VERSION\@,$(VERSION),g' \
-	-e 's,@PACKAGE_NAME\@,$(PACKAGE_NAME),g'
+	-e 's|@SHELL[@]|$(SHELL)|g' \
+	-e 's|@PERL[@]|$(PERL)|g' \
+	-e 's|@bindir[@]|$(bindir)|g' \
+	-e 's|@datadir[@]|$(pkgdatadir)|g' \
+	-e 's|@prefix[@]|$(prefix)|g' \
+	-e 's|@autoconf-name[@]|'`echo autoconf | sed '$(transform)'`'|g' \
+	-e 's|@autoheader-name[@]|'`echo autoheader | sed '$(transform)'`'|g' \
+	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
+	-e 's|@M4[@]|$(M4)|g' \
+	-e 's|@AWK[@]|$(AWK)|g' \
+	-e 's|@VERSION[@]|$(VERSION)|g' \
+	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g'
 
 # All the files below depend on Makefile so that they are rebuilt
 # when the prefix, etc. changes. Unfortunately, suffix rules

@@ -633,7 +633,7 @@ AT_CHECK([cd at-dir && ../configure], [], [ignore])
 
 # Absolute name.
 at_here=`pwd`
-AT_CHECK([cd at-dir && $at_here/configure], [], [ignore])
+AT_CHECK([cd at-dir && "$at_here/configure"], [], [ignore])
 
 AT_CLEANUP
 

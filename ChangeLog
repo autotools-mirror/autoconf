@@ -1,5 +1,26 @@
 2005-03-22  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* NEWS: The configure command now warns you if you attempt to use
+	a directory whose name contains a special character like space,
+	newline, or "\".
+	* doc/autoconf.texi (Installation Directory Variables): Allow
+	"," in file names.  Do not use \@; it's not a portable regexp.
+	* bin/Makefile.am (edit): Likewise.
+	* lib/Makefile.am (edit): Likewise.
+	* tests/Makefile.am (edit): Likewise.
+	* tests/semantics.at: Likewise.
+	* tests/torture.at: Likewise.
+	* lib/autoconf/general.m4 (AC_ARG_PROGRAM): Likewise.
+	* lib/autoconf/status.m4 (_AC_SRCDIRS): Likewise.
+	* doc/autoconf.texi (File System Conventions): Warn about
+	unportable file names.
+	* lib/autoconf/general.m4 (_AC_INIT_DIRCHECK): New macro.
+	(AC_INIT): Use it.
+	(_AC_INIT_SRCDIR): Use ac_pwd rather than invoking pwd.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Propagate
+	ac_pwd, and quote srcdir.
+	* lib/autotest/general.m4 (AT_INIT): Quote file name args.
+
 	* doc/autoconf.texi: Fix some systematic formatting problems.
 	".)"  needs a following @: if not at the end of a sentence, and
 	similarly for "!)".  "etc." should be preceded by a comma.
