@@ -6,6 +6,7 @@ AM_INIT_AUTOMAKE(autoconf, 2.49c)
 
 # Initialize the test suite.
 AT_CONFIG(..)
+AC_PATH_PROG(EXPR, expr)
 
 # We use a path for GNU m4 so even if users have another m4 first in
 # their path, the installer can configure with a path that has GNU m4

@@ -7,6 +7,27 @@ AT_BANNER([Low level compiling/preprocessing macros.])
 # primitive, so check those first.
 
 
+##- ----------- ##
+## Extensions.  ##
+## ------------ ##
+
+# As far as we know only `foo', `foo.exe' are possible executable,
+# and `foo.o', `foo.obj' are possible object files.  Autoconf must not
+# know that, but it is OK for the test suite to take this into account.
+AT_CHECK_MACRO([Extensions],
+[[AC_PROG_CC
+case $ac_exeext in
+  '' | '.exe' ) ;;
+  * ) AC_MSG_ERROR([suspicious executable suffix: $ac_exeext]);;
+esac
+
+case $ac_objext in
+  'o' | 'obj' ) ;;
+  * ) AC_MSG_ERROR([suspicious object suffix: $ac_objext]);;
+esac
+]])
+
+
 ## ------------ ##
 ## C keywords.  ##
 ## ------------ ##
@@ -17,10 +38,11 @@ AT_CHECK_MACRO([C keywords],
 AC_C_CONST
 AC_C_INLINE
 AC_C_VOLATILE
-case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
+case $GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile in
  yes,*no*)
    AC_MSG_ERROR([failed to detect `const', `inline' or `volatile' support]);;
-esac]])
+esac
+]])
 
 
 

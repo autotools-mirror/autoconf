@@ -651,6 +651,7 @@ AC_DEFUN([AC_OBJEXT],   [])
 # _AC_COMPILER_EXEEXT_DEFAULT
 # ---------------------------
 # Check for the extension used for the default name for executables.
+# Beware of `expr' that may return `0' or `'.
 m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 [# Try without -o first, disregard a.out.
 ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
@@ -658,8 +659,9 @@ AS_IFELSE([AC_TRY_EVAL(ac_link_default)],
 [for ac_file in `ls a.exe conftest.exe a.* conftest conftest.* 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.out | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
-    *) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-       break;;
+    *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+          break;;
+    * ) break;;
   esac
 done],
           [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
@@ -683,8 +685,9 @@ _AC_LINK_IFELSE([],
 for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
-    *) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-       break;;
+    *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+          break;;
+    * ) break;;
   esac
 done],
               [AC_MSG_ERROR([cannot compute EXEEXT: cannot compile and link])])

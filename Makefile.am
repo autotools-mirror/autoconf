@@ -89,6 +89,11 @@ INSTALL.txt: $(top_srcdir)/doc/install.texi
 MAINTAINERCLEANFILES = acversion.m4 INSTALL.txt
 
 
+## maintainer-check ##
+
+maintainer-check:
+	cd tests && make maintainer-check
+
 ## ----------------------------------- ##
 ## Special installation instructions.  ##
 ## ----------------------------------- ##

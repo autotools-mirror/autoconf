@@ -58,6 +58,7 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 AWK = @AWK@
+EXPR = @EXPR@
 HELP2MAN = @HELP2MAN@
 M4 = @M4@
 PERL = @PERL@
@@ -78,7 +79,7 @@ EXTRA_DIST = README              atgeneral.m4 atspecific.m4 aclocal.m4          
 MACRO_FILES = ../acgeneral.m4   ../acspecific.m4               ../acfunctions.m4 ../aclang.m4 ../acheaders.m4
 
 
-CLEANFILES = debug-*.sh macro configure configure.in config.status              config.cache config.log config.h.in config.h
+CLEANFILES = debug-*.sh macro configure configure.in configure.ac              config.status config.cache config.log config.h.in config.h              stderr stdout empty
 
 DISTCLEANFILES = atconfig testsuite
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -209,6 +210,28 @@ syntax.at: mktests.sh $(MACRO_FILES)
 
 update.at: mktests.sh $(MACRO_FILES)
 	cd $(srcdir) && ./mktests.sh $(MACRO_FILES)
+
+maintainer-check: maintainer-check-posix maintainer-check-c++
+
+# The hairy heredoc is more robust than using echo.
+expr:
+	echo '#! $(SHELL)'            >expr
+	echo 'result=`@EXPR@ "$$@"`' >>expr
+	echo 'estatus=$$?'           >>expr
+	echo 'cat <<EOF'             >>expr
+	echo '$${result:-0}'         >>expr
+	echo 'EOF'                   >>expr
+	echo 'exit $$estatus'        >>expr
+	chmod +x expr
+
+# Try the test suite with more severe environments.
+maintainer-check-posix: expr
+	POSIXLY_CORRECTLY=yes make check
+	rm expr
+
+# Try using G++ as a C compiler.
+maintainer-check-c++:
+	CC=g++ make check
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
