@@ -1,5 +1,18 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	No longer use a diversion to store the sed program implementing
+	AC_SUBST.
+
+	* acgeneral.m4 (_AC_SUBST): New macro.
+	(_AC_SUBST_SED_PROGRAM): Initialize.
+	(AC_SUBST): Use _AC_SUBST.
+	(AC_SUBST_FILE): Likewise.
+	(AC_DIVERSION_SED): Removed.  Renumber the AC_DIVERSIONs.
+	(AC_OUTPUT_FILES): Instead on undiverting AC_DIVERSION_SED, output
+	_AC_SUBST_SED_PROGRAM.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	Standardize the error messages in the options handling of
 	`configure' and `config.status'.
 

@@ -58,7 +58,7 @@
 m4_namespace_push(autoconf)
 
 # m4 output diversions.  We let m4 output them all in order at the end,
-# except that we explicitly undivert AC_DIVERSION_SED, AC_DIVERSION_CMDS,
+# except that we explicitly undivert AC_DIVERSION_CMDS,
 # and AC_DIVERSION_ICMDS.
 
 define(AC_DIVERSION_KILL,    -1)# suppress output
@@ -70,9 +70,8 @@ define(AC_DIVERSION_NORMAL_3, 4)# AC_REQUIRE'd code, 3 level deep
 define(AC_DIVERSION_NORMAL_2, 5)# AC_REQUIRE'd code, 2 level deep
 define(AC_DIVERSION_NORMAL_1, 6)# AC_REQUIRE'd code, 1 level deep
 define(AC_DIVERSION_NORMAL,   7)# the tests and output code
-define(AC_DIVERSION_SED,      8)# variable substitutions in config.status
-define(AC_DIVERSION_CMDS,     9)# extra shell commands in config.status
-define(AC_DIVERSION_ICMDS,   10)# extra initialization in config.status
+define(AC_DIVERSION_CMDS,     8)# extra shell commands in config.status
+define(AC_DIVERSION_ICMDS,    9)# extra initialization in config.status
 
 
 # AC_DIVERT_PUSH(STREAM)
@@ -1666,32 +1665,35 @@ EOF
 ## -------------------------- ##
 
 
+# _AC_SUBST(VARIABLE, PROGRAM)
+# ----------------------------
+# If VARIABLE has not already been AC_SUBST'ed, append the sed PROGRAM
+# to `_AC_SUBST_SED_PROGRAM'.
+define(_AC_SUBST,
+[ifdef([AC_SUBST($1)], [],
+[define([AC_SUBST($1)])dnl
+m4_append([_AC_SUBST_SED_PROGRAM],
+[$2
+])])])
+
+# Initialize.
+define([_AC_SUBST_SED_PROGRAM])
+
+
 # AC_SUBST(VARIABLE)
 # ------------------
-# This macro protects VARIABLE from being diverted twice
-# if this macro is called twice for it.
 # Beware that if you change this macro, you also have to change the
 # sed script at the top of AC_OUTPUT_FILES.
 define(AC_SUBST,
-[ifdef([AC_SUBST_$1], ,
-[define([AC_SUBST_$1], )dnl
-AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
-s%@$1@%[$]$1%;t t
-AC_DIVERT_POP()dnl
-])])
+[_AC_SUBST([$1], [s%@$1@%[$]$1%;t t])])
+
 
 # AC_SUBST_FILE(VARIABLE)
 # -----------------------
 # Read the comments of the preceding macro.
 define(AC_SUBST_FILE,
-[ifdef([AC_SUBST_$1], ,
-[define([AC_SUBST_$1], )dnl
-AC_DIVERT_PUSH(AC_DIVERSION_SED)dnl
-/@$1@/r [$]$1
-s%@$1@%%;t t
-AC_DIVERT_POP()dnl
-])])
-
+[_AC_SUBST([$1], [/@$1@/r [$]$1
+s%@$1@%%;t t])])
 
 
 ## --------------------------------------- ##
@@ -3604,7 +3606,7 @@ changequote([, ])dnl
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
 dnl Insert the sed substitutions of variables.
-undivert(AC_DIVERSION_SED)dnl
+_AC_SUBST_SED_PROGRAM()dnl
 CEOF
 
 EOF
