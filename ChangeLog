@@ -1,3 +1,8 @@
+2004-11-10  Derek R. Price  <derek@ximbiot.com>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Note `cp -r'
+	limitations.  Reorder paragraphs for clarity.
+
 2004-10-11  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Standardize spelling of "Posix" (as opposed
@@ -174,8 +179,8 @@
 
 2004-06-23  Noah Misch  <noah@cs.caltech.edu>
 
-        * lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): If the shell is
-        zsh, disable GLOB_SUBST to avoid backslash handling problems.
+	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): If the shell is
+	zsh, disable GLOB_SUBST to avoid backslash handling problems.
 	(trivial change)
 
 2004-06-04  Paul Eggert  <eggert@cs.ucla.edu>
@@ -475,7 +480,7 @@
 	(AC_CHECK_ALIGNOF): New macro.
 	* tests/mktests.sh (ac_exclude_list): Exclude AC_CHECK_ALIGNOF.
 	* tests/semantics.at (AC_CHECK_ALIGNOF): Add tests similar to
-        those for sizeof.
+	those for sizeof.
 
 2004-03-03  Paul Eggert  <eggert@twinsun.com>
 
