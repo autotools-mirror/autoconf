@@ -1,5 +1,13 @@
 2000-05-26  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (AC_FUNC_STRERROR_R): New, from `strerror_r.m4',
+	serial 2, by Jim Meyering.
+	(AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK): New, from
+	`lstat-slash.m4', serial 1, by Jim Meyering.
+	* acfunctions: Adjust.
+
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_CHECK_TOOLS): Don't require
 	AC_CHECK_TOOL_PREFIX, it's dead.
 

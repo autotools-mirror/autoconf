@@ -2786,6 +2786,19 @@ a process ID as an argument.  This macro does not check whether
 first call @code{AC_CHECK_FUNC} for @code{getpgrp}.
 @end defmac
 
+@defmac AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
+@maindex FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
+@cvindex LSTAT_FOLLOWS_SLASHED_SYMLINK
+According to @sc{posix}, if @file{link} is a symlink to an
+@file{entity}, then @code{lstat} must return information on the
+@file{entity} (not on @file{link}) when called on @file{"link/"}, i.e.,
+when the trailing slash is given.
+
+If @code{lstat} behaves properly, define
+@code{LSTAT_FOLLOWS_SLASHED_SYMLINK}, otherwise require an
+@code{AC_LIBOBJ} replacement of @code{lstat}.
+@end defmac
+
 @defmac AC_FUNC_MALLOC
 @maindex FUNC_MALLOC
 If the @code{malloc} works correctly (@samp{malloc (0)} returns a valid
@@ -2855,6 +2868,18 @@ If the @code{strcoll} function exists and works correctly, define
 @code{HAVE_STRCOLL}.  This does a bit more than
 @samp{AC_CHECK_FUNCS(strcoll)}, because some systems have incorrect
 definitions of @code{strcoll}, which should not be used.
+@end defmac
+
+@defmac AC_FUNC_STRERROR_R
+@maindex FUNC_STRERROR_R
+@cvindex HAVE_STRERROR_R
+@cvindex HAVE_WORKING_STRERROR_R
+If @code{strerror_r} is available, define @code{HAVE_STRERROR_R}.  If
+its implementation correctly returns a @code{char *}, define
+@code{HAVE_WORKING_STRERROR_R}.  On at least DEC UNIX 4.0[A-D] and HP-UX
+B.10.20, @code{strerror_r} returns @code{int}.  Actually, this tests
+only whether it returns a scalar or an array, but that should be enough.
+This is used by the common @file{error.c}.
 @end defmac
 
 @defmac AC_FUNC_STRFTIME
