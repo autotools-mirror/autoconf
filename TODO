@@ -98,14 +98,6 @@ In config.status comment, put the host/target/build types, if used.
 
 ------------------------------------------------------------------------------
 
-Have AC_CANONICAL_* cache the host/build/target types.
-They have to be overridden by the command line arguments,
-just as for X includes and libraries.  Should they be cached
-all in one variable, or three?  In that case, what if only one
-or two of the cache variables are set?
-
-------------------------------------------------------------------------------
-
      The argument HELP-STRING is a description of the option which
      ...
      Avoid tabs in the help string.  You'll need to enclose it in `['
@@ -488,10 +480,6 @@ announce and only those few things will need to be changed.
 Perhaps config.status could be written with comments saying what was
 decided.
 From: Roland McGrath <roland@gnu.ai.mit.edu>
-
-------------------------------------------------------------------------------
-
-Use automake to generate autoconf's Makefile.in's?
 
 ------------------------------------------------------------------------------
 
