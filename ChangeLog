@@ -1,5 +1,10 @@
 2000-12-12  Pavel Roskin  <proski@gnu.org>
 
+	* Makefile.am: Don't use suffix rules for perl and shell
+	scripts. Use explicit rules instead.
+
+2000-12-12  Pavel Roskin  <proski@gnu.org>
+
 	* autoscan.pl (init_tables): Allow spaces on the right hand side
 	in autoscan tables. Die if there are no spaces at all.
 	(scan_c_file): Use \b instead of \W so that keywords match at

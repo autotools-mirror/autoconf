@@ -22,7 +22,7 @@ AUTOMAKE_OPTIONS = check-news 1.4 readme-alpha
 
 SUBDIRS = . m4 man doc tests
 
-SUFFIXES = .m4 .m4f .pl .sh
+SUFFIXES = .m4 .m4f
 ## There is currently no means with Automake not to run aclocal.
 ACLOCAL_AMFLAGS = --version >/dev/null && touch aclocal.m4
 WGET = wget
@@ -107,9 +107,6 @@ install-data-hook: INSTALL.txt
 ## The scripts.  ##
 ## ------------- ##
 
-# Follow the version number changes.
-$(bin_SCRIPTS): configure.in
-
 editsh = sed \
 	-e 's,@datadir\@,$(pkgdatadir),g' \
 	-e 's,@M4\@,$(M4),g' \
@@ -127,17 +124,41 @@ editpl = sed \
 	-e 's,@VERSION\@,$(VERSION),g' \
 	-e 's,@PACKAGE\@,$(PACKAGE),g'
 
-.sh:
-	rm -f $@ $@.tmp
-	$(editsh) $< >$@.tmp
-	chmod +x $@.tmp
-	mv $@.tmp $@
+autoconf: $(srcdir)/autoconf.sh $(srcdir)/configure.in
+	rm -f autoconf autoconf.tmp
+	$(editsh) $(srcdir)/autoconf.sh >autoconf.tmp
+	chmod +x autoconf.tmp
+	mv autoconf.tmp autoconf
 
-.pl:
-	rm -f $@ $@.tmp
-	$(editpl) $< >$@.tmp
-	chmod +x $@.tmp
-	mv $@.tmp $@
+autoheader: $(srcdir)/autoheader.sh $(srcdir)/configure.in
+	rm -f autoheader autoheader.tmp
+	$(editsh) $(srcdir)/autoheader.sh >autoheader.tmp
+	chmod +x autoheader.tmp
+	mv autoheader.tmp autoheader
+
+autoreconf: $(srcdir)/autoreconf.sh $(srcdir)/configure.in
+	rm -f autoreconf autoreconf.tmp
+	$(editsh) $(srcdir)/autoreconf.sh >autoreconf.tmp
+	chmod +x autoreconf.tmp
+	mv autoreconf.tmp autoreconf
+
+autoupdate: $(srcdir)/autoupdate.sh $(srcdir)/configure.in
+	rm -f autoupdate autoupdate.tmp
+	$(editsh) $(srcdir)/autoupdate.sh >autoupdate.tmp
+	chmod +x autoupdate.tmp
+	mv autoupdate.tmp autoupdate
+
+ifnames: $(srcdir)/ifnames.sh $(srcdir)/configure.in
+	rm -f ifnames ifnames.tmp
+	$(editsh) $(srcdir)/ifnames.sh >ifnames.tmp
+	chmod +x ifnames.tmp
+	mv ifnames.tmp ifnames
+
+autoscan: $(srcdir)/autoscan.pl $(srcdir)/configure.in
+	rm -f autoscan autoscan.tmp
+	$(editpl) $(srcdir)/autoscan.pl >autoscan.tmp
+	chmod +x autoscan.tmp
+	mv autoscan.tmp autoscan
 
 
 ## ------------------ ##
