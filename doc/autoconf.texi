@@ -12436,10 +12436,10 @@ builtin type @var{default}, e.g., @samp{short} or @samp{unsigned}.
 This macro is equivalent to:
 
 @example
-AC_CHECK_TYPE([@var{type}],
-              [AC_DEFINE([@var{type}], [@var{default}],
-                         [Define to `@var{default}' if <sys/types.h>
-                          does not define.])])
+AC_CHECK_TYPE([@var{type}],,
+              [AC_DEFINE_UNQUOTED([@var{type}], [@var{default}],
+                                  [Define to `@var{default}' if
+                                   <sys/types.h> does not define.])])
 @end example
 
 In order to keep backward compatibility, the two versions of
