@@ -108,7 +108,7 @@ pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_KILL)
 # ------------------
 # The prologue for Autoconf macros.
 define(AC_PRO,
-[define([AC_PROVIDE_$1], )dnl
+[AC_PROVIDE([$1])dnl
 ifelse(AC_DIVERSION_CURRENT, AC_DIVERSION_NORMAL,
        [AC_DIVERT_PUSH(m4_eval(AC_DIVERSION_CURRENT - 1))],
        [pushdef([AC_DIVERSION_CURRENT], AC_DIVERSION_CURRENT)])dnl
@@ -175,7 +175,7 @@ define(AC_OBSOLETE,
 # there exist a specialized version of MACRO for ARG1, use this macro
 # instead with arguments ARGS (i.e., ARG1 is *not* given).  See the
 # definition of `AC_DEFUN'.
-AC_DEFUN(AC_SPECIALIZE,
+define(AC_SPECIALIZE,
 [ifdef([$1-$2],
        [indir([$1-$2], m4_shift(m4_shift($@)))],
        [indir([$1], m4_shift($@))])])
@@ -205,7 +205,7 @@ AC_DIVERT_POP()dnl
 # AC_PROVIDE(MACRO-NAME)
 # ----------------------
 define(AC_PROVIDE,
-[define([AC_PROVIDE_$1], )])
+[define([AC_PROVIDE_$1])])
 
 
 

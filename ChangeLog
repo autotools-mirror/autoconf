@@ -1,5 +1,13 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_PRO): Use AC_PROVIDE instead of defining
+	yourself.  This allows to see everything that is AC_PROVIDEd via
+	autoconf --trace.
+	(AC_SPECIALIZE): define'd, not AC_DEFUN'd.
+	(AC_PROVIDE): Use define with a single arg, instead of an empty $2.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (ac_includes_default): Don't use simple quotes, but
 	doubles quotes if you want to use \-continuation lines: this is
 	not recognized by MIPS' sh.
