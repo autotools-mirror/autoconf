@@ -6274,7 +6274,82 @@ call it (without any arguments).  Make sure to quote @var{macro-name}
 with square brackets.  @var{macro-name} must have been defined using
 @code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
 that it has been called.
+
+@code{AC_REQUIRE} must be used inside an @code{AC_DEFUN}'d macro, it
+must not be called from the top level.
 @end defmac
+
+@code{AC_REQUIRE} is often misunderstood, it really implements
+dependencies between macros in the sense that if a macro depends upon
+another, the latter will be expanded @emph{before} the body of the
+former.  In particular, @samp{AC_REQUIRE(FOO)} is not replaced with the
+body of @code{FOO}.  For instance, this definition of macros
+
+@example
+@group
+AC_DEFUN([TRAVOLTA],
+[test "$body_temparature_in_celsius" -gt "38" &&
+  dance_floor=occupied])
+AC_DEFUN([NEWTON_JOHN],
+[test "$hair_style" = "curly" &&
+  dance_floor=occupied])
+@end group
+
+@group
+AC_DEFUN([RESERVE_DANCE_FLOOR],
+[if date | grep '^Sat.*pm' >/dev/null 2>&1; then
+  AC_REQUIRE([TRAVOLTA])
+  AC_REQUIRE([NEWTON_JOHN])
+fi])
+@end group
+@end example
+
+@noindent
+with this @file{configure.in}
+
+@example
+AC_INIT
+RESERVE_DANCE_FLOOR
+if test "$dance_floor" = occupied; then
+  AC_MSG_ERROR([cannot pick up here, let's move])
+fi
+@end example
+
+@noindent
+will not leave you with a better chance to meet the kindred soul the
+other times that the Saturday night since it expands into:
+
+@example
+@group
+test "$body_temperature_in_Celsius" -gt "38" &&
+  dance_floor=occupied
+test "$hair_style" = "curly" &&
+  dance_floor=occupied
+fi
+if date | grep '^Sat.*pm' >/dev/null 2>&1; then
+
+
+fi
+@end group
+@end example
+
+This behavior was chosen on purpose: (i) it avoids that messages from
+required macros interrupt the messages from the requiring macros, (ii),
+it avoids bad surprises when shell conditionals are used, as in:
+
+@example
+@group
+if ...; then
+  AC_REQUIRE([SOME_CHECK])
+fi
+...
+SOME_CHECK
+@end group
+@end example
+
+
+You are encouraged to put all the @code{AC_REQUIRE}s at the beginning of
+the macros.  You can use @code{dnl} to avoid the empty line they leave.
 
 An alternative to using @code{AC_DEFUN} is to use @code{define} and call
 @code{AC_PROVIDE}.  Because this technique does not prevent nested

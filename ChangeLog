@@ -1,5 +1,9 @@
 2000-06-26  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Prerequisite Macros): More about AC_REQUIRE.
+
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
 	Given better names to the diversions.
 
 	* acgeneral.m4 (_AC_DIVERT(NORMAL_2), _AC_DIVERT(NORMAL_3),
