@@ -1,5 +1,11 @@
 2000-10-25  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_SHELL_DIRNAME): The sed fall back was producing
+	twice the output for it was not using `-n' and used `p'.  Remove
+	the latter.
+
+2000-10-25  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PREPARE_FDS): Give some information on
 	the host in config.log.
 
