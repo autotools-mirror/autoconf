@@ -1,3 +1,8 @@
+2001-05-30  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_PROG_F77): Add Compaq's "fort" to the list of
+	Fortran (95) compilers to check.
+
 2001-05-29  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* doc/autoconf.texi (Introduction, Pointers): Update the Autoconf

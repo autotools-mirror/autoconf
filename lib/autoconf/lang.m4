@@ -1259,6 +1259,7 @@ AU_DEFUN([ac_cv_prog_g77],
 # fl32 is the Microsoft Fortran "PowerStation" compiler.
 # af77 is the Apogee F77 compiler for Intergraph hardware running CLIX.
 # epcf90 is the "Edinburgh Portable Compiler" F90.
+# fort is the Compaq Fortran 90 (now 95) compiler for Tru64 and Linux/Alpha.
 AC_DEFUN([AC_PROG_F77],
 [AC_LANG_PUSH(Fortran 77)dnl
 AC_ARG_VAR([F77],    [Fortran 77 compiler command])dnl
@@ -1266,7 +1267,7 @@ AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 AC_CHECK_TOOLS(F77,
       [m4_default([$1],
-                  [g77 f77 xlf cf77 cft77 pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 xlf95 lf95 g95 fc])])
+                  [g77 f77 xlf cf77 cft77 pgf77 fl32 af77 fort77 f90 xlf90 pgf90 epcf90 f95 fort xlf95 lf95 g95 fc])])
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
