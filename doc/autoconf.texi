@@ -414,7 +414,7 @@ Upgrading From Version 2.13
 * Changed Quotation::           Broken code which used to work
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
-* AC_LIBOBJ vs. LIBOBJS::       LIBOBJS is a forbidden token
+* AC_LIBOBJ vs LIBOBJS::        LIBOBJS is a forbidden token
 
 Generating Test Suites with Autotest
 
@@ -12329,7 +12329,7 @@ features in version 2.50; the changes are summarized in the file
 * Changed Quotation::           Broken code which used to work
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
-* AC_LIBOBJ vs. LIBOBJS::       LIBOBJS is a forbidden token
+* AC_LIBOBJ vs LIBOBJS::        LIBOBJS is a forbidden token
 @end menu
 
 @node Changed Quotation
@@ -12573,7 +12573,7 @@ configure as follows:
 @end example
 
 
-@node AC_LIBOBJ vs. LIBOBJS
+@node AC_LIBOBJ vs LIBOBJS
 @subsection @code{AC_LIBOBJ} vs. @code{LIBOBJS}
 
 Up to Autoconf 2.13, the replacement of functions was triggered via the
