@@ -1665,11 +1665,11 @@ ac_given_srcdir=$srcdir
 ifdef([AC_PROVIDE_AC_PROG_INSTALL], [ac_given_INSTALL="$INSTALL"
 ])dnl
 
-ifdef([AC_LIST_HEADER],
-[changequote({,})
-trap 'rm -fr `echo $1 AC_LIST_HEADER | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
-changequote(,)],
-[trap 'rm -f $1; exit 1' 1 2 15])
+changequote(<<, >>)dnl
+ifdef(<<AC_LIST_HEADER>>,
+<<trap 'rm -fr `echo "$1 AC_LIST_HEADER" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15>>,
+<<trap 'rm -fr `echo "$1" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15>>)
+changequote([, ])dnl
 
 AC_OUTPUT_FILES($1)
 ifdef([AC_LIST_HEADER], [AC_OUTPUT_HEADER(AC_LIST_HEADER)])dnl
