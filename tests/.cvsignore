@@ -1,5 +1,6 @@
 Makefile
 at-check-line
+at-setup-line
 atconfig
 config.h
 config.hin
