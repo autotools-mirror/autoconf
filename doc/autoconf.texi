@@ -3378,7 +3378,7 @@ instance) they return the buffer pointer instead.
 @c @fuindex sscanf
 @prindex @code{sscanf}
 On various old systems, e.g. HP-UX 9, @code{sscanf} requires that its
-input string is writable (though it doesn't actually change it).  This
+input string be writable (though it doesn't actually change it).  This
 can be a problem when using @command{gcc} since it normally puts
 constant strings in read-only memory
 (@pxref{Incompatibilities,Incompatibilities of GCC,,gcc,Using and
@@ -3388,7 +3388,7 @@ having format strings read-only can be a problem.
 @item @code{strnlen}
 @c @fuindex strnlen
 @prindex @code{strnlen}
-AIX 4.3 provides a broken version which produces funny results:
+AIX 4.3 provides a broken version which produces the following results:
 
 @example
 strnlen ("foobar", 0) = 0
@@ -3406,7 +3406,7 @@ strnlen ("foobar", 9) = 6
 @item @code{unlink}
 @c @fuindex unlink
 @prindex @code{unlink}
-The @sc{posix} spec says that @code{unlink} causes the given files to be
+The @sc{posix} spec says that @code{unlink} causes the given file to be
 removed only after there are no more open file handles for it.  Not all
 OS's support this behaviour though.  So even on systems that provide
 @code{unlink}, you cannot portably assume it is OK to call it on files
@@ -3861,9 +3861,8 @@ Then, if @code{strftime} is available, define @code{HAVE_STRFTIME}.
 @cvindex HAVE_STRNLEN
 @c @fuindex strnlen
 @prindex @code{strnlen}
-Check for a working @code{strnlen}, and ask for its replacement.  Some
-architectures are know to provide broken versions of @code{strnlen}, such
-as AIX 4.3.
+If the @code{strnlen} function is not available, or is buggy (like the one
+from AIX 4.3), require an @code{AC_LIBOBJ} replacement for it.
 @end defmac
 
 @defmac AC_FUNC_UTIME_NULL
