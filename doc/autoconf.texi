@@ -6,9 +6,9 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 2.7
-@set VERSION 2.7
-@set UPDATED November 1995
+@set EDITION 2.8
+@set VERSION 2.8
+@set UPDATED January 1996
 
 @iftex
 @finalout
@@ -27,7 +27,7 @@ This file documents the GNU Autoconf package for creating scripts to
 configure source code packages using templates and an @code{m4} macro
 package.
 
-Copyright (C) 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
+Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -61,7 +61,7 @@ by the Foundation.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, '93, '94, '95, '96 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -1655,12 +1655,16 @@ AC_PATH_PROG(INETD, inetd, /usr/libexec/inetd,
   $PATH:/usr/libexec:/usr/sbin:/usr/etc:etc)
 @end example
 
-@defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found} @r{[}, @var{path}@r{]]})
+@defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found} @r{[}, @var{value-if-not-found} @r{[}, @var{path}, @r{[} @var{reject} @r{]]]})
 @maindex CHECK_PROG
 Check whether program @var{prog-to-check-for} exists in @code{PATH}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
-@var{value-if-not-found}, if given.  If @var{variable} was already set,
-do nothing.  Calls @code{AC_SUBST} for @var{variable}.
+@var{value-if-not-found}, if given.  Always pass over @var{reject} (an
+absolute file name) even if it is the first found in the search path; in
+that case, set @var{variable} using the absolute file name of the
+@var{prog-to-check-for} found that is not @var{reject}.  If
+@var{variable} was already set, do nothing.  Calls @code{AC_SUBST} for
+@var{variable}.
 @end defmac
 
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for} @r{[}, @var{value-if-not-found} @r{[}, @var{path}@r{]]})
