@@ -6,8 +6,7 @@ config.h
 config.hin
 config.log
 config.status
-configure
-configure.in
+configure configure.ac configure.in configure.scan
 debug-*.sh
 empty
 experr
