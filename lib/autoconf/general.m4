@@ -1,7 +1,7 @@
 dnl Parameterized macros.
 dnl Requires GNU m4.
 dnl This file is part of Autoconf.
-dnl Copyright (C) 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
+dnl Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
 dnl
 dnl This program is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -1860,7 +1860,7 @@ dnl Using a here document instead of a string reduces the quoting nightmare.
 # Protect against Makefile macro expansion.
 cat > conftest.defs <<\EOF
 changequote(<<, >>)dnl
-s%<<#define>> \([A-Za-z_][A-Za-z0-9_]*\) \(.*\)%-D\1=\2%g
+s%<<#define>> \([A-Za-z_][A-Za-z0-9_]*\) *\(.*\)%-D\1=\2%g
 s%[ 	`~<<#>>$^&*(){}\\|;'"<>?]%\\&%g
 s%\[%\\&%g
 s%\]%\\&%g
