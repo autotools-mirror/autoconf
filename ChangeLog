@@ -1,5 +1,10 @@
 2002-03-19  Akim Demaille  <akim@epita.fr>
 
+	* tests/semantics.at (AC_C_BIGENDIAN): s/unknow/unknown/.
+	From Aaron Ucko.
+
+2002-03-19  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in (scan_file): Specify the location in `&used'
 	invocations.
 	From Nicolas Joly.

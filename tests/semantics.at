@@ -2,7 +2,7 @@
 
 AT_BANNER([Semantics.])
 
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright 2000, 2001, 2002 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -357,7 +357,7 @@ _AT_CHECK_AC_MACRO(
    # or unknown (because the cross-compiling check is allowed to fail;
    # although it might be interesting to suppress this comparison, just
    # to know on which system it fails if it ever does).
-   if test $ac_endian != $ac_prevendian -a $ac_endian != unknow; then
+   if test $ac_endian != $ac_prevendian -a $ac_endian != unknown; then
      AC_MSG_ERROR([unexpected endianness: first run found '$ac_prevendian' but second run found '$ac_endian'])
    fi
 ])
