@@ -467,6 +467,20 @@ define([_m4_foreach],
 ## Text processing.  ##
 ## ----------------- ##
 
+# m4_tolower(STRING)
+# m4_toupper(STRING)
+# ------------------
+# These macros lowercase and uppercase strings.
+define([m4_tolower],
+[translit([$1],
+          [ABCDEFGHIJKLMNOPQRSTUVWXYZ],
+          [abcdefghijklmnopqrstuvwxyz])])
+
+define([m4_toupper],
+[translit([$1],
+          [abcdefghijklmnopqrstuvwxyz],
+          [ABCDEFGHIJKLMNOPQRSTUVWXYZ])])
+
 
 # m4_quote(STRING)
 # ----------------

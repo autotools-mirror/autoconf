@@ -3271,7 +3271,7 @@ fi
 # No big loss, I think, since most configures don't use this macro anyway.
 AC_DEFUN([AC_PREFIX_PROGRAM],
 [dnl Get an upper case version of $[1].
-pushdef([AC_Prog], translit([$1], [a-z], [A-Z]))dnl
+pushdef([AC_Prog], m4_toupper([$1]))dnl
 if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
   echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG

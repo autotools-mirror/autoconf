@@ -1733,8 +1733,8 @@ esac
 AC_DEFUN([AC_F77_FUNC],
 [AC_REQUIRE([_AC_F77_NAME_MANGLING])dnl
 case $ac_cv_f77_mangling in
-  upper*) ac_val="translit([$1],[a-z],[A-Z])" ;;
-  lower*) ac_val="translit([$1],[A-Z],[a-z])" ;;
+  upper*) ac_val="m4_toupper([$1])" ;;
+  lower*) ac_val="m4_tolower([$1])" ;;
   *)      ac_val="unknown" ;;
 esac
 case $ac_cv_f77_mangling in *," underscore"*) ac_val="$ac_val"_ ;; esac
