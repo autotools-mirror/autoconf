@@ -5855,11 +5855,33 @@ Aaaaarg!
 
 
 @item @command{cat}
+@c ----------------
 @cindex @command{cat}
-Don't rely on any option.
+Don't rely on any option.  The option @option{-v}, which shows
+non printing characters, @emph{seems} portable though.
+
+
+@item @command{cp}
+@c ---------------
+@cindex @command{cp}
+@c This is thanks to Ian.
+SunOS @command{cp} does not support @option{-f}, although its
+@command{mv} does.  It's possible to deduce why @command{mv} and
+@command{cp} are different with respect to @option{-f}.  @command{mv}
+prompts by default before overwriting a read-only file.  @command{cp}
+does not.  Therefore, @command{mv} requires a @option{-f} option, but
+@command{cp} does not.  @command{mv} and @command{cp} behave differently
+with respect to read-only files because the simplest form of
+@command{cp} cannot overwrite a read-only file, but the simplest form of
+@command{mv} can.  This is because @command{cp} opens the target for
+write access, whereas @command{mv} simply calls @code{link} (or, in
+newer systems, @code{rename}).
+@c Ian said: ``I don't think -p or -r are portable''!!! How can you live
+@c without -r???
 
 
 @item @command{dirname}
+@c --------------------
 @cindex @command{dirname}
 Not all hosts have @command{dirname}, but it is reasonably easy to
 emulate, e.g.:
@@ -5894,6 +5916,7 @@ standard.
 
 
 @item @command{egrep}
+@c ------------------
 @cindex @command{egrep}
 The empty alternative is not portable, use @samp{?} instead. For
 instance with Digital Unix v5.0:
@@ -5912,6 +5935,7 @@ foo
 
 
 @item @command{expr}
+@c -----------------
 @cindex @command{expr}
 No @command{expr} keyword starts with @samp{x}, so use @samp{expr
 x"@var{word}" : 'x@var{regex}'} to keep @command{expr} from
@@ -5944,7 +5968,9 @@ expr bar : foo \| foo : bar
 @noindent
 Avoid this portability problem by avoiding the empty string.
 
+
 @item @command{expr} (@samp{:})
+@c ----------------------------
 @cindex @command{expr}
 Don't use @samp{\?}, @samp{\+} and @samp{\|} in patterns, they are
 not supported on Solaris.
@@ -6006,6 +6032,7 @@ set to @command{expr} or to @command{false} according to the result.
 
 
 @item @command{grep}
+@c -----------------
 @cindex @command{grep}
 Don't use @samp{grep -s} to suppress output, because @samp{grep -s} on
 System V does not suppress output, only error messages.  Instead,
@@ -6018,7 +6045,9 @@ honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Anyway,
 Stardent Vistra SVR4 @code{grep} lacks @option{-e}...  Instead, use
 alternation and @code{egrep}.
 
+
 @item @command{ln}
+@c ---------------
 @cindex @command{ln}
 Don't rely on @command{ln} having a @option{-f} option.  Symbolic links
 are not available on old systems, use @samp{ln} as a fall back.
@@ -6030,7 +6059,23 @@ src dst} will generate @file{src.exe} which will attempt to call
 @file{dst.exe}. But this feature only works for executables, therefore,
 don't rely on symbolic links on @sc{djgpp}.
 
+
+@item @command{mv}
+@c ---------------
+@cindex @command{mv}
+The only portable options are @option{-f} and @option{-i}.
+
+Moving individual files between file systems is portable (it was in V6),
+but it is not always atomic: when doing @samp{mv new existing}, there's
+a critical section where neither the old nor the new version of
+@file{existing} actually exists.
+
+Moving directories across mount points is not portable, use @command{cp}
+and @command{rm}.
+
+
 @item @command{sed}
+@c ----------------
 @cindex @command{sed}
 Patterns should not include the separator (unless escaped), even as part
 of a character class.  In conformance with @sc{posix}, the Cray
@@ -6073,6 +6118,7 @@ matched''.
 
 
 @item @command{sed} (@samp{t})
+@c ---------------------------
 @cindex @command{sed} (@samp{t})
 Some old systems have @command{sed} that ``forget'' to reset their
 @samp{t} flag when starting a new cycle.  For instance on @sc{mips

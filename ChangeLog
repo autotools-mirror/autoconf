@@ -1,3 +1,8 @@
+2000-11-30  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Some about cp
+	and mv, thanks to Ian.
+
 2000-11-29  Akim Demaille  <akim@epita.fr>
 
 	* acspecific.m4 (_AC_OBJEXT): Skip *.tds, special case .o and
