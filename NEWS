@@ -31,6 +31,13 @@
 - GNATS
   The GNATS base has moved to
   http://bugs.gnu.org/cgi-bin/gnatsweb.pl?database=autoconf
+
+** Misc.
+
+- config.log
+  Now contains the list of ouput variables and files (AC_SUBST,
+  AC_SUBST_FILES).
+
 
 * Major changes in Autoconf 2.53
 

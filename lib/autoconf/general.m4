@@ -468,6 +468,9 @@ AC_SUBST([PACKAGE_BUGREPORT],
          [m4_ifdef([AC_PACKAGE_BUGREPORT], ['AC_PACKAGE_BUGREPORT'])])dnl
 
 m4_divert_pop([DEFAULTS])dnl
+m4_wrap([m4_divert_text([DEFAULTS],
+[ac_subst_vars='m4_ifdef([_AC_SUBST_VARS],  [m4_defn([_AC_SUBST_VARS])])'
+ac_subst_files='m4_ifdef([_AC_SUBST_FILES], [m4_defn([_AC_SUBST_FILES])])'])])dnl
 ])# _AC_INIT_DEFAULTS
 
 
@@ -1161,6 +1164,7 @@ trap 'exit_status=$?
   # Save into config.log some information that might help in debugging.
   {
     echo
+
     AS_BOX([Cache variables.])
     echo
     m4_bpatsubsts(m4_defn([_AC_CACHE_DUMP]),
@@ -1168,10 +1172,31 @@ trap 'exit_status=$?
 ],                [],
                   ['], ['"'"'])
     echo
+
+    AS_BOX([Output variables.])
+    echo
+    for ac_var in $ac_subst_vars
+    do
+      eval ac_val=$`echo $ac_var`
+      echo "$ac_var='"'"'$ac_val'"'"'"
+    done | sort
+    echo
+
+    if test -n "$ac_subst_files"; then
+      AS_BOX([Output files.])
+      echo
+      for ac_var in $ac_subst_files
+      do
+	eval ac_val=$`echo $ac_var`
+        echo "$ac_var='"'"'$ac_val'"'"'"
+      done | sort
+      echo
+    fi
+
     if test -s confdefs.h; then
       AS_BOX([confdefs.h.])
       echo
-      sed "/^$/d" confdefs.h
+      sed "/^$/d" confdefs.h | sort
       echo
     fi
     test "$ac_signal" != 0 &&
@@ -1825,20 +1850,6 @@ _ACEOF
 ## -------------------------- ##
 
 
-# _AC_SUBST(VARIABLE, PROGRAM)
-# ----------------------------
-# If VARIABLE has not already been AC_SUBST'ed, append the sed PROGRAM
-# to `_AC_SUBST_SED_PROGRAM'.
-m4_define([_AC_SUBST],
-[m4_expand_once([m4_append([_AC_SUBST_SED_PROGRAM],
-[$2
-])])dnl
-])
-
-# Initialize.
-m4_define([_AC_SUBST_SED_PROGRAM])
-
-
 # AC_SUBST(VARIABLE, [VALUE])
 # ---------------------------
 # Create an output variable from a shell VARIABLE.  If VALUE is given
@@ -1849,7 +1860,7 @@ m4_define([_AC_SUBST_SED_PROGRAM])
 # sed script at the top of _AC_OUTPUT_FILES.
 m4_define([AC_SUBST],
 [m4_ifvaln([$2], [$1=$2])[]dnl
-_AC_SUBST([$1], [s,@$1@,[$]$1,;t t])dnl
+m4_append_uniq([_AC_SUBST_VARS], [$1], [ ])dnl
 ])# AC_SUBST
 
 
@@ -1857,8 +1868,7 @@ _AC_SUBST([$1], [s,@$1@,[$]$1,;t t])dnl
 # -----------------------
 # Read the comments of the preceding macro.
 m4_define([AC_SUBST_FILE],
-[_AC_SUBST([$1], [/@$1@/r [$]$1
-s,@$1@,,;t t])])
+[m4_append_uniq([_AC_SUBST_FILES], [$1], [ ])])
 
 
 

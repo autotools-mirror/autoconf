@@ -862,7 +862,15 @@ dnl the other too.
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
 dnl Insert the sed substitutions of variables.
-_AC_SUBST_SED_PROGRAM()dnl
+m4_ifdef([_AC_SUBST_VARS],
+         [AC_FOREACH([AC_Var], m4_defn([_AC_SUBST_VARS]),
+[s,@AC_Var@,$AC_Var,;t t
+])])dnl
+m4_ifdef([_AC_SUBST_FILES],
+         [AC_FOREACH([AC_Var], m4_defn([_AC_SUBST_FILES]),
+[/@AC_Var@/r $AC_Var
+s,@AC_Var@,,;t t
+])])dnl
 CEOF
 
 _ACEOF

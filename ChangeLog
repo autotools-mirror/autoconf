@@ -1,3 +1,16 @@
+2002-04-25  Akim Demaille  <akim@epita.fr>
+
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Let ac_subst_files
+	and ac_subst_vars be sh variables containing the list of
+	AC_SUBST_FILES'ed and AC_SUBST'ed identifiers.  Output them in the
+	DEFAULT diversion.
+	(_AC_INIT_PREPARE): Use them to log them.
+	(_AC_SUBST, _AC_SUBST_SED_PROGRAM): Remove.
+	(AC_SUBST, AC_SUBST_FILE): Instead of buliding the
+	_AC_SUBST_SED_PROGRAM, store the list of output files/variables in
+	_AC_SUBST_FILES and _AC_SUBST_VARS.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES): Adjust.
+
 2002-04-24  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (autoreconf): Run automake after autoconf and
