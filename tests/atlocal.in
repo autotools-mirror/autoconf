@@ -1,0 +1,16 @@
+# -*- shell-script -*-
+# @configure_input@
+# Configurable variable values for building test suites.
+# Copyright 2000, 2001 Free Software Foundation, Inc.
+
+# We need GNU m4, and Perl.
+M4='@M4@'
+PERL='@PERL@'
+
+# Be sure to use the non installed Perl modules.
+# We need no special protection for the subtools (e.g., autoheader runs
+# autoconf which runs autom4te) because by themselves, they try to use
+# subtools from the same directory (i.e., foo/autoheader will run
+# foo/autoconf etc.).
+autom4te_perllibdir=$top_srcdir/lib
+export autom4te_perllibdir
