@@ -563,7 +563,7 @@ instances of @code{install} known not to work.  Also sets the variable
 @code{INSTALL_PROGRAM} to @samp{$(INSTALL)} and
 @code{INSTALL_DATA} to @samp{$(INSTALL) -m 644}.
 
-If you need to use your own $file{install.sh} because it has features
+If you need to use your own @file{install.sh} because it has features
 not found in standard @code{install} programs, there is no reason to use
 @code{AC_PROG_INSTALL}; just put the pathname of your script into your
 @file{Makefile.in} files.
