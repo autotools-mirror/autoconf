@@ -1,3 +1,22 @@
+2000-05-26  Akim Demaille  <akim@epita.fr>
+
+	Thanks to --program-transform-name, `autoconf' might be install as
+	`yo-man-i-am-the-all-mighty-AVt0c0nF-eh-eh'.  But when
+	`yo-man-i-am-the-all-mighty-AVt0h3Ad3R-eh-eh' and the other tools
+	want to trace, they might stupidly invoke the program named
+	`autoconf' instead.  Pfff, stupid scripts :)
+
+	* Makefile.am (editsh): Transfer the names of the install
+	`autoconf' and `autoheader'.
+	* autoconf.sh: Add a missing period at the end of the comment
+	# Parse command line
+	Make sure to have a ChangeLog much longer than the patch.
+	* autoheader.sh: Use the right `autoconf'.
+	* autoupdate.sh: Likewise.
+	* autoreconf.sh: Likewise, and for `autoheader' too.
+	Simplify the handling of localdir and AC_MACRODIR.
+	* ifnames.sh: Formatting changes.
+
 2000-05-25  Steven G. Johnson <stevenj@alum.mit.edu>
 
 	Don't use f2c as a possible Fortran compiler, since by itself it

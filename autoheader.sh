@@ -69,6 +69,11 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
 # Variables.
 : ${AC_MACRODIR=@datadir@}
+if test -n "$AUTOCONF"; then
+  autoconf=$AUTOCONF
+else
+  autoconf=`echo "$0" | sed -e 's/[^/]*$//`"@autoconf-name@"
+fi
 debug=false
 localdir=.
 tmp=
@@ -77,6 +82,7 @@ warning_all=false
 warning_error=false
 warning_obsolete=false
 
+# Parse command line.
 while test $# -gt 0 ; do
   case "$1" in
     --version | --vers* | -V )
@@ -198,14 +204,15 @@ case $# in
      exit 1 ;;
 esac
 
-# Well, work now!
-config_h=
-syms=
+# Set up autoconf.
+autoconf="$autoconf -l $localdir"
+export AC_MACRODIR
+
+# ----------------------- #
+# Real work starts here.  #
+# ----------------------- #
 
 # Source what the traces are trying to tell us.
-autoconf=`echo "$0" | sed -e 's,[^/]*$,autoconf,'`
-test -n "$localdir" && autoconf="$autoconf -l $localdir"
-export AC_MACRODIR
 $autoconf  \
   --trace AC_CONFIG_HEADERS:'config_h="$1"' \
   --trace AH_OUTPUT:'ac_verbatim_$1="\

@@ -120,7 +120,7 @@ task=script
 tmp=
 verbose=:
 
-# Parse command line
+# Parse command line.
 while test $# -gt 0 ; do
   case "$1" in
     --version | --vers* | -V )

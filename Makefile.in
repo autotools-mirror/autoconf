@@ -97,9 +97,10 @@ CLEANFILES = autoconf.m4f              $(bin_SCRIPTS)
 
 # The scripts.
 
-editsh = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 	's,@''M4''@,$(M4),g'  -e 's,@''AWK''@,$(AWK),g' 	-e 's,@''SHELL''@,$(SHELL),g' 	-e 's,@''VERSION''@,$(VERSION),g' -e 's,@''PACKAGE''@,$(PACKAGE),g'
+editsh = sed 	-e 's,@''datadir''@,$(pkgdatadir),g' 	-e 's,@''M4''@,$(M4),g' 	-e 's,@''AWK''@,$(AWK),g' 	-e 's,@''SHELL''@,$(SHELL),g' 	-e 's,@''VERSION''@,$(VERSION),g' 	-e 's,@''PACKAGE''@,$(PACKAGE),g' 	-e 's,@autoconf-name@,'`echo autoconf | sed '$(transform)'`',g' 	-e 's,@autoheader-name@,'`echo autoheader | sed '$(transform)'`',g'
 
-editpl = sed -e 's,@''datadir''@,$(pkgdatadir),g' -e 's,@''PERL''@,$(PERL),g' 	-e 's,@''VERSION''@,$(VERSION),g' -e 's,@''PACKAGE''@,$(PACKAGE),g'
+
+editpl = sed 	-e 's,@''datadir''@,$(pkgdatadir),g' 	-e 's,@''PERL''@,$(PERL),g' 	-e 's,@''VERSION''@,$(VERSION),g' 	-e 's,@''PACKAGE''@,$(PACKAGE),g'
 
 
 common = libm4.m4 acgeneral.m4 acspecific.m4 acoldnames.m4 acversion.m4          aclang.m4
@@ -430,14 +431,18 @@ install-data-hook: INSTALL.txt
 
 .sh:
 	rm -f $@ $@.tmp
-	$(editsh) $< > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+	$(editsh) $< >$@.tmp
+	chmod +x $@.tmp
+	mv $@.tmp $@
 
 .pl:
 	rm -f $@ $@.tmp
-	$(editpl) $< > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+	$(editpl) $< >$@.tmp
+	chmod +x $@.tmp
+	mv $@.tmp $@
 
 .m4.m4f:
-	$(M4) -F $*.m4f -I$(srcdir) $(srcdir)/$*.m4
+	$(M4) -I $(srcdir) $(srcdir)/$*.m4 --freeze-state=$*.m4f
 
 autoconf.m4f: autoconf.m4 $(common)
 

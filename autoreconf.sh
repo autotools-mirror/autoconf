@@ -57,14 +57,35 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 help="\
 Try \`$me --help' for more information."
 
-localdir=
-verbose=:
-force=no
+# NLS nuisances.
+# Only set these to C if already set.  These must not be set unconditionally
+# because not all systems understand e.g. LANG=C (notably SCO).
+# Fixing LC_MESSAGES prevents Solaris sh from translating var values in `set'!
+# Non-C LC_CTYPE values break the ctype check.
+if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
+if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
+if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
+if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
+
+# Variables.
+: ${AC_MACRODIR=@datadir@}
+if test -n "$AUTOCONF"; then
+  autoconf=$AUTOCONF
+else
+  autoconf=`echo "$0" | sed -e 's/[^/]*$//`"@autoconf-name@"
+fi
+if test -n "$AUTOHEADER"; then
+  autoheader=$AUTOHEADER
+else
+  autoheader=`echo "$0" | sed -e 's/[^/]*$//`"@autoheader-name@"
+fi
 automake_mode=--gnu
 automake_deps=
+force=no
+localdir=.
+verbose=:
 
-test -z "$AC_MACRODIR" && AC_MACRODIR=@datadir@
-
+# Parse command line.
 while test $# -gt 0; do
   case "$1" in
     --version | --vers* | -V )
@@ -121,9 +142,14 @@ if test $# -ne 0; then
   exit 1
 fi
 
-# The paths to the autoconf and autoheader scripts, at the top of the tree.
-top_autoconf=`echo "$0" | sed s%autoreconf%autoconf%`
-top_autoheader=`echo "$0" | sed s%autoreconf%autoheader%`
+# Set up autoconf and autoheader.
+autoconf="$autoconf -l $localdir"
+autoheader="$autoheader -l $localdir"
+export AC_MACRODIR
+
+# ----------------------- #
+# Real work starts here.  #
+# ----------------------- #
 
 # Make a list of directories to process.
 # The xargs grep filters out Cygnus configure.in files.
@@ -140,20 +166,7 @@ while read dir; do
      dots=`echo /$dir|sed 's%/[^/]*%../%g'` ;;
   esac
 
-  case "$0" in
-  /*)  autoconf=$top_autoconf; autoheader=$top_autoheader ;;
-  */*) autoconf=$dots$top_autoconf; autoheader=$dots$top_autoheader ;;
-  *)   autoconf=$top_autoconf; autoheader=$top_autoheader ;;
-  esac
-
-  case "$AC_MACRODIR" in
-  /*)  macrodir_opt="--macrodir=$AC_MACRODIR" ;;
-  *)   macrodir_opt="--macrodir=$dots$AC_MACRODIR" ;;
-  esac
-
   case "$localdir" in
-  "")  localdir_opt=
-       aclocal_m4=aclocal.m4 ;;
   /*)  localdir_opt="--localdir=$localdir"
        aclocal_m4=$localdir/aclocal.m4 ;;
   *)   localdir_opt="--localdir=$dots$localdir"
@@ -218,7 +231,7 @@ while read dir; do
     :
   else
     $verbose "running autoconf in $dir"
-    $autoconf $macrodir_opt $localdir_opt
+    $autoconf $localdir_opt
   fi
 
   if grep '^[ 	]*A[CM]_CONFIG_HEADER' configure.in >/dev/null; then
@@ -246,7 +259,7 @@ while read dir; do
         :
       else
         $verbose "running autoheader in $dir"
-        $autoheader $macrodir_opt $localdir_opt &&
+        $autoheader $localdir_opt &&
         $verbose "touching $stamp" &&
         touch $stamp
       fi

@@ -34,9 +34,9 @@ identifiers that appear in those files in \`#if', \`#elif', \`#ifdef', or
 \`#ifndef' directives.  Print each identifier on a line, followed by a
 space-separated list of the files in which that identifier occurs.
 
-  -h, --help            print this help, then exit
-  -V, --version         print version number, then exit
-  -v, --verbose         verbosely report processing
+  -h, --help      print this help, then exit
+  -V, --version   print version number, then exit
+  -v, --verbose   verbosely report processing
 
 Report bugs to <bug-autoconf@gnu.org>."
 
