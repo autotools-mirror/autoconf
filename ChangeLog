@@ -1,3 +1,7 @@
+1998-10-08  Ben Elliston  <bje@cygnus.com>
+
+	* acgeneral.m4 (AC_TRY_LINK_FUNC): Fix macro ordering.
+
 1998-10-03  Ben Elliston  <bje@cygnus.com>
 
 	* acconfig.h (FC_NO_MINUS_C_MINUS_O): Add to complete the Fortran

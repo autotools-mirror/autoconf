@@ -1527,6 +1527,28 @@ rm -fr conftest*])
 dnl ### Checking for libraries
 
 
+dnl AC_TRY_LINK_FUNC(func, action-if-found, action-if-not-found)
+dnl Try to link a program that calls FUNC, handling GCC builtins.  If
+dnl the link succeeds, execute ACTION-IF-FOUND; otherwise, execute
+dnl ACTION-IF-NOT-FOUND.
+
+AC_DEFUN(AC_TRY_LINK_FUNC,
+AC_TRY_LINK(dnl
+ifelse([$2], [main], , dnl Avoid conflicting decl of main.
+[/* Override any gcc2 internal prototype to avoid an error.  */
+]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+extern "C"
+#endif
+])dnl
+[/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char $1();
+]),
+[$1()],
+[$2],
+[$3]))
+
+
 dnl AC_SEARCH_LIBS(func, searchlibs, [action-if-found], [action-if-not-found])
 dnl Search for a library defining FUNC, if it's not already available.
 
@@ -1769,27 +1791,6 @@ ifelse([$4], , , [  rm -rf conftest*
 ])dnl
 fi
 rm -f conftest*])
-
-dnl AC_TRY_LINK_FUNC(func, action-if-found, action-if-not-found)
-dnl Try to link a program that calls FUNC, handling GCC builtins.  If
-dnl the link succeeds, execute ACTION-IF-FOUND; otherwise, execute
-dnl ACTION-IF-NOT-FOUND.
-
-AC_DEFUN(AC_TRY_LINK_FUNC,
-AC_TRY_LINK(dnl
-ifelse([$2], [main], , dnl Avoid conflicting decl of main.
-[/* Override any gcc2 internal prototype to avoid an error.  */
-]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
-extern "C"
-#endif
-])dnl
-[/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char $1();
-]),
-[$1()],
-[$2],
-[$3]))
 
 
 dnl ### Checking for run-time features
