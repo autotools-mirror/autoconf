@@ -121,7 +121,7 @@ MAINTAINERCLEANFILES += $(TESTSUITE_GENERATED_AT)
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
 # here since below we explicitly `cd' to $srcdir.  As for the dependencies,
 # thanks God for VPATH.  Hm...
-autoconfdir = $(top_srcdir)/lib/autoconf
+autoconfdir = ../lib/autoconf
 AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/status.m4 \
 		 $(autoconfdir)/autoheader.m4 \

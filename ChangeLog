@@ -1,5 +1,9 @@
 2004-05-24  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* tests/Makefile.am (autoconfdir): Fix to match comment (trivial
+	change).  Patch reported by Ralf Wildenhues in
+	<http://mail.gnu.org/archive/html/bug-autoconf/2004-05/msg00092.html>.
+
 	* lib/autoconf/functions.m4 (AC_FUNC_MBRTOWC): Don't assume that a
 	function F exists if the compiler and linker let you compile an
 	expression like (F != 0).  Recent versions of GCC optimize away
