@@ -12225,40 +12225,42 @@ code.  See @xref{Hosts and Cross-Compilation}, for more.
 @node Using System Type
 @section Using the System Type
 
-How do you use a canonical system type?  Usually, you use it in one or
-more @code{case} statements in @file{configure.ac} to select
-system-specific C files.  Then, using @code{AC_CONFIG_LINKS}, link those
-files which have names based on the system name, to generic names, such
-as @file{host.h} or @file{target.c} (@pxref{Configuration Links}).  The
-@code{case} statement patterns can use shell wild cards to group several
-cases together, like in this fragment:
+In @file{configure.ac} the system type is generally used by one or more
+@code{case} statements to select system-specifics.  Shell wildcards can
+be used to match a group of system types.
+
+For example, an extra assembler code object file could be chosen, giving
+access to a CPU cycle counter register.  @code{$(CYCLE_OBJ)} in the
+following would be used in a @file{Makefile} to add the object to a
+program or library.
 
 @example
-case $target in
-i386-*-mach* | i386-*-gnu*)
-             obj_format=aout emulation=mach bfd_gas=yes ;;
-i960-*-bout) obj_format=bout ;;
+case $host in
+  alpha*-*-*) CYCLE_OBJ=rpcc.o ;;
+  i?86-*-*)   CYCLE_OBJ=rdtsc.o ;;
+  *)          CYCLE_OBJ= ;;
+esac
+AC_SUBST(CYCLE_OBJ)
+@end example
+
+@code{AC_CONFIG_LINKS} (@pxref{Configuration Links}) is another good way
+to select variant source files, for example optimized code for some
+CPUs.  The configured CPU type doesn't always indicate exact CPU types,
+so some run-time capability checks may be necessary too.
+
+@example
+case $host in
+  alpha*-*-*)   AC_CONFIG_LINKS(dither.c:alpha/dither.c) ;;
+  powerpc*-*-*) AC_CONFIG_LINKS(dither.c:powerpc/dither.c) ;;
+  *-*-*)        AC_CONFIG_LINKS(dither.c:generic/dither.c) ;;
 esac
 @end example
 
-@noindent
-and later in @file{configure.ac}, use:
-
-@example
-AC_CONFIG_LINKS(host.h:config/$machine.h
-                object.h:config/$obj_format.h)
-@end example
-
-Note that the above example uses @code{$target} because it's taken from
-a tool which can be built on some architecture (@code{$build}), run on
-another (@code{$host}), but yet handle data for a third architecture
-(@code{$target}).  Such tools are usually part of a compiler suite, they
-generate code for a specific @code{$target}.
-
-However @code{$target} should be meaningless for most packages.  If you
-want to base a decision on the system where your program will be run,
-make sure you use the @code{$host} variable, as in the following
-excerpt:
+Another example is filenames made to vary according to system
+conventions.  On Unix-like systems ``dot'' files are usual but on DOS
+systems @file{ini} files are usual.  It may be worth allowing the user
+to override such things though, if it's a matter of personal preference,
+or in case a new DOS-like system comes along.
 
 @example
 case $host in
@@ -12269,12 +12271,45 @@ case $host in
     MUMBLE_INIT=".mumbleinit"
     ;;
 esac
-AC_SUBST([MUMBLE_INIT])
+AC_SUBST(MUMBLE_INIT)
 @end example
 
-You can also use the host system type to find cross-compilation tools.
-@xref{Generic Programs}, for information about the @code{AC_CHECK_TOOL}
-macro which does that.
+The host system type can also be used to find cross-compilation tools
+with @code{AC_CHECK_TOOL} (@pxref{Generic Programs}).
+
+The above examples all show @samp{$host}, since this is where the code
+is going to run.  Only rarely is it necessary to test @samp{$build}
+(which is where the build is being done).
+
+Whenever you're tempted to use @samp{$host} it's worth considering
+whether some sort of probe would be better.  New system types come along
+periodically or previously missing features are added.  Well-written
+probes can adapt themselves to such things, but hard-coded lists of
+names won't.  Here are some guidelines,
+
+@itemize @bullet
+@item
+Availability of libraries and library functions should always be checked
+by probing.
+@item
+Variant behaviour of system calls is best identified with runtime tests
+if possible, but bug workarounds or obscure difficulties might have to
+be driven from @samp{$host}.
+@item
+Assembler code is inevitably highly CPU-specific and is best selected
+according to the CPU part of @samp{$host}.
+@item
+Assembler variations like underscore prefix on globals or ELF versus
+COFF type directives are however best determined by probing, perhaps
+even examining the compiler output.
+@end itemize
+
+@samp{$target} is for use by a package creating a compiler or similar.
+For ordinary packages it's meaningless and should not be used.  It
+indicates what the created compiler should generate code for, if it can
+cross-compile.  @samp{$target} generally selects various hard-coded CPU
+and system conventions, since usually the compiler or tools under
+construction will themselves determine how the target will work.
 
 
 @c ===================================================== Site Configuration.
