@@ -9,7 +9,7 @@ bug-autoconf@gnu.org.  This program will get better only if you report
 the problems you encounter.
 
 Please, *do not package this*, *do not distribute it* widely, it is
-not ready for a full scale use.  Because it is not fully functional,
-if you distribute this package, we will buried under bug reports from
-panicked users.  We don't have time to spend on this, and users
-neither.
+not ready for full scale use.  Because it is not fully functional, if
+you distribute this package, we will be buried under bug reports from
+panicked users.  We don't have time to spend on this, and nor do the
+users.
