@@ -1,6 +1,6 @@
-divert(-1)						    -*- Autoconf -*-
+include(m4sh.m4)					    -*- Autoconf -*-
 # `m4' macros used in building test suites.
-# Copyright (C) 2000 Free Software Foundation, Inc.
+# Copyright 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,48 +45,12 @@ divert(-1)						    -*- Autoconf -*-
 # any notice of this special exception to the GPL from your modified
 # version.
 
-changequote()
-changequote([, ])
 
-define([AT_DEFINE], defn([define]))
-define([AT_EVAL], defn([eval]))
-define([AT_FORMAT], defn([format]))
-define([AT_INCLUDE], defn([include]))
-define([AT_SHIFT], defn([shift]))
-define([AT_UNDEFINE], defn([undefine]))
+m4_define([AT_DEFINE], m4_defn([m4_define]))
+m4_define([AT_INCLUDE], m4_defn([m4_include]))
+m4_define([AT_SHIFT], m4_defn([m4_shift]))
+m4_define([AT_UNDEFINE], m4_defn([m4_undefine]))
 
-undefine([define])
-undefine([eval])
-undefine([format])
-undefine([include])
-undefine([shift])
-undefine([undefine])
-
-
-# AT_CASE(SWITCH, VAL1, IF-VAL1, VAL2, IF-VAL2, ..., DEFAULT)
-# -----------------------------------------------------------
-# m4 equivalent of
-# switch (SWITCH)
-# {
-#   case VAL1:
-#     IF-VAL1;
-#     break;
-#   case VAL2:
-#     IF-VAL2;
-#     break;
-#   ...
-#   default:
-#     DEFAULT;
-#     break;
-# }.
-# All the values are optional, and the macro is robust to active
-# symbols properly quoted.
-AT_DEFINE([AT_CASE],
-[ifelse([$#], 0, [],
-	[$#], 1, [],
-	[$#], 2, [$2],
-        [$1], [$2], [$3],
-        [AT_CASE([$1], AT_SHIFT(AT_SHIFT(AT_SHIFT($@))))])])
 
 
 # Use of diversions:
@@ -99,7 +63,7 @@ AT_DEFINE([AT_CASE],
 # -------
 # Return the current file sans directory, a colon, and the current line.
 AT_DEFINE([AT_LINE],
-[patsubst(__file__, ^.*/\(.*\), \1):__line__])
+[m4_patsubst(__file__, ^.*/\(.*\), \1):__line__])
 
 
 # AT_INIT(PROGRAM)
@@ -273,28 +237,27 @@ divert[]dnl
 # Start a group of related tests, all to be executed in the same subshell.
 # The group is testing what DESCRIPTION says.
 AT_DEFINE([AT_SETUP],
-[AT_DEFINE([AT_ordinal], AT_EVAL(AT_ordinal + 1))
-pushdef([AT_group_description], [$1])
-pushdef([AT_data_files], )
-pushdef([AT_data_expout], )
-pushdef([AT_data_experr], )
+[AT_DEFINE([AT_ordinal], m4_eval(AT_ordinal + 1))
+m4_pushdef([AT_data_files], )
+m4_pushdef([AT_data_expout], )
+m4_pushdef([AT_data_experr], )
 if $at_stop_on_error && test -n "$at_failed_list"; then :; else
 divert(1)[]dnl
   echo AT_LINE > at-check-line
   echo AT_LINE > at-setup-line
   if $at_verbose; then
-    echo 'testing AT_group_description'
+    echo 'testing $1'
     echo $at_n "     $at_c"
   fi
   if $at_verbose; then
     echo "AT_ordinal. $srcdir/AT_LINE..."
   else
-    echo $at_n "substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
+    echo $at_n "m4_substr(AT_ordinal. $srcdir/AT_LINE                            , 0, 30)[]$at_c"
   fi
   if test -z "$at_skip_mode"; then
     (
 [#] Snippet (d[]AT_ordinal[](
-[#] Testing AT_group_description
+[#] Testing $1
 [#] Snippet )d[]AT_ordinal[])
 [#] Snippet (s[]AT_ordinal[](
 [#] starting from `AT_LINE'.
@@ -339,10 +302,10 @@ undivert(1)[]dnl
     rm ifelse([AT_data_files$1], , [-f], [-rf[]AT_data_files[]ifelse($1, , , [ $1])]) stdout stderr[]AT_data_expout[]AT_data_experr
   fi
 fi
-popdef([AT_data_experr])
-popdef([AT_data_expout])
-popdef([AT_data_files])
-popdef([AT_group_description])[]dnl
+m4_popdef([AT_data_experr])
+m4_popdef([AT_data_expout])
+m4_popdef([AT_data_files])
+m4_popdef([AT_group_description])[]dnl
 ])# AT_CLEANUP
 
 
@@ -372,7 +335,7 @@ $2[]_ATEOF
 # their content is not checked.
 AT_DEFINE([AT_CHECK],
 [$at_traceoff
-$at_verbose && echo "$srcdir/AT_LINE: patsubst([$1], [\([\"`$]\)], \\\1)"
+$at_verbose && echo "$srcdir/AT_LINE: m4_patsubst([$1], [\([\"`$]\)], \\\1)"
 echo AT_LINE > at-check-line
 $at_check_stds && exec 5>&1 6>&2 1>stdout 2>stderr
 $at_traceon
@@ -395,18 +358,18 @@ dnl Restore stdout to fd1 and stderr to fd2.
 dnl If not verbose, neutralize the output of diff.
   $at_verbose || exec 1>/dev/null 2>/dev/null
   at_failed=false;
-  AT_CASE([$4],
+  m4_case([$4],
           ignore, [$at_verbose && cat stderr;:],
           experr, [AT_DEFINE([AT_data_experr], [ experr])dnl
 $at_diff experr stderr || at_failed=:],
           [], [$at_diff empty stderr || at_failed=:],
-          [echo $at_n "patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || at_failed=:])
-  AT_CASE([$3],
+          [echo $at_n "m4_patsubst([$4], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stderr || at_failed=:])
+  m4_case([$3],
           ignore, [$at_verbose && cat stdout;:],
           expout, [AT_DEFINE([AT_data_expout], [ expout])dnl
 $at_diff expout stdout || at_failed=:],
           [], [$at_diff empty stdout || at_failed=:],
-          [echo $at_n "patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout || at_failed=:])
+          [echo $at_n "m4_patsubst([$3], [\([\"`$]\)], \\\1)$at_c" | $at_diff - stdout || at_failed=:])
   if $at_failed; then
     exit 1
   else

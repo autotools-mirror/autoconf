@@ -1,3 +1,21 @@
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
+	Move Autotest on top of M4sh.
+
+	* tests/atgeneral.m4: Import M4sh.
+	Adjust the differences on the names of the builtins (define etc.).
+	(AT_CASE): Remove, use m4_case.
+	(AT_SETUP): Don't use `AT_group_description', `$1' is OK.
+	* tests/atspecific.m4 (m4_for, m4_foreach): Remove, use those of
+	M4sugar.
+	* tests/m4sugar.at: Strengthen the quotation and adjust to the new
+	macro names.
+	* tests/m4sh.at: Ditto.
+	* tests/torture.at: Ditto.
+	* tests/base.at: Ditto.
+	* m4sh.m4: Import M4sugar.
+	* autoconf.m4: Don't import M4sugar, M4sh does.
+
 2000-11-20  Pavel Roskin  <proski@gnu.org>
 
 	* acgeneral.m4 (_AC_RUN_IFELSE): `==' in test is not portable,

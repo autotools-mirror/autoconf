@@ -212,10 +212,10 @@ AT_CLEANUP(configure config.status config.log config.cache config.h defs)
 dnl The value used as a big value for AC_DEFINE.
 dnl Don't use sh active chars here, below it is also used in a sh
 dnl assignment.
-define([Big_Value],
+m4_define([Big_Value],
 [This value should be long enough to torture the various limits of sed and other tools used by Autoconf.])
 
-define([DEFINE_Description],
+m4_define([DEFINE_Description],
 [Define to a long string if your `Autoconf' works properly.])
 
 
@@ -229,7 +229,7 @@ define([DEFINE_Description],
 # turned into ac_uummy during the construction of config.status.  Yes,
 # this is admittedly a bug, but it would be too hard to fix this.
 # There is really no point in AC_DEFINE a var named ac_d.*.
-define([AT_DUMMY_VAR],
+m4_define([AT_DUMMY_VAR],
 [ac_Dummy_[]m4_patsubst([000$1], [.*\(...\)$], [\1])])
 
 dnl This call was quite delicate to write because we didn't want to
@@ -239,23 +239,23 @@ dnl touch something.
 
 AT_SETUP([Torturing config.status])
 
-AT_DATA(dummy.in,
-[m4_for(AT_Count, 1, 100,
+AT_DATA([dummy.in],
+[m4_for([AT_Count], 1, 100, 1,
 [@AT_DUMMY_VAR(AT_Count)@
 ])])
 
 AT_DATA(configure.in,
-[AC_INIT
+[[AC_INIT
 AC_CONFIG_HEADERS(config.h:config.hin)
 AC_CONFIG_FILES(dummy)
-[define]([AC_DEFUBST_VALUE], Big_Value)
+m4_define]([AC_DEFUBST_VALUE], Big_Value)
 dnl The following 4 lines are a transfert from AT_DUMMY_VAR in Autotest
 dnl to AC_DUMMY_VAR in Autoconf.
-[define]([AC_DUMMY_VAR],
-changequote({{, }})dnl
-[defn({{AT_DUMMY_VAR}})]dnl
-changequote([, ]))
-m4_for(AT_Count, 1, 100,
+[m4_define]([AC_DUMMY_VAR],
+m4_changequote({{, }})dnl
+[m4_defn({{AT_DUMMY_VAR}})]dnl
+m4_changequote([, ]))
+m4_for(AT_Count, 1, 100, 1,
 [AC_DEFUBST(AT_Count)
 ])
 AC_OUTPUT
@@ -267,7 +267,7 @@ AT_CHECK([./configure], 0, ignore)
 
 # Checking that AC_DEFINE worked properly.
 AT_DATA(expout,
-[m4_for(AT_Count, 1, 100,
+[m4_for(AT_Count, 1, 100, 1,
 [
 /* DEFINE_Description */
 [#define] AT_DUMMY_VAR(AT_Count) "Big_Value"
@@ -276,7 +276,7 @@ AT_CHECK([sed -n -e '3,$ p' config.h], 0, expout)
 
 # Checking that AC_SUBST worked properly.
 AT_DATA(expout,
-[m4_for(AT_Count, 1, 100,
+[m4_for(AT_Count, 1, 100, 1,
 [Big_Value
 ])])
 
