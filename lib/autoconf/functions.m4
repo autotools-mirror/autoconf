@@ -948,7 +948,7 @@ fi
 # AC_FUNC_MMAP
 # ------------
 AC_DEFUN([AC_FUNC_MMAP],
-[AC_CHECK_HEADERS(stdlib.h unistd.h sys/stat.h)
+[AC_CHECK_HEADERS(stdlib.h unistd.h)
 AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 [AC_TRY_RUN(
@@ -985,9 +985,7 @@ char *malloc ();
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-#if HAVE_SYS_STAT_H
-# include <sys/stat.h>
-#endif
+#include <sys/stat.h>
 
 /* This mess was copied from the GNU getpagesize.h.  */
 #if !HAVE_GETPAGESIZE

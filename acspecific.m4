@@ -528,13 +528,10 @@ AU_DEFUN([AC_STRUCT_ST_BLKSIZE],
         `HAVE_STRUCT_STAT_ST_BLKSIZE'.  Remove this warning and
         the `AC_DEFINE' when you adjust the code.])
 AC_CHECK_MEMBERS([struct stat.st_blksize],
-                  [AC_DEFINE(HAVE_ST_BLKSIZE, 1,
-                             [Define if your `struct stat' has
-                              `st_blksize'.  Deprecated, use
-                              `HAVE_STRUCT_STAT_ST_BLKSIZE' instead.])],,
-                  [#include <sys/types.h>
-#include <sys/stat.h>
-])dnl
+                 [AC_DEFINE(HAVE_ST_BLKSIZE, 1,
+                            [Define if your `struct stat' has
+                             `st_blksize'.  Deprecated, use
+                             `HAVE_STRUCT_STAT_ST_BLKSIZE' instead.])])
 ])# AC_STRUCT_ST_BLKSIZE
 
 
@@ -558,10 +555,7 @@ AC_DEFUN([AC_STRUCT_ST_BLOCKS],
                              [Define if your `struct stat' has
                               `st_blocks'.  Deprecated, use
                               `HAVE_STRUCT_STAT_ST_BLOCKS' instead.])],
-                  [AC_LIBOBJ([fileblocks])],
-                  [#include <sys/types.h>
-#include <sys/stat.h>
-])dnl
+                  [AC_LIBOBJ([fileblocks])])
 ])# AC_STRUCT_ST_BLOCKS
 
 
@@ -576,10 +570,7 @@ AC_CHECK_MEMBERS([struct stat.st_rdev],
                  [AC_DEFINE(HAVE_ST_RDEV, 1,
                             [Define if your `struct stat' has `st_rdev'.
                              Deprecated, use `HAVE_STRUCT_STAT_ST_RDEV'
-                             instead.])],,
-                  [#include <sys/types.h>
-#include <sys/stat.h>
-])dnl
+                             instead.])])
 ])# AC_STRUCT_ST_RDEV
 
 

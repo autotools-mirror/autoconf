@@ -55,7 +55,7 @@ This file documents the GNU Autoconf package for creating scripts to
 configure source code packages using templates and an @code{m4} macro
 package.
 
-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000 Free Software
+Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000 Free Software
 Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of this
@@ -2631,6 +2631,7 @@ Most generic macros provide the following default set of includes:
 @group
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #if STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
@@ -3843,11 +3844,7 @@ If @code{struct stat} contains an @code{st_blksize} member, define
 the future.  This macro is obsoleted, and should be replaced by
 
 @example
-@group
-AC_CHECK_MEMBERS([struct stat.st_blksize],,,
-[#include <sys/types.h>
-#include <sys/stat.h>])
-@end group
+AC_CHECK_MEMBERS([struct stat.st_blksize])
 @end example
 @end defmac
 
@@ -3873,13 +3870,8 @@ is to be avoided, as its support will cease in the future.
 
 This macro is obsoleted, and should be replaced by
 @example
-@group
-AC_CHECK_MEMBERS([struct stat.st_rdev],,,
-[#include <sys/types.h>
-#include <sys/stat.h>])
-@end group
+AC_CHECK_MEMBERS([struct stat.st_rdev])
 @end example
-
 @end defmac
 
 @defmac AC_STRUCT_TM

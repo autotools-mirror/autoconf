@@ -1,3 +1,14 @@
+2000-11-17  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (_AC_INIT_DEFAULTS) <ac_includes_default>: Include
+	sys/stat.h.
+	* acspecific.m4 (AC_STRUCT_ST_BLKSIZE, AC_STRUCT_ST_BLOCKS)
+	(AC_STRUCT_ST_RDEV): Simplify.
+	* acfunctions.m4 (AC_FUNC_MMAP): Include sys/stat.h unconditionally.
+	* doc/autoconf.texi (Default Includes): Adjust.
+	(Particular Structures) <AC_STRUCT_ST_BLKSIZE, AC_STRUCT_ST_RDEV>:
+	Adjust.
+
 2000-11-16  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Usual Tools) <expr>:

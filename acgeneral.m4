@@ -810,6 +810,7 @@ dnl If ever you change this variable, please keep autoconf.texi in sync.
 ac_includes_default="\
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #if STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
