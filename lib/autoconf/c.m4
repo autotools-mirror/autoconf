@@ -832,8 +832,7 @@ fi
 # --------------
 AC_DEFUN([AC_C_BIGENDIAN],
 [AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
-[ac_cv_c_bigendian=unknown
-# See if sys/param.h defines the BYTE_ORDER macro.
+[# See if sys/param.h defines the BYTE_ORDER macro.
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/param.h>
 ],
@@ -847,9 +846,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 ], [#if BYTE_ORDER != BIG_ENDIAN
  not big endian
 #endif
-])],               [ac_cv_c_bigendian=yes],
-                   [ac_cv_c_bigendian=no])])
-if test $ac_cv_c_bigendian = unknown; then
+])], [ac_cv_c_bigendian=yes], [ac_cv_c_bigendian=no])],
+[# It does not; compile a test program.
 AC_TRY_RUN(
 [int
 main ()
@@ -862,13 +860,39 @@ main ()
   } u;
   u.l = 1;
   exit (u.c[sizeof (long) - 1] == 1);
-}], ac_cv_c_bigendian=no, ac_cv_c_bigendian=yes)
-fi])
-if test $ac_cv_c_bigendian = yes; then
-  AC_DEFINE(WORDS_BIGENDIAN, 1,
-            [Define if your processor stores words with the most significant
-             byte first (like Motorola and SPARC, unlike Intel and VAX).])
+}], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes],
+[# try to guess the endianess by grep'ing values into an object file
+  ac_cv_c_bigendian=unknown
+  AC_COMPILE_IFELSE(
+[short ascii_mm[[]] = { 0x4249, 0x4765, 0x6E44, 0x6961, 0x6E53, 0x7953, 0 };
+short ascii_ii[[]] = { 0x694C, 0x5454, 0x656C, 0x6E45, 0x6944, 0x6E61, 0 };
+void _ascii () { char *s = (char *) ascii_mm; s = (char *) ascii_ii; }
+short ebcdic_ii[[]] = { 0x89D3, 0xE3E3, 0x8593, 0x95C5, 0x89C4, 0x9581, 0 };
+short ebcdic_mm[[]] = { 0xC2C9, 0xC785, 0x95C4, 0x8981, 0x95E2, 0xA8E2, 0 };
+void _ebcdic () { char *s = (char *) ebcdic_mm; s = (char *) ebcdic_ii; }
+int main () { _ascii (); _ebcdic (); return 0; }],
+[if test `grep -l BIGenDianSyS conftest.$ac_objext` ; then
+  ac_cv_c_bigendian=yes
 fi
+if test `grep -l LiTTleEnDian conftest.$ac_objext` ; then
+  if test "$ac_cv_c_bigendian" = unknown; then
+    ac_cv_c_bigendian=no
+  else
+    # finding both strings is unlikely to happen, but who knows?
+    ac_cv_c_bigendian=unknown
+  fi
+fi])])])])
+case $ac_cv_c_bigendian in
+  yes)
+    AC_DEFINE(WORDS_BIGENDIAN, 1,
+	      [Define if your processor stores words with the most significant
+	       byte first (like Motorola and SPARC, unlike Intel and VAX).]);;
+  no)
+    ;;
+  *)
+    AC_MSG_ERROR([unknown endianess
+presetting ac_cv_c_bigendian=no (or yes) will help]);;
+esac
 ])# AC_C_BIGENDIAN
 
 

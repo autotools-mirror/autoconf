@@ -1,3 +1,9 @@
+2001-08-11  Alexandre Duret-Lutz  <duret_g@epita.fr>
+
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Guess endianness by grep'ing
+	magic values from an object file when cross-compiling.
+	Based on code by Guido Draheim <Guido.Draheim@gmx.de>.
+
 2001-08-10  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in (&handle_output): Don't use `grep' with side
