@@ -1,3 +1,28 @@
+Major changes in release 2.0:
+
+** New files:
+* Fits into an integrated GNU source tree containing the compiler tools.
+* Comes with config.sub, config.guess, and Cygnus configure.
+
+** New macros:
+* AC_CONFIG_AUX, AC_SYSTEM_TYPE, AC_SUBST_FILE, AC_MAKE_LINKS to
+  support deciding unguessable features based on the host and target types.
+* AC_CONFIG_SUBDIRS to recursively configure a source tree.
+
+** Changed macros:
+* AC_OUTPUT adds the "automatically generated" comment after "#!" lines, 
+  not before them.
+* AC_PROG_INSTALL looks for install.sh in the directory specified by
+  AC_CONFIG_AUX, or srcdir or srcdir/.. by default.
+* AC_OUTPUT correctly creates multiple header files.
+
+** New utilities:
+* autoscan to generate a preliminary configure.in for a package by
+  scanning its source code for commonly used nonportable functions,
+  programs, and header files.
+* autoreconf to recursively remake configure and configuration header
+  files in a source tree.
+
 Major changes in release 1.9:
 
 * AC_YYTEXT_POINTER replaces AC_DECLARE_YYTEXT.
