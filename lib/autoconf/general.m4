@@ -247,15 +247,13 @@ AC_DIVERT_POP()dnl
 ])])
 
 
-# AC_EXPAND_ONCE(MACRO-NAME)
-# --------------------------
-# If MACRO-NAME has never been expanded, expand it *here*.  Useful
-# undocumented fragile feature: MACRO-NAME can be almost any code to
-# expand once.
+# AC_EXPAND_ONCE(TEXT)
+# --------------------
+# If TEXT has never been expanded, expand it *here*.
 define(AC_EXPAND_ONCE,
 [AC_PROVIDE_IF([$1],
                [],
-               [$1])])
+               [AC_PROVIDE([$1])[]$1])])
 
 
 # AC_PROVIDE(MACRO-NAME)
@@ -1211,22 +1209,15 @@ AC_DIVERT_POP()dnl to NORMAL
 ## ----------------------------- ##
 
 
-# _AC_ARG_ENABLE_HELP_PROLOGUE
-# ----------------------------
-# Text which introduces the --enable section in `configure --help'.
-AC_DEFUN(_AC_ARG_ENABLE_HELP_PROLOGUE,
-[[
-Optional Features:
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-]])
-
-
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------------------
 AC_DEFUN(AC_ARG_ENABLE,
 [AC_DIVERT_PUSH(AC_DIVERSION_HELP_ENABLE)dnl
-AC_EXPAND_ONCE([_AC_ARG_ENABLE_HELP_PROLOGUE])[]dnl
+AC_EXPAND_ONCE([
+Optional Features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+])[]dnl
 $2
 AC_DIVERT_POP()dnl
 @%:@ Check whether --enable-[$1] or --disable-[$1] was given.
@@ -1249,22 +1240,16 @@ AU_DEFUN(AC_ENABLE,
 ## ------------------------------ ##
 
 
-# _AC_ARG_WITH_HELP_PROLOGUE
-# --------------------------
-# Text which introduces the --with section in `configure --help'.
-AC_DEFUN(_AC_ARG_WITH_HELP_PROLOGUE,
-[[
-Optional Packages:
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-]])
-
 
 # AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
 # --------------------------------------------------------------------
 AC_DEFUN(AC_ARG_WITH,
 [AC_DIVERT_PUSH(AC_DIVERSION_HELP_WITH)dnl
-AC_EXPAND_ONCE([_AC_ARG_WITH_HELP_PROLOGUE])[]dnl
+AC_EXPAND_ONCE([
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+])[]dnl
 $2
 AC_DIVERT_POP()dnl
 @%:@ Check whether --with-[$1] or --without-[$1] was given.
@@ -1287,14 +1272,6 @@ AU_DEFUN(AC_WITH,
 ## ----------------------------------------- ##
 
 
-# _AC_ARG_VAR_HELP_PROLOGUE
-# -------------------------
-# Text which introduces the variables section in `configure --help'.
-AC_DEFUN(_AC_ARG_VAR_HELP_PROLOGUE,
-[[
-Some influent environment variables:
-]])
-
 
 # AC_ARG_VAR(VARNAME, DOCUMENTATION)
 # ----------------------------------
@@ -1302,7 +1279,9 @@ Some influent environment variables:
 # document it in `configure --help'.
 AC_DEFUN(AC_ARG_VAR,
 [AC_DIVERT_PUSH(AC_DIVERSION_HELP_VAR)dnl
-AC_EXPAND_ONCE([_AC_ARG_VAR_HELP_PROLOGUE])[]dnl
+AC_EXPAND_ONCE([
+Some influent environment variables:
+])[]dnl
 AC_HELP_STRING([$1], [$2], [              ])
 AC_DIVERT_POP()dnl
 dnl Register if set and not yet registered.
