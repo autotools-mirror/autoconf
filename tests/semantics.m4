@@ -320,10 +320,9 @@ AT_SETUP([AC_PROG_CPP with warnings])
 
 AT_DATA([mycpp],
 [[#! /bin/sh
-${1+"$@"}
-err_code=$?
 echo noise >&2
-exit $err_code
+${1+"$@"}
+exit $?
 ]])
 
 chmod +x mycpp
