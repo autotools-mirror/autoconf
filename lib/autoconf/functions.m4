@@ -379,7 +379,7 @@ AU_ALIAS([fp_FUNC_FNMATCH], [AC_FUNC_FNMATCH])
 AC_DEFUN([AC_FUNC_FSEEKO],
 [_AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
    [ac_cv_sys_largefile_source],
-   [Define to make fseeko visible on some hosts (e.g. HP-UX 10.20).],
+   [Define to make fseeko visible on some hosts (e.g. glibc 2.2).],
    [@%:@include <stdio.h>], [return !fseeko;])
 
 # We used to try defining _XOPEN_SOURCE=500 too, to work around a bug

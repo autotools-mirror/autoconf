@@ -1,3 +1,14 @@
+2000-11-16  Paul Eggert  <eggert@twinsun.com>
+
+	* m4/largefile.m4 (_AC_SYS_LARGEFILE_SOURCE): Remove, replaced by...
+	(_AC_SYS_LARGEFILE_TEST_INCLUDES): this.
+	(AC_SYS_LARGEFILE_MACRO_VALUE): Use AC_LANG_PROGRAM instead of
+	_AC_SYS_LARGEFILE_SOURCE, i.e., don't pass
+	_AC_SYS_LARGEFILE_TEST_INCLUDES by default: this isn't desirable
+	when checking for fseeko.
+	(AC_SYS_LARGEFILE): Pass AC_SYS_LARGEFILE_TEST_INCLUDES to
+	_AC_SYS_LARGEFILE_MACRO_VALUE, since it no longer does this for us.
+
 2000-11-16  Akim Demaille  <akim@epita.fr>
 
 	Provide a means for escaping the forbidden patterns test.

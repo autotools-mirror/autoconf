@@ -623,14 +623,12 @@ AU_DEFUN([AC_ARG_ARRAY],
 with arguments. Remove this warning when you adjust your code.])])
 
 
-# _AC_SYS_LARGEFILE_SOURCE(PROLOGUE, BODY)
-# ----------------------------------------
-m4_define([_AC_SYS_LARGEFILE_SOURCE],
-[AC_LANG_PROGRAM(
-[$1
-@%:@include <sys/types.h>
-int a[[(off_t) 9223372036854775807 == 9223372036854775807 ? 1 : -1]];],
-[$2])])
+# _AC_SYS_LARGEFILE_TEST_INCLUDES
+# -------------------------------
+m4_define([_AC_SYS_LARGEFILE_TEST_INCLUDES],
+[@%:@include <sys/types.h>
+int a[[(off_t) 9223372036854775807 == 9223372036854775807 ? 1 : -1]];[]dnl
+])
 
 
 # _AC_SYS_LARGEFILE_MACRO_VALUE(C-MACRO, VALUE,
@@ -642,9 +640,9 @@ m4_define([_AC_SYS_LARGEFILE_MACRO_VALUE],
 [AC_CACHE_CHECK([for $1 value needed for large files], [$3],
 [while :; do
   $3=no
-  AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE([$5], [$6])],
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$5], [$6])],
   		    [break])
-  AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE([@%:@define $1 $2
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@define $1 $2
 $5], [$6])],
   		    [$3=$2; break])
   break
@@ -690,10 +688,12 @@ if test "$enable_largefile" != no; then
 
   _AC_SYS_LARGEFILE_MACRO_VALUE(_FILE_OFFSET_BITS, 64,
     ac_cv_sys_file_offset_bits,
-    [Number of bits in a file offset, on hosts where this is settable.])
+    [Number of bits in a file offset, on hosts where this is settable.],
+    [_AC_SYS_LARGEFILE_TEST_INCLUDES])
   _AC_SYS_LARGEFILE_MACRO_VALUE(_LARGE_FILES, 1,
     ac_cv_sys_large_files,
-    [Define for large files, on AIX-style hosts.])
+    [Define for large files, on AIX-style hosts.],
+    [_AC_SYS_LARGEFILE_TEST_INCLUDES])
 fi
 ])# AC_SYS_LARGEFILE
 
