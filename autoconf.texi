@@ -848,6 +848,7 @@ commands given to it are run just before the commands passed to this macro.
 @end defmac
 
 @defmac AC_OUTPUT_COMMANDS (@var{extra-cmds} @r{[}, @var{init-cmds}@r{]})
+@maindex AC_OUTPUT_COMMANDS
 Specify additional shell commands to run at the end of
 @file{config.status}, and shell commands to initialize any variables
 from @code{configure}.  This macro may be called multiple times.

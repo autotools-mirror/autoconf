@@ -1,3 +1,7 @@
+1999-03-28  Tom Tromey  <tromey@cygnus.com>
+
+	* autoconf.texi (AC_OUTPUT_COMMANDS): Add to macro index.
+
 1999-03-22  Ben Elliston  <bje@cygnus.com>
 
 	* config.guess: Rename BUILD_CC to CC_FOR_BUILD; there is a
