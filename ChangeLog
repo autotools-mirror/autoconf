@@ -1,3 +1,8 @@
+Mon Jun 26 20:54:36 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acgeneral.m4 (AC_LANG_C, AC_LANG_CPLUSPLUS): Put the command
+	  being run into the log file.
+
 Thu Jun 22 22:33:23 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acspecific.m4 (AC_PROG_INSTALL): Don't cache a shell script path.

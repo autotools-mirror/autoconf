@@ -1022,9 +1022,12 @@ AC_DEFUN(AC_LANG_C,
 [define([AC_LANG], [C])dnl
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC 2>&AC_FD_CC'
-ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_cpp='echo $CPP $CPPFLAGS 1>&AC_FD_CC;
+$CPP $CPPFLAGS'
+ac_compile='echo ${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC;
+${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_link='echo ${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC;
+${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])
 
 dnl AC_LANG_CPLUSPLUS()
@@ -1032,9 +1035,12 @@ AC_DEFUN(AC_LANG_CPLUSPLUS,
 [define([AC_LANG], [CPLUSPLUS])dnl
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC 2>&AC_FD_CC'
-ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_cpp='echo $CXXCPP $CPPFLAGS 1>&AC_FD_CC;
+$CXXCPP $CPPFLAGS'
+ac_compile='echo ${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC;
+${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_link='echo ${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC;
+${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])
 
 dnl Push the current language on a stack.
