@@ -149,7 +149,7 @@ m4_define([$1], [$2])dnl
 ])
 
 # Register define too.
-m4_namespace_register(libm4, [define])
+m4_namespace_define(libm4, [define], defn([define]))
 
 
 # Put the m4 builtins into the `libm4' name space.  We cannot use `define'
