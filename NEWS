@@ -1,7 +1,7 @@
 Major changes in release 2.14:
 
 * New macro AC_HELP_STRING to format an Autoconf macro's help string so
-  that it looks pretty when the user executes "configure --help.  See
+  that it looks pretty when the user executes `configure --help'.  See
   the Texinfo documentation for details.
 * Support for automatically determining a Fortran 77 compilers
   name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
