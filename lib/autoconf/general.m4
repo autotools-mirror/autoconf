@@ -2885,14 +2885,15 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 m4_define([_AC_RUN_IFELSE],
 [m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest$ac_exeext
-if AC_TRY_EVAL(ac_link) &&
-   test -s conftest$ac_exeext && (./conftest$ac_exeext; exit) 2>/dev/null; then
-  m4_default([$2], :)
-else
-  echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-  cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-m4_ifvanl([$3], [  $3])dnl
-fi
+AC_TRY_EVAL(ac_link) &&
+  (./conftest$ac_exeext) >&AS_MESSAGE_LOG_FD 2>&1;
+ac_status=$?
+AS_IFELSE([test $ac_status == 0],
+          [$2],
+[echo "$as_me: program exited with status: $ac_status" >&AS_MESSAGE_LOG_FD
+echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+m4_ifvanl([$3], [$3])dnl])
 rm -f conftest$ac_exeext ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 

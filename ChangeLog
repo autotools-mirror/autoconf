@@ -1,5 +1,14 @@
 2000-11-17  Akim Demaille  <akim@epita.fr>
 
+	Let AC_TRY_RUN be more verbose
+
+	* acgeneral.m4 (_AC_RUN_IFELSE): Instead of canceling the output
+	of the test program, save it into the log.
+	Save the exit status, and report it in the log when non zero.
+	Just use `(./conftest)' instead of `(./conftest; exit)'.
+
+2000-11-17  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_DEFAULTS) <ac_includes_default>: Include
 	sys/stat.h.
 	* acspecific.m4 (AC_STRUCT_ST_BLKSIZE, AC_STRUCT_ST_BLOCKS)
