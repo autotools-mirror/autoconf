@@ -209,6 +209,7 @@ m4_expand_once([m4_append([_AS_DETECT_SUGGESTED_BODY], [
 # features.
 m4_defun_once([_AS_DETECT_BETTER_SHELL],
 [m4_wrap([m4_divert_text([M4SH-SANITIZE], [
+AS_REQUIRE([_AS_UNSET_PREPARE])dnl
 if test "x$CONFIG_SHELL" = x; then
   AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY]) 2>/dev/null],
         [as_have_required=yes],
@@ -234,8 +235,9 @@ if test "x$CONFIG_SHELL" = x; then
       done
 
       AS_IF([test "x$CONFIG_SHELL" != x],
-        [AS_UNSET([ENV])
-        AS_UNSET([BASH_ENV])
+        [for as_var in BASH_ENV ENV
+        do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+        done
         export CONFIG_SHELL
         exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}])
 
@@ -319,7 +321,9 @@ if test ! -f "$as_myself"; then
 fi
 
 # Work around bugs in pre-3.0 UWIN ksh.
-$as_unset ENV MAIL MAILPATH
+for as_var in ENV MAIL MAILPATH
+do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+done
 PS1='$ '
 PS2='> '
 PS4='+ '
@@ -333,7 +337,7 @@ do
   if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
     eval $as_var=C; export $as_var
   else
-    $as_unset $as_var
+    ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
   fi
 done
 

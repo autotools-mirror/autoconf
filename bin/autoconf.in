@@ -71,7 +71,9 @@ if test ! -f "$as_myself"; then
 fi
 
 # Work around bugs in pre-3.0 UWIN ksh.
-$as_unset ENV MAIL MAILPATH
+for as_var in ENV MAIL MAILPATH
+do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+done
 PS1='$ '
 PS2='> '
 PS4='+ '
@@ -85,7 +87,7 @@ do
   if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
     eval $as_var=C; export $as_var
   else
-    $as_unset $as_var
+    ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
   fi
 done
 
@@ -273,8 +275,9 @@ fi
       done
 
       if test "x$CONFIG_SHELL" != x; then
-  $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
-        $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
+  for as_var in BASH_ENV ENV
+        do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+        done
         export CONFIG_SHELL
         exec "$CONFIG_SHELL" "$as_myself" ${1+"$@"}
 fi
