@@ -561,7 +561,7 @@ if test $ac_compiler_gnu = yes; then
      "checking for GNU _AC_LANG compiler characterisitics" >&AS_MESSAGE_LOG_FD
   ac_compiler=`set X $ac_compile; echo $[2]`
   _AC_EVAL([$ac_compiler --version </dev/null >&AS_MESSAGE_LOG_FD])
-  _AC_EVAL([$ac_compiler -dumpspecs </dev/null >&AS_MESSAGE_LOG_FD])
+  _AC_EVAL([$ac_compiler -v </dev/null >&AS_MESSAGE_LOG_FD])
 fi
 ])])# _AC_LANG_COMPILER_GNU
 
