@@ -1,5 +1,9 @@
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Some about diff and cmp.
+
+2001-01-22  Akim Demaille  <akim@epita.fr>
+
 	* sh.m4 (AS_ESCAPE): New.
 	(_AS_QUOTE_IFELSE): Use it.
 	* tests/atgeneral.m4 (AT_INIT) <SHELL>: Define and use.

@@ -6078,6 +6078,16 @@ Don't rely on any option.  The option @option{-v}, which shows
 non printing characters, @emph{seems} portable though.
 
 
+@item @command{cmp}
+@c ----------------
+@cindex @command{cmp}
+@command{cmp} performs a raw data comparison of two files, while
+@command{diff} compares two text files.  Therefore, if you might compare
+DOS files, even if only checking whether two files are different, use
+@command{diff} to avoid spurious differences due to differences of
+newline encoding.
+
+
 @item @command{cp}
 @c ---------------
 @cindex @command{cp}
@@ -6096,6 +6106,14 @@ newer systems, @code{rename}).
 @c Ian said: ``I don't think -p or -r are portable''!!! How can you live
 @c without -r???
 
+
+@item @command{diff}
+@c -----------------
+@cindex @command{diff}
+Option @option{-u} is nonportable.
+
+Some implementations, such as Tru64's, fail when comparing to
+@file{/dev/null}.  Use an empty file instead.
 
 @item @command{dirname}
 @c --------------------
