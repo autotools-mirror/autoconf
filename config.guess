@@ -636,6 +636,7 @@ EOF
 				    s/ .*//
 				    p'`
         case "$ld_supported_emulations" in
+	  *ia64)      echo "${UNAME_MACHINE}-unknown-linux"         ; exit 0 ;;
 	  i?86linux)  echo "${UNAME_MACHINE}-pc-linux-gnuaout"      ; exit 0 ;;
 	  i?86coff)   echo "${UNAME_MACHINE}-pc-linux-gnucoff"      ; exit 0 ;;
 	  sparclinux) echo "${UNAME_MACHINE}-unknown-linux-gnuaout" ; exit 0 ;;
