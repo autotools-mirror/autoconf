@@ -22,6 +22,7 @@
 
 # Ones that have their own macros.
 X11/Xlib.h	AC_PATH_X
+alloca.h        AC_FUNC_ALLOCA
 dirent.h	AC_HEADER_DIRENT
 float.h		AC_HEADER_STDC
 float.h		AC_CHECK_HEADERS
@@ -40,7 +41,6 @@ sys/wait.h	AC_HEADER_SYS_WAIT
 
 # Others, checked with AC_CHECK_HEADERS.
 OS.h
-alloca.h
 argz.h
 arpa/inet.h
 errno.h

@@ -47,7 +47,8 @@ my %macro = ();
 # $NEEDED_MACROS{MACRO} is an array of locations requiring MACRO.
 my %needed_macros = ();
 
-my @kinds = qw (functions headers identifiers programs makevars libraries);
+my @kinds = qw (functions headers identifiers programs
+                makevars libraries);
 
 # For each kind, the default macro.
 my %generic_macro =
@@ -224,12 +225,23 @@ sub scan_c_file ($)
 	}
 
       # Preprocessor directives.
-      if (/^\s*\#\s*include\s*<([^>]*)>/)
+      if (s/^\s*\#\s*//)
 	{
-	  push (@{$used{'headers'}{$1}}, "$File::Find::name:$.");
+	  if (/^include\s*<([^>]*)>/)
+	    {
+	      push (@{$used{'headers'}{$1}}, "$File::Find::name:$.");
+	    }
+	  if (s/^(if|ifdef|ifndef|elif)\s+//)
+	    {
+	      foreach my $word (split (/\W+/))
+		{
+		  push (@{$used{'identifiers'}{$word}}, "$File::Find::name:$.")
+		    unless $word eq 'defined' || $word !~ /^[a-zA-Z_]/;
+		}
+	    }
+	  # Ignore other preprocessor directives.
+	  next;
 	}
-      # Ignore other preprocessor directives.
-      next if /^\s*\#/;
 
       # Remove string and character constants.
       s,\"[^\"]*\",,g;
@@ -303,7 +315,6 @@ sub scan_sh_file ($)
   while ($_ = $file->getline)
     {
       # Strip out comments and variable references.
-      s/#.*//;
       s/#.*//;
       s/\${[^\}]*}//g;
       s/@[^@]*@//g;
@@ -401,8 +412,8 @@ sub output_kind ($$)
     if exists $kind_comment{$kind};
   foreach my $word (sort keys %{$used{$kind}})
     {
-      # Words that were caught, but not to be checked according to
-      # the autoscan library files.
+      # Words that were caught, but not to be checked according to the
+      # autoscan library files.
       next
 	if ! exists $macro{$kind}{$word};
 
@@ -459,8 +470,9 @@ sub output ($)
 
   my $file = new Autom4te::XFile ">$configure_scan";
 
-  print $file "# Process this file with autoconf to produce a configure script.\n";
-  print $file "AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)\n";
+  print $file
+    ("# Process this file with autoconf to produce a configure script.\n"
+     . "AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)\n");
   if (defined $cfiles[0])
     {
       print $file "AC_CONFIG_SRCDIR([$cfiles[0]])\n";
@@ -506,7 +518,7 @@ sub check_configure_ac ($)
   # I'd be very happy if someone could explain to me why sort (uniq ...)
   # doesn't work properly: I need `uniq (sort ...)'.  --akim
   my $trace_option =
-    join (' -t ', '',
+    join (' --trace=', '',
 	  uniq (sort (map { s/\(.*//; $_ } keys %needed_macros)));
 
   verbose "running: $autoconf $trace_option $configure_ac";
