@@ -1772,6 +1772,7 @@ when writing GNU software.
 * CPU Portability::             Supporting the range of CPU types
 * System Functions::            Portability and ``standard'' library functions
 * Internationalization::        Techniques for internationalization
+* Mmap::                        How you can safely use @code{mmap}.
 @end menu
 
 @node Formatting
@@ -1899,6 +1900,13 @@ page.  The formfeeds should appear alone on lines by themselves.
 
 Every program should start with a comment saying briefly what it is for.
 Example: @samp{fmt - filter for simple filling of text}.
+
+Please write the comments in a GNU program in English, because English
+is the one language that nearly all programmers in all countries can
+read.  If you do not write English well, please write comments in
+English as well as you can, then ask other people to help rewrite them.
+If you can't write comments in English, please find someone to work with
+you and translate your comments into English.
 
 Please put a comment on each function saying what the function does,
 what sorts of arguments it gets, and what the possible values of
@@ -2100,6 +2108,15 @@ pointer constant, except when calling a varargs function.
 @node  Names
 @section Naming Variables and Functions
 
+The names of global variables and functions in a program serve as
+comments of a sort.  So don't choose terse names---instead, look for
+names that give useful information about the meaning of the variable or
+function.  In a GNU program, names should be English, like other
+comments.
+
+Local variable names can be shorter, because they are used only within
+one context, where (presumably) comments explain their purpose.
+
 Please use underscores to separate words in a name, so that the Emacs
 word commands can be useful within them.  Stick to lower case; reserve
 upper case for macros and @code{enum} constants, and for name-prefixes
@@ -2125,10 +2142,10 @@ When you want to define names with constant integer values, use
 constants.
 
 Use file names of 14 characters or less, to avoid creating gratuitous
-problems on older System V systems.  You can use the program @code{doschk} to test for
-this.  @code{doschk} also tests for potential name conflicts if the
-files were loaded onto an MS-DOS file system---something you may or may
-not care about.
+problems on older System V systems.  You can use the program
+@code{doschk} to test for this.  @code{doschk} also tests for potential
+name conflicts if the files were loaded onto an MS-DOS file
+system---something you may or may not care about.
 
 @node System Portability
 @section Portability between System Types
@@ -2235,6 +2252,25 @@ functions to avoid unnecessary loss of portability.
 @item
 Don't use the value of @code{sprintf}.  It returns the number of
 characters written on some systems, but not on all systems.
+
+@item
+Don't assume that @code{mmap} either works on all files or fails
+for all files.  It may work on some files and fail on others.
+
+The proper way to use @code{mmap} is to try it on the specific file for
+which you want to use it---and if @code{mmap} doesn't work, fall back on
+doing the job in another way using @code{read} and @code{write}.
+
+The reason this precaution is needed is that the GNU kernel (the HURD)
+provides a user-extensible file system, in which there can be many
+different kinds of ``ordinary files.''  Many of them support
+@code{mmap}, but some do not.  It is important to make programs handle
+all these kinds of files.
+
+@item
+@code{main} should be declared to return type @code{int}.  It should
+terminate either by calling @code{exit} or by returning the integer
+status code; make sure it cannot ever return an undefined value.
 
 @item
 Don't declare system functions explicitly.
