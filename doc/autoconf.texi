@@ -12842,6 +12842,8 @@ AC_LIBOBJ([malloc])
 
 @sp 1
 
+@ovindex U
+@cindex @code{$U}
 When asked for automatic de-ANSI-fication, Automake needs
 @code{LIBOBJS}'ed filenames to have @samp{$U} appended to the base
 names.  Libtool requires the definition of @code{LTLIBOBJS}, which
@@ -12875,10 +12877,12 @@ AC_SUBST(LTLIBOBJS)
 
 @sp 1
 
-Fortunately, you no longer have to use this: @code{AC_OUTPUT} normalizes
+You no longer have to use this: @code{AC_OUTPUT} normalizes
 @code{LIBOBJS} and @code{LTLIBOBJS} (hence it works with any version of
-Automake and Libtool).  So just remove these lines.
-@command{autoupdate} cannot handle this task, since this is not a macro.
+Automake and Libtool).  Just remove these lines (@command{autoupdate}
+cannot handle this task, since this is not a macro).
+
+Note that @code{U} must not be used in your Makefiles.
 
 
 @c ============================= Generating Test Suites with Autotest
