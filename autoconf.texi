@@ -661,16 +661,29 @@ Print the version number of Autoconf and exit.
 @node Invoking autoreconf, , Invoking autoconf, Making configure Scripts
 @section Using @code{autoreconf} to Update @code{configure} Scripts
 
-If you have a lot of Autoconf-generated @code{configure} scripts and you
-get a new version of Autoconf, the @code{autoreconf} program can be
-handy.  It runs @code{autoconf} (and @code{autoheader}, where
-appropriate) repeatedly to remake all of the Autoconf @code{configure}
-scripts in the directory tree rooted at the current directory.  If you
-give the @samp{--macrodir=@var{dir}} or @samp{--localdir=@var{dir}}
-options, it passes them down (with relative paths adjusted properly).
+If you have a lot of Autoconf-generated @code{configure} scripts, the
+@code{autoreconf} program can save you some work.  It runs
+@code{autoconf} (and @code{autoheader}, where appropriate) repeatedly to
+remake the Autoconf @code{configure} scripts and configuration header
+templates in the directory tree rooted at the current directory.  By
+default, it only remakes those files that are older than their
+@file{configure.in} or (if present) @file{aclocal.m4}.  Since
+@code{autoheader} does not change the timestamp of its output file if
+the file wouldn't be changing, this is not necessarily the minimum
+amount of work.  If you install a new version of Autoconf, you can make
+@code{autoreconf} remake @emph{all} of the files by giving it the
+@samp{--force} option.
 
-@xref{Automatic Remaking}, for information about automatic remaking of
-@code{configure} scripts when their source files change.
+If you give @code{autoreconf} the @samp{--macrodir=@var{dir}} or
+@samp{--localdir=@var{dir}} options, it passes them down to
+@code{autoconf} and @code{autoheader} (with relative paths adjusted
+properly).
+
+@xref{Automatic Remaking}, for @file{Makefile} rules to automatically
+remake @code{configure} scripts when their source files change.  That
+method handles the timestamps of configuration header templates
+properly, but does not pass @samp{--macrodir=@var{dir}} or
+@samp{--localdir=@var{dir}}.
 
 @noindent
 @code{autoreconf} accepts the following options:
@@ -679,6 +692,12 @@ options, it passes them down (with relative paths adjusted properly).
 @item --help
 @itemx -h
 Print a summary of the command line options and exit.
+
+@item --force
+@itemx -f
+Remake even @file{configure} scripts and configuration headers that are
+newer than their input files (@file{configure.in} and, if present,
+@file{aclocal.m4}).
 
 @item --localdir=@var{dir}
 @itemx -l @var{dir}
