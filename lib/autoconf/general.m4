@@ -508,6 +508,7 @@ ac_arg_enable_help=
 ac_arg_var_help=
 ac_default_prefix=/usr/local
 # Factorizing default headers for most tests.
+dnl If ever you change this variable, please keep autoconf.texi in sync.
 ac_includes_default="\
 #include <stdio.h>
 #include <sys/types.h>

@@ -1,5 +1,16 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Let the doc catch up.
+
+	* doc/autoconf.texi (Common Behavior): New section, to document
+	the common behavior of the macros.
+	(Standard Symbols): New subsection.  Describes the transformation
+	of the AC_DEFINEd names.
+	(Default Includes): New subsection.  Obvious content.
+	All the ``callers'' updated.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_OUTPUT_HEADERS): Don't use `break' to exit the
 	while loops which are breaking conftest.defines and
 	conftest.undefs into smaller snippets: just use the proper

@@ -175,6 +175,7 @@ Configuration Header Files
 
 Existing Tests
 
+* Common Behavior::             Macros' standard schemes
 * Alternative Programs::        Selecting between alternative programs
 * Libraries::                   Library archives that might be missing
 * Library Functions::           C library functions that might be missing
@@ -186,6 +187,11 @@ Existing Tests
 * Fortran 77 Compiler Characteristics::
 * System Services::             Operating system services
 * UNIX Variants::               Special kludges for specific UNIX variants
+
+Common Behavior
+
+* Standard Symbols::            Symbols defined by the macros
+* Default Includes::            Includes used by the generic macros
 
 Alternative Programs
 
@@ -1579,6 +1585,7 @@ preprocessor symbol @var{name} to the value 1''.  @xref{Defining
 Symbols}, for how to get those symbol definitions into your program.
 
 @menu
+* Common Behavior::             Macros' standard schemes
 * Alternative Programs::        Selecting between alternative programs
 * Libraries::                   Library archives that might be missing
 * Library Functions::           C library functions that might be missing
@@ -1592,7 +1599,99 @@ Symbols}, for how to get those symbol definitions into your program.
 * UNIX Variants::               Special kludges for specific UNIX variants
 @end menu
 
-@node Alternative Programs, Libraries, Existing Tests, Existing Tests
+@node Common Behavior, Alternative Programs, Existing Tests, Existing Tests
+@section Common Behavior
+
+Much effort is developed in Autoconf to make it easy to learn.  The most
+obvious means to reach this goal is simply to enforce standard and
+rigorous schemes, and to avoid as much as possible exceptions.  Because
+of history and momentum, there are still too many exceptions in
+Autoconf, nevertheless this section describes some of the common rules.
+
+@menu
+* Standard Symbols::            Symbols defined by the macros
+* Default Includes::            Includes used by the generic macros
+@end menu
+
+@node Standard Symbols, Default Includes, Common Behavior, Common Behavior
+@subsection Standard Symbols
+
+All the generic macros which @code{AC_DEFINE} a symbol as a result of
+their test transform their @var{argument}s to a standard alphabet.
+First @var{argument} is mapped to upper case and any star @samp{*} to
+@samp{P}.  Any characters that remains which is not alpha-numerical or
+underscore is mapped to an underscore.
+
+For instance
+
+@example
+AC_CHECK_TYPES((struct $Expensive*))
+@end example
+
+@noindent
+may define the symbol @samp{HAVE_STRUCT__EXPENSIVEP}.
+
+
+@node Default Includes,  , Standard Symbols, Common Behavior
+@subsection Default Includes
+@cindex Includes, default
+
+Several tests depend upon a set of headers.  Since headers are not
+universally available, you actually have to provide a set of protected
+includes, such as
+
+@example
+@group
+#if TIME_WITH_SYS_TIME
+# include <sys/time.h>
+# include <time.h>
+#else
+# if HAVE_SYS_TIME_H
+#  include <sys/time.h>
+# else
+#  include <time.h>
+# endif
+#endif
+@end group
+@end example
+
+@noindent
+Unless you know exactly what you are doing, you should avoid to use
+unconditional includes, and check the existence of the headers you
+include beforehand (@pxref{Header Files}).
+
+Most generic macros provide the following default set of includes:
+
+@example
+@group
+#include <stdio.h>
+#include <sys/types.h>
+#if STDC_HEADERS
+# include <stdlib.h>
+# include <stddef.h>
+#else
+# if HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
+#if HAVE_STRING_H
+# if !STDC_HEADERS && HAVE_MEMORY_H
+#  include <memory.h>
+# endif
+# include <string.h>
+#else
+# if HAVE_STRINGS_H
+#  include <strings.h>
+# endif
+#endif
+#if HAVE_UNISTD_H
+# include <unistd.h>
+#endif
+@end group
+@end example
+
+
+@node Alternative Programs, Libraries, Common Behavior, Existing Tests
 @section Alternative Programs
 @cindex Programs, checking
 
@@ -2663,8 +2762,8 @@ test macros.
 If the declaration of @var{symbol} (a function or a variable) is needed
 because it is not declared in @var{includes}, run the shell commands
 @var{action-if-not-found}, otherwise @var{action-if-found}.  If no
-@var{includes} are given at all, FIXME: point to a node defining the
-standard include.
+@var{includes} are specified, the default includes are used
+(@pxref{Default Includes}).
 
 This macro actually tests whether it is valid to use @var{symbol} as an
 r-value, not if it is really declared, because it is much safer to avoid
@@ -2793,7 +2892,8 @@ particular test macros.
 @defmac AC_CHECK_MEMBER (@var{aggregate}.@var{member}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_MEMBER
 Check whether @var{member} is a member of the aggregate @var{aggregate}.
-FIXME: Default @var{includes} are provided.
+If no @var{includes} are specified, the default includes are used
+(@pxref{Default Includes}).
 @example
 AC_CHECK_MEMBER(struct passwd.pw_gecos,,
                 [AC_FATAL([We need `struct passwd.pw_gecos'!])],
@@ -2901,13 +3001,13 @@ test macros.
 
 @defmac AC_CHECK_TYPES ((@var{type}, @dots{}), @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_TYPES
-For each given @var{type} that is defined by the FIXME: @var{includes},
-define @code{HAVE_@var{type}} (in all capitals).  If
-@var{action-if-found} is given, it is additional shell code to execute
-when one of the header files is found.  You can give it a value of
-@samp{break} to break out of the loop on the first match.  If
-@var{action-if-not-found} is given, it is executed when one of the
-header files is not found.
+For each defined @var{type} define @code{HAVE_@var{type}} (in all
+capitals).  If no @var{includes} are specified, the default includes are
+used (@pxref{Default Includes}).  If @var{action-if-found} is given, it
+is additional shell code to execute when one of the header files is
+found.  You can give it a value of @samp{break} to break out of the loop
+on the first match.  If @var{action-if-not-found} is given, it is
+executed when one of the header files is not found.
 
 This macro uses m4 lists:
 @example
@@ -2925,9 +3025,10 @@ to incompatible code in the case of pointer types.
 
 @defmac AC_CHECK_TYPE (@var{type}, @var{default}, @ovar{includes})
 @maindex CHECK_TYPE
-If the type @var{type} is not defined in FIXME: @ovar{includes}, define
-it to be the C (or C++) builtin type @var{default}; e.g., @samp{short}
-or @samp{unsigned}.
+If the type @var{type} is not defined, define it to be the C (or C++)
+builtin type @var{default}; e.g., @samp{short} or @samp{unsigned}.  If
+no @var{includes} are specified, the default includes are used
+(@pxref{Default Includes}).
 
 This macro has a broken design.  First, although it is a member of the
 @code{CHECK} clan, singular subfamily, it does more than just checking.
@@ -3071,9 +3172,9 @@ size_t my_strlen PARAMS ((const char *));
 Define @code{SIZEOF_@var{uctype}} to be the size in bytes of the C (or
 C++) type @var{type} (e.g. @samp{int}, @samp{char *} etc.).  If
 @samp{type} is unknown, it gets a size of 0.  If no @var{includes} are
-provided, the default headers are used (FIXME: point to the right
-node).  If you provide default header, make sure to include
-@file{stdio.h} which is required for this macro to run.
+specified, the default includes are used (@pxref{Default Includes}).  If
+you provide @var{include}, make sure to include @file{stdio.h} which is
+required for this macro to run.
 
 @var{uctype} is @var{type}, with lowercase converted to uppercase,
 spaces changed to underscores, and asterisks changed to @samp{P}.  If
