@@ -2,6 +2,11 @@
 
 	Version 2.57b.
 
+	* Makefile.cfg (local-checks-to-skip): New.
+	* Makefile.maint (local-check): Rename as...
+	(local-checks-available): this.
+	(local-check): New.
+
 2003-08-22  Akim Demaille  <akim@epita.fr>
 
 	Output stack traces in warnings.
