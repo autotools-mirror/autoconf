@@ -164,7 +164,8 @@ realclean: distclean
 TAGS:
 	etags ${srcdir}/*.m4 ${srcdir}/*.sh ${srcdir}/[a-z]*.in ${srcdir}/*.texi
 
-dist: $(DISTDEP) $(DISTFILES)
+# Don't depend on DISTFILES because there's no rule for "standards.info*".
+dist: $(DISTDEP)
 	chmod -R a+rX .
 	distname=`sed -e '/define(AC_ACVERSION,/!d' \
 	-e 's/[^0-9.]*\([0-9.]*\).*/autoconf-\1/' -e q acgeneral.m4`; \
