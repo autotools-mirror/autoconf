@@ -1,5 +1,12 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* m4sugar.m4 (m4_location): When using its value, don't use
+	`m4_defn', since m4_location is not a variable, it's a macro which
+	expands to __file__:__line__.
+	* tests/m4sugar.at (m4_warn): New test.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.at (unexpanded macros): Strengthen.
 	* autoconf.sh (finalize.awk): Use `sub' instead of `index' +
 	`substr'.

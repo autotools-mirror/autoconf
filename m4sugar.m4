@@ -1025,7 +1025,7 @@ m4_define([_m4_expansion_stack_dump],
        [m4_errprint(m4_defn([_m4_expansion_stack]))dnl
 m4_popdef([_m4_expansion_stack])dnl
 _m4_expansion_stack_dump()],
-       [m4_errprint(m4_defn([m4_location])[: the top level])])])
+       [m4_errprint(m4_location[: the top level])])])
 
 
 # _m4_defun_pro(MACRO-NAME)
@@ -1068,7 +1068,7 @@ m4_provide([$1])dnl
 # macros that are not involved in ordering constraints, to save m4
 # processing.
 m4_define([m4_defun],
-[m4_define([m4_location($1)], m4_defn([m4_location]))dnl
+[m4_define([m4_location($1)], m4_location)dnl
 m4_define([$1],
           [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])
 
@@ -1078,7 +1078,7 @@ m4_define([$1],
 # As m4_defun, but issues the EXPANSION only once, and warns if used
 # several times.
 m4_define([m4_defun_once],
-[m4_define([m4_location($1)], m4_defn([m4_location]))dnl
+[m4_define([m4_location($1)], m4_location)dnl
 m4_define([$1],
           [m4_provide_ifelse([$1],
                              [m4_warn([syntax], [$1 invoked multiple times])],
@@ -1128,7 +1128,7 @@ m4_define([m4_before],
 #   it passes to `AC_LANG_COMPILER(C)'.
 m4_define([_m4_require],
 [m4_pushdef([_m4_expansion_stack],
-            m4_defn([m4_location])[: $1 is required by...])dnl
+            m4_location[: $1 is required by...])dnl
 ifdef([_m4_expanding($1)],
       [m4_fatal([m4_require: circular dependency of $1])])dnl
 ifndef([_m4_divert_dump],
