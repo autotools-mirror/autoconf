@@ -1,5 +1,12 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	LANGUAGE should be neutralized too.
+
+	* acgeneral.m4 (_AC_INIT_PREPARE_ENVIRONMENT): Do it.
+	* doc/autoconf.texi (Special Shell Variables): Mention it.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	Set autoconf's default warnings to `syntax'.
 
 	In fact, honor the most recent specification in the concatenation

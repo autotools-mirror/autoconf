@@ -4722,24 +4722,24 @@ fall back, see @ref{Limitations of Builtins}.
 
 @item LANG
 @itemx LC_ALL
-@itemx LC_MESSAGES
 @itemx LC_CTYPE
+@itemx LANGUAGE
+@itemx LC_MESSAGES
 @evindex LANG
 @evindex LC_ALL
-@evindex LC_MESSAGES
 @evindex LC_CTYPE
+@evindex LANGUAGE
+@evindex LC_MESSAGES
 
 These must not be set unconditionally because not all systems understand
 e.g. @samp{LANG=C} (notably SCO).  Fixing @code{LC_MESSAGES} prevents
 Solaris @command{sh} from translating var values in @code{set}!  Non-C
-@code{LC_CTYPE} values break the ctype check.  Therefore, run:
+@code{LC_CTYPE} values break the ctype check.  @code{LANGUAGE} is a
+@sc{gnu} extension.
 
-@example
-test "$@{LANG+set@}" = set && LANG=C && export LANG
-test "$@{LC_ALL+set@}" = set && LC_ALL=C && export LC_ALL
-test "$@{LC_CTYPE+set@}" = set && LC_CTYPE=C && export LC_CTYPE
-test "$@{LC_MESSAGES+set@}" = set && LC_MESSAGES=C && export LC_MESSAGES
-@end example
+@emph{If} one of these variables is set, you should try to unset it,
+using @samp{C} as a fall back value. see @ref{Limitations of Builtins},
+builtin @command{unset}, for more details.
 
 @item NULLCMD
 @evindex NULLCMD
