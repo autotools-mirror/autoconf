@@ -1663,8 +1663,8 @@ if test $ac_cv_func_strerror_r = yes; then
 #       endif
      ],
      [
-       int buf; /* avoiding square brackets makes this easier */
-       char x = *strerror_r (0, buf, sizeof buf);
+       char buf;
+       char x = *strerror_r (0, &buf, sizeof buf);
      ],
      ac_cv_func_strerror_r_works=yes,
      ac_cv_func_strerror_r_works=no
