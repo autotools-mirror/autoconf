@@ -1,5 +1,12 @@
 2000-02-10  Akim Demaille  <akim@epita.fr>
 
+	Clean up a few changequotes.
+
+	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Instead of using changequote
+	to protect a few `[ ]', double quote the constant sections.
+
+2000-02-10  Akim Demaille  <akim@epita.fr>
+
 	Restore AC_HAVE_LIBRARY.
 
 	* acgeneral.m4 (AC_HAVE_LIBRARY): AU_DEFUNed in terms of
