@@ -1,5 +1,14 @@
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4: Change `tests?' into `groups?' in
+	variable names when referring to a single test group, or to
+	`suite' when referring to the whole test suite.
+	`at_last_test' is removed: m4 compute at_format itself.
+	(at_stdout, at_stder1, at_stderr): New variables.
+	(AT_CHECK): Use them.
+
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Be sure to put `.', relative,
 	in PATH.
 	Create `testsuite.dir/003/run' instead of `testsuite.003'.
