@@ -1299,7 +1299,7 @@ AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
 
 # _AC_FUNC_REALLOC_IF(IF-WORKS, IF-NOT)
 # -------------------------------------
-# If `realloc (0, 0)' properly handled, run IF-WORKS, otherwise, IF-NOT.
+# If `realloc (0, 0)' is properly handled, run IF-WORKS, otherwise, IF-NOT.
 AC_DEFUN([_AC_FUNC_REALLOC_IF],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_CHECK_HEADERS(stdlib.h)
@@ -1322,7 +1322,7 @@ AS_IF([test $ac_cv_func_realloc_0_nonnull = yes], [$1], [$2])
 
 # AC_FUNC_REALLOC
 # ---------------
-# Report whether `realloc (0, 0)' properly handled, and replace realloc if
+# Report whether `realloc (0, 0)' is properly handled, and replace realloc if
 # needed.
 AN_FUNCTION([realloc], [AC_FUNC_REALLOC])
 AC_DEFUN([AC_FUNC_REALLOC],
