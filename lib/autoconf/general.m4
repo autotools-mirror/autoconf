@@ -1451,9 +1451,9 @@ done
 trap 'exit_status=$?
   # Save into config.log some information that might help in debugging.
   echo >&AS_MESSAGE_LOG_FD
-  echo "## ----------------- ##" >&AS_MESSAGE_LOG_FD
-  echo "## Cache variables.  ##" >&AS_MESSAGE_LOG_FD
-  echo "## ----------------- ##" >&AS_MESSAGE_LOG_FD
+  echo ["## ----------------- ##"] >&AS_MESSAGE_LOG_FD
+  echo ["## Cache variables.  ##"] >&AS_MESSAGE_LOG_FD
+  echo ["## ----------------- ##"] >&AS_MESSAGE_LOG_FD
   echo >&AS_MESSAGE_LOG_FD
   m4_patsubst(m4_patsubst(m4_dquote(m4_defn([_AC_CACHE_DUMP])),
                           [^ *\(#.*\)?
@@ -1462,9 +1462,9 @@ trap 'exit_status=$?
   sed "/^$/d" confdefs.h >conftest.log
   if test -s conftest.log; then
     echo >&AS_MESSAGE_LOG_FD
-    echo "## ------------ ##" >&AS_MESSAGE_LOG_FD
-    echo "## confdefs.h.  ##" >&AS_MESSAGE_LOG_FD
-    echo "## ------------ ##" >&AS_MESSAGE_LOG_FD
+    echo ["## ------------ ##"] >&AS_MESSAGE_LOG_FD
+    echo ["## confdefs.h.  ##"] >&AS_MESSAGE_LOG_FD
+    echo ["## ------------ ##"] >&AS_MESSAGE_LOG_FD
     echo >&AS_MESSAGE_LOG_FD
     cat conftest.log >&AS_MESSAGE_LOG_FD
   fi

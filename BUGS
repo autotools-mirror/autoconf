@@ -21,10 +21,6 @@ address them.
 
 Autoconf must not be used in production if there are serious bugs.
 
-** Unexpanded macros
-Some macros are left unexpanded (grep AS_MESSAGE configure), and
-worse, autoconf doesn't complain.
-
 ** AC_LANG vs AC_REQUIRE
 Because AC_REQUIRE makes the `time' concept different for Sh and M4,
 it may happen that the currently required language is not the one
