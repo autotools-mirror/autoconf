@@ -81,6 +81,14 @@ m4_undefine([undefine])
 # m4_copy(SRC, DST)
 # -----------------
 # Define DST as the definition of SRC.
+# What's the difference between:
+# 1. m4_copy([from], [to])
+# 2. m4_define([from], [to($@)])
+# Well, obviously 1 is more expansive in space.  Maybe 2 is more expansive
+# in time, but because of the space cost of 1, it's not that obvious.
+# Nevertheless, one huge difference is the handling of `$0'.  If `from'
+# uses `$0', then with 1, `to''s `$0' is `to', while it is `from' in 2.
+# The user will certainly prefer see `from'.
 m4_define([m4_copy],
 [m4_define([$2], m4_defn([$1]))])
 
@@ -534,8 +542,7 @@ m4_builtin([undefine], $@)])
 # m4_for(VARIABLE, FIRST, LAST, [STEP = +/-1], EXPRESSION)
 # --------------------------------------------------------
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO.
-# Both limits are included.
-
+# Both limits are included, and bounds are checked for consistency.
 m4_define([m4_for],
 [m4_case(m4_sign(m4_eval($3 - $2)),
          1, [m4_assert(m4_sign(m4_default($4, 1)) == 1)],
@@ -546,6 +553,10 @@ m4_if(m4_eval([$3 > $2]), 1,
       [_m4_for([$1], [$3], m4_default([$4], -1), [$5])])dnl
 m4_popdef([$1])])
 
+
+# _m4_for(VARIABLE, FIRST, LAST, STEP, EXPRESSION)
+# ------------------------------------------------
+# Core of the loop, no consistency checks.
 m4_define([_m4_for],
 [$4[]dnl
 m4_if($1, [$2], [],
@@ -666,10 +677,10 @@ m4_define([_m4_foreach],
 ## --------------------------- ##
 
 
-# _m4_divert(DIBERSION-NAME or NUMBER)
+# _m4_divert(DIVERSION-NAME or NUMBER)
 # ------------------------------------
-# If DIVERSION-NAME is the name of a diversion, return its number, otherwise
-# return makeNUMBER.
+# If DIVERSION-NAME is the name of a diversion, return its number,
+# otherwise if is a NUMBER return it.
 m4_define([_m4_divert],
 [m4_ifdef([_m4_divert($1)],
           [m4_indir([_m4_divert($1)])],
@@ -1064,8 +1075,8 @@ m4_divert_pop()dnl
 # -----------------------------
 m4_define([m4_expansion_stack_push],
 [m4_pushdef([m4_expansion_stack],
-            [$1]
-m4_defn([m4_expansion_stack]))])
+            [$1]m4_ifdef([m4_expansion_stack], [
+m4_defn([m4_expansion_stack])]))])
 
 
 # m4_expansion_stack_pop
@@ -1079,7 +1090,8 @@ m4_define([m4_expansion_stack_pop],
 # -----------------------
 # Dump the expansion stack.
 m4_define([m4_expansion_stack_dump],
-[m4_errprint(m4_defn([m4_expansion_stack]))dnl
+[m4_ifdef([m4_expansion_stack],
+          [m4_errprintn(m4_defn([m4_expansion_stack]))])dnl
 m4_errprintn(m4_location[: the top level])])
 
 

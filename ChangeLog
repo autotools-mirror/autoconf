@@ -1,3 +1,20 @@
+2001-01-18  Akim Demaille  <akim@epita.fr>
+
+	Various cleanups and consistency checks.
+
+	* m4sugar.m4: Formatting changes.
+	* acgeneral.m4 (AC_DIVERT_PUSH, AC_DIVERT_POP, AC_REQUIRE)
+	(AC_DIAGNOSE, AC_FATAL, AC_MSG_WARN, AC_MSG_NOTICE, AC_MSG_ERROR):
+	Use m4_copy to define them, in order to keep a good $0.
+	(AC_INIT): AC_LANG_PUSH C, not AC_LANG, to initialize the stack.
+	* aclang.m4 (AC_LANG_PUSH): Dont't use m4_defn on undefined macros.
+	(AC_LANG_POP): Admit an argument specifying the language we quit
+	when popping.
+	Adjust Autoconf's AC_LANG_POPs.
+	* tests/tools.at (AWK portability): Don't depend on AC_INIT.
+	(autoconf --trace: user macros): Obviously I
+	meant TRACE1, not AC_TRACE1.
+
 2001-01-17  Akim Demaille  <akim@epita.fr>
 
 	* m4sugar.m4 (m4_undefine, m4_popdef): Don't tolerate undefined

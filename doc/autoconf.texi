@@ -6498,10 +6498,21 @@ then select the @var{language}.  Use this macro and @code{AC_LANG_POP}
 in macros that need to temporarily switch to a particular language.
 @end defmac
 
-@defmac AC_LANG_POP
+@defmac AC_LANG_POP (@ovar{language})
 @maindex LANG_POP
 Select the language that is saved on the top of the stack, as set by
 @code{AC_LANG_PUSH}, and remove it from the stack.
+
+If given, @var{language} specifies the language we just @emph{quit}.  It
+is a good idea to specify it when it's known (which should be the
+case...), since Autoconf will track inconsistencies.
+
+@example
+AC_LANG_PUSH(Fortran 77)
+# Perform some tests on Fortran 77.
+# ...
+AC_LANG_POP(Fortran 77)
+@end example
 @end defmac
 
 @defmac AC_REQUIRE_CPP

@@ -75,8 +75,7 @@ AT_CLEANUP
 AT_SETUP([AWK portability])
 
 AT_DATA([configure.ac],
-[[AC_INIT
-]])
+[])
 
 if (gawk --version) >/dev/null 2>&1; then
   # Generation of the script.
@@ -111,7 +110,7 @@ AT_DATA(configure.ac,
 AC_DEFUN([TRACE1], [TRACE2(m4_shift($@))])
 AC_DEFUN([TRACE2], [[$2], $1])
 TRACE1(foo, bar, baz)
-TRACE1(foo, AC_TRACE1(bar, baz))
+TRACE1(foo, TRACE1(bar, baz))
 TRACE1(foo, active, baz)
 TRACE1(foo, [active], TRACE1(active, [active]))
 ]])
@@ -120,8 +119,10 @@ TRACE1(foo, [active], TRACE1(active, [active]))
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
 [[configure.ac:4:TRACE1:foo:bar:baz
 configure.ac:4:TRACE2:bar:baz
-configure.ac:5:TRACE1:foo:AC_TRACE1(bar, baz)
-configure.ac:5:TRACE2:AC_TRACE1(bar, baz)
+configure.ac:5:TRACE1:bar:baz
+configure.ac:5:TRACE2:baz
+configure.ac:5:TRACE1:foo::baz
+configure.ac:5:TRACE2::baz
 configure.ac:6:TRACE1:foo:ACTIVE:baz
 configure.ac:6:TRACE2:ACTIVE:baz
 configure.ac:7:TRACE1:ACTIVE:active
@@ -136,7 +137,9 @@ AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1:'
 [[
 [foo], [bar], [baz].
 
-[foo], [AC_TRACE1(bar, baz)], [].
+[bar], [baz], [].
+
+[foo], [], [baz].
 
 [foo], [ACTIVE], [baz].
 
@@ -148,7 +151,8 @@ AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1:'
 # ${sep}@.
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE2:'${)===(}@'], 0,
 [[[bar])===([baz]
-[AC_TRACE1(bar, baz)]
+[baz]
+[])===([baz]
 [ACTIVE])===([baz]
 [active]
 [active])===([])===([ACTIVE]

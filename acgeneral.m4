@@ -143,15 +143,10 @@ m4_define([AC_DIVERT_ONCE],
 
 
 # AC_DIVERT_PUSH(DIVERSION-NAME)
-# ------------------------------
-m4_define([AC_DIVERT_PUSH],
-[m4_divert_push($@)])
-
-
 # AC_DIVERT_POP
-# -------------
-m4_define([AC_DIVERT_POP],
-[m4_divert_pop($@)])
+# ------------------------------
+m4_copy([m4_divert_push],[AC_DIVERT_PUSH])
+m4_copy([m4_divert_pop], [AC_DIVERT_POP])
 
 
 # Throw away output until AC_INIT is called.
@@ -209,8 +204,7 @@ m4_define([AC_BEFORE],
 # ------------------
 # If STRING has never been AC_PROVIDE'd, then expand it. A macro must
 # be AC_DEFUN'd if either it is AC_REQUIRE'd, or it AC_REQUIRE's.
-m4_define([AC_REQUIRE],
-[m4_require([$1])])
+m4_copy([m4_require], [AC_REQUIRE])
 
 
 # AC_EXPAND_ONCE(TEXT)
@@ -1491,7 +1485,7 @@ _AC_ARG_VAR_VALIDATE
 _AC_ARG_VAR_PRECIOUS(build_alias)dnl
 _AC_ARG_VAR_PRECIOUS(host_alias)dnl
 _AC_ARG_VAR_PRECIOUS(target_alias)dnl
-AC_LANG(C)
+AC_LANG_PUSH(C)
 
 _AC_PROG_ECHO()dnl
 dnl Substitute for predefined variables.
@@ -2139,11 +2133,10 @@ s,@$1@,,;t t])])
 
 
 # AC_DIAGNOSE(CATEGORY, MESSAGE)
-# ------------------------------
-# Report a MESSAGE to the user of autoconf if `-W' or `-W all' was
-# specified.
-m4_define([AC_DIAGNOSE],
-[m4_warn($@)])
+# AC_FATAL(MESSAGE, [EXIT-STATUS])
+# --------------------------------
+m4_copy([m4_warn],  [AC_DIAGNOSE])
+m4_copy([m4_fatal], [AC_FATAL])
 
 
 # AC_WARNING(MESSAGE)
@@ -2152,12 +2145,6 @@ m4_define([AC_DIAGNOSE],
 # specified.
 m4_define([AC_WARNING],
 [AC_DIAGNOSE([syntax], [$1])])
-
-
-# AC_FATAL(MESSAGE, [EXIT-STATUS])
-# --------------------------------
-m4_define([AC_FATAL],
-[m4_fatal($@)])
 
 
 
@@ -2204,9 +2191,9 @@ _AS_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 # AC_MSG_NOTICE(STRING)
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
 # --------------------------------------
-m4_define([AC_MSG_WARN],   [AS_WARN($@)])
-m4_define([AC_MSG_NOTICE], [AS_MESSAGE($@)])
-m4_define([AC_MSG_ERROR],  [AS_ERROR($@)])
+m4_copy([AS_WARN],    [AC_MSG_WARN])
+m4_copy([AS_MESSAGE], [AC_MSG_NOTICE])
+m4_copy([AS_ERROR],   [AC_MSG_ERROR])
 
 
 # AU::AC_CHECKING(FEATURE)

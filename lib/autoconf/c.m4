@@ -111,14 +111,10 @@ m4_define([_AC_LANG_DISPATCH],
 # AC_LANG(LANG)
 # -------------
 # Set the current language to LANG.
-#
-# Do *not* write AC_LANG([$1]), because this pair of parens does not
-# correspond to an evaluation, rather, they are just part of the name.
-# If you add quotes here, they will be part of the name too, yielding
-# `AC_LANG([C])' for instance, which does not exist.
 AC_DEFUN([AC_LANG],
-[m4_if(m4_defn([_AC_LANG]), [$1], [],
-       [m4_define([_AC_LANG], [$1])dnl
+[m4_ifdef([_AC_LANG],
+          [m4_if(m4_defn([_AC_LANG]), [$1], [],
+                 [m4_define([_AC_LANG], [$1])])dnl
 _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
 
 
@@ -126,15 +122,21 @@ _AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
 # ------------------
 # Save the current language, and use LANG.
 m4_define([AC_LANG_PUSH],
-[m4_pushdef([_AC_LANG], m4_defn([_AC_LANG]))dnl
+[m4_pushdef([_AC_LANG],
+            m4_ifdef([_AC_LANG],
+                     [m4_defn([_AC_LANG])]))dnl
 AC_LANG([$1])])
 
 
-# AC_LANG_POP
-# -----------
-# Restore the previous language.
+# AC_LANG_POP([LANG])
+# -------------------
+# If given, check that the current language is LANG, and restore the
+# previous language.
 m4_define([AC_LANG_POP],
-[m4_popdef([_AC_LANG])dnl
+[m4_ifval([$1],
+     [m4_if([$1], m4_defn([_AC_LANG]), [],
+            [m4_fatal([$0($1): unexpected current language: ]_AC_LANG)])])dnl
+m4_popdef([_AC_LANG])dnl
 m4_if(_AC_LANG, [_AC_LANG], [AC_FATAL([too many $0])])dnl
 AC_LANG(_AC_LANG)])
 
@@ -822,7 +824,7 @@ if test -n "$ac_cpp_err"; then
   AC_MSG_ERROR([C preprocessor "$CPP" fails sanity check])
 fi
 AC_SUBST(CPP)dnl
-AC_LANG_POP()dnl
+AC_LANG_POP(C)dnl
 ])# AC_PROG_CPP
 
 
@@ -846,7 +848,7 @@ AU_DEFUN([ac_cv_prog_gcc],
 # This just gives the user an opportunity to specify an alternative
 # search list for the C compiler.
 AC_DEFUN([AC_PROG_CC],
-[AC_LANG_PUSH(C)
+[AC_LANG_PUSH(C)dnl
 AC_ARG_VAR([CC], [C compiler command])
 AC_ARG_VAR([CFLAGS], [C compiler flags])
 m4_ifval([$1],
@@ -879,7 +881,7 @@ _AC_COMPILE_IFELSE([@%:@ifndef __cplusplus
   choke me
 @%:@endif],
                    [_AC_PROG_CXX_EXIT_DECLARATION])
-AC_LANG_POP
+AC_LANG_POP(C)dnl
 ])# AC_PROG_CC
 
 
@@ -1031,7 +1033,7 @@ if test -n "$ac_cpp_err"; then
   AC_MSG_ERROR([C++ preprocessor "$CXXCPP" fails sanity check])
 fi
 AC_SUBST(CXXCPP)dnl
-AC_LANG_POP()dnl
+AC_LANG_POP(C++)dnl
 ])# AC_PROG_CXXCPP
 
 
@@ -1076,7 +1078,7 @@ AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
 AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_CXX_G
 _AC_PROG_CXX_EXIT_DECLARATION
-AC_LANG_POP
+AC_LANG_POP(C++)dnl
 ])# AC_PROG_CXX
 
 
@@ -1201,7 +1203,7 @@ G77=`test $ac_compiler_gnu = yes && echo yes`
 AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
 AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_F77_G
-AC_LANG_POP
+AC_LANG_POP(Fortran 77)dnl
 ])# AC_PROG_F77
 
 
@@ -1641,7 +1643,7 @@ echo "$ac_f77_v_output" >&AS_MESSAGE_LOG_FD
 FFLAGS=$ac_save_FFLAGS
 
 rm -f conftest.*
-AC_LANG_POP()dnl
+AC_LANG_POP(Fortran 77)dnl
 
 # If we are using xlf then replace all the commas with spaces.
 if echo $ac_f77_v_output | grep xlfentry >/dev/null 2>&1; then
@@ -1796,7 +1798,7 @@ fi # test "x$FLIBS" = "x"
 ])
 FLIBS="$ac_cv_flibs"
 AC_SUBST(FLIBS)
-AC_LANG_POP()dnl
+AC_LANG_POP(Fortran 77)dnl
 ])# AC_F77_LIBRARY_LDFLAGS
 
 
@@ -1882,9 +1884,9 @@ AC_COMPILE_IFELSE(
   fi
 
   LIBS=$ac_save_LIBS
-  AC_LANG_POP()dnl
+  AC_LANG_POP(C)dnl
   rm -f cf77_test* conftest*])
-AC_LANG_POP()dnl
+AC_LANG_POP(Fortran 77)dnl
 ])
 ])# _AC_F77_NAME_MANGLING
 
