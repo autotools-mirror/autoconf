@@ -1,3 +1,9 @@
+2003-10-04  Steven G. Johnson  <stevenj@ab-initio.mit.edu>
+
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_G): Use language-specific
+	cache variable instead of $G77 to decide whether to include -O2,
+	since $G77 is specific to Fortran 77.
+
 2003-10-03  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* lib/autoconf/fortran.m4 (AC_FC_FREEFORM): Support Absoft "-f

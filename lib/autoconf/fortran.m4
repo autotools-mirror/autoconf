@@ -421,13 +421,13 @@ _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 if test "$ac_test_FFLAGS" = set; then
   _AC_LANG_PREFIX[]FLAGS=$ac_save_FFLAGS
 elif test $ac_cv_prog_[]_AC_LANG_ABBREV[]_g = yes; then
-  if test "$G77" = yes; then
+  if test "x$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu" = xyes; then
     _AC_LANG_PREFIX[]FLAGS="-g -O2"
   else
     _AC_LANG_PREFIX[]FLAGS="-g"
   fi
 else
-  if test "$G77" = yes; then
+  if test "x$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu" = xyes; then
     _AC_LANG_PREFIX[]FLAGS="-O2"
   else
     _AC_LANG_PREFIX[]FLAGS=
