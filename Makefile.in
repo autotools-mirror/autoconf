@@ -29,10 +29,10 @@ M4 = m4
 prefix = /usr/local
 exec_prefix = $(prefix)
 
-# Directory in which to install autoconf script.
+# Directory in which to install scripts.
 bindir = $(exec_prefix)/bin
 
-# Directory in which to install m4 files.
+# Directory in which to install library files.
 datadir = $(prefix)/lib
 
 # Directory in which to install documentation info files.
@@ -45,61 +45,42 @@ SHELL = /bin/sh
 DISTFILES = README Makefile.in INSTALL NEWS COPYING ChangeLog \
 autoconf.texi autoconf.info* standards.texi make-stds.texi standards.info* \
 texinfo.tex acconfig.h autoconf.sh acgeneral.m4 acspecific.m4 \
-configure autoconf.in autoheader.sh
-
-all: autoconf autoheader autoconf.info standards.info
+configure configure.in autoheader.sh mkinstalldirs
 
 editsh = sed -e 's,@datadir@,$(datadir),g' -e 's,@M4@,$(M4),g'
+
+all: autoconf autoheader autoconf.info standards.info
 
 autoconf: autoconf.sh
 	rm -f $@
 	$(editsh) $(srcdir)/autoconf.sh > $@ && chmod +x $@
+
 autoheader: autoheader.sh
 	rm -f $@
 	$(editsh) $(srcdir)/autoheader.sh > $@ && chmod +x $@
 
-configure: autoconf.conf
-	rm -f $(srcdir)/configure
-	ln $(srcdir)/autoconf.conf $(srcdir)/configure
-
-Makefile: Makefile.in
-	sh config.status
-
-# Special rule for non-GNU makes.
-autoconf.conf: autoconf.in acgeneral.m4 acspecific.m4
-	$(M4) $(srcdir)/acgeneral.m4 $(srcdir)/acspecific.m4 $(srcdir)/autoconf.in > $(srcdir)/autoconf.conf
-	chmod +x $(srcdir)/autoconf.conf
-
 autoconf.info: autoconf.texi
 	$(MAKEINFO) -I$(srcdir) $(srcdir)/autoconf.texi --no-split --output=$@
+
 standards.info: standards.texi make-stds.texi
 	$(MAKEINFO) -I$(srcdir) $(srcdir)/standards.texi --no-split --output=$@
-	
-# GNU make rules to produce current foo.conf and foo.h files from all the
-# foo.in files in the current directory.
-# Don't use := because non-GNU makes reject it.
-infiles = $(wildcard [a-z]*.in)
-confs: $(infiles:.in=.conf)
-heads: $(infiles:.in=.h)
-
-# GNU make rule to make a .conf file from a .in file in the current directory.
-%.conf: %.in acgeneral.m4 acspecific.m4
-	$(M4) $(srcdir)/acgeneral.m4 $(srcdir)/acspecific.m4 $< > $@ && chmod +x $@
 
 check:
 
-install: autoconf autoheader acgeneral.m4 acspecific.m4 autoconf.info \
-standards.info acconfig.h
+installdirs:
+	$(SHELL) ${srcdir}/mkinstalldirs $(bindir) $(infodir) $(datadir)
+
+install: all acgeneral.m4 acspecific.m4 acconfig.h installdirs
 	$(INSTALL_PROGRAM) autoconf $(bindir)/autoconf
 	$(INSTALL_PROGRAM) autoheader $(bindir)/autoheader
-	test -d $(datadir) || mkdir $(datadir)
 	$(INSTALL_DATA) $(srcdir)/acgeneral.m4 $(datadir)/acgeneral.m4
 	$(INSTALL_DATA) $(srcdir)/acspecific.m4 $(datadir)/acspecific.m4
 	$(INSTALL_DATA) $(srcdir)/acconfig.h $(datadir)/acconfig.h
 	test ! -r $(srcdir)/aclocal.m4 || $(INSTALL_DATA) $(srcdir)/aclocal.m4 $(datadir)/aclocal.m4
-	test -d $(infodir) || mkdir $(infodir)
-	$(INSTALL_DATA) $(srcdir)/autoconf.info $(infodir)/autoconf.info
-	$(INSTALL_DATA) $(srcdir)/standards.info $(infodir)/standards.info
+	-if test -f autoconf.info; then d=.; else d=$(srcdir); fi; \
+	$(INSTALL_DATA) $$d/autoconf.info $(infodir)/autoconf.info
+	-if test -f standards.info; then d=.; else d=$(srcdir); fi; \
+	$(INSTALL_DATA) $$d/standards.info $(infodir)/standards.info
 
 uninstall:
 	rm -f $(bindir)/autoconf $(bindir)/autoheader
@@ -107,8 +88,17 @@ uninstall:
 	-rmdir $(datadir)
 	cd $(infodir); rm -f autoconf.info standards.info
 
+Makefile: Makefile.in config.status
+	$(SHELL) config.status
+config.status: configure
+	$(SHELL) $(srcdir)/configure --no-create
+configure: configure.in acgeneral.m4 acspecific.m4
+	cd $(srcdir); \
+	$(M4) acgeneral.m4 acspecific.m4 configure.in > configure && \
+	chmod +x configure
+
 clean:
-	rm -f *.conf autoconf autoheader
+	rm -f autoconf autoheader
 	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.log
 	rm -f *.pg *.pgs *.toc *.tp *.tps *.vr *.vrs
 
@@ -121,7 +111,7 @@ realclean: distclean
 	rm -f TAGS *.info*
 
 TAGS:
-	etags *.m4 *.sh [a-z]*.in *.texi
+	etags ${srcdir}/*.m4 ${srcdir}/*.sh ${srcdir}/[a-z]*.in ${srcdir}/*.texi
 
 dist: Makefile $(DISTFILES)
 	echo autoconf-`sed -e '/define(AC_ACVERSION,/!d' -e 's/[^0-9.]*\([0-9.]*\).*/\1/' -e q acgeneral.m4` > .fname
@@ -129,9 +119,9 @@ dist: Makefile $(DISTFILES)
 	mkdir `cat .fname`
 	for file in $(DISTFILES); do \
 	  ln $$file `cat .fname` \
-	    || { echo copying $$file instead; cp -p $$file `cat .fname`; } \
+	    || { echo copying $$file instead; cp -p $$file `cat .fname`; }; \
 	done
-	tar --gzip chf `cat .fname`.tar.gz `cat .fname`
+	tar --gzip -chf `cat .fname`.tar.gz `cat .fname`
 	rm -rf `cat .fname` .fname
 
 # Prevent GNU make v3 from overflowing arg limit on SysV.
