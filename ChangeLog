@@ -1,3 +1,8 @@
+2001-01-22  Lars J. Aas  <somelarsa@sim.no>
+
+	* aclang.m4 (_AC_PROG_CXX_EXIT_DECLARATION): First try no declaration,
+	then '#include <stdlib.h>', before trying the explicit declarations.
+
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_COMPILE_IFELSE): Wrap the test -s in

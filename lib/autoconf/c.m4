@@ -1129,12 +1129,13 @@ fi[]dnl
 # Find a valid prototype for exit and declare it in confdefs.h.
 m4_define([_AC_PROG_CXX_EXIT_DECLARATION],
 [for ac_declaration in \
+   ''\
+   '#include <stdlib.h>' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
    'extern "C" void exit (int);' \
-   'void exit (int);' \
-   ''
+   'void exit (int);'
 do
   _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@include <stdlib.h>
 $ac_declaration],
