@@ -857,6 +857,59 @@ fi
 ])# AC_FUNC_FNMATCH
 
 
+# _AC_LIBOBJ_GETLOADAVG
+# ---------------------
+# Set up the AC_LIBOBJ replacement of `getloadavg'.
+define([_AC_LIBOBJ_GETLOADAVG],
+[AC_LIBOBJ(getloadavg)
+AC_DEFINE(C_GETLOADAVG, 1, [Define if using `getloadavg.c'.])
+# Figure out what our getloadavg.c needs.
+ac_have_func=no
+AC_CHECK_HEADER(sys/dg_sys_info.h,
+[ac_have_func=yes
+ AC_DEFINE(DGUX, 1, [Define for DGUX with <sys/dg_sys_info.h>.])
+ AC_CHECK_LIB(dgc, dg_sys_info)])
+
+AC_CHECK_HEADER(locale.h)
+AC_CHECK_FUNCS(setlocale)
+
+# We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
+# uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
+# Irix 4.0.5F has the header but not the library.
+if test $ac_have_func = no && test $ac_cv_lib_elf_elf_begin = yes; then
+  ac_have_func=yes
+  AC_DEFINE(SVR4, 1, [Define on System V Release 4.])
+fi
+
+if test $ac_have_func = no; then
+  AC_CHECK_HEADER(inq_stats/cpustats.h,
+  [ac_have_func=yes
+   AC_DEFINE(UMAX, 1, [Define for Encore UMAX.])
+   AC_DEFINE(UMAX4_3, 1,
+             [Define for Encore UMAX 4.3 that has <inq_status/cpustats.h>
+              instead of <sys/cpustats.h>.])])
+fi
+
+if test $ac_have_func = no; then
+  AC_CHECK_HEADER(sys/cpustats.h,
+  [ac_have_func=yes; AC_DEFINE(UMAX)])
+fi
+
+if test $ac_have_func = no; then
+  AC_CHECK_HEADERS(mach/mach.h)
+fi
+
+AC_CHECK_HEADERS(nlist.h,
+[AC_CHECK_MEMBERS([struct nlist.n_un.n_name],
+                  [AC_DEFINE(NLIST_NAME_UNION, 1,
+                             [Define if your `struct nlist' has an
+                              `n_un' member.  Obsolete, depend on
+                              `HAVE_STRUCT_NLIST_N_UN_N_NAME])], [],
+                  [@%:@include <nlist.h>])
+])dnl
+])# _AC_LIBOBJ_GETLOADAVG
+
+
 # AC_FUNC_GETLOADAVG
 # ------------------
 AC_DEFUN([AC_FUNC_GETLOADAVG],
@@ -892,71 +945,22 @@ if test $ac_have_func = no; then
                [LIBS="-lgetloadavg $LIBS"], [LIBS=$ac_getloadavg_LIBS])
 fi
 
-# Make sure it is really in the library, if we think we found it.
-AC_REPLACE_FUNCS(getloadavg)
-
-if test $ac_cv_func_getloadavg = yes; then
-  AC_DEFINE(HAVE_GETLOADAVG, 1,
-            [Define if your system has its own `getloadavg' function.])
-  ac_have_func=yes
-else
-  AC_DEFINE(C_GETLOADAVG, 1, [Define if using `getloadavg.c'.])
-  # Figure out what our getloadavg.c needs.
-  ac_have_func=no
-  AC_CHECK_HEADER(sys/dg_sys_info.h,
-  [ac_have_func=yes
-   AC_DEFINE(DGUX, 1, [Define for DGUX with <sys/dg_sys_info.h>.])
-   AC_CHECK_LIB(dgc, dg_sys_info)])
-
-  AC_CHECK_HEADER(locale.h)
-  AC_CHECK_FUNCS(setlocale)
-
-  # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
-  # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
-  # Irix 4.0.5F has the header but not the library.
-  if test $ac_have_func = no && test $ac_cv_lib_elf_elf_begin = yes; then
-    ac_have_func=yes
-    AC_DEFINE(SVR4, 1, [Define on System V Release 4.])
-  fi
-
-  if test $ac_have_func = no; then
-    AC_CHECK_HEADER(inq_stats/cpustats.h,
-    [ac_have_func=yes
-     AC_DEFINE(UMAX, 1, [Define for Encore UMAX.])
-     AC_DEFINE(UMAX4_3, 1,
-               [Define for Encore UMAX 4.3 that has <inq_status/cpustats.h>
-                instead of <sys/cpustats.h>.])])
-  fi
-
-  if test $ac_have_func = no; then
-    AC_CHECK_HEADER(sys/cpustats.h,
-    [ac_have_func=yes; AC_DEFINE(UMAX)])
-  fi
-
-  if test $ac_have_func = no; then
-    AC_CHECK_HEADERS(mach/mach.h)
-  fi
-
-  AC_CHECK_HEADERS(nlist.h,
-  [AC_CHECK_MEMBERS([struct nlist.n_un.n_name],
-                    [AC_DEFINE(NLIST_NAME_UNION, 1,
-                               [Define if your `struct nlist' has an
-                                `n_un' member.  Obsolete, depend on
-                                `HAVE_STRUCT_NLIST_N_UN_N_NAME])], [],
-                    [@%:@include <nlist.h>])
-  ])dnl
-fi # Do not have getloadavg in system libraries.
+# Make sure it is really in the library, if we think we found it,
+# otherwise set up the replacement function.
+AC_CHECK_FUNCS(getloadavg, [],
+               [_AC_LIBOBJ_GETLOADAVG])
 
 # Some definitions of getloadavg require that the program be installed setgid.
 dnl FIXME: Don't hardwire the path of getloadavg.c in the top-level directory.
 AC_CACHE_CHECK(whether getloadavg requires setgid,
-  ac_cv_func_getloadavg_setgid,
+               ac_cv_func_getloadavg_setgid,
 [AC_EGREP_CPP([Yowza Am I SETGID yet],
 [#include "$srcdir/getloadavg.c"
 #ifdef LDAV_PRIVILEGED
 Yowza Am I SETGID yet
 @%:@endif],
-  ac_cv_func_getloadavg_setgid=yes, ac_cv_func_getloadavg_setgid=no)])
+              ac_cv_func_getloadavg_setgid=yes,
+              ac_cv_func_getloadavg_setgid=no)])
 if test $ac_cv_func_getloadavg_setgid = yes; then
   NEED_SETGID=true
   AC_DEFINE(GETLOADAVG_PRIVILEGED, 1,
@@ -978,9 +982,8 @@ if test $ac_cv_func_getloadavg_setgid = yes; then
 	       s/^.[sSrwx-]* *[0-9]* *\([^0-9]*\)  *.*/\1/;
 	       / /s/.* //;p;']`
 ])
-  KMEM_GROUP=$ac_cv_group_kmem
+  AC_SUBST(KMEM_GROUP, $ac_cv_group_kmem)dnl
 fi
-AC_SUBST(KMEM_GROUP)dnl
 if test "x$ac_save_LIBS" = x; then
   GETLOADAVG_LIBS=$LIBS
 else
