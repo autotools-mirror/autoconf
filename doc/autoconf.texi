@@ -5525,23 +5525,16 @@ CC=bizarre-cc}, it is impossible to notice it in @samp{CC=bizarre-cc
 @example
 $ ./configure --silent --config-cache
 $ CC=cc ./configure --silent --config-cache
-configure: WARNING: `CC' was not set in the previous run
-configure: WARNING: changes in the environment can compromise
-configure: WARNING: the build. consider removing config.cache
-configure: WARNING: and starting over
-$ CC=gcc ./configure --config-cache --silent
-configure: WARNING: `CC' has changed since the previous run:
-configure: WARNING:   former value:  cc
-configure: WARNING:   current value: gcc
-configure: WARNING: changes in the environment can compromise
-configure: WARNING: the build. consider removing config.cache
-configure: WARNING: and starting over
-$ ./configure --silent --config-cache
-configure: WARNING: `CC' was set to `gcc' in the previous run
-configure: WARNING: changes in the environment can compromise
-configure: WARNING: the build. consider removing config.cache
-configure: WARNING: and starting over
+configure: error: `CC' was not set in the previous run
+configure: error: changes in the environment can compromise \
+the build
+configure: error: run `make distclean' and/or \
+`rm config.cache' and start over
 @end example
+
+@noindent
+and similarly if the variable is unset, or if its content is changed.
+
 
 @item
 @var{variable} is kept during automatic reconfiguration

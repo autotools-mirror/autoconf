@@ -1536,17 +1536,17 @@ for ac_var in `(set) 2>&1 |
   eval ac_new_val="\$ac_env_${ac_var}_value"
   case $ac_old_set,$ac_new_set in
     set,)
-      AS_MESSAGE([error: `$ac_var' was set to `$ac_old_val' in the previous run])
+      AS_MESSAGE([error: `$ac_var' was set to `$ac_old_val' in the previous run], 2)
       ac_cache_corrupted=: ;;
     ,set)
-      AS_MESSAGE([error: `$ac_var' was not set in the previous run])
+      AS_MESSAGE([error: `$ac_var' was not set in the previous run], 2)
       ac_cache_corrupted=: ;;
     ,);;
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
-        AS_MESSAGE([error: `$ac_var' has changed since the previous run:])
-        AS_MESSAGE([  former value:  $ac_old_val])
-        AS_MESSAGE([  current value: $ac_new_val])
+        AS_MESSAGE([error: `$ac_var' has changed since the previous run:], 2)
+        AS_MESSAGE([  former value:  $ac_old_val], 2)
+        AS_MESSAGE([  current value: $ac_new_val], 2)
         ac_cache_corrupted=:
       fi;;
   esac
@@ -1566,7 +1566,7 @@ dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
   fi
 done
 if $ac_cache_corrupted; then
-  AS_MESSAGE([error: changes in the environment can compromise the build])
+  AS_MESSAGE([error: changes in the environment can compromise the build], 2)
   AS_ERROR([run `make distclean' and/or `rm $cache_file' and start over])
 fi
 ])# _AC_ARG_VAR_VALIDATE
