@@ -46,12 +46,12 @@ dnl to the GPL from your modified version.
 dnl
 dnl Written by David MacKenzie, with help from
 dnl Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
-dnl Roland McGrath, Noah Friedman, and david d zuhn.
+dnl Roland McGrath, Noah Friedman, david d zuhn, and many others.
 dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 1.125)
+define(AC_ACVERSION, 2.0)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -673,7 +673,7 @@ dnl AC_PREREQ_COMPARE(MAJOR1, MINOR1, TERNARY1, MAJOR2, MINOR2, TERNARY2,
 dnl                   PRINTABLE2)
 define(AC_PREREQ_COMPARE,
 [ifelse(builtin([eval],
-[$3 + $2 * 10000 + $1 * 1000000 < $6 + $5 * 10000 + $4 * 1000000]), 1,
+[$3 + $2 * 1000 + $1 * 1000000 < $6 + $5 * 1000 + $4 * 1000000]), 1,
 [errprint(Autoconf version $7 or higher is required for this script
 )m4exit(3)])])
 
@@ -1400,7 +1400,7 @@ dnl ### Checking for header files
 dnl AC_CHECK_HEADER(HEADER-FILE, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_CHECK_HEADER,
 [dnl Do the transliteration at runtime so arg 1 can be a shell variable.
-ac_safe=`echo "$1" | tr './' '__'`
+ac_safe=`echo "$1" | tr './\055' '___'`
 AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(ac_cv_header_$ac_safe,
 [AC_TRY_CPP([#include <$1>], eval "ac_cv_header_$ac_safe=yes",
@@ -1421,7 +1421,7 @@ AC_DEFUN(AC_CHECK_HEADERS,
 do
 AC_CHECK_HEADER($ac_hdr,
 [changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
+  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./\055' '[A-Z]___'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2], $3)dnl
 done

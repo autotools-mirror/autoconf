@@ -45,7 +45,7 @@ dnl to the GPL from your modified version.
 dnl
 dnl Written by David MacKenzie, with help from
 dnl Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
-dnl Roland McGrath, and Noah Friedman.
+dnl Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
 dnl ### Checks for programs
@@ -525,7 +525,7 @@ dnl Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 dnl defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
 dnl AC_CHECK_HEADER_DIRENT(HEADER-FILE, ACTION-IF-FOUND)
 AC_DEFUN(AC_CHECK_HEADER_DIRENT,
-[ac_safe=`echo "$1" | tr './' '__'`
+[ac_safe=`echo "$1" | tr './\055' '___'`
 AC_MSG_CHECKING([for $1 that defines DIR])
 AC_CACHE_VAL(ac_cv_header_dirent_$ac_safe,
 [AC_TRY_COMPILE([#include <sys/types.h>
@@ -548,7 +548,7 @@ AC_DEFUN(AC_CHECK_HEADERS_DIRENT,
 do
 AC_CHECK_HEADER_DIRENT($ac_hdr,
 [changequote(, )dnl
-  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
+  ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./\055' '[A-Z]___'`
 changequote([, ])dnl
   AC_DEFINE_UNQUOTED($ac_tr_hdr) $2])dnl
 done])
