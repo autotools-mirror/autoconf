@@ -1,3 +1,9 @@
+Thu Mar 21 10:52:03 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
+
+	* acspecific.m4 (AC_FUNC_GETLOADAVG): Fix name of -lelf cache variable
+	name in test of it.
+	(AC_PATH_XTRA): Fix name of -ldnet cache variable name in test of it.
+
 Wed Mar 20 09:37:31 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_LIB): Use \055 for -; leading and trailing
