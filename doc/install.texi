@@ -5,7 +5,7 @@
 
 @unnumbered Installation Instructions
 
-Copyright @copyright{} 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004
+Copyright @copyright{} 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004, 2005
 Free Software Foundation, Inc.
 
 This file is free documentation; the Free Software Foundation gives
@@ -223,9 +223,17 @@ For example:
 @end example
 
 @noindent
-will cause the specified gcc to be used as the C compiler (unless it is
+causes the specified @command{gcc} to be used as the C compiler (unless it is
 overridden in the site shell script).
+Here is a another example:
 
+@example
+/bin/bash ./configure CONFIG_SHELL=/bin/bash
+@end example
+
+@noindent
+Here the @samp{CONFIG_SHELL=/bin/bash} operand causes subsequent
+configuration-related scripts to be executed by @command{/bin/bash}.
 
 @node configure Invocation
 @section @command{configure} Invocation
