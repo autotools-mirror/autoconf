@@ -1,5 +1,14 @@
 2004-12-17  Stepan Kasal  <kasal@ucw.cz>
 
+	Add a specialized check for resolv.h.  Thanks to Gerrit P. Haase,
+	Reini Urban and Paul Eggert for reporting the dependencies.
+
+	* lib/autoconf/headers.m4 (AC_HEADER_RESOLV): New macro.
+	* doc/autoconf.texi (AC_HEADER_RESOLV): Document it.
+	(AC_HEADER_STAT): @cvindex{STAT_MACROS_BROKEN}, not @acindex.
+
+2004-12-17  Stepan Kasal  <kasal@ucw.cz>
+
 	* bin/autoscan.in: Open autoscan.log only after ``parse_args'';
 	  so that eg. ``autoscan --help'' doesn't truncate it.
 

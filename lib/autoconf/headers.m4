@@ -440,6 +440,33 @@ fi
 ])# AC_HEADER_MAJOR
 
 
+# AC_HEADER_RESOLV
+# ----------------
+# According to http://www.mcsr.olemiss.edu/cgi-bin/man-cgi?resolver+3
+# (or http://www.chemie.fu-berlin.de/cgi-bin/man/sgi_irix?resolver+3),
+# sys/types.h, netinet/in.h and arpa/nameser.h are required on IRIX.
+# netinet/in.h is needed on Cygwin, too.
+# With Solaris 9, netdb.h is required, to get symbols like HOST_NOT_FOUND.
+#
+AN_HEADER(resolv.h,	[AC_HEADER_RESOLV])
+AC_DEFUN([AC_HEADER_RESOLV],
+[AC_CHECK_HEADERS(sys/types.h netinet/in.h arpa/nameser.h netdb.h resolv.h,
+		  [], [],
+[[#if HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#  include <netinet/in.h>   /* inet_ functions / structs */
+#endif
+#ifdef HAVE_ARPA_NAMESER_H
+#  include <arpa/nameser.h> /* DNS HEADER struct */
+#endif
+#ifdef HAVE_NETDB_H
+#  include <netdb.h>
+#endif]])
+])# AC_HEADER_RESOLV
+
+
 # AC_HEADER_STAT
 # --------------
 # FIXME: Shouldn't this be named AC_HEADER_SYS_STAT?

@@ -4759,10 +4759,34 @@ If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @code{MAJOR_IN_SYSMACROS}.
 @end defmac
 
+@defmac AC_HEADER_RESOLV
+@acindex{HEADER_RESOLV}
+@cvindex HAVE_RESOLV_H
+@hdrindex{resolv.h}
+Checks for header @file{resolv.h}, checking for prerequisities first.
+To properly use @file{resolv.h}, your code should contain something like
+the following:
+
+@verbatim
+#if HAVE_SYS_TYPES_H
+#  include <sys/types.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#  include <netinet/in.h>   /* inet_ functions / structs */
+#endif
+#ifdef HAVE_ARPA_NAMESER_H
+#  include <arpa/nameser.h> /* DNS HEADER struct */
+#endif
+#ifdef HAVE_NETDB_H
+#  include <netdb.h>
+#endif
+#include <resolv.h>
+@end verbatim
+@end defmac
 
 @defmac AC_HEADER_STAT
 @acindex{HEADER_STAT}
-@acindex{STAT_MACROS_BROKEN}
+@cvindex STAT_MACROS_BROKEN
 @hdrindex{sys/stat.h}
 If the macros @code{S_ISDIR}, @code{S_ISREG}, etc.@: defined in
 @file{sys/stat.h} do not work properly (returning false positives),
