@@ -1,3 +1,7 @@
+2001-12-14  Akim Demaille  <akim@epita.fr>
+
+	* Makefile.am (MAINTAINERCLEANFILES): Remove configure.
+
 2001-12-13  Peter Eisentraut  <peter_e@gmx.net>
 
 	* lib/autoconf/status.m4 (_AC_SRCPATHS): Rename buildpath to
