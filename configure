@@ -20,7 +20,7 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+elif test -n "${BASH_VERSION+set}${KSH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 DUALCASE=1; export DUALCASE # for MKS sh
@@ -80,9 +80,7 @@ if test ! -f "$as_myself"; then
 fi
 
 # Work around bugs in pre-3.0 UWIN ksh.
-for as_var in ENV MAIL MAILPATH
-do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-done
+$as_unset ENV MAIL MAILPATH
 PS1='$ '
 PS2='> '
 PS4='+ '
@@ -96,7 +94,7 @@ do
   if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
     eval $as_var=C; export $as_var
   else
-    ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+    $as_unset $as_var
   fi
 done
 
@@ -213,7 +211,7 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+elif test -n "${BASH_VERSION+set}${KSH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 DUALCASE=1; export DUALCASE # for MKS sh
@@ -232,7 +230,7 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+elif test -n "${BASH_VERSION+set}${KSH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 DUALCASE=1; export DUALCASE # for MKS sh
@@ -298,9 +296,8 @@ fi
       done
 
       if test "x$CONFIG_SHELL" != x; then
-  for as_var in BASH_ENV ENV
-        do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-        done
+  $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
+        $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
         export CONFIG_SHELL
         exec "$CONFIG_SHELL" "$as_myself" ${1+"$@"}
 fi
@@ -2632,7 +2629,7 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
-elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+elif test -n "${BASH_VERSION+set}${KSH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
   set -o posix
 fi
 DUALCASE=1; export DUALCASE # for MKS sh
@@ -2693,9 +2690,7 @@ echo "$as_me: error: cannot find myself; rerun with an absolute path" >&2;}
 fi
 
 # Work around bugs in pre-3.0 UWIN ksh.
-for as_var in ENV MAIL MAILPATH
-do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-done
+$as_unset ENV MAIL MAILPATH
 PS1='$ '
 PS2='> '
 PS4='+ '
@@ -2709,7 +2704,7 @@ do
   if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
     eval $as_var=C; export $as_var
   else
-    ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+    $as_unset $as_var
   fi
 done
 
