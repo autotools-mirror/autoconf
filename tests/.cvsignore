@@ -9,7 +9,9 @@ conftest*
 debug-*.sh
 dst1 dst2 src1 src2
 empty
+endless.sh
 macros.m4
 mycc mycpp
 state*
+syntax.sh
 testsuite testsuite.log testsuite.tmp
