@@ -108,6 +108,3 @@ ifelse([$3],,[#
 #undef $1
 "@@@
 ])])
-
-dnl autoheader is not the right program to complain about cross-compiling
-define([AC_TRY_RUN], [])
