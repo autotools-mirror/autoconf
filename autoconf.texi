@@ -1056,7 +1056,7 @@ C++ features.
 @ovindex FFLAGS
 Debugging and optimization options for the Fortran 77 compiler.  If it
 is not set in the environment when @code{configure} runs, the default
-value is set when you call @code{AC_PROG_FC} (or empty if you don't).
+value is set when you call @code{AC_PROG_F77} (or empty if you don't).
 @code{configure} uses this variable when compiling programs to test for
 Fortran 77 features.
 @end defvar
@@ -1623,17 +1623,17 @@ calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
 @code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
 @end defmac
 
-@defmac  AC_PROG_FC
+@defmac  AC_PROG_F77
 @maindex PROG_FORTRAN
-@ovindex FC
+@ovindex F77
 @ovindex FFLAGS
-Determine a Fortran 77 compiler to use.  If @code{FC} is not already set
-in the environment, check for @code{g77}, @code{f77} and @code{f2c}, in
-that order.  Set the output variable @code{FC} to the name of the
+Determine a Fortran 77 compiler to use.  If @code{F77} is not already
+set in the environment, check for @code{g77}, @code{f77} and @code{f2c},
+in that order.  Set the output variable @code{F77} to the name of the
 compiler found.
 
 If using @code{g77} (the GNU Fortran 77 compiler), then
-@code{AC_PROG_FC} will set the shell variable @code{G77} to @samp{yes},
+@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes},
 and empty otherwise.  If the output variable @code{FFLAGS} was not
 already set in the environment, then set it to @samp{-g -02} for
 @code{g77} (or @samp{-O2} where @code{g77} does not accept @samp{-g}).
@@ -1641,11 +1641,11 @@ Otherwise, set @code{FFLAGS} to @samp{-g} for all other Fortran 77
 compilers.
 @end defmac
 
-@defmac AC_PROG_FC_C_O
-@maindex PROG_FC_C_O
-@cvindex FC_NO_MINUS_C_MINUS_O
+@defmac AC_PROG_F77_C_O
+@maindex PROG_F77_C_O
+@cvindex F77_NO_MINUS_C_MINUS_O
 Test if the Fortran 77 compiler accepts the options @samp{-c} and
-@samp{-o} simultaneously, and define @code{FC_NO_MINUS_C_MINUS_O} if it
+@samp{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} if it
 does not.
 @end defmac
 
@@ -3323,9 +3323,10 @@ it has been run, empty otherwise.
 
 @defmac AC_LANG_FORTRAN77
 @maindex LANG_FORTRAN77
-Do compilation tests using @code{FC} and use extension @file{.f} for
+Do compilation tests using @code{F77} and use extension @file{.f} for
 test programs.  Set the shell variable @code{cross_compiling} to the
-value computed by @code{AC_PROG_FC} if it has been run, empty otherwise.
+value computed by @code{AC_PROG_F77} if it has been run, empty
+otherwise.
 @end defmac
 
 @defmac AC_LANG_SAVE

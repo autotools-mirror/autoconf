@@ -1249,9 +1249,9 @@ dnl AC_LANG_FORTRAN77()
 AC_DEFUN(AC_LANG_FORTRAN77,
 [define([AC_LANG], [FORTRAN77])dnl
 ac_ext=f
-ac_compile='${FC-f77} -c $FFLAGS conftest.$ac_ext 1>&AC_FD_CC'
-ac_link='${FC-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
-cross_compiling=$ac_cv_prog_fc_cross
+ac_compile='${F77-f77} -c $FFLAGS conftest.$ac_ext 1>&AC_FD_CC'
+ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
+cross_compiling=$ac_cv_prog_f77_cross
 ])
 
 dnl Push the current language on a stack.

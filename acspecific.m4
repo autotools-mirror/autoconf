@@ -154,33 +154,27 @@ else
 fi
 ])
 
-dnl Determine a Fortran compiler to use.  If `FC' is not already set in
-dnl the environment, check for `g77', `f77' and `f2c', in that order.
-dnl See the output variable `FC' to the name of the compiler found.
+dnl Determine a Fortran 77 compiler to use.  If `F77' is not already set
+dnl in the environment, check for `g77', `f77' and `f2c', in that order.
+dnl Set the output variable `F77' to the name of the compiler found.
 dnl 
-dnl If using `g77' (the GNU Fortran compiler), then `AC_PROG_FC' will
-dnl set the shell variable `G77' to `yes', and empty otherwise.  If the
-dnl output variable `FFLAGS' was not already set in the environment,
+dnl If using `g77' (the GNU Fortran 77 compiler), then `AC_PROG_F77'
+dnl will set the shell variable `G77' to `yes', and empty otherwise.  If
+dnl the output variable `FFLAGS' was not already set in the environment,
 dnl then set it to `-g -02' for `g77' (or `-O2' where `g77' does not
 dnl accept `-g').  Otherwise, set `FFLAGS' to `-g' for all other Fortran
-dnl compilers.
+dnl 77 compilers.
 dnl 
-dnl AC_PROG_FC()
-AC_DEFUN(AC_PROG_FC,
+dnl AC_PROG_F77()
+AC_DEFUN(AC_PROG_F77,
 [AC_BEFORE([$0], [AC_PROG_CPP])dnl
-if test -z "$FC"; then
-  AC_CHECK_PROG(FC, g77, g77)
-  if test -z "$FC"; then
-    AC_CHECK_PROG(FC, f77, f77)
-    if test -z "$FC"; then
-      AC_CHECK_PROG(FC, f2c, f2c)
-    fi
-    test -z "$FC" && AC_MSG_ERROR([no acceptable Fortran compiler found in \$PATH])
-  fi
+if test -z "$F77"; then
+  AC_CHECK_PROGS(F77, g77 f77 f2c)
+    test -z "$F77" && AC_MSG_ERROR([no acceptable Fortran 77 compiler found in \$PATH])
 fi
 
-AC_PROG_FC_WORKS
-AC_PROG_FC_GNU
+AC_PROG_F77_WORKS
+AC_PROG_F77_GNU
 
 if test $ac_cv_prog_g77 = yes; then
   G77=yes
@@ -190,10 +184,10 @@ dnl normal versions of a library), tasteless as that idea is.
   ac_test_FFLAGS="${FFLAGS+set}"
   ac_save_FFLAGS="$FFLAGS"
   FFLAGS=
-  AC_PROG_FC_G
+  AC_PROG_F77_G
   if test "$ac_test_FFLAGS" = set; then
     FFLAGS="$ac_save_FFLAGS"
-  elif test $ac_cv_prog_fc_g = yes; then
+  elif test $ac_cv_prog_f77_g = yes; then
     FFLAGS="-g -O2"
   else
     FFLAGS="-O2"
@@ -234,28 +228,28 @@ AC_MSG_RESULT($ac_cv_prog_cxx_cross)
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
 
-dnl Test whether the Fortran compiler can compile and link a trivial
-dnl Fortran program.  Also, test whether the Fortran compiler is a
+dnl Test whether the Fortran 77 compiler can compile and link a trivial
+dnl Fortran program.  Also, test whether the Fortran 77 compiler is a
 dnl cross-compiler (which may realistically be the case if the Fortran
 dnl compiler is `g77').
 dnl 
-dnl AC_PROG_FC_WORKS()
-AC_DEFUN(AC_PROG_FC_WORKS,
-[AC_MSG_CHECKING([whether the Fortran compiler ($FC $FFLAGS $LDFLAGS) works])
+dnl AC_PROG_F77_WORKS()
+AC_DEFUN(AC_PROG_F77_WORKS,
+[AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) works])
 AC_LANG_SAVE
 AC_LANG_FORTRAN77
 AC_TRY_COMPILER(dnl
 [      program conftest
       end
-], ac_cv_prog_fc_works, ac_cv_prog_fc_cross)
+], ac_cv_prog_f77_works, ac_cv_prog_f77_cross)
 AC_LANG_RESTORE
-AC_MSG_RESULT($ac_cv_prog_fc_works)
-if test $ac_cv_prog_fc_works = no; then
-  AC_MSG_ERROR([installation or configuration problem: Fortran compiler cannot create executables.])
+AC_MSG_RESULT($ac_cv_prog_f77_works)
+if test $ac_cv_prog_f77_works = no; then
+  AC_MSG_ERROR([installation or configuration problem: Fortran 77 compiler cannot create executables.])
 fi
-AC_MSG_CHECKING([whether the Fortran compiler ($FC $FFLAGS $LDFLAGS) is a cross-compiler])
-AC_MSG_RESULT($ac_cv_prog_fc_cross)
-cross_compiling=$ac_cv_prog_fc_cross
+AC_MSG_CHECKING([whether the Fortran 77 compiler ($F77 $FFLAGS $LDFLAGS) is a cross-compiler])
+AC_MSG_RESULT($ac_cv_prog_f77_cross)
+cross_compiling=$ac_cv_prog_f77_cross
 ])
 
 AC_DEFUN(AC_PROG_CC_GNU,
@@ -286,19 +280,19 @@ else
   ac_cv_prog_gxx=no
 fi])])
 
-dnl Test whether for Fortran compiler is `g77' (the GNU Fortran
-dnl Compiler).  This test depends on whether the Fortran compiler can do
-dnl CPP pre-processing.
+dnl Test whether for Fortran 77 compiler is `g77' (the GNU Fortran 77
+dnl Compiler).  This test depends on whether the Fortran 77 compiler can
+dnl do CPP pre-processing.
 dnl 
-dnl AC_PROG_FC_GNU()
-AC_DEFUN(AC_PROG_FC_GNU,
-[AC_CACHE_CHECK(whether we are using GNU Fortran, ac_cv_prog_g77,
+dnl AC_PROG_F77_GNU()
+AC_DEFUN(AC_PROG_F77_GNU,
+[AC_CACHE_CHECK(whether we are using GNU Fortran 77, ac_cv_prog_g77,
 [cat > conftest.fpp <<EOF
 #ifdef __GNUC__
   yes
 #endif
 EOF
-if AC_TRY_COMMAND($FC -E conftest.fpp) | egrep yes >/dev/null 2>&1; then
+if AC_TRY_COMMAND($F77 -E conftest.fpp) | egrep yes >/dev/null 2>&1; then
   ac_cv_prog_g77=yes
 else
   ac_cv_prog_g77=no
@@ -326,20 +320,20 @@ fi
 rm -f conftest*
 ])])
 
-dnl Test whether the Fortran compiler can accept the `-g' option to
+dnl Test whether the Fortran 77 compiler can accept the `-g' option to
 dnl enable debugging.
 dnl 
-dnl AC_PROG_FC_G()
-AC_DEFUN(AC_PROG_FC_G,
-[AC_CACHE_CHECK(whether $FC accepts -g, ac_cv_prog_fc_g,
+dnl AC_PROG_F77_G()
+AC_DEFUN(AC_PROG_F77_G,
+[AC_CACHE_CHECK(whether $F77 accepts -g, ac_cv_prog_f77_g,
 [cat > conftest.f << EOF
        program conftest
        end
 EOF
-if test -z "`$FC -g -c conftest.f 2>&1`"; then
-  ac_cv_prog_fc_g=yes
+if test -z "`$F77 -g -c conftest.f 2>&1`"; then
+  ac_cv_prog_f77_g=yes
 else
-  ac_cv_prog_fc_g=no
+  ac_cv_prog_f77_g=no
 fi
 rm -f conftest*
 ])])
@@ -414,22 +408,22 @@ else
 fi
 ])
 
-dnl Test if the Fortran compiler accepts the options `-c' and `-o'
-dnl simultaneously, and define `FC_NO_MINUS_C_MINUS_O' if it does not.
+dnl Test if the Fortran 77 compiler accepts the options `-c' and `-o'
+dnl simultaneously, and define `F77_NO_MINUS_C_MINUS_O' if it does not.
 dnl
 dnl The usefulness of this macro is questionable, as I can't really see
 dnl why anyone would use it.  The only reason I include it is for
 dnl completeness, since a similar test exists for the C compiler.
 dnl 
-dnl AC_PROG_FC_C_O
-AC_DEFUN(AC_PROG_FC_C_O,
-[AC_BEFORE([$0], [AC_PROG_FC])dnl
-AC_MSG_CHECKING(whether $FC understand -c and -o together)
-set dummy $FC; ac_fc="`echo [$]2 |
+dnl AC_PROG_F77_C_O
+AC_DEFUN(AC_PROG_F77_C_O,
+[AC_BEFORE([$0], [AC_PROG_F77])dnl
+AC_MSG_CHECKING(whether $F77 understand -c and -o together)
+set dummy $F77; ac_f77="`echo [$]2 |
 changequote(, )dnl
 sed -e 's/[^a-zA-Z0-9_]/_/g' -e 's/^[0-9]/_/'`"
 changequote([, ])dnl
-AC_CACHE_VAL(ac_cv_prog_fc_${ac_fc}_c_o,
+AC_CACHE_VAL(ac_cv_prog_f77_${ac_f77}_c_o,
 [cat > conftest.f << EOF
        program conftest
        end
@@ -437,19 +431,19 @@ EOF
 # We do the `AC_TRY_EVAL' test twice because some compilers refuse to
 # overwrite an existing `.o' file with `-o', although they will create
 # one.
-ac_try='$FC $FFLAGS -c conftest.f -o conftest.o 1>&AC_FD_CC'
+ac_try='$F77 $FFLAGS -c conftest.f -o conftest.o 1>&AC_FD_CC'
 if AC_TRY_EVAL(ac_try) && test -f conftest.o && AC_TRY_EVAL(ac_try); then
-  eval ac_cv_prog_fc_${ac_fc}_c_o=yes
+  eval ac_cv_prog_f77_${ac_f77}_c_o=yes
 else
-  eval ac_cv_prog_fc_${ac_fc}_c_o=no
+  eval ac_cv_prog_f77_${ac_f77}_c_o=no
 fi
 rm -f conftest*
 ])dnl
-if eval "test \"`echo '$ac_cv_prog_fc_'${ac_fc}_c_o`\" = yes"; then
+if eval "test \"`echo '$ac_cv_prog_f77_'${ac_f77}_c_o`\" = yes"; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_DEFINE(FC_NO_MINUS_C_MINUS_O)
+  AC_DEFINE(F77_NO_MINUS_C_MINUS_O)
 fi
 ])
 
@@ -2030,15 +2024,15 @@ dnl extremely useful macro.  Thank you John.
 dnl
 dnl AC_F77_LIBRARY_LDFLAGS()
 AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
-[AC_MSG_CHECKING([for Fortran libraries])
-AC_REQUIRE([AC_PROG_FC])
+[AC_MSG_CHECKING([for Fortran 77 libraries])
+AC_REQUIRE([AC_PROG_F77])
 AC_REQUIRE([AC_CANONICAL_HOST])
 AC_CACHE_VAL(ac_cv_flibs,
 [changequote(, )dnl
 dnl Write a minimal program and compile it with -v.  I don't know what
 dnl to do if your compiler doesn't have -v...
 echo "      END" > conftest.f
-foutput=`${FC} -v -o conftest conftest.f 2>&1`
+foutput=`${F77} -v -o conftest conftest.f 2>&1`
 dnl
 dnl The easiest thing to do for xlf output is to replace all the commas
 dnl with spaces.  Try to only do that if the output is really from xlf,

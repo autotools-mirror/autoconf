@@ -6,6 +6,12 @@
 	output and not standard error. Suggested by Steve Robbins
 	<steve@nyongwa.montreal.qc.ca>.
 
+1998-12-11  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+	
+	* acconfig.h, acgeneral.m4, acspecific.m4, autoconf.texi: Change
+	all of the Fortran 77 code to use the new `F77' prefix instead of
+	the older `FC' prefix.
+
 1998-12-11  Ben Elliston  <bje@cygnus.com>
 
 	* acgeneral.m4 (AC_ACVERSION): Bump to 2.13.
