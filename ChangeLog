@@ -1,3 +1,12 @@
+2002-09-24  Paul Eggert  <eggert@twinsun.com>
+
+	Fix a portability bug reported by Alexandre Duret-Lutz: Solaris 8
+	make handles suffix-rules differently from GNU make.
+
+	* bin/Makefile.am (SUFFIXES, .in): Remove.
+	(autoconf autoheader autoreconf autoupdate ifnames autoscan autom4te):
+	Move the body of the old .in rule here.
+
 2002-09-16  Akim Demaille  <akim@epita.fr>
 
 	i960 compilers create `b.out' files by default.
