@@ -1,3 +1,7 @@
+2000-05-09  Jim Meyering  <meyering@lucent.com>
+
+	* acgeneral.m4 (AC_SEARCH_LIBS): Remove double quotes around `no'.
+
 2000-05-09  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_OUTPUT_FILES): Don't automatically spit
