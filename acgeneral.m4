@@ -51,7 +51,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 1.123)
+define(AC_ACVERSION, 1.124)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -210,6 +210,7 @@ program_prefix=NONE
 program_suffix=NONE
 program_transform_name=s,x,x,
 silent=
+site=
 srcdir=
 target=NONE
 verbose=
@@ -354,6 +355,11 @@ EOF
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
+
+  -site | --site | --sit)
+    ac_prev=site ;;
+  -site=* | --site=* | --sit=*)
+    site="$ac_optarg" ;;
 
   -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
     ac_prev=srcdir ;;
@@ -667,7 +673,7 @@ dnl AC_PREREQ_COMPARE(MAJOR1, MINOR1, TERNARY1, MAJOR2, MINOR2, TERNARY2,
 dnl                   PRINTABLE2)
 define(AC_PREREQ_COMPARE,
 [ifelse(builtin([eval],
-[$3 + $2 * 100 + $1 * 10000 < $6 + $5 * 100 + $4 * 10000]), 1,
+[$3 + $2 * 10000 + $1 * 1000000 < $6 + $5 * 10000 + $4 * 1000000]), 1,
 [errprint(Autoconf version $7 or higher is required for this script
 )m4exit(3)])])
 
