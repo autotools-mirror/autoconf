@@ -1,5 +1,9 @@
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Various English fixes from Jim.
+
+2000-07-19  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Compilers and Preprocessors, Obsolete
 	Macros): Don't give boring internal details.
 	(Language Choice): Typo.

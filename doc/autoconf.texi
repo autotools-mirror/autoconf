@@ -5965,12 +5965,12 @@ You can refer to any arguments passed to the macro as @samp{$1},
 GNU m4}, for more complete information on writing M4 macros.
 
 Be sure to quote properly both the @var{macro-body} @emph{and} the
-@var{macro-name}, to avoid any problems if the macro happens to be
-already defined.
+@var{macro-name}, to avoid any problems if the macro happens to have
+been previously defined.
 
-Any macro should have a header comment which gives its prototype, and a
-short documentation.  When arguments have default values, display them
-in the prototype.  For instance:
+Each macro should have a header comment which gives its prototype, and a
+brief description.  When arguments have default values, display them in
+the prototype.  For instance:
 
 @example
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
@@ -5990,7 +5990,7 @@ use the builtin @code{dnl}: it causes @code{m4} to discard the text
 through the next newline.
 
 Keep in mind that @code{dnl} is rarely needed to introduce comments,
-rather it is useful to get rid of the newlines behind macros which
+rather it is useful to get rid of the newlines following macros that
 produce no output, such as @code{AC_REQUIRE}.
 
 
@@ -6771,11 +6771,11 @@ purpose.  With the @code{s} command, the preferred separator is @samp{/}
 unless @samp{/} itself is used in the command, in which case you should
 use @samp{,}.
 
-@xref{Macro Definitions}, for details on how to define a macro.  If the
-macro is never @code{AC_REQUIRE}'d nor @code{AC_REQUIRE}'s, use
-@code{define}.  In case of doubt, use @code{AC_DEFUN}.  All the
-@code{AC_REQUIRE} should be at the beginning of the macro,
-@code{dnl}'ed.
+@xref{Macro Definitions}, for details on how to define a macro.  If a
+macro doesn't use @code{AC_REQUIRE} and it is expected never to be the
+object of an @code{AC_REQUIRE} directive, then use @code{define}.  In
+case of doubt, use @code{AC_DEFUN}.  All the @code{AC_REQUIRE}
+statements should be at the beginning of the macro, @code{dnl}'ed.
 
 Unless the macro is short, try to leave the closing @samp{])} at the
 beginning of a line, followed by a comment which repeats the name of the
