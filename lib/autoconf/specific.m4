@@ -252,9 +252,10 @@ fi
 # interrupted by a signal, define `HAVE_RESTARTABLE_SYSCALLS'.
 AC_DEFUN([AC_SYS_RESTARTABLE_SYSCALLS],
 [AC_DIAGNOSE([obsolete],
-[$0: System call restartability is now typically set at runtime.
-Remove this `AC_SYS_RESTARTABLE_SYSCALLS'
-and adjust your code to use `sigaction' with `SA_RESTART' instead.])dnl
+[$0: AC_SYS_RESTARTABLE_SYSCALLS is useful only when supporting very
+old systems that lack `sigaction' and `SA_RESTART'.  Don't bother with
+this macro unless you need to support very old systems like 4.2BSD and
+SVR3.])dnl
 AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
 AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
