@@ -1248,7 +1248,7 @@ m4_define([AC_INIT],
 m4_pattern_forbid([^_?A[CHUM]_])
 m4_pattern_forbid([_AC_])
 m4_pattern_forbid([^LIBOBJS$],
-                  [do not use LIBOBJS directly, use AC_LIBOBJ])
+                  [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs. LIBOBJS'])
 # Actually reserved by M4sh.
 m4_pattern_allow([^AS_FLAGS$])
 AS_INIT

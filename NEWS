@@ -22,6 +22,9 @@
   types.
   Emphasizes that `cross-compilation' == `--host is given'.
   If you are working on compilers etc., be sure to read this section.
+- Section `AC_LIBOBJ vs. LIBOBJS'
+  Explains why assigning LIBOBJS directly is now an error.
+  Details how to update the code.
 
 ** configure
 

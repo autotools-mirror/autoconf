@@ -1,5 +1,11 @@
 2002-03-04  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (AC_LIBOBJ vs. LIBOBJS): New.
+	* lib/autoconf/general.m4 (AC_INIT): More informative error
+	message for LIBOBJ.
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
 	* lib/freeze.mk ($(build_libdir)/m4sugar/version.m4): New, for
 	parallel builds.
 

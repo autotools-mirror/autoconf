@@ -412,6 +412,7 @@ Upgrading From Version 2.13
 * Changed Quotation::           Broken code which used to work
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
+* AC_LIBOBJ vs. LIBOBJS::
 
 Generating Test Suites with Autotest
 
@@ -11493,6 +11494,7 @@ features in version 2.50; the changes are summarized in the file
 * Changed Quotation::           Broken code which used to work
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
+* AC_LIBOBJ vs. LIBOBJS::       LIBOBJS is a forbidden token
 @end menu
 
 @node Changed Quotation
@@ -11734,6 +11736,91 @@ configure as follows:
 ./configure CC=m68k-coff-gcc
 @end example
 
+
+@node AC_LIBOBJ vs. LIBOBJS
+@subsection @code{AC_LIBOBJ} vs. @code{LIBOBJS}
+
+Up to Autoconf 2.13, the replacement of functions was triggered via the
+variable @code{LIBOBJS}.  Since Autoconf 2.50, the macro
+@code{AC_LIBOBJ} should be used instead (@pxref{Generic Functions}).
+Starting at Autoconf 2.53, the use of @code{LIBOBJS} is an error.
+
+This change is mandated by the unification of the GNU Build System
+components.  In particular, the various fragile techniques used to parse
+a @file{configure.ac} are all replaced with the use of traces.  As a
+consequence, any action must be traceable, which obsoletes critical
+variable assignments.  Fortunately, @code{LIBOBJS} was the only problem.
+
+At the time this documentation is written, Automake does not rely on
+traces yet, but this is planed for a near future.  Nevertheless, to
+ease the transition, and to guarantee this future Automake release will
+be able to use Autoconf 2.53, using @code{LIBOBJS} directly will make
+@command{autoconf} fail.  But note that the output, @command{configure},
+is correct and fully functional: you have some delay to adjust your
+source.
+
+There are two typical uses of @code{LIBOBJS}: asking for a replacement
+function, and adjusting @code{LIBOBJS} for Automake and/or Libtool.
+
+@sp 1
+
+As for function replacement, the fix is immediate: use
+@code{AC_LIBOBJ}.  For instance:
+
+@example
+LIBOBJS="$LIBOBJS fnmatch.o"
+LIBOBJS="$LIBOBJS malloc.$ac_objext"
+@end example
+
+@noindent
+should be replaced with:
+
+@example
+AC_LIBOBJ([fnmatch])
+AC_LIBOBJ([malloc])
+@end example
+
+@sp 1
+
+When asked for automatic de-ANSI-fication, Automake needs
+@code{LIBOBJS}'ed filenames to have @samp{$U} appended to the
+base names.   Libtool requires the definition of @code{LTLIBOBJS}, which
+suffixes are mapped to @samp{.lo}.  Although Autoconf provides them with
+means to free the user to do that by herself, by the time of this
+writing, none do.  Therefore, it is common to see @file{configure.ac}
+end with:
+
+@example
+# This is necessary so that .o files in LIBOBJS are also built via
+# the ANSI2KNR-filtering rules.
+LIBOBJS=`echo "$LIBOBJS" | sed 's/\.o /\$U.o /g;s/\.o$/\$U.o/'`
+LTLIBOBJS=`echo "$LIBOBJS" | sed 's/\.o/\.lo/g'`
+AC_SUBST(LTLIBOBJS)
+@end example
+
+@noindent
+First, note that this code is @emph{wrong}, because @samp{.o} is not the
+only possible extension@footnote{
+@c
+Yet another reason why assigning @code{LIBOBJS} directly is discouraged.
+@c
+}!  Because the token @code{LIBOBJS} is now
+forbidden, you will have to replace this snippet with:
+
+@example
+# This is necessary so that .o files in LIBOBJS are also built via
+# the ANSI2KNR-filtering rules.
+LIB@@&t@@OBJS=`echo "$LIB@@&t@@OBJS" |
+             sed 's,\.[[^.]]* ,$U&,g;s,\.[[^.]]*$,$U&,'`
+LTLIBOBJS=`echo "$LIB@@&t@@OBJS" |
+           sed 's,\.[[^.]]* ,.lo ,g;s,\.[[^.]]*$,.lo,'`
+AC_SUBST(LTLIBOBJS)
+@end example
+
+@noindent
+Unfortunately, @command{autoupdate} cannot help here, since... this is
+not a macro!  Of course, first make sure your release of Automake and/or
+Libtool still requires these.
 
 @c ============================= Generating Test Suites with Autotest
 
