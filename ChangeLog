@@ -1,5 +1,12 @@
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT) <at_cmd_line>: Remove.
+	<at_cmd_line>: New.
+	Pass it to debug-*.sh scripts.
+	<AUTOTEST_PATH>: May contain absolute dir names.
+
+2001-08-27  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Log the command line.
 	Support `VAR=VAL' as arguments.
 	Compute PATH _after_ the options processing, so that AUTOTEST_PATH

@@ -93,7 +93,7 @@ AS_SHELL_SANITIZE
 SHELL=${CONFIG_SHELL-/bin/sh}
 
 # How were we run?
-at_cmd_line="$[0] $[@]"
+at_cli_args=${1+"$[@]"}
 
 . ./atconfig
 
@@ -228,16 +228,26 @@ at_sep=
 at_path=
 # Build first.
 for at_dir in $AUTOTEST_PATH; do
-  at_dir=`(cd "$top_builddir/$at_dir" && pwd) 2>/dev/null`
-  if test -n "$at_dir"; then
+  case $at_dir in
+    [[\\/]]* | ?:[[\\/]]* )
+       at_dir=`(cd "$at_dir" && pwd) 2>/dev/null` ;;
+    * )
+       at_dir=`(cd "$top_builddir/$at_dir" && pwd) 2>/dev/null` ;;
+  esac
+  if test -d "$at_dir"; then
     at_path="$at_path$at_sep$at_dir"
     at_sep=$PATH_SEPARATOR
   fi
 done
 # Then source.
 for at_dir in $AUTOTEST_PATH; do
-  at_dir=`(cd "$top_srcdir/$at_dir" && pwd) 2>/dev/null`
-  if test -n "$at_dir"; then
+  case $at_dir in
+    [[\\/]]* | ?:[[\\/]]* )
+       at_dir=`(cd "$at_dir" && pwd) 2>/dev/null` ;;
+    * )
+       at_dir=`(cd "$top_srcdir/$at_dir" && pwd) 2>/dev/null` ;;
+  esac
+  if test -d "$at_dir"; then
     at_path="$at_path$at_sep$at_dir"
     at_sep=$PATH_SEPARATOR
   fi
@@ -245,7 +255,7 @@ done
 # And finally PATH.
 for at_dir in $PATH; do
   at_dir=`(cd "$at_dir" && pwd) 2>/dev/null`
-  if test -n "$at_dir"; then
+  if test -d "$at_dir"; then
     at_path="$at_path$at_sep$at_dir"
     at_sep=$PATH_SEPARATOR
   fi
@@ -262,7 +272,7 @@ if $1 --version | grep "$at_package.*$at_version" >/dev/null; then
     echo
 
     echo "$as_me: command line was:"
-    echo "  $ $at_cmd_line"
+    echo "  $ $[0] $at_cli_args"
     echo
 
     # Try to find a few ChangeLogs in case it might help determining the
@@ -398,7 +408,8 @@ elif test $at_debug = false; then
   for at_group in $at_fail_list; do
     echo $at_n " $at_group$at_c"
     ( echo "#! /bin/sh"
-      echo 'exec ${CONFIG_SHELL-'"$SHELL"'} '"$[0]"' -v -d '"$at_group"' ${1+"$[@]"}'
+      echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
+           '-v -d' "$at_cli_args" "$at_group" '${1+"$[@]"}'
       echo 'exit 1'
     ) >debug-$at_group.sh
     chmod +x debug-$at_group.sh
