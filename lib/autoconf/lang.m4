@@ -211,8 +211,7 @@ _ACEOF])
 # AC_LANG_SOURCE(BODY)
 # --------------------
 # Produce a valid source for the current language, which includes the
-# BODY, and as much as possible `confdefs.h' and the `#line' sync
-# lines.
+# BODY, and as much as possible `confdefs.h'.
 AC_DEFUN([AC_LANG_SOURCE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
