@@ -1,3 +1,7 @@
+2001-07-25  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.in (ac_LF_and_DOT): Remove, unused.
+
 2001-07-24  Akim Demaille  <akim@epita.fr>
 
 	Let autoconf use autom4te for traces.

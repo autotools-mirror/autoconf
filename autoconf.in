@@ -83,15 +83,6 @@ if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 
-# ac_LF_and_DOT
-# We use echo to avoid assuming a particular line-breaking character.
-# The extra dot is to prevent the shell from consuming trailing
-# line-breaks from the sub-command output.  A line-break within
-# single-quotes doesn't work because, if this script is created in a
-# platform that uses two characters for line-breaks (e.g., DOS), tr
-# would break.
-ac_LF_and_DOT=`echo; echo .`
-
 # Find GNU m4.
 # Handle the case that m4 has moved since we were configured.
 # It may have been found originally in a build directory.
