@@ -556,21 +556,17 @@ macro files (by reading @file{autoconf.m4}).
 @noindent
 Files used in preparing a software package for distribution:
 @example
-@group
 your source files --> [autoscan*] --> [configure.scan] --> configure.in
 
-configure.in --.   .------> autoconf* -----> configure
-               +---+
-[aclocal.m4] --+   `---.
-[acsite.m4] ---'       |
-                       +--> [autoheader*] -> [config.h.in]
-[acconfig.h] ----.     |
-                 +-----'
-[config.h.top] --+
-[config.h.bot] --'
+@group
+configure.in --.
+               |   .------> autoconf* -----> configure
+[aclocal.m4] --+---+
+               |   `-----> [autoheader*] --> [config.h.in]
+[acsite.m4] ---'
+@end group
 
 Makefile.in -------------------------------> Makefile.in
-@end group
 @end example
 
 @noindent
@@ -1989,8 +1985,7 @@ $(srcdir)/configure: configure.in aclocal.m4
 
 # autoheader might not change config.h.in, so touch a stamp file.
 $(srcdir)/config.h.in: stamp-h.in
-$(srcdir)/stamp-h.in: configure.in aclocal.m4 acconfig.h \
-    config.h.top config.h.bot
+$(srcdir)/stamp-h.in: configure.in aclocal.m4
         cd $(srcdir) && autoheader
         echo timestamp > $(srcdir)/stamp-h.in
 
@@ -5900,10 +5895,9 @@ characters, as @code{make} tends to eat them.  To use a shell variable
 characters @samp{[} or @samp{]}), use @code{AC_DEFINE_UNQUOTED} instead.
 @var{description} is only useful if you are using
 @code{AC_CONFIG_HEADERS}.  In this case, @var{description} is put into
-the generated @file{config.h.in} as the comment before the macro define;
-the macro need not be mentioned in @file{acconfig.h}.  The following
-example defines the C preprocessor variable @code{EQUATION} to be the
-string constant @samp{"$a > $b"}:
+the generated @file{config.h.in} as the comment before the macro define.
+The following example defines the C preprocessor variable
+@code{EQUATION} to be the string constant @samp{"$a > $b"}:
 
 @example
 AC_DEFINE(EQUATION, "$a > $b")
@@ -8114,33 +8108,48 @@ for @code{CONFIG_COMMANDS} etc.)
 @cindex @file{config.h.top}
 @cindex @file{config.h.bot}
 
-@code{autoheader} scans @file{configure.in} and figures out which C
-preprocessor symbols it might define.  It copies comments and
-@code{#define} and @code{#undef} statements from a file called
-@file{acconfig.h} in the current directory, if present.  This file used
-to be mandatory if you @code{AC_DEFINE} any additional symbols.  Now,
-you are encouraged to use the @code{AH} series of macros
-(@pxref{Autoheader Macros}).
+In order to produce @file{config.h.in}, @command{autoheader} needs to
+build or to find templates for each symbol.  Modern releases of Autoconf
+use @code{AH_VERBATIM} and @code{AH_TEMPLATE} (@pxref{Autoheader
+Macros}), but in older releases a file, @file{acconfig.h}, contained the
+list of needed templates.  @code{autoheader} copies comments and
+@code{#define} and @code{#undef} statements from @file{acconfig.h} in
+the current directory, if present.  This file used to be mandatory if
+you @code{AC_DEFINE} any additional symbols.
 
-The file that @code{autoheader} creates contains mainly @code{#define}
-and @code{#undef} statements and their accompanying comments.  If
-@file{./acconfig.h} contains the string @samp{@@TOP@@},
+Modern releases of Autoconf also provide @code{AH_TOP} and
+@code{AH_BOTTOM} if you need to prepend/append some information to
+@file{config.h.in}.  Ancient versions of Autoconf had a similar feature:
+if @file{./acconfig.h} contains the string @samp{@@TOP@@},
 @code{autoheader} copies the lines before the line containing
 @samp{@@TOP@@} into the top of the file that it generates.  Similarly,
 if @file{./acconfig.h} contains the string @samp{@@BOTTOM@@},
 @code{autoheader} copies the lines after that line to the end of the
-file it generates.  Either or both of those strings may be omitted.
+file it generates.  Either or both of those strings may be omitted.  An
+even older alternate way to produce the same effect in jurasik versions
+of Autoconf is to create the files @file{@var{file}.top} (typically
+@file{config.h.top}) and/or @file{@var{file}.bot} in the current
+directory.  If they exist, @code{autoheader} copies them to the
+beginning and end, respectively, of its output.
 
-An alternate way to produce the same effect is to create the files
-@file{@var{file}.top} (typically @file{config.h.top}) and/or
-@file{@var{file}.bot} in the current directory.  If they exist,
-@code{autoheader} copies them to the beginning and end, respectively, of
-its output.  Their use is discouraged because they have file names that
-contain two periods, and so cannot be stored on MS-DOS; also, they are
-two more files to clutter up the directory.  But if you use the
-@option{--localdir=@var{dir}} option to use an @file{acconfig.h} in
-another directory, they give you a way to put custom boilerplate in each
-individual @file{config.h.in}.
+In former versions of Autoconf, the files used in preparing a software
+package for distribution were:
+@example
+@group
+configure.in --.   .------> autoconf* -----> configure
+               +---+
+[aclocal.m4] --+   `---.
+[acsite.m4] ---'       |
+                       +--> [autoheader*] -> [config.h.in]
+[acconfig.h] ----.     |
+                 +-----'
+[config.h.top] --+
+[config.h.bot] --'
+@end group
+@end example
+
+Use only the @code{AH_} macros, @file{configure.in} should be
+self-contained, and should not depend upon @file{acconfig.h} etc.
 
 
 @node autoupdate Invocation, Obsolete Macros, acconfig.h, Obsolete Constructs
@@ -8972,9 +8981,9 @@ If you distribute @file{install.sh} with your package, rename it to
 create a file called @file{install} from it.  @code{AC_PROG_INSTALL}
 looks for the script under both names, but it is best to use the new name.
 
-If you were using @file{config.h.top} or @file{config.h.bot}, you still
-can, but you will have less clutter if you merge them into
-@file{acconfig.h}.  @xref{autoheader Invocation}.
+If you were using @file{config.h.top}, @file{config.h.bot}, or
+@file{acconfig.h}, you still can, but you will have less clutter if you
+use the @code{AH_} macros.  @xref{Autoheader Macros}.
 
 @node Changed Makefiles, Changed Macros, Changed File Names, Autoconf 1
 @subsection Changed Makefiles
@@ -9153,12 +9162,11 @@ GPL, but doing so is not required to use Autoconf.
 
 Of the other files that might be used with @code{configure},
 @file{config.h.in} is under whatever copyright you use for your
-@file{configure.in}, since it is derived from that file and from the
-public domain file @file{acconfig.h}.  @file{config.sub} and
-@file{config.guess} have an exception to the GPL when they are used with
-an Autoconf-generated @code{configure} script, which permits you to
-distribute them under the same terms as the rest of your package.
-@file{install-sh} is from the X Consortium and is not copyrighted.
+@file{configure.in}.  @file{config.sub} and @file{config.guess} have an
+exception to the GPL when they are used with an Autoconf-generated
+@code{configure} script, which permits you to distribute them under the
+same terms as the rest of your package.  @file{install-sh} is from the X
+Consortium and is not copyrighted.
 
 @node Why GNU m4, Bootstrapping, Distributing, Questions
 @section Why Require GNU M4?

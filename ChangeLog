@@ -1,5 +1,19 @@
 2000-11-02  Akim Demaille  <akim@epita.fr>
 
+	The documentation is not clear about the obsoleteness of
+	`acconfig.h', `config.h.top', and `config.h.bot'.
+	Reported by Aharon Robbins.
+
+	* doc/autoconf.texi (Making configure Scripts)
+	(Automatic Remaking, Defining Symbols, Distributing): Forget about
+	these files.
+	(acconfig.h): Reword.
+	Display the old scheme presenting the dependencies between input
+	and output files.
+	(Changed File Names): Clarify.
+
+2000-11-02  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Limitations of Usual Tools): Some about
 	dirname.
 
