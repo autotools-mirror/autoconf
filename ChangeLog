@@ -1,5 +1,11 @@
 2000-03-23  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_LANG_PROGRAM, AC_LANG_PROGRAM(C),
+	AC_LANG_PROGRAM(C++), AC_LANG_PROGRAM(FORTRAN77)): New macros.
+	(AC_TRY_COMPILE, AC_TRY_LINK): Use them.
+
+2000-03-23  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): Support --help={long, short,
 	recursive}.
 	(_AC_INIT_HELP): Propagate --help=recursive to CONFIG_SUBDIRS.

@@ -2168,10 +2168,20 @@ _AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
 
 # AC_LANG_SOURCE(BODY)
 # --------------------
-# Produce a valid source for the current language, which includes the BODY.
-# Include the `#line' sync lines.
+# Produce a valid source for the current language, which includes the
+# BODY.  Include the `#line' sync lines.
 AC_DEFUN([AC_LANG_SOURCE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])
+
+
+# AC_LANG_PROGRAM(PROLOGUE, BODY)
+# -------------------------------
+# Produce a valid source for the current language.  Prepend the
+# PROLOGUE (typically CPP directives and/or declarations) to an
+# execution the BODY (typically glued inside the `main' function, or
+# equivalent).
+AC_DEFUN([AC_LANG_PROGRAM],
+[AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG_CURRENT, $@)])])
 
 
 
@@ -2199,11 +2209,27 @@ AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 
 # AC_LANG_SOURCE(C)(BODY)
 # -----------------------
+# This sometimes fails to find confdefs.h, for some reason.
+# #line __oline__ "[$]0"
 define([AC_LANG_SOURCE(C)],
 [#line __oline__ "configure"
 #include "confdefs.h"
 $1])
 
+
+# AC_LANG_PROGRAM(C)(PROLOGUE, BODY)
+# ----------------------------------
+define([AC_LANG_PROGRAM(C)],
+[$1
+int
+main ()
+{
+dnl Do *not* indent the following line: there may be CPP directives.
+dnl Don't move the `;' right after for the same reason.
+$2
+  ;
+  return 0;
+}])
 
 
 # ------------------ #
@@ -2239,6 +2265,20 @@ extern "C" void exit (int);
 $1])
 
 
+# AC_LANG_PROGRAM(C++)(PROLOGUE, BODY)
+# ------------------------------------
+define([AC_LANG_PROGRAM(C++)],
+[$1
+int
+main ()
+{
+dnl Do *not* indent the following line: there may be CPP directives.
+dnl Don't move the `;' right after for the same reason.
+$2
+  ;
+  return 0;
+}])
+
 
 
 # ------------------------- #
@@ -2269,6 +2309,14 @@ AU_DEFUN([AC_LANG_FORTRAN77], [AC_LANG(FORTRAN77)])
 define([AC_LANG_SOURCE(FORTRAN77)],
 [$1])
 
+
+# AC_LANG_PROGRAM(FORTRAN77)(PROLOGUE, BODY)
+# ------------------------------------------
+# Yes, we discard the PROLOGUE.
+define([AC_LANG_PROGRAM(FORTRAN77)],
+[      program main
+$2
+      end])
 
 
 
@@ -2867,25 +2915,8 @@ rm -f conftest*
 # FIXME: Should INCLUDES be defaulted here?
 AC_DEFUN(AC_TRY_COMPILE,
 [cat >conftest.$ac_ext <<EOF
-AC_LANG_CASE([FORTRAN77],
-[      program main
-[$2]
-      end],
-[dnl This sometimes fails to find confdefs.h, for some reason.
-dnl #line __oline__ "[$]0"
-#line __oline__ "configure"
-#include "confdefs.h"
-[$1]
-int
-main ()
-{
-dnl Do *not* indent the following line: there may be CPP directives.
-dnl Don't move the `;' right after for the same reason.
-[$2]
-  ;
-  return 0;
-}
-])EOF
+AC_LANG_PROGRAM([[$1]], [[$2]])
+EOF
 if AC_TRY_EVAL(ac_compile); then
   m4_default([$3], :)
 else
@@ -2906,29 +2937,15 @@ rm -f conftest*])
 #             [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------
 # Should the INCLUDES be defaulted here?
+# FIXME: WARNING: The code to compile was different in the case of
+# Fortran between AC_TRY_COMPILE and AC_TRY_LINK, though they should
+# equivalent as far as I can tell from the semantics and the docs.  In
+# the former, $[2] is used as is, in the latter, it is `call' ed.
+# Remove these FIXME: once truth established.
 AC_DEFUN(AC_TRY_LINK,
 [cat >conftest.$ac_ext <<EOF
-AC_LANG_CASE([FORTRAN77],
-[
-      program main
-      call [$2]
-      end
-],
-[dnl This sometimes fails to find confdefs.h, for some reason.
-dnl #line __oline__ "[$]0"
-#line __oline__ "configure"
-#include "confdefs.h"
-[$1]
-int
-main()
-{
-dnl Do *not* indent the following line: there may be CPP directives.
-dnl Don't move the `;' right after for the same reason.
-[$2]
-  ;
-  return 0;
-}
-])EOF
+AC_LANG_PROGRAM([[$1]], [[$2]])
+EOF
 if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
   m4_default([$3], :)
 else
