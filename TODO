@@ -9,6 +9,15 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Autoconf 2.50
 
+** More tests
+Check that AC_REQUIRE circular dependencies are caught.
+
+** _AC_EXPANSION_STACK_DUMP
+Where ever AC_FATAL is used, we should call _AC_EXPANSION_STACK_DUMP.
+Try to see if we can use __FILE__ and __LINE__ in the stack: this
+would provide much more accurate error messages (but it might be
+costly...).
+
 ** --target & AC_ARG_PROGRAM
 Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.

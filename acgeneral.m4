@@ -210,6 +210,13 @@ pushdef([_AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 # needed machinery for `AC_REQUIRE'.  A macro must be AC_DEFUN'd if
 # either it is AC_REQUIRE'd, or it AC_REQUIRE's.
 #
+# Two things deserve attention and are detailed below:
+#  1. Implementation of AC_REQUIRE
+#  2. Keeping tracking of the expansion stack
+#
+# 1. Implementation of AC_REQUIRE
+# ===============================
+#
 # Of course AC_DEFUN AC_PROVIDE's the macro, so that a macro which has
 # been expanded is not expanded again when AC_REQUIRE'd, but the
 # difficult part is the proper expansion of macros when they are
@@ -490,6 +497,53 @@ pushdef([_AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 #   DUMP:       undefined
 #   BODY:       TEST2a; TEST3; TEST2b; TEST1
 #   diversions: BODY |-
+#
+#
+# 2. Keeping tracking of the expansion stack
+# ==========================================
+#
+# When M4 expansion goes wrong it is often extremely hard to find the
+# path amongst macros that drove to the failure.  What is needed case
+# is the stack of macro `calls'. One could imagine that GNU M4 would
+# maintain a stack of macro expansion, unfortunately it doesn't, so we
+# do it by hand.  This is of course extremely costly, but the help
+# this stack provides is worth it.  Nevertheless to limit the
+# performance penalty this is implemented only for AC_DEFUN'd macros,
+# not for define'd macros.
+#
+# The scheme is simplistic: each time we enter an AC_DEFUN'd macros,
+# we pushdef its name in _AC_EXPANSION_STACK, and when we exit the
+# macro, we popdef _AC_EXPANSION_STACK.
+#
+# In addition, we want to use the expansion stack to detect circular
+# AC_REQUIRE dependencies.  This means we need to browse the stack to
+# check whether a macro being expanded is AC_REQUIRE'd.  For ease of
+# implementation, and certainly for the benefit of performances, we
+# don't browse the _AC_EXPANSION_STACK, rather each time we expand a
+# macro FOO we define _AC_EXPANDING(FOO).  Then AC_REQUIRE(BAR) simply
+# needs to check whether _AC_EXPANDING(BAR) is defined to diagnose a
+# circular dependency.
+#
+# To improve the diagnostic, in addition to keeping track of the stack
+# of macro calls, _AC_EXPANSION_STACK also records the AC_REQUIRE
+# stack.  Note that therefore an AC_DEFUN'd macro being required will
+# appear twice in the stack: the first time because it is required,
+# the second because it is expanded.  We can avoid this, but it has
+# two small drawbacks: (i) the implementation is slightly more
+# complex, and (ii) it hides the difference between define'd macros
+# (which don't appear in _AC_EXPANSION_STACK) and AC_DEFUN'd macros
+# (which do).  The more debugging information, the better.
+
+
+# _AC_EXPANSION_STACK_DUMP
+# ------------------------
+# Dump the expansion stack.
+define([_AC_EXPANSION_STACK_DUMP],
+[ifdef([_AC_EXPANSION_STACK],
+       [m4_errprint([  ]defn([_AC_EXPANSION_STACK]))dnl
+popdef([_AC_EXPANSION_STACK])dnl
+_AC_EXPANSION_STACK_DUMP()],
+       [m4_errprint([  the top level])])])
 
 
 # _AC_DEFUN_PRO(MACRO-NAME)
@@ -497,6 +551,8 @@ pushdef([_AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 # The prologue for Autoconf macros.
 define([_AC_DEFUN_PRO],
 [AC_PROVIDE([$1])dnl
+pushdef([_AC_EXPANSION_STACK], [$1 is expanded from...])dnl
+pushdef([_AC_EXPANDING($1)])dnl
 ifdef([_AC_DIVERT_DUMP],
       [AC_DIVERT_PUSH(defn([_AC_DIVERT_DIVERSION]))],
       [define([_AC_DIVERT_DUMP], defn([_AC_DIVERT_DIVERSION]))dnl
@@ -513,12 +569,13 @@ define([_AC_DEFUN_EPI],
 ifelse(_AC_DIVERT_DUMP, _AC_DIVERT_DIVERSION,
        [undivert(_AC_DIVERT([PREPARE]))dnl
 undefine([_AC_DIVERT_DUMP])])dnl
+popdef([_AC_EXPANSION_STACK])dnl
+popdef([_AC_EXPANDING($1)])dnl
 ])
 
 
 # AC_DEFUN(NAME, EXPANSION)
 # -------------------------
-#
 # Define a macro which automatically provides itself.  Add machinery
 # so the macro automatically switches expansion to the diversion
 # stack if it is not already using it.  In this case, once finished,
@@ -566,7 +623,8 @@ define([AC_BEFORE],
 # ------------------------------------------
 # If NAME-TO-CHECK has never been expanded (actually, if it is not
 # AC_PROVIDE'd), expand BODY-TO-EXPAND *before* the current macro
-# expansion.  Once expanded, emit it in _AC_DIVERT_DUMP.
+# expansion.  Once expanded, emit it in _AC_DIVERT_DUMP.  Keep track
+# of the AC_REQUIRE chain in _AC_EXPANSION_STACK.
 #
 # The normal cases are:
 #
@@ -591,8 +649,14 @@ define([AC_BEFORE],
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
 define([_AC_REQUIRE],
-[ifndef([_AC_DIVERT_DUMP],
-        [AC_FATAL([$0: cannot be used outside of an AC_DEFUN'd macro])])dnl
+[pushdef([_AC_EXPANSION_STACK],
+         [$1 is required by...])dnl
+ifdef([_AC_EXPANDING($1)],
+      [m4_errprint([AC_REQUIRE: circular dependency of $1])dnl
+_AC_EXPANSION_STACK_DUMP()dnl
+m4exit(1)])dnl
+ifndef([_AC_DIVERT_DUMP],
+    [AC_FATAL([AC_REQUIRE: cannot be used outside of an AC_DEFUN'd macro])])dnl
 AC_PROVIDE_IFELSE([$1],
                   [],
                   [AC_DIVERT_PUSH(m4_eval(_AC_DIVERT_DIVERSION - 1))dnl
@@ -603,6 +667,7 @@ AC_PROVIDE_IFELSE([$1],
                   [],
                   [AC_DIAGNOSE([syntax],
                                [$1 is AC_REQUIRE'd but is not AC_DEFUN'd])])dnl
+popdef([_AC_EXPANSION_STACK])dnl
 ])
 
 
@@ -624,6 +689,8 @@ define([AC_EXPAND_ONCE],
 
 # AC_PROVIDE(MACRO-NAME)
 # ----------------------
+# Ideally we should use `AC_PROVIDE($1)', but unfortunately many third
+# party macros know that we use `AC_PROVIDE_$1' and they depend on it.
 define([AC_PROVIDE],
 [define([AC_PROVIDE_$1])])
 

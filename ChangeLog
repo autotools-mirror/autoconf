@@ -1,5 +1,18 @@
 2000-10-12  Akim Demaille  <akim@epita.fr>
 
+	Diagnose AC_REQUIRE circular dependencies.
+
+	* acgeneral.m4 (_AC_DEFUN_PRO, _AC_DEFUN_EPI): Keep a stack of
+	macro expansions, _AC_EXPANSION_STACK.
+	Use `_AC_EXPANDING(FOO)' to record the fact that `FOO' is being
+	expanded.
+	(_AC_REQUIRE): Diagnose required macros which are already being
+	expanded.
+	Record in _AC_EXPANSION_STACK the AC_REQUIRE calls.
+	(_AC_EXPANSION_STACK_DUMP): New macro.
+
+2000-10-12  Akim Demaille  <akim@epita.fr>
+
 	* libm4.m4 (m4_dumpdefs, _m4_dumpdefs_up, _m4_dumpdefs_down): New
 	macros.
 
