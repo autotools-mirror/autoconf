@@ -1,3 +1,8 @@
+2002-04-06  Kevin Ryde  <user42@zip.com.au>
+
+	* doc/autoconf.texi (Systemology): Add link to Unix V7 online docs.
+	(Portable Shell): Cross reference to Systemology.
+
 2002-04-05  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (autoreconf): Be sure to accumulate the
