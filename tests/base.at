@@ -158,3 +158,39 @@ AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 
 AT_CLEANUP
+
+
+## ---------------------- ##
+## AC_REQUIRE & AC_LANG.  ##
+## ---------------------- ##
+
+AT_SETUP([AC_REQUIRE & AC_LANG])
+
+AT_DATA([configure.ac],
+[[AC_DEFUN([AC_F77_1],
+[AC_LANG_PUSH([Fortran 77])
+if test $ac_ext != f; then
+  AC_MSG_ERROR([F77_1: current shell language is $ac_ext, expected Fortran])
+fi
+AC_LANG_POP
+])
+
+
+AC_DEFUN([AC_F77_2],
+[AC_LANG_PUSH([Fortran 77])
+AC_REQUIRE([AC_F77_1])
+if test $ac_ext != f; then
+  AC_MSG_ERROR([F77_2: current shell language is $ac_ext, expected Fortran])
+fi
+AC_LANG_POP
+])
+
+AC_INIT
+AC_F77_2
+AS_EXIT(0)
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP

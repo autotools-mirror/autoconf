@@ -1999,3 +1999,7 @@ ac_clean_files=$ac_clean_files_save
 
 test "$no_create" = yes || $SHELL $CONFIG_STATUS || { (exit 1); exit 1; }
 
+# Report the state of this version of Autoconf if this is a beta.
+case 2.49c in
+  *[a-z]*) sed -n '/^\* Status/,$p' BUGS;;
+esac

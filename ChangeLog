@@ -1,5 +1,10 @@
 2001-01-23  Akim Demaille  <akim@epita.fr>
 
+	* configure.in: If this is a beta, dump the core of BUGS.
+	* tests/base.at (AC_REQUIRE & AC_LANG): New test, currently failing.
+
+2001-01-23  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl: Don't use `defined' to check whether an array is
 	defined.
 	Don't use parens with `defined'.
