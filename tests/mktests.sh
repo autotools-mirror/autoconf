@@ -220,11 +220,19 @@ MK_EOF
   } >ac$base.tat
 
   # In one atomic step so that if something above fails, the trap
-  # preserves the old version of the file.
-  mv ac$base.tat ac$base.at
+  # preserves the old version of the file.  If there is nothing to
+  # check, output /rien du tout/[1].
+  if fgrep AT_CHECK ac$base.tat >/dev/null 2>&1; then
+    mv ac$base.tat ac$base.at
+  else
+    rm -f ac$base.tat ac$base.at
+    touch ac$base.at
+  fi
 done
 
 rm -f acdefuns audefuns requires
 
 trap 0
 exit 0
+
+# [1] En franc,ais dans le texte.

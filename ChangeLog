@@ -1,5 +1,9 @@
 2001-09-13  Akim Demaille  <akim@epita.fr>
 
+	* tests/mktests.sh: Don't output banners for empty test files.
+
+2001-09-13  Akim Demaille  <akim@epita.fr>
+
 	Test suites can be run independently of configure.
 
 	* lib/m4sugar/m4sh.m4 (_AS_ECHO, _AS_ECHO_N_PREPARE): New.
