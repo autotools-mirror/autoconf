@@ -723,10 +723,14 @@ ac_exeext=$EXEEXT
 # determined by ac_objext.
 #
 # This macro is called by AC_LANG_COMPILER, the latter being required
-# by the AC_COMPILE_IFELSE macros, so use _AC_COMPILE_IFELSE.
+# by the AC_COMPILE_IFELSE macros, so use _AC_COMPILE_IFELSE.  And in fact,
+# don't, since _AC_COMPILE_IFELSE needs to know ac_objext for the `test -s'
+# it includes.  So do it by hand.
 m4_define([_AC_COMPILER_OBJEXT],
 [AC_CACHE_CHECK([for object suffix], ac_cv_objext,
-[_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+rm -f conftest.o conftest.obj
+AS_IFELSE([AC_TRY_EVAL(ac_compile)],
 [for ac_file in `ls conftest.o conftest.obj conftest.* 2>/dev/null`; do
   case $ac_file in
     *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb ) ;;
@@ -734,8 +738,10 @@ m4_define([_AC_COMPILER_OBJEXT],
        break;;
   esac
 done],
-                     [AC_MSG_ERROR([cannot compute OBJEXT: cannot compile])])
-rm -f conftest.$ac_cv_objext])
+          [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
+AC_MSG_ERROR([cannot compute OBJEXT: cannot compile])])
+rm -f conftest.$ac_cv_objext conftest.$ac_ext])
 AC_SUBST([OBJEXT], [$ac_cv_objext])dnl
 ac_objext=$OBJEXT
 ])# _AC_COMPILER_OBJEXT

@@ -1,5 +1,11 @@
 2000-12-19  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (_AC_COMPILER_OBJEXT): Don't rely on
+	_AC_COMPILE_IFELSE which uses ac_objext in a `test -s'.
+	Reported by Lars J. Aas.
+
+2000-12-19  Akim Demaille  <akim@epita.fr>
+
 	* tests/compile.at (AC_PROG_CPP without warnings, GNU Fortran 77):
 	Use AC_TRY_COMMAND when running commands, to enrich the logs.
 
