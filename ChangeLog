@@ -5,7 +5,7 @@
 	lines with empty lines to preserve line numbers.
 	Original version by Derek Price.
 
-2001-02-07  +2001-02-06  Derek Price  <derek.price@openavenue.com>
+2001-02-07  Derek Price  <derek.price@openavenue.com>
 
 	* acgeneral.m4 (_AC_LIBOBJ): Call AC_LIBSOURCE with '.c' extension
 	appended to function name.
@@ -87,7 +87,7 @@
 	* autoreconf.sh: Fix the case when the verbose output was not
 	redirected to stderr as everywhere else.
 
-2001-01-30  Ralf Corsepius <corsepiu@faw.uni-ulm.de>
+2001-01-30  Ralf Corsepius  <corsepiu@faw.uni-ulm.de>
 
 	* acgeneral.m4 (_AC_OUTPUT_SUBDIRS): Remove configure.ac
 	from check for ac_sub_configure.
@@ -532,7 +532,7 @@
 
 2001-01-22  Raja R Harinath  <harinath@cs.umn.edu>,
 	Tim Van Holder  <tim.van.holder@pandora.be>,
-	Jim Meyering <jim@meyering.net>
+	Jim Meyering  <jim@meyering.net>
 
 	* acspecific.m4 (AC_AIX): Fix typo: s/@\$/@%/.
 
@@ -9958,7 +9958,7 @@
 	* autoconf.texi (EDITION): Likewise.
 	(VERSION): Likewise.
 
-1998-10-30  Jeff Garzik <jgarzik@pobox.com>
+1998-10-30  Jeff Garzik  <jgarzik@pobox.com>
 
 	* autoconf.texi: Document AC_CACHE_LOAD and AC_CACHE_SAVE. Explain
 	how AC_CACHE_SAVE can be used as a means of syncing the cache to
