@@ -1,3 +1,10 @@
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_ARG_ENABLE, AC_ARG_WITH, AC_PATH_PROG,
+	AC_PATH_PROGS, AC_PATH_TOOL, AC_CHECK_TOOL, AC_PREFIX_PROGRAM,
+	AC_EGREP_CPP, AC_TRY_LINK, AC_COMPILE_CHECK, AC_TRY_RUN_NATIVE):
+	Use ifval instead of ifelse.
+
 2000-03-07 Mark Elbrecht <snowball3@bigfoot.com>
 
 	Support absolute DOS-style paths.

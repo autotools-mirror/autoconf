@@ -1190,7 +1190,7 @@ AC_DIVERT_POP()dnl
 if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
   enableval="[$enable_]patsubst([$1], -, _)"
   ifelse([$3], , :, [$3])
-ifelse([$4], , , [else
+ifval([$4], [else
   $4
 ])dnl
 fi
@@ -1217,7 +1217,7 @@ AC_DIVERT_POP()dnl
 if test "[${with_]patsubst([$1], -, _)+set}" = set; then
   withval="[$with_]patsubst([$1], -, _)"
   ifelse([$3], , :, [$3])
-ifelse([$4], , , [else
+ifval([$4], [else
   $4
 ])dnl
 fi
@@ -2159,7 +2159,7 @@ dnl not every word.  This closes a longstanding sh security hole.
   IFS="$ac_save_ifs"
 dnl If no 3rd arg is given, leave the cache variable unset,
 dnl so AC_PATH_PROGS will keep looking.
-ifelse([$3], , , [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"
+ifval([$3], [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$3"
 ])dnl
   ;;
 esac])dnl
@@ -2182,7 +2182,7 @@ do
 AC_PATH_PROG($1, [$]ac_prog, , $4)
 test -n "[$]$1" && break
 done
-ifelse([$3], , , [test -n "[$]$1" || $1="$3"
+ifval([$3], [test -n "[$]$1" || $1="$3"
 ])])
 
 
@@ -2211,8 +2211,8 @@ fi
 AC_DEFUN(AC_PATH_TOOL,
 [AC_REQUIRE([_AC_CHECK_TOOL_PREFIX])dnl
 AC_PATH_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
-             ifelse([$3], , [$2], ), $4)
-ifelse([$3], , , [
+             ifelse([$3], , [$2]), $4)
+ifval([$3], [
 if test -z "$ac_cv_prog_$1"; then
   if test -n "$ac_tool_prefix"; then
     AC_PATH_PROG($1, $2, $2, $3)
@@ -2229,7 +2229,7 @@ AC_DEFUN(AC_CHECK_TOOL,
 [AC_REQUIRE([_AC_CHECK_TOOL_PREFIX])dnl
 AC_CHECK_PROG($1, ${ac_tool_prefix}$2, ${ac_tool_prefix}$2,
 	      ifelse([$3], , [$2], ), $4)
-ifelse([$3], , , [
+ifval([$3], [
 if test -z "$ac_cv_prog_$1"; then
   if test -n "$ac_tool_prefix"; then
     AC_CHECK_PROG($1, $2, $2, $3)
@@ -2445,7 +2445,7 @@ else
   echo "$ac_err" >&AC_FD_CC
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-ifelse([$3], , , [  rm -rf conftest*
+ifval([$3], [  rm -rf conftest*
   $3
 ])dnl
 fi
@@ -2482,7 +2482,7 @@ changequote(, )dnl
 changequote([, ])dnl
   ifelse([$3], , :, [rm -rf conftest*
   $3])
-ifelse([$4], , , [else
+ifval([$4], [else
   rm -rf conftest*
   $4
 ])dnl
@@ -2528,7 +2528,7 @@ if AC_TRY_EVAL(ac_compile); then
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-ifelse([$4], , , [  rm -rf conftest*
+ifval([$4], [  rm -rf conftest*
   $4
 ])dnl
 fi
@@ -2574,7 +2574,7 @@ if AC_TRY_EVAL(ac_link) && test -s conftest${ac_exeext}; then
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-ifelse([$4], , , [  rm -rf conftest*
+ifval([$4], [  rm -rf conftest*
   $4
 ])dnl
 fi
@@ -2586,7 +2586,7 @@ rm -f conftest*
 #                  ACTION-IF-FOUND, [ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------
 AU_DEFUN(AC_COMPILE_CHECK,
-[ifelse([$1], , , [AC_CHECKING([for $1])
+[ifval([$1], [AC_CHECKING([for $1])
 ])dnl
 AC_TRY_LINK([$2], [$3], [$4], [$5])
 ])
@@ -2634,7 +2634,7 @@ dnl Don't remove the temporary files here, so they can be examined.
 else
   echo "configure: failed program was:" >&AC_FD_CC
   cat conftest.$ac_ext >&AC_FD_CC
-ifelse([$3], , , [  rm -fr conftest*
+ifval([$3], [  rm -fr conftest*
   $3
 ])dnl
 fi
