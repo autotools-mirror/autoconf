@@ -257,8 +257,8 @@ define(AC_PROVIDE,
 ## --------------------- ##
 
 
-# AC_SHELL_IFELSE(TEST[, IF-TRUE[, IF-FALSE]])
-# -------------------------------------------
+# AC_SHELL_IFELSE(TEST, [IF-TRUE], [IF-FALSE])
+# --------------------------------------------
 # Expand into
 # | if TEST; then
 # |   IF-TRUE
@@ -452,7 +452,7 @@ define([AC_FOREACH],
 ## ----------------------------------- ##
 
 
-# AC_HELP_STRING(LHS, RHS[, COLUMN])
+# AC_HELP_STRING(LHS, RHS, [COLUMN])
 # ----------------------------------
 #
 # Format an Autoconf macro's help string so that it looks pretty when
@@ -1179,8 +1179,8 @@ AC_SUBST(mandir)dnl
 ## ----------------------------- ##
 
 
-# AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-# -----------------------------------------------------------------------
+# AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
+# ----------------------------------------------------------------------
 AC_DEFUN(AC_ARG_ENABLE,
 [AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 ac_arg_enable_help="$ac_arg_enable_help
@@ -1206,8 +1206,8 @@ AU_DEFUN(AC_ENABLE,
 ## ------------------------------ ##
 
 
-# AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE [, ACTION-IF-FALSE])
-# ---------------------------------------------------------------------
+# AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
+# --------------------------------------------------------------------
 AC_DEFUN(AC_ARG_WITH,
 [AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
 ac_arg_with_help="$ac_arg_with_help
@@ -1228,9 +1228,9 @@ AU_DEFUN(AC_WITH,
 
 
 
-## -------------------------------------- ##
-## Remembering env vars for reconfiguring ##
-## -------------------------------------- ##
+## ---------------------------------------- ##
+## Remembering env vars for reconfiguring.  ##
+## ---------------------------------------- ##
 
 
 # AC_ARG_VAR(VARNAME, DOCUMENTATION)
@@ -1288,6 +1288,7 @@ test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
 
 # AC_REVISION(REVISION-INFO)
+# --------------------------
 AC_DEFUN(AC_REVISION,
 [AC_REQUIRE([AC_INIT_BINSH])dnl
 AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
@@ -1295,7 +1296,6 @@ AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
 AC_DIVERT_POP()dnl to KILL
 ])
 
-# Subroutines of AC_PREREQ.
 
 # _AC_VERSION_UNLETTER(VERSION)
 # -----------------------------
@@ -1317,6 +1317,7 @@ define(_AC_VERSION_UNLETTER,
           abcdefghijklmnopqrstuvwxyz,
           12345678901234567890123456)])
 
+
 # _AC_VERSION_COMPARE(VERSION-1, VERSION-2)
 # -----------------------------------------
 # Compare the two version numbers and expand into
@@ -1326,6 +1327,7 @@ define(_AC_VERSION_UNLETTER,
 define(_AC_VERSION_COMPARE,
 [m4_list_cmp((m4_split(_AC_VERSION_UNLETTER([$1]), [\.])),
              (m4_split(_AC_VERSION_UNLETTER([$2]), [\.])))])
+
 
 # AC_PREREQ(VERSION)
 # ------------------
@@ -1746,58 +1748,82 @@ define(_AC_SH_QUOTE,
         [AC_WARNING([backquotes should not be backslashed in: $1])dnl
 [$1]])])
 
-# _AC_ECHO_UNQUOTED(STRING [ , FD ])
+
+# _AC_ECHO_UNQUOTED(STRING, [FD])
+# -------------------------------
 # Expands into a sh call to echo onto FD (default is AC_FD_MSG).
 # The shell performs its expansions on STRING.
 define([_AC_ECHO_UNQUOTED],
 [echo "[$1]" 1>&ifelse($2,, AC_FD_MSG, $2)])
 
-# _AC_ECHO(STRING [ , FD ])
+
+# _AC_ECHO(STRING, [FD])
+# ----------------------
 # Expands into a sh call to echo onto FD (default is AC_FD_MSG),
 # protecting STRING from backquote expansion.
 define([_AC_ECHO],
 [_AC_ECHO_UNQUOTED(_AC_SH_QUOTE([$1]), $2)])
 
-# _AC_ECHO_N(STRING [ , FD ])
+
+# _AC_ECHO_N(STRING, [FD])
+# ------------------------
 # Same as _AC_ECHO, but echo doesn't return to a new line.
 define(_AC_ECHO_N,
 [echo $ECHO_N "_AC_SH_QUOTE($1)$ECHO_C" 1>&ifelse($2,,AC_FD_MSG,$2)])
 
+
 # AC_MSG_CHECKING(FEATURE-DESCRIPTION)
+# ------------------------------------
 define(AC_MSG_CHECKING,
 [_AC_ECHO_N([checking $1... ])
 _AC_ECHO([configure:__oline__: checking $1], AC_FD_CC)])
 
+
 # AC_CHECKING(FEATURE-DESCRIPTION)
+# --------------------------------
 define(AC_CHECKING,
 [_AC_ECHO([checking $1])
 _AC_ECHO([configure:__oline__: checking $1], AC_FD_CC)])
 
+
 # AC_MSG_RESULT(RESULT-DESCRIPTION)
+# ---------------------------------
 define(AC_MSG_RESULT,
 [_AC_ECHO([$ECHO_T""$1])])
 
+
 # AC_MSG_RESULT_UNQUOTED(RESULT-DESCRIPTION)
+# ------------------------------------------
 # Likewise, but perform $ ` \ shell substitutions.
 define(AC_MSG_RESULT_UNQUOTED,
 [_AC_ECHO_UNQUOTED([$ECHO_T""$1])])
 
+
 # AC_VERBOSE(RESULT-DESCRIPTION)
+# ------------------------------
 define(AC_VERBOSE,
 [AC_OBSOLETE([$0], [; instead use AC_MSG_RESULT])dnl
 _AC_ECHO([	$1])])
 
+
 # AC_MSG_WARN(PROBLEM-DESCRIPTION)
+# --------------------------------
 define(AC_MSG_WARN,
 [_AC_ECHO([configure: warning: $1], 2)])
 
+
 # AC_MSG_ERROR(ERROR-DESCRIPTION, [EXIT-STATUS])
+# ----------------------------------------------
 define(AC_MSG_ERROR,
 [{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); }])
 
+
 # AC_MSG_ERROR_UNQUOTED(ERROR-DESCRIPTION, [EXIT-STATUS])
+# -------------------------------------------------------
 define(AC_MSG_ERROR_UNQUOTED,
 [{ _AC_ECHO_UNQUOTED([configure: error: $1], 2); exit m4_default([$2], 1); }])
+
+
 
 
 ## --------------------------------------------- ##
@@ -1816,6 +1842,7 @@ define(AC_MSG_ERROR_UNQUOTED,
 define(AC_LANG_CASE,
 [m4_case(AC_LANG, $@)])
 
+
 # AC_LANG_C
 # ---------
 AC_DEFUN(AC_LANG_C,
@@ -1828,6 +1855,7 @@ ac_link='${CC-cc} -o conftest${ac_exeext} $CFLAGS $CPPFLAGS $LDFLAGS conftest.$a
 cross_compiling=$ac_cv_prog_cc_cross
 ])
 
+
 # AC_LANG_CPLUSPLUS
 # -----------------
 AC_DEFUN(AC_LANG_CPLUSPLUS,
@@ -1839,6 +1867,7 @@ ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
 ac_link='${CXX-g++} -o conftest${ac_exeext} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
 cross_compiling=$ac_cv_prog_cxx_cross
 ])
+
 
 # AC_LANG_FORTRAN77
 # -----------------
@@ -1867,6 +1896,8 @@ pushdef([AC_LANG_RESTORE],
          [CPLUSPLUS], [AC_LANG_CPLUSPLUS()],
          [FORTRAN77], [AC_LANG_FORTRAN77()])dnl
 popdef([AC_LANG_STACK])])
+
+
 
 
 ## ---------------------------- ##
@@ -1952,9 +1983,13 @@ define(AC_INCLUDES_DEFAULT,
 ])])
 
 
+
+
+
 ## -------------------------- ##
 ## Generic structure checks.  ##
 ## -------------------------- ##
+
 
 # AC_CHECK_MEMBER(AGGREGATE.MEMBER,
 #                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
@@ -2077,9 +2112,9 @@ AC_SUBST($1)dnl
 ])# AC_CHECK_PROG
 
 
-# AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
-#                [, PATH]])
-# -----------------------------------------------------------------
+# AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
+#                [PATH])
+# ------------------------------------------------------------------
 AC_DEFUN(AC_CHECK_PROGS,
 [for ac_prog in $2
 do
@@ -2090,8 +2125,8 @@ ifelse([$3], , , [test -n "[$]$1" || $1="$3"
 ])])
 
 
-# AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND [, PATH]])
-# -------------------------------------------------------------------------
+# AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
+# -----------------------------------------------------------------------
 AC_DEFUN(AC_PATH_PROG,
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=[$]2
@@ -2132,9 +2167,9 @@ AC_SUBST($1)dnl
 ])# AC_PATH_PROG
 
 
-# AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR [, VALUE-IF-NOT-FOUND
-#               [, PATH]])
-# ----------------------------------------------------------------
+# AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
+#               [PATH])
+# -----------------------------------------------------------------
 AC_DEFUN(AC_PATH_PROGS,
 [for ac_prog in $2
 do

@@ -2382,9 +2382,9 @@ AC_CHECK_MEMBERS((struct stat.st_rdev),
 
 
 
-## ------------------------------------- ##
-## Checks for compiler characteristics.  ##
-## ------------------------------------- ##
+## --------------------------------------- ##
+## Checks for C compiler characteristics.  ##
+## --------------------------------------- ##
 
 
 AC_DEFUN(AC_C_CROSS,
@@ -2430,7 +2430,7 @@ AC_DEFUN(AC_C_LONG_DOUBLE,
 else
 AC_TRY_RUN(
 [int
-main()
+main ()
 {
   /* The Stardent Vistra knows sizeof(long double), but does not
      support it.  */
@@ -3002,6 +3002,7 @@ dnl Be optimistic at first.
             ;;
     esac
 ])])
+
 
 
 ## -------------------------------------- ##

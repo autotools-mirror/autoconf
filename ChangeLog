@@ -1,3 +1,8 @@
+2000-03-02  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4: Formatting changes.
+	* acspecific.m4: Likewise.
+
 2000-03-01  Akim Demaille  <akim@epita.fr>
 
 	The empty regexp cannot be portably used in egrep's alternation.
