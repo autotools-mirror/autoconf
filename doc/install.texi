@@ -1,6 +1,16 @@
 @c This file is included by autoconf.texi and is used to produce
 @c the INSTALL file.
 
+@ifclear autoconf_manual
+
+Copyright 1994, 1995, 1996, 1999, 2000, 2001 Free Software Foundation,
+Inc.
+
+This file is free documentation; the Free Software Foundation gives
+unlimited permission to copy, distribute and modify it.
+
+@end ifclear
+
 @node Basic Installation
 @section Basic Installation
 
@@ -258,12 +268,3 @@ Look for the package's source code in directory @var{dir}.  Usually
 @noindent
 @command{configure} also accepts some other, not widely useful, options.
 Run @samp{configure --help} for more details.
-
-@node INSTALL Copyright Notice
-@section Copyright Notice for the @file{INSTALL} File
-
-Copyright 1994, 1995, 1996, 1999, 2000, 2001 Free Software Foundation,
-Inc.
-
-The @file{INSTALL} file is free documentation; the Free Software
-Foundation gives unlimited permission to copy, distribute and modify it.
