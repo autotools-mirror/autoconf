@@ -411,6 +411,7 @@ Upgrading From Version 2.13
 
 * Changed Quotation::           Broken code which used to work
 * New Macros::                  Interaction with foreign macros
+* Hosts and Cross-Compilation::  Bugward compatibility kludges
 
 Generating Test Suites with Autotest
 
@@ -3203,12 +3204,13 @@ sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
 
 @defmac AC_CHECK_TOOLS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex CHECK_TOOLS
-Like @code{AC_CHECK_TOOL}, each of the tools in the list @var{progs-to-check-for} are
-checked with a prefix of the host type as determined by @code{AC_CANONICAL_HOST},
-followed by a dash (@pxref{Canonicalizing}). If none of the tools can be found with a
-prefix, then the first one without a prefix is used. If a tool is found, set
-@var{variable} to the name of that program. If none of the tools in the
-list are found, set @var{variable} to @var{value-if-not-found}; if
+Like @code{AC_CHECK_TOOL}, each of the tools in the list
+@var{progs-to-check-for} are checked with a prefix of the host type as
+determined by @code{AC_CANONICAL_HOST}, followed by a dash
+(@pxref{Canonicalizing}). If none of the tools can be found with a
+prefix, then the first one without a prefix is used. If a tool is found,
+set @var{variable} to the name of that program. If none of the tools in
+the list are found, set @var{variable} to @var{value-if-not-found}; if
 @var{value-if-not-found} is not specified, the value of @var{variable}
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
@@ -9566,49 +9568,29 @@ command or symbols predefined by the C preprocessor.
 Alternately, the user can specify the system type with command line
 arguments to @command{configure}.  Doing so is necessary when
 cross-compiling.  In the most complex case of cross-compiling, three
-system types are involved.  The options to specify them are@footnote{For
-backward compatibility, @command{configure} will accept a system type as an
-option by itself.  Such an option will override the defaults for build,
-host and target system types.  The following configure statement will
-configure a cross toolchain that will run on NetBSD/alpha but generate
-code for GNU Hurd/sparc, which is also the build platform.
-
-@example
-./configure --host=alpha-netbsd sparc-gnu
-@end example
-}:
+system types are involved.  The options to specify them are:
 
 @table @option
 @item --build=@var{build-type}
 the type of system on which the package is being configured and
-compiled.
+compiled.  It defaults to the result of running @command{config.guess}.
 
 @item --host=@var{host-type}
 @ovindex cross_compiling
-the type of system on which the package will run.
+the type of system on which the package will run.  By default it is the
+same as the build machine.  Specifying it enables the cross-compilation
+mode.
 
 @item --target=@var{target-type}
 the type of system for which any compiler tools in the package will
 produce code (rarely needed).  By default, it is the same as host.
 @end table
 
-They all default to the result of running @command{config.guess}, unless
-you specify either @option{--build} or @option{--host}.  In this case, the
-default becomes the system type you specified.  If you specify both, and
-they're different, @command{configure} will enter cross compilation mode,
-so it won't run any tests that require execution.
-
-Hint: if you mean to override the result of @command{config.guess}, prefer
-@option{--build} over @option{--host}.  In the future, @option{--host} will
-not override the name of the build system type.  Also, if you specify
-@option{--host}, but not @option{--build}, when @command{configure} performs
-the first compiler test it will try to run an executable produced by the
-compiler.  If the execution fails, it will enter cross-compilation mode.
-Note, however, that it won't guess the build-system type, since this may
-require running test programs.  Moreover, by the time the compiler test
-is performed, it may be too late to modify the build-system type: other
-tests may have already been performed.  Therefore, whenever you specify
-@code{--host}, be sure to specify @code{--build} too.
+If you mean to override the result of @command{config.guess}, use
+@option{--build}, not @option{--host}, which enables cross-compilation.
+For historical reasons, passing @option{--host} also changes the build
+type.  Therefore, whenever you specify @code{--host}, be sure to specify
+@code{--build} too.  This will be fixed in the future.
 
 @example
 ./configure --build=i686-pc-linux-gnu --host=m68k-coff
@@ -9623,11 +9605,14 @@ as follows:
 ./configure CC=m68k-coff-gcc
 @end example
 
+@cindex @command{config.sub}
 @command{configure} recognizes short aliases for many system types; for
 example, @samp{decstation} can be used instead of
 @samp{mips-dec-ultrix4.2}.  @command{configure} runs a script called
 @command{config.sub} to canonicalize system type aliases.
 
+This section deliberately omits the description of the obsolete
+interface, see @ref{Hosts and Cross-Compilation}.
 
 
 @node Canonicalizing
@@ -9686,12 +9671,6 @@ three individual parts @code{host_cpu}, @code{host_vendor}, and
 If @option{--host} was specified, then @code{host} is the
 canonicalization of @code{host_alias} by @command{config.sub},
 otherwise it defaults to @code{build}.
-
-For temporary backward-compatibility, when @option{--host} is specified
-by @option{--build} isn't, the build system will be assumed to be the
-same as @option{--host}, and @samp{build_alias} will be set to that
-value.  Eventually, this historically incorrect behavior will go away.
-
 @end defmac
 
 @defmac AC_CANONICAL_TARGET
@@ -9709,6 +9688,8 @@ canonicalization of @code{target_alias} by @command{config.sub},
 otherwise it defaults to @code{host}.
 @end defmac
 
+Note that there can be artifacts due to the backward compatibility
+code.  @xref{Hosts and Cross-Compilation}, for more.
 
 @node Using System Type
 @section Using the System Type
@@ -10022,9 +10003,8 @@ Place in output variable @code{program_transform_name} a sequence of
 If any of the options described below are given to @command{configure},
 program names are transformed accordingly.  Otherwise, if
 @code{AC_CANONICAL_TARGET} has been called and a @option{--target} value
-is given that differs from the host type (specified with @option{--host}),
-the target type followed by a dash is used as a prefix.  Otherwise, no
-program name transformation is done.
+is given, the target type followed by a dash is used as a prefix.
+Otherwise, no program name transformation is done.
 @end defmac
 
 @menu
@@ -11512,6 +11492,7 @@ features in version 2.50; the changes are summarized in the file
 @menu
 * Changed Quotation::           Broken code which used to work
 * New Macros::                  Interaction with foreign macros
+* Hosts and Cross-Compilation::  Bugward compatibility kludges
 @end menu
 
 @node Changed Quotation
@@ -11638,6 +11619,119 @@ AC_CHECK_TYPES([ptrdiff_t])
 $ @kbd{aclocal-1.4}
 $ @kbd{autoconf}
 $
+@end example
+
+
+@node Hosts and Cross-Compilation
+@subsection Hosts and Cross-Compilation
+
+Based on the experience of compiler writers, and after long public
+debates, many aspects of the cross-compilation chain have changed:
+
+@itemize @minus
+@item
+the relationship between the build, host, and target architecture types,
+
+@item
+the command line interface for specifying them to @command{configure},
+
+@item
+the variables defined in @command{configure},
+
+@item
+the enabling of cross-compilation mode.
+@end itemize
+
+@sp 1
+
+The relationship between build, host, and target have been cleaned up:
+the chain of default is now simply: target defaults to host, host to
+build, and build to the result of @command{config.guess}.  Nevertheless,
+in order to ease the transition from 2.13 to 2.50, the following
+transition scheme is implemented.  @emph{Do not rely on it}, as it will
+be completely disabled in a couple of releases (we cannot keep it, as it
+proves to cause more problems than to cure).
+
+They all default to the result of running @command{config.guess}, unless
+you specify either @option{--build} or @option{--host}.  In this case,
+the default becomes the system type you specified.  If you specify both,
+and they're different, @command{configure} will enter cross compilation
+mode, so it won't run any tests that require execution.
+
+Hint: if you mean to override the result of @command{config.guess},
+prefer @option{--build} over @option{--host}.  In the future,
+@option{--host} will not override the name of the build system type.
+Whenever you specify @code{--host}, be sure to specify @code{--build}
+too.
+
+@sp 1
+
+For backward compatibility, @command{configure} will accept a system
+type as an option by itself.  Such an option will override the defaults
+for build, host and target system types.  The following configure
+statement will configure a cross toolchain that will run on NetBSD/alpha
+but generate code for GNU Hurd/sparc, which is also the build platform.
+
+@example
+./configure --host=alpha-netbsd sparc-gnu
+@end example
+
+@sp 1
+
+In Autoconf, the variables @code{build}, @code{host}, and @code{target}
+had a different semantics before and after the invocation of
+@code{AC_CANONICAL_BUILD} etc.  Now, the argument of @option{--build} is
+strictly copied into @code{build_alias}, and is left empty otherwise.
+After the @code{AC_CANONICAL_BUILD}, @code{build} is set to the
+canonicalized build type.  To ease the transition, before, its contents
+is the same as that of @code{build_alias}.  Do @emph{not} rely on this
+broken feature.
+
+For consistency with the backward compatibility scheme exposed above,
+when @option{--host} is specified by @option{--build} isn't, the build
+system will be assumed to be the same as @option{--host}, and
+@samp{build_alias} will be set to that value.  Eventually, this
+historically incorrect behavior will go away.
+
+@sp 1
+
+The former scheme to enable cross-compilation proved to cause more harm
+than good, in particular, it used to be triggered too easily, leaving
+regular end users puzzled in front of cryptic error messages.
+@command{configure} could even enter cross-compilation mode, only
+because the compiler was not functional.  This is mainly because
+@command{configure} used to try to detect cross-compilation, instead of
+waiting for an explicit flag from the user.
+
+Now, @command{configure} enters cross-compilation mode iff
+@option{--host} is passed.
+
+That's the short documentation.  To ease the transition between 2.13 and
+its successors, a more complicated scheme is implemented.  @emph{Do not
+rely on the following}, as it will be removed in a near future.
+
+If you specify @option{--host}, but not @option{--build}, when
+@command{configure} performs the first compiler test it will try to run
+an executable produced by the compiler.  If the execution fails, it will
+enter cross-compilation mode.  This is fragile.  Moreover, by the time
+the compiler test is performed, it may be too late to modify the
+build-system type: other tests may have already been performed.
+Therefore, whenever you specify @code{--host}, be sure to specify
+@code{--build} too.
+
+@example
+./configure --build=i686-pc-linux-gnu --host=m68k-coff
+@end example
+
+@noindent
+will enter cross-compilation mode.  The former interface, which
+consisted in setting the compiler to a cross-compiler without informing
+@command{configure} is obsolete.  For instance, @command{configure} will
+fail if it can't run the code generated by the specified compiler if you
+configure as follows:
+
+@example
+./configure CC=m68k-coff-gcc
 @end example
 
 

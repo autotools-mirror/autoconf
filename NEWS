@@ -16,6 +16,12 @@
   AC_TRY_CPP, AC_TRY_COMPILE, AC_TRY_LINK and AC_TRY_RUN.
 - Licensing
   The Autoconf manual is now distributed under the terms of the GNU FDL.
+- Section `Hosts and Cross-Compilation'
+  Explains the rationale for the 2.5x changes in the cross-compilation
+  chain, and in the relationships between build, host, and target
+  types.
+  Emphasizes that `cross-compilation' == `--host is given'.
+  If you are working on compilers etc., be sure to read this section.
 
 ** configure
 

@@ -1,5 +1,16 @@
 2002-03-04  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Transforming Names): Equality between target
+	and host is irrelevant.
+	(Specifying Names, Canonicalizing): Remove all references to the
+	backward compatibility hooks.  Rather, collect them all into...
+	(Hosts and Cross-Compilation): this new section.
+	* doc/install.texi (System Type): Ditto.
+	* lib/autoconf/general.m4 (AC_CANONICAL_HOST): Explicitly state
+	that `--host' implies cross-compilation.
+
+2002-03-04  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Evaluation Macros): New.
 	* lib/m4sugar/m4sugar.m4 (m4_lquote): Remove, it is totally
 	useless.

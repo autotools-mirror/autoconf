@@ -906,11 +906,12 @@ done
 
 # There might be people who depend on the old broken behavior: `$host'
 # used to hold the argument of --host etc.
+# FIXME: To remove some day.
 build=$build_alias
 host=$host_alias
 target=$target_alias
 
-# FIXME: should be removed in autoconf 3.0.
+# FIXME: To remove some day.
 if test "x$host_alias" != x; then
   if test "x$build_alias" = x; then
     cross_compiling=maybe
@@ -1583,7 +1584,7 @@ _AC_CANONICAL_SPLIT(build)
 AC_DEFUN_ONCE([AC_CANONICAL_HOST],
 [AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 m4_divert_text([HELP_CANON],
-[[  --host=HOST       build programs to run on HOST [BUILD]]])dnl
+[[  --host=HOST       cross-compile to build programs to run on HOST [BUILD]]])dnl
 AC_CACHE_CHECK([host system type], [ac_cv_host],
 [ac_cv_host_alias=$host_alias
 test -z "$ac_cv_host_alias" &&
