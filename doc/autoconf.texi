@@ -4149,6 +4149,31 @@ the shell variable @code{interpval}; it will be set to @samp{yes}
 if the system supports @samp{#!}, @samp{no} if not.
 @end defmac
 
+@defmac AC_SYS_LARGEFILE
+@maindex SYS_LARGEFILE
+@cvindex _FILE_OFFSET_BITS
+@cvindex _LARGEFILE_SOURCE
+@cvindex _LARGE_FILES
+@cvindex _XOPEN_SOURCE
+@ovindex CC
+Arrange for
+@uref{http://www.sas.com/standards/large.file/x_open.20Mar96.html,
+large-file support}.  On some hosts, one must use special compiler
+options to build programs that can access large files.  Append any such
+options to the output variable @code{CC}.  Define
+@code{_FILE_OFFSET_BITS}, @code{_LARGEFILE_SOURCE}, @code{_LARGE_FILES},
+and @code{_XOPEN_SOURCE} if necessary.
+
+The user can disable large-file support by configuring with the
+@option{--disable-largefile} option.
+
+If you use this macro, check that your program works even when
+@code{off_t} is longer than @code{long}, since this is common when
+large-file support is enabled.  For example, it is not correct to print
+an arbitrary @code{off_t} value @code{X} with @code{printf ("%ld",
+(long) X)}.
+@end defmac
+
 @defmac AC_SYS_LONG_FILE_NAMES
 @maindex SYS_LONG_FILE_NAMES
 @cvindex HAVE_LONG_FILE_NAMES

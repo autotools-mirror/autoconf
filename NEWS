@@ -134,6 +134,9 @@ test cases in this new frame work.
 - AC_CHECK_DECL, AC_CHECK_DECLS
   To check whether a symbol is declared.
 
+- AC_CHECK_SIZEOF
+  No longer needs a cross-compilation size.
+
 - AC_CHECK_TYPE
   The test it performs is much more robust than previously, and makes
   it possible to test builtin types in addition to typedefs.
@@ -149,7 +152,6 @@ test cases in this new frame work.
 - AC_CHECK_MEMBER, AC_CHECK_MEMBERS
   Check for given members in aggregates (e.g., pw_gecos in struct
   passwd).
-
 
 - AC_PROG_CC_STDC
   Checks if the compiler supports ISO C, included when needs special
@@ -174,8 +176,8 @@ test cases in this new frame work.
 - AC_PROG_LEX
   Now integrates `AC_DECL_YYTEXT' which is obsoleted.
 
-- AC_CHECK_SIZEOF
-  No longer needs a cross-compilation size.
+- AC_SYS_LARGEFILE
+  Arrange for large-file support.
 
 ** C++ compatibility
   Every macro has been revisited in order to support at best CC=c++.

@@ -2090,8 +2090,91 @@ rm -f conftest])
 interpval=$ac_cv_sys_interpreter
 ])
 
+
 AC_DEFUNCT([AC_HAVE_POUNDBANG], [;use AC_SYS_INTERPRETER, taking no arguments])
 AC_DEFUNCT([AC_ARG_ARRAY], [; don't do unportable things with arguments])
+
+
+# _AC_SYS_LARGEFILE_SOURCE(PROLOGUE, BODY)
+# ----------------------------------------
+define([_AC_SYS_LARGEFILE_SOURCE],
+[AC_LANG_PROGRAM(
+[$1
+@%:@include <sys/types.h>
+int a[[(off_t) 9223372036854775807 == 9223372036854775807 ? 1 : -1]];],
+[$2])])
+
+
+# _AC_SYS_LARGEFILE_MACRO_VALUE(C-MACRO, VALUE,
+#                               CACHE-VAR,
+#                               DESCRIPTION,
+#                               [INCLUDES], [FUNCTION-BODY])
+# ----------------------------------------------------------
+define([_AC_SYS_LARGEFILE_MACRO_VALUE],
+[AC_CACHE_CHECK([for $1 value needed for large files], [$3],
+[while :; do
+  AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE([$5], [$6])],
+  		    [break])
+  AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE([@%:@define $1 $2
+$5], [$6])],
+  		    [$3=$2; break])
+  $3=no
+  break
+done])
+if test "$$3" != no; then
+  AC_DEFINE_UNQUOTED([$1], [$$3], [$4])
+fi[]dnl
+])# _AC_SYS_LARGEFILE_MACRO_VALUE
+
+
+# AC_SYS_LARGEFILE
+# ----------------
+# By default, many hosts won't let programs access large files;
+# one must use special compiler options to get large-file access to work.
+# For more details about this brain damage please see:
+# http://www.sas.com/standards/large.file/x_open.20Mar96.html
+AC_DEFUN([AC_SYS_LARGEFILE],
+[AC_ARG_ENABLE(largefile,
+               [  --disable-largefile     omit support for large files])
+if test "$enable_largefile" != no; then
+
+  AC_CACHE_CHECK([for special C compiler options needed for large files],
+    ac_cv_sys_largefile_CC,
+    [ac_cv_sys_largefile_CC=no
+     if test "$GCC" != yes; then
+       ac_save_CC=${CC-cc}
+       while :; do
+     	 # IRIX 6.2 and later do not support large files by default,
+     	 # so use the C compiler's -n32 option if that helps.
+     	 AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE()],
+     			   [break])
+     	 CC="$CC -n32"
+     	 AC_COMPILE_IFELSE([_AC_SYS_LARGEFILE_SOURCE()],
+     			   [ac_cv_sys_largefile_CC=' -n32'; break])
+         break
+       done
+       CC=$ac_save_CC
+    fi])
+  if test "$ac_cv_sys_largefile_CC" != no; then
+    CC=$CC$ac_cv_sys_largefile_CC
+  fi
+
+  _AC_SYS_LARGEFILE_MACRO_VALUE(_FILE_OFFSET_BITS, 64,
+    ac_cv_sys_file_offset_bits,
+    [Number of bits in a file offset, on hosts where this is settable.])
+  _AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
+    ac_cv_sys_largefile_source,
+    [Define to make ftello visible on some hosts (e.g. HP-UX 10.20).],
+    [@%:@include <stdio.h>], [return !ftello;])
+  _AC_SYS_LARGEFILE_MACRO_VALUE(_LARGE_FILES, 1,
+    ac_cv_sys_large_files,
+    [Define for large files, on AIX-style hosts.])
+  _AC_SYS_LARGEFILE_MACRO_VALUE(_XOPEN_SOURCE, 500,
+    ac_cv_sys_xopen_source,
+    [Define to make ftello visible on some hosts (e.g. glibc 2.1.3).],
+    [@%:@include <stdio.h>], [return !ftello;])
+fi
+])# AC_SYS_LARGEFILE
 
 
 # AC_SYS_LONG_FILE_NAMES
