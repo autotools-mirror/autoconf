@@ -473,19 +473,11 @@ $debug ||
 ])# _AC_SHELL_TMPDIR
 
 
-# AC_SHELL_UNSET(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
-# --------------------------------------------------------
+# AC_SHELL_UNSETENV(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
+# -----------------------------------------------------------
 # Try to unset the env VAR, otherwise set it to
 # VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
 define([AC_SHELL_UNSET],
-[$ac_unset $1 || test "${$1+set}" != set || $1=$2])
-
-
-# AC_SHELL_UNSETENV(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
-# --------------------------------------------------------
-# Try to unset the env VAR, otherwise set it to
-# VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
-define([AC_SHELL_UNSETENV],
 [$ac_unset $1 || test "${$1+set}" != set || $1=$2 && export $1])
 
 
@@ -1466,19 +1458,28 @@ fi])dnl
 
 # _AC_INIT_PREPARE_ENVIRONMENT
 # ----------------------------
-# Tune the envvar we depend upon: IFS, NLS.
+# Tune the behavior of the shell.
 define([_AC_INIT_PREPARE_ENVIRONMENT],
-[if (unset FOO) >/dev/null 2>&1; then
+[# Be Bourne compatible
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+  emulate sh
+  NULLCMD=:
+elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+  set -o posix
+fi
+
+# Support unset when possible.
+if (unset FOO) >/dev/null 2>&1; then
   ac_unset=unset
 else
   ac_unset=false
 fi
 
 # NLS nuisances.
-AC_SHELL_UNSETENV([LANG],        [C])
-AC_SHELL_UNSETENV([LC_ALL],      [C])
-AC_SHELL_UNSETENV([LC_CTYPE],    [C])
-AC_SHELL_UNSETENV([LC_MESSAGES], [C])
+AC_SHELL_UNSET([LANG],        [C])
+AC_SHELL_UNSET([LC_ALL],      [C])
+AC_SHELL_UNSET([LC_CTYPE],    [C])
+AC_SHELL_UNSET([LC_MESSAGES], [C])
 
 # IFS
 # We need space, tab and new line, in precisely that order.
@@ -1487,7 +1488,7 @@ ac_nl='
 IFS=" 	$ac_nl"
 
 # CDPATH.
-AC_SHELL_UNSETENV([CDPATH], [:])
+AC_SHELL_UNSET([CDPATH], [:])
 ])
 
 

@@ -1,5 +1,19 @@
 2000-05-24  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Limitations of Builtins): Document `unset'.
+	(Special Shell Variables): Adjust.
+	(Shellology): New section.  Introduce bash and zsh.
+	(Special Shell Variables): Some data on NULLCMD.
+	(Quotation Thumb Rule): Rename as
+	(Quotation Rule of Thumb): this.
+	* acgeneral.m4 (AC_SHELL_UNSET): Remove.
+	(AC_SHELL_UNSETENV): Rename as...
+	(AC_SHELL_UNSET): this.
+	(_AC_INIT_PREPARE_ENVIRONMENT): Prepare bash and zsh.
+	Adjust to AC_SHELL_UNSET.
+
+2000-05-24  Akim Demaille  <akim@epita.fr>
+
 	The options --build etc. used to set `$build'.  *If*
 	AC_CANONICAL_SYSTEM was run, then the value of `$build' given by
 	the user was saved into `$build_alias', and `$build' was

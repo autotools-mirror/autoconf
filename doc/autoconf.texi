@@ -253,6 +253,7 @@ Checking Run Time Behavior
 
 Portable Shell Programming
 
+* Shellology::                  A zoology of shells
 * Special Shell Variables::     Variables you should not change
 * Shell Substitutions::         Test and assign
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
@@ -283,7 +284,7 @@ Quoting
 * Active Characters::           Characters that change the behavior of m4
 * One Macro Call::              Quotation and one macro call
 * Quotation and Nested Macros::  Macros calling macros
-* Quotation Thumb Rule::        One parenthesis, one quote
+* Quotation Rule Of Thumb::     One parenthesis, one quote
 
 Dependencies Between Macros
 
@@ -668,7 +669,7 @@ AC_MSG_WARN([[AC_DC stinks  --Iron Maiden]])
 @end example
 
 You are now able to understand one of the constructs of Autoconf which
-has continuously been misunderstood...  The thumb rule is that
+has continuously been misunderstood...  The rule of thumb is that
 @emph{whenever you expect macro expansion, expect quote expansion},
 i.e., expect one level of quotes to be lost.  For instance
 
@@ -4524,23 +4525,54 @@ restriction allows users to start out with a fairly small set of
 programs and build the rest, avoiding too many interdependencies between
 packages.
 
-Some of these external utilities have a portable subset of features, as
-well; for example, don't rely on @code{ln} having a @samp{-f} option or
-@code{cat} having any options.
+Some of these external utilities have a portable subset of features, see
+@ref{Limitations of Usual Tools}.
 
 @menu
+* Shellology::                  A zoology of shells
 * Special Shell Variables::     Variables you should not change
 * Shell Substitutions::         Test and assign
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
 @end menu
 
-@node Special Shell Variables, Shell Substitutions, Portable Shell, Portable Shell
+@node Shellology, Special Shell Variables, Portable Shell, Portable Shell
+@subsection Shellology
+
+There are several families of shells, most prominently the Bourne
+family and the C shell family which are deeply incompatible.  If you
+want to write portable shell scripts, avoid members of the C shell
+family.
+
+Below we describe some of the members of the Bourne shell family.
+
+@table @asis
+@item @command{bash}
+@cindex @command{bash}
+To detect whether you are running @command{bash}, test if
+@code{BASH_VERSION} is set.  To disable its extensions and require
+@sc{posix} compatibility, run @samp{set -o posix}. @xref{Bash POSIX
+Mode,, Bash @sc{posix} Mode, bash, The GNU Bash Reference Manual}, for
+details.
+
+@item @command{zsh}
+@cindex @command{zsh}
+To detect whether you are running @command{zsh}, test if
+@code{ZSH_VERSION} is set.  By default @command{zsh} is @emph{not}
+compatible with the Bourne shell: you have to run @samp{emulate sh} and
+set @code{NULLCMD} to @samp{:}. @xref{Compatibility,, Compatibility,
+zsh, The Z Shell Manual}, for details.
+@end table
+
+
+@node Special Shell Variables, Shell Substitutions, Shellology, Portable Shell
 @subsection Special Shell Variables
 
-Some shell variables shall not be used.  Since currently Autoconf does
-not use @code{unset}, there are some variables which need some specific
-values to disable the features they control.
+Some shell variables shall not be used or have a deep influence on the
+behavior of the shell.  In order to recover a sane behavior from the
+shell, some variables should be unset, but @command{unset} is not
+portable (@pxref{Limitations of Builtins}) and a fall back value is
+needed.  We list these values below.
 
 @c Alphabetical order, case insensitive, `A' before `a'.
 @table @code
@@ -4577,7 +4609,9 @@ bash-2.02 % (CDPATH=.: cd foo)
 @end example
 
 Therefore a portable solution to neutralize @samp{CDPATH} is
-@samp{CDPATH=$@{ZSH_VERSION+.@}:}.
+@samp{CDPATH=$@{ZSH_VERSION+.@}:}.  Note that since @command{zsh}
+support @command{unset}, you may unset @samp{CDPATH} using @samp{:} as a
+fall back, see @ref{Limitations of Builtins}.
 
 @item LANG
 @itemx LC_ALL
@@ -4599,6 +4633,14 @@ test "$@{LC_ALL+set@}" = set && LC_ALL=C && export LC_ALL
 test "$@{LC_CTYPE+set@}" = set && LC_CTYPE=C && export LC_CTYPE
 test "$@{LC_MESSAGES+set@}" = set && LC_MESSAGES=C && export LC_MESSAGES
 @end example
+
+@item NULLCMD
+@evindex NULLCMD
+When executing the command @samp{>foo}, @command{zsh} executes
+@samp{$NULLCMD >foo}.  The Bourne shell considers @code{NULLCMD} is
+@samp{:}, while @command{zsh}, even in Bourne shell compatibility mode,
+sets @code{NULLCMD} to @samp{cat}.  If you forgot to set @code{NULLCMD},
+your script might be suspended waiting for data on its standard input.
 
 @item status
 @evindex status
@@ -4806,6 +4848,27 @@ case $ac_feature in
   *[^-a-zA-Z0-9_]*) @var{action};;
 esac
 @end example
+
+@item @command{unset}
+@cindex @command{unset}
+You cannot assume the support of @command{unset}, nevertheless, because
+it is extremely useful to disable embarrassing variables such as
+@code{CDPATH} or @code{LANG}, you can test for its existence, and use
+it @emph{provided} you give a neutralizing value when @command{unset} is
+not supported:
+
+@example
+if (unset FOO) >/dev/null 2>&1; then
+  unset=unset
+else
+  unset=false
+fi
+$unset CDPATH || CDPATH=:
+@end example
+
+@xref{Special Shell Variables}, for some neutralizing values. Also, see
+@ref{Limitations of Builtins}, documentation of @command{export}, for
+the case of environment variables.
 @end table
 
 @node Limitations of Usual Tools,  , Limitations of Builtins, Portable Shell
@@ -4815,6 +4878,10 @@ The small set of tools you can expect to find on any machine can still
 find some limitations you should be aware of.
 
 @table @asis
+@item @command{cat}
+@cindex @command{cat}
+Don't rely on any option.
+
 @item @command{egrep}
 @cindex @command{egrep}
 The empty alternative is not portable, use @samp{?} instead. For
@@ -4844,6 +4911,10 @@ Don't use multiple regexps with @samp{-e}, as some @code{grep} will only
 honor the last pattern (eg., IRIX 6.5 and Solaris 2.5.1).  Anyway,
 Stardent Vistra SVR4 @code{grep} lacks @samp{-e}...  Instead, use
 alternation and @code{egrep}.
+
+@item @command{ln}
+@cindex @command{ln}
+Don't rely on @code{ln} having a @samp{-f} option.
 
 @item @command{sed}
 @cindex @command{sed}
@@ -5472,14 +5543,14 @@ macro does.  For example, @code{AC_PATH_X} has internal macros
 The most common brokenness of existing macros is an improper quotation.
 This section, which users of Autoconf can skip, but which macro writers
 @emph{must} read, first justifies the quotation scheme which was chosen
-for Autoconf, and ends with the thumb rules.  Understanding the former
+for Autoconf, and ends with the rule of thumb.  Understanding the former
 helps following the latter.
 
 @menu
 * Active Characters::           Characters that change the behavior of m4
 * One Macro Call::              Quotation and one macro call
 * Quotation and Nested Macros::  Macros calling macros
-* Quotation Thumb Rule::        One parenthesis, one quote
+* Quotation Rule Of Thumb::     One parenthesis, one quote
 @end menu
 
 @node Active Characters, One Macro Call, Quoting, Quoting
@@ -5609,7 +5680,7 @@ With this in mind, we can explore the cases where macros invoke
 macros...
 
 
-@node Quotation and Nested Macros, Quotation Thumb Rule, One Macro Call, Quoting
+@node Quotation and Nested Macros, Quotation Rule Of Thumb, One Macro Call, Quoting
 @subsection Quotation and Nested Macros
 
 The examples below use the following macros:
@@ -5737,10 +5808,10 @@ its users to leave their macro calls unquoted, which is dangerous.
 Also, because it behaves differently from the other macro, it's an
 exception, which we are avoiding in Autoconf.
 
-@node Quotation Thumb Rule,  , Quotation and Nested Macros, Quoting
-@subsection Quotation Thumb Rule
+@node Quotation Rule Of Thumb,  , Quotation and Nested Macros, Quoting
+@subsection Quotation Rule Of Thumb
 
-To conclude, the quotation thumb rules are:
+To conclude, the quotation rule of thumb is:
 
 @center @emph{One pair of quotes per pair of parentheses.}
 
