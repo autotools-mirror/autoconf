@@ -1,5 +1,19 @@
 2002-01-06  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Move the AC_SUBST
+	of PACKAGE_NAME, PACKAGE_TARNAME, PACKAGE_VERSION, PACKAGE_STRING,
+	and PACKAGE_BUGREPORT from here...
+	(_AC_INIT_DEFAULTS): to here, since it is unrelated to the
+	arguments.
+	(_AC_INIT_PREPARE): AC_DEFINE these symbols.
+	* lib/autotest/general.m4: Use AT_PACKAGE_*, not PACKAGE_*.
+	(AT_INIT): No longer catch `^PACKAGE_(BUGREPORT|STRING)$'.
+	* tests/tools.at (autoheader): Adjust.
+	* tests/atspecific.m4 (AT_CHECK_DEFINES): Adjust.
+
+	
+2002-01-06  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in (scan_file): Use `&used'.
 
 2002-01-03  Akim Demaille  <akim@epita.fr>

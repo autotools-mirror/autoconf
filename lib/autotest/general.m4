@@ -89,9 +89,8 @@ m4_define([AT_LINE],
 # Begin test suite.
 m4_define([AT_INIT],
 [m4_pattern_forbid([^_?AT_])
-m4_pattern_forbid([PACKAGE_(BUGREPORT|STRING)$])
 m4_define([AT_TESTSUITE_NAME],
-          m4_defn([PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
+          m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 AS_INIT
@@ -184,7 +183,7 @@ while test $[@%:@] -gt 0; do
         ;;
 
     --version | -V )
-        echo "$as_me (PACKAGE_STRING)"
+        echo "$as_me (AT_PACKAGE_STRING)"
         exit 0
         ;;
 
@@ -318,7 +317,7 @@ Execution tuning:
                  default for debugging scripts
   -x, --trace    enable tests shell tracing
 
-Report bugs to <PACKAGE_BUGREPORT>.
+Report bugs to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
   exit 0
 fi
@@ -544,7 +543,7 @@ m4_divert([TAIL])[]dnl
         sed "s/^ */$as_me: warning: /" <<_ATEOF
         A failure happened in a test group before any test could be
         run. This means that test suite is improperly designed.  Please
-        report this failure to <PACKAGE_BUGREPORT>.
+        report this failure to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
     	echo "$at_setup_line" >$at_check_line_file
       fi
@@ -671,7 +670,7 @@ elif test $at_debug_p = false; then
   AS_BOX([$as_me.log is created.])
 
   echo
-  echo "Please send \`$as_me.log' to <PACKAGE_BUGREPORT>,"
+  echo "Please send \`$as_me.log' to <AT_PACKAGE_BUGREPORT>,"
   echo "along with all information you think might help."
   exit 1
 fi

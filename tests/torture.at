@@ -326,10 +326,10 @@ AT_DATA([expout],
 ]])
 AT_CHECK([cat config.h], 0, expout)
 
-# Check the value of DEFS.  Note the leading space.
+# Check the value of DEFS.
 AT_DATA([expout],
-[[-Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA]
-])
+[[-DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA
+]])
 
 # Because we strip trailing spaces in `testsuite' we can't leave one in
 # expout, hence nuke the one left by AC_OUTPUT_MAKE_DEFS.
@@ -426,12 +426,26 @@ AT_CHECK_CONFIGURE
 
 # Checking that AC_DEFINE worked properly.
 AT_DATA([expout],
-[m4_for(AT_Count, 1, 100, 1,
+[/* Define to the address where bug reports for this package should be sent. */
+#define PACKAGE_BUGREPORT ""
+
+/* Define to the full name of this package. */
+#define PACKAGE_NAME ""
+
+/* Define to the full name and version of this package. */
+#define PACKAGE_STRING ""
+
+/* Define to the one symbol short name of this package. */
+#define PACKAGE_TARNAME ""
+
+/* Define to the version of this package. */
+#define PACKAGE_VERSION ""
+m4_for(AT_Count, 1, 100, 1,
 [
 /* AT_DESCRIPTION */
 [#define] AT_DUMMY_VAR(AT_Count) "AT_BIG_VALUE"
 ])])
-AT_CHECK([sed -n '3,$ p' config.h], 0, expout)
+AT_CHECK([sed -n '4,$ p' config.h], 0, expout)
 
 # Checking that AC_SUBST worked properly.
 AT_DATA([expout],

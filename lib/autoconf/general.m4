@@ -448,6 +448,18 @@ AC_SUBST([PATH_SEPARATOR])dnl
 # only ac_max_sed_lines should be used.
 : ${ac_max_here_lines=38}
 
+# Identity of this package.
+AC_SUBST([PACKAGE_NAME],
+         [m4_ifdef([AC_PACKAGE_NAME],      ['AC_PACKAGE_NAME'])])dnl
+AC_SUBST([PACKAGE_TARNAME],
+         [m4_ifdef([AC_PACKAGE_TARNAME],   ['AC_PACKAGE_TARNAME'])])dnl
+AC_SUBST([PACKAGE_VERSION],
+         [m4_ifdef([AC_PACKAGE_VERSION],   ['AC_PACKAGE_VERSION'])])dnl
+AC_SUBST([PACKAGE_STRING],
+         [m4_ifdef([AC_PACKAGE_STRING],    ['AC_PACKAGE_STRING'])])dnl
+AC_SUBST([PACKAGE_BUGREPORT],
+         [m4_ifdef([AC_PACKAGE_BUGREPORT], ['AC_PACKAGE_BUGREPORT'])])dnl
+
 m4_divert_pop([DEFAULTS])dnl
 ])# _AC_INIT_DEFAULTS
 
@@ -566,18 +578,6 @@ AC_SUBST([includedir],     ['${prefix}/include'])dnl
 AC_SUBST([oldincludedir],  ['/usr/include'])dnl
 AC_SUBST([infodir],        ['${prefix}/info'])dnl
 AC_SUBST([mandir],         ['${prefix}/man'])dnl
-
-# Identity of this package.
-AC_SUBST([PACKAGE_NAME],
-         [m4_ifdef([AC_PACKAGE_NAME],      ['AC_PACKAGE_NAME'])])dnl
-AC_SUBST([PACKAGE_TARNAME],
-         [m4_ifdef([AC_PACKAGE_TARNAME],   ['AC_PACKAGE_TARNAME'])])dnl
-AC_SUBST([PACKAGE_VERSION],
-         [m4_ifdef([AC_PACKAGE_VERSION],   ['AC_PACKAGE_VERSION'])])dnl
-AC_SUBST([PACKAGE_STRING],
-         [m4_ifdef([AC_PACKAGE_STRING],    ['AC_PACKAGE_STRING'])])dnl
-AC_SUBST([PACKAGE_BUGREPORT],
-         [m4_ifdef([AC_PACKAGE_BUGREPORT], ['AC_PACKAGE_BUGREPORT'])])dnl
 
 ac_prev=
 for ac_option
@@ -1186,6 +1186,19 @@ ac_signal=0
 rm -rf conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo >confdefs.h
+
+# Predefined preprocessor variables.
+AC_DEFINE_UNQUOTED([PACKAGE_NAME], ["$PACKAGE_NAME"],
+                   [Define to the full name of this package.])
+AC_DEFINE_UNQUOTED([PACKAGE_TARNAME], ["$PACKAGE_TARNAME"],
+                   [Define to the one symbol short name of this package.])
+AC_DEFINE_UNQUOTED([PACKAGE_VERSION], ["$PACKAGE_VERSION"],
+                   [Define to the version of this package.])
+AC_DEFINE_UNQUOTED([PACKAGE_STRING], ["$PACKAGE_STRING"],
+                   [Define to the full name and version of this package.])
+AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT], ["$PACKAGE_BUGREPORT"],
+                   [Define to the address where bug reports for this package
+                    should be sent.])
 
 # Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD

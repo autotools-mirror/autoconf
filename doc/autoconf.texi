@@ -1483,34 +1483,41 @@ and verifications.  Set the name of the @var{package} and its
 @var{version}.  The optional argument @var{bug-report-address} should be
 the email to which users should send bug reports.
 
-These three arguments must be @emph{static}, i.e., there must not be any
-shell computation, but they can be computed by M4.  The following macros
-and output variables are then defined:
+These three arguments should be @emph{static}, i.e., there should not be
+any shell computation, but they can be computed by M4.  The following M4
+macros (e.g., @code{AC_PACKAGE_NAME}), output variables (e.g.,
+@code{PACKAGE_NAME}), and preprocessor symbols (e.g.,
+@code{PACKAGE_NAME}) are then defined:
 
 @table @asis
 @item @code{AC_PACKAGE_NAME}, @code{PACKAGE_NAME}
 @acindex PACKAGE_NAME
 @ovindex PACKAGE_NAME
+@cvindex PACKAGE_NAME
 Exactly @var{package}.
 
 @item @code{AC_PACKAGE_TARNAME}, @code{PACKAGE_TARNAME}
 @acindex PACKAGE_TARNAME
 @ovindex PACKAGE_TARNAME
+@cvindex PACKAGE_TARNAME
 @var{package} once @samp{GNU } strip, and lower cased.
 
 @item @code{AC_PACKAGE_VERSION}, @code{PACKAGE_VERSION}
 @acindex PACKAGE_VERSION
 @ovindex PACKAGE_VERSION
+@cvindex PACKAGE_VERSION
 Exactly @var{version}.
 
 @item @code{AC_PACKAGE_STRING}, @code{PACKAGE_STRING}
 @acindex PACKAGE_STRING
 @ovindex PACKAGE_STRING
+@cvindex PACKAGE_STRING
 Exactly @samp{@var{package} @var{version}}.
 
 @item @code{AC_PACKAGE_BUGREPORT}, @code{PACKAGE_BUGREPORT}
 @acindex PACKAGE_BUGREPORT
 @ovindex PACKAGE_BUGREPORT
+@cvindex PACKAGE_BUGREPORT
 Exactly @var{bug-report-address}.
 @end table
 @end defmac

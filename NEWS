@@ -77,6 +77,11 @@
 
 ** Generic macros
 
+- AC_INIT
+  It now defines the preprocessor symbols PACKAGE_NAME,
+  PACKAGE_TARNAME, PACKAGE_VERSION, PACKAGE_STRING, and
+  PACKAGE_BUGREPORT.
+
 - AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS.
   Provide the user with srcdir, ac_srcdir, ac_top_srcdir, ac_builddir,
   ac_top_builddir, ac_abs_srcdir, ac_abs_top_srcdir, ac_abs_builddir,
