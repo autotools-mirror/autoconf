@@ -1,3 +1,7 @@
+2003-11-06  Akim Demaille  <akim@epita.fr>
+
+	Version 2.59.
+
 2003-11-05  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autoconf/status.m4 (_AC_SRCPATHS): Fix use of AS_SET_CATFILE

@@ -1,4 +1,9 @@
-* Major changes in Autoconf 2.58a                       -*- outline -*-
+* Major changes in Autoconf 2.59                       -*- outline -*-
+
+  Released 2003-11-04, by Akim Demaille
+
+** ac_abs_builddir etc.
+  Absolute paths were actually relative in 2.58.
 
 * Major changes in Autoconf 2.58
 
