@@ -1,5 +1,10 @@
 2003-04-01  Derek Price  <derek@ximbiot.com>
 
+	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Correct syntax error
+	from Akim's checkin of 3-29.
+	
+2003-04-01  Derek Price  <derek@ximbiot.com>
+
 	* tests/torture.at (Configuring subdirectories): Add missing
 	close-quote for Akim's change from 3-28.
 
