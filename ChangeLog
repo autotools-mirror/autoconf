@@ -1,3 +1,11 @@
+1999-09-23  Akim Demaille  <akim@epita.fr>
+
+	* NEWS: Document AC_ARG_VAR.
+
+	* acspecific.m4 (AC_C_LONG_DOUBLE): Avoid a needed execution by
+	using a pure compilation test.  Excellent for cross compilation.
+	From Kaveh R. Ghazi.
+
 1999-09-22  Akim Demaille  <akim@epita.fr>
 
 	* install.texi: Give emore details on envvar handling.

@@ -11,6 +11,8 @@ Major changes in release 2.15:
   - AC_HELP_STRING
     To format an Autoconf macro's help string so that it looks pretty
     when the user executes `configure --help'.
+  - AC_ARG_VAR
+    Document and ask for the registration of an envvar.
 * Environment variables are kept when reconfiguring.
   The previous scheme to set envvar before running configure was
     ENV=VAL ./configure
@@ -18,7 +20,8 @@ Major changes in release 2.15:
   it was run, therefore --recheck was run in an inconsistent environment.
   Now, one runs
     ./configure ENV=VAR
-  and the --recheck works correctly.
+  and the --recheck works correctly.  Variable declared with AC_ARG_VAR
+  are also preserved.
 * Support for automatically determining a Fortran 77 compilers
   name-mangling scheme.  New CPP macros F77_FUNC and F77_FUNC_ are
   provided to wrap C/C++ identifiers, thus making it easier and more

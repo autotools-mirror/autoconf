@@ -1978,11 +1978,11 @@ AC_DEFUN(AC_C_LONG_DOUBLE,
 [if test "$GCC" = yes; then
   ac_cv_c_long_double=yes
 else
-AC_TRY_RUN([int main() {
-/* The Stardent Vistra knows sizeof(long double), but does not support it.  */
+AC_TRY_COMPILE(,
+[/* The Stardent Vistra knows sizeof(long double), but does not support it.  */
 long double foo = 0.0;
 /* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
-exit(sizeof(long double) < sizeof(double)); }],
+switch (0) case 0: case (sizeof(long double) >= sizeof(double)):;],
 ac_cv_c_long_double=yes, ac_cv_c_long_double=no)
 fi])
 if test $ac_cv_c_long_double = yes; then
