@@ -46,7 +46,7 @@ m4_defun([AC_STATE_SAVE],
       [^(host|build|target)(_(alias|cpu|vendor|os))?=],
       [^(cross_compiling)=],
       [^(interpval|PATH_SEPARATOR)=],
-      [^(F77DUMMY_MAIN|f77_(case|underscore))=],
+      [^(F77_DUMMY_MAIN|f77_(case|underscore))=],
       [^(ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB)=],
       [^(AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC)=],
       [^(_|@|.[*#?].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS)=])' 2>/dev/null |
