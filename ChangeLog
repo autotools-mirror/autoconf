@@ -1,3 +1,7 @@
+2001-01-11  Kevin Ryde  <user42@zip.com.au>
+
+	* autoconf.texi (Shellology): Fix an @end itemize, and a typo.
+
 2001-01-11  Kelly Anderson  <tgcorp@attglobal.net>
 
 	* autoconf.sh (M4): Handle PC drive letters.

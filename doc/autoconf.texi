@@ -5098,13 +5098,14 @@ echo $@{FOO=`bar`@}
 
 @item
 beware that @command{exit} inside command substitution causes the
-current shell exit as well. Use parentheses to prevent @command{ash}
+current shell to exit as well. Use parentheses to prevent @command{ash}
 from exiting:
 
 @example
 (`exit 1`) || echo "All right"
 `exit 1` || echo "ash won't print it"
 @end example
+@end itemize
 
 @item @command{bash}
 @cindex @command{bash}
@@ -5128,7 +5129,6 @@ To detect whether you are running @command{zsh}, test if
 compatible with the Bourne shell: you have to run @samp{emulate sh} and
 set @code{NULLCMD} to @samp{:}. @xref{Compatibility,, Compatibility,
 zsh, The Z Shell Manual}, for details.
-@end itemize
 @end table
 
 The following discussion between Russ Allbery and Robert Lipe is worth
