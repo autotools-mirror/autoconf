@@ -1,7 +1,7 @@
 ## Process this file with automake to create Makefile.in. -*-Makefile-*-
 
 ## Makefile for Autoconf testsuite.
-## Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+## Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
+EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 	     atlocal.in package.m4 wrapper.as
 
 # Running the uninstalled scripts.
@@ -84,7 +84,7 @@ TESTSUITE = ./testsuite
 # we are allowed to use it (since we ship it).
 AUTOTEST = ./autom4te --language=autotest
 $(TESTSUITE): $(srcdir)/package.m4 \
-	      atspecific.m4 \
+	      local.at \
 	      $(TESTSUITE_AT) \
 	      $(autotest_m4f_dependencies)
 	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp

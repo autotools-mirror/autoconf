@@ -2,7 +2,7 @@
 
 AT_BANNER([Executables (autoheader, autoupdate...).])
 
-# Copyright 2000, 2001 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2003 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -154,8 +154,6 @@ AT_CLEANUP
 # -----------------------------
 AT_SETUP([autoconf --trace: user macros])
 
-
-m4_pattern_allow([^m4_(define|shift)$])
 AT_DATA([configure.ac],
 [[m4_define([active], [ACTIVE])
 m4_define([TRACE1], [TRACE2(m4_shift($@))])

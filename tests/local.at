@@ -17,6 +17,14 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
+# We need a very up to date version of Autotest.
+m4_version_prereq([2.53])
+
+# Used in many tests.
+m4_pattern_allow([^AS_EXIT$])
+m4_pattern_allow([^m4_(define|shift)$])
+
+AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 
 ## ------------------ ##
 ## Testing autom4te.  ##
@@ -352,3 +360,12 @@ AT_CHECK_ENV
 
 AT_CLEANUP()dnl
 ])# AT_CHECK_UPDATE
+
+
+
+## ----------------------- ##
+## Launch the test suite.  ##
+## ----------------------- ##
+
+AT_INIT
+

@@ -105,7 +105,7 @@ target_alias = @target_alias@
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 mktests.sh \
+EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 	     atlocal.in package.m4 wrapper.as
 
 
@@ -441,7 +441,7 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 $(srcdir)/wrapper.in: $(srcdir)/wrapper.as
 	./autom4te --language=M4sh $(srcdir)/wrapper.as -o $@
 $(TESTSUITE): $(srcdir)/package.m4 \
-	      atspecific.m4 \
+	      local.at \
 	      $(TESTSUITE_AT) \
 	      $(autotest_m4f_dependencies)
 	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp

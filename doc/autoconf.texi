@@ -14177,6 +14177,14 @@ health checking, before listing include statements for all other test
 files.  The special file @file{package.m4}, containing the
 identification of the package, is automatically included if found.
 
+A convenient alternative consists in moving all the global issues
+(local Autotest macros, elementary health checking, and @code{AT_INIT}
+invocation) into the file @code{local.at}, and making
+@file{testsuite.at} be a simple list of @code{m4_include} of sub test
+suites.  In such case, generating the whole test suite or pieces of it
+is only a matter of choosing the @command{autom4te} command line
+arguments.
+
 The validation scripts that Autotest produces are by convention called
 @command{testsuite}.  When run, @command{testsuite} executes each test
 group in turn, producing only one summary line per test to say if that
@@ -14216,13 +14224,13 @@ Here is a diagram showing the relationship between files.
 Files used in preparing a software package for distribution:
 
 @example
-subfile-1.at ->.
-    ...         \
-subfile-i.at ---->-- testsuite.at -->.
-    ...         /                     \
-subfile-n.at ->'                       >-- autom4te* -->testsuite
-				      /
-		      [package.m4] ->'
+                [package.m4] -->.
+                                 \
+subfile-1.at ->.  [local.at] ---->+
+    ...         \                  \
+subfile-i.at ---->-- testsuite.at -->-- autom4te* -->testsuite
+    ...         /
+subfile-n.at ->'
 @end example
 
 @noindent

@@ -1,3 +1,14 @@
+2003-06-23  Akim Demaille  <akim@epita.fr>
+
+	* tests/mktests.sh (au_exclude_egrep): Fix output copyright notice.
+	* lib/autom4te.cfg (args): Add local.at? for Autotest args.
+	* tests/atspecific.m4: Rename as...
+	* tests/local.at: This.
+	* tests/suite.at: Move the globals into...
+	* tests/local.at: here.
+	* tests/Makefile.am: Adjust.
+	* doc/autoconf.texi (testsuite Scripts): Adjust.
+
 2003-06-21  Kevin Ryde  <user42@zip.com.au>
 
 	* lib/autoconf/c.m4 (_AC_PROG_CC_STDC): Extend test program to get an
