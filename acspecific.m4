@@ -1761,7 +1761,11 @@ else
   ac_save_LDFLAGS="$LDFLAGS"
   LDFLAGS="$LDFLAGS -L$x_libraries"
   AC_CHECK_LIB(ICE, IceConnectionNumbers, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lICE"])
+  # On SunOS 4, -lSM requires -lICE in order to link, according to
+  # interran@uluru.Stanford.EDU (John Interrante).
+  ac_save_LIBS="$LIBS"; LIBS="$LIBS $X_EXTRA_LIBS"
   AC_CHECK_LIB(SM, SmcOpenConnection, [X_EXTRA_LIBS="$X_EXTRA_LIBS -lSM"])
+  LIBS="$ac_save_LIBS"
   LDFLAGS="$ac_save_LDFLAGS"
 
   # Check for system-dependent libraries X programs must link with.

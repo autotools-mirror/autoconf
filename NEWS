@@ -44,6 +44,8 @@ Major changes in release 2.0:
 * AC_DEFINE, AC_DEFINE_UNQUOTED, and AC_SUBST are more robust and smaller.
 * AC_DEFINE no longer prints anything, because of the new result reporting
   mechanism (AC_MSG_CHECKING and AC_MSG_RESULT).
+* AC_ARG_ENABLE and AC_ARG_WITH support whitespace in the arguments to
+  --enable- and --with- options.
 * AC_VERBOSE pays attention to --quiet/--silent, not --verbose.
 * AC_CHECK_FUNCS and AC_CHECK_HEADERS take optional shell commands to
   execute on success or failure.

@@ -5,7 +5,16 @@ Things it might be nice to do someday:
 ------------------------------------------------------------------------------
 
 * Add AC_PROG_CC_POSIX to replace the current ad-hoc macros for AIX,
-Minix, ISC, etc.
+  Minix, ISC, etc.
+
+------------------------------------------------------------------------------
+
+* Use AC_EGREP_CPP instead of AC_TRY_LINK to detect structures and members.
+
+------------------------------------------------------------------------------
+
+* Make AC_CHECK_FUNC[S] automatically use any particular macros for the
+  listed functions.
 
 ------------------------------------------------------------------------------
 

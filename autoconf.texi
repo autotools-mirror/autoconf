@@ -182,8 +182,8 @@ Typedefs
 
 Writing Tests
 
-* Checking Declarations::	Detecting header files and declarations.
-* Checking Libraries::          Detecting functions and global variables.
+* Examining Declarations::	Detecting header files and declarations.
+* Examining Libraries::         Detecting functions and global variables.
 * Run Time::		        Testing for run-time features.
 * Portable Shell::              Shell script portability pitfalls.
 * Testing Values and Files::    Checking strings and files.
@@ -921,9 +921,9 @@ The @file{stamp-} files are necessary because the timestamps of
 them does not change their contents.  This feature avoids unnecessary
 recompilation.  You should include the file @file{stamp-h.in} your
 package's distribution, so @code{make} will consider @file{config.h.in}
-up to date.  On some old BSD systems, @code{touch} does not update the
-timestamps on empty files, so use @code{echo} or an empty command as a
-workaround.
+up to date.  On some old BSD systems, @code{touch} or any command that
+results in an empty file does not update the timestamps, so use a
+command like @code{date} as a workaround.
 
 @example
 @group
@@ -934,7 +934,7 @@ configure: configure.in aclocal.m4
 config.h.in: stamp-h.in
 stamp-h.in: configure.in aclocal.m4 acconfig.h config.h.top config.h.bot
         cd $@{srcdir@} && autoheader
-        echo > $@{srcdir@}/stamp-h.in
+        date > $@{srcdir@}/stamp-h.in
 
 config.h: stamp-h
 stamp-h: config.h.in config.status
@@ -948,7 +948,7 @@ config.status: configure
 @end group
 @end example
 
-In addition, you should pass @samp{echo > stamp-h} in the @var{extra-cmds}
+In addition, you should pass @samp{date > stamp-h} in the @var{extra-cmds}
 argument to @code{AC_OUTPUT}, so @file{config.status} will ensure that
 @file{config.h} is considered up to date.  @xref{Output}, for more
 information about @code{AC_OUTPUT}.
@@ -1658,8 +1658,8 @@ variable @code{LIBOBJS}.
 @defmac AC_FUNC_MMAP
 @maindex FUNC_MMAP
 @cvindex HAVE_MMAP
-If the @code{mmap} function exists and works correctly, define
-@code{HAVE_MMAP}.
+If the @code{mmap} function exists and works correctly on memory mapped
+files, define @code{HAVE_MMAP}.
 @end defmac
 
 @defmac AC_FUNC_SETVBUF_REVERSED
@@ -1842,10 +1842,10 @@ something like the following:
 @group
 #if HAVE_DIRENT_H
 # include <dirent.h>
-# define NAMLEN(dirent) (strlen((dirent)->d_name))
+# define NAMLEN(dirent) strlen((dirent)->d_name)
 #else
 # define dirent direct
-# define NAMLEN(dirent) ((dirent)->d_namlen)
+# define NAMLEN(dirent) (dirent)->d_namlen
 # if HAVE_SYS_NDIR_H
 #  include <sys/ndir.h>
 # endif
@@ -1928,7 +1928,6 @@ char *strchr (), *strrchr ();
 # ifndef HAVE_MEMCPY
 #  define memcpy(d, s, n) bcopy ((s), (d), (n))
 #  define memmove(d, s, n) bcopy ((s), (d), (n))
-#  define memcmp(s1, s2, n) bcmp ((s1), (s2), (n))
 # endif
 #endif
 @end group
@@ -2025,8 +2024,9 @@ is executed when one of the header files is not found.
 @section Structures
 
 The following macros check for certain structures or structure members.
-You can use @code{AC_TRY_LINK} (@pxref{Checking Libraries}) to check
-structures not listed here.
+You can use @code{AC_EGREP_CPP} (@pxref{Examining Declarations}) or
+@code{AC_TRY_LINK} (@pxref{Examining Libraries}) to check structures not
+listed here.
 
 @defmac AC_HEADER_STAT
 @maindex HEADER_STAT
@@ -2205,7 +2205,7 @@ to be the C (or C++) builtin type @var{default}; e.g., @samp{short} or
 @section Compiler Characteristics
 
 The following macros check for C compiler or machine architecture
-features.  You can use @code{AC_TRY_LINK} (@pxref{Checking Libraries})
+features.  You can use @code{AC_TRY_LINK} (@pxref{Examining Libraries})
 or @code{AC_TRY_RUN} (@pxref{Run Time}) to check for
 characteristics not listed here.
 
@@ -2440,8 +2440,8 @@ features call these macros and do cache their results and print messages
 about what they're checking for.
 
 @menu
-* Checking Declarations::	Detecting header files and declarations.
-* Checking Libraries::          Detecting functions and global variables.
+* Examining Declarations::	Detecting header files and declarations.
+* Examining Libraries::         Detecting functions and global variables.
 * Run Time::		        Testing for run-time features.
 * Portable Shell::              Shell script portability pitfalls.
 * Testing Values and Files::    Checking strings and files.
@@ -2449,10 +2449,12 @@ about what they're checking for.
 * Language Choice::             Selecting which language to use for testing.
 @end menu
 
-@node Checking Declarations, Checking Libraries, , Writing Tests
-@section Checking Declarations
+@node Examining Declarations, Examining Libraries, , Writing Tests
+@section Examining Declarations
 
-Here is how to check whether particular header files exist.
+Here is how to check whether particular header files exist.  You can
+check for one at a time, or more than one if you need several header
+files to all exist for some purpose.
 
 @defmac AC_TRY_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex TRY_CPP
@@ -2470,14 +2472,28 @@ because @samp{-g}, @samp{-O}, etc. are not valid options to many C
 preprocessors.
 @end defmac
 
-The following macros check whether header files contain particular
-symbols.  You can not check whether preprocessor symbols are defined
-this way, because they get expanded before @code{egrep} sees them.  But
-you can detect them by simply using @code{#ifdef} directives in your
-programs.
+Here is now to find out whether a header file contains a particular
+declaration, such as a typedef, a structure, a structure member, or a
+function.  Use @code{AC_EGREP_HEADER} instead of running @code{grep}
+directly on the header file; on some systems the symbol might be defined
+in another header file that the file you are checking @samp{#include}s.
 
-You can also use @code{AC_EGREP_CPP} to check whether the C preprocessor
-predefines particular symbols, like this:
+@defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
+@maindex EGREP_HEADER
+If the output of running the preprocessor on the system header file
+@var{header-file} matches the @code{egrep} regular expression
+@var{pattern}, execute shell commands @var{action-if-found}, otherwise
+execute @var{action-if-not-found}.
+
+This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
+on which language is current, @pxref{Language Choice}), if it hasn't
+been called already.
+@var{action-if-not-found}.
+@end defmac
+
+To check for C preprocessor symbols, either defined by header files or
+predefined by the C preprocessor, use @code{AC_EGREP_CPP}.  Here is an
+example of the latter:
 
 @example
 AC_EGREP_CPP(yes,
@@ -2500,38 +2516,19 @@ on which language is current, @pxref{Language Choice}), if it hasn't
 been called already.
 @end defmac
 
-To find out whether a header file contains a particular symbol, use the
-following macro instead of using @code{grep} directly on the header
-file.  On some systems the symbol might be defined in another header
-file that the file you are checking @samp{#include}s.
+@node Examining Libraries, Run Time, Examining Declarations, Writing Tests
+@section Examining Libraries
 
-@defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
-@maindex EGREP_HEADER
-If the output of running the preprocessor on the system header file
-@var{header-file} matches the @code{egrep} regular expression
-@var{pattern}, execute shell commands @var{action-if-found}, otherwise
-execute @var{action-if-not-found}.
-
-This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
-on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.
-@var{action-if-not-found}.
-@end defmac
-
-@node Checking Libraries, Run Time, Checking Declarations, Writing Tests
-@section Checking Libraries
-
-Autoconf checks for many features by examining or compiling small test
-programs.  To find out whether a library function is available, Autoconf
-tries to compile and link a small program that uses it.  This is unlike
-Larry Wall's Metaconfig, which uses @code{nm} or @code{ar} on the C
-library to try to figure out which functions are available.  Trying to
-link with the function is usually a more reliable and flexible approach
+To find out whether a library function or global variable is available,
+Autoconf tries to compile and link a small program that uses it.  This
+is unlike Larry Wall's Metaconfig, which uses @code{nm} or @code{ar} on
+the C library to try to figure out which functions are available.
+Trying to link with the function is usually a more reliable approach
 because it avoids dealing with the variations in the options and output
 formats of @code{nm} and @code{ar} and in the location of the standard
 libraries.  It also allows configuring for cross-compilation or checking
-a function's runtime behavior if needed.  On the other hand, it is
-sometimes slower than scanning the libraries.
+a function's runtime behavior if needed.  On the other hand, it can be
+slower than scanning the libraries once.
 
 A few systems have linkers that do not return a failure exit status when
 there are unresolved functions in the link.  This bug makes the
@@ -2539,6 +2536,13 @@ configuration scripts produced by Autoconf unusable on those systems.
 However, some of them can be given options that make the exit status
 correct.  This is a problem that Autoconf does not currently handle
 automatically. 
+
+The below macro is used to compile test programs to test for functions
+and global variables.  It is also used to check for libraries, by adding
+the library being checked for to @samp{$LIBS} temporarily and trying to
+link a small program.  And it is used to check matters of C syntax, such
+as whether a particular keyword is recognized---a test program using a
+keyword does not compile on systems that don't support it.
 
 @defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex TRY_LINK
@@ -2553,12 +2557,12 @@ macro uses @code{CFLAGS} or @code{CXXFLAGS}, @code{CPPFLAGS},
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex COMPILE_CHECK
-This is an obsolete alias for @code{AC_TRY_LINK}, with the addition that it
+This is an obsolete version of @code{AC_TRY_LINK}, with the addition that it
 prints @samp{checking for @var{echo-text}} to the standard output first,
 if @var{echo-text} is non-empty.
 @end defmac
 
-@node Run Time, Portable Shell, Checking Libraries, Writing Tests
+@node Run Time, Portable Shell, Examining Libraries, Writing Tests
 @section Checking Run Time Behavior
 
 Sometimes you need to find out how a system performs at run time, such
@@ -3690,9 +3694,6 @@ only of alphanumeric characters and dashes.
 
 The option's argument is available to the shell commands
 @var{action-if-true} in the shell variable @code{withval}.
-Arguments containing blanks are not handled correctly; if you need an
-argument to contain a list, require the items to be separated by commas
-instead.
 
 The argument @var{help-string} is a description of the option which
 looks like this:
@@ -3752,9 +3753,7 @@ user-level facility.  It should consist only of alphanumeric characters
 and dashes.
 
 The option's argument is available to the shell commands
-@var{action-if-true} in the shell variable @code{enableval}.  Arguments
-containing blanks are not handled correctly; if you need an argument to
-contain a list, require the items to be separated by commas instead.
+@var{action-if-true} in the shell variable @code{enableval}.
 The @var{help-string} argument is like that of @code{AC_ARG_WITH}
 (@pxref{External Software}).
 @end defmac
@@ -4145,6 +4144,11 @@ freeze its internal state in a file that it can read back quickly.
 If you have an @file{aclocal.m4} installed with Autoconf (as opposed to
 in a particular package's source directory), you must rename it to
 @file{acsite.m4}.  @xref{Invoking autoconf}.
+
+If you distribute @file{install.sh} with your package, rename it to
+@file{install-sh} so @code{make} builtin rules won't inadvertantly
+create a file called @file{install} from it.  @code{AC_PROG_INSTALL}
+looks for the script under both names, but it is best to use the new name.
 
 If you were using @file{config.h.top} or @file{config.h.bot}, you still
 can, but you will have less clutter if you merge them into

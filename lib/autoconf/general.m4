@@ -966,7 +966,7 @@ AC_DEFUN(AC_LANG_C,
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CPP} $CPPFLAGS'
-ac_compile='${CC-cc} $CFLAGS $CPPFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_link='${CC-cc} $CFLAGS $CPPFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])
 
 dnl AC_LANG_CPLUSPLUS()
@@ -975,7 +975,7 @@ AC_DEFUN(AC_LANG_CPLUSPLUS,
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 ac_cpp='${CXXCPP} $CPPFLAGS'
-ac_compile='${CXX-gcc} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_link='${CXX-gcc} $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.${ac_ext} -o conftest $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
 ])
 
 dnl Push the current language on a stack.
@@ -1222,8 +1222,7 @@ rm -f conftest*
 dnl AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
 dnl                  ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_COMPILE_CHECK,
-[dnl It's actually ok to use this, if you don't care about caching.
-dnl AC_OBSOLETE([$0], [; instead use AC_TRY_LINK])dnl
+[AC_OBSOLETE([$0], [; instead use AC_TRY_LINK])dnl
 ifelse([$1], , , [AC_CHECKING([for $1])
 ])dnl
 AC_TRY_LINK([$2], [$3], [$4], [$5])dnl
@@ -1247,7 +1246,7 @@ int t() {
 [$2]
 ; return 0; }
 EOF
-if eval $ac_compile; then
+if eval $ac_link; then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 ifelse([$4], , , [else
@@ -1278,7 +1277,7 @@ extern "C" void exit(int);
 ])dnl
 [$1]
 EOF
-eval $ac_compile
+eval $ac_link
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
   ifelse([$2], , :, [$2])
 ifelse([$3], , , [else
