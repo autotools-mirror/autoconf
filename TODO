@@ -1,0 +1,108 @@
+-*- outline -*-
+
+Autoconf work:
+
+Required for 2.0:
+
+------------------------------------------------------------------------------
+
+* Support AC_OUTPUT and AC_CONFIG_HEADER creating FILE from other than FILE.in.
+(Design is a problem; might not do it.)
+
+------------------------------------------------------------------------------
+
+* Add AC_{INCLUDE,LIB}_DIR?  (Noah Friedman's suggestion.)
+
+------------------------------------------------------------------------------
+
+* Fix up quoting for AC_DEFINE; understand and integrate Jim Avera's patches.
+
+------------------------------------------------------------------------------
+
+* Integrate aclocal.m4, config.h.top, config.h.bot, config.h.in (?).
+Make autoheader search the resulting file.  Use @DEFS@ (?) to
+indicate where autoheader should insert its stuff, defaulting to the
+end.
+
+------------------------------------------------------------------------------
+
+* Document chapter addressing misconceptions.
+
+------------------------------------------------------------------------------
+
+Other things:
+
+------------------------------------------------------------------------------
+
+* Support host and target dependent hints for things that can't be
+automatically determined.  Perhaps this could replace or supplement
+the current ad-hoc macros for Dynix, SCO, ISC, etc.  Or, perhaps there
+should be macros for certain functions (statfs, wait) or classes of
+functions (POSIX, NIS) that do everything necessary, instead.
+
+------------------------------------------------------------------------------
+
+* Support copying and adding "dir" commands to .gdbinit.
+
+------------------------------------------------------------------------------
+
+* Supply a template Makefile.in that people can adapt (what GNU hello
+  was going to be).
+
+** Have CC, DEFS, etc. substitutions.
+
+** Support all of the GNU standard targets.
+
+** Parameterize with make variables to require as little modification
+as necessary.  Maybe via m4?  (Eww, visions of imake.)
+
+** Make it usable both with and without a header file.
+
+------------------------------------------------------------------------------
+
+* Mike Haertel's suggestions.
+
+** Provide a file containing decls for alloca, strings, etc.  acdecls.h?
+
+** Cross compiling:
+
+*** Error messages include instructions for overriding defaults using
+config.site.
+
+*** Distribute a config.site corresponding to a hypothetical bare POSIX system with c89.
+
+** Site defaults:
+
+*** Convention for consistency checking of env vars and options in config.site so config.site can print obnoxious messages if it doesn't like options or env vars that users use.
+
+------------------------------------------------------------------------------
+
+* autoscan: Tell the files that caused inclusion of each macro,
+in a dnl comment.  (Seems to be hard.)
+
+------------------------------------------------------------------------------
+
+* Select the right CONFIG_SHELL automatically (Ultrix, Lynx esp.)
+
+------------------------------------------------------------------------------
+
+* Select the right C compiler or POSIX/ANSI C options automatically.
+
+------------------------------------------------------------------------------
+
+* Prototypes and IEEE math contributed macros.
+
+------------------------------------------------------------------------------
+
+* Functions to check for C++ functions, or C functions under C++.
+
+------------------------------------------------------------------------------
+
+* Cache consistency checking: ignore cache if environment
+(CC or PATH) differs.
+
+------------------------------------------------------------------------------
+
+* Print verbose messages in all cases, whether or not things are found.
+
+------------------------------------------------------------------------------
