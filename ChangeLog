@@ -1,5 +1,11 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh (force): Instead of yes/no, use :/false.
+	Adjust the code.
+	(automake_deps, automake_force): No longer used.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_DIRNAME): Use an `expr' solution instead of
 	echo|sed.
 	From Paul Eggert.

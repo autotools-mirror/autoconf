@@ -79,7 +79,7 @@ if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 # Variables.
 : ${AC_MACRODIR=@datadir@}
 dir=`echo "$0" | sed -e 's/[^/]*$//'`
-force=no
+force=false
 localdir=.
 verbose=:
 
@@ -136,7 +136,7 @@ while test $# -gt 0; do
        shift ;;
 
      --force | -f )
-       force=yes; shift ;;
+       force=:; shift ;;
 
      # Options of Automake.
      --cygnus | --foreign | --gnits | --gnu | --include-deps | -i )
@@ -165,7 +165,7 @@ fi
 # Dispatch autoreconf's option to the tools.
 autoconf="$autoconf -l $localdir `$verbose --verbose`"
 autoheader="$autoheader -l $localdir `$verbose --verbose`"
-test $force = no && automake="$automake --no-force"
+$force || automake="$automake --no-force"
 automake="$automake `$verbose --verbose`"
 aclocal="$aclocal `$verbose --verbose`"
 export AC_MACRODIR
@@ -219,7 +219,7 @@ while read dir; do
   p
   q
 }' Makefile.in 2>/dev/null`
-     if test $force = no &&
+     if $force &&
         ls -lt configure.in $aclocal_m4 $aclocal_dir/acinclude.m4 2>/dev/null|
 	sed 1q |
         grep 'aclocal\.m4$' > /dev/null
@@ -238,13 +238,13 @@ while read dir; do
   # Re-run automake if required.  Assumes that there is a Makefile.am
   # in the topmost directory.
   if test -f Makefile.am; then
-     $verbose running $automake $amforce in $dir
-     $automake $amforce $automake_mode $automake_deps
+     $verbose running $automake in $dir
+     $automake
   fi
 
   test ! -f $aclocal_m4 && aclocal_m4=
 
-  if test $force = no && test -f configure &&
+  if $force && test -f configure &&
     ls -lt configure configure.in $aclocal_m4 | sed 1q |
       grep 'configure$' > /dev/null
   then
@@ -270,7 +270,7 @@ while read dir; do
       '`
     stamp=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`/stamp-h`test "$tcount" -gt 1 && echo "$tcount"`.in
     if test ! -f "$template" || grep autoheader "$template" >/dev/null; then
-      if test $force = no && test -f $template &&
+      if $force && test -f $template &&
 	 ls -lt $template configure.in $aclocal_m4 $stamp 2>/dev/null \
 	        `echo $localdir_opt | sed -e 's/--localdir=//' \
 		                          -e '/./ s%$%/%'`acconfig.h |
