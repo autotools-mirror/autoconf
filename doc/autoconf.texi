@@ -1373,6 +1373,8 @@ AUTOMAKE|:::::|automake|:::::|$missing_dir
 @section Using @code{autoreconf} to Update @code{configure} Scripts
 @cindex @code{autoreconf}
 
+@c FIXME: Now completely outdated.
+
 If you have a lot of Autoconf-generated @code{configure} scripts, the
 @code{autoreconf} program can save you some work.  It runs
 @code{autoconf} (and @code{autoheader}, where appropriate) repeatedly to

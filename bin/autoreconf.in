@@ -45,13 +45,13 @@ use strict;
 # -----
 $help = "Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
-Run `autoconf' (and `autoheader', `aclocal', `automake' and
-`gettextize', where appropriate) repeatedly to remake the GNU Build
+Run `autoconf' (and `autoheader', `aclocal', `automake', `gettextize',
+and `libtoolize' where appropriate) repeatedly to remake the GNU Build
 System files in the directory tree rooted at the current directory.
 By default, it only remakes those files that are older than their
-predecessors.  If you install a new version of GNU Build System
-components, running `autoreconf' remakes all of the files by giving it
-the `--force' option.
+predecessors.  If you install new versions of the GNU Build System,
+running `autoreconf' remakes all of the files by giving it the
+`--force' option.
 
 Operation modes:
   -h, --help      print this help, then exit
@@ -73,8 +73,8 @@ Library directories:
 Unless specified, heuristics try to compute `M4DIR' from the `Makefile.am',
 or defaults to `m4' if it exists.
 
-The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, and ACLOCAL
-are honored.
+The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL,
+GETTEXTIZE, LIBTOOLIZE are honored.
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";
@@ -94,7 +94,8 @@ my $autoconf   = $ENV{'AUTOCONF'}   || '@autoconf-name@';
 my $autoheader = $ENV{'AUTOHEADER'} || '@autoheader-name@';
 my $automake   = $ENV{'AUTOMAKE'}   || 'automake';
 my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
-my $gettextize = $ENV{'GETTEXTIZE'} || 'gettexize';
+my $libtoolize = $ENV{'LIBTOOLIZE'} || 'libtoolize';
+my $gettextize = $ENV{'GETTEXTIZE'} || 'gettextize';
 
 
 # --install -- as --add-missing in other tools.
@@ -139,6 +140,10 @@ sub parse_args ()
       print STDERR "\n";
       xsystem ("$aclocal --version | sed 1q >&2");
       print STDERR "\n";
+      xsystem ("$gettextize --version | sed 1q >&2");
+      print STDERR "\n";
+      xsystem ("$libtoolize --version | sed 1q >&2");
+      print STDERR "\n";
     }
 
   # Dispatch autoreconf's option to the tools.
@@ -151,6 +156,7 @@ sub parse_args ()
       $autoconf   .= ' --force';
       $autoheader .= ' --force';
       $gettextize .= ' --force';
+      $libtoolize .= ' --force';
     }
   else
     {
@@ -161,7 +167,6 @@ sub parse_args ()
     {
       $autoconf   .= ' --verbose';
       $autoheader .= ' --verbose';
-      $automake   .= ' --verbose';
       $aclocal    .= ' --verbose';
     }
   # --debug;
@@ -170,6 +175,7 @@ sub parse_args ()
       $autoconf   .= ' --debug';
       $autoheader .= ' --debug';
       $automake   .= ' --verbose';
+      $libtoolize .= ' --debug';
     }
   # --install and --symlink;
   if ($install)
@@ -178,6 +184,8 @@ sub parse_args ()
       $automake .= ' --copy'
 	unless $symlink;
       $gettextize .= ' --copy'
+	unless $symlink;
+      $libtoolize .= ' --copy'
 	unless $symlink;
     }
 }
@@ -208,9 +216,10 @@ sub autoreconf ()
      }
   if (!$uses_autoconf)
     {
-      verbose "$configure_ac: not Autoconf";
+      verbose "$configure_ac: not using Autoconf";
       return;
     }
+
 
   # -------------------- #
   # Running gettexitze.  #
@@ -225,11 +234,32 @@ sub autoreconf ()
     }
   if (!$uses_gettext)
     {
-      verbose "$configure_ac: not Gettext";
+      verbose "$configure_ac: not using Gettext";
     }
   else
     {
       xsystem ($gettextize);
+    }
+
+
+  # -------------------- #
+  # Running libtoolize.  #
+  # -------------------- #
+
+  my $uses_libtool = 0;
+  my $traces = new Autom4te::XFile "$autoconf --trace=AM_PROG_LIBTOOL |";
+  while ($_ = $traces->getline)
+    {
+      $uses_libtool = 1
+	if /AM_PROG_LIBTOOL/;
+    }
+  if (!$uses_libtool)
+    {
+      verbose "$configure_ac: not using Libtool";
+    }
+  else
+    {
+      xsystem ($libtoolize);
     }
 
 
@@ -271,7 +301,11 @@ sub autoreconf ()
   # ------------------ #
 
   # Assumes that there is a Makefile.am in the topmost directory.
-  if (-f 'Makefile.am')
+  if (!-f 'Makefile.am')
+    {
+      verbose "$configure_ac: not using Automake";
+    }
+  else
     {
       # We should always run automake, and let it decide whether it shall
       # update the file or not.  In fact, the effect of `$force' is already
@@ -305,7 +339,7 @@ sub autoreconf ()
     }
   if (!$uses_autoheader)
     {
-      verbose "$configure_ac: not Autoheader";
+      verbose "$configure_ac: not using Autoheader";
     }
   else
     {

@@ -1,5 +1,9 @@
 2001-10-08  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoreconf.in (autoreconf): Run libtoolize when appropriate.
+
+2001-10-08  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (autoreconf Invocation): Adjust.
 	* bin/autoreconf.in (autoreconf): Run gettextize when appropriate.
 

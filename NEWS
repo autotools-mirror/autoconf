@@ -38,7 +38,7 @@
   No longer passes --cygnus, --foreign, --gnits, --gnu, --include-deps:
   automake options are to be given via AUTOMAKE_OPTIONS.
 - autoreconf
-  Runs gettextize when appropriate.
+  Runs gettextize and libtoolize when appropriate.
 
 ** Bug fixes
 - The top level $prefix is propagated to the AC_CONFIG_SUBDIRS configures.

@@ -6,13 +6,13 @@ autoreconf \- Update generated configuration files
 .B autoreconf
 [\fIOPTION\fR] ... [\fITEMPLATE-FILE\fR]
 .SH DESCRIPTION
-Run `autoconf' (and `autoheader', `aclocal', `automake' and
-`gettextize', where appropriate) repeatedly to remake the GNU Build
+Run `autoconf' (and `autoheader', `aclocal', `automake', `gettextize',
+and `libtoolize' where appropriate) repeatedly to remake the GNU Build
 System files in the directory tree rooted at the current directory.
 By default, it only remakes those files that are older than their
-predecessors.  If you install a new version of GNU Build System
-components, running `autoreconf' remakes all of the files by giving it
-the `--force' option.
+predecessors.  If you install new versions of the GNU Build System,
+running `autoreconf' remakes all of the files by giving it the
+`--force' option.
 .SS "Operation modes:"
 .TP
 \fB\-h\fR, \fB\-\-help\fR
@@ -52,8 +52,8 @@ this package's Autoconf extensions
 Unless specified, heuristics try to compute `M4DIR' from the `Makefile.am',
 or defaults to `m4' if it exists.
 .PP
-The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, and ACLOCAL
-are honored.
+The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL,
+GETTEXTIZE, LIBTOOLIZE are honored.
 .SH AUTHOR
 Written by David J. MacKenzie and Akim Demaille.
 .PP
