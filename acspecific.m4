@@ -1381,7 +1381,7 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_STRCOLL,
-[AC_CACHE_CHECK(for strcoll, ac_cv_func_strcoll_works,
+[AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
 [AC_TRY_RUN([#include <string.h>
 main ()
 {

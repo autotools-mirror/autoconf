@@ -1,9 +1,9 @@
 Major changes in release 2.11:
 
 * AC_PROG_CC and AC_PROG_CXX check whether the compiler works.
-  They default CFLAGS/CXXFLAGS to "-g -O2" for gcc, instead of "-g -O".
+  They also default CFLAGS/CXXFLAGS to "-g -O2" for gcc, instead of "-g -O".
 * AC_REPLACE_FUNCS defines HAVE_foo if the system has the function `foo'.
-* The argument to AC_CONFIG_HEADER can contain shell variables.
+* AC_CONFIG_HEADER expands shell variables in its argument.
 * New macros: AC_FUNC_FNMATCH, AC_FUNC_SETPGRP.
 * The "checking..." messages and the source code for test programs that
   fail are saved in config.log. 

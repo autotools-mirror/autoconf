@@ -1,3 +1,12 @@
+Mon Nov 18 10:24:50 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* Version 2.11.
+
+Sun Nov 17 20:12:05 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* acspecific.m4 (AC_FUNC_STRCOLL): Make the checking message more
+	accurate.
+
 Thu Nov 14 11:15:27 1996  David J MacKenzie  <djm@catapult.va.pubnix.com>
 
 	* acheaders: Add entry for malloc.h.  Make the strings.h entry
