@@ -1,3 +1,13 @@
+1999-10-31  Ben Elliston  <bje@cygnus.com>
+
+	* testsuite/autoconf.s/defines.exp: Changed `fail' and `pass' in
+	`xfail' and `xpass'. The testsuite checks that acconfig.h
+	templates the AC_DEFINEs. Since we no longer rely on acconfig.h,
+	the test is obsolete.
+	* acspecific.m4 (AC_PROG_BINSH, AC_PROG_SED): Don't quote the name
+	of the macro defined; the testsuite does not recognize this
+	syntax. From Akim Demaille <akim@epita.fr>.
+
 1999-10-27  Ben Elliston  <bje@cygnus.com>
 
 	* THANKS: Updated Alexandre's address.

@@ -520,7 +520,7 @@ dnl Set the variable $ac_cv_prog_sed_max_cmd to the maximum number
 dnl of commands to put in a sed script, `infinite' meaning a priori
 dnl infinite.
 dnl This macro is not documented on purpose.
-AC_DEFUN([AC_PROG_SED],
+AC_DEFUN(AC_PROG_SED,
 [AC_CACHE_CHECK([for max sed script length], ac_cv_prog_sed_max_cmd,
 [echo >conftest.s "\
 s/0/1/;s/1/2/;s/2/3/;s/3/4/;s/4/5/;s/5/6/;s/6/7/;s/7/8/;s/8/9/;s/9/0/;s/9/O/;"
@@ -543,7 +543,7 @@ dnl AC_PROG_BINSH
 dnl -------------
 dnl Check the maximum length of an here document.
 dnl FIXME: Is this test really reliable?
-AC_DEFUN([AC_PROG_BINSH],
+AC_DEFUN(AC_PROG_BINSH,
 [AC_CACHE_CHECK([for max here document length], ac_cv_prog_binsh_max_heredoc,
 [echo >conftest.s1 "\
 ac_test='This is a sample string to test here documents.'"
