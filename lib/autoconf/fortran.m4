@@ -1146,19 +1146,22 @@ fi
 # prevent flag from being added to FCFLAGS multiple times.)
 #
 # The known flags are:
-#              -free: Compaq compiler (fort)
-#          -freeform: SGI compiler
 #        -ffree-form: GNU g77
+#                -FR: Intel compiler (icc, ecc)
+#              -free: Compaq compiler (fort)
 #             -qfree: IBM compiler (xlf)
 # -Mfree, -Mfreeform: Portland Group compiler
-#                -FR: Intel compiler (icc, ecc)
+#          -freeform: SGI compiler
+#            -f free: Absoft Fortran
+# We try to test the "more popular" flags first, by some prejudiced
+# notion of popularity.
 AC_DEFUN_ONCE([AC_FC_FREEFORM],
 [AC_CACHE_CHECK([for Fortran flag needed to allow free-form source],
                 ac_cv_fc_freeform,
 [AC_LANG_PUSH(Fortran)dnl
 ac_cv_fc_freeform=unknown
 ac_fc_freeform_FCFLAGS_save=$FCFLAGS
-for ac_flag in none -free -freeform -ffree-form -qfree -Mfree -Mfreeform -FR; do
+for ac_flag in none -ffree-form -FR -free -qfree -Mfree -Mfreeform -freeform "-f free"; do
   test "x$ac_flag" != xnone && FCFLAGS="$ac_fc_freeform_FCFLAGS_save $ac_flag"
   AC_COMPILE_IFELSE([
   program freeform

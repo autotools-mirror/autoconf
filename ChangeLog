@@ -1,5 +1,10 @@
 2003-10-03  Steven G. Johnson  <stevenj@alum.mit.edu>
 
+	* lib/autoconf/fortran.m4 (AC_FC_FREEFORM): Support Absoft "-f
+	free" flag.  Re-order flags tested into rough order of popularity.
+
+2003-10-03  Steven G. Johnson  <stevenj@alum.mit.edu>
+
 	* lib/autoconf/fortran.m4 (AC_PROG_FC): Reverse the order of the
 	arguments so that it can be used with syntax identical to
 	AC_PROG_F77, and so that we can more easily decide to
