@@ -1,3 +1,9 @@
+2002-03-27  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (_AS_BASENAME_PREPARE): New macro.
+	(AS_SHELL_SANITIZE): Invoke it.
+	(AS_BASENAME): AS_REQUIRE it, and use $as_basename.
+
 2002-03-26  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Portable Shell): Add pointers to FAQs.
