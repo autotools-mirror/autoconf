@@ -12568,14 +12568,14 @@ but generate code for GNU Hurd/sparc, which is also the build platform.
 
 @sp 1
 
-In Autoconf, the variables @code{build}, @code{host}, and @code{target}
-had a different semantics before and after the invocation of
-@code{AC_CANONICAL_BUILD} etc.  Now, the argument of @option{--build} is
-strictly copied into @code{build_alias}, and is left empty otherwise.
-After the @code{AC_CANONICAL_BUILD}, @code{build} is set to the
-canonicalized build type.  To ease the transition, before, its contents
-is the same as that of @code{build_alias}.  Do @emph{not} rely on this
-broken feature.
+In Autoconf 2.13 and before, the variables @code{build}, @code{host},
+and @code{target} had a different semantics before and after the
+invocation of @code{AC_CANONICAL_BUILD} etc.  Now, the argument of
+@option{--build} is strictly copied into @code{build_alias}, and is left
+empty otherwise.  After the @code{AC_CANONICAL_BUILD}, @code{build} is
+set to the canonicalized build type.  To ease the transition, before,
+its contents is the same as that of @code{build_alias}.  Do @emph{not}
+rely on this broken feature.
 
 For consistency with the backward compatibility scheme exposed above,
 when @option{--host} is specified by @option{--build} isn't, the build

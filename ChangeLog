@@ -1,3 +1,8 @@
+2002-05-23  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (Hosts and Cross-Compilation): Specify the
+	version of Autoconf that is discussed.
+
 2002-05-22  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/fortran.m4 (AC_PROG_F77): Remove cf77 and cft77
@@ -18,10 +23,10 @@
 	AC_FUNC_FNMATCH_GNU also tests for GNU extensions.
 	Both macros now accept an optional source-dir arg.
 	New macro AC_GNU_SOURCE to define _GNU_SOURCE.
-	
+
 	* NEWS: Document this.
 	* doc/autoconf.texi (Particular Functions, UNIX Variants): Likewise.
-	
+
 	* lib/autoconf/functions.m4 (_AC_FUNC_FNMATCH): New macro.
 	(AC_FUNC_FNMATCH): Use it.  Test only for POSIX conformance,
 	not for GNU extensions; this undoes part of the 2000-11-03 change,
@@ -37,7 +42,7 @@
 	Don't require AC_SYS_POSIX_TERMIOS.  The test is unnecessary,
 	and it causes a 'test' syntax error if it fails.
 	Bug reported by Stephen Gildea.
-	
+
 	* lib/autoconf/functions.m4 (AC_FUNC_SETVBUF_REVERSED):
 	If prototypes are supported, use them to check this at compile-time,
 	instead of trying to check it at run-time.  If we must do a run-time
@@ -53,7 +58,7 @@
 	Also, mention HAVE_NLIST_H rather than NLIST_STRUCT, since
 	that's what the code does; this fixes a bug reported by
 	Paul D. Smith.
-	
+
 2002-05-03  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoreconf.in (autoreconf): Rewrite to use Gettext's
