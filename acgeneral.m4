@@ -24,7 +24,7 @@ dnl
 divert(-1)dnl Throw away output until AC_INIT is called.
 changequote([, ])
 
-define(AC_ACVERSION, 1.111)
+define(AC_ACVERSION, 1.112)
 
 dnl Some old m4's don't support m4exit.  But they provide
 dnl equivalent functionality by core dumping because of the
@@ -1291,7 +1291,8 @@ cat > conftest.${ac_ext} <<EOF
 EOF
 dnl Capture the stderr of cpp.  eval is necessary to expand ac_cpp.
 dnl We used to copy stderr to stdout and capture it in a variable, but
-dnl that breaks under sh -x.
+dnl that breaks under sh -x, which writes compile commands starting
+dnl with ` +' to stderr in eval and subshells.
 eval "$ac_cpp conftest.${ac_ext} >/dev/null 2>conftest.out"
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
