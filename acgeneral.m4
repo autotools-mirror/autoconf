@@ -64,7 +64,7 @@ define(AC_NOTICE,
 dnl [#] Generated automatically using autoconf.
 # Generated automatically using autoconf version] AC_ACVERSION [
 dnl [#] by AC_USER@AC_HOST on AC_DATE
-# Copyright (C) 1991, 1992, 1993 Free Software Foundation, Inc.
+# Copyright (C) 1991, 1992, 1993, 1994 Free Software Foundation, Inc.
 
 # This configure script is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as published
@@ -140,11 +140,11 @@ changequote([,])dnl
        ac_package=`echo $ac_package| sed 's/-/_/g'`
        case "$ac_arg" in
 changequote(,)dnl
-         *=*) val="`echo $ac_arg|sed 's/[^=]*=//'`" ;;
+         *=*) ac_val="`echo $ac_arg|sed 's/[^=]*=//'`" ;;
 changequote([,])dnl
-         *) val=1 ;;
+         *) ac_val=1 ;;
        esac
-       eval "with_$ac_package='$val'" ;;
+       eval "with_$ac_package='$ac_val'" ;;
 
      -v | -verbose | --verbose | --verbos | --verbo | --verb | --ver | --ve | --v)
        ac_verbose=yes ;;
@@ -635,8 +635,8 @@ if test -n "$exec_prefix"; then
   ac_prsub="$ac_prsub
 s%^exec_prefix\\([ 	]*\\)=\\([ 	]*\\).*$%exec_prefix\\1=\\2$exec_prefix%"
 fi
-# Any assignment to VPATH causes Sun make
-# to only execute the first set of double-colon rules.
+# Any assignment to VPATH causes Sun make to only execute
+# the first set of double-colon rules, so remove it if not needed.
 if test "x$srcdir" = x.; then
   ac_vpsub='/^[ 	]*VPATH[ 	]*=[ 	]*/d'
 fi
