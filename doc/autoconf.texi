@@ -3248,19 +3248,35 @@ it, then you can use one of the general function-check macros.
 @end menu
 
 @node Function Portability, Particular Functions, Library Functions, Library Functions
-@subsection Portability of Classical Functions
+@subsection Portability of C Functions
 
 Most usual functions can either be missing, or be buggy, or be limited
 on some architectures.  This section tries to make an inventory of these
 portability issues.  By definition, this list will always require
-additions, please help us keeping it as complete as possible
+additions.  Please help us keeping it as complete as possible.
 
 @table @asis
+@item @code{snprintf}
+@c @fuindex snprintf
+@prindex @code{snprintf}
+@c @fuindex vsnprintf
+@prindex @code{vsnprintf}
+The ISO C99 standard says that if the output array isn't big enough and
+if no other errors occur, @code{snprintf} and @code{vsnprintf} truncate
+the output and return the number of bytes that ought to have been
+produced.  Some older systems return the truncated length (e.g., GNU C
+Library 2.0.x or IRIX 6.5), some a negative value (e.g., earlier GNU C
+Library versions), and some the buffer length without truncation (e.g.,
+32-bit Solaris 7).  Also, some buggy older systems ignore the length and
+overrun the buffer (e.g., 64-bit Solaris 7).
+
 @item @code{sprintf}
 @c @fuindex sprintf
 @prindex @code{sprintf}
+@c @fuindex vsprintf
+@prindex @code{vsprintf}
 The ISO C standard says @code{sprintf} and @code{vsprintf} return the
-number of characters written, but on some old systems (SunOS for
+number of bytes written, but on some old systems (SunOS 4 for
 instance) they return the buffer pointer instead.
 
 @item @code{unlink}
