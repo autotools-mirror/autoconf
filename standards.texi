@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 24 February 1996
+@set lastupdate 27 February 1996
 @c %**end of header
 
 @ifinfo
@@ -28,7 +28,7 @@ END-INFO-DIR-ENTRY
 
 @ifinfo
 GNU Coding Standards
-Copyright (C) 1992, 1993, 1994, 1995 Free Software Foundation, Inc.
+Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -59,7 +59,7 @@ by the Free Software Foundation.
 @page
 
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993, 1994,1995 Free Software Foundation, Inc.
+Copyright @copyright{} 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
