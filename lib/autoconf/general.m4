@@ -2293,8 +2293,8 @@ ifval([$3], [test -n "[$]$1" || $1="$3"
 
 # _AC_CHECK_TOOL_PREFIX
 # ---------------------
-AC_DEFUN(AC_CHECK_TOOL_PREFIX,
-[AC_REQUIRE([_AC_CANONICAL_HOST])dnl
+AC_DEFUN(_AC_CHECK_TOOL_PREFIX,
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_REQUIRE([_AC_CANONICAL_BUILD])dnl
 if test $host != $build; then
   ac_tool_prefix=${host_alias}-
