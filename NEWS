@@ -1,4 +1,7 @@
 * Major changes in Autoconf 2.50a                       -*- outline -*-
+** Default includes
+Now include stdint.h.
+
 
 * Major changes in Autoconf 2.50
 

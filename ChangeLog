@@ -1,5 +1,11 @@
 2001-05-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Include
+	stdlib.h.
+	From Paul Eggert and Lars Hecking.
+
+2001-05-31  Akim Demaille  <akim@epita.fr>
+
 	* tests/base.at: Adjust line numbers in error messages.
 
 2001-05-31  Akim Demaille  <akim@epita.fr>
