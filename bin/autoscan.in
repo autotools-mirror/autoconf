@@ -124,7 +124,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n";
 sub parse_args ()
 {
   getopt ('I|include|A|autoconf-dir|m|macrodir=s' => \@include,
-	  'B|prepend-include=s' => @prepend_include);
+	  'B|prepend-include=s' => \@prepend_include);
 
   die "$me: too many arguments
 Try `$me --help' for more information.\n"
