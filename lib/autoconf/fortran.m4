@@ -1040,26 +1040,9 @@ AC_DEFUN([AC_C_CHAR_UNSIGNED],
 # undef __CHAR_UNSIGNED__
 #endif])dnl
 AC_CACHE_CHECK(whether char is unsigned, ac_cv_c_char_unsigned,
-[if test "$GCC" = yes; then
-  # GCC predefines this symbol on systems where it applies.
-AC_EGREP_CPP(yes,
-[#ifdef __CHAR_UNSIGNED__
-  yes
-#endif
-], ac_cv_c_char_unsigned=yes, ac_cv_c_char_unsigned=no)
-else
-AC_TRY_RUN(
-[/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
-#if !defined(__STDC__) || __STDC__ != 1
-# define volatile
-#endif
-int
-main()
-{
-  volatile char c = 255;
-  exit(c < 0);
-}], ac_cv_c_char_unsigned=yes, ac_cv_c_char_unsigned=no)
-fi])
+[AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([AC_INCLUDES_DEFAULT([])],
+                                             [((char) -1) < 0])],
+                   ac_cv_c_char_unsigned=no, ac_cv_c_char_unsigned=yes)])
 if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi

@@ -105,9 +105,6 @@ We *need* it.
 ** More macros from Jim
 Those related to *_SLASH_*.
 
-** AC_C_CHAR_UNSIGNED
-Use the new technology to read compiler's characteristics.
-
 ** AC_FUNC_GETLOADAVG
 We must find a solution for this macro which needs to find
 `getloadavg.c'.

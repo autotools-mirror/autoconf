@@ -1,3 +1,9 @@
+2000-06-05  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_C_CHAR_UNSIGNED): Use the new compiler-test
+	technology so that we can do the test via compilations only.  Also
+	use (char) -1 instead of (char) 255 to check if char is unsigned.
+
 2000-05-28  Jim Meyering  <meyering@lucent.com>
 
 	* acspecific.m4 (AC_FUNC_STRERROR_R): Call strerror_r with 2nd arg
