@@ -555,11 +555,13 @@ GNU C compiler and @code{ioctl} does not work properly without
 @defmac AC_PROG_INSTALL
 @maindex PROG_INSTALL
 Set @code{make} variable @code{INSTALL} to @samp{install -c} if
-@code{install} is found, otherwise set it to @samp{cp}.  Screens out the
+@code{install} is found and is compatible with the BSD and GNU versions.
+Otherwise, set @code{INSTALL} to @samp{@var{srcdir}/install.sh -c} if that
+script exists, or to @samp{cp} as a last resort.  Screens out the
 false matches @file{/etc/install}, @file{/usr/sbin/install}, and other
-instances of @code{install} known not to work.  The variable
-@code{INSTALL_PROGRAM} is set to @samp{$(INSTALL)} and
-@code{INSTALL_DATA} is set to @samp{$(INSTALL) -m 644}.
+instances of @code{install} known not to work.  Also sets the variable
+@code{INSTALL_PROGRAM} to @samp{$(INSTALL)} and
+@code{INSTALL_DATA} to @samp{$(INSTALL) -m 644}.
 @end defmac
 
 @defmac AC_PROG_RANLIB
