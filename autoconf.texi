@@ -6,8 +6,8 @@
 @c @setchapternewpage odd
 @c %**end of header
 
-@set EDITION 1.10.1
-@set VERSION 1.10.1
+@set EDITION 1.90
+@set VERSION 1.90
 @set UPDATED May 1994
 
 @iftex
@@ -155,7 +155,6 @@ Test Programs
 Makefiles
 
 * Predefined Variables::	Heavily used @code{make} variables.
-* Installation Prefixes::	A special variable substitution.
 * VPATH Substitutions::		Compiling in a different directory.
 * Automatic Remaking::		Makefile rules for configuring.
 
@@ -2477,12 +2476,11 @@ GNU Coding Standards}, for more information on what to put in Makefiles.
 
 @menu
 * Predefined Variables::	Heavily used @code{make} variables.
-* Installation Prefixes::	A special variable substitution.
 * VPATH Substitutions::		Compiling in a different directory.
 * Automatic Remaking::		Makefile rules for configuring.
 @end menu
 
-@node Predefined Variables, Installation Prefixes, , Makefiles
+@node Predefined Variables, VPATH Substitutions, , Makefiles
 @section Predefined Variables
 
 Some @code{make} variables are predefined by the Autoconf macros.
@@ -2501,12 +2499,10 @@ The installation prefix for architecture-specific files.
 
 @defvar prefix
 The installation prefix for architecture-independent files.
-@xref{Installation Prefixes}, for an alternate way to set this variable.
 @end defvar
 
 @defvar srcdir
 The directory that contains the source code for that @file{Makefile}.
-@xref{Installation Prefixes}, for an alternate way to set this variable.
 @end defvar
 
 @defvar top_srcdir
@@ -2530,43 +2526,7 @@ Names of object files (ending in @file{.o}).  Set by
 @code{AC_REPLACE_FUNCS} (@pxref{General Feature Tests}).
 @end defvar
 
-@node Installation Prefixes, VPATH Substitutions, Predefined Variables, Makefiles
-@section Installation Prefixes
-
-Autoconf-generated @code{configure} scripts support an alternate
-method for substituting two particular variables, for compatibility with
-Cygnus @code{configure}.  This method is not recommended.
-
-If @code{configure} has figured out a value for the installation prefix,
-either by the user supplying one on the command line (@pxref{Invoking
-configure}) or with @code{AC_PREFIX} (@pxref{General Feature Tests}), then it
-substitutes that value in @file{Makefile}s that it creates.  Wherever a
-@file{Makefile.in} contains lines like
-
-@example
-prefix = /usr/local
-exec_prefix = $@{prefix@}
-@end example
-
-@noindent
-@code{configure} substitutes the value it figured out.  The substitution
-only occurs if the word @samp{prefix} or @samp{exec_prefix} is not
-preceded by any other characters on the line, and @code{configure} has
-figured out a value for the prefix.
-
-There can be separate installation prefixes for architecture-specific
-files (@code{exec_prefix}) and architecture-independent files
-(@code{prefix}).  @xref{Invoking configure}, for more information
-on setting them.
-
-Autoconf @code{configure} scripts replace these two variables without
-requiring them to be enclosed in @samp{@@} characters, and only if they
-have been set, because the Cygnus @code{configure} does so.  In
-retrospect, being compatible in this way was a bad decision, because it
-created an inconsistency in Autoconf without giving significant
-benefits.
-
-@node VPATH Substitutions, Automatic Remaking, Installation Prefixes, Makefiles
+@node VPATH Substitutions, Automatic Remaking, Predefined Variables, Makefiles
 @section @code{VPATH} Substitutions
 
 You might want to compile a software package in a different directory
