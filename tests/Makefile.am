@@ -41,9 +41,9 @@ testsuite: $(top_srcdir)/m4sugar.m4 $(top_srcdir)/m4sh.m4 \
            $(SUITE)
 	$(M4) -I $(srcdir) -I $(top_srcdir) atspecific.m4 suite.at | \
           sed -e 's/[ 	]*$$//' | \
-	  sed -e '/^$$/N;/\n$$/D' > $@-tmp
-	chmod +x $@-tmp
-	mv $@-tmp $@
+	  sed -e '/^$$/N;/\n$$/D' >$@.tmp
+	chmod +x $@.tmp
+	mv $@.tmp $@
 
 
 # The files which contains macro we check for syntax.  Don't use $(top_srcdir)
