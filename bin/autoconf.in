@@ -225,7 +225,7 @@ NUMBERS='0123456789'
 WORDCHAR=_$alphabet$ALPHABET$NUMBERS
 
 m4_warnings=
-for warning in `IFS=,; echo syntax,$WARNINGS,$warnings |
+for warning in `IFS=,; echo syntax $WARNINGS $warnings |
                          tr $ALPHABET $alphabet`
 do
   test -n $warning || continue
@@ -258,10 +258,10 @@ $debug ||
 # Running m4.
 test -f "$autoconf_dir/acsite.m4" && acsite_m4="$autoconf_dir/acsite.m4"
 test -f "$localdir/aclocal.m4"   && aclocal_m4="$localdir/aclocal.m4"
-m4_common="$acsite_m4 $aclocal_m4 -I $autoconf_dir -I $localdir \
-           -Dm4_tmpdir=$tmp"
-run_m4="$M4           $autoconf_dir/autoconf.m4  $m4_common"
-run_m4f="$M4 --reload $autoconf_dir/autoconf.m4f $m4_common"
+m4_common="-I $autoconf_dir -I $localdir -Dm4_tmpdir=$tmp"
+m4_prefiles="                $autoconf_dir/autoconf.m4  $acsite_m4 $aclocal_m4"
+m4f_prefiles="--reload-state=$autoconf_dir/autoconf.m4f $acsite_m4 $aclocal_m4"
+run_m4="$M4 $m4_common"
 
 # Find the input file.
 case $# in
@@ -315,7 +315,8 @@ case $task in
   # M4 expansion.
   : >$tmp/forbidden.rx
   : >$tmp/allowed.rx
-  $run_m4f -Dm4_warnings=$m4_warnings $infile >$tmp/configure ||
+  $verbose "$me: running $run_m4 -Dm4_warnings=$m4_warnings $m4f_prefiles $infile" >&2
+  $run_m4 -Dm4_warnings=$m4_warnings $m4f_prefiles $infile >$tmp/configure ||
     { (exit 1); exit 1; }
 
   if test "x$outfile" != x-; then
@@ -714,15 +715,16 @@ EOF
   # Do we trace the initialization?
   # `errprint' must be silent, otherwise there can be warnings mixed
   # with traces in m4's stderr.
+  run_m4_trace="$run_m4 $trace_opt -daflq -Derrprint"
   if $initialization; then
-    run_m4_trace="$run_m4 $trace_opt -daflq -Derrprint"
+    trace_prefiles="$m4_prefiles"
   else
-    run_m4_trace="$run_m4f $trace_opt -daflq -Derrprint"
+    trace_prefiles="$m4f_prefiles"
   fi
 
   # Run m4 on the input file to get traces.
-  $verbose "$me: running $run_m4_trace $infile | $M4 $tmp/trace.m4" >&2
-  $run_m4_trace $infile 2>&1 >/dev/null |
+  $verbose "$me: running $run_m4_trace $trace_prefiles $infile | $M4 $tmp/trace.m4" >&2
+  $run_m4_trace $trace_prefiles $infile 2>&1 >/dev/null |
     sed -f $tmp/trace2m4.sed |
     # Now we are ready to run m4 to process the trace file.
     if $debug; then

@@ -1,3 +1,16 @@
+2001-06-02  Nathan Sidwell  <nathan@codesourcery.com>
+
+	GNU getopt, when POSIXLY_CORRECT does not permute options and
+	arguments.  So pass the options first.
+	Fixes PR autoconf/184.
+
+	* autoconf.sh (m4_prefiles, m4f_prefiles): New variables.
+	(run_m4): Remove files.
+	(run_m4f): Remove.
+	Update remainder of script to use them.
+	(for warning in): Do not use a literal comma as it will not be
+	split by IFS.
+
 2001-06-02  Christian Marquardt  <marq@gfz-potsdam.de>
 
 	* aclang.m4 (AC_PROG_F77): Add Fujitsu's "frt" to the list of
