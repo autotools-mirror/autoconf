@@ -447,9 +447,8 @@ AS_IF([AC_TRY_EVAL(ac_link_default)],
 # Be careful to initialize this variable, since it used to be cached.
 # Otherwise an old cache value of `no' led to `EXEEXT = no' in a Makefile.
 ac_cv_exeext=
-for ac_file in `ls a_out.exe a.exe conftest.exe 2>/dev/null;
-                ls a.out conftest 2>/dev/null;
-                ls a.* conftest.* 2>/dev/null`; do
+for ac_file in a_out.exe a.exe conftest.exe a.out conftest a.* conftest.*; do
+  test -f "$ac_file" || continue
   case $ac_file in
     _AC_COMPILER_EXEEXT_REJECT ) ;;
     a.out ) # We found the default executable, but exeext='' is most
@@ -515,7 +514,8 @@ AS_IF([AC_TRY_EVAL(ac_link)],
 # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
 # work properly (i.e., refer to `conftest.exe'), while it won't with
 # `rm'.
-for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/dev/null`; do
+for ac_file in conftest.exe conftest conftest.*; do
+  test -f "$ac_file" || continue
   case $ac_file in
     _AC_COMPILER_EXEEXT_REJECT ) ;;
     *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
