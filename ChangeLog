@@ -1,5 +1,18 @@
 2001-08-15  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (pr): New index.
+	(prindex, findex): Use, merge, and output them.
+	(Environment Variable Index, Output Variable Index)
+	(Preprocessor Symbol Index, Autoconf Macro Index, M4 Macro Index)
+	(Autotest Macro Index): Rename as...
+	(Environment Variables, Output Variables,Preprocessor Symbols)
+	(Autoconf Macros, M4 Macros, Autotest Macros): these.
+	* doc/install.texi: Use @command.
+	(Environment Variables): Rename as...
+	(Defining Variables): this.
+
+2001-08-15  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Function Portability): sprintf's return
 	value.
 	From Kevin Ryde.
