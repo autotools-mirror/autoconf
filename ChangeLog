@@ -1,5 +1,10 @@
 2000-03-14  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_PREPARE): Kill a changequote in the
+	building of `ac_configure_args'.
+
+2000-03-14  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_DIVERT): Rename _AC_DIVERT.
 	(AC_DIVERT): New macro.
 	Spread its use where better than a pair of AC_DIVERT_PUSH/POP.

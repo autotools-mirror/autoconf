@@ -1174,13 +1174,11 @@ do
   | --no-cr | --no-c) ;;
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
   | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r) ;;
-changequote(<<, >>)dnl
 dnl If you change this globbing pattern, test it on an old shell --
 dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
-  *" "*|*"	"*|*[\[\]\~\<<#>>\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
+[  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)]
   ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"`
   ac_configure_args="$ac_configure_args '$ac_arg'" ;;
-changequote([, ])dnl
   *) ac_configure_args="$ac_configure_args $ac_arg" ;;
   esac
 done
