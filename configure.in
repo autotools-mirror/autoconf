@@ -23,7 +23,7 @@ AC_SUBST(M4)
 AC_PROG_AWK
 
 # Generating man pages.
-AM_MISSING_PROG(HELP2MAN, help2man, [\${SHELL} \${top_srcdir}])
+AM_MISSING_PROG(HELP2MAN, help2man, $missing_dir)
 
 # We use a path for perl so the #! line in autoscan will work.
 AC_PATH_PROG(PERL, perl, no)

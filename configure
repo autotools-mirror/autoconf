@@ -953,7 +953,7 @@ if (aclocal --version) < /dev/null > /dev/null 2>&1; then
    echo "configure:953: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
-   ACLOCAL="$missing_dir/missing aclocal"
+   ACLOCAL="$SHELL $missing_dir/missing aclocal"
    echo "configure:957: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
@@ -968,7 +968,7 @@ if (autoconf --version) < /dev/null > /dev/null 2>&1; then
    echo "configure:968: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
-   AUTOCONF="$missing_dir/missing autoconf"
+   AUTOCONF="$SHELL $missing_dir/missing autoconf"
    echo "configure:972: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
@@ -983,7 +983,7 @@ if (automake --version) < /dev/null > /dev/null 2>&1; then
    echo "configure:983: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
-   AUTOMAKE="$missing_dir/missing automake"
+   AUTOMAKE="$SHELL $missing_dir/missing automake"
    echo "configure:987: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
@@ -998,7 +998,7 @@ if (autoheader --version) < /dev/null > /dev/null 2>&1; then
    echo "configure:998: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
-   AUTOHEADER="$missing_dir/missing autoheader"
+   AUTOHEADER="$SHELL $missing_dir/missing autoheader"
    echo "configure:1002: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
@@ -1013,7 +1013,7 @@ if (makeinfo --version) < /dev/null > /dev/null 2>&1; then
    echo "configure:1013: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
-   MAKEINFO="$missing_dir/missing makeinfo"
+   MAKEINFO="$SHELL $missing_dir/missing makeinfo"
    echo "configure:1017: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
@@ -1134,7 +1134,7 @@ if (help2man --version) < /dev/null > /dev/null 2>&1; then
    echo "configure:1134: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
-   HELP2MAN="\${SHELL} \${top_srcdir}/missing help2man"
+   HELP2MAN="$SHELL $missing_dir/missing help2man"
    echo "configure:1138: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi

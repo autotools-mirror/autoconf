@@ -12,7 +12,7 @@ if ($2 --version) < /dev/null > /dev/null 2>&1; then
    $1=$2
    AC_MSG_RESULT(found)
 else
-   $1="$3/missing $2"
+   $1="$SHELL $3/missing $2"
    AC_MSG_RESULT(missing)
 fi
 AC_SUBST($1)])

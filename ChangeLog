@@ -1,3 +1,9 @@
+2000-10-14  Pavel Roskin  <proski@gnu.org>
+
+	* m4/missing.m4 (AM_MISSING_PROG): Use $SHELL to run "missing"
+	* configure.in: Don't add $SHELL to the path of help2man -
+	it is already added by AM_MISSING_PROG.
+
 2000-10-13  Akim Demaille  <akim@epita.fr>
 
 	* tests/mktests.sh: If ever it fails, touch the output files
