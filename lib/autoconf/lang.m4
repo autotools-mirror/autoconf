@@ -467,23 +467,34 @@ m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 # of exeext.
 AC_MSG_CHECKING([for _AC_LANG compiler default output file name])
 ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
-AS_IF([AC_TRY_EVAL(ac_link_default)],
-[# Find the output, starting from the most likely.  This scheme is
-# not robust to junk in `.', hence go to wildcards (a.*) only as a last
-# resort.
+#
+# List of possible output files, starting from the most likely.
+# The algorithm is not robust to junk in `.', hence go to wildcards (a.*)
+# only as a last resort.  b.out is created by i960 compilers.
+ac_files='a_out.exe a.exe conftest.exe a.out conftest a.* conftest.* b.out'
+#
+# The IRIX 6 linker writes into existing files which may not be
+# executable, retaining their permissions.  Remove them first so a
+# subsequent execution test works.
+ac_rmfiles=
+for ac_file in $ac_files
+do
+  case $ac_file in
+    _AC_COMPILER_EXEEXT_REJECT ) ;;
+    * ) ac_rmfiles="$ac_rmfiles $ac_file";;
+  esac
+done
+rm -f $ac_rmfiles
 
-# Be careful to initialize this variable, since it used to be cached.
+AS_IF([AC_TRY_EVAL(ac_link_default)],
+[# Be careful to initialize this variable, since it used to be cached.
 # Otherwise an old cache value of `no' led to `EXEEXT = no' in a Makefile.
 ac_cv_exeext=
-# b.out is created by i960 compilers.
-for ac_file in a_out.exe a.exe conftest.exe a.out conftest a.* conftest.* b.out
+for ac_file in $ac_files
 do
   test -f "$ac_file" || continue
   case $ac_file in
     _AC_COMPILER_EXEEXT_REJECT )
-	;;
-    conftest.$ac_ext )
-	# This is the source file.
 	;;
     [[ab]].out )
 	# We found the default executable, but exeext='' is most
