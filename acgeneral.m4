@@ -773,7 +773,8 @@ if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then its parent.
   ac_prog=$[0]
-  ac_confdir=`echo "$ac_prog" | sed 's%/[[^/][^/]]*$%%'`
+dnl FIXME: should use AS_DIRNAME here once it is made DOS-friendly.
+  ac_confdir=`echo "$ac_prog" | sed 's%[[\\/][^\\/][^\\/]]*$%%'`
   test "x$ac_confdir" = "x$ac_prog" && ac_confdir=.
   srcdir=$ac_confdir
   if test ! -r $srcdir/$ac_unique_file; then
@@ -791,7 +792,7 @@ if test ! -r $srcdir/$ac_unique_file; then
 fi
 dnl Double slashes in pathnames in object file debugging info
 dnl mess up M-x gdb in Emacs.
-srcdir=`echo "$srcdir" | sed 's%\([[^/]]\)/*$%\1%'`
+srcdir=`echo "$srcdir" | sed 's%\([[^\\/]]\)[[\\/]]*$%\1%'`
 m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_SRCDIR
 
