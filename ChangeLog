@@ -1,5 +1,10 @@
 1999-04-05  Ben Elliston  <bje@cygnus.com>
 
+	* acspecific.m4 (AC_CYGWIN): Do not remove conftest*; let
+	AC_TRY_COMPILE clean up after itself.
+	(AC_MINGW32): Likewise.
+	(AC_EMXOS2): Likewise.
+
 	* acspecific.m4 (AC_EMXOS2): New macro. Contributed by Ryuji Abe
 	<raeva@t3.rim.or.jp>.
 	(AC_EXEEXT): Handle case for OS/2.

@@ -2631,8 +2631,7 @@ AC_DEFUN(AC_CYGWIN,
 #define __CYGWIN__ __CYGWIN32__
 #endif
 return __CYGWIN__;],
-ac_cv_cygwin=yes, ac_cv_cygwin=no)
-rm -f conftest*])
+ac_cv_cygwin=yes, ac_cv_cygwin=no)])
 CYGWIN=
 test "$ac_cv_cygwin" = yes && CYGWIN=yes])
 
@@ -2641,8 +2640,7 @@ dnl EXEEXT.
 AC_DEFUN(AC_MINGW32,
 [AC_CACHE_CHECK(for mingw32 environment, ac_cv_mingw32,
 [AC_TRY_COMPILE(,[return __MINGW32__;],
-ac_cv_mingw32=yes, ac_cv_mingw32=no)
-rm -f conftest*])
+ac_cv_mingw32=yes, ac_cv_mingw32=no)])
 MINGW32=
 test "$ac_cv_mingw32" = yes && MINGW32=yes])
 
@@ -2651,8 +2649,7 @@ dnl for EXEEXT.
 AC_DEFUN(AC_EMXOS2,
 [AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
 [AC_TRY_COMPILE(,[return __EMX__;],
-ac_cv_emxos2=yes, ac_cv_emxos2=no)
-rm -f conftest*])
+ac_cv_emxos2=yes, ac_cv_emxos2=no)])
 EMXOS2=
 test "$ac_cv_emxos2" = yes && EMXOS2=yes])
 
