@@ -770,6 +770,27 @@ substitutions performed on them in @code{configure}.  You can use
 @var{extra-cmds}.
 @end defmac
 
+If you run @code{make} on subdirectories, you should run it using the
+@code{make} variable @code{MAKE}.  Most versions of @code{make} set
+@code{MAKE} to the name of the @code{make} program plus any options it
+was given.  However, some old versions do not set it.  The following
+macro allows you to use it even with those versions.
+
+@defmac AC_PROG_MAKE_SET
+@maindex PROG_MAKE_SET
+@ovindex SET_MAKE
+If @code{make} predefines the variable @code{MAKE}, define output
+variable @code{SET_MAKE} to be empty.  Otherwise, define @code{SET_MAKE}
+to contain @samp{MAKE=make}.  Calls @code{AC_SUBST} for @code{SET_MAKE}.
+@end defmac
+
+To use this macro, place a line like this in each @file{Makefile.in}
+that runs @code{MAKE} on other directories:
+
+@example
+@@SET_MAKE@@
+@end example
+
 @node Makefile Substitutions, Configuration Headers, Output, Setup
 @section Substitutions in Makefiles
 
@@ -1425,27 +1446,6 @@ standard place.  Otherwise set @code{LEX} to @samp{lex} and
 If @samp{ln -s} works on the current filesystem (the operating system
 and filesystem support symbolic links), set output
 variable @code{LN_S} to @samp{ln -s}, otherwise set it to @samp{ln}.
-@end defmac
-
-@defmac AC_PROG_MAKE_SET
-@maindex PROG_MAKE_SET
-@ovindex SET_MAKE
-If @code{make} predefines the variable @code{MAKE}, define output
-variable @code{SET_MAKE} to be empty.  Otherwise, define @code{SET_MAKE}
-to contain @samp{MAKE=make}.  Calls @code{AC_SUBST} for @code{SET_MAKE}.
-
-In recent versions of @code{make}, the variable @code{MAKE} contains the
-name of the @code{make} program plus options it was given.  It is used
-when running @code{make} recursively in subdirectories.  But some old
-versions of @code{make} don't set the @code{MAKE} variable.
-This macro allows use of @code{MAKE} on all systems.
-
-If you use this macro, simply place a line like this in your
-@file{Makefile.in} file(s):
-
-@example
-@@SET_MAKE@@
-@end example
 @end defmac
 
 @defmac AC_PROG_RANLIB
