@@ -79,10 +79,26 @@ dnl [#] by AC_USER@AC_HOST on AC_DATE
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-# Save the original args to write them into config.status later.
+])dnl
+dnl
+define(AC_PARSEARGS,
+[# Save the original args to write them into config.status later.
 ac_configure_args="[$]*"
-ac_prog=[$]0
+
+# Only options that might do something get documented.
+changequote(,)dnl
+ac_usage="Usage: configure [options] [host]
+Options: [defaults in brackets]
+--enable-FEATURE[=VAL]	include FEATURE [VAL=yes]
+--exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
+--help			print this message
+--prefix=PREFIX		install host independent files in PREFIX [/usr/local]
+--quiet, --silent	do not print \`checking for...' messages
+--srcdir=DIR		find the sources in DIR [configure dir or ..]
+--verbose		print results of checks
+--version		print the version of autoconf that created configure
+--with-PACKAGE[=VAL]	external PACKAGE is available [VAL=yes]"
+changequote([,])dnl
 
 # Initialize some variables set by options.
 exec_prefix=
@@ -94,23 +110,6 @@ program_suffix=
 ac_silent=
 srcdir=
 ac_verbose=
-])dnl
-dnl
-define(AC_PARSEARGS,
-[changequote(,)dnl
-# Only options that might do something get documented.
-ac_usage="Usage: configure [options] [host]
-Options: [defaults in brackets]
---enable-FEATURE[=VAL]	enable FEATURE (optional parameter VAL)
---exec-prefix=PREFIX	install host dependent files in PREFIX [/usr/local]
---help			print this message
---prefix=PREFIX		install host independent files in PREFIX [/usr/local]
---quiet, --silent	do not print \`checking for...' messages
---srcdir=DIR		find the sources in DIR [. or ..]
---verbose		print results of checks
---version		print the version of autoconf that created configure
---with-PACKAGE[=VAL]	external PACKAGE is available (optional parameter VAL)"
-changequote([,])dnl
 
 # Get the option argument from the current or next ARGV element.
 ac_get_optarg='
@@ -299,6 +298,9 @@ define(AC_PREPARE,
 [trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
 trap 'rm -fr confdefs* $ac_clean_files' 0
 
+# Save the original args if we used an alternate arg parser.
+ac_configure_args="${ac_configure_args-[$]*}"
+
 # NLS nuisances.
 # These must not be set unconditionally because not all systems understand
 # e.g. LANG=C (notably SCO).
@@ -318,6 +320,7 @@ ac_unique_file=$1
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then `..'.
+  ac_prog=[$]0
 changequote(,)dnl
   ac_confdir=`echo $ac_prog|sed 's%/[^/][^/]*$%%'`
 changequote([,])dnl
