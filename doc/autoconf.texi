@@ -1324,10 +1324,10 @@ disable warnings falling into @var{category}
 @end table
 
 Warnings about @samp{syntax} are enabled by default, and the environment
-variable @code{WARNINGS}, a comma separated list of categories, is
+variable @env{WARNINGS}, a comma separated list of categories, is
 honored.  Passing @samp{-W @var{category}} will actually behave as if
 you had passed @samp{--warnings=syntax,$WARNINGS,@var{category}}.  If
-you want to disable the defaults and @code{WARNINGS}, but (for example)
+you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
 none,obsolete}.
 
@@ -1546,10 +1546,10 @@ disable warnings falling into @var{category}
 @end table
 
 Warnings about @samp{syntax} are enabled by default, and the environment
-variable @code{WARNINGS}, a comma separated list of categories, is
+variable @env{WARNINGS}, a comma separated list of categories, is
 honored.  Passing @samp{-W @var{category}} will actually behave as if
 you had passed @samp{--warnings=syntax,$WARNINGS,@var{category}}.  If
-you want to disable the defaults and @code{WARNINGS}, but (for example)
+you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
 none,obsolete}.
 @end table
@@ -8371,7 +8371,7 @@ disable warnings falling into @var{category}
 @end table
 
 Warnings about @samp{syntax} are enabled by default, and the environment
-variable @code{WARNINGS}, a comma separated list of categories, is
+variable @env{WARNINGS}, a comma separated list of categories, is
 honored.  @command{autom4te -W @var{category}} will actually
 behave as if you had run:
 
@@ -8381,7 +8381,7 @@ autom4te --warnings=syntax,$WARNINGS,@var{category}
 
 @noindent
 If you want to disable @command{autom4te}'s defaults and
-@code{WARNINGS}, but (for example) enable the warnings about obsolete
+@env{WARNINGS}, but (for example) enable the warnings about obsolete
 constructs, you would use @option{-W none,obsolete}.
 
 @cindex Back trace
@@ -9918,7 +9918,7 @@ use it as path separator.  When creating or accessing paths, you can use the
 to the appropriate value (@samp{:} or @samp{;}) when it starts up.
 
 File names need extra care as well.  While @acronym{DOS} variants
-that are Posixy enough to run @command{autoconf} (such as DJGPP) will
+that are Posixy enough to run @command{autoconf} (such as @acronym{DJGPP}) will
 usually be able to handle long file names properly, there are still
 limitations that can seriously break packages.  Several of these issues
 can be easily detected by the
@@ -10434,13 +10434,13 @@ Autoconf-generated scripts export this variable when they start up.
 @evindex CDPATH
 When this variable is set it specifies a list of directories to search
 when invoking @code{cd} with a relative file name.  Posix
-1003.1-2001 says that if a nonempty directory name from @code{CDPATH}
+1003.1-2001 says that if a nonempty directory name from @env{CDPATH}
 is used successfully, @code{cd} prints the resulting absolute
 file name.  Unfortunately this output can break idioms like
 @samp{abs=`cd src && pwd`} because @code{abs} receives the name twice.
 Also, many shells do not conform to this part of Posix; for
 example, @command{zsh} prints the result only if a directory name
-other than @file{.} was chosen from @code{CDPATH}.
+other than @file{.} was chosen from @env{CDPATH}.
 
 In practice the shells that have this problem also support
 @command{unset}, so you can work around the problem as follows:
@@ -10449,17 +10449,47 @@ In practice the shells that have this problem also support
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 @end example
 
-Autoconf-generated scripts automatically unset @code{CDPATH} if
+Autoconf-generated scripts automatically unset @env{CDPATH} if
 possible, so you need not worry about this problem in those scripts.
 
 @item DUALCASE
 @evindex DUALCASE
 In the MKS shell, case statements and file name generation are
-case-insensitive unless @code{DUALCASE} is nonzero.
+case-insensitive unless @env{DUALCASE} is nonzero.
 Autoconf-generated scripts export this variable when they start up.
+
+@item ENV
+@itemx MAIL
+@itemx MAILPATH
+@itemx PS1
+@itemx PS2
+@itemx PS4
+@evindex ENV
+@evindex MAIL
+@evindex MAILPATH
+@evindex PS1
+@evindex PS2
+@evindex PS4
+These variables should not matter for shell scripts, since they are
+supposed to affect only interactive shells.  However, at least one
+shell (the pre-3.0 @sc{uwin} Korn shell) gets confused about
+whether it is interactive, which means that (for example) a @env{PS1}
+with a side effect can unexpectedly modify @samp{$?}.  To work around
+this bug, Autoconf-generated scripts do something like this:
+
+@example
+(unset ENV) >/dev/null 2>&1 && unset ENV MAIL MAILPATH
+PS1='$ '
+PS2='> '
+PS4='+ '
+@end example
 
 @item IFS
 @evindex IFS
+Long ago, shell scripts inherited @env{IFS} from the environment,
+but this caused many problems so modern shells any environment
+settings for @env{IFS}.
+
 Don't set the first character of @code{IFS} to backslash.  Indeed,
 Bourne shells use the first character (backslash) when joining the
 components in @samp{"$@@"} and some shells then re-interpret (!) the
@@ -10520,7 +10550,6 @@ are treated like their Posix brethren (@env{LC_COLLATE},
 etc.)@: as described above.
 
 @item LINENO
-@evindex LINENO
 Most modern shells provide the current line number in @code{LINENO}.
 Its value is the line number of the beginning of the current command.
 Autoconf attempts to execute @command{configure} with a modern shell.
@@ -10607,41 +10636,25 @@ $ @kbd{sed '=' <lineno |}
 @end group
 @end example
 
-
 @item NULLCMD
 @evindex NULLCMD
 When executing the command @samp{>foo}, @command{zsh} executes
 @samp{$NULLCMD >foo} unless it is operating in Bourne shell
 compatibility mode and the @command{zsh} version is newer
 than 3.1.6-dev-18.  If are using an older @command{zsh}
-and forget to set @code{NULLCMD},
+and forget to set @env{NULLCMD},
 your script might be suspended waiting for data on its standard input.
 
-@item ENV
-@itemx MAIL
-@itemx MAILPATH
-@itemx PS1
-@itemx PS2
-@itemx PS4
-@evindex ENV
-@evindex MAIL
-@evindex MAILPATH
-@evindex PS1
-@evindex PS2
-@evindex PS4
-These variables should not matter for shell scripts, since they are
-supposed to affect only interactive shells.  However, at least one
-shell (the pre-3.0 @sc{uwin} Korn shell) gets confused about
-whether it is interactive, which means that (for example) a @env{PS1}
-with a side effect can unexpectedly modify @samp{$?}.  To work around
-this bug, Autoconf-generated scripts do something like this:
-
-@example
-(unset ENV) >/dev/null 2>&1 && unset ENV MAIL MAILPATH
-PS1='$ '
-PS2='> '
-PS4='+ '
-@end example
+@item PATH_SEPARATOR
+@evindex PATH_SEPARATOR
+On @acronym{DJGPP} systems, the @env{PATH_SEPARATOR} environment
+variable can be set to either @samp{:} or @samp{;} to control the path
+separator Bash uses to set up certain environment variables (such as
+@env{PATH}).  If you want @command{configure} to detect the regular
+@acronym{DOS} path separator (@samp{;}), so it can be safely substituted
+in files that may not support @samp{;} as a path separator, then unset
+this variable or set it to @samp{;}.  @xref{File System Conventions},
+for more information about @code{PATH_SEPARATOR}.
 
 @item PWD
 @evindex PWD
@@ -10654,34 +10667,18 @@ about @env{PWD} and executes @command{cd}; in this case @env{PWD} will
 point to the wrong directory.  Use @samp{`pwd`} rather than
 @samp{$PWD}.
 
-@item status
-@evindex status
-This variable is an alias to @samp{$?} for @code{zsh} (at least 3.1.6),
-hence read-only.  Do not use it.
-
-@item PATH_SEPARATOR
-@evindex PATH_SEPARATOR
-If it is not set, @command{configure} will detect the appropriate path
-separator for the build system and set the @code{PATH_SEPARATOR} output
-variable accordingly.
-
-On DJGPP systems, the @code{PATH_SEPARATOR} environment variable can be
-set to either @samp{:} or @samp{;} to control the path separator
-Bash uses to set up certain environment variables (such as
-@env{PATH}).  Since this only works inside Bash, you want
-@command{configure} to detect the regular @acronym{DOS} path separator
-(@samp{;}), so it can be safely substituted in files that may not support
-@samp{;} as path separator.  So it is recommended to either unset this
-variable or set it to @samp{;}.
-
 @item RANDOM
-@evindex RANDOM
 Many shells provide @code{RANDOM}, a variable that returns a different
 integer each time it is used.  Most of the time, its value does not
 change when it is not used, but on @sc{irix} 6.5 the value changes all
-the time.  This can be observed by using @command{set}.
-@end table
+the time.  This can be observed by using @command{set}.  It is common
+practice to use @code{$RANDOM} as part of a file name, but code
+shouldn't rely on @code{$RANDOM} expanding to a nonempty string.
 
+@item status
+This variable is an alias to @samp{$?} for @code{zsh} (at least 3.1.6),
+hence read-only.  Do not use it.
+@end table
 
 @node Limitations of Builtins
 @section Limitations of Shell Builtins
@@ -10861,7 +10858,7 @@ EOF
 @c -----------------
 @prindex @command{exit}
 The default value of @command{exit} is supposed to be @code{$?};
-unfortunately, some shells, such as the DJGPP port of Bash 2.04, just
+unfortunately, some shells, such as the @acronym{DJGPP} port of Bash 2.04, just
 perform @samp{exit 0}.
 
 @example
@@ -11388,7 +11385,7 @@ The default executable, produced by @samp{cc foo.c}, can be
 @itemize
 @item @file{a.out} --- usual Posix convention.
 @item @file{b.out} --- i960 compilers (including @command{gcc}).
-@item @file{a.exe} --- DJGPP port of @command{gcc}.
+@item @file{a.exe} --- @acronym{DJGPP} port of @command{gcc}.
 @item @file{a_out.exe} --- GNV @command{cc} wrapper for DEC C on OpenVMS.
 @item @file{foo.exe} --- various MS-DOS compilers.
 @end itemize
@@ -11748,13 +11745,15 @@ Use @samp{join - file} instead.
 Don't rely on @command{ln} having a @option{-f} option.  Symbolic links
 are not available on old systems; use @samp{$(LN_S)} as a portable substitute.
 
-For versions of the DJGPP before 2.04, @command{ln} emulates soft links
+For versions of the @acronym{DJGPP} before 2.04,
+@command{ln} emulates symbolic links
 to executables by generating a stub that in turn calls the real
 program.  This feature also works with nonexistent files like in the
 Posix spec.  So @samp{ln -s file link} will generate @file{link.exe},
 which will attempt to call @file{file.exe} if run.  But this feature only
 works for executables, so @samp{cp -p} is used instead for these
-systems.  DJGPP versions 2.04 and later have full symlink support.
+systems.  @acronym{DJGPP} versions 2.04 and later have full support
+for symbolic links.
 
 
 @item @command{ls}
@@ -11823,25 +11822,26 @@ older versions are not thread-safe either).
 @c -------------------
 @prindex @command{mktemp}
 @cindex Creating temporary files
-The command @command{mktemp} lets shell scripts use temporary files
-safely, but it does not exist on all systems.  A portable way to create
-a safe temporary file name is to create a temporary directory with mode
-700 and use a file inside this directory.
+Shell scripts can use temporary files safely with @command{mktemp}, but
+it does not exist on all systems.  A portable way to create a safe
+temporary file name is to create a temporary directory with mode 700 and
+use a file inside this directory.  Both methods prevent attackers from
+gaining control, though @command{mktemp} is far less likely to fail
+gratuitously under attack.
 
-Here is sample code to create a new temporary directory safely
-under @code{$TMPDIR}, with the default location being @file{/tmp}:
+Here is sample code to create a new temporary directory safely:
 
 @example
+# Create a temporary directory $tmp in $TMPDIR (default /tmp).
+# Use mktemp if possible; otherwise fall back on mkdir,
+# with $RANDOM to make collisions less likely.
 : $@{TMPDIR=/tmp@}
 @{
-  # Prefer mktemp if it exists, as it is more reliable.
   tmp=`
     (umask 077 && mktemp -d "$TMPDIR/fooXXXXXX") 2>/dev/null
   ` &&
   test -n "$tmp" && test -d "$tmp"
-@} ||
-@{
-  # Fall back on mkdir; $RANDOM makes collisions less likely.
+@} || @{
   tmp=$TMPDIR/foo$$-$RANDOM
   (umask 077 && mkdir "$tmp")
 @} || exit $?
@@ -12293,12 +12293,12 @@ SHELL = @@SHELL@@
 @end example
 
 Do not force @code{SHELL = /bin/sh} because that is not correct
-everywhere.  For instance there is no @code{/bin/sh} in DJGPP, and when
+everywhere.  For instance @acronym{DJGPP} lacks @code{/bin/sh}, and when
 its GNU @code{make} port sees such a setting it enters a special
 emulation mode where features like pipes and redirections are emulated
 on top of DOS's @command{command.com}.  Unfortunately this emulation is
 incomplete; for instance it does not handle command substitutions.
-On DJGPP @code{SHELL} should point the port of Bash.
+On @acronym{DJGPP} @code{SHELL} should point to Bash.
 
 Posix-compliant @command{make}s should never acquire the value of
 $(SHELL) from the environment, even when @code{make -e} is used
@@ -13698,7 +13698,7 @@ can alter its behavior:
 @evindex CONFIG_SHELL
 The shell with which to run @command{configure} for the @option{--recheck}
 option.  It must be Bourne-compatible.  The default is a shell that
-supports @env{LINENO} if available, and @file{/bin/sh} otherwise.
+supports @code{LINENO} if available, and @file{/bin/sh} otherwise.
 Invoking @command{configure} by hand bypasses this setting, so you may
 need to use a command like @samp{/bin/bash ./configure
 CONFIG_SHELL=/bin/bash} to insure that the same shell is used
