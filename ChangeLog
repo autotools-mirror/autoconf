@@ -1,3 +1,10 @@
+2001-04-26  Pavel Roskin  <proski@gnu.org>
+
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Use two backslashes
+	before double quotes in the copyright notice, since the native
+	OpenBSD shell removes single backslashes in here-documents with
+	unquoted delimiters.
+
 2001-04-25  Nicolas Joly  <njoly@pasteur.fr>
 
 	* acgeneral.m4 (_AC_RUN_IFELSE): Clean `core' files.
@@ -85,9 +92,9 @@
 
 2001-04-15  Lars J. Aas  <larsa@sim.no>
 
-        * acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Alter response on
-        `config.status --version' to be more compliant with the GNU Coding
-        Standards.
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Alter response on
+	`config.status --version' to be more compliant with the GNU Coding
+	Standards.
 
 2001-04-13  Steven G. Johnson  <stevenj@alum.mit.edu>
 
