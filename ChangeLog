@@ -308,6 +308,7 @@
 	disabled for language Autoconf-without-aclocal-m4.
 
 2004-03-16  Paolo Bonzini  <bonzini@gnu.org>
+	    Nathanael Nerode  <neroden@twcny.rr.com>
 
 	* lib/autoconf/programs.m4 (AC_PATH_TOOL, AC_CHECK_TOOL,
 	AC_CHECK_TOOLS): Warn if a cross-tool is found without
