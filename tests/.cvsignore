@@ -4,6 +4,7 @@ config.h config.hin
 config.log
 config.status
 configure configure.ac configure.in configure.scan
+confdefs.h
 conftest*
 debug-*.sh
 empty
