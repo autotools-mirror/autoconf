@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate August 29, 2000
+@set lastupdate November 26, 2000
 @c %**end of header
 
 @ifinfo
@@ -613,10 +613,10 @@ together, so that no reasonable program could use one without the
 other; then they can both go in the same file.
 
 External symbols that are not documented entry points for the user
-should have names beginning with @samp{_}.  They should also contain
-the chosen name prefix for the library, to prevent collisions with
-other libraries.  These can go in the same files with user entry
-points if you like.
+should have names beginning with @samp{_}.  The @samp{_} should be
+followed by the chosen name prefix for the library, to prevent
+collisions with other libraries.  These can go in the same files with
+user entry points if you like.
 
 Static functions and variables can be used as you like and need not
 fit any naming convention.
@@ -2469,11 +2469,16 @@ constants.
 
 @cindex file-name limitations
 @pindex doschk
-Use file names of 14 characters or less, to avoid creating gratuitous
-problems on older System V systems.  You can use the program
-@code{doschk} to test for this.  @code{doschk} also tests for potential
-name conflicts if the files were loaded onto an MS-DOS file
-system---something you may or may not care about.
+You might want to make sure that none of the file names would conflict
+the files were loaded onto an MS-DOS file system which shortens the
+names.  You can use the program @code{doschk} to test for this.
+
+Some GNU programs were designed to limit themselves to file names of 14
+characters or less, to avoid file name conflicts if they are read into
+older System V systems.  Please preserve this feature in the existing
+GNU programs that have it, but there is no need to do this in new GNU
+programs.  @code{doschk} also reports file names longer than 14
+characters.
 
 @node System Portability
 @section Portability between System Types
@@ -2484,15 +2489,17 @@ versions.  For a GNU program, this kind of portability is desirable, but
 not paramount.
 
 The primary purpose of GNU software is to run on top of the GNU kernel,
-compiled with the GNU C compiler, on various types of @sc{cpu}.  The
-amount and kinds of variation among GNU systems on different @sc{cpu}s
-will be comparable to the variation among Linux-based GNU systems or
-among BSD systems today.  So the kinds of portability that are absolutely
-necessary are quite limited.
+compiled with the GNU C compiler, on various types of @sc{cpu}.  So the
+kinds of portability that are absolutely necessary are quite limited.
+But it is important to support Linux-based GNU systems, since they
+are the form of GNU that is popular.
 
-But many users do run GNU software on non-GNU Unix or Unix-like systems.
-So supporting a variety of Unix-like systems is desirable, although not
-paramount.
+Beyond that, it is good to support the other free operating systems
+(*BSD), and it is nice to support other Unix-like systems if you want
+to.  Supporting a variety of Unix-like systems is desirable, although
+not paramount.  It is usually not too hard, so you may as well do it.
+But you don't have to consider it an obligation, if it does turn out to
+be hard.
 
 @pindex autoconf
 The easiest way to achieve portability to most Unix-like systems is to
@@ -3036,6 +3043,15 @@ are more than a few pages long.  Likewise for a collection of short
 documents---you only need one copy of the GNU FDL for the whole
 collection.  For a single short document, you can use a very permissive
 non-copyleft license, to avoid taking up space with a long license.
+
+See @uref{http://www.gnu.org/copyleft/fdl-howto.html} for more explanation
+of how to employ the GFDL.
+
+Note that it is not obligatory to include a copy of the GNU GPL or GNU
+LGPL in a manual whose license is neither the GPL nor the LGPL.  It can
+be a good idea to include the program's license in a large manual; in a
+short manual, whose size would be increased considerably by including
+the program's license, it is probably better not to include it.
 
 @node Manual Credits
 @section Manual Credits
@@ -3612,4 +3628,5 @@ update-date-leading-regexp: "@c This date is automagically updated when you save
 update-date-trailing-regexp: ""
 eval: (load "/gd/gnuorg/update-date.el")
 eval: (add-hook 'write-file-hooks 'update-date)
+compile-command: "make just-standards"
 End:
