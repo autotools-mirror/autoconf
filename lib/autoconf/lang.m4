@@ -442,7 +442,7 @@ m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 [# Try to create an executable without -o first, disregard a.out.
 # It will help us diagnose broken compilers, and finding out an intuition
 # of exeext.
-AC_MSG_CHECKING([for _AC_LANG compiler default output])
+AC_MSG_CHECKING([for _AC_LANG compiler default output file name])
 ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
 AS_IF([AC_TRY_EVAL(ac_link_default)],
 [# Find the output, starting from the most likely.  This scheme is
