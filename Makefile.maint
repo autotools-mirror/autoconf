@@ -143,8 +143,12 @@ announcement: NEWS ChangeLog $(distdir).tar.gz
 	)
 
 writable-files:
+	if test -d $(release-archive-dir); then :; else			\
+	  mkdir $(release-archive-dir);					\
+	fi
 	for file in $(distdir).tar.gz $(xd-delta)			\
-	  ../release/$(distdir).tar.gz ../release/$(xd-delta); do	\
+	            $(release-archive-dir)/$(distdir).tar.gz		\
+	            $(release-archive-dir)/$(xd-delta); do		\
 	  test -e $$file || continue;					\
 	  test -w $$file						\
 	    || { echo ERROR: $$file is not writable; fail=1; };		\
