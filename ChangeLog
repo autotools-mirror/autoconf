@@ -1,5 +1,11 @@
 2000-11-03  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_INIT_PARSE_ARGS): TRIPLET can include `_' and
+	`-'.
+	Reported by Andreas Jaeger.
+
+2000-11-03  Akim Demaille  <akim@epita.fr>
+
 	* m4sh.m4 (_AS_UNSET_PREPARE): New macro, eved from
 	_AC_INIT_PREPARE_ENVIRONMENT, and fixed: set `FOO' before trying
 	to unset it: `unset' exits 1 if the variable is not defined.

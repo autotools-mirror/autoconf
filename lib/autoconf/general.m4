@@ -1160,7 +1160,7 @@ Try `configure --help' for more information.])
   *)
     # FIXME: should be removed in autoconf 3.0.
     AC_MSG_WARN([you should use --build, --host, --target])
-    expr "x$ac_option" : "[.*[^.$ac_cr_alnum]]" >/dev/null &&
+    expr "x$ac_option" : "[.*[^-._$ac_cr_alnum]]" >/dev/null &&
       AC_MSG_WARN([invalid host type: $ac_option])
     : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
     ;;
