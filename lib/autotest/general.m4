@@ -131,7 +131,7 @@ m4_define([_m4_divert(TEST_SCRIPT)],        403)
 # even think about using `?' or `\?'.  Bah, `*' will do.
 # Pleeeeeeeease, Gary, provide us with dirname and ERE!
 m4_define([AT_LINE],
-[m4_bpatsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
+[$at_srcdir/m4_bpatsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
 
 
 # AT_INIT([TESTSUITE-NAME])
@@ -1086,6 +1086,7 @@ m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_
 )dnl
 m4_divert_pop([TEST_SCRIPT])dnl Back to TESTS
     AT_xfail
+    echo "#                             -*- compilation -*-" >> "$at_group_log"
     (
       echo "AT_ordinal. m4_defn([AT_line]): testing $1..."
       $at_traceon
@@ -1193,7 +1194,7 @@ m4_define([AT_CHECK_NOESCAPE],
 # trace with `set -x', the shell code will set `at_trace_this=yes'.  Otherwise,
 # the shell code will print a message stating an aspect of COMMANDS that makes
 # tracing them unsafe.
-# 
+#
 # Tracing COMMANDS is not safe if they contain a command that spans multiple
 # lines.  When the test suite user passes `-x' or `--trace', the test suite
 # precedes every command with a `set -x'.  Since most tests expect a specific
@@ -1201,7 +1202,7 @@ m4_define([AT_CHECK_NOESCAPE],
 # the captured stderr before comparing with the expected stderr.  If a command
 # spans multiple lines, so will its trace, but a `+' only prefixes the first
 # line of that trace:
-# 
+#
 # $ echo 'foo
 # bar'
 # => stdout
@@ -1210,14 +1211,14 @@ m4_define([AT_CHECK_NOESCAPE],
 # => stderr
 # + foo
 # bar
-# 
+#
 # In a subset of cases, one could filter such extended shell traces from stderr.
 # Since test commands spanning several lines are rare, I chose instead to simply
 # not trace COMMANDS that could yield multiple trace lines.  Distinguishing such
 # COMMANDS became the task at hand.
-# 
+#
 # These features may cause a shell command to span multiple lines:
-# 
+#
 # (a) A quoted literal newline.
 # Example:
 #   echo foo'
@@ -1225,7 +1226,7 @@ m4_define([AT_CHECK_NOESCAPE],
 # M4 is a hostile language for the job of parsing COMMANDS to determine whether
 # each literal newline is quoted, so we simply disable tracing for all COMMANDS
 # that bear literal newlines.
-# 
+#
 # (b) A command substitution not subject to word splitting.
 # Example:
 #   var=$(printf 'foo\nbar')
@@ -1234,7 +1235,7 @@ m4_define([AT_CHECK_NOESCAPE],
 # One cannot know in general the number of lines a command substitution will
 # yield without executing the substituted command.  As such, we disable tracing
 # for all COMMANDS containing these constructs.
-# 
+#
 # (c) A parameter expansion not subject to word splitting.
 # Example:
 #   var=foo'
@@ -1247,20 +1248,20 @@ m4_define([AT_CHECK_NOESCAPE],
 # a copy of COMMANDS and expand that string within double quotes at runtime.  If
 # the result of that expansion contains multiple lines, the test suite disables
 # tracing for the command in question.
-# 
+#
 # This method leads the test suite to expand some parameters that the shell
 # itself will never expand due to single-quotes or backslash escapes.  This is
 # not a problem for `$foo' expansions, which will simply yield the empty string
 # or some unrelated value.  A `${...}' expansion could actually form invalid
 # shell code, however; consider `${=foo}'.  Therefore, we disable tracing for
 # all COMMANDS containing `${...}'.  This affects few COMMANDS.
-# 
+#
 # This macro falls in a very hot path; the Autoconf test suite expands it 1640
 # times as of this writing.  To give a sense of the impact of the heuristics I
 # just described, the test suite preemptively disables tracing for 31 of those,
 # and 268 contain parameter expansions that require runtime evaluation.  The
 # balance are always safe to trace.
-# 
+#
 # _AT_CHECK expands COMMANDS, but the Autoconf language does not provide a way
 # to safely expand arbitrary COMMANDS in an argument list, so the below tests
 # examine COMMANDS unexpanded.

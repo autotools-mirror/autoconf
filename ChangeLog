@@ -1,3 +1,11 @@
+2004-12-21  Akim Demaille  <akim@epita.fr>
+
+	Enable Emacs navigation within testsuite.log files.
+
+	* lib/autotest/general.m4 (AT_CLEANUP): Add an hint for Emacs to
+	use the compilation mode.
+	(AT_LINE): Point to the srcdir.
+
 2004-12-19  Noah Misch  <noah@cs.caltech.edu>
 
 	* tests/Makefile.am (installcheck-local): Use $(bindir).
