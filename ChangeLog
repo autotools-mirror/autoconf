@@ -1,3 +1,13 @@
+2003-04-01  Akim Demaille  <akim@epita.fr>
+
+	* doc/autoconf.texi (ac, at, ms): Rename these indexes as...
+	(AC, AT, MS): these.
+	(shortindexflag, @acindex, @ahindex, @asindex, @atindex, @msindex):
+	New.
+	Use them.
+	* doc/Makefile.am (CLEANFILES): Adjust.
+	(TEXI2DVI): Make it --batch.
+
 2003-03-31  Derek Price  <derek@ximbiot.com>
 
 	* lib/autotest/general.m4: Revert the checkin from 3-27 which removed

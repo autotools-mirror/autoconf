@@ -105,8 +105,8 @@ standards_TEXINFOS = make-stds.texi
 
 # Files from texi2dvi that should be removed, but which Automake does
 # not know.
-CLEANFILES = autoconf.acs  autoconf.cvs  autoconf.mss  autoconf.prs \
-	     autoconf.ats  autoconf.evs  autoconf.fns  autoconf.ovs \
+CLEANFILES = autoconf.ACs  autoconf.cvs  autoconf.MSs  autoconf.prs \
+	     autoconf.ATs  autoconf.evs  autoconf.fns  autoconf.ovs \
              autoconf.tmp \
 	     autoconf*.html standards*.html
 
@@ -226,10 +226,10 @@ dist-info: $(INFO_DEPS)
 	done
 
 mostlyclean-aminfo:
-	-rm -f autoconf.AC autoconf.ACs autoconf.atx autoconf.atxs autoconf.aux \
-	  autoconf.cp autoconf.cps autoconf.cv autoconf.cvs autoconf.ev \
-	  autoconf.evs autoconf.fn autoconf.fns autoconf.ky \
-	  autoconf.kys autoconf.log autoconf.msx autoconf.msxs \
+	-rm -f autoconf.AC autoconf.ACs autoconf.AT autoconf.ATs autoconf.MS \
+	  autoconf.MSs autoconf.aux autoconf.cp autoconf.cps \
+	  autoconf.cv autoconf.cvs autoconf.ev autoconf.evs autoconf.fn \
+	  autoconf.fns autoconf.ky autoconf.kys autoconf.log \
 	  autoconf.ov autoconf.ovs autoconf.pg autoconf.pgs autoconf.pr \
 	  autoconf.prs autoconf.tmp autoconf.toc autoconf.tp \
 	  autoconf.tps autoconf.vr autoconf.vrs autoconf.dvi \
