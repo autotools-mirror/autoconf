@@ -1,5 +1,11 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* autoreconf.sh (dots, aclocal_m4, acconfig_h): Remove.
+	Adjust dependencies.
+	When using $verbose, redirect to stderr.
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* autoreconf.sh: Clarify the difference between the location of
 	`aclocal.m4' and that of the location Autoconf extensions.
 	(-M, --m4dir): New option.

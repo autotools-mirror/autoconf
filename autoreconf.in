@@ -251,17 +251,6 @@ while read dir; do
   (
   cd $dir || continue
 
-  case "$dir" in
-  .) dots= ;;
-  *) # A "../" for each directory in /$dir.
-     dots=`echo /$dir | sed 's%/[^/]*%../%g'` ;;
-  esac
-
-  case "$localdir" in
-  /*)  aclocal_m4=$localdir/aclocal.m4 ;;
-  *)   aclocal_m4=$dots$localdir/aclocal.m4 ;;
-  esac
-
 
   # ----------------- #
   # Running aclocal.  #
@@ -269,14 +258,13 @@ while read dir; do
 
   # uses_aclocal -- is this package using aclocal?
   uses_aclocal=false
-  aclocal_dir=`echo $aclocal_m4 | sed 's,/*[^/]*$,,;s,^$,.,'`
-  if grep 'generated automatically by aclocal' $aclocal_m4 >/dev/null 2>&1 ||
-     test -f "$aclocal_dir/acinclude.m4"; then
+  if grep 'generated .* by aclocal' $localddir/aclocal.m4 >/dev/null 2>&1 ||
+     test -f "$localdir/acinclude.m4"; then
      uses_aclocal=:
   fi
   if $uses_aclocal &&
      { $force ||
-       $update $aclocal_m4 $aclocal_dir/acinclude.m4; } then
+       $update $localdir/aclocal.m4 $localdir/acinclude.m4; } then
      # If there are flags for aclocal in Makefile.am, use them.
      aclocal_flags=`sed -f $tmp/alflags.sed Makefile.am 2>/dev/null`
 
@@ -290,8 +278,8 @@ while read dir; do
            aclocal_flags="$aclocal_flags -I $m4dir";;
      esac
 
-     $verbose running $aclocal $aclocal_flags --output=$aclocal_m4 in $dir
-     $aclocal $aclocal_flags --output=$aclocal_m4
+     $verbose running $aclocal $aclocal_flags --output=$localdir/aclocal.m4 in $dir >&2
+     $aclocal $aclocal_flags --output=$localdir/aclocal.m4
   fi
 
 
@@ -305,7 +293,7 @@ while read dir; do
     uses_automake=:
   if $uses_automake &&
      { $force || $update Makefile.in Makefile.am; } then
-    $verbose running $automake in $dir
+    $verbose running $automake in $dir >&2
     $automake
   fi
 
@@ -314,11 +302,9 @@ while read dir; do
   # Running autoconf.  #
   # ------------------ #
 
-  test ! -f $aclocal_m4 && aclocal_m4=
-
   if $force ||
-     $update configure configure.in $aclocal_m4; then
-    $verbose running $autoconf in $dir
+     $update configure configure.in $localdir/aclocal.m4; then
+    $verbose running $autoconf in $dir >&2
     $autoconf
   fi
 
@@ -341,17 +327,18 @@ while read dir; do
     template_dir=`echo $template | sed 's,/*[^/]*$,,;s,^$,.,'`
     stamp_num=`test "$tcount" -gt 1 && echo "$tcount"`
     stamp=$template_dir/stamp-h$stamp_num.in
-    acconfig_h=$localdir/acconfig.h
     uses_autoheader=false;
     grep autoheader "$template" >/dev/null 2>&1 &&
        uses_autoheader=:
     if $uses_autoheader &&
        { $force ||
-         $update $template configure.in $aclocal_m4 $acconfig_h ||
-         $update $stamp    configure.in $aclocal_m4 $acconfig_h; } then
-      $verbose running $autoheader in $dir
+         $update $template \
+            configure.in $localdir/aclocal.m4 $localdir/acconfig.h ||
+         $update $stamp    \
+            configure.in $localdir/aclocal_m4 $localdir/acconfig.h; } then
+      $verbose running $autoheader in $dir >&2
       $autoheader &&
-      $verbose "touching $stamp" &&
+      $verbose "touching $stamp" >&2 &&
       touch $stamp
     fi
   fi
