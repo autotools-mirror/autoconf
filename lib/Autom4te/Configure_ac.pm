@@ -79,7 +79,7 @@ sub require_configure_ac (;$)
 {
   my $res = find_configure_ac (@_);
   fatal "`configure.ac' or `configure.in' is required"
-    unless defined $res;
+    unless -f $res;
   return $res
 }
 

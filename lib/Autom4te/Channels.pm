@@ -158,7 +158,7 @@ C<$warnings_are_errors> is set.
 =item C<exit_code =E<gt> 1>
 
 The value to update C<$exit_code> with when a fatal or error message
-is emited.  C<$exit_code> is also updated for warnings output
+is emitted.  C<$exit_code> is also updated for warnings output
 when @<$warnings_are_errors> is set.
 
 =item C<file =E<gt> \*STDERR>
@@ -255,7 +255,7 @@ use vars qw (%_default_options %_global_duplicate_messages
    );
 
 # Filled with output messages as keys, to detect duplicates.
-# The value associated to each keys is the number of occurences
+# The value associated with each key is the number of occurrences
 # filtered out.
 %_local_duplicate_messages = ();
 %_global_duplicate_messages = ();
@@ -495,7 +495,7 @@ the following would be output:
 C<$location> can also be an instance of C<Autom4te::Location>.  In this
 case the stack of contexts will be displayed in addition.
 
-If C<$message> contains new line caracters, C<$location> is prepended
+If C<$message> contains newline characters, C<$location> is prepended
 to each line.  For instance
 
   msg 'error', 'somewhere', "1st line\n2nd line";
@@ -635,7 +635,7 @@ By default, when C<msg> is called, messages are processed immediately.
 
 Sometimes it is necessary to delay the output of messages.
 For instance you might want to make diagnostics before
-channels have been completly configured.
+channels have been completely configured.
 
 After C<buffer_messages(@types)> has been called, messages sent with
 C<msg> to a channel whose type is listed in C<@types> will be stored in a
