@@ -1,5 +1,13 @@
 2000-06-13  Akim Demaille  <akim@epita.fr>
 
+	`./config.status -d' is buggy.
+
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Remove the `shift' in
+	--debug.
+	* doc/autoconf.texi (Limitations of Builtins): Some about shift.
+
+2000-06-13  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Caching Results): Bigger warning about the
 	extremely frequent action-in-commands bug.
 	Move the documentation of AC_CACHE_SAVE and AC_CACHE_LOAD...

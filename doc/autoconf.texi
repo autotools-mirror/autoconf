@@ -4897,6 +4897,12 @@ if cmp -s file file.new; then :; else
 fi
 @end example
 
+@item @command{shift}
+@cindex @command{shift}
+Not only is @command{shift}ing a bad idea when there is nothing left to
+shift, but in addition it is not portable: the shell of @sc{RISC/os}
+4.52 refuses it.
+
 @item @command{test}
 @cindex @command{test}
 The @code{test} program is the way to perform many file and string

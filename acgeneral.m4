@@ -3985,7 +3985,7 @@ Try \`$me --help' for more information."; exit 1 ;;
   --help | --hel | -h )
     echo "$ac_cs_usage"; exit 0 ;;
   --debug | --d* | -d )
-    debug=:; shift ;;
+    debug=: ;;
   --file | --fil | --fi | --f )
     shift
     CONFIG_FILES="$CONFIG_FILES $[1]"
