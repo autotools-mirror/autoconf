@@ -125,7 +125,10 @@ sub init_tables
       die "$me: cannot open $datadir/ac$kind: $!\n";
     while (<TABLE>) {
       next if /^\s*$/ || /^\s*#/; # Ignore blank lines and comments.
-	($word, $macro) = split;
+      unless (/^(\S+)\s+(\S.*)$/) {
+	die "$me: cannot parse definition in $datadir/ac$kind:\n$_\n";
+      }
+      ($word, $macro) = ($1, $2);
       eval "\$$kind" . "_macros{\$word} = \$macro";
     }
     close(TABLE);
@@ -210,10 +213,10 @@ sub scan_c_file
 
     # Tokens in the code.
     # Maybe we should ignore function definitions (in column 0)?
-    while (s/\W([a-zA-Z_]\w*)\s*\(/ /) {
+    while (s/\b([a-zA-Z_]\w*)\s*\(/ /) {
       $functions{$1}++ if !defined($c_keywords{$1});
     }
-    while (s/\W([a-zA-Z_]\w*)\W/ /) {
+    while (s/\b([a-zA-Z_]\w*)\b/ /) {
       $identifiers{$1}++ if !defined($c_keywords{$1});
     }
   }
@@ -252,15 +255,15 @@ sub scan_makefile
     s/@[^@]*@//g;
 
     # Variable assignments.
-    while (s/\W([a-zA-Z_]\w*)\s*=/ /) {
+    while (s/\b([a-zA-Z_]\w*)\s*=/ /) {
       $makevars{$1}++;
     }
     # Libraries.
-    while (s/\W-l([a-zA-Z_]\w*)\W/ /) {
+    while (s/\B-l([a-zA-Z_]\w*)\b/ /) {
       $libraries{$1}++;
     }
     # Tokens in the code.
-    while (s/\W([a-zA-Z_]\w*)\W/ /) {
+    while (s/\b([a-zA-Z_]\w*)\b/ /) {
       $programs{$1}++;
     }
   }
@@ -298,7 +301,7 @@ sub scan_sh_file
     s/@[^@]*@//g;
 
     # Tokens in the code.
-    while (s/\W([a-zA-Z_]\w*)\W/ /) {
+    while (s/\b([a-zA-Z_]\w*)\b/ /) {
       $programs{$1}++;
     }
   }
@@ -323,6 +326,9 @@ sub output
   print CONF "AC_INIT\n";
   if (defined $initfile) {
     print CONF "AC_CONFIG_SRCDIR([$initfile])\n";
+  }
+  if (defined $cfiles[0]) {
+    print CONF "AC_CONFIG_HEADER([config.h])\n";
   }
 
   &output_programs;

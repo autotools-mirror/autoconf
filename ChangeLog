@@ -1,3 +1,16 @@
+2000-12-12  Pavel Roskin  <proski@gnu.org>
+
+	* autoscan.pl (init_tables): Allow spaces on the right hand side
+	in autoscan tables. Die if there are no spaces at all.
+	(scan_c_file): Use \b instead of \W so that keywords match at
+	the beginning and the end of the line.
+	(scan_sh_file): Likewise.
+	(scan_makefile): Likewise. Use \B to match before `-l'.
+	(output): Suggest AC_CONFIG_HEADER if any C/C++ sources are
+	found.
+	* acidentifiers: Update macros for structure members st_blksize
+	and st_rdev.
+
 2000-12-12  Akim Demaille  <akim@epita.fr>
 
 	* tests/compile.at (GNU Fortran 77): Be robust to compilers that
