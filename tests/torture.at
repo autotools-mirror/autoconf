@@ -16,7 +16,7 @@ AT_BANNER([[Testing config.status.
 
 AT_SETUP([AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 rm -rf header file link command
 touch header.in file.in link.in command.in
@@ -62,7 +62,7 @@ AT_CLEANUP(header file link command header.in file.in link.in command.in)
 # Check that config.status detects missing input files
 AT_SETUP([Missing templates])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 AC_CONFIG_FILES([nonexistent])
 AC_OUTPUT
@@ -93,7 +93,7 @@ AT_CLEANUP
 
 AT_SETUP([configure invocation])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 echo "result=$one$enable_two$with_three"
 AC_OUTPUT
@@ -130,7 +130,7 @@ AT_CLEANUP(configure config.status config.log config.cache)
 
 AT_SETUP([#define header templates])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h:config.hin)
 # I18n of dummy variables: their French translations.
@@ -242,7 +242,7 @@ AT_DATA([dummy.in],
 [@AT_DUMMY_VAR(AT_Count)@
 ])])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h:config.hin)
 AC_CONFIG_FILES(dummy)

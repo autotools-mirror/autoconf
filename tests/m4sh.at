@@ -11,7 +11,7 @@ AT_BANNER([M4sh.])
 
 AT_SETUP([[AS_DIRNAME & AS_DIRNAME_SED]])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[_AS_EXPR_PREPARE
 
 define([AS_DIRNAME_TEST],
@@ -62,7 +62,7 @@ AT_CLEANUP(configure)
 
 AT_SETUP([[AS_MKDIR_P]])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_PLAIN_SCRIPT
 pwd=`pwd`
 set -e
@@ -94,7 +94,7 @@ AT_CLEANUP(configure 1 a)
 
 AT_SETUP([Negated classes in globbing])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_PLAIN_SCRIPT
 case 'with!two!bangs' in
   *[[!a-z]]*) ;;

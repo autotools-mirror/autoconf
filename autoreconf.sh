@@ -359,6 +359,7 @@ while read dir; do
   # ------------------ #
 
   if $force ||
+     $update configure configure.ac $localdir/aclocal.m4 ||
      $update configure configure.in $localdir/aclocal.m4; then
     $verbose $me: running $autoconf in $dir >&2
     $autoconf
@@ -390,9 +391,13 @@ while read dir; do
     if $uses_autoheader &&
        { $force ||
          $update $template \
+            configure.ac $localdir/aclocal.m4 $localdir/acconfig.h ||
+         $update $template \
             configure.in $localdir/aclocal.m4 $localdir/acconfig.h ||
          $update $stamp    \
-            configure.in $localdir/aclocal_m4 $localdir/acconfig.h; } then
+            configure.ac $localdir/aclocal.m4 $localdir/acconfig.h ||
+         $update $stamp    \
+            configure.in $localdir/aclocal.m4 $localdir/acconfig.h; } then
       $verbose $me: running $autoheader in $dir >&2
       $autoheader &&
       $verbose "touching $stamp" >&2 &&

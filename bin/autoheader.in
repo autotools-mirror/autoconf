@@ -20,18 +20,14 @@
 
 # Written by Roland McGrath.
 
-# If given no args, create `config.h.in' from template file `configure.in'.
-# With one arg, create a header file on standard output from
-# the given template file.
-
 me=`echo "$0" | sed -e 's,.*/,,'`
 
 usage="\
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Create a template file of C \`#define' statements for \`configure' to
-use.  To this end, scan TEMPLATE-FILE, or \`configure.in' if none
-given.
+use.  To this end, scan TEMPLATE-FILE, or \`configure.ac' if present,
+or else \`configure.in'.
 
   -h, --help               print this help, then exit
   -V, --version            print version number, then exit
@@ -230,7 +226,18 @@ test -r $localdir/acconfig.h && acconfigs="$acconfigs $localdir/acconfig.h"
 
 # Find the input file.
 case $# in
-  0) infile=configure.in ;;
+  0)
+    case `ls configure.ac configure.in 2>/dev/null` in
+      *ac*in )
+        echo "$me: warning: both \`configure.ac' and \`configure.in' are present." >&2
+        echo "$me: warning: proceeding with \`configure.ac'." >&2
+        infile=configure.ac;;
+      *ac ) infile=configure.ac;;
+      *in ) infile=configure.in;;
+      * )
+        echo "$me: no input file" >&2
+        exit 1;;
+    esac;;
   1) infile=$1 ;;
   *) exec >&2
      echo "$me: invalid number of arguments."

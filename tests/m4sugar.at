@@ -12,7 +12,7 @@ AT_SETUP([[m4_text_wrap]])
 # commas are not swallowed.  This can easily happen because of
 # m4-listification.
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_PLAIN_SCRIPT()dnl
 m4_text_wrap([Short string */], [   ], [/* ], 20)
 
@@ -61,7 +61,7 @@ AT_SETUP([[m4_warn]])
 # commas are not swallowed.  This can easily happen because of
 # m4-listification.
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[m4_warn([foo],  [foo])
 m4_warn([bar],    [bar])
 m4_warn([syntax], [syntax])
@@ -69,25 +69,25 @@ m4_warn([syntax], [syntax])
 
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o-],
          0, [],
-[configure.in:3: warning: syntax
+[configure.ac:3: warning: syntax
 ])
 
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wall],
          0, [],
-[configure.in:1: warning: foo
-configure.in:2: warning: bar
-configure.in:3: warning: syntax
+[configure.ac:1: warning: foo
+configure.ac:2: warning: bar
+configure.ac:3: warning: syntax
 ])
 
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wnone,bar],
          0, [],
-[configure.in:2: warning: bar
+[configure.ac:2: warning: bar
 ])
 
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -o- -Wnone,bar,error],
          1, [],
-[configure.in:2: error: bar
-configure.in:2: the top level
+[configure.ac:2: error: bar
+configure.ac:2: the top level
 ])
 
 AT_CLEANUP

@@ -35,7 +35,7 @@
 @dircategory Individual utilities
 @direntry
 * autoscan: (autoconf)autoscan Invocation.
-                                Semi-automatic @file{configure.in} writing
+                                Semi-automatic @file{configure.ac} writing
 * ifnames: (autoconf)ifnames Invocation.
                                 Listing the conditionals in source code
 * autoconf: (autoconf)autoconf Invocation.
@@ -157,17 +157,17 @@ package.  This is edition @value{EDITION}, for Autoconf version
 
 Making @code{configure} Scripts
 
-* Writing configure.in::        What to put in an Autoconf input file
-* autoscan Invocation::         Semi-automatic @file{configure.in} writing
+* Writing configure.ac::        What to put in an Autoconf input file
+* autoscan Invocation::         Semi-automatic @file{configure.ac} writing
 * ifnames Invocation::          Listing the conditionals in source code
 * autoconf Invocation::         How to create configuration scripts
 * autoreconf Invocation::       Remaking multiple @code{configure} scripts
 
-Writing @file{configure.in}
+Writing @file{configure.ac}
 
 * Shell Script Compiler::       Autoconf as solution of a problem
 * Autoconf Language::           Programming in Autoconf
-* configure.in Layout::         Standard organization of configure.in
+* configure.ac Layout::         Standard organization of configure.ac
 
 Initialization and Output Files
 
@@ -344,7 +344,7 @@ Obsolete Constructs
 
 * Obsolete config.status Use::  Different calling convention
 * acconfig.h::                  Additional entries in @file{config.h.in}
-* autoupdate Invocation::       Automatic update of @file{configure.in}
+* autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
 
@@ -461,7 +461,7 @@ Autoconf Gnats database}, or sent to @email{bug-autoconf@@gnu.org, the
 Autoconf Bugs mailing list}.  If possible, first check that your bug is
 not already solved in current development versions, and that it has not
 been reported yet.  Be sure to include all the needed information and a
-short @file{configure.in} that demonstrates the problem.
+short @file{configure.ac} that demonstrates the problem.
 
 Autoconf's development tree is accessible via @sc{cvs}, see the Autoconf
 web page for details.  There is also a
@@ -541,14 +541,16 @@ a file called @file{config.log} containing any messages produced by
 compilers, to help debugging if @code{configure} makes a mistake.
 @end itemize
 
+@cindex @file{configure.in}
+@cindex @file{configure.ac}
 To create a @code{configure} script with Autoconf, you need to write an
-Autoconf input file @file{configure.in} and run @code{autoconf} on it.
-If you write your own feature tests to supplement those that come with
-Autoconf, you might also write files called @file{aclocal.m4} and
-@file{acsite.m4}.  If you use a C header file to contain @code{#define}
-directives, you might also run @code{autoheader}, and you will
-distribute the generated file @file{config.h.in} with the
-package.
+Autoconf input file @file{configure.ac} (or @file{configure.in}) and run
+@code{autoconf} on it.  If you write your own feature tests to
+supplement those that come with Autoconf, you might also write files
+called @file{aclocal.m4} and @file{acsite.m4}.  If you use a C header
+file to contain @code{#define} directives, you might also run
+@code{autoheader}, and you will distribute the generated file
+@file{config.h.in} with the package.
 
 Here is a diagram showing how the files that can be used in
 configuration are produced.  Programs that are executed are suffixed by
@@ -559,10 +561,10 @@ macro files (by reading @file{autoconf.m4}).
 @noindent
 Files used in preparing a software package for distribution:
 @example
-your source files --> [autoscan*] --> [configure.scan] --> configure.in
+your source files --> [autoscan*] --> [configure.scan] --> configure.ac
 
 @group
-configure.in --.
+configure.ac --.
                |   .------> autoconf* -----> configure
 [aclocal.m4] --+---+
                |   `-----> [autoheader*] --> [config.h.in]
@@ -586,41 +588,45 @@ Makefile.in ---'                    `-> Makefile ---'
 @end example
 
 @menu
-* Writing configure.in::        What to put in an Autoconf input file
-* autoscan Invocation::         Semi-automatic @file{configure.in} writing
+* Writing configure.ac::        What to put in an Autoconf input file
+* autoscan Invocation::         Semi-automatic @file{configure.ac} writing
 * ifnames Invocation::          Listing the conditionals in source code
 * autoconf Invocation::         How to create configuration scripts
 * autoreconf Invocation::       Remaking multiple @code{configure} scripts
 @end menu
 
-@node Writing configure.in, autoscan Invocation, Making configure Scripts, Making configure Scripts
-@section Writing @file{configure.in}
+@node Writing configure.ac, autoscan Invocation, Making configure Scripts, Making configure Scripts
+@section Writing @file{configure.ac}
 
 To produce a @code{configure} script for a software package, create a
-file called @file{configure.in} that contains invocations of the
+file called @file{configure.ac} that contains invocations of the
 Autoconf macros that test the system features your package needs or can
 use.  Autoconf macros already exist to check for many features; see
 @ref{Existing Tests}, for their descriptions.  For most other features,
 you can use Autoconf template macros to produce custom checks; see
 @ref{Writing Tests}, for information about them.  For especially tricky
-or specialized features, @file{configure.in} might need to contain some
+or specialized features, @file{configure.ac} might need to contain some
 hand-crafted shell commands.  The @code{autoscan} program can give you a
-good start in writing @file{configure.in} (@pxref{autoscan Invocation},
+good start in writing @file{configure.ac} (@pxref{autoscan Invocation},
 for more information).
 
-
+Previous versions of Autoconf promoted the name @file{configure.in},
+which is somewhat ambiguous (the tool needed to proceed this file is not
+given by the extension), and introduces a slight confusion with
+@file{config.h.in} and so on, for which @samp{.in} means ``to be
+processed by @code{configure}''.  Using @file{configure.ac} is now preferred.
 
 @menu
 * Shell Script Compiler::       Autoconf as solution of a problem
 * Autoconf Language::           Programming in Autoconf
-* configure.in Layout::         Standard organization of configure.in
+* configure.ac Layout::         Standard organization of configure.ac
 @end menu
 
-@node Shell Script Compiler, Autoconf Language, Writing configure.in, Writing configure.in
+@node Shell Script Compiler, Autoconf Language, Writing configure.ac, Writing configure.ac
 @subsection A Shell Script Compiler
 
 Like for any other language, to properly program in Autoconf, i.e., the
-language in which you write @file{configure.in}, you must understand
+language in which you write @file{configure.ac}, you must understand
 @emph{what} is the problem it tries to answer, and @emph{how} it does.
 
 The problem Autoconf addresses is that the world is a mess: after all,
@@ -638,7 +644,7 @@ do not belong to the least common divisor, therefore, where you'd define
 a function and use it ten times, you need to write ten times its body.
 
 Therefore, what is really needed is some kind of compiler,
-@code{autoconf}, which takes an Autoconf program, @file{configure.in},
+@code{autoconf}, which takes an Autoconf program, @file{configure.ac},
 and transform it in a portable shell script, @code{configure}.
 
 How does @code{autoconf} perform this task?
@@ -661,7 +667,7 @@ expander, such as M4, and implement the extensions as a set of M4
 macros.
 
 
-@node Autoconf Language, configure.in Layout, Shell Script Compiler, Writing configure.in
+@node Autoconf Language, configure.ac Layout, Shell Script Compiler, Writing configure.ac
 @subsection The Autoconf Language
 @cindex quotation
 
@@ -776,26 +782,26 @@ AC_CHECK_HEADERS(stdio.h)
 @end example
 
 It is best to put each macro call on its own line in
-@file{configure.in}.  Most of the macros don't add extra newlines; they
+@file{configure.ac}.  Most of the macros don't add extra newlines; they
 rely on the newline after the macro call to terminate the commands.
 This approach makes the generated @code{configure} script a little
 easier to read by not inserting lots of blank lines.  It is generally
 safe to set shell variables on the same line as a macro call, because
 the shell allows assignments without intervening newlines.
 
-You can include comments in @file{configure.in} files by starting them
+You can include comments in @file{configure.ac} files by starting them
 with the @samp{#}.  For example, it is helpful to begin
-@file{configure.in} files with a line like this:
+@file{configure.ac} files with a line like this:
 
 @example
 # Process this file with autoconf to produce a configure script.
 @end example
 
-@node configure.in Layout,  , Autoconf Language, Writing configure.in
-@subsection Standard @file{configure.in} Layout
+@node configure.ac Layout,  , Autoconf Language, Writing configure.ac
+@subsection Standard @file{configure.ac} Layout
 
-The order in which @file{configure.in} calls the Autoconf macros is not
-important, with a few exceptions.  Every @file{configure.in} must
+The order in which @file{configure.ac} calls the Autoconf macros is not
+important, with a few exceptions.  Every @file{configure.ac} must
 contain a call to @code{AC_INIT} before the checks, and a call to
 @code{AC_OUTPUT} at the end (@pxref{Output}).  Additionally, some macros
 rely on other macros having been called first, because they check
@@ -828,20 +834,20 @@ checks for system services
 @end display
 
 
-@node autoscan Invocation, ifnames Invocation, Writing configure.in, Making configure Scripts
-@section Using @code{autoscan} to Create @file{configure.in}
+@node autoscan Invocation, ifnames Invocation, Writing configure.ac, Making configure Scripts
+@section Using @code{autoscan} to Create @file{configure.ac}
 @cindex @code{autoscan}
 
-The @code{autoscan} program can help you create a @file{configure.in}
+The @code{autoscan} program can help you create a @file{configure.ac}
 file for a software package.  @code{autoscan} examines source files in
 the directory tree rooted at a directory given as a command line
 argument, or the current directory if none is given.  It searches the
 source files for common portability problems and creates a file
-@file{configure.scan} which is a preliminary @file{configure.in} for
+@file{configure.scan} which is a preliminary @file{configure.ac} for
 that package.
 
 You should manually examine @file{configure.scan} before renaming it to
-@file{configure.in}; it will probably need some adjustments.
+@file{configure.ac}; it will probably need some adjustments.
 Occasionally @code{autoscan} outputs a macro in the wrong order relative
 to another macro, so that @code{autoconf} produces a warning; you need
 to move such macros manually.  Also, if you want the package to use a
@@ -890,12 +896,12 @@ different versions of Autoconf.
 @section Using @code{ifnames} to List Conditionals
 @cindex @code{ifnames}
 
-@code{ifnames} can help when writing a @file{configure.in} for a
+@code{ifnames} can help when writing a @file{configure.ac} for a
 software package.  It prints the identifiers that the package already
 uses in C preprocessor conditionals.  If a package has already been set
 up to have some portability, this program can help you figure out what
 its @code{configure} needs to check for.  It may help fill in some gaps
-in a @file{configure.in} generated by @code{autoscan} (@pxref{autoscan
+in a @file{configure.ac} generated by @code{autoscan} (@pxref{autoscan
 Invocation}).
 
 @code{ifnames} scans all of the C source files named on the command line
@@ -922,14 +928,14 @@ Print the version number of Autoconf and exit.
 @section Using @code{autoconf} to Create @code{configure}
 @cindex @code{autoconf}
 
-To create @code{configure} from @file{configure.in}, run the
+To create @code{configure} from @file{configure.ac}, run the
 @code{autoconf} program with no arguments.  @code{autoconf} processes
-@file{configure.in} with the @code{m4} macro processor, using the
+@file{configure.ac} with the @code{m4} macro processor, using the
 Autoconf macros.  If you give @code{autoconf} an argument, it reads that
-file instead of @file{configure.in} and writes the configuration script
+file instead of @file{configure.ac} and writes the configuration script
 to the standard output instead of to @code{configure}.  If you give
 @code{autoconf} the argument @option{-}, it reads the standard input
-instead of @file{configure.in} and writes the configuration script on
+instead of @file{configure.ac} and writes the configuration script on
 the standard output.
 
 The Autoconf macros are defined in several files.  Some of the files are
@@ -1020,7 +1026,7 @@ none,obsolete}.
 @cindex Macro invocation stack
 @command{autoconf} displays a back trace for errors, but not for
 warnings; if you want them, just pass @option{-W error}.  For instance
-on this @file{configure.in}:
+on this @file{configure.ac}:
 
 @example
 AC_DEFUN([INNER],
@@ -1038,15 +1044,15 @@ you get:
 
 @example
 /tmp % ace -Wcross
-configure.in:8: warning: AC_TRY_RUN called without default \
+configure.ac:8: warning: AC_TRY_RUN called without default \
 to allow cross compiling
 /tmp % ace -Wcross,error
-configure.in:8: error: AC_TRY_RUN called without default \
+configure.ac:8: error: AC_TRY_RUN called without default \
 to allow cross compiling
 acgeneral.m4:3044: AC_TRY_RUN is expanded from...
-configure.in:2: INNER is expanded from...
-configure.in:5: OUTTER is expanded from...
-configure.in:8: the top level
+configure.ac:2: INNER is expanded from...
+configure.ac:5: OUTTER is expanded from...
+configure.ac:8: the top level
 @end example
 
 @item --trace=@var{macro}[:@var{format}]
@@ -1068,9 +1074,9 @@ results in a noticeable speedup, but can be disabled by this option.
 @end table
 
 
-It is often necessary to check the content of a @file{configure.in} file,
+It is often necessary to check the content of a @file{configure.ac} file,
 but it is extremely fragile and error prone to try to parse it.  It is
-suggested to rely upon @option{--trace} to scan @file{configure.in}.
+suggested to rely upon @option{--trace} to scan @file{configure.ac}.
 
 The @var{format} of @option{--trace} can use the following special
 escapes:
@@ -1123,9 +1129,9 @@ For instance, to know the list of variables that are substituted:
 @example
 @group
 % autoconf -t AC_SUBST
-configure.in:2:AC_SUBST:ECHO_C
-configure.in:2:AC_SUBST:ECHO_N
-configure.in:2:AC_SUBST:ECHO_T
+configure.ac:2:AC_SUBST:ECHO_C
+configure.ac:2:AC_SUBST:ECHO_N
+configure.ac:2:AC_SUBST:ECHO_T
 @i{More traces deleted}
 @end group
 @end example
@@ -1136,7 +1142,7 @@ The example below highlights the difference between @samp{$@@},
 
 @example
 @group
-% cat configure.in
+% cat configure.ac
 AC_DEFINE(This, is, [an
 [example]])
 % autoconf -t 'AC_DEFINE:@@: $@@
@@ -1156,9 +1162,9 @@ Much freedom is given over the @var{format}:
 @example
 @group
 % autoconf -t 'AC_SUBST:ac_subst@{"$1"@} = "$f:$l";'
-ac_subst@{"ECHO_C"@} = "configure.in:2";
-ac_subst@{"ECHO_N"@} = "configure.in:2";
-ac_subst@{"ECHO_T"@} = "configure.in:2";
+ac_subst@{"ECHO_C"@} = "configure.ac:2";
+ac_subst@{"ECHO_N"@} = "configure.ac:2";
+ac_subst@{"ECHO_T"@} = "configure.ac:2";
 @i{More traces deleted}
 @end group
 @end example
@@ -1187,7 +1193,7 @@ If you have a lot of Autoconf-generated @code{configure} scripts, the
 remake the Autoconf @code{configure} scripts and configuration header
 templates in the directory tree rooted at the current directory.  By
 default, it only remakes those files that are older than their
-@file{configure.in} or (if present) @file{aclocal.m4}.  Since
+@file{configure.ac} or (if present) @file{aclocal.m4}.  Since
 @code{autoheader} does not change the timestamp of its output file if
 the file wouldn't be changing, this is not necessarily the minimum
 amount of work.  If you install a new version of Autoconf, you can make
@@ -1237,7 +1243,7 @@ Don't remove the temporary files.
 @item --force
 @itemx -f
 Remake even @file{configure} scripts and configuration headers that are
-newer than their input files (@file{configure.in} and, if present,
+newer than their input files (@file{configure.ac} and, if present,
 @file{aclocal.m4}).
 
 @item --install
@@ -1254,7 +1260,7 @@ Instead of copying missing auxiliary files, install symbolic links.
 Have @code{autoconf} and @code{autoheader} look for the package files
 @file{aclocal.m4} and (@code{autoheader} only) @file{acconfig.h} (but
 not @file{@var{file}.top} and @file{@var{file}.bot}) in directory
-@var{dir} instead of in the directory containing each @file{configure.in}.
+@var{dir} instead of in the directory containing each @file{configure.ac}.
 
 @item --autoconf-dir=@var{dir}
 @itemx -A @var{dir}
@@ -1356,12 +1362,12 @@ The @var{copyright-notice} will show up in both the head of
 @cindex Revision
 Copy revision stamp @var{revision-info} into the @code{configure}
 script, with any dollar signs or double-quotes removed.  This macro lets
-you put a revision stamp from @file{configure.in} into @code{configure}
+you put a revision stamp from @file{configure.ac} into @code{configure}
 without @sc{rcs} or @code{cvs} changing it when you check in
 @code{configure}.  That way, you can determine easily which revision of
-@file{configure.in} a particular @code{configure} corresponds to.
+@file{configure.ac} a particular @code{configure} corresponds to.
 
-For example, this line in @file{configure.in}:
+For example, this line in @file{configure.ac}:
 
 @c The asis prevents RCS from changing the example in the manual.
 @example
@@ -1373,7 +1379,7 @@ produces this in @code{configure}:
 
 @example
 #! /bin/sh
-# From configure.in Revision: 1.30
+# From configure.ac Revision: 1.30
 @end example
 @end defmac
 
@@ -1466,7 +1472,7 @@ describes the former use, and its modern equivalent.
 @maindex OUTPUT
 @cindex Instantiation
 Generate @file{config.status} and launch it.  Call this macro once, at
-the end of @file{configure.in}.
+the end of @file{configure.ac}.
 
 @file{config.status} will take all the configuration actions: all the
 output files (see @ref{Configuration Files}, macro
@@ -1586,7 +1592,7 @@ output variables in the concatenation of @file{boiler/top.mk} and
 The special value @samp{-} might be used to denote the standard output
 when used in @var{output}, or the standard input when used in the
 @var{inputs}.  You most probably don't need to use this in
-@file{configure.in}, but it is convenient when using the command line
+@file{configure.ac}, but it is convenient when using the command line
 interface of @file{./config.status}, see @ref{config.status Invocation},
 for more details.
 
@@ -2022,12 +2028,12 @@ command like @code{echo} as a workaround.
 
 @example
 @group
-$(srcdir)/configure: configure.in aclocal.m4
+$(srcdir)/configure: configure.ac aclocal.m4
         cd $(srcdir) && autoconf
 
 # autoheader might not change config.h.in, so touch a stamp file.
 $(srcdir)/config.h.in: stamp-h.in
-$(srcdir)/stamp-h.in: configure.in aclocal.m4
+$(srcdir)/stamp-h.in: configure.ac aclocal.m4
         cd $(srcdir) && autoheader
         echo timestamp > $(srcdir)/stamp-h.in
 
@@ -2121,7 +2127,7 @@ to prepend and/or append boilerplate to the file.
 Your distribution should contain a template file that looks as you want
 the final header file to look, including comments, with @code{#undef}
 statements which are used as hooks.  For example, suppose your
-@file{configure.in} makes these calls:
+@file{configure.ac} makes these calls:
 
 @example
 AC_CONFIG_HEADERS(conf.h)
@@ -2169,7 +2175,7 @@ use @code{autoheader} to generate it, see @ref{autoheader Invocation}.
 
 The @command{autoheader} program can create a template file of C
 @samp{#define} statements for @code{configure} to use.  If
-@file{configure.in} invokes @code{AC_CONFIG_HEADERS(@var{file})},
+@file{configure.ac} invokes @code{AC_CONFIG_HEADERS(@var{file})},
 @command{autoheader} creates @file{@var{file}.in}; if multiple file
 arguments are given, the first one is used.  Otherwise,
 @command{autoheader} creates @file{config.h.in}.
@@ -2203,10 +2209,10 @@ just have to @emph{fill in the blanks}.
 But let's come back to the point: @command{autoheader}'s invocation...
 
 If you give @command{autoheader} an argument, it uses that file instead
-of @file{configure.in} and writes the header file to the standard output
+of @file{configure.ac} and writes the header file to the standard output
 instead of to @file{config.h.in}.  If you give @command{autoheader} an
 argument of @option{-}, it reads the standard input instead of
-@file{configure.in} and writes the header file to the standard output.
+@file{configure.ac} and writes the header file to the standard output.
 
 @code{autoheader} accepts the following options:
 
@@ -2273,7 +2279,7 @@ disable warnings falling into @var{category}
 @node Autoheader Macros,  , autoheader Invocation, Configuration Headers
 @subsection Autoheader Macros
 
-@code{autoheader} scans @file{configure.in} and figures out which C
+@code{autoheader} scans @file{configure.ac} and figures out which C
 preprocessor symbols it might define.  It knows how to generate
 templates for symbols defined by @code{AC_CHECK_HEADERS},
 @code{AC_CHECK_FUNCS} etc., but if you @code{AC_DEFINE} any additional
@@ -2484,7 +2490,7 @@ it is run instead of @code{configure}. This is for packages that might
 use a non-autoconf script @code{Configure}, which can't be called
 through a wrapper @code{configure} since it would be the same file on
 case-insensitive filesystems. Likewise, if a @var{dir} contains
-@file{configure.in} but no @code{configure}, the Cygnus @code{configure}
+@file{configure.ac} but no @code{configure}, the Cygnus @code{configure}
 script found by @code{AC_CONFIG_AUXDIR} is used.
 
 The subdirectory @code{configure} scripts are given the same command
@@ -3426,7 +3432,7 @@ nevertheless, there is always a means to avoid this, and you are
 encouraged to always uses literals with @code{AC_LIBOBJ}.
 
 Conversely, if you need to know what are the files that might be needed
-by a @file{configure.in}, you should trace @code{AC_LIBOBJ_DECL}.
+by a @file{configure.ac}, you should trace @code{AC_LIBOBJ_DECL}.
 @end defmac
 
 
@@ -3559,7 +3565,7 @@ functions but @file{string.h}; some declare the memory functions in
 @file{memory.h}, some in @file{string.h}; etc.  It is probably
 sufficient to check for one string function and one memory function; if
 the library has the @sc{ansi} versions of those then it probably has
-most of the others.  If you put the following in @file{configure.in}:
+most of the others.  If you put the following in @file{configure.ac}:
 
 @example
 AC_HEADER_STDC
@@ -4564,7 +4570,7 @@ any found to the output variable @code{X_PRE_LIBS}.
 @maindex SYS_INTERPRETER
 Check whether the system supports starting scripts with a line of the
 form @samp{#! /bin/csh} to select the interpreter to use for the script.
-After running this macro, shell code in @code{configure.in} can check
+After running this macro, shell code in @code{configure.ac} can check
 the shell variable @code{interpval}; it will be set to @samp{yes}
 if the system supports @samp{#!}, @samp{no} if not.
 @end defmac
@@ -4929,7 +4935,7 @@ to @code{return} in @code{main} is ignored.
 Test programs can use @code{#if} or @code{#ifdef} to check the values of
 preprocessor macros defined by tests that have already run.  For
 example, if you call @code{AC_HEADER_STDC}, then later on in
-@file{configure.in} you can have a test program that includes an
+@file{configure.ac} you can have a test program that includes an
 @sc{ansi} C header file conditionally:
 
 @example
@@ -6322,7 +6328,7 @@ its features by default.  Packages that use other programming languages
 (maybe more than one, e.g. C and C++) need to test features of the
 compilers for the respective languages.  The following macros determine
 which programming language is used in the subsequent tests in
-@file{configure.in}.
+@file{configure.ac}.
 
 @defmac AC_LANG (@var{language})
 Do compilation tests using the compiler, preprocessor and file
@@ -6510,7 +6516,7 @@ names when @code{AC_OUTPUT} is called.  Set the variable to
 
 This macro is useful for inserting @file{Makefile} fragments containing
 special dependencies or other @code{make} directives for particular host
-or target types into @file{Makefile}s.  For example, @file{configure.in}
+or target types into @file{Makefile}s.  For example, @file{configure.ac}
 could contain:
 
 @example
@@ -6700,7 +6706,7 @@ site-wide cache file to use instead of the default, to make it work
 transparently, as long as the same C compiler is used every time
 (@pxref{Site Defaults}).
 
-If your configure script, or a macro called from configure.in, happens
+If your configure script, or a macro called from configure.ac, happens
 to abort the configure process, it may be useful to checkpoint the cache
 a few times at key points using @code{AC_CACHE_SAVE}.  Doing so will
 reduce the amount of time it takes to re-run the configure script with
@@ -6717,7 +6723,7 @@ cache file is not found.  Called automatically from @code{AC_INIT}.
 @maindex CACHE_SAVE
 Flushes all cached values to the cache file.  Called automatically from
 @code{AC_OUTPUT}, but it can be quite useful to call
-@code{AC_CACHE_SAVE} at key points in configure.in.
+@code{AC_CACHE_SAVE} at key points in configure.ac.
 @end defmac
 
 For instance:
@@ -7055,7 +7061,7 @@ define(car, $1)
 @end example
 
 @noindent
-But, while it is acceptable for a @file{configure.in} to avoid unneeded
+But, while it is acceptable for a @file{configure.ac} to avoid unneeded
 quotes, it is bad practice for Autoconf macros which must both be more
 robust, and advocate the perfect writing.
 
@@ -7440,7 +7446,7 @@ fi])
 @end example
 
 @noindent
-with this @file{configure.in}
+with this @file{configure.ac}
 
 @example
 AC_INIT
@@ -7497,8 +7503,8 @@ the documentation.
 
 Autoconf provides the @code{AC_BEFORE} macro to warn users when macros
 with this kind of dependency appear out of order in a
-@file{configure.in} file.  The warning occurs when creating
-@code{configure} from @file{configure.in}, not when running
+@file{configure.ac} file.  The warning occurs when creating
+@code{configure} from @file{configure.ac}, not when running
 @code{configure}.
 
 For example, @code{AC_PROG_CPP} checks whether the C compiler
@@ -7939,7 +7945,7 @@ otherwise it defaults to @code{host}.
 @section Using the System Type
 
 How do you use a canonical system type?  Usually, you use it in one or
-more @code{case} statements in @file{configure.in} to select
+more @code{case} statements in @file{configure.ac} to select
 system-specific C files.  Then, using @code{AC_CONFIG_LINKS}, link those
 files which have names based on the system name, to generic names, such
 as @file{host.h} or @file{target.c} (@pxref{Configuration Links}).  The
@@ -7955,7 +7961,7 @@ esac
 @end example
 
 @noindent
-and in @file{configure.in}, use:
+and in @file{configure.ac}, use:
 
 @example
 AC_CONFIG_LINKS(host.h:config/$machine.h
@@ -8023,7 +8029,7 @@ some of the packages support.  An unfortunate side effect is that option
 spelling errors are not diagnosed.  No better approach to this problem
 has been suggested so far.
 
-For each external software package that may be used, @file{configure.in}
+For each external software package that may be used, @file{configure.ac}
 should call @code{AC_ARG_WITH} to detect whether the @code{configure}
 user asked to use it.  Whether each package is used or not by default,
 and which arguments are valid, is up to you.
@@ -8099,7 +8105,7 @@ that some of the packages support.
 An unfortunate side effect is that option spelling errors are not diagnosed.
 No better approach to this problem has been suggested so far.
 
-For each optional feature, @file{configure.in} should call
+For each optional feature, @file{configure.ac} should call
 @code{AC_ARG_ENABLE} to detect whether the @code{configure} user asked
 to include it.  Whether each feature is included or not by default, and
 which arguments are valid, is up to you.
@@ -8208,7 +8214,7 @@ Standards}, for more information on where to put data files.
 @section Transforming Program Names When Installing
 
 Autoconf supports changing the names of programs when installing them.
-In order to use these transformations, @file{configure.in} must call the
+In order to use these transformations, @file{configure.ac} must call the
 macro @code{AC_ARG_PROGRAM}.
 
 @defmac AC_ARG_PROGRAM
@@ -8495,7 +8501,7 @@ distributed packages to share the values computed by @code{configure}.
 Doing so can be useful if some of the packages need a superset of the
 features that one of them, perhaps a common library, does.  These
 options allow a @file{config.status} file to create files other than the
-ones that its @file{configure.in} specifies, so it can be used for a
+ones that its @file{configure.ac} specifies, so it can be used for a
 different package.
 
 @item --header=@var{file}[:@var{template}]
@@ -8534,7 +8540,7 @@ scripts shouldn't be merged because they are maintained separately.
 
 You can use @file{./config.status} in your Makefiles.  For example, in
 the dependencies given above (@pxref{Automatic Remaking}),
-@file{config.status} is run twice when @file{configure.in} has changed.
+@file{config.status} is run twice when @file{configure.ac} has changed.
 If that bothers you, you can make each run only regenerate the files for
 that rule:
 @example
@@ -8569,7 +8575,7 @@ understanding how to move to more modern constructs.
 @menu
 * Obsolete config.status Use::  Different calling convention
 * acconfig.h::                  Additional entries in @file{config.h.in}
-* autoupdate Invocation::       Automatic update of @file{configure.in}
+* autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
 @end menu
@@ -8585,14 +8591,14 @@ Before, environment variables had to be used.
 @evindex CONFIG_COMMANDS
 The tags of the commands to execute.  The default is the arguments given
 to @code{AC_OUTPUT} and @code{AC_CONFIG_COMMANDS} in
-@file{configure.in}.
+@file{configure.ac}.
 @end defvar
 
 @defvar CONFIG_FILES
 @evindex CONFIG_FILES
 The files in which to perform @samp{@@@var{variable}@@} substitutions.
 The default is the arguments given to @code{AC_OUTPUT} and
-@code{AC_CONFIG_FILES} in @file{configure.in}.
+@code{AC_CONFIG_FILES} in @file{configure.ac}.
 @end defvar
 
 @defvar CONFIG_HEADERS
@@ -8627,7 +8633,7 @@ Makefile: Makefile.in config.status
 @end example
 
 @noindent
-(If @file{configure.in} does not call @code{AC_CONFIG_HEADERS}, there is
+(If @file{configure.ac} does not call @code{AC_CONFIG_HEADERS}, there is
 no need to set @code{CONFIG_HEADERS} in the @code{make} rules, equally
 for @code{CONFIG_COMMANDS} etc.)
 
@@ -8667,7 +8673,7 @@ In former versions of Autoconf, the files used in preparing a software
 package for distribution were:
 @example
 @group
-configure.in --.   .------> autoconf* -----> configure
+configure.ac --.   .------> autoconf* -----> configure
                +---+
 [aclocal.m4] --+   `---.
 [acsite.m4] ---'       |
@@ -8679,30 +8685,30 @@ configure.in --.   .------> autoconf* -----> configure
 @end group
 @end example
 
-Use only the @code{AH_} macros, @file{configure.in} should be
+Use only the @code{AH_} macros, @file{configure.ac} should be
 self-contained, and should not depend upon @file{acconfig.h} etc.
 
 
 @node autoupdate Invocation, Obsolete Macros, acconfig.h, Obsolete Constructs
-@section Using @code{autoupdate} to Modernize @file{configure.in}
+@section Using @code{autoupdate} to Modernize @file{configure.ac}
 @cindex @code{autoupdate}
 
-The @code{autoupdate} program updates a @file{configure.in} file that
+The @code{autoupdate} program updates a @file{configure.ac} file that
 calls Autoconf macros by their old names to use the current macro names.
 In version 2 of Autoconf, most of the macros were renamed to use a more
 uniform and descriptive naming scheme.  @xref{Macro Names}, for a
 description of the new scheme.  Although the old names still work
 (@pxref{Obsolete Macros}, for a list of the old macros and the corresponding
-new names), you can make your @file{configure.in} files more readable
+new names), you can make your @file{configure.ac} files more readable
 and make it easier to use the current Autoconf documentation if you
 update them to use the new macro names.
 
 @evindex SIMPLE_BACKUP_SUFFIX
-If given no arguments, @code{autoupdate} updates @file{configure.in},
+If given no arguments, @code{autoupdate} updates @file{configure.ac},
 backing up the original version with the suffix @file{~} (or the value
 of the environment variable @code{SIMPLE_BACKUP_SUFFIX}, if that is
 set).  If you give @code{autoupdate} an argument, it reads that file
-instead of @file{configure.in} and writes the updated file to the
+instead of @file{configure.ac} and writes the updated file to the
 standard output.
 
 @noindent
@@ -9485,7 +9491,7 @@ AC_EGREP_CPP(yes,
 Autoconf version 2 is mostly backward compatible with version 1.
 However, it introduces better ways to do some things, and doesn't
 support some of the ugly things in version 1.  So, depending on how
-sophisticated your @file{configure.in} files are, you might have to do
+sophisticated your @file{configure.ac} files are, you might have to do
 some manual work in order to upgrade to version 2.  This chapter points
 out some problems to watch for when upgrading.  Also, perhaps your
 @code{configure} scripts could benefit from some of the new features in
@@ -9559,7 +9565,7 @@ Many of the macros were renamed in Autoconf version 2.  You can still
 use the old names, but the new ones are clearer, and it's easier to find
 the documentation for them.  @xref{Obsolete Macros}, for a table showing the
 new names for the old macros.  Use the @code{autoupdate} program to
-convert your @file{configure.in} to using the new macro names.
+convert your @file{configure.ac} to using the new macro names.
 @xref{autoupdate Invocation}.
 
 Some macros have been superseded by similar ones that do the job better,
@@ -9588,7 +9594,7 @@ contents of that variable turned out to be too cumbersome and
 inefficient to do every time @code{AC_DEFINE} is called.  @xref{Cache
 Variable Names}.
 
-For example, here is a @file{configure.in} fragment written for Autoconf
+For example, here is a @file{configure.ac} fragment written for Autoconf
 version 1:
 
 @example
@@ -9693,7 +9699,7 @@ GPL, but doing so is not required to use Autoconf.
 
 Of the other files that might be used with @code{configure},
 @file{config.h.in} is under whatever copyright you use for your
-@file{configure.in}.  @file{config.sub} and @file{config.guess} have an
+@file{configure.ac}.  @file{config.sub} and @file{config.guess} have an
 exception to the GPL when they are used with an Autoconf-generated
 @code{configure} script, which permits you to distribute them under the
 same terms as the rest of your package.  @file{install-sh} is from the X
@@ -9919,10 +9925,10 @@ locally or that have patches from vendors installed.
 
 I considered using an architecture similar to that of Cygnus
 @code{configure}, where there is a single @code{configure} script that
-reads pieces of @file{configure.in} when run.  But I didn't want to have
+reads pieces of @file{configure.ac} when run.  But I didn't want to have
 to distribute all of the feature tests with every package, so I settled
 on having a different @code{configure} made from each
-@file{configure.in} by a preprocessor.  That approach also offered more
+@file{configure.ac} by a preprocessor.  That approach also offered more
 control and flexibility.
 
 I looked briefly into using the Metaconfig package, by Larry Wall,

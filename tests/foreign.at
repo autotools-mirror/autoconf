@@ -15,8 +15,8 @@ AT_CHECK([libtoolize --version || exit 77],
 AT_CHECK([[libtoolize --version | grep '1.3.[012345]' && exit 77]],
          ignore, ignore, ignore)
 
-# Using a configure.in, have libtoolize confess where libtool.m4 is.
-AT_DATA([configure.in],
+# Using a configure.ac, have libtoolize confess where libtool.m4 is.
+AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
@@ -24,9 +24,9 @@ AC_PROG_LIBTOOL
 AT_CHECK([libtoolize | sed -n ["s,^.*\`\(/[^']*\)'.*,\1,p"] >at-path],
          0, [], ignore)
 
-# Build the concatenation of libtool.m4 and configure.in.
-cp `cat at-path` configure.in
-cat >>configure.in <<_EOF
+# Build the concatenation of libtool.m4 and configure.ac.
+cp `cat at-path` configure.ac
+cat >>configure.ac <<_EOF
 AC_INIT
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL

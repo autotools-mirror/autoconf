@@ -11,7 +11,7 @@ AT_BANNER([Autoconf base layer.])
 
 AT_SETUP([AC_REQUIRE: topological sort])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[define([REQUIRE_AND_CHECK],
 [AC_REQUIRE([$1])dnl
 test -z "$m4_translit([$1], [A-Z], [a-z])" && AS_EXIT(1)])
@@ -52,7 +52,7 @@ AT_CLEANUP
 
 AT_SETUP([AC_REQUIRE & AC_DEFUN_ONCE: Require, expand])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_DEFUN([TEST],
 [AC_REQUIRE([MULTI_TEST])
 AC_REQUIRE([SINGLE_TEST])])
@@ -79,8 +79,8 @@ esac
 ]])
 
 AT_CHECK_AUTOCONF([], [],
-[configure.in:16: warning: SINGLE_TEST invoked multiple times
-configure.in:17: warning: SINGLE_TEST invoked multiple times
+[configure.ac:16: warning: SINGLE_TEST invoked multiple times
+configure.ac:17: warning: SINGLE_TEST invoked multiple times
 ])
 
 AT_CHECK_CONFIGURE
@@ -95,7 +95,7 @@ AT_CLEANUP
 
 AT_SETUP([AC_REQUIRE & AC_DEFUN_ONCE: Expand, require])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_DEFUN([TEST],
 [AC_REQUIRE([MULTI_TEST])
 AC_REQUIRE([SINGLE_TEST])])
@@ -123,7 +123,7 @@ esac
 ]])
 
 AT_CHECK_AUTOCONF([], [],
-[configure.in:15: warning: SINGLE_TEST invoked multiple times
+[configure.ac:15: warning: SINGLE_TEST invoked multiple times
 ])
 AT_CHECK_CONFIGURE
 
@@ -137,7 +137,7 @@ AT_CLEANUP
 
 AT_SETUP([AC_REQUIRE & AC_PROVIDE])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_DEFUN([TEST],
 [AC_REQUIRE([INNER_TEST])])
 

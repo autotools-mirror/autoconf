@@ -44,7 +44,7 @@ m4_include([semantics.at])
 # Checking all the AC_DEFUN'd macros.
 m4_include([syntax.at])
 
-# Checking that updating an obsolete macro produces a valid configure.in
+# Checking that updating an obsolete macro produces a valid configure.ac
 m4_include([update.at])
 
 # Compatibility with foreign tools.

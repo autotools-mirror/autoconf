@@ -74,7 +74,7 @@ AT_CLEANUP
 
 AT_SETUP([AWK portability])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT
 ]])
 
@@ -106,7 +106,7 @@ AT_CLEANUP(configure)
 # -----------------------------
 AT_SETUP([autoconf --trace: user macros])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[define([active], [ACTIVE])
 AC_DEFUN([TRACE1], [TRACE2(m4_shift($@))])
 AC_DEFUN([TRACE2], [[$2], $1])
@@ -118,16 +118,16 @@ TRACE1(foo, [active], TRACE1(active, [active]))
 
 # Several --traces.
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir -t TRACE1 -t TRACE2], 0,
-[[configure.in:4:TRACE1:foo:bar:baz
-configure.in:4:TRACE2:bar:baz
-configure.in:5:TRACE1:foo:AC_TRACE1(bar, baz)
-configure.in:5:TRACE2:AC_TRACE1(bar, baz)
-configure.in:6:TRACE1:foo:ACTIVE:baz
-configure.in:6:TRACE2:ACTIVE:baz
-configure.in:7:TRACE1:ACTIVE:active
-configure.in:7:TRACE2:active
-configure.in:7:TRACE1:foo:active::ACTIVE
-configure.in:7:TRACE2:active::ACTIVE
+[[configure.ac:4:TRACE1:foo:bar:baz
+configure.ac:4:TRACE2:bar:baz
+configure.ac:5:TRACE1:foo:AC_TRACE1(bar, baz)
+configure.ac:5:TRACE2:AC_TRACE1(bar, baz)
+configure.ac:6:TRACE1:foo:ACTIVE:baz
+configure.ac:6:TRACE2:ACTIVE:baz
+configure.ac:7:TRACE1:ACTIVE:active
+configure.ac:7:TRACE2:active
+configure.ac:7:TRACE1:foo:active::ACTIVE
+configure.ac:7:TRACE2:active::ACTIVE
 ]])
 
 # Several line requests.
@@ -161,14 +161,14 @@ AT_CLEANUP
 # --------------------------
 AT_SETUP([autoconf --trace: builtins])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[define([active], [ACTIVE])
 ]])
 
 AT_CHECK([[autoconf --autoconf-dir .. -l $at_srcdir -t define |
             sed -n '$p']],
          0,
-[[configure.in:1:define:active:ACTIVE
+[[configure.ac:1:define:active:ACTIVE
 ]])
 
 # FIXME: Without `$1' the following test dies.  Groumphf, once again to
@@ -194,7 +194,7 @@ AT_CLEANUP
 # ---------------------------------
 AT_SETUP([autoconf: forbidden tokens, basic])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_PLAIN_SCRIPT()dnl
 AC_FOO
 _AC_BAR
@@ -210,11 +210,11 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir 2>err], 1)
 # The output of autoconf is not deterministic here because it
 # uses `for (ind in array)'.  So be sure to have a unique representation.
 AT_CHECK([sort <err], 0,
-[[configure.in:2: error: undefined macro: AC_FOO
-configure.in:3: error: undefined macro: _AC_BAR
-configure.in:4: error: undefined macro: m4_foo
-configure.in:7: error: undefined macro: B_AC_FOO
-configure.in:8: error: undefined macro: AS_FOO
+[[configure.ac:2: error: undefined macro: AC_FOO
+configure.ac:3: error: undefined macro: _AC_BAR
+configure.ac:4: error: undefined macro: m4_foo
+configure.ac:7: error: undefined macro: B_AC_FOO
+configure.ac:8: error: undefined macro: AS_FOO
 ]])
 
 AT_CLEANUP(configure err)
@@ -224,7 +224,7 @@ AT_CLEANUP(configure err)
 # --------------------------------------
 AT_SETUP([autoconf: forbidden tokens, exceptions])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_PLAIN_SCRIPT()dnl
 
 # This is allowed in spite of the name.
@@ -250,12 +250,12 @@ AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir 2>err], 1)
 # The output of autoconf is not deterministic here because it
 # uses `for (ind in array)'.  So be sure to have a unique representation.
 AT_CHECK([sort <err], 0,
-[[configure.in:10: error: undefined macro: FORBIDDEN
-configure.in:14: error: undefined macro: AC_THIS_IS_INVALID
-configure.in:14: error: undefined macro: AZ_THIS_IS_INVALID_TOO
-configure.in:15: error: undefined macro: ALTHOUGH_AC_THIS_IS
-configure.in:7: error: undefined macro: AC_ALLOWED_NOT
-configure.in:7: error: undefined macro: NOT_AC_ALLOWED
+[[configure.ac:10: error: undefined macro: FORBIDDEN
+configure.ac:14: error: undefined macro: AC_THIS_IS_INVALID
+configure.ac:14: error: undefined macro: AZ_THIS_IS_INVALID_TOO
+configure.ac:15: error: undefined macro: ALTHOUGH_AC_THIS_IS
+configure.ac:7: error: undefined macro: AC_ALLOWED_NOT
+configure.ac:7: error: undefined macro: NOT_AC_ALLOWED
 configure:18: error: undefined macro: AC_OUTPUT
 ]])
 
@@ -326,13 +326,13 @@ AT_DATA(acconfig.h,
 
 
 # 1. Check that `acconfig.h' is still honored.
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(this, "whatever you want.")
 ]])
 
-AT_CHECK([autoheader --autoconf-dir .. -<configure.in], 0,
+AT_CHECK([autoheader --autoconf-dir .. -<configure.ac], 0,
 [[/* config.h.in.  Generated automatically from - by autoheader.  */
 /* Define this to whatever you want. */
 #undef this
@@ -340,13 +340,13 @@ AT_CHECK([autoheader --autoconf-dir .. -<configure.in], 0,
 
 
 # 2. Check that missing templates are a fatal error.
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h)
 AC_DEFINE(that, "whatever you want.")
 ]])
 
-AT_CHECK([autoheader --autoconf-dir .. -<configure.in], 1, [],
+AT_CHECK([autoheader --autoconf-dir .. -<configure.ac], 1, [],
 [autoheader: No template for symbol `that'
 ])
 
@@ -360,35 +360,35 @@ AT_DATA(acconfig.h,
 /* Bottom from acconfig.h. */
 ]])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h)
-AH_TOP([Top1 from configure.in.])
-AH_TOP([Top2 from configure.in.])
-AH_VERBATIM([Middle], [Middle from configure.in.])
-AH_BOTTOM([Bottom1 from configure.in.])
-AH_BOTTOM([Bottom2 from configure.in.])
+AH_TOP([Top1 from configure.ac.])
+AH_TOP([Top2 from configure.ac.])
+AH_VERBATIM([Middle], [Middle from configure.ac.])
+AH_BOTTOM([Bottom1 from configure.ac.])
+AH_BOTTOM([Bottom2 from configure.ac.])
 ]])
 
 
 # Yes, that's right: the `middle' part of `acconfig.h' is still before
 # the AH_TOP part.  But so what, you're not supposed to use the two
 # together.
-AT_CHECK([autoheader --autoconf-dir .. -<configure.in], 0,
+AT_CHECK([autoheader --autoconf-dir .. -<configure.ac], 0,
 [[/* config.h.in.  Generated automatically from - by autoheader.  */
 /* Top from acconfig.h. */
 
 /* Middle from acconfig.h. */
 
-Top1 from configure.in.
+Top1 from configure.ac.
 
-Top2 from configure.in.
+Top2 from configure.ac.
 
-Middle from configure.in.
+Middle from configure.ac.
 
-Bottom1 from configure.in.
+Bottom1 from configure.ac.
 
-Bottom2 from configure.in.
+Bottom2 from configure.ac.
 /* Bottom from acconfig.h. */
 ]], [])
 
@@ -405,7 +405,7 @@ AT_CLEANUP
 # Check that AC_CANONICAL_SYSTEM and AC_OUTPUT are properly updated.
 AT_SETUP([autoupdate])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT(Test, 1.0)
 AC_CANONICAL_SYSTEM
 dnl The doc says 27 is a valid fubar.
@@ -425,14 +425,14 @@ AC_OUTPUT
 
 # Checking `autoupdate'.
 AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
-         [autoupdate: `configure.in' is updated
+         [autoupdate: `configure.ac' is updated
 ])
-AT_CHECK([cat configure.in], 0, [expout])
+AT_CHECK([cat configure.ac], 0, [expout])
 # Checking that `autoupdate' is idempotent
 AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
-         [autoupdate: `configure.in' is unchanged
+         [autoupdate: `configure.ac' is unchanged
 ])
-AT_CHECK([cat configure.in], 0, [expout])
+AT_CHECK([cat configure.ac], 0, [expout])
 
 AT_CLEANUP
 
@@ -441,7 +441,7 @@ AT_CLEANUP
 # --------------------------
 AT_SETUP([autoupdating AC_LINK_FILES])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 AC_LINK_FILES(dst1 dst2, src1 src2)
 AC_OUTPUT
@@ -454,7 +454,7 @@ AT_DATA(dst2, dst2
 
 # Checking `autoupdate'.
 AT_CHECK([autoupdate --autoconf-dir $top_srcdir], 0, [],
-         [autoupdate: `configure.in' is updated
+         [autoupdate: `configure.ac' is updated
 ])
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE

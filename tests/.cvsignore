@@ -1,7 +1,5 @@
 Makefile
-at-check-line
-at-setup-line
-atconfig
+at-check-line at-setup-line at-path atconfig
 config.h
 config.hin
 config.log

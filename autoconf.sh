@@ -18,18 +18,15 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 
-# If given no args, create `configure' from template file `configure.in'.
-# With one arg, create a configure script on standard output from
-# the given template file.
-
 me=`echo "$0" | sed -e 's,.*/,,'`
 
 usage="\
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Generate a configuration script from a TEMPLATE-FILE if given, or
-\`configure.in' by default.  Output is sent to the standard output if
-TEMPLATE-FILE is given, else into \`configure'.
+\`configure.ac' if present, or else \`configure.in'.  Output is sent
+to the standard output if TEMPLATE-FILE is given, else into
+\`configure'.
 
 Operation modes:
   -h, --help               print this help, then exit
@@ -267,8 +264,19 @@ run_m4f="$M4 --reload $autoconf_dir/autoconf.m4f $m4_common"
 
 # Find the input file.
 case $# in
-  0) infile=configure.in
-     test $task = script && test -z "$outfile" && outfile=configure;;
+  0)
+    case `ls configure.ac configure.in 2>/dev/null` in
+      *ac*in )
+        echo "$me: warning: both \`configure.ac' and \`configure.in' are present." >&2
+        echo "$me: warning: proceeding with \`configure.ac'." >&2
+        infile=configure.ac;;
+      *ac ) infile=configure.ac;;
+      *in ) infile=configure.in;;
+      * )
+        echo "$me: no input file" >&2
+        exit 1;;
+    esac
+    test $task = script && test -z "$outfile" && outfile=configure;;
   1) infile=$1 ;;
   *) exec >&2
      echo "$me: invalid number of arguments."

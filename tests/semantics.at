@@ -135,7 +135,7 @@ AT_CHECK_MACRO([AC_CHECK_TYPES],
 # or to the new one.
 AT_SETUP([AC_CHECK_TYPES: backward compatibility])
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 define([_AC_CHECK_TYPE_NEW], [NEW])
 define([_AC_CHECK_TYPE_OLD], [OLD])
@@ -152,7 +152,7 @@ AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF([], [],
-[configure.in:10: warning: AC_CHECK_TYPE: assuming `uint65536_t' is not a type
+[configure.ac:10: warning: AC_CHECK_TYPE: assuming `uint65536_t' is not a type
 ])
 AT_CHECK([[sed -e '/^#(cut-from-here/,/^#to-here)/!d' -e '/^#/d' configure]],
          0,
@@ -171,7 +171,7 @@ AT_CLEANUP
 # AC_CHECK_FILES
 # --------------
 # FIXME: To really test HAVE_AC_EXISTS2 and HAVE_AC_MISSING2 we need to
-# open AH_TEMPLATE to `configure.in', which is not yet the case.
+# open AH_TEMPLATE to `configure.ac', which is not yet the case.
 AT_CHECK_MACRO([AC_CHECK_FILES],
 [touch ac-exists1 ac-exists2
 ac_exists2=ac-exists2
@@ -219,7 +219,7 @@ AT_SETUP([AC_CHECK_PROG & AC_CHECK_PROGS])
 
 AT_CHECK_PROGS_PREPARE
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 pwd=`pwd`
 path=`echo "1:2:3:4:5:6" | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
@@ -266,7 +266,7 @@ AT_SETUP(AC_PATH_PROG & AC_PATH_PROGS)
 
 AT_CHECK_PROGS_PREPARE
 
-AT_DATA(configure.in,
+AT_DATA(configure.ac,
 [[AC_INIT
 pwd=`pwd`
 path=`echo "1:2:3:4:5:6" | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`

@@ -1,3 +1,13 @@
+2000-12-23  Akim Demaille  <akim@epita.fr>
+
+	* autoconf.sh: Promote `configure.ac' over `configure.in'.
+	* autoreconf.sh: Likewise.
+	* autoheader.sh: Ditto.
+	* autoupdate.sh: Similarly.
+	* doc/autoconf.texi: Adjust.
+	* tests/atspecific.m4: Be sure to remove configure.in.
+	Adjust the test suite to use `configure.ac'.
+
 2000-12-22  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (_AC_EVAL, AC_TRY_EVAL, AC_TRY_COMMAND): Be a

@@ -24,8 +24,10 @@ include(atgeneral.m4)					-*- Autoconf -*-
 
 # AT_CHECK_AUTOCONF(FLAGS, STDOUT, STDERR)
 # ----------------------------------------
+# Also remove `configure.in', just in case one remained from a previous
+# run.
 m4_define([AT_CHECK_AUTOCONF],
-[AT_CLEANUP_FILES(configure)dnl
+[AT_CLEANUP_FILES(configure.in configure)dnl
 AT_CHECK([autoconf --autoconf-dir .. -l $at_srcdir $1], 0, [$2], [$3])])
 
 
@@ -54,15 +56,15 @@ AT_CHECK([top_srcdir=$top_srcdir ./configure $1],
 
 # _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS)
 # --------------------------------------
-# Create a minimalist configure.in running the macro named
+# Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
 # TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
 # `config.guess' etc.).
 m4_define([_AT_CHECK_AC_MACRO],
-[dnl Produce the configure.in
+[dnl Produce the configure.ac
 AT_CLEANUP_FILES(env-after state*)dnl
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir)
 AC_CONFIG_HEADER(config.h:config.hin)
@@ -91,7 +93,7 @@ fi
 
 # AT_CHECK_MACRO(NAME-OF-THE-MACRO, [MACRO-USE], [ADDITIONAL-CMDS])
 # -----------------------------------------------------------------
-# Create a minimalist configure.in running the macro named
+# Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the shell runs correctly the configure.
 # TOP_SRCDIR is needed to set the auxdir (some macros need `install-sh',
@@ -107,7 +109,7 @@ AT_CLEANUP()dnl
 
 # AT_CHECK_UPDATE(NAME-OF-THE-MACRO)
 # ----------------------------------
-# Create a minimalist configure.in running the macro named
+# Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, autoupdate this script, check that autoconf runs
 # on that script, and that the shell runs correctly the configure.
 # TOP_SRCDIR is needed to set the auxdir (some macros need
@@ -117,7 +119,7 @@ m4_define([AT_CHECK_UPDATE],
 
 _AT_CHECK_AC_MACRO([$1],
 [AT_CHECK([autoupdate --autoconf-dir $at_top_srcdir], 0,
-          [], [autoupdate: `configure.in' is updated
+          [], [autoupdate: `configure.ac' is updated
 ])])
 
 AT_CLEANUP()dnl
