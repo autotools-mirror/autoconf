@@ -1,3 +1,15 @@
+2001-06-23  Paolo Bonzini <bonzini@gnu.org>
+
+	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Defer parsing of
+	config.status targets to after the evaluation of the INIT-CMDS.
+	Double quote config.status targets (used to be single quoted).
+
+2001-06-23  Akim Demaille  <akim@epita.fr>
+
+	* tests/torture.at (CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Check the content of the created file.
+	Check the ./config.status command line invocation.
+
 2001-06-23  Akim Demaille  <akim@epita.fr>
 
 	* tests/foreign.at (Libtool): Reject prehistoric versions.

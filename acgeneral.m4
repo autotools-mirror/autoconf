@@ -3669,28 +3669,12 @@ Try `$[0] --help' for more information.]);;
     CONFIG_HEADERS="$CONFIG_HEADERS $[1]"
     ac_need_defaults=false;;
 
-  # Handling of arguments.
-AC_FOREACH([AC_File], AC_LIST_FILES,
-[  'm4_patsubst(AC_File, [:.*])' )dnl
- CONFIG_FILES="$CONFIG_FILES AC_File" ;;
-])dnl
-AC_FOREACH([AC_File], AC_LIST_LINKS,
-[  'm4_patsubst(AC_File, [:.*])' )dnl
- CONFIG_LINKS="$CONFIG_LINKS AC_File" ;;
-])dnl
-AC_FOREACH([AC_File], AC_LIST_COMMANDS,
-[  'm4_patsubst(AC_File, [:.*])' )dnl
- CONFIG_COMMANDS="$CONFIG_COMMANDS AC_File" ;;
-])dnl
-AC_FOREACH([AC_File], AC_LIST_HEADERS,
-[  'm4_patsubst(AC_File, [:.*])' )dnl
- CONFIG_HEADERS="$CONFIG_HEADERS AC_File" ;;
-])dnl
-
   # This is an error.
   -*) AC_MSG_ERROR([unrecognized option: $[1]
 Try `$[0] --help' for more information.]) ;;
-  *) AC_MSG_ERROR([invalid argument: $[1]]);;
+
+  *) ac_config_targets="$ac_config_targets $[1]" ;;
+
   esac
   shift
 done
@@ -3710,11 +3694,47 @@ on `(hostname || uname -n) 2>/dev/null | sed 1q`
 _ACEOF
 EOF
 
+dnl We output the INIT-CMDS first for obvious reasons :)
+m4_ifset([_AC_OUTPUT_COMMANDS_INIT],
+[cat >>$CONFIG_STATUS <<EOF
+#
+# INIT-COMMANDS section.
+#
+
+_AC_OUTPUT_COMMANDS_INIT()
+EOF])
+
+
 dnl Issue this section only if there were actually config files.
 dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_LIST_COMMANDS,
 dnl or AC_LIST_LINKS is set.
 m4_ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
-[cat >>$CONFIG_STATUS <<\EOF
+[
+cat >>$CONFIG_STATUS <<\EOF
+for ac_config_target in $ac_config_targets
+do
+  case "$ac_config_target" in
+  # Handling of arguments.
+AC_FOREACH([AC_File], AC_LIST_FILES,
+[  "m4_patsubst(AC_File, [:.*])" )dnl
+ CONFIG_FILES="$CONFIG_FILES AC_File" ;;
+])dnl
+AC_FOREACH([AC_File], AC_LIST_LINKS,
+[  "m4_patsubst(AC_File, [:.*])" )dnl
+ CONFIG_LINKS="$CONFIG_LINKS AC_File" ;;
+])dnl
+AC_FOREACH([AC_File], AC_LIST_COMMANDS,
+[  "m4_patsubst(AC_File, [:.*])" )dnl
+ CONFIG_COMMANDS="$CONFIG_COMMANDS AC_File" ;;
+])dnl
+AC_FOREACH([AC_File], AC_LIST_HEADERS,
+[  "m4_patsubst(AC_File, [:.*])" )dnl
+ CONFIG_HEADERS="$CONFIG_HEADERS AC_File" ;;
+])dnl
+  *) AC_MSG_ERROR([invalid argument: $ac_config_target]);;
+  esac
+done
+
 # If the user did not use the arguments to specify the items to instantiate,
 # then the envvar interface is used.  Set only those that are not.
 # We use the long form for the default assignment because of an extremely
@@ -3738,17 +3758,6 @@ AS_TMPDIR(cs)
 
 EOF
 ])[]dnl m4_ifval
-
-dnl We output the INIT-CMDS first for obvious reasons :)
-m4_ifset([_AC_OUTPUT_COMMANDS_INIT],
-[cat >>$CONFIG_STATUS <<EOF
-#
-# INIT-COMMANDS section.
-#
-
-_AC_OUTPUT_COMMANDS_INIT()
-EOF])
-
 
 dnl The following four sections are in charge of their own here
 dnl documenting into $CONFIG_STATUS.

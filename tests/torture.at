@@ -75,6 +75,9 @@ AT_CHECK_AC_ARG_VAR([unset a precious variable],
 AT_CHECK_AC_ARG_VAR([change a precious variable],
                     [apple of my eye], [orange of my eye])
 
+
+
+
 ## ---------------------------------------------- ##
 ## AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS.  ##
 ## ---------------------------------------------- ##
@@ -83,40 +86,79 @@ AT_SETUP([AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS])
 
 AT_DATA(configure.ac,
 [[AC_INIT
-rm -rf header file link command
-touch header.in file.in link.in command.in
+rm -rf header var-header file var-file link var-link command var-command
+echo 'OK' >input
+
+# Be sure to also stress the associated INIT-CMDS.
 case $what_to_test in
- header)   AC_CONFIG_HEADERS(header:header.in);;
- file)     AC_CONFIG_FILES(file:file.in);;
- command)  AC_CONFIG_COMMANDS(command:command.in, [cp command.in command]);;
- link)     AC_CONFIG_LINKS(link:link.in);;
+ header)
+   AC_CONFIG_HEADERS(header:input);;
+ var-header)
+   AC_CONFIG_HEADERS(var-header:$header_in, [], [header_in=input]);;
+
+ file)
+   AC_CONFIG_FILES(file:input);;
+ var-file)
+   AC_CONFIG_FILES(var-file:$file_in, [], [file_in=input]);;
+
+ command)
+   AC_CONFIG_COMMANDS(command:input,
+                      [cp input command]);;
+ var-command)
+   AC_CONFIG_COMMANDS(var-command:$command_in,
+                      [cp $command_in var-command], [command_in=input]);;
+
+ link)
+   AC_CONFIG_LINKS(link:input);;
+ var-link)
+   AC_CONFIG_LINKS(var-link:$link_in, [], [link_in=input]);;
 esac
 AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
 
-# Create a header
-AT_CHECK_CONFIGURE([what_to_test=header])
-AT_CHECK([ls header file command link], [ignore], [header
-], [ignore])
+
+# AT_CHECK_CONFIG_CREATION(THING = (header | link | file | command))
+# ------------------------------------------------------------------
+# Check that THING and var-THING (which uses variables in AC_CONFIG_THING)
+# are properly created, with the right content.
+# Use `grep OK' instead of a simple `cat' to avoid banners such as in
+# AC_CONFIG_HEADERS.
+m4_define([AT_CHECK_CONFIG_CREATION],
+[AT_CHECK_CONFIGURE([what_to_test=$1])
+AT_CHECK([ls header var-header file var-file command var-command link var-link 2>/dev/null],
+         [ignore], [$1
+])
+AT_CHECK([grep OK $1], [], [OK
+])
+
+AT_CHECK_CONFIGURE([what_to_test=var-$1 --no-create])
+# config.status might be stupidly expecting data on stdin, if it's
+# really broken...
+AT_CHECK([./config.status var-$1 </dev/null], [], [ignore])
+AT_CHECK([ls header var-header file var-file command var-command link var-link 2>/dev/null],
+         [ignore], [var-$1
+])
+AT_CHECK([grep OK var-$1], [], [OK
+])
+])# AT_CHECK_CONFIG_CREATION
+
 
 # Create a file
-AT_CHECK_CONFIGURE([what_to_test=file])
-AT_CHECK([ls header file command link], [ignore], [file
-], [ignore])
+AT_CHECK_CONFIG_CREATION(file)
+
+# Create a header
+AT_CHECK_CONFIG_CREATION(header)
 
 # Execute a command
-AT_CHECK_CONFIGURE([what_to_test=command])
-AT_CHECK([ls header file command link], [ignore], [command
-], [ignore])
+AT_CHECK_CONFIG_CREATION(command)
 
 # Create a link
-AT_CHECK_CONFIGURE([what_to_test=link])
-AT_CHECK([ls header file command link], [ignore], [link
-], [ignore])
+AT_CHECK_CONFIG_CREATION(link)
 
-AT_CLEANUP(header file link command header.in file.in link.in command.in)
+AT_CLEANUP(header file link commandvar-header var-file var-link var-command
+           input)
 
 
 
