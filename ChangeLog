@@ -1,3 +1,10 @@
+2001-09-21  Tim Van Holder  <tim.van.holder@pandora.be>
+
+	* lib/autoconf/functions.m4 (_AC_FUNC_FORK): Replaceded an 8-bit
+	character (u: -> ue) in a code comment.
+	(AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK): Only run 'ln -s' if we know
+	it works.
+
 2001-09-21  Akim Demaille  <akim@epita.fr>
 
 	* Makefile.maint (AUTOM4TE): Neutralize autom4te.

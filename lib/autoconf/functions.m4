@@ -623,7 +623,7 @@ AC_DEFUN([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK],
        [ac_cv_func_lstat_dereferences_slashed_symlink],
 [rm -f conftest.sym conftest.file
 echo >conftest.file
-if ln -s conftest.file conftest.sym; then
+if test "$as_ln_s" = "ln -s" && ln -s conftest.file conftest.sym; then
   AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
     [struct stat sbuf;
      /* Linux will dereference the symlink and fail.
@@ -1397,7 +1397,7 @@ fi
 # -------------
 AC_DEFUN([_AC_FUNC_FORK],
   [AC_CACHE_CHECK(for working fork, ac_cv_func_fork_works,
-    [AC_RUN_IFELSE([/* By Rüdiger Kuhlmann. */
+    [AC_RUN_IFELSE([/* By Ruediger Kuhlmann. */
       #include <sys/types.h>
       #if HAVE_UNISTD_H
       # include <unistd.h>
