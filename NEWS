@@ -1,9 +1,10 @@
 Major changes in release 1.9:
 
-* AC_SIZEOF_TYPE generates the cpp symbol name automatically.
+* AC_SIZEOF_TYPE generates the cpp symbol name automatically,
+  and autoheader generates entries for those names automatically.
 * AC_FIND_X gets the result from xmkmf correctly.
 * AC_PROG_INSTALL finds OSF/1 installbsd.
-* autoheader-produced config.h files protect against multiple inclusion.
+* A copy of install.sh is placed in ${acdatadir}, for convenience.
 
 Major changes in release 1.8:
 
