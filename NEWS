@@ -81,6 +81,8 @@
 - AC_FUNC_STRERROR_R now sets STRERROR_R_CHAR_P, not HAVE_WORKING_STRERROR_R,
   because POSIX 1003.1-200x draft 7 says strerror_r returns int, not char *.
 
+- AC_FUNC_STRTOD substitutes POW_LIB.
+
 
 * Major changes in Autoconf 2.52
 ** Documentation

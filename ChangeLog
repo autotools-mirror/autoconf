@@ -1,5 +1,10 @@
 2001-11-12  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/functions.m4 (AC_FUNC_STRTOD): AC_SUBST POW_LIB.
+	From Jim Meyering.
+
+2001-11-12  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoconf/programs.m4 (_AC_PROG_LEX_YYTEXT_DECL): Use
 	AC_TRY_EVAL to run $LEX, not AC_TRY_COMMAND.  This validates the
 	definition used by Automake where LEX is +/- "${missing} lex" and

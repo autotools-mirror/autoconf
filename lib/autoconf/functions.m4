@@ -1169,7 +1169,8 @@ fi
 # AC_FUNC_STRTOD
 # --------------
 AC_DEFUN([AC_FUNC_STRTOD],
-[AC_CACHE_CHECK(for working strtod, ac_cv_func_strtod,
+[AC_SUBST(POW_LIB)dnl
+AC_CACHE_CHECK(for working strtod, ac_cv_func_strtod,
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[
 double strtod ();
 int
