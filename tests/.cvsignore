@@ -1,16 +1,12 @@
 Makefile
-at-check-line at-setup-line at-path atconfig
-config.h
-config.hin
+at-* atconfig experr expout stderr stdout
+config.h config.hin
 config.log
 config.status
 configure configure.ac configure.in configure.scan
+conftest*
 debug-*.sh
 empty
-experr
-expout
 macros.m4
 state*
-stderr
-stdout
-testsuite
+testsuite testsuite.log
