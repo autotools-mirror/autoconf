@@ -1703,6 +1703,22 @@ This warns the user if a call to @code{AC_PROG_CPP} has already occurred
 when @code{AC_PROG_CC} is called.
 @end defmac
 
+@defmac AC_OBSOLETE (@var{this-macro-name} @r{[}, @var{suggestion}@r{]})
+@maindex OBSOLETE
+Make @code{m4} print a message on the standard error output warning that
+@var{this-macro-name} is obsolete, and giving the file and line number
+where it was called.  @var{this-macro-name} should be the name of the
+macro that is calling @code{AC_BEFORE}.  If @var{suggestion} is given,
+it is printed at the end of the warning message; for example, it can be
+a suggestion for what to use instead of @var{this-macro-name}.
+
+A sample call is:
+
+@example
+AC_OBSOLETE([$0], [; use AC_HAVE_HEADERS(unistd.h) instead])
+@end example
+@end defmac
+
 @defmac AC_PROVIDE (@var{macro-name})
 @maindex PROVIDE
 Set a flag recording that @var{macro-name} has been called.  The
