@@ -466,8 +466,11 @@ do
   | --no-cr | --no-c) ;;
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
   | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r) ;;
-changequote(, )dnl
-  *[^-a-zA-Z0-9@%_=+:,./]*) ac_configure_args="$ac_configure_args '$ac_arg'" ;;
+changequote(<<, >>)dnl
+dnl If you change this globbing pattern, test it on an old shell --
+dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
+  *" "*|*"	"*|*[\[\]\~\<<#>>\$\^\&\*\(\)\{\}\\\|\;\<\>\?]*)
+  ac_configure_args="$ac_configure_args '$ac_arg'" ;;
 changequote([, ])dnl
   *) ac_configure_args="$ac_configure_args $ac_arg" ;;
   esac
@@ -1546,7 +1549,7 @@ dnl Using a here document instead of a string reduces the quoting nightmare.
 cat > conftest.defs <<\EOF
 changequote(<<, >>)dnl
 s%<<#define>> \([A-Za-z_][A-Za-z0-9_]*\) \(.*\)%-D\1=\2%g
-s%[ `~<<#>>$^&*(){}\\|;'"<>?]%\\&%g
+s%[ 	`~<<#>>$^&*(){}\\|;'"<>?]%\\&%g
 s%\[%\\&%g
 s%\]%\\&%g
 s%\$%$$%g
