@@ -1,3 +1,10 @@
+2002-06-15  Paul Eggert  <eggert@twinsun.com>
+
+	* tests/wrapsh.as (AUTOCONF, AUTOHEADER, AUTOM4TE, AUTOM4TE_CFG,
+	autom4te_perllibdir): Set to top build dir or src dir as appropriate,
+	so that we consistently test the just-built programs.
+	* tests/wrappl.as: Likewise.
+	
 2002-06-12  Paul Eggert  <eggert@twinsun.com>
 
 	* bin/autoconf.as (AUTOM4TE): Default to a fully qualified path
