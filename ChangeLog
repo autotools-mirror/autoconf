@@ -1,5 +1,10 @@
 2000-12-15  Akim Demaille  <akim@epita.fr>
 
+	* tests/compile.at (GNU Fortran 77): s/g77/G77/.
+	Reported by Ezra Peisach.
+
+2000-12-15  Akim Demaille  <akim@epita.fr>
+
 	* man/Makefile.am (.x.1): Fix to work properly with
 	builddir != srcdir.
 
