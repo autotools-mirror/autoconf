@@ -174,7 +174,7 @@ dnl Redefine MACRO-NAME to hold its former content plus STRING at the
 dnl end.  It is valid to use this macro with MACRO-NAME undefined.
 dnl
 dnl This macro is robust to active symbols.  It can be used to grow
-dnl strings or lists.
+dnl strings.
 dnl
 dnl    | define(active, ACTIVE)
 dnl    | m4_append([sentence], [This is an])
@@ -200,8 +200,15 @@ dnl    =>
 dnl    => active
 define(m4_append,
 [define([$1],
-ifdef([$1], [defn([$1])])
-[$2])])
+ifdef([$1], [defn([$1])])[$2])])
+
+
+dnl m4_list_append(MACRO-NAME, STRING)
+dnl ----------------------------------
+dnl Same as `m4_append', but each element is separated by `, '.
+define(m4_list_append,
+[define([$1],
+ifdef([$1], [defn([$1]), ])[$2])])
 
 
 dnl ------------------------------------------------------------
@@ -2872,10 +2879,50 @@ AC_VAR_POPDEF([ac_Type])dnl
 
 dnl ### Creating output files
 
+dnl AC_CONFIG_IF_MEMBER(DEST[:SOURCE], LIST, ACTION-IF-TRUE, ACTION-IF-FALSE)
+dnl -------------------------------------------------------------------------
+dnl If DEST is member of LIST, expand to ACTION-IF-TRUE, else ACTION-IF-FALSE.
+dnl
+dnl LIST is an AC_CONFIG list, i.e., a list of DEST[:SOURCE], separated
+dnl with spaces.
+dnl
+dnl FIXME: This macro is badly designed, but I'm not guilty: m4 is.  There
+dnl is just no way to simply compare two strings in m4, but to use pattern
+dnl matching.  The big problem is then that the active characters should
+dnl be quoted.  So an additional macro should be used here.  Nevertheless,
+dnl in the case of file names, there is not much to worry.
+define(AC_CONFIG_IF_MEMBER,
+[pushdef([AC_Dest], patsubst([$1], [:.*]))dnl
+ifelse(regexp($2, [\(^\| \)]AC_Dest[\(:\| \|$\)]), -1, [$4], [$3])dnl
+popdef([AC_Dest])dnl
+])
+
+
+dnl AC_CONFIG_UNIQUE(DEST[:SOURCE]...)
+dnl ----------------------------------
+dnl Verify that there is no double definition of an output file
+dnl (precisely, guarantees there is no common elements between
+dnl CONFIG_HEADERS, CONFIG_FILES, CONFIG_LINKS, and CONFIG_SUBDIRS).
+define(AC_CONFIG_UNIQUE,
+[AC_FOREACH([AC_File], [$1],
+ [AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_HEADERS],
+     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_HEADER.])])
+  AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_LINKS],
+     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_LINKS.])])
+  AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_SUBDIRS],
+     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_SUBDIRS.])])
+  AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_FILES],
+     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_FILES or AC_OUTPUT.])])])dnl
+])
+
 
 dnl AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
+dnl --------------------------------------
+dnl FIXME: For sake of uniformity, it should be AC_CONFIG_HEADERS, and
+dnl it should be possible to accumulate several calls.
 AC_DEFUN(AC_CONFIG_HEADER,
-[define(AC_LIST_HEADERS, $1)])
+[AC_CONFIG_UNIQUE([$1])dnl
+define(AC_LIST_HEADERS, $1)])
 
 
 dnl AC_CONFIG_LINKS(DEST:SOURCE...)
@@ -2884,13 +2931,12 @@ dnl Specify that config.status should establish a (symbolic if possible)
 dnl link from TOP_SRCDIR/SOURCE to TOP_SRCDIR/DEST.
 dnl Reject DEST=., because it is makes it hard for ./config.status
 dnl to guess the links to establish (`./config.status .').
+dnl This macro may be called multiple times.
 AC_DEFUN(AC_CONFIG_LINKS,
-[ifelse(regexp([$1], [^.:]), -1,,
-        [AC_FATAL([$0: invalid destination: `.'])])
-ifelse(regexp([$1], [ .:]), -1,,
-        [AC_FATAL([$0: invalid destination: `.'])])
-define([AC_LIST_LINKS],
-       ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$1])
+[AC_CONFIG_UNIQUE([$1])dnl
+ifelse(regexp([$1], [^\.:\| \.:]), -1,,
+        [AC_FATAL([$0: invalid destination: `.'])])dnl
+m4_append([AC_LIST_LINKS], [$1])dnl
 ])
 
 
@@ -2898,27 +2944,49 @@ dnl AC_LINK_FILES(SOURCE..., DEST...)
 dnl ---------------------------------
 dnl Link each of the existing files SOURCE... to the corresponding
 dnl link name in DEST...
-dnl This macro, as AC_CONFIG_FILES, produces no sh code, so we don't
-dnl dnl.
 AC_DEFUN(AC_LINK_FILES,
-[AC_OBSOLETE([$0], [; instead use AC_CONFIG_FILES(DEST:SOURCE...)])
+[AC_OBSOLETE([$0], [; instead use AC_CONFIG_LINKS(DEST:SOURCE...)])dnl
 ifelse($#, 2, ,
-  [AC_FATAL([$0: incorrect number of arguments])])
-
-pushdef([AC_Sources], m4_split(m4_strip(m4_join([$1]))))
-pushdef([AC_Dests], m4_split(m4_strip(m4_join([$2]))))
-
+  [AC_FATAL([$0: incorrect number of arguments])])dnl
+dnl
+pushdef([AC_Sources], m4_split(m4_strip(m4_join([$1]))))dnl
+pushdef([AC_Dests], m4_split(m4_strip(m4_join([$2]))))dnl
+dnl
 m4_foreach([AC_Dummy], (AC_Sources),
-  [AC_CONFIG_LINKS(m4_car(AC_Dests):m4_car(AC_Sources))
-   define([AC_Sources], m4_quote(m4_shift(AC_Sources)))
-   define([AC_Dests], m4_quote(m4_shift(AC_Dests)))])
+[AC_CONFIG_LINKS(m4_car(AC_Dests):m4_car(AC_Sources))
+define([AC_Sources], m4_quote(m4_shift(AC_Sources)))
+define([AC_Dests], m4_quote(m4_shift(AC_Dests)))])dnl
+dnl
+popdef([AC_Sources])dnl
+popdef([AC_Dests])dnl
+])dnl AC_LINK_FILES
 
-popdef([AC_Sources])
-popdef([AC_Dests])
-])
 
-define([AC_LIST_LINKS],
-       ifdef([AC_LIST_LINKS], [AC_LIST_LINKS ],)[$2:$1])])
+dnl AC_CONFIG_FILES(FILE...[, COMMANDS])
+dnl ------------------------------------
+dnl Specify output files, as with AC_OUTPUT, i.e., files that are
+dnl configured with AC_SUBST.  Associate the COMMANDS to each FILE,
+dnl i.e., when config.status creates FILE, run COMMANDS afterwards.
+dnl
+dnl The commands are stored in a growing string AC_LIST_FILES_COMMANDS
+dnl which should be used like this:
+dnl
+dnl      case $ac_file in
+dnl        AC_LIST_FILES_COMMANDS
+dnl      esac
+AC_DEFUN([AC_CONFIG_FILES],
+[AC_CONFIG_UNIQUE([$1])dnl
+m4_append([AC_LIST_FILES], [ $1])dnl
+dnl
+pushdef([AC_Prefix], [   ])dnl
+dnl
+ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+[m4_append([AC_LIST_FILES_COMMANDS],
+[  ]patsubst(AC_File, [:.*])[ ) $2 ;;
+])])])dnl
+])dnl
+
+
 
 dnl AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
 dnl -----------------------------------------
@@ -2934,9 +3002,11 @@ AC_DIVERT_PUSH(AC_DIVERSION_ICMDS)dnl
 AC_DIVERT_POP()])
 
 dnl AC_CONFIG_SUBDIRS(DIR ...)
+dnl --------------------------
 AC_DEFUN(AC_CONFIG_SUBDIRS,
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-define([AC_LIST_SUBDIRS], ifdef([AC_LIST_SUBDIRS], [AC_LIST_SUBDIRS ],)[$1])dnl
+[AC_CONFIG_UNIQUE([$1])dnl
+AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+m4_append([AC_LIST_SUBDIRS], [$1])dnl
 subdirs="AC_LIST_SUBDIRS"
 AC_SUBST(subdirs)dnl
 ])
@@ -2949,7 +3019,9 @@ dnl The CONFIG_HEADERS are defined in the m4 variable AC_LIST_HEADERS.
 dnl Pay special attention not to have too long here docs: some old
 dnl shells die.  Unfortunately the limit is not known precisely...
 define(AC_OUTPUT,
-[trap '' 1 2 15
+[dnl Store the CONFIG_FILES
+AC_CONFIG_FILES([$1])dnl
+trap '' 1 2 15
 AC_CACHE_SAVE
 trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
@@ -2990,8 +3062,8 @@ dnl so uname gets run too.
 # configure, is in ./config.log if it exists.
 
 # Files that config.status was made for.
-ifset([$1], [config_files="\\
-AC_WRAP($1, [    ])"
+ifdef([AC_LIST_FILES], [config_files="\\
+AC_WRAP(AC_LIST_FILES, [    ])"
 ])dnl
 ifdef([AC_LIST_HEADERS], [config_headers="\\
 AC_WRAP(AC_LIST_HEADERS, [    ])"
@@ -3013,9 +3085,9 @@ Usage: $CONFIG_STATUS @BKL@OPTIONS@BKR@ FILE...
 dnl Issue this section only if there were actually config files.
 dnl The following test checks if one of AC_LIST_HEADERS, the CONFIG_FILES
 dnl which are given via $[1], or AC_LIST_LINKS is set.
-ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)[$1],
+ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)ifdef([AC_LIST_FILES], 1),
 [Files to instantiate:
-ifset($1, [  Configuration files:
+ifdef([AC_LIST_FILES], [  Configuration files:
 \$config_files
 ])dnl
 ifdef([AC_LIST_HEADERS], [  Configuration headers:
@@ -3094,15 +3166,15 @@ EOF
 dnl Issue this section only if there were actually config files.
 dnl The following test checks if one of AC_LIST_HEADERS, the CONFIG_FILES
 dnl which are given via $[1], or AC_LIST_LINKS is set.
-ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)[$1],
+ifset(ifdef([AC_LIST_HEADERS], 1)ifdef([AC_LIST_LINKS], 1)ifdef([AC_LIST_FILES], 1),
 [cat >> $CONFIG_STATUS <<EOF
 # If there were arguments, don't assign a default value.
 if test \$[#] = 0; then
-ifset([$1], [  : \${CONFIG_FILES="\$config_files"}
+ifdef([AC_LIST_FILES], [  CONFIG_FILES="\$config_files"
 ])dnl
-ifdef([AC_LIST_HEADERS], [  : \${CONFIG_HEADERS="\$config_headers"}
+ifdef([AC_LIST_HEADERS], [  CONFIG_HEADERS="\$config_headers"
 ])dnl
-ifdef([AC_LIST_LINKS], [  : \${CONFIG_LINKS="\$config_links"}
+ifdef([AC_LIST_LINKS], [  CONFIG_LINKS="\$config_links"
 ])dnl
 fi
 
@@ -3121,10 +3193,10 @@ dnl documenting into $CONFIG_STATUS.
 dnl Because AC_OUTPUT_FILES is in charge of undiverting the AC_SUBST
 dnl section, it is better to divert it to void and *call it*, rather
 dnl than not calling it at all
-ifset([$1],
-      [AC_OUTPUT_FILES([$1])],
+ifdef([AC_LIST_FILES],
+      [AC_OUTPUT_FILES(AC_LIST_FILES)],
       [AC_DIVERT_PUSH(AC_DIVERSION_KILL)dnl
-AC_OUTPUT_FILES([$1])dnl
+AC_OUTPUT_FILES(AC_LIST_FILES)dnl
 AC_DIVERT_POP()])dnl
 ifdef([AC_LIST_HEADERS], [AC_OUTPUT_HEADER(AC_LIST_HEADERS)])dnl
 ifdef([AC_LIST_LINKS], [AC_OUTPUT_LINKS(AC_LIST_LINKS)])dnl
@@ -3146,11 +3218,12 @@ ifdef([AC_LIST_SUBDIRS], [AC_OUTPUT_SUBDIRS(AC_LIST_SUBDIRS)])dnl
 ])dnl AC_OUTPUT
 
 
-dnl AC_OUTPUT_MAKE_DEFS()
-dnl ---------------------
+dnl AC_OUTPUT_MAKE_DEFS
+dnl -------------------
 dnl Set the DEFS variable to the -D options determined earlier.
 dnl This is a subroutine of AC_OUTPUT.
 dnl It is called inside configure, outside of config.status.
+dnl FIXME: This has to be fixed the same way as in AC_OUTPUT_HEADER.
 define(AC_OUTPUT_MAKE_DEFS,
 [# Transform confdefs.h into DEFS.
 dnl Using a here document instead of a string reduces the quoting nightmare.
@@ -3193,6 +3266,11 @@ dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
 dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_FILES,
 [cat >>$CONFIG_STATUS <<EOF
+
+#
+# CONFIG_FILES section.
+#
+
 # Protect against being on the right side of a sed subst in config.status.
 dnl Please, pay attention that this sed code depends a lot on the shape
 dnl of the sed commands issued by AC_SUBST.  So if you change one, change
@@ -3342,10 +3420,18 @@ dnl     rm -f $ac_file
 dnl    mv $ac_cs_root.out $ac_file
 dnl  fi
   mv $ac_cs_root.out $ac_file
+
+ifdef([AC_LIST_FILES_COMMANDS],
+[  # Run the commands associated to the file.
+  case "$ac_file" in
+AC_LIST_FILES_COMMANDS[]dnl
+  esac
+])dnl
 fi; done
 rm -f $ac_cs_root.s*
 EOF
 ])dnl AC_OUTPUT_FILES
+
 
 dnl AC_OUTPUT_HEADER(HEADER-FILE...)
 dnl --------------------------------
@@ -3357,6 +3443,11 @@ dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_HEADER,
 [cat >>$CONFIG_STATUS <<\EOF
 changequote(<<, >>)dnl
+
+#
+# CONFIG_HEADER section.
+#
+
 # These sed commands are passed to sed as "A NAME B NAME C VALUE D", where
 # NAME is the cpp macro being defined and VALUE is the value it is being given.
 #
@@ -3511,6 +3602,10 @@ dnl It has to send itself into $CONFIG_STATUS (eg, via here documents).
 dnl Upon exit, no here document shall be opened.
 define(AC_OUTPUT_LINKS,
 [cat >> $CONFIG_STATUS <<\EOF
+
+#
+# CONFIG_LINKS section.
+#
 srcdir=$ac_given_srcdir
 
 dnl Here we use : instead of .. because if AC_LINK_FILES was used
@@ -3550,7 +3645,7 @@ changequote([, ])dnl
 changequote(, )dnl
   [/$]*) ac_rel_source="$srcdir/$ac_source" ;;
 changequote([, ])dnl
-  *) ac_rel_source="$ac_dots$srcdir/$ac_source" ;;
+      *) ac_rel_source="$ac_dots$srcdir/$ac_source" ;;
   esac
 
   # Make a symlink if possible; otherwise try a hard link.

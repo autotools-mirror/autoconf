@@ -13,8 +13,25 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
+** autoconf.texi: config.status in node names.
+The info mode of Emacs seems to have problems with this.  If the info
+reader catches that properly, we should not care.  If no info reader
+can handle this, we should change the affected node names.  Bug
+triggered by looking for `CONFIG_FILES' in the index.
+
+** autoconf.texi: Document AC_CONFIG_FILES.
+I didn't do it, because I don't know where to do that.  I would like
+to have all the AC_CONFIG_ together, but it is not currently the
+case.  An architecture for the docs needs to be decided.
+
+** autoconf.texi, near fubar=27.
+This example is *wrong*.  fubar is set in configure, not
+config.status, therefore the extra commands will not know $fubar, as
+the example let us believe.
+
 ** AC_C_STRUCT_MEMBER needs a full rewrite.
 And once done, the former specialized macros should be adapted.
+AC_CHECK_MEMBER/AC_CHECK_MEMBERS is a proposal, see the code.
 
 ** AC_CHECK_HEADER should not template config.h entries.
 Its entry in autoheader.m4 should be removed.
@@ -22,9 +39,27 @@ Its entry in autoheader.m4 should be removed.
 ** Allow tags for AC_OUTPUT_COMMANDS
 so that we  can run ./config.status name-of-the command.
 
+** Generalize the association of a commands to an output file.
+See AC_CONFIG_FILES: it is possible to associate a command which is
+run when the file is creating.  This should be extended to all the
+other AC_CONFIG entities.  But then there is a question: should the
+commands associated to a HEADER be in config.status's HEADER section,
+ran right after the file is created, or we should just plug the
+commands in the section of tagged AC_OUTPUT_COMMANDS.  There are two
+issues here: if we want to display the commands ran, then we want them
+to appear after `creating ...', not at the end.  It is also better wrt
+trapping (since files are finalized sooner, there are less files to
+remove when C-c is caught).  On the other hand, it is a bit less
+pleasant to program in Autoconf.
+
+** Rename AC_CONFIG_HEADER as AC_CONFIG_HEADERS?
+See the FIXME note in the code.
+
 ** Allow --recursive to config.status
+So that --recheck does not pass --no-recursive to configure.
 
 ** Allow --header, --command, --file to config.status.
+I don't remember the purpose, ask Alexandre.
 
 ** Move AM_PROG_CC_STDC into Autoconf.
 Autoconf should provide the means to determine the ANSIsm of the

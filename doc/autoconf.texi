@@ -866,9 +866,9 @@ not the parents of that directory).  Usually, @file{Makefile}s are
 created this way, but other files, such as @file{.gdbinit}, can be
 specified as well.
 
-If @code{AC_CONFIG_HEADER}, @code{AC_CONFIG_LINKS}, or
-@code{AC_CONFIG_SUBDIRS} has been called, this macro also creates the
-files named as their arguments.
+If @code{AC_CONFIG_HEADER}, @code{AC_CONFIG_LINKS},
+@code{AC_CONFIG_FILES}, or @code{AC_CONFIG_SUBDIRS} has been called,
+this macro also creates the files named as their arguments.
 
 A typical call to @code{AC_OUTPUT} looks like this:
 @example
@@ -5212,8 +5212,8 @@ one of them, perhaps a common library, does.  These variables allow a
 @defvar CONFIG_FILES
 @evindex CONFIG_FILES
 The files in which to perform @samp{@@@var{variable}@@} substitutions.
-The default is the arguments given to @code{AC_OUTPUT} in
-@file{configure.in}.
+The default is the arguments given to @code{AC_OUTPUT} and
+@code{AC_CONFIG_FILES} in @file{configure.in}.
 @end defvar
 
 @defvar CONFIG_HEADERS
@@ -5244,7 +5244,7 @@ stamp-h: config.h.in config.status
         echo > stamp-h
 
 Makefile: Makefile.in config.status
-        CONFIG_LINKS CONFIG_FILES=Makefile CONFIG_HEADERS= ./config.status
+        CONFIG_LINKS= CONFIG_FILES=Makefile CONFIG_HEADERS= ./config.status
 @end group
 @end example
 
@@ -5252,7 +5252,7 @@ Makefile: Makefile.in config.status
 (If @file{configure.in} does not call @code{AC_CONFIG_HEADER}, there is
 no need to set @code{CONFIG_HEADERS} in the @code{make} rules.)
 
-Note that this example could also have been written
+Note that this example could also have been written:
 
 @example
 @group

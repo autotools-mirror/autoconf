@@ -1,5 +1,35 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+      New macro: AC_CONFIG_FILES which is very much like AC_OUTPUT but
+      that one associates commands to run when a config file is
+      created.  For instance for a shell script `foo', one uses
+      AC_CONFIG_FILES(foo, chmod +x foo).
+
+      In addition, check that the same name is never used twice in
+      config files, headers, subdirs and links.
+
+      * acgeneral.m4 (m4_append): Don't insert new line between
+      elements.
+      (m4_list_append): New macro.
+      (AC_CONFIG_IF_MEMBER): New macro which tests if a file is member
+      of a config list.
+      (AC_CONFIG_UNIQUE): New macro which ensures that a config file
+      name is not yet used.
+      (AC_CONFIG_HEADER, AC_CONFIG_LINKS, AC_CONFIG_SUBDIRS): Use
+      AC_CONFIG_UNIQUE.
+
+      * acgeneral.m4 (AC_CONFIG_FILES): New macro.
+      (AC_LIST_FILES): New list, which stores arguments of
+      AC_CONFIG_LISTS the same as AC_LIST_LINKS stores AC_CONFIG_LINKS
+      etc.
+      (AC_OUTPUT): No longer rely on $1 to designate the config files:
+      register them via AC_CONFIG_FILES.  All uses of $1 replaced by
+      uses of AC_LIST_FILES.
+      (AC_OUTPUT_FILES): Run the commands associated to the
+      CONFIG_FILES.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh (Looking for bugs): In addition to AC_, match AH_
 	and AM_.
 
