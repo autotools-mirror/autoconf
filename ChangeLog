@@ -7,6 +7,10 @@
 
 	* config.guess: Likewise.
 
+	* NEWS: Update.
+
+	* configure: Rebuild.
+
 1998-12-26  Ben Elliston  <bje@cygnus.com>
 
 	* autoreconf.sh (stamp): Add missing quote.
