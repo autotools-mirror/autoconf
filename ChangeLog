@@ -1,3 +1,7 @@
+2000-07-19  Peter Eisentraut  <peter_e@gmx.net>
+
+	* Makefile.am: Remove INSTALL.txt by maintainer-clean target.
+
 2000-07-19  Akim Demaille  <akim@epita.fr>
 
 	* autoupdate.sh: Typo: s/infile/file/.

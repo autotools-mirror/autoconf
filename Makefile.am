@@ -71,6 +71,8 @@ install-data-hook: INSTALL.txt
 	  $(INSTALL_DATA) $$d$$p.txt $(DESTDIR)$(pkgdatadir)/$$f; \
 	done
 
+MAINTAINERCLEANFILES = INSTALL.txt
+
 # The scripts.
 
 editsh = sed \

@@ -1194,7 +1194,7 @@ Used to ask for brief usage information.
 @samp{-q} in @code{ls}.
 
 @item html
-In @code{makeinfo}, output HTML.  
+In @code{makeinfo}, output HTML.
 
 @item idle
 @samp{-u} in @code{who}.
@@ -2890,10 +2890,10 @@ inconsistencies between different parts of a program, by giving you a
 history of how the conflicting concepts arose and who they came from.
 
 @menu
-* Change Log Concepts::         
-* Style of Change Logs::        
-* Simple Changes::              
-* Conditional Changes::         
+* Change Log Concepts::
+* Style of Change Logs::
+* Simple Changes::
+* Conditional Changes::
 * Indicating the Part Changed::
 @end menu
 
@@ -3223,10 +3223,10 @@ to work with @var{package}.
 @c  Giving an optional @var{parameter} of
 @c @samp{no} should omit @var{package}, if it is used by default.
 
-Possible values of @var{package} include 
+Possible values of @var{package} include
 @samp{gnu-as} (or @samp{gas}), @samp{gnu-ld}, @samp{gnu-libc},
 @samp{gdb},
-@samp{x}, 
+@samp{x},
 and
 @samp{x-toolkit}.
 
