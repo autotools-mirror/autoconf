@@ -29,12 +29,12 @@ MAINTAINERCLEANFILES = $(man_MANS)
 
 # Depend on configure.in to get version number changes.
 common_dep = $(top_srcdir)/configure.in $(srcdir)/common.x
-autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(top_srcdir)/autoconf.sh
-autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(top_srcdir)/autoreconf.sh
-autoheader.1: $(common_dep) $(srcdir)/autoheader.x $(top_srcdir)/autoheader.sh
+autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(top_srcdir)/autoconf.in
+autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(top_srcdir)/autoreconf.in
+autoheader.1: $(common_dep) $(srcdir)/autoheader.x $(top_srcdir)/autoheader.in
 autoupdate.1: $(common_dep) $(srcdir)/autoupdate.x $(top_srcdir)/autoupdate.in
-ifnames.1:    $(common_dep) $(srcdir)/ifnames.x    $(top_srcdir)/ifnames.sh
-autoscan.1:   $(common_dep) $(srcdir)/autoscan.x   $(top_srcdir)/autoscan.pl
+ifnames.1:    $(common_dep) $(srcdir)/ifnames.x    $(top_srcdir)/ifnames.in
+autoscan.1:   $(common_dep) $(srcdir)/autoscan.x   $(top_srcdir)/autoscan.in
 
 # Independent from this package.
 config.guess.1: $(srcdir)/config.guess.x  $(top_srcdir)/config.guess

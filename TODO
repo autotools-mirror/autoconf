@@ -7,7 +7,7 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 ------------------------------------------------------------------------------
 
-* Autoconf 2.50
+* Autoconf 2.51
 
 ** --target & AC_ARG_PROGRAM
 Shouldn't *any* `program' be installed as `$target_alias-program' even
@@ -15,12 +15,13 @@ if AC_ARG_PROGRAM is not called?  That would be much more predictable.
 Ian?
 
 ** Document
-Automake, Libtool.
+Automake, Libtool, AC_ARG_VAR.
+
+** RedHat's Autoconf page
+should be removed.
 
 ** AC_CHECK_TOOL...
 Write a test that checks that it honors the values set by the user.
-
-* Autoconf 2.51
 
 ** AC_CHECK_FUNCS and AC_TRY_LINK_FUNC
 I have still not understood what's the difference  between the two
@@ -118,11 +119,11 @@ technology.  Should we make this a new language?  AC_LANG(ISO C).  It
 would be great to introduce AC_LANG_COMPILER in this release too.
 
 * autoconf.texi
-Move the specific macro documentation blocks into the source files, and use
-a doc-block extraction/merge technique to get docuemntation into texi-file.
-This should help avoid bit-rot in the doc, and make the doc easier to update
-when people add/change macros.  The name "autodoc" is probably already taken 
-so we probably need another one.
+Move the specific macro documentation blocks into the source files,
+and use a doc-block extraction/merge technique to get docuemntation
+into texi-file.  This should help avoid bit-rot in the doc, and make
+the doc easier to update when people add/change macros.  The name
+"autodoc" is probably already taken so we probably need another one.
 
 ------------------------------------------------------------------------------
 
