@@ -4,6 +4,11 @@
 	comments do not always work. Never trust the exit status of
 	`make -k'.
 
+2002-07-24  Kevin Ryde  <user42@zip.com.au>
+
+	* autoconf.texi (Limitations of Make, Making testsuite Scripts):
+	Untabify, since tabs are not enjoyed by texi2dvi and makeinfo.
+	
 2002-07-23  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE):
