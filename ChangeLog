@@ -1,3 +1,10 @@
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
+	* autoheader.m4 (AC_FUNC_ALLOCA): Rename from this ...
+	(AH_FUNC_ALLOCA): ... to this.  Includes all the needed templates.
+	(AC_C_CHAR_UNSIGNED): Rename from this ...
+	(AH_C_CHAR_UNSIGNED): ... to this.
+	
 1999-10-31  Ben Elliston  <bje@cygnus.com>
 
 	* Makefile.am (CLEANFILES): New explicit variable.

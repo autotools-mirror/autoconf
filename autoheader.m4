@@ -116,23 +116,36 @@ define([AH_PROG_LEX],
 [AH_CHECK_LIB(fl)
 AH_CHECK_LIB(l)])
 
-define([AC_FUNC_ALLOCA],
-[AH_VERBATIM([STACK_DIRECTION],
+define([AH_FUNC_ALLOCA],
+[AH_TEMPLATE(HAVE_ALLOCA_H,
+            [Define if you have <alloca.h> and it should be used
+             (not on Ultrix).])
+AH_TEMPLATE(HAVE_ALLOCA,
+            [Define if you have `alloca', as a function or macro.])
+AH_TEMPLATE(C_ALLOCA, [Define if using `alloca.c'.])
+AH_TEMPLATE(CRAY_STACKSEG_END,
+            [Define to one of _getb67, GETB67, getb67 for Cray-2 and Cray-YMP
+             systems.  This function is required for alloca.c support on those
+             systems.])
+AH_VERBATIM([STACK_DIRECTION],
 [/* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at run-time.
-	STACK_DIRECTION > 0 => grows toward higher addresses
-	STACK_DIRECTION < 0 => grows toward lower addresses
-	STACK_DIRECTION = 0 => direction of growth unknown */
+        STACK_DIRECTION > 0 => grows toward higher addresses
+        STACK_DIRECTION < 0 => grows toward lower addresses
+        STACK_DIRECTION = 0 => direction of growth unknown */
 #undef STACK_DIRECTION
-])])
+])
+])dnl AH_FUNC_ALLOCA
 
-define([AC_C_CHAR_UNSIGNED],
+
+define([AH_C_CHAR_UNSIGNED],
 [AH_VERBATIM([__CHAR_UNSIGNED__],
 [/* Define if type `char' is unsigned and you are not using gcc.  */
 #ifndef __CHAR_UNSIGNED__
 # undef __CHAR_UNSIGNED__
 #endif])])
+
 
 define([AH_AIX],
 [AH_VERBATIM([_ALL_SOURCE],
