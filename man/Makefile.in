@@ -329,7 +329,7 @@ uninstall-man: uninstall-man1
 	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am uninstall \
 	uninstall-am uninstall-info-am uninstall-man uninstall-man1
 
-autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(binsrcdir)/autoconf.in
+autoconf.1:   $(common_dep) $(srcdir)/autoconf.x   $(binsrcdir)/autoconf.as
 autoheader.1: $(common_dep) $(srcdir)/autoheader.x $(binsrcdir)/autoheader.in
 autom4te.1:   $(common_dep) $(srcdir)/autom4te.x   $(binsrcdir)/autom4te.in
 autoreconf.1: $(common_dep) $(srcdir)/autoreconf.x $(binsrcdir)/autoreconf.in
