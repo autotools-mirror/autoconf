@@ -1328,7 +1328,7 @@ dnl ### Examining libraries
 dnl AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
 dnl                  ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
 AC_DEFUN(AC_COMPILE_CHECK,
-[AC_OBSOLETE([$0], [; instead use AC_TRY_COMPILE or AC_TRY_LINK])dnl
+[AC_OBSOLETE([$0], [; instead use AC_TRY_COMPILE or AC_TRY_LINK, and AC_MSG_CHECKING and AC_MSG_RESULT])dnl
 ifelse([$1], , , [AC_CHECKING([for $1])
 ])dnl
 AC_TRY_LINK([$2], [$3], [$4], [$5])dnl
@@ -1436,19 +1436,21 @@ AC_DEFUN(AC_CHECK_FUNC,
 [AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(ac_cv_func_$1,
 [AC_TRY_LINK(
-[#include <ctype.h> /* Arbitrary system header to define __stub macros. */], [
+[#include <ctype.h> /* Arbitrary system header to define __stub macros. */
+/* Override any gcc2 internal prototype to avoid an error.  */
+]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
+extern "C"
+#endif
+])dnl
+[char $1(); 
+], [
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
 #if defined (__stub_$1) || defined (__stub___$1)
 choke me
 #else
-/* Override any gcc2 internal prototype to avoid an error.  */
-]ifelse(AC_LANG, CPLUSPLUS, [#ifdef __cplusplus
-extern "C"
-#endif
-])dnl
-[char $1(); $1();
+$1();
 #endif
 ], eval "ac_cv_func_$1=yes", eval "ac_cv_func_$1=no")])dnl
 if eval "test \"`echo '$ac_cv_func_'$1`\" = yes"; then
