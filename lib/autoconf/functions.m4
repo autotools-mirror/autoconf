@@ -590,9 +590,8 @@ AC_DEFUN([AC_FUNC_GETMNTENT],
 AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS",
   [AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS",
     [AC_CHECK_LIB(gen, getmntent, LIBS="-lgen $LIBS")])])
-AC_CHECK_FUNC(getmntent,
-              [AC_DEFINE(HAVE_GETMNTENT, 1,
-                         [Define to 1 if you have the `getmntent' function.])])])
+AC_CHECK_FUNCS(getmntent)
+])
 
 
 # AC_FUNC_GETPGRP
