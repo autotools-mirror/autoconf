@@ -100,7 +100,10 @@ if test -z "$CPP"; then
 dnl On the NeXT, cc -E appears to run the code through the compiler's parser,
 dnl not just through cpp.
   AC_TEST_CPP([#include <stdio.h>
-Syntax Error], , CPP=/lib/cpp)
+Syntax Error], ,
+  CPP="${CC-cc} -E -traditional-cpp"
+  AC_TEST_CPP([#include <stdio.h>
+Syntax Error], ,CPP=/lib/cpp))
 fi
 test ".${verbose}" != "." && echo "	setting CPP to $CPP"
 AC_SUBST(CPP)dnl
@@ -779,7 +782,7 @@ if test -n "$GCC"; then
 AC_DEFINE(HAVE_LONG_DOUBLE)
 else
 AC_TEST_PROGRAM([int main() {
-/* The Stardent Vistra knows sizeof(long double), but doesn't support it.  */
+/* The Stardent Vistra knows sizeof(long double), but does not support it.  */
 long double foo = 0.0;
 /* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
 exit(sizeof(long double) < sizeof(double)); }],
@@ -1003,21 +1006,41 @@ if test ".$x_direct_test_include" = . ; then
    x_direct_test_include='X11/Intrinsic.h'
 fi
 AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
-  for dir in \
-    /usr/local/include \
-    /usr/unsupported/include \
-    /usr/x386/include \
-    /usr/local/x11r5/include \
-    /usr/include/X11R6 \
-    /usr/include/X11R5 \
-    /usr/include/X11R4 \
-    /usr/X11R6/include \
-    /usr/X11R5/include \
-    /usr/X11/include \
-    /usr/openwin/include \
+  for dir in                  \
+    /usr/X11R6/include        \
+    /usr/X11R5/include        \
+    /usr/X11R4/include        \
+                              \
+    /usr/include/X11R6        \
+    /usr/include/X11R5        \
+    /usr/include/X11R4        \
+                              \
+    /usr/local/X11R6/include  \
+    /usr/local/X11R5/include  \
+    /usr/local/X11R4/include  \
+                              \
+    /usr/local/include/X11R6  \
+    /usr/local/include/X11R5  \
+    /usr/local/include/X11R4  \
+                              \
+    /usr/X11/include          \
+    /usr/include/X11          \
+    /usr/local/X11/include    \
+    /usr/local/include/X11    \
+                              \
+    /usr/openwin/include      \
     /usr/openwin/share/include \
-    /usr/lpp/Xamples/include \
-    /usr/athena/include \
+                              \
+    /usr/X386/include         \
+    /usr/x386/include         \
+    /usr/XFree86/include/X11  \
+                              \
+    /usr/include              \
+    /usr/local/include        \
+    /usr/unsupported/include  \
+    /usr/athena/include       \
+    /usr/local/x11r5/include  \
+    /usr/lpp/Xamples/include  \
     ; \
   do
     if test -r "$dir/$x_direct_test_include"; then
@@ -1030,23 +1053,41 @@ AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
 # `lib' works.
 AC_HAVE_LIBRARY("$x_direct_test_library", no_x=,
 for dir in `echo "$x_includes" | sed s/include/lib/` \
-  /usr/local/lib \
-  /usr/unsupported/lib \
-  /usr/x386/lib \
-  /usr/local/x11r5/lib \
-  /usr/lib/X11 \
-  /usr/lib/X11R6 \
-  /usr/lib/X11R5 \
-  /usr/lib/X11R4 \
-  /usr/X11R6/lib \
-  /usr/X11R5/lib \
-  /usr/X11R4/lib \
-  /usr/X11/lib \
-  /usr/openwin/lib \
-  /usr/lpp/Xamples/lib \
-  /usr/athena/lib \
-  /usr/lib \
-  ; \
+    /usr/X11R6/lib        \
+    /usr/X11R5/lib        \
+    /usr/X11R4/lib        \
+                          \
+    /usr/lib/X11R6        \
+    /usr/lib/X11R5        \
+    /usr/lib/X11R4        \
+                          \
+    /usr/local/X11R6/lib  \
+    /usr/local/X11R5/lib  \
+    /usr/local/X11R4/lib  \
+                          \
+    /usr/local/lib/X11R6  \
+    /usr/local/lib/X11R5  \
+    /usr/local/lib/X11R4  \
+                          \
+    /usr/X11/lib          \
+    /usr/lib/X11          \
+    /usr/local/X11/lib    \
+    /usr/local/lib/X11    \
+                          \
+    /usr/openwin/lib      \
+    /usr/openwin/share/lib \
+                          \
+    /usr/X386/lib         \
+    /usr/x386/lib         \
+    /usr/XFree86/lib/X11  \
+                          \
+    /usr/lib              \
+    /usr/local/lib        \
+    /usr/unsupported/lib  \
+    /usr/athena/lib       \
+    /usr/local/x11r5/lib  \
+    /usr/lpp/Xamples/lib  \
+    ; \
 do
   for extension in a so sl; do
     if test -r $dir/lib${x_direct_test_library}.$extension; then
