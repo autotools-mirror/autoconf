@@ -29,11 +29,11 @@ SUFFIXES = .m4 .m4f
 # others) to `false'.  But we _ship_ tests/autom4te, so it doesn't
 # apply to us.
 MY_AUTOM4TE = $(top_builddir)/tests/autom4te
-$(MY_AUTOM4TE):
+$(MY_AUTOM4TE): $(top_srcdir)/tests/wrapper.in
 	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
 
 AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
-$(AUTOM4TE_CFG):
+$(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
 
 # When processing the file with diversion disabled, there must be no

@@ -1,5 +1,10 @@
 2002-10-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/freeze.mk ($(AUTOM4TE_CFG)): Add a missing dependency on
+	autom4te.in that resulted in the need for two `make' runs.
+
+2002-10-27  Akim Demaille  <akim@epita.fr>
+
 	* configure.ac: Bump to 2.54b.
 
 2002-10-25  Akim Demaille  <akim@epita.fr>

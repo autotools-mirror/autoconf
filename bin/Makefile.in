@@ -418,9 +418,9 @@ uninstall-am: uninstall-binSCRIPTS uninstall-info-am
 	pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-binSCRIPTS uninstall-info-am
 
-$(MY_AUTOM4TE):
+$(MY_AUTOM4TE): $(top_srcdir)/tests/wrapper.in
 	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
-$(AUTOM4TE_CFG):
+$(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
 
 # When processing the file with diversion disabled, there must be no

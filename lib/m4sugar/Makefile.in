@@ -424,9 +424,9 @@ check-local: check-forbidden-patterns
 
 m4sugar.m4f: $(m4sugar_m4f_dependencies)
 m4sh.m4f: $(m4sh_m4f_dependencies)
-$(MY_AUTOM4TE):
+$(MY_AUTOM4TE): $(top_srcdir)/tests/wrapper.in
 	cd $(top_builddir)/tests && $(MAKE) $(AM_MAKEFLAGS) autom4te
-$(AUTOM4TE_CFG):
+$(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
 
 # When processing the file with diversion disabled, there must be no
