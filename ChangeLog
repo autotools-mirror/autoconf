@@ -1,3 +1,11 @@
+2001-02-26  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AH_VERBATIM, AH_TEMPLATE): New, use AS_ESCAPE, not
+	_AS_QUOTE.
+	(_AH_VERBATIM_OLD, _AH_TEMPLATE_OLD): New, used for bugward
+	compatibility in...
+	(AC_DEFINE, AC_DEFINE_UNQUOTED): here.
+
 2001-02-26  Pavel Roskin  <proski@gnu.org>
 
 	* autoupdate.in (&mktmpdir): Strip the newline from the output
