@@ -1,3 +1,8 @@
+2004-01-07  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autom4te.in (Automake-preselections): Preselect AC_LIBTOOL_TAGS
+	and _LT_AC_TAGCONFIG.
+
 2004-01-06  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (One Macro Call): Fix an incorrect
@@ -42,7 +47,7 @@
 	srcdir): Likewise.
 	* doc/autoconf.texi (Limitations of Usual Tools):
 	Warn against "rm -fr".
-	
+
 2004-01-03  Paul Eggert  <eggert@twinsun.com>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Mention that cc

@@ -1,6 +1,6 @@
 # Definition of Autom4te option sets.                     -*- Makefile -*-
 #
-# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 #
 # This file is part of GNU Autoconf.
 #
@@ -44,6 +44,7 @@ args: --preselect AC_CONFIG_LIBOBJ_DIR
 args: --preselect AC_CONFIG_LINKS
 args: --preselect AC_INIT
 args: --preselect AC_LIBSOURCE
+args: --preselect AC_LIBTOOL_TAGS
 args: --preselect AC_SUBST
 args: --preselect AM_AUTOMAKE_VERSION
 args: --preselect AM_CONDITIONAL
@@ -53,6 +54,7 @@ args: --preselect AM_MAINTAINER_MODE
 args: --preselect AM_PROG_CC_C_O
 args: --preselect m4_include
 args: --preselect m4_sinclude
+args: --preselect _LT_AC_TAGCONFIG
 end-language: "Automake-preselections"
 
 
