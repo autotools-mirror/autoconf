@@ -2190,7 +2190,7 @@ AC_CACHE_CHECK([for working const], ac_cv_c_const,
 changequote(<<, >>)dnl
 <<
 /* Ultrix mips cc rejects this.  */
-typedef int charset[2]; const charset x;
+typedef int charset[2]; const charset x = {0, 0};
 /* SunOS 4.1.1 cc rejects this.  */
 char const *const *ccp;
 char **p;
