@@ -1,3 +1,12 @@
+2004-01-03  Paul Eggert  <eggert@twinsun.com>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Mention that cc
+	-c -o might not work.  From a suggestion by Kevin Ryde.
+	(C Compiler, Generating Sources, Limitations
+	of Usual Tools, Limitations of Make, Making testsuite Scripts):
+	Don't put '-o' after non-options, as POSIX doesn't allow this.
+	Mention that cc's name might be gcc or c89 or whatever.
+
 2004-01-04  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi: Add various further index entries.
