@@ -1068,6 +1068,8 @@ if test "$ac_cv_prog_cc_stdc" != no; then
   AC_MSG_RESULT([yes])
   AC_DEFINE(PROTOTYPES, 1,
             [Define to 1 if the C compiler supports function prototypes.])
+  AC_DEFINE(__PROTOTYPES, 1,
+            [Define like PROTOTYPES; this can be used by system headers.])
 else
   AC_MSG_RESULT([no])
 fi
