@@ -99,7 +99,8 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 # AS_REQUIRE(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK])
 # -----------------------------------------------------------
 # BODY-TO-EXPAND is some initialization which must be expanded in the
-# M4SH-INIT section when expanded (required or not).  For instance:
+# M4SH-INIT section when expanded (required or not).  This is very
+# different from m4_require.  For instance:
 #
 #      m4_defun([_FOO_PREPARE], [foo=foo])
 #      m4_defun([FOO],
@@ -416,7 +417,7 @@ AS_DIRNAME_SED([$1])])
 # Also see the comments for AS_DIRNAME.
 
 m4_defun([AS_BASENAME_EXPR],
-[m4_require([_AS_EXPR_PREPARE])dnl
+[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
 $as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
 	 X[]$1 : 'X\(//\)$' \| \
 	 X[]$1 : 'X\(/\)$' \| \
