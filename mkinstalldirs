@@ -18,7 +18,8 @@ do
        -* ) pathcomp=./$pathcomp ;;
      esac
 
-     if test ! -d "$pathcomp"; then
+     # Test `DIR/.' so that we see a symlink to a directory as a directory.
+     if test ! -d "$pathcomp"/.; then
         echo "mkdir $pathcomp" 1>&2
         mkdir "$pathcomp" || errstatus=$?
      fi
