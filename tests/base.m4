@@ -6,8 +6,9 @@ Base layer.
 
 EOF
 
-# m4_wrap
-# -------
+## ------- ##
+## m4_wrap ##
+## ------- ##
 
 AT_SETUP(m4_wrap)
 
@@ -54,8 +55,9 @@ AT_CLEANUP()
 
 
 
-# AC_REQUIRE
-# ----------
+## ------------ ##
+## AC_REQUIRE.  ##
+## ------------ ##
 
 # Check that dependencies are always properly honored.
 
@@ -94,8 +96,9 @@ AT_CHECK([./configure], 0)
 AT_CLEANUP(configure)
 
 
-# AC_SHELL_MKDIR_P
-# ----------------
+## ------------------ ##
+## AC_SHELL_MKDIR_P.  ##
+## ------------------ ##
 
 # Build nested dirs.
 
@@ -118,3 +121,75 @@ AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
 AT_CHECK([./configure], 0)
 
 AT_CLEANUP(configure 1 a)
+
+
+
+## ----------------------------------------- ##
+## AC_SHELL_DIRNAME & AC_SHELL_DIRNAME_SED.  ##
+## ----------------------------------------- ##
+
+# Build nested dirs.
+
+AT_SETUP(AC_SHELL_DIRNAME & AC_SHELL_DIRNAME_SED)
+
+AT_DATA(configure.in,
+[[
+
+define([AC_SHELL_DIRNAME_TEST],
+[dir=`AC_SHELL_DIRNAME([$1])`
+test "$dir" = "$2" ||
+  echo "dirname($1) = $dir instead of $2" >&2])
+define([AC_SHELL_DIRNAME_SED_TEST],
+[dir=`AC_SHELL_DIRNAME_SED([$1])`
+test "$dir" = "$2" ||
+  echo "dirname_sed($1) = $dir instead of $2" >&2])
+
+AC_PLAIN_SCRIPT
+AC_SHELL_DIRNAME_TEST([//1],		[//])
+AC_SHELL_DIRNAME_TEST([/1],		[/])
+AC_SHELL_DIRNAME_TEST([./1],		[.])
+AC_SHELL_DIRNAME_TEST([../../2],	[../..])
+AC_SHELL_DIRNAME_TEST([//1/],		[//])
+AC_SHELL_DIRNAME_TEST([/1/],		[/])
+AC_SHELL_DIRNAME_TEST([./1/],		[.])
+AC_SHELL_DIRNAME_TEST([../../2],	[../..])
+AC_SHELL_DIRNAME_TEST([//1/3],		[//1])
+AC_SHELL_DIRNAME_TEST([/1/3],		[/1])
+AC_SHELL_DIRNAME_TEST([./1/3],		[./1])
+AC_SHELL_DIRNAME_TEST([../../2/3],	[../../2])
+AC_SHELL_DIRNAME_TEST([//1/3///],	[//1])
+AC_SHELL_DIRNAME_TEST([/1/3///],	[/1])
+AC_SHELL_DIRNAME_TEST([./1/3///],	[./1])
+AC_SHELL_DIRNAME_TEST([../../2/3///],	[../../2])
+AC_SHELL_DIRNAME_TEST([//1//3/],	[//1])
+AC_SHELL_DIRNAME_TEST([/1//3/],		[/1])
+AC_SHELL_DIRNAME_TEST([./1//3/],	[./1])
+AC_SHELL_DIRNAME_TEST([../../2//3/],	[../../2])
+
+AC_SHELL_DIRNAME_SED_TEST([//1],		[//])
+AC_SHELL_DIRNAME_SED_TEST([/1],			[/])
+AC_SHELL_DIRNAME_SED_TEST([./1],		[.])
+AC_SHELL_DIRNAME_SED_TEST([../../2],		[../..])
+AC_SHELL_DIRNAME_SED_TEST([//1/],		[//])
+AC_SHELL_DIRNAME_SED_TEST([/1/],		[/])
+AC_SHELL_DIRNAME_SED_TEST([./1/],		[.])
+AC_SHELL_DIRNAME_SED_TEST([../../2],		[../..])
+AC_SHELL_DIRNAME_SED_TEST([//1/3],		[//1])
+AC_SHELL_DIRNAME_SED_TEST([/1/3],		[/1])
+AC_SHELL_DIRNAME_SED_TEST([./1/3],		[./1])
+AC_SHELL_DIRNAME_SED_TEST([../../2/3],		[../../2])
+AC_SHELL_DIRNAME_SED_TEST([//1/3///],		[//1])
+AC_SHELL_DIRNAME_SED_TEST([/1/3///],		[/1])
+AC_SHELL_DIRNAME_SED_TEST([./1/3///],		[./1])
+AC_SHELL_DIRNAME_SED_TEST([../../2/3///],	[../../2])
+AC_SHELL_DIRNAME_SED_TEST([//1//3/],		[//1])
+AC_SHELL_DIRNAME_SED_TEST([/1//3/],		[/1])
+AC_SHELL_DIRNAME_SED_TEST([./1//3/],		[./1])
+AC_SHELL_DIRNAME_SED_TEST([../../2//3/],	[../../2])
+exit 0
+]])
+
+AT_CHECK([../autoconf --autoconf-dir .. -l $at_srcdir], 0, [], [])
+AT_CHECK([./configure], 0)
+
+AT_CLEANUP(configure)

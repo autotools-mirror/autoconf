@@ -1,6 +1,6 @@
 #!/bin/sh
 # Validation suite for Autoconf
-# Copyright (C) 2000 Free Software Foundation, Inc.
+# Copyright 2000 Free Software Foundation, Inc.
 
 # Still many parts of `autoconf' are not exercised by the test suite.  A few
 # FIXME's, below, are used to list tests that we would need.  Do you feel

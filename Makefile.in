@@ -88,7 +88,7 @@ nodistpkgdataDATA = autoconf.m4f
 pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
 OLDCHANGELOGS = ChangeLog.0 ChangeLog.1
-EXTRA_DIST = $(OLDCHANGELOGS) autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh ifnames.sh autoscan.pl INSTALL.txt $(distpkgdataDATA)
+EXTRA_DIST = $(OLDCHANGELOGS) acversion.m4.in autoconf.sh autoheader.sh autoreconf.sh autoupdate.sh ifnames.sh autoscan.pl INSTALL.txt $(distpkgdataDATA)
 
 
 # Files that should be removed, but which Automake does not know:

@@ -920,18 +920,24 @@ done; }
 # a silly length limit that causes expr to fail if the matched
 # substring is longer than 120 bytes.  So fall back on echo|sed if
 # expr fails.
-define([AC_SHELL_DIRNAME],
+define([AC_SHELL_DIRNAME_EXPR],
 [expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
       X[]$1 : 'X\(//\)[[^/]]' \| \
       X[]$1 : 'X\(//\)$' \| \
       X[]$1 : 'X\(/\)' \| \
-      .   : '\(.\)' 2>/dev/null ||
-echo "X[]$1" |
+      .     : '\(.\)'])
+
+define([AC_SHELL_DIRNAME_SED],
+[echo "X[]$1" |
     sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
   	  /^X\(\/\/\)$/{ s//\1/; q; }
   	  /^X\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q']])
+
+define([AC_SHELL_DIRNAME],
+[AC_SHELL_DIRNAME_EXPR([$1]) 2>/dev/null ||
+AC_SHELL_DIRNAME_SED([$1])])
 
 
 ## --------------------------------------------------- ##

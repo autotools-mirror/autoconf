@@ -1,3 +1,10 @@
+2000-10-25  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_SHELL_DIRNAME): Split its code into...
+	(AC_SHELL_DIRNAME_EXPR, AC_SHELL_DIRNAME_SED): these new macros.
+	* tests/base.m4 (AC_SHELL_DIRNAME & AC_SHELL_DIRNAME_SED): New
+	test.
+
 2000-10-25  Pavel Roskin  <proski@gnu.org>
 
 	* tests/aclocal.m4 (AC_ENV_SAVE): Rename to ...
