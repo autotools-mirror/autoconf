@@ -61,16 +61,21 @@ m4_namespace_push(autoconf)
 # m4 output diversions.  We let m4 output them all in order at the end,
 # except that we explicitly undivert AC_DIVERSION_ICMDS.
 
-define(AC_DIVERSION_KILL,    -1)# suppress output
-define(AC_DIVERSION_BINSH,    0)# AC_REQUIRE'd #! /bin/sh line
-define(AC_DIVERSION_NOTICE,   1)# copyright notice & option help strings
-define(AC_DIVERSION_INIT,     2)# initialization code
-define(AC_DIVERSION_NORMAL_4, 3)# AC_REQUIRE'd code, 4 level deep
-define(AC_DIVERSION_NORMAL_3, 4)# AC_REQUIRE'd code, 3 level deep
-define(AC_DIVERSION_NORMAL_2, 5)# AC_REQUIRE'd code, 2 level deep
-define(AC_DIVERSION_NORMAL_1, 6)# AC_REQUIRE'd code, 1 level deep
-define(AC_DIVERSION_NORMAL,   7)# the tests and output code
-define(AC_DIVERSION_ICMDS,    8)# extra initialization in config.status
+define(AC_DIVERSION_KILL,      	-1)# suppress output
+define(AC_DIVERSION_BINSH,     	 0)# AC_REQUIRE'd #! /bin/sh line
+define(AC_DIVERSION_NOTICE,    	 1)# copyright notice
+define(AC_DIVERSION_INIT,      	 2)# initialization code
+define(AC_DIVERSION_HELP_BEGIN,  3)# Handling `configure --help'
+define(AC_DIVERSION_HELP_ENABLE, 4)# Help msg from AC_ARG_ENABLE
+define(AC_DIVERSION_HELP_WITH,   5)# Help msg from AC_ARG_WITH
+define(AC_DIVERSION_HELP_VAR,    6)# Help msg from AC_ARG_VAR
+define(AC_DIVERSION_HELP_END,    7)# Tail of the handling of --help
+define(AC_DIVERSION_NORMAL_4,    8)# AC_REQUIRE'd code, 4 level deep
+define(AC_DIVERSION_NORMAL_3,    9)# AC_REQUIRE'd code, 3 level deep
+define(AC_DIVERSION_NORMAL_2,   10)# AC_REQUIRE'd code, 2 level deep
+define(AC_DIVERSION_NORMAL_1,   11)# AC_REQUIRE'd code, 1 level deep
+define(AC_DIVERSION_NORMAL,     12)# the tests and output code
+define(AC_DIVERSION_ICMDS,      13)# extra initialization in config.status
 
 
 # AC_DIVERT_PUSH(STREAM)
@@ -226,17 +231,31 @@ AU_DEFINE([$1], [$2], [$3])dnl
 # AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
 # ---------------------------------------------
 define(AC_BEFORE,
-[ifdef([AC_PROVIDE_$2], [AC_WARNING([$2 was called before $1])])])
+[AC_PROVIDE_IF([$2], [AC_WARNING([$2 was called before $1])])])
 
 
 # AC_REQUIRE(MACRO-NAME)
 # ----------------------
+# If MACRO-NAME has never been expanded, expand it *before* the current
+# macro expansion.
 define(AC_REQUIRE,
-[ifdef([AC_PROVIDE_$1], ,
-[AC_DIVERT_PUSH(m4_eval(AC_DIVERSION_CURRENT - 1))dnl
-indir([$1])
+[AC_PROVIDE_IF([$1],
+               [],
+               [AC_DIVERT_PUSH(m4_eval(AC_DIVERSION_CURRENT - 1))dnl
+$1
 AC_DIVERT_POP()dnl
 ])])
+
+
+# AC_EXPAND_ONCE(MACRO-NAME)
+# --------------------------
+# If MACRO-NAME has never been expanded, expand it *here*.  Useful
+# undocumented fragile feature: MACRO-NAME can be almost any code to
+# expand once.
+define(AC_EXPAND_ONCE,
+[AC_PROVIDE_IF([$1],
+               [],
+               [$1])])
 
 
 # AC_PROVIDE(MACRO-NAME)
@@ -248,6 +267,15 @@ define(AC_PROVIDE,
 [m4_define([AC_PROVIDE_$1])])
 
 
+# AC_PROVIDE_IF(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)
+# -------------------------------------------------------
+# If MACRO-NAME is provided do IF-PROVIDED, else IF-NOT-PROVIDED.
+# The purpose of this macro is to provide the user with a means to
+# check macros which are provided without letting her know how the
+# information is coded.
+define(AC_PROVIDE_IF,
+[ifdef([AC_PROVIDE_$1],
+       [$2], [$3])])
 
 
 ## --------------------- ##
@@ -529,9 +557,6 @@ AC_DEFUN(_AC_INIT_NOTICE,
 # gives unlimited permission to copy, distribute and modify it.
 
 # Defaults:
-ac_arg_with_help=
-ac_arg_enable_help=
-ac_arg_var_help=
 ac_default_prefix=/usr/local
 # Factorizing default headers for most tests.
 dnl If ever you change this variable, please keep autoconf.texi in sync.
@@ -932,7 +957,8 @@ fi
 # -------------
 # Handle the `configure --help' message.
 define([_AC_INIT_HELP],
-[[if $ac_init_help; then
+[AC_DIVERT_PUSH(AC_DIVERSION_HELP_BEGIN)dnl
+[if $ac_init_help; then
   # Omit some internal or obsolete options to make the list less imposing.
   # This message is too long to be a string in the A/UX 3.1 sh.
   cat <<\EOF
@@ -987,7 +1013,7 @@ Program names:
                           run sed PROGRAM on installed program names
 
 EOF
-    cat <<\EOF
+  cat <<\EOF
 Host type:
   --build=BUILD      configure for building on BUILD [BUILD=HOST]
   --host=HOST        configure for HOST [guessed]
@@ -996,23 +1022,15 @@ Host type:
 X features:
   --x-includes=DIR    X include files are in DIR
   --x-libraries=DIR   X library files are in DIR
-EOF]]
-dnl It would be great to sort, unfortunately, since each entry maybe
-dnl split on several lines, it is not as evident as a simple `| sort'.
-[[  test -n "$ac_arg_enable_help" && echo "
-Optional features:
-  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]\
-$ac_arg_enable_help"
-  test -n "$ac_arg_with_help" && echo "
-Optional packages:
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)\
-$ac_arg_with_help"
-  test -n "$ac_arg_var_help" && echo "
-Some influent environment variables:$ac_arg_var_help"
+EOF
+  cat <<\EOF]
+AC_DIVERT_POP()dnl
+AC_DIVERT_PUSH(AC_DIVERSION_HELP_END)dnl
+EOF
   exit 0
-fi]])# _AC_INIT_HELP
+fi
+AC_DIVERT_POP()dnl
+])# _AC_INIT_HELP
 
 
 # _AC_INIT_VERSION
@@ -1199,20 +1217,28 @@ AC_DIVERT_POP()dnl to NORMAL
 
 
 
-
-
-
 ## ----------------------------- ##
 ## Selecting optional features.  ##
 ## ----------------------------- ##
 
 
-# AC_ARG_ENABLE(FEATURE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
-# ----------------------------------------------------------------------
+# _AC_ARG_ENABLE_HELP_PROLOGUE
+# ----------------------------
+# Text which introduces the --enable section in `configure --help'.
+AC_DEFUN(_AC_ARG_ENABLE_HELP_PROLOGUE,
+[[
+Optional Features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+]])
+
+
+# AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ------------------------------------------------------------------------
 AC_DEFUN(AC_ARG_ENABLE,
-[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
-ac_arg_enable_help="$ac_arg_enable_help
-[$2]"
+[AC_DIVERT_PUSH(AC_DIVERSION_HELP_ENABLE)dnl
+AC_EXPAND_ONCE([_AC_ARG_ENABLE_HELP_PROLOGUE])[]dnl
+$2
 AC_DIVERT_POP()dnl
 @%:@ Check whether --enable-[$1] or --disable-[$1] was given.
 if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
@@ -1221,8 +1247,8 @@ if test "[${enable_]patsubst([$1], -, _)+set}" = set; then
 ifval([$4], [else
   $4
 ])dnl
-fi
-])
+fi[]dnl
+])# AC_ARG_ENABLE
 
 
 AU_DEFUN(AC_ENABLE,
@@ -1234,12 +1260,23 @@ AU_DEFUN(AC_ENABLE,
 ## ------------------------------ ##
 
 
+# _AC_ARG_WITH_HELP_PROLOGUE
+# --------------------------
+# Text which introduces the --with section in `configure --help'.
+AC_DEFUN(_AC_ARG_WITH_HELP_PROLOGUE,
+[[
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+]])
+
+
 # AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
 # --------------------------------------------------------------------
 AC_DEFUN(AC_ARG_WITH,
-[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
-ac_arg_with_help="$ac_arg_with_help
-[$2]"
+[AC_DIVERT_PUSH(AC_DIVERSION_HELP_WITH)dnl
+AC_EXPAND_ONCE([_AC_ARG_WITH_HELP_PROLOGUE])[]dnl
+$2
 AC_DIVERT_POP()dnl
 @%:@ Check whether --with-[$1] or --without-[$1] was given.
 if test "[${with_]patsubst([$1], -, _)+set}" = set; then
@@ -1248,27 +1285,36 @@ if test "[${with_]patsubst([$1], -, _)+set}" = set; then
 ifval([$4], [else
   $4
 ])dnl
-fi
-])
+fi[]dnl
+])# AC_ARG_WITH
 
 AU_DEFUN(AC_WITH,
 [AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])])
 
 
 
-## ---------------------------------------- ##
-## Remembering env vars for reconfiguring.  ##
-## ---------------------------------------- ##
+## ----------------------------------------- ##
+## Remembering variables for reconfiguring.  ##
+## ----------------------------------------- ##
+
+
+# _AC_ARG_VAR_HELP_PROLOGUE
+# -------------------------
+# Text which introduces the variables section in `configure --help'.
+AC_DEFUN(_AC_ARG_VAR_HELP_PROLOGUE,
+[[
+Some influent environment variables:
+]])
 
 
 # AC_ARG_VAR(VARNAME, DOCUMENTATION)
 # ----------------------------------
 # Register VARNAME as a variable configure should remember, and
-# document it in --help.
+# document it in `configure --help'.
 AC_DEFUN(AC_ARG_VAR,
-[AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
-ac_arg_var_help="$ac_arg_var_help
-AC_HELP_STRING([$1], [$2], [              ])"
+[AC_DIVERT_PUSH(AC_DIVERSION_HELP_VAR)dnl
+AC_EXPAND_ONCE([_AC_ARG_VAR_HELP_PROLOGUE])[]dnl
+AC_HELP_STRING([$1], [$2], [              ])
 AC_DIVERT_POP()dnl
 dnl Register if set and not yet registered.
 dnl If there are envvars given as arguments, they are already set,
@@ -1276,7 +1322,8 @@ dnl therefore they won't be set again, which is the right thing.
 case "${$1+set} $ac_configure_args" in
  *" $1="* );;
  "set "*) ac_configure_args="$1='[$]$1' $ac_configure_args";;
-esac])
+esac[]dnl
+])# AC_ARG_VAR
 
 
 

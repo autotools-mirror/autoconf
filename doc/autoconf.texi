@@ -5422,7 +5422,7 @@ Options}).  The following example will make this clearer.
 AC_DEFUN(TEST_MACRO,
 [AC_ARG_WITH(foo,
              AC_HELP_STRING([--with-foo], [use foo (default is NO)],
-             ac_cv_use_foo=$withval, ac_cv_use_foo=no)
+             ac_cv_use_foo=$withval, ac_cv_use_foo=no),
 AC_CACHE_CHECK(whether to use foo, ac_cv_use_foo, ac_cv_use_foo=no)])
 @end example
 
@@ -5443,7 +5443,7 @@ arguments, as shown in the following example.
 AC_DEFUN(MY_ARG_WITH,
 [AC_ARG_WITH([$1],
              AC_HELP_STRING([--with-$1], [use $1 (default is $2)]),
-             ac_cv_use_$1=$withval, ac_cv_use_$1=no)
+             ac_cv_use_$1=$withval, ac_cv_use_$1=no),
 AC_CACHE_CHECK(whether to use $1, ac_cv_use_$1, ac_cv_use_$1=$2)])
 @end example
 @end defmac

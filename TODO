@@ -55,8 +55,7 @@ Document --install.  Should --install `fix' configure.in for the user?
 ** AC_ARG_VAR
 If should check that none of the envvar it is in charge of, has
 changed.  The configure.in writer may supply what to do (FATAL, WARN
-etc.).  See VALIDATE CACHE TUPLE.  Write the documentation of
-AC_ARG_VAR.  Where should it go?
+etc.).  See VALIDATE CACHE TUPLE.  Document.  Where?
 
 ** Allow --recursive to config.status
 So that --recheck does not pass --no-recursive to configure.
