@@ -423,6 +423,7 @@ sub autoreconf_current_directory ()
   # Perform a single trace reading to avoid --force forcing a rerun
   # between two --trace, that's useless.  If there is no AC_INIT, then
   # we are not interested: it looks like a Cygnus thingy.
+  my $aux_dir;
   my $uses_gettext_via_traces;
   my $uses_libtool;
   my $uses_autoheader;
@@ -433,6 +434,7 @@ sub autoreconf_current_directory ()
      . join (' --trace=', '',
 	     # If you change this list, update the
 	     # `Autoreconf-preselections' section of autom4te.in.
+	     'AC_CONFIG_AUX_DIR:AC_CONFIG_AUX_DIR:\$1',
 	     'AC_CONFIG_HEADERS',
 	     'AC_CONFIG_SUBDIRS:AC_CONFIG_SUBDIRS:\$1',
 	     'AC_INIT',
@@ -442,6 +444,7 @@ sub autoreconf_current_directory ()
      . ' |');
   while ($_ = $traces->getline)
     {
+      $aux_dir = $1                 if /AC_CONFIG_AUX_DIR:(.*)/;
       $uses_autoconf = 1            if /AC_INIT/;
       $uses_gettext_via_traces = 1  if /AM_GNU_GETTEXT/;
       $uses_libtool = 1             if /AC_PROG_LIBTOOL/;
@@ -468,6 +471,24 @@ sub autoreconf_current_directory ()
     if $uses_gettext_via_traces && ! $uses_gettext;
   error "$configure_ac: AM_GNU_GETTEXT_VERSION is used, but not AM_GNU_GETTEXT"
     if $uses_gettext && ! $uses_gettext_via_traces;
+
+
+  # ---------------------------- #
+  # Setting up the source tree.  #
+  # ---------------------------- #
+
+  # libtoolize, automake --add-missing etc. will drop files in the
+  # $AUX_DIR.  But these tools fail to install these files if the
+  # directory itself does not exist, which valid: just imagine a CVS
+  # repository with hand written code only (there is not even a need
+  # for a Makefile.am!).
+
+  if (defined $aux_dir && ! -d $aux_dir)
+    {
+      verb "$configure_ac: creating directory $aux_dir";
+      mkdir $aux_dir
+	or error "cannot create $aux_dir: $!";
+    }
 
 
   # -------------------- #

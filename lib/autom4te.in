@@ -61,6 +61,7 @@ end-language: "Automake-preselections"
 ## -------------------------- ##
 
 begin-language: "Autoreconf-preselections"
+args: --preselect AC_CONFIG_AUX_DIR
 args: --preselect AC_CONFIG_HEADERS
 args: --preselect AC_CONFIG_SUBDIRS
 args: --preselect AC_INIT

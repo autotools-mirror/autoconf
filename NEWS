@@ -1,4 +1,10 @@
-* Major changes in Autoconf 2.57f                       -*- outline -*-
+* Major changes in Autoconf 2.57g                       -*- outline -*-
+
+** autoreconf and auxiliary directory
+  Autoreconf creates the auxiliary directory if needed.  This is
+  especially useful for initial "bootstrapping" of fresh CVS checkouts.
+
+* Major changes in Autoconf 2.57f
 
   Released 2003-10-01, by Akim Demaille.
 
