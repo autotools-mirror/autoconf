@@ -1,5 +1,12 @@
 2000-09-14  Pavel Roskin  <proski@gnu.org>
 
+	* aclang.m4 (AC_PROG_CPP): Use double quotes in the for loop
+	and eliminate ac_tmp_cpp.
+	(AC_PROG_CXXCPP): Use double quotes in the for loop and
+	eliminate ac_tmp_cxxcpp.
+
+2000-09-14  Pavel Roskin  <proski@gnu.org>
+
 	* acgeneral.m4 (_AC_TRY_CPP): Don't filter out conftest.$ac_ext
 	from the output - it is only printed by Visual C that gives
 	correct exit status.

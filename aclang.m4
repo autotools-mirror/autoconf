@@ -615,10 +615,9 @@ fi
 if test -z "$CPP"; then
   AC_CACHE_VAL(ac_cv_prog_CPP,
   [dnl
-    for ac_tmp_cpp in '${CC-cc} -E' '${CC-cc} -E -traditional-cpp' '/lib/cpp'
+    # Double quotes because CPP needs to be expanded
+    for CPP in "${CC-cc} -E" "${CC-cc} -E -traditional-cpp" "/lib/cpp"
     do
-      # CPP needs to be expanded
-      eval "CPP=\"$ac_tmp_cpp\""
       _AC_PROG_PREPROC_WORKS()
       if test -z "$ac_cpp_err"; then
         break
@@ -833,10 +832,9 @@ AC_LANG_PUSH(C++)dnl
 if test -z "$CXXCPP"; then
   AC_CACHE_VAL(ac_cv_prog_CXXCPP,
   [dnl
-    for ac_tmp_cxxcpp in '${CXX-g++} -E' '/lib/cpp'
+    # Double quotes because CXXCPP needs to be expanded
+    for CXXCPP in "${CXX-g++} -E" "/lib/cpp"
     do
-      # CXXCPP needs to be expanded
-      eval "CXXCPP=\"$ac_tmp_cxxcpp\""
       _AC_PROG_PREPROC_WORKS()
       if test -z "$ac_cpp_err"; then
         break
