@@ -1,5 +1,15 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Adapt autoheader to use libm4's namespaces.
+
+	* autoheader.m4 (AH_HOOK): Removed.
+	(AH_DEFUN): Define in the `autoheader' name space.
+	Use only AH_DEFUN to define macros in this file.
+	(epilogue): No longer run the `AH_HOOKS', enter the `autoheader'
+	name space.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Clean up a bit the user interface.
 
 	* autoconf.sh: Give your name while reporting errors.

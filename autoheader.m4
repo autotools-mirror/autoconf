@@ -18,27 +18,29 @@ include(libm4.m4)dnl                                          -*- Autoconf -*-
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Roland McGrath.
+# Originally written by Roland McGrath.
 #
 m4_include(acversion.m4)
 m4_include(acgeneral.m4)
 m4_include(acspecific.m4)
 m4_include(acoldnames.m4)
 
-# AH_HOOK(AUTOCONF-NAME, AUTOHEADER-NAME)
-# ---------------------------------------
-# Install a new hook for AH_ macros.  Specify that the macro
-# AUTOCONF-NAME will later be defined as the concatenation of
-# both its former definition, and that of AUTOHEADER-NAME.
+
+# AH_DEFUN(MACRO, VALUE)
+# ----------------------
+#
+# Assign VALUE *and* the current value of MACRO to MACRO, in the
+# namespace `autoheader'.  We enter the namespace `autoheader' when
+# running autoheader.
 #
 # There are several motivations for not just defining to be equivalent to
 # AUTOHEADER-NAME.
 #
-# Let AC_FOO be
+# Let autoconf::AC_FOO (abbreviated AC_FOO below) be
 #   | AC_DEFINE(FOO, 1)
 #   | AC_DEFINE(BAR, 1)
 #   | AC_DEFINE(BAZ, 1, The value of BAZ.)
-# Let AH_FOO be
+# Let autoheader::AC_FOO (abbreviated AH_FOO below) be
 #   | AH_TEMPLATE(FOO, The value of FOO.)
 #
 # If we hook AC_FOO to be AH_FOO only, then only FOO will be templated.
@@ -51,26 +53,14 @@ m4_include(acoldnames.m4)
 # is not templated at all.  Hooking AC_FOO on both its AC_ and AH_ faces
 # makes sure we keep track of non templated DEFINEs.
 #
-# The two last end of lines make AH_HOOKS more readable.
-define(AH_HOOK,
-[m4_append([AH_HOOKS],
-[define([$1],
-defn([$1])
-defn([$2])
-)
-])])
-
-
-
-# AH_DEFUN(MACRO, CONTENT)
-# ------------------------
-# Define the macro AH_MACRO (i.e., with AH_ prepended) as CONTENT.  Also
-# install an AH_HOOK from MACRO to AH_MACRO.  This hook is run by
-# autoheader to substitutes the selected AC_FOO macros by AH_AC_FOO.
+#
+# Finally, if AC_FOO requires a macro which AC_DEFINEs a symbol,
+# then, if we used AH_FOO only, the required macro would not be
+# expanded, thus its symbols would not be prototyped.
 define(AH_DEFUN,
-[define([AH_$1], [$2])
-AH_HOOK([$1], [AH_$1])])
-
+[m4_namespace_define(autoheader, [$1],
+defn([$1])
+[$2])])
 
 
 # These are alternate definitions of some macros, which produce
@@ -80,11 +70,13 @@ AH_HOOK([$1], [AH_$1])])
 # the newline, which makes the @@@ not always be at the beginning of
 # a line.
 
+
 # Autoheader is not the right program to complain about cross-compiling.
 AH_DEFUN([AC_TRY_RUN],
 [$2
 $3
 $4])
+
 
 # AH_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
 # -------------------------------------------
@@ -94,7 +86,7 @@ $4])
 # If DESCRIPTION is not given, then there is a risk that VARIABLE will
 # not be properly templated.  To control later that it has been
 # templated elsewhere, store VARIABLE in a shell growing string, SYMS.
-define([AH_DEFINE],
+AH_DEFUN([AH_DEFINE],
 [ifval([$3],
        [AH_TEMPLATE([$1], [$3])],
        [#
@@ -110,7 +102,7 @@ AH_DEFUN([AC_DEFINE_UNQUOTED], [AH_DEFINE($@)])
 # -----------------------------
 # Issue an autoheader template for KEY, i.e., a comment composed
 # of DESCRIPTION (properly wrapped), and then #undef KEY.
-define([AH_TEMPLATE],
+AH_DEFUN([AH_TEMPLATE],
 [AH_VERBATIM([$1],
              m4_wrap([$2 */], [   ], [/* ])[
 #undef $1])])
@@ -122,7 +114,7 @@ define([AH_TEMPLATE],
 # occur if there is AC_CHECK_FUNCS($my_func)), issue an autoheader TEMPLATE
 # associated to the KEY.  Otherwise, do nothing.
 # TEMPLATE is output as is, with no formating.
-define([AH_VERBATIM],
+AH_DEFUN([AH_VERBATIM],
 [AC_VAR_IF_INDIR([$1],,
 [#
 @@@
@@ -141,7 +133,7 @@ $3
 # Failure
 $4])
 
-define([AH_CHECK_HEADERS],
+AH_DEFUN([AH_CHECK_HEADERS],
 [AC_FOREACH([AC_Header], [$1],
   [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Header),
                [Define if you have the <]AC_Header[> header file.])
@@ -204,6 +196,9 @@ AH_DEFUN([AC_CHECK_MEMBERS],
 AH_DEFUN([AC_CHECK_TYPE],
 [AH_TEMPLATE([$1], [Define to `$2' if <sys/types.h> does not define.])])
 
+
+# AC_FUNC_ALLOCA
+# --------------
 AH_DEFUN([AC_FUNC_ALLOCA],
 [AH_VERBATIM([STACK_DIRECTION],
 [/* If using the C implementation of alloca, define if you know the
@@ -212,8 +207,8 @@ AH_DEFUN([AC_FUNC_ALLOCA],
         STACK_DIRECTION > 0 => grows toward higher addresses
         STACK_DIRECTION < 0 => grows toward lower addresses
         STACK_DIRECTION = 0 => direction of growth unknown */
-#undef STACK_DIRECTION
-])])dnl AH_FUNC_ALLOCA
+#undef STACK_DIRECTION])
+])dnl AH_FUNC_ALLOCA
 
 
 # AH_CHECK_TYPES((TYPES, ...))
@@ -234,8 +229,8 @@ AH_DEFUN([AC_C_CHAR_UNSIGNED],
 [/* Define if type `char' is unsigned and you are not using gcc.  */
 #ifndef __CHAR_UNSIGNED__
 # undef __CHAR_UNSIGNED__
-#endif
-])])
+#endif])
+])
 
 
 AH_DEFUN([AC_AIX],
@@ -245,8 +240,8 @@ AH_DEFUN([AC_AIX],
    We just want to avoid a redefinition error message.  */
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE
-#endif
-])])
+#endif])
+])
 
 
 AH_DEFUN([AC_F77_WRAPPERS],
@@ -266,5 +261,5 @@ AH_DEFUN([AC_CONFIG_HEADERS],
 [@@@config_h=patsubst($1, [ .*$], [])@@@
 ])
 
-# Install the AH_HOOKS
-AH_HOOKS
+# Enter the `autoheader' name space
+m4_enable(autoheader)
