@@ -21,8 +21,11 @@
 
 2003-03-27  Derek Price  <derek@ximbiot.com>
 
-	* lib/autotest/general.m4: Define and use new diversions in preparation
-	for accepting new arguments and allowing scripting around tests.
+	* lib/autotest/general.m4 (PARSE_ARGS,PARSE_ARGS_END,HELP,HELP_MODES,
+	HELP_TUNING,HELP_OTHER,HELP_END,PREPARE_TESTS,TESTS_END): Define and
+	use new diversions in preparation for accepting new arguments and
+	allowing scripting around tests.
+	(OPTIONS,TAIL): Remove these diversions to make way for the ones above.
 
 2003-03-26  Derek Price  <derek@ximbiot.com>
 
