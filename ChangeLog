@@ -1,5 +1,9 @@
 2001-08-17  Akim Demaille  <akim@epita.fr>
 
+	* bin/autom4te.in (&parse_args): Recognize --normalize.
+
+2001-08-17  Akim Demaille  <akim@epita.fr>
+
 	Start implementing the AC_CHECK_HEADER transition scheme.
 
 	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_NEW)

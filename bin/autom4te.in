@@ -453,6 +453,7 @@ sub parse_args ()
      "v|verbose"    => \$verbose,
      "d|debug"      => \$debug,
      "o|output=s"   => \$output,
+     "normalize"    => \$normalize,
      "f|force"      => \$force,
      "W|warnings=s" => \@warning,
 
