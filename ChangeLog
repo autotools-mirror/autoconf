@@ -1,3 +1,8 @@
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
+	* tests/aclocal.m4 (AC_STATE_SAVE): s/LIBOBJS/LIB@&t@OBJS/ to cope
+	with stricter rules on LIBOBJS.
+
 2001-11-12  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/c.m4 (AC_C_PROTOTYPES): Define __PROTOTYPES too.
