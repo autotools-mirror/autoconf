@@ -8611,6 +8611,20 @@ evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
 gives @samp{1} with sh on Solaris, but @samp{2} with Bash.  You must use
 @samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
 
+Don't rely on the following to find @file{subdir/program}:
+
+@example
+PATH=subdir$PATH_SEPARATOR$PATH program
+@end example
+
+@noindent
+as this does not work with Zsh 3.0.6.  Use something like this
+instead:
+
+@example
+(PATH=subdir$PATH_SEPARATOR$PATH; export PATH; exec program)
+@end example
+
 Don't rely on the exit status of an assignment: Ash 0.2 does not change
 the status and propagates that of the last statement:
 
