@@ -55,9 +55,9 @@ AT_CHECK([/bin/sh ./syntax.sh])
 # Specify the path to the tool, some shells don't honor PATH when
 # running `sh PROG'.
 
-AT_CHECK([/bin/sh -n ../autoconf],   0)
-AT_CHECK([/bin/sh -n ../autoreconf], 0)
-AT_CHECK([/bin/sh -n ../ifnames],    0)
+AT_CHECK([/bin/sh -n ../bin/autoconf],   0)
+AT_CHECK([/bin/sh -n ../bin/autoreconf], 0)
+AT_CHECK([/bin/sh -n ../bin/ifnames],    0)
 
 # These are not built, they are in the src tree.
 AT_CHECK([/bin/sh -n $at_top_srcdir/config/install-sh], 0)
@@ -79,8 +79,9 @@ AT_SETUP([Syntax of the Perl scripts])
 # | % perl -c ./autom4te
 # | ./autom4te syntax OK
 # Ignore it, it might change between releases.
-AT_CHECK([$PERL -c ../autom4te],   0, [], [ignore])
-AT_CHECK([$PERL -c ../autoupdate], 0, [], [ignore])
+AT_CHECK([$PERL -c ../bin/autom4te],   0, [], [ignore])
+AT_CHECK([$PERL -c ../bin/autoscan],   0, [], [ignore])
+AT_CHECK([$PERL -c ../bin/autoupdate], 0, [], [ignore])
 
 AT_CLEANUP
 
