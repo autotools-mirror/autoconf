@@ -6,6 +6,7 @@ AT_BANNER([Testing autoconf/headers macros.])
 # Modern macros.
 AT_CHECK_MACRO([AC_HEADER_MAJOR])
 AT_CHECK_MACRO([AC_HEADER_STAT])
+AT_CHECK_MACRO([AC_HEADER_STDBOOL])
 AT_CHECK_MACRO([AC_HEADER_TIOCGWINSZ])
 
 # Obsolete macros.
