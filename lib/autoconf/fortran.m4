@@ -354,14 +354,18 @@ $1])
 
 # AC_LANG_PROGRAM(C)([PROLOGUE], [BODY])
 # --------------------------------------
+# If AC_F77_DUMMY_MAIN was run, then any C/C++ program might be linked
+# against Fortran code, hence a dummy main might be needed.
 m4_define([AC_LANG_PROGRAM(C)],
 [$1
-#ifdef F77_DUMMY_MAIN
+m4_provide_ifelse([AC_F77_DUMMY_MAIN],
+[#ifdef F77_DUMMY_MAIN
 #  ifdef __cplusplus
      extern "C"
 #  endif
    int F77_DUMMY_MAIN() { return 1; }
 #endif
+])dnl
 int
 main ()
 {
@@ -1920,8 +1924,9 @@ AC_SUBST(FLIBS)
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_F77_LIBRARY_LDFLAGS
 
+
 # AC_F77_DUMMY_MAIN([ACTION-IF-FAIL], [ACTION-IF-NONE], [ACTION-IF-FOUND])
-# ---------------------
+# ------------------------------------------------------------------------
 # Detect name of dummy main routine required by the Fortran libraries,
 # (if any) and define F77_DUMMY_MAIN to this name (which should be
 # used for a dummy declaration, if it is defined).  On some systems,
@@ -1967,7 +1972,7 @@ AC_CACHE_CHECK([for dummy main to link with Fortran 77 libraries],
 
  if test $ac_cv_f77_dummy_main = unknown; then
    for ac_func in MAIN__ MAIN_ __main MAIN _MAIN __MAIN main_ main__ _main; do
-     AC_TRY_LINK([#define F77_DUMMY_MAIN $ac_func], 
+     AC_TRY_LINK([@%:@define F77_DUMMY_MAIN $ac_func],
                  [], [ac_cv_f77_dummy_main=$ac_func; break])
    done
  fi
@@ -1982,13 +1987,14 @@ elif test $ac_cv_f77_dummy_main = none; then
 else
   m4_default([$3],
     [AC_DEFINE_UNQUOTED([F77_DUMMY_MAIN], $ac_cv_f77_dummy_main,
-       [Define to dummy "main" function (if any) required to link to
+       [Define to dummy `main' function (if any) required to link to
         the Fortran 77 libraries.])])
 fi
 ])# AC_F77_DUMMY_MAIN
 
+
 # AC_F77_MAIN
-# ---------------------
+# -----------
 # Define F77_MAIN to name of alternate main() function for use with
 # the Fortran libraries.  (Typically, the libraries may define their
 # own main() to initialize I/O, etcetera, that then call your own
@@ -2006,15 +2012,17 @@ AC_CACHE_CHECK([for alternate main to link with Fortran 77 libraries],
 
  for ac_func in MAIN__ MAIN_ __main MAIN _MAIN __MAIN main_ main__ _main; do
    AC_TRY_LINK([#undef F77_DUMMY_MAIN
-#define main $ac_func], [], [ac_cv_f77_main=$ac_func; break])
+@%:@define main $ac_func], [], [ac_cv_f77_main=$ac_func; break])
  done
  rm -f conftest*
  LIBS=$ac_f77_m_save_LIBS
  AC_LANG_POP(C)dnl
 ])
-AC_DEFINE_UNQUOTED([F77_MAIN], $ac_cv_f77_main, [Define to alternate name for
-	"main" routine that is called from a "main" in the Fortran libraries.])
+AC_DEFINE_UNQUOTED([F77_MAIN], $ac_cv_f77_main,
+                   [Define to alternate name for `main' routine that is
+                    called from a `main' in the Fortran libraries.])
 ])# AC_F77_MAIN
+
 
 # _AC_F77_NAME_MANGLING
 # ---------------------

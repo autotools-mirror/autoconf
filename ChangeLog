@@ -1,5 +1,11 @@
 2001-07-17  Akim Demaille  <akim@epita.fr>
 
+	* aclang.m4 (AC_LANG_PROGRAM(C)): Output F77_DUMMY_MAIN only when
+	AC_F77_DUMMY_MAIN has been run.
+	From Pavel Roskin and Steven G. Johnson.
+
+2001-07-17  Akim Demaille  <akim@epita.fr>
+
 	* configure.in: Rename as...
 	* configure.ac: this.
 
