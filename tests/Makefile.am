@@ -105,7 +105,7 @@ MACRO_FILES = $(top_srcdir)/acgeneral.m4   $(top_srcdir)/acspecific.m4 \
 
 macros.m4: $(MACRO_FILES) $(srcdir)/Makefile.am
 	cat $(MACRO_FILES) | \
-	  sed -ne 's/^A[CU]_DEFUN(\[*\([a-zA-Z0-9_]*\).*$$/\1/p' | \
+	  sed -ne 's/^A[CU]_DEFUN\(_ONCE\)\?(\[*\([a-zA-Z0-9_]*\).*$$/\2/p' | \
 	  sort | uniq | $(FILTER_MACROS) >defuns
 # Get the list of macros that are required: there is little interest
 # in testing them since they will be run but the guy who requires
