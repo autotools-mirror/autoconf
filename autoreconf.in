@@ -253,7 +253,7 @@ EOF
 # Exit 0 iff the first argument is not the most recent of all or is missing.
 cat >$tmp/update.sh <<\EOF
 test -f "$1" || exit 0
-test x`ls -1dt "$@" | sed 1q` != x"$1"
+test x`ls -1dt "$@" 2>/dev/null | sed 1q` != x"$1"
 EOF
 update="@SHELL@ $tmp/update.sh"
 
@@ -298,7 +298,7 @@ while read dir; do
            aclocal_flags="$aclocal_flags -I $m4dir";;
      esac
 
-     $verbose running $aclocal $aclocal_flags --output=$localdir/aclocal.m4 in $dir >&2
+     $verbose $me: running $aclocal $aclocal_flags --output=$localdir/aclocal.m4 in $dir >&2
      $aclocal $aclocal_flags --output=$localdir/aclocal.m4
   fi
 
@@ -315,7 +315,7 @@ while read dir; do
   # update the file or not.  In fact, the effect of `$force' is already
   # included in `$automake' via `--no-force'.
   if $uses_automake; then
-    $verbose running $automake in $dir >&2
+    $verbose $me: running $automake in $dir >&2
     $automake
   fi
 
@@ -326,7 +326,7 @@ while read dir; do
 
   if $force ||
      $update configure configure.in $localdir/aclocal.m4; then
-    $verbose running $autoconf in $dir >&2
+    $verbose $me: running $autoconf in $dir >&2
     $autoconf
   fi
 
@@ -336,6 +336,7 @@ while read dir; do
   # -------------------- #
 
   # templates -- arguments of AC_CONFIG_HEADERS.
+  $verbose $me: running $autoconf -t 'AC_CONFIG_HEADERS:$1'
   templates=`$autoconf -t 'AC_CONFIG_HEADERS:$1'`
   if test -n "$templates"; then
     tcount=`set -- $templates; echo $#`
@@ -358,7 +359,7 @@ while read dir; do
             configure.in $localdir/aclocal.m4 $localdir/acconfig.h ||
          $update $stamp    \
             configure.in $localdir/aclocal_m4 $localdir/acconfig.h; } then
-      $verbose running $autoheader in $dir >&2
+      $verbose $me: running $autoheader in $dir >&2
       $autoheader &&
       $verbose "touching $stamp" >&2 &&
       touch $stamp

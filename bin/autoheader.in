@@ -222,6 +222,7 @@ export AC_MACRODIR
 # ----------------------- #
 
 # Source what the traces are trying to tell us.
+$verbose $me: running $autoconf to trace from $infile >&2
 $autoconf  \
   --trace AC_CONFIG_HEADERS:'config_h="$1"' \
   --trace AH_OUTPUT:'ac_verbatim_$1="\
@@ -229,6 +230,8 @@ $2"' \
   --trace AC_DEFINE:'syms="$$syms $1"' \
   --trace AC_DEFINE_UNQUOTED:'syms="$$syms $1"' \
   $infile >$tmp/traces.sh || exit 1
+
+$verbose $me: sourcing $tmp/traces.sh >&2
 . $tmp/traces.sh
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
@@ -281,6 +284,7 @@ test -f $config_h.bot && cat $config_h.bot >>$tmp/config.hin
 
 
 # Check that all the symbols have a template.
+$verbose $me: checking completeness of the template >&2
 status=0
 # Regexp for a white space.
 w='[ 	]'

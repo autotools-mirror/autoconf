@@ -537,7 +537,7 @@ EOF
   fi
 
   # Run m4 on the input file to get traces.
-  $verbose "Running $run_m4_trace $infile | $M4 $tmp/trace.m4" >&2
+  $verbose "$me: running $run_m4_trace $infile | $M4 $tmp/trace.m4" >&2
   $run_m4_trace $infile 2>&1 >/dev/null |
     sed -f $tmp/trace2m4.sed |
     # Now we are ready to run m4 to process the trace file.
