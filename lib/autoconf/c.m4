@@ -417,7 +417,7 @@ if test -z "$CC"; then
 fi
 ])
 
-test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
+test -z "$CC" && AC_MSG_ERROR([no acceptable C compiler found in \$PATH])
 
 # Provide some information about the compiler.
 echo "$as_me:$LINENO:" \

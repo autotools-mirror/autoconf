@@ -889,7 +889,7 @@ do
   eval ac_val=$`echo $ac_var`
   case $ac_val in
     [[\\/$]]* | ?:[[\\/]]* | NONE | '' ) ;;
-    *)  AC_MSG_ERROR([expected an absolute path for --$ac_var: $ac_val]);;
+    *)  AC_MSG_ERROR([expected an absolute directory name for --$ac_var: $ac_val]);;
   esac
 done
 
@@ -900,7 +900,7 @@ do
   eval ac_val=$`echo $ac_var`
   case $ac_val in
     [[\\/$]]* | ?:[[\\/]]* ) ;;
-    *)  AC_MSG_ERROR([expected an absolute path for --$ac_var: $ac_val]);;
+    *)  AC_MSG_ERROR([expected an absolute directory name for --$ac_var: $ac_val]);;
   esac
 done
 
@@ -1572,7 +1572,7 @@ test -z "$ac_cv_build_alias" &&
 test -z "$ac_cv_build_alias" &&
   AC_MSG_ERROR([cannot guess build type; you must specify one])
 ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
-  AC_MSG_ERROR([$ac_config_sub $ac_cv_build_alias failed.])
+  AC_MSG_ERROR([$ac_config_sub $ac_cv_build_alias failed])
 ])
 _AC_CANONICAL_SPLIT(build)
 ])# AC_CANONICAL_BUILD

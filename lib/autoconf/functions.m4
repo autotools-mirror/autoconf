@@ -1115,7 +1115,7 @@ AC_DEFUN([AC_FUNC_SETPGRP],
   exit (setpgrp (1,1) == -1 ? 0 : 1);])],
                [ac_cv_func_setpgrp_void=no],
                [ac_cv_func_setpgrp_void=yes],
-               [AC_MSG_ERROR([cannot check setpgrp if cross compiling])])])
+               [AC_MSG_ERROR([cannot check setpgrp when cross compiling])])])
 if test $ac_cv_func_setpgrp_void = yes; then
   AC_DEFINE(SETPGRP_VOID, 1,
             [Define to 1 if the `setpgrp' function takes no argument.])
@@ -1165,7 +1165,7 @@ AC_CHECK_FUNC(pow)
 if test $ac_cv_func_pow = no; then
   AC_CHECK_LIB(m, pow,
                [POW_LIB=-lm],
-               [AC_MSG_WARN([can't find library containing definition of pow])])
+               [AC_MSG_WARN([cannot find library containing definition of pow])])
 fi
 ])# _AC_LIBOBJ_STRTOD
 
@@ -1401,7 +1401,7 @@ if test "x$ac_cv_func_fork_works" = xcross; then
       ac_cv_func_fork_works=yes
       ;;
   esac
-  AC_MSG_WARN(CROSS: Result $ac_cv_func_fork_works guessed due to cross-compiling.)
+  AC_MSG_WARN([result $ac_cv_func_fork_works guessed because of cross compilation])
 fi
 ac_cv_func_vfork_works=$ac_cv_func_vfork
 if test "x$ac_cv_func_vfork" = xyes; then
@@ -1409,7 +1409,7 @@ if test "x$ac_cv_func_vfork" = xyes; then
 fi;
 if test "x$ac_cv_func_fork_works" = xcross; then
   ac_cv_func_vfork_works=ac_cv_func_vfork
-  AC_MSG_WARN(CROSS: Result $ac_cv_func_vfork_works guessed due to cross-compiling.)
+  AC_MSG_WARN([result $ac_cv_func_vfork_works guessed because of cross compilation])
 fi
 
 if test "x$ac_cv_func_vfork_works" = xyes; then

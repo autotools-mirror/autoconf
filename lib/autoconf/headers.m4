@@ -125,7 +125,7 @@ case $ac_header_compiler:$ac_header_preproc in
     AC_MSG_WARN([$1: accepted by the compiler, rejected by the preprocessor!])
     AC_MSG_WARN([$1: proceeding with the preprocessor's result]);;
   no:yes )
-    AC_MSG_WARN([$1: present but cannot be compiled.])
+    AC_MSG_WARN([$1: present but cannot be compiled])
     AC_MSG_WARN([$1: check for missing prerequisite headers?])
     AC_MSG_WARN([$1: proceeding with the preprocessor's result]);;
 esac

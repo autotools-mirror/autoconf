@@ -277,7 +277,7 @@ AC_DEFUN([AC_PROG_INSTALL],
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-AC_MSG_CHECKING([for a BSD compatible install])
+AC_MSG_CHECKING([for a BSD-compatible install])
 if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
 [_AS_PATH_WALK([$PATH],

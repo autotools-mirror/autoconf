@@ -488,7 +488,7 @@ AC_MSG_RESULT([$cross_compiling])
 # Check for the extension used when `-o foo'.  Try to see if ac_cv_exeext,
 # as computed by _AC_COMPILER_EXEEXT_DEFAULT is OK.
 m4_define([_AC_COMPILER_EXEEXT_O],
-[AC_MSG_CHECKING([for executable suffix])
+[AC_MSG_CHECKING([for suffix of executables])
 AS_IF([AC_TRY_EVAL(ac_link)],
 [# If both `conftest.exe' and `conftest' are `present' (well, observable)
 # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
@@ -503,7 +503,7 @@ for ac_file in `(ls conftest.exe; ls conftest; ls conftest.*) 2>/dev/null`; do
     * ) break;;
   esac
 done],
-              [AC_MSG_ERROR([cannot compute EXEEXT: cannot compile and link])])
+              [AC_MSG_ERROR([cannot compute suffix of executables: cannot compile and link])])
 rm -f conftest$ac_cv_exeext
 AC_MSG_RESULT([$ac_cv_exeext])
 ])# _AC_COMPILER_EXEEXT_O
@@ -548,7 +548,7 @@ ac_exeext=$EXEEXT
 # don't, since _AC_COMPILE_IFELSE needs to know ac_objext for the `test -s'
 # it includes.  So do it by hand.
 m4_define([_AC_COMPILER_OBJEXT],
-[AC_CACHE_CHECK([for object suffix], ac_cv_objext,
+[AC_CACHE_CHECK([for suffix of object files], ac_cv_objext,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 rm -f conftest.o conftest.obj
 AS_IF([AC_TRY_EVAL(ac_compile)],
@@ -561,7 +561,7 @@ AS_IF([AC_TRY_EVAL(ac_compile)],
 done],
       [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-AC_MSG_ERROR([cannot compute OBJEXT: cannot compile])])
+AC_MSG_ERROR([cannot compute suffix of object files: cannot compile])])
 rm -f conftest.$ac_cv_objext conftest.$ac_ext])
 AC_SUBST([OBJEXT], [$ac_cv_objext])dnl
 ac_objext=$OBJEXT

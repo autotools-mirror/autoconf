@@ -751,7 +751,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   AC_MSG_NOTICE([linking $srcdir/$ac_source to $ac_dest])
 
   if test ! -r $srcdir/$ac_source; then
-    AC_MSG_ERROR([$srcdir/$ac_source: File not found])
+    AC_MSG_ERROR([$srcdir/$ac_source: file not found])
   fi
   rm -f $ac_dest
 
