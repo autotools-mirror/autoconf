@@ -1,7 +1,8 @@
 1998-12-27  Ben Elliston  <bje@cygnus.com>
 
 	* acspecific.m4 (AC_CYGWIN): Rename from `AC_CYGWIN32'.
-	
+	(AC_CYGWIN32): Warn about deprecated usage. Forward to AC_CYGWIN.
+
 	* config.sub: Drop `32' from `Cygwin32'.
 
 	* config.guess: Likewise.

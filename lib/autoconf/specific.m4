@@ -2611,6 +2611,11 @@ AC_SUBST(X_LIBS)dnl
 AC_SUBST(X_EXTRA_LIBS)dnl
 ])
 
+dnl The old Cygwin32 macro is deprecated.
+AC_DEFUN(AC_CYGWIN32,
+[AC_OBSOLETE([$0], [; instead use AC_CYGWIN])dnl
+AC_CYGWIN])
+
 dnl Check for Cygwin.  This is a way to set the right value for
 dnl EXEEXT.
 AC_DEFUN(AC_CYGWIN,
