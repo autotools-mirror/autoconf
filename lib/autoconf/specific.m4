@@ -1118,21 +1118,17 @@ fi
 
 dnl A few hasbeen'd macros.
 
-AC_DEFUN(AC_UNISTD_H,
-[AC_HASBEEN([$0], [; instead use AC_CHECK_HEADERS(unistd.h)])])
+AC_DEFUNCT(AC_UNISTD_H, [; instead use AC_CHECK_HEADERS(unistd.h)])
 
-AC_DEFUN(AC_USG,
-[AC_HASBEEN([$0],
-            [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])])
+AC_DEFUNCT(AC_USG,
+            [; instead use AC_CHECK_HEADERS(string.h) and HAVE_STRING_H])
 
 dnl If memchr and the like aren't declared in <string.h>, include <memory.h>.
 dnl To avoid problems, don't check for gcc2 built-ins.
-AC_DEFUN(AC_MEMORY_H,
-[AC_HASBEEN([$0],
-            [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])])
+AC_DEFUNCT(AC_MEMORY_H,
+            [; instead use AC_CHECK_HEADERS(memory.h) and HAVE_MEMORY_H])
 
-AC_DEFUN(AC_DIR_HEADER,
-[AC_HASBEEN([$0], [; instead use AC_HEADER_DIRENT])])
+AC_DEFUNCT(AC_DIR_HEADER, [; instead use AC_HEADER_DIRENT])
 
 
 dnl ### Checks for typedefs
@@ -2449,11 +2445,8 @@ fi
 ])dnl AC_C_LONG_DOUBLE
 
 
-AC_DEFUN(AC_INT_16_BITS,
-[AC_HASBEEN([$0], [; instead use AC_CHECK_SIZEOF(int)])])
-
-AC_DEFUN(AC_LONG_64_BITS,
-[AC_HASBEEN([$0], [; instead use AC_CHECK_SIZEOF(long)])])
+AC_DEFUNCT(AC_INT_16_BITS, [; instead use AC_CHECK_SIZEOF(int)])
+AC_DEFUNCT(AC_LONG_64_BITS, [; instead use AC_CHECK_SIZEOF(long)])
 
 
 dnl AC_C_BIGENDIAN
@@ -3567,33 +3560,8 @@ else
 fi
 ])dnl AC_ISC_POSIX
 
-AC_DEFUN(AC_XENIX_DIR,
-[AC_OBSOLETE([$0], [; instead use AC_HEADER_DIRENT])dnl
-AC_REQUIRE([AC_DIR_HEADER])dnl
-AC_MSG_CHECKING(for Xenix)
-AC_EGREP_CPP(yes,
-[#if defined(M_XENIX) && !defined(M_UNIX)
-  yes
-#endif
-], [AC_MSG_RESULT(yes); XENIX=yes], [AC_MSG_RESULT(no); XENIX=])
-if test "$XENIX" = yes; then
-  # Make sure -ldir precedes -lx.
-  test $ac_header_dirent = dirent.h && LIBS="-ldir $LIBS"
-  LIBS="$LIBS -lx"
-fi
-])dnl AC_XENIX_DIR
-
-AC_DEFUN(AC_DYNIX_SEQ,
-[AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT])dnl
-AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS")
-])
-
-AC_DEFUN(AC_IRIX_SUN,
-[AC_OBSOLETE([$0], [; instead use AC_FUNC_GETMNTENT or AC_CHECK_LIB(sun, getpwnam)])dnl
-AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS")
-])
-
-AC_DEFUN(AC_SCO_INTL,
-[AC_OBSOLETE([$0], [; instead use AC_FUNC_STRFTIME])dnl
-AC_CHECK_LIB(intl, strftime, LIBS="-lintl $LIBS")
-])
+AC_DEFUNCT(AC_XENIX_DIR, [; instead use AC_HEADER_DIRENT])
+AC_DEFUNCT(AC_DYNIX_SEQ, [; instead use AC_FUNC_GETMNTENT])
+AC_DEFUNCT(AC_IRIX_SUN,
+           [; instead use AC_FUNC_GETMNTENT or AC_CHECK_LIB(sun, getpwnam)])
+AC_DEFUNCT(AC_SCO_INTL, [; instead use AC_FUNC_STRFTIME])

@@ -4554,12 +4554,11 @@ temptation of removing obsolete macros is high.  The following macro
 intends to free the maintainer from this nightmare while still report an
 error to the users.
 
-@defmac AC_HASBEEN (@var{this-macro-name} @r{[}, @var{suggestion}@r{]})
-@maindex HASBEEN
-This is a stronger version of @code{AC_OBSOLETE} to be used when a macro
-is no longer implemented: @code{autoconf} dies on each occurence of
-@code{AC_HASBEEN}.  Macros which have been left obsolete for a long time
-are likely to use this mechanism.
+@defmac AC_DEFUNCT (@var{macro-name}, @ovar{suggestion})
+@maindex DEFUNCT
+Define @var{macro-name} to be a macro which is no longer supported,
+i.e., die as soon as it is used.  This is the destiny of macros which
+have been left obsolete for a long time.
 @end defmac
 
 

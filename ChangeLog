@@ -1,5 +1,28 @@
 1999-11-10  Akim Demaille  <akim@epita.fr>
 
+	A test suite will be introduced which tries to run all the
+	specific macros, but hasbeen'd macro make configure die with bad
+	exit status.  So we wish to distinguish live macros from defunct
+	macros at the moment they are AC_DEFUN'd, not in their body.  Hm,
+	defunct, defunct... Hey!  That's a good name!
+
+	* acgeneral.m4 (AC_DEFUNCT): New macro, comparable to AC_DEFUN,
+	but for macros which are no longer defined.  Replaces AC_HASBEEN.
+	(AC_HASBEEN): Defunct.  Well, removed in fact.
+	(AC_HAVE_LIBRARY): Don't use AC_DEFUN and AC_HASBEEN, just
+	AC_DEFUNCT.
+	* acspecific.m4 (AC_UNISTD_H, AC_USG, AC_MEMORY_H, AC_DIR_HEADER,
+	AC_INT_16_BITS, AC_LONG_64_BITS): Likewise.
+	(AC_XENIX_DIR): It was defunct even before I declared it was: was
+	depending upon AC_DIR_HEADER which is defunct.  So AC_DEFUNCT'ed
+	now.
+	(AC_DYNIX_SEQ, AC_IRIX_SUN, AC_SCO_INTL): While we're here, you
+	too are defunct now.
+	* autoconf.texi (Obsolete Macros): Replace the documentation of
+	AC_HASBEEN with that of AC_DEFUNCT.
+
+1999-11-10  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh: Formatting changes.
 	Removed development junk.
 	* acspecific.m4: Formatting changes.

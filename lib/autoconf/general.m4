@@ -474,6 +474,14 @@ define([AC_DEFUN],
 define([$1], [AC_PRO([$1])$4[]AC_EPI()])])])
 
 
+dnl AC_DEFUNCT(NAME, COMMENT)
+dnl -------------------------
+dnl Declare the macro NAME no longer exists, and must not be used.
+define([AC_DEFUNCT],
+[define([$1], [AC_FATAL([$1] is defunct[$2])])])
+
+
+
 
 dnl ### Some /bin/sh idioms
 
@@ -2149,11 +2157,6 @@ dnl -------------------------------------------
 define(AC_OBSOLETE,
 [AC_WARNING([$1] is obsolete[$2])])
 
-dnl AC_HASBEEN(THIS-MACRO-NAME [, SUGGESTION])
-dnl ------------------------------------------
-define(AC_HASBEEN,
-[AC_FATAL([$1] is obsolete[$2])])
-
 
 
 dnl ### Generic structure checks
@@ -2586,8 +2589,7 @@ AC_VAR_POPDEF([ac_Lib])dnl
 
 dnl AC_HAVE_LIBRARY
 dnl ---------------
-AC_DEFUN(AC_HAVE_LIBRARY,
-[AC_HASBEEN([$0], [; instead use AC_CHECK_LIB])])
+AC_DEFUNCT(AC_HAVE_LIBRARY, [; instead use AC_CHECK_LIB])
 
 
 dnl ### Examining declarations
