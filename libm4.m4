@@ -233,8 +233,21 @@ define(m4_match,
 ## --------------------- ##
 
 
-# Implementing loops (`foreach' loops) in m4 is much more tricky than it
-# may seem.  Actually, the example of a `foreach' loop in the m4
+# m4_for(VARIABLE, FROM, TO, EXPRESSION)
+# --------------------------------------
+# Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO.
+# Both limits are included.
+define([m4_for],
+[pushdef([$1], [$2])_m4_for([$1], [$2], [$3], [$4])popdef([$1])])
+
+define([_m4_for],
+[$4[]ifelse($1, [$3], [],
+            [define([$1], incr($1))_m4_for([$1], [$2], [$3], [$4])])])
+
+
+
+# Implementing `foreach' loops in m4 is much more tricky than it may
+# seem.  Actually, the example of a `foreach' loop in the m4
 # documentation is wrong: it does not quote the arguments properly,
 # which leads to undesired expansions.
 #
