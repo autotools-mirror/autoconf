@@ -5189,14 +5189,14 @@ The macro @code{AC_TRY_CPP} is used to check whether particular header
 files exist.  You can check for one at a time, or more than one if you
 need several header files to all exist for some purpose.
 
-@defmac AC_TRY_CPP (@var{includes}, @ovar{action-if-true}, @ovar{action-if-false})
+@defmac AC_TRY_CPP (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
 @acindex TRY_CPP
-@var{includes} is C or C++ @code{#include} statements and declarations,
-on which shell variable, back quote, and backslash substitutions are
-performed.  (Actually, it can be any C program, but other statements are
-probably not useful.)  If the preprocessor produces no error messages
-while processing it, run shell commands @var{action-if-true}.  Otherwise
-run shell commands @var{action-if-false}.
+If the preprocessor produces no error messages while processing the
+@var{input} (typically includes), run shell commands
+@var{action-if-true}.  Otherwise run shell commands
+@var{action-if-false}.  Beware that @var{input} is double quoted.  Shell
+variable, back quote, and backslash substitutions are performed on
+@var{input}.
 
 This macro uses @code{CPPFLAGS}, but not @code{CFLAGS}, because
 @option{-g}, @option{-O}, etc. are not valid options to many C
@@ -5253,9 +5253,12 @@ all systems.
 
 @defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex TRY_COMPILE
-Create a C, C++ or Fortran 77 test program (depending on which language
-is current, @pxref{Language Choice}), to see whether a function whose
-body consists of @var{function-body} can be compiled.
+Create a test program in the current language (@pxref{Language Choice})
+to see whether a function whose body consists of @var{function-body} can
+be compiled.  If the file compiles successfully, run shell commands
+@var{action-if-found}, otherwise run @var{action-if-not-found}.
+
+This macro double quotes both @var{includes} and @var{function-body}.
 
 For C and C++, @var{includes} is any @code{#include} statements needed
 by the code in @var{function-body} (@var{includes} will be ignored if
@@ -5264,9 +5267,6 @@ the currently selected language is Fortran 77).  This macro also uses
 selected language, as well as @code{CPPFLAGS}, when compiling.  If
 Fortran 77 is the currently selected language then @code{FFLAGS} will be
 used when compiling.
-
-If the file compiles successfully, run shell commands
-@var{action-if-found}, otherwise run @var{action-if-not-found}.
 
 This macro does not try to link; use @code{AC_TRY_LINK} if you need to
 do that (@pxref{Examining Libraries}).
@@ -5306,7 +5306,11 @@ program.
 @acindex TRY_LINK
 Depending on the current language (@pxref{Language Choice}), create a
 test program to see whether a function whose body consists of
-@var{function-body} can be compiled and linked.
+@var{function-body} can be compiled and linked.  If the file compiles
+and links successfully, run shell commands @var{action-if-found},
+otherwise run @var{action-if-not-found}.
+
+This macro double quotes both @var{includes} and @var{function-body}.
 
 For C and C++, @var{includes} is any @code{#include} statements needed
 by the code in @var{function-body} (@var{includes} will be ignored if
@@ -5316,9 +5320,6 @@ selected language, as well as @code{CPPFLAGS}, when compiling.  If
 Fortran 77 is the currently selected language then @code{FFLAGS} will be
 used when compiling.  However, both @code{LDFLAGS} and @code{LIBS} will
 be used during linking in all cases.
-
-If the file compiles and links successfully, run shell commands
-@var{action-if-found}, otherwise run @var{action-if-not-found}.
 @end defmac
 
 @defmac AC_TRY_LINK_FUNC (@var{function}, @ovar{action-if-found}, @ovar{action-if-not-found})
@@ -5362,14 +5363,17 @@ system while configuring.
 
 @defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
 @acindex TRY_RUN
-@var{program} is the text of a C program, on which shell variable and
-back quote substitutions are performed.  If it compiles and links
-successfully and returns an exit status of 0 when executed, run shell
-commands @var{action-if-true}.  Otherwise, run shell commands
-@var{action-if-false}; the exit status of the program is available in
-the shell variable @samp{$?}.  This macro uses @code{CFLAGS} or
-@code{CXXFLAGS}, @code{CPPFLAGS}, @code{LDFLAGS}, and @code{LIBS} when
-compiling.
+If @var{program} compiles and links successfully and returns an exit
+status of 0 when executed, run shell commands @var{action-if-true}.
+Otherwise, run shell commands @var{action-if-false}; the exit status of
+the program should be available in the shell variable @samp{$?}, but has
+never been: don't depend on this.
+
+This macro double quotes @var{program}, the text of a program in the
+current language (@pxref{Language Choice}), on which shell variable and
+back quote substitutions are performed.  This macro uses @code{CFLAGS}
+or @code{CXXFLAGS}, @code{CPPFLAGS}, @code{LDFLAGS}, and @code{LIBS}
+when compiling.
 
 If the C compiler being used does not produce executables that run on
 the system where @code{configure} is being run, then the test program is

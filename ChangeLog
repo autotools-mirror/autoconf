@@ -1,5 +1,14 @@
 2001-08-20  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Examining Declarations) <AC_TRY_CPP>:
+	(Examining Syntax) <AC_TRY_COMPILE>
+	(Examining Libraries) <AC_TRY_LINK>
+	(Test Programs) <AC_TRY_RUN>: These macros double quote some of
+	their arguments.
+	Reported by Werner Lemberg.
+
+2001-08-20  Akim Demaille  <akim@epita.fr>
+
 	* lib/autotest/general.m4 (AT_INIT): Compute top_builddir,
 	top_srcdir and srcdir from at_topbuild_2_topsrc and at_testdir.
 	Load atlocal late enough to dump it in the log.
