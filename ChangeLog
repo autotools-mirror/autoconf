@@ -1,3 +1,18 @@
+2005-01-21  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Builtins): Clarify that
+	"if test -d foo; ..." is portable.  Suggested by Stepan Kasal.
+
+2005-01-20  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Shell Substitutions): Fix typo in case statement.
+	Warn about newline stripping in `` and $().  Update Solaris
+	version to 9.
+	(Limitations of Builtins): Use expr "X...", not expr "x...", as
+	X insulates us from future changes to Posix.
+	(Limitations of Usual Tools): For AS_DIRNAME, warn about newline
+	stripping.
+
 2005-01-19  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Defining Symbols): Delete the false comment that
