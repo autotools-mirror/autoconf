@@ -1,5 +1,13 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Arrange that config.status creates the file with the AC_SUBSTing
+	engine only if needed.
+
+	* acgeneral.m4 (AC_OUTPUT_FILES): Create the sed code only if test
+	-n "$CONFIG_FILES".
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	Promote AC_LANG_CASE.
 
 	* acgeneral.m4 (AC_TRY_COMPILER, AC_TRY_LINK_FUNC, AC_CHECK_LIB,

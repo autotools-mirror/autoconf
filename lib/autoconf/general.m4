@@ -3389,13 +3389,16 @@ define(AC_OUTPUT_FILES,
 # CONFIG_FILES section.
 #
 
-# Protect against being on the right side of a sed subst in config.status.
+# No need to generate the scripts if there are no CONFIG_FILES.
+# This happens for instance when ./config.status config.h
+if test -n "\$CONFIG_FILES"; then
+  # Protect against being on the right side of a sed subst in config.status.
 dnl Please, pay attention that this sed code depends a lot on the shape
 dnl of the sed commands issued by AC_SUBST.  So if you change one, change
 dnl the other too.
 changequote(, )dnl
-sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
- s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$ac_cs_root.subs <<\\CEOF
+  sed 's/%@/@@/; s/@%/@@/; s/%;t t\$/@;t t/; /@;t t\$/s/[\\\\&%]/\\\\&/g;
+   s/@@/%@/; s/@@/@%/; s/@;t t\$/%;t t/' >\$ac_cs_root.subs <<\\CEOF
 changequote([, ])dnl
 dnl These here document variables are unquoted when configure runs
 dnl but quoted when config.status runs, so variables are expanded once.
@@ -3405,49 +3408,49 @@ CEOF
 
 EOF
 
-cat >>$CONFIG_STATUS <<\EOF
-# Split the substitutions into bite-sized pieces for seds with
-# small command number limits, like on Digital OSF/1 and HP-UX.
+  cat >>$CONFIG_STATUS <<\EOF
+  # Split the substitutions into bite-sized pieces for seds with
+  # small command number limits, like on Digital OSF/1 and HP-UX.
 dnl One cannot portably go further than 100 commands because of HP-UX.
 dnl Here, there are 2 cmd per line, and two cmd are added later.
-ac_max_sed_lines=48
-ac_sed_frag=1 # Number of current file.
-ac_beg=1 # First line for current file.
-ac_end=$ac_max_sed_lines # Line after last line for current file.
-ac_more_lines=:
-ac_sed_cmds=""
-while $ac_more_lines; do
-  if test $ac_beg -gt 1; then
-    sed "1,${ac_beg}d; ${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
-  else
-    sed "${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
-  fi
-  if test ! -s $ac_cs_root.sfrag; then
-    ac_more_lines=false
-    rm -f $ac_cs_root.sfrag
-  else
-    # The purpose of the label and of the branching condition is to
-    # speed up the sed processing (if there are no `@' at all, there
-    # is no need to browse any of the substitutions).
-    # These are the two extra sed commands mentioned above.
-    (echo ':t
-/@@BKL@a-zA-Z_@BKR@@BKL@a-zA-Z_0-9@BKR@*@/!b' && cat $ac_cs_root.sfrag) >$ac_cs_root.s$ac_sed_frag
-    if test -z "$ac_sed_cmds"; then
-      ac_sed_cmds="sed -f $ac_cs_root.s$ac_sed_frag"
+  ac_max_sed_lines=48
+  ac_sed_frag=1 # Number of current file.
+  ac_beg=1 # First line for current file.
+  ac_end=$ac_max_sed_lines # Line after last line for current file.
+  ac_more_lines=:
+  ac_sed_cmds=""
+  while $ac_more_lines; do
+    if test $ac_beg -gt 1; then
+      sed "1,${ac_beg}d; ${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
     else
-      ac_sed_cmds="$ac_sed_cmds | sed -f $ac_cs_root.s$ac_sed_frag"
+      sed "${ac_end}q" $ac_cs_root.subs >$ac_cs_root.sfrag
     fi
-    ac_sed_frag=`expr $ac_sed_frag + 1`
-    ac_beg=$ac_end
-    ac_end=`expr $ac_end + $ac_max_sed_lines`
+    if test ! -s $ac_cs_root.sfrag; then
+      ac_more_lines=false
+      rm -f $ac_cs_root.sfrag
+    else
+      # The purpose of the label and of the branching condition is to
+      # speed up the sed processing (if there are no `@' at all, there
+      # is no need to browse any of the substitutions).
+      # These are the two extra sed commands mentioned above.
+      (echo ':t
+  /@@BKL@a-zA-Z_@BKR@@BKL@a-zA-Z_0-9@BKR@*@/!b' && cat $ac_cs_root.sfrag) >$ac_cs_root.s$ac_sed_frag
+      if test -z "$ac_sed_cmds"; then
+  	ac_sed_cmds="sed -f $ac_cs_root.s$ac_sed_frag"
+      else
+  	ac_sed_cmds="$ac_sed_cmds | sed -f $ac_cs_root.s$ac_sed_frag"
+      fi
+      ac_sed_frag=`expr $ac_sed_frag + 1`
+      ac_beg=$ac_end
+      ac_end=`expr $ac_end + $ac_max_sed_lines`
+    fi
+  done
+  if test -z "$ac_sed_cmds"; then
+    ac_sed_cmds=cat
   fi
-done
-if test -z "$ac_sed_cmds"; then
-  ac_sed_cmds=cat
-fi
+fi # test -n "$CONFIG_FILES"
 
 EOF
-
 cat >>$CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
 changequote(, )dnl
@@ -3498,7 +3501,8 @@ changequote([, ])dnl
 
   echo creating "$ac_file"
   rm -f "$ac_file"
-  configure_input="Generated automatically from `echo $ac_file_in|sed 's%.*/%%'` by configure."
+  configure_input="Generated automatically from `echo $ac_file_in |
+                                                 sed 's%.*/%%'` by configure."
   case "$ac_file" in
 changequote(, )dnl
   *[Mm]akefile*) ac_comsub="1i\\
@@ -3507,9 +3511,10 @@ changequote([, ])dnl
   *) ac_comsub= ;;
   esac
 
-# Don't redirect the output to AC_FILE directly: use `mv' so that updating
-# is atomic, and doesn't need trapping.
-  ac_file_inputs=`echo $ac_file_in | sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+  # Don't redirect the output to AC_FILE directly: use `mv' so that updating
+  # is atomic, and doesn't need trapping.
+  ac_file_inputs=`echo $ac_file_in |
+                  sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
   for ac_file_input in $ac_file_inputs;
   do
     test -f "$ac_file_input" ||
@@ -3599,7 +3604,8 @@ changequote([, ])dnl
   echo creating $ac_file
 
   rm -f $ac_cs_root.frag $ac_cs_root.in $ac_cs_root.out
-  ac_file_inputs=`echo $ac_file_in|sed -e "s%^%$ac_given_srcdir/%" -e "s%:% $ac_given_srcdir/%g"`
+  ac_file_inputs=`echo $ac_file_in |
+                  sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
     for ac_file_input in $ac_file_inputs;
   do
     test -f "$ac_file_input" ||
