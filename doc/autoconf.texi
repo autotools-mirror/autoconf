@@ -3591,13 +3591,13 @@ Ultrix 4.3, where @samp{getgroups (0, 0)} always fails), define
 needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 @end defmac
 
-@defmac AC_FUNC_GETLOADAVG
+@defmac AC_FUNC_GETLOADAVG (@dvar{dir, .})
 @acindex FUNC_GETLOADAVG
 @cvindex SVR4
 @cvindex DGUX
 @cvindex UMAX
 @cvindex UMAX4_3
-@cvindex NLIST_STRUCT
+@cvindex HAVE_NLIST_H
 @cvindex NLIST_NAME_UNION
 @cvindex GETLODAVG_PRIVILEGED
 @cvindex NEED_SETGID
@@ -3613,8 +3613,9 @@ Check how to get the system load averages.  If the system has the
 @code{GETLOADAVG_LIBS} to any libraries needed to get that function.
 Also add @code{GETLOADAVG_LIBS} to @code{LIBS}.
 
-Otherwise, require an @code{AC_LIBOBJ} replacement (@file{getloadavg.c})
-of @samp{getloadavg}, and possibly define several other C preprocessor
+Otherwise, require an @code{AC_LIBOBJ} replacement for
+@samp{getloadavg} with source code in @file{@var{dir}/getloadavg.c},
+and possibly define several other C preprocessor
 macros and output variables:
 
 @enumerate
@@ -3626,7 +3627,7 @@ Define @code{SVR4}, @code{DGUX}, @code{UMAX}, or @code{UMAX4_3} if on
 those systems.
 
 @item
-If @file{nlist.h} is found, define @code{NLIST_STRUCT}.
+If @file{nlist.h} is found, define @code{HAVE_NLIST_H}.
 
 @item
 If @samp{struct nlist} has an @samp{n_un.n_name} member, define
