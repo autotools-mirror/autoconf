@@ -77,9 +77,9 @@ AT_CHECK([/bin/sh -n ../bin/autoconf],   0)
 AT_CHECK([/bin/sh -n ../bin/autoreconf], 0)
 
 # These are not built, they are in the src tree.
-AT_CHECK([/bin/sh -n $at_top_srcdir/config/install-sh], 0)
-AT_CHECK([/bin/sh -n $at_top_srcdir/config/mkinstalldirs], 0)
-AT_CHECK([/bin/sh -n $at_top_srcdir/config/missing], 0)
+AT_CHECK([/bin/sh -n $top_srcdir/config/install-sh], 0)
+AT_CHECK([/bin/sh -n $top_srcdir/config/mkinstalldirs], 0)
+AT_CHECK([/bin/sh -n $top_srcdir/config/missing], 0)
 
 AT_CLEANUP
 

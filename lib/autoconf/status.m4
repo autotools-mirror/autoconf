@@ -127,12 +127,17 @@
 #   - `$srcdir' is `top-build -> top-src'
 #
 # Ouputs:
+# - `ac_builddir' is `.', for symmetry only.
 # - `ac_top_builddir' is `build -> top_build'.
 #      If not empty, has a trailing slash.
 # - `ac_srcdir' is `build -> src'.
-# - `ac_top_srcdir' is `build -> top-src'
+# - `ac_top_srcdir' is `build -> top-src'.
+#
+# and `ac_buildpath' etc., the absolute paths.
 m4_define([_AC_SRCPATHS],
-[if test $1 != .; then
+[ac_builddir=.
+
+if test $1 != .; then
   ac_dir_suffix=/`echo $1 | sed 's,^\.[[\\/]],,'`
   # A "../" for each directory in $ac_dir_suffix.
   ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[[^\\/]]*,../,g'`
@@ -155,6 +160,12 @@ case $srcdir in
     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
     ac_top_srcdir=$ac_top_builddir$srcdir ;;
 esac
+# Don't blindly perform a `cd $1/$ac_foo && pwd` since $ac_foo can be
+# absolute.
+ac_buildpath=`cd $1 && cd $ac_builddir && pwd`
+ac_top_buildpath=`cd $1 && cd $ac_top_builddir && pwd`
+ac_srcpath=`cd $1 && cd $ac_srcdir && pwd`
+ac_top_srcpath=`cd $1 && cd $ac_top_srcdir && pwd`
 ])# _AC_SRCPATHS
 
 
@@ -949,7 +960,13 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 [/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
 s,@configure_input@,$configure_input,;t t
 s,@srcdir@,$ac_srcdir,;t t
+s,@srcpath@,$ac_srcpath,;t t
 s,@top_srcdir@,$ac_top_srcdir,;t t
+s,@top_srcpath@,$ac_top_srcpath,;t t
+s,@builddir@,$ac_builddir,;t t
+s,@buildpath@,$ac_buildpath,;t t
+s,@top_builddir@,$ac_top_builddir,;t t
+s,@top_buildpath@,$ac_top_buildpath,;t t
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s,@INSTALL@,$ac_INSTALL,;t t
 ])dnl
 dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
@@ -1058,6 +1075,7 @@ if test "$no_recursion" != yes; then
   # in subdir configurations.
   ac_sub_configure_args="--prefix=$prefix $ac_sub_configure_args"
 
+  ac_popdir=`pwd`
   for ac_dir in : $subdirs; do test "x$ac_dir" = x: && continue
 
     # Do not complain, so a configure script can configure whichever
@@ -1066,10 +1084,9 @@ if test "$no_recursion" != yes; then
 
     AC_MSG_NOTICE([configuring in $ac_dir])
     AS_MKDIR_P(["$ac_dir"])
-
-    ac_popdir=`pwd`
-    cd $ac_dir
     _AC_SRCPATHS(["$ac_dir"])
+
+    cd $ac_dir
 
     # Check for guested configure; otherwise get Cygnus style configure.
     if test -f $ac_srcdir/configure.gnu; then

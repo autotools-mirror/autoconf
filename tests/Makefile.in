@@ -66,14 +66,14 @@ PACKAGE_NAME = @PACKAGE_NAME@
 PERL = @PERL@
 VERSION = @VERSION@
 
-EXTRA_DIST = $(WRAPPERS) $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
+EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
              atlocal.in
 
 
 # Running the uninstalled scripts.
-WRAPPERS = autoconf autoheader autoreconf autom4te autoupdate ifnames
+WRAPPERS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
-DISTCLEANFILES = atconfig atlocal package.m4 $(TESTSUITE)
+DISTCLEANFILES = atconfig atlocal package.m4 $(TESTSUITE) $(WRAPPERS)
 
 TESTSUITE_GENERATED_AT = \
 	aclang.at acc.at acfortran.at \
@@ -96,8 +96,9 @@ TESTSUITE_AT = $(TESTSUITE_GENERATED_AT) $(TESTSUITE_HAND_AT)
 TESTSUITE = ./testsuite
 
 # Run the non installed autom4te.
-AUTOM4TE = $(srcdir)/autom4te
-AUTOTEST = $(AUTOM4TE) --language=autotest
+# Don't use AUTOM4TE since `make alpha' makes it unavailable although
+# we are allowed to use it (since we ship it).
+AUTOTEST = ./autom4te --language=autotest
 
 MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE_GENERATED_AT)
 
@@ -124,9 +125,11 @@ AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 CLEANFILES = expr
 subdir = tests
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = autoconf autoheader autom4te autoreconf autoscan \
+	autoupdate ifnames
 DIST_SOURCES =
-DIST_COMMON = README Makefile.am Makefile.in
+DIST_COMMON = README Makefile.am Makefile.in autom4te.in autoreconf.in \
+	autoupdate.in wrappl.in wrapsh.in
 all: all-am
 
 .SUFFIXES:
@@ -137,6 +140,20 @@ Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \
 	  CONFIG_HEADERS= CONFIG_LINKS= \
 	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
+autoconf: $(top_builddir)/config.status wrapsh.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrapsh.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+autoheader: $(top_builddir)/config.status wrappl.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+autom4te: $(top_builddir)/config.status autom4te.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+autoreconf: $(top_builddir)/config.status autoreconf.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+autoscan: $(top_builddir)/config.status wrappl.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+autoupdate: $(top_builddir)/config.status autoupdate.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
+ifnames: $(top_builddir)/config.status wrappl.in
+	cd $(top_builddir) && CONFIG_FILES=$(subdir)/$@:tests/wrappl.in CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 uninstall-info-am:
 tags: TAGS
 TAGS:

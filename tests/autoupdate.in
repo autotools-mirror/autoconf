@@ -1,14 +1,15 @@
 #! /bin/sh
 # Running `autoupdate' as if it were installed.
 
-. ./atconfig
-
 # Be sure to use the non installed Perl modules.
 # We need no special protection for the subtools (e.g., autoheader runs
 # autoconf which runs autom4te) because by themselves, they try to use
 # subtools from the same directory (i.e., foo/autoheader will run
 # foo/autoconf etc.).
-autom4te_perllibdir=$top_srcdir/lib
+autom4te_perllibdir=@top_srcpath@/lib
 export autom4te_perllibdir
 
-exec ../bin/autoupdate --include ../lib --include $top_srcdir/lib ${1+"$@"}
+# We might need files from build (frozen files), in addition of src files.
+exec @top_buildpath@/bin/autoupdate \
+     -I @top_buildpath@/lib \
+     -I @top_srcpath@/lib ${1+"$@"}

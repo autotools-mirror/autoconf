@@ -6,18 +6,22 @@
 ** Documentation
 - AC_INIT
   Argument requirements, output variables, defined macros.
-- Autotest
-  First sketch of its documentation.
+- M4sugar, M4sh, Autotest
+  First sketch.
 - Double quoting macros
   AC_TRY_CPP, AC_TRY_COMPILE, AC_TRY_LINK and AC_TRY_RUN.
 - Licensing
   The Autoconf manual is now distributed under the terms of the GNU FDL.
 
-** $LINENO
-  Is now used instead of hard coded line numbers.
+** configure
+- $LINENO
+  Now used instead of hard coded line numbers.
   This eases the comparison of `configure's, and diminishes the
   pressure over control version archives.
   Automatic replacement for shells that don't support this feature.
+- New output variables
+  @builddir@, @top_builddir@, @srcpath@, @top_srcpath@, @buildpath@,
+  @top_buildpath@.
 
 ** autom4te
   New executable, used by the Autoconf suite to cache and speed up
@@ -42,7 +46,10 @@
 
 ** Generic macros
 - AC_CONFIG_COMMANDS, HEADERS, FILES, LINKS.
-  Provide the user with srcdir, ac_top_srcdir, ac_top_builddir, ac_srcdir.
+  Provide the user with srcdir, ac_srcdir, ac_top_srcdir, ac_builddir,
+  ac_top_builddir, ac_srcpath, ac_top_srcpath, ac_buildpath,
+  ac_top_buildpath.
+
 
 * Major changes in Autoconf 2.52
 ** Documentation

@@ -27,10 +27,22 @@ AC_CONFIG_SRCDIR(ChangeLog)
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(autoconf, 2.52e)
 
-# Initialize the test suite.
-# Some of our bins are location independant, e.g., ifnames.
-# We don't need wrappers for them.
-AC_CONFIG_TESTDIR(tests, tests:bin)
+# Initialize the test suite and build position independent wrappers.
+AC_CONFIG_TESTDIR(tests)
+AC_CONFIG_FILES([tests/autoconf:tests/wrapsh.in],
+                [chmod +x tests/autoconf])
+AC_CONFIG_FILES([tests/autoheader:tests/wrappl.in],
+                [chmod +x tests/autoheader])
+AC_CONFIG_FILES([tests/autom4te],
+                [chmod +x tests/autom4te])
+AC_CONFIG_FILES([tests/autoreconf],
+                [chmod +x tests/autoreconf])
+AC_CONFIG_FILES([tests/autoscan:tests/wrappl.in],
+                [chmod +x tests/autoscan])
+AC_CONFIG_FILES([tests/autoupdate],
+                [chmod +x tests/autoupdate])
+AC_CONFIG_FILES([tests/ifnames:tests/wrappl.in],
+                [chmod +x tests/ifnames])
 AC_PATH_PROG(EXPR, expr)
 
 # We use a path for GNU m4 so even if users have another m4 first in

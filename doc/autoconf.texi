@@ -2073,15 +2073,47 @@ those libraries are found and provide necessary functions, see
 programs to test for C, C++ and Fortran 77 features.
 @end defvar
 
+@defvar builddir
+@ovindex builddir
+Rigorously equal to @samp{.}.  Added for symmetry only.
+@end defvar
+
+@defvar buildpath
+@ovindex buildpath
+Absolute path of @code{builddir}.
+@end defvar
+
+@defvar top_builddir
+@ovindex top_builddir
+The relative path to the top-level of the current build tree.  In the
+top-level directory, this is the same as @code{srcbuild}.
+@end defvar
+
+@defvar top_buildpath
+@ovindex top_buildpath
+Absolute path of @code{top_builddir}.
+@end defvar
+
 @defvar srcdir
 @ovindex srcdir
-The directory that contains the source code for that @file{Makefile}.
+The relative path to the directory that contains the source code for
+that @file{Makefile}.
+@end defvar
+
+@defvar srcpath
+@ovindex srcpath
+Absolute path of @code{srcdir}.
 @end defvar
 
 @defvar top_srcdir
 @ovindex top_srcdir
-The top-level source code directory for the package.  In the top-level
-directory, this is the same as @code{srcdir}.
+The relative path to the top-level source code directory for the
+package.  In the top-level directory, this is the same as @code{srcdir}.
+@end defvar
+
+@defvar top_srcpath
+@ovindex top_srcpath
+Absolute path of @code{top_srcdir}.
 @end defvar
 
 @node Installation Directory Variables

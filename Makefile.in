@@ -76,6 +76,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 
 # Automake is unable to look into our special aclocal.m4...
 AMTAR = @AMTAR@
+AWK = @AWK@
 
 pkgdata_DATA = INSTALL
 MAKEINFO = @MAKEINFO@ --no-headers --no-validate --no-split
@@ -252,6 +253,7 @@ distdir: $(DISTFILES)
 	fi
 	-chmod -R a+w $(distdir) >/dev/null 2>&1; rm -rf $(distdir)
 	mkdir $(distdir)
+	$(mkinstalldirs) $(distdir)/tests
 	@for file in $(DISTFILES); do \
 	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \

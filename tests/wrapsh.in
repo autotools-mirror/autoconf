@@ -3,6 +3,4 @@
 
 me=`echo "$0" | sed -e 's,.*[\\/],,'`
 
-. ./atconfig
-
-exec ../bin/$me --include ../lib ${1+"$@"}
+exec @top_buildpath@/bin/$me --include @top_buildpath@/lib ${1+"$@"}

@@ -86,9 +86,13 @@ AC_CONFIG_COMMANDS([$1/atconfig],
 @%:@ Copyright 2000, 2001 Free Software Foundation, Inc.
 
 at_testdir='$1'
+buildpath='$ac_buildpath'
 srcdir='$ac_srcdir'
+srcpath='$ac_srcpath'
 top_srcdir='$ac_top_srcdir'
+top_srcpath='$ac_top_srcpath'
 top_builddir='$ac_top_builddir'
+top_buildpath='$ac_top_buildpath'
 
 AUTOTEST_PATH='m4_default([$2], [$1])'
 

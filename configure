@@ -1124,8 +1124,10 @@ _ACEOF
 program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
 rm conftest.sed
 
-test x"${MISSING+set}" = xset ||
-  MISSING="\${SHELL} `CDPATH=:; cd $ac_aux_dir && pwd`/missing"
+# expand $ac_aux_dir to an absolute path
+am_aux_dir=`cd $ac_aux_dir && pwd`
+
+test x"${MISSING+set}" = xset || MISSING="\${SHELL} $am_aux_dir/missing"
 # Use eval to expand $SHELL
 if eval "$MISSING --run true"; then
   am_missing_run="$MISSING --run "
@@ -1135,9 +1137,6 @@ else
   { echo "$as_me:$LINENO: WARNING: ${am_backtick}missing' script is too old or missing" >&5
 echo "$as_me: WARNING: ${am_backtick}missing' script is too old or missing" >&2;}
 fi
-
-# expand $ac_aux_dir to an absolute path
-am_aux_dir=`CDPATH=:; cd $ac_aux_dir && pwd`
 
 for ac_prog in mawk gawk nawk awk
 do
@@ -1237,7 +1236,7 @@ fi
 rmdir .deps 2>/dev/null
 
 # test to see if srcdir already configured
-if test "`CDPATH=:; cd $srcdir && pwd`" != "`pwd`" &&
+if test "`cd $srcdir && pwd`" != "`pwd`" &&
    test -f $srcdir/config.status; then
   { { echo "$as_me:$LINENO: error: source directory already configured; run \"make distclean\" there first" >&5
 echo "$as_me: error: source directory already configured; run \"make distclean\" there first" >&2;}
@@ -1258,14 +1257,6 @@ _ACEOF
 
 # Autoconf 2.50 wants to disallow AM_ names.  We explicitly allow
 # the ones we care about.
-
-# Autoconf 2.50 always computes EXEEXT.  However we need to be
-# compatible with 2.13, for now.  So we always define EXEEXT, but we
-# don't compute it.
-
-# Similar for OBJEXT -- only we only use OBJEXT if the user actually
-# requests that it be used.  This is a bit dumb.
-: ${OBJEXT=o}
 
 # Some tools Automake needs.
 
@@ -1288,9 +1279,7 @@ INSTALL_STRIP_PROGRAM="\${SHELL} \$(install_sh) -c -s"
 # We need awk for the "check" target.  The system "awk" is bad on
 # some platforms.
 
-# Initialize the test suite.
-# Some of our bins are location independant, e.g., ifnames.
-# We don't need wrappers for them.
+# Initialize the test suite and build position independent wrappers.
 ac_config_commands="$ac_config_commands tests/package.m4"
 
 ac_config_commands="$ac_config_commands tests/atconfig"
@@ -1299,6 +1288,20 @@ if test -f $srcdir/tests/atlocal.in; then
   ac_config_files="$ac_config_files tests/atlocal"
 
 fi
+
+ac_config_files="$ac_config_files tests/autoconf:tests/wrapsh.in"
+
+ac_config_files="$ac_config_files tests/autoheader:tests/wrappl.in"
+
+ac_config_files="$ac_config_files tests/autom4te"
+
+ac_config_files="$ac_config_files tests/autoreconf"
+
+ac_config_files="$ac_config_files tests/autoscan:tests/wrappl.in"
+
+ac_config_files="$ac_config_files tests/autoupdate"
+
+ac_config_files="$ac_config_files tests/ifnames:tests/wrappl.in"
 
 # Extract the first word of "expr", so it can be a program name with args.
 set dummy expr; ac_word=$2
@@ -1894,6 +1897,13 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "tests/atlocal" ) CONFIG_FILES="$CONFIG_FILES tests/atlocal" ;;
+  "tests/autoconf" ) CONFIG_FILES="$CONFIG_FILES tests/autoconf:tests/wrapsh.in" ;;
+  "tests/autoheader" ) CONFIG_FILES="$CONFIG_FILES tests/autoheader:tests/wrappl.in" ;;
+  "tests/autom4te" ) CONFIG_FILES="$CONFIG_FILES tests/autom4te" ;;
+  "tests/autoreconf" ) CONFIG_FILES="$CONFIG_FILES tests/autoreconf" ;;
+  "tests/autoscan" ) CONFIG_FILES="$CONFIG_FILES tests/autoscan:tests/wrappl.in" ;;
+  "tests/autoupdate" ) CONFIG_FILES="$CONFIG_FILES tests/autoupdate" ;;
+  "tests/ifnames" ) CONFIG_FILES="$CONFIG_FILES tests/ifnames:tests/wrappl.in" ;;
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "m4/Makefile" ) CONFIG_FILES="$CONFIG_FILES m4/Makefile" ;;
   "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
@@ -1995,8 +2005,6 @@ s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
 s,@PACKAGE@,$PACKAGE,;t t
 s,@VERSION@,$VERSION,;t t
-s,@EXEEXT@,$EXEEXT,;t t
-s,@OBJEXT@,$OBJEXT,;t t
 s,@ACLOCAL@,$ACLOCAL,;t t
 s,@AUTOCONF@,$AUTOCONF,;t t
 s,@AUTOMAKE@,$AUTOMAKE,;t t
@@ -2192,6 +2200,16 @@ s,@INSTALL@,$ac_INSTALL,;t t
     rm -f $tmp/out
   fi
 
+  # Run the commands associated with the file.
+  case $ac_file in
+    tests/autoconf ) chmod +x tests/autoconf ;;
+    tests/autoheader ) chmod +x tests/autoheader ;;
+    tests/autom4te ) chmod +x tests/autom4te ;;
+    tests/autoreconf ) chmod +x tests/autoreconf ;;
+    tests/autoscan ) chmod +x tests/autoscan ;;
+    tests/autoupdate ) chmod +x tests/autoupdate ;;
+    tests/ifnames ) chmod +x tests/ifnames ;;
+  esac
 done
 _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF
@@ -2259,7 +2277,7 @@ srcdir='$ac_srcdir'
 top_srcdir='$ac_top_srcdir'
 top_builddir='$ac_top_builddir'
 
-AUTOTEST_PATH='tests:bin'
+AUTOTEST_PATH='tests'
 
 SHELL=\${CONFIG_SHELL-'$SHELL'}
 ATEOF

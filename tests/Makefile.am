@@ -20,13 +20,13 @@
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = $(WRAPPERS) $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
+EXTRA_DIST = $(TESTSUITE_AT) atspecific.m4 aclocal.m4 mktests.sh \
              atlocal.in
 
 # Running the uninstalled scripts.
-WRAPPERS = autoconf autoheader autoreconf autom4te autoupdate ifnames
+WRAPPERS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
 
-DISTCLEANFILES       = atconfig atlocal package.m4 $(TESTSUITE)
+DISTCLEANFILES = atconfig atlocal package.m4 $(TESTSUITE) $(WRAPPERS)
 
 TESTSUITE_GENERATED_AT = \
 	aclang.at acc.at acfortran.at \
@@ -47,8 +47,9 @@ TESTSUITE_AT = $(TESTSUITE_GENERATED_AT) $(TESTSUITE_HAND_AT)
 TESTSUITE = ./testsuite
 
 # Run the non installed autom4te.
-AUTOM4TE = $(srcdir)/autom4te
-AUTOTEST = $(AUTOM4TE) --language=autotest
+# Don't use AUTOM4TE since `make alpha' makes it unavailable although
+# we are allowed to use it (since we ship it).
+AUTOTEST = ./autom4te --language=autotest
 testsuite: $(top_srcdir)/lib/m4sugar/m4sugar.m4 \
 	   $(top_srcdir)/lib/m4sugar/m4sh.m4 \
            $(top_srcdir)/lib/autotest/autotest.m4 \

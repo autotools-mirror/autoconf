@@ -1084,8 +1084,9 @@ if test "$ac_init_help" = "recursive"; then
   # If there are subdirs, report their specific --help.
   ac_popdir=`pwd`
   for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
-    cd $ac_dir
+    test -d $ac_dir || continue
     _AC_SRCPATHS(["$ac_dir"])
+    cd $ac_dir
     # Check for guested configure; otherwise get Cygnus style configure.
     if test -f $ac_srcdir/configure.gnu; then
       echo

@@ -95,7 +95,6 @@ m4_define([AT_TESTSUITE_NAME],
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_data_files], [stdout expout at-* stderr experr])
-m4_define([AT_victims], [])
 m4_divert_text([BINSH], [@%:@! /bin/sh])
 m4_divert_push([DEFAULT])dnl
 
@@ -112,11 +111,7 @@ do
   . ./$at_file || AS_ERROR([invalid content: $at_file])
 done
 
-AUTOTEST_PATH=`echo $AUTOTEST_PATH |tr ':' $PATH_SEPARATOR`
-
-# Use absolute file notations, as the test might change directories.
-at_srcdir=`cd "$srcdir" && pwd`
-at_top_srcdir=`cd "$top_srcdir" && pwd`
+AUTOTEST_PATH=`echo $AUTOTEST_PATH | tr ':' $PATH_SEPARATOR`
 
 # Not all shells have the 'times' builtin; the subshell is needed to make
 # sure we discard the 'times: not found' message from the shell.

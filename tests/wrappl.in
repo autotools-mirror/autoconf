@@ -1,14 +1,14 @@
 #! /bin/sh
-# Running `ifnames' as if it were installed.
+# Running `$0' as if it were installed.
 
-. ./atconfig
+me=`echo "$0" | sed -e 's,.*[\\/],,'`
 
 # Be sure to use the non installed Perl modules.
 # We need no special protection for the subtools (e.g., autoheader runs
 # autoconf which runs autom4te) because by themselves, they try to use
 # subtools from the same directory (i.e., foo/autoheader will run
 # foo/autoconf etc.).
-autom4te_perllibdir=$top_srcdir/lib
+autom4te_perllibdir=@top_srcpath@/lib
 export autom4te_perllibdir
 
-exec ../bin/ifnames ${1+"$@"}
+exec @top_buildpath@/bin/$me ${1+"$@"}

@@ -31,7 +31,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 
 # Automake is unable to look into our special aclocal.m4...
 AMTAR = @AMTAR@
-
+AWK   = @AWK@
 
 ## -------------------- ##
 ## Forwarding targets.  ##

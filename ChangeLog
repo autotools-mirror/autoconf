@@ -1,5 +1,35 @@
 2001-09-23  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/status.m4 (_AC_SRCPATHS): Compute and provide
+	ac_buildpath, ac_top_buildpath, ac_srcpath, and ac_top_srcpath.
+	(_AC_OUTPUT_FILES): Also substitute srcpath, top_srcpath,
+	builddir, buildpath, top_builddir, and top_buildpath.
+	(_AC_OUTPUT_SUBDIRS): Compute the dir variables *before* changing
+	the current directory.
+	* lib/autoconf/general.m4 (_AC_INIT_HELP): Compute the dir
+	variables *before* changing the current directory.
+	Skip nonexistent dirs.
+	* doc/autoconf.texi (Preset Output Variables): Document these
+	variables.
+
+	* lib/autotest/general.m4: Do not reset AT_victims.
+	Don't compute at_srcdir nor at_top_srcdir.
+
+	* tests/tools.at: Hence use top_srcdir.
+
+	* tests/Makefile.am, tests/autoconf, tests/autoheader,
+	* tests/autom4te, tests/autoreconf, tests/autoupdate, tests/ifnames:
+	Remove.
+	* tests/autoreconf.in, tests/wrappl.in, tests/autom4te.in,
+	* tests/wrapsh.in, tests/autoupdate.in: New.
+	* tests/Makefile.am (DISTCLEANFILES, EXTRA_DIST): Adjust.
+	* configure.ac: Build the position independent wrappers.
+
+	* man/Makefile.am: Now that test wrappers are position
+	independent, use them and drop dark envvar magic.
+
+2001-09-23  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Common Shell Constructs): Rename as...
 	(Programming in M4sh): this.
 	Promote to @section.
