@@ -3721,14 +3721,18 @@ can be used to insist on non-@code{NULL} (@pxref{Particular Functions}).
 @item @code{putenv}
 @c @fuindex putenv
 @prindex @code{putenv}
+POSIX prefers @code{setenv} to @code{putenv}; among other things,
+@code{putenv} is not required of all POSIX implementations, but
+@code{setenv} is.
+
 POSIX specifies that @code{putenv} puts the given string directly in
 @code{environ}, but some systems make a copy of it instead (e.g.,
 glibc 2.0, or BSD).  And when a copy is made, @code{unsetenv} might
 not free it, causing a memory leak (e.g., FreeBSD 4).
 
-POSIX specifies that @code{putenv("FOO")} removes @samp{FOO} from the
-environment, but on some systems (e.g., FreeBSD 4) this is not the
-case and instead @code{unsetenv} must be used.
+On some systems @code{putenv("FOO")} removes @samp{FOO} from the
+environment, but this is not standard usage and it dumps core
+on some systems (e.g., AIX).
 
 On MINGW, a call @code{putenv("FOO=")} removes @samp{FOO} from the
 environment, rather than inserting it with an empty value.
@@ -3827,7 +3831,7 @@ strnlen ("foobar", 9) = 6
 @prindex @code{unlink}
 The @acronym{POSIX} spec says that @code{unlink} causes the given file to be
 removed only after there are no more open file handles for it.  Not all
-OS's support this behavior though.  So even on systems that provide
+OSes support this behavior though.  So even on systems that provide
 @code{unlink}, you cannot portably assume it is OK to call it on files
 that are open.  For example, on Windows 9x and ME, such a call would fail;
 on DOS it could even lead to file system corruption, as the file might end
