@@ -1,5 +1,14 @@
 2000-10-24  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (_AC_SHELL_DIRNAME): Rename as...
+	(AC_SHELL_DIRNAME): this.
+	s/X$1/X[]$1/ so that when $1 is a macro, it's given a chance to be
+	expanded.
+	(AC_PREFIX_PROGRAM): Use AC_SHELL_DIRNAME.
+	Quote properly.
+
+2000-10-24  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.m4 (Syntax of the scripts): Specify the path to the
 	tested program, some shells don't honor the PATH with `sh PROG'.
 

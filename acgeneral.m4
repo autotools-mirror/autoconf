@@ -891,8 +891,8 @@ done; }
 ])# AC_SHELL_MKDIR_P
 
 
-# _AC_SHELL_DIRNAME(PATHNAME)
-# ---------------------------
+# AC_SHELL_DIRNAME(PATHNAME)
+# --------------------------
 # Simulate running `dirname(1)' on PATHNAME, not all systems have it.
 # This macro must be usable from inside ` `.
 #
@@ -920,18 +920,18 @@ done; }
 # a silly length limit that causes expr to fail if the matched
 # substring is longer than 120 bytes.  So fall back on echo|sed if
 # expr fails.
-define([_AC_SHELL_DIRNAME],
-[expr X$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
-      X$1 : 'X\(//\)[[^/]]' \| \
-      X$1 : 'X\(//\)$' \| \
-      X$1 : 'X\(/\)' \| \
+define([AC_SHELL_DIRNAME],
+[expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
+      X[]$1 : 'X\(//\)[[^/]]' \| \
+      X[]$1 : 'X\(//\)$' \| \
+      X[]$1 : 'X\(/\)' \| \
       .   : '\(.\)' 2>/dev/null ||
-echo "X$1" | sed ['
-	    /^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/p; q; }
-	    /^X\(\/\/\)[^/].*/{ s//\1/p; q; }
-	    /^X\(\/\/\)$/{ s//\1/p; q; }
-	    /^X\(\/\).*/{ s//\1/p; q; }
-	    s/.*/./p; q']])
+echo "X[]$1" |
+    sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/p; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/p; q; }
+  	  /^X\(\/\/\)$/{ s//\1/p; q; }
+  	  /^X\(\/\).*/{ s//\1/p; q; }
+  	  s/.*/./p; q']])
 
 
 ## --------------------------------------------------- ##
@@ -3125,7 +3125,7 @@ AC_DEFUN([AC_PATH_PROG],
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=$[2]
 AC_MSG_CHECKING([for $ac_word])
-AC_CACHE_VAL(ac_cv_path_$1,
+AC_CACHE_VAL([ac_cv_path_$1],
 [case $$1 in
   [[\\/]]* | ?:[[\\/]]*)
   ac_cv_path_$1="$$1" # Let the user override the test with a path.
@@ -3241,13 +3241,13 @@ fi
 # No big loss, I think, since most configures don't use this macro anyway.
 AC_DEFUN([AC_PREFIX_PROGRAM],
 [dnl Get an upper case version of $[1].
-pushdef(AC_Prog, translit($1, a-z, A-Z))dnl
+pushdef([AC_Prog], translit([$1], [a-z], [A-Z]))dnl
 if test "x$prefix" = xNONE; then
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
-echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG
-AC_PATH_PROG(AC_Prog, $1)
+  echo $ECHO_N "checking for prefix by $ECHO_C" >&AC_FD_MSG
+  AC_PATH_PROG(m4_quote(AC_Prog), [$1])
   if test -n "$ac_cv_path_[]AC_Prog"; then
-    prefix=`echo $ac_cv_path_[]AC_Prog | [sed 's,/[^/][^/]*//*[^/][^/]*$,,']`
+    prefix=`AC_SHELL_DIRNAME([$ac_cv_path_[]AC_Prog])`
   fi
 fi
 popdef([AC_Prog])dnl
@@ -4823,7 +4823,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   esac
 
   # Adjust a relative srcdir, top_srcdir, and INSTALL for subdirectories.
-  ac_dir=`_AC_SHELL_DIRNAME("$ac_file")`
+  ac_dir=`AC_SHELL_DIRNAME("$ac_file")`
   if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
     AC_SHELL_MKDIR_P("$ac_dir")
     ac_dir_suffix="/`echo $ac_dir|sed 's,^\./,,'`"
@@ -5145,7 +5145,7 @@ cat >>$CONFIG_STATUS <<\EOF
     if cmp -s $ac_file $tmp/config.h 2>/dev/null; then
       echo "$ac_file is unchanged"
     else
-      ac_dir=`_AC_SHELL_DIRNAME("$ac_file")`
+      ac_dir=`AC_SHELL_DIRNAME("$ac_file")`
       if test "$ac_dir" != "$ac_file" && test "$ac_dir" != .; then
         AC_SHELL_MKDIR_P("$ac_dir")
       fi
@@ -5196,7 +5196,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
   rm -f $ac_dest
 
   # Make relative symlinks.
-  ac_dest_dir=`_AC_SHELL_DIRNAME("$ac_dest")`
+  ac_dest_dir=`AC_SHELL_DIRNAME("$ac_dest")`
   if test "$ac_dest_dir" != "$ac_dest" && test "$ac_dest_dir" != .; then
     AC_SHELL_MKDIR_P("$ac_dest_dir")
     ac_dest_dir_suffix="/`echo $ac_dest_dir|sed 's,^\./,,'`"
