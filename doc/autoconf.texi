@@ -15008,7 +15008,7 @@ Generating testing or validation suites using Autotest is rather easy.
 The whole validation suite is held in a file to be processed through
 @command{autom4te}, itself using @acronym{GNU} M4 under the scene, to
 produce a stand-alone Bourne shell script which then gets distributed.
-Neither @command{autom4te} nor @acronym{GNU} M4 are not needed anymore at
+Neither @command{autom4te} nor @acronym{GNU} M4 are needed at
 the installer end.
 
 @cindex test group

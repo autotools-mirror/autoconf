@@ -1,3 +1,8 @@
+2004-05-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (testsuite Scripts): Fix typo.
+	Problem reported by Stepan Kasal.
+	
 2004-05-24  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/Makefile.am (autoconfdir): Fix to match comment (trivial
