@@ -456,28 +456,14 @@ esac
 ])dnl
 dnl
 AC_DEFUN(AC_HEADER_DIRENT,
-[AC_MSG_CHECKING(for directory library header)
-dnl We don't use AC_CHECK_HEADERS so we can stop when we get a match.
-AC_CACHE_VAL(ac_cv_header_dir,
-[ac_cv_header_dir=no
-for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
-  AC_MSG_CHECKING([for $ac_hdr])
-AC_TRY_LINK([#include <sys/types.h>
-#include <$ac_hdr>], [DIR *dirp = 0;], ac_cv_header_dir=$ac_hdr; break)
-done])dnl
-
-AC_MSG_RESULT($ac_cv_header_dir)
-case "$ac_cv_header_dir" in
-dirent.h) AC_DEFINE(HAVE_DIRENT_H) ;;
-sys/ndir.h) AC_DEFINE(HAVE_SYS_NDIR_H) ;;
-sys/dir.h) AC_DEFINE(HAVE_SYS_DIR_H) ;;
-ndir.h) AC_DEFINE(HAVE_NDIR_H) ;;
-esac
+[ac_header_dir=no
+AC_CHECK_HEADERS(dirent.h sys/ndir.h sys/dir.h ndir.h,
+  [ac_header_dir=$ac_hdr; break])
 
 AC_MSG_CHECKING(whether closedir returns void)
 AC_CACHE_VAL(ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
-#include <$ac_cv_header_dir>
+#include <$ac_header_dir>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
   ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
 AC_MSG_RESULT($ac_cv_func_closedir_void)
@@ -488,17 +474,12 @@ fi
 dnl
 dnl Obsolete.
 AC_DEFUN(AC_DIR_HEADER,
-[AC_MSG_CHECKING(for directory library header)
-AC_CACHE_VAL(ac_cv_header_dir,
-[ac_cv_header_dir=no
+[ac_header_dir=no
 for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
-  AC_MSG_CHECKING([for $ac_hdr])
-AC_TRY_LINK([#include <sys/types.h>
-#include <$ac_hdr>], [DIR *dirp = 0;], ac_cv_header_dir=$ac_hdr; break)
-done])dnl
+  AC_CHECK_HEADER($ac_hdr, [ac_header_dir=$ac_hdr; break])
+done
 
-AC_MSG_RESULT($ac_cv_header_dir)
-case "$ac_cv_header_dir" in
+case "$ac_header_dir" in
 dirent.h) AC_DEFINE(DIRENT) ;;
 sys/ndir.h) AC_DEFINE(SYSNDIR) ;;
 sys/dir.h) AC_DEFINE(SYSDIR) ;;
@@ -508,7 +489,7 @@ esac
 AC_MSG_CHECKING(whether closedir returns void)
 AC_CACHE_VAL(ac_cv_func_closedir_void,
 [AC_TRY_RUN([#include <sys/types.h>
-#include <$ac_cv_header_dir>
+#include <$ac_header_dir>
 int closedir(); main() { exit(closedir(opendir(".")) != 0); }],
   ac_cv_func_closedir_void=no, ac_cv_func_closedir_void=yes)])dnl
 AC_MSG_RESULT($ac_cv_func_closedir_void)

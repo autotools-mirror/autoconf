@@ -44,6 +44,8 @@ Major changes in release 2.0:
 * AC_DEFINE no longer prints anything, because of the new result reporting
   mechanism (AC_MSG_CHECKING and AC_MSG_RESULT).
 * AC_VERBOSE pays attention to --quiet/--silent, not --verbose.
+* AC_CHECK_FUNCS and AC_CHECK_HEADERS take an optional arg to execute
+  on a match.
 
 ** New utilities:
 * autoscan to generate a preliminary configure.in for a package by

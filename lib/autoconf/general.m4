@@ -799,6 +799,8 @@ dnl Allow a site initialization script to override cache values.
 # Ultrix sh set writes to stderr and can't be redirected directly.
 (set) 2>&1 | sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)=\(.*\)/\1=\${\1-'\2'}/p" >> $cache_file
 changequote([, ])dnl
+else
+echo "not updating unwritable cache $cache_file"
 fi
 ])dnl
 dnl
@@ -1309,18 +1311,18 @@ ifelse([$3], , , [$3
 fi
 ])dnl
 dnl
-dnl AC_CHECK_FUNCS(FUNCTION...)
+dnl AC_CHECK_FUNCS(FUNCTION... [, ACTION])
 AC_DEFUN(AC_CHECK_FUNCS,
 [for ac_func in $1
 do
 changequote(, )dnl
 ac_tr_func=HAVE_`echo $ac_func | tr '[a-z]' '[A-Z]'`
 changequote([, ])dnl
-AC_CHECK_FUNC(${ac_func}, AC_DEFINE(${ac_tr_func}))dnl
+AC_CHECK_FUNC(${ac_func}, AC_DEFINE(${ac_tr_func}) $2)dnl
 done
 ])dnl
 dnl
-dnl AC_CHECK_HEADERS(HEADER-FILE...)
+dnl AC_CHECK_HEADERS(HEADER-FILE... [, ACTION])
 AC_DEFUN(AC_CHECK_HEADERS,
 [AC_REQUIRE_CPP()dnl Make sure the cpp check happens outside the loop.
 for ac_hdr in $1
@@ -1328,7 +1330,7 @@ do
 changequote(, )dnl
 ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
 changequote([, ])dnl
-AC_CHECK_HEADER(${ac_hdr}, AC_DEFINE(${ac_tr_hdr}))dnl
+AC_CHECK_HEADER(${ac_hdr}, AC_DEFINE(${ac_tr_hdr}) $2)dnl
 done
 ])dnl
 dnl
