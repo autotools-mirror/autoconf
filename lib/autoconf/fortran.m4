@@ -615,7 +615,7 @@ AS_IF([test "$F77_DUMMY_MAIN" != unknown],
                       link to the Fortran 77 libraries.])
 fi])],
       [m4_default([$2],
-                [AC_MSG_ERROR([linking to Fortran libraries from C fails])])])
+            [AC_MSG_FAILURE([linking to Fortran libraries from C fails])])])
 ])# AC_F77_DUMMY_MAIN
 
 

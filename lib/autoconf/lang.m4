@@ -478,8 +478,7 @@ do
 done],
       [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-AC_MSG_ERROR([_AC_LANG compiler cannot create executables
-check `config.log' for details.], 77)])
+AC_MSG_FAILURE([_AC_LANG compiler cannot create executables], 77)])
 ac_exeext=$ac_cv_exeext
 AC_MSG_RESULT([$ac_file])
 ])# _AC_COMPILER_EXEEXT_DEFAULT
@@ -500,7 +499,7 @@ if test "$cross_compiling" != yes; then
     if test "$cross_compiling" = maybe; then
 	cross_compiling=yes
     else
-	AC_MSG_ERROR([cannot run _AC_LANG compiled programs.
+	AC_MSG_FAILURE([cannot run _AC_LANG compiled programs.
 If you meant to cross compile, use `--host'.])
     fi
   fi
@@ -540,7 +539,7 @@ for ac_file in conftest.exe conftest conftest.*; do
     * ) break;;
   esac
 done],
-              [AC_MSG_ERROR([cannot compute suffix of executables: cannot compile and link])])
+              [AC_MSG_FAILURE([cannot compute suffix of executables: cannot compile and link])])
 rm -f conftest$ac_cv_exeext
 AC_MSG_RESULT([$ac_cv_exeext])
 ])# _AC_COMPILER_EXEEXT_O
@@ -598,7 +597,7 @@ AS_IF([AC_TRY_EVAL(ac_compile)],
 done],
       [echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
 cat conftest.$ac_ext >&AS_MESSAGE_LOG_FD
-AC_MSG_ERROR([cannot compute suffix of object files: cannot compile])])
+AC_MSG_FAILURE([cannot compute suffix of object files: cannot compile])])
 rm -f conftest.$ac_cv_objext conftest.$ac_ext])
 AC_SUBST([OBJEXT], [$ac_cv_objext])dnl
 ac_objext=$OBJEXT

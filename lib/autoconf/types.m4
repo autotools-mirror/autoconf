@@ -396,7 +396,7 @@ AC_CACHE_CHECK([size of $1], AS_TR_SH([ac_cv_sizeof_$1]),
   _AC_COMPUTE_INT([(long) (sizeof ($1))],
                   [AS_TR_SH([ac_cv_sizeof_$1])],
                   [AC_INCLUDES_DEFAULT([$3])],
-                  [AC_MSG_ERROR([cannot compute sizeof ($1), 77])])
+                  [AC_MSG_FAILURE([cannot compute sizeof ($1), 77])])
 else
   AS_TR_SH([ac_cv_sizeof_$1])=0
 fi])dnl

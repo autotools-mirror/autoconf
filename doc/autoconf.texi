@@ -283,8 +283,8 @@ Writing Tests
 
 * Language Choice::             Selecting which language to use for testing
 * Writing Test Programs::       Forging source files for compilers
-* Examining Declarations::      Detecting header files and declarations
-* Examining Syntax::            Detecting language syntax features
+* Running the Preprocessor::    Detecting preprocessor symbols
+* Running the Compiler::        Detecting language or header features
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
 * Systemology::                 A zoology of operating systems
@@ -294,6 +294,7 @@ Writing Test Programs
 
 * Guidelines::                  General rules for writing test programs
 * Test Functions::              Avoiding pitfalls in test programs
+* Generating Sources::          Source Program Boilerplates
 
 Results of Tests
 
@@ -418,6 +419,7 @@ Upgrading From Version 2.13
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
 * AC_LIBOBJ vs LIBOBJS::        LIBOBJS is a forbidden token
+* AC_FOO_IFELSE vs AC_TRY_FOO::  A more generic scheme for testing sources
 
 Generating Test Suites with Autotest
 
@@ -4522,8 +4524,8 @@ accepted by the preprocessor.  This was changed because the old test was
 inappropriate for typical uses.  Headers are typically used to compile,
 not merely to preprocess, and the old behavior sometimes accepted
 headers that clashed at compile-time.  If you need to check whether a
-header is preprocessable, you can use @code{AC_TRY_CPP} or one of its
-variants (@pxref{Examining Declarations}).
+header is preprocessable, you can use @code{AC_PREPROC_IFELSE}
+(@pxref{Running the Preprocessor}).
 
 This scheme, which improves the robustness of the test, also requires
 that you make sure that headers that must be included before the
@@ -4549,7 +4551,7 @@ The following macros check for the declaration of variables and
 functions.  If there is no macro specifically defined to check for a
 symbol you need, then you can use the general macros (@pxref{Generic
 Declarations}) or, for more complex tests, you may use
-@code{AC_TRY_COMPILE} (@pxref{Examining Syntax}).
+@code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}).
 
 @menu
 * Particular Declarations::     Macros to check for certain declarations
@@ -4635,7 +4637,7 @@ The following macros check for the presence of certain members in C
 structures.  If there is no macro specifically defined to check for a
 member you need, then you can use the general structure-member macros
 (@pxref{Generic Structures}) or, for more complex tests, you may use
-@code{AC_TRY_COMPILE} (@pxref{Examining Syntax}).
+@code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}).
 
 @menu
 * Particular Structures::       Macros to check for certain structure members
@@ -5018,11 +5020,6 @@ C preprocessor.  If @samp{$CC -E} doesn't work, @file{/lib/cpp} is used.
 It is only portable to run @code{CPP} on files with a @file{.c}
 extension.
 
-If the current language is C (@pxref{Language Choice}), many of the
-specific test macros use the value of @code{CPP} indirectly by calling
-@code{AC_TRY_CPP}, @code{AC_CHECK_HEADER}, @code{AC_EGREP_HEADER}, or
-@code{AC_EGREP_CPP}.
-
 Some preprocessors don't indicate missing include files by the error
 status.  For such preprocessors an internal variable is set that causes
 other macros to check the standard error from the preprocessor and
@@ -5032,8 +5029,8 @@ consider the test failed if any warnings have been reported.
 
 The following macros check for C compiler or machine architecture
 features.  To check for characteristics not listed here, use
-@code{AC_TRY_COMPILE} (@pxref{Examining Syntax}) or @code{AC_TRY_RUN}
-(@pxref{Run Time})
+@code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
+@code{AC_TRY_RUN} (@pxref{Run Time})
 
 @defmac AC_C_BACKSLASH_A
 @acindex HAVE_C_BACKSLASH_A
@@ -5236,11 +5233,6 @@ preprocessor.  If @samp{$CXX -E} doesn't work, @file{/lib/cpp} is used.
 It is only portable to run @code{CXXCPP} on files with a @file{.c},
 @file{.C}, or @file{.cc} extension.
 
-If the current language is C++ (@pxref{Language Choice}), many of the
-specific test macros use the value of @code{CXXCPP} indirectly by
-calling @code{AC_TRY_CPP}, @code{AC_CHECK_HEADER},
-@code{AC_EGREP_HEADER}, or @code{AC_EGREP_CPP}.
-
 Some preprocessors don't indicate missing include files by the error
 status.  For such preprocessors an internal variable is set that causes
 other macros to check the standard error from the preprocessor and
@@ -5291,8 +5283,8 @@ does not.
 
 
 The following macros check for Fortran 77 compiler characteristics.  To
-check for characteristics not listed here, use @code{AC_TRY_COMPILE}
-(@pxref{Examining Syntax}) or @code{AC_TRY_RUN} (@pxref{Run Time}),
+check for characteristics not listed here, use @code{AC_COMPILE_IFELSE}
+(@pxref{Running the Compiler}) or @code{AC_TRY_RUN} (@pxref{Run Time}),
 making sure to first set the current language to Fortran 77
 @code{AC_LANG(Fortran 77)} (@pxref{Language Choice}).
 
@@ -5636,8 +5628,8 @@ software package, the best thing to do is encapsulate it in a new macro.
 @menu
 * Language Choice::             Selecting which language to use for testing
 * Writing Test Programs::       Forging source files for compilers
-* Examining Declarations::      Detecting header files and declarations
-* Examining Syntax::            Detecting language syntax features
+* Running the Preprocessor::    Detecting preprocessor symbols
+* Running the Compiler::        Detecting language or header features
 * Examining Libraries::         Detecting functions and global variables
 * Run Time::                    Testing for run-time features
 * Systemology::                 A zoology of operating systems
@@ -5719,10 +5711,29 @@ This section is dedicated to these source samples.
 @menu
 * Guidelines::                  General rules for writing test programs
 * Test Functions::              Avoiding pitfalls in test programs
+* Generating Sources::          Source Program Boilerplates
 @end menu
 
 @node Guidelines
 @subsection Guidelines for Test Programs
+
+The most important rule to follow when writing testing samples is:
+
+@center @emph{Look for realism.}
+
+This motto means that testing samples must be written with the same
+strictness as real programs are written.  In particular, you should
+avoid ``shortcuts'' and simplifications.
+
+Don't just play with the preprocessor if you want to prepare a
+compilation.  For instance, using @command{cpp} to check if a header is
+functional might let your @command{configure} accept a header which will
+cause some @emph{compiler} error.  Do not hesitate checking header with
+other headers included before, especially required headers.
+
+Make sure the symbols you use are properly defined, i.e., refrain for
+simply declaring a function yourself instead of including the proper
+header.
 
 Test programs should not write anything to the standard output.  They
 should return 0 if the test succeeds, nonzero otherwise, so that success
@@ -5794,34 +5805,173 @@ them, either pass them the correct number of arguments or redeclare them
 with a different return type (such as @code{char}).
 
 
+@node Generating Sources
+@subsection Generating Sources
+
+Autoconf provides a set of macros that can be used to generate test
+source files.  They are written to be language generic, i.e., they
+actually depend on the current language (@pxref{Language Choice}) to
+``format'' the output properly.
 
 
-@node Examining Declarations
-@section Examining Declarations
+@defmac AC_LANG_CONFTEST (@var{source})
+@acindex LANG_CONFTEST
+Save the @var{source} text in the current test source file:
+@file{conftest.@var{extension}} where the @var{extension} depends on the
+current language.
 
-The macro @code{AC_TRY_CPP} is used to check whether particular header
-files exist.  You can check for one at a time, or more than one if you
-need several header files to all exist for some purpose.
+Note that the @var{source} is evaluated exactly once, like regular
+Autoconf macro arguments, and therefore (i) you may pass a macro
+invocation, (ii) if not, be sure to double quote if needed.
+@end defmac
 
-@defmac AC_TRY_CPP (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
-@acindex TRY_CPP
-If the preprocessor produces no error messages while processing the
-@var{input} (typically includes), run shell commands
-@var{action-if-true}.  Otherwise run shell commands
-@var{action-if-false}.  Beware that @var{input} is double quoted.  Shell
-variable, back quote, and backslash substitutions are performed on
-@var{input}.
+@defmac AC_LANG_SOURCE (@var{source})
+@acindex LANG_SOURCE
+Expands into the @var{source}, with proper definition of the current
+location (e.g., @samp{#line 1234 "configure"} in C), and definition of
+all the @code{AC_DEFINE} performed so far.
+@end defmac
+
+For instance executing (observe the double quotation!):
+
+@example
+AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
+AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
+AC_LANG_CONFTEST(
+   [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
+gcc -E -dD conftest.c -o -
+@end example
+
+@noindent
+results in:
+
+@example
+# 1 "conftest.c"
+# 1169 "configure"
+
+# 1 "confdefs.h" 1
+
+#define PACKAGE_NAME "Autoconf Documentation"
+#define PACKAGE_TARNAME "autoconf-documentation"
+#define PACKAGE_VERSION "@value{VERSION}"
+#define PACKAGE_STRING "Autoconf Documentation @value{VERSION}"
+#define PACKAGE_BUGREPORT "bug-autoconf@@gnu.org"
+#define HELLO_WORLD "Hello, World\n"
+# 1170 "configure" 2
+
+const char hw[] = "Hello, World\n";
+@end example
+
+@defmac AC_LANG_PROGRAM (@var{prologue}, @var{body})
+@acindex LANG_PROGRAM
+Expands into a source file which consists of the @var{prologue}, and
+then @var{body} as body of the main function (e.g., @code{main} in
+C).  Since it uses @code{AC_LANG_SOURCE}, the feature of the latter are
+available.
+@end defmac
+
+For instance:
+
+@example
+AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
+AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
+AC_LANG_CONFTEST(
+[AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
+                 [[fputs (hw, stdout);]])])
+gcc -E -dD conftest.c -o -
+@end example
+
+@noindent
+results in:
+
+@example
+# 1 "conftest.c"
+# 1169 "configure"
+
+# 1 "confdefs.h" 1
+
+#define PACKAGE_NAME "Autoconf Documentation"
+#define PACKAGE_TARNAME "autoconf-documentation"
+#define PACKAGE_VERSION "@value{VERSION}"
+#define PACKAGE_STRING "Autoconf Documentation @value{VERSION}"
+#define PACKAGE_BUGREPORT "bug-autoconf@@gnu.org"
+#define HELLO_WORLD "Hello, World\n"
+# 1170 "configure" 2
+
+const char hw[] = "Hello, World\n";
+int
+main ()
+@{
+fputs (hw, stdout);
+  ;
+  return 0;
+@}
+@end example
+
+@node Running the Preprocessor
+@section Running the Preprocessor
+
+Sometimes one might need to run the preprocessor on some source file.
+@emph{Usually it is a bad idea}, as you typically need to @emph{compile}
+your project, not merely run the preprocessor on it; therefore you
+certainly want to run the compiler, not the preprocessor.  Resist to the
+temptation of following the easiest path.
+
+Nevertheless, if you need to run the preprocessor, then use
+@code{AC_PREPROC_IFELSE}.
+
+@defmac AC_PREPROC_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
+@acindex PREPROC_IFELSE
+Run the preprocessor of the current language (@pxref{Language Choice})
+on the @var{input}, run the shell commands @var{action-if-true} on
+success, @var{action-if-false} otherwise.  The @var{input} can be made
+by @code{AC_LANG_PROGRAM} and friends.
 
 This macro uses @code{CPPFLAGS}, but not @code{CFLAGS}, because
 @option{-g}, @option{-O}, etc.@: are not valid options to many C
 preprocessors.
+
+It is customary to report unexpected failures with
+@code{AC_MSG_FAILURE}.
 @end defmac
 
-Here is how to find out whether a header file contains a particular
-declaration, such as a typedef, a structure, a structure member, or a
-function.  Use @code{AC_EGREP_HEADER} instead of running @code{grep}
-directly on the header file; on some systems the symbol might be defined
-in another header file that the file you are checking @samp{#include}s.
+For instance:
+
+@example
+AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
+AC_DEFINE([HELLO_WORLD], ["Hello, World\n"])
+AC_PREPROC_IFELSE(
+   [AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
+                    [[fputs (hw, stdout);]])],
+   [AC_MSG_RESULT([OK])],
+   [AC_MSG_FAILURE([unexpected preprocessor failure])])
+@end example
+
+@noindent
+results in:
+
+@example
+checking for gcc... gcc
+checking for C compiler default output... a.out
+checking whether the C compiler works... yes
+checking whether we are cross compiling... no
+checking for suffix of executables...
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ANSI C... none needed
+checking how to run the C preprocessor... gcc -E
+OK
+@end example
+
+@sp 1
+
+The macro @code{AC_TRY_CPP} (@pxref{Obsolete Macros}) used to play the
+role of @code{AC_PREPROC_IFELSE}, but double quotes its argument, making
+it impossible to use it to ellaborate sources.  You are encouraged to
+get rid of your old use of the macro @code{AC_TRY_CPP} in favor of
+@code{AC_PREPROC_IFELSE}, but, in the first place, are you sure you need
+to run the @emph{preprocessor} and not the compiler?
 
 @defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @var{action-if-found}, @ovar{action-if-not-found})
 @acindex EGREP_HEADER
@@ -5831,18 +5981,6 @@ If the output of running the preprocessor on the system header file
 execute @var{action-if-not-found}.
 @end defmac
 
-To check for C preprocessor symbols, either defined by header files or
-predefined by the C preprocessor, use @code{AC_EGREP_CPP}.  Here is an
-example of the latter:
-
-@example
-AC_EGREP_CPP(yes,
-[#ifdef _AIX
-  yes
-#endif
-], is_aix=yes, is_aix=no)
-@end example
-
 @defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex EGREP_CPP
 @var{program} is the text of a C or C++ program, on which shell
@@ -5850,40 +5988,33 @@ variable, back quote, and backslash substitutions are performed.  If the
 output of running the preprocessor on @var{program} matches the
 extended regular expression @var{pattern}, execute shell commands
 @var{action-if-found}, otherwise execute @var{action-if-not-found}.
-
-This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
-on which language is current, @pxref{Language Choice}), if it hasn't
-been called already.
 @end defmac
 
-@node Examining Syntax
-@section Examining Syntax
 
-To check for a syntax feature of the C, C++, or Fortran 77 compiler, such
-as whether it recognizes a certain keyword, use @code{AC_TRY_COMPILE} to
-try to compile a small program that uses that feature.  You can also use
-it to check for structures and structure members that are not present on
-all systems.
 
-@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
-@acindex TRY_COMPILE
-Create a test program in the current language (@pxref{Language Choice})
-to see whether a function whose body consists of @var{function-body} can
-be compiled.  If the file compiles successfully, run shell commands
-@var{action-if-found}, otherwise run @var{action-if-not-found}.
+@node Running the Compiler
+@section Running the Compiler
 
-This macro double quotes both @var{includes} and @var{function-body}.
+To check for a syntax feature of the (C, C++, or Fortran 77) compiler,
+such as whether it recognizes a certain keyword, or simply to try some
+library feature, use @code{AC_COMPILE_IFELSE} to try to compile a small
+program that uses that feature.
 
-For C and C++, @var{includes} is any @code{#include} statements needed
-by the code in @var{function-body} (@var{includes} will be ignored if
-the currently selected language is Fortran 77).  This macro also uses
-@code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is the currently
-selected language, as well as @code{CPPFLAGS}, when compiling.  If
-Fortran 77 is the currently selected language then @code{FFLAGS} will be
-used when compiling.
 
-This macro does not try to link; use @code{AC_TRY_LINK} if you need to
-do that (@pxref{Examining Libraries}).
+@defmac AC_COMPILE_IFELSE (@var{input}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@acindex COMPILE_IFELSE
+Run the compiler of the current language (@pxref{Language Choice}) on
+the @var{input}, run the shell commands @var{action-if-true} on success,
+@var{action-if-false} otherwise. The @var{input} can be made by
+@code{AC_LANG_PROGRAM} and friends.
+
+This macro uses @code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is
+the currently selected language, as well as @code{CPPFLAGS}, when
+compiling.  If Fortran 77 is the currently selected language then
+@code{FFLAGS} will be used when compiling.
+
+This macro does not try to link; use @code{AC_LINK_IFELSE} if you need
+to do that (@pxref{Examining Libraries}).
 @end defmac
 
 @node Examining Libraries
@@ -6637,6 +6768,14 @@ $HOME for \$HOME}.
 
 The @var{error-description} should start with a lower-case letter, and
 ``cannot'' is preferred to ``can't''.
+@end defmac
+
+@defmac AC_MSG_FAILURE (@var{error-description}, @ovar{exit-status})
+@acindex MSG_FAILURE
+This @code{AC_MSG_ERROR} wrapper notifies the user of an error that
+prevents @command{configure} from completing @emph{and} that additional
+details are provided in @file{config.log}.  This is typically used when
+abnormal results are found during a compilation.
 @end defmac
 
 @defmac AC_MSG_WARN (@var{problem-description})
@@ -12842,6 +12981,32 @@ issue.
 @code{AC_HEADER_TIME}
 @end defmac
 
+@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@acindex TRY_COMPILE
+Same as @samp{AC_COMPILE_IFELSE([AC_LANG_SOURCE([[@var{includes}]],
+[[@var{function-body}]])], [@var{action-if-true}],
+[@var{action-if-false}])} (@pxref{Running the Compiler}).
+
+This macro double quotes both @var{includes} and @var{function-body}.
+
+For C and C++, @var{includes} is any @code{#include} statements needed
+by the code in @var{function-body} (@var{includes} will be ignored if
+the currently selected language is Fortran 77).  This macro also uses
+@code{CFLAGS} or @code{CXXFLAGS} if either C or C++ is the currently
+selected language, as well as @code{CPPFLAGS}, when compiling.  If
+Fortran 77 is the currently selected language then @code{FFLAGS} will be
+used when compiling.
+@end defmac
+
+@defmac AC_TRY_CPP (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
+@acindex TRY_CPP
+Same as @samp{AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@var{input}]])],
+[@var{action-if-true}], [@var{action-if-false}])} (@pxref{Running the
+Preprocessor}).
+
+This macro double quotes the @var{input}.
+@end defmac
+
 @defmac AC_UID_T
 @acindex UID_T
 @code{AC_TYPE_UID_T}
@@ -13132,6 +13297,7 @@ features in version 2.50; the changes are summarized in the file
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
 * AC_LIBOBJ vs LIBOBJS::        LIBOBJS is a forbidden token
+* AC_FOO_IFELSE vs AC_TRY_FOO::  A more generic scheme for testing sources
 @end menu
 
 @node Changed Quotation
@@ -13455,6 +13621,71 @@ Automake and Libtool).  Just remove these lines (@command{autoupdate}
 cannot handle this task, since this is not a macro).
 
 Note that @code{U} must not be used in your Makefiles.
+
+
+@node AC_FOO_IFELSE vs AC_TRY_FOO
+@subsection @code{AC_FOO_IFELSE} vs.@: @code{AC_TRY_FOO}
+
+Since Autoconf 2.50, internal codes uses @code{AC_PREPROC_IFELSE},
+@code{AC_COMPILE_IFELSE}, @code{AC_LINK_IFELSE}, and
+@code{AC_RUN_IFELSE} on the other one hand and @code{AC_LANG_SOURCES},
+and @code{AC_LANG_PROGRAM} on the other hand instead of the deprecated
+@code{AC_TRY_CPP}, @code{AC_TRY_COMPILE}, @code{AC_TRY_LINK}, and
+@code{AC_TRY_RUN}.  The motivations where:
+@itemize @minus
+@item
+a more consistent interface: @code{AC_TRY_COMPILE} etc. were double
+quoting their arguments;
+
+@item
+the combinatoric explosion is solved by decomposing on the one hand the
+generation of sources, and on the other hand executing the program;
+
+@item
+this scheme helps supporting more languages than plain C and C++.
+@end itemize
+
+In addition to the change of syntax, the philosphy has changed too:
+while emphasis was put on speed at the expense of accuracy, today's
+Autoconf promotes accuracy of the testing framework at, ahem..., the
+expense of speed.
+
+
+As a perfect example of what is @emph{not} to be done, here is how to
+find out whether a header file contains a particular declaration, such
+as a typedef, a structure, a structure member, or a function.  Use
+@code{AC_EGREP_HEADER} instead of running @code{grep} directly on the
+header file; on some systems the symbol might be defined in another
+header file that the file you are checking @samp{#include}s.
+
+As a (bad) example, here is how you should not check for C preprocessor
+symbols, either defined by header files or predefined by the C
+preprocessor: using @code{AC_EGREP_CPP}:
+
+@example
+@group
+AC_EGREP_CPP(yes,
+[#ifdef _AIX
+  yes
+#endif
+], is_aix=yes, is_aix=no)
+@end group
+@end example
+
+The above example, properly written would (i) use
+@code{AC_LANG_PROGRAM}, and (ii) run the compiler:
+
+@example
+@group
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+[[#if !defined _AIX
+# error _AIX not defined
+#endif
+]])],
+                   [is_aix=yes],
+                   [is_aix=no])
+@end group
+@end example
 
 
 @c ============================= Generating Test Suites with Autotest

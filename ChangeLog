@@ -1,5 +1,42 @@
 2002-10-27  Akim Demaille  <akim@epita.fr>
 
+	* lib/autoconf/headers.m4 (AC_HEADER_STDC): Don't use AC_TRY_CPP.
+
+	More `check config.log' messages.
+
+	* lib/autoconf/general.m4 (AC_MSG_FAILURE): New.
+	* doc/autoconf.texi (Printing Messages): Document it.
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF): Use it when
+	appropriate.
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT)
+	(_AC_COMPILER_EXEEXT_WORKS, _AC_COMPILER_EXEEXT_O)
+	(_AC_COMPILER_OBJEXT): Likewise.
+	* lib/autoconf/general.m4 (AC_RUN_IFELSE): Likewise.
+	* lib/autoconf/fortran.m4 (_AC_LANG_PROGRAM_C_F77_HOOKS):
+	Likewise.
+	* lib/autoconf/c.m4 (AC_PROG_CPP, AC_PROG_CC, AC_PROG_CXXCPP):
+	Likewise.
+
+	Deprecate macros with unsual interface.
+
+	* lib/autoconf/general.m4 (AC_TRY_CPP, AC_TRY_LINK)
+	(AC_TRY_COMPILE, AC_TRY_RUN): AU_DEFUN'ed.
+
+	Document the new ones, and proper style.
+
+	* doc/autoconf.texi (Generating Sources): New.
+	Document AC_LANG_CONFTEST, AC_LANG_SOURCE, AC_LANG_PROGRAM.
+	(Examining Declarations): Rename as...
+	(Running the Preprocessor): this.
+	Document AC_PREPROC_IFELSE.
+	(Examining Syntax): Rename as...
+	(Running the Compiler): this.
+	(AC_FOO_IFELSE vs AC_TRY_FOO): New section.
+	(Obsolete Macros): Move the definition of AC_TRY_CPP and
+	AC_TRY_COMPILE here.
+
+2002-10-27  Akim Demaille  <akim@epita.fr>
+
 	Move sections around.
 
 	* doc/autoconf.texi (Customizing autom4te): Remove a lost

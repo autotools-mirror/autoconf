@@ -1963,11 +1963,14 @@ _AS_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
 # AC_MSG_WARN(PROBLEM)
 # AC_MSG_NOTICE(STRING)
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
-# --------------------------------------
+# AC_MSG_FAILURE(ERROR, [EXIT-STATUS = 1])
+# ----------------------------------------
 m4_copy([AS_WARN],    [AC_MSG_WARN])
 m4_copy([AS_MESSAGE], [AC_MSG_NOTICE])
 m4_copy([AS_ERROR],   [AC_MSG_ERROR])
-
+m4_define([AC_MSG_FAILURE],
+[AC_MSG_ERROR([$1
+See `config.log' for more details.], [$2])])
 
 # AU::AC_CHECKING(FEATURE)
 # ------------------------
@@ -2111,7 +2114,7 @@ _AC_PREPROC_IFELSE($@)])
 # (But it actually tests whether INCLUDES produces no CPP errors.)
 #
 # INCLUDES are not defaulted and are double quoted.
-AC_DEFUN([AC_TRY_CPP],
+AU_DEFUN([AC_TRY_CPP],
 [AC_PREPROC_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3])])
 
 
@@ -2183,7 +2186,7 @@ _AC_COMPILE_IFELSE($@)])
 # AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
 #                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------
-AC_DEFUN([AC_TRY_COMPILE],
+AU_DEFUN([AC_TRY_COMPILE],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])], [$3], [$4])])
 
 
@@ -2230,7 +2233,7 @@ _AC_LINK_IFELSE($@)])
 # equivalent as far as I can tell from the semantics and the docs.  In
 # the former, $[2] is used as is, in the latter, it is `call' ed.
 # Remove these FIXME: once truth established.
-AC_DEFUN([AC_TRY_LINK],
+AU_DEFUN([AC_TRY_LINK],
 [AC_LINK_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])], [$3], [$4])])
 
 
@@ -2287,7 +2290,7 @@ m4_ifval([$4], [],
                      [$0 called without default to allow cross compiling])])dnl
 if test "$cross_compiling" = yes; then
   m4_default([$4],
-             [AC_MSG_ERROR([cannot run test program while cross compiling])])
+           [AC_MSG_FAILURE([cannot run test program while cross compiling])])
 else
   _AC_RUN_IFELSE($@)
 fi])
@@ -2297,7 +2300,7 @@ fi])
 #            [ACTION-IF-TRUE], [ACTION-IF-FALSE],
 #            [ACTION-IF-CROSS-COMPILING = RUNTIME-ERROR])
 # --------------------------------------------------------
-AC_DEFUN([AC_TRY_RUN],
+AU_DEFUN([AC_TRY_RUN],
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3], [$4])])
 
 

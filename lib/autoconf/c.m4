@@ -368,7 +368,7 @@ else
 fi
 AC_MSG_RESULT([$CPP])
 _AC_PROG_PREPROC_WORKS_IFELSE([],
-                    [AC_MSG_ERROR([C preprocessor "$CPP" fails sanity check])])
+                [AC_MSG_FAILURE([C preprocessor "$CPP" fails sanity check])])
 AC_SUBST(CPP)dnl
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CPP
@@ -416,7 +416,7 @@ if test -z "$CC"; then
 fi
 ])
 
-test -z "$CC" && AC_MSG_ERROR([no acceptable C compiler found in \$PATH])
+test -z "$CC" && AC_MSG_FAILURE([no acceptable C compiler found in \$PATH])
 
 # Provide some information about the compiler.
 echo "$as_me:$LINENO:" \
@@ -588,7 +588,7 @@ else
 fi
 AC_MSG_RESULT([$CXXCPP])
 _AC_PROG_PREPROC_WORKS_IFELSE([],
-              [AC_MSG_ERROR([C++ preprocessor "$CXXCPP" fails sanity check])])
+          [AC_MSG_FAILURE([C++ preprocessor "$CXXCPP" fails sanity check])])
 AC_SUBST(CXXCPP)dnl
 AC_LANG_POP(C++)dnl
 ])# AC_PROG_CXXCPP

@@ -566,11 +566,13 @@ AN_HEADER([string.h],   [AC_HEADER_STDC])
 
 AC_DEFUN([AC_HEADER_STDC],
 [AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
-[AC_TRY_CPP([#include <stdlib.h>
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include <float.h>
-], ac_cv_header_stdc=yes, ac_cv_header_stdc=no)
+]])],
+                    [ac_cv_header_stdc=yes],
+                    [ac_cv_header_stdc=no])
 
 if test $ac_cv_header_stdc = yes; then
   # SunOS 4.x string.h does not declare mem*, contrary to ANSI.

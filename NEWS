@@ -11,6 +11,11 @@ Release tips:
 - AC_CHECK_HEADER, AC_CHECK_HEADERS
   More information on proper use.
 
+- Writing Test Programs
+
+  This sections explains how to write good test sources to use with
+  AC_COMPILE_IFELSE etc.  It documents AC_LANG_PROGRAMS and so forth.
+
 ** autoreconf
 
 - Is more robust to different Gettext installations.
@@ -19,6 +24,7 @@ Release tips:
   compile mode.
 
 ** Obsolete options
+
   Support for the obsoleted options -m, --macrodir, -l, --localdir is
   dropped in favor of the safer --include/--prepend-include scheme.
 
@@ -30,7 +36,9 @@ Release tips:
 ** Macros
 
 - New macros
-  AC_FUNC_MBRTOWC, AC_HEADER_STDBOOL.
+  AC_COMPILER_IFELSE, AC_FUNC_MBRTOWC, AC_HEADER_STDBOOL,
+  AC_LANG_CONFTEST, AC_LANG_SOURCE, AC_LANG_PROGRAM, AC_MSG_FAILURE,
+  AC_PREPROC_IFELSE.
 
 - Obsoleted
   Obsoleted macros are kept for Autoconf backward compatibility, but
