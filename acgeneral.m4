@@ -3021,22 +3021,35 @@ AC_DEFUN(AC_CONFIG_HEADER,
 [AC_CONFIG_HEADERS([$1])])
 
 
-dnl AC_CONFIG_LINKS(DEST:SOURCE...)
-dnl -------------------------------
+dnl AC_CONFIG_LINKS(DEST:SOURCE..., [COMMANDS])
+dnl -------------------------------------------
 dnl Specify that config.status should establish a (symbolic if possible)
 dnl link from TOP_SRCDIR/SOURCE to TOP_SRCDIR/DEST.
 dnl Reject DEST=., because it is makes it hard for ./config.status
 dnl to guess the links to establish (`./config.status .').
 dnl This macro may be called multiple times.
+dnl
+dnl The commands are stored in a growing string AC_LIST_LINKS_COMMANDS
+dnl which should be used like this:
+dnl
+dnl      case $ac_file in
+dnl        AC_LIST_LINKS_COMMANDS
+dnl      esac
 AC_DEFUN(AC_CONFIG_LINKS,
 [AC_CONFIG_UNIQUE([$1])dnl
 ifelse(regexp([$1], [^\.:\| \.:]), -1,,
         [AC_FATAL([$0: invalid destination: `.'])])dnl
 m4_append([AC_LIST_LINKS], [$1])dnl
-])
+dnl Register the commands
+ifelse([$2],,, [AC_FOREACH([AC_File], [$1],
+[m4_append([AC_LIST_LINKS_COMMANDS],
+[    ]patsubst(AC_File, [:.*])[ ) $2 ;;
+])])])dnl
+])dnl
 
 dnl Initialize the list.
 define([AC_LIST_LINKS])
+define([AC_LIST_LINKS_COMMANDS])
 
 
 dnl AC_LINK_FILES(SOURCE..., DEST...)
@@ -3371,14 +3384,14 @@ dnl Because AC_OUTPUT_FILES is in charge of undiverting the AC_SUBST
 dnl section, it is better to divert it to void and *call it*, rather
 dnl than not calling it at all
 ifset([AC_LIST_FILES],
-      [AC_OUTPUT_FILES(AC_LIST_FILES)],
+      [AC_OUTPUT_FILES()],
       [AC_DIVERT_PUSH(AC_DIVERSION_KILL)dnl
-       AC_OUTPUT_FILES(AC_LIST_FILES)dnl
+       AC_OUTPUT_FILES()dnl
        AC_DIVERT_POP()])dnl
 ifset([AC_LIST_HEADERS],
-      [AC_OUTPUT_HEADERS(AC_LIST_HEADERS)])dnl
+      [AC_OUTPUT_HEADERS()])dnl
 ifset([AC_LIST_LINKS],
-      [AC_OUTPUT_LINKS(AC_LIST_LINKS)])dnl
+      [AC_OUTPUT_LINKS()])dnl
 ifset([AC_LIST_COMMANDS],
       [AC_OUTPUT_COMMANDS_COMMANDS()])dnl
 

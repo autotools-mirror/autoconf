@@ -1,5 +1,15 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CONFIG_LINKS): Allow a second argument,
+	commands to run, as AC_CONFIG_FILES and HEADERS.
+	(AC_LIST_LINKS_COMMANDS): New growing string.  Initialize.
+	(AC_OUTPUT_LINKS): Use it.
+	(AC_OUTPUT_FILES, AC_OUTPUT_HEADERS, AC_OUTPUT_LINKS): Don't
+	pretend to have arguments: you don't depend upon it.
+	(AC_OUTPUT): Call the previous macros without arguments.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_PREFIX_PROGRAM): Don't use define/undefine, but
 	pushdef/podef.  AC_UPCASE_NAME no longer exist.
 
