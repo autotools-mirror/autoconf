@@ -16214,7 +16214,7 @@ a specific demand, stores additional information in
 @command{autoconf}, behind the scenes, @command{autom4te} will also
 store information for the other tools, so that when you invoke
 @command{autoheader} or @command{automake} etc., re-processing
-@file{configure.ac} is not needed.  The speed up is frequently of 30,
+@file{configure.ac} is not needed.  The speed up is frequently of 30%,
 and is increasing with the size of @file{configure.ac}.
 
 But it is and remains being simply a cache: you can safely remove it.

@@ -448,7 +448,7 @@ m4_define([AS_EXIT],
 # with simplifications is IF-TRUE and/or IF-FALSE is empty.
 #
 # FIXME: Be n-ary, just as m4_if.
-m4_define([AS_IF],
+m4_defun([AS_IF],
 [m4_ifval([$2$3],
 [if $1; then
   m4_ifval([$2], [$2], :)

@@ -1,3 +1,9 @@
+2005-02-12  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sh.m4 (AS_IF): Define by m4_defun, not m4_define.
+	This causes that any required macros inside will get before the if.
+	* doc/autoconf.texi (autom4te.cache): A typo.
+
 2005-02-12  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Undo previous change, except keep the change to
