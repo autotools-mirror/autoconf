@@ -117,16 +117,20 @@ while test $# -gt 0 ; do
        echo "$version" ; exit 0 ;;
     --help | --h* | -h )
        echo "$usage"; exit 0 ;;
+
     --debug | --d* | -d )
        debug=:; shift ;;
+    --verbose | --verb* | -v )
+       verbose=echo
+       shift;;
 
     --localdir=* | --l*=* )
        localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
        shift ;;
     --localdir | --l* | -l )
        shift
-       test $# -eq 0 && { echo "$help" >&2; exit 1; }
-       localdir="$1"
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       localdir=$1
        shift ;;
 
     --macrodir=* | --m*=* )
@@ -134,22 +138,18 @@ while test $# -gt 0 ; do
        shift ;;
     --macrodir | --m* | -m )
        shift
-       test $# -eq 0 && { echo "$help" >&2; exit 1; }
-       AC_MACRODIR="$1"
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       AC_MACRODIR=$1
        shift ;;
 
     --install )
        task=install
        shift;;
 
-    --verbose | --verb* | -v )
-       verbose=echo
-       shift;;
-
     --trace | -t )
        task=trace
        shift
-       test $# -eq 0 && { echo "$help" >&2; exit 1; }
+       test $# = 0 && { echo "$help" >&2; exit 1; }
        traces="$traces '$1'"
        shift ;;
     --trace=* )
@@ -162,8 +162,8 @@ while test $# -gt 0 ; do
 
     --output | -o )
        shift
-       test $# -eq 0 && { echo "$help" >&2; exit 1; }
-       outfile="$1"
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       outfile=$1
        shift ;;
     --output=* )
        outfile=`echo "$1" | sed -e 's/^[^=]*=//'`
@@ -192,7 +192,7 @@ run_m4f="$M4 $use_localdir --reload $AC_MACRODIR/autoconf.m4f"
 case $# in
   0) infile=configure.in
      test $task = script && test "x$outfile" = x && outfile=configure;;
-  1) infile="$1" ;;
+  1) infile=$1 ;;
   *) exec >&2
      echo "$me: invalid number of arguments."
      echo "$help"
@@ -201,8 +201,8 @@ esac
 
 # Trap on 0 to stop playing with `rm'.
 if $debug; then
-  trap 'ah_status=$?
-        rm -f $tmpin $tmpout $silent_m4 $trace_m4 && exit $ah_status' 0
+  trap 'status=$?
+        rm -f $tmpin $tmpout $silent_m4 $trace_m4 && exit $status' 0
   trap exit 1 2 13 15
 fi
 
@@ -242,7 +242,7 @@ case $task in
     sed -n "s/^[^#]*\\($pattern[_A-Za-z0-9]*\\).*/\\1/p" $tmpout |
       while read macro; do
   	grep -n "^[^#]*$macro" $infile /dev/null
-  	test $? -eq 1 && echo "***BUG in Autoconf--please report*** $macro"
+  	test $? = 1 && echo "***BUG in Autoconf--please report*** $macro"
       done | sort -u >&2
     status=1
   fi

@@ -1,5 +1,21 @@
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
+	More uniform style is scripts.
+
+	* autoheader.sh: s/-eq/=/.
+	Uniform ordering of variable initializations, option handling.
+	Don't use quotes where useless (foo=$1, not foo="$1").
+	Propagate `run_m4' and `run_m4f'.
+	Use `$0' in --help.
+	* autoconf.sh: Likewise.
+	* autoreconf.sh: Likewise.
+	* autoupdate.sh: Likewise.
+	* ifnames.sh: Likewise.
+	* autoupdate.m4: Small bug: at the end `dnl' is disabled, so use
+	`m4_dnl'.
+
+2000-03-13  Akim Demaille  <akim@epita.fr>
+
 	`autoconf --trace': faster.
 
 	* autoconf.sh (initialization): New var, new option.

@@ -26,7 +26,7 @@
 me=`echo "$0" | sed -e 's,.*/,,'`
 
 usage="\
-Usage: ifnames [OPTION] ...  [FILE] ...
+Usage: $0 [OPTION] ...  [FILE] ...
 
 Scan all of the C source FILES (or the standard input, if none are
 given) and write to the standard output a sorted list of all the
@@ -68,7 +68,10 @@ while test $# -gt 0; do
   esac
 done
 
-@AWK@ '
+# Variables.
+: ${AWK=@AWK@}
+
+$AWK '
   # Record that sym was found in FILENAME.
   function file_sym(sym,  i, fs) {
     if (sym ~ /^[A-Za-z_]/) {

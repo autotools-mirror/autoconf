@@ -1,7 +1,7 @@
 include(libm4.m4)#                                          -*- Autoconf -*-
 # This file is part of Autoconf.
 # Driver that loads the Autoupdate macro files.
-# Copyright (C) 1999 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@ include(libm4.m4)#                                          -*- Autoconf -*-
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
 # 02111-1307, USA.
 #
-# Written by Akim Demaille
+# Written by Akim Demaille.
 #
 # Do not sinclude acsite.m4 here, because it may not be installed
 # yet when Autoconf is frozen.
@@ -32,4 +32,4 @@ m4_enable(autoupdate)
 # Disable m4
 m4_disable(libm4)
 m4_changequote(, )
-divert(0)dnl
+divert(0)m4_dnl

@@ -62,14 +62,6 @@ if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
 if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
 if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
 
-test -z "${AC_MACRODIR}" && AC_MACRODIR=@datadir@
-test -z "${M4}" && M4=@M4@
-case "${M4}" in
-/*) # Handle the case that m4 has moved since we were configured.
-    # It may have been found originally in a build directory.
-    test -f "${M4}" || M4=m4 ;;
-esac
-
 # ac_LF_and_DOT
 # We use echo to avoid assuming a particular line-breaking character.
 # The extra dot is to prevent the shell from consuming trailing
@@ -79,54 +71,83 @@ esac
 # would break.
 ac_LF_and_DOT=`echo; echo .`
 
-localdir=.
+# Find GNU m4.
+# Handle the case that m4 has moved since we were configured.
+# It may have been found originally in a build directory.
+: ${M4=@M4@}
+case "$M4" in
+/*) test -f "$M4" || M4=m4 ;;
+esac
+# Some non-GNU m4's don't reject the --help option, so give them /dev/null.
+case `$M4 --help </dev/null 2>&1` in
+*reload-state*);;
+*) echo "$me: Autoconf requires GNU m4 1.4 or later" >&2; exit 1 ;;
+esac
+
+# Variables.
+: ${AC_MACRODIR=@datadir@}
 debug=false
+localdir=.
+verbose=:
 # Basename for temporary files.
 : ${TMPDIR=/tmp}
-ah_base=$TMPDIR/ah$$
-tmpout=$ah_base.out
+tmpbase=$TMPDIR/ah$$
+tmpout=$tmpbase.out
 
 while test $# -gt 0 ; do
-   case "$1" in
-      -h | --help | --h* )
-         echo "$usage"; exit 0 ;;
-      --version | --v* )
-         echo "$version"; exit 0 ;;
-      -d | --debug | --d* )
-         debug=:; shift ;;
-      --localdir=* | --l*=* )
-         localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
-         shift ;;
-      -l | --localdir | --l*)
-         shift
-         test $# -eq 0 && { echo "$help" >&2; exit 1; }
-         localdir=$1
-         shift ;;
-      --macrodir=* | --m*=* )
-         AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
-         shift ;;
-      -m | --macrodir | --m* )
-         shift
-         test $# -eq 0 && { echo "$help" >&2; exit 1; }
-         AC_MACRODIR=$1
-         shift ;;
-      -- )     # Stop option processing
-        shift; break ;;
-      - )     # Use stdin as input.
-        break ;;
-      -* )
-        exec >&2
-        echo "$me: invalid option $1"
-        echo "$help"
-        exit 1 ;;
-      * )
-        break ;;
-   esac
+  case "$1" in
+    --version | --vers* | -V )
+       echo "$version" ; exit 0 ;;
+    --help | --h* | -h )
+       echo "$usage"; exit 0 ;;
+
+    --debug | --d* | -d )
+       debug=:; shift ;;
+    --verbose | --verb* | -v )
+       verbose=echo
+       shift;;
+
+    --localdir=* | --l*=* )
+       localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
+       shift ;;
+    --localdir | --l* | -l )
+       shift
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       localdir=$1
+       shift ;;
+
+    --macrodir=* | --m*=* )
+       AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
+       shift ;;
+    --macrodir | --m* | -m )
+       shift
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       AC_MACRODIR=$1
+       shift ;;
+
+    -- )     # Stop option processing
+      shift; break ;;
+    - )     # Use stdin as input.
+      break ;;
+    -* )
+      exec >&2
+      echo "$me: invalid option $1"
+      echo "$help"
+      exit 1 ;;
+    * )
+      break ;;
+  esac
 done
+
+# Running m4.
+test -n "$localdir" && use_localdir="-I$localdir"
+run_m4="$M4 $use_localdir -I $AC_MACRODIR autoheader.m4"
+run_m4f="$M4 $use_localdir --reload $AC_MACRODIR/autoheader.m4f"
 
 acconfigs=
 test -r $localdir/acconfig.h && acconfigs="$acconfigs $localdir/acconfig.h"
 
+# Find the input file.
 case $# in
   0) infile=configure.in ;;
   1) infile=$1 ;;
@@ -136,30 +157,18 @@ case $# in
      exit 1 ;;
 esac
 
+# Trap on 0 to stop playing with `rm'.
+$debug || trap 'status=$?; rm -f $tmpbase* && exit $status' 0
+$debug || trap exit 1 2 13 15
+
+# Well, work now!
 config_h=
 syms=
-
-if test "$localdir" != .; then
-  use_localdir="-I$localdir -DAC_LOCALDIR=$localdir"
-else
-  use_localdir=
-fi
-
-# Some non-GNU m4's don't reject the --help option, so give them /dev/null.
-case `$M4 --help < /dev/null 2>&1` in
-*reload-state*);;
-*) echo "$me: Autoconf requires GNU m4 1.4 or later" >&2; exit 1 ;;
-esac
-run_m4="$M4 --reload $AC_MACRODIR/autoheader.m4f $use_localdir"
-
-# Trap on 0 to stop playing with `rm'.
-$debug || trap 'ah_status=$?; rm -f $ah_base* && exit $ah_status' 0
-$debug || trap exit 1 2 13 15
 
 # Extract assignments of `ah_verbatim_SYMBOL' from the modified
 # autoconf processing of the input file.  The sed hair is necessary to
 # win for multi-line macro invocations.
-$run_m4 $infile >$ah_base.exp
+$run_m4 $infile >$tmpbase.exp
 sed -n -e '
 	: again
 	/^@@@.*@@@$/s/^@@@\(.*\)@@@$/\1/p
@@ -168,9 +177,9 @@ sed -n -e '
 		n
 		s/^/@@@/
 		b again
-	}' $ah_base.exp >$ah_base.decls
-. $ah_base.decls
-$debug || rm -f $ah_base.exp $ah_base.decls
+	}' $tmpbase.exp >$tmpbase.decls
+. $tmpbase.decls
+$debug || rm -f $tmpbase.exp $tmpbase.decls
 
 # Make SYMS newline-separated rather than blank-separated, and remove dups.
 # Start each symbol with a blank (to match the blank after "#undef")
@@ -227,7 +236,7 @@ if test -n "$syms"; then
   # Some fgrep's have limits on the number of lines that can be in the
   # pattern on the command line, so use a temporary file containing the
   # pattern.
-  (fgrep_tmp=$ah_base.fgrep
+  (fgrep_tmp=$tmpbase.fgrep
    cat > $fgrep_tmp <<EOF
 $syms
 EOF
@@ -262,8 +271,8 @@ if test -n "$syms"; then
 fi
 
 # If the run was successful, output the result.
-if test $status -eq 0; then
-  if test $# -eq 0; then
+if test $status = 0; then
+  if test $# = 0; then
     # Output is a file
     if test -f $config_h_in && cmp -s $tmpout $config_h_in; then
       # File didn't change, so don't update its mod time.

@@ -20,7 +20,7 @@
 me=`echo "$0" | sed -e 's,.*/,,'`
 
 usage="\
-Usage: autoreconf [OPTION] ... [TEMPLATE-FILE]
+Usage: $0 [OPTION] ... [TEMPLATE-FILE]
 
 Run \`autoconf' (and \`autoheader', \`aclocal' and \`automake', where
 appropriate) repeatedly to remake the Autoconf \`configure' scripts
@@ -67,49 +67,53 @@ test -z "$AC_MACRODIR" && AC_MACRODIR=@datadir@
 
 while test $# -gt 0; do
   case "$1" in
-  --help | --h* | -h )
-    echo "$usage"; exit 0 ;;
-  --version | --vers* | -V )
-    echo "$version"; exit 0 ;;
+    --version | --vers* | -V )
+       echo "$version" ; exit 0 ;;
+    --help | --h* | -h )
+       echo "$usage"; exit 0 ;;
 
-  --localdir=* | --l*=* )
-    localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
-    shift ;;
-  --localdir | --l* | -l )
-    shift
-    test $# -eq 0 && { echo "$help" >&2; exit 1; }
-    localdir="${1}"
-    shift ;;
+    --verbose | --verb* | -v )
+       verbose=echo
+       shift;;
 
-  --macrodir=* | --m*=* )
-    AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
-    shift ;;
-  --macrodir | --m* | -m )
-    shift
-    test $# -eq 0 && { echo "help" >&2; exit 1; }
-    AC_MACRODIR="$1"
-    shift ;;
+    --localdir=* | --l*=* )
+       localdir=`echo "$1" | sed -e 's/^[^=]*=//'`
+       shift ;;
+    --localdir | --l* | -l )
+       shift
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       localdir=$1
+       shift ;;
 
-  -v | --verbose | --verb*)
-    verbose=echo; shift ;;
-  -f | --force)
-    force=yes; shift ;;
-  --cygnus | --foreign | --gnits | --gnu)
-    automake_mode=$1; shift ;;
-  --include-deps | -i)
-    automake_deps=$1; shift ;;
+    --macrodir=* | --m*=* )
+       AC_MACRODIR=`echo "$1" | sed -e 's/^[^=]*=//'`
+       shift ;;
+    --macrodir | --m* | -m )
+       shift
+       test $# = 0 && { echo "$help" >&2; exit 1; }
+       AC_MACRODIR=$1
+       shift ;;
 
-  --)     # Stop option processing.
-    shift; break ;;
-  -*)
-    exec >&2
-    echo "$me: invalid option $1"
-    echo "$help"
-    exit 1 ;;
-  *) break ;;
+     --force | -f )
+       force=yes; shift ;;
+     --cygnus | --foreign | --gnits | --gnu)
+       automake_mode=$1; shift ;;
+     --include-deps | -i)
+       automake_deps=$1; shift ;;
+
+     -- )     # Stop option processing.
+       shift; break ;;
+     -* )
+       exec >&2
+       echo "$me: invalid option $1"
+       echo "$help"
+       exit 1 ;;
+     * )
+       break ;;
   esac
 done
 
+# Find the input file.
 if test $# -ne 0; then
   exec >&2
   echo "$me: invalid number of arguments"
@@ -118,8 +122,8 @@ if test $# -ne 0; then
 fi
 
 # The paths to the autoconf and autoheader scripts, at the top of the tree.
-top_autoconf=`echo "$0" |sed s%autoreconf%autoconf%`
-top_autoheader=`echo "$0" |sed s%autoreconf%autoheader%`
+top_autoconf=`echo "$0" | sed s%autoreconf%autoconf%`
+top_autoheader=`echo "$0" | sed s%autoreconf%autoheader%`
 
 # Make a list of directories to process.
 # The xargs grep filters out Cygnus configure.in files.
