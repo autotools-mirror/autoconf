@@ -804,7 +804,8 @@ dnl                   PRINTABLE2)
 define(AC_PREREQ_COMPARE,
 [ifelse(builtin([eval],
 [$3 + $2 * 1000 + $1 * 1000000 < $6 + $5 * 1000 + $4 * 1000000]), 1,
-[errprint(Autoconf version $7 or higher is required for this script
+[errprint(dnl
+FATAL ERROR: Autoconf version $7 or higher is required for this script
 )m4exit(3)])])
 
 dnl Complain and exit if the Autoconf version is less than VERSION.
