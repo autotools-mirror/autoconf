@@ -5975,6 +5975,39 @@ inefficiently.  Users can generally speed things up by using a faster
 shell, e.g., by using the command @samp{bash ./configure} rather than
 plain @samp{./configure}.
 
+Some shells can be extremely inefficient when there are a lot of
+here-documents inside a single statement.  For instance if your
+@file{configure.ac} includes something like:
+
+@example
+@group
+if <cross_compiling>; then
+  assume this and that
+else
+  check this
+  check that
+  check something else
+  on and on forever
+fi
+@end group
+@end example
+
+A shell parses the whole @code{if}/@code{fi} construct, creating
+temporary files for each here document in it.  Some shells create links
+for such here-documents on every @code{fork ()}, so that the clean-up
+code they had installed correctly removes them.  It is creating the
+links that the shell can take forever.
+
+Moving the tests out of the @code{if}/@code{fi}, or creating multiple
+@code{if}/@code{fi} constructs, would improve the performance
+significantly.  Anyway, this kind of construct is not exactly the
+typical use of Autoconf.  In fact, it's even not recommended, because M4
+macros can't look into shell conditionals, so we may fail to expand a
+macro when it was expanded before in a conditional path, and the
+condition turned out to be false at run-time, and we end up not
+executing the macro at all.
+
+
 @item @command{exit}
 @c -----------------
 @cindex @command{exit}
