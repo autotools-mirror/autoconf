@@ -723,7 +723,7 @@ AC_SUBST(CXXCPP)dnl
 # for (if not specified, a default list is used).  This just gives the
 # user an opportunity to specify an alternative search list for the C++
 # compiler.
-# aCC	HP-UX C++ compiler
+# aCC	HP-UX C++ compiler much better than `CC', so test before.
 # KCC	KAI C++ compiler
 # RCC	Rational C++
 # xlC_r	AIX C Set++ (with support for reentrant code)
@@ -733,7 +733,7 @@ AC_DEFUN([AC_PROG_CXX],
 AC_LANG_PUSH(C++)
 AC_CHECK_TOOLS(CXX,
                $CCC m4_default([$1],
-                          [g++ c++ gpp CC cxx cc++ cl aCC KCC RCC xlC_r xlC]),
+                          [g++ c++ gpp aCC CC cxx cc++ cl KCC RCC xlC_r xlC]),
                g++)
 
 _AC_LANG_COMPILER_WORKS
@@ -1154,7 +1154,7 @@ $ac_kw int foo () {return 0; }
                     [ac_cv_c_inline=$ac_kw; break])
 done
 ])
-case "$ac_cv_c_inline" in
+case $ac_cv_c_inline in
   inline | yes) ;;
   no) AC_DEFINE(inline,,
                 [Define as `__inline' if that's what the C compiler calls it,
@@ -1390,9 +1390,9 @@ for ac_arg in $ac_link_output; do
   # an argument.
   ac_previous_arg=$ac_save_arg
   echo $ac_arg | grep '^[^-]' >/dev/null 2>&1 && ac_previous_arg=
-  case "$ac_previous_arg" in
+  case $ac_previous_arg in
     '')
-      case "$ac_arg" in
+      case $ac_arg in
         /*.a)
           # Append to AC_SEEN if it's not already there.
           AC_LIST_MEMBER_OF($ac_arg, $ac_seen,
@@ -1559,7 +1559,7 @@ AH_TEMPLATE([F77_FUNC],
      case), which must not contain underscores, for linking with Fortran.])dnl
 AH_TEMPLATE([F77_FUNC_],
     [As F77_FUNC, but for C identifiers containing underscores.])dnl
-case "$f77_case,$f77_underscore" in
+case $f77_case,$f77_underscore in
   lower,no)
           AC_DEFINE([F77_FUNC(name,NAME)],  [name])
           AC_DEFINE([F77_FUNC_(name,NAME)], [name]) ;;

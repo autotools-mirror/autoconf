@@ -204,8 +204,8 @@ will cause the specified gcc to be used as the C compiler (unless it is
 overridden in the site shell script).
 
 
-@node Invoking configure
-@section Invoking @code{configure}
+@node configure Invocation
+@section @code{configure} Invocation
 
 @code{configure} recognizes the following options to control how it
 operates.

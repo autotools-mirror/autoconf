@@ -136,7 +136,7 @@ AH_CHECK_LIB(l)dnl
 AC_CHECK_PROG(LEX, flex, flex, lex)
 if test -z "$LEXLIB"
 then
-  case "$LEX" in
+  case $LEX in
   flex*) ac_lib=fl ;;
   *) ac_lib=l ;;
   esac
@@ -213,7 +213,7 @@ AC_CACHE_VAL(ac_cv_path_install,
 [  ac_save_IFS=$IFS; IFS=':'
   for ac_dir in $PATH; do
     # Account for people who put trailing slashes in PATH elements.
-    case "$ac_dir/" in
+    case $ac_dir/ in
     /|./|.//|/etc/*|/usr/sbin/*|/usr/etc/*|/sbin/*|/usr/afsws/bin/*|/usr/ucb/*) ;;
     *)
       # OSF1 and SCO ODT 3.0 have their own names for install.
@@ -273,8 +273,7 @@ AC_DEFUN([AC_PROG_LN_S],
 [AC_MSG_CHECKING(whether ln -s works)
 AC_CACHE_VAL(ac_cv_prog_LN_S,
 [rm -f conftestdata
-if ln -s X conftestdata 2>/dev/null
-then
+if ln -s X conftestdata 2>/dev/null; then
   rm -f conftestdata
   ac_cv_prog_LN_S="ln -s"
 else
@@ -1151,6 +1150,54 @@ fi
 ])# AC_FUNC_GETPGRP
 
 
+# AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
+# -------------------------------------
+# When crosscompiling, be pessimistic so we will end up using the
+# replacement version of lstat that checkes for trailing slashes and
+# calls lstat a second time when necessary.
+AC_DEFUN([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK],
+[AC_CACHE_CHECK(
+       [whether lstat dereferences a symlink specified with a trailing slash],
+       [ac_cv_func_lstat_dereferences_slashed_symlink],
+[rm -f conftest.sym conftest.file
+echo >conftest.file
+if ln -s conftest.file conftest.sym; then
+  AC_TRY_RUN([
+#  include <sys/types.h>
+#  include <sys/stat.h>
+
+   int
+   main ()
+   {
+     struct stat sbuf;
+     /* Linux will dereference the symlink and fail.
+        That is better in the sense that it means we will not
+        have to compile and use the lstat wrapper.  */
+     exit (lstat ("conftest.sym/", &sbuf) ? 0 : 1);
+   }
+   ],
+   ac_cv_func_lstat_dereferences_slashed_symlink=yes,
+   ac_cv_func_lstat_dereferences_slashed_symlink=no,
+   ac_cv_func_lstat_dereferences_slashed_symlink=no
+  )
+else
+  # If the `ln -s' command failed, then we probably don't even
+  # have an lstat function.
+  ac_cv_func_lstat_dereferences_slashed_symlink=no
+fi
+])
+
+test $ac_cv_func_lstat_dereferences_slashed_symlink = yes &&
+  AC_DEFINE_UNQUOTED(LSTAT_FOLLOWS_SLASHED_SYMLINK, 1,
+                     [Define if `lstat' dereferences a symlink specified
+                      with a trailing slash.])
+
+if test $ac_cv_func_lstat_dereferences_slashed_symlink = no; then
+  AC_LIBOBJ(lstat)
+fi
+])
+
+
 # AC_FUNC_MALLOC
 # --------------
 # Is `malloc (0)' properly handled?
@@ -1596,6 +1643,39 @@ if test $ac_cv_func_setpgrp_void = yes; then
             [Define if the `setpgrp' function takes no argument.])
 fi
 ])# AC_FUNC_SETPGRP
+
+
+# AC_FUNC_STRERROR_R
+# ------------------
+AC_DEFUN([AC_FUNC_STRERROR_R],
+[# Check strerror_r
+AC_CHECK_FUNCS([strerror_r])
+if test $ac_cv_func_strerror_r = yes; then
+  AC_CHECK_HEADERS(string.h)
+  AC_CACHE_CHECK([for working strerror_r],
+                 ac_cv_func_strerror_r_works,
+   [
+    AC_TRY_COMPILE(
+     [
+#       include <stdio.h>
+#       if HAVE_STRING_H
+#        include <string.h>
+#       endif
+     ],
+     [
+       int buf; /* avoiding square brackets makes this easier */
+       char x = *strerror_r (0, buf, sizeof buf);
+     ],
+     ac_cv_func_strerror_r_works=yes,
+     ac_cv_func_strerror_r_works=no
+    )
+    if test $ac_cv_func_strerror_r_works = yes; then
+      AC_DEFINE_UNQUOTED(HAVE_WORKING_STRERROR_R, 1,
+        [Define to 1 if `strerror_r' returns a string.])
+    fi
+  ])
+fi
+])# AC_FUNC_STRERROR_R
 
 
 # AC_FUNC_STRFTIME
@@ -2221,11 +2301,11 @@ EOF
     # Screen out bogus values from the imake configuration.  They are
     # bogus both because they are the default anyway, and because
     # using them would break gcc on systems where it needs fixed includes.
-    case "$ac_im_incroot" in
+    case $ac_im_incroot in
 	/usr/include) ;;
 	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes=$ac_im_incroot;;
     esac
-    case "$ac_im_usrlibdir" in
+    case $ac_im_usrlibdir in
 	/usr/lib | /lib) ;;
 	*) test -d "$ac_im_usrlibdir" && ac_x_libraries=$ac_im_usrlibdir ;;
     esac
