@@ -1,8 +1,8 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.14a)
-AC_INIT(Autoconf, 2.14a, bug-autoconf@gnu.org)
+AC_INIT(Autoconf, 2.49a, bug-autoconf@gnu.org)
 AC_CONFIG_SRCDIR(acgeneral.m4)
-AM_INIT_AUTOMAKE(autoconf, 2.14a)
+AM_INIT_AUTOMAKE(autoconf, 2.49a)
 
 # Initialize the test suite.
 AT_CONFIG(..)
