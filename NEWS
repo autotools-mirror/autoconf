@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.53c                       -*- outline -*-
+* Major changes in Autoconf 2.53d                       -*- outline -*-
 
 ** Executables
 
@@ -53,8 +53,8 @@
   looks for getloadavg.c in the CONFIG_LIBOBJ_DIR.
 
 - AC_FUNC_MALLOC
-   Now defines HAVE_MALLOC to 0 if `malloc' does not work, and asks
-   for an AC_LIBOBJ replacement.
+  Now defines HAVE_MALLOC to 0 if `malloc' does not work, and asks
+  for an AC_LIBOBJ replacement.
 
 ** Bug fixes
 
