@@ -1415,12 +1415,74 @@ rm -f conftest.data
 AU_ALIAS([AC_UTIME_NULL], [AC_FUNC_UTIME_NULL])
 
 
-# AC_FUNC_VFORK
+# AC_FUNC_FORK
 # -------------
-AC_DEFUN([AC_FUNC_VFORK],
-[AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADERS(unistd.h vfork.h)
-AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
+AC_DEFUN([AC_FUNC_FORK],
+  [AC_REQUIRE([AC_TYPE_PID_T])dnl
+  AC_CHECK_HEADERS(unistd.h vfork.h)
+  AC_CHECK_FUNCS(fork vfork)
+  ac_cv_func_fork_works=$ac_cv_func_fork
+  if test "x$ac_cv_func_fork" = xyes; then
+    _AC_FUNC_FORK
+  fi
+  if test "x$ac_cv_func_fork_works" = xcross"; then
+    case "$host" in
+      *-*-amigaos* | *-*-msdosdjgpp*)
+        # Override, as these systems have only a dummy fork() stub
+        ac_cv_func_fork_works=no
+        ;;
+      *)
+        ac_cv_func_fork_works=yes
+        ;;
+    esac
+    AC_MSG_WARN(CROSS: Result $ac_cv_func_fork_works guessed due to cross-compiling.)
+  fi
+  ac_cv_func_vfork_works=$ac_cv_func_vfork
+  if test "x$ac_cv_func_vfork" = xyes; then
+    _AC_FUNC_VFORK
+  fi;
+  if test "x$ac_cv_func_fork_works" = xcross"; then
+    ac_cv_func_vfork_works=ac_cv_func_vfork
+    AC_MSG_WARN(CROSS: Result $ac_cv_func_vfork_works guessed due to cross-compiling.)
+  fi
+  
+  if test "x$ac_cv_func_vfork_works" = xyes; then
+    AC_DEFINE(HAVE_WORKING_VFORK, 1, [Define if `vfork' works.])
+  else
+    AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
+  fi
+  if test "x$ac_cv_func_fork_works" = xyes; then
+    AC_DEFINE(HAVE_WORKING_FORK, 1, [Define if `fork' works.])
+  endif
+])# AC_FUNC_FORK
+
+
+# _AC_FUNC_FORK
+# -------------
+AC_DEFUN([_AC_FUNC_FORK],
+  [AC_CACHE_CHECK(for working fork, ac_cv_func_fork_works,
+    [AC_RUN_IFELSE([/* By Rüdiger Kuhlmann. */
+      #include <sys/types.h>
+      #if HAVE_UNISTD_H
+      # include <unistd.h>
+      #endif
+      /* Some systems only have a dummy stub for fork() */
+      int main ()
+      {
+        if (fork() < 0)
+          exit (1);
+        exit (0);
+      }],
+    [ac_cv_func_fork_works=yes],
+    [ac_cv_func_fork_works=no],
+    [ac_cv_func_fork_works=cross])])]
+)# _AC_FUNC_FORK
+
+
+# _AC_FUNC_VFORK
+# -------------
+AC_DEFUN([_AC_FUNC_VFORK],
+[AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
 #include <sys/types.h>
@@ -1516,17 +1578,17 @@ main ()
 }],
             [ac_cv_func_vfork_works=yes],
             [ac_cv_func_vfork_works=no],
-            [AC_CHECK_FUNC(vfork)
-ac_cv_func_vfork_works=$ac_cv_func_vfork])])
-if test "x$ac_cv_func_vfork_works" = xno; then
-  AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
-fi
-])# AC_FUNC_VFORK
+            [ac_cv_func_vfork_works=cross])])
+])# _AC_FUNC_VFORK
 
+
+# AU::AC_FUNC_VFORK
+# ------------
+AU_ALIAS([AC_FUNC_VFORK], [AC_FUNC_FORK])
 
 # AU::AC_VFORK
 # ------------
-AU_ALIAS([AC_VFORK], [AC_FUNC_VFORK])
+AU_ALIAS([AC_VFORK], [AC_FUNC_FORK])
 
 
 # AC_FUNC_VPRINTF

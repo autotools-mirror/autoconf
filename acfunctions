@@ -26,6 +26,7 @@ chown		AC_FUNC_CHOWN
 error		AC_FUNC_ERROR_AT_LINE
 error_at_line	AC_FUNC_ERROR_AT_LINE
 fnmatch		AC_FUNC_FNMATCH
+fork		AC_FUNC_FORK     
 fseeko		AC_FUNC_FSEEKO
 ftello		AC_FUNC_FSEEKO
 getgroups	AC_FUNC_GETGROUPS
@@ -56,7 +57,7 @@ strerror_r	AC_FUNC_STRERROR_R
 strftime	AC_FUNC_STRFTIME
 strtod		AC_FUNC_STRTOD
 utime		AC_FUNC_UTIME_NULL
-vfork		AC_FUNC_VFORK
+vfork		AC_FUNC_FORK
 vfprintf	AC_FUNC_VPRINTF
 vprintf		AC_FUNC_VPRINTF
 vsprintf	AC_FUNC_VPRINTF

@@ -1,3 +1,17 @@
+2001-06-18  Rüdiger Kuhlmann  <autoconf-list-xf3QB=cvz1AP@ruediger-kuhlmann.de>
+
+	* acfunctions.m4: (AC_FUNC_VFORK) rename as...
+	(_AC_FUNC_VFORK): this.
+	Remove AC_DEFINEs and don't guess cross-compilation values.
+	(_AC_FUNC_FORK): New, check whether fork() isn't just a stub.
+	(AC_FUNC_FORK): New, use _AC_FUNC_VFORK and _AC_FUNC_FORK to
+	define HAVE_WORKING_FORK, HAVE_WORKING_VFORK; and vfork to fork if
+	vfork doesn't work.
+	Guess values if cross-compiling, but warn.
+	* acfunctions: Add AC_FUNC_FORK.
+	* doc/autoconf.texi: Document AC_FUNC_FORK. Give example to define
+	and vfork appropriately.
+
 2001-06-18  Akim Demaille  <akim@epita.fr>
 
 	* doc/autoconf.texi (Functions Portability): New section.

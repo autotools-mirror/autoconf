@@ -3275,6 +3275,38 @@ If the @code{fnmatch} function is available and works (unlike the one on
 Solaris 2.4), define @code{HAVE_FNMATCH}.
 @end defmac
 
+@defmac AC_FUNC_FORK
+@maindex FUNC_FORK
+@cvindex HAVE_VFORK_H
+@cvindex HAVE_WORKING_FORK
+@cvindex HAVE_WORKING_VFORK
+@cvindex vfork
+This macro checks for the @code{fork} and @code{vfork} functions. If a
+working @code{fork} is found, define @code{HAVE_WORKING_FORK}. This macro
+checks whether @code{fork} is just a stub by trying to run it.
+
+If @file{vfork.h} is found, define @code{HAVE_VFORK_H}. If a working
+@code{vfork} is found, define @code{HAVE_WORKING_VFORK}. Otherwise,
+define @code{vfork} to be @code{fork} for backward compatibility with
+previous versions of @command{autoconf}. This macro checks for several known
+errors in implementations of @code{vfork} and considers the system to not
+have a working @code{vfork} if it detects any of them. It is not considered
+to be an implementation error if a child's invocation of @code{signal}
+modifies the parent's signal handler, since child processes rarely change
+their signal handlers.
+
+Since this macro defines @code{vfork} only for backward compatibility with
+previous versions of @command{autoconf} you're encouraged to define it
+yourself in new code:
+@example
+@group
+#if !HAVE_WORKING_VFORK
+# define vfork fork
+#endif
+@end group
+@end example
+@end defmac
+
 @defmac AC_FUNC_FSEEKO
 @maindex FUNC_FSEEKO
 @cvindex _LARGEFILE_SOURCE
@@ -3503,19 +3535,6 @@ Then, if @code{strftime} is available, define @code{HAVE_STRFTIME}.
 @cvindex HAVE_UTIME_NULL
 If @samp{utime(@var{file}, NULL)} sets @var{file}'s timestamp to
 the present, define @code{HAVE_UTIME_NULL}.
-@end defmac
-
-@defmac AC_FUNC_VFORK
-@maindex FUNC_VFORK
-@cvindex HAVE_VFORK_H
-@cvindex vfork
-If @file{vfork.h} is found, define @code{HAVE_VFORK_H}.  If a working
-@code{vfork} is not found, define @code{vfork} to be @code{fork}.  This
-macro checks for several known errors in implementations of @code{vfork}
-and considers the system to not have a working @code{vfork} if it
-detects any of them.  It is not considered to be an implementation error
-if a child's invocation of @code{signal} modifies the parent's signal
-handler, since child processes rarely change their signal handlers.
 @end defmac
 
 @defmac AC_FUNC_VPRINTF
