@@ -1,5 +1,11 @@
 1999-10-04  Akim Demaille  <akim@epita.fr>
 
+	Beware of  the expansions of $n in comments.
+
+	* acgeneral.m4 (AC_OUTPUT): Changed $1 into [$1] in dnls.
+
+1999-10-04  Akim Demaille  <akim@epita.fr>
+
 	Revert partially the previous changes: AC_CHECK_HEADERS_DIRENT is
 	used by AC_HEADER_DIRENT.
 
