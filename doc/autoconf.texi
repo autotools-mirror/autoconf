@@ -2651,7 +2651,8 @@ Create a test C program to see whether a function whose body consists of
 If the file compiles successfully, run shell commands
 @var{action-if-found}, otherwise run @var{action-if-not-found}.  This
 macro uses @code{CFLAGS} or @code{CXXFLAGS}, and @code{CPPFLAGS}, when
-compiling.
+compiling.  It does not try to link; use @code{AC_TRY_LINK} if you need
+to do that (@pxref{Examining Libraries}).
 @end defmac
 
 @node Examining Libraries, Run Time, Examining Syntax, Writing Tests
@@ -2659,7 +2660,7 @@ compiling.
 
 To check for a library, a function, or a global variable, Autoconf
 @code{configure} scripts try to compile and link a small program that
-uses it.  This is unlike Metaconfig, which uses @code{nm}
+uses it.  This is unlike Metaconfig, which by default uses @code{nm}
 or @code{ar} on the C library to try to figure out which functions are
 available.  Trying to link with the function is usually a more reliable
 approach because it avoids dealing with the variations in the options
