@@ -473,6 +473,22 @@ $debug ||
 ])# _AC_SHELL_TMPDIR
 
 
+# AC_SHELL_UNSET(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
+# --------------------------------------------------------
+# Try to unset the env VAR, otherwise set it to
+# VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
+define([AC_SHELL_UNSET],
+[$ac_unset $1 || test ${$1+set} != set || $1=$2])
+
+
+# AC_SHELL_UNSETENV(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
+# --------------------------------------------------------
+# Try to unset the env VAR, otherwise set it to
+# VALUE-IF-UNSET-NOT-SUPPORTED.  `ac_unset' must have been computed.
+define([AC_SHELL_UNSETENV],
+[$ac_unset $1 || test ${$1+set} != set || $1=$2 && export $1])
+
+
 ## --------------------------------------------------- ##
 ## Common m4/sh handling of variables (indirections).  ##
 ## --------------------------------------------------- ##
@@ -1436,28 +1452,32 @@ fi])dnl
 ])# _AC_INIT_VERSION
 
 
-
 # _AC_INIT_PREPARE_ENVIRONMENT
 # ----------------------------
 # Tune the envvar we depend upon: IFS, NLS.
-# FIXME: CDPATH.
 define([_AC_INIT_PREPARE_ENVIRONMENT],
-[# NLS nuisances.
-# Only set these to C if already set.  These must not be set unconditionally
-# because not all systems understand e.g. LANG=C (notably SCO).
-# Fixing LC_MESSAGES prevents Solaris sh from translating var values in `set'!
-# Non-C LC_CTYPE values break the ctype check.
-if test "${LANG+set}"   = set; then LANG=C;   export LANG;   fi
-if test "${LC_ALL+set}" = set; then LC_ALL=C; export LC_ALL; fi
-if test "${LC_MESSAGES+set}" = set; then LC_MESSAGES=C; export LC_MESSAGES; fi
-if test "${LC_CTYPE+set}"    = set; then LC_CTYPE=C;    export LC_CTYPE;    fi
+[if (unset FOO) >/dev/null 2>&1; then
+  ac_unset=unset
+else
+  ac_unset=false
+fi
+
+# NLS nuisances.
+AC_SHELL_UNSETENV([LANG],        [C])
+AC_SHELL_UNSETENV([LC_ALL],      [C])
+AC_SHELL_UNSETENV([LC_CTYPE],    [C])
+AC_SHELL_UNSETENV([LC_MESSAGES], [C])
 
 # IFS
 # We need space, tab and new line, in precisely that order.
 ac_nl='
 '
-IFS=" 	$ac_nl"dnl
+IFS=" 	$ac_nl"
+
+# CDPATH.
+AC_SHELL_UNSETENV([CDPATH], [:])
 ])
+
 
 # _AC_INIT_PREPARE
 # ----------------

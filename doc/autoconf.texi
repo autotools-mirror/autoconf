@@ -252,6 +252,7 @@ Checking Run Time Behavior
 
 Portable Shell Programming
 
+* Special Shell Variables::
 * Testing Values and Files::    Checking strings and files
 * Shell Substitutions::         Test and assign
 * Limitations of Usual Tools::  Portable use of portable tools
@@ -4515,13 +4516,77 @@ well; for example, don't rely on @code{ln} having a @samp{-f} option or
 @code{cat} having any options.
 
 @menu
+* Special Shell Variables::     Variables you should not change
 * Testing Values and Files::    Checking strings and files
 * Shell Substitutions::         Test and assign
 * Limitations of Usual Tools::  Portable use of portable tools
 * Exiting from Shell Scripts::  How to exit from an autoconf shell script
 @end menu
 
-@node Testing Values and Files, Shell Substitutions, Portable Shell, Portable Shell
+@node Special Shell Variables, Testing Values and Files, Portable Shell, Portable Shell
+@subsection Special Shell Variables
+
+Some shell variables shall not be used.  Since currently Autoconf does
+not use @code{unset}, there are some variables which need some specific
+values to disable the features they control.
+
+@c Alphabetical order, case insensitive, `A' before `a'.
+@table @code
+@item CDPATH
+@evindex CDPATH
+Because when this variable is set @code{cd} is verbose, idioms such as
+@samp{abs=`cd $rel && pwd`} break, since @code{abs} receives twice the
+path.
+
+@c FIXME: Which shells?  How do they behave?
+Setting @code{CDPATH} to the empty value is not enough for most shells.
+A simple colon is enough but for @code{zsh}, which prefers a leading dot:
+
+@example
+~ % mkdir foo && CDPATH=: cd foo
+~/foo
+~ % CDPATH=:. cd foo
+~/foo
+~ % CDPATH=.: cd foo
+~ %
+@end example
+
+@noindent
+(of course we could just @code{unset} @code{CDPATH}, it also behaves
+properly if set to the empty string).
+
+Therefore a portable solution to neutralize @samp{CDPATH} is
+@samp{CDPATH=$@{ZSH_VERSION+.@}:}.
+
+@item LANG
+@itemx LC_ALL
+@itemx LC_MESSAGES
+@itemx LC_CTYPE
+@evindex LANG
+@evindex LC_ALL
+@evindex LC_MESSAGES
+@evindex LC_CTYPE
+
+These must not be set unconditionally because not all systems understand
+e.g. @strong{LANG=C} (notably SCO).  Fixing @code{LC_MESSAGES} prevents
+Solaris @command{sh} from translating var values in @code{set}!  Non-C
+@code{LC_CTYPE} values break the ctype check.  Therefore, run:
+
+@example
+test "$@{LANG+set@}" = set && LANG=C && export LANG
+test "$@{LC_ALL+set@}" = set && LC_ALL=C && export LC_ALL
+test "$@{LC_CTYPE+set@}" = set && LC_CTYPE=C && export LC_CTYPE
+test "$@{LC_MESSAGES+set@}" = set && LC_MESSAGES=C && export LC_MESSAGES
+@end example
+
+@item status
+@evindex status
+This variable is an alias to @samp{$?} for @code{zsh} (at least 3.1.6),
+hence read-only.  Do not use it.
+@end table
+
+
+@node Testing Values and Files, Shell Substitutions, Special Shell Variables, Portable Shell
 @subsection Testing Values and Files
 
 @code{configure} scripts need to test properties of many files and

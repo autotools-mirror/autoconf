@@ -1,3 +1,13 @@
+2000-05-19  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4 (AC_SHELL_UNSET, AC_SHELL_UNSETENV): New macro.
+	(_AC_INIT_PREPARE_ENVIRONMENT): Use AC_SHELL_UNSETENV.
+	Set CDPATH.  Fixes Autoconf/96.
+
+	* doc/autoconf.texi (Special Shell Variables): New node.
+	Document `status', `CDPATH', `LANG', `LC_ALL', `LC_MESSAGES' and
+	`LC_CTYPE'.
+
 2000-05-12  Akim Demaille  <akim@epita.fr>
 
 	* acgeneral.m4 (sinclude): Define, some packages (binutils) need
