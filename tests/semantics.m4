@@ -15,6 +15,12 @@ AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
                  exit 1)])
 
 
+
+## -------------------------------- ##
+## Members of the AC_CHECK family.  ##
+## -------------------------------- ##
+
+
 # AC_CHECK_LIB
 # ------------
 # Well, I can't imagine a system where `cos' is neither in libc, nor
@@ -266,3 +272,23 @@ AT_CHECK([../autoconf -m .. -l $at_srcdir], 0,, ignore)
 AT_CHECK([./configure], 0, ignore)
 
 AT_CLEANUP(path config.log config.cache configure)
+
+
+
+
+## ----------------- ##
+## Specific macros.  ##
+## ----------------- ##
+
+
+# AC_C_CONST
+# ----------
+# GCC supports `const', `volatile', and `inline'.
+AT_TEST_MACRO(C keywords,
+[[AC_PROG_CC
+AC_C_CONST
+AC_C_INLINE
+AC_C_VOLATILE
+case "$GCC,$ac_cv_c_const,$ac_cv_c_inline,$ac_cv_c_volatile" in
+ yes,*no*) exit 1;;
+esac]])

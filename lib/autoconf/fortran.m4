@@ -859,8 +859,9 @@ ac_save_CC=$CC
 for ac_arg in "" -qlanglvl=ansi -std1 -Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
 do
   CC="$ac_save_CC $ac_arg"
-  AC_TRY_COMPILE(
-[#include <stdarg.h>
+  AC_COMPILE_IFELSE(
+[AC_LANG_PROGRAM(
+[[#include <stdarg.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -887,9 +888,9 @@ struct s1 {int (*f) (int a);};
 struct s2 {int (*f) (double a);};
 int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, int);
 int argc;
-char **argv;],
-[return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];],
-[ac_cv_prog_cc_stdc=$ac_arg; break])
+char **argv;]],
+[[return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];]])],
+                     [ac_cv_prog_cc_stdc=$ac_arg; break])
 done
 CC=$ac_save_CC
 ])
@@ -986,20 +987,21 @@ AC_DEFUN(AC_C_BIGENDIAN,
 [AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
 [ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
-AC_TRY_COMPILE([#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/param.h>
 ],
 [#if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
  bogus endian macros
 #endif
-],
+])],
 [# It does; now see whether it defined to BIG_ENDIAN or not.
-AC_TRY_COMPILE([#include <sys/types.h>
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/param.h>
 ], [#if BYTE_ORDER != BIG_ENDIAN
  not big endian
 #endif
-], ac_cv_c_bigendian=yes, ac_cv_c_bigendian=no)])
+])],               [ac_cv_c_bigendian=yes],
+                   [ac_cv_c_bigendian=no])])
 if test $ac_cv_c_bigendian = unknown; then
 AC_TRY_RUN(
 [int
@@ -1033,12 +1035,12 @@ AC_DEFUN(AC_C_INLINE,
 AC_CACHE_CHECK([for inline], ac_cv_c_inline,
 [ac_cv_c_inline=no
 for ac_kw in inline __inline__ __inline; do
-  AC_TRY_COMPILE(,
+  AC_COMPILE_IFELSE([AC_LANG_SOURCE(
 [#ifndef __cplusplus
-  } $ac_kw int foo() {
+$ac_kw int foo () {return 0; }
 #endif
-],
-[ac_cv_c_inline=$ac_kw; break])
+])],
+                    [ac_cv_c_inline=$ac_kw; break])
 done
 ])
 case "$ac_cv_c_inline" in
@@ -1056,8 +1058,8 @@ esac
 AC_DEFUN(AC_C_CONST,
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,
-[AC_TRY_COMPILE(,
-[/* FIXME: Include the comments suggested by Paul. */
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
+[[/* FIXME: Include the comments suggested by Paul. */
 #ifndef __cplusplus
   /* Ultrix mips cc rejects this.  */
   typedef int charset[2];
@@ -1103,8 +1105,9 @@ AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,
     const int foo = 10;
   }
 #endif
-],
-                ac_cv_c_const=yes, ac_cv_c_const=no)])
+]])],
+                   [ac_cv_c_const=yes],
+                   [ac_cv_c_const=no])])
 if test $ac_cv_c_const = no; then
   AC_DEFINE(const,,
             [Define to empty if `const' does not conform to ANSI C.])
@@ -1123,10 +1126,11 @@ fi
 AC_DEFUN(AC_C_VOLATILE,
 [AC_REQUIRE([AC_PROG_CC_STDC])dnl
 AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
-[AC_TRY_COMPILE(,[
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [
 volatile int x;
-int * volatile y;],
-ac_cv_c_volatile=yes, ac_cv_c_volatile=no)])
+int * volatile y;])],
+                   [ac_cv_c_volatile=yes],
+                   [ac_cv_c_volatile=no])])
 if test $ac_cv_c_volatile = no; then
   AC_DEFINE(volatile,,
             [Define to empty if the keyword `volatile' does not work.

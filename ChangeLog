@@ -1,5 +1,19 @@
 2000-05-11  Akim Demaille  <akim@epita.fr>
 
+	Eradicate AC_TRY_COMPILE.
+
+	* aclang.m4 (AC_PROG_CC_STDC, AC_C_BIGENDIAN, AC_C_INLINE,
+	AC_C_CONST, AC_C_VOLATILE, AC_F77_NAME_MANGLING): Use
+	`AC_COMPILE_IFELSE'.
+	* acspecific.m4 (AC_DECL_SYS_SIGLIST, _AC_CHECK_HEADER_DIRENT,
+	AC_HEADER_SYS_WAIT, AC_HEADER_TIME, AC_TYPE_SIGNAL,
+	AC_FUNC_GETLOADAVG, AC_FUNC_SELECT_ARGTYPES, AC_STRUCT_TM,
+	AC_CYGWIN, AC_MINGW32, AC_EMXOS2): Likewise.
+	* tests/semantics.m4 (C keywords): Check that AC_C_CONST,
+	AC_C_VOLATILE, and AC_C_INLINE function properly with GCC.
+
+2000-05-11  Akim Demaille  <akim@epita.fr>
+
 	Replace AC_LANG_SAVE/AC_LANG_RESTORE with AC_LANG_PUSH/AC_LANG_POP.
 
 	* aclang.m4 (_AC_LANG_CURRENT, AC_LANG_STACK): You two are the same

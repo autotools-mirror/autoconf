@@ -2865,9 +2865,8 @@ rm -f conftest*[]dnl
 
 
 # AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
-#              [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+#                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------
-# FIXME: Should INCLUDES be defaulted here?
 AC_DEFUN([AC_TRY_COMPILE],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])], [$3], [$4])])
 

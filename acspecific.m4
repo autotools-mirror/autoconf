@@ -319,14 +319,16 @@ AC_DEFUNCT(AC_RSH, [; replace it with equivalent code])
 AC_DEFUN(AC_DECL_SYS_SIGLIST,
 [AC_CACHE_CHECK([for sys_siglist declaration in signal.h or unistd.h],
   ac_cv_decl_sys_siglist,
-[AC_TRY_COMPILE([#include <sys/types.h>
+[AC_COMPILE_IFELSE(
+[AC_LANG_PROGRAM([#include <sys/types.h>
 #include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif
-], [char *msg = *(sys_siglist + 1);],
-  ac_cv_decl_sys_siglist=yes, ac_cv_decl_sys_siglist=no)])
+], [char *msg = *(sys_siglist + 1);])],
+                   [ac_cv_decl_sys_siglist=yes],
+                   [ac_cv_decl_sys_siglist=no])])
 if test $ac_cv_decl_sys_siglist = yes; then
   AC_DEFINE(SYS_SIGLIST_DECLARED, 1,
             [Define if `sys_siglist' is declared by <signal.h> or <unistd.h>.])
@@ -349,11 +351,12 @@ fi
 define([_AC_CHECK_HEADER_DIRENT],
 [AC_VAR_PUSHDEF([ac_Header], [ac_cv_header_dirent_$1])dnl
 AC_CACHE_CHECK([for $1 that defines DIR], ac_Header,
-[AC_TRY_COMPILE([#include <sys/types.h>
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <$1>
 ],
-                [DIR *dirp = 0;],
-AC_VAR_SET(ac_Header, yes), AC_VAR_SET(ac_Header, no))])
+                                    [DIR *dirp = 0;])],
+                   [AC_VAR_SET(ac_Header, yes)],
+                   [AC_VAR_SET(ac_Header, no)])])
 AC_SHELL_IFELSE([test AC_VAR_GET(ac_Header) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Header])dnl
@@ -513,19 +516,21 @@ fi
 AC_DEFUN(AC_HEADER_SYS_WAIT,
 [AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
   ac_cv_header_sys_wait_h,
-[AC_TRY_COMPILE(
-[#include <sys/types.h>
+[AC_COMPILE_IFELSE(
+[AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/wait.h>
 #ifndef WEXITSTATUS
 # define WEXITSTATUS(stat_val) ((unsigned)(stat_val) >> 8)
 #endif
 #ifndef WIFEXITED
 # define WIFEXITED(stat_val) (((stat_val) & 255) == 0)
-#endif],
+#endif
+],
 [  int s;
   wait (&s);
-  s = WIFEXITED (s) ? WEXITSTATUS (s) : 1;],
-ac_cv_header_sys_wait_h=yes, ac_cv_header_sys_wait_h=no)])
+  s = WIFEXITED (s) ? WEXITSTATUS (s) : 1;])],
+                 [ac_cv_header_sys_wait_h=yes],
+                 [ac_cv_header_sys_wait_h=no])])
 if test $ac_cv_header_sys_wait_h = yes; then
   AC_DEFINE(HAVE_SYS_WAIT_H, 1,
             [Define if you have <sys/wait.h> that is POSIX.1 compatible.])
@@ -538,11 +543,13 @@ fi
 AC_DEFUN(AC_HEADER_TIME,
 [AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
   ac_cv_header_time,
-[AC_TRY_COMPILE([#include <sys/types.h>
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/time.h>
 #include <time.h>
 ],
-[struct tm *tp;], ac_cv_header_time=yes, ac_cv_header_time=no)])
+[struct tm *tp;])],
+                   [ac_cv_header_time=yes],
+                   [ac_cv_header_time=no])])
 if test $ac_cv_header_time = yes; then
   AC_DEFINE(TIME_WITH_SYS_TIME, 1,
             [Define if you can safely include both <sys/time.h> and <time.h>.])
@@ -659,7 +666,8 @@ AC_DEFUNCT(AC_LONG_64_BITS, [; instead use AC_CHECK_SIZEOF(long)])
 # Note that identifiers starting with SIG are reserved by ANSI C.
 AC_DEFUN(AC_TYPE_SIGNAL,
 [AC_CACHE_CHECK([return type of signal handlers], ac_cv_type_signal,
-[AC_TRY_COMPILE([#include <sys/types.h>
+[AC_COMPILE_IFELSE(
+[AC_LANG_PROGRAM([#include <sys/types.h>
 #include <signal.h>
 #ifdef signal
 # undef signal
@@ -670,7 +678,9 @@ extern "C" void (*signal (int, void (*)(int)))(int);
 void (*signal ()) ();
 #endif
 ],
-[int i;], ac_cv_type_signal=void, ac_cv_type_signal=int)])
+                 [int i;])],
+                   [ac_cv_type_signal=void],
+                   [ac_cv_type_signal=int])])
 AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
                    [Define as the return type of signal handlers
                     (`int' or `void').])
@@ -916,10 +926,11 @@ else
   AC_CHECK_HEADER(nlist.h,
   [AC_DEFINE(NLIST_STRUCT, 1, [Define if you have <nlist.h>.])
   AC_CACHE_CHECK([for n_un in struct nlist], ac_cv_struct_nlist_n_un,
-  [AC_TRY_COMPILE([#include <nlist.h>
+  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <nlist.h>
 ],
-                  [struct nlist n; n.n_un.n_name = 0;],
-                  ac_cv_struct_nlist_n_un=yes, ac_cv_struct_nlist_n_un=no)])
+                                      [struct nlist n; n.n_un.n_name = 0;])],
+                     [ac_cv_struct_nlist_n_un=yes],
+                     [ac_cv_struct_nlist_n_un=no])])
   if test $ac_cv_struct_nlist_n_un = yes; then
     AC_DEFINE(NLIST_NAME_UNION, 1,
               [Define if your `struct nlist' has an `n_un' member.])
@@ -1375,7 +1386,7 @@ AC_DEFUN(AC_FUNC_SELECT_ARGTYPES,
 [for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
  for ac_arg1 in 'int' 'size_t' 'unsigned long' 'unsigned'; do
   for ac_arg5 in 'struct timeval *' 'const struct timeval *'; do
-   AC_TRY_COMPILE(
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
 [#include <sys/types.h>
 #if HAVE_SYS_TIME_H
 # include <sys/time.h>
@@ -1386,8 +1397,8 @@ AC_DEFUN(AC_FUNC_SELECT_ARGTYPES,
 #if HAVE_SYS_SOCKET_H
 # include <sys/socket.h>
 #endif
-extern int select ($ac_arg1,$ac_arg234,$ac_arg234,$ac_arg234,$ac_arg5);],,
-    [ac_cv_func_select_args="$ac_arg1,$ac_arg234,$ac_arg5"; break 3])
+extern int select ($ac_arg1,$ac_arg234,$ac_arg234,$ac_arg234,$ac_arg5);])],
+              [ac_cv_func_select_args="$ac_arg1,$ac_arg234,$ac_arg5"; break 3])
   done
  done
 done
@@ -1717,11 +1728,12 @@ fi
 AC_DEFUN(AC_STRUCT_TM,
 [AC_CACHE_CHECK([whether struct tm is in sys/time.h or time.h],
   ac_cv_struct_tm,
-[AC_TRY_COMPILE([#include <sys/types.h>
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <time.h>
 ],
-[struct tm *tp; tp->tm_sec;],
-  ac_cv_struct_tm=time.h, ac_cv_struct_tm=sys/time.h)])
+                                    [struct tm *tp; tp->tm_sec;])],
+                   [ac_cv_struct_tm=time.h],
+                   [ac_cv_struct_tm=sys/time.h])])
 if test $ac_cv_struct_tm = sys/time.h; then
   AC_DEFINE(TM_IN_SYS_TIME, 1,
             [Define if your <sys/time.h> declares `struct tm'.])
@@ -2345,12 +2357,13 @@ AU_DEFUN(AC_CYGWIN32,
 # EXEEXT.
 AC_DEFUN(AC_CYGWIN,
 [AC_CACHE_CHECK(for Cygwin environment, ac_cv_cygwin,
-[AC_TRY_COMPILE(,
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
 [#ifndef __CYGWIN__
 # define __CYGWIN__ __CYGWIN32__
 #endif
-return __CYGWIN__;],
-ac_cv_cygwin=yes, ac_cv_cygwin=no)])
+return __CYGWIN__;])],
+                   [ac_cv_cygwin=yes],
+                   [ac_cv_cygwin=no])])
 CYGWIN=
 test "$ac_cv_cygwin" = yes && CYGWIN=yes])
 
@@ -2361,8 +2374,9 @@ test "$ac_cv_cygwin" = yes && CYGWIN=yes])
 # EXEEXT.
 AC_DEFUN(AC_MINGW32,
 [AC_CACHE_CHECK(for mingw32 environment, ac_cv_mingw32,
-[AC_TRY_COMPILE(,[return __MINGW32__;],
-ac_cv_mingw32=yes, ac_cv_mingw32=no)])
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __MINGW32__;])],
+                   [ac_cv_mingw32=yes],
+                   [ac_cv_mingw32=no])])
 MINGW32=
 test "$ac_cv_mingw32" = yes && MINGW32=yes])
 
@@ -2373,8 +2387,9 @@ test "$ac_cv_mingw32" = yes && MINGW32=yes])
 # for EXEEXT.
 AC_DEFUN(AC_EMXOS2,
 [AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
-[AC_TRY_COMPILE(,[return __EMX__;],
-ac_cv_emxos2=yes, ac_cv_emxos2=no)])
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
+                   [ac_cv_emxos2=yes],
+                   [ac_cv_emxos2=no])])
 EMXOS2=
 test "$ac_cv_emxos2" = yes && EMXOS2=yes])
 
