@@ -528,7 +528,7 @@ case $basic_machine in
 		os=-netbsd
 		;;
 	netwinder)
-		basic_machine=armv4l-corel
+		basic_machine=armv4l-rebel
 		os=-linux
 		;;
 	news | news700 | news800 | news900)
@@ -1017,7 +1017,7 @@ case $basic_machine in
 	*-acorn)
 		os=-riscix1.2
 		;;
-	arm*-corel)
+	arm*-rebel)
 		os=-linux
 		;;
 	arm*-semi)

@@ -618,12 +618,6 @@ EOF
 	echo `echo ${UNAME_MACHINE}|sed -e 's,[-/].*$,,'`-unknown-gnu`echo ${UNAME_RELEASE}|sed -e 's,/.*$,,'`
 	exit 0 ;;
     *:Linux:*:*)
-	# uname on the ARM produces all sorts of strangeness, and we need to
-	# filter it out.
-	case "$UNAME_MACHINE" in
-	  armv*)		      UNAME_MACHINE=$UNAME_MACHINE ;;
-	  arm* | sa110*)	      UNAME_MACHINE="arm" ;;
-	esac
 
 	# The BFD linker knows what the default object file format is, so
 	# first see if it will tell us. cd to the root directory to prevent
@@ -636,13 +630,39 @@ EOF
 				    s/ .*//
 				    p'`
         case "$ld_supported_emulations" in
-	  *ia64)      echo "${UNAME_MACHINE}-unknown-linux"         ; exit 0 ;;
-	  i?86linux)  echo "${UNAME_MACHINE}-pc-linux-gnuaout"      ; exit 0 ;;
-	  i?86coff)   echo "${UNAME_MACHINE}-pc-linux-gnucoff"      ; exit 0 ;;
-	  sparclinux) echo "${UNAME_MACHINE}-unknown-linux-gnuaout" ; exit 0 ;;
-	  armlinux)   echo "${UNAME_MACHINE}-unknown-linux-gnuaout" ; exit 0 ;;
-	  m68klinux)  echo "${UNAME_MACHINE}-unknown-linux-gnuaout" ; exit 0 ;;
-	  elf32ppc | elf32ppclinux)
+	    *ia64)
+		echo "${UNAME_MACHINE}-unknown-linux"
+		exit 0
+		;;
+	  i?86linux)
+		echo "${UNAME_MACHINE}-pc-linux-gnuaout"
+		exit 0
+		;;
+	  i?86coff)
+		echo "${UNAME_MACHINE}-pc-linux-gnucoff"
+		exit 0
+		;;
+	  sparclinux)
+		echo "${UNAME_MACHINE}-unknown-linux-gnuaout"
+		exit 0
+		;;
+	  armlinux)
+		echo "${UNAME_MACHINE}-unknown-linux-gnuaout"
+		exit 0
+		;;
+	  elf32arm*)
+		echo "${UNAME_MACHINE}-unknown-linux-gnu"
+		exit 0
+		;;
+	  armelf_linux*)
+		echo "${UNAME_MACHINE}-unknown-linux-gnu"
+		exit 0
+		;;
+	  m68klinux)
+		echo "${UNAME_MACHINE}-unknown-linux-gnuaout"
+		exit 0
+		;;
+	  elf32ppc)
 		# Determine Lib Version
 		cat >$dummy.c <<EOF
 #include <features.h>
@@ -671,7 +691,9 @@ EOF
 			fi
 		fi	
 		rm -f $dummy.c $dummy
-		echo powerpc-unknown-linux-gnu${LIBC} ; exit 0 ;;
+		echo powerpc-unknown-linux-gnu${LIBC}
+		exit 0
+		;;
 	esac
 
 	if test "${UNAME_MACHINE}" = "alpha" ; then
