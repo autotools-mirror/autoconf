@@ -1,3 +1,9 @@
+1999-09-24  Ben Elliston  <bje@cygnus.com>
+
+	* acspecific.m4 (AC_HEADER_STDC): Define ISLOWER and ISUPPER
+	macros correctly on EBCDIC systems. Contributed by Kurt D.
+	Zeilenga <kurt@openldap.org>. Fix for autoconf/6.
+
 1999-09-24  Jim Blandy  <jimb@zwingli.cygnus.com>
 
 	* acspecific.m4 (AC_C_VOLATILE): New test.
