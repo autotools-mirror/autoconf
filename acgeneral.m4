@@ -3283,17 +3283,15 @@ rm -f conftest*
 # --------------------------------------------------------------------
 # Try to compile PROGRAM.
 AC_DEFUN([AC_COMPILE_IFELSE],
-[AC_LANG_CONFTEST([$1])
+[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_compile) && test -s conftest.$ac_objext; then
   m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_LOG
   cat conftest.$ac_ext >&AC_FD_LOG
-ifval([$3],
-[  $3
-])dnl
+m4_ifvanl([$3],[  $3])dnl
 fi
-rm -f conftest*[]dnl
+rm -f conftest.$ac_objext ifval([$1], [conftest.$ac_ext])[]dnl
 ])# AC_COMPILE_IFELSE
 
 
@@ -3314,17 +3312,16 @@ AC_DEFUN([AC_TRY_COMPILE],
 # -----------------------------------------------------------------
 # Try to link PROGRAM.
 AC_DEFUN([AC_LINK_IFELSE],
-[AC_LANG_CONFTEST([$1])
+[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_link) && test -s conftest$ac_exeext; then
   m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_LOG
   cat conftest.$ac_ext >&AC_FD_LOG
-ifval([$3],
-[  $3
-])dnl
+m4_ifvanl([$3], [  $3])dnl
 fi
-rm -f conftest*[]dnl
+rm -f conftest.$ac_objext conftest$ac_exeext ifval([$1],
+                                                   [conftest.$ac_ext])[]dnl
 ])# AC_LINK_IFELSE
 
 
@@ -3362,18 +3359,17 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
 # -----------------------------------------------------------
 # Compile, link, and run.
 AC_DEFUN([AC_RUN_IFELSE],
-[AC_LANG_CONFTEST([$1])
+[m4_ifvanl([$1], [AC_LANG_CONFTEST([$1])])dnl
 if AC_TRY_EVAL(ac_link) &&
    test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null; then
   m4_default([$2], :)
 else
   echo "configure: failed program was:" >&AC_FD_LOG
   cat conftest.$ac_ext >&AC_FD_LOG
-ifval([$3],
-[  $3
-])dnl
+m4_ifvanl([$3], [  $3])dnl
 fi
-rm -f conftest*[]dnl
+rm -f conftest.$ac_objext conftest$ac_exeext ifval([$1],
+                                                   [conftest.$ac_ext])[]dnl
 ])# AC_RUN_IFELSE
 
 

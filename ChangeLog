@@ -1,5 +1,11 @@
 2000-08-04  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4: (AC_RUN_IFELSE, AC_LINK_IFELSE, AC_COMPILE_IFELSE):
+	Don't create the source file if none is given, and in this case,
+	don't remove it either.
+
+2000-08-04  Akim Demaille  <akim@epita.fr>
+
 	* libm4.m4 (m4_ifvanl): New macro.
 	* acgeneral.m4: Use it.
 
