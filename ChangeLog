@@ -23,7 +23,7 @@
 	* bin/autoupdate.in (&handle_m4_macros) <unm4.m4>: Undefine iff
 	defined.
 
-	
+
 2001-09-05  Akim Demaille  <akim@epita.fr>
 
 	* lib/Autom4te/General.pm (&getopt): Work around the `-' Getopt bug.
@@ -88,7 +88,7 @@
 
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
-	* man/Makefile.am (.x.1): We really have pass
+	* man/Makefile.am (.x.1): We really have to pass
 	autom4te_perllibdir.
 
 2001-08-31  Akim Demaille  <akim@epita.fr>
@@ -96,7 +96,6 @@
 	* lib/autotest/general.m4 (AT_INIT): Don't pass all the args to
 	debug scripts, in particular passing explicitly listed tests to
 	run is stupid.
-
 
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
@@ -166,7 +165,6 @@
 	* tests/atspecific.m4 (AT_CHECK_AUTOCONF): Adjust.
 	* tests/autoconf: Dittowise.
 
-
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
 	* bin/autoconf.in: Don't bother with `acsite.m4' and `aclocal.m4'.
@@ -175,7 +173,6 @@
 	Use -e, not -f, since /dev/null for instance is OK.
 	(&parse_args): Adjust.
 	* lib/autom4te.in (Autoconf): Add `acsite.m4?' and `aclocal.m4?'.
-
 
 2001-08-31  Akim Demaille  <akim@epita.fr>
 
@@ -304,7 +301,6 @@
 	(--clean, -c): New option.
 	* tests/Makefile.am: Use this option.
 
-
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
 	* lib/autoconf/status.m4 (_AC_SRCPATHS): Rename `ac_dots' as
@@ -403,7 +399,6 @@
 	Rather, pass autoconf_dir to m4.
 	* tests/Makefile.am (testsuite): Remove -I top_srcdir, unneeded.
 	* tests/suite.at: Require 2.52c.
-
 
 2001-08-27  Akim Demaille  <akim@epita.fr>
 
