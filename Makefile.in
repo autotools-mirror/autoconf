@@ -33,6 +33,8 @@ PROGS = $(APROGS) @PROGS@
 # Path of the perl interpreter.
 PERL = @PERL@
 
+transform=@program_transform_name@
+
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 
@@ -124,14 +126,14 @@ install: all $(M4FILES) acconfig.h installdirs install-info
 	*traditional*) ;; \
 	*) echo Error: Autoconf requires GNU m4 1.1 or later; exit 1 ;; \
 	esac
-	for i in $(APROGS); do \
-	  $(INSTALL_PROGRAM) $$i $(bindir)/$$i; \
+	for p in $(APROGS); do \
+	  $(INSTALL_PROGRAM) $$p $(bindir)/`echo $$p|sed '$(transform)'`; \
 	done
 	for i in $(M4FILES) acconfig.h; do \
 	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
 	done
 	-if test -f autoscan; then \
-	$(INSTALL_PROGRAM) autoscan $(bindir)/autoscan; \
+	$(INSTALL_PROGRAM) autoscan $(bindir)/`echo autoscan|sed '$(transform)'`; \
 	for i in acfunctions acheaders acidentifiers acprograms \
 	  acmakevars; do \
 	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
