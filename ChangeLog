@@ -1,3 +1,8 @@
+2001-10-02  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): "source" -> ".", for
+	compatibility with POSIX shells.
+
 2001-10-02  Akim Demaille  <akim@epita.fr>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Just source 40.lineno
