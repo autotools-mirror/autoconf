@@ -58,6 +58,9 @@ proc autoconf_start_plus {configout} {
     if [string match "*is obsolete*" "$comp_output"] then {
 	return 1
     }
+    if [string match "*allow cross*" "$comp_output"] then {
+	return 1
+    }
     if ![string match "" "$comp_output"] then {
 	fail "$configout, problem with running autoconf"
 	return 0
