@@ -1,3 +1,15 @@
+2004-01-09  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/autoconf/general.m4: Fix bug: AC_CHECK_SIZEOF evokes a warning
+	with `autoconf -Wall,error'.  Bug reported by Eric Blake in
+	<http://mail.gnu.org/archive/html/autoconf-patches/2004-01/msg00000.html>.
+	(_AC_COMPUTE_INT_COMPILE): Invoke _AC_COMPILE_IFELSE, not
+	AC_COMPILE_IFELSE, since we now assume our caller invokes
+	AC_LANG_COMPILER_REQUIRE, for symmetry with _AC_COMPUTE_INT_RUN.
+	(_AC_COMPUTE_INT_RUN): Likewise, for _AC_RUN_IFELSE instead
+	of AC_RUN_IFELSE; this avoids the warning mentioned above.
+	(_AC_COMPUTE_INT): Invoke AC_LANG_COMPILER_REQUIRE.
+
 2004-01-07  Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/general.m4 (_AC_LIBOBJS_NORMALIZE): Avoid \$ inside
