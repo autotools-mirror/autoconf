@@ -244,10 +244,12 @@ AC_CACHE_VAL(ac_cv_prog_CPP,
   CPP="${CC-cc} -E"
   # On the NeXT, cc -E runs the code through the compiler's parser,
   # not just through cpp.
-  AC_TRY_CPP([#include <stdio.h>
+dnl Use a header file that comes with gcc, so configuring glibc
+dnl with a fresh cross-compiler works.
+  AC_TRY_CPP([#include <assert.h>
 Syntax Error], ,
   CPP="${CC-cc} -E -traditional-cpp"
-  AC_TRY_CPP([#include <stdio.h>
+  AC_TRY_CPP([#include <assert.h>
 Syntax Error], , CPP=/lib/cpp))
   ac_cv_prog_CPP="$CPP"])dnl
 fi
