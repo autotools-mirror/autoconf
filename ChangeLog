@@ -1,3 +1,8 @@
+2003-10-11  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Use the new official
+	name for the GNU Fortran 95+ compiler, 'gfortran', not 'g95'.
+
 2003-10-10  Andreas Schwab  <schwab@suse.de>
 
 	* bin/autoheader.in: Avoid empty first line in --version and

@@ -329,7 +329,7 @@ AC_DEFUN([_AC_FC_DIALECT_YEAR],
 # Known compilers:
 #  f77/f90/f95: generic compiler names
 #  g77: GNU Fortran 77 compiler
-#  g95: putative GNU Fortran 95 compiler (in progress)
+#  gfortran: putative GNU Fortran 95+ compiler (in progress)
 #  fort77: native F77 compiler under HP-UX (and some older Crays)
 #  frt: Fujitsu F77 compiler
 #  pgf77/pgf90/pgf95: Portland Group F77/F90/F95 compilers
@@ -341,7 +341,7 @@ AC_DEFUN([_AC_FC_DIALECT_YEAR],
 #  fort: Compaq (now HP) Fortran 90/95 compiler for Tru64 and Linux/Alpha
 #  ifc: Intel Fortran 95 compiler for Linux/x86
 #  efc: Intel Fortran 95 compiler for IA64
-m4_define([_AC_F95_FC], [f95 fort xlf95 ifc efc pgf95 lf95 g95])
+m4_define([_AC_F95_FC], [f95 fort xlf95 ifc efc pgf95 lf95 gfortran])
 m4_define([_AC_F90_FC], [f90 xlf90 pgf90 epcf90])
 m4_define([_AC_F77_FC], [g77 f77 xlf frt pgf77 fort77 fl32 af77])
 AC_DEFUN([_AC_PROG_FC],
