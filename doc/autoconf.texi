@@ -13690,21 +13690,25 @@ Be sure to distribute @file{package.m4} and to put it into the source
 hierarchy: the test suite ought to be shipped!
 
 @item
-@c FIXME: This macro should become part of Autoconf.  AC_AUTOTEST_PATH?
-Use the @code{AT_CONFIG} macro from within file @file{configure.ac}.
-This macro accepts one argument, which is the directory, relative to the
-test directory, where the executables are prepared.
+Invoke @code{AC_CONFIG_TESTDIR}.
+
+@defmac AC_CONFIG_TESTDIR (@var{directory}, @dvar{test-path, @var{directory}})
+@acindex CONFIG_TESTDIR
+An Autotest test suite is to be configured in @var{directory}.  This
+macro requires the instanciation of @file{@var{directory}/atconfig} from
+@file{@var{directory}/atconfig.in}, and sets the default
+@code{AUTOTEST_PATH} to @var{test-path} (@pxref{testsuite Invocation}).
+@end defmac
 
 @item
-Still within @file{configure.ac}, ensure that some
+Still within @file{configure.ac}, as appropriate, ensure that some
 @code{AC_CONFIG_FILES} command includes substitution for
-@file{tests/atconfig} and also, as appropriate, @file{tests/atlocal}.
+@file{tests/atlocal}.
 
 @item
 The @file{tests/Makefile.in} should be modified so the validation in
 your package is triggered by @samp{make check}.  An example is provided
 below.
-
 @end itemize
 
 With Automake, here is a minimal example about how to link @samp{make
