@@ -11799,22 +11799,36 @@ Nested parenthesization in patterns (e.g., @samp{\(\(a*\)b*)\)}) is
 quite portable to modern hosts, but is not supported by some older
 @command{sed} implementations like SVR3.
 
-Of course the option @option{-e} is portable, but it is not needed.  No
-valid Sed program can start with a dash, so it does not help
-disambiguating.  Its sole usefulness is to help enforcing indentation as
-in:
+The @option{-e} option is portable.
+Some people prefer to use it:
 
 @example
-sed -e @var{instruction-1} \
-    -e @var{instruction-2}
+sed -e '@var{command-1}' \
+    -e '@var{command-2}'
 @end example
 
 @noindent
-as opposed to
+as opposed to the equivalent:
 
 @example
-sed @var{instruction-1};@var{instruction-2}
+sed '
+  @var{command-1}
+  @var{command-2}
+'
 @end example
+
+@noindent
+The following usage is sometimes equivalent:
+
+@example
+sed '@var{command-1};@var{command-2}'
+@end example
+
+but Posix says that this use of a semicolon has undefined effect if
+@var{command-1}'s verb is @samp{@{}, @samp{a}, @samp{b}, @samp{c},
+@samp{i}, @samp{r}, @samp{t}, @samp{w}, @samp{:}, or @samp{#}, so you
+should use semicolon only with simple scripts that do not use these
+verbs.
 
 Contrary to yet another urban legend, you may portably use @samp{&} in
 the replacement part of the @code{s} command to mean ``what was
