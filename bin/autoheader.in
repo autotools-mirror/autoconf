@@ -35,7 +35,7 @@ given.
   -h, --help            print this help, then exit
       --version         print version number, then exit
   -d, --debug           don't remove temporary files
-  -m, --macrodir=DIR    directory storing macro files
+  -m, --macrodir=DIR    directory storing Autoconf's macro files
   -l, --localdir=DIR    directory storing \`aclocal.m4' and \`acconfig.h'
   -v, --verbose         verbosely report processing
 
@@ -185,8 +185,6 @@ case "$config_h" in
 *) config_h_in="$config_h.in" ;;
 esac
 
-tmpout=$ah_base.out
-$debug || trap "rm -f $ah_base*; exit 1" 1 2 15
 # Don't write "do not edit" -- it will get copied into the
 # config.h, which it's ok to edit.
 cat <<EOF >$tmpout
