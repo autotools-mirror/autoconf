@@ -1,5 +1,13 @@
 2001-08-17  Akim Demaille  <akim@epita.fr>
 
+	Start implementing the AC_CHECK_HEADER transition scheme.
+
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_NEW)
+	(_AC_CHECK_HEADER_OLD, _AC_CHECK_HEADER_MONGREL): New.
+	(AC_CHECK_HEADER): Use them.
+
+2001-08-17  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi: Work around Texinfo buglets.
 	(Transformation Rules): One example is enough, users are expected
 	to have their brains on. And BTW, use DESTDIR.

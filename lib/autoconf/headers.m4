@@ -65,24 +65,107 @@
 #                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #                 [INCLUDES])
 # ---------------------------------------------------------
-# If INCLUDES is empty and strictly empty, use the preprocessor to
-# check whether HEADER-FILE exists.  If INCLUDES is set, then use the
-# compiler to check whether INCLUDES followed by HEADER-FILE compiles
-# with success.
+# We are slowly moving to checking headers with the compiler instead
+# of the preproc, so that we actually learn about the usability of a
+# header instead of its mere presence.  But since users are used to
+# the old semantics, they check for headers in random order and
+# without providing prerequisite headers.  This macro implements the
+# transition phase, and should be cleaned up latter to use compilation
+# only.
+#
+# If INCLUDES is empty, then check both via the compiler and preproc.
+# If the results are different, issue a warning, but keep the preproc
+# result.
+#
+# If INCLUDES is `-', keep only the old semantics.
+#
+# If INCLUDES is specified and different from `-', then use the new
+# semantics only.
 AC_DEFUN([AC_CHECK_HEADER],
+[m4_case([$4],
+         [],  [_AC_CHECK_HEADER_MONGREL($@)],
+         [-], [_AC_CHECK_HEADER_OLD($@)],
+              [_AC_CHECK_HEADER_NEW($@)])
+])# AC_CHECK_HEADER
+
+
+# _AC_CHECK_HEADER_MONGREL(HEADER-FILE,
+#                          [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#                          [INCLUDES])
+# --------------------------------------------------------------
+# Check using both the compiler and the preprocessor.  If they disagree,
+# warn, and the preproc wins.
+#
+# This is not based on _AC_CHECK_HEADER_NEW and _AC_CHECK_HEADER_OLD
+# because it obfuscate the code to try to factor everything, in particular
+# because of the cache variables, and the `checking...' messages.
+m4_define([_AC_CHECK_HEADER_MONGREL],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AC_CACHE_CHECK([for $1], ac_Header,
-            [m4_ifval([$4],
-                      [AC_COMPILE_IFELSE([AC_LANG_SOURCE([$4
+AS_VAR_SET_IF(ac_Header,
+              [AC_CACHE_CHECK([for $1], ac_Header, [])],
+              [# Is the header compilable?
+AC_MSG_CHECKING([$1 usability])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT([$4])
 @%:@include <$1>])],
-                                         [AS_VAR_SET(ac_Header, yes)],
-                                         [AS_VAR_SET(ac_Header, no)])],
-                      [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
-                                         [AS_VAR_SET(ac_Header, yes)],
-                                         [AS_VAR_SET(ac_Header, no)])])])
+                  [ac_header_compiler=yes],
+                  [ac_header_compiler=no])
+AC_MSG_RESULT([$ac_header_compiler])
+
+# Is the header present?
+AC_MSG_CHECKING([$1 presence])
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
+                  [ac_header_preproc=yes],
+                  [ac_header_preproc=no])
+AC_MSG_RESULT([$ac_header_preproc])
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc in
+  yes:no )
+    AC_MSG_WARN([$1: accepted by the compiler, rejected by the preprocessor!])
+    AC_MSG_WARN([$1: proceeding with the preprocessor's result]);;
+  no:yes )
+    AC_MSG_WARN([$1: present but cannot be compiled.])
+    AC_MSG_WARN([$1: check for missing prerequisite headers?])
+    AC_MSG_WARN([$1: proceeding with the preprocessor's result]);;
+esac
+AC_CACHE_CHECK([for $1], ac_Header,
+               [AS_VAR_SET(ac_Header, $ac_header_preproc)])
+])dnl ! set ac_HEADER
 AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Header])dnl
-])# AC_CHECK_HEADER
+])# _AC_CHECK_HEADER_MONGREL
+
+
+# _AC_CHECK_HEADER_NEW(HEADER-FILE,
+#                      [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#                      [INCLUDES])
+# --------------------------------------------------------------
+# Check the compiler accepts HEADER-FILE.  The INCLUDES are defaulted.
+m4_define([_AC_CHECK_HEADER_NEW],
+[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
+AC_CACHE_CHECK([for $1], ac_Header,
+               [AC_COMPILE_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT([$4])
+@%:@include <$1>])],
+                                  [AS_VAR_SET(ac_Header, yes)],
+                                  [AS_VAR_SET(ac_Header, no)])])
+AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
+AS_VAR_POPDEF([ac_Header])dnl
+])# _AC_CHECK_HEADER_NEW
+
+
+# _AC_CHECK_HEADER_OLD(HEADER-FILE,
+#                      [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# --------------------------------------------------------------
+# Check the preprocessor accepts HEADER-FILE.
+m4_define([_AC_CHECK_HEADER_OLD],
+[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
+AC_CACHE_CHECK([for $1], ac_Header,
+               [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
+                                         [AS_VAR_SET(ac_Header, yes)],
+                                         [AS_VAR_SET(ac_Header, no)])])
+AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
+AS_VAR_POPDEF([ac_Header])dnl
+])# _AC_CHECK_HEADER_OLD
 
 
 # AH_CHECK_HEADERS(HEADER-FILE...)

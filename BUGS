@@ -35,6 +35,13 @@ address them.
 
 * Status
 
-	/*--------------------------.
-	| Safe for production use.  |
-	`--------------------------*/
+/*------------------------------------------------------------------.
+| Do not use without perfect knowledge of AC_CHECK_HEADER changes.  |
+`------------------------------------------------------------------*/
+
+** AC_CHECK_HEADER
+
+The handling is being revamped, and has not been tested enough to be
+trusted.  We are *extremely* interested in your comments and
+experience with this being-built new semantics.  Nonetheless it is way
+too soon to use this version even for beta releases.
