@@ -2918,8 +2918,8 @@ AC_DEFUN(AC_CHECK_TYPE,
 ## ----------------------- ##
 
 
-# AC_CONFIG_IF_MEMBER(DEST[:SOURCE], LIST, ACTION-IF-TRUE, ACTION-IF-FALSE)
-# -------------------------------------------------------------------------
+# AC_CONFIG_IF_MEMBER(DEST, LIST, ACTION-IF-TRUE, ACTION-IF-FALSE)
+# ----------------------------------------------------------------
 # If DEST is member of LIST, expand to ACTION-IF-TRUE, else ACTION-IF-FALSE.
 #
 # LIST is an AC_CONFIG list, i.e., a list of DEST[:SOURCE], separated
@@ -2928,34 +2928,37 @@ AC_DEFUN(AC_CHECK_TYPE,
 # FIXME: This macro is badly designed, but I'm not guilty: m4 is.  There
 # is just no way to simply compare two strings in m4, but to use pattern
 # matching.  The big problem is then that the active characters should
-# be quoted.  So an additional macro should be used here.  Nevertheless,
-# in the case of file names, there is not much to worry.
+# be quoted.  Currently `+*.' are quoted.
 define(AC_CONFIG_IF_MEMBER,
-[pushdef([AC_Dest], patsubst([$1], [:.*]))dnl
-ifelse(regexp($2, [\(^\| \)]AC_Dest[\(:\| \|$\)]), -1, [$4], [$3])dnl
-popdef([AC_Dest])dnl
-])
+[ifelse(regexp($2, [\(^\| \)]patsubst([$1],
+                                      [\([+*.]\)], [\\\1])[\(:\| \|$\)]),
+        -1, [$4], [$3])])
 
 
 # AC_CONFIG_UNIQUE(DEST[:SOURCE]...)
 # ----------------------------------
+#
 # Verify that there is no double definition of an output file
 # (precisely, guarantees there is no common elements between
 # CONFIG_HEADERS, CONFIG_FILES, CONFIG_LINKS, and CONFIG_SUBDIRS).
-# This macro should output nothing, so we divert to /dev/null.
+# This macro should output nothing, so we divert to /dev/null.  Note
+# that this macro does not check if the list $[1] itself contains
+# doubles.
 define(AC_CONFIG_UNIQUE,
 [AC_DIVERT_PUSH(AC_DIVERSION_KILL)
 AC_FOREACH([AC_File], [$1],
- [AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_HEADERS],
-     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_HEADER or AC_CONFIG_HEADERS.])])
-  AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_LINKS],
-     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_LINKS.])])
-  AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_SUBDIRS],
-     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_SUBDIRS.])])
-  AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_COMMANDS],
-     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_COMMANDS.])])
-  AC_CONFIG_IF_MEMBER(AC_File, [AC_LIST_FILES],
-     [AC_FATAL(`AC_File' [is already registered with AC_CONFIG_FILES or AC_OUTPUT.])])])
+[pushdef([AC_Dest], patsubst(AC_File, [:.*]))
+AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
+     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_HEADER or AC_CONFIG_HEADERS.])])
+  AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_LINKS],
+     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_LINKS.])])
+  AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_SUBDIRS],
+     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_SUBDIRS.])])
+  AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_COMMANDS],
+     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_COMMANDS.])])
+  AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_FILES],
+     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_FILES or AC_OUTPUT.])])
+popdef([AC_Dest])])
 AC_DIVERT_POP()dnl
 ])
 

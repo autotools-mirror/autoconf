@@ -1,5 +1,13 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_CONFIG_UNIQUE): Strip the `:foo.in' part
+	yourself, in order to give better error messages.
+	(AC_CONFIG_IF_MEMBER): Adapted to the above change.
+	Quote some regexp active characters ([+.*]).
+	Suggested by Alexandre Oliva.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_INCLUDES_DEFAULT): Make it more robust to
 	the fact it is used non quoted.
 	Reported by Jim Meyering.
