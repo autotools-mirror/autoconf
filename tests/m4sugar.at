@@ -2,7 +2,7 @@
 
 AT_BANNER([M4sugar.])
 
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2005 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -106,11 +106,8 @@ baz
 
 AT_CHECK_M4SUGAR([], 1, [],
 [[script.4s:12: error: m4@&t@_require: circular dependency of foo
-script.4s:12: foo is required by...
 script.4s:5: bar is expanded from...
-script.4s:12: bar is required by...
 script.4s:2: foo is expanded from...
-script.4s:12: foo is required by...
 script.4s:8: baz is expanded from...
 script.4s:12: the top level
 autom4te: m4 failed with exit status: 1
