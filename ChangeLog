@@ -1,3 +1,17 @@
+2000-12-13  Akim Demaille  <akim@epita.fr>
+
+	EXEEXT and OBJEXT don't need to know $CYGWIN etc.
+
+	* acspecific.m4 (AC_EXEEXT, AC_OBJEXT, _AC_EXEEXT, _AC_OBJEXT):
+	Move as...
+	* aclang.m4 (AC_EXEEXT, AC_OBJEXT, _AC_COMPILER_EXEEXT)
+	(_AC_COMPILER_OBJEXT): these.
+	(_AC_COMPILER_EXEEXT): Use _AC_LINK_IFELSE.
+	Don't depend upon $CYGWIN and the like.
+	(_AC_COMPILER_OBJEXT): Model after _AC_COMPILER_EXEEXT.
+	Skip more extensions.
+	Use _AC_COMPILE_IFELSE.
+
 2000-12-12  Pavel Roskin  <proski@gnu.org>
 
 	* Makefile.am: Don't use suffix rules for perl and shell

@@ -613,17 +613,97 @@ AC_DEFUN_ONCE([AC_NO_EXECUTABLES],
 [m4_divert_push([KILL])
 
 AC_BEFORE([$0], [_AC_LANG_COMPILER_WORKS])
-AC_BEFORE([$0], [_AC_EXEEXT])
+AC_BEFORE([$0], [_AC_COMPILER_EXEEXT])
 
 m4_define([_AC_LANG_COMPILER_WORKS], [cross_compiling=maybe])
 
-m4_define([_AC_EXEEXT], [EXEEXT=])
+m4_define([_AC_COMPILER_EXEEXT], [EXEEXT=])
 
 m4_define([AC_LINK_IFELSE],
 [AC_FATAL([All the tests involving linking were disabled by $0])])
 
 m4_divert_pop()dnl
 ])# # AC_NO_EXECUTABLES
+
+
+
+# ----------------------------- #
+# Computing EXEEXT and OBJEXT.  #
+# ----------------------------- #
+
+
+# Files to ignore
+# ---------------
+# Ignore .d files produced by CFLAGS=-MD.
+#
+# On UWIN (which uses a cc wrapper for MSVC), the compiler also generates
+# a .pdb file
+#
+# When the w32 free Borland C++ command line compiler links a program
+# (conftest.exe), it also produces a file named `conftest.tds' in
+# addition to `conftest.obj'
+
+
+# We must not AU define them, because autoupdate would them remove
+# them, which is right, but Automake 1.4 would remove the support for
+# $(EXEEXT) etc.
+# FIXME: Remove this once Automake fixed.
+AC_DEFUN([AC_EXEEXT],   [])
+AC_DEFUN([AC_OBJEXT],   [])
+
+
+# _AC_COMPILER_EXEEXT
+# -------------------
+# Check for the extension used for executables.  It compiles a test
+# executable.  If this is called, the executable extensions will be
+# automatically used by link commands run by the configure script.
+#
+# This macro is called by AC_LANG_COMPILER, the latter being required
+# by the AC_LINK_IFELSE macros, so use _AC_LINK_IFELSE.
+m4_define([_AC_COMPILER_EXEEXT],
+[AC_CACHE_CHECK([for executable suffix], ac_cv_exeext,
+[_AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+[# If both `conftest.exe' and `conftest' are `present' (well, observable)
+# catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
+# work properly (i.e., refer to `conftest.exe'), while it won't with
+# `rm'.
+for ac_file in `ls conftest.exe conftest conftest.* 2>/dev/null`; do
+  case $ac_file in
+    *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    *) ac_cv_exeext=`expr "$ac_file" : 'conftest\(.*\)'`
+       break;;
+  esac
+done],
+              [AC_MSG_ERROR([cannot compute EXEEXT: cannot compile and link])])
+rm -f conftest$ac_cv_exeext])
+AC_SUBST([EXEEXT], [$ac_cv_exeext])dnl
+ac_exeext=$EXEEXT
+])# _AC_COMPILER_EXEEXT
+
+
+# _AC_COMPILER_OBJEXT
+# -------------------
+# Check the object extension used by the compiler: typically `.o' or
+# `.obj'.  If this is called, some other behaviour will change,
+# determined by ac_objext.
+#
+# This macro is called by AC_LANG_COMPILER, the latter being required
+# by the AC_COMPILE_IFELSE macros, so use _AC_COMPILE_IFELSE.
+m4_define([_AC_COMPILER_OBJEXT],
+[AC_CACHE_CHECK([for object suffix], ac_cv_objext,
+[_AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+[for ac_file in `ls conftest.o conftest.obj conftest.* 2>/dev/null`; do
+  case $ac_file in
+    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb ) ;;
+    *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
+       break;;
+  esac
+done],
+                     [AC_MSG_ERROR([cannot compute OBJEXT: cannot compile])])
+rm -f conftest.$ac_cv_objext])
+AC_SUBST([OBJEXT], [$ac_cv_objext])dnl
+ac_objext=$OBJEXT
+])# _AC_COMPILER_OBJEXT
 
 
 # -------------------- #
@@ -752,8 +832,8 @@ test -z "$CC" && AC_MSG_ERROR([no acceptable cc found in \$PATH])
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
-AC_EXPAND_ONCE([_AC_OBJEXT])
-AC_EXPAND_ONCE([_AC_EXEEXT])
+AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
+AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_CC_G
 AC_LANG_POP
 ])# AC_PROG_CC
@@ -945,8 +1025,8 @@ AC_CHECK_TOOLS(CXX,
 _AC_LANG_COMPILER_WORKS
 _AC_LANG_COMPILER_GNU
 GXX=`test $ac_compiler_gnu = yes && echo yes`
-AC_EXPAND_ONCE([_AC_OBJEXT])
-AC_EXPAND_ONCE([_AC_EXEEXT])
+AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
+AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_CXX_G
 AC_LANG_POP
 ])# AC_PROG_CXX
@@ -1044,8 +1124,8 @@ ac_ext=F
 _AC_LANG_COMPILER_GNU
 ac_ext=$ac_save_ext
 G77=`test $ac_compiler_gnu = yes && echo yes`
-AC_EXPAND_ONCE([_AC_OBJEXT])
-AC_EXPAND_ONCE([_AC_EXEEXT])
+AC_EXPAND_ONCE([_AC_COMPILER_OBJEXT])[]dnl
+AC_EXPAND_ONCE([_AC_COMPILER_EXEEXT])[]dnl
 _AC_PROG_F77_G
 AC_LANG_POP
 ])# AC_PROG_F77

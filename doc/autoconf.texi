@@ -4056,16 +4056,17 @@ All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
 the output of the compiler, typically to the empty string if Unix and
 @samp{.exe} if Win32 or OS/2.
 
-@ovindex CYGWIN
-@ovindex EMXOS2
-@ovindex MINGW32
-They also set the shell variable @code{CYGWIN} to @samp{yes} if run in
-the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX
-environment on OS/2, and @code{MINGW32} to @samp{yes} with the MingW32
-compiler.
+@c FIXME:
+@c @ovindex CYGWIN
+@c @ovindex EMXOS2
+@c @ovindex MINGW32
+@c They also set the shell variable @code{CYGWIN} to @samp{yes} if run in
+@c the Cygwin environment, @code{EMXOS2} to @samp{yes} if in the EMX
+@c environment on OS/2, and @code{MINGW32} to @samp{yes} with the MingW32
+@c compiler.
 
 @ovindex OBJEXT
-Finally, they define the output variable @code{OBJEXT} based on the
+They also define the output variable @code{OBJEXT} based on the
 output of the compiler, after .c files have been excluded, typically
 to @samp{o} if Unix, @samp{obj} if Win32.
 
