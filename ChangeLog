@@ -1,5 +1,11 @@
 2002-09-28  Akim Demaille  <akim@epita.fr>
 
+	* lib/autom4te.in (Autoscan-preselections, Autoreconf-preselections)
+	(Automake-preselections): Update.
+	* bin/autoreconf.in, bin/autoheader.in: Comment changes.
+
+2002-09-28  Akim Demaille  <akim@epita.fr>
+
 	* lib/autoscan/autoscan.pre: Move all the remaining rules to...
 	* lib/autoconf/c.m4, lib/autoconf/functions.m4,
 	* lib/autoconf/headers.m4, lib/autoconf/libs.m4,
