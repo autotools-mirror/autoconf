@@ -5064,7 +5064,7 @@ example, if you didn't like the default order, then you could invoke
 @code{AC_PROG_F77} like this:
 
 @example
-AC_PROG_F77(fl32 f77 fort77 xlf cf77 g77 f90 xlf90)
+AC_PROG_F77(fl32 f77 fort77 xlf g77 f90 xlf90)
 @end example
 
 If using @code{g77} (the @sc{gnu} Fortran 77 compiler), then
