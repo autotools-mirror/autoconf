@@ -1,5 +1,14 @@
 2003-06-25  Akim Demaille  <akim@epita.fr>
 
+	* lib/Makefile.am (autom4te.cfg): Make it read only.
+	Depend on Makefile since it contains substitutions.
+	From Paolo Bonzini.
+	* lib/autom4te.in (args): Add local.at? for Autotest args.
+	This change was made on autom4te.cfg which is generated.
+	Reported by Raja R. Harinath.
+
+2003-06-25  Akim Demaille  <akim@epita.fr>
+
 	* doc/autoconf.texi (Header Portability): sys/mount.h.
 	From Gareth McCaughan.
 
