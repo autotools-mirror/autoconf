@@ -6,8 +6,8 @@
 @c %**end of header
 @c Use on instead of odd in the setchapternewpage for single-sided printing.
 
-@set EDITION 1.7.5
-@set VERSION 1.7.5
+@set EDITION 1.7.6
+@set VERSION 1.7.6
 @set UPDATED March 1994
 
 @iftex
@@ -1417,6 +1417,19 @@ X/Imakefile}.
 
 If you pass @var{extra-cmds}, those commands will be inserted into
 @file{config.status} to be run after all its other processing.
+@end defmac
+
+@defmac AC_PREREQ (@var{version})
+@maindex PREREQ
+Ensure that a recent enough version of Autoconf is being used.
+If the version of Autoconf being used to create @code{configure} is
+earlier than @var{version}, print an error message on the standard error
+output and do not create @code{configure}.
+
+This macro is useful if your @file{configure.in} relies on non-obvious
+behavior that changed between Autoconf releases.  (If it merely needs
+recently added macros, then the @code{autoconf} program already tells
+the user if they are not found, so this macro is less useful in that case.)
 @end defmac
 
 @defmac AC_REVISION (@var{revision-info})
