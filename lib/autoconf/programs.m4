@@ -447,6 +447,8 @@ if test -z "$$1"; then
 m4_default([$4], [\$PATH])])
 fi
 AC_SUBST([$1])
+else
+  ac_cv_path_$1=$$1
 fi
 ])
 
