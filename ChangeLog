@@ -1,5 +1,14 @@
 2000-02-08  Akim Demaille  <akim@epita.fr>
 
+	Quote properly AC_SHELL_IFELSE and callers.
+
+	* acgeneral.m4 (AC_SHELL_IFELSE): Don't overquote $1.
+	(AC_VAR_IF_SET, AC_CHECK_MEMBER, AC_CHECK_LIB, AC_CHECK_HEADER,
+	AC_CHECK_DECL, AC_CHECK_FUNC, AC_CHECK_TYPE_INTERNAL): Quote the
+	first argument of AC_SHELL_IFELSE.
+
+2000-02-08  Akim Demaille  <akim@epita.fr>
+
 	It seems quite delicate to have AC_INCLUDES_DEFAULT insert the
 	default headers in the INIT section of configure: the reason is
 	that AC_INCLUDES_DEFAULT is called unquoted, and this results in

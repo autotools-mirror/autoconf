@@ -198,14 +198,14 @@ define(AC_PROVIDE,
 # -------------------------------------------
 # Expand into
 # | if TEST; then
-# | 	IF-TRUE;
+# |   IF-TRUE
 # | else
-# | 	IF-FALSE
+# |   IF-FALSE
 # | fi
 # with simplifications is IF-TRUE and/or IF-FALSE is empty.
 define([AC_SHELL_IFELSE],
 [ifval([$2$3],
-[if [$1]; then
+[if $1; then
   ifval([$2], [$2], :)
 ifval([$3],
 [else
@@ -276,7 +276,7 @@ define(AC_VAR_TEST_SET,
 # Implement a shell `if-then-else' depending whether VARIABLE is set
 # or not.  Polymorphic.
 define(AC_VAR_IF_SET,
-[AC_SHELL_IFELSE(AC_VAR_TEST_SET([$1]), [$2], [$3])])
+[AC_SHELL_IFELSE([AC_VAR_TEST_SET([$1])], [$2], [$3])])
 
 
 # AC_VAR_PUSHDEF and AC_VAR_POPDEF
@@ -1897,7 +1897,7 @@ dnl foo.MEMBER;
 foo.patsubst([$1], [.*\.]);,
                 AC_VAR_SET(ac_Member, yes),
                 AC_VAR_SET(ac_Member, no))])
-AC_SHELL_IFELSE(test AC_VAR_GET(ac_Member) = yes,
+AC_SHELL_IFELSE([test AC_VAR_GET(ac_Member) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Member])dnl
 ])dnl AC_CHECK_MEMBER
@@ -2260,7 +2260,7 @@ char $2();
 [$2()],
 AC_VAR_SET(ac_Lib, yes), AC_VAR_SET(ac_Lib, no))
 LIBS="$ac_save_LIBS"])
-AC_SHELL_IFELSE(test AC_VAR_GET(ac_Lib) = yes,
+AC_SHELL_IFELSE([test AC_VAR_GET(ac_Lib) = yes],
                 m4_default([$3],
                            [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
@@ -2510,7 +2510,7 @@ AC_CACHE_CHECK([for $1], ac_Header,
 [AC_TRY_CPP([#include <$1>
 ],
 AC_VAR_SET(ac_Header, yes), AC_VAR_SET(ac_Header, no))])
-AC_SHELL_IFELSE(test AC_VAR_GET(ac_Header) = yes,
+AC_SHELL_IFELSE([test AC_VAR_GET(ac_Header) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Header])dnl
 ])dnl AC_CHECK_HEADER
@@ -2592,7 +2592,7 @@ AC_CACHE_CHECK([whether $1 is declared], ac_Symbol,
 #endif
 ],
 AC_VAR_SET(ac_Symbol, yes), AC_VAR_SET(ac_Symbol, no))])
-AC_SHELL_IFELSE(test AC_VAR_GET(ac_Symbol) = yes,
+AC_SHELL_IFELSE([test AC_VAR_GET(ac_Symbol) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Symbol])dnl
 ])dnl AC_CHECK_DECL
@@ -2648,7 +2648,7 @@ choke me
 f = $1;
 #endif
 ], AC_VAR_SET(ac_var, yes), AC_VAR_SET(ac_var, no))])
-AC_SHELL_IFELSE(test AC_VAR_GET(ac_var) = yes,
+AC_SHELL_IFELSE([test AC_VAR_GET(ac_var) = yes],
                [$2], [$3])dnl
 AC_VAR_POPDEF([ac_var])dnl
 ])dnl AC_CHECK_FUNC
@@ -2789,7 +2789,7 @@ if (sizeof ($1))
   return 0;],
                 AC_VAR_SET(ac_Type, yes),
                 AC_VAR_SET(ac_Type, no))])
-AC_SHELL_IFELSE(test AC_VAR_GET(ac_Type) = yes,
+AC_SHELL_IFELSE([test AC_VAR_GET(ac_Type) = yes],
                 [$2], [$3])dnl
 AC_VAR_POPDEF([ac_Type])dnl
 ])dnl AC_CHECK_TYPE_INTERNAL
