@@ -1,3 +1,8 @@
+1999-02-28  Ben Elliston  <bje@cygnus.com>
+
+	* config.sub: Add `oskit' as a basic system type. From Godmar Back
+	<gback@cs.utah.edu>.
+
 1999-02-26  Ben Elliston  <bje@cygnus.com>
 
 	* install-sh: Avoid trailing whitespace.
