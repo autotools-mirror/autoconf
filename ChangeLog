@@ -1,5 +1,10 @@
 2001-01-22  Akim Demaille  <akim@epita.fr>
 
+	* autoscan.pl: Formatting changes.
+	Check `configure.ac' or `configure.in' if present.
+
+2001-01-22  Akim Demaille  <akim@epita.fr>
+
 	* autoscan.pl (&wanted): Don't register `Makefile' when
 	`Makefile.in' is present.
 	Factor the simplification of $name.

@@ -37,7 +37,20 @@ $verbose = 0;
 &find('.');
 &scan_files;
 &output;
-&check_configure_ac ('configure.in');
+
+if (-f 'configure.ac')
+  {
+    if (-f 'configure.in')
+      {
+	print STDERR "warning: `configure.ac' and `configure.in' both present.\n";
+	print STDERR "warning: proceeding with `configure.ac'.\n";
+      }
+    &check_configure_ac ('configure.in');
+  }
+elsif (-f 'configure.in')
+  {
+    &check_configure_ac ('configure.in');
+  }
 
 exit 0;
 
@@ -123,19 +136,24 @@ sub init_tables
   # instead of duplicating the code in lots of configure.ac files.
 
   foreach $kind ('functions', 'headers', 'identifiers', 'programs',
-		 'makevars') {
-    open(TABLE, "<$datadir/ac$kind") ||
-      die "$me: cannot open $datadir/ac$kind: $!\n";
-    while (<TABLE>) {
-      next if /^\s*$/ || /^\s*#/; # Ignore blank lines and comments.
-      unless (/^(\S+)\s+(\S.*)$/) {
-	die "$me: cannot parse definition in $datadir/ac$kind:\n$_\n";
-      }
-      ($word, $macro) = ($1, $2);
-      eval "\$$kind" . "_macros{\$word} = \$macro";
+		 'makevars')
+    {
+      open(TABLE, "<$datadir/ac$kind") ||
+	die "$me: cannot open $datadir/ac$kind: $!\n";
+      while (<TABLE>)
+	{
+	  # Ignore blank lines and comments.
+	  next
+	    if /^\s*$/ || /^\s*\#/;
+	  unless (/^(\S+)\s+(\S.*)$/)
+	    {
+	      die "$me: cannot parse definition in $datadir/ac$kind:\n$_\n";
+	    }
+	  ($word, $macro) = ($1, $2);
+	  eval "\$$kind" . "_macros{\$word} = \$macro";
+	}
+      close(TABLE);
     }
-    close(TABLE);
-  }
 }
 
 # Collect names of various kinds of files in the package.
@@ -171,96 +189,111 @@ sub wanted
 # that might create nonportabilities.
 sub scan_files
 {
-  if (defined $cfiles[0]) {
-    $initfile = $cfiles[0];		# Pick one at random.
-  }
+  if (defined $cfiles[0])
+    {
+      $initfile = $cfiles[0];		# Pick one at random.
+    }
 
-  if ($verbose) {
-    print "cfiles:", join(" ", @cfiles), "\n";
-    print "makefiles:", join(" ", @makefiles), "\n";
-    print "shfiles:", join(" ", @shfiles), "\n";
-  }
+  if ($verbose)
+    {
+      print "cfiles:", join(" ", @cfiles), "\n";
+      print "makefiles:", join(" ", @makefiles), "\n";
+      print "shfiles:", join(" ", @shfiles), "\n";
+    }
 
-  foreach $file (@cfiles) {
-    $programs{"cc"}++;
-    &scan_c_file($file);
-  }
+  foreach $file (@cfiles)
+    {
+      $programs{"cc"}++;
+      &scan_c_file($file);
+    }
 
-  foreach $file (@makefiles) {
-    &scan_makefile($file);
-  }
+  foreach $file (@makefiles)
+    {
+      &scan_makefile($file);
+    }
 
-  foreach $file (@shfiles) {
-    &scan_sh_file($file);
-  }
+  foreach $file (@shfiles)
+    {
+      &scan_sh_file($file);
+    }
 }
 
+# scan_c_file(FILE)
+# -----------------
 sub scan_c_file
 {
   local($file) = @_;
   local($in_comment) = 0;	# Nonzero if in a multiline comment.
 
   open(CFILE, "<$file") || die "$me: cannot open $file: $!\n";
-  while (<CFILE>) {
-    # Strip out comments, approximately.
-    # Ending on this line.
-    if ($in_comment && m,\*/,) {
-      s,.*\*/,,;
-      $in_comment = 0;
-    }
-    # All on one line.
-    s,/\*.*\*/,,g;
-    # Starting on this line.
-    if (m,/\*,) {
-      $in_comment = 1;
-    }
-    # Continuing on this line.
-    next if $in_comment;
+  while (<CFILE>)
+    {
+      # Strip out comments, approximately.
+      # Ending on this line.
+      if ($in_comment && m,\*/,)
+	{
+	  s,.*\*/,,;
+	  $in_comment = 0;
+	}
+      # All on one line.
+      s,/\*.*\*/,,g;
+      # Starting on this line.
+      if (m,/\*,)
+	{
+	  $in_comment = 1;
+	}
+      # Continuing on this line.
+      next if $in_comment;
 
-    # Preprocessor directives.
-    if (/^\s*\#\s*include\s*<([^>]*)>/) {
-      $headers{$1}++;
+      # Preprocessor directives.
+      if (/^\s*\#\s*include\s*<([^>]*)>/)
+	{
+	  $headers{$1}++;
+	}
+      # Ignore other preprocessor directives.
+      next if /^\s*\#/;
+
+      # Remove string and character constants.
+      s,\"[^\"]*\",,g;
+      s,\'[^\']*\',,g;
+
+      # Tokens in the code.
+      # Maybe we should ignore function definitions (in column 0)?
+      while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
+	{
+	  $functions{$1}++
+	    if !defined($c_keywords{$1});
+	}
+      while (s/\b([a-zA-Z_]\w*)\b/ /)
+	{
+	  $identifiers{$1}++
+	    if !defined($c_keywords{$1});
+	}
     }
-    # Ignore other preprocessor directives.
-    next if /^\s*\#/;
-
-    # Remove string and character constants.
-    s,\"[^\"]*\",,g;
-    s,\'[^\']*\',,g;
-
-    # Tokens in the code.
-    # Maybe we should ignore function definitions (in column 0)?
-    while (s/\b([a-zA-Z_]\w*)\s*\(/ /)
-      {
-	$functions{$1}++
-	  if !defined($c_keywords{$1});
-      }
-    while (s/\b([a-zA-Z_]\w*)\b/ /)
-      {
-	$identifiers{$1}++
-	  if !defined($c_keywords{$1});
-      }
-  }
   close(CFILE);
 
-  if ($verbose) {
-    local($word);
+  if ($verbose)
+    {
+      local($word);
 
-    print "\n$file functions:\n";
-    foreach $word (sort keys %functions) {
-      print "$word $functions{$word}\n";
-    }
+      print "\n$file functions:\n";
+      foreach $word (sort keys %functions)
+	{
+	  print "$word $functions{$word}\n";
+	}
 
-    print "\n$file identifiers:\n";
-    foreach $word (sort keys %identifiers) {
-      print "$word $identifiers{$word}\n";
-    }
+      print "\n$file identifiers:\n";
+      foreach $word (sort keys %identifiers)
+	{
+	  print "$word $identifiers{$word}\n";
+	}
 
-    print "\n$file headers:\n";
-    foreach $word (sort keys %headers) {
-      print "$word $headers{$word}\n";
+      print "\n$file headers:\n";
+      foreach $word (sort keys %headers)
+	{
+	  print "$word $headers{$word}\n";
+	}
     }
-  }
 }
 
 sub scan_makefile
@@ -268,51 +301,54 @@ sub scan_makefile
   local($file) = @_;
 
   open(MFILE, "<$file") || die "$me: cannot open $file: $!\n";
-  while (<MFILE>) {
-    # Strip out comments and variable references.
-    s/#.*//;
-    s/\$\([^\)]*\)//g;
-    s/\${[^\}]*}//g;
-    s/@[^@]*@//g;
+  while (<MFILE>)
+    {
+      # Strip out comments and variable references.
+      s/#.*//;
+      s/\$\([^\)]*\)//g;
+      s/\${[^\}]*}//g;
+      s/@[^@]*@//g;
 
-    # Variable assignments.
-    while (s/\b([a-zA-Z_]\w*)\s*=/ /)
-      {
-	push (@{$makevars{$1}}, "$file:$.");
-      }
-    # Libraries.
-    while (s/\B-l([a-zA-Z_]\w*)\b/ /)
-      {
-	$libraries{$1}++;
-      }
-    # Tokens in the code.
-    while (s/\b([a-zA-Z_]\w*)\b/ /)
-      {
-	push (@{$programs{$1}}, "$file:$.");
-      }
-  }
+      # Variable assignments.
+      while (s/\b([a-zA-Z_]\w*)\s*=/ /)
+	{
+	  push (@{$makevars{$1}}, "$file:$.");
+	}
+      # Libraries.
+      while (s/\B-l([a-zA-Z_]\w*)\b/ /)
+	{
+	  $libraries{$1}++;
+	}
+      # Tokens in the code.
+      while (s/\b([a-zA-Z_]\w*)\b/ /)
+	{
+	  push (@{$programs{$1}}, "$file:$.");
+	}
+    }
   close(MFILE);
 
-  if ($verbose) {
-    local($word);
+  if ($verbose)
+    {
+      local($word);
 
-    print "\n$file makevars:\n";
-    foreach $word (sort keys %makevars)
-      {
-	print "$word @{$makevars{$word}}\n";
-      }
+      print "\n$file makevars:\n";
+      foreach $word (sort keys %makevars)
+	{
+	  print "$word @{$makevars{$word}}\n";
+	}
 
-    print "\n$file libraries:\n";
-    foreach $word (sort keys %libraries) {
-      print "$word $libraries{$word}\n";
+      print "\n$file libraries:\n";
+      foreach $word (sort keys %libraries)
+	{
+	  print "$word $libraries{$word}\n";
+	}
+
+      print "\n$file programs:\n";
+      foreach $word (sort keys %programs)
+	{
+	  print "$word @{$programs{$word}}\n";
+	}
     }
-
-    print "\n$file programs:\n";
-    foreach $word (sort keys %programs)
-      {
-	print "$word @{$programs{$word}}\n";
-      }
-  }
 }
 
 sub scan_sh_file
@@ -320,26 +356,29 @@ sub scan_sh_file
   local($file) = @_;
 
   open(MFILE, "<$file") || die "$me: cannot open $file: $!\n";
-  while (<MFILE>) {
-    # Strip out comments and variable references.
-    s/#.*//;
-    s/\${[^\}]*}//g;
-    s/@[^@]*@//g;
+  while (<MFILE>)
+    {
+      # Strip out comments and variable references.
+      s/#.*//;
+      s/\${[^\}]*}//g;
+      s/@[^@]*@//g;
 
-    # Tokens in the code.
-    while (s/\b([a-zA-Z_]\w*)\b/ /) {
-      push (@{$programs{$1}}, "$file:$.");
+      # Tokens in the code.
+      while (s/\b([a-zA-Z_]\w*)\b/ /)
+	{
+	  push (@{$programs{$1}}, "$file:$.");
+	}
     }
-  }
   close(MFILE);
 
   if ($verbose) {
     local($word);
 
     print "\n$file programs:\n";
-    foreach $word (sort keys %programs) {
-      print "$word @{$programs{$word}}\n";
-    }
+    foreach $word (sort keys %programs)
+      {
+	print "$word @{$programs{$word}}\n";
+      }
   }
 }
 
@@ -350,12 +389,14 @@ sub output
 
   print CONF "# Process this file with autoconf to produce a configure script.\n";
   print CONF "AC_INIT\n";
-  if (defined $initfile) {
-    print CONF "AC_CONFIG_SRCDIR([$initfile])\n";
-  }
-  if (defined $cfiles[0]) {
-    print CONF "AC_CONFIG_HEADER([config.h])\n";
-  }
+  if (defined $initfile)
+    {
+      print CONF "AC_CONFIG_SRCDIR([$initfile])\n";
+    }
+  if (defined $cfiles[0])
+    {
+      print CONF "AC_CONFIG_HEADER([config.h])\n";
+    }
 
   &output_programs;
   &output_libraries;
@@ -364,10 +405,11 @@ sub output
   &output_functions;
 
   # Change DIR/Makefile.in to DIR/Makefile.
-  foreach $_ (@makefiles) {
-    s/\.in$//;
-    $unique_makefiles{$_}++;
-  }
+  foreach $_ (@makefiles)
+    {
+      s/\.in$//;
+      $unique_makefiles{$_}++;
+    }
   print CONF "\nAC_CONFIG_FILES([",
         join("\n                 ", keys(%unique_makefiles)), "])\n";
   print CONF "AC_OUTPUT\n";
@@ -422,14 +464,18 @@ sub output_headers
   local ($word);
 
   print CONF "\n# Checks for header files.\n";
-  foreach $word (sort keys %headers) {
-    if (defined($headers_macros{$word}) &&
-	$headers_macros{$word} eq 'AC_CHECK_HEADERS') {
-      push(@have_headers, $word);
-    } else {
-      &print_unique($headers_macros{$word});
+  foreach $word (sort keys %headers)
+    {
+      if (defined($headers_macros{$word}) &&
+	  $headers_macros{$word} eq 'AC_CHECK_HEADERS')
+	{
+	  push(@have_headers, $word);
+	}
+      else
+	{
+	  &print_unique($headers_macros{$word});
+	}
     }
-  }
   print CONF "AC_CHECK_HEADERS([" . join(' ', sort(@have_headers)) . "])\n"
     if defined(@have_headers);
 }
@@ -439,14 +485,18 @@ sub output_identifiers
   local ($word);
 
   print CONF "\n# Checks for typedefs, structures, and compiler characteristics.\n";
-  foreach $word (sort keys %identifiers) {
-    if (defined ($identifiers_macros{$word}) &&
-	$identifiers_macros{$word} eq 'AC_CHECK_TYPES') {
-      push (@have_types, $word);
-    } else {
-      &print_unique ($identifiers_macros{$word});
+  foreach $word (sort keys %identifiers)
+    {
+      if (defined ($identifiers_macros{$word}) &&
+	  $identifiers_macros{$word} eq 'AC_CHECK_TYPES')
+	{
+	  push (@have_types, $word);
+	}
+      else
+	{
+	  &print_unique ($identifiers_macros{$word});
+	}
     }
-  }
   print CONF "AC_CHECK_TYPES([" . join(', ', sort(@have_types)) . "])\n"
     if defined (@have_types);
 }
@@ -456,14 +506,18 @@ sub output_functions
   local ($word);
 
   print CONF "\n# Checks for library functions.\n";
-  foreach $word (sort keys %functions) {
-    if (defined($functions_macros{$word}) &&
-	$functions_macros{$word} eq 'AC_CHECK_FUNCS') {
-      push(@have_funcs, $word);
-    } else {
-      &print_unique($functions_macros{$word});
+  foreach $word (sort keys %functions)
+    {
+      if (defined($functions_macros{$word}) &&
+	  $functions_macros{$word} eq 'AC_CHECK_FUNCS')
+	{
+	  push(@have_funcs, $word);
+	}
+      else
+	{
+	  &print_unique($functions_macros{$word});
+	}
     }
-  }
   print CONF "AC_CHECK_FUNCS([" . join(' ', sort(@have_funcs)) . "])\n"
     if defined(@have_funcs);
 }
