@@ -8961,50 +8961,25 @@ fallback value is needed.  We list these values below.
 @table @code
 @item CDPATH
 @evindex CDPATH
-When this variable is set @code{cd} is verbose, so idioms such as
-@samp{abs=`cd $rel && pwd`} break because @code{abs} receives the path
-twice.
+When this variable is set it specifies a list of directories to search
+when invoking @code{cd} with a relative filename.  @acronym{POSIX}
+1003.1-2001 says that if a nonempty directory name from @code{CDPATH}
+is used successfully, @code{cd} prints the resulting absolute
+filename.  Unfortunately this output can break idioms like
+@samp{abs=`cd src && pwd`} because @code{abs} receives the path twice.
+Also, many shells do not conform to this part of @acronym{POSIX}; for
+example, @command{zsh} prints the result only if a directory name
+other than @file{.} was chosen from @code{CDPATH}.
 
-@c FIXME: Which shells?  How do they behave?
-Setting @code{CDPATH} to the empty value is not enough for most shells.
-A simple path separator is enough except for @code{zsh}, which prefers a
-leading dot:
-
-@example
-zsh-3.1.6$ @kbd{mkdir foo && (CDPATH=: cd foo)}
-/tmp/foo
-zsh-3.1.6$ @kbd{(CDPATH=:. cd foo)}
-/tmp/foo
-zsh-3.1.6$ @kbd{(CDPATH=.: cd foo)}
-zsh-3.1.6$
-@end example
-
-@noindent
-(of course we could just @command{unset} @code{CDPATH}, since it also
-behaves properly if set to the empty string).
-
-Life wouldn't be so much fun if @command{bash} and @command{zsh} had the
-same behavior:
+In practice the shells that have this problem also support
+@command{unset}, so you can work around the problem as follows:
 
 @example
-bash-2.02$ @kbd{mkdir foo && (CDPATH=: cd foo)}
-bash-2.02$ @kbd{(CDPATH=:. cd foo)}
-bash-2.02$ @kbd{(CDPATH=.: cd foo)}
-/tmp/foo
+(unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 @end example
 
-Of course, even better style would be to use @code{PATH_SEPARATOR} instead
-of a @samp{:}.
-Therefore, a portable solution to neutralize @code{CDPATH} is
-
-@example
-CDPATH=$@{ZSH_VERSION+.@}$PATH_SEPARATOR
-@end example
-
-@noindent
-Note that since @command{zsh} supports @command{unset}, you may unset
-@code{CDPATH} using @code{PATH_SEPARATOR} as a fallback, see
-@ref{Limitations of Builtins}.
+Autoconf-generated scripts automatically unset @code{CDPATH} if
+possible, so you need not worry about this problem in those scripts.
 
 @item IFS
 @evindex IFS
@@ -9145,6 +9120,16 @@ When executing the command @samp{>foo}, @command{zsh} executes
 sets @code{NULLCMD} to @samp{cat}.  If you forgot to set @code{NULLCMD},
 your script might be suspended waiting for data on its standard input.
 
+@item PWD
+@acronym{POSIX} 1003.1-2001 requires that @command{cd} and
+@command{pwd} must update the @env{PWD} environment variable to point
+to the logical path to the current directory, but traditional shells
+do not support this.  This can cause confusion if one shell instance
+maintains @env{PWD} but a subsidiary and different shell does not know
+about @env{PWD} and executes @command{cd}; in this case @env{PWD} will
+point to the wrong directory.  Use @samp{`pwd`} rather than
+@samp{$PWD}.
+
 @item status
 @evindex status
 This variable is an alias to @samp{$?} for @code{zsh} (at least 3.1.6),
@@ -9204,6 +9189,27 @@ You can't use @command{!}, you'll have to rewrite your code.
 @c ------------------
 @prindex @command{break}
 The use of @samp{break 2}, etcetera, is safe.
+
+
+@item @command{cd} and @command{pwd}
+@c ---------------------------------
+@prindex @command{cd}
+@prindex @command{pwd}
+@acronym{POSIX} 1003.1-2001 requires that @command{cd} and
+@command{pwd} must support the @option{-L} and @option{-P} options,
+with @option{-L} being the default.  However, traditional shells do
+not support these options, and their @command{cd} and @command{pwd}
+commands have the @option{-P} behavior.
+
+Portable scripts should assume neither option is supported, and should
+assume neither behavior is the default.  This can be a bit tricky,
+since the @acronym{POSIX} default behavior means that, for example,
+@samp{ls ..} and @samp{cd ..} may refer to different directories.  It
+is safe to use @command{cd @var{dir}} if @var{dir} contains no
+@file{..} components.  Also, Autoconf-generated scripts check for this
+problem when computing variables like @code{ac_top_srcdir}
+(@pxref{Configuration Actions}), so it is safe to @command{cd} to
+these variables.
 
 
 @item @command{case}
@@ -9431,6 +9437,10 @@ fi
 @end example
 
 
+@item @command{pwd}
+@c ----------------
+See @command{cd} above.
+
 @item @command{set}
 @c ----------------
 @prindex @command{set}
@@ -9644,7 +9654,7 @@ for @command{true}.
 @prindex @command{unset}
 You cannot assume the support of @command{unset}, nevertheless, because
 it is extremely useful to disable embarrassing variables such as
-@code{CDPATH}, you can test for its existence and use
+@code{PS1}, you can test for its existence and use
 it @emph{provided} you give a neutralizing value when @command{unset} is
 not supported:
 
@@ -9654,7 +9664,7 @@ if (unset FOO) >/dev/null 2>&1; then
 else
   unset=false
 fi
-$unset CDPATH || CDPATH=:
+$unset PS1 || PS1='$ '
 @end example
 
 @xref{Special Shell Variables}, for some neutralizing values. Also, see
