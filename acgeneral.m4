@@ -1573,8 +1573,7 @@ dnl [#]line __oline__ "[$]0"
 [#]line __oline__ "configure"
 #include "confdefs.h"
 [$1]
-int main() { return 0; }
-int t() {
+int main() {
 [$2]
 ; return 0; }
 EOF
@@ -1611,8 +1610,7 @@ dnl [#]line __oline__ "[$]0"
 [#]line __oline__ "configure"
 #include "confdefs.h"
 [$1]
-int main() { return 0; }
-int t() {
+int main() {
 [$2]
 ; return 0; }
 EOF

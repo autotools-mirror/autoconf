@@ -813,20 +813,21 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_FNMATCH,
-[AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch,
+[AC_CACHE_CHECK(for working fnmatch, ac_cv_func_fnmatch_works,
 # Some versions of Solaris or SCO have a broken fnmatch function.
 # So we run a test program.  If we are cross-compiling, take no chance.
 # Thanks to John Oleynick and Franc,ois Pinard for this test.
 [AC_TRY_RUN([main() { exit (fnmatch ("a*", "abc", 0) != 0); }],
-ac_cv_func_fnmatch=yes, ac_cv_func_fnmatch=no, ac_cv_func_fnmatch=no)])
-if test $ac_cv_func_fnmatch = yes; then
+ac_cv_func_fnmatch_works=yes, ac_cv_func_fnmatch_works=no,
+ac_cv_func_fnmatch_works=no)])
+if test $ac_cv_func_fnmatch_works = yes; then
   AC_DEFINE(HAVE_FNMATCH)
 fi
 ])
 
 AC_DEFUN(AC_FUNC_MMAP,
 [AC_CHECK_FUNCS(getpagesize)
-AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap,
+AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 [AC_TRY_RUN([
 /* Thanks to Mike Haertel and Jim Avera for this test.
    Here is a matrix of mmap possibilities:
@@ -942,8 +943,9 @@ main()
 	unlink("conftestmmap");
 	exit(0);
 }
-], ac_cv_func_mmap=yes, ac_cv_func_mmap=no, ac_cv_func_mmap=no)])
-if test $ac_cv_func_mmap = yes; then
+], ac_cv_func_mmap_fixed_mapped=yes, ac_cv_func_mmap_fixed_mapped=no,
+ac_cv_func_mmap_fixed_mapped=no)])
+if test $ac_cv_func_mmap_fixed_mapped = yes; then
   AC_DEFINE(HAVE_MMAP)
 fi
 ])
@@ -1041,7 +1043,7 @@ fi
 AC_DEFUN(AC_FUNC_VFORK,
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
 AC_CHECK_HEADER(vfork.h, AC_DEFINE(HAVE_VFORK_H))
-AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork,
+AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_TRY_RUN([/* Thanks to Paul Eggert for this test.  */
 #include <stdio.h>
 #include <sys/types.h>
@@ -1132,14 +1134,14 @@ main() {
 	 );
   }
 }],
-ac_cv_func_vfork=yes, ac_cv_func_vfork=no, AC_CHECK_FUNC(vfork))])
-if test $ac_cv_func_vfork = no; then
+ac_cv_func_vfork_works=yes, ac_cv_func_vfork_works=no, AC_CHECK_FUNC(vfork))])
+if test $ac_cv_func_vfork_works = no; then
   AC_DEFINE(vfork, fork)
 fi
 ])
 
 AC_DEFUN(AC_FUNC_WAIT3,
-[AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3,
+[AC_CACHE_CHECK(for wait3 that fills in rusage, ac_cv_func_wait3_rusage,
 [AC_TRY_RUN([#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/resource.h>
@@ -1167,8 +1169,9 @@ main() {
     exit(r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
 	 && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
   }
-}], ac_cv_func_wait3=yes, ac_cv_func_wait3=no, ac_cv_func_wait3=no)])
-if test $ac_cv_func_wait3 = yes; then
+}], ac_cv_func_wait3_rusage=yes, ac_cv_func_wait3_rusage=no,
+ac_cv_func_wait3_rusage=no)])
+if test $ac_cv_func_wait3_rusage = yes; then
   AC_DEFINE(HAVE_WAIT3)
 fi
 ])
@@ -1184,7 +1187,7 @@ if test $ac_cv_header_alloca_h = yes; then
   AC_DEFINE(HAVE_ALLOCA_H)
 fi
 
-AC_CACHE_CHECK([for alloca], ac_cv_func_alloca,
+AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
 [AC_TRY_LINK([
 #ifdef __GNUC__
 # define alloca __builtin_alloca
@@ -1202,12 +1205,12 @@ char *alloca ();
 # endif
 #endif
 ], [char *p = (char *) alloca(1);],
-  ac_cv_func_alloca=yes, ac_cv_func_alloca=no)])
-if test $ac_cv_func_alloca = yes; then
+  ac_cv_func_alloca_works=yes, ac_cv_func_alloca_works=no)])
+if test $ac_cv_func_alloca_works = yes; then
   AC_DEFINE(HAVE_ALLOCA)
 fi
 
-if test $ac_cv_func_alloca = no; then
+if test $ac_cv_func_alloca_works = no; then
   # The SVR3 libPW and SVR4 libucb both contain incompatible functions
   # that cause trouble.  Some versions do not even contain alloca or
   # contain a buggy version.  If you still want to use their alloca,
@@ -1268,9 +1271,9 @@ AC_CHECK_LIB(util, getloadavg,
 if test $ac_have_func = no; then
   # There is a commonly available library for RS/6000 AIX.
   # Since it is not a standard part of AIX, it might be installed locally.
-  ac_save_LIBS="$LIBS" LIBS="-L/usr/local/lib $LIBS"
+  ac_getloadavg_LIBS="$LIBS" LIBS="-L/usr/local/lib $LIBS"
   AC_CHECK_LIB(getloadavg, getloadavg,
-    LIBS="-lgetloadavg $LIBS", LIBS="$ac_save_LIBS")
+    LIBS="-lgetloadavg $LIBS", LIBS="$ac_getloadavg_LIBS")
 fi
 
 # Make sure it is really in the library, if we think we found it.
@@ -1375,15 +1378,16 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_STRCOLL,
-[AC_CACHE_CHECK(for strcoll, ac_cv_func_strcoll,
+[AC_CACHE_CHECK(for strcoll, ac_cv_func_strcoll_works,
 [AC_TRY_RUN([#include <string.h>
 main ()
 {
   exit (strcoll ("abc", "def") >= 0 ||
 	strcoll ("ABC", "DEF") >= 0 ||
 	strcoll ("123", "456") >= 0);
-}], ac_cv_func_strcoll=yes, ac_cv_func_strcoll=no, ac_cv_func_strcoll=no)])
-if test $ac_cv_func_strcoll = yes; then
+}], ac_cv_func_strcoll_works=yes, ac_cv_func_strcoll_works=no,
+ac_cv_func_strcoll_works=no)])
+if test $ac_cv_func_strcoll_works = yes; then
   AC_DEFINE(HAVE_STRCOLL)
 fi
 ])
@@ -1421,15 +1425,16 @@ AC_CHECK_LIB(intl, strftime, LIBS="-lintl $LIBS")
 AC_CHECK_FUNC(strftime, [AC_DEFINE(HAVE_STRFTIME)])])
 
 AC_DEFUN(AC_FUNC_MEMCMP,
-[AC_CACHE_CHECK(for 8-bit clean memcmp, ac_cv_func_memcmp,
+[AC_CACHE_CHECK(for 8-bit clean memcmp, ac_cv_func_memcmp_clean,
 [AC_TRY_RUN([
 main()
 {
   char c0 = 0x40, c1 = 0x80, c2 = 0x81;
   exit(memcmp(&c0, &c2, 1) < 0 && memcmp(&c1, &c2, 1) < 0 ? 0 : 1);
 }
-], ac_cv_func_memcmp=yes, ac_cv_func_memcmp=no, ac_cv_func_memcmp=no)])
-test $ac_cv_func_memcmp = no && LIBOBJS="$LIBOBJS memcmp.o"
+], ac_cv_func_memcmp_clean=yes, ac_cv_func_memcmp_clean=no,
+ac_cv_func_memcmp_clean=no)])
+test $ac_cv_func_memcmp_clean = no && LIBOBJS="$LIBOBJS memcmp.o"
 AC_SUBST(LIBOBJS)dnl
 ])
 

@@ -57,7 +57,7 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 ------------------------------------------------------------------------------
 
-* Allow [ and ] in egrep patterns and AC_DEFINE args.
+* Allow [ and ] in AC_DEFINE args.
 
 ------------------------------------------------------------------------------
 
@@ -381,7 +381,37 @@ Rick Boykin <rboykin@cscsun3.larc.nasa.gov>
 
 ------------------------------------------------------------------------------
 
-Look into quoting of cache variable values reported by Paul Eggert.
+This is fine, but painfully slow.
+
+Sun Jun 30 04:43:08 1996  Paul Eggert  <eggert@twinsun.com>
+
+	* acgeneral.m4 (AC_CACHE_SAVE):
+	Output each variable separately, so that values containing
+	special characters (e.g. ', \, newline) are handled correctly.
+
+--- acgeneral.m4	1996/11/09 22:20:01	1.211
++++ acgeneral.m4	1996/11/12 04:32:06
+@@ -1051,10 +1052,16 @@
+ dnl Allow a site initialization script to override cache values.
+ # Ultrix sh set writes to stderr and can't be redirected directly,
+ # and sets the high bit in the cache file unless we assign to the vars.
+-# HP-UX 10.01 sh prints single quotes around any value that contains spaces.
+-(set) 2>&1 |
+-sed -n "s/^\([a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*\)='*\([^']*\)'*/\1=\${\1='\2'}/p"\
+-  >> confcache
++ac_vars=`(set) 2>&1 | sed -n '/^[a-zA-Z0-9_]*_cv_[a-zA-Z0-9_]*=/s/=.*//p'`
++# Output each variable separately so that values containing
++# special characters (e.g. ', \, newline) are handled correctly.
++for ac_var in $ac_vars; do
++  eval ac_val=\$$ac_var
++  sed -e "s/'/'\\\\''/g" -e "1s/^/$ac_var=\${$ac_var='&/" -e "\$s/\$/'}/" \
++    >> confcache <<EOF
++$ac_val
++EOF
++done
+ changequote([, ])dnl
+ if cmp -s $cache_file confcache; then
+   :
 
 ------------------------------------------------------------------------------
 
@@ -412,3 +442,9 @@ Slaven Rezic <eserte@cabulja.herceg.de>
 
 ------------------------------------------------------------------------------
 
+Whichever AC_LINK_FILES directive comes last is that one that gets
+done.
+
+From Jim Meyering
+
+------------------------------------------------------------------------------

@@ -3479,7 +3479,12 @@ transparently, as long as the same C compiler is used every time
 of information.  The following macros print messages in ways appropriate
 for each kind.  The arguments to all of them get enclosed in shell
 double quotes, so the shell performs variable and backquote substitution
-on them.
+on them.  You can print a message containing a comma by quoting the
+message with the @code{m4} quote characters:
+
+@example
+AC_MSG_RESULT([never mind, I found the BASIC compiler])
+@end example
 
 These macros are all wrappers around the @code{echo} shell command.
 @code{configure} scripts should rarely need to run @code{echo} directly

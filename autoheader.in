@@ -90,7 +90,7 @@ TEMPLATES="${AC_MACRODIR}/acconfig.h"
 #if test "$localdir" != .; then
   # When running autoheader from autoreconf, this is how we get
   # subdirectories' acconfig.h files.
-  test -r ./acconfig.h && TEMPLATES="${TEMPLATES} ./acconfig.h"
+  #test -r ./acconfig.h && TEMPLATES="${TEMPLATES} ./acconfig.h"
 #fi
 test -r $localdir/acconfig.h && TEMPLATES="${TEMPLATES} $localdir/acconfig.h"
 
@@ -171,14 +171,23 @@ test -r $localdir/acconfig.h &&
 
 # This puts each template paragraph on its own line, separated by @s.
 if test -n "$syms"; then
-   # Make sure the boundary of template files is also the boundary
-   # of the paragraph.  Extra newlines don't hurt since they will
-   # be removed.
-   for t in $TEMPLATES; do cat $t; echo; echo; done |
-   # The sed script is suboptimal because it has to take care of
-   # some broken seds (e.g. AIX) that remove '\n' from the
-   # pattern/hold space if the line is empty. (junio@twinsun.com).
-   sed -n -e '
+  # Make sure the boundary of template files is also the boundary
+  # of the paragraph.  Extra newlines don't hurt since they will
+  # be removed.
+  # Undocumented useless feature: stuff outside of @TOP@ and @BOTTOM@ 
+  # is ignored in the systemwide acconfig.h too.
+  for t in $TEMPLATES; do
+    sedscript=""
+    grep @TOP@ $t >/dev/null && sedscript="1,/@TOP@/d;"
+    grep @BOTTOM@ $t >/dev/null && sedscript="$sedscript /@BOTTOM@/,\$d;"
+    # This substitution makes "#undef<TAB>FOO" in acconfig.h work.
+    sed -n -e "$sedscript s/	/ /g; p" $t
+    echo; echo
+  done |
+  # The sed script is suboptimal because it has to take care of
+  # some broken seds (e.g. AIX) that remove '\n' from the
+  # pattern/hold space if the line is empty. (junio@twinsun.com).
+  sed -n -e '
 	/^[ 	]*$/{
 		x
 		s/\n/@/g
@@ -187,18 +196,18 @@ if test -n "$syms"; then
 		x
 	}
 	H' | sed -e 's/@@*/@/g' |
-   # Select each paragraph that refers to a symbol we picked out above.
-   # Some fgrep's have limits on the number of lines that can be in the
-   # pattern on the command line, so use a temporary file containing the
-   # pattern.
-   (fgrep_tmp=${TMPDIR-/tmp}/autoh$$
-    trap "rm -f $fgrep_tmp; exit 1" 1 2 15
-    cat > $fgrep_tmp <<EOF
+  # Select each paragraph that refers to a symbol we picked out above.
+  # Some fgrep's have limits on the number of lines that can be in the
+  # pattern on the command line, so use a temporary file containing the
+  # pattern.
+  (fgrep_tmp=${TMPDIR-/tmp}/autoh$$
+   trap "rm -f $fgrep_tmp; exit 1" 1 2 15
+   cat > $fgrep_tmp <<EOF
 $syms
 EOF
-    fgrep -f $fgrep_tmp
-    rm -f $fgrep_tmp) |
-   tr @ \\012
+   fgrep -f $fgrep_tmp
+   rm -f $fgrep_tmp) |
+  tr @ \\012
 fi
 
 echo "$types" | tr , \\012 | sort | uniq | while read ctype; do
@@ -244,7 +253,10 @@ test -r $localdir/acconfig.h &&
   sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h
 test -f ${config_h}.bot && cat ${config_h}.bot
 
-echo '#endif /* _CONFIG_H */'
+cat <<EOF
+
+#endif /* _CONFIG_H */
+EOF
 
 status=0
 
@@ -261,8 +273,8 @@ fi
 
 if test $# -eq 0; then
   if test $status -eq 0; then
-    if cmp -s $tmpout ${config_h_in}; then
-      rm -f $tmpout
+    if test -f ${config_h_in} && cmp -s $tmpout ${config_h_in}; then
+      rm -f $tmpout # File didn't change, so don't update its mod time.
     else
       mv -f $tmpout ${config_h_in}
     fi
