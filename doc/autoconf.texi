@@ -230,7 +230,7 @@ Existing Tests
 * Declarations::                Declarations that may be missing
 * Structures::                  Structures or members that might be missing
 * Types::                       Types that might be missing
-* Compilers and Preprocessors::  Checks for compiling programs
+* Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
 * UNIX Variants::               Special kludges for specific UNIX variants
 
@@ -289,7 +289,7 @@ Writing Tests
 * Multiple Cases::              Tests for several possible values
 * Language Choice::             Selecting which language to use for testing
 
-Checking Run-Time Behavior
+Checking Run Time Behavior
 
 * Test Programs::               Running test programs
 * Guidelines::                  General rules for writing test programs
@@ -313,11 +313,11 @@ Programming in M4
 * M4 Quotation::                Protecting macros from unwanted expansion
 * Invoking autom4te::           The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
-* Programming in M4sh::         Common shell constructs
+* Programming in M4sh::         Common shell Constructs
 
 M4 Quotation
 
-* Active Characters::           Characters that change the behavior of m4
+* Active Characters::           Characters that change the behavior of M4
 * One Macro Call::              Quotation and one macro call
 * Quotation and Nested Macros::  Macros calling macros
 * Changequote is Evil::         Worse than INTERCAL: M4 + changequote
@@ -433,6 +433,7 @@ Frequent Autoconf Questions, with answers
 * Bootstrapping::               Autoconf and GNU M4 require each other?
 * Why Not Imake::               Why GNU uses @command{configure} instead of Imake
 * Defining Directories::        Passing @code{datadir} to program
+* autom4te.cache::              What is it?  Can I remove it?
 
 History of Autoconf
 
@@ -13892,6 +13893,7 @@ are addressed.
 * Bootstrapping::               Autoconf and GNU M4 require each other?
 * Why Not Imake::               Why GNU uses @command{configure} instead of Imake
 * Defining Directories::        Passing @code{datadir} to program
+* autom4te.cache::              What is it?  Can I remove it?
 @end menu
 
 @node Distributing
@@ -14134,6 +14136,35 @@ Some macros are already available to address this issue: see
 @code{adl_COMPUTE_STANDARD_RELATIVE_PATHS} on the
 @href{http://www.gnu.org/software/ac-archive/, Autoconf Macro Archive}.
 @end itemize
+
+
+@node autom4te.cache
+@section What is @file{autom4te.cache}?
+
+@display
+What is this directory @file{autom4te.cache}?  Can I safely remove it?
+@end display
+
+In the GNU Build System, @file{configure.ac} plays a central role and is
+read by many tools: @command{autoconf} to create @file{configure},
+@command{autoheader} to create @file{config.h.in}, @command{automake} to
+create @file{Makefile.in}, @command{autoscan} to check the completeness
+of @file{configure.ac}, @command{autoreconf} to check the GNU Build
+System components that are used.  To ``read @file{configure.ac}''
+actually means to compile it with M4, which can be a very long process
+for complex @file{configure.ac}.
+
+This is why all these tools, instead of running directly M4, invoke
+@command{autom4te} (@pxref{Invoking autom4te}) which, while answering to
+a specific demand, stores additional information in
+@file{autom4te.cache} for future runs.  For instance, if you run
+@command{autoconf}, behind the scenes, @command{autom4te} will also
+store information for the other tools, so that when you invoke
+@command{autoheader} or @command{automake} etc., re-processing
+@file{configure.ac} is not needed.  The speed up is frequently of 30,
+and is increasing with the size of @file{configure.ac}.
+
+But it is and remains being simply a cache: you can safely remove it.
 
 
 

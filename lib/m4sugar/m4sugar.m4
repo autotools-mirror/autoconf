@@ -1202,12 +1202,7 @@ m4_define([_m4_divert(GROW)],       10000)
 # -------------------------
 # The prologue for Autoconf macros.
 m4_define([_m4_defun_pro],
-[m4_expansion_stack_push(m4_defn([m4_location($1)])[: $1 is expanded from...])dnl
-m4_pushdef([_m4_expanding($1)])dnl
-m4_ifdef([_m4_divert_dump],
-         [m4_divert_push(m4_defn([_m4_divert_diversion]))],
-         [m4_copy([_m4_divert_diversion], [_m4_divert_dump])dnl
-m4_divert_push([GROW])])dnl
+[
 ])
 
 
@@ -1216,13 +1211,7 @@ m4_divert_push([GROW])])dnl
 # The Epilogue for Autoconf macros.  MACRO-NAME only helps tracing
 # the PRO/EPI pairs.
 m4_define([_m4_defun_epi],
-[m4_divert_pop()dnl
-m4_if(_m4_divert_dump, _m4_divert_diversion,
-      [m4_undivert([GROW])dnl
-m4_undefine([_m4_divert_dump])])dnl
-m4_expansion_stack_pop()dnl
-m4_popdef([_m4_expanding($1)])dnl
-m4_provide([$1])dnl
+[m4_provide([$1])dnl
 ])
 
 
@@ -1313,23 +1302,9 @@ m4_define([m4_before],
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
 m4_define([m4_require],
-[m4_expansion_stack_push(m4_location[: $1 is required by...])dnl
-m4_ifdef([_m4_expanding($1)],
-         [m4_fatal([$0: circular dependency of $1])])dnl
-m4_ifndef([_m4_divert_dump],
-          [m4_fatal([$0: cannot be used outside of an m4_defun'd macro])])dnl
-m4_provide_if([$1],
+[m4_provide_if([$1],
               [],
-              [m4_divert_push(m4_eval(m4_divnum - 1))dnl
-m4_default([$2], [$1])
-m4_divert(m4_defn([_m4_divert_dump]))dnl
-m4_undivert(m4_defn([_m4_divert_diversion]))dnl
-m4_divert_pop(m4_defn([_m4_divert_dump]))])dnl
-m4_provide_if([$1],
-              [],
-              [m4_warn([syntax],
-                       [$1 is m4_require'd but is not m4_defun'd])])dnl
-m4_expansion_stack_pop()dnl
+              [m4_default([$2], [$1])])
 ])
 
 
