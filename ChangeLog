@@ -1,5 +1,10 @@
 2001-08-13  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (ma): Rename this index as...
+	(ac): this.
+
+2001-08-13  Akim Demaille  <akim@epita.fr>
+
 	* Makefile.am: Remove dead code and dead comments.
 	(pdf, html): New targets.
 	* doc/autoconf.texi (Using Autotest): New chapter.
