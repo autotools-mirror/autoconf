@@ -1979,16 +1979,44 @@ use @code{autoheader} to generate it, see @ref{autoheader Invocation}.
 @subsection Using @code{autoheader} to Create @file{config.h.in}
 @cindex @code{autoheader}
 
-The @code{autoheader} program can create a template file of C
+The @command{autoheader} program can create a template file of C
 @samp{#define} statements for @code{configure} to use.  If
 @file{configure.in} invokes @code{AC_CONFIG_HEADERS(@var{file})},
-@code{autoheader} creates @file{@var{file}.in}; if multiple file
+@command{autoheader} creates @file{@var{file}.in}; if multiple file
 arguments are given, the first one is used.  Otherwise,
-@code{autoheader} creates @file{config.h.in}.
+@command{autoheader} creates @file{config.h.in}.
 
-If you give @code{autoheader} an argument, it uses that file instead of
-@file{configure.in} and writes the header file to the standard output
-instead of to @file{config.h.in}.  If you give @code{autoheader} an
+In order to do its job @command{autoheader} needs that you document all
+the symbols that you might use, i.e., that there is at least one
+@code{AC_DEFINE} or one @code{AC_DEFINE_UNQUOTED} using its third
+argument, see @ref{Defining Symbols}.  An additional constraint is that
+the first argument must be a literal.
+
+You might wonder why @command{autoheader} is needed: after all, why
+would @command{configure} need to ``patch'' a @file{config.h.in} to
+produce a @file{config.h} instead of just creating @file{config.h} from
+scratch?
+
+Well, when everything rocks the answer is just that we are losing our
+time maintaining @command{autoheader}: generating directly
+@file{config.h} is just what is needed.
+
+But when things go wrong, you'll thanks the Autoconf team for
+@command{autoheader}...
+
+The fact that the symbols are documented is precious to @emph{check}
+that @file{config.h} makes sense.
+
+The fact that there is a well defined list of symbols which should be
+@code{#define}'d (or not) is also precious for people who are porting
+packages to environments where @command{configure} cannot be run: they
+just have to @emph{fill in the blanks}.
+
+But let's come back to the point: @command{autoheader}'s invocation...
+
+If you give @command{autoheader} an argument, it uses that file instead
+of @file{configure.in} and writes the header file to the standard output
+instead of to @file{config.h.in}.  If you give @command{autoheader} an
 argument of @option{-}, it reads the standard input instead of
 @file{configure.in} and writes the header file to the standard output.
 
