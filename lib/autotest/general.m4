@@ -124,9 +124,11 @@ at_errexit_p=false
 # Shall we be verbose?
 at_verbose=:
 at_quiet=echo
+# The directory we are in.
+at_dir=`pwd`
 # The directory the whole test suite works in.
 # Should be absolutely to let the user `cd' at will.
-at_tests_dir=`pwd`/$as_me.dir
+at_tests_dir=$at_dir/$as_me.dir
 # The file containing the location of the last AT_CHECK.
 at_check_line_file=$at_tests_dir/at-check-line
 # Shall we keep the debug scripts?  Must be `:' when test suite is
@@ -352,8 +354,9 @@ _AS_PATH_WALK([$AUTOTEST_PATH $PATH],
 esac])
 
 # Now build and simplify PATH.
-at_sep=
-PATH=
+# Be sure to put `.' in front too: we will `cd', and we must be
+# run to run what is in the current directory (e.g., in a group directory).
+PATH=.
 _AS_PATH_WALK([$at_path],
 [as_dir=`(cd "$as_dir" && pwd) 2>/dev/null`
 test -d "$as_dir" || continue
@@ -362,8 +365,7 @@ case $PATH in
                   $as_dir$PATH_SEPARATOR* | \
   *$PATH_SEPARATOR$as_dir                 | \
   *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR* ) ;;
-  *) PATH=$PATH$at_sep$as_dir
-     at_sep=$PATH_SEPARATOR;;
+  *) PATH=$PATH$PATH_SEPARATOR$as_dir ;;
 esac])
 export PATH
 
@@ -543,6 +545,15 @@ _ATEOF
         *)  at_msg="FAILED near \``cat $at_check_line_file`'"
             at_fail_list="$at_fail_list $at_test"
             # Up failure, keep the group directory for autopsy.
+            # Create the debugging script.
+            {
+              echo "#! /bin/sh"
+              echo "cd $at_dir"
+              echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
+                   '-v -d' "$at_debug_args" "$at_test" '${1+"$[@]"}'
+              echo 'exit 1'
+            } >$at_group_dir/run
+            chmod +x $at_group_dir/run
             ;;
       esac
       echo $at_msg
@@ -556,6 +567,10 @@ _ATEOF
   esac
 done
 
+# Back to the top test directory.
+cd $at_tests_dir
+
+# Compute the duration of the suite.
 at_stop_date=`date`
 at_stop_time=`(date +%s) 2>/dev/null`
 echo "$as_me: ending at: $at_stop_date" >&AS_MESSAGE_LOG_FD
@@ -585,27 +600,7 @@ elif test $at_debug_p = false; then
     AS_BOX([ERROR: Suite unsuccessful, $at_fail_count of $at_test_count tests failed.])
   fi
 
-  # Remove any debugging script resulting from a previous run.
-  rm -f $as_me.[[0-9]] $as_me.[[0-9][0-9]] $as_me.[[0-9][0-9][0-9]]
-
   # Normalize the names so that `ls' lists them in order.
-  at_NNN=`expr "NNN$at_group" : ".*\($at_format\)"`
-  echo
-  echo $ECHO_N "Writing \`$as_me.$at_NNN' scripts, with $at_NNN =$ECHO_C"
-  for at_group in $at_fail_list
-  do
-    at_number=`expr "000$at_group" : ".*\($at_format\)"`
-    echo $ECHO_N " $at_number$ECHO_C"
-    {
-      echo "#! /bin/sh"
-      echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
-           '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
-      echo 'exit 1'
-    } >$as_me.$at_number
-    chmod +x $as_me.$at_number
-  done
-  echo ', done.'
-  echo
   echo 'You may investigate any problem if you feel able to do so, in which'
   echo 'case the test suite provides a good starting point.'
   echo

@@ -1,5 +1,14 @@
 2001-11-13  Akim Demaille  <akim@epita.fr>
 
+	* lib/autotest/general.m4 (AT_INIT): Be sure to put `.', relative,
+	in PATH.
+	Create `testsuite.dir/003/run' instead of `testsuite.003'.
+	Do it as soon as a test fails, don't wait till the end of the test
+	suite.
+	Don't remove $as_me.[0-9]*, since these files no longer exist.
+
+2001-11-13  Akim Demaille  <akim@epita.fr>
+
 	* tests/tools.at: Use absolute paths, since we are no longer run
 	in place.
 
