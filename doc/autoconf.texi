@@ -4000,7 +4000,7 @@ The options have one of these forms:
 @end example
 
 For example, @samp{--with-gnu-ld} means work with the GNU linker instead
-of some other linker.  @samp{--with-x11} means work with X11.
+of some other linker.  @samp{--with-x} means work with The X Window System.
 
 The user can give an argument by following the package name with
 @samp{=} and the argument.  Giving an argument of @samp{no} is for
