@@ -1,3 +1,10 @@
+1999-07-15  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
+
+	* acspecific.m4 (AC_F77_LIBRARY_LDFLAGS): New implementation, to
+	make maintenance easier.
+	Grep the initial output so that we don't start parsing "-l" and
+	"-L" too early.  From Christopher Lee <chrislee@ri.cmu.edu>
+
 1999-06-09  Matthew D. Langston  <langston@SLAC.Stanford.EDU>
 
 	* autoconf.texi (Pretty Help Strings): Synchronize documentation

@@ -2152,215 +2152,189 @@ OBJEXT=$ac_cv_objext
 ac_objext=$ac_cv_objext
 AC_SUBST(OBJEXT)])
 
-dnl Determine the linker flags (e.g. `-L' and `-l') for the Fortran 77
+
+dnl AC_F77_LIBRARY_LDFLAGS
+dnl ----------------------
+dnl
+dnl Determine the linker flags (e.g. "-L" and "-l") for the Fortran 77
 dnl intrinsic and run-time libraries that are required to successfully
 dnl link a Fortran 77 program or shared library.  The output variable
 dnl FLIBS is set to these flags.
-dnl 
+dnl
 dnl This macro is intended to be used in those situations when it is
 dnl necessary to mix, e.g. C++ and Fortran 77, source code into a single
 dnl program or shared library.
-dnl 
+dnl
 dnl For example, if object files from a C++ and Fortran 77 compiler must
 dnl be linked together, then the C++ compiler/linker must be used for
 dnl linking (since special C++-ish things need to happen at link time
 dnl like calling global constructors, instantiating templates, enabling
 dnl exception support, etc.).
-dnl 
+dnl
 dnl However, the Fortran 77 intrinsic and run-time libraries must be
 dnl linked in as well, but the C++ compiler/linker doesn't know how to
 dnl add these Fortran 77 libraries.  Hence, the macro
-dnl `AC_F77_LIBRARY_LDFLAGS' was created to determine these Fortran 77
+dnl "AC_F77_LIBRARY_LDFLAGS" was created to determine these Fortran 77
 dnl libraries.
 dnl
 dnl This macro was packaged in its current form by Matthew D. Langston
 dnl <langston@SLAC.Stanford.EDU>.  However, nearly all of this macro
-dnl came from the `OCTAVE_FLIBS' macro in `octave-2.0.13/aclocal.m4',
+dnl came from the "OCTAVE_FLIBS" macro in "octave-2.0.13/aclocal.m4",
 dnl and full credit should go to John W. Eaton for writing this
 dnl extremely useful macro.  Thank you John.
 dnl
 dnl AC_F77_LIBRARY_LDFLAGS()
+
+dnl We have to "pushdef" this macro for now, because I haven't checked
+dnl this version of the macro into the Autoconf repository yes.  MDL
 AC_DEFUN(AC_F77_LIBRARY_LDFLAGS,
-[AC_MSG_CHECKING([for Fortran 77 libraries])
-AC_REQUIRE([AC_PROG_F77])
-AC_REQUIRE([AC_CANONICAL_HOST])
-AC_CACHE_VAL(ac_cv_flibs,
-[changequote(, )dnl
-dnl Write a minimal program and compile it with -v.  I don't know what
-dnl to do if your compiler doesn't have -v...
-echo "      END" > conftest.f
-foutput=`${F77} -v -o conftest conftest.f 2>&1`
-dnl
-dnl The easiest thing to do for xlf output is to replace all the commas
-dnl with spaces.  Try to only do that if the output is really from xlf,
-dnl since doing that causes problems on other systems.
-dnl
-xlf_p=`echo $foutput | grep xlfentry`
-if test -n "$xlf_p"; then
-  foutput=`echo $foutput | sed 's/,/ /g'`
-fi
-dnl
-ld_run_path=`echo $foutput | \
-  sed -n -e 's/^.*LD_RUN_PATH *= *\([^ ]*\).*/\1/p'`
-dnl
-dnl We are only supposed to find this on Solaris systems...
-dnl Uh, the run path should be absolute, shouldn't it?
-dnl
-case "$ld_run_path" in
-  /*)
-    if test "$ac_cv_prog_gcc" = yes; then
-      ld_run_path="-Xlinker -R -Xlinker $ld_run_path"
-    else
-      ld_run_path="-R $ld_run_path"
+[
+  AC_CACHE_CHECK([for Fortran 77 libraries],
+                 ac_cv_flibs,
+  [
+    AC_REQUIRE([AC_PROG_F77])
+    AC_REQUIRE([AC_CYGWIN])
+
+    AC_LANG_SAVE
+    AC_LANG_FORTRAN77
+
+# This is the simplest of all Fortran 77 programs.
+    cat > conftest.$ac_ext <<EOF
+      end
+EOF
+
+    # Save the "compiler output file descriptor" to FD 8.
+    exec 8>&AC_FD_CC
+
+    # Temporarily redirect compiler output to stdout, since this is what
+    # we want to capture in "f77_link_output".
+    exec AC_FD_CC>&1
+
+    # Compile and link our simple test program by passing the "-v" flag
+    # to the Fortran 77 compiler in order to get "verbose" output that
+    # we can then parse for the Fortran 77 linker flags.  I don't know
+    # what to do if your compiler doesn't have -v.
+    FFLAGS_SAVE="$FFLAGS"
+    FFLAGS="$FFLAGS -v"
+    f77_link_output=`eval $ac_link 2>&1 | grep -v 'Driving:'`
+    FFLAGS="$FFLAGS_SAVE"
+
+    # Restore the "compiler output file descriptor".
+    exec AC_FD_CC>&8
+
+    rm -f conftest.*
+
+    AC_LANG_RESTORE
+
+    # This will ultimately be our output variable.
+    FLIBS=
+
+changequote(, )dnl
+
+    # If we are using xlf then replace all the commas with spaces.
+    if test `echo $f77_link_output | grep xlfentry > /dev/null 2>&1`; then
+        f77_link_output=`echo $f77_link_output | sed 's/,/ /g'`
     fi
-  ;;
-  *)
-    ld_run_path=
-  ;;
-esac
-dnl
-flibs=
-lflags=
-dnl
-dnl If want_arg is set, we know we want the arg to be added to the list,
-dnl so we don't have to examine it.
-dnl
-want_arg=
-dnl
-for arg in $foutput; do
-  old_want_arg=$want_arg
-  want_arg=
-dnl
-dnl None of the options that take arguments expect the argument to
-dnl start with a -, so pretend we didn't see anything special.
-dnl
-  if test -n "$old_want_arg"; then
-    case "$arg" in
-      -*)
-        old_want_arg=
-      ;;
-    esac
-  fi
-  case "$old_want_arg" in
-    '')
-      case $arg in
-        /*.a)
-          exists=false
-          for f in $lflags; do
-            if test x$arg = x$f; then
-              exists=true
-            fi
-          done
-          if $exists; then
-            arg=
-          else
-            lflags="$lflags $arg"
-          fi
-        ;;
-        -bI:*)
-          exists=false
-          for f in $lflags; do
-            if test x$arg = x$f; then
-              exists=true
-            fi
-          done
-          if $exists; then
-            arg=
-          else
-            if test "$ac_cv_prog_gcc" = yes; then
-              lflags="$lflags -Xlinker $arg"
-            else
-              lflags="$lflags $arg"
-            fi
-          fi
-        ;;
-        -lang* | -lcrt0.o | -lc | -lgcc)
-          arg=
-        ;;
-        -[lLR])
-          want_arg=$arg
-          arg=
-        ;;
-        -[lLR]*)
-          exists=false
-          for f in $lflags; do
-            if test x$arg = x$f; then
-              exists=true
-            fi
-          done
-          if $exists; then
-            arg=
-          else
-            case "$arg" in
-              -lkernel32)
-                case "$canonical_host_type" in
-                  *-*-cygwin*)
-                    arg=
-                  ;;
-                  *)
-                    lflags="$lflags $arg"
-                  ;;
+
+    # The "save_arg" variable will be set to the current option
+    # (i.e. something beginning with a "-") when we come across an
+    # option that we think will take an argument (e.g. -L
+    # /usr/local/lib/foo).  When "save_arg" is set, we append "arg" to
+    # "seen" without any further examination.
+    save_arg=
+
+
+    # This is just a "list" (i.e. space delimited elements) of flags
+    # that we've already seen.  This just help us not add the same
+    # linker flags twice to "FLIBS".
+    seen=
+
+    # The basic algorithm is that if "arg" makes it all the way through
+    # down to the bottom of the the "for" loop, then it is added to
+    # "FLIBS".
+    for arg in $f77_link_output; do
+        # Assume that none of the options that take arguments expect the
+        # argument to start with a "-".  If we ever see this case, then
+        # reset "previous_arg" so that we don't try and process "arg" as
+        # an argument.
+        previous_arg="$save_arg"
+        test -n "`echo $arg | sed -n -e '/^-/!p'`" && previous_arg=
+        case "$previous_arg" in
+            '')
+                case "$arg" in
+                    /*.a)
+                        # Append to "seen" if it's not already there.
+                        changequote([, ])dnl
+                        AC_LIST_MEMBER_OF($arg, $seen, arg=, seen="$seen $arg")
+                        changequote(, )dnl
+                        ;;
+                    -bI:*)
+                        # Append to "seen" if it's not already there.
+                        changequote([, ])dnl
+                        AC_LIST_MEMBER_OF($arg, $seen, arg=, [AC_LINKER_OPTION([$arg], seen)])
+                        changequote(, )dnl
+                        ;;
+                        # Ignore these flags.
+                    -lang* | -lcrt0.o | -l[cm] | -lgcc | -LANG:=*)
+                        arg=
+                        ;;
+                    -lkernel32)
+                        # Only ignore this flag under the Cygwin
+                        # environment.
+                        if test x"$CYGWIN" = xyes; then arg=; else seen="$seen $arg"; fi
+                        ;;
+                    -[LRu])
+                        # These flags, when seen by themselves, take an
+                        # argument.
+                        save_arg=$arg
+                        arg=
+                        ;;
+                    -YP,*)
+                        temp_arg=
+                        for i in `echo $arg | sed -e 's%^P,%-L%' -e 's%:% -L%g'`; do
+                            # Append to "seen" if it's not already
+                            # there.
+                            changequote([, ])dnl
+                            AC_LIST_MEMBER_OF($i, $seen, temp_arg="$temp_arg $i", seen="$seen $i")
+                            changequote(, )dnl
+                        done
+                        arg="$temp_arg"
+                        ;;
+                    -[lLR]*)
+                        # Append to "seen" if it's not already there.
+                        changequote([, ])dnl
+                        AC_LIST_MEMBER_OF($arg, $seen, arg=, seen="$seen $arg")
+                        changequote(, )dnl
+                        ;;
+                    *)
+                        # Ignore everything else.
+                        arg=
+                        ;;
                 esac
-              ;;
-              -lm)
-              ;;
-              *)
-                lflags="$lflags $arg"
-              ;;
-            esac
-          fi
-        ;;
-        -u)
-          want_arg=$arg
-          arg=
-        ;;
-        -Y)
-          want_arg=$arg
-          arg=
-        ;;
-        *)
-          arg=
-        ;;
-      esac
-    ;;
-    -[lLR])
-      arg="$old_want_arg $arg"
-    ;;
-    -u)
-      arg="-u $arg"
-    ;;
-    -Y)
-dnl
-dnl Should probably try to ensure unique directory options here too.
-dnl This probably only applies to Solaris systems, and then will only
-dnl work with gcc...
-dnl
-      arg=`echo $arg | sed -e 's%^P,%%'`
-      SAVE_IFS=$IFS
-      IFS=:
-      list=
-      for elt in $arg; do
-        list="$list -L$elt"
-      done
-      IFS=$SAVE_IFS
-      arg="$list"
-    ;;
-  esac
-dnl
-  if test -n "$arg"; then
-    flibs="$flibs $arg"
-  fi
-done
-if test -n "$ld_run_path"; then
-  flibs_result="$ld_run_path $flibs"
-else
-  flibs_result="$flibs"
-fi
+                ;;
+            -[LRu])
+                arg="$previous_arg $arg"
+                ;;
+        esac
+
+        # If "arg" has survived up until this point, then put it in
+        # "FLIBS".
+        test -n "$arg" && FLIBS="$FLIBS $arg"
+    done
+
+    # Assumption: We only see "LD_RUN_PATH" on Solaris systems.  If this
+    # is seen, then we insist that the "run path" must be an absolute
+    # path (i.e. it must begin with a "/").
+    ld_run_path=`echo $f77_link_output | sed -n -e 's%^.*LD_RUN_PATH *= *\(/[^ ]*\).*$%\1%p'`
+    test -n "$ld_run_path" && FLIBS="$ld_run_path $FLIBS"
+
 changequote([, ])dnl
-ac_cv_flibs="$flibs_result"])
-FLIBS="$ac_cv_flibs"
-AC_SUBST(FLIBS)dnl
-AC_MSG_RESULT($FLIBS)
+
+    ac_cv_flibs="$FLIBS"
+  ])
+
+  AC_SUBST(FLIBS)
+
 ])
 
 
