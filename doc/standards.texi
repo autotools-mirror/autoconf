@@ -569,17 +569,24 @@ and @samp{--help}.
 
 @table @code
 @item --version
-This option should direct the program to output several lines of origin
-and legal information, on standard output and then exit successfully.
-Other options and arguments should be ignored once this is seen, and the
-program should not perform its normal function.
+This option should direct the program to information about its name,
+version, origin and legal status, all on standard output, and then exit
+successfully.  Other options and arguments should be ignored once this
+is seen, and the program should not perform its normal function.
 
-The first line of output should contain the program name and version
-number, in this format:
+The first line is meant to be easy for a program to parse; the version
+number proper starts after the last space.  In addition, it contains
+the canonical name for this program, in this format:
 
 @example
 GNU Emacs 19.30
 @end example
+
+@noindent
+The program's name should be a constant string; @emph{don't} compute it
+from @code{argv[0]}.  The idea is to state the standard or canonical
+name for the program, not its file name.  There are other ways to find
+out the precise file name where a command is found in @code{PATH}.
 
 If the program is a subsidiary part of a larger package, mention the
 package name in parentheses, like this:
@@ -588,15 +595,54 @@ package name in parentheses, like this:
 emacsserver (GNU Emacs) 19.30
 @end example
 
-The first line is meant to be easy to parse; the version number proper
-starts after the last space.
+@noindent
+If the package has a version number which is different from this
+program's version number, you can mention the package version number
+just before the close-parenthesis.
 
-The second line should be a copyright notice.  If more than one
-copyright notice is called for, put each on a separate line.
+If you @strong{need} to mention the version numbers of libraries which
+are distributed separately from the package which contains this program,
+you can do so by printing an additional line of version info for each
+library you want to mention.  Use the same format for these lines as for
+the first line.
+
+Please don't mention all the libraries that the program uses ``just for
+completeness''---that would produce a lot of unhelpful clutter.  Please
+mention library version numbers only if you find in practice that they
+are very important to you in debugging.
+
+The following line, after the version number line or lines, should be a
+copyright notice.  If more than one copyright notice is called for, put
+each on a separate line.
 
 Next should follow a brief statement that the program is free software,
 and that users are free to copy and change it on certain conditions.  If
-the program is covered by the GNU GPL, say so here.
+the program is covered by the GNU GPL, say so here.  Also mention that
+there is no warranty, to the extent permitted by law.
+
+It is ok to finish the output with a list of the major authors of the
+program, as a way of giving credit.
+
+Here's an example of output that follows these rules:
+
+@smallexample
+GNU Emacs 19.34.5
+Copyright (C) 1996 Free Software Foundation, Inc.
+GNU Emacs comes with NO WARRANTY, to the extent permitted by law.
+You may redistribute copies of GNU Emacs
+under the terms of the GNU General Public License.
+For more information about these matters, see the files named COPYING.
+@end smallexample
+
+You should adapt this to your program, of course, filling in the proper
+year, copyright holder, name of program, and the references to
+distribution terms, and changing the rest of the wording as necessary.
+
+This copyright notice only needs to mention the most recent year in
+which changes were made---there's no need to list the years for previous
+versions' changes.  You don't have to mention the name of the program in
+these notices, if that is inconvenient, since it appeared in the first
+line.
 
 @item --help
 This option should output brief documentation for how to invoke the
