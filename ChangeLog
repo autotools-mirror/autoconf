@@ -1,3 +1,18 @@
+2000-10-31  Akim Demaille  <akim@epita.fr>
+
+	Move the handling of classified warnings into M4sugar.
+
+	* m4sugar.m4 (m4_diagnose): Remove.
+	(m4_warning): New.
+	* acgeneral.m4 (AC_WARNING_IFELSE, _AC_WARNING_IFELSE)
+	(_AC_WARNING_ERROR_IFELSE, __AC_WARNING_ERROR_IFELSE)
+	(_AC_DIAGNOSE, AC_DIAGNOSE): Rename as...
+	* m4sugar.m4 (m4_warning_ifelse, _m4_warning_ifelse)
+	(_m4_warning_error_ifelse, __m4_warning_error_ifelse)
+	(_m4_warn, m4_warn): these.
+	* acgeneral.m4 (AC_DIAGNOSE): Wrapper around `m4_warn'.
+	* autoconf.sh: Define `m4_warnings' instead of `_AC_WARNINGS'.
+
 2000-10-30  Pavel Roskin  <proski@gnu.org>
 
 	* acspecific.m4 (AC_PATH_XTRA): Use AC_LANG_PROGRAM() as the

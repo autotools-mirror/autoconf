@@ -521,7 +521,7 @@ define([_AC_EXPANSION_STACK_DUMP],
        [m4_errprint(defn([_AC_EXPANSION_STACK]))dnl
 popdef([_AC_EXPANSION_STACK])dnl
 _AC_EXPANSION_STACK_DUMP()],
-       [m4_diagnose([the top level])])])
+       [m4_errprint(m4_location[: the top level])])])
 
 
 # _AC_DEFUN_PRO(MACRO-NAME)
@@ -2589,81 +2589,26 @@ s,@$1@,,;t t])])
 # between AC_FATAL and AC_MSG_ERROR.
 
 
-# AC_WARNING_IFELSE(CATEGORY, IF-TRUE, IF-FALSE)
-# ----------------------------------------------
-# If the CATEGORY of warnings is enabled, expand IF_TRUE otherwise
-# IF-FALSE.
-#
-# The variable `_AC_WARNINGS' contains a comma separated list of
-# warnings which order is the converse from the one specified by
-# the user, i.e., if she specified `-W error,none,obsolete',
-# `_AC_WARNINGS' is `obsolete,none,error'.  We read it from left to
-# right, and:
-# - if none or noCATEGORY is met, run IF-FALSE
-# - if all or CATEGORY is met, run IF-TRUE
-# - if there is nothing left, run IF-FALSE.
-define([AC_WARNING_IFELSE],
-[_AC_WARNING_IFELSE([$1], [$2], [$3], _AC_WARNINGS)])
-
-
-# _AC_WARNING_IFELSE(CATEGORY, IF-TRUE, IF-FALSE, WARNING1, ...)
-# --------------------------------------------------------------
-# Implementation of the loop described above.
-define([_AC_WARNING_IFELSE],
-[ifelse([$4],  [$1],    [$2],
-        [$4],  [all],   [$2],
-        [$4],  [],      [$3],
-        [$4],  [none],  [$3],
-        [$4],  [no-$1], [$3],
-        [$0([$1], [$2], [$3], m4_shiftn(4, $@))])])
-
-
-# _AC_WARNING_ERROR_IFELSE(IF-TRUE, IF-FALSE)
-# -------------------------------------------
-# The same as AC_WARNING_IFELSE, but scan for `error' only.
-define([_AC_WARNING_ERROR_IFELSE],
-[__AC_WARNING_ERROR_IFELSE([$1], [$2], _AC_WARNINGS)])
-
-
-# __AC_WARNING_ERROR_IFELSE(IF-TRUE, IF-FALSE)
-# --------------------------------------------
-# The same as _AC_WARNING_IFELSE, but scan for `error' only.
-define([__AC_WARNING_ERROR_IFELSE],
-[ifelse([$3],  [error],    [$1],
-        [$3],  [],         [$2],
-        [$3],  [no-error], [$2],
-        [$0([$1], [$2], m4_shiftn(3, $@))])])
-
-
-
-# _AC_DIAGNOSE(MESSAGE)
-# ---------------------
-# Report MESSAGE as a warning, unless the user requested -W error,
-# in which case report a fatal error.
-define([_AC_DIAGNOSE],
-[_AC_WARNING_ERROR_IFELSE([m4_fatal([$1])],
-                          [m4_warn([$1])])])
-
-
 # AC_DIAGNOSE(CATEGORY, MESSAGE)
 # ------------------------------
-# Report a MESSAGE to the autoconf user if the CATEGORY of warnings
-# is requested (in fact, not disabled).
+# Report a MESSAGE to the user of autoconf if `-W' or `-W all' was
+# specified.
 define([AC_DIAGNOSE],
-[AC_WARNING_IFELSE([$1], [_AC_DIAGNOSE([$2])])])
+[m4_warn($@)])
 
 
 # AC_WARNING(MESSAGE)
 # -------------------
 # Report a MESSAGE to the user of autoconf if `-W' or `-W all' was
 # specified.
-define([AC_WARNING], [AC_DIAGNOSE([syntax], [$1])])
+define([AC_WARNING],
+[AC_DIAGNOSE([syntax], [$1])])
 
 
 # AC_FATAL(MESSAGE, [EXIT-STATUS])
 # --------------------------------
 define([AC_FATAL],
-[m4_diagnose([$1])
+[m4_errprint(m4_location[: $1])
 _AC_EXPANSION_STACK_DUMP()
 m4exit(m4_default([$2], [1]))])
 
@@ -3906,7 +3851,8 @@ AC_DEFUN([AC_CHECK_TYPE],
         _AC_CHECK_TYPE_REPLACEMENT_TYPE_P([$2]), 1,
            [_AC_CHECK_TYPE_OLD($@)],
         _AC_CHECK_TYPE_MAYBE_TYPE_P([$2]), 1,
-           [m4_warn([$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW($@)],
+           [AC_DIAGNOSE([syntax],
+                    [$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW($@)],
         [_AC_CHECK_TYPE_NEW($@)])[]dnl
 ])# AC_CHECK_TYPE
 

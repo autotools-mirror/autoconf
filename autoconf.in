@@ -226,12 +226,12 @@ ALPHABET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 NUMBERS='0123456789'
 WORDCHAR=_$alphabet$ALPHABET$NUMBERS
 
-_ac_warnings=
+m4__warnings=
 for warning in `IFS=,; echo syntax,$WARNINGS,$warnings |
                          tr $ALPHABET $alphabet`
 do
   test -n $warning || continue
-  _ac_warnings="$warning"`test -n "$_ac_warnings" && echo ",$_ac_warnings"`
+  m4__warnings="$warning"`test -n "$m4__warnings" && echo ",$m4_warnings"`
 done
 
 
@@ -303,7 +303,7 @@ case $task in
   ## --------------------------------- ##
   script)
   # M4 expansion.
-  $run_m4f -D_AC_WARNINGS=$_ac_warnings $infile >$tmp/configure ||
+  $run_m4f -Dm4_warnings=$m4_warnings $infile >$tmp/configure ||
     { (exit 1); exit; }
 
   if test "x$outfile" != x-; then

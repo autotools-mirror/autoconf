@@ -98,24 +98,18 @@ define([m4_errprint], [errprint([$1
 ])])
 
 
-# m4_diagnose(MSG)
-# ----------------
-# Same as `m4_errprint', but reports the file and line.
-define([m4_diagnose],
-[m4_errprint(m4_location: [$1])])
-
-
-# m4_warn(MSG)
-# ------------
+# m4_warning(MSG)
+# ---------------
 # Warn the user.
-define([m4_warn], [m4_diagnose([warning: $1])])
+define([m4_warning],
+[m4_errprint(m4_location[: warning: $1])])
 
 
 # m4_fatal(MSG, [EXIT-STATUS])
 # ----------------------------
 # Fatal the user.                                                      :)
 define([m4_fatal],
-[m4_diagnose([error: $1])dnl
+[m4_errprint(m4_location[: error: $1])dnl
 m4exit(ifelse([$2],, 1, [$2]))])
 
 
@@ -129,8 +123,78 @@ define([m4_assert],
         [])])
 
 
+## ------------- ##
+## 3. Warnings.  ##
+## ------------- ##
+
+
+# m4_warning_ifelse(CATEGORY, IF-TRUE, IF-FALSE)
+# ----------------------------------------------
+# If the CATEGORY of warnings is enabled, expand IF_TRUE otherwise
+# IF-FALSE.
+#
+# The variable `m4_warnings' contains a comma separated list of
+# warnings which order is the converse from the one specified by
+# the user, i.e., if she specified `-W error,none,obsolete',
+# `m4_warnings' is `obsolete,none,error'.  We read it from left to
+# right, and:
+# - if none or noCATEGORY is met, run IF-FALSE
+# - if all or CATEGORY is met, run IF-TRUE
+# - if there is nothing left, run IF-FALSE.
+define([m4_warning_ifelse],
+[_m4_warning_ifelse([$1], [$2], [$3], m4_warnings)])
+
+
+# _m4_warning_ifelse(CATEGORY, IF-TRUE, IF-FALSE, WARNING1, ...)
+# --------------------------------------------------------------
+# Implementation of the loop described above.
+define([_m4_warning_ifelse],
+[ifelse([$4],  [$1],    [$2],
+        [$4],  [all],   [$2],
+        [$4],  [],      [$3],
+        [$4],  [none],  [$3],
+        [$4],  [no-$1], [$3],
+        [$0([$1], [$2], [$3], m4_shiftn(4, $@))])])
+
+
+# _m4_warning_error_ifelse(IF-TRUE, IF-FALSE)
+# -------------------------------------------
+# The same as m4_warning_ifelse, but scan for `error' only.
+define([_m4_warning_error_ifelse],
+[__m4_warning_error_ifelse([$1], [$2], m4_warnings)])
+
+
+# __m4_warning_error_ifelse(IF-TRUE, IF-FALSE)
+# --------------------------------------------
+# The same as _m4_warning_ifelse, but scan for `error' only.
+define([__m4_warning_error_ifelse],
+[ifelse([$3],  [error],    [$1],
+        [$3],  [],         [$2],
+        [$3],  [no-error], [$2],
+        [$0([$1], [$2], m4_shiftn(3, $@))])])
+
+
+
+# _m4_warn(MESSAGE)
+# -----------------
+# Report MESSAGE as a warning, unless the user requested -W error,
+# in which case report a fatal error.
+define([_m4_warn],
+[_m4_warning_error_ifelse([m4_fatal([$1])],
+                          [m4_warning([$1])])])
+
+
+# m4_warn(CATEGORY, MESSAGE)
+# --------------------------
+# Report a MESSAGE to the autoconf user if the CATEGORY of warnings
+# is requested (in fact, not disabled).
+define([m4_warn],
+[m4_warning_ifelse([$1], [_m4_warn([$2])])])
+
+
+
 ## ------------------- ##
-## 3. File inclusion.  ##
+## 4. File inclusion.  ##
 ## ------------------- ##
 
 
@@ -151,7 +215,8 @@ define([m4_assert],
 # been included.
 define([m4_include_unique],
 [ifdef([m4_include($1)],
-       [m4_warn([file `$1' included several times])])dnl
+       [m4_warn([syntax],
+                [file `$1' included several times])])dnl
 define([m4_include($1)])])
 
 
@@ -177,7 +242,7 @@ undefine([sinclude])
 
 
 ## ------------------------------------ ##
-## 4. Additional branching constructs.  ##
+## 5. Additional branching constructs.  ##
 ## ------------------------------------ ##
 
 # Both `ifval' and `ifset' tests against the empty string.  The
@@ -279,7 +344,7 @@ define([m4_match],
 
 
 ## ---------------------------------------- ##
-## 5. Enhanced version of some primitives.  ##
+## 6. Enhanced version of some primitives.  ##
 ## ---------------------------------------- ##
 
 # m4_do(STRING, ...)
@@ -364,7 +429,7 @@ define([m4_noquote],
 
 
 ## -------------------------- ##
-## 6. Implementing m4 loops.  ##
+## 7. Implementing m4 loops.  ##
 ## -------------------------- ##
 
 
@@ -499,7 +564,7 @@ define([_m4_foreach],
 
 
 ## --------------------------- ##
-## 7. More diversion support.  ##
+## 8. More diversion support.  ##
 ## --------------------------- ##
 
 
@@ -545,7 +610,7 @@ m4_divert_pop()dnl
 
 
 ## -------------------- ##
-## 8. Text processing.  ##
+## 9. Text processing.  ##
 ## -------------------- ##
 
 # m4_tolower(STRING)
@@ -770,9 +835,9 @@ popdef([m4_Prefix])dnl
 
 
 
-## ---------------------- ##
-## 9. Number processing.  ##
-## ---------------------- ##
+## ----------------------- ##
+## 10. Number processing.  ##
+## ----------------------- ##
 
 # m4_sign(A)
 # ----------
@@ -818,7 +883,7 @@ define([m4_list_cmp],
 
 
 ## ------------------------ ##
-## 10. Version processing.  ##
+## 11. Version processing.  ##
 ## ------------------------ ##
 
 
