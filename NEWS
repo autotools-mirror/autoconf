@@ -8,6 +8,10 @@ Now include stdint.h.
 - configure accepts --prefix='' again.
 - AC_CHECK_LIB works properly when its first argument is not a
   literal.
+
+** Generic macros
+- AC_CHECK_HEADER and AC_CHECK_HEADERS support a fourth argument to
+  specify pre-includes.
 
 * Major changes in Autoconf 2.50
 

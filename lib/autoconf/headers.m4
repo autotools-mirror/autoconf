@@ -60,12 +60,15 @@
 ## 1. Generic tests for headers.  ##
 ## ------------------------------ ##
 
-# AC_CHECK_HEADER(HEADER-FILE, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ----------------------------------------------------------------------
+# AC_CHECK_HEADER(HEADER-FILE,
+#                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#                 [INCLUDES])
+# ---------------------------------------------------------
 AC_DEFUN([AC_CHECK_HEADER],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Header,
-               [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
+               [AC_PREPROC_IFELSE([AC_LANG_SOURCE([m4_n([$4])dnl
+@%:@include <$1>])],
                                   [AS_VAR_SET(ac_Header, yes)],
                                   [AS_VAR_SET(ac_Header, no)])])
 AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
@@ -83,6 +86,7 @@ m4_define([AH_CHECK_HEADERS],
 
 # AC_CHECK_HEADERS(HEADER-FILE...
 #                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+#                 [INCLUDES])
 # ----------------------------------------------------------
 AC_DEFUN([AC_CHECK_HEADERS],
 [AH_CHECK_HEADERS([$1])dnl
@@ -90,7 +94,8 @@ for ac_header in $1
 do
 AC_CHECK_HEADER($ac_header,
                 [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$ac_header)) $2],
-                [$3])dnl
+                [$3],
+                [$4])dnl
 done
 ])
 

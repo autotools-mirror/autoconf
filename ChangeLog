@@ -1,3 +1,8 @@
+2001-06-13  Akim Demaille  <akim@epita.fr>
+
+	* acheaders.m4 (AC_CHECK_HEADER, AC_CHECK_HEADERS): Support $4 =
+	INCLUDES.
+
 2001-06-12  Maciej W. Rozycki  <macro@ds2.pg.gda.pl>
 
 	* acspecific.m4 (AC_PATH_XTRA): Check if linking against libX11

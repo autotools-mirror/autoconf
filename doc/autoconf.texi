@@ -3860,15 +3860,20 @@ These macros are used to find system header files not covered by the
 as well as find out whether it is present, you have to write your own
 test for it (@pxref{Writing Tests}).
 
-@defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_HEADER
 If the system header file @var{header-file} exists, execute shell commands
 @var{action-if-found}, otherwise execute @var{action-if-not-found}.  If
 you just want to define a symbol if the header file is available,
 consider using @code{AC_CHECK_HEADERS} instead.
+
+This macro actually checks whether @var{header-file} can be included
+without error.  If @var{includes} is specified, they are included before
+@var{header-file}.  Note that the @var{includes} are @emph{not}
+defaulted.  They might be in future releases.
 @end defmac
 
-@defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{includes})
 @maindex CHECK_HEADERS
 @cvindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
@@ -3878,6 +3883,11 @@ is given, it is additional shell code to execute when one of the header
 files is found.  You can give it a value of @samp{break} to break out of
 the loop on the first match.  If @var{action-if-not-found} is given, it
 is executed when one of the header files is not found.
+
+This macro actually checks whether @var{header-file} can be included
+without error.  If @var{includes} is specified, they are included before
+@var{header-file}.  Note that the @var{includes} are @emph{not}
+defaulted.  They might be in future releases.
 @end defmac
 
 @node Declarations, Structures, Header Files, Existing Tests
