@@ -25,7 +25,7 @@ eval "exec @PERL@ -S $0 $*"
 
 require "find.pl";
 
-$datadir = "@datadir@";
+$datadir = $ENV{"AC_MACRODIR"} || "@datadir@";
 $verbose = 0;
 
 &parse_args;

@@ -1181,9 +1181,9 @@ fi
 ])
 
 AC_DEFUN(AC_FUNC_GETMNTENT,
-[# getmntent is in -lsun on Irix 4, -lseq on PTX.
-AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun")
-AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")
+[# getmntent is in -lsun on Irix 4, -lseq on Dynix/PTX.
+AC_CHECK_LIB(sun, getmntent, LIBS="$LIBS -lsun",
+  [AC_CHECK_LIB(seq, getmntent, LIBS="$LIBS -lseq")])
 AC_CHECK_FUNC(getmntent, [AC_DEFINE(HAVE_GETMNTENT)])])
 
 AC_DEFUN(AC_FUNC_STRFTIME,

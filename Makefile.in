@@ -64,7 +64,7 @@ DISTFILES = COPYING ChangeLog ChangeLog.1 INSTALL \
 	autoconf.sh autoconf.texi install.texi \
 	autoheader.sh autoreconf.sh autoscan.pl autoupdate.sh ifnames.sh \
 	config.guess config.sub configure configure.in \
-	install.sh mkinstalldirs texinfo.tex \
+	install-sh mkinstalldirs texinfo.tex \
 	testsuite/Makefile.in testsuite/config/*.exp \
 	testsuite/lib/*.exp testsuite/autoconf.[gs]/*.exp \
 	standards.texi make-stds.texi standards.info*
