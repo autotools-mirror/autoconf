@@ -1195,6 +1195,8 @@ AC_DEFUN([AC_OBJEXT],   [])
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
 #
+# Ignore .d files produced by CFLAGS=-MD.
+#
 # This macro is called by AC_LANG_COMPILER, the latter being required
 # by the AC_COMPILE_IFELSE macros, so use AC_TRY_EVAL.
 m4_define([_AC_EXEEXT],
@@ -1210,7 +1212,7 @@ m4_define([_AC_EXEEXT],
       # `rm'.
       for ac_file in `ls conftest.exe conftest conftest.* 2>/dev/null`; do
     	case $ac_file in
-    	  *.$ac_ext | *.o | *.obj | *.xcoff | *.tds) ;;
+    	  *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d) ;;
     	  *) ac_cv_exeext=`expr "$ac_file" : 'conftest\(.*\)'`
     	     break;;
     	esac
@@ -1236,6 +1238,8 @@ ac_exeext=$EXEEXT
 # (conftest.exe), it also produces a file named `conftest.tds' in
 # addition to `conftest.obj'
 #
+# Ignore .d files produced by CFLAGS=-MD.
+#
 # This macro is called by AC_LANG_COMPILER, the latter being required
 # by the AC_COMPILE_IFELSE macros, so use AC_TRY_EVAL.
 m4_define([_AC_OBJEXT],
@@ -1244,7 +1248,7 @@ m4_define([_AC_OBJEXT],
 if AC_TRY_EVAL(ac_compile); then
   for ac_file in `ls conftest.o conftest.obj conftest.* 2>/dev/null`; do
     case $ac_file in
-      *.$ac_ext | *.tds ) ;;
+      *.$ac_ext | *.tds | *.d ) ;;
       *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
          break;;
     esac

@@ -1,3 +1,8 @@
+2000-12-05  Bob Wilson  <bwilson@tensilica.com>
+
+	* acspecific.m4 (_AC_OBJEXT, _AC_EXEEXT): Ignore .d files produced
+	by CFLAGS=-MD.
+
 2000-12-05  Akim Demaille  <akim@epita.fr>
 
 	* aclang.m4 (AC_PROG_F77): Temporarily set ac_ext to F to run
