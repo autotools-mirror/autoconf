@@ -1,5 +1,10 @@
 2000-05-22  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (_AC_LIBOBJ_ALLOCA): New macro, extracted from...
+	(AC_FUNC_ALLOCA): here.  Adjust.
+
+2000-05-22  Akim Demaille  <akim@epita.fr>
+
 	Add `configure --config-cache', `-C' as a shortcut for
 	`--cache-file=config.cache'.
 

@@ -11,6 +11,7 @@
 # Initializations.
 #
 ac_default_prefix=/usr/local
+cross_compiling=no
 subdirs=
 MFLAGS= MAKEFLAGS=
 SHELL=${CONFIG_SHELL-/bin/sh}
@@ -120,6 +121,9 @@ do
   -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
   | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
     cache_file=$ac_optarg ;;
+
+  --config-cache | -C)
+    cache_file=config.cache ;;
 
   -datadir | --datadir | --datadi | --datad | --data | --dat | --da)
     ac_prev=datadir ;;
@@ -376,9 +380,9 @@ Try \`configure --help' for more information." >&2; exit 1; }
 
   *)
     case $ac_option in
-      *[^-a-zA-Z0-9.]*) echo "configure: warning: invalid host type: $ac_option" >&2;;
+      *[^-a-zA-Z0-9.]*) echo "configure: WARNING: invalid host type: $ac_option" >&2;;
     esac
-    echo "configure: warning: you should use --build, --host, --target" >&2
+    echo "configure: WARNING: you should use --build, --host, --target" >&2
     : ${build=$ac_option} ${host=$ac_option} ${target=$ac_option}
     ;;
 
@@ -386,7 +390,8 @@ Try \`configure --help' for more information." >&2; exit 1; }
 done
 
 if test -n "$ac_prev"; then
-  { echo "configure: error: missing argument to --\`echo $ac_prev | sed 's/_/-/g'\`" >&2; exit 1; }
+  ac_option=--`echo $ac_prev | sed 's/_/-/g'`
+  { echo "configure: error: missing argument to $ac_option" >&2; exit 1; }
 fi
 
 # Be sure to have absolute paths.
@@ -448,6 +453,7 @@ Configuration:
   -V, --version           display version information and exit
   -q, --quiet, --silent   do not print \`checking...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
+  -C, --config-cache      alias for \`--cache-file=config.cache'
   -n, --no-create         do not create output files
       --srcdir=DIR        find the sources in DIR [configure dir or \`..']
 
@@ -523,7 +529,7 @@ if test "$ac_init_help" = "recursive"; then
       echo
       $ac_configure --help
     else
-      echo "configure: warning: no configuration information is in $ac_subdir" >&2
+      echo "configure: WARNING: no configuration information is in $ac_subdir" >&2
     fi
     cd $ac_popdir
   done
@@ -688,7 +694,7 @@ ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "configure:605: checking for a BSD compatible install" >&5
+echo "configure:610: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -735,7 +741,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "configure:651: result: $INSTALL" >&5
+echo "configure:656: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -746,7 +752,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
-echo "configure:658: checking whether build environment is sane" >&5
+echo "configure:663: checking whether build environment is sane" >&5
 echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6
 # Just in case
 sleep 1
@@ -783,7 +789,7 @@ else
 Check your system clock" >&2; exit 1; }
 fi
 rm -f conftest*
-echo "configure:693: result: yes" >&5
+echo "configure:698: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 if test "$program_transform_name" = s,x,x,; then
   program_transform_name=
@@ -804,7 +810,7 @@ test "$program_suffix" != NONE &&
 # sed with no file args requires a program.
 test -z "$program_transform_name" && program_transform_name="s,x,x,"
 
-echo "configure:712: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:717: checking whether ${MAKE-make} sets \${MAKE}" >&5
 echo $ECHO_N "checking whether ${MAKE-make} sets \${MAKE}... $ECHO_C" >&6
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"\${ac_cv_prog_make_${ac_make}_set+set}\" = set"; then
@@ -824,11 +830,11 @@ fi
 rm -f conftestmake
 fi
 if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
-  echo "configure:732: result: yes" >&5
+  echo "configure:737: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   SET_MAKE=
 else
-  echo "configure:736: result: no" >&5
+  echo "configure:741: result: no" >&5
 echo "${ECHO_T}no" >&6
   SET_MAKE="MAKE=${MAKE-make}"
 fi
@@ -850,78 +856,78 @@ cat >>confdefs.h <<EOF
 EOF
 
 missing_dir=`cd $ac_aux_dir && pwd`
-echo "configure:752: checking for working aclocal" >&5
+echo "configure:757: checking for working aclocal" >&5
 echo $ECHO_N "checking for working aclocal... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (aclocal --version) < /dev/null > /dev/null 2>&1; then
    ACLOCAL=aclocal
-   echo "configure:759: result: found" >&5
+   echo "configure:764: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    ACLOCAL="$missing_dir/missing aclocal"
-   echo "configure:763: result: missing" >&5
+   echo "configure:768: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "configure:766: checking for working autoconf" >&5
+echo "configure:771: checking for working autoconf" >&5
 echo $ECHO_N "checking for working autoconf... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (autoconf --version) < /dev/null > /dev/null 2>&1; then
    AUTOCONF=autoconf
-   echo "configure:773: result: found" >&5
+   echo "configure:778: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOCONF="$missing_dir/missing autoconf"
-   echo "configure:777: result: missing" >&5
+   echo "configure:782: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "configure:780: checking for working automake" >&5
+echo "configure:785: checking for working automake" >&5
 echo $ECHO_N "checking for working automake... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (automake --version) < /dev/null > /dev/null 2>&1; then
    AUTOMAKE=automake
-   echo "configure:787: result: found" >&5
+   echo "configure:792: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOMAKE="$missing_dir/missing automake"
-   echo "configure:791: result: missing" >&5
+   echo "configure:796: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "configure:794: checking for working autoheader" >&5
+echo "configure:799: checking for working autoheader" >&5
 echo $ECHO_N "checking for working autoheader... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (autoheader --version) < /dev/null > /dev/null 2>&1; then
    AUTOHEADER=autoheader
-   echo "configure:801: result: found" >&5
+   echo "configure:806: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    AUTOHEADER="$missing_dir/missing autoheader"
-   echo "configure:805: result: missing" >&5
+   echo "configure:810: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
-echo "configure:808: checking for working makeinfo" >&5
+echo "configure:813: checking for working makeinfo" >&5
 echo $ECHO_N "checking for working makeinfo... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (makeinfo --version) < /dev/null > /dev/null 2>&1; then
    MAKEINFO=makeinfo
-   echo "configure:815: result: found" >&5
+   echo "configure:820: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    MAKEINFO="$missing_dir/missing makeinfo"
-   echo "configure:819: result: missing" >&5
+   echo "configure:824: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
@@ -936,7 +942,7 @@ for ac_prog in gm4 gnum4 m4
 do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "configure:832: checking for $ac_word" >&5
+echo "configure:837: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_M4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -946,7 +952,7 @@ else
   ac_cv_path_M4="$M4" # Let the user override the test with a path.
   ;;
   *)
-  ac_save_ifs=$IFS; IFS=':'
+  ac_save_IFS=$IFS; IFS=':'
   ac_dummy="$PATH"
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
@@ -955,16 +961,16 @@ else
       break
     fi
   done
-  IFS=$ac_save_ifs
+  IFS=$ac_save_IFS
   ;;
 esac
 fi
 M4=$ac_cv_path_M4
 if test -n "$M4"; then
-  echo "configure:857: result: $M4" >&5
+  echo "configure:862: result: $M4" >&5
 echo "${ECHO_T}$M4" >&6
 else
-  echo "configure:860: result: no" >&5
+  echo "configure:865: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -972,7 +978,7 @@ test -n "$M4" && break
 done
 test -n "$M4" || M4="m4"
 
-echo "configure:866: checking whether m4 supports frozen files" >&5
+echo "configure:871: checking whether m4 supports frozen files" >&5
 echo $ECHO_N "checking whether m4 supports frozen files... $ECHO_C" >&6
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -984,7 +990,7 @@ if test x"$M4" != x; then
   esac
 fi
 fi
-echo "configure:878: result: $ac_cv_prog_gnu_m4" >&5
+echo "configure:883: result: $ac_cv_prog_gnu_m4" >&5
 echo "${ECHO_T}$ac_cv_prog_gnu_m4" >&6
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
   { echo "configure: error: GNU m4 1.4 is required" >&2; exit 1; }
@@ -997,7 +1003,7 @@ for ac_prog in mawk gawk nawk awk
 do
 # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-echo "configure:890: checking for $ac_word" >&5
+echo "configure:895: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_prog_AWK+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1005,7 +1011,7 @@ else
   if test -n "$AWK"; then
   ac_cv_prog_AWK="$AWK" # Let the user override the test.
 else
-  for ac_path in `ac_save_ifs=$IFS; IFS=':'
+  for ac_path in `ac_save_IFS=$IFS; IFS=':'
 ac_dummy="$PATH"
 for ac_dir in $ac_dummy; do
   test -z "$ac_dir" && ac_dir=.
@@ -1013,7 +1019,7 @@ for ac_dir in $ac_dummy; do
     echo "$ac_dir/$ac_word"
   fi
 done
-IFS=$ac_save_ifs
+IFS=$ac_save_IFS
 `; do
     ac_cv_prog_AWK="$ac_prog"
     break
@@ -1022,10 +1028,10 @@ fi
 fi
 AWK=$ac_cv_prog_AWK
 if test -n "$AWK"; then
-  echo "configure:915: result: $AWK" >&5
+  echo "configure:920: result: $AWK" >&5
 echo "${ECHO_T}$AWK" >&6
 else
-  echo "configure:918: result: no" >&5
+  echo "configure:923: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
@@ -1033,25 +1039,25 @@ test -n "$AWK" && break
 done
 
 # Generating man pages.
-echo "configure:924: checking for working help2man" >&5
+echo "configure:929: checking for working help2man" >&5
 echo $ECHO_N "checking for working help2man... $ECHO_C" >&6
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
 if (help2man --version) < /dev/null > /dev/null 2>&1; then
    HELP2MAN=help2man
-   echo "configure:931: result: found" >&5
+   echo "configure:936: result: found" >&5
 echo "${ECHO_T}found" >&6
 else
    HELP2MAN="\${SHELL} \${top_srcdir}/missing help2man"
-   echo "configure:935: result: missing" >&5
+   echo "configure:940: result: missing" >&5
 echo "${ECHO_T}missing" >&6
 fi
 
 # We use a path for perl so the #! line in autoscan will work.
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
-echo "configure:941: checking for $ac_word" >&5
+echo "configure:946: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
 if test "${ac_cv_path_PERL+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -1061,7 +1067,7 @@ else
   ac_cv_path_PERL="$PERL" # Let the user override the test with a path.
   ;;
   *)
-  ac_save_ifs=$IFS; IFS=':'
+  ac_save_IFS=$IFS; IFS=':'
   ac_dummy="$PATH"
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
@@ -1070,24 +1076,24 @@ else
       break
     fi
   done
-  IFS=$ac_save_ifs
+  IFS=$ac_save_IFS
   test -z "$ac_cv_path_PERL" && ac_cv_path_PERL="no"
   ;;
 esac
 fi
 PERL=$ac_cv_path_PERL
 if test -n "$PERL"; then
-  echo "configure:967: result: $PERL" >&5
+  echo "configure:972: result: $PERL" >&5
 echo "${ECHO_T}$PERL" >&6
 else
-  echo "configure:970: result: no" >&5
+  echo "configure:975: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
 if test "$PERL" != no; then
   PERLSCRIPTS=autoscan
 else
-  echo "configure: warning: autoscan will not be built since perl is not found" >&2
+  echo "configure: WARNING: autoscan will not be built since perl is not found" >&2
 fi
 
 # Find a good install program.  We prefer a C program (faster),
@@ -1101,7 +1107,7 @@ fi
 # AFS /usr/afsws/bin/install, which mishandles nonexistent args
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
-echo "configure:989: checking for a BSD compatible install" >&5
+echo "configure:994: checking for a BSD compatible install" >&5
 echo $ECHO_N "checking for a BSD compatible install... $ECHO_C" >&6
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
@@ -1148,7 +1154,7 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-echo "configure:1035: result: $INSTALL" >&5
+echo "configure:1040: result: $INSTALL" >&5
 echo "${ECHO_T}$INSTALL" >&6
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
@@ -1283,19 +1289,14 @@ cat confdefs.h | sed -e 's/^/| /' >&5
 : ${CONFIG_STATUS=./config.status}
 trap 'rm -f $CONFIG_STATUS conftest*; exit 1' 1 2 15
 echo creating $CONFIG_STATUS
-cat >$CONFIG_STATUS <<EOF
+cat >$CONFIG_STATUS <<\EOF
 #! /bin/sh
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
 # Compiler output produced by configure, useful for debugging
 # configure, is in ./config.log if it exists.
 
-configure=$0
-configure_args=$ac_configure_args
 debug=false
-EOF
-
-cat >>$CONFIG_STATUS <<\EOF
 me=`echo "$0" | sed -e 's,.*/,,'`
 SHELL=${CONFIG_SHELL-/bin/sh}
 
@@ -1327,7 +1328,7 @@ cat >>$CONFIG_STATUS <<EOF
 ac_cs_version="\\
 $CONFIG_STATUS generated by autoconf version 2.14a.
 Configured on host `(hostname || uname -n) 2>/dev/null | sed 1q` by
-  $configure $configure_arg"
+  `echo "$0 $ac_configure_args" | sed 's/[\\""\`\$]/\\\\&/g'`"
 
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
@@ -1354,11 +1355,14 @@ do
   esac
 
   case "$1" in
-
   # Handling of the options.
+EOF
+cat >>$CONFIG_STATUS <<EOF
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
-    echo "running $SHELL $configure $configure_args --no-create --no-recursion"
-    exec $SHELL $configure $configure_args --no-create --no-recursion ;;
+    echo "running $SHELL $0 " $ac_configure_args " --no-create --no-recursion"
+    exec $SHELL $0 $ac_configure_args --no-create --no-recursion ;;
+EOF
+cat >>$CONFIG_STATUS <<\EOF
   --version | --vers* | -V )
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
@@ -1574,8 +1578,8 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
 
   # Don't redirect the output to AC_FILE directly: use `mv' so that
   # updating is atomic, and doesn't need trapping.
-  ac_file_inputs=`echo "$ac_file_in" |
-                  sed -e "s%^%$ac_given_srcdir/%;s%:% $ac_given_srcdir/%g"`
+  ac_file_inputs=`IFS=:
+                  for f in $ac_file_in; do echo $ac_given_srcdir/$f; done`
   for ac_file_input in $ac_file_inputs;
   do
     test -f "$ac_file_input" ||

@@ -694,10 +694,63 @@ AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 ## ---------------------- ##
 
 
-# AC_FUNC_ALLOCA
-# --------------
-AC_DEFUN([AC_FUNC_ALLOCA],
-[AH_VERBATIM([STACK_DIRECTION],
+# _AC_LIBOBJ_ALLOCA
+# -----------------
+# Set up the LIBOBJ replacement of `alloca'.  Well, not exactly
+# AC_LIBOBJ since we actually set the output variable `ALLOCA'.
+# Nevertheless, for Automake, AC_LIBOBJ_DECL it.
+define([_AC_LIBOBJ_ALLOCA],
+[# The SVR3 libPW and SVR4 libucb both contain incompatible functions
+# that cause trouble.  Some versions do not even contain alloca or
+# contain a buggy version.  If you still want to use their alloca,
+# use ar to extract alloca.o from them instead of compiling alloca.c.
+AC_LIBOBJ_DECL(alloca)
+AC_SUBST(ALLOCA, alloca.${ac_objext})dnl
+AC_DEFINE(C_ALLOCA, 1, [Define if using `alloca.c'.])
+
+AC_CACHE_CHECK(whether `alloca.c' needs Cray hooks, ac_cv_os_cray,
+[AC_EGREP_CPP(webecray,
+[#if defined(CRAY) && ! defined(CRAY2)
+webecray
+#else
+wenotbecray
+#endif
+], ac_cv_os_cray=yes, ac_cv_os_cray=no)])
+if test $ac_cv_os_cray = yes; then
+  for ac_func in _getb67 GETB67 getb67; do
+    AC_CHECK_FUNC($ac_func,
+  		  [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func,
+  				      [Define to one of `_getb67', `GETB67',
+  				       `getb67' for Cray-2 and Cray-YMP
+                                       systems. This function is required for
+                                       `alloca.c' support on those systems.])
+    break])
+  done
+fi
+
+AC_CACHE_CHECK(stack direction for C alloca, ac_cv_c_stack_direction,
+[AC_TRY_RUN(
+[int
+find_stack_direction ()
+{
+  static char *addr = 0;
+  auto char dummy;
+  if (addr == 0)
+    {
+      addr = &dummy;
+      return find_stack_direction ();
+    }
+  else
+    return (&dummy > addr) ? 1 : -1;
+}
+
+int
+main ()
+{
+  exit (find_stack_direction () < 0);
+}], ac_cv_c_stack_direction=1, ac_cv_c_stack_direction=-1,
+  ac_cv_c_stack_direction=0)])
+AH_VERBATIM([STACK_DIRECTION],
 [/* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at run-time.
@@ -705,11 +758,18 @@ AC_DEFUN([AC_FUNC_ALLOCA],
         STACK_DIRECTION < 0 => grows toward lower addresses
         STACK_DIRECTION = 0 => direction of growth unknown */
 @%:@undef STACK_DIRECTION])dnl
-AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
+AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
+])# _AC_LIBOBJ_ALLOCA
+
+
+# AC_FUNC_ALLOCA
+# --------------
+AC_DEFUN([AC_FUNC_ALLOCA],
+[AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
 # The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
-[AC_TRY_LINK([#include <alloca.h>],
+[AC_TRY_LINK([@%:@include <alloca.h>],
   [char *p = (char *) alloca (2 * sizeof (int));],
   ac_cv_working_alloca_h=yes, ac_cv_working_alloca_h=no)])
 if test $ac_cv_working_alloca_h = yes; then
@@ -740,65 +800,15 @@ char *alloca ();
 #  endif
 # endif
 #endif
-], [char *p = (char *) alloca(1);],
+], [char *p = (char *) alloca (1);],
   ac_cv_func_alloca_works=yes, ac_cv_func_alloca_works=no)])
+
 if test $ac_cv_func_alloca_works = yes; then
   AC_DEFINE(HAVE_ALLOCA, 1,
             [Define if you have `alloca', as a function or macro.])
+else
+  _AC_LIBOBJ_ALLOCA
 fi
-
-if test $ac_cv_func_alloca_works = no; then
-  # The SVR3 libPW and SVR4 libucb both contain incompatible functions
-  # that cause trouble.  Some versions do not even contain alloca or
-  # contain a buggy version.  If you still want to use their alloca,
-  # use ar to extract alloca.o from them instead of compiling alloca.c.
-  ALLOCA=alloca.${ac_objext}
-  AC_DEFINE(C_ALLOCA, 1, [Define if using `alloca.c'.])
-
-AC_CACHE_CHECK(whether alloca needs Cray hooks, ac_cv_os_cray,
-[AC_EGREP_CPP(webecray,
-[#if defined(CRAY) && ! defined(CRAY2)
-webecray
-#else
-wenotbecray
-#endif
-], ac_cv_os_cray=yes, ac_cv_os_cray=no)])
-if test $ac_cv_os_cray = yes; then
-for ac_func in _getb67 GETB67 getb67; do
-  AC_CHECK_FUNC($ac_func,
-                [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func,
-                                    [Define to one of _getb67, GETB67, getb67
-                                     for Cray-2 and Cray-YMP systems.
-                                     This function is required for alloca.c
-                                     support on those systems.])
-  break])
-done
-fi
-
-AC_CACHE_CHECK(stack direction for C alloca, ac_cv_c_stack_direction,
-[AC_TRY_RUN(
-[find_stack_direction ()
-{
-  static char *addr = 0;
-  auto char dummy;
-  if (addr == 0)
-    {
-      addr = &dummy;
-      return find_stack_direction ();
-    }
-  else
-    return (&dummy > addr) ? 1 : -1;
-}
-
-int
-main ()
-{
-  exit (find_stack_direction () < 0);
-}], ac_cv_c_stack_direction=1, ac_cv_c_stack_direction=-1,
-  ac_cv_c_stack_direction=0)])
-AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
-fi
-AC_SUBST(ALLOCA)dnl
 ])# AC_FUNC_ALLOCA
 
 
