@@ -114,7 +114,7 @@ m4_rename_m4([changequote])
 m4_rename_m4([debugfile])
 m4_rename_m4([debugmode])
 m4_rename_m4([decr])
-m4_rename_m4([divert])
+m4_undefine([divert])
 m4_rename_m4([dumpdef])
 m4_rename_m4([eval])
 m4_rename_m4([format])
@@ -137,7 +137,7 @@ m4_rename_m4([sysval])
 m4_rename_m4([traceoff])
 m4_rename_m4([traceon])
 m4_rename_m4([translit])
-m4_rename_m4([undivert])
+m4_undefine([undivert])
 
 
 ## ------------------- ##
@@ -639,6 +639,22 @@ m4_define([_m4_divert],
 
 # KILL is only used to suppress output.
 m4_define([_m4_divert(KILL)],           -1)
+
+
+# m4_divert(DIVERSION-NAME)
+# -------------------------
+# Change the diversion stream to DIVERSION-NAME.
+m4_define([m4_divert],
+[m4_builtin([divert], _m4_divert([$1]))dnl
+])
+
+
+# m4_undivert(DIVERSION-NAME)
+# ---------------------------
+# Undivert DIVERSION-NAME.
+m4_define([m4_undivert],
+[m4_builtin([undivert], _m4_divert([$1]))dnl
+])
 
 
 # m4_divert_push(DIVERSION-NAME)

@@ -54,9 +54,27 @@ m4_define([AT_UNDEFINE], m4_defn([m4_undefine]))
 
 
 # Use of diversions:
-#  0 - overall initialization; for each test group: skipping and cleanups;
-#  2 - for each test group: proper code, to reinsert between cleanups;
-#  3 - overall wrap up: generation of debugging scripts and statistics.
+#
+#  - SUITE_PRO
+#    overall initialization
+#  - TESTS
+#    The core of the test suite, the ``normal'' diversion.
+#  - SUITE_EPI
+#    tail of the core for;case, overall wrap up, generation of debugging
+#    scripts and statistics.
+#
+#  - TEST
+#    for each test group: proper code, to reinsert between cleanups;
+#    undiverted into TESTS once at_data_files diverted.
+
+m4_define([_m4_divert(SUITE_PRO)],        0)
+m4_define([_m4_divert(TESTS)],           10)
+m4_define([_m4_divert(SUITE_EPI)],       20)
+
+m4_define([_m4_divert(TEST)],           100)
+
+m4_divert_push([TESTS])
+m4_divert_push([KILL])
 
 
 # AT_LINE
@@ -71,7 +89,7 @@ AT_DEFINE([AT_LINE],
 # Begin testing suite, using PROGRAM to check version.  The search path
 # should be already preset so the proper executable will be selected.
 AT_DEFINE([AT_INIT],
-[m4_divert_push(0)dnl
+[m4_divert_push([SUITE_PRO])dnl
 AT_DEFINE([AT_ordinal], 0)
 . ./atconfig
 # -e sets to true
@@ -148,15 +166,14 @@ fi
 at_failed_list=
 at_ignore_count=0
 at_test_count=0
-m4_divert_push(1)dnl
+m4_divert([TESTS])dnl
 
 : ${tests="$TESTS"}
 for test in $tests
 do
   at_status=0;
   case $test in
-m4_divert_pop[]dnl
-m4_divert_push(3)[]dnl
+m4_divert([SUITE_EPI])[]dnl
   esac
   at_test_count=`expr 1 + $at_test_count`
   $at_verbose $at_n "     $test. $srcdir/`cat at-setup-line`: $at_c"
@@ -234,9 +251,7 @@ fi
 
 exit 0
 m4_divert_pop()dnl
-m4_divert_push(1)dnl
-m4_divert_push([KILL])dnl
-m4_wrap([m4_divert_text(0,
+m4_wrap([m4_divert_text([SUITE_PRO],
                         [TESTS="m4_for([i], 1, AT_ordinal, 1, [i ])"])])dnl
 ])# AT_INIT
 
@@ -249,10 +264,10 @@ m4_wrap([m4_divert_text(0,
 AT_DEFINE([AT_SETUP],
 [AT_DEFINE([AT_ordinal], m4_eval(AT_ordinal + 1))
 m4_pushdef([AT_data_files], [stdout stderr ])
-m4_divert_pop()dnl
+m4_divert_push([TESTS])dnl
   AT_ordinal )
 dnl Here will be inserted the definition of at_data_files.
-m4_divert(2)[]dnl
+m4_divert([TEST])[]dnl
     rm -rf $at_data_files
     echo AT_LINE > at-setup-line
     $at_verbose 'testing $1'
@@ -302,11 +317,11 @@ AT_DEFINE([AT_CLEANUP],
     )
     at_status=$?
     ;;
-m4_divert(1)[]dnl
+m4_divert([TESTS])[]dnl
     at_data_files="AT_data_files"
-m4_undivert(2)[]dnl
+m4_undivert([TEST])[]dnl
 m4_popdef([AT_data_files])dnl
-m4_divert_push([KILL])dnl
+m4_divert_pop()dnl
 ])# AT_CLEANUP
 
 

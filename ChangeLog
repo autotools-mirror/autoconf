@@ -1,5 +1,15 @@
 2000-11-23  Akim Demaille  <akim@epita.fr>
 
+	* m4sugar.m4 (m4_divert, m4_undivert): Support named diversions.
+	* tests/atgeneral.m4 (_m4_divert(SUITE_PRO), _m4_divert(TESTS))
+	(_m4_divert(SUITE_EPI), _m4_divert(TEST)): New diversions.
+	Push the first two diversions.
+	(AT_INIT): Don't.
+	(AT_INIT, AT_SETUP, AT_CLEANUP): Adjust to use the named
+	diversions.
+
+2000-11-23  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_CLEANUP): Factor the computation of
 	at_test_count into...
 	(AT_INIT): here.
