@@ -1,5 +1,10 @@
 2001-06-13  Akim Demaille  <akim@epita.fr>
 
+	* m4/missing.m4, config/missing: Updated to Automake 1.4g's.
+	Suggested by Alexander Mai.
+
+2001-06-13  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS): Guard
 	sys/types.h and sys/stat.h, and check for them.
 
