@@ -1,5 +1,12 @@
 2000-03-08  Akim Demaille  <akim@epita.fr>
 
+	* acgeneral.m4 (AC_INIT_BINSH, AC_INIT_NOTICE, AC_INIT_PREPARE):
+	Rename as...
+	(_AC_INIT_BINSH, _AC_INIT_NOTICE, _AC_INIT_PREPARE): this.
+	All callers adjusted.
+
+2000-03-08  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_INIT_PARSE_ARGS): Rename as...
 	(_AC_INIT_PARSE_ARGS): this.
 	Move the display of help and version strings to...

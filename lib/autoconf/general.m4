@@ -508,9 +508,20 @@ popdef([AC_Prefix])dnl
 ## ---------------- ##
 
 
-# AC_INIT_NOTICE
+# _AC_INIT_BINSH
 # --------------
-AC_DEFUN(AC_INIT_NOTICE,
+# Try to have only one #! line, so the script doesn't look funny
+# for users of AC_REVISION.
+AC_DEFUN(_AC_INIT_BINSH,
+[AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
+#! /bin/sh
+AC_DIVERT_POP()dnl to KILL
+])
+
+
+# _AC_INIT_NOTICE
+# --------------
+AC_DEFUN(_AC_INIT_NOTICE,
 [# Guess values for system-dependent variables and create Makefiles.
 # Generated automatically using Autoconf version ]AC_ACVERSION[
 # Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
@@ -553,7 +564,7 @@ ac_includes_default="\
 #if HAVE_UNISTD_H
 # include <unistd.h>
 #endif"
-@%:@ Any additions from configure.in:])
+@%:@ Any additions from configure.in:])# _AC_INIT_NOTICE
 
 
 # AC_PREFIX_DEFAULT(PREFIX)
@@ -1010,17 +1021,6 @@ define([_AC_INIT_VERSION],
 fi])# _AC_INIT_VERSION
 
 
-# AC_INIT_BINSH
-# -------------
-# Try to have only one #! line, so the script doesn't look funny
-# for users of AC_REVISION.
-AC_DEFUN(AC_INIT_BINSH,
-[AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
-#! /bin/sh
-AC_DIVERT_POP()dnl to KILL
-])
-
-
 # AC_INCLUDE(FILE)
 # ----------------
 # Wrapper around m4_include.
@@ -1034,29 +1034,8 @@ define(AC_INCLUDES,
 [m4_foreach([File], [$1], [AC_INCLUDE(File)])])
 
 
-# AC_INIT(UNIQUE-FILE-IN-SOURCE-DIR)
-# ----------------------------------
-# Output the preamble of the `configure' script.
-AC_DEFUN(AC_INIT,
-[m4_sinclude(acsite.m4)dnl
-m4_sinclude(./aclocal.m4)dnl
-AC_REQUIRE([AC_INIT_BINSH])dnl
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
-AC_INIT_NOTICE
-AC_DIVERT_POP()dnl to KILL
-AC_DIVERT_POP()dnl to NORMAL
-AC_DIVERT_PUSH(AC_DIVERSION_INIT)dnl
-_AC_INIT_PARSE_ARGS
-_AC_INIT_HELP
-_AC_INIT_VERSION
-AC_INIT_PREPARE([$1])dnl
-AC_DIVERT_POP()dnl to NORMAL
-])
-
-
-
-# AC_INIT_PREPARE(UNIQUE-FILE-IN-SOURCE-DIR)
-# ------------------------------------------
+# _AC_INIT_PREPARE([UNIQUE-FILE-IN-SOURCE-DIR])
+# ---------------------------------------------
 # Called by AC_INIT to build the preamble of the `configure' scripts.
 # 1. Trap and clean up various tmp files.
 # 2. Set up the fd and output files
@@ -1065,7 +1044,7 @@ AC_DIVERT_POP()dnl to NORMAL
 # 5. Find `$srcdir', and check its validity by verifying the presence of
 #    UNIQUE-FILE-IN-SOURCE-DIR.
 # 6. Required macros (cache, default AC_SUBST etc.)
-AC_DEFUN(AC_INIT_PREPARE,
+AC_DEFUN([_AC_INIT_PREPARE],
 [trap 'rm -fr conftest* confdefs* core core.* *.core $ac_clean_files; exit 1' 1 2 15
 
 # File descriptor usage:
@@ -1191,7 +1170,31 @@ AC_SUBST(includedir)dnl
 AC_SUBST(oldincludedir)dnl
 AC_SUBST(infodir)dnl
 AC_SUBST(mandir)dnl
+])# _AC_INIT_PREPARE
+
+
+# AC_INIT([UNIQUE-FILE-IN-SOURCE-DIR])
+# ------------------------------------
+# Output the preamble of the `configure' script.
+AC_DEFUN(AC_INIT,
+[m4_sinclude(acsite.m4)dnl
+m4_sinclude(./aclocal.m4)dnl
+AC_REQUIRE([_AC_INIT_BINSH])dnl
+AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+_AC_INIT_NOTICE
+AC_DIVERT_POP()dnl to KILL
+AC_DIVERT_POP()dnl to NORMAL
+AC_DIVERT_PUSH(AC_DIVERSION_INIT)dnl
+_AC_INIT_PARSE_ARGS
+_AC_INIT_HELP
+_AC_INIT_VERSION
+_AC_INIT_PREPARE([$1])dnl
+AC_DIVERT_POP()dnl to NORMAL
 ])
+
+
+
+
 
 
 
@@ -1311,7 +1314,7 @@ test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 # AC_REVISION(REVISION-INFO)
 # --------------------------
 AC_DEFUN(AC_REVISION,
-[AC_REQUIRE([AC_INIT_BINSH])dnl
+[AC_REQUIRE([_AC_INIT_BINSH])dnl
 AC_DIVERT_PUSH(AC_DIVERSION_BINSH)dnl
 [# From configure.in] translit([$1], $")
 AC_DIVERT_POP()dnl to KILL
@@ -1953,7 +1956,7 @@ AC_DEFUN(AC_TRY_COMMAND,
 # Therefore, the following *is* buggy, but this is the kind of
 # tradeoff we accept in order to improve configure.
 
-# See AC_INIT_NOTICE to see the value of the default includes.
+# See _AC_INIT_NOTICE to see the value of the default includes.
 
 
 # AC_INCLUDES_DEFAULT([INCLUDES])
