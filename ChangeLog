@@ -1,5 +1,8 @@
 1999-01-09  Ben Elliston  <bje@cygnus.com>
 
+	* Makefile.in (html): New target. Generate HTML documentation.
+	Contributed by Wilfredo Sanchez <wsanchez@apple.com>.
+	
 	* autoconf.texi (AC_CHECK_LIB): Explain more. Contributed by Bob
 	Friesenhahn <bfriesen@simple.dallas.tx.us>.
 	(UPDATED): Bump to 1999.

@@ -26,6 +26,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 MAKEINFO = makeinfo
 TEXI2DVI = texi2dvi
+TEXI2HTML = texi2html
 M4 = @M4@
 AWK = @AWK@
 PERL = @PERL@
@@ -127,6 +128,14 @@ autoconf.dvi: autoconf.texi
 standards.dvi: standards.texi make-stds.texi
 	$(TEXI2DVI) $(srcdir)/standards.texi
 
+html: autoconf_1.html standards_1.html
+
+autoconf_1.html: autoconf.texi
+	$(TEXI2HTML) -split_chapter $(srcdir)/autoconf.texi
+
+standards_1.html: standards.texi
+	$(TEXI2HTML) -split_chapter $(srcdir)/standards.texi
+
 check: all
 	rootme=`pwd`; srcrootme=`cd $(srcdir); pwd`; \
 	test -r install-sh || cp $(srcdir)/install-sh .; \
@@ -156,6 +165,9 @@ install: all $(M4FILES) acconfig.h installdirs install-info
 	$(INSTALL_DATA) $(srcdir)/$$i $(acdatadir)/$$i; \
 	done; \
 	else :; fi
+
+install-strip:
+	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' install
 
 # Don't cd, to avoid breaking install-sh references.
 install-info: info installdirs
@@ -191,7 +203,7 @@ config.status: configure
 maintainer-clean::
 	@echo "This command is intended for maintainers to use;"
 	@echo "rebuilding the deleted files requires makeinfo."
-	rm -f TAGS *.info* INSTALL
+	rm -f TAGS *.html* *.info* INSTALL
 
 clean mostlyclean distclean maintainer-clean::
 	for dir in $(SUBDIRS); do \
