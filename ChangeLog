@@ -1,5 +1,19 @@
 2000-03-13  Akim Demaille  <akim@epita.fr>
 
+	`autoconf --trace': faster.
+
+	* autoconf.sh (initialization): New var, new option.
+	(option loop): When you need an arg, make sure there is one.
+	(run_m4f): New var, which content is that of the former...
+	(run_m4): Don't use m4 frozen state files.
+	Change all callers.
+	Don't pass AC_LOCALDIR, not documented, and unused.
+	(task trace): Honor `--verbose' and `--initialization'.
+	(globally): Send `--verbose' messages in stderr.
+	Fix random typos.
+
+2000-03-13  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_PROG_BINSH): Removed.
 
 2000-03-13  Akim Demaille  <akim@epita.fr>
