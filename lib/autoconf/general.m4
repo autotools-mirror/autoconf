@@ -1158,12 +1158,9 @@ AC_DEFUN(AC_LANG_C,
 [define([AC_LANG], [C])dnl
 ac_ext=c
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-ac_cpp='echo $CPP $CPPFLAGS 1>&AC_FD_CC;
-$CPP $CPPFLAGS'
-ac_compile='echo ${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC;
-${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC 2>&AC_FD_CC'
-ac_link='echo ${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC;
-${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='${CC-cc} -c $CFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
+ac_link='${CC-cc} -o conftest $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
 ])
 
 dnl AC_LANG_CPLUSPLUS()
@@ -1171,12 +1168,9 @@ AC_DEFUN(AC_LANG_CPLUSPLUS,
 [define([AC_LANG], [CPLUSPLUS])dnl
 ac_ext=C
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-ac_cpp='echo $CXXCPP $CPPFLAGS 1>&AC_FD_CC;
-$CXXCPP $CPPFLAGS'
-ac_compile='echo ${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC;
-${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC 2>&AC_FD_CC'
-ac_link='echo ${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC;
-${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC 2>&AC_FD_CC'
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='${CXX-g++} -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext 1>&AC_FD_CC'
+ac_link='${CXX-g++} -o conftest $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS 1>&AC_FD_CC'
 ])
 
 dnl Push the current language on a stack.
@@ -1188,6 +1182,21 @@ dnl Restore the current language from the stack.
 dnl AC_LANG_RESTORE()
 define(AC_LANG_RESTORE,
 [ifelse(AC_LANG_STACK, C, [ifelse(AC_LANG, C, , [AC_LANG_C])], [ifelse(AC_LANG, CPLUSPLUS, , [AC_LANG_CPLUSPLUS])])[]popdef([AC_LANG_STACK])])
+
+
+dnl ### Compiler-running mechanics
+
+
+dnl The purpose of this macro is to "configure:123: command line"
+dnl written into config.log for every test run.
+dnl AC_TRY_EVAL(VARIABLE)
+AC_DEFUN(AC_TRY_EVAL,
+[{ (eval echo configure:__oline__: \"[$]$1\") 1>&AC_FD_CC; dnl
+(eval [$]$1) 2>&AC_FD_CC; }])
+
+dnl AC_TRY_COMMAND(COMMAND)
+AC_DEFUN(AC_TRY_COMMAND,
+[{ ac_try='$1'; AC_TRY_EVAL(ac_try); }])
 
 
 dnl ### Dependencies between macros
@@ -1438,7 +1447,8 @@ dnl Capture the stderr of cpp.  eval is necessary to expand ac_cpp.
 dnl We used to copy stderr to stdout and capture it in a variable, but
 dnl that breaks under sh -x, which writes compile commands starting
 dnl with ` +' to stderr in eval and subshells.
-eval "$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
+ac_try='$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out'
+AC_TRY_EVAL(ac_try)
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   ifelse([$2], , :, [rm -rf conftest*
@@ -1499,7 +1509,7 @@ int t() {
 [$2]
 ; return 0; }
 EOF
-if eval $ac_compile; then
+if AC_TRY_EVAL(ac_compile); then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 ifelse([$4], , , [else
@@ -1537,7 +1547,7 @@ int t() {
 [$2]
 ; return 0; }
 EOF
-if eval $ac_link; then
+if AC_TRY_EVAL(ac_link); then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 ifelse([$4], , , [else
@@ -1572,7 +1582,7 @@ extern "C" void exit(int);
 ])dnl
 [$1]
 EOF
-eval $ac_link
+AC_TRY_EVAL(ac_link)
 if test -s conftest && (./conftest; exit) 2>/dev/null; then
   ifelse([$2], , :, [$2])
 ifelse([$3], , , [else
