@@ -23,6 +23,16 @@ Write a test that checks that it honors the values set by the user.
 ** autom4te and warnings.
 Decide what must be done.
 
+** AC_DEFINE(func, rpl_func)
+This scheme causes problems: if for instance, #define malloc
+rpl_malloc, then the rest of configure will use an undefined malloc.
+Hence some tests fail.  Up to now we simply #undef these functions
+where we had a problem (cf. AC_FUNC_MKTIME and AC_FUNC_MMAP for
+instance).  This is _bad_.  Maybe the #define func rpl_malloc should
+be performed in another file than confdefs.h, say confh.h, which is
+used for config.h generation, but not used in configure's own tests.
+
+
 ** Automake 1.6
 *** AC_LIBOBJ_DECL
 Decide with the Automake team whether this macro should list only `.c'

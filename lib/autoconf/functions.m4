@@ -888,7 +888,10 @@ AC_DEFUN([AC_FUNC_MMAP],
 AC_CHECK_FUNCS(getpagesize)
 AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 [AC_RUN_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
-[[/* Thanks to Mike Haertel and Jim Avera for this test.
+[[/* malloc might have been renamed as rpl_malloc. */
+#undef malloc
+
+/* Thanks to Mike Haertel and Jim Avera for this test.
    Here is a matrix of mmap possibilities:
 	mmap private not fixed
 	mmap private fixed at somewhere currently unmapped
