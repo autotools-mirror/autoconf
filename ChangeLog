@@ -1,3 +1,10 @@
+2003-09-26  Paul Eggert  <eggert@twinsun.com>
+
+	* lib/m4sugar/m4sh.m4 (_AS_MKDIR_P_PREPARE): If mkdir -p . fails,
+	rm -fr ./-p to remove junk left behind on NextStep and OpenStep.
+	Problem reported by Eric Sunshine in:
+	http://mail.gnu.org/archive/html/autoconf-patches/2002-12/msg00014.html
+
 2003-09-26  Akim Demaille  <akim@epita.fr>
 
 	The test suite are sometimes assigning timings incorrectly.
