@@ -211,13 +211,7 @@ AT_CHECK([/lib/cpp </dev/null || exit 77], [], [ignore], [ignore])
 AT_DATA([mycc],
 [[#! /bin/sh
 echo "Annoying copyright message" >&2
-if test "$1" != "-E"; then
-  exec cc $*
-elif test "$2" = "-traditional-cpp"; then
-  exec cc $*
-else
-  exec /lib/cpp ${1+"$@"}
-fi
+exec "$@"
 ]])
 
 chmod +x mycc
@@ -227,7 +221,8 @@ chmod +x mycc
 # normal CPP selection check.  If we explicitly set CPP, it goes down
 # a different codepath.
 _AT_CHECK_AC_MACRO(
-[[CC=./mycc
+[[AC_PROG_CC
+CC="./mycc $CC"
 AC_PROG_CPP
 # The test $CC compiler should have been selected.
 test "$CPP" != "$CC -E" &&

@@ -1,5 +1,10 @@
 2001-05-19  Akim Demaille  <akim@epita.fr>
 
+	* tests/compile.at (AC_PROG_CPP via CC): Invoke AC_PROG_CC instead
+	if using `cc'.
+
+2001-05-19  Akim Demaille  <akim@epita.fr>
+
 	* tests/compile.at (GNU Fortran 77): Don't AS_EXIT when using
 	AT_CHECK_MACRO since it skips tests embedded in configure.ac.
 	Remove files which might have been created when invoking the
