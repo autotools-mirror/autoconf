@@ -1,5 +1,9 @@
 2000-07-10  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi (Coding Style): Some more constraints :).
+
+2000-07-10  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_FUNC_STRERROR_R): Aaaaaaarg!  Don't leave the
 	AC_DEFINE inside the AC_CACHE_CHECK.
 

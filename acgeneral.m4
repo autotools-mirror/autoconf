@@ -2192,7 +2192,7 @@ AC_DEFUN_ONCE([AC_CANONICAL_BUILD],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_DIVERT([HELP_CANON],
 [[
-Hosts type:
+System types:
   --build=BUILD     configure for building on BUILD [guessed]]])dnl
 # Make sure we can run config.sub.
 $ac_config_sub sun4 >/dev/null 2>&1 ||

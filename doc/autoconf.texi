@@ -6697,6 +6697,12 @@ fi[]dnl
 ])# AC_PATH_X
 @end example
 
+If the macro is long, try to split it into logical chunks.  Typically,
+macros which check for a bug in a function and prepare its
+@code{AC_LIBOBJ} replacement should have an auxiliary macro to perform
+this setup.
+
+Do not hesitate to introduce auxiliary macros to factor your code.
 
 In order to highlight this coding style, here is a macro written the old
 way:
