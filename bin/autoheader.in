@@ -103,7 +103,7 @@ sub parse_args ()
   my $srcdir;
 
   getopt ('I|include|A|autoconf-dir|m|macrodir|l|localdir=s' => \@include,
-	  'W|warning' => \@warning);
+	  'W|warning=s' => \@warning);
 
   if (! @ARGV)
     {

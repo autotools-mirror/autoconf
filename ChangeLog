@@ -1,3 +1,8 @@
+2002-04-23  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoheader.in (parse_args): --warning takes an argument.
+	Fixes PR/220.
+
 2002-04-22  Peter Eisentraut  <peter_e@gmx.net>
 
 	* lib/autoconf/general.m4 (_AC_RUN_IFELSE): Remove gmon.out
