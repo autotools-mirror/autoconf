@@ -1,6 +1,9 @@
 Fri Mar  8 15:06:48 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
-	* acgeneral.m4: Version 2.8 released.
+	* acgeneral.m4 (AC_CHECK_LIB): Declare $2 to override gcc2 internal
+	prototype.
+
+	* Version 2.8 released.
 
 Wed Mar  6 14:38:31 1996  Roland McGrath  <roland@charlie-brown.gnu.ai.mit.edu>
 
