@@ -53,7 +53,7 @@ dnl Issue an autoheader template for KEY, i.e., a comment composed
 dnl of DESCRIPTION (properly wrapped), and then #undef KEY.
 define([AH_TEMPLATE],
 [AH_VERBATIM([$1],
-             AC_WRAP(_AC_SH_QUOTE([[$2 */]]), [   ], [/* ])[
+             AC_WRAP(_AC_SH_QUOTE([$2 */]), [   ], [/* ])[
 #undef $1])])
 
 dnl AH_VERBATIM(KEY, TEMPLATE)
@@ -141,9 +141,8 @@ define([AH_FUNC_ALLOCA],
         STACK_DIRECTION > 0 => grows toward higher addresses
         STACK_DIRECTION < 0 => grows toward lower addresses
         STACK_DIRECTION = 0 => direction of growth unknown */
-#undef STACK_DIRECTION
-])
-])dnl AH_FUNC_ALLOCA
+#undef STACK_DIRECTION[]dnl
+])])dnl AH_FUNC_ALLOCA
 
 
 define([AH_C_CHAR_UNSIGNED],
@@ -151,7 +150,8 @@ define([AH_C_CHAR_UNSIGNED],
 [/* Define if type `char' is unsigned and you are not using gcc.  */
 #ifndef __CHAR_UNSIGNED__
 # undef __CHAR_UNSIGNED__
-#endif])])
+#endif[]dnl
+])])
 
 
 define([AH_AIX],

@@ -1,5 +1,10 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	* autoheader.m4 (AH_TEMPLATE): Quote $2 once, now _AC_SH_QUOTE
+	behaves properly.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4: Formatting changes.
 	* acspecific.m4: Likewise.
 
