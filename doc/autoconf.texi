@@ -3717,6 +3717,14 @@ constant strings in read-only memory
 Porting the @acronym{GNU} Compiler Collection}).  Apparently in some cases even
 having format strings read-only can be a problem.
 
+@item @code{strerror_r}
+@c @fuindex strerror_r
+@prindex @code{strerror_r}
+POSIX specifies that @code{strerror_r} returns an @code{int}, but many
+systems (eg.@: @acronym{GNU} C Library version 2.2.4) provide a
+different version returning a @code{char *}.  @code{AC_FUNC_STRERROR_R}
+can detect which is in use (@pxref{Particular Functions}).
+
 @item @code{strnlen}
 @c @fuindex strnlen
 @prindex @code{strnlen}
