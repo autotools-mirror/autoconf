@@ -1913,13 +1913,11 @@ prints @samp{checking for @var{echo-text}} to the standard output first.
 
 @defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @var{action-if-found} @r{[}, @var{action-if-not-found}@r{]})
 @maindex EGREP_CPP
-@var{program} is the text of a C or C++ program, on which shell variable and
-backquote substitutions are performed.  If the output of running the
-preprocessor on @var{program} contains the @code{egrep} regular
-expression @var{pattern}, execute shell commands @var{action-if-found},
-otherwise execute @var{action-if-not-found}.  (It is an unfortunate
-oversight that we use the word @code{PROGRAM} in Autoconf macro names to
-sometimes mean C or C++ source code and sometimes mean a UNIX command.)
+@var{program} is the text of a C or C++ program, on which shell
+variable, backquote, and backslash substitutions are performed.  If the
+output of running the preprocessor on @var{program} contains the
+@code{egrep} regular expression @var{pattern}, execute shell commands
+@var{action-if-found}, otherwise execute @var{action-if-not-found}.
 
 This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
 on which language is current, @pxref{Language Choice}), if it hasn't
@@ -1946,12 +1944,12 @@ your programs.
 
 @defmac AC_TRY_CPP (@var{includes}, @var{action-if-true} @r{[}, @var{action-if-false}@r{]})
 @maindex TRY_CPP
-@var{includes} is C or C++ @code{#include} statements and declarations, on
-which shell variable and backquote substitutions are performed.
-(Actually, it can be any C program, but other statements are probably
-not useful.)  If the preprocessor produces no error messages while
-processing it, run shell commands @var{action-if-true}.  Otherwise run
-shell commands @var{action-if-false}.
+@var{includes} is C or C++ @code{#include} statements and declarations,
+on which shell variable, backquote, and backslash substitutions are
+performed.  (Actually, it can be any C program, but other statements are
+probably not useful.)  If the preprocessor produces no error messages
+while processing it, run shell commands @var{action-if-true}.  Otherwise
+run shell commands @var{action-if-false}.
 
 This macro calls @code{AC_PROG_CPP} or @code{AC_PROG_CXXCPP} (depending
 on which language is current, @pxref{Language Choice}), if it hasn't

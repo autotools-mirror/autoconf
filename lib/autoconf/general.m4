@@ -1125,8 +1125,8 @@ cat > conftest.${ac_ext} <<EOF
 #include "confdefs.h"
 [$2]
 EOF
-eval "$ac_cpp conftest.${ac_ext} > conftest.out 2>&1"
-if egrep "$1" conftest.out >/dev/null 2>&1; then
+if eval "$ac_cpp conftest.${ac_ext}" 2>&AC_FD_CC |
+  egrep "$1" >/dev/null 2>&1; then
   ifelse([$3], , :, [rm -rf conftest*
   $3])
 ifelse([$4], , , [else
@@ -1219,8 +1219,9 @@ ac_err=`eval "($ac_cpp conftest.${ac_ext} >/dev/null) 2>&1"`
 if test -z "$ac_err"; then
   ifelse([$2], , :, [rm -rf conftest*
   $2])
-ifelse([$3], , , [else
-  rm -rf conftest*
+else
+  echo "$ac_err" >&AC_FD_CC
+ifelse([$3], , , [  rm -rf conftest*
   $3
 ])dnl
 fi

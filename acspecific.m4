@@ -854,7 +854,8 @@ fi
 ])dnl
 dnl
 AC_DEFUN(AC_FUNC_ALLOCA,
-[# The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
+[AC_REQUIRE_CPP()dnl Set CPP; we run AC_EGREP_CPP conditionally.
+# The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 AC_MSG_CHECKING([for working alloca.h])
 AC_CACHE_VAL(ac_cv_header_alloca_h,
