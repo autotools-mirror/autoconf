@@ -45,9 +45,9 @@ dnl
 define(AC_USER, [esyscmd(
 changequote({,})dnl
 # Extract the user name from the first pair of parentheses.
-({sedcmd='s/[^(]*(\([^)]*\)).*/\1/';}
+({ac_sedcmd='s/[^(]*(\([^)]*\)).*/\1/';}
 changequote([,])dnl
-whoami || id|sed "$sedcmd") 2>/dev/null|tr -d '\012')])dnl
+whoami || id|sed "$ac_sedcmd") 2>/dev/null|tr -d '\012')])dnl
 dnl
 define(AC_HOST, [esyscmd((hostname || uname -n) 2>/dev/null|tr -d '\012')])dnl
 dnl
@@ -87,67 +87,67 @@ dnl [#] by AC_USER@AC_HOST on AC_DATE
 ])dnl
 dnl
 define(AC_PARSEARGS,
-[for arg
+[for ac_arg
 do
   # Handle --exec-prefix with a space before the argument.
-  if test x$next_exec_prefix = xyes; then exec_prefix=$arg; next_exec_prefix=
+  if test x$ac_next_exec_prefix = xyes; then exec_prefix=$ac_arg; ac_next_exec_prefix=
   # Handle --host with a space before the argument.
-  elif test x$next_host = xyes; then next_host=
+  elif test x$ac_next_host = xyes; then ac_next_host=
   # Handle --prefix with a space before the argument.
-  elif test x$next_prefix = xyes; then prefix=$arg; next_prefix=
+  elif test x$ac_next_prefix = xyes; then prefix=$ac_arg; ac_next_prefix=
   # Handle --srcdir with a space before the argument.
-  elif test x$next_srcdir = xyes; then srcdir=$arg; next_srcdir=
+  elif test x$ac_next_srcdir = xyes; then srcdir=$ac_arg; ac_next_srcdir=
   else
-    case $arg in
+    case $ac_arg in
      # For backward compatibility, recognize -exec-prefix and --exec_prefix.
      -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* | --exec-pref=* | --exec-pre=* | --exec-pr=* | --exec-p=* | --exec-=* | --exec=* | --exe=* | --ex=* | --e=*)
 changequote(,)dnl
-	exec_prefix=`echo $arg | sed 's/[-a-z_]*=//'` ;;
+	exec_prefix=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
 changequote([,])dnl
      -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- | --exec | --exe | --ex | --e)
-	next_exec_prefix=yes ;;
+	ac_next_exec_prefix=yes ;;
 
      -gas | --gas | --ga | --g) ;;
 
      -host=* | --host=* | --hos=* | --ho=* | --h=*) ;;
      -host | --host | --hos | --ho | --h)
-	next_host=yes ;;
+	ac_next_host=yes ;;
 
      -nfp | --nfp | --nf) ;;
 
      -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
 changequote(,)dnl
-	prefix=`echo $arg | sed 's/[-a-z_]*=//'` ;;
+	prefix=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
 changequote([,])dnl
      -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
-	next_prefix=yes ;;
+	ac_next_prefix=yes ;;
 
      -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=* | --s=*)
 changequote(,)dnl
-	srcdir=`echo $arg | sed 's/[-a-z_]*=//'` ;;
+	srcdir=`echo $ac_arg | sed 's/[-a-z_]*=//'` ;;
 changequote([,])dnl
      -srcdir | --srcdir | --srcdi | --srcd | --src | --sr | --s)
-	next_srcdir=yes ;;
+	ac_next_srcdir=yes ;;
 
      -with-* | --with-*)
-       package=`echo $arg|sed -e 's/-*with-//' -e 's/=.*//'`
+       ac_package=`echo $ac_arg|sed -e 's/-*with-//' -e 's/=.*//'`
        # Reject names that aren't valid shell variable names.
 changequote(,)dnl
-       if test -n "`echo $package| sed 's/[-a-zA-Z0-9_]//g'`"; then
+       if test -n "`echo $ac_package| sed 's/[-a-zA-Z0-9_]//g'`"; then
 changequote([,])dnl
-         echo "configure: $package: invalid package name" >&2; exit 1
+         echo "configure: $ac_package: invalid package name" >&2; exit 1
        fi
-       package=`echo $package| sed 's/-/_/g'`
-       case "$arg" in
+       ac_package=`echo $ac_package| sed 's/-/_/g'`
+       case "$ac_arg" in
 changequote(,)dnl
-         *=*) val="`echo $arg|sed 's/[^=]*=//'`" ;;
+         *=*) val="`echo $ac_arg|sed 's/[^=]*=//'`" ;;
 changequote([,])dnl
          *) val=1 ;;
        esac
-       eval "with_$package='$val'" ;;
+       eval "with_$ac_package='$val'" ;;
 
      -v | -verbose | --verbose | --verbos | --verbo | --verb | --ver | --ve | --v)
-       verbose=yes ;;
+       ac_verbose=yes ;;
 
      *) ;;
     esac
@@ -162,7 +162,7 @@ AC_PARSEARGS
 AC_PREPARE($1)])dnl
 dnl
 define(AC_PREPARE,
-[trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 3 15
+[trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 2 15
 trap 'rm -f confdefs* $ac_clean_files' 0
 
 # NLS nuisances.
@@ -178,62 +178,33 @@ compile='${CC-cc} $CFLAGS $LDFLAGS conftest.c -o conftest $LIBS >/dev/null 2>&1'
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-unique_file=$1
+ac_unique_file=$1
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
-  srcdirdefaulted=yes
+  ac_srcdir_defaulted=yes
   # Try the directory containing this script, then `..'.
-  prog=[$]0
+  ac_prog=[$]0
 changequote(,)dnl
-  confdir=`echo $prog|sed 's%/[^/][^/]*$%%'`
+  ac_confdir=`echo $ac_prog|sed 's%/[^/][^/]*$%%'`
 changequote([,])dnl
-  test "X$confdir" = "X$prog" && confdir=.
-  srcdir=$confdir
-  if test ! -r $srcdir/$unique_file; then
+  test "X$ac_confdir" = "X$ac_prog" && ac_confdir=.
+  srcdir=$ac_confdir
+  if test ! -r $srcdir/$ac_unique_file; then
     srcdir=..
   fi
 fi
-if test ! -r $srcdir/$unique_file; then
-  if test x$srcdirdefaulted = xyes; then
-    echo "configure: Can not find sources in \`${confdir}' or \`..'." 1>&2
+if test ! -r $srcdir/$ac_unique_file; then
+  if test x$ac_srcdir_defaulted = xyes; then
+    echo "configure: Can not find sources in \`${ac_confdir}' or \`..'." 1>&2
   else
     echo "configure: Can not find sources in \`${srcdir}'." 1>&2
   fi
   exit 1
 fi
 
-dnl This is effectively disabled because it is a nuisance if not using
-dnl a configuration header file.
-ifelse([AC_CONFIG_NAMES], [], [
-# Check for an already configured srcdir.
-if test -r $srcdir/config.status && \
-  test z"`sh -c pwd`" != z"`(cd $srcdir; sh -c pwd)`"; then
-  cat <<EOF >&2
-configure: The directory tree \`${srcdir}' is being used
-   as a build directory right now; it has been configured in its own
-   right.  You cannot currently configure and build in both the source
-   directory and another build directory.  To configure in this directory,
-   you must first do \`make distclean' in ${srcdir},
-   and then run configure again.
-EOF
-  exit 1
-ifelse([not ready yet], [], [ XXX this should do the following:
-* Edit "VPATH=..." into GNU vpath directives for %.c and %.h (%.y?).
-* Add -DCONFIG_BROKETS to DEFS (config.h is not good enough, because it is
-  used to FIND config.h).
-cat <<EOF >&2
-configure: WARNING: The directory tree \`${srcdir}' is being used
-   as a build directory right now; it has been configured in its own
-   right.  To configure in another directory as well, you MUST
-   use GNU make.  If you do not have GNU make, then you must
-   now do \`make distclean' in ${srcdir},
-   and then run ${progname} again.
-EOF])dnl
-fi])dnl
-
 # Save the original args to write them into config.status later.
-configure_args="[$]*"
+ac_configure_args="[$]*"
 ])dnl
 dnl
 dnl Protects the argument from being diverted twice
@@ -270,18 +241,18 @@ define(AC_PREFIX,
 [if test -z "$prefix"
 then
   echo checking for $1 to derive installation directory prefix
-  IFS="${IFS= 	}"; saveifs="$IFS"; IFS="$IFS:"
-  for dir in $PATH; do
-    test -z "$dir" && dir=.
-    if test $dir != . && test -f $dir/$1; then
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="$IFS:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test $ac_dir != . && test -f $ac_dir/$1; then
 changequote(,)dnl
       # Not all systems have dirname.
-      prefix=`echo $dir|sed 's%/[^/][^/]*$%%'`
+      prefix=`echo $ac_dir|sed 's%/[^/][^/]*$%%'`
 changequote([,])dnl
       break
     fi
   done
-  IFS="$saveifs"
+  IFS="$ac_save_ifs"
   echo "	chose installation directory prefix ${prefix}"
 fi
 ])dnl
@@ -332,7 +303,7 @@ AC_QUOTE_DQUOTE(AC_QUOTE_HERE(AC_QUOTE_HERE(AC_QUOTE_SED($1))))])dnl
 dnl
 dnl Don't compare $2 to a blank, so we can support "-Dfoo=".
 dnl If creating a configuration header file, we add
-dnl commands to SEDDEFS to define the variable.  SED[due][ABCD]
+dnl commands to ac_sed_defs to define the variable.  ac_sed_[due][ABCD]
 dnl get defined in config.status.  Here we just insert the
 dnl variable parts of the string: the variable name to define
 dnl and the value to give it.
@@ -341,7 +312,7 @@ define(AC_DEFINE,[
 {
 dnl Uniformly use AC_DEFINE_[SED]QUOTE, so callers of AC_DEFINE_UNQUOTED
 dnl can use AC_QUOTE_* manually if they want to.
-test -n "$verbose" && \
+test -n "$ac_verbose" && \
 ifelse($#, 2,
 [define([AC_VAL], $2)dnl
 echo "	defining" $1 to be ifelse(AC_VAL,, empty, "AC_QUOTE_SQUOTE(AC_VAL)")],
@@ -352,10 +323,10 @@ echo "[#][define]" $1 "AC_QUOTE_SQUOTE(AC_VAL)" >> confdefs.h
 dnl Define DEFS even if AC_CONFIG_NAMES for use in user case statements.
 DEFS="$DEFS -D$1=AC_QUOTE_SQUOTE(AC_VAL)"
 ifdef([AC_CONFIG_NAMES],
-SEDDEFS="dnl
-${SEDDEFS}\${SEDdA}$1\${SEDdB}$1\${SEDdC}AC_DEFINE_SEDQUOTE(AC_VAL)\${SEDdD}
-\${SEDuA}$1\${SEDuB}$1\${SEDuC}AC_DEFINE_SEDQUOTE(AC_VAL)\${SEDuD}
-\${SEDeA}$1\${SEDeB}$1\${SEDeC}AC_DEFINE_SEDQUOTE(AC_VAL)\${SEDeD}
+ac_sed_defs="dnl
+${ac_sed_defs}\${ac_sed_dA}$1\${ac_sed_dB}$1\${ac_sed_dC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_sed_dD}
+\${ac_sed_uA}$1\${ac_sed_uB}$1\${ac_sed_uC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_sed_uD}
+\${ac_sed_eA}$1\${ac_sed_eB}$1\${ac_sed_eC}AC_DEFINE_SEDQUOTE(AC_VAL)\${ac_sed_eD}
 "
 )dnl
 }
@@ -399,27 +370,27 @@ dnl
 define(AC_PROGRAM_CHECK,
 [if test -z "[$]$1"; then
   # Extract the first word of `$2', so it can be a program name with args.
-  set dummy $2; word=[$]2
-  echo checking for $word
-  IFS="${IFS= 	}"; saveifs="$IFS"; IFS="${IFS}:"
-  for dir in $PATH; do
-    test -z "$dir" && dir=.
-    if test -f $dir/$word; then
+  set ac_dummy $2; ac_word=[$]2
+  echo checking for $ac_word
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
       $1="$3"
       break
     fi
   done
-  IFS="$saveifs"
+  IFS="$ac_save_ifs"
 fi
 ifelse([$4],,, [test -z "[$]$1" && $1="$4"])
-test -n "[$]$1" && test -n "$verbose" && echo "	setting $1 to [$]$1"
+test -n "[$]$1" && test -n "$ac_verbose" && echo "	setting $1 to [$]$1"
 AC_SUBST($1)dnl
 ])dnl
 dnl
 define(AC_PROGRAMS_CHECK,
-[for p in $2
+[for ac_prog in $2
 do
-AC_PROGRAM_CHECK($1, [$]p, [$]p, )
+AC_PROGRAM_CHECK($1, [$]ac_prog, [$]ac_prog, )
 test -n "[$]$1" && break
 done
 ifelse([$3],,, [test -n "[$]$1" || $1="$3"
@@ -428,26 +399,26 @@ dnl
 define(AC_PROGRAM_PATH,
 [if test -z "[$]$1"; then
   # Extract the first word of `$2', so it can be a program name with args.
-  set dummy $2; word=[$]2
-  echo checking for $word
-  IFS="${IFS= 	}"; saveifs="$IFS"; IFS="${IFS}:"
-  for dir in $PATH; do
-    test -z "$dir" && dir=.
-    if test -f $dir/$word; then
-      $1="$dir/$word"
+  set ac_dummy $2; ac_word=[$]2
+  echo checking for $ac_word
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in $PATH; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      $1="$ac_dir/$ac_word"
       break
     fi
   done
-  IFS="$saveifs"
+  IFS="$ac_save_ifs"
 fi
 ifelse([$3],,, [test -z "[$]$1" && $1="$3"])
-test -n "[$]$1" && test -n "$verbose" && echo "	setting $1 to [$]$1"
+test -n "[$]$1" && test -n "$ac_verbose" && echo "	setting $1 to [$]$1"
 AC_SUBST($1)dnl
 ])dnl
 define(AC_PROGRAMS_PATH,
-[for p in $2
+[for ac_prog in $2
 do
-AC_PROGRAM_PATH($1, [$]p)
+AC_PROGRAM_PATH($1, [$]ac_prog)
 test -n "[$]$1" && break
 done
 ifelse([$3],,, [test -n "[$]$1" || $1="$3"
@@ -546,8 +517,8 @@ define(AC_TEST_CPP,
 EOF
 dnl Some shells (Coherent) do redirections in the wrong order, so need
 dnl the parens.
-err=`eval "($CPP conftest.c >/dev/null) 2>&1"`
-if test -z "$err"; then
+ac_err=`eval "($CPP conftest.c >/dev/null) 2>&1"`
+if test -z "$ac_err"; then
   ifelse([$2], , :, [rm -rf conftest*
   $2
 ])
@@ -559,20 +530,20 @@ fi
 rm -f conftest*])dnl
 dnl
 define(AC_REPLACE_FUNCS,
-[for func in $1
+[for ac_func in $1
 do
-AC_COMPILE_CHECK([${func}], [#include <ctype.h>], [
+AC_COMPILE_CHECK([${ac_func}], [#include <ctype.h>], [
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
-#if defined (__stub_${func}) || defined (__stub___${func})
+#if defined (__stub_${ac_func}) || defined (__stub___${ac_func})
 choke me
 #else
 /* Override any gcc2 internal prototype to avoid an error.  */
-extern char ${func}(); ${func}();
+extern char ${ac_func}(); ${ac_func}();
 #endif
-], , [LIBOBJS="$LIBOBJS ${func}.o"
-test -n "$verbose" && echo "	using ${func}.o instead"])
+], , [LIBOBJS="$LIBOBJS ${ac_func}.o"
+test -n "$ac_verbose" && echo "	using ${ac_func}.o instead"])
 done
 AC_SUBST(LIBOBJS)dnl
 ])dnl
@@ -604,24 +575,24 @@ $2, $3)])dnl
 ])dnl
 dnl
 define(AC_HAVE_FUNCS,
-[for func in $1
+[for ac_func in $1
 do
 changequote(,)dnl
-trfunc=HAVE_`echo $func | tr '[a-z]' '[A-Z]'`
+ac_tr_func=HAVE_`echo $ac_func | tr '[a-z]' '[A-Z]'`
 changequote([,])dnl
-AC_FUNC_CHECK(${func},
-AC_DEFINE(${trfunc}))dnl
+AC_FUNC_CHECK(${ac_func},
+AC_DEFINE(${ac_tr_func}))dnl
 done
 ])dnl
 dnl
 define(AC_HAVE_HEADERS,
-[for hdr in $1
+[for ac_hdr in $1
 do
 changequote(,)dnl
-trhdr=HAVE_`echo $hdr | tr '[a-z]./' '[A-Z]__'`
+ac_tr_hdr=HAVE_`echo $ac_hdr | tr '[a-z]./' '[A-Z]__'`
 changequote([,])dnl
-AC_HEADER_CHECK(${hdr},
-AC_DEFINE(${trhdr}))dnl
+AC_HEADER_CHECK(${ac_hdr},
+AC_DEFINE(${ac_tr_hdr}))dnl
 done
 ])dnl
 dnl
@@ -630,19 +601,19 @@ changequote(/,/)dnl
 define(/libname/, dnl
 patsubst(patsubst($1, /lib\([^\.]*\)\.a/, /\1/), /-l/, //))dnl
 changequote([,])dnl
-LIBS_save="${LIBS}"
+ac_save_LIBS="${LIBS}"
 LIBS="${LIBS} -l[]libname[]"
-have_lib=""
-AC_COMPILE_CHECK([-l[]libname[]], , [main();], [have_lib="1"])dnl
-LIBS="${LIBS_save}"
+ac_have_lib=""
+AC_COMPILE_CHECK([-l[]libname[]], , [main();], [ac_have_lib="1"])dnl
+LIBS="${ac_save_LIBS}"
 ifelse($#, 1, [dnl
-if test -n "${have_lib}"; then
+if test -n "${ac_have_lib}"; then
    AC_DEFINE([HAVE_LIB]translit(libname, [a-z], [A-Z]))
    LIBS="${LIBS} -l[]libname[]"
 fi
 undefine(libname)dnl
 ], [dnl
-if test -n "${have_lib}"; then
+if test -n "${ac_have_lib}"; then
    :; $2
 else
    :; $3
@@ -658,18 +629,25 @@ define(AC_OUTPUT,
 # Set default prefixes.
 if test "z$prefix" != 'z' ; then
   test "z$exec_prefix" = 'z' && exec_prefix='${prefix}'
-  prsub="s%^prefix\\([ 	]*\\)=\\([ 	]*\\).*$%prefix\\1=\\2$prefix%"
+  ac_prsub="s%^prefix\\([ 	]*\\)=\\([ 	]*\\).*$%prefix\\1=\\2$prefix%"
 fi
 if test -n "$exec_prefix"; then
-  prsub="$prsub
+  ac_prsub="$ac_prsub
 s%^exec_prefix\\([ 	]*\\)=\\([ 	]*\\).*$%exec_prefix\\1=\\2$exec_prefix%"
+fi
+# Any assignment to VPATH causes Sun make
+# to only execute the first set of double-colon rules.
+if test "x$srcdir" = x.; then
+changequote(,)
+  ac_vpsub='/^[ 	]*VPATH[ 	]*=[ 	]*/d'
+changequote([,])
 fi
 # Quote sed substitution magic chars in DEFS.
 cat >conftest.def <<EOF
 $DEFS
 EOF
-escape_ampersand_and_backslash='s%[&\\]%\\&%g'
-DEFS=`sed "$escape_ampersand_and_backslash" <conftest.def`
+ac_escape_ampersand_and_backslash='s%[&\\]%\\&%g'
+DEFS=`sed "$ac_escape_ampersand_and_backslash" <conftest.def`
 rm -f conftest.def
 # Substitute for predefined variables.
 changequote([,])dnl
@@ -687,11 +665,12 @@ DEFS='$DEFS'
 divert(2)dnl
 prefix='$prefix'
 exec_prefix='$exec_prefix'
-prsub='$prsub'
+ac_prsub='$ac_prsub'
+ac_vpsub='$ac_vpsub'
 extrasub='$extrasub'
 divert(0)dnl
 
-trap 'rm -f config.status; exit 1' 1 3 15
+trap 'rm -f config.status; exit 1' 1 2 15
 echo creating config.status
 rm -f config.status
 cat > config.status <<EOF
@@ -703,67 +682,68 @@ dnl hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
 dnl so uname gets run too.
 # on host `(hostname || uname -n) 2>/dev/null | sed 1q`:
 #
-[#] [$]0 [$]configure_args
+[#] [$]0 [$]ac_configure_args
 
-for arg
+for ac_arg
 do
-  case "[\$]arg" in
+  case "[\$]ac_arg" in
     -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
-    echo running [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]configure_args
-    exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]configure_args ;;
+    echo running [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args
+    exec [\$]{CONFIG_SHELL-/bin/sh} [$]0 [$]ac_configure_args ;;
     *) echo "Usage: config.status [--recheck]" 2>&1; exit 1 ;;
   esac
 done
 
 ifdef([AC_CONFIG_NAMES],
-[trap 'rm -fr $1 AC_CONFIG_NAMES conftest*; exit 1' 1 3 15],
-[trap 'rm -f $1; exit 1' 1 3 15])
+[trap 'rm -fr $1 AC_CONFIG_NAMES conftest*; exit 1' 1 2 15],
+[trap 'rm -f $1; exit 1' 1 2 15])
 dnl Insert the variable assignments.
 undivert(2)dnl
 EOF
 cat >> config.status <<\EOF
 
-top_srcdir=$srcdir
+ac_top_srcdir=$srcdir
 
 CONFIG_FILES=${CONFIG_FILES-"$1"}
-for file in .. ${CONFIG_FILES}; do if test "x$file" != x..; then
+for ac_file in .. ${CONFIG_FILES}; do if test "x$ac_file" != x..; then
   # Remove last slash and all that follows it.  Not all systems have dirname.
 changequote(,)dnl
-  dir=`echo $file|sed 's%/[^/][^/]*$%%'`
+  ac_dir=`echo $ac_file|sed 's%/[^/][^/]*$%%'`
 changequote([,])dnl
-  if test "$dir" != "$file"; then
+  if test "$ac_dir" != "$ac_file"; then
     # The file is in a subdirectory.
-    test ! -d "$dir" && mkdir "$dir"
-    dirsuffix="/$dir"
+    test ! -d "$ac_dir" && mkdir "$ac_dir"
+    ac_dir_suffix="/$ac_dir"
   else
-    dirsuffix=
+    ac_dir_suffix=
   fi
 
-  case "$top_srcdir" in
+  case "$ac_top_srcdir" in
   .)  srcdir=. ;;
-  /*) srcdir="$top_srcdir$dirsuffix" ;;
+  /*) srcdir="$ac_top_srcdir$ac_dir_suffix" ;;
   *)
-    # Relative path.  Prepend a "../" for each directory in $dirsuffix.
+    # Relative path.  Prepend a "../" for each directory in $ac_dir_suffix.
 changequote(,)dnl
-    dots=`echo $dirsuffix|sed 's%/[^/]*%../%g'`
+    ac_dots=`echo $ac_dir_suffix|sed 's%/[^/]*%../%g'`
 changequote([,])dnl
-    srcdir="$dots$top_srcdir$dirsuffix" ;;
+    srcdir="$ac_dots$ac_top_srcdir$ac_dir_suffix" ;;
   esac
 
-  echo creating "$file"
-  rm -f "$file"
-  comment_str="Generated automatically from `echo $file|sed 's|.*/||'`.in by configure."
-  case "$file" in
-    *.c | *.h | *.C | *.cc | *.m )  echo "/* $comment_str */" > "$file" ;;
-    * )          echo "# $comment_str"     > "$file" ;;
+  echo creating "$ac_file"
+  rm -f "$ac_file"
+  comment_str="Generated automatically from `echo $ac_file|sed 's|.*/||'`.in by configure."
+  case "$ac_file" in
+    *.c | *.h | *.C | *.cc | *.m )  echo "/* $comment_str */" > "$ac_file" ;;
+    * )          echo "# $comment_str"     > "$ac_file" ;;
   esac
   sed -e "
-$prsub
+$ac_prsub
+$ac_vpsub
 dnl Shell code in configure.in might set extrasub.
 $extrasub
 dnl Insert the sed substitutions.
 undivert(1)dnl
-" $top_srcdir/${file}.in >> $file
+" $ac_top_srcdir/${ac_file}.in >> $ac_file
 fi; done
 AC_OUTPUT_HEADER
 $2
@@ -779,7 +759,7 @@ define(AC_OUTPUT_HEADER,[dnl
 ifdef([AC_CONFIG_NAMES],[dnl
 changequote(<<,>>)dnl
 
-# These sed commands are put into SEDDEFS when defining a macro.
+# These sed commands are put into ac_sed_defs when defining a macro.
 # They are broken into pieces to make the sed script easier to manage.
 # They are passed to sed as "A NAME B NAME C VALUE D", where NAME
 # is the cpp macro being defined and VALUE is the value it is being given.
@@ -787,44 +767,44 @@ changequote(<<,>>)dnl
 # Hopefully no one uses "!" as a variable value.
 # Other candidates for the sed separators, like , and @, do get used.
 #
-# SEDd sets the value in "#define NAME VALUE" lines.
-SEDdA='s!^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
-SEDdB='\([ 	][ 	]*\)[^ 	]*!\1#\2'
-SEDdC='\3'
-SEDdD='!g'
-# SEDu turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
-SEDuA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-SEDuB='\([ 	]\)!\1#\2define\3'
-SEDuC=' '
-SEDuD='\4!g'
-# SEDe turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
-SEDeA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
-SEDeB='<<$>>!\1#\2define\3'
-SEDeC=' '
-SEDeD='!g'
+# ac_sed_d sets the value in "#define NAME VALUE" lines.
+ac_sed_dA='s!^\([ 	]*\)#\([ 	]*define[ 	][ 	]*\)'
+ac_sed_dB='\([ 	][ 	]*\)[^ 	]*!\1#\2'
+ac_sed_dC='\3'
+ac_sed_dD='!g'
+# ac_sed_u turns "#undef NAME" with trailing blanks into "#define NAME VALUE".
+ac_sed_uA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_sed_uB='\([ 	]\)!\1#\2define\3'
+ac_sed_uC=' '
+ac_sed_uD='\4!g'
+# ac_sed_e turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
+ac_sed_eA='s!^\([ 	]*\)#\([ 	]*\)undef\([ 	][ 	]*\)'
+ac_sed_eB='<<$>>!\1#\2define\3'
+ac_sed_eC=' '
+ac_sed_eD='!g'
 changequote([,])dnl
 rm -f conftest.sed
 EOF
 # Turn off quoting long enough to insert the sed commands.
 rm -f conftest.sh
 cat > conftest.sh <<EOF
-$SEDDEFS
+$ac_sed_defs
 EOF
 
-# Break up $SEDDEFS (now in conftest.sh) because some shells have a limit
+# Break up $ac_sed_defs (now in conftest.sh) because some shells have a limit
 # on the size of here documents.
 
 # Maximum number of lines to put in a single here document.
-maxshlines=9
+ac_max_sh_lines=9
 
 while :
 do
   # wc gives bogus results for an empty file on some systems.
-  lines=`grep -c . conftest.sh`
-  if test -z "$lines" || test "$lines" -eq 0; then break; fi
+  ac_lines=`grep -c . conftest.sh`
+  if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
   rm -f conftest.s1 conftest.s2
-  sed ${maxshlines}q conftest.sh > conftest.s1 # Like head -20.
-  sed 1,${maxshlines}d conftest.sh > conftest.s2 # Like tail +21.
+  sed ${ac_max_sh_lines}q conftest.sh > conftest.s1 # Like head -20.
+  sed 1,${ac_max_sh_lines}d conftest.sh > conftest.s2 # Like tail +21.
   # Write a limited-size here document to append to conftest.sed.
   echo 'cat >> conftest.sed <<CONFEOF' >> config.status
   cat conftest.s1 >> config.status
@@ -847,36 +827,36 @@ changequote([,])dnl
 CONFEOF
 rm -f conftest.h
 # Break up the sed commands because old seds have small limits.
-maxsedlines=20
+ac_max_sed_lines=20
 
 CONFIG_HEADERS=${CONFIG_HEADERS-"AC_CONFIG_NAMES"}
-for file in .. ${CONFIG_HEADERS}; do if test "x$file" != x..; then
-  echo creating $file
+for ac_file in .. ${CONFIG_HEADERS}; do if test "x$ac_file" != x..; then
+  echo creating $ac_file
 
-  cp $top_srcdir/$file.in conftest.h1
+  cp $ac_top_srcdir/$ac_file.in conftest.h1
   while :
   do
-    lines=`grep -c . conftest.sed`
-    if test -z "$lines" || test "$lines" -eq 0; then break; fi
+    ac_lines=`grep -c . conftest.sed`
+    if test -z "$ac_lines" || test "$ac_lines" -eq 0; then break; fi
     rm -f conftest.s1 conftest.s2 conftest.h2
-    sed ${maxsedlines}q conftest.sed > conftest.s1 # Like head -20.
-    sed 1,${maxsedlines}d conftest.sed > conftest.s2 # Like tail +21.
+    sed ${ac_max_sed_lines}q conftest.sed > conftest.s1 # Like head -20.
+    sed 1,${ac_max_sed_lines}d conftest.sed > conftest.s2 # Like tail +21.
     sed -f conftest.s1 < conftest.h1 > conftest.h2
     rm -f conftest.s1 conftest.h1 conftest.sed
     mv conftest.h2 conftest.h1
     mv conftest.s2 conftest.sed
   done
   rm -f conftest.sed conftest.h
-  echo "/* $file.  Generated automatically by configure.  */" > conftest.h
+  echo "/* $ac_file.  Generated automatically by configure.  */" > conftest.h
   cat conftest.h1 >> conftest.h
   rm -f conftest.h1
-  if cmp -s $file conftest.h 2>/dev/null; then
+  if cmp -s $ac_file conftest.h 2>/dev/null; then
     # The file exists and we would not be changing it.
-    echo "$file is unchanged"
+    echo "$ac_file is unchanged"
     rm -f conftest.h
   else
-    rm -f $file
-    mv conftest.h $file
+    rm -f $ac_file
+    mv conftest.h $ac_file
   fi
 fi; done
 
