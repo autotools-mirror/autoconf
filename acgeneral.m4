@@ -1,4 +1,4 @@
- This file is part of Autoconf.                       -*- Autoconf -*-
+# This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
 # Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
 # Free Software Foundation, Inc.
@@ -188,10 +188,10 @@ pushdef([AC_DIVERT_DIVERSION], _AC_DIVERT([KILL]))
 ## ------------------------------- ##
 
 
-# AC_PRO(MACRO-NAME)
-# ------------------
+# _AC_DEFUN_PRO(MACRO-NAME)
+# -------------------------
 # The prologue for Autoconf macros.
-define([AC_PRO],
+define([_AC_DEFUN_PRO],
 [AC_PROVIDE([$1])dnl
 ifelse(AC_DIVERT_DIVERSION, _AC_DIVERT([NORMAL]),
        [AC_DIVERT_PUSH(m4_eval(AC_DIVERT_DIVERSION - 1))],
@@ -199,10 +199,11 @@ ifelse(AC_DIVERT_DIVERSION, _AC_DIVERT([NORMAL]),
 ])
 
 
-# AC_EPI
-# ------
-# The Epilogue for Autoconf macros.
-define([AC_EPI],
+# _AC_DEFUN_EPI(MACRO-NAME)
+# -------------------------
+# The Epilogue for Autoconf macros.  MACRO-NAME only helps tracing
+# the PRO/EPI pairs.
+define([_AC_DEFUN_EPI],
 [AC_DIVERT_POP()dnl
 ifelse(AC_DIVERT_DIVERSION, _AC_DIVERT([NORMAL]),
 [undivert(_AC_DIVERT([NORMAL_4]))dnl
@@ -213,8 +214,8 @@ undivert(_AC_DIVERT([NORMAL_1]))dnl
 ])
 
 
-# AC_DEFUN(NAME, [REPLACED-FUNCTION, ARGUMENT, ]EXPANSION)
-# --------------------------------------------------------
+# AC_DEFUN(NAME, EXPANSION)
+# -------------------------
 #
 # Define a macro which automatically provides itself.  Add machinery
 # so the macro automatically switches expansion to the diversion
@@ -224,19 +225,8 @@ undivert(_AC_DIVERT([NORMAL_1]))dnl
 # macros.  We don't use this macro to define some frequently called
 # macros that are not involved in ordering constraints, to save m4
 # processing.
-#
-# If the REPLACED-FUNCTION and ARGUMENT are defined, then declare that
-# NAME is a specialized version of REPLACED-FUNCTION when its first
-# argument is ARGUMENT.  For instance AC_TYPE_SIZE_T is a specialization
-# of AC_CHECK_TYPE applied to `size_t'.
-#
-# This feature is not documented on purpose.  It might change in the
-# future.
 define([AC_DEFUN],
-[ifelse([$3],,
-        [define([$1], [AC_PRO([$1])$2[]AC_EPI()])],
-        [define([$2-$3], [$1])
-define([$1], [AC_PRO([$1])$4[]AC_EPI()])])])
+[define([$1], [_AC_DEFUN_PRO([$1])$2[]_AC_DEFUN_EPI([$1])])])
 
 
 # AC_DEFUN_ONCE(NAME, EXPANSION)
@@ -247,7 +237,7 @@ define([AC_DEFUN_ONCE],
 [define([$1],
 [AC_PROVIDE_IFELSE([$1],
                    [AC_DIAGNOSE([syntax], [$1 invoked multiple times])],
-                   [AC_PRO([$1])$2[]AC_EPI()])])])
+                   [_AC_DEFUN_PRO([$1])$2[]_AC_DEFUN_EPI([$1])])])])
 
 
 # AC_DEFUNCT(NAME, COMMENT)
@@ -262,18 +252,6 @@ define([AC_DEFUNCT],
 define([AC_OBSOLETE],
 [AC_DIAGNOSE([obsolete], [$1 is obsolete$2])])
 
-
-# AC_SPECIALIZE(MACRO, ARG1 [, ARGS...])
-# --------------------------------------
-#
-# Basically calls the macro MACRO with arguments ARG1, ARGS... But if
-# there exist a specialized version of MACRO for ARG1, use this macro
-# instead with arguments ARGS (i.e., ARG1 is *not* given).  See the
-# definition of `AC_DEFUN'.
-define([AC_SPECIALIZE],
-[ifdef([$1-$2],
-       [indir([$1-$2], m4_shift(m4_shift($@)))],
-       [$1(m4_shift($@))])])
 
 
 
@@ -822,7 +800,7 @@ define([AC_PREREQ],
 # _AC_INIT_DEFAULTS
 # -----------------
 # Values which defaults can be set from `configure.in'.
-AC_DEFUN([_AC_INIT_DEFAULTS],
+define([_AC_INIT_DEFAULTS],
 [AC_DIVERT_PUSH([DEFAULTS])dnl
 
 #
@@ -931,7 +909,7 @@ AC_DIVERT_POP()dnl
 
 # _AC_INIT_PARSE_ARGS
 # -------------------
-AC_DEFUN([_AC_INIT_PARSE_ARGS],
+define([_AC_INIT_PARSE_ARGS],
 [AC_DIVERT_PUSH([INIT_PARSE_ARGS])dnl
 
 # Initialize some variables set by options.
@@ -1439,7 +1417,7 @@ AC_DIVERT_POP()dnl
 # _AC_INIT_VERSION
 # ----------------
 # Handle the `configure --version' message.
-AC_DEFUN([_AC_INIT_VERSION],
+define([_AC_INIT_VERSION],
 [AC_DIVERT([VERSION_BEGIN],
 [if $ac_init_version; then
   cat <<\EOF])dnl
@@ -1497,7 +1475,7 @@ AC_SHELL_UNSET([CDPATH], [:])
 # 3. Remember the options given to `configure' for `config.status --recheck'.
 # 4. Ensure a correct environment
 # 5. Required macros (cache, default AC_SUBST etc.)
-AC_DEFUN([_AC_INIT_PREPARE],
+define([_AC_INIT_PREPARE],
 [AC_DIVERT_PUSH([INIT_PREPARE])dnl
 _AC_INIT_PREPARE_ENVIRONMENT
 
@@ -1727,7 +1705,7 @@ esac[]dnl
 # --------------
 # This macro is expanded only once, to avoid that `foo' ends up being
 # installed as `ggfoo'.
-AC_DEFUN_ONCE(AC_ARG_PROGRAM,
+AC_DEFUN_ONCE([AC_ARG_PROGRAM],
 [dnl Document the options.
 AC_DIVERT_PUSH([HELP_BEGIN])dnl
 
@@ -1833,7 +1811,7 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # _AC_CANONICAL_SPLIT(THING)
 # --------------------------
 # Generate the variables THING, THING_{alias cpu vendor os}.
-AC_DEFUN([_AC_CANONICAL_SPLIT],
+define([_AC_CANONICAL_SPLIT],
 [AC_SUBST([$1],       [$ac_cv_$1])dnl
 dnl FIXME: AC_SUBST([$1_alias],  [$ac_cv_$1_alias])dnl
 AC_SUBST([$1_cpu],
@@ -2424,7 +2402,7 @@ AC_VAR_POPDEF([ac_Member])dnl
 # The first argument is an m4 list.
 AC_DEFUN([AC_CHECK_MEMBERS],
 [m4_foreach([AC_Member], [$1],
-  [AC_SPECIALIZE([AC_CHECK_MEMBER], AC_Member,
+  [AC_CHECK_MEMBER(AC_Member,
          [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Member), 1,
                             [Define if `]patsubst(AC_Member, [^[^.]*\.])[' is
                              member of `]patsubst(AC_Member, [\..*])['.])
@@ -3040,7 +3018,7 @@ AC_VAR_POPDEF([ac_File])dnl
 # -----------------------------------------------------------------
 AC_DEFUN([AC_CHECK_FILES],
 [AC_FOREACH([AC_FILE_NAME], [$1],
-  [AC_SPECIALIZE([AC_CHECK_FILE], AC_FILE_NAME,
+  [AC_CHECK_FILE(AC_FILE_NAME,
                  [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_FILE_NAME), 1,
                                    [Define if you have the file `]AC_File['.])
 $2],
@@ -3081,7 +3059,7 @@ AC_VAR_POPDEF([ac_Symbol])dnl
 # other AC_CHECK_*S macros.  SYMBOLS is an m4 list.
 AC_DEFUN([AC_CHECK_DECLS],
 [m4_foreach([AC_Symbol], [$1],
-  [AC_SPECIALIZE([AC_CHECK_DECL], AC_Symbol,
+  [AC_CHECK_DECL(AC_Symbol,
                  [AC_DEFINE_UNQUOTED(AC_TR_CPP([HAVE_DECL_]AC_Symbol), 1,
                                      [Define to 1 if you have the declaration
                                      of `]AC_Symbol[', and to 0 if you don't.])
@@ -3314,7 +3292,7 @@ AC_DEFINE_UNQUOTED(AC_TR_CPP(sizeof_$1), $AC_TR_SH([ac_cv_sizeof_$1]),
 # (not necessarily size_t etc.).  Equally, instead of defining an unused
 # variable, we just use a cast to avoid warnings from the compiler.
 # Suggested by Paul Eggert.
-AC_DEFUN([_AC_CHECK_TYPE_NEW],
+define([_AC_CHECK_TYPE_NEW],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
@@ -3339,13 +3317,13 @@ AC_VAR_POPDEF([ac_Type])dnl
 # AC_CHECK_TYPE.
 AC_DEFUN([AC_CHECK_TYPES],
 [m4_foreach([AC_Type], [$1],
-  [AC_SPECIALIZE([_AC_CHECK_TYPE_NEW], AC_Type,
-                 [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Type), 1,
-                                     [Define if the system has the type
-                                      `]AC_Type['.])
+  [_AC_CHECK_TYPE_NEW(AC_Type,
+                      [AC_DEFINE_UNQUOTED(AC_TR_CPP(HAVE_[]AC_Type), 1,
+                                          [Define if the system has the type
+                                          `]AC_Type['.])
 $2],
-                 [$3],
-                 [$4])])])
+                      [$3],
+                      [$4])])])
 
 
 # _AC_CHECK_TYPE_OLD(TYPE, DEFAULT)
@@ -3353,7 +3331,7 @@ $2],
 # FIXME: This is an extremely badly chosen name, since this
 # macro actually performs an AC_REPLACE_TYPE.  Some day we
 # have to clean this up.
-AC_DEFUN([_AC_CHECK_TYPE_OLD],
+define([_AC_CHECK_TYPE_OLD],
 [_AC_CHECK_TYPE_NEW([$1],,
    [AC_DEFINE_UNQUOTED([$1], [$2],
                        [Define to `$2' if <sys/types.h> does not define.])])dnl

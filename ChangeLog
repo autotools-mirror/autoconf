@@ -1,3 +1,20 @@
+2000-06-26  Akim Demaille  <akim@epita.fr>
+
+	Various cleanups.
+
+	* acgeneral.m4 (AC_PRO, AC_EPI): Rename as _AC_DEFUN_PRO and
+	_AC_DEFUN_EPI.
+	Adjust dependencies.
+	(AC_DEFUN): Remove the not-to-be-released specializing mechanism.
+	(AC_SPECIALIZE): Remove for the same reasons.
+	Adjust dependencies.
+	(_AC_INIT_DEFAULTS, _AC_INIT_PARSE_ARGS, _AC_INIT_VERSION,
+	_AC_INIT_PREPARE, _AC_CANONICAL_SPLIT, _AC_CHECK_TYPE_NEW,
+	_AC_CHECK_TYPE_OLD): Define via `define' instead of `AC_DEFUN':
+	they are not related to AC_REQUIRE in any way.
+	* acspecific.m4 (AC_PROG_ECHO, _AC_DECL_YYTEXT, _AC_PATH_X_XMKMF,
+	_AC_PATH_X_DIRECT): Define via `define' instead of `AC_DEFUN'.
+
 2000-06-19  Steven G. Johnson  <stevenj@gil-galad.mit.edu>
 
 	* acgeneral.m4 (AC_CHECK_TOOL): Use two variables in order to

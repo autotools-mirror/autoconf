@@ -63,7 +63,7 @@
 # display the checking message.  In addition, caching something used once
 # has little interest.
 # Idea borrowed from dist 3.0.
-AC_DEFUN([_AC_PROG_ECHO],
+define([_AC_PROG_ECHO],
 [if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   # Stardent Vistra SVR4 grep lacks -e, says Kaveh R. Ghazi.
   if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -149,7 +149,7 @@ _AC_DECL_YYTEXT])
 # _AC_DECL_YYTEXT
 # ---------------
 # Check if lex declares yytext as a char * by default, not a char[].
-AC_DEFUN([_AC_DECL_YYTEXT],
+define([_AC_DECL_YYTEXT],
 [AC_REQUIRE_CPP()dnl
 AC_CACHE_CHECK(lex output file root, ac_cv_prog_lex_root,
 [# The minimal lex program is just a single line: %%.  But some broken lexes
@@ -2361,7 +2361,7 @@ fi
 # ---------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
-AC_DEFUN([_AC_PATH_X_XMKMF],
+define([_AC_PATH_X_XMKMF],
 [rm -fr conftestdir
 if mkdir conftestdir; then
   cd conftestdir
@@ -2402,7 +2402,7 @@ fi
 # ----------------
 # Internal subroutine of AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
-AC_DEFUN([_AC_PATH_X_DIRECT],
+define([_AC_PATH_X_DIRECT],
 [# Standard set of common directories for X headers.
 # Check X11 before X11Rn because it is often a symlink to the current release.
 ac_x_header_dirs='
