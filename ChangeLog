@@ -1,5 +1,14 @@
 2000-06-09  Akim Demaille  <akim@epita.fr>
 
+	`autoconf --trace' dies on filenames with `:'.
+	Reported by Mark Elbrecht.
+
+	* autoconf.sh <trace> (trace2m4.sed): Use `..*' instead of
+	`[^:][^:]*' to catch file names.  The rest of regex is probably
+	precise enough to avoid incorrect parsing.
+
+2000-06-09  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (_AC_SYS_LARGEFILE_MACRO_VALUE): Always initialize
 	$3 to no
 

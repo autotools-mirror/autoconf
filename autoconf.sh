@@ -374,6 +374,22 @@ divert(-1)
   define([star],    [_$0([$1], args($@))])
 EOF
 
+  # trace2m4.sed
+  # ------------
+  # Transform the traces from m4 into an m4 input file.
+  # Typically, transform:
+  # | m4trace:configure.in:3: -1- AC_SUBST([exec_prefix], [NONE])
+  # into
+  # | AT_AC_SUBST([configure.in], [3], [1], [AC_SUBST], [exec_prefix], [NONE])
+  # Pay attention that the file name might include colons, if under DOS
+  # for instance, so we don't use `[^:][^:]*'.
+  # The first s/// catches multiline traces, the second, traces as above.
+  preamble='m4trace:\(..*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)-'
+  cat >$tmp/trace2m4.sed <<EOF
+  s/^$preamble \([^(][^(]*\)(\(.*\)$/AT_\4([\1], [\2], [\3], [\4], \5/
+  s/^$preamble \(.*\)$/AT_\4([\1], [\2], [\3], [\4])/
+EOF
+
   # translate.awk
   # -------------
   # Translate user tracing requests into m4 macros.
@@ -501,8 +517,7 @@ EOF
   # Run m4 on the input file to get traces.
   $verbose "Running $run_m4_trace $infile | $M4 $tmp/trace.m4" >&2
   $run_m4_trace $infile 2>&1 >/dev/null |
-    sed -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \([^(][^(]*\)(\(.*\)$/AT_\4([\1], [\2], [\3], [\4], \5/' \
-        -e 's/^m4trace:\([^:][^:]*\):\([0-9][0-9]*\): -\([0-9][0-9]*\)- \(.*\)$/AT_\4([\1], [\2], [\3], [\4])/' |
+    sed -f $tmp/trace2m4.sed |
     # Now we are ready to run m4 to process the trace file.
     $M4 $tmp/trace.m4 - |
     # It makes no sense to try to transform __oline__.
