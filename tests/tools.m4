@@ -11,16 +11,47 @@ EOF
 ## Check that the shell scripts are syntactically correct.  ##
 ## -------------------------------------------------------- ##
 
+# We use `/bin/sh -n script' to check that there are no syntax errors
+# in the scripts.  Although incredible, there are /bin/sh that go into
+# endless loops with `-n', e.g., SunOS's:
+#
+#   $ uname -a
+#   SunOS ondine 4.1.3 2 sun4m unknown
+#   $ cat endless.sh
+#   while false
+#   do
+#     :
+#   done
+#   exit 0
+#   $ time sh endless.sh
+#   sh endless.sh  0,02s user 0,03s system 78% cpu 0,064 total
+#   $ time sh -nx endless.sh
+#   ^Csh -nx endless.sh  3,67s user 0,03s system 63% cpu 5,868 total
+#
+# So before using `/bin/sh -n' to check our scripts, we first check
+# that `/bin/sh -n' is not broken to death.
+
 AT_SETUP(Syntax of the scripts)
 
-AT_DATA(true,
-[[#! /bin/sh
-exit 0
+# A script that never returns.  We don't care that it never returns,
+# broken /bin/sh loop equally with `false', but it makes it easier to
+# test the robusteness in a good environment: just remove the `-n'.
+AT_DATA(endless.sh,
+[[while true
+do
+  :
+done
 ]])
 
-chmod +x true
+# A script in charge of testing `/bin/sh -n'.
+AT_DATA(syntax.sh,
+[[set -e
+(/bin/sh -n endless.sh) &
+cpid=$!
+sleep 2 && kill $cpid >/dev/null 2>&1
+]])
 
-if (/bin/sh -n ./true) >/dev/null 2>&1; then
+if /bin/sh ./syntax.sh; then
   AT_CHECK([/bin/sh -n ../autoconf],   0)
   AT_CHECK([/bin/sh -n ../autoreconf], 0)
   AT_CHECK([/bin/sh -n ../autoupdate], 0)

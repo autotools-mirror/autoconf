@@ -1,3 +1,9 @@
+2000-02-18  Akim Demaille  <akim@epita.fr>
+
+	* tests/tools.m4 (Syntax of the scripts): Be robust to shells that
+	never return on some `/bin/sh -n foo.sh'.
+	Reported by Nicolas Joly.
+
 2000-02-17  Akim Demaille  <akim@epita.fr>
 
 	Move the documentation into doc/.
