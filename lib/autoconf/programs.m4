@@ -458,7 +458,7 @@ AN_MAKEVAR([MAKE], [AC_PROG_MAKE_SET])
 AN_PROGRAM([make], [AC_PROG_MAKE_SET])
 AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING([whether ${MAKE-make} sets \$(MAKE)])
-set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,./+-,__p_,'`
+set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,:./+-,___p_,'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftest.make <<\_ACEOF
 all:

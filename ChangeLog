@@ -1,3 +1,29 @@
+2003-02-26  Richard Dawe  <rich@phekda.freeserve.co.uk>
+
+	* bin/autoheader.in (BEGIN): For DJGPP SHELL may not be set
+	to a shell that can handle redirection or quoting correctly.
+	Override SHELL with the shell detected by configure.
+	Use of $^O suggested by Tim van Holder.
+	* bin/autom4te.in (BEGIN): Likewise.
+	* bin/autoreconf.in (BEGIN): Likewise.
+	* bin/autoscan.in (BEGIN): Likewise.
+	* bin/autoupdate.in (BEGIN): Likewise.
+	* bin/ifnames.in (BEGIN): Likewise.
+
+	* bin/ifnames.in: Add final newline to help and version messages.
+
+	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): Translate colons,
+	to cope with DOS-style absolute paths, when constructing
+	${ac_make}.
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS, _AC_OUTPUT_FILES):
+	When constructing paths with IFS=:, quote the path. If we're
+	constructing a DOS-style absolute path, we don't want to split it
+	on the colon.
+
+	* tests/atspecific.m4 (AT_CHECK_CONFIGURE): Fix typo
+	in description.
+
 2003-02-25  Pavel Roskin  <proski@gnu.org>
 
 	* bin/autoheader.in: Add missing newline when printing

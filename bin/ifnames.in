@@ -35,6 +35,12 @@ BEGIN
 {
   my $datadir = ($ENV{'autom4te_perllibdir'} || '@datadir@');
   unshift @INC, "$datadir";
+
+  # Override SHELL.  On DJGPP SHELL may not be set to a shell
+  # that can handle redirection and quote arguments correctly,
+  # e.g.: COMMAND.COM.  For DJGPP always use the shell that configure
+  # has detected.
+  $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
 use Autom4te::General;
@@ -53,7 +59,8 @@ space-separated list of the files in which that identifier occurs.
   -h, --help      print this help, then exit
   -V, --version   print version number, then exit
 
-Report bugs to <bug-autoconf\@gnu.org>.";
+Report bugs to <bug-autoconf\@gnu.org>.
+";
 
 
 # $VERSION
@@ -64,7 +71,8 @@ Written by David J. MacKenzie and Paul Eggert.
 
 Copyright 2002 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.";
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+";
 
 
 # &parse_args ()

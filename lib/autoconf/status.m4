@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterizing and creating config.status.
-# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002
+# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002, 2003
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -523,14 +523,15 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
       [[\\/$]]*)
          # Absolute (can't be DOS-style, as IFS=:)
          test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
-         echo $f;;
+         # Do quote $f, to prevent DOS paths from being IFS'd.
+         echo "$f";;
       *) # Relative
          if test -f "$f"; then
            # Build tree
-           echo $f
+           echo "$f"
          elif test -f "$srcdir/$f"; then
            # Source tree
-           echo $srcdir/$f
+           echo "$srcdir/$f"
          else
            # /dev/null tree
            AC_MSG_ERROR([cannot find input file: $f])
@@ -979,14 +980,14 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
       [[\\/$]]*)
          # Absolute (can't be DOS-style, as IFS=:)
          test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
-         echo $f;;
+         echo "$f";;
       *) # Relative
          if test -f "$f"; then
            # Build tree
-           echo $f
+           echo "$f"
          elif test -f "$srcdir/$f"; then
            # Source tree
-           echo $srcdir/$f
+           echo "$srcdir/$f"
          else
            # /dev/null tree
            AC_MSG_ERROR([cannot find input file: $f])

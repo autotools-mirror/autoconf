@@ -28,6 +28,12 @@ BEGIN
 {
   my $datadir = ($ENV{'autom4te_perllibdir'} || '@datadir@');
   unshift @INC, "$datadir";
+
+  # Override SHELL.  On DJGPP SHELL may not be set to a shell
+  # that can handle redirection and quote arguments correctly,
+  # e.g.: COMMAND.COM.  For DJGPP always use the shell that configure
+  # has detected.
+  $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
 ## --------- ##

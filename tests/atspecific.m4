@@ -221,7 +221,7 @@ m4_define([AT_CHECK_AUTOHEADER],
 
 # AT_CHECK_CONFIGURE(END-COMMAND,
 #                    [EXIT-STATUS = 0],
-#                    [SDOUT = IGNORE], STDERR)
+#                    [STDOUT = IGNORE], STDERR)
 # --------------------------------------------
 # `abs_top_srcdir' is needed so that `./configure' finds install-sh.
 # Using --srcdir is more expensive.

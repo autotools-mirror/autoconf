@@ -1,8 +1,11 @@
 * Major changes in Autoconf 2.57a                       -*- outline -*-
 
+* Improve DJGPP portability
+  The Autoconf tools and configure behave better under DJGPP.
+
 * Major changes in Autoconf 2.57
 
-  Released 2002-12-03.
+  Released 2002-12-03 by Paul Eggert.
 
 Bug fixes for problems with AIX linker, with freestanding C compilers,
 with GNU m4 limitations, and with obsolete copies of GNU documents.
@@ -11,13 +14,13 @@ The Free Documentation License has been upgraded from 1.1 to 1.2.
 
 * Major changes in Autoconf 2.56
 
-  Released November 15th, 2002.
+  Released November 15th, 2002 by Akim Demaille.
 
 One packaging problem fixed (config/install-sh was not executable).
 
 * Major changes in Autoconf 2.55
 
-  Released November 14th, 2002.
+  Released November 14th, 2002 by Akim Demaille.
 
 Release tips:
 
