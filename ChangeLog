@@ -1,5 +1,9 @@
 1999-09-29  Akim Demaille  <akim@epita.fr>
 
+	* acconfig.h: Commit the change announced below.
+
+1999-09-29  Akim Demaille  <akim@epita.fr>
+
 	* acspecific.m4 (AC_C_CONST): Changed from
 	const charset x;
 	to

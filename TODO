@@ -13,6 +13,31 @@ These are things mandatory to fulfill before releasing 2.15.  There
 are also suggestions we should either satisfy right now (they're
 easy), or remove (obsoleted since then).
 
+** fnmatch
+From: Stanislav Brabec <utx@k332.feld.cvut.cz>
+
+If AC_LANG is c++ and c++ is (at least) gcc-2.95.1, the result is error;
+it can be fixed on my system by #include <fnmatch.h>, but I don't
+know, if it is general include.
+Other possible fix is checking for fnmatch using cc in any case.
+
+
+Log part:
+
+configure:1955: checking for working fnmatch
+configure:1973: c++ -o conftest  -O69 -fomit-frame-pointer  -I/usr/games/include  -I/usr/games/include  confte
+st.C -lclanlayer2 -lclan -L/usr/X11R6/lib  -L/usr/games/lib 1>&5
+configure: In function `int main()':
+configure:1970: implicit declaration of function `int fnmatch(...)'
+configure: failed program was:
+#line 1966 "configure"
+#include "confdefs.h"
+#ifdef __cplusplus
+extern "C" void exit(int);
+#endif
+main() { exit (fnmatch ("a*", "abc", 0) != 0); }
+
+
 ** We should remove obsolete things.
 Both in the doc and the code.  Looking for the keyword `obsolete'
 proves to be useful.
