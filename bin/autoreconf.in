@@ -34,7 +34,8 @@ BEGIN
 
 use Autom4te::General;
 use Autom4te::XFile;
-use Cwd 'chdir', 'cwd';
+# Do not use Cwd::chdir, since it might hang.
+use Cwd 'cwd';
 use strict;
 
 ## ----------- ##
