@@ -5806,6 +5806,21 @@ The @href{http://bhami.com/rosetta.html, Rosetta Stone for Unix}
 contains a lot of interesting crossed information on various Unices.
 
 @table @asis
+@item Darwin
+@cindex Darwin
+Darwin is also known as Mac OS X.  Beware that this system @emph{can} be
+case-preserving, but case insensitive.  This can cause nasty problems,
+since for instance the installation attempt for a package having an
+@file{INSTALL} file can result in @samp{make install} report that
+nothing was to be done!
+
+That's all dependent on whether the file system is a UFS (case
+sensitive) or HFS+ (case preserving).  By default Apple wants you to
+install the OS on HFS+.  Unfortunately, there are some pieces of
+software which really need to be built on UFS.  We may want to rebuild
+darwin to have both UFS and HFS+ available (and put the /local/build
+tree on the UFS).
+
 @item @sc{qnx 4.25}
 @cindex @sc{qnx 4.25}
 @c FIXME: Please, if you feel like writing something more precise,
