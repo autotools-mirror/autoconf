@@ -1,12 +1,15 @@
 2002-02-05  Akim Demaille  <akim@epita.fr>
 
+	* lib/freeze.mk: New.
+
+2002-02-05  Akim Demaille  <akim@epita.fr>
+
 	Implement `autom4te --freeze'.
 
 	* bin/autom4te.in (&freeze): New.
 	* lib/autoconf/autoconf.m4, lib/autotest/general.m4,
 	* lib/m4sugar/m4sh.m4: Don't include files given by autom4te.
 
-	
 2002-02-05  Akim Demaille  <akim@epita.fr>
 
 	* bin/autom4te.in (&parse_args): Implement `frozen files are
