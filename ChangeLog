@@ -1,5 +1,9 @@
 2000-11-09  Pavel Roskin  <proski@gnu.org>
 
+	* install-sh: Use ":" instead of "true".
+
+2000-11-09  Pavel Roskin  <proski@gnu.org>
+
 	* tests/tools.at (Syntax of the scripts): Check "autoreconf"
 	only once. Check "install-sh", "mkinstalldirs" and "missing".
 
