@@ -140,6 +140,104 @@ define([AC_DEFUN],
 [define($1, [AC_PRO([$1])$2[]AC_EPI()])])
 
 
+dnl ### Common m4/sh handling of variables (indirections)
+
+
+dnl The purpose of this section is to provide a uniform API for
+dnl reading/setting sh variables with or without indirection.
+dnl Typically, one can write
+dnl   AC_VAR_SET(var, val)
+dnl or
+dnl   AC_VAR_SET(ac_$var, val)
+dnl and expect the right thing to happen.
+
+dnl AC_VAR_IF_INDIR(EXPRESSION, IF-INDIR, IF-NOT-INDIR)
+dnl If EXPRESSION has shell indirections ($var or `expr`), expand
+dnl IF-INDIR, else IF-NOT-INDIR.
+define(AC_VAR_IF_INDIR,
+[ifelse(regexp([$1], [[`$]]),
+        -1, [$3],
+        [$2])])
+
+dnl AC_VAR_SET(VARIABLE, VALUE)
+dnl Set the VALUE of the shell VARIABLE.
+dnl If the variable contains indirections (e.g. `ac_cv_func_$ac_func`)
+dnl perform whenever possible at m4 level, otherwise sh level.
+define(AC_VAR_SET,
+[AC_VAR_IF_INDIR([$1], eval "[$1]=[$2]", [$1]=[$2])])
+
+dnl AC_VAR_GET(VARIABLE)
+dnl Get the value of the shell VARIABLE.
+dnl Evaluates to $VARIABLE if there are no indirection in VARIABLE,
+dnl else into the appropriate `eval' sequence.
+define(AC_VAR_GET,
+[AC_VAR_IF_INDIR([$1], [`eval "echo \`echo $\"$1\"\`"`], $[$1])])
+
+
+dnl ### Common m4/sh character translation
+
+dnl The point of this section is to provide high level functions
+dnl comparable to m4's `translit' primitive, but with the following
+dnl features:
+dnl - hiding portability issues
+dnl   tr cannot be used in some cases, because all the tr in this world
+dnl   don't behave the same way.  In particular there is no portable
+dnl   behavior of tr wrt the character `-'.  Sed has to be used in these
+dnl   cases.
+dnl - m4/sh polymorphism
+dnl   Transliteration of manifest strings should be handled by m4, while
+dnl   shell variables' content will be translated at run time (tr or sed).
+
+dnl AC_TR(STRING, FROM, TO)
+dnl Perform tr 'FROM' 'TO' on STRING by m4 when possible, otherwise
+dnl by the shell at configure time.
+dnl We use `sed' and not `tr' when there is a `-', because:
+dnl - if `-' is in the middle, it is taken as a range.
+dnl - if `-' is at the beginning, some `tr' think it is an option.
+dnl - if `-' is at the end, Solaris, `/usr/bin/tr' hangs.  I suspect
+dnl   that it takes `a-' as the C string "a-\0", and when expanding
+dnl   from `a' to `\0' never ends...
+dnl Include a protection against `%' (used as a sed separator) in FROM and TO.
+dnl Forbid appearence of `-' elsewhere than in the last position,
+dnl since we might otherwise trigger a GNU m4 bug (version 1.4 included).
+define(AC_TR,
+[ifelse(regexp([$2$3], [%]), -1,,
+	[AC_FATAL([$0: `%' cannot be used.  Change the definition of $0])])dnl
+ifelse(regexp([$2], [-]), -1,, len([$2]),,
+       [AC_FATAL([$0: `-' cannot be used but in the last position.])])dnl
+ifelse(len([$2]), len([$3]),,
+       [AC_FATAL([$0: argument 2 and 3 should have the same length])])dnl
+AC_VAR_IF_INDIR([$1],
+                `echo "[$1]" | ifelse(regexp([$2], [-]), -1,
+                                      tr '[$2]' '[$3]',
+                                      sed 'y%[$2]%[$3]%')`,
+                [translit([$1], [$2], [$3])])])
+
+dnl AC_TR_UPCASE_NAME(EXPRESSION)
+dnl If EXPRESSION has to be shell expanded (contains ` or $), late
+dnl upper casing is performed (at configure time), else at autoconf time.
+dnl Space and star are included because they may appear as part of a type.
+define(AC_TR_UPCASE_NAME,
+[AC_TR([$1],
+       [* abcdefghijklmnopqrstuvwxyz],
+       [P_ABCDEFGHIJKLMNOPQRSTUVWXYZ])])
+
+dnl AC_TR_UPCASE_FILE(EXPRESSION)
+dnl Same as AC_UPCASE_NAME, but also maps `.-/' to `___'.
+dnl Used for CPP macros.
+define(AC_TR_UPCASE_FILE,
+[AC_TR([$1],
+       [abcdefghijklmnopqrstuvwxyz./-],
+       [ABCDEFGHIJKLMNOPQRSTUVWXYZ___])])
+
+dnl AC_TR_SH(EXPRESSION)
+dnl Transform EXPRESSION into a valid shell variable name.
+define(AC_TR_SH,
+[AC_TR([$1],
+       [ *+./-],
+       [_pp___])])
+
+
 dnl ### Initialization
 
 
@@ -937,9 +1035,7 @@ dnl                   PRINTABLE2)
 define(AC_PREREQ_COMPARE,
 [ifelse(builtin([eval],
 [$3 + $2 * 1000 + $1 * 1000000 < $6 + $5 * 1000 + $4 * 1000000]), 1,
-[errprint(dnl
-FATAL ERROR: Autoconf version $7 or higher is required for this script
-)m4exit(3)])])
+[AC_FATAL(Autoconf version $7 or higher is required for this script)])])
 
 dnl Complain and exit if the Autoconf version is less than VERSION.
 dnl AC_PREREQ(VERSION)
@@ -1269,35 +1365,72 @@ AC_DIVERT_POP()dnl
 ])])
 
 
-dnl ### Printing messages
+dnl ### Printing messages at autoconf run time
 
+dnl _AC_MESSAGE(MESSAGE)
+dnl Report the MESSAGE at m4 time, with line and filename.
+define(_AC_MESSAGE, [errprint(__file__:__line__: [$1
+])])
+
+dnl AC_WARNING(MESSAGE)
+define(AC_WARNING, [_AC_MESSAGE([warning: $1])])
+
+dnl AC_FATAL(MESSAGE [, EXIT-STATUS])
+define(AC_FATAL,
+[_AC_MESSAGE([error: $1])
+m4exit(ifdef([$2], [$2], 1))])
+
+
+dnl ### Printing messages at configure run time
+
+define(echo1, [$1])
+
+dnl _AC_SH_QUOTE(STRING)
+dnl Quote the back quotes but if they are already quoted.
+dnl This exception is to provide backwards compatibility.
+define(_AC_SH_QUOTE,
+[changequote(<<, >>)dnl
+substr(patsubst(<<X$1>>,
+                <<\([^\]\)`>>, <<\1\\`>>), 1)<<>>dnl
+changequote([, ])])
+
+dnl _AC_ECHO(STRING [ , FD ])
+dnl Expands into a sh call to echo onto FD (default is AC_FD_MSG),
+dnl protecting STRING from backquote expansion.
+define(_AC_ECHO,
+[echo "_AC_SH_QUOTE($1)" 1>&ifelse($2,,AC_FD_MSG,$2)])
+
+dnl _AC_ECHO_N(STRING [ , FD ])
+dnl Same as _AC_ECHO, but echo doesn't return to a new line.
+define(_AC_ECHO_N,
+[echo $ac_n "_AC_SH_QUOTE($1)$ac_c" 1>&ifelse($2,,AC_FD_MSG,$2)])
 
 dnl AC_MSG_CHECKING(FEATURE-DESCRIPTION)
 define(AC_MSG_CHECKING,
-[echo $ac_n "checking $1""... $ac_c" 1>&AC_FD_MSG
-echo "configure:__oline__: checking $1" >&AC_FD_CC])
+[_AC_ECHO_N([checking $1... ])
+_AC_ECHO([configure:__oline__: checking $1], AC_FD_CC)])
 
 dnl AC_CHECKING(FEATURE-DESCRIPTION)
 define(AC_CHECKING,
-[echo "checking $1" 1>&AC_FD_MSG
-echo "configure:__oline__: checking $1" >&AC_FD_CC])
+[_AC_ECHO([checking $1])
+_AC_ECHO([configure:__oline__: checking $1], AC_FD_CC)])
 
 dnl AC_MSG_RESULT(RESULT-DESCRIPTION)
 define(AC_MSG_RESULT,
-[echo "$ac_t""$1" 1>&AC_FD_MSG])
+[_AC_ECHO([$ac_t""$1])])
 
 dnl AC_VERBOSE(RESULT-DESCRIPTION)
 define(AC_VERBOSE,
 [AC_OBSOLETE([$0], [; instead use AC_MSG_RESULT])dnl
-echo "	$1" 1>&AC_FD_MSG])
+_AC_ECHO([	$1])])
 
 dnl AC_MSG_WARN(PROBLEM-DESCRIPTION)
 define(AC_MSG_WARN,
-[echo "configure: warning: $1" 1>&2])
+[_AC_ECHO([configure: warning: $1], 2)])
 
 dnl AC_MSG_ERROR(ERROR-DESCRIPTION)
 define(AC_MSG_ERROR,
-[{ echo "configure: error: $1" 1>&2; exit 1; }])
+[{ _AC_ECHO([configure: error: $1], 2); exit 1; }])
 
 
 dnl ### Selecting which language to use for testing
@@ -1367,8 +1500,7 @@ dnl ### Dependencies between macros
 
 dnl AC_BEFORE(THIS-MACRO-NAME, CALLED-MACRO-NAME)
 define(AC_BEFORE,
-[ifdef([AC_PROVIDE_$2], [errprint(__file__:__line__: [$2 was called before $1
-])])])
+[ifdef([AC_PROVIDE_$2], [AC_WARNING([$2 was called before $1])])])
 
 dnl AC_REQUIRE(MACRO-NAME)
 define(AC_REQUIRE,
@@ -1384,8 +1516,9 @@ define(AC_PROVIDE,
 
 dnl AC_OBSOLETE(THIS-MACRO-NAME [, SUGGESTION])
 define(AC_OBSOLETE,
-[errprint(__file__:__line__: warning: [$1] is obsolete[$2]
-)])
+[AC_WARNING([$1] is obsolete[$2])])
+
+
 
 
 dnl ### Generic structure checks
@@ -1397,6 +1530,8 @@ AC_DEFUN(AC_C_STRUCT_MEMBER,
   [AC_TRY_COMPILE([$2], [$3 foo; foo.$4;],
    ac_cv_c_struct_member_$1=yes,ac_cv_c_struct_member_$1=no)])
 $1="$ac_cv_c_struct_member_$1"])
+
+
 
 
 dnl ### Checking for programs
@@ -1567,9 +1702,7 @@ dnl No big loss, I think, since most configures don't use this macro anyway.
 dnl AC_PREFIX_PROGRAM(PROGRAM)
 AC_DEFUN(AC_PREFIX_PROGRAM,
 [if test "x$prefix" = xNONE; then
-changequote(<<, >>)dnl
-define(<<AC_VAR_NAME>>, translit($1, [a-z], [A-Z]))dnl
-changequote([, ])dnl
+define([AC_VAR_NAME], AC_UPCASE_NAME([$1])dnl
 dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
 echo $ac_n "checking for prefix by $ac_c" 1>&AC_FD_MSG
 AC_PATH_PROG(AC_VAR_NAME, $1)
@@ -1732,7 +1865,7 @@ LIBS="$ac_save_LIBS"
 AC_MSG_RESULT($AC_CV_NAME)
 if test "$AC_CV_NAME" = yes; then
   ifelse([$2], ,
-[AC_DEFINE([HAVE_LIB]translit(AC_LIB_NAME, [a-z], [A-Z]))
+[AC_DEFINE([HAVE_LIB]AC_TR_UPCASE_NAME(AC_LIB_NAME))
   LIBS="-l[]AC_LIB_NAME[] $LIBS"
 ], [$2])
 ifelse([$3], , , [else
@@ -1894,8 +2027,7 @@ dnl            [, ACTION-IF-CROSS-COMPILING]]])
 AC_DEFUN(AC_TRY_RUN,
 [if test "$cross_compiling" = yes; then
   ifelse([$4], ,
-    [errprint(__file__:__line__: warning: [AC_TRY_RUN] called without default to allow cross compiling
-)dnl
+    [AC_WARNING([[AC_TRY_RUN] called without default to allow cross compiling])dnl
   AC_MSG_ERROR(can not run test program while cross compiling)],
   [$4])
 else
@@ -1973,8 +2105,7 @@ ac_safe=`echo "$1" | sed 'y%./+-%__p_%'`
 AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(ac_cv_file_$ac_safe,
 [if test "$cross_compiling" = yes; then
-  errprint(__file__:__line__: warning: Cannot check for file existence when cross compiling
-)dnl
+  AC_WARNING([Cannot check for file existence when cross compiling])dnl
   AC_MSG_ERROR(Cannot check for file existence when cross compiling)
 else
   if test -r $1; then
@@ -1997,10 +2128,8 @@ AC_DEFUN(AC_CHECK_FILES,
 [for ac_file in $1
 do
 AC_CHECK_FILE($ac_file,
-[changequote(, )dnl
-  ac_tr_file=HAVE_`echo $ac_file | sed 'y%abcdefghijklmnopqrstuvwxyz./-%ABCDEFGHIJKLMNOPQRSTUVWXYZ___%'`
-changequote([, ])dnl
-  AC_DEFINE_UNQUOTED($ac_tr_file) $2], $3)dnl
+              [AC_DEFINE_UNQUOTED(AC_TR_UPCASE_FILE(HAVE_$ac_file)) $2],
+              [$3])dnl
 done
 ])
 
@@ -2053,10 +2182,8 @@ AC_DEFUN(AC_CHECK_FUNCS,
 [for ac_func in $1
 do
 AC_CHECK_FUNC($ac_func,
-[changequote(, )dnl
-  ac_tr_func=HAVE_`echo $ac_func | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`
-changequote([, ])dnl
-  AC_DEFINE_UNQUOTED($ac_tr_func) $2], $3)dnl
+              [AC_DEFINE_UNQUOTED(AC_TR_UPCASE_NAME(HAVE_$ac_func)) $2],
+              [$3])dnl
 done
 ])
 
@@ -2072,12 +2199,10 @@ dnl ### Checking compiler characteristics
 
 dnl AC_CHECK_SIZEOF(TYPE [, CROSS-SIZE])
 AC_DEFUN(AC_CHECK_SIZEOF,
-[changequote(<<, >>)dnl
-dnl The name to #define.
-define(<<AC_TYPE_NAME>>, translit(sizeof_$1, [a-z *], [A-Z_P]))dnl
+[dnl The name to #define.
+define([AC_TYPE_NAME], AC_TR_UPCASE_NAME(sizeof_$1))dnl
 dnl The cache variable name.
-define(<<AC_CV_NAME>>, translit(ac_cv_sizeof_$1, [ *], [_p]))dnl
-changequote([, ])dnl
+define([AC_CV_NAME], AC_TR_SH(ac_cv_sizeof_$1))dnl
 AC_MSG_CHECKING(size of $1)
 AC_CACHE_VAL(AC_CV_NAME,
 [AC_TRY_RUN([#include <stdio.h>
