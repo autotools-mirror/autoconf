@@ -35,6 +35,10 @@ Major changes in release 1.8:
 * The example Makefile dependencies for configure et al. work better.
 * Namespace cleanup: all shell variables used internally by Autoconf
   have names beginning with `ac_'.
+
+More big improvements are in process for future releases, but have not
+yet been (variously) finished, integrated, tested, or documented enough
+to release yet.
 
 Major changes in release 1.7:
 
