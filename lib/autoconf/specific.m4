@@ -997,9 +997,12 @@ dnl Internal subroutine of AC_FIND_X.
 define(AC_FIND_X_DIRECT,
 [echo checking for X include and library files directly
 if test ".$x_direct_test_library" = . ; then
-   x_direct_test_library=Xt
+   x_direct_test_library='Xt'
 fi
-AC_TEST_CPP([#include <X11/Intrinsic.h>], no_x=,
+if test ".$x_direct_test_include" = . ; then
+   x_direct_test_include='X11/Intrinsic.h'
+fi
+AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
   for dir in \
     /usr/local/include \
     /usr/unsupported/include \
@@ -1017,7 +1020,7 @@ AC_TEST_CPP([#include <X11/Intrinsic.h>], no_x=,
     /usr/athena/include \
     ; \
   do
-    if test -r $dir/X11/Intrinsic.h; then
+    if test -r "$dir/$x_direct_test_include"; then
       x_includes=$dir; no_x=
       break
     fi
@@ -1042,10 +1045,11 @@ for dir in `echo "$x_includes" | sed s/include/lib/` \
   /usr/openwin/lib \
   /usr/lpp/Xamples/lib \
   /usr/athena/lib \
+  /usr/lib \
   ; \
 do
   for extension in a so sl; do
-    if test -r $dir/libXt.$extension; then
+    if test -r $dir/lib${x_direct_test_library}.$extension; then
       x_libraries=$dir; no_x=
       break 2
     fi
