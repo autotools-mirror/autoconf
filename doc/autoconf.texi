@@ -135,6 +135,14 @@
 @end macro
 @end ifclear
 
+@c @hdrindex{MACRO}
+@c ---------------
+@c Indexing a header.
+@macro hdrindex{macro}
+@prindex @file{\macro\}
+@c
+@end macro
+
 @c @msindex{MACRO}
 @c ---------------
 @c Registering an m4_\MACRO\.
@@ -3614,6 +3622,7 @@ in some cases how they respond when given certain arguments.
 @ovindex ALLOCA
 @c @fuindex alloca
 @prindex @code{alloca}
+@hdrindex alloca.h
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
 @code{__GNUC__} and @code{_AIX}.  If this macro finds @file{alloca.h},
@@ -3723,6 +3732,7 @@ Library 2.1.
 @prindex @code{fork}
 @c @fuindex vfork
 @prindex @code{vfork}
+@hdrindex vfork.h
 This macro checks for the @code{fork} and @code{vfork} functions.  If a
 working @code{fork} is found, define @code{HAVE_WORKING_FORK}.  This macro
 checks whether @code{fork} is just a stub by trying to run it.
@@ -3808,6 +3818,7 @@ Define @code{SVR4}, @code{DGUX}, @code{UMAX}, or @code{UMAX4_3} if on
 those systems.
 
 @item
+@hdrindex nlist.h
 If @file{nlist.h} is found, define @code{HAVE_NLIST_H}.
 
 @item
@@ -4122,6 +4133,7 @@ are also available.)
 @acindex{REPLACE_FNMATCH}
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
+@hdrindex fnmatch.h
 If the @code{fnmatch} function does not conform to @acronym{POSIX} (see
 @code{AC_FUNC_FNMATCH}), ask for its @code{AC_LIBOBJ} replacement.
 
@@ -4283,6 +4295,8 @@ additions.  Please help us keeping it as complete as possible.
 
 @table @asis
 @item @file{inttypes.h} vs.@: @file{stdint.h}
+@hdrindex inttypes.h
+@hdrindex stdint.h
 Paul Eggert notes that: ISO C 1999 says that @file{inttypes.h} includes
 @file{stdint.h}, so there's no need to include @file{stdint.h}
 separately in a standard environment.  Many implementations have
@@ -4292,9 +4306,11 @@ know of any implementation that has @file{stdint.h} but not
 @file{stdint.h}; @file{stdint.h} seems to be a creation of the committee.
 
 @item @file{linux/irda.h}
+@hdrindex linux/irda.h
 It requires @file{linux/types.h} and @file{sys/socket.h}.
 
 @item @file{net/if.h}
+@hdrindex net/if.h
 On Darwin, this file requires that @file{sys/socket.h} be included
 beforehand.  One should run:
 
@@ -4320,15 +4336,19 @@ AC_CHECK_HEADERS([net/if.h], [], [],
 See above, item @file{inttypes.h} vs.@: @file{stdint.h}.
 
 @item @file{stdlib.h}
+@hdrindex stdlib.h
 On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
 
 @item @file{sys/socket.h}
+@hdrindex sys/socket.h
 On Darwin, @file{stdlib.h} is a prerequisite.
 
 @item @file{sys/ucred.h}
+@hdrindex sys/ucred.h
 On HP Tru64 5.1, @file{sys/types.h} is a prerequisite.
 
 @item @file{X11/extensions/scrnsaver.h}
+@hdrindex X11/extensions/scrnsaver.h
 Using XFree86, this header requires @file{X11/Xlib.h}, which is probably
 so required that you might not even consider looking for it.
 
@@ -4352,6 +4372,10 @@ exist, and in some cases whether they declare certain symbols.
 @cvindex HAVE_NDIR_H
 @cvindex HAVE_SYS_DIR_H
 @cvindex HAVE_SYS_NDIR_H
+@hdrindex dirent.h
+@hdrindex sys/ndir.h
+@hdrindex sys/dir.h
+@hdrindex ndir.h
 Check for the following header files.  For the first one that is
 found and defines @samp{DIR}, define the listed C preprocessor macro:
 
@@ -4398,6 +4422,8 @@ This macro also checks for the SCO Xenix @file{dir} and @file{x} libraries.
 @acindex{HEADER_MAJOR}
 @cvindex MAJOR_IN_MKDEV
 @cvindex MAJOR_IN_SYSMACROS
+@hdrindex sys/mkdev.h
+@hdrindex sys/sysmacros.h
 If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @code{makedev}, but @file{sys/mkdev.h} does, define
 @code{MAJOR_IN_MKDEV}; otherwise, if @file{sys/sysmacros.h} does, define
@@ -4408,6 +4434,7 @@ If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @defmac AC_HEADER_STAT
 @acindex{HEADER_STAT}
 @acindex{STAT_MACROS_BROKEN}
+@hdrindex sys/stat.h
 If the macros @code{S_ISDIR}, @code{S_ISREG}, etc.@: defined in
 @file{sys/stat.h} do not work properly (returning false positives),
 define @code{STAT_MACROS_BROKEN}.  This is the case on Tektronix UTekV,
@@ -4418,6 +4445,8 @@ Amdahl UTS and Motorola System V/88.
 @acindex{HEADER_STDBOOL}
 @cvindex HAVE_STDBOOL_H
 @cvindex HAVE__BOOL
+@hdrindex stdbool.h
+@hdrindex system.h
 If @file{stdbool.h} exists and is conformant to C99, define
 @code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
 @code{HAVE__BOOL} to 1.  To fulfill the C99 requirements, your
@@ -4446,6 +4475,11 @@ typedef unsigned char _Bool;
 @defmac AC_HEADER_STDC
 @acindex{HEADER_STDC}
 @cvindex STDC_HEADERS
+@hdrindex stdlib.h
+@hdrindex stdarg.h
+@hdrindex string.h
+@hdrindex float.h
+@hdrindex ctype.h
 Define @code{STDC_HEADERS} if the system has @acronym{ANSI} C header files.
 Specifically, this macro checks for @file{stdlib.h}, @file{stdarg.h},
 @file{string.h}, and @file{float.h}; if the system has those, it
@@ -4461,6 +4495,8 @@ the system has @acronym{ANSI}-compliant header files (and probably C library
 functions) because many systems that have GCC do not have @acronym{ANSI} C
 header files.
 
+@hdrindex string.h
+@hdrindex strings.h
 On systems without @acronym{ANSI} C headers, there is so much variation
 that it is probably easier to declare the functions you use than to
 figure out exactly what the system header files declare.  Some systems
@@ -4513,6 +4549,7 @@ for example, put it in @file{memchr.c} and use
 @defmac AC_HEADER_SYS_WAIT
 @acindex{HEADER_SYS_WAIT}
 @cvindex HAVE_SYS_WAIT_H
+@hdrindex sys/wait.h
 If @file{sys/wait.h} exists and is compatible with @acronym{POSIX}, define
 @code{HAVE_SYS_WAIT_H}.  Incompatibility can occur if @file{sys/wait.h}
 does not exist, or if it uses the old @acronym{BSD} @code{union wait} instead
@@ -4538,6 +4575,7 @@ example:
 @end defmac
 
 @cvindex _POSIX_VERSION
+@hdrindex unistd.h
 @code{_POSIX_VERSION} is defined when @file{unistd.h} is included on
 @acronym{POSIX} systems.  If there is no @file{unistd.h}, it is definitely
 not a @acronym{POSIX} system.  However, some non-@acronym{POSIX} systems do
@@ -4561,6 +4599,8 @@ The way to check if the system supports @acronym{POSIX} is:
 @defmac AC_HEADER_TIME
 @acindex{HEADER_TIME}
 @cvindex TIME_WITH_SYS_TIME
+@hdrindex time.h
+@hdrindex sys/time.h
 If a program may include both @file{time.h} and @file{sys/time.h},
 define @code{TIME_WITH_SYS_TIME}.  On some older systems,
 @file{sys/time.h} includes @file{time.h}, but @file{time.h} is not
@@ -4591,6 +4631,8 @@ example, @code{struct timeval} as well as
 @defmac AC_HEADER_TIOCGWINSZ
 @acindex{HEADER_TIOCGWINSZ}
 @cvindex GWINSZ_IN_SYS_IOCTL
+@hdrindex sys/ioctl.h
+@hdrindex termios.h
 @c FIXME: I need clarifications from Jim.
 If the use of @code{TIOCGWINSZ} requires @file{<sys/ioctl.h>}, then
 define @code{GWINSZ_IN_SYS_IOCTL}.  Otherwise @code{TIOCGWINSZ} can be
@@ -4819,6 +4861,8 @@ AC_CHECK_MEMBERS([struct stat.st_rdev])
 @defmac AC_STRUCT_TM
 @acindex{STRUCT_TM}
 @cvindex TM_IN_SYS_TIME
+@hdrindex time.h
+@hdrindex sys/time.h
 If @file{time.h} does not define @code{struct tm}, define
 @code{TM_IN_SYS_TIME}, which means that including @file{sys/time.h}
 had better define @code{struct tm}.
@@ -4889,6 +4933,8 @@ use a general type-check macro.
 @node Particular Types
 @subsection Particular Type Checks
 
+@hdrindex sys/types.h
+@hdrindex stdlib.h
 These macros check for particular C types in @file{sys/types.h},
 @file{stdlib.h} and others, if they exist.
 
@@ -4902,6 +4948,7 @@ is the base type of the array argument to @code{getgroups}.
 @defmac AC_TYPE_MBSTATE_T
 @acindex{TYPE_MBSTATE_T}
 @cvindex mbstate_t
+@hdrindex wchar.h
 Define @code{HAVE_MBSTATE_T} if @code{<wchar.h>} declares the
 @code{mbstate_t} type.  Also, define @code{mbstate_t} to be a type if
 @code{<wchar.h>} does not declare it.
@@ -4928,6 +4975,7 @@ Equivalent to @samp{AC_CHECK_TYPE(pid_t, int)}.
 @defmac AC_TYPE_SIGNAL
 @acindex{TYPE_SIGNAL}
 @cvindex RETSIGTYPE
+@hdrindex signal.h
 If @file{signal.h} declares @code{signal} as returning a pointer to a
 function returning @code{void}, define @code{RETSIGTYPE} to be
 @code{void}; otherwise, define it to be @code{int}.
