@@ -1,3 +1,16 @@
+2000-10-16  Akim Demaille  <akim@epita.fr>
+
+	* acgeneral.m4: Adjust copyright notice.
+	* acspecific.m4: Likewise.
+	* acoldnames.m4: Likewise.
+	* acversion.m4.in: Likewise.
+	* autoconf.sh: Likewise.
+	* autoheader.sh: Likewise.
+	* autoreconf.sh: Likewise.
+	* autoscan.pl: Likewise.
+	* autoupdate.sh: Likewise.
+	* ifnames.sh: Likewise.
+
 2000-10-16  Pavel Roskin  <proski@gnu.org>
 
 	* tests/aclocal.m4: Don't considers variables @, '*', '?' and

@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
-# Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
+# Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -2082,7 +2082,7 @@ ifset([AC_PACKAGE_BUGREPORT],
 # ------------------
 define([_AC_INIT_COPYRIGHT],
 [AC_COPYRIGHT(
-[Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
+[Copyright 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000
 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.])dnl

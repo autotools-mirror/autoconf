@@ -1,6 +1,6 @@
 #! @SHELL@
 # ifnames - print the identifiers used in C preprocessor conditionals
-# Copyright (C) 1994, 95, 99, 2000 Free Software Foundation, Inc.
+# Copyright 1994, 1995, 1999, 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ version="\
 ifnames (GNU @PACKAGE@) @VERSION@
 Written by David J. MacKenzie and Paul Eggert.
 
-Copyright (C) 1994, 95, 99, 2000 Free Software Foundation, Inc.
+Copyright 1994, 1995, 1999, 2000 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 
@@ -73,16 +73,20 @@ done
 
 $AWK '
   # Record that sym was found in FILENAME.
-  function file_sym(sym,  i, fs) {
-    if (sym ~ /^[A-Za-z_]/) {
-      if (!found[sym,FILENAME]) {
+  function file_sym(sym,  i, fs)
+  {
+    if (sym ~ /^[A-Za-z_]/)
+    {
+      if (!found[sym,FILENAME])
+      {
 	found[sym,FILENAME] = 1
 
 	# Insert FILENAME into files[sym], keeping the list sorted.
 	i = 1
 	fs = files[sym]
  	while (match(substr(fs, i), /^ [^ ]*/) \
- 	       && substr(fs, i + 1, RLENGTH - 1) < FILENAME) {
+ 	       && substr(fs, i + 1, RLENGTH - 1) < FILENAME)
+        {
  	  i += RLENGTH
 	}
 	files[sym] = substr(fs, 1, i - 1) " " FILENAME substr(fs, i)
@@ -91,7 +95,8 @@ $AWK '
   }
 
   {
-    while (sub(/\\$/, "", $0) > 0) {
+    while (sub(/\\$/, "", $0) > 0)
+    {
       if ((getline tmp) > 0)
 	$0 = $0 tmp
       else
@@ -99,25 +104,32 @@ $AWK '
     }
   }
 
-  /^[\t ]*#/ {
-    if (sub(/^[\t ]*#[\t ]*ifn?def[\t ]+/, "", $0)) {
+  /^[\t ]*#/
+  {
+    if (sub(/^[\t ]*#[\t ]*ifn?def[\t ]+/, "", $0))
+    {
       sub(/[^A-Za-z_0-9].*/, "", $0)
       file_sym($0)
     }
-    if (sub(/^[\t ]*#[\t ]*(el)?if[\t ]+/, "", $0)) {
+    if (sub(/^[\t ]*#[\t ]*(el)?if[\t ]+/, "", $0))
+    {
       # Remove comments.  Not perfect, but close enough.
       gsub(/\/\*[^\/]*(\*\/)?/, "", $0)
 
-      for (i = split($0, field, /[^A-Za-z_0-9]+/);  1 <= i;  i--) {
-	if (field[i] != "defined") {
+      for (i = split($0, field, /[^A-Za-z_0-9]+/);  1 <= i;  i--)
+      {
+	if (field[i] != "defined")
+        {
 	  file_sym(field[i])
 	}
       }
     }
   }
 
-  END {
-    for (sym in files) {
+  END
+  {
+    for (sym in files)
+    {
       print sym files[sym]
     }
   }

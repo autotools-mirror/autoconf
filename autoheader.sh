@@ -1,6 +1,7 @@
 #! @SHELL@
 # autoheader -- create `config.h.in' from `configure.in'
-# Copyright (C) 1992-94, 96, 98, 99, 2000 Free Software Foundation, Inc.
+# Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000
+# Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -53,7 +54,8 @@ version="\
 autoheader (GNU @PACKAGE@) @VERSION@
 Written by Roland McGrath.
 
-Copyright (C) 1992-94, 96, 98, 99, 2000 Free Software Foundation, Inc.
+Copyright 1992, 1993, 1994, 1996, 1998, 1999, 2000
+Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 

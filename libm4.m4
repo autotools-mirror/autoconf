@@ -2,7 +2,7 @@ divert(-1)                                                   -*- Autoconf -*-
 # This file is part of Autoconf.
 # Base m4 layer.
 # Requires GNU m4.
-# Copyright (C) 1999, 2000 Free Software Foundation, Inc.
+# Copyright 1999, 2000 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

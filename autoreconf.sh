@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoreconf - remake all Autoconf configure scripts in a directory tree
-# Copyright (C) 1994, 99, 2000 Free Software Foundation, Inc.
+# Copyright 1994, 1999, 2000 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@ version="\
 autoreconf (GNU @PACKAGE@) @VERSION@
 Written by David J. MacKenzie.
 
-Copyright (C) 1994, 99, 2000 Free Software Foundation, Inc.
+Copyright 1994, 1999, 2000 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 

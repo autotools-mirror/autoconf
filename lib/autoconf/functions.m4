@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for functions.
-# Copyright (C) 2000
+# Copyright 2000
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify

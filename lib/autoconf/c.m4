@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 1992, 93, 94, 95, 96, 98, 99, 2000
+# Copyright 1992, 93, 94, 95, 96, 98, 99, 2000
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
