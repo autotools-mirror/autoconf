@@ -1,5 +1,12 @@
 2000-03-25  Akim Demaille  <akim@epita.fr>
 
+	* autoheader.sh (checking completeness): Be ready to recognize
+	patterns with a value, and spaces between `#' and the directive, e.g.
+	# define FOO FIXME:
+	Reported by John Fortin.
+
+2000-03-25  Akim Demaille  <akim@epita.fr>
+
 	* acgeneral.m4 (AC_RUN_IFELSE): New macro.
 	(AC_TRY_RUN_NATIVE): Remove.
 	(AC_TRY_RUN): Use AC_RUN_IFELSE, not AC_TRY_RUN_NATIVE.

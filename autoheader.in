@@ -259,12 +259,14 @@ test -r $localdir/acconfig.h &&
   sed -n '/@BOTTOM@/,${/@BOTTOM@/!p;}' $localdir/acconfig.h >>$tmpout
 test -f ${config_h}.bot && cat ${config_h}.bot >>$tmpout
 
-# Check that all the symbols have a template
-status=0
 
+# Check that all the symbols have a template.
+status=0
+# Regexp for a white space.
+w='[ 	]'
 if test -n "$syms"; then
   for sym in $syms; do
-    if grep "^#[a-z]*[ 	][ 	]*$sym[ 	]*$" $tmpout >/dev/null; then
+    if egrep "^#$w*[a-z]*$w$w*$sym($w*|$w.*)$" $tmpout >/dev/null; then
       : # All is well.
     else
       echo "$0: No template for symbol \`$sym'" >&2
@@ -272,6 +274,7 @@ if test -n "$syms"; then
     fi
   done
 fi
+
 
 # If the run was successful, output the result.
 if test $status = 0; then
