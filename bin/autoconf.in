@@ -126,12 +126,12 @@ $M4 -I$AC_MACRODIR $use_localdir $r autoconf.m4$f $infile > $tmpout ||
 pattern="AC_"
 
 status=0
-if grep "${pattern}" $tmpout > /dev/null 2>&1; then
+if grep "^[^#]*${pattern}" $tmpout > /dev/null 2>&1; then
   echo "autoconf: Undefined macros:" >&2
-  grep "${pattern}" $tmpout | sed "s/.*\\(${pattern}[_A-Za-z0-9]*\\).*/\\1/" |
-    while read name; do
-      grep -n $name $infile /dev/null
-      test $? -eq 1 && echo >&2 "***BUG in Autoconf--please report*** $name"
+  sed -n "s/^[^#]*\\(${pattern}[_A-Za-z0-9]*\\).*/\\1/p" $tmpout |
+    while read macro; do
+      grep -n "^[^#]*$macro" $infile /dev/null
+      test $? -eq 1 && echo >&2 "***BUG in Autoconf--please report*** $macro"
     done | sort -u >&2
   status=1
 fi
@@ -147,7 +147,7 @@ $AWK '
 /__oline__/ { printf "%d:", NR + 1 }
            { print }
 ' $tmpout | sed '
-/__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__\(.*\)$/\2\1\3/
+/__oline__/s/^\([0-9][0-9]*\):\(.*\)__oline__/\2\1/
 ' >&4
 
 rm -f $tmpout

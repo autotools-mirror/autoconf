@@ -30,6 +30,10 @@ Fri Jan  5 17:50:28 1996  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 	grep $name in $infile misses, give error message that there must
 	be an Autoconf bug.
 
+Tue Dec 19 10:49:20 1995  David J. MacKenzie  <djm@catapult.va.pubnix.com>
+
+	* autoconf.sh: Ignore undefined macros in shell comments.
+
 Mon Dec 11 22:12:54 1995  Roland McGrath  <roland@churchy.gnu.ai.mit.edu>
 
 	* acspecific.m4 (AC_PROG_CC_C_O): Rearrange logic to get the right
