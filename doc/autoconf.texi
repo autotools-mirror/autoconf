@@ -5853,8 +5853,7 @@ invocation, (ii) if not, be sure to double quote if needed.
 
 @defmac AC_LANG_SOURCE (@var{source})
 @acindex LANG_SOURCE
-Expands into the @var{source}, with proper definition of the current
-location (e.g., @samp{#line 1234 "configure"} in C), and definition of
+Expands into the @var{source}, with the definition of
 all the @code{AC_DEFINE} performed so far.
 @end defmac
 
