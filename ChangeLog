@@ -1,3 +1,8 @@
+1999-08-26  Ben Elliston  <bje@cygnus.com>
+
+	* autoconf.texi (Changed Results): Correct an error in one of the
+	examples. Fix for autoconf/38.
+
 1999-08-25  Ben Elliston  <bje@cygnus.com>
 
 	* autoconf.texi (Cache Variable Names): Be more explicit about the
