@@ -1206,6 +1206,9 @@ AC_DEFUN([AC_OBJEXT],   [])
 #
 # Ignore .d files produced by CFLAGS=-MD.
 #
+# On UWIN (which uses a cc wrapper for MSVC), the compiler also generates
+# a .pdb file
+#
 # This macro is called by AC_LANG_COMPILER, the latter being required
 # by the AC_COMPILE_IFELSE macros, so use AC_TRY_EVAL.
 m4_define([_AC_EXEEXT],
@@ -1221,7 +1224,7 @@ m4_define([_AC_EXEEXT],
       # `rm'.
       for ac_file in `ls conftest.exe conftest conftest.* 2>/dev/null`; do
     	case $ac_file in
-    	  *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d) ;;
+    	  *.$ac_ext | *.o | *.obj | *.xcoff | *.tds | *.d | *.pdb ) ;;
     	  *) ac_cv_exeext=`expr "$ac_file" : 'conftest\(.*\)'`
     	     break;;
     	esac

@@ -1,5 +1,10 @@
 2000-12-07  Akim Demaille  <akim@epita.fr>
 
+	* acspecific.m4 (_AC_EXEEXT): Skip *.pdb.
+	From Paul Berrevoets <paul@swi.com>.
+
+2000-12-07  Akim Demaille  <akim@epita.fr>
+
 	* tests/atgeneral.m4 (AT_CHECK): Bad typo: assign `exit 1' to
 	at_continue if something failed, not `:'.
 	* tests/semantics.at (AC_PATH_XTRA): New.
