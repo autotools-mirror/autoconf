@@ -1421,15 +1421,17 @@ If you pass @var{extra-cmds}, those commands will be inserted into
 
 @defmac AC_PREREQ (@var{version})
 @maindex PREREQ
-Ensure that a recent enough version of Autoconf is being used.
-If the version of Autoconf being used to create @code{configure} is
-earlier than @var{version}, print an error message on the standard error
-output and do not create @code{configure}.
+Ensure that a recent enough version of Autoconf is being used.  If the
+version of Autoconf being used to create @code{configure} is earlier
+than @var{version} (e.g., @samp{1.8}), print an error message on the
+standard error output and do not create @code{configure}.
 
 This macro is useful if your @file{configure.in} relies on non-obvious
-behavior that changed between Autoconf releases.  (If it merely needs
-recently added macros, then the @code{autoconf} program already tells
-the user if they are not found, so this macro is less useful in that case.)
+behavior that changed between Autoconf releases.  If it merely needs
+recently added macros, then @code{AC_PREREQ} is less useful, because the
+@code{autoconf} program already tells the user which macros are not
+found.  The same thing happens if @file{configure.in} is processed by a
+version of Autoconf older than when @code{AC_PREREQ} was added.
 @end defmac
 
 @defmac AC_REVISION (@var{revision-info})
