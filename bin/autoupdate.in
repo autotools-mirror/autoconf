@@ -59,9 +59,11 @@ Operation modes:
   -V, --version              print version number, then exit
   -v, --verbose              verbosely report processing
   -d, --debug                don't remove temporary files
+  -f, --force                consider all files obsolete
+
+Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
   -I, --include=DIR          append directory DIR to search path
-  -f, --force                consider all files obsolete
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";

@@ -27,15 +27,13 @@ to the standard output if TEMPLATE-FILE is given, else into
 \`configure'.
 
 Operation modes:
-  -h, --help                  print this help, then exit
-  -V, --version               print version number, then exit
-  -v, --verbose               verbosely report processing
-  -d, --debug                 don't remove temporary files
-  -B, --prepend-include=DIR   prepend directory DIR to search path
-  -I, --include=DIR           append directory DIR to search path
-  -f, --force                 consider all files obsolete
-  -o, --output=FILE           save output in FILE (stdout is the default)
-  -W, --warnings=CATEGORY     report the warnings falling in CATEGORY [syntax]
+  -h, --help                print this help, then exit
+  -V, --version             print version number, then exit
+  -v, --verbose             verbosely report processing
+  -d, --debug               don't remove temporary files
+  -f, --force               consider all files obsolete
+  -o, --output=FILE         save output in FILE (stdout is the default)
+  -W, --warnings=CATEGORY   report the warnings falling in CATEGORY [syntax]
 
 Warning categories include:
   \`cross'         cross compilation issues
@@ -47,6 +45,10 @@ Warning categories include:
   \`error'         warnings are error
 
 The environment variable \`WARNINGS' is honored.
+
+Library directories:
+  -B, --prepend-include=DIR  prepend directory DIR to search path
+  -I, --include=DIR          append directory DIR to search path
 
 Tracing:
   -t, --trace=MACRO     report the list of calls to MACRO

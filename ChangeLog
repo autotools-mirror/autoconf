@@ -1,5 +1,10 @@
 2002-10-25  Akim Demaille  <akim@epita.fr>
 
+	* bin/autoconf.as, bin/autoconf.in, bin/autoupdate.in ($help):
+	Space changes.
+
+2002-10-25  Akim Demaille  <akim@epita.fr>
+
 	* bin/autoscan.in (output): Output AC_PREREQ.
 	(%needed_macros): Add AC_PREREQ so that configure.ac without one
 	be reported.

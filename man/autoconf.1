@@ -24,12 +24,6 @@ verbosely report processing
 \fB\-d\fR, \fB\-\-debug\fR
 don't remove temporary files
 .TP
-\fB\-B\fR, \fB\-\-prepend\-include\fR=\fIDIR\fR
-prepend directory DIR to search path
-.TP
-\fB\-I\fR, \fB\-\-include\fR=\fIDIR\fR
-append directory DIR to search path
-.TP
 \fB\-f\fR, \fB\-\-force\fR
 consider all files obsolete
 .TP
@@ -62,6 +56,13 @@ turn off all the warnings
 warnings are error
 .PP
 The environment variable `WARNINGS' is honored.
+.SS "Library directories:"
+.TP
+\fB\-B\fR, \fB\-\-prepend\-include\fR=\fIDIR\fR
+prepend directory DIR to search path
+.TP
+\fB\-I\fR, \fB\-\-include\fR=\fIDIR\fR
+append directory DIR to search path
 .SS "Tracing:"
 .TP
 \fB\-t\fR, \fB\-\-trace\fR=\fIMACRO\fR
