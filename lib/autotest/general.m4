@@ -361,7 +361,7 @@ ifelse([$2],,,
 [at_status=$?
 if test $at_status != $2; then
 dnl Maybe there was an important message to read before it died.
-  test -n "$at_verbose" && cat stderr >&6
+  test -n "$at_verbose" && test -z "$at_no_redirs" && cat stderr >&6
 dnl Exit with the same code, at least to preserve 77.
   exit $at_status
 fi

@@ -1,3 +1,7 @@
+2000-07-07  François Pinard  <pinard@iro.umontreal.ca>
+
+	* tests/atgeneral.m4 (AT_CHECK): Fix a redirection problem.
+
 2000-07-07  Akim Demaille  <akim@epita.fr>
 
 	AC_REVISION must not AC_REQUIRE AC_INIT, it leaves the diversions
