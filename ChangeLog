@@ -1,5 +1,11 @@
 2001-01-16  Akim Demaille  <akim@epita.fr>
 
+	* doc/autoconf.texi: Lots of additions and changes.
+	(File Descriptors): New.
+	(Limitations of Make): New.
+
+2001-01-16  Akim Demaille  <akim@epita.fr>
+
 	* m4sh.m4 (AS_EXIT): Don't rely on exit == exit $?.
 	Reported by Tim Van Holder.
 

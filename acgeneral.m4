@@ -704,7 +704,7 @@ gives unlimited permission to copy, distribute and modify it.])dnl
 
 m4_define([AS_MESSAGE_FD], 6)
 m4_define([AS_MESSAGE_LOG_FD], 5)
-# That's how trey used to be named.
+# That's how they used to be named.
 AU_ALIAS([AC_FD_CC],  [AS_MESSAGE_LOG_FD])
 AU_ALIAS([AC_FD_MSG], [AS_MESSAGE_FD])
 
@@ -713,8 +713,6 @@ m4_define([_AC_INIT_DEFAULTS_FDS],
 # 0 standard input
 # 1 file creation
 # 2 errors and warnings
-# 3 some systems may open it to /dev/tty
-# 4 used on the Kubota Titan
 @%:@ AS_MESSAGE_FD checking for... messages and results
 @%:@ AS_MESSAGE_LOG_FD compiler messages saved in config.log
 if test "$silent" = yes; then
@@ -3719,9 +3717,8 @@ test "x$prefix" = xNONE && prefix=$ac_default_prefix
 # Let make expand exec_prefix.
 test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 
-# Any assignment to VPATH causes Sun make to only execute
-# the first set of double-colon rules, so remove it if not needed.
-# If there is a colon in the path, we need to keep it.
+# VPATH is dangerous, but if there is a colon in the path, we need to
+# keep it.
 if test "x$srcdir" = x.; then
   ac_vpsub=['/^[ 	]*VPATH[ 	]*=[^:]*$/d']
 fi

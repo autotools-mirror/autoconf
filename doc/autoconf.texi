@@ -207,8 +207,8 @@ Existing Tests
 * Structures::                  Structures or members that might be missing
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
-* C Compiler Characteristics::
-* Fortran 77 Compiler Characteristics::
+* C Compiler::                  Checking its characteristics
+* Fortran 77 Compiler::         Checking its characteristics
 * System Services::             Operating system services
 * UNIX Variants::               Special kludges for specific UNIX variants
 
@@ -267,11 +267,13 @@ Checking Run Time Behavior
 Portable Shell Programming
 
 * Shellology::                  A zoology of shells
-* Shell Substitutions::         Variable expansions...
+* File Descriptors::            FDs and redirections
+* Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Special Shell Variables::     Variables you should not change
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
+* Limitations of Make::         Portable Makefiles
 
 Results of Tests
 
@@ -2571,8 +2573,8 @@ Symbols}, for how to get those symbol definitions into your program.
 * Structures::                  Structures or members that might be missing
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
-* C Compiler Characteristics::
-* Fortran 77 Compiler Characteristics::
+* C Compiler::                  Checking its characteristics
+* Fortran 77 Compiler::         Checking its characteristics
 * System Services::             Operating system services
 * UNIX Variants::               Special kludges for specific UNIX variants
 @end menu
@@ -4062,7 +4064,7 @@ implemented.  In case of doubt, read the documentation of the former
 @code{AC_CHECK_TYPE}, see @ref{Obsolete Macros}.
 
 
-@node Compilers and Preprocessors, C Compiler Characteristics, Types, Existing Tests
+@node Compilers and Preprocessors, C Compiler, Types, Existing Tests
 @section Compilers and Preprocessors
 
 @ovindex EXEEXT
@@ -4253,7 +4255,7 @@ this is becoming a less prevalent problem.
 @end defmac
 
 
-@node C Compiler Characteristics, Fortran 77 Compiler Characteristics, Compilers and Preprocessors, Existing Tests
+@node C Compiler, Fortran 77 Compiler, Compilers and Preprocessors, Existing Tests
 @section C Compiler Characteristics
 
 The following macros check for C compiler or machine architecture
@@ -4410,7 +4412,7 @@ defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 
 
 
-@node Fortran 77 Compiler Characteristics, System Services, C Compiler Characteristics, Existing Tests
+@node Fortran 77 Compiler, System Services, C Compiler, Existing Tests
 @section Fortran 77 Compiler Characteristics
 
 The following macros check for Fortran 77 compiler characteristics.  To
@@ -4522,7 +4524,7 @@ preprocessor as above; for example, to call Fortran routines from some
 language other than C/C++.
 @end defmac
 
-@node System Services, UNIX Variants, Fortran 77 Compiler Characteristics, Existing Tests
+@node System Services, UNIX Variants, Fortran 77 Compiler, Existing Tests
 @section System Services
 
 The following macros check for operating system services or capabilities.
@@ -5053,14 +5055,16 @@ Some of these external utilities have a portable subset of features, see
 
 @menu
 * Shellology::                  A zoology of shells
-* Shell Substitutions::         Variable expansions...
+* File Descriptors::            FDs and redirections
+* Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Special Shell Variables::     Variables you should not change
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
+* Limitations of Make::         Portable Makefiles
 @end menu
 
-@node Shellology, Shell Substitutions, Portable Shell, Portable Shell
+@node Shellology, File Descriptors, Portable Shell, Portable Shell
 @subsection Shellology
 
 There are several families of shells, most prominently the Bourne
@@ -5071,15 +5075,15 @@ family.
 Below we describe some of the members of the Bourne shell family.
 
 @table @asis
-@item @command{ash}
-@cindex @command{ash}
+@item Ash
+@cindex Ash
 @command{ash} is often used on @sc{gnu}/Linux and @sc{bsd} systems as a
-light-weight Bourne-compatible shell.  @command{ash} version 0.2 has
-some bugs that are fixed in the 0.3.x series, but portable shell scripts
-should workaround them, since version 0.2 is still shipped with many
-@sc{gnu}/Linux distributions.
+light-weight Bourne-compatible shell.  Ash 0.2 has some bugs that are
+fixed in the 0.3.x series, but portable shell scripts should workaround
+them, since version 0.2 is still shipped with many @sc{gnu}/Linux
+distributions.
 
-To be compatible with @command{ash} 0.2
+To be compatible with Ash 0.2:
 
 @itemize @bullet
 @item
@@ -5100,18 +5104,13 @@ echo $@{FOO=`bar`@}
 @end example
 
 @item
-beware that @command{exit} inside command substitution causes the
-current shell to exit as well. Use parentheses to prevent @command{ash}
-from exiting:
-
-@example
-(`exit 1`) || echo "All right"
-`exit 1` || echo "ash won't print it"
-@end example
+beware that single builtin substitutions are not performed by a sub
+shell, hence their effect applies to the current shell!  @xref{Shell
+Substitutions}, item ``Command Substitution''.
 @end itemize
 
-@item @command{bash}
-@cindex @command{bash}
+@item Bash
+@cindex Bash
 To detect whether you are running @command{bash}, test if
 @code{BASH_VERSION} is set.  To disable its extensions and require
 @sc{posix} compatibility, run @samp{set -o posix}. @xref{Bash POSIX
@@ -5125,8 +5124,8 @@ The @sc{posix}-compliant Bourne shell on a Solaris system is
 There is no extra charge for this package, but it is also not part of a
 minimal OS install and therefore some folks may not have it.
 
-@item @command{zsh}
-@cindex @command{zsh}
+@item Zsh
+@cindex Zsh
 To detect whether you are running @command{zsh}, test if
 @code{ZSH_VERSION} is set.  By default @command{zsh} is @emph{not}
 compatible with the Bourne shell: you have to run @samp{emulate sh} and
@@ -5162,13 +5161,45 @@ So while most modern systems do have a shell _somewhere_ that meets the
 @sc{posix} standard, the challenge is to find it.
 @end quotation
 
+@node File Descriptors, Shell Substitutions, Shellology, Portable Shell
+@subsection File Descriptors
 
-@node Shell Substitutions, Assignments, Shellology, Portable Shell
+Some file descriptors shall not be used, since some systems, admittedly
+arcane, use them for special purpose:
+
+@table @asis
+@item 3
+some systems may open it to @samp{/dev/tty}.
+
+@item 4
+used on the Kubota Titan.
+@end table
+
+Don't redirect several times the same file descriptor, as you are doomed
+to failure under Ultrix.
+
+@example
+ULTRIX V4.4 (Rev. 69) System #31: Thu Aug 10 19:42:23 GMT 1995
+UWS V4.4 (Rev. 11)
+$ eval 'echo matter >fullness' >void
+illegal io
+$ eval '(echo matter >fullness)' >void
+illegal io
+$ (eval '(echo matter >fullness)') >void
+Ambiguous output redirect.
+@end example
+
+@noindent
+In each case the expected result is of course @file{fullness} containing
+@samp{matter} and @file{void} being empty.
+
+@node Shell Substitutions, Assignments, File Descriptors, Portable Shell
 @subsection Shell Substitutions
 
 Contrary to a persistent urban legend, the Bourne shell does not
-systematically split variables and backquoted expressions, in
-particular, the following code:
+systematically split variables and backquoted expressions, in particular
+on the right-hand side of assignments, and the argument of @code{case}.
+For instance the following code:
 
 @example
 case "$given_srcdir" in
@@ -5178,8 +5209,7 @@ esac
 @end example
 
 @noindent
-is more readable with the right-hand side of the assignments, and the
-argument of @code{case} left without quotes:
+is more readable written as:
 
 @example
 case $given_srcdir in
@@ -5201,7 +5231,7 @@ inside double-quoted backquoted expressions (Pfew!).
 @cindex @samp{"$@@"}
 One of the most famous shell portability issues is related to
 @samp{"$@@"}: when there are no positional argument, it is supposed to
-be equivalent to nothing.  But some shell, for instance under Digital
+be equivalent to nothing.  But some shells, for instance under Digital
 Unix 4.0 and 5.0, will then replace it with an empty argument.  To be
 portable, use @samp{$@{1+"$@@"@}}.
 
@@ -5308,6 +5338,27 @@ use
 @example
 test "$@{var+set@}" = set || var=@var{@{value@}}
 @end example
+
+
+@item `@var{commands}`
+@cindex `@var{commands}`
+@cindex Command Substitution
+While in general it makes no sense, do not substitute a single builtin
+with side effects as Ash 0.2, trying to optimize, does not fork a sub
+shell to perform the command.
+
+For instance if you wanted to check that @command{cd} is silent, do not
+use @samp{test -z "`cd /tmp`"} because...
+
+@example
+$ pwd
+/tmp
+$ test -n "`cd /`" && pwd
+/
+@end example
+
+@noindent
+The result of @samp{foo=`exit 1`} is left as an exercise to the reader.
 
 
 @item $(@var{commands})
@@ -5589,7 +5640,7 @@ as the string composed of a backslash and an n.
 @c -----------------
 @cindex @command{exit}
 The default value of @command{exit} is supposed to be @code{$?},
-unfortunately some shell, such as the @sc{djgpp} port of Bash 2.04, just
+unfortunately some shells, such as the @sc{djgpp} port of Bash 2.04, just
 perform @samp{exit 0}.
 
 @example
@@ -5686,6 +5737,7 @@ done
 @end example
 
 @item @command{if}
+@c ---------------
 @cindex @command{if}
 Using @samp{!} is not portable.  Instead of
 
@@ -5703,6 +5755,28 @@ if cmp -s file file.new; then :; else
   mv file.new file
 fi
 @end example
+
+There are shells which do not reset the exit status out of an
+@command{if}:
+
+@example
+$ if (exit 42); then true; fi; echo $?
+42
+@end example
+
+@noindent
+while a proper shell should have printed @samp{0}.  This is especially
+bad in Makefiles since it produces false failures.  This is why properly
+written Makefiles, such as Automake's, have such hairy constructs:
+
+@example
+if test -f "$file"; then
+  install "$file" "$dest"
+else
+  :
+fi
+@end example
+
 
 @item @command{set}
 @c ----------------
@@ -5746,6 +5820,7 @@ You may use @samp{!} with @command{test}, but not with @command{if}:
 @samp{test ! -r foo || exit 1}.
 
 @item @command{test} (files)
+@c -------------------------
 To enable @code{configure} scripts to support cross-compilation, they
 shouldn't do anything that tests features of the build system instead of
 the host system.  But occasionally you may find it necessary to check
@@ -5755,6 +5830,7 @@ have it.  Do not use @samp{test -e} either, because Solaris 2.5 does not
 have it.
 
 @item @command{test} (strings)
+@c ---------------------------
 Avoid @samp{test "@var{string}"}, in particular if @var{string} might
 start with a dash, since @code{test} might interpret its argument as an
 option (e.g., @samp{@var{string} = "-n"}).
@@ -5914,7 +5990,7 @@ $unset CDPATH || CDPATH=:
 the case of environment variables.
 @end table
 
-@node Limitations of Usual Tools,  , Limitations of Builtins, Portable Shell
+@node Limitations of Usual Tools, Limitations of Make, Limitations of Builtins, Portable Shell
 @subsection Limitations of Usual Tools
 
 The small set of tools you can expect to find on any machine can still
@@ -6293,6 +6369,20 @@ t end
 s/.*/deleted/g
 : end
 @end example
+@end table
+
+@node Limitations of Make,  , Limitations of Usual Tools, Portable Shell
+@subsection Limitations of Make
+
+Make itself suffers a great number of limitations, only a few of which
+being listed here.  First of all, remember that since commands are
+executed by the shell, all its weaknesses are inherited...
+
+@table @asis
+@item @code{VPATH}
+@cindex @code{VPATH}
+Don't use it!  For instance any assignment to @code{VPATH} causes Sun
+@command{make} to only execute the first set of double-colon rules.
 @end table
 
 
