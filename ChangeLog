@@ -1,5 +1,16 @@
 1999-10-31  Akim Demaille  <akim@epita.fr>
 
+	Perform a better checking for missing templates in autoheader.
+
+	* autoheader.m4 (AH_HOOK): When hook AC_FOO on AH_FOO, define the
+	new AC_FOO to be the expansion of both AH_FOO *and* AC_FOO.  See
+	its definition for the motivations.
+
+	* autoheader.m4 (AH_FUNC_ALLOCA): Remove the now useless
+	additional templates.
+
+1999-10-31  Akim Demaille  <akim@epita.fr>
+
 	Work properly with Automake 1.4.
 
 	* Makefile.am (distpkgdataDATA): Replaces dist_pkgdata_DATA.

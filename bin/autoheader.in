@@ -260,7 +260,8 @@ if test $status -eq 0; then
   if test $# -eq 0; then
     # Output is a file
     if test -f ${config_h_in} && cmp -s $tmpout ${config_h_in}; then
-      : # File didn't change, so don't update its mod time.
+      # File didn't change, so don't update its mod time.
+      echo "$0: $config_h_in is unchanged" >&2
     else
       mv -f $tmpout ${config_h_in}
     fi

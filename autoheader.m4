@@ -36,12 +36,9 @@ dnl --------------------------------------------
 dnl When running autoheader, this macro replaces AC_DEFINE and
 dnl AC_DEFINE_UNQUOTED.
 dnl
-dnl We remember the symbols we already defined to avoid to define
-dnl them twice.  In the future we may want to use another program
-dnl than sh to issue the templates.  For instance with AWK, we
-dnl may fill an associative array (key is $1, value is the template).
-dnl This garantees that there is a unique prototype issued, and also
-dnl that it will be sorted!
+dnl If DESCRIPTION is not given, then there is a risk that VARIABLE will
+dnl not be properly templated.  To control later that it has been
+dnl templated elsewhere, store VARIABLE in a shell growing string, SYMS.
 define([AH_DEFINE],
 [ifval([$3],
        [AH_TEMPLATE([$1], [$3])],
@@ -51,6 +48,7 @@ dnl Ignore CPP macro arguments.
 ])])
 
 dnl AH_TEMPLATE(KEY, DESCRIPTION)
+dnl -----------------------------
 dnl Issue an autoheader template for KEY, i.e., a comment composed
 dnl of DESCRIPTION (properly wrapped), and then #undef KEY.
 define([AH_TEMPLATE],
@@ -87,19 +85,19 @@ define([AH_CHECK_HEADERS],
 [AC_FOREACH([AC_Header], [$1],
   [AH_TEMPLATE(AC_TR_CPP(HAVE_[]AC_Header),
                [Define if you have the <]AC_Header[> header file.])
-# Success
-$2
-# Failure
-$3])])
+   # Success
+   $2
+   # Failure
+   $3])])
 
 define([AH_CHECK_DECLS],
 [AC_FOREACH([AC_Symbol], [$1],
   [AH_TEMPLATE(AC_TR_CPP([NEED_]AC_Symbol[_DECL]),
                [Define if you need the declaration of `]AC_Symbol['.])
-# Success
-$2
-# Failure
-$3])])
+   # Success
+   $2
+   # Failure
+   $3])])
 
 define([AH_CHECK_FUNCS],
 [AC_FOREACH([AC_Func], [$1],
@@ -136,17 +134,7 @@ define([AH_CHECK_MEMBERS],
 
 
 define([AH_FUNC_ALLOCA],
-[AH_TEMPLATE(HAVE_ALLOCA_H,
-            [Define if you have <alloca.h> and it should be used
-             (not on Ultrix).])
-AH_TEMPLATE(HAVE_ALLOCA,
-            [Define if you have `alloca', as a function or macro.])
-AH_TEMPLATE(C_ALLOCA, [Define if using `alloca.c'.])
-AH_TEMPLATE(CRAY_STACKSEG_END,
-            [Define to one of _getb67, GETB67, getb67 for Cray-2 and Cray-YMP
-             systems.  This function is required for alloca.c support on those
-             systems.])
-AH_VERBATIM([STACK_DIRECTION],
+[AH_VERBATIM([STACK_DIRECTION],
 [/* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at run-time.
@@ -194,9 +182,47 @@ define([AC_CONFIG_H], patsubst($1, [ .*$], []))dnl
 @@@config_h=AC_CONFIG_H@@@
 ])
 
-dnl Install a new hook for AH_ macros.
+dnl AH_HOOK(AUTOCONF-NAME, AUTOHEADER-NAME)
+dnl ---------------------------------------
+dnl Install a new hook for AH_ macros.  Specify that the macro
+dnl AUTOCONF-NAME will later be defined as the concatenation of
+dnl both its former definition, and that of AUTOHEADER-NAME.
+dnl
+dnl There are motivations for not just defining to AUTOHEADER-NAME.  For
+dnl instance, if there is an AC macro which requires a special template
+dnl but also has traditional AC_DEFINEs which are documented, then it is
+dnl logical that these templates are preserved.  AC_FUNC_ALLOCA is such an
+dnl example.
+dnl Another reason is that this way
+dnl
+dnl There are several for not just defining to be equivalent to
+dnl AUTOHEADER-NAME.
+dnl
+dnl Let AC_FOO be
+dnl   | AC_DEFINE(FOO, 1)
+dnl   | AC_DEFINE(BAR, 1)
+dnl   | AC_DEFINE(BAZ, 1, The value of BAZ.)
+dnl Let AH_FOO be
+dnl   | AH_TEMPLATE(FOO, The value of FOO.)
+dnl
+dnl If we hook AC_FOO to be AH_FOO only, then only FOO will be templated.
+dnl If we hook AC_FOO to expand in both the former AC_FOO and AH_FOO, then
+dnl both FOO and BAZ are templated.
+dnl
+dnl Additionaly, if AC_FOO is hooked to AH_FOO only, then we loose track
+dnl of the other AC_DEFINE, and the autoheader machinery (see the use of
+dnl the shell variable SYMS in AC_TEMPLATE) won't be able to see that BAR
+dnl is not templated at all.  Hooking AC_FOO on both its AC_ and AH_ faces
+dnl makes sure we keep track of non templated DEFINEs.
+dnl
+dnl The two last end of lines make AH_HOOKS more readable.
 define(AH_HOOK,
-[m4_append([AH_HOOKS], [define([$1], defn([$2]))])])
+[m4_append([AH_HOOKS],
+[define([$1],
+defn([$1])
+defn([$2])
+)
+])])
 
 
 dnl Autoheader is not the right program to complain about cross-compiling.
