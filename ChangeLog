@@ -1,3 +1,9 @@
+2001-07-25  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* aclang.m4 (AC_F77_LIBRARY_LDFLAGS): Ignore -libmil (on Solaris),
+	which has a special meaning and is not a reference to libibmil.a.
+	Reported by Matteo Frigo.
+
 2001-07-25  Pavel Roskin  <proski@gnu.org>
 
 	* autom4te.in (mktmpdir): Strip trailing newline from mktemp
