@@ -5252,6 +5252,23 @@ installers who run into trouble in this area should get a C compiler
 like GCC to compile their C code.
 @end defmac
 
+@defmac AC_C_RESTRICT
+@acindex C_RESTRICT
+@cvindex restrict
+If the C compiler recognizes the @code{restrict} keyword, don't do anything.
+If it recognizes only a variant spelling (@code{__restrict},
+@code{__restrict__}, or @code{_Restrict}), then define
+@code{restrict} to that.
+Otherwise, define @code{restrict} to be empty.
+Thus, programs may simply use @code{restrict} as if every C compiler
+supported it; for those that do not, the @file{Makefile}
+or configuration header defines it away.
+
+Although support in C++ for the @code{restrict} keyword is not
+required, several C++ compilers do accept the keyword.
+This macro works for them, too.
+@end defmac
+
 @defmac AC_C_VOLATILE
 @acindex{C_VOLATILE}
 @cvindex volatile
