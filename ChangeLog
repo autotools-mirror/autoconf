@@ -1,5 +1,11 @@
 2002-04-29  Akim Demaille  <akim@epita.fr>
 
+	* doc/install.texi: Better wording for setting variables when
+	running configure.
+	From Christian Cornelssen.
+
+2002-04-29  Akim Demaille  <akim@epita.fr>
+
 	* tests/m4sh.at (LINENO): If testsuite itself is rewritten because
 	of lack of $LINENO support, then the test will compare the $LINENO
 	in testsuite vs. the lineno in the test file.  This is wrong, of
