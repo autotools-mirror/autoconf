@@ -163,7 +163,7 @@ esac
 # Don't blindly perform a `cd $1/$ac_foo && pwd` since $ac_foo can be
 # absolute.
 ac_abs_builddir=`cd $1 && cd $ac_builddir && pwd`
-ac_abs_top_builddir=`cd $1 && cd $ac_top_builddir && pwd`
+ac_abs_top_builddir=`cd $1 && cd ${ac_top_builddir}. && pwd`
 ac_abs_srcdir=`cd $1 && cd $ac_srcdir && pwd`
 ac_abs_top_srcdir=`cd $1 && cd $ac_top_srcdir && pwd`
 ])# _AC_SRCPATHS

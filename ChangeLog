@@ -1,3 +1,8 @@
+2002-04-09  Andreas Schwab  <schwab@suse.de>
+
+	* lib/autoconf/status.m4 (_AC_SRCPATHS): Handle empty
+	ac_top_builddir when setting ac_abs_top_builddir.
+
 2002-04-06  Kevin Ryde  <user42@zip.com.au>
 
 	* doc/autoconf.texi (Systemology): Add link to Unix V7 online docs.
