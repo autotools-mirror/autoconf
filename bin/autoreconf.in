@@ -34,7 +34,7 @@ BEGIN
 
 use Autom4te::General;
 use Autom4te::XFile;
-use File::Find;
+use Cwd 'chdir', 'cwd';
 use strict;
 
 ## ----------- ##
@@ -43,11 +43,13 @@ use strict;
 
 # $HELP
 # -----
-$help = "Usage: $0 [OPTION] ... [TEMPLATE-FILE]
+$help = "Usage: $0 [OPTION] ... [CONFIGURE-AC] ...
 
 Run `autoconf' (and `autoheader', `aclocal', `automake', `gettextize',
 and `libtoolize' where appropriate) repeatedly to remake the GNU Build
-System files in the directory tree rooted at the current directory.
+System files in the directory tree driven by CONFIGURE-AC (defaulting
+to `./configure.ac').
+
 By default, it only remakes those files that are older than their
 predecessors.  If you install new versions of the GNU Build System,
 running `autoreconf' remakes all of the files by giving it the
@@ -61,9 +63,6 @@ Operation modes:
   -f, --force     consider all files obsolete
   -i, --install   copy missing auxiliary files
   -s, --symlink   instead of copying, install symbolic links
-
-The option `--install' is similar to the option `--add-missing' in
-other tools.
 
 Library directories:
   -I, --include=DIR  look for FILES in DIR (cumulative)
@@ -100,6 +99,8 @@ my $status = 0;
 # symlink -- when --install, use symlinks instead.
 my $symlink = 0;
 
+# The directory where autoreconf was run.
+my $cwd = cwd;
 
 ## ---------- ##
 ## Routines.  ##
@@ -117,8 +118,8 @@ sub parse_args ()
 	  'i|install'                                        => \$install,
 	  's|symlink'                                        => \$symlink);
 
-  die "$me: too many arguments\n"
-    if @ARGV;
+  push @ARGV, find_configure_ac
+    unless @ARGV;
 
   if ($verbose && $debug)
     {
@@ -174,31 +175,36 @@ sub parse_args ()
 }
 
 
-# &maybe_autoreconf ()
-# --------------------
-# If the current file ($_) is configure.ac, then there is work to perform
-# there.  Otherwise return.  The main point is preserving $_.
-sub maybe_autoreconf ()
-{
-  # If there it's not `configure.ac' or `configure.in', we are not
-  # interested in the directory.
-  return
-    if !/^configure\.(ac|in)$/;
-
-  # Save $_ as Find::File requires it to be preserved.
-  my $underscore = $_;
-  autoreconf ($_);
-  $_ = $underscore;
-}
-
-
-# &autoreconf ($CONFIGURE_AC)
-# ---------------------------
-# Reconf the current directory.
+# &autoreconf ($CONFIGURE_AC_PATH)
+# --------------------------------
+# Reconf the directory of $CONFIGURE_AC_PATH.
 sub autoreconf ($)
 {
-  my ($configure_ac) = @_;
-  verbose "working on $File::Find::name";
+  my ($configure_ac_path) = @_;
+  my ($subdir, $configure_ac) = fileparse ($configure_ac_path);
+
+  verbose "working in $subdir, on $configure_ac";
+  chdir $subdir
+    or die "$me: cannot chdir to $subdir: $!\n";
+
+
+  # ---------------------- #
+  # Is it using Autoconf?  #
+  # ---------------------- #
+
+  my $uses_autoconf;
+  my $configure_ac_file = new Autom4te::XFile $configure_ac;
+  while ($_ = $configure_ac_file->getline)
+     {
+       $uses_autoconf = 1
+	 if /AC_INIT/;
+     }
+  if (!$uses_autoconf)
+    {
+      verbose "$configure_ac: not using Autoconf";
+      return;
+    }
+
 
   # ------------------------------- #
   # See what tools will be needed.  #
@@ -207,18 +213,10 @@ sub autoreconf ($)
   # Perform a single trace reading to avoid --force forcing a rerun
   # between two --trace, that's useless.  If there is no AC_INIT, then
   # we are not interested: it looks like a Cygnus thingy.
-  my $configure_ac_file = new Autom4te::XFile $configure_ac;
-  my $uses_autoconf;
   my $uses_gettext;
   my $uses_libtool;
   my $uses_autoheader;
   my $uses_aclocal;
-  while ($_ = $configure_ac_file->getline)
-     {
-       $uses_autoconf = 1
-	 if /AC_INIT/;
-     }
-
   my $traces = new Autom4te::XFile
     ("$autoconf"
      . join (' --trace=', '',
@@ -233,15 +231,6 @@ sub autoreconf ($)
       $uses_autoheader = 1 if /AC_CONFIG_HEADERS/;
     }
 
-  # ------------------ #
-  # Running autoconf.  #
-  # ------------------ #
-
-  if (!$uses_autoconf)
-    {
-      verbose "$configure_ac: not using Autoconf";
-      return;
-    }
 
   # -------------------- #
   # Running gettexitze.  #
@@ -371,6 +360,9 @@ sub autoreconf ($)
     {
       xsystem ($autoheader);
     }
+
+  chdir $cwd
+    or die "$me: cannot chdir to $cwd: $!\n";
 }
 
 
@@ -380,7 +372,11 @@ sub autoreconf ($)
 
 # When debugging, it is convenient that all the related temporary
 # files be at the same place.
-mktmpdir ('ah');
+mktmpdir ('ar');
 $ENV{'TMPDIR'} = $tmp;
 parse_args;
-find (\&maybe_autoreconf, '.');
+
+# Autoreconf all the given configure.ac.  A while loop, not a for,
+# since the list can change at runtime because of AC_CONFIG_SUBDIRS.
+autoreconf (shift @ARGV)
+  while (@ARGV);

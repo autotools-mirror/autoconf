@@ -1,3 +1,10 @@
+2001-11-03  Akim Demaille  <akim@epita.fr>
+
+	* bin/autoreconf.in (&parse_args): Work only on the configure.ac
+	passed on command line, defaulting to ./configure.ac if present.
+	(&maybe_autoreconf, File::Find): Remove, unused.
+	(&autoreconf): If autoconf is not used, don't try to trace.
+
 2001-11-02  Akim Demaille  <akim@epita.fr>
 
 	* configure.ac: Bump to 2.52g.
