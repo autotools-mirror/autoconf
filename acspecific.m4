@@ -1091,7 +1091,7 @@ define(AC_FIND_X,
 [AC_PROVIDE([$0])# If we find X, set shell vars x_includes and x_libraries to the paths.
 no_x=true
 AC_FIND_X_XMKMF
-if test -z "$ac_imake_usrlibdir"; then
+if test -z "$ac_im_usrlibdir"; then
 AC_FIND_X_DIRECT
 fi
 test -n "$x_includes" && AC_VERBOSE(X11 headers are in $x_includes)
@@ -1114,16 +1114,17 @@ EOF
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
     eval `make acfindx 2>/dev/null | grep -v make`
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
-    if test ! -f $ac_im_usrlibdir/libX11.a && test -f $ac_im_libdir/libX11.a; then
+    if test ! -f $ac_im_usrlibdir/libX11.a && test -f $ac_im_libdir/libX11.a
+    then
       ac_im_usrlibdir=$ac_im_libdir
     fi
     case "$ac_im_incroot" in
 	/usr/include) ;;
-	*) x_includes="${x_includes-$ac_im_incroot}" ;;
+	*) test -z "$x_includes" && x_includes="$ac_im_incroot" ;;
     esac
     case "$ac_im_usrlibdir" in
 	/usr/lib | /lib) ;;
-	*) x_libraries="${x_libraries-$ac_im_usrlibdir}" ;;
+	*) test -z "$x_libraries" && x_libraries="$ac_im_usrlibdir" ;;
     esac
   fi
   cd ..
@@ -1179,7 +1180,8 @@ AC_TEST_CPP([#include <$x_direct_test_include>], no_x=,
     ; \
   do
     if test -r "$ac_dir/$x_direct_test_include"; then
-      x_includes=${x_includes-$ac_dir}; no_x=
+      test -z "$x_includes" && x_includes=$ac_dir
+      no_x=
       break
     fi
   done)
@@ -1226,7 +1228,8 @@ for ac_dir in `echo "$x_includes" | sed s/include/lib/` \
 do
   for ac_extension in a so sl; do
     if test -r $ac_dir/lib${x_direct_test_library}.$ac_extension; then
-      x_libraries=${x_libraries-$ac_dir}; no_x=
+      test -z "$x_libraries" && x_libraries=$ac_dir
+      no_x=
       break 2
     fi
   done
