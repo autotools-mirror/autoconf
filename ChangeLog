@@ -1,5 +1,13 @@
 2001-05-22  Akim Demaille  <akim@epita.fr>
 
+	* autoconf.in, autoreconf.in, autoheader.in, autoscan.in, ifnames.in,
+	* autoupdate.in: Specify the Emacs mode.
+	* acversion.m4.in: Rename as...
+	* acversion.m4: this.
+	* tests/Makefile.am (CLEANFILES): More garbage.
+
+2001-05-22  Akim Demaille  <akim@epita.fr>
+
 	* autoconf.sh, autoreconf.sh, autoheader.sh, autoscan.pl, ifnames.sh:
 	Rename as...
 	* autoconf.in, autoreconf.in, autoheader.in, autoscan.in, ifnames.in:

@@ -1,4 +1,5 @@
 #! @SHELL@
+# -*- shell-script -*-
 # autoreconf - remake all Autoconf configure scripts in a directory tree
 # Copyright 1994, 1999, 2000 Free Software Foundation, Inc.
 

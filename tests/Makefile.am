@@ -76,6 +76,7 @@ actypes.at: mktests.sh $(MACRO_FILES)
 
 CLEANFILES = debug-*.sh macro configure configure.in configure.ac \
              config.status config.cache config.log config.h.in config.h \
+             config.hin state-* at-* \
              stderr stdout empty \
 	     config.guess config.sub expr libtool ltconfig ltmain.sh install-sh
 DISTCLEANFILES = atconfig testsuite

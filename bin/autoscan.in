@@ -1,4 +1,5 @@
 #! @PERL@ -w
+# -*- perl -*-
 # autoscan - Create configure.scan (a preliminary configure.ac) for a package.
 # Copyright 1994, 1999, 2000, 2001 Free Software Foundation, Inc.
 

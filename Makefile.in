@@ -94,7 +94,7 @@ nodistpkgdataDATA = autoconf.m4f
 
 pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
-EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2              BUGS INSTALL.txt              acversion.m4.in              autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in              autoscan.in              $(distpkgdataDATA)
+EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2              BUGS INSTALL.txt              acversion.in              autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in              autoscan.in              $(distpkgdataDATA)
 
 
 # Files that should be removed, but which Automake does not know:
@@ -415,8 +415,8 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 #   is changed, acversion.m4 is built only after the new version number is
 #   propagated to the Makefile.  (Libtool uses the same guarantee.)
 
-acversion.m4: $(srcdir)/acversion.m4.in $(srcdir)/configure.in
-	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.m4.in >acversion.tm4
+acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.in
+	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.in >acversion.tm4
 	mv acversion.tm4 $(srcdir)/acversion.m4
 
 # INSTALL is a special case.  Automake seems to have a single name space

@@ -49,7 +49,7 @@ pkgdata_DATA = $(distpkgdataDATA) $(nodistpkgdataDATA)
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
              BUGS INSTALL.txt \
-             acversion.m4.in \
+             acversion.in \
              autoconf.in autoheader.in autoreconf.in autoupdate.in ifnames.in \
              autoscan.in \
              $(distpkgdataDATA)
@@ -72,8 +72,8 @@ CLEANFILES = autoconf.m4f \
 #   is changed, acversion.m4 is built only after the new version number is
 #   propagated to the Makefile.  (Libtool uses the same guarantee.)
 
-acversion.m4: $(srcdir)/acversion.m4.in $(srcdir)/configure.in
-	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.m4.in >acversion.tm4
+acversion.m4: $(srcdir)/acversion.in $(srcdir)/configure.in
+	sed 's,@VERSION\@,$(VERSION),g' $(srcdir)/acversion.in >acversion.tm4
 	mv acversion.tm4 $(srcdir)/acversion.m4
 
 ## INSTALL.  ##

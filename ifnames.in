@@ -1,4 +1,5 @@
 #! @SHELL@
+# -*- shell-script -*-
 # ifnames - print the identifiers used in C preprocessor conditionals
 # Copyright 1994, 1995, 1999, 2000 Free Software Foundation, Inc.
 
