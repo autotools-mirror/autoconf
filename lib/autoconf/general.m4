@@ -969,22 +969,8 @@ dnl ### Checking for C features - fundamental (no caching)
 dnl
 dnl
 define(AC_HEADER_EGREP,
-[AC_REQUIRE_CPP()dnl
-AC_PROVIDE([$0])dnl
-echo '#include "confdefs.h"
-#include <$2>' > conftest.${ac_ext}
-eval "$ac_cpp conftest.${ac_ext} > conftest.out 2>&1"
-if egrep "$1" conftest.out >/dev/null 2>&1; then
-  ifelse([$3], , :, [rm -rf conftest*
-  $3
-])
-ifelse([$4], , , [else
-  rm -rf conftest*
-  $4
-])dnl
-fi
-rm -f conftest*
-])dnl
+[AC_PROVIDE([$0])dnl
+AC_PROGRAM_EGREP([$1], [#include <$2>], [$3], [$4])])dnl
 dnl
 dnl Because this macro is used by AC_GCC_TRADITIONAL, which must come early,
 dnl it is not included in AC_BEFORE checks.
