@@ -1638,4 +1638,5 @@ m4_ifndef([m4_tmpdir],
 # M4sugar reserves `m4_[A-Za-z0-9_]*'.  We'd need \b and +,
 # but they are not portable.
 m4_pattern_forbid([^m4_])
+m4_pattern_forbid([^dnl$])
 ])
