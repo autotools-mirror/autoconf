@@ -1,3 +1,9 @@
+2002-03-25  Paul Eggert  <eggert@twinsun.com>
+
+	* tests/m4sh.at: Don't rely on "PATH=test:$PATH test-1" working
+	as POSIX requires, as it doesn't work with Zsh.
+	* doc/autoconf.texi (Assignments): Document the problem.
+
 2002-03-25  Alexandre Duret-Lutz  <duret_g@epita.fr>
 
 	* doc/autoconf.texi (Limitations of Make): Mention more issue
