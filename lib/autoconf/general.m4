@@ -162,8 +162,8 @@ AC_PARSEARGS
 AC_PREPARE($1)])dnl
 dnl
 define(AC_PREPARE,
-[trap 'rm -fr conftest* confdefs* core; exit 1' 1 3 15
-trap 'rm -f confdefs*' 0
+[trap 'rm -fr conftest* confdefs* core $ac_clean_files; exit 1' 1 3 15
+trap 'rm -f confdefs* $ac_clean_files' 0
 
 # NLS nuisances.
 # These must not be set unconditionally because not all systems understand
