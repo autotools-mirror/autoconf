@@ -1,6 +1,6 @@
 #! @SHELL@
 # autoconf -- create `configure' using m4 macros
-# Copyright 1992, 1993, 1994, 1996, 1999, 2000
+# Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001
 # Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -63,7 +63,7 @@ version="\
 autoconf (@PACKAGE_NAME@) @VERSION@
 Written by David J. MacKenzie.
 
-Copyright 1992, 1993, 1994, 1996, 1999, 2000
+Copyright 1992, 1993, 1994, 1996, 1999, 2000, 2001
 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
