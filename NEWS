@@ -1,4 +1,9 @@
 * Major changes in Autoconf 2.53a                       -*- outline -*-
+
+** Executables
+
+- autoreconf is adjusted to GNU Gettext 0.11.
+
 
 * Major changes in Autoconf 2.53
 

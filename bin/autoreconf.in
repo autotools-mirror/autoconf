@@ -91,6 +91,9 @@ my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
 my $libtoolize = $ENV{'LIBTOOLIZE'} || 'libtoolize';
 my $gettextize = $ENV{'GETTEXTIZE'} || 'gettextize';
 
+# Does gettextize support --no-changelog and --intl?
+my $gettextize_intl_p;
+my $gettextize_no_changelog_p;
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
@@ -101,6 +104,8 @@ my $symlink = 0;
 
 # The directory where autoreconf was run.
 my $cwd = cwd;
+
+
 
 ## ---------- ##
 ## Routines.  ##
@@ -177,6 +182,29 @@ sub parse_args ()
       $libtoolize .= ' --debug';
     }
 }
+
+
+# &study_gettextize
+# -----------------
+# See what options gettextize supports.
+sub study_gettextize ()
+{
+  return
+    if defined $gettextize_no_changelog_p && defined $gettextize_intl_p;
+
+  $gettextize_no_changelog_p = 0;
+  $gettextize_intl_p = 0;
+
+  my $usage = new Autom4te::XFile ("$gettextize --help |");
+  while ($_ = $usage->getline)
+    {
+      $gettextize_no_changelog_p = 1 if /--no-changelog/;
+      $gettextize_intl_p = 1         if /--intl/;
+    }
+
+  $gettextize .= " --no-changelog" if $gettextize_no_changelog_p;
+}
+
 
 
 # &autoreconf ($DIRECTORY)
@@ -266,6 +294,9 @@ sub autoreconf ($)
 	if -f 'aclocal.m4t';
     }
 
+  # We might have to rerun aclocal if Libtool or Gettext import new
+  # macros.
+  my $rerun_alocal = 0;
 
 
   # ------------------------------- #
@@ -276,6 +307,8 @@ sub autoreconf ($)
   # between two --trace, that's useless.  If there is no AC_INIT, then
   # we are not interested: it looks like a Cygnus thingy.
   my $uses_gettext;
+  # Starting at GNU Gettext 0.11, libintl is optional.
+  my $uses_libintl;
   my $uses_libtool;
   my $uses_autoheader;
   my @subdir;
@@ -289,7 +322,11 @@ sub autoreconf ($)
   while ($_ = $traces->getline)
     {
       $uses_autoconf = 1            if /AC_INIT/;
-      $uses_gettext = 1             if /AM_GNU_GETTEXT/;
+      if (/AM_GNU_GETTEXT/)
+	{
+	  $uses_gettext = 1;
+	  $uses_libintl = !/external/;
+	}
       $uses_libtool = 1             if /AC_PROG_LIBTOOL/;
       $uses_autoheader = 1          if /AC_CONFIG_HEADERS/;
       push @subdir, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/;
@@ -319,17 +356,54 @@ sub autoreconf ($)
     {
       verbose "$configure_ac: not using Gettext";
     }
-  elsif (-d 'intl' && !$force)
+  elsif (!$install)
     {
-      verbose "$configure_ac: not running gettextize: `intl' is already present";
-    }
-  elsif ($install)
-    {
-      xsystem ($gettextize);
+      verbose "$configure_ac: not running gettextize: --install not given";
     }
   else
     {
-      verbose "$configure_ac: not running gettextize: --install not given";
+      # See if gettextize supports --intl and --no-changelog.
+      study_gettextize;
+
+      # Old and new gettext are really different :(
+      if ($gettextize_intl_p)
+	{
+	  # Gettext >= 0.11.
+	  if ($uses_libintl)
+	    {
+	      if (-d 'intl' && !$force)
+		{
+		  verbose ("$configure_ac: not running gettextize: ",
+			   "`intl' is already present");
+		}
+	      else
+		{
+		  xsystem "$gettextize --intl";
+		  $rerun_alocal = 1;
+		}
+	    }
+	  else
+	    {
+	      # Always run modern gettextizes, as they update/import
+	      # several files.
+	      xsystem "$gettextize";
+	      $rerun_alocal = 1;
+	    }
+	}
+      else
+	{
+	  # Gettext < 0.11.
+	  if (-d 'intl' && !$force)
+	    {
+	      verbose ("$configure_ac: not running gettextize: ",
+		       "`intl' is already present");
+	    }
+	  else
+	    {
+	      xsystem "$gettextize --intl";
+	      $rerun_alocal = 1;
+	    }
+	}
     }
 
 
@@ -344,6 +418,7 @@ sub autoreconf ($)
   elsif ($install)
     {
       xsystem ($libtoolize);
+      $rerun_alocal = 1;
     }
   else
     {
@@ -366,6 +441,27 @@ sub autoreconf ($)
       # update the file or not.  In fact, the effect of `$force' is already
       # included in `$automake' via `--no-force'.
       xsystem ($automake);
+    }
+
+
+  # ------------------- #
+  # Rerunning aclocal.  #
+  # ------------------- #
+
+  # If we re-installed Libtool or Gettext, the macros might have changed.
+  if ($rerun_alocal)
+    {
+      if (!$uses_aclocal)
+	{
+	  verbose "$configure_ac: not using aclocal";
+	}
+      else
+	{
+	  xsystem ("$aclocal $aclocal_flags --output=aclocal.m4t");
+	  # aclocal may produce no output.
+	  update_file ('aclocal.m4t', 'aclocal.m4')
+	    if -f 'aclocal.m4t';
+	}
     }
 
 
