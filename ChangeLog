@@ -1,3 +1,8 @@
+2005-04-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Particular Functions): Use gnulib's current
+	pattern for alloca snippet.
+
 2005-04-04  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): Fix a typo.
