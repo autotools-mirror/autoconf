@@ -3986,27 +3986,25 @@ still want to use their @code{alloca}, use @code{ar} to extract
 @file{alloca.o} from them instead of compiling @file{alloca.c}.
 
 Source files that use @code{alloca} should start with a piece of code
-like the following, to declare it properly.  In some versions of @acronym{AIX},
-the declaration of @code{alloca} must precede everything else except for
-comments and preprocessor directives.  The @code{#pragma} directive is
-indented so that pre-@acronym{ANSI} C compilers will ignore it, rather than
-choke on it.
+like the following, to declare it properly.
 
 @example
 @group
-/* AIX requires this to be the first thing in the file.  */
-#ifndef __GNUC__
-# if HAVE_ALLOCA_H
-#  include <alloca.h>
-# else
-#  ifdef _AIX
- #pragma alloca
-#  else
-#   ifndef alloca /* predefined by HP cc +Olibcalls */
-char *alloca ();
-#   endif
-#  endif
+#if HAVE_ALLOCA_H
+# include <alloca.h>
+#elif defined __GNUC__
+# define alloca __builtin_alloca
+#elif defined _AIX
+# define alloca __alloca
+#elif defined _MSC_VER
+# include <malloc.h>
+# define alloca _alloca
+#else
+# include <stddef.h>
+# ifdef  __cplusplus
+extern "C"
 # endif
+void *alloca (size_t);
 #endif
 @end group
 @end example
