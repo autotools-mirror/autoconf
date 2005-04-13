@@ -1,3 +1,8 @@
+2005-04-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Look for configure.ac
+	as well as configure.in.  Problem reported by Gregorio Guidi.
+
 2005-04-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Particular Functions): Use gnulib's current
