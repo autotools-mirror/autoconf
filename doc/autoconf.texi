@@ -13311,6 +13311,81 @@ spaces.
 
 You should format your @var{help-string} with the macro
 @code{AS_HELP_STRING} (@pxref{Pretty Help Strings}).
+
+The following example shows how to use the @code{AC_ARG_WITH} macro in
+a common situation.  You want to let the user decide whether to enable
+support for an external library (e.g., the readline library); if the user
+specified neither @option{--with-readline} nor @option{--without-readline},
+you want to enable support for readline only if the library is available
+on the system.
+
+@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
+@example
+AC_ARG_WITH(readline,
+  [AS_HELP_STRING(--with-readline,
+    [support fancy command line editing @@<:@@default=check@@:>@@])],
+  [],
+  with_readline=check)
+
+LIBREADLINE=
+AS_IF([test "x$with_readline" != xno],
+  [AC_CHECK_LIB(readline, main,
+    [AC_SUBST(LIBREADLINE, "-lreadline -lncurses")
+     AC_DEFINE_UNQUOTED(HAVE_LIBREADLINE, 1, [Define if you have libreadline])
+    ],
+    [if test "x$with_readline" != xcheck; then
+       AC_MSG_FAILURE([--with-readline was given, but test for readline failed])
+     fi
+    ], -lncurses)])
+@end example
+
+The next example shows how to use @code{AC_ARG_WITH} to give the user the
+possibility to enable support for the readline library, in case it is still
+experimental and not well tested, and is therefore disabled by default.
+
+@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
+@example
+AC_ARG_WITH(readline,
+  [AS_HELP_STRING(--with-readline,
+    [enable experimental support for readline @@<:@@default=disabled@@:>@@])],
+  [],
+  with_readline=no)
+
+LIBREADLINE=
+AS_IF([test "x$with_readline" != xno],
+  [AC_CHECK_LIB(readline, main,
+    [AC_SUBST(LIBREADLINE, "-lreadline -lncurses")
+     AC_DEFINE(HAVE_LIBREADLINE, 1, [Define if you have libreadline])
+    ],
+    [AC_MSG_FAILURE([--with-readline was given, but test for readline failed])],
+    -lncurses)])
+@end example
+
+The last example shows how to use @code{AC_ARG_WITH} to give the user the
+possibility to disable support for the readline library, given that it is
+an important feature and that it should be enabled by default.
+
+@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
+@example
+AC_ARG_WITH(readline,
+  [AS_HELP_STRING(--without-readline,
+    [disable support for readline @@<:@@default=enabled@@:>@@])],
+  [],
+  with_readline=yes)
+
+LIBREADLINE=
+AS_IF([test "x$with_readline" != xno],
+  [AC_CHECK_LIB(readline, main,
+    [AC_SUBST(LIBREADLINE, "-lreadline -lncurses")
+     AC_DEFINE(HAVE_LIBREADLINE, 1, [Define if you have libreadline])
+    ],
+    [AC_MSG_FAILURE([test for readline failed, use --without-readline if you want to force readline support off])],
+    -lncurses)])
+@end example
+
+These three examples can be easily adapted to the case where
+@code{AC_ARG_ENABLE} should be preferred to @code{AC_ARG_WITH} (see
+@ref{Package Options}).
 @end defmac
 
 @defmac AC_WITH (@var{package}, @var{action-if-given}, @ovar{action-if-not-given})
@@ -13381,6 +13456,10 @@ actually just the value of the shell variable
 
 You should format your @var{help-string} with the macro
 @code{AS_HELP_STRING} (@pxref{Pretty Help Strings}).
+
+See the examples suggested with the definition of @code{AC_ARG_WITH}
+(@pxref{External Software}) to get an idea of possible utilizations of
+@code{AC_ARG_ENABLE}.
 @end defmac
 
 @defmac AC_ENABLE (@var{feature}, @var{action-if-given}, @ovar{action-if-not-given})

@@ -1,3 +1,8 @@
+2005-04-14  Gregorio Guidi  <greg_g@gentoo.org>
+
+	* doc/autoconf.texi (External Software, Package Options): Add
+	  examples showing how to implement --with-* and --enable-* options.
+
 2005-04-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Look for configure.ac
