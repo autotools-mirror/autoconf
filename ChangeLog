@@ -1,3 +1,8 @@
+2005-04-15  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_ARG_VAR_VALIDATE): Fixed a typo in
+	  the comment.
+
 2005-04-14  Gregorio Guidi  <greg_g@gentoo.org>
 
 	* doc/autoconf.texi (External Software, Package Options): Add
