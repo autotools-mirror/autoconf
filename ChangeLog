@@ -1,3 +1,8 @@
+2005-04-19  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Handle --docdir.
+	Report from Horst Wente.
+
 2005-04-15  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (_AC_ARG_VAR_VALIDATE): Fixed a typo in

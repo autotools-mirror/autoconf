@@ -651,6 +651,11 @@ do
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
     eval "enable_$ac_feature=no" ;;
 
+  -docdir | --docdir | --docdi | --doc | --do)
+    ac_prev=docdir ;;
+  -docdir=* | --docdir=* | --docdi=* | --doc=* | --do=*)
+    docdir=$ac_optarg ;;
+
   -dvidir | --dvidir | --dvidi | --dvid | --dvi | --dv)
     ac_prev=dvidir ;;
   -dvidir=* | --dvidir=* | --dvidi=* | --dvid=* | --dvi=* | --dv=*)
