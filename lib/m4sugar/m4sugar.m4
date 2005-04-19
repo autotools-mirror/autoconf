@@ -410,8 +410,8 @@ m4_map_sep([$1], [$2], m4_cdr($3))])])
 ## 6. Enhanced version of some primitives.  ##
 ## ---------------------------------------- ##
 
-# m4_patsubsts(STRING, RE1, SUBST1, RE2, SUBST2, ...)
-# ---------------------------------------------------
+# m4_bpatsubsts(STRING, RE1, SUBST1, RE2, SUBST2, ...)
+# ----------------------------------------------------
 # m4 equivalent of
 #
 #   $_ = STRING;
@@ -422,7 +422,7 @@ m4_map_sep([$1], [$2], m4_cdr($3))])])
 # All the values are optional, and the macro is robust to active symbols
 # properly quoted.
 #
-# I would have liked to name this macro `m4_patsubst', unfortunately,
+# I would have liked to name this macro `m4_bpatsubst', unfortunately,
 # due to quotation problems, I need to double quote $1 below, therefore
 # the anchors are broken :(  I can't let users be trapped by that.
 m4_define([m4_bpatsubsts],
