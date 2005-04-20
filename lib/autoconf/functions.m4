@@ -1,6 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for functions.
-# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1621,7 +1622,7 @@ AC_CACHE_CHECK(whether setvbuf arguments are reversed,
 		putchar ('\r');
 		exit (0); /* Non-reversed systems SEGV here.  */]])],
 	   [ac_cv_func_setvbuf_reversed=yes],
-	   [rm -f core *.core],
+	   [],
 	   [[: # Assume setvbuf is not reversed when cross-compiling.]])]
 	ac_cv_func_setvbuf_reversed=yes)])])
 if test $ac_cv_func_setvbuf_reversed = yes; then
@@ -1679,8 +1680,7 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
 	  && t.st_mtime - s.st_mtime < 120));]])],
 	      ac_cv_func_utime_null=yes,
 	      ac_cv_func_utime_null=no,
-	      ac_cv_func_utime_null=no)
-rm -f core *.core])
+	      ac_cv_func_utime_null=no)])
 if test $ac_cv_func_utime_null = yes; then
   AC_DEFINE(HAVE_UTIME_NULL, 1,
 	    [Define to 1 if `utime(file, NULL)' sets file's timestamp to the
