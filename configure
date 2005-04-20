@@ -1525,7 +1525,7 @@ _ASBOX
       echo "$as_me: caught signal $ac_signal"
     echo "$as_me: exit $exit_status"
   } >&5
-  rm -f core *.core &&
+  rm -f core *.core core.conftest.* &&
   rm -f -r conftest* confdefs* conf$$* $ac_clean_files &&
     exit $exit_status
      ' 0
