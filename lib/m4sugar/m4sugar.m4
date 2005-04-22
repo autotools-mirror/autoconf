@@ -1416,10 +1416,7 @@ m4_define([m4_flatten],
 #    m4_strip([  active 	 	active ])end
 #    => active activeend
 #
-# This macro is fun!  Because we want to preserve active symbols, STRING
-# must be quoted for each evaluation, which explains there are 4 levels
-# of brackets around $1 (don't forget that the result must be quoted
-# too, hence one more quoting than applications).
+# Because we want to preserve active symbols, STRING must be double-quoted.
 #
 # Then notice the 2 last patterns: they are in charge of removing the
 # leading/trailing spaces.  Why not just `[^ ]'?  Because they are
@@ -1511,10 +1508,10 @@ m4_define([m4_append_uniq],
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
 # -------------------------------------------------------
 # Expands into STRING wrapped to hold in WIDTH columns (default = 79).
-# If prefix is set, each line is prefixed with it.  If FIRST-PREFIX is
-# specified, then the first line is prefixed with it.  As a special
-# case, if the length of the first prefix is greater than that of
-# PREFIX, then FIRST-PREFIX will be left alone on the first line.
+# If PREFIX is given, each line is prefixed with it.  If FIRST-PREFIX is
+# specified, then the first line is prefixed with it.  As a special case,
+# if the length of FIRST-PREFIX is greater than that of PREFIX, then
+# FIRST-PREFIX will be left alone on the first line.
 #
 # Typical outputs are:
 #
@@ -1541,12 +1538,15 @@ m4_define([m4_append_uniq],
 # we really want to bother with people trying each single corner
 # of a software?
 #
+# more important:
+# FIXME: handle quadrigraphs correctly, both in TEXT and in FIRST_PREFIX.
+#
 # This macro does not leave a trailing space behind the last word,
 # what complicates it a bit.  The algorithm is stupid simple: all the
 # words are preceded by m4_Separator which is defined to empty for the
 # first word, and then ` ' (single space) for all the others.
 m4_define([m4_text_wrap],
-[m4_pushdef([m4_Prefix], m4_default([$2], []))dnl
+[m4_pushdef([m4_Prefix], [$2])dnl
 m4_pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
 m4_pushdef([m4_Width], m4_default([$4], 79))dnl
 m4_pushdef([m4_Cursor], m4_len(m4_Prefix1))dnl

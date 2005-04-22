@@ -13347,7 +13347,7 @@ experimental and not well tested, and is therefore disabled by default.
 @example
 AC_ARG_WITH(readline,
   [AS_HELP_STRING(--with-readline,
-    [enable experimental support for readline @@<:@@default=disabled@@:>@@])],
+    [enable experimental support for readline])],
   [],
   with_readline=no)
 
@@ -13369,7 +13369,7 @@ an important feature and that it should be enabled by default.
 @example
 AC_ARG_WITH(readline,
   [AS_HELP_STRING(--without-readline,
-    [disable support for readline @@<:@@default=enabled@@:>@@])],
+    [disable support for readline])],
   [],
   with_readline=yes)
 

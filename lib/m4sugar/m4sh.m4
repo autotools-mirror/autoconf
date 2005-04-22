@@ -1058,6 +1058,18 @@ _AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"])
 #  | column 2                |
 #  column 0                  column 26
 #
+#
+# FIXME: Handle quadrigraphs in LHS correctly.
+# another one:
+# FIXME: the m4_text_wrap interface design seems to be wrong.  I see two ways:
+# 1) m4_text_wrap could pad the FIRST_PREFIX to the length of PREFIX; then
+#    there would be no need to handle quadrigraphs in AS_HELP_STRING.
+# 2) The special case when FIRST_PREFIX is longer than PREFIX could be moved
+#    from m4_text_wrap here; then one could call
+#	m4_text_wrap(TEXT, [], [    ])
+#    to get an indented paragraph.
+# My first impression is that 2) is better.  --kasal 19apr05
+#
 m4_define([AS_HELP_STRING],
 [m4_pushdef([AS_Prefix], m4_default([$3], [                          ]))dnl
 m4_pushdef([AS_Prefix_Format],

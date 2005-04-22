@@ -1,3 +1,12 @@
+2005-04-22  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (External Software): Quadrigraphs are not
+	  processed correctly in AS_HELP_STRING; avoid this in the examples.
+	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): Add a FIXME about quadrigraphs.
+	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Likewise; and rephrase the
+	  comment and reduce m4_default([foo], []) to [foo].
+	(m4_strip): Update the explanation.
+
 2005-04-19  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE, _AC_RUN_IFELSE):
