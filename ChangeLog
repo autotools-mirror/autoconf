@@ -1,3 +1,7 @@
+2005-04-25  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): A tiny optimization.
+
 2005-04-22  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (External Software): Quadrigraphs are not
