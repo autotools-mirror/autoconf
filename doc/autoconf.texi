@@ -11180,7 +11180,7 @@ processing as soon as a non-option argument is found.  Therefore, use
 set x $my_list; shift
 @end example
 
-Avoid @samp{set -}, e.g., @samp{set - $my_list}.  POSIX 1003.1-2001 no
+Avoid @samp{set -}, e.g., @samp{set - $my_list}.  Posix no
 longer requires support for this command, and in traditional shells
 @samp{set - $my_list} resets the @samp{-v} and @samp{-x} options, which
 makes scripts harder to debug.
