@@ -1120,8 +1120,7 @@ m4_case([$1],
 # ---------------------
 # Declare a list of keywords associated to the current test group.
 m4_define([AT_KEYWORDS],
-[m4_append_uniq([AT_keywords], [$1], [
-])])
+[m4_append_uniq([AT_keywords], [$1], [ ])])
 
 
 # AT_CAPTURE_FILE(FILE)
