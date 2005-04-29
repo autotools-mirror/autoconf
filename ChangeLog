@@ -2,6 +2,7 @@
 
 	* doc/autoconf.texi (Autoconf Language): Add more description
 	about quoting heuristics.
+	(Limitations of Builtins): Describe "set -" problems.
 
 2005-04-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
