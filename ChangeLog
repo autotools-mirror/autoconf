@@ -5,6 +5,9 @@
 
 2005-04-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autotest/general.m4 (AT_KEYWORDS): Separate by space,
+	not newline.
+
 	* doc/autoconf.texi (External Software): Replace AC_DEFINE_UNQUOTED
 	by AC_DEFINE; it was a mistake.
 	From bug reported against libtool by Dalibor Topic <robilad@kaffe.org>.
