@@ -988,8 +988,8 @@ space between the macro name and the open parenthesis.  Arguments should
 be enclosed within the M4 quote characters @samp{[} and @samp{]}, and be
 separated by commas.  Any leading spaces in arguments are ignored,
 unless they are quoted.  You may safely leave out the quotes when the
-argument is simple text, but @emph{always} quote complex arguments such
-as other macro calls.  This rule applies recursively for every macro
+argument cannot contain any macro calls, but @emph{always} quote arguments
+that might contain macro calls.  This rule applies recursively for every macro
 call, including macros called from other macros.
 
 For instance:
@@ -1005,15 +1005,37 @@ AC_CHECK_HEADER([stdio.h],
 is quoted properly.  You may safely simplify its quotation to:
 
 @example
-AC_CHECK_HEADER(stdio.h,
-                [AC_DEFINE(HAVE_STDIO_H, 1,
-                   Define to 1 if you have <stdio.h>.)],
+AC_CHECK_HEADER([stdio.h],
+                [AC_DEFINE([HAVE_STDIO_H], 1,
+                   [Define to 1 if you have <stdio.h>.])],
                 [AC_MSG_ERROR([Sorry, can't do anything for you])])
 @end example
 
 @noindent
-Notice that the argument of @code{AC_MSG_ERROR} is still quoted;
-otherwise, its comma would have been interpreted as an argument separator.
+because @samp{1} cannot contain a macro call.  Here, the argument of
+@code{AC_MSG_ERROR} must be quoted; otherwise, its comma would be
+interpreted as an argument separator.  Also, @samp{AC_CHECK_HEADER}'s
+second and third arguments must be quoted, since those arguments contain
+macro calls.  The three arguments @samp{HAVE_STDIO_H}, @samp{stdio.h},
+and @samp{Define to 1 if you have <stdio.h>.} do not need quoting, but
+if you unwisely defined a macro with a name like @samp{Define} or
+@samp{stdio} then they would need quoting.  Cautious Autoconf users
+would keep the quotes, but many Autoconf users find such precautions
+annoying, and would rewrite the example as follows:
+
+@example
+AC_CHECK_HEADER(stdio.h,
+                [AC_DEFINE(HAVE_STDIO_H, 1,
+                   [Define to 1 if you have <stdio.h>.])],
+                [AC_MSG_ERROR([Sorry, can't do anything for you])])
+@end example
+
+@noindent
+This is safe, so long as you adopt good naming conventions and do not
+define macros with names like @samp{HAVE_STDIO_H}, @samp{stdio}, or
+@samp{h}.  Though it is also safe here to omit the quotes around
+@samp{Define to 1 if you have <stdio.h>.} this is not recommended, as
+message strings are more likely to inadvertently contain commas.
 
 The following example is wrong and dangerous, as it is underquoted:
 
@@ -1078,11 +1100,6 @@ On the other hand, descriptions (e.g., the last parameter of
 are subject to line breaking, for example---and should not be double quoted.
 Even if these descriptions are short and are not actually broken, double
 quoting them yields weird results.
-
-The careful reader will notice that, according to these guidelines, the
-``properly'' quoted @code{AC_CHECK_HEADER} example above is actually
-lacking three pairs of quotes!  Nevertheless, for the sake of readability,
-double quotation of literals is used only where needed in this manual.
 
 Some macros take optional arguments, which this documentation represents
 as @ovar{arg} (not to be confused with the quote characters).  You may
