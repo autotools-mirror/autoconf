@@ -1,3 +1,8 @@
+2005-04-29  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (External Software): Replace AC_DEFINE_UNQUOTED
+	by AC_DEFINE; it was a mistake.
+
 2005-04-25  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): A tiny optimization.
