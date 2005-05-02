@@ -11701,7 +11701,7 @@ example:
 expr '' \| ''
 @end example
 
-@acronym{GNU}/Linux and Posix 1003.2-1992 return the empty string
+Posix 1003.2-1992 returns the empty string
 for this case, but traditional Unix returns @samp{0} (Solaris is
 one such example).  In Posix 1003.1-2001, the specification was
 changed to match traditional Unix's behavior (which is
