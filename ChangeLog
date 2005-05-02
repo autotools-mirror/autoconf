@@ -1,3 +1,8 @@
+2005-05-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): "expr '' \| ''"
+	outputs 0 on GNU/Linux these days.
+
 2005-04-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Autoconf Language): Add more description
