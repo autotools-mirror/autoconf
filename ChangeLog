@@ -1,3 +1,9 @@
+2004-05-02  Gary V. Vaughan  <gary@gnu.org>
+
+	* lib/autoconf/general.m4 (_AC_LIBOBJS_NORMALIZE): Prepend each
+	object named in LIBOBJS and LTLIBOBJS with the ${LIBOBJDIR}, as
+	set by latest automake.
+
 2005-05-01  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): "expr '' \| ''"

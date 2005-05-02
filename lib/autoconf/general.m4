@@ -2550,7 +2550,7 @@ m4_define([AC_LIBOBJ],
 
 # _AC_LIBOBJS_NORMALIZE
 # ---------------------
-# Clean up LIBOBJS abd LTLIBOBJS so that they work with 1. ac_objext,
+# Clean up LIBOBJS and LTLIBOBJS so that they work with 1. ac_objext,
 # 2. Automake's ANSI2KNR, 3. Libtool, 4. combination of the three.
 # Used with AC_CONFIG_COMMANDS_PRE.
 AC_DEFUN([_AC_LIBOBJS_NORMALIZE],
@@ -2560,9 +2560,10 @@ for ac_i in : $LIB@&t@OBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_script='s/\$U\././;s/\.o$//;s/\.obj$//'
   ac_i=`echo "$ac_i" | sed "$ac_script"`
-  # 2. Add them.
-  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
+  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
+  #    will be set to the directory where LIBOBJS objects are built.
+  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
 done
 AC_SUBST([LIB@&t@OBJS], [$ac_libobjs])
 AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])

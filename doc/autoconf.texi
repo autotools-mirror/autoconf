@@ -4616,7 +4616,10 @@ to @samp{AC_CONFIG_LIBOBJ_DIR(lib)}.
 @command{configure} might need to know the replacement directory for the
 following reasons: (i) some checks use the replacement files, (ii) some
 macros bypass broken system headers by installing links to the
-replacement headers, etc.
+replacement headers (iii) when used in conjunction with Automake,
+within each @file{Makefile}, @var{directory} is used as a relative path
+from @code{$(top_srcdir)} to each object named in @code(LIBOBJS) and
+@code(LTLIBOBJS), etc.
 @end defmac
 
 @sp 1
@@ -15500,6 +15503,13 @@ Automake and Libtool).  Just remove these lines (@command{autoupdate}
 cannot handle this task, since this is not a macro).
 
 Note that @code{U} must not be used in your Makefiles.
+
+@ovindex LIBOBJDIR
+When used with Automake 1.10 or newer, a suitable value for
+@code{LIBOBJDIR} is set so that the @code{LIBOBJS} and @code{LTLIBOBJS}
+can be referenced from any @file{Makefile.am}.  Even without Automake,
+arranging for @code{LIBOBJDIR} to be set correctly will enable
+referencing @code{LIBOBJS} and @code{LTLIBOBJS} in another directory.
 
 
 @node AC_FOO_IFELSE vs AC_TRY_FOO
