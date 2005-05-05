@@ -1,3 +1,7 @@
+2005-05-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Generic Functions): Typos.
+
 2004-05-02  Gary V. Vaughan  <gary@gnu.org>
 
 	* lib/autoconf/general.m4 (_AC_LIBOBJS_NORMALIZE): Prepend each

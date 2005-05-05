@@ -4618,8 +4618,8 @@ following reasons: (i) some checks use the replacement files, (ii) some
 macros bypass broken system headers by installing links to the
 replacement headers (iii) when used in conjunction with Automake,
 within each @file{Makefile}, @var{directory} is used as a relative path
-from @code{$(top_srcdir)} to each object named in @code(LIBOBJS) and
-@code(LTLIBOBJS), etc.
+from @code{$(top_srcdir)} to each object named in @code{LIBOBJS} and
+@code{LTLIBOBJS}, etc.
 @end defmac
 
 @sp 1
