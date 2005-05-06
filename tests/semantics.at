@@ -145,7 +145,7 @@ AT_CHECK_DEFINES(
 ])
 
 AT_CHECK([sed 's/  */ /g;s/^ //;s/ $//' config.libobjs], [],
-	 [autoconf_ftnirp$U.o
+	 [${LIBOBJDIR}autoconf_ftnirp$U.o
 ])
 
 AT_CLEANUP([config.libobjs])
