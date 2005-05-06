@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Type related macros: existence, sizeof, and structure members.
-# Copyright (C) 2000, 2001, 2002, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004, 2005 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -355,18 +355,10 @@ AC_DEFUN([AC_TYPE_SIGNAL],
 [AC_COMPILE_IFELSE(
 [AC_LANG_PROGRAM([#include <sys/types.h>
 #include <signal.h>
-#ifdef signal
-# undef signal
-#endif
-#ifdef __cplusplus
-extern "C" void (*signal (int, void (*)(int)))(int);
-#else
-void (*signal ()) ();
-#endif
 ],
-		 [int i;])],
-		   [ac_cv_type_signal=void],
-		   [ac_cv_type_signal=int])])
+		 [return *(signal (0, 0)) (0) == 1;])],
+		   [ac_cv_type_signal=int],
+		   [ac_cv_type_signal=void])])
 AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 		   [Define as the return type of signal handlers
 		    (`int' or `void').])

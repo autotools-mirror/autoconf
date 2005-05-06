@@ -1,8 +1,19 @@
+2005-05-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix C++ related problems reported by Werner Lemberg.
+	* doc/autoconf.texi (C++ Compiler): Mention .cpp extension.
+	* lib/autoconf/c.m4 (AC_LANG(C++)): Set ac_ext to .cpp, not .cc.
+	* lib/autoconf/types.m4 (AC_TYPE_SIGNAL): Simplify test, to
+	avoid problems with C++ and throw.
+	* tests/compile.at: .cpp, not .cc.
+
+	* tests/semantics.at: Prepend LIBOBJDIR, as per 2005-05-02 change.
+
 2005-05-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Generic Functions): Typos.
 
-2004-05-02  Gary V. Vaughan  <gary@gnu.org>
+2005-05-02  Gary V. Vaughan  <gary@gnu.org>
 
 	* lib/autoconf/general.m4 (_AC_LIBOBJS_NORMALIZE): Prepend each
 	object named in LIBOBJS and LTLIBOBJS with the ${LIBOBJDIR}, as

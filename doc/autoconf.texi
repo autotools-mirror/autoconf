@@ -5990,8 +5990,8 @@ compilers.
 @ovindex CXXCPP
 Set output variable @code{CXXCPP} to a command that runs the C++
 preprocessor.  If @samp{$CXX -E} doesn't work, @file{/lib/cpp} is used.
-It is only portable to run @code{CXXCPP} on files with a @file{.c},
-@file{.C}, or @file{.cc} extension.
+It is portable to run @code{CXXCPP} only on files with a @file{.c},
+@file{.C}, @file{.cc}, or @file{.cpp} extension.
 
 Some preprocessors don't indicate missing include files by the error
 status.  For such preprocessors an internal variable is set that causes

@@ -90,7 +90,7 @@ m4_define([_AC_LANG_PREFIX(C)], [C])
 # ------------
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
 m4_define([AC_LANG(C++)],
-[ac_ext=cc
+[ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
