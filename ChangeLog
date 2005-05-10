@@ -1,3 +1,11 @@
+2005-05-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Autoconf Language): Be more precise about
+	quoting rules.  Problems noted by Stepan Kasal.
+	Also, throughout this document, be more careful about white space.
+	"blank", "white space", and "space" all have different meanings
+	and we should be careful to say what we mean.
+
 2005-05-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix C++ related problems reported by Werner Lemberg.
