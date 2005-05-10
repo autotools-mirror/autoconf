@@ -804,7 +804,7 @@ information on Automake.
 The book @cite{@acronym{GNU} Autoconf, Automake and
 Libtool}@footnote{@cite{@acronym{GNU} Autoconf, Automake and Libtool},
 by G. V. Vaughan, B. Elliston, T. Tromey, and I. L. Taylor.  SAMS (originally
-New Riders), 2000, ISBN 1578701902.}  describes the complete @acronym{GNU}
+New Riders), 2000, ISBN 1578701902.} describes the complete @acronym{GNU}
 build environment.  You can also find
 @uref{http://sources.redhat.com/autobook/, the entire book on-line}.
 
@@ -983,13 +983,13 @@ status, in Autoconf their status is rigorously the same.  Therefore, we
 need a means to distinguish literal strings from text to be expanded:
 quotation.
 
-When calling macros that take arguments, there must not be any blank
+When calling macros that take arguments, there must not be any white
 space between the macro name and the open parenthesis.  Arguments should
 be enclosed within the M4 quote characters @samp{[} and @samp{]}, and be
-separated by commas.  Any leading spaces in arguments are ignored,
-unless they are quoted.  You may safely leave out the quotes when the
-argument cannot contain any macro calls, but @emph{always} quote arguments
-that might contain macro calls.  This rule applies recursively for every macro
+separated by commas.  Any leading blanks or newlines in arguments are ignored,
+unless they are quoted.  You should always quote an argument that
+might contain a macro name, comma, parenthesis, or a leading blank or
+newline.  This rule applies recursively for every macro
 call, including macros called from other macros.
 
 For instance:
@@ -1198,7 +1198,7 @@ contain detailed information on why a macro is requested.
 @command{autoscan} uses several data files (installed along with Autoconf)
 to determine which macros to output when it finds particular symbols in
 a package's source files.  These data files all have the same format:
-each line consists of a symbol, whitespace, and the Autoconf macro to
+each line consists of a symbol, one or more blanks, and the Autoconf macro to
 output if that symbol is encountered.  Lines starting with @samp{#} are
 comments.
 
@@ -1906,7 +1906,7 @@ where the arguments are:
 
 @table @var
 @item @var{tag}@dots{}
-A whitespace-separated list of tags, which are typically the names of
+A blank-or-newline-separated list of tags, which are typically the names of
 the files to instantiate.
 
 You are encouraged to use literals as @var{tags}.  In particular, you
@@ -2657,7 +2657,7 @@ directory.
 @cvindex HAVE_CONFIG_H
 This macro is one of the instantiating macros; see @ref{Configuration
 Actions}.  Make @code{AC_OUTPUT} create the file(s) in the
-whitespace-separated list @var{header} containing C preprocessor
+blank-or-newline-separated list @var{header} containing C preprocessor
 @code{#define} statements, and replace @samp{@@DEFS@@} in generated
 files with @option{-DHAVE_CONFIG_H} instead of the value of @code{DEFS}.
 The usual name for @var{header} is @file{config.h}.
@@ -2720,7 +2720,7 @@ commented out (in case the system predefines that symbol).
 @end example
 
 Pay attention that @samp{#undef} is in the first column, and there is
-nothing behind @samp{HAVE_UNISTD_H}, not even white spaces.  You can
+nothing after @samp{HAVE_UNISTD_H}, not even white space.  You can
 then decode the configuration header using the preprocessor directives:
 
 @example
@@ -3028,7 +3028,7 @@ packages in subdirectories.
 @acindex{CONFIG_SUBDIRS}
 @ovindex subdirs
 Make @code{AC_OUTPUT} run @command{configure} in each subdirectory
-@var{dir} in the given whitespace-separated list.  Each @var{dir} should
+@var{dir} in the given blank-or-newline-separated list.  Each @var{dir} should
 be a literal, i.e., please do not use:
 
 @example
@@ -3516,7 +3516,7 @@ that case, set @var{variable} using the absolute file name of the
 
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
 @acindex{CHECK_PROGS}
-Check for each program in the whitespace-separated list
+Check for each program in the blank-separated list
 @var{progs-to-check-for} existing in the @env{PATH}.  If one is found, set
 @var{variable} to the name of that program.  Otherwise, continue
 checking the next program in the list.  If none of the programs in the
@@ -4536,7 +4536,7 @@ about selecting the language for checks.)
 @defmac AC_CHECK_FUNCS (@var{function}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{CHECK_FUNCS}
 @cvindex HAVE_@var{function}
-For each @var{function} in the whitespace-separated argument list,
+For each @var{function} in the blank-or-newline-separated argument list,
 define @code{HAVE_@var{function}} (in all capitals) if it is available.
 If @var{action-if-found} is given, it is additional shell code to
 execute when one of the functions is found.  You can give it a value of
@@ -5103,7 +5103,7 @@ below.
 @acindex{CHECK_HEADERS}
 @cvindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
-whitespace-separated argument list that exists, define
+blank-separated argument list that exists, define
 @code{HAVE_@var{header-file}} (in all capitals).  If @var{action-if-found}
 is given, it is additional shell code to execute when one of the header
 files is found.  You can give it a value of @samp{break} to break out of
@@ -5660,7 +5660,7 @@ compilers.  Set output variable @code{CC} to the name of the compiler
 found.
 
 This macro may, however, be invoked with an optional first argument
-which, if specified, must be a space separated list of C compilers to
+which, if specified, must be a blank-separated list of C compilers to
 search for.  This just gives the user an opportunity to specify an
 alternative search list for the C compiler.  For example, if you didn't
 like the default order, then you could invoke @code{AC_PROG_CC} like
@@ -5968,7 +5968,7 @@ then other names).  If none of those checks succeed, then as a last
 resort set @code{CXX} to @code{g++}.
 
 This macro may, however, be invoked with an optional first argument
-which, if specified, must be a space separated list of C++ compilers to
+which, if specified, must be a blank-separated list of C++ compilers to
 search for.  This just gives the user an opportunity to specify an
 alternative search list for the C++ compiler.  For example, if you
 didn't like the default order, then you could invoke @code{AC_PROG_CXX}
@@ -6031,7 +6031,7 @@ then some other names.  Set the output variable @code{F77} to the name
 of the compiler found.
 
 This macro may, however, be invoked with an optional first argument
-which, if specified, must be a space separated list of Fortran 77
+which, if specified, must be a blank-separated list of Fortran 77
 compilers to search for.  This just gives the user an opportunity to
 specify an alternative search list for the Fortran 77 compiler.  For
 example, if you didn't like the default order, then you could invoke
@@ -6070,7 +6070,7 @@ is actually supported.  Thus, it is preferable that you avoid the
 the latest Fortran standard.
 
 This macro may, alternatively, be invoked with an optional first argument
-which, if specified, must be a space separated list of Fortran
+which, if specified, must be a blank-separated list of Fortran
 compilers to search for, just as in @code{AC_PROG_F77}.
 
 If the output variable @code{FCFLAGS} was not already set in the
@@ -7277,7 +7277,7 @@ AC_DEFINE_UNQUOTED($ac_tr_hdr, 1,
 Due to a syntactical bizarreness of the Bourne shell, do not use
 semicolons to separate @code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED}
 calls from other macro calls or shell code; that can cause syntax errors
-in the resulting @command{configure} script.  Use either spaces or
+in the resulting @command{configure} script.  Use either blanks or
 newlines.  That is, do this:
 
 @example
@@ -8481,7 +8481,7 @@ m4 --reload-state=4.m4f input.m4
 @itemx -f
 Produce a frozen state file.  @command{autom4te} freezing is stricter
 than M4's: it must produce no warnings, and no output other than empty
-lines (a line with whitespace is @emph{not} empty) and comments
+lines (a line with white space is @emph{not} empty) and comments
 (starting with @samp{#}).  Please, note that contrary to @command{m4},
 this options takes no argument:
 
@@ -9426,7 +9426,8 @@ There are exceptional cases where you do want to comment special M4
 constructs, in which case @code{dnl} is right, but keep in mind that it
 is unlikely.
 
-M4 ignores the leading spaces before each argument, use this feature to
+M4 ignores the leading blanks and newlines before each argument.
+Use this feature to
 indent in such a way that arguments are (more or less) aligned with the
 opening parenthesis of the macro being called.  For instance, instead of
 
@@ -11419,7 +11420,7 @@ include some limitations you should be aware of.
 @item @command{awk}
 @c ----------------
 @prindex @command{awk}
-Don't leave white spaces before the parentheses in user functions calls;
+Don't leave white space before the opening parenthesis in a user function call;
 @acronym{GNU} awk will reject it:
 
 @example
@@ -12098,7 +12099,7 @@ don't have first hand experience with older @command{sed}s) have
 supported it.
 
 Posix requires that you must not have any white space between
-@samp{!}  and the following command.  It is OK to have blanks between
+@samp{!} and the following command.  It is OK to have blanks between
 the address and the @samp{!}.  For instance, on Solaris 8:
 
 @example
@@ -13332,7 +13333,7 @@ looks like this:
 needed.  Just make sure the columns line up in @samp{configure
 --help}.  Avoid tabs in the help string.  You'll need to enclose the
 help string in @samp{[} and @samp{]} in order to produce the leading
-spaces.
+blanks.
 
 You should format your @var{help-string} with the macro
 @code{AS_HELP_STRING} (@pxref{Pretty Help Strings}).
@@ -13522,8 +13523,8 @@ AC_ARG_WITH(foo,
 @end example
 
 The second argument of @code{AS_HELP_STRING} is
-not a literal, and should not be double quoted. @xref{Autoconf
-Language}, for a more detailed explanation.
+not a literal, and should not be double quoted.
+@xref{Autoconf Language}, for a more detailed explanation.
 Then the last few lines of @samp{configure --help} will appear like
 this:
 
