@@ -1428,7 +1428,7 @@ _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
     ac_cs_recheck=: ;;
-  --version | --vers* | -V )
+  --version | --versio | --versi | --vers | --ver | --ve | --v | -V )
     echo "$ac_cs_version"; exit ;;
   --he | --h)
     # Conflict between --help and --header
@@ -1436,7 +1436,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 Try `$[0] --help' for more information.]);;
   --help | --hel | -h )
     echo "$ac_cs_usage"; exit ;;
-  --debug | --d* | -d )
+  --debug | --debu | --deb | --de | --d | -d )
     debug=: ;;
   --file | --fil | --fi | --f )
     $ac_shift

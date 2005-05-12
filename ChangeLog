@@ -1,3 +1,10 @@
+2005-05-11  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Make the check
+	  for absolute directory names in one loop.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Handle
+	  abbreviations of --version and --debug.
+
 2005-05-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Autoconf Language): Be more precise about

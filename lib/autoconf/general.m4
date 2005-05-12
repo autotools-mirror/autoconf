@@ -929,26 +929,17 @@ if test -n "$ac_prev"; then
 fi
 
 # Be sure to have absolute directory names.
-for ac_var in exec_prefix prefix
+for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
+		datadir sysconfdir sharedstatedir localstatedir includedir \
+		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
+		libdir localedir mandir
 do
   eval ac_val=$`echo $ac_var`
   case $ac_val in
-    [[\\/$]]* | ?:[[\\/]]* | NONE | '' ) ;;
-    *)  AC_MSG_ERROR([expected an absolute directory name for --$ac_var: $ac_val]);;
+    [[\\/$]]* | ?:[[\\/]]* )  continue;;
+    NONE | '' ) case $ac_var in *prefix ) continue;; esac;;
   esac
-done
-
-# Be sure to have absolute directory names.
-for ac_var in bindir sbindir libexecdir datarootdir datadir sysconfdir \
-              sharedstatedir localstatedir includedir oldincludedir \
-              docdir infodir htmldir dvidir pdfdir psdir libdir \
-              localedir mandir
-do
-  eval ac_val=$`echo $ac_var`
-  case $ac_val in
-    [[\\/$]]* | ?:[[\\/]]* ) ;;
-    *)  AC_MSG_ERROR([expected an absolute directory name for --$ac_var: $ac_val]);;
-  esac
+  AC_MSG_ERROR([expected an absolute directory name for --$ac_var: $ac_val])
 done
 
 # There might be people who depend on the old broken behavior: `$host'
