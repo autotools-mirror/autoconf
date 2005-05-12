@@ -144,6 +144,8 @@ if test $1 != .; then
 else
   ac_dir_suffix= ac_top_builddir=
 fi
+ac_abs_top_builddir=$ac_pwd
+ac_abs_builddir=$ac_pwd$ac_dir_suffix
 
 case $srcdir in
   .)  # No --srcdir option.  We are building in place.
@@ -152,22 +154,18 @@ case $srcdir in
        ac_top_srcdir=.
     else
        ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
-    fi ;;
+    fi
+    ac_abs_top_srcdir=$ac_pwd ;;
   [[\\/]]* | ?:[[\\/]]* )  # Absolute name.
     ac_srcdir=$srcdir$ac_dir_suffix;
-    ac_top_srcdir=$srcdir ;;
+    ac_top_srcdir=$srcdir
+    ac_abs_top_srcdir=$srcdir ;;
   *) # Relative name.
     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_top_builddir$srcdir ;;
+    ac_top_srcdir=$ac_top_builddir$srcdir
+    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
 esac
-
-# Do not use `cd foo && pwd` to compute absolute names, because
-# the directories may not exist.
-AS_SET_CATFILE([ac_abs_builddir],   [$ac_pwd],          [$1])
-AS_SET_CATFILE([ac_abs_top_builddir],
-	                            [$ac_abs_builddir], [${ac_top_builddir}.])
-AS_SET_CATFILE([ac_abs_srcdir],     [$ac_abs_builddir], [$ac_srcdir])
-AS_SET_CATFILE([ac_abs_top_srcdir], [$ac_abs_builddir], [$ac_top_srcdir])
+ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
 ])# _AC_SRCDIRS
 
 

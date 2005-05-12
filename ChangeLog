@@ -1,3 +1,8 @@
+2005-05-12  Stepan Kasal  <address@hidden>
+
+	* lib/autoconf/status.m4 (_AC_SRCDIRS): Simplify the computation
+	  of absolute paths.
+
 2005-05-11  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Make the check
