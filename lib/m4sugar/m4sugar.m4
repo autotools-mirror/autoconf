@@ -374,8 +374,8 @@ m4_define([m4_case],
 # All the values are optional, and the macro is robust to active symbols
 # properly quoted.
 m4_define([m4_bmatch],
-[m4_if([$#], 0, [],
-       [$#], 1, [],
+[m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
+       [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
        [$#], 2, [$2],
        [m4_if(m4_bregexp([$1], [$2]), -1, [$0([$1], m4_shiftn(3, $@))],
 	      [$3])])])
