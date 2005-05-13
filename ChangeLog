@@ -1,3 +1,10 @@
+2005-05-13  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (AC_CONFIG_LIBOBJ_DIR): Remove the broken
+	  check.
+	* lib/m4sugar/m4sugar.m4 (m4_bmatch): Halt with error if we don't get
+	  enough arguments, similarly as in m4_bpatsubsts.
+
 2005-05-12  Stepan Kasal  <address@hidden>
 
 	* lib/autoconf/status.m4 (_AC_SRCDIRS): Simplify the computation
