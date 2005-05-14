@@ -1,3 +1,41 @@
+2005-05-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* AUTHORS, BUGS, COPYING, ChangeLog, ChangeLog.0, ChangeLog.1,
+	ChangeLog.2, GNUmakefile, HACKING, Makefile.am, Makefile.cfg,
+	Makefile.maint, NEWS, README, README-alpha, TODO, configure.ac,
+	bin/Makefile.am, bin/autoconf.as, bin/autoheader.in,
+	bin/autom4te.in, bin/autoreconf.in, bin/autoscan.in,
+	bin/autoupdate.in, bin/ifnames.in, config/Makefile.am,
+	config/config.guess, config/config.sub, config/elisp-comp,
+	config/m4.m4, config/mdate-sh, config/missing, config/texinfo.tex,
+	doc/Makefile.am, doc/fdl.texi, lib/Makefile.am, lib/autom4te.in,
+	lib/freeze.mk, lib/Autom4te/C4che.pm, lib/Autom4te/ChannelDefs.pm,
+	lib/Autom4te/Channels.pm, lib/Autom4te/Configure_ac.pm,
+	lib/Autom4te/FileUtils.pm, lib/Autom4te/General.pm,
+	lib/Autom4te/Request.pm, lib/Autom4te/Struct.pm,
+	lib/Autom4te/XFile.pm, lib/autoconf/Makefile.am,
+	lib/autoconf/autoconf.m4, lib/autoconf/autoheader.m4,
+	lib/autoconf/autoscan.m4, lib/autoconf/autotest.m4,
+	lib/autoconf/autoupdate.m4, lib/autoconf/c.m4,
+	lib/autoconf/fortran.m4, lib/autoconf/functions.m4,
+	lib/autoconf/general.m4, lib/autoconf/headers.m4,
+	lib/autoconf/lang.m4, lib/autoconf/libs.m4,
+	lib/autoconf/oldnames.m4, lib/autoconf/programs.m4,
+	lib/autoconf/specific.m4, lib/autoconf/status.m4,
+	lib/autoconf/types.m4, lib/autoscan/Makefile.am,
+	lib/autoscan/autoscan.list, lib/autoscan/autoscan.pre,
+	lib/autotest/Makefile.am, lib/autotest/autotest.m4,
+	lib/autotest/general.m4, lib/emacs/Makefile.am,
+	lib/emacs/autoconf-mode.el, lib/emacs/autotest-mode.el,
+	lib/m4sugar/Makefile.am, lib/m4sugar/m4sh.m4,
+	lib/m4sugar/m4sugar.m4, man/Makefile.am, tests/Makefile.am,
+	tests/atlocal.in, tests/autotest.at, tests/base.at, tests/c.at,
+	tests/compile.at, tests/foreign.at, tests/fortran.at,
+	tests/local.at, tests/m4sh.at, tests/m4sugar.at, tests/mktests.sh,
+	tests/semantics.at, tests/suite.at, tests/tools.at,
+	tests/torture.at, tests/wrapper.as:
+	Update FSF postal mail address.
+
 2005-05-13  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (AC_CONFIG_LIBOBJ_DIR): Remove the broken
@@ -8454,5 +8492,5 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with autoconf; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA 02111-1307, USA.
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+Boston, MA 02110-1301, USA.
