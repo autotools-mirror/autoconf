@@ -3989,11 +3989,13 @@ it defines @code{HAVE_ALLOCA_H}.
 If those attempts fail, it looks for the function in the standard C
 library.  If any of those methods succeed, it defines
 @code{HAVE_ALLOCA}.  Otherwise, it sets the output variable
-@code{ALLOCA} to @samp{alloca.o} and defines @code{C_ALLOCA} (so
-programs can periodically call @samp{alloca(0)} to garbage collect).
-This variable is separate from @code{LIBOBJS} so multiple programs can
-share the value of @code{ALLOCA} without needing to create an actual
-library, in case only some of them use the code in @code{LIBOBJS}.
+@code{ALLOCA} to @samp{$@{LIBOBJDIR@}alloca.o} and defines
+@code{C_ALLOCA} (so programs can periodically call @samp{alloca(0)} to
+garbage collect).  This variable is separate from @code{LIBOBJS} so
+multiple programs can share the value of @code{ALLOCA} without needing
+to create an actual library, in case only some of them use the code in
+@code{LIBOBJS}.  The @samp{$@{LIBOBJDIR@}} prefix serves the same
+purpose as in @code{LIBOBJS} (@pxref{AC_LIBOBJ vs LIBOBJS}).
 
 This macro does not try to get @code{alloca} from the System V R3
 @file{libPW} or the System V R4 @file{libucb} because those libraries

@@ -27,6 +27,10 @@
     infodir       info documentation [DATAROOTDIR/info]
     mandir        man documentation [DATAROOTDIR/man]
 
+  This means that if you use any of `@datadir@', `@infodir@', or
+  `@mandir@' in a file, you will have to ensure `${datarootdir}' is
+  defined in this file.
+
 ** AC_PROG_CC_C89, AC_PROG_CC_C99
   New macros for ISO C99 support.  AC_PROG_CC_C89 and AC_PROG_CC_C99
   check for ANSI C89 and ISO C99 support respectively.
@@ -40,6 +44,11 @@
 
 ** AT_COPYRIGHT
   New macro for copyright notices in testsuite files.
+
+** ALLOCA, LIBOBJS, LTLIBOBJS
+  Object names added to these variables are now prefixed with `${LIBOBJDIR}',
+  as in `${LIBOBJDIR}alloca.o'.  LIBOBJDIR is meant to be defined from
+  `Makefile.in' in case the object files lie in a different directory.
 
 * Major changes in Autoconf 2.59b
 

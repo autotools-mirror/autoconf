@@ -254,7 +254,7 @@ m4_define([_AC_LIBOBJ_ALLOCA],
 # contain a buggy version.  If you still want to use their alloca,
 # use ar to extract alloca.o from them instead of compiling alloca.c.
 AC_LIBSOURCES(alloca.c)
-AC_SUBST(ALLOCA, alloca.$ac_objext)dnl
+AC_SUBST([ALLOCA], [\${LIBOBJDIR}alloca.$ac_objext])dnl
 AC_DEFINE(C_ALLOCA, 1, [Define to 1 if using `alloca.c'.])
 
 AC_CACHE_CHECK(whether `alloca.c' needs Cray hooks, ac_cv_os_cray,
