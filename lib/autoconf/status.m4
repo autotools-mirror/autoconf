@@ -153,7 +153,7 @@ case $srcdir in
     if test -z "$ac_top_builddir"; then
        ac_top_srcdir=.
     else
-       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
+       ac_top_srcdir=`expr $ac_top_builddir : ['\(.*[^/]\)']`
     fi
     ac_abs_top_srcdir=$ac_pwd ;;
   [[\\/]]* | ?:[[\\/]]* )  # Absolute name.
@@ -240,6 +240,44 @@ m4_define([_AC_CONFIG_UNIQUE],
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_FILES],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_FILES.])])dnl
 m4_popdef([AC_Dest])])dnl
+])
+
+
+# _AC_CONFIG_SPLIT(LIST, DEST, SOURCE)
+# ------------------------------------
+#
+# Shell variable LIST must contain at least two file names, separated by
+# colon.  The first component goes to DEST, the rest to SOURCE.
+# We compute SOURCE first, so LIST and DEST can be the same variable.
+#
+m4_define([_AC_CONFIG_SPLIT],
+[	$3=`expr "X$$1" : ['X[^:]*:\(.*\)']`
+	$2=`expr "X$$1" : ['X\([^:]*\)']`[]dnl
+])
+
+# _AC_CONFIG_SPLIT_SOURCE_DEST
+# ----------------------------
+#
+# Used in CONFIG_COMMANDS and CONFIG_LINKS sections.
+#
+m4_define([_AC_CONFIG_SPLIT_SOURCE_DEST],
+[case $ac_file in
+  *:*)	_AC_CONFIG_SPLIT(ac_file, ac_dest, ac_source) ;;
+  *)	ac_dest=$ac_file ac_source=$ac_file ;;
+esac[]dnl
+])
+
+# _AC_CONFIG_SPLIT_FILE_IN
+# ------------------------
+#
+# Used in CONFIG_HEADERS and CONFIG_FILES sections.
+#
+m4_define([_AC_CONFIG_SPLIT_FILE_IN],
+[case $ac_file in
+  *:*)	_AC_CONFIG_SPLIT(ac_file, ac_file, ac_file_in) ;;
+  -)	ac_file_in=- ;;
+  *)	ac_file_in=$ac_file.in ;;
+esac[]dnl
 ])
 
 
@@ -363,8 +401,7 @@ m4_define([_AC_OUTPUT_COMMANDS],
 # CONFIG_COMMANDS section.
 #
 for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
-  ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
-  ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+  _AC_CONFIG_SPLIT_SOURCE_DEST
   ac_dir=`AS_DIRNAME(["$ac_dest"])`
   AS_MKDIR_P(["$ac_dir"])
   _AC_SRCDIRS(["$ac_dir"])
@@ -483,7 +520,7 @@ m4_define([_AC_OUTPUT_HEADERS],
 [cat >>$CONFIG_STATUS <<\_ACEOF
 
 #
-# CONFIG_HEADER section.
+# CONFIG_HEADERS section.
 #
 
 # These sed commands are passed to sed as "A NAME B NAME C VALUE D", where
@@ -505,13 +542,9 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
   - | *:- | *:-:* ) # input from stdin
-	cat >"$tmp/stdin"
-	ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
-  *:* ) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
-  * )   ac_file_in=$ac_file.in ;;
+	cat >"$tmp/stdin" ;;
   esac
+  _AC_CONFIG_SPLIT_FILE_IN
 
   test x"$ac_file" != x- && AC_MSG_NOTICE([creating $ac_file])
 
@@ -727,7 +760,7 @@ m4_define([AC_LIST_LINKS_COMMANDS])
 # interest in creating config links with literal values, no special
 # mechanism is implemented to handle them.
 #
-# _AC_LINK_CNT is used to be robust to multiple calls.
+# _AC_LINK_FILES_CNT is used to be robust to multiple calls.
 AU_DEFUN([AC_LINK_FILES],
 [m4_if($#, 2, ,
        [m4_fatal([$0: incorrect number of arguments])])dnl
@@ -766,8 +799,7 @@ dnl Here we use : instead of .. because if AC_LINK_FILES was used
 dnl with empty parameters (as in gettext.m4), then we obtain here
 dnl `:', which we want to skip.  So let's keep a single exception: `:'.
 for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
-  ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
-  ac_source=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
+  _AC_CONFIG_SPLIT_SOURCE_DEST
 
   AC_MSG_NOTICE([linking $srcdir/$ac_source to $ac_dest])
 
@@ -932,13 +964,9 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
   - | *:- | *:-:* ) # input from stdin
-	cat >"$tmp/stdin"
-	ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
-  *:* ) ac_file_in=`echo "$ac_file" | sed 's,[[^:]]*:,,'`
-	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
-  * )   ac_file_in=$ac_file.in ;;
+	cat >"$tmp/stdin" ;;
   esac
+  _AC_CONFIG_SPLIT_FILE_IN
 
   # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
   ac_dir=`AS_DIRNAME(["$ac_file"])`
@@ -1405,8 +1433,8 @@ while test $[#] != 0
 do
   case $[1] in
   --*=*)
-    ac_option=`expr "x$[1]" : 'x\([[^=]]*\)='`
-    ac_optarg=`expr "x$[1]" : 'x[[^=]]*=\(.*\)'`
+    ac_option=`expr "X$[1]" : 'X\([[^=]]*\)='`
+    ac_optarg=`expr "X$[1]" : 'X[[^=]]*=\(.*\)'`
     ac_shift=:
     ;;
   -*)

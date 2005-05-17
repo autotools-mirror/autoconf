@@ -320,8 +320,8 @@ do
     [[0-9][0-9][0-9]-[0-9][0-9][0-9]] | \
     [[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] | \
     [[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] )
-	at_range_start=`echo $at_option |sed 's,-.*,,'`
-	at_range_end=`echo $at_option |sed 's,.*-,,'`
+	at_range_start=`expr $at_option : '\([^-]*\)'`
+	at_range_end=`expr $at_option : '[^-]*-\(.*\)'`
 	# FIXME: Maybe test to make sure start <= end?
 	at_range=`echo " $at_groups_all " | \
 	  sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,' \

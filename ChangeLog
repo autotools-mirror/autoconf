@@ -1,3 +1,18 @@
+2005-05-17  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_INIT_HELP): Merge two consecutive
+	  ``cat <<_ACEOF'' commands to one.
+	(_AC_CANONICAL_SPLIT): Use expr, not ``echo|sed.''
+	* lib/autoconf/status.m4: On various places, use expr instead of
+	  ``echo|sed.''
+	(_AC_CONFIG_SPLIT, _AC_CONFIG_SPLIT_SOURCE_DEST):
+	(_AC_CONFIG_SPLIT_FILE_IN): New macros, to factor out common code.
+	* lib/autotest/general.m4 (AT_INIT): Use expr to get the numbers from
+	  a range.
+	* tests/local.at (AT_CHECK_SHELL_SYNTAX): Use awk to search for
+	  the wrong patterns between ``case'' and ``esac.''  The previous
+	  code had false positives.
+
 2005-05-14  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autoconf/functions.m4 (_AC_LIBOBJ_ALLOCA): Prepend ${LIBOBJDIR},

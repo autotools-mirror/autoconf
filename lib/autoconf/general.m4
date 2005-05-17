@@ -1004,9 +1004,6 @@ Configuration:
   -n, --no-create         do not create output files
       --srcdir=DIR        find the sources in DIR [configure dir or \`..']
 
-_ACEOF
-
-  cat <<_ACEOF
 Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
 			  [$ac_default_prefix]
@@ -1685,12 +1682,9 @@ m4_define([AC_REQUIRE_AUX_FILE],
 m4_define([_AC_CANONICAL_SPLIT],
 [AC_SUBST([$1],       [$ac_cv_$1])dnl
 dnl FIXME: AC_SUBST([$1_alias],  [$ac_cv_$1_alias])dnl
-AC_SUBST([$1_cpu],
-	 [`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\1/'`])dnl
-AC_SUBST([$1_vendor],
-	 [`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\2/'`])dnl
-AC_SUBST([$1_os],
-	 [`echo $ac_cv_$1 | sed 's/^\([[^-]]*\)-\([[^-]]*\)-\(.*\)$/\3/'`])dnl
+AC_SUBST([$1_cpu],	[`expr "X$ac_cv_$1" : ['X\([^-]*\)']`])dnl
+AC_SUBST([$1_vendor],	[`expr "X$ac_cv_$1" : ['X[^-]*-\([^-]*\)']`])dnl
+AC_SUBST([$1_os],	[`expr "X$ac_cv_$1" : ['X[^-]*-[^-]*-\(.*\)']`])dnl
 ])# _AC_CANONICAL_SPLIT
 
 
