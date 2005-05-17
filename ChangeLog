@@ -1,5 +1,11 @@
 2005-05-17  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Don't m4_quote the second
+	  argument to m4_foreach.  I guess it was necessary in the past,
+	  but I think it's a no-op now.
+
+2005-05-17  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/general.m4 (_AC_INIT_HELP): Merge two consecutive
 	  ``cat <<_ACEOF'' commands to one.
 	(_AC_CANONICAL_SPLIT): Use expr, not ``echo|sed.''
