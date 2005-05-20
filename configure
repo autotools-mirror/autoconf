@@ -1161,9 +1161,6 @@ Configuration:
   -n, --no-create         do not create output files
       --srcdir=DIR        find the sources in DIR [configure dir or \`..']
 
-_ACEOF
-
-  cat <<_ACEOF
 Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
 			  [$ac_default_prefix]
@@ -1238,32 +1235,34 @@ if test "$ac_init_help" = "recursive"; then
     test -d $ac_dir || continue
     ac_builddir=.
 
-if test "$ac_dir" != .; then
+case "$ac_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
   ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
-  # A "../" for each directory in $ac_dir_suffix.
-  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
-else
-  ac_dir_suffix= ac_top_builddir=
-fi
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,/..,g;s,/,,'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
 ac_abs_top_builddir=$ac_pwd
 ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
 
 case $srcdir in
   .)  # No --srcdir option.  We are building in place.
     ac_srcdir=.
-    if test -z "$ac_top_builddir"; then
-       ac_top_srcdir=.
-    else
-       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
-    fi
+    ac_top_srcdir=$ac_top_builddir_sub
     ac_abs_top_srcdir=$ac_pwd ;;
   [\\/]* | ?:[\\/]* )  # Absolute name.
     ac_srcdir=$srcdir$ac_dir_suffix;
     ac_top_srcdir=$srcdir
     ac_abs_top_srcdir=$srcdir ;;
   *) # Relative name.
-    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_top_builddir$srcdir
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
     ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
 esac
 ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
@@ -1493,10 +1492,6 @@ ac_signal=0
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -f -r conftest* confdefs.h
-# AIX cpp loses on an empty file, so make sure it contains at least a newline.
-# NextStep 3.3 (patch 3) loses unless the first echo outputs at least 14 bytes.
-ac_space=' '
-echo "$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space" >confdefs.h
 
 # Predefined preprocessor variables.
 
@@ -3087,8 +3082,8 @@ while test $# != 0
 do
   case $1 in
   --*=*)
-    ac_option=`expr "x$1" : 'x\([^=]*\)='`
-    ac_optarg=`expr "x$1" : 'x[^=]*=\(.*\)'`
+    ac_option=`expr "X$1" : 'X\([^=]*\)='`
+    ac_optarg=`expr "X$1" : 'X[^=]*=\(.*\)'`
     ac_shift=:
     ;;
   -*)
@@ -3359,13 +3354,14 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
   - | *:- | *:-:* ) # input from stdin
-	cat >"$tmp/stdin"
-	ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
-	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
-  *:* ) ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
-	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
-  * )   ac_file_in=$ac_file.in ;;
+	cat >"$tmp/stdin" ;;
   esac
+  case $ac_file in
+  *:*)		ac_file_in=`expr "X$ac_file" : 'X[^:]*:\(.*\)'`
+	ac_file=`expr "X$ac_file" : 'X\([^:]*\)'` ;;
+  -)	ac_file_in=- ;;
+  *)	ac_file_in=$ac_file.in ;;
+esac
 
   # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
   ac_dir=`(dirname "$ac_file") 2>/dev/null ||
@@ -3407,32 +3403,34 @@ echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
 
   ac_builddir=.
 
-if test "$ac_dir" != .; then
+case "$ac_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
   ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
-  # A "../" for each directory in $ac_dir_suffix.
-  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
-else
-  ac_dir_suffix= ac_top_builddir=
-fi
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,/..,g;s,/,,'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
 ac_abs_top_builddir=$ac_pwd
 ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
 
 case $srcdir in
   .)  # No --srcdir option.  We are building in place.
     ac_srcdir=.
-    if test -z "$ac_top_builddir"; then
-       ac_top_srcdir=.
-    else
-       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
-    fi
+    ac_top_srcdir=$ac_top_builddir_sub
     ac_abs_top_srcdir=$ac_pwd ;;
   [\\/]* | ?:[\\/]* )  # Absolute name.
     ac_srcdir=$srcdir$ac_dir_suffix;
     ac_top_srcdir=$srcdir
     ac_abs_top_srcdir=$srcdir ;;
   *) # Relative name.
-    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_top_builddir$srcdir
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
     ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
 esac
 ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
@@ -3440,7 +3438,7 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
 
   case $INSTALL in
   [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
-  *) ac_INSTALL=$ac_top_builddir$INSTALL ;;
+  *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
   esac
 
   if test x"$ac_file" != x-; then
@@ -3501,7 +3499,7 @@ s|@top_srcdir@|$ac_top_srcdir|;t t
 s|@abs_top_srcdir@|$ac_abs_top_srcdir|;t t
 s|@builddir@|$ac_builddir|;t t
 s|@abs_builddir@|$ac_abs_builddir|;t t
-s|@top_builddir@|$ac_top_builddir|;t t
+s|@top_builddir@|$ac_top_builddir_sub|;t t
 s|@abs_top_builddir@|$ac_abs_top_builddir|;t t
 s,@INSTALL@,$ac_INSTALL,;t t
 " $ac_file_inputs | (eval "$ac_sed_cmds") >"$tmp/out"
@@ -3521,8 +3519,11 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 # CONFIG_COMMANDS section.
 #
 for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
-  ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
-  ac_source=`echo "$ac_file" | sed 's,[^:]*:,,'`
+  case $ac_file in
+  *:*)		ac_source=`expr "X$ac_file" : 'X[^:]*:\(.*\)'`
+	ac_dest=`expr "X$ac_file" : 'X\([^:]*\)'` ;;
+  *)	ac_dest=$ac_file ac_source=$ac_file ;;
+esac
   ac_dir=`(dirname "$ac_dest") 2>/dev/null ||
 $as_expr X"$ac_dest" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$ac_dest" : 'X\(//\)[^/]' \| \
@@ -3562,32 +3563,34 @@ echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
 
   ac_builddir=.
 
-if test "$ac_dir" != .; then
+case "$ac_dir" in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
   ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
-  # A "../" for each directory in $ac_dir_suffix.
-  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
-else
-  ac_dir_suffix= ac_top_builddir=
-fi
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,/..,g;s,/,,'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
 ac_abs_top_builddir=$ac_pwd
 ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
 
 case $srcdir in
   .)  # No --srcdir option.  We are building in place.
     ac_srcdir=.
-    if test -z "$ac_top_builddir"; then
-       ac_top_srcdir=.
-    else
-       ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
-    fi
+    ac_top_srcdir=$ac_top_builddir_sub
     ac_abs_top_srcdir=$ac_pwd ;;
   [\\/]* | ?:[\\/]* )  # Absolute name.
     ac_srcdir=$srcdir$ac_dir_suffix;
     ac_top_srcdir=$srcdir
     ac_abs_top_srcdir=$srcdir ;;
   *) # Relative name.
-    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_top_builddir$srcdir
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
     ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
 esac
 ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
@@ -3608,7 +3611,7 @@ at_srcdir='$ac_srcdir'
 abs_srcdir='$ac_abs_srcdir'
 at_top_srcdir='$ac_top_srcdir'
 abs_top_srcdir='$ac_abs_top_srcdir'
-at_top_builddir='$ac_top_builddir'
+at_top_build_prefix='$ac_top_build_prefix'
 abs_top_builddir='$ac_abs_top_builddir'
 
 AUTOTEST_PATH='tests'
