@@ -1288,10 +1288,9 @@ ac_signal=0
 
 # confdefs.h avoids OS command line length limits that DEFS can exceed.
 rm -f -r conftest* confdefs.h
-# AIX cpp loses on an empty file, so make sure it contains at least a newline.
-# NextStep 3.3 (patch 3) loses unless the first echo outputs at least 14 bytes.
-ac_space=' '
-echo "$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space$ac_space" >confdefs.h
+dnl AIX cpp loses on an empty file, NextStep 3.3 (patch 3) loses on a file
+dnl containing less than 14 bytes (including the newline).
+dnl But the defines below solve this problem.
 
 # Predefined preprocessor variables.
 AC_DEFINE_UNQUOTED([PACKAGE_NAME], ["$PACKAGE_NAME"],
