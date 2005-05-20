@@ -1970,7 +1970,7 @@ The name of the top source directory, assuming that the working
 directory is the current build directory.
 
 
-@item ac_top_builddir
+@item ac_top_build_prefix
 The name of the top build directory, assuming that the working
 directory is the current build directory.
 It can be empty, or else ends with a slash, so that you may concatenate
@@ -1997,8 +1997,8 @@ AC_CONFIG_COMMANDS([deep/dir/out:in/in.in], [@dots{}], [@dots{}])
 # Argument of --srcdir
 srcdir='../package'
 # Reversing deep/dir
-ac_top_builddir='../../'
-# Concatenation of $ac_top_builddir and srcdir
+ac_top_build_prefix='../../'
+# Concatenation of $ac_top_build_prefix and srcdir
 ac_top_srcdir='../../../package'
 # Concatenation of $ac_top_srcdir and deep/dir
 ac_srcdir='../../../package/deep/dir'

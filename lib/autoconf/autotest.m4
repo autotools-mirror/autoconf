@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Interface with Autotest.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
-# 2003, 2004 Free Software Foundation, Inc.
+# 2003, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ at_srcdir='$ac_srcdir'
 abs_srcdir='$ac_abs_srcdir'
 at_top_srcdir='$ac_top_srcdir'
 abs_top_srcdir='$ac_abs_top_srcdir'
-at_top_builddir='$ac_top_builddir'
+at_top_build_prefix='$ac_top_build_prefix'
 abs_top_builddir='$ac_abs_top_builddir'
 
 AUTOTEST_PATH='m4_default([$2], [$1])'

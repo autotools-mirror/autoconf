@@ -182,7 +182,7 @@ done
 # in, but the groups themselves are run in testsuite-dir/group-dir.
 if test -n "$at_top_srcdir"; then
   builddir=../..
-  for at_dir in srcdir top_srcdir top_builddir
+  for at_dir in srcdir top_srcdir top_build_prefix
   do
     at_val=AS_VAR_GET(at_$at_dir)
     AS_VAR_SET($at_dir, $at_val/../..)
@@ -479,12 +479,12 @@ case $as_dir in
     at_path=$at_path$as_dir
     ;;
   * )
-    if test -z "$at_top_builddir"; then
+    if test -z "$at_top_build_prefix"; then
       # Stand-alone test suite.
       at_path=$at_path$as_dir
     else
       # Embedded test suite.
-      at_path=$at_path$at_top_builddir/$as_dir$PATH_SEPARATOR
+      at_path=$at_path$at_top_build_prefix$as_dir$PATH_SEPARATOR
       at_path=$at_path$at_top_srcdir/$as_dir
     fi
     ;;
@@ -899,8 +899,8 @@ else
       echo
     fi
     if test -n "$at_top_srcdir"; then
-      AS_BOX([$at_top_builddir/config.log])
-      sed 's/^/| /' $at_top_builddir/config.log
+      AS_BOX([${at_top_build_prefix}config.log])
+      sed 's/^/| /' ${at_top_build_prefix}config.log
       echo
     fi
   } >&AS_MESSAGE_LOG_FD

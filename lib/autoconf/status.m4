@@ -126,43 +126,46 @@
 #   - BUILD-DIR-NAME is `top-build -> build' and `top-src -> src'
 #   - `$srcdir' is `top-build -> top-src'
 #
-# Ouputs:
+# Outputs:
 # - `ac_builddir' is `.', for symmetry only.
-# - `ac_top_builddir' is `build -> top_build'.
+# - `ac_top_builddir_sub' is `build -> top_build'.
+#      This is used for @top_builddir@.
+# - `ac_top_build_prefix' is `build -> top_build'.
 #      If not empty, has a trailing slash.
 # - `ac_srcdir' is `build -> src'.
 # - `ac_top_srcdir' is `build -> top-src'.
-#
 # and `ac_abs_builddir' etc., the absolute directory names.
 m4_define([_AC_SRCDIRS],
 [ac_builddir=.
 
-if test $1 != .; then
+case $1 in
+.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+*)
   ac_dir_suffix=/`echo $1 | sed 's,^\.[[\\/]],,'`
-  # A "../" for each directory in $ac_dir_suffix.
-  ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[[^\\/]]*,../,g'`
-else
-  ac_dir_suffix= ac_top_builddir=
-fi
+  # A ".." for each directory in $ac_dir_suffix.
+  ac_top_builddir_sub=`echo "$ac_dir_suffix" | sed 's,/[[^\\/]]*,/..,g;s,/,,'`
+  case $ac_top_builddir_sub in
+  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+  esac ;;
+esac
 ac_abs_top_builddir=$ac_pwd
 ac_abs_builddir=$ac_pwd$ac_dir_suffix
+# for backward compatibility:
+ac_top_builddir=$ac_top_build_prefix
 
 case $srcdir in
   .)  # No --srcdir option.  We are building in place.
     ac_srcdir=.
-    if test -z "$ac_top_builddir"; then
-       ac_top_srcdir=.
-    else
-       ac_top_srcdir=`expr $ac_top_builddir : ['\(.*[^/]\)']`
-    fi
+    ac_top_srcdir=$ac_top_builddir_sub
     ac_abs_top_srcdir=$ac_pwd ;;
   [[\\/]]* | ?:[[\\/]]* )  # Absolute name.
     ac_srcdir=$srcdir$ac_dir_suffix;
     ac_top_srcdir=$srcdir
     ac_abs_top_srcdir=$srcdir ;;
   *) # Relative name.
-    ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
-    ac_top_srcdir=$ac_top_builddir$srcdir
+    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+    ac_top_srcdir=$ac_top_build_prefix$srcdir
     ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
 esac
 ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
@@ -815,7 +818,7 @@ for ac_file in : $CONFIG_LINKS; do test "x$ac_file" = x: && continue
 
   case $srcdir in
   [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$srcdir/$ac_source ;;
-      *) ac_rel_source=$ac_top_builddir$srcdir/$ac_source ;;
+      *) ac_rel_source=$ac_top_build_prefix$srcdir/$ac_source ;;
   esac
 
   # Try a symlink, then a hard link, then a copy.
@@ -976,7 +979,7 @@ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [  case $INSTALL in
   [[\\/$]]* | ?:[[\\/]]* ) ac_INSTALL=$INSTALL ;;
-  *) ac_INSTALL=$ac_top_builddir$INSTALL ;;
+  *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
   esac
 ])dnl
 
@@ -1036,7 +1039,7 @@ s|@top_srcdir@|$ac_top_srcdir|;t t
 s|@abs_top_srcdir@|$ac_abs_top_srcdir|;t t
 s|@builddir@|$ac_builddir|;t t
 s|@abs_builddir@|$ac_abs_builddir|;t t
-s|@top_builddir@|$ac_top_builddir|;t t
+s|@top_builddir@|$ac_top_builddir_sub|;t t
 s|@abs_top_builddir@|$ac_abs_top_builddir|;t t
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s,@INSTALL@,$ac_INSTALL,;t t
 ])dnl
@@ -1178,7 +1181,7 @@ if test "$no_recursion" != yes; then
       case $cache_file in
       [[\\/]]* | ?:[[\\/]]* ) ac_sub_cache_file=$cache_file ;;
       *) # Relative name.
-	ac_sub_cache_file=$ac_top_builddir$cache_file ;;
+	ac_sub_cache_file=$ac_top_build_prefix$cache_file ;;
       esac
 
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir])

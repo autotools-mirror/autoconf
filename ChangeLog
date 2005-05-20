@@ -1,5 +1,21 @@
 2005-05-20  Stepan Kasal  <kasal@ucw.cz>
 
+	* NEWS: @top_builddir@ is now a dirname, ac_top_builddir will follow.
+	* lib/autoconf/status.m4 (_AC_SRCDIRS): Rename ...
+	(ac_top_builddir): ... this ...
+	(ac_top_build_prefix): ... to this; the old name is also kept, for
+	  backward compatibility.
+	(ac_top_builddir_sub): New variable, without the trailing slash,
+	  always nonempty.
+	(_AC_OUTPUT_FILES): s/@top_builddir@/$ac_top_builddir_sub/
+	* doc/autoconf.texi (Configuration Actions): Rename
+	  ac_top_builddir to ac_top_build_prefix.
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Rename
+	  at_top_builddir to at_top_build_prefix.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+
+2005-05-20  Stepan Kasal  <kasal@ucw.cz>
+
 	* ./lib/autoconf/general.m4 (_AC_INIT_PREPARE): Simplify the init
 	  of confdefs.h .
 
