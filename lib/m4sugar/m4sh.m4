@@ -723,7 +723,7 @@ m4_define([_AS_LINENO_WORKS],
 # script where LINENO is hard coded.
 # Comparing LINENO against _oline_ is not a good solution, since in
 # the case of embedded executables (such as config.status within
-# configure) you'd compare LINENO wrt config.status vs. _oline_ vs
+# configure) you'd compare LINENO wrt config.status vs. _oline_ wrt
 # configure.
 m4_define([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
