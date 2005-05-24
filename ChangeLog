@@ -1,5 +1,10 @@
 2005-05-24  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (AC_CONFIG_MACRO_DIR): Simplify the
+	  `if' at the end.
+
+2005-05-24  Stepan Kasal  <kasal@ucw.cz>
+
 	* bin/autoconf.as: Make more use of "shift 2" in option processing.
 
 2005-05-24  Stepan Kasal  <kasal@ucw.cz>
