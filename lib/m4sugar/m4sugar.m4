@@ -322,7 +322,7 @@ m4_define([m4_ifvaln],
 # expand IF-FALSE, otherwise IF-TRUE.
 m4_define([m4_ifset],
 [m4_ifdef([$1],
-	  [m4_if(m4_defn([$1]), [], [$3], [$2])],
+	  [m4_ifval(m4_defn([$1]), [$2], [$3])],
 	  [$3])])
 
 
