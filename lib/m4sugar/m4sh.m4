@@ -521,13 +521,6 @@ m4_define([_AS_QUOTE_IFELSE],
 	  [$2])])
 
 
-# _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])
-# -----------------------------------------------
-# Perform shell expansions on STRING and echo the string to FD.
-m4_define([_AS_ECHO_UNQUOTED],
-[echo "$1" >&m4_default([$2], [AS_MESSAGE_FD])])
-
-
 # _AS_QUOTE(STRING, [CHARS = `"])
 # -------------------------------
 # If there are quoted (via backslash) backquotes do nothing, else
@@ -538,6 +531,13 @@ m4_define([_AS_QUOTE],
 		  [m4_warn([obsolete],
 	   [back quotes and double quotes must not be escaped in: $1])dnl
 $1])])
+
+
+# _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])
+# -----------------------------------------------
+# Perform shell expansions on STRING and echo the string to FD.
+m4_define([_AS_ECHO_UNQUOTED],
+[echo "$1" >&m4_default([$2], [AS_MESSAGE_FD])])
 
 
 # _AS_ECHO(STRING, [FD = AS_MESSAGE_FD])
