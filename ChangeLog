@@ -1,3 +1,7 @@
+2005-05-24  Stepan Kasal  <kasal@ucw.cz>
+
+	* bin/Makefile.am: Merge the two rules for creating scripts.
+
 2005-05-23  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (AC_MSG_RESULT_UNQUOTED): Make
