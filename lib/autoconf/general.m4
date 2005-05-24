@@ -2019,16 +2019,16 @@ m4_define([AC_WARNING],
 # AC_MSG_CHECKING(FEATURE)
 # ------------------------
 m4_define([AC_MSG_CHECKING],
-[_AS_ECHO_LOG([checking $1])
-_AS_ECHO_N([checking $1... ])[]dnl
+[{ _AS_ECHO_LOG([checking $1])
+_AS_ECHO_N([checking $1... ]); }dnl
 ])
 
 
 # AC_MSG_RESULT(RESULT)
 # ---------------------
 m4_define([AC_MSG_RESULT],
-[_AS_ECHO_LOG([result: $1])
-_AS_ECHO([${ECHO_T}$1])[]dnl
+[{ _AS_ECHO_LOG([result: $1])
+_AS_ECHO([${ECHO_T}$1]); }dnl
 ])
 
 
