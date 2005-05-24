@@ -1,43 +1,19 @@
 2005-05-24  Stepan Kasal  <kasal@ucw.cz>
 
-	* lib/autoconf/general.m4 (AC_MSG_CHECKING, AC_MSG_RESULT):
-	  Put braces around the two echo commands, for consistency
-	  with AC_MSG_ERROR and such.
-
-2005-05-24  Stepan Kasal  <kasal@ucw.cz>
-
 	* lib/m4sugar/m4sh.m4 (_AS_ECHO_LOG): New macro to factor out
 	  common code; used in many places in the tree.
-
-2005-05-24  Stepan Kasal  <kasal@ucw.cz>
-
-	* lib/m4sugar/m4sh.m4 (AS_ESCAPE): Make the pattern a bit simpler;
-	  use \& insetad of \1.
-
-2005-05-24  Stepan Kasal  <kasal@ucw.cz>
-
-	* lib/m4sugar/m4sh.m4 (_AS_ECHO_UNQUOTED): Move the macro lower;
-	no code change.
-
-2005-05-24  Stepan Kasal  <kasal@ucw.cz>
+	(AS_ESCAPE): Make the pattern a bit simpler; use \& insetad of \1.
+	(_AS_ECHO_UNQUOTED): Move the macro lower; no code change.
 
 	* lib/m4sugar/m4sugar.m4 (m4_ifset): Use m4_ifval.
 
-2005-05-24  Stepan Kasal  <kasal@ucw.cz>
-
 	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR): Merge the two error
 	  messages when ac_unique_file is not found.
-
-2005-05-24  Stepan Kasal  <kasal@ucw.cz>
-
-	* lib/autoconf/general.m4 (AC_CONFIG_MACRO_DIR): Simplify the
-	  `if' at the end.
-
-2005-05-24  Stepan Kasal  <kasal@ucw.cz>
+	(AC_CONFIG_MACRO_DIR): Simplify the `if' at the end.
+	(AC_MSG_CHECKING, AC_MSG_RESULT): Put braces around the two echo
+	  commands, for consistency with AC_MSG_ERROR and such.
 
 	* bin/autoconf.as: Make more use of "shift 2" in option processing.
-
-2005-05-24  Stepan Kasal  <kasal@ucw.cz>
 
 	* bin/Makefile.am: Merge the two rules for creating scripts.
 
