@@ -1,3 +1,9 @@
+2005-05-23  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (AC_MSG_RESULT_UNQUOTED): Make
+	obsolete; it was never documented.
+	(AC_CACHE_CHECK): Use AC_MSG_RESULT instead.
+
 2005-05-20  Stepan Kasal  <kasal@ucw.cz>
 
 	* NEWS: @top_builddir@ is now a dirname, ac_top_builddir will follow.

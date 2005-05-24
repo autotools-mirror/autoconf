@@ -1905,7 +1905,11 @@ AS_VAR_SET_IF([$1],
 m4_defun([AC_CACHE_CHECK],
 [AC_MSG_CHECKING([$1])
 AC_CACHE_VAL([$2], [$3])dnl
-AC_MSG_RESULT_UNQUOTED([AS_VAR_GET([$2])])])
+AS_LITERAL_IF([$2],
+	      [AC_MSG_RESULT([$$2])],
+	      [ac_res=AS_VAR_GET([$2])
+	       AC_MSG_RESULT([$ac_res])])dnl
+])
 
 
 
@@ -2033,15 +2037,6 @@ _AS_ECHO([${ECHO_T}$1])[]dnl
 ])
 
 
-# AC_MSG_RESULT_UNQUOTED(RESULT)
-# ------------------------------
-# Likewise, but perform $ ` \ shell substitutions.
-m4_define([AC_MSG_RESULT_UNQUOTED],
-[_AS_ECHO_UNQUOTED([$as_me:$LINENO: result: $1], AS_MESSAGE_LOG_FD)
-_AS_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
-])
-
-
 # AC_MSG_WARN(PROBLEM)
 # AC_MSG_NOTICE(STRING)
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
@@ -2067,6 +2062,15 @@ sed 's/^/| /' conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 # ------------------------
 AU_DEFUN([AC_CHECKING],
 [AS_MESSAGE([checking $1...])])
+
+
+# AU::AC_MSG_RESULT_UNQUOTED(RESULT)
+# ----------------------------------
+# No escaping, so it performed also backtick substitution.
+AU_DEFUN([AC_MSG_RESULT_UNQUOTED],
+[_AS_ECHO_UNQUOTED([$as_me:$LINENO: result: $1], AS_MESSAGE_LOG_FD)
+_AS_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
+])
 
 
 # AU::AC_VERBOSE(STRING)
