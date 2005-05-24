@@ -502,8 +502,8 @@ $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 # Escape the CHARS in STRING.
 m4_define([AS_ESCAPE],
 [m4_bpatsubst([$1],
-	     m4_ifval([$2], [[\([$2]\)]], [[\([\"$`]\)]]),
-	     [\\\1])])
+	     m4_dquote(m4_default([$2], [\"$`])),
+	     [\\\&])])
 
 
 # _AS_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)

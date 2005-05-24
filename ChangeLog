@@ -1,5 +1,10 @@
 2005-05-24  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/m4sugar/m4sh.m4 (AS_ESCAPE): Make the pattern a bit simpler;
+	  use \& insetad of \1.
+
+2005-05-24  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/m4sugar/m4sh.m4 (_AS_ECHO_UNQUOTED): Move the macro lower;
 	no code change.
 
