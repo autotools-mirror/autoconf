@@ -1,5 +1,9 @@
 2005-05-24  Stepan Kasal  <kasal@ucw.cz>
 
+	* bin/autoconf.as: Make more use of "shift 2" in option processing.
+
+2005-05-24  Stepan Kasal  <kasal@ucw.cz>
+
 	* bin/Makefile.am: Merge the two rules for creating scripts.
 
 2005-05-23  Stepan Kasal  <kasal@ucw.cz>
