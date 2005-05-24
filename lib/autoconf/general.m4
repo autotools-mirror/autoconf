@@ -524,11 +524,8 @@ else
   ac_srcdir_defaulted=no
 fi
 if test ! -r $srcdir/$ac_unique_file; then
-  if test "$ac_srcdir_defaulted" = yes; then
-    AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $ac_confdir or ..])
-  else
-    AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $srcdir])
-  fi
+  test "$ac_srcdir_defaulted" = yes && srcdir="$ac_confdir or .."
+  AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $srcdir])
 fi
 (cd $srcdir && test -r ./$ac_unique_file) 2>/dev/null ||
   AC_MSG_ERROR([sources are in $srcdir, but `cd $srcdir' does not work])

@@ -1,5 +1,10 @@
 2005-05-24  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR): Merge the two error
+	  messages when ac_unique_file is not found.
+
+2005-05-24  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/general.m4 (AC_CONFIG_MACRO_DIR): Simplify the
 	  `if' at the end.
 
@@ -35,7 +40,7 @@
 
 2005-05-20  Stepan Kasal  <kasal@ucw.cz>
 
-	* ./lib/autoconf/general.m4 (_AC_INIT_PREPARE): Simplify the init
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Simplify the init
 	  of confdefs.h .
 
 2005-05-17  Stepan Kasal  <kasal@ucw.cz>
