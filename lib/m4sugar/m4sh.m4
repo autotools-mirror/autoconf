@@ -547,6 +547,13 @@ m4_define([_AS_ECHO],
 [_AS_ECHO_UNQUOTED([_AS_QUOTE([$1])], [$2])])
 
 
+# _AS_ECHO_LOG(STRING)
+# --------------------
+# Log the string to AS_MESSAGE_LOG_FD.
+m4_define([_AS_ECHO_LOG],
+[_AS_ECHO([$as_me:$LINENO: $1], [AS_MESSAGE_LOG_FD])])
+
+
 # _AS_ECHO_N_PREPARE
 # ------------------
 # Check whether to use -n, \c, or newline-tab to separate
@@ -583,7 +590,7 @@ echo $ECHO_N "_AS_QUOTE([$1])$ECHO_C" >&m4_default([$2],
 # ----------------------------------------
 m4_define([AS_MESSAGE],
 [m4_ifset([AS_MESSAGE_LOG_FD],
-	  [{ _AS_ECHO([$as_me:$LINENO: $1], [AS_MESSAGE_LOG_FD])
+	  [{ _AS_ECHO_LOG([$1])
 _AS_ECHO([$as_me: $1], [$2]);}],
 	  [_AS_ECHO([$as_me: $1], [$2])])[]dnl
 ])

@@ -361,8 +361,7 @@ AC_CHECK_TOOLS([]_AC_FC[],
 		[_AC_F95_FC _AC_F90_FC _AC_F77_FC])))
 
 # Provide some information about the compiler.
-echo "$as_me:__oline__:" \
-     "checking for _AC_LANG compiler version" >&AS_MESSAGE_LOG_FD
+_AS_ECHO_LOG([checking for _AC_LANG compiler version])
 ac_compiler=`set X $ac_compile; echo $[2]`
 _AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
@@ -526,7 +525,8 @@ AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # flags.
 ac_save_FFLAGS=$[]_AC_LANG_PREFIX[]FLAGS
 _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS m4_default([$1], [$ac_cv_prog_[]_AC_LANG_ABBREV[]_v])"
-(eval echo $as_me:__oline__: \"$ac_link\") >&AS_MESSAGE_LOG_FD
+eval ac_link_cmd=\"$ac_link\"
+_AS_ECHO_LOG([$ac_link_cmd])
 ac_[]_AC_LANG_ABBREV[]_v_output=`eval $ac_link AS_MESSAGE_LOG_FD>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_[]_AC_LANG_ABBREV[]_v_output" >&AS_MESSAGE_LOG_FD
 _AC_LANG_PREFIX[]FLAGS=$ac_save_FFLAGS

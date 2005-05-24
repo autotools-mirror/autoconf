@@ -479,8 +479,7 @@ fi
 test -z "$CC" && AC_MSG_FAILURE([no acceptable C compiler found in \$PATH])
 
 # Provide some information about the compiler.
-echo "$as_me:$LINENO:" \
-     "checking for _AC_LANG compiler version" >&AS_MESSAGE_LOG_FD
+_AS_ECHO_LOG([checking for _AC_LANG compiler version])
 ac_compiler=`set X $ac_compile; echo $[2]`
 _AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
@@ -714,8 +713,7 @@ if test -z "$CXX"; then
   fi
 fi
 # Provide some information about the compiler.
-echo "$as_me:$LINENO:" \
-     "checking for _AC_LANG compiler version" >&AS_MESSAGE_LOG_FD
+_AS_ECHO_LOG([checking for _AC_LANG compiler version])
 ac_compiler=`set X $ac_compile; echo $[2]`
 _AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])

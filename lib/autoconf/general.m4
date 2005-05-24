@@ -2019,7 +2019,7 @@ m4_define([AC_WARNING],
 # AC_MSG_CHECKING(FEATURE)
 # ------------------------
 m4_define([AC_MSG_CHECKING],
-[_AS_ECHO([$as_me:$LINENO: checking $1], AS_MESSAGE_LOG_FD)
+[_AS_ECHO_LOG([checking $1])
 _AS_ECHO_N([checking $1... ])[]dnl
 ])
 
@@ -2027,7 +2027,7 @@ _AS_ECHO_N([checking $1... ])[]dnl
 # AC_MSG_RESULT(RESULT)
 # ---------------------
 m4_define([AC_MSG_RESULT],
-[_AS_ECHO([$as_me:$LINENO: result: $1], AS_MESSAGE_LOG_FD)
+[_AS_ECHO_LOG([result: $1])
 _AS_ECHO([${ECHO_T}$1])[]dnl
 ])
 
@@ -2089,7 +2089,7 @@ AC_DEFUN([_AC_RUN_LOG],
 [{ ($2) >&AS_MESSAGE_LOG_FD
   ($1) 2>&AS_MESSAGE_LOG_FD
   ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+  _AS_ECHO_LOG([\$? = $ac_status])
   (exit $ac_status); }])
 
 
@@ -2107,7 +2107,7 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
   grep -v '^ *+' conftest.er1 >conftest.err
   rm -f conftest.er1
   cat conftest.err >&AS_MESSAGE_LOG_FD
-  echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
+  _AS_ECHO_LOG([\$? = $ac_status])
   (exit $ac_status); }])
 
 
