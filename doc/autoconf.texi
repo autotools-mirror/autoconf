@@ -11207,6 +11207,9 @@ Not only is @command{shift}ing a bad idea when there is nothing left to
 shift, but in addition it is not portable: the shell of @acronym{MIPS
 RISC/OS} 4.52 refuses to do it.
 
+Don't use @samp{shift 2} etc.; it was not in the 7th Edition Bourne shell,
+and it is also absent in many pre-POSIX shells.
+
 
 @item @command{source}
 @c -------------------

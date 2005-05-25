@@ -113,7 +113,7 @@ while test $# -gt 0 ; do
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        autom4te_options="$autom4te_options $option '$2'"
-       shift 2 ;;
+       shift; shift ;;
 
     --trace=* | -t?* )
        traces="$traces --trace='"`echo "$optarg" | sed "s/'/'\\\\\\\\''/g"`"'"
@@ -121,7 +121,7 @@ while test $# -gt 0 ; do
     --trace | -t )
        test $# = 1 && eval "$exit_missing_arg"
        traces="$traces --trace='"`echo "$2" | sed "s/'/'\\\\\\\\''/g"`"'"
-       shift 2 ;;
+       shift; shift ;;
     --initialization | -i )
        autom4te_options="$autom4te_options --melt"
        shift;;
@@ -132,7 +132,7 @@ while test $# -gt 0 ; do
     --output | -o )
        test $# = 1 && eval "$exit_missing_arg"
        outfile=$2
-       shift 2 ;;
+       shift; shift ;;
 
     -- )     # Stop option processing
        shift; break ;;
