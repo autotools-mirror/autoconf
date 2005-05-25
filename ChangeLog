@@ -1,3 +1,8 @@
+2005-05-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/local.at: Don't attempt to check for negated character
+	classes in shell scripts.  The test was too brittle.
+
 2005-05-25  Stepan Kasal  <kasal@ucw.cz>
 
 	* bin/autoconf.as: Don't use "shift 2"; it's not portable enough.
