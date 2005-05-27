@@ -285,10 +285,10 @@ as_func_ret_failure () {
 exitcode=0
 AS_IF([as_func_success], [],
   [exitcode=1
-  echo as_func_failure succeeded.])
+  echo as_func_success failed.])
 AS_IF([as_func_failure],
   [exitcode=1
-  echo as_func_success failed.])
+  echo as_func_failure succeeded.])
 AS_IF([as_func_ret_success], [],
   [exitcode=1
   echo as_func_ret_success failed.])
