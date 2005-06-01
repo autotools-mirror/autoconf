@@ -879,7 +879,15 @@ ac_config_files="$ac_config_files m4_normalize([$1])"
 m4_define([AC_LIST_FILES])
 m4_define([AC_LIST_FILES_COMMANDS])
 
-
+# _AC_SED_CMD_LIMIT
+# -----------------
+# Evaluate to an m4 number equal to the maximum number of commands to put
+# in any single sed program.
+#
+# Some seds have small command number limits, like on Digital OSF/1 and HP-UX.
+m4_define([_AC_SED_CMD_LIMIT],
+dnl One cannot portably go further than 100 commands because of HP-UX.
+[100])
 
 # _AC_OUTPUT_FILES
 # ----------------
@@ -889,80 +897,141 @@ m4_define([AC_LIST_FILES_COMMANDS])
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
 m4_define([_AC_OUTPUT_FILES],
-[cat >>$CONFIG_STATUS <<_ACEOF
-
+[cat >>$CONFIG_STATUS <<\_ACEOF
 #
 # CONFIG_FILES section.
 #
 
 # No need to generate the scripts if there are no CONFIG_FILES.
 # This happens for instance when ./config.status config.h
-if test -n "\$CONFIG_FILES"; then
-  # Protect against being on the right side of a sed subst in config.status.
-dnl Please, pay attention that this sed code depends a lot on the shape
-dnl of the sed commands issued by AC_SUBST.  So if you change one, change
-dnl the other too.
-[  sed 's/,@/@@/; s/@,/@@/; s/,;t t\$/@;t t/; /@;t t\$/s/[\\\\&,]/\\\\&/g;
-   s/@@/,@/; s/@@/@,/; s/@;t t\$/,;t t/' >"\$tmp/subs.sed" <<\\CEOF]
-dnl These here document variables are unquoted when configure runs
-dnl but quoted when config.status runs, so variables are expanded once.
-dnl Insert the sed substitutions of variables.
-m4_ifdef([_AC_SUBST_VARS],
-	 [AC_FOREACH([AC_Var], m4_defn([_AC_SUBST_VARS]),
-[s,@AC_Var@,$AC_Var,;t t
-])])dnl
-m4_ifdef([_AC_SUBST_FILES],
-	 [AC_FOREACH([AC_Var], m4_defn([_AC_SUBST_FILES]),
-[/@AC_Var@/r $AC_Var
-s,@AC_Var@,,;t t
-])])dnl
-CEOF
+if test -n "$CONFIG_FILES"; then
 
 _ACEOF
 
-  cat >>$CONFIG_STATUS <<\_ACEOF
-  # Split the substitutions into bite-sized pieces for seds with
-  # small command number limits, like on Digital OSF/1 and HP-UX.
-dnl One cannot portably go further than 100 commands because of HP-UX.
-dnl Here, there are 2 cmd per line, and two cmd are added later.
-  ac_max_sed_lines=48
-  ac_sed_frag=1 # Number of current file.
-  ac_beg=1 # First line for current file.
-  ac_end=$ac_max_sed_lines # Line after last line for current file.
-  ac_more_lines=:
-  ac_sed_cmds=
-  while $ac_more_lines; do
-    if test $ac_beg -gt 1; then
-      sed "1,${ac_beg}d; ${ac_end}q" "$tmp/subs.sed" >"$tmp/subs.frag"
-    else
-      sed "${ac_end}q" "$tmp/subs.sed" >"$tmp/subs.frag"
-    fi
-    if test ! -s "$tmp/subs.frag"; then
-      ac_more_lines=false
-    else
-      # The purpose of the label and of the branching condition is to
-      # speed up the sed processing (if there are no `@' at all, there
-      # is no need to browse any of the substitutions).
-      # These are the two extra sed commands mentioned above.
-      (echo [':t
-  /@[a-zA-Z_][a-zA-Z_0-9]*@/!b'] && cat "$tmp/subs.frag") >"$tmp/subs-$ac_sed_frag.sed"
-      if test -z "$ac_sed_cmds"; then
-	ac_sed_cmds="sed -f '$tmp/subs-$ac_sed_frag.sed'"
-      else
-	ac_sed_cmds="$ac_sed_cmds | sed -f '$tmp/subs-$ac_sed_frag.sed'"
-      fi
-      ac_sed_frag=`expr $ac_sed_frag + 1`
-      ac_beg=$ac_end
-      ac_end=`expr $ac_end + $ac_max_sed_lines`
-    fi
-  done
-  if test -z "$ac_sed_cmds"; then
-    ac_sed_cmds=cat
+m4_pushdef([_AC_SED_CMDS], [])dnl Part of pipeline that does substitutions.
+dnl
+m4_pushdef([_AC_SED_FRAG_NUM], 0)dnl Fragment number.
+m4_pushdef([_AC_SED_CMD_NUM], 2)dnl Num of commands in current frag so far.
+m4_pushdef([_AC_SED_DELIM_NUM], 0)dnl Expected number of delimiters in file.
+m4_pushdef([_AC_SED_FRAG], [])dnl The constant part of the current fragment.
+dnl
+m4_ifdef([_AC_SUBST_FILES],
+[# Create sed commands to just substitute file output variables.
+
+AC_FOREACH([_AC_Var], m4_defn([_AC_SUBST_FILES]),
+[dnl End fragments at beginning of loop so that last fragment is not ended.
+m4_if(1,m4_eval(_AC_SED_CMD_NUM+4>_AC_SED_CMD_LIMIT),
+[dnl Fragment is full and not the last one, so no need for the final un-escape.
+dnl Increment fragment number.
+m4_define([_AC_SED_FRAG_NUM],m4_incr(_AC_SED_FRAG_NUM))dnl
+dnl Record that this fragment will need to be used.
+m4_define([_AC_SED_CMDS],
+m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
+[cat >>$CONFIG_STATUS <<_ACEOF
+cat >"$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <\CEOF
+/@[a-zA-Z_][a-zA-Z_0-9]*@/!b
+]m4_defn(_AC_SED_FRAG)dnl
+[CEOF
+
+_ACEOF
+]m4_define([_AC_SED_CMD_NUM], 2)m4_define([_AC_SED_FRAG])dnl
+])dnl Last fragment ended.
+m4_define([_AC_SED_CMD_NUM], m4_eval(_AC_SED_CMD_NUM+4))dnl
+m4_define([_AC_SED_FRAG],
+m4_defn([_AC_SED_FRAG])dnl
+[/^[ 	]*@]_AC_Var[@[ 	]*$/{ r $]_AC_Var[
+d; }
+])dnl
+])dnl
+# Remaining file output variables are in a fragment that also has non-file
+# output varibles.
+
+])
+dnl
+m4_define([_AC_SED_FRAG],[
+]m4_defn([_AC_SED_FRAG]))dnl
+AC_FOREACH([_AC_Var],
+m4_ifdef([_AC_SUBST_VARS],[m4_defn([_AC_SUBST_VARS]) ])[@END@],
+[m4_if(_AC_SED_DELIM_NUM,0,
+[m4_if(_AC_Var,[@END@],
+[dnl The whole of the last fragment would be the final deletion of `|#_!!_#|'.
+m4_define([_AC_SED_CMDS],m4_defn([_AC_SED_CMDS])[| sed 's/|#_!!_#|//g' ])],
+[
+ac_delim='%!_!# '
+for ac_last_try in false false false false false :; do
+  cat >conf$$subs.sed <<_ACEOF
+])])dnl
+m4_if(_AC_Var,[ac_delim],
+[dnl Just to be on the safe side, claim that $ac_delim is the empty string.
+m4_define([_AC_SED_FRAG],
+m4_defn([_AC_SED_FRAG])dnl
+[s,ac_delim,|#_!!_#|,g
+])dnl
+m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))],
+      _AC_Var,[@END@],
+      [m4_if(1,m4_eval(_AC_SED_CMD_NUM+2<=_AC_SED_CMD_LIMIT),
+             [m4_define([_AC_SED_FRAG], [ end]m4_defn([_AC_SED_FRAG]))])],
+[m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))dnl
+m4_define([_AC_SED_DELIM_NUM], m4_incr(_AC_SED_DELIM_NUM))dnl
+_AC_Var!$_AC_Var$ac_delim
+])dnl
+m4_if(_AC_SED_CMD_LIMIT,
+      m4_if(_AC_Var,[@END@],_AC_SED_CMD_LIMIT,_AC_SED_CMD_NUM),
+[_ACEOF
+
+  if test `grep -c "$ac_delim\$" conf$$subs.sed` = _AC_SED_DELIM_NUM; then
+    break
+  elif $ac_last_try; then
+    AC_MSG_ERROR([could not make $CONFIG_STATUS])
+  else
+    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
   fi
+done
+
+ac_eof=`sed -n '/^CEOF[0-9]*$/s/CEOF//p' conf$$subs.sed | sort -nru | sed 1q`
+ac_eof=`expr 0$ac_eof + 1`
+
+dnl Increment fragment number.
+m4_define([_AC_SED_FRAG_NUM],m4_incr(_AC_SED_FRAG_NUM))dnl
+dnl Record that this fragment will need to be used.
+m4_define([_AC_SED_CMDS],
+m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
+[cat >>$CONFIG_STATUS <<_ACEOF
+cat >"\$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <<\CEOF$ac_eof
+/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]m4_defn([_AC_SED_FRAG])dnl
+[_ACEOF
+sed '
+s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g
+s/^/s,@/; s/!/@,|#_!!_#|/
+:n
+t n
+s/'"$ac_delim"'$/,g/; t
+s/$/\\/; p
+N; s/^.*\n//; s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g; b n
+' >>$CONFIG_STATUS <conf$$subs.sed
+rm -f conf$$subs.sed
+cat >>$CONFIG_STATUS <<_ACEOF
+]m4_if(_AC_Var,[@END@],
+[m4_if(1,m4_eval(_AC_SED_CMD_NUM+2>_AC_SED_CMD_LIMIT),
+[m4_define([_AC_SED_CMDS],m4_defn([_AC_SED_CMDS])[| sed 's/|#_!!_#|//g' ])],
+[[:end
+s/|#_!!_#|//g
+]])])dnl
+CEOF$ac_eof
+_ACEOF
+m4_define([_AC_SED_FRAG], [
+])m4_define([_AC_SED_DELIM_NUM], 0)m4_define([_AC_SED_CMD_NUM], 2)dnl
+
+])])dnl
+dnl
+m4_popdef([_AC_SED_FRAG_NUM])dnl
+m4_popdef([_AC_SED_CMD_NUM])dnl
+m4_popdef([_AC_SED_DELIM_NUM])dnl
+m4_popdef([_AC_SED_FRAG])dnl
+dnl
+cat >>$CONFIG_STATUS <<\_ACEOF
 fi # test -n "$CONFIG_FILES"
 
-_ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF
 for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
   case $ac_file in
@@ -1043,8 +1112,8 @@ s|@top_builddir@|$ac_top_builddir_sub|;t t
 s|@abs_top_builddir@|$ac_abs_top_builddir|;t t
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [s,@INSTALL@,$ac_INSTALL,;t t
 ])dnl
-dnl The parens around the eval prevent an "illegal io" in Ultrix sh.
-" $ac_file_inputs | (eval "$ac_sed_cmds") >"$tmp/out"
+" $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
+m4_popdef([_AC_SED_CMDS])dnl
   rm -f "$tmp/stdin"
 dnl This would break Makefile dependencies.
 dnl  if diff $ac_file "$tmp/out" >/dev/null 2>&1; then

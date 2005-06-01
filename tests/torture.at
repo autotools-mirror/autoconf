@@ -556,7 +556,6 @@ AT_CLEANUP
 ## ---------------------- ##
 
 AT_SETUP([Substitute a newline])
-AT_XFAIL_IF(:)
 
 AT_DATA([Foo.in],
 [@foo@

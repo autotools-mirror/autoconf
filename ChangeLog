@@ -1,3 +1,16 @@
+2005-05-31  Dan Manthey  <dan_manthey@partech.com>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES): Output variables may
+	now contain newlines, and substituted files must be referenced on
+	a line alone; the sed scripts to substitute them are now very
+	different.
+	(_AC_SED_CMD_LIMIT): Added; single place to store limit on how many
+	commands can be put in a sed script portably.
+	* doc/autoconf.texi (Setting Output Variables): Document above
+	changes.  (Particular Header Checks) <AC_HEADER_STDBOOL>: Give exaple
+	use of multiline substitution.
+	* tests/torture.at: No longer expect substitution of newline to fail.
+
 2005-05-27  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_WORK): Fix diagnostics.

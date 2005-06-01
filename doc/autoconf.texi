@@ -4897,6 +4897,39 @@ typedef unsigned char _Bool;
 # define __bool_true_false_are_defined 1
 #endif
 @end verbatim
+
+However, since output variables can now contain newlines, it is possible
+to construct an output variable that includes only those headers and
+definitions needed, such as:
+
+@verbatim
+AC_HEADER_STDBOOL
+AC_SUBST(stdbool)
+if test "x$ac_cv_header_stdbool_h" = xyes; then
+  stdbool='
+#include <stdbool.h>
+'
+else
+  if test "x$ac_cv_type__Bool" != xyes; then
+    stdbool='
+#ifdef __cplusplus
+typedef bool _Bool;
+#else
+typedef unsigned char _Bool;
+#endif
+'
+  else
+    stdbool='
+'
+  fi
+  stdbool=$stdbool'dnl
+# define bool _Bool
+# define false 0
+# define true 1
+# define __bool_true_false_are_defined 1
+'
+fi
+@end verbatim
 @end defmac
 
 
@@ -7321,9 +7354,13 @@ substitute the variable @var{variable} into output files (typically one
 or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
 replace instances of @samp{@@@var{variable}@@} in input files with the
 value that the shell variable @var{variable} has when @code{AC_OUTPUT}
-is called.  This value of @var{variable} should not contain literal
-newlines.  (There is currently no portable way to escape literal
-newlines.)
+is called.  It is now permissible for the value to contain newlines.
+The substituted value is not rescanned for more output variables;
+occurences of @samp{@@@var{variable}@@} in the value are inserted
+literally into the output file.  (Actually, the surrounding @code{@@}s
+are surrounded by @code{|#_!!_#|}, and all occurences of @code{|#_!!_#|}
+are ultimately removed.  If by some misfortune, you need a literal
+@code{|#_!!_#|} in your output file, use @code{|#_!|#_!!_#|!_#|}.)
 
 If @var{value} is given, in addition assign it to @var{variable}.
 
@@ -7340,7 +7377,10 @@ that @code{AC_OUTPUT} will replace instances of
 @samp{@@@var{variable}@@} in output files (such as @file{Makefile.in})
 with the contents of the file that the shell variable @var{variable}
 names when @code{AC_OUTPUT} is called.  Set the variable to
-@file{/dev/null} for cases that do not have a file to insert.
+@file{/dev/null} for cases that do not have a file to insert.  This
+substitution only occurs when the @samp{@@@var{variable}@@} is on a line
+by itself, optionally surrounded by spaces and tabs.  The whole line,
+including the spaces, tabs, and the terminating newline, is replaced.
 
 This macro is useful for inserting @file{Makefile} fragments containing
 special dependencies or other @code{make} directives for particular host
