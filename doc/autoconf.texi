@@ -4878,7 +4878,7 @@ Amdahl UTS and Motorola System V/88.
 If @file{stdbool.h} exists and is conformant to C99, define
 @code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
 @code{HAVE__BOOL} to 1.  To fulfill the C99 requirements, your
-@file{system.h} should contain the following code:
+@file{system.h} could contain the following code:
 
 @verbatim
 #if HAVE_STDBOOL_H
@@ -4898,13 +4898,12 @@ typedef unsigned char _Bool;
 #endif
 @end verbatim
 
-However, since output variables can now contain newlines, it is possible
-to construct an output variable that includes only those headers and
-definitions needed, such as:
+Alternatively you can construct an output variable that includes only
+those headers and definitions needed.  For example:
 
 @verbatim
 AC_HEADER_STDBOOL
-AC_SUBST(stdbool)
+AC_SUBST([stdbool])
 if test "x$ac_cv_header_stdbool_h" = xyes; then
   stdbool='
 #include <stdbool.h>
@@ -4922,11 +4921,11 @@ typedef unsigned char _Bool;
     stdbool='
 '
   fi
-  stdbool=$stdbool'dnl
-# define bool _Bool
-# define false 0
-# define true 1
-# define __bool_true_false_are_defined 1
+  stdbool=$stdbool'
+#define bool _Bool
+#define false 0
+#define true 1
+#define __bool_true_false_are_defined 1
 '
 fi
 @end verbatim
@@ -7354,13 +7353,12 @@ substitute the variable @var{variable} into output files (typically one
 or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
 replace instances of @samp{@@@var{variable}@@} in input files with the
 value that the shell variable @var{variable} has when @code{AC_OUTPUT}
-is called.  It is now permissible for the value to contain newlines.
+is called.  The value can contain newlines.
 The substituted value is not rescanned for more output variables;
-occurences of @samp{@@@var{variable}@@} in the value are inserted
-literally into the output file.  (Actually, the surrounding @code{@@}s
-are surrounded by @code{|#_!!_#|}, and all occurences of @code{|#_!!_#|}
-are ultimately removed.  If by some misfortune, you need a literal
-@code{|#_!!_#|} in your output file, use @code{|#_!|#_!!_#|!_#|}.)
+occurrences of @samp{@@@var{variable}@@} in the value are inserted
+literally into the output file.  (The algorithm uses the special marker
+@code{|#_!!_#|} internally, so the substituted value cannot contain
+@code{|#_!!_#|})
 
 If @var{value} is given, in addition assign it to @var{variable}.
 
@@ -7377,10 +7375,11 @@ that @code{AC_OUTPUT} will replace instances of
 @samp{@@@var{variable}@@} in output files (such as @file{Makefile.in})
 with the contents of the file that the shell variable @var{variable}
 names when @code{AC_OUTPUT} is called.  Set the variable to
-@file{/dev/null} for cases that do not have a file to insert.  This
-substitution only occurs when the @samp{@@@var{variable}@@} is on a line
-by itself, optionally surrounded by spaces and tabs.  The whole line,
-including the spaces, tabs, and the terminating newline, is replaced.
+@file{/dev/null} for cases that do not have a file to insert.
+This substitution occurs only when the @samp{@@@var{variable}@@} is on a
+line by itself, optionally surrounded by spaces and tabs.  The
+substitution replaces the whole line, including the spaces, tabs, and
+the terminating newline.
 
 This macro is useful for inserting @file{Makefile} fragments containing
 special dependencies or other @code{make} directives for particular host

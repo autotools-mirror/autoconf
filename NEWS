@@ -47,6 +47,13 @@
   ac_cv_prog_cc_c99 or ac_cv_prog_cc_c89 (whichever is valid, in
   that order).
 
+** AC_SUBST
+  The subtituted value can now contain newlines.
+
+** AC_SUBST_FILE
+  The substitution now occurs only when @variable@ is on a line by itself,
+  optionally surrounded by spaces and tabs.  The whole line is replaced.
+
 ** AT_COPYRIGHT
   New macro for copyright notices in testsuite files.
 

@@ -1,3 +1,12 @@
+2005-06-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Note yesterday's changes to AC_SUBST and AC_SUBST_FILE.
+	* doc/autoconf.texi (Particular Headers): Reword example
+	for multiline stdbool replacement.
+	(Setting Output Variables): Reword text a bit.  Don't
+	give all the details about |#_!!_#|.
+	Reword description of line replacement.
+
 2005-05-31  Dan Manthey  <dan_manthey@partech.com>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES): Output variables may
