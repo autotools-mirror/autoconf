@@ -1,3 +1,10 @@
+2005-06-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autotest/general.m4 (AT_INIT): Don't create a regular
+	expression of unbounded size when processing the --list
+	option.  This runs afoul of a limit of 399 bytes per regular
+	expression on AIX.  Problem reported by Ralf Wildenhues.
+
 2005-06-01  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Note yesterday's changes to AC_SUBST and AC_SUBST_FILE.
