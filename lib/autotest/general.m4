@@ -442,12 +442,17 @@ AT_TESTSUITE_NAME test groups:
 
 _ATEOF
   # "  1 42  45 " => "^(1|42|45);".
-  at_groups_pattern=`echo "$at_groups" | sed 's/^  *//;s/  *$//;s/  */|/g'`
   echo "$at_help_all" |
-    awk 'BEGIN { FS = ";" }
-	 { if ($[1] !~ /^('"$at_groups_pattern"')$/) next }
-	 { if ($[1]) printf " %3d: %-18s %s\n", $[1], $[2], $[3]
-	   if ($[4]) printf "      %s\n", $[4] } '
+    awk 'BEGIN {
+	   for (n = split("'"$at_groups"'", a); n; n--) selected[[a[n]]] = 1
+	   FS = ";"
+	 }
+	 {
+	   if (selected[[$ 1]]) {
+	     printf " %3d: %-18s %s\n", $ 1, $ 2, $ 3
+	     if ($ 4) printf "      %s\n", $ 4
+	   }
+	 }'
   exit 0
 fi
 m4_divert_pop([HELP_END])dnl
