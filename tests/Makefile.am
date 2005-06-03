@@ -25,9 +25,8 @@ EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 	     atlocal.in package.m4 wrapper.as
 
 # Running the uninstalled scripts.
-check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
-
-DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
+check_SCRIPTS = $(wrappers)
+DISTCLEANFILES = atconfig atlocal $(TESTSUITE)
 MAINTAINERCLEANFILES = Makefile.in
 
 # Import the dependencies on Autotest and M4sh.

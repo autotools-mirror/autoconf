@@ -1,3 +1,8 @@
+2005-06-03  Stepan Kasal  <kasal@ucw.cz>
+
+	* tests/Makefile.am (check_SCRIPTS): Set to $(wrappers).
+	(DISTCLEANFILES): Remove $(check_SCRIPTS).
+
 2005-06-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autotest/general.m4 (AT_INIT): Don't create a regular
