@@ -104,6 +104,7 @@ $(TESTSUITE): $(srcdir)/package.m4 \
 	      local.at \
 	      $(TESTSUITE_AT) \
 	      $(autotest_m4f_dependencies)
+	cd $(top_srcdir)/lib/autotest && $(MAKE) $(AM_MAKEFLAGS) autotest.m4f
 	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp
 	mv $@.tmp $@
 

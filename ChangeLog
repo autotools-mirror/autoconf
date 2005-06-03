@@ -2,6 +2,7 @@
 
 	* tests/Makefile.am (check_SCRIPTS): Set to $(wrappers).
 	(DISTCLEANFILES): Remove $(check_SCRIPTS).
+	(testsuite): Make sure autotest.m4f is up-to-date before using it.
 
 2005-06-02  Paul Eggert  <eggert@cs.ucla.edu>
 
