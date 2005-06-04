@@ -11513,7 +11513,7 @@ bar
 Either do not depend on such patterns (i.e., use @samp{/^(.*foo|bar)/},
 or use a simple test to reject such AWK@.
 
-@acronym{AIX} version 5.1 limits on the maximal length of regular
+@acronym{AIX} version 5.2 limits on the maximal length of regular
 expressions and literal strings in the program to 399.
 
 
