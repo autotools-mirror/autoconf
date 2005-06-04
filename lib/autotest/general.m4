@@ -442,10 +442,11 @@ AT_TESTSUITE_NAME test groups:
 
 _ATEOF
   # "  1 42  45 " => "^(1|42|45);".
-  echo "$at_help_all" |
-    awk 'BEGIN {
-	   for (n = split("'"$at_groups"'", a); n; n--) selected[[a[n]]] = 1
+  echo "$at_groups$as_nl$at_help_all" |
+    awk 'NR == 1 {
+	   for (n = NF; n; n--) selected[[$n]] = 1
 	   FS = ";"
+	   next
 	 }
 	 {
 	   if (selected[[$ 1]]) {
