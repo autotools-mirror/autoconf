@@ -11516,6 +11516,9 @@ or use a simple test to reject such AWK@.
 @acronym{AIX} version 5.2 limits on the maximal length of regular
 expressions and literal strings in the program to 399.
 
+Some @command{awk}, such as Solaris 9's native one, have a limit of 99
+fields in a record. You may be able to circumvent this problem by using
+the builtin function @code{split}.
 
 @item @command{cat}
 @c ----------------

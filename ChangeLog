@@ -1,3 +1,17 @@
+2005-06-06  Ralf Menzel	<menzel@ls6.cs.uni-dortmund.de>  (trivial change)
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Solaris' awk cannot
+	  swallow records with more than 99 fields.
+	* lib/autotest/general.m4 (AT_INIT): Use the awk builtin `split' to 
+	  parse the long line.
+
+2005-06-04  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): AIX awk cannot
+	  swallow literals longer than 399.  Reported by Ralf Wildenhues.
+	* lib/autotest/general.m4 (AT_INIT): Pass $at_groups though stdin,
+	  to workaround this limitation.
+
 2005-06-03  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Find g95 in addition
