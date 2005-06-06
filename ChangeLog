@@ -1,5 +1,20 @@
 2005-06-06  Stepan Kasal  <kasal@ucw.cz>
 
+	m4_cdr of one-member list was [[]] (one-member list containing an
+	empty string) instead of [] (an empty list.  Callers were skewed to
+	match this misbehaviour.  As a consequence of this:
+	 - m4_foreach([x], [], [foo]) expanded to `foo', while
+	 - the expansion of m4_foreach([x], [[]], [foo]) was empty.
+	I fixed this bug.
+
+	* lib/m4sugar/m4sugar.m4 (m4_cdr): If only one argument is given,
+	  expand to an empty string; print error msg if called without
+	  an argument list.
+	(m4_foreach, m4_map, m4_map_sep): Don't expect the previous
+	  misbehaviour; handle [] and [[]] correctly.
+
+2005-06-06  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Nuke ac_max_here_lines.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): Simplify the sed
 	  scripts created and the loop applying them, use _AC_SED_CMD_LIMIT.

@@ -381,15 +381,25 @@ m4_define([m4_bmatch],
 	      [$3])])])
 
 
+# m4_car(LIST)
+# m4_cdr(LIST)
+# ------------
+# Manipulate m4 lists.
+m4_define([m4_car], [[$1]])
+m4_define([m4_cdr],
+[m4_if([$#], 0, [m4_fatal([$0: cannot be called without arguments])],
+       [$#], 1, [],
+       [m4_dquote(m4_shift($@))])])
+
+
 # m4_map(MACRO, LIST)
 # -------------------
 # Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
 # of LIST (which can be lists themselves, for multiple arguments MACROs).
 m4_define([m4_fst], [$1])
 m4_define([m4_map],
-[m4_if([$2], [[]], [],
-       [$1(m4_fst($2))[]dnl
-m4_map([$1], m4_cdr($2))])])
+[m4_ifval([$2],
+	  [$1(m4_fst($2))[]m4_map([$1], m4_cdr($2))])])
 
 
 # m4_map_sep(MACRO, SEPARATOR, LIST)
@@ -398,12 +408,8 @@ m4_map([$1], m4_cdr($2))])])
 # are the elements of LIST (which can be lists themselves, for multiple
 # arguments MACROs).
 m4_define([m4_map_sep],
-[m4_if([$3], [[]], [],
-       [$1(m4_fst($3))[]dnl
-m4_if(m4_cdr($3),
-      [[]], [],
-      [$2])[]dnl
-m4_map_sep([$1], [$2], m4_cdr($3))])])
+[m4_ifval([$3],
+	  [$1(m4_fst($3))[]m4_map([$2[]$1], m4_cdr($3))])])
 
 
 ## ---------------------------------------- ##
@@ -680,14 +686,10 @@ m4_if($1, [$2], [],
 m4_define([m4_foreach],
 [m4_pushdef([$1])_m4_foreach($@)m4_popdef([$1])])
 
-# Low level macros used to define m4_foreach.
-m4_define([m4_car], [[$1]])
-m4_define([m4_cdr], [m4_dquote(m4_shift($@))])
 m4_define([_m4_foreach],
-[m4_if([$2], [[]], [],
-       [m4_define([$1], m4_car($2))$3[]_m4_foreach([$1],
-						   m4_cdr($2),
-						   [$3])])])
+[m4_ifval([$2],
+	  [m4_define([$1], m4_car($2))$3[]dnl
+_m4_foreach([$1], m4_cdr($2), [$3])])])
 
 
 
