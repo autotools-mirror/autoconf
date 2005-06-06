@@ -485,40 +485,6 @@ AC_DEFUN([AC_CONFIG_HEADER],
 # itself into $CONFIG_STATUS (eg, via here documents).  Upon exit, no
 # here document shall be opened.
 #
-#
-# The code produced used to be extremely costly: there are was a
-# single sed script (n lines) handling both `#define' templates,
-# `#undef' templates with trailing space, and `#undef' templates
-# without trailing spaces.  The full script was run on each of the m
-# lines of `config.h.in', i.e., about n x m.
-#
-# Now there are two scripts: `conftest.defines' for the `#define'
-# templates, and `conftest.undef' for the `#undef' templates.
-#
-# Optimization 1.  It is incredibly costly to run two `#undef'
-# scripts, so just remove trailing spaces first.  Removes about a
-# third of the cost.
-#
-# Optimization 2.  Since `#define' are rare and obsoleted,
-# `conftest.defines' is built and run only if grep says there are
-# `#define'.  Improves by at least a factor 2, since in addition we
-# avoid the cost of *producing* the sed script.
-#
-# Optimization 3.  In each script, first check that the current input
-# line is a template.  This avoids running the full sed script on
-# empty lines and comments (divides the cost by about 3 since each
-# template chunk is typically a comment, a template, an empty line).
-#
-# Optimization 4.  Once a substitution performed, since there can be
-# only one per line, immediately restart the script on the next input
-# line (using the `t' sed instruction).  Divides by about 2.
-# *Note:* In the case of the AC_SUBST sed script (_AC_OUTPUT_FILES)
-# this optimization cannot be applied as is, because there can be
-# several substitutions per line.
-#
-#
-# The result is about, hm, ... times blah... plus....  Ahem.  The
-# result is about much faster.
 m4_define([_AC_OUTPUT_HEADERS],
 [cat >>$CONFIG_STATUS <<\_ACEOF
 
@@ -526,20 +492,24 @@ m4_define([_AC_OUTPUT_HEADERS],
 # CONFIG_HEADERS section.
 #
 
-# These sed commands are passed to sed as "A NAME B NAME C VALUE D", where
-# NAME is the cpp macro being defined and VALUE is the value it is being given.
+# These sed commands are passed to sed as "A NAME B PARAMS C VALUE D", where
+# NAME is the cpp macro being defined, VALUE is the value it is being given.
+# PARAMS is the parameter list in the macro definition--in most cases, it's
+# just an empty string.
 #
-# ac_d sets the value in "#define NAME VALUE" lines.
-dnl Double quote for the `[ ]' and `define'.
-[ac_dA='s,^\([	 ]*\)#\([	 ]*define[	 ][	 ]*\)'
-ac_dB='[	 ].*$,\1#\2'
+dnl Quote, for the `[ ]' and `define'.
+[ac_dA='s,^\([	 ]*#[	 ]*\)[^	 ]*\([	 ][	 ]*'
+ac_dB='\)\([ 	(].*\)*$,\1define\2'
 ac_dC=' '
-ac_dD=',;t'
-# ac_u turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
-ac_uA='s,^\([	 ]*\)#\([	 ]*\)undef\([	 ][	 ]*\)'
-ac_uB='$,\1#\2define\3'
-ac_uC=' '
-ac_uD=',;t']
+ac_dD=',']
+dnl ac_dD used to contain `;t' at the end.
+dnl This was an optimization which was making the code both slow and incorrect.
+dnl 1) Since the script has to be broken to chunks containing 100 commands,
+dnl this extra command means we have to call sed more times.
+dnl 2) The code was incorrect: in the strange case that a sumbol has multiple
+dnl different AC_DEFINEs, we want to honour the *last* one.
+
+[ac_word_regexp=[_$as_cr_Letters][_$as_cr_alnum]*]
 
 for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
@@ -575,113 +545,84 @@ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
 	 fi;;
       esac
     done` || AS_EXIT([1])
-  # Remove the trailing spaces.
-  sed 's/[[	 ]]*$//' $ac_file_inputs >"$tmp/in"
 
 _ACEOF
 
-# Transform confdefs.h into two sed scripts, `conftest.defines' and
-# `conftest.undefs', that substitutes the proper values into
-# config.h.in to produce config.h.  The first handles `#define'
-# templates, and the second `#undef' templates.
+# Transform confdefs.h into a sed script `conftest.defines', that
+# substitutes the proper values into config.h.in to produce config.h.
 # And first: Protect against being on the right side of a sed subst in
 # config.status.  Protect against being in an unquoted here document
 # in config.status.
-rm -f conftest.defines conftest.undefs
-# Using a here document instead of a string reduces the quoting nightmare.
-# Putting comments in sed scripts is not portable.
-#
-# `end' is used to avoid that the second main sed command (meant for
-# 0-ary CPP macros) applies to n-ary macro definitions.
-# See the Autoconf documentation for `clear'.
-cat >confdef2sed.sed <<\_ACEOF
-dnl Double quote for `[ ]' and `define'.
-[s/[\\&,]/\\&/g
-s,[\\$`],\\&,g
-t clear
-: clear
-s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*\)\(([^)]*)\)[	 ]*\(.*\)$,${ac_dA}\1${ac_dB}\1\2${ac_dC}\3${ac_dD},gp
-t end
-s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)$,${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD},gp
-: end]
-_ACEOF
 # If some macros were called several times there might be several times
 # the same #defines, which is useless.  Nevertheless, we may not want to
-# sort them, since we want the *last* AC-DEFINE to be honored.
-uniq confdefs.h | sed -n -f confdef2sed.sed >conftest.defines
-sed 's/ac_d/ac_u/g' conftest.defines >conftest.undefs
-rm -f confdef2sed.sed
-
+# sort them, since we want the *last* AC_DEFINE to be honored.
+dnl
+dnl Quote, for `[ ]' and `define'.
+[rm -f conftest.defines conftest.tail
+ac_word_re=[_$as_cr_Letters][_$as_cr_alnum]*
+uniq confdefs.h |
+  sed -n '
+	t rset
+	:rset
+	s/^[ 	]*#[ 	]*define[ 	][	 ]*//
+	t ok
+	d
+	:ok
+	s/[\\&,]/\\&/g
+	s/[\\$`]/\\&/g
+	s/^\('"$ac_word_re"'\)\(([^()]*)\)[ 	]*\(.*\)/${ac_dA}\1$ac_dB\2${ac_dC}\3$ac_dD/p
+	s/^\('"$ac_word_re"'\)[ 	]*\(.*\)/${ac_dA}\1$ac_dB${ac_dC}\2$ac_dD/p
+  ' >conftest.defines
+]
 # This sed command replaces #undef with comments.  This is necessary, for
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it.
-cat >>conftest.undefs <<\_ACEOF
-[s,^[	 ]*#[	 ]*undef[	 ][	 ]*[a-zA-Z_][a-zA-Z_0-9]*,/* & */,]
-_ACEOF
+# (The regexp can be very short, we know the line contains either #define
+# or #undef.)
+echo '[s,^[	 #]*u.*,/* & */,]' >>conftest.defines
 
-# Break up conftest.defines because some shells have a limit on the size
-# of here documents, and old seds have small limits too (100 cmds).
-echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
-echo '  if grep ["^[	 ]*#[	 ]*define"] "$tmp/in" >/dev/null; then' >>$CONFIG_STATUS
-echo '  # If there are no defines, we may have an empty if/fi' >>$CONFIG_STATUS
-echo '  :' >>$CONFIG_STATUS
-rm -f conftest.tail
-while grep . conftest.defines >/dev/null
+# Break up conftest.defines because some old seds have a limit on number
+# of cmds (HP-UX can take 100 cmds).  Subtract the three cmds at the
+# beginning of each fragment.
+ac_max_sed_lines=97
+
+# First sed command is:	 sed -f defines.sed $ac_file_inputs >"$tmp/out1"
+# Second one is:	 sed -f defines.sed "$tmp/out1" >"$tmp/out2"
+# Third one will be:	 sed -f defines.sed "$tmp/out2" >"$tmp/out1"
+# et cetera.
+ac_in='$ac_file_inputs'
+ac_out='"$tmp/out1"'
+ac_nxt='"$tmp/out2"'
+
+while :
 do
-  # Write a limited-size here document to $tmp/defines.sed.
-  echo '  cat >"$tmp/defines.sed" <<CEOF' >>$CONFIG_STATUS
-  # Speed up: don't consider the non `#define' lines.
-  echo ['/^[	 ]*#[	 ]*define/!b'] >>$CONFIG_STATUS
-  # Work around the forget-to-reset-the-flag bug.
-  echo 't clr' >>$CONFIG_STATUS
-  echo ': clr' >>$CONFIG_STATUS
-  sed ${ac_max_here_lines}q conftest.defines >>$CONFIG_STATUS
+  # Write a here document:
+  dnl Quote, for the `[ ]' and `define'.
+  echo ['    # First, check the format of the line:
+    cat >"$tmp/defines.sed" <<CEOF
+/^[	 ]*#[	 ]*undef[	 ][	 ]*$ac_word_regexp[ 	]*$/!{
+/^[	 ]*#[	 ]*define[	 ][	 ]*$ac_word_regexp[( 	]/!b
+}'] >>$CONFIG_STATUS
+  sed ${ac_max_sed_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
-  sed -f "$tmp/defines.sed" "$tmp/in" >"$tmp/out"
-  rm -f "$tmp/in"
-  mv "$tmp/out" "$tmp/in"
-' >>$CONFIG_STATUS
-  sed 1,${ac_max_here_lines}d conftest.defines >conftest.tail
+    sed -f "$tmp/defines.sed"' "$ac_in >$ac_out" >>$CONFIG_STATUS
+  ac_in=$ac_out ac_out=$ac_nxt ac_nxt=$ac_in
+  sed 1,${ac_max_sed_lines}d conftest.defines >conftest.tail
+  grep . conftest.tail >/dev/null || break
   rm -f conftest.defines
   mv conftest.tail conftest.defines
 done
-rm -f conftest.defines
-echo '  fi # grep' >>$CONFIG_STATUS
-echo >>$CONFIG_STATUS
-
-# Break up conftest.undefs because some shells have a limit on the size
-# of here documents, and old seds have small limits too (100 cmds).
-echo '  # Handle all the #undef templates' >>$CONFIG_STATUS
-rm -f conftest.tail
-while grep . conftest.undefs >/dev/null
-do
-  # Write a limited-size here document to $tmp/undefs.sed.
-  echo '  cat >"$tmp/undefs.sed" <<CEOF' >>$CONFIG_STATUS
-  # Speed up: don't consider the non `#undef'
-  echo ['/^[	 ]*#[	 ]*undef/!b'] >>$CONFIG_STATUS
-  # Work around the forget-to-reset-the-flag bug.
-  echo 't clr' >>$CONFIG_STATUS
-  echo ': clr' >>$CONFIG_STATUS
-  sed ${ac_max_here_lines}q conftest.undefs >>$CONFIG_STATUS
-  echo 'CEOF
-  sed -f "$tmp/undefs.sed" "$tmp/in" >"$tmp/out"
-  rm -f "$tmp/in"
-  mv "$tmp/out" "$tmp/in"
-' >>$CONFIG_STATUS
-  sed 1,${ac_max_here_lines}d conftest.undefs >conftest.tail
-  rm -f conftest.undefs
-  mv conftest.tail conftest.undefs
-done
-rm -f conftest.undefs
+rm -f conftest.defines conftest.tail
 
 dnl Now back to your regularly scheduled config.status.
+echo "ac_result=$ac_in" >>$CONFIG_STATUS
 cat >>$CONFIG_STATUS <<\_ACEOF
   # Let's still pretend it is `configure' which instantiates (i.e., don't
   # use $as_me), people would be surprised to read:
   #    /* config.h.  Generated by config.status.  */
   if test x"$ac_file" != x-; then
     echo "/* $ac_file.  Generated by configure.  */" >"$tmp/config.h"
-    cat "$tmp/in" >>"$tmp/config.h"
+    cat "$ac_result" >>"$tmp/config.h"
     if diff $ac_file "$tmp/config.h" >/dev/null 2>&1; then
       AC_MSG_NOTICE([$ac_file is unchanged])
     else
@@ -692,9 +633,9 @@ cat >>$CONFIG_STATUS <<\_ACEOF
     fi
   else
     echo "/* Generated by configure.  */"
-    cat "$tmp/in"
+    cat "$ac_result"
   fi
-  rm -f "$tmp/in"
+  rm -f "$tmp/out[12]"
 dnl If running for Automake, be ready to perform additional
 dnl commands to set up the timestamp files.
 m4_ifdef([_AC_AM_CONFIG_HEADER_HOOK],
