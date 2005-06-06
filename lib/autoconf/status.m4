@@ -581,10 +581,8 @@ uniq confdefs.h |
 # or #undef.)
 echo '[s,^[	 #]*u.*,/* & */,]' >>conftest.defines
 
-# Break up conftest.defines because some old seds have a limit on number
-# of cmds (HP-UX can take 100 cmds).  Subtract the three cmds at the
-# beginning of each fragment.
-ac_max_sed_lines=97
+# Break up conftest.defines:
+ac_max_sed_lines=m4_expr(_AC_SED_CMD_LIMIT - 3)
 
 # First sed command is:	 sed -f defines.sed $ac_file_inputs >"$tmp/out1"
 # Second one is:	 sed -f defines.sed "$tmp/out1" >"$tmp/out2"

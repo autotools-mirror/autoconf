@@ -1,3 +1,9 @@
+2005-06-06  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Nuke ac_max_here_lines.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): Simplify the sed
+	  scripts created and the loop applying them, use _AC_SED_CMD_LIMIT.
+
 2005-06-06  Ralf Menzel	<menzel@ls6.cs.uni-dortmund.de>  (trivial change)
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Solaris' awk cannot
