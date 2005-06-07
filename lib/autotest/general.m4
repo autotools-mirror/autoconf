@@ -443,7 +443,7 @@ AT_TESTSUITE_NAME test groups:
 _ATEOF
   # Passing at_groups is tricky.  We cannot use it to form a literal string
   # or regexp because of the limitation of AIX awk.  And Solaris' awk
-  # doesn't grok more than 99 fieldsin a record, so we have to use `split'.
+  # doesn't grok more than 99 fields in a record, so we have to use `split'.
   echo "$at_groups$as_nl$at_help_all" |
     awk 'BEGIN { FS = ";" }
 	 NR == 1 {
