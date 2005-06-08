@@ -610,7 +610,8 @@ else
 fi
 
 # Use `diff -u' when possible.
-if diff -u "$at_devnull" "$at_devnull" >/dev/null 2>&1; then
+if at_diff=`diff -u "$at_devnull" "$at_devnull" 2>&1` && test -z "$at_diff"
+then
   at_diff='diff -u'
 else
   at_diff=diff
