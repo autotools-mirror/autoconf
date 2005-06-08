@@ -1,5 +1,10 @@
 2005-06-08  Derek Price  <derek@ximbiot.com>
 
+	* lib/m4sugar/m4sugar.m4: Undefine include & sinclude rather than
+	renaming them since they are about to be redefined anyhow.
+
+2005-06-08  Derek Price  <derek@ximbiot.com>
+
 	* doc/autoconf.texi (Redefined M4 Macros): Add index entries for most
 	redefined M4 macros to this node.  Document m4_include & m4_sinclude.
 	Move m4_undefine to alphabetical order.
