@@ -10899,6 +10899,16 @@ $
 Even with this, SunOS 5.7 ksh matches a backslash if the set contains any
 of the characters @samp{|}, @samp{&}, @samp{(}, or @samp{)}.
 
+Conversely, Tru64 @command{ksh} (circa 2003) erroneously always matches
+a closing parenthesis if not specified in a character class:
+
+@example
+$ @kbd{case foo in *\)*) echo fail ;; esac}
+fail
+$ @kbd{case foo in *')'*) echo fail ;; esac}
+fail
+@end example
+
 Some shells, such as Ash 0.3.8, are confused by an empty
 @code{case}/@code{esac}:
 

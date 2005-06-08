@@ -24,6 +24,11 @@
 	Reword to avoid some formatting glitches.
 	* doc/installt.exi: Reword to avoid some formatting glitches.
 
+        * doc/autoconf.texi (Limitations of Builtins) <case>: Mention
+        Tru64 ksh pattern matching bug.  Reported against Libtool by
+        Albert Chin <libtool@mlists.thewrittenword.com> and
+        Nicolas Joly <njoly@pasteur.fr>.
+
 2005-06-06  Stepan Kasal  <kasal@ucw.cz>
 
 	m4_cdr of one-member list was [[]] (one-member list containing an
