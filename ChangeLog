@@ -1,3 +1,9 @@
+2005-06-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autotest/general.m4 (AT_INIT): Don't accept Solaris 9's diff
+	-u, since it outputs chatter if the input files are the same.
+	Problem reported by Ralf Menzel.
+
 2005-06-08  Derek Price  <derek@ximbiot.com>
 
 	* lib/m4sugar/m4sugar.m4: Undefine include & sinclude rather than
