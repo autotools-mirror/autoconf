@@ -1,3 +1,9 @@
+2005-06-08  Derek Price  <derek@ximbiot.com>
+
+	* doc/autoconf.texi (Redefined M4 Macros): Add index entries for most
+	redefined M4 macros to this node.  Document m4_include & m4_sinclude.
+	Move m4_undefine to alphabetical order.
+
 2005-06-07  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* README: Recommend GNU M4 1.4.3 or later.

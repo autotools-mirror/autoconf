@@ -8726,6 +8726,27 @@ M4sugar''.
 @node Redefined M4 Macros
 @subsection Redefined M4 Macros
 
+@msindex{builtin}
+@msindex{decr}
+@msindex{define}
+@msindex{dumpdef}
+@msindex{errprint}
+@msindex{esyscmd}
+@msindex{eval}
+@msindex{format}
+@msindex{ifdef}
+@msindex{incr}
+@msindex{index}
+@msindex{indir}
+@msindex{len}
+@msindex{maketemp}
+@msindex{pushdef}
+@msindex{shift}
+@msindex{substr}
+@msindex{syscmd}
+@msindex{sysval}
+@msindex{translit}
+@msindex{undefine}
 With a few exceptions, all the M4 native macros are moved in the
 @samp{m4_} pseudo-namespace, e.g., M4sugar renames @code{define} as
 @code{m4_define} etc.
@@ -8756,17 +8777,11 @@ This macro corresponds to @code{m4exit}.
 This macro corresponds to @code{ifelse}.
 @end defmac
 
-@defmac m4_undefine (@var{macro})
-@msindex{undefine}
-Contrary to the M4 builtin, this macro fails if @var{macro} is not
-defined.  Use
-
-@example
-m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
-@end example
-
-@noindent
-to recover the behavior of the builtin.
+@defmac m4_include (@var{file})
+@defmacx m4_sinclude (@var{file})
+@msindex{include}
+@msindex{sinclude}
+Like the M4 builtins, but warn against multiple inclusions of @var{file}.
 @end defmac
 
 @defmac m4_bpatsubst (@var{string}, @var{regexp}, @ovar{replacement})
@@ -8805,6 +8820,19 @@ m4_wrap([bar])
 m4_wrap([foo])
 @result{}FOOBAR
 @end example
+@end defmac
+
+@defmac m4_undefine (@var{macro})
+@msindex{undefine}
+Contrary to the M4 builtin, this macro fails if @var{macro} is not
+defined.  Use
+
+@example
+m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
+@end example
+
+@noindent
+to recover the behavior of the builtin.
 @end defmac
 
 @node Evaluation Macros
