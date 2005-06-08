@@ -14989,7 +14989,7 @@ AC_RUN_IFELSE(
 @end example
 
 @noindent
-@xref{Run Time}).
+@xref{Run Time}.
 @end defmac
 
 @defmac AC_UID_T
