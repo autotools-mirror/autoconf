@@ -1,3 +1,29 @@
+2005-06-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* README: Recommend GNU M4 1.4.3 or later.
+	* doc/autoconf.texi (Introduction): Likewise.
+	Reword to avoid some formatting glitches.
+	Use "#!/bin/sh", not "#! /bin/sh"; the space isn't needed these days.
+	Clarify explanation of HP compiler bug.
+	Redo example output tp match current CVS snapshot.
+	Use @example.org in email addresses when the examples
+	might get inadvertently cut-and-pasted into user code.
+	Remove example of autom4te usage that doesn't seem to work now.
+	Use modern AC_INIT (except when the example is meant to be
+	shown with Autoconf 2.13).
+	Update ksh info for Solaris 9 and later.
+	KB -> kB.
+	Modernize description of Automake versions a bit.
+	Don't claim a future version of Autoconf is near.
+	* doc/install.texi: Reword to avoid some formatting glitches.
+
+2005-06-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi: Add [] to examples, so that the manual
+	follows its own advice about quoting better.
+	Reword to avoid some formatting glitches.
+	* doc/installt.exi: Reword to avoid some formatting glitches.
+
 2005-06-06  Stepan Kasal  <kasal@ucw.cz>
 
 	m4_cdr of one-member list was [[]] (one-member list containing an
@@ -23,7 +49,7 @@
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Solaris' awk cannot
 	  swallow records with more than 99 fields.
-	* lib/autotest/general.m4 (AT_INIT): Use the awk builtin `split' to 
+	* lib/autotest/general.m4 (AT_INIT): Use the awk builtin `split' to
 	  parse the long line.
 
 2005-06-04  Stepan Kasal  <kasal@ucw.cz>

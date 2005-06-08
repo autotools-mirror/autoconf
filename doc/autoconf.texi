@@ -643,7 +643,7 @@ Autoconf imposes some restrictions on the names of macros used with
 
 Autoconf requires @acronym{GNU} M4 in order to generate the scripts.  It uses
 features that some versions of M4, including @acronym{GNU} M4 1.3,
-do not have.  You must use version 1.4 or later of @acronym{GNU} M4.
+do not have.  You should use version 1.4.3 or later of @acronym{GNU} M4.
 
 @xref{Autoconf 1}, for information about upgrading from version 1.
 @xref{History}, for the story of Autoconf's development.  @xref{FAQ},
@@ -654,25 +654,28 @@ Autoconf web page} for up-to-date information, details on the mailing
 lists, pointers to a list of known bugs, etc.
 
 Mail suggestions to @email{autoconf@@gnu.org, the Autoconf mailing
-list}.
+list}.  Past suggestions are
+@uref{http://lists.gnu.org/archive/html/autoconf/, archived}.
 
-Bug reports should be emailed to @email{bug-autoconf@@gnu.org, the
-Autoconf Bugs mailing list}.  If possible, first check that your bug is
+Mail bug reports to @email{bug-autoconf@@gnu.org, the
+Autoconf Bugs mailing list}.  Past bug reports are
+@uref{http://lists.gnu.org/archive/html/bug-autoconf/, archived}.
+
+If possible, first check that your bug is
 not already solved in current development versions, and that it has not
 been reported yet.  Be sure to include all the needed information and a
 short @file{configure.ac} that demonstrates the problem.
 
-Autoconf's development tree is accessible via @acronym{CVS}; see the
+Autoconf's development tree is accessible via anonymous @acronym{CVS}; see the
 @uref{http://savannah.gnu.org/projects/autoconf/, Autoconf
 Summary} for details.  Patches relative to the
 current @acronym{CVS} version can be sent for review to the
 @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
+Past patches are
+@uref{http://lists.gnu.org/archive/html/autoconf-patches/, archived}.
 
-Archives of @email{bug-autoconf@@gnu.org} can be
-found in @uref{http://lists.gnu.org/archive/html/bug-autoconf/}, and
-similarly for the other mailing lists.
-
-Because of its mission, Autoconf includes only a set of often-used
+Because of its mission, the Autoconf package itself
+includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
 @uref{http://www.gnu.org/software/ac-archive/, @acronym{GNU} Autoconf Macro
@@ -1108,9 +1111,9 @@ argument explicit, or you may simply omit the trailing commas.  The
 three lines below are equivalent:
 
 @example
-AC_CHECK_HEADERS(stdio.h, [], [], [])
-AC_CHECK_HEADERS(stdio.h,,,)
-AC_CHECK_HEADERS(stdio.h)
+AC_CHECK_HEADERS([stdio.h], [], [], [])
+AC_CHECK_HEADERS([stdio.h],,,)
+AC_CHECK_HEADERS([stdio.h])
 @end example
 
 It is best to put each macro call on its own line in
@@ -1343,7 +1346,7 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
-honored.  Passing @samp{-W @var{category}} will actually behave as if
+honored as well.  Passing @samp{-W @var{category}} will actually behave as if
 you had passed @samp{--warnings=syntax,$WARNINGS,@var{category}}.  If
 you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
@@ -1509,7 +1512,8 @@ newer than their input files (@file{configure.ac} and, if present,
 Install the missing auxiliary files in the package.  By default, files
 are copied; this can be changed with @option{--symlink}.
 
-This option triggers calls to @samp{automake --add-missing},
+If deemed appropriate, this option triggers calls to
+@samp{automake --add-missing},
 @samp{libtoolize}, @samp{autopoint}, etc.
 
 @item --symlink
@@ -1565,7 +1569,7 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
-honored.  Passing @samp{-W @var{category}} will actually behave as if
+honored as well.  Passing @samp{-W @var{category}} will actually behave as if
 you had passed @samp{--warnings=syntax,$WARNINGS,@var{category}}.  If
 you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
@@ -1679,7 +1683,7 @@ earlier than @var{version}, print an error message to the standard
 error output and exit with failure (exit status is 63).  For example:
 
 @example
-AC_PREREQ(@value{VERSION})
+AC_PREREQ([@value{VERSION}])
 @end example
 
 This macro is the only macro that may be used before @code{AC_INIT}, but
@@ -1712,14 +1716,14 @@ For example, this line in @file{configure.ac}:
 
 @c The asis prevents RCS from changing the example in the manual.
 @example
-AC_REVISION($@asis{Revision: 1.30 }$)
+AC_REVISION([$@asis{Revision: 1.30 }$])
 @end example
 
 @noindent
 produces this in @command{configure}:
 
 @example
-#! /bin/sh
+#!/bin/sh
 # From configure.ac Revision: 1.30
 @end example
 @end defmac
@@ -1915,15 +1919,15 @@ should avoid
 @example
 @dots{} && my_foos="$my_foos fooo"
 @dots{} && my_foos="$my_foos foooo"
-AC_CONFIG_FOOS($my_foos)
+AC_CONFIG_FOOS([$my_foos])
 @end example
 
 @noindent
 and use this instead:
 
 @example
-@dots{} && AC_CONFIG_FOOS(fooo)
-@dots{} && AC_CONFIG_FOOS(foooo)
+@dots{} && AC_CONFIG_FOOS([fooo])
+@dots{} && AC_CONFIG_FOOS([foooo])
 @end example
 
 The macros @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
@@ -1931,8 +1935,8 @@ special @var{tag}s: they may have the form @samp{@var{output}} or
 @samp{@var{output}:@var{inputs}}.  The file @var{output} is instantiated
 from its templates, @var{inputs} (defaulting to @samp{@var{output}.in}).
 
-For instance
-@samp{AC_CONFIG_FILES(Makefile:boiler/top.mk:boiler/bot.mk)} asks for
+@samp{AC_CONFIG_FILES([Makefile:boiler/top.mk:boiler/bot.mk)]},
+for example, asks for
 the creation of @file{Makefile} that will be the expansion of the
 output variables in the concatenation of @file{boiler/top.mk} and
 @file{boiler/bot.mk}.
@@ -2143,7 +2147,7 @@ reference this variable in a comment at the top of each input file.  For
 example, an input shell script should begin like this:
 
 @example
-#! /bin/sh
+#!/bin/sh
 # @@configure_input@@
 @end example
 
@@ -2441,7 +2445,7 @@ depend upon the current value of @code{prefix}.
 A corollary is that you should not use these variables except in
 Makefiles.  For instance, instead of trying to evaluate @code{datadir}
 in @file{configure} and hard-coding it in Makefiles using
-e.g., @samp{AC_DEFINE_UNQUOTED(DATADIR, "$datadir", [Data directory.])},
+e.g., @samp{AC_DEFINE_UNQUOTED([DATADIR], ["$datadir"], [Data directory.])},
 you should add
 @samp{-DDATADIR="$(datadir)"} to your @code{CPPFLAGS}.
 
@@ -2618,10 +2622,15 @@ config.status: configure
 (Be careful if you copy these lines directly into your Makefile, as you
 will need to convert the indented lines to start with the tab character.)
 
-In addition, you should use @samp{AC_CONFIG_FILES([stamp-h], [echo
-timestamp > stamp-h])} so @file{config.status} will ensure that
-@file{config.h} is considered up to date.  @xref{Output}, for more
-information about @code{AC_OUTPUT}.
+In addition, you should use
+
+@example
+AC_CONFIG_FILES([stamp-h], [echo timestamp > stamp-h])
+@end example
+
+@noindent
+so @file{config.status} will ensure that @file{config.h} is considered up to
+date.  @xref{Output}, for more information about @code{AC_OUTPUT}.
 
 @xref{config.status Invocation}, for more examples of handling
 configuration-related dependencies.
@@ -2991,8 +3000,8 @@ macros; see @ref{Configuration Actions}.
 For example, this call:
 
 @example
-AC_CONFIG_LINKS(host.h:config/$machine.h
-                object.h:config/$obj_format.h)
+AC_CONFIG_LINKS([host.h:config/$machine.h
+                object.h:config/$obj_format.h])
 @end example
 
 @noindent
@@ -3035,7 +3044,7 @@ be a literal, i.e., please do not use:
 if test "$package_foo_enabled" = yes; then
   $my_subdirs="$my_subdirs foo"
 fi
-AC_CONFIG_SUBDIRS($my_subdirs)
+AC_CONFIG_SUBDIRS([$my_subdirs])
 @end example
 
 @noindent
@@ -3045,7 +3054,7 @@ write:
 
 @example
 if test "$package_foo_enabled" = yes; then
-  AC_CONFIG_SUBDIRS(foo)
+  AC_CONFIG_SUBDIRS([foo])
 fi
 @end example
 
@@ -3054,7 +3063,7 @@ subdirectory is optional, write:
 
 @example
 if test -d $srcdir/foo; then
-  AC_CONFIG_SUBDIRS(foo)
+  AC_CONFIG_SUBDIRS([foo])
 fi
 @end example
 
@@ -3196,7 +3205,7 @@ that are not alphanumeric are converted to underscores.
 For instance,
 
 @example
-AC_CHECK_TYPES(struct $Expensive*)
+AC_CHECK_TYPES([struct $Expensive*])
 @end example
 
 @noindent
@@ -3416,8 +3425,8 @@ is suggested that you use this Autoconf snippet:
 AC_PROG_LEX
 if test "$LEX" != flex; then
   LEX="$SHELL $missing_dir/missing flex"
-  AC_SUBST(LEX_OUTPUT_ROOT, lex.yy)
-  AC_SUBST(LEXLIB, '')
+  AC_SUBST([LEX_OUTPUT_ROOT], [lex.yy])
+  AC_SUBST([LEXLIB], [''])
 fi
 @end example
 
@@ -3550,7 +3559,7 @@ with a prefix of the host type as determined by
 For example, if the user runs @samp{configure --host=i386-gnu}, then
 this call:
 @example
-AC_CHECK_TOOL(RANLIB, ranlib, :)
+AC_CHECK_TOOL([RANLIB], [ranlib], [:])
 @end example
 @noindent
 sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
@@ -3688,8 +3697,8 @@ in some common cases.  Many standard functions like @code{gethostbyname}
 appear the standard C library on some hosts, and in special libraries
 like @code{nsl} on other hosts.  On some hosts the special libraries
 contain variant implementations that you may not want to use.  These
-days it is normally better to use @code{AC_SEARCH_LIBS(gethostbyname,
-nsl)} instead of @code{AC_CHECK_LIB(nsl, gethostbyname)}.
+days it is normally better to use @code{AC_SEARCH_LIBS([gethostbyname],
+[nsl])} instead of @code{AC_CHECK_LIB([nsl], [gethostbyname])}.
 @end defmac
 
 
@@ -3774,7 +3783,7 @@ argument that is outside the range of @code{double}.
 
 To work around this porting mess, you can use code like the following.
 
-@example
+@smallexample
 #include <math.h>
 
 #ifndef isnan
@@ -3796,7 +3805,7 @@ static inline int isinf_f  (float       x) @{ return isnan (x - x); @}
 static inline int isinf_d  (double      x) @{ return isnan (x - x); @}
 static inline int isinf_ld (long double x) @{ return isnan (x - x); @}
 #endif
-@end example
+@end smallexample
 
 Use @code{AC_C_INLINE} (@pxref{C Compiler}) so that this code works on
 compilers that lack the @code{inline} keyword.  Some optimizing
@@ -4169,7 +4178,7 @@ sure to set the @code{AC_LIBOBJ} replacement directory properly (see
 
 If the system has the @code{getloadavg} function, define
 @code{HAVE_GETLOADAVG}, and set @code{GETLOADAVG_LIBS} to any libraries
-needed to get that function.  Also add @code{GETLOADAVG_LIBS} to
+necessary to get that function.  Also add @code{GETLOADAVG_LIBS} to
 @code{LIBS}.  Otherwise, require an @code{AC_LIBOBJ} replacement for
 @samp{getloadavg} with source code in @file{@var{dir}/getloadavg.c}, and
 possibly define several other C preprocessor macros and output
@@ -4538,8 +4547,8 @@ about selecting the language for checks.)
 @defmac AC_CHECK_FUNCS (@var{function}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{CHECK_FUNCS}
 @cvindex HAVE_@var{function}
-For each @var{function} in the blank-or-newline-separated argument list,
-define @code{HAVE_@var{function}} (in all capitals) if it is available.
+For each @var{function} enumerated in the blank-or-newline-separated argument
+list, define @code{HAVE_@var{function}} (in all capitals) if it is available.
 If @var{action-if-found} is given, it is additional shell code to
 execute when one of the functions is found.  You can give it a value of
 @samp{break} to break out of the loop on the first match.  If
@@ -4582,9 +4591,9 @@ a variable @code{$foo_or_bar} to @code{AC_LIBOBJ} that holds either
 @code{"foo"} or @code{"bar"}, you should do:
 
 @example
-AC_LIBSOURCE(foo.c)
-AC_LIBSOURCE(bar.c)
-AC_LIBOBJ($foo_or_bar)
+AC_LIBSOURCE([foo.c])
+AC_LIBSOURCE([bar.c])
+AC_LIBOBJ([$foo_or_bar])
 @end example
 
 @noindent
@@ -4603,7 +4612,7 @@ comma-separated M4 list.  Thus, the above example might be rewritten:
 
 @example
 AC_LIBSOURCES([foo.c, bar.c])
-AC_LIBOBJ($foo_or_bar)
+AC_LIBOBJ([$foo_or_bar])
 @end example
 @end defmac
 
@@ -4613,7 +4622,7 @@ Specify that @code{AC_LIBOBJ} replacement files are to be found in
 @var{directory}, a name relative to the top level of the
 source tree.  The replacement directory defaults to @file{.}, the top
 level directory, and the most typical value is @file{lib}, corresponding
-to @samp{AC_CONFIG_LIBOBJ_DIR(lib)}.
+to @samp{AC_CONFIG_LIBOBJ_DIR([lib])}.
 
 @command{configure} might need to know the replacement directory for the
 following reasons: (i) some checks use the replacement files, (ii) some
@@ -4972,7 +4981,7 @@ If you put the following in @file{configure.ac}:
 
 @example
 AC_HEADER_STDC
-AC_CHECK_FUNCS(strchr memcpy)
+AC_CHECK_FUNCS([strchr memcpy])
 @end example
 
 @noindent
@@ -5003,7 +5012,7 @@ suffice; you must provide an implementation of each function.  An easy
 way to incorporate your implementations only when needed (since the ones
 in system C libraries may be hand optimized) is to, taking @code{memchr}
 for example, put it in @file{memchr.c} and use
-@samp{AC_REPLACE_FUNCS(memchr)}.
+@samp{AC_REPLACE_FUNCS([memchr])}.
 @end defmac
 
 @defmac AC_HEADER_SYS_WAIT
@@ -5069,7 +5078,7 @@ include both files.  This macro is useful in programs that use, for
 example, @code{struct timeval} as well as
 @code{struct tm}.  It is best used in conjunction with
 @code{HAVE_SYS_TIME_H}, which can be checked for using
-@code{AC_CHECK_HEADERS(sys/time.h)}.
+@code{AC_CHECK_HEADERS([sys/time.h])}.
 
 @example
 @group
@@ -5223,7 +5232,7 @@ execute when one of the function declarations is needed, otherwise
 
 This macro uses an m4 list as first argument:
 @example
-AC_CHECK_DECLS(strdup)
+AC_CHECK_DECLS([strdup])
 AC_CHECK_DECLS([strlen])
 AC_CHECK_DECLS([malloc, realloc, calloc, free])
 @end example
@@ -5352,7 +5361,7 @@ If no @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
 
 @example
-AC_CHECK_MEMBER(struct passwd.pw_gecos,,
+AC_CHECK_MEMBER([struct passwd.pw_gecos], [],
                 [AC_MSG_ERROR([We need `passwd.pw_gecos'!])],
                 [#include <pwd.h>])
 @end example
@@ -5423,19 +5432,19 @@ Define @code{HAVE_MBSTATE_T} if @code{<wchar.h>} declares the
 @defmac AC_TYPE_MODE_T
 @acindex{TYPE_MODE_T}
 @cvindex mode_t
-Equivalent to @samp{AC_CHECK_TYPE(mode_t, int)}.
+Equivalent to @samp{AC_CHECK_TYPE([mode_t], [int])}.
 @end defmac
 
 @defmac AC_TYPE_OFF_T
 @acindex{TYPE_OFF_T}
 @cvindex off_t
-Equivalent to @samp{AC_CHECK_TYPE(off_t, long int)}.
+Equivalent to @samp{AC_CHECK_TYPE([off_t], [long int])}.
 @end defmac
 
 @defmac AC_TYPE_PID_T
 @acindex{TYPE_PID_T}
 @cvindex pid_t
-Equivalent to @samp{AC_CHECK_TYPE(pid_t, int)}.
+Equivalent to @samp{AC_CHECK_TYPE([pid_t], [int])}.
 @end defmac
 
 @defmac AC_TYPE_SIGNAL
@@ -5462,7 +5471,7 @@ hup_handler ()
 @defmac AC_TYPE_SIZE_T
 @acindex{TYPE_SIZE_T}
 @cvindex size_t
-Equivalent to @samp{AC_CHECK_TYPE(size_t, unsigned int)}.
+Equivalent to @samp{AC_CHECK_TYPE([size_t], [unsigned int])}.
 @end defmac
 
 @defmac AC_TYPE_UID_T
@@ -5497,7 +5506,7 @@ it is executed when one of the types is not found.
 
 This macro uses m4 lists:
 @example
-AC_CHECK_TYPES(ptrdiff_t)
+AC_CHECK_TYPES([ptrdiff_t])
 AC_CHECK_TYPES([unsigned long long int, uintmax_t])
 @end example
 
@@ -5564,14 +5573,10 @@ main (void)
 @noindent
 To our knowledge, there is a single compiler that does not support this
 trick: the HP C compilers (the real one, not only the ``bundled'') on
-HP-UX 11.00:
-
-@example
-$ @kbd{cc -c -Ae +O2 +Onolimit conftest.c}
-cc: "conftest.c": error 1879: Variable-length arrays cannot \
-    have static storage.
-@end example
-
+HP-UX 11.00.  They incorrectly reject the above program with the diagnostic
+``Variable-length arrays cannot have static storage.''
+This bug comes from HP compilers' mishandling of @code{sizeof (int)},
+not from the @code{? 1 : -1}, and
 Autoconf works around this problem by casting @code{sizeof (int)} to
 @code{long int} before comparing it.
 @end table
@@ -5593,7 +5598,7 @@ argument was used when cross-compiling.
 For example, the call
 
 @example
-AC_CHECK_SIZEOF(int *)
+AC_CHECK_SIZEOF([int *])
 @end example
 
 @noindent
@@ -5632,7 +5637,7 @@ being checked for, since they can easily be worked around.
 @table @asis
 @item Don't use lines containing solitary backslashes
 They tickle a bug in the HP-UX C compiler (checked on HP-UX 10.20,
-11.00, and 11i).  Running the compiler on the following source,
+11.00, and 11i).  When given the following source:
 
 @example
 #ifdef __STDC__
@@ -5651,14 +5656,8 @@ char apostrophe = '\\
 @end example
 
 @noindent
-yields
-
-@example
-@error{}cpp: "foo.c", line 13: error 4048: Non-terminating comment at end of file.
-@error{}cpp: "foo.c", line 13: error 4033: Missing #endif at end of file.
-@end example
-
-@noindent
+the compiler incorrectly fails with the diagnostics ``Non-terminating
+comment at end of file'' and ``Missing @samp{#endif} at end of file.''
 Removing the lines with solitary backslashes solves the problem.
 
 @item Don't compile several files at once if output matters to you
@@ -5701,7 +5700,7 @@ like the default order, then you could invoke @code{AC_PROG_CC} like
 this:
 
 @example
-AC_PROG_CC(cl egcs gcc cc)
+AC_PROG_CC([cl egcs gcc cc])
 @end example
 
 If the C compiler is not in @acronym{ANSI} mode by default, try to add an
@@ -6009,7 +6008,7 @@ didn't like the default order, then you could invoke @code{AC_PROG_CXX}
 like this:
 
 @example
-AC_PROG_CXX(cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc)
+AC_PROG_CXX([cl KCC CC cxx cc++ xlC aCC c++ g++ egcs gcc])
 @end example
 
 If using the @acronym{GNU} C++ compiler, set shell variable @code{GXX} to
@@ -6072,7 +6071,7 @@ example, if you didn't like the default order, then you could invoke
 @code{AC_PROG_F77} like this:
 
 @example
-AC_PROG_F77(fl32 f77 fort77 xlf g77 f90 xlf90)
+AC_PROG_F77([fl32 f77 fort77 xlf g77 f90 xlf90])
 @end example
 
 If using @code{g77} (the @acronym{GNU} Fortran 77 compiler), then
@@ -6128,7 +6127,7 @@ The following macros check for Fortran compiler characteristics.
 To check for characteristics not listed here, use
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
 @code{AC_RUN_IFELSE} (@pxref{Run Time}), making sure to first set the
-current language to Fortran 77 or Fortran via @code{AC_LANG(Fortran 77)}
+current language to Fortran 77 or Fortran via @code{AC_LANG([Fortran 77])}
 or @code{AC_LANG(Fortran)} (@pxref{Language Choice}).
 
 
@@ -6436,7 +6435,7 @@ any found to the output variable @code{X_PRE_LIBS}.
 @defmac AC_SYS_INTERPRETER
 @acindex{SYS_INTERPRETER}
 Check whether the system supports starting scripts with a line of the
-form @samp{#! /bin/csh} to select the interpreter to use for the script.
+form @samp{#!/bin/sh} to select the interpreter to use for the script.
 After running this macro, shell code in @file{configure.ac} can check
 the shell variable @code{interpval}; it will be set to @samp{yes}
 if the system supports @samp{#!}, @samp{no} if not.
@@ -6634,10 +6633,10 @@ is a good idea to specify it when it's known (which should be the
 case@dots{}), since Autoconf will detect inconsistencies.
 
 @example
-AC_LANG_PUSH(Fortran 77)
+AC_LANG_PUSH([Fortran 77])
 # Perform some tests on Fortran 77.
 # @dots{}
-AC_LANG_POP(Fortran 77)
+AC_LANG_POP([Fortran 77])
 @end example
 @end defmac
 
@@ -6802,7 +6801,7 @@ all the @code{AC_DEFINE} performed so far.
 For instance executing (observe the double quotation!):
 
 @example
-AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
+AC_INIT([Hello], [1.0], [bug-hello@@example.org])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
 AC_LANG_CONFTEST(
@@ -6814,18 +6813,15 @@ gcc -E -dD -o - conftest.c
 results in:
 
 @example
+@dots{}
 # 1 "conftest.c"
-# 1169 "configure"
 
-# 1 "confdefs.h" 1
-
-#define PACKAGE_NAME "Autoconf Documentation"
-#define PACKAGE_TARNAME "autoconf-documentation"
-#define PACKAGE_VERSION "@value{VERSION}"
-#define PACKAGE_STRING "Autoconf Documentation @value{VERSION}"
-#define PACKAGE_BUGREPORT "bug-autoconf@@gnu.org"
+#define PACKAGE_NAME "Hello"
+#define PACKAGE_TARNAME "hello"
+#define PACKAGE_VERSION "1.0"
+#define PACKAGE_STRING "Hello 1.0"
+#define PACKAGE_BUGREPORT "bug-hello@@example.org"
 #define HELLO_WORLD "Hello, World\n"
-# 1170 "configure" 2
 
 const char hw[] = "Hello, World\n";
 @end example
@@ -6841,7 +6837,7 @@ available.
 For instance:
 
 @example
-AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
+AC_INIT([Hello], [1.0], [bug-hello@@example.org])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
 AC_LANG_CONFTEST(
@@ -6854,18 +6850,15 @@ gcc -E -dD -o - conftest.c
 results in:
 
 @example
+@dots{}
 # 1 "conftest.c"
-# 1169 "configure"
 
-# 1 "confdefs.h" 1
-
-#define PACKAGE_NAME "Autoconf Documentation"
-#define PACKAGE_TARNAME "autoconf-documentation"
-#define PACKAGE_VERSION "@value{VERSION}"
-#define PACKAGE_STRING "Autoconf Documentation @value{VERSION}"
-#define PACKAGE_BUGREPORT "bug-autoconf@@gnu.org"
+#define PACKAGE_NAME "Hello"
+#define PACKAGE_TARNAME "hello"
+#define PACKAGE_VERSION "1.0"
+#define PACKAGE_STRING "Hello 1.0"
+#define PACKAGE_BUGREPORT "bug-hello@@example.org"
 #define HELLO_WORLD "Hello, World\n"
-# 1170 "configure" 2
 
 const char hw[] = "Hello, World\n";
 int
@@ -6934,7 +6927,7 @@ It is customary to report unexpected failures with
 For instance:
 
 @example
-AC_INIT(Autoconf Documentation, @value{VERSION}, bug-autoconf@@gnu.org)
+AC_INIT([Hello], [1.0], [bug-hello@@example.org])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
 AC_PREPROC_IFELSE(
@@ -6949,14 +6942,14 @@ results in:
 
 @example
 checking for gcc... gcc
-checking for C compiler default output... a.out
+checking for C compiler default output file name... a.out
 checking whether the C compiler works... yes
 checking whether we are cross compiling... no
 checking for suffix of executables...
 checking for suffix of object files... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to accept ANSI C... none needed
+checking for gcc option to accept ISO C89... none needed
 checking how to run the C preprocessor... gcc -E
 OK
 @end example
@@ -7158,8 +7151,8 @@ information is available on the
 
 @item Tru64
 @cindex Tru64
-The @uref{http://h30097.www3.hp.com/docs/,
-documentation of several versions of Tru64} is available in different
+@uref{http://h30097.www3.hp.com/docs/,
+Documentation of several versions of Tru64} is available in different
 formats.
 
 @item Unix version 7
@@ -7193,20 +7186,20 @@ fstype=no
 # The order of these tests is important.
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statvfs.h>
 #include <sys/fstyp.h>]])],
-                  [AC_DEFINE(FSTYPE_STATVFS, 1,
+                  [AC_DEFINE([FSTYPE_STATVFS], [1],
                      [Define if statvfs exists.])
                    fstype=SVR4])
 if test $fstype = no; then
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
 #include <sys/fstyp.h>]])],
-                  [AC_DEFINE(FSTYPE_USG_STATFS, 1,
+                  [AC_DEFINE([FSTYPE_USG_STATFS], [1],
                      [Define if USG statfs.])
                    fstype=SVR3])
 fi
 if test $fstype = no; then
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
 #include <sys/vmount.h>]])]),
-                  [AC_DEFINE(FSTYPE_AIX_STATFS, 1,
+                  [AC_DEFINE([FSTYPE_AIX_STATFS], [1],
                      [Define if AIX statfs.])
                    fstype=AIX])
 fi
@@ -7249,10 +7242,10 @@ already defined a certain C preprocessor symbol, test the value of the
 appropriate cache variable, as in this example:
 
 @example
-AC_CHECK_FUNC(vprintf, [AC_DEFINE(HAVE_VPRINTF, 1,
+AC_CHECK_FUNC([vprintf], [AC_DEFINE([HAVE_VPRINTF], [1],
                           [Define if vprintf exists.])])
 if test "$ac_cv_func_vprintf" != yes; then
-  AC_CHECK_FUNC(_doprnt, [AC_DEFINE(HAVE_DOPRNT, 1,
+  AC_CHECK_FUNC([_doprnt], [AC_DEFINE([HAVE_DOPRNT], [1],
                             [Define if _doprnt exists.])])
 fi
 @end example
@@ -7278,7 +7271,7 @@ The following example defines the C preprocessor variable
 @code{EQUATION} to be the string constant @samp{"$a > $b"}:
 
 @example
-AC_DEFINE(EQUATION, "$a > $b",
+AC_DEFINE([EQUATION], ["$a > $b"],
   [Equation string.])
 @end example
 
@@ -7299,11 +7292,11 @@ special meaning.  Use this macro instead of @code{AC_DEFINE} when
 @var{variable} or @var{value} is a shell variable.  Examples:
 
 @example
-AC_DEFINE_UNQUOTED(config_machfile, "$machfile",
+AC_DEFINE_UNQUOTED([config_machfile], ["$machfile"],
   [Configuration machine file.])
-AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
+AC_DEFINE_UNQUOTED([GETGROUPS_T], [$ac_cv_type_getgroups],
   [getgroups return type.])
-AC_DEFINE_UNQUOTED($ac_tr_hdr, 1,
+AC_DEFINE_UNQUOTED([$ac_tr_hdr], [1],
   [Translated header name.])
 @end example
 @end defmac
@@ -7315,16 +7308,16 @@ in the resulting @command{configure} script.  Use either blanks or
 newlines.  That is, do this:
 
 @example
-AC_CHECK_HEADER(elf.h,
-  [AC_DEFINE(SVR4, 1, [System V Release 4]) LIBS="$LIBS -lelf"])
+AC_CHECK_HEADER([elf.h],
+  [AC_DEFINE([SVR4], [1], [System V Release 4]) LIBS="$LIBS -lelf"])
 @end example
 
 @noindent
 or this:
 
 @example
-AC_CHECK_HEADER(elf.h,
-  [AC_DEFINE(SVR4, 1, [System V Release 4])
+AC_CHECK_HEADER([elf.h],
+  [AC_DEFINE([SVR4], [1], [System V Release 4])
    LIBS="$LIBS -lelf"])
 @end example
 
@@ -7332,8 +7325,8 @@ AC_CHECK_HEADER(elf.h,
 instead of this:
 
 @example
-AC_CHECK_HEADER(elf.h,
-  [AC_DEFINE(SVR4, 1, [System V Release 4]); LIBS="$LIBS -lelf"])
+AC_CHECK_HEADER([elf.h],
+  [AC_DEFINE([SVR4], [1], [System V Release 4]); LIBS="$LIBS -lelf"])
 @end example
 
 @node Setting Output Variables
@@ -7530,7 +7523,7 @@ AC_DEFUN([AC_SHELL_TRUE],
                 [ac_cv_shell_true_works=no
                  true && ac_cv_shell_true_works=yes
                  if test $ac_cv_shell_true_works = yes; then
-                   AC_DEFINE([TRUE_WORKS], 1
+                   AC_DEFINE([TRUE_WORKS], [1],
                              [Define if `true(1)' works properly.])
                  fi])
 ])
@@ -7549,7 +7542,7 @@ AC_DEFUN([AC_SHELL_TRUE],
                 [ac_cv_shell_true_works=no
                  true && ac_cv_shell_true_works=yes])
  if test $ac_cv_shell_true_works = yes; then
-   AC_DEFINE([TRUE_WORKS], 1
+   AC_DEFINE([TRUE_WORKS], [1],
              [Define if `true(1)' works properly.])
  fi
 ])
@@ -7621,8 +7614,8 @@ tests run on one system so they can be shared between configure scripts
 and configure runs.  It is not useful on other systems.  If its contents
 are invalid for some reason, the user may delete or edit it.
 
-By default, @command{configure} uses no cache file (technically, it uses
-@option{--cache-file=/dev/null}), to avoid problems caused by accidental
+By default, @command{configure} uses no cache file,
+to avoid problems caused by accidental
 use of stale cache files.
 
 To enable caching, @command{configure} accepts @option{--config-cache} (or
@@ -7689,16 +7682,16 @@ AC_CACHE_SAVE
 
 @group
 # Checks for libraries.
-AC_CHECK_LIB(nsl, gethostbyname)
-AC_CHECK_LIB(socket, connect)
+AC_CHECK_LIB([nsl], [gethostbyname])
+AC_CHECK_LIB([socket], [connect])
 @r{ @dots{} more lib checks @dots{}}
 AC_CACHE_SAVE
 @end group
 
 @group
 # Might abort@dots{}
-AM_PATH_GTK(1.0.2,, [AC_MSG_ERROR([GTK not in path])])
-AM_PATH_GTKMM(0.9.5,, [AC_MSG_ERROR([GTK not in path])])
+AM_PATH_GTK([1.0.2], [], [AC_MSG_ERROR([GTK not in path])])
+AM_PATH_GTKMM([0.9.5], [], [AC_MSG_ERROR([GTK not in path])])
 @end group
 @r{ @dots{} AC_OUTPUT, etc. @dots{}}
 @end example
@@ -8448,43 +8441,14 @@ autom4te --warnings=syntax,$WARNINGS,@var{category}
 @end example
 
 @noindent
-If you want to disable @command{autom4te}'s defaults and
-@env{WARNINGS}, but (for example) enable the warnings about obsolete
+For example, if you want to disable @command{autom4te}'s defaults and
+@env{WARNINGS}, but enable the warnings about obsolete
 constructs, you would use @option{-W none,obsolete}.
 
 @cindex Back trace
 @cindex Macro invocation stack
 @command{autom4te} displays a back trace for errors, but not for
-warnings; if you want them, just pass @option{-W error}.  For instance,
-on this @file{configure.ac}:
-
-@example
-AC_DEFUN([INNER],
-[AC_RUN_IFELSE([AC_LANG_PROGRAM([exit (0)])])])
-
-AC_DEFUN([OUTER],
-[INNER])
-
-AC_INIT
-OUTER
-@end example
-
-@noindent
-you get:
-
-@example
-$ @kbd{autom4te -l autoconf -Wcross}
-configure.ac:8: warning: AC_RUN_IFELSE called without default \
-to allow cross compiling
-$ @kbd{autom4te -l autoconf -Wcross,error -f}
-configure.ac:8: error: AC_RUN_IFELSE called without default \
-to allow cross compiling
-acgeneral.m4:3044: AC_RUN_IFELSE is expanded from...
-configure.ac:2: INNER is expanded from...
-configure.ac:5: OUTER is expanded from...
-configure.ac:8: the top level
-@end example
-
+warnings; if you want them, just pass @option{-W error}.
 
 @item --melt
 @itemx -m
@@ -8689,14 +8653,26 @@ the language-specific files before any third-party macros.
 
 @cindex @file{autom4te.cfg}
 As an example, if Autoconf is installed in its default location,
-@file{/usr/local}, running @samp{autom4te -l m4sugar foo.m4} is
-strictly equivalent to running @samp{autom4te --prepend-include
-/usr/local/share/autoconf m4sugar/m4sugar.m4f --warnings syntax foo.m4}.
-Recursive expansion applies: running @samp{autom4te -l m4sh foo.m4}
+@file{/usr/local}, the command @samp{autom4te -l m4sugar foo.m4} is
+strictly equivalent to the command:
+
+@example
+autom4te --prepend-include /usr/local/share/autoconf \
+  m4sugar/m4sugar.m4f --warnings syntax foo.m4
+@end example
+
+@noindent
+Recursive expansion applies here: the command @samp{autom4te -l m4sh foo.m4}
 is the same as @samp{autom4te --language M4sugar m4sugar/m4sh.m4f
-foo.m4}, i.e., @samp{autom4te --prepend-include /usr/local/share/autoconf
-m4sugar/m4sugar.m4f m4sugar/m4sh.m4f --mode 777 foo.m4}.  The definition
-of the languages is stored in @file{autom4te.cfg}.
+foo.m4}, i.e.:
+
+@example
+autom4te --prepend-include /usr/local/share/autoconf \
+  m4sugar/m4sugar.m4f m4sugar/m4sh.m4f --mode 777 foo.m4
+@end example
+
+@noindent
+The definition of the languages is stored in @file{autom4te.cfg}.
 
 @node Customizing autom4te
 @subsection Customizing @command{autom4te}
@@ -8945,7 +8921,7 @@ details about what this returns and why it is more portable than the
 
 @defmac AS_IF (@var{test}, @ovar{RUN-IF-TRUE}, @ovar{RUN-IF-FALSE})
 @asindex{IF}
-Run shell code TEST.  If TEST exits with a zero status then run shell code
+Run shell code TEST@.  If TEST exits with a zero status then run shell code
 RUN-IF-TRUE, else run shell code RUN-IF-FALSE, with simplifications if either
 RUN-IF-TRUE or RUN-IF-FALSE is empty.
 @end defmac
@@ -9082,7 +9058,8 @@ the prototype.  For example:
 # AC_MSG_ERROR(ERROR, [EXIT-STATUS = 1])
 # --------------------------------------
 m4_define([AC_MSG_ERROR],
-[@{ _AC_ECHO([configure: error: $1], 2); exit m4_default([$2], 1); @}])
+  [@{ AS_MESSAGE([error: $1], [2])
+     exit m4_default([$2], [1]); @}])
 @end example
 
 Comments about the macro should be left in the header comment.  Most
@@ -9283,7 +9260,7 @@ fi])
 with this @file{configure.ac}
 
 @example
-AC_INIT
+AC_INIT([Dance Manager], [1.0], [bug-dance@@example.org])
 RESERVE_DANCE_FLOOR
 if test "$dance_floor" = occupied; then
   AC_MSG_ERROR([cannot pick up here, let's move])
@@ -9646,20 +9623,14 @@ advantage of features that were added after Unix version 7, circa
 You should not use shell functions, aliases, negated character
 classes, or other features that are not found in all Bourne-compatible
 shells; restrict yourself to the lowest common denominator.  Even
-@code{unset} is not supported by all shells!  Also, include a space
-after the exclamation point in interpreter specifications, like this:
+@code{unset} is not supported by all shells!
 
-@example
-#! /usr/bin/perl
-@end example
-
-@noindent
-If you omit the space before the absolute file name,
-then 4.2@acronym{BSD} based systems
-(such as DYNIX) will ignore the line, because they interpret
-@samp{#! /} as a 4-byte magic number.  Some old systems have quite
-small limits on the length of the @samp{#!} line too, for instance 32
+Some old systems have quite
+small limits on the length of the @samp{#!} line; for instance, 32
 bytes (not including the newline) on SunOS 4.
+A few ancient 4.2@acronym{BSD} based systems (such as Dynix circa 1984)
+required a single space between the @samp{#!} and the @samp{/}, but
+these are no longer of practical concern.
 
 The set of external programs you should run in a @command{configure} script
 is fairly small.  @xref{Utilities in Makefiles,, Utilities in
@@ -9766,28 +9737,24 @@ called @samp{ksh88} and @samp{ksh93}, named after the years of initial
 release.  It is usually called @command{ksh}, but is called @command{sh}
 on some hosts if you set your path appropriately.
 
-@itemize @minus
-@item
 Solaris systems have three variants:
 @prindex @command{/usr/bin/ksh} on Solaris
-@command{/usr/bin/ksh} is @samp{ksh88},
+@command{/usr/bin/ksh} is @samp{ksh88}; it is
+standard on Solaris 2.0 and later.
 @prindex @command{/usr/xpg4/bin/sh} on Solaris
 @command{/usr/xpg4/bin/sh} is a Posix-compliant variant of
-@samp{ksh88}, and
+@samp{ksh88}; it is standard on Solaris 9 and later.
 @prindex @command{/usr/dt/bin/dtksh} on Solaris
-@command{/usr/dt/bin/dtksh} is @samp{ksh93}.  @command{/usr/bin/ksh}
-is standard on Solaris; the other variants are parts of optional
+@command{/usr/dt/bin/dtksh} is @samp{ksh93}.
+Variants that are not standard may be parts of optional
 packages.  There is no extra charge for these packages, but they are
 not part of a minimal OS install and therefore some installations may
 not have it.
 
-@item
 Starting with Tru64 Version 4.0, the Korn shell @command{/usr/bin/ksh}
 is also available as @command{/usr/bin/posix/sh}.  If the environment
 variable @env{BIN_SH} is set to @code{xpg4}, subsidiary invocations of
 the standard shell conform to Posix.
-
-@end itemize
 
 @item Pdksh
 @prindex @samp{pdksh}
@@ -10870,7 +10837,8 @@ is therefore not portable in practice.  Typically it is easy to rewrite
 such code, e.g.:
 
 @example
-cmp file1 file2 >/dev/null 2>&1 || echo files differ or trouble
+cmp file1 file2 >/dev/null 2>&1 ||
+  echo files differ or trouble
 @end example
 
 More generally, one can always rewrite @samp{! @var{command}} as:
@@ -11050,7 +11018,7 @@ two variables coexist: the environment variable and the shell
 variable.  The following code demonstrates this failure:
 
 @example
-#! /bin/sh
+#!/bin/sh
 echo $FOO
 FOO=bar
 echo $FOO
@@ -11517,7 +11485,7 @@ or use a simple test to reject such AWK@.
 expressions and literal strings in the program to 399.
 
 Some @command{awk}, such as Solaris 9's native one, have a limit of 99
-fields in a record. You may be able to circumvent this problem by using
+fields in a record.  You may be able to circumvent this problem by using
 the builtin function @code{split}.
 
 @item @command{cat}
@@ -12028,30 +11996,25 @@ but it is not always atomic: when doing @samp{mv new existing}, there's
 a critical section where neither the old nor the new version of
 @file{existing} actually exists.
 
-Be aware that moving files from @file{/tmp} can sometimes cause
+On some systems moving files from @file{/tmp} can sometimes cause
 undesirable (but perfectly valid) warnings, even if you created these
-files.  On some systems, creating the file in @file{/tmp} is setting a
-guid @code{wheel} which you may not be part of.  So the file is copied,
-and then the @code{chgrp} fails:
+files.  This is because @file{/tmp} belongs to a group that ordinary
+users are not members of, and files created in @file{/tmp} inherit
+@file{/tmp}'s group.  When the file is copied, @command{mv} issues
+a diagnostic without failing:
 
-@example
+@smallexample
 $ @kbd{touch /tmp/foo}
 $ @kbd{mv /tmp/foo .}
-@error{}mv: ./foo: set owner/group (was: 3830/0): Operation not permitted
+@error{}mv: ./foo: set owner/group (was: 100/0): Operation not permitted
 $ @kbd{echo $?}
 0
 $ @kbd{ls foo}
 foo
-@end example
+@end smallexample
 
 @noindent
-This behavior conforms to Posix:
-
-@quotation
-If the duplication of the file characteristics fails for any reason, mv
-shall write a diagnostic message to standard error, but this failure
-shall not cause mv to modify its exit status.''
-@end quotation
+This annoying behavior conforms to Posix, unfortunately.
 
 Moving directories across mount points is not portable, use @command{cp}
 and @command{rm}.
@@ -12371,7 +12334,7 @@ line with @code{#}, not only the first.
 OSF/1 4.0d's @command{make} cannot process @file{Makefile}s with lines
 longer than 38912 bytes.  It exits with a @code{Line too long}
 diagnostic.  A later version, Tru64 5.1's @command{make} has been
-reported to crash with lines around 20KB.
+reported to crash with lines around 20 kB.
 
 @item @code{make macro=value} and sub-@command{make}s.
 
@@ -12417,7 +12380,7 @@ invocations, the @code{foo} macro will be overridden in
 sub-@code{make}s as expected.
 
 This syntax (@code{foo=bar make -e}) is portable only when used
-outside a @file{Makefile}, for instance from a script or from the
+outside of a @file{Makefile}, for instance from a script or from the
 command line.  When run inside a @command{make} rule, GNU
 @command{make} 3.80 and prior versions forget to propagate the
 @code{-e} option to sub-@command{make}s.
@@ -12593,8 +12556,8 @@ whole thing manually.  For instance, using the following pattern:
 
 @example
 VPATH = ../pkg/src
-foo.c: ifoo.c
-        cp `test -f ifoo.c || echo ../pkg/src/`ifoo.c foo.c
+f.c: if.c
+        cp `test -f if.c || echo $(VPATH)/`if.c f.c
 @end example
 
 @item Automatic rule rewriting
@@ -12609,123 +12572,140 @@ For instance
 
 @example
 VPATH = ../pkg/src
-foo.c: ifoo.c
-        cp ifoo.c foo.c
+f.c: if.c
+        cp if.c f.c
 @end example
 
 @noindent
-would execute @code{cp ../pkg/src/ifoo.c foo.c} if @file{ifoo.c} was
+would execute @code{cp ../pkg/src/if.c f.c} if @file{if.c} was
 found in @file{../pkg/src}.  That sounds great.
 
 However, for the sake of other @command{make} implementations, we can't
 rely on this, and we have to search @code{VPATH} manually:
 
-@example
+@smallexample
 VPATH = ../pkg/src
-foo.c: ifoo.c
-        cp `test -f ifoo.c || echo ../pkg/src/`ifoo.c foo.c
-@end example
+f.c: if.c
+        cp `test -f if.c || echo $(VPATH)/`if.c f.c
+@end smallexample
 
 @noindent
 However the "prerequisite rewriting" still applies here.  So if
-@file{ifoo.c} is in @file{../pkg/src}, SunOS @command{make} and OSF1/Tru64
+@file{if.c} is in @file{../pkg/src}, SunOS @command{make} and OSF1/Tru64
 @command{make} will execute
 
-@example
-@code{cp `test -f ../pkg/src/ifoo.c || echo ../pkg/src/`ifoo.c foo.c}
-@end example
+@smallexample
+@code{cp `test -f ../pkg/src/if.c || echo ../pkg/src/`if.c f.c}
+@end smallexample
 
 @noindent
 which reduces to
 
 @example
-cp ifoo.c foo.c
+cp if.c f.c
 @end example
 
 @noindent
 and thus fails.  Oops.
 
-One workaround is to make sure that ifoo.c never appears as a plain word
+One workaround is to make sure that @file{if.c} never appears as a plain word
 in the rule.  For instance these three rules would be safe.
 
-@example
+@smallexample
 VPATH = ../pkg/src
-foo.c: ifoo.c
-        cp `test -f ./ifoo.c || echo ../pkg/src/`ifoo.c foo.c
-foo2.c: ifoo2.c
-        cp `test -f 'ifoo2.c' || echo ../pkg/src/`ifoo2.c foo2.c
-foo3.c: ifoo3.c
-        cp `test -f "ifoo3.c" || echo ../pkg/src/`ifoo3.c foo3.c
-@end example
+f.c: if.c
+        cp `test -f ./if.c || echo $(VPATH)/`if.c f.c
+g.c: ig.c
+        cp `test -f 'ig.c' || echo $(VPATH)/`ig.c g.c
+h.c: ih.c
+        cp `test -f "ih.c" || echo $(VPATH)/`ih.c h.c
+@end smallexample
 
 Things get worse when your prerequisites are in a macro.
 
 @example
 VPATH = ../pkg/src
-HEADERS = foo.h foo2.h foo3.h
+HEADERS = f.h g.h h.h
 install-HEADERS: $(HEADERS)
         for i in $(HEADERS); do \
-          $(INSTALL) -m 644 `test -f $$i || echo ../pkg/src/`$$i \
+          $(INSTALL) -m 644 \
+            `test -f $$i || echo $(VPATH)/`$$i \
             $(DESTDIR)$(includedir)/$$i; \
         done
 @end example
 
 The above @code{install-HEADERS} rule is not SunOS-proof because @code{for
-i in $(HEADERS);} will be expanded as @code{for i in foo.h foo2.h foo3.h;}
-where @code{foo.h} and @code{foo2.h} are plain words and are hence
+i in $(HEADERS);} will be expanded as @code{for i in f.h g.h h.h;}
+where @code{f.h} and @code{g.h} are plain words and are hence
 subject to @code{VPATH} adjustments.
 
 If the three files are in @file{../pkg/src}, the rule is run as:
 
 @example
-for i in ../pkg/src/foo.h ../pkg/src/foo2.h foo3.h; do \
-  install -m 644 `test -f $i || echo ../pkg/src/`$i \
+for i in ../pkg/src/f.h ../pkg/src/g.h h.h; do \
+  install -m 644 \
+     `test -f $i || echo ../pkg/src/`$i \
      /usr/local/include/$i; \
 done
 @end example
 
 where the two first @command{install} calls will fail.  For instance,
-consider the @code{foo.h} installation:
+consider the @code{f.h} installation:
 
 @example
-install -m 644 `test -f ../pkg/src/foo.h || echo ../pkg/src/`../pkg/src/foo.h \
-  /usr/local/include/../pkg/src/foo.h;
+install -m 644 \
+  `test -f ../pkg/src/f.h || \
+    echo ../pkg/src/ \
+  `../pkg/src/f.h \
+  /usr/local/include/../pkg/src/f.h;
 @end example
 @noindent
 It reduces to:
 
 @example
-install -m 644 ../pkg/src/foo.h /usr/local/include/../pkg/src/foo.h;
+install -m 644 \
+  ../pkg/src/f.h \
+  /usr/local/include/../pkg/src/f.h;
 @end example
 
 Note that the manual @code{VPATH} search did not cause any problems here;
-however this command installs @file{foo.h} in an incorrect directory.
+however this command installs @file{f.h} in an incorrect directory.
 
 Trying to quote @code{$(HEADERS)} in some way, as we did for
 @code{foo.c} a few @file{Makefile}s ago, does not help:
 
 @example
 install-HEADERS: $(HEADERS)
-        headers='$(HEADERS)'; for i in $$headers; do \
-          $(INSTALL) -m 644 `test -f $$i || echo ../pkg/src/`$$i \
+        headers='$(HEADERS)'; \
+        for i in $$headers; do \
+          $(INSTALL) -m 644 \
+            `test -f $$i || echo $(VPATH)/`$$i \
             $(DESTDIR)$(includedir)/$$i; \
         done
 @end example
 
-Indeed, @code{headers='$(HEADERS)'} expands to @code{headers='foo.h
-foo2.h foo3.h'} where @code{foo2.h} is still a plain word.  (Aside: the
-@code{headers='$(HEADERS)'; for i in $$headers;} idiom is a good
+Now, @code{headers='$(HEADERS)'} macroexpands to:
+
+@example
+headers='f.h g.h h.h'
+@end example
+
+@noindent
+but @code{g.h} is still a plain word.  (As an aside, the idiom
+@code{headers='$(HEADERS)'; for i in $$headers;} is a good
 idea if @code{$(HEADERS)} can be empty, because some shells diagnose a
 syntax error on @code{for i in;}.)
 
 One workaround is to strip this unwanted @file{../pkg/src/} prefix manually:
 @example
 VPATH = ../pkg/src
-HEADERS = foo.h foo2.h foo3.h
+HEADERS = f.h g.h h.h
 install-HEADERS: $(HEADERS)
-        headers='$(HEADERS)'; for i in $$headers; do \
-          i=`expr "$$i" : '../pkg/src/\(.*\)'`;
-          $(INSTALL) -m 644 `test -f $$i || echo ../pkg/src/`$$i \
+        headers='$(HEADERS)'; \
+        for i in $$headers; do \
+          i=`expr "$$i" : '$(VPATH)/\(.*\)'`;
+          $(INSTALL) -m 644 \
+            `test -f $$i || echo $(VPATH)/`$$i \
             $(DESTDIR)$(includedir)/$$i; \
         done
 @end example
@@ -12733,11 +12713,11 @@ install-HEADERS: $(HEADERS)
 Automake does something similar.  However the above hack works only if
 the files listed in @code{HEADERS} are in the current directory or a
 subdirectory; they should not be in an enclosing directory.  If we had
-@code{HEADERS = ../foo.h}, the above fragment would fail in a VPATH
+@code{HEADERS = ../f.h}, the above fragment would fail in a VPATH
 build with OSF1/Tru64 @command{make}.  The reason is that not only does
 OSF1/Tru64 @command{make} rewrite dependencies, but it also simplifies
-them.  Hence @code{../foo.h} will become @code{../pkg/foo.h} instead of
-@code{../pkg/src/../foo.h}.  This obviously defeats any attempt to strip
+them.  Hence @code{../f.h} will become @code{../pkg/f.h} instead of
+@code{../pkg/src/../f.h}.  This obviously defeats any attempt to strip
 a leading @file{../pkg/src/} component.
 
 The following example makes the behavior of OSF1/Tru64 @command{make}
@@ -12759,16 +12739,16 @@ Dependency @file{../foo} was found in @file{sub/../foo}, but OSF1/Tru64
 directory does not even exist, this just means that the simplification
 occurred before the file was checked for.)
 
-For the records here is how SunOS @command{make} behaves on this
+For the record here is how SunOS @command{make} behaves on this
 very same example.
-@example
+@smallexample
 % make
 make: Fatal error: Don't know how to make target `../foo'
 % mkdir sub
 % make
 echo sub/../foo
 sub/../foo
-@end example
+@end smallexample
 
 
 @item OSF/Tru64 @command{make} creates prerequisite directories magically
@@ -13239,7 +13219,7 @@ case $host in
   i?86-*-*)   CYCLE_OBJ=rdtsc.o ;;
   *)          CYCLE_OBJ= ;;
 esac
-AC_SUBST(CYCLE_OBJ)
+AC_SUBST([CYCLE_OBJ])
 @end example
 
 @code{AC_CONFIG_LINKS} (@pxref{Configuration Links}) is another good way
@@ -13249,9 +13229,9 @@ so some run-time capability checks may be necessary too.
 
 @example
 case $host in
-  alpha*-*-*)   AC_CONFIG_LINKS(dither.c:alpha/dither.c) ;;
-  powerpc*-*-*) AC_CONFIG_LINKS(dither.c:powerpc/dither.c) ;;
-  *-*-*)        AC_CONFIG_LINKS(dither.c:generic/dither.c) ;;
+  alpha*-*-*)   AC_CONFIG_LINKS([dither.c:alpha/dither.c]) ;;
+  powerpc*-*-*) AC_CONFIG_LINKS([dither.c:powerpc/dither.c]) ;;
+  *-*-*)        AC_CONFIG_LINKS([dither.c:generic/dither.c]) ;;
 esac
 @end example
 
@@ -13397,20 +13377,22 @@ on the system.
 
 @c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
 @example
-AC_ARG_WITH(readline,
-  [AS_HELP_STRING(--with-readline,
+AC_ARG_WITH([readline],
+  [AS_HELP_STRING([--with-readline],
     [support fancy command line editing @@<:@@default=check@@:>@@])],
   [],
-  with_readline=check)
+  [with_readline=check])
 
 LIBREADLINE=
 AS_IF([test "x$with_readline" != xno],
-  [AC_CHECK_LIB(readline, main,
-    [AC_SUBST(LIBREADLINE, "-lreadline -lncurses")
-     AC_DEFINE(HAVE_LIBREADLINE, 1, [Define if you have libreadline])
+  [AC_CHECK_LIB([readline], [main],
+    [AC_SUBST([LIBREADLINE], ["-lreadline -lncurses"])
+     AC_DEFINE([HAVE_LIBREADLINE], [1],
+               [Define if you have libreadline])
     ],
     [if test "x$with_readline" != xcheck; then
-       AC_MSG_FAILURE([--with-readline was given, but test for readline failed])
+       AC_MSG_FAILURE(
+         [--with-readline was given, but test for readline failed])
      fi
     ], -lncurses)])
 @end example
@@ -13421,20 +13403,22 @@ experimental and not well tested, and is therefore disabled by default.
 
 @c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
 @example
-AC_ARG_WITH(readline,
-  [AS_HELP_STRING(--with-readline,
+AC_ARG_WITH([readline],
+  [AS_HELP_STRING([--with-readline],
     [enable experimental support for readline])],
   [],
-  with_readline=no)
+  [with_readline=no])
 
 LIBREADLINE=
 AS_IF([test "x$with_readline" != xno],
-  [AC_CHECK_LIB(readline, main,
-    [AC_SUBST(LIBREADLINE, "-lreadline -lncurses")
-     AC_DEFINE(HAVE_LIBREADLINE, 1, [Define if you have libreadline])
+  [AC_CHECK_LIB([readline], [main],
+    [AC_SUBST([LIBREADLINE], ["-lreadline -lncurses"])
+     AC_DEFINE([HAVE_LIBREADLINE], [1],
+               [Define if you have libreadline])
     ],
-    [AC_MSG_FAILURE([--with-readline was given, but test for readline failed])],
-    -lncurses)])
+    [AC_MSG_FAILURE(
+       [--with-readline was given, but test for readline failed])],
+    [-lncurses])])
 @end example
 
 The last example shows how to use @code{AC_ARG_WITH} to give the user the
@@ -13443,20 +13427,22 @@ an important feature and that it should be enabled by default.
 
 @c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
 @example
-AC_ARG_WITH(readline,
-  [AS_HELP_STRING(--without-readline,
+AC_ARG_WITH([readline],
+  [AS_HELP_STRING([--without-readline],
     [disable support for readline])],
   [],
-  with_readline=yes)
+  [with_readline=yes])
 
 LIBREADLINE=
 AS_IF([test "x$with_readline" != xno],
-  [AC_CHECK_LIB(readline, main,
-    [AC_SUBST(LIBREADLINE, "-lreadline -lncurses")
-     AC_DEFINE(HAVE_LIBREADLINE, 1, [Define if you have libreadline])
+  [AC_CHECK_LIB([readline], [main],
+    [AC_SUBST([LIBREADLINE], ["-lreadline -lncurses"])
+     AC_DEFINE([HAVE_LIBREADLINE], [1],
+               [Define if you have libreadline])
     ],
-    [AC_MSG_FAILURE([test for readline failed, use --without-readline if you want to force readline support off])],
-    -lncurses)])
+    [AC_MSG_FAILURE(
+       [readline test failed (--without-readline to disable)])],
+    [-lncurses])])
 @end example
 
 These three examples can be easily adapted to the case where
@@ -13565,8 +13551,8 @@ Expands into an help string that looks pretty when the user executes
 Options}).  The following example will make this clearer.
 
 @example
-AC_ARG_WITH(foo,
-  [AS_HELP_STRING(--with-foo,
+AC_ARG_WITH([foo],
+  [AS_HELP_STRING([--with-foo],
      [use foo (default is no)])],
   [ac_cv_use_foo=$withval],
   [ac_cv_use_foo=no])
@@ -14232,10 +14218,10 @@ builtin type @var{default}, e.g., @samp{short int} or @samp{unsigned int}.
 This macro is equivalent to:
 
 @example
-AC_CHECK_TYPE([@var{type}],,
-              [AC_DEFINE_UNQUOTED([@var{type}], [@var{default}],
-                                  [Define to `@var{default}' if
-                                   <sys/types.h> does not define.])])
+AC_CHECK_TYPE([@var{type}], [],
+  [AC_DEFINE_UNQUOTED([@var{type}], [@var{default}],
+     [Define to `@var{default}'
+      if <sys/types.h> does not define.])])
 @end example
 
 In order to keep backward compatibility, the two versions of
@@ -14325,7 +14311,7 @@ not to use this macro.
 Same as:
 
 @example
-AC_CHECK_DECLS([sys_siglist],,,
+AC_CHECK_DECLS([sys_siglist], [], [],
 [#include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
 #if HAVE_UNISTD_H
@@ -14365,7 +14351,7 @@ If on DYNIX/ptx, add @option{-lseq} to output variable
 @code{LIBS}.  This macro used to be defined as
 
 @example
-AC_CHECK_LIB(seq, getmntent, LIBS="-lseq $LIBS")
+AC_CHECK_LIB([seq], [getmntent], [LIBS="-lseq $LIBS"])
 @end example
 
 @noindent
@@ -14503,7 +14489,7 @@ of the password and group functions, use @samp{AC_CHECK_LIB(sun,
 getpwnam)}.  Up to Autoconf 2.13, it used to be
 
 @example
-AC_CHECK_LIB(sun, getmntent, LIBS="-lsun $LIBS")
+AC_CHECK_LIB([sun], [getmntent], [LIBS="-lsun $LIBS"])
 @end example
 
 @noindent
@@ -14511,23 +14497,23 @@ now it is defined as
 
 @example
 AC_FUNC_GETMNTENT
-AC_CHECK_LIB(sun, getpwnam)
+AC_CHECK_LIB([sun], [getpwnam])
 @end example
 @end defmac
 
 @defmac AC_LANG_C
 @acindex{LANG_C}
-Same as @samp{AC_LANG(C)}.
+Same as @samp{AC_LANG([C])}.
 @end defmac
 
 @defmac AC_LANG_CPLUSPLUS
 @acindex{LANG_CPLUSPLUS}
-Same as @samp{AC_LANG(C++)}.
+Same as @samp{AC_LANG([C++])}.
 @end defmac
 
 @defmac AC_LANG_FORTRAN77
 @acindex{LANG_FORTRAN77}
-Same as @samp{AC_LANG(Fortran 77)}.
+Same as @samp{AC_LANG([Fortran 77])}.
 @end defmac
 
 @defmac AC_LANG_RESTORE
@@ -14557,8 +14543,8 @@ AC_LINK_FILES(config/$machine.h config/$obj_format.h,
 is:
 
 @example
-AC_CONFIG_LINKS(host.h:config/$machine.h
-                object.h:config/$obj_format.h)
+AC_CONFIG_LINKS([host.h:config/$machine.h
+                object.h:config/$obj_format.h])
 @end example
 @end defmac
 
@@ -14594,7 +14580,7 @@ Use the generic macro @samp{AC_CHECK_SIZEOF([long int])} instead.
 @cvindex NEED_MEMORY_H
 Used to define @code{NEED_MEMORY_H} if the @code{mem} functions were
 defined in @file{memory.h}.  Today it is equivalent to
-@samp{AC_CHECK_HEADERS(memory.h)}.  Adjust your code to depend upon
+@samp{AC_CHECK_HEADERS([memory.h])}.  Adjust your code to depend upon
 @code{HAVE_MEMORY_H}, not @code{NEED_MEMORY_H}; see @ref{Standard
 Symbols}.
 @end defmac
@@ -14771,7 +14757,7 @@ If on SCO Unix, add @option{-lintl} to output variable @code{LIBS}.  This
 macro used to do this:
 
 @example
-AC_CHECK_LIB(intl, strftime, LIBS="-lintl $LIBS")
+AC_CHECK_LIB([intl], [strftime], [LIBS="-lintl $LIBS"])
 @end example
 
 @noindent
@@ -14872,9 +14858,18 @@ issue.
 
 @defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{TRY_COMPILE}
-Same as @samp{AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[@var{includes}]],
-[[@var{function-body}]])], [@var{action-if-true}],
-[@var{action-if-false}])} (@pxref{Running the Compiler}).
+Same as:
+
+@example
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM([[@var{includes}]],
+     [[@var{function-body}]])],
+  [@var{action-if-true}],
+  [@var{action-if-false}])
+@end example
+
+@noindent
+@xref{Running the Compiler}.
 
 This macro double quotes both @var{includes} and @var{function-body}.
 
@@ -14887,18 +14882,35 @@ and compilation flags are determined by the current language
 
 @defmac AC_TRY_CPP (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
 @acindex{TRY_CPP}
-Same as @samp{AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@var{input}]])],
-[@var{action-if-true}], [@var{action-if-false}])} (@pxref{Running the
-Preprocessor}).
+Same as:
+
+@example
+AC_PREPROC_IFELSE(
+  [AC_LANG_SOURCE([[@var{input}]])],
+  [@var{action-if-true}],
+  [@var{action-if-false}])
+@end example
+
+@noindent
+@xref{Running the Preprocessor}.
 
 This macro double quotes the @var{input}.
 @end defmac
 
 @defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{TRY_LINK}
-Same as @samp{AC_LINK_IFELSE([AC_LANG_PROGRAM([[@var{includes}]],
-[[@var{function-body}]])], [@var{action-if-true}],
-[@var{action-if-false}])} (@pxref{Running the Compiler}).
+Same as:
+
+@example
+AC_LINK_IFELSE(
+  [AC_LANG_PROGRAM([[@var{includes}]],
+     [[@var{function-body}]])],
+  [@var{action-if-true}],
+  [@var{action-if-false}])
+@end example
+
+@noindent
+@xref{Running the Compiler}.
 
 This macro double quotes both @var{includes} and @var{function-body}.
 
@@ -14928,11 +14940,19 @@ This macro is equivalent to
 
 @defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
 @acindex{TRY_RUN}
-Same as @samp{AC_RUN_IFELSE([AC_LANG_SOURCE([[@var{program}]],
-[@var{action-if-true}], [@var{action-if-false}],
-[@var{action-if-cross-compiling}])} (@pxref{Run Time}).
-@end defmac
+Same as:
 
+@example
+AC_RUN_IFELSE(
+  [AC_LANG_SOURCE([[@var{program}]])],
+  [@var{action-if-true}],
+  [@var{action-if-false}],
+  [@var{action-if-cross-compiling}])
+@end example
+
+@noindent
+@xref{Run Time}).
+@end defmac
 
 @defmac AC_UID_T
 @acindex{UID_T}
@@ -14941,7 +14961,7 @@ Same as @samp{AC_RUN_IFELSE([AC_LANG_SOURCE([[@var{program}]],
 
 @defmac AC_UNISTD_H
 @acindex{UNISTD_H}
-Same as @samp{AC_CHECK_HEADERS(unistd.h)}.
+Same as @samp{AC_CHECK_HEADERS([unistd.h])}.
 @end defmac
 
 @defmac AC_USG
@@ -15005,7 +15025,7 @@ running @sc{xenix} on which you should not depend:
 
 @example
 AC_MSG_CHECKING([for Xenix])
-AC_EGREP_CPP(yes,
+AC_EGREP_CPP([yes],
 [#if defined M_XENIX && !defined M_UNIX
   yes
 #endif],
@@ -15155,11 +15175,11 @@ esac
 Here is a way to write it for version 2:
 
 @example
-AC_CHECK_FUNCS(syslog)
+AC_CHECK_FUNCS([syslog])
 if test $ac_cv_func_syslog = no; then
   # syslog is not in the default libraries.  See if it's in some other.
   for lib in bsd socket inet; do
-    AC_CHECK_LIB($lib, syslog, [AC_DEFINE(HAVE_SYSLOG)
+    AC_CHECK_LIB([$lib], [syslog], [AC_DEFINE([HAVE_SYSLOG])
       LIBS="$LIBS -l$lib"; break])
   done
 fi
@@ -15247,7 +15267,7 @@ quoted:
 @example
 AC_INIT
 AC_CHECK_HEADERS(foo.h,,
-AC_MSG_ERROR(cannot find foo.h, bailing out))
+  AC_MSG_ERROR(cannot find foo.h, bailing out))
 AC_OUTPUT
 @end example
 
@@ -15276,9 +15296,9 @@ The message needs to be quoted, and the @code{AC_MSG_ERROR} invocation
 too!
 
 @example
-AC_INIT
-AC_CHECK_HEADERS(foo.h,,
-                 [AC_MSG_ERROR([cannot find foo.h, bailing out])])
+AC_INIT([Example], [1.0], [bug-example@@example.org])
+AC_CHECK_HEADERS([foo.h], [],
+  [AC_MSG_ERROR([cannot find foo.h, bailing out])])
 AC_OUTPUT
 @end example
 
@@ -15310,13 +15330,15 @@ $
 @cindex undefined macro
 @cindex @code{_m4_divert_diversion}
 
-Because Autoconf has been dormant for years, Automake provided
-Autoconf-like macros for a while.  Autoconf 2.50 now provides better
+While Autoconf was relatively dormant in the late 1990s, Automake
+provided Autoconf-like macros for a while.  Starting with Autoconf 2.50
+in 2001, Autoconf provided
 versions of these macros, integrated in the @code{AC_} namespace,
 instead of @code{AM_}.  But in order to ease the upgrading via
 @command{autoupdate}, bindings to such @code{AM_} macros are provided.
 
-Unfortunately Automake did not quote the names of these macros!
+Unfortunately older versions of Automake (e.g., Automake 1.4)
+did not quote the names of these macros.
 Therefore, when @command{m4} finds something like
 @samp{AC_DEFUN(AM_TYPE_PTRDIFF_T, @dots{})} in @file{aclocal.m4},
 @code{AM_TYPE_PTRDIFF_T} is
@@ -15326,32 +15348,32 @@ Fortunately Autoconf catches pre-@code{AC_INIT} expansions, and will
 complain, in its own words:
 
 @example
-$ @kbd{cat configure.in}
-AC_INIT
+$ @kbd{cat configure.ac}
+AC_INIT([Example], [1.0], [bug-example@@example.org])
 AM_TYPE_PTRDIFF_T
 $ @kbd{aclocal-1.4}
 $ @kbd{autoconf}
-./aclocal.m4:17: error: m4_defn: undefined macro: _m4_divert_diversion
-actypes.m4:289: AM_TYPE_PTRDIFF_T is expanded from...
-./aclocal.m4:17: the top level
+aclocal.m4:17: error: m4_defn: undefined macro: _m4_divert_diversion
+aclocal.m4:17: the top level
+autom4te: m4 failed with exit status: 1
 $
 @end example
 
-Future versions of Automake will simply no longer define most of these
+Modern versions of Automake no longer define most of these
 macros, and will properly quote the names of the remaining macros.
-But you don't have to wait for it to happen to do the right thing right
-now: do not depend upon macros from Automake as it is simply not its job
+If you must use an old Automake, do not depend upon macros from Automake
+as it is simply not its job
 to provide macros (but the one it requires itself):
 
 @example
-$ @kbd{cat configure.in}
-AC_INIT
+$ @kbd{cat configure.ac}
+AC_INIT([Example], [1.0], [bug-example@@example.org])
 AM_TYPE_PTRDIFF_T
 $ @kbd{rm aclocal.m4}
 $ @kbd{autoupdate}
-autoupdate: `configure.in' is updated
-$ @kbd{cat configure.in}
-AC_INIT
+autoupdate: `configure.ac' is updated
+$ @kbd{cat configure.ac}
+AC_INIT([Example], [1.0], [bug-example@@example.org])
 AC_CHECK_TYPES([ptrdiff_t])
 $ @kbd{aclocal-1.4}
 $ @kbd{autoconf}
@@ -15525,7 +15547,7 @@ suffixes are mapped to @samp{.lo}.  People used to run snippets such as:
 # the ANSI2KNR-filtering rules.
 LIBOBJS=`echo "$LIBOBJS" | sed 's/\.o /\$U.o /g;s/\.o$/\$U.o/'`
 LTLIBOBJS=`echo "$LIBOBJS" | sed 's/\.o/\.lo/g'`
-AC_SUBST(LTLIBOBJS)
+AC_SUBST([LTLIBOBJS])
 @end example
 
 @noindent
@@ -15543,7 +15565,7 @@ LIB@@&t@@OBJS=`echo "$LIB@@&t@@OBJS" |
              sed 's,\.[[^.]]* ,$U&,g;s,\.[[^.]]*$,$U&,'`
 LTLIBOBJS=`echo "$LIB@@&t@@OBJS" |
            sed 's,\.[[^.]]* ,.lo ,g;s,\.[[^.]]*$,.lo,'`
-AC_SUBST(LTLIBOBJS)
+AC_SUBST([LTLIBOBJS])
 @end example
 
 @sp 1
@@ -16146,7 +16168,8 @@ check-local: atconfig atlocal $(TESTSUITE)
         $(SHELL) $(TESTSUITE) $(TESTSUITEFLAGS)
 
 installcheck-local: atconfig atlocal $(TESTSUITE)
-        $(SHELL) $(TESTSUITE) AUTOTEST_PATH="$(bindir)" $(TESTSUITEFLAGS)
+        $(SHELL) $(TESTSUITE) AUTOTEST_PATH="$(bindir)" \
+          $(TESTSUITEFLAGS)
 
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at
@@ -16240,8 +16263,7 @@ __file__
 __line__
 @end example
 
-Autoconf requires version 1.4 or above of @acronym{GNU} M4 because it uses
-frozen state files.
+Autoconf requires version 1.4.3 or later of @acronym{GNU} M4.
 
 Since only software maintainers need to use Autoconf, and since @acronym{GNU}
 M4 is simple to configure and install, it seems reasonable to require
@@ -16381,8 +16403,8 @@ similar.  If I use
 
 @example
 AC_DEFINE_UNQUOTED([DATADIR], [$datadir],
-                   [Define to the read-only architecture-independent
-                    data directory.])
+  [Define to the read-only architecture-independent
+   data directory.])
 @end example
 
 @noindent
@@ -16502,31 +16524,32 @@ elsewhere.
 As of Autoconf 2.56 both checks are performed, and @code{configure}
 complains loudly if the compiler and the preprocessor do not agree.
 For the time being the result used is that of the preprocessor, to give
-maintainers time to adjust their @file{configure.ac}, but in the near
+maintainers time to adjust their @file{configure.ac}, but in the
 future, only the compiler will be considered.
 
 Consider the following example:
 
-@example
+@smallexample
 $ @kbd{cat number.h}
 typedef int number;
 $ @kbd{cat pi.h}
 const number pi = 3;
 $ @kbd{cat configure.ac}
-AC_INIT
-AC_CHECK_HEADERS(pi.h)
+AC_INIT([Example], [1.0], [bug-example@@example.org])
+AC_CHECK_HEADERS([pi.h])
 $ @kbd{autoconf -Wall}
 $ @kbd{./configure}
 checking for gcc... gcc
-checking for C compiler default output... a.out
+checking for C compiler default output file name... a.out
 checking whether the C compiler works... yes
 checking whether we are cross compiling... no
 checking for suffix of executables...
 checking for suffix of object files... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to accept ANSI C... none needed
+checking for gcc option to accept ISO C89... none needed
 checking how to run the C preprocessor... gcc -E
+checking for grep that handles long lines and -e... grep
 checking for egrep... grep -E
 checking for ANSI C header files... yes
 checking for sys/types.h... yes
@@ -16541,13 +16564,16 @@ checking for unistd.h... yes
 checking pi.h usability... no
 checking pi.h presence... yes
 configure: WARNING: pi.h: present but cannot be compiled
-configure: WARNING: pi.h: check for missing prerequisite headers?
+configure: WARNING: pi.h:     check for missing prerequisite headers?
+configure: WARNING: pi.h: see the Autoconf documentation
+configure: WARNING: pi.h:     section "Present But Cannot Be Compiled"
 configure: WARNING: pi.h: proceeding with the preprocessor's result
-configure: WARNING:     ## ------------------------------------ ##
-configure: WARNING:     ## Report this to bug-autoconf@@gnu.org. ##
-configure: WARNING:     ## ------------------------------------ ##
+configure: WARNING: pi.h: in the future, the compiler will take precedence
+configure: WARNING:     ## -------------------------------------- ##
+configure: WARNING:     ## Report this to bug-example@@example.org ##
+configure: WARNING:     ## -------------------------------------- ##
 checking for pi.h... yes
-@end example
+@end smallexample
 
 @noindent
 The proper way the handle this case is using the fourth argument
@@ -16555,8 +16581,8 @@ The proper way the handle this case is using the fourth argument
 
 @example
 $ @kbd{cat configure.ac}
-AC_INIT
-AC_CHECK_HEADERS(number.h pi.h,,,
+AC_INIT([Example], [1.0], [bug-example@@example.org])
+AC_CHECK_HEADERS([number.h pi.h], [], [],
 [[#if HAVE_NUMBER_H
 # include <number.h>
 #endif

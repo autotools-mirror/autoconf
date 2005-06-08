@@ -120,16 +120,17 @@ before reconfiguring for another architecture.
 @node Installation Names
 @section Installation Names
 
-By default, @samp{make install} will install the package's files in
-@file{/usr/local/bin}, @file{/usr/local/man}, etc.  You can specify an
+By default, @samp{make install} installs the package's commands under
+@file{/usr/local/bin}, include files under @file{/usr/local/include}, etc.
+You can specify an
 installation prefix other than @file{/usr/local} by giving
 @command{configure} the option @option{--prefix=@var{prefix}}.
 
 You can specify separate installation prefixes for architecture-specific
-files and architecture-independent files.  If you give
-@command{configure} the option @option{--exec-prefix=@var{prefix}}, the
-package will use @var{prefix} as the prefix for installing programs and
-libraries.  Documentation and other data files will still use the
+files and architecture-independent files.  If you pass the option
+@option{--exec-prefix=@var{prefix}} to @command{configure}, the
+package uses @var{prefix} as the prefix for installing programs and
+libraries.  Documentation and other data files still use the
 regular prefix.
 
 In addition, if you use an unusual directory layout you can give options
@@ -187,7 +188,7 @@ If @file{config.sub} isn't included in this package, then this package
 doesn't need to know the machine type.
 
 If you are @emph{building} compiler tools for cross-compiling, you
-should use the @option{--target=@var{type}} option to select the type of
+should use the option @option{--target=@var{type}} to select the type of
 system they will produce code for.
 
 If you want to @emph{use} a cross compiler, that generates code for a
