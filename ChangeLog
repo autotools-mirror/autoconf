@@ -1,3 +1,8 @@
+2005-06-10  Derek Price  <derek@ximbiot.com>
+
+	* doc/autoconf.texi (Programming in M4sh): Document AS_TR_CPP &
+	AS_TR_SH.
+
 2005-06-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autotest/general.m4 (AT_INIT): Don't accept Solaris 9's diff
