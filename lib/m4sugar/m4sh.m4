@@ -1211,7 +1211,7 @@ m4_define([AS_VAR_GET],
 m4_define([AS_VAR_TEST_SET],
 [AS_LITERAL_IF([$1],
 	       [test "${$1+set}" = set],
-	       [eval "test \"\${$1+set}\" = set"])])
+	       [{ as_var=$1; eval "test \"\${$as_var+set}\" = set"; }])])
 
 
 # AS_VAR_SET_IF(VARIABLE, IF-TRUE, IF-FALSE)

@@ -1,3 +1,8 @@
+2005-06-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (AS_VAR_TEST_SET): Work even if $1 contains
+	quotes and backslashes.  Patch from Derek Price.
+
 2005-06-10  Derek Price  <derek@ximbiot.com>
 
 	* doc/autoconf.texi (Programming in M4sh): Document AS_TR_CPP &
