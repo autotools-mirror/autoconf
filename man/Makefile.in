@@ -138,6 +138,8 @@ MAINTAINERCLEANFILES = $(dist_man_MANS)
 # Depend on configure.ac to get version number changes.
 common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x
 binsrcdir = $(top_srcdir)/bin
+remove_time_stamp = 's/^\(\.TH[^"]*"[^"]*"[^"]*\)"[^"]*"/\1/'
+MOSTLYCLEANFILES = $(srcdir)/*.t
 SUFFIXES = .x .1
 all: all-am
 
@@ -275,6 +277,7 @@ install-strip:
 	  `test -z '$(STRIP)' || \
 	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
+	-test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
 
 clean-generic:
 
@@ -370,7 +373,14 @@ $(srcdir)/config.sub.1:   $(top_srcdir)/config/config.sub
 	$(HELP2MAN) \
 	    --include=$*.x \
 	    --include=$(srcdir)/common.x \
-	    --output=$@ `echo '$*' | sed 's,.*/,,'`
+	    --output=$@.t `echo '$*' | sed 's,.*/,,'`
+	if sed $(remove_time_stamp) $@ >$@a.t 2>/dev/null && \
+	   sed $(remove_time_stamp) $@.t | cmp $@a.t - >/dev/null 2>&1; then \
+		touch $@; \
+	else \
+		mv $@.t $@; \
+	fi
+	rm -f $@*.t
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
