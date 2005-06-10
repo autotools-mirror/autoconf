@@ -125,8 +125,8 @@ EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 
 
 # Running the uninstalled scripts.
-check_SCRIPTS = autoconf autoheader autoreconf autom4te autoscan autoupdate ifnames
-DISTCLEANFILES = atconfig atlocal $(TESTSUITE) $(check_SCRIPTS)
+check_SCRIPTS = $(wrappers)
+DISTCLEANFILES = atconfig atlocal $(TESTSUITE)
 MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE_GENERATED_AT)
 SUFFIXES = .m4 .m4f
 AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
@@ -461,6 +461,7 @@ $(TESTSUITE): $(srcdir)/package.m4 \
 	      local.at \
 	      $(TESTSUITE_AT) \
 	      $(autotest_m4f_dependencies)
+	cd $(top_builddir)/lib/autotest && $(MAKE) $(AM_MAKEFLAGS) autotest.m4f
 	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp
 	mv $@.tmp $@
 
