@@ -47,6 +47,10 @@ $(srcdir)/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
 $(srcdir)/config.guess.1: $(top_srcdir)/config/config.guess
 $(srcdir)/config.sub.1:   $(top_srcdir)/config/config.sub
 
+remove_time_stamp = 's/^\(\.TH[^"]*"[^"]*"[^"]*\)"[^"]*"/\1/'
+
+MOSTLYCLEANFILES = $(srcdir)/*.t
+
 SUFFIXES = .x .1
 
 .x.1:
@@ -65,4 +69,11 @@ SUFFIXES = .x .1
 	$(HELP2MAN) \
 	    --include=$*.x \
 	    --include=$(srcdir)/common.x \
-	    --output=$@ `echo '$*' | sed 's,.*/,,'`
+	    --output=$@.t `echo '$*' | sed 's,.*/,,'`
+	if sed $(remove_time_stamp) $@ >$@a.t 2>/dev/null && \
+	   sed $(remove_time_stamp) $@.t | cmp $@a.t - >/dev/null 2>&1; then \
+		touch $@; \
+	else \
+		mv $@.t $@; \
+	fi
+	rm -f $@*.t

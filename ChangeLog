@@ -1,5 +1,10 @@
 2005-06-10  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* man/Makefile.am (MOSTLYCLEANFILES): Add $(srcdir)/*.t.
+	(.x.1): Ignore the time stamp in the .TH line when deciding whether
+	to update the man page.  That way, we don't have to check in new
+	man pages every month.
+
 	* lib/m4sugar/m4sh.m4 (AS_VAR_TEST_SET): Work even if $1 contains
 	quotes and backslashes.  Patch from Derek Price.
 
