@@ -12209,7 +12209,7 @@ script (the line numbers are not actual part of the texts):
 s/keep me/kept/g  # a
 t end             # b
 s/.*/deleted/g    # c
-: end             # d
+:end              # d
 @end example
 
 @noindent
@@ -12264,11 +12264,11 @@ One portable implementation of the script above is:
 
 @example
 t clear
-: clear
+:clear
 s/keep me/kept/g
 t end
 s/.*/deleted/g
-: end
+:end
 @end example
 
 @item @command{touch}
