@@ -1,5 +1,14 @@
 2005-06-10  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi: "filesystem" -> "file system".
+	"behavior" -> "behavior".
+	Warn about \(...\)* in Solaris sed (written by Ralf Menzel).
+	* lib/autoconf/general.m4: Omit blank after ":" sed command,
+	as per POSIX.
+	* lib/m4sugar/m4sh.m4: Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): Work around problem
+	with Solaris sed.  Fix by Stepan Kasal.
+
 	* man/Makefile.am (MOSTLYCLEANFILES): Add $(srcdir)/*.t.
 	(.x.1): Ignore the time stamp in the .TH line when deciding whether
 	to update the man page.  That way, we don't have to check in new

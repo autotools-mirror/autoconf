@@ -499,15 +499,17 @@ m4_define([_AC_OUTPUT_HEADERS],
 #
 dnl Quote, for the `[ ]' and `define'.
 [ac_dA='s,^\([	 ]*#[	 ]*\)[^	 ]*\([	 ][	 ]*'
-ac_dB='\)\([ 	(].*\)*$,\1define\2'
+ac_dB='\)[ 	(].*$,\1define\2'
 ac_dC=' '
-ac_dD=',']
-dnl ac_dD used to contain `;t' at the end.
-dnl This was an optimization which was making the code both slow and incorrect.
-dnl 1) Since the script has to be broken to chunks containing 100 commands,
-dnl this extra command means we have to call sed more times.
-dnl 2) The code was incorrect: in the strange case that a sumbol has multiple
-dnl different AC_DEFINEs, we want to honour the *last* one.
+ac_dD=' ,']
+dnl ac_dD used to contain `;t' at the end, but that was both slow and incorrect.
+dnl 1) Since the script must be broken into chunks containing 100 commands,
+dnl the extra command meant extra calls to sed.
+dnl 2) The code was incorrect: in the unusual case where a symbol has multiple
+dnl different AC_DEFINEs, the last one should be honored.
+dnl
+dnl ac_dB works because every line has a space appended.  ac_dB reinserts
+dnl the space, because some symbol may have been AC_DEFINEd several times.
 
 [ac_word_regexp=[_$as_cr_Letters][_$as_cr_alnum]*]
 
@@ -550,16 +552,17 @@ _ACEOF
 
 # Transform confdefs.h into a sed script `conftest.defines', that
 # substitutes the proper values into config.h.in to produce config.h.
-# And first: Protect against being on the right side of a sed subst in
-# config.status.  Protect against being in an unquoted here document
-# in config.status.
-# If some macros were called several times there might be several times
-# the same #defines, which is useless.  Nevertheless, we may not want to
-# sort them, since we want the *last* AC_DEFINE to be honored.
+rm -f conftest.defines conftest.tail
+# First, append a space to every undef/define line, to ease matching.
+echo 's/$/ /' >conftest.defines
+# Then, protect against being on the right side of a sed subst, or in
+# an unquoted here document, in config.status.  If some macros were
+# called several times there might be several #defines for the same
+# symbol, which is useless.  But do not sort them, since the last
+# AC_DEFINE must be honored.
 dnl
 dnl Quote, for `[ ]' and `define'.
-[rm -f conftest.defines conftest.tail
-ac_word_re=[_$as_cr_Letters][_$as_cr_alnum]*
+[ac_word_re=[_$as_cr_Letters][_$as_cr_alnum]*
 uniq confdefs.h |
   sed -n '
 	t rset
@@ -572,14 +575,15 @@ uniq confdefs.h |
 	s/[\\$`]/\\&/g
 	s/^\('"$ac_word_re"'\)\(([^()]*)\)[ 	]*\(.*\)/${ac_dA}\1$ac_dB\2${ac_dC}\3$ac_dD/p
 	s/^\('"$ac_word_re"'\)[ 	]*\(.*\)/${ac_dA}\1$ac_dB${ac_dC}\2$ac_dD/p
-  ' >conftest.defines
+  ' >>conftest.defines
 ]
-# This sed command replaces #undef with comments.  This is necessary, for
+# Remove the space that was appended to ease matching.
+# Then replace #undef with comments.  This is necessary, for
 # example, in the case of _POSIX_SOURCE, which is predefined and required
 # on some systems where configure will not decide to define it.
-# (The regexp can be very short, we know the line contains either #define
-# or #undef.)
-echo '[s,^[	 #]*u.*,/* & */,]' >>conftest.defines
+# (The regexp can be short, since the line contains either #define or #undef.)
+echo 's/ $//
+[s,^[	 #]*u.*,/* & */,]' >>conftest.defines
 
 # Break up conftest.defines:
 ac_max_sed_lines=m4_eval(_AC_SED_CMD_LIMIT - 3)

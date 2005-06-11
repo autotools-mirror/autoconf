@@ -712,7 +712,7 @@ The ubiquity of @command{make} means that a @file{Makefile} is almost the
 only viable way to distribute automatic build rules for software, but
 one quickly runs into @command{make}'s numerous limitations.  Its lack of
 support for automatic dependency tracking, recursive builds in
-subdirectories, reliable timestamps (e.g., for network filesystems), and
+subdirectories, reliable timestamps (e.g., for network file systems), and
 so on, mean that developers must painfully (and often incorrectly)
 reinvent the wheel for each project.  Portability is non-trivial, thanks
 to the quirks of @command{make} on many systems.  On top of all this is the
@@ -3072,7 +3072,7 @@ If a given @var{dir} contains @command{configure.gnu}, it is run instead
 of @command{configure}.  This is for packages that might use a
 non-Autoconf script @command{Configure}, which can't be called through a
 wrapper @command{configure} since it would be the same file on
-case-insensitive filesystems.  Likewise, if a @var{dir} contains
+case-insensitive file systems.  Likewise, if a @var{dir} contains
 @file{configure.in} but no @command{configure}, the Cygnus
 @command{configure} script found by @code{AC_CONFIG_AUX_DIR} is used.
 
@@ -11230,7 +11230,7 @@ outputs logical directory names, which have the following advantages:
 Logical names are what the user specified.
 @item
 Physical names may not be portable from one installation
-host to another due to network filesystem gymnastics.
+host to another due to network file system gymnastics.
 @item
 On modern hosts @samp{pwd -P} may fail due to lack of permissions to
 some parent directory, but plain @command{pwd} cannot fail for this
@@ -11647,7 +11647,7 @@ newer systems, @code{rename}).
 
 @cindex timestamp resolution
 Traditionally, file timestamps had 1-second resolution, and @samp{cp
--p} copied the timestamps exactly.  However, many modern filesystems
+-p} copied the timestamps exactly.  However, many modern file systems
 have timestamps with 1-nanosecond resolution.  Unfortunately, @samp{cp
 -p} implementations truncate timestamps when copying files, so this
 can result in the destination file appearing to be older than the
@@ -12135,6 +12135,17 @@ Nested parenthesization in patterns (e.g., @samp{\(\(a*\)b*)\)}) is
 quite portable to modern hosts, but is not supported by some older
 @command{sed} implementations like SVR3.
 
+Some @command{sed} implementations, e.g., Solaris 10,
+restrict the special role of the asterisk to one-character regular expressions.
+This may lead to unexpected behavior:
+
+@example
+$ @kbd{echo '1*23*4' | /usr/bin/sed 's/\(.\)*/x/g'}
+x2x4
+$ @kbd{echo '1*23*4' | /usr/xpg4/bin/sed 's/\(.\)*/x/g'}
+x
+@end example
+
 The @option{-e} option is portable.
 Some people prefer to use it:
 
@@ -12243,7 +12254,7 @@ jumps.  Finally, since the flag is clear, 4 is processed properly.
 There are two things one should remember about @samp{t} in @command{sed}.
 Firstly, always remember that @samp{t} jumps if @emph{some} substitution
 succeeded, not only the immediately preceding substitution.  Therefore,
-always use a fake @samp{t clear; : clear} to reset the t flag where
+always use a fake @samp{t clear; :clear} to reset the t flag where
 needed.
 
 Secondly, you cannot rely on @command{sed} to clear the flag at each new
@@ -13057,7 +13068,7 @@ As a result, in such a case, you have to write target rules.
 @cindex timestamp resolution
 Traditionally, file timestamps had 1-second resolution, and
 @command{make} used those timestamps to determine whether one file was
-newer than the other.  However, many modern filesystems have
+newer than the other.  However, many modern file systems have
 timestamps with 1-nanosecond resolution.  Some @command{make}
 implementations look at the entire timestamp; others ignore the
 fractional part, which can lead to incorrect results.  Normally this
@@ -13315,7 +13326,7 @@ names won't.  Here are some guidelines,
 Availability of libraries and library functions should always be checked
 by probing.
 @item
-Variant behaviour of system calls is best identified with runtime tests
+Variant behavior of system calls is best identified with runtime tests
 if possible, but bug workarounds or obscure difficulties might have to
 be driven from @samp{$host}.
 @item

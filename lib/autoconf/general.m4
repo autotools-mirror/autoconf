@@ -1858,11 +1858,11 @@ _ACEOF
 _AC_CACHE_DUMP() |
   sed ['
      t clear
-     : clear
+     :clear
      s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
      t end
      /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
-     : end'] >>confcache
+     :end'] >>confcache
 if diff $cache_file confcache >/dev/null 2>&1; then :; else
   if test -w $cache_file; then
     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"

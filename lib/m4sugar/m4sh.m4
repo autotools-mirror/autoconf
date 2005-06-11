@@ -755,9 +755,9 @@ _AS_LINENO_WORKS || {
       s,[[$]]LINENO.*,&-,
       t lineno
       b
-      : lineno
+      :lineno
       N
-      : loop
+      :loop
       s,[[$]]LINENO\([[^'$as_cr_alnum'_]].*\n\)\(.*\),\2\1\2,
       t loop
       s,-\n.*,,
