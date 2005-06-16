@@ -11830,6 +11830,13 @@ Solaris 8 @command{/usr/ucb/expr}) have a silly length limit that causes
 bytes.  In this case, you might want to fall back on @samp{echo|sed} if
 @command{expr} fails.
 
+On Mac OS X 10.4, @command{expr} mishandles the pattern @samp{[^-]} in
+some cases.  For example, the command @samp{expr
+Xpowerpc-apple-darwin8.1.0 : 'X[^-]*-[^-]*-\(.*\)'} outputs
+@samp{apple-darwin8.1.0} rather than the correct @samp{darwin8.1.0}.
+This particular case can be worked around by substituting @samp{[^--]}
+for @samp{[^-]}.
+
 Don't leave, there is some more!
 
 The @acronym{QNX} 4.25 @command{expr}, in addition of preferring @samp{0} to

@@ -1,3 +1,11 @@
+2005-06-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Mention expr bug
+	on Mac OS X 10.4 reported by Peter O'Gorman in:
+	http://lists.gnu.org/archive/html/autoconf-patches/2005-06/msg00041.html
+	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT):
+	Use shell builtins rather than 'expr', to work around expr bug.
+
 2005-06-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: "filesystem" -> "file system".
