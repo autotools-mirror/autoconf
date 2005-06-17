@@ -3332,7 +3332,7 @@ best implementation.
 @acindex{PROG_GREP}
 @ovindex GREP
 On AIX the default @code{grep} silently truncates long lines on the
-input before matching.  On Solaris 9 @code{/usr/bin/grep} does not
+input before matching.  On Solaris, @code{/usr/bin/grep} does not
 understand the @option{-e} option.  On NeXT, @code{grep} understands only a
 single @option{-e} option.  This macro looks for @sc{gnu} Grep or
 else the best available @code{grep} or @code{ggrep} in the user's
@@ -3881,7 +3881,7 @@ Solaris 7).
 @c @fuindex vsprintf
 @prindex @code{vsprintf}
 The ISO C standard says @code{sprintf} and @code{vsprintf} return the
-number of bytes written, but on some old systems (SunOS 4 for
+number of bytes written, but on some ancient systems (SunOS 4 for
 instance) they return the buffer pointer instead.
 
 @item @code{sscanf}
@@ -4681,10 +4681,9 @@ additions.  Please help us keeping it as complete as possible.
 Paul Eggert notes that: ISO C 1999 says that @file{inttypes.h} includes
 @file{stdint.h}, so there's no need to include @file{stdint.h}
 separately in a standard environment.  Many implementations have
-@file{inttypes.h} but not @file{stdint.h} (e.g., Solaris 7), but I don't
+@file{inttypes.h} but not @file{stdint.h} (e.g., Solaris 7), but we don't
 know of any implementation that has @file{stdint.h} but not
-@file{inttypes.h}.  Nor do I know of any free software that includes
-@file{stdint.h}; @file{stdint.h} seems to be a creation of the committee.
+@file{inttypes.h}.
 
 @item @file{linux/irda.h}
 @hdrindex{linux/irda.h}
@@ -5677,9 +5676,9 @@ b.o} solves the issue.
 
 @item Don't rely on correct @code{#line} support
 On Solaris 8, @command{c89} (Sun WorkShop 6 update 2 C 5.3 Patch
-111679-08 2002/05/09)) rejects @code{#line} directives whose line
-numbers are greater than 32767.  In addition, nothing in @sc{posix}
-makes this invalid.  That is the reason why Autoconf stopped issuing
+111679-08 2002/05/09)) diagnoses @code{#line} directives whose line
+numbers are greater than 32767.  In addition, nothing in Posix
+makes this invalid.  That is why Autoconf stopped issuing
 @code{#line} directives.
 @end table
 
@@ -9909,11 +9908,11 @@ bash-2.04$ @kbd{cat <<EOF
 
 Many older shells (including the Bourne shell) implement here-documents
 inefficiently.  And some shells mishandle large here-documents: for
-example, Solaris 8 @command{dtksh}, which is derived from
-Korn shell version M-12/28/93d, mishandles variable expansion that occurs
-on 1024-byte buffer boundaries within a here-document.  Users can
-generally fix these problems by using a faster or more reliable
-shell, e.g., by using the command @samp{bash ./configure} rather than
+example, Solaris @command{dtksh}, which is derived from Korn shell
+version M-12/28/93d, mishandles variable expansion that occurs on
+1024-byte buffer boundaries within a here-document.  Users can generally
+fix these problems by using a faster or more reliable shell, e.g., by
+using the command @samp{bash ./configure CONFIG_SHELL=bash} rather than
 plain @samp{./configure}.
 
 Some shells can be extremely inefficient when there are a lot of
@@ -10277,9 +10276,9 @@ of a ``bad substitution''.
 
 @sp 1
 
-The Solaris @command{sh} has a frightening bug in its interpretation
+Solaris @command{/bin/sh} has a frightening bug in its interpretation
 of this.  Imagine you need set a variable to a string containing
-@samp{@}}.  This @samp{@}} character confuses the Solaris @command{sh}
+@samp{@}}.  This @samp{@}} character confuses Solaris @command{/bin/sh}
 when the affected variable was already set.  This bug can be exercised
 by running:
 
@@ -10404,7 +10403,7 @@ releases of Solaris don't support it:
 
 @example
 $ @kbd{showrev -c /bin/sh | grep version}
-Command version: SunOS 5.9 Generic May 2002
+Command version: SunOS 5.10 Generic January 2005
 $ @kbd{echo $(echo blah)}
 syntax error: `(' unexpected
 @end example
@@ -10433,7 +10432,8 @@ confusion, insert a space between the two opening parentheses.
 
 When setting several variables in a row, be aware that the order of the
 evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
-gives @samp{1} with sh on Solaris, but @samp{2} with Bash.  You must use
+gives @samp{1} with Solaris @command{/bin/sh}, but @samp{2} with Bash.
+You must use
 @samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
 
 Don't rely on the following to find @file{subdir/program}:
@@ -10876,7 +10876,7 @@ directory, you must use @samp{. ./foo}.
 @prindex @command{!}
 The Unix version 7 shell did not support
 negating the exit status of commands with @command{!}, and this feature
-is still absent from more modern shells (e.g., Solaris 9 @command{sh}).
+is still absent from more modern shells (e.g., Solaris @command{/bin/sh}).
 Shell code like this:
 
 @example
@@ -10948,7 +10948,8 @@ $ @kbd{scanset='[<]'; case '\' in $scanset) echo OK;; esac}
 $
 @end example
 
-Even with this, SunOS 5.7 ksh matches a backslash if the set contains any
+Even with this, Solaris @command{ksh} matches a backslash if the set
+contains any
 of the characters @samp{|}, @samp{&}, @samp{(}, or @samp{)}.
 
 Conversely, Tru64 @command{ksh} (circa 2003) erroneously always matches
@@ -10971,7 +10972,7 @@ ash-0.3.8 $ @kbd{case foo in esac;}
 
 Many shells still do not support parenthesized cases, which is a pity
 for those of us using tools that rely on balanced parentheses.  For
-instance, Solaris 8's Bourne shell:
+instance, Solaris @command{/bin/sh}:
 
 @example
 $ @kbd{case foo in (foo) echo foo;; esac}
@@ -11016,7 +11017,7 @@ etc.@: for a means to simulate @option{-n}.
 Do not use backslashes in the arguments, as there is no consensus on
 their handling.  On @samp{echo '\n' | wc -l}, the @command{sh} of
 Digital Unix 4.0 and @acronym{MIPS RISC/OS} 4.52, answer 2, but the Solaris
-@command{sh}, Bash, and Zsh (in @command{sh} emulation mode) report 1.
+@command{/bin/sh}, Bash, and Zsh (in @command{sh} emulation mode) report 1.
 Please note that the problem is truly @command{echo}: all the shells
 understand @samp{'\n'} as the string composed of a backslash and an
 @samp{n}.
@@ -11057,7 +11058,7 @@ trap to clean up before exiting.  If the last shell command exited with
 nonzero status, the trap also exits with nonzero status so that the
 invoker can tell that an error occurred.
 
-Unfortunately, in some shells, such as Solaris 8 @command{sh}, an exit
+Unfortunately, in some shells, such as Solaris @command{/bin/sh}, an exit
 trap ignores the @code{exit} command's argument.  In these shells, a trap
 cannot determine whether it was invoked by plain @code{exit} or by
 @code{exit 1}.  Instead of calling @code{exit} directly, use the
@@ -11073,7 +11074,8 @@ of the environment variables.  Conversely, each environment variable
 received by the shell when it is launched should be imported as a shell
 variable marked as exported.
 
-Alas, many shells, such as Solaris 2.5, @sc{irix} 6.3, @sc{irix} 5.2,
+Alas, many shells, such as Solaris @command{/bin/sh},
+@sc{irix} 6.3, @sc{irix} 5.2,
 @acronym{AIX} 4.1.5, and Digital Unix 4.0, forget to
 @command{export} the environment variables they receive.  As a result,
 two variables coexist: the environment variable and the shell
@@ -11099,8 +11101,8 @@ that you update.
 @item @command{false}
 @c ------------------
 @prindex @command{false}
-Don't expect @command{false} to exit with status 1: in the native Bourne
-shell of Solaris 8 it exits with status 255.
+Don't expect @command{false} to exit with status 1: in native
+Solaris it exits with status 255.
 
 
 @item @command{for}
@@ -11199,7 +11201,7 @@ printf %s -foo
 @item @command{read}
 @c ------------------
 @prindex @command{read}
-Not all shells support @option{-r} (Solaris 9 @command{sh} for example).
+Not all shells support @option{-r} (Solaris @command{/bin/sh} for example).
 
 
 @item @command{pwd}
@@ -11315,11 +11317,11 @@ shouldn't do anything that tests features of the build system instead of
 the host system.  But occasionally you may find it necessary to check
 whether some arbitrary file exists.  To do so, use @samp{test -f} or
 @samp{test -r}.  Do not use @samp{test -x}, because 4.3@acronym{BSD} does not
-have it.  Do not use @samp{test -e} either, because Solaris 2.5 does not
-have it.  To test for symbolic links on systems that have them, use
+have it.  Do not use @samp{test -e} either, because Solaris @command{/bin/sh}
+lacks it.  To test for symbolic links on systems that have them, use
 @samp{test -h} rather than @samp{test -L}; either form conforms to
 Posix 1003.1-2001, but older shells like Solaris 8
-@code{sh} support only @option{-h}.
+@code{/bin/sh} support only @option{-h}.
 
 @item @command{test} (strings)
 @c ---------------------------
@@ -11329,7 +11331,7 @@ option (e.g., @samp{@var{string} = "-n"}).
 
 Contrary to a common belief, @samp{test -n @var{string}} and
 @samp{test -z @var{string}} @strong{are} portable.  Nevertheless many
-shells (such as Solaris 2.5, @acronym{AIX} 3.2, @sc{unicos} 10.0.0.6,
+shells (such as Solaris, @acronym{AIX} 3.2, @sc{unicos} 10.0.0.6,
 Digital Unix 4, etc.)@: have bizarre precedence and may be confused if
 @var{string} looks like an operator:
 
@@ -11409,7 +11411,7 @@ the @emph{last} command run: that before @command{exit}, or
 @command{exit} itself?''
 
 Bash considers @command{exit} to be the last command, while Zsh and
-Solaris 8 @command{sh} consider that when the trap is run it is
+Solaris @command{/bin/sh} consider that when the trap is run it is
 @emph{still} in the @command{exit}, hence it is the previous exit status
 that the trap receives:
 
@@ -11491,11 +11493,11 @@ The small set of tools you can expect to find on any machine can still
 include some limitations you should be aware of.
 
 @table @asis
-@item @command{awk}
+@item Awk
 @c ----------------
-@prindex @command{awk}
-Don't leave white space before the opening parenthesis in a user function call;
-@acronym{GNU} awk will reject it:
+@prindex Awk
+Don't leave white space before the opening parenthesis in a user function call.
+Posix does not allow this and @acronym{GNU} Awk rejects it:
 
 @example
 $ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
@@ -11526,8 +11528,7 @@ bar
 foo
 @end example
 
-Some AWK, such as HPUX 11.0's native one, have regex engines fragile to
-inner anchors:
+Some Awk implementations, such as HPUX 11.0's native one, mishandle anchors:
 
 @example
 $ @kbd{echo xfoo | $AWK '/foo|^bar/ @{ print @}'}
@@ -11541,20 +11542,52 @@ bar
 
 @noindent
 Either do not depend on such patterns (i.e., use @samp{/^(.*foo|bar)/},
-or use a simple test to reject such AWK@.
+or use a simple test to reject such implementations.
 
-@acronym{AIX} version 5.2 limits on the maximal length of regular
-expressions and literal strings in the program to 399.
+@acronym{AIX} version 5.2 has an arbitrary limit of 399 on the the
+length of regular expressions and literal strings in an Awk program.
 
-Some @command{awk}, such as Solaris 9's native one, have a limit of 99
+Traditional Awk implementations derived from Unix version 7, such as
+Solaris @command{/bin/awk}, have many limitations and do not
+conform to Posix.  Nowadays @code{AC_PROG_AWK} (@pxref{Particular
+Programs}) will find you an Awk that doesn't have these problems, but if
+for some reason you prefer not to use @code{AC_PROG_AWK} you may need to
+address them.
+
+Traditional Awk does not support multidimensional arrays or user-defined
+functions.
+
+Traditional Awk does not support the @option{-v} option.  You can use
+assignments after the program instead, e.g., @command{$AWK '@{print v
+$1@}' v=x}; however, don't forget that such assignments are not
+evaluated until they are encountered (e.g., after any @code{BEGIN}
+action).
+
+Traditional Awk does not support the keywords @code{delete} or @code{do}.
+
+Traditional Awk does not support the expressions
+@code{@var{a}?@var{b}:@var{c}}, @code{!@var{a}}, @code{@var{a}^@var{b}},
+or @code{@var{a}^=@var{b}}.
+
+Traditional Awk does not support the predefined @code{CONVFMT} variable.
+
+Traditional Awk supports only the predefined functions @code{exp},
+@code{int}, @code{length}, @code{log}, @code{split}, @code{sprintf},
+@code{sqrt}, and @code{substr}.
+
+Traditional Awk @code{getline} is not at all compatible with Posix;
+avoid it.
+
+Traditional Awk @code{split} supports only two arguments.
+
+Traditional Awk has a limit of 99
 fields in a record.  You may be able to circumvent this problem by using
-the builtin function @code{split}.
+@code{split}.
 
 @item @command{cat}
 @c ----------------
 @prindex @command{cat}
-Don't rely on any option.  The option @option{-v}, which displays
-non-printing characters, @emph{seems} portable, though.
+Don't rely on any option.
 
 
 @item @command{cc}
@@ -11621,7 +11654,7 @@ newline encoding.
 @prindex @command{cp}
 Avoid the @option{-r} option, since its behavior is not specified by
 Posix.  Use @option{-R} instead.  On @acronym{GNU} hosts the two options
-are equivalent, but on Solaris 9 hosts (for example) @command{cp -r}
+are equivalent, but on Solaris hosts (for example) @command{cp -r}
 reads from pipes instead of replicating them.
 
 Some @command{cp} implementations (e.g., BSD/OS 4.2) do not allow
@@ -11631,7 +11664,7 @@ avoid this problem, omit the trailing slashes.  For example, use
 /tmp/newdir/} if @file{/tmp/newdir} does not exist.
 
 @c This is thanks to Ian.
-SunOS @command{cp} does not support @option{-f}, although its
+SunOS 4 @command{cp} does not support @option{-f}, although its
 @command{mv} does.  It's possible to deduce why @command{mv} and
 @command{cp} are different with respect to @option{-f}.  @command{mv}
 prompts by default before overwriting a read-only file.  @command{cp}
@@ -11657,7 +11690,7 @@ the system calls that @command{cp} uses; traditionally this was
 @command{cp} implementations use @code{utimes}, which has
 1-microsecond resolution.  These newer implementations include GNU
 coreutils 5.0.91 or later, and Solaris 8 (sparc) patch 109933-02 or
-later.  Unfortunately as of September 2003 there is still no system
+later.  Unfortunately as of June 2005 there is still no system
 call to set time stamps to the full nanosecond resolution.
 
 Bob Proulx notes that @samp{cp -p} always @emph{tries} to copy
@@ -11884,7 +11917,7 @@ not work on long input lines.  To work around these problems, invoke
 @c -----------------
 @prindex @command{find}
 The option @option{-maxdepth} seems to be @acronym{GNU} specific.
-Tru64 v5.1, Net@acronym{BSD} 1.5 and Solaris 2.5 @command{find}
+Tru64 v5.1, Net@acronym{BSD} 1.5 and Solaris @command{find}
 commands do not understand it.
 
 The replacement of @samp{@{@}} is guaranteed only if the argument is
@@ -11905,7 +11938,7 @@ while @acronym{GNU} @command{find} reports @samp{./foo-./foo}.
 @c -----------------
 @prindex @command{grep}
 Don't use @samp{grep -q} to suppress output, because many @command{grep}
-implementations (e.g., Solaris 10) do not support @option{-q}.
+implementations (e.g., Solaris) do not support @option{-q}.
 Don't use @samp{grep -s} to suppress output either, because Posix
 says @option{-s} does not suppress output, only some error messages;
 also, the @option{-s} option of traditional @command{grep} behaved
@@ -11916,8 +11949,8 @@ status of @code{grep} to determine whether it found a match.
 
 Some traditional @command{grep} implementations do not work on long
 input lines.  Also, many implementations do not support multiple regexps
-with @option{-e}: they either reject @samp{-e} entirely (e.g., Solaris
-10) or honor only the last pattern (e.g., @acronym{IRIX} 6.5).  To
+with @option{-e}: they either reject @samp{-e} entirely (e.g., Solaris)
+or honor only the last pattern (e.g., @acronym{IRIX} 6.5).  To
 work around these problems, invoke @code{AC_PROG_GREP} and then use
 @code{$GREP}.
 
@@ -12005,14 +12038,14 @@ None of @command{mkdir}'s options are portable to older systems.  Instead of
 
 Posix does not clearly specify whether @samp{mkdir -p foo}
 should succeed when @file{foo} is a symbolic link to an already-existing
-directory.  GNU Coreutils 5.1.0 @command{mkdir} succeeds, but Solaris 9
+directory.  GNU Coreutils 5.1.0 @command{mkdir} succeeds, but Solaris
 @command{mkdir} fails.
 
 Not all @code{mkdir -p} implementations are thread-safe.  When it is not
 and you call @code{mkdir -p a/b} and @code{mkdir -p a/c} at the same
 time, both will detect that @file{a/} is missing, one will create
 @file{a/}, then the other will try to create @file{a/} and die with a
-@code{File exists} error.  At least Solaris 8, NetBSD 1.6, and OpenBSD
+@code{File exists} error.  At least Solaris 10, NetBSD 1.6, and OpenBSD
 3.4 have an unsafe @code{mkdir -p}.  GNU Coreutils (since Fileutils
 version 4.0c), FreeBSD 5.0, and NetBSD-current are known to have a
 race-free @code{mkdir -p}.  This possible race is harmful in parallel
@@ -12132,7 +12165,7 @@ Input should have reasonably long lines, since some @command{sed} have
 an input buffer limited to 4000 bytes.
 
 Alternation, @samp{\|}, is common but Posix does not require its
-support, so it should be avoided in portable scripts.  Solaris 8
+support, so it should be avoided in portable scripts.  Solaris
 @command{sed} does not support alternation; e.g., @samp{sed '/a\|b/d'}
 deletes only lines that contain the literal string @samp{a|b}.
 
@@ -12142,7 +12175,7 @@ Nested parenthesization in patterns (e.g., @samp{\(\(a*\)b*)\)}) is
 quite portable to modern hosts, but is not supported by some older
 @command{sed} implementations like SVR3.
 
-Some @command{sed} implementations, e.g., Solaris 10,
+Some @command{sed} implementations, e.g., Solaris,
 restrict the special role of the asterisk to one-character regular expressions.
 This may lead to unexpected behavior:
 
@@ -12193,7 +12226,7 @@ supported it.
 
 Posix requires that you must not have any white space between
 @samp{!} and the following command.  It is OK to have blanks between
-the address and the @samp{!}.  For instance, on Solaris 8:
+the address and the @samp{!}.  For instance, on Solaris:
 
 @example
 $ @kbd{echo "foo" | sed -n '/bar/ ! p'}
@@ -12312,7 +12345,7 @@ are executed by the shell, all its weaknesses are inherited@enddots{}
 @item @code{$<}
 Posix says that the @samp{$<} construct in makefiles can be
 used only in inference rules and in the @samp{.DEFAULT} rule; its
-meaning in ordinary rules is unspecified.  Solaris 8's @command{make}
+meaning in ordinary rules is unspecified.  Solaris @command{make}
 for instance will replace it with the empty string.  OpenBSD (3.0 and
 later) @command{make} will diagnose these uses and error out.
 
@@ -12644,7 +12677,7 @@ f.c: if.c
 @cindex @code{VPATH} and automatic rule rewriting
 @cindex automatic rule rewriting and @code{VPATH}
 
-Some @command{make} implementations, such as SunOS @command{make} or
+Some @command{make} implementations, such as SunOS 4 @command{make} or
 OSF1/Tru64 @command{make}, will search prerequisites in @code{VPATH} and
 rewrite all their occurrences in the rule appropriately.
 
@@ -12671,7 +12704,7 @@ f.c: if.c
 
 @noindent
 However the "prerequisite rewriting" still applies here.  So if
-@file{if.c} is in @file{../pkg/src}, SunOS @command{make} and OSF1/Tru64
+@file{if.c} is in @file{../pkg/src}, SunOS 4 @command{make} and OSF1/Tru64
 @command{make} will execute
 
 @smallexample
@@ -12714,7 +12747,7 @@ install-HEADERS: $(HEADERS)
         done
 @end example
 
-The above @code{install-HEADERS} rule is not SunOS-proof because @code{for
+The above @code{install-HEADERS} rule is not SunOS-4-proof because @code{for
 i in $(HEADERS);} will be expanded as @code{for i in f.h g.h h.h;}
 where @code{f.h} and @code{g.h} are plain words and are hence
 subject to @code{VPATH} adjustments.
@@ -12819,7 +12852,7 @@ Dependency @file{../foo} was found in @file{sub/../foo}, but OSF1/Tru64
 directory does not even exist, this just means that the simplification
 occurred before the file was checked for.)
 
-For the record here is how SunOS @command{make} behaves on this
+For the record here is how SunOS 4 @command{make} behaves on this
 very same example.
 @smallexample
 % make

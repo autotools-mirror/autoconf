@@ -1,3 +1,13 @@
+2005-06-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (as_awk_strverscmp): Port to Solaris /bin/awk.
+	* doc/autoconf.texi:
+	Don't mention Solaris versions so much, if a
+	problem is common to all extant versions of Solaris.  Say "SunOS
+	4" instead of "SunOS" for SunOS 4.
+	(awk): Mention more of the limitations of traditional Awk.
+	(cat): Don't talk about cat -v.
+
 2005-06-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_VERSION_COMPARE_PREPARE): New macro.

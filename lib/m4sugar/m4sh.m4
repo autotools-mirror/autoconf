@@ -1027,24 +1027,27 @@ _AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"])
 # Output variables for comparing version numbers.
 m4_defun([_AS_VERSION_COMPARE_PREPARE],
 [[as_awk_strverscmp='
+  # Use only awk features that work with 7th edition Unix awk (1978).
+  # My, what an old awk you have, Mr. Solaris!
   END {
     while (length(v1) || length(v2)) {
       # Set d1 to be the next thing to compare from v1, and likewise for d2.
       # Normally this is a single character, but if v1 and v2 contain digits,
       # compare them as integers and fractions as strverscmp does.
-      d1 = v1; sub(/[^0-9].*/, "", d1); len1 = length(d1)
-      d2 = v2; sub(/[^0-9].*/, "", d2); len2 = length(d2)
-      if (len1 && len2) {
-	# v1 and v2 both have leading digits.
-	v1 = substr(v1, len1 + 1)
-	v2 = substr(v2, len1 + 1)
+      if (v1 ~ /^[0-9]/ && v2 ~ /^[0-9]/) {
+	# Split v1 and v2 into their leading digit string components d1 and d2,
+	# and advance v1 and v2 past the leading digit strings.
+	for (len1 = 1; substr(v1, len1 + 1) ~ /^[0-9]/; len1++) continue
+	for (len2 = 1; substr(v2, len2 + 1) ~ /^[0-9]/; len2++) continue
+	d1 = substr(v1, 1, len1); v1 = substr(v1, len1 + 1)
+	d2 = substr(v2, 1, len2); v2 = substr(v2, len2 + 1)
 	if (d1 ~ /^0/) {
 	  if (d2 ~ /^0/) {
 	    # Compare two fractions.
-	    do {
+	    while (d1 ~ /^0/ && d2 ~ /^0/) {
 	      d1 = substr(d1, 2); len1--
 	      d2 = substr(d2, 2); len2--
-	    } while (d1 ~ /^0/ && d2 ~ /^0/);
+	    }
 	    if (len1 != len2 && ! (len1 && len2 && substr(d1, 1, 1) == substr(d2, 1, 1))) {
 	      # The two components differ in length, and the common prefix
 	      # contains only leading zeros.  Consider the longer to be less.
