@@ -741,8 +741,16 @@ AC_DEFUN([AC_PROG_SED],
 # ------------
 AN_MAKEVAR([BISON],  [AC_PROG_YACC])
 AN_MAKEVAR([YACC],  [AC_PROG_YACC])
+AN_MAKEVAR([YFLAGS],  [AC_PROG_YACC])
 AN_PROGRAM([yacc],  [AC_PROG_YACC])
 AN_PROGRAM([byacc], [AC_PROG_YACC])
 AN_PROGRAM([bison], [AC_PROG_YACC])
 AC_DEFUN([AC_PROG_YACC],
-[AC_CHECK_PROGS(YACC, 'bison -y' byacc, yacc)])
+[AC_CHECK_PROGS(YACC, 'bison -y' byacc, yacc)dnl
+AC_ARG_VAR(YACC,
+[The `Yet Another C Compiler' implementation to use.  Defaults to the first
+program found out of: `bison -y', `byacc', `yacc'.])dnl
+AC_ARG_VAR(YFLAGS,
+[The list of arguments that will be passed by default to $YACC.  This script
+will default YFLAGS to the empty string to avoid a default value of `-d' given
+by some make applications.])])

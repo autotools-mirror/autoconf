@@ -1,3 +1,7 @@
+2005-06-20  Derek Price  <derek@ximbiot.com>
+
+	* lib/m4/programs.m4 (AC_PROG_YACC): Declare YACC & YFLAGS precious.
+
 2005-06-17  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (as_awk_strverscmp): Port to Solaris /bin/awk.

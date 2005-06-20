@@ -281,6 +281,7 @@ makevar: LN		AC_PROG_LN_S
 makevar: MAKE		AC_PROG_MAKE_SET
 makevar: RANLIB		AC_PROG_RANLIB
 makevar: YACC		AC_PROG_YACC
+makevar: YFLAGS		AC_PROG_YACC
 program: CC		AC_PROG_CXX
 program: awk		AC_PROG_AWK
 program: bison		AC_PROG_YACC
