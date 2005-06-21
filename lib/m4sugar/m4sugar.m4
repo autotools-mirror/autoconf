@@ -1364,11 +1364,11 @@ m4_define([m4_toupper],
 #
 # REGEXP specifies where to split.  Default is [\t ]+.
 #
-# Pay attention to the m4_changequotes.  Inner m4_changequotes exist for
-# obvious reasons (we want to insert square brackets).  Outer
-# m4_changequotes are needed because otherwise the m4 parser, when it
-# sees the closing bracket we add to the result, believes it is the
-# end of the body of the macro we define.
+# If STRING is empty, the result is an empty list.
+#
+# Pay attention to the m4_changequotes.  When m4 reads the definition of
+# m4_split, it still has quotes set to [ and ].  Luckily, these are matched
+# in the macro body, so the definition is stored correctly.
 #
 # Also, notice that $1 is quoted twice, since we want the result to
 # be quoted.  Then you should understand that the argument of
@@ -1379,16 +1379,17 @@ m4_define([m4_toupper],
 #   m4_split([active active ])end
 #   => [active], [active], []end
 
-m4_changequote(<<, >>)
-m4_define(<<m4_split>>,
-<<m4_changequote(``, '')dnl
+m4_define([m4_split],
+[m4_ifval([$1], [_m4_split($@)])])
+
+m4_define([_m4_split],
+[m4_changequote(``, '')dnl
 [dnl Can't use m4_default here instead of m4_if, because m4_default uses
 dnl [ and ] as quotes.
 m4_bpatsubst(````$1'''',
 	     m4_if(``$2'',, ``[	 ]+'', ``$2''),
 	     ``], ['')]dnl
-m4_changequote([, ])>>)
-m4_changequote([, ])
+m4_changequote([, ])])
 
 
 
