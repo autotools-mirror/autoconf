@@ -1,3 +1,17 @@
+2005-06-21  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: Document that
+	b, t, r, w commands require single space, while : cannot have any.
+	(Special Shell Variables): Fix sed code this in the example.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): Likewise; and fix a typo.
+	* lib/autotest/general.m4 (AT_ARG_OPTION): Fix typo in the description.
+
+2005-06-21  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sugar.m4 (m4_split): If the parameter is empty,
+	expand to the empty list.  Don't use two pairs of m4_changequote,
+	it's not necessary.
+
 2005-06-20  Derek Price  <derek@ximbiot.com>
 
 	* lib/m4/programs.m4 (AC_PROG_YACC): Declare YACC & YFLAGS precious.
@@ -29,13 +43,13 @@
 2005-06-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: "filesystem" -> "file system".
-	"behavior" -> "behavior".
+	"behaviour" -> "behavior".
 	Warn about \(...\)* in Solaris sed (written by Ralf Menzel).
 	* lib/autoconf/general.m4: Omit blank after ":" sed command,
 	as per POSIX.
 	* lib/m4sugar/m4sh.m4: Likewise.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): Work around problem
-	with Solaris sed.  Fix by Stepan Kasal.
+	with Solaris sed.  Fix by Ralf Menzel and Stepan Kasal.
 
 	* man/Makefile.am (MOSTLYCLEANFILES): Add $(srcdir)/*.t.
 	(.x.1): Ignore the time stamp in the .TH line when deciding whether

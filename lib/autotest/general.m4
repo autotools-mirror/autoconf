@@ -1037,7 +1037,7 @@ AS_IF([$at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)],,[$5])dnl
 # if --noOPTION is received, and `false' by default.
 #
 # Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered with
-# $at_optarg set to `:' or `false' as appropriate.  $opt_arg is actually
+# $at_optarg set to `:' or `false' as appropriate.  $at_optarg is actually
 # just a copy of $at_arg_OPTION.
 #
 # ACTION-IF-NOT-GIVEN will be run once after option parsing is complete

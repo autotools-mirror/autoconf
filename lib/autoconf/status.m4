@@ -508,7 +508,7 @@ dnl the extra command meant extra calls to sed.
 dnl 2) The code was incorrect: in the unusual case where a symbol has multiple
 dnl different AC_DEFINEs, the last one should be honored.
 dnl
-dnl ac_dB works because every line has a space appended.  ac_dB reinserts
+dnl ac_dB works because every line has a space appended.  ac_dD reinserts
 dnl the space, because some symbol may have been AC_DEFINEd several times.
 
 [ac_word_regexp=[_$as_cr_Letters][_$as_cr_alnum]*]
@@ -1623,13 +1623,13 @@ m4_define([AC_OUTPUT_MAKE_DEFS],
 # look for a macro that doesn't take arguments.
 cat >confdef2opt.sed <<\_ACEOF
 t clear
-: clear
+:clear
 s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\),-D\1=\2,g
 t quote
 s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\),-D\1=\2,g
 t quote
 d
-: quote
+:quote
 s,[	 `~#$^&*(){}\\|;'"<>?],\\&,g
 s,\[,\\&,g
 s,\],\\&,g

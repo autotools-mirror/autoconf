@@ -10788,7 +10788,8 @@ $ @kbd{sed '=' <lineno |}
 > @kbd{  sed '}
 > @kbd{    N}
 > @kbd{    s,$,-,}
-> @kbd{    : loop}
+> @kbd{    t loop}
+> @kbd{    :loop}
 > @kbd{    s,^\([0-9]*\)\(.*\)[$]LINENO\([^a-zA-Z0-9_]\),\1\2\1\3,}
 > @kbd{    t loop}
 > @kbd{    s,-$,,}
@@ -12236,6 +12237,11 @@ $ @kbd{echo "foo" | sed -n '/bar/! p'}
 $ @kbd{echo "foo" | sed -n '/bar/ !p'}
 foo
 @end example
+
+Also note that Posix requires that the arguments of commands @samp{b},
+@samp{t}, @samp{r}, @samp{w} have to be separated by exactly one space.
+On the other hand, no white space is allowed between @samp{:} and the
+following label name.
 
 @item @command{sed} (@samp{t})
 @c ---------------------------
