@@ -1675,22 +1675,18 @@ ac_save_IFS=$IFS; IFS='-'
 set x $ac_cv_$1
 shift
 IFS=$ac_save_IFS
-$1_cpu=$[1]
-$1_vendor=$[2]
-$1_os=$[3]
 
+AC_SUBST([$1_cpu], [$[1]])dnl
+AC_SUBST([$1_vendor], [$[2]])dnl
+AC_SUBST([$1_os], [$[3]])dnl
 case $[#] in
 0|1|2) ;;
 *)
   shift; shift; shift
   for ac_arg
-  do $1_os=$1_os-$ac_arg
+  do $1_os=[$]$1_os-$ac_arg
   done;;
 esac
-
-AC_SUBST([$1_cpu])dnl
-AC_SUBST([$1_vendor])dnl
-AC_SUBST([$1_os])dnl
 ])# _AC_CANONICAL_SPLIT
 
 

@@ -1,3 +1,11 @@
+2005-06-22  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT): Use AC_SUBST/2.
+
+2005-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT): Fix typo.
+
 2005-06-21  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: Document that
