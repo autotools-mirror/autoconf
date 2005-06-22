@@ -149,10 +149,12 @@ AC_SUBST([EMACS], [$TEST_EMACS])
 AM_PATH_LISPDIR
 
 
-## ------ ##
-## Grep.  ##
-## ------ ##
+## ------------ ##
+## Grep & sed.  ##
+## ------------ ##
 AC_PROG_GREP
+AC_PROG_EGREP
+AC_PROG_SED
 
 
 ## ------------ ##

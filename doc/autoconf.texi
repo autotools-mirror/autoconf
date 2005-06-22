@@ -11955,6 +11955,18 @@ or honor only the last pattern (e.g., @acronym{IRIX} 6.5).  To
 work around these problems, invoke @code{AC_PROG_GREP} and then use
 @code{$GREP}.
 
+Another possible workaround for the multiple @samp{-e} problem is to
+separate the patterns by newlines, for example:
+
+@example
+grep 'foo
+bar' in.txt
+@end example
+
+Alternation, @samp{\|}, is common but Posix does not require its
+support in basic regular expressions, so it should be avoided in
+portable scripts.  Solaris @command{grep} does not support it.
+
 Don't rely on @option{-w}, as Irix 6.5.16m's @command{grep} does not
 support it.
 

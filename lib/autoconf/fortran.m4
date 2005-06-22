@@ -559,7 +559,6 @@ case $ac_[]_AC_LANG_ABBREV[]_v_output in
     ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/-cmdline  *"[[^"]]*"/ /g'` ;;
 
   # If we are using Cray Fortran then delete quotes.
-  # Use "\"" instead of '"' for font-lock-mode.
   *cft90*)
     ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/"//g'` ;;
 esac

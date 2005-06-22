@@ -21,6 +21,8 @@
 
 PERL='@PERL@'
 GREP='@GREP@'
+EGREP='@EGREP@'
+SED='@SED@'
 
 # We need to know if sh -n is ok.
 ac_cv_sh_n_works='@ac_cv_sh_n_works@'

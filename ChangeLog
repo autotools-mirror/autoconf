@@ -1,5 +1,19 @@
 2005-06-22  Stepan Kasal  <kasal@ucw.cz>
 
+	Fix AT_CONFIG_CMP for Solaris hosts; idea from Ralf Menzel.
+	* configure.ac: Call AC_PROG_EGREP and AC_PROG_SED.
+	* tests/atlocal.in: Propagate $EGREP and $SED.
+	* tests/local.at (AT_CHECK_ENV): Use $EGREP, not $GREP -E.
+	(AT_CONFIG_CMP): Use sed instead of grep plumbing.
+
+	* doc/autoconf.texi (Limitations of Usual Tools) <grep>: Mention
+	that '\|' is not allowed in BREs; recommend using newline separated
+	list of patterns instead of multiple -e options.
+
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Remove an old comment.
+
+2005-06-22  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT): Use AC_SUBST/2.
 
 2005-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>

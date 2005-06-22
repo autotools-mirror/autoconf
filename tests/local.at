@@ -274,7 +274,7 @@ test -f state-ls.after && { AT_CMP([state-ls.before], [state-ls.after]) }
 if test -f state-env.before && test -f state-env.after; then
   for act_file in state-env.before state-env.after
   do
-    $GREP -E -v -e 'm4_join([|],
+    $EGREP -v -e 'm4_join([|],
       [^a[cs]_],
       [^((exec_)?prefix|DEFS|CONFIG_STATUS)=],
       [^(CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77)=],
@@ -316,21 +316,27 @@ fi
 # - SECONDS [zsh]
 # - '$' [zsh]
 #
-# Furthermore, it is okay for a variable initialized to empty in one run to be
-# unset in another run.  This happens when, for example, cache update code tries
-# a number of values in LIBS and eventually restores LIBS to its original value.
-# If LIBS was previously unset, it will have become set and empty.
+# Furthermore, it is okay for a non-cache variable initialized to empty in one
+# run to be unset in another run.  This happens when, for example, cache update
+# code tries a number of values in LIBS and eventually restores LIBS to its
+# original value. If LIBS was previously unset, it will have become set and
+# empty.  (OTOH, cache variables indicate the result of the test even if they
+# are empty, so we have to be strict about them.)
+#
+# Lines that do not look like `foo=bar' are probably latter lines of
+# multiline values; trim them.
+#
 m4_define([AT_CONFIG_CMP],
 [for act_file in $1 $2
 do
-    { $GREP -v \
-'^\(ac\|as\)_
-^\(PPID\|RANDOM\|SECONDS\|'\'\\\$\''\)=
-^[[^=]]*=$'        $act_file
-      $GREP ^ac_cv $act_file ; } |
-      # Lines that do not look like `foo=bar' are probably latter lines of
-      # multiline values; trim them.
-      $GREP '^m4_defn([m4_re_word])=' >at_config_vars-$act_file
+  $SED '/^ac_cv_/ b
+	/^m4_defn([m4_re_word])=./ !d
+	/^a[[cs]]_/ d
+	/^PPID=/ d
+	/^RANDOM=/ d
+	/^SECONDS=/ d
+	/'\'\\\$\''=/ d
+	' $act_file >at_config_vars-$act_file
 done
 AT_CMP([at_config_vars-$1], [at_config_vars-$2])[]dnl
 ])# AT_CONFIG_CMP
