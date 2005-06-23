@@ -1,3 +1,16 @@
+2005-06-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix some more shell quoting problems.  Prompted by a bug report
+	from Justace Clutter.
+	* lib/autoconf/general.m4 (_AC_INIT_DIRCHECK): Put name of invalid
+	variable into diagnostic.  Make the diagnostic an error, not a warning,
+	because we really don't support spaces and suchlike in dir names.
+	(_AC_INIT_SRCDIR): Allow special characters in $ac_unique_file.
+	Don't worry about backslashes in srcdir; it can't happen now.
+	(_AC_INIT_PARSE_ARGS): Allow weird characters in ac_optarg.
+	Simplify ac_optarg handling.
+	(_AC_ARG_VAR_VALIDATE): Remove unnecessary and inconsistent quotes.
+
 2005-06-22  Stepan Kasal  <kasal@ucw.cz>
 
 	Fix AT_CONFIG_CMP for Solaris hosts; idea from Ralf Menzel.

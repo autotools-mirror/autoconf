@@ -468,13 +468,14 @@ ac_pwd=`pwd` && test -n "$ac_pwd" ||
 
 ac_pat="[[\$][{][_$as_cr_Letters][_$as_cr_alnum]*[}]]"
 
-for ac_dir in "$ac_pwd" "$srcdir" \
-  "$bindir" "$sbindir" "$libexecdir" "$datarootdir" "$datadir" \
-  "$sysconfdir" "$sharedstatedir" "$localstatedir" "$includedir" \
-  "$oldincludedir" "$docdir" "$infodir" "$htmldir" "$dvidir" "$pdfdir" \
-  "$psdir" "$libdir" "$localedir" "$mandir"
+for ac_var in ac_pwd srcdir \
+  bindir sbindir libexecdir datarootdir datadir \
+  sysconfdir sharedstatedir localstatedir includedir \
+  oldincludedir docdir infodir htmldir dvidir pdfdir \
+  psdir libdir localedir mandir
 do
   # Remove references to shell or make variables.
+  eval ac_dir=\$$ac_var
   ac_dirx=$ac_dir
   while :
   do
@@ -494,7 +495,7 @@ do
 '* | *'	'* | *' '* | *\"* | *\#* | *\$* | *\&* | *\'* | *\(* | *\)* | \
   *\** | *\;* | *\<* | *\=* | *\>* | *\?* | *\@<:@* | *\\* | *\`* | \
   *\|* | \~*)
-    AC_MSG_WARN([Directory name `$ac_dir' contains special characters]);;
+    AC_MSG_ERROR([$ac_var directory name `$ac_dir' has special characters]);;
   esac
 done
 m4_divert_pop([PARSE_ARGS])dnl
@@ -509,24 +510,25 @@ m4_define([_AC_INIT_SRCDIR],
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
-  # Try the directory containing this script, then its parent.
+  # Try the directory containing this script, then the parent directory.
   ac_confdir=`AS_DIRNAME(["$[0]"])`
   srcdir=$ac_confdir
-  if test ! -r $srcdir/$ac_unique_file; then
+  if test ! -r "$srcdir/$ac_unique_file"; then
     srcdir=..
   fi
 else
   ac_srcdir_defaulted=no
 fi
-if test ! -r $srcdir/$ac_unique_file; then
+if test ! -r "$srcdir/$ac_unique_file"; then
   test "$ac_srcdir_defaulted" = yes && srcdir="$ac_confdir or .."
   AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $srcdir])
 fi
-(cd $srcdir && test -r ./$ac_unique_file) 2>/dev/null ||
+(cd $srcdir && test -r "./$ac_unique_file") 2>/dev/null ||
   AC_MSG_ERROR([sources are in $srcdir, but `cd $srcdir' does not work])
+dnl Remove unnecessary trailing slashes from srcdir.
 dnl Double slashes in file names in object file debugging info
 dnl mess up M-x gdb in Emacs.
-srcdir=`echo "$srcdir" | sed 's%\([[^\\/]]\)[[\\/]]*$%\1%'`
+srcdir=`echo "$srcdir" | sed 's%\([[^/]]\)/*$%\1%'`
 m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_SRCDIR
 
@@ -590,12 +592,15 @@ for ac_option
 do
   # If the previous option needs an argument, assign it.
   if test -n "$ac_prev"; then
-    eval "$ac_prev=\$ac_option"
+    eval $ac_prev=\$ac_option
     ac_prev=
     continue
   fi
 
-  ac_optarg=`expr "x$ac_option" : 'x[[^=]]*=\(.*\)'`
+  case $ac_option in
+  *=*)	ac_optarg=`expr "X$ac_option" : '[[^=]]*=\(.*\)'` ;;
+  *)	ac_optarg=yes ;;
+  esac
 
   # Accept the important Cygnus configure options, so we can diagnose typos.
 
@@ -641,7 +646,7 @@ do
     expr "x$ac_feature" : "[.*[^-_$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid feature name: $ac_feature])
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
-    eval "enable_$ac_feature=no" ;;
+    eval enable_$ac_feature=no ;;
 
   -docdir | --docdir | --docdi | --doc | --do)
     ac_prev=docdir ;;
@@ -659,11 +664,7 @@ do
     expr "x$ac_feature" : "[.*[^-_$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid feature name: $ac_feature])
     ac_feature=`echo $ac_feature | sed 's/-/_/g'`
-    case $ac_option in
-      *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
-      *) ac_optarg=yes ;;
-    esac
-    eval "enable_$ac_feature='$ac_optarg'" ;;
+    eval enable_$ac_feature=\$ac_optarg ;;
 
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
@@ -859,11 +860,7 @@ do
     expr "x$ac_package" : "[.*[^-_$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
     ac_package=`echo $ac_package| sed 's/-/_/g'`
-    case $ac_option in
-      *=*) ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`;;
-      *) ac_optarg=yes ;;
-    esac
-    eval "with_$ac_package='$ac_optarg'" ;;
+    eval with_$ac_package=\$ac_optarg ;;
 
   -without-* | --without-*)
     ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
@@ -871,7 +868,7 @@ do
     expr "x$ac_package" : "[.*[^-_$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
     ac_package=`echo $ac_package | sed 's/-/_/g'`
-    eval "with_$ac_package=no" ;;
+    eval with_$ac_package=no ;;
 
   --x)
     # Obsolete; use --with-x.
@@ -900,8 +897,7 @@ Try `$[0] --help' for more information.])
     # Reject names that are not valid shell variable names.
     expr "x$ac_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid variable name: $ac_envvar])
-    ac_optarg=`echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"`
-    eval "$ac_envvar='$ac_optarg'"
+    eval $ac_envvar=\$ac_optarg
     export $ac_envvar ;;
 
   *)
@@ -926,7 +922,7 @@ for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
 		libdir localedir mandir
 do
-  eval ac_val=$`echo $ac_var`
+  eval ac_val=\$$ac_var
   case $ac_val in
     [[\\/$]]* | ?:[[\\/]]* )  continue;;
     NONE | '' ) case $ac_var in *prefix ) continue;; esac;;
@@ -1243,7 +1239,7 @@ trap 'exit_status=$?
     echo
     for ac_var in $ac_subst_vars
     do
-      eval ac_val=$`echo $ac_var`
+      eval ac_val=\$$ac_var
       echo "$ac_var='"'"'$ac_val'"'"'"
     done | sort
     echo
@@ -1253,7 +1249,7 @@ trap 'exit_status=$?
       echo
       for ac_var in $ac_subst_files
       do
-	eval ac_val=$`echo $ac_var`
+	eval ac_val=\$$ac_var
 	echo "$ac_var='"'"'$ac_val'"'"'"
       done | sort
       echo
@@ -1465,8 +1461,8 @@ for ac_var in `(set) 2>&1 |
 	       sed -n 's/^ac_env_\([[a-zA-Z_0-9]]*\)_set=.*/\1/p'`; do
   eval ac_old_set=\$ac_cv_env_${ac_var}_set
   eval ac_new_set=\$ac_env_${ac_var}_set
-  eval ac_old_val="\$ac_cv_env_${ac_var}_value"
-  eval ac_new_val="\$ac_env_${ac_var}_value"
+  eval ac_old_val=\$ac_cv_env_${ac_var}_value
+  eval ac_new_val=\$ac_env_${ac_var}_value
   case $ac_old_set,$ac_new_set in
     set,)
       AS_MESSAGE([error: `$ac_var' was set to `$ac_old_val' in the previous run], 2)
@@ -2129,8 +2125,7 @@ AC_DEFUN([_AC_EVAL],
 
 # _AC_EVAL_STDERR(COMMAND)
 # ------------------------
-# Same as _AC_RUN_LOG_STDERR, but evals  (instead of the running) the
-# COMMAND.
+# Like _AC_RUN_LOG_STDERR, but eval (instead of running) COMMAND.
 AC_DEFUN([_AC_EVAL_STDERR],
 [_AC_RUN_LOG_STDERR([eval $1],
 		    [eval echo "$as_me:$LINENO: \"$1\""])])
