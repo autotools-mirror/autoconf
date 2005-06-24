@@ -1,3 +1,13 @@
+2005-06-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Don't worry about spaces in bindir etc.  Only srcdir and working
+	directory have inherent problems with special characters like spaces,
+	due to limitations in Make syntax.  Problem reported by Alexandre
+	Duret-Lutz.
+	* lib/autoconf/general.m4 (_AC_INIT_DIRCHECK): Implement the above.
+	Also, fix Tru64 porting problem with shell patterns,
+	reported by Ralf Wildenhues.
+
 2005-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
         * doc/autoconf.texi (Subdirectories): Fix markup typos.

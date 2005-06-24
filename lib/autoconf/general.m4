@@ -467,12 +467,9 @@ ac_pwd=`pwd` && test -n "$ac_pwd" ||
   AC_MSG_ERROR([Working directory cannot be determined])
 
 ac_pat="[[\$][{][_$as_cr_Letters][_$as_cr_alnum]*[}]]"
+ac_pat1='*[)]*'
 
-for ac_var in ac_pwd srcdir \
-  bindir sbindir libexecdir datarootdir datadir \
-  sysconfdir sharedstatedir localstatedir includedir \
-  oldincludedir docdir infodir htmldir dvidir pdfdir \
-  psdir libdir localedir mandir
+for ac_var in ac_pwd srcdir
 do
   # Remove references to shell or make variables.
   eval ac_dir=\$$ac_var
@@ -492,7 +489,7 @@ do
   # Preserve that tab character below!
   case $ac_dirx in
   '' | -* | */-* | *'
-'* | *'	'* | *' '* | *\"* | *\#* | *\$* | *\&* | *\'* | *\(* | *\)* | \
+'* | *'	'* | *' '* | *\"* | *\#* | *\$* | *\&* | *\'* | *\(* | $ac_pat1 | \
   *\** | *\;* | *\<* | *\=* | *\>* | *\?* | *\@<:@* | *\\* | *\`* | \
   *\|* | \~*)
     AC_MSG_ERROR([$ac_var directory name `$ac_dir' has special characters]);;
