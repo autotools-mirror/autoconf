@@ -1,5 +1,7 @@
 2005-06-23  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* tests/local.at (AT_CHECK_ENV): Simplify regexp slightly.
+
 	Fix some more shell quoting problems.  Prompted by a bug report
 	from Justace Clutter.
 	* lib/autoconf/general.m4 (_AC_INIT_DIRCHECK): Put name of invalid
