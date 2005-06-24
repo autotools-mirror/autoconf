@@ -3024,8 +3024,8 @@ to create the links.
 
 @node Subdirectories
 @section Configuring Other Packages in Subdirectories
-@section Configure subdirectories
-@section Subdirectory configure
+@cindex Configure subdirectories
+@cindex Subdirectory configure
 
 In most situations, calling @code{AC_OUTPUT} is sufficient to produce
 @file{Makefile}s in subdirectories.  However, @command{configure} scripts

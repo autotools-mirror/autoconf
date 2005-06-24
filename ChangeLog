@@ -1,3 +1,7 @@
+2005-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+        * doc/autoconf.texi (Subdirectories): Fix markup typos.
+
 2005-06-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/local.at (AT_CHECK_ENV): Simplify regexp slightly.
