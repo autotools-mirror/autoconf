@@ -1,3 +1,8 @@
+2005-06-28  Derek Price  <derek@ximbiot.com>
+
+	* doc/autoconf.texi (Limitations of Usual Tools <sed>): Reword recent
+	addition.
+
 2005-06-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Don't worry about spaces in bindir etc.  Only srcdir and working
@@ -10,7 +15,7 @@
 
 2005-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
-        * doc/autoconf.texi (Subdirectories): Fix markup typos.
+	* doc/autoconf.texi (Subdirectories): Fix markup typos.
 
 2005-06-23  Paul Eggert  <eggert@cs.ucla.edu>
 
