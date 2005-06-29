@@ -1413,6 +1413,23 @@ AU_DEFUN([AC_WITH],
 ## ----------------------------------------- ##
 
 
+# AC_ARG_VAR(VARNAME, DOCUMENTATION)
+# ----------------------------------
+# Register VARNAME as a precious variable, and document it in
+# `configure --help' (but only once).
+AC_DEFUN([AC_ARG_VAR],
+[m4_divert_once([HELP_VAR], [[
+Some influential environment variables:]])dnl
+m4_divert_once([HELP_VAR_END], [[
+Use these variables to override the choices made by `configure' or to help
+it to find libraries and programs with nonstandard names/locations.]])dnl
+m4_expand_once([m4_divert_once([HELP_VAR],
+			       [AS_HELP_STRING([$1], [$2], [              ])])],
+	       [$0($1)])dnl
+_AC_ARG_VAR_PRECIOUS([$1])dnl
+])# AC_ARG_VAR
+
+
 # _AC_ARG_VAR_PRECIOUS(VARNAME)
 # -----------------------------
 # Declare VARNAME is precious.
@@ -1496,23 +1513,6 @@ if $ac_cache_corrupted; then
   AS_ERROR([run `make distclean' and/or `rm $cache_file' and start over])
 fi
 ])# _AC_ARG_VAR_VALIDATE
-
-
-# AC_ARG_VAR(VARNAME, DOCUMENTATION)
-# ----------------------------------
-# Register VARNAME as a precious variable, and document it in
-# `configure --help' (but only once).
-AC_DEFUN([AC_ARG_VAR],
-[m4_divert_once([HELP_VAR], [[
-Some influential environment variables:]])dnl
-m4_divert_once([HELP_VAR_END], [[
-Use these variables to override the choices made by `configure' or to help
-it to find libraries and programs with nonstandard names/locations.]])dnl
-m4_expand_once([m4_divert_once([HELP_VAR],
-			       [AS_HELP_STRING([$1], [$2], [              ])])],
-	       [$0($1)])dnl
-_AC_ARG_VAR_PRECIOUS([$1])dnl
-])# AC_ARG_VAR
 
 
 
