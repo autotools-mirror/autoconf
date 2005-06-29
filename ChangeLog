@@ -1,5 +1,13 @@
 2005-06-29  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (AC_SUBST_TRACE): New macro, to be traced
+	instead of AC_SUBST; proposed by Alexandre Duret-Lutz.
+	(AC_SUBST): Call it.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES): Call AC_SUBST_TRACE for
+	the directory specific variables; but don't call it for configure_input.
+
+2005-06-29  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/general.m4 (AC_ARG_VAR): Move next to _AC_ARG_PRECIOUS.
 
 2005-06-28  Derek Price  <derek@ximbiot.com>

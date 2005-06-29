@@ -1960,6 +1960,12 @@ _ACEOF
 ## -------------------------- ##
 
 
+# AC_SUBST_TRACE(VARIABLE)
+# ------------------------
+# This macro is used with --trace to collect the list of substituted variables.
+m4_define([AC_SUBST_TRACE])
+
+
 # AC_SUBST(VARIABLE, [VALUE])
 # ---------------------------
 # Create an output variable from a shell VARIABLE.  If VALUE is given
@@ -1969,7 +1975,8 @@ _ACEOF
 # Beware that if you change this macro, you also have to change the
 # sed script at the top of _AC_OUTPUT_FILES.
 m4_define([AC_SUBST],
-[m4_pattern_allow([^$1$])dnl
+[AC_SUBST_TRACE([$1])dnl
+m4_pattern_allow([^$1$])dnl
 m4_ifvaln([$2], [$1=$2])[]dnl
 m4_append_uniq([_AC_SUBST_VARS], [$1], [
 ])dnl
