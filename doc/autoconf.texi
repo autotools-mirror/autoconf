@@ -10021,6 +10021,32 @@ good ones@enddots{}
 Don't try to move/delete open files, such as in @samp{exec >foo; mv foo
 bar}; see @ref{Limitations of Builtins}, @command{mv} for more details.
 
+Don't rely on open file descriptors being open in child processes.  In
+@command{ksh}, file descriptors above 2 which are opened using
+@samp{exec n>file} are closed by a subsequent @samp{exec} (such as
+that involved in the fork-and-exec which runs a program or script).
+Thus, using sh, we have:
+@example
+$ cat ./descrips
+#! /bin/sh -
+echo hello >&5
+$ exec 5>t
+$ ./descrips
+$ cat t
+hello
+$
+@end example
+But using ksh:
+@example
+$ exec 5>t
+$ ./descrips
+hello
+$ cat t
+$
+@end example
+Within the process which runs the @samp{descrips} script, file
+descriptor number 5 is closed.
+
 @node File System Conventions
 @section File System Conventions
 @cindex File system conventions
@@ -13048,7 +13074,7 @@ cp ../bar.x bar.y
 cp bar.x bar.y
 cp: cannot stat `bar.x': No such file or directory
 *** Error code 1
-% @kbd{tmake}       # True64 make
+% @kbd{tmake}       # Tru64 make
 cp ../bar.x bar.y
 @end example
 

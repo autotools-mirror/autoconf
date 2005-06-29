@@ -1,5 +1,10 @@
 2005-06-29  Stepan Kasal  <kasal@ucw.cz>
 
+	* doc/autoconf.texi (File Descriptors): ksh doesn't pass open file
+	descriptors to child processes; reported by Norman Gray.
+
+2005-06-29  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/general.m4 (AC_SUBST_TRACE): New macro, to be traced
 	instead of AC_SUBST; proposed by Alexandre Duret-Lutz.
 	(AC_SUBST): Call it.
