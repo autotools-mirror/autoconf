@@ -10028,7 +10028,7 @@ that involved in the fork-and-exec which runs a program or script).
 Thus, using sh, we have:
 @example
 $ cat ./descrips
-#! /bin/sh -
+#!/bin/sh -
 echo hello >&5
 $ exec 5>t
 $ ./descrips
