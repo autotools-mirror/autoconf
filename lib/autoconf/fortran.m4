@@ -554,7 +554,9 @@ case $ac_[]_AC_LANG_ABBREV[]_v_output in
   *mGLOB_options_string*)
     ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/"-mGLOB[[^"]]*"/ /g'` ;;
 
-  # Portland Group compiler has quoted -cmdline argument
+  # Portland Group compiler has singly- or doubly-quoted -cmdline argument
+  *-cmdline\ \'*)
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed "s/-cmdline  *'[[^']]*'/ /g"` ;;
   *-cmdline*)
     ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/-cmdline  *"[[^"]]*"/ /g'` ;;
 

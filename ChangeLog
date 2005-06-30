@@ -1,3 +1,9 @@
+2005-06-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de> 
+
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Fix also for
+	single-quoted -cmdline argument in Portland Group compiler.
+	Reported against LAM by Ole Holm Nielsen <Ole.H.Nielsen@fysik.dtu.dk>.
+
 2005-06-30  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Generic Functions): Mention the Gnulib project.
