@@ -4564,6 +4564,12 @@ specific files, and then program as if you were in a Posix
 environment.  Some functions may be missing or unfixable, and your
 package must be ready to replace them.
 
+Suitable replacements for many such problem functions are available from
+@uref{http://www.gnu.org/software/gnulib/, Gnulib}, which aims to
+provide a centralized repository of such portability functions (among
+other things).  The source files are available online, under various
+licences, mostly GNU GPL or GNU LGPL.
+
 @defmac AC_LIBOBJ (@var{function})
 @acindex{LIBOBJ}
 @ovindex LIBOBJS
