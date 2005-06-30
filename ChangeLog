@@ -1,5 +1,10 @@
 2005-06-30  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/status.m4: Fix the order of the "sections", so that it
+	matches the order of execution.  No code changed.
+
+2005-06-30  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Use a here
 	document to output the default config_* lists to config.status.
 	Don't recognize option --file, if the functionality is not there.

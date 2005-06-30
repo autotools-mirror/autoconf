@@ -285,140 +285,304 @@ esac[]dnl
 
 
 
-## ------------------------ ##
-## Configuration commands.  ##
-## ------------------------ ##
+## --------------------- ##
+## Configuration files.  ##
+## --------------------- ##
 
 
-# _AC_CONFIG_COMMANDS_INIT([INIT-COMMANDS])
-# -----------------------------------------
-#
-# Register INIT-COMMANDS as command pasted *unquoted* in
-# `config.status'.  This is typically used to pass variables from
-# `configure' to `config.status'.  Note that $[1] is not over quoted as
-# was the case in AC_OUTPUT_COMMANDS.
-m4_define([_AC_CONFIG_COMMANDS_INIT],
-[m4_ifval([$1],
-	  [m4_append([_AC_OUTPUT_COMMANDS_INIT],
-		     [$1
-])])])
-
-# Initialize.
-m4_define([_AC_OUTPUT_COMMANDS_INIT])
-
-
-# _AC_CONFIG_COMMAND(NAME, [COMMANDS])
+# _AC_CONFIG_FILE(FILE..., [COMMANDS])
 # ------------------------------------
 # See below.
-m4_define([_AC_CONFIG_COMMAND],
+m4_define([_AC_CONFIG_FILE],
 [_AC_CONFIG_UNIQUE([$1])dnl
-m4_append([AC_LIST_COMMANDS], [ $1])dnl
+m4_append([AC_LIST_FILES], [ $1])dnl
+_AC_CONFIG_DEPENDENCIES([$1])dnl
+dnl Register the commands.
 m4_ifval([$2],
-[m4_append([AC_LIST_COMMANDS_COMMANDS],
+[m4_append([AC_LIST_FILES_COMMANDS],
 [    ]m4_bpatsubst([$1], [:.*])[ ) $2 ;;
 ])])dnl
 ])
 
-# AC_CONFIG_COMMANDS(NAME...,[COMMANDS], [INIT-CMDS])
-# ---------------------------------------------------
+# AC_CONFIG_FILES(FILE..., [COMMANDS], [INIT-CMDS])
+# -------------------------------------------------
+# Specify output files, as with AC_OUTPUT, i.e., files that are
+# configured with AC_SUBST.  Associate the COMMANDS to each FILE,
+# i.e., when config.status creates FILE, run COMMANDS afterwards.
 #
-# Specify additional commands to be run by config.status.  This
-# commands must be associated with a NAME, which should be thought
-# as the name of a file the COMMANDS create.
-AC_DEFUN([AC_CONFIG_COMMANDS],
-[AC_FOREACH([AC_Name], [$1], [_AC_CONFIG_COMMAND(m4_defn([AC_Name]), [$2])])dnl
+# The commands are stored in a growing string AC_LIST_FILES_COMMANDS
+# which should be used like this:
+#
+#      case $ac_file in
+#        AC_LIST_FILES_COMMANDS
+#      esac
+AC_DEFUN([AC_CONFIG_FILES],
+[AC_FOREACH([AC_File], [$1], [_AC_CONFIG_FILE(m4_defn([AC_File]), [$2])])dnl
 _AC_CONFIG_COMMANDS_INIT([$3])dnl
-ac_config_commands="$ac_config_commands $1"
+ac_config_files="$ac_config_files m4_normalize([$1])"
 ])
 
 # Initialize the lists.
-m4_define([AC_LIST_COMMANDS])
-m4_define([AC_LIST_COMMANDS_COMMANDS])
+m4_define([AC_LIST_FILES])
+m4_define([AC_LIST_FILES_COMMANDS])
 
-
-# AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
-# -----------------------------------------
+# _AC_SED_CMD_LIMIT
+# -----------------
+# Evaluate to an m4 number equal to the maximum number of commands to put
+# in any single sed program.
 #
-# Add additional commands for AC_OUTPUT to put into config.status.
-#
-# This macro is an obsolete version of AC_CONFIG_COMMANDS.  The only
-# difficulty in mapping AC_OUTPUT_COMMANDS to AC_CONFIG_COMMANDS is
-# to give a unique key.  The scheme we have chosen is `default-1',
-# `default-2' etc. for each call.
-#
-# Unfortunately this scheme is fragile: bad things might happen
-# if you update an included file and configure.ac: you might have
-# clashes :(  On the other hand, I'd like to avoid weird keys (e.g.,
-# depending upon __file__ or the pid).
-AU_DEFUN([AC_OUTPUT_COMMANDS],
-[m4_define([_AC_OUTPUT_COMMANDS_CNT], m4_incr(_AC_OUTPUT_COMMANDS_CNT))dnl
-dnl Double quoted since that was the case in the original macro.
-AC_CONFIG_COMMANDS([default-]_AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
-])
+# Some seds have small command number limits, like on Digital OSF/1 and HP-UX.
+m4_define([_AC_SED_CMD_LIMIT],
+dnl One cannot portably go further than 100 commands because of HP-UX.
+[100])
 
-# Initialize.
-AU_DEFUN([_AC_OUTPUT_COMMANDS_CNT], 0)
-
-
-# AC_CONFIG_COMMANDS_PRE(CMDS)
-# ----------------------------
-# Commands to run right before config.status is created. Accumulates.
-AC_DEFUN([AC_CONFIG_COMMANDS_PRE],
-[m4_append([AC_OUTPUT_COMMANDS_PRE], [$1
-])])
-
-
-# AC_OUTPUT_COMMANDS_PRE
-# ----------------------
-# A *variable* in which we append all the actions that must be
-# performed before *creating* config.status.  For a start, clean
-# up all the LIBOBJ mess.
-m4_define([AC_OUTPUT_COMMANDS_PRE],
-[_AC_LIBOBJS_NORMALIZE()
-])
-
-
-# AC_CONFIG_COMMANDS_POST(CMDS)
-# -----------------------------
-# Commands to run after config.status was created.  Accumulates.
-AC_DEFUN([AC_CONFIG_COMMANDS_POST],
-[m4_append([AC_OUTPUT_COMMANDS_POST], [$1
-])])
-
-# Initialize.
-m4_define([AC_OUTPUT_COMMANDS_POST])
-
-
-
-# _AC_OUTPUT_COMMANDS
-# -------------------
-# This is a subroutine of AC_OUTPUT, in charge of issuing the code
-# related to AC_CONFIG_COMMANDS.
+# _AC_OUTPUT_FILES
+# ----------------
+# Do the variable substitutions to create the Makefiles or whatever.
+# This is a subroutine of AC_OUTPUT.
 #
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
-m4_define([_AC_OUTPUT_COMMANDS],
+m4_define([_AC_OUTPUT_FILES],
 [cat >>$CONFIG_STATUS <<\_ACEOF
+#
+# CONFIG_FILES section.
+#
 
-#
-# CONFIG_COMMANDS section.
-#
-for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
-  _AC_CONFIG_SPLIT_SOURCE_DEST
-  ac_dir=`AS_DIRNAME(["$ac_dest"])`
+# No need to generate the scripts if there are no CONFIG_FILES.
+# This happens for instance when ./config.status config.h
+if test -n "$CONFIG_FILES"; then
+
+_ACEOF
+
+m4_pushdef([_AC_SED_CMDS], [])dnl Part of pipeline that does substitutions.
+dnl
+m4_pushdef([_AC_SED_FRAG_NUM], 0)dnl Fragment number.
+m4_pushdef([_AC_SED_CMD_NUM], 2)dnl Num of commands in current frag so far.
+m4_pushdef([_AC_SED_DELIM_NUM], 0)dnl Expected number of delimiters in file.
+m4_pushdef([_AC_SED_FRAG], [])dnl The constant part of the current fragment.
+dnl
+m4_ifdef([_AC_SUBST_FILES],
+[# Create sed commands to just substitute file output variables.
+
+AC_FOREACH([_AC_Var], m4_defn([_AC_SUBST_FILES]),
+[dnl End fragments at beginning of loop so that last fragment is not ended.
+m4_if(1,m4_eval(_AC_SED_CMD_NUM+4>_AC_SED_CMD_LIMIT),
+[dnl Fragment is full and not the last one, so no need for the final un-escape.
+dnl Increment fragment number.
+m4_define([_AC_SED_FRAG_NUM],m4_incr(_AC_SED_FRAG_NUM))dnl
+dnl Record that this fragment will need to be used.
+m4_define([_AC_SED_CMDS],
+m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
+[cat >>$CONFIG_STATUS <<_ACEOF
+cat >"$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <\CEOF
+/@[a-zA-Z_][a-zA-Z_0-9]*@/!b
+]m4_defn(_AC_SED_FRAG)dnl
+[CEOF
+
+_ACEOF
+]m4_define([_AC_SED_CMD_NUM], 2)m4_define([_AC_SED_FRAG])dnl
+])dnl Last fragment ended.
+m4_define([_AC_SED_CMD_NUM], m4_eval(_AC_SED_CMD_NUM+4))dnl
+m4_define([_AC_SED_FRAG],
+m4_defn([_AC_SED_FRAG])dnl
+[/^[ 	]*@]_AC_Var[@[ 	]*$/{ r $]_AC_Var[
+d; }
+])dnl
+])dnl
+# Remaining file output variables are in a fragment that also has non-file
+# output varibles.
+
+])
+dnl
+m4_define([_AC_SED_FRAG],[
+]m4_defn([_AC_SED_FRAG]))dnl
+AC_FOREACH([_AC_Var],
+m4_ifdef([_AC_SUBST_VARS],[m4_defn([_AC_SUBST_VARS]) ])[@END@],
+[m4_if(_AC_SED_DELIM_NUM,0,
+[m4_if(_AC_Var,[@END@],
+[dnl The whole of the last fragment would be the final deletion of `|#_!!_#|'.
+m4_define([_AC_SED_CMDS],m4_defn([_AC_SED_CMDS])[| sed 's/|#_!!_#|//g' ])],
+[
+ac_delim='%!_!# '
+for ac_last_try in false false false false false :; do
+  cat >conf$$subs.sed <<_ACEOF
+])])dnl
+m4_if(_AC_Var,[ac_delim],
+[dnl Just to be on the safe side, claim that $ac_delim is the empty string.
+m4_define([_AC_SED_FRAG],
+m4_defn([_AC_SED_FRAG])dnl
+[s,ac_delim,|#_!!_#|,g
+])dnl
+m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))],
+      _AC_Var,[@END@],
+      [m4_if(1,m4_eval(_AC_SED_CMD_NUM+2<=_AC_SED_CMD_LIMIT),
+             [m4_define([_AC_SED_FRAG], [ end]m4_defn([_AC_SED_FRAG]))])],
+[m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))dnl
+m4_define([_AC_SED_DELIM_NUM], m4_incr(_AC_SED_DELIM_NUM))dnl
+_AC_Var!$_AC_Var$ac_delim
+])dnl
+m4_if(_AC_SED_CMD_LIMIT,
+      m4_if(_AC_Var,[@END@],_AC_SED_CMD_LIMIT,_AC_SED_CMD_NUM),
+[_ACEOF
+
+  if test `grep -c "$ac_delim\$" conf$$subs.sed` = _AC_SED_DELIM_NUM; then
+    break
+  elif $ac_last_try; then
+    AC_MSG_ERROR([could not make $CONFIG_STATUS])
+  else
+    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
+  fi
+done
+
+ac_eof=`sed -n '/^CEOF[0-9]*$/s/CEOF//p' conf$$subs.sed | sort -nru | sed 1q`
+ac_eof=`expr 0$ac_eof + 1`
+
+dnl Increment fragment number.
+m4_define([_AC_SED_FRAG_NUM],m4_incr(_AC_SED_FRAG_NUM))dnl
+dnl Record that this fragment will need to be used.
+m4_define([_AC_SED_CMDS],
+m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
+[cat >>$CONFIG_STATUS <<_ACEOF
+cat >"\$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <<\CEOF$ac_eof
+/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]m4_defn([_AC_SED_FRAG])dnl
+[_ACEOF
+sed '
+s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g
+s/^/s,@/; s/!/@,|#_!!_#|/
+:n
+t n
+s/'"$ac_delim"'$/,g/; t
+s/$/\\/; p
+N; s/^.*\n//; s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g; b n
+' >>$CONFIG_STATUS <conf$$subs.sed
+rm -f conf$$subs.sed
+cat >>$CONFIG_STATUS <<_ACEOF
+]m4_if(_AC_Var,[@END@],
+[m4_if(1,m4_eval(_AC_SED_CMD_NUM+2>_AC_SED_CMD_LIMIT),
+[m4_define([_AC_SED_CMDS],m4_defn([_AC_SED_CMDS])[| sed 's/|#_!!_#|//g' ])],
+[[:end
+s/|#_!!_#|//g
+]])])dnl
+CEOF$ac_eof
+_ACEOF
+m4_define([_AC_SED_FRAG], [
+])m4_define([_AC_SED_DELIM_NUM], 0)m4_define([_AC_SED_CMD_NUM], 2)dnl
+
+])])dnl
+dnl
+m4_popdef([_AC_SED_FRAG_NUM])dnl
+m4_popdef([_AC_SED_CMD_NUM])dnl
+m4_popdef([_AC_SED_DELIM_NUM])dnl
+m4_popdef([_AC_SED_FRAG])dnl
+dnl
+cat >>$CONFIG_STATUS <<\_ACEOF
+fi # test -n "$CONFIG_FILES"
+
+for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
+  # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
+  case $ac_file in
+  - | *:- | *:-:* ) # input from stdin
+	cat >"$tmp/stdin" ;;
+  esac
+  _AC_CONFIG_SPLIT_FILE_IN
+
+  # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
+  ac_dir=`AS_DIRNAME(["$ac_file"])`
   AS_MKDIR_P(["$ac_dir"])
   _AC_SRCDIRS(["$ac_dir"])
 
-  AC_MSG_NOTICE([executing $ac_dest commands])
-dnl Some shells don't like empty case/esac
-m4_ifset([AC_LIST_COMMANDS_COMMANDS],
-[  case $ac_dest in
-AC_LIST_COMMANDS_COMMANDS()dnl
+AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
+[  case $INSTALL in
+  [[\\/$]]* | ?:[[\\/]]* ) ac_INSTALL=$INSTALL ;;
+  *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
+  esac
+])dnl
+
+  if test x"$ac_file" != x-; then
+    AC_MSG_NOTICE([creating $ac_file])
+    rm -f "$ac_file"
+  fi
+  # Let's still pretend it is `configure' which instantiates (i.e., don't
+  # use $as_me), people would be surprised to read:
+  #    /* config.h.  Generated by config.status.  */
+  if test x"$ac_file" = x-; then
+    configure_input=
+  else
+    configure_input="$ac_file.  "
+  fi
+  configure_input=$configure_input"Generated from `echo $ac_file_in |
+				     sed 's,.*/,,'` by configure."
+
+  # First look for the input files in the build tree, otherwise in the
+  # src tree.
+  ac_file_inputs=`IFS=:
+    for f in $ac_file_in; do
+      case $f in
+      -) echo "$tmp/stdin" ;;
+      [[\\/$]]*)
+	 # Absolute (can't be DOS-style, as IFS=:)
+	 test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
+	 echo "$f";;
+      *) # Relative
+	 if test -f "$f"; then
+	   # Build tree
+	   echo "$f"
+	 elif test -f "$srcdir/$f"; then
+	   # Source tree
+	   echo "$srcdir/$f"
+	 else
+	   # /dev/null tree
+	   AC_MSG_ERROR([cannot find input file: $f])
+	 fi;;
+      esac
+    done` || AS_EXIT([1])
+_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF
+dnl Neutralize VPATH when `$srcdir' = `.'.
+  sed "$ac_vpsub
+dnl Shell code in configure.ac might set extrasub.
+dnl FIXME: do we really want to maintain this feature?
+$extrasub
+_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF
+:t
+[/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
+dnl configure_input is a somewhat special, so we don't call AC_SUBST_TRACE.
+s|@configure_input@|$configure_input|;t t
+dnl During the transition period, this is a special case:
+s|@top_builddir@|$ac_top_builddir_sub|;t t[]AC_SUBST_TRACE([top_builddir])
+m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
+			builddir, abs_builddir,
+			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]]),
+	   [s|@_AC_Var@|$ac_[]_AC_Var|;t t[]AC_SUBST_TRACE(_AC_Var)
+])dnl
+" $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
+m4_popdef([_AC_SED_CMDS])dnl
+  rm -f "$tmp/stdin"
+dnl This would break Makefile dependencies.
+dnl  if diff $ac_file "$tmp/out" >/dev/null 2>&1; then
+dnl    echo "$ac_file is unchanged"
+dnl   else
+dnl     rm -f $ac_file
+dnl    mv "$tmp/out" $ac_file
+dnl  fi
+  if test x"$ac_file" != x-; then
+    mv "$tmp/out" $ac_file
+  else
+    cat "$tmp/out"
+    rm -f "$tmp/out"
+  fi
+
+m4_ifset([AC_LIST_FILES_COMMANDS],
+[  # Run the commands associated with the file.
+  case $ac_file in
+AC_LIST_FILES_COMMANDS()dnl
   esac
 ])dnl
 done
 _ACEOF
-])# _AC_OUTPUT_COMMANDS
+])# _AC_OUTPUT_FILES
 
 
 
@@ -781,304 +945,140 @@ _ACEOF
 
 
 
-## --------------------- ##
-## Configuration files.  ##
-## --------------------- ##
+## ------------------------ ##
+## Configuration commands.  ##
+## ------------------------ ##
 
 
-# _AC_CONFIG_FILE(FILE..., [COMMANDS])
+# _AC_CONFIG_COMMANDS_INIT([INIT-COMMANDS])
+# -----------------------------------------
+#
+# Register INIT-COMMANDS as command pasted *unquoted* in
+# `config.status'.  This is typically used to pass variables from
+# `configure' to `config.status'.  Note that $[1] is not over quoted as
+# was the case in AC_OUTPUT_COMMANDS.
+m4_define([_AC_CONFIG_COMMANDS_INIT],
+[m4_ifval([$1],
+	  [m4_append([_AC_OUTPUT_COMMANDS_INIT],
+		     [$1
+])])])
+
+# Initialize.
+m4_define([_AC_OUTPUT_COMMANDS_INIT])
+
+
+# _AC_CONFIG_COMMAND(NAME, [COMMANDS])
 # ------------------------------------
 # See below.
-m4_define([_AC_CONFIG_FILE],
+m4_define([_AC_CONFIG_COMMAND],
 [_AC_CONFIG_UNIQUE([$1])dnl
-m4_append([AC_LIST_FILES], [ $1])dnl
-_AC_CONFIG_DEPENDENCIES([$1])dnl
-dnl Register the commands.
+m4_append([AC_LIST_COMMANDS], [ $1])dnl
 m4_ifval([$2],
-[m4_append([AC_LIST_FILES_COMMANDS],
+[m4_append([AC_LIST_COMMANDS_COMMANDS],
 [    ]m4_bpatsubst([$1], [:.*])[ ) $2 ;;
 ])])dnl
 ])
 
-# AC_CONFIG_FILES(FILE..., [COMMANDS], [INIT-CMDS])
-# -------------------------------------------------
-# Specify output files, as with AC_OUTPUT, i.e., files that are
-# configured with AC_SUBST.  Associate the COMMANDS to each FILE,
-# i.e., when config.status creates FILE, run COMMANDS afterwards.
+# AC_CONFIG_COMMANDS(NAME...,[COMMANDS], [INIT-CMDS])
+# ---------------------------------------------------
 #
-# The commands are stored in a growing string AC_LIST_FILES_COMMANDS
-# which should be used like this:
-#
-#      case $ac_file in
-#        AC_LIST_FILES_COMMANDS
-#      esac
-AC_DEFUN([AC_CONFIG_FILES],
-[AC_FOREACH([AC_File], [$1], [_AC_CONFIG_FILE(m4_defn([AC_File]), [$2])])dnl
+# Specify additional commands to be run by config.status.  This
+# commands must be associated with a NAME, which should be thought
+# as the name of a file the COMMANDS create.
+AC_DEFUN([AC_CONFIG_COMMANDS],
+[AC_FOREACH([AC_Name], [$1], [_AC_CONFIG_COMMAND(m4_defn([AC_Name]), [$2])])dnl
 _AC_CONFIG_COMMANDS_INIT([$3])dnl
-ac_config_files="$ac_config_files m4_normalize([$1])"
+ac_config_commands="$ac_config_commands $1"
 ])
 
 # Initialize the lists.
-m4_define([AC_LIST_FILES])
-m4_define([AC_LIST_FILES_COMMANDS])
+m4_define([AC_LIST_COMMANDS])
+m4_define([AC_LIST_COMMANDS_COMMANDS])
 
-# _AC_SED_CMD_LIMIT
-# -----------------
-# Evaluate to an m4 number equal to the maximum number of commands to put
-# in any single sed program.
+
+# AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)
+# -----------------------------------------
 #
-# Some seds have small command number limits, like on Digital OSF/1 and HP-UX.
-m4_define([_AC_SED_CMD_LIMIT],
-dnl One cannot portably go further than 100 commands because of HP-UX.
-[100])
+# Add additional commands for AC_OUTPUT to put into config.status.
+#
+# This macro is an obsolete version of AC_CONFIG_COMMANDS.  The only
+# difficulty in mapping AC_OUTPUT_COMMANDS to AC_CONFIG_COMMANDS is
+# to give a unique key.  The scheme we have chosen is `default-1',
+# `default-2' etc. for each call.
+#
+# Unfortunately this scheme is fragile: bad things might happen
+# if you update an included file and configure.ac: you might have
+# clashes :(  On the other hand, I'd like to avoid weird keys (e.g.,
+# depending upon __file__ or the pid).
+AU_DEFUN([AC_OUTPUT_COMMANDS],
+[m4_define([_AC_OUTPUT_COMMANDS_CNT], m4_incr(_AC_OUTPUT_COMMANDS_CNT))dnl
+dnl Double quoted since that was the case in the original macro.
+AC_CONFIG_COMMANDS([default-]_AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
+])
 
-# _AC_OUTPUT_FILES
-# ----------------
-# Do the variable substitutions to create the Makefiles or whatever.
-# This is a subroutine of AC_OUTPUT.
+# Initialize.
+AU_DEFUN([_AC_OUTPUT_COMMANDS_CNT], 0)
+
+
+# AC_CONFIG_COMMANDS_PRE(CMDS)
+# ----------------------------
+# Commands to run right before config.status is created. Accumulates.
+AC_DEFUN([AC_CONFIG_COMMANDS_PRE],
+[m4_append([AC_OUTPUT_COMMANDS_PRE], [$1
+])])
+
+
+# AC_OUTPUT_COMMANDS_PRE
+# ----------------------
+# A *variable* in which we append all the actions that must be
+# performed before *creating* config.status.  For a start, clean
+# up all the LIBOBJ mess.
+m4_define([AC_OUTPUT_COMMANDS_PRE],
+[_AC_LIBOBJS_NORMALIZE()
+])
+
+
+# AC_CONFIG_COMMANDS_POST(CMDS)
+# -----------------------------
+# Commands to run after config.status was created.  Accumulates.
+AC_DEFUN([AC_CONFIG_COMMANDS_POST],
+[m4_append([AC_OUTPUT_COMMANDS_POST], [$1
+])])
+
+# Initialize.
+m4_define([AC_OUTPUT_COMMANDS_POST])
+
+
+
+# _AC_OUTPUT_COMMANDS
+# -------------------
+# This is a subroutine of AC_OUTPUT, in charge of issuing the code
+# related to AC_CONFIG_COMMANDS.
 #
 # It has to send itself into $CONFIG_STATUS (eg, via here documents).
 # Upon exit, no here document shall be opened.
-m4_define([_AC_OUTPUT_FILES],
+m4_define([_AC_OUTPUT_COMMANDS],
 [cat >>$CONFIG_STATUS <<\_ACEOF
+
 #
-# CONFIG_FILES section.
+# CONFIG_COMMANDS section.
 #
-
-# No need to generate the scripts if there are no CONFIG_FILES.
-# This happens for instance when ./config.status config.h
-if test -n "$CONFIG_FILES"; then
-
-_ACEOF
-
-m4_pushdef([_AC_SED_CMDS], [])dnl Part of pipeline that does substitutions.
-dnl
-m4_pushdef([_AC_SED_FRAG_NUM], 0)dnl Fragment number.
-m4_pushdef([_AC_SED_CMD_NUM], 2)dnl Num of commands in current frag so far.
-m4_pushdef([_AC_SED_DELIM_NUM], 0)dnl Expected number of delimiters in file.
-m4_pushdef([_AC_SED_FRAG], [])dnl The constant part of the current fragment.
-dnl
-m4_ifdef([_AC_SUBST_FILES],
-[# Create sed commands to just substitute file output variables.
-
-AC_FOREACH([_AC_Var], m4_defn([_AC_SUBST_FILES]),
-[dnl End fragments at beginning of loop so that last fragment is not ended.
-m4_if(1,m4_eval(_AC_SED_CMD_NUM+4>_AC_SED_CMD_LIMIT),
-[dnl Fragment is full and not the last one, so no need for the final un-escape.
-dnl Increment fragment number.
-m4_define([_AC_SED_FRAG_NUM],m4_incr(_AC_SED_FRAG_NUM))dnl
-dnl Record that this fragment will need to be used.
-m4_define([_AC_SED_CMDS],
-m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
-[cat >>$CONFIG_STATUS <<_ACEOF
-cat >"$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <\CEOF
-/@[a-zA-Z_][a-zA-Z_0-9]*@/!b
-]m4_defn(_AC_SED_FRAG)dnl
-[CEOF
-
-_ACEOF
-]m4_define([_AC_SED_CMD_NUM], 2)m4_define([_AC_SED_FRAG])dnl
-])dnl Last fragment ended.
-m4_define([_AC_SED_CMD_NUM], m4_eval(_AC_SED_CMD_NUM+4))dnl
-m4_define([_AC_SED_FRAG],
-m4_defn([_AC_SED_FRAG])dnl
-[/^[ 	]*@]_AC_Var[@[ 	]*$/{ r $]_AC_Var[
-d; }
-])dnl
-])dnl
-# Remaining file output variables are in a fragment that also has non-file
-# output varibles.
-
-])
-dnl
-m4_define([_AC_SED_FRAG],[
-]m4_defn([_AC_SED_FRAG]))dnl
-AC_FOREACH([_AC_Var],
-m4_ifdef([_AC_SUBST_VARS],[m4_defn([_AC_SUBST_VARS]) ])[@END@],
-[m4_if(_AC_SED_DELIM_NUM,0,
-[m4_if(_AC_Var,[@END@],
-[dnl The whole of the last fragment would be the final deletion of `|#_!!_#|'.
-m4_define([_AC_SED_CMDS],m4_defn([_AC_SED_CMDS])[| sed 's/|#_!!_#|//g' ])],
-[
-ac_delim='%!_!# '
-for ac_last_try in false false false false false :; do
-  cat >conf$$subs.sed <<_ACEOF
-])])dnl
-m4_if(_AC_Var,[ac_delim],
-[dnl Just to be on the safe side, claim that $ac_delim is the empty string.
-m4_define([_AC_SED_FRAG],
-m4_defn([_AC_SED_FRAG])dnl
-[s,ac_delim,|#_!!_#|,g
-])dnl
-m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))],
-      _AC_Var,[@END@],
-      [m4_if(1,m4_eval(_AC_SED_CMD_NUM+2<=_AC_SED_CMD_LIMIT),
-             [m4_define([_AC_SED_FRAG], [ end]m4_defn([_AC_SED_FRAG]))])],
-[m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))dnl
-m4_define([_AC_SED_DELIM_NUM], m4_incr(_AC_SED_DELIM_NUM))dnl
-_AC_Var!$_AC_Var$ac_delim
-])dnl
-m4_if(_AC_SED_CMD_LIMIT,
-      m4_if(_AC_Var,[@END@],_AC_SED_CMD_LIMIT,_AC_SED_CMD_NUM),
-[_ACEOF
-
-  if test `grep -c "$ac_delim\$" conf$$subs.sed` = _AC_SED_DELIM_NUM; then
-    break
-  elif $ac_last_try; then
-    AC_MSG_ERROR([could not make $CONFIG_STATUS])
-  else
-    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
-  fi
-done
-
-ac_eof=`sed -n '/^CEOF[0-9]*$/s/CEOF//p' conf$$subs.sed | sort -nru | sed 1q`
-ac_eof=`expr 0$ac_eof + 1`
-
-dnl Increment fragment number.
-m4_define([_AC_SED_FRAG_NUM],m4_incr(_AC_SED_FRAG_NUM))dnl
-dnl Record that this fragment will need to be used.
-m4_define([_AC_SED_CMDS],
-m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
-[cat >>$CONFIG_STATUS <<_ACEOF
-cat >"\$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <<\CEOF$ac_eof
-/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]m4_defn([_AC_SED_FRAG])dnl
-[_ACEOF
-sed '
-s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g
-s/^/s,@/; s/!/@,|#_!!_#|/
-:n
-t n
-s/'"$ac_delim"'$/,g/; t
-s/$/\\/; p
-N; s/^.*\n//; s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g; b n
-' >>$CONFIG_STATUS <conf$$subs.sed
-rm -f conf$$subs.sed
-cat >>$CONFIG_STATUS <<_ACEOF
-]m4_if(_AC_Var,[@END@],
-[m4_if(1,m4_eval(_AC_SED_CMD_NUM+2>_AC_SED_CMD_LIMIT),
-[m4_define([_AC_SED_CMDS],m4_defn([_AC_SED_CMDS])[| sed 's/|#_!!_#|//g' ])],
-[[:end
-s/|#_!!_#|//g
-]])])dnl
-CEOF$ac_eof
-_ACEOF
-m4_define([_AC_SED_FRAG], [
-])m4_define([_AC_SED_DELIM_NUM], 0)m4_define([_AC_SED_CMD_NUM], 2)dnl
-
-])])dnl
-dnl
-m4_popdef([_AC_SED_FRAG_NUM])dnl
-m4_popdef([_AC_SED_CMD_NUM])dnl
-m4_popdef([_AC_SED_DELIM_NUM])dnl
-m4_popdef([_AC_SED_FRAG])dnl
-dnl
-cat >>$CONFIG_STATUS <<\_ACEOF
-fi # test -n "$CONFIG_FILES"
-
-for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
-  # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
-  case $ac_file in
-  - | *:- | *:-:* ) # input from stdin
-	cat >"$tmp/stdin" ;;
-  esac
-  _AC_CONFIG_SPLIT_FILE_IN
-
-  # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
-  ac_dir=`AS_DIRNAME(["$ac_file"])`
+for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
+  _AC_CONFIG_SPLIT_SOURCE_DEST
+  ac_dir=`AS_DIRNAME(["$ac_dest"])`
   AS_MKDIR_P(["$ac_dir"])
   _AC_SRCDIRS(["$ac_dir"])
 
-AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
-[  case $INSTALL in
-  [[\\/$]]* | ?:[[\\/]]* ) ac_INSTALL=$INSTALL ;;
-  *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
-  esac
-])dnl
-
-  if test x"$ac_file" != x-; then
-    AC_MSG_NOTICE([creating $ac_file])
-    rm -f "$ac_file"
-  fi
-  # Let's still pretend it is `configure' which instantiates (i.e., don't
-  # use $as_me), people would be surprised to read:
-  #    /* config.h.  Generated by config.status.  */
-  if test x"$ac_file" = x-; then
-    configure_input=
-  else
-    configure_input="$ac_file.  "
-  fi
-  configure_input=$configure_input"Generated from `echo $ac_file_in |
-				     sed 's,.*/,,'` by configure."
-
-  # First look for the input files in the build tree, otherwise in the
-  # src tree.
-  ac_file_inputs=`IFS=:
-    for f in $ac_file_in; do
-      case $f in
-      -) echo "$tmp/stdin" ;;
-      [[\\/$]]*)
-	 # Absolute (can't be DOS-style, as IFS=:)
-	 test -f "$f" || AC_MSG_ERROR([cannot find input file: $f])
-	 echo "$f";;
-      *) # Relative
-	 if test -f "$f"; then
-	   # Build tree
-	   echo "$f"
-	 elif test -f "$srcdir/$f"; then
-	   # Source tree
-	   echo "$srcdir/$f"
-	 else
-	   # /dev/null tree
-	   AC_MSG_ERROR([cannot find input file: $f])
-	 fi;;
-      esac
-    done` || AS_EXIT([1])
-_ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF
-dnl Neutralize VPATH when `$srcdir' = `.'.
-  sed "$ac_vpsub
-dnl Shell code in configure.ac might set extrasub.
-dnl FIXME: do we really want to maintain this feature?
-$extrasub
-_ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF
-:t
-[/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
-dnl configure_input is a somewhat special, so we don't call AC_SUBST_TRACE.
-s|@configure_input@|$configure_input|;t t
-dnl During the transition period, this is a special case:
-s|@top_builddir@|$ac_top_builddir_sub|;t t[]AC_SUBST_TRACE([top_builddir])
-m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
-			builddir, abs_builddir,
-			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]]),
-	   [s|@_AC_Var@|$ac_[]_AC_Var|;t t[]AC_SUBST_TRACE(_AC_Var)
-])dnl
-" $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
-m4_popdef([_AC_SED_CMDS])dnl
-  rm -f "$tmp/stdin"
-dnl This would break Makefile dependencies.
-dnl  if diff $ac_file "$tmp/out" >/dev/null 2>&1; then
-dnl    echo "$ac_file is unchanged"
-dnl   else
-dnl     rm -f $ac_file
-dnl    mv "$tmp/out" $ac_file
-dnl  fi
-  if test x"$ac_file" != x-; then
-    mv "$tmp/out" $ac_file
-  else
-    cat "$tmp/out"
-    rm -f "$tmp/out"
-  fi
-
-m4_ifset([AC_LIST_FILES_COMMANDS],
-[  # Run the commands associated with the file.
-  case $ac_file in
-AC_LIST_FILES_COMMANDS()dnl
+  AC_MSG_NOTICE([executing $ac_dest commands])
+dnl Some shells don't like empty case/esac
+m4_ifset([AC_LIST_COMMANDS_COMMANDS],
+[  case $ac_dest in
+AC_LIST_COMMANDS_COMMANDS()dnl
   esac
 ])dnl
 done
 _ACEOF
-])# _AC_OUTPUT_FILES
+])# _AC_OUTPUT_COMMANDS
 
 
 
