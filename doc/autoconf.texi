@@ -12282,9 +12282,9 @@ $ @kbd{echo "foo" | sed -n '/bar/ !p'}
 foo
 @end example
 
-Also note that Posix requires that the arguments of the @samp{b}, @samp{t},
-@samp{r}, and @samp{w} commands be separated by exactly one space from their
-command.  On the other hand, no white space is allowed between @samp{:} and the
+Also note that Posix requires that the @samp{b}, @samp{t}, @samp{r}, and
+@samp{w} commands be followed by exactly one space before their argument.
+On the other hand, no white space is allowed between @samp{:} and the
 subsequent label name.
 
 @item @command{sed} (@samp{t})

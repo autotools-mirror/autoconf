@@ -1,6 +1,7 @@
 2005-06-30  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Generic Functions): Mention the Gnulib project.
+	(Limitations of Usual Tools) <sed>: Another minor rephrasing.
 
 2005-06-30  Alexandre Duret-Lutz  <adl@gnu.org>
 
@@ -25,7 +26,7 @@
 
 2005-06-28  Derek Price  <derek@ximbiot.com>
 
-	* doc/autoconf.texi (Limitations of Usual Tools <sed>): Reword recent
+	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: Reword recent
 	addition.
 
 2005-06-23  Paul Eggert  <eggert@cs.ucla.edu>
