@@ -1358,21 +1358,20 @@ echo >&AS_MESSAGE_LOG_FD
 _ACEOF
 
 # Files that config.status was made for.
-if test -n "$ac_config_files"; then
-  echo "config_files=\"$ac_config_files\"" >>$CONFIG_STATUS
-fi
-
-if test -n "$ac_config_headers"; then
-  echo "config_headers=\"$ac_config_headers\"" >>$CONFIG_STATUS
-fi
-
-if test -n "$ac_config_links"; then
-  echo "config_links=\"$ac_config_links\"" >>$CONFIG_STATUS
-fi
-
-if test -n "$ac_config_commands"; then
-  echo "config_commands=\"$ac_config_commands\"" >>$CONFIG_STATUS
-fi
+cat >>$CONFIG_STATUS <<_ACEOF
+m4_ifset([AC_LIST_FILES],
+[config_files="$ac_config_files"
+])dnl
+m4_ifset([AC_LIST_HEADERS],
+[config_headers="$ac_config_headers"
+])dnl
+m4_ifset([AC_LIST_LINKS],
+[config_links="$ac_config_links"
+])dnl
+m4_ifset([AC_LIST_COMMANDS],
+[config_commands="$ac_config_commands"
+])dnl
+_ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
 
@@ -1469,22 +1468,26 @@ cat >>$CONFIG_STATUS <<\_ACEOF
     ac_cs_recheck=: ;;
   --version | --versio | --versi | --vers | --ver | --ve | --v | -V )
     echo "$ac_cs_version"; exit ;;
-  --he | --h)
-    # Conflict between --help and --header
-    AC_MSG_ERROR([ambiguous option: $[1]
-Try `$[0] --help' for more information.]);;
-  --help | --hel | -h )
-    echo "$ac_cs_usage"; exit ;;
   --debug | --debu | --deb | --de | --d | -d )
     debug=: ;;
+m4_ifset([AC_LIST_FILES], [dnl
   --file | --fil | --fi | --f )
     $ac_shift
     CONFIG_FILES="$CONFIG_FILES $ac_optarg"
     ac_need_defaults=false;;
+])dnl
+m4_ifset([AC_LIST_HEADERS], [dnl
   --header | --heade | --head | --hea )
     $ac_shift
     CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
     ac_need_defaults=false;;
+  --he | --h)
+    # Conflict between --help and --header
+    AC_MSG_ERROR([ambiguous option: $[1]
+Try `$[0] --help' for more information.]);;
+], [  --he | --h |])dnl
+  --help | --hel | -h )
+    echo "$ac_cs_usage"; exit ;;
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil | --si | --s)
     ac_cs_silent=: ;;
