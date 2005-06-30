@@ -1,3 +1,7 @@
+2005-06-30  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autom4te.in (Automake-preselections): Preselect AC_SUBST_TRACE.
+
 2005-06-29  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (File Descriptors): ksh doesn't pass open file
