@@ -1063,42 +1063,19 @@ fi
 (cd $srcdir && test -r "./$ac_unique_file") 2>/dev/null ||
   { echo "$as_me: error: sources are in $srcdir, but \`cd $srcdir' does not work" >&2
    { (exit 1); exit 1; }; }
-srcdir=`echo "$srcdir" | sed 's%\([^/]\)/*$%\1%'`
+case $srcdir in
+*/) srcdir=`expr "X$srcdir" : 'X\(.*[^/]\)' \| "X$srcdir" : 'X\(.*\)'`;;
+esac
 
-ac_pwd=`pwd` && test -n "$ac_pwd" ||
+ac_pwd=`pwd` && test -n "$ac_pwd" &&
+ac_ls_di=`ls -di .` &&
+ac_pwd_ls_di=`cd "$ac_pwd" && ls -di .` ||
   { echo "$as_me: error: Working directory cannot be determined" >&2
    { (exit 1); exit 1; }; }
+test "X$ac_ls_di" = "X$ac_pwd_ls_di" ||
+  { echo "$as_me: error: pwd does not report name of working directory" >&2
+   { (exit 1); exit 1; }; }
 
-ac_pat="[\$][{][_$as_cr_Letters][_$as_cr_alnum]*[}]"
-ac_pat1='*)*'
-
-for ac_var in ac_pwd srcdir
-do
-  # Remove references to shell or make variables.
-  eval ac_dir=\$$ac_var
-  ac_dirx=$ac_dir
-  while :
-  do
-    case $ac_dirx in
-    *\${*}*)
-      ac_dirx=`
-	expr "X$ac_dirx" : "X\\(.*\\)$ac_pat"`X`
-	expr "X$ac_dirx" : "X.*$ac_pat\\(.*\\)"`;;
-    *) break;;
-    esac
-  done
-
-  # Check for newline, tab, space, and other weird possibilities.
-  # Preserve that tab character below!
-  case $ac_dirx in
-  '' | -* | */-* | *'
-'* | *'	'* | *' '* | *\"* | *\#* | *\ | *\&* | *\'* | *\(* | $ac_pat1 | \
-  *\** | *\;* | *\<* | *\=* | *\>* | *\?* | *\[* | *\\* | *\`* | \
-  *\|* | \~*)
-    { echo "$as_me: error: $ac_var directory name \`$ac_dir' has special characters" >&2
-   { (exit 1); exit 1; }; };;
-  esac
-done
 ac_env_build_alias_set=${build_alias+set}
 ac_env_build_alias_value=$build_alias
 ac_cv_env_build_alias_set=${build_alias+set}
@@ -3165,21 +3142,10 @@ echo >&5
 _ACEOF
 
 # Files that config.status was made for.
-if test -n "$ac_config_files"; then
-  echo "config_files=\"$ac_config_files\"" >>$CONFIG_STATUS
-fi
-
-if test -n "$ac_config_headers"; then
-  echo "config_headers=\"$ac_config_headers\"" >>$CONFIG_STATUS
-fi
-
-if test -n "$ac_config_links"; then
-  echo "config_links=\"$ac_config_links\"" >>$CONFIG_STATUS
-fi
-
-if test -n "$ac_config_commands"; then
-  echo "config_commands=\"$ac_config_commands\"" >>$CONFIG_STATUS
-fi
+cat >>$CONFIG_STATUS <<_ACEOF
+config_files="$ac_config_files"
+config_commands="$ac_config_commands"
+_ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
 
@@ -3251,25 +3217,14 @@ cat >>$CONFIG_STATUS <<\_ACEOF
     ac_cs_recheck=: ;;
   --version | --versio | --versi | --vers | --ver | --ve | --v | -V )
     echo "$ac_cs_version"; exit ;;
-  --he | --h)
-    # Conflict between --help and --header
-    { { echo "$as_me:$LINENO: error: ambiguous option: $1
-Try \`$0 --help' for more information." >&5
-echo "$as_me: error: ambiguous option: $1
-Try \`$0 --help' for more information." >&2;}
-   { (exit 1); exit 1; }; };;
-  --help | --hel | -h )
-    echo "$ac_cs_usage"; exit ;;
   --debug | --debu | --deb | --de | --d | -d )
     debug=: ;;
   --file | --fil | --fi | --f )
     $ac_shift
     CONFIG_FILES="$CONFIG_FILES $ac_optarg"
     ac_need_defaults=false;;
-  --header | --heade | --head | --hea )
-    $ac_shift
-    CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
-    ac_need_defaults=false;;
+  --he | --h |  --help | --hel | -h )
+    echo "$ac_cs_usage"; exit ;;
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil | --si | --s)
     ac_cs_silent=: ;;
@@ -3639,15 +3594,15 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 :t
 /@[a-zA-Z_][a-zA-Z_0-9]*@/!b
 s|@configure_input@|$configure_input|;t t
+s|@top_builddir@|$ac_top_builddir_sub|;t t
 s|@srcdir@|$ac_srcdir|;t t
 s|@abs_srcdir@|$ac_abs_srcdir|;t t
 s|@top_srcdir@|$ac_top_srcdir|;t t
 s|@abs_top_srcdir@|$ac_abs_top_srcdir|;t t
 s|@builddir@|$ac_builddir|;t t
 s|@abs_builddir@|$ac_abs_builddir|;t t
-s|@top_builddir@|$ac_top_builddir_sub|;t t
 s|@abs_top_builddir@|$ac_abs_top_builddir|;t t
-s,@INSTALL@,$ac_INSTALL,;t t
+s|@INSTALL@|$ac_INSTALL|;t t
 " $ac_file_inputs | sed -f "$tmp/subs-1.sed" >$tmp/out
   rm -f "$tmp/stdin"
   if test x"$ac_file" != x-; then
