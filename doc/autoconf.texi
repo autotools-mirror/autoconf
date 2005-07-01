@@ -2653,13 +2653,19 @@ macro selects this kind of output.  It should be called right after
 
 The package should @samp{#include} the configuration header file before
 any other header files, to prevent inconsistencies in declarations (for
-example, if it redefines @code{const}).  Use @samp{#include <config.h>}
-instead of @samp{#include "config.h"}, and pass the C compiler a
-@option{-I.} option (or @option{-I..}; whichever directory contains
-@file{config.h}).  That way, even if the source directory is configured
-itself (perhaps to make a distribution), other build directories can
-also be configured without finding the @file{config.h} from the source
-directory.
+example, if it redefines @code{const}).
+
+To provide for VPATH builds, remember to pass the C compiler a @option{-I.}
+option (or @option{-I..}; whichever directory contains @file{config.h}).
+Even if you use @samp{#include "config.h"}, the preprocessor searches only
+the directory of the currently read file, ie@. the source directory, not
+the build directory.
+
+With the appropriate @option{-I} option, you can use
+@samp{#include <config.h>}.  Actually, it's a good habit to use it,
+because in the rare case when the source directory contains another
+@file{config.h}, the build directory should be searched first.
+
 
 @defmac AC_CONFIG_HEADERS (@var{header} @dots{}, @ovar{cmds}, @ovar{init-cmds})
 @acindex{CONFIG_HEADERS}

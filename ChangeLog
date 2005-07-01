@@ -1,5 +1,10 @@
 2005-06-30  Stepan Kasal  <kasal@ucw.cz>
 
+	* doc/autoconf.texi (Configuration Headers): Change the explanation
+	about #include <config.h>.
+
+2005-06-30  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/status.m4: Fix the order of the "sections", so that it
 	matches the order of execution.  No code changed.
 
