@@ -211,17 +211,16 @@ m4_define([_AC_CONFIG_DEPENDENCY],
 	  [AC_FILE_DEPENDENCY_TRACE([$1], [$1.in])])])
 
 
-# _AC_CONFIG_DEPENDENCIES(DEST[:SOURCE1[:SOURCE2...]]...)
-# -------------------------------------------------------
+# _AC_CONFIG_DEPENDENCIES(DEST[:SOURCE1[:SOURCE2...]])
+# ----------------------------------------------------
 # Declare the DESTs depend upon their SOURCE1 etc.
 m4_define([_AC_CONFIG_DEPENDENCIES],
-[AC_FOREACH([AC_File], [$1],
-  [_AC_CONFIG_DEPENDENCY(m4_bpatsubst(AC_File, [:], [,]))])dnl
+[_AC_CONFIG_DEPENDENCY(m4_bpatsubst([$1], [:], [,]))dnl
 ])
 
 
-# _AC_CONFIG_UNIQUE(DEST[:SOURCE]...)
-# -----------------------------------
+# _AC_CONFIG_UNIQUE(DEST[:SOURCE])
+# --------------------------------
 #
 # Verify that there is no double definition of an output file
 # (precisely, guarantees there is no common elements between
@@ -230,19 +229,18 @@ m4_define([_AC_CONFIG_DEPENDENCIES],
 # Note that this macro does not check if the list $[1] itself
 # contains doubles.
 m4_define([_AC_CONFIG_UNIQUE],
-[AC_FOREACH([AC_File], [$1],
 [m4_pushdef([AC_Dest], m4_bpatsubst(AC_File, [:.*]))dnl
+  AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_FILES],
+     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_FILES.])])dnl
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_HEADERS.])])dnl
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_LINKS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_LINKS.])])dnl
-  AC_CONFIG_IF_MEMBER(AC_Dest, [_AC_LIST_SUBDIRS],
-     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_SUBDIRS.])])dnl
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_COMMANDS],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_COMMANDS.])])dnl
-  AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_FILES],
-     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_FILES.])])dnl
-m4_popdef([AC_Dest])])dnl
+  AC_CONFIG_IF_MEMBER(AC_Dest, [_AC_LIST_SUBDIRS],
+     [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_SUBDIRS.])])dnl
+m4_popdef([AC_Dest])dnl
 ])
 
 
@@ -317,7 +315,7 @@ m4_ifval([$2],
 #        AC_LIST_FILES_COMMANDS
 #      esac
 AC_DEFUN([AC_CONFIG_FILES],
-[AC_FOREACH([AC_File], [$1], [_AC_CONFIG_FILE(m4_defn([AC_File]), [$2])])dnl
+[m4_foreach_w([AC_File], [$1], [_AC_CONFIG_FILE(m4_defn([AC_File]), [$2])])dnl
 _AC_CONFIG_COMMANDS_INIT([$3])dnl
 ac_config_files="$ac_config_files m4_normalize([$1])"
 ])
@@ -365,7 +363,7 @@ dnl
 m4_ifdef([_AC_SUBST_FILES],
 [# Create sed commands to just substitute file output variables.
 
-AC_FOREACH([_AC_Var], m4_defn([_AC_SUBST_FILES]),
+m4_foreach_w([_AC_Var], m4_defn([_AC_SUBST_FILES]),
 [dnl End fragments at beginning of loop so that last fragment is not ended.
 m4_if(1,m4_eval(_AC_SED_CMD_NUM+4>_AC_SED_CMD_LIMIT),
 [dnl Fragment is full and not the last one, so no need for the final un-escape.
@@ -397,7 +395,7 @@ d; }
 dnl
 m4_define([_AC_SED_FRAG],[
 ]m4_defn([_AC_SED_FRAG]))dnl
-AC_FOREACH([_AC_Var],
+m4_foreach_w([_AC_Var],
 m4_ifdef([_AC_SUBST_VARS],[m4_defn([_AC_SUBST_VARS]) ])[@END@],
 [m4_if(_AC_SED_DELIM_NUM,0,
 [m4_if(_AC_Var,[@END@],
@@ -620,7 +618,7 @@ m4_ifval([$2],
 #        AC_LIST_HEADERS_COMMANDS
 #      esac
 AC_DEFUN([AC_CONFIG_HEADERS],
-[AC_FOREACH([AC_File], [$1], [_AC_CONFIG_HEADER(m4_defn([AC_File]), [$2])])dnl
+[m4_foreach_w([AC_File], [$1], [_AC_CONFIG_HEADER(m4_defn([AC_File]), [$2])])dnl
 _AC_CONFIG_COMMANDS_INIT([$3])dnl
 ac_config_headers="$ac_config_headers m4_normalize([$1])"
 ])
@@ -846,7 +844,7 @@ m4_ifval([$2],
 # Reject DEST=., because it is makes it hard for ./config.status
 # to guess the links to establish (`./config.status .').
 AC_DEFUN([AC_CONFIG_LINKS],
-[AC_FOREACH([AC_File], [$1], [_AC_CONFIG_LINK(m4_defn([AC_File]), [$2])])dnl
+[m4_foreach_w([AC_File], [$1], [_AC_CONFIG_LINK(m4_defn([AC_File]), [$2])])dnl
 _AC_CONFIG_COMMANDS_INIT([$3])dnl
 ac_config_links="$ac_config_links m4_normalize([$1])"
 ])
@@ -986,7 +984,7 @@ m4_ifval([$2],
 # commands must be associated with a NAME, which should be thought
 # as the name of a file the COMMANDS create.
 AC_DEFUN([AC_CONFIG_COMMANDS],
-[AC_FOREACH([AC_Name], [$1], [_AC_CONFIG_COMMAND(m4_defn([AC_Name]), [$2])])dnl
+[m4_foreach_w([AC_Name], [$1], [_AC_CONFIG_COMMAND(m4_defn([AC_Name]), [$2])])dnl
 _AC_CONFIG_COMMANDS_INIT([$3])dnl
 ac_config_commands="$ac_config_commands $1"
 ])
@@ -1100,11 +1098,11 @@ _ACEOF
 #   This is used in _AC_OUTPUT_SUBDIRS.
 # _AC_LIST_SUBDIRS is used only for _AC_CONFIG_UNIQUE.
 AC_DEFUN([AC_CONFIG_SUBDIRS],
-[_AC_CONFIG_UNIQUE([$1])dnl
+[m4_foreach_w([_AC_Sub], [$1], [_AC_CONFIG_UNIQUE([_AC_Sub])])dnl
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 m4_append([_AC_LIST_SUBDIRS], [ $1])dnl
 AS_LITERAL_IF([$1], [],
-	      [AC_DIAGNOSE(syntax, [$0: you should use literals])])
+	      [AC_DIAGNOSE(syntax, [$0: you should use literals])])dnl
 m4_divert_text([DEFAULTS],
 	       [ac_subdirs_all="$ac_subdirs_all m4_normalize([$1])"])
 AC_SUBST(subdirs, "$subdirs $1")dnl
@@ -1530,30 +1528,30 @@ _ACEOF])
 
 
 dnl Issue this section only if there were actually config files.
-dnl This checks if one of AC_LIST_HEADERS, AC_LIST_FILES, AC_LIST_COMMANDS,
-dnl or AC_LIST_LINKS is set.
-m4_ifval(AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_FILES()AC_LIST_COMMANDS(),
+dnl This checks if one of AC_LIST_FILES, AC_LIST_HEADERS, AC_LIST_LINKS,
+dnl or AC_LIST_COMMANDS is set.
+m4_ifval(AC_LIST_FILES()AC_LIST_HEADERS()AC_LIST_LINKS()AC_LIST_COMMANDS(),
 [
 cat >>$CONFIG_STATUS <<\_ACEOF
 for ac_config_target in $ac_config_targets
 do
   case "$ac_config_target" in
   # Handling of arguments.
-AC_FOREACH([AC_File], AC_LIST_FILES,
+m4_foreach_w([AC_File], AC_LIST_FILES,
 [  "m4_bpatsubst(AC_File, [:.*])" )dnl
  CONFIG_FILES="$CONFIG_FILES AC_File" ;;
 ])dnl
-AC_FOREACH([AC_File], AC_LIST_LINKS,
+m4_foreach_w([AC_File], AC_LIST_HEADERS,
+[  "m4_bpatsubst(AC_File, [:.*])" )dnl
+ CONFIG_HEADERS="$CONFIG_HEADERS AC_File" ;;
+])dnl
+m4_foreach_w([AC_File], AC_LIST_LINKS,
 [  "m4_bpatsubst(AC_File, [:.*])" )dnl
  CONFIG_LINKS="$CONFIG_LINKS AC_File" ;;
 ])dnl
-AC_FOREACH([AC_File], AC_LIST_COMMANDS,
+m4_foreach_w([AC_File], AC_LIST_COMMANDS,
 [  "m4_bpatsubst(AC_File, [:.*])" )dnl
  CONFIG_COMMANDS="$CONFIG_COMMANDS AC_File" ;;
-])dnl
-AC_FOREACH([AC_File], AC_LIST_HEADERS,
-[  "m4_bpatsubst(AC_File, [:.*])" )dnl
- CONFIG_HEADERS="$CONFIG_HEADERS AC_File" ;;
 ])dnl
   *) AC_MSG_ERROR([invalid argument: $ac_config_target]);;
   esac

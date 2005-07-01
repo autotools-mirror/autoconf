@@ -190,22 +190,9 @@ m4_define([AC_OBSOLETE],
 ## ----------------------------- ##
 
 
-# AC_FOREACH(VARIABLE, LIST, EXPRESSION)
-# --------------------------------------
-#
-# Compute EXPRESSION assigning to VARIABLE each value of the LIST.
-# LIST is a /bin/sh list, i.e., it has the form ` item_1 item_2
-# ... item_n ': white spaces are separators, and leading and trailing
-# spaces are meaningless.
-#
-# This macro is robust to active symbols:
-#    AC_FOREACH([Var], [ active
-#    b	act\
-#    ive  ], [-Var-])end
-#    => -active--b--active-end
-m4_define([AC_FOREACH],
-[m4_foreach([$1], m4_split(m4_normalize([$2])), [$3])])
-
+# AU::AC_FOREACH(VARIABLE, LIST, EXPRESSION)
+# ------------------------------------------
+AU_ALIAS([AC_FOREACH], [m4_foreach_w])
 
 
 
@@ -2427,7 +2414,7 @@ AS_VAR_POPDEF([ac_File])dnl
 # AC_CHECK_FILES(FILE..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------------------
 AC_DEFUN([AC_CHECK_FILES],
-[AC_FOREACH([AC_FILE_NAME], [$1],
+[m4_foreach_w([AC_FILE_NAME], [$1],
   [AC_CHECK_FILE(AC_FILE_NAME,
 		 [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_FILE_NAME), 1,
 				    [Define to 1 if you have the

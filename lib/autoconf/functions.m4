@@ -78,7 +78,7 @@ AS_VAR_POPDEF([ac_var])dnl
 # AC_CHECK_FUNCS(FUNCTION..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ---------------------------------------------------------------------
 AC_DEFUN([AC_CHECK_FUNCS],
-[AC_FOREACH([AC_Func], [$1],
+[m4_foreach_w([AC_Func], [$1],
   [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Func),
 	       [Define to 1 if you have the `]AC_Func[' function.])])dnl
 for ac_func in $1
@@ -93,7 +93,7 @@ done
 # AC_REPLACE_FUNCS(FUNCTION...)
 # -----------------------------
 AC_DEFUN([AC_REPLACE_FUNCS],
-[AC_FOREACH([AC_Func], [$1], [AC_LIBSOURCE(AC_Func.c)])dnl
+[m4_foreach_w([AC_Func], [$1], [AC_LIBSOURCE(AC_Func.c)])dnl
 AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ($ac_func)])
 ])
 

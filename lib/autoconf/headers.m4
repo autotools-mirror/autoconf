@@ -185,7 +185,7 @@ AS_VAR_POPDEF([ac_Header])dnl
 # AH_CHECK_HEADERS(HEADER-FILE...)
 # --------------------------------
 m4_define([AH_CHECK_HEADERS],
-[AC_FOREACH([AC_Header], [$1],
+[m4_foreach_w([AC_Header], [$1],
   [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Header),
 	       [Define to 1 if you have the <]AC_Header[> header file.])])])
 
@@ -380,7 +380,7 @@ AS_VAR_POPDEF([ac_Header])dnl
 # AH_CHECK_HEADERS_DIRENT(HEADERS...)
 # -----------------------------------
 m4_define([AH_CHECK_HEADERS_DIRENT],
-[AC_FOREACH([AC_Header], [$1],
+[m4_foreach_w([AC_Header], [$1],
   [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Header),
 	       [Define to 1 if you have the <]AC_Header[> header file, and
 		it defines `DIR'.])])])

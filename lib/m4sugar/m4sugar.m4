@@ -692,6 +692,21 @@ m4_define([_m4_foreach],
 _m4_foreach([$1], m4_cdr($2), [$3])])])
 
 
+# m4_foreach_w(VARIABLE, LIST, EXPRESSION)
+# ----------------------------------------
+#
+# Like m4_foreach, but the list is whitespace separated.
+#
+# This macro is robust to active symbols:
+#    m4_foreach_w([Var], [ active
+#    b	act\
+#    ive  ], [-Var-])end
+#    => -active--b--active-end
+#
+m4_define([m4_foreach_w],
+[m4_foreach([$1], m4_split(m4_normalize([$2])), [$3])])
+
+
 
 ## --------------------------- ##
 ## 8. More diversion support.  ##
@@ -1558,7 +1573,7 @@ m4_Prefix1[]dnl
 m4_if(m4_eval(m4_Cursor > m4_len(m4_Prefix)),
       1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix])[]dnl
-m4_foreach([m4_Word], m4_split(m4_normalize([$1])),
+m4_foreach_w([m4_Word], [$1],
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_len(m4_defn([m4_Word])) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
