@@ -450,38 +450,13 @@ AC_DEFUN([AC_CONFIG_SRCDIR],
 m4_define([_AC_INIT_DIRCHECK],
 [m4_divert_push([PARSE_ARGS])dnl
 
-ac_pwd=`pwd` && test -n "$ac_pwd" ||
+ac_pwd=`pwd` && test -n "$ac_pwd" &&
+ac_ls_di=`ls -di .` &&
+ac_pwd_ls_di=`cd "$ac_pwd" && ls -di .` ||
   AC_MSG_ERROR([Working directory cannot be determined])
+test "X$ac_ls_di" = "X$ac_pwd_ls_di" ||
+  AC_MSG_ERROR([pwd does not report name of working directory])
 
-ac_pat="[[\$][{][_$as_cr_Letters][_$as_cr_alnum]*[}]]"
-ac_pat1='*[)]*'
-
-for ac_var in ac_pwd srcdir
-do
-  # Remove references to shell or make variables.
-  eval ac_dir=\$$ac_var
-  ac_dirx=$ac_dir
-  while :
-  do
-    case $ac_dirx in
-    *\${*}*)
-      ac_dirx=`
-	expr "X$ac_dirx" : "X\\(.*\\)$ac_pat"`X`
-	expr "X$ac_dirx" : "X.*$ac_pat\\(.*\\)"`;;
-    *) break;;
-    esac
-  done
-
-  # Check for newline, tab, space, and other weird possibilities.
-  # Preserve that tab character below!
-  case $ac_dirx in
-  '' | -* | */-* | *'
-'* | *'	'* | *' '* | *\"* | *\#* | *\$* | *\&* | *\'* | *\(* | $ac_pat1 | \
-  *\** | *\;* | *\<* | *\=* | *\>* | *\?* | *\@<:@* | *\\* | *\`* | \
-  *\|* | \~*)
-    AC_MSG_ERROR([$ac_var directory name `$ac_dir' has special characters]);;
-  esac
-done
 m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_DIRCHECK
 
@@ -512,7 +487,9 @@ fi
 dnl Remove unnecessary trailing slashes from srcdir.
 dnl Double slashes in file names in object file debugging info
 dnl mess up M-x gdb in Emacs.
-srcdir=`echo "$srcdir" | sed 's%\([[^/]]\)/*$%\1%'`
+case $srcdir in
+*/) srcdir=`expr "X$srcdir" : 'X\(.*[[^/]]\)' \| "X$srcdir" : 'X\(.*\)'`;;
+esac
 m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_SRCDIR
 

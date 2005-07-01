@@ -1,3 +1,11 @@
+2005-07-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_INIT_DIRCHECK): Remove the tests for
+	directories with weird names.  Apparently some people like living
+	on the edge.  However, improve the test that "pwd" actually does
+	report a name for the working directory.
+	* NEWS: Remove the claim that we test for funny chars in dir names.
+
 2005-06-30  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Configuration Headers): Change the explanation
@@ -16,7 +24,7 @@
 	Likewise for --header; moreover, recognize --he and --h as shortcuts
 	for --help in that case.
 
-2005-06-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de> 
+2005-06-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Fix also for
 	single-quoted -cmdline argument in Portland Group compiler.
