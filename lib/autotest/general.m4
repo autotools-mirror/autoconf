@@ -478,7 +478,7 @@ m4_divert_push([PREPARE_TESTS])dnl
 # For embedded test suites, AUTOTEST_PATH is relative to the top level
 # of the package.  Then expand it into build/src parts, since users
 # may create executables in both places.
-AUTOTEST_PATH=`echo $AUTOTEST_PATH | sed "s,:,$PATH_SEPARATOR,g"`
+AUTOTEST_PATH=`echo $AUTOTEST_PATH | sed "s&:&$PATH_SEPARATOR&g"`
 at_path=
 _AS_PATH_WALK([$AUTOTEST_PATH $PATH],
 [test -n "$at_path" && at_path=$at_path$PATH_SEPARATOR

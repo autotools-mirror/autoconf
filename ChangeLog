@@ -1,3 +1,14 @@
+2005-07-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (AC_ARG_PROGRAM): Use &, not |, in
+	sed substitution command, so that we allow | in program prefixes
+	and program suffixes.  (& is a problem anyway; we're not fixing
+	that here.)
+	* lib/autoconf/status.m4 (AC_CONFIG_FILES): Likewise, for
+	configure_input, top_builddir, srcdir, etc.
+	* lib/autotest/general.m4 (AT_INIT): Likewise, for
+	PATH_SEPARATOR in AUTOTEST_PATH.
+
 2005-07-02  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autoconf/general.m4 (AC_SITE_LOAD): Rewrite the

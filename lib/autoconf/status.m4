@@ -547,13 +547,13 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 :t
 [/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
 dnl configure_input is a somewhat special, so we don't call AC_SUBST_TRACE.
-s|@configure_input@|$configure_input|;t t
+s&@configure_input@&$configure_input&;t t
 dnl During the transition period, this is a special case:
-s|@top_builddir@|$ac_top_builddir_sub|;t t[]AC_SUBST_TRACE([top_builddir])
+s&@top_builddir@&$ac_top_builddir_sub&;t t[]AC_SUBST_TRACE([top_builddir])
 m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 			builddir, abs_builddir,
 			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]]),
-	   [s|@_AC_Var@|$ac_[]_AC_Var|;t t[]AC_SUBST_TRACE(_AC_Var)
+	   [s&@_AC_Var@&$ac_[]_AC_Var&;t t[]AC_SUBST_TRACE(_AC_Var)
 ])dnl
 " $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
 m4_popdef([_AC_SED_CMDS])dnl

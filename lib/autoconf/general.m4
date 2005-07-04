@@ -1501,10 +1501,10 @@ Program names:
   --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
 m4_divert_pop([HELP_BEGIN])dnl
 test "$program_prefix" != NONE &&
-  program_transform_name="s|^|$program_prefix|;$program_transform_name"
+  program_transform_name="s&^&$program_prefix&;$program_transform_name"
 # Use a double $ so make ignores it.
 test "$program_suffix" != NONE &&
-  program_transform_name="s|\$|$program_suffix|;$program_transform_name"
+  program_transform_name="s&\$&$program_suffix&;$program_transform_name"
 # Double any \ or $.  echo might interpret backslashes.
 # By default was `s,x,x', remove it if useless.
 cat <<\_ACEOF >conftest.sed
