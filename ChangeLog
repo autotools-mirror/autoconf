@@ -1,3 +1,9 @@
+2005-07-02  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autoconf/general.m4 (AC_SITE_LOAD): Rewrite the
+	for loop over config.site files using `set', to allow
+	directory names containing IFS characters.
+
 2005-07-01  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_DIRCHECK): Remove the tests for
