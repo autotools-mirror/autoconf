@@ -1,3 +1,8 @@
+2005-07-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* bin/autom4te.in ($m4): Catch usages like --nesting-limit=2048.
+	Problem reported by Patrick Welche.
+
 2005-07-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (AC_ARG_PROGRAM): Use &, not |, in

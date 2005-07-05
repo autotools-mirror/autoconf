@@ -6,7 +6,7 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
 # autom4te - Wrapper around M4 libraries.
-# Copyright (C) 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ fatal "need GNU m4 1.4 or later: $m4"
 # Set some high recursion limit as the default limit, 250, has already
 # been hit with AC_OUTPUT.  Don't override the user's choice.
 $m4 .= ' --nesting-limit=1024'
-  if " $m4 " !~ / (--nesting-limit|-L) /;
+  if " $m4 " !~ / (--nesting-limit(=[0-9]+)?|-L[0-9]*) /;
 
 
 # @M4_BUILTIN -- M4 builtins and a useful comment.
