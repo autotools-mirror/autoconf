@@ -213,7 +213,7 @@ m4_define([_AC_CONFIG_DEPENDENCY],
 
 # _AC_CONFIG_DEPENDENCIES(DEST[:SOURCE1[:SOURCE2...]])
 # ----------------------------------------------------
-# Declare the DESTs depend upon their SOURCE1 etc.
+# Declare the DEST depends upon SOURCE1 etc.
 m4_define([_AC_CONFIG_DEPENDENCIES],
 [_AC_CONFIG_DEPENDENCY(m4_bpatsubst([$1], [:], [,]))dnl
 ])
@@ -224,12 +224,11 @@ m4_define([_AC_CONFIG_DEPENDENCIES],
 #
 # Verify that there is no double definition of an output file
 # (precisely, guarantees there is no common elements between
-# CONFIG_HEADERS, CONFIG_FILES, CONFIG_LINKS, and CONFIG_SUBDIRS).
+# CONFIG_FILES, CONFIG_HEADERS, CONFIG_LINKS, CONFIG_COMMANDS and
+# CONFIG_SUBDIRS).
 #
-# Note that this macro does not check if the list $[1] itself
-# contains doubles.
 m4_define([_AC_CONFIG_UNIQUE],
-[m4_pushdef([AC_Dest], m4_bpatsubst(AC_File, [:.*]))dnl
+[m4_pushdef([AC_Dest], m4_bpatsubst([$1], [:.*]))dnl
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_FILES],
      [AC_FATAL(`AC_Dest' [is already registered with AC_CONFIG_FILES.])])dnl
   AC_CONFIG_IF_MEMBER(AC_Dest, [AC_LIST_HEADERS],

@@ -1,5 +1,11 @@
 2005-07-05  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/status.m4 (_AC_CONFIG_DEPENDENCIES): Fix the
+	description, the macro now accepts only a single tag.
+	(_AC_CONFIG_UNIQUE): Likewise; s/AC_File/[$1]/
+
+2005-07-05  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Set also
 	at_top_builddir, for compatibility with older autotest.
 	* lib/autotest/general.m4 (AT_INIT): If at_top_build_prefix
@@ -35,6 +41,15 @@
 	on the edge.  However, improve the test that "pwd" actually does
 	report a name for the working directory.
 	* NEWS: Remove the claim that we test for funny chars in dir names.
+
+2005-07-01  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (AC_FOREACH): Make obsolete; it's
+	replaced ...
+	* lib/m4sugar/m4sugar.m4 (m4_foreach_w): ... by this new macro.
+	* lib/autoconf/status.m4 (_AC_CONFIG_DEPENDENCIES, _AC_CONFIG_UNIQUE):
+	Now accept a single tag, not whitespace separated list.
+	(AC_CONFIG_SUBDIRS): Call _AC_CONFIG_UNIQUE in a m4_foreach_w loop.
 
 2005-06-30  Stepan Kasal  <kasal@ucw.cz>
 
