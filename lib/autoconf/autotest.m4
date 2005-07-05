@@ -78,6 +78,9 @@ abs_top_srcdir='$ac_abs_top_srcdir'
 at_top_build_prefix='$ac_top_build_prefix'
 abs_top_builddir='$ac_abs_top_builddir'
 
+# Backward compatibility with Autotest <= 2.59b:
+at_top_builddir=\$at_top_build_prefix
+
 AUTOTEST_PATH='m4_default([$2], [$1])'
 
 SHELL=\${CONFIG_SHELL-'$SHELL'}

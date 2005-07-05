@@ -1,3 +1,11 @@
+2005-07-05  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Set also
+	at_top_builddir, for compatibility with older autotest.
+	* lib/autotest/general.m4 (AT_INIT): If at_top_build_prefix
+	is not set, use at_top_builddir, for compatibility with older
+	versions of autoconf.
+
 2005-07-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* bin/autom4te.in ($m4): Catch usages like --nesting-limit=2048.

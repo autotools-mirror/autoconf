@@ -178,6 +178,9 @@ do
   . ./$at_file || AS_ERROR([invalid content: $at_file])
 done
 
+# Autoconf <=2.59b set at_top_builddir instead of at_top_build_prefix:
+: ${at_top_build_prefix=$at_top_builddir}
+
 # atconfig delivers names relative to the directory the test suite is
 # in, but the groups themselves are run in testsuite-dir/group-dir.
 if test -n "$at_top_srcdir"; then
