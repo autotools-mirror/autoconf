@@ -331,6 +331,7 @@ m4_define([AT_CONFIG_CMP],
 do
   $SED '/^ac_cv_/ b
 	/^m4_defn([m4_re_word])=./ !d
+	/^[[^=]]*='\''\''$/ d
 	/^a[[cs]]_/ d
 	/^PPID=/ d
 	/^RANDOM=/ d
