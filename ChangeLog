@@ -1,5 +1,10 @@
 2005-07-06  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* NEWS: New macro AC_C_TYPEOF.
+	* doc/autoconf.texi (C Compiler): Document AC_C_TYPEOF.
+	* lib/autoconf/c.m4 (AC_C_TYPEOF): New macro.
+	* tests/c.at (C keywords): Test AC_C_TYPEOF.
+
 	Fix problems reported by Nicolas Joly.
 	* tests/base.at (Input/Output): Ignore 'loading site script' chatter.
 	* tests/local.at (AT_CONFIG_CMP): Ignore lines like "LIBS=''" too.
