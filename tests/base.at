@@ -244,7 +244,7 @@ AT_DATA([configure.ac],
 cat <&AS_ORIGINAL_STDIN_FD >&AS_MESSAGE_FD
 ]])
 AT_CHECK_AUTOCONF
-AT_CHECK([echo Hello | top_srcdir=$abs_top_srcdir ./configure],, [Hello
+AT_CHECK([echo Hello | top_srcdir=$abs_top_srcdir ./configure | grep -v 'configure: loading site script '],, [Hello
 ])
 AT_CHECK([echo Hello | top_srcdir=$abs_top_srcdir ./configure --silent])
 
