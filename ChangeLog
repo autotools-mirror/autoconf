@@ -9,6 +9,13 @@
 	  ac_cv_build_alias to ac_build_alias.
 	(AC_CANONICAL_HOST, AC_CANONICAL_TARGET): Simplify.
 
+	On 2005-02-24, an unintentional AC_SUBST([CC]) was introduced; this
+	change eliminates it.  Problem reported by Alexandre Duret-Lutz.
+	* lib/autoconf/general.m4 (_AC_ARG_VAR_PRECIOUS): Move the AC_SUBST ...
+	(AC_ARG_VAR): ... here.
+	(_AC_INIT_PREPARE): Call AC_SUBST for build_alias, host_alias and
+	  target_alias.
+
 2005-07-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: New macro AC_C_TYPEOF.

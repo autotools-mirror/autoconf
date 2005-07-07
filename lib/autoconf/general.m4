@@ -1258,9 +1258,9 @@ AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT], ["$PACKAGE_BUGREPORT"],
 AC_SITE_LOAD
 AC_CACHE_LOAD
 _AC_ARG_VAR_VALIDATE
-_AC_ARG_VAR_PRECIOUS([build_alias])dnl
-_AC_ARG_VAR_PRECIOUS([host_alias])dnl
-_AC_ARG_VAR_PRECIOUS([target_alias])dnl
+_AC_ARG_VAR_PRECIOUS([build_alias])AC_SUBST([build_alias])dnl
+_AC_ARG_VAR_PRECIOUS([host_alias])AC_SUBST([host_alias])dnl
+_AC_ARG_VAR_PRECIOUS([target_alias])AC_SUBST([target_alias])dnl
 AC_LANG_PUSH(C)
 
 dnl Substitute for predefined variables.
@@ -1390,6 +1390,7 @@ it to find libraries and programs with nonstandard names/locations.]])dnl
 m4_expand_once([m4_divert_once([HELP_VAR],
 			       [AS_HELP_STRING([$1], [$2], [              ])])],
 	       [$0($1)])dnl
+AC_SUBST([$1])dnl
 _AC_ARG_VAR_PRECIOUS([$1])dnl
 ])# AC_ARG_VAR
 
@@ -1409,8 +1410,7 @@ _AC_ARG_VAR_PRECIOUS([$1])dnl
 # In subsequent runs, after having loaded the cache, compare
 # ac_cv_env_foo against ac_env_foo.  See _AC_ARG_VAR_VALIDATE.
 m4_define([_AC_ARG_VAR_PRECIOUS],
-[AC_SUBST([$1])dnl
-m4_divert_once([PARSE_ARGS],
+[m4_divert_once([PARSE_ARGS],
 [ac_env_$1_set=${$1+set}
 ac_env_$1_value=$$1
 ac_cv_env_$1_set=${$1+set}
