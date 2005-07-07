@@ -5,6 +5,10 @@
 	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Report the full
 	path, too; insert a "===" to emphasize the line.
 
+	* lib/autoconf/general.m4 (AC_CANONICAL_BUILD): Rename
+	  ac_cv_build_alias to ac_build_alias.
+	(AC_CANONICAL_HOST, AC_CANONICAL_TARGET): Simplify.
+
 2005-07-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: New macro AC_C_TYPEOF.

@@ -1627,7 +1627,6 @@ m4_define([AC_REQUIRE_AUX_FILE],
 # Generate the variables THING, THING_{alias cpu vendor os}.
 m4_define([_AC_CANONICAL_SPLIT],
 [AC_SUBST([$1],       [$ac_cv_$1])dnl
-dnl FIXME: AC_SUBST([$1_alias],  [$ac_cv_$1_alias])dnl
 ac_save_IFS=$IFS; IFS='-'
 set x $ac_cv_$1
 shift
@@ -1662,13 +1661,13 @@ $ac_config_sub sun4 >/dev/null 2>&1 ||
   AC_MSG_ERROR([cannot run $ac_config_sub])
 
 AC_CACHE_CHECK([build system type], [ac_cv_build],
-[ac_cv_build_alias=$build_alias
-test -z "$ac_cv_build_alias" &&
-  ac_cv_build_alias=`$ac_config_guess`
-test -z "$ac_cv_build_alias" &&
+[ac_build_alias=$build_alias
+test "x$ac_build_alias" = x &&
+  ac_build_alias=`$ac_config_guess`
+test "x$ac_build_alias" = x &&
   AC_MSG_ERROR([cannot guess build type; you must specify one])
-ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
-  AC_MSG_ERROR([$ac_config_sub $ac_cv_build_alias failed])
+ac_cv_build=`$ac_config_sub $ac_build_alias` ||
+  AC_MSG_ERROR([$ac_config_sub $ac_build_alias failed])
 ])
 _AC_CANONICAL_SPLIT(build)
 ])# AC_CANONICAL_BUILD
@@ -1681,11 +1680,12 @@ AC_DEFUN_ONCE([AC_CANONICAL_HOST],
 m4_divert_text([HELP_CANON],
 [[  --host=HOST       cross-compile to build programs to run on HOST [BUILD]]])dnl
 AC_CACHE_CHECK([host system type], [ac_cv_host],
-[ac_cv_host_alias=$host_alias
-test -z "$ac_cv_host_alias" &&
-  ac_cv_host_alias=$ac_cv_build_alias
-ac_cv_host=`$ac_config_sub $ac_cv_host_alias` ||
-  AC_MSG_ERROR([$ac_config_sub $ac_cv_host_alias failed])
+[if test "x$host_alias" = x; then
+  ac_cv_host=$ac_cv_build
+else
+  ac_cv_host=`$ac_config_sub $host_alias` ||
+    AC_MSG_ERROR([$ac_config_sub $host_alias failed])
+fi
 ])
 _AC_CANONICAL_SPLIT([host])
 ])# AC_CANONICAL_HOST
@@ -1699,12 +1699,12 @@ AC_BEFORE([$0], [AC_ARG_PROGRAM])dnl
 m4_divert_text([HELP_CANON],
 [[  --target=TARGET   configure for building compilers for TARGET [HOST]]])dnl
 AC_CACHE_CHECK([target system type], [ac_cv_target],
-[dnl Set target_alias.
-ac_cv_target_alias=$target_alias
-test "x$ac_cv_target_alias" = "x" &&
-  ac_cv_target_alias=$ac_cv_host_alias
-ac_cv_target=`$ac_config_sub $ac_cv_target_alias` ||
-  AC_MSG_ERROR([$ac_config_sub $ac_cv_target_alias failed])
+[if test "x$target_alias" = x; then
+  ac_cv_target=$ac_cv_host
+else
+  ac_cv_target=`$ac_config_sub $target_alias` ||
+    AC_MSG_ERROR([$ac_config_sub $target_alias failed])
+fi
 ])
 _AC_CANONICAL_SPLIT([target])
 
