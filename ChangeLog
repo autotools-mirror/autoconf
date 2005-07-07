@@ -1,7 +1,5 @@
 2005-07-07  Stepan Kasal  <kasal@ucw.cz>
 
-	* tests/local.at (AT_CONFIG_CMP): Revert Paul's previous change.
-
 	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Report the full
 	path, too; insert a "===" to emphasize the line.
 
@@ -15,6 +13,28 @@
 	(AC_ARG_VAR): ... here.
 	(_AC_INIT_PREPARE): Call AC_SUBST for build_alias, host_alias and
 	  target_alias.
+
+	Keep a list of all precious variables and process them with one simple
+	for loop, instead of expanding all commands, or, OTOH, complicated
+	processing of output of "set".
+	* lib/autoconf/general.m4 (_AC_ARG_VAR_PRECIOUS): Acumulate the
+	variable names in new macro...
+	(_AC_PRECIOUS_VARS): ... which will be assigned to ac_precious_vars.
+	(_AC_ARG_VAR_STORE): New macro which writes to diversion PARSE_ARGS
+	  a loop to assign all ac_env_* and ac_cv_env_* variables.
+	(_AC_ARG_VAR_VALIDATE): Use shell variable ac_precious_vars, divert
+	  to INIT_PREPARE.
+	(_AC_INIT_DEFAULTS): At the end, if _AC_PRECIOUS_VARS is set, assign
+	  its value to shell variable ac_precious_vars and call
+	  _AC_ARG_VAR_STORE and _AC_ARG_VAR_VALIDATE.
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Don't call
+	  _AC_ARG_VAR_VALIDATE.
+
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Move AC_LANG_PUSH(C)
+	  and the AC_SUBSTs ...
+	(AC_INIT): ... here.
+
+	* tests/local.at (AT_CONFIG_CMP): Revert Paul's previous change.
 
 2005-07-06  Paul Eggert  <eggert@cs.ucla.edu>
 

@@ -403,7 +403,12 @@ AC_SUBST([PACKAGE_BUGREPORT],
 m4_divert_pop([DEFAULTS])dnl
 m4_wrap([m4_divert_text([DEFAULTS],
 [ac_subst_vars='m4_ifdef([_AC_SUBST_VARS],  [m4_defn([_AC_SUBST_VARS])])'
-ac_subst_files='m4_ifdef([_AC_SUBST_FILES], [m4_defn([_AC_SUBST_FILES])])'])])dnl
+ac_subst_files='m4_ifdef([_AC_SUBST_FILES], [m4_defn([_AC_SUBST_FILES])])'
+m4_ifdef([_AC_PRECIOUS_VARS],
+  [_AC_ARG_VAR_STORE[]dnl
+   _AC_ARG_VAR_VALIDATE[]dnl
+   ac_precious_vars='m4_defn([_AC_PRECIOUS_VARS])'])dnl
+])])dnl
 ])# _AC_INIT_DEFAULTS
 
 
@@ -1114,8 +1119,8 @@ _ACEOF
 # 1. Trap and clean up various tmp files.
 # 2. Set up the fd and output files
 # 3. Remember the options given to `configure' for `config.status --recheck'.
-# 4. Ensure a correct environment
-# 5. Required macros (cache, default AC_SUBST etc.)
+# 4. Initiates confdefs.h
+# 5. Loads site and cache files
 m4_define([_AC_INIT_PREPARE],
 [m4_divert_push([INIT_PREPARE])dnl
 
@@ -1257,18 +1262,6 @@ AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT], ["$PACKAGE_BUGREPORT"],
 # Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
 AC_CACHE_LOAD
-_AC_ARG_VAR_VALIDATE
-_AC_ARG_VAR_PRECIOUS([build_alias])AC_SUBST([build_alias])dnl
-_AC_ARG_VAR_PRECIOUS([host_alias])AC_SUBST([host_alias])dnl
-_AC_ARG_VAR_PRECIOUS([target_alias])AC_SUBST([target_alias])dnl
-AC_LANG_PUSH(C)
-
-dnl Substitute for predefined variables.
-AC_SUBST([DEFS])dnl
-AC_SUBST([ECHO_C])dnl
-AC_SUBST([ECHO_N])dnl
-AC_SUBST([ECHO_T])dnl
-AC_SUBST([LIBS])dnl
 m4_divert_pop([INIT_PREPARE])dnl
 ])# _AC_INIT_PREPARE
 
@@ -1312,6 +1305,18 @@ _AC_INIT_PREPARE
 _AC_INIT_NOTICE
 _AC_INIT_COPYRIGHT
 m4_ifval([$2], , [m4_ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
+dnl
+dnl Substitute for predefined variables.
+AC_SUBST([DEFS])dnl
+AC_SUBST([ECHO_C])dnl
+AC_SUBST([ECHO_N])dnl
+AC_SUBST([ECHO_T])dnl
+AC_SUBST([LIBS])dnl
+_AC_ARG_VAR_PRECIOUS([build_alias])AC_SUBST([build_alias])dnl
+_AC_ARG_VAR_PRECIOUS([host_alias])AC_SUBST([host_alias])dnl
+_AC_ARG_VAR_PRECIOUS([target_alias])AC_SUBST([target_alias])dnl
+dnl
+AC_LANG_PUSH(C)
 ])
 
 
@@ -1398,7 +1403,14 @@ _AC_ARG_VAR_PRECIOUS([$1])dnl
 # _AC_ARG_VAR_PRECIOUS(VARNAME)
 # -----------------------------
 # Declare VARNAME is precious.
-#
+m4_define([_AC_ARG_VAR_PRECIOUS],
+[m4_append_uniq([_AC_PRECIOUS_VARS], [$1], [
+])dnl
+])
+
+
+# _AC_ARG_VAR_STORE
+# -----------------
 # We try to diagnose when precious variables have changed.  To do this,
 # make two early snapshots (after the option processing to take
 # explicit variables into account) of those variables: one (ac_env_)
@@ -1409,12 +1421,14 @@ _AC_ARG_VAR_PRECIOUS([$1])dnl
 #
 # In subsequent runs, after having loaded the cache, compare
 # ac_cv_env_foo against ac_env_foo.  See _AC_ARG_VAR_VALIDATE.
-m4_define([_AC_ARG_VAR_PRECIOUS],
-[m4_divert_once([PARSE_ARGS],
-[ac_env_$1_set=${$1+set}
-ac_env_$1_value=$$1
-ac_cv_env_$1_set=${$1+set}
-ac_cv_env_$1_value=$$1])dnl
+m4_define([_AC_ARG_VAR_STORE],
+[m4_divert_text([PARSE_ARGS],
+[for ac_var in $ac_precious_vars; do
+  eval ac_env_${ac_var}_set=\${${ac_var}+set}
+  eval ac_env_${ac_var}_value=\$${ac_var}
+  eval ac_cv_env_${ac_var}_set=\${${ac_var}+set}
+  eval ac_cv_env_${ac_var}_value=\$${ac_var}
+done])dnl
 ])
 
 
@@ -1432,11 +1446,11 @@ ac_cv_env_$1_value=$$1])dnl
 # So we check that `ac_env_' and `ac_cv_env_' are consistent.  If
 # they aren't, die.
 m4_define([_AC_ARG_VAR_VALIDATE],
+[m4_divert_text([INIT_PREPARE],
 [# Check that the precious variables saved in the cache have kept the same
 # value.
 ac_cache_corrupted=false
-for ac_var in `(set) 2>&1 |
-	       sed -n 's/^ac_env_\([[a-zA-Z_0-9]]*\)_set=.*/\1/p'`; do
+for ac_var in $ac_precious_vars; do
   eval ac_old_set=\$ac_cv_env_${ac_var}_set
   eval ac_new_set=\$ac_env_${ac_var}_set
   eval ac_old_val=\$ac_cv_env_${ac_var}_value
@@ -1475,7 +1489,7 @@ done
 if $ac_cache_corrupted; then
   AS_MESSAGE([error: changes in the environment can compromise the build], 2)
   AS_ERROR([run `make distclean' and/or `rm $cache_file' and start over])
-fi
+fi])dnl
 ])# _AC_ARG_VAR_VALIDATE
 
 
