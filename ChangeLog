@@ -34,6 +34,9 @@
 	  and the AC_SUBSTs ...
 	(AC_INIT): ... here.
 
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Changed the title of
+	  the ac_subst_files section in config.log.
+
 	* tests/local.at (AT_CONFIG_CMP): Revert Paul's previous change.
 
 2005-07-06  Paul Eggert  <eggert@cs.ucla.edu>

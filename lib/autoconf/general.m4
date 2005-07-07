@@ -1211,7 +1211,7 @@ trap 'exit_status=$?
     echo
 
     if test -n "$ac_subst_files"; then
-      AS_BOX([Output files.])
+      AS_BOX([File substitutions.])
       echo
       for ac_var in $ac_subst_files
       do
