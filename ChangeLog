@@ -2,6 +2,9 @@
 
 	* tests/local.at (AT_CONFIG_CMP): Revert Paul's previous change.
 
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Report the full
+	path, too; insert a "===" to emphasize the line.
+
 2005-07-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: New macro AC_C_TYPEOF.
