@@ -1,3 +1,7 @@
+2005-07-07  Stepan Kasal  <kasal@ucw.cz>
+
+	* tests/local.at (AT_CONFIG_CMP): Revert Paul's previous change.
+
 2005-07-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: New macro AC_C_TYPEOF.
@@ -12,12 +16,13 @@
 
 2005-07-05  Stepan Kasal  <kasal@ucw.cz>
 
+	Fix my changes from 2005-07-01; reported by Noah Misch.
 	* lib/autoconf/status.m4 (_AC_CONFIG_DEPENDENCIES): Fix the
 	description, the macro now accepts only a single tag.
 	(_AC_CONFIG_UNIQUE): Likewise; s/AC_File/[$1]/
 
-2005-07-05  Stepan Kasal  <kasal@ucw.cz>
-
+	Fix cases when the varsions of Autoconf and Autotest don't match.
+	Reported by Noah Misch.
 	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Set also
 	at_top_builddir, for compatibility with older autotest.
 	* lib/autotest/general.m4 (AT_INIT): If at_top_build_prefix
@@ -67,13 +72,8 @@
 
 	* doc/autoconf.texi (Configuration Headers): Change the explanation
 	about #include <config.h>.
-
-2005-06-30  Stepan Kasal  <kasal@ucw.cz>
-
-	* lib/autoconf/status.m4: Fix the order of the "sections", so that it
-	matches the order of execution.  No code changed.
-
-2005-06-30  Stepan Kasal  <kasal@ucw.cz>
+	(Generic Functions): Mention the Gnulib project.
+	(Limitations of Usual Tools) <sed>: Another minor rephrasing.
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Use a here
 	document to output the default config_* lists to config.status.
@@ -81,16 +81,14 @@
 	Likewise for --header; moreover, recognize --he and --h as shortcuts
 	for --help in that case.
 
+	* lib/autoconf/status.m4: Fix the order of the "sections", so that it
+	matches the order of execution.  No code changed.
+
 2005-06-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Fix also for
 	single-quoted -cmdline argument in Portland Group compiler.
 	Reported against LAM by Ole Holm Nielsen <Ole.H.Nielsen@fysik.dtu.dk>.
-
-2005-06-30  Stepan Kasal  <kasal@ucw.cz>
-
-	* doc/autoconf.texi (Generic Functions): Mention the Gnulib project.
-	(Limitations of Usual Tools) <sed>: Another minor rephrasing.
 
 2005-06-30  Alexandre Duret-Lutz  <adl@gnu.org>
 
@@ -103,15 +101,13 @@
 
 2005-06-29  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (AC_ARG_VAR): Move next to _AC_ARG_PRECIOUS.
+
 	* lib/autoconf/general.m4 (AC_SUBST_TRACE): New macro, to be traced
 	instead of AC_SUBST; proposed by Alexandre Duret-Lutz.
 	(AC_SUBST): Call it.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES): Call AC_SUBST_TRACE for
 	the directory specific variables; but don't call it for configure_input.
-
-2005-06-29  Stepan Kasal  <kasal@ucw.cz>
-
-	* lib/autoconf/general.m4 (AC_ARG_VAR): Move next to _AC_ARG_PRECIOUS.
 
 2005-06-28  Derek Price  <derek@ximbiot.com>
 
@@ -161,8 +157,6 @@
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Remove an old comment.
 
-2005-06-22  Stepan Kasal  <kasal@ucw.cz>
-
 	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT): Use AC_SUBST/2.
 
 2005-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
@@ -176,8 +170,6 @@
 	(Special Shell Variables): Fix sed code this in the example.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS): Likewise; and fix a typo.
 	* lib/autotest/general.m4 (AT_ARG_OPTION): Fix typo in the description.
-
-2005-06-21  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/m4sugar/m4sugar.m4 (m4_split): If the parameter is empty,
 	expand to the empty list.  Don't use two pairs of m4_changequote,
@@ -290,7 +282,7 @@
 	match this misbehaviour.  As a consequence of this:
 	 - m4_foreach([x], [], [foo]) expanded to `foo', while
 	 - the expansion of m4_foreach([x], [[]], [foo]) was empty.
-	I fixed this bug.
+	This bug has been fixed:
 
 	* lib/m4sugar/m4sugar.m4 (m4_cdr): If only one argument is given,
 	  expand to an empty string; print error msg if called without
