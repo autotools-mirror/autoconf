@@ -1,3 +1,8 @@
+2005-07-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/local.at (AT_CONFIG_CMP): Ignore lines like "LIBS=''" too.
+	This is a corrected version of yesterday's patch.
+
 2005-07-07  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Report the full
