@@ -407,7 +407,9 @@ ac_subst_files='m4_ifdef([_AC_SUBST_FILES], [m4_defn([_AC_SUBST_FILES])])'
 m4_ifdef([_AC_PRECIOUS_VARS],
   [_AC_ARG_VAR_STORE[]dnl
    _AC_ARG_VAR_VALIDATE[]dnl
-   ac_precious_vars='m4_defn([_AC_PRECIOUS_VARS])'])dnl
+   ac_precious_vars='m4_defn([_AC_PRECIOUS_VARS])'])
+m4_ifdef([_AC_LIST_SUBDIRS],
+  [ac_subdirs_all='m4_defn([_AC_LIST_SUBDIRS])'])dnl
 ])])dnl
 ])# _AC_INIT_DEFAULTS
 
@@ -1868,7 +1870,7 @@ rm -f confcache[]dnl
 # Should be dnl'ed.  Try to catch common mistakes.
 m4_defun([AC_CACHE_VAL],
 [m4_bmatch([$2], [AC_DEFINE],
-	   [AC_DIAGNOSE(syntax,
+	   [AC_DIAGNOSE([syntax],
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AS_VAR_SET_IF([$1],

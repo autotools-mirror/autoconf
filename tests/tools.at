@@ -510,7 +510,7 @@ AC_CANONICAL_TARGET([])
 # The doc says 27 is a valid fubar.
 fubar=27
 AC_CONFIG_FILES([Makefile])
-AC_CONFIG_COMMANDS([default],[[echo $fubar]],[[fubar=$fubar]])
+AC_CONFIG_COMMANDS([default],[echo $fubar],[fubar=$fubar])
 AC_OUTPUT
 ]])
 
