@@ -1,3 +1,7 @@
+2005-07-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* Makefile.maint: Update from Bison.
+
 2005-07-25  Stepan Kasal  <kasal@ucw.cz>
 
 	Rewrite substantial part of lib/autoconf/status.m4.
