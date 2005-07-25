@@ -1431,7 +1431,7 @@ m4_define([m4_flatten],
 #
 # This macro is robust to active symbols.
 #    m4_define(active, ACTIVE)
-#    m4_strip([  active 	 	active ])end
+#    m4_strip([  active <tab> <tab>active ])end
 #    => active activeend
 #
 # Because we want to preserve active symbols, STRING must be double-quoted.
