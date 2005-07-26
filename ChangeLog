@@ -20,7 +20,7 @@
 	_AC_OUTPUT_LINKS, _AC_OUTPUT_COMMANDS): Renamed to ...
 	(_AC_OUTPUT_FILE, _AC_OUTPUT_HEADER, _AC_OUTPUT_LINK,
 	_AC_OUTPUT_COMMAND): ..., respectively.  These macros no longer
-	contains the initialization, nor the for loop, nor the associated
+	contain the initialization, nor the for loop, nor the associated
 	commands; all these go to ...
 	(_AC_OUTPUT_MAIN_LOOP): ... this new macro, called from
 	_AC_OUTPUT_CONFIG_STATUS.
