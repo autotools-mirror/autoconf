@@ -615,7 +615,7 @@
 	* lib/m4sugar/m4sugar.m4 (m4_bmatch): Halt with error if we don't get
 	  enough arguments, similarly as in m4_bpatsubsts.
 
-2005-05-12  Stepan Kasal  <address@hidden>
+2005-05-12  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/status.m4 (_AC_SRCDIRS): Simplify the computation
 	  of absolute paths.
@@ -946,7 +946,7 @@
 	* tests/local.at: Add Autoconf test suite copyright notice.
 	* doc/autoconf.texi (Writing testsuite.at): Document AT_COPYRIGHT.
 
-2005-02-04  Bruno Haible <bruno@clisp.org>
+2005-02-04  Bruno Haible  <bruno@clisp.org>
 	and Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): New mkstemp entry.
@@ -964,7 +964,7 @@
 	(AT_CAPTURE_FILE): Use space-backslash-newline as a separator, not
 	space.
 
-2005-02-03  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+2005-02-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_WORK): Move func_* to
 	as_func_*.  Add test to check whether positional parameters
@@ -982,7 +982,7 @@
 	* lib/autoconf/general.m4 (_AC_INIT_HELP, _AC_INIT_VERSION): Likewise.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Likewise.
 
-2005-02-02  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+2005-02-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Limitations of Usual Tools):
 	Unicos 9 sed limitations.
@@ -1141,7 +1141,7 @@
 	(m4_require): If the macro hasn't been expanded yet, call ...
 	(_m4_require_call): this new macro.
 
-2005-01-03  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+2005-01-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE, _AC_ARG_VAR_VALIDATE):
 	Workarounds for documented `case' limitations.
@@ -1209,7 +1209,7 @@
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Test candidate
 	shells in subshell, to avoid noise from ash.  (trivial change)
 
-2004-12-22  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+2004-12-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Limitations of Builtins) <case>: Mention
 	problems with SunOS ksh and backslash escaping, Bourne shells and
@@ -1479,7 +1479,7 @@
 	* NEWS: Mention that bugs.gnu.org is kaput.
 	* README: Likewise.  Mention where mailing list archives can be found.
 
-2004-11-28  Stepan Kasal  <address@ucw.cz>
+2004-11-28  Stepan Kasal  <kasal@ucw.cz>
 
 	* HACKING: Refer to "coreutils", not "File, Shell or Text utils".
 	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): A typo in the comment.
@@ -1840,7 +1840,7 @@
 	* configure.ac (AC_PROG_GREP): Add.
 	* lib/freeze.mk (GREP): New macro.
 
-2004-05-02  Eric Sunshine <sunshine@sunshineco.com>
+2004-05-02  Eric Sunshine  <sunshine@sunshineco.com>
 
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Consult $SHELL as
 	a possible candidate only after all others fail, rather than
@@ -1854,7 +1854,7 @@
 	problems in Automake, it nevertheless makes sense to avoid
 	introducing unnecessary incompatibilites.
 
-2004-04-22  Albert Chin-A-Young <china@thewrittenword.com>,
+2004-04-22  Albert Chin-A-Young  <china@thewrittenword.com>,
 	    Gary V. Vaughan  <gary@gnu.org>
 
 	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Don't guess
@@ -2072,9 +2072,9 @@
 	warning message when the third argument includes $0
 	(reported by Alexandre Duret-Lutz).
 
-2004-01-30  Paolo Bonzini <bonzini@gnu.org>
-	    Eric Sunshine <sunshine@sunshineco.com>
-	    Paul Eggert <eggert@twinsun.com>
+2004-01-30  Paolo Bonzini  <bonzini@gnu.org>
+	    Eric Sunshine  <sunshine@sunshineco.com>
+	    Paul Eggert  <eggert@twinsun.com>
 
 	* lib/m4sugar/m4sh.m4 (M4SH-SANITIZE): New diversion.
 	(AS_INIT): Output shell initialization there. Removed optional
@@ -2129,8 +2129,8 @@
 	the 2003-05-22 change, which removed the older years from the list.
 	* lib/autoconf/status.m4 (AC_OUTPUT): Update copyright date to 2004.
 
-2004-01-27  Gary V. Vaugan  <gary@gnu.org>
-	    Albert Chin-A-Young <china@thewrittenword.com>
+2004-01-27  Gary V. Vaughan  <gary@gnu.org>
+	    Albert Chin-A-Young  <china@thewrittenword.com>
 
 	* lib/autoconf/programs.m4 (AC_PROG_GREP): New macro to test for a
 	grep or ggrep program in PATH that accepts as long lines as
@@ -2188,7 +2188,7 @@
 	* tests/mktests.sh: Update copyright date to 2004, since some tests
 	have changed in 2004.
 
-2004-01-23  Gary V. Vaugan  <gary@gnu.org>
+2004-01-23  Gary V. Vaughan  <gary@gnu.org>
 
 	* lib/autoconf/programs.m4 (AC_PROG_SED):  New macro to test for a
 	non-truncating sed or gsed program in PATH.
@@ -2395,7 +2395,7 @@
 	* TODO: Remove already done things.  Update the part about finding
 	tools for the target.
 
-2003-11-24  Paolo Bonzini <bonzini@gnu.org>
+2003-11-24  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/autoconf/headers.m4 (AC_USG, AC_MEMORY_H, AC_DIR_HEADER):
 	Make wording more consistent.
@@ -2785,7 +2785,7 @@
 	versus test -L issues.
 
 2003-09-23  Daniel Jacobowitz  <drow@mvista.com> and
-	    Paul Eggert <eggert@twinsun.com>
+	    Paul Eggert  <eggert@twinsun.com>
 
 	Trivial change to support GCC's configuration procedure.
 	* lib/autoconf/c.m4 (AC_PROG_CPP_WERROR): New macro.
@@ -3119,7 +3119,7 @@
 	* doc/autoconf.texi (autom4te Invocation): Mention
 	Autoconf-without-aclocal-m4.
 
-2003-08-18  Derek Price <derek@ximbiot.com>
+2003-08-18  Derek Price  <derek@ximbiot.com>
 
 	* doc/autoconf.texi (Writing testsuite.at): Document RUN-IF-FAIL &
 	RUN-IF-PASS optional arguments.
@@ -3319,7 +3319,7 @@
 	White spaces cleanup.
 
 2003-05-22  Jim Meyering  <jim@meyering.net>
-	    Paul Eggert <eggert@twinsun.com>
+	    Paul Eggert  <eggert@twinsun.com>
 
 	* lib/autoconf/c.m4 (_AC_PROG_CXX_EXIT_DECLARATION):
 	Remove `#include <stdlib.h>' from the list; we should never
@@ -6937,7 +6937,7 @@
 	Allow expression to return any value that can fit into unsigned long
 	(not int, as before).  Check for output errors.
 
-2001-09-17  Bruno Haible <haible@ilog.fr>
+2001-09-17  Bruno Haible  <haible@ilog.fr>
 
 	* lib/autoconf/c.m4: (AC_LANG_INT_SAVE(C)):
 	Always include <stdio.h> and <stdlib.h>. Evaluate
@@ -8620,7 +8620,7 @@
 	inttypes.h is missing if it conflicts with sys/types.h, as on IRIX
 	5.3.
 
-2001-06-23  Paolo Bonzini <bonzini@gnu.org>
+2001-06-23  Paolo Bonzini  <bonzini@gnu.org>
 
 	* acgeneral.m4 (_AC_OUTPUT_CONFIG_STATUS): Defer parsing of
 	config.status targets to after the evaluation of the INIT-CMDS.
