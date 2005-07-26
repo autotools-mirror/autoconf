@@ -2,6 +2,9 @@
 
 	* Makefile.maint: Update from Bison.
 
+	* lib/m4sugar/m4sugar.m4 (m4_strip): Comment fix---change tab to
+	"<tab>" in comment, so that the point is understandable.
+
 2005-07-25  Stepan Kasal  <kasal@ucw.cz>
 
 	Rewrite substantial part of lib/autoconf/status.m4.
