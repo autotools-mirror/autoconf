@@ -918,8 +918,9 @@ if test "$no_recursion" != yes; then
     # parts of a large source tree are present.
     test -d $srcdir/$ac_dir || continue
 
-    ac_dir_full=`pwd`/$ac_dir
-    AC_MSG_NOTICE([=== configuring in $ac_dir ($ac_dir_full)])
+    ac_msg="=== configuring in $ac_dir (`pwd`/$ac_dir"
+    _AS_ECHO_LOG([$ac_msg])
+    _AS_ECHO([$ac_msg])
     AS_MKDIR_P(["$ac_dir"])
     _AC_SRCDIRS(["$ac_dir"])
 

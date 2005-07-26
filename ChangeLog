@@ -1,3 +1,8 @@
+2005-07-26  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): The message is now
+	prefixed by mere "===", not "configure: === ".
+
 2005-07-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* Makefile.maint: Update from Bison.
