@@ -1334,16 +1334,18 @@ m4_define([AT_CHECK_NOESCAPE],
 # examine COMMANDS unexpanded.
 m4_define([_AT_DECIDE_TRACEABLE],
 [dnl Utility macros.
-m4_pushdef([at_reason])[]dnl
 m4_pushdef([at_lf], [
 ])[]dnl
 dnl
 dnl Examine COMMANDS for a reason to never trace COMMANDS.
-m4_bmatch([$1],
-          [`.*`], [m4_pushdef([at_reason],  [a `...` command substitution])],
-          [\$(],  [m4_pushdef([at_reason], [a $(...) command substitution])],
-          [\${],  [m4_pushdef([at_reason], [a ${...} parameter expansion])],
-          at_lf,  [m4_pushdef([at_reason], [an embedded newline])])[]dnl
+m4_pushdef([at_reason],
+	   m4_bmatch([$1],
+	             [`.*`], [[a `...` command substitution]],
+	             [\$(],  [[a $(...) command substitution]],
+	             [\${],  [[a ${...} parameter expansion]],
+	             at_lf,  [[an embedded newline]],
+		     [[]]dnl No reason.
+))dnl
 dnl
 m4_ifval(m4_defn([at_reason]),
 [echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'],
