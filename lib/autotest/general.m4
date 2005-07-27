@@ -1432,14 +1432,11 @@ m4_case([$3],
 	[echo >>"$at_stdout"; echo "m4_ifval([$7],[AS_ESCAPE([$3])],[$3])" | $at_diff - "$at_stdout" || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
-m4_case([$2],
-  [77],
+m4_if([$2], [77],
     [],
-    [   77) echo 77 > "$at_status_file"
-            exit 77;;
+    [   77) echo 77 > "$at_status_file"; exit 77;;
 ])dnl
-m4_case([$2],
-  [ignore],
+m4_if([$2], [ignore],
     [   *);;],
     [   m4_default([$2], [0])) ;;
    *) echo "$at_srcdir/AT_LINE: exit code was $at_status, expected m4_default([$2], [0])"

@@ -2,6 +2,7 @@
 
 	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): The symbol at_reason
 	was pushdef'ed twice while popped only once.  Push it only once.
+	(_AT_CHECK): Cosmetic changes to the "case $at_status" command.
 
 2005-07-26  Stepan Kasal  <kasal@ucw.cz>
 
