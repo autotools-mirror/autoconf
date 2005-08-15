@@ -241,3 +241,53 @@ AT_CHECK_AT_TITLE_CHAR([Backquote],    [`], [:])
 AT_CHECK_AT_TITLE_CHAR([Single-quote], ['], [:])
 AT_CHECK_AT_TITLE_CHAR([Double-quote], ["], [:])
 AT_CHECK_AT_TITLE_CHAR([Backslash],    [\])
+
+
+## --------- ##
+## Keywords. ##
+## --------- ##
+AT_SETUP([Keywords])
+AT_KEYWORDS([autotest])
+AT_XFAIL_IF(:)
+
+AT_DATA([k.at],
+[[m4_define([AT_PACKAGE_STRING],[k])
+m4_define([AT_PACKAGE_BUGREPORT],[devnull])
+AT_INIT
+AT_SETUP(none)
+AT_CHECK(:)
+AT_CLEANUP
+AT_SETUP(first)
+AT_KEYWORDS(key1)
+AT_CHECK(:)
+AT_CLEANUP
+AT_SETUP(second)
+AT_KEYWORDS(key2)
+AT_CHECK(:)
+AT_CLEANUP
+AT_SETUP(both)
+AT_KEYWORDS(key1)
+AT_KEYWORDS(key2)
+AT_CHECK(:)
+AT_CLEANUP
+]])
+AT_CHECK_AUTOM4TE([--language=autotest -o k k.at])
+
+# AT_CHECK_EGREP(PATTERN, STATUS, COUNT)
+m4_define([AT_CHECK_EGREP],
+[AT_CHECK([$EGREP -c '$1' stdout], $2, [$3
+], ignore)
+])
+
+# AT_CHECK_KEYS(TESTSUITE-OPTIONS, PATTERN1, COUNT1, PATTERN2, COUNT2)
+m4_define([AT_CHECK_KEYS],
+[AT_CHECK([./k $1], 0, [stdout])
+AT_CHECK_EGREP([$2], 0, [$3])
+AT_CHECK_EGREP([$4], 1, [$5])
+])
+
+AT_CHECK_KEYS([-k key1], [first|both], [2], [none|second], [0])
+AT_CHECK_KEYS([-k key2], [second|both], [2], [none|first], [0])
+AT_CHECK_KEYS([-k key1,key2], [both], [1], [none|first|second], [0])
+AT_CHECK_KEYS([-k key1 -k key2], [first|second|both], [3], [none], [0])
+AT_CLEANUP

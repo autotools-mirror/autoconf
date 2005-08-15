@@ -1,3 +1,12 @@
+2005-08-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/autoscan.at (autoscan): New file.
+	* tests/suite.at: Use it.
+	* tests/Makefile.am (TESTSUITE_HAND_AT): Add it.
+	Reported against Libtool by Gideon Go <gideon.go@gmail.com>.
+
+	* tests/autotest.at (Keywords): Test keywords combinations.
+
 2005-08-12  Stepan Kasal  <kasal@ucw.cz>
 
 	* Makefile.maint (GZIP_ENV): When checking the help text of gzip,

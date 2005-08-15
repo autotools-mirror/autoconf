@@ -72,3 +72,6 @@ m4_include([aclibs.at])
 
 # Compatibility with foreign tools.
 m4_include([foreign.at])
+
+# Autoscan test
+m4_include([autoscan.at])

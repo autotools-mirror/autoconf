@@ -91,6 +91,7 @@ TESTSUITE_HAND_AT = \
 	base.at tools.at torture.at \
 	compile.at c.at fortran.at \
 	semantics.at \
+	autoscan.at \
 	foreign.at
 
 TESTSUITE_AT = $(TESTSUITE_GENERATED_AT) $(TESTSUITE_HAND_AT)
