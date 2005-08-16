@@ -454,7 +454,10 @@ AC_DEFUN([AC_CONFIG_SRCDIR],
 # _AC_INIT_DIRCHECK
 # -----------------
 # Set ac_pwd, and sanity-check it and the source and installation directories.
-m4_define([_AC_INIT_DIRCHECK],
+#
+# (This macro is AC_REQUIREd by _AC_INIT_SRCDIR, so it has to be AC_DEFUNed.)
+#
+AC_DEFUN([_AC_INIT_DIRCHECK],
 [m4_divert_push([PARSE_ARGS])dnl
 
 ac_pwd=`pwd` && test -n "$ac_pwd" &&
@@ -470,8 +473,12 @@ m4_divert_pop([PARSE_ARGS])dnl
 # _AC_INIT_SRCDIR
 # ---------------
 # Compute `srcdir' based on `$ac_unique_file'.
-m4_define([_AC_INIT_SRCDIR],
-[m4_divert_push([PARSE_ARGS])dnl
+#
+# (We have to AC_DEFUN it, since we use AC_REQUIRE.)
+#
+AC_DEFUN([_AC_INIT_SRCDIR],
+[AC_REQUIRE([_AC_INIT_DIRCHECK])dnl
+m4_divert_push([PARSE_ARGS])dnl
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -489,11 +496,17 @@ if test ! -r "$srcdir/$ac_unique_file"; then
   test "$ac_srcdir_defaulted" = yes && srcdir="$ac_confdir or .."
   AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $srcdir])
 fi
-(cd $srcdir && test -r "./$ac_unique_file") 2>/dev/null ||
-  AC_MSG_ERROR([sources are in $srcdir, but `cd $srcdir' does not work])
-dnl Remove unnecessary trailing slashes from srcdir.
-dnl Double slashes in file names in object file debugging info
-dnl mess up M-x gdb in Emacs.
+ac_msg="sources are in $srcdir, but \`cd $srcdir' does not work"
+ac_abs_confdir=`(
+	cd $srcdir && test -r "./$ac_unique_file" || AC_MSG_ERROR([$ac_msg])
+	pwd)`
+# When building in place, set srcdir=.
+if test "$ac_abs_confdir" = "$ac_pwd"; then
+  srcdir=.
+fi
+# Remove unnecessary trailing slashes from srcdir.
+# Double slashes in file names in object file debugging info
+# mess up M-x gdb in Emacs.
 case $srcdir in
 */) srcdir=`expr "X$srcdir" : 'X\(.*[[^/]]\)' \| "X$srcdir" : 'X\(.*\)'`;;
 esac
@@ -1298,8 +1311,8 @@ AS_PREPARE
 m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
 _AC_INIT_DEFAULTS
 _AC_INIT_PARSE_ARGS
-_AC_INIT_SRCDIR
 _AC_INIT_DIRCHECK
+_AC_INIT_SRCDIR
 _AC_INIT_HELP
 _AC_INIT_VERSION
 _AC_INIT_CONFIG_LOG

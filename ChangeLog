@@ -1,3 +1,13 @@
+2005-08-16  Stepan Kasal  <kasal@ucw.cz>
+
+	When building in place, set srcdir="."; suggested by Tim Van Holder.
+
+	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR): Do this; to recognize
+	  build in place, we need ac_pwd, and thus have to AC_REQUIRE ...
+	(_AC_INIT_DIRCHECK): ... this macro and AC_DEFUN both of them.
+	* lib/autoconf/status.m4 (_AC_SRCDIRS): Fix a comment: srcdir="."
+	  does not mean "no --srcdir option".
+
 2005-08-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/autoscan.at (autoscan): New file.

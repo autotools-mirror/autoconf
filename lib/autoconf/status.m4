@@ -121,7 +121,7 @@ ac_abs_builddir=$ac_pwd$ac_dir_suffix
 ac_top_builddir=$ac_top_build_prefix
 
 case $srcdir in
-  .)  # No --srcdir option.  We are building in place.
+  .)  # We are building in place.
     ac_srcdir=.
     ac_top_srcdir=$ac_top_builddir_sub
     ac_abs_top_srcdir=$ac_pwd ;;
