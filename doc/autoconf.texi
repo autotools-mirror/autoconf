@@ -7330,7 +7330,7 @@ newlines.  That is, do this:
 
 @example
 AC_CHECK_HEADER([elf.h],
-  [AC_DEFINE([SVR4], [1], [System V Release 4]) LIBS="$LIBS -lelf"])
+  [AC_DEFINE([SVR4], [1], [System V Release 4]) LIBS="-lelf $LIBS"])
 @end example
 
 @noindent
@@ -7339,7 +7339,7 @@ or this:
 @example
 AC_CHECK_HEADER([elf.h],
   [AC_DEFINE([SVR4], [1], [System V Release 4])
-   LIBS="$LIBS -lelf"])
+   LIBS="-lelf $LIBS"])
 @end example
 
 @noindent
@@ -7347,7 +7347,7 @@ instead of this:
 
 @example
 AC_CHECK_HEADER([elf.h],
-  [AC_DEFINE([SVR4], [1], [System V Release 4]); LIBS="$LIBS -lelf"])
+  [AC_DEFINE([SVR4], [1], [System V Release 4]); LIBS="-lelf $LIBS"])
 @end example
 
 @node Setting Output Variables
@@ -15340,7 +15340,7 @@ case "$DEFS" in
   saved_LIBS="$LIBS"
   for lib in bsd socket inet; do
     AC_CHECKING(for syslog in -l$lib)
-    LIBS="$saved_LIBS -l$lib"
+    LIBS="-l$lib $saved_LIBS"
     AC_HAVE_FUNCS(syslog)
     case "$DEFS" in
     *-DHAVE_SYSLOG*) break ;;
@@ -15359,7 +15359,7 @@ if test $ac_cv_func_syslog = no; then
   # syslog is not in the default libraries.  See if it's in some other.
   for lib in bsd socket inet; do
     AC_CHECK_LIB([$lib], [syslog], [AC_DEFINE([HAVE_SYSLOG])
-      LIBS="$LIBS -l$lib"; break])
+      LIBS="-l$lib $LIBS"; break])
   done
 fi
 @end example
@@ -15846,27 +15846,27 @@ subscribing to the Autoconf mailing lists.}
 
 It is paradoxical that portable projects depend on nonportable tools
 to run their test suite.  Autoconf by itself is the paragon of this
-problem: although it aims at perfectly portability, up to 2.13, its
+problem: although it aims at perfectly portability, up to 2.13 its
 test suite was using Deja@acronym{GNU}, a rich and complex testing
 framework, but which is far from being standard on Posix systems.
 Worse yet, it was likely to be missing on the most fragile platforms,
 the very platforms that are most likely to torture Autoconf and
 exhibit deficiencies.
 
-To circumvent this problem many package maintainers have developed their
+To circumvent this problem, many package maintainers have developed their
 own testing framework, based on simple shell scripts whose sole outputs
 are exit status values describing whether the test succeeded.  Most of
 these tests share common patterns, and this can result in lots of
 duplicated code and tedious maintenance.
 
 Following exactly the same reasoning that yielded to the inception of
-Autoconf, Autotest provides a test suite generation frame work, based on
-M4 macros, building a portable shell script.  The suite itself is
+Autoconf, Autotest provides a test suite generation framework, based on
+M4 macros building a portable shell script.  The suite itself is
 equipped with automatic logging and tracing facilities which greatly
 diminish the interaction with bug reporters, and simple timing reports.
 
 Autoconf itself has been using Autotest for years, and we do attest that
-it has considerably improved the strength of the test suite, and the
+it has considerably improved the strength of the test suite and the
 quality of bug reports.  Other projects are known to use some generation
 of Autotest, such as Bison, Free Recode, Free Wdiff, @acronym{GNU} Tar, each of
 them with different needs, and this usage has validated Autotest as a general
@@ -15900,7 +15900,7 @@ The whole validation suite is held in a file to be processed through
 @command{autom4te}, itself using @acronym{GNU} M4 under the scene, to
 produce a stand-alone Bourne shell script which then gets distributed.
 Neither @command{autom4te} nor @acronym{GNU} M4 are needed at
-the installer end.
+the installer's end.
 
 @cindex test group
 Each test of the validation suite should be part of some test group.  A
@@ -15948,7 +15948,7 @@ of debugging scripts has the purpose of easing the chase for bugs.
 @item a log of the run, named @file{testsuite.log}
 @end itemize
 
-In the ideal situation, none of the tests fail, and consequently, no
+In the ideal situation, none of the tests fail, and consequently no
 debugging directory is left behind for validation.
 
 It often happens in practice that individual tests in the validation
@@ -16011,22 +16011,22 @@ need, but therefore most of the time it contains all that is needed:
 @table @asis
 @item command line arguments
 @c akim s/to consist in/to consist of/
-A very bad Posix habit which is unfortunately widespread consists of
+A very bad but unfortunately widespread Posix habit consists of
 setting environment variables before the command, such as in
-@samp{CC=my-home-grown-cc ./testsuite}.  This results in the test suite
-not knowing this change, hence (i) it can't report it to you, and (ii)
+@samp{CC=my-home-grown-cc ./testsuite}.  The test suite will not
+know this change, hence (i) it cannot report it to you, and (ii)
 it cannot preserve the value of @code{CC} for subsequent runs.
 Autoconf faced exactly the same problem, and solved it by asking
 users to pass the variable definitions as command line arguments.
-Autotest requires this rule too, but has no means to enforce it; the log
-then contains a trace of the variables the user changed.
+Autotest requires this rule, too, but has no means to enforce it; the log
+then contains a trace of the variables that were changed by the user.
 
 @item @file{ChangeLog} excerpts
 The topmost lines of all the @file{ChangeLog}s found in the source
 hierarchy.  This is especially useful when bugs are reported against
 development versions of the package, since the version string does not
 provide sufficient information to know the exact state of the sources
-the user compiled.  Of course this relies on the use of a
+the user compiled.  Of course, this relies on the use of a
 @file{ChangeLog}.
 
 @item build machine
@@ -16056,13 +16056,13 @@ on the configuration itself.
 @section Writing @file{testsuite.at}
 
 The @file{testsuite.at} is a Bourne shell script making use of special
-Autotest M4 macros.  It often contains a call to @code{AT_INIT} nears
+Autotest M4 macros.  It often contains a call to @code{AT_INIT} near
 its beginning followed by one call to @code{m4_include} per source file
 for tests.  Each such included file, or the remainder of
 @file{testsuite.at} if include files are not used, contain a sequence of
-test groups.  Each test group begins with one call to @code{AT_SETUP},
-it contains an arbitrary number of shell commands or calls to
-@code{AT_CHECK}, and it completes with one call to @code{AT_CLEANUP}.
+test groups.  Each test group begins with a call to @code{AT_SETUP},
+then an arbitrary number of shell commands or calls to @code{AT_CHECK},
+and then completes with a call to @code{AT_CLEANUP}.
 
 @defmac AT_INIT (@ovar{name})
 @atindex{INIT}
@@ -16114,14 +16114,14 @@ of the test group being started.
 @atindex{KEYWORDS}
 Associate the space-separated list of @var{keywords} to the enclosing
 test group.  This makes it possible to run ``slices'' of the test suite.
-For instance if some of your test groups exercise some @samp{foo}
+For instance, if some of your test groups exercise some @samp{foo}
 feature, then using @samp{AT_KEYWORDS(foo)} lets you run
 @samp{./testsuite -k foo} to run exclusively these test groups.  The
 @var{title} of the test group is automatically recorded to
 @code{AT_KEYWORDS}.
 
 Several invocations within a test group accumulate new keywords.  In
-other words, don't fear registering several times the same keyword in a
+other words, don't fear registering the same keyword several times in a
 test group.
 @end defmac
 
@@ -16207,22 +16207,22 @@ keywords.
 
 @sp 1
 
-By default all the tests are performed (or described with
+By default all tests are performed (or described with
 @option{--list}) in the default environment first silently, then
 verbosely, but the environment, set of tests, and verbosity level can be
 tuned:
 
 @table @samp
 @item @var{variable}=@var{value}
-Set the environment @var{variable} to @var{value}.  Do not run
-@samp{FOO=foo ./testsuite} as debugging scripts would then run in a
+Set the environment @var{variable} to @var{value}.  Use this rather
+than @samp{FOO=foo ./testsuite} as debugging scripts would then run in a
 different environment.
 
 @cindex @code{AUTOTEST_PATH}
 The variable @code{AUTOTEST_PATH} specifies the testing path to prepend
 to @env{PATH}.  Relative directory names (not starting with
 @samp{/}) are considered to be relative to the top level of the
-package being built.  All the directories are made absolute, first
+package being built.  All directories are made absolute, first
 starting from the top level @emph{build} tree, then from the
 @emph{source} tree.  For instance @samp{./testsuite
 AUTOTEST_PATH=tests:bin} for a @file{/src/foo-1.0} source package built
@@ -16239,14 +16239,14 @@ selection.
 
 @item --keywords=@var{keywords}
 @itemx -k @var{keywords}
-Add to the selection the test groups which title or keywords (arguments
-to @code{AT_SETUP} or @code{AT_KEYWORDS}) match @emph{all} the keywords
+Add to the selection the test groups with title or keywords (arguments
+to @code{AT_SETUP} or @code{AT_KEYWORDS}) that match @emph{all} keywords
 of the comma separated list @var{keywords}.
 
 Running @samp{./testsuite -k autoupdate,FUNC} will select all the tests
 tagged with @samp{autoupdate} @emph{and} @samp{FUNC} (as in
 @samp{AC_CHECK_FUNC}, @samp{AC_FUNC_FNMATCH}, etc.)@: while
-@samp{./testsuite -k autoupdate -k FUNC} runs all the tests tagged with
+@samp{./testsuite -k autoupdate -k FUNC} will select all tests tagged with
 @samp{autoupdate} @emph{or} @samp{FUNC}.
 
 @item --errexit

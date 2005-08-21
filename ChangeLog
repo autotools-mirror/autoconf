@@ -1,3 +1,12 @@
+2005-08-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Using Autotest, testsuite Scripts)
+	(Autotest Logs, Writing testsuite.at, testsuite Invocation):
+	Language cleanup.
+
+	* doc/autoconf.texi (Defining Symbols, Changed Results):
+	Prepend to LIBS, not append, in examples.
+
 2005-08-16  Stepan Kasal  <kasal@ucw.cz>
 
 	When building in place, set srcdir="."; suggested by Tim Van Holder.
