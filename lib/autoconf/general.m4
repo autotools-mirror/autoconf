@@ -1337,10 +1337,23 @@ AC_LANG_PUSH(C)
 
 
 
-## ----------------------------- ##
-## Selecting optional features.  ##
-## ----------------------------- ##
+## ------------------------------------------------------------- ##
+## Selecting optional features, working with optional software.  ##
+## ------------------------------------------------------------- ##
 
+
+# _AC_ENABLE_IF(OPTION, FEATURE, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# -------------------------------------------------------------------
+# Common code for AC_ARG_ENABLE and AC_ARG_WITH.
+# OPTION is either "enable" or "with".
+#
+m4_define([_AC_ENABLE_IF],
+[# Check whether --$1-$2 was given.
+_AC_ENABLE_IF_ACTION([$1], m4_bpatsubst([$2], -, _), [$3], [$4])[]dnl
+])
+
+m4_define([_AC_ENABLE_IF_ACTION],
+[AS_IF([test "${$1_$2+set}" = set], [$1val=$$1_$2; $3], [$4])])
 
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------------------
@@ -1350,24 +1363,12 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])dnl
 m4_divert_once([HELP_ENABLE], [$2])dnl
-[#] Check whether --enable-$1 or --disable-$1 was given.
-if test "[${enable_]m4_bpatsubst([$1], -, _)+set}" = set; then
-  enableval="[$enable_]m4_bpatsubst([$1], -, _)"
-  $3
-m4_ifvaln([$4], [else
-  $4])dnl
-fi; dnl
+_AC_ENABLE_IF([enable], [$1], [$3], [$4])
 ])# AC_ARG_ENABLE
 
 
 AU_DEFUN([AC_ENABLE],
 [AC_ARG_ENABLE([$1], [  --enable-$1], [$2], [$3])])
-
-
-## ------------------------------ ##
-## Working with optional software ##
-## ------------------------------ ##
-
 
 
 # AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
@@ -1378,13 +1379,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
 m4_divert_once([HELP_WITH], [$2])dnl
-[#] Check whether --with-$1 or --without-$1 was given.
-if test "[${with_]m4_bpatsubst([$1], -, _)+set}" = set; then
-  withval="[$with_]m4_bpatsubst([$1], -, _)"
-  $3
-m4_ifvaln([$4], [else
-  $4])dnl
-fi; dnl
+_AC_ENABLE_IF([with], [$1], [$3], [$4])
 ])# AC_ARG_WITH
 
 AU_DEFUN([AC_WITH],

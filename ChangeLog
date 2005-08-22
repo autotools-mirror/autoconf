@@ -1,3 +1,9 @@
+2005-08-22  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Factor out
+	  common code to...
+	(_AC_ENABLE_IF, _AC_ENABLE_IF_ACTION): ... these new macros.
+
 2005-08-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Using Autotest, testsuite Scripts)
