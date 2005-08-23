@@ -19,6 +19,9 @@
 
 2005-08-23  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Strip the parameter list
+	before passing the macro name to AH_TEMPLATE.
+
 	* Makefile.maint: Revert the change from 2005-08-12.
 
 2005-08-22  Stepan Kasal  <kasal@ucw.cz>

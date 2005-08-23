@@ -1938,7 +1938,7 @@ m4_define([AC_DEFINE_UNQUOTED], [_AC_DEFINE_Q([], $@)])
 # -----------------------------------------------------
 m4_define([_AC_DEFINE_Q],
 [AC_DEFINE_TRACE([$2])dnl
-m4_ifval([$4], [AH_TEMPLATE([$2], [$4])])dnl
+m4_ifval([$4], [AH_TEMPLATE(m4_bpatsubst([[$2]], [(.*)]), [$4])])dnl
 cat >>confdefs.h <<$1_ACEOF
 [@%:@define] $2 m4_if($#, 2, 1, [$3])
 _ACEOF
