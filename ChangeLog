@@ -1,3 +1,7 @@
+2005-08-23  Stepan Kasal  <kasal@ucw.cz>
+
+	* Makefile.maint: Revert the change from 2005-08-12.
+
 2005-08-22  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Factor out

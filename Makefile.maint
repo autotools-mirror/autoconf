@@ -27,7 +27,7 @@ ME := Makefile.maint
 # Use --rsyncable if available.
 GZIP_ENV = \
   "--no-name --best$$( \
-    case $$(gzip --help 2>&1) in \
+    case $$(gzip --help) in \
     (*--rsyncable*) echo ' --rsyncable';; \
     esac \
   )"
