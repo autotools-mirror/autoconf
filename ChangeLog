@@ -20,7 +20,11 @@
 2005-08-23  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Strip the parameter list
-	before passing the macro name to AH_TEMPLATE.
+	  before passing the macro name to AH_TEMPLATE.
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): config.status
+	  now opens log after option processing; in particular, --version
+	  and --help do not touch config.log.
 
 	* Makefile.maint: Revert the change from 2005-08-12.
 
