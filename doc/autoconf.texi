@@ -2648,8 +2648,9 @@ seriously, the command lines can exceed the length limits of some
 operating systems.  As an alternative to passing @option{-D} options to
 the compiler, @command{configure} scripts can create a C header file
 containing @samp{#define} directives.  The @code{AC_CONFIG_HEADERS}
-macro selects this kind of output.  It should be called right after
-@code{AC_INIT}.
+macro selects this kind of output.  Though it can be called anywhere
+between @code{AC_INIT} and @code{AC_OUTPUT}, it is customary to call
+it right after @code{AC_INIT}.
 
 The package should @samp{#include} the configuration header file before
 any other header files, to prevent inconsistencies in declarations (for
@@ -2695,6 +2696,19 @@ AC_CONFIG_HEADERS([defines.h:defs.pre:defines.h.in:defs.post])
 Doing this allows you to keep your file names acceptable to
 @acronym{DOS} variants, or
 to prepend and/or append boilerplate to the file.
+@end defmac
+
+@defmac AH_HEADER
+This macro is defined as the name of the first declared config header
+and undefined if no config headers have been declared up to this point.
+A third-party macro may, for example, require use of a config header
+without invoking AC_CONFIG_HEADERS twice, like this:
+
+@example
+AC_CONFIG_COMMANDS_PRE(
+	[m4_ifndef([AH_HEADER], [AC_CONFIG_HEADERS([config.h])])])
+@end example
+
 @end defmac
 
 @xref{Configuration Actions}, for more details on @var{header}.
@@ -2970,13 +2984,23 @@ AC_CONFIG_COMMANDS([time-stamp], [date >time-stamp])
 @end example
 @end defmac
 
+The following two macros look similar, but in fact they are not of the same
+breed: they are executed directly by @file{configure}, so you cannot use
+@file{config.status} to re-run them.
+
+@c Yet it is good to leave them here.  The user sees them together and
+@c decides which best fits their needs.
+
 @defmac AC_CONFIG_COMMANDS_PRE (@var{cmds})
-@acindex{OUTPUT_COMMANDS_PRE}
+@acindex{CONFIG_COMMANDS_PRE}
 Execute the @var{cmds} right before creating @file{config.status}.
+
+This macro presents the last opportunity to call @code{AC_SUBST},
+@code{AC_DEFINE}, or @code{AC_CONFIG_FOOS} macros. 
 @end defmac
 
 @defmac AC_CONFIG_COMMANDS_POST (@var{cmds})
-@acindex{OUTPUT_COMMANDS_POST}
+@acindex{CONFIG_COMMANDS_POST}
 Execute the @var{cmds} right after creating @file{config.status}.
 @end defmac
 

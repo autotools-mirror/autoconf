@@ -258,9 +258,14 @@ _AC_CONFIG_REGISTER_DEST([$1], [$2], m4_bpatsubst([[$2]], [:.*\(.\)$], [\1]), [$
 # With CONFIG_LINKS, reject DEST=., because it is makes it hard for ./config.status
 # to guess the links to establish (`./config.status .').
 #
+# Save the name of the first config header to AH_HEADER.
+#
 m4_define([_AC_CONFIG_REGISTER_DEST],
 [_AC_CONFIG_UNIQUE([$1], [$3])dnl
-m4_if([$1 $3], [LINKS .], [AC_FATAL([invalid destination of a config link: `.'])])dnl
+m4_if([$1 $3], [LINKS .],
+      [AC_FATAL([invalid destination of a config link: `.'])])dnl
+m4_if([$1], [HEADERS],
+      [m4_define_default([AH_HEADER], [$3])])dnl
 dnl
 dnl Recognize TAG as an argument to config.status:
 dnl

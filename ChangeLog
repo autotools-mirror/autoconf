@@ -1,3 +1,15 @@
+2005-08-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>,
+	    Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/status.m4 (_AC_CONFIG_REGISTER_DEST): When the
+	first header appears, define AH_HEADER.
+	* doc/autoconf.texi (Configuration Headers): Document AH_HEADER.
+	Update limitations about when to call AC_CONFIG_HEADERS.
+	(Configuration Commands): Document that AC_CONFIG_COMMANDS_PRE
+	parameter can call AC_SUBST, AC_DEFINE, or AC_CONFIG_FOOS; explain
+	that AC_CONFIG_COMMANDS_PRE and AC_CONFIG_COMMANDS_POST are not
+	``Configuration Actions''; fix their index entries.
+
 2005-08-23  Stepan Kasal  <kasal@ucw.cz>
 
 	* Makefile.maint: Revert the change from 2005-08-12.
