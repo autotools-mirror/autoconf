@@ -10,6 +10,13 @@
 	that AC_CONFIG_COMMANDS_PRE and AC_CONFIG_COMMANDS_POST are not
 	``Configuration Actions''; fix their index entries.
 
+        * lib/autotest/general.m4 (AT_INIT): Process multiple keywords
+	options correctly.  Process N-M as M-N if M is smaller than N.
+        Process ranges correctly so that N-N will run only N.
+	Sort and uniquify the tests that will be run.  If there is more
+	than one test, reinsert the banners for the tests.
+        * tests/autotest.at (Keywords): Unmark XFAIL.
+
 2005-08-23  Stepan Kasal  <kasal@ucw.cz>
 
 	* Makefile.maint: Revert the change from 2005-08-12.

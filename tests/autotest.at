@@ -248,7 +248,6 @@ AT_CHECK_AT_TITLE_CHAR([Backslash],    [\])
 ## --------- ##
 AT_SETUP([Keywords])
 AT_KEYWORDS([autotest])
-AT_XFAIL_IF(:)
 
 AT_DATA([k.at],
 [[m4_define([AT_PACKAGE_STRING],[k])

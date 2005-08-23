@@ -249,7 +249,6 @@ at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [.])'
 at_help_all='AT_help_all'])])dnl
 m4_divert_push([PARSE_ARGS])dnl
 
-at_keywords=
 at_prev=
 for at_option
 do
@@ -306,14 +305,14 @@ do
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
 	at_range_start=`echo $at_option |tr -d '-'`
 	at_range=`echo " $at_groups_all " | \
-	  sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,'`
+	  sed -e 's,^.* \('$at_range_start' \),\1,'`
 	at_groups="$at_groups$at_range "
 	;;
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
 	at_range_end=`echo $at_option |tr -d '-'`
 	at_range=`echo " $at_groups_all " | \
-	  sed -e 's, '$at_range_end' .*$, '$at_range_end','`
+	  sed -e 's,\( '$at_range_end'\) .*$,\1,'`
 	at_groups="$at_groups$at_range "
 	;;
 
@@ -323,12 +322,16 @@ do
     [[0-9][0-9][0-9]-[0-9][0-9][0-9]] | \
     [[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] | \
     [[0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]] )
-	at_range_start=`expr $at_option : '\([^-]*\)'`
-	at_range_end=`expr $at_option : '[^-]*-\(.*\)'`
-	# FIXME: Maybe test to make sure start <= end?
+	at_range_start=`expr $at_option : '\(.*\)-'`
+	at_range_end=`expr $at_option : '.*-\(.*\)'`
+	if test $at_range_start -gt $at_range_end; then
+	  at_tmp=$at_range_end
+	  at_range_end=$at_range_start
+	  at_range_start=$at_tmp
+	fi
 	at_range=`echo " $at_groups_all " | \
-	  sed -e 's,^.* '$at_range_start' ,'$at_range_start' ,' \
-	      -e 's, '$at_range_end' .*$, '$at_range_end','`
+	  sed -e 's,^.*\( '$at_range_start' \),\1,' \
+	      -e 's,\( '$at_range_end'\) .*$,\1,'`
 	at_groups="$at_groups$at_range "
 	;;
 
@@ -337,7 +340,16 @@ do
 	at_prev=--keywords
 	;;
     --keywords=* )
-	at_keywords="$at_keywords,$at_optarg"
+	at_groups_selected=$at_help_all
+	for at_keyword in `IFS=,; set X $at_optarg; shift; echo ${1+$[@]}`
+	do
+		# Do not match the test group titles.
+		at_groups_selected=`echo "$at_groups_selected" |
+			grep -i ["^[1-9][^;]*;.*[; ]$at_keyword[ ;]"]`
+	done
+	at_groups_selected=`echo "$at_groups_selected" | sed 's/;.*//'`
+	# Smash the newlines.
+	at_groups="$at_groups`echo $at_groups_selected` "
 	;;
 m4_divert_pop([PARSE_ARGS])dnl
 dnl Process *=* last to allow for user specified --option=* type arguments.
@@ -362,23 +374,36 @@ m4_divert_push([PARSE_ARGS_END])dnl
   esac
 done
 
-# Process the --keywords
-if test -n "$at_keywords"; then
-  at_groups_selected=$at_help_all
-  for at_keyword in `IFS=,; set X $at_keywords; shift; echo ${1+$[@]}`
-  do
-    # It is on purpose that we match the test group titles too.
-    at_groups_selected=`echo "$at_groups_selected" |
-			grep -i "^[[^;]]*;[[^;]]*.*[[; ]]$at_keyword[[ ;]]"`
-  done
-  at_groups_selected=`echo "$at_groups_selected" | sed 's/;.*//'`
-  # Smash the end of lines.
-  at_groups_selected=`echo $at_groups_selected`
-  at_groups="$at_groups$at_groups_selected "
-fi
-
 # Selected test groups.
-test -z "$at_groups" && at_groups=$at_groups_all
+if test -z "$at_groups"; then
+  at_groups=$at_groups_all
+else
+  # Sort the tests, removing duplicates:
+  at_groups=`echo $at_groups | tr ' ' "$as_nl" | sort -nu`
+  # and add banners.  (Passing at_groups_all is tricky--see the comment
+  # starting with "Passing at_groups is tricky.")
+  at_groups=`echo "$at_groups$as_nl $at_groups_all" |
+    awk ['BEGIN { FS = "@" } # Effectively switch off field splitting.
+	/^$/ { next }  # Ignore the empty line.
+	!/ / { groups++; selected[$ 0] = 1; next }
+	# The last line, containing at_groups_all.
+	{
+		n = split($ 0, a, " ")
+		# If there are several tests, select their banners:
+		if (groups > 1) {
+			for (i = 1; i <= n; i++) {
+				if (a[i] ~ /^banner-/)
+					banner = a[i]
+				else if (banner != "" && selected[a[i]] == 1)
+					selected[banner] = 1
+			}
+		}
+		for (i = 1; i <= n; i++)
+			if (selected[a[i]] == 1)
+				list = list " " a[i]
+		print list
+	}']`
+fi
 m4_divert_pop([PARSE_ARGS_END])dnl
 m4_divert_push([HELP])dnl
 
