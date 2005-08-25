@@ -1074,8 +1074,8 @@ m4_defun([_AS_VERSION_COMPARE_PREPARE],
 	}
       } else {
 	# The normal case, without worrying about digits.
-	if (v1 == "") d1 = v1; else { d1 = substr(v1, 1, 1); v1 = substr(v1,2) }
-	if (v2 == "") d2 = v2; else { d2 = substr(v2, 1, 1); v2 = substr(v2,2) }
+	if (length(v1)) { d1 = substr(v1, 1, 1); v1 = substr(v1,2) } else d1=v1
+	if (length(v2)) { d2 = substr(v2, 1, 1); v2 = substr(v2,2) } else d2=v2
       }
       if (d1 < d2) exit 1
       if (d1 > d2) exit 2
