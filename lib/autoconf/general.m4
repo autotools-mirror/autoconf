@@ -1650,23 +1650,19 @@ m4_define([AC_REQUIRE_AUX_FILE],
 # --------------------------
 # Generate the variables THING, THING_{alias cpu vendor os}.
 m4_define([_AC_CANONICAL_SPLIT],
-[AC_SUBST([$1],       [$ac_cv_$1])dnl
+[case $ac_cv_$1 in
+*-*-*) ;;
+*) AC_MSG_ERROR([invalid value of canonical $1]);;
+esac
+AC_SUBST([$1], [$ac_cv_$1])dnl
 ac_save_IFS=$IFS; IFS='-'
 set x $ac_cv_$1
 shift
-IFS=$ac_save_IFS
-
 AC_SUBST([$1_cpu], [$[1]])dnl
 AC_SUBST([$1_vendor], [$[2]])dnl
-AC_SUBST([$1_os], [$[3]])dnl
-case $[#] in
-0|1|2) ;;
-*)
-  shift; shift; shift
-  for ac_arg
-  do $1_os=[$]$1_os-$ac_arg
-  done;;
-esac
+shift; shift
+AC_SUBST([$1_os], [$[*]])dnl
+IFS=$ac_save_IFS
 ])# _AC_CANONICAL_SPLIT
 
 

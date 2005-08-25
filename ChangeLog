@@ -1,3 +1,9 @@
+2005-08-24  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT): Simplify; rejecting
+	some evil values and relying on the fact that $* concatenates the
+	parameters by the first character from IFS.
+
 2005-08-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>,
 	    Stepan Kasal  <kasal@ucw.cz>
 
