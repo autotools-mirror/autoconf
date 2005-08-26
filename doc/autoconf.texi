@@ -9017,7 +9017,7 @@ For example:
 
 @example
 $ type="char *"
-$ echo "#define AS_TR_CPP(HAVE_$type) 1"
+$ echo "#define AS_TR_CPP([HAVE_$type]) 1"
 #define HAVE_CHAR_P 1
 @end example
 @end defmac
@@ -9028,8 +9028,8 @@ Transform @var{expression} into a valid shell variable name.  For example:
 
 @example
 $ header="sys/some file.h"
-$ AS_TR_SH(HAVE_$header)=:
-$ if $HAVE_sys_some_file_h; then echo "Have it!"; fi
+$ AS_TR_SH([HAVE_$header])=yes
+$ if test "$HAVE_sys_some_file_h" = yes; then echo "Have it!"; fi
 Have it!
 @end example
 @end defmac

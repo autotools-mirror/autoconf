@@ -1,3 +1,10 @@
+2005-08-26  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Programming in M4sh) <AS_TR_CPP>: Fix m4 quoting
+	in the example.  Reported by Bruno Haible.
+	<AS_TR_SH>: Likewise.  Also modify the example to be more convincing:
+	"if $undefined_var;" succeeds with my shell.
+
 2005-08-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_VERSION_COMPARE_PREPARE):
