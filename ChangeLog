@@ -1,3 +1,8 @@
+2005-08-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_VERSION_COMPARE_PREPARE):
+	The previous patch didn't work, so try a better one.
+
 2005-08-26  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Programming in M4sh) <AS_TR_CPP>: Fix m4 quoting
@@ -12,7 +17,8 @@
 2005-08-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_VERSION_COMPARE_PREPARE):
-	Work around bug in Solaris 9 (and 10) /usr/xpg4/bin/awk.
+	Work around bug in Solaris /usr/xpg4/bin/awk.
+	The bug is present in at least Solaris 8 through 10.
 
 2005-08-24  Stepan Kasal  <kasal@ucw.cz>
 
