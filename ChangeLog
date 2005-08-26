@@ -5,6 +5,10 @@
 	<AS_TR_SH>: Likewise.  Also modify the example to be more convincing:
 	"if $undefined_var;" succeeds with my shell.
 
+	* lib/autoconf/general.m4 (AC_CANONICAL_BUILD, AC_CANONICAL_HOST,
+	AC_CANONICAL_TARGET): Define by AC_DEFUN, no need to use AC_DEFUN_ONCE;
+	but change the m4_divert_text to m4_divert_once.
+
 2005-08-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_VERSION_COMPARE_PREPARE):
