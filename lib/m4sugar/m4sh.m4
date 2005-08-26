@@ -1030,7 +1030,7 @@ m4_defun([_AS_VERSION_COMPARE_PREPARE],
   # Use only awk features that work with 7th edition Unix awk (1978).
   # My, what an old awk you have, Mr. Solaris!
   END {
-    while (length(v1) || length(v2)) {
+    while (length(v1) && length(v2)) {
       # Set d1 to be the next thing to compare from v1, and likewise for d2.
       # Normally this is a single character, but if v1 and v2 contain digits,
       # compare them as integers and fractions as strverscmp does.
@@ -1074,12 +1074,16 @@ m4_defun([_AS_VERSION_COMPARE_PREPARE],
 	}
       } else {
 	# The normal case, without worrying about digits.
-	if (length(v1)) { d1 = substr(v1, 1, 1); v1 = substr(v1,2) } else d1=v1
-	if (length(v2)) { d2 = substr(v2, 1, 1); v2 = substr(v2,2) } else d2=v2
+	d1 = substr(v1, 1, 1); v1 = substr(v1, 2)
+	d2 = substr(v2, 1, 1); v2 = substr(v2, 2)
       }
       if (d1 < d2) exit 1
       if (d1 > d2) exit 2
     }
+    # Beware Solaris /usr/xgp4/bin/awk (at least through Solaris 10),
+    # which mishandles some comparisons of empty strings to integers.
+    if (length(v2)) exit 1
+    if (length(v1)) exit 2
   }
 ']])
 
