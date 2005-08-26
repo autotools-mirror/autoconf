@@ -1,3 +1,9 @@
+2005-08-26  Pavel Roskin  <proski@gnu.org>
+
+	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): Use shell variable
+	XMKMF to locate xmkmf.  Make XMKMF precious.  Export CC when
+	running xmkmf.
+
 2005-08-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_VERSION_COMPARE_PREPARE):

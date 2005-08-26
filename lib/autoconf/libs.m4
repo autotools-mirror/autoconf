@@ -180,7 +180,8 @@ m4_popdef([AC_Lib_Name])dnl
 # Internal subroutine of _AC_PATH_X.
 # Set ac_x_includes and/or ac_x_libraries.
 m4_define([_AC_PATH_X_XMKMF],
-[rm -f -r conftest.dir
+[AC_ARG_VAR(XMKMF, [Path to xmkmf, Makefile generator for X Window System])dnl
+rm -f -r conftest.dir
 if mkdir conftest.dir; then
   cd conftest.dir
   # Make sure to not put "make" in the Imakefile rules, since we grep it out.
@@ -188,7 +189,7 @@ if mkdir conftest.dir; then
 acfindx:
 	@echo 'ac_im_incroot="${INCROOT}"; ac_im_usrlibdir="${USRLIBDIR}"; ac_im_libdir="${LIBDIR}"'
 _ACEOF
-  if (xmkmf) >/dev/null 2>/dev/null && test -f Makefile; then
+  if (export CC; ${XMKMF-xmkmf}) >/dev/null 2>/dev/null && test -f Makefile; then
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
     eval `${MAKE-make} acfindx 2>/dev/null | grep -v make`
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
