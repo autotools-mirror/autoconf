@@ -2699,6 +2699,7 @@ to prepend and/or append boilerplate to the file.
 @end defmac
 
 @defmac AH_HEADER
+@ahindex{HEADER}
 This macro is defined as the name of the first declared config header
 and undefined if no config headers have been declared up to this point.
 A third-party macro may, for example, require use of a config header
