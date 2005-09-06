@@ -1,3 +1,16 @@
+2005-09-06  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/libs.m4 (AC_SEARCH_LIBS): Merge the two AC_LINK_IFELSE
+	  calls, so that the final expansion of this macro is shorter.
+	  Create the conftest.$ac_ext outside the `for' loop, to speed the run.
+	  Do not use `break' in the argument to AC_LINK_IFELSE, it would skip
+	  the cleanup there.  Use AS_VAR_* macros, to be more general.
+	* tests/semantics.at (AC_SEARCH_LIBS): Check for the cleanup.
+
+	* lib/autoconf/general.m4: Use AS_IF where appropriate.
+
+	* lib/m4sugar/m4sh.m4 (AS_IF): Use m4_default.
+
 2005-09-01  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Configuration Headers): Add an index entry

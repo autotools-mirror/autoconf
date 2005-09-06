@@ -1353,7 +1353,8 @@ _AC_ENABLE_IF_ACTION([$1], m4_bpatsubst([$2], -, _), [$3], [$4])[]dnl
 ])
 
 m4_define([_AC_ENABLE_IF_ACTION],
-[AS_IF([test "${$1_$2+set}" = set], [$1val=$$1_$2; $3], [$4])])
+[AS_IF([test "${$1_$2+set}" = set], [$1val=$$1_$2; $3], [$4])dnl
+])
 
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------------------
@@ -1363,7 +1364,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])dnl
 m4_divert_once([HELP_ENABLE], [$2])dnl
-_AC_ENABLE_IF([enable], [$1], [$3], [$4])
+_AC_ENABLE_IF([enable], [$1], [$3], [$4])dnl
 ])# AC_ARG_ENABLE
 
 
@@ -1379,7 +1380,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
 m4_divert_once([HELP_WITH], [$2])dnl
-_AC_ENABLE_IF([with], [$1], [$3], [$4])
+_AC_ENABLE_IF([with], [$1], [$3], [$4])dnl
 ])# AC_ARG_WITH
 
 AU_DEFUN([AC_WITH],
@@ -2173,12 +2174,8 @@ if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null; then
 else
   ac_cpp_err=yes
 fi
-if test -z "$ac_cpp_err"; then
-  m4_default([$2], :)
-else
-  _AC_MSG_LOG_CONFTEST
-  $3
-fi
+AS_IF([test -z "$ac_cpp_err"], [$2], [_AC_MSG_LOG_CONFTEST
+  $3])
 rm -f conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_PREPROC_IFELSE
 
@@ -2212,15 +2209,13 @@ AC_DEFUN([AC_EGREP_CPP],
 [AC_LANG_PREPROC_REQUIRE()dnl
 AC_REQUIRE([AC_PROG_EGREP])dnl
 AC_LANG_CONFTEST([AC_LANG_SOURCE([[$2]])])
-dnl eval is necessary to expand ac_cpp.
+AS_IF([dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
-if (eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD |
+(eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD |
 dnl Quote $1 to prevent m4 from eating character classes
-  $EGREP "[$1]" >/dev/null 2>&1; then
-  m4_default([$3], :)
-m4_ifvaln([$4], [else
-  $4])dnl
-fi
+  $EGREP "[$1]" >/dev/null 2>&1],
+  [$3],
+  [$4])dnl
 rm -f conftest*
 ])# AC_EGREP_CPP
 
@@ -2254,7 +2249,7 @@ AS_IF([_AC_EVAL_STDERR($ac_compile) &&
 	 AC_TRY_COMMAND([test -s conftest.$ac_objext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
-m4_ifvaln([$3],[$3])dnl])dnl
+	$3])
 rm -f conftest.err conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
@@ -2295,7 +2290,7 @@ AS_IF([_AC_EVAL_STDERR($ac_link) &&
 	 AC_TRY_COMMAND([test -s conftest$ac_exeext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
-m4_ifvaln([$3], [$3])dnl])[]dnl
+	$3])
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
@@ -2369,12 +2364,11 @@ AC_DEFUN([AC_RUN_IFELSE],
 m4_ifval([$4], [],
 	 [AC_DIAGNOSE([cross],
 		     [$0 called without default to allow cross compiling])])dnl
-if test "$cross_compiling" = yes; then
-  m4_default([$4],
-	   [AC_MSG_FAILURE([cannot run test program while cross compiling])])
-else
-  _AC_RUN_IFELSE($@)
-fi])
+AS_IF([test "$cross_compiling" = yes],
+  [m4_default([$4],
+	   [AC_MSG_FAILURE([cannot run test program while cross compiling])])],
+  [_AC_RUN_IFELSE($@)])
+])
 
 
 # AC_TRY_RUN(PROGRAM,
