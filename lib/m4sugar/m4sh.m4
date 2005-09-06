@@ -451,7 +451,7 @@ m4_define([AS_EXIT],
 m4_defun([AS_IF],
 [m4_ifval([$2$3],
 [if $1; then
-  m4_ifval([$2], [$2], :)
+  m4_default([$2], [:])
 m4_ifvaln([$3],
 [else
   $3])dnl
