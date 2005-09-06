@@ -83,7 +83,13 @@ AC_SEARCH_LIBS(cos, oser m ust,,
 case "$ac_cv_search_cos" in
   -loser|-lust) AC_MSG_ERROR([jeez, $ac_cv_search_cos must be a cool library!]) ;;
 esac
+])
 
+
+# AC_SEARCH_LIBS (none needed)
+# ----------------------------
+AT_CHECK_MACRO([AC_SEARCH_LIBS (none needed)],
+[
 AC_SEARCH_LIBS(printf, oser c ust,,
 	     [AC_MSG_ERROR([cannot find `printf'])])
 
@@ -91,7 +97,6 @@ case "$ac_cv_search_printf" in
   -loser|-lust) AC_MSG_ERROR([jeez, $ac_cv_search_printf must be a cool library!]) ;;
   -lc) AC_MSG_ERROR([huh, you need to give -lc?])
 esac
-
 ])
 
 

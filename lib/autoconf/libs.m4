@@ -67,24 +67,29 @@
 # --------------------------------------------------------
 # Search for a library defining FUNC, if it's not already available.
 AC_DEFUN([AC_SEARCH_LIBS],
-[AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
+[AS_VAR_PUSHDEF([ac_Search], [ac_cv_search_$1])dnl
+AC_CACHE_CHECK([for library containing $1], ac_Search,
 [ac_func_search_save_LIBS=$LIBS
-ac_cv_search_$1=no
-AC_LINK_IFELSE([AC_LANG_CALL([], [$1])],
-	       [ac_cv_search_$1="none required"])
-if test "$ac_cv_search_$1" = no; then
-  for ac_lib in $2; do
+AC_LANG_CONFTEST([AC_LANG_CALL([], [$1])])
+for ac_lib in '' $2; do
+  if test -z "$ac_lib"; then
+    ac_res="none required"
+  else
+    ac_res=-l$ac_lib
     LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
-    AC_LINK_IFELSE([AC_LANG_CALL([], [$1])],
-		   [ac_cv_search_$1="-l$ac_lib"
-break])
-  done
-fi
+  fi
+  AC_LINK_IFELSE([], [AS_VAR_SET(ac_Search, [$ac_res])])
+  AS_VAR_SET_IF(ac_Search, [break])dnl
+done
+AS_VAR_SET_IF(ac_Search, , [AS_VAR_SET(ac_Search, [no])])dnl
+rm conftest.$ac_ext
 LIBS=$ac_func_search_save_LIBS])
-AS_IF([test "$ac_cv_search_$1" != no],
-  [test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
+ac_res=AS_VAR_GET(ac_Search)
+AS_IF([test "$ac_res" != no],
+  [test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
   $3],
       [$4])dnl
+AS_VAR_POPDEF([ac_Search])dnl
 ])
 
 
