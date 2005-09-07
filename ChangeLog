@@ -1,3 +1,7 @@
+2005-09-07  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/c.m4 (AC_LANG_SOURCE(C)): Remove an incorrect comment.
+
 2005-09-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* config/move-if-change: Don't output "$2 is unchanged";

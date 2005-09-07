@@ -126,7 +126,6 @@ m4_define([_AC_LANG_PREFIX(C++)], [CXX])
 
 # AC_LANG_SOURCE(C)(BODY)
 # -----------------------
-# This sometimes fails to find confdefs.h, for some reason.
 # We can't use '#line $LINENO "configure"' here, since
 # Sun c89 (Sun WorkShop 6 update 2 C 5.3 Patch 111679-08 2002/05/09)
 # rejects $LINENO greater than 32767, and some configure scripts
