@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for libraries.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -265,13 +265,13 @@ ac_x_header_dirs='
 /usr/openwin/share/include'
 
 if test "$ac_x_includes" = no; then
-  # Guess where to find include files, by looking for Intrinsic.h.
+  # Guess where to find include files, by looking for Xlib.h.
   # First, try using that file with no special directory specified.
-  AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <X11/Intrinsic.h>])],
+  AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <X11/Xlib.h>])],
 [# We can compile using X headers with no special include directory.
 ac_x_includes=],
 [for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Intrinsic.h"; then
+  if test -r "$ac_dir/X11/Xlib.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -284,8 +284,8 @@ if test "$ac_x_libraries" = no; then
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
   LIBS="-lXt $LIBS"
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <X11/Intrinsic.h>],
-				  [XtMalloc (0)])],
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <X11/Xlib.h>],
+				  [XrmInitialize (0)])],
 		 [LIBS=$ac_save_LIBS
 # We can link X programs with no special library path.
 ac_x_libraries=],

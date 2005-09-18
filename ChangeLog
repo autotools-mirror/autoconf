@@ -1,3 +1,10 @@
+2005-09-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Look for X11/Xlib.h
+	and XrmInitialize rather than X11/Intrinsic.h and XtMalloc
+	(which belong to Xt, not X itself).  See Debian bug 327655.
+	* NEWS: Mention this.
+
 2005-09-07  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/c.m4 (AC_LANG_SOURCE(C)): Remove an incorrect comment.
