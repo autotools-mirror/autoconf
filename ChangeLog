@@ -1,3 +1,12 @@
+2005-09-27  Stepan Kasal  <kasal@ucw.cz>
+
+	* tests/semantics.at (AC_C_BIGENDIAN): Pass --force to autoheader,
+	  in case the computer is too quick.  Double quote the configure.ac
+	  snippets.
+
+	* tests/local.at (AT_CHECK_AUTOCONF): Always pass --force to prevent
+	  problems if the testsuite were running too fast.
+
 2005-09-18  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Look for X11/Xlib.h

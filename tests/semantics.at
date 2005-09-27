@@ -468,13 +468,13 @@ AT_KEYWORDS([cross])
 # cross-compiling or not.
 
 _AT_CHECK_AC_MACRO(
-  [AC_C_BIGENDIAN([ac_endian=big],[ac_endian=little],[ac_endian=unknown])
+  [[AC_C_BIGENDIAN([ac_endian=big],[ac_endian=little],[ac_endian=unknown])
    echo $ac_endian > at-endian
-])
+]])
 
 rm -f config.hin  # So that next run of autoheader is quiet.
 _AT_CHECK_AC_MACRO(
-  [cross_compiling=yes
+  [[cross_compiling=yes
    AC_C_BIGENDIAN([ac_endian=big],[ac_endian=little],[ac_endian=unknown])
    ac_prevendian=`cat at-endian`
    # Check that we have found the same result as in the previous run
@@ -484,11 +484,12 @@ _AT_CHECK_AC_MACRO(
    if test $ac_endian != $ac_prevendian && test $ac_endian != unknown; then
      AC_MSG_ERROR([unexpected endianness: first run found '$ac_prevendian' but second run found '$ac_endian'])
    fi
-])
+]])
 
 # Make sure AC_C_BIGENDIAN with no argument will define WORDS_BIGENDIAN
-AT_CONFIGURE_AC([AC_C_BIGENDIAN])
-AT_CHECK_AUTOHEADER
+AT_CONFIGURE_AC([[AC_C_BIGENDIAN]])
+# --force is necessary, the computer might be too fast.
+AT_CHECK_AUTOHEADER([--force])
 AT_CHECK([grep WORDS_BIGENDIAN config.hin], [], [ignore])
 
 AT_CLEANUP(at-endian)

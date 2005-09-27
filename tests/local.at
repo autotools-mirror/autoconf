@@ -200,8 +200,10 @@ AC_STATE_SAVE(after)
 
 # AT_CHECK_AUTOCONF(ARGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # ----------------------------------------------------------
+# We always use "--force", to prevent problems with timestamps if the testsuite
+# were running too fast.
 m4_define([AT_CHECK_AUTOCONF],
-[AT_CHECK([autoconf $1], [$2], [$3], [$4])
+[AT_CHECK([autoconf --force $1], [$2], [$3], [$4])
 if test -s configure; then
   AT_CHECK_SHELL_SYNTAX(configure)
 fi
