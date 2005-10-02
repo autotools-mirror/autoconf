@@ -1,3 +1,8 @@
+2005-10-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+        * lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Balance
+        parentheses.  (tiny change)
+
 2005-09-27  Stepan Kasal  <kasal@ucw.cz>
 
 	* tests/semantics.at (AC_C_BIGENDIAN): Pass --force to autoheader,

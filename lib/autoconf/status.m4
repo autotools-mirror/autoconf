@@ -311,7 +311,7 @@ dnl One cannot portably go further than 100 commands because of HP-UX.
 # ------------------------
 # Create the sed scripts needed for CONFIG_FILES.
 # Support multiline substitutions and make sure that the substitutions are
-# not evaluated recursively. 
+# not evaluated recursively.
 # The intention is to have readable config.status and configure, even
 # though this m4 code might be scaring.
 #
@@ -923,7 +923,7 @@ if test "$no_recursion" != yes; then
     # parts of a large source tree are present.
     test -d $srcdir/$ac_dir || continue
 
-    ac_msg="=== configuring in $ac_dir (`pwd`/$ac_dir"
+    ac_msg="=== configuring in $ac_dir (`pwd`/$ac_dir)"
     _AS_ECHO_LOG([$ac_msg])
     _AS_ECHO([$ac_msg])
     AS_MKDIR_P(["$ac_dir"])
@@ -1321,7 +1321,7 @@ $debug ||
 }
 dnl The comment above AS_TMPDIR says at most 4 chars are allowed.
 AS_TMPDIR([conf], [.])
- 
+
 m4_ifdef([_AC_SEEN_CONFIG(FILES)], [_AC_OUTPUT_FILES_PREPARE])[]dnl
 
 for ac_tag in[]dnl
