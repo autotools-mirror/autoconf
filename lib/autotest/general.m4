@@ -669,7 +669,7 @@ do
       # Create a fresh directory for the next test group, and enter.
       at_group_dir=$at_suite_dir/$at_group_normalized
       at_group_log=$at_group_dir/$as_me.log
-      chmod -R u+w $at_group_dir
+      test -d $at_group_dir && chmod -R u+w $at_group_dir
       rm -f -r $at_group_dir
       mkdir $at_group_dir ||
 	AS_ERROR([cannot create $at_group_dir])
