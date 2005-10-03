@@ -669,6 +669,7 @@ do
       # Create a fresh directory for the next test group, and enter.
       at_group_dir=$at_suite_dir/$at_group_normalized
       at_group_log=$at_group_dir/$as_me.log
+      chmod -R u+w $at_group_dir
       rm -f -r $at_group_dir
       mkdir $at_group_dir ||
 	AS_ERROR([cannot create $at_group_dir])
@@ -925,12 +926,9 @@ else
       echo
       for at_group in $at_fail_list
       do
-        # Normalize the test group number.
+        # Normalize the test group number and cat the log.
         at_group_normalized=`expr "00000$at_group" : ".*\($at_format\)"`
-        # Create a fresh directory for the next test group, and enter.
-        at_group_dir=$at_suite_dir/$at_group_normalized
-        at_group_log=$at_group_dir/$as_me.log
-        cat "$at_group_log"
+        cat "$at_suite_dir/$at_group_normalized/$as_me.log"
         echo
       done
       echo
