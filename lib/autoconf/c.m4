@@ -162,13 +162,13 @@ $2
 m4_define([AC_LANG_CALL(C)],
 [AC_LANG_PROGRAM([$1
 m4_if([$2], [main], ,
-[/* Override any gcc2 internal prototype to avoid an error.  */
+[/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
 extern "C"
 #endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char $2 ();])], [$2 ();])])
+char $2 ();])], [return $2 ();])])
 
 
 # AC_LANG_FUNC_LINK_TRY(C)(FUNCTION)
@@ -204,26 +204,20 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 
 #undef $1
 
-/* Override any gcc2 internal prototype to avoid an error.  */
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
 #ifdef __cplusplus
 extern "C"
-{
 #endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
 char $1 ();
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
 #if defined (__stub_$1) || defined (__stub___$1)
 choke me
-#else
-char (*f) () = $1;
 #endif
-#ifdef __cplusplus
-}
-#endif
-], [return f != $1;])])
+], [return $1 ();])])
 
 
 # AC_LANG_BOOL_COMPILE_TRY(C)(PROLOGUE, EXPRESSION)

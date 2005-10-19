@@ -1,3 +1,16 @@
+2005-10-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Generating Sources): AC_LANG_PROGRAMS ->
+	AC_LANG_PROGRAM, fixing a typo.  Don't give details about
+	the inner workings of AC_LANG_FUNC_LINK_TRY.
+	* lib/autoconf/c.m4 (AC_LANG_CALL(C)): Reformat to match
+	AC_LANG_FUNC_LINK_TRY.  This involves returning the value returned
+	by the function rather than ignoring it.
+	(AC_LANG_FUNC_LINK_TRY(C)): Call the function rather than simply
+	comparing its address.  Intel's interprocedural optimization was
+	outsmarting the old heuristic.  Problem reported by
+	Mikulas Patocka.
+
 2005-10-19  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (AC_SUBST): Remove an obsolete comment.
@@ -15,7 +28,7 @@
 2005-10-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 	    Stepan Kasal  <kasal@ucw.cz>
 
-        * lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Balance parentheses.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Balance parentheses.
 	* lib/autotest/general.m4 (AT_INIT): If the test dir already exists,
 	make its content writable before removing it.  Remove an errorneous
 	comment from the end, where the logs of the failed tests are copied
@@ -110,12 +123,12 @@
 	that AC_CONFIG_COMMANDS_PRE and AC_CONFIG_COMMANDS_POST are not
 	``Configuration Actions''; fix their index entries.
 
-        * lib/autotest/general.m4 (AT_INIT): Process multiple keywords
+	* lib/autotest/general.m4 (AT_INIT): Process multiple keywords
 	options correctly.  Process N-M as M-N if M is smaller than N.
-        Process ranges correctly so that N-N will run only N.
+	Process ranges correctly so that N-N will run only N.
 	Sort and uniquify the tests that will be run.  If there is more
 	than one test, reinsert the banners for the tests.
-        * tests/autotest.at (Keywords): Unmark XFAIL.
+	* tests/autotest.at (Keywords): Unmark XFAIL.
 
 2005-08-23  Stepan Kasal  <kasal@ucw.cz>
 
@@ -579,10 +592,10 @@
 	Reword to avoid some formatting glitches.
 	* doc/installt.exi: Reword to avoid some formatting glitches.
 
-        * doc/autoconf.texi (Limitations of Builtins) <case>: Mention
-        Tru64 ksh pattern matching bug.  Reported against Libtool by
-        Albert Chin <libtool@mlists.thewrittenword.com> and
-        Nicolas Joly <njoly@pasteur.fr>.
+	* doc/autoconf.texi (Limitations of Builtins) <case>: Mention
+	Tru64 ksh pattern matching bug.  Reported against Libtool by
+	Albert Chin <libtool@mlists.thewrittenword.com> and
+	Nicolas Joly <njoly@pasteur.fr>.
 
 2005-06-06  Stepan Kasal  <kasal@ucw.cz>
 
@@ -1596,7 +1609,7 @@
 	* lib/autotest/general.m4 (AT_INIT): Replace a `tr' with a `sed'.  Join
 	PATH members so as to not prepend an empty element.  Move a comment.
 	* Makefile.am (SUBDIRS): Build in `tests' last.
-        * tests/Makefile.am (installcheck-local): Add check-local dependencies.
+	* tests/Makefile.am (installcheck-local): Add check-local dependencies.
 
 2004-12-08  Paul Eggert  <eggert@cs.ucla.edu>
 

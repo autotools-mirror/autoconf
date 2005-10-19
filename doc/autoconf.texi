@@ -2997,7 +2997,7 @@ breed: they are executed directly by @file{configure}, so you cannot use
 Execute the @var{cmds} right before creating @file{config.status}.
 
 This macro presents the last opportunity to call @code{AC_SUBST},
-@code{AC_DEFINE}, or @code{AC_CONFIG_FOOS} macros. 
+@code{AC_DEFINE}, or @code{AC_CONFIG_FOOS} macros.
 @end defmac
 
 @defmac AC_CONFIG_COMMANDS_POST (@var{cmds})
@@ -6921,7 +6921,7 @@ fputs (hw, stdout);
 @acindex{LANG_CALL}
 Expands into a source file which consists of the @var{prologue}, and
 then a call to the @var{function} as body of the main function (e.g.,
-@code{main} in C).  Since it uses @code{AC_LANG_PROGRAMS}, the feature
+@code{main} in C).  Since it uses @code{AC_LANG_PROGRAM}, the feature
 of the latter are available.
 
 This function will probably be replaced in the future by a version
@@ -6932,10 +6932,9 @@ not encouraged, as it violates strongly the typing system.
 
 @defmac AC_LANG_FUNC_LINK_TRY (@var{function})
 @acindex{LANG_FUNC_LINK_TRY}
-Expands into a source file which consists of a pseudo use of the
-@var{function} as body of the main function (e.g., @code{main} in C): a
-simple (function pointer) assignment.  Since it uses
-@code{AC_LANG_PROGRAMS}, the feature of the latter are available.
+Expands into a source file which uses the @var{function} in the body of
+the main function (e.g., @code{main} in C).  Since it uses
+@code{AC_LANG_PROGRAM}, the feature of the latter are available.
 
 As @code{AC_LANG_CALL}, this macro is documented only for completeness.
 It is considered to be severely broken, and in the future will be
