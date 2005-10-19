@@ -1960,8 +1960,6 @@ m4_define([AC_SUBST_TRACE])
 # assign it to VARIABLE.  Use `""' is you want to set VARIABLE to an
 # empty value, not an empty second argument.
 #
-# Beware that if you change this macro, you also have to change the
-# sed script at the top of _AC_OUTPUT_FILES.
 m4_define([AC_SUBST],
 [AC_SUBST_TRACE([$1])dnl
 m4_pattern_allow([^$1$])dnl

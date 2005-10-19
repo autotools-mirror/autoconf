@@ -1,3 +1,7 @@
+2005-10-19  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (AC_SUBST): Remove an obsolete comment.
+
 2005-10-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sugar.m4 (_m4_map): New macro.
