@@ -216,7 +216,7 @@ Release tips:
 - Writing Test Programs
 
   This sections explains how to write good test sources to use with
-  AC_COMPILE_IFELSE etc.  It documents AC_LANG_PROGRAMS and so forth.
+  AC_COMPILE_IFELSE etc.  It documents AC_LANG_PROGRAM and so forth.
 
 - AC_FOO_IFELSE vs. AC_TRY_FOO
 
