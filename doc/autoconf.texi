@@ -6876,7 +6876,7 @@ const char hw[] = "Hello, World\n";
 @acindex{LANG_PROGRAM}
 Expands into a source file which consists of the @var{prologue}, and
 then @var{body} as body of the main function (e.g., @code{main} in
-C).  Since it uses @code{AC_LANG_SOURCE}, the feature of the latter are
+C).  Since it uses @code{AC_LANG_SOURCE}, the features of the latter are
 available.
 @end defmac
 
@@ -6934,7 +6934,7 @@ not encouraged, as it violates strongly the typing system.
 @acindex{LANG_FUNC_LINK_TRY}
 Expands into a source file which uses the @var{function} in the body of
 the main function (e.g., @code{main} in C).  Since it uses
-@code{AC_LANG_PROGRAM}, the feature of the latter are available.
+@code{AC_LANG_PROGRAM}, the features of the latter are available.
 
 As @code{AC_LANG_CALL}, this macro is documented only for completeness.
 It is considered to be severely broken, and in the future will be
