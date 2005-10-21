@@ -6701,7 +6701,7 @@ therefore as much as possible you ought to avoid using them to wrap
 your code, rather, require from the user to run the macro with a
 correct current language, and check it with @code{AC_LANG_ASSERT}.
 And anyway, that may help the user understand she is running a Fortran
-macro while expecting a result about her Fortran 77 compiler...
+macro while expecting a result about her Fortran 77 compiler@dots{}
 @end defmac
 
 
@@ -10326,6 +10326,19 @@ case $# in
 0) cat conftest.c;;
 *) cat conftest.c "$@@";;
 esac
+@end example
+
+
+@item $@{10@}
+@cindex positional parameters
+The 10th, 11th, @dots{} positional parameters can be accessed only after
+a @code{shift}.  The 7th edition shell reported an error if given @code{$@{10@}};
+Solaris 10 @command{/bin/sh} still acts that way:
+
+@example
+$ @kbd{set 1 2 3 4 5 6 7 8 9 10}
+$ @kbd{echo $@{10@}}
+bad substitution
 @end example
 
 @item $@{@var{var}:-@var{value}@}
@@ -15812,7 +15825,7 @@ this scheme helps supporting more languages than plain C and C++.
 
 In addition to the change of syntax, the philosphy has changed too:
 while emphasis was put on speed at the expense of accuracy, today's
-Autoconf promotes accuracy of the testing framework at, ahem..., the
+Autoconf promotes accuracy of the testing framework at, ahem@dots{}, the
 expense of speed.
 
 

@@ -1,11 +1,14 @@
+2005-10-20  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Shell Substitutions}: Document that ${10} is
+	not portable; thanks to Paul Eggert and Alexandre.
+
+	* NEWS: Fix an old typo.
+
 2005-10-20  Jim Meyering  <jim@meyering.net>
 
 	* doc/autoconf.texi: Typo: s/feature/features/ in ``the features of
 	the latter'', in two places.
-
-2005-10-20  Stepan Kasal  <kasal@ucw.cz>
-
-	* NEWS: Fix an old typo.
 
 2005-10-19  Paul Eggert  <eggert@cs.ucla.edu>
 
