@@ -1,3 +1,9 @@
+2005-10-21  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): When determining,
+	the delimiter CEOF$ac_eof: fix quoting of CEOF[0-9]* and modify the 
+	code so that the most common case requires less forks.
+
 2005-10-20  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Shell Substitutions}: Document that ${10} is

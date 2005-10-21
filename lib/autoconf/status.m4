@@ -411,8 +411,11 @@ m4_if(_AC_SED_CMD_LIMIT,
   fi
 done
 
-ac_eof=`sed -n '/^CEOF[0-9]*$/s/CEOF//p' conf$$subs.sed | sort -nru | sed 1q`
-ac_eof=`expr 0$ac_eof + 1`
+ac_eof=
+if grep '^CEOF$' conf$$subs.sed >/dev/null; then
+  ac_eof=`sed -n '/^CEOF[[0-9]]*$/s/CEOF//p' conf$$subs.sed | sort -nru | sed 1q`
+  ac_eof=`expr 0$ac_eof + 1`
+fi
 
 dnl Increment fragment number.
 m4_define([_AC_SED_FRAG_NUM], m4_incr(_AC_SED_FRAG_NUM))dnl
