@@ -576,20 +576,24 @@ set dummy $CC; ac_cc=`echo $[2] |
 		      sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
+ac_clean_files_save=$ac_clean_files
+ac_clean_files="$ac_clean_files conftst2.$ac_objext"
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-ac_try='$CC -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
+ac_try='$CC -c conftest.$ac_ext -o conftst2.$ac_objext >&AS_MESSAGE_LOG_FD'
+rm -f conftst2.$ac_objext
 if AC_TRY_EVAL(ac_try) &&
-   test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try);
+   test -f conftst2.$ac_objext && AC_TRY_EVAL(ac_try);
 then
   eval ac_cv_prog_cc_${ac_cc}_c_o=yes
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
     if AC_TRY_COMMAND(cc -c conftest.$ac_ext >&AS_MESSAGE_LOG_FD); then
-      ac_try='cc -c conftest.$ac_ext -o conftest.$ac_objext >&AS_MESSAGE_LOG_FD'
+      ac_try='cc -c conftest.$ac_ext -o conftst2.$ac_objext >&AS_MESSAGE_LOG_FD'
+      rm -f conftst2.$ac_objext
       if AC_TRY_EVAL(ac_try) &&
-	 test -f conftest.$ac_objext && AC_TRY_EVAL(ac_try);
+	 test -f conftst2.$ac_objext && AC_TRY_EVAL(ac_try);
       then
 	# cc works too.
 	:
@@ -602,7 +606,8 @@ then
 else
   eval ac_cv_prog_cc_${ac_cc}_c_o=no
 fi
-rm -f conftest*
+rm -f conftest* conftst2.$ac_objext
+ac_clean_files=$ac_clean_files_save
 ])dnl
 if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
   AC_MSG_RESULT([yes])
