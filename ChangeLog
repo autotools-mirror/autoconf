@@ -1,3 +1,9 @@
+2005-10-25  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/c.m4 (AC_PROG_CC_C_O): rm -f conftst2.*, not only
+	conftst2.$ac_objext.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_C_O): Likewise.
+
 2005-10-24  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/c.m4 (AC_PROG_CC_C_O): Use conftst2.o instead of

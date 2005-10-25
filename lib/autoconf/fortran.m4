@@ -460,11 +460,11 @@ AC_CACHE_CHECK([whether $[]_AC_FC[] understands -c and -o together],
                [ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 ac_clean_files_save=$ac_clean_files
-ac_clean_files="$ac_clean_files conftst2.$ac_objext"
+ac_clean_files="$ac_clean_files conftst2.*"
 # We test twice because some compilers refuse to overwrite an existing
 # `.o' file with `-o', although they will create one.
 ac_try='$[]_AC_FC[] $[]_AC_LANG_PREFIX[]FLAGS -c conftest.$ac_ext -o conftst2.$ac_objext >&AS_MESSAGE_LOG_FD'
-rm -f conftst2.$ac_objext
+rm -f conftst2.*
 if AC_TRY_EVAL(ac_try) &&
      test -f conftst2.$ac_objext &&
      AC_TRY_EVAL(ac_try); then
@@ -472,7 +472,7 @@ if AC_TRY_EVAL(ac_try) &&
 else
   ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o=no
 fi
-rm -f conftest* conftst2.$ac_objext
+rm -f conftest* conftst2.*
 ac_clean_files=$ac_clean_files_save
 ])
 if test $ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o = no; then
