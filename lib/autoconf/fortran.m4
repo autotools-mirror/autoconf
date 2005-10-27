@@ -459,22 +459,18 @@ AC_DEFUN([_AC_PROG_FC_C_O],
 AC_CACHE_CHECK([whether $[]_AC_FC[] understands -c and -o together],
                [ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
-ac_clean_files_save=$ac_clean_files
-ac_clean_files="$ac_clean_files conftst2.*"
 # We test twice because some compilers refuse to overwrite an existing
 # `.o' file with `-o', although they will create one.
-ac_try='$[]_AC_FC[] $[]_AC_LANG_PREFIX[]FLAGS -c conftest.$ac_ext -o conftst2.$ac_objext >&AS_MESSAGE_LOG_FD'
-rm -f conftst2.*
+ac_try='$[]_AC_FC[] $[]_AC_LANG_PREFIX[]FLAGS -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
+rm -f conftest2.*
 if AC_TRY_EVAL(ac_try) &&
-     test -f conftst2.$ac_objext &&
+     test -f conftest2.$ac_objext &&
      AC_TRY_EVAL(ac_try); then
   ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o=yes
 else
   ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o=no
 fi
-rm -f conftest* conftst2.*
-ac_clean_files=$ac_clean_files_save
-])
+rm -f conftest*])
 if test $ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o = no; then
   AC_DEFINE([]_AC_FC[]_NO_MINUS_C_MINUS_O, 1,
             [Define to 1 if your Fortran compiler doesn't accept
