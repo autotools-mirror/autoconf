@@ -57,6 +57,10 @@
   The substitution now occurs only when @variable@ is on a line by itself,
   optionally surrounded by spaces and tabs.  The whole line is replaced.
 
+** AH_HEADER
+  New macro which is defined to the name of the first declared config header
+  or undefined if no config headers have been declared yet.
+
 ** AT_COPYRIGHT
   New macro for copyright notices in testsuite files.
 
@@ -97,10 +101,6 @@
 ** AC_PROG_SED
   New macro that tests for a sed program that truncates as few characters
   as possible.
-
-** AH_HEADER
-  New macro which is defined to the name of the first declared config header
-  or undefined if no config headers have been declared yet.
 
 * Major changes in Autoconf 2.59
 
