@@ -579,9 +579,6 @@ AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 # Make sure it works both with $CC and with simple cc.
 # We do the test twice because some compilers refuse to overwrite an
 # existing .o file with -o, though they will create one.
-# (On an 8+3 filesystem, conftest2.* is not distinguishable from conftest.*,
-# thus the test always passes; but if the ./configure scripts are ever run
-# on good old DOS, it has to be with DJGPP, thus with gcc.)
 ac_try='$CC -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
 rm -f conftest2.*
 if AC_TRY_EVAL(ac_try) &&
