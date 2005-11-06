@@ -56,11 +56,11 @@
 ## ----------------------------- ##
 
 
-# AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR,
+# _AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR,
 #               [VALUE-IF-FOUND], [VALUE-IF-NOT-FOUND],
 #               [PATH], [REJECT])
 # -----------------------------------------------------
-AC_DEFUN([AC_CHECK_PROG],
+AC_DEFUN([_AC_CHECK_PROG],
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=$[2]
 AC_MSG_CHECKING([for $ac_word])
@@ -113,8 +113,17 @@ if test -n "$$1"; then
 else
   AC_MSG_RESULT([no])
 fi
+])# _AC_CHECK_PROG
+
+
+# AC_CHECK_PROG(VARIABLE, PROG-TO-CHECK-FOR,
+#               [VALUE-IF-FOUND], [VALUE-IF-NOT-FOUND],
+#               [PATH], [REJECT])
+# -----------------------------------------------------
+AC_DEFUN([AC_CHECK_PROG],
+[_AC_CHECK_PROG($@)
 AC_SUBST($1)dnl
-])# AC_CHECK_PROG
+])
 
 
 # AC_CHECK_PROGS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
@@ -129,9 +138,9 @@ done
 m4_ifvaln([$3], [test -n "$$1" || $1="$3"])])
 
 
-# AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
-# -----------------------------------------------------------------------
-AC_DEFUN([AC_PATH_PROG],
+# _AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
+# ------------------------------------------------------------------------
+AC_DEFUN([_AC_PATH_PROG],
 [# Extract the first word of "$2", so it can be a program name with args.
 set dummy $2; ac_word=$[2]
 AC_MSG_CHECKING([for $ac_word])
@@ -155,13 +164,20 @@ m4_ifvaln([$3],
 [  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"])dnl
   ;;
 esac])dnl
-AC_SUBST([$1], [$ac_cv_path_$1])
 if test -n "$$1"; then
   AC_MSG_RESULT([$$1])
 else
   AC_MSG_RESULT([no])
 fi
-])# AC_PATH_PROG
+])# _AC_PATH_PROG
+
+
+# AC_PATH_PROG(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
+# -----------------------------------------------------------------------
+AC_DEFUN([AC_PATH_PROG],
+[_AC_PATH_PROG($@)
+AC_SUBST([$1], [$ac_cv_path_$1])dnl
+])
 
 
 # AC_PATH_PROGS(VARIABLE, PROGS-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND],
@@ -198,7 +214,7 @@ AC_DEFUN([AC_PATH_TOOL],
 fi
 if test -z "$ac_cv_path_$1"; then
   ac_pt_$1=$$1
-  AC_PATH_PROG([ac_pt_$1], [$2], [], [$4])
+  _AC_PATH_PROG([ac_pt_$1], [$2], [], [$4])
   if test "x$ac_pt_$1" = x; then
     $1="$3"
   else
@@ -224,7 +240,7 @@ AC_DEFUN([AC_CHECK_TOOL],
 fi
 if test -z "$ac_cv_prog_$1"; then
   ac_ct_$1=$$1
-  AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [], [$4])
+  _AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [], [$4])
   if test "x$ac_ct_$1" = x; then
     $1="$3"
   else
@@ -283,7 +299,7 @@ AC_PATH_PROG([$1], [$target_alias-$2], , [$4])
 if test -z "$ac_cv_path_$1"; then
   if test "$build" = "$target"; then
     ac_pt_$1=$$1
-    AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
+    _AC_PATH_PROG([ac_pt_$1], [$2], [$3], [$4])
     $1=$ac_pt_$1
   else
     $1="$3"
@@ -303,7 +319,7 @@ AC_CHECK_PROG([$1], [$target_alias-$2], [$target_alias-$2], , [$4])
 if test -z "$ac_cv_prog_$1"; then
   if test "$build" = "$target"; then
     ac_ct_$1=$$1
-    AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
+    _AC_CHECK_PROG([ac_ct_$1], [$2], [$2], [$3], [$4])
     $1=ac_ct_$1
   else
     $1="$3"

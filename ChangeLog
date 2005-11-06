@@ -1,3 +1,13 @@
+2005-11-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/programs.m4 (AC_CHECK_PROG, AC_PATH_PROG):
+	Factor functionality to..
+	(_AC_CHECK_PROG, _AC_PATH_PROG): these new macros, but only
+	`AC_SUBST($1)' in the public version.
+	(AC_CHECK_TOOL, AC_PATH_TOOL, AC_PATH_TARGET_TOOL)
+	(AC_CHECK_TARGET_TOOL): Use internal versions for ac_ct_* and
+	ac_pt_* variables.
+
 2005-11-01  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/c.m4 (AC_PROG_CC_C_O): Remove the comment about 8+3
