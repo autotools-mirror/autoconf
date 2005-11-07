@@ -380,7 +380,9 @@ ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
 # Initializations.
 #
 ac_default_prefix=/usr/local
+ac_clean_files=
 ac_config_libobj_dir=.
+LIB@&t@OBJS=
 cross_compiling=no
 subdirs=
 MFLAGS=

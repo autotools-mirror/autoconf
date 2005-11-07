@@ -1,3 +1,8 @@
+2005-11-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Initialize
+	ac_clean_files and LIBOBJS.
+
 2005-11-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/programs.m4 (AC_CHECK_PROG, AC_PATH_PROG):
