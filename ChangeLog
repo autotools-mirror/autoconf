@@ -1,3 +1,8 @@
+2005-11-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_MAIN_LOOP): Initialize
+	`tmp' to avoid file removal race.
+
 2005-11-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Initialize

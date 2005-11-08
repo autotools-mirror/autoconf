@@ -1317,9 +1317,14 @@ fi
 # simply because there is no reason against having it here, and in addition,
 # creating and moving files from /tmp can sometimes cause problems.
 # Hook for its removal unless debugging.
+# Note that there is a small window in which the directory will not be cleaned:
+# after its creation but before its name has been assigned to `$tmp'.
 $debug ||
 {
-  trap 'exit_status=$?; rm -fr "$tmp" && exit $exit_status' 0
+  tmp=
+  trap 'exit_status=$?
+  { test -z "$tmp" || test ! -d "$tmp" || rm -fr "$tmp"; } && exit $exit_status
+' 0
   trap 'AS_EXIT([1])' 1 2 13 15
 }
 dnl The comment above AS_TMPDIR says at most 4 chars are allowed.
