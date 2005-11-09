@@ -351,9 +351,9 @@ dnl Record that this fragment will need to be used.
 m4_define([_AC_SED_CMDS],
   m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
 [cat >>$CONFIG_STATUS <<_ACEOF
-cat >"$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <\CEOF
+cat >"\$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <<\CEOF
 /@[a-zA-Z_][a-zA-Z_0-9]*@/!b
-]m4_defn(_AC_SED_FRAG)dnl
+]m4_defn([_AC_SED_FRAG])dnl
 [CEOF
 
 _ACEOF
@@ -399,7 +399,7 @@ m4_define([_AC_SED_DELIM_NUM], m4_incr(_AC_SED_DELIM_NUM))dnl
 _AC_Var!$_AC_Var$ac_delim
 ])dnl
 m4_if(_AC_SED_CMD_LIMIT,
-      m4_if(_AC_Var, [@END@], _AC_SED_CMD_LIMIT, _AC_SED_CMD_NUM),
+      m4_if(_AC_Var, [@END@], m4_if(_AC_SED_CMD_NUM, 2, 2, _AC_SED_CMD_LIMIT), _AC_SED_CMD_NUM),
 [_ACEOF
 
   if test `grep -c "$ac_delim\$" conf$$subs.sed` = _AC_SED_DELIM_NUM; then

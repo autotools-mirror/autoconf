@@ -1,3 +1,9 @@
+2005-11-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE):
+	Fix quoting of output line (triggered for many AC_SUBST_FILEs).
+	Fix macro quoting.  Fix output for n*100 substituted variables.
+
 2005-11-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_MAIN_LOOP): Initialize
