@@ -9958,8 +9958,8 @@ example, Solaris @command{dtksh}, which is derived from Korn shell
 version M-12/28/93d, mishandles variable expansion that occurs on
 1024-byte buffer boundaries within a here-document.  Users can generally
 fix these problems by using a faster or more reliable shell, e.g., by
-using the command @samp{bash ./configure CONFIG_SHELL=bash} rather than
-plain @samp{./configure}.
+using the command @samp{CONFIG_SHELL=/bin/bash /bin/bash ./configure} rather
+than plain @samp{./configure}.
 
 Some shells can be extremely inefficient when there are a lot of
 here-documents inside a single statement.  For instance if your
@@ -14149,9 +14149,9 @@ The shell with which to run @command{configure} for the @option{--recheck}
 option.  It must be Bourne-compatible.  The default is a shell that
 supports @code{LINENO} if available, and @file{/bin/sh} otherwise.
 Invoking @command{configure} by hand bypasses this setting, so you may
-need to use a command like @samp{/bin/bash ./configure
-CONFIG_SHELL=/bin/bash} to insure that the same shell is used
-everywhere.
+need to use a command like @samp{CONFIG_SHELL=/bin/bash /bin/bash ./configure}
+to insure that the same shell is used everywhere.  The absolute name of the
+shell should be passed.
 @end defvar
 
 @defvar CONFIG_STATUS

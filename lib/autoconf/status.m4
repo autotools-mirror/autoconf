@@ -1256,7 +1256,9 @@ exec AS_MESSAGE_LOG_FD>>config.log
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
 if \$ac_cs_recheck; then
-  echo "running $SHELL $[0] " $ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&AS_MESSAGE_FD
+  echo "running CONFIG_SHELL=$SHELL $SHELL $[0] " $ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&AS_MESSAGE_FD
+  CONFIG_SHELL=$SHELL
+  export CONFIG_SHELL
   exec $SHELL $[0] $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
 fi
 m4_ifdef([_AC_OUTPUT_COMMANDS_INIT],

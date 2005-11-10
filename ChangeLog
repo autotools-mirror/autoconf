@@ -1,3 +1,11 @@
+2005-11-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Pass
+	CONFIG_SHELL in the environment of the configure rerun.
+	* doc/autoconf.texi (Here-Documents, config.status Invocation):
+	Suggest passing CONFIG_SHELL absolute, and in the environment
+	rather than as option.
+
 2005-11-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE):
