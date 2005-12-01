@@ -9783,13 +9783,16 @@ To be compatible with Ash 0.2:
 
 @itemize @minus
 @item
-don't use @samp{$?} after expanding empty or unset variables:
+don't use @samp{$?} after expanding empty or unset variables,
+or at the start of an @command{eval}:
 
 @example
 foo=
 false
 $foo
-echo "Don't use it: $?"
+echo "Do not use it: $?"
+false
+eval 'echo "Do not use it: $?"'
 @end example
 
 @item
@@ -11120,6 +11123,25 @@ $foo
 EOF
 @end example
 
+
+@item @command{eval}
+@c -----------------
+@prindex @command{eval}
+In some shell implementations (e.g., @command{ash}, OpenBSD 3.8
+@command{sh}, @command{pdksh} v5.2.14 99/07/13.2, and @command{zsh}
+4.2.5), the arguments of @samp{eval} are evaluated in a context where
+@samp{$?} is 0, so they exhibit behavior like this:
+
+@example
+$ false; eval 'echo $?'
+0
+@end example
+
+The correct behavior here is to assign a nonzero value to @samp{foo},
+but portable scripts should not rely on this.
+
+You should not rely on @code{LINENO} within @command{eval}.
+@xref{Special Shell Variables}.
 
 @item @command{exit}
 @c -----------------
