@@ -1,7 +1,12 @@
 2005-12-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Builtins): Fix typos in previous
-	patch, noted by Realf Wildenhues.
+	patch, noted by Ralf Wildenhues.
+
+2005-12-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): Try `set -o
+	posix' unconditionally, for pdksh in `native sh' emulation.
 
 2005-12-01  Paul Eggert  <eggert@cs.ucla.edu>
 
