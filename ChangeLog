@@ -1,3 +1,8 @@
+2005-12-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Builtins): Fix typos in previous
+	patch, noted by Realf Wildenhues.
+
 2005-12-01  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Shellology): Document eval $? problem
