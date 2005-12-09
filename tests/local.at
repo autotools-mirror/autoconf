@@ -72,7 +72,7 @@ m4_define([AT_CHECK_PERL_SYNTAX],
 # or (using gm4 as GNU M4 1.4):
 #
 #  script.4s:1: /usr/local/bin/gm4: Cannot open foo: No such file or directory
-#  autom4te: /usr/local/bin/m4 failed with exit status: 1
+#  autom4te: /usr/local/bin/gm4 failed with exit status: 1
 #
 # becomes
 #
