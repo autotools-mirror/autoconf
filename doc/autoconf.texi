@@ -11891,6 +11891,10 @@ replacement @code{grep -E}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_EGREP} and then use @code{$EGREP}.
 
+Portable extended regular expressions should use @samp{\} only to escape
+characters in the string @samp{$()*+.?[\^@{|}.  For example, @samp{\@}}
+is not portable, even though it typically matches @samp{@}}.
+
 The empty alternative is not portable, use @samp{?} instead.  For
 instance with Digital Unix v5.0:
 
@@ -11945,8 +11949,15 @@ Avoid this portability problem by avoiding the empty string.
 @item @command{expr} (@samp{:})
 @c ----------------------------
 @prindex @command{expr}
-Don't use @samp{\?}, @samp{\+} and @samp{\|} in patterns, as they are
-not supported on Solaris.
+Portable @command{expr} regular expressions should use @samp{\} to
+escape only characters in the string @samp{$()*.0123456789[\^n@{@}}.
+For example, alternation, @samp{\|}, is common but Posix does not
+require its support, so it should be avoided in portable scripts.
+Similarly, @samp{\+} and @samp{\?} should be avoided.
+
+Portable @command{expr} regular expressions should not begin with
+@samp{^}.  Patterns are automatically anchored so leading @samp{^} is
+not needed anyway.
 
 The Posix standard is ambiguous as to whether
 @samp{expr 'a' : '\(b\)'} outputs @samp{0} or the empty string.
@@ -12045,6 +12056,12 @@ while @acronym{GNU} @command{find} reports @samp{./foo-./foo}.
 @item @command{grep}
 @c -----------------
 @prindex @command{grep}
+Portable scripts can rely on the @command{grep} options @option{-c},
+@option{-l}, @option{-n}, and @option{-v}, but should avoid other
+options.  For example, don't use @option{-w}, as Posix does not require
+it and Irix 6.5.16m's @command{grep} does not support it.
+
+Some of the options required by Posix are not portable in practice.
 Don't use @samp{grep -q} to suppress output, because many @command{grep}
 implementations (e.g., Solaris) do not support @option{-q}.
 Don't use @samp{grep -s} to suppress output either, because Posix
@@ -12070,12 +12087,17 @@ grep 'foo
 bar' in.txt
 @end example
 
-Alternation, @samp{\|}, is common but Posix does not require its
+Traditional @command{grep} implementations (e.g., Solaris) do not
+support the @option{-E} or @samp{-F} options.  To work around these
+problems, invoke @code{AC_PROG_EGREP} and then use @code{$EGREP}, and
+similarly for @code{AC_PROG_FGREP} and @code{$FGREP}.
+
+Portable @command{grep} regular expressions should use @samp{\} only to
+escape characters in the string @samp{$()*.0123456789[\^@{@}}.  For example,
+alternation, @samp{\|}, is common but Posix does not require its
 support in basic regular expressions, so it should be avoided in
 portable scripts.  Solaris @command{grep} does not support it.
-
-Don't rely on @option{-w}, as Irix 6.5.16m's @command{grep} does not
-support it.
+Similarly, @samp{\+} and @samp{\?} should be avoided.
 
 
 @item @command{join}
@@ -12264,8 +12286,8 @@ Patterns should not include the separator (unless escaped), even as part
 of a character class.  In conformance with Posix, the Cray
 @command{sed} will reject @samp{s/[^/]*$//}: use @samp{s,[^/]*$,,}.
 
-Avoid empty patterns within parentheses (i.e., @samp{\(\)}).  Posix is
-silent on whether they are allowed, and Unicos 9 @command{sed} rejects
+Avoid empty patterns within parentheses (i.e., @samp{\(\)}).  Posix does
+not require support for empty patterns, and Unicos 9 @command{sed} rejects
 them.
 
 Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
@@ -12273,21 +12295,25 @@ Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
 Sed scripts should not use branch labels longer than 8 characters and
 should not contain comments.
 
-Don't include extra @samp{;}, as some @command{sed}, such as Net@acronym{BSD}
-1.4.2's, try to interpret the second as a command:
+Avoid redundant @samp{;}, as some @command{sed} implementations, such as
+Net@acronym{BSD} 1.4.2's, incorrectly try to interpret the second
+@samp{;} as a command:
 
 @example
 $ @kbd{echo a | sed 's/x/x/;;s/x/x/'}
 sed: 1: "s/x/x/;;s/x/x/": invalid command code ;
 @end example
 
-Input should have reasonably long lines, since some @command{sed} have
-an input buffer limited to 4000 bytes.
+Input should not have unreasonably long lines, since some @command{sed}
+implementations have an input buffer limited to 4000 bytes.
 
-Alternation, @samp{\|}, is common but Posix does not require its
+Portable @command{sed} regular expressions should use @samp{\} only to escape
+characters in the string @samp{$()*.0123456789[\^n@{@}}.  For example,
+alternation, @samp{\|}, is common but Posix does not require its
 support, so it should be avoided in portable scripts.  Solaris
 @command{sed} does not support alternation; e.g., @samp{sed '/a\|b/d'}
 deletes only lines that contain the literal string @samp{a|b}.
+Similarly, @samp{\+} and @samp{\?} should be avoided.
 
 Anchors (@samp{^} and @samp{$}) inside groups are not portable.
 
