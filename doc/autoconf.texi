@@ -10511,6 +10511,15 @@ a different notation @samp{$((@var{expression}))} that in modern
 shells is an arithmetic expression not a command.  To avoid the
 confusion, insert a space between the two opening parentheses.
 
+Avoid @var{commands} that contain unbalanced parentheses in
+here-documents, comments, or case statement patterns, as many shells
+mishandle them.  For example, Bash 3.1, @samp{ksh88}, @command{pdksh}
+5.2.14, and Zsh 4.2.6 all mishandle the following valid command:
+
+@example
+echo $(case x in x) echo hello;; esac)
+@end example
+
 @end table
 
 
