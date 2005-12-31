@@ -1,3 +1,8 @@
+2005-12-31  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/programs.m4 (_AC_PROG_GREP): Use $PATH_SEPARATOR;
+	  ":" caused problems on OS/2-EMX.  Suggested by Andrew Belov.
+
 2005-12-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Shell Substitutions): Warn about unbalanced

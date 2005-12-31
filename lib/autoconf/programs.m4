@@ -426,7 +426,7 @@ AC_DEFUN([AC_PROG_GREP],
 m4_define([_AC_PROG_GREP],
 [_AC_PATH_PROG_FEATURE_CHECK([$1], [$2],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_$1], [ac_cv_path_$1],
-		["$ac_path_$1" $3], [$1])], [$PATH:/usr/xpg4/bin])
+		["$ac_path_$1" $3], [$1])], [$PATH$PATH_SEPARATOR/usr/xpg4/bin])
 ])
 
 
