@@ -1,5 +1,6 @@
 2006-01-04  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi: Update copyright (and other) dates to 2006.
 	* doc/autoconf.texi (Shellology): Mac OS X 10.2 changed the default
 	shell from zsh to bash.
 

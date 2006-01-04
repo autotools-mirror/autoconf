@@ -181,7 +181,7 @@ a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
 
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
-2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -9864,7 +9864,7 @@ its own.  Similarly to Bash, you can detect whether you are
 running @command{pdksh} by testing whether @code{KSH_VERSION} is set,
 and you can require Posix compatibility by running @samp{set
 -o posix}.  Unfortunately, with @command{pdksh} 5.2.14 (the latest
-stable version as of March 2005) Posix mode is buggy and causes
+stable version as of January 2006) Posix mode is buggy and causes
 @command{pdksh} to depart from Posix in at least one respect:
 
 @example
@@ -11808,7 +11808,7 @@ the system calls that @command{cp} uses; traditionally this was
 @command{cp} implementations use @code{utimes}, which has
 1-microsecond resolution.  These newer implementations include GNU
 coreutils 5.0.91 or later, and Solaris 8 (sparc) patch 109933-02 or
-later.  Unfortunately as of June 2005 there is still no system
+later.  Unfortunately as of January 2006 there is still no system
 call to set time stamps to the full nanosecond resolution.
 
 Bob Proulx notes that @samp{cp -p} always @emph{tries} to copy
