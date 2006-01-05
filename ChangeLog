@@ -1,5 +1,7 @@
 2006-01-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/status.m4: Fix typo.
+
 	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Ignore
 	singly- or doubly-quoted arguments to `-cmdline', `-ignore',
 	`-def', for the benefit of Portland `pgf90 -Mipa'.

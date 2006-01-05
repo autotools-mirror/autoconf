@@ -318,7 +318,7 @@ dnl One cannot portably go further than 100 commands because of HP-UX.
 # This code was written by Dan Manthey.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopen with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
 #
 m4_define([_AC_OUTPUT_FILES_PREPARE],
 [#
