@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Fortran languages support.
-# Copyright (C) 2001, 2003, 2004, 2005
+# Copyright (C) 2001, 2003, 2004, 2005, 2006
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -558,10 +558,11 @@ case $ac_[]_AC_LANG_ABBREV[]_v_output in
   # Portland Group compiler has singly- or doubly-quoted -cmdline argument
   # Singly-quoted arguments were reported for versions 5.2-4 and 6.0-4.
   # Doubly-quoted arguments were reported for "PGF90/x86 Linux/x86 5.0-2".
-  *-cmdline\ \'*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed "s/-cmdline  *'[[^']]*'/ /g"` ;;
-  *-cmdline*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/-cmdline  *"[[^"]]*"/ /g'` ;;
+  *-cmdline\ * | *-ignore\ * | *-def\ *)
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed "\
+        s/-cmdline  *'[[^']]*'/ /g; s/-cmdline  *\"[[^\"]]*\"/ /g
+        s/-ignore  *'[[^']]*'/ /g; s/-ignore  *\"[[^\"]]*\"/ /g
+        s/-def  *'[[^']]*'/ /g; s/-def  *\"[[^\"]]*\"/ /g"` ;;
 
   # If we are using Cray Fortran then delete quotes.
   *cft90*)
