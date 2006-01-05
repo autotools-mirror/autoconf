@@ -1,3 +1,21 @@
+2006-01-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix Posix-conformance bugs re use of { command in sed scripts,
+	and improve the sed-related documentation a bit.
+	* doc/autoconf.texi (Installation Directory Variables): Use
+	our own style advice re 's,a,b,' versus 's|a|b|'.  Use "Sed"
+	rather than "sed" when talking about Sed in general.
+	(Particular Programs): Likewise.
+	(Coding Style): y is like s with respect to / and ,.
+	(Limitations of Usual Tools): Document the weird restrictions
+	that Posix has about { }.  Use better quoting.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE, _AC_OUTPUT_HEADER):
+	Rewrite to conform to Posix rules about { } in sed scripts.
+	* lib/m4sugar/m4sh.m4 (AS_DIRNAME_SED, AS_BASENAME_SED): Likewise.
+	* tests/foreign.at (Libtool): Likewise.
+	* tests/semantics.at (AC_CHECK_PROG & AC_CHECK_PROGS):
+	Use our own style advice re 's,a,b,' versus 's|a|b|'.
+
 2006-01-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4: Fix typo.

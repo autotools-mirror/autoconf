@@ -2,7 +2,8 @@
 
 AT_BANNER([Semantics.])
 
-# Copyright (C) 2000, 2001, 2002, 2004, 2005 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006 Free Software
+# Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -420,7 +421,7 @@ AT_DATA([configure.ac],
 [[AC_INIT
 pwd=`pwd`
 p="1${PATH_SEPARATOR}2${PATH_SEPARATOR}3${PATH_SEPARATOR}4${PATH_SEPARATOR}5${PATH_SEPARATOR}6"
-path=`echo $p | sed -e 's|\([[0-9]]\)|'"$pwd"'/path/\1|g'`
+path=`echo $p | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
 fail=false
 
 AC_CHECK_PROG(TOOL1, tool, found, not-found, $path)
@@ -507,7 +508,7 @@ AT_DATA([configure.ac],
 [[AC_INIT
 pwd=`pwd`
 p="1${PATH_SEPARATOR}2${PATH_SEPARATOR}3${PATH_SEPARATOR}4${PATH_SEPARATOR}5${PATH_SEPARATOR}6"
-path=`echo $p | sed -e 's|\([[0-9]]\)|'"$pwd"'/path/\1|g'`
+path=`echo $p | sed -e 's,\([[0-9]]\),'"$pwd"'/path/\1,g'`
 fail=false
 
 AC_PATH_PROG(TOOL1, tool, not-found, $path)

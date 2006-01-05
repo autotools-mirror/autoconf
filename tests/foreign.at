@@ -2,7 +2,7 @@
 
 AT_BANNER([Compatibility with other tools.])
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,11 @@ AT_CHECK([libtoolize --version || exit 77],
 # CVS Autoconf probably does not work with too old Libtools.
 AT_CHECK([[
 case `libtoolize --version |
-      sed -n '/^.* \([0-9][0-9.a-z]*\)$/{s//\1/;p;q;}'` in
+      sed -n '/^.* \([0-9][0-9.a-z]*\)$/{
+		s//\1/
+		p
+		q
+	}'` in
   0.*          ) exit 77;;
   1.[0123]*    ) exit 77;;
 esac]],

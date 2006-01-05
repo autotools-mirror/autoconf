@@ -2458,8 +2458,8 @@ Makefile snippet similar to:
 @example
 @group
 edit = sed \
-        -e 's|@@datadir[@@]|$(pkgdatadir)|g' \
-        -e 's|@@prefix[@@]|$(prefix)|g'
+        -e 's,@@datadir[@@],$(pkgdatadir),g' \
+        -e 's,@@prefix[@@],$(prefix),g'
 @end group
 
 @group
@@ -2484,7 +2484,7 @@ Some details are noteworthy:
 @table @samp
 @item @@datadir[@@]
 The brackets prevent @command{configure} from replacing
-@samp{@@datadir@@} in the sed expression itself.
+@samp{@@datadir@@} in the Sed expression itself.
 Brackets are preferable to a backslash here, since
 Posix says @samp{\@@} is not portable.
 
@@ -2493,7 +2493,7 @@ Don't use @samp{@@pkgdatadir@@}!  Use the matching makefile variable
 instead.
 
 @item ,
-Don't use @samp{/} in the sed expression(s) since most likely the
+Don't use @samp{/} in the Sed expression(s) since most likely the
 variables you use, such as @samp{$(pkgdatadir)}, will contain
 some.
 
@@ -3509,7 +3509,7 @@ is found, and otherwise to @samp{:} (do nothing).
 @defmac AC_PROG_SED
 @acindex{PROG_SED}
 @ovindex SED
-Set output variable @code{SED} to a @code{sed} on @env{PATH} that
+Set output variable @code{SED} to a Sed implementation on @env{PATH} that
 truncates as few characters as possible.  If @sc{gnu} Sed is found,
 use that instead.
 @end defmac
@@ -9619,9 +9619,9 @@ etc.  If you add portability issues to the picture, you'll prefer
 better than hacking Autoconf @code{:-)}.
 
 When using @command{sed}, don't use @option{-e} except for indenting
-purpose.  With the @code{s} command, the preferred separator is @samp{/}
-unless @samp{/} itself is used in the command, in which case you should
-use @samp{,}.
+purposes.  With the @code{s} and @code{y} commands, the preferred
+separator is @samp{/} unless @samp{/} itself might appear in the pattern
+or replacement, in which case you should use @samp{,}.
 
 @xref{Macro Definitions}, for details on how to define a macro.  If a
 macro doesn't use @code{AC_REQUIRE} and it is expected to never be the
@@ -11397,7 +11397,7 @@ shift, but in addition it is not portable: the shell of @acronym{MIPS
 RISC/OS} 4.52 refuses to do it.
 
 Don't use @samp{shift 2} etc.; it was not in the 7th Edition Bourne shell,
-and it is also absent in many pre-POSIX shells.
+and it is also absent in many pre-Posix shells.
 
 
 @item @command{source}
@@ -12373,6 +12373,12 @@ but Posix says that this use of a semicolon has undefined effect if
 should use semicolon only with simple scripts that do not use these
 verbs.
 
+Commands inside @{ @} brackets are further restricted.  Posix says that
+they cannot be preceded by addresses, @samp{!}, or @samp{;}, and that
+each command must be followed immediately by a newline, without any
+intervening blanks or semicolons.  The closing bracket must be alone on
+a line, other than white space preceding or following it.
+
 Contrary to yet another urban legend, you may portably use @samp{&} in
 the replacement part of the @code{s} command to mean ``what was
 matched''.  All descendants of Unix version 7 @command{sed}
@@ -12392,6 +12398,10 @@ $ @kbd{echo "foo" | sed -n '/bar/! p'}
 $ @kbd{echo "foo" | sed -n '/bar/ !p'}
 foo
 @end example
+
+Posix also says that you should not combine @samp{!} and @samp{;}.  If
+you use @samp{!}, it is best to put it on a command that is delimited by
+newlines rather than @samp{;}.
 
 Also note that Posix requires that the @samp{b}, @samp{t}, @samp{r}, and
 @samp{w} commands be followed by exactly one space before their argument.
@@ -12443,20 +12453,21 @@ kept
 deleted
 @end example
 
-Why?  When processing 1, a matches, therefore sets the t flag, b jumps to
-d, and the output is produced.  When processing line 2, the t flag is
-still set (this is the bug).  Line a fails to match, but @command{sed}
-is not supposed to clear the t flag when a substitution fails.  Line b
-sees that the flag is set, therefore it clears it, and jumps to d, hence
-you get @samp{delete me} instead of @samp{deleted}.  When processing 3, t
-is clear, a matches, so the flag is set, hence b clears the flags and
-jumps.  Finally, since the flag is clear, 4 is processed properly.
+Why?  When processing line 1, (a) matches, therefore sets the @samp{t}
+flag, (b)b jumps to (d), and the output is produced.  When processing
+line 2, the @samp{t} flag is still set (this is the bug).  Command (a)
+fails to match, but @command{sed} is not supposed to clear the @samp{t}
+flag when a substitution fails.  Command (b) sees that the flag is set,
+therefore it clears it, and jumps to (d), hence you get @samp{delete me}
+instead of @samp{deleted}.  When processing line (3), @samp{t} is clear,
+(a) matches, so the flag is set, hence (b) clears the flags and jumps.
+Finally, since the flag is clear, line 4 is processed properly.
 
 There are two things one should remember about @samp{t} in @command{sed}.
 Firstly, always remember that @samp{t} jumps if @emph{some} substitution
 succeeded, not only the immediately preceding substitution.  Therefore,
-always use a fake @samp{t clear; :clear} to reset the t flag where
-needed.
+always use a fake @samp{t clear} followed by a @samp{:clear} on the next
+line, to reset the @samp{t} flag where needed.
 
 Secondly, you cannot rely on @command{sed} to clear the flag at each new
 cycle.

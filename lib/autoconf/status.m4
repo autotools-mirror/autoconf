@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterizing and creating config.status.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -363,7 +363,8 @@ m4_define([_AC_SED_CMD_NUM], m4_eval(_AC_SED_CMD_NUM + 4))dnl
 m4_define([_AC_SED_FRAG],
 m4_defn([_AC_SED_FRAG])dnl
 [/^[ 	]*@]_AC_Var[@[ 	]*$/{ r $]_AC_Var[
-d; }
+d
+}
 ])dnl
 ])dnl
 # Remaining file output variables are in a fragment that also has non-file
@@ -461,12 +462,12 @@ m4_popdef([_AC_SED_FRAG])dnl
 # (actually we leave an empty line to preserve line numbers).
 if test "x$srcdir" = x.; then
   ac_vpsub=['/^[	 ]*VPATH[	 ]*=/{
-s/:*\$(srcdir):*/:/;
-s/:*\${srcdir}:*/:/;
-s/:*@srcdir@:*/:/;
-s/^\([^=]*=[	 ]*\):*/\1/;
-s/:*$//;
-s/^[^=]*=[	 ]*$//;
+s/:*\$(srcdir):*/:/
+s/:*\${srcdir}:*/:/
+s/:*@srcdir@:*/:/
+s/^\([^=]*=[	 ]*\):*/\1/
+s/:*$//
+s/^[^=]*=[	 ]*$//
 }']
 fi
 
@@ -643,9 +644,10 @@ do
   dnl Quote, for the `[ ]' and `define'.
   echo ['    # First, check the format of the line:
     cat >"$tmp/defines.sed" <<CEOF
-/^[	 ]*#[	 ]*undef[	 ][	 ]*$ac_word_regexp[ 	]*$/!{
-/^[	 ]*#[	 ]*define[	 ][	 ]*$ac_word_regexp[( 	]/!b
-}'] >>$CONFIG_STATUS
+/^[	 ]*#[	 ]*undef[	 ][	 ]*$ac_word_regexp[ 	]*$/b def
+/^[	 ]*#[	 ]*define[	 ][	 ]*$ac_word_regexp[( 	]/b def
+b
+:def'] >>$CONFIG_STATUS
   sed ${ac_max_sed_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
     sed -f "$tmp/defines.sed"' "$ac_in >$ac_out" >>$CONFIG_STATUS

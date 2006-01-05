@@ -2,7 +2,7 @@
 # M4 sugar for common shell constructs.
 # Requires GNU M4 and M4sugar.
 #
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -639,11 +639,23 @@ $as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
 
 m4_defun([AS_DIRNAME_SED],
 [echo X[]$1 |
-    sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
-  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
-  	  /^X\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q']])
+    sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
+	    s//\1/
+	    q
+	  }
+	  /^X\(\/\/\)[^/].*/{
+	    s//\1/
+	    q
+	  }
+	  /^X\(\/\/\)$/{
+	    s//\1/
+	    q
+	  }
+	  /^X\(\/\).*/{
+	    s//\1/
+	    q
+	  }
+	  s/.*/./; q']])
 
 m4_defun([AS_DIRNAME],
 [(dirname $1) 2>/dev/null ||
@@ -665,10 +677,19 @@ $as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
 
 m4_defun([AS_BASENAME_SED],
 [echo X/[]$1 |
-    sed ['/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
-  	  /^X\/\(\/\/\)$/{ s//\1/; q; }
-  	  /^X\/\(\/\).*/{ s//\1/; q; }
-  	  s/.*/./; q']])
+    sed ['/^.*\/\([^/][^/]*\)\/*$/{
+	    s//\1/
+	    q
+	  }
+	  /^X\/\(\/\/\)$/{
+	    s//\1/
+	    q
+	  }
+	  /^X\/\(\/\).*/{
+	    s//\1/
+	    q
+	  }
+	  s/.*/./; q']])
 
 m4_defun([AS_BASENAME],
 [AS_REQUIRE([_$0_PREPARE])dnl
