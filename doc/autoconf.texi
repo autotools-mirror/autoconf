@@ -2458,8 +2458,8 @@ Makefile snippet similar to:
 @example
 @group
 edit = sed \
-        -e 's,@@datadir[@@],$(pkgdatadir),g' \
-        -e 's,@@prefix[@@],$(prefix),g'
+        -e 's|@@datadir[@@]|$(pkgdatadir)|g' \
+        -e 's|@@prefix[@@]|$(prefix)|g'
 @end group
 
 @group
@@ -9621,7 +9621,13 @@ better than hacking Autoconf @code{:-)}.
 When using @command{sed}, don't use @option{-e} except for indenting
 purposes.  With the @code{s} and @code{y} commands, the preferred
 separator is @samp{/} unless @samp{/} itself might appear in the pattern
-or replacement, in which case you should use @samp{,}.
+or replacement, in which case you should use @samp{|}, or optionally
+@samp{,} if you know the pattern and replacement cannot contain a file
+name.  If none of these characters will do, choose a printable character
+that cannot appear in the pattern or replacement.  Characters from the
+set @samp{"#$&'()*;<=>?`|~} are good choices if the pattern or
+replacement might contain a file name, since they have special meaning
+to the shell and are less likely to occur in file names.
 
 @xref{Macro Definitions}, for details on how to define a macro.  If a
 macro doesn't use @code{AC_REQUIRE} and it is expected to never be the

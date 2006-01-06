@@ -773,15 +773,15 @@ _AS_LINENO_WORKS || {
     /[[$]]LINENO/=
   ' <$as_myself |
     sed '
-      s,[[$]]LINENO.*,&-,
+      s/[[$]]LINENO.*/&-/
       t lineno
       b
       :lineno
       N
       :loop
-      s,[[$]]LINENO\([[^'$as_cr_alnum'_]].*\n\)\(.*\),\2\1\2,
+      s/[[$]]LINENO\([[^'$as_cr_alnum'_]].*\n\)\(.*\)/\2\1\2/
       t loop
-      s,-\n.*,,
+      s/-\n.*//
     ' >$as_me.lineno &&
   chmod +x $as_me.lineno ||
     AS_ERROR([cannot create $as_me.lineno; rerun with a POSIX shell])

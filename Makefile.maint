@@ -2,7 +2,8 @@
 # This Makefile fragment is shared between the coreutils,
 # CPPI, Bison, and Autoconf.
 
-## Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+## Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -207,7 +208,7 @@ sc_prohibit_jm_in_m4:
 sc_root_tests:
 	@t1=sc-root.expected; t2=sc-root.actual;			\
 	grep -nl '^PRIV_CHECK_ARG=require-root'				\
-	  $$($(CVS_LIST) tests) |sed s,tests,., |sort > $$t1;		\
+	  $$($(CVS_LIST) tests) |sed s/tests/./ |sort > $$t1;		\
 	sed -n 's,	cd \([^ ]*\) .*MAKE..check TESTS=\(.*\),./\1/\2,p' \
 	  $(srcdir)/tests/Makefile.am |sort > $$t2;			\
 	diff -u $$t1 $$t2 || diff=1;					\

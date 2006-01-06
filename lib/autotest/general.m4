@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -306,14 +306,14 @@ do
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
 	at_range_start=`echo $at_option |tr -d '-'`
 	at_range=`echo " $at_groups_all " | \
-	  sed -e 's,^.* \('$at_range_start' \),\1,'`
+	  sed -e 's/^.* \('$at_range_start' \)/\1/'`
 	at_groups="$at_groups$at_range "
 	;;
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
 	at_range_end=`echo $at_option |tr -d '-'`
 	at_range=`echo " $at_groups_all " | \
-	  sed -e 's,\( '$at_range_end'\) .*$,\1,'`
+	  sed -e 's/\( '$at_range_end'\) .*$/\1/'`
 	at_groups="$at_groups$at_range "
 	;;
 
@@ -331,8 +331,8 @@ do
 	  at_range_start=$at_tmp
 	fi
 	at_range=`echo " $at_groups_all " | \
-	  sed -e 's,^.*\( '$at_range_start' \),\1,' \
-	      -e 's,\( '$at_range_end'\) .*$,\1,'`
+	  sed -e 's/^.*\( '$at_range_start' \)/\1/' \
+	      -e 's/\( '$at_range_end'\) .*$/\1/'`
 	at_groups="$at_groups$at_range "
 	;;
 
