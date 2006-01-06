@@ -1,5 +1,11 @@
 2006-01-05  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* bin/autoconf.as, bin/autoheader.in, bin/autom4te.in
+	* bin/autoreconf.in, bin/autoscan.in, bin/autoupdate.in, bin/ifnames.in:
+	* lib/autoconf/general.m4, lib/autoconf/status.m4:
+	* lib/autotest/general.m4:
+	Update copyright year to 2006.
+
 	* Makefile.maint (sc_root_tests): Use recommend style s/a/b/ for
 	sed substitutions.
 	* doc/autoconf.texi (Installation Directory Variables): Use s|a|b|

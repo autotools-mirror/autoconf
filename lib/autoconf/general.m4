@@ -334,7 +334,7 @@ m4_ifset([AC_PACKAGE_BUGREPORT],
 m4_define([_AC_INIT_COPYRIGHT],
 [AC_COPYRIGHT(
 [Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.],
 	      [VERSION_FSF])dnl

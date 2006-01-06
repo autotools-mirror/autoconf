@@ -159,7 +159,7 @@ m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 AS_INIT
 AT_COPYRIGHT(
-[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 Foundation, Inc.
 This test suite is free software; the Free Software Foundation gives
 unlimited permission to copy, distribute and modify it.])
