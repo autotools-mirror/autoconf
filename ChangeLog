@@ -3,7 +3,7 @@
 	* bin/autoconf.as, bin/autoheader.in, bin/autom4te.in
 	* bin/autoreconf.in, bin/autoscan.in, bin/autoupdate.in, bin/ifnames.in:
 	* lib/autoconf/general.m4, lib/autoconf/status.m4:
-	* lib/autotest/general.m4:
+	* lib/autotest/general.m4, tests/local.at:
 	Update copyright year to 2006.
 
 	* Makefile.maint (sc_root_tests): Use recommend style s/a/b/ for
