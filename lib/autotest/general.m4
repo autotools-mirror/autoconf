@@ -276,7 +276,8 @@ do
 	;;
 
     --clean | -c )
-	test -d "$at_suite_dir" && chmod -R u+rwx "$at_suite_dir"
+	test -d "$at_suite_dir" &&
+	  find "$at_suite_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
 	rm -f -r "$at_suite_dir" "$at_suite_log"
 	exit 0
 	;;
@@ -670,8 +671,10 @@ do
       # Create a fresh directory for the next test group, and enter.
       at_group_dir=$at_suite_dir/$at_group_normalized
       at_group_log=$at_group_dir/$as_me.log
-      test -d $at_group_dir && chmod -R u+rwx $at_group_dir
-      rm -f -r $at_group_dir
+      if test -d $at_group_dir; then
+	find $at_group_dir -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+	rm -fr $at_group_dir
+      fi
       mkdir $at_group_dir ||
 	AS_ERROR([cannot create $at_group_dir])
       cd $at_group_dir
@@ -764,10 +767,11 @@ _ATEOF
 	  echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
 
 	  # Cleanup the group directory, unless the user wants the files.
-	  $at_debug_p || {
-	    test -d $at_group_dir && chmod -R u+rwx $at_group_dir
-	    rm -f -r $at_group_dir
-	  }
+	  $at_debug_p ||
+	    if test -d $at_group_dir; then
+	      find $at_group_dir -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+	      rm -fr $at_group_dir
+	    fi
 	  ;;
 	*)
 	  # Upon failure, include the log into the testsuite's global

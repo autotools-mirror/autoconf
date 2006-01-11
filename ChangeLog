@@ -1,3 +1,10 @@
+2006-01-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	    Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autotest/general.m4 (AT_INIT): When ensuring writability
+	before the removals of test dirs, use `find' to avoid modification
+	of symlinked directories.
+
 2006-01-11  Steven G. Johnson  <stevenj@alum.mit.edu>
 
 	* lib/autoconf/fortran.m4 (AC_F77_DUMMY_MAIN, AC_FC_DUMMY_MAIN):
