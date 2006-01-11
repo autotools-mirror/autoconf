@@ -1,6 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2001, 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+# Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -783,6 +784,7 @@ m4_define([_AC_PROG_CXX_EXIT_DECLARATION],
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
    'extern "C" void exit (int);' \
+   'extern "C" __declspec(dllimport) void exit (int);' \
    'void exit (int);'
 do
   _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$ac_declaration
