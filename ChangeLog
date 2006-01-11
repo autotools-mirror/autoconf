@@ -1,5 +1,9 @@
 2006-01-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/lang.m4 (_AC_COMPILER_OBJEXT_REJECT):
+	Add `*.map' and `.inf' for Green Hills compiler.
+	Reported by Stefan Seefeld <stefan@codesourcery.com>.
+
 	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Handle quadrigraphs
 	correctly: pad with spaces after FIRST_PREFIX if necessary,
 	and compute string lenghts with `m4_qlen' instead of `m4_len'.

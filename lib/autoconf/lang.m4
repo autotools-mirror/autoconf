@@ -1,6 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2000, 2001, 2002, 2004, 2005 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006 Free Software
+# Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -421,6 +422,9 @@ m4_divert_pop()dnl
 #
 # - *.xSYM
 #   Created on BeOS.  Seems to be per executable.
+# 
+# - *.map, *.inf
+#   Created by the Green Hills compiler.
 
 
 # _AC_COMPILER_OBJEXT_REJECT
@@ -428,7 +432,7 @@ m4_divert_pop()dnl
 # Case/esac pattern matching the files to be ignored when looking for
 # compiled object files.
 m4_define([_AC_COMPILER_OBJEXT_REJECT],
-[*.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg])
+[*.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf])
 
 
 # _AC_COMPILER_EXEEXT_REJECT
