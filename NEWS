@@ -61,6 +61,9 @@
   New macro which is defined to the name of the first declared config header
   or undefined if no config headers have been declared yet.
 
+** AS_HELP_STRING
+  The macro correctly handles quadrigraphs now.
+
 ** AT_COPYRIGHT
   New macro for copyright notices in testsuite files.
 
@@ -1266,7 +1269,7 @@ Various bug fixes.
 -----
 
 Copyright (C) 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
-2003, 2004, 2005 Free Software Foundation, Inc.
+2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 
 This file is part of GNU Autoconf.
 

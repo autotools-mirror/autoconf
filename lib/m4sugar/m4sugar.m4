@@ -3,7 +3,7 @@ divert(-1)#                                                  -*- Autoconf -*-
 # Base M4 layer.
 # Requires GNU M4.
 #
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1559,9 +1559,6 @@ m4_define([m4_append_uniq],
 # we really want to bother with people trying each single corner
 # of a software?
 #
-# more important:
-# FIXME: handle quadrigraphs correctly, both in TEXT and in FIRST_PREFIX.
-#
 # This macro does not leave a trailing space behind the last word,
 # what complicates it a bit.  The algorithm is stupid simple: all the
 # words are preceded by m4_Separator which is defined to empty for the
@@ -1570,19 +1567,25 @@ m4_define([m4_text_wrap],
 [m4_pushdef([m4_Prefix], [$2])dnl
 m4_pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
 m4_pushdef([m4_Width], m4_default([$4], 79))dnl
-m4_pushdef([m4_Cursor], m4_len(m4_Prefix1))dnl
+m4_pushdef([m4_Cursor], m4_qlen(m4_Prefix1))dnl
 m4_pushdef([m4_Separator], [])dnl
 m4_Prefix1[]dnl
-m4_if(m4_eval(m4_Cursor > m4_len(m4_Prefix)),
+m4_if(m4_eval(m4_qlen(m4_Prefix1) > m4_len(m4_Prefix)),
       1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
-m4_Prefix])[]dnl
+m4_Prefix],
+      m4_if(m4_eval(m4_qlen(m4_Prefix1) < m4_len(m4_Prefix)),
+	    [0], [],
+	    [m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
+m4_for(m4_Space, m4_qlen(m4_Prefix1), m4_eval(m4_len(m4_Prefix) - 1),
+		    [], [ ])])[]dnl
+)[]dnl
 m4_foreach_w([m4_Word], [$1],
-[m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_len(m4_defn([m4_Word])) + 1))dnl
+[m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_qlen(m4_defn([m4_Word])) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
 m4_if(m4_eval(m4_Cursor > m4_Width),
       1, [m4_define([m4_Cursor],
-		    m4_eval(m4_len(m4_Prefix) + m4_len(m4_defn([m4_Word])) + 1))]
+		    m4_eval(m4_len(m4_Prefix) + m4_qlen(m4_defn([m4_Word])) + 1))]
 m4_Prefix,
        [m4_Separator])[]dnl
 m4_defn([m4_Word])[]dnl

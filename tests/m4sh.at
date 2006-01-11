@@ -2,7 +2,7 @@
 
 AT_BANNER([M4sh.])
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -457,14 +457,79 @@ _AS_LINENO_PREPARE
 echo "AS_HELP_STRING([--an-option],[some text])"
 echo "AS_HELP_STRING([--another-much-longer-option],
 [some other text which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--fooT=barT], [foo bar])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@], [foo bar])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@123456789], [foo bar])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@1234567890], [foo bar])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@12345678901], [foo bar])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@123456789012], [foo bar])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@1234567890123], [foo bar])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@],
+[some other text which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@123456789],
+[some other text which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@1234567890],
+[some other text which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@12345678901],
+[some other text which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@123456789012],
+[some other text which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@1234567890123],
+[some other text which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@],
+[some other @<][:@ex@:][>@ which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@123456789],
+[some other @<][:@ex@:][>@ which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@1234567890],
+[some other @<][:@ex@:][>@ which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@12345678901],
+[some other @<][:@ex@:][>@ which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@123456789012],
+[some other @<][:@ex@:][>@ which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@1234567890123],
+[some other @<][:@ex@:][>@ which should wrap at our default of 80 characters.])"
 ]])
 
 AT_CHECK_M4SH
 AT_CHECK([./script], [0],
-[  --an-option             some text
+[[  --an-option             some text
   --another-much-longer-option
                           some other text which should wrap at our default of
                           80 characters.
-])
+  --fooT=barT             foo bar
+  --foo[=bar]             foo bar
+  --foo[=bar]123456789    foo bar
+  --foo[=bar]1234567890   foo bar
+  --foo[=bar]12345678901  foo bar
+  --foo[=bar]123456789012 foo bar
+  --foo[=bar]1234567890123
+                          foo bar
+  --foo[=bar]             some other text which should wrap at our default of
+                          80 characters.
+  --foo[=bar]123456789    some other text which should wrap at our default of
+                          80 characters.
+  --foo[=bar]1234567890   some other text which should wrap at our default of
+                          80 characters.
+  --foo[=bar]12345678901  some other text which should wrap at our default of
+                          80 characters.
+  --foo[=bar]123456789012 some other text which should wrap at our default of
+                          80 characters.
+  --foo[=bar]1234567890123
+                          some other text which should wrap at our default of
+                          80 characters.
+  --foo[=bar]             some other [ex] which should wrap at our default of
+                          80 characters.
+  --foo[=bar]123456789    some other [ex] which should wrap at our default of
+                          80 characters.
+  --foo[=bar]1234567890   some other [ex] which should wrap at our default of
+                          80 characters.
+  --foo[=bar]12345678901  some other [ex] which should wrap at our default of
+                          80 characters.
+  --foo[=bar]123456789012 some other [ex] which should wrap at our default of
+                          80 characters.
+  --foo[=bar]1234567890123
+                          some other [ex] which should wrap at our default of
+                          80 characters.
+]])
 
 AT_CLEANUP

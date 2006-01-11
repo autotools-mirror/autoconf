@@ -1,3 +1,13 @@
+2006-01-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Handle quadrigraphs
+	correctly: pad with spaces after FIRST_PREFIX if necessary,
+	and compute string lenghts with `m4_qlen' instead of `m4_len'.
+	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): Comments updated.
+	* tests/m4sh.at (AS_HELP_STRING): Test extended.
+	* NEWS: Updated.
+	Reported by numerous people, numerous times.
+
 2006-01-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* bin/autoconf.as, bin/autoheader.in, bin/autom4te.in
