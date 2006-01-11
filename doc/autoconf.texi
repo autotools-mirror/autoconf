@@ -4788,6 +4788,10 @@ On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
 On FreeBSD 4.8 on ia32 and using gcc version 2.95.4,
 @file{sys/params.h} is a prerequisite.
 
+@item @file{sys/ptem.h}
+@hdrindex{sys/ptem.h}
+On Solaris 8, @file{sys/stream.h} is a prerequisite.
+
 @item @file{sys/socket.h}
 @hdrindex{sys/socket.h}
 On Darwin, @file{stdlib.h} is a prerequisite.

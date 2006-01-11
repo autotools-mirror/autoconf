@@ -1,3 +1,8 @@
+2006-01-11  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Header Portability): On Solaris 8, sys/ptem.h
+	requires sys/stream.h.  Reported by Oliver Kiddle.
+
 2006-01-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 	    Stepan Kasal  <kasal@ucw.cz>
 
