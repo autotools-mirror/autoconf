@@ -1,3 +1,8 @@
+2006-01-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Ignore
+	`-LIST:' and `-LNO:', for PathScale 2.3 compilers.
+
 2006-01-11  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Header Portability): On Solaris 8, sys/ptem.h
