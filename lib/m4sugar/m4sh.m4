@@ -998,7 +998,7 @@ m4_define([AS_TMPDIR],
 [# Create a (secure) tmp directory for tmp files.
 m4_if([$2], [], [: ${TMPDIR=/tmp}])
 {
-  tmp=`(umask 077 && mktemp -d -q "m4_default([$2], [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
+  tmp=`(umask 077 && mktemp -d "m4_default([$2], [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
   test -n "$tmp" && test -d "$tmp"
 }  ||
 {

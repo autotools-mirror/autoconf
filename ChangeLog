@@ -1,3 +1,10 @@
+2006-01-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): Do not pass `-q' to mktemp.
+	* lib/Autom4te/General.pm (mktmpdir): Likewise.
+	(END): Improve error message a bit.
+	Reported by Bruce Korb <bkorb@gnu.org>.
+
 2006-01-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Ignore

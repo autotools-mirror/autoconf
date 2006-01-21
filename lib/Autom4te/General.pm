@@ -193,11 +193,14 @@ sub END
     {
       if (<$tmp/*>)
 	{
-	  if (! unlink <$tmp/*>)
+	  while (<$tmp/*>)
 	    {
-	      print STDERR "$me: cannot empty $tmp: $!\n";
-	      $? = 1;
-	      return;
+	      if (! unlink $_)
+		{
+		  print STDERR "$me: cannot empty $tmp ($_): $!\n";
+		  $? = 1;
+		  return;
+		}
 	    }
 	}
       if (! rmdir $tmp)
@@ -312,7 +315,7 @@ sub mktmpdir ($)
 
   # If mktemp supports dirs, use it.
   $tmp = `(umask 077 &&
-	   mktemp -d -q "$TMPDIR/${signature}XXXXXX") 2>/dev/null`;
+	   mktemp -d "$TMPDIR/${signature}XXXXXX") 2>/dev/null`;
   chomp $tmp;
 
   if (!$tmp || ! -d $tmp)
