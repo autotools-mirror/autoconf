@@ -2,7 +2,7 @@
 # Macros that test for specific, unclassified, features.
 #
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -442,7 +442,7 @@ AC_DEFUN([AC_ISC_POSIX], [AC_SEARCH_LIBS(strerror, cposix)])
 AU_DEFUN([AC_XENIX_DIR],
 [AC_MSG_CHECKING([for Xenix])
 AC_EGREP_CPP(yes,
-[#if defined(M_XENIX) && !defined(M_UNIX)
+[#if defined M_XENIX && ! defined M_UNIX
   yes
 @%:@endif],
 	     [AC_MSG_RESULT([yes]); XENIX=yes],

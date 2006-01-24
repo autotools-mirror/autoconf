@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for functions.
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -259,7 +259,7 @@ AC_DEFINE(C_ALLOCA, 1, [Define to 1 if using `alloca.c'.])
 
 AC_CACHE_CHECK(whether `alloca.c' needs Cray hooks, ac_cv_os_cray,
 [AC_EGREP_CPP(webecray,
-[#if defined(CRAY) && ! defined(CRAY2)
+[#if defined CRAY && ! defined CRAY2
 webecray
 #else
 wenotbecray

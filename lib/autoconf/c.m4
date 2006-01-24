@@ -215,7 +215,7 @@ char $1 ();
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
-#if defined (__stub_$1) || defined (__stub___$1)
+#if defined __stub_$1 || defined __stub___$1
 choke me
 #endif
 ], [return $1 ();])])

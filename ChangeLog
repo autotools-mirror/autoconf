@@ -1,3 +1,12 @@
+2006-01-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY(C)): Prefer "defined
+	FOO" to "defined (FOO)".
+	* lib/autoconf/functions.m4 (_AC_LIBOBJ_ALLOCA): Likewise.
+	* lib/autoconf/headers.m4 (AC_HEADER_STAT): Likewise.
+	* lib/autoconf/specific.m4 (AC_XENIX_DIR): Likewise.
+	* tests/tools.at (ifnames): Likewise.
+
 2006-01-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): Do not pass `-q' to mktemp.

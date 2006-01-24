@@ -1,7 +1,8 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for headers.
 #
-# Copyright (C) 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2006 Free Software
+# Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -483,25 +484,25 @@ AC_DEFUN([AC_HEADER_STAT],
 [AC_EGREP_CPP([You lose], [#include <sys/types.h>
 #include <sys/stat.h>
 
-#if defined(S_ISBLK) && defined(S_IFDIR)
+#if defined S_ISBLK && defined S_IFDIR
 # if S_ISBLK (S_IFDIR)
 You lose.
 # endif
 #endif
 
-#if defined(S_ISBLK) && defined(S_IFCHR)
+#if defined S_ISBLK && defined S_IFCHR
 # if S_ISBLK (S_IFCHR)
 You lose.
 # endif
 #endif
 
-#if defined(S_ISLNK) && defined(S_IFREG)
+#if defined S_ISLNK && defined S_IFREG
 # if S_ISLNK (S_IFREG)
 You lose.
 # endif
 #endif
 
-#if defined(S_ISSOCK) && defined(S_IFREG)
+#if defined S_ISSOCK && defined S_IFREG
 # if S_ISSOCK (S_IFREG)
 You lose.
 # endif
