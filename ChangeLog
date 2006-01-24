@@ -1,3 +1,11 @@
+2006-01-23  Steven G. Johnson  <stevenj@fftw.org>
+
+	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS, _AC_FC_DUMMY_MAIN):
+	(_AC_FC_MAIN, __AC_FC_NAME_MANGLING): Use _AC_LANG in check
+	messages to differentiate Fortran and Fortran 77 tests.
+	(AC_FC_SRCEXT, AC_FC_FREEFORM): Use AC_LANG_PUSH/POP instead of
+	AC_LANG_ASSERT, to allow use in mixed-language projects.
+
 2006-01-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY(C)): Prefer "defined

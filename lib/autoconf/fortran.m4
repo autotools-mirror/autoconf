@@ -635,7 +635,7 @@ fi],
 AC_DEFUN([_AC_FC_LIBRARY_LDFLAGS],
 [_AC_FORTRAN_ASSERT()dnl
 _AC_PROG_FC_V
-AC_CACHE_CHECK([for Fortran libraries of $[]_AC_FC[]], ac_cv_[]_AC_LANG_ABBREV[]_libs,
+AC_CACHE_CHECK([for _AC_LANG libraries of $[]_AC_FC[]], ac_cv_[]_AC_LANG_ABBREV[]_libs,
 [if test "x$[]_AC_LANG_PREFIX[]LIBS" != "x"; then
   ac_cv_[]_AC_LANG_ABBREV[]_libs="$[]_AC_LANG_PREFIX[]LIBS" # Let the user override the test.
 else
@@ -783,7 +783,7 @@ m4_define(_AC_LANG_PROGRAM_C_[]_AC_FC[]_HOOKS,
 ]AC_LANG_CASE([Fortran], [#endif])
 [#endif
 ])
-AC_CACHE_CHECK([for dummy main to link with Fortran libraries],
+AC_CACHE_CHECK([for dummy main to link with _AC_LANG libraries],
                ac_cv_[]_AC_LANG_ABBREV[]_dummy_main,
 [ac_[]_AC_LANG_ABBREV[]_dm_save_LIBS=$LIBS
  LIBS="$LIBS $[]_AC_LANG_PREFIX[]LIBS"
@@ -853,7 +853,7 @@ AC_LANG_POP(Fortran)dnl
 #
 AC_DEFUN([_AC_FC_MAIN],
 [_AC_FORTRAN_ASSERT()dnl
-AC_CACHE_CHECK([for alternate main to link with Fortran libraries],
+AC_CACHE_CHECK([for alternate main to link with _AC_LANG libraries],
                ac_cv_[]_AC_LANG_ABBREV[]_main,
 [ac_[]_AC_LANG_ABBREV[]_m_save_LIBS=$LIBS
  LIBS="$LIBS $[]_AC_LANG_PREFIX[]LIBS"
@@ -918,7 +918,7 @@ AC_LANG_POP(Fortran)dnl
 #
 AC_DEFUN([__AC_FC_NAME_MANGLING],
 [_AC_FORTRAN_ASSERT()dnl
-AC_CACHE_CHECK([for Fortran name-mangling scheme],
+AC_CACHE_CHECK([for _AC_LANG name-mangling scheme],
                ac_cv_[]_AC_LANG_ABBREV[]_mangling,
 [AC_COMPILE_IFELSE(
 [      subroutine foobar()
@@ -1144,7 +1144,7 @@ AC_LANG_POP(Fortran)dnl
 # some versions), the $FCFLAGS_<EXT> variable *must* go immediately before
 # the source file on the command line, unlike other $FCFLAGS.  Ugh.
 AC_DEFUN([AC_FC_SRCEXT],
-[AC_LANG_ASSERT(Fortran)dnl
+[AC_LANG_PUSH(Fortran)dnl
 AC_CACHE_CHECK([for Fortran flag to compile .$1 files],
                 ac_cv_fc_srcext_$1,
 [ac_ext=$1
@@ -1172,6 +1172,7 @@ else
   AC_SUBST(FCFLAGS_[]$1)
   $2
 fi
+AC_LANG_POP(Fortran)dnl
 ])# AC_FC_SRCEXT
 
 
@@ -1195,7 +1196,7 @@ fi
 # We try to test the "more popular" flags first, by some prejudiced
 # notion of popularity.
 AC_DEFUN_ONCE([AC_FC_FREEFORM],
-[AC_LANG_ASSERT([Fortran])dnl
+[AC_LANG_PUSH(Fortran)dnl
 AC_CACHE_CHECK([for Fortran flag needed to allow free-form source],
                 ac_cv_fc_freeform,
 [ac_cv_fc_freeform=unknown
@@ -1224,4 +1225,5 @@ else
   fi
   $1
 fi
+AC_LANG_POP(Fortran)dnl
 ])# AC_FC_FREEFORM
