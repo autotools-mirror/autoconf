@@ -11531,6 +11531,13 @@ It is safe to trap at least the signals 1, 2, 13, and 15.  You can also
 trap 0, i.e., have the @command{trap} run when the script ends (either via an
 explicit @command{exit}, or the end of the script).
 
+Posix says that @samp{trap - 1 2 13 15} resets the traps for the
+specified signals to their default values, but many common shells (e.g.,
+Solaris @command{/bin/sh}) misinterpret this and attempt to execute a
+``command'' named @command{-} when the specified conditions arise.
+There is no portable workaround, except for @samp{trap - 0}, for which
+@samp{trap '' 0} is a portable substitute.
+
 Although Posix is not absolutely clear on this point, it is widely
 admitted that when entering the trap @samp{$?} should be set to the exit
 status of the last command run before the trap.  The ambiguity can be

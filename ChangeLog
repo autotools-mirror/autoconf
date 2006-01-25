@@ -1,3 +1,8 @@
+2006-01-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Builtins): Document the
+	problem with "trap -".
+
 2006-01-23  Steven G. Johnson  <stevenj@fftw.org>
 
 	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS, _AC_FC_DUMMY_MAIN):
