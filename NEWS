@@ -72,6 +72,9 @@
   as in `${LIBOBJDIR}alloca.o'.  LIBOBJDIR is meant to be defined from
   `Makefile.in' in case the object files lie in a different directory.
 
+** autoreconf
+  Supports --no-recursive now.
+
 * Major changes in Autoconf 2.59b
 
   Released 2004-08-20, by Paul Eggert.

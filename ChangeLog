@@ -1,5 +1,10 @@
 2006-01-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* bin/autoreconf.in: New option `--no-recursive'.
+	Improve wording for subpackages a bit.
+	* doc/autoconf.texi (autoreconf Invocation): Updated.
+	* NEWS: Updated.
+
 	* doc/install.texi (Defining Variables): Put `CONFIG_SHELL'
 	in environment of `configure', not the command line.
 	Reported by Howard Chu <hyc@highlandsun.com>.

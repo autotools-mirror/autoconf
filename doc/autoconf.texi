@@ -1516,6 +1516,10 @@ If deemed appropriate, this option triggers calls to
 @samp{automake --add-missing},
 @samp{libtoolize}, @samp{autopoint}, etc.
 
+@item --no-recursive
+Do not rebuild files in subdirectories to configure (see @ref{Subdirectories},
+macro @code{AC_CONFIG_SUBDIRS}).
+
 @item --symlink
 @itemx -s
 When used with @option{--install}, install symbolic links to the missing
