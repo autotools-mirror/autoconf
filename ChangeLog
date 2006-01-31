@@ -1,3 +1,9 @@
+2006-01-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/install.texi (Defining Variables): Put `CONFIG_SHELL'
+	in environment of `configure', not the command line.
+	Reported by Howard Chu <hyc@highlandsun.com>.
+
 2006-01-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Builtins): Document the

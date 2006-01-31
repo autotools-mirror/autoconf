@@ -226,10 +226,12 @@ For example:
 @noindent
 causes the specified @command{gcc} to be used as the C compiler (unless it is
 overridden in the site shell script).
-Here is a another example:
+Because the value of @var{CONFIG_SHELL} may be needed before the argument
+parsing loop of @command{configure}, it is an exception to this rule, and
+should be put in the environment:
 
 @example
-/bin/bash ./configure CONFIG_SHELL=/bin/bash
+CONFIG_SHELL=/bin/bash /bin/bash ./configure
 @end example
 
 @noindent
