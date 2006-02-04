@@ -1,3 +1,8 @@
+2006-02-04  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/install.texi (Defining Variables): Classify the `CONFIG_SHELL'
+	hint as ``a workaround for a bug.''
+
 2006-01-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* bin/autoreconf.in: New option `--no-recursive'.

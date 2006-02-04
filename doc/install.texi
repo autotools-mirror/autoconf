@@ -226,17 +226,25 @@ For example:
 @noindent
 causes the specified @command{gcc} to be used as the C compiler (unless it is
 overridden in the site shell script).
-Because the value of @var{CONFIG_SHELL} may be needed before the argument
-parsing loop of @command{configure}, it is an exception to this rule, and
-should be put in the environment:
+
+@noindent
+Unfortunately, there is a bug in Autoconf 2.60: the command
 
 @example
-CONFIG_SHELL=/bin/bash /bin/bash ./configure
+/bin/bash ./configure CONFIG_SHELL=/bin/bash
 @end example
 
 @noindent
-Here the @samp{CONFIG_SHELL=/bin/bash} operand causes subsequent
-configuration-related scripts to be executed by @command{/bin/bash}.
+doesn't work as it should.  A possible workaround is to set the variable in
+the environment, too:
+
+@example
+CONFIG_SHELL=/bin/bash /bin/bash ./configure CONFIG_SHELL=/bin/bash
+@end example
+
+@noindent
+This problem will be fixed in a future release of Autoconf.
+
 
 @node configure Invocation
 @section @command{configure} Invocation
