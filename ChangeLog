@@ -1,3 +1,9 @@
+2006-02-10  J.T. Conklin  <jtc@acorntoolworks.com>
+
+	* doc/autoconf.texi (Running the Compiler, Running the Linker):
+	Changes the macro arguments in summaries to match the
+	descriptions.
+
 2006-02-04  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/install.texi (Defining Variables): Classify the `CONFIG_SHELL'

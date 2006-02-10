@@ -7043,7 +7043,7 @@ Choice}) compiler, such as whether it recognizes a certain keyword, or
 simply to try some library feature, use @code{AC_COMPILE_IFELSE} to try
 to compile a small program that uses that feature.
 
-@defmac AC_COMPILE_IFELSE (@var{input}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_COMPILE_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
 @acindex{COMPILE_IFELSE}
 Run the compiler and compilation flags of the current language
 (@pxref{Language Choice}) on the @var{input}, run the shell commands
@@ -7078,7 +7078,7 @@ checked for to @code{LIBS} temporarily and trying to link a small
 program.
 
 
-@defmac AC_LINK_IFELSE (@var{input}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_LINK_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
 @acindex{LINK_IFELSE}
 Run the compiler (and compilation flags) and the linker of the current
 language (@pxref{Language Choice}) on the @var{input}, run the shell
