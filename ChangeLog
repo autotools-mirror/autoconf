@@ -1,3 +1,15 @@
+2006-02-13 Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Programming in M4sh): Document
+	AS_BOURNE_COMPATIBLE and AS_SHELL_SANITIZE.
+
+2006-02-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): Renamed to..
+	(AS_BOURNE_COMPATIBLE): ..this.
+	(_AS_RUN, AS_SHELL_SANITIZE): Adjusted all callers.
+
 2006-02-12  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/install.texi (Defining Variables): Tighten up the

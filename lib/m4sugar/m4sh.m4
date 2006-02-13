@@ -157,10 +157,10 @@ $2
 }])])])
 
 
-# _AS_BOURNE_COMPATIBLE
-# ---------------------
+# AS_BOURNE_COMPATIBLE
+# --------------------
 # Try to be as Bourne and/or POSIX as possible.
-m4_define([_AS_BOURNE_COMPATIBLE],
+m4_define([AS_BOURNE_COMPATIBLE],
 [# Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -184,7 +184,7 @@ DUALCASE=1; export DUALCASE # for MKS sh
 m4_define([_AS_RUN],
 [m4_ifval([$2],
 [{ $2 <<\_ASEOF
-_AS_BOURNE_COMPATIBLE
+AS_BOURNE_COMPATIBLE
 $1
 _ASEOF
 }],
@@ -319,7 +319,7 @@ m4_defun([AS_SHELL_SANITIZE],
 ## M4sh Initialization.  ##
 ## --------------------- ##
 
-_AS_BOURNE_COMPATIBLE
+AS_BOURNE_COMPATIBLE
 
 # PATH needs CR
 _AS_CR_PREPARE

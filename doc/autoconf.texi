@@ -8992,6 +8992,14 @@ For the time being, it is not mature enough to be widely used.
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
+@defmac AS_BOURNE_COMPATIBLE
+@asindex{BOURNE_COMPATIBLE}
+Set up the shell to be more compatible with the Bourne shell as
+standardized by Posix, if possible.  This may involve setting
+environment variables, or setting options, or similar
+implementation-specific actions.
+@end defmac
+
 @defmac AS_DIRNAME (@var{file-name})
 @asindex{DIRNAME}
 Return the directory portion of @var{file-name}, using the algorithm
@@ -9016,6 +9024,15 @@ lack support for the @option{-p} option.  Also, @code{AS_MKDIR_P}
 succeeds if @var{file-name} is a symbolic link to an existing directory,
 even though Posix is unclear whether @samp{mkdir -p} should
 succeed in that case.
+@end defmac
+
+@defmac AS_SHELL_SANITIZE
+@asindex{SHELL_SANITIZE}
+Initialize the shell suitably for @code{configure} scripts.  This has
+the effect of @code{AS_BOURNE_COMPATIBLE}, and sets some other
+environment variables for predictable results from configuration tests.
+For example, it sets @env{LC_ALL} to change to the default C locale.
+@xref{Special Shell Variables}.
 @end defmac
 
 @defmac AS_TR_CPP (@var{expression})
