@@ -169,8 +169,8 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$[@]"}'='"$[@]"'
   setopt NO_GLOB_SUBST
-elif (set -o posix) >/dev/null 2>&1; then
-  set -o posix
+else
+  case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
 BIN_SH=xpg4; export BIN_SH # for Tru64
 DUALCASE=1; export DUALCASE # for MKS sh
