@@ -5,8 +5,8 @@
 
 @unnumbered Installation Instructions
 
-Copyright @copyright{} 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004, 2005
-Free Software Foundation, Inc.
+Copyright @copyright{} 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004,
+2005, 2006 Free Software Foundation, Inc.
 
 This file is free documentation; the Free Software Foundation gives
 unlimited permission to copy, distribute and modify it.
@@ -228,23 +228,13 @@ causes the specified @command{gcc} to be used as the C compiler (unless it is
 overridden in the site shell script).
 
 @noindent
-Unfortunately, there is a bug in Autoconf 2.60: the command
-
-@example
-/bin/bash ./configure CONFIG_SHELL=/bin/bash
-@end example
-
-@noindent
-doesn't work as it should.  A possible workaround is to set the variable in
-the environment, too:
+Unfortunately, this technique does not work for @env{CONFIG_SHELL} due
+to an Autoconf bug.  Until the bug is fixed you can use this
+workaround:
 
 @example
 CONFIG_SHELL=/bin/bash /bin/bash ./configure CONFIG_SHELL=/bin/bash
 @end example
-
-@noindent
-This problem will be fixed in a future release of Autoconf.
-
 
 @node configure Invocation
 @section @command{configure} Invocation

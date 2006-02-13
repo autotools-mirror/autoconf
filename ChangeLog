@@ -1,3 +1,16 @@
+2006-02-12  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/install.texi (Defining Variables): Tighten up the
+	CONFIG_SHELL wording.
+
+2006-02-12 Paul Eggert  <eggert@cs.ucla.edu>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (_AS_BOURNE_COMPATIBLE): Look at the output
+	of (set -o) rather than testing whether (set -o posix) succeeds,
+	to work around a bug in the AIX 5.3 shell.  Problem originally
+	reportd by Howard Chu for libtool.
+
 2006-02-10  J.T. Conklin  <jtc@acorntoolworks.com>
 
 	* doc/autoconf.texi (Running the Compiler, Running the Linker):
