@@ -9519,6 +9519,12 @@ include information on what to do after running @command{autoupdate};
 in the updated @file{configure.ac} file.
 @end defmac
 
+@defmac AU_ALIAS (@var{old-name}, @var{new-name})
+@auindex{ALIAS}
+Used if the @var{old-name} is to be replaced by a call to @var{new-macro}
+with the same parameters.  This happens for example if the macro was renamed.
+@end defmac
+
 @node Coding Style
 @section Coding Style
 @cindex Coding style

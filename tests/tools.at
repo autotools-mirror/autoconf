@@ -506,7 +506,7 @@ AC_OUTPUT(Makefile, echo $fubar, fubar=$fubar)
 
 AT_DATA([expout],
 [[AC_INIT([Test],[1.0])
-AC_CANONICAL_TARGET([])
+AC_CANONICAL_TARGET
 # The doc says 27 is a valid fubar.
 fubar=27
 AC_CONFIG_FILES([Makefile])
@@ -568,5 +568,29 @@ AT_CHECK([echo "AC_PREREQ($autoupdate_version)" | autoupdate -],
 
 AT_CHECK([echo "AC_PREREQ(999.99)" | autoupdate -],
 	 63, [], [ignore])
+
+AT_CLEANUP
+
+
+# autoupdating AU_ALIAS
+# ---------------------
+AT_SETUP([autoupdating AU_ALIAS])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_DEFUN([FOO], [$#])
+AU_ALIAS([BAZ],[FOO])
+test "FOO:FOO():FOO(x) BAZ:BAZ():BAZ(x)" = "0:1:1 0:1:1" || exit 1
+AC_PROG_CC
+AC_STDC_HEADERS
+AC_OUTPUT
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+AT_CHECK([grep 'AC_HEADER_STDC(' configure.ac], 1, [ignore], [ignore])
+AT_CHECK([grep 'AC_HEADER_STDC' configure.ac], 0, [ignore], [ignore])
 
 AT_CLEANUP

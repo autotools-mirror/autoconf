@@ -227,7 +227,7 @@ sub handle_autoconf_macros ()
   print $unac_m4 "# unac.m4 -- undefine the AC macros.\n";
   foreach (sort grep { $ac_macros{$_} ne 'm4sugar' } keys %ac_macros)
     {
-      print $ac_m4   "_au_define([$_], [[\$0(\$\@)]])\n";
+      print $ac_m4   "_au_define([$_], [m4_if(\$#, 0, [[\$0]], [[\$0(\$\@)]])])\n";
       print $unac_m4 "_au_undefine([$_])\n";
     }
 }

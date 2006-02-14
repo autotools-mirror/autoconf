@@ -1,3 +1,14 @@
+2006-02-14  Stepan Kasal  <kasal@ucw.cz>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoupdate.in (handle_autoconf_macros): Fix updating of
+	macros without parameters.
+	* lib/autoconf/autoupdate.m4 (AU_ALIAS): Likewise.
+	* doc/autoconf.texi (Obsoleting Macros): Document AU_ALIAS.
+	* tests/tools.at (autoupdating AU_ALIAS): New test for AU_ALIAS
+	`$#' bug.
+	(autoupdate): Updated to match AU_ALIAS fix.
+
 2006-02-13 Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 	and Paul Eggert  <eggert@cs.ucla.edu>
 

@@ -2,7 +2,7 @@
 # Interface with autoupdate.
 
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2003, 2004 Free Software Foundation, Inc.
+# 2003, 2004, 2006 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -115,5 +115,16 @@ $2])])
 #
 # Do not use `defn' since then autoupdate would replace an old macro
 # call with the new macro body instead of the new macro call.
+#
+# Moreover, we have to take care that calls without parameters are
+# expanded to calls without parameters, not with one empty parameter.
+# This is not only an aesthetical improvement of autoupdate, it also
+# matters with poorly written macros which test for $# = 0.
+#
 m4_define([AU_ALIAS],
-[AU_DEFUN([$1], [$2($][@)])])
+[AU_DEFUN([$1], _AU_ALIAS_BODY([$], [$2]))])
+
+# The body for the AU_DEFUN above should look like:
+#	[m4_if($#, 0, [NEW-NAME], [NEW-NAME($@)])]
+# Thus the helper macro is:
+m4_define([_AU_ALIAS_BODY], [[m4_if($1#, 0, [$2], [$2($1@)])]])
