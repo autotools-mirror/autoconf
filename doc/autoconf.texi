@@ -799,7 +799,7 @@ The home pages for
 
 @item Automake Manual
 
-@xref{Top,,Automake,automake,@acronym{GNU} Automake}, for more
+@xref{Top, , Automake, automake, @acronym{GNU} Automake}, for more
 information on Automake.
 
 @item Books
@@ -1080,7 +1080,7 @@ has been continually misunderstood@dots{}  The rule of thumb is that
 i.e., expect one level of quotes to be lost.  For instance:
 
 @example
-AC_COMPILE_IFELSE([char b[10];],, [AC_MSG_ERROR([you lose])])
+AC_COMPILE_IFELSE([char b[10];], [], [AC_MSG_ERROR([you lose])])
 @end example
 
 @noindent
@@ -1092,7 +1092,7 @@ use it!)  Let's take a closer look: the author meant the first argument
 to be understood as a literal, and therefore it must be quoted twice:
 
 @example
-AC_COMPILE_IFELSE([[char b[10];]],, [AC_MSG_ERROR([you lose])])
+AC_COMPILE_IFELSE([[char b[10];]], [], [AC_MSG_ERROR([you lose])])
 @end example
 
 @noindent
@@ -1478,7 +1478,7 @@ Gettext supplies the @command{autopoint} command to add translation
 infrastructure to a source package.  If you use @command{autopoint},
 your @file{configure.ac} should invoke both @code{AM_GNU_GETTEXT} and
 @code{AM_GNU_GETTEXT_VERSION(@var{gettext-version})}.  @xref{autopoint
-Invocation,, Invoking the @code{autopoint} Program, gettext, GNU
+Invocation, , Invoking the @code{autopoint} Program, gettext, GNU
 @code{gettext} utilities}, for further details.
 
 @noindent
@@ -2103,7 +2103,7 @@ distributed with a file @file{Makefile.in}, but no @file{Makefile}; that
 way, the user has to properly configure the package for the local system
 before compiling it.
 
-@xref{Makefile Conventions,, Makefile Conventions, standards, The
+@xref{Makefile Conventions, , Makefile Conventions, standards, The
 @acronym{GNU} Coding Standards}, for more information on what to put in
 @file{Makefile}s.
 
@@ -2295,7 +2295,7 @@ Absolute name of @code{top_srcdir}.
 @cindex Directories, installation
 
 The following variables specify the directories where the package will
-be installed, see @ref{Directory Variables,, Variables for
+be installed, see @ref{Directory Variables, , Variables for
 Installation Directories, standards, The @acronym{GNU} Coding
 Standards}, for more information.  See the end of this section for
 details on when and how to use these variables.
@@ -2663,7 +2663,7 @@ example, if it redefines @code{const}).
 To provide for VPATH builds, remember to pass the C compiler a @option{-I.}
 option (or @option{-I..}; whichever directory contains @file{config.h}).
 Even if you use @samp{#include "config.h"}, the preprocessor searches only
-the directory of the currently read file, ie@. the source directory, not
+the directory of the currently read file, i.e., the source directory, not
 the build directory.
 
 With the appropriate @option{-I} option, you can use
@@ -3793,7 +3793,7 @@ tradition of it returning @code{int}.
 @item @code{free}
 @c @fuindex free
 @prindex @code{free}
-The ISO C99 standard says a call @code{free(NULL)} does nothing, but
+The C standard says a call @code{free (NULL)} does nothing, but
 some old systems don't support this (e.g., NextStep).
 
 @item @code{isinf}
@@ -3802,7 +3802,7 @@ some old systems don't support this (e.g., NextStep).
 @c @fuindex isnan
 @prindex @code{isinf}
 @prindex @code{isnan}
-The ISO C99 standard specifies that @code{isinf} and @code{isnan} are
+The C99 standard says that @code{isinf} and @code{isnan} are
 macros.  On some systems just macros are available (e.g., HP-UX), on
 some systems both macros and functions (e.g., glibc 2.3.2), and on some
 systems only functions (e.g., IRIX 6 and Solaris 9).  In some cases
@@ -3851,8 +3851,8 @@ probably not worth worrying about.
 @item @code{malloc}
 @c @fuindex malloc
 @prindex @code{malloc}
-The ISO C99 standard says a call @code{malloc(0)} is implementation
-dependent, it may either return @code{NULL} (e.g., OSF 4) or
+The C standard says a call @code{malloc (0)} is implementation
+dependent.  It may either return @code{NULL} (e.g., OSF 4) or
 non-@code{NULL} (e.g., @acronym{GNU} C Library).  @code{AC_FUNC_MALLOC}
 can be used to insist on non-@code{NULL} (@pxref{Particular Functions}).
 
@@ -3868,18 +3868,18 @@ Posix specifies that @code{putenv} puts the given string directly in
 glibc 2.0, or BSD).  And when a copy is made, @code{unsetenv} might
 not free it, causing a memory leak (e.g., FreeBSD 4).
 
-On some systems @code{putenv("FOO")} removes @samp{FOO} from the
+On some systems @code{putenv ("FOO")} removes @samp{FOO} from the
 environment, but this is not standard usage and it dumps core
 on some systems (e.g., AIX).
 
-On MINGW, a call @code{putenv("FOO=")} removes @samp{FOO} from the
+On MINGW, a call @code{putenv ("FOO=")} removes @samp{FOO} from the
 environment, rather than inserting it with an empty value.
 
 @item @code{realloc}
 @c @fuindex realloc
 @prindex @code{realloc}
-The ISO C99 standard says a call @code{realloc(NULL,size)} is equivalent
-to a @code{malloc(size)}, but some old systems don't support this (e.g.,
+The C standard says a call @code{realloc (NULL, size)} is equivalent
+to @code{malloc (size)}, but some old systems don't support this (e.g.,
 NextStep).
 
 @item @code{signal} handler
@@ -3900,7 +3900,7 @@ used to establish the correct type in all cases.
 @prindex @code{snprintf}
 @c @fuindex vsnprintf
 @prindex @code{vsnprintf}
-The ISO C99 standard says that if the output array isn't big enough
+The C99 standard says that if the output array isn't big enough
 and if no other errors occur, @code{snprintf} and @code{vsnprintf}
 truncate the output and return the number of bytes that ought to have
 been produced.  Some older systems return the truncated length (e.g.,
@@ -3915,7 +3915,7 @@ Solaris 7).
 @prindex @code{sprintf}
 @c @fuindex vsprintf
 @prindex @code{vsprintf}
-The ISO C standard says @code{sprintf} and @code{vsprintf} return the
+The C standard says @code{sprintf} and @code{vsprintf} return the
 number of bytes written, but on some ancient systems (SunOS 4 for
 instance) they return the buffer pointer instead.
 
@@ -3926,7 +3926,7 @@ On various old systems, e.g., HP-UX 9, @code{sscanf} requires that its
 input string be writable (though it doesn't actually change it).  This
 can be a problem when using @command{gcc} since it normally puts
 constant strings in read-only memory
-(@pxref{Incompatibilities,Incompatibilities of GCC,,gcc,Using and
+(@pxref{Incompatibilities, Incompatibilities of GCC, , gcc, Using and
 Porting the @acronym{GNU} Compiler Collection}).  Apparently in some cases even
 having format strings read-only can be a problem.
 
@@ -3976,17 +3976,17 @@ and some @acronym{DOS} variants even corrupt the file system.
 @c @fuindex unsetenv
 @prindex @code{unsetenv}
 On MINGW, @code{unsetenv} is not available, but a variable @samp{FOO}
-can be removed with a call @code{putenv("FOO=")}, as described under
+can be removed with a call @code{putenv ("FOO=")}, as described under
 @code{putenv} above.
 
 @item @code{va_copy}
 @c @fuindex va_copy
 @prindex @code{va_copy}
-The ISO C99 standard provides @code{va_copy} for copying
+The C99 standard provides @code{va_copy} for copying
 @code{va_list} variables.  It may be available in older environments
 too, though possibly as @code{__va_copy} (e.g., @command{gcc} in strict
-C89 mode).  These can be tested with @code{#ifdef}.  A fallback to
-@code{memcpy (&dst, &src, sizeof(va_list))} will give maximum
+pre-C99 mode).  These can be tested with @code{#ifdef}.  A fallback to
+@code{memcpy (&dst, &src, sizeof (va_list))} will give maximum
 portability.
 
 @item @code{va_list}
@@ -4003,10 +4003,18 @@ value back in the caller (e.g., @code{vsnprintf} in the @acronym{GNU} C Library
 @item Signed @code{>>}
 Normally the C @code{>>} right shift of a signed type replicates the
 high bit, giving a so-called ``arithmetic'' shift.  But care should be
-taken since the ISO C standard doesn't require that behavior.  On those
+taken since Standard C doesn't require that behavior.  On those
 few processors without a native arithmetic shift (for instance Cray
 vector systems) zero bits may be shifted in, the same as a shift of an
 unsigned type.
+
+@item Integer @code{/}
+C divides signed integers by truncating their quotient toward zero,
+yielding the same result as Fortran.  However, before C99 the standard
+allowed C implementations to take the floor or ceiling of the quotient
+in some cases.  Hardly any implementations took advantage of this
+freedom, though, and it's probably not worth worrying about this issue
+nowadays.
 @end table
 
 
@@ -4034,7 +4042,7 @@ If those attempts fail, it looks for the function in the standard C
 library.  If any of those methods succeed, it defines
 @code{HAVE_ALLOCA}.  Otherwise, it sets the output variable
 @code{ALLOCA} to @samp{$@{LIBOBJDIR@}alloca.o} and defines
-@code{C_ALLOCA} (so programs can periodically call @samp{alloca(0)} to
+@code{C_ALLOCA} (so programs can periodically call @samp{alloca (0)} to
 garbage collect).  This variable is separate from @code{LIBOBJS} so
 multiple programs can share the value of @code{ALLOCA} without needing
 to create an actual library, in case only some of them use the code in
@@ -4397,7 +4405,7 @@ If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
 @c @fuindex realloc
 @prindex @code{realloc}
 If the @code{realloc} function is compatible with the @acronym{GNU} C
-library @code{realloc} (i.e., @samp{realloc (0, 0)} returns a
+library @code{realloc} (i.e., @samp{realloc (NULL, 0)} returns a
 valid pointer), define @code{HAVE_REALLOC} to 1.  Otherwise define
 @code{HAVE_REALLOC} to 0, ask for an @code{AC_LIBOBJ} replacement for
 @samp{realloc}, and define @code{realloc} to @code{rpl_realloc} so that
@@ -4524,7 +4532,7 @@ from @acronym{AIX} 4.3), require an @code{AC_LIBOBJ} replacement for it.
 @cvindex HAVE_UTIME_NULL
 @c @fuindex utime
 @prindex @code{utime}
-If @samp{utime(@var{file}, NULL)} sets @var{file}'s timestamp to
+If @samp{utime (@var{file}, NULL)} sets @var{file}'s timestamp to
 the present, define @code{HAVE_UTIME_NULL}.
 @end defmac
 
@@ -4719,9 +4727,9 @@ additions.  Please help us keeping it as complete as possible.
 @item @file{inttypes.h} vs.@: @file{stdint.h}
 @hdrindex{inttypes.h}
 @hdrindex{stdint.h}
-Paul Eggert notes that: ISO C 1999 says that @file{inttypes.h} includes
+The C99 standard says that @file{inttypes.h} includes
 @file{stdint.h}, so there's no need to include @file{stdint.h}
-separately in a standard environment.  Many implementations have
+separately in a standard environment.  Some implementations have
 @file{inttypes.h} but not @file{stdint.h} (e.g., Solaris 7), but we don't
 know of any implementation that has @file{stdint.h} but not
 @file{inttypes.h}.
@@ -4848,12 +4856,13 @@ something like the following:
 
 @example
 @group
-#if HAVE_DIRENT_H
+#include <sys/types.h>
+#ifdef HAVE_DIRENT_H
 # include <dirent.h>
-# define NAMLEN(dirent) strlen((dirent)->d_name)
+# define NAMLEN(dirent) strlen ((dirent)->d_name)
 #else
 # define dirent direct
-# define NAMLEN(dirent) (dirent)->d_namlen
+# define NAMLEN(dirent) ((dirent)->d_namlen)
 # if HAVE_SYS_NDIR_H
 #  include <sys/ndir.h>
 # endif
@@ -5811,19 +5820,19 @@ features.  To check for characteristics not listed here, use
 
 @defmac AC_PROG_CC_STDC
 @acindex{PROG_CC_STDC}
-If the C compiler is not able to compile ISO Standard C (currently ISO
-C99), try to add an option to output variable @code{CC} to make it so.
-If the compiler does not support ISO C99, fall back to supporting
-@acronym{ANSI} C89 (ISO C90).
+If the C compiler cannot compile @acronym{ISO} Standard C (currently
+C99), try to add an option to output variable @code{CC} to make it work.
+If the compiler does not support C99, fall back to supporting
+@acronym{ANSI} C89 (@acronym{ISO} C90).
 
 After calling this macro you can check whether the C compiler has been
-set to accept ISO Standard C; if not, the shell variable
+set to accept Standard C; if not, the shell variable
 @code{ac_cv_prog_cc_stdc} is set to @samp{no}.
 @end defmac
 
 @defmac AC_PROG_CC_C89
 @acindex{PROG_CC_C89}
-If the C compiler is not in @acronym{ANSI} C89 (ISO C90) mode by
+If the C compiler is not in @acronym{ANSI} C89 (@acronym{ISO} C90) mode by
 default, try to add an option to output variable @code{CC} to make it
 so.  This macro tries various options that select @acronym{ANSI} C89 on
 some system or another.  It considers the compiler to be in
@@ -5838,17 +5847,17 @@ This macro is called automatically by @code{AC_PROG_CC}.
 
 @defmac AC_PROG_CC_C99
 @acindex{PROG_CC_C99}
-If the C compiler is not in ISO C99 mode by default, try to add an
+If the C compiler is not in C99 mode by default, try to add an
 option to output variable @code{CC} to make it so.  This macro tries
-various options that select ISO C99 on some system or another.  It
-considers the compiler to be in ISO C99 mode if it handles @code{_Bool},
-flexible arrays, @code{inline}, @code{long long}, mixed code and
+various options that select C99 on some system or another.  It
+considers the compiler to be in C99 mode if it handles @code{_Bool},
+flexible arrays, @code{inline}, @code{long long int}, mixed code and
 declarations, named initialization of structs, @code{restrict}, varargs
 macros, variable declarations in @code{for} loops and variable length
 arrays.
 
 After calling this macro you can check whether the C compiler has been
-set to accept ISO C99; if not, the shell variable
+set to accept C99; if not, the shell variable
 @code{ac_cv_prog_cc_c99} is set to @samp{no}.
 @end defmac
 
@@ -6199,7 +6208,7 @@ should be include after @code{LIBS} when linking).
 
 This macro is intended to be used in those situations when it is
 necessary to mix, e.g., C++ and Fortran source code in a single
-program or shared library (@pxref{Mixing Fortran 77 With C and C++,,,
+program or shared library (@pxref{Mixing Fortran 77 With C and C++, , ,
 automake, @acronym{GNU} Automake}).
 
 For example, if object files from a C++ and Fortran compiler must be
@@ -6213,8 +6222,8 @@ as well, but the C++ compiler/linker doesn't know by default how to add
 these Fortran 77 libraries.  Hence, this macro was created to determine
 these Fortran libraries.
 
-The macros @code{AC_F77_DUMMY_MAIN}/@code{AC_FC_DUMMY_MAIN} or
-@code{AC_F77_MAIN}/@code{AC_FC_MAIN} will probably also be necessary to
+The macros @code{AC_F77_DUMMY_MAIN} and @code{AC_FC_DUMMY_MAIN} or
+@code{AC_F77_MAIN} and @code{AC_FC_MAIN} will probably also be necessary to
 link C/C++ with Fortran; see below.
 @end defmac
 
@@ -6227,8 +6236,8 @@ With many compilers, the Fortran libraries detected by
 their own @code{main} entry function that initializes things like
 Fortran I/O, and which then calls a user-provided entry function named
 (say) @code{MAIN__} to run the user's program.  The
-@code{AC_F77_DUMMY_MAIN}/@code{AC_FC_DUMMY_MAIN} or
-@code{AC_F77_MAIN}/@code{AC_FC_MAIN} macro figures out how to deal with
+@code{AC_F77_DUMMY_MAIN} and @code{AC_FC_DUMMY_MAIN} or
+@code{AC_F77_MAIN} and @code{AC_FC_MAIN} macros figure out how to deal with
 this interaction.
 
 When using Fortran for purely numerical functions (no I/O, etc.)@: often
@@ -6276,15 +6285,15 @@ As discussed above, many Fortran libraries allow you to provide an entry
 point called (say) @code{MAIN__} instead of the usual @code{main}, which
 is then called by a @code{main} function in the Fortran libraries that
 initializes things like Fortran I/O@.  The
-@code{AC_F77_MAIN}/@code{AC_FC_MAIN} macro detects whether it is
+@code{AC_F77_MAIN} and @code{AC_FC_MAIN} macros detect whether it is
 @emph{possible} to utilize such an alternate main function, and defines
-@code{F77_MAIN}/@code{FC_MAIN} to the name of the function.  (If no
-alternate main function name is found, @code{F77_MAIN}/@code{FC_MAIN} is
+@code{F77_MAIN} and @code{FC_MAIN} to the name of the function.  (If no
+alternate main function name is found, @code{F77_MAIN} and @code{FC_MAIN} are
 simply defined to @code{main}.)
 
 Thus, when calling Fortran routines from C that perform things like I/O,
 one should use this macro and name the "main" function
-@code{F77_MAIN}/@code{FC_MAIN} instead of @code{main}.
+@code{F77_MAIN} or @code{FC_MAIN} instead of @code{main}.
 @end defmac
 
 @defmac AC_F77_WRAPPERS
@@ -6295,8 +6304,8 @@ one should use this macro and name the "main" function
 @acindex{FC_WRAPPERS}
 @cvindex FC_FUNC
 @cvindex FC_FUNC_
-Defines C macros @code{F77_FUNC(name,NAME)}/@code{FC_FUNC(name,NAME)}
-and @code{F77_FUNC_(name,NAME)}/@code{FC_FUNC_(name,NAME)} to properly
+Defines C macros @code{F77_FUNC (name, NAME)}, @code{FC_FUNC (name, NAME)},
+@code{F77_FUNC_(name, NAME)}, and @code{FC_FUNC_(name, NAME)} to properly
 mangle the names of C/C++ identifiers, and identifiers with underscores,
 respectively, so that they match the name-mangling scheme used by the
 Fortran compiler.
@@ -6311,7 +6320,7 @@ simply wraps all C identifiers in one of the macros provided by
 you have the following Fortran 77 subroutine:
 
 @example
-      subroutine foobar(x,y)
+      subroutine foobar (x, y)
       double precision x, y
       y = 3.14159 * x
       return
@@ -6321,7 +6330,7 @@ you have the following Fortran 77 subroutine:
 You would then declare its prototype in C or C++ as:
 
 @example
-#define FOOBAR_F77 F77_FUNC(foobar,FOOBAR)
+#define FOOBAR_F77 F77_FUNC (foobar, FOOBAR)
 #ifdef __cplusplus
 extern "C"  /* prevent C++ name mangling */
 #endif
@@ -6331,7 +6340,7 @@ void FOOBAR_F77(double *x, double *y);
 Note that we pass both the lowercase and uppercase versions of the
 function name to @code{F77_FUNC} so that it can select the right one.
 Note also that all parameters to Fortran 77 routines are passed as
-pointers (@pxref{Mixing Fortran 77 With C and C++,,, automake, @acronym{GNU}
+pointers (@pxref{Mixing Fortran 77 With C and C++, , , automake, @acronym{GNU}
 Automake}).
 
 (Replace @code{F77} with @code{FC} for Fortran instead of Fortran 77.)
@@ -6341,20 +6350,20 @@ name-mangling scheme of the Fortran compiler, there may be Fortran
 compilers that it doesn't support yet.  In this case, the above code
 will generate a compile-time error, but some other behavior
 (e.g., disabling Fortran-related features) can be induced by checking
-whether the @code{F77_FUNC}/@code{FC_FUNC} macro is defined.
+whether @code{F77_FUNC} or @code{FC_FUNC} is defined.
 
 Now, to call that routine from a C program, we would do something like:
 
 @example
 @{
     double x = 2.7183, y;
-    FOOBAR_F77(&x, &y);
+    FOOBAR_F77 (&x, &y);
 @}
 @end example
 
 If the Fortran identifier contains an underscore (e.g., @code{foo_bar}),
-you should use @code{F77_FUNC_}/@code{FC_FUNC_} instead of
-@code{F77_FUNC}/@code{FC_FUNC} (with the same arguments).  This is
+you should use @code{F77_FUNC_} or @code{FC_FUNC_} instead of
+@code{F77_FUNC} or @code{FC_FUNC} (with the same arguments).  This is
 because some Fortran compilers mangle names differently if they contain
 an underscore.
 @end defmac
@@ -6704,7 +6713,7 @@ This macro runs only at @command{autoconf} time, and incurs no cost at
 layer language @footnote{Because M4 is not aware of Sh code,
 especially conditionals, some optimizations that look nice statically
 may produce incorrect results at runtime.}, the macros
-@code{AC_LANG_PUSH}/@code{AC_LANG_POP} cannot be ``optimizing'',
+@code{AC_LANG_PUSH} and @code{AC_LANG_POP} cannot be ``optimizing'',
 therefore as much as possible you ought to avoid using them to wrap
 your code, rather, require from the user to run the macro with a
 correct current language, and check it with @code{AC_LANG_ASSERT}.
@@ -9165,7 +9174,7 @@ AC_DEFUN(@var{macro-name}, @var{macro-body})
 @end example
 
 You can refer to any arguments passed to the macro as @samp{$1},
-@samp{$2}, etc.  @xref{Definitions,, How to define new macros, m4.info,
+@samp{$2}, etc.  @xref{Definitions, , How to define new macros, m4.info,
 @acronym{GNU} m4}, for more complete information on writing M4 macros.
 
 Be sure to properly quote both the @var{macro-body} @emph{and} the
@@ -9767,7 +9776,7 @@ required a single space between the @samp{#!} and the @samp{/}, but
 these are no longer of practical concern.
 
 The set of external programs you should run in a @command{configure} script
-is fairly small.  @xref{Utilities in Makefiles,, Utilities in
+is fairly small.  @xref{Utilities in Makefiles, , Utilities in
 Makefiles, standards, @acronym{GNU} Coding Standards}, for the list.  This
 restriction allows users to start out with a fairly small set of
 programs and build the rest, avoiding too many interdependencies between
@@ -9850,7 +9859,7 @@ Substitutions}, item ``Command Substitution''.
 To detect whether you are running Bash, test whether
 @code{BASH_VERSION} is set.  To require
 Posix compatibility, run @samp{set -o posix}.  @xref{Bash POSIX
-Mode,, Bash Posix Mode, bash, The @acronym{GNU} Bash Reference
+Mode, , Bash Posix Mode, bash, The @acronym{GNU} Bash Reference
 Manual}, for details.
 
 @item Bash 2.05 and later
@@ -9923,7 +9932,7 @@ To detect whether you are running @command{zsh}, test whether
 @code{ZSH_VERSION} is set.  By default @command{zsh} is @emph{not}
 compatible with the Bourne shell: you must execute @samp{emulate sh},
 and for @command{zsh} versions before 3.1.6-dev-18 you must also
-set @code{NULLCMD} to @samp{:}.  @xref{Compatibility,, Compatibility,
+set @code{NULLCMD} to @samp{:}.  @xref{Compatibility, , Compatibility,
 zsh, The Z Shell Manual}, for details.
 
 The default Mac OS X @command{sh} was originally Zsh; it was changed to
@@ -13116,7 +13125,7 @@ directory that was created in the current directory.
 
 @acronym{GNU} @command{make} uses a rather complex algorithm to decide when it
 should use files found via a @code{VPATH} search.  @xref{Search
-Algorithm,, How Directory Searches are Performed, make, The @acronym{GNU} Make
+Algorithm, , How Directory Searches are Performed, make, The @acronym{GNU} Make
 Manual}.
 
 If a target needs to be rebuilt, @acronym{GNU} @command{make} discards the
@@ -13136,7 +13145,7 @@ OpenBSD and FreeBSD @command{make}s, however, will never perform a
 This is extremely annoying.
 
 When attempting a @code{VPATH} build for an autoconfiscated package
-(e.g,, @code{mkdir build && cd build && ../configure}), this means the
+(e.g., @code{mkdir build && cd build && ../configure}), this means the
 @acronym{GNU}
 @command{make} will build everything locally in the @file{build}
 directory, while BSD @command{make} will build new files locally and
@@ -13930,7 +13939,7 @@ location such as the user's home directory.  It could even be specified
 by an environment variable.  The programs should examine that file at
 run time, rather than at compile time.  Run-time configuration is more
 convenient for users and makes the configuration process simpler than
-getting the information while configuring.  @xref{Directory Variables,,
+getting the information while configuring.  @xref{Directory Variables, ,
 Variables for Installation Directories, standards, @acronym{GNU} Coding
 Standards}, for more information on where to put data files.
 
@@ -15595,7 +15604,7 @@ quoted:
 
 @example
 AC_INIT
-AC_CHECK_HEADERS(foo.h,,
+AC_CHECK_HEADERS(foo.h, ,
   AC_MSG_ERROR(cannot find foo.h, bailing out))
 AC_OUTPUT
 @end example

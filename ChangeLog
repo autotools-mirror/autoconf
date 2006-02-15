@@ -1,3 +1,17 @@
+2006-02-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Minor style cleanup.
+	Be consistent about spaces after commas.
+	Insert [] where empty args look a bit funny.
+	Fix some "i.e." and "e.g." usages.
+	Try to avoid "X/Y" usages.
+	Don't be pedantic about "ISO C99"; just say C99.
+	Prefer GNU style for spaces in front of parens.
+	(Function Portability): Comment about C89 versus C99
+	signed integer division.
+	(Particular Headers): Use current gnulib style for dirent
+	includes.
+
 2006-02-14  Stepan Kasal  <kasal@ucw.cz>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
