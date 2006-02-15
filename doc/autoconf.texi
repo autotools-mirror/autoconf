@@ -9009,6 +9009,13 @@ environment variables, or setting options, or similar
 implementation-specific actions.
 @end defmac
 
+@defmac AS_CASE (@var{word}, @ovar{pattern1}, @ovar{if-matched1}, @dots{}, @ovar{default})
+@asindex{CASE}
+Expand into a shell @samp{case} statement, where @var{word} is matched
+against one or more patterns.  @var{if-matched} is run if the
+corresponding pattern matched @var{word}, else @var{default} is run.
+@end defmac
+
 @defmac AS_DIRNAME (@var{file-name})
 @asindex{DIRNAME}
 Return the directory portion of @var{file-name}, using the algorithm
@@ -9017,11 +9024,12 @@ details about what this returns and why it is more portable than the
 @command{dirname} command.
 @end defmac
 
-@defmac AS_IF (@var{test}, @ovar{RUN-IF-TRUE}, @ovar{RUN-IF-FALSE})
+@defmac AS_IF (@var{test}, @ovar{run-if-true}, @ovar{run-if-false})
 @asindex{IF}
-Run shell code TEST@.  If TEST exits with a zero status then run shell code
-RUN-IF-TRUE, else run shell code RUN-IF-FALSE, with simplifications if either
-RUN-IF-TRUE or RUN-IF-FALSE is empty.
+Run shell code @var{test}.  If @var{test} exits with a zero status then
+run shell code @var{run-if-true}, else run shell code @var{run-if-false},
+with simplifications if either @var{run-if-true} or @var{run-if-false}
+is empty.
 @end defmac
 
 @defmac AS_MKDIR_P (@var{file-name})
@@ -9430,9 +9438,11 @@ SOME_CHECK
 @end group
 @end example
 
-
-You are encouraged to put all @code{AC_REQUIRE}s at the beginning of a
-macro.  You can use @code{dnl} to avoid the empty lines they leave.
+The helper macros @code{AS_IF} and @code{AS_CASE} may be used to
+enforce expansion of required macros outside of shell conditional
+constructs.  You are furthermore encouraged to put all @code{AC_REQUIRE}s
+at the beginning of a macro.  You can use @code{dnl} to avoid the empty
+lines they leave.
 
 @node Suggested Ordering
 @subsection Suggested Ordering

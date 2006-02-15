@@ -533,3 +533,36 @@ AT_CHECK([./script], [0],
 ]])
 
 AT_CLEANUP
+
+
+## ------------------- ##
+## AS_IF and AS_CASE.  ##
+## ------------------- ##
+
+AT_SETUP([AS@&t@_IF and AS@&t@_CASE])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+# Syntax checks: cope with empty arguments.
+AS_IF([:], [], [echo wrong])
+AS_IF([:], [:], [echo wrong])
+AS_IF([false], [echo wrong], [:])
+AS_IF([false], [echo wrong])
+AS_CASE([foo])
+AS_CASE([foo], [:])
+AS_CASE([foo],
+        [foo], [:],
+        [echo wrong])
+AS_CASE([foo],
+        [foo], [:],
+        [*],   [echo wrong])
+AS_CASE([foo],
+        [bar], [echo wrong],
+        [foo], [:],
+        [*],   [echo wrong])
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script])
+
+AT_CLEANUP

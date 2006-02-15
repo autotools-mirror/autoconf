@@ -64,6 +64,9 @@
 ** AS_HELP_STRING
   The macro correctly handles quadrigraphs now.
 
+** AS_BOURNE_COMPATIBLE, AS_SHELL_SANITIZE, AS_CASE
+  These macros are new or published now.
+
 ** AT_COPYRIGHT
   New macro for copyright notices in testsuite files.
 

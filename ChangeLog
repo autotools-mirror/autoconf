@@ -1,3 +1,15 @@
+2006-02-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (AS_CASE): New macro.
+	(_AS_CASE): Private helper macro.
+	* tests/m4sh.at: Basic tests for AS_IF and AS_CASE.
+	* doc/autoconf.texi (Programming in M4sh): Document AS_CASE.
+	Fix syntax of AS_IF description
+	(Prerequisite Macros): Mention AS_IF and AS_CASE as workarounds
+	for the AC_REQUIRE mess.
+	* NEWS: Mention AS_CASE, AS_BOURNE_COMPATIBLE, and
+	AS_SHELL_SANITIZE.
+
 2006-02-14  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Minor style cleanup.
