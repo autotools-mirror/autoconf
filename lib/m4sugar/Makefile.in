@@ -100,7 +100,6 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 TEST_EMACS = @TEST_EMACS@
 VERSION = @VERSION@
-ac_ct_STRIP = @ac_ct_STRIP@
 ac_cv_sh_n_works = @ac_cv_sh_n_works@
 am__leading_dot = @am__leading_dot@
 am__tar = @am__tar@
