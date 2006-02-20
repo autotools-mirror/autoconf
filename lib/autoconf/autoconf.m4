@@ -1,6 +1,8 @@
 # This file is part of Autoconf.                -*- Autoconf -*-
 # Driver that loads the Autoconf macro files.
-# Copyright (C) 1994, 1999, 2000, 2001, 2002  Free Software Foundation, Inc.
+#
+# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2006 Free Software
+# Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,6 +62,7 @@ m4_include([autoconf/autotest.m4])
 m4_include([autoconf/programs.m4])
 m4_include([autoconf/lang.m4])
 m4_include([autoconf/c.m4])
+m4_include([autoconf/erlang.m4])
 m4_include([autoconf/fortran.m4])
 m4_include([autoconf/functions.m4])
 m4_include([autoconf/headers.m4])
