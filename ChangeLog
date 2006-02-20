@@ -3,8 +3,10 @@
 	Add basic support for Erlang, both for configuring Erlang/OTP
 	tools, and Erlang as a conf test language.
 	* lib/autoconf/erlang.m4: New file.
-	* lib/autoconf/autoconf.m4
-	* lib/autoconf/Makefile.am (dist_autoconflib_DATA): Add erlang.m4.
+	* lib/autoconf/autoconf.m4: Add erlang.m4.
+	* lib/autoconf/Makefile.am (dist_autoconflib_DATA): Likewise.
+	* lib/freeze.mk (autoconf_m4f_dependencies): Likewise.
+	* NEWS: Add short description of new macros.
 	* THANKS: Add Romain Lenglet.
 
 2006-02-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>

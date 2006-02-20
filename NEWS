@@ -78,6 +78,15 @@
 ** autoreconf
   Supports --no-recursive now.
 
+** New macros to support Erlang/OTP.
+  New macros for configuring paths to Erlang tools and libraries:
+  AC_ERLANG_PATH_ERLC, AC_ERLANG_NEED_ERLC, AC_ERLANG_PATH_ERL,
+  AC_ERLANG_NEED_ERL, AC_ERLANG_CHECK_LIB, AC_ERLANG_SUBST_ROOT_DIR,
+  AC_ERLANG_SUBST_LIB_DIR.
+
+  New macros for configuring installation of Erlang libraries:
+  AC_ERLANG_SUBST_INSTALL_LIB_DIR, AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR.
+
 * Major changes in Autoconf 2.59b
 
   Released 2004-08-20, by Paul Eggert.

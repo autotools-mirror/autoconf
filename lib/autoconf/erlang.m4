@@ -47,9 +47,9 @@
 # Written by Romain Lenglet.
 
 
-# ERLANG_PATH_ERLC([VALUE-IF-NOT-FOUND], [PATH])
+# AC_ERLANG_PATH_ERLC([VALUE-IF-NOT-FOUND], [PATH])
 # ----------------------------------------------
-AC_DEFUN([ERLANG_PATH_ERLC],
+AC_DEFUN([AC_ERLANG_PATH_ERLC],
 [AC_ARG_VAR([ERLC], [Erlang/OTP compiler command [autodetected]])dnl
 if test -n "$ERLC"; then
     AC_MSG_CHECKING([for erlc])
@@ -58,20 +58,20 @@ else
     AC_PATH_TOOL(ERLC, erlc, [$1], [$2])
 fi
 AC_ARG_VAR([ERLCFLAGS], [Erlang/OTP compiler flags [none]])dnl
-])# ERLANG_PATH_ERLC
+])# AC_ERLANG_PATH_ERLC
 
-# ERLANG_NEED_ERLC([PATH])
+# AC_ERLANG_NEED_ERLC([PATH])
 # ------------------------
-AC_DEFUN([ERLANG_NEED_ERLC],
-[ERLANG_PATH_ERLC([not found], [$1])
+AC_DEFUN([AC_ERLANG_NEED_ERLC],
+[AC_ERLANG_PATH_ERLC([not found], [$1])
 if test "$ERLC" = "not found"; then
     AC_MSG_ERROR([Erlang/OTP compiler (erlc) not found but required])
 fi
-])# ERLANG_NEED_ERLC
+])# AC_ERLANG_NEED_ERLC
 
-# ERLANG_PATH_ERL([VALUE-IF-NOT-FOUND], [PATH])
+# AC_ERLANG_PATH_ERL([VALUE-IF-NOT-FOUND], [PATH])
 # ---------------------------------------------
-AC_DEFUN([ERLANG_PATH_ERL],
+AC_DEFUN([AC_ERLANG_PATH_ERL],
 [AC_ARG_VAR([ERL], [Erlang/OTP interpreter command [autodetected]])dnl
 if test -n "$ERL"; then
     AC_MSG_CHECKING([for erl])
@@ -79,16 +79,16 @@ if test -n "$ERL"; then
 else
     AC_PATH_TOOL(ERL, erl, [$1], [$2])[]dnl
 fi
-])# ERLANG_PATH_ERL
+])# AC_ERLANG_PATH_ERL
 
-# ERLANG_NEED_ERL([PATH])
+# AC_ERLANG_NEED_ERL([PATH])
 # -----------------------
-AC_DEFUN([ERLANG_NEED_ERL],
-[ERLANG_PATH_ERL([not found], [$1])
+AC_DEFUN([AC_ERLANG_NEED_ERL],
+[AC_ERLANG_PATH_ERL([not found], [$1])
 if test "$ERL" = "not found"; then
     AC_MSG_ERROR([Erlang/OTP interpreter (erl) not found but required])
 fi
-])# ERLANG_NEED_ERL
+])# AC_ERLANG_NEED_ERL
 
 
 
@@ -175,7 +175,7 @@ AC_DEFUN([AC_LANG_PREPROC(Erlang)],
 # ----------------------------
 # Find the Erlang compiler.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_COMPILER(Erlang)],
-[AC_REQUIRE([ERLANG_PATH_ERLC])])
+[AC_REQUIRE([AC_ERLANG_PATH_ERLC])])
 
 
 
@@ -183,11 +183,11 @@ AC_DEFUN([AC_LANG_COMPILER(Erlang)],
 
 dnl Macro for checking if an Erlang library is installed
 
-# ERLANG_CHECK_LIB(LIBRARY, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# AC_ERLANG_CHECK_LIB(LIBRARY, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -------------------------------------------------------------------
-AC_DEFUN([ERLANG_CHECK_LIB],
-[AC_REQUIRE([ERLANG_PATH_ERLC])[]dnl
-AC_REQUIRE([ERLANG_PATH_ERL])[]dnl
+AC_DEFUN([AC_ERLANG_CHECK_LIB],
+[AC_REQUIRE([AC_ERLANG_PATH_ERLC])[]dnl
+AC_REQUIRE([AC_ERLANG_PATH_ERL])[]dnl
 AC_CACHE_CHECK([for Erlang/OTP '$1' library subdirectory],
     [erlang_cv_lib_dir_$1],
     [AC_LANG_PUSH(Erlang)[]dnl
@@ -212,17 +212,17 @@ AC_CACHE_CHECK([for Erlang/OTP '$1' library subdirectory],
     ])
 AC_SUBST([ERLANG_LIB_DIR_$1], [$erlang_cv_lib_dir_$1])
 AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"], [$3], [$2])
-])# ERLANG_CHECK_LIB
+])# AC_ERLANG_CHECK_LIB
 
 
 
 dnl Determines the Erlang/OTP root directory
 
-# ERLANG_SUBST_ROOT_DIR
+# AC_ERLANG_SUBST_ROOT_DIR
 # ---------------
-AC_DEFUN([ERLANG_SUBST_ROOT_DIR],
-[AC_REQUIRE([ERLANG_NEED_ERLC])[]dnl
-AC_REQUIRE([ERLANG_NEED_ERL])[]dnl
+AC_DEFUN([AC_ERLANG_SUBST_ROOT_DIR],
+[AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
+AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
 AC_CACHE_CHECK([for Erlang/OTP root directory],
     [erlang_cv_root_dir],
     [AC_LANG_PUSH(Erlang)[]dnl
@@ -237,13 +237,13 @@ AC_CACHE_CHECK([for Erlang/OTP root directory],
      AC_LANG_POP(Erlang)[]dnl
     ])
 AC_SUBST([ERLANG_ROOT_DIR], [$erlang_cv_root_dir])
-])# ERLANG_SUBST_ROOT_DIR
+])# AC_ERLANG_SUBST_ROOT_DIR
 
-# ERLANG_SUBST_LIB_DIR
+# AC_ERLANG_SUBST_LIB_DIR
 # ---------------
-AC_DEFUN([ERLANG_SUBST_LIB_DIR],
-[AC_REQUIRE([ERLANG_NEED_ERLC])[]dnl
-AC_REQUIRE([ERLANG_NEED_ERL])[]dnl
+AC_DEFUN([AC_ERLANG_SUBST_LIB_DIR],
+[AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
+AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
 AC_CACHE_CHECK([for Erlang/OTP library base directory],
     [erlang_cv_lib_dir],
     [AC_LANG_PUSH(Erlang)[]dnl
@@ -258,7 +258,7 @@ AC_CACHE_CHECK([for Erlang/OTP library base directory],
      AC_LANG_POP(Erlang)[]dnl
     ])
 AC_SUBST([ERLANG_LIB_DIR], [$erlang_cv_lib_dir])
-])# ERLANG_SUBST_LIB_DIR
+])# AC_ERLANG_SUBST_LIB_DIR
 
 
 dnl Directories for installing Erlang/OTP packages are separated from the
@@ -266,9 +266,9 @@ dnl directories determined by running the Erlang/OTP installation that is used
 dnl for building.
 
 
-# ERLANG_SUBST_INSTALL_LIB_DIR
+# AC_ERLANG_SUBST_INSTALL_LIB_DIR
 # ---------------
-AC_DEFUN([ERLANG_SUBST_INSTALL_LIB_DIR],
+AC_DEFUN([AC_ERLANG_SUBST_INSTALL_LIB_DIR],
 [AC_MSG_CHECKING([for Erlang/OTP library installation base directory])
 AC_ARG_VAR([ERLANG_INSTALL_LIB_DIR],
     [Erlang/OTP library installation base directory [LIBDIR/erlang/lib]])
@@ -278,13 +278,13 @@ else
     AC_SUBST([ERLANG_INSTALL_LIB_DIR], ['${libdir}/erlang/lib'])
     AC_MSG_RESULT([$libdir/erlang/lib])
 fi
-])# ERLANG_SUBST_INSTALL_LIB_DIR
+])# AC_ERLANG_SUBST_INSTALL_LIB_DIR
 
 
-# ERLANG_SUBST_INSTALL_LIB_SUBDIR(PACKAGE_TARNAME, PACKAGE_VERSION)
+# AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR(PACKAGE_TARNAME, PACKAGE_VERSION)
 # ---------------
-AC_DEFUN([ERLANG_SUBST_INSTALL_LIB_SUBDIR],
-[AC_REQUIRE([ERLANG_SUBST_INSTALL_LIB_DIR])[]dnl
+AC_DEFUN([AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR],
+[AC_REQUIRE([AC_ERLANG_SUBST_INSTALL_LIB_DIR])[]dnl
 AC_MSG_CHECKING([for Erlang/OTP '$1' library installation subdirectory])
 AC_ARG_VAR([ERLANG_INSTALL_LIB_DIR_$1],
     [Erlang/OTP '$1' library installation subdirectory [ERLANG_INSTALL_LIB_DIR/$1-$2]])
@@ -294,5 +294,5 @@ else
     AC_SUBST([ERLANG_INSTALL_LIB_DIR_$1], ['${ERLANG_INSTALL_LIB_DIR}/$1-$2'])
     AC_MSG_RESULT([$ERLANG_INSTALL_LIB_DIR/$1-$2])
 fi
-])# ERLANG_SUBST_INSTALL_LIB_SUBDIR
+])# AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR
 
