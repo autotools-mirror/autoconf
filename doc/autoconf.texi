@@ -9916,12 +9916,12 @@ the standard shell conform to Posix.
 @prindex @samp{pdksh}
 A public-domain clone of the Korn shell called @command{pdksh} is widely
 available: it has most of the @samp{ksh88} features along with a few of
-its own.  Similarly to Bash, you can detect whether you are
-running @command{pdksh} by testing whether @code{KSH_VERSION} is set,
-and you can require Posix compatibility by running @samp{set
--o posix}.  Unfortunately, with @command{pdksh} 5.2.14 (the latest
-stable version as of January 2006) Posix mode is buggy and causes
-@command{pdksh} to depart from Posix in at least one respect:
+its own.  It will usually set @code{KSH_VERSION}, except if invoked as
+@command{/bin/sh} on OpenBSD, and similarly to Bash you can require
+Posix compatibility by running @samp{set -o posix}.  Unfortunately, with
+@command{pdksh} 5.2.14 (the latest stable version as of February 2006)
+Posix mode is buggy and causes @command{pdksh} to depart from Posix in
+at least one respect:
 
 @example
 $ echo "`echo \"hello\"`"
