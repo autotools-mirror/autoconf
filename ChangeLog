@@ -1,3 +1,17 @@
+2006-02-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Looping constructs): New node, to
+	document m4_for, m4_foreach, m4_foreach_w, and mention
+	obsolete AC_FOREACH.
+	(Obsolete Macros): Document AC_FOREACH.
+	* lib/m4sugar/m4sugar.m4 (_m4_for): Fix declaration comment.
+	(m4_for): Fix to never loop (almost) endlessly, work correctly
+	with arithmetic expressions in arguments, a step of zero or
+	non-integer multiple of the interval, and avoid integer
+	overflow.
+	* tests/m4sugar.at: New test for m4_for, m4_foreach, and
+	m4_foreach_w.
+
 2006-02-20  Romain Lenglet  <rlenglet@users.forge.objectweb.org>
 
 	Add basic support for Erlang, both for configuring Erlang/OTP

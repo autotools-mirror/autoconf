@@ -2,7 +2,7 @@
 
 AT_BANNER([M4sugar.])
 
-# Copyright (C) 2000, 2001, 2002, 2005 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2005, 2006 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,8 +20,8 @@ AT_BANNER([M4sugar.])
 # 02110-1301, USA.
 
 
-# AT_CHECK_M4SUGAR_TEXT(CODE, STDOUT, STDER)
-# ------------------------------------------
+# AT_CHECK_M4SUGAR_TEXT(CODE, STDOUT, STDERR)
+# -------------------------------------------
 # Check that m4sugar CODE expands to STDOUT and emits STDERR.
 m4_define([AT_CHECK_M4SUGAR_TEXT],
 [
@@ -203,4 +203,118 @@ AT_CHECK_M4RE([m4_re_string], [_9abc], [ok])
 AT_CHECK_M4RE([m4_re_string], [9ab_c], [ok])
 AT_CHECK_M4RE([m4_re_string], [9a@_c])
 
+AT_CLEANUP
+
+## ---------- ##
+## M4 Loops.  ##
+## ---------- ##
+
+AT_SETUP([M4 loops])
+
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_define([myvar], [outer value])dnl
+m4_for([myvar], 1, 3, 1, [ myvar])
+m4_for([myvar], 1, 3,  , [ myvar])
+m4_for([myvar], 3, 1,-1, [ myvar])
+m4_for([myvar], 3, 1,  , [ myvar])
+m4_for([myvar], 1, 3, 2, [ myvar])
+m4_for([myvar], 3, 1,-2, [ myvar])
+m4_for([myvar],-1,-3,-2, [ myvar])
+m4_for([myvar],-3,-1, 2, [ myvar])
+dnl Make sure we recalculate the bounds correctly:
+m4_for([myvar], 1, 3, 3, [ myvar])
+m4_for([myvar], 1, 6, 3, [ myvar])
+m4_for([myvar],22,-7,-5, [ myvar])
+m4_for([myvar],-2,-7,-4, [ myvar])
+m4_for([myvar],-7,-2, 4, [ myvar])
+dnl Make sure we are not exposed to division truncation:
+m4_for([myvar], 2, 5, 2, [ myvar])
+m4_for([myvar],-5,-2, 2, [ myvar])
+m4_for([myvar], 5, 2,-2, [ myvar])
+m4_for([myvar],-2,-5,-2, [ myvar])
+dnl Make sure we do not divide by zero:
+m4_for([myvar], 1, 1,  , [ myvar])
+m4_for([myvar], 1, 1,+2, [ myvar])
+m4_for([myvar], 1, 1,-2, [ myvar])
+dnl Make sure we do not loop endlessly
+m4_for([myval], 1, 1, 0, [ myval])
+dnl Make sure to properly parenthesize
+m4_for([myvar], 3-5, -2+8, , [ myvar])
+m4_for([myvar], -2+8, 3-5, , [ myvar])
+m4_for([myvar], 8, 16, 3 * 2, [ myvar])
+m4_for([myvar], 8, 16, -3 * -2, [ myvar])
+m4_for([myvar], [2<<2], [2<<3], [-3 * (-2)], [ myvar])
+m4_foreach([myvar], [[a], [b, c], [d], [e
+],[f]], [ myvar|])
+m4_foreach_w([myvar], [a  b c, d,e f
+g], [ myvar|])
+myvar
+]],
+[[ 1 2 3
+ 1 2 3
+ 3 2 1
+ 3 2 1
+ 1 3
+ 3 1
+ -1 -3
+ -3 -1
+ 1
+ 1 4
+ 22 17 12 7 2 -3
+ -2 -6
+ -7 -3
+ 2 4
+ -5 -3
+ 5 3
+ -2 -4
+ 1
+ 1
+ 1
+ 1
+ -2 -1 0 1 2 3 4 5 6
+ 6 5 4 3 2 1 0 -1 -2
+ 8 14
+ 8 14
+ 8 14
+ a| b, c| d| e
+| f|
+ a| b| c,| d,e| f| g|
+outer value
+]], [])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_init
+m4_divert_push([0])m4_wrap([m4_divert_pop([0])[]])dnl
+m4_for([myvar], 1, 3,-1, [ myvar])
+]])
+
+AT_CHECK_M4SUGAR([], 1, [],
+[[script.4s:3: error: assert failed: -1 > 0
+script.4s:3: the top level
+autom4te: m4 failed with exit status: 1
+]])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_init
+m4_divert_push([0])m4_wrap([m4_divert_pop([0])[]])dnl
+m4_for([myvar], 1, 2, 0, [ myvar])
+]])
+
+AT_CHECK_M4SUGAR([], 1, [],
+[[script.4s:3: error: assert failed: 0 > 0
+script.4s:3: the top level
+autom4te: m4 failed with exit status: 1
+]])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_init
+m4_divert_push([0])m4_wrap([m4_divert_pop([0])[]])dnl
+m4_for([myvar], 2, 1, 0, [ myvar])
+]])
+
+AT_CHECK_M4SUGAR([], 1, [],
+[[script.4s:3: error: assert failed: 0 < 0
+script.4s:3: the top level
+autom4te: m4 failed with exit status: 1
+]])
 AT_CLEANUP

@@ -571,19 +571,24 @@ m4_builtin([undefine], $@)])
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO.
 # Both limits are included, and bounds are checked for consistency.
 m4_define([m4_for],
-[m4_case(m4_sign(m4_eval($3 - $2)),
-	 1, [m4_assert(m4_sign(m4_default($4, 1)) == 1)],
-	-1, [m4_assert(m4_sign(m4_default($4, -1)) == -1)])dnl
-m4_pushdef([$1], [$2])dnl
-m4_if(m4_eval([$3 > $2]), 1,
-      [_m4_for([$1], [$3], m4_default([$4], 1), [$5])],
-      [_m4_for([$1], [$3], m4_default([$4], -1), [$5])])dnl
+[m4_pushdef([$1], m4_eval([$2]))dnl
+m4_if(m4_eval(([$3]) > $1), 1,
+[m4_pushdef([_m4_step], m4_eval(m4_default([$4], 1)))dnl
+m4_assert(_m4_step > 0)dnl
+_m4_for([$1], m4_eval((([$3]) - $1) / _m4_step * _m4_step + $1), _m4_step, [$5])],
+      m4_eval(([$3]) < $1), 1,
+[m4_pushdef([_m4_step], m4_eval(m4_default([$4], -1)))dnl
+m4_assert(_m4_step < 0)dnl
+_m4_for([$1], m4_eval(($1 - ([$3])) / -(_m4_step) * _m4_step + $1), _m4_step, [$5])],
+      [m4_pushdef(_m4_step,[])dnl
+$5])[]dnl
+m4_popdef([_m4_step])dnl
 m4_popdef([$1])])
 
 
-# _m4_for(VARIABLE, FIRST, LAST, STEP, EXPRESSION)
-# ------------------------------------------------
-# Core of the loop, no consistency checks.
+# _m4_for(VARIABLE, LAST, STEP, EXPRESSION)
+# -----------------------------------------
+# Core of the loop, no consistency checks, all arguments are plain numbers.
 m4_define([_m4_for],
 [$4[]dnl
 m4_if($1, [$2], [],

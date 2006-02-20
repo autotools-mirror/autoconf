@@ -437,6 +437,7 @@ Using @command{autom4te}
 Programming in M4sugar
 
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
+* Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
 * Forbidden Patterns::          Catching unexpanded macros
 
@@ -8781,6 +8782,7 @@ M4sugar''.
 
 @menu
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
+* Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
 * Forbidden Patterns::          Catching unexpanded macros
 @end menu
@@ -8896,6 +8898,48 @@ m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
 @noindent
 to recover the behavior of the builtin.
 @end defmac
+
+
+
+@node Looping constructs
+@subsection Looping constructs
+
+The following macros implement loops in M4.
+
+@defmac m4_for (@var{var}, @var{first}, @var{last}, @ovar{step}, @var{expression})
+@msindex{for}
+Loop over the numeric values between @var{first} and @var{last}
+including bounds by increments of @var{step}.  For each iteration,
+expand @var{expression} with the numeric value assigned to @var{var}.
+If @var{step} is omitted, it defaults to @samp{1} or @samp{-1} depending
+on the order of the limits.  If given, @var{step} has to match this
+order.
+@end defmac
+
+@defmac m4_foreach (@var{var}, @var{list}, @var{expression})
+@msindex{foreach}
+Loop over the comma-separated m4 list @var{list}, assigning each value
+to @var{var}, and expand @var{expression}.  The following example will
+output two lines:
+
+@example
+m4_foreach([myvar], [[foo], [bar, baz]],
+           [echo myvar
+])
+
+@end example
+@end defmac
+
+@defmac m4_foreach_w (@var{var}, @var{list}, @var{expression})
+@msindex{foreach_w}
+Loop over the whitespace-separated list @var{list}, assigning each value
+to @var{var}, and expand @var{expression}.
+
+The deprecated macro @code{AC_FOREACH} is an alias of
+@code{m4_foreach_w}.
+@end defmac
+
+
 
 @node Evaluation Macros
 @subsection Evaluation Macros
@@ -14735,6 +14779,11 @@ and sets @code{EMXOS2}.
 @code{AC_PATH_XTRA}
 @end defmac
 
+@defmac AC_FOREACH
+@acindex{FOREACH}
+@code{m4_foreach_w}
+@end defmac
+
 @defmac AC_FUNC_CHECK
 @acindex{FUNC_CHECK}
 @code{AC_CHECK_FUNC}
@@ -15955,7 +16004,7 @@ generation of sources, and on the other hand executing the program;
 this scheme helps supporting more languages than plain C and C++.
 @end itemize
 
-In addition to the change of syntax, the philosphy has changed too:
+In addition to the change of syntax, the philosophy has changed too:
 while emphasis was put on speed at the expense of accuracy, today's
 Autoconf promotes accuracy of the testing framework at, ahem@dots{}, the
 expense of speed.
