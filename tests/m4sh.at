@@ -545,24 +545,91 @@ AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
 # Syntax checks: cope with empty arguments.
 AS_IF([:], [], [echo wrong])
-AS_IF([:], [:], [echo wrong])
-AS_IF([false], [echo wrong], [:])
+AS_IF([:], [echo one], [echo wrong])
+AS_IF([false], [echo wrong], [echo two])
 AS_IF([false], [echo wrong])
+# n-ary version
+AS_IF([false], [echo wrong],
+      [:], [echo three])
+AS_IF([false], [echo wrong],
+      [:], [echo four],
+      [echo wrong])
+AS_IF([false], [echo wrong],
+      [false], [echo wrong])
+AS_IF([false], [echo wrong],
+      [false], [echo wrong],
+      [echo five])
+AS_IF([false], [echo wrong],
+      [false], [echo wrong],
+      [:], [echo six],
+      [echo wrong])
 AS_CASE([foo])
-AS_CASE([foo], [:])
+AS_CASE([foo], [echo seven])
 AS_CASE([foo],
-        [foo], [:],
+        [foo], [echo eight],
         [echo wrong])
 AS_CASE([foo],
-        [foo], [:],
+        [foo], [echo nine],
         [*],   [echo wrong])
 AS_CASE([foo],
         [bar], [echo wrong],
-        [foo], [:],
+        [foo], [echo ten],
         [*],   [echo wrong])
+
+# check that require works correctly
+m4_for([n], 1, 9, [],
+[m4_defun([FOO]n, [foo]n[=]n)dnl
+m4_defun([BAR]n,
+	 [m4_require([FOO]]n[)dnl
+bar]n[=]n)[]dnl
+])
+
+AS_IF([:], [BAR1])
+echo "foo1=$foo1 bar1=$bar1"
+AS_IF([:], [], [BAR2])
+echo "foo2=$foo2 bar2=$bar2"
+AS_IF([false], [BAR3])
+echo "foo3=$foo3 bar3=$bar3"
+AS_IF([false], [], [BAR4])
+echo "foo4=$foo4 bar4=$bar4"
+AS_CASE([x], [x], [BAR5])
+echo "foo5=$foo5 bar5=$bar5"
+AS_CASE([x], [y], [BAR6])
+echo "foo6=$foo6 bar6=$bar6"
+AS_CASE([x],
+	[x], [:],
+	[BAR7])
+echo "foo7=$foo7 bar7=$bar7"
+AS_CASE([x],
+	[y], [:],
+	[BAR8])
+echo "foo8=$foo8 bar8=$bar8"
+AS_CASE([x],
+	[y], [:],
+	[x], [BAR9])
+echo "foo9=$foo9 bar9=$bar9"
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([./script], [0], [[one
+two
+three
+four
+five
+six
+seven
+eight
+nine
+ten
+foo1=1 bar1=1
+foo2=2 bar2=
+foo3=3 bar3=
+foo4=4 bar4=4
+foo5=5 bar5=5
+foo6=6 bar6=
+foo7=7 bar7=
+foo8=8 bar8=8
+foo9=9 bar9=9
+]])
 
 AT_CLEANUP

@@ -437,24 +437,34 @@ m4_define([AS_EXIT],
 [{ (exit m4_default([$1], 1)); exit m4_default([$1], 1); }])
 
 
-# AS_IF(TEST, [IF-TRUE], [IF-FALSE])
-# ----------------------------------
+# AS_IF(TEST1, [IF-TRUE1]...[IF-FALSE])
+# -------------------------------------
 # Expand into
-# | if TEST; then
-# |   IF-TRUE
+# | if TEST1; then
+# |   IF-TRUE1
+# | elif TEST2; then
+# |   IF-TRUE2
+# [...]
 # | else
 # |   IF-FALSE
 # | fi
-# with simplifications is IF-TRUE and/or IF-FALSE is empty.
+# with simplifications if IF-TRUE1 and/or IF-FALSE is empty.
 #
-# FIXME: Be n-ary, just as m4_if.
+m4_define([_AS_IF],
+[m4_ifval([$2$3],
+[elif $1; then
+  m4_default([$2], [:])
+m4_ifval([$3], [$0(m4_shiftn(2, $@))])],
+[m4_ifvaln([$1],
+[else
+  $1])dnl
+])dnl
+])# _AS_IF
 m4_defun([AS_IF],
 [m4_ifval([$2$3],
 [if $1; then
   m4_default([$2], [:])
-m4_ifvaln([$3],
-[else
-  $3])dnl
+m4_ifval([$3], [_$0(m4_shiftn(2, $@))])[]dnl
 fi
 ])dnl
 ])# AS_IF

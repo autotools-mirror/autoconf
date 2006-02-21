@@ -1,5 +1,12 @@
 2006-02-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/m4sugar/m4sh.m4 (AS_IF): Extend to allow more than one
+	test, as in `if tests; then cmd1; elif ...; else ...; fi'.
+	* doc/autoconf.texi (Programming in M4sh): Adjusted.
+	* tests/m4sh.at (AS_IF and AS_CASE): Test this.  Also make sure
+	both macros are defun'ed so that required macros are evaluated
+	outside.
+
 	* doc/autoconf.texi (Prerequisite Macros): State more precisely
 	where a required macro will be expanded.
 	(Coding Style): Another reason not to use `m4_define'.

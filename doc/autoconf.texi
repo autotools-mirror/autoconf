@@ -9068,12 +9068,23 @@ details about what this returns and why it is more portable than the
 @command{dirname} command.
 @end defmac
 
-@defmac AS_IF (@var{test}, @ovar{run-if-true}, @ovar{run-if-false})
+@defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
 @asindex{IF}
-Run shell code @var{test}.  If @var{test} exits with a zero status then
-run shell code @var{run-if-true}, else run shell code @var{run-if-false},
-with simplifications if either @var{run-if-true} or @var{run-if-false}
-is empty.
+Run shell code @var{test1}.  If @var{test1} exits with a zero status then
+run shell code @var{run-if-true1}, else examine further tests.  If no test
+exits with a zero status, run shell code @var{run-if-false}, with
+simplifications if either @var{run-if-true1} or @var{run-if-false1}
+is empty.  For example,
+
+@example
+AS_IF([test "$foo" = yes], [HANDLE_FOO([yes])],
+      [test "$foo" != no], [HANDLE_FOO([maybe])],
+      [echo foo not specified])
+@end example
+
+@noindent
+will make sure any @code{AC_REQUIRE}'s macros of @code{HANDLE_FOO} will
+be expanded before the first test.
 @end defmac
 
 @defmac AS_MKDIR_P (@var{file-name})
