@@ -9417,8 +9417,10 @@ must not be called from the top level.
 @code{AC_REQUIRE} is often misunderstood.  It really implements
 dependencies between macros in the sense that if one macro depends upon
 another, the latter will be expanded @emph{before} the body of the
-former.  In particular, @samp{AC_REQUIRE(FOO)} is not replaced with the
-body of @code{FOO}.  For instance, this definition of macros:
+former.  To be more precise, the required macro will be expanded before
+the outermost @code{AC_DEFUN}'d macro in the current expansion stack.
+In particular, @samp{AC_REQUIRE([FOO])} is not replaced with the body of
+@code{FOO}.  For instance, this definition of macros:
 
 @example
 @group
@@ -9724,10 +9726,12 @@ replacement might contain a file name, since they have special meaning
 to the shell and are less likely to occur in file names.
 
 @xref{Macro Definitions}, for details on how to define a macro.  If a
-macro doesn't use @code{AC_REQUIRE} and it is expected to never be the
-object of an @code{AC_REQUIRE} directive, then use @code{m4_define}.  In
-case of doubt, use @code{AC_DEFUN}.  All the @code{AC_REQUIRE}
-statements should be at the beginning of the macro, @code{dnl}'ed.
+macro doesn't use @code{AC_REQUIRE}, is expected to never be the object
+of an @code{AC_REQUIRE} directive, and macros required by other macros
+inside arguments will not need to be expanded before this macro, then
+use @code{m4_define}.  In case of doubt, use @code{AC_DEFUN}.
+All the @code{AC_REQUIRE} statements should be at the beginning of the
+macro, @code{dnl}'ed.
 
 You should not rely on the number of arguments: instead of checking
 whether an argument is missing, test that it is not empty.  It provides

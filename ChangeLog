@@ -1,3 +1,9 @@
+2006-02-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Prerequisite Macros): State more precisely
+	where a required macro will be expanded.
+	(Coding Style): Another reason not to use `m4_define'.
+
 2006-02-21  Eric Blake  <ebb9@byu.net>
 
 	* lib/autoconf/general.m4 (_AC_LIBOBJ): Minor optimization.
