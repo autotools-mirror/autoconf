@@ -2497,10 +2497,7 @@ m4_define([_AC_LIBOBJ],
 [AS_LITERAL_IF([$1],
 	       [AC_LIBSOURCE([$1.c])],
 	       [$2])dnl
-case $LIB@&t@OBJS in
-    "$1.$ac_objext"   | \
-  *" $1.$ac_objext"   | \
-    "$1.$ac_objext "* | \
+case " $LIB@&t@OBJS " in
   *" $1.$ac_objext "* ) ;;
   *) AC_SUBST([LIB@&t@OBJS], ["$LIB@&t@OBJS $1.$ac_objext"]) ;;
 esac

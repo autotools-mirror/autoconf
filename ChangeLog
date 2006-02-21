@@ -1,3 +1,7 @@
+2006-02-21  Eric Blake  <ebb9@byu.net>
+
+	* lib/autoconf/general.m4 (_AC_LIBOBJ): Minor optimization.
+
 2006-02-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Looping constructs): New node, to
