@@ -1,3 +1,9 @@
+2006-02-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Text processing Macros): New node to
+	document the m4sugar macros m4_re_escape, m4_tolower,
+	m4_toupper, m4_split, m4_normalize, m4_append, m4_append_uniq.
+
 2006-02-22  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Fix typo:

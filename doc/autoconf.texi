@@ -439,6 +439,7 @@ Programming in M4sugar
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
+* Text processing Macros::      String manipulation in M4
 * Forbidden Patterns::          Catching unexpanded macros
 
 Writing Autoconf Macros
@@ -8784,6 +8785,7 @@ M4sugar''.
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
+* Text processing Macros::      String manipulation in M4
 * Forbidden Patterns::          Catching unexpanded macros
 @end menu
 
@@ -8976,6 +8978,54 @@ $1 = a, $@@ = [a],[b]
 $1 = a,b, $@@ = [a,b]
 $1 = [a],[b], $@@ = [[a],[b]]
 @end example
+
+
+
+@node Text processing Macros
+@subsection Text processing Macros
+
+The following macros may be used to manipulate strings in M4.
+They are not intended for casual use.
+
+@defmac m4_re_escape (@var{string})
+@msindex{re_escape}
+Backslash-escape all characters in @var{string} that are active in
+regexps.
+@end defmac
+
+@defmac m4_tolower (@var{string})
+@defmacx m4_toupper (@var{string})
+@msindex{tolower}
+@msindex{toupper}
+Return @var{string} with letters converted to upper or lower case,
+respectively.
+@end defmac
+
+@defmac m4_split (@var{string}, @ovar{regexp})
+@msindex{split}
+Split @var{string} into an M4 list of elements quoted by @samp{[} and
+@samp{]}, while keeping white space at the beginning and at the end.
+If @var{regexp} is given, use it instead of @samp{[\t ]+} for splitting.
+If @var{string} is empty, the result is an empty list.
+@end defmac
+
+@defmac m4_normalize (@var{string})
+@msindex{normalize}
+Remove leading and trailing spaces and tabs, sequences of
+backslash-then-newline, and replace multiple spaces and tabs with a
+single space.
+@end defmac
+
+@defmac m4_append (@var{macro-name}, @var{string}, @ovar{separator})
+@defmacx m4_append_uniq (@var{macro-name}, @var{string}, @ovar{separator})
+@msindex{append}
+@msindex{append_uniq}
+Redefine @var{macro-name} to its former contents with @var{separator}
+and @var{string} added at the end.  If @var{macro-name} was undefined
+before (but not if it was defined but empty), then no @var{separator} is
+added.  @code{m4_append} can be used to grow strings, and
+@code{m4_append_uniq} to grow strings without duplicating substrings.
+@end defmac
 
 
 
