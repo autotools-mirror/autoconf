@@ -1,3 +1,9 @@
+2006-02-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Fix typo:
+	XrmInitialize (0) -> XrmInitialize ().
+	Reported by Toshio Kuratomi.
+
 2006-02-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/m4sugar/m4sh.m4 (AS_IF): Extend to allow more than one
