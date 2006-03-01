@@ -651,7 +651,7 @@ b
   sed ${ac_max_sed_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
     sed -f "$tmp/defines.sed"' "$ac_in >$ac_out" >>$CONFIG_STATUS
-  ac_in=$ac_out ac_out=$ac_nxt ac_nxt=$ac_in
+  ac_in=$ac_out; ac_out=$ac_nxt; ac_nxt=$ac_in
   sed 1,${ac_max_sed_lines}d conftest.defines >conftest.tail
   grep . conftest.tail >/dev/null || break
   rm -f conftest.defines

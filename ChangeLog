@@ -1,3 +1,10 @@
+2006-03-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADER): Force correct
+	order of variable initialization, so even the Solaris 2.6 shell
+	can create a config header correctly.  Fixes lots of test suite
+	failures.
+
 2006-02-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Text processing Macros): New node to
