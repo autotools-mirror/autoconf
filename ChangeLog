@@ -1,3 +1,9 @@
+2006-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/types.m4 (AC_CHECK_ALIGNOF): Work around
+	HPUX compiler bug, similarly to AC_CHECK_SIZEOF, as documented
+	in section `Specific Compiler Characteristics'.
+
 2006-03-04  Eric Blake  <ebb9@byu.net>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_STRERROR_R): Avoid unused

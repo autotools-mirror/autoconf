@@ -406,7 +406,9 @@ AC_DEFUN([AC_CHECK_ALIGNOF],
 AC_CHECK_TYPE([$1], [], [], [$2])
 AC_CACHE_CHECK([alignment of $1], AS_TR_SH([ac_cv_alignof_$1]),
 [if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
-  _AC_COMPUTE_INT([offsetof (struct { char x; $1 y; }, y)],
+  # The cast to long int works around a bug in the HP C Compiler,
+  # see AC_CHECK_SIZEOF for more information.
+  _AC_COMPUTE_INT([(long int) offsetof (struct { char x; $1 y; }, y)],
 		  [AS_TR_SH([ac_cv_alignof_$1])],
 		  [AC_INCLUDES_DEFAULT([$2])
 #ifndef offsetof
