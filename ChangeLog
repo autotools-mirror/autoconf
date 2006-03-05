@@ -1,3 +1,15 @@
+2006-03-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autotest/general.m4 (_AT_NORMALIZE_TEST_GROUP_NUMBER): New macro.
+	(AT_INIT): Use it, to remove arbitrary limit of 999,999 test
+	cases, and to work around Tru64 expr bug.
+
+2006-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Mention Tru64
+	expr bug that turns the result of a regex match into a number if
+	possible.
+
 2006-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/types.m4 (AC_CHECK_ALIGNOF): Work around

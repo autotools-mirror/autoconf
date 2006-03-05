@@ -12203,6 +12203,14 @@ will output @samp{a} on most hosts, but @samp{aa} on @acronym{QNX} 4.25.  A
 simple workaround consists in testing @command{expr} and use a variable
 set to @command{expr} or to @command{false} according to the result.
 
+Tru64 @command{expr} incorrectly treats the result as a number, if it
+can be interpreted that way:
+
+@example
+$ @kbd{expr 00001 : '.*\(...\)'}
+1
+@end example
+
 
 @item @command{fgrep}
 @c ------------------

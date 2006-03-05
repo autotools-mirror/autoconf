@@ -148,6 +148,21 @@ m4_define([AT_LINE],
 [m4_bpatsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
 
 
+# _AT_NORMALIZE_TEST_GROUP_NUMBER(SHELL-VAR)
+# ------------------------------------------
+# Normalize SHELL-VAR so that its value has the same number of digits as
+# all the other test group numbers.
+m4_define([_AT_NORMALIZE_TEST_GROUP_NUMBER],
+[
+  while :; do
+    case $$1 in #(
+    $at_format*) break;;
+    esac
+    $1=0$$1
+  done
+])
+
+
 # AT_INIT([TESTSUITE-NAME])
 # -------------------------
 # Begin test suite.
@@ -241,10 +256,10 @@ m4_wrap([m4_divert_text([DEFAULTS],
 at_tested='m4_ifdef([AT_tested], [AT_tested])'
 # List of the all the test groups.
 at_groups_all='AT_groups_all'
-# As many dots as there are digits in the last test group number.
+# As many question marks as there are digits in the last test group number.
 # Used to normalize the test group numbers so that `ls' lists them in
 # numerical order.
-at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [.])'
+at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [?])'
 # Description of all the test groups.
 at_help_all='AT_help_all'])])dnl
 m4_divert_push([PARSE_ARGS])dnl
@@ -665,8 +680,8 @@ do
 	*" $at_group "* ) continue;;
       esac
 
-      # Normalize the test group number.
-      at_group_normalized=`expr "00000$at_group" : ".*\($at_format\)"`
+      at_group_normalized=$at_group
+      _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
 
       # Create a fresh directory for the next test group, and enter.
       at_group_dir=$at_suite_dir/$at_group_normalized
@@ -934,8 +949,8 @@ else
       echo
       for at_group in $at_fail_list
       do
-        # Normalize the test group number and cat the log.
-        at_group_normalized=`expr "00000$at_group" : ".*\($at_format\)"`
+        at_group_normalized=$at_group
+        _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
         cat "$at_suite_dir/$at_group_normalized/$as_me.log"
         echo
       done
