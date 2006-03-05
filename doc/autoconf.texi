@@ -7585,8 +7585,8 @@ instance, the following macro is broken:
 AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
                 [ac_cv_shell_true_works=no
-                 true && ac_cv_shell_true_works=yes
-                 if test $ac_cv_shell_true_works = yes; then
+                 (true) 2>/dev/null && ac_cv_shell_true_works=yes
+                 if test "$ac_cv_shell_true_works" = yes; then
                    AC_DEFINE([TRUE_WORKS], [1],
                              [Define if `true(1)' works properly.])
                  fi])
@@ -7604,8 +7604,8 @@ is:
 AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [ac_cv_shell_true_works],
                 [ac_cv_shell_true_works=no
-                 true && ac_cv_shell_true_works=yes])
- if test $ac_cv_shell_true_works = yes; then
+                 (true) 2>/dev/null && ac_cv_shell_true_works=yes])
+ if test "$ac_cv_shell_true_works" = yes; then
    AC_DEFINE([TRUE_WORKS], [1],
              [Define if `true(1)' works properly.])
  fi
