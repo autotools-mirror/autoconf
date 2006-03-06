@@ -1,5 +1,16 @@
 2006-03-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/status.m4 (_AC_SED_CMD_LIMIT): The limit for
+	HP-UX sed is 99 commands, not 100.
+	(_AC_OUTPUT_FILES_PREPARE): Do not count the `}' of an
+	_AC_SUBST_FILES fragment.  Separate `{' and `r' commands by
+	newline for portability.
+	* tests/torture.at (Torturing config.status): Also test 100
+	AC_SUBST_FILE invocations.  Fix test to actually verify the
+	AC_CONFIG_FILES output.
+	* doc/autoconf.texi (Limitations of Usual Tools): Document HP-UX
+	command, label, and read-file `r' limits.  Unify HP-UX spelling.
+
 	* tests/Makefile.am (edit, $(wrappers)): Do not use `$<' in
 	non-suffix rule.
 	($(TESTSUITE_GENERATED_AT)): Use `$(srcdir)` for the benefit of

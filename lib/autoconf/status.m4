@@ -303,8 +303,8 @@ AC_DEFUN([AC_CONFIG_FILES], [_AC_CONFIG_FOOS([FILES], $@)])
 #
 # Some seds have small command number limits, like on Digital OSF/1 and HP-UX.
 m4_define([_AC_SED_CMD_LIMIT],
-dnl One cannot portably go further than 100 commands because of HP-UX.
-[100])
+dnl One cannot portably go further than 99 commands because of HP-UX.
+[99])
 
 
 # _AC_OUTPUT_FILES_PREPARE
@@ -343,7 +343,7 @@ m4_ifdef([_AC_SUBST_FILES],
 
 m4_foreach_w([_AC_Var], m4_defn([_AC_SUBST_FILES]),
 [dnl End fragments at beginning of loop so that last fragment is not ended.
-m4_if(m4_eval(_AC_SED_CMD_NUM + 4 > _AC_SED_CMD_LIMIT), 1,
+m4_if(m4_eval(_AC_SED_CMD_NUM + 3 > _AC_SED_CMD_LIMIT), 1,
 [dnl Fragment is full and not the last one, so no need for the final un-escape.
 dnl Increment fragment number.
 m4_define([_AC_SED_FRAG_NUM], m4_incr(_AC_SED_FRAG_NUM))dnl
@@ -359,10 +359,11 @@ cat >"\$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <<\CEOF
 _ACEOF
 ]m4_define([_AC_SED_CMD_NUM], 2)m4_define([_AC_SED_FRAG])dnl
 ])dnl Last fragment ended.
-m4_define([_AC_SED_CMD_NUM], m4_eval(_AC_SED_CMD_NUM + 4))dnl
+m4_define([_AC_SED_CMD_NUM], m4_eval(_AC_SED_CMD_NUM + 3))dnl
 m4_define([_AC_SED_FRAG],
 m4_defn([_AC_SED_FRAG])dnl
-[/^[ 	]*@]_AC_Var[@[ 	]*$/{ r $]_AC_Var[
+[/^[ 	]*@]_AC_Var[@[ 	]*$/{
+r $]_AC_Var[
 d
 }
 ])dnl

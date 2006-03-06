@@ -11818,7 +11818,7 @@ bar
 foo
 @end example
 
-Some Awk implementations, such as HPUX 11.0's native one, mishandle anchors:
+Some Awk implementations, such as HP-UX 11.0's native one, mishandle anchors:
 
 @example
 $ @kbd{echo xfoo | $AWK '/foo|^bar/ @{ print @}'}
@@ -12483,7 +12483,9 @@ them.
 Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
 
 Sed scripts should not use branch labels longer than 8 characters and
-should not contain comments.
+should not contain comments.  HP-UX sed has a limit of 99 commands and
+48 labels, which can not be circumvented by using more than one script
+file.  It can execute up to 19 reads with the @samp{r} command per cycle.
 
 Avoid redundant @samp{;}, as some @command{sed} implementations, such as
 Net@acronym{BSD} 1.4.2's, incorrectly try to interpret the second
