@@ -2,7 +2,7 @@
 
 # Build some of the Autoconf test files.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@ as_me=`echo "$0" | sed 's,.*[\\/],,'`
 
 trap 'echo "'"$as_me"': failed.  To proceed run make check." >&2
       rm -f acdefuns audefuns requires *.tat
-      for file in "$@"
+      for file
       do
         touch `echo "$file" | sed "s,.*[\\/],,;s/\..*/.at/"`
       done
@@ -46,9 +46,9 @@ test $# != 0
 src="$@"
 
 # Set locale to C so that `sort' behaves in a uniform way.
-export LANGUAGE; LANGUAGE=C
-export LANG; LANG=C
-export LC_ALL; LC_ALL=C
+LANGUAGE=C; export LANGUAGE
+LANG=C; export LANG
+LC_ALL=C export LC_ALL
 
 
 # requires

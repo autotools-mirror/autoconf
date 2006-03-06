@@ -1,3 +1,12 @@
+2006-03-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/Makefile.am (edit, $(wrappers)): Do not use `$<' in
+	non-suffix rule.
+	($(TESTSUITE_GENERATED_AT)): Use `$(srcdir)` for the benefit of
+	non-GNU make.
+	(autoconfdir, $(AUTOCONF_FILES)): Likewise.
+	* tests/mktests.sh: Small shell portability fixes.
+
 2006-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Caching Results): Fix the examples to use a

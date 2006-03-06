@@ -63,10 +63,11 @@ edit = sed \
 	-e 's|@wrap_program[@]|$@|g' \
 	-e 's|@abs_top_srcdir[@]|@abs_top_srcdir@|g' \
 	-e 's|@abs_top_builddir[@]|@abs_top_builddir@|g' \
-	-e 's|@configure_input[@]|Generated from $<.|g'
+	-e "s|@configure_input[@]|Generated from $$input.|g"
 
 $(wrappers): wrapper.in
 	rm -f $@ $@.tmp
+	input=wrapper.in; \
 	$(edit) wrapper.in >$@.tmp
 	chmod +x $@.tmp
 	chmod a-w $@.tmp
@@ -79,11 +80,19 @@ $(wrappers): wrapper.in
 ## ------------ ##
 
 TESTSUITE_GENERATED_AT = \
-	aclang.at acc.at acfortran.at \
-	acgeneral.at acstatus.at \
-	acautoheader.at acautoupdate.at \
-	acspecific.at acfunctions.at acheaders.at actypes.at \
-	aclibs.at acprograms.at
+	$(srcdir)/aclang.at \
+	$(srcdir)/acc.at \
+	$(srcdir)/acfortran.at \
+	$(srcdir)/acgeneral.at \
+	$(srcdir)/acstatus.at \
+	$(srcdir)/acautoheader.at \
+	$(srcdir)/acautoupdate.at \
+	$(srcdir)/acspecific.at \
+	$(srcdir)/acfunctions.at \
+	$(srcdir)/acheaders.at \
+	$(srcdir)/actypes.at \
+	$(srcdir)/aclibs.at \
+	$(srcdir)/acprograms.at
 
 TESTSUITE_HAND_AT = \
 	suite.at \
@@ -134,10 +143,10 @@ MAINTAINERCLEANFILES += $(TESTSUITE_GENERATED_AT)
 
 ## Producing the test files.
 
-# The files which contains macro we check for syntax.  Don't use $(top_srcdir)
-# here since below we explicitly `cd' to $srcdir.  As for the dependencies,
-# thanks God for VPATH.  Hm...
-autoconfdir = ../lib/autoconf
+# The files which contains macro we check for syntax.  Use $(top_srcdir)
+# for the benefit of non-GNU make.  Fix the names in the rule below
+# where we `cd' to $srcdir.
+autoconfdir = $(top_srcdir)/lib/autoconf
 AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/status.m4 \
 		 $(autoconfdir)/autoheader.m4 \
@@ -149,11 +158,12 @@ AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/fortran.m4 \
 		 $(autoconfdir)/headers.m4 \
 		 $(autoconfdir)/libs.m4 \
-		 $(autoconfdir)/types.m4	\
+		 $(autoconfdir)/types.m4 \
 		 $(autoconfdir)/programs.m4
 
 $(TESTSUITE_GENERATED_AT): mktests.sh $(AUTOCONF_FILES)
-	cd $(srcdir) && ./mktests.sh $(AUTOCONF_FILES)
+	cd $(srcdir) && ./mktests.sh \
+	  `echo " "$(AUTOCONF_FILES) | sed 's, [^ ]*/, ../lib/autoconf/,g'`
 
 
 ## maintainer-check ##
