@@ -141,7 +141,7 @@ AT_CLEANUP
 AT_SETUP([AC_PROG_CPP without warnings])
 
 # Ignore if /lib/cpp doesn't work
-AT_CHECK([echo '#include <stdio.h>' | /lib/cpp </dev/null || exit 77],
+AT_CHECK([echo '#include <stdio.h>' | /lib/cpp || exit 77],
   [], [ignore], [ignore])
 
 # A cpp which exit status is meaningless.
@@ -179,7 +179,7 @@ AT_CLEANUP
 AT_SETUP([AC_PROG_CPP via CC])
 
 # Ignore if /lib/cpp doesn't work
-AT_CHECK([echo '#include <stdio.h>' | /lib/cpp </dev/null || exit 77],
+AT_CHECK([echo '#include <stdio.h>' | /lib/cpp || exit 77],
   [], [ignore], [ignore])
 
 AT_DATA([mycc],
