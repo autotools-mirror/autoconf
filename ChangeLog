@@ -1,3 +1,10 @@
+2006-03-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/c.at (AC_PROG_CPP without warnings): Require that
+	/lib/cpp include stdio.h correctly.  Solaris 10's doesn't.
+	Problem reported by D'Arcy A MacIsaac and diagnosed by
+	Ralf Wildenhues.
+
 2006-03-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_SED_CMD_LIMIT): The limit for
