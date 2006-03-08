@@ -1,8 +1,8 @@
 2006-03-08  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* tests/c.at (AC_PROG_CPP without warnings): Require that
-	/lib/cpp include stdio.h correctly.  Solaris 10's doesn't.
-	Problem reported by D'Arcy A MacIsaac and diagnosed by
+	* tests/c.at (AC_PROG_CPP without warnings, AC_PROG_CPP via CC):
+	Require that /lib/cpp include stdio.h correctly.  Solaris 10's
+	doesn't.  Problem reported by D'Arcy A MacIsaac and diagnosed by
 	Ralf Wildenhues.
 
 2006-03-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
