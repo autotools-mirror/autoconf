@@ -15387,9 +15387,8 @@ and compilation flags are determined by the current language
 @defmac AC_TRY_LINK_FUNC (@var{function}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{TRY_LINK_FUNC}
 This macro is equivalent to
-@samp{AC_LINK_IFELSE([AC_LANG_CALL([[@var{includes}]],
-[[@var{function-body}]])], [@var{action-if-true}],
-[@var{action-if-false}])}.
+@samp{AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])],
+[@var{action-if-found}], [@var{action-if-not-found}])}.
 @end defmac
 
 @defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
