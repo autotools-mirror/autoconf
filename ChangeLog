@@ -1,3 +1,21 @@
+2006-03-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Use @acronym more consistently for acronyms
+	like BSD, GPL, LGPL.  Fix minor English typos.
+	(AC_STDC_HEADERS, AC_PROG_GCC_TRADITIONAL):
+	Mention that these macros are becoming obsolete.
+	(AC_STDC_HEADERS, AC_PROG_CC, AC_C_CONST, AC_C_VOLATILE):
+	Use more modern terminology for which standard is what.
+	(AC_PROG_CC): Mention gcc first, and remove obsolete references to egcs
+	and to ansi2knr.
+	(AC_PROG_CXX): Likewise.
+	(AC_C_PROTOTYPES, Test Functions, AC_LIBOBJ vs LIBOBJS):
+	Remove obsolete discussion about how to port to K&R.
+	(Guidelines for Test Programs): Suggest AC_HEADER_STDBOOL rather than
+	the obsolescent AC_HEADER_STDC.
+	(AC_FOO_IFELSE vs AC_TRY_FOO): Don't use #error; test programs
+	can't rely on it.
+
 2006-03-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/c.at (AC_PROG_CPP without warnings, AC_PROG_CPP via CC):
