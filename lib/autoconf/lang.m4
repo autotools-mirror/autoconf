@@ -210,7 +210,7 @@ m4_defun([AC_LANG_ASSERT],
 # AC_LANG_CONFTEST(BODY)
 # ----------------------
 # Save the BODY in `conftest.$ac_ext'.  Add a trailing new line.
-m4_define([AC_LANG_CONFTEST],
+AC_DEFUN([AC_LANG_CONFTEST],
 [cat >conftest.$ac_ext <<_ACEOF
 $1
 _ACEOF])
