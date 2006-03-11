@@ -1,5 +1,9 @@
 2006-03-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/c.m4 (AC_PROG_CC_STDC): If we cannot enable C99
+	nor C89 mode, set `$ac_cv_prog_cc_stdc' to `no' instead of
+	trying to execute the command `no'.
+
 	* lib/autoconf/lang.m4 (AC_LANG_CONFTEST): AC_DEFUN this, not
 	m4_define, so that the requirements of `AC_INCLUDES_DEFAULT' are
 	expanded outside.

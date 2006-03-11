@@ -1054,7 +1054,8 @@ AC_DEFUN([AC_PROG_CC_C99],
 AC_DEFUN([AC_PROG_CC_STDC],
 [ AC_REQUIRE([AC_PROG_CC])dnl
   _AC_PROG_CC_C99([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c99],
-                  [_AC_PROG_CC_C89([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89], [no])])dnl
+		  [_AC_PROG_CC_C89([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89],
+				   [ac_cv_prog_cc_stdc=no])])dnl
   AC_MSG_CHECKING([for $CC option to accept ISO Standard C])
   AC_CACHE_VAL([ac_cv_prog_cc_stdc], [])
   case "x$ac_cv_prog_cc_stdc" in
