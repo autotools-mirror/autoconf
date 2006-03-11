@@ -336,6 +336,7 @@ Existing Tests
 * Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
 * Posix Variants::              Special kludges for specific Posix variants
+* Erlang Libraries::            Checking for the existence of Erlang libraries
 
 Common Behavior
 
@@ -380,6 +381,7 @@ Compilers and Preprocessors
 * Generic Compiler Characteristics::  Language independent tests and features
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
+* Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
 
 Writing Tests
@@ -2211,6 +2213,14 @@ achieve this, in which case @code{ECHO_T} is set to tab.  You might not
 want to use it.
 @end defvar
 
+@defvar ERLCFLAGS
+@ovindex ERLCFLAGS
+Debugging and optimization options for the Erlang compiler.  If it is not set
+in the environment when @command{configure} runs, the default value is empty.
+@command{configure} uses this variable when compiling programs to test for
+Erlang features.
+@end defvar
+
 @defvar FCFLAGS
 @ovindex FCFLAGS
 Debugging and optimization options for the Fortran compiler.  If it
@@ -2529,6 +2539,26 @@ autoconf autoheader: Makefile
 Be sure to specify the name of the source directory,
 otherwise the package won't support separated builds.
 @end table
+
+For the more specific installation of Erlang libraries, the following variables
+are defined:
+
+@defvar ERLANG_INSTALL_LIB_DIR
+@ovindex ERLANG_INSTALL_LIB_DIR
+The common parent directory of Erlang library installation directories.
+This variable is set by calling the @code{AC_ERLANG_SUBST_INSTALL_LIB_DIR}
+macro in @file{configure.ac}.
+@end defvar
+
+@defvar ERLANG_INSTALL_LIB_DIR_@var{library}
+@ovindex ERLANG_INSTALL_LIB_DIR_@var{library}
+The installation directory for Erlang library @var{library}.
+This variable is set by calling the
+@samp{AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR(@var{library}, @var{version}}
+macro in @file{configure.ac}.
+@end defvar
+
+@xref{Erlang Libraries}, for details.
 
 
 @node Build Directories
@@ -3211,6 +3241,7 @@ Symbols}, for how to get those symbol definitions into your program.
 * Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
 * Posix Variants::              Special kludges for specific Posix variants
+* Erlang Libraries::            Checking for the existence of Erlang libraries
 @end menu
 
 @node Common Behavior
@@ -5607,6 +5638,7 @@ compiling.
 * Generic Compiler Characteristics::  Language independent tests and features
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
+* Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
 @end menu
 
@@ -6081,6 +6113,67 @@ consider the test failed if any warnings have been reported.  However,
 it is not known whether such broken preprocessors exist for C++.
 @end defmac
 
+
+@node Erlang Compiler and Interpreter
+@subsection Erlang Compiler and Interpreter Characteristics
+@cindex Erlang
+
+Autoconf defines the following macros for determining paths to the essential
+Erlang/OTP programs:
+
+@defmac AC_ERLANG_PATH_ERLC (@ovar{value-if-not-found}, @ovar{path})
+@acindex{ERLANG_PATH_ERLC}
+@ovindex ERLC
+@ovindex ERLCFLAGS
+Determine an Erlang compiler to use.  If @code{ERLC} is not already set in the
+environment, check for @command{erlc}.  Set output variable @code{ERLC} to the
+complete path of the compiler command found.
+
+The optional two arguments have the same meaning as the two last arguments of
+macro @code{AC_PROG_PATH} for looking for the @command{erlc} program.  For
+example, to look for @command{erlc} only in the @file{/usr/lib/erlang/bin}
+directory:
+
+@example
+AC_ERLANG_PATH_ERLC([not found], [/usr/lib/erlang/bin])
+@end example
+@end defmac
+
+@defmac AC_ERLANG_NEED_ERLC (@ovar{path})
+@acindex{ERLANG_NEED_ERLC}
+@ovindex AC_ERLANG_PATH_ERLC
+@ovindex ERLC
+@ovindex ERLCFLAGS
+A simplified variant of the @code{AC_ERLANG_PATH_ERLC} macro, that prints an
+error message and exits the @command{configure} script if the @command{erlc}
+program is not found.
+@end defmac
+
+@defmac AC_ERLANG_PATH_ERL (@ovar{value-if-not-found}, @ovar{path})
+@acindex{ERLANG_PATH_ERL}
+@ovindex ERL
+Determine an Erlang interpreter to use.  If @code{ERL} is not already set in the
+environment, check for @command{erl}.  Set output variable @code{ERL} to the
+complete path of the interpreter command found.
+
+The optional two arguments have the same meaning as the two last arguments of
+macro @code{AC_PROG_PATH} for looking for the @command{erl} program.  For
+example, to look for @command{erl} only in the @file{/usr/lib/erlang/bin}
+directory:
+
+@example
+AC_ERLANG_PATH_ERL([not found], [/usr/lib/erlang/bin])
+@end example
+@end defmac
+
+@defmac AC_ERLANG_NEED_ERL (@ovar{path})
+@acindex{ERLANG_NEED_ERL}
+@ovindex AC_ERLANG_PATH_ERL
+@ovindex ERL
+A simplified variant of the @code{AC_ERLANG_PATH_ERL} macro, that prints an
+error message and exits the @command{configure} script if the @command{erl}
+program is not found.
+@end defmac
 
 
 @node Fortran Compiler
@@ -6582,6 +6675,86 @@ facilities.  Should be called before any macros that run the C compiler.
 @end defmac
 
 
+@node Erlang Libraries
+@section Erlang Libraries
+@cindex Erlang, Library, checking
+
+The following macros check for an installation of Erlang/OTP, and for the
+presence of certain Erlang libraries.  All those macros require the
+configuration of an Erlang interpreter and an Erlang compiler
+(@pxref{Erlang Compiler and Interpreter}).
+
+@defmac AC_ERLANG_SUBST_ROOT_DIR
+@acindex{ERLANG_SUBST_ROOT_DIR}
+@ovindex ERLANG_ROOT_DIR
+
+Set the output variable @code{ERLANG_ROOT_DIR} to the path of the root
+directory of Erlang/OTP (as returned by Erlang's @code{code:root_dir/0}
+function), which is the directory where it is installed.  The result of this
+test is cached if caching is enabled when running @code{configure}.
+@end defmac
+
+@defmac AC_ERLANG_SUBST_LIB_DIR
+@acindex{ERLANG_SUBST_LIB_DIR}
+@ovindex ERLANG_LIB_DIR
+
+Set the output variable @code{ERLANG_LIB_DIR} to the path of the library
+directory of Erlang/OTP (as returned by Erlang's
+@code{code:lib_dir/0} function), which subdirectories each contain an installed
+Erlang/OTP library.  The result of this test is cached if caching is enabled
+when running @code{configure}.
+@end defmac
+
+@defmac AC_ERLANG_CHECK_LIB (@var{library}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@acindex{ERLANG_CHECK_LIB}
+@ovindex ERLANG_LIB_DIR_library
+
+Test whether the Erlang/OTP library @var{library} is installed by calling
+Erlang's @code{code:lib_dir/1} function.  The result of this test is cached if
+caching is enabled when running @code{configure}.  @var{action-if-found} is a
+list of shell commands to run if the library is installed;
+@var{action-if-not-found} is a list of shell commands to run if it is not.
+Additionally, if the library is installed, the output variable
+@samp{ERLANG_LIB_DIR_@var{library}} is set to the path to the library
+installation directory.  For example, to check if the @code{stdlib} library is
+installed:
+
+@example
+AC_ERLANG_CHECK_LIB([stdlib],
+  [echo "stdlib is installed in $ERLANG_LIB_DIR_stdlib"],
+  [AC_MSG_ERROR([stdlib was not found!])])
+@end example
+@end defmac
+
+In addition to the above macros, which test installed Erlang libraries, the
+following macros determine paths to built libraries installation directories:
+
+@defmac AC_ERLANG_SUBST_INSTALL_LIB_DIR
+@acindex{ERLANG_SUBST_INSTALL_LIB_DIR}
+@ovindex ERLANG_INSTALL_LIB_DIR
+
+Set the @code{ERLANG_INSTALL_LIB_DIR} output variable to the directory into
+which every built Erlang library should be installed in a separate subdirectory.
+If this variable is not set in the environment when @command{configure} runs,
+its default value is @code{$ERLANG_LIB_DIR}, as determined by the
+@code{AC_ERLANG_SUBST_LIB_DIR} macro.
+@end defmac
+
+@defmac AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR (@var{library}, @var{version})
+@acindex{ERLANG_SUBST_INSTALL_LIB_SUBDIR}
+@ovindex ERLANG_INSTALL_LIB_DIR_@var{library}
+
+Set the @samp{ERLANG_INSTALL_LIB_DIR_@var{library}} output variable to the
+directory into which the built Erlang library @var{library} version
+@var{version} should be installed.  If this variable is not set in the
+environment when @command{configure} runs, its default value is
+@samp{$ERLANG_INSTALL_LIB_DIR/@var{library}-@var{version}}, the
+@code{ERLANG_INSTALL_LIB_DIR} variable being set by the
+@code{AC_ERLANG_SUBST_INSTALL_LIB_DIR} macro.
+@end defmac
+
+
+
 
 
 @c ========================================================= Writing Tests
@@ -6662,6 +6835,10 @@ test programs.  Use compilation flags: @code{FFLAGS}.
 Do compilation tests using @code{FC} and use extension @file{.f} (or
 whatever has been set by @code{AC_FC_SRCEXT}) for test programs.  Use
 compilation flags: @code{FCFLAGS}.
+
+@item Erlang
+Compile and execute tests using @code{ERLC} and @code{ERL} and use extension
+@file{.erl} for test Erlang modules.  Use compilation flags: @code{ERLCFLAGS}.
 @end table
 @end defmac
 
@@ -6843,6 +7020,7 @@ For instance executing (observe the double quotation!):
 AC_INIT([Hello], [1.0], [bug-hello@@example.org])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
+AC_LANG(C)
 AC_LANG_CONFTEST(
    [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
 gcc -E -dD -o - conftest.c
@@ -6864,6 +7042,9 @@ results in:
 
 const char hw[] = "Hello, World\n";
 @end example
+
+When the test language is Fortran or Erlang, the @code{AC_DEFINE} definitions
+are not automatically translated as constants in the source code by this macro.
 
 @defmac AC_LANG_PROGRAM (@var{prologue}, @var{body})
 @acindex{LANG_PROGRAM}
@@ -6909,6 +7090,35 @@ fputs (hw, stdout);
 @}
 @end example
 
+In Erlang tests, the created @file{conftest.erl} source file is that of an
+Erlang module called @code{conftest}.  This module defines and exports one
+@code{start/0} function, which is called to perform the test.  The
+@var{prologue} is optional code that is inserted between the module header
+and the @code{start/0} function definition.  @var{body} is the body of the
+@code{start/0} function (without the final period).
+
+For instance:
+
+@example
+AC_INIT([Hello], [1.0], [bug-hello@@example.org])
+AC_LANG(Erlang)
+AC_LANG_CONFTEST(
+[AC_LANG_PROGRAM([[-define(HELLO_WORLD, "Hello, world!").]],
+                 [[io:format("~s~n", [?HELLO_WORLD])]])])
+cat conftest.erl
+@end example
+
+@noindent
+results in:
+
+@example
+-module(conftest).
+-export([start/0]).
+-define(HELLO_WORLD, "Hello, world!").
+start() ->
+io:format("~s~n", [?HELLO_WORLD])
+.
+@end example
 
 @defmac AC_LANG_CALL (@var{prologue}, @var{function})
 @acindex{LANG_CALL}
@@ -6920,8 +7130,9 @@ of the latter are available.
 This function will probably be replaced in the future by a version
 which would enable specifying the arguments.  The use of this macro is
 not encouraged, as it violates strongly the typing system.
-@end defmac
 
+This macro cannot be used for Erlang tests.
+@end defmac
 
 @defmac AC_LANG_FUNC_LINK_TRY (@var{function})
 @acindex{LANG_FUNC_LINK_TRY}
@@ -6933,6 +7144,8 @@ As @code{AC_LANG_CALL}, this macro is documented only for completeness.
 It is considered to be severely broken, and in the future will be
 removed in favor of actual function calls (with properly typed
 arguments).
+
+This macro cannot be used for Erlang tests.
 @end defmac
 
 @node Running the Preprocessor
@@ -6946,6 +7159,9 @@ temptation of following the easiest path.
 
 Nevertheless, if you need to run the preprocessor, then use
 @code{AC_PREPROC_IFELSE}.
+
+Note that the Erlang and Fortan languages have no preprocessor, hence the
+macros described in this section cannot be used for tests in those languages.
 
 @defmac AC_PREPROC_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
 @acindex{PREPROC_IFELSE}
@@ -7041,6 +7257,12 @@ It is customary to report unexpected failures with
 Linker}).
 @end defmac
 
+When setting Erlang as the test language, the @var{input} must be the source
+code of a module named @code{conftest}.  @code{AC_COMPILE_IFELSE} generates a
+@file{conftest.beam} file that can be interpreted by the Erlang virtual
+machine.  Using @code{AC_LANG_PROGRAM} to specify the test program ensures that
+the Erlang module has the right name.
+
 @node Running the Linker
 @section Running the Linker
 
@@ -7079,6 +7301,8 @@ It is customary to report unexpected failures with
 use @code{AC_RUN_IFELSE} if you need to do that (@pxref{Run Time}).
 @end defmac
 
+Erlang being an interpreted language, Erlang programs do not need linking,
+hence @code{AC_LINK_IFELSE} cannot be used with Erlang tests.
 
 
 @node Run Time
@@ -7146,6 +7370,30 @@ in other macros, including a few of the ones that come with Autoconf,
 you can test whether the shell variable @code{cross_compiling} is set to
 @samp{yes}, and then use an alternate method to get the results instead
 of calling the macros.
+
+Erlang tests must exit themselves the Erlang VM by calling the @code{halt/1}
+function: the given status code is used to determine the success of the test
+(status is @code{0}) or its failure (status is different than @code{0}), as
+explained above.  If a test must output configuration information, since
+halting the VM may truncate data output into the standard output, it is
+recommended to output data into the @file{conftest.out} file, using the
+function of module @code{file}.  That file is automatically deleted by
+@code{AC_RUN_IFELSE}.
+
+For instance, a simplified implementation of Autoconf's
+@code{AC_ERLANG_SUBST_LIB_DIR} macro is:
+
+@example
+AC_INIT([LibdirTest], [1.0], [bug-libdirtest@@example.org])
+AC_ERLANG_NEED_ERL
+AC_LANG(Erlang)
+AC_RUN_IFELSE(
+  [AC_LANG_PROGRAM([], [dnl
+    file:write_file("conftest.out", code:lib_dir()),
+    halt(0)])],
+  [echo "code:lib_dir() returned: `cat conftest.out`"],
+  [AC_MSG_FAILURE([test Erlang program execution failed])])
+@end example
 
 
 @node Systemology
