@@ -1448,17 +1448,16 @@ AC_DEFUN([AC_C_TYPEOF],
        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
 	 [[
 	   int value;
-	   return
-	     (! ((void)
-		 ((struct {
+	   typedef struct {
 		   char a [1
 			   + ! (($ac_kw (value))
 				(($ac_kw (value)) 0 < ($ac_kw (value)) -1
 				 ? ($ac_kw (value)) - 1
 				 : ~ (~ ($ac_kw (value)) 0
-				      << sizeof ($ac_kw (value)))))]; } *)
-		  0),
-		 0));
+				      << sizeof ($ac_kw (value)))))]; }
+	      ac__typeof_type_;
+	   return
+	     (! ((void) ((ac__typeof_type_ *) 0), 0));
 	 ]])],
 	 [ac_cv_c_typeof=$ac_kw])
        test $ac_cv_c_typeof != no && break
