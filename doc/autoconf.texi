@@ -1401,7 +1401,7 @@ configure.ac:2:AC_SUBST:ECHO_T
 
 @noindent
 The example below highlights the difference between @samp{$@@},
-@samp{$*}, and @strong{$%}.
+@samp{$*}, and @samp{$%}.
 
 @example
 @group
@@ -1410,12 +1410,12 @@ AC_DEFINE(This, is, [an
 [example]])
 $ @kbd{autoconf -t 'AC_DEFINE:@@: $@@}
 *: $*
-$: $%'
+%: $%'
 @@: [This],[is],[an
 [example]]
 *: This,is,an
 [example]
-$: This:is:an [example]
+%: This:is:an [example]
 @end group
 @end example
 

@@ -1,5 +1,9 @@
 2006-03-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/autoconf.texi (autoconf Invocation): Fix typos in trace
+	example.  Do not emphasize `$%', it is hardly new and special.
+	Reported by Edouard Bechetoille <ebecheto@ens-lyon.fr>.
+
 	* doc/autoconf.texi (Limitations of Usual Tools): Document
 	OpenBSD and traditional `grep' failure to handle multiple
 	patterns separated by newlines.
