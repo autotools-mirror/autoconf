@@ -279,6 +279,35 @@ AC_CHECK_ALIGNOF(charcharchar)
 ])])
 
 
+# AC_CHECK_ALIGNOF struct
+# -----------------------
+# Not cross-compiling.
+AT_CHECK_MACRO([AC_CHECK_ALIGNOF struct],
+[[AC_CHECK_ALIGNOF([struct { char c; }])
+AC_CHECK_ALIGNOF([struct nosuchstruct])
+]],
+[AT_CHECK([[grep "#define ALIGNOF_STRUCT___CHAR_C___ [^0]" config.h]],
+	 0, ignore)
+AT_CHECK([[grep "#define ALIGNOF_STRUCT_NOSUCHSTRUCT 0" config.h]],
+	 0, ignore)
+])
+
+
+# AC_CHECK_ALIGNOF struct
+# -----------------------
+AT_CHECK_MACRO([AC_CHECK_ALIGNOF struct],
+[[# Exercise the code used when cross-compiling
+cross_compiling=yes
+AC_CHECK_ALIGNOF([struct { char c; }])
+AC_CHECK_ALIGNOF([struct nosuchstruct])
+]],
+[AT_CHECK([[grep "#define ALIGNOF_STRUCT___CHAR_C___ [^0]" config.h]],
+	 0, ignore)
+AT_CHECK([[grep "#define ALIGNOF_STRUCT_NOSUCHSTRUCT 0" config.h]],
+	 0, ignore)
+])
+
+
 # AC_CHECK_SIZEOF
 # ---------------
 # Not cross-compiling.
@@ -312,6 +341,43 @@ AC_CHECK_SIZEOF(charcharchar)
 #define SIZEOF_CHARCHAR 2
 #define SIZEOF_CHARCHARCHAR 0
 ])])
+
+
+# AC_CHECK_SIZEOF structs
+# -----------------------
+# Not cross-compiling.
+AT_CHECK_MACRO([AC_CHECK_SIZEOF struct],
+[[AC_C_CONST
+AC_CHECK_SIZEOF([struct { char c; int x; }])
+AC_CHECK_SIZEOF([const struct { const char *p; int x; }])
+AC_CHECK_SIZEOF([struct nosuchstruct])
+]],
+[AT_CHECK([[grep "#define SIZEOF_STRUCT___CHAR_C__INT_X___ [^0]" config.h]],
+	 0, ignore)
+AT_CHECK([[grep "#define SIZEOF_CONST_STRUCT___CONST_CHAR_PP__INT_X___ [^0]" config.h]],
+	 0, ignore)
+AT_CHECK([[grep "#define SIZEOF_STRUCT_NOSUCHSTRUCT 0" config.h]],
+	 0, ignore)
+])
+
+
+# AC_CHECK_SIZEOF
+# ---------------
+AT_CHECK_MACRO([AC_CHECK_SIZEOF struct],
+[[# Exercise the code used when cross-compiling
+cross_compiling=yes
+AC_C_CONST
+AC_CHECK_SIZEOF([struct { char c; int x; }])
+AC_CHECK_SIZEOF([const struct { const char *p; int x; }])
+AC_CHECK_SIZEOF([struct nosuchstruct])
+]],
+[AT_CHECK([[grep "#define SIZEOF_STRUCT___CHAR_C__INT_X___ [^0]" config.h]],
+	 0, ignore)
+AT_CHECK([[grep "#define SIZEOF_CONST_STRUCT___CONST_CHAR_PP__INT_X___ [^0]" config.h]],
+	 0, ignore)
+AT_CHECK([[grep "#define SIZEOF_STRUCT_NOSUCHSTRUCT 0" config.h]],
+	 0, ignore)
+])
 
 
 # AC_CHECK_TYPES

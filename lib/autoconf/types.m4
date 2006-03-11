@@ -139,13 +139,20 @@
 # (not necessarily size_t etc.).  Equally, instead of defining an unused
 # variable, we just use a cast to avoid warnings from the compiler.
 # Suggested by Paul Eggert.
+# 
+# Now, the next issue is that C++ disallows defining types inside casts
+# and inside `sizeof()', but we would like to allow unnamed structs, for
+# use inside AC_CHECK_SIZEOF, for example.  So we create a typedef of the
+# new type.  Note that this does not obviate the need for the other
+# constructs in general.
 m4_define([_AC_CHECK_TYPE_NEW],
 [AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], ac_Type,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
-[if (($1 *) 0)
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])
+typedef $1 ac__type_new_;],
+[if ((ac__type_new_ *) 0)
   return 0;
-if (sizeof ($1))
+if (sizeof (ac__type_new_))
   return 0;])],
 		   [AS_VAR_SET(ac_Type, yes)],
 		   [AS_VAR_SET(ac_Type, no)])])
@@ -386,10 +393,11 @@ AC_CACHE_CHECK([size of $1], AS_TR_SH([ac_cv_sizeof_$1]),
   # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
   # declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
   # This bug is HP SR number 8606223364.
-  _AC_COMPUTE_INT([(long int) (sizeof ($1))],
+  _AC_COMPUTE_INT([(long int) (sizeof (ac__type_sizeof_))],
 		  [AS_TR_SH([ac_cv_sizeof_$1])],
-		  [AC_INCLUDES_DEFAULT([$3])],
-		  [AC_MSG_FAILURE([cannot compute sizeof ($1), 77])])
+		  [AC_INCLUDES_DEFAULT([$3])
+		   typedef $1 ac__type_sizeof_;],
+		  [AC_MSG_FAILURE([cannot compute sizeof ($1)], 77)])
 else
   AS_TR_SH([ac_cv_sizeof_$1])=0
 fi])dnl

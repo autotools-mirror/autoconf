@@ -1,5 +1,13 @@
 2006-03-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW): Use a typedef to
+	allow to pass unnamed structs even in C++.
+	(AC_CHECK_SIZEOF):  Likewise.
+	Also fix quoting error in `AC_MSG_FAILURE' arguments.
+	* tests/semantics.at (AC_CHECK_ALIGNOF struct, AC_CHECK_SIZEOF
+	struct): New tests for unnamed structs, each both native and
+	cross-compiling.
+
 	* lib/autoconf/c.m4 (AC_C_TYPEOF): Use typedef to avoid defining
 	a structure inside a cast, for C++ conformance.
 	* lib/autoconf/types.m4 (AC_CHECK_ALIGNOF): Likewise.
