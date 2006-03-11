@@ -12502,6 +12502,10 @@ grep 'foo
 bar' in.txt
 @end example
 
+@noindent
+except that this will fail with traditional @command{grep}
+implementations and with Open@acronym{BSD} 3.8 @command{grep}.
+
 Traditional @command{grep} implementations (e.g., Solaris) do not
 support the @option{-E} or @samp{-F} options.  To work around these
 problems, invoke @code{AC_PROG_EGREP} and then use @code{$EGREP}, and
