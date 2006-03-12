@@ -16725,13 +16725,29 @@ selection.
 @itemx -k @var{keywords}
 Add to the selection the test groups with title or keywords (arguments
 to @code{AT_SETUP} or @code{AT_KEYWORDS}) that match @emph{all} keywords
-of the comma separated list @var{keywords}.
+of the comma separated list @var{keywords}, case-insensitively.  Use
+@samp{!} immediately before the keyword to invert the selection for this
+keyword.  By default, the keywords match whole words; enclose them in
+@samp{.*} to also match parts of words.
 
-Running @samp{./testsuite -k autoupdate,FUNC} will select all the tests
-tagged with @samp{autoupdate} @emph{and} @samp{FUNC} (as in
-@samp{AC_CHECK_FUNC}, @samp{AC_FUNC_FNMATCH}, etc.)@: while
-@samp{./testsuite -k autoupdate -k FUNC} will select all tests tagged with
-@samp{autoupdate} @emph{or} @samp{FUNC}.
+For example, running
+
+@example
+@kbd{./testsuite -k 'autoupdate,.*FUNC.*'}
+@end example
+
+@noindent
+will select all tests tagged @samp{autoupdate} @emph{and} with tags
+containing @samp{FUNC} (as in @samp{AC_CHECK_FUNC}, @samp{AC_FUNC_FNMATCH},
+etc.), while
+
+@example
+@kbd{./testsuite -k '!autoupdate' -k '.*FUNC.*'}
+@end example
+
+@noindent
+will select all tests not tagged @samp{autoupdate} @emph{or} with tags
+containing @samp{FUNC}.
 
 @item --errexit
 @itemx -e

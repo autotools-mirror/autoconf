@@ -1,3 +1,19 @@
+2006-03-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT) <at_optarg>: Optimize
+	`expr' away if there is nothing to do.
+	< --keywords >: Simplify and robustify argument handling.
+	Revert erroneous comment from 2005-08-23.  Extend to allow
+	keyword negation with `!'.
+	Update help message.  Remove broken code to prevent running
+	tests multiple times.
+	* doc/autoconf.texi (testsuite Invocation) < --keywords >:
+	Update and fix the documentation accordingly.
+	* tests/autotest.at (Keywords): Renamed to..
+	(Keywords and ranges): .. this.  Extended to make sure negated
+	keywords, keywords taken from AT_SETUP arguments, and numeric
+	test ranges work, and that matching is case-insensitive.
+
 2006-03-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW): Use a typedef to

@@ -2,7 +2,7 @@
 
 AT_BANNER([Autotest.])
 
-# Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+# Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -246,7 +246,7 @@ AT_CHECK_AT_TITLE_CHAR([Backslash],    [\])
 ## --------- ##
 ## Keywords. ##
 ## --------- ##
-AT_SETUP([Keywords])
+AT_SETUP([Keywords and ranges])
 AT_KEYWORDS([autotest])
 
 AT_DATA([k.at],
@@ -289,4 +289,31 @@ AT_CHECK_KEYS([-k key1], [first|both], [2], [none|second], [0])
 AT_CHECK_KEYS([-k key2], [second|both], [2], [none|first], [0])
 AT_CHECK_KEYS([-k key1,key2], [both], [1], [none|first|second], [0])
 AT_CHECK_KEYS([-k key1 -k key2], [first|second|both], [3], [none], [0])
+AT_CHECK_KEYS([-k '!key1'], [none|second], [2], [first|both], [0])
+AT_CHECK_KEYS([-k '!key2'], [none|first], [2], [second|both], [0])
+AT_CHECK_KEYS([-k '!key1,key2'], [second], [1], [none|first|both], [0])
+AT_CHECK_KEYS([-k 'key1,!key2'], [first], [1], [none|second|both], [0])
+AT_CHECK_KEYS([-k '!key1,!key2'], [none], [1], [first|second|both], [0])
+AT_CHECK_KEYS([-k '!key1' -k KEY2], [none|second|both], [3], [first], [0])
+AT_CHECK_KEYS([-k key1 -k '!key2'], [none|first|both], [3], [second], [0])
+AT_CHECK_KEYS([-k '!KEY1' -k '!key2'], [none|first|second], [3], [both], [0])
+
+AT_CHECK_KEYS([-k none], [none], [1], [first|second|both], [0])
+AT_CHECK_KEYS([-k key1,both], [both], [1], [none|first|second], [0])
+AT_CHECK_KEYS([-k key1 -k both], [first|both], [2], [none|second], [0])
+AT_CHECK_KEYS([-k none,first], [successful], [1], [none|first|second|both], [0])
+AT_CHECK_KEYS([-k none,first,second,both], [successful], [1], [none|first|second|both], [0])
+AT_CHECK_KEYS([-k !none,first], [first], [1], [none|second|both], [0])
+
+AT_CHECK_KEYS([-k '.*eco.*'], [second], [1], [none|first|both], [0])
+AT_CHECK_KEYS([-k 'ECO'], [successful], [1], [none|first|second|both], [0])
+AT_CHECK_KEYS([-k '.*eco'], [successful], [1], [none|first|second|both], [0])
+AT_CHECK_KEYS([-k 'eco.*'], [successful], [1], [none|first|second|both], [0])
+AT_CHECK_KEYS([-k 'fir.*'], [first], [1], [none|second|both], [0])
+
+AT_CHECK_KEYS([1-2], [none|first], [2], [second|both], [0])
+AT_CHECK_KEYS([1-3 2-1], [none|first|second], [3], [both], [0])
+AT_CHECK_KEYS([-3], [none|first|second], [3], [both], [0])
+AT_CHECK_KEYS([4-], [both], [1], [none|first|second], [0])
+AT_CHECK_KEYS([-k second 4-], [second|both], [2], [none|first], [0])
 AT_CLEANUP
