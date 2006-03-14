@@ -1,5 +1,8 @@
 2006-03-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/autoconf.texi (Special Shell Variables): Missing word.
+	Reported by Keith Marshall <keith.marshall@total.com>.
+
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Do not forget to reset
 	IFS even in case of empty `$PATH'.
 
