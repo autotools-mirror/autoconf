@@ -1,3 +1,8 @@
+2006-03-14  Romain Lenglet  <rlenglet@users.forge.objectweb.org>
+
+	* doc/autoconf.texi (several sections): Cleaned up documentation for
+	macros in erlang.m4.
+
 2006-03-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/autotest.at (AT_NO_CMDSUBST): New macro to determine
