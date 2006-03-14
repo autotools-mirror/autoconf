@@ -1,5 +1,10 @@
 2006-03-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/autotest.at (AT_NO_CMDSUBST): New macro to determine
+	failure condition for `$(cmd)' style command substitutions.
+	(Parenthetical command substition, Multiline parenthetical
+	command substition): Use it.
+
 	* doc/autoconf.texi (Special Shell Variables): Missing word.
 	Reported by Keith Marshall <keith.marshall@total.com>.
 
