@@ -899,6 +899,7 @@ do
   test -z "$as_dir" && as_dir=.
   $2
 done
+IFS=$as_save_IFS
 ])
 
 

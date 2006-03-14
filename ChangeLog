@@ -1,3 +1,8 @@
+2006-03-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Do not forget to reset
+	IFS even in case of empty `$PATH'.
+
 2006-03-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (AT_INIT) <at_optarg>: Optimize
