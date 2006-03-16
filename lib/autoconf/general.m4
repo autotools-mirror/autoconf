@@ -1664,6 +1664,7 @@ shift
 AC_SUBST([$1_cpu], [$[1]])dnl
 AC_SUBST([$1_vendor], [$[2]])dnl
 shift; shift
+[# Remember, the first character of IFS is used to create $]*:
 AC_SUBST([$1_os], [$[*]])dnl
 IFS=$ac_save_IFS
 ])# _AC_CANONICAL_SPLIT

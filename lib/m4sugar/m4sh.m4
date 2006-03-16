@@ -326,6 +326,14 @@ _AS_CR_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
 _AS_UNSET_PREPARE
 
+# IFS
+# We need space, tab and new line, in precisely that order.
+# (If _AS_PATH_WALK were called with IFS unset, it would disable word
+# splitting by setting IFS to empty value.)
+as_nl='
+'
+IFS=" 	$as_nl"
+
 # Find who we are.  Look in the path if we contain no path at all
 # relative or not.
 case $[0] in
@@ -371,6 +379,8 @@ _AS_BASENAME_PREPARE
 # Name of the executable.
 as_me=`AS_BASENAME("$[0]")`
 
+# CDPATH.
+$as_unset CDPATH
 ])
 
 
@@ -396,15 +406,6 @@ _AS_MKDIR_P_PREPARE
 _AS_TEST_PREPARE
 _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
-
-# IFS
-# We need space, tab and new line, in precisely that order.
-as_nl='
-'
-IFS=" 	$as_nl"
-
-# CDPATH.
-$as_unset CDPATH
 ])
 
 

@@ -1,3 +1,11 @@
+2006-03-16  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sh.m4 (_AS_PREPARE): Move the IFS setup and CDPATH
+	  sanitizing...
+	(AS_SHELL_SANITIZE): ...here; mention _AS_PATH_WALK needs IFS set.
+	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT): Add an explanation
+	  why IFS is restored so late; thank you, Ralf, for reminding us.
+	
 2006-03-15  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Pretty Help Strings): No need to use cached
