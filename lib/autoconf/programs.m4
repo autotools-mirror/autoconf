@@ -122,7 +122,7 @@ fi
 # -----------------------------------------------------
 AC_DEFUN([AC_CHECK_PROG],
 [_AC_CHECK_PROG($@)
-AC_SUBST($1)dnl
+AC_SUBST([$1])dnl
 ])
 
 
@@ -164,6 +164,7 @@ m4_ifvaln([$3],
 [  test -z "$ac_cv_path_$1" && ac_cv_path_$1="$3"])dnl
   ;;
 esac])dnl
+$1=$ac_cv_path_$1
 if test -n "$$1"; then
   AC_MSG_RESULT([$$1])
 else
@@ -176,7 +177,7 @@ fi
 # -----------------------------------------------------------------------
 AC_DEFUN([AC_PATH_PROG],
 [_AC_PATH_PROG($@)
-AC_SUBST([$1], [$ac_cv_path_$1])dnl
+AC_SUBST([$1])dnl
 ])
 
 
