@@ -1,3 +1,11 @@
+2006-03-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (contents): To fix texi2html output, hide
+	`@setcontentsaftertitlepage' for HTML.
+	(Writing Autoconf Macros): Likewise, insert space after `@c'.
+	(Leviticus, Numbers, Deuteronomy): Likewise, change `@,c' to
+	`@,{c}'.
+
 2006-03-16  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/m4sugar/m4sh.m4 (_AS_PREPARE): Move the IFS setup and CDPATH

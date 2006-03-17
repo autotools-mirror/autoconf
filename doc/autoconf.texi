@@ -5,7 +5,9 @@
 @include version.texi
 @settitle Autoconf
 @setchapternewpage odd
+@ifnothtml
 @setcontentsaftertitlepage
+@end ifnothtml
 @finalout
 
 @c @ovar(ARG, DEFAULT)
@@ -9479,7 +9481,7 @@ explicitly from @code{AS_ORIGINAL_STDIN_FD}.
 @end defmac
 
 
-@c=================================================== Writing Autoconf Macros.
+@c =================================================== Writing Autoconf Macros.
 
 @node Writing Autoconf Macros
 @chapter Writing Autoconf Macros
@@ -17398,7 +17400,7 @@ In the fall of 1991 I called together a group of fellow questers after
 the Holy Grail of portability (er, that is, alpha testers) to give me
 feedback as I encapsulated pieces of my handwritten scripts in M4 macros
 and continued to add features and improve the techniques used in the
-checks.  Prominent among the testers were Fran@,cois Pinard, who came up
+checks.  Prominent among the testers were Fran@,{c}ois Pinard, who came up
 with the idea of making an Autoconf shell script to run M4
 and check for unresolved macro calls; Richard Pixley, who suggested
 running the compiler instead of searching the file system to find
@@ -17433,7 +17435,7 @@ version is better, but still doesn't provide everything we need.
 
 More development occurred as people put Autoconf under more stresses
 (and to uses I hadn't anticipated).  Karl Berry added checks for X11.
-david zuhn contributed C++ support.  Fran@,cois Pinard made it diagnose
+david zuhn contributed C++ support.  Fran@,{c}ois Pinard made it diagnose
 invalid arguments.  Jim Blandy bravely coerced it into configuring
 @acronym{GNU} Emacs, laying the groundwork for several later improvements.
 Roland McGrath got it to configure the @acronym{GNU} C Library, wrote the
@@ -17481,7 +17483,7 @@ of the program.  I made the messages showing results of the checks less
 ambiguous, always printing a result.  I regularized the names of the
 macros and cleaned up coding style inconsistencies.  I added some
 auxiliary utilities that I had developed to help convert source code
-packages to use Autoconf.  With the help of Fran@,cois Pinard, I made
+packages to use Autoconf.  With the help of Fran@,{c}ois Pinard, I made
 the macros not interrupt each others' messages.  (That feature revealed
 some performance bottlenecks in @acronym{GNU} M4, which he hastily
 corrected!)  I reorganized the documentation around problems people want
@@ -17489,7 +17491,7 @@ to solve.  And I began a test suite, because experience had shown that
 Autoconf has a pronounced tendency to regress when we change it.
 
 Again, several alpha testers gave invaluable feedback, especially
-Fran@,cois Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn,
+Fran@,{c}ois Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn,
 and Mark Eichin.
 
 Finally, version 2.0 was ready.  And there was much rejoicing.  (And I
