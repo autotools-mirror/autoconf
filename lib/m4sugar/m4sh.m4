@@ -226,7 +226,7 @@ if test "x$CONFIG_SHELL" = x; then
 	 _AS_RUN([_AS_DETECT_SUGGESTED_BODY]) 2> /dev/null],
     [],
     [as_candidate_shells=
-    _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
+    _AS_PATH_WALK([/usr/bin/posix$PATH_SEPARATOR/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
       [case $as_dir in
 	 /*)
 	   for as_base in sh bash ksh sh5; do
