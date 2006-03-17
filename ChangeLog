@@ -1,5 +1,18 @@
 2006-03-17  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/programs.m4 (AC_PATH_TOOL, AC_CHECK_TOOL, AC_CHECK_TOOLS):
+	  Factor out the warning to...
+	(_AC_TOOL_WARN): ... this new macro; use `cross_compiling'.
+	* tests/local.at (AT_CHECK_MACRO_CROSS): Avoid this warning.
+	* tests/semantics.at (AC_C_BIGENDIAN): Likewise.
+
+2006-03-17  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Do not special
+	  case `ac_delim' when writing the sed script.
+
+2006-03-17  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/m4sugar/m4sh.m4 (AS_BOURNE_COMPATIBLE): Removed BIN_SH=xpg4,
 	  moved DUALCASE=1 ...
 	(AS_SHELL_SANITIZE): ... here.
