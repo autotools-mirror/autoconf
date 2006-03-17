@@ -206,6 +206,17 @@ m4_ifvaln([$3], [test -n "$$1" || $1="$3"])dnl
 AU_DEFUN([AC_CHECK_TOOL_PREFIX])
 
 
+# _AC_TOOL_WARN
+# -------------
+AC_DEFUN([_AC_TOOL_WARN],
+[case $cross_compiling:$ac_tool_warned in
+yes:)
+AC_MSG_WARN([In the future, Autoconf will not detect cross-tools
+whose name does not start with the host triplet.  If you think this
+configuration is useful to you, please write to autoconf@gnu.org.])
+ac_tool_warned=yes ;;
+esac])
+
 # AC_PATH_TOOL(VARIABLE, PROG-TO-CHECK-FOR, [VALUE-IF-NOT-FOUND], [PATH])
 # -----------------------------------------------------------------------
 # (Use different variables $1 and ac_pt_$1 so that cache vars don't conflict.)
@@ -219,11 +230,7 @@ if test -z "$ac_cv_path_$1"; then
   if test "x$ac_pt_$1" = x; then
     $1="$3"
   else
-    if test "$build" != "$host"; then
-      AC_MSG_WARN([In the future, Autoconf will not detect cross-tools
-whose name does not start with the host triplet.  If you think this
-configuration is useful to you, please write to autoconf@gnu.org.])
-    fi
+    _AC_TOOL_WARN
     $1=$ac_pt_$1
   fi
 else
@@ -245,11 +252,7 @@ if test -z "$ac_cv_prog_$1"; then
   if test "x$ac_ct_$1" = x; then
     $1="$3"
   else
-    if test "$build" != "$host"; then
-      AC_MSG_WARN([In the future, Autoconf will not detect cross-tools
-whose name does not start with the host triplet.  If you think this
-configuration is useful to you, please write to autoconf@gnu.org.])
-    fi
+    _AC_TOOL_WARN
     $1=$ac_ct_$1
   fi
 else
@@ -280,11 +283,7 @@ if test -z "$$1"; then
   if test "x$ac_ct_$1" = x; then
     $1="$3"
   else
-    if test "$build" != "$host"; then
-      AC_MSG_WARN([In the future, Autoconf will not detect cross-tools
-whose name does not start with the host triplet.  If you think this
-configuration is useful to you, please write to autoconf@gnu.org.])
-    fi
+    _AC_TOOL_WARN
     $1=$ac_ct_$1
   fi
 fi

@@ -434,8 +434,9 @@ m4_define([AT_CHECK_MACRO_CROSS],
 [AT_CHECK_MACRO($@)
 AT_CHECK_MACRO([$1 (cross compile)],
   [AT_KEYWORDS([cross])
-  # Exercise the code used when cross-compiling
+  # Exercise the code used when cross-compiling.
   cross_compiling=yes
+  ac_tool_warned=yes
   m4_default([$2], [$1])],
   [$3], [$4])
 ])

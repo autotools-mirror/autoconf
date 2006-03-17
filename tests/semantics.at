@@ -465,7 +465,9 @@ _AT_CHECK_AC_MACRO(
 
 rm -f config.hin  # So that next run of autoheader is quiet.
 _AT_CHECK_AC_MACRO(
-  [[cross_compiling=yes
+  [[# Force cross compiling.
+   cross_compiling=yes
+   ac_tool_warned=yes
    AC_C_BIGENDIAN([ac_endian=big],[ac_endian=little],[ac_endian=unknown])
    ac_prevendian=`cat at-endian`
    # Check that we have found the same result as in the previous run
