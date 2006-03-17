@@ -1,3 +1,11 @@
+2006-03-17  Stepan Kasal  <kasal@ucw.cz>
+
+	* tests/local.at (AT_CHECK_MACRO_CROSS): New macro, creates two tests:
+	  the first one is usual AT_CHECK_MACRO test, the second one checks
+	  that the same works when cross-compiling.
+	* tests/semantics.at (AC_CHECK_ALIGNOF, AC_CHECK_ALIGNOF struct):
+	(AC_CHECK_SIZEOF, AC_CHECK_SIZEOF struct): Use it.
+
 2006-03-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Prepend
