@@ -11091,7 +11091,6 @@ the last command executed.
 @evindex BIN_SH
 In Tru64, if @env{BIN_SH} is set to @code{xpg4}, subsidiary invocations of
 the standard shell conform to Posix.
-Autoconf-generated scripts export this variable when they start up.
 
 @item CDPATH
 @evindex CDPATH

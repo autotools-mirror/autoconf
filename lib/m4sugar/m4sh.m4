@@ -172,8 +172,6 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
-BIN_SH=xpg4; export BIN_SH # for Tru64
-DUALCASE=1; export DUALCASE # for MKS sh
 ])
 
 
@@ -320,6 +318,7 @@ m4_defun([AS_SHELL_SANITIZE],
 ## --------------------- ##
 
 AS_BOURNE_COMPATIBLE
+DUALCASE=1; export DUALCASE # for MKS sh
 
 # PATH needs CR
 _AS_CR_PREPARE

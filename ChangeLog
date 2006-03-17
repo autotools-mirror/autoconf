@@ -1,5 +1,13 @@
 2006-03-17  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/m4sugar/m4sh.m4 (AS_BOURNE_COMPATIBLE): Removed BIN_SH=xpg4,
+	  moved DUALCASE=1 ...
+	(AS_SHELL_SANITIZE): ... here.
+	* doc/autoconf.texi (Special Shell Variables) <BIN_SH>: Do not say
+	  that it is set.
+
+2006-03-17  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/programs.m4 (AC_CHECK_PROG): Quote the parameter of
 	  AC_SUBST.
 	(_AC_PATH_PROG): Store the result to VARIABLE.
