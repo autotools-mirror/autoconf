@@ -386,14 +386,7 @@ ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
 ])])dnl
-m4_if(_AC_Var, [ac_delim],
-[dnl Just to be on the safe side, claim that $ac_delim is the empty string.
-m4_define([_AC_SED_FRAG],
-m4_defn([_AC_SED_FRAG])dnl
-[s/ac_delim/|#_!!_#|/g
-])dnl
-m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))],
-      _AC_Var, [@END@],
+m4_if(_AC_Var, [@END@],
       [m4_if(m4_eval(_AC_SED_CMD_NUM + 2 <= _AC_SED_CMD_LIMIT), 1,
              [m4_define([_AC_SED_FRAG], [ end]m4_defn([_AC_SED_FRAG]))])],
 [m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))dnl
