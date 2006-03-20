@@ -1,5 +1,8 @@
 2006-03-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/local.at (AT_CHECK_ENV): Ignore AC_SUBSTed Objective C
+	and Erlang related variables.
+
 	* lib/autoconf/c.m4 (AC_LANG(Objective C), AC_LANG_OBJC)
 	(_AC_LANG_ABBREV(Objective C), _AC_LANG_PREFIX(Objective C))
 	(AC_LANG_SOURCE(Objective C), AC_LANG_PROGRAM(Objective C))
