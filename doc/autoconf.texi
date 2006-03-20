@@ -3361,7 +3361,7 @@ Expand to @var{include-directives} if defined, otherwise to:
 
 If the default includes are used, then check for the presence of these
 headers and their compatibility, i.e., you don't need to run
-@code{AC_HEADERS_STDC}, nor check for @file{stdlib.h} etc.
+@code{AC_HEADER_STDC}, nor check for @file{stdlib.h} etc.
 
 These headers are checked for in the same order as they are included.
 For instance, on some systems @file{string.h} and @file{strings.h} both
@@ -12150,7 +12150,7 @@ compiler name.
 @prindex @command{chmod}
 Avoid usages like @samp{chmod -w file}; use @samp{chmod a-w file}
 instead, for two reasons.  First, plain @samp{-w} does not necessarily
-make the file unwriteable, since it does not affect mode bits that
+make the file unwritable, since it does not affect mode bits that
 correspond to bits in the file mode creation mask.  Second,
 Posix says that the @samp{-w} might be interpreted as an
 implementation-specific option, not as a mode; Posix suggests

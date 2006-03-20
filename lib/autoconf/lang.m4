@@ -455,8 +455,8 @@ AC_DEFUN([AC_OBJEXT],   [])
 # ---------------------------
 # Check for the extension used for the default name for executables.
 #
-# We do this in order to find out what is the extension we must for
-# compiling executables (see _AC_COMPILER_EXEEXT's comments).
+# We do this in order to find out what is the extension we must add for
+# creating executables (see _AC_COMPILER_EXEEXT's comments).
 #
 # Beware of `expr' that may return `0' or `'.  Since this macro is
 # the first one in touch with the compiler, it should also check that
@@ -591,7 +591,7 @@ AC_MSG_RESULT([$ac_cv_exeext])
 #
 # Note that some compilers (cross or not), strictly obey to `-o foo' while
 # the host requires `foo.exe', so we should not depend upon `-o' to
-# test EXEEXT.  But then, be sure no to destroy user files.
+# test EXEEXT.  But then, be sure not to destroy user files.
 #
 # Must be run before _AC_COMPILER_OBJEXT because _AC_COMPILER_EXEEXT_DEFAULT
 # checks whether the compiler works.
