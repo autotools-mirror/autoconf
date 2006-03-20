@@ -1,3 +1,21 @@
+2006-03-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/c.m4 (AC_LANG(Objective C), AC_LANG_OBJC)
+	(_AC_LANG_ABBREV(Objective C), _AC_LANG_PREFIX(Objective C))
+	(AC_LANG_SOURCE(Objective C), AC_LANG_PROGRAM(Objective C))
+	(AC_LANG_CALL(Objective C), AC_LANG_FUNC_LINK_TRY(Objective C))
+	(AC_LANG_BOOL_COMPILE_TRY(Objective C))
+	(AC_LANG_INT_SAVE(Objective C), AC_LANG_PREPROC(Objective C))
+	(AC_PROG_OBJCPP, AC_LANG_COMPILER(Objective C), AC_PROG_OBJC)
+	(_AC_PROG_OBJC_G): New macros.
+	(_AC_ARG_VAR_CPPFLAGS): Adjusted.
+	* doc/autoconf.texi (Objective C Compiler): New node.
+	(Preset Output Variables): Document OBJCFLAGS.
+	(Language Choice): Document `Objective C' language.
+	(Fortran Compiler): Fix typo.
+	* NEWS: Updated.
+	Inspired by a patch from David M. Lloyd <dmlloyd@tds.net>.
+
 2006-03-20  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Default Includes): Fix typo

@@ -383,6 +383,7 @@ Compilers and Preprocessors
 * Generic Compiler Characteristics::  Language independent tests and features
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
+* Objective C Compiler::        Likewise
 * Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
 
@@ -2258,6 +2259,15 @@ but some Autoconf macros may prepend extra libraries to this variable if
 those libraries are found and provide necessary functions, see
 @ref{Libraries}.  @command{configure} uses this variable when linking
 programs to test for C, C++, and Fortran features.
+@end defvar
+
+@defvar OBJCFLAGS
+@ovindex OBJCFLAGS
+Debugging and optimization options for the Objective C compiler.  If it is
+not set in the environment when @command{configure} runs, the default value
+is set when you call @code{AC_PROG_OBJC} (or empty if you don't).
+@command{configure} uses this variable when compiling programs to test for
+Objective C features.
 @end defvar
 
 @defvar builddir
@@ -5642,6 +5652,7 @@ compiling.
 * Generic Compiler Characteristics::  Language independent tests and features
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
+* Objective C Compiler::        Likewise
 * Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
 @end menu
@@ -6118,6 +6129,44 @@ it is not known whether such broken preprocessors exist for C++.
 @end defmac
 
 
+@node Objective C Compiler
+@subsection Objective C Compiler Characteristics
+
+
+@defmac AC_PROG_OBJC (@ovar{compiler-search-list})
+@acindex{PROG_OBJC}
+@ovindex OBJC
+@ovindex OBJCFLAGS
+Determine an Objective C compiler to use.  If @code{OBJC} is not already
+set in the environment, check for Objective C compilers.  Set output
+variable @code{OBJC} to the name of the compiler found.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a blank-separated list of Objective C compilers to
+search for.  This just gives the user an opportunity to specify an
+alternative search list for the Objective C compiler.  For example, if you
+didn't like the default order, then you could invoke @code{AC_PROG_OBJC}
+like this:
+
+@example
+AC_PROG_OBJC([gcc objcc objc])
+@end example
+
+If using the @acronym{GNU} Objective C compiler, set shell variable
+@code{GOBJC} to @samp{yes}.  If output variable @code{OBJCFLAGS} was not
+already set, set it to @option{-g -O2} for the @acronym{GNU} Objective C
+compiler (@option{-O2} on systems where @command{gcc} does not accept
+@option{-g}), or @option{-g} for other compilers.
+@end defmac
+
+@defmac AC_PROG_OBJCCPP
+@acindex{PROG_OBJCCPP}
+@ovindex OBJCCPP
+Set output variable @code{OBJCCPP} to a command that runs the Objective C
+preprocessor.  If @samp{$OBJC -E} doesn't work, @file{/lib/cpp} is used.
+@end defmac
+
+
 @node Erlang Compiler and Interpreter
 @subsection Erlang Compiler and Interpreter Characteristics
 @cindex Erlang
@@ -6282,7 +6331,7 @@ Determine the linker flags (e.g., @option{-L} and @option{-l}) for the
 @dfn{Fortran intrinsic and run-time libraries} that are required to
 successfully link a Fortran program or shared library.  The output
 variable @code{FLIBS} or @code{FCLIBS} is set to these flags (which
-should be include after @code{LIBS} when linking).
+should be included after @code{LIBS} when linking).
 
 This macro is intended to be used in those situations when it is
 necessary to mix, e.g., C++ and Fortran source code in a single
@@ -6843,6 +6892,12 @@ compilation flags: @code{FCFLAGS}.
 @ovindex ERLCFLAGS
 Compile and execute tests using @code{ERLC} and @code{ERL} and use extension
 @file{.erl} for test Erlang modules.  Use compilation flags: @code{ERLCFLAGS}.
+
+@item Objective C
+Do compilation tests using @code{OBJC} and @code{OBJCCPP} and use
+extension @file{.m} for test programs.  Use compilation flags:
+@code{CPPFLAGS} with @code{OBJCPP}, and both @code{CPPFLAGS} and
+@code{OBJCFLAGS} with @code{OBJC}.
 @end table
 @end defmac
 

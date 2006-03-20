@@ -87,6 +87,9 @@
   New macros for configuring installation of Erlang libraries:
   AC_ERLANG_SUBST_INSTALL_LIB_DIR, AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR.
 
+** New macros to support Objective C.
+  AC_PROG_OBJC, AC_PROG_OBJCPP.
+
 * Major changes in Autoconf 2.59b
 
   Released 2004-08-20, by Paul Eggert.
