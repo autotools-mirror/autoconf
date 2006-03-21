@@ -1,3 +1,7 @@
+2006-03-21  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoscan/autoscan.list: Refreshed.
+
 2006-03-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/local.at (AT_CHECK_ENV): Ignore AC_SUBSTed Objective C

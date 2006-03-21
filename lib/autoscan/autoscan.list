@@ -279,6 +279,7 @@ makevar: INSTALL		AC_PROG_INSTALL
 makevar: LEX		AC_PROG_LEX
 makevar: LN		AC_PROG_LN_S
 makevar: MAKE		AC_PROG_MAKE_SET
+makevar: OBJC		AC_PROG_OBJC
 makevar: RANLIB		AC_PROG_RANLIB
 makevar: YACC		AC_PROG_YACC
 makevar: YFLAGS		AC_PROG_YACC
@@ -299,5 +300,7 @@ program: ln		AC_PROG_LN_S
 program: make		AC_PROG_MAKE_SET
 program: mawk		AC_PROG_AWK
 program: nawk		AC_PROG_AWK
+program: objc		AC_PROG_OBJC
+program: objcc		AC_PROG_OBJC
 program: ranlib		AC_PROG_RANLIB
 program: yacc		AC_PROG_YACC
