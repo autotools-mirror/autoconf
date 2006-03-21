@@ -1,5 +1,9 @@
 2006-03-21  Stepan Kasal  <kasal@ucw.cz>
 
+	* doc/autoconf.texi (Installation Directory Variables): Fix typo.
+
+2006-03-21  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoscan/autoscan.list: Refreshed.
 
 2006-03-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>

@@ -2557,7 +2557,7 @@ are defined:
 
 @defvar ERLANG_INSTALL_LIB_DIR
 @ovindex ERLANG_INSTALL_LIB_DIR
-@acindex ERLANG_SUBST_INSTALL_LIB_DIR
+@acindex{ERLANG_SUBST_INSTALL_LIB_DIR}
 The common parent directory of Erlang library installation directories.
 This variable is set by calling the @code{AC_ERLANG_SUBST_INSTALL_LIB_DIR}
 macro in @file{configure.ac}.
@@ -2565,7 +2565,7 @@ macro in @file{configure.ac}.
 
 @defvar ERLANG_INSTALL_LIB_DIR_@var{library}
 @ovindex ERLANG_INSTALL_LIB_DIR_@var{library}
-@acindex ERLANG_SUBST_INSTALL_LIB_SUBDIR
+@acindex{ERLANG_SUBST_INSTALL_LIB_SUBDIR}
 The installation directory for Erlang library @var{library}.
 This variable is set by calling the
 @samp{AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR(@var{library}, @var{version}}
