@@ -419,7 +419,7 @@ exit 0;
 # The task of `autoupdate' is not trivial: the biggest difficulty being
 # that you must limit the changes to the parts that really need to be
 # updated.  Finding a satisfying implementation proved to be quite hard,
-# as this is the fourth implementation of `autoupdate'.
+# as this is the fifth implementation of `autoupdate'.
 #
 # Below, we will use a simple example of obsolete macro:
 #
@@ -602,7 +602,7 @@ exit 0;
 # strings which can become quickly huge, which slows it significantly.
 #
 # In particular one should avoid as much as possible to use `define' for
-# temporaries.  Now that `define' as quite a complex meaning, it is an
+# temporaries.  Now that `define' has quite a complex meaning, it is an
 # expensive operations that should be limited to macros.  Use
 # `m4_define' for temporaries.
 #
@@ -717,7 +717,7 @@ exit 0;
 # No big deal for the semantics (unless the macro depends upon $#, which
 # is bad), but the users would not be happy.
 #
-# Additionally, we introduced quotes that we not there before, which is
+# Additionally, we introduced quotes that were not there before, which is
 # OK in most cases, but could change the semantics of the file.
 #
 # Cruel dilemma: we do want the auto-quoting definition of `NEW' when
@@ -889,7 +889,7 @@ exit 0;
 # # ------------------------------
 #
 # This approach is heavily based on traces, but then there is an obvious
-# problem: non expanded code will never be seen/ In particular, the body
+# problem: non expanded code will never be seen.  In particular, the body
 # of a `define' definition is not seen, so on the input
 #
 #	  define([idem], [OLD(0, [$1])])
@@ -955,11 +955,11 @@ exit 0;
 # this:
 #
 #  `m4save.m4'
-#    moves the m4 builtins into the `_au_' pseudo namespace
+#    moves the m4 builtins into the `_au_' pseudo namespace,
 #  `unm4.m4'
-#    undefines the builtins
+#    undefines the builtins,
 #  `m4.m4'
-#    restores them
+#    restores them.
 #
 # So `input.m4' is:
 #

@@ -1,3 +1,7 @@
+2006-03-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoupdate.in: Fix some typos.
+
 2006-03-21  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Installation Directory Variables): Fix typo.
