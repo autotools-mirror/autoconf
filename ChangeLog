@@ -483,7 +483,7 @@
 	* lib/autotest/general.m4, tests/local.at:
 	Update copyright year to 2006.
 
-	* Makefile.maint (sc_root_tests): Use recommend style s/a/b/ for
+	* Makefile.maint (sc_root_tests): Use the recommended style s/a/b/ for
 	sed substitutions.
 	* doc/autoconf.texi (Installation Directory Variables): Use s|a|b|
 	for file names, again.  Reported by Noah Misch.
