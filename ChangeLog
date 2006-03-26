@@ -1,3 +1,9 @@
+2006-03-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoscan.in: The value of find_configure_ac should be
+	checked for existence, so we don't barf over a nonexisting
+	configure.ac.  Reported by Laurence Darby <ldarby@tuffmail.com>.
+
 2006-03-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* bin/autoupdate.in: Fix some typos.

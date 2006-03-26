@@ -631,7 +631,7 @@ my $configure_ac = find_configure_ac;
 init_tables;
 scan_files;
 output ('configure.scan');
-if ($configure_ac)
+if (-f $configure_ac)
   {
     check_configure_ac ($configure_ac);
   }
