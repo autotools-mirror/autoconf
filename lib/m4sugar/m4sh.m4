@@ -817,13 +817,13 @@ _AS_LINENO_WORKS || {
       t loop
       s/-\n.*//
     ' >$as_me.lineno &&
-  chmod +x $as_me.lineno ||
+  chmod +x "$as_me.lineno" ||
     AS_ERROR([cannot create $as_me.lineno; rerun with a POSIX shell])
 
   # Don't try to exec as it changes $[0], causing all sort of problems
   # (the dirname of $[0] is not the place where we might find the
   # original and so on.  Autoconf is especially sensible to this).
-  . ./$as_me.lineno
+  . "./$as_me.lineno"
   # Exit status is that of the last command.
   exit
 }

@@ -940,17 +940,17 @@ else
     # Summary of failed and skipped tests.
     if test $at_fail_count != 0; then
       echo "Failed tests:"
-      $SHELL $[0] $at_fail_list --list
+      $SHELL "$[0]" $at_fail_list --list
       echo
     fi
     if test $at_skip_count != 0; then
       echo "Skipped tests:"
-      $SHELL $[0] $at_skip_list --list
+      $SHELL "$[0]" $at_skip_list --list
       echo
     fi
     if test $at_xpass_count != 0; then
       echo "Unexpected passes:"
-      $SHELL $[0] $at_xpass_list --list
+      $SHELL "$[0]" $at_xpass_list --list
       echo
     fi
     if test $at_fail_count != 0; then

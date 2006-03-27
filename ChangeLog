@@ -1,3 +1,11 @@
+2006-03-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Quote
+	`$0' to protect against spaces.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Likewise, for
+	`$0', $as_me.
+
 2006-03-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* bin/autoscan.in: The value of find_configure_ac should be
