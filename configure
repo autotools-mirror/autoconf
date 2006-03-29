@@ -23,9 +23,8 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
-BIN_SH=xpg4; export BIN_SH # for Tru64
-DUALCASE=1; export DUALCASE # for MKS sh
 
+DUALCASE=1; export DUALCASE # for MKS sh
 
 # PATH needs CR
 # Avoid depending upon Character Ranges.
@@ -56,6 +55,14 @@ else
 fi
 
 
+# IFS
+# We need space, tab and new line, in precisely that order.
+# (If _AS_PATH_WALK were called with IFS unset, it would disable word
+# splitting by setting IFS to empty value.)
+as_nl='
+'
+IFS=" 	$as_nl"
+
 # Find who we are.  Look in the path if we contain no path at all
 # relative or not.
 case $0 in
@@ -67,6 +74,7 @@ do
   test -z "$as_dir" && as_dir=.
   test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
 done
+IFS=$as_save_IFS
 
      ;;
 esac
@@ -136,6 +144,8 @@ echo X/"$0" |
 	  }
 	  s/.*/./; q'`
 
+# CDPATH.
+$as_unset CDPATH
 
 
 if test "x$CONFIG_SHELL" = x; then
@@ -206,7 +216,7 @@ test \$exitcode = 0) || { (exit 1); exit 1; }
 else
   as_candidate_shells=
     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
+for as_dir in /usr/bin/posix$PATH_SEPARATOR/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
@@ -217,6 +227,7 @@ do
 	   done
        esac
 done
+IFS=$as_save_IFS
 
 
       for as_shell in $as_candidate_shells $SHELL; do
@@ -232,8 +243,6 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
-BIN_SH=xpg4; export BIN_SH # for Tru64
-DUALCASE=1; export DUALCASE # for MKS sh
 
 :
 _ASEOF
@@ -252,8 +261,6 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
-BIN_SH=xpg4; export BIN_SH # for Tru64
-DUALCASE=1; export DUALCASE # for MKS sh
 
 :
 (as_func_return () {
@@ -432,14 +439,14 @@ test \$exitcode = 0") || {
       t loop
       s/-\n.*//
     ' >$as_me.lineno &&
-  chmod +x $as_me.lineno ||
+  chmod +x "$as_me.lineno" ||
     { echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
    { (exit 1); exit 1; }; }
 
   # Don't try to exec as it changes $[0], causing all sort of problems
   # (the dirname of $[0] is not the place where we might find the
   # original and so on.  Autoconf is especially sensible to this).
-  . ./$as_me.lineno
+  . "./$as_me.lineno"
   # Exit status is that of the last command.
   exit
 }
@@ -507,15 +514,6 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
 
-
-# IFS
-# We need space, tab and new line, in precisely that order.
-as_nl='
-'
-IFS=" 	$as_nl"
-
-# CDPATH.
-$as_unset CDPATH
 
 
 exec 7<&0 </dev/null 6>&1
@@ -1328,6 +1326,7 @@ do
   test -z "$as_dir" && as_dir=.
   echo "PATH: $as_dir"
 done
+IFS=$as_save_IFS
 
 } >&5
 
@@ -1711,6 +1710,7 @@ case $as_dir/ in
     ;;
 esac
 done
+IFS=$as_save_IFS
 
 
 fi
@@ -1864,6 +1864,7 @@ do
   fi
 done
 done
+IFS=$as_save_IFS
 
 fi
 fi
@@ -1998,6 +1999,7 @@ do
   fi
 done
 done
+IFS=$as_save_IFS
 
 fi
 fi
@@ -2037,6 +2039,7 @@ do
   fi
 done
 done
+IFS=$as_save_IFS
 
 fi
 fi
@@ -2052,14 +2055,16 @@ fi
   if test "x$ac_ct_STRIP" = x; then
     STRIP=":"
   else
-    if test "$build" != "$host"; then
-      { echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
 whose name does not start with the host triplet.  If you think this
 configuration is useful to you, please write to autoconf@gnu.org." >&5
 echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
 whose name does not start with the host triplet.  If you think this
 configuration is useful to you, please write to autoconf@gnu.org." >&2;}
-    fi
+ac_tool_warned=yes ;;
+esac
     STRIP=$ac_ct_STRIP
   fi
 else
@@ -2164,10 +2169,12 @@ do
   fi
 done
 done
+IFS=$as_save_IFS
 
   ;;
 esac
 fi
+EXPR=$ac_cv_path_EXPR
 if test -n "$EXPR"; then
   { echo "$as_me:$LINENO: result: $EXPR" >&5
 echo "${ECHO_T}$EXPR" >&6; }
@@ -2176,7 +2183,6 @@ else
 echo "${ECHO_T}no" >&6; }
 fi
 
-EXPR=$ac_cv_path_EXPR
 
 
 
@@ -2215,10 +2221,12 @@ do
   fi
 done
 done
+IFS=$as_save_IFS
 
   ;;
 esac
 fi
+M4=$ac_cv_path_M4
 if test -n "$M4"; then
   { echo "$as_me:$LINENO: result: $M4" >&5
 echo "${ECHO_T}$M4" >&6; }
@@ -2227,7 +2235,6 @@ else
 echo "${ECHO_T}no" >&6; }
 fi
 
-M4=$ac_cv_path_M4
 
   test -n "$M4" && break
 done
@@ -2294,11 +2301,13 @@ do
   fi
 done
 done
+IFS=$as_save_IFS
 
   test -z "$ac_cv_path_PERL" && ac_cv_path_PERL="no"
   ;;
 esac
 fi
+PERL=$ac_cv_path_PERL
 if test -n "$PERL"; then
   { echo "$as_me:$LINENO: result: $PERL" >&5
 echo "${ECHO_T}$PERL" >&6; }
@@ -2307,7 +2316,6 @@ else
 echo "${ECHO_T}no" >&6; }
 fi
 
-PERL=$ac_cv_path_PERL
 
 if test "$PERL" = no; then
   { { echo "$as_me:$LINENO: error: perl is not found" >&5
@@ -2354,6 +2362,7 @@ do
   fi
 done
 done
+IFS=$as_save_IFS
 
 fi
 fi
@@ -2439,6 +2448,7 @@ do
   fi
 done
 done
+IFS=$as_save_IFS
 
 fi
 fi
@@ -2566,6 +2576,7 @@ esac
 done
 
 done
+IFS=$as_save_IFS
 
 
 fi
@@ -2647,6 +2658,7 @@ esac
 done
 
 done
+IFS=$as_save_IFS
 
 
 fi
@@ -2726,6 +2738,7 @@ esac
 done
 
 done
+IFS=$as_save_IFS
 
 
 fi
@@ -2899,9 +2912,8 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
-BIN_SH=xpg4; export BIN_SH # for Tru64
-DUALCASE=1; export DUALCASE # for MKS sh
 
+DUALCASE=1; export DUALCASE # for MKS sh
 
 # PATH needs CR
 # Avoid depending upon Character Ranges.
@@ -2932,6 +2944,14 @@ else
 fi
 
 
+# IFS
+# We need space, tab and new line, in precisely that order.
+# (If _AS_PATH_WALK were called with IFS unset, it would disable word
+# splitting by setting IFS to empty value.)
+as_nl='
+'
+IFS=" 	$as_nl"
+
 # Find who we are.  Look in the path if we contain no path at all
 # relative or not.
 case $0 in
@@ -2943,6 +2963,7 @@ do
   test -z "$as_dir" && as_dir=.
   test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
 done
+IFS=$as_save_IFS
 
      ;;
 esac
@@ -3012,6 +3033,8 @@ echo X/"$0" |
 	  }
 	  s/.*/./; q'`
 
+# CDPATH.
+$as_unset CDPATH
 
 
 
@@ -3045,14 +3068,14 @@ echo X/"$0" |
       t loop
       s/-\n.*//
     ' >$as_me.lineno &&
-  chmod +x $as_me.lineno ||
+  chmod +x "$as_me.lineno" ||
     { echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
    { (exit 1); exit 1; }; }
 
   # Don't try to exec as it changes $[0], causing all sort of problems
   # (the dirname of $[0] is not the place where we might find the
   # original and so on.  Autoconf is especially sensible to this).
-  . ./$as_me.lineno
+  . "./$as_me.lineno"
   # Exit status is that of the last command.
   exit
 }
@@ -3120,15 +3143,6 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
 # Sed expression to map a string onto a valid variable name.
 as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
 
-
-# IFS
-# We need space, tab and new line, in precisely that order.
-as_nl='
-'
-IFS=" 	$as_nl"
-
-# CDPATH.
-$as_unset CDPATH
 
 exec 6>&1
 
@@ -3268,7 +3282,7 @@ if \$ac_cs_recheck; then
   echo "running CONFIG_SHELL=$SHELL $SHELL $0 " $ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&6
   CONFIG_SHELL=$SHELL
   export CONFIG_SHELL
-  exec $SHELL $0 $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
+  exec $SHELL "$0" $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
 fi
 _ACEOF
 
