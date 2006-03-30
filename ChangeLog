@@ -6,7 +6,7 @@
 	modernize it a bit.
 	(Limitations of Usual Tools): Add basename.  Remove verbiage
 	after dirname, since it got moved to the above sections.
-	All this was inspired by a patch proposed earlier by Ralf Wildenhues.
+	All this was inspired by a patch proposed earlier by Eric Blake.
 
 2006-03-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
