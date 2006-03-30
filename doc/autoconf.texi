@@ -1541,10 +1541,12 @@ run @samp{make}.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Append @var{dir} to the include path.  Multiple invocations accumulate.
+Passed on to @command{autoconf} and @command{autoheader} internally.
 
 @item --prepend-include=@var{dir}
 @item -B @var{dir}
 Prepend @var{dir} to the include path.  Multiple invocations accumulate.
+Passed on to @command{autoconf} and @command{autoheader} internally.
 
 @item --warnings=@var{category}
 @itemx -W @var{category}
@@ -1587,6 +1589,8 @@ enable the warnings about obsolete constructs, you would use @option{-W
 none,obsolete}.
 @end table
 
+If you want @command{autoreconf} to pass flags that are not listed here
+to @command{aclocal}, set @code{ACLOCAL_AMFLAGS} in your Makefile.am.
 
 @c ========================================= Initialization and Output Files.
 
