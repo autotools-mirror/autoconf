@@ -9379,6 +9379,14 @@ For the time being, it is not mature enough to be widely used.
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
+@defmac AS_BASENAME (@var{file-name})
+@asindex{BASENAME}
+Output the non-directory portion of @var{file-name}.  For example,
+@code{AS_BASENAME([/one/two/three])} outputs @samp{three}.
+@xref{Limitations of Usual Tools}, for more details about what this
+returns and why it is more portable than the @command{basename} command.
+@end defmac
+
 @defmac AS_BOURNE_COMPATIBLE
 @asindex{BOURNE_COMPATIBLE}
 Set up the shell to be more compatible with the Bourne shell as
@@ -9396,10 +9404,10 @@ corresponding pattern matched @var{word}, else @var{default} is run.
 
 @defmac AS_DIRNAME (@var{file-name})
 @asindex{DIRNAME}
-Return the directory portion of @var{file-name}, using the algorithm
-required by Posix.  @xref{Limitations of Usual Tools}, for more
-details about what this returns and why it is more portable than the
-@command{dirname} command.
+Output the directory portion of @var{file-name}.  For example,
+@code{AS_DIRNAME([/one/two/three])} outputs @samp{/one/two}.
+@xref{Limitations of Usual Tools}, for more details about what this
+returns and why it is more portable than the @command{dirname} command.
 @end defmac
 
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
@@ -10569,6 +10577,14 @@ violations to the above restrictions.
 
 On some Posix-like platforms, @samp{!} and @samp{^} are special too, so
 they should be avoided.
+
+Posix lets implementations treat leading @file{//} specially, but
+requires leading @file{///} and beyond to be equivalent to @file{/}.
+Most Unix variants treat @file{//} like @file{/}.  However, some treat
+@file{//} as a ``super-root'' that can provide access to files that are
+not otherwise reachable from @file{/}.  The super-root tradition began
+with Apollo Domain/OS, which died out long ago, but unfortunately Cygwin
+has revived it.
 
 While @command{autoconf} and friends will usually be run on some Posix
 variety, it can and will be used on other systems, most notably @acronym{DOS}
@@ -12158,6 +12174,19 @@ Traditional Awk has a limit of 99
 fields in a record.  You may be able to circumvent this problem by using
 @code{split}.
 
+
+@item @command{basename}
+@c ---------------------
+@prindex @command{basename}
+Not all hosts have a working @command{basename}, and you should instead
+use @code{AS_BASENAME} (@pxref{Programming in M4sh}).  For example:
+
+@example
+file=`basename "$file"`       # This is not portable.
+file=`AS_BASENAME(["$file"])` # This is more portable.
+@end example
+
+
 @item @command{cat}
 @c ----------------
 @prindex @command{cat}
@@ -12325,29 +12354,6 @@ use @code{AS_DIRNAME} (@pxref{Programming in M4sh}).  For example:
 dir=`dirname "$file"`       # This is not portable.
 dir=`AS_DIRNAME(["$file"])` # This is more portable.
 @end example
-
-Unfortunately, neither of the above commands work if @code{$file}'s
-directory name ends in newline, since @samp{`@dots{}`} removes all
-trailing newlines.
-
-@noindent
-This handles a few subtleties in the standard way required by
-Posix.  For example, under UN*X, should @samp{dirname //1} give
-@samp{/}?  Paul Eggert answers:
-
-@quotation
-No, under some older flavors of Unix, leading @samp{//} is a special
-file name: it refers to a ``super-root'' and is used to access other
-machines' files.  Leading @samp{///}, @samp{////}, etc.@: are equivalent
-to @samp{/}; but leading @samp{//} is special.  This tradition
-started with Apollo Domain/OS, though it has largely died out in practice.
-
-Posix allows but does not require the special treatment for
-@samp{//}.  It says that the behavior of @command{dirname} on file names of the
-form @samp{//([^/]+/*)?} is implementation defined.  In these cases,
-@acronym{GNU} @command{dirname} returns @samp{/}, but those no-longer-used
-flavors of Unix returned @samp{//}.
-@end quotation
 
 
 @item @command{egrep}

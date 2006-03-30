@@ -1,3 +1,13 @@
+2006-03-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Programming in M4sh): Mention AS_BASENAME.
+	Give an example for AS_DIRNAME instead of referring to Posix..
+	(File System Conventions): Put discussion of // versus / here, and
+	modernize it a bit.
+	(Limitations of Usual Tools): Add basename.  Remove verbiage
+	after dirname, since it got moved to the above sections.
+	All this was inspired by a patch proposed earlier by Ralf Wildenhues.
+
 2006-03-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Quote
@@ -109,7 +119,7 @@
 	(AS_SHELL_SANITIZE): ...here; mention _AS_PATH_WALK needs IFS set.
 	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT): Add an explanation
 	  why IFS is restored so late; thank you, Ralf, for reminding us.
-	
+
 2006-03-15  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Pretty Help Strings): No need to use cached
