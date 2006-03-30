@@ -103,7 +103,8 @@ syntax-check-rules = \
   sc_system_h_headers \
   sc_tight_scope \
   sc_trailing_space \
-  sc_unmarked_diagnostics
+  sc_unmarked_diagnostics \
+  sc_texi_notab
 
 syntax-check: $(syntax-check-rules)
 #	@grep -nE '#  *include <(limits|std(def|arg|bool))\.h>'		\
@@ -166,12 +167,20 @@ sc_file_system:
 	    exit 1; } || :
 
 sc_obsolete_symbols:
-	@grep -nE '\<(HAVE_''FCNTL_H)\>'					\
+	@grep -nE '\<(HAVE_''FCNTL_H)\>'				\
 	     $$($(CVS_LIST_EXCEPT)) &&					\
 	  { echo '$(ME): do not use HAVE_''FCNTL_H'			\
 		1>&2; exit 1; } || :
 
 # FIXME: warn about definitions of EXIT_FAILURE, EXIT_SUCCESS, STREQ
+
+# Do not use TABs in .texi files, except in verbatim environments.
+sc_texi_notab:
+	@sed '/^@verbatim/,/^@end verbatim/d' /dev/null			\
+	    $$($(CVS_LIST_EXCEPT) | grep -E '\.(texi|txi|texinfo)$$' )	\
+	  | grep '[	]' &&						\
+	  { echo '$(ME): Do not use TABs in texinfo files outside of @verbatim'	\
+		1>&2; exit 1; } || :
 
 # Each nonempty line must start with a year number, or a TAB.
 sc_changelog:

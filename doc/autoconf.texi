@@ -2761,7 +2761,7 @@ without invoking AC_CONFIG_HEADERS twice, like this:
 
 @example
 AC_CONFIG_COMMANDS_PRE(
-	[m4_ifndef([AH_HEADER], [AC_CONFIG_HEADERS([config.h])])])
+        [m4_ifndef([AH_HEADER], [AC_CONFIG_HEADERS([config.h])])])
 @end example
 
 @end defmac

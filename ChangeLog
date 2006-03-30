@@ -1,3 +1,10 @@
+2006-03-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* Makefile.maint (sc_texi_notab): New check: do not use TABs
+	in texinfo files outside of verbatim environments.
+	(syntax-check-rules): Update.
+	* doc/autoconf.texi (Configuration Headers): Conform to it.
+
 2006-03-30  Chris Pickett <cpicke@cs.mcgill.ca>  (tiny change)
 
 	* doc/autoconf.texi (autoreconf Invocation): Mention that -I for
