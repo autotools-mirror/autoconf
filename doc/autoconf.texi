@@ -9386,9 +9386,8 @@ that unfortunately are not portable in practice.
 @defmac AS_BASENAME (@var{file-name})
 @asindex{BASENAME}
 Output the non-directory portion of @var{file-name}.  For example,
-@code{file=`AS_BASENAME([/one/two/three])`} sets @code{file} to
-@samp{three}.  @xref{Limitations of Usual Tools}, for why this is more
-portable than @command{file=`basename /one/two/three`}.
+if @code{$file} is @samp{/one/two/three}, the command
+@code{base=`AS_BASENAME(["$file"])`} sets @code{base} to @samp{three}.
 @end defmac
 
 @defmac AS_BOURNE_COMPATIBLE
@@ -9409,9 +9408,8 @@ corresponding pattern matched @var{word}, else @var{default} is run.
 @defmac AS_DIRNAME (@var{file-name})
 @asindex{DIRNAME}
 Output the directory portion of @var{file-name}.  For example,
-@code{file=`AS_DIRNAME([/one/two/three])`} sets @code{file} to
-@samp{/one/two}.  @xref{Limitations of Usual Tools}, for why this is
-more portable than @command{file=`dirname /one/two/three`}.
+if @code{$file} is @samp{/one/two/three}, the command
+@code{dir=`AS_DIRNAME(["$file"])`} sets @code{dir} to @samp{/one/two}.
 @end defmac
 
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})

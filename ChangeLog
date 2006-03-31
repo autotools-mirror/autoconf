@@ -1,5 +1,8 @@
 2006-03-31  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Programming in M4sh): Sharpen the descriptions
+	of AS_BASENAME and AS_DIRNAME.  Reported by Stepan Kasal.
+
 	* lib/m4sugar/m4sh.m4 (AS_BASENAME_EXPR): Handle ///, ////, etc.
 	correctly.  Problem reported by Eric Blake.
 	(_AS_EXPR_PREPARE): Detect Tru64 expr bug.  Problem reported by
