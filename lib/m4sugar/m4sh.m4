@@ -654,7 +654,7 @@ m4_define([AS_ERROR],
 
 # AS_DIRNAME(FILE-NAME)
 # ---------------------
-# Simulate running `dirname(1)' on FILE-NAME.  Not all systems have it.
+# Simulate the command 'dirname FILE-NAME'.  Not all systems have dirname.
 # This macro must be usable from inside ` `.
 #
 # Prefer expr to echo|sed, since expr is usually faster and it handles
@@ -699,14 +699,14 @@ AS_DIRNAME_SED([$1])])
 
 # AS_BASENAME(FILE-NAME)
 # ----------------------
-# Simulate running `basename(1)' on FILE-NAME.  Not all systems have it.
+# Simulate the command 'basename FILE-NAME'.  Not all systems have basename.
 # Also see the comments for AS_DIRNAME.
 
 m4_defun([AS_BASENAME_EXPR],
 [AS_REQUIRE([_AS_EXPR_PREPARE])dnl
 $as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
 	 X[]$1 : 'X\(//\)$' \| \
-	 X[]$1 : 'X\(/\)$' \| \
+	 X[]$1 : 'X\(/\)' \| \
 	 .     : '\(.\)'])
 
 m4_defun([AS_BASENAME_SED],
@@ -754,11 +754,12 @@ fi
 
 # _AS_EXPR_PREPARE
 # ----------------
-# Some expr work properly (i.e. compute and issue the right result),
-# but exit with failure.  When a fall back to expr (as in AS_DIRNAME)
-# is provided, you get twice the result.  Prevent this.
+# QNX 4.25 expr computes and issue the right result but exits with failure.
+# Tru64 expr mishandles leading zeros in numeric strings.
+# Detect these flaws.
 m4_defun([_AS_EXPR_PREPARE],
-[if expr a : '\(a\)' >/dev/null 2>&1; then
+[if expr a : '\(a\)' >/dev/null 2>&1 &&
+   test "X`expr 00001 : '.*\(...\)'`" = X001; then
   as_expr=expr
 else
   as_expr=false

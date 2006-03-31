@@ -1,3 +1,10 @@
+2006-03-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (AS_BASENAME_EXPR): Handle ///, ////, etc.
+	correctly.  Problem reported by Eric Blake.
+	(_AS_EXPR_PREPARE): Detect Tru64 expr bug.  Problem reported by
+	Ralf Wildenhues.
+
 2006-03-30  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Programming in M4sh, Limitations of Usual Tools):
