@@ -1,11 +1,12 @@
 2006-04-01  Noah Misch  <noah@cs.caltech.edu>
 
+	* lib/autoconf/general.m4 (_AC_INIT_VERSION): Emit script name and
+	Autoconf version number despite a zero- or one-argument AC_INIT.
+
 	* bin/autoreconf.in (parse_args): Multiple -v send --verbose to
 	subordinate tools.
 	* lib/Autom4te/General.pm (getopt): Make -v and -d incremental.
 	* doc/autoconf.texi (autoreconf Invocation): Document it.
-
-2006-04-01  Noah Misch  <noah@cs.caltech.edu>
 
 	* doc/autoconf.texi: Use `Cygwin', `MinGW', and `license' consistently.
 	Append LocalWords so ispell-buffer passes cleanly.  Spelling fixes.
@@ -21,8 +22,6 @@
 	* bin/autoupdate.in: Redefine m4_location so that warnings print
 	the correct lines of the input file by subtracting..
 	(_au__first_line): ..this new definition.
-
-2006-04-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (AC_COMPILE_CHECK): Prefer
 	AC_MSG_CHECKING over obsolete AC_CHECKING in autoupdated code.
@@ -107,8 +106,6 @@
 
 	* doc/autoconf.texi (Installation Directory Variables): Fix typo.
 
-2006-03-21  Stepan Kasal  <kasal@ucw.cz>
-
 	* lib/autoscan/autoscan.list: Refreshed.
 
 2006-03-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
@@ -148,12 +145,8 @@
 	* tests/local.at (AT_CHECK_MACRO_CROSS): Avoid this warning.
 	* tests/semantics.at (AC_C_BIGENDIAN): Likewise.
 
-2006-03-17  Stepan Kasal  <kasal@ucw.cz>
-
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Do not special
 	  case `ac_delim' when writing the sed script.
-
-2006-03-17  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/m4sugar/m4sh.m4 (AS_BOURNE_COMPATIBLE): Removed BIN_SH=xpg4,
 	  moved DUALCASE=1 ...
@@ -161,14 +154,10 @@
 	* doc/autoconf.texi (Special Shell Variables) <BIN_SH>: Do not say
 	  that it is set.
 
-2006-03-17  Stepan Kasal  <kasal@ucw.cz>
-
 	* lib/autoconf/programs.m4 (AC_CHECK_PROG): Quote the parameter of
 	  AC_SUBST.
 	(_AC_PATH_PROG): Store the result to VARIABLE.
 	(AC_PATH_PROG): No need to set VARIABLE again.
-
-2006-03-17  Stepan Kasal  <kasal@ucw.cz>
 
 	* tests/local.at (AT_CHECK_MACRO_CROSS): New macro, creates two tests:
 	  the first one is usual AT_CHECK_MACRO test, the second one checks
