@@ -2335,7 +2335,7 @@ The directory for installing executables that users run.
 
 @defvar datadir
 @ovindex datadir
-The directory for installing ideosyncratic read-only
+The directory for installing idiosyncratic read-only
 architecture-independent data.
 @end defvar
 
@@ -3923,7 +3923,7 @@ On some systems @code{putenv ("FOO")} removes @samp{FOO} from the
 environment, but this is not standard usage and it dumps core
 on some systems (e.g., AIX).
 
-On MINGW, a call @code{putenv ("FOO=")} removes @samp{FOO} from the
+On MinGW, a call @code{putenv ("FOO=")} removes @samp{FOO} from the
 environment, rather than inserting it with an empty value.
 
 @item @code{realloc}
@@ -4026,7 +4026,7 @@ and some @acronym{DOS} variants even corrupt the file system.
 @item @code{unsetenv}
 @c @fuindex unsetenv
 @prindex @code{unsetenv}
-On MINGW, @code{unsetenv} is not available, but a variable @samp{FOO}
+On MinGW, @code{unsetenv} is not available, but a variable @samp{FOO}
 can be removed with a call @code{putenv ("FOO=")}, as described under
 @code{putenv} above.
 
@@ -4662,7 +4662,7 @@ Suitable replacements for many such problem functions are available from
 @uref{http://www.gnu.org/software/gnulib/, Gnulib}, which aims to
 provide a centralized repository of such portability functions (among
 other things).  The source files are available online, under various
-licences, mostly @acronym{GNU} @acronym{GPL} or @acronym{GNU} @acronym{LGPL}.
+licenses, mostly @acronym{GNU} @acronym{GPL} or @acronym{GNU} @acronym{LGPL}.
 
 @defmac AC_LIBOBJ (@var{function})
 @acindex{LIBOBJ}
@@ -4951,7 +4951,7 @@ If @file{sys/types.h} does not define @code{major}, @code{minor}, and
 @acindex{HEADER_RESOLV}
 @cvindex HAVE_RESOLV_H
 @hdrindex{resolv.h}
-Checks for header @file{resolv.h}, checking for prerequisities first.
+Checks for header @file{resolv.h}, checking for prerequisites first.
 To properly use @file{resolv.h}, your code should contain something like
 the following:
 
@@ -14306,7 +14306,7 @@ You should format your @var{help-string} with the macro
 @code{AS_HELP_STRING} (@pxref{Pretty Help Strings}).
 
 See the examples suggested with the definition of @code{AC_ARG_WITH}
-(@pxref{External Software}) to get an idea of possible utilizations of
+(@pxref{External Software}) to get an idea of possible applications of
 @code{AC_ARG_ENABLE}.
 @end defmac
 
@@ -15087,7 +15087,7 @@ esac
 @end example
 
 Beware that the variable @code{CYGWIN} has a very special meaning when
-running CygWin32, and should not be changed.  That's yet another reason
+running Cygwin, and should not be changed.  That's yet another reason
 not to use this macro.
 @end defmac
 
@@ -15378,7 +15378,7 @@ Symbols}.
 
 @defmac AC_MINGW32
 @acindex{MINGW32}
-Similar to @code{AC_CYGWIN} but checks for the MingW32 compiler
+Similar to @code{AC_CYGWIN} but checks for the MinGW compiler
 environment and sets @code{MINGW32}.
 @end defmac
 
@@ -17679,6 +17679,99 @@ introduced in this document.
 @printindex cp
 
 @bye
+
+@c  LocalWords:  texinfo setfilename autoconf texi settitle setchapternewpage
+@c  LocalWords:  setcontentsaftertitlepage finalout ARG ovar varname dvar acx
+@c  LocalWords:  makeinfo dvi defcodeindex ev ov CPP cv Autotest mv defindex fn
+@c  LocalWords:  shortindexflag iftex ifset acindex ACindex ifclear ahindex fu
+@c  LocalWords:  asindex MSindex atindex ATindex auindex hdrindex prindex FIXME
+@c  LocalWords:  msindex alloca fnindex Aaarg indices FSF's dircategory ifnames
+@c  LocalWords:  direntry autoscan autoreconf autoheader autoupdate config FDs
+@c  LocalWords:  testsuite titlepage Elliston Demaille vskip filll ifnottex hmm
+@c  LocalWords:  insertcopying Autoconf's detailmenu Automake Libtool Posix ois
+@c  LocalWords:  Systemology Checkpointing Changequote INTERCAL changequote dfn
+@c  LocalWords:  Quadrigraphs builtins Shellology acconfig Bugward LIBOBJ Imake
+@c  LocalWords:  LIBOBJS IFELSE cindex flushright Pinard Metaconfig uref Simons
+@c  LocalWords:  filesystems distclean uninstall noindent versioning Tromey dir
+@c  LocalWords:  SAMS samp aclocal acsite underquoted emph itemx prepend SUBST
+@c  LocalWords:  evindex automake Gettext autopoint gettext symlink libtoolize
+@c  LocalWords:  defmac INIT tarname ovindex cvindex BUGREPORT PREREQ asis PROG
+@c  LocalWords:  SRCDIR srcdir globbing afterwards cmds foos fooo foooo init cd
+@c  LocalWords:  builddir timestamp src Imakefile chmod defvar CFLAGS CPPFLAGS
+@c  LocalWords:  CXXFLAGS DEFS DHAVE defvarx FCFLAGS FFLAGS LDFLAGS bindir GCC
+@c  LocalWords:  datadir datarootdir docdir dvidir htmldir libdir ifnothtml kbd
+@c  LocalWords:  includedir infodir libexecdir localedir localstatedir mandir
+@c  LocalWords:  oldincludedir pdfdir PDF psdir PostScript sbindir sysconfdir
+@c  LocalWords:  sharedstatedir DDATADIR sed tmp pkgdatadir VPATH conf unistd
+@c  LocalWords:  undef endif builtin FUNCS ifndef STACKSEG getb GETB YMP fubar
+@c  LocalWords:  PRE dest SUBDIRS subdirs fi struct STDC stdlib stddef INTTYPES
+@c  LocalWords:  inttypes STDINT stdint AWK AIX Solaris NeXT env EGREP FGREP yy
+@c  LocalWords:  LEXLIB YYTEXT lfl nonportable Automake's LN RANLIB byacc INETD
+@c  LocalWords:  inetd prog PROGS progs ranlib lmp lXt lX nsl gethostbyname UX
+@c  LocalWords:  NextStep isinf isnan glibc IRIX sunmath lm lsunmath pre sizeof
+@c  LocalWords:  ld inline malloc OSF putenv setenv FreeBSD realloc SunOS MinGW
+@c  LocalWords:  snprintf vsnprintf sprintf vsprintf sscanf gcc strerror ifdef
+@c  LocalWords:  strnlen sysconf PAGESIZE unsetenv va fallback memcpy dst FUNC
+@c  LocalWords:  PowerPC GNUC libPW pragma Olibcalls CHOWN chown CLOSEDIR VFORK
+@c  LocalWords:  closedir FNMATCH fnmatch vfork FSEEKO LARGEFILE fseeko SVR sc
+@c  LocalWords:  largefile GETGROUPS getgroups GETLOADAVG DGUX UMAX NLIST KMEM
+@c  LocalWords:  GETLODAVG SETGID getloadavg nlist setgid setuid GETMNTENT irix
+@c  LocalWords:  getmntent UnixWare GETPGRP getpgid getpgrp Posix's pid LSTAT
+@c  LocalWords:  lstat rpl MEMCMP memcmp OpenStep MBRTOWC mbrtowc MKTIME mktime
+@c  LocalWords:  localtime MMAP mmap OBSTACK obstack obstacks ARGTYPES timeval
+@c  LocalWords:  SETPGRP setpgrp defmacx Hurd SETVBUF setvbuf STRCOLL strcoll
+@c  LocalWords:  STRTOD strtod DECL STRFTIME strftime SCO UTIME utime VPRINTF
+@c  LocalWords:  DOPRNT vprintf doprnt sp unfixable LIBSOURCE LIBSOURCES Eggert
+@c  LocalWords:  linux netinet ia Tru XFree DIRENT NDIR dirent ndir multitable
+@c  LocalWords:  NAMLEN strlen namlen MKDEV SYSMACROS makedev RESOLV resolv DNS
+@c  LocalWords:  inet structs NAMESER arpa NETDB netdb UTekV UTS autom GCC's kB
+@c  LocalWords:  STDBOOL BOOL stdbool conformant cplusplus bool Bool stdarg tm
+@c  LocalWords:  ctype strchr strrchr rindex bcopy memmove memchr WEXITSTATUS
+@c  LocalWords:  WIFEXITED TIOCGWINSZ GWINSZ termios preprocess preprocessable
+@c  LocalWords:  DECLS strdup calloc BLKSIZE blksize RDEV rdev TZNAME tzname pw
+@c  LocalWords:  passwd gecos pwd MBSTATE mbstate wchar RETSIGTYPE hup UID uid
+@c  LocalWords:  gid ptrdiff uintmax EXEEXT OBJEXT Ae Onolimit conftest AXP str
+@c  LocalWords:  ALIGNOF WERROR Werror cpp HP's WorkShop egcs un fied stdc CXX
+@c  LocalWords:  varargs BIGENDIAN Endianness SPARC endianness grep'ed CONST FC
+@c  LocalWords:  const STRINGIZE stringizing PARAMS unprotoize protos KCC cxx
+@c  LocalWords:  xlC aCC CXXCPP FREEFORM xlf FLIBS FCLIBS ish SRCEXT XTRA LFS
+@c  LocalWords:  ISC lcposix MINIX Minix conditionalized inlines hw dD confdefs
+@c  LocalWords:  fputs stdout PREPROC ar UFS HFS QNX realtime fstype STATVFS se
+@c  LocalWords:  statvfs STATFS statfs func machfile hdr lelf raboof DEFUN GTK
+@c  LocalWords:  GTKMM Grmph ified ine defn baz EOF qar Ahhh changecom algol io
+@c  LocalWords:  changeword quadrigraphs quadrigraph dnl SGI atoi overquoting
+@c  LocalWords:  Aas Wcross sep args namespace undefine bpatsubst popdef dquote
+@c  LocalWords:  bregexp Overquote overquotation meisch maisch meische maische
+@c  LocalWords:  miscian DIRNAME dirname MKDIR CATFILE XMKMF TRAVOLTA celsius
+@c  LocalWords:  EMX emxos Emacsen Korn DYNIX subshell posix Ksh ksh Pdksh Zsh
+@c  LocalWords:  pdksh zsh Allbery Lipe Kubota UWS zorglub stderr eval esac lfn
+@c  LocalWords:  drivespec Posixy DJGPP doschk prettybird LPT pfew Zsh's yu yaa
+@c  LocalWords:  yM uM aM firebird IP subdir misparses ok Unpatched abc bc zA
+@c  LocalWords:  CDPATH DUALCASE LINENO prepass Subshells lineno NULLCMD cmp wc
+@c  LocalWords:  MAILPATH scanset arg NetBSD Almquist printf filesystem expr cp
+@c  LocalWords:  Oliva awk Aaaaarg cmd regex xfoo GNV OpenVMS unwriteable te VM
+@c  LocalWords:  coreutils sparc Proulx SysV nbar nfoo maxdepth acdilrtu TWG mc
+@c  LocalWords:  mkdir exe uname OpenBSD Fileutils mktemp umask TMPDIR guid os
+@c  LocalWords:  fooXXXXXX Unicos parenthesization utimes hpux hppa unescaped
+@c  LocalWords:  pmake DOS's gmake ifoo DESTDIR autoconfiscated pc coff mips gg
+@c  LocalWords:  dec ultrix cpu wildcards rpcc rdtsc powerpc behaviour readline
+@c  LocalWords:  withval vxworks gless localcache usr LOFF loff CYGWIN Cygwin
+@c  LocalWords:  cygwin SIGLIST siglist SYSNDIR SYSDIR ptx lseq rusage elif MSC
+@c  LocalWords:  lfoo POUNDBANG lsun NIS getpwnam SYSCALLS RSH INTL lintl aix
+@c  LocalWords:  intl lx ldir syslog bsd EPI toolchain netbsd objext de KNR nn
+@c  LocalWords:  fication LTLIBOBJS Wdiff TESTDIR atconfig atlocal akim XFAIL
+@c  LocalWords:  ChangeLog prepended errexit smallexample TESTSUITEFLAGS GPL er
+@c  LocalWords:  installcheck autotest indir Pixley Bothner Eichin Kerberos adl
+@c  LocalWords:  DISTCLEANFILES preprocessor's fileutils Stallman Murphey Stenn
+@c  LocalWords:  Manfredi Autoconfig TCL FSP david zuhn Blandy MACRODIR Raeburn
+@c  LocalWords:  autoconfiscate Savoye Haertel Avera Meyering fdl appendixsec
+@c  LocalWords:  printindex american LIBOBJDIR LibdirTest ERLCFLAGS OBJCFLAGS
+@c  LocalWords:  VER Gnulib online xyes strcpy TYPEOF typeof OBJC objcc objc ln
+@c  LocalWords:  GOBJC OBJCCPP OTP ERLC erl valloc decr dumpdef errprint incr
+@c  LocalWords:  esyscmd len maketemp pushdef substr syscmd sysval translit txt
+@c  LocalWords:  sinclude foreach myvar tolower toupper uniq BASENAME STDIN ig
+@c  LocalWords:  Dynix descrips basename aname cname ih macroexpands xno xcheck
+@c  LocalWords:  LIBREADLINE lreadline lncurses libreadline
 
 @c Local Variables:
 @c fill-column: 72

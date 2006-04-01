@@ -1,3 +1,8 @@
+2006-04-01  Noah Misch  <noah@cs.caltech.edu>
+
+	* doc/autoconf.texi: Use `Cygwin', `MinGW', and `license' consistently.
+	Append LocalWords so ispell-buffer passes cleanly.  Spelling fixes.
+
 2006-04-01  Eric Blake  <ebb9@byu.net>
 
 	* lib/m4sugar/m4sh.m4 (AS_MKDIR_P): Allow use in shell lists.
