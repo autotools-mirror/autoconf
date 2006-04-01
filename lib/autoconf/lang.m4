@@ -378,11 +378,10 @@ m4_divert_text([DEFAULTS], [ac_no_link=no])
 AC_BEFORE([$0], [_AC_COMPILER_EXEEXT])
 AC_BEFORE([$0], [AC_LINK_IFELSE])
 
-m4_define([_AC_COMPILER_EXEEXT],
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
-if AC_TRY_EVAL(ac_link); then
+m4_define([_AC_COMPILER_EXEEXT_TESTS],
+[if AC_TRY_EVAL(ac_link); then
   ac_no_link=no
-  ]m4_defn([_AC_COMPILER_EXEEXT])[
+  ]m4_defn([_AC_COMPILER_EXEEXT_TESTS])[
 else
   ac_no_link=yes
   # Setting cross_compile will disable run tests; it will
@@ -475,61 +474,32 @@ m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 # of exeext.
 AC_MSG_CHECKING([for _AC_LANG compiler default output file name])
 ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
-#
-# List of possible output files, starting from the most likely.
-# The algorithm is not robust to junk in `.', hence go to wildcards (a.*)
-# only as a last resort.  b.out is created by i960 compilers.
-ac_files='a_out.exe a.exe conftest.exe a.out conftest a.* conftest.* b.out'
-#
-# The IRIX 6 linker writes into existing files which may not be
-# executable, retaining their permissions.  Remove them first so a
-# subsequent execution test works.
-ac_rmfiles=
-for ac_file in $ac_files
-do
-  case $ac_file in
-    _AC_COMPILER_EXEEXT_REJECT ) ;;
-    * ) ac_rmfiles="$ac_rmfiles $ac_file";;
-  esac
-done
-rm -f $ac_rmfiles
 
 AS_IF([AC_TRY_EVAL(ac_link_default)],
-[# Be careful to initialize this variable, since it used to be cached.
-# Otherwise an old cache value of `no' led to `EXEEXT = no' in a Makefile.
-ac_cv_exeext=
-for ac_file in $ac_files
+[for ac_file in $ac_outfiles a.* conftest.* NO
 do
   test -f "$ac_file" || continue
   case $ac_file in
-    _AC_COMPILER_EXEEXT_REJECT )
-	;;
-    [[ab]].out )
-	# We found the default executable, but exeext='' is most
-	# certainly right.
-	break;;
-    *.* )
-	ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-	# FIXME: I believe we export ac_cv_exeext for Libtool,
-	# but it would be cool to find out if it's true.  Does anybody
-	# maintain Libtool? --akim.
-	export ac_cv_exeext
-	break;;
-    * )
-	break;;
+    _AC_COMPILER_EXEEXT_REJECT ) ;;
+    * ) break;;
   esac
-done],
+done
+AS_IF([test "$ac_file" = NO], [AC_MSG_FAILURE([no output file found])])
+],
       [_AC_MSG_LOG_CONFTEST
 AC_MSG_FAILURE([_AC_LANG compiler cannot create executables], 77)])
-ac_exeext=$ac_cv_exeext
 AC_MSG_RESULT([$ac_file])
+_AC_COMPILER_EXEEXT_WORKS
+# Clean up; list also $ac_file, in case it matched a wildcard entry.
+rm -f $ac_outfiles $ac_file
 ])# _AC_COMPILER_EXEEXT_DEFAULT
 
 
 # _AC_COMPILER_EXEEXT_WORKS
 # -------------------------
+# Called from _AC_COMPILER_EXEEXT_DEFAULT.
 m4_define([_AC_COMPILER_EXEEXT_WORKS],
-[# Check the compiler produces executables we can run.  If not, either
+[# Check that the compiler produces executables we can run.  If not, either
 # the compiler is broken, or we cross compile.
 AC_MSG_CHECKING([whether the _AC_LANG compiler works])
 # FIXME: These cross compiler hacks should be removed for Autoconf 3.0
@@ -553,38 +523,51 @@ AC_MSG_RESULT([yes])
 # _AC_COMPILER_EXEEXT_CROSS
 # -------------------------
 m4_define([_AC_COMPILER_EXEEXT_CROSS],
-[# Check the compiler produces executables we can run.  If not, either
-# the compiler is broken, or we cross compile.
-AC_MSG_CHECKING([whether we are cross compiling])
+[AC_MSG_CHECKING([whether we are cross compiling])
 AC_MSG_RESULT([$cross_compiling])
 ])# _AC_COMPILER_EXEEXT_CROSS
 
 
 # _AC_COMPILER_EXEEXT_O
 # ---------------------
-# Check for the extension used when `-o foo'.  Try to see if ac_cv_exeext,
-# as computed by _AC_COMPILER_EXEEXT_DEFAULT is OK.
+# Check for the extension used when `-o foo'.  Compute ac_cv_exeext.
+#
 m4_define([_AC_COMPILER_EXEEXT_O],
-[AC_MSG_CHECKING([for suffix of executables])
-AS_IF([AC_TRY_EVAL(ac_link)],
-[# If both `conftest.exe' and `conftest' are `present' (well, observable)
-# catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
-# work properly (i.e., refer to `conftest.exe'), while it won't with
-# `rm'.
-for ac_file in conftest.exe conftest conftest.*; do
-  test -f "$ac_file" || continue
-  case $ac_file in
-    _AC_COMPILER_EXEEXT_REJECT ) ;;
-    *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-	  export ac_cv_exeext
-	  break;;
-    * ) break;;
-  esac
-done],
-	      [AC_MSG_FAILURE([cannot compute suffix of executables: cannot compile and link])])
-rm -f conftest$ac_cv_exeext
-AC_MSG_RESULT([$ac_cv_exeext])
+[AC_CACHE_CHECK([for suffix of executables], ac_cv_exeext,
+  [AS_IF([AC_TRY_EVAL(ac_link)],
+    [# If both `conftest.exe' and `conftest' are `present' (well, observable),
+    # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
+    # work properly (i.e., refer to `conftest.exe'), while it won't with `rm'.
+    for ac_file in conftest.exe conftest conftest.* NO; do
+      test -f "$ac_file" || continue
+      case $ac_file in
+	_AC_COMPILER_EXEEXT_REJECT ) ;;
+	*.* ) ac_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+	      break;;
+	* ) break;;
+      esac
+    done
+    AS_IF([test "$ac_file" = NO],
+      [AC_MSG_FAILURE([cannot compute suffix of executables: no output file found])])
+    # Clean up; list also $ac_file, in case it matched conftest.*.
+    rm -f $ac_outfiles $ac_file
+    ],
+    [AC_MSG_FAILURE([cannot compute suffix of executables: cannot compile and link])
+    ])
+  ])
+AC_SUBST([EXEEXT], [$ac_cv_exeext])dnl
+ac_exeext=$EXEEXT
 ])# _AC_COMPILER_EXEEXT_O
+
+
+# _AC_COMPILER_EXEEXT_TESTS
+# -------------------------
+# Calls all of the above _AC_COMPILER_EXEEXT_* tests.
+# This macro is modified by the AC_NO_EXECUTABLES hack.
+m4_define([_AC_COMPILER_EXEEXT_TESTS],
+[_AC_COMPILER_EXEEXT_DEFAULT
+_AC_COMPILER_EXEEXT_CROSS
+_AC_COMPILER_EXEEXT_O])
 
 
 # _AC_COMPILER_EXEEXT
@@ -600,18 +583,33 @@ AC_MSG_RESULT([$ac_cv_exeext])
 # Must be run before _AC_COMPILER_OBJEXT because _AC_COMPILER_EXEEXT_DEFAULT
 # checks whether the compiler works.
 m4_define([_AC_COMPILER_EXEEXT],
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+[
+# List of possible output files.  We want to start from the most likely,
+# but we have to check foo.exe before foo, because Cygwin `test -f' looks
+# also for foo.exe.  b.out is created by i960 compilers.
+# As a last resort, we also try wildcards: `conftest.*' and `a.*'.
+# But we are not allowed to rm a.*, and we do not want always remove
+# conftest.*, so we will list them literally, when appropriate.
+ac_outfiles="a_out.exe a.out conftest.exe conftest a.exe b.out"
+
+# The IRIX 6 linker writes into existing files which may not be
+# executable, retaining their permissions.  Remove them first so a
+# subsequent execution test works.
+rm -f $ac_outfiles conftest.*
+
+AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+
 ac_clean_files_save=$ac_clean_files
-ac_clean_files="$ac_clean_files a.out a.exe b.out"
-_AC_COMPILER_EXEEXT_DEFAULT
-_AC_COMPILER_EXEEXT_WORKS
-rm -f a.out a.exe conftest$ac_cv_exeext b.out
+ac_clean_files="$ac_clean_files $ac_outfiles"
+
+# The following tests should remove their output except files matching conftest.*.
+_AC_COMPILER_EXEEXT_TESTS
+
 ac_clean_files=$ac_clean_files_save
-_AC_COMPILER_EXEEXT_CROSS
-_AC_COMPILER_EXEEXT_O
-rm -f conftest.$ac_ext
-AC_SUBST([EXEEXT], [$ac_cv_exeext])dnl
-ac_exeext=$EXEEXT
+
+_AC_COMPILER_OBJEXT
+
+rm -f conftest.*
 ])# _AC_COMPILER_EXEEXT
 
 
@@ -627,8 +625,7 @@ ac_exeext=$EXEEXT
 # it includes.  So do it by hand.
 m4_define([_AC_COMPILER_OBJEXT],
 [AC_CACHE_CHECK([for suffix of object files], ac_cv_objext,
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
-rm -f conftest.o conftest.obj
+[rm -f conftest.o conftest.obj
 AS_IF([AC_TRY_EVAL(ac_compile)],
 [for ac_file in conftest.o conftest.obj conftest.*; do
   test -f "$ac_file" || continue;
@@ -639,8 +636,7 @@ AS_IF([AC_TRY_EVAL(ac_compile)],
   esac
 done],
       [_AC_MSG_LOG_CONFTEST
-AC_MSG_FAILURE([cannot compute suffix of object files: cannot compile])])
-rm -f conftest.$ac_cv_objext conftest.$ac_ext])
+AC_MSG_FAILURE([cannot compute suffix of object files: cannot compile])])])
 AC_SUBST([OBJEXT], [$ac_cv_objext])dnl
 ac_objext=$OBJEXT
 ])# _AC_COMPILER_OBJEXT

@@ -1,5 +1,29 @@
 2006-04-01  Stepan Kasal  <kasal@ucw.cz>
 
+	Clean up _AC_COMPILER_EXEEXT* macros.
+
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Don't try to
+	  detect exeext, it will be done by _AC_COMPILER_EXEEXT_O; just set
+	  ac_file to the name of the default output filei and call
+	  _AC_COMPILER_EXEEXT_WORKS.  Move the definition of ac_files and the
+	  initial `rm' of the candidate files...
+	(_AC_COMPILER_EXEEXT): ... here and simplify them.  Moreover, use
+	  the same list in subsequent `rm' calls, and for the temporary
+	  redefinition of ac_clean_files; call _AC_COMPILER_OBJEXT at the end,
+	  and don't call the other _AC_COMPILER_EXEEXT_* macros directly, use...
+	(_AC_COMPILER_EXEEXT_TESTS): ... this new macro.
+	(_AC_COMPILER_EXEEXT_O): Don't export ac_cv_exeext, it's not needed (or
+	  no longer needed) by libtool.  Make it a cache check.
+	(_AC_COMPILER_EXEEXT_CROSS): Remove the comment, it was obviously
+	  copied here by mistake.
+	(AC_NO_EXECUTABLES): Redefine _AC_COMPILER_EXEEXT_TESTS, not
+	  _AC_COMPILER_EXEEXT.
+	* lib/autoconf/c.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_OBJC): Do not call
+	  _AC_COMPILER_OBJEXT directly.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Likewise.
+
+2006-04-01  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/m4sugar/m4sh.m4 (_AS_DIRNAME_PREPARE): New macro.
 	(AS_DIRNAME): Use it.
 

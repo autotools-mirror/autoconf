@@ -370,7 +370,6 @@ _AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 rm -f a.out
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
-m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 # If we don't use `.F' as extension, the preprocessor is not run on the
 # input file.  (Note that this only needs to work for GNU compilers.)
 ac_save_ext=$ac_ext
