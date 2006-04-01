@@ -927,7 +927,7 @@ fi
 
 # _AS_PATH_WALK([PATH = $PATH], BODY, [NO-OPTIMIZE])
 # --------------------------------------------------
-# Walk through PATH running BODY for each `as_dir'.  Skip non-existent
+# Walk through PATH running BODY for each `as_dir'.  Skip nonexistent
 # directories unless NO-OPTIMIZE is specified.
 #
 # Still very private as its interface looks quite bad.

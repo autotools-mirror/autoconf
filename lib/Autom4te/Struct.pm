@@ -508,7 +508,7 @@ accessor accordingly.
 The constructor of a generated class can be passed a list
 of I<element>=>I<value> pairs, with which to initialize the struct.
 If no initializer is specified for a particular element, its default
-initialization is performed instead. Initializers for non-existent
+initialization is performed instead. Initializers for nonexistent
 elements are silently ignored.
 
 Note that the initializer for a nested struct is specified

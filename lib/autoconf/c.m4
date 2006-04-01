@@ -430,7 +430,7 @@ do
 		     [# Broken: fails on valid input.
 continue])
 
-  # OK, works on sane cases.  Now check whether non-existent headers
+  # OK, works on sane cases.  Now check whether nonexistent headers
   # can be detected and how.
   _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <ac_nonexistent.h>]])],
 		     [# Broken: success on invalid input.

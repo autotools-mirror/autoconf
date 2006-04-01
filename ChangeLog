@@ -1,8 +1,10 @@
 2006-04-01  Eric Blake  <ebb9@byu.net>
 
-	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Optimize non-existant
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Optimize nonexistent
 	directories, unless optional third argument supplied.
 	(AS_UNAME): Don't optimize PATH walk.
+
+	* lib/Autom4te/Struct.pm, lib/autoconf/c.m4: s/non-existent/nonexistent/
 
 2006-04-01  Eric Blake  <ebb9@byu.net>
 	and Stepan Kasal  <kasal@ucw.cz>
