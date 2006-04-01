@@ -925,9 +925,10 @@ fi
 ])# _AS_PATH_SEPARATOR_PREPARE
 
 
-# _AS_PATH_WALK([PATH = $PATH], BODY)
-# -----------------------------------
-# Walk through PATH running BODY for each `as_dir'.
+# _AS_PATH_WALK([PATH = $PATH], BODY, [NO-OPTIMIZE])
+# --------------------------------------------------
+# Walk through PATH running BODY for each `as_dir'.  Skip non-existent
+# directories unless NO-OPTIMIZE is specified.
 #
 # Still very private as its interface looks quite bad.
 #
@@ -946,6 +947,7 @@ for as_dir in $as_dummy],
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
+  m4_ifvaln([$3], [], [test -d "$as_dir" || continue])dnl
   $2
 done
 IFS=$as_save_IFS
@@ -1142,7 +1144,7 @@ uname -v = `(uname -v) 2>/dev/null || echo unknown`
 
 _ASUNAME
 
-_AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"])
+_AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"], [:])
 }])
 
 
