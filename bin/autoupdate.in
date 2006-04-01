@@ -288,6 +288,9 @@ foreach my $file (@ARGV)
       # Redefine __file__ to make warnings nicer; $file is replaced below.
       m4_define([__file__], [$file])
 
+      # Redefine m4_location to fix the line number.
+      m4_define([m4_location], [__file__:m4_eval(__line__ - _au__first_line)])
+
       # Move all the builtins into the `_au_' pseudo namespace
       m4_include([m4save.m4])
 
@@ -373,11 +376,11 @@ foreach my $file (@ARGV)
       # `_au_disable' would be wrong.
       _au__include([unm4.m4])
 
-      # Disable special characters.
+      # Disable special characters, and set the first line number.
       _au_m4_changequote()
       _au_m4_changecom()
 
-      _au__divert(0)_au_dnl
+      _au_m4_define(_au__first_line, _au___line__)_au__divert(0)_au_dnl
 EOF
 
     $input_m4 =~ s/^      //mg;

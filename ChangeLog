@@ -1,5 +1,11 @@
 2006-04-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* bin/autoupdate.in: Redefine m4_location so that warnings print
+	the correct lines of the input file by subtracting..
+	(_au__first_line): ..this new definition.
+
+2006-04-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
 	* lib/autoconf/general.m4 (AC_COMPILE_CHECK): Prefer
 	AC_MSG_CHECKING over obsolete AC_CHECKING in autoupdated code.
 	Remove stray newline in output.
