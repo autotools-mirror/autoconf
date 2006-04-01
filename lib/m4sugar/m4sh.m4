@@ -188,6 +188,7 @@ _ASEOF
 }],
 [(eval "AS_ESCAPE(m4_quote($1))")])])
 
+
 # AS_DETECT_REQUIRED(TEST)
 # ------------------------
 # Refuse to execute under a shell that does not pass
@@ -199,6 +200,7 @@ m4_expand_once([m4_append([_AS_DETECT_REQUIRED_BODY], [
 ($1) || AS_EXIT(1)
 ])], [AS_DETECT_REQUIRED_provide($1)])])
 
+
 # AS_DETECT_SUGGESTED(TEST)
 # -------------------------
 # Prefer to execute under a shell that passes the given TEST.
@@ -208,6 +210,7 @@ m4_defun([AS_DETECT_SUGGESTED],
 m4_expand_once([m4_append([_AS_DETECT_SUGGESTED_BODY], [
 ($1) || AS_EXIT(1)
 ])], [AS_DETECT_SUGGESTED_provide($1)])])
+
 
 # _AS_DETECT_BETTER_SHELL
 # -----------------------
@@ -256,7 +259,7 @@ if test "x$CONFIG_SHELL" = x; then
       AS_EXIT(1)])
     ])
 fi
-])])])
+])])])# _AS_DETECT_BETTER_SHELL
 
 
 # _AS_SHELL_FN_WORK
@@ -296,7 +299,8 @@ AS_IF([as_func_ret_failure],
 AS_IF([( set x; as_func_ret_success y && test x = "[$]1" )], [],
   [exitcode=1
   echo positional parameters were not saved.])
-test $exitcode = 0])
+test $exitcode = 0[]dnl
+])# _AS_SHELL_FN_WORK
 
 
 # AS_COPYRIGHT(TEXT)
@@ -326,15 +330,15 @@ _AS_PATH_SEPARATOR_PREPARE
 _AS_UNSET_PREPARE
 
 # IFS
-# We need space, tab and new line, in precisely that order.
+# We need space, tab and new line, in precisely that order.  Quoting is
+# there to prevent editors from complaining about space-tab.
 # (If _AS_PATH_WALK were called with IFS unset, it would disable word
 # splitting by setting IFS to empty value.)
 as_nl='
 '
-IFS=" 	$as_nl"
+IFS=" ""	$as_nl"
 
-# Find who we are.  Look in the path if we contain no path at all
-# relative or not.
+# Find who we are.  Look in the path if we contain no directory separator.
 case $[0] in
   *[[\\/]]* ) as_myself=$[0] ;;
   *) _AS_PATH_WALK([],
@@ -380,7 +384,7 @@ as_me=`AS_BASENAME("$[0]")`
 
 # CDPATH.
 $as_unset CDPATH
-])
+])# AS_SHELL_SANITIZE
 
 
 # _AS_PREPARE
@@ -421,6 +425,30 @@ m4_defun([AS_PREPARE],
 ## ----------------------------- ##
 
 # This section is lexicographically sorted.
+
+
+# AS_CASE(WORD, [PATTERN1], [IF-MATCHED1]...[DEFAULT])
+# ----------------------------------------------------
+# Expand into
+# | case WORD in
+# | PATTERN1) IF-MATCHED1 ;;
+# | ...
+# | *) DEFAULT ;;
+# | esac
+m4_define([_AS_CASE],
+[m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
+       [$#], 1, [  *) $1 ;;],
+       [$#], 2, [  $1) m4_default([$2], [:]) ;;],
+       [  $1) m4_default([$2], [:]) ;;
+$0(m4_shiftn(2, $@))])dnl
+])
+m4_defun([AS_CASE],
+[m4_ifval([$2$3],
+[case $1 in
+_AS_CASE(m4_shift($@))
+esac
+])dnl
+])# AS_CASE
 
 
 # AS_EXIT([EXIT-CODE = 1])
@@ -468,30 +496,6 @@ m4_ifval([$3], [_$0(m4_shiftn(2, $@))])[]dnl
 fi
 ])dnl
 ])# AS_IF
-
-
-# AS_CASE(WORD, [PATTERN1], [IF-MATCHED1]...[DEFAULT])
-# ----------------------------------------------------
-# Expand into
-# | case WORD in
-# | PATTERN1) IF-MATCHED1 ;;
-# | ...
-# | *) DEFAULT ;;
-# | esac
-m4_define([_AS_CASE],
-[m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
-       [$#], 1, [  *) $1 ;;],
-       [$#], 2, [  $1) m4_default([$2], [:]) ;;],
-       [  $1) m4_default([$2], [:]) ;;
-$0(m4_shiftn(2, $@))])dnl
-])
-m4_defun([AS_CASE],
-[m4_ifval([$2$3],
-[case $1 in
-_AS_CASE(m4_shift($@))
-esac
-])dnl
-])# AS_CASE
 
 
 # _AS_UNSET_PREPARE
@@ -652,6 +656,53 @@ m4_define([AS_ERROR],
 # This section is lexicographically sorted.
 
 
+# AS_BASENAME(FILE-NAME)
+# ----------------------
+# Simulate the command 'basename FILE-NAME'.  Not all systems have basename.
+# Also see the comments for AS_DIRNAME.
+
+m4_defun([AS_BASENAME_EXPR],
+[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
+$as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
+	 X[]$1 : 'X\(//\)$' \| \
+	 X[]$1 : 'X\(/\)' \| \
+	 .     : '\(.\)'])
+
+m4_defun([AS_BASENAME_SED],
+[echo X/[]$1 |
+    sed ['/^.*\/\([^/][^/]*\)\/*$/{
+	    s//\1/
+	    q
+	  }
+	  /^X\/\(\/\/\)$/{
+	    s//\1/
+	    q
+	  }
+	  /^X\/\(\/\).*/{
+	    s//\1/
+	    q
+	  }
+	  s/.*/./; q']])
+
+m4_defun([AS_BASENAME],
+[AS_REQUIRE([_$0_PREPARE])dnl
+$as_basename $1 ||
+AS_BASENAME_EXPR([$1]) 2>/dev/null ||
+AS_BASENAME_SED([$1])])
+
+
+# _AS_BASENAME_PREPARE
+# --------------------
+# Avoid Solaris 9 /usr/ucb/basename, as `basename /' outputs an empty line.
+m4_defun([_AS_BASENAME_PREPARE],
+[if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
+  as_basename=basename
+else
+  as_basename=false
+fi
+])# _AS_BASENAME_PREPARE
+
+
 # AS_DIRNAME(FILE-NAME)
 # ---------------------
 # Simulate the command 'dirname FILE-NAME'.  Not all systems have dirname.
@@ -697,41 +748,6 @@ AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
 AS_DIRNAME_SED([$1])])
 
 
-# AS_BASENAME(FILE-NAME)
-# ----------------------
-# Simulate the command 'basename FILE-NAME'.  Not all systems have basename.
-# Also see the comments for AS_DIRNAME.
-
-m4_defun([AS_BASENAME_EXPR],
-[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
-$as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
-	 X[]$1 : 'X\(//\)$' \| \
-	 X[]$1 : 'X\(/\)' \| \
-	 .     : '\(.\)'])
-
-m4_defun([AS_BASENAME_SED],
-[echo X/[]$1 |
-    sed ['/^.*\/\([^/][^/]*\)\/*$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\/\(\/\/\)$/{
-	    s//\1/
-	    q
-	  }
-	  /^X\/\(\/\).*/{
-	    s//\1/
-	    q
-	  }
-	  s/.*/./; q']])
-
-m4_defun([AS_BASENAME],
-[AS_REQUIRE([_$0_PREPARE])dnl
-$as_basename $1 ||
-AS_BASENAME_EXPR([$1]) 2>/dev/null ||
-AS_BASENAME_SED([$1])])
-
-
 # AS_EXECUTABLE_P
 # ---------------
 # Check whether a file is executable.
@@ -740,17 +756,6 @@ m4_defun([AS_EXECUTABLE_P],
 { test -f $1 && $as_executable_p $1; }dnl
 ])# AS_EXECUTABLE_P
 
-
-# _AS_BASENAME_PREPARE
-# --------------------
-# Avoid Solaris 9 /usr/ucb/basename, as `basename /' outputs an empty line.
-m4_defun([_AS_BASENAME_PREPARE],
-[if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
-  as_basename=basename
-else
-  as_basename=false
-fi
-])# _AS_BASENAME_PREPARE
 
 # _AS_EXPR_PREPARE
 # ----------------
@@ -766,6 +771,7 @@ else
 fi
 ])# _AS_EXPR_PREPARE
 
+
 # _AS_LINENO_WORKS
 # ---------------
 # Succeed if the currently executing shell supports LINENO.
@@ -779,6 +785,7 @@ m4_define([_AS_LINENO_WORKS],
   as_lineno_2=$LINENO
   test "x$as_lineno_1" != "x$as_lineno_2" &&
   test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2"])
+
 
 # _AS_LINENO_PREPARE
 # ------------------
@@ -823,7 +830,7 @@ _AS_LINENO_WORKS || {
 
   # Don't try to exec as it changes $[0], causing all sort of problems
   # (the dirname of $[0] is not the place where we might find the
-  # original and so on.  Autoconf is especially sensible to this).
+  # original and so on.  Autoconf is especially sensitive to this).
   . "./$as_me.lineno"
   # Exit status is that of the last command.
   exit
@@ -856,6 +863,47 @@ else
 fi
 rm -f conf$$ conf$$.exe conf$$.file
 ])# _AS_LN_S_PREPARE
+
+
+# AS_LN_S(FILE, LINK)
+# -------------------
+# FIXME: Should we add the glue code to handle properly relative symlinks
+# simulated with `ln' or `cp'?
+m4_defun([AS_LN_S],
+[AS_REQUIRE([_AS_LN_S_PREPARE])dnl
+$as_ln_s $1 $2
+])
+
+
+# AS_MKDIR_P(DIR)
+# ---------------
+# Emulate `mkdir -p' with plain `mkdir'.
+m4_define([AS_MKDIR_P],
+[AS_REQUIRE([_$0_PREPARE])dnl
+{ if $as_mkdir_p; then
+    test -d $1 || mkdir -p $1
+  else
+    as_dir=$1
+    as_dirs=
+    while test ! -d "$as_dir"; do
+      as_dirs="$as_dir $as_dirs"
+      as_dir=`AS_DIRNAME("$as_dir")`
+    done
+    test ! -n "$as_dirs" || mkdir $as_dirs
+  fi || AS_ERROR([cannot create directory $1]); }dnl
+])# AS_MKDIR_P
+
+
+# _AS_MKDIR_P_PREPARE
+# -------------------
+m4_defun([_AS_MKDIR_P_PREPARE],
+[if mkdir -p . 2>/dev/null; then
+  as_mkdir_p=:
+else
+  test -d ./-p && rmdir ./-p
+  as_mkdir_p=false
+fi
+])# _AS_MKDIR_P_PREPARE
 
 
 # _AS_PATH_SEPARATOR_PREPARE
@@ -904,44 +952,21 @@ IFS=$as_save_IFS
 ])
 
 
-# AS_LN_S(FILE, LINK)
-# -------------------
-# FIXME: Should we add the glue code to handle properly relative symlinks
-# simulated with `ln' or `cp'?
-m4_defun([AS_LN_S],
-[AS_REQUIRE([_AS_LN_S_PREPARE])dnl
-$as_ln_s $1 $2
-])
-
-
-# _AS_MKDIR_P_PREPARE
-# -------------------
-m4_defun([_AS_MKDIR_P_PREPARE],
-[if mkdir -p . 2>/dev/null; then
-  as_mkdir_p=:
-else
-  test -d ./-p && rmdir ./-p
-  as_mkdir_p=false
-fi
-])# _AS_MKDIR_P_PREPARE
-
-# AS_MKDIR_P(DIR)
-# ---------------
-# Emulate `mkdir -p' with plain `mkdir'.
-m4_define([AS_MKDIR_P],
-[AS_REQUIRE([_$0_PREPARE])dnl
-{ if $as_mkdir_p; then
-    test -d $1 || mkdir -p $1
-  else
-    as_dir=$1
-    as_dirs=
-    while test ! -d "$as_dir"; do
-      as_dirs="$as_dir $as_dirs"
-      as_dir=`AS_DIRNAME("$as_dir")`
-    done
-    test ! -n "$as_dirs" || mkdir $as_dirs
-  fi || AS_ERROR([cannot create directory $1]); }dnl
-])# AS_MKDIR_P
+# AS_SET_CATFILE(VAR, DIR-NAME, FILE-NAME)
+# ----------------------------------------
+# Set VAR to DIR-NAME/FILE-NAME.
+# Optimize the common case where $2 or $3 is '.'.
+m4_define([AS_SET_CATFILE],
+[case $2 in
+.) $1=$3;;
+*)
+  case $3 in
+  .) $1=$2;;
+  [[\\/]]* | ?:[[\\/]]* ) $1=$3;;
+  *) $1=$2/$3;;
+  esac;;
+esac[]dnl
+])# AS_SET_CATFILE
 
 
 # _AS_TEST_PREPARE
@@ -965,23 +990,6 @@ rm -f conf$$.file
 ])# _AS_TEST_PREPARE
 
 
-# AS_SET_CATFILE(VAR, DIR-NAME, FILE-NAME)
-# ----------------------------------------
-# Set VAR to DIR-NAME/FILE-NAME.
-# Optimize the common case where $2 or $3 is '.'.
-m4_define([AS_SET_CATFILE],
-[case $2 in
-.) $1=$3;;
-*)
-  case $3 in
-  .) $1=$2;;
-  [[\\/]]* | ?:[[\\/]]* ) $1=$3;;
-  *) $1=$2/$3;;
-  esac;;
-esac[]dnl
-])# AS_SET_CATFILE
-
-
 
 
 ## ------------------ ##
@@ -1000,6 +1008,7 @@ m4_define([AS_BOX],
 	       [_AS_BOX_LITERAL($@)],
 	       [_AS_BOX_INDIR($@)])])
 
+
 # _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = `-'])
 # -------------------------------------------------
 m4_define([_AS_BOX_LITERAL],
@@ -1007,12 +1016,70 @@ m4_define([_AS_BOX_LITERAL],
 m4_text_box($@)
 _ASBOX])
 
+
 # _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = `-'])
 # -----------------------------------------------
 m4_define([_AS_BOX_INDIR],
 [sed 'h;s/./m4_default([$2], [-])/g;s/^.../@%:@@%:@ /;s/...$/ @%:@@%:@/;p;x;p;x' <<_ASBOX
 @%:@@%:@ $1 @%:@@%:@
 _ASBOX])
+
+
+# AS_HELP_STRING(LHS, RHS, [COLUMN])
+# ----------------------------------
+#
+# Format a help string so that it looks pretty when
+# the user executes "script --help".  This macro takes three
+# arguments, a "left hand side" (LHS), a "right hand side" (RHS), and
+# the COLUMN which is a string of white spaces which leads to the
+# the RHS column (default: 26 white spaces).
+#
+# The resulting string is suitable for use in other macros that require
+# a help string (e.g. AC_ARG_WITH).
+#
+# Here is the sample string from the Autoconf manual (Node: External
+# Software) which shows the proper spacing for help strings.
+#
+#    --with-readline         support fancy command line editing
+#  ^ ^                       ^
+#  | |                       |
+#  | column 2                column 26
+#  |
+#  column 0
+#
+# A help string is made up of a "left hand side" (LHS) and a "right
+# hand side" (RHS).  In the example above, the LHS is
+# "--with-readline", while the RHS is "support fancy command line
+# editing".
+#
+# If the LHS contains more than (COLUMN - 3) characters, then the LHS is
+# terminated with a newline so that the RHS starts on a line of its own
+# beginning with COLUMN.  In the default case, this corresponds to an
+# LHS with more than 23 characters.
+#
+# Therefore, in the example, if the LHS were instead
+# "--with-readline-blah-blah-blah", then the AS_HELP_STRING macro would
+# expand into:
+#
+#
+#    --with-readline-blah-blah-blah
+#  ^ ^                       support fancy command line editing
+#  | |                       ^
+#  | column 2                |
+#  column 0                  column 26
+#
+#
+# m4_text_wrap hacks^Wworks around the fact that m4_format does not
+# know quadrigraphs.
+#
+m4_define([AS_HELP_STRING],
+[m4_pushdef([AS_Prefix], m4_default([$3], [                          ]))dnl
+m4_pushdef([AS_Prefix_Format],
+	   [  %-]m4_eval(m4_len(AS_Prefix) - 3)[s ])dnl [  %-23s ]
+m4_text_wrap([$2], AS_Prefix, m4_format(AS_Prefix_Format, [$1]))dnl
+m4_popdef([AS_Prefix_Format])dnl
+m4_popdef([AS_Prefix])dnl
+])# AS_HELP_STRING
 
 
 # AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
@@ -1142,7 +1209,8 @@ m4_defun([_AS_VERSION_COMPARE_PREPARE],
     if (length(v2)) exit 1
     if (length(v1)) exit 2
   }
-']])
+']])# _AS_VERSION_COMPARE_PREPARE
+
 
 # AS_VERSION_COMPARE(VERSION-1, VERSION-2,
 #                    [ACTION-IF-LESS], [ACTION-IF-EQUAL], [ACTION-IF-GREATER])
@@ -1160,64 +1228,7 @@ case $? in
 0) $4;;
 2) $5;;
 esac[]dnl
-])
-
-
-# AS_HELP_STRING(LHS, RHS, [COLUMN])
-# ----------------------------------
-#
-# Format a help string so that it looks pretty when
-# the user executes "script --help".  This macro takes three
-# arguments, a "left hand side" (LHS), a "right hand side" (RHS), and
-# the COLUMN which is a string of white spaces which leads to the
-# the RHS column (default: 26 white spaces).
-#
-# The resulting string is suitable for use in other macros that require
-# a help string (e.g. AC_ARG_WITH).
-#
-# Here is the sample string from the Autoconf manual (Node: External
-# Software) which shows the proper spacing for help strings.
-#
-#    --with-readline         support fancy command line editing
-#  ^ ^                       ^
-#  | |                       |
-#  | column 2                column 26
-#  |
-#  column 0
-#
-# A help string is made up of a "left hand side" (LHS) and a "right
-# hand side" (RHS).  In the example above, the LHS is
-# "--with-readline", while the RHS is "support fancy command line
-# editing".
-#
-# If the LHS contains more than (COLUMN - 3) characters, then the LHS is
-# terminated with a newline so that the RHS starts on a line of its own
-# beginning with COLUMN.  In the default case, this corresponds to an
-# LHS with more than 23 characters.
-#
-# Therefore, in the example, if the LHS were instead
-# "--with-readline-blah-blah-blah", then the AS_HELP_STRING macro would
-# expand into:
-#
-#
-#    --with-readline-blah-blah-blah
-#  ^ ^                       support fancy command line editing
-#  | |                       ^
-#  | column 2                |
-#  column 0                  column 26
-#
-#
-# m4_text_wrap hacks^Wworks around the fact that m4_format does not
-# know quadrigraphs.
-#
-m4_define([AS_HELP_STRING],
-[m4_pushdef([AS_Prefix], m4_default([$3], [                          ]))dnl
-m4_pushdef([AS_Prefix_Format],
-	   [  %-]m4_eval(m4_len(AS_Prefix) - 3)[s ])dnl [  %-23s ]
-m4_text_wrap([$2], AS_Prefix, m4_format(AS_Prefix_Format, [$1]))dnl
-m4_popdef([AS_Prefix_Format])dnl
-m4_popdef([AS_Prefix])dnl
-])
+])# _AS_VERSION_COMPARE
 
 
 
