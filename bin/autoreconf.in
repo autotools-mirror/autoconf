@@ -216,13 +216,18 @@ sub parse_args ()
       $automake .= ' --no-force'
 	if $aclocal_supports_force;
     }
-  # --debug;
-  if ($debug)
+  # --verbose --verbose or --debug;
+  if ($verbose > 1 || $debug)
     {
-      $autoconf   .= ' --verbose --debug';
-      $autoheader .= ' --verbose --debug';
+      $autoconf   .= ' --verbose';
+      $autoheader .= ' --verbose';
       $automake   .= ' --verbose';
       $aclocal    .= ' --verbose';
+    }
+  if ($debug)
+    {
+      $autoconf   .= ' --debug';
+      $autoheader .= ' --debug';
       $libtoolize .= ' --debug';
     }
   # --warnings;

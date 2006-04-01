@@ -273,9 +273,9 @@ sub getopt (%)
   %option = ("h|help"     => sub { print $help; exit 0 },
 	     "V|version"  => sub { print $version; exit 0 },
 
-	     "v|verbose"    => \$verbose,
-	     "d|debug"      => \$debug,
-	     'f|force'      => \$force,
+	     "v|verbose"  => sub { ++$verbose },
+	     "d|debug"    => sub { ++$debug },
+	     'f|force'    => \$force,
 
 	     # User options last, so that they have precedence.
 	     %option);

@@ -1,5 +1,12 @@
 2006-04-01  Noah Misch  <noah@cs.caltech.edu>
 
+	* bin/autoreconf.in (parse_args): Multiple -v send --verbose to
+	subordinate tools.
+	* lib/Autom4te/General.pm (getopt): Make -v and -d incremental.
+	* doc/autoconf.texi (autoreconf Invocation): Document it.
+
+2006-04-01  Noah Misch  <noah@cs.caltech.edu>
+
 	* doc/autoconf.texi: Use `Cygwin', `MinGW', and `license' consistently.
 	Append LocalWords so ispell-buffer passes cleanly.  Spelling fixes.
 
