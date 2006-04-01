@@ -1,3 +1,9 @@
+2006-04-01  Eric Blake  <ebb9@byu.net>
+
+	* lib/m4sugar/m4sh.m4 (AS_MKDIR_P): Allow use in shell lists.
+	* lib/autotest/general.m4: Be tolerant of existing directory when
+	  rm failed to remove it.
+
 2006-04-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* bin/autoupdate.in: Redefine m4_location so that warnings print

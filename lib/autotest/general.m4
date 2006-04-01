@@ -699,7 +699,8 @@ do
 	find $at_group_dir -type d ! -perm -700 -exec chmod u+rwx \{\} \;
 	rm -fr $at_group_dir
       fi
-      mkdir $at_group_dir ||
+      # Be tolerant if the above `rm' was not able to remove the directory.
+      AS_MKDIR_P([$at_group_dir]) ||
 	AS_ERROR([cannot create $at_group_dir])
       cd $at_group_dir
       ;;

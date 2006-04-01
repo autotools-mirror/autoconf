@@ -940,7 +940,7 @@ m4_define([AS_MKDIR_P],
       as_dir=`AS_DIRNAME("$as_dir")`
     done
     test ! -n "$as_dirs" || mkdir $as_dirs
-  fi || AS_ERROR([cannot create directory $1]); }
+  fi || AS_ERROR([cannot create directory $1]); }dnl
 ])# AS_MKDIR_P
 
 
