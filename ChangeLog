@@ -26,8 +26,13 @@
 
 	* lib/m4sugar/m4sh.m4 (_AS_DIRNAME_PREPARE): New macro.
 	(AS_DIRNAME): Use it.
+	(_AS_PREPARE): Add _AS_DIRNAME_PREPARE.
 
 	* tests/*.at: Remove the generated ones.
+
+2006-04-01  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autotest/general.m4 (AT_INIT): Don't optimize the first PATH walk.
 
 2006-04-01  Eric Blake  <ebb9@byu.net>
 
