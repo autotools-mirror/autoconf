@@ -1,4 +1,10 @@
 2006-04-01  Eric Blake  <ebb9@byu.net>
+
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Optimize non-existant
+	directories, unless optional third argument supplied.
+	(AS_UNAME): Don't optimize PATH walk.
+
+2006-04-01  Eric Blake  <ebb9@byu.net>
 	and Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/m4sugar/m4sh.m4: Sort sections as implied by the comments,
