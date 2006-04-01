@@ -192,7 +192,10 @@ m4_define([AC_OBSOLETE],
 
 # AU::AC_FOREACH(VARIABLE, LIST, EXPRESSION)
 # ------------------------------------------
-AU_ALIAS([AC_FOREACH], [m4_foreach_w])
+AU_DEFUN([AC_FOREACH], [[m4_foreach_w($@)]])
+AC_DEFUN([AC_FOREACH], [m4_foreach_w($@)dnl
+AC_DIAGNOSE([obsolete], [The macro `AC_FOREACH' is obsolete.
+You should run autoupdate.])])
 
 
 
@@ -2319,9 +2322,8 @@ AU_DEFUN([AC_TRY_LINK],
 #                  ACTION-IF-FOUND, [ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------
 AU_DEFUN([AC_COMPILE_CHECK],
-[m4_ifvaln([$1], [AC_CHECKING([for $1])])dnl
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])
-])
+[m4_ifvaln([$1], [AC_MSG_CHECKING([for $1])])dnl
+AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])])
 
 
 

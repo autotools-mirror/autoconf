@@ -1,3 +1,22 @@
+2006-04-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (AC_COMPILE_CHECK): Prefer
+	AC_MSG_CHECKING over obsolete AC_CHECKING in autoupdated code.
+	Remove stray newline in output.
+	(AC_FOREACH): AU_DEFUN this as literal for autoupdate, and also
+	AC_DEFUN this for autoconf, including the obsoletion diagnose.
+	Fixes autoupdating of code where the replacement output contains
+	m4sugar macros.
+	* lib/autoconf/lang.m4 (AC_LANG_SAVE): Likewise.
+	* tests/mktests.sh (ac_exclude_list): Add AC_FOREACH.
+	 (au_exclude_list): Add AC_LANG_SAVE.
+	* tests/tools.at: Several new tests for all of this.
+	* doc/autoconf.texi (Obsoleting Macros): Give a hint about the
+	hairy details.
+	The AC_LANG_SAVE issue was reported against Libtool by
+	Dalibor Topic <robilad@kaffe.org>, and against Autoconf 2.57 by
+	Kristian Kvilekval <kris@cs.ucsb.edu>.
+
 2006-04-01  Stepan Kasal  <kasal@ucw.cz>
 
 	* bin/autoupdate.in: Handle m4 builtins and m4sugar macros together--

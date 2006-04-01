@@ -133,6 +133,9 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 # - AC_SYS_RESTARTABLE_SYSCALLS, AC_FUNC_WAIT3
 #   Obsolete, checked in semantics.
 #
+# - AC_FOREACH
+#   Obsolete, but needs to be AC_DEFUN'ed.
+#
 ac_exclude_list='^AC_ARG_VAR$
 ^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$
 ^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$
@@ -156,6 +159,7 @@ ac_exclude_list='^AC_ARG_VAR$
 ^AC_(CYGWIN|CYGWIN32|EMXOS2|MING32|EXEEXT|OBJEXT)$
 ^AC_PATH_XTRA$
 ^AC_SYS_RESTARTABLE_SYSCALLS$
+^AC_FOREACH$
 _AC_'
 
 
@@ -167,6 +171,8 @@ ac_exclude_egrep=$exclude_list$ac_exclude_list
 
 # au_exclude_list
 # ---------------
+# AC_LANG_SAVE
+#    needs user interaction to be removed.
 # AC_LANG_RESTORE
 #    cannot be used alone.
 # AC_LINK_FILES, AC_PREREQ
@@ -177,7 +183,7 @@ ac_exclude_egrep=$exclude_list$ac_exclude_list
 #    are empty.
 # AC_CYGWIN, AC_MINGW32, AC_EMXOS2
 #    are using AC_REQUIRE.
-au_exclude_list='^AC_LANG_RESTORE$
+au_exclude_list='^AC_LANG_(SAVE|RESTORE)$
 ^AC_LINK_FILES|AC_PREREQ$
 ^AC_(INIT|OUTPUT)$
 ^AC_C_CROSS|AC_PROG_CC_STDC$

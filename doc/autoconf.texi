@@ -9937,6 +9937,12 @@ replaced by the modern @var{implementation}.  @var{message} should
 include information on what to do after running @command{autoupdate};
 @command{autoupdate} will print it as a warning, and include it
 in the updated @file{configure.ac} file.
+
+The details of this macro are hairy: if @command{autoconf} encounters an
+@code{AU_DEFUN}ed macro, all macros inside its second argument are expanded
+as usual.  However, when @command{autoupdate} is run, only M4 and M4sugar
+macros will be expanded here, while all other macros are disabled and will
+appear literally in the updated @file{configure.ac}.
 @end defmac
 
 @defmac AU_ALIAS (@var{old-name}, @var{new-name})

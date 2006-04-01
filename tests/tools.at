@@ -594,3 +594,128 @@ AT_CHECK([grep 'AC_HEADER_STDC(' configure.ac], 1, [ignore], [ignore])
 AT_CHECK([grep 'AC_HEADER_STDC' configure.ac], 0, [ignore], [ignore])
 
 AT_CLEANUP
+
+
+# autoupdating OLD to NEW
+# -----------------------
+
+# The example taken from the code comments.
+AT_SETUP([autoupdating OLD to NEW])
+
+AT_DATA([aclocal.m4],
+[[AU_DEFUN([OLD], [NEW([$1, $2], m4@&t@_eval([$1 + $2]))])
+AC_DEFUN([NEW], [echo "sum($1) = $2"])
+]])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+OLD(1, 2)
+NEW([0, 0], [0])
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+AT_CHECK([[grep 'NEW(\[1, 2], *\[3])' configure.ac]], 0, [ignore], [ignore])
+AT_CHECK([[grep 'NEW(\[0, 0], *\[0])' configure.ac]], 0, [ignore], [ignore])
+
+AT_CLEANUP
+
+
+# autoupdating AC_HELP_STRING
+# ---------------------------
+AT_SETUP([autoupdating AC_HELP_STRING])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_ARG_ENABLE([foo], [AC_HELP_STRING([--enable-foo], [foo bar])], [:], [:])
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE([], [], [], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [], [ignore])
+AT_CHECK([[grep '\[--enable-foo], *\[foo bar]' configure.ac]], 0, [ignore], [ignore])
+
+AT_CLEANUP
+
+
+# autoupdating with m4sugar
+# -------------------------
+AT_SETUP([autoupdating with m4sugar])
+
+AT_DATA([aclocal.m4],
+[[AU_DEFUN([OLD],
+[m4@&t@_pushdef([foo], [bar])dn@&t@l
+echo "foo $1 foo"
+m4@&t@_popdef([foo])dn@&t@l
+])
+]])
+
+touch foo.in
+
+AT_DATA([configure.ac],
+[[AC_PREREQ(2.54)
+m4_define([gnumeric_version_epoch], [1])
+AC_INIT
+OLD([ bla  bla ])
+AC_FOREACH([name], [n1 n2],
+           [echo name
+])
+AC_CHECKING([for feature])
+AC_MSG_RESULT_UNQUOTED([`echo done`])
+
+AC_OUTPUT([foo])
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE([], [], [], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [], [ignore])
+
+AT_CLEANUP
+
+
+# autoupdating AC_LANG_SAVE
+# -------------------------
+AT_SETUP([autoupdating AC_LANG_SAVE])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_LANG_SAVE
+AC_LANG_RESTORE
+AC_LANG_SAVE
+AC_LANG_RESTORE
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE([], [], [], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [], [ignore])
+
+AT_CLEANUP
+
+
+# autoupdating AC_FOREACH
+# -----------------------
+AT_SETUP([autoupdating AC_FOREACH])
+
+AT_DATA([aclocal.m4],
+[[AU_DEFUN([OLD], [AC_FOREACH([myvar], [4 5 6], [' myvar'])])
+]])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+echo AC_FOREACH([myvar], [1 2 3], [' myvar'])OLD
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE
+AT_CHECK([[grep 'echo 1 2 3 4 5 6' configure.ac]], 1, [ignore], [ignore])
+AT_CHECK([[grep 'm4@&t@_foreach_w' configure.ac]], 0, [ignore], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [0], [stdout])
+AT_CHECK([[grep ' 1 2 3 4 5 6' stdout]], 0, [ignore], [ignore])
+
+AT_CLEANUP

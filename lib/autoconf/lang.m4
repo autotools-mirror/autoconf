@@ -161,9 +161,13 @@ m4_popdef([$0 OLD])dnl
 # ------------
 # Save the current language, but don't change language.
 AU_DEFUN([AC_LANG_SAVE],
-[m4_pushdef([_AC_LANG], _AC_LANG)],
+[[AC_LANG_SAVE]],
 [Instead of using `AC_LANG', `AC_LANG_SAVE', and `AC_LANG_RESTORE',
 you should use `AC_LANG_PUSH' and `AC_LANG_POP'.])
+AC_DEFUN([AC_LANG_SAVE],
+[m4_pushdef([_AC_LANG], _AC_LANG)dnl
+AC_DIAGNOSE([obsolete], [The macro `AC_LANG_SAVE' is obsolete.
+You should run autoupdate.])])
 
 
 # AC_LANG_RESTORE
