@@ -1,3 +1,10 @@
+2006-04-01  Stepan Kasal  <kasal@ucw.cz>
+
+	* bin/autoupdate.in: Handle m4 builtins and m4sugar macros together--
+	  switch all of them on and of when necessary.  Fixes the bug when
+	  m4sugar macros (e.g., m4_define) were expanded after the first
+	  automatic update (e.g., after AC_PREREQ or AC_INIT).
+
 2006-03-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Programming in M4sh): Sharpen the descriptions

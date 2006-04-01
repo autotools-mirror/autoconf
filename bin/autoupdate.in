@@ -115,64 +115,28 @@ sub parse_args ()
 }
 
 
-# ------------- #
-# M4 builtins.  #
-# ------------- #
-
-my @m4_builtins;
-
-# &handle_m4_symbols ()
-# ---------------------
-# Create the following $tmp files:
-# m4.m4 -- enable the m4 builtins.
-# unm4.m4 -- disable the m4 builtins.
-# savem4.m4 -- save the m4 builtins.
-sub handle_m4_macros ()
-{
-  # Get the list of builtins.
-  xsystem ("echo dumpdef | $m4 2>$tmp/m4.defs >/dev/null");
-  my $m4_defs = new Autom4te::XFile "$tmp/m4.defs";
-  while ($_ = $m4_defs->getline)
-    {
-      push @m4_builtins, $1
-	if /^(\w+):/;
-    }
-  $m4_defs->close;
-
-  # Output the files.
-  my $m4_m4 = new Autom4te::XFile ">$tmp/m4.m4";
-  print $m4_m4 "# m4.m4 -- enable the m4 builtins.\n";
-  my $unm4_m4 = new Autom4te::XFile ">$tmp/unm4.m4";
-  print $unm4_m4 "# unm4.m4 -- disable the m4 builtins.\n";
-  print $unm4_m4 "# Because Autoconf, via M4sugar, redefines some of these\n";
-  print $unm4_m4 "# macros, and therefore since unac.m4 disables them,\n";
-  print $unm4_m4 "# disable only if defined.\n";
-  my $m4save_m4 = new Autom4te::XFile ">$tmp/m4save.m4";
-  print $m4save_m4 "# savem4.m4 -- save the m4 builtins.\n";
-  foreach (@m4_builtins)
-    {
-      print $m4save_m4 "define([_au_$_], defn([$_]))\n";
-      print $unm4_m4   "_au_ifdef([$_], [_au_undefine([$_])])\n";
-      print $m4_m4     "_au_define([$_], _au_defn([_au_$_]))\n";
-    }
-}
-
-
 
 # ----------------- #
 # Autoconf macros.  #
 # ----------------- #
 
-
-# @AU_MACROS & AC_MACROS -- AU and AC macros and yet another useful comment.
-my (%ac_macros, %au_macros);
-
+my (%ac_macros, %au_macros, %m4_builtins);
 
 # HANDLE_AUTOCONF_MACROS ()
 # -------------------------
 # @M4_BUILTINS -- M4 builtins and a useful comment.
 sub handle_autoconf_macros ()
 {
+  # Get the builtins.
+  xsystem ("echo dumpdef | $m4 2>$tmp/m4.defs >/dev/null");
+  my $m4_defs = new Autom4te::XFile "$tmp/m4.defs";
+  while ($_ = $m4_defs->getline)
+    {
+      $m4_builtins{$1} = 1
+	if /^(\w+):/;
+    }
+  $m4_defs->close;
+
   my $macros = new Autom4te::XFile ("$autoconf"
 				    . " --trace AU_DEFINE:'AU:\$f:\$1'"
 				    . " --trace define:'AC:\$f:\$1'"
@@ -182,22 +146,32 @@ sub handle_autoconf_macros ()
       chomp;
       my ($domain, $file, $macro) = /^(AC|AU):(.*):([^:]*)$/ or next;
       # ../lib/m4sugar/m4sugar.m4  -> m4sugar
+      # ../lib/m4sugar/version.m4  -> m4sugar
       # ../lib/autoconf/general.m4 -> autoconf
       # aclocal.m4 -> aclocal
+      # ../lib/m4sugar/m4sh.m4     -> m4sh
       my $set = basename (dirname ($file));
       $set = 'aclocal' if $file eq 'aclocal.m4';
+      $set = 'm4sh' if basename($file) eq 'm4sh.m4';
       error "unknown set: $set: $_"
-	unless $set =~ /^(m4sugar|aclocal|autoconf)$/;
-      if ($domain eq "AC")
+	unless $set =~ /^(m4sugar|m4sh|aclocal|autoconf)$/;
+      if ($domain eq "AU")
 	{
-	  $ac_macros{$macro} = $set;
+	  $au_macros{$macro} = 1;
+	}
+      elsif ($set eq "m4sugar")
+	{
+	  # Add the m4sugar macros to m4_builtins.
+	  $m4_builtins{$macro} = 1;
 	}
       else
 	{
-	  $au_macros{$macro} = $set;
+	  # Autoconf, aclocal, and m4sh macros.
+	  $ac_macros{$macro} = 1;
 	}
     }
   $macros->close;
+
 
   # Don't keep AU macros in @AC_MACROS.
   delete $ac_macros{$_}
@@ -205,7 +179,7 @@ sub handle_autoconf_macros ()
   # Don't keep M4sugar macros which are redefined by Autoconf,
   # such as `builtin', `changequote' etc.  See autoconf/autoconf.m4.
   delete $ac_macros{$_}
-    foreach (@m4_builtins);
+    foreach (keys %m4_builtins);
   error "no current Autoconf macros found"
     unless keys %ac_macros;
   error "no obsolete Autoconf macros found"
@@ -225,10 +199,26 @@ sub handle_autoconf_macros ()
   print $ac_m4 "# ac.m4 -- autoquoting definitions of the AC macros.\n";
   my $unac_m4 = new Autom4te::XFile ">$tmp/unac.m4";
   print $unac_m4 "# unac.m4 -- undefine the AC macros.\n";
-  foreach (sort grep { $ac_macros{$_} ne 'm4sugar' } keys %ac_macros)
+  foreach (sort keys %ac_macros)
     {
-      print $ac_m4   "_au_define([$_], [m4_if(\$#, 0, [[\$0]], [[\$0(\$\@)]])])\n";
-      print $unac_m4 "_au_undefine([$_])\n";
+      print $ac_m4   "_au_m4_define([$_], [m4_if(\$#, 0, [[\$0]], [[\$0(\$\@)]])])\n";
+      print $unac_m4 "_au_m4_undefine([$_])\n";
+    }
+
+  # m4save.m4 -- save the m4 builtins.
+  # unm4.m4 -- disable the m4 builtins.
+  # m4.m4 -- enable the m4 builtins.
+  my $m4save_m4 = new Autom4te::XFile ">$tmp/m4save.m4";
+  print $m4save_m4 "# m4save.m4 -- save the m4 builtins.\n";
+  my $unm4_m4 = new Autom4te::XFile ">$tmp/unm4.m4";
+  print $unm4_m4 "# unm4.m4 -- disable the m4 builtins.\n";
+  my $m4_m4 = new Autom4te::XFile ">$tmp/m4.m4";
+  print $m4_m4 "# m4.m4 -- enable the m4 builtins.\n";
+  foreach (sort keys %m4_builtins)
+    {
+      print $m4save_m4 "_au__save([$_])\n";
+      print $unm4_m4   "_au__undefine([$_])\n";
+      print $m4_m4     "_au__restore([$_])\n";
     }
 }
 
@@ -245,12 +235,11 @@ $autoconf .= join (' --include=', '', @include);
 $autoconf .= join (' --prepend-include=', '', @prepend_include);
 
 mktmpdir ('au');
-handle_m4_macros;
 handle_autoconf_macros;
 
 # $au_changequote -- enable the quote `[', `]' right before any AU macro.
 my $au_changequote =
-  's/\b(' . join ('|', keys %au_macros) . ')\b/_au_changequote([,])$1/g';
+  's/\b(' . join ('|', keys %au_macros) . ')\b/_au_m4_changequote([,])$1/g';
 
 # au.m4 -- definitions the AU macros.
 xsystem ("$autoconf --trace AU_DEFINE:'_au_defun(\@<:\@\$1\@:>\@,
@@ -281,25 +270,38 @@ foreach my $file (@ARGV)
     # input file.
     my $input_m4 = <<\EOF;
       divert(-1)                                            -*- Autoconf -*-
-      changequote([, ])
+      changequote([,])
+
+      # Define our special macros:
+      define([_au__defn], defn([defn]))
+      define([_au__divert], defn([divert]))
+      define([_au__include], defn([include]))
+      define([_au__undefine], defn([undefine]))
+      define([_au__save], [m4_ifdef([$1], [m4_copy([$1], [_au_$1])])])
+      define([_au__restore],
+	[_au_m4_ifdef([_au_$1],
+	  [_au_m4_define([$1], _au__defn([_au_$1]))])])
+
+      # Set up m4sugar.
+      include(m4sugar/m4sugar.m4)
 
       # Redefine __file__ to make warnings nicer; $file is replaced below.
-      define([__file__], [$file])
+      m4_define([__file__], [$file])
 
       # Move all the builtins into the `_au_' pseudo namespace
-      include([m4save.m4])
+      m4_include([m4save.m4])
 
       # _au_defun(NAME, BODY)
       # ---------------------
       # Define NAME to BODY, plus AU activation/deactivation.
-      _au_define([_au_defun],
-      [_au_define([$1],
+      _au_m4_define([_au_defun],
+      [_au_m4_define([$1],
       [_au_enable()dnl
       $2[]dnl
       _au_disable()])])
 
       # Import the definition of the obsolete macros.
-      _au_include([au.m4])
+      _au__include([au.m4])
 
 
       ## ------------------------ ##
@@ -317,52 +319,49 @@ foreach my $file (@ARGV)
 
       # __au_enable
       # -----------
-      # Reenable the builtins, and m4sugar.
-      _au_define([__au_enable],
-      [_au_divert(-1)
+      # Reenable the builtins, m4sugar, and the autoquoting AC macros.
+      _au_m4_define([__au_enable],
+      [_au__divert(-1)
       # Enable special characters.
-      _au_changecom([#])
+      _au_m4_changecom([#])
 
-      # Enable the m4 builtins, m4sugar and the autoquoting AC macros.
-      _au_include([m4.m4])
-      _au_include([m4sugar/m4sugar.m4])
-      _au_include([ac.m4])
+      _au__include([m4.m4])
+      _au__include([ac.m4])
 
-      _au_divert(0)])
+      _au__divert(0)])
 
       # _au_enable
       # ----------
-      # Called at the beginning of all the obsolete macros.  Reenable the
-      # builtins, and m4sugar if needed.
-      _au_define([_au_enable],
-      [_au_ifdef([_au_enabled],
+      # Called at the beginning of all the obsolete macros.  If this is the
+      # outermost level, call __au_enable.
+      _au_m4_define([_au_enable],
+      [_au_m4_ifdef([_au_enabled],
 		 [],
 		 [__au_enable()])_au_dnl
-      _au_pushdef([_au_enabled])])
+      _au_m4_pushdef([_au_enabled])])
 
 
       # __au_disable
       # ------------
-      # Disable the builtins, and m4sugar.
-      _au_define([__au_disable],
-      [_au_divert(-1)
-      # Disable m4sugar, the AC autoquoting macros, and m4.
-      _au_include([unac.m4])
-      _au_include([unm4.m4])
+      # Disable the AC autoquoting macros, m4sugar, and m4.
+      _au_m4_define([__au_disable],
+      [_au__divert(-1)
+      _au__include([unac.m4])
+      _au__include([unm4.m4])
 
       # Disable special characters.
-      _au_changequote()
-      _au_changecom()
+      _au_m4_changequote()
+      _au_m4_changecom()
 
-      _au_divert(0)])
+      _au__divert(0)])
 
       # _au_disable
       # -----------
-      # Called at the end of all the obsolete macros.  Disable the
-      # builtins, and m4sugar if needed..
-      _au_define([_au_disable],
-      [_au_popdef([_au_enabled])_au_dnl
-      _au_ifdef([_au_enabled],
+      # Called at the end of all the obsolete macros.  If we are at the
+      # outermost level, call __au_disable.
+      _au_m4_define([_au_disable],
+      [_au_m4_popdef([_au_enabled])_au_dnl
+      _au_m4_ifdef([_au_enabled],
 		[],
 		[__au_disable()])])
 
@@ -370,16 +369,15 @@ foreach my $file (@ARGV)
       ## ------------------------------- ##
       ## Disable, and process the file.  ##
       ## ------------------------------- ##
-      _au_divert(-1)
-      # Disable m4: M4sugar and the AC autoquoting macros are not loaded yet,
-      # hence invoking `_au_disable' is wrong.
-      _au_include([unm4.m4])
+      # The AC autoquoting macros are not loaded yet, hence invoking
+      # `_au_disable' would be wrong.
+      _au__include([unm4.m4])
 
       # Disable special characters.
-      _au_changequote()
-      _au_changecom()
+      _au_m4_changequote()
+      _au_m4_changecom()
 
-      _au_divert(0)_au_dnl
+      _au__divert(0)_au_dnl
 EOF
 
     $input_m4 =~ s/^      //mg;
