@@ -1,3 +1,15 @@
+2006-04-02  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/c.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_OBJC): Call
+	  _AC_COMPILER_EXEEXT instead of m4_expand_once([_AC_COMPILER_EXEEXT])
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Likewise.
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_TESTS): On subsequent
+	  calls, for a new language, only check that the compiler works.
+	(AC_NO_EXECUTABLES): Change the redefinition of
+	  _AC_COMPILER_EXEEXT_TESTS so that on subsequent calls, it checks
+	  that the new language's compiler works if ac_no_link=no, and
+	  does nothing otherwise.
+
 2006-04-02  Pavel Roskin  <proski@gnu.org>
 
 	* doc/autoconf.texi (AC_PATH_X): Update per 2005-08-26 change.

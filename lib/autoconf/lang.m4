@@ -379,22 +379,25 @@ AC_BEFORE([$0], [_AC_COMPILER_EXEEXT])
 AC_BEFORE([$0], [AC_LINK_IFELSE])
 
 m4_define([_AC_COMPILER_EXEEXT_TESTS],
-[if AC_TRY_EVAL(ac_link); then
-  ac_no_link=no
+[m4_expand_once([
+   if AC_TRY_EVAL(ac_link); then
+     ac_no_link=no
+   else
+     ac_no_link=yes
+     # Setting cross_compile will disable run tests; it will
+     # also disable AC_CHECK_FILE but that's generally
+     # correct if we can't link.
+     cross_compiling=yes
+     EXEEXT=
+     _AC_COMPILER_EXEEXT_CROSS
+   fi])
+if test $ac_no_link = no; then
   ]m4_defn([_AC_COMPILER_EXEEXT_TESTS])[
-else
-  ac_no_link=yes
-  # Setting cross_compile will disable run tests; it will
-  # also disable AC_CHECK_FILE but that's generally
-  # correct if we can't link.
-  cross_compiling=yes
-  EXEEXT=
-  _AC_COMPILER_EXEEXT_CROSS
 fi
 ])
 
 m4_define([AC_LINK_IFELSE],
-[if test x$ac_no_link = xyes; then
+[if test $ac_no_link = yes; then
   AC_MSG_ERROR([Link tests are not allowed after AC@&t@_NO_EXECUTABLES.])
 fi
 ]m4_defn([AC_LINK_IFELSE]))
@@ -566,8 +569,9 @@ ac_exeext=$EXEEXT
 # This macro is modified by the AC_NO_EXECUTABLES hack.
 m4_define([_AC_COMPILER_EXEEXT_TESTS],
 [_AC_COMPILER_EXEEXT_DEFAULT
-_AC_COMPILER_EXEEXT_CROSS
-_AC_COMPILER_EXEEXT_O])
+ m4_expand_once([_AC_COMPILER_EXEEXT_CROSS
+   _AC_COMPILER_EXEEXT_O])
+])
 
 
 # _AC_COMPILER_EXEEXT
@@ -607,7 +611,7 @@ _AC_COMPILER_EXEEXT_TESTS
 
 ac_clean_files=$ac_clean_files_save
 
-_AC_COMPILER_OBJEXT
+m4_expand_once([_AC_COMPILER_OBJEXT])
 
 rm -f conftest.*
 ])# _AC_COMPILER_EXEEXT
