@@ -6586,17 +6586,23 @@ The following macros check for operating system services or capabilities.
 
 @defmac AC_PATH_X
 @acindex{PATH_X}
+@evindex XMKMF
 @cindex X Window System
 Try to locate the X Window System include files and libraries.  If the
 user gave the command line options @option{--x-includes=@var{dir}} and
-@option{--x-libraries=@var{dir}}, use those directories.  If either or
-both were not given, get the missing values by running @code{xmkmf} on a
-trivial @file{Imakefile} and examining the @file{Makefile} that it
-produces.  If that fails (such as if @code{xmkmf} is not present), look
-for the files in several directories where they often reside.  If either
-method is successful, set the shell variables @code{x_includes} and
-@code{x_libraries} to their locations, unless they are in directories
-the compiler searches by default.
+@option{--x-libraries=@var{dir}}, use those directories.
+
+If either or both were not given, get the missing values by running
+@code{xmkmf} (or an executable pointed to by the @code{XMKMF}
+environment variable) on a trivial @file{Imakefile} and examining the
+@file{Makefile} that it produces.  Setting @code{XMKMF} to @samp{false}
+will disable this method.
+
+If this method fails to find the X Window System, @command{configure}
+will look for the files in several directories where they often reside. 
+If either method is successful, set the shell variables
+@code{x_includes} and @code{x_libraries} to their locations, unless they
+are in directories the compiler searches by default.
 
 If both methods fail, or the user gave the command line option
 @option{--without-x}, set the shell variable @code{no_x} to @samp{yes};
