@@ -1,3 +1,7 @@
+2006-04-03  Eric Blake  <ebb9@byu.net>
+
+	* THANKS: Add myself.
+
 2006-04-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (AT_INIT): Add `at_testdir' to pointer
