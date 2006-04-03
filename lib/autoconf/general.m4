@@ -1862,10 +1862,11 @@ _AC_CACHE_DUMP() |
      :end'] >>confcache
 if diff $cache_file confcache >/dev/null 2>&1; then :; else
   if test -w $cache_file; then
-    test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
+    test "x$cache_file" != "x/dev/null" &&
+      AC_MSG_NOTICE([updating cache $cache_file])
     cat confcache >$cache_file
   else
-    echo "not updating unwritable cache $cache_file"
+    AC_MSG_NOTICE([not updating unwritable cache $cache_file])
   fi
 fi
 rm -f confcache[]dnl
