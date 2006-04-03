@@ -2838,10 +2838,13 @@ _ACEOF
      :end' >>confcache
 if diff $cache_file confcache >/dev/null 2>&1; then :; else
   if test -w $cache_file; then
-    test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
+    test "x$cache_file" != "x/dev/null" &&
+      { echo "$as_me:$LINENO: updating cache $cache_file" >&5
+echo "$as_me: updating cache $cache_file" >&6;}
     cat confcache >$cache_file
   else
-    echo "not updating unwritable cache $cache_file"
+    { echo "$as_me:$LINENO: not updating unwritable cache $cache_file" >&5
+echo "$as_me: not updating unwritable cache $cache_file" >&6;}
   fi
 fi
 rm -f confcache
