@@ -1,5 +1,8 @@
 2006-04-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/mktests.sh: Update copyright year in the header of the
+	generated files.
+
 	* lib/autoconf/c.m4 (AC_C_INLINE): Do not skip cleanup code.
 	(AC_C_RESTRICT): Likewise.  Furthermore, add a function with a
 	typedef'ed restricted pointer, to catch a compiler bug on
