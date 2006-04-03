@@ -1591,7 +1591,7 @@ none,obsolete}.
 @end table
 
 If you want @command{autoreconf} to pass flags that are not listed here
-to @command{aclocal}, set @code{ACLOCAL_AMFLAGS} in your Makefile.am.
+on to @command{aclocal}, set @code{ACLOCAL_AMFLAGS} in your Makefile.am.
 
 @c ========================================= Initialization and Output Files.
 
