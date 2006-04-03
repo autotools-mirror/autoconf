@@ -3838,9 +3838,14 @@ additions.  Please help us keeping it as complete as possible.
 @item @code{exit}
 @c @fuindex exit
 @prindex @code{exit}
-Did you know that, on some older hosts, @code{exit} returns @code{int}?
+On ancient hosts, @code{exit} returned @code{int}.
 This is because @code{exit} predates @code{void}, and there was a long
 tradition of it returning @code{int}.
+
+On more-modern hosts, the problem more likely is that @code{exit} is not
+declared, due to C++ problems of some sort or another.  For this reason
+we suggest that test programs not invoke @code{exit}, but return from
+@code{main} instead.
 
 @item @code{free}
 @c @fuindex free
@@ -6599,7 +6604,7 @@ environment variable) on a trivial @file{Imakefile} and examining the
 will disable this method.
 
 If this method fails to find the X Window System, @command{configure}
-will look for the files in several directories where they often reside. 
+will look for the files in several directories where they often reside.
 If either method is successful, set the shell variables
 @code{x_includes} and @code{x_libraries} to their locations, unless they
 are in directories the compiler searches by default.
@@ -7002,9 +7007,9 @@ Test programs should not write anything to the standard output.  They
 should return 0 if the test succeeds, nonzero otherwise, so that success
 can be distinguished easily from a core dump or other failure;
 segmentation violations and other failures produce a nonzero exit
-status.  Test programs should @code{exit}, not @code{return}, from
-@code{main}, because on some systems (old Suns, at least) the argument
-to @code{return} in @code{main} is ignored.
+status.  Test programs should @code{return}, not @code{exit}, from
+@code{main}, because on some systems (notably C++ compilers masquerading
+as C compilers) @code{exit} is not declared.
 
 Test programs can use @code{#if} or @code{#ifdef} to check the values of
 preprocessor macros defined by tests that have already run.  For

@@ -298,7 +298,7 @@ find_stack_direction ()
 int
 main ()
 {
-  exit (find_stack_direction () < 0);
+  return find_stack_direction () < 0;
 }])],
 	       [ac_cv_c_stack_direction=1],
 	       [ac_cv_c_stack_direction=-1],
@@ -389,15 +389,14 @@ AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
   struct stat before, after;
 
   if (creat (f, 0600) < 0)
-    exit (1);
+    return 1;
   if (stat (f, &before) < 0)
-    exit (1);
+    return 1;
   if (chown (f, (uid_t) -1, (gid_t) -1) == -1)
-    exit (1);
+    return 1;
   if (stat (f, &after) < 0)
-    exit (1);
-  exit ((before.st_uid == after.st_uid
-	 && before.st_gid == after.st_gid) ? 0 : 1);
+    return 1;
+  return ! (before.st_uid == after.st_uid && before.st_gid == after.st_gid);
 ]])],
 	       [ac_cv_func_chown_works=yes],
 	       [ac_cv_func_chown_works=no],
@@ -426,7 +425,7 @@ AC_CACHE_CHECK([whether closedir returns void],
 int closedir ();
 #endif
 ],
-				[[exit (closedir (opendir (".")) != 0);]])],
+				[[return closedir (opendir (".")) != 0;]])],
 	       [ac_cv_func_closedir_void=no],
 	       [ac_cv_func_closedir_void=yes],
 	       [ac_cv_func_closedir_void=yes])])
@@ -478,7 +477,7 @@ AC_DEFUN([_AC_FUNC_FNMATCH_IF],
 #	   define y(a, b, c) (fnmatch (a, b, c) == 0)
 #	   define n(a, b, c) (fnmatch (a, b, c) == FNM_NOMATCH)
 	 ],
-	 [exit
+	 [return
 	   (!(y ("a*", "abc", 0)
 	      && n ("d*/*1", "d/s/1", FNM_PATHNAME)
 	      && y ("a\\\\bc", "abc", 0)
@@ -602,7 +601,7 @@ if test $ac_cv_func_getgroups = yes; then
   AC_CACHE_CHECK([for working getgroups], ac_cv_func_getgroups_works,
    [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
       [[/* On Ultrix 4.3, getgroups (0, 0) always fails.  */
-       exit (getgroups (0, 0) == -1 ? 1 : 0);]])],
+       return getgroups (0, 0) == -1;]])],
 		  [ac_cv_func_getgroups_works=yes],
 		  [ac_cv_func_getgroups_works=no],
 		  [ac_cv_func_getgroups_works=no])
@@ -815,7 +814,7 @@ if test "$as_ln_s" = "ln -s" && ln -s conftest.file conftest.sym; then
      /* Linux will dereference the symlink and fail.
 	That is better in the sense that it means we will not
 	have to compile and use the lstat wrapper.  */
-     exit (lstat ("conftest.sym/", &sbuf) ? 0 : 1);])],
+     return lstat ("conftest.sym/", &sbuf) != 0;])],
 		[ac_cv_func_lstat_dereferences_slashed_symlink=yes],
 		[ac_cv_func_lstat_dereferences_slashed_symlink=no],
 		[ac_cv_func_lstat_dereferences_slashed_symlink=no])
@@ -853,7 +852,7 @@ AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 char *malloc ();
 #endif
 ]],
-		 [exit (malloc (0) ? 0 : 1);])],
+		 [return ! malloc (0);])],
 	       [ac_cv_func_malloc_0_nonnull=yes],
 	       [ac_cv_func_malloc_0_nonnull=no],
 	       [ac_cv_func_malloc_0_nonnull=no])])
@@ -911,7 +910,7 @@ AC_DEFUN([AC_FUNC_MEMCMP],
   /* Some versions of memcmp are not 8-bit clean.  */
   char c0 = '\100', c1 = '\200', c2 = '\201';
   if (memcmp(&c0, &c2, 1) >= 0 || memcmp(&c1, &c2, 1) >= 0)
-    exit (1);
+    return 1;
 
   /* The Next x86 OpenStep bug shows up only when comparing 16 bytes
      or more and with at least one buffer not starting on a 4-byte boundary.
@@ -927,9 +926,9 @@ AC_DEFUN([AC_FUNC_MEMCMP],
 	strcpy (a, "--------01111111");
 	strcpy (b, "--------10000000");
 	if (memcmp (a, b, 16) >= 0)
-	  exit (1);
+	  return 1;
       }
-    exit (0);
+    return 0;
   }
 ]])],
 	       [ac_cv_func_memcmp_working=yes],
@@ -985,9 +984,9 @@ static char *tz_strings[] = {
 };
 #define N_STRINGS (sizeof (tz_strings) / sizeof (tz_strings[0]))
 
-/* Fail if mktime fails to convert a date in the spring-forward gap.
+/* Return 0 if mktime fails to convert a date in the spring-forward gap.
    Based on a problem report from Andreas Jaeger.  */
-static void
+static int
 spring_forward_gap ()
 {
   /* glibc (up to about 1998-10-07) failed this test. */
@@ -1006,29 +1005,27 @@ spring_forward_gap ()
   tm.tm_min = 0;
   tm.tm_sec = 0;
   tm.tm_isdst = -1;
-  if (mktime (&tm) == (time_t)-1)
-    exit (1);
+  return mktime (&tm) != (time_t) -1;
 }
 
-static void
+static int
 mktime_test1 (now)
      time_t now;
 {
   struct tm *lt;
-  if ((lt = localtime (&now)) && mktime (lt) != now)
-    exit (1);
+  return ! (lt = localtime (&now)) || mktime (lt) == now;
 }
 
-static void
+static int
 mktime_test (now)
      time_t now;
 {
-  mktime_test1 (now);
-  mktime_test1 ((time_t) (time_t_max - now));
-  mktime_test1 ((time_t) (time_t_min + now));
+  return (mktime_test1 (now)
+	  && mktime_test1 ((time_t) (time_t_max - now))
+	  && mktime_test1 ((time_t) (time_t_min + now)));
 }
 
-static void
+static int
 irix_6_4_bug ()
 {
   /* Based on code from Ariel Faigon.  */
@@ -1041,11 +1038,10 @@ irix_6_4_bug ()
   tm.tm_sec = 0;
   tm.tm_isdst = -1;
   mktime (&tm);
-  if (tm.tm_mon != 2 || tm.tm_mday != 31)
-    exit (1);
+  return tm.tm_mon == 2 && tm.tm_mday == 31;
 }
 
-static void
+static int
 bigtime_test (j)
      int j;
 {
@@ -1067,8 +1063,9 @@ bigtime_test (j)
 	     && lt->tm_wday == tm.tm_wday
 	     && ((lt->tm_isdst < 0 ? -1 : 0 < lt->tm_isdst)
 		  == (tm.tm_isdst < 0 ? -1 : 0 < tm.tm_isdst))))
-	exit (1);
+	return 0;
     }
+  return 1;
 }
 
 int
@@ -1095,18 +1092,20 @@ main ()
 	putenv (tz_strings[i]);
 
       for (t = 0; t <= time_t_max - delta; t += delta)
-	mktime_test (t);
-      mktime_test ((time_t) 1);
-      mktime_test ((time_t) (60 * 60));
-      mktime_test ((time_t) (60 * 60 * 24));
+	if (! mktime_test (t))
+	  return 1;
+      if (! (mktime_test ((time_t) 1)
+	     && mktime_test ((time_t) (60 * 60))
+	     && mktime_test ((time_t) (60 * 60 * 24))))
+	return 1;
 
       for (j = 1; 0 < j; j *= 2)
-	bigtime_test (j);
-      bigtime_test (j - 1);
+	if (! bigtime_test (j))
+	  return 1;
+      if (! bigtime_test (j - 1))
+	return 1;
     }
-  irix_6_4_bug ();
-  spring_forward_gap ();
-  exit (0);
+  return ! (irix_6_4_bug () && spring_forward_gap ());
 }]])],
 	       [ac_cv_func_working_mktime=yes],
 	       [ac_cv_func_working_mktime=no],
@@ -1211,15 +1210,15 @@ main ()
   /* First, make a file with some known garbage in it. */
   data = (char *) malloc (pagesize);
   if (!data)
-    exit (1);
+    return 1;
   for (i = 0; i < pagesize; ++i)
     *(data + i) = rand ();
   umask (0);
   fd = creat ("conftest.mmap", 0600);
   if (fd < 0)
-    exit (1);
+    return 1;
   if (write (fd, data, pagesize) != pagesize)
-    exit (1);
+    return 1;
   close (fd);
 
   /* Next, try to mmap the file at a fixed address which already has
@@ -1227,17 +1226,17 @@ main ()
      we see the same garbage.  */
   fd = open ("conftest.mmap", O_RDWR);
   if (fd < 0)
-    exit (1);
+    return 1;
   data2 = (char *) malloc (2 * pagesize);
   if (!data2)
-    exit (1);
+    return 1;
   data2 += (pagesize - ((long int) data2 & (pagesize - 1))) & (pagesize - 1);
   if (data2 != mmap (data2, pagesize, PROT_READ | PROT_WRITE,
 		     MAP_PRIVATE | MAP_FIXED, fd, 0L))
-    exit (1);
+    return 1;
   for (i = 0; i < pagesize; ++i)
     if (*(data + i) != *(data2 + i))
-      exit (1);
+      return 1;
 
   /* Finally, make sure that changes to the mapped area do not
      percolate back to the file as seen by read().  (This is a bug on
@@ -1246,14 +1245,14 @@ main ()
     *(data2 + i) = *(data2 + i) + 1;
   data3 = (char *) malloc (pagesize);
   if (!data3)
-    exit (1);
+    return 1;
   if (read (fd, data3, pagesize) != pagesize)
-    exit (1);
+    return 1;
   for (i = 0; i < pagesize; ++i)
     if (*(data + i) != *(data3 + i))
-      exit (1);
+      return 1;
   close (fd);
-  exit (0);
+  return 0;
 }]])],
 	       [ac_cv_func_mmap_fixed_mapped=yes],
 	       [ac_cv_func_mmap_fixed_mapped=no],
@@ -1313,7 +1312,7 @@ AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
 char *realloc ();
 #endif
 ]],
-		 [exit (realloc (0, 0) ? 0 : 1);])],
+		 [return ! realloc (0, 0);])],
 	       [ac_cv_func_realloc_0_nonnull=yes],
 	       [ac_cv_func_realloc_0_nonnull=no],
 	       [ac_cv_func_realloc_0_nonnull=no])])
@@ -1395,7 +1394,7 @@ AC_DEFUN([AC_FUNC_SETPGRP],
 [/* If this system has a BSD-style setpgrp which takes arguments,
   setpgrp(1, 1) will fail with ESRCH and return -1, in that case
   exit successfully. */
-  exit (setpgrp (1,1) == -1 ? 0 : 1);])],
+  return setpgrp (1,1) != -1;])],
 	       [ac_cv_func_setpgrp_void=no],
 	       [ac_cv_func_setpgrp_void=yes],
 	       [AC_MSG_ERROR([cannot check setpgrp when cross compiling])])])
@@ -1421,9 +1420,9 @@ AC_CACHE_CHECK([whether $1 accepts an empty string],
 	       [ac_cv_func_$1_empty_string_bug],
 [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
 [[struct stat sbuf;
-  exit ($1 ("", &sbuf) ? 1 : 0);]])],
-	    [ac_cv_func_$1_empty_string_bug=yes],
+  return $1 ("", &sbuf) == 0;]])],
 	    [ac_cv_func_$1_empty_string_bug=no],
+	    [ac_cv_func_$1_empty_string_bug=yes],
 	    [ac_cv_func_$1_empty_string_bug=yes])])
 if test $ac_cv_func_$1_empty_string_bug = yes; then
   AC_LIBOBJ([$1])
@@ -1476,7 +1475,7 @@ main()
     double value;
     value = strtod (string, &term);
     if (value != 69 || term != (string + 4))
-      exit (1);
+      return 1;
   }
 
   {
@@ -1486,9 +1485,9 @@ main()
     char *term;
     strtod (string, &term);
     if (term != string && *(term - 1) == 0)
-      exit (1);
+      return 1;
   }
-  exit (0);
+  return 0;
 }
 ]])],
 	       ac_cv_func_strtod=yes,
@@ -1535,7 +1534,7 @@ AC_CACHE_CHECK([whether strerror_r returns char *],
 	extern char *strerror_r ();],
 	[[char buf[100];
 	  char x = *strerror_r (0, buf, sizeof buf);
-	  exit (!isalpha (x));]])],
+	  return ! isalpha (x);]])],
 		    ac_cv_func_strerror_r_char_p=yes, , :)
     fi
   ])
@@ -1575,9 +1574,9 @@ AC_DEFUN([AC_FUNC_STRNLEN],
     {
       int expected = i <= S_LEN ? i : S_LEN;
       if (strnlen (S, i) != expected)
-	exit (1);
+	return 1;
     }
-  exit (0);
+  return 0;
 ]])],
 	       [ac_cv_func_strnlen_working=yes],
 	       [ac_cv_func_strnlen_working=no],
@@ -1619,9 +1618,9 @@ AC_CACHE_CHECK(whether setvbuf arguments are reversed,
 		   is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
 		char buf;
 		if (setvbuf (stdout, _IOLBF, &buf, 1) != 0)
-		  exit (1);
+		  return 1;
 		putchar ('\r');
-		exit (0); /* Non-reversed systems SEGV here.  */]])],
+		return 0; /* Non-reversed systems SEGV here.  */]])],
 	   [ac_cv_func_setvbuf_reversed=yes],
 	   [],
 	   [[: # Assume setvbuf is not reversed when cross-compiling.]])]
@@ -1646,7 +1645,7 @@ AN_FUNCTION([strcoll], [AC_FUNC_STRCOLL])
 AC_DEFUN([AC_FUNC_STRCOLL],
 [AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
 [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-  [[exit (strcoll ("abc", "def") >= 0 ||
+  [[return (strcoll ("abc", "def") >= 0 ||
 	 strcoll ("ABC", "DEF") >= 0 ||
 	 strcoll ("123", "456") >= 0)]])],
 	       ac_cv_func_strcoll_works=yes,
@@ -1674,11 +1673,11 @@ AC_DEFUN([AC_FUNC_UTIME_NULL],
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
 AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
 [[struct stat s, t;
-  exit (!(stat ("conftest.data", &s) == 0
-	  && utime ("conftest.data", 0) == 0
-	  && stat ("conftest.data", &t) == 0
-	  && t.st_mtime >= s.st_mtime
-	  && t.st_mtime - s.st_mtime < 120));]])],
+  return ! (stat ("conftest.data", &s) == 0
+	    && utime ("conftest.data", 0) == 0
+	    && stat ("conftest.data", &t) == 0
+	    && t.st_mtime >= s.st_mtime
+	    && t.st_mtime - s.st_mtime < 120);]])],
 	      ac_cv_func_utime_null=yes,
 	      ac_cv_func_utime_null=no,
 	      ac_cv_func_utime_null=no)])
@@ -1749,9 +1748,7 @@ AC_DEFUN([_AC_FUNC_FORK],
       [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
 	[
 	  /* By Ruediger Kuhlmann. */
-	  if (fork() < 0)
-	    exit (1);
-	  exit (0);
+	  return fork () < 0;
 	])],
       [ac_cv_func_fork_works=yes],
       [ac_cv_func_fork_works=no],
@@ -1837,7 +1834,7 @@ main ()
 
     while (wait(&status) != child)
       ;
-    exit(
+    return (
 	 /* Was there some problem with vforking?  */
 	 child < 0
 
@@ -1932,8 +1929,8 @@ main ()
       wait3(&i, 0, &r);
       /* Avoid "text file busy" from rm on fast HP-UX machines.  */
       sleep(2);
-      exit (r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
-	    && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
+      return (r.ru_nvcsw == 0 && r.ru_majflt == 0 && r.ru_minflt == 0
+	      && r.ru_stime.tv_sec == 0 && r.ru_stime.tv_usec == 0);
     }
 }]])],
 	       [ac_cv_func_wait3_rusage=yes],

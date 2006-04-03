@@ -139,7 +139,7 @@
 # (not necessarily size_t etc.).  Equally, instead of defining an unused
 # variable, we just use a cast to avoid warnings from the compiler.
 # Suggested by Paul Eggert.
-# 
+#
 # Now, the next issue is that C++ disallows defining types inside casts
 # and inside `sizeof()', but we would like to allow unnamed structs, for
 # use inside AC_CHECK_SIZEOF, for example.  So we create a typedef of the
@@ -280,7 +280,7 @@ main ()
   /* Exit non-zero if getgroups seems to require an array of ints.  This
      happens when gid_t is short int but getgroups modifies an array
      of ints.  */
-  exit ((n > 0 && gidset[n] != val.gval) ? 1 : 0);
+  return n > 0 && gidset[n] != val.gval;
 }]])],
 	       [ac_cv_type_getgroups=gid_t],
 	       [ac_cv_type_getgroups=int],

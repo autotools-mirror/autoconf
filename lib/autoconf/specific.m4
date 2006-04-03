@@ -280,7 +280,7 @@ main ()
       sleep (3);
       kill (getppid (), SIGINT);
       sleep (3);
-      exit (0);
+      return 0;
     }
 
   signal (SIGINT, ucatch);
@@ -289,7 +289,7 @@ main ()
   if (status == -1)
     wait (&i);
 
-  exit (status == -1);
+  return status == -1;
 }])],
 	       [ac_cv_sys_restartable_syscalls=yes],
 	       [ac_cv_sys_restartable_syscalls=no])])

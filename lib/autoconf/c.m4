@@ -278,22 +278,22 @@ static unsigned long int ulongval () { return $2; }
 [
   FILE *f = fopen ("conftest.val", "w");
   if (! f)
-    exit (1);
+    return 1;
   if (($2) < 0)
     {
       long int i = longval ();
       if (i != ($2))
-	exit (1);
+	return 1;
       fprintf (f, "%ld\n", i);
     }
   else
     {
       unsigned long int i = ulongval ();
       if (i != ($2))
-	exit (1);
+	return 1;
       fprintf (f, "%lu\n", i);
     }
-  exit (ferror (f) || fclose (f) != 0);
+  return ferror (f) || fclose (f) != 0;
 ])])
 
 
@@ -552,14 +552,6 @@ _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CC_G
 _AC_PROG_CC_C89
-# Some people use a C++ compiler to compile C.  Since we use `exit',
-# in C++ we need to declare it.  In case someone uses the same compiler
-# for both compiling C and C++ we need to have the C++ compiler decide
-# the declaration of exit, since it's the most demanding environment.
-_AC_COMPILE_IFELSE([@%:@ifndef __cplusplus
-  choke me
-@%:@endif],
-		   [_AC_PROG_CXX_EXIT_DECLARATION])
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CC
 
@@ -786,7 +778,6 @@ _AC_COMPILER_EXEEXT
 _AC_LANG_COMPILER_GNU
 GXX=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CXX_G
-_AC_PROG_CXX_EXIT_DECLARATION
 AC_LANG_POP(C++)dnl
 ])# AC_PROG_CXX
 
@@ -831,43 +822,6 @@ else
   fi
 fi[]dnl
 ])# _AC_PROG_CXX_G
-
-
-# _AC_PROG_CXX_EXIT_DECLARATION
-# -----------------------------
-# If <stdlib.h> doesn't already provide a valid prototype for exit,
-# determine the appropriate prototype and put it in confdefs.h.
-# This macro is run only when testing a C++ compiler, but it generates
-# a prototype that is also appropriate for C compilers in order to
-# support a mixed C/C++ configuration environment.
-# We don't need to worry about this for C, since we include <stdlib.h>
-# if it is available, and that method works for all C compilers.
-m4_define([_AC_PROG_CXX_EXIT_DECLARATION],
-[for ac_declaration in \
-   '' \
-   'extern "C" void std::exit (int) throw (); using std::exit;' \
-   'extern "C" void std::exit (int); using std::exit;' \
-   'extern "C" void exit (int) throw ();' \
-   'extern "C" void exit (int);' \
-   'extern "C" __declspec(dllimport) void exit (int);' \
-   'void exit (int);'
-do
-  _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$ac_declaration
-@%:@include <stdlib.h>],
-				      [exit (42);])],
-		     [],
-		     [continue])
-  _AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$ac_declaration],
-				      [exit (42);])],
-		     [break])
-done
-rm -f conftest*
-if test -n "$ac_declaration"; then
-  echo '#ifdef __cplusplus' >>confdefs.h
-  echo $ac_declaration      >>confdefs.h
-  echo '#endif'             >>confdefs.h
-fi
-])# _AC_PROG_CXX_EXIT_DECLARATION
 
 
 # ------------------------------ #
@@ -1381,7 +1335,7 @@ AC_RUN_IFELSE(
     char c[sizeof (long int)];
   } u;
   u.l = 1;
-  exit (u.c[sizeof (long int) - 1] == 1);
+  return u.c[sizeof (long int) - 1] == 1;
 ]])],
 	      [ac_cv_c_bigendian=no],
 	      [ac_cv_c_bigendian=yes],

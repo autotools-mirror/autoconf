@@ -1,3 +1,25 @@
+2006-04-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: AC_PROG_CC and AC_PROG_CXX no longer declare 'exit'.
+	* doc/autoconf.texi (Function Portability): Mention that C++
+	has trouble with 'exit'.
+	(Guidelines): Test programs shouldn't use 'exit'.
+	* lib/autoconf/c.m4 (_AC_PROG_CXX_EXIT_DECLARATION):
+	Remove; all uses removed.
+	(AC_LANG_INT_SAVE(C), AC_C_BIGENDIAN):
+	Return from 'main' instead of calling 'exit'.
+	* lib/autoconf/functions.m4 (_AC_LIBOBJ_ALLOCA, AC_FUNC_CLOSEDIR_VOID):
+	(_AC_FUNC_FNMATCH_IF, AC_FUNC_GETGROUPS):
+	(AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK, _AC_FUNC_MALLOC_IF):
+	(AC_FUNC_MEMCMP, AC_FUNC_MKTIME, AC_FUNC_MMAP, _AC_FUNC_REALLOC_IF):
+	(AC_FUNC_SETPGRP, _AC_FUNC_STAT, AC_FUNC_STRTOD, AC_FUNC_STRERROR_R):
+	(AC_FUNC_STRNLEN, AC_FUNC_SETVBUF_REVERSED, AC_FUNC_UTIME_NULL):
+	(_AC_FUNC_FORK, _AC_FUNC_VFORK, AC_FUNC_WAIT3): Likewise.
+	* lib/autoconf/headers.m4 (AC_HEADER_STDC): Likewise.
+	* lib/autoconf/specific.m4 (AC_SYS_RESTARTABLE_SYSCALLS): Likewise.
+	* lib/autoconf/types.m4 (AC_TYPE_GETGROUPS): Likewise.
+	* tests/compile.at: Likewsie.
+
 2006-04-02  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/c.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_OBJC): Call
