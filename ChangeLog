@@ -1,3 +1,8 @@
+2006-04-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT): Add `at_testdir' to pointer
+	to log, point to testsuite output tree.
+
 2006-04-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: AC_PROG_CC and AC_PROG_CXX no longer declare 'exit'.

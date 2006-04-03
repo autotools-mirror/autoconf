@@ -976,7 +976,7 @@ else
   AS_BOX([$as_me.log was created.])
 
   echo
-  echo "Please send \`$as_me.log' and all information you think might help:"
+  echo "Please send \`${at_testdir+${at_testdir}/}$as_me.log' and all information you think might help:"
   echo
   echo "   To: <AT_PACKAGE_BUGREPORT>"
   echo "   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:dnl
@@ -986,7 +986,8 @@ $at_xpass_list${at_xpass_list:+ passed unexpectedly}"
   if test $at_debug_p = false; then
     echo
     echo 'You may investigate any problem if you feel able to do so, in which'
-    echo 'case the test suite provides a good starting point.'
+    echo 'case the test suite provides a good starting point.  Its output may'
+    echo "be found below \`${at_testdir+${at_testdir}/}$as_me.dir'."
     echo
   fi
     exit 1
