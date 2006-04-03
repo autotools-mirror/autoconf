@@ -47,7 +47,7 @@ use File::Basename;
 use File::Find;
 use strict;
 
-use vars qw(@cfiles @makefiles @shfiles %printed);
+use vars qw(@cfiles @makefiles @shfiles @subdirs %printed);
 
 # The kind of the words we are looking for.
 my @kinds = qw (function header identifier program
@@ -385,6 +385,15 @@ sub scan_file ()
   # Strip a useless leading `./'.
   $File::Find::name =~ s,^\./,,;
 
+  if ($_ ne '.' and -d $_ and
+      -f "$_/configure.in"  ||
+      -f "$_/configure.ac"  ||
+      -f "$_/configure.gnu" ||
+      -f "$_/configure")
+    {
+      $File::Find::prune = 1;
+      push @subdirs, $File::Find::name;
+    }
   if (/\.[chlym](\.in)?$/)
     {
       used 'program', 'cc', $File::Find::name;
@@ -530,6 +539,7 @@ sub output ($)
   output_kind ($file, 'identifier');
   output_kind ($file, 'function');
 
+  print $file "\n";
   if (@makefiles)
     {
       # Change DIR/Makefile.in to DIR/Makefile.
@@ -538,9 +548,15 @@ sub output ($)
 	  $m =~ s/\.(?:in|am)$//;
 	  $unique_makefiles{$m}++;
 	}
-      print $file ("\nAC_CONFIG_FILES([",
+      print $file ("AC_CONFIG_FILES([",
 		   join ("\n                 ",
 			 sort keys %unique_makefiles), "])\n");
+    }
+  if (@subdirs)
+    {
+      print $file ("AC_CONFIG_SUBDIRS([",
+		   join ("\n                   ",
+			 sort @subdirs), "])\n");
     }
   print $file "AC_OUTPUT\n";
 

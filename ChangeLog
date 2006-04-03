@@ -1,5 +1,12 @@
 2006-04-03  Noah Misch  <noah@cs.caltech.edu>
 
+	* bin/autoscan.in (subdirs): New global.
+	(scan_file): Prune directories with configure{,.{ac,in,gnu}}.
+	(output): Emit AC_CONFIG_SUBDIRS as needed.
+	* tests/autoscan.at (autoscan): Remove XFAIL.
+
+2006-04-03  Noah Misch  <noah@cs.caltech.edu>
+
 	* lib/autoconf/general.m4 (AC_CACHE_SAVE): Use AC_MSG_NOTICE.
 
 2006-04-03  Eric Blake  <ebb9@byu.net>

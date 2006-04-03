@@ -20,7 +20,6 @@ AT_BANNER([Autoscan.])
 # 02110-1301, USA.
 
 AT_SETUP([autoscan])
-AT_XFAIL_IF(:)
 
 AT_DATA([Makefile.am],
 [[SUBDIRS = subpkg
