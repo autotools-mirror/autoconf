@@ -1,5 +1,7 @@
 2006-04-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* THANKS: Update.
+
 	* tests/mktests.sh: Update copyright year in the header of the
 	generated files.
 

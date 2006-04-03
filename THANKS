@@ -4,11 +4,12 @@ people:
 
 Aaron Crane                 aaronc@pobox.com
 Aaron M. Ucko               amu@alum.mit.edu
+Adam J. Richter             adam@yggdrasil.com
 Aharon Robbins              arnold@gnu.org
 Akim Demaille               akim@freefriends.org
 Akinori Musha               knu@iDaemons.org
 Alain Knaff                 Alain.Knaff@imag.fr
-Adam J. Richter             adam@yggdrasil.com
+Albert Chin-A-Young         china@thewrittenword.com
 Alec Wolman                 wolman@cs.washington.edu
 Alexandre Duret-Lutz        duret_g@epita.fr
 Alexandre Oliva             oliva@lsd.ic.unicamp.br
@@ -43,10 +44,12 @@ Chris Torek                 torek@bsdi.com
 Cort Dougan                 cort@cs.nmt.edu
 Dan Manthey                 dan_manthey@partech.com
 Daniel Carroll              dan@mesastate.edu
+Daniel Jacobowitz           drow@mvista.com
 Daniele Arena               daniele@ripe.net
 Dave Adams                  adams@hpesdwa.fc.hp.com
 Dave Love                   fx@gnu.org
 David Carter                david@carter.net
+David M. Lloyd              dmlloyd@tds.net
 David Morgan                dmorgan@symark.com
 Derek R. Price              derek.price@openavenue.com
 Didier Desseaux             didess@infonie.fr
@@ -144,6 +147,7 @@ Miles Bader                 miles@gnu.ai.mit.edu
 Mo DeJong                   mdejong@cygnus.com
 Morten Eriksen              mortene@sim.no
 Motoyuki Kasahara           m-kasahr@sra.co.jp
+Nathanael Nerode            neroden@gcc.gnu.org
 Nicolas Joly                njoly@pasteur.fr
 Nishio Futoshi              fut_nis@d3.dion.ne.jp
 Noah Elliott                elliott@hera.llnl.gov
@@ -152,6 +156,7 @@ Noah Misch                  noah@cs.caltech.edu
 Oliver Kiddle               opk@zsh.org
 Olly Betts                  olly@survex.com
 Ossama Othman               ossama@debian.org
+Paolo Bonzini               bonzini@gnu.org
 Patrick Tullmann            tullmann@cs.utah.edu
 Patrick Welche              prlw1@newn.cam.ac.uk
 Paul Berrevoets             paul@swi.com
@@ -169,6 +174,7 @@ Pontus Skoeld               pont@soua.net
 Rainer Orth                 ro@TechFak.Uni-Bielefeld.DE
 Raja R Harinath             harinath@cs.umn.edu
 Ralf Corsepius              corsepiu@faw.uni-ulm.de
+Ralf Menzel                 menzel@ls6.cs.uni-dortmund.de
 Ralf S. Engelschall         rse@engelschall.com
 Ralf Wildenhues             Ralf.Wildenhues@gmx.de
 Richard Dawe                rich@phekda.freeserve.co.uk
