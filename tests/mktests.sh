@@ -66,11 +66,11 @@ cat $src |
 # ------------
 # Macros which must not be checked at all (not by ac-macros.at, nor
 # au-macros.at).
-# The trailing new line is meant.
 #
 # - ac_cv_prog_gcc, gxx, g77
 #   Not macros, just mapping from old variable name to a new one.
-exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
+exclude_list='
+	/^ac_cv_prog_(gcc|gxx|g77)$/ {next}
 '
 
 
@@ -78,130 +78,104 @@ exclude_list='^ac_cv_prog_(gcc|gxx|g77)$
 # ---------------
 # The test `ac-macros.at' tries to run all the macros of Autoconf to check
 # for syntax problems, etc.  Not all the macros can be run without argument,
-# and some are already tested elsewhere.  EGREP_EXCLUDE must filter out
+# and some are already tested elsewhere.  AC_EXCLUDE_LIST must filter out
 # the macros we don't want to test in ac-macros.at.
-#
-# - AC_CANONICALIZE, AC_PREFIX_PROGRAM, AC_PREREQ
-#   Need an argument.
-#
-# - AC_CHECK alignof, decl, file, func, header, lib, member, prog, sizeof,
-#   host/target tool, type
-#   Performed in the semantics tests.
-#
-# - AC_CONFIG
-#   They fail when the source does not exist.
-#
-# - AC_FUNC_GETLOADAVG, AC_REPLACE_FNMATCH, AC_FUNC_FNMATCH_GNU
-#   Require a file that is not shipped with Autoconf.  But it should.
-#
-# - AC_INIT
-#   AC_INIT includes all the AC_INIT macros.  Note that there is an
-#   infinite m4 recursion if AC_INIT it used twice.
-#
-# - AC_LANG*
-#   Heavily used by other macros.
-#
-# - AC_PATH_PROGS?, AC_PATH_TOOL, AC_PATH_TARGET_TOOL, AC_F77_FUNC, AC_FC_FUNC,
-#   AC_FC_SRCEXT
-#   They produce `= val' because $1, the variable used to store the result,
-#   is empty.
-#
-# - AC_FC_FREEFORM
-#   Requires the current language to be Fortran, not C.
-#
-# - AC_TRY, AC_.*_IFELSE, AC_RUN_LOG.
-#   Used in many places.
-#
-# - _AC_
-#   Internal macros are used elsewhere.
-#
-# - AC_OUTPUT
-#   Already tested by `AT_CHECK_MACRO'.
-#
-# - AC_FD_CC
-#   Is a number.
-#
-# - AC_PROG_CC, AC_C_(CONST|VOLATILE), AC_PATH_XTRA
-#   Checked in semantics.
-#
-# - AC_CYGWIN, AC_CYGWIN32, AC_EMXOS2, AC_MING32, AC_EXEEXT, AC_OBJEXT
-#   AU defined to nothing.
-#
-# - AC_PATH_XTRA
-#   Checked in semantics.
-#
-# - AC_SYS_RESTARTABLE_SYSCALLS, AC_FUNC_WAIT3
-#   Obsolete, checked in semantics.
-#
-# - AC_FOREACH
-#   Obsolete, but needs to be AC_DEFUN'ed.
-#
-ac_exclude_list='^AC_ARG_VAR$
-^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$
-^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$
-^AC_CONFIG
-^AC_(F77|FC)_FUNC$
-^AC_FC_(FUNC|FREEFORM|SRCEXT)$
-^AC_FD_CC$
-^AC_FUNC_(GETLOADAVG|FNMATCH_GNU|WAIT3)$
-^AC_INIT
-^AC_LANG
-^AC_LINKER_OPTION$
-^AC_LINK_FILES$
-^AC_LIST_MEMBER_OF$
-^AC_OUTPUT$
-^AC_PATH_((TARGET_)?TOOL|PROG)S?$
-^AC_REPLACE_(FNMATCH|FUNCS)$
-^AC_SEARCH_LIBS$
-^(AC_TRY.*|AC_RUN_LOG)$
-^AC_.*_IFELSE$
-^(AC_(PROG_CC|C_CONST|C_VOLATILE))$
-^AC_(CYGWIN|CYGWIN32|EMXOS2|MING32|EXEEXT|OBJEXT)$
-^AC_PATH_XTRA$
-^AC_SYS_RESTARTABLE_SYSCALLS$
-^AC_FOREACH$
-_AC_'
+ac_exclude_list='
+	# Internal macros are used elsewhere.
+	/_AC_/ {next}
+
+	# Dunno why these are ignored.
+	/^AC_ARG_VAR$/ {next}
+	/^AC_LINKER_OPTION$/ {next}
+	/^AC_LINK_FILES$/ {next}
+	/^AC_LIST_MEMBER_OF$/ {next}
+	/^AC_REPLACE_FUNCS$/ {next}
+	/^AC_SEARCH_LIBS$/ {next}
+
+	# Used in many places.
+	/^AC_.*_IFELSE$/ {next}
+	/^AC_LANG/ {next}
+	/^AC_RUN_LOG$/ {next}
+	/^AC_TRY/ {next}
+
+	# Need an argument.
+	/^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$/ {next}
+
+	# Performed in the semantics tests.
+	/^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$/ {next}
+
+	# Fail when the source does not exist.
+	/^AC_CONFIG/ {next}
+
+	# AU defined to nothing.
+	/^AC_(CYGWIN|CYGWIN32|EMXOS2|MING32|EXEEXT|OBJEXT)$/ {next}
+
+	# Produce "= val" because $1, the variable used to store the result,
+	# is empty.
+	/^AC_(F77|FC)_FUNC$/ {next}
+	/^AC_FC_SRCEXT$/ {next}
+	/^AC_PATH_((TARGET_)?TOOL|PROG)S?$/ {next}
+
+	# Requires the current language to be Fortran, not C.
+	/^AC_FC_FREEFORM$/ {next}
+
+	# Is a number.
+	/^AC_FD_CC$/ {next}
+
+	# Obsolete, but needs to be AC_DEFUNed.
+	/^AC_FOREACH$/ {next}
+
+	# Require a file that is not shipped with Autoconf.  But it should.
+	/^AC_FUNC_(GETLOADAVG|FNMATCH_GNU)$/ {next}
+	/^AC_REPLACE_FNMATCH$/ {next}
+
+	# Obsolete, checked in semantics.
+	/^AC_FUNC_WAIT3$/ {next}
+	/^AC_SYS_RESTARTABLE_SYSCALLS$/ {next}
+
+	# AC_INIT includes all the AC_INIT macros.
+	# There is an infinite m4 recursion if AC_INIT is used twice.
+	/^AC_INIT/ {next}
+
+	# Checked in semantics.
+	/^AC_(PROG_CC|C_CONST|C_VOLATILE)$/ {next}
+	/^AC_PATH_XTRA$/ {next}
+
+	# Already tested by AT_CHECK_MACRO.
+	/^AC_OUTPUT$/ {next}
+'
 
 
-# ac_exclude_egrep
-# ----------------
-# Build a single extended regular expression out of filter_macros_list.
-ac_exclude_egrep=$exclude_list$ac_exclude_list
+# ac_exclude_script
+# -----------------
+# Build a single awk script out of the above.
+ac_exclude_script="$exclude_list $ac_exclude_list {print}"
 
 
 # au_exclude_list
 # ---------------
-# AC_LANG_SAVE
-#    needs user interaction to be removed.
-# AC_LANG_RESTORE
-#    cannot be used alone.
-# AC_LINK_FILES, AC_PREREQ
-#    need arguments and are tested elsewhere.
-# AC_INIT and AC_OUTPUT
-#    are already in `configure.ac'.
-# AC_C_CROSS and AC_PROG_CC_STDC
-#    are empty.
-# AC_CYGWIN, AC_MINGW32, AC_EMXOS2
-#    are using AC_REQUIRE.
-au_exclude_list='^AC_LANG_(SAVE|RESTORE)$
-^AC_LINK_FILES|AC_PREREQ$
-^AC_(INIT|OUTPUT)$
-^AC_C_CROSS|AC_PROG_CC_STDC$
-^AC_(CYGWIN|MINGW32|EMXOS2)$'
+au_exclude_list='
+	# Empty.
+	/^AC_C_CROSS|AC_PROG_CC_STDC$/ {next}
 
+	# Use AC_REQUIRE.
+	/^AC_(CYGWIN|MINGW32|EMXOS2)$/ {next}
 
-# au_exclude_egrep
-# ----------------
-# Build a single extended regular expression out of filter_macros_list.
-au_exclude_egrep=$exclude_list$au_exclude_list
+	# Already in configure.ac.
+	/^AC_(INIT|OUTPUT)$/ {next}
 
+	# AC_LANG_SAVE needs user interaction to be removed.
+	# AC_LANG_RESTORE cannot be used alone.
+	/^AC_LANG_(SAVE|RESTORE)$/ {next}
 
-# egrep
-# -----
-if echo a | grep -E '(a|b)' >/dev/null 2>&1
-then egrep='grep -E'
-else egrep='egrep'
-fi
+	# Need arguments and are tested elsewhere.
+	/^AC_LINK_FILES|AC_PREREQ$/ {next}
+'
+
+# au_exclude_script
+# -----------------
+# Build a single awk script out of the above.
+au_exclude_script="$exclude_list $au_exclude_list {print}"
 
 
 ## ------------------------- ##
@@ -218,15 +192,14 @@ do
   	   -e 's/^AC_DEFUN_ONCE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' |
     sort |
     uniq |
-    # Watch out we are `set -e': don't fail.
-    ($egrep -v "$ac_exclude_egrep" || true) >acdefuns
+    awk "$ac_exclude_script" >acdefuns
 
   # Get the list of macros which are defined in Autoupdate level.
   cat $file |
     sed -n 's/^AU_DEFUN(\[*\([a-zA-Z][a-zA-Z0-9_]*\).*$/\1/p' |
     sort |
     uniq |
-    ($egrep -v "$au_exclude_egrep" || true) > audefuns
+    awk "$au_exclude_script" >audefuns
 
   # Filter out required macros.
   {

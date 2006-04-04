@@ -1,3 +1,12 @@
+2006-04-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/mktests.sh: Use awk rather than grep -E or egrep, to avoid
+	portability problems with regular expressions containing newlines.
+	(exclude_list, ac_exclude_list, au_exclude_list, ac_exclude_script):
+	Switch from grep to awk syntax.
+	(ac_exclude_script): Renamed from ac_exclude_egrep.
+	(au_exclude_script): Renamed from au_exclude_egrep.
+
 2006-04-04  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_HELP): Only `configure.in' evidences
