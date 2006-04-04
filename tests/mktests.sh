@@ -36,7 +36,7 @@ trap 'echo "'"$as_me"': failed.  To proceed run make check." >&2
       exit 1' \
      0 1 2 15
 
-# If ever something goes wrong, fail, so that the trap be launched.
+# If ever something goes wrong, fail, so that the trap is launched.
 set -e
 
 # We need arguments.
@@ -56,20 +56,19 @@ LC_ALL=C export LC_ALL
 # Get the list of macros that are required: there is little interest
 # in testing them since they will be run but the guy who requires
 # them.
-cat $src |
-  sed -n 's/dnl.*//;s/.*AC_REQUIRE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' |
-  sort |
-  uniq >requires
+sed -n 's/dnl.*//;s/.*AC_REQUIRE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $src |
+  sort -u >requires
 
 
 # exclude_list
 # ------------
 # Macros which must not be checked at all (not by ac-macros.at, nor
 # au-macros.at).
-#
-# - ac_cv_prog_gcc, gxx, g77
-#   Not macros, just mapping from old variable name to a new one.
 exclude_list='
+	# Not a macro name at all.
+	/^$/ {next}
+
+	# Not macros, just mapping from old variable name to a new one.
 	/^ac_cv_prog_(gcc|gxx|g77)$/ {next}
 '
 
@@ -133,6 +132,9 @@ ac_exclude_list='
 	/^AC_FUNC_WAIT3$/ {next}
 	/^AC_SYS_RESTARTABLE_SYSCALLS$/ {next}
 
+	# Not intended to be invoked at the top level.
+	/^AC_INCLUDES_DEFAULT$/ {next}
+
 	# AC_INIT includes all the AC_INIT macros.
 	# There is an infinite m4 recursion if AC_INIT is used twice.
 	/^AC_INIT/ {next}
@@ -187,19 +189,15 @@ do
   base=`echo "$file" | sed 's,.*[\\/],,;s/\..*//'`
   # Get the list of macros which are defined in Autoconf level.
   # Get rid of the macros we are not interested in.
-  cat $file |
-    sed -n -e 's/^AC_DEFUN(\[*\([a-zA-Z0-9_]*\).*$/\1/p' \
-  	   -e 's/^AC_DEFUN_ONCE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' |
-    sort |
-    uniq |
-    awk "$ac_exclude_script" >acdefuns
+  sed -n -e 's/^AC_DEFUN(\[*\([a-zA-Z0-9_]*\).*$/\1/p' \
+  	 -e 's/^AC_DEFUN_ONCE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $file |
+    awk "$ac_exclude_script" |
+    sort -u >acdefuns
 
   # Get the list of macros which are defined in Autoupdate level.
-  cat $file |
-    sed -n 's/^AU_DEFUN(\[*\([a-zA-Z][a-zA-Z0-9_]*\).*$/\1/p' |
-    sort |
-    uniq |
-    awk "$au_exclude_script" >audefuns
+  sed -n 's/^AU_DEFUN(\[*\([a-zA-Z][a-zA-Z0-9_]*\).*$/\1/p' $file |
+    awk "$au_exclude_script" |
+    sort -u >audefuns
 
   # Filter out required macros.
   {
@@ -217,18 +215,10 @@ do
 MK_EOF
 
     echo "# Modern macros."
-    for macro in `cat acdefuns`; do
-      if grep "$macro" requires >/dev/null 2>&1; then :; else
-  	echo "AT_CHECK_MACRO([$macro])"
-      fi
-    done
+    comm -23 acdefuns requires | sed 's/.*/AT_CHECK_MACRO([&])/'
     echo
     echo "# Obsolete macros."
-    for macro in `cat audefuns`; do
-      if grep "$macro" requires >/dev/null 2>&1; then :; else
-  	echo "AT_CHECK_AU_MACRO([$macro])"
-      fi
-    done
+    comm -23 audefuns requires | sed 's/.*/AT_CHECK_AU_MACRO([&])/'
   } >ac$base.tat
 
   # In one atomic step so that if something above fails, the trap

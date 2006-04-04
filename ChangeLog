@@ -1,6 +1,14 @@
 2006-04-04  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* tests/mktests.sh: Use awk rather than grep -E or egrep, to avoid
+	* tests/mktests.sh: Don't use 'cat'; just read the files directly.
+	Prefer 'sort -u' to 'sort | uniq'.  Filter data before sorting it.
+	Use 'comm' rather than N instances of grep; this also fixes a bug
+	whereby substrings were incorrectly matched, causing us to not
+	generate tests for AC_F77_NAME_MANGLING and AC_FUNC_LSTAT.
+	(exclude_list): Exclude empty macros.
+	(ac_exclude_list): Exclude AC_INCLUDES_DEFAULT.
+
+	Use awk rather than grep -E or egrep, to avoid
 	portability problems with regular expressions containing newlines.
 	(exclude_list, ac_exclude_list, au_exclude_list, ac_exclude_script):
 	Switch from grep to awk syntax.
