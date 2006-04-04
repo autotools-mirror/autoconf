@@ -1068,8 +1068,7 @@ if test "$ac_init_help" = "recursive"; then
     elif test -f $ac_srcdir/configure; then
       echo &&
       $SHELL $ac_srcdir/configure  --help=recursive
-    elif test -f $ac_srcdir/configure.ac ||
-	   test -f $ac_srcdir/configure.in; then
+    elif test -f $ac_srcdir/configure.in; then
       echo &&
       $ac_configure --help
     else

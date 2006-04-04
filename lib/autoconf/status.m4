@@ -935,8 +935,7 @@ if test "$no_recursion" != yes; then
       ac_sub_configure="$SHELL '$ac_srcdir/configure.gnu'"
     elif test -f $ac_srcdir/configure; then
       ac_sub_configure="$SHELL '$ac_srcdir/configure'"
-    elif test -f $ac_srcdir/configure.ac ||
-	 test -f $ac_srcdir/configure.in; then
+    elif test -f $ac_srcdir/configure.in; then
       ac_sub_configure=$ac_configure
     else
       AC_MSG_WARN([no configuration information is in $ac_dir])

@@ -1,3 +1,12 @@
+2006-04-04  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autoconf/general.m4 (_AC_INIT_HELP): Only `configure.in' evidences
+	a subdirectory subject to Cygnus `configure'.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Likewise.
+
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): Omit the bug
+	report request when we have no AC_PACKAGE_BUGREPORT.
+
 2006-04-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* THANKS: Update.

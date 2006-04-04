@@ -135,12 +135,9 @@ case $ac_header_compiler:$ac_header_preproc:$ac_[]_AC_LANG_ABBREV[]_preproc_warn
     AC_MSG_WARN([$1:     section "Present But Cannot Be Compiled"])
     AC_MSG_WARN([$1: proceeding with the preprocessor's result])
     AC_MSG_WARN([$1: in the future, the compiler will take precedence])
-    (
-      AS_BOX([Report this to ]m4_ifset([AC_PACKAGE_BUGREPORT],
-				       [AC_PACKAGE_BUGREPORT],
-				       [the AC_PACKAGE_NAME lists. ]))
-    ) |
-      sed "s/^/$as_me: WARNING:     /" >&2
+    m4_ifset([AC_PACKAGE_BUGREPORT],
+    [( AS_BOX([Report this to ]AC_PACKAGE_BUGREPORT)
+     ) | sed "s/^/$as_me: WARNING:     /" >&2])
     ;;
 esac
 AC_CACHE_CHECK([for $1], ac_Header,
