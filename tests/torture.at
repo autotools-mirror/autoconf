@@ -338,7 +338,7 @@ AT_DATA([config.hin],
 [[#define foo   0
 #  define bar bar
 #  define baz   "Archimedes was sinking in his baz"
-#  define fubar	 	 	 	tutu
+#  define fubar				tutu
 #define a B
 #define aa BB
 #define aaa BBB

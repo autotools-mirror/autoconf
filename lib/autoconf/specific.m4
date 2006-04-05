@@ -132,10 +132,10 @@ m4_define([_AC_SYS_LARGEFILE_MACRO_VALUE],
 [while :; do
   $3=no
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$5], [$6])],
-  		    [break])
+		    [break])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@define $1 $2
 $5], [$6])],
-  		    [$3=$2; break])
+		    [$3=$2; break])
   break
 done])
 if test "$$3" != no; then
@@ -162,12 +162,12 @@ if test "$enable_largefile" != no; then
      if test "$GCC" != yes; then
        ac_save_CC=$CC
        while :; do
-     	 # IRIX 6.2 and later do not support large files by default,
-     	 # so use the C compiler's -n32 option if that helps.
+	 # IRIX 6.2 and later do not support large files by default,
+	 # so use the C compiler's -n32 option if that helps.
 	 AC_LANG_CONFTEST([AC_LANG_PROGRAM([_AC_SYS_LARGEFILE_TEST_INCLUDES])])
-     	 AC_COMPILE_IFELSE([], [break])
-     	 CC="$CC -n32"
-     	 AC_COMPILE_IFELSE([], [ac_cv_sys_largefile_CC=' -n32'; break])
+	 AC_COMPILE_IFELSE([], [break])
+	 CC="$CC -n32"
+	 AC_COMPILE_IFELSE([], [ac_cv_sys_largefile_CC=' -n32'; break])
 	 break
        done
        CC=$ac_save_CC

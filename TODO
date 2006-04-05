@@ -78,11 +78,11 @@ Harlan:
    I'm starting to use "modules" at more places to handle software
    installation, and it would be helpful to set general things like:
 
-   	prefix=/opt/pkg/@PACKAGE@/@VERSION@
+	prefix=/opt/pkg/@PACKAGE@/@VERSION@
 
    once at a global level, and then, for example, have things like:
 
-   	--with-etcdir=$prefix/etc
+	--with-etcdir=$prefix/etc
 
    stuffed "above" the various versions of SSH so I wouldn't have to hunt for
    these things every time it was time to recompile a new version of a
@@ -188,9 +188,9 @@ Hi Robert,
 > documentation, the entry for AC_PATH_XTRA, in particular.
 
 > The documentation says that AC_PATH_XTRA
-> 	... adds the C compiler flags that X needs to output variable
-> 	`X_CFLAGS', and the X linker flags to `X_LIBS'.  If X is not
-> 	available, adds `-DX_DISPLAY_MISSING' to `X_CFLAGS'.
+>	... adds the C compiler flags that X needs to output variable
+>	`X_CFLAGS', and the X linker flags to `X_LIBS'.  If X is not
+>	available, adds `-DX_DISPLAY_MISSING' to `X_CFLAGS'.
 
 > It doesn't seem to add -DX_DISPLAY_MISSING to X_CFLAGS.  X_DISPLAY_MISSING
 > ends up defined in config.h, instead.

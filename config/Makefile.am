@@ -25,7 +25,7 @@ MAINTAINERCLEANFILES = $(GENERIC_TOOLS)
 SPECIFIC_MACROS =				\
 m4.m4
 
-GENERIC_TOOLS = 				\
+GENERIC_TOOLS =					\
 config.guess					\
 config.sub					\
 emacs-comp					\

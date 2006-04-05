@@ -89,33 +89,33 @@
 # The most obvious way to check for a TYPE is just to compile a variable
 # definition:
 #
-# 	  TYPE my_var;
+#	  TYPE my_var;
 #
 # Unfortunately this does not work for const qualified types in C++,
 # where you need an initializer.  So you think of
 #
-# 	  TYPE my_var = (TYPE) 0;
+#	  TYPE my_var = (TYPE) 0;
 #
 # Unfortunately, again, this is not valid for some C++ classes.
 #
 # Then you look for another scheme.  For instance you think of declaring
 # a function which uses a parameter of type TYPE:
 #
-# 	  int foo (TYPE param);
+#	  int foo (TYPE param);
 #
 # but of course you soon realize this does not make it with K&R
 # compilers.  And by no ways you want to
 #
-# 	  int foo (param)
-# 	    TYPE param
-# 	  { ; }
+#	  int foo (param)
+#	    TYPE param
+#	  { ; }
 #
 # since this time it's C++ who is not happy.
 #
 # Don't even think of the return type of a function, since K&R cries
 # there too.  So you start thinking of declaring a *pointer* to this TYPE:
 #
-# 	  TYPE *p;
+#	  TYPE *p;
 #
 # but you know fairly well that this is legal in C for aggregates which
 # are unknown (TYPE = struct does-not-exist).
@@ -123,7 +123,7 @@
 # Then you think of using sizeof to make sure the TYPE is really
 # defined:
 #
-# 	  sizeof (TYPE);
+#	  sizeof (TYPE);
 #
 # But this succeeds if TYPE is a variable: you get the size of the
 # variable's type!!!
@@ -133,7 +133,7 @@
 #
 # Also note that we use
 #
-# 	  if (sizeof (TYPE))
+#	  if (sizeof (TYPE))
 #
 # to `read' sizeof (to avoid warnings), while not depending on its type
 # (not necessarily size_t etc.).  Equally, instead of defining an unused

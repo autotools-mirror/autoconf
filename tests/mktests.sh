@@ -190,7 +190,7 @@ do
   # Get the list of macros which are defined in Autoconf level.
   # Get rid of the macros we are not interested in.
   sed -n -e 's/^AC_DEFUN(\[*\([a-zA-Z0-9_]*\).*$/\1/p' \
-  	 -e 's/^AC_DEFUN_ONCE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $file |
+	 -e 's/^AC_DEFUN_ONCE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $file |
     awk "$ac_exclude_script" |
     sort -u >acdefuns
 

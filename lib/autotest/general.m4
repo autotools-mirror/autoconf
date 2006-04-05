@@ -390,16 +390,16 @@ dnl Process *=* last to allow for user specified --option=* type arguments.
 m4_divert_push([PARSE_ARGS_END])dnl
 
     *=*)
-  	at_envvar=`expr "x$at_option" : 'x\([[^=]]*\)='`
-  	# Reject names that are not valid shell variable names.
-  	expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
-  	  AS_ERROR([invalid variable name: $at_envvar])
-  	at_value=`echo "$at_optarg" | sed "s/'/'\\\\\\\\''/g"`
-  	eval "$at_envvar='$at_value'"
-  	export $at_envvar
+	at_envvar=`expr "x$at_option" : 'x\([[^=]]*\)='`
+	# Reject names that are not valid shell variable names.
+	expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
+	  AS_ERROR([invalid variable name: $at_envvar])
+	at_value=`echo "$at_optarg" | sed "s/'/'\\\\\\\\''/g"`
+	eval "$at_envvar='$at_value'"
+	export $at_envvar
 	# Propagate to debug scripts.
-  	at_debug_args="$at_debug_args $at_option"
-  	;;
+	at_debug_args="$at_debug_args $at_option"
+	;;
 
      *) echo "$as_me: invalid option: $at_option" >&2
 	echo "Try \`$[0] --help' for more information." >&2
@@ -745,7 +745,7 @@ m4_divert_push([TESTS_END])[]dnl
 	run. This means that test suite is improperly designed.  Please
 	report this failure to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
-    	echo "$at_setup_line" >"$at_check_line_file"
+	echo "$at_setup_line" >"$at_check_line_file"
       fi
       at_group_count=`expr 1 + $at_group_count`
       $at_verbose $ECHO_N "$at_group. $at_setup_line: $ECHO_C"

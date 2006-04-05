@@ -1,5 +1,11 @@
 2006-04-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* TODO, config/Makefile.am, lib/freeze.mk, lib/autoconf/c.m4,
+	lib/autoconf/specific.m4, lib/autoconf/status.m4,
+	lib/autoconf/types.m4, lib/autotest/general.m4,
+	tests/mktests.sh, tests/torture.at: White space cleanup:
+	remove some SPACE before TAB, or add quoting ('' or @&t@).
+
 	* NEWS, TODO, bin/autoreconf.in: `filesystem' -> `file system'.
 
 	* doc/autoconf.texi (Shell Substitutions): Document `^' vs. `|'.

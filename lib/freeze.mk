@@ -70,7 +70,7 @@ m4sh_m4f_dependencies =				\
 	$(m4sugar_m4f_dependencies)		\
 	$(src_libdir)/m4sugar/m4sh.m4
 
-autotest_m4f_dependencies = 			\
+autotest_m4f_dependencies =			\
 	$(m4sh_m4f_dependencies)		\
 	$(src_libdir)/autotest/autotest.m4	\
 	$(src_libdir)/autotest/general.m4
