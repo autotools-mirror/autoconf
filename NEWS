@@ -678,7 +678,7 @@ config.guess, config.sub.
 
 - When recursing into subdirectories, try for configure.gnu before
   configure to adapt for packages not using autoconf on case-insensitive
-  filesystems.
+  file systems.
 
 - Diagnostics
   More errors are now caught (circular AC_REQUIRE dependencies,

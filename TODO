@@ -527,7 +527,7 @@ Timezone calculations checks.
 
 ------------------------------------------------------------------------------
 
-Support different default filesystem layouts, e.g. SVR4, Linux.
+Support different default file system layouts, e.g. SVR4, Linux.
 Of course, this can be done locally with config.site.
 
 ------------------------------------------------------------------------------

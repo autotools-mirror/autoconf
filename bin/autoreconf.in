@@ -413,7 +413,7 @@ sub autoreconf_current_directory ()
     }
   else
     {
-      # Some filesystems have sub-second time stamps, and if so we may
+      # Some file systems have sub-second time stamps, and if so we may
       # run into trouble later, after we rerun autoconf and set the
       # time stamps of input files to be no greater than aclocal.m4,
       # because the time-stamp-setting operation (utime) has a

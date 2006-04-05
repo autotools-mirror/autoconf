@@ -1,5 +1,7 @@
 2006-04-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* NEWS, TODO, bin/autoreconf.in: `filesystem' -> `file system'.
+
 	* doc/autoconf.texi (Shell Substitutions): Document `^' vs. `|'.
 
 2006-04-05  Eric Blake  <ebb9@byu.net>
