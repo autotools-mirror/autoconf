@@ -666,8 +666,7 @@ m4_defun([AS_BASENAME_EXPR],
 [AS_REQUIRE([_AS_EXPR_PREPARE])dnl
 $as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
 	 X[]$1 : 'X\(//\)$' \| \
-	 X[]$1 : 'X\(/\)' \| \
-	 .     : '\(.\)'])
+	 X[]$1 : 'X\(/\)' \| .])
 
 m4_defun([AS_BASENAME_SED],
 [echo X/[]$1 |
@@ -720,8 +719,7 @@ m4_defun([AS_DIRNAME_EXPR],
 $as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
 	 X[]$1 : 'X\(//\)[[^/]]' \| \
 	 X[]$1 : 'X\(//\)$' \| \
-	 X[]$1 : 'X\(/\)' \| \
-	 .     : '\(.\)'])
+	 X[]$1 : 'X\(/\)' \| .])
 
 m4_defun([AS_DIRNAME_SED],
 [echo X[]$1 |

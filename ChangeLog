@@ -1,3 +1,8 @@
+2006-04-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (AS_BASENAME_EXPR, AS_DIRNAME_EXPR):
+	Use simplified args that Eric Blake originally suggested.
+
 2006-04-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/mktests.sh: Don't use 'cat'; just read the files directly.
