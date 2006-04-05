@@ -485,6 +485,7 @@ Manual Configuration
 
 Site Configuration
 
+* Help Formatting::             Customizing @samp{configure --help}
 * External Software::           Working with other optional software
 * Package Options::             Selecting optional features
 * Pretty Help Strings::         Formatting help string
@@ -14088,6 +14089,7 @@ under modified names, and set default values for @command{configure}
 options.
 
 @menu
+* Help Formatting::             Customizing @samp{configure --help}
 * External Software::           Working with other optional software
 * Package Options::             Selecting optional features
 * Pretty Help Strings::         Formatting help string
@@ -14095,6 +14097,41 @@ options.
 * Transforming Names::          Changing program names when installing
 * Site Defaults::               Giving @command{configure} local defaults
 @end menu
+
+@node Help Formatting
+@section Controlling Help Output
+
+Users will consult @samp{configure --help} to learn of configuration
+decisions specific to your package.  By default, @command{configure}
+breaks this output into sections for each type of option; within each
+section, help strings appear in the order @file{configure.ac} defines
+them:
+
+@example
+Optional Features:
+  @dots{}
+  --enable-bar            include bar
+
+Optional Packages:
+  @dots{}
+  --with-foo              use foo
+@end example
+
+@defmac AC_PRESERVE_HELP_ORDER
+@acindex{PRESERVE_HELP_ORDER}
+
+Request an alternate @option{--help} format, in which options of all
+types appear together, in the order defined.  Call this macro before any
+@code{AC_ARG_ENABLE} or @code{AC_ARG_WITH}.
+
+@example
+Optional Features and Packages:
+  @dots{}
+  --enable-bar            include bar
+  --with-foo              use foo
+@end example
+
+@end defmac
 
 @node External Software
 @section Working With External Software

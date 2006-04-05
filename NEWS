@@ -39,6 +39,11 @@
   Now checks for X11/Xlib.h and XrmInitialize (X proper) rather than
   X11/Intrinsic.h and XtMalloc (Xt).
 
+** AC_PRESERVE_HELP_ORDER
+  New macro that causes `configure' to display help strings for AC_ARG_ENABLE
+  and AC_ARG_WITH arguments in one region, in the order defined.  The default
+  behavior is to group options of each classes separately.
+
 ** AC_PROG_CC, AC_PROG_CXX
   No longer automatically arrange to declare the 'exit' function of C,
   when a C++ compiler is used.  Standard Autoconf macros no longer use

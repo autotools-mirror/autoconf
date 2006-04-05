@@ -1,3 +1,11 @@
+2006-04-05  Howard Chu  <hyc@highlandsun.com>  (trivial change)
+	    Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autoconf/general.m4 (AC_PRESERVE_HELP_ORDER): New macro.
+	(AC_ARG_ENABLE, AC_ARG_WITH): Adjust.
+	* doc/autoconf.texi (Help Formatting): New node.
+	* NEWS: Announce AC_PRESERVE_HELP_ORDER.
+
 2006-04-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* TODO, config/Makefile.am, lib/freeze.mk, lib/autoconf/c.m4,

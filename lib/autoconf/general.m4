@@ -1342,6 +1342,20 @@ AC_LANG_PUSH(C)
 ## Selecting optional features, working with optional software.  ##
 ## ------------------------------------------------------------- ##
 
+# AC_PRESERVE_HELP_ORDER
+# ----------------------
+# Emit help strings in the order given, rather than grouping all --enable-FOO
+# and all --with-BAR.
+AC_DEFUN([AC_PRESERVE_HELP_ORDER],
+[m4_define([_AC_PRESERVE_HELP_ORDER], 1)
+m4_divert_once([HELP_ENABLE], [[
+Optional Features and Packages:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
+m4_define([_m4_divert(HELP_ENABLE)],    _m4_divert(HELP_WITH))
+])# AC_PRESERVE_HELP_ORDER
 
 # _AC_ENABLE_IF(OPTION, FEATURE, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # -------------------------------------------------------------------
@@ -1360,10 +1374,11 @@ m4_define([_AC_ENABLE_IF_ACTION],
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------------------
 AC_DEFUN([AC_ARG_ENABLE],
+[m4_ifndef([_AC_PRESERVE_HELP_ORDER],
 [m4_divert_once([HELP_ENABLE], [[
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
-  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])dnl
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])])dnl
 m4_divert_once([HELP_ENABLE], [$2])dnl
 _AC_ENABLE_IF([enable], [$1], [$3], [$4])dnl
 ])# AC_ARG_ENABLE
@@ -1376,10 +1391,11 @@ AU_DEFUN([AC_ENABLE],
 # AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
 # --------------------------------------------------------------------
 AC_DEFUN([AC_ARG_WITH],
+[m4_ifndef([_AC_PRESERVE_HELP_ORDER],
 [m4_divert_once([HELP_WITH], [[
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)]])])
 m4_divert_once([HELP_WITH], [$2])dnl
 _AC_ENABLE_IF([with], [$1], [$3], [$4])dnl
 ])# AC_ARG_WITH
