@@ -1,3 +1,12 @@
+2006-04-05  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autoconf/status.m4 (_AC_CONFIG_FOOS): Do not append normalized
+	TAGS to ac_config_<foo>s.
+	(AC_CONFIG_FILES, AC_CONFIG_HEADERS, AC_CONFIG_LINKS): Do so here.
+	(AC_CONFIG_COMMANDS): Append NAME to ac_config_commands without
+	normalizing it, consistent it with previous releases.
+	* tests/torture.at (Macro calls in AC_CONFIG_COMMANDS tags): New test.
+
 2006-04-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (AS_BASENAME_EXPR, AS_DIRNAME_EXPR):

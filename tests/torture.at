@@ -204,6 +204,25 @@ AT_CLEANUP
 
 
 
+## ---------------------------------------- ##
+## Macro calls in AC_CONFIG_COMMANDS tags.  ##
+## ---------------------------------------- ##
+
+AT_SETUP([Macro calls in AC_CONFIG_COMMANDS tags])
+
+AT_DATA_M4SUGAR([configure.ac],
+[[AC_INIT
+AC_CONFIG_COMMANDS([m4_if(1,1,mytag)])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
+
 ## ------------------- ##
 ## Missing templates.  ##
 ## ------------------- ##
