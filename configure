@@ -129,8 +129,7 @@ fi
 as_me=`$as_basename "$0" ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
 	 X"$0" : 'X\(//\)$' \| \
-	 X"$0" : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
+	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
 echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
 	    s//\1/
@@ -1074,8 +1073,7 @@ if test -z "$srcdir"; then
 $as_expr X"$0" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$0" : 'X\(//\)[^/]' \| \
 	 X"$0" : 'X\(//\)$' \| \
-	 X"$0" : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
+	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
 echo X"$0" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
@@ -1269,8 +1267,7 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
     elif test -f $ac_srcdir/configure; then
       echo &&
       $SHELL $ac_srcdir/configure  --help=recursive
-    elif test -f $ac_srcdir/configure.ac ||
-	   test -f $ac_srcdir/configure.in; then
+    elif test -f $ac_srcdir/configure.in; then
       echo &&
       $ac_configure --help
     else
@@ -1661,8 +1658,8 @@ ac_config_guess="$SHELL $ac_aux_dir/config.guess"
 ac_config_sub="$SHELL $ac_aux_dir/config.sub"
 ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 
-ac_config_files="$ac_config_files config/Makefile"
 
+ac_config_files="$ac_config_files config/Makefile"
 
 am__api_version="1.9"
 # Find a good install program.  We prefer a C program (faster),
@@ -2153,11 +2150,11 @@ echo "${ECHO_T}$ac_cv_sh_n_works" >&6; }
 
 
 # Initialize the test suite.
+
 ac_config_commands="$ac_config_commands tests/atconfig"
 
 
 ac_config_files="$ac_config_files tests/Makefile tests/atlocal"
-
 # Extract the first word of "expr", so it can be a program name with args.
 set dummy expr; ac_word=$2
 { echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -2280,8 +2277,8 @@ fi
 ## Man pages.  ##
 ## ----------- ##
 
-ac_config_files="$ac_config_files man/Makefile"
 
+ac_config_files="$ac_config_files man/Makefile"
 
 HELP2MAN=${HELP2MAN-"${am_missing_run}help2man"}
 
@@ -2350,8 +2347,8 @@ echo "$as_me: error: Perl 5.005_03 or better is required" >&2;}
 ## Emacs.  ##
 ## ------- ##
 
-ac_config_files="$ac_config_files lib/emacs/Makefile"
 
+ac_config_files="$ac_config_files lib/emacs/Makefile"
 TEST_EMACS=$EMACS
 test x"$TEST_EMACS" = xt && TEST_EMACS=
 for ac_prog in emacs xemacs
@@ -2788,8 +2785,8 @@ echo "${ECHO_T}$ac_cv_path_SED" >&6; }
 ## Conclusion.  ##
 ## ------------ ##
 
-ac_config_files="$ac_config_files Makefile doc/Makefile lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile lib/m4sugar/Makefile lib/autoconf/Makefile lib/autotest/Makefile bin/Makefile"
 
+ac_config_files="$ac_config_files Makefile doc/Makefile lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile lib/m4sugar/Makefile lib/autoconf/Makefile lib/autotest/Makefile bin/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3043,8 +3040,7 @@ fi
 as_me=`$as_basename "$0" ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
 	 X"$0" : 'X\(//\)$' \| \
-	 X"$0" : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
+	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
 echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
 	    s//\1/
@@ -3598,8 +3594,7 @@ echo "$as_me: creating $ac_file" >&6;}
 $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$ac_file" : 'X\(//\)[^/]' \| \
 	 X"$ac_file" : 'X\(//\)$' \| \
-	 X"$ac_file" : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
+	 X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
 echo X"$ac_file" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
@@ -3629,8 +3624,7 @@ echo X"$ac_file" |
 $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$as_dir" : 'X\(//\)[^/]' \| \
 	 X"$as_dir" : 'X\(//\)$' \| \
-	 X"$as_dir" : 'X\(/\)' \| \
-	 .     : '\(.\)' 2>/dev/null ||
+	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
 echo X"$as_dir" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
