@@ -1,3 +1,9 @@
+2006-04-05  Eric Blake  <ebb9@byu.net>
+
+	* lib/autotest/general.m4 (AT_INIT): Prep AT_*_all, so that an
+	empty test suite works.
+	* tests/autotest.at (Empty test suite): Remove xfail.
+
 2006-04-05  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/autoconf/status.m4 (_AC_CONFIG_FOOS): Do not append normalized

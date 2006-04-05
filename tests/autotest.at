@@ -78,11 +78,11 @@ m4_define([AT_NO_CMDSUBST],
 ## Empty test suite.  ##
 ## ------------------ ##
 
-# This is not a sensible thing to do, but the user should not get a unhelpful
-# error message, which is what happens presently.
+# This is not a sensible thing to do, but the user should not get an unhelpful
+# error message.
 AT_CHECK_AT([Empty test suite],
 [[AT_INIT([empty test suite])
-]], [:])
+]])
 
 
 ## ----------------------------------------------------- ##

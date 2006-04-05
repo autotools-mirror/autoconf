@@ -172,6 +172,8 @@ m4_define([AT_TESTSUITE_NAME],
 	  m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
+m4_define([AT_groups_all], [])
+m4_define([AT_help_all], [])
 AS_INIT
 AT_COPYRIGHT(
 [Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
