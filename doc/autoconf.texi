@@ -11007,6 +11007,11 @@ mishandle them.  For example, Bash 3.1, @samp{ksh88}, @command{pdksh}
 echo $(case x in x) echo hello;; esac)
 @end example
 
+@item ^
+@cindex ^ quoting
+Always quote @samp{^}, otherwise traditional shells such as
+@command{/bin/sh} on Solaris 10 treat this like @samp{|}.
+
 @end table
 
 

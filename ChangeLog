@@ -1,3 +1,7 @@
+2006-04-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Shell Substitutions): Document `^' vs. `|'.
+
 2006-04-05  Eric Blake  <ebb9@byu.net>
 
 	* lib/autotest/general.m4 (AT_INIT): Prep AT_*_all, so that an
