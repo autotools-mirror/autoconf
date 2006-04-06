@@ -1,3 +1,8 @@
+2006-04-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (C Compiler): Warn about #error.  Follows up
+	on a patch proposed by Ralf Wildenhues.
+
 2006-04-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/status.m4: Replace <space>''<tab> with

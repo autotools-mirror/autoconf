@@ -5795,6 +5795,15 @@ This can cause problems if you observe the output of the compiler to
 detect failures.  Invoking @samp{cc -c a.c && cc -c b.c && cc -o c a.o
 b.o} solves the issue.
 
+@item Don't rely on @code{#error} failing
+The @sc{irix} C compiler does not fail when #error is preprocessed; it
+simply emits a diagnostic and continues, exiting successfully.  So,
+instead of an error directive like @code{#error "Unsupported word size"}
+it is more portable to use an invalid directive like @code{#Unsupported
+word size} in Autoconf tests.  In ordinary source code, @code{#error} is
+OK, since installers with inadequate compilers like @sc{irix} can simply
+examine these compilers' diagnostic output.
+
 @item Don't rely on correct @code{#line} support
 On Solaris 8, @command{c89} (Sun WorkShop 6 update 2 C 5.3 Patch
 111679-08 2002/05/09)) diagnoses @code{#line} directives whose line
