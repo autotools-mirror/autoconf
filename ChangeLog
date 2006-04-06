@@ -1,3 +1,9 @@
+2006-04-06  Eric Blake  <ebb9@byu.net>
+
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_O): Inside cache
+	check, s/ac_exeext/ac_cv_exeext/.  Fixes regression introduced
+	2006-04-01.
+
 2006-04-06  Stepan Kasal  <kasal@ucw.cz>,
 	    Eric Blake  <ebb9@byu.net>,
 	    Paul Eggert  <eggert@cs.ucla.edu>,

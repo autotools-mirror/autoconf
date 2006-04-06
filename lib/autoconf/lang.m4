@@ -542,7 +542,7 @@ m4_define([_AC_COMPILER_EXEEXT_O],
       test -f "$ac_file" || continue
       case $ac_file in
 	_AC_COMPILER_EXEEXT_REJECT ) ;;
-	*.* ) ac_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+	*.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
 	      break;;
 	* ) break;;
       esac
