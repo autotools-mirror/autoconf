@@ -21,8 +21,7 @@
 # 02110-1301, USA.
 
 # If we fail, clean up, but touch the output files.  We probably failed
-# because we used some non portable tool, but we just don't care: this
-# shell script is a maintainer tool, and we do expect good tools.
+# because we used some non-portable tool.
 
 as_me=`echo "$0" | sed 's,.*[\\/],,'`
 
@@ -54,16 +53,15 @@ LC_ALL=C export LC_ALL
 # requires
 # --------
 # Get the list of macros that are required: there is little interest
-# in testing them since they will be run but the guy who requires
-# them.
+# in testing them since they will be run by the guy who requires them.
 sed -n 's/dnl.*//;s/.*AC_REQUIRE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $src |
   sort -u >requires
 
 
 # exclude_list
 # ------------
-# Macros which must not be checked at all (not by ac-macros.at, nor
-# au-macros.at).
+# Macros which must not be checked at all (not with AT_CHECK_MACRO nor
+# AT_CHECK_AU_MACRO).
 exclude_list='
 	# Not a macro name at all.
 	/^$/ {next}
@@ -75,10 +73,10 @@ exclude_list='
 
 # ac_exclude_list
 # ---------------
-# The test `ac-macros.at' tries to run all the macros of Autoconf to check
-# for syntax problems, etc.  Not all the macros can be run without argument,
-# and some are already tested elsewhere.  AC_EXCLUDE_LIST must filter out
-# the macros we don't want to test in ac-macros.at.
+# We try to test all the Autoconf macros with AT_CHECK_MACRO to check
+# for syntax problems, etc.  Not every macros can be run without
+# arguments, and some are already tested elsewhere.  AC_EXCLUDE_LIST
+# filters out the macros we don't want to test.
 ac_exclude_list='
 	# Internal macros are used elsewhere.
 	/^_?_AC_/ {next}
@@ -149,6 +147,7 @@ ac_exclude_script="$exclude_list $ac_exclude_list {print}"
 
 # au_exclude_list
 # ---------------
+# Check all AU_DEFUN'ed macros with AT_CHECK_AU_MACRO, except these.
 au_exclude_list='
 	# Empty.
 	/^AC_C_CROSS|AC_PROG_CC_STDC$/ {next}

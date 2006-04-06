@@ -1,5 +1,7 @@
 2006-04-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/mktests.sh: Reword comments.
+
 	* tests/mktests.sh: Only skip internal macros starting with
 	`_AC_' or `__AC_'.  Noted by Stepan Kasal.
 	Update exclusion lists for the test suite to this end:
