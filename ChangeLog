@@ -129,7 +129,7 @@
 	* lib/autoconf/headers.m4 (AC_HEADER_STDC): Likewise.
 	* lib/autoconf/specific.m4 (AC_SYS_RESTARTABLE_SYSCALLS): Likewise.
 	* lib/autoconf/types.m4 (AC_TYPE_GETGROUPS): Likewise.
-	* tests/compile.at: Likewsie.
+	* tests/compile.at: Likewise.
 
 2006-04-02  Stepan Kasal  <kasal@ucw.cz>
 
