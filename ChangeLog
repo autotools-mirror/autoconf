@@ -1,3 +1,8 @@
+2006-04-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/status.m4: Replace <space>''<tab> with
+	<tab><space> where this makes sense.
+
 2006-04-05  Howard Chu  <hyc@highlandsun.com>  (trivial change)
 	    Noah Misch  <noah@cs.caltech.edu>
 
