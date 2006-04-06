@@ -1,5 +1,7 @@
 2006-04-06  Stepan Kasal  <kasal@ucw.cz>
 
+	* tests/Makefile.am (maintainer-check-posix): s/POSIXLY_CORRECTLY/POSIXLY_CORRECT/
+
 	* lib/autoconf/status.m4 (_AC_CONFIG_FOOS): Append TAGS to
 	  ac_config_<foo>s again, sometimes normalized, sometimes not.
 	(AC_CONFIG_FILES, AC_CONFIG_HEADERS, AC_CONFIG_LINKS, AC_CONFIG_COMMANDS):

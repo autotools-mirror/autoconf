@@ -184,7 +184,7 @@ expr:
 
 # Try the test suite with more severe environments.
 maintainer-check-posix: expr
-	POSIXLY_CORRECTLY=yes make check
+	POSIXLY_CORRECT=yes make check
 	rm expr
 
 # Try using G++ as a C compiler.
