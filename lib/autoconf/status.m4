@@ -366,7 +366,7 @@ _ACEOF
 m4_define([_AC_SED_CMD_NUM], m4_eval(_AC_SED_CMD_NUM + 3))dnl
 m4_define([_AC_SED_FRAG],
 m4_defn([_AC_SED_FRAG])dnl
-[/^[ @&t@	]*@]_AC_Var[@[ @&t@	]*$/{
+[/^[	 ]*@]_AC_Var[@[	 ]*$/{
 r $]_AC_Var[
 d
 }
@@ -642,8 +642,8 @@ do
   dnl Quote, for the `[ ]' and `define'.
   echo ['    # First, check the format of the line:
     cat >"$tmp/defines.sed" <<CEOF
-/^[	 ]*#[	 ]*undef[	 ][	 ]*$ac_word_regexp[ @&t@	]*$/b def
-/^[	 ]*#[	 ]*define[	 ][	 ]*$ac_word_regexp[( @&t@	]/b def
+/^[	 ]*#[	 ]*undef[	 ][	 ]*$ac_word_regexp[	 ]*$/b def
+/^[	 ]*#[	 ]*define[	 ][	 ]*$ac_word_regexp[(	 ]/b def
 b
 :def'] >>$CONFIG_STATUS
   sed ${ac_max_sed_lines}q conftest.defines >>$CONFIG_STATUS

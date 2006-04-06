@@ -1,3 +1,8 @@
+2006-04-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4: More replacements to
+	<tab><space> where this makes sense.
+
 2006-04-06  Stepan Kasal  <kasal@ucw.cz>
 
 	* tests/Makefile.am (maintainer-check-posix): s/POSIXLY_CORRECTLY/POSIXLY_CORRECT/
