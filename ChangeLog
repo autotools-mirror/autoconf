@@ -1,3 +1,7 @@
+2006-04-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/make-stds.texi: Sync from gnulib.
+
 2006-04-06  Eric Blake  <ebb9@byu.net>
 
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_O): Inside cache
