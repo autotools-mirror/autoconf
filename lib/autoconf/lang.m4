@@ -425,7 +425,7 @@ m4_divert_pop()dnl
 #
 # - *.xSYM
 #   Created on BeOS.  Seems to be per executable.
-# 
+#
 # - *.map, *.inf
 #   Created by the Green Hills compiler.
 

@@ -1,5 +1,17 @@
 2006-04-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* Makefile.maint (sc_cast_of_argument_to_free): Do not fail when
+	no file matches the glob, discard the warning, set `nullglob'.
+	(syntax-check): Likewise.
+	(sc_cast_of_x_alloc_return_value): Likewise.
+	(sc_cast_of_alloca_return_value, sc_error_exit_success)
+	(sc_prohibit_jm_in_m4, .re-list, sc_unmarked_diagnostics)
+	(m4-check): Likewise.
+	(sc_system_h_headers): Do not print rule on execution.
+	(sc_tight_scope): Do not fail for non-existing `src' directory.
+	(sc_changelog): Skip the Copyright footer.
+	* lib/autoconf/lang.m4: Remove trailing space.
+
 	* lib/autoconf/status.m4: More replacements to
 	<tab><space> where this makes sense.
 

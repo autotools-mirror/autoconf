@@ -107,32 +107,37 @@ syntax-check-rules = \
   sc_texi_notab
 
 syntax-check: $(syntax-check-rules)
-#	@grep -nE '#  *include <(limits|std(def|arg|bool))\.h>'		\
-#	    $$(find -type f -name '*.[chly]') &&			\
+#	@shopt -s nullglob;						\
+#	grep -nE '#  *include <(limits|std(def|arg|bool))\.h>'		\
+#	    $$(find -type f -name '*.[chly]') /dev/null &&		\
 #	  { echo '$(ME): found conditional include' 1>&2;		\
 #	    exit 1; } || :
 
 #	grep -nE '^#  *include <(string|stdlib)\.h>'			\
-#	    $(srcdir)/{lib,src}/*.[chy] &&				\
+#	    $(srcdir)/{lib,src}/*.[chy] /dev/null &&			\
 #	  { echo '$(ME): FIXME' 1>&2;					\
 #	    exit 1; } || :
 # FIXME: don't allow `#include .strings\.h' anywhere
 
 sc_cast_of_argument_to_free:
-	@grep -nE '\<free \(\(' $(srcdir)/{lib,src}/*.[chly] &&		\
+	@shopt -s nullglob;						\
+	grep -nE '\<free \(\('						\
+	    $(srcdir)/{lib,src}/*.[chly] /dev/null &&			\
 	  { echo '$(ME): don'\''t cast free argument' 1>&2;		\
 	    exit 1; } || :
 
 sc_cast_of_x_alloc_return_value:
-	@grep -nE --exclude=$(srcdir)/lib/regex.c			\
+	@shopt -s nullglob;						\
+	grep -nE --exclude=$(srcdir)/lib/regex.c			\
 	    '\*\) *x(m|c|re)alloc\>'					\
-	    $(srcdir)/{lib,src}/*.[chy] &&				\
+	    $(srcdir)/{lib,src}/*.[chy] /dev/null &&			\
 	  { echo '$(ME): don'\''t cast x*alloc return value' 1>&2;	\
 	    exit 1; } || :
 
 sc_cast_of_alloca_return_value:
-	@grep -nE '\*\) *alloca\>'					\
-	    $(srcdir)/src/*.[chy] &&					\
+	@shopt -s nullglob;						\
+	grep -nE '\*\) *alloca\>'					\
+	    $(srcdir)/src/*.[chy] /dev/null &&				\
 	  { echo '$(ME): don'\''t cast alloca return value' 1>&2;	\
 	    exit 1; } || :
 
@@ -154,8 +159,8 @@ sc_prohibit_atoi_atof:
 # Using EXIT_SUCCESS as the first argument to error is misleading,
 # since when that parameter is 0, error does not exit.  Use `0' instead.
 sc_error_exit_success:
-	@grep -nF 'error (EXIT_SUCCESS,'					\
-	    $$(find -type f -name '*.[chly]') &&			\
+	@grep -nF 'error (EXIT_SUCCESS,'				\
+	    $$(find -type f -name '*.[chly]') /dev/null &&		\
 	  { echo '$(ME): found error (EXIT_SUCCESS' 1>&2;		\
 	    exit 1; } || :
 
@@ -184,7 +189,8 @@ sc_texi_notab:
 
 # Each nonempty line must start with a year number, or a TAB.
 sc_changelog:
-	@grep -n '^[^12	]' $$(find . -maxdepth 2 -name ChangeLog) &&	\
+	@sed '/^-----/,$$d' $$(find . -maxdepth 2 -name ChangeLog)	\
+	  | grep -n '^[^12	]' &&					\
 	  { echo '$(ME): found unexpected prefix in a ChangeLog' 1>&2;	\
 	    exit 1; } || :
 
@@ -209,7 +215,7 @@ endif
 # On 2004-04-13, they were all changed to start with gl_ instead.
 # Make sure that none are inadvertently reintroduced.
 sc_prohibit_jm_in_m4:
-	@grep -nE 'jm_[A-Z]'						\
+	@grep -nE 'jm_[A-Z]' /dev/null					\
 		$$($(CVS_LIST) $(srcdir)/m4 |grep '\.m4$$') &&		\
 	    { echo '$(ME): do not use jm_ in m4 macro names'		\
 	      1>&2; exit 1; } || :
@@ -229,8 +235,9 @@ sc_root_tests:
 # Create a list of regular expressions matching the names
 # of files included from system.h.  Exclude a couple.
 .re-list:
-	@sed -n '/^# *include /s///p' $(srcdir)/src/system.h \
-	  | grep -Ev 'sys/(param|file)\.h' \
+	@shopt -s nullglob;						\
+	sed -n '/^# *include /s///p' $(srcdir)/src/system.[h] /dev/null	\
+	  | grep -Ev 'sys/(param|file)\.h'				\
 	  | sed 's/ .*//;;s/^["<]/^# *include [<"]/;s/\.h[">]$$/\\.h[">]/' \
 	  > $@-t
 	@mv $@-t $@
@@ -238,7 +245,7 @@ sc_root_tests:
 # Files in src/ should not include directly any of
 # the headers already included via system.h.
 sc_system_h_headers: .re-list
-	if test -f $(srcdir)/src/system.h; then			\
+	@if test -f $(srcdir)/src/system.h; then				\
 	  trap 'rc=$$?; rm -f .re-list; exit $$rc' 0 1 2 3 15;		\
 	  grep -nE -f .re-list						\
 	      $$($(CVS_LIST) src |					\
@@ -255,7 +262,7 @@ sc_sun_os_names:
 	    exit 1; } || :
 
 sc_tight_scope:
-	$(MAKE) -C src $@
+	@if test -d src; then $(MAKE) -C src $@; else :; fi
 
 sc_trailing_space:
 	@grep -n '[	 ]$$'						\
@@ -266,8 +273,9 @@ sc_trailing_space:
 # Look for diagnostics that aren't marked for translation.
 # This won't find any for which error's format string is on a separate line.
 sc_unmarked_diagnostics:
-	@grep -nE							\
-	    '\<error \([^"]*"[^"]*[a-z]{3}' $(srcdir)/{lib,src}/*.c	\
+	@shopt -s nullglob;						\
+	grep -nE '\<error \([^"]*"[^"]*[a-z]{3}'			\
+	    $(srcdir)/{lib,src}/*.c /dev/null				\
 	  | grep -v '_(' &&						\
 	  { echo '$(ME): found unmarked diagnostic(s)' 1>&2;		\
 	    exit 1; } || :
@@ -312,7 +320,8 @@ changelog-check:
 	fi
 
 m4-check:
-	@grep 'AC_DEFUN([^[]' m4/*.m4 \
+	@shopt -s nullglob;						\
+	grep 'AC_DEFUN([^[]' m4/*.m4 /dev/null				\
 	  && { echo 'Makefile.maint: quote the first arg to AC_DEFUN' 1>&2; \
 	       exit 1; } || :
 

@@ -298,7 +298,7 @@ Sat May  9 14:52:57 1992  David J. MacKenzie  (djm@churchy.gnu.ai.mit.edu)
 	was given, even if not substituting for prefix.
 
 	* acgeneral.m4 (AC_INIT, AC_OUTPUT): Remove @VPATH@
-	substitution; use @srcdir@ instead. 
+	substitution; use @srcdir@ instead.
 
 Sun May  3 01:21:47 1992  David J. MacKenzie  (djm@geech.gnu.ai.mit.edu)
 
