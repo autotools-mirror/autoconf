@@ -574,7 +574,7 @@ m4_define([_AC_OUTPUT_HEADER],
   #
 dnl Quote, for the `[ ]' and `define'.
 [  ac_dA='s,^\([	 ]*#[	 ]*\)[^	 ]*\([	 ][	 ]*'
-  ac_dB='\)[ ''	(].*$,\1define\2'
+  ac_dB='\)[	 (].*$,\1define\2'
   ac_dC=' '
   ac_dD=' ,']
 dnl ac_dD used to contain `;t' at the end, but that was both slow and incorrect.
@@ -606,14 +606,14 @@ uniq confdefs.h |
   sed -n '
 	t rset
 	:rset
-	s/^[ ''	]*#[ ''	]*define[ ''	][	 ]*//
+	s/^[	 ]*#[	 ]*define[	 ][	 ]*//
 	t ok
 	d
 	:ok
 	s/[\\&,]/\\&/g
 	s/[\\$`]/\\&/g
-	s/^\('"$ac_word_re"'\)\(([^()]*)\)[ ''	]*\(.*\)/${ac_dA}\1$ac_dB\2${ac_dC}\3$ac_dD/p
-	s/^\('"$ac_word_re"'\)[ ''	]*\(.*\)/${ac_dA}\1$ac_dB${ac_dC}\2$ac_dD/p
+	s/^\('"$ac_word_re"'\)\(([^()]*)\)[	 ]*\(.*\)/${ac_dA}\1$ac_dB\2${ac_dC}\3$ac_dD/p
+	s/^\('"$ac_word_re"'\)[	 ]*\(.*\)/${ac_dA}\1$ac_dB${ac_dC}\2$ac_dD/p
   ' >>conftest.defines
 ]
 # Remove the space that was appended to ease matching.
