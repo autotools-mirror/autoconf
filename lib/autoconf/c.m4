@@ -547,7 +547,7 @@ _AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 
-_AC_COMPILER_EXEEXT
+m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_GNU
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CC_G
@@ -774,7 +774,7 @@ _AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 
-_AC_COMPILER_EXEEXT
+m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_GNU
 GXX=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_CXX_G
@@ -905,7 +905,7 @@ _AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
 _AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 
-_AC_COMPILER_EXEEXT
+m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 _AC_LANG_COMPILER_GNU
 GOBJC=`test $ac_compiler_gnu = yes && echo yes`
 _AC_PROG_OBJC_G
