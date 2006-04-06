@@ -1061,16 +1061,13 @@ if test "$ac_init_help" = "recursive"; then
     test -d $ac_dir || continue
     _AC_SRCDIRS(["$ac_dir"])
     cd $ac_dir || { ac_status=$?; continue; }
-    # Check for guested configure; otherwise get Cygnus style configure.
+    # Check for guested configure.
     if test -f $ac_srcdir/configure.gnu; then
       echo &&
       $SHELL $ac_srcdir/configure.gnu  --help=recursive
     elif test -f $ac_srcdir/configure; then
       echo &&
       $SHELL $ac_srcdir/configure  --help=recursive
-    elif test -f $ac_srcdir/configure.in; then
-      echo &&
-      $ac_configure --help
     else
       AC_MSG_WARN([no configuration information is in $ac_dir])
     fi || ac_status=$?
