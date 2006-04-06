@@ -25,7 +25,7 @@
 	`_AC_' or `__AC_'.  Noted by Stepan Kasal.
 	Update exclusion lists for the test suite to this end:
 	(AC_ARG_VAR): Do test this now.
-	(AC_REPLACE_FUNCS): This needs an argument.
+	(AC_SEARCH_LIBS, AC_REPLACE_FUNCS): Need an argument.
 	(AC_LINKER_OPTION): Remove (renamed to _AC_LINKER_OPTION).
 	(AC_LIST_MEMBER_OF): Likewise (renamed to _AC_LIST_MEMBER_IF).
 	(AC_LINK_FILES): Obsoleted since (and thus AU_DEFUN'ed).
@@ -52,6 +52,10 @@
 	<tab><space> where this makes sense.
 
 2006-04-06  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Insert a newline before
+	  the first parameter of m4_bpatsubsts, to workaround the problem
+	  with anchors.
 
 	* tests/Makefile.am (maintainer-check-posix): s/POSIXLY_CORRECTLY/POSIXLY_CORRECT/
 
