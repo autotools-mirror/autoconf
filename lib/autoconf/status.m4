@@ -227,12 +227,17 @@ m4_define([_AC_CONFIG_UNIQUE],
 # Associate the COMMANDS to each TAG, i.e., when config.status creates TAG,
 # run COMMANDS afterwards.  (This is done in _AC_CONFIG_REGISTER_DEST.)
 #
+# For COMMANDS, do not m4_normalize TAGS before adding it to ac_config_commands.
+# This historical difference allows macro calls in TAGS.
+#
 m4_define([_AC_CONFIG_FOOS],
 [m4_foreach_w([AC_File], [$2],
 	      [_AC_CONFIG_REGISTER([$1], m4_defn([AC_File]), [$3])])dnl
 m4_define([_AC_SEEN_CONFIG(ANY)])dnl
 m4_define([_AC_SEEN_CONFIG($1)])dnl
 _AC_CONFIG_COMMANDS_INIT([$4])dnl
+ac_config_[]m4_tolower([$1])="$ac_config_[]m4_tolower([$1]) dnl
+m4_if([$1], [COMMANDS], [$2], [m4_normalize([$2])])"
 ])
 
 
@@ -269,14 +274,14 @@ dnl
 dnl Recognize TAG as an argument to config.status:
 dnl
 m4_append([_AC_LIST_TAGS],
-[    $3) CONFIG_$1="$CONFIG_$1 $2" ;;
+[    "$3") CONFIG_$1="$CONFIG_$1 $2" ;;
 ])dnl
 dnl
 dnl Register the associated commands, if any:
 dnl
 m4_ifval([$4],
 [m4_append([_AC_LIST_TAG_COMMANDS],
-[    $3:]m4_bpatsubst([$1], [^\(.\).*$], [\1])[) $4 ;;
+[    "$3":]m4_bpatsubst([$1], [^\(.\).*$], [\1])[) $4 ;;
 ])])dnl
 ])# _AC_CONFIG_REGISTER_DEST
 
@@ -292,9 +297,7 @@ m4_ifval([$4],
 # -------------------------------------------------
 # Specify output files, i.e., files that are configured with AC_SUBST.
 #
-AC_DEFUN([AC_CONFIG_FILES],
-[_AC_CONFIG_FOOS([FILES], $@)
-ac_config_files="$ac_config_files m4_normalize([$1])"])
+AC_DEFUN([AC_CONFIG_FILES], [_AC_CONFIG_FOOS([FILES], $@)])
 
 
 # _AC_SED_CMD_LIMIT
@@ -540,9 +543,7 @@ dnl  fi
 # Specify that the HEADERS are to be created by instantiation of the
 # AC_DEFINEs.
 #
-AC_DEFUN([AC_CONFIG_HEADERS],
-[_AC_CONFIG_FOOS([HEADERS], $@)
-ac_config_headers="$ac_config_headers m4_normalize([$1])"])
+AC_DEFUN([AC_CONFIG_HEADERS], [_AC_CONFIG_FOOS([HEADERS], $@)])
 
 
 # AC_CONFIG_HEADER(HEADER-TO-CREATE ...)
@@ -694,9 +695,7 @@ m4_ifdef([_AC_AM_CONFIG_HEADER_HOOK],
 # Reject DEST=., because it is makes it hard for ./config.status
 # to guess the links to establish (`./config.status .').
 #
-AC_DEFUN([AC_CONFIG_LINKS],
-[_AC_CONFIG_FOOS([LINKS], $@)
-ac_config_links="$ac_config_links m4_normalize([$1])"])
+AC_DEFUN([AC_CONFIG_LINKS], [_AC_CONFIG_FOOS([LINKS], $@)])
 
 
 # AC_LINK_FILES(SOURCE..., DEST...)
@@ -774,13 +773,7 @@ m4_define([_AC_OUTPUT_LINK],
 # commands must be associated with a NAME, which should be thought
 # as the name of a file the COMMANDS create.
 #
-# Unlike other _AC_CONFIG_FOOS, we do not m4_normalize NAME before storing it in
-# ac_config_commands.  This difference is historical, and it allows macro calls
-# in NAME.
-#
-AC_DEFUN([AC_CONFIG_COMMANDS],
-[_AC_CONFIG_FOOS([COMMANDS], $@)
-ac_config_commands="$ac_config_commands $1"])
+AC_DEFUN([AC_CONFIG_COMMANDS], [_AC_CONFIG_FOOS([COMMANDS], $@)])
 
 
 # AC_OUTPUT_COMMANDS(EXTRA-CMDS, INIT-CMDS)

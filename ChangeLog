@@ -1,5 +1,13 @@
 2006-04-06  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/status.m4 (_AC_CONFIG_FOOS): Append TAGS to
+	  ac_config_<foo>s again, sometimes normalized, sometimes not.
+	(AC_CONFIG_FILES, AC_CONFIG_HEADERS, AC_CONFIG_LINKS, AC_CONFIG_COMMANDS):
+	  Do not do so here.
+	(_AC_CONFIG_REGISTER_DEST): Double quote the tags in macros _AC_LIST_TAGS
+	  and_AC_LIST_TAG_COMMANDS; fixes another regression introduced by the
+	  2005-07-25 rewrite.  Noticed by Noah Misch.
+
 	* lib/autoconf/general.m4 (AC_PRESERVE_HELP_ORDER): Do not define
 	  _AC_PRESERVE_HELP_ORDER, ...
 	(AC_ARG_ENABLE, AC_ARG_WITH): ... use AC_PROVIDE_IFELSE insetad.
