@@ -81,15 +81,7 @@ exclude_list='
 # the macros we don't want to test in ac-macros.at.
 ac_exclude_list='
 	# Internal macros are used elsewhere.
-	/_AC_/ {next}
-
-	# Dunno why these are ignored.
-	/^AC_ARG_VAR$/ {next}
-	/^AC_LINKER_OPTION$/ {next}
-	/^AC_LINK_FILES$/ {next}
-	/^AC_LIST_MEMBER_OF$/ {next}
-	/^AC_REPLACE_FUNCS$/ {next}
-	/^AC_SEARCH_LIBS$/ {next}
+	/^_?_AC_/ {next}
 
 	# Used in many places.
 	/^AC_.*_IFELSE$/ {next}
@@ -99,6 +91,7 @@ ac_exclude_list='
 
 	# Need an argument.
 	/^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$/ {next}
+	/^AC_SEARCH_LIBS|AC_REPLACE_FUNCS$/ {next}
 
 	# Performed in the semantics tests.
 	/^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$/ {next}
