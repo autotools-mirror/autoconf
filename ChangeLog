@@ -1,5 +1,8 @@
 2006-04-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* config/elisp-comp, config/install-sh, config/mdate-sh,
+	config/missing, config/mkinstalldirs: Sync from Automake.
+
 	* lib/Autom4te/FileUtils.pm, lib/Autom4te/Struct.pm: Sync
 	from Automake.
 
