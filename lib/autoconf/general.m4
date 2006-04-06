@@ -1821,26 +1821,39 @@ fi
 m4_define([_AC_CACHE_DUMP],
 [# The following way of writing the cache mishandles newlines in values,
 # but we know of no workaround that is simple, portable, and efficient.
-# So, don't put newlines in cache variables' values.
+# So, we kill variables containing newlines.
 # Ultrix sh set writes to stderr and can't be redirected directly,
 # and sets the high bit in the cache file unless we assign to the vars.
-{
+(
+  for ac_var in `(set) 2>&1 | sed -n ['s/^\([a-zA-Z_][a-zA-Z0-9_]*\)=.*/\1/p']`; do
+    eval ac_val=\$$ac_var
+    case $ac_val in #(
+    *${as_nl}*)
+      case $ac_var in #(
+      *_cv_*) AC_MSG_WARN([Cache variable $ac_var contains a newline.]) ;;
+      esac
+      case $ac_var in #(
+      _ | IFS | as_nl) ;; #(
+      *) $as_unset $ac_var ;;
+      esac ;;
+    esac
+  done
+
   (set) 2>&1 |
-    case `(ac_space=' '; set | grep ac_space) 2>&1` in
-    *ac_space=\ *)
+    case $as_nl`(ac_space=' '; set) 2>&1` in #(
+    *${as_nl}ac_space=\ *)
       # `set' does not quote correctly, so add quotes (double-quote
       # substitution turns \\\\ into \\, and sed turns \\ into \).
       sed -n \
 	["s/'/'\\\\''/g;
 	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"]
-      ;;
+      ;; #(
     *)
       # `set' quotes correctly as required by POSIX, so do not add quotes.
-      sed -n \
-	["s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"]
+      sed -n ["/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"]
       ;;
-    esac;
-}dnl
+    esac
+)dnl
 ])# _AC_CACHE_DUMP
 
 

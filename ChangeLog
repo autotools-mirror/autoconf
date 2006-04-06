@@ -1,4 +1,23 @@
+2006-04-06  Stepan Kasal  <kasal@ucw.cz>,
+	    Eric Blake  <ebb9@byu.net>,
+	    Paul Eggert  <eggert@cs.ucla.edu>,
+	    Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_CACHE_DUMP): Fix the detection of
+	whether `set' quotes correctly: redirect stderr of the tested
+	`set', and use a subshell, for Ultrix; use `sed' instead of
+	`grep' for zsh `set' which may write binary output; match only
+	at the beginning of a line, to avoid false positives.
+	In order to avoid false positives by unrelated variables with
+	multiline content, put the dump algorithm in a subshell and
+	unset all variables containing newlines (except some which are
+	special to the shell).  Warn about cache variables that are
+	unset.
+
 2006-04-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* config/config.guess, config/config.sub, config/texinfo.tex:
+	Sync from upstream.
 
 	* tests/mktests.sh: Reword comments.
 
