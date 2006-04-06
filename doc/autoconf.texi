@@ -10975,6 +10975,17 @@ $ @kbd{test -z "`cd /`" && pwd}
 @noindent
 The result of @samp{foo=`exit 1`} is left as an exercise to the reader.
 
+The MSYS shell leaves a stray byte in the expansion of a double-quoted
+command substitution of a native program, if the end of the substution
+is not aligned with the end of the double quote.  This may be worked
+around by inserting another pair of quotes:
+
+@example
+$ @kbd{echo "`printf 'foo\r\n'` bar" > broken}
+$ @kbd{echo "`printf 'foo\r\n'`"" bar" | cmp - broken}
+- broken differ: char 4, line 1
+@end example
+
 
 @item $(@var{commands})
 @cindex $(@var{commands})
