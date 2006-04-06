@@ -1,5 +1,8 @@
 2006-04-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/Autom4te/FileUtils.pm, lib/Autom4te/Struct.pm: Sync
+	from Automake.
+
 	* doc/make-stds.texi: Sync from gnulib.
 
 2006-04-06  Eric Blake  <ebb9@byu.net>

@@ -207,18 +207,18 @@ sub up_to_date_p ($@)
 }
 
 
-=item C<handle_exec_errors ($command)>
+=item C<handle_exec_errors ($command, [$expected_exit_code = 0])>
 
 Display an error message for C<$command>, based on the content of
-C<$?> and C<$!>.
+C<$?> and C<$!>.  Be quiet if the command exited normally
+with C<$expected_exit_code>.
 
 =cut
 
-# handle_exec_errors ($COMMAND)
-# -----------------------------
-sub handle_exec_errors ($)
+sub handle_exec_errors ($;$)
 {
-  my ($command) = @_;
+  my ($command, $expected) = @_;
+  $expected = 0 unless defined $expected;
 
   $command = (split (' ', $command))[0];
   if ($!)
@@ -235,7 +235,8 @@ sub handle_exec_errors ($)
 	  # Propagate exit codes.
 	  fatal ('',
 		 "$command failed with exit status: $status",
-		 exit_code => $status);
+		 exit_code => $status)
+	    unless $status == $expected;
 	}
       elsif (WIFSIGNALED ($?))
 	{
@@ -272,24 +273,22 @@ sub xqx ($)
 }
 
 
-=item C<xsystem ($command)>
+=item C<xsystem (@argv)>
 
-Same as C<system>, but fails on errors, and reports the C<$command>
+Same as C<system>, but fails on errors, and reports the C<@argv>
 in verbose mode.
 
 =cut
 
-# xsystem ($COMMAND)
-# ------------------
-sub xsystem ($)
+sub xsystem (@)
 {
-  my ($command) = @_;
+  my (@command) = @_;
 
-  verb "running: $command";
+  verb "running: @command";
 
   $! = 0;
-  handle_exec_errors $command
-    if system $command;
+  handle_exec_errors "@command"
+    if system @command;
 }
 
 
