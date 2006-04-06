@@ -1417,7 +1417,7 @@ Some influential environment variables:]])dnl
 m4_divert_once([HELP_VAR_END], [[
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.]])dnl
-m4_expand_once([m4_divert_once([HELP_VAR],
+m4_expand_once([m4_divert_text([HELP_VAR],
 			       [AS_HELP_STRING([$1], [$2], [              ])])],
 	       [$0($1)])dnl
 AC_SUBST([$1])dnl

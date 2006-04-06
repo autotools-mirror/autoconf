@@ -1,5 +1,8 @@
 2006-04-06  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (AC_ARG_VAR): Do not use m4_divert_once
+	  inside m4_expand_once; it is redundant.
+
 	* lib/autoconf/general.m4 (_AC_INIT_HELP): Remove the broken support
 	  for --help from Cygnus `configure.'
 
