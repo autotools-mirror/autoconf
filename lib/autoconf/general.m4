@@ -1344,8 +1344,7 @@ AC_LANG_PUSH(C)
 # Emit help strings in the order given, rather than grouping all --enable-FOO
 # and all --with-BAR.
 AC_DEFUN([AC_PRESERVE_HELP_ORDER],
-[m4_define([_AC_PRESERVE_HELP_ORDER], 1)
-m4_divert_once([HELP_ENABLE], [[
+[m4_divert_once([HELP_ENABLE], [[
 Optional Features and Packages:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
@@ -1371,7 +1370,8 @@ m4_define([_AC_ENABLE_IF_ACTION],
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------------------
 AC_DEFUN([AC_ARG_ENABLE],
-[m4_ifndef([_AC_PRESERVE_HELP_ORDER],
+[AC_PROVIDE_IFELSE([AC_PRESERVE_HELP_ORDER],
+[],
 [m4_divert_once([HELP_ENABLE], [[
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
@@ -1388,7 +1388,8 @@ AU_DEFUN([AC_ENABLE],
 # AC_ARG_WITH(PACKAGE, HELP-STRING, ACTION-IF-TRUE, [ACTION-IF-FALSE])
 # --------------------------------------------------------------------
 AC_DEFUN([AC_ARG_WITH],
-[m4_ifndef([_AC_PRESERVE_HELP_ORDER],
+[AC_PROVIDE_IFELSE([AC_PRESERVE_HELP_ORDER],
+[],
 [m4_divert_once([HELP_WITH], [[
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]

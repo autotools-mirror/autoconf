@@ -1,5 +1,9 @@
 2006-04-06  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (AC_PRESERVE_HELP_ORDER): Do not define
+	  _AC_PRESERVE_HELP_ORDER, ...
+	(AC_ARG_ENABLE, AC_ARG_WITH): ... use AC_PROVIDE_IFELSE insetad.
+
 	* lib/autoconf/general.m4 (AC_ARG_VAR): Do not use m4_divert_once
 	  inside m4_expand_once; it is redundant.
 
