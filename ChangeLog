@@ -1,3 +1,12 @@
+2006-04-07  Stepan Kasal  <kasal@ucw.cz>
+
+	Revert my change from 2006-03-17, in other words:
+	* lib/m4sugar/m4sh.m4 (AS_BOURNE_COMPATIBLE): Insert BIN_SH=xpg4
+	  and DUALCASE=1.
+	(AS_SHELL_SANITIZE): Remove DUALCASE=1.
+	* doc/autoconf.texi (Special Shell Variables) <BIN_SH>: Say that
+	  it is set.
+
 2006-04-07  Eric Blake  <ebb9@byu.net>
 
 	* doc/autoconf.texi (Programming in M4sh): Document that
