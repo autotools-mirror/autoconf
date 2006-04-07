@@ -1,3 +1,16 @@
+2006-04-07  Stepan Kasal  <kasal@ucw.cz>
+
+	Revert the patch from 2006-04-01 and only improve
+	_AS_DETECT_BETTER_SHELL:
+
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_WALK): Do not optimize; do not
+	skip nonexistent directories.
+	(_AS_DETECT_BETTER_SHELL): The optimization is moved here--try
+	only shell candidates which exist.
+	(AS_UNAME): No need to give three parameters to _AS_PATH_WALK.
+	* lib/autotest/general.m4 (AT_INIT): No need to give three
+	parameters to _AS_PATH_WALK.
+
 2006-04-07  Stepan Kasal  <kasal@ucw.cz>,
 	    Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
 

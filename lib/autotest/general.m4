@@ -558,7 +558,7 @@ case $as_dir in
       at_path=$at_path$at_top_srcdir/$as_dir
     fi
     ;;
-esac], [:])
+esac])
 
 # Now build and simplify PATH.
 #
