@@ -23,8 +23,9 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
-
+BIN_SH=xpg4; export BIN_SH # for Tru64
 DUALCASE=1; export DUALCASE # for MKS sh
+
 
 # PATH needs CR
 # Avoid depending upon Character Ranges.
@@ -72,7 +73,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
 done
 IFS=$as_save_IFS
@@ -221,7 +221,6 @@ for as_dir in /usr/bin/posix$PATH_SEPARATOR/bin$PATH_SEPARATOR/usr/bin$PATH_SEPA
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   case $as_dir in
 	 /*)
 	   for as_base in sh bash ksh sh5; do
@@ -233,7 +232,9 @@ IFS=$as_save_IFS
 
 
       for as_shell in $as_candidate_shells $SHELL; do
-	 if { ($as_shell) 2> /dev/null <<\_ASEOF
+	 # Try only shells which exist, to save several forks.
+	 if test -f $as_shell &&
+		{ ($as_shell) 2> /dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -245,6 +246,8 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
+BIN_SH=xpg4; export BIN_SH # for Tru64
+DUALCASE=1; export DUALCASE # for MKS sh
 
 :
 _ASEOF
@@ -263,6 +266,8 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
+BIN_SH=xpg4; export BIN_SH # for Tru64
+DUALCASE=1; export DUALCASE # for MKS sh
 
 :
 (as_func_return () {
@@ -1328,7 +1333,7 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-    echo "PATH: $as_dir"
+  echo "PATH: $as_dir"
 done
 IFS=$as_save_IFS
 
@@ -1696,7 +1701,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   # Account for people who put trailing slashes in PATH elements.
 case $as_dir/ in
   ./ | .// | /cC/* | \
@@ -1874,7 +1878,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_AWK="$ac_prog"
@@ -2010,7 +2013,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_STRIP="${ac_tool_prefix}strip"
@@ -2051,7 +2053,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_ac_ct_STRIP="strip"
@@ -2182,7 +2183,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_EXPR="$as_dir/$ac_word$ac_exec_ext"
@@ -2235,7 +2235,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_M4="$as_dir/$ac_word$ac_exec_ext"
@@ -2316,7 +2315,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_PERL="$as_dir/$ac_word$ac_exec_ext"
@@ -2378,7 +2376,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_TEST_EMACS="$ac_prog"
@@ -2465,7 +2462,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_EMACS="$ac_prog"
@@ -2564,7 +2560,6 @@ for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_prog in grep ggrep; do
   for ac_exec_ext in '' $ac_executable_extensions; do
     ac_path_GREP="$as_dir/$ac_prog$ac_exec_ext"
@@ -2647,7 +2642,6 @@ for as_dir in $PATH$PATH_SEPARATOR/usr/xpg4/bin
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_prog in egrep; do
   for ac_exec_ext in '' $ac_executable_extensions; do
     ac_path_EGREP="$as_dir/$ac_prog$ac_exec_ext"
@@ -2728,7 +2722,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   for ac_prog in sed gsed; do
   for ac_exec_ext in '' $ac_executable_extensions; do
     ac_path_SED="$as_dir/$ac_prog$ac_exec_ext"
@@ -2958,8 +2951,9 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
-
+BIN_SH=xpg4; export BIN_SH # for Tru64
 DUALCASE=1; export DUALCASE # for MKS sh
+
 
 # PATH needs CR
 # Avoid depending upon Character Ranges.
@@ -3007,7 +3001,6 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  test -d "$as_dir" || continue
   test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
 done
 IFS=$as_save_IFS
