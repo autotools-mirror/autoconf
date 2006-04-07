@@ -9461,7 +9461,8 @@ except that it is portable to older versions of @command{mkdir} that
 lack support for the @option{-p} option.  Also, @code{AS_MKDIR_P}
 succeeds if @var{file-name} is a symbolic link to an existing directory,
 even though Posix is unclear whether @samp{mkdir -p} should
-succeed in that case.
+succeed in that case.  If creation of @var{file-name} fails, exit the
+script.
 @end defmac
 
 @defmac AS_SHELL_SANITIZE

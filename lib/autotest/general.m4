@@ -702,8 +702,7 @@ do
 	rm -fr $at_group_dir
       fi
       # Be tolerant if the above `rm' was not able to remove the directory.
-      AS_MKDIR_P([$at_group_dir]) ||
-	AS_ERROR([cannot create $at_group_dir])
+      AS_MKDIR_P([$at_group_dir])
       cd $at_group_dir
       ;;
   esac

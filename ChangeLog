@@ -1,3 +1,9 @@
+2006-04-07  Eric Blake  <ebb9@byu.net>
+
+	* doc/autoconf.texi (Programming in M4sh): Document that
+	AS_MKDIR_P exits the script on failure.
+	* lib/autotest/general.m4: Remove redundant AS_ERROR.
+
 2006-04-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* config/elisp-comp, config/install-sh, config/mdate-sh,
