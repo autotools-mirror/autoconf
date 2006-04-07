@@ -1,3 +1,12 @@
+2006-04-07  Stepan Kasal  <kasal@ucw.cz>,
+	    Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoupdate.in (handle_autoconf_patches): Change the way we
+	distinguish m4sugar macros.
+	* tests/tools.at (autoupdating with aclocal and m4_include):
+	New test.  Bug reported by Gary V. Vaughan <gary@gnu.org>,
+	test case by Noah Misch <noah@cs.caltech.edu>.
+
 2006-04-07  Stepan Kasal  <kasal@ucw.cz>
 
 	Revert my change from 2006-03-17, in other words:

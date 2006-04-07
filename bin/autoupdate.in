@@ -145,21 +145,11 @@ sub handle_autoconf_macros ()
     {
       chomp;
       my ($domain, $file, $macro) = /^(AC|AU):(.*):([^:]*)$/ or next;
-      # ../lib/m4sugar/m4sugar.m4  -> m4sugar
-      # ../lib/m4sugar/version.m4  -> m4sugar
-      # ../lib/autoconf/general.m4 -> autoconf
-      # aclocal.m4 -> aclocal
-      # ../lib/m4sugar/m4sh.m4     -> m4sh
-      my $set = basename (dirname ($file));
-      $set = 'aclocal' if $file eq 'aclocal.m4';
-      $set = 'm4sh' if basename($file) eq 'm4sh.m4';
-      error "unknown set: $set: $_"
-	unless $set =~ /^(m4sugar|m4sh|aclocal|autoconf)$/;
       if ($domain eq "AU")
 	{
 	  $au_macros{$macro} = 1;
 	}
-      elsif ($set eq "m4sugar")
+      elsif ($file =~ /(^|\/)m4sugar\/(m4sugar|version)\.m4$/)
 	{
 	  # Add the m4sugar macros to m4_builtins.
 	  $m4_builtins{$macro} = 1;

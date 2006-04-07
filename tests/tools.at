@@ -719,3 +719,32 @@ AT_CHECK_CONFIGURE([], [0], [stdout])
 AT_CHECK([[grep ' 1 2 3 4 5 6' stdout]], 0, [ignore], [ignore])
 
 AT_CLEANUP
+
+
+# autoupdating with aclocal and m4_include
+# ----------------------------------------
+AT_SETUP([autoupdating with aclocal and m4@&t@_include])
+
+# We use aclocal.
+AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
+
+mkdir m4 aclocal
+AT_DATA([configure.in],
+[[AC_INIT(x,0)
+AC_UNCHANGED_MACRO
+AC_OLD_MACRO
+AC_OUTPUT
+]])
+AT_DATA([m4/stuff.m4],
+[[AU_ALIAS([AC_OLD_MACRO], [AC_NEW_MACRO])
+AC_DEFUN([AC_NEW_MACRO], [echo hi])
+AC_DEFUN([AC_UNCHANGED_MACRO], [echo one])
+]])
+cp m4/stuff.m4 aclocal/stuff.m4
+AT_CHECK([aclocal -I aclocal], [0], [ignore], [ignore])
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE
+AT_CHECK([aclocal -I m4], [0], [ignore], [ignore])
+AT_CHECK_AUTOUPDATE
+
+AT_CLEANUP
