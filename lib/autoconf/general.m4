@@ -1199,8 +1199,7 @@ AS_UNSET(ac_configure_args1)
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.  We remove comments because anyway the quotes in there
 # would cause problems or look ugly.
-# WARNING: Be sure not to use single quotes in there, as some shells,
-# such as our DU 5.0 friend, will then `close' the trap.
+# WARNING: Do not use single quotes inside single quotes.
 trap 'exit_status=$?
   # Save into config.log some information that might help in debugging.
   {
