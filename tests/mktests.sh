@@ -88,8 +88,8 @@ ac_exclude_list='
 	/^AC_TRY/ {next}
 
 	# Need an argument.
-	/^AC_CANONICALIZE|AC_PREFIX_PROGRAM|AC_PREREQ$/ {next}
-	/^AC_SEARCH_LIBS|AC_REPLACE_FUNCS$/ {next}
+	/^AC_(CANONICALIZE|PREFIX_PROGRAM|PREREQ)$/ {next}
+	/^AC_(SEARCH_LIBS|REPLACE_FUNCS)$/ {next}
 
 	# Performed in the semantics tests.
 	/^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$/ {next}
@@ -150,7 +150,7 @@ ac_exclude_script="$exclude_list $ac_exclude_list {print}"
 # Check all AU_DEFUN'ed macros with AT_CHECK_AU_MACRO, except these.
 au_exclude_list='
 	# Empty.
-	/^AC_C_CROSS|AC_PROG_CC_STDC$/ {next}
+	/^AC_(C_CROSS|PROG_CC_STDC)$/ {next}
 
 	# Use AC_REQUIRE.
 	/^AC_(CYGWIN|MINGW32|EMXOS2)$/ {next}
@@ -163,7 +163,7 @@ au_exclude_list='
 	/^AC_LANG_(SAVE|RESTORE)$/ {next}
 
 	# Need arguments and are tested elsewhere.
-	/^AC_LINK_FILES|AC_PREREQ$/ {next}
+	/^AC_(LINK_FILES|PREREQ)$/ {next}
 '
 
 # au_exclude_script
