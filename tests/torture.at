@@ -116,6 +116,9 @@ AT_CHECK_AC_ARG_VAR([apple of my eye], [])
 # Change a precious variable
 AT_CHECK_AC_ARG_VAR([apple of my eye], [orange of my eye])
 
+# Change a precious variable that contains braces
+AT_CHECK_AC_ARG_VAR([apple of my {eye}], [orange of my eye])
+
 AT_CLEANUP
 
 

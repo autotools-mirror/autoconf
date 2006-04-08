@@ -1,3 +1,11 @@
+2006-04-08  Stepan Kasal  <kasal@ucw.cz>,
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (AC_CACHE_SAVE): All `ac_cv_env_foo'
+	variables shall be overriden by the cache.
+	* tests/torture.at (AC_ARG_VAR): Test also with a first value
+	that contains braces.
+
 2006-04-07  Stepan Kasal  <kasal@ucw.cz>
 
 	Revert the patch from 2006-04-01 and only improve
