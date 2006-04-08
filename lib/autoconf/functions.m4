@@ -1,4 +1,4 @@
-# This file is part of Autoconf.                       -*- Autoconf -*-
+# This file is part of Autoconf.			-*- Autoconf -*-
 # Checking for functions.
 # Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
@@ -75,18 +75,44 @@ AS_VAR_POPDEF([ac_var])dnl
 ])# AC_CHECK_FUNC
 
 
+# _AH_CHECK_FUNCS(FUNCTION...)
+# ----------------------------
+m4_define([_AH_CHECK_FUNCS],
+[m4_foreach_w([AC_Func], [$1],
+   [AH_TEMPLATE(AS_TR_CPP([HAVE_]m4_defn([AC_Func])),
+      [Define to 1 if you have the `]m4_defn([AC_Func])[' function.])])])
+
+
 # AC_CHECK_FUNCS(FUNCTION..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ---------------------------------------------------------------------
 AC_DEFUN([AC_CHECK_FUNCS],
-[m4_foreach_w([AC_Func], [$1],
-  [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Func),
-	       [Define to 1 if you have the `]AC_Func[' function.])])dnl
+[_AH_CHECK_FUNCS([$1])dnl
 for ac_func in $1
 do
 AC_CHECK_FUNC($ac_func,
 	      [AC_DEFINE_UNQUOTED([AS_TR_CPP([HAVE_$ac_func])]) $2],
 	      [$3])dnl
 done
+])
+
+
+# AC_CHECK_FUNCS_ONCE(FUNCTION...)
+# --------------------------------
+AC_DEFUN([AC_CHECK_FUNCS_ONCE],
+[
+  _AH_CHECK_FUNCS([$1])
+  m4_foreach_w([AC_Func], [$1],
+    [AC_DEFUN([_AC_Func_]m4_defn([AC_Func]),
+       [m4_divert_text([INIT_PREPARE],
+	  [ac_func_list="$ac_func_list AC_Func"])
+	_AC_FUNCS_EXPANSION])
+     AC_REQUIRE([_AC_Func_]m4_defn([AC_Func]))])
+])
+m4_define([_AC_FUNCS_EXPANSION],
+[
+  m4_divert_text([DEFAULTS], [ac_func_list=])
+  AC_CHECK_FUNCS([$ac_func_list])
+  m4_define([_AC_FUNCS_EXPANSION], [])
 ])
 
 
@@ -1499,6 +1525,36 @@ fi
 ])
 
 
+# AC_FUNC_STRTOLD
+# ---------------
+AC_DEFUN([AC_FUNC_STRTOLD],
+[
+  AC_CACHE_CHECK([whether strtold conforms to C99],
+    [ac_cv_func_strtold],
+    [AC_COMPILE_IFELSE(
+       [AC_LANG_PROGRAM(
+	  [[/* On HP-UX before 11.23, strtold returns a struct instead of
+		long double.  Reject implementations like that, by requiring
+		compatibility with the C99 prototype.  */
+#	     include <stdlib.h>
+	     static long double (*p) (char const *, char **) = strtold;
+	     static long double
+	     test (char const *nptr, char **endptr)
+	     {
+	       long double r;
+	       r = strtold (nptr, endptr);
+	       return r;
+	     }]],
+	   [[return test ("1.0", NULL) != 1 || p ("1.0", NULL) != 1;]])],
+       [ac_cv_func_strtold=yes],
+       [ac_cv_func_strtold=no])])
+  if test $ac_cv_func_strtold = yes; then
+    AC_DEFINE([HAVE_STRTOLD], 1,
+      [Define to 1 if strtold exists and conforms to C99.])
+  fi
+])# AC_FUNC_STRTOLD
+
+
 # AU::AM_FUNC_STRTOD
 # ------------------
 AU_ALIAS([AM_FUNC_STRTOD], [AC_FUNC_STRTOD])
@@ -1894,7 +1950,7 @@ AU_ALIAS([AC_VPRINTF], [AC_FUNC_VPRINTF])
 AN_FUNCTION([wait3], [AC_FUNC_WAIT3])
 AC_DEFUN([AC_FUNC_WAIT3],
 [AC_DIAGNOSE([obsolete],
-[$0: `wait3' is being removed from the Open Group standards.
+[$0: `wait3' has been removed from POSIX.
 Remove this `AC_FUNC_WAIT3' and adjust your code to use `waitpid' instead.])dnl
 AC_CACHE_CHECK([for wait3 that fills in rusage],
 	       [ac_cv_func_wait3_rusage],

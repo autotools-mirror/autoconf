@@ -35,6 +35,16 @@
 ** AC_C_TYPEOF
   New macro to check for support of 'typeof' syntax a la GNU C.
 
+** AC_CHECK_DECLS_ONCE, AC_CHECK_FUNCS_ONCE, AC_CHECK_HEADERS_ONCE
+  New "once-only" variants of commonly-used macros, to make 'configure'
+  smaller and faster in common cases.
+
+** AC_FUNC_STRTOLD
+  New macro to check for strtold with C99 semantics.
+
+** AC_HEADER_ASSERT
+  New macro that lets builder disable assertions at 'configure'-time.
+
 ** AC_PATH_X
   Now checks for X11/Xlib.h and XrmInitialize (X proper) rather than
   X11/Intrinsic.h and XtMalloc (Xt).
@@ -62,12 +72,29 @@
   ac_cv_prog_cc_c99 or ac_cv_prog_cc_c89 (whichever is valid, in
   that order).
 
+** AC_STRUCT_DIRENT_D_INO, AC_STRUCT_DIRENT_D_TYPE
+  New macro for checking commonly-used members of struct dirent.
+
 ** AC_SUBST
   The subtituted value can now contain newlines.
 
 ** AC_SUBST_FILE
   The substitution now occurs only when @variable@ is on a line by itself,
   optionally surrounded by spaces and tabs.  The whole line is replaced.
+
+** AC_TYPE_LONG_DOUBLE, AC_TYPE_LONG_DOUBLE_WIDER
+  New macros to check for long double, and whether it is wider than double.
+  The old macro AC_C_TYPE_LONG_DOUBLE has been marked as obsolete;
+  applications should switch to the new macro.
+
+** AC_TYPE_INT8_T, AC_TYPE_INT16_T, AC_TYPE_INT32_T, AC_TYPE_INT64_T,
+   AC_TYPE_INTMAX_T, AC_TYPE_INTPTR_T, AC_TYPE_LONG_LONG_INT, AC_TYPE_SSIZE_T,
+   AC_TYPE_UINT8_T, AC_TYPE_UINT16_T, AC_TYPE_UINT32_T, AC_TYPE_UINT64_T,
+   AC_TYPE_UINTMAX_T, AC_TYPE_UINTPTR_T, AC_TYPE_UNSIGNED_LONG_LONG_INT
+  New macros to check for C99 and POSIX types.
+
+** AC_USE_SYSTEM_EXTENSIONS
+  New macro to enable extensions to Posix.
 
 ** AH_HEADER
   New macro which is defined to the name of the first declared config header
@@ -98,6 +125,8 @@
 
   New macros for configuring installation of Erlang libraries:
   AC_ERLANG_SUBST_INSTALL_LIB_DIR, AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR.
+
+** The manual now mentions Gnulib more prominently.
 
 ** New macros to support Objective C.
   AC_PROG_OBJC, AC_PROG_OBJCPP.

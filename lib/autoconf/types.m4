@@ -1,6 +1,8 @@
-# This file is part of Autoconf.                       -*- Autoconf -*-
+# This file is part of Autoconf.			-*- Autoconf -*-
 # Type related macros: existence, sizeof, and structure members.
-# Copyright (C) 2000, 2001, 2002, 2004, 2005 Free Software Foundation, Inc.
+#
+# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006 Free Software
+# Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -65,8 +67,8 @@
 # AC_CHECK_ families:
 #
 #    AC_CHECK_TYPE(TYPE,
-#	           [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#	           [INCLUDES])
+#		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		   [INCLUDES = DEFAULT-INCLUDES])
 #
 # In order to provide backward compatibility, the new scheme is
 # implemented as _AC_CHECK_TYPE_NEW, the old scheme as _AC_CHECK_TYPE_OLD,
@@ -162,8 +164,8 @@ AS_VAR_POPDEF([ac_Type])dnl
 
 
 # AC_CHECK_TYPES(TYPES,
-#                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#                [INCLUDES = DEFAULT-INCLUDES])
+#		 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		 [INCLUDES = DEFAULT-INCLUDES])
 # --------------------------------------------------------
 # TYPES is an m4 list.  There are no ambiguities here, we mean the newer
 # AC_CHECK_TYPE.
@@ -217,16 +219,16 @@ m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
 # AC_CHECK_TYPE(TYPE, DEFAULT)
 #  or
 # AC_CHECK_TYPE(TYPE,
-#	        [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#	        [INCLUDES = DEFAULT-INCLUDES])
+#		[ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		[INCLUDES = DEFAULT-INCLUDES])
 # -------------------------------------------------------
 #
 # Dispatch respectively to _AC_CHECK_TYPE_OLD or _AC_CHECK_TYPE_NEW.
-# 1. More than two arguments         => NEW
+# 1. More than two arguments	     => NEW
 # 2. $2 seems to be replacement type => OLD
 #    See _AC_CHECK_TYPE_REPLACEMENT_TYPE_P for `replacement type'.
-# 3. $2 seems to be a type           => NEW plus a warning
-# 4. default                         => NEW
+# 3. $2 seems to be a type	     => NEW plus a warning
+# 4. default			     => NEW
 AC_DEFUN([AC_CHECK_TYPE],
 [m4_if($#, 3,
 	 [_AC_CHECK_TYPE_NEW($@)],
@@ -304,6 +306,204 @@ AU_DEFUN([AM_TYPE_PTRDIFF_T],
 [AC_CHECK_TYPES(ptrdiff_t)])
 
 
+# AC_TYPE_INTMAX_T
+# -----------------
+AC_DEFUN([AC_TYPE_INTMAX_T],
+[
+  AC_REQUIRE([AC_TYPE_LONG_LONG_INT])
+  AC_CHECK_TYPE([intmax_t],
+    [AC_DEFINE([HAVE_INTMAX_T], 1,
+       [Define to 1 if the system has the type `intmax_t'.])],
+    [test $ac_cv_type_long_long_int = yes \
+       && ac_type='long long int' \
+       || ac_type='long int'
+     AC_DEFINE_UNQUOTED([intmax_t], [$ac_type],
+       [Define to the widest signed integer type
+	if <stdint.h> and <inttypes.h> do not define.])])
+])
+
+
+# AC_TYPE_UINTMAX_T
+# -----------------
+AC_DEFUN([AC_TYPE_UINTMAX_T],
+[
+  AC_REQUIRE([AC_TYPE_UNSIGNED_LONG_LONG_INT])
+  AC_CHECK_TYPE([uintmax_t],
+    [AC_DEFINE([HAVE_UINTMAX_T], 1,
+       [Define to 1 if the system has the type `uintmax_t'.])],
+    [test $ac_cv_type_unsigned_long_long_int = yes \
+       && ac_type='unsigned long long int' \
+       || ac_type='unsigned long int'
+     AC_DEFINE_UNQUOTED([uintmax_t], [$ac_type],
+       [Define to the widest unsigned integer type
+	if <stdint.h> and <inttypes.h> do not define.])])
+])
+
+
+# AC_TYPE_INTPTR_T
+# -----------------
+AC_DEFUN([AC_TYPE_INTPTR_T],
+[
+  AC_CHECK_TYPE([intptr_t],
+    [AC_DEFINE([HAVE_INTPTR_T], 1,
+       [Define to 1 if the system has the type `intptr_t'.])],
+    [for ac_type in 'int' 'long int' 'long long int'; do
+       AC_COMPILE_IFELSE(
+	 [AC_LANG_BOOL_COMPILE_TRY(
+	    [AC_INCLUDES_DEFAULT],
+	    [[sizeof (void *) <= sizeof ($ac_type)]])],
+	 [AC_DEFINE_UNQUOTED([intptr_t], [$ac_type],
+	    [Define to the type of a signed integer type wide enough to
+	     hold a pointer, if such a type exists, and if the system
+	     does not define it.])
+	  ac_type=])
+       test -z "$ac_type" && break
+     done])
+])
+
+
+# AC_TYPE_UINTPTR_T
+# -----------------
+AC_DEFUN([AC_TYPE_UINTPTR_T],
+[
+  AC_CHECK_TYPE([uintptr_t],
+    [AC_DEFINE([HAVE_UINTPTR_T], 1,
+       [Define to 1 if the system has the type `uintptr_t'.])],
+    [for ac_type in 'unsigned int' 'unsigned long int' \
+	'unsigned long long int'; do
+       AC_COMPILE_IFELSE(
+	 [AC_LANG_BOOL_COMPILE_TRY(
+	    [AC_INCLUDES_DEFAULT],
+	    [[sizeof (void *) <= sizeof ($ac_type)]])],
+	 [AC_DEFINE_UNQUOTED([uintptr_t], [$ac_type],
+	    [Define to the type of an unsigned integer type wide enough to
+	     hold a pointer, if such a type exists, and if the system
+	     does not define it.])
+	  ac_type=])
+       test -z "$ac_type" && break
+     done])
+])
+
+
+# AC_TYPE_LONG_DOUBLE
+# -------------------
+AC_DEFUN([AC_TYPE_LONG_DOUBLE],
+[
+  AC_CACHE_CHECK([for long double], [ac_cv_type_long_double],
+    [if test "$GCC" = yes; then
+       ac_cv_type_long_double=yes
+     else
+       AC_COMPILE_IFELSE(
+	 [AC_LANG_BOOL_COMPILE_TRY(
+	    [[/* The Stardent Vistra knows sizeof (long double), but does
+		 not support it.  */
+	      long double foo = 0.0L;]],
+	    [[/* On Ultrix 4.3 cc, long double is 4 and double is 8.  */
+	      sizeof (double) <= sizeof (long double)]])],
+	 [ac_cv_type_long_double=yes],
+	 [ac_cv_type_long_double=no])
+     fi])
+  if test $ac_cv_type_long_double = yes; then
+    AC_DEFINE([HAVE_LONG_DOUBLE], 1,
+      [Define to 1 if the system has the type `long double'.])
+  fi
+])
+
+
+# AC_TYPE_LONG_DOUBLE_WIDER
+# -------------------------
+AC_DEFUN([AC_TYPE_LONG_DOUBLE_WIDER],
+[
+  AC_CACHE_CHECK(
+    [for long double with more range or precision than double],
+    [ac_cv_type_long_double_wider],
+    [AC_COMPILE_IFELSE(
+       [AC_LANG_BOOL_COMPILE_TRY(
+	  [[#include <float.h>
+	    long double const a[] =
+	      {
+		 0.0L, DBL_MIN, DBL_MAX, DBL_EPSILON,
+		 LDBL_MIN, LDBL_MAX, LDBL_EPSILON
+	      };
+	    long double
+	    f (long double x)
+	    {
+	       return ((x + (unsigned long int) 10) * (-1 / x) + a[0]
+			+ (x ? f (x) : 'c'));
+	    }
+	  ]],
+	  [[(0 < ((DBL_MAX_EXP < LDBL_MAX_EXP)
+		   + (DBL_MANT_DIG < LDBL_MANT_DIG)
+		   - (LDBL_MAX_EXP < DBL_MAX_EXP)
+		   - (LDBL_MANT_DIG < DBL_MANT_DIG)))
+	    && (int) LDBL_EPSILON == 0
+	  ]])],
+       ac_cv_type_long_double_wider=yes,
+       ac_cv_type_long_double_wider=no)])
+  if test $ac_cv_type_long_double_wider = yes; then
+    AC_DEFINE([HAVE_LONG_DOUBLE_WIDER], 1,
+      [Define to 1 if the type `long double' works and has more range or
+       precision than `double'.])
+  fi
+])# AC_TYPE_LONG_DOUBLE_WIDER
+
+
+# AC_C_LONG_DOUBLE
+# ----------------
+AU_DEFUN([AC_C_LONG_DOUBLE],
+  [
+    AC_TYPE_LONG_DOUBLE_WIDER
+    ac_cv_c_long_double=$ac_cv_type_long_double_wider
+    if test $ac_cv_c_long_double = yes; then
+      AC_DEFINE([HAVE_LONG_DOUBLE], 1,
+	[Define to 1 if the type `long double' works and has more range or
+	 precision than `double'.])
+    fi
+  ],
+  [The macro `AC_C_LONG_DOUBLE' is obsolete.
+You should use `AC_TYPE_LONG_DOUBLE' or `AC_TYPE_LONG_DOUBLE_WIDER' instead.]
+)
+
+
+# AC_TYPE_LONG_LONG_INT
+# ---------------------
+AC_DEFUN([AC_TYPE_LONG_LONG_INT],
+[
+  AC_CACHE_CHECK([for long long int], [ac_cv_type_long_long_int],
+    [AC_LINK_IFELSE(
+       [AC_LANG_PROGRAM(
+	  [long long int ll = 1LL; int i = 63;],
+	  [long long int llmax = (long long int) -1;
+	   return ll << i | ll >> i | llmax / ll | llmax % ll;])],
+       [ac_cv_type_long_long_int=yes],
+       [ac_cv_type_long_long_int=no])])
+  if test $ac_cv_type_long_long_int = yes; then
+    AC_DEFINE([HAVE_LONG_LONG_INT], 1,
+      [Define to 1 if the system has the type `long long int'.])
+  fi
+])
+
+
+# AC_TYPE_UNSIGNED_LONG_LONG_INT
+# ------------------------------
+AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
+[
+  AC_CACHE_CHECK([for unsigned long long int],
+    [ac_cv_type_unsigned_long_long_int],
+    [AC_LINK_IFELSE(
+       [AC_LANG_PROGRAM(
+	  [unsigned long long int ull = 1ULL; int i = 63;],
+	  [unsigned long long int ullmax = (unsigned long long int) -1;
+	   return ull << i | ull >> i | ullmax / ull | ullmax % ull;])],
+       [ac_cv_type_unsigned_long_long_int=yes],
+       [ac_cv_type_unsigned_long_long_int=no])])
+  if test $ac_cv_type_unsigned_long_long_int = yes; then
+    AC_DEFINE([HAVE_UNSIGNED_LONG_LONG_INT], 1,
+      [Define to 1 if the system has the type `unsigned long long int'.])
+  fi
+])
+
+
 # AC_TYPE_MBSTATE_T
 # -----------------
 AC_DEFUN([AC_TYPE_MBSTATE_T],
@@ -343,6 +543,9 @@ fi
 AN_IDENTIFIER([size_t], [AC_TYPE_SIZE_T])
 AC_DEFUN([AC_TYPE_SIZE_T], [AC_CHECK_TYPE(size_t, unsigned int)])
 
+AN_IDENTIFIER([ssize_t], [AC_TYPE_SSIZE_T])
+AC_DEFUN([AC_TYPE_SSIZE_T], [AC_CHECK_TYPE(ssize_t, int)])
+
 AN_IDENTIFIER([pid_t], [AC_TYPE_PID_T])
 AC_DEFUN([AC_TYPE_PID_T],  [AC_CHECK_TYPE(pid_t,  int)])
 
@@ -352,6 +555,82 @@ AC_DEFUN([AC_TYPE_OFF_T],  [AC_CHECK_TYPE(off_t,  long int)])
 AN_IDENTIFIER([mode_t], [AC_TYPE_MODE_T])
 AC_DEFUN([AC_TYPE_MODE_T], [AC_CHECK_TYPE(mode_t, int)])
 
+AN_IDENTIFIER([int8_t], [AC_TYPE_INT8_T])
+AN_IDENTIFIER([int16_t], [AC_TYPE_INT16_T])
+AN_IDENTIFIER([int32_t], [AC_TYPE_INT32_T])
+AN_IDENTIFIER([int64_t], [AC_TYPE_INT64_T])
+AN_IDENTIFIER([uint8_t], [AC_TYPE_UINT8_T])
+AN_IDENTIFIER([uint16_t], [AC_TYPE_UINT16_T])
+AN_IDENTIFIER([uint32_t], [AC_TYPE_UINT32_T])
+AN_IDENTIFIER([uint64_t], [AC_TYPE_UINT64_T])
+AC_DEFUN([AC_TYPE_INT8_T], [_AC_TYPE_INT(8)])
+AC_DEFUN([AC_TYPE_INT16_T], [_AC_TYPE_INT(16)])
+AC_DEFUN([AC_TYPE_INT32_T], [_AC_TYPE_INT(32)])
+AC_DEFUN([AC_TYPE_INT64_T], [_AC_TYPE_INT(64)])
+AC_DEFUN([AC_TYPE_UINT8_T], [_AC_TYPE_UNSIGNED_INT(8)])
+AC_DEFUN([AC_TYPE_UINT16_T], [_AC_TYPE_UNSIGNED_INT(16)])
+AC_DEFUN([AC_TYPE_UINT32_T], [_AC_TYPE_UNSIGNED_INT(32)])
+AC_DEFUN([AC_TYPE_UINT64_T], [_AC_TYPE_UNSIGNED_INT(64)])
+
+# _AC_TYPE_INT(NBITS)
+# -------------------
+AC_DEFUN([_AC_TYPE_INT],
+[
+  AC_CACHE_CHECK([for int$1_t], [ac_cv_c_int$1_t],
+    [ac_cv_c_int$1_t=no
+     for ac_type in 'int$1_t' 'int' 'long int' \
+	 'long long int' 'short int' 'signed char'; do
+       AC_COMPILE_IFELSE(
+	 [AC_LANG_BOOL_COMPILE_TRY(
+	    [AC_INCLUDES_DEFAULT],
+	    [[0 < ($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 1)]])],
+	 [AC_COMPILE_IFELSE(
+	    [AC_LANG_BOOL_COMPILE_TRY(
+	       [AC_INCLUDES_DEFAULT],
+	       [[($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 1)
+	         < ($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 2)]])],
+	    [],
+	    [ac_cv_c_int$1_t=$ac_type])])
+       test "$ac_cv_c_int$1_t" != no && break
+     done])
+  case $ac_cv_c_int$1_t in #(
+  no|int$1_t) ;; #(
+  *)
+    AC_DEFINE_UNQUOTED([int$1_t], [$ac_cv_c_int$1_t],
+      [Define to the type of a signed integer type of width exactly $1 bits
+       if such a type exists and the standard includes do not define it.]);;
+  esac
+])# _AC_TYPE_INT
+
+# _AC_TYPE_UNSIGNED_INT(NBITS)
+# ----------------------------
+AC_DEFUN([_AC_TYPE_UNSIGNED_INT],
+[
+  AC_CACHE_CHECK([for uint$1_t], [ac_cv_c_uint$1_t],
+    [ac_cv_c_uint$1_t=no
+     for ac_type in 'uint$1_t' 'unsigned int' 'unsigned long int' \
+	 'unsigned long long int' 'unsigned short int' 'unsigned char'; do
+       AC_COMPILE_IFELSE(
+	 [AC_LANG_BOOL_COMPILE_TRY(
+	    [AC_INCLUDES_DEFAULT],
+	    [[($ac_type) -1 >> ($1 - 1) == 1]])],
+	 [ac_cv_c_uint$1_t=$ac_type])
+       test "$ac_cv_c_uint$1_t" != no && break
+     done])
+  case $ac_cv_c_uint$1_t in #(
+  no|uint$1_t) ;; #(
+  *)
+    m4_if([$1], 32,
+      [AC_DEFINE([_UINT$1_T], 1,
+	 [Define for Solaris 2.5.1 so the uint$1_t typedef from
+	  <sys/synch.h>, <pthread.h>, or <semaphore.h> is not used.
+	  If the typedef was allowed, the #define below would cause a
+	  syntax error.])])
+    AC_DEFINE_UNQUOTED([uint$1_t], [$ac_cv_c_uint$1_t],
+      [Define to the type of an unsigned integer type of width exactly $1 bits
+       if such a type exists and the standard includes do not define it.]);;
+  esac
+])# _AC_TYPE_UNSIGNED_INT
 
 # AC_TYPE_SIGNAL
 # --------------
@@ -469,8 +748,8 @@ you adjust the code.])
 # ---------------- #
 
 # AC_CHECK_MEMBER(AGGREGATE.MEMBER,
-#                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#                 [INCLUDES])
+#		  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		  [INCLUDES = DEFAULT-INCLUDES])
 # ---------------------------------------------------------
 # AGGREGATE.MEMBER is for instance `struct passwd.pw_gecos', shell
 # variables are not a valid argument.
@@ -503,8 +782,8 @@ AS_VAR_POPDEF([ac_Member])dnl
 
 
 # AC_CHECK_MEMBERS([AGGREGATE.MEMBER, ...],
-#                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
-#                  [INCLUDES])
+#		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
+#		   [INCLUDES = DEFAULT-INCLUDES])
 # ---------------------------------------------------------
 # The first argument is an m4 list.
 AC_DEFUN([AC_CHECK_MEMBERS],
@@ -530,6 +809,40 @@ AN_IDENTIFIER([st_rdev],    [AC_CHECK_MEMBERS([struct stat.st_rdev])])
 
 # Alphabetic order, please.
 
+# _AC_STRUCT_DIRENT(MEMBER)
+# -------------------------
+AC_DEFUN([_AC_STRUCT_DIRENT],
+[
+  AC_REQUIRE([AC_HEADER_DIRENT])
+  AC_CHECK_MEMBERS([struct dirent.$1], [], [],
+    [[
+#include <sys/types.h>
+#ifdef HAVE_DIRENT_H
+# include <dirent.h>
+#else
+# define dirent direct
+# ifdef HAVE_SYS_NDIR_H
+#  include <sys/ndir.h>
+# endif
+# ifdef HAVE_SYS_DIR_H
+#  include <sys/dir.h>
+# endif
+# ifdef HAVE_NDIR_H
+#  include <ndir.h>
+# endif
+#endif
+    ]])
+])
+
+# AC_STRUCT_DIRENT_D_INO
+# -----------------------------------
+AC_DEFUN([AC_STRUCT_DIRENT_D_INO], [_AC_STRUCT_DIRENT([d_ino])])
+
+# AC_STRUCT_DIRENT_D_TYPE
+# ------------------------------------
+AC_DEFUN([AC_STRUCT_DIRENT_D_TYPE], [_AC_STRUCT_DIRENT([d_type])])
+
+
 # AC_STRUCT_ST_BLKSIZE
 # --------------------
 AU_DEFUN([AC_STRUCT_ST_BLKSIZE],
@@ -553,7 +866,7 @@ the `AC_DEFINE' when you adjust the code.])# AC_STRUCT_ST_BLKSIZE
 #
 # AC_OBSOLETE([$0], [; replace it with
 #   AC_CHECK_MEMBERS([struct stat.st_blocks],
-#                     [AC_LIBOBJ([fileblocks])])
+#		      [AC_LIBOBJ([fileblocks])])
 # Please note that it will define `HAVE_STRUCT_STAT_ST_BLOCKS',
 # and not `HAVE_ST_BLOCKS'.])dnl
 #

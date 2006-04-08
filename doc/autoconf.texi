@@ -279,6 +279,7 @@ published by the Free Software Foundation raise funds for
 The @acronym{GNU} Build System
 
 * Automake::                    Escaping Makefile hell
+* Gnulib::                      The @acronym{GNU} portability library
 * Libtool::                     Building libraries portably
 * Pointers::                    More info on the @acronym{GNU} build system
 
@@ -709,6 +710,7 @@ entire @acronym{GNU} build system for your software.
 
 @menu
 * Automake::                    Escaping Makefile hell
+* Gnulib::                      The @acronym{GNU} portability library
 * Libtool::                     Building libraries portably
 * Pointers::                    More info on the @acronym{GNU} build system
 @end menu
@@ -754,6 +756,32 @@ in @file{/usr/local/bin} (or whatever prefix was given to
 The benefits of Automake increase for larger packages (especially ones
 with subdirectories), but even for small programs the added convenience
 and portability can be substantial.  And that's not all@enddots{}
+
+@node Gnulib
+@section Gnulib
+
+@acronym{GNU} software has a well-deserved reputation for running on
+many different types of systems.  While our primary goal is to write
+software for the @acronym{GNU} system, many users and developers have
+been introduced to us through the systems that they were already using.
+
+@cindex Gnulib
+Gnulib is a central location for common @acronym{GNU} code, intended to
+be shared among free software packages.  Its components are typically
+shared at the source level, rather than being a library that gets built,
+installed, and linked against.  The idea is to copy files from Gnulib
+into your own source tree.  There is no distribution tarball; developers
+should just grab source modules from the repository.  The source files
+are available online, under various licenses, mostly @acronym{GNU}
+@acronym{GPL} or @acronym{GNU} @acronym{LGPL}.
+
+Gnulib modules typically contain C source code along with Autoconf
+macros used to configure the source code.  For example, the Gnulib
+@code{stdbool} module implements a @file{stdbool.h} header that nearly
+conforms to C99, even on old-fashioned hosts that lack @file{stdbool.h}.
+This module contains a source file for the replacement header, along
+with an Autoconf macro that arranges to use the replacement header on
+old-fashioned systems.
 
 @node Libtool
 @section Libtool
@@ -802,7 +830,8 @@ the @acronym{GNU} build tools.
 
 The home pages for
 @uref{http://www.gnu.org/software/autoconf/, Autoconf},
-@uref{http://www.gnu.org/software/automake/, Automake}, and
+@uref{http://www.gnu.org/software/automake/, Automake},
+@uref{http://www.gnu.org/software/gnulib/, Gnulib}, and
 @uref{http://www.gnu.org/software/libtool/, Libtool}.
 
 @item Automake Manual
@@ -4539,17 +4568,6 @@ If the @code{strcoll} function exists and works correctly, define
 definitions of @code{strcoll} that should not be used.
 @end defmac
 
-@defmac AC_FUNC_STRTOD
-@acindex{FUNC_STRTOD}
-@ovindex POW_LIB
-@c @fuindex strtod
-@prindex @code{strtod}
-If the @code{strtod} function does not exist or doesn't work correctly,
-ask for an @code{AC_LIBOBJ} replacement of @samp{strtod}.  In this case,
-because @file{strtod.c} is likely to need @samp{pow}, set the output
-variable @code{POW_LIB} to the extra library needed.
-@end defmac
-
 @defmac AC_FUNC_STRERROR_R
 @acindex{FUNC_STRERROR_R}
 @cvindex HAVE_STRERROR_R
@@ -4574,6 +4592,24 @@ the buffer argument.
 @prindex @code{strftime}
 Check for @code{strftime} in the @file{intl} library, for SCO Unix.
 Then, if @code{strftime} is available, define @code{HAVE_STRFTIME}.
+@end defmac
+
+@defmac AC_FUNC_STRTOD
+@acindex{FUNC_STRTOD}
+@ovindex POW_LIB
+@c @fuindex strtod
+@prindex @code{strtod}
+If the @code{strtod} function does not exist or doesn't work correctly,
+ask for an @code{AC_LIBOBJ} replacement of @samp{strtod}.  In this case,
+because @file{strtod.c} is likely to need @samp{pow}, set the output
+variable @code{POW_LIB} to the extra library needed.
+@end defmac
+
+@defmac AC_FUNC_STRTOLD
+@acindex{FUNC_STRTOLD}
+@prindex @code{strtold}
+If the @code{strtold} function exists and conforms to C99, define
+@code{HAVE_STRTOLD}.
 @end defmac
 
 @defmac AC_FUNC_STRNLEN
@@ -4657,6 +4693,17 @@ execute when one of the functions is found.  You can give it a value of
 functions is not found.
 @end defmac
 
+@defmac AC_CHECK_FUNCS_ONCE (@var{function}@dots{})
+@acindex{CHECK_FUNCS_ONCE}
+@cvindex HAVE_@var{function}
+For each @var{function} enumerated in the blank-or-newline-separated argument
+list, define @code{HAVE_@var{function}} (in all capitals) if it is available.
+This is a once-only variant of @code{AC_CHECK_FUNCS}.  It generates the
+checking code at most once, so that @command{configure} is smaller and
+faster; but the checks cannot be conditionalized and are always done once,
+early during the @command{configure} run.
+@end defmac
+
 @sp 1
 
 Autoconf follows a philosophy that was formed over the years by those
@@ -4666,10 +4713,7 @@ environment.  Some functions may be missing or unfixable, and your
 package must be ready to replace them.
 
 Suitable replacements for many such problem functions are available from
-@uref{http://www.gnu.org/software/gnulib/, Gnulib}, which aims to
-provide a centralized repository of such portability functions (among
-other things).  The source files are available online, under various
-licenses, mostly @acronym{GNU} @acronym{GPL} or @acronym{GNU} @acronym{LGPL}.
+Gnulib (@pxref{Gnulib}).
 
 @defmac AC_LIBOBJ (@var{function})
 @acindex{LIBOBJ}
@@ -4782,6 +4826,12 @@ problems they cause.  By definition, this list will always require
 additions.  Please help us keeping it as complete as possible.
 
 @table @asis
+
+@item @file{limits.h}
+C99 says that @file{limits.h} defines @code{LLONG_MIN},
+@code{LLONG_MAX}, and @code{ULLONG_MAX}, but many almost-C99
+environments (e.g., default GCC 4.0.2 + glibc 2.4) do not define them.
+
 @item @file{inttypes.h} vs.@: @file{stdint.h}
 @hdrindex{inttypes.h}
 @hdrindex{stdint.h}
@@ -4889,6 +4939,15 @@ AC_CHECK_HEADERS([X11/extensions/scrnsaver.h], [], [],
 These macros check for particular system header files---whether they
 exist, and in some cases whether they declare certain symbols.
 
+@defmac AC_HEADER_ASSERT
+@acindex{HEADER_ASSERT}
+@cvindex NDEBUG
+@hdrindex{assert.h}
+Check whether to enable assertions in the style of @file{assert.h}.
+Assertions are enabled by default, but the user can override this by
+invoking @command{configure} with the @option{--disable-assert} option.
+@end defmac
+
 @defmac AC_HEADER_DIRENT
 @acindex{HEADER_DIRENT}
 @cvindex HAVE_DIRENT_H
@@ -4940,6 +4999,9 @@ the length of a directory entry name by passing a pointer to a
 @code{struct dirent} to the @code{NAMLEN} macro.
 
 This macro also checks for the SCO Xenix @file{dir} and @file{x} libraries.
+
+Also see @code{AC_STRUCT_DIRENT_D_INO} and
+@code{AC_STRUCT_DIRENT_D_TYPE} (@pxref{Particular Structures}).
 @end defmac
 
 @defmac AC_HEADER_MAJOR
@@ -4995,7 +5057,7 @@ Amdahl UTS and Motorola System V/88.
 @cvindex HAVE__BOOL
 @hdrindex{stdbool.h}
 @hdrindex{system.h}
-If @file{stdbool.h} exists and is conformant to C99, define
+If @file{stdbool.h} exists and conforms to C99, define
 @code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
 @code{HAVE__BOOL} to 1.  To fulfill the C99 requirements, your
 @file{system.h} could contain the following code:
@@ -5008,7 +5070,7 @@ If @file{stdbool.h} exists and is conformant to C99, define
 #  ifdef __cplusplus
 typedef bool _Bool;
 #  else
-typedef unsigned char _Bool;
+#   define _Bool signed char
 #  endif
 # endif
 # define bool _Bool
@@ -5018,37 +5080,10 @@ typedef unsigned char _Bool;
 #endif
 @end verbatim
 
-Alternatively you can construct an output variable that includes only
-those headers and definitions needed.  For example:
+Alternatively you can use the @samp{stdbool} package of Gnulib
+(@pxref{Gnulib}); it packages the above code into a replacement header
+and contains a few other bells and whistles.
 
-@verbatim
-AC_HEADER_STDBOOL
-AC_SUBST([stdbool])
-if test "x$ac_cv_header_stdbool_h" = xyes; then
-  stdbool='
-#include <stdbool.h>
-'
-else
-  if test "x$ac_cv_type__Bool" != xyes; then
-    stdbool='
-#ifdef __cplusplus
-typedef bool _Bool;
-#else
-typedef unsigned char _Bool;
-#endif
-'
-  else
-    stdbool='
-'
-  fi
-  stdbool=$stdbool'
-#define bool _Bool
-#define false 0
-#define true 1
-#define __bool_true_false_are_defined 1
-'
-fi
-@end verbatim
 @end defmac
 
 
@@ -5299,6 +5334,21 @@ AC_CHECK_HEADERS([bar.h], [], [],
 ])
 @end verbatim
 
+The following variant generates smaller, faster @command{configure}
+files if you do not need the full power of @code{AC_CHECK_HEADERS}.
+
+@defmac AC_CHECK_HEADERS_ONCE (@var{header-file}@dots{})
+@acindex{CHECK_HEADERS_ONCE}
+@cvindex HAVE_@var{header}
+For each given system header file @var{header-file} in the
+blank-separated argument list that exists, define
+@code{HAVE_@var{header-file}} (in all capitals).
+This is a once-only variant of @code{AC_CHECK_HEADERS}.  It generates the
+checking code at most once, so that @command{configure} is smaller and
+faster; but the checks cannot be conditionalized and are always done once,
+early during the @command{configure} run.
+@end defmac
+
 @node Declarations
 @section Declarations
 @cindex Declaration, checking
@@ -5384,6 +5434,18 @@ your files may be used without being configured, or they are used during
 the configuration.  In most cases the traditional approach is enough.
 @end defmac
 
+@defmac AC_CHECK_DECLS_ONCE (@var{symbols})
+@acindex{CHECK_DECLS_ONCE}
+@cvindex HAVE_DECL_@var{symbol}
+For each of the @var{symbols} (@emph{comma}-separated list), define
+@code{HAVE_DECL_@var{symbol}} (in all capitals) to @samp{1} if
+@var{symbol} is declared in the default include files, otherwise to
+@samp{0}.  This is a once-only variant of @code{AC_CHECK_DECLS}.  It
+generates the checking code at most once, so that @command{configure} is
+smaller and faster; but the checks cannot be conditionalized and are
+always done once, early during the @command{configure} run.
+@end defmac
+
 
 @node Structures
 @section Structures
@@ -5404,6 +5466,28 @@ member you need, then you can use the general structure-member macros
 @subsection Particular Structure Checks
 
 The following macros check for certain structures or structure members.
+
+@defmac AC_STRUCT_DIRENT_D_INO
+@acindex{STRUCT_DIRENT_D_INO}
+@cvindex HAVE_STRUCT_DIRENT_D_INO
+Perform all the actions of @code{AC_HEADER_DIRENT} (@pxref{Particular
+Headers}).  Then, if @code{struct dirent} contains a @code{d_ino}
+member, define @code{HAVE_STRUCT_DIRENT_D_INO}.
+
+@code{HAVE_STRUCT_DIRENT_D_INO} indicates only the presence of
+@code{d_ino}, not whether its contents are always reliable.
+Traditionally, a zero @code{d_ino} indicated a deleted directory entry,
+though modern systems hide this detail from the user and never return
+zero @code{d_ino} values.
+@end defmac
+
+@defmac AC_STRUCT_DIRENT_D_TYPE
+@acindex{STRUCT_DIRENT_D_TYPE}
+@cvindex HAVE_STRUCT_DIRENT_D_TYPE
+Perform all the actions of @code{AC_HEADER_DIRENT} (@pxref{Particular
+Headers}).  Then, if @code{struct dirent} contains a @code{d_type}
+member, define @code{HAVE_STRUCT_DIRENT_D_TYPE}.
+@end defmac
 
 @defmac AC_STRUCT_ST_BLKSIZE
 @acindex{STRUCT_ST_BLKSIZE}
@@ -5528,14 +5612,94 @@ use a general type-check macro.
 
 @hdrindex{sys/types.h}
 @hdrindex{stdlib.h}
+@hdrindex{stdint.h}
+@hdrindex{inttypes.h}
 These macros check for particular C types in @file{sys/types.h},
-@file{stdlib.h} and others, if they exist.
+@file{stdlib.h}, @file{stdint.h}, @file{inttypes.h} and others, if they
+exist.
+
+The Gnulib @code{stdint} module is an alternate way to define many of
+these symbols; it is useful if you prefer your code to assume a
+C99-or-better environment.  @xref{Gnulib}.
 
 @defmac AC_TYPE_GETGROUPS
 @acindex{TYPE_GETGROUPS}
 @cvindex GETGROUPS_T
 Define @code{GETGROUPS_T} to be whichever of @code{gid_t} or @code{int}
 is the base type of the array argument to @code{getgroups}.
+@end defmac
+
+@defmac AC_TYPE_INT8_T
+@acindex{TYPE_INT8_T}
+@cvindex HAVE_INT8_T
+@cvindex int8_t
+If @file{stdint.h} or @file{inttypes.h} defines the type @code{int8_t},
+define @code{HAVE_INT8_T}.  Otherwise, define @code{int8_t} to a signed
+integer type that is exactly 8 bits wide and that uses two's complement
+representation, if such a type exists.
+@end defmac
+
+@defmac AC_TYPE_INT16_T
+@acindex{TYPE_INT16_T}
+@cvindex HAVE_INT16_T
+@cvindex int16_t
+This is like @code{AC_TYPE_INT8_T}, except for 16-bit integers.
+@end defmac
+
+@defmac AC_TYPE_INT32_T
+@acindex{TYPE_INT32_T}
+@cvindex HAVE_INT32_T
+@cvindex int32_t
+This is like @code{AC_TYPE_INT8_T}, except for 32-bit integers.
+@end defmac
+
+@defmac AC_TYPE_INT64_T
+@acindex{TYPE_INT64_T}
+@cvindex HAVE_INT64_T
+@cvindex int64_t
+This is like @code{AC_TYPE_INT8_T}, except for 64-bit integers.
+@end defmac
+
+@defmac AC_TYPE_INTMAX_T
+@acindex{TYPE_INTMAX_T}
+@cvindex HAVE_INTMAX_T
+@cvindex intmax_t
+If @file{stdint.h} or @file{inttypes.h} defines the type @code{intmax_t},
+define @code{HAVE_INTMAX_T}.  Otherwise, define @code{intmax_t} to the
+widest signed integer type.
+@end defmac
+
+@defmac AC_TYPE_INTPTR_T
+@acindex{TYPE_INTPTR_T}
+@cvindex HAVE_INTPTR_T
+@cvindex intptr_t
+If @file{stdint.h} or @file{inttypes.h} defines the type @code{intptr_t},
+define @code{HAVE_INTPTR_T}.  Otherwise, define @code{intptr_t} to a
+signed integer type wide enough to hold a pointer, if such a type
+exists.
+@end defmac
+
+@defmac AC_TYPE_LONG_DOUBLE
+@acindex{TYPE_LONG_DOUBLE}
+@cvindex HAVE_LONG_DOUBLE
+If the C compiler supports a working @code{long double} type, define
+@code{HAVE_LONG_DOUBLE}.  The @code{long double} type might have the
+same range and precision as @code{double}.
+@end defmac
+
+@defmac AC_TYPE_LONG_DOUBLE_WIDER
+@acindex{TYPE_LONG_DOUBLE_WIDER}
+@cvindex HAVE_LONG_DOUBLE_WIDER
+If the C compiler supports a working @code{long double} type with more
+range or precision than the @code{double} type, define
+@code{HAVE_LONG_DOUBLE_WIDER}.
+@end defmac
+
+@defmac AC_TYPE_LONG_LONG_INT
+@acindex{TYPE_LONG_LONG_INT}
+@cvindex HAVE_LONG_LONG_INT
+If the C compiler supports a working @code{long long int} type, define
+@code{HAVE_LONG_LONG_INT}.
 @end defmac
 
 @defmac AC_TYPE_MBSTATE_T
@@ -5592,12 +5756,75 @@ hup_handler ()
 Equivalent to @samp{AC_CHECK_TYPE([size_t], [unsigned int])}.
 @end defmac
 
+@defmac AC_TYPE_SSIZE_T
+@acindex{TYPE_SSIZE_T}
+@cvindex ssize_t
+Equivalent to @samp{AC_CHECK_TYPE([ssize_t], [int])}.
+@end defmac
+
 @defmac AC_TYPE_UID_T
 @acindex{TYPE_UID_T}
 @cvindex uid_t
 @cvindex gid_t
 If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
 @code{gid_t} to be @code{int}.
+@end defmac
+
+@defmac AC_TYPE_UINT8_T
+@acindex{TYPE_UINT8_T}
+@cvindex HAVE_UINT8_T
+@cvindex uint8_t
+If @file{stdint.h} or @file{inttypes.h} defines the type @code{uint8_t},
+define @code{HAVE_UINT8_T}.  Otherwise, define @code{uint8_t} to an
+unsigned integer type that is exactly 8 bits wide, if such a type
+exists.
+@end defmac
+
+@defmac AC_TYPE_UINT16_T
+@acindex{TYPE_UINT16_T}
+@cvindex HAVE_UINT16_T
+@cvindex uint16_t
+This is like @code{AC_TYPE_UINT8_T}, except for 16-bit unsigned integers.
+@end defmac
+
+@defmac AC_TYPE_UINT32_T
+@acindex{TYPE_UINT32_T}
+@cvindex HAVE_UINT32_T
+@cvindex uint32_t
+This is like @code{AC_TYPE_UINT8_T}, except for 32-bit unsigned integers.
+@end defmac
+
+@defmac AC_TYPE_UINT64_T
+@acindex{TYPE_UINT64_T}
+@cvindex HAVE_UINT64_T
+@cvindex uint64_t
+This is like @code{AC_TYPE_UINT8_T}, except for 64-bit unsigned integers.
+@end defmac
+
+@defmac AC_TYPE_UINTMAX_T
+@acindex{TYPE_UINTMAX_T}
+@cvindex HAVE_UINTMAX_T
+@cvindex uintmax_t
+If @file{stdint.h} or @file{inttypes.h} defines the type @code{uintmax_t},
+define @code{HAVE_UINTMAX_T}.  Otherwise, define @code{uintmax_t} to the
+widest unsigned integer type.
+@end defmac
+
+@defmac AC_TYPE_UINTPTR_T
+@acindex{TYPE_UINTPTR_T}
+@cvindex HAVE_UINTPTR_T
+@cvindex uintptr_t
+If @file{stdint.h} or @file{inttypes.h} defines the type @code{uintptr_t},
+define @code{HAVE_UINTPTR_T}.  Otherwise, define @code{uintptr_t} to an
+unsigned integer type wide enough to hold a pointer, if such a type
+exists.
+@end defmac
+
+@defmac AC_TYPE_UNSIGNED_LONG_LONG_INT
+@acindex{TYPE_UNSIGNED_LONG_LONG_INT}
+@cvindex HAVE_UNSIGNED_LONG_LONG_INT
+If the C compiler supports a working @code{unsigned long long int} type,
+define @code{HAVE_UNSIGNED_LONG_LONG_INT}.
 @end defmac
 
 @node Generic Types
@@ -6043,14 +6270,6 @@ if it accepts one of those, otherwise define @code{inline} to be empty.
 @cvindex __CHAR_UNSIGNED__
 If the C type @code{char} is unsigned, define @code{__CHAR_UNSIGNED__},
 unless the C compiler predefines it.
-@end defmac
-
-@defmac AC_C_LONG_DOUBLE
-@acindex{C_LONG_DOUBLE}
-@cvindex HAVE_LONG_DOUBLE
-If the C compiler supports a working @code{long double} type with more
-range or precision than the @code{double} type, define
-@code{HAVE_LONG_DOUBLE}.
 @end defmac
 
 @defmac AC_C_STRINGIZE
@@ -6747,6 +6966,23 @@ obsolescent.
 If on Minix, define @code{_MINIX} and @code{_POSIX_SOURCE} and define
 @code{_POSIX_1_SOURCE} to be 2.  This allows the use of Posix
 facilities.  Should be called before any macros that run the C compiler.
+@end defmac
+
+@defmac AC_USE_SYSTEM_EXTENSIONS
+@acindex{USE_SYSTEM_EXTENSIONS}
+@cvindex _ALL_SOURCE
+@cvindex _GNU_SOURCE
+@cvindex _MINIX
+@cvindex _POSIX_1_SOURCE
+@cvindex _POSIX_PTHREAD_SEMANTICS
+@cvindex _POSIX_SOURCE
+@cvindex __EXTENSIONS__
+If possible, enable extensions to Posix on hosts that normally disable
+the extensions, typically due to standards-conformance namespace issues.
+This may involve defining @code{__EXTENSIONS__} and
+@code{_POSIX_PTHREAD_SEMANTICS}, which are macros used by Solaris.  This
+macro also has the combined effects of @code{AC_GNU_SOURCE},
+@code{AC_AIX}, and @code{AC_MINIX}.
 @end defmac
 
 
@@ -10004,8 +10240,8 @@ by setting @code{AC_SUBST_@var{symbol}}, which is a regular macro name.
 But since there is a macro named @code{AC_SUBST_FILE}, it was just
 impossible to @samp{AC_SUBST(FILE)}!  In this case,
 @code{AC_SUBST(@var{symbol})} or @code{_AC_SUBST(@var{symbol})} should
-have been used (yes, with the parentheses)@dots{}or better yet, high-level
-macros such as @code{AC_EXPAND_ONCE}.
+have been used (yes, with the parentheses).
+@c or better yet, high-level macros such as @code{m4_expand_once}
 
 No Autoconf macro should ever enter the user-variable name space; i.e.,
 except for the variables that are the actual result of running the
@@ -15045,6 +15281,17 @@ removed because of limited usefulness
 This macro is obsolete; it does nothing.
 @end defmac
 
+@defmac AC_C_LONG_DOUBLE
+@acindex{C_LONG_DOUBLE}
+@cvindex HAVE_LONG_DOUBLE
+If the C compiler supports a working @code{long double} type with more
+range or precision than the @code{double} type, define
+@code{HAVE_LONG_DOUBLE}.
+
+You should use @code{AC_TYPE_LONG_DOUBLE} or
+@code{AC_TYPE_LONG_DOUBLE_WIDER} instead.  @xref{Particular Types}.
+@end defmac
+
 @defmac AC_CANONICAL_SYSTEM
 @acindex{CANONICAL_SYSTEM}
 Determine the system type and set output variables to the names of the
@@ -15429,7 +15676,12 @@ Use the generic macro @samp{AC_CHECK_SIZEOF([long int])} instead.
 
 @defmac AC_LONG_DOUBLE
 @acindex{LONG_DOUBLE}
-@code{AC_C_LONG_DOUBLE}
+If the C compiler supports a working @code{long double} type with more
+range or precision than the @code{double} type, define
+@code{HAVE_LONG_DOUBLE}.
+
+You should use @code{AC_TYPE_LONG_DOUBLE} or
+@code{AC_TYPE_LONG_DOUBLE_WIDER} instead.  @xref{Particular Types}.
 @end defmac
 
 @defmac AC_LONG_FILE_NAMES

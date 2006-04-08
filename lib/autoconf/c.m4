@@ -1,4 +1,4 @@
-# This file is part of Autoconf.                       -*- Autoconf -*-
+# This file is part of Autoconf.			-*- Autoconf -*-
 # Programming languages support.
 # Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 # Foundation, Inc.
@@ -574,8 +574,8 @@ AC_CACHE_CHECK(whether $CC accepts -g, ac_cv_prog_cc_g,
      [ac_cv_prog_cc_g=yes],
      [CFLAGS=""
       _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
-        [],
-        [ac_c_werror_flag=$ac_save_c_werror_flag
+	[],
+	[ac_c_werror_flag=$ac_save_c_werror_flag
 	 CFLAGS="-g"
 	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 	   [ac_cv_prog_cc_g=yes])])])
@@ -800,8 +800,8 @@ AC_CACHE_CHECK(whether $CXX accepts -g, ac_cv_prog_cxx_g,
      [ac_cv_prog_cxx_g=yes],
      [CXXFLAGS=""
       _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
-        [],
-        [ac_cxx_werror_flag=$ac_save_cxx_werror_flag
+	[],
+	[ac_cxx_werror_flag=$ac_save_cxx_werror_flag
 	 CXXFLAGS="-g"
 	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 	   [ac_cv_prog_cxx_g=yes])])])
@@ -931,8 +931,8 @@ AC_CACHE_CHECK(whether $OBJC accepts -g, ac_cv_prog_objc_g,
      [ac_cv_prog_objc_g=yes],
      [OBJCFLAGS=""
       _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
-        [],
-        [ac_objc_werror_flag=$ac_save_objc_werror_flag
+	[],
+	[ac_objc_werror_flag=$ac_save_objc_werror_flag
 	 OBJCFLAGS="-g"
 	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 	   [ac_cv_prog_objc_g=yes])])])
@@ -1219,9 +1219,9 @@ AC_DEFUN([AC_PROG_CC_STDC],
       ;;
     *)
       if test "x$ac_cv_prog_cc_stdc" = x; then
-        AC_MSG_RESULT([none needed])
+	AC_MSG_RESULT([none needed])
       else
-        AC_MSG_RESULT([$ac_cv_prog_cc_stdc])
+	AC_MSG_RESULT([$ac_cv_prog_cc_stdc])
       fi
       ;;
   esac
@@ -1273,42 +1273,6 @@ if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi
 ])# AC_C_CHAR_UNSIGNED
-
-
-# AC_C_LONG_DOUBLE
-# ----------------
-AC_DEFUN([AC_C_LONG_DOUBLE],
-[AC_CACHE_CHECK(
-   [for working long double with more range or precision than double],
-   [ac_cv_c_long_double],
-   [AC_COMPILE_IFELSE(
-      [AC_LANG_BOOL_COMPILE_TRY(
-	 [[#include <float.h>
-	   long double const a[] =
-	     {
-		0.0L, DBL_MIN, DBL_MAX, DBL_EPSILON,
-		LDBL_MIN, LDBL_MAX, LDBL_EPSILON
-	     };
-	   long double
-	   f (long double x)
-	   {
-	      return ((x + (unsigned long int) 10) * (-1 / x) + a[0]
-	               + (x ? f (x) : 'c'));
-	   }
-	 ]],
-	 [[(0 < ((DBL_MAX_EXP < LDBL_MAX_EXP)
-		  + (DBL_MANT_DIG < LDBL_MANT_DIG)
-		  - (LDBL_MAX_EXP < DBL_MAX_EXP)
-		  - (LDBL_MANT_DIG < DBL_MANT_DIG)))
-	   && (int) LDBL_EPSILON == 0
-         ]])],
-      ac_cv_c_long_double=yes,
-      ac_cv_c_long_double=no)])
-if test $ac_cv_c_long_double = yes; then
-  AC_DEFINE(HAVE_LONG_DOUBLE, 1,
-	    [Define to 1 if long double works and has more range or precision than double.])
-fi
-])# AC_C_LONG_DOUBLE
 
 
 # AC_C_BIGENDIAN ([ACTION-IF-TRUE], [ACTION-IF-FALSE], [ACTION-IF-UNKNOWN])

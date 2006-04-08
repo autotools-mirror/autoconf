@@ -1,4 +1,4 @@
-# This file is part of Autoconf.                       -*- Autoconf -*-
+# This file is part of Autoconf.			-*- Autoconf -*-
 # Macros that test for specific, unclassified, features.
 #
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
@@ -123,9 +123,9 @@ m4_define([_AC_SYS_LARGEFILE_TEST_INCLUDES],
 
 
 # _AC_SYS_LARGEFILE_MACRO_VALUE(C-MACRO, VALUE,
-#                               CACHE-VAR,
-#                               DESCRIPTION,
-#                               [INCLUDES], [FUNCTION-BODY])
+#				CACHE-VAR,
+#				DESCRIPTION,
+#				PROLOGUE, [FUNCTION-BODY])
 # ----------------------------------------------------------
 m4_define([_AC_SYS_LARGEFILE_MACRO_VALUE],
 [AC_CACHE_CHECK([for $1 value needed for large files], [$3],
@@ -377,6 +377,41 @@ case $host_os in
 esac
 ], [$0 is obsolete: use AC_CANONICAL_HOST and check if $host_os
 matches *mingw32*])# AC_MINGW32
+
+
+# AC_USE_SYSTEM_EXTENSIONS
+# ------------------------
+# Enable extensions on systems that normally disable them,
+# typically due to standards-conformance issues.
+AC_DEFUN([AC_USE_SYSTEM_EXTENSIONS],
+[
+  AC_BEFORE([$0], [AC_COMPILE_IFELSE])
+  AC_BEFORE([$0], [AC_RUN_IFELSE])
+
+  AC_REQUIRE([AC_GNU_SOURCE])
+  AC_REQUIRE([AC_AIX])
+  AC_REQUIRE([AC_MINIX])
+
+  AH_VERBATIM([__EXTENSIONS__],
+[/* Enable extensions on Solaris.  */
+#ifndef __EXTENSIONS__
+# undef __EXTENSIONS__
+#endif
+#ifndef _POSIX_PTHREAD_SEMANTICS
+# undef _POSIX_PTHREAD_SEMANTICS
+#endif])
+  AC_CACHE_CHECK([whether it is safe to define __EXTENSIONS__],
+    [ac_cv_safe_to_define___extensions__],
+    [AC_COMPILE_IFELSE(
+       [AC_LANG_PROGRAM([
+#	  define __EXTENSIONS__ 1
+	  AC_INCLUDES_DEFAULT])],
+       [ac_cv_safe_to_define___extensions__=yes],
+       [ac_cv_safe_to_define___extensions__=no])])
+  test $ac_cv_safe_to_define___extensions__ = yes &&
+    AC_DEFINE([__EXTENSIONS__])
+  AC_DEFINE([_POSIX_PTHREAD_SEMANTICS])
+])
 
 
 

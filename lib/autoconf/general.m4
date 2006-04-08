@@ -561,8 +561,8 @@ AC_SUBST([localstatedir],  ['${prefix}/var'])dnl
 AC_SUBST([includedir],     ['${prefix}/include'])dnl
 AC_SUBST([oldincludedir],  ['/usr/include'])dnl
 AC_SUBST([docdir],         [m4_ifset([AC_PACKAGE_TARNAME],
-                                     ['${datarootdir}/doc/${PACKAGE_TARNAME}'],
-                                     ['${datarootdir}/doc/${PACKAGE}'])])dnl
+				     ['${datarootdir}/doc/${PACKAGE_TARNAME}'],
+				     ['${datarootdir}/doc/${PACKAGE}'])])dnl
 AC_SUBST([infodir],        ['${datarootdir}/info'])dnl
 AC_SUBST([htmldir],        ['${docdir}'])dnl
 AC_SUBST([dvidir],         ['${docdir}'])dnl
@@ -1644,7 +1644,7 @@ test -d "$ac_macro_dir" ||
 # It announces FILE is required in the auxdir.
 m4_define([AC_REQUIRE_AUX_FILE],
 [AS_LITERAL_IF([$1], [],
-               [AC_FATAL([$0: requires a literal argument])])])
+	       [AC_FATAL([$0: requires a literal argument])])])
 
 
 
@@ -2490,6 +2490,18 @@ $3],
 ])# AC_CHECK_DECLS
 
 
+# AC_CHECK_DECLS_ONCE(SYMBOLS)
+# ----------------------------
+# Like AC_CHECK_DECLS(SYMBOLS), but do it at most once.
+AC_DEFUN([AC_CHECK_DECLS_ONCE],
+[
+  m4_foreach([AC_Symbol], [$1],
+    [AC_DEFUN([_AC_Check_Decl_]m4_defn([AC_Symbol]),
+       [AC_CHECK_DECLS(m4_defn([AC_Symbol]))])
+     AC_REQUIRE([_AC_Check_Decl_]m4_defn([AC_Symbol]))])
+])
+
+
 
 ## ---------------------------------- ##
 ## Replacement of library functions.  ##
@@ -2568,8 +2580,8 @@ AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])
 ## ----------------------------------- ##
 
 
-# _AC_COMPUTE_INT_COMPILE(EXPRESSION, VARIABLE, [INCLUDES], [IF-FAILS])
-# ---------------------------------------------------------------------
+# _AC_COMPUTE_INT_COMPILE(EXPRESSION, VARIABLE, PROLOGUE, [IF-FAILS])
+# -------------------------------------------------------------------
 # Compute the integer EXPRESSION and store the result in the VARIABLE.
 # Works OK if cross compiling, but assumes twos-complement arithmetic.
 m4_define([_AC_COMPUTE_INT_COMPILE],
@@ -2612,15 +2624,15 @@ esac[]dnl
 ])# _AC_COMPUTE_INT_COMPILE
 
 
-# _AC_COMPUTE_INT_RUN(EXPRESSION, VARIABLE, [INCLUDES], [IF-FAILS])
-# -----------------------------------------------------------------
+# _AC_COMPUTE_INT_RUN(EXPRESSION, VARIABLE, PROLOGUE, [IF-FAILS])
+# ---------------------------------------------------------------
 # Store the evaluation of the integer EXPRESSION in VARIABLE.
 m4_define([_AC_COMPUTE_INT_RUN],
 [_AC_RUN_IFELSE([AC_LANG_INT_SAVE([$3], [$1])],
 		[$2=`cat conftest.val`], [$4])])
 
 
-# _AC_COMPUTE_INT(EXPRESSION, VARIABLE, INCLUDES, IF-FAILS)
+# _AC_COMPUTE_INT(EXPRESSION, VARIABLE, PROLOGUE, IF-FAILS)
 # ---------------------------------------------------------
 m4_define([_AC_COMPUTE_INT],
 [AC_LANG_COMPILER_REQUIRE()dnl

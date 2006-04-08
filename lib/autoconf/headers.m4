@@ -1,7 +1,7 @@
-# This file is part of Autoconf.                       -*- Autoconf -*-
+# This file is part of Autoconf.			-*- Autoconf -*-
 # Checking for headers.
 #
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2006 Free Software
+# Copyright (C) 1988, 1999, 2000, 2001, 2002, 2003, 2004, 2006 Free Software
 # Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -65,8 +65,8 @@
 
 
 # AC_CHECK_HEADER(HEADER-FILE,
-#                 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#                 [INCLUDES])
+#		  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		  [INCLUDES])
 # ---------------------------------------------------------
 # We are slowly moving to checking headers with the compiler instead
 # of the preproc, so that we actually learn about the usability of a
@@ -93,9 +93,9 @@ AC_DEFUN([AC_CHECK_HEADER],
 
 
 # _AC_CHECK_HEADER_MONGREL(HEADER-FILE,
-#                          [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#                          [INCLUDES])
-# --------------------------------------------------------------
+#			   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#			   [INCLUDES = DEFAULT-INCLUDES])
+# ------------------------------------------------------------------
 # Check using both the compiler and the preprocessor.  If they disagree,
 # warn, and the preproc wins.
 #
@@ -149,8 +149,8 @@ AS_VAR_POPDEF([ac_Header])dnl
 
 
 # _AC_CHECK_HEADER_NEW(HEADER-FILE,
-#                      [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#                      [INCLUDES])
+#		       [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		       [INCLUDES = DEFAULT-INCLUDES])
 # --------------------------------------------------------------
 # Check the compiler accepts HEADER-FILE.  The INCLUDES are defaulted.
 m4_define([_AC_CHECK_HEADER_NEW],
@@ -166,7 +166,7 @@ AS_VAR_POPDEF([ac_Header])dnl
 
 
 # _AC_CHECK_HEADER_OLD(HEADER-FILE,
-#                      [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+#		       [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------------
 # Check the preprocessor accepts HEADER-FILE.
 m4_define([_AC_CHECK_HEADER_OLD],
@@ -184,13 +184,13 @@ AS_VAR_POPDEF([ac_Header])dnl
 # --------------------------------
 m4_define([AH_CHECK_HEADERS],
 [m4_foreach_w([AC_Header], [$1],
-  [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Header),
-	       [Define to 1 if you have the <]AC_Header[> header file.])])])
+  [AH_TEMPLATE(AS_TR_CPP([HAVE_]m4_defn([AC_Header])),
+     [Define to 1 if you have the <]m4_defn([AC_Header])[> header file.])])])
 
 
-# AC_CHECK_HEADERS(HEADER-FILE...
-#                  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#                  [INCLUDES])
+# AC_CHECK_HEADERS(HEADER-FILE...,
+#		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		   [INCLUDES])
 # ----------------------------------------------------------
 AC_DEFUN([AC_CHECK_HEADERS],
 [AH_CHECK_HEADERS([$1])dnl
@@ -202,6 +202,26 @@ AC_CHECK_HEADER($ac_header,
 		[$4])dnl
 done
 ])# AC_CHECK_HEADERS
+
+
+# AC_CHECK_HEADERS_ONCE(HEADER-FILE...)
+# -------------------------------------
+AC_DEFUN([AC_CHECK_HEADERS_ONCE],
+[
+  AH_CHECK_HEADERS([$1])
+  m4_foreach_w([AC_Header], [$1],
+    [AC_DEFUN([_AC_Header_]m4_quote(m4_translit(AC_Header, [./-], [___])),
+       [m4_divert_text([INIT_PREPARE],
+	  [ac_header_list="$ac_header_list AC_Header"])
+	_AC_HEADERS_EXPANSION])
+     AC_REQUIRE([_AC_Header_]m4_quote(m4_translit(AC_Header, [./-], [___])))])
+])
+m4_define([_AC_HEADERS_EXPANSION],
+[
+  m4_divert_text([DEFAULTS], [ac_header_list=])
+  AC_CHECK_HEADERS([$ac_header_list])
+  m4_define([_AC_HEADERS_EXPANSION], [])
+])
 
 
 
@@ -354,9 +374,22 @@ AN_HEADER([wctype.h],           [AC_CHECK_HEADERS])
 ## 4. Tests for specific headers.  ##
 ## ------------------------------- ##
 
+# AC_HEADER_ASSERT
+# ----------------
+# Check whether to enable assertions.
+AC_DEFUN([AC_HEADER_ASSERT],
+[
+  AC_MSG_CHECKING([whether to enable assertions])
+  AC_ARG_ENABLE([assert],
+    [  --disable-assert        turn off assertions],
+    [AC_MSG_RESULT([no])
+     AC_DEFINE(NDEBUG, 1, [Define to 1 if assertions should be disabled.])],
+    [AC_MSG_RESULT(yes)])
+])
+
 
 # _AC_CHECK_HEADER_DIRENT(HEADER-FILE,
-#                         [ACTION-IF-FOUND], [ACTION-IF-NOT_FOUND])
+#			  [ACTION-IF-FOUND], [ACTION-IF-NOT_FOUND])
 # -----------------------------------------------------------------
 # Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
 # defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
@@ -526,22 +559,22 @@ AC_DEFUN([AC_HEADER_STDBOOL],
       [[
 #include <stdbool.h>
 #ifndef bool
-# error bool is not defined
+ "error: bool is not defined"
 #endif
 #ifndef false
-# error false is not defined
+ "error: false is not defined"
 #endif
 #if false
-# error false is not 0
+ "error: false is not 0"
 #endif
 #ifndef true
-# error true is not defined
+ "error: true is not defined"
 #endif
 #if true != 1
-# error true is not 1
+ "error: true is not 1"
 #endif
 #ifndef __bool_true_false_are_defined
-# error __bool_true_false_are_defined is not defined
+ "error: __bool_true_false_are_defined is not defined"
 #endif
 
 	struct s { _Bool s: 1; _Bool t; } s;
@@ -558,10 +591,39 @@ AC_DEFUN([AC_HEADER_STDBOOL],
 	enum { j = false, k = true, l = false * true, m = true * 256 };
 	_Bool n[m];
 	char o[sizeof n == m * sizeof n[0] ? 1 : -1];
+	char p[-1 - (_Bool) 0 < 0 && -1 - (bool) 0 < 0 ? 1 : -1];
+#	if defined __xlc__ || defined __GNUC__
+	 /* Catch a bug in IBM AIX xlc compiler version 6.0.0.0
+	    reported by James Lemley on 2005-10-05; see
+	    http://lists.gnu.org/archive/html/bug-coreutils/2005-10/msg00086.html
+	    This test is not quite right, since xlc is allowed to
+	    reject this program, as the initializer for xlcbug is
+	    not one of the forms that C requires support for.
+	    However, doing the test right would require a run-time
+	    test, and that would make cross-compilation harder.
+	    Let us hope that IBM fixes the xlc bug, and also adds
+	    support for this kind of constant expression.  In the
+	    meantime, this test will reject xlc, which is OK, since
+	    our stdbool.h substitute should suffice.  We also test
+	    this with GCC, where it should work, to detect more
+	    quickly whether someone messes up the test in the
+	    future.  */
+	 char digs[] = "0123456789";
+	 int xlcbug = 1 / (&(digs + 5)[-2 + (bool) 1] == &digs[4] ? 1 : -1);
+#	endif
+	/* Catch a bug in an HP-UX C compiler.  See
+	   http://gcc.gnu.org/ml/gcc-patches/2003-12/msg02303.html
+	   http://lists.gnu.org/archive/html/bug-coreutils/2005-11/msg00161.html
+	 */
+	_Bool q = true;
+	_Bool *pq = &q;
       ]],
       [[
-	 return (!a + !b + !c + !d + !e + !f + !g + !h + !i + !j + !k + !l
-		 + !m + !n + !o);
+	*pq |= q;
+	*pq |= ! q;
+	/* Refer to every declared value, to avoid compiler optimizations.  */
+	return (!a + !b + !c + !d + !e + !f + !g + !h + !i + !!j + !k + !!l
+		+ !m + !n + !o + !p + !q + !pq);
       ]])],
       [ac_cv_header_stdbool_h=yes],
       [ac_cv_header_stdbool_h=no])])

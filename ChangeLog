@@ -1,3 +1,65 @@
+2006-04-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Import macros from gnulib (often changing their name).
+
+	* NEWS: AC_C_TYPE_LONG_DOUBLE is now obsolete.
+	New macros AC_CHECK_DECLS_ONCE, AC_CHECK_FUNCS_ONCE,
+	AC_CHECK_HEADERS_ONCE, AC_FUNC_STRTOLD, AC_HEADER_ASSERT,
+	AC_STRUCT_DIRENT_D_INO, AC_STRUCT_DIRENT_D_TYPE,
+	AC_TYPE_LONG_DOUBLE, AC_TYPE_LONG_DOUBLE_WIDER, AC_TYPE_INT8_T,
+	AC_TYPE_INT16_T, AC_TYPE_INT32_T, AC_TYPE_INT64_T,
+	AC_TYPE_INTMAX_T, AC_TYPE_INTPTR_T, AC_TYPE_LONG_LONG_INT,
+	AC_TYPE_UINT8_T, AC_TYPE_UINT16_T, AC_TYPE_UINT32_T,
+	AC_TYPE_UINT64_T, AC_TYPE_UINTMAX_T, AC_TYPE_UINTPTR_T,
+	AC_TYPE_UNSIGNED_LONG_LONG_INT, AC_USE_SYSTEM_EXTENSIONS.
+	The manual mentions Gnulib more prominently.
+	* doc/autoconf.texi (Gnulib): New node.
+	(Pointers): Add Gnulib URL.
+	(Particular Functions): Alphabetize.  Add AC_FUNC_STRTOLD.
+	(Generic Functions): Add AC_CHECK_FUNCS_ONCE.  Refer to new
+	Gnulib section.
+	(Particular Headers): Add AC_HEADER_ASSERT.  For stdbool.h,
+	suggest a #define rather than a typedef for _Bool, and mention
+	Gnulib rather than trying to substitute stdbool code.
+	(Generic Headers): Add AC_CHECK_HEADERS_ONCE.
+	(Generic Declarations): Add AC_CHECK_DECLS_ONCE.
+	(Particular Structures): Add AC_STRUCT_DIRENT_D_INO,
+	AC_STRUCT_DIRENT_D_TYPE.
+	(Particular Types): Mention stdint.h and inttypes.h as standard
+	headers too.
+	Add AC_TYPE_INT8_T, AC_TYPE_INT16_T, AC_TYPE_INT32_T, AC_TYPE_INT64_T,
+	AC_TYPE_INTMAX_T, AC_TYPE_INTPTR_T, AC_TYPE_LONG_DOUBLE,
+	AC_TYPE_LONG_DOUBLE_WIDER, AC_TYPE_LONG_LONG_INT, AC_TYPE_UINT8_T,
+	AC_TYPE_UINT16_T, AC_TYPE_UINT32_T, AC_TYPE_UINT64_T, AC_TYPE_UINTMAX_T,
+	AC_TYPE_UINTPTR_T, AC_TYPE_UNSIGNED_LONG_LONG_INT.
+	(C Compiler): Move AC_C_LONG_DOUBLE to ...
+	(Obsolete Macros): here.  Under AC_LONG_DOUBLE, mention
+	AC_TYPE_LONG_DOUBLE or AC_TYPE_LONG_DOUBLE_WIDER instead.
+	(Posix Variants): Add AC_USE_SYSTEM_EXTENSIONS.
+	(Coding Style).  Don't mention m4_expand_once.
+	* lib/autoconf/c.m4 (AC_C_LONG_DOUBLE): Implement via
+	AC_TYPE_LONG_DOUBLE_WIDER.  Now obsolete.
+	* lib/autoconf/functions.m4 (_AH_CHECK_FUNCS): New macro.
+	(AC_CHECK_FUNCS): Use it.
+	(AC_CHECK_FUNCS_ONCE, AC_FUNC_STRTOLD): New macros.
+	(AC_FUNC_WAIT3): "the Open Group standards" -> "POSIX".
+	* lib/autoconf/general.m4 (AC_CHECK_DECLS_ONCE): New macro.
+	* lib/autoconf/headers.m4 (AC_CHECK_HEADERS_ONCE): New macro.
+	(AC_HEADER_ASSERT): New macro.
+	(AC_HEADER_STDBOOL): Don't assume "#error" works.
+	Catch a bug in IBM AIX xlc compiler version 6.0.0.0.
+	Catch a bug in an HP-UX C compiler.
+	* lib/autoconf/specific.m4 (AC_USE_SYSTEM_EXTENSIONS): New macro.
+	* lib/autoconf/types.m4 (AC_TYPE_INTMAX_T. AC_TYPE_UINTMAX_T):
+	(AC_TYPE_INTPTR_T, AC_TYPE_UINTPTR_T. AC_TYPE_LONG_DOUBLE):
+	(AC_TYPE_LONG_DOUBLE_WIDER, AC_C_LONG_DOUBLE, AC_TYPE_LONG_LONG_INT):
+	(AC_TYPE_UNSIGNED_LONG_LONG_INT, _AC_TYPE_INT, _AC_TYPE_UNSIGNED_INT):
+	(_AC_STRUCT_DIRENT, AC_STRUCT_DIRENT_D_INO, AC_STRUCT_DIRENT_D_TYPE):
+	New macros.
+
+	* tests/mktests.sh (ac_exclude_list): Fix some typos in
+	recent changes: awk wants /^(a|b)$/, not /^a|b$/.
+
 2006-04-08  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Fix the wording
