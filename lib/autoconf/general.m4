@@ -1199,8 +1199,9 @@ AS_UNSET(ac_configure_args1)
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.  We remove comments because anyway the quotes in there
 # would cause problems or look ugly.
-# WARNING: Do not use single quotes inside single quotes.
-trap 'exit_status=$?
+# WARNING: Use '\'' to represent an apostrophe within the trap.
+trap '
+  exit_status=$?
   # Save into config.log some information that might help in debugging.
   {
     echo
@@ -1210,7 +1211,7 @@ trap 'exit_status=$?
     m4_bpatsubsts(m4_defn([_AC_CACHE_DUMP]),
 		  [^ *\(#.*\)?
 ],                [],
-		  ['], ['"'"'])
+		  ['], ['\\''])
     echo
 
     AS_BOX([Output variables.])
@@ -1218,7 +1219,7 @@ trap 'exit_status=$?
     for ac_var in $ac_subst_vars
     do
       eval ac_val=\$$ac_var
-      echo "$ac_var='"'"'$ac_val'"'"'"
+      echo "$ac_var='\''$ac_val'\''"
     done | sort
     echo
 
@@ -1228,7 +1229,7 @@ trap 'exit_status=$?
       for ac_var in $ac_subst_files
       do
 	eval ac_val=\$$ac_var
-	echo "$ac_var='"'"'$ac_val'"'"'"
+	echo "$ac_var='\''$ac_val'\''"
       done | sort
       echo
     fi
@@ -1236,7 +1237,7 @@ trap 'exit_status=$?
     if test -s confdefs.h; then
       AS_BOX([confdefs.h.])
       echo
-      sed "/^$/d" confdefs.h | sort
+      grep . confdefs.h | sort
       echo
     fi
     test "$ac_signal" != 0 &&
@@ -1244,9 +1245,9 @@ trap 'exit_status=$?
     echo "$as_me: exit $exit_status"
   } >&AS_MESSAGE_LOG_FD
   rm -f core *.core core.conftest.* &&
-  rm -f -r conftest* confdefs* conf$[$]* $ac_clean_files &&
+    rm -f -r conftest* confdefs* conf$[$]* $ac_clean_files &&
     exit $exit_status
-     ' 0
+' 0
 for ac_signal in 1 2 13 15; do
   trap 'ac_signal='$ac_signal'; AS_EXIT([1])' $ac_signal
 done
