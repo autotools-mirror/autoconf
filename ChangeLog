@@ -83,8 +83,8 @@
 	(_AC_STRUCT_DIRENT, AC_STRUCT_DIRENT_D_INO, AC_STRUCT_DIRENT_D_TYPE):
 	New macros.
 
-	* tests/mktests.sh (ac_exclude_list): Fix some typos in
-	recent changes: awk wants /^(a|b)$/, not /^a|b$/.
+	* tests/mktests.sh (ac_exclude_list, au_exclude_list): Do not
+	use /^foo|bar$/, it does not mean /^(foo|bar)$/.
 
 2006-04-08  Stepan Kasal  <kasal@ucw.cz>
 
