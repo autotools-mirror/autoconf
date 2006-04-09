@@ -1,3 +1,7 @@
+2006-04-09  Stepan Kasal  <kasal@ucw.cz>
+
+	* tests/Makefile.am (AUTOCONF_FILES): Fix typo in the comment.
+
 2006-04-09  Alexandre Duret-Lutz  <adl@gnu.org>
 
 	* lib/autom4te.in (Automake-preselections): Preselect

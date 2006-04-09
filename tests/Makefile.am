@@ -143,7 +143,7 @@ MAINTAINERCLEANFILES += $(TESTSUITE_GENERATED_AT)
 
 ## Producing the test files.
 
-# The files which contains macro we check for syntax.  Use $(top_srcdir)
+# The files which contain macros we check for syntax.  Use $(top_srcdir)
 # for the benefit of non-GNU make.  Fix the names in the rule below
 # where we `cd' to $srcdir.
 autoconfdir = $(top_srcdir)/lib/autoconf
