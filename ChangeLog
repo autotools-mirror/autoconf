@@ -1,3 +1,8 @@
+2006-04-09  Alexandre Duret-Lutz  <adl@gnu.org>
+
+	* lib/autom4te.in (Automake-preselections): Preselect
+	_AM_SUBST_NOTMAKE.
+
 2006-04-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Use '\'' for an
