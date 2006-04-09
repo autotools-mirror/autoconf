@@ -110,8 +110,7 @@ two
 
 AT_CHECK_AT_TEST([Backquote command substition],
   [AT_CHECK([echo `echo hi`], 0, [hi
-], [])],
-  [AT_NO_CMDSUBST])
+], [])])
 
 
 AT_CHECK_AT_TEST([Multiline backquote command substition],
@@ -120,12 +119,12 @@ bar
 ])
    AT_CHECK([echo "`cat myfile`"], 0, [foo
 bar
-], [])],
-  [AT_NO_CMDSUBST])
+], [])])
 
 AT_CHECK_AT_TEST([Parenthetical command substition],
   [AT_CHECK([echo $(echo hi)], 0, [hi
-], [])])
+], [])],
+  [AT_NO_CMDSUBST])
 
 AT_CHECK_AT_TEST([Multiline parenthetical command substition],
   [AT_DATA([myfile],[foo
@@ -133,7 +132,8 @@ bar
 ])
    AT_CHECK([echo "$(cat myfile)"], 0, [foo
 bar
-], [])])
+], [])],
+  [AT_NO_CMDSUBST])
 
 
 ## ------------------------- ##

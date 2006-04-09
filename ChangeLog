@@ -1,3 +1,12 @@
+2006-04-09  Eric Blake  <ebb9@byu.net>
+
+	* tests/autotest.at (Backquote command substitution),
+	(Multiline backquote command substitution): Remove mistaken
+	AT_NO_CMDSUBST from the 2006-03-14 patch, which was meant to be
+	applied...
+	(Parenthetical command substitution, Multiline parenthetical
+	command substitution): here.
+
 2006-04-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Import macros from gnulib (often changing their name).
