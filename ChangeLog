@@ -1,5 +1,12 @@
 2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/m4sugar/m4sh.m4 (_AS_LN_S_PREPARE): MSYS `ln -s' fails
+	with a target directory; it's internally implemented as `cp'
+	anyway, but since Autoconf advertises the possibility to use
+	a target directory when LN_S is `ln -s', we need to find out.
+	Reported by Rolf Ebert <rolf.ebert.gcc@gmx.de> against MSYS,
+	analyzed by Keith Marshall <keith.marshall@total.com>.
+
 	* THANKS: Update.
 
 2006-04-10  Paul Eggert  <eggert@cs.ucla.edu>

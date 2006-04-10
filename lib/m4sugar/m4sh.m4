@@ -857,11 +857,18 @@ _AS_LINENO_WORKS || {
 # Don't use conftest.sym to avoid file name issues on DJGPP, where this
 # would yield conftest.sym.exe for DJGPP < 2.04.  And don't use `conftest'
 # as base name to avoid prohibiting concurrency (e.g., concurrent
-# config.statuses).
+# config.statuses).  MSYS `ln -s' fails with a target directory.
 m4_defun([_AS_LN_S_PREPARE],
 [rm -f conf$$ conf$$.exe conf$$.file
+if test -d conf$$.dir; then
+  rm -f conf$$.dir/conf$$.file
+else
+  rm -f conf$$.dir
+  mkdir conf$$.dir
+fi
 echo >conf$$.file
-if ln -s conf$$.file conf$$ 2>/dev/null; then
+if ln -s conf$$.file conf$$ 2>/dev/null &&
+   ln -s conf$$.file conf$$.dir 2>/dev/null; then
   # We could just check for DJGPP; but this test a) works b) is more generic
   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
   if test -f conf$$.exe; then
@@ -875,7 +882,8 @@ elif ln conf$$.file conf$$ 2>/dev/null; then
 else
   as_ln_s='cp -p'
 fi
-rm -f conf$$ conf$$.exe conf$$.file
+rm -f conf$$ conf$$.exe conf$$.dir/conf$$.file conf$$.file
+rmdir conf$$.dir 2>/dev/null
 ])# _AS_LN_S_PREPARE
 
 
