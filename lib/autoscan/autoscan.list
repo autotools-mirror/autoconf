@@ -253,6 +253,10 @@ identifier: const		AC_C_CONST
 identifier: false		AC_HEADER_STDBOOL
 identifier: gid_t		AC_TYPE_UID_T
 identifier: inline		AC_C_INLINE
+identifier: int16_t		AC_TYPE_INT16_T
+identifier: int32_t		AC_TYPE_INT32_T
+identifier: int64_t		AC_TYPE_INT64_T
+identifier: int8_t		AC_TYPE_INT8_T
 identifier: mode_t		AC_TYPE_MODE_T
 identifier: obstack		AC_FUNC_OBSTACK
 identifier: off_t		AC_TYPE_OFF_T
@@ -260,6 +264,7 @@ identifier: pid_t		AC_TYPE_PID_T
 identifier: ptrdiff_t		AC_CHECK_TYPES
 identifier: restrict		AC_C_RESTRICT
 identifier: size_t		AC_TYPE_SIZE_T
+identifier: ssize_t		AC_TYPE_SSIZE_T
 identifier: st_blksize		AC_CHECK_MEMBERS([struct stat.st_blksize])
 identifier: st_blocks		AC_STRUCT_ST_BLOCKS
 identifier: st_rdev		AC_CHECK_MEMBERS([struct stat.st_rdev])
@@ -269,6 +274,10 @@ identifier: tm		AC_STRUCT_TM
 identifier: tm_zone		AC_STRUCT_TIMEZONE
 identifier: true		AC_HEADER_STDBOOL
 identifier: uid_t		AC_TYPE_UID_T
+identifier: uint16_t		AC_TYPE_UINT16_T
+identifier: uint32_t		AC_TYPE_UINT32_T
+identifier: uint64_t		AC_TYPE_UINT64_T
+identifier: uint8_t		AC_TYPE_UINT8_T
 identifier: volatile		AC_C_VOLATILE
 makevar: AWK		AC_PROG_AWK
 makevar: BISON		AC_PROG_YACC

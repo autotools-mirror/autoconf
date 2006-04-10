@@ -484,8 +484,15 @@ else
 fi
 
 rm -f conf$$ conf$$.exe conf$$.file
+if test -d conf$$.dir; then
+  rm -f conf$$.dir/conf$$.file
+else
+  rm -f conf$$.dir
+  mkdir conf$$.dir
+fi
 echo >conf$$.file
-if ln -s conf$$.file conf$$ 2>/dev/null; then
+if ln -s conf$$.file conf$$ 2>/dev/null &&
+   ln -s conf$$.file conf$$.dir 2>/dev/null; then
   # We could just check for DJGPP; but this test a) works b) is more generic
   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
   if test -f conf$$.exe; then
@@ -499,7 +506,8 @@ elif ln conf$$.file conf$$ 2>/dev/null; then
 else
   as_ln_s='cp -p'
 fi
-rm -f conf$$ conf$$.exe conf$$.file
+rm -f conf$$ conf$$.exe conf$$.dir/conf$$.file conf$$.file
+rmdir conf$$.dir 2>/dev/null
 
 if mkdir -p . 2>/dev/null; then
   as_mkdir_p=:
@@ -1403,9 +1411,9 @@ $as_unset ac_configure_args1 || test "${ac_configure_args1+set}" != set || { ac_
 # When interrupted or exit'd, cleanup temporary files, and complete
 # config.log.  We remove comments because anyway the quotes in there
 # would cause problems or look ugly.
-# WARNING: Be sure not to use single quotes in there, as some shells,
-# such as our DU 5.0 friend, will then `close' the trap.
-trap 'exit_status=$?
+# WARNING: Use '\'' to represent an apostrophe within the trap.
+trap '
+  exit_status=$?
   # Save into config.log some information that might help in debugging.
   {
     echo
@@ -1418,7 +1426,7 @@ _ASBOX
     echo
     # The following way of writing the cache mishandles newlines in values,
 (
-  for ac_var in `(set) 2>&1 | sed -n '"'"'s/^\([a-zA-Z_][a-zA-Z0-9_]*\)=.*/\1/p'"'"'`; do
+  for ac_var in `(set) 2>&1 | sed -n '\''s/^\([a-zA-Z_][a-zA-Z0-9_]*\)=.*/\1/p'\''`; do
     eval ac_val=\$$ac_var
     case $ac_val in #(
     *${as_nl}*)
@@ -1433,11 +1441,11 @@ echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
     esac
   done
   (set) 2>&1 |
-    case $as_nl`(ac_space='"'"' '"'"'; set) 2>&1` in #(
+    case $as_nl`(ac_space='\'' '\''; set) 2>&1` in #(
     *${as_nl}ac_space=\ *)
       sed -n \
-	"s/'"'"'/'"'"'\\\\'"'"''"'"'/g;
-	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
+	"s/'\''/'\''\\\\'\'''\''/g;
+	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\''\\2'\''/p"
       ;; #(
     *)
       sed -n "/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"
@@ -1455,7 +1463,7 @@ _ASBOX
     for ac_var in $ac_subst_vars
     do
       eval ac_val=\$$ac_var
-      echo "$ac_var='"'"'$ac_val'"'"'"
+      echo "$ac_var='\''$ac_val'\''"
     done | sort
     echo
 
@@ -1469,7 +1477,7 @@ _ASBOX
       for ac_var in $ac_subst_files
       do
 	eval ac_val=\$$ac_var
-	echo "$ac_var='"'"'$ac_val'"'"'"
+	echo "$ac_var='\''$ac_val'\''"
       done | sort
       echo
     fi
@@ -1481,7 +1489,7 @@ _ASBOX
 ## ----------- ##
 _ASBOX
       echo
-      sed "/^$/d" confdefs.h | sort
+      cat confdefs.h
       echo
     fi
     test "$ac_signal" != 0 &&
@@ -1489,9 +1497,9 @@ _ASBOX
     echo "$as_me: exit $exit_status"
   } >&5
   rm -f core *.core core.conftest.* &&
-  rm -f -r conftest* confdefs* conf$$* $ac_clean_files &&
+    rm -f -r conftest* confdefs* conf$$* $ac_clean_files &&
     exit $exit_status
-     ' 0
+' 0
 for ac_signal in 1 2 13 15; do
   trap 'ac_signal='$ac_signal'; { (exit 1); exit 1; }' $ac_signal
 done
@@ -3147,8 +3155,15 @@ else
 fi
 
 rm -f conf$$ conf$$.exe conf$$.file
+if test -d conf$$.dir; then
+  rm -f conf$$.dir/conf$$.file
+else
+  rm -f conf$$.dir
+  mkdir conf$$.dir
+fi
 echo >conf$$.file
-if ln -s conf$$.file conf$$ 2>/dev/null; then
+if ln -s conf$$.file conf$$ 2>/dev/null &&
+   ln -s conf$$.file conf$$.dir 2>/dev/null; then
   # We could just check for DJGPP; but this test a) works b) is more generic
   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
   if test -f conf$$.exe; then
@@ -3162,7 +3177,8 @@ elif ln conf$$.file conf$$ 2>/dev/null; then
 else
   as_ln_s='cp -p'
 fi
-rm -f conf$$ conf$$.exe conf$$.file
+rm -f conf$$ conf$$.exe conf$$.dir/conf$$.file conf$$.file
+rmdir conf$$.dir 2>/dev/null
 
 if mkdir -p . 2>/dev/null; then
   as_mkdir_p=:
