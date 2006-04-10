@@ -1236,7 +1236,8 @@ trap '
 
     if test -s confdefs.h; then
       AS_BOX([confdefs.h.])
-      sort -u confdefs.h
+      echo
+      cat confdefs.h
       echo
     fi
     test "$ac_signal" != 0 &&

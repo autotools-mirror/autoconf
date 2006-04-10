@@ -1,3 +1,10 @@
+2006-04-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Just output
+	confdefs.h as-is.  In general, if it has backslash-newline or the
+	like, then it doesn't work either to sort or to remove empty
+	lines.
+
 2006-04-09  Stepan Kasal  <kasal@ucw.cz>
 
 	* tests/Makefile.am (AUTOCONF_FILES): Fix typo in the comment.
