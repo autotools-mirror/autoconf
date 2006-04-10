@@ -113,6 +113,7 @@
   Object names added to these variables are now prefixed with `${LIBOBJDIR}',
   as in `${LIBOBJDIR}alloca.o'.  LIBOBJDIR is meant to be defined from
   `Makefile.in' in case the object files lie in a different directory.
+  The LIBOBJDIR feature is experimental.
 
 ** autoreconf
   Supports --no-recursive now.

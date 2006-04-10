@@ -16659,6 +16659,7 @@ When used with Automake 1.10 or newer, a suitable value for
 can be referenced from any @file{Makefile.am}.  Even without Automake,
 arranging for @code{LIBOBJDIR} to be set correctly will enable
 referencing @code{LIBOBJS} and @code{LTLIBOBJS} in another directory.
+The @code{LIBOJBDIR} feature is experimental.
 
 
 @node AC_FOO_IFELSE vs AC_TRY_FOO

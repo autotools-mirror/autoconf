@@ -1,5 +1,8 @@
 2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* NEWS, doc/autoconf.texi (AC_LIBOBJ vs LIBOBJS): Mark
+	`LIBOBJDIR' as experimental.
+
 	* lib/m4sugar/m4sh.m4 (_AS_LN_S_PREPARE): MSYS `ln -s' fails
 	with a target directory; it's internally implemented as `cp'
 	anyway, but since Autoconf advertises the possibility to use
