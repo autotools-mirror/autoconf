@@ -25,13 +25,9 @@
 
 as_me=`echo "$0" | sed 's,.*[\\/],,'`
 
-trap 'echo "'"$as_me"': failed.  To proceed run make check." >&2
+trap 'echo "'"$as_me"': failed." >&2
       rm -f acdefuns audefuns requires *.tat
-      for file
-      do
-        touch `echo "$file" | sed "s,.*[\\/],,;s/\..*/.at/"`
-      done
-      trap 0
+      trap "" 0
       exit 1' \
      0 1 2 15
 
@@ -218,17 +214,17 @@ MK_EOF
   # check, output /rien du tout/[1].
   if grep AT_CHECK ac$base.tat >/dev/null 2>&1; then
     mv -f ac$base.tat ac$base.at
-    # Help people not to update these files by hand.
-    chmod a-w ac$base.at
   else
     rm -f ac$base.tat ac$base.at
     touch ac$base.at
   fi
+  # Help people not to update these files by hand.
+  chmod a-w ac$base.at
 done
 
 rm -f acdefuns audefuns requires
 
-trap 0
+trap '' 0
 exit 0
 
 # [1] En franc,ais dans le texte.

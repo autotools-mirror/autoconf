@@ -1,3 +1,9 @@
+2006-04-10  Stepan Kasal  <kasal@ucw.cz>
+
+	* tests/mktests.sh: Use "trap '' 0", not "trap 0".  Do not touch
+	the files if a problem appears.  Make the empty *.at files
+	read-only, too.  Proposed by Ralf Wildenhues.
+
 2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* config/Makefile.am: Add comment to force updated Makefile.in.
