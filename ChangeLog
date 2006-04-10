@@ -1,5 +1,7 @@
 2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/standards.texi: Sync from gnulib.
+
 	* NEWS, doc/autoconf.texi (AC_LIBOBJ vs LIBOBJS): Mark
 	`LIBOBJDIR' as experimental.
 

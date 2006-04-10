@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate December 30, 2004
+@set lastupdate April 9, 2006
 @c %**end of header
 
 @dircategory GNU organization
@@ -33,7 +33,7 @@
 The GNU coding standards, last updated @value{lastupdate}.
 
 Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
-2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.1
@@ -72,7 +72,7 @@ Free Documentation License''.
 * Managing Releases::           The Release Process
 * References::                  References to Non-Free Software or Documentation
 * Copying This Manual::         How to Make Copies of This Manual
-* Index::                       
+* Index::
 
 @end menu
 
@@ -117,8 +117,8 @@ to document them as much as possible.  That way, your program will be
 more maintainable by others.
 
 The GNU Hello program serves as an example of how to follow the GNU
-coding standards for a trivial program which prints @samp{Hello,
-world!}.  @uref{http://www.gnu.org/software/hello/hello.html}.
+coding standards for a trivial program.
+@uref{http://www.gnu.org/software/hello/hello.html}.
 
 @node Legal Issues
 @chapter Keeping Free Software Free
@@ -224,7 +224,7 @@ packages or documentation.
 
 Trademark acknowledgements are the statements that such-and-such is a
 trademark of so-and-so.  The GNU Project has no objection to the basic
-idea of trademarks, but these acknowledgements feel like kowtowing, 
+idea of trademarks, but these acknowledgements feel like kowtowing,
 and there is no legal requirement for them, so we don't use them.
 
 What is legally required, as regards other people's trademarks, is to
@@ -239,9 +239,9 @@ C'' as a label for the compiler rather than for the language.
 
 Please don't use ``win'' as an abbreviation for Microsoft Windows in
 GNU software or documentation.  In hacker terminology, calling
-something a "win" is a form of praise.  If you wish to praise
+something a ``win'' is a form of praise.  If you wish to praise
 Microsoft Windows when speaking on your own, by all means do so, but
-not in GNU software.  Usually we write the word ``windows'' in full,
+not in GNU software.  Usually we write the name ``Windows'' in full,
 but when brevity is very important (as in file names and sometimes
 symbol names), we abbreviate it to ``w''.  For instance, the files and
 functions in Emacs that deal with Windows start with @samp{w32}.
@@ -311,12 +311,12 @@ is written in that language, too.  The Emacs editor pioneered this
 technique.
 
 @cindex GUILE
-The standard extensibility interpreter for GNU software is GUILE, which
-implements the language Scheme (an especially clean and simple dialect
-of Lisp).  @uref{http://www.gnu.org/software/guile/}.  We don't reject
-programs written in other ``scripting languages'' such as Perl and
-Python, but using GUILE is very important for the overall consistency of
-the GNU system.
+The standard extensibility interpreter for GNU software is GUILE
+(@uref{http://www.gnu.org/software/guile/}), which implements the
+language Scheme (an especially clean and simple dialect of Lisp).  We
+don't reject programs written in other ``scripting languages'' such as
+Perl and Python, but using GUILE is very important for the overall
+consistency of the GNU system.
 
 @node Compatibility
 @section Compatibility with Other Implementations
@@ -518,6 +518,8 @@ software.  It also describes general standards for error messages, the
 command line interface, and how libraries should behave.
 
 @menu
+* Non-GNU Standards::           We consider standards such as POSIX;
+                                  we don't "obey" them.
 * Semantics::                   Writing robust programs
 * Libraries::                   Library behavior
 * Errors::                      Formatting error messages
@@ -528,6 +530,50 @@ command line interface, and how libraries should behave.
 * Memory Usage::                When and how to care about memory needs
 * File Usage::                  Which files to use, and where
 @end menu
+
+@node Non-GNU Standards
+@section Non-GNU Standards
+
+The GNU Project regards standards published by other organizations as
+suggestions, not orders.  We consider those standards, but we do not
+``obey'' them.  In developing a GNU program, you should implement
+an outside standard's specifications when that makes the GNU system
+better overall in an objective sense.  When it doesn't, you shouldn't.
+
+In most cases, following published standards is convenient for
+users---it means that their programs or scripts will work more
+portably.  For instance, GCC implements nearly all the features of
+Standard C as specified by that standard.  C program developers would
+be unhappy if it did not.  And GNU utilities mostly follow
+specifications of POSIX.2; shell script writers and users would be
+unhappy if our programs were incompatible.
+
+But we do not follow either of these specifications rigidly, and there
+are specific points on which we decided not to follow them, so as to
+make the GNU system better for users.
+
+For instance, Standard C says that nearly all extensions to C are
+prohibited.  How silly!  GCC implements many extensions, some of which
+were later adopted as part of the standard.  If you want these
+constructs to give an error message as ``required'' by the standard,
+you must specify @samp{--pedantic}, which was implemented only so that
+we can say ``GCC is a 100% implementation of the standard,'' not
+because there is any reason to actually use it.
+
+POSIX.2 specifies that @samp{df} and @samp{du} must output sizes by
+default in units of 512 bytes.  What users want is units of 1k, so
+that is what we do by default.  If you want the ridiculous behavior
+``required'' by POSIX, you must set the environment variable
+@samp{POSIXLY_CORRECT} (which was originally going to be named
+@samp{POSIX_ME_HARDER}).
+
+GNU utilities also depart from the letter of the POSIX.2 specification
+when they support long-named command-line options, and intermixing
+options with ordinary arguments.  This minor incompatibility with
+POSIX is never a problem in practice, and it is very useful.
+
+In particular, don't reject a new feature, or remove an old one,
+merely because a standard says it is ``forbidden'' or ``deprecated.''
 
 @node Semantics
 @section Writing Robust Programs
@@ -686,7 +732,7 @@ If you want to mention the column number, use one of these formats:
 
 @example
 @var{source-file-name}:@var{lineno}:@var{column}: @var{message}
-@var{source-file-name}:@var{lineno}.@var{column}: @var{message}   
+@var{source-file-name}:@var{lineno}.@var{column}: @var{message}
 
 @end example
 
@@ -850,7 +896,7 @@ All programs should support two standard options: @samp{--version}
 and @samp{--help}.  CGI programs should accept these as command-line
 options, and also if given as the @env{PATH_INFO}; for instance,
 visiting @url{http://example.org/p.cgi/--help} in a browser should
-output the same information as inokving @samp{p.cgi --help} from the
+output the same information as invoking @samp{p.cgi --help} from the
 command line.
 
 @table @code
@@ -933,19 +979,20 @@ This copyright notice only needs to mention the most recent year in
 which changes were made---there's no need to list the years for previous
 versions' changes.  You don't have to mention the name of the program in
 these notices, if that is inconvenient, since it appeared in the first
-line.
+line.  (The rules are different for copyright notices in source files;
+see @ref{Copyright Notices,,,maintain,Information for GNU Maintainers}.)
 
 Translations of the above lines must preserve the validity of the
 copyright notices (@pxref{Internationalization}).  If the translation's
 character set supports it, the @samp{(C)} should be replaced with the
 copyright symbol, as follows:
 
-@ifinfo 
-(the official copyright symbol, which is the letter C in a circle); 
-@end ifinfo 
-@ifnotinfo 
+@ifinfo
+(the official copyright symbol, which is the letter C in a circle);
+@end ifinfo
+@ifnotinfo
 @copyright{}
-@end ifnotinfo 
+@end ifnotinfo
 
 Write the word ``Copyright'' exactly like that, in English.  Do not
 translate it into another language.  International treaties recognize
@@ -2142,6 +2189,8 @@ when writing GNU software.
 * CPU Portability::             Supporting the range of CPU types
 * System Functions::            Portability and ``standard'' library functions
 * Internationalization::        Techniques for internationalization
+* Character Set::               Use ASCII by default.
+* Quote Characters::            Use `...' in the C locale.
 * Mmap::                        How you can safely use @code{mmap}.
 @end menu
 
@@ -2152,33 +2201,33 @@ when writing GNU software.
 @cindex open brace
 @cindex braces, in C source
 It is important to put the open-brace that starts the body of a C
-function in column zero, and avoid putting any other open-brace or
-open-parenthesis or open-bracket in column zero.  Several tools look
-for open-braces in column zero to find the beginnings of C functions.
+function in column one, and avoid putting any other open-brace or
+open-parenthesis or open-bracket in column one.  Several tools look
+for open-braces in column one to find the beginnings of C functions.
 These tools will not work on code not formatted that way.
 
 It is also important for function definitions to start the name of the
-function in column zero.  This helps people to search for function
+function in column one.  This helps people to search for function
 definitions, and may also help certain tools recognize them.  Thus,
-the proper format is this:
-
-@example
-static char *
-concat (s1, s2)        /* Name starts in column zero here */
-     char *s1, *s2;
-@{                     /* Open brace in column zero here */
-  @dots{}
-@}
-@end example
-
-@noindent
-or, if you want to use Standard C syntax, format the definition like
-this:
+using Standard C syntax, the format is this:
 
 @example
 static char *
 concat (char *s1, char *s2)
 @{
+  @dots{}
+@}
+@end example
+
+@noindent
+or, if you want to use traditional C syntax, format the definition like
+this:
+
+@example
+static char *
+concat (s1, s2)        /* Name starts in column one here */
+     char *s1, *s2;
+@{                     /* Open brace in column one here */
   @dots{}
 @}
 @end example
@@ -2296,7 +2345,13 @@ page.  The formfeeds should appear alone on lines by themselves.
 @cindex commenting
 
 Every program should start with a comment saying briefly what it is for.
-Example: @samp{fmt - filter for simple filling of text}.
+Example: @samp{fmt - filter for simple filling of text}.  This comment
+should be at the top of the source file containing the @samp{main}
+function of the program.
+
+Also, please write a brief comment at the start of each source file,
+with the file name and a line or two about the overall purpose of the
+file.
 
 Please write the comments in a GNU program in English, because English
 is the one language that nearly all programmers in all countries can
@@ -2574,7 +2629,7 @@ constants.
 @cindex file-name limitations
 @pindex doschk
 You might want to make sure that none of the file names would conflict
-the files were loaded onto an MS-DOS file system which shortens the
+if the files were loaded onto an MS-DOS file system which shortens the
 names.  You can use the program @code{doschk} to test for this.
 
 Some GNU programs were designed to limit themselves to file names of 14
@@ -2616,11 +2671,11 @@ Avoid using the format of semi-internal data bases (e.g., directories)
 when there is a higher-level alternative (@code{readdir}).
 
 @cindex non-@sc{posix} systems, and portability
-As for systems that are not like Unix, such as MSDOS, Windows, the
-Macintosh, VMS, and MVS, supporting them is often a lot of work.  When
-that is the case, it is better to spend your time adding features that
-will be useful on GNU and GNU/Linux, rather than on supporting other
-incompatible systems.
+As for systems that are not like Unix, such as MSDOS, Windows, VMS, MVS,
+and older Macintosh systems, supporting them is often a lot of work.
+When that is the case, it is better to spend your time adding features
+that will be useful on GNU and GNU/Linux, rather than on supporting
+other incompatible systems.
 
 If you do support Windows, please do not abbreviate it as ``win''.  In
 hacker terminology, calling something a ``win'' is a form of praise.
@@ -2665,7 +2720,7 @@ printf ("diff = %ld\n", (long) (pointer2 - pointer1));
 @end example
 
 1989 Standard C requires this to work, and we know of only one
-counterexample: 64-bit programs on Microsoft Windows IA-64.  We will
+counterexample: 64-bit programs on Microsoft Windows.  We will
 leave it to those who want to port GNU programs to that environment
 to figure out how to do it.
 
@@ -2969,6 +3024,63 @@ printf (f->tried_implicit
         : "#  Implicit rule search has not been done.\n");
 @end example
 
+
+@node Character Set
+@section Character Set
+@cindex character set
+@cindex encodings
+@cindex ASCII characters
+@cindex non-ASCII characters
+
+Sticking to the ASCII character set (plain text, 7-bit characters) is
+preferred in GNU source code comments, text documents, and other
+contexts, unless there is good reason to do something else because of
+the application domain.  For example, if source code deals with the
+French Revolutionary calendar, it is OK if its literal strings contain
+accented characters in month names like ``Flor@'eal''.  Also, it is OK
+to use non-ASCII characters to represent proper names of contributors in
+change logs (@pxref{Change Logs}).
+
+If you need to use non-ASCII characters, you should normally stick with
+one encoding, as one cannot in general mix encodings reliably.
+
+
+@node Quote Characters
+@section Quote Characters
+@cindex quote characters
+@cindex locale-specific quote characters
+@cindex left quote
+@cindex grave accent
+
+In the C locale, GNU programs should stick to plain ASCII for quotation
+characters in messages to users: preferably 0x60 (@samp{`}) for left
+quotes and 0x27 (@samp{'}) for right quotes.  It is ok, but not
+required, to use locale-specific quotes in other locales.
+
+The @uref{http://www.gnu.org/software/gnulib/, Gnulib} @code{quote} and
+@code{quotearg} modules provide a reasonably straightforward way to
+support locale-specific quote characters, as well as taking care of
+other issues, such as quoting a filename that itself contains a quote
+character.  See the Gnulib documentation for usage details.
+
+In any case, the documentation for your program should clearly specify
+how it does quoting, if different than the preferred method of @samp{`}
+and @samp{'}.  This is especially important if the output of your
+program is ever likely to be parsed by another program.
+
+Quotation characters are a difficult area in the computing world at
+this time: there are no true left or right quote characters in Latin1;
+the @samp{`} character we use was standardized there as a grave
+accent.  Moreover, Latin1 is still not universally usable.
+
+Unicode contains the unambiguous quote characters required, and its
+common encoding UTF-8 is upward compatible with Latin1.  However,
+Unicode and UTF-8 are not universally well-supported, either.
+
+This may change over the next few years, and then we will revisit
+this.
+
+
 @node Mmap
 @section Mmap
 @findex mmap
@@ -3087,9 +3199,9 @@ functions, variables, options, and important concepts that are part of
 the program.  One combined Index should do for a short manual, but
 sometimes for a complex package it is better to use multiple indices.
 The Texinfo manual includes advice on preparing good index entries, see
-@ref{Index Entries, , Making Index Entries, texinfo, The GNU Texinfo
-Manual}, and see @ref{Indexing Commands, , Defining the Entries of an
-Index, texinfo, The GNU Texinfo manual}.
+@ref{Index Entries, , Making Index Entries, texinfo, GNU Texinfo}, and
+see @ref{Indexing Commands, , Defining the Entries of an
+Index, texinfo, GNU Texinfo}.
 
 Don't use Unix man pages as a model for how to write GNU documentation;
 most of them are terse, badly structured, and give inadequate
@@ -3233,10 +3345,10 @@ inconsistencies between different parts of a program, by giving you a
 history of how the conflicting concepts arose and who they came from.
 
 @menu
-* Change Log Concepts::         
-* Style of Change Logs::        
-* Simple Changes::              
-* Conditional Changes::         
+* Change Log Concepts::
+* Style of Change Logs::
+* Simple Changes::
+* Conditional Changes::
 * Indicating the Part Changed::
 @end menu
 
@@ -3598,20 +3710,21 @@ For example, an Athlon-based GNU/Linux system might be
 
 The @code{configure} script needs to be able to decode all plausible
 alternatives for how to describe a machine.  Thus,
-@samp{athlon-pc-gnu/linux} would be a valid alias.
-There is a shell script called
-@uref{ftp://ftp.gnu.org/gnu/config/config.sub, @file{config.sub}}
-that you can use
-as a subroutine to validate system types and canonicalize aliases.
+@samp{athlon-pc-gnu/linux} would be a valid alias.  There is a shell
+script called
+@uref{http://savannah.gnu.org/@/cgi-bin/@/viewcvs/@/*checkout*/@/config/@/config/@/config.sub,
+@file{config.sub}} that you can use as a subroutine to validate system
+types and canonicalize aliases.
 
 The @code{configure} script should also take the option
 @option{--build=@var{buildtype}}, which should be equivalent to a
 plain @var{buildtype} argument.  For example, @samp{configure
 --build=i686-pc-linux-gnu} is equivalent to @samp{configure
 i686-pc-linux-gnu}.  When the build type is not specified by an option
-or argument, the @code{configure} script should normally guess it
-using the shell script
-@uref{ftp://ftp.gnu.org/gnu/config/config.guess, @file{config.guess}}.
+or argument, the @code{configure} script should normally guess it using
+the shell script
+@uref{http://savannah.gnu.org/@/cgi-bin/@/viewcvs/@/*checkout*/@/config/@/config/@/config.guess,
+@file{config.guess}}.
 
 @cindex optional features, configure-time
 Other options are permitted to specify in more detail the software
@@ -3796,9 +3909,11 @@ social and ethical problem, and the point of GNU is to solve that
 problem.
 
 The GNU definition of free software is found on the GNU web site at
-@url{http://www.gnu.org/philosophy/free-sw.html}.  A list of
+@url{http://www.gnu.org/philosophy/free-sw.html}, and the definition
+of free documentation is found at
+@url{http://www.gnu.org/philosophy/free-doc.html}.  A list of
 important licenses and whether they qualify as free is in
-@url{http://www.gnu.org/licenses/license-list.html}.  The terms
+@url{http://www.gnu.org/@/licenses/@/license-list.html}.  The terms
 ``free'' and ``non-free'', used in this document, refer to that
 definition.  If it is not clear whether a license qualifies as free
 under this definition, please ask the GNU Project by writing to
@@ -3854,7 +3969,7 @@ scope of an operating system project.
 Referring to a web site that describes or recommends a non-free
 program is in effect promoting that software, so please do not make
 links (or mention by name) web sites that contain such material.  This
-policy is relevant particulary for the web pages for a GNU package.
+policy is relevant particularly for the web pages for a GNU package.
 
 Following links from nearly any web site can lead to non-free
 software; this is an inescapable aspect of the nature of the web, and
