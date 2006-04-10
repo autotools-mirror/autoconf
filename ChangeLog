@@ -1,3 +1,18 @@
+2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* Makefile.maint (cvs-sv): New macro, to be used..
+	(config.guess-url_prefix, config.sub-url_prefix)
+	(texinfo.tex-url_prefix, standards.texi-url_prefix): ..here;
+	point to CVS text checkout of Gnulib files.
+	(copyright-check): Bump current year.
+	(announcement): Do not hard-wire `./announce-gen'.
+	(cvs-update): Propagate failures of `cvs' and `move-if-change'
+	correctly.
+	* Makefile.cfg (executable-update): Use `chmod a+x' instead of
+	`chmod +x'.
+	(wget_files): Update config.guess, config.sub, texinfo.tex by
+	`wget-update', now that their URLs work again.
+
 2006-04-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Particular Types): Don't use AC_CHECK_TYPE.

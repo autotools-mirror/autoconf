@@ -382,7 +382,7 @@ v_etc_file = lib/version-etc.c
 # Make sure that the copyright date in $(v_etc_file) is up to date.
 copyright-check:
 	@if test -f $(v_etc_file); then \
-	  grep 'enum { COPYRIGHT_YEAR = 2005 };' $(v_etc_file) \
+	  grep "enum { COPYRIGHT_YEAR = `date +%Y` };" $(v_etc_file) \
 	    >/dev/null \
 	  || { echo 'out of date copyright in $(v_etc_file); update it' 1>&2; \
 	       exit 1; }; \
@@ -484,7 +484,7 @@ xd-delta = $(PACKAGE)-$(PREV_VERSION)-$(VERSION).xdelta
 
 rel-files = $(xd-delta) $(DIST_ARCHIVES)
 announcement: NEWS ChangeLog $(rel-files)
-	@./announce-gen							\
+	@$(announce_gen)						\
 	    --release-type=$(RELEASE_TYPE)				\
 	    --package=$(PACKAGE)					\
 	    --prev=$(PREV_VERSION)					\
@@ -500,6 +500,7 @@ announcement: NEWS ChangeLog $(rel-files)
 
 ftp-gnu = ftp://ftp.gnu.org/gnu
 www-gnu = http://www.gnu.org
+cvs-sv  = http://cvs.savannah.gnu.org/viewcvs/~checkout~
 
 # Use mv, if you don't have/want move-if-change.
 move_if_change ?= move-if-change
@@ -550,14 +551,14 @@ wget_files ?= \
 
 get-targets = $(patsubst %, get-%, $(wget_files))
 
-config.guess-url_prefix = $(ftp-gnu)/build-aux/
-config.sub-url_prefix = $(ftp-gnu)/build-aux/
+config.guess-url_prefix = $(cvs-sv)/config/config/
+config.sub-url_prefix = $(cvs-sv)/config/config/
 
 ansi2knr.c-url_prefix = ftp://ftp.cs.wisc.edu/ghost/
 
-texinfo.tex-url_prefix = $(ftp-gnu)/texinfo/
+texinfo.tex-url_prefix = $(cvs-sv)/gnulib/gnulib/build-aux/
 
-standards.texi-url_prefix = $(www-gnu)/prep/
+standards.texi-url_prefix = $(cvs-sv)/gnulib/gnulib/doc/
 make-stds.texi-url_prefix = $(standards.texi-url_prefix)
 
 target = $(patsubst get-%, %, $@)
@@ -580,18 +581,19 @@ wget-update: $(get-targets)
 
 .PHONY: cvs-update
 cvs-update:
-	fail=;								\
+	exit_status=0;							\
 	for f in $(cvs_files); do					\
 	  test -f $$f || { echo "*** skipping $$f" 1>&2; continue; };	\
 	  cvs diff $$f > /dev/null					\
-	    || { echo "*** $$f is locally modified; skipping it" 1>&2;	\
-		 fail=yes; continue; };					\
+	    || { exit_status=$$?;					\
+		 echo "*** $$f is locally modified; skipping it" 1>&2;	\
+		 continue; };						\
 	  file=$$(basename $$f);					\
 	  echo checking out $$file...;					\
 	  $(CVS) -d $(automake_repo) co -p automake/lib/$$file> $$f.t	\
-	    && $(move_if_change) $$f.t $$f;				\
+	    && $(move_if_change) $$f.t $$f || exit_status=$$?;		\
 	done;								\
-	test "$$fail" && exit 1
+	exit $$exit_status
 
 emit_upload_commands:
 	@echo =====================================
