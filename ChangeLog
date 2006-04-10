@@ -1,3 +1,7 @@
+2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* THANKS: Update.
+
 2006-04-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Just output
