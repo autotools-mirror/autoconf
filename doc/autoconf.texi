@@ -18021,7 +18021,7 @@ introduced in this document.
 @c  LocalWords:  Systemology Checkpointing Changequote INTERCAL changequote dfn
 @c  LocalWords:  Quadrigraphs builtins Shellology acconfig Bugward LIBOBJ Imake
 @c  LocalWords:  LIBOBJS IFELSE cindex flushright Pinard Metaconfig uref Simons
-@c  LocalWords:  filesystems distclean uninstall noindent versioning Tromey dir
+@c  LocalWords:  distclean uninstall noindent versioning Tromey dir
 @c  LocalWords:  SAMS samp aclocal acsite underquoted emph itemx prepend SUBST
 @c  LocalWords:  evindex automake Gettext autopoint gettext symlink libtoolize
 @c  LocalWords:  defmac INIT tarname ovindex cvindex BUGREPORT PREREQ asis PROG
@@ -18077,7 +18077,7 @@ introduced in this document.
 @c  LocalWords:  drivespec Posixy DJGPP doschk prettybird LPT pfew Zsh's yu yaa
 @c  LocalWords:  yM uM aM firebird IP subdir misparses ok Unpatched abc bc zA
 @c  LocalWords:  CDPATH DUALCASE LINENO prepass Subshells lineno NULLCMD cmp wc
-@c  LocalWords:  MAILPATH scanset arg NetBSD Almquist printf filesystem expr cp
+@c  LocalWords:  MAILPATH scanset arg NetBSD Almquist printf expr cp
 @c  LocalWords:  Oliva awk Aaaaarg cmd regex xfoo GNV OpenVMS unwriteable te VM
 @c  LocalWords:  coreutils sparc Proulx SysV nbar nfoo maxdepth acdilrtu TWG mc
 @c  LocalWords:  mkdir exe uname OpenBSD Fileutils mktemp umask TMPDIR guid os

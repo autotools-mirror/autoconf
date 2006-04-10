@@ -1,0 +1,4 @@
+config/config.guess
+config/config.sub
+aclocal.m4
+configure

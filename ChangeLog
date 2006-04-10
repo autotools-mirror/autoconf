@@ -1,5 +1,9 @@
 2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/autoconf.texi: Remove unused words from word list.
+	* .x-sc_prohibit_atoi_atof, .x-sc_space_tab, .x-sc_sun_os_names,
+	.x-sc_trailing_space: New files.
+
 	* doc/standards.texi: Sync from gnulib.
 
 	* NEWS, doc/autoconf.texi (AC_LIBOBJ vs LIBOBJS): Mark
