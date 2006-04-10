@@ -41,7 +41,7 @@ MY_AUTOM4TE =									\
 # output but comments and empty lines.
 # If freezing produces output, something went wrong: a bad `divert',
 # or an improper paren etc.
-# It may happen that the output does not end with a end of line, hence
+# It may happen that the output does not end with an end of line, hence
 # force an end of line when reporting errors.
 .m4.m4f:
 	$(MY_AUTOM4TE)				\

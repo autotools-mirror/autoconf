@@ -1,5 +1,11 @@
 2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/freeze.mk: Fix typo in comment.  Unlike the last, white
+	space only patch to this file, this patch causes the Makefile.in
+	files that include freeze.mk to be updated, and thus have a
+	newer time stamp again, which in turn makes a pristine CVS
+	checkout have correct time stamps.
+
 	* Makefile.maint (cvs-sv): New macro, to be used..
 	(config.guess-url_prefix, config.sub-url_prefix)
 	(texinfo.tex-url_prefix, standards.texi-url_prefix): ..here;
