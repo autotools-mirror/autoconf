@@ -18,6 +18,8 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
 
+# This line added to force a rebuild of Makefile.in.
+
 EXTRA_DIST = $(SPECIFIC_MACROS) $(SPECIFIC_TOOLS) \
 	      prev-version.txt
 MAINTAINERCLEANFILES = $(GENERIC_TOOLS)

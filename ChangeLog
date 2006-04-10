@@ -1,5 +1,7 @@
 2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* config/Makefile.am: Add comment to force updated Makefile.in.
+
 	* lib/freeze.mk: Fix typo in comment.  Unlike the last, white
 	space only patch to this file, this patch causes the Makefile.in
 	files that include freeze.mk to be updated, and thus have a
