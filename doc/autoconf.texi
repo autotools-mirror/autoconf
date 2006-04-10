@@ -5714,19 +5714,22 @@ Define @code{HAVE_MBSTATE_T} if @code{<wchar.h>} declares the
 @defmac AC_TYPE_MODE_T
 @acindex{TYPE_MODE_T}
 @cvindex mode_t
-Equivalent to @samp{AC_CHECK_TYPE([mode_t], [int])}.
+Define @code{mode_t} to a suitable type, if standard headers do not
+define it.
 @end defmac
 
 @defmac AC_TYPE_OFF_T
 @acindex{TYPE_OFF_T}
 @cvindex off_t
-Equivalent to @samp{AC_CHECK_TYPE([off_t], [long int])}.
+Define @code{off_t} to a suitable type, if standard headers do not
+define it.
 @end defmac
 
 @defmac AC_TYPE_PID_T
 @acindex{TYPE_PID_T}
 @cvindex pid_t
-Equivalent to @samp{AC_CHECK_TYPE([pid_t], [int])}.
+Define @code{pid_t} to a suitable type, if standard headers do not
+define it.
 @end defmac
 
 @defmac AC_TYPE_SIGNAL
@@ -5753,21 +5756,23 @@ hup_handler ()
 @defmac AC_TYPE_SIZE_T
 @acindex{TYPE_SIZE_T}
 @cvindex size_t
-Equivalent to @samp{AC_CHECK_TYPE([size_t], [unsigned int])}.
+Define @code{size_t} to a suitable type, if standard headers do not
+define it.
 @end defmac
 
 @defmac AC_TYPE_SSIZE_T
 @acindex{TYPE_SSIZE_T}
 @cvindex ssize_t
-Equivalent to @samp{AC_CHECK_TYPE([ssize_t], [int])}.
+Define @code{ssize_t} to a suitable type, if standard headers do not
+define it.
 @end defmac
 
 @defmac AC_TYPE_UID_T
 @acindex{TYPE_UID_T}
 @cvindex uid_t
 @cvindex gid_t
-If @code{uid_t} is not defined, define @code{uid_t} to be @code{int} and
-@code{gid_t} to be @code{int}.
+Define @code{uid_t} and @code{gid_t} to suitable types, if standard
+headers do not define them.
 @end defmac
 
 @defmac AC_TYPE_UINT8_T

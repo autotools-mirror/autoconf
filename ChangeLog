@@ -1,3 +1,8 @@
+2006-04-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Particular Types): Don't use AC_CHECK_TYPE.
+	Problem noted by Paul D. Smith.
+
 2006-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi: Remove unused words from word list.
