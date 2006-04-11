@@ -84,6 +84,11 @@ AT_CHECK_AT([Empty test suite],
 [[AT_INIT([empty test suite])
 ]])
 
+# Next level of emptiness.
+AT_CHECK_AT_TEST([Empty test], [])
+
+# And finally, an empty check should not cause a syntax error.
+AT_CHECK_AT_TEST([Empty check], [AT_CHECK])
 
 ## ----------------------------------------------------- ##
 ## Newlines and command substitutions in test commands.  ##

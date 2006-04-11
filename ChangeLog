@@ -1,4 +1,8 @@
-2006-04-10  Eric Blake  <ebb9@byu.net>
+2006-04-11  Eric Blake  <ebb9@byu.net>
+
+	* lib/autotest/general.m4 (_AT_CHECK): Avoid syntax error on empty
+	check.
+	* tests/autotest.at (Empty test, Empty check): New test to check it.
 
 	* lib/autoconf/c.m4 (AC_C_CONST, AC_C_VOLATILE): Avoid warnings
 	from gcc.

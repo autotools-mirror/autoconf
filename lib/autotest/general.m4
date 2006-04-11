@@ -1469,7 +1469,7 @@ if test -n "$at_trace_this"; then
     grep '^ *+' "$at_stder1" >&2
     grep -v '^ *+' "$at_stder1" >"$at_stderr"
 else
-    ( $1 ) >"$at_stdout" 2>"$at_stderr"
+    ( :; $1 ) >"$at_stdout" 2>"$at_stderr"
     at_status=$?
 fi
 
