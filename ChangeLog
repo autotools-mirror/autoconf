@@ -1,3 +1,8 @@
+2006-04-10  Eric Blake  <ebb9@byu.net>
+
+	* lib/autoconf/c.m4 (AC_C_CONST, AC_C_VOLATILE): Avoid warnings
+	from gcc.
+
 2006-04-10  Stepan Kasal  <kasal@ucw.cz>
 
 	* tests/mktests.sh: Use "trap '' 0", not "trap 0".  Do not touch

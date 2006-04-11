@@ -1425,6 +1425,7 @@ AC_DEFUN([AC_C_CONST],
     char const *s = 0 ? (char *) 0 : (char const *) 0;
 
     *t++ = 0;
+    if (s) return 0;
   }
   { /* Someone thinks the Sun supposedly-ANSI compiler will reject this.  */
     int x[] = {25, 17};
@@ -1443,7 +1444,9 @@ AC_DEFUN([AC_C_CONST],
   }
   { /* ULTRIX-32 V3.1 (Rev 9) vcc rejects this */
     const int foo = 10;
+    if (!foo) return 0;
   }
+  return !x[0] && !zero.x;
 #endif
 ]])],
 		   [ac_cv_c_const=yes],
@@ -1511,7 +1514,8 @@ AC_DEFUN([AC_C_VOLATILE],
 [AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [
 volatile int x;
-int * volatile y;])],
+int * volatile y = (int *) 0;
+return !x && !y;])],
 		   [ac_cv_c_volatile=yes],
 		   [ac_cv_c_volatile=no])])
 if test $ac_cv_c_volatile = no; then
