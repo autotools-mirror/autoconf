@@ -1,5 +1,17 @@
 2006-04-11  Eric Blake  <ebb9@byu.net>
 
+	* tests/autotest.at (AT_CHECK_AT): Add new argument, to allow
+	top-level tests after micro-suite has been run.   Used in...
+	(Debugging a successful test, Debugging script and environment),
+	(Debugging a failed test): ...these new tests.  The first of these
+	is fixed by...
+	* lib/autotest/general.m4 (_AT_CREATE_DEBUGGING_SCRIPT): New
+	macro, split out from...
+	(AT_INIT): ...here, so that using -d also generates a run script.
+	Document that -d inhibits top-level logging.
+	* doc/autoconf.texi (testsuite Invocation): Document that -d only
+	inhibits top-level logging; debug scripts are created.
+
 	* lib/autotest/general.m4 (_AT_CHECK): Avoid syntax error on empty
 	check.
 	* tests/autotest.at (Empty test, Empty check): New test to check it.

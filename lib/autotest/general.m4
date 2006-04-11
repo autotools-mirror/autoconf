@@ -162,6 +162,22 @@ m4_define([_AT_NORMALIZE_TEST_GROUP_NUMBER],
   done
 ])
 
+# _AT_CREATE_DEBUGGING_SCRIPT
+# ---------------------------
+# Create the debugging script $at_group_dir/run which will reproduce the
+# current test group.
+m4_define([_AT_CREATE_DEBUGGING_SCRIPT],
+[	  {
+	    echo "#! /bin/sh"
+	    echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
+	    echo "cd '$at_dir'"
+	    echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
+	         '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
+	    echo 'exit 1'
+	  } >$at_group_dir/run
+	  chmod +x $at_group_dir/run
+])# _AT_CREATE_DEBUGGING_SCRIPT
+
 
 # AT_INIT([TESTSUITE-NAME])
 # -------------------------
@@ -481,7 +497,7 @@ Execution tuning:
   -e, --errexit  abort as soon as a test fails; implies --debug
   -v, --verbose  force more detailed output
 	         default for debugging scripts
-  -d, --debug    inhibit clean up and debug script creation
+  -d, --debug    inhibit clean up and top-level logging
 	         default for debugging scripts
   -x, --trace    enable tests shell tracing
 _ATEOF
@@ -793,11 +809,12 @@ _ATEOF
 	  echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
 
 	  # Cleanup the group directory, unless the user wants the files.
-	  $at_debug_p ||
-	    if test -d $at_group_dir; then
-	      find $at_group_dir -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-	      rm -fr $at_group_dir
-	    fi
+	  if $at_debug_p ; then
+	    _AT_CREATE_DEBUGGING_SCRIPT
+	  elif test -d $at_group_dir; then
+	    find $at_group_dir -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+	    rm -fr $at_group_dir
+	  fi
 	  ;;
 	*)
 	  # Upon failure, include the log into the testsuite's global
@@ -807,15 +824,7 @@ _ATEOF
 
 	  # Upon failure, keep the group directory for autopsy, and
 	  # create the debugging script.
-	  {
-	    echo "#! /bin/sh"
-	    echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
-	    echo "cd '$at_dir'"
-	    echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
-	         '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
-	    echo 'exit 1'
-	  } >$at_group_dir/run
-	  chmod +x $at_group_dir/run
+	  _AT_CREATE_DEBUGGING_SCRIPT
 	  $at_errexit && break
 	  ;;
       esac

@@ -20,12 +20,13 @@ AT_BANNER([Autotest.])
 # 02110-1301, USA.
 
 # AT_CHECK_AT(TITLE, SUITE-CODE, [XFAIL-CONDITION], [STATUS = 0],
-#             [STDOUT := ignore], STDERR)
+#             [STDOUT := ignore], STDERR, [POST-TEST-CODE])
 # ---------------------------------------------------------------
 # Create a new test named TITLE that runs a minimal Autotest test suite,
 # SUITE-CODE.  Call AT_XFAIL_IF with XFAIL-CONDITION.  STATUS and STDERR pass
 # directly to the AT_CHECK that call the minimal test suite.  STDOUT is not
-# used, but it is reserved for future use.
+# used, but it is reserved for future use.  Run POST-TEST-CODE
+# at the top level after the micro-suite has been run.
 m4_define([AT_CHECK_AT],
 [
 AT_SETUP([$1])
@@ -49,8 +50,9 @@ AT_DATA([mysuite.at], [$2])
 AT_CHECK_AUTOM4TE([--language=autotest -o micro-suite mysuite.at])
 AT_CHECK([$CONFIG_SHELL ./micro-suite],       m4_default([$4], 0), [ignore], [$6])
 AT_CHECK([$CONFIG_SHELL ./micro-suite -v -x], m4_default([$4], 0), [ignore], [$6])
+$7
 AT_CLEANUP
-])
+])# AT_CHECK_AT
 
 # AT_CHECK_AT_TEST(TITLE, SUITE-SNIPPET, ...)
 # -----------------------------------------------------------------------
@@ -254,6 +256,51 @@ AT_CHECK_AT_TITLE_CHAR([Backquote],    [`], [:])
 AT_CHECK_AT_TITLE_CHAR([Single-quote], ['], [:])
 AT_CHECK_AT_TITLE_CHAR([Double-quote], ["], [:])
 AT_CHECK_AT_TITLE_CHAR([Backslash],    [\])
+
+
+## ----------------- ##
+## Debugging a test. ##
+## ----------------- ##
+
+AT_CHECK_AT_TEST([Debugging a successful test],
+  [AT_CHECK([:])], [], [], [], [ignore],
+[# Without options, when all tests pass, no test directory should exist.
+AT_CHECK([test -d micro-suite.dir/1 && exit 42
+          ./micro-suite -d 1], [], [ignore], [ignore])
+# Running with -d should leave a reproducible test group.
+# Also, running the test script from the test group locks the
+# directory from removal on some platforms; the script should still be
+# able to run even if rmdir fails.
+AT_CHECK([(cd micro-suite.dir/1 && ./run)], [], [ignore], [ignore])
+# Running a debugging script implies -d.
+AT_CHECK([(cd micro-suite.dir/1 && ./run)], [], [ignore], [ignore])
+])
+
+AT_CHECK_AT_TEST([Debugging script and environment],
+  [AT_CHECK([test "$MY_VAR" = pass || exit 42])],
+  [], [1], [], [ignore], [
+# Changing environment outside of debugging script is not preserved.
+AT_CHECK([(cd micro-suite.dir/1 && MY_VAR=pass ./run)],
+         [0], [ignore], [ignore])
+AT_CHECK([(cd micro-suite.dir/1 && ./run)],
+         [1], [ignore], [ignore])
+# Changing environment as argument to debugging script is preserved.
+AT_CHECK([(cd micro-suite.dir/1; ./run MY_VAR=pass)],
+         [0], [ignore], [ignore])
+AT_CHECK([(cd micro-suite.dir/1; ./run)],
+         [0], [ignore], [ignore])
+])
+
+# The run script is currently invalid when shell metacharacters are passed
+# in via an environment option.
+AT_CHECK_AT_TEST([Debugging a failed test],
+  [AT_CHECK([test "$MY_VAR" = "one space" || exit 42])],
+  [:], [1], [], [ignore], [
+AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='two  spaces')],
+         [1], [ignore], [ignore])
+AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='one space')],
+         [0], [ignore], [ignore])
+])
 
 
 ## --------- ##

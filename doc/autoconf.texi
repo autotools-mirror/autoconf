@@ -17171,8 +17171,8 @@ containing @samp{FUNC}.
 @item --errexit
 @itemx -e
 If any test fails, immediately abort testing.  It implies
-@option{--debug}: post test group clean up, debugging script generation,
-and logging are inhibited.  This option is meant for the full test
+@option{--debug}: post test group clean up, and top-level logging
+are inhibited.  This option is meant for the full test
 suite, it is not really useful for generated debugging scripts.
 
 @item --verbose
@@ -17184,7 +17184,8 @@ is the default for debugging scripts.
 @itemx -d
 Do not remove the files after a test group was performed ---but they are
 still removed @emph{before}, therefore using this option is sane when
-running several test groups.  Do not create debugging scripts.  Do not
+running several test groups.  Create debugging scripts.  Do not
+overwrite the top-level
 log (in order to preserve supposedly existing full log file).  This is
 the default for debugging scripts, but it can also be useful to debug
 the testsuite itself.
