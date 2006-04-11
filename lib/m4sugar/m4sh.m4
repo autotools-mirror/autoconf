@@ -877,7 +877,9 @@ if ln -s conf$$.file conf$$ 2>/dev/null &&
   else
     as_ln_s='ln -s'
   fi
-elif ln conf$$.file conf$$ 2>/dev/null; then
+elif rm -f conf$$ conf$$.dir/conf$$.file &&
+     ln conf$$.file conf$$ 2>/dev/null &&
+     ln conf$$.file conf$$.dir 2>/dev/null; then
   as_ln_s=ln
 else
   as_ln_s='cp -p'

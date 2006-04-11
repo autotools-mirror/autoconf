@@ -1,5 +1,12 @@
 2006-04-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/m4sugar/m4sh.m4 (_AS_LN_S_PREPARE): If `ln -s file1 file2'
+	succeeded, but `ln -s file dir' failed, take care to remove the
+	leftover target before the next test, to prevent its spurious
+	failure; also make sure `ln file dir' works before selecting it.
+	Thanks to Keith Marshall for pointing this out.
+	* THANKS: Update.
+
 	* lib/autotest/general.m4 (AT_INIT): Store quoted variable
 	assignments in `at_debug_args', so that we put them correctly
 	in the `run' script.
