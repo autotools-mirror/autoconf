@@ -414,7 +414,7 @@ m4_divert_push([PARSE_ARGS_END])dnl
 	eval "$at_envvar='$at_value'"
 	export $at_envvar
 	# Propagate to debug scripts.
-	at_debug_args="$at_debug_args $at_option"
+	at_debug_args="$at_debug_args $at_envvar='$at_value'"
 	;;
 
      *) echo "$as_me: invalid option: $at_option" >&2

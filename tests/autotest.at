@@ -295,7 +295,7 @@ AT_CHECK([(cd micro-suite.dir/1; ./run)],
 # in via an environment option.
 AT_CHECK_AT_TEST([Debugging a failed test],
   [AT_CHECK([test "$MY_VAR" = "one space" || exit 42])],
-  [:], [1], [], [ignore], [
+  [], [1], [], [ignore], [
 AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='two  spaces')],
          [1], [ignore], [ignore])
 AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='one space')],

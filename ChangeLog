@@ -1,3 +1,11 @@
+2006-04-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT): Store quoted variable
+	assignments in `at_debug_args', so that we put them correctly
+	in the `run' script.
+	* tests/autotest.at (Debugging a failed test): Unmark XFAIL.
+	Reported by Eric Blake.
+
 2006-04-11  Eric Blake  <ebb9@byu.net>
 
 	* tests/autotest.at (AT_CHECK_AT): Add new argument, to allow
