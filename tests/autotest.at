@@ -291,7 +291,7 @@ AT_CHECK([(cd micro-suite.dir/1; ./run)],
          [0], [ignore], [ignore])
 ])
 
-# The run script is currently invalid when shell metacharacters are passed
+# The run script must still be valid when shell metacharacters are passed
 # in via an environment option.
 AT_CHECK_AT_TEST([Debugging a failed test],
   [AT_CHECK([test "$MY_VAR" = "one space" || exit 42])],
