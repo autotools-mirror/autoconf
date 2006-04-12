@@ -491,16 +491,14 @@ else
   mkdir conf$$.dir
 fi
 echo >conf$$.file
-if ln -s conf$$.file conf$$ 2>/dev/null &&
-   ln -s conf$$.file conf$$.dir 2>/dev/null; then
-  # We could just check for DJGPP; but this test a) works b) is more generic
-  # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
-  if test -f conf$$.exe; then
-    # Don't use ln at all; we don't have any links
+if ln -s conf$$.file conf$$ 2>/dev/null; then
+  as_ln_s='ln -s'
+  # ... but there are two gotchas:
+  # 1) On MSYS, both `ln -s file dir' and `ln file dir' fail.
+  # 2) DJGPP < 2.04 has no symlinks; `ln -s' creates a wrapper executable.
+  # In both cases, we have to default to `cp -p'.
+  ln -s conf$$.file conf$$.dir 2>/dev/null && test ! -f conf$$.exe ||
     as_ln_s='cp -p'
-  else
-    as_ln_s='ln -s'
-  fi
 elif ln conf$$.file conf$$ 2>/dev/null; then
   as_ln_s=ln
 else
@@ -3162,16 +3160,14 @@ else
   mkdir conf$$.dir
 fi
 echo >conf$$.file
-if ln -s conf$$.file conf$$ 2>/dev/null &&
-   ln -s conf$$.file conf$$.dir 2>/dev/null; then
-  # We could just check for DJGPP; but this test a) works b) is more generic
-  # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
-  if test -f conf$$.exe; then
-    # Don't use ln at all; we don't have any links
+if ln -s conf$$.file conf$$ 2>/dev/null; then
+  as_ln_s='ln -s'
+  # ... but there are two gotchas:
+  # 1) On MSYS, both `ln -s file dir' and `ln file dir' fail.
+  # 2) DJGPP < 2.04 has no symlinks; `ln -s' creates a wrapper executable.
+  # In both cases, we have to default to `cp -p'.
+  ln -s conf$$.file conf$$.dir 2>/dev/null && test ! -f conf$$.exe ||
     as_ln_s='cp -p'
-  else
-    as_ln_s='ln -s'
-  fi
 elif ln conf$$.file conf$$ 2>/dev/null; then
   as_ln_s=ln
 else
