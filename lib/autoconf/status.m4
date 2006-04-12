@@ -496,6 +496,32 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 ])
 _ACEOF
 
+cat >>$CONFIG_STATUS <<\_ACEOF
+# If the template does not know about datarootdir, expand it.
+# FIXME: This hack should be removed a few years after 2.60.
+ac_datarootdir_hack=
+m4_define([_AC_datarootdir_vars],
+          [datadir, docdir, infodir, localedir, mandir])
+case `sed -n '/datarootdir/ {
+  p
+  q
+}
+m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
+           [/@_AC_Var@/p
+])' $ac_file_inputs` in
+*datarootdir*) ;;
+*@[]m4_join([@*|*@], _AC_datarootdir_vars)@*)
+  AC_MSG_WARN([$ac_file_inputs seems to ignore the --datarootdir setting])
+_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF
+  ac_datarootdir_hack='
+  m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
+               [s&@_AC_Var@&$_AC_Var&g
+  ])dnl
+  s&\\\${datarootdir}&$datarootdir&g' ;;
+esac
+_ACEOF
+
 # Neutralize VPATH when `$srcdir' = `.'.
 # Shell code in configure.ac might set extrasub.
 # FIXME: do we really want to maintain this feature?
@@ -515,6 +541,7 @@ m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]]),
 	   [s&@_AC_Var@&$ac_[]_AC_Var&;t t[]AC_SUBST_TRACE(_AC_Var)
 ])dnl
+$ac_datarootdir_hack
 " $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
 
   rm -f "$tmp/stdin"

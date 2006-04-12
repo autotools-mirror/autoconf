@@ -633,6 +633,35 @@ two
 AT_CLEANUP
 
 
+## ------------------------ ##
+## datarootdir workaround.  ##
+## ------------------------ ##
+
+AT_SETUP([datarootdir workaround])
+
+AT_DATA([Foo.in],
+[@datadir@
+@docdir@
+@infodir@
+@localedir@
+@mandir@
+])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_AUX_DIR($top_srcdir/config)
+AC_CONFIG_FILES([Foo])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [],
+  [config.status: WARNING:  Foo.in seems to ignore the --datarootdir setting
+])
+AT_CHECK([grep datarootdir Foo], 1, [])
+AT_CLEANUP
+
+
 ## -------- ##
 ## srcdir.  ##
 ## -------- ##

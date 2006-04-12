@@ -25,7 +25,10 @@
 
   This means that if you use any of `@datadir@', `@infodir@', or
   `@mandir@' in a file, you will have to ensure `${datarootdir}' is
-  defined in this file.
+  defined in this file.  As a temporary measure, if any of those are
+  found but no mention of `datarootdir', the substitutions will be
+  replaced with values that do not contain `${datarootdir}', and a
+  warning will be issued.
 
 ** @top_builddir@ is now a dir name: it is always nonempty and doesn't have
   a trailing slash.  Similar change will be made to ac_top_builddir in a

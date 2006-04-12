@@ -1,3 +1,15 @@
+2006-04-12  Stepan Kasal  <kasal@ucw.cz>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): If the templates for
+	the instantiated file do not contain the string 'datarootdir'
+	but contain @datadir@, @docdir@, @infodir@, @localedir@, or
+	@mandir@, replace the reference '${datarootdir}' by the value.
+	* tests/torture.at (datarootdir workaround): New test.
+	* NEWS: Advertise this temporary fixup.
+	Based on a patch by Bruno Haible, reported and analyzed by
+	Paul Eggert and Noah Misch.
+
 2006-04-12  Eric Blake  <ebb9@byu.net>
 
 	* tests/autotest.at (Debugging a failed test): Fix comment.
