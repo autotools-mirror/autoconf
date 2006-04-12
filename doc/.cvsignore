@@ -11,10 +11,12 @@
 *.ky
 *.aux *.dvi *.info *.log
 Makefile
+autoconf
 *.pdf
 *.pg
 *.ps
 stamp-vti
+standards
 *.tmp
 *.toc
 *.tp
