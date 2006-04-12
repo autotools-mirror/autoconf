@@ -1,6 +1,6 @@
 * Major changes in Autoconf 2.59c
 
-  Released 2006-04-13, by Ralf Wildenhues.
+  Released 2006-04-12, by Ralf Wildenhues.
 
 ** The configure command now redirects standard input from /dev/null,
   to help avoid problems with subsidiary commands that might mistakenly
