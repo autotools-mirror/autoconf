@@ -857,7 +857,7 @@ _AS_LINENO_WORKS || {
 # Don't use conftest.sym to avoid file name issues on DJGPP, where this
 # would yield conftest.sym.exe for DJGPP < 2.04.  And don't use `conftest'
 # as base name to avoid prohibiting concurrency (e.g., concurrent
-# config.statuses).  MSYS `ln -s' fails with a target directory.
+# config.statuses).
 m4_defun([_AS_LN_S_PREPARE],
 [rm -f conf$$ conf$$.exe conf$$.file
 if test -d conf$$.dir; then
@@ -867,19 +867,15 @@ else
   mkdir conf$$.dir
 fi
 echo >conf$$.file
-if ln -s conf$$.file conf$$ 2>/dev/null &&
-   ln -s conf$$.file conf$$.dir 2>/dev/null; then
-  # We could just check for DJGPP; but this test a) works b) is more generic
-  # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
-  if test -f conf$$.exe; then
-    # Don't use ln at all; we don't have any links
+if ln -s conf$$.file conf$$ 2>/dev/null; then
+  as_ln_s='ln -s'
+  # ... but there are two gotchas:
+  # 1) On MSYS, both `ln -s file dir' and `ln file dir' fail.
+  # 2) DJGPP < 2.04 has no symlinks; `ln -s' creates a wrapper executable.
+  # In both cases, we have to default to `cp -p'.
+  ln -s conf$$.file conf$$.dir 2>/dev/null && test ! -f conf$$.exe ||
     as_ln_s='cp -p'
-  else
-    as_ln_s='ln -s'
-  fi
-elif rm -f conf$$ conf$$.dir/conf$$.file &&
-     ln conf$$.file conf$$ 2>/dev/null &&
-     ln conf$$.file conf$$.dir 2>/dev/null; then
+elif ln conf$$.file conf$$ 2>/dev/null; then
   as_ln_s=ln
 else
   as_ln_s='cp -p'

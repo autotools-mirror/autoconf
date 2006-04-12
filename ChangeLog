@@ -1,3 +1,8 @@
+2006-04-12  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sh.m4 (_AS_LN_S_PREPARE): Simplify the summary of
+	all the changes since 2006-04-07.
+
 2006-04-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/m4sugar/m4sh.m4 (_AS_LN_S_PREPARE): If `ln -s file1 file2'
