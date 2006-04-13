@@ -1,5 +1,7 @@
 2006-04-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* NEWS: Update.
+
 	* configure.ac (AC_INIT): Bump to 2.59d.
 
 2006-04-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
