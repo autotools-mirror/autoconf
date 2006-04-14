@@ -52,8 +52,8 @@ use vars qw (@ISA @EXPORT);
 Return the first path for a C<$file_name> in the C<include>s.
 
 We match exactly the behavior of GNU M4: first look in the current
-directory (which includes the case of absolute file names), and, if
-the file is not absolute, just fail.  Otherwise, look in C<@include>.
+directory (which includes the case of absolute file names), and then,
+if the file name is not absolute, look in C<@include>.
 
 If the file is flagged as optional (ends with C<?>), then return undef
 if absent, otherwise exit with error.
