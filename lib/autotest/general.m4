@@ -598,8 +598,13 @@ export PATH
 # Setting up the FDs.
 # 5 is the log file.  Not to be overwritten if `-d'.
 m4_define([AS_MESSAGE_LOG_FD], [5])
-$at_debug_p && at_suite_log=/dev/null
-exec AS_MESSAGE_LOG_FD>"$at_suite_log"
+if $at_debug_p; then
+  at_suite_log=/dev/null
+else
+  exec AS_MESSAGE_LOG_FD>&- # Work around a MinGW bug.
+  : >"$at_suite_log"
+fi
+exec AS_MESSAGE_LOG_FD>>"$at_suite_log"
 
 # Banners and logs.
 AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])

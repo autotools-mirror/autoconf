@@ -1,3 +1,12 @@
+2006-04-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_INIT_CONFIG_LOG): Close
+	AS_MESSAGE_LOG_FD before reopening it onto the log file.
+	This works around a MinGW bug reported by Eric Paire.
+	Make sure that all writes to the log file append to it,
+	rather than possibly losing data.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+
 2006-04-14  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/Autom4te/FileUtils.pm (find_file): Fix a typo in the
