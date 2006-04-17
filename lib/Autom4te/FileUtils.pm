@@ -76,22 +76,17 @@ sub find_file ($@)
   return File::Spec->canonpath ($file_name)
     if -e $file_name;
 
-  if (File::Spec->file_name_is_absolute ($file_name))
+  if (!File::Spec->file_name_is_absolute ($file_name))
     {
-      fatal "$file_name: no such file or directory"
-	unless $optional;
-      return undef;
-    }
-
-  foreach my $path (@include)
-    {
-      return File::Spec->canonpath (File::Spec->catfile ($path, $file_name))
-	if -e File::Spec->catfile ($path, $file_name)
+      foreach my $path (@include)
+	{
+	  return File::Spec->canonpath (File::Spec->catfile ($path, $file_name))
+	    if -e File::Spec->catfile ($path, $file_name)
+	}
     }
 
   fatal "$file_name: no such file or directory"
     unless $optional;
-
   return undef;
 }
 

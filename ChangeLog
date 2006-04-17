@@ -1,3 +1,7 @@
+2006-04-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/Autom4te/FileUtils.pm: Sync from Automake.
+
 2006-04-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_CONFIG_LOG): Don't
