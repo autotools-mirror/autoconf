@@ -1270,6 +1270,19 @@ if $ac_cs_silent; then
   ac_configure_extra_args="$ac_configure_extra_args --silent"
 fi
 
+_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF
+dnl Check this before opening the log, to avoid a bug on MinGW,
+dnl which prohibits the recursive instance from truncating an open log.
+if \$ac_cs_recheck; then
+  echo "running CONFIG_SHELL=$SHELL $SHELL $[0] " $ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&AS_MESSAGE_FD
+  CONFIG_SHELL=$SHELL
+  export CONFIG_SHELL
+  exec $SHELL "$[0]" $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
+fi
+
+_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF
 dnl Open the log:
 m4_rename([_AC_save_AS_MESSAGE_LOG_FD], [AS_MESSAGE_LOG_FD])dnl
 exec AS_MESSAGE_LOG_FD>>config.log
@@ -1281,12 +1294,6 @@ exec AS_MESSAGE_LOG_FD>>config.log
 
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
-if \$ac_cs_recheck; then
-  echo "running CONFIG_SHELL=$SHELL $SHELL $[0] " $ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&AS_MESSAGE_FD
-  CONFIG_SHELL=$SHELL
-  export CONFIG_SHELL
-  exec $SHELL "$[0]" $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
-fi
 m4_ifdef([_AC_OUTPUT_COMMANDS_INIT],
 [#
 # INIT-COMMANDS

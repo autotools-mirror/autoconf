@@ -1103,7 +1103,6 @@ fi])dnl
 m4_define([_AC_INIT_CONFIG_LOG],
 [m4_divert_text([INIT_PREPARE],
 [m4_define([AS_MESSAGE_LOG_FD], 5)dnl
-exec AS_MESSAGE_LOG_FD>&- # Work around a MinGW bug.
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.

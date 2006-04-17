@@ -601,7 +601,6 @@ m4_define([AS_MESSAGE_LOG_FD], [5])
 if $at_debug_p; then
   at_suite_log=/dev/null
 else
-  exec AS_MESSAGE_LOG_FD>&- # Work around a MinGW bug.
   : >"$at_suite_log"
 fi
 exec AS_MESSAGE_LOG_FD>>"$at_suite_log"

@@ -1,3 +1,15 @@
+2006-04-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_INIT_CONFIG_LOG): Don't
+	use ">&-" since we're only 99.999% sure that this is portable,
+	and since the MinGW bug is fixed in a different way.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+
+2006-04-16  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Handle --recheck
+	before opening config.log, to avoid hitting a bug on MinGW.
+
 2006-04-14  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_CONFIG_LOG): Close
