@@ -1200,8 +1200,8 @@ AS_UNSET(ac_configure_args1)
 # config.log.  We remove comments because anyway the quotes in there
 # would cause problems or look ugly.
 # WARNING: Use '\'' to represent an apostrophe within the trap.
-trap '
-  exit_status=$?
+# WARNING: Do not start the trap code with a newline, due to a FreeBSD 4.0 bug.
+trap 'exit_status=$?
   # Save into config.log some information that might help in debugging.
   {
     echo

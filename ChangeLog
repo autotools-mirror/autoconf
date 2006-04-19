@@ -1,3 +1,11 @@
+2006-04-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Remove the leading
+	newline from the `trap' code to finish `config.log'; the NetBSD
+	/bin/sh resets the exit status after an empty command, as
+	documented in doc/autoconf.texi.
+	Reported by Dalibor Topic <robilad@kaffe.org>.
+
 2006-04-19  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (C Compiler): Clarify AC_C_TYPEOF.
