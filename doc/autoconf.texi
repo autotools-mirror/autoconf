@@ -6293,10 +6293,10 @@ found in macros such as this:
 @acindex{C_TYPEOF}
 @cvindex HAVE_TYPEOF
 @cvindex typeof
-If the C compiler supports GCC's @code{typeof} syntax, define
-@code{HAVE_TYPEOF}.  If the support is available only via a different
-spelling of the keyword (e.g., @code{__typeof__}), define @code{typeof}
-to that spelling.
+If the C compiler supports GCC's @code{typeof} syntax either directly or
+through a different spelling of the keyword (e.g., @code{__typeof__}),
+define @code{HAVE_TYPEOF}.  If the support is available only through a
+different spelling, define @code{typeof} to that spelling.
 @end defmac
 
 @defmac AC_C_PROTOTYPES

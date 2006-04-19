@@ -1,3 +1,8 @@
+2006-04-19  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (C Compiler): Clarify AC_C_TYPEOF.
+	Suggested by Bruno Haible.
+
 2006-04-18  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* configure.ac (ac_cv_sh_n_works): Don't try to test for it, since
