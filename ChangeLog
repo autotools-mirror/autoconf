@@ -1,3 +1,14 @@
+2006-04-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* configure.ac (ac_cv_sh_n_works): Don't try to test for it, since
+	some shells (e.g., Solaris 8 /bin/sh) implement it verrrry slowly.
+	Instead, just list the shells that we know work.
+	* tests/local.at (AT_CHECK_SHELL_SYNTAX): Remove 2nd arg.  All uses
+	changed.  Be more cautious about the _cv_ variable.
+	* tests/tools.at (Syntax of the shell scripts): Check the
+	_cv_ variable once, at first, to avoid an internal autoconf error
+	when sh -n does not work.
+
 2006-04-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/Autom4te/FileUtils.pm: Sync from Automake.

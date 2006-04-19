@@ -45,13 +45,13 @@ AT_CHECK([$at_diff "$1" "$2"])
 ## Testing syntax.  ##
 ## ---------------- ##
 
-# AT_CHECK_SHELL_SYNTAX(PROGRAM, ALT-COMMAND)
-# -------------------------------------------
+# AT_CHECK_SHELL_SYNTAX(PROGRAM)
+# ------------------------------
 # If the shell handles `-n' well, use it to check the syntax of PROGRAM;
-# otherwise, run ALT-COMMAND.
+# otherwise, do nothing.
 m4_define([AT_CHECK_SHELL_SYNTAX],
-[AS_IF([test x"$ac_cv_sh_n_works" != xno],
-  [AT_CHECK([/bin/sh -n $1], 0)], [$2])])
+[AS_IF([test "$ac_cv_sh_n_works" = yes],
+  [AT_CHECK([/bin/sh -n $1])])])
 
 m4_define([AT_CHECK_PERL_SYNTAX],
 [AT_CHECK([autom4te_perllibdir=$abs_top_srcdir/lib $PERL -c $abs_top_builddir/bin/$1],

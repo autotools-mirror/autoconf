@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 # Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002, 2003,
-# 2004 Free Software Foundation, Inc.
+# 2004, 2005, 2006 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -48,30 +48,25 @@ AM_INIT_AUTOMAKE([check-news 1.7.9 dist-bzip2 readme-alpha])
 #   $ time sh -nx endless.sh
 #   ^Csh -nx endless.sh  3,67s user 0,03s system 63% cpu 5,868 total
 #
+# Also, some implementations of /bin/sh (e.g., Solaris 8) are soooo slow
+# that they are unusable on large scripts like our testsuite.
+
 # So before using `/bin/sh -n' to check our scripts, we first check
-# that `/bin/sh -n' is not broken to death.
+# that `/bin/sh -n' is known to not have these problems.
 
-# A script that never returns.  We don't care that it never returns,
-# broken /bin/sh loop equally with `false', but it makes it easier to
-# test the robustness in a good environment: just remove the `-n'.
-AC_CACHE_CHECK([whether sh -n works], ac_cv_sh_n_works,
-[cat > conftest.sh <<_CONFEOF_
-while :
-do
-  :
-done
-_CONFEOF_
-
-(/bin/sh -n conftest.sh) &
-sleep 2
-if kill $! >/dev/null 2>&1; then
-  # We managed to kill the child, which means that we probably
-  # can't trust `/bin/sh -n', hence the test failed.
-  ac_cv_sh_n_works=no
-else
-  ac_cv_sh_n_works=yes
+AC_CACHE_CHECK([whether /bin/sh -n is known to work], ac_cv_sh_n_works,
+[if (
+    unset BASH_VERSION ZSH_VERSION
+    /bin/sh -c '
+      test -n "${BASH_VERSION+set}" || # Bash
+      test -n "${KSH_VERSION+set}" || # pdksh
+      test -n "${ZSH_VERSION+set}" || # zsh
+      test -n "${.sh.version}" # ksh93; put this last since its syntax is dodgy
+    '
+  ) 2>/dev/null
+then ac_cv_sh_n_works=yes
+else ac_cv_sh_n_works=no
 fi
-rm conftest.sh
 ])
 AC_SUBST(ac_cv_sh_n_works)
 
