@@ -1,3 +1,11 @@
+2006-04-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Update wording to say merely "should" for AS_DIRNAME
+	and AS_BASENAME.
+	* lib/m4sugar/m4sh.m4 (AS_BASENAME, AS_DIRNAME): Bring these
+	back, albeit undocumented.  Programs now have a grace period
+	to switch to AS_VAR_SET_DIRNAME and AS_VAR_SET_BASENAME.
+
 2006-04-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Introduction): The GNU Autoconf Macro

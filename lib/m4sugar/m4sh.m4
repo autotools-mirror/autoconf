@@ -692,6 +692,11 @@ $as_basename -- $1 ||
 _AS_BASENAME_EXPR([$1]) 2>/dev/null ||
 _AS_BASENAME_SED([$1])])
 
+# Some programs rely on _AS_BASENAME being called AS_BASENAME.
+# They should be rewritten to use AS_VAR_SET_BASENAME, but in
+# the meantime we'll leave AS_BASENAME in as an undocumented macro.
+m4_defun([AS_BASENAME], [_AS_BASENAME([$1])])
+
 
 # _AS_BASENAME_PREPARE
 # --------------------
@@ -749,6 +754,11 @@ m4_defun([_AS_DIRNAME],
 $as_dirname -- $1 ||
 _AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
 _AS_DIRNAME_SED([$1])])
+
+# Some programs rely on _AS_DIRNAME being called AS_DIRNAME.
+# They should be rewritten to use AS_VAR_SET_DIRNAME, but in
+# the meantime we'll leave AS_DIRNAME in as an undocumented macro.
+m4_defun([AS_DIRNAME], [_AS_DIRNAME([$1])])
 
 
 # _AS_DIRNAME_PREPARE

@@ -1,8 +1,8 @@
 * Major changes in Autoconf 2.59d
 
-** New macros AS_VAR_SET_BASENAME and AS_VAR_SET_DIRNAME, replacing the
-  AS_BASENAME and AS_DIRNAME macros that were introduced in alpha
-  versions but not mentioned in the NEWS file.
+** New macros AS_VAR_SET_BASENAME and AS_VAR_SET_DIRNAME.
+  Programs that use the (never-stable, and now undocumented) AS_BASENAME
+  and AS_DIRNAME macros should use these new macros instead.
 
 * Major changes in Autoconf 2.59c
 
