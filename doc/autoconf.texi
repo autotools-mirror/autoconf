@@ -687,7 +687,7 @@ Because of its mission, the Autoconf package itself
 includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
-@uref{http://www.gnu.org/software/ac-archive/, @acronym{GNU} Autoconf Macro
+@uref{http://autoconf-archive.cryp.to/, Autoconf Macro
 Archive}, which is kindly run by @email{simons@@cryp.to,
 Peter Simons}.
 
@@ -17546,7 +17546,7 @@ datadir.h: Makefile
 Use @code{AC_DEFINE} but have @command{configure} compute the literal
 value of @code{datadir} and others.  Many people have wrapped macros to
 automate this task.  For instance, the macro @code{AC_DEFINE_DIR} from
-the @uref{http://www.gnu.org/software/ac-archive/, @acronym{GNU} Autoconf Macro
+the @uref{http://autoconf-archive.cryp.to/, Autoconf Macro
 Archive}.
 
 This solution does not conform to the @acronym{GNU} Coding Standards.
@@ -17559,8 +17559,8 @@ find @code{prefix} at runtime, this way your package is relocatable.
 Some macros are already available to address this issue: see
 @code{adl_COMPUTE_RELATIVE_PATHS} and
 @code{adl_COMPUTE_STANDARD_RELATIVE_PATHS} on the
-@uref{http://www.gnu.org/software/ac-archive/,
-@acronym{GNU} Autoconf Macro Archive}.
+@uref{http://autoconf-archive.cryp.to/,
+Autoconf Macro Archive}.
 @end itemize
 
 

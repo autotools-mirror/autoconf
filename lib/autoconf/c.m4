@@ -1461,7 +1461,7 @@ fi
 # AC_C_RESTRICT
 # -------------
 # based on acx_restrict.m4, from the GNU Autoconf Macro Archive at:
-# http://www.gnu.org/software/ac-archive/htmldoc/acx_restrict.html
+# http://autoconf-archive.cryp.to/acx_restrict.html
 #
 # Determine whether the C/C++ compiler supports the "restrict" keyword
 # introduced in ANSI C99, or an equivalent.  Do nothing if the compiler

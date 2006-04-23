@@ -1,3 +1,10 @@
+2006-04-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Introduction): The GNU Autoconf Macro
+	Archive is not officially `GNU' any more.  Update URL.
+	(Defining Directories): Likewise
+	* lib/autoconf/c.m4 (AC_C_RESTRICT): Update URL.
+
 2006-04-22  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Remove AS_DIRNAME and AS_BASENAME, replacing them with
