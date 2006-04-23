@@ -1,9 +1,5 @@
 * Major changes in Autoconf 2.59d
 
-** New macros AS_VAR_SET_BASENAME and AS_VAR_SET_DIRNAME.
-  Programs that use the (never-stable, and now undocumented) AS_BASENAME
-  and AS_DIRNAME macros should use these new macros instead.
-
 * Major changes in Autoconf 2.59c
 
   Released 2006-04-12, by Ralf Wildenhues.

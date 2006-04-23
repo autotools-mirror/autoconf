@@ -1,10 +1,11 @@
 2006-04-23  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* NEWS: Update wording to say merely "should" for AS_DIRNAME
-	and AS_BASENAME.
-	* lib/m4sugar/m4sh.m4 (AS_BASENAME, AS_DIRNAME): Bring these
-	back, albeit undocumented.  Programs now have a grace period
-	to switch to AS_VAR_SET_DIRNAME and AS_VAR_SET_BASENAME.
+	* NEWS: Remove mention of AS_VAR_SET_BASENAME and AS_VAR_SET_DIRNAME.
+	* doc/autoconf.texi (Programming in M4sh): Remove mention of
+	AS_VAR_SET_BASENAME, AS_VAR_SET_DIRNAME, and AS_BASENAME.
+	We have to keep AS_DIRNAME since it was part of a stable Autoconf,
+	but AS_BASENAME doesn't have to be supported.
+	* lib/m4sugar/m4sh.m4 (AS_BASENAME, AS_DIRNAME): Bring these back.
 
 2006-04-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

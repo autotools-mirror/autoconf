@@ -9646,14 +9646,6 @@ For the time being, it is not mature enough to be widely used.
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
-@defmac AS_VAR_SET_BASENAME (@var{variable}, @var{file-name})
-@asindex{VAR_SET_BASENAME}
-Set @var{variable} to the non-directory portion of @var{file-name}.
-For example,
-if @code{$file} is @samp{/one/two/three}, the command
-@code{AS_VAR_SET_BASENAME([base], ["$file"])`} sets @code{base} to @samp{three}.
-@end defmac
-
 @defmac AS_BOURNE_COMPATIBLE
 @asindex{BOURNE_COMPATIBLE}
 Set up the shell to be more compatible with the Bourne shell as
@@ -9669,11 +9661,11 @@ against one or more patterns.  @var{if-matched} is run if the
 corresponding pattern matched @var{word}, else @var{default} is run.
 @end defmac
 
-@defmac AS_VAR_SET_DIRNAME (@var{variable}, @var{file-name})
-@asindex{VAR_SET_DIRNAME}
-Set @var{variable} to the directory portion of @var{file-name}.  For example,
+@defmac AS_DIRNAME (@var{file-name})
+@asindex{DIRNAME}
+Output the directory portion of @var{file-name}.  For example,
 if @code{$file} is @samp{/one/two/three}, the command
-@code{AS_VAR_SET_DIRNAME([var], ["$file"])} sets @code{dir} to @samp{/one/two}.
+@code{dir=`AS_DIRNAME(["$file"])`} sets @code{dir} to @samp{/one/two}.
 @end defmac
 
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
@@ -12468,23 +12460,8 @@ fields in a record.  You may be able to circumvent this problem by using
 @item @command{basename}
 @c ---------------------
 @prindex @command{basename}
-Not all hosts have a working @command{basename}, and you should instead
-use @code{AS_VAR_SET_BASENAME} (@pxref{Programming in M4sh}), followed by
-@command{expr} if you need to strip a suffix.  For example:
-
-@example
-a=`basename "$aname"`  # This is not portable.
-AS_VAR_SET_BASENAME([a], ["$aname"])  # This is more portable.
-
-# This is not portable.
-c=`basename "$cname" .c`
-
-# This is more portable.
-AS_VAR_SET_BASENAME([c], ["$cname"])
-case $c in
-?*.c) c=`expr "X$c" : 'X\(.*\)\.c'`;;
-esac
-@end example
+Not all hosts have a working @command{basename}.
+You can use @command{expr} instead.
 
 
 @item @command{cat}
@@ -12648,11 +12625,11 @@ Some implementations, such as Tru64's, fail when comparing to
 @c --------------------
 @prindex @command{dirname}
 Not all hosts have a working @command{dirname}, and you should instead
-use @code{AS_VAR_SET_DIRNAME} (@pxref{Programming in M4sh}).  For example:
+use @code{AS_DIRNAME} (@pxref{Programming in M4sh}).  For example:
 
 @example
-dir=`dirname "$file"`  # This is not portable.
-AS_VAR_SET_DIRNAME([dir], ["$file"])  # This is more portable.
+dir=`dirname "$file"`       # This is not portable.
+dir=`AS_DIRNAME(["$file"])` # This is more portable.
 @end example
 
 
