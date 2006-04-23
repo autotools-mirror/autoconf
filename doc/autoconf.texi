@@ -9646,11 +9646,12 @@ For the time being, it is not mature enough to be widely used.
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
-@defmac AS_BASENAME (@var{file-name})
-@asindex{BASENAME}
-Output the non-directory portion of @var{file-name}.  For example,
+@defmac AS_VAR_SET_BASENAME (@var{variable}, @var{file-name})
+@asindex{VAR_SET_BASENAME}
+Set @var{variable} to the non-directory portion of @var{file-name}.
+For example,
 if @code{$file} is @samp{/one/two/three}, the command
-@code{base=`AS_BASENAME(["$file"])`} sets @code{base} to @samp{three}.
+@code{AS_VAR_SET_BASENAME([base], ["$file"])`} sets @code{base} to @samp{three}.
 @end defmac
 
 @defmac AS_BOURNE_COMPATIBLE
@@ -9668,11 +9669,11 @@ against one or more patterns.  @var{if-matched} is run if the
 corresponding pattern matched @var{word}, else @var{default} is run.
 @end defmac
 
-@defmac AS_DIRNAME (@var{file-name})
-@asindex{DIRNAME}
-Output the directory portion of @var{file-name}.  For example,
+@defmac AS_VAR_SET_DIRNAME (@var{variable}, @var{file-name})
+@asindex{VAR_SET_DIRNAME}
+Set @var{variable} to the directory portion of @var{file-name}.  For example,
 if @code{$file} is @samp{/one/two/three}, the command
-@code{dir=`AS_DIRNAME(["$file"])`} sets @code{dir} to @samp{/one/two}.
+@code{AS_VAR_SET_DIRNAME([var], ["$file"])} sets @code{dir} to @samp{/one/two}.
 @end defmac
 
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
@@ -11197,8 +11198,8 @@ test "$@{var+set@}" = set || var=@var{@{value@}}
 @cindex Command Substitution
 Posix requires shells to trim all trailing newlines from command
 output before substituting it, so assignments like
-@samp{dir=`AS_DIRNAME(["$file"])`} will not work as expected if the
-directory of @samp{$file} ends in a newline.
+@samp{dir=`echo "$file" | tr a A`} will not work as expected if
+@samp{$file} ends in a newline.
 
 While in general it makes no sense, do not substitute a single builtin
 with side effects, because Ash 0.2, trying to optimize, does not fork a
@@ -12468,18 +12469,18 @@ fields in a record.  You may be able to circumvent this problem by using
 @c ---------------------
 @prindex @command{basename}
 Not all hosts have a working @command{basename}, and you should instead
-use @code{AS_BASENAME} (@pxref{Programming in M4sh}), followed by
+use @code{AS_VAR_SET_BASENAME} (@pxref{Programming in M4sh}), followed by
 @command{expr} if you need to strip a suffix.  For example:
 
 @example
-a=`basename "$aname"`       # This is not portable.
-a=`AS_BASENAME(["$aname"])` # This is more portable.
+a=`basename "$aname"`  # This is not portable.
+AS_VAR_SET_BASENAME([a], ["$aname"])  # This is more portable.
 
 # This is not portable.
 c=`basename "$cname" .c`
 
 # This is more portable.
-c=`AS_BASENAME(["$cname"])`
+AS_VAR_SET_BASENAME([c], ["$cname"])
 case $c in
 ?*.c) c=`expr "X$c" : 'X\(.*\)\.c'`;;
 esac
@@ -12647,11 +12648,11 @@ Some implementations, such as Tru64's, fail when comparing to
 @c --------------------
 @prindex @command{dirname}
 Not all hosts have a working @command{dirname}, and you should instead
-use @code{AS_DIRNAME} (@pxref{Programming in M4sh}).  For example:
+use @code{AS_VAR_SET_DIRNAME} (@pxref{Programming in M4sh}).  For example:
 
 @example
-dir=`dirname "$file"`       # This is not portable.
-dir=`AS_DIRNAME(["$file"])` # This is more portable.
+dir=`dirname "$file"`  # This is not portable.
+AS_VAR_SET_DIRNAME([dir], ["$file"])  # This is more portable.
 @end example
 
 

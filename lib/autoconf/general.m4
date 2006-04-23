@@ -440,8 +440,8 @@ dnl We reimplement AC_MSG_CHECKING (mostly) to avoid the ... in the middle.
   _AS_ECHO_N([checking for prefix by ])
   AC_PATH_PROG(ac_prefix_program, [$1])
   if test -n "$ac_prefix_program"; then
-    prefix=`AS_DIRNAME(["$ac_prefix_program"])`
-    prefix=`AS_DIRNAME(["$prefix"])`
+    AS_VAR_SET_DIRNAME([prefix], ["$ac_prefix_program"])
+    AS_VAR_SET_DIRNAME([prefix], ["$prefix"])
   fi
 fi
 ])# AC_PREFIX_PROGRAM
@@ -489,7 +489,7 @@ m4_divert_push([PARSE_ARGS])dnl
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then the parent directory.
-  ac_confdir=`AS_DIRNAME(["$[0]"])`
+  AS_VAR_SET_DIRNAME([ac_confdir], ["$[0]"])
   srcdir=$ac_confdir
   if test ! -r "$srcdir/$ac_unique_file"; then
     srcdir=..

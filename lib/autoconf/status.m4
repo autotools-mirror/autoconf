@@ -1427,7 +1427,7 @@ do
     ;;
   esac
 
-  ac_dir=`AS_DIRNAME(["$ac_file"])`
+  AS_VAR_SET_DIRNAME([ac_dir], ["$ac_file"])
   AS_MKDIR_P(["$ac_dir"])
   _AC_SRCDIRS(["$ac_dir"])
 

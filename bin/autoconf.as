@@ -1,7 +1,8 @@
 AS_INIT[]dnl                                            -*- shell-script -*-
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003, 2004, 2005
-# Free Software Foundation, Inc.
+
+# Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003,
+# 2004, 2005, 2006 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -66,7 +67,11 @@ Copyright (C) 2006 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."]
 
-me=`AS_BASENAME([$0])`
+me=$0
+case $me in
+*/autoconf) me=autoconf;;
+*/*) me=`expr "X$me" : '.*/\(.*\)'`;;
+esac
 
 help="\
 Try \`$me --help' for more information."
@@ -79,7 +84,6 @@ exit 1"
 # Variables.
 : ${AUTOM4TE='@bindir@/@autom4te-name@'}
 autom4te_options=
-dir=`AS_DIRNAME([$0])`
 outfile=
 verbose=:
 

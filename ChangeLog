@@ -1,3 +1,39 @@
+2006-04-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Remove AS_DIRNAME and AS_BASENAME, replacing them with
+	AS_VAR_SET_DIRNAME and AS_VAR_SET_BASENAME.
+	* doc/autoconf.texi (Programming in M4sh): Document this.  All uses
+	changed.  The newer interfaces are more reliable, as they allow
+	implementations that handle trailing newline correctly.  For now,
+	we're in a freeze, so I did not include the more-reliable
+	implementations, but I wanted to correct the interface before 2.60
+	goes out.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_REQUIRED): Renamed from
+	AS_DETECT_REQUIRED.  All uses changed.
+	(_AS_DETECT_SUGGESTED): Renamed from AS_DETECT_SUGGESTED.
+	All uses changed.
+	(_AS_DETECT_BETTER_SHELL): Put ;; at the end of a case.
+	(_AS_BASENAME): Renamed from AS_BASENAME.  All uses changed.
+	Use "basename --" to protect against leading "-".
+	(_AS_BASENAME_EXPR): Renamed from AS_BASENAME_EXPR.  All uses changed.
+	(_AS_BASENAME_SED): Renamed from AS_BASENAME_SED.  All uses changed.
+	(_AS_BASENAME_PREPARE): Reject implementations that cannot handle "--".
+	(_AS_DIRNAME_PREPARE): Likewise.
+	(_AS_DIRNAME): Renamed from AS_DIRNAME.  All uses changed.
+	(_AS_DIRNAME_EXPR): Renamed from AS_DIRNAME_EXPR.  All uses changed.
+	(_AS_DIRNAME_SED): Renamed from AS_DIRNAME_SED.  All uses changed.
+	Use "dirname --".
+	(AS_VAR_SET_BASENAME, AS_VAR_SET_DIRNAME): New macros.
+	* tests/m4sh.at (AS_VAR_SET_DIRNAME): Renamed from AS_DIRNAME.
+	Test the new API.  Don't test internals, since they're probably
+	going to change anyway.
+	(AS_VAR_SET_BASENAME): Likewise, renamed from AS_BASENAME.
+
+	* bin/autoconf.as: Don't use AS_BASENAME or AS_DIRNAME.  This
+	removes a bootstrapping problem with the changes described above.
+	The AS_DIRNAME part wasn't used, anyway, and the AS_BASENAME
+	part can be done portably without all the deep Autoconf magic.
+
 2006-04-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Remove the leading

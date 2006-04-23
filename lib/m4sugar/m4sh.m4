@@ -150,7 +150,7 @@ m4_define([AS_REQUIRE],
 # xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
 #
 m4_define([AS_REQUIRE_SHELL_FN],
-[AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
+[_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
 m4_provide_if([AS_SHELL_FN_$1], [],
                [m4_provide([AS_SHELL_FN_$1])m4_divert_text([M4SH-INIT], [$1() {
 $2
@@ -191,27 +191,26 @@ _ASEOF
 [(eval "AS_ESCAPE(m4_quote($1))")])])
 
 
-# AS_DETECT_REQUIRED(TEST)
-# ------------------------
-# Refuse to execute under a shell that does not pass
-# the given TEST.
+# _AS_DETECT_REQUIRED(TEST)
+# -------------------------
+# Refuse to execute under a shell that does not pass the given TEST.
 m4_define([_AS_DETECT_REQUIRED_BODY], [:])
-m4_defun([AS_DETECT_REQUIRED],
+m4_defun([_AS_DETECT_REQUIRED],
 [m4_require([_AS_DETECT_BETTER_SHELL])dnl
 m4_expand_once([m4_append([_AS_DETECT_REQUIRED_BODY], [
 ($1) || AS_EXIT(1)
-])], [AS_DETECT_REQUIRED_provide($1)])])
+])], [_AS_DETECT_REQUIRED_provide($1)])])
 
 
-# AS_DETECT_SUGGESTED(TEST)
-# -------------------------
+# _AS_DETECT_SUGGESTED(TEST)
+# --------------------------
 # Prefer to execute under a shell that passes the given TEST.
 m4_define([_AS_DETECT_SUGGESTED_BODY], [:])
-m4_defun([AS_DETECT_SUGGESTED],
+m4_defun([_AS_DETECT_SUGGESTED],
 [m4_require([_AS_DETECT_BETTER_SHELL])dnl
 m4_expand_once([m4_append([_AS_DETECT_SUGGESTED_BODY], [
 ($1) || AS_EXIT(1)
-])], [AS_DETECT_SUGGESTED_provide($1)])])
+])], [_AS_DETECT_SUGGESTED_provide($1)])])
 
 
 # _AS_DETECT_BETTER_SHELL
@@ -234,7 +233,7 @@ if test "x$CONFIG_SHELL" = x; then
 	 /*)
 	   for as_base in sh bash ksh sh5; do
 	     as_candidate_shells="$as_candidate_shells $as_dir/$as_base"
-	   done
+	   done;;
        esac])
 
       for as_shell in $as_candidate_shells $SHELL; do
@@ -383,7 +382,7 @@ _AS_EXPR_PREPARE
 _AS_BASENAME_PREPARE
 
 # Name of the executable.
-as_me=`AS_BASENAME("$[0]")`
+AS_VAR_SET_BASENAME([as_me], [$[0]])
 
 # CDPATH.
 $as_unset CDPATH
@@ -660,18 +659,18 @@ m4_define([AS_ERROR],
 # This section is lexicographically sorted.
 
 
-# AS_BASENAME(FILE-NAME)
-# ----------------------
+# _AS_BASENAME(FILE-NAME)
+# -----------------------
 # Simulate the command 'basename FILE-NAME'.  Not all systems have basename.
 # Also see the comments for AS_DIRNAME.
 
-m4_defun([AS_BASENAME_EXPR],
+m4_defun([_AS_BASENAME_EXPR],
 [AS_REQUIRE([_AS_EXPR_PREPARE])dnl
 $as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
 	 X[]$1 : 'X\(//\)$' \| \
 	 X[]$1 : 'X\(/\)' \| .])
 
-m4_defun([AS_BASENAME_SED],
+m4_defun([_AS_BASENAME_SED],
 [echo X/[]$1 |
     sed ['/^.*\/\([^/][^/]*\)\/*$/{
 	    s//\1/
@@ -687,18 +686,19 @@ m4_defun([AS_BASENAME_SED],
 	  }
 	  s/.*/./; q']])
 
-m4_defun([AS_BASENAME],
-[AS_REQUIRE([_$0_PREPARE])dnl
-$as_basename $1 ||
-AS_BASENAME_EXPR([$1]) 2>/dev/null ||
-AS_BASENAME_SED([$1])])
+m4_defun([_AS_BASENAME],
+[AS_REQUIRE([$0_PREPARE])dnl
+$as_basename -- $1 ||
+_AS_BASENAME_EXPR([$1]) 2>/dev/null ||
+_AS_BASENAME_SED([$1])])
 
 
 # _AS_BASENAME_PREPARE
 # --------------------
 # Avoid Solaris 9 /usr/ucb/basename, as `basename /' outputs an empty line.
+# Also, traditional basename mishandles --.
 m4_defun([_AS_BASENAME_PREPARE],
-[if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
+[if as_basename=`(basename -- /) 2>&1` && test "X$as_basename" = "X/"; then
   as_basename=basename
 else
   as_basename=false
@@ -706,8 +706,8 @@ fi
 ])# _AS_BASENAME_PREPARE
 
 
-# AS_DIRNAME(FILE-NAME)
-# ---------------------
+# _AS_DIRNAME(FILE-NAME)
+# ----------------------
 # Simulate the command 'dirname FILE-NAME'.  Not all systems have dirname.
 # This macro must be usable from inside ` `.
 #
@@ -717,14 +717,14 @@ fi
 # a silly length limit that causes expr to fail if the matched
 # substring is longer than 120 bytes.  So fall back on echo|sed if
 # expr fails.
-m4_defun([AS_DIRNAME_EXPR],
+m4_defun([_AS_DIRNAME_EXPR],
 [AS_REQUIRE([_AS_EXPR_PREPARE])dnl
 $as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
 	 X[]$1 : 'X\(//\)[[^/]]' \| \
 	 X[]$1 : 'X\(//\)$' \| \
 	 X[]$1 : 'X\(/\)' \| .])
 
-m4_defun([AS_DIRNAME_SED],
+m4_defun([_AS_DIRNAME_SED],
 [echo X[]$1 |
     sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
@@ -744,17 +744,17 @@ m4_defun([AS_DIRNAME_SED],
 	  }
 	  s/.*/./; q']])
 
-m4_defun([AS_DIRNAME],
-[AS_REQUIRE([_$0_PREPARE])dnl
-$as_dirname $1 ||
-AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
-AS_DIRNAME_SED([$1])])
+m4_defun([_AS_DIRNAME],
+[AS_REQUIRE([$0_PREPARE])dnl
+$as_dirname -- $1 ||
+_AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
+_AS_DIRNAME_SED([$1])])
 
 
 # _AS_DIRNAME_PREPARE
 # --------------------
 m4_defun([_AS_DIRNAME_PREPARE],
-[if (dirname /) >/dev/null 2>&1; then
+[if (dirname -- /) >/dev/null 2>&1; then
   as_dirname=dirname
 else
   as_dirname=false
@@ -811,7 +811,7 @@ m4_define([_AS_LINENO_WORKS],
 # configure.
 m4_define([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
-AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])
+_AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])
 _AS_LINENO_WORKS || {
 
   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
@@ -907,7 +907,7 @@ m4_define([AS_MKDIR_P],
     as_dirs=
     while test ! -d "$as_dir"; do
       as_dirs="$as_dir $as_dirs"
-      as_dir=`AS_DIRNAME("$as_dir")`
+      AS_VAR_SET_DIRNAME([as_dir], ["$as_dir"])
     done
     test ! -n "$as_dirs" || mkdir $as_dirs
   fi || AS_ERROR([cannot create directory $1]); }dnl
@@ -1008,6 +1008,22 @@ else
 fi
 rm -f conf$$.file
 ])# _AS_TEST_PREPARE
+
+
+# AS_VAR_SET_BASENAME(VARIABLE, FILE-NAME)
+# ----------------------------------------
+# Simulate VARIABLE=`basename FILE-NAME`.
+m4_defun([AS_VAR_SET_BASENAME],
+[$1=$2
+$1=`_AS_BASENAME(["$$1"])`])
+
+
+# AS_VAR_SET_DIRNAME(VARIABLE, FILE-NAME)
+# ---------------------------------------
+# Simulate the command VARIABLE=`dirname FILE-NAME`.
+m4_defun([AS_VAR_SET_DIRNAME],
+[$1=$2
+$1=`_AS_DIRNAME(["$$1"])`])
 
 
 
@@ -1441,7 +1457,7 @@ m4_define([AS_VAR_POPDEF],
 # This temporary macro checks "in the wild" for shells that do
 # not support shell functions.
 m4_define([_AS_SHELL_FN_SPY],
-[AS_DETECT_SUGGESTED([_AS_SHELL_FN_WORK])
+[_AS_DETECT_SUGGESTED([_AS_SHELL_FN_WORK])
 _AS_RUN([_AS_SHELL_FN_WORK]) || {
   echo No shell found that supports shell functions.
   echo Please tell autoconf@gnu.org about your system,
