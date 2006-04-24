@@ -7666,14 +7666,10 @@ not run.  If the optional shell commands @var{action-if-cross-compiling}
 are given, they are run instead.  Otherwise, @command{configure} prints
 an error message and exits.
 
-In the @var{action-if-false} section, the exit status of the program is
-available in the shell variable @samp{$?}, but be very careful to limit
-yourself to positive values smaller than 127; bigger values should be
-saved into a file by the @var{program}.  Note also that you have simply
-no guarantee that this exit status is issued by the @var{program}, or by
-the failure of its compilation.  In other words, use this feature if
-sadist only, it was reestablished because the Autoconf maintainers grew
-tired of receiving ``bug reports''.
+In the @var{action-if-false} section, the failing exit status is
+available in the shell variable @samp{$?}.  This exit status might be
+that of a failed compilation, or it might be that of a failed program
+execution.
 
 It is customary to report unexpected failures with
 @code{AC_MSG_FAILURE}.
@@ -7700,6 +7696,30 @@ in other macros, including a few of the ones that come with Autoconf,
 you can test whether the shell variable @code{cross_compiling} is set to
 @samp{yes}, and then use an alternate method to get the results instead
 of calling the macros.
+
+A C or C++ runtime test can exit with status @var{N} by returning
+@var{N} from the @code{main} function.  Portable programs are supposed
+to exit either with status 0 or @code{EXIT_SUCCESS} to succeed, or with
+status @code{EXIT_FAILURE} to fail, but in practice it is portable to
+fail by exiting with status 1, and test programs that assume Posix can
+fail by exiting with status values from 1 through 255.  Programs on
+SunOS 2.0 (1985) through 3.5.2 (1988) incorrectly exited with zero
+status when @code{main} returned nonzero, but ancient systems like these
+are no longer of practical concern.
+
+A test can also exit with status @var{N} by passing @var{N} to the
+@code{exit} function, and a test can fail by calling the @code{abort}
+function.  If a test is specialized to just some platforms, it can fail
+by calling functions specific to those platforms, e.g., @code{_exit}
+(Posix) and @code{_Exit} (C99).  However, like other functions, an exit
+function should be declared, typically by including a header.  For
+example, if a test calls @code{exit}, it should include @file{stdlib.h}
+either directly or via the default includes (@pxref{Default Includes}).
+
+A test can fail due to undefined behavior such as dereferencing a null
+pointer, but this is not recommended as undefined behavior allows an
+implementation to do whatever it pleases and this includes exiting
+successfully.
 
 Erlang tests must exit themselves the Erlang VM by calling the @code{halt/1}
 function: the given status code is used to determine the success of the test
