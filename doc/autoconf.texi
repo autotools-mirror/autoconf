@@ -9666,6 +9666,16 @@ For the time being, it is not mature enough to be widely used.
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
+@c Deprecated, to be replaced by a better API
+@ignore
+@defmac AS_BASENAME (@var{file-name})
+@asindex{BASENAME}
+Output the non-directory portion of @var{file-name}.  For example,
+if @code{$file} is @samp{/one/two/three}, the command
+@code{base=`AS_BASENAME(["$file"])`} sets @code{base} to @samp{three}.
+@end defmac
+@end ignore
+
 @defmac AS_BOURNE_COMPATIBLE
 @asindex{BOURNE_COMPATIBLE}
 Set up the shell to be more compatible with the Bourne shell as
@@ -12482,6 +12492,27 @@ fields in a record.  You may be able to circumvent this problem by using
 @prindex @command{basename}
 Not all hosts have a working @command{basename}.
 You can use @command{expr} instead.
+
+@c AS_BASENAME is to be replaced by a better API.
+@ignore
+Not all hosts have a working @command{basename}, and you should instead
+use @code{AS_BASENAME} (@pxref{Programming in M4sh}), followed by
+@command{expr} if you need to strip a suffix.  For example:
+
+@example
+a=`basename "$aname"`       # This is not portable.
+a=`AS_BASENAME(["$aname"])` # This is more portable.
+
+# This is not portable.
+c=`basename "$cname" .c`
+
+# This is more portable.
+c=`AS_BASENAME(["$cname"])`
+case $c in
+?*.c) c=`expr "X$c" : 'X\(.*\)\.c'`;;
+esac
+@end example
+@end ignore
 
 
 @item @command{cat}

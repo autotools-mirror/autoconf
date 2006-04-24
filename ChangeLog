@@ -1,15 +1,40 @@
 2006-04-23  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Prepare for deprecation of AS_BASENAME and AS_DIRNAME, and fix
+	a few minor bugs in this area.
+
+	* doc/autoconf.texi (Programming in M4sh): Comment out the
+	documentation of AS_BASENAME, for now.
+	(Shell Substitutions): Do not use AS_DIRNAME in an example.
+	(Limitations of Builtins) <basename>: Do not refer to
+	AS_BASENAME.
+	* bin/autoconf.as (me): Don't use AS_BASENAME.
+	(dir): Remove the unused variable.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_REQUIRED): Renamed from
+	AS_DETECT_REQUIRED.  All uses changed.
+	(_AS_DETECT_SUGGESTED): Renamed from AS_DETECT_SUGGESTED.
+	All uses changed.
+	(_AS_DETECT_BETTER_SHELL): Put ;; at the end of a case.
+	(AS_BASENAME): Use "basename --" to protect against leading "-".
+	(_AS_BASENAME_EXPR): Renamed from AS_BASENAME_EXPR.  All uses changed.
+	(_AS_BASENAME_SED): Renamed from AS_BASENAME_SED.  All uses changed.
+	(_AS_BASENAME_PREPARE): Reject implementations that cannot handle "--".
+	(_AS_DIRNAME_PREPARE): Likewise.
+	(_AS_DIRNAME_EXPR): Renamed from AS_DIRNAME_EXPR.  All uses changed.
+	(_AS_DIRNAME_SED): Renamed from AS_DIRNAME_SED.  All uses changed.
+	(AS_DIRNAME): Use "dirname --".
+
+2006-04-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Runtime): Renamed from "Run Time".  All uses
+	of "run time" and "run-time" changed to "runtime", for consistency.
+	* lib/autoconf/fortran.m4: Likewise (in comment).
+	* lib/autoconf/functions.m4: Likewise.
+	* lib/autoconf/general.m4: Likewise.
+	* lib/autoconf/headers.m4: Likewise.
+
 	* doc/autoconf.texi (Run Time): Document the exit status situation
 	with more accuracy and detail.
-
-	* NEWS: Remove mention of AS_VAR_SET_BASENAME and AS_VAR_SET_DIRNAME.
-	* doc/autoconf.texi (Programming in M4sh): Remove mention of
-	AS_VAR_SET_BASENAME, AS_VAR_SET_DIRNAME, and AS_BASENAME.
-	We have to keep AS_DIRNAME since it was part of a stable Autoconf,
-	but AS_BASENAME doesn't have to be supported.
-
-	* lib/m4sugar/m4sh.m4 (AS_BASENAME, AS_DIRNAME): Bring these back.
 
 2006-04-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -17,42 +42,6 @@
 	Archive is not officially `GNU' any more.  Update URL.
 	(Defining Directories): Likewise
 	* lib/autoconf/c.m4 (AC_C_RESTRICT): Update URL.
-
-2006-04-22  Paul Eggert  <eggert@cs.ucla.edu>
-
-	* NEWS: Remove AS_DIRNAME and AS_BASENAME, replacing them with
-	AS_VAR_SET_DIRNAME and AS_VAR_SET_BASENAME.
-	* doc/autoconf.texi (Programming in M4sh): Document this.  All uses
-	changed.  The newer interfaces are more reliable, as they allow
-	implementations that handle trailing newline correctly.  For now,
-	we're in a freeze, so I did not include the more-reliable
-	implementations, but I wanted to correct the interface before 2.60
-	goes out.
-	* lib/m4sugar/m4sh.m4 (_AS_DETECT_REQUIRED): Renamed from
-	AS_DETECT_REQUIRED.  All uses changed.
-	(_AS_DETECT_SUGGESTED): Renamed from AS_DETECT_SUGGESTED.
-	All uses changed.
-	(_AS_DETECT_BETTER_SHELL): Put ;; at the end of a case.
-	(_AS_BASENAME): Renamed from AS_BASENAME.  All uses changed.
-	Use "basename --" to protect against leading "-".
-	(_AS_BASENAME_EXPR): Renamed from AS_BASENAME_EXPR.  All uses changed.
-	(_AS_BASENAME_SED): Renamed from AS_BASENAME_SED.  All uses changed.
-	(_AS_BASENAME_PREPARE): Reject implementations that cannot handle "--".
-	(_AS_DIRNAME_PREPARE): Likewise.
-	(_AS_DIRNAME): Renamed from AS_DIRNAME.  All uses changed.
-	(_AS_DIRNAME_EXPR): Renamed from AS_DIRNAME_EXPR.  All uses changed.
-	(_AS_DIRNAME_SED): Renamed from AS_DIRNAME_SED.  All uses changed.
-	Use "dirname --".
-	(AS_VAR_SET_BASENAME, AS_VAR_SET_DIRNAME): New macros.
-	* tests/m4sh.at (AS_VAR_SET_DIRNAME): Renamed from AS_DIRNAME.
-	Test the new API.  Don't test internals, since they're probably
-	going to change anyway.
-	(AS_VAR_SET_BASENAME): Likewise, renamed from AS_BASENAME.
-
-	* bin/autoconf.as: Don't use AS_BASENAME or AS_DIRNAME.  This
-	removes a bootstrapping problem with the changes described above.
-	The AS_DIRNAME part wasn't used, anyway, and the AS_BASENAME
-	part can be done portably without all the deep Autoconf magic.
 
 2006-04-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

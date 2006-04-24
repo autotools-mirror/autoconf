@@ -382,7 +382,7 @@ _AS_EXPR_PREPARE
 _AS_BASENAME_PREPARE
 
 # Name of the executable.
-AS_VAR_SET_BASENAME([as_me], [$[0]])
+as_me=`AS_BASENAME("$[0]")`
 
 # CDPATH.
 $as_unset CDPATH
@@ -659,8 +659,8 @@ m4_define([AS_ERROR],
 # This section is lexicographically sorted.
 
 
-# _AS_BASENAME(FILE-NAME)
-# -----------------------
+# AS_BASENAME(FILE-NAME)
+# ----------------------
 # Simulate the command 'basename FILE-NAME'.  Not all systems have basename.
 # Also see the comments for AS_DIRNAME.
 
@@ -686,16 +686,11 @@ m4_defun([_AS_BASENAME_SED],
 	  }
 	  s/.*/./; q']])
 
-m4_defun([_AS_BASENAME],
-[AS_REQUIRE([$0_PREPARE])dnl
+m4_defun([AS_BASENAME],
+[AS_REQUIRE([_$0_PREPARE])dnl
 $as_basename -- $1 ||
 _AS_BASENAME_EXPR([$1]) 2>/dev/null ||
 _AS_BASENAME_SED([$1])])
-
-# Some programs rely on _AS_BASENAME being called AS_BASENAME.
-# They should be rewritten to use AS_VAR_SET_BASENAME, but in
-# the meantime we'll leave AS_BASENAME in as an undocumented macro.
-m4_defun([AS_BASENAME], [_AS_BASENAME([$1])])
 
 
 # _AS_BASENAME_PREPARE
@@ -703,7 +698,7 @@ m4_defun([AS_BASENAME], [_AS_BASENAME([$1])])
 # Avoid Solaris 9 /usr/ucb/basename, as `basename /' outputs an empty line.
 # Also, traditional basename mishandles --.
 m4_defun([_AS_BASENAME_PREPARE],
-[if as_basename=`(basename -- /) 2>&1` && test "X$as_basename" = "X/"; then
+[if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
   as_basename=basename
 else
   as_basename=false
@@ -711,8 +706,8 @@ fi
 ])# _AS_BASENAME_PREPARE
 
 
-# _AS_DIRNAME(FILE-NAME)
-# ----------------------
+# AS_DIRNAME(FILE-NAME)
+# ---------------------
 # Simulate the command 'dirname FILE-NAME'.  Not all systems have dirname.
 # This macro must be usable from inside ` `.
 #
@@ -749,16 +744,11 @@ m4_defun([_AS_DIRNAME_SED],
 	  }
 	  s/.*/./; q']])
 
-m4_defun([_AS_DIRNAME],
-[AS_REQUIRE([$0_PREPARE])dnl
+m4_defun([AS_DIRNAME],
+[AS_REQUIRE([_$0_PREPARE])dnl
 $as_dirname -- $1 ||
 _AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
 _AS_DIRNAME_SED([$1])])
-
-# Some programs rely on _AS_DIRNAME being called AS_DIRNAME.
-# They should be rewritten to use AS_VAR_SET_DIRNAME, but in
-# the meantime we'll leave AS_DIRNAME in as an undocumented macro.
-m4_defun([AS_DIRNAME], [_AS_DIRNAME([$1])])
 
 
 # _AS_DIRNAME_PREPARE
@@ -917,7 +907,7 @@ m4_define([AS_MKDIR_P],
     as_dirs=
     while test ! -d "$as_dir"; do
       as_dirs="$as_dir $as_dirs"
-      AS_VAR_SET_DIRNAME([as_dir], ["$as_dir"])
+      as_dir=`AS_DIRNAME("$as_dir")`
     done
     test ! -n "$as_dirs" || mkdir $as_dirs
   fi || AS_ERROR([cannot create directory $1]); }dnl
@@ -1018,22 +1008,6 @@ else
 fi
 rm -f conf$$.file
 ])# _AS_TEST_PREPARE
-
-
-# AS_VAR_SET_BASENAME(VARIABLE, FILE-NAME)
-# ----------------------------------------
-# Simulate VARIABLE=`basename FILE-NAME`.
-m4_defun([AS_VAR_SET_BASENAME],
-[$1=$2
-$1=`_AS_BASENAME(["$$1"])`])
-
-
-# AS_VAR_SET_DIRNAME(VARIABLE, FILE-NAME)
-# ---------------------------------------
-# Simulate the command VARIABLE=`dirname FILE-NAME`.
-m4_defun([AS_VAR_SET_DIRNAME],
-[$1=$2
-$1=`_AS_DIRNAME(["$$1"])`])
 
 
 

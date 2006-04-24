@@ -95,20 +95,32 @@ AT_CLEANUP
 
 
 
-## -------------------- ##
-## AS_VAR_SET_DIRNAME.  ##
-## -------------------- ##
+## ------------ ##
+## AS_DIRNAME.  ##
+## ------------ ##
 
 # Build nested dirs.
-AT_SETUP([AS@&t@_VAR_SET_DIRNAME])
+AT_SETUP([AS@&t@_DIRNAME])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
 
+# The EXPR variant is allowed to fail if `expr' was considered as too
+# weak for us, in which case `as_expr=false'.
 m4_define([DIRNAME_TEST],
-[AS_VAR_SET_DIRNAME([dir], [$1])
+[dir=`AS_DIRNAME([$1])`
 test "$dir" = "$2" || (test -n "$3" && test "$dir" = "$3") ||
-  echo "dirname($1) = $dir instead of $2" >&2])
+  echo "dirname($1) = $dir instead of $2" >&2
+
+if test "$as_expr" != false; then
+  dir=`_AS_DIRNAME_EXPR([$1])`
+  test "$dir" = "$2" || (test -n "$3" && test "$dir" = "$3") ||
+    echo "dirname_expr($1) = $dir instead of $2" >&2
+fi
+
+dir=`_AS_DIRNAME_SED([$1])`
+test "$dir" = "$2" || (test -n "$3" && test "$dir" = "$3") ||
+  echo "dirname_sed($1) = $dir instead of $2" >&2])
 
 DIRNAME_TEST([/],		[/])
 DIRNAME_TEST([//],		[//],	[/])
@@ -143,20 +155,24 @@ AT_CLEANUP
 
 
 
-## --------------------- ##
-## AS_VAR_SET_BASENAME.  ##
-## --------------------- ##
+## ------------- ##
+## AS_BASENAME.  ##
+## ------------- ##
 
 # Build nested dirs.
-AT_SETUP([AS@&t@_VAR_SET_BASENAME])
+AT_SETUP([AS@&t@_BASENAME])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
 
 m4_define([BASENAME_TEST],
-[AS_VAR_SET_BASENAME([base], [$1])
+[base=`AS_BASENAME([$1])`
 test "$base" = "$2" ||
-  echo "basename($1) = $base instead of $2" >&2])
+  echo "basename($1) = $base instead of $2" >&2
+
+base=`_AS_BASENAME_SED([$1])`
+test "$base" = "$2" ||
+  echo "basename_sed($1) = $base instead of $2" >&2])
 
 BASENAME_TEST([//1],             [1])
 BASENAME_TEST([/1],              [1])
