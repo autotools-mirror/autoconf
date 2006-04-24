@@ -2353,9 +2353,9 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])])
 
 
 
-## -------------------------------- ##
-## Checking for run-time features.  ##
-## -------------------------------- ##
+## ------------------------------- ##
+## Checking for runtime features.  ##
+## ------------------------------- ##
 
 
 # _AC_RUN_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])

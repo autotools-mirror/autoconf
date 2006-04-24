@@ -395,7 +395,7 @@ Writing Tests
 * Running the Preprocessor::    Detecting preprocessor symbols
 * Running the Compiler::        Detecting language or header features
 * Running the Linker::          Detecting library features
-* Run Time::                    Testing for run-time features
+* Runtime::                     Testing for runtime features
 * Systemology::                 A zoology of operating systems
 * Multiple Cases::              Tests for several possible values
 
@@ -699,7 +699,7 @@ Peter Simons}.
 @cindex GNU build system
 
 Autoconf solves an important problem---reliable discovery of
-system-specific build and run-time information---but this is only one
+system-specific build and runtime information---but this is only one
 piece of the puzzle for the development of portable software.  To this
 end, the @acronym{GNU} project has developed a suite of integrated
 utilities to finish the job Autoconf started: the @acronym{GNU} build
@@ -3753,7 +3753,7 @@ accept program names that are not prefixed with the host type.
 @cindex File, checking
 
 You might also need to check for the existence of files.  Before using
-these macros, ask yourself whether a run-time test might not be a better
+these macros, ask yourself whether a runtime test might not be a better
 solution.  Be aware that, like most Autoconf macros, they test a feature
 of the host machine, and therefore, they die when cross-compiling.
 
@@ -6122,7 +6122,7 @@ warnings, such as deprecation notices.
 The following macros check for C compiler or machine architecture
 features.  To check for characteristics not listed here, use
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
-@code{AC_RUN_IFELSE} (@pxref{Run Time}).
+@code{AC_RUN_IFELSE} (@pxref{Runtime}).
 
 @defmac AC_PROG_CC_STDC
 @acindex{PROG_CC_STDC}
@@ -6560,7 +6560,7 @@ Test whether the Fortran compiler accepts the options @option{-c} and
 The following macros check for Fortran compiler characteristics.
 To check for characteristics not listed here, use
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
-@code{AC_RUN_IFELSE} (@pxref{Run Time}), making sure to first set the
+@code{AC_RUN_IFELSE} (@pxref{Runtime}), making sure to first set the
 current language to Fortran 77 or Fortran via @code{AC_LANG([Fortran 77])}
 or @code{AC_LANG(Fortran)} (@pxref{Language Choice}).
 
@@ -6572,7 +6572,7 @@ or @code{AC_LANG(Fortran)} (@pxref{Language Choice}).
 @acindex{FC_LIBRARY_LDFLAGS}
 @ovindex FCLIBS
 Determine the linker flags (e.g., @option{-L} and @option{-l}) for the
-@dfn{Fortran intrinsic and run-time libraries} that are required to
+@dfn{Fortran intrinsic and runtime libraries} that are required to
 successfully link a Fortran program or shared library.  The output
 variable @code{FLIBS} or @code{FCLIBS} is set to these flags (which
 should be included after @code{LIBS} when linking).
@@ -6588,7 +6588,7 @@ linked together, then the C++ compiler/linker must be used for linking
 global constructors, instantiating templates, enabling exception
 support, etc.).
 
-However, the Fortran intrinsic and run-time libraries must be linked in
+However, the Fortran intrinsic and runtime libraries must be linked in
 as well, but the C++ compiler/linker doesn't know by default how to add
 these Fortran 77 libraries.  Hence, this macro was created to determine
 these Fortran libraries.
@@ -7110,7 +7110,7 @@ software package, the best thing to do is encapsulate it in a new macro.
 * Running the Preprocessor::    Detecting preprocessor symbols
 * Running the Compiler::        Detecting language or header features
 * Running the Linker::          Detecting library features
-* Run Time::                    Testing for run-time features
+* Runtime::                     Testing for runtime features
 * Systemology::                 A zoology of operating systems
 * Multiple Cases::              Tests for several possible values
 @end menu
@@ -7422,7 +7422,7 @@ In Erlang tests, the created source file is that of an Erlang module called
 one @code{start/0} function, which is called to perform the test.  The
 @var{prologue} is optional code that is inserted between the module header and
 the @code{start/0} function definition.  @var{body} is the body of the
-@code{start/0} function without the final period (@pxref{Run Time}, about
+@code{start/0} function without the final period (@pxref{Runtime}, about
 constraints on this function's behaviour).
 
 For instance:
@@ -7603,7 +7603,7 @@ available.  Trying to link with the function is usually a more reliable
 approach because it avoids dealing with the variations in the options
 and output formats of @code{nm} and @code{ar} and in the location of the
 standard libraries.  It also allows configuring for cross-compilation or
-checking a function's run-time behavior if needed.  On the other hand,
+checking a function's runtime behavior if needed.  On the other hand,
 it can be slower than scanning the libraries once, but accuracy is more
 important than speed.
 
@@ -7627,7 +7627,7 @@ current compilation flags.
 
 It is customary to report unexpected failures with
 @code{AC_MSG_FAILURE}.  This macro does not try to execute the program;
-use @code{AC_RUN_IFELSE} if you need to do that (@pxref{Run Time}).
+use @code{AC_RUN_IFELSE} if you need to do that (@pxref{Runtime}).
 @end defmac
 
 The @code{AC_LINK_IFELSE} macro cannot be used for Erlang tests, since Erlang
@@ -7635,16 +7635,16 @@ programs are interpreted and do not require linking.
 
 
 
-@node Run Time
-@section Checking Run Time Behavior
+@node Runtime
+@section Checking Runtime Behavior
 
-Sometimes you need to find out how a system performs at run time, such
+Sometimes you need to find out how a system performs at runtime, such
 as whether a given function has a certain capability or bug.  If you
 can, make such checks when your program runs instead of when it is
 configured.  You can check for things like the machine's endianness when
 your program initializes itself.
 
-If you really need to test for a run-time behavior while configuring,
+If you really need to test for a runtime behavior while configuring,
 you can write a test program to determine the result, and compile and
 run it using @code{AC_RUN_IFELSE}.  Avoid running test programs if
 possible, because this prevents people from configuring your package for
@@ -7676,7 +7676,7 @@ It is customary to report unexpected failures with
 @end defmac
 
 Try to provide a pessimistic default value to use when cross-compiling
-makes run-time tests impossible.  You do this by passing the optional
+makes runtime tests impossible.  You do this by passing the optional
 last argument to @code{AC_RUN_IFELSE}.  @command{autoconf} prints a
 warning message when creating @command{configure} each time it
 encounters a call to @code{AC_RUN_IFELSE} with no
@@ -10738,7 +10738,7 @@ significantly.  Anyway, this kind of construct is not exactly the
 typical use of Autoconf.  In fact, it's even not recommended, because M4
 macros can't look into shell conditionals, so we may fail to expand a
 macro when it was expanded before in a conditional path, and the
-condition turned out to be false at run-time, and we end up not
+condition turned out to be false at runtime, and we end up not
 executing the macro at all.
 
 @node File Descriptors
@@ -14290,7 +14290,7 @@ AC_SUBST([CYCLE_OBJ])
 @code{AC_CONFIG_LINKS} (@pxref{Configuration Links}) is another good way
 to select variant source files, for example optimized code for some
 CPUs.  The configured CPU type doesn't always indicate exact CPU types,
-so some run-time capability checks may be necessary too.
+so some runtime capability checks may be necessary too.
 
 @example
 case $host in
@@ -14700,7 +14700,7 @@ edited @emph{only by users}, not by programs.  The location of the file
 can either be based on the @code{prefix} variable, or be a standard
 location such as the user's home directory.  It could even be specified
 by an environment variable.  The programs should examine that file at
-run time, rather than at compile time.  Run-time configuration is more
+runtime, rather than at compile time.  Runtime configuration is more
 convenient for users and makes the configuration process simpler than
 getting the information while configuring.  @xref{Directory Variables, ,
 Variables for Installation Directories, standards, @acronym{GNU} Coding
@@ -16072,7 +16072,7 @@ AC_RUN_IFELSE(
 @end example
 
 @noindent
-@xref{Run Time}.
+@xref{Runtime}.
 @end defmac
 
 @defmac AC_UID_T

@@ -599,7 +599,7 @@ AC_DEFUN([AC_HEADER_STDBOOL],
 	    This test is not quite right, since xlc is allowed to
 	    reject this program, as the initializer for xlcbug is
 	    not one of the forms that C requires support for.
-	    However, doing the test right would require a run-time
+	    However, doing the test right would require a runtime
 	    test, and that would make cross-compilation harder.
 	    Let us hope that IBM fixes the xlc bug, and also adds
 	    support for this kind of constant expression.  In the

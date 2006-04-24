@@ -607,7 +607,7 @@ fi],
 # ----------------------
 #
 # Determine the linker flags (e.g. "-L" and "-l") for the Fortran
-# intrinsic and run-time libraries that are required to successfully
+# intrinsic and runtime libraries that are required to successfully
 # link a Fortran program or shared library.  The output variable
 # FLIBS/FCLIBS is set to these flags.
 #
@@ -621,7 +621,7 @@ fi],
 # like calling global constructors, instantiating templates, enabling
 # exception support, etc.).
 #
-# However, the Fortran intrinsic and run-time libraries must be
+# However, the Fortran intrinsic and runtime libraries must be
 # linked in as well, but the C++ compiler/linker doesn't know how to
 # add these Fortran libraries.  Hence, the macro
 # "AC_F77_LIBRARY_LDFLAGS" was created to determine these Fortran
