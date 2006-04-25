@@ -118,7 +118,7 @@ else
   as_expr=false
 fi
 
-if as_basename=`(basename -- /) 2>&1` && test "X$as_basename" = "X/"; then
+if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
   as_basename=basename
 else
   as_basename=false
@@ -126,12 +126,11 @@ fi
 
 
 # Name of the executable.
-as_me=$0
-as_me=`$as_basename -- "$as_me" ||
-$as_expr X/"$as_me" : '.*/\([^/][^/]*\)/*$' \| \
-	 X"$as_me" : 'X\(//\)$' \| \
-	 X"$as_me" : 'X\(/\)' \| . 2>/dev/null ||
-echo X/"$as_me" |
+as_me=`$as_basename -- "$0" ||
+$as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
+	 X"$0" : 'X\(//\)$' \| \
+	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
+echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
 	    s//\1/
 	    q
@@ -1081,13 +1080,12 @@ test "X$ac_ls_di" = "X$ac_pwd_ls_di" ||
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then the parent directory.
-  ac_confdir="$0"
-ac_confdir=`$as_dirname -- "$ac_confdir" ||
-$as_expr X"$ac_confdir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$ac_confdir" : 'X\(//\)[^/]' \| \
-	 X"$ac_confdir" : 'X\(//\)$' \| \
-	 X"$ac_confdir" : 'X\(/\)' \| . 2>/dev/null ||
-echo X"$ac_confdir" |
+  ac_confdir=`$as_dirname -- "$0" ||
+$as_expr X"$0" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$0" : 'X\(//\)[^/]' \| \
+	 X"$0" : 'X\(//\)$' \| \
+	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
+echo X"$0" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
 	    q
@@ -3050,7 +3048,7 @@ else
   as_expr=false
 fi
 
-if as_basename=`(basename -- /) 2>&1` && test "X$as_basename" = "X/"; then
+if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
   as_basename=basename
 else
   as_basename=false
@@ -3058,12 +3056,11 @@ fi
 
 
 # Name of the executable.
-as_me=$0
-as_me=`$as_basename -- "$as_me" ||
-$as_expr X/"$as_me" : '.*/\([^/][^/]*\)/*$' \| \
-	 X"$as_me" : 'X\(//\)$' \| \
-	 X"$as_me" : 'X\(/\)' \| . 2>/dev/null ||
-echo X/"$as_me" |
+as_me=`$as_basename -- "$0" ||
+$as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
+	 X"$0" : 'X\(//\)$' \| \
+	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
+echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
 	    s//\1/
 	    q
@@ -3623,13 +3620,12 @@ echo "$as_me: creating $ac_file" >&6;}
     ;;
   esac
 
-  ac_dir="$ac_file"
-ac_dir=`$as_dirname -- "$ac_dir" ||
-$as_expr X"$ac_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
-	 X"$ac_dir" : 'X\(//\)[^/]' \| \
-	 X"$ac_dir" : 'X\(//\)$' \| \
-	 X"$ac_dir" : 'X\(/\)' \| . 2>/dev/null ||
-echo X"$ac_dir" |
+  ac_dir=`$as_dirname -- "$ac_file" ||
+$as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$ac_file" : 'X\(//\)[^/]' \| \
+	 X"$ac_file" : 'X\(//\)$' \| \
+	 X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
+echo X"$ac_file" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
 	    q
@@ -3654,8 +3650,7 @@ echo X"$ac_dir" |
     as_dirs=
     while test ! -d "$as_dir"; do
       as_dirs="$as_dir $as_dirs"
-      as_dir="$as_dir"
-as_dir=`$as_dirname -- "$as_dir" ||
+      as_dir=`$as_dirname -- "$as_dir" ||
 $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$as_dir" : 'X\(//\)[^/]' \| \
 	 X"$as_dir" : 'X\(//\)$' \| \
