@@ -1,3 +1,7 @@
+2006-04-25  Stepan Kasal  <kasal@ucw.cz>
+
+	* bin/autoconf.as (me): Replace by as_me.
+
 2006-04-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Don't use AS_ERROR,

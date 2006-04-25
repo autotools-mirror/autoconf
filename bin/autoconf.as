@@ -67,17 +67,11 @@ Copyright (C) 2006 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."]
 
-me=$0
-case $me in
-*/autoconf) me=autoconf;;
-*/*) me=`expr "X$me" : '.*/\(.*\)'`;;
-esac
-
 help="\
-Try \`$me --help' for more information."
+Try \`$as_me --help' for more information."
 
 exit_missing_arg="\
-echo \"$me: option \\\`\$1' requires an argument\" >&2
+echo \"$as_me: option \\\`\$1' requires an argument\" >&2
 echo \"\$help\" >&2
 exit 1"
 
@@ -144,7 +138,7 @@ while test $# -gt 0 ; do
        break ;;
     -* )
        exec >&2
-       echo "$me: invalid option $1"
+       echo "$as_me: invalid option $1"
        echo "$help"
        exit 1 ;;
     * )
@@ -157,21 +151,21 @@ case $# in
   0)
     if test -f configure.ac; then
       if test -f configure.in; then
-	echo "$me: warning: both \`configure.ac' and \`configure.in' are present." >&2
-	echo "$me: warning: proceeding with \`configure.ac'." >&2
+	echo "$as_me: warning: both \`configure.ac' and \`configure.in' are present." >&2
+	echo "$as_me: warning: proceeding with \`configure.ac'." >&2
       fi
       infile=configure.ac
     elif test -f configure.in; then
       infile=configure.in
     else
-      echo "$me: no input file" >&2
+      echo "$as_me: no input file" >&2
       exit 1
     fi
     test -z "$traces" && test -z "$outfile" && outfile=configure;;
   1) # autom4te doesn't like `-'.
      test "x$1" != "x-" && infile=$1 ;;
   *) exec >&2
-     echo "$me: invalid number of arguments."
+     echo "$as_me: invalid number of arguments."
      echo "$help"
      (exit 1); exit 1 ;;
 esac
@@ -183,5 +177,5 @@ test -z "$outfile" && outfile=-
 eval set x $autom4te_options \
   --language=autoconf --output=\$outfile "$traces" \$infile
 shift
-$verbose "$me: running $*" >&2
+$verbose "$as_me: running $*" >&2
 exec "$AUTOM4TE" "$@"
