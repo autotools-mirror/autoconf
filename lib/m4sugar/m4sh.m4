@@ -353,7 +353,8 @@ if test "x$as_myself" = x; then
   as_myself=$[0]
 fi
 if test ! -f "$as_myself"; then
-  AS_ERROR([cannot find myself; rerun with an absolute file name])
+  echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
+  AS_EXIT
 fi
 
 # Work around bugs in pre-3.0 UWIN ksh.
