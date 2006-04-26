@@ -1,3 +1,14 @@
+2006-04-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Portable C and C++, Varities of Unportability):
+	(Integer Overflow, Null Pointers, Buffer Overruns):
+	(Floating Point Portability, Exiting Portably): New sections.
+	(Writing Test Programs): Fix some langauge.  Recommend exiting
+	with status 1, not merely nonzero.  Clarify exit declaration.
+	(Run Time): Move C exit status stuff to new Exiting Portably section.
+	(Systemology): Mention Posix and levenez.  Update v7 reference.
+	(Portable Shell): Mention the Posix shell.
+
 2006-04-25  Stepan Kasal  <kasal@ucw.cz>
 
 	* bin/autoconf.as (me): Replace by as_me.

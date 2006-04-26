@@ -262,6 +262,7 @@ published by the Free Software Foundation raise funds for
 * Programming in M4::           Layers on top of which Autoconf is written
 * Writing Autoconf Macros::     Adding new macros to Autoconf
 * Portable Shell::              Shell script portability pitfalls
+* Portable C and C++::          C and C++ portability pitfalls
 * Manual Configuration::        Selecting features that can't be guessed
 * Site Configuration::          Local defaults for @command{configure}
 * Running configure Scripts::   How to use the Autoconf output
@@ -477,6 +478,15 @@ Portable Shell Programming
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
 * Limitations of Make::         Portable Makefiles
+
+Portable C and C++ Programming
+
+* Varieties of Unportability::  How to make your programs unportable
+* Integer Overflow::            When integers get too large
+* Null Pointers::               Properties of null pointers
+* Buffer Overruns::             Subscript errors and the like
+* Floating Point Portability::  Portable floating-point arithmetic
+* Exiting Portably::            Exiting and the exit status
 
 Manual Configuration
 
@@ -7223,8 +7233,8 @@ depending on which language is current.
 @node Writing Test Programs
 @section Writing Test Programs
 
-Autoconf tests follow is common scheme: feeding some program with some
-input, and most of the time, feeding a compiler with some source file.
+Autoconf tests follow a common scheme: feed some program with some
+input, and most of the time, feed a compiler with some source file.
 This section is dedicated to these source samples.
 
 @menu
@@ -7254,13 +7264,14 @@ Make sure the symbols you use are properly defined, i.e., refrain for
 simply declaring a function yourself instead of including the proper
 header.
 
-Test programs should not write anything to the standard output.  They
-should return 0 if the test succeeds, nonzero otherwise, so that success
+Test programs should not write to standard output.  They
+should exit with status 0 if the test succeeds, and with status 1
+otherwise, so that success
 can be distinguished easily from a core dump or other failure;
 segmentation violations and other failures produce a nonzero exit
-status.  Test programs should @code{return}, not @code{exit}, from
-@code{main}, because on some systems (notably C++ compilers masquerading
-as C compilers) @code{exit} is not declared.
+status.  Unless you arrange for @code{exit} to be declared, test
+programs should @code{return}, not @code{exit}, from @code{main},
+because on many systems @code{exit} is not declared by default.
 
 Test programs can use @code{#if} or @code{#ifdef} to check the values of
 preprocessor macros defined by tests that have already run.  For
@@ -7697,29 +7708,8 @@ you can test whether the shell variable @code{cross_compiling} is set to
 @samp{yes}, and then use an alternate method to get the results instead
 of calling the macros.
 
-A C or C++ runtime test can exit with status @var{N} by returning
-@var{N} from the @code{main} function.  Portable programs are supposed
-to exit either with status 0 or @code{EXIT_SUCCESS} to succeed, or with
-status @code{EXIT_FAILURE} to fail, but in practice it is portable to
-fail by exiting with status 1, and test programs that assume Posix can
-fail by exiting with status values from 1 through 255.  Programs on
-SunOS 2.0 (1985) through 3.5.2 (1988) incorrectly exited with zero
-status when @code{main} returned nonzero, but ancient systems like these
-are no longer of practical concern.
-
-A test can also exit with status @var{N} by passing @var{N} to the
-@code{exit} function, and a test can fail by calling the @code{abort}
-function.  If a test is specialized to just some platforms, it can fail
-by calling functions specific to those platforms, e.g., @code{_exit}
-(Posix) and @code{_Exit} (C99).  However, like other functions, an exit
-function should be declared, typically by including a header.  For
-example, if a test calls @code{exit}, it should include @file{stdlib.h}
-either directly or via the default includes (@pxref{Default Includes}).
-
-A test can fail due to undefined behavior such as dereferencing a null
-pointer, but this is not recommended as undefined behavior allows an
-implementation to do whatever it pleases and this includes exiting
-successfully.
+A C or C++ runtime test should be portable.
+@xref{Portable C and C++}.
 
 Erlang tests must exit themselves the Erlang VM by calling the @code{halt/1}
 function: the given status code is used to determine the success of the test
@@ -7753,9 +7743,15 @@ This section aims at presenting some systems and pointers to
 documentation.  It may help you addressing particular problems reported
 by users.
 
+@uref{http://www.opengroup.org/susv3, Posix-conforming systems} are
+derived from the @uref{http://www.bell-labs.com/history/unix/, Unix
+operating system}.
+
 The @uref{http://bhami.com/rosetta.html, Rosetta Stone for Unix}
-contains a lot of interesting crossed information on various
-Posix-conforming systems.
+contains a table correlating the features of various Posix-conforming
+systems.  @uref{http://www.levenez.com/unix/, Unix History} is a
+simplified diagram of how many Unix systems were derived from each
+other.
 
 @table @asis
 @item Darwin
@@ -7796,7 +7792,7 @@ formats.
 Officially this was called the ``Seventh Edition'' of ``the @sc{unix}
 time-sharing system'' but we use the more-common name ``Unix version 7''.
 Documentation is available in the
-@uref{http://plan9.bell-labs.com/7thEdMan/, V7 Manual}.
+@uref{http://plan9.bell-labs.com/7thEdMan/, Unix Seventh Edition Manual}.
 Previous versions of Unix are called ``Unix version 6'', etc., but
 they were not as widely used.
 @end table
@@ -10491,7 +10487,11 @@ packages.
 Some of these external utilities have a portable subset of features; see
 @ref{Limitations of Usual Tools}.
 
-There are other sources of documentation about shells.  See for instance
+There are other sources of documentation about shells.  The
+specification for the Posix
+@uref{http://www.opengroup.org/susv3/utilities/xcu_chap02.html, Shell
+Command Language}, though more generous than the restrictive shell
+subset described above, is fairly portable nowadays.  Also please see
 @uref{http://www.faqs.org/faqs/unix-faq/shell/, the Shell FAQs}.
 
 @menu
@@ -14121,6 +14121,204 @@ dest-stamp: src
 @end table
 
 
+
+
+@c ======================================== Portable C and C++ Programming
+
+@node Portable C and C++
+@chapter Portable C and C++ Programming
+@cindex Portable C and C++ programming
+
+C and C++ programs often use low-level features of the underlying
+system, and therefore are often more difficult to make portable to other
+platforms.
+
+Several standards have been developed to help make your programs more
+portable.  If you write programs with these standards in mind, you can
+have greater confidence that your programs will work on a wide variety
+of systems.  @xref{Standards, , Language Standards Supported by GCC,
+gcc, Using the GNU Compiler Collection (GCC)}, for a list of C-related
+standards.  Many programs also assume the
+@uref{http://www.opengroup.org/susv3, Posix standard}.
+
+Some old code is written to be portable to K&R C, which predates any C
+standard.  K&R C compilers are no longer of practical interest, though,
+and the rest of section assumes at least C89, the first C standard.
+
+Program portability is a huge topic, and this section can only briefly
+introduce common pitfalls.  @xref{System Portability, , Portability
+between System Types, standards, @acronym{GNU} Coding Standards}, for
+more information.
+
+@menu
+* Varieties of Unportability::  How to make your programs unportable
+* Integer Overflow::            When integers get too large
+* Null Pointers::               Properties of null pointers
+* Buffer Overruns::             Subscript errors and the like
+* Floating Point Portability::  Portable floating-point arithmetic
+* Exiting Portably::            Exiting and the exit status
+@end menu
+
+@node Varieties of Unportability
+@section Varieties of Unportability
+@cindex portability
+
+Autoconf tests and ordinary programs often need to test what is allowed
+on a system, and therefore they may need to deliberately exceed the
+boundaries of what the standards allow, if only to see whether an
+optional feature is present.  When you write such a program, you should
+keep in mind the difference between constraints, unspecified behavior,
+and undefined behavior.
+
+In C, a @dfn{constraint} is a rule that the compiler must enforce.  An
+example constraint is that C programs must not declare a bit-field with
+negative width.  Tests can therefore reliably assume that programs with
+negative-width bit-fields will be rejected by a compiler that conforms
+to the standard.
+
+@dfn{Unspecified behavior} is valid behavior, where the standard allows
+multiple possibilities.  For example, the order of evaluation of
+function arguments is unspecified.  Some unspecified behavior is
+@dfn{implementation-defined}, i.e., documented by the implementation,
+but since Autoconf tests cannot read the documentation they cannot
+distinguish between implementation-defined and other unspecified
+behavior.  It is common for Autoconf tests to probe implementations to
+determine otherwise-unspecified behavior.
+
+@dfn{Undefined behavior} is invalid behavior, where the standard allows
+the implementation to do anything it pleases.  For example,
+dereferencing a null pointer leads to undefined behavior.  If possible,
+test programs should avoid undefined behavior, since a program with
+undefined behavior might succeed on a test that should fail.
+
+The above rules apply to programs that are intended to conform to the
+standard.  However, strictly-conforming programs are quite rare, since
+the standards are so limiting.  A major goal of Autoconf is to support
+programs that use implementation features not described by the standard,
+and it is fairly common for test programs to violate the above rules, if
+the programs work well enough in practice.
+
+@node Integer Overflow
+@section Integer Overflow
+@cindex overflow, arithmetic
+
+In C, signed integer overflow leads to undefined behavior.  However,
+many programs and Autoconf tests assume that integer overflow silently
+wraps around modulo a power of 2 so long as you cast the resulting value
+to an integer type or store it into an integer variable.  Such programs
+are portable to the vast majority of modern platforms.  C99 has a way of
+specifying this portability (the LIA-1 option) but this is not
+universally supported yet.  GCC users might consider using the
+@option{-ftrapv} option if they are worried about porting their code to
+the rare platforms where overflow does not wrap around.
+
+In contrast, unsigned integer overflow reliably wraps around modulo the
+word size.
+
+@node Null Pointers
+@section Properties of Null Pointers
+@cindex null pointers
+
+Most modern hosts reliably fail when you attempt to dereference a null
+pointer.
+
+On almost all modern hosts, null pointers use an all-bits-zero internal
+representation, so you can reliably use @code{memset} with 0 to set all
+the pointers in an array to null values.
+
+If @code{p} is a null pointer to an object type, the C expression
+@code{p + 0} always evaluates to @code{p} on modern hosts, even though
+the standard says that it has undefined behavior.
+
+@node Buffer Overruns
+@section Buffer Overruns and Subscript Errors
+@cindex buffer overruns
+
+Buffer overruns and subscript errors are the most common dangerous
+errors in C programs.  They result in undefined behavior because storing
+outside an array typically modifies storage that is used by some other
+object, and most modern systems lack runtime checks to catch these
+errors.  Programs should not rely on buffer overruns being caught.
+
+There is one exception to the usual rule that a portable program cannot
+address outside an array.  In C, it is valid to compute the address just
+past an object, e.g., @code{&a[N]} where @code{a} has @code{N} elements,
+so long as you do not dereference the resulting pointer.  But it is not
+valid to compute the address just before an object, e.g., @code{&a[-1]};
+nor is it valid to compute two past the end, e.g., @code{&a[N+1]}.  On
+most platforms @code{&a[-1] < &a[0] && &a[N] < &a[N+1]}, but this is not
+reliable in general, and it is usually easy enough to avoid the
+potential portability problem, e.g., by allocating an extra unused array
+element at the start or end.
+
+@uref{http://valgrind.org/, Valgrind} can catch many overruns.  GCC
+users might also consider using the @option{-fmudflap} option to catch
+overruns.
+
+Buffer overruns are usually caused by off-by-one errors, but there are
+more subtle ways to get them.
+
+Using @code{int} values to index into an array or compute array sizes
+will cause problems on typical 64-bit hosts where an array index might
+be @math{2^31} or larger.
+
+If you add or multiply two numbers to calculate an array size, e.g.,
+@code{malloc (x * sizeof y + z)}, havoc will ensue if the addition or
+multiplication overflows.
+
+Many implementations of the @code{alloca} function silently misbehave
+and can generate buffer overflows if given sizes that are too large.
+The size limits are implementation dependent, but are at least 4000
+bytes on all platforms that we know about.
+
+The standard functions @code{asctime}, @code{asctime_r}, @code{ctime},
+@code{ctime_r}, and @code{gets} are prone to buffer overflows, and
+portable code should not use them unless the inputs are known to be
+within certain limits.  The time-related functions can overflow their
+buffers if given time stamps out of range (e.g., a year less than -999
+or greater than 9999).  Time-related buffer overflows cannot happen with
+recent-enough versions of the GNU C library, but are possible with other
+implementations.  The @code{gets} function is the worst, since it almost
+invariably overflows its buffer when presented with an input line larger
+than the buffer.
+
+@node Floating Point Portability
+@section Floating Point Portability
+@cindex floating point
+
+Almost all modern systems use IEEE-754 floating point, and it is safe to
+assume IEEE-754 in most portable code these days.  For more information,
+please see David Goldberg's classic paper
+@uref{http://www.validlab.com/goldberg/paper.pdf, What Every Computer
+Scientist Should Know About Floating-Point Arithmetic}.
+
+@node Exiting Portably
+@section Exiting Portably
+@cindex exiting portably
+
+A C or C++ program can exit with status @var{N} by returning
+@var{N} from the @code{main} function.  Portable programs are supposed
+to exit either with status 0 or @code{EXIT_SUCCESS} to succeed, or with
+status @code{EXIT_FAILURE} to fail, but in practice it is portable to
+fail by exiting with status 1, and test programs that assume Posix can
+fail by exiting with status values from 1 through 255.  Programs on
+SunOS 2.0 (1985) through 3.5.2 (1988) incorrectly exited with zero
+status when @code{main} returned nonzero, but ancient systems like these
+are no longer of practical concern.
+
+A program can also exit with status @var{N} by passing @var{N} to the
+@code{exit} function, and a program can fail by calling the @code{abort}
+function.  If a program is specialized to just some platforms, it can fail
+by calling functions specific to those platforms, e.g., @code{_exit}
+(Posix) and @code{_Exit} (C99).  However, like other functions, an exit
+function should be declared, typically by including a header.  For
+example, if a C program calls @code{exit}, it should include @file{stdlib.h}
+either directly or via the default includes (@pxref{Default Includes}).
+
+A program can fail due to undefined behavior such as dereferencing a null
+pointer, but this is not recommended as undefined behavior allows an
+implementation to do whatever it pleases and this includes exiting
+successfully.
 
 
 @c ================================================== Manual Configuration
