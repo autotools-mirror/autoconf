@@ -1,3 +1,10 @@
+2006-04-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Limitations of Builtins): Document FreeBSD
+	/bin/sh set unsorted output.
+	* lib/autoconf/general.m4 (_AC_CACHE_DUMP): Adjust.
+	* tests/local.at
+
 2006-04-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Portable C and C++, Varities of Unportability):

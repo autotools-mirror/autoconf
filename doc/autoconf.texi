@@ -12165,6 +12165,9 @@ better to combine them:
 set -ex
 @end example
 
+The @command{set} of the Free@acronym{BSD} 6.0 shell does not sort its
+output.
+
 
 @item @command{shift}
 @c ------------------

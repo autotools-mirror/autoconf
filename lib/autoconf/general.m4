@@ -1852,7 +1852,8 @@ m4_define([_AC_CACHE_DUMP],
       # `set' quotes correctly as required by POSIX, so do not add quotes.
       sed -n ["/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"]
       ;;
-    esac
+    esac |
+    sort
 )dnl
 ])# _AC_CACHE_DUMP
 

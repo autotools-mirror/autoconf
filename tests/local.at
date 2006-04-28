@@ -181,7 +181,7 @@ m4_define([AT_CONFIGURE_AC],
 # leaves temporary files.  AT_CONFIG_CMP uses the variable dumps to confirm that
 # tests have the same side effects regardless of caching.
 m4_defun([AC_STATE_SAVE],
-[(set) >state-env.$][1 2>&1
+[(set) 2>&1 | sort >state-env.$][1
 ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$][1
 ])# AC_STATE_SAVE
 ]])
