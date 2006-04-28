@@ -85,8 +85,8 @@ if test "x$as_myself" = x; then
   as_myself=$0
 fi
 if test ! -f "$as_myself"; then
-  { echo "$as_me: error: cannot find myself; rerun with an absolute file name" >&2
-   { (exit 1); exit 1; }; }
+  echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
+  { (exit 1); exit 1; }
 fi
 
 # Work around bugs in pre-3.0 UWIN ksh.
@@ -1448,7 +1448,8 @@ echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
     *)
       sed -n "/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"
       ;;
-    esac
+    esac |
+    sort
 )
     echo
 
@@ -2842,7 +2843,8 @@ echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
       # `set' quotes correctly as required by POSIX, so do not add quotes.
       sed -n "/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"
       ;;
-    esac
+    esac |
+    sort
 ) |
   sed '
      /^ac_cv_env_/b end
@@ -3015,8 +3017,8 @@ if test "x$as_myself" = x; then
   as_myself=$0
 fi
 if test ! -f "$as_myself"; then
-  { echo "$as_me: error: cannot find myself; rerun with an absolute file name" >&2
-   { (exit 1); exit 1; }; }
+  echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
+  { (exit 1); exit 1; }
 fi
 
 # Work around bugs in pre-3.0 UWIN ksh.
