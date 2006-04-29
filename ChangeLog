@@ -11,7 +11,7 @@
 	* doc/autoconf.texi (Limitations of Builtins): Document FreeBSD
 	/bin/sh set unsorted output.
 	* lib/autoconf/general.m4 (_AC_CACHE_DUMP): Adjust.
-	* tests/local.at
+	* tests/local.at: Likewise.
 
 2006-04-26  Paul Eggert  <eggert@cs.ucla.edu>
 
