@@ -13691,7 +13691,7 @@ However the "prerequisite rewriting" still applies here.  So if
 @command{make} will execute
 
 @smallexample
-@code{cp `test -f ../pkg/src/if.c || echo ../pkg/src/`if.c f.c}
+cp `test -f ../pkg/src/if.c || echo ../pkg/src/`if.c f.c
 @end smallexample
 
 @noindent
@@ -14047,7 +14047,7 @@ $ @kbd{cat Makefile}
 .SUFFIXES: .in
 foo: foo.in
 .in:
-        cp $< $@
+        cp $< $@@
 $ @kbd{touch foo.in}
 $ @kbd{make}
 $ @kbd{ls}
@@ -14070,7 +14070,7 @@ Note it works without the @samp{foo: foo.in} dependency.
 $ @kbd{cat Makefile}
 .SUFFIXES: .in
 .in:
-        cp $< $@
+        cp $< $@@
 $ @kbd{make foo}
 cp foo.in foo
 @end example
@@ -14083,7 +14083,7 @@ $ @kbd{cat Makefile}
 foo.out: foo.in
 .SUFFIXES: .in .out
 .in.out:
-        cp $< $@
+        cp $< $@@
 $ @kbd{make}
 cp foo.in foo.out
 @end example

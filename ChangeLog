@@ -1,5 +1,7 @@
 2006-04-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/autoconf.texi (Limitations of Make): Clean up markup.
+
 	* ChangeLog: Typo.
 	* doc/autoconf.texi (Portable Shell): Allow wrapped URLs, for
 	DVI output.
