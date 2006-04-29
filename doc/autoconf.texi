@@ -10489,10 +10489,10 @@ Some of these external utilities have a portable subset of features; see
 
 There are other sources of documentation about shells.  The
 specification for the Posix
-@uref{http://www.opengroup.org/susv3/utilities/xcu_chap02.html, Shell
+@uref{http://www.opengroup.org/@/susv3/@/utilities/@/xcu_chap02.html, Shell
 Command Language}, though more generous than the restrictive shell
 subset described above, is fairly portable nowadays.  Also please see
-@uref{http://www.faqs.org/faqs/unix-faq/shell/, the Shell FAQs}.
+@uref{http://www.faqs.org/@/faqs/@/unix-faq/@/shell/, the Shell FAQs}.
 
 @menu
 * Shellology::                  A zoology of shells

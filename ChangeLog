@@ -1,3 +1,9 @@
+2006-04-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* ChangeLog: Typo.
+	* doc/autoconf.texi (Portable Shell): Allow wrapped URLs, for
+	DVI output.
+
 2006-04-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Limitations of Builtins): Document FreeBSD
@@ -7,7 +13,7 @@
 
 2006-04-26  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* doc/autoconf.texi (Portable C and C++, Varities of Unportability):
+	* doc/autoconf.texi (Portable C and C++, Varieties of Unportability):
 	(Integer Overflow, Null Pointers, Buffer Overruns):
 	(Floating Point Portability, Exiting Portably): New sections.
 	(Writing Test Programs): Fix some langauge.  Recommend exiting
