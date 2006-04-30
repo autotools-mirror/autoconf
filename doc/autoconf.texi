@@ -7753,6 +7753,9 @@ systems.  @uref{http://www.levenez.com/unix/, Unix History} is a
 simplified diagram of how many Unix systems were derived from each
 other.
 
+@uref{http://heirloom.sourceforge.net/, The Heirloom Project}
+provides some variants of traditional implementations of Unix utilities.
+
 @table @asis
 @item Darwin
 @cindex Darwin

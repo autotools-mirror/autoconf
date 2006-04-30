@@ -1,5 +1,8 @@
 2006-04-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* NEWS: Typo.
+	* doc/autoconf.texi (Systemology): Mention the Heirloom Project.
+
 	* doc/autoconf.texi (Introduction, Pointers): Use `@/' liberally
 	in URLs to improve DVI formatted output (requires texinfo 4.6).
 	(System Services, Systemology, Shellology): Likewise.

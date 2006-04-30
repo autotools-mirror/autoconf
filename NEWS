@@ -80,7 +80,7 @@
   that order).
 
 ** AC_STRUCT_DIRENT_D_INO, AC_STRUCT_DIRENT_D_TYPE
-  New macro for checking commonly-used members of struct dirent.
+  New macros for checking commonly-used members of struct dirent.
 
 ** AC_SUBST
   The subtituted value can now contain newlines.
