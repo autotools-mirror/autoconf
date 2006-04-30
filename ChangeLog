@@ -1,3 +1,14 @@
+2006-04-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Fortran Compiler): Do not use `@ovar' in
+	continuous text.
+	(Runtime): Fix macro argument names to match description:
+	`action-if-found' -> `action-if-true' and similarly.
+	(Obsolete Macros): Likewise.
+	* lib/autoconf/general.m4 (_AC_COMPILE_IFELSE): Likewise.
+	(AC_COMPILE_IFELSE, AC_TRY_COMPILE, _AC_LINK_IFELSE)
+	(AC_LINK_IFELSE, AC_TRY_LINK, AC_COMPILE_CHECK): Likewise.
+
 2006-04-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Limitations of Make): Clean up markup.

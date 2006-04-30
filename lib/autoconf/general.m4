@@ -2266,8 +2266,8 @@ AC_DEFUN([AC_EGREP_HEADER],
 ## ------------------ ##
 
 
-# _AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ---------------------------------------------------------------------
+# _AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ----------------------------------------------------------------
 # Try to compile PROGRAM.
 # This macro can be used during the selection of a compiler.
 m4_define([_AC_COMPILE_IFELSE],
@@ -2284,8 +2284,8 @@ rm -f conftest.err conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
 
-# AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# --------------------------------------------------------------------
+# AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ---------------------------------------------------------------
 # Try to compile PROGRAM.  Requires that the compiler for the current
 # language was checked for, hence do not use this macro in macros looking
 # for a compiler.
@@ -2295,8 +2295,8 @@ _AC_COMPILE_IFELSE($@)])
 
 
 # AC_TRY_COMPILE(INCLUDES, FUNCTION-BODY,
-#                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# --------------------------------------------------------
+#                [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ---------------------------------------------------
 AU_DEFUN([AC_TRY_COMPILE],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])], [$3], [$4])])
 
@@ -2307,8 +2307,8 @@ AU_DEFUN([AC_TRY_COMPILE],
 ## --------------------- ##
 
 
-# _AC_LINK_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# ------------------------------------------------------------------
+# _AC_LINK_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# -------------------------------------------------------------
 # Try to link PROGRAM.
 # This macro can be used during the selection of a compiler.
 m4_define([_AC_LINK_IFELSE],
@@ -2326,8 +2326,8 @@ rm -f conftest.err conftest.$ac_objext \
 ])# _AC_LINK_IFELSE
 
 
-# AC_LINK_IFELSE(PROGRAM, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# -----------------------------------------------------------------
+# AC_LINK_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ------------------------------------------------------------
 # Try to link PROGRAM.  Requires that the compiler for the current
 # language was checked for, hence do not use this macro in macros looking
 # for a compiler.
@@ -2337,16 +2337,16 @@ _AC_LINK_IFELSE($@)])
 
 
 # AC_TRY_LINK(INCLUDES, FUNCTION-BODY,
-#             [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# -----------------------------------------------------
+#             [ACTION-IF-TRUE], [ACTION-IF-FALSE])
+# ------------------------------------------------
 # Contrarily to AC_LINK_IFELSE, this macro double quote its first two args.
 AU_DEFUN([AC_TRY_LINK],
 [AC_LINK_IFELSE([AC_LANG_PROGRAM([[$1]], [[$2]])], [$3], [$4])])
 
 
 # AC_COMPILE_CHECK(ECHO-TEXT, INCLUDES, FUNCTION-BODY,
-#                  ACTION-IF-FOUND, [ACTION-IF-NOT-FOUND])
-# --------------------------------------------------------
+#                  ACTION-IF-TRUE, [ACTION-IF-FALSE])
+# ---------------------------------------------------
 AU_DEFUN([AC_COMPILE_CHECK],
 [m4_ifvaln([$1], [AC_MSG_CHECKING([for $1])])dnl
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])])

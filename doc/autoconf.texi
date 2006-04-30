@@ -6633,7 +6633,7 @@ was found, and @code{none} when no such dummy main is needed.
 
 By default, @var{action-if-found} defines @code{F77_DUMMY_MAIN} or
 @code{FC_DUMMY_MAIN} to the name of this routine (e.g., @code{MAIN__})
-@emph{if} it is required.  @ovar{action-if-not-found} defaults to
+@emph{if} it is required.  @var{action-if-not-found} defaults to
 exiting with an error.
 
 In order to link with Fortran routines, the user's C/C++ program should
@@ -6800,9 +6800,9 @@ foo.o: foo.f90
 @end example
 
 If @code{AC_FC_SRCEXT} succeeds in compiling files with the @var{ext}
-extension, it calls @ovar{action-if-success} (defaults to nothing).  If
+extension, it calls @var{action-if-success} (defaults to nothing).  If
 it fails, and cannot find a way to make the @code{FC} compiler accept such
-files, it calls @ovar{action-if-failure} (defaults to exiting with an
+files, it calls @var{action-if-failure} (defaults to exiting with an
 error message).
 
 @end defmac
@@ -6823,8 +6823,8 @@ specify a different extension with @code{AC_FC_SRCEXT}, such as
 succeed without modifying @code{FCFLAGS}.
 
 If @code{AC_FC_FREEFORM} succeeds in compiling free-form source, it
-calls @ovar{action-if-success} (defaults to nothing).  If it fails, it
-calls @ovar{action-if-failure} (defaults to exiting with an error
+calls @var{action-if-success} (defaults to nothing).  If it fails, it
+calls @var{action-if-failure} (defaults to exiting with an error
 message).
 @end defmac
 
@@ -7661,7 +7661,7 @@ run it using @code{AC_RUN_IFELSE}.  Avoid running test programs if
 possible, because this prevents people from configuring your package for
 cross-compiling.
 
-@defmac AC_RUN_IFELSE (@var{input}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{action-if-cross-compiling})
+@defmac AC_RUN_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
 @acindex{RUN_IFELSE}
 If @var{program} compiles and links successfully and returns an exit
 status of 0 when executed, run shell commands @var{action-if-true}.
@@ -15608,7 +15608,7 @@ typedef loff_t off_t;
 Same as @samp{AC_MSG_NOTICE([checking @var{feature-description}@dots{}]}.
 @end defmac
 
-@defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-true}, @ovar{action-if-false})
 @acindex{COMPILE_CHECK}
 This is an obsolete version of @code{AC_TRY_COMPILE} itself replaced by
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}), with the
@@ -16210,7 +16210,7 @@ issue.
 @code{AC_HEADER_TIME}
 @end defmac
 
-@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @ovar{action-if-true}, @ovar{action-if-false})
 @acindex{TRY_COMPILE}
 Same as:
 
@@ -16251,7 +16251,7 @@ AC_PREPROC_IFELSE(
 This macro double quotes the @var{input}.
 @end defmac
 
-@defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @ovar{action-if-true}, @ovar{action-if-false})
 @acindex{TRY_LINK}
 Same as:
 
