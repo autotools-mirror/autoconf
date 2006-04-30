@@ -1,5 +1,11 @@
 2006-04-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/autoconf.texi (Introduction, Pointers): Use `@/' liberally
+	in URLs to improve DVI formatted output (requires texinfo 4.6).
+	(System Services, Systemology, Shellology): Likewise.
+	(Limitations of Usual Tools): Rewrite Mac OS X example for nicer
+	output.
+
 	* doc/autoconf.texi (Fortran Compiler): Do not use `@ovar' in
 	continuous text.
 	(Runtime): Fix macro argument names to match description:

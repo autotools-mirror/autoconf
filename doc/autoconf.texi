@@ -691,7 +691,7 @@ Summary} for details.  Patches relative to the
 current @acronym{CVS} version can be sent for review to the
 @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
 Past patches are
-@uref{http://lists.gnu.org/archive/html/autoconf-patches/, archived}.
+@uref{http://lists.gnu.org/@/archive/@/html/@/autoconf-patches/, archived}.
 
 Because of its mission, the Autoconf package itself
 includes only a set of often-used
@@ -839,10 +839,10 @@ the @acronym{GNU} build tools.
 @item Web
 
 The home pages for
-@uref{http://www.gnu.org/software/autoconf/, Autoconf},
-@uref{http://www.gnu.org/software/automake/, Automake},
-@uref{http://www.gnu.org/software/gnulib/, Gnulib}, and
-@uref{http://www.gnu.org/software/libtool/, Libtool}.
+@uref{http://www.gnu.org/@/software/@/autoconf/, Autoconf},
+@uref{http://www.gnu.org/@/software/@/automake/, Automake},
+@uref{http://www.gnu.org/@/software/@/gnulib/, Gnulib}, and
+@uref{http://www.gnu.org/@/software/@/libtool/, Libtool}.
 
 @item Automake Manual
 
@@ -856,7 +856,7 @@ Libtool}@footnote{@cite{@acronym{GNU} Autoconf, Automake and Libtool},
 by G. V. Vaughan, B. Elliston, T. Tromey, and I. L. Taylor.  SAMS (originally
 New Riders), 2000, ISBN 1578701902.} describes the complete @acronym{GNU}
 build environment.  You can also find
-@uref{http://sources.redhat.com/autobook/, the entire book on-line}.
+@uref{http://sources.redhat.com/@/autobook/, the entire book on-line}.
 
 @end itemize
 
@@ -6899,7 +6899,7 @@ if the system supports @samp{#!}, @samp{no} if not.
 @cindex Large file support
 @cindex LFS
 Arrange for
-@uref{http://www.unix-systems.org/version2/whatsnew/lfs20mar.html,
+@uref{http://www.unix-systems.org/@/version2/@/whatsnew/@/lfs20mar.html,
 large-file support}.  On some hosts, one must use special compiler
 options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
@@ -7782,7 +7782,7 @@ information is available on the
 
 @item Tru64
 @cindex Tru64
-@uref{http://h30097.www3.hp.com/docs/,
+@uref{http://h30097.www3.hp.com/@/docs/,
 Documentation of several versions of Tru64} is available in different
 formats.
 
@@ -10516,7 +10516,7 @@ subset described above, is fairly portable nowadays.  Also please see
 There are several families of shells, most prominently the Bourne family
 and the C shell family which are deeply incompatible.  If you want to
 write portable shell scripts, avoid members of the C shell family.  The
-@uref{http://www.faqs.org/faqs/unix-faq/shell/shell-differences/, the
+@uref{http://www.faqs.org/@/faqs/@/unix-faq/@/shell/@/shell-differences/, the
 Shell difference FAQ} includes a small history of Posix shells, and a
 comparison between several of them.
 
@@ -12788,9 +12788,13 @@ bytes.  In this case, you might want to fall back on @samp{echo|sed} if
 @command{expr} fails.
 
 On Mac OS X 10.4, @command{expr} mishandles the pattern @samp{[^-]} in
-some cases.  For example, the command @samp{expr
-Xpowerpc-apple-darwin8.1.0 : 'X[^-]*-[^-]*-\(.*\)'} outputs
-@samp{apple-darwin8.1.0} rather than the correct @samp{darwin8.1.0}.
+some cases.  For example, the command
+@example
+expr Xpowerpc-apple-darwin8.1.0 : 'X[^-]*-[^-]*-\(.*\)'
+@end example
+
+@noindent
+outputs @samp{apple-darwin8.1.0} rather than the correct @samp{darwin8.1.0}.
 This particular case can be worked around by substituting @samp{[^--]}
 for @samp{[^-]}.
 
