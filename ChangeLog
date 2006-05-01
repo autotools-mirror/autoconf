@@ -162,6 +162,9 @@
 
 	Version 2.59c.
 
+	* Makefile.maint (news-date-check): Do not require a leading `*'
+	before the release date in NEWS.
+
 2006-04-12  Stepan Kasal  <kasal@ucw.cz>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
