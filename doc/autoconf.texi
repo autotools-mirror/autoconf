@@ -12143,10 +12143,14 @@ Also please see the discussion of the @command{cd} command.
 @item @command{set}
 @c ----------------
 @prindex @command{set}
-This builtin faces the usual problem with arguments starting with a
+With the Free@acronym{BSD} 6.0 shell, the @command{set} command (without
+any options) does not sort its output.
+
+The @command{set} builtin faces the usual problem with arguments starting with a
 dash.  Modern shells such as Bash or Zsh understand @option{--} to specify
 the end of the options (any argument after @option{--} is a parameter,
-even @samp{-x} for instance), but most shells simply stop the option
+even @samp{-x} for instance), but many traditional shells (e.g., Solaris
+10 @command{/bin/sh}) simply stop option
 processing as soon as a non-option argument is found.  Therefore, use
 @samp{dummy} or simply @samp{x} to end the option processing, and use
 @command{shift} to pop it out:
@@ -12168,8 +12172,37 @@ better to combine them:
 set -ex
 @end example
 
-The @command{set} of the Free@acronym{BSD} 6.0 shell does not sort its
-output.
+The @acronym{BSD} shell has had several problems with the @option{-e}
+option, partly because @acronym{BSD} @command{make} traditionally used
+@option{-e} even though this was incompatible with Posix
+(@pxref{Limitations of Make}).  Older versions of the @acronym{BSD}
+shell (circa 1990) mishandled @samp{&&}, @samp{||}, @samp{if}, and
+@samp{case} when @option{-e} was in effect, causing the shell to exit
+unexpectedly in some cases.  This was particularly a problem with
+makefiles, and led to circumlocutions like @samp{sh -c 'test -f file ||
+touch file'}, where the seemingly-unnecessary @samp{sh -c '@dots{}'}
+wrapper works around the bug.
+
+Even relatively-recent versions of the @acronym{BSD} shell (e.g.,
+Open@acronym{BSD} 3.4) wrongly exit with @option{-e} if a command within
+@samp{&&} fails inside a compound statement.  For example:
+
+@example
+#! /bin/sh
+set -e
+foo='nonempty'
+test -n "$foo" && exit 1
+echo one
+if :; then
+  test -n "$foo" && exit 1
+fi
+echo two
+@end example
+
+@noindent
+does not print @samp{two}.  One workaround is to use @samp{if test -n
+"$foo"; then exit 1; fi} rather than @samp{test -n "$foo" && exit 1}.
+Another possibility is to warn @acronym{BSD} users not to use @samp{sh -e}.
 
 
 @item @command{shift}
@@ -13351,6 +13384,11 @@ remove @file{U} with Posix make, but incompatible
 @command{touch} fails.  One way to work around this is to reword the
 affected simple-commands so that they always succeed, e.g., @samp{touch
 T || :; rm -f U}.
+However, even this approach can run into common bugs in BSD
+implementations of the @option{-e} option of @command{sh} and
+@command{set} (@pxref{Limitations of Builtins}), so if you are worried
+about porting to buggy BSD shells it may be simpler to migrate
+complicated @command{make} actions into separate scripts.
 
 @item Leading underscore in macro names
 Some @command{make}s don't support leading underscores in macro names,

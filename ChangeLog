@@ -1,3 +1,9 @@
+2006-05-01  Paul Eggert  <eggert@cs.ucla.edu>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Limitations of Builtins, Limitations of Make):
+	Mention more problems with the -e option.
+
 2006-04-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* NEWS: Typo.
