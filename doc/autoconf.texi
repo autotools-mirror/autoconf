@@ -12190,7 +12190,7 @@ Open@acronym{BSD} 3.4) wrongly exit with @option{-e} if a command within
 @example
 #! /bin/sh
 set -e
-foo='nonempty'
+foo=''
 test -n "$foo" && exit 1
 echo one
 if :; then
