@@ -1,3 +1,10 @@
+2006-05-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT): Cater for
+	traditional shells like the Solaris one that do not use the
+	first IFS character for assembling `$*'.
+	Prompted by a related report from autoconf_bug@nro.ca.
+
 2006-05-01  Paul Eggert  <eggert@cs.ucla.edu>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
