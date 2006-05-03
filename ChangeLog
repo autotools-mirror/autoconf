@@ -1,3 +1,8 @@
+2006-05-03  Bruno Haible  <bruno@clisp.org>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Identify more
+	precisely which Mac OS X versions have the od problem.
+
 2006-05-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Use @option systematically.
