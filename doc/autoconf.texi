@@ -13138,6 +13138,22 @@ exec > foo
 rm -f foo
 @end example
 
+
+@item @command{od}
+@c ---------------
+@prindex @command{od}
+
+In older versions of Mac OS X, @command{od} does not support the
+standard Posix options @option{-A}, @option{-j}, @option{-N}, or
+@option{-t}, or the @acronym{XSI} option @option{-s}.  The only
+supported Posix option is @code{-v}, and the only supported
+@acronym{XSI} options are those in @option{-bcdox}.  The BSD
+@command{hexdump} program can be used instead.
+
+This problem no longer exists in Mac OS X 10.4.6; we don't know when it
+was fixed.
+
+
 @item @command{sed}
 @c ----------------
 @prindex @command{sed}
