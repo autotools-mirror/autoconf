@@ -14267,17 +14267,23 @@ the programs work well enough in practice.
 @cindex overflow, arithmetic
 
 In C, signed integer overflow leads to undefined behavior.  However,
-many programs and Autoconf tests assume that integer overflow silently
-wraps around modulo a power of 2 so long as you cast the resulting value
+many programs and Autoconf tests assume that signed integer overflow after
+addition, subtraction, or multiplication silently
+wraps around modulo a power of two, using two's complement arithmetic,
+so long as you cast the resulting value
 to an integer type or store it into an integer variable.  Such programs
-are portable to the vast majority of modern platforms.  C99 has a way of
-specifying this portability (the LIA-1 option) but this is not
-universally supported yet.  GCC users might consider using the
-@option{-ftrapv} option if they are worried about porting their code to
-the rare platforms where overflow does not wrap around.
+are portable to the vast majority of modern platforms.  However, signed
+integer division is not always harmless: for example, on CPUs of the
+i386 family, dividing @code{INT_MIN} by @code{-1} yields a SIGFPE signal
+which by default terminates the program.
 
-In contrast, unsigned integer overflow reliably wraps around modulo the
-word size.
+GCC users might consider using the
+@option{-ftrapv} option if they are worried about porting their code to
+the rare platforms where signed integer overflow does not wrap around
+after addition, subtraction, or multiplication.
+
+Unsigned integer overflow reliably wraps around modulo the word size.
+This is guaranteed by the C standard and is portable in practice.
 
 @node Null Pointers
 @section Properties of Null Pointers

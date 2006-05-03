@@ -1,12 +1,15 @@
 2006-05-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Use @option systematically.
+	(Integer Overflow):
 
 2006-05-02  Paul Eggert  <eggert@cs.ucla.edu>
 	and Bruno Haible  <bruno@clisp.org>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Add a paragraph
 	about 'od'.
+	(Integer Overflow): Mention the special case of integer division
+	overflow.
 
 2006-05-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
