@@ -11546,7 +11546,9 @@ characters.
 
 The proper value for @code{IFS} (in regular code, not when performing
 splits) is @samp{@key{SPC}@key{TAB}@key{RET}}.  The first character is
-especially important, as it is used to join the arguments in @samp{@@*}.
+especially important, as it is used to join the arguments in @samp{$*};
+however, note that traditional shells, but also bash-2.04, fail to adhere
+to this and join with a space anyway.
 
 @item LANG
 @itemx LC_ALL
