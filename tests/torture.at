@@ -57,7 +57,7 @@ m4_define([AT_CHECK_AC_ARG_VAR],
 
 # Initial value.
 m4_ifval([$1],
-	 [precious='$1'; export precious],
+	 [precious='m4_bpatsubst($1, [[']], ['\\''])'; export precious],
 	 [unset precious])
 AT_CHECK_CONFIGURE([--config-cache -q])
 AT_CHECK([cat file], [], [`$1'
@@ -118,6 +118,9 @@ AT_CHECK_AC_ARG_VAR([apple of my eye], [orange of my eye])
 
 # Change a precious variable that contains braces
 AT_CHECK_AC_ARG_VAR([apple of my {eye}], [orange of my eye])
+
+# Change a precious variable that contains all kinds of fun
+AT_CHECK_AC_ARG_VAR(['p  r	ec"iou$], [orange of my eye])
 
 AT_CLEANUP
 
@@ -258,34 +261,51 @@ AT_CLEANUP
 # Check that `configure' and `config.status' honor their interface.
 #
 # We run `./configure one=val1 --enable-two=val2 --with-three=val3'
-# and verify that (i) `configure' correctly receives the arguments and
+# and verify that (i) `configure' correctly receives the arguments,
 # (ii) correctly passes them to `config.status', which we check by
-# running `config.status --recheck'.
+# running `config.status --recheck', and (iii) correctly passes them
+# to sub-configure scripts.
 
 AT_SETUP([configure invocation])
 
+mkdir sub
+
 AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_SUBDIRS([sub])
+echo "result=$one$enable_two$with_three"
+AC_OUTPUT
+]])
+
+AT_DATA([sub/configure.ac],
 [[AC_INIT
 echo "result=$one$enable_two$with_three"
 AC_OUTPUT
 ]])
 
+echo fake install-sh script >install-sh
+
 AT_CHECK_AUTOCONF
+cd sub
+AT_CHECK_AUTOCONF
+cd ..
 
 AT_CHECK_CONFIGURE([one=one --enable-two=two --with-three=three |
 		     sed -n -e 's/^result=//p'], 0,
-		   [onetwothree
-])
+		   [m4_do([onetwothree
+],			  [onetwothree
+])])
 AT_CHECK([./config.status --recheck | sed -n 's/^result=//p'], 0,
 	 [onetwothree
 ])
 
-AT_CHECK_CONFIGURE([one="\"'$ " --enable-two="\" ' $" --with-three=" \"'$"|
+AT_CHECK_CONFIGURE([one="\"'$ " --enable-two="\" '  $" --with-three="	\"'$"|
 		      sed -n -e 's/^result=//p'], 0,
-		   ["'$ " ' $ "'$
-])
+		   [m4_do(["'$ " '  $	"'$
+],			  ["'$ " '  $	"'$
+])])
 AT_CHECK([./config.status --recheck | sed -n 's/^result=//p'], 0,
-	 ["'$ " ' $ "'$
+	 ["'$ " '  $	"'$
 ])
 
 AT_CLEANUP

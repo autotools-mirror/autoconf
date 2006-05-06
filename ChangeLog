@@ -1,5 +1,15 @@
 2006-05-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Take care not to
+	munge (multiple) white space and other oddities.
+	* tests/torture.at (AT_CHECK_AC_ARG_VAR): Make sure to M4-escape
+	single quotes in variable assignment.
+	(AC_ARG_VAR, configure invocation): Adjust tests to expose this
+	and similar failures by adding multiple spaces, tabs, and other
+	special characters.
+	Report and different test suggested by Francesco Romani
+	<fromani@gmail.com> and Andrew Church <achurch@achurch.org>.
+
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): When we escape
 	single quotes, we only need to search for single quotes; this
 	both simplifies the search pattern, and makes us less

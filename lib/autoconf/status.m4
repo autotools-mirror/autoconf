@@ -915,7 +915,10 @@ if test "$no_recursion" != yes; then
   # Remove --cache-file and --srcdir arguments so they do not pile up.
   ac_sub_configure_args=
   ac_prev=
-  for ac_arg in $ac_configure_args; do
+  eval set x "$ac_configure_args"
+  shift
+  for ac_arg
+  do
     if test -n "$ac_prev"; then
       ac_prev=
       continue
@@ -938,7 +941,11 @@ if test "$no_recursion" != yes; then
       ac_prev=prefix ;;
     -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
       ;;
-    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
+    *)
+      case $ac_arg in
+      *\'*) ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+      esac
+      ac_sub_configure_args="$ac_sub_configure_args '$ac_arg'" ;;
     esac
   done
 
@@ -984,8 +991,8 @@ if test "$no_recursion" != yes; then
 
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir])
       # The eval makes quoting arguments work.
-      eval $ac_sub_configure $ac_sub_configure_args \
-	   --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir ||
+      eval "$ac_sub_configure $ac_sub_configure_args \
+	   --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir" ||
 	AC_MSG_ERROR([$ac_sub_configure failed for $ac_dir])
     fi
 
