@@ -1,3 +1,12 @@
+2006-05-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): When we escape
+	single quotes, we only need to search for single quotes; this
+	both simplifies the search pattern, and makes us less
+	susceptible to `echo' variations for arguments not containing
+	single quotes.
+	(_AC_ARG_VAR_VALIDATE): Likewise.
+
 2006-05-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Special Shell Variables) <IFS>: Document

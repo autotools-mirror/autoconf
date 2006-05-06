@@ -1156,9 +1156,7 @@ do
     -q | -quiet | --quiet | --quie | --qui | --qu | --q \
     | -silent | --silent | --silen | --sile | --sil)
       continue ;;
-dnl If you change this globbing pattern, test it on an old shell --
-dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
-  [  *" "*|*"	"*|*[\\\[\~\#\$\^\&\*\(\)\{\}\|\;\<\>\?\"\']*|*\]*)]
+    *\'*)
       ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
     esac
     case $ac_pass in
@@ -1500,10 +1498,7 @@ for ac_var in $ac_precious_vars; do
   # Pass precious variables to config.status.
   if test "$ac_new_set" = set; then
     case $ac_new_val in
-dnl If you change this globbing pattern, test it on an old shell --
-dnl it's sensitive.  Putting any kind of quote in it causes syntax errors.
-[    *" "*|*"	"*|*[\\\[\~\#\$\^\&\*\(\)\{\}\|\;\<\>\?\"\']*|*\]*)]
-      ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
+    *\'*) ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
     *) ac_arg=$ac_var=$ac_new_val ;;
     esac
     case " $ac_configure_args " in
