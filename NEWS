@@ -1,5 +1,10 @@
 * Major changes in Autoconf 2.59d
 
+** AC_PROG_CC_STDC
+  Passing 'ac_cv_prog_cc_stdc=no' to 'configure' now sets ac_cv_prog_cc_c99
+  and ac_cv_prog_cc_c89 to 'no' as well, for backward compatibility with
+  obsolete K&R tests in the Automake test suite.
+
 * Major changes in Autoconf 2.59c
 
   Released 2006-04-12, by Ralf Wildenhues.

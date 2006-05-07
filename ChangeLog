@@ -1,3 +1,10 @@
+2006-05-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/c.m4 (AC_PROG_CC_STDC): If ac_cv_prog_cc_stdc
+	is set to `no', then that overrides and sets ac_cv_prog_cc_c89
+	and ac_cv_prog_cc_c99 to `no', for backward compatibility.
+	* NEWS: Update.
+
 2006-05-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Take care not to
