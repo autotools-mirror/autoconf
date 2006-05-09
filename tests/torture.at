@@ -1004,10 +1004,11 @@ AC_OUTPUT
 
 AT_DATA([HeeHee.am],
 [[# Humans do no worse than `GNUmakefile.am'.
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign 1.8
 ]])
 
-AT_CHECK([autoreconf -Wall -v -i], 0, [ignore], [ignore])
+AT_CHECK([autoreconf -Wall -v -i], 0, [ignore], [stderr],
+	 [AT_CHECK([grep 'require.*1\.8' stderr && exit 77], [1])])
 AT_CHECK([test -f HeeHee.in])
 
 AT_CLEANUP

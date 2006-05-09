@@ -1,3 +1,8 @@
+2006-05-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/torture.at (Unusual Automake input files): Skip if we
+	detect automake < 1.8.
+
 2006-05-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/c.m4 (AC_PROG_CC_STDC): If ac_cv_prog_cc_stdc
