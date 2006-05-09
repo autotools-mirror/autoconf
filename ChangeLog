@@ -1,5 +1,10 @@
 2006-05-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/Makefile.am (AUTOTEST): Use `$(MY_AUTOM4TE)' instead of
+	`./autom4te' to create `./testsuite', since the `all' target
+	will ensure its presence, but `installcheck' should not create
+	the uninstalled wrappers.
+
 	* tests/torture.at (Unusual Automake input files): Skip if we
 	detect automake < 1.8.
 

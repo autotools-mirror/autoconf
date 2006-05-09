@@ -109,7 +109,7 @@ TESTSUITE = ./testsuite
 # Run the non installed autom4te.
 # Don't use AUTOM4TE since `make alpha' makes it unavailable although
 # we are allowed to use it (since we ship it).
-AUTOTEST = ./autom4te --language=autotest
+AUTOTEST = $(MY_AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/package.m4 \
 	      local.at \
 	      $(TESTSUITE_AT) \
