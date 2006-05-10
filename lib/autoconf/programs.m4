@@ -568,13 +568,16 @@ case $as_dir/ in
 	    grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
 	    # program-specific install script used by HP pwplus--don't use.
 	    :
-	  else
+	  elif rm -fr conftest.dir &&
+	    $as_dir/$ac_prog$ac_exec_ext -c -d conftest.dir/d >/dev/null 2>&1 &&
+	    rmdir conftest.dir/d conftest.dir >/dev/null 2>&1; then
 	    ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
 	    break 3
 	  fi
 	fi
       done
     done
+    rm -fr conftest.dir
     ;;
 esac])
 ])dnl
@@ -628,7 +631,7 @@ AC_SUBST(INSTALL_DATA)dnl
 # restrict ourselves to GNU mkdir (using the --version option ensures
 # this.)
 AC_DEFUN([AC_PROG_MKDIR_P],
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+[AC_REQUIRE([AC_PROG_INSTALL])dnl
 if mkdir -p --version . >/dev/null 2>&1 && test ! -d ./--version; then
   # We used to define $(mkdir_p) as `mkdir -p .', in order to
   # allow $(mkdir_p) to be used without argument.  As in
@@ -658,7 +661,7 @@ else
   do
     test -d $d && rmdir $d
   done
-  mkdir_p='$(install_sh) -d'
+  mkdir_p="$INSTALL -d"
 fi
 AC_SUBST([mkdir_p])
 ])# AC_PROG_MKDIR_P
