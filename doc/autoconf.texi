@@ -3530,7 +3530,7 @@ and its parent directories if needed.  The command is checked to make
 sure that it is thread-safe (@pxref{Limitations of Usual Tools}).
 
 This macro uses the @samp{mkdir -p} command if possible.  Otherwise, it
-falls back to the @samp{install-sh -d} command, so your package should
+falls back on @code{$INSTALL}, so your package should
 contain @file{install-sh} as described under @code{AC_PROG_INSTALL}.
 
 This macro is related to the @code{AS_MKDIR_P} macro (@pxref{Programming
