@@ -1,3 +1,12 @@
+2006-05-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* config/install-sh: Update to Automake CVS version, as follows:
+
+	2006-04-25  Stepan Kasal  <kasal@ucw.cz>
+	* lib/install-sh: Simplify the expr implementation of dirname.
+	2006-04-24  Paul Eggert  <eggert@cs.ucla.edu>
+	* lib/install-sh: Handle --, and diagnose unknown options.
+
 2006-05-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/Makefile.am (AUTOTEST): Use `$(MY_AUTOM4TE)' instead of
