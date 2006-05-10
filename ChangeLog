@@ -13,6 +13,8 @@
 	from mkdir.  Mention that Autoconf 2.60 install-sh is safe but
 	earlier editions are not (including Automake 1.8.3).
 	Do not suggest mkinstalldirs for thread-safety.
+	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Insist on an 'install'
+	that understands -d, so that AC_PROG_MKDIR_P can fall back on $INSTALL.
 	* lib/m4sugar/m4sh.m4 (AS_MKDIR_P): Make it more robust in the
 	presence of special characters and race conditions.
 	* tests/local.at (AT_CHECK_ENV): Add mkdir_p to the list of variables
