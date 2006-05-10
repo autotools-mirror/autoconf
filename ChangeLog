@@ -1,7 +1,33 @@
 2006-05-10  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* config/install-sh: Update to Automake CVS version, as follows:
+	* NEWS: New macro AC_PROG__MKDIR_P.  AS_MKDIR_P is now more robust.
+	* config/install-sh: Don't use 'path' to talk about file names,
+	as per GNU coding standards.  Close a race condition reported by Ralf
+        Wildenhues and Stepan Kasal.  There is still a race condition
+        on hosts that predate POSIX 1003.1-1992, but we can't help this.
+	Don't mishandle weird characters like space on pre-POSIX hosts.
+	Invoke mkdir at most once per dir arg on pre-POSIX hosts.
+	* doc/autoconf.texi (Programming in M4sh): Cross-reference to
+	AC_PROG_MKDIR_P from AS_MKDIR_P.
+	(Limitations of Usual Tools): Cross-reference to AC_PROG_MKDIR_P
+	from mkdir.  Mention that Autoconf 2.60 install-sh is safe but
+	earlier editions are not (including Automake 1.8.3).
+	Do not suggest mkinstalldirs for thread-safety.
+	* lib/m4sugar/m4sh.m4 (AS_MKDIR_P): Make it more robust in the
+	presence of special characters and race conditions.
+	* tests/local.at (AT_CHECK_ENV): Add mkdir_p to the list of variables
+	in Autoconf's name space.
 
+2006-05-10  Bruno Haible  <bruno@clisp.org>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): New macro, taken
+	from Automake with minor changes.
+	* doc/autoconf.texi (Particular Programs): Document AC_PROG_MKDIR_P.
+
+2006-05-10  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* config/install-sh: Update to Automake CVS version, as follows:
 	2006-04-25  Stepan Kasal  <kasal@ucw.cz>
 	* lib/install-sh: Simplify the expr implementation of dirname.
 	2006-04-24  Paul Eggert  <eggert@cs.ucla.edu>

@@ -292,7 +292,7 @@ if test -f state-env.before && test -f state-env.after; then
       [F77_DUMMY_MAIN|f77_(case|underscore)],
       [FC(_DUMMY_MAIN|FLAGS|LIBS|FLAGS_f)?],
       [ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB],
-      [AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|RANLIB|SET_MAKE|YACC],
+      [AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|mkdir_p|RANLIB|SET_MAKE|YACC],
       [GREP|[EF]GREP|SED],
       [[_@]|.[*#?$].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS]))=' \
      $act_file 2>/dev/null |

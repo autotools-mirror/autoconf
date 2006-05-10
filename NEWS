@@ -5,6 +5,13 @@
   and ac_cv_prog_cc_c89 to 'no' as well, for backward compatibility with
   obsolete K&R tests in the Automake test suite.
 
+** AC_PROG_MKDIR_P
+  New macro.
+
+** AS_MKDIR_P
+  Now more robust with special characters in file names, or when
+  multiple processes create the same directory at the same time.
+
 * Major changes in Autoconf 2.59c
 
   Released 2006-04-12, by Ralf Wildenhues.

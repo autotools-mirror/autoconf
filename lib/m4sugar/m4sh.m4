@@ -901,17 +901,24 @@ $as_ln_s $1 $2
 # Emulate `mkdir -p' with plain `mkdir'.
 m4_define([AS_MKDIR_P],
 [AS_REQUIRE([_$0_PREPARE])dnl
-{ if $as_mkdir_p; then
-    test -d $1 || mkdir -p $1
-  else
-    as_dir=$1
+{ as_dir=$1
+  case $as_dir in #(
+  -*) as_dir=./$as_dir;;
+  esac
+  test -d "$as_dir" || { $as_mkdir_p && mkdir -p "$as_dir"; } || {
     as_dirs=
-    while test ! -d "$as_dir"; do
-      as_dirs="$as_dir $as_dirs"
+    while :; do
+      case $as_dir in #(
+      *\'*) as_qdir=`echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #(
+      *) as_qdir=$as_dir;;
+      esac
+      as_dirs="'$as_qdir' $as_dirs"
       as_dir=`AS_DIRNAME("$as_dir")`
+      test -d "$as_dir" && break
     done
-    test ! -n "$as_dirs" || mkdir $as_dirs
-  fi || AS_ERROR([cannot create directory $1]); }dnl
+    test -z "$as_dirs" || eval "mkdir $as_dirs"
+  } || test -d "$as_dir" || AS_ERROR([cannot create directory $as_dir]); }dnl
+  # The last "test -d" is in case some other process made the directory.
 ])# AS_MKDIR_P
 
 

@@ -3521,6 +3521,29 @@ not found in standard @code{install} programs, there is no reason to use
 @file{Makefile.in} files.
 @end defmac
 
+@defmac AC_PROG_MKDIR_P
+@acindex{AC_PROG_MKDIR_P}
+@ovindex mkdir_p
+Set output variable @code{mkdir_p} to a command that ensures that for
+each argument, a directory named by this argument exists, creating it
+and its parent directories if needed.  The command is checked to make
+sure that it is thread-safe (@pxref{Limitations of Usual Tools}).
+
+This macro uses the @samp{mkdir -p} command if possible.  Otherwise, it
+falls back to the @samp{install-sh -d} command, so your package should
+contain @file{install-sh} as described under @code{AC_PROG_INSTALL}.
+
+This macro is related to the @code{AS_MKDIR_P} macro (@pxref{Programming
+in M4sh}), but it sets an output variable intended for use in other
+files, whereas @code{AS_MKDIR_P} is intended for use in scripts like
+@command{configure}.  Also, @code{AS_MKDIR_P} does not accept options,
+but if you are willing to assume Posix 1003.2-1992 or later, a
+@code{mkdir_p} can use options, e.g., a makefile might invoke
+@code{$(mkdir_p) -m 0 dir}.
+@end defmac
+
+This macro differs from
+
 @defmac AC_PROG_LEX
 @acindex{PROG_LEX}
 @ovindex LEX
@@ -9726,6 +9749,9 @@ succeeds if @var{file-name} is a symbolic link to an existing directory,
 even though Posix is unclear whether @samp{mkdir -p} should
 succeed in that case.  If creation of @var{file-name} fails, exit the
 script.
+
+Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Limitations of Usual
+Tools}).
 @end defmac
 
 @defmac AS_SHELL_SANITIZE
@@ -13035,7 +13061,8 @@ found"} if there are no @samp{.c} files.
 @cindex Making directories
 None of @command{mkdir}'s options are portable to older systems.  Instead of
 @samp{mkdir -p @var{file-name}}, you should use use
-@code{AS_MKDIR_P(@var{file-name})} (@pxref{Programming in M4sh}).
+@code{AS_MKDIR_P(@var{file-name})} (@pxref{Programming in M4sh})
+or @code{AC_PROG_MKDIR_P} (@pxref{Particular Programs}).
 
 Posix does not clearly specify whether @samp{mkdir -p foo}
 should succeed when @file{foo} is a symbolic link to an already-existing
@@ -13053,9 +13080,9 @@ version 4.0c), Free@acronym{BSD} 5.0, and Net@acronym{BSD}-current are
 known to have a
 race-free @code{mkdir -p}.  This possible race is harmful in parallel
 builds when several @file{Makefile} rules call @code{mkdir -p} to
-construct directories.  You may use @command{mkinstalldirs} or
-@code{install-sh -d} as a safe replacement, provided these scripts are
-recent enough (the copies shipped with Automake 1.8.3 are OK, those from
+construct directories.  You may use
+@code{install-sh -d} as a safe replacement, provided this script is
+recent enough (the copy shipped with Autoconf 2.60 is OK, those from
 older versions are not thread-safe either).
 
 
