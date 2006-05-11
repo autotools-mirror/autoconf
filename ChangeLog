@@ -1,12 +1,29 @@
+2006-05-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Sync from Automake, as follows:
+
+	2006-05-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	* config/install-sh: Initialize IFS, so field splitting isn't
+	turned off later.
+	* config/mkinstalldirs: Likewise.
+	* config/missing: Remove superfluous quotes.  Replace all uses of
+	`[' by `test', for consistency, and for..
+	* config/missing (sed_minuso, sed_output): New variables.
+	(autom4te, help2man, makeinfo): Use them.  Unifies detection of
+	`-o FILE', `--output FILE', `--output=FILE', stricter regex.
+	Fixes `missing' to detect `--output' for help2man.  Fixes
+	PR automake/483.  Report by Dennis J. Linse.
+	(autom4te): Document in `missing --help'.
+
 2006-05-10  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* NEWS: New macro AC_PROG__MKDIR_P.  AS_MKDIR_P is now more robust.
+	* NEWS: New macro AC_PROG_MKDIR_P.  AS_MKDIR_P is now more robust.
 	* config/install-sh: Don't use 'path' to talk about file names,
 	as per GNU coding standards.  Close a race condition reported by Ralf
         Wildenhues and Stepan Kasal.  There is still a race condition
-        on hosts that predate POSIX 1003.1-1992, but we can't help this.
-	Don't mishandle weird characters like space on pre-POSIX hosts.
-	Invoke mkdir at most once per dir arg on pre-POSIX hosts.
+        on hosts that predate Posix 1003.1-1992, but we can't help this.
+	Don't mishandle weird characters like space on pre-Posix hosts.
+	Invoke mkdir at most once per dir arg on pre-Posix hosts.
 	* doc/autoconf.texi (Programming in M4sh): Cross-reference to
 	AC_PROG_MKDIR_P from AS_MKDIR_P.
 	(Limitations of Usual Tools): Cross-reference to AC_PROG_MKDIR_P
