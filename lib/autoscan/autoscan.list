@@ -288,6 +288,7 @@ makevar: INSTALL		AC_PROG_INSTALL
 makevar: LEX		AC_PROG_LEX
 makevar: LN		AC_PROG_LN_S
 makevar: MAKE		AC_PROG_MAKE_SET
+makevar: MKDIR_P		AC_PROG_MKDIR_P
 makevar: OBJC		AC_PROG_OBJC
 makevar: RANLIB		AC_PROG_RANLIB
 makevar: YACC		AC_PROG_YACC

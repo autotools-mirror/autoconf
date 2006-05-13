@@ -3264,7 +3264,6 @@ gives unlimited permission to copy, distribute and modify it."
 ac_pwd='$ac_pwd'
 srcdir='$srcdir'
 INSTALL='$INSTALL'
-
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
@@ -3644,13 +3643,18 @@ echo X"$ac_file" |
 	    q
 	  }
 	  s/.*/./; q'`
-  { if $as_mkdir_p; then
-    test -d "$ac_dir" || mkdir -p "$ac_dir"
-  else
-    as_dir="$ac_dir"
+  { as_dir="$ac_dir"
+  case $as_dir in #(
+  -*) as_dir=./$as_dir;;
+  esac
+  test -d "$as_dir" || { $as_mkdir_p && mkdir -p "$as_dir"; } || {
     as_dirs=
-    while test ! -d "$as_dir"; do
-      as_dirs="$as_dir $as_dirs"
+    while :; do
+      case $as_dir in #(
+      *\'*) as_qdir=`echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #(
+      *) as_qdir=$as_dir;;
+      esac
+      as_dirs="'$as_qdir' $as_dirs"
       as_dir=`$as_dirname -- "$as_dir" ||
 $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$as_dir" : 'X\(//\)[^/]' \| \
@@ -3674,10 +3678,11 @@ echo X"$as_dir" |
 	    q
 	  }
 	  s/.*/./; q'`
+      test -d "$as_dir" && break
     done
-    test ! -n "$as_dirs" || mkdir $as_dirs
-  fi || { { echo "$as_me:$LINENO: error: cannot create directory \"$ac_dir\"" >&5
-echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
+    test -z "$as_dirs" || eval "mkdir $as_dirs"
+  } || test -d "$as_dir" || { { echo "$as_me:$LINENO: error: cannot create directory $as_dir" >&5
+echo "$as_me: error: cannot create directory $as_dir" >&2;}
    { (exit 1); exit 1; }; }; }
   ac_builddir=.
 
@@ -3724,7 +3729,6 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
   [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
   *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
   esac
-
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
