@@ -918,7 +918,6 @@ m4_define([AS_MKDIR_P],
     done
     test -z "$as_dirs" || eval "mkdir $as_dirs"
   } || test -d "$as_dir" || AS_ERROR([cannot create directory $as_dir]); }dnl
-  # The last "test -d" is in case some other process made the directory.
 ])# AS_MKDIR_P
 
 

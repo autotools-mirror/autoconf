@@ -1824,7 +1824,7 @@ Invocation}, for more information.
 @c just like any text that appear before @code{AC_INIT}.
 @c @end defmac
 
-Packages that do manual configuration or use the @code{install} program
+Packages that do manual configuration or use the @command{install} program
 might need to tell @command{configure} where to find some other shell
 scripts by calling @code{AC_CONFIG_AUX_DIR}, though the default places
 it looks are correct for most cases.
@@ -3493,14 +3493,14 @@ lines.
 @ovindex INSTALL_DATA
 @ovindex INSTALL_SCRIPT
 Set output variable @code{INSTALL} to the name of a @acronym{BSD}-compatible
-@code{install} program, if one is found in the current @env{PATH}.
+@command{install} program, if one is found in the current @env{PATH}.
 Otherwise, set @code{INSTALL} to @samp{@var{dir}/install-sh -c},
 checking the directories specified to @code{AC_CONFIG_AUX_DIR} (or its
 default directories) to determine @var{dir} (@pxref{Output}).  Also set
 the variables @code{INSTALL_PROGRAM} and @code{INSTALL_SCRIPT} to
 @samp{$@{INSTALL@}} and @code{INSTALL_DATA} to @samp{$@{INSTALL@} -m 644}.
 
-This macro screens out various instances of @code{install} known not to
+This macro screens out various instances of @command{install} known not to
 work.  It prefers to find a C program rather than a shell script, for
 speed.  Instead of @file{install-sh}, it can also use @file{install.sh},
 but that name is obsolete because some @command{make} programs have a rule
@@ -3510,39 +3510,43 @@ Autoconf comes with a copy of @file{install-sh} that you can use.  If
 you use @code{AC_PROG_INSTALL}, you must include either
 @file{install-sh} or @file{install.sh} in your distribution, or
 @command{configure} will produce an error message saying it can't find
-them---even if the system you're on has a good @code{install} program.
+them---even if the system you're on has a good @command{install} program.
 This check is a safety measure to prevent you from accidentally leaving
 that file out, which would prevent your package from installing on
-systems that don't have a @acronym{BSD}-compatible @code{install} program.
+systems that don't have a @acronym{BSD}-compatible @command{install} program.
 
 If you need to use your own installation program because it has features
-not found in standard @code{install} programs, there is no reason to use
+not found in standard @command{install} programs, there is no reason to use
 @code{AC_PROG_INSTALL}; just put the file name of your program into your
 @file{Makefile.in} files.
 @end defmac
 
 @defmac AC_PROG_MKDIR_P
 @acindex{AC_PROG_MKDIR_P}
-@ovindex mkdir_p
-Set output variable @code{mkdir_p} to a command that ensures that for
+@ovindex MKDIR_P
+Set output variable @code{MKDIR_P} to a program that ensures that for
 each argument, a directory named by this argument exists, creating it
-and its parent directories if needed.  The command is checked to make
+and its parent directories if needed.  The program is checked to make
 sure that it is thread-safe (@pxref{Limitations of Usual Tools}).
 
 This macro uses the @samp{mkdir -p} command if possible.  Otherwise, it
-falls back on @code{$INSTALL}, so your package should
+falls back on invoking @command{install-sh} with the @option{-d} option,
+so your package should
 contain @file{install-sh} as described under @code{AC_PROG_INSTALL}.
+A @file{install-sh} file that predates Autoconf 2.60 or Automake 1.10
+won't be thread-safe, so if you want to support parallel installs from
+different packages into the same directory you need to make sure you
+have an up-to-date @file{install-sh}.  In particular, be careful about
+using @samp{autoreconf -if} if your Automake predates Automake 1.10.
 
 This macro is related to the @code{AS_MKDIR_P} macro (@pxref{Programming
 in M4sh}), but it sets an output variable intended for use in other
 files, whereas @code{AS_MKDIR_P} is intended for use in scripts like
 @command{configure}.  Also, @code{AS_MKDIR_P} does not accept options,
 but if you are willing to assume Posix 1003.2-1992 or later, a
-@code{mkdir_p} can use options, e.g., a makefile might invoke
-@code{$(mkdir_p) -m 0 dir}.
+@code{MKDIR_P} can use the @option{-m} option, e.g., a makefile might
+invoke @code{$(MKDIR_P) -m 0 dir} to create an inaccessible directory.
 @end defmac
-
-This macro differs from
 
 @defmac AC_PROG_LEX
 @acindex{PROG_LEX}
@@ -9750,8 +9754,7 @@ even though Posix is unclear whether @samp{mkdir -p} should
 succeed in that case.  If creation of @var{file-name} fails, exit the
 script.
 
-Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Limitations of Usual
-Tools}).
+Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Particular Programs}).
 @end defmac
 
 @defmac AS_SHELL_SANITIZE
@@ -13082,8 +13085,8 @@ race-free @code{mkdir -p}.  This possible race is harmful in parallel
 builds when several @file{Makefile} rules call @code{mkdir -p} to
 construct directories.  You may use
 @code{install-sh -d} as a safe replacement, provided this script is
-recent enough (the copy shipped with Autoconf 2.60 is OK, those from
-older versions are not thread-safe either).
+recent enough; the copy shipped with Autoconf 2.60 and Automake 1.10 is
+OK, but copies from older versions are not thread-safe either.
 
 
 @item @command{mktemp}

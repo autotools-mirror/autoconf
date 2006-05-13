@@ -1,3 +1,24 @@
+2006-05-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Particular Programs): AC_PROG_MKDIR_P now
+	sets MKDIR_P, not mkdir_p, to avoid collisions with Automake.
+	Warn about obsolete install-sh files.  Remove stray sentence
+	fragment and fix cross reference.
+	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Don't insist on
+	install -d; this undoes the 2006-05-10 change.
+	(MKDIR_P): Mark with AN_MAKEVAR.
+	(AC_PROG_MKDIR_P): Fall back on $ac_install_sh, not $INSTALL, so
+	that we don't require $INSTALL to be thread-safe.  Move comments
+	out of generated code.  Require AC_CONFIG_AUX_DIR_DEFAULT instead
+	of AC_PROG_INSTALL.  Output a message saying that we're checking
+	mkdir -p.  Set MKDIR_P rather than mkdir_p.  Do special magic for
+	MKDIR_P instead of AC_SUBST.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE, _AC_OUTPUT_CONFIG_STATUS):
+	Special magic for MKDIR_P, too.
+	* lib/m4sugar/m4sh.m4 (AS_MKDIR_P): Remove comment that defeated
+	a dnl.
+	* tests/local.at (AT_CHECK_ENV): mkdir_p -> MKDIR_P.
+
 2006-05-11  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Sync from Automake, as follows:
@@ -20,8 +41,8 @@
 	* NEWS: New macro AC_PROG_MKDIR_P.  AS_MKDIR_P is now more robust.
 	* config/install-sh: Don't use 'path' to talk about file names,
 	as per GNU coding standards.  Close a race condition reported by Ralf
-        Wildenhues and Stepan Kasal.  There is still a race condition
-        on hosts that predate Posix 1003.1-1992, but we can't help this.
+	Wildenhues and Stepan Kasal.  There is still a race condition
+	on hosts that predate Posix 1003.1-1992, but we can't help this.
 	Don't mishandle weird characters like space on pre-Posix hosts.
 	Invoke mkdir at most once per dir arg on pre-Posix hosts.
 	* doc/autoconf.texi (Programming in M4sh): Cross-reference to

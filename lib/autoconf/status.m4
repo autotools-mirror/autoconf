@@ -493,7 +493,13 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
   [[\\/$]]* | ?:[[\\/]]* ) ac_INSTALL=$INSTALL ;;
   *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
   esac
-])
+])dnl
+AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P],
+[  case $MKDIR_P in
+  [[\\/$]]* | ?:[[\\/]]* ) ac_MKDIR_P=$MKDIR_P ;;
+  *) ac_MKDIR_P=$ac_top_build_prefix$MKDIR_P ;;
+  esac
+])dnl
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
@@ -538,7 +544,7 @@ dnl During the transition period, this is a special case:
 s&@top_builddir@&$ac_top_builddir_sub&;t t[]AC_SUBST_TRACE([top_builddir])
 m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 			builddir, abs_builddir,
-			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]]),
+			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]])AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P], [[, MKDIR_P]]),
 	   [s&@_AC_Var@&$ac_[]_AC_Var&;t t[]AC_SUBST_TRACE(_AC_Var)
 ])dnl
 $ac_datarootdir_hack
@@ -1207,7 +1213,10 @@ ac_pwd='$ac_pwd'
 srcdir='$srcdir'
 AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 [INSTALL='$INSTALL'
-])
+])dnl
+AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P],
+[MKDIR_P='$MKDIR_P'
+])dnl
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF

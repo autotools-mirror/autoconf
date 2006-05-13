@@ -568,16 +568,13 @@ case $as_dir/ in
 	    grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
 	    # program-specific install script used by HP pwplus--don't use.
 	    :
-	  elif rm -fr conftest.dir &&
-	    $as_dir/$ac_prog$ac_exec_ext -c -d conftest.dir/d >/dev/null 2>&1 &&
-	    rmdir conftest.dir/d conftest.dir >/dev/null 2>&1; then
+	  else
 	    ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
 	    break 3
 	  fi
 	fi
       done
     done
-    rm -fr conftest.dir
     ;;
 esac])
 ])dnl
@@ -610,7 +607,8 @@ AC_SUBST(INSTALL_DATA)dnl
 
 # AC_PROG_MKDIR_P
 # ---------------
-# Check whether `mkdir -p' is supported, fallback to mkinstalldirs otherwise.
+# Check whether `mkdir -p' is known to be thread-safe, and fall back to
+# install-sh -d otherwise.
 #
 # Automake 1.8 used `mkdir -m 0755 -p --' to ensure that directories
 # created by `make install' are always world readable, even if the
@@ -630,40 +628,47 @@ AC_SUBST(INSTALL_DATA)dnl
 # one can create it and the other will error out.  Consequently we
 # restrict ourselves to GNU mkdir (using the --version option ensures
 # this.)
+#
+# Automake used to define mkdir_p as `mkdir -p .', in order to
+# allow $(mkdir_p) to be used without argument.  As in
+#   $(mkdir_p) $(somedir)
+# where $(somedir) is conditionally defined.  However we don't do
+# that for MKDIR_P.
+#  1. before we restricted the check to GNU mkdir, `mkdir -p .' was
+#     reported to fail in read-only directories.  The system where this
+#     happened has been forgotten.
+#  2. in practice we call $(MKDIR_P) on directories such as
+#       $(MKDIR_P) "$(DESTDIR)$(somedir)"
+#     and we don't want to create $(DESTDIR) if $(somedir) is empty.
+#     To support the latter case, we have to write
+#       test -z "$(somedir)" || $(MKDIR_P) "$(DESTDIR)$(somedir)"
+#     so $(MKDIR_P) always has an argument.
+#     We will have better chances of detecting a missing test if
+#     $(MKDIR_P) complains about missing arguments.
+#  3. $(MKDIR_P) is named after `mkdir -p' and we don't expect this
+#     to accept no argument.
+#  4. having something like `mkdir .' in the output is unsightly.
+#
+# On NextStep and OpenStep, the `mkdir' command does not
+# recognize any option.  It will interpret all options as
+# directories to create.
+AN_MAKEVAR([MKDIR_P], [AC_PROG_MKDIR_P])
 AC_DEFUN([AC_PROG_MKDIR_P],
-[AC_REQUIRE([AC_PROG_INSTALL])dnl
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_REQUIRE_AUX_FILE([install-sh])dnl
+AC_MSG_CHECKING([for a thread-safe mkdir -p])
 if mkdir -p --version . >/dev/null 2>&1 && test ! -d ./--version; then
-  # We used to define $(mkdir_p) as `mkdir -p .', in order to
-  # allow $(mkdir_p) to be used without argument.  As in
-  #   $(mkdir_p) $(somedir)
-  # where $(somedir) is conditionally defined.  However we don't do
-  # that anymore.
-  #  1. before we restricted the check to GNU mkdir, `mkdir -p .' was
-  #     reported to fail in read-only directories.  The system where this
-  #     happened has been forgotten.
-  #  2. in practice we call $(mkdir_p) on directories such as
-  #       $(mkdir_p) "$(DESTDIR)$(somedir)"
-  #     and we don't want to create $(DESTDIR) if $(somedir) is empty.
-  #     To support the latter case, we have to write
-  #       test -z "$(somedir)" || $(mkdir_p) "$(DESTDIR)$(somedir)"
-  #     so $(mkdir_p) always has an argument.
-  #     We will have better chances of detecting a missing test if
-  #     $(mkdir_p) complains about missing arguments.
-  #  3. $(mkdir_p) is named after `mkdir -p' and we don't expect this
-  #     to accept no argument.
-  #  4. having something like `mkdir .' in the output is unsightly.
-  mkdir_p='mkdir -p'
+  MKDIR_P='mkdir -p'
 else
-  # On NextStep and OpenStep, the `mkdir' command does not
-  # recognize any option.  It will interpret all options as
-  # directories to create.
   for d in ./-p ./--version
   do
     test -d $d && rmdir $d
   done
-  mkdir_p="$INSTALL -d"
+  MKDIR_P="$ac_install_sh -d"
 fi
-AC_SUBST([mkdir_p])
+dnl Do special magic for MKDIR_P instead of AC_SUBST, to get
+dnl relative names right.
+AC_MSG_RESULT([$MKDIR_P])
 ])# AC_PROG_MKDIR_P
 
 
