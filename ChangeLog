@@ -1,3 +1,11 @@
+2006-05-17  Olly Betts  <olly@survex.com>  (tiny change)
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoreconf.in: Pass the directory argument to
+	`require_configure_ac'.  Fix comment.
+	* tests/torture.at (Configuring subdirectories): Expose this.
+	Reported by Olly Betts.
+
 2006-05-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/Automake/Configure_ac.pm, lib/Automake/Channels.pm,

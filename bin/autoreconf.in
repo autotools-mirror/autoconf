@@ -664,11 +664,11 @@ mktmpdir ('ar');
 $ENV{'TMPDIR'} = $tmp;
 parse_args;
 
-# Autoreconf all the given configure.ac.  A while loop, not a for,
-# since the list can change at runtime because of AC_CONFIG_SUBDIRS.
+# Autoreconf all the given configure.ac.  Unless `--no-recursive' is passed,
+# AC_CONFIG_SUBDIRS will be traversed in &autoreconf_current_directory.
 for my $directory (@ARGV)
   {
-    require_configure_ac;
+    require_configure_ac ($directory);
     autoreconf ($directory);
   }
 

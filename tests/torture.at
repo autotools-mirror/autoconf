@@ -853,6 +853,14 @@ top_srcdir=../../../inner
 prefix=/good
 ])
 
+# Make sure we can run autoreconf on a subdirectory
+rm -f configure configure.in
+AT_CHECK([autoreconf inner], [], [], [ignore])
+
+# Make sure we can pass a configure.ac name
+AT_CHECK([cd inner && autoreconf configure.in], [], [], [ignore])
+AT_CHECK([autoreconf inner/configure.in], [], [], [ignore])
+
 AT_CLEANUP
 
 
