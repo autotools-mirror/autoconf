@@ -1,4 +1,4 @@
-# Copyright (C) 2003, 2005  Free Software Foundation, Inc.
+# Copyright (C) 2003, 2005, 2006  Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,6 +14,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301, USA.
+
+###############################################################
+# The main copy of this file is in Automake's CVS repository. #
+# Updates should be sent to automake-patches@gnu.org.         #
+###############################################################
 
 package Autom4te::Configure_ac;
 
@@ -67,7 +72,7 @@ sub find_configure_ac (;@)
 	}
       return $configure_ac
     }
-  elsif (-f 'configure.in')
+  elsif (-f $configure_in)
     {
       return $configure_in;
     }

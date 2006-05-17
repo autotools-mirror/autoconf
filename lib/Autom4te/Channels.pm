@@ -1,4 +1,4 @@
-# Copyright (C) 2002, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004, 2006 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,6 +14,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301, USA.
+
+###############################################################
+# The main copy of this file is in Automake's CVS repository. #
+# Updates should be sent to automake-patches@gnu.org.         #
+###############################################################
 
 package Autom4te::Channels;
 
@@ -43,7 +48,7 @@ Autom4te::Channels - support functions for error and warning management
   # Treat all warnings as errors.
   $warnings_are_errors = 1;
 
-  # Exit with the greater exist code encountered so far.
+  # Exit with the greatest exit code encountered so far.
   exit $exit_code;
 
 =head1 DESCRIPTION
@@ -108,7 +113,7 @@ $warnings_are_errors = 0;
 
 =item C<UP_NONE>, C<UP_TEXT>, C<UP_LOC_TEXT>
 
-Possible values for the C<uniq_part> options.  This select the part
+Possible values for the C<uniq_part> options.  This selects the part
 of the message that should be considered when filtering out duplicates.
 If C<UP_LOC_TEXT> is used, the location and the explanation message
 are used for filtering.  If C<UP_TEXT> is used, only the explanation
@@ -126,10 +131,10 @@ use constant UP_LOC_TEXT => 2;
 
 Possible values for the C<uniq_scope> options.
 Use C<US_GLOBAL> for error messages that should be printed only
-once in the run of the program, C<US_LOCAL> for message that
+once during the execution of the program, C<US_LOCAL> for message that
 should be printed only once per file.  (Actually, C<Channels> does not
-now when files are changed, it relies on you calling C<reset_local_duplicates>
-when this happens.)
+do this now when files are changed, it relies on you calling
+C<reset_local_duplicates> when this happens.)
 
 =cut
 
@@ -143,7 +148,7 @@ use constant US_GLOBAL => 1;
 
 Channels accept the options described below.  These options can be
 passed as a hash to the C<register_channel>, C<setup_channel>, and C<msg>
-functions.  The possible keys, with there default value are:
+functions.  The possible keys, with their default value are:
 
 =over
 
@@ -352,7 +357,7 @@ sub exists_channel ($)
 =item C<channel_type ($name)>
 
 Returns the type of channel C<$name> if it has been registered.
-Returns The empty string otherwise.
+Returns the empty string otherwise.
 
 =cut
 
@@ -478,7 +483,7 @@ sub _print_message ($$%)
 
 =item C<msg ($channel, $location, $message, [%options])>
 
-Emit a message on C<$channel>, overriding some options of the channel  with
+Emit a message on C<$channel>, overriding some options of the channel with
 those specified in C<%options>.  Obviously C<$channel> must have been
 registered with C<register_channel>.
 
@@ -496,10 +501,10 @@ the following would be output:
   foo.c:10: unused variable `mumble'
 
 C<$location> can also be an instance of C<Autom4te::Location>.  In this
-case the stack of contexts will be displayed in addition.
+case, the stack of contexts will be displayed in addition.
 
 If C<$message> contains newline characters, C<$location> is prepended
-to each line.  For instance
+to each line.  For instance,
 
   msg 'error', 'somewhere', "1st line\n2nd line";
 
@@ -646,8 +651,8 @@ list for later processing.
 
 This backlog of messages is processed when C<flush_messages> is
 called, with the current channel options (not the options in effect,
-at the time of C<msg>).  So for instance if some channel was silenced
-in the meantime, messages to this channels will not be print.
+at the time of C<msg>).  So for instance, if some channel was silenced
+in the meantime, messages to this channel will not be printed.
 
 C<flush_messages> cancels the effect of C<buffer_messages>.  Following
 calls to C<msg> are processed immediately as usual.

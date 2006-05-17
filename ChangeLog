@@ -1,5 +1,15 @@
 2006-05-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/Automake/Configure_ac.pm, lib/Automake/Channels.pm,
+	lib/Automake/FileUtils.pm, lib/Automake/Struct.pm: Sync from
+	Automake as follows:
+
+	* lib/Autom4te/Configure_ac.pm (find_configure_ac): Use
+	`$configure_in' instead of `configure.in', to preserve
+	directory component.
+
+2006-05-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
 	* config/config.guess, config/config.sub, config/texinfo.tex,
 	doc/make-stds.texi, doc/standards.texi: Sync from upstream.
 
