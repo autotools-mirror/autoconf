@@ -1,3 +1,8 @@
+2006-05-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoreconf.in ($help): Reword according to the manual.
+	Suggested by Olly Betts.
+
 2006-05-17  Olly Betts  <olly@survex.com>  (tiny change)
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

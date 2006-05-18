@@ -55,16 +55,16 @@ use strict;
 
 # $HELP
 # -----
-$help = "Usage: $0 [OPTION] ... [CONFIGURE-AC or DIRECTORY] ...
+$help = "Usage: $0 [OPTION] ... [DIRECTORY] ...
 
 Run `autoconf' (and `autoheader', `aclocal', `automake', `autopoint'
 (formerly `gettextize'), and `libtoolize' where appropriate)
-repeatedly to remake the GNU Build System files in the DIRECTORIES or
-the directory trees driven by CONFIGURE-AC (defaulting to `.').
+repeatedly to remake the GNU Build System files in specified
+DIRECTORIES and their subdirectories (defaulting to `.').
 
 By default, it only remakes those files that are older than their
-predecessors.  If you install new versions of the GNU Build System,
-running `autoreconf' remakes all of the files by giving it the
+sources.  If you install new versions of the GNU Build System,
+you can make `autoreconf' remake all of the files by giving it the
 `--force' option.
 
 Operation modes:
