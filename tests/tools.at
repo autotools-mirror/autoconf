@@ -309,6 +309,32 @@ AT_CHECK_AUTOCONF([], 1, [], [experr])
 AT_CLEANUP
 
 
+# autoconf: subdirectories
+# --------------------------------------
+AT_SETUP([autoconf: subdirectories])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_MKDIR_P
+AC_CONFIG_FILES(sub/foo)
+AC_OUTPUT
+]])
+
+mkdir sub
+
+AT_DATA([sub/foo.in],
+[[@MKDIR_P@
+]])
+
+AT_DATA([install-sh])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+AT_CHECK([grep '/mkdir -p' sub/foo], 1)
+
+AT_CLEANUP
+
+
 
 
 

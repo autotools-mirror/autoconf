@@ -495,9 +495,10 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
   esac
 ])dnl
 AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P],
-[  case $MKDIR_P in
-  [[\\/$]]* | ?:[[\\/]]* ) ac_MKDIR_P=$MKDIR_P ;;
-  *) ac_MKDIR_P=$ac_top_build_prefix$MKDIR_P ;;
+[  ac_MKDIR_P=$MKDIR_P
+  case $MKDIR_P in
+  [[\\/$]]* | ?:[[\\/]]* ) ;;
+  */*) ac_MKDIR_P=$ac_top_build_prefix$MKDIR_P ;;
   esac
 ])dnl
 _ACEOF
