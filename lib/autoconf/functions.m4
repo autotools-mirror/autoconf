@@ -557,7 +557,7 @@ AC_DEFINE(fnmatch, rpl_fnmatch,
 AN_FUNCTION([fnmatch], [AC_REPLACE_FNMATCH])
 AC_DEFUN([AC_REPLACE_FNMATCH],
 [_AC_FUNC_FNMATCH_IF([POSIX], [ac_cv_func_fnmatch_works],
-		     [rm -f $ac_config_libobj_dir/fnmatch.h],
+		     [rm -f "$ac_config_libobj_dir/fnmatch.h"],
 		     [_AC_LIBOBJ_FNMATCH])
 ])# AC_REPLACE_FNMATCH
 
@@ -567,7 +567,7 @@ AC_DEFUN([AC_REPLACE_FNMATCH],
 AC_DEFUN([AC_FUNC_FNMATCH_GNU],
 [AC_REQUIRE([AC_GNU_SOURCE])
 _AC_FUNC_FNMATCH_IF([GNU], [ac_cv_func_fnmatch_gnu],
-		    [rm -f $ac_config_libobj_dir/fnmatch.h],
+		    [rm -f "$ac_config_libobj_dir/fnmatch.h"],
 		    [_AC_LIBOBJ_FNMATCH])
 ])# AC_FUNC_FNMATCH_GNU
 

@@ -503,7 +503,7 @@ if test ! -r "$srcdir/$ac_unique_file"; then
 fi
 ac_msg="sources are in $srcdir, but \`cd $srcdir' does not work"
 ac_abs_confdir=`(
-	cd $srcdir && test -r "./$ac_unique_file" || AC_MSG_ERROR([$ac_msg])
+	cd "$srcdir" && test -r "./$ac_unique_file" || AC_MSG_ERROR([$ac_msg])
 	pwd)`
 # When building in place, set srcdir=.
 if test "$ac_abs_confdir" = "$ac_pwd"; then
@@ -1058,16 +1058,16 @@ fi
 if test "$ac_init_help" = "recursive"; then
   # If there are subdirs, report their specific --help.
   for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
-    test -d $ac_dir || continue
+    test -d "$ac_dir" || continue
     _AC_SRCDIRS(["$ac_dir"])
-    cd $ac_dir || { ac_status=$?; continue; }
+    cd "$ac_dir" || { ac_status=$?; continue; }
     # Check for guested configure.
-    if test -f $ac_srcdir/configure.gnu; then
+    if test -f "$ac_srcdir/configure.gnu"; then
       echo &&
-      $SHELL $ac_srcdir/configure.gnu  --help=recursive
-    elif test -f $ac_srcdir/configure; then
+      $SHELL "$ac_srcdir/configure.gnu" --help=recursive
+    elif test -f "$ac_srcdir/configure"; then
       echo &&
-      $SHELL $ac_srcdir/configure  --help=recursive
+      $SHELL "$ac_srcdir/configure" --help=recursive
     else
       AC_MSG_WARN([no configuration information is in $ac_dir])
     fi || ac_status=$?
@@ -1564,7 +1564,7 @@ rm -f conftest.sed
 # in directory DIR.  These are auxiliary files used in configuration.
 # DIR can be either absolute or relative to $srcdir.
 AC_DEFUN([AC_CONFIG_AUX_DIR],
-[AC_CONFIG_AUX_DIRS($1 $srcdir/$1)])
+[AC_CONFIG_AUX_DIRS($1 "$srcdir"/$1)])
 
 
 # AC_CONFIG_AUX_DIR_DEFAULT
@@ -1572,7 +1572,7 @@ AC_DEFUN([AC_CONFIG_AUX_DIR],
 # The default is `$srcdir' or `$srcdir/..' or `$srcdir/../..'.
 # There's no need to call this macro explicitly; just AC_REQUIRE it.
 AC_DEFUN([AC_CONFIG_AUX_DIR_DEFAULT],
-[AC_CONFIG_AUX_DIRS($srcdir $srcdir/.. $srcdir/../..)])
+[AC_CONFIG_AUX_DIRS("$srcdir" "$srcdir/.." "$srcdir/../..")])
 
 
 # AC_CONFIG_AUX_DIRS(DIR ...)
@@ -1584,15 +1584,15 @@ AC_DEFUN([AC_CONFIG_AUX_DIR_DEFAULT],
 AC_DEFUN([AC_CONFIG_AUX_DIRS],
 [ac_aux_dir=
 for ac_dir in $1; do
-  if test -f $ac_dir/install-sh; then
+  if test -f "$ac_dir/install-sh"; then
     ac_aux_dir=$ac_dir
     ac_install_sh="$ac_aux_dir/install-sh -c"
     break
-  elif test -f $ac_dir/install.sh; then
+  elif test -f "$ac_dir/install.sh"; then
     ac_aux_dir=$ac_dir
     ac_install_sh="$ac_aux_dir/install.sh -c"
     break
-  elif test -f $ac_dir/shtool; then
+  elif test -f "$ac_dir/shtool"; then
     ac_aux_dir=$ac_dir
     ac_install_sh="$ac_aux_dir/shtool install -c"
     break
@@ -1601,9 +1601,6 @@ done
 if test -z "$ac_aux_dir"; then
   AC_MSG_ERROR([cannot find install-sh or install.sh in $1])
 fi
-ac_config_guess="$SHELL $ac_aux_dir/config.guess"
-ac_config_sub="$SHELL $ac_aux_dir/config.sub"
-ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
 AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ])# AC_CONFIG_AUX_DIRS
 
@@ -1692,17 +1689,17 @@ m4_divert_once([HELP_CANON],
 System types:
   --build=BUILD     configure for building on BUILD [guessed]]])dnl
 # Make sure we can run config.sub.
-$ac_config_sub sun4 >/dev/null 2>&1 ||
-  AC_MSG_ERROR([cannot run $ac_config_sub])
+$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+  AC_MSG_ERROR([cannot run $SHELL $ac_aux_dir/config.sub])
 
 AC_CACHE_CHECK([build system type], [ac_cv_build],
 [ac_build_alias=$build_alias
 test "x$ac_build_alias" = x &&
-  ac_build_alias=`$ac_config_guess`
+  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
 test "x$ac_build_alias" = x &&
   AC_MSG_ERROR([cannot guess build type; you must specify one])
-ac_cv_build=`$ac_config_sub $ac_build_alias` ||
-  AC_MSG_ERROR([$ac_config_sub $ac_build_alias failed])
+ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+  AC_MSG_ERROR([$SHELL $ac_aux_dir/config.sub $ac_build_alias failed])
 ])
 _AC_CANONICAL_SPLIT(build)
 ])# AC_CANONICAL_BUILD
@@ -1718,8 +1715,8 @@ AC_CACHE_CHECK([host system type], [ac_cv_host],
 [if test "x$host_alias" = x; then
   ac_cv_host=$ac_cv_build
 else
-  ac_cv_host=`$ac_config_sub $host_alias` ||
-    AC_MSG_ERROR([$ac_config_sub $host_alias failed])
+  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+    AC_MSG_ERROR([$SHELL $ac_aux_dir/config.sub $host_alias failed])
 fi
 ])
 _AC_CANONICAL_SPLIT([host])
@@ -1737,8 +1734,8 @@ AC_CACHE_CHECK([target system type], [ac_cv_target],
 [if test "x$target_alias" = x; then
   ac_cv_target=$ac_cv_host
 else
-  ac_cv_target=`$ac_config_sub $target_alias` ||
-    AC_MSG_ERROR([$ac_config_sub $target_alias failed])
+  ac_cv_target=`$SHELL "$ac_aux_dir/config.sub" $target_alias` ||
+    AC_MSG_ERROR([$SHELL $ac_aux_dir/config.sub $target_alias failed])
 fi
 ])
 _AC_CANONICAL_SPLIT([target])
@@ -1802,8 +1799,8 @@ m4_define([AC_CACHE_LOAD],
   if test -f "$cache_file"; then
     AC_MSG_NOTICE([loading cache $cache_file])
     case $cache_file in
-      [[\\/]]* | ?:[[\\/]]* ) . $cache_file;;
-      *)                      . ./$cache_file;;
+      [[\\/]]* | ?:[[\\/]]* ) . "$cache_file";;
+      *)                      . "./$cache_file";;
     esac
   fi
 else
@@ -1886,8 +1883,8 @@ _AC_CACHE_DUMP() |
      t end
      s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
      :end'] >>confcache
-if diff $cache_file confcache >/dev/null 2>&1; then :; else
-  if test -w $cache_file; then
+if diff "$cache_file" confcache >/dev/null 2>&1; then :; else
+  if test -w "$cache_file"; then
     test "x$cache_file" != "x/dev/null" &&
       AC_MSG_NOTICE([updating cache $cache_file])
     cat confcache >$cache_file

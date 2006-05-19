@@ -650,11 +650,11 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
 for at_program in : $at_tested
 do
   test "$at_program" = : && continue
-  _AS_PATH_WALK([$PATH], [test -f $as_dir/$at_program && break])
-  if test -f $as_dir/$at_program; then
+  _AS_PATH_WALK([$PATH], [test -f "$as_dir/$at_program" && break])
+  if test -f "$as_dir/$at_program"; then
     {
       echo "$at_srcdir/AT_LINE: $as_dir/$at_program --version"
-      $as_dir/$at_program --version
+      "$as_dir/$at_program" --version
       echo
     } >&AS_MESSAGE_LOG_FD 2>&1
   else
@@ -717,9 +717,9 @@ do
       # Create a fresh directory for the next test group, and enter.
       at_group_dir=$at_suite_dir/$at_group_normalized
       at_group_log=$at_group_dir/$as_me.log
-      if test -d $at_group_dir; then
-	find $at_group_dir -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-	rm -fr $at_group_dir
+      if test -d "$at_group_dir"; then
+	find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+	rm -fr "$at_group_dir"
       fi
       # Be tolerant if the above `rm' was not able to remove the directory.
       AS_MKDIR_P([$at_group_dir])
@@ -815,9 +815,9 @@ _ATEOF
 	  # Cleanup the group directory, unless the user wants the files.
 	  if $at_debug_p ; then
 	    _AT_CREATE_DEBUGGING_SCRIPT
-	  elif test -d $at_group_dir; then
-	    find $at_group_dir -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-	    rm -fr $at_group_dir
+	  elif test -d "$at_group_dir"; then
+	    find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+	    rm -fr "$at_group_dir"
 	  fi
 	  ;;
 	*)

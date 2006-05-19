@@ -221,15 +221,15 @@ else
   ac_tmpdirs='/tmp /var/tmp /usr/tmp'
 fi
 for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
-  test -d $ac_dir || continue
-  test -w $ac_dir || continue # It is less confusing to not echo anything here.
+  test -d "$ac_dir" || continue
+  test -w "$ac_dir" || continue # It is less confusing to not echo anything here.
   ac_xdir=$ac_dir/cf$$
-  (umask 077 && mkdir $ac_xdir 2>/dev/null) || continue
+  (umask 077 && mkdir "$ac_xdir" 2>/dev/null) || continue
   ac_tf1=$ac_xdir/conftest9012345
   ac_tf2=$ac_xdir/conftest9012346
-  touch $ac_tf1 2>/dev/null && test -f $ac_tf1 && test ! -f $ac_tf2 ||
+  touch "$ac_tf1" 2>/dev/null && test -f "$ac_tf1" && test ! -f "$ac_tf2" ||
     ac_cv_sys_long_file_names=no
-  rm -f -r $ac_xdir 2>/dev/null
+  rm -f -r "$ac_xdir" 2>/dev/null
   test $ac_cv_sys_long_file_names = no && break
 done])
 if test $ac_cv_sys_long_file_names = yes; then

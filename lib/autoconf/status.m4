@@ -776,19 +776,19 @@ m4_define([_AC_OUTPUT_LINK],
 
   AC_MSG_NOTICE([linking $srcdir/$ac_source to $ac_file])
 
-  if test ! -r $srcdir/$ac_source; then
+  if test ! -r "$srcdir/$ac_source"; then
     AC_MSG_ERROR([$srcdir/$ac_source: file not found])
   fi
-  rm -f $ac_file
+  rm -f "$ac_file"
 
   # Try a relative symlink, then a hard link, then a copy.
   case $srcdir in
   [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$srcdir/$ac_source ;;
       *) ac_rel_source=$ac_top_build_prefix$srcdir/$ac_source ;;
   esac
-  ln -s $ac_rel_source $ac_file 2>/dev/null ||
-    ln $srcdir/$ac_source $ac_file 2>/dev/null ||
-    cp -p $srcdir/$ac_source $ac_file ||
+  ln -s "$ac_rel_source" "$ac_file" 2>/dev/null ||
+    ln "$srcdir/$ac_source" "$ac_file" 2>/dev/null ||
+    cp -p "$srcdir/$ac_source" "$ac_file" ||
     AC_MSG_ERROR([cannot link or copy $srcdir/$ac_source to $ac_file])
 ])# _AC_OUTPUT_LINK
 
@@ -964,7 +964,7 @@ if test "$no_recursion" != yes; then
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
-    test -d $srcdir/$ac_dir || continue
+    test -d "$srcdir/$ac_dir" || continue
 
     ac_msg="=== configuring in $ac_dir (`pwd`/$ac_dir)"
     _AS_ECHO_LOG([$ac_msg])
@@ -972,15 +972,16 @@ if test "$no_recursion" != yes; then
     AS_MKDIR_P(["$ac_dir"])
     _AC_SRCDIRS(["$ac_dir"])
 
-    cd $ac_dir
+    cd "$ac_dir"
 
     # Check for guested configure; otherwise get Cygnus style configure.
-    if test -f $ac_srcdir/configure.gnu; then
+    if test -f "$ac_srcdir/configure.gnu"; then
       ac_sub_configure="$SHELL '$ac_srcdir/configure.gnu'"
-    elif test -f $ac_srcdir/configure; then
+    elif test -f "$ac_srcdir/configure"; then
       ac_sub_configure="$SHELL '$ac_srcdir/configure'"
-    elif test -f $ac_srcdir/configure.in; then
-      ac_sub_configure=$ac_configure
+    elif test -f "$ac_srcdir/configure.in"; then
+      # This should be Cygnus configure.
+      ac_sub_configure="$SHELL '$ac_aux_dir/configure'"
     else
       AC_MSG_WARN([no configuration information is in $ac_dir])
       ac_sub_configure=
@@ -998,7 +999,7 @@ if test "$no_recursion" != yes; then
       AC_MSG_NOTICE([running $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir])
       # The eval makes quoting arguments work.
       eval "$ac_sub_configure $ac_sub_configure_args \
-	   --cache-file=$ac_sub_cache_file --srcdir=$ac_srcdir" ||
+	   --cache-file=\"\$ac_sub_cache_file\" --srcdir=\"\$ac_srcdir\"" ||
 	AC_MSG_ERROR([$ac_sub_configure failed for $ac_dir])
     fi
 

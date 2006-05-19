@@ -1,3 +1,20 @@
+2006-05-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/functions.m4 (AC_REPLACE_FNMATCH, AC_FUNC_FNMATCH_GNU):
+	Quote some uses of shell variables if they might suffer unexpected
+	globbing.  This doesn't fix all instances of quoting problems that
+	I found, just the easy ones that look safe.
+	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR, _AC_INIT_HELP):
+	(AC_CONFIG_AUX_DIR, AC_CONFIG_AUX_DIR_DEFAULT, AC_CONFIG_AUX_DIRS):
+	(AC_CANONICAL_BUILD, AC_CANONICAL_HOST, AC_CANONICAL_TARGET):
+	(AC_CACHE_LOAD, AC_CACHE_SAVE): Likewise.
+	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF, _AC_PATH_X_DIRECT): Likewise.
+	* lib/autoconf/specific.m4 (AC_SYS_LONG_FILE_NAMES): Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_LINK, _AC_OUTPUT_SUBDIRS):
+	Likewise.
+	* lib/autotest/general.m4 (_AC_INIT_PARSE_ARGS): Likewise.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Likewise.
+
 2006-05-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* bin/autoreconf.in ($help): Reword according to the manual.
