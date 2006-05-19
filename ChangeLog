@@ -1,3 +1,9 @@
+2006-05-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Name temporary
+	variable `ac_d' instead of `d' to avoid infringing namespace.
+	Report by Ralf Menzel.
+
 2006-05-18  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): Don't prepend

@@ -660,9 +660,9 @@ AC_MSG_CHECKING([for a thread-safe mkdir -p])
 if mkdir -p --version . >/dev/null 2>&1 && test ! -d ./--version; then
   MKDIR_P='mkdir -p'
 else
-  for d in ./-p ./--version
+  for ac_d in ./-p ./--version
   do
-    test -d $d && rmdir $d
+    test -d $ac_d && rmdir $ac_d
   done
   MKDIR_P="$ac_install_sh -d"
 fi
