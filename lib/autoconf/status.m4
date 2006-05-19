@@ -660,7 +660,7 @@ echo 's/ $//
 [s,^[	 #]*u.*,/* & */,]' >>conftest.defines
 
 # Break up conftest.defines:
-ac_max_sed_lines=m4_eval(_AC_SED_CMD_LIMIT - 3)
+ac_max_sed_lines=m4_eval(_AC_SED_CMD_LIMIT - 4)
 
 # First sed command is:	 sed -f defines.sed $ac_file_inputs >"$tmp/out1"
 # Second one is:	 sed -f defines.sed "$tmp/out1" >"$tmp/out2"
