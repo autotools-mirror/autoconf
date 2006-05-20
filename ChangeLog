@@ -1,3 +1,10 @@
+2006-05-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/c.m4 (AC_PROG_CXX_C_O): New macro.
+	* doc/autoconf.texi (C++ Compiler): Document it.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_C_O): Adjust comment.
+	* NEWS: Update.
+
 2006-05-19  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADER): Fix off-by-one bug

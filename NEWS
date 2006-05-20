@@ -5,6 +5,9 @@
   and ac_cv_prog_cc_c89 to 'no' as well, for backward compatibility with
   obsolete K&R tests in the Automake test suite.
 
+** AC_PROG_CXX_C_O
+  New macro.
+
 ** AC_PROG_MKDIR_P
   New macro.
 

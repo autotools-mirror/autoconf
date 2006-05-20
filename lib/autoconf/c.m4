@@ -824,6 +824,35 @@ fi[]dnl
 ])# _AC_PROG_CXX_G
 
 
+# AC_PROG_CXX_C_O
+# ---------------
+# Test if the C++ compiler accepts the options `-c' and `-o'
+# simultaneously, and define `CXX_NO_MINUS_C_MINUS_O' if it does not.
+AC_DEFUN([AC_PROG_CXX_C_O],
+[AC_LANG_ASSERT([C++])dnl
+AC_CACHE_CHECK([whether $CXX understands -c and -o together],
+               [ac_cv_prog_cxx_c_o],
+[AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
+# We test twice because some compilers refuse to overwrite an existing
+# `.o' file with `-o', although they will create one.
+ac_try='$CXX $CXXFLAGS -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
+rm -f conftest2.*
+if AC_TRY_EVAL(ac_try) &&
+     test -f conftest2.$ac_objext &&
+     AC_TRY_EVAL(ac_try); then
+  ac_cv_prog_cxx_c_o=yes
+else
+  ac_cv_prog_cxx_c_o=no
+fi
+rm -f conftest*])
+if test $ac_cv_prog_cxx_c_o = no; then
+  AC_DEFINE(CXX_NO_MINUS_C_MINUS_O, 1,
+            [Define to 1 if your C++ compiler doesn't accept
+             -c and -o together.])
+fi
+])# AC_PROG_CXX_C_O
+
+
 # ------------------------------ #
 # 3d. The Objective C compiler.  #
 # ------------------------------ #

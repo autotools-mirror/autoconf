@@ -6409,6 +6409,14 @@ consider the test failed if any warnings have been reported.  However,
 it is not known whether such broken preprocessors exist for C++.
 @end defmac
 
+@defmac AC_PROG_CXX_C_O
+@acindex{PROG_CXX_C_O}
+@cvindex CXX_NO_MINUS_C_MINUS_O
+Test whether the C++ compiler accepts the options @option{-c} and
+@option{-o} simultaneously, and define @code{CXX_NO_MINUS_C_MINUS_O},
+if it does not.
+@end defmac
+
 
 @node Objective C Compiler
 @subsection Objective C Compiler Characteristics

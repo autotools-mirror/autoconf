@@ -452,7 +452,7 @@ fi[]dnl
 # why anyone would use it.  The only reason I include it is for
 # completeness, since a similar test exists for the C compiler.
 #
-# FIXME: it seems like we could merge the C/Fortran versions of this.
+# FIXME: it seems like we could merge the C/C++/Fortran versions of this.
 AC_DEFUN([_AC_PROG_FC_C_O],
 [_AC_FORTRAN_ASSERT()dnl
 AC_CACHE_CHECK([whether $[]_AC_FC[] understands -c and -o together],
