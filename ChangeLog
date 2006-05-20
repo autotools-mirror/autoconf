@@ -881,7 +881,7 @@
 
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Don't try to
 	  detect exeext, it will be done by _AC_COMPILER_EXEEXT_O; just set
-	  ac_file to the name of the default output filei and call
+	  ac_file to the name of the default output file and call
 	  _AC_COMPILER_EXEEXT_WORKS.  Move the definition of ac_files and the
 	  initial `rm' of the candidate files...
 	(_AC_COMPILER_EXEEXT): ... here and simplify them.  Moreover, use
