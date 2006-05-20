@@ -1,5 +1,9 @@
 2006-05-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/c.m4 (AC_PROG_CXX_C_O): Require AC_PROG_CXX,
+	and set the language to C++ (analogous to the equivalent Fortran
+	tests).
+
 	* lib/autoconf/c.m4 (AC_PROG_CXX_C_O): New macro.
 	* doc/autoconf.texi (C++ Compiler): Document it.
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_C_O): Adjust comment.

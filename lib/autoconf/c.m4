@@ -829,7 +829,8 @@ fi[]dnl
 # Test if the C++ compiler accepts the options `-c' and `-o'
 # simultaneously, and define `CXX_NO_MINUS_C_MINUS_O' if it does not.
 AC_DEFUN([AC_PROG_CXX_C_O],
-[AC_LANG_ASSERT([C++])dnl
+[AC_REQUIRE([AC_PROG_CXX])dnl
+AC_LANG_PUSH([C++])dnl
 AC_CACHE_CHECK([whether $CXX understands -c and -o together],
                [ac_cv_prog_cxx_c_o],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
@@ -850,6 +851,7 @@ if test $ac_cv_prog_cxx_c_o = no; then
             [Define to 1 if your C++ compiler doesn't accept
              -c and -o together.])
 fi
+AC_LANG_POP([C++])dnl
 ])# AC_PROG_CXX_C_O
 
 
