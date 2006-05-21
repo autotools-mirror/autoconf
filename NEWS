@@ -1,5 +1,9 @@
 * Major changes in Autoconf 2.59d
 
+** ac_config_guess, ac_config_sub, ac_configure
+  These never-documented variables have been marked with a comment
+  saying that we intend to remove them in a future release.
+
 ** AC_PROG_CC_STDC
   Passing 'ac_cv_prog_cc_stdc=no' to 'configure' now sets ac_cv_prog_cc_c99
   and ac_cv_prog_cc_c89 to 'no' as well, for backward compatibility with

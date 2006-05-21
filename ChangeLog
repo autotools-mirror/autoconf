@@ -1,3 +1,13 @@
+2006-05-20  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (AC_CONFIG_AUX_DIRS): Bring back
+	ac_config_guess, ac_config_sub, and ac_configure, since evidently
+	some other programs unwisely rely on these undocumented vars.
+	But put in warning comments about them.
+	Problem reported by Ralf Wildenhues in
+	<http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00068.html>.
+	* NEWS: Document that these variables are intended to go away.
+
 2006-05-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/c.m4 (AC_PROG_CXX_C_O): Require AC_PROG_CXX,
