@@ -480,7 +480,7 @@ fi # test -n "$CONFIG_FILES"
 # Do the variable substitutions to create the Makefiles or whatever.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopen with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
 #
 m4_define([_AC_OUTPUT_FILE],
 [
@@ -594,7 +594,7 @@ AC_DEFUN([AC_CONFIG_HEADER],
 # `config.h.in'.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopen with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
 #
 m4_define([_AC_OUTPUT_HEADER],
 [
@@ -768,7 +768,7 @@ update, you should probably tune the result yourself.])# AC_LINK_FILES
 # _AC_OUTPUT_LINK
 # ---------------
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopen with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
 m4_define([_AC_OUTPUT_LINK],
 [
   #
@@ -835,7 +835,7 @@ AC_CONFIG_COMMANDS([default-]_AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
 # _AC_OUTPUT_COMMAND
 # ------------------
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopen with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
 m4_define([_AC_OUTPUT_COMMAND],
 [  AC_MSG_NOTICE([executing $ac_file commands])
 ])
@@ -1343,7 +1343,7 @@ chmod +x $CONFIG_STATUS
 # The main loop in $CONFIG_STATUS.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopen with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
 #
 AC_DEFUN([_AC_OUTPUT_MAIN_LOOP],
 [
