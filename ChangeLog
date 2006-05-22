@@ -1,3 +1,16 @@
+2006-05-21  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_GETMNTENT):
+	Import the following fix from coreutils:
+
+	2006-01-13  Jim Meyering  <jim@meyering.net>
+
+	Invoke AC_CHECK_FUNCS(getmntent) unconditionally so that tests of
+	$ac_cv_func_getmntent (e.g., in gl_LIST_MOUNTED_FILE_SYSTEMS) need
+	not double-quote uses of that variable, to accommodate the rare
+	case in which getmntent is available in none of the libraries
+	checked.  This happens at least on FreeBSD 5.0.
+
 2006-05-20  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (AC_CONFIG_AUX_DIRS): Bring back

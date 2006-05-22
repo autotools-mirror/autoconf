@@ -799,7 +799,8 @@ AN_FUNCTION([getmntent], [AC_FUNC_GETMNTENT])
 AC_DEFUN([AC_FUNC_GETMNTENT],
 [# getmntent is in the standard C library on UNICOS, in -lsun on Irix 4,
 # -lseq on Dynix/PTX, -lgen on Unixware.
-AC_SEARCH_LIBS(getmntent, [sun seq gen], [AC_CHECK_FUNCS(getmntent)])
+AC_SEARCH_LIBS(getmntent, [sun seq gen])
+AC_CHECK_FUNCS(getmntent)
 ])
 
 
