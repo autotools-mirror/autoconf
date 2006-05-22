@@ -3458,32 +3458,27 @@ best implementation.
 @defmac AC_PROG_GREP
 @acindex{PROG_GREP}
 @ovindex GREP
-On AIX the default @code{grep} silently truncates long lines on the
-input before matching.  On Solaris, @code{/usr/bin/grep} does not
-understand the @option{-e} option.  On NeXT, @code{grep} understands only a
-single @option{-e} option.  This macro looks for @sc{gnu} Grep or
-else the best available @code{grep} or @code{ggrep} in the user's
-@env{PATH} which accepts the longest input lines possible, and which
-accepts and respects multiple @option{-e} options.  Set the
-output variable @code{GREP} to whatever is chosen.
+Look for the best available @code{grep} or @code{ggrep} that accepts the
+longest input lines possible, and that supports multiple @option{-e} options.
+Set the output variable @code{GREP} to whatever is chosen.
+@xref{Limitations of Usual Tools}, for more information about
+portability problems with the @command{grep} command family.
 @end defmac
 
 @defmac AC_PROG_EGREP
 @acindex{PROG_EGREP}
 @ovindex EGREP
-Check whether @code{$GREP -E} works, or else search the user's
-@env{PATH} for @code{egrep}, and @code{gegrep}, in that order, and set
-output variable @code{EGREP} to the one that accepts the longest input
-lines.
+Check whether @code{$GREP -E} works, or else look for the best available
+@code{egrep} or @code{gegrep} that accepts the longest input lines possible.
+Set the output variable @code{EGREP} to whatever is chosen.
 @end defmac
 
 @defmac AC_PROG_FGREP
 @acindex{PROG_FGREP}
 @ovindex FGREP
-Check whether @code{$GREP -F} works, or else search the user's
-@env{PATH} for @code{fgrep}, and @code{gfgrep}, in that order, and set
-output variable @code{FGREP} to the one that accepts the longest input
-lines.
+Check whether @code{$GREP -F} works, or else look for the best available
+@code{fgrep} or @code{gfgrep} that accepts the longest input lines possible.
+Set the output variable @code{FGREP} to whatever is chosen.
 @end defmac
 
 @defmac AC_PROG_INSTALL
@@ -3632,9 +3627,10 @@ is found, and otherwise to @samp{:} (do nothing).
 @defmac AC_PROG_SED
 @acindex{PROG_SED}
 @ovindex SED
-Set output variable @code{SED} to a Sed implementation on @env{PATH} that
-truncates as few characters as possible.  If @sc{gnu} Sed is found,
-use that instead.
+Set output variable @code{SED} to a Sed implementation that conforms to
+Posix and does not have arbitrary length limits.  Report an error if no
+acceptable Sed is found.  @xref{Limitations of Usual Tools}, for more
+information about portability problems with Sed.
 @end defmac
 
 @defmac AC_PROG_YACC
@@ -12778,7 +12774,7 @@ Portable extended regular expressions should use @samp{\} only to escape
 characters in the string @samp{$()*+.?[\^@{|}.  For example, @samp{\@}}
 is not portable, even though it typically matches @samp{@}}.
 
-The empty alternative is not portable, use @samp{?} instead.  For
+The empty alternative is not portable.  Use @samp{?} instead.  For
 instance with Digital Unix v5.0:
 
 @example
@@ -12954,7 +12950,9 @@ while @acronym{GNU} @command{find} reports @samp{./foo-./foo}.
 Portable scripts can rely on the @command{grep} options @option{-c},
 @option{-l}, @option{-n}, and @option{-v}, but should avoid other
 options.  For example, don't use @option{-w}, as Posix does not require
-it and Irix 6.5.16m's @command{grep} does not support it.
+it and Irix 6.5.16m's @command{grep} does not support it.  Also,
+portable scripts should not combine @option{-c} with @option{-l},
+as Posix does not allow this.
 
 Some of the options required by Posix are not portable in practice.
 Don't use @samp{grep -q} to suppress output, because many @command{grep}
@@ -12968,9 +12966,12 @@ doesn't exist) of @code{grep} to @file{/dev/null}.  Check the exit
 status of @code{grep} to determine whether it found a match.
 
 Some traditional @command{grep} implementations do not work on long
-input lines.  Also, many implementations do not support multiple regexps
+input lines.  On AIX the default @code{grep} silently truncates long
+lines on the input before matching.
+
+Also, many implementations do not support multiple regexps
 with @option{-e}: they either reject @option{-e} entirely (e.g., Solaris)
-or honor only the last pattern (e.g., @acronym{IRIX} 6.5).  To
+or honor only the last pattern (e.g., @acronym{IRIX} 6.5 and NeXT).  To
 work around these problems, invoke @code{AC_PROG_GREP} and then use
 @code{$GREP}.
 
@@ -12989,7 +12990,10 @@ implementations and with Open@acronym{BSD} 3.8 @command{grep}.
 Traditional @command{grep} implementations (e.g., Solaris) do not
 support the @option{-E} or @option{-F} options.  To work around these
 problems, invoke @code{AC_PROG_EGREP} and then use @code{$EGREP}, and
-similarly for @code{AC_PROG_FGREP} and @code{$FGREP}.
+similarly for @code{AC_PROG_FGREP} and @code{$FGREP}.  Even if you are
+willing to require support for Posix @command{grep}, your script should
+not use both @option{-E} and @option{-F}, since Posix does not allow
+this combination.
 
 Portable @command{grep} regular expressions should use @samp{\} only to
 escape characters in the string @samp{$()*.0123456789[\^@{@}}.  For example,
@@ -13214,6 +13218,8 @@ should not contain comments.  HP-UX sed has a limit of 99 commands
 (not counting @samp{:} commands) and
 48 labels, which can not be circumvented by using more than one script
 file.  It can execute up to 19 reads with the @samp{r} command per cycle.
+Solaris @command{/usr/ucb/sed} rejects usages that exceed an limit of
+about 6000 bytes for the internal representation of commands.
 
 Avoid redundant @samp{;}, as some @command{sed} implementations, such as
 Net@acronym{BSD} 1.4.2's, incorrectly try to interpret the second

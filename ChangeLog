@@ -1,3 +1,19 @@
+2006-05-22  Paul Eggert  <eggert@cs.ucla.edu>,
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>,
+	    Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Particular Programs): Do not promise that
+	we always prefer the GNU version of the program, and that we
+	search according to PATH; both rules can have exceptions.
+	Update description of AC_PROG_GREP, AC_PROG_EGREP, AC_PROG_FGREP,
+	AC_PROG_SED.  Move descriptions of limitations
+	to the Limitations of Usual Tools section.
+	(Limitations of Usual Tools) <sed>: Mention script length
+	limitations with Solaris /usr/ucb/sed.
+	<grep>: Fix wording for empty alternative.  Mention that -c and
+	-l should not be combined, and that -E and -F should not be
+	combined.
+
 2006-05-21  Paul Eggert  <eggert@cs.ucla.edu>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
