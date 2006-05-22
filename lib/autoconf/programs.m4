@@ -505,7 +505,7 @@ dnl   # for best performing tool in a list breaks down.
     # 10*(2^10) chars as input seems more than enough
     test $ac_count -gt 10 && break
   done
-  rm -f conftest.*])
+  rm -f conftest.in conftest.tmp conftest.nl conftest.out])
 ])
 
 

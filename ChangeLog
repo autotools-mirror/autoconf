@@ -1,3 +1,8 @@
+2006-05-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Remove
+	only the files that this macro generates.
+
 2006-05-21  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: For
