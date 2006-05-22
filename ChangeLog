@@ -1,3 +1,9 @@
+2006-05-21  Paul Eggert  <eggert@cs.ucla.edu>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/programs.m4 (AC_PROG_SED): Catch script length
+	limits in Solaris 8 /usr/ucb/sed by testing a long script.
+
 2006-05-22  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Defining Symbols): Literal parameter of
