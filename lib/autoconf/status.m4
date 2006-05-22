@@ -303,7 +303,7 @@ AC_DEFUN([AC_CONFIG_FILES], [_AC_CONFIG_FOOS([FILES], $@)])
 # _AC_SED_CMD_LIMIT
 # -----------------
 # Evaluate to an m4 number equal to the maximum number of commands to put
-# in any single sed program.
+# in any single sed program, not counting ":" commands.
 #
 # Some seds have small command number limits, like on Digital OSF/1 and HP-UX.
 m4_define([_AC_SED_CMD_LIMIT],
@@ -660,7 +660,7 @@ echo 's/ $//
 [s,^[	 #]*u.*,/* & */,]' >>conftest.defines
 
 # Break up conftest.defines:
-ac_max_sed_lines=m4_eval(_AC_SED_CMD_LIMIT - 4)
+ac_max_sed_lines=m4_eval(_AC_SED_CMD_LIMIT - 3)
 
 # First sed command is:	 sed -f defines.sed $ac_file_inputs >"$tmp/out1"
 # Second one is:	 sed -f defines.sed "$tmp/out1" >"$tmp/out2"

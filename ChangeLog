@@ -1,5 +1,13 @@
 2006-05-21  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: For
+	the HP-UX sed limitation of 99 commands, labels do not count.
+	* lib/autoconf/status.m4 (_AC_SED_CMD_LIMIT): Mention that
+	in the comment.
+	(_AC_OUTPUT_HEADER): Revert the change from 2006-05-19.
+
+2006-05-21  Paul Eggert  <eggert@cs.ucla.edu>
+
 	* lib/autoconf/functions.m4 (AC_FUNC_GETMNTENT):
 	Import the following fix from coreutils:
 

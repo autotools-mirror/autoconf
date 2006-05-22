@@ -13207,7 +13207,8 @@ them.
 Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
 
 Sed scripts should not use branch labels longer than 8 characters and
-should not contain comments.  HP-UX sed has a limit of 99 commands and
+should not contain comments.  HP-UX sed has a limit of 99 commands
+(not counting @samp{:} commands) and
 48 labels, which can not be circumvented by using more than one script
 file.  It can execute up to 19 reads with the @samp{r} command per cycle.
 
