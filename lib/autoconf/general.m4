@@ -1940,9 +1940,9 @@ AS_LITERAL_IF([$2],
 
 # AC_DEFINE_TRACE_LITERAL(LITERAL-CPP-SYMBOL)
 # -------------------------------------------
-# This macro is useless, it is used only with --trace to collect the
-# list of *literals* CPP values passed to AC_DEFINE/AC_DEFINE_UNQUOTED.
-m4_define([AC_DEFINE_TRACE_LITERAL])
+# Used by --trace to collect the list of AC_DEFINEd macros.
+m4_define([AC_DEFINE_TRACE_LITERAL],
+[m4_pattern_allow([^$1$])])
 
 
 # AC_DEFINE_TRACE(CPP-SYMBOL)

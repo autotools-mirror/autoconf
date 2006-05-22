@@ -309,6 +309,23 @@ AT_CHECK_AUTOCONF([], 1, [], [experr])
 AT_CLEANUP
 
 
+# autoconf: automatically allowed tokens
+# --------------------------------------
+AT_SETUP([autoconf: automatically alowed tokens])
+
+AT_DATA_M4SH([configure.ac],
+[[AC_INIT
+m4_pattern_forbid([^FB_])
+AC_DEFINE([FB_ONE])
+AC_SUBST([FB_TWO])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+
+AT_CLEANUP
+
+
 # autoconf: subdirectories
 # --------------------------------------
 AT_SETUP([autoconf: subdirectories])

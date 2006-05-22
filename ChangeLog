@@ -1,5 +1,14 @@
 2006-05-22  Stepan Kasal  <kasal@ucw.cz>
 
+	* doc/autoconf.texi (Defining Symbols): Literal parameter of
+	AC_DEFINE is now passed to m4_pattern_allow.
+	* NEWS: Mention that; likewise for AC_SUBST.
+	* lib/autoconf/general.m4 (AC_DEFINE_TRACE_LITERAL): Pass
+	the parameter to m4_pattern_allow.
+	* tests/tools.at: Add a check for that.
+
+2006-05-22  Stepan Kasal  <kasal@ucw.cz>
+
 	* lib/autoconf/status.m4: Fix typos.
 
 2006-05-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>

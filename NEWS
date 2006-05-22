@@ -4,6 +4,9 @@
   These never-documented variables have been marked with a comment
   saying that we intend to remove them in a future release.
 
+** AC_SUBST, AC_DEFINE
+  Literal arguments to these are passed to m4_pattern_allow now.
+
 ** AC_PROG_CC_STDC
   Passing 'ac_cv_prog_cc_stdc=no' to 'configure' now sets ac_cv_prog_cc_c99
   and ac_cv_prog_cc_c89 to 'no' as well, for backward compatibility with

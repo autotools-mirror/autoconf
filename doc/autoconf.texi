@@ -7948,6 +7948,9 @@ If neither @var{value} nor @var{description} are given, then
 @var{value} defaults to 1 instead of to the empty string.  This is for
 backwards compatibility with older versions of Autoconf, but this usage
 is obsolescent and may be withdrawn in future versions of Autoconf.
+
+If the @var{variable} is a literal string, it is passed to
+@code{m4_pattern_allow} (@pxref{Forbidden Patterns}).
 @end defmac
 
 @defmac AC_DEFINE_UNQUOTED (@var{variable}, @var{value}, @ovar{description})
