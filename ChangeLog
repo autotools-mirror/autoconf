@@ -1,3 +1,9 @@
+2006-05-23  Jim Meyering  <jim@meyering.net>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK):
+	Fix typo introduced with 2006-04-02 change.  It reversed the sense
+	of the test.
+
 2006-05-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADER): Simplify ac_dA and

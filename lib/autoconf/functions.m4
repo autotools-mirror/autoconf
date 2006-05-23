@@ -841,7 +841,7 @@ if test "$as_ln_s" = "ln -s" && ln -s conftest.file conftest.sym; then
      /* Linux will dereference the symlink and fail.
 	That is better in the sense that it means we will not
 	have to compile and use the lstat wrapper.  */
-     return lstat ("conftest.sym/", &sbuf) != 0;])],
+     return lstat ("conftest.sym/", &sbuf) == 0;])],
 		[ac_cv_func_lstat_dereferences_slashed_symlink=yes],
 		[ac_cv_func_lstat_dereferences_slashed_symlink=no],
 		[ac_cv_func_lstat_dereferences_slashed_symlink=no])
