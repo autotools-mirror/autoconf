@@ -1,3 +1,10 @@
+2006-05-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT): UnixWare `tr' may interpret
+	`tr -d -' as bad option argument.  Work around this by deleting
+	an unrelated character.
+	Report by Tim Rice <tim@multitalents.net>.
+
 2006-05-22  Paul Eggert  <eggert@cs.ucla.edu>,
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>,
 	    Stepan Kasal  <kasal@ucw.cz>

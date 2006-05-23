@@ -341,14 +341,14 @@ do
 
     # Ranges
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
-	at_range_start=`echo $at_option |tr -d '-'`
+	at_range_start=`echo $at_option |tr -d X-`
 	at_range=`echo " $at_groups_all " | \
 	  sed -e 's/^.* \('$at_range_start' \)/\1/'`
 	at_groups="$at_groups$at_range "
 	;;
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
-	at_range_end=`echo $at_option |tr -d '-'`
+	at_range_end=`echo $at_option |tr -d X-`
 	at_range=`echo " $at_groups_all " | \
 	  sed -e 's/\( '$at_range_end'\) .*$/\1/'`
 	at_groups="$at_groups$at_range "
