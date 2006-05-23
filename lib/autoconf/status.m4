@@ -680,12 +680,14 @@ while :
 do
   # Write a here document:
   dnl Quote, for the `[ ]' and `define'.
-  echo ['    # First, check the format of the line:
-    cat >"$tmp/defines.sed" <<\CEOF
-/^[	 ]*#[	 ]*undef[	 ][	 ]*'"$ac_word_re"'[	 ]*$/b def
-/^[	 ]*#[	 ]*define[	 ][	 ]*'"$ac_word_re"'[(	 ]/b def
+[  cat >>$CONFIG_STATUS <<_ACEOF
+    # First, check the format of the line:
+    cat >"\$tmp/defines.sed" <<\\CEOF
+/^[	 ]*#[	 ]*undef[	 ][	 ]*$ac_word_re[	 ]*\$/b def
+/^[	 ]*#[	 ]*define[	 ][	 ]*$ac_word_re[(	 ]/b def
 b
-:def'] >>$CONFIG_STATUS
+:def
+_ACEOF]
   sed ${ac_max_sed_lines}q conftest.defines >>$CONFIG_STATUS
   echo 'CEOF
     sed -f "$tmp/defines.sed"' "$ac_in >$ac_out" >>$CONFIG_STATUS
