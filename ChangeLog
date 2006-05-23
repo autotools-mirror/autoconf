@@ -1,3 +1,10 @@
+2006-05-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADER): Simplify ac_dA and
+	ac_dB slightly, to save bytes in the script.
+	Max out at 50 lines, rather than 96; this is more likely
+	(though not guaranteed) to avoid obscure 'sed' failures.
+
 2006-05-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (AT_INIT): UnixWare `tr' may interpret

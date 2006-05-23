@@ -608,8 +608,8 @@ m4_define([_AC_OUTPUT_HEADER],
   # just an empty string.
   #
 dnl Quote, for the `[ ]' and `define'.
-[  ac_dA='s,^\([	 ]*#[	 ]*\)[^	 ]*\([	 ][	 ]*'
-  ac_dB='\)[	 (].*$,\1define\2'
+[  ac_dA='s,^\([	 #]*\)[^	 ]*\([	 ]*'
+  ac_dB='\)[	 (].*,\1define\2'
   ac_dC=' '
   ac_dD=' ,']
 dnl ac_dD used to contain `;t' at the end, but that was both slow and incorrect.
@@ -660,7 +660,15 @@ echo 's/ $//
 [s,^[	 #]*u.*,/* & */,]' >>conftest.defines
 
 # Break up conftest.defines:
-ac_max_sed_lines=m4_eval(_AC_SED_CMD_LIMIT - 3)
+dnl If we cared only about not exceeding line count limits, we would use this:
+dnl ac_max_sed_lines=m4_eval(_AC_SED_CMD_LIMIT - 3)
+dnl But in practice this can generate scripts that contain too many bytes;
+dnl and this can cause obscure 'sed' failures, e.g.,
+dnl http://lists.gnu.org/archive/html/bug-coreutils/2006-05/msg00127.html
+dnl So instead, we use the following, which is about half the size we'd like:
+ac_max_sed_lines=50
+dnl In the future, let's use awk or sh instead of sed to do substitutions,
+dnl since we have so many problems with sed.
 
 # First sed command is:	 sed -f defines.sed $ac_file_inputs >"$tmp/out1"
 # Second one is:	 sed -f defines.sed "$tmp/out1" >"$tmp/out2"
