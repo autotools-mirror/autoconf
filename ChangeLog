@@ -1,3 +1,12 @@
+2006-05-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADER): Don't use shell
+	expansion in the here-documents used by config.status, as that
+	runs afoul of the Korn shell version M-12/28/93d bug described in
+	the Autoconf manual, and this in turn causes a Coreutils 5.95 build to
+	fail as described by Tim Rice and diagnosed by Ralf Wildenhues in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2006-05/msg00082.html>.
+
 2006-05-23  Jim Meyering  <jim@meyering.net>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK):

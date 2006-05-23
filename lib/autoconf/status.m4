@@ -601,27 +601,6 @@ m4_define([_AC_OUTPUT_HEADER],
   #
   # CONFIG_HEADER
   #
-
-  # These sed commands are passed to sed as "A NAME B PARAMS C VALUE D", where
-  # NAME is the cpp macro being defined, VALUE is the value it is being given.
-  # PARAMS is the parameter list in the macro definition--in most cases, it's
-  # just an empty string.
-  #
-dnl Quote, for the `[ ]' and `define'.
-[  ac_dA='s,^\([	 #]*\)[^	 ]*\([	 ]*'
-  ac_dB='\)[	 (].*,\1define\2'
-  ac_dC=' '
-  ac_dD=' ,']
-dnl ac_dD used to contain `;t' at the end, but that was both slow and incorrect.
-dnl 1) Since the script must be broken into chunks containing 100 commands,
-dnl the extra command meant extra calls to sed.
-dnl 2) The code was incorrect: in the unusual case where a symbol has multiple
-dnl different AC_DEFINEs, the last one should be honored.
-dnl
-dnl ac_dB works because every line has a space appended.  ac_dD reinserts
-dnl the space, because some symbol may have been AC_DEFINEd several times.
-
-  [ac_word_regexp=[_$as_cr_Letters][_$as_cr_alnum]*]
 _ACEOF
 
 # Transform confdefs.h into a sed script `conftest.defines', that
@@ -637,6 +616,26 @@ echo 's/$/ /' >conftest.defines
 dnl
 dnl Quote, for `[ ]' and `define'.
 [ac_word_re=[_$as_cr_Letters][_$as_cr_alnum]*
+# These sed commands are passed to sed as "A NAME B PARAMS C VALUE D", where
+# NAME is the cpp macro being defined, VALUE is the value it is being given.
+# PARAMS is the parameter list in the macro definition--in most cases, it's
+# just an empty string.
+ac_dA='s,^\\([	 #]*\\)[^	 ]*\\([	 ]*'
+ac_dB='\\)[	 (].*,\\1define\\2'
+ac_dC=' '
+ac_dD=' ,']
+dnl ac_dD used to contain `;t' at the end, but that was both slow and incorrect.
+dnl 1) Since the script must be broken into chunks containing 100 commands,
+dnl the extra command meant extra calls to sed.
+dnl 2) The code was incorrect: in the unusual case where a symbol has multiple
+dnl different AC_DEFINEs, the last one should be honored.
+dnl
+dnl ac_dB works because every line has a space appended.  ac_dD reinserts
+dnl the space, because some symbol may have been AC_DEFINEd several times.
+dnl
+dnl The first use of ac_dA has a space prepended, so that the second
+dnl use does not match the initial 's' of $ac_dA.
+[
 uniq confdefs.h |
   sed -n '
 	t rset
@@ -646,9 +645,8 @@ uniq confdefs.h |
 	d
 	:ok
 	s/[\\&,]/\\&/g
-	s/[\\$`]/\\&/g
-	s/^\('"$ac_word_re"'\)\(([^()]*)\)[	 ]*\(.*\)/${ac_dA}\1$ac_dB\2${ac_dC}\3$ac_dD/p
-	s/^\('"$ac_word_re"'\)[	 ]*\(.*\)/${ac_dA}\1$ac_dB${ac_dC}\2$ac_dD/p
+	s/^\('"$ac_word_re"'\)\(([^()]*)\)[	 ]*\(.*\)/ '"$ac_dA"'\1'"$ac_dB"'\2'"${ac_dC}"'\3'"$ac_dD"'/p
+	s/^\('"$ac_word_re"'\)[	 ]*\(.*\)/'"$ac_dA"'\1'"$ac_dB$ac_dC"'\2'"$ac_dD"'/p
   ' >>conftest.defines
 ]
 # Remove the space that was appended to ease matching.
@@ -683,9 +681,9 @@ do
   # Write a here document:
   dnl Quote, for the `[ ]' and `define'.
   echo ['    # First, check the format of the line:
-    cat >"$tmp/defines.sed" <<CEOF
-/^[	 ]*#[	 ]*undef[	 ][	 ]*$ac_word_regexp[	 ]*$/b def
-/^[	 ]*#[	 ]*define[	 ][	 ]*$ac_word_regexp[(	 ]/b def
+    cat >"$tmp/defines.sed" <<\CEOF
+/^[	 ]*#[	 ]*undef[	 ][	 ]*'"$ac_word_re"'[	 ]*$/b def
+/^[	 ]*#[	 ]*define[	 ][	 ]*'"$ac_word_re"'[(	 ]/b def
 b
 :def'] >>$CONFIG_STATUS
   sed ${ac_max_sed_lines}q conftest.defines >>$CONFIG_STATUS
