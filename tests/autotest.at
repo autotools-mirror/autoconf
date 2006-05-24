@@ -160,13 +160,14 @@ AT_CHECK_AT_TEST([Invalid brace-enclosed parameter expansion],
 ## ---------------------------- ##
 
 # The last paragaph in the comment above _AT_DECIDE_TRACEABLE illustrates why
-# this test fails.
+# this test fails (except with Korn shell-style quoting $'foo\nbar').
 AT_CHECK_AT_TEST([Multiline command from M4 expansion],
   [m4_define([GNU], ['foo
 bar'])
    AT_CHECK([echo GNU], 0, [foo
 bar
-], [])], [:])
+], [])], [case `( set -x; echo 'foo
+bar') 2>&1` in *\$\'foo\\nbar\'*) false;; *) :;; esac])
 
 AT_CHECK_AT_TEST([Double-M4-quoted command],
   [m4_define([GNU], ['foo

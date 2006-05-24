@@ -1,3 +1,10 @@
+2006-05-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/autotest.at (Multiline command from M4 expansion):
+	No failure to be expected if the shell quotes newlines in
+	commands in the `set -x' output.  Report by Tim Rice.
+	* THANKS: Update.
+
 2006-05-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADER): Don't use shell
