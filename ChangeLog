@@ -1,3 +1,11 @@
+2006-05-25  Noah Misch  <noah@cs.caltech.edu>
+
+	Sync from Automake:
+
+	* lib/Autom4te/XFile.pm (lock): Allow EOPNOTSUPP, besides
+	ENOLCK.  Only mention `make -j' when applicable.  Only raise
+	fatal errors when `make -j' is involved.  Improve error message.
+
 2006-05-25  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Here-Documents): We now know more about
