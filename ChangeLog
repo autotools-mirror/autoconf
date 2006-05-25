@@ -1,5 +1,9 @@
 2006-05-25  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/autoconf.texi (Here-Documents): We now know more about
+	the variable expansion in here documents bug.
+	Thanks to Tim Rice and Stepan Kasal.
+
 	* doc/autoconf.texi (Making testsuite Scripts): Add an example
 	how to use TESTSUITEFLAGS.  Suggested by Eric Blake.
 

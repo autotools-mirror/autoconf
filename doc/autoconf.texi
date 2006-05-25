@@ -10748,13 +10748,14 @@ bash-2.04$ @kbd{cat <<EOF
 
 
 Many older shells (including the Bourne shell) implement here-documents
-inefficiently.  And some shells mishandle large here-documents: for
-example, Solaris @command{dtksh}, which is derived from Korn shell
-version M-12/28/93d, mishandles variable expansion that occurs on
-1024-byte buffer boundaries within a here-document.  Users can generally
-fix these problems by using a faster or more reliable shell, e.g., by
-using the command @samp{CONFIG_SHELL=/bin/bash /bin/bash ./configure} rather
-than plain @samp{./configure}.
+inefficiently.  And some shells mishandle large here-documents: for example,
+Solaris 10 @command{dtksh} and the UnixWare 7.1.1 Posix shell, which are
+derived from Korn shell version M-12/28/93d, mishandle braced variable
+expansion @code{$@{var@}} that crosses a 1024- or 4096-byte buffer boundary
+within a here-document.  If the closing brace does not lie on the boundary,
+the failure is silent and the variable expansion will be empty, otherwise
+the shell will report a bad substitution.  This bug can usually be worked
+around by omitting the braces: @code{$var}.
 
 Some shells can be extremely inefficient when there are a lot of
 here-documents inside a single statement.  For instance if your
