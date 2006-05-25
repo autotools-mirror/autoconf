@@ -1,3 +1,8 @@
+2006-05-25  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Making testsuite Scripts): Add an example
+	how to use TESTSUITEFLAGS.  Suggested by Eric Blake.
+
 2006-05-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/autotest.at (Multiline command from M4 expansion):

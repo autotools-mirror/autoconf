@@ -17644,6 +17644,14 @@ atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
 and manage to have @file{atconfig.in} and @code{$(EXTRA_DIST)}
 distributed.
 
+With all this in place, and if you have not initialized @samp{TESTSUITEFLAGS}
+within your Makefile, you can fine-tune test suite execution with this variable,
+for example:
+
+@example
+make check TESTSUITEFLAGS='-v -d -x 75 -k AC_PROG_CC CFLAGS=-g'
+@end example
+
 
 
 @c =============================== Frequent Autoconf Questions, with answers
