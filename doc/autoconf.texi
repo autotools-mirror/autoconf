@@ -13370,8 +13370,8 @@ kept
 deleted
 @end example
 
-Why?  When processing line 1, (a) matches, therefore sets the @samp{t}
-flag, (b)b jumps to (d), and the output is produced.  When processing
+Why?  When processing line 1, (c) matches, therefore sets the @samp{t}
+flag, and the output is produced.  When processing
 line 2, the @samp{t} flag is still set (this is the bug).  Command (a)
 fails to match, but @command{sed} is not supposed to clear the @samp{t}
 flag when a substitution fails.  Command (b) sees that the flag is set,
