@@ -495,9 +495,11 @@ done
 rm -f $ac_rmfiles
 
 AS_IF([AC_TRY_EVAL(ac_link_default)],
-[# Be careful to initialize this variable, since it used to be cached.
-# Otherwise an old cache value of `no' led to `EXEEXT = no' in a Makefile.
-ac_cv_exeext=
+[# Autoconf-2.13 could set the ac_cv_exeext variable to `no'.
+# So ignore a value of `no', otherwise this would lead to `EXEEXT = no'
+# in a Makefile.  We should not override ac_cv_exeext if it was cached,
+# so that the user can short-circuit this test for compilers unknown to
+# Autoconf.
 for ac_file in $ac_files
 do
   test -f "$ac_file" || continue
@@ -509,16 +511,22 @@ do
 	# certainly right.
 	break;;
     *.* )
-	ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-	# FIXME: I believe we export ac_cv_exeext for Libtool,
-	# but it would be cool to find out if it's true.  Does anybody
-	# maintain Libtool? --akim.
-	export ac_cv_exeext
+        if test "${ac_cv_exeext+set}" = set && test "$ac_cv_exeext" != no;
+	then :; else
+	   ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
+	fi
+	# We set ac_cv_exeext here because the later test for it is not
+	# safe: cross compilers may not add the suffix if given an `-o'
+	# argument, so we may need to know it at that point already.
+	# Even if this section looks crufty: it has the advantage of
+	# actually working.
 	break;;
     * )
 	break;;
   esac
-done],
+done
+test "$ac_cv_exeext" = no && ac_cv_exeext=
+],
       [_AC_MSG_LOG_CONFTEST
 AC_MSG_FAILURE([_AC_LANG compiler cannot create executables], 77)])
 ac_exeext=$ac_cv_exeext
@@ -529,7 +537,7 @@ AC_MSG_RESULT([$ac_file])
 # _AC_COMPILER_EXEEXT_WORKS
 # -------------------------
 m4_define([_AC_COMPILER_EXEEXT_WORKS],
-[# Check the compiler produces executables we can run.  If not, either
+[# Check that the compiler produces executables we can run.  If not, either
 # the compiler is broken, or we cross compile.
 AC_MSG_CHECKING([whether the _AC_LANG compiler works])
 # FIXME: These cross compiler hacks should be removed for Autoconf 3.0
@@ -553,7 +561,7 @@ AC_MSG_RESULT([yes])
 # _AC_COMPILER_EXEEXT_CROSS
 # -------------------------
 m4_define([_AC_COMPILER_EXEEXT_CROSS],
-[# Check the compiler produces executables we can run.  If not, either
+[# Check that the compiler produces executables we can run.  If not, either
 # the compiler is broken, or we cross compile.
 AC_MSG_CHECKING([whether we are cross compiling])
 AC_MSG_RESULT([$cross_compiling])
@@ -576,7 +584,6 @@ for ac_file in conftest.exe conftest conftest.*; do
   case $ac_file in
     _AC_COMPILER_EXEEXT_REJECT ) ;;
     *.* ) ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
-	  export ac_cv_exeext
 	  break;;
     * ) break;;
   esac

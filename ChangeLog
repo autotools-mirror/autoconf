@@ -1,3 +1,17 @@
+2006-05-26  Stepan Kasal  <kasal@ucw.cz>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Drop the
+	initialization of `ac_cv_exeext', do not override it if it was
+	already set, unless it was set to `no', for compatibility with
+	Autoconf-2.13, and comment this.
+	Do not export `ac_cv_exeext', Libtool hasn't needed this for years.
+	(_AC_COMPILER_EXEEXT_DEFAULT): Likewise, do not export it.
+	(_AC_COMPILER_EXEEXT_WORKS, _AC_COMPILER_EXEEXT_CROSS): Typos.
+	* doc/autoconf.texi (Compilers and Preprocessors) <EXEEXT>:
+	Document that this test may be overridden by setting
+	`ac_cv_exeext'.
+
 2006-05-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Revert these two patches:

@@ -5911,7 +5911,9 @@ implemented.  In case of doubt, read the documentation of the former
 All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
 @code{AC_PROG_F77}) define the output variable @code{EXEEXT} based on
 the output of the compiler, typically to the empty string if
-Posix and @samp{.exe} if a @acronym{DOS} variant.
+Posix and @samp{.exe} if a @acronym{DOS} variant.  It can be overridden
+by passing the argument @samp{ac_cv_exeext=@var{ext}} to
+@command{configure}.
 
 @ovindex OBJEXT
 They also define the output variable @code{OBJEXT} based on the
