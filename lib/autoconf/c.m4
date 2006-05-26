@@ -666,7 +666,7 @@ else
 fi
 rm -f conftest*
 ])dnl
-if eval "test \"`echo '$ac_cv_prog_cc_'${ac_cc}_c_o`\" = yes"; then
+if eval test \$ac_cv_prog_cc_${ac_cc}_c_o = yes; then
   AC_MSG_RESULT([yes])
 else
   AC_MSG_RESULT([no])

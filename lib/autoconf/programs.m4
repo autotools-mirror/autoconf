@@ -764,22 +764,22 @@ AN_MAKEVAR([MAKE], [AC_PROG_MAKE_SET])
 AN_PROGRAM([make], [AC_PROG_MAKE_SET])
 AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING([whether ${MAKE-make} sets \$(MAKE)])
-set dummy ${MAKE-make}; ac_make=`echo "$[2]" | sed 'y,:./+-,___p_,'`
+set x ${MAKE-make}; ac_make=`echo "$[2]" | sed 's/+/p/g; s/[^a-zA-Z0-9_]/_/g'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftest.make <<\_ACEOF
 SHELL = /bin/sh
 all:
-	@echo 'ac_maketemp=X"$(MAKE)"'
+	@echo '@@@%%%=$(MAKE)=@@@%%%'
 _ACEOF
 # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
-if test "$ac_maketemp" != X ; then
-  eval ac_cv_prog_make_${ac_make}_set=yes
-else
-  eval ac_cv_prog_make_${ac_make}_set=no
-fi
+case `${MAKE-make} -f conftest.make 2>/dev/null` in
+  *@@@%%%=?*=@@@%%%*)
+    eval ac_cv_prog_make_${ac_make}_set=yes;;
+  *)
+    eval ac_cv_prog_make_${ac_make}_set=no;;
+esac
 rm -f conftest.make])dnl
-if eval "test \"`echo '$ac_cv_prog_make_'${ac_make}_set`\" = yes"; then
+if eval test \$ac_cv_prog_make_${ac_make}_set = yes; then
   AC_MSG_RESULT([yes])
   SET_MAKE=
 else
@@ -819,7 +819,7 @@ AC_DEFUN([AC_PROG_SED],
        ac_script="$ac_script$as_nl$ac_script"
      done
      echo "$ac_script" | sed 99q >conftest.sed
-     $as_unset ac_script || ac_script= 
+     $as_unset ac_script || ac_script=
      _AC_PATH_PROG_FEATURE_CHECK(SED, [sed gsed],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_SED], [ac_cv_path_SED],
 		["$ac_path_SED" -f conftest.sed])])])

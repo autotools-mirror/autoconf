@@ -209,20 +209,18 @@ AC_DEFUN([AC_SYS_LONG_FILE_NAMES],
 #      .		the current directory, where building will happen
 #      $prefix/lib	where we will be installing things
 #      $exec_prefix/lib	likewise
-# eval it to expand exec_prefix.
 #      $TMPDIR		if set, where it might want to write temporary files
-# if $TMPDIR is not set:
 #      /tmp		where it might want to write temporary files
 #      /var/tmp		likewise
 #      /usr/tmp		likewise
-if test -n "$TMPDIR" && test -d "$TMPDIR" && test -w "$TMPDIR"; then
-  ac_tmpdirs=$TMPDIR
-else
-  ac_tmpdirs='/tmp /var/tmp /usr/tmp'
-fi
-for ac_dir in  . $ac_tmpdirs `eval echo $prefix/lib $exec_prefix/lib` ; do
-  test -d "$ac_dir" || continue
-  test -w "$ac_dir" || continue # It is less confusing to not echo anything here.
+for ac_dir in . "$TMPDIR" /tmp /var/tmp /usr/tmp "$prefix/lib" "$exec_prefix/lib"; do
+  # Skip $TMPDIR if it is empty or bogus, and skip $exec_prefix/lib
+  # in the usual case where exec_prefix is '${prefix}'.
+  case $ac_dir in #(
+    . | /* | ?:[[\\/]]*) ;; #(
+    *) continue;;
+  esac
+  test -w "$ac_dir/." || continue # It is less confusing to not echo anything here.
   ac_xdir=$ac_dir/cf$$
   (umask 077 && mkdir "$ac_xdir" 2>/dev/null) || continue
   ac_tf1=$ac_xdir/conftest9012345

@@ -1,6 +1,37 @@
+2006-05-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Mention that AC_TRY_COMMAND and AC_TRY_EVAL may be removed.
+	* doc/autoconf.texi (Special Chars in Variables): New section.
+	(Preset Output Variables): Warn about special chars in CPPFLAGS.
+	(Installation Directory Variables): Quote $(datadir) better.
+	(Limitations of Builtins): Describe some of eval's trickiness.
+	* lib/autoconf/c.m4 (AC_PROG_CC_C_O): Simplify quoting.
+	* lib/autoconf/fortram.m4 (_AC_PROG_FC_V_OUTPUT): Likewise.
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Put leading space
+	in front of every arg, not just trailing args.  Quote apostrophes.
+	(_AC_EVAL_ECHO): New macro.
+	(_AC_EVAL, AC_EVAL_STDERR): Use it.  Quote arg of eval.
+	(AC_TRY_EVAL, AC_TRY_COMMAND): Mention that these macros might get
+	removed.
+	(_AC_LINK_IFELSE): Use proper rule for shell continuation lines,
+	exposed by quoting of eval argument.  Put the command on line line
+	so it logs better.
+	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): Use eval more safely.
+	(_AC_PATH_X, AC_PATH_X): Quote more safely.
+	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): Use eval more safely.
+	* lib/autoconf/specific.m4 (AC_SYS_LONG_FILE_NAMES): Don't use eval.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Minor style change.
+	Handle special chars in prefix, ac_srcdir, ac_aux_dir.
+	Use eval more safely.
+	(_AC_OUTPUT_CONFIG_STATUS): Adjust to above changes.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_GET): Note that this API needs
+	to be replaced.
+	* tests/base.at (AC_TRY_COMMAND): Use proper rule for shell continuation
+	lines, exposed by quoting of eval argument.
+
 2006-05-26  Stepan Kasal  <kasal@ucw.cz>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
-	
+
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Drop the
 	initialization of `ac_cv_exeext', do not override it if it was
 	already set, unless it was set to `no', for compatibility with
@@ -15,12 +46,12 @@
 2006-05-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Revert these two patches:
-	
+
 	2006-04-06  Eric Blake  <ebb9@byu.net>
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_O): Inside cache
 	check, s/ac_exeext/ac_cv_exeext/.  Fixes regression introduced
 	2006-04-01.
-	
+
 	2006-04-01  Stepan Kasal  <kasal@ucw.cz>
 	Clean up _AC_COMPILER_EXEEXT* macros.
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Don't try to

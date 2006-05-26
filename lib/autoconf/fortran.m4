@@ -527,8 +527,9 @@ AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # flags.
 ac_save_FFLAGS=$[]_AC_LANG_PREFIX[]FLAGS
 _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS m4_default([$1], [$ac_cv_prog_[]_AC_LANG_ABBREV[]_v])"
-eval ac_link_cmd=\"$ac_link\"
-_AS_ECHO_LOG([$ac_link_cmd])
+eval "set x $ac_link"
+shift
+_AS_ECHO_LOG([$[*]])
 ac_[]_AC_LANG_ABBREV[]_v_output=`eval $ac_link AS_MESSAGE_LOG_FD>&1 2>&1 | grep -v 'Driving:'`
 echo "$ac_[]_AC_LANG_ABBREV[]_v_output" >&AS_MESSAGE_LOG_FD
 _AC_LANG_PREFIX[]FLAGS=$ac_save_FFLAGS

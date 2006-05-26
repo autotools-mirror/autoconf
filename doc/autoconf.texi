@@ -410,6 +410,7 @@ Results of Tests
 
 * Defining Symbols::            Defining C preprocessor symbols
 * Setting Output Variables::    Replacing variables in output files
+* Special Chars in Variables::  Characters to beware of in variables
 * Caching Results::             Speeding up subsequent @command{configure} runs
 * Printing Messages::           Notifying @command{configure} users
 
@@ -2219,6 +2220,8 @@ miscellaneous options for the C and C++ preprocessors and compilers.  If
 it is not set in the environment when @command{configure} runs, the default
 value is empty.  @command{configure} uses this variable when compiling or
 preprocessing programs to test for C and C++ features.
+@xref{Special Chars in Variables}, for limitations that @code{CPPFLAGS}
+might run into.
 @end defvar
 
 @defvar CXXFLAGS
@@ -2520,7 +2523,8 @@ Makefiles.  For instance, instead of trying to evaluate @code{datadir}
 in @file{configure} and hard-coding it in Makefiles using
 e.g., @samp{AC_DEFINE_UNQUOTED([DATADIR], ["$datadir"], [Data directory.])},
 you should add
-@option{-DDATADIR="$(datadir)"} to your @code{CPPFLAGS}.
+@option{-DDATADIR='$(datadir)'} to your Makefile's definition of
+@code{CPPFLAGS} (@code{AM_CPPFLAGS} if you are also using Automake).
 
 Similarly, you should not rely on @code{AC_CONFIG_FILES} to replace
 @code{datadir} and friends in your shell scripts and other files, rather
@@ -7889,6 +7893,7 @@ print a message letting the user know the result of the test.
 @menu
 * Defining Symbols::            Defining C preprocessor symbols
 * Setting Output Variables::    Replacing variables in output files
+* Special Chars in Variables::  Characters to beware of in variables
 * Caching Results::             Speeding up subsequent @command{configure} runs
 * Printing Messages::           Notifying @command{configure} users
 @end menu
@@ -8137,6 +8142,35 @@ running /bin/sh ./configure undeclared_var=raboof --silent \
 @end itemize
 @end defmac
 
+@node Special Chars in Variables
+@section Special Characters in Output Variables
+@cindex Output variables, special characters in
+
+Many output variables are intended to be evaluated both by
+@command{make} and by the shell.  Some characters are expanded
+differently in these two contexts, so to avoid confusion these
+variables' values should not contain any of the following characters:
+
+@example
+" # $ & ' ( ) * ; < > ? [ \ ^ ` |
+@end example
+
+Also, these variables' values should neither contain newlines, nor start
+with @samp{~}, nor contain white space or @samp{:} immediately followed
+by @samp{~}.  The values can contain nonempty sequences of white space
+characters like tabs and spaces, but each such sequence might
+arbitrarily be replaced by a single space during substitution.
+
+These restrictions apply both to the values that @command{configure}
+computes, and to the values set directly by the user.  For example, the
+following invocations of @command{configure} are problematic, since they
+attempt to use special characters within @code{CPPFLAGS}:
+
+@example
+CPPFLAGS='-DOUCH="&\"#$*?"' ./configure
+
+./configure CPPFLAGS='-DOUCH="&\"#$*?"'
+@end example
 
 @node Caching Results
 @section Caching Results
@@ -10905,12 +10939,12 @@ the following:
 @end example
 
 Also, file names should not begin with @samp{~} or @samp{-}, and should
-not contain @samp{-} immediately after @samp{/}.
+contain neither @samp{-} immediately after @samp{/} nor @samp{~}
+immediately after @samp{:}.
 
 These restrictions apply not only to the files that you distribute, but
 also to the absolute file names of your source, build, and destination
-directories.  Autoconf-generated @command{configure} scripts warn of
-violations to the above restrictions.
+directories.
 
 On some Posix-like platforms, @samp{!} and @samp{^} are special too, so
 they should be avoided.
@@ -11958,6 +11992,36 @@ EOF
 @item @command{eval}
 @c -----------------
 @prindex @command{eval}
+The @command{eval} command is useful in limited circumstances, e.g.,
+using commands like @samp{eval table_$key=\$value} and @samp{eval
+value=table_$key} to simulate a hash table when the key is known to be
+alphanumeric.  However, @command{eval} is tricky to use on arbitrary
+arguments, even when it is implemented correctly.
+
+It is obviously unwise to use @samp{eval $cmd} if the string value of
+@samp{cmd} was derived from an untrustworthy source.  But even if the
+string value is valid, @samp{eval $cmd} might not work as intended,
+since it causes field splitting and file name expansion to occur twice,
+once for the @command{eval} and once for the command itself.  It is
+therefore safer to use @samp{eval "$cmd"}.  For example, if @var{cmd}
+has the value @samp{cat test?.c}, @samp{eval $cmd} might expand to the
+equivalent of @samp{cat test;.c} if there happens to be a file named
+@file{test;.c} in the current directory; and this in turn will
+mistakenly attempt to invoke @command{cat} on the file @file{test} and
+then execute the command @command{.c}.  To avoid this problem, use
+@samp{eval "$cmd"} rather than @samp{eval $cmd}.
+
+However, suppose that you want to output the text of the evaluated
+command just before executing it.  Assuming the previous example,
+@samp{echo "Executing: $cmd"} outputs @samp{Executing: cat test?.c}, but
+this output doesn't show the user that @samp{test;.c} is the actual name
+of the copied file.  Conversely, @samp{eval "echo Executing: $cmd"} will
+work on this example, but it will fail with @samp{cmd='cat foo >bar'},
+since it will mistakenly replace the contents of @file{bar} by the
+string @samp{cat foo}.  No simple, general, and portable solution to
+this problem is known.
+
+You should also be wary of common bugs in @command{eval} implementations.
 In some shell implementations (e.g., older @command{ash}, Open@acronym{BSD} 3.8
 @command{sh}, @command{pdksh} v5.2.14 99/07/13.2, and @command{zsh}
 4.2.5), the arguments of @samp{eval} are evaluated in a context where

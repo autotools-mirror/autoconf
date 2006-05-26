@@ -1369,6 +1369,8 @@ m4_define([AS_VAR_SET],
 # Get the value of the shell VARIABLE.
 # Evaluates to $VARIABLE if there are no indirection in VARIABLE,
 # else into the appropriate `eval' sequence.
+# FIXME: This mishandles values that end in newlines, or have backslashes,
+# or are '-n'.  Fixing this will require changing the API.
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
 	       [$$1],

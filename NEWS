@@ -1,5 +1,9 @@
 * Major changes in Autoconf 2.59d
 
+** AC_TRY_COMMAND, AC_TRY_EVAL
+  These never-documented macros have been marked with a comment
+  saying that they may be removed in a future release.
+
 ** ac_config_guess, ac_config_sub, ac_configure
   These never-documented variables have been marked with a comment
   saying that we intend to remove them in a future release.

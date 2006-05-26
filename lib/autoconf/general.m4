@@ -1145,7 +1145,6 @@ m4_define([_AC_INIT_PREPARE],
 ac_configure_args=
 ac_configure_args0=
 ac_configure_args1=
-ac_sep=
 ac_must_keep_next=false
 for ac_pass in 1 2
 do
@@ -1184,9 +1183,7 @@ dnl exit don't matter.
 	  -* ) ac_must_keep_next=true ;;
 	esac
       fi
-      ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
-      # Get rid of the leading space.
-      ac_sep=" "
+      ac_configure_args="$ac_configure_args '$ac_arg'"
       ;;
     esac
   done
@@ -1217,6 +1214,9 @@ trap 'exit_status=$?
     for ac_var in $ac_subst_vars
     do
       eval ac_val=\$$ac_var
+      case $ac_val in
+      *\'\''*) ac_val=`echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+      esac
       echo "$ac_var='\''$ac_val'\''"
     done | sort
     echo
@@ -1227,6 +1227,9 @@ trap 'exit_status=$?
       for ac_var in $ac_subst_files
       do
 	eval ac_val=\$$ac_var
+	case $ac_val in
+	*\'\''*) ac_val=`echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+	esac
 	echo "$ac_var='\''$ac_val'\''"
       done | sort
       echo
@@ -2140,33 +2143,58 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
   _AS_ECHO_LOG([\$? = $ac_status])
   (exit $ac_status); }])
 
+# _AC_EVAL_ECHO(COMMAND)
+# ----------------------
+# Echo COMMAND.  This is designed to be used just before evaluating COMMAND.
+AC_DEFUN([_AC_EVAL_ECHO],
+[m4_if([$1], [$ac_try], [], [ac_try="$1"
+])dnl
+dnl If the string contains '${', '"', '`', or '\', then escape
+dnl $, ", `, and \.  This is a hack, but it is safe and it also
+dnl typically expands substrings like '$CC', which is what we want.
+case $ac_try in #(
+  *\${* | *\"* | *\`* | *\\*)
+    ac_script='s/[[$"`\\]]/\\&/g'
+    ac_try=`echo "$ac_try" | sed "$ac_script"`;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try\""])
 
 # _AC_EVAL(COMMAND)
 # -----------------
 # Eval COMMAND, save the exit status in ac_status, and log it.
 AC_DEFUN([_AC_EVAL],
-[_AC_RUN_LOG([eval $1],
-	     [eval echo "$as_me:$LINENO: \"$1\""])])
+[_AC_RUN_LOG([eval "$1"],
+	     [_AC_EVAL_ECHO([$1])])])
 
 
 # _AC_EVAL_STDERR(COMMAND)
 # ------------------------
 # Like _AC_RUN_LOG_STDERR, but eval (instead of running) COMMAND.
 AC_DEFUN([_AC_EVAL_STDERR],
-[_AC_RUN_LOG_STDERR([eval $1],
-		    [eval echo "$as_me:$LINENO: \"$1\""])])
+[_AC_RUN_LOG_STDERR([eval "$1"],
+		    [_AC_EVAL_ECHO([$1])])])
 
 
 # AC_TRY_EVAL(VARIABLE)
 # ---------------------
+# Evaluate "$VARIABLE", which should be a valid shell command.
 # The purpose of this macro is to "configure:123: command line"
 # written into config.log for every test run.
+# This macro is dangerous, and should not be used outside Autoconf, since not
+# every shell command will work due to problems with eval and quoting,
+# and the rules for exactly what does work are tricky.
+# This macro may be removed in a future release.
 AC_DEFUN([AC_TRY_EVAL],
 [_AC_EVAL([$$1])])
 
 
 # AC_TRY_COMMAND(COMMAND)
 # -----------------------
+# Like AC_TRY_EVAL, but execute the string COMMAND instead.
+# This macro is dangerous, and should not be used outside Autoconf, since not
+# every shell command will work due to problems with eval and quoting,
+# and the rules for exactly what does work are tricky.
+# This macro may be removed in a future release.
 AC_DEFUN([AC_TRY_COMMAND],
 [{ ac_try='$1'
   _AC_EVAL([$ac_try]); }])
@@ -2278,8 +2306,7 @@ m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
 AS_IF([_AC_EVAL_STDERR($ac_compile) &&
-	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag"
-			 || test ! -s conftest.err]) &&
+	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" || test ! -s conftest.err]) &&
 	 AC_TRY_COMMAND([test -s conftest.$ac_objext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
@@ -2319,8 +2346,7 @@ m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
 AS_IF([_AC_EVAL_STDERR($ac_link) &&
-	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag"
-			 || test ! -s conftest.err]) &&
+	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" || test ! -s conftest.err]) &&
 	 AC_TRY_COMMAND([test -s conftest$ac_exeext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST

@@ -189,14 +189,19 @@ m4_define([_AC_PATH_X_XMKMF],
 rm -f -r conftest.dir
 if mkdir conftest.dir; then
   cd conftest.dir
-  # Make sure to not put "make" in the Imakefile rules, since we grep it out.
   cat >Imakefile <<'_ACEOF'
-acfindx:
-	@echo 'ac_im_incroot="${INCROOT}"; ac_im_usrlibdir="${USRLIBDIR}"; ac_im_libdir="${LIBDIR}"'
+incroot:
+	@echo incroot='${INCROOT}'
+usrlibdir:
+	@echo usrlibdir='${USRLIBDIR}'
+libdir:
+	@echo libdir='${LIBDIR}'
 _ACEOF
   if (export CC; ${XMKMF-xmkmf}) >/dev/null 2>/dev/null && test -f Makefile; then
     # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
-    eval `${MAKE-make} acfindx 2>/dev/null | grep -v make`
+    for ac_var in incroot usrlibdir libdir; do
+      eval "ac_im_$ac_var=\`\${MAKE-make} $ac_var 2>/dev/null | sed -n 's/^$ac_var=//p'\`"
+    done
     # Open Windows xmkmf reportedly sets LIBDIR instead of USRLIBDIR.
     for ac_extension in a so sl; do
       if test ! -f "$ac_im_usrlibdir/libX11.$ac_extension" &&
@@ -313,14 +318,16 @@ AC_DEFUN([_AC_PATH_X],
 ac_x_includes=no ac_x_libraries=no
 _AC_PATH_X_XMKMF
 _AC_PATH_X_DIRECT
-if test "$ac_x_includes" = no || test "$ac_x_libraries" = no; then
-  # Didn't find X anywhere.  Cache the known absence of X.
-  ac_cv_have_x="have_x=no"
-else
-  # Record where we found X for the cache.
-  ac_cv_have_x="have_x=yes \
-		ac_x_includes=$ac_x_includes ac_x_libraries=$ac_x_libraries"
-fi])dnl
+case $ac_x_includes,$ac_x_libraries in #(
+  no,* | *,no | *\'*)
+    # Didn't find X, or a directory has "'" in its name.
+    ac_cv_have_x="have_x=no";; #(
+  *)
+    # Record where we found X for the cache.
+    ac_cv_have_x="have_x=yes\
+	ac_x_includes='$ac_x_includes'\
+	ac_x_libraries='$ac_x_libraries'"
+esac])dnl
 ])
 
 
@@ -345,12 +352,11 @@ if test "x$with_x" = xno; then
   # The user explicitly disabled X.
   have_x=disabled
 else
-  if test "x$x_includes" != xNONE && test "x$x_libraries" != xNONE; then
-    # Both variables are already set.
-    have_x=yes
-  else
-    _AC_PATH_X
-  fi
+  case $x_includes,$x_libraries in #(
+    *\'*) AC_MSG_ERROR([Cannot use X directory names containing ']);; #(
+    *,NONE | NONE,*) _AC_PATH_X;; #(
+    *) have_x=yes;;
+  esac
   eval "$ac_cv_have_x"
 fi # $with_x != no
 
@@ -362,8 +368,9 @@ else
   test "x$x_includes" = xNONE && x_includes=$ac_x_includes
   test "x$x_libraries" = xNONE && x_libraries=$ac_x_libraries
   # Update the cache value to reflect the command line values.
-  ac_cv_have_x="have_x=yes \
-		ac_x_includes=$x_includes ac_x_libraries=$x_libraries"
+  ac_cv_have_x="have_x=yes\
+	ac_x_includes='$x_includes'\
+	ac_x_libraries='$x_libraries'"
   AC_MSG_RESULT([libraries $x_libraries, headers $x_includes])
 fi
 ])# AC_PATH_X
