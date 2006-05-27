@@ -1,9 +1,3 @@
-2006-05-26  Bruno Haible  <bruno@clisp.org>
-
-	* lib/autoconf/functions.m4 (AC_FUNC_GETLOADAVG):
-	Don't test whether getloadavg.c is where it belongs.  See:
-	http://lists.gnu.org/archive/html/bug-autoconf/2006-05/msg00045.html
-
 2006-05-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Particular Programs, Limitations of Usual Tools):
