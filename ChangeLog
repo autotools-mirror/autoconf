@@ -1,3 +1,12 @@
+2006-05-27  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Reword notice for AC_TRY_COMMAND, AC_TRY_EVAL,
+	ac_config_guess, ac_config_sub, ac_configure.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS):
+	Fix typo that prevented an unnecessary space from being removed.
+	Problems reported by Ralf Wildenhues in:
+	http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00143.html
+
 2006-05-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Particular Programs, Limitations of Usual Tools):

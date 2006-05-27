@@ -1,12 +1,11 @@
 * Major changes in Autoconf 2.59d
 
-** AC_TRY_COMMAND, AC_TRY_EVAL
-  These never-documented macros have been marked with a comment
-  saying that they may be removed in a future release.
-
-** ac_config_guess, ac_config_sub, ac_configure
-  These never-documented variables have been marked with a comment
-  saying that we intend to remove them in a future release.
+** AC_TRY_COMMAND, AC_TRY_EVAL, ac_config_guess, ac_config_sub, ac_configure
+  These never-documented macros and variables have been marked with
+  comments saying that they may be removed in a future release,
+  because their use can lead to unintended code being executed.
+  If you need functionality that only these macros or variables
+  currently supply, please write bug-autoconf@gnu.org.
 
 ** AC_SUBST, AC_DEFINE
   Literal arguments to these are passed to m4_pattern_allow now.
