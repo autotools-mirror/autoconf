@@ -700,10 +700,6 @@ AN_FUNCTION([getloadavg], [AC_FUNC_GETLOADAVG])
 AC_DEFUN([AC_FUNC_GETLOADAVG],
 [ac_have_func=no # yes means we've found a way to get the load average.
 
-# Make sure getloadavg.c is where it belongs, at configure-time.
-test -f "$srcdir/$ac_config_libobj_dir/getloadavg.c" ||
-  AC_MSG_ERROR([$srcdir/$ac_config_libobj_dir/getloadavg.c is missing])
-
 ac_save_LIBS=$LIBS
 
 # Check for getloadavg, but be sure not to touch the cache variable.
