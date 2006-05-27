@@ -1,3 +1,10 @@
+2006-05-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (autoheader Invocation): The first argument to
+	`AC_DEFINE_UNQUOTED' need not be a literal.  Mention the
+	alternatives and clear up the language a bit.
+
 2006-05-27  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Reword notice for AC_TRY_COMMAND, AC_TRY_EVAL,
@@ -26,7 +33,7 @@
 	changes, since MKDIR_P now might end in "/mkdir -p".
 
 	* doc/autoconf.texi (autoheader Invocation): Mention that the
-	first arg of AC_DEFINE_UNQUOTED must not be a literal.
+	first arg of AC_DEFINE_UNQUOTED must be a literal.
 	Problem reported by Ben Pfaff in
 	<http://lists.gnu.org/archive/html/bug-autoconf/2006-05/msg00090.html>.
 

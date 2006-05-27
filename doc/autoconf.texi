@@ -2885,13 +2885,14 @@ arguments are given, the first one is used.  Otherwise,
 @command{autoheader} creates @file{config.h.in}.
 
 In order to do its job, @command{autoheader} needs you to document all
-of the symbols that you might use; i.e., there must be at least one
-@code{AC_DEFINE} or one @code{AC_DEFINE_UNQUOTED} call with a third
-argument for each symbol (@pxref{Defining Symbols}).  An additional
-constraint is that the first argument of @code{AC_DEFINE}
-or @code{AC_DEFINE_UNQUOTED} must be a
-literal.  Note that all symbols defined by Autoconf's builtin tests are
-already documented properly; you only need to document those that you
+of the symbols that you might use.  Typically this is done via an
+@code{AC_DEFINE} or @code{AC_DEFINE_UNQUOTED} call whose first argument
+is a literal symbol and whose third argument describes the symbol
+(@pxref{Defining Symbols}).  Alternatively, you can use
+@code{AH_TEMPLATE} (@pxref{Autoheader Macros}), or you can supply a
+suitable input file for a subsequent configuration header file.
+Symbols defined by Autoconf's builtin tests are already documented properly;
+you need to document only those that you
 define yourself.
 
 You might wonder why @command{autoheader} is needed: after all, why
