@@ -1,10 +1,16 @@
 2006-05-26  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (autoheader Invocation): Mention that the
+	first arg of AC_DEFINE_UNQUOTED must not be a literal.
+	Problem reported by Ben Pfaff in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2006-05/msg00090.html>.
+
 	* NEWS: Mention that AC_TRY_COMMAND and AC_TRY_EVAL may be removed.
 	* doc/autoconf.texi (Special Chars in Variables): New section.
 	(Preset Output Variables): Warn about special chars in CPPFLAGS.
 	(Installation Directory Variables): Quote $(datadir) better.
 	(Limitations of Builtins): Describe some of eval's trickiness.
+
 	* lib/autoconf/c.m4 (AC_PROG_CC_C_O): Simplify quoting.
 	* lib/autoconf/fortram.m4 (_AC_PROG_FC_V_OUTPUT): Likewise.
 	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Put leading space

@@ -2888,7 +2888,8 @@ In order to do its job, @command{autoheader} needs you to document all
 of the symbols that you might use; i.e., there must be at least one
 @code{AC_DEFINE} or one @code{AC_DEFINE_UNQUOTED} call with a third
 argument for each symbol (@pxref{Defining Symbols}).  An additional
-constraint is that the first argument of @code{AC_DEFINE} must be a
+constraint is that the first argument of @code{AC_DEFINE}
+or @code{AC_DEFINE_UNQUOTED} must be a
 literal.  Note that all symbols defined by Autoconf's builtin tests are
 already documented properly; you only need to document those that you
 define yourself.
