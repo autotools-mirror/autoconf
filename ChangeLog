@@ -1,5 +1,21 @@
 2006-05-26  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Particular Programs, Limitations of Usual Tools):
+	Use better wording to talk about AC_PROG_MKDIR_P's thread-safety.
+	Don't use the term "thread-safe" to talk about mkdir race
+	conditions, since the problem is more a process than a thread
+	issue.  Problem reported by Stepan Kasal in:
+	http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00088.html
+	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Use code that mimics
+	the test for 'install' more closely.  Look at MKDIR_P first.
+	Look in the PATH, and at /opt/sfw/bin.
+	Look for a 'gmkdir' program as well (Solaris 10 /opt/sfw/bin/gmkdir).
+	Don't bother to try mkdir -p, since we already check mkdir --version;
+	just look at the version number.  (There's no easy way to check
+	for race-free implementations.)
+	* tests/tools.at (autoconf: subdirectories): Adjust to above
+	changes, since MKDIR_P now might end in "/mkdir -p".
+
 	* doc/autoconf.texi (autoheader Invocation): Mention that the
 	first arg of AC_DEFINE_UNQUOTED must not be a literal.
 	Problem reported by Ben Pfaff in

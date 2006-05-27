@@ -347,7 +347,7 @@ AT_DATA([install-sh])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-AT_CHECK([grep '/mkdir -p' sub/foo], 1)
+AT_CHECK([[grep '^[^/].*/mkdir -p' sub/foo]], 1)
 
 AT_CLEANUP
 

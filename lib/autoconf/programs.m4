@@ -627,7 +627,7 @@ AC_SUBST(INSTALL_DATA)dnl
 # concurrently, both version can detect that a/ is missing, but only
 # one can create it and the other will error out.  Consequently we
 # restrict ourselves to GNU mkdir (using the --version option ensures
-# this.)
+# this).
 #
 # Automake used to define mkdir_p as `mkdir -p .', in order to
 # allow $(mkdir_p) to be used without argument.  As in
@@ -657,14 +657,31 @@ AC_DEFUN([AC_PROG_MKDIR_P],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_REQUIRE_AUX_FILE([install-sh])dnl
 AC_MSG_CHECKING([for a thread-safe mkdir -p])
-if mkdir -p --version . >/dev/null 2>&1 && test ! -d ./--version; then
-  MKDIR_P='mkdir -p'
-else
-  for ac_d in ./-p ./--version
-  do
-    test -d $ac_d && rmdir $ac_d
-  done
-  MKDIR_P="$ac_install_sh -d"
+if test -z "$MKDIR_P"; then
+  AC_CACHE_VAL([ac_cv_path_mkdir],
+    [_AS_PATH_WALK([$PATH$PATH_SEPARATOR/opt/sfw/bin],
+      [for ac_prog in mkdir gmkdir; do
+	 for ac_exec_ext in '' $ac_executable_extensions; do
+	   AS_EXECUTABLE_P(["$as_dir/$ac_prog$ac_exec_ext"]) || continue
+	   case `"$as_dir/$ac_prog$ac_exec_ext" --version 2>&1` in #(
+	     'mkdir (GNU coreutils) '* | \
+	     'mkdir (coreutils) '* | \
+	     'mkdir (fileutils) '4.1*)
+	       ac_cv_path_mkdir=$as_dir/$ac_prog$ac_exec_ext
+	       break 3;;
+	   esac
+	 done
+       done])])
+  if test "${ac_cv_path_mkdir+set}" = set; then
+    MKDIR_P="$ac_cv_path_mkdir -p"
+  else
+    # As a last resort, use the slow shell script.  Don't cache a
+    # value for MKDIR_P within a source directory, because that will
+    # break other packages using the cache if that directory is
+    # removed, or if the value is a relative name.
+    test -d ./--version && rmdir ./--version
+    MKDIR_P="$ac_install_sh -d"
+  fi
 fi
 dnl Do special magic for MKDIR_P instead of AC_SUBST, to get
 dnl relative names right.

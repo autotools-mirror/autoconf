@@ -3526,15 +3526,17 @@ not found in standard @command{install} programs, there is no reason to use
 @ovindex MKDIR_P
 Set output variable @code{MKDIR_P} to a program that ensures that for
 each argument, a directory named by this argument exists, creating it
-and its parent directories if needed.  The program is checked to make
-sure that it is thread-safe (@pxref{Limitations of Usual Tools}).
+and its parent directories if needed, and without race conditions when
+two instances of the program attempt to make the same directory at
+nearly the same time.
 
 This macro uses the @samp{mkdir -p} command if possible.  Otherwise, it
 falls back on invoking @command{install-sh} with the @option{-d} option,
 so your package should
 contain @file{install-sh} as described under @code{AC_PROG_INSTALL}.
 A @file{install-sh} file that predates Autoconf 2.60 or Automake 1.10
-won't be thread-safe, so if you want to support parallel installs from
+is vulnerable to race conditions, so if you want to support parallel
+installs from
 different packages into the same directory you need to make sure you
 have an up-to-date @file{install-sh}.  In particular, be careful about
 using @samp{autoreconf -if} if your Automake predates Automake 1.10.
@@ -3543,9 +3545,10 @@ This macro is related to the @code{AS_MKDIR_P} macro (@pxref{Programming
 in M4sh}), but it sets an output variable intended for use in other
 files, whereas @code{AS_MKDIR_P} is intended for use in scripts like
 @command{configure}.  Also, @code{AS_MKDIR_P} does not accept options,
-but if you are willing to assume Posix 1003.2-1992 or later, a
-@code{MKDIR_P} can use the @option{-m} option, e.g., a makefile might
+but @code{MKDIR_P} can use the @option{-m} option, e.g., a makefile might
 invoke @code{$(MKDIR_P) -m 0 dir} to create an inaccessible directory.
+Finally, @code{AS_MKDIR_P} does not check for race condition
+vulnerability, whereas @code{AC_PROG_MKDIR_P} does.
 @end defmac
 
 @defmac AC_PROG_LEX
@@ -13155,21 +13158,22 @@ should succeed when @file{foo} is a symbolic link to an already-existing
 directory.  The @acronym{GNU} Core Utilities 5.1.0 @command{mkdir}
 succeeds, but Solaris @command{mkdir} fails.
 
-Not all @code{mkdir -p} implementations are thread-safe.  When it is not
-and you call @code{mkdir -p a/b} and @code{mkdir -p a/c} at the same
-time, both will detect that @file{a/} is missing, one will create
-@file{a/}, then the other will try to create @file{a/} and die with a
-@code{File exists} error.  At least Solaris 10, Net@acronym{BSD} 1.6, and Open@acronym{BSD}
-3.4 have an unsafe @code{mkdir -p}.  The @acronym{GNU} Core Utilities
+Traditional @code{mkdir -p} implementations suffer from race conditions.
+For example, if you invoke @code{mkdir -p a/b} and @code{mkdir -p a/c}
+at the same time, both processes might detect that @file{a} is missing,
+one might create @file{a}, then the other might try to create @file{a}
+and fail with a @code{File exists} diagnostic.  At least Solaris 10,
+Net@acronym{BSD} 1.6, and Open@acronym{BSD} 3.4 are vulnerable to race
+conditions.  The @acronym{GNU} Core Utilities
 (since @samp{fileutils}
-version 4.0c), Free@acronym{BSD} 5.0, and Net@acronym{BSD}-current are
+version 4.1), Free@acronym{BSD} 5.0, and Net@acronym{BSD}-current are
 known to have a
 race-free @code{mkdir -p}.  This possible race is harmful in parallel
 builds when several @file{Makefile} rules call @code{mkdir -p} to
 construct directories.  You may use
 @code{install-sh -d} as a safe replacement, provided this script is
 recent enough; the copy shipped with Autoconf 2.60 and Automake 1.10 is
-OK, but copies from older versions are not thread-safe either.
+OK, but copies from older versions are vulnerable.
 
 
 @item @command{mktemp}
