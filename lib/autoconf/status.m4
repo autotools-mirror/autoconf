@@ -506,7 +506,7 @@ _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF
 # If the template does not know about datarootdir, expand it.
 # FIXME: This hack should be removed a few years after 2.60.
-ac_datarootdir_hack=
+ac_datarootdir_hack=; ac_datarootdir_seen=
 m4_define([_AC_datarootdir_vars],
           [datadir, docdir, infodir, localedir, mandir])
 case `sed -n '/datarootdir/ {
@@ -516,7 +516,7 @@ case `sed -n '/datarootdir/ {
 m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
            [/@_AC_Var@/p
 ])' $ac_file_inputs` in
-*datarootdir*) ;;
+*datarootdir*) ac_datarootdir_seen=yes;;
 *@[]m4_join([@*|*@], _AC_datarootdir_vars)@*)
   AC_MSG_WARN([$ac_file_inputs seems to ignore the --datarootdir setting])
 _ACEOF
@@ -550,6 +550,11 @@ m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 ])dnl
 $ac_datarootdir_hack
 " $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
+
+test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
+  grep '\${datarootdir}' "$tmp/out" &&
+  AC_MSG_WARN([$ac_file contains a reference to the variable `datarootdir'
+which seems to be undefined.  Please make sure it is defined.])
 
   rm -f "$tmp/stdin"
   case $ac_file in

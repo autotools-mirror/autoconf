@@ -1,3 +1,15 @@
+2005-05-28  Stepan Kasal  <kasal@ucw.cz>
+	and Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): If we have not seen
+	mention of `datarootdir' in the input file(s), but literal
+	`${datarootdir}' in the output file, and we haven't warned yet,
+	then warn as well: the user may have (erroneously) used
+	`AC_SUBST([mydatadir], [$datadir/my])' instead of the correct
+	`AC_SUBST([mydatadir], ['${datadir}/my'])'.
+	* tests/torture.at (datarootdir workaround): Extend this test.
+	* NEWS: Update.
+
 2006-05-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 	and Paul Eggert  <eggert@cs.ucla.edu>
 

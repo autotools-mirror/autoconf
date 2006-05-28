@@ -1,5 +1,8 @@
 * Major changes in Autoconf 2.59d
 
+ ** Even more safety checks for the new Directory variables:
+   Warn about suspicious `${datarootdir}' found in config files output.
+ 
 ** AC_TRY_COMMAND, AC_TRY_EVAL, ac_config_guess, ac_config_sub, ac_configure
   These never-documented macros and variables have been marked with
   comments saying that they may be removed in a future release,

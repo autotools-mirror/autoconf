@@ -667,16 +667,27 @@ AT_DATA([Foo.in],
 @mandir@
 ])
 
+AT_DATA([Bar.in],
+[@mydatadir@
+])
+
 AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir/config)
-AC_CONFIG_FILES([Foo])
+
+# This substitution is wrong and bogus!  Don't use it in your own code!
+# Read `info Autoconf "Defining Directories"'!
+AC_SUBST([mydatadir], [${datadir}/my])
+
+AC_CONFIG_FILES([Foo Bar])
 AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [], [],
   [config.status: WARNING:  Foo.in seems to ignore the --datarootdir setting
+config.status: WARNING: Bar contains a reference to the variable `datarootdir'
+which seems to be undefined.  Please make sure it is defined.
 ])
 AT_CHECK([grep datarootdir Foo], 1, [])
 AT_CLEANUP
