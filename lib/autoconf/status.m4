@@ -552,7 +552,7 @@ $ac_datarootdir_hack
 " $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
-  grep '\${datarootdir}' "$tmp/out" &&
+  { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
   AC_MSG_WARN([$ac_file contains a reference to the variable `datarootdir'
 which seems to be undefined.  Please make sure it is defined.])
 

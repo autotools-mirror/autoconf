@@ -1,3 +1,8 @@
+2005-05-28  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): Do not use `grep' on
+	the output file in the `${datarootdir}' test.
+
 2005-05-28  Stepan Kasal  <kasal@ucw.cz>
 	and Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
 
