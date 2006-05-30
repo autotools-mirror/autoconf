@@ -364,9 +364,9 @@ AC_CHECK_TOOLS([]_AC_FC[],
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
 ac_compiler=`set X $ac_compile; echo $[2]`
-_AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 rm -f a.out
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
@@ -463,9 +463,9 @@ AC_CACHE_CHECK([whether $[]_AC_FC[] understands -c and -o together],
 # `.o' file with `-o', although they will create one.
 ac_try='$[]_AC_FC[] $[]_AC_LANG_PREFIX[]FLAGS -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
 rm -f conftest2.*
-if AC_TRY_EVAL(ac_try) &&
+if _AC_DO_VAR(ac_try) &&
      test -f conftest2.$ac_objext &&
-     AC_TRY_EVAL(ac_try); then
+     _AC_DO_VAR(ac_try); then
   ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o=yes
 else
   ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o=no

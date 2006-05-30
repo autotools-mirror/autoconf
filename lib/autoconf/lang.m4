@@ -380,7 +380,7 @@ AC_BEFORE([$0], [AC_LINK_IFELSE])
 
 m4_define([_AC_COMPILER_EXEEXT],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
-if AC_TRY_EVAL(ac_link); then
+if _AC_DO_VAR(ac_link); then
   ac_no_link=no
   ]m4_defn([_AC_COMPILER_EXEEXT])[
 else
@@ -494,7 +494,7 @@ do
 done
 rm -f $ac_rmfiles
 
-AS_IF([AC_TRY_EVAL(ac_link_default)],
+AS_IF([_AC_DO_VAR(ac_link_default)],
 [# Autoconf-2.13 could set the ac_cv_exeext variable to `no'.
 # So ignore a value of `no', otherwise this would lead to `EXEEXT = no'
 # in a Makefile.  We should not override ac_cv_exeext if it was cached,
@@ -543,7 +543,7 @@ AC_MSG_CHECKING([whether the _AC_LANG compiler works])
 # FIXME: These cross compiler hacks should be removed for Autoconf 3.0
 # If not cross compiling, check that we can run a simple program.
 if test "$cross_compiling" != yes; then
-  if AC_TRY_COMMAND([./$ac_file]); then
+  if _AC_DO_TOKENS([./$ac_file]); then
     cross_compiling=no
   else
     if test "$cross_compiling" = maybe; then
@@ -574,7 +574,7 @@ AC_MSG_RESULT([$cross_compiling])
 # as computed by _AC_COMPILER_EXEEXT_DEFAULT is OK.
 m4_define([_AC_COMPILER_EXEEXT_O],
 [AC_MSG_CHECKING([for suffix of executables])
-AS_IF([AC_TRY_EVAL(ac_link)],
+AS_IF([_AC_DO_VAR(ac_link)],
 [# If both `conftest.exe' and `conftest' are `present' (well, observable)
 # catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
 # work properly (i.e., refer to `conftest.exe'), while it won't with
@@ -636,7 +636,7 @@ m4_define([_AC_COMPILER_OBJEXT],
 [AC_CACHE_CHECK([for suffix of object files], ac_cv_objext,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 rm -f conftest.o conftest.obj
-AS_IF([AC_TRY_EVAL(ac_compile)],
+AS_IF([_AC_DO_VAR(ac_compile)],
 [for ac_file in conftest.o conftest.obj conftest.*; do
   test -f "$ac_file" || continue;
   case $ac_file in

@@ -1,3 +1,18 @@
+2006-05-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4: Revert AC_TRY_EVAL and AC_TRY_COMMAND,
+	since evidently some packages rely on the old, broken behavior.
+	Problem reported by Ralf Wildenhues in
+	<http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00160.html>.
+	(AC_TRY_EVAL, AC_TRY_COMMAND, _AC_EVAL): Go back to the
+	pre-2006-05-26 definitions, but leave in the comments that
+	these macros are dangerous and should not be used.
+	(_AC_DO_ECHO): Renamed from _AC_EVAL_ECHO.  All callers changed.
+	(_AC_DO): Renamed from _AC_EVAL.  All callers changed.
+	(_AC_DO_STDERR): Renamed from _AC_EVAL_STDERR.  All callers changed.
+	(_AC_DO_VAR): Renamed from AC_TRY_EVAL.
+	(_AC_DO_TOKENS): Renamed from AC_TRY_COMMAND.
+
 2006-05-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/status.m4 (AC_OUTPUT_MAKE_DEFS): Rewrite to avoid

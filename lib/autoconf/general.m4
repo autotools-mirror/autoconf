@@ -2143,10 +2143,10 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
   _AS_ECHO_LOG([\$? = $ac_status])
   (exit $ac_status); }])
 
-# _AC_EVAL_ECHO(COMMAND)
-# ----------------------
+# _AC_DO_ECHO(COMMAND)
+# --------------------
 # Echo COMMAND.  This is designed to be used just before evaluating COMMAND.
-AC_DEFUN([_AC_EVAL_ECHO],
+AC_DEFUN([_AC_DO_ECHO],
 [m4_if([$1], [$ac_try], [], [ac_try="$1"
 ])dnl
 dnl If the string contains '${', '"', '`', or '\', then escape
@@ -2159,42 +2159,76 @@ case $ac_try in #(
 esac
 eval "echo \"\$as_me:$LINENO: $ac_try\""])
 
+# _AC_DO(COMMAND)
+# ---------------
+# Eval COMMAND, save the exit status in ac_status, and log it.
+# For internal use only.
+AC_DEFUN([_AC_DO],
+[_AC_RUN_LOG([eval "$1"],
+	     [_AC_DO_ECHO([$1])])])
+
+
+# _AC_DO_STDERR(COMMAND)
+# ----------------------
+# Like _AC_RUN_LOG_STDERR, but eval (instead of running) COMMAND.
+AC_DEFUN([_AC_DO_STDERR],
+[_AC_RUN_LOG_STDERR([eval "$1"],
+		    [_AC_DO_ECHO([$1])])])
+
+
+# _AC_DO_VAR(VARIABLE)
+# --------------------
+# Evaluate "$VARIABLE", which should be a valid shell command.
+# The purpose of this macro is to write "configure:123: command line"
+# into config.log for every test run.
+AC_DEFUN([_AC_DO_VAR],
+[_AC_DO([$$1])])
+
+
+# _AC_DO_TOKENS(COMMAND)
+# ----------------------
+# Like _AC_DO_VAR, but execute COMMAND instead, where COMMAND is a series of
+# tokens of the shell command language.
+AC_DEFUN([_AC_DO_TOKENS],
+[{ ac_try='$1'
+  _AC_DO([$ac_try]); }])
+
+
 # _AC_EVAL(COMMAND)
 # -----------------
 # Eval COMMAND, save the exit status in ac_status, and log it.
+# Unlike _AC_DO, this macro mishandles quoted arguments in some cases.
+# It is present only to support the backward-compatibility macros
+# AC_TRY_EVAL and AC_TRY_COMMAND.
 AC_DEFUN([_AC_EVAL],
-[_AC_RUN_LOG([eval "$1"],
-	     [_AC_EVAL_ECHO([$1])])])
-
-
-# _AC_EVAL_STDERR(COMMAND)
-# ------------------------
-# Like _AC_RUN_LOG_STDERR, but eval (instead of running) COMMAND.
-AC_DEFUN([_AC_EVAL_STDERR],
-[_AC_RUN_LOG_STDERR([eval "$1"],
-		    [_AC_EVAL_ECHO([$1])])])
+[_AC_RUN_LOG([eval $1],
+	     [eval echo "$as_me:$LINENO: \"$1\""])])
 
 
 # AC_TRY_EVAL(VARIABLE)
 # ---------------------
-# Evaluate "$VARIABLE", which should be a valid shell command.
-# The purpose of this macro is to "configure:123: command line"
-# written into config.log for every test run.
-# This macro is dangerous, and should not be used outside Autoconf, since not
-# every shell command will work due to problems with eval and quoting,
-# and the rules for exactly what does work are tricky.
-# This macro may be removed in a future release.
+# Evaluate $VARIABLE, which should be a valid shell command.
+# The purpose of this macro is to write "configure:123: command line"
+# into config.log for every test run.
+#
+# The AC_TRY_EVAL and AC_TRY_COMMAND macros are dangerous and
+# undocumented, and should not be used.
+# The may be removed or their API changed in a future release.
+# Autoconf itself no longer uses these two macros; they are present
+# only for backward compatibility with previous versions of Autoconf.
+# Not every shell command will work due to problems with eval
+# and quoting, and the rules for exactly what does work are tricky.
+# Worse, due to double-expansion during evaluation, arbitrary unintended
+# shell commands could be executed in some situations.
 AC_DEFUN([AC_TRY_EVAL],
 [_AC_EVAL([$$1])])
 
 
 # AC_TRY_COMMAND(COMMAND)
 # -----------------------
-# Like AC_TRY_EVAL, but execute the string COMMAND instead.
-# This macro is dangerous, and should not be used outside Autoconf, since not
-# every shell command will work due to problems with eval and quoting,
-# and the rules for exactly what does work are tricky.
-# This macro may be removed in a future release.
+# Like AC_TRY_EVAL, but execute COMMAND instead, where COMMAND is a series of
+# tokens of the shell command language.
+# This macro should not be used; see the comments under AC_TRY_EVAL for why.
 AC_DEFUN([AC_TRY_COMMAND],
 [{ ac_try='$1'
   _AC_EVAL([$ac_try]); }])
@@ -2226,7 +2260,7 @@ AC_DEFUN([AC_RUN_LOG],
 # to expand ac_cpp.
 AC_DEFUN([_AC_PREPROC_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-if _AC_EVAL_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null; then
+if _AC_DO_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null; then
   if test -s conftest.err; then
     ac_cpp_err=$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag
     ac_cpp_err=$ac_cpp_err$ac_[]_AC_LANG_ABBREV[]_werror_flag
@@ -2305,9 +2339,9 @@ AC_DEFUN([AC_EGREP_HEADER],
 m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
-AS_IF([_AC_EVAL_STDERR($ac_compile) &&
-	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" || test ! -s conftest.err]) &&
-	 AC_TRY_COMMAND([test -s conftest.$ac_objext])],
+AS_IF([_AC_DO_STDERR($ac_compile) &&
+	 _AC_DO_TOKENS([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" || test ! -s conftest.err]) &&
+	 _AC_DO_TOKENS([test -s conftest.$ac_objext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
@@ -2345,9 +2379,9 @@ AU_DEFUN([AC_TRY_COMPILE],
 m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
-AS_IF([_AC_EVAL_STDERR($ac_link) &&
-	 AC_TRY_COMMAND([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" || test ! -s conftest.err]) &&
-	 AC_TRY_COMMAND([test -s conftest$ac_exeext])],
+AS_IF([_AC_DO_STDERR($ac_link) &&
+	 _AC_DO_TOKENS([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" || test ! -s conftest.err]) &&
+	 _AC_DO_TOKENS([test -s conftest$ac_exeext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
@@ -2399,7 +2433,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])])
 m4_define([_AC_RUN_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest$ac_exeext
-AS_IF([AC_TRY_EVAL(ac_link) && AC_TRY_COMMAND(./conftest$ac_exeext)],
+AS_IF([_AC_DO_VAR(ac_link) && _AC_DO_TOKENS(./conftest$ac_exeext)],
       [$2],
       [echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
 _AC_MSG_LOG_CONFTEST

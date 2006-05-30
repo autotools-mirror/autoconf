@@ -720,7 +720,7 @@ cat >conftest.l <<_ACEOF
 %%
 %%
 _ACEOF
-AC_TRY_EVAL(LEX conftest.l)
+_AC_DO_VAR(LEX conftest.l)
 if test -f lex.yy.c; then
   ac_cv_prog_lex_root=lex.yy
 elif test -f lexyy.c; then

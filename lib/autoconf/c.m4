@@ -543,9 +543,9 @@ test -z "$CC" && AC_MSG_FAILURE([no acceptable C compiler found in \$PATH])
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
 ac_compiler=`set X $ac_compile; echo $[2]`
-_AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
@@ -641,17 +641,17 @@ AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 # existing .o file with -o, though they will create one.
 ac_try='$CC -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
 rm -f conftest2.*
-if AC_TRY_EVAL(ac_try) &&
-   test -f conftest2.$ac_objext && AC_TRY_EVAL(ac_try);
+if _AC_DO_VAR(ac_try) &&
+   test -f conftest2.$ac_objext && _AC_DO_VAR(ac_try);
 then
   eval ac_cv_prog_cc_${ac_cc}_c_o=yes
   if test "x$CC" != xcc; then
     # Test first that cc exists at all.
-    if AC_TRY_COMMAND(cc -c conftest.$ac_ext >&AS_MESSAGE_LOG_FD); then
+    if _AC_DO_TOKENS(cc -c conftest.$ac_ext >&AS_MESSAGE_LOG_FD); then
       ac_try='cc -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
       rm -f conftest2.*
-      if AC_TRY_EVAL(ac_try) &&
-	 test -f conftest2.$ac_objext && AC_TRY_EVAL(ac_try);
+      if _AC_DO_VAR(ac_try) &&
+	 test -f conftest2.$ac_objext && _AC_DO_VAR(ac_try);
       then
 	# cc works too.
 	:
@@ -771,9 +771,9 @@ fi
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
 ac_compiler=`set X $ac_compile; echo $[2]`
-_AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
@@ -840,9 +840,9 @@ AC_CACHE_CHECK([whether $CXX understands -c and -o together],
 # `.o' file with `-o', although they will create one.
 ac_try='$CXX $CXXFLAGS -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
 rm -f conftest2.*
-if AC_TRY_EVAL(ac_try) &&
+if _AC_DO_VAR(ac_try) &&
      test -f conftest2.$ac_objext &&
-     AC_TRY_EVAL(ac_try); then
+     _AC_DO_VAR(ac_try); then
   ac_cv_prog_cxx_c_o=yes
 else
   ac_cv_prog_cxx_c_o=no
@@ -934,9 +934,9 @@ AC_CHECK_TOOLS(OBJC,
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
 ac_compiler=`set X $ac_compile; echo $[2]`
-_AC_EVAL([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
-_AC_EVAL([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
+_AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
