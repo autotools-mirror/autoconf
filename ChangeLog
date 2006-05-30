@@ -1,3 +1,9 @@
+2006-05-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE):
+	Don't assume 'grep' works on long lines, since AIX grep doesn't.
+
 2005-05-28  Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): Do not use `grep' on

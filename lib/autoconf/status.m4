@@ -401,7 +401,8 @@ m4_if(_AC_SED_CMD_LIMIT,
       m4_if(_AC_Var, [@END@], m4_if(_AC_SED_CMD_NUM, 2, 2, _AC_SED_CMD_LIMIT), _AC_SED_CMD_NUM),
 [_ACEOF
 
-  if test `grep -c "$ac_delim\$" conf$$subs.sed` = _AC_SED_DELIM_NUM; then
+dnl Do not use grep on conf$$subs.sed, since AIX grep has a line length limit.
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = _AC_SED_DELIM_NUM; then
     break
   elif $ac_last_try; then
     AC_MSG_ERROR([could not make $CONFIG_STATUS])
@@ -410,10 +411,11 @@ m4_if(_AC_SED_CMD_LIMIT,
   fi
 done
 
-ac_eof=
-if grep '^CEOF$' conf$$subs.sed >/dev/null; then
-  ac_eof=`sed -n '/^CEOF[[0-9]]*$/s/CEOF//p' conf$$subs.sed | sort -nru | sed 1q`
-  ac_eof=`expr 0$ac_eof + 1`
+dnl Similarly, avoid grep here too.
+ac_eof=`sed -n '/^CEOF[[0-9]]*$/s/CEOF/0/p' conf$$subs.sed`
+if test -n "$ac_eof"; then
+  ac_eof=`echo "$ac_eof" | sort -nru | sed 1q`
+  ac_eof=`expr $ac_eof + 1`
 fi
 
 dnl Increment fragment number.
