@@ -1,3 +1,9 @@
+2006-05-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (_AS_DIRNAME_PREPARE): Check whether
+	`dirname -- /' returns `/', for SunOS dirname scripts that escaped.
+	Report by Sam Sirlin <sam@kalessin.jpl.nasa.gov>.
+
 2006-05-30  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4: Revert AC_TRY_EVAL and AC_TRY_COMMAND,

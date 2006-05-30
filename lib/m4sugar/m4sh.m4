@@ -755,7 +755,7 @@ _AS_DIRNAME_SED([$1])])
 # _AS_DIRNAME_PREPARE
 # --------------------
 m4_defun([_AS_DIRNAME_PREPARE],
-[if (dirname -- /) >/dev/null 2>&1; then
+[if (as_dir=`dirname -- /` && test "$as_dir" = /) >/dev/null 2>&1; then
   as_dirname=dirname
 else
   as_dirname=false
