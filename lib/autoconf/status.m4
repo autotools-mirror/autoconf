@@ -1491,37 +1491,35 @@ done # for ac_tag
 # Set the DEFS variable to the -D options determined earlier.
 # This is a subroutine of AC_OUTPUT.
 # It is called inside configure, outside of config.status.
-# Using a here document instead of a string reduces the quoting nightmare.
 m4_define([AC_OUTPUT_MAKE_DEFS],
 [[# Transform confdefs.h into DEFS.
 # Protect against shell expansion while executing Makefile rules.
 # Protect against Makefile macro expansion.
 #
 # If the first sed substitution is executed (which looks for macros that
-# take arguments), then we branch to the quote section.  Otherwise,
+# take arguments), then branch to the quote section.  Otherwise,
 # look for a macro that doesn't take arguments.
-cat >confdef2opt.sed <<\_ACEOF
+ac_script='
 t clear
 :clear
 s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\)/-D\1=\2/g
 t quote
 s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)/-D\1=\2/g
 t quote
-d
+b any
 :quote
-s/[	 `~#$^&*(){}\\|;'"<>?]/\\&/g
+s/[	 `~#$^&*(){}\\|;'\''"<>?]/\\&/g
 s/\[/\\&/g
 s/\]/\\&/g
 s/\$/$$/g
-p
-_ACEOF
-# We use echo to avoid assuming a particular line-breaking character.
-# The extra dot is to prevent the shell from consuming trailing
-# line-breaks from the sub-command output.  A line-break within
-# single-quotes doesn't work because, if this script is created in a
-# platform that uses two characters for line-breaks (e.g., DOS), tr
-# would break.
-ac_LF_and_DOT=`echo; echo .`
-DEFS=`sed -n -f confdef2opt.sed confdefs.h | tr "$ac_LF_and_DOT" ' .'`
-rm -f confdef2opt.sed
+H
+:any
+${
+	g
+	s/^\n//
+	s/\n/ /g
+	p
+}
+'
+DEFS=`sed -n "$ac_script" confdefs.h`
 ]])# AC_OUTPUT_MAKE_DEFS

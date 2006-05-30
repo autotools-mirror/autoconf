@@ -1,3 +1,8 @@
+2006-05-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/status.m4 (AC_OUTPUT_MAKE_DEFS): Rewrite to avoid
+	the use of 'tr', since this is our only use of 'tr'.
+
 2006-05-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 	and Paul Eggert  <eggert@cs.ucla.edu>
 
