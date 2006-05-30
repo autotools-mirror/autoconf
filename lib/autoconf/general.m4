@@ -2213,7 +2213,7 @@ AC_DEFUN([_AC_EVAL],
 #
 # The AC_TRY_EVAL and AC_TRY_COMMAND macros are dangerous and
 # undocumented, and should not be used.
-# The may be removed or their API changed in a future release.
+# They may be removed or their API changed in a future release.
 # Autoconf itself no longer uses these two macros; they are present
 # only for backward compatibility with previous versions of Autoconf.
 # Not every shell command will work due to problems with eval
