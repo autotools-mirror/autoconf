@@ -622,12 +622,11 @@ AC_SUBST(INSTALL_DATA)dnl
 # setting umask.
 #
 # We cannot accept any implementation of `mkdir' that recognizes `-p'.
-# Some implementations (such as Solaris 8's) are not thread-safe: if a
-# parallel make tries to run `mkdir -p a/b' and `mkdir -p a/c'
+# Some implementations (such as Solaris 8's) are vulnerable to race conditions:
+# if a parallel make tries to run `mkdir -p a/b' and `mkdir -p a/c'
 # concurrently, both version can detect that a/ is missing, but only
 # one can create it and the other will error out.  Consequently we
-# restrict ourselves to GNU mkdir (using the --version option ensures
-# this).
+# restrict ourselves to known race-free implementations.
 #
 # Automake used to define mkdir_p as `mkdir -p .', in order to
 # allow $(mkdir_p) to be used without argument.  As in
