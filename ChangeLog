@@ -1,3 +1,15 @@
+2006-05-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_DO_ECHO): Be even more conservative
+	about quoting the case statement, just in case.
+
+2006-05-31  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Particular Programs) <AC_PROG_MKDIR_P>:
+	Document that ${MKDIR_P} understands --.
+	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Improve the
+	comment.
+
 2006-05-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/m4sugar/m4sh.m4 (_AS_DIRNAME_PREPARE): Guard against test

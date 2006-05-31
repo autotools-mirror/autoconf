@@ -3546,8 +3546,10 @@ This macro is related to the @code{AS_MKDIR_P} macro (@pxref{Programming
 in M4sh}), but it sets an output variable intended for use in other
 files, whereas @code{AS_MKDIR_P} is intended for use in scripts like
 @command{configure}.  Also, @code{AS_MKDIR_P} does not accept options,
-but @code{MKDIR_P} can use the @option{-m} option, e.g., a makefile might
-invoke @code{$(MKDIR_P) -m 0 dir} to create an inaccessible directory.
+but @code{MKDIR_P} supports the @option{-m} option, e.g., a makefile
+might invoke @code{$(MKDIR_P) -m 0 dir} to create an inaccessible
+directory, and conversely a makefile should use @code{$(MKDIR_P) --
+$(FOO)} if @var{FOO} might yield a value that begins with @samp{-}.
 Finally, @code{AS_MKDIR_P} does not check for race condition
 vulnerability, whereas @code{AC_PROG_MKDIR_P} does.
 @end defmac
@@ -10796,7 +10798,9 @@ expansion @code{$@{var@}} that crosses a 1024- or 4096-byte buffer boundary
 within a here-document.  If the closing brace does not lie on the boundary,
 the failure is silent and the variable expansion will be empty, otherwise
 the shell will report a bad substitution.  This bug can usually be worked
-around by omitting the braces: @code{$var}.
+around by omitting the braces: @code{$var}.  The bug was fixed in
+@samp{ksh99g} (1998-04-30) but as of 2006 many operating systems were
+still shipping older versions with the bug.
 
 Some shells can be extremely inefficient when there are a lot of
 here-documents inside a single statement.  For instance if your

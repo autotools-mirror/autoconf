@@ -2152,11 +2152,18 @@ AC_DEFUN([_AC_DO_ECHO],
 dnl If the string contains '"', '`', or '\', then just echo it rather
 dnl than expanding it.  This is a hack, but it is safer, while also
 dnl typically expanding simple substrings like '$CC', which is what we want.
+dnl
 dnl The rest of this macro body is quoted, to work around misuses like
 dnl `AC_CHECK_FUNC(sigblock, , AC_CHECK_LIB(bsd, sigblock))',
 dnl which underquotes the 3rd arg and would misbehave if we didn't quote here.
-[case $ac_try in #(
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;; #(
+dnl The "(($ac_try" instead of $ac_try avoids problems with even-worse
+dnl underquoting misuses, such as
+dnl `AC_CHECK_FUNC(foo, , AC_CHECK_LIB(a, foo, , AC_CHECK_LIB(b, foo)))'.
+dnl We normally wouldn't bother with this kind of workaround for invalid code
+dnl but this change was put in just before Autoconf 2.60 and we wanted to
+dnl minimize the integration hassle.
+[case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
   *) ac_try_echo=$ac_try;;
 esac
 eval "echo \"\$as_me:$LINENO: $ac_try_echo\""]])
