@@ -10799,7 +10799,7 @@ within a here-document.  If the closing brace does not lie on the boundary,
 the failure is silent and the variable expansion will be empty, otherwise
 the shell will report a bad substitution.  This bug can usually be worked
 around by omitting the braces: @code{$var}.  The bug was fixed in
-@samp{ksh99g} (1998-04-30) but as of 2006 many operating systems were
+@samp{ksh93g} (1998-04-30) but as of 2006 many operating systems were
 still shipping older versions with the bug.
 
 Some shells can be extremely inefficient when there are a lot of
