@@ -2,6 +2,8 @@
 
 	* lib/autoconf/general.m4 (_AC_DO_ECHO): Be even more conservative
 	about quoting the case statement, just in case.
+	* doc/autoconf.texi (Here-Documents): Mention that the ksh bug
+	was fixed in ksh93g; reported by Ralf Wildenhues.
 
 2006-05-31  Stepan Kasal  <kasal@ucw.cz>
 
