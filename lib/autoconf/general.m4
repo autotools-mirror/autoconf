@@ -2149,15 +2149,17 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
 AC_DEFUN([_AC_DO_ECHO],
 [m4_if([$1], [$ac_try], [], [ac_try="$1"
 ])dnl
-dnl If the string contains '${', '"', '`', or '\', then escape
-dnl $, ", `, and \.  This is a hack, but it is safe and it also
-dnl typically expands substrings like '$CC', which is what we want.
-case $ac_try in #(
-  *\${* | *\"* | *\`* | *\\*)
-    ac_script='s/[[$"`\\]]/\\&/g'
-    ac_try=`echo "$ac_try" | sed "$ac_script"`;;
+dnl If the string contains '"', '`', or '\', then just echo it rather
+dnl than expanding it.  This is a hack, but it is safer, while also
+dnl typically expanding simple substrings like '$CC', which is what we want.
+dnl The rest of this macro body is quoted, to work around misuses like
+dnl `AC_CHECK_FUNC(sigblock, , AC_CHECK_LIB(bsd, sigblock))',
+dnl which underquotes the 3rd arg and would misbehave if we didn't quote here.
+[case $ac_try in #(
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;; #(
+  *) ac_try_echo=$ac_try;;
 esac
-eval "echo \"\$as_me:$LINENO: $ac_try\""])
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\""]])
 
 # _AC_DO(COMMAND)
 # ---------------
@@ -2198,11 +2200,20 @@ AC_DEFUN([_AC_DO_TOKENS],
 # -----------------
 # Eval COMMAND, save the exit status in ac_status, and log it.
 # Unlike _AC_DO, this macro mishandles quoted arguments in some cases.
-# It is present only to support the backward-compatibility macros
-# AC_TRY_EVAL and AC_TRY_COMMAND.
+# It is present only for backward compatibility with previous Autoconf versions.
 AC_DEFUN([_AC_EVAL],
 [_AC_RUN_LOG([eval $1],
 	     [eval echo "$as_me:$LINENO: \"$1\""])])
+
+
+# _AC_EVAL_STDERR(COMMAND)
+# ------------------------
+# Like _AC_RUN_LOG_STDERR, but eval (instead of running) COMMAND.
+# Unlike _AC_DO_STDERR, this macro mishandles quoted arguments in some cases.
+# It is present only for backward compatibility with previous Autoconf versions.
+AC_DEFUN([_AC_EVAL_STDERR],
+[_AC_RUN_LOG_STDERR([eval $1],
+		    [eval echo "$as_me:$LINENO: \"$1\""])])
 
 
 # AC_TRY_EVAL(VARIABLE)

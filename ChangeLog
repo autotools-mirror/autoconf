@@ -1,3 +1,16 @@
+2006-05-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_DO_ECHO): Be more conservative
+	about quoting ac_try: quote all of it, if any of it seems suspicious.
+	This means we don't have to worry about ${ or sed any more.
+	Also, double-quote the case statement, to work around misuses via
+	underquoting as reported by Ralf Wildenhues in
+	<http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00169.html>.
+	(_AC_EVAL_STDERR): Revert, since evidently some packages rely on this
+	undocumented and dangerous macro.
+	Problem reported by Ralf Wildenhues in
+	<http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00168.html>.
+
 2006-05-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/m4sugar/m4sh.m4 (_AS_DIRNAME_PREPARE): Check whether
