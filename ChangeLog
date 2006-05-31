@@ -7,7 +7,9 @@
 
 2006-05-31  Stepan Kasal  <kasal@ucw.cz>
 
-	* doc/autoconf.texi (Particular Programs) <AC_PROG_MKDIR_P>:
+	* doc/autoconf.texi (System Services): Do not document
+	overriding EXEEXT via ac_cv_exeext=ext.
+	(Particular Programs) <AC_PROG_MKDIR_P>:
 	Document that ${MKDIR_P} understands --.
 	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Improve the
 	comment.
