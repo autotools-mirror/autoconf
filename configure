@@ -459,7 +459,7 @@ test \$exitcode = 0") || {
 }
 
 
-if (as_dir=`dirname -- /` && test "$as_dir" = /) >/dev/null 2>&1; then
+if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
   as_dirname=dirname
 else
   as_dirname=false
@@ -3138,7 +3138,7 @@ $as_unset CDPATH
 }
 
 
-if (as_dir=`dirname -- /` && test "$as_dir" = /) >/dev/null 2>&1; then
+if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
   as_dirname=dirname
 else
   as_dirname=false

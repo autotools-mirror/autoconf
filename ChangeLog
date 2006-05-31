@@ -1,3 +1,8 @@
+2006-05-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (_AS_DIRNAME_PREPARE): Guard against test
+	argument with leading hyphen.  Problem reported by Paul Eggert.
+
 2006-05-30  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_DO_ECHO): Be more conservative
