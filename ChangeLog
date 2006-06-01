@@ -1,3 +1,7 @@
+2006-06-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* config/texinfo.tex, doc/standards.texi: Sync from upstream.
+
 2006-06-01  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (File System Conventions): Warn about ":"
