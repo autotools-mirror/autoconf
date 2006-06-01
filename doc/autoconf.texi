@@ -10947,7 +10947,9 @@ the following:
 
 Also, file names should not begin with @samp{~} or @samp{-}, and should
 contain neither @samp{-} immediately after @samp{/} nor @samp{~}
-immediately after @samp{:}.
+immediately after @samp{:}.  On Posix-like platforms, directory names
+should not contain @samp{:}, as this runs afoul of @samp{:} used as the
+path separator.
 
 These restrictions apply not only to the files that you distribute, but
 also to the absolute file names of your source, build, and destination

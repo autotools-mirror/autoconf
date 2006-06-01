@@ -1,3 +1,8 @@
+2006-06-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (File System Conventions): Warn about ":"
+	anywhere in directory names.
+
 2006-05-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_DO_ECHO): Be even more conservative
