@@ -1,3 +1,10 @@
+2006-06-02  Stepan Kasal  <kasal@ucw.cz>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Here-Documents): Add details about the
+	pre-ksh93g bug.  Reword slightly to make it clearer.  Consistently
+	use "here-documents" instead of "here documents".
+
 2006-06-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* config/texinfo.tex, doc/standards.texi: Sync from upstream.

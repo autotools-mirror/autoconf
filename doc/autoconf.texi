@@ -10755,8 +10755,8 @@ Posix standard, the challenge is to find it.
 
 @node Here-Documents
 @section Here-Documents
-@cindex Here documents
-@cindex Shell here documents
+@cindex Here-documents
+@cindex Shell here-documents
 
 Don't rely on @samp{\} being preserved just because it has no special
 meaning together with the next symbol.  In the native @command{sh}
@@ -10787,21 +10787,23 @@ bash-2.04$ @kbd{cat <<EOF
 @end group
 @end example
 
-
-Many older shells (including the Bourne shell) implement here-documents
-inefficiently.  And some shells mishandle large here-documents: for example,
+Some shells mishandle large here-documents: for example,
 Solaris 10 @command{dtksh} and the UnixWare 7.1.1 Posix shell, which are
 derived from Korn shell version M-12/28/93d, mishandle braced variable
-expansion @code{$@{var@}} that crosses a 1024- or 4096-byte buffer boundary
-within a here-document.  If the closing brace does not lie on the boundary,
-the failure is silent and the variable expansion will be empty, otherwise
-the shell will report a bad substitution.  This bug can usually be worked
-around by omitting the braces: @code{$var}.  The bug was fixed in
+expansion that crosses a 1024- or 4096-byte buffer boundary
+within a here-document.  Only the part of the variable name after the boundary
+is used.  For example, @code{$@{variable@}} could be replaced by the expansion
+of @code{$@{ble@}}.  If the end of the variable name is aligned with the block
+boundary, the shell reports an error, as if you used @code{$@{@}}.
+Instead of @code{$@{variable-default@}}, the shell may expand
+@code{$@{riable-default@}}, or even @code{$@{fault@}}.  This bug can often
+be worked around by omitting the braces: @code{$variable}.  The bug was fixed in
 @samp{ksh93g} (1998-04-30) but as of 2006 many operating systems were
 still shipping older versions with the bug.
 
-Some shells can be extremely inefficient when there are a lot of
-here-documents inside a single statement.  For instance if your
+Many older shells (including the Bourne shell) implement here-documents
+inefficiently.  In particular, some shells can be extremely inefficient when
+a single statement contains many here-documents.  For instance if your
 @file{configure.ac} includes something like:
 
 @example
@@ -10820,7 +10822,7 @@ fi
 @end example
 
 A shell parses the whole @code{if}/@code{fi} construct, creating
-temporary files for each here document in it.  Some shells create links
+temporary files for each here-document in it.  Some shells create links
 for such here-documents on every @code{fork}, so that the clean-up code
 they had installed correctly removes them.  It is creating the links
 that can take the shell forever.
