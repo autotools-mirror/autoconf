@@ -9820,9 +9820,9 @@ Transform @var{expression} into a valid right-hand side for a C @code{#define}.
 For example:
 
 @example
-$ type="char *"
-$ echo "#define AS_TR_CPP([HAVE_$type]) 1"
-#define HAVE_CHAR_P 1
+# This outputs "#define HAVE_CHAR_P 1".
+type="char *"
+echo "#define AS_TR_CPP([HAVE_$type]) 1"
 @end example
 @end defmac
 
@@ -9831,10 +9831,10 @@ $ echo "#define AS_TR_CPP([HAVE_$type]) 1"
 Transform @var{expression} into a valid shell variable name.  For example:
 
 @example
-$ header="sys/some file.h"
-$ AS_TR_SH([HAVE_$header])=yes
-$ if test "$HAVE_sys_some_file_h" = yes; then echo "Have it!"; fi
-Have it!
+# This outputs "Have it!".
+header="sys/some file.h"
+AS_TR_SH([HAVE_$header])=yes
+if test "$HAVE_sys_some_file_h" = yes; then echo "Have it!"; fi
 @end example
 @end defmac
 
@@ -10700,10 +10700,10 @@ Posix mode is buggy and causes @command{pdksh} to depart from Posix in
 at least one respect:
 
 @example
-$ echo "`echo \"hello\"`"
+$ @kbd{echo "`echo \"hello\"`"}
 hello
-$ set -o posix
-$ echo "`echo \"hello\"`"
+$ @kbd{set -o posix}
+$ @kbd{echo "`echo \"hello\"`"}
 "hello"
 @end example
 
@@ -10913,24 +10913,30 @@ Don't rely on open file descriptors being open in child processes.  In
 @samp{exec n>file} are closed by a subsequent @samp{exec} (such as
 that involved in the fork-and-exec which runs a program or script).
 Thus, using sh, we have:
+
 @example
-$ cat ./descrips
+$ @kbd{cat ./descrips}
 #!/bin/sh -
 echo hello >&5
-$ exec 5>t
-$ ./descrips
-$ cat t
-hello
+$ @kbd{exec 5>t}
+$ @kbd{./descrips}
+$ @kbd{cat t}
 $
+hello
 @end example
+
+@noindent
 But using ksh:
+
 @example
-$ exec 5>t
-$ ./descrips
+$ @kbd{exec 5>t}
+$ @kbd{./descrips}
 hello
-$ cat t
+$ @kbd{cat t}
 $
 @end example
+
+@noindent
 Within the process which runs the @samp{descrips} script, file
 descriptor number 5 is closed.
 
@@ -11513,13 +11519,13 @@ Unpatched Tru64 5.1 @command{sh} omits the last slash of command-line
 arguments that contain two trailing slashes:
 
 @example
-$ echo / // /// //// .// //.
+$ @kbd{echo / // /// //// .// //.}
 / / // /// ./ //.
-$ x=//
-$ eval "echo \$x"
+$ @kbd{x=//}
+$ @kbd{eval "echo \$x"}
 /
-$ set -x
-$ echo abc | tr -t ab //
+$ @kbd{set -x}
+$ @kbd{echo abc | tr -t ab //}
 + echo abc
 + tr -t ab /
 /bc
@@ -12039,7 +12045,7 @@ In some shell implementations (e.g., older @command{ash}, Open@acronym{BSD} 3.8
 @samp{$?} is 0, so they exhibit behavior like this:
 
 @example
-$ false; eval 'echo $?'
+$ @kbd{false; eval 'echo $?'}
 0
 @end example
 
@@ -12806,7 +12812,7 @@ you can't use the name of the kernel as an indicator of the behavior.
 @item @command{date}
 @c -----------------
 @prindex @command{date}
-Some versions of @command{date} do not recognize special % directives,
+Some versions of @command{date} do not recognize special @samp{%} directives,
 and unfortunately, instead of complaining, they just pass them through,
 and exit with success:
 
@@ -13582,14 +13588,14 @@ According to Posix, @file{Makefile} comments start with @code{#}
 and continue until an unescaped newline is reached.
 
 @example
-% @kbd{cat Makefile}
+$ @kbd{cat Makefile}
 # A = foo \
       bar \
       baz
 
 all:
         @@echo ok
-% @kbd{make}   # GNU make
+$ @kbd{make}   # GNU make
 ok
 @end example
 
@@ -13599,7 +13605,7 @@ discards anything from @code{#} up to the end of line, ignoring any
 trailing backslash.
 
 @example
-% @kbd{pmake}  # BSD make
+$ @kbd{pmake}  # BSD make
 "Makefile", line 3: Need an operator
 Fatal errors encountered -- cannot continue
 @end example
@@ -13630,20 +13636,20 @@ override to sub-invocations of @command{make}.  Some other implementation
 will not pass the substitution along to sub-@command{make}s.
 
 @example
-% @kbd{cat Makefile}
+$ @kbd{cat Makefile}
 foo = foo
 one:
         @@echo $(foo)
         $(MAKE) two
 two:
         @@echo $(foo)
-% @kbd{make foo=bar}            # GNU make 3.79.1
+$ @kbd{make foo=bar}            # GNU make 3.79.1
 bar
 make two
 make[1]: Entering directory `/home/adl'
 bar
 make[1]: Leaving directory `/home/adl'
-% @kbd{pmake foo=bar}           # BSD make
+$ @kbd{pmake foo=bar}           # BSD make
 bar
 pmake two
 foo
@@ -13656,7 +13662,7 @@ the @file{Makefile} macro definitions, and declare foo as an environment
 variable:
 
 @example
-% @kbd{env foo=bar make -e}
+$ @kbd{env foo=bar make -e}
 @end example
 
 The @option{-e} option is propagated to sub-@command{make}s automatically,
@@ -13726,16 +13732,16 @@ For instance it's not surprising that OSF/Tru64 @command{make} doesn't
 protect @code{SHELL}, since it doesn't use it.
 
 @example
-% @kbd{cat Makefile}
+$ @kbd{cat Makefile}
 SHELL = /bin/sh
 FOO = foo
 all:
         @@echo $(SHELL)
         @@echo $(FOO)
-% @kbd{env SHELL=/bin/tcsh FOO=bar make -e}   # OSF1 V4.0 Make
+$ @kbd{env SHELL=/bin/tcsh FOO=bar make -e}   # OSF1 V4.0 Make
 /bin/tcsh
 bar
-% @kbd{env SHELL=/bin/tcsh FOO=bar gmake -e}  # GNU make
+$ @kbd{env SHELL=/bin/tcsh FOO=bar gmake -e}  # GNU make
 /bin/sh
 bar
 @end example
@@ -13768,16 +13774,16 @@ before reading @file{Makefile}.  Hence the @file{Makefile} in the
 current directory will not be read.
 
 @example
-% @kbd{cat Makefile}
+$ @kbd{cat Makefile}
 all:
         echo Hello
-% @kbd{cat obj/Makefile}
+$ @kbd{cat obj/Makefile}
 all:
         echo World
-% @kbd{make}      # GNU make
+$ @kbd{make}      # GNU make
 echo Hello
 Hello
-% @kbd{pmake}     # BSD make
+$ @kbd{pmake}     # BSD make
 echo World
 World
 @end example
@@ -13790,14 +13796,14 @@ reflect whether they encountered an error in their exit status; other
 implementations always succeed.
 
 @example
-% @kbd{cat Makefile}
+$ @kbd{cat Makefile}
 all:
         false
-% @kbd{make -k; echo exit status: $?}    # GNU make
+$ @kbd{make -k; echo exit status: $?}    # GNU make
 false
 make: *** [all] Error 1
 exit status: 2
-% @kbd{pmake -k; echo exit status: $?}   # BSD make
+$ @kbd{pmake -k; echo exit status: $?}   # BSD make
 false
 *** Error code 1 (continuing)
 exit status: 0
@@ -14008,13 +14014,13 @@ a leading @file{../pkg/src/} component.
 The following example makes the behavior of OSF1/Tru64 @command{make}
 more apparent.
 @example
-% cat Makefile
+$ @kbd{cat Makefile}
 VPATH = sub
 all: ../foo
         echo ../foo
-% ls
+$ @kbd{ls}
 Makefile foo
-% make
+$ @kbd{make}
 echo foo
 foo
 @end example
@@ -14027,10 +14033,10 @@ occurred before the file was checked for.)
 For the record here is how SunOS 4 @command{make} behaves on this
 very same example.
 @smallexample
-% make
+$ @kbd{make}
 make: Fatal error: Don't know how to make target `../foo'
-% mkdir sub
-% make
+$ @kbd{mkdir sub}
+$ @kbd{make}
 echo sub/../foo
 sub/../foo
 @end smallexample
@@ -14044,13 +14050,13 @@ When a prerequisite is a sub-directory of @code{VPATH}, Tru64
 @command{make} will create it in the current directory.
 
 @example
-% @kbd{mkdir -p foo/bar build}
-% @kbd{cd build}
-% @kbd{cat >Makefile <<END
+$ @kbd{mkdir -p foo/bar build}
+$ @kbd{cd build}
+$ @kbd{cat >Makefile <<END
 VPATH = ..
 all: foo/bar
 END}
-% @kbd{make}
+$ @kbd{make}
 mkdir foo
 mkdir foo/bar
 @end example
@@ -14100,34 +14106,34 @@ directory, while @acronym{BSD} @command{make} will build new files locally and
 update existing files in the source directory.
 
 @example
-% @kbd{cat Makefile}
+$ @kbd{cat Makefile}
 VPATH = ..
 all: foo.x bar.x
 foo.x bar.x: newer.x
         @@echo Building $@@
-% @kbd{touch ../bar.x}
-% @kbd{touch ../newer.x}
-% @kbd{make}        # GNU make
+$ @kbd{touch ../bar.x}
+$ @kbd{touch ../newer.x}
+$ @kbd{make}        # GNU make
 Building foo.x
 Building bar.x
-% @kbd{pmake}       # NetBSD make
+$ @kbd{pmake}       # NetBSD make
 Building foo.x
 Building ../bar.x
-% @kbd{fmake}       # FreeBSD make, OpenBSD make
+$ @kbd{fmake}       # FreeBSD make, OpenBSD make
 Building foo.x
 Building bar.x
-% @kbd{tmake}       # Tru64 make
+$ @kbd{tmake}       # Tru64 make
 Building foo.x
 Building bar.x
-% @kbd{touch ../bar.x}
-% @kbd{make}        # GNU make
+$ @kbd{touch ../bar.x}
+$ @kbd{make}        # GNU make
 Building foo.x
-% @kbd{pmake}       # NetBSD make
+$ @kbd{pmake}       # NetBSD make
 Building foo.x
-% @kbd{fmake}       # FreeBSD make, OpenBSD make
+$ @kbd{fmake}       # FreeBSD make, OpenBSD make
 Building foo.x
 Building bar.x
-% @kbd{tmake}       # Tru64 make
+$ @kbd{tmake}       # Tru64 make
 Building foo.x
 Building bar.x
 @end example
@@ -14148,7 +14154,7 @@ because it ignored the @code{VPATH} result of @file{bar.x} while running
 the @code{bar.x: newer.x} rule.
 
 @example
-% @kbd{cat Makefile}
+$ @kbd{cat Makefile}
 VPATH = ..
 all: bar.y
 bar.x: newer.x
@@ -14156,23 +14162,23 @@ bar.x: newer.x
 .SUFFIXES: .x .y
 .x.y:
         cp $< $@@
-% @kbd{touch ../bar.x}
-% @kbd{touch ../newer.x}
-% @kbd{make}        # GNU make
+$ @kbd{touch ../bar.x}
+$ @kbd{touch ../newer.x}
+$ @kbd{make}        # GNU make
 Building bar.x
 cp bar.x bar.y
 cp: cannot stat `bar.x': No such file or directory
 make: *** [bar.y] Error 1
-% @kbd{pmake}       # NetBSD make
+$ @kbd{pmake}       # NetBSD make
 Building ../bar.x
 cp ../bar.x bar.y
-% @kbd{rm bar.y}
-% @kbd{fmake}       # FreeBSD make, OpenBSD make
+$ @kbd{rm bar.y}
+$ @kbd{fmake}       # FreeBSD make, OpenBSD make
 echo Building bar.x
 cp bar.x bar.y
 cp: cannot stat `bar.x': No such file or directory
 *** Error code 1
-% @kbd{tmake}       # Tru64 make
+$ @kbd{tmake}       # Tru64 make
 Building bar.x
 cp: bar.x: No such file or directory
 *** Exit 1
@@ -14186,26 +14192,26 @@ uses.  Tru64 will also work, but Free@acronym{BSD} and Open@acronym{BSD}
 still don't.
 
 @example
-% @kbd{cat Makefile}
+$ @kbd{cat Makefile}
 VPATH = ..
 all: bar.y
 bar.x: newer.x
 .SUFFIXES: .x .y
 .x.y:
         cp $< $@@
-% @kbd{touch ../bar.x}
-% @kbd{touch ../newer.x}
-% @kbd{make}        # GNU make
+$ @kbd{touch ../bar.x}
+$ @kbd{touch ../newer.x}
+$ @kbd{make}        # GNU make
 cp ../bar.x bar.y
-% @kbd{rm bar.y}
-% @kbd{pmake}       # NetBSD make
+$ @kbd{rm bar.y}
+$ @kbd{pmake}       # NetBSD make
 cp ../bar.x bar.y
-% @kbd{rm bar.y}
-% @kbd{fmake}       # FreeBSD make, OpenBSD make
+$ @kbd{rm bar.y}
+$ @kbd{fmake}       # FreeBSD make, OpenBSD make
 cp bar.x bar.y
 cp: cannot stat `bar.x': No such file or directory
 *** Error code 1
-% @kbd{tmake}       # Tru64 make
+$ @kbd{tmake}       # Tru64 make
 cp ../bar.x bar.y
 @end example
 
