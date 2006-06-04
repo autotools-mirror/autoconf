@@ -89,7 +89,7 @@ Library directories:
   -I, --include=DIR          append directory DIR to search path
 
 The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL,
-AUTOPOINT, LIBTOOLIZE are honored.
+AUTOPOINT, LIBTOOLIZE, M4 are honored.
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";

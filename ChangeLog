@@ -1,3 +1,10 @@
+2006-06-04  Eric Blake  <ebb9@byu.net>
+
+	* bin/autoreconf.in (help): Document M4 environment variable.
+	* bin/autoconf.as (Usage): Likewise.
+	* bin/autom4te.in (help): Likewise.
+	* doc/autoconf.texi (autom4te Invocation): Likewise.
+
 2006-06-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: GNU make now recommended for VPATH builds.

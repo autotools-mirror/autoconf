@@ -9140,7 +9140,10 @@ autom4te @var{options} @var{files}
 @end example
 
 @noindent
-where the @var{files} are directly passed to @command{m4}.  In addition
+@evindex M4
+where the @var{files} are directly passed to @command{m4}.  By default,
+@acronym{GNU} m4 is found during configure, but the environment variable
+@env{M4} can be set to tell @command{autom4te} where to look.  In addition
 to the regular expansion, it handles the replacement of the quadrigraphs
 (@pxref{Quadrigraphs}), and of @samp{__oline__}, the current line in the
 output.  It supports an extended syntax for the @var{files}:

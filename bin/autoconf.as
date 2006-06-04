@@ -45,7 +45,7 @@ Warning categories include:
   \`none'          turn off all the warnings
   \`error'         warnings are error
 
-The environment variable \`WARNINGS' is honored.
+The environment variables \`M4' and \`WARNINGS' are honored.
 
 Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
