@@ -1,8 +1,16 @@
 * Major changes in Autoconf 2.59d
 
- ** Even more safety checks for the new Directory variables:
-   Warn about suspicious `${datarootdir}' found in config files output.
- 
+** GNU make now recommended for VPATH builds
+  INSTALL now suggests VPATH builds (e.g., "sh ../srcdir/configure")
+  only if you use GNU make.  In practice, other 'make' implementations
+  have too many subtle incompatibilities in their support for VPATH.
+  These incompatibilities do not hurt bare Autoconf, but do affect
+  Automake-generated makefiles.  Recommending GNU make keeps the
+  installation instructions simpler.
+
+** Even more safety checks for the new Directory variables:
+  Warn about suspicious `${datarootdir}' found in config files output.
+
 ** AC_TRY_COMMAND, AC_TRY_EVAL, ac_config_guess, ac_config_sub, ac_configure
   These never-documented macros and variables have been marked with
   comments saying that they may be removed in a future release,
@@ -27,6 +35,24 @@
 ** AS_MKDIR_P
   Now more robust with special characters in file names, or when
   multiple processes create the same directory at the same time.
+
+** Obsolescent macros
+  The documentation now says that the following macros are obsolescent:
+  they test for problems that are so old that they are no longer of
+  practical importance on current systems.
+
+    AC_C_BACKSLASH_A       AC_FUNC_SELECT_ARGTYPES   AC_HEADER_STAT
+    AC_C_CONST             AC_FUNC_SETPGRP           AC_HEADER_STDC
+    AC_C_PROTOTYPES        AC_FUNC_SETVBUF_REVERSED  AC_HEADER_SYS_WAIT
+    AC_C_STRINGIZE         AC_FUNC_STAT              AC_HEADER_TIME
+    AC_C_VOLATILE          AC_FUNC_STRFTIME          AC_ISC_POSIX
+    AC_FUNC_CLOSEDIR_VOID  AC_FUNC_STRNLEN           AC_PROG_GCC_TRADITIONAL
+    AC_FUNC_GETPGRP        AC_FUNC_UTIME_NULL        AC_STRUCT_TM
+    AC_FUNC_LSTAT          AC_FUNC_VPRINTF
+    AC_FUNC_MEMCMP         AC_HEADER_DIRENT
+
+  New programs need not use these macros.  We have no current plans to
+  remove them.
 
 * Major changes in Autoconf 2.59c
 

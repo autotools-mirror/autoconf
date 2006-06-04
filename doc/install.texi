@@ -16,7 +16,10 @@ unlimited permission to copy, distribute and modify it.
 @node Basic Installation
 @section Basic Installation
 
-These are generic installation instructions.
+Briefly, the shell commands @samp{./configure; make; make install}
+should configure, build, and install this package.  The following
+more-detailed instructions are generic; see the @file{README} file for
+instructions specific to this package.
 
 The @command{configure} shell script attempts to guess correct values
 for various system-dependent variables used during compilation.  It uses
@@ -30,8 +33,8 @@ output (useful mainly for debugging @command{configure}).
 It can also use an optional file (typically called @file{config.cache}
 and enabled with @option{--cache-file=config.cache} or simply
 @option{-C}) that saves the results of its tests to speed up
-reconfiguring.  (Caching is disabled by default to prevent problems with
-accidental use of stale cache files.)
+reconfiguring.  Caching is disabled by default to prevent problems with
+accidental use of stale cache files.
 
 If you need to do unusual things to compile the package, please try to
 figure out how @command{configure} could check whether to do them, and
@@ -41,7 +44,7 @@ cache, and at some point @file{config.cache} contains results you don't
 want to keep, you may remove or edit it.
 
 The file @file{configure.ac} (or @file{configure.in}) is used to create
-@file{configure} by a program called @code{autoconf}.  You only need
+@file{configure} by a program called @code{autoconf}.  You need
 @file{configure.ac} if you want to change it or regenerate
 @file{configure} using a newer version of @code{autoconf}.
 
@@ -51,12 +54,9 @@ The simplest way to compile this package is:
 @enumerate
 @item
 @code{cd} to the directory containing the package's source code and type
-@samp{./configure} to configure the package for your system.  If you're
-using @code{csh} on an old version of System V, you might need to type
-@samp{sh ./configure} instead to prevent @code{csh} from trying to
-execute @command{configure} itself.
+@samp{./configure} to configure the package for your system.
 
-Running @command{configure} takes awhile.  While running, it prints some
+Running @command{configure} might take a while.  While running, it prints some
 messages telling which features it is checking for.
 
 @item
@@ -93,7 +93,7 @@ parameters by setting variables in the command line or in the environment.
 Here is an example:
 
 @example
-./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
+./configure CC=c99 CFLAGS=-g LIBS=-lposix
 @end example
 
 @xref{Defining Variables}, for more details.
@@ -104,15 +104,13 @@ Here is an example:
 
 You can compile the package for more than one kind of computer at the
 same time, by placing the object files for each architecture in their
-own directory.  To do this, you must use a version of @command{make}
-that supports the @code{VPATH} variable, such as GNU @command{make}.
+own directory.  To do this, you should use @acronym{GNU} @command{make}.
 @command{cd} to the directory where you want the object files and
 executables to go and run the @command{configure} script.
 @command{configure} automatically checks for the source code in the
 directory that @command{configure} is in and in @file{..}.
 
-If you have to use a @command{make} that does not support the
-@code{VPATH} variable, you have to compile the package for one
+With a non-@acronym{GNU} @command{make}, you should compile the package for one
 architecture at a time in the source code directory.  After you have
 installed the package for one architecture, use @samp{make distclean}
 before reconfiguring for another architecture.

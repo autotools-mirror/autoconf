@@ -1,3 +1,41 @@
+2006-06-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: GNU make now recommended for VPATH builds.
+	Mention that some macros are now documented to be obsolescent.
+	* doc/autoconf.texi:
+	Prefer "current" to "modern" to describe
+	currently-used (albeit perhaps old-fashioned) hosts.
+	Mention which ancient features no longer need to be worried about.
+	setgid -> set-group-ID
+	setuid -> set-user-ID (these are the Posix terms)
+	Fix some misuses of "only".
+	(AC_C_BACKSLASH_A, AC_C_CONST, AC_C_PROTOTYPES):
+	(AC_C_STRINGIZE, AC_C_VOLATILE, AC_FUNC_CLOSEDIR_VOID):
+	(AC_FUNC_GETPGRP, AC_FUNC_LSTAT, AC_FUNC_MEMCMP):
+	(AC_FUNC_SELECT_ARGTYPES, AC_FUNC_SETPGRP):
+	(AC_FUNC_SETVBUF_REVERSED, AC_FUNC_STAT, AC_FUNC_STRFTIME):
+	(AC_FUNC_STRNLEN, AC_FUNC_UTIME_NULL, AC_FUNC_VPRINTF):
+	(AC_HEADER_DIRENT, AC_HEADER_STAT, AC_HEADER_STDC):
+	(AC_HEADER_SYS_WAIT, AC_HEADER_TIME, AC_ISC_POSIX):
+	(AC_PROG_GCC_TRADITIONAL, AC_STRUCT_TM):
+	Mention that these macros are obsolescent.
+	(Installation Directory Variables): shall -> should
+	(File Descriptors): Mention that 0, 1, 2 might get reopened.
+	Mention that it's now safe to use 3 and 4.
+	(Limitations of Usual Tools): cp -r is now specified by Posix.
+	Omit longwinded and obsolescent discussion of cp -f.
+	Modernize discussion of expr, ls.
+	(Limitations of Make): Modernize discussion of VPATH builds.
+	Mention $? as a workaround in some cases.
+	* doc/install.texi (Basic Installation):
+	Mention "./configure; make; make install" first.  Be more
+	specific about why this file is generic.  Remove unnecessary
+	parens.  Remove misleading "only".  Remove obsolete advice
+	about csh.  Don't say "configure" takes awhile; say it
+	might take a while.  Suggest CFLAGS=-g rather than CFLAGS=-O2,
+	and CC=c99 rather than CC=c89, as these are blessed by current
+	Posix.  Recommend GNU make if doing a VPATH build.
+
 2006-06-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Use a consistent style "$ @kbd{...}" for
