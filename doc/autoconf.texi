@@ -3535,7 +3535,7 @@ This macro uses the @samp{mkdir -p} command if possible.  Otherwise, it
 falls back on invoking @command{install-sh} with the @option{-d} option,
 so your package should
 contain @file{install-sh} as described under @code{AC_PROG_INSTALL}.
-A @file{install-sh} file that predates Autoconf 2.60 or Automake 1.10
+An @file{install-sh} file that predates Autoconf 2.60 or Automake 1.10
 is vulnerable to race conditions, so if you want to support parallel
 installs from
 different packages into the same directory you need to make sure you
@@ -13233,13 +13233,13 @@ Traditional @code{mkdir -p} implementations suffer from race conditions.
 For example, if you invoke @code{mkdir -p a/b} and @code{mkdir -p a/c}
 at the same time, both processes might detect that @file{a} is missing,
 one might create @file{a}, then the other might try to create @file{a}
-and fail with a @code{File exists} diagnostic.  At least Solaris 10,
-Net@acronym{BSD} 1.6, and Open@acronym{BSD} 3.4 are vulnerable to race
-conditions.  The @acronym{GNU} Core Utilities
-(since @samp{fileutils}
-version 4.1), Free@acronym{BSD} 5.0, and Net@acronym{BSD}-current are
-known to have a
-race-free @code{mkdir -p}.  This possible race is harmful in parallel
+and fail with a @code{File exists} diagnostic.  The @acronym{GNU} Core
+Utilities (@samp{fileutils} version 4.1), Free@acronym{BSD} 5.0,
+Net@acronym{BSD} 2.0.2, and Open@acronym{BSD} 2.4 are known to be
+race-free when two processes invoke @code{mkdir -p} simultaneously, but
+earlier versions are vulnerable.  Solaris @command{mkdir} is still
+vulnerable as of Solaris 10, and other traditional Unix systems are
+probably vulnerable too.  This possible race is harmful in parallel
 builds when several @file{Makefile} rules call @code{mkdir -p} to
 construct directories.  You may use
 @code{install-sh -d} as a safe replacement, provided this script is
@@ -18597,7 +18597,7 @@ introduced in this document.
 @c  LocalWords:  CDPATH DUALCASE LINENO prepass Subshells lineno NULLCMD cmp wc
 @c  LocalWords:  MAILPATH scanset arg NetBSD Almquist printf expr cp
 @c  LocalWords:  Oliva awk Aaaaarg cmd regex xfoo GNV OpenVMS unwriteable te VM
-@c  LocalWords:  coreutils sparc Proulx SysV nbar nfoo maxdepth acdilrtu TWG mc
+@c  LocalWords:  sparc Proulx SysV nbar nfoo maxdepth acdilrtu TWG mc
 @c  LocalWords:  mkdir exe uname OpenBSD Fileutils mktemp umask TMPDIR guid os
 @c  LocalWords:  fooXXXXXX Unicos parenthesization utimes hpux hppa unescaped
 @c  LocalWords:  pmake DOS's gmake ifoo DESTDIR autoconfiscated pc coff mips gg
