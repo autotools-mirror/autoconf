@@ -1,5 +1,7 @@
 * Major changes in Autoconf 2.59d
 
+  Released 2006-06-05, by Ralf Wildenhues.
+
 ** GNU make now recommended for VPATH builds
   INSTALL now suggests VPATH builds (e.g., "sh ../srcdir/configure")
   only if you use GNU make.  In practice, other 'make' implementations
