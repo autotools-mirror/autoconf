@@ -41,15 +41,14 @@
   they test for problems that are so old that they are no longer of
   practical importance on current systems.
 
-    AC_C_BACKSLASH_A       AC_FUNC_SELECT_ARGTYPES   AC_HEADER_STAT
-    AC_C_CONST             AC_FUNC_SETPGRP           AC_HEADER_STDC
-    AC_C_PROTOTYPES        AC_FUNC_SETVBUF_REVERSED  AC_HEADER_SYS_WAIT
-    AC_C_STRINGIZE         AC_FUNC_STAT              AC_HEADER_TIME
-    AC_C_VOLATILE          AC_FUNC_STRFTIME          AC_ISC_POSIX
-    AC_FUNC_CLOSEDIR_VOID  AC_FUNC_STRNLEN           AC_PROG_GCC_TRADITIONAL
-    AC_FUNC_GETPGRP        AC_FUNC_UTIME_NULL        AC_STRUCT_TM
-    AC_FUNC_LSTAT          AC_FUNC_VPRINTF
-    AC_FUNC_MEMCMP         AC_HEADER_DIRENT
+    AC_C_BACKSLASH_A       AC_FUNC_MEMCMP            AC_HEADER_DIRENT
+    AC_C_CONST             AC_FUNC_SELECT_ARGTYPES   AC_HEADER_STAT
+    AC_C_PROTOTYPES        AC_FUNC_SETPGRP           AC_HEADER_STDC
+    AC_C_STRINGIZE         AC_FUNC_SETVBUF_REVERSED  AC_HEADER_SYS_WAIT
+    AC_C_VOLATILE          AC_FUNC_STAT              AC_HEADER_TIME
+    AC_FUNC_CLOSEDIR_VOID  AC_FUNC_STRFTIME          AC_ISC_POSIX
+    AC_FUNC_GETPGRP        AC_FUNC_UTIME_NULL        AC_PROG_GCC_TRADITIONAL
+    AC_FUNC_LSTAT          AC_FUNC_VPRINTF           AC_STRUCT_TM
 
   New programs need not use these macros.  We have no current plans to
   remove them.

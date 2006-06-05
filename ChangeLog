@@ -1,3 +1,9 @@
+2006-06-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Whoops!  AC_FUNC_STRNLEN isn't obsolescent.  Problem
+	reported by Ralf Wildenhues.
+	* doc/autoconf.texi (AC_FUNC_STRNLEN): Likewise.
+
 2006-06-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* THANKS: Update.

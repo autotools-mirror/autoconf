@@ -4689,9 +4689,6 @@ If the @code{strtold} function exists and conforms to C99, define
 @prindex @code{strnlen}
 If the @code{strnlen} function is not available, or is buggy (like the one
 from @acronym{AIX} 4.3), require an @code{AC_LIBOBJ} replacement for it.
-
-This macro is obsolescent, as no current systems have the bug.
-New programs need not use this macro.
 @end defmac
 
 @defmac AC_FUNC_UTIME_NULL
