@@ -3934,7 +3934,8 @@ some old systems don't support this (e.g., NextStep).
 @prindex @code{isinf}
 @prindex @code{isnan}
 The C99 standard says that @code{isinf} and @code{isnan} are
-macros.  On some systems just macros are available (e.g., HP-UX), on
+macros.  On some systems just macros are available
+(e.g., HP-UX and Solaris 10), on
 some systems both macros and functions (e.g., glibc 2.3.2), and on some
 systems only functions (e.g., IRIX 6 and Solaris 9).  In some cases
 these functions are declared in nonstandard headers like
@@ -6140,9 +6141,9 @@ OK, since installers with inadequate compilers like @sc{irix} can simply
 examine these compilers' diagnostic output.
 
 @item Don't rely on correct @code{#line} support
-On Solaris 8, @command{c89} (Sun WorkShop 6 update 2 C 5.3 Patch
-111679-08 2002/05/09)) diagnoses @code{#line} directives whose line
-numbers are greater than 32767.  In addition, nothing in Posix
+On Solaris, @command{c89} (at least Sun C 5.3 through 5.8)
+diagnoses @code{#line} directives whose line
+numbers are greater than 32767.  Nothing in Posix
 makes this invalid.  That is why Autoconf stopped issuing
 @code{#line} directives.
 @end table
@@ -11441,7 +11442,7 @@ releases of Solaris don't support it:
 
 @example
 $ @kbd{showrev -c /bin/sh | grep version}
-Command version: SunOS 5.10 Generic January 2005
+Command version: SunOS 5.10 Generic 121004-01 Oct 2005
 $ @kbd{echo $(echo blah)}
 syntax error: `(' unexpected
 @end example
@@ -12071,10 +12072,9 @@ Don't expect any option.  @xref{Preset Output Variables}, @code{ECHO_N}
 etc.@: for a means to simulate @option{-n}.
 
 Do not use backslashes in the arguments, as there is no consensus on
-their handling.  On @samp{echo '\n' | wc -l}, the @command{sh} of
-Digital Unix 4.0 and @acronym{MIPS RISC/OS} 4.52, answer 2, but the Solaris
-@command{/bin/sh}, Bash, and Zsh (in @command{sh} emulation mode) report 1.
-Please note that the problem is truly @command{echo}: all the shells
+their handling.  For @samp{echo '\n' | wc -l}, the @command{sh} of
+Solaris outputs 2, but Bash and Zsh (in @command{sh} emulation mode) output 1.
+The problem is truly @command{echo}: all the shells
 understand @samp{'\n'} as the string composed of a backslash and an
 @samp{n}.
 
@@ -12207,7 +12207,7 @@ that you update.
 @c ------------------
 @prindex @command{false}
 Don't expect @command{false} to exit with status 1: in native
-Solaris it exits with status 255.
+Solaris @file{/bin/false} exits with status 255.
 
 
 @item @command{for}
