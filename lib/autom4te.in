@@ -78,6 +78,7 @@ args: --preselect AC_CONFIG_SUBDIRS
 args: --preselect AC_INIT
 args: --preselect AC_PROG_LIBTOOL
 args: --preselect LT_INIT
+args: --preselect LT_CONFIG_LTDL_DIR
 args: --preselect AM_GNU_GETTEXT
 end-language: "Autoreconf-preselections"
 

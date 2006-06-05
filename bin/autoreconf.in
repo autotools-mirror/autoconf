@@ -442,6 +442,7 @@ sub autoreconf_current_directory ()
   my $aux_dir;
   my $uses_gettext_via_traces;
   my $uses_libtool;
+  my $uses_libltdl;
   my $uses_autoheader;
   my $uses_automake;
   my @subdir;
@@ -457,6 +458,7 @@ sub autoreconf_current_directory ()
 	     'AC_INIT',
 	     'AC_PROG_LIBTOOL',
 	     'LT_INIT',
+	     'LT_CONFIG_LTDL_DIR',
 	     'AM_GNU_GETTEXT',
 	     'AM_INIT_AUTOMAKE',
 	    )
@@ -467,6 +469,7 @@ sub autoreconf_current_directory ()
       $uses_autoconf = 1            if /AC_INIT/;
       $uses_gettext_via_traces = 1  if /AM_GNU_GETTEXT/;
       $uses_libtool = 1             if /(AC_PROG_LIBTOOL|LT_INIT)/;
+      $uses_libltdl = 1             if /LT_CONFIG_LTDL_DIR/;
       $uses_autoheader = 1          if /AC_CONFIG_HEADERS/;
       $uses_automake = 1            if /AM_INIT_AUTOMAKE/;
       push @subdir, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/ && $recursive;
@@ -521,6 +524,10 @@ sub autoreconf_current_directory ()
     }
   elsif ($install)
     {
+      if ($uses_libltdl)
+        {
+	  $libtoolize .= " --ltdl";
+	}
       xsystem ($libtoolize);
       $rerun_aclocal = 1;
     }

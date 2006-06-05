@@ -1,3 +1,11 @@
+2006-06-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoreconf.in: Trace `LT_CONFIG_LTDL_DIR'; if it has been
+	seen, invoke libtoolize with `--ltdl' argument.
+	* lib/autom4te.in (Autoreconf-preselections): Adjust.
+	* NEWS: Update.
+	Suggested by Eric Blake.
+
 2006-06-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Whoops!  AC_FUNC_STRNLEN isn't obsolescent.  Problem

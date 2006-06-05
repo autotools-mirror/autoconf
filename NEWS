@@ -53,6 +53,11 @@
   New programs need not use these macros.  We have no current plans to
   remove them.
 
+** autoreconf
+  For compatibility with future Libtool 2.0, autoreconf will invoke
+  libtoolize with the option `--ltdl' now, if LT_CONFIG_LTDL_DIR is
+  used.
+
 * Major changes in Autoconf 2.59c
 
   Released 2006-04-12, by Ralf Wildenhues.
