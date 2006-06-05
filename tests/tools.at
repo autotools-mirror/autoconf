@@ -253,17 +253,15 @@ _AS_BAR
 [dnl]
 ]])
 
-AT_DATA_M4SH([experr],
-[[configure.ac:2: error: possibly undefined macro: m4_foo
-      If this token and others are legitimate, please use m4_pattern_allow.
+AT_CHECK_AUTOCONF([], 1, [],
+[[configure.ac:2: error: possibly undefined macro: m4@&t@_foo
+      If this token and others are legitimate, please use m4@&t@_pattern_allow.
       See the Autoconf documentation.
-configure.ac:3: error: possibly undefined macro: _m4_bar
-configure.ac:4: error: possibly undefined macro: AS_FOO
-configure.ac:5: error: possibly undefined macro: _AS_BAR
-configure.ac:6: error: possibly undefined macro: dnl
+configure.ac:3: error: possibly undefined macro: _m4@&t@_bar
+configure.ac:4: error: possibly undefined macro: AS@&t@_FOO
+configure.ac:5: error: possibly undefined macro: _AS@&t@_BAR
+configure.ac:6: error: possibly undefined macro: d@&t@nl
 ]])
-
-AT_CHECK_AUTOCONF([], 1, [], experr)
 
 AT_CLEANUP
 
@@ -294,17 +292,15 @@ BAS_DEFINE
 It would be very bad if Autoconf forgot to expand [AS_]INIT!
 ]])
 
-AT_DATA_M4SH([experr],
-[[configure.ac:1: error: possibly undefined macro: AS_INIT
-      If this token and others are legitimate, please use m4_pattern_allow.
+AT_CHECK_AUTOCONF([], 1, [],
+[[configure.ac:1: error: possibly undefined macro: AS@&t@_INIT
+      If this token and others are legitimate, please use m4@&t@_pattern_allow.
       See the Autoconf documentation.
-configure.ac:7: error: possibly undefined macro: AS_ALLOWED_NOT
+configure.ac:7: error: possibly undefined macro: AS@&t@_ALLOWED_NOT
 configure.ac:10: error: possibly undefined macro: FORBIDDEN
-configure.ac:14: error: possibly undefined macro: AS_THIS_IS_INVALID
-configure.ac:14: error: possibly undefined macro: _AS_THIS_IS_INVALID_TOO
+configure.ac:14: error: possibly undefined macro: AS@&t@_THIS_IS_INVALID
+configure.ac:14: error: possibly undefined macro: _AS@&t@_THIS_IS_INVALID_TOO
 ]])
-
-AT_CHECK_AUTOCONF([], 1, [], [experr])
 
 AT_CLEANUP
 

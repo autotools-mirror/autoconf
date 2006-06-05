@@ -1249,7 +1249,8 @@ m4_define([m4_require],
 [m4_ifdef([_m4_expanding($1)],
 	 [m4_fatal([$0: circular dependency of $1])])dnl
 m4_ifndef([_m4_divert_dump],
-	  [m4_fatal([$0($1): cannot be used outside of an m4_defun'd macro])])dnl
+	  [m4_fatal([$0($1): cannot be used outside of an ]dnl
+m4_bmatch([$0], [^AC_], [[AC_DEFUN]], [[m4_defun]])['d macro])])dnl
 m4_provide_if([$1],
 	      [],
 	      [_m4_require_call([$1], [$2])])dnl

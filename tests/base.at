@@ -63,6 +63,24 @@ AT_CHECK_CONFIGURE
 AT_CLEANUP
 
 
+## --------------------------- ##
+## AC_REQUIRE: error message.  ##
+## --------------------------- ##
+
+# Check that the message mentions AC_DEFUN, not m4_defun.
+
+AT_SETUP([AC_REQUIRE: error message])
+AT_DATA([configure.ac],
+[[AC_REQUIRE([AC_PROG_CC])
+]])
+
+AT_CHECK_AUTOCONF([], [1], [],
+[[configure.ac:1: error: AC_REQUIRE(AC_PROG_CC): cannot be used outside of an AC_DEFUN'd macro
+configure.ac:1: the top level
+autom4te: m4 failed with exit status: 1
+]])
+AT_CLEANUP
+
 
 ## ----------------------------------------------- ##
 ## AC_REQUIRE and AC_DEFUN_ONCE: Require, expand.  ##

@@ -1,3 +1,17 @@
+2006-06-05  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sugar.m4 (m4_require): Modify the error
+	message issued by AC_REQUIRE.
+	* tests/m4sugar.at: Check m4_require's error message.
+	* tests/base.at: Check AC_REQUIRE's error message.
+	* tests/local.at (AT_CHECK_M4): New macro, almost identical
+	to...
+	(AT_CHECK_AUTOM4TE): ... which is now a thin wrapper around
+	AT_CHECK_M4.
+	(AT_CHECK_AUTOCONF): Use AT_CHECK_M4; no longer support
+	`expout' as the last parameter.
+	* tests/tools.at: Adapt to the above change.
+
 2006-06-04  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Correct

@@ -95,6 +95,25 @@ script.4s:7: the top level
 AT_CLEANUP
 
 
+## --------------------------- ##
+## m4_require: error message.  ##
+## --------------------------- ##
+
+AT_SETUP([m4@&t@_require: error message])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_defun([foo], [FOO])
+m4_require([foo])
+]])
+
+AT_CHECK_M4SUGAR([], 1, [],
+[[script.4s:2: error: m4@&t@_require(foo): cannot be used outside of an m4_defun'd macro
+script.4s:2: the top level
+autom4te: m4 failed with exit status: 1
+]])
+AT_CLEANUP
+
+
 ## ----------------------------------- ##
 ## m4_require: circular dependencies.  ##
 ## ----------------------------------- ##
