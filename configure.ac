@@ -22,7 +22,7 @@
 # We need AC_CONFIG_TESTDIR.
 AC_PREREQ([2.59])
 
-AC_INIT([GNU Autoconf], [2.59d], [bug-autoconf@gnu.org])
+AC_INIT([GNU Autoconf], [2.59e], [bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
 

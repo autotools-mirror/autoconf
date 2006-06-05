@@ -1,5 +1,10 @@
 2006-06-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* configure.ac (AC_INIT): Bump to 2.59e.
+	* NEWS: Update.
+
+2006-06-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
 	Version 2.59d.
 
 	* config/texinfo.tex: Sync from upstream.
