@@ -127,7 +127,7 @@ GREP = @GREP@
 ## -------------------------------- ##
 
 check-forbidden-patterns:
-	if (cd $(srcdir) && \
+	@if (cd $(srcdir) && \
 	    $(GREP) $(forbidden_patterns) $(forbidden_patterns_files)) \
 	    >forbidden.log; then \
 	  echo "ERROR: forbidden patterns were found:" >&2; \

@@ -1,3 +1,9 @@
+2006-06-06  Tim Rice <tim@multitalents.net>.
+
+	* lib/freeze.mk: Quiet check-forbidden-patterns so the string
+	"ERROR" only shows up in "make check" output if there is an
+	error.
+
 2006-06-06  Eric Blake  <ebb9@byu.net>
 
 	* tests/tools.at (automatically allowed tokens): Fix typo.
