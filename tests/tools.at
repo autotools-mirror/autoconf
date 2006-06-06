@@ -307,7 +307,7 @@ AT_CLEANUP
 
 # autoconf: automatically allowed tokens
 # --------------------------------------
-AT_SETUP([autoconf: automatically alowed tokens])
+AT_SETUP([autoconf: automatically allowed tokens])
 
 AT_DATA_M4SH([configure.ac],
 [[AC_INIT

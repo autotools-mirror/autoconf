@@ -1,3 +1,7 @@
+2006-06-06  Eric Blake  <ebb9@byu.net>
+
+	* tests/tools.at (automatically allowed tokens): Fix typo.
+
 2006-06-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Don't blame non-GNU VPATH compatibility issues on Automake.
