@@ -1,3 +1,9 @@
+2006-06-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Integer Overflow): Mention that INT_MIN % -1
+	typically overflows on x86 CPUs, even though the C standard
+	requires otherwise.
+
 2006-06-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* configure.ac (AC_INIT): Bump to 2.59e.

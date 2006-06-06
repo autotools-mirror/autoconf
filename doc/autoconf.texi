@@ -14479,7 +14479,10 @@ to an integer type or store it into an integer variable.  Such programs
 are portable to the vast majority of modern platforms.  However, signed
 integer division is not always harmless: for example, on CPUs of the
 i386 family, dividing @code{INT_MIN} by @code{-1} yields a SIGFPE signal
-which by default terminates the program.
+which by default terminates the program.  Worse, taking the remainder
+of these two values typically yields the same signal on these CPUs,
+even though the C standard requires @code{INT_MIN % -1} to yield zero
+because the expression does not overflow.
 
 GCC users might consider using the
 @option{-ftrapv} option if they are worried about porting their code to
