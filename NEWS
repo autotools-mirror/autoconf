@@ -8,9 +8,9 @@
   INSTALL now suggests VPATH builds (e.g., "sh ../srcdir/configure")
   only if you use GNU make.  In practice, other 'make' implementations
   have too many subtle incompatibilities in their support for VPATH.
-  These incompatibilities do not hurt bare Autoconf, but do affect
-  Automake-generated makefiles.  Recommending GNU make keeps the
-  installation instructions simpler.
+  Many packages (including Autoconf itself) are portable to other
+  'make' implementations, but some packages are not, and recommending
+  GNU make keeps the installation instructions simpler.
 
 ** Even more safety checks for the new Directory variables:
   Warn about suspicious `${datarootdir}' found in config files output.

@@ -1,5 +1,7 @@
 2006-06-05  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* NEWS: Don't blame non-GNU VPATH compatibility issues on Automake.
+
 	* doc/autoconf.texi (Integer Overflow): Mention that INT_MIN % -1
 	typically overflows on x86 CPUs, even though the C standard
 	requires otherwise.
