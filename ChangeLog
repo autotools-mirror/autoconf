@@ -1,8 +1,15 @@
+2006-06-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Look for
+	$as_shell.exe too.  Problem reported by Andreas Buening in
+	<http://lists.gnu.org/archive/html/autoconf/2006-06/msg00038.html>.
+
 2006-06-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_ALLOCA): Work around
 	`unused variable' compiler warning, for `-Wall -Werror'.
-	Report by Jaap Haitsma <jaap@haitsma.org>.
+	Reported by Jaap Haitsma in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00012.html>.
 
 2006-06-06  Paul Eggert  <eggert@cs.ucla.edu>
 

@@ -160,6 +160,11 @@ $2
 # AS_BOURNE_COMPATIBLE
 # --------------------
 # Try to be as Bourne and/or POSIX as possible.
+#
+# FIXME: The assignment to BIN_SH is dubious; see
+# <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
+# It might be better to remove it, but first please see
+# <http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00025.html>.
 m4_define([AS_BOURNE_COMPATIBLE],
 [# Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
@@ -217,6 +222,18 @@ m4_expand_once([m4_append([_AS_DETECT_SUGGESTED_BODY], [
 # -----------------------
 # The real workhorse for detecting a shell with the correct
 # features.
+#
+# FIXME: The '/usr/bin/posix' below works around a shell bug in OSF
+# <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>
+# but this causes a regression on OpenServer 6.0.0
+# <http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00017.html>
+# The code should test for the OSF bug directly rather than look at
+# /usr/bin/posix here.
+#
+# FIXME: The 'test -f "$as_shell.exe"' works around a problem in OS/2
+# <http://lists.gnu.org/archive/html/autoconf/2006-06/msg00038.html>
+# but we should replace the two test -f calls with a single AS_EXECUTABLE_P.
+#
 m4_defun_once([_AS_DETECT_BETTER_SHELL],
 [m4_wrap([m4_divert_text([M4SH-SANITIZE], [
 AS_REQUIRE([_AS_UNSET_PREPARE])dnl
@@ -237,8 +254,8 @@ if test "x$CONFIG_SHELL" = x; then
        esac])
 
       for as_shell in $as_candidate_shells $SHELL; do
-	 # Try only shells which exist, to save several forks.
-	 AS_IF([test -f "$as_shell" &&
+	 # Try only shells that exist, to save several forks.
+	 AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
 		_AS_RUN([_AS_DETECT_REQUIRED_BODY],
                         [("$as_shell") 2> /dev/null])],
 	       [CONFIG_SHELL=$as_shell
@@ -1000,6 +1017,7 @@ esac[]dnl
 # ----------------
 # Find out ahead of time whether ``test -x'' can be used to distinguish
 # executables from other regular files.
+# FIXME: This should use "test -x /"; that's much faster.
 m4_defun([_AS_TEST_PREPARE],
 [# Find out whether ``test -x'' works.  Don't use a zero-byte file, as
 # systems may use methods other than mode bits to determine executability.
