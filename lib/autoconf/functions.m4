@@ -351,7 +351,8 @@ AC_DEFUN([AC_FUNC_ALLOCA],
 AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
 [AC_LINK_IFELSE(
        [AC_LANG_PROGRAM([[@%:@include <alloca.h>]],
-			[[char *p = (char *) alloca (2 * sizeof (int));]])],
+			[[char *p = (char *) alloca (2 * sizeof (int));
+			  if (p) return 0;]])],
 		[ac_cv_working_alloca_h=yes],
 		[ac_cv_working_alloca_h=no])])
 if test $ac_cv_working_alloca_h = yes; then
@@ -382,7 +383,8 @@ char *alloca ();
 #  endif
 # endif
 #endif
-]],                               [[char *p = (char *) alloca (1);]])],
+]],                               [[char *p = (char *) alloca (1);
+				    if (p) return 0;]])],
 		[ac_cv_func_alloca_works=yes],
 		[ac_cv_func_alloca_works=no])])
 
