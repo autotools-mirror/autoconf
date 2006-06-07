@@ -2363,7 +2363,7 @@ AS_IF([_AC_DO_STDERR($ac_compile) &&
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
-rm -f conftest.err conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
+rm -f core conftest.err conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
 
@@ -2403,7 +2403,7 @@ AS_IF([_AC_DO_STDERR($ac_link) &&
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
-rm -f conftest.err conftest.$ac_objext \
+rm -f core conftest.err conftest.$ac_objext \
       conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 

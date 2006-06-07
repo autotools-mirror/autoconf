@@ -664,7 +664,7 @@ then
 else
   eval ac_cv_prog_cc_${ac_cc}_c_o=no
 fi
-rm -f conftest*
+rm -f core conftest*
 ])dnl
 if eval test \$ac_cv_prog_cc_${ac_cc}_c_o = yes; then
   AC_MSG_RESULT([yes])

@@ -1,3 +1,12 @@
+2006-06-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/c.m4 (AC_PROG_CC_C_O): Remove core file, in
+	case the compiler dumps core.  Problem reported for
+	OpenServer 5.0.7 by Tim Rice in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00019.html>.
+	* lib/autoconf/general.m4 (_AC_COMPILE_IFELSE, _AC_LINK_IFELSE):
+	Likewise.
+
 2006-06-06  Tim Rice <tim@multitalents.net>.
 
 	* lib/freeze.mk: Quiet check-forbidden-patterns so the string
