@@ -2596,7 +2596,7 @@ autoconf autoheader: Makefile
 
 @xref{Limitations of Make}, for details.
 
-@item @samp{$(srcdir)}
+@item $(srcdir)
 Be sure to specify the name of the source directory,
 otherwise the package won't support separated builds.
 @end table
@@ -12639,7 +12639,7 @@ include some limitations you should be aware of.
 
 @table @asis
 @item Awk
-@c ----------------
+@c ------
 @prindex Awk
 Don't leave white space before the opening parenthesis in a user function call.
 Posix does not allow this and @acronym{GNU} Awk rejects it:
@@ -13009,7 +13009,7 @@ expr a : '\(b\)' \| ''
 
 @noindent
 Unfortunately this behaves exactly as the original expression; see the
-@samp{@command{expr} (@samp{|})} entry for more information.
+@command{expr} (@samp{|}) entry for more information.
 
 Ancient @command{expr} implementations (e.g., SunOS 4 @command{expr} and
 Solaris 8 @command{/usr/ucb/expr}) have a silly length limit that causes
@@ -17563,7 +17563,7 @@ brackets to protect against included commas or spurious M4
 expansion.  The contents ought to end with an end of line.
 @end defmac
 
-@defmac AT_CHECK (@var{commands}, @dvar{status, @samp{0}}, @dvar{stdout, @samp{}}, @dvar{stderr, @samp{}}, @ovar{run-if-fail}, @ovar{run-if-pass})
+@defmac AT_CHECK (@var{commands}, @dvar{status, 0}, @dvar{stdout, }, @dvar{stderr, }, @ovar{run-if-fail}, @ovar{run-if-pass})
 @atindex{CHECK}
 Execute a test by performing given shell @var{commands}.  These commands
 should normally exit with @var{status}, while producing expected
@@ -17741,7 +17741,7 @@ hierarchy: the test suite ought to be shipped!
 @item
 Invoke @code{AC_CONFIG_TESTDIR}.
 
-@defmac AC_CONFIG_TESTDIR (@var{directory}, @dvar{test-path, @var{directory}})
+@defmac AC_CONFIG_TESTDIR (@var{directory}, @dvar{test-path, directory})
 @acindex{CONFIG_TESTDIR}
 An Autotest test suite is to be configured in @var{directory}.  This
 macro requires the instantiation of @file{@var{directory}/atconfig} from

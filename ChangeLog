@@ -1,3 +1,14 @@
+2006-06-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Installation Directory Variables):
+	Drop extra @samp from `@table @samp' item.
+	(Limitations of Usual Tools): Comment fix.
+	Do not nest @samp just to point to other table items.
+	(Writing testsuite.at) <AT_CHECK>: The second argument to
+	`@dvar' is already @samp'ed.
+	(Making testsuite Scripts) <AC_CONFIG_TESTDIR>: Likewise,
+	do not use @var in the second argument.
+
 2006-06-07  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Look for
