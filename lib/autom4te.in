@@ -47,6 +47,8 @@ args: --preselect AC_CONFIG_FILES
 args: --preselect AC_CONFIG_HEADERS
 args: --preselect AC_CONFIG_LIBOBJ_DIR
 args: --preselect AC_CONFIG_LINKS
+args: --preselect AC_FC_FREEFORM
+args: --preselect AC_FC_SRCEXT
 args: --preselect AC_INIT
 args: --preselect AC_LIBSOURCE
 args: --preselect AC_REQUIRE_AUX_FILE
@@ -59,6 +61,9 @@ args: --preselect AM_GNU_GETTEXT
 args: --preselect AM_INIT_AUTOMAKE
 args: --preselect AM_MAINTAINER_MODE
 args: --preselect AM_PROG_CC_C_O
+args: --preselect AM_PROG_CXX_C_O
+args: --preselect AM_PROG_F77_C_O
+args: --preselect AM_PROG_FC_C_O
 args: --preselect _AM_SUBST_NOTMAKE
 args: --preselect LT_SUPPORTED_TAG
 args: --preselect _LT_AC_TAGCONFIG

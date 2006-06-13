@@ -1,5 +1,8 @@
 2006-06-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autom4te.in (Automake-preselections): Add AM_PROG_CXX_C_O,
+	AM_PROG_F77_C_O, AM_PROG_FC_C_O, AC_FC_SRCEXT, AC_FC_FREEFORM.
+
 	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): Fix M4 quotation
 	in regular expression.
 
