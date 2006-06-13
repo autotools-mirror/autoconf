@@ -780,7 +780,7 @@ AN_MAKEVAR([MAKE], [AC_PROG_MAKE_SET])
 AN_PROGRAM([make], [AC_PROG_MAKE_SET])
 AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING([whether ${MAKE-make} sets \$(MAKE)])
-set x ${MAKE-make}; ac_make=`echo "$[2]" | sed 's/+/p/g; s/[^a-zA-Z0-9_]/_/g'`
+set x ${MAKE-make}; ac_make=`echo "$[2]" | sed 's/+/p/g; s/[[^a-zA-Z0-9_]]/_/g'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftest.make <<\_ACEOF
 SHELL = /bin/sh
