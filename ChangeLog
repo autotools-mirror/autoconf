@@ -1,3 +1,9 @@
+2006-06-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Initializing configure, Shell Substitutions):
+	Warn about $@ not persisting.  Problem reported by Julien Danjou in
+	<http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=372179>.
+
 2006-06-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Some systematic minor improvements, as
