@@ -1419,7 +1419,7 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
-honored as well.  Passing @option{-W @var{category}} actually behave as if
+honored as well.  Passing @option{-W @var{category}} actually behaves as if
 you had passed @option{--warnings=syntax,$WARNINGS,@var{category}}.  If
 you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
