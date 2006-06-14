@@ -484,11 +484,12 @@ Portable Make Programming
 
 * $< in Ordinary Make Rules::   $< in ordinary rules
 * Failure in Make Rules::       Failing portably in rules
-* Leading _ in Macro Names::    $(_FOO) on ancient hosts
+* Special Chars in Names::      $(.FOO), $(_FOO), $(007), etc.
 * Backslash-Newline-Newline::   Empty last lines in macro definitions
 * Backslash-Newline Comments::  Spanning comments across line boundaries
 * Long Lines in Makefiles::     Line length limitations
 * Macros and Submakes::         @code{make macro=value} and submakes
+* The Make Macro MAKEFLAGS::    @code{$(MAKEFLAGS)} portability issues
 * The Make Macro SHELL::        @code{$(SHELL)} portability issues
 * Comments in Make Rules::      Other problems with Make comments
 * obj/ and Make::               Don't name a subdirectory @file{obj}
@@ -13616,11 +13617,12 @@ itself.
 @menu
 * $< in Ordinary Make Rules::   $< in ordinary rules
 * Failure in Make Rules::       Failing portably in rules
-* Leading _ in Macro Names::    $(_FOO) on ancient hosts
+* Special Chars in Names::      $(.FOO), $(_FOO), $(007), etc.
 * Backslash-Newline-Newline::   Empty last lines in macro definitions
 * Backslash-Newline Comments::  Spanning comments across line boundaries
 * Long Lines in Makefiles::     Line length limitations
 * Macros and Submakes::         @code{make macro=value} and submakes
+* The Make Macro MAKEFLAGS::    @code{$(MAKEFLAGS)} portability issues
 * The Make Macro SHELL::        @code{$(SHELL)} portability issues
 * Comments in Make Rules::      Other problems with Make comments
 * obj/ and Make::               Don't name a subdirectory @file{obj}
@@ -13659,8 +13661,13 @@ implementations of the @option{-e} option of @command{sh} and
 about porting to buggy BSD shells it may be simpler to migrate
 complicated @command{make} actions into separate scripts.
 
-@node Leading _ in Macro Names
-@section Leading @samp{_} in Make Macro Names
+@node Special Chars in Names
+@section Special Characters in Make Macro Names
+
+Posix limits macro names to nonempty strings containing only
+@acronym{ASCII} letters and digits, @samp{.}, and @samp{_}.  Many
+@command{make} implementations allow a wider variety of characters, but
+portable makefiles should avoid them.
 
 Some ancient @command{make} implementations don't support leading
 underscores in macro names.  An example is @acronym{NEWS-OS} 4.2R.
@@ -13824,6 +13831,31 @@ two:
 
 You need to foresee all macros that a user might want to override if
 you do that.
+
+@node The Make Macro MAKEFLAGS
+@section The Make Macro MAKEFLAGS
+@cindex @code{MAKEFLAGS} and @command{make}
+@cindex @command{make} and @code{MAKEFLAGS}
+
+Posix requires @command{make} to use @code{MAKEFLAGS} to affect the
+current and recursive invocations of make, but allows implementations
+several formats for the variable.  It is tricky to parse
+@code{$MAKEFLAGS} to determine whether @option{-s} for silent execution
+or @option{-k} for continued execution are in effect.  For example, you
+cannot assume that the first space-separated word in @code{$MAKEFLAGS}
+contains single-letter options, since in the Cygwin version of
+@acronym{GNU} @command{make} it is either @option{--unix} or
+@option{--win32} with the second word containing single-letter options.
+
+@example
+$ @kbd{cat Makefile}
+all:
+	@@echo MAKEFLAGS = $(MAKEFLAGS)
+$ @kbd{make}
+MAKEFLAGS = --unix
+$ @kbd{make -k}
+MAKEFLAGS = --unix -k
+@end example
 
 @node The Make Macro SHELL
 @section The Make Macro @code{SHELL}
