@@ -232,8 +232,8 @@ IFS=$as_save_IFS
 
 
       for as_shell in $as_candidate_shells $SHELL; do
-	 # Try only shells which exist, to save several forks.
-	 if test -f "$as_shell" &&
+	 # Try only shells that exist, to save several forks.
+	 if { test -f "$as_shell" || test -f "$as_shell.exe"; } &&
 		{ ("$as_shell") 2> /dev/null <<\_ASEOF
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
@@ -1920,7 +1920,7 @@ done
 
 { echo "$as_me:$LINENO: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 echo $ECHO_N "checking whether ${MAKE-make} sets \$(MAKE)... $ECHO_C" >&6; }
-set x ${MAKE-make}; ac_make=`echo "$2" | sed 's/+/p/g; s/^a-zA-Z0-9_/_/g'`
+set x ${MAKE-make}; ac_make=`echo "$2" | sed 's/+/p/g; s/[^a-zA-Z0-9_]/_/g'`
 if { as_var=ac_cv_prog_make_${ac_make}_set; eval "test \"\${$as_var+set}\" = set"; }; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
