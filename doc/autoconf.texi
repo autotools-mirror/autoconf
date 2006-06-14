@@ -262,6 +262,7 @@ published by the Free Software Foundation raise funds for
 * Programming in M4::           Layers on top of which Autoconf is written
 * Writing Autoconf Macros::     Adding new macros to Autoconf
 * Portable Shell::              Shell script portability pitfalls
+* Portable Make::               Makefile portability pitfalls
 * Portable C and C++::          C and C++ portability pitfalls
 * Manual Configuration::        Selecting features that can't be guessed
 * Site Configuration::          Local defaults for @command{configure}
@@ -279,7 +280,7 @@ published by the Free Software Foundation raise funds for
 
 The @acronym{GNU} Build System
 
-* Automake::                    Escaping Makefile hell
+* Automake::                    Escaping makefile hell
 * Gnulib::                      The @acronym{GNU} portability library
 * Libtool::                     Building libraries portably
 * Pointers::                    More info on the @acronym{GNU} build system
@@ -306,7 +307,7 @@ Initialization and Output Files
 * Output::                      Outputting results from the configuration
 * Configuration Actions::       Preparing the output based on results
 * Configuration Files::         Creating output files
-* Makefile Substitutions::      Using output variables in @file{Makefile}s
+* Makefile Substitutions::      Using output variables in makefiles
 * Configuration Headers::       Creating a configuration header file
 * Configuration Commands::      Running arbitrary instantiation commands
 * Configuration Links::         Links depending on the configuration
@@ -478,7 +479,31 @@ Portable Shell Programming
 * Special Shell Variables::     Variables you should not change
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
-* Limitations of Make::         Portable Makefiles
+
+Portable Make Programming
+
+* $< in Ordinary Make Rules::   $< in ordinary rules
+* Failure in Make Rules::       Failing portably in rules
+* Leading _ in Macro Names::    $(_FOO) on ancient hosts
+* Backslash-Newline-Newline::   Empty last lines in macro definitions
+* Backslash-Newline Comments::  Spanning comments across line boundaries
+* Long Lines in Makefiles::     Line length limitations
+* Macros and Submakes::         @code{make macro=value} and submakes
+* The Make Macro SHELL::        @code{$(SHELL)} portability issues
+* Comments in Make Rules::      Other problems with Make comments
+* obj/ and Make::               Don't name a subdirectory @file{obj}
+* make -k Status::              Exit status of @samp{make -k}
+* VPATH and Make::              @code{VPATH} and its many discontents
+* Single Suffix Rules::         Single suffix rules and separated dependencies
+* Timestamps and Make::         Subsecond timestamp resolution
+
+@code{VPATH} and Make
+
+* VPATH and Double-colon::      Problems with @samp{::} on ancient hosts
+* $< in Explicit Rules::        @code{$<} does not work in ordinary rules
+* Automatic Rule Rewriting::    @code{VPATH} goes wild on Solaris
+* OSF/Tru64 Directory Magic::   @command{mkdir} goes wild on OSF/Tru64
+* Make Target Lookup::          More details about @code{VPATH} lookup
 
 Portable C and C++ Programming
 
@@ -509,7 +534,7 @@ Transforming Program Names When Installing
 
 * Transformation Options::      @command{configure} options to transform names
 * Transformation Examples::     Sample uses of transforming names
-* Transformation Rules::        @file{Makefile} uses of transforming names
+* Transformation Rules::        Makefile uses of transforming names
 
 Running @command{configure} Scripts
 
@@ -654,7 +679,7 @@ Autoconf does not solve all problems related to making portable
 software packages---for a more complete solution, it should be used in
 concert with other @acronym{GNU} build tools like Automake and
 Libtool.  These other tools take on jobs like the creation of a
-portable, recursive @file{Makefile} with all of the standard targets,
+portable, recursive makefile with all of the standard targets,
 linking of shared libraries, and so on.  @xref{The GNU Build System},
 for more information.
 
@@ -720,7 +745,7 @@ to sources of more information, and try to convince you to use the
 entire @acronym{GNU} build system for your software.
 
 @menu
-* Automake::                    Escaping Makefile hell
+* Automake::                    Escaping makefile hell
 * Gnulib::                      The @acronym{GNU} portability library
 * Libtool::                     Building libraries portably
 * Pointers::                    More info on the @acronym{GNU} build system
@@ -729,9 +754,9 @@ entire @acronym{GNU} build system for your software.
 @node Automake
 @section Automake
 
-The ubiquity of @command{make} means that a @file{Makefile} is almost the
+The ubiquity of @command{make} means that a makefile is almost the
 only viable way to distribute automatic build rules for software, but
-one quickly runs into @command{make}'s numerous limitations.  Its lack of
+one quickly runs into its numerous limitations.  Its lack of
 support for automatic dependency tracking, recursive builds in
 subdirectories, reliable timestamps (e.g., for network file systems), and
 so on, mean that developers must painfully (and often incorrectly)
@@ -747,7 +772,7 @@ provided by @command{configure}.  Into this mess steps @dfn{Automake}.
 
 Automake allows you to specify your build needs in a @code{Makefile.am}
 file with a vastly simpler and more powerful syntax than that of a plain
-@code{Makefile}, and then generates a portable @code{Makefile.in} for
+makefile, and then generates a portable @code{Makefile.in} for
 use with Autoconf.  For example, the @code{Makefile.am} to build and
 install a simple ``Hello world'' program might look like:
 
@@ -759,8 +784,8 @@ hello_SOURCES = hello.c
 @noindent
 The resulting @code{Makefile.in} (~400 lines) automatically supports all
 the standard targets, the substitutions provided by Autoconf, automatic
-dependency tracking, @code{VPATH} building, and so on.  @command{make} will
-build the @code{hello} program, and @code{make install} will install it
+dependency tracking, @code{VPATH} building, and so on.  @command{make}
+builds the @code{hello} program, and @code{make install} installs it
 in @file{/usr/local/bin} (or whatever prefix was given to
 @command{configure}, if not @file{/usr/local}).
 
@@ -797,7 +822,7 @@ old-fashioned systems.
 @node Libtool
 @section Libtool
 
-Very often, one wants to build not only programs, but libraries, so that
+Often, one wants to build not only programs, but libraries, so that
 other programs can benefit from the fruits of your labor.  Ideally, one
 would like to produce @emph{shared} (dynamically linked) libraries,
 which can be used by multiple programs without duplication on disk or in
@@ -811,7 +836,7 @@ and magic incantations.  Fortunately, @acronym{GNU} provides a solution:
 Libtool handles all the requirements of building shared libraries for
 you, and at this time seems to be the @emph{only} way to do so with any
 portability.  It also handles many other headaches, such as: the
-interaction of @code{Makefile} rules with the variable suffixes of
+interaction of Make rules with the variable suffixes of
 shared libraries, linking reliably with shared libraries before they are
 installed by the superuser, and supplying a consistent versioning system
 (so that different versions of a library can be installed or upgraded
@@ -826,11 +851,11 @@ whenever shared libraries are needed, and you need not know its syntax.
 Developers who are used to the simplicity of @command{make} for small
 projects on a single system might be daunted at the prospect of
 learning to use Automake and Autoconf.  As your software is
-distributed to more and more users, however, you will otherwise
+distributed to more and more users, however, you otherwise
 quickly find yourself putting lots of effort into reinventing the
 services that the @acronym{GNU} build tools provide, and making the
 same mistakes that they once made and overcame.  (Besides, since
-you're already learning Autoconf, Automake will be a piece of cake.)
+you're already learning Autoconf, Automake is a piece of cake.)
 
 There are a number of places that you can go to for more information on
 the @acronym{GNU} build tools.
@@ -883,7 +908,7 @@ optionally, a C header file, the name of which is configurable,
 containing @code{#define} directives (@pxref{Configuration Headers});
 
 @item
-a shell script called @file{config.status} that, when run, will recreate
+a shell script called @file{config.status} that, when run, recreates
 the files listed above (@pxref{config.status Invocation});
 
 @item
@@ -904,7 +929,7 @@ Autoconf input file @file{configure.ac} (or @file{configure.in}) and run
 supplement those that come with Autoconf, you might also write files
 called @file{aclocal.m4} and @file{acsite.m4}.  If you use a C header
 file to contain @code{#define} directives, you might also run
-@command{autoheader}, and you will distribute the generated file
+@command{autoheader}, and you can distribute the generated file
 @file{config.h.in} with the package.
 
 Here is a diagram showing how the files that can be used in
@@ -1006,7 +1031,7 @@ into a portable shell script, @command{configure}.
 How does @command{autoconf} perform this task?
 
 There are two obvious possibilities: creating a brand new language or
-extending an existing one.  The former option is very attractive: all
+extending an existing one.  The former option is attractive: all
 sorts of optimizations could easily be implemented in the compiler and
 many rigorous checks could be performed on the Autoconf program
 (e.g., rejecting any non-portable construct).  Alternatively, you can
@@ -1027,9 +1052,9 @@ as a set of M4 macros.
 @subsection The Autoconf Language
 @cindex quotation
 
-The Autoconf language is very different from many other computer
+The Autoconf language differs from many other computer
 languages because it treats actual code the same as plain text.  Whereas
-in C, for instance, data and instructions have very different syntactic
+in C, for instance, data and instructions have different syntactic
 status, in Autoconf their status is rigorously the same.  Therefore, we
 need a means to distinguish literal strings from text to be expanded:
 quotation.
@@ -1106,7 +1131,7 @@ echo "Hard rock was here!  --[AC_DC]"
 @end example
 
 @noindent
-which will result in
+which results in:
 
 @example
 echo "Hard rock was here!  --AC_DC"
@@ -1133,7 +1158,7 @@ AC_COMPILE_IFELSE([char b[10];], [], [AC_MSG_ERROR([you lose])])
 
 @noindent
 is incorrect: here, the first argument of @code{AC_COMPILE_IFELSE} is
-@samp{char b[10];} and will be expanded once, which results in
+@samp{char b[10];} and is expanded once, which results in
 @samp{char b10;}.  (There was an idiom common in Autoconf's past to
 address this issue via the M4 @code{changequote} primitive, but do not
 use it!)  Let's take a closer look: the author meant the first argument
@@ -1232,7 +1257,7 @@ completeness.
 
 When using @command{autoscan} to create a @file{configure.ac}, you
 should manually examine @file{configure.scan} before renaming it to
-@file{configure.ac}; it will probably need some adjustments.
+@file{configure.ac}; it probably needs some adjustments.
 Occasionally, @command{autoscan} outputs a macro in the wrong order
 relative to another macro, so that @command{autoconf} produces a warning;
 you need to move such macros manually.  Also, if you want the package to
@@ -1243,8 +1268,8 @@ order to make it work with Autoconf (@pxref{ifnames Invocation}, for
 information about a program that can help with that job).
 
 When using @command{autoscan} to maintain a @file{configure.ac}, simply
-consider adding its suggestions.  The file @file{autoscan.log} will
-contain detailed information on why a macro is requested.
+consider adding its suggestions.  The file @file{autoscan.log}
+contains detailed information on why a macro is requested.
 
 @command{autoscan} uses several data files (installed along with Autoconf)
 to determine which macros to output when it finds particular symbols in
@@ -1394,7 +1419,7 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
-honored as well.  Passing @option{-W @var{category}} will actually behave as if
+honored as well.  Passing @option{-W @var{category}} actually behave as if
 you had passed @option{--warnings=syntax,$WARNINGS,@var{category}}.  If
 you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
@@ -1514,7 +1539,7 @@ If you install a new version of some tool, you can make
 @command{autoreconf} remake @emph{all} of the files by giving it the
 @option{--force} option.
 
-@xref{Automatic Remaking}, for @file{Makefile} rules to automatically
+@xref{Automatic Remaking}, for Make rules to automatically
 remake @command{configure} scripts when their source files change.  That
 method handles the timestamps of configuration header templates
 properly, but does not pass @option{--autoconf-dir=@var{dir}} or
@@ -1624,7 +1649,7 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
-honored as well.  Passing @option{-W @var{category}} will actually behave as if
+honored as well.  Passing @option{-W @var{category}} actually behaves as if
 you had passed @option{--warnings=syntax,$WARNINGS,@var{category}}.  If
 you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
@@ -1632,7 +1657,7 @@ none,obsolete}.
 @end table
 
 If you want @command{autoreconf} to pass flags that are not listed here
-on to @command{aclocal}, set @code{ACLOCAL_AMFLAGS} in your Makefile.am.
+on to @command{aclocal}, set @code{ACLOCAL_AMFLAGS} in your @file{Makefile.am}.
 
 @c ========================================= Initialization and Output Files.
 
@@ -1651,7 +1676,7 @@ initialization and the creation of output files.
 * Output::                      Outputting results from the configuration
 * Configuration Actions::       Preparing the output based on results
 * Configuration Files::         Creating output files
-* Makefile Substitutions::      Using output variables in @file{Makefile}s
+* Makefile Substitutions::      Using output variables in makefiles
 * Configuration Headers::       Creating a configuration header file
 * Configuration Commands::      Running arbitrary instantiation commands
 * Configuration Links::         Links depending on the configuration
@@ -1754,7 +1779,7 @@ State that, in addition to the Free Software Foundation's copyright on
 the Autoconf macros, parts of your @command{configure} are covered by the
 @var{copyright-notice}.
 
-The @var{copyright-notice} will show up in both the head of
+The @var{copyright-notice} shows up in both the head of
 @command{configure} and in @samp{configure --version}.
 @end defmac
 
@@ -1813,7 +1838,7 @@ Invocation}, for more information.
 @c @c FIXME: There is no longer shell globbing.
 @c Read the macro definitions that appear in the listed files.  A list of
 @c space-separated file names or shell globbing patterns is expected.  The
-@c files will be read in the order they're listed.
+@c files are read in the order they're listed.
 @c
 @c Because the order of definition of macros is important (only the last
 @c definition of a macro is used), beware that it is @code{AC_INIT} that
@@ -1843,7 +1868,7 @@ either absolute or relative to @file{@var{srcdir}}.  The default is
 @code{AC_PROG_INSTALL} does not automatically require distributing the
 other auxiliary files.  It checks for @file{install.sh} also, but that
 name is obsolete because some @code{make} have a rule that creates
-@file{install} from it if there is no @file{Makefile}.
+@file{install} from it if there is no makefile.
 
 The auxiliary directory is commonly named @file{build-aux}.
 If you need portability to @acronym{DOS} variants, do not name the
@@ -1880,7 +1905,7 @@ declaration before @option{--trace} can be called safely.
 
 Every Autoconf script, e.g., @file{configure.ac}, should finish by
 calling @code{AC_OUTPUT}.  That is the macro that generates and runs
-@file{config.status}, which will create the @file{Makefile}s and any
+@file{config.status}, which in turn creates the makefiles and any
 other files resulting from configuration.  This is the only required
 macro besides @code{AC_INIT} (@pxref{Input}).
 
@@ -1890,7 +1915,7 @@ macro besides @code{AC_INIT} (@pxref{Input}).
 Generate @file{config.status} and launch it.  Call this macro once, at
 the end of @file{configure.ac}.
 
-@file{config.status} will perform all the configuration actions: all the
+@file{config.status} performs all the configuration actions: all the
 output files (see @ref{Configuration Files}, macro
 @code{AC_CONFIG_FILES}), header files (see @ref{Configuration Headers},
 macro @code{AC_CONFIG_HEADERS}), commands (see @ref{Configuration
@@ -1900,7 +1925,7 @@ to configure (see @ref{Subdirectories}, macro @code{AC_CONFIG_SUBDIRS})
 are honored.
 
 The location of your @code{AC_OUTPUT} invocation is the exact point
-where configuration actions are taken: any code afterwards will be
+where configuration actions are taken: any code afterwards is
 executed by @code{configure} once @command{config.status} was run.  If
 you want to bind actions to @command{config.status} itself
 (independently of whether @command{configure} is being run), see
@@ -1988,13 +2013,13 @@ and use this instead:
 @end example
 
 The macros @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
-special @var{tag}s: they may have the form @samp{@var{output}} or
+special @var{tag} values: they may have the form @samp{@var{output}} or
 @samp{@var{output}:@var{inputs}}.  The file @var{output} is instantiated
 from its templates, @var{inputs} (defaulting to @samp{@var{output}.in}).
 
 @samp{AC_CONFIG_FILES([Makefile:boiler/top.mk:boiler/bot.mk)]},
 for example, asks for
-the creation of @file{Makefile} that will be the expansion of the
+the creation of the file @file{Makefile} that contains the expansion of the
 output variables in the concatenation of @file{boiler/top.mk} and
 @file{boiler/bot.mk}.
 
@@ -2072,7 +2097,7 @@ independently of @samp{in/in.in}.
 Shell commands output @emph{unquoted} near the beginning of
 @file{config.status}, and executed each time @file{config.status} runs
 (regardless of the tag).  Because they are unquoted, for example,
-@samp{$var} will be output as the value of @code{var}.  @var{init-cmds}
+@samp{$var} is output as the value of @code{var}.  @var{init-cmds}
 is typically used by @file{configure} to give @file{config.status} some
 variables it needs to run the @var{commands}.
 
@@ -2082,7 +2107,7 @@ in unpredictable ways.  Sorry@enddots{}
 @end table
 
 All these macros can be called multiple times, with different
-@var{tag}s, of course!
+@var{tag} values, of course!
 
 
 @node Configuration Files
@@ -2098,14 +2123,14 @@ Make @code{AC_OUTPUT} create each @file{@var{file}} by copying an input
 file (by default @file{@var{file}.in}), substituting the output variable
 values.
 @c Before we used to have this feature, which was later rejected
-@c because it complicates the write of Makefiles:
+@c because it complicates the write of makefiles:
 @c If the file would be unchanged, it is left untouched, to preserve
 @c timestamp.
 This macro is one of the instantiating macros; see @ref{Configuration
 Actions}.  @xref{Makefile Substitutions}, for more information on using
 output variables.  @xref{Setting Output Variables}, for more information
 on creating them.  This macro creates the directory that the file is in
-if it doesn't exist.  Usually, @file{Makefile}s are created this way,
+if it doesn't exist.  Usually, makefiles are created this way,
 but other files, such as @file{.gdbinit}, can be specified as well.
 
 Typical calls to @code{AC_CONFIG_FILES} look like this:
@@ -2138,8 +2163,8 @@ to prepend and/or append boilerplate to the file.
 
 Each subdirectory in a distribution that contains something to be
 compiled or installed should come with a file @file{Makefile.in}, from
-which @command{configure} will create a @file{Makefile} in that directory.
-To create a @file{Makefile}, @command{configure} performs a simple variable
+which @command{configure} creates a file @file{Makefile} in that directory.
+To create @file{Makefile}, @command{configure} performs a simple variable
 substitution, replacing occurrences of @samp{@@@var{variable}@@} in
 @file{Makefile.in} with the value that @command{configure} has determined
 for that variable.  Variables that are substituted into output files in
@@ -2152,13 +2177,13 @@ left unchanged.  @xref{Setting Output Variables}, for more information
 on creating output variables with @code{AC_SUBST}.
 
 A software package that uses a @command{configure} script should be
-distributed with a file @file{Makefile.in}, but no @file{Makefile}; that
+distributed with a file @file{Makefile.in}, but no makefile; that
 way, the user has to properly configure the package for the local system
 before compiling it.
 
 @xref{Makefile Conventions, , Makefile Conventions, standards, The
 @acronym{GNU} Coding Standards}, for more information on what to put in
-@file{Makefile}s.
+makefiles.
 
 @menu
 * Preset Output Variables::     Output variables that are always set
@@ -2199,7 +2224,7 @@ uses this variable when compiling programs to test for C features.
 A comment saying that the file was generated automatically by
 @command{configure} and giving the name of the input file.
 @code{AC_OUTPUT} adds a comment line containing this variable to the top
-of every @file{Makefile} it creates.  For other files, you should
+of every makefile it creates.  For other files, you should
 reference this variable in a comment at the top of each input file.  For
 example, an input shell script should begin like this:
 
@@ -2342,7 +2367,7 @@ Absolute name of @code{top_builddir}.
 @defvar srcdir
 @ovindex srcdir
 The relative name of the directory that contains the source code for
-that @file{Makefile}.
+that makefile.
 @end defvar
 
 @defvar abs_srcdir
@@ -2366,8 +2391,8 @@ Absolute name of @code{top_srcdir}.
 @cindex Installation directories
 @cindex Directories, installation
 
-The following variables specify the directories where the package will
-be installed, see @ref{Directory Variables, , Variables for
+The following variables specify the directories where the package
+is installed, see @ref{Directory Variables, , Variables for
 Installation Directories, standards, The @acronym{GNU} Coding
 Standards}, for more information.  See the end of this section for
 details on when and how to use these variables.
@@ -2492,9 +2517,9 @@ The directory for installing read-only single-machine data.
 
 Most of these variables have values that rely on @code{prefix} or
 @code{exec_prefix}.  It is deliberate that the directory output
-variables keep them unexpanded: typically @samp{@@datarootdir@@} will be
+variables keep them unexpanded: typically @samp{@@datarootdir@@} is
 replaced by @samp{$@{prefix@}/share}, not @samp{/usr/local/share}, and
-@samp{@@datadir@@} will be replaced by @samp{$@{datarootdir@}}.
+@samp{@@datadir@@} is replaced by @samp{$@{datarootdir@}}.
 
 This behavior is mandated by the @acronym{GNU} coding standards, so that when
 the user runs:
@@ -2519,18 +2544,19 @@ In order to support these features, it is essential that
 depend upon the current value of @code{prefix}.
 
 A corollary is that you should not use these variables except in
-Makefiles.  For instance, instead of trying to evaluate @code{datadir}
-in @file{configure} and hard-coding it in Makefiles using
+makefiles.  For instance, instead of trying to evaluate @code{datadir}
+in @file{configure} and hard-coding it in makefiles using
 e.g., @samp{AC_DEFINE_UNQUOTED([DATADIR], ["$datadir"], [Data directory.])},
 you should add
-@option{-DDATADIR='$(datadir)'} to your Makefile's definition of
+@option{-DDATADIR='$(datadir)'} to your makefile's definition of
 @code{CPPFLAGS} (@code{AM_CPPFLAGS} if you are also using Automake).
 
 Similarly, you should not rely on @code{AC_CONFIG_FILES} to replace
-@code{datadir} and friends in your shell scripts and other files, rather
+@code{datadir} and friends in your shell scripts and other files; instead,
 let @command{make} manage their replacement.  For instance Autoconf
 ships templates of its shell scripts ending with @samp{.in}, and uses a
-Makefile snippet similar to:
+makefile snippet similar to the following to build scripts like
+@command{autoheader} and @command{autom4te}:
 
 @example
 @group
@@ -2540,19 +2566,17 @@ edit = sed \
 @end group
 
 @group
-autoconf: Makefile $(srcdir)/autoconf.in
-        rm -f autoconf autoconf.tmp
-        $(edit) $(srcdir)/autoconf.in >autoconf.tmp
-        chmod +x autoconf.tmp
-        mv autoconf.tmp autoconf
+autoheader autom4te: Makefile
+        rm -f $@@ $@@.tmp
+        $(edit) $(srcdir)/$@@.in >$@@.tmp
+        chmod +x $@@.tmp
+        chmod a-w $@@.tmp
+        mv $@@.tmp $@@
 @end group
 
 @group
-autoheader: Makefile $(srcdir)/autoheader.in
-        rm -f autoheader autoheader.tmp
-        $(edit) $(srcdir)/autoconf.in >autoheader.tmp
-        chmod +x autoheader.tmp
-        mv autoheader.tmp autoheader
+autoheader: $(srcdir)/autoheader.in
+autom4te: $(srcdir)/autom4te.in
 @end group
 @end example
 
@@ -2571,13 +2595,16 @@ instead.
 
 @item ,
 Don't use @samp{/} in the Sed expression(s) since most likely the
-variables you use, such as @samp{$(pkgdatadir)}, will contain
-some.
+variables you use, such as @samp{$(pkgdatadir)}, contain @samp{/}.
 
 @item Dependency on @file{Makefile}
 Since @code{edit} uses values that depend on the configuration specific
 values (@code{prefix}, etc.)@: and not only on @code{VERSION} and so forth,
 the output depends on @file{Makefile}, not @file{configure.ac}.
+
+@item $@@
+The main rule is generic, and uses @samp{$@@} extensively to
+avoid the need for multiple copies of the rule.
 
 @item Separated dependencies and Single Suffix Rules
 You can't use them!  The above snippet cannot be (portably) rewritten
@@ -2594,11 +2621,15 @@ autoconf autoheader: Makefile
 @end group
 @end example
 
-@xref{Limitations of Make}, for details.
+@xref{Single Suffix Rules}, for details.
 
 @item $(srcdir)
 Be sure to specify the name of the source directory,
 otherwise the package won't support separated builds.
+
+@item VPATH
+The value of @code{VPATH} should not contain shell metacharacters or white
+space.  @xref{Special Chars in Variables}.
 @end table
 
 For the more specific installation of Erlang libraries, the following variables
@@ -2661,7 +2692,7 @@ which tells how to create a @file{.o} file from a @file{.c} file.)  Some
 versions of @command{make} do not set @code{$<} in explicit rules; they
 expand it to an empty value.
 
-Instead, @file{Makefile} command lines should always refer to source
+Instead, Make command lines should always refer to source
 files by prefixing them with @samp{$(srcdir)/}.  For example:
 
 @example
@@ -2685,12 +2716,12 @@ The @samp{$(srcdir)/} prefix is included because of limitations in the
 @code{VPATH} mechanism.
 
 The @file{stamp-} files are necessary because the timestamps of
-@file{config.h.in} and @file{config.h} will not be changed if remaking
+@file{config.h.in} and @file{config.h} are not changed if remaking
 them does not change their contents.  This feature avoids unnecessary
 recompilation.  You should include the file @file{stamp-h.in} your
-package's distribution, so @command{make} will consider
+package's distribution, so that @command{make} considers
 @file{config.h.in} up to date.  Don't use @command{touch}
-(@pxref{Limitations of Usual Tools}), rather use @command{echo} (using
+(@pxref{Limitations of Usual Tools}); instead, use @command{echo} (using
 @command{date} would cause needless differences, hence @acronym{CVS}
 conflicts, etc.).
 
@@ -2718,8 +2749,8 @@ config.status: configure
 @end example
 
 @noindent
-(Be careful if you copy these lines directly into your Makefile, as you
-will need to convert the indented lines to start with the tab character.)
+(Be careful if you copy these lines directly into your makefile, as you
+need to convert the indented lines to start with the tab character.)
 
 In addition, you should use
 
@@ -2728,7 +2759,7 @@ AC_CONFIG_FILES([stamp-h], [echo timestamp > stamp-h])
 @end example
 
 @noindent
-so @file{config.status} will ensure that @file{config.h} is considered up to
+so @file{config.status} ensures that @file{config.h} is considered up to
 date.  @xref{Output}, for more information about @code{AC_OUTPUT}.
 
 @xref{config.status Invocation}, for more examples of handling
@@ -2837,8 +2868,8 @@ AC_CHECK_HEADERS([unistd.h])
 
 @noindent
 Then you could have code like the following in @file{conf.h.in}.  On
-systems that have @file{unistd.h}, @command{configure} will @samp{#define}
-@samp{HAVE_UNISTD_H} to 1.  On other systems, the whole line will be
+systems that have @file{unistd.h}, @command{configure} defines
+@samp{HAVE_UNISTD_H} to 1.  On other systems, the whole line is
 commented out (in case the system predefines that symbol).
 
 @example
@@ -3027,7 +3058,7 @@ AH_TEMPLATE([CRAY_STACKSEG_END],
 @end example
 
 @noindent
-will generate the following template, with the description properly
+generates the following template, with the description properly
 justified.
 
 @example
@@ -3088,7 +3119,7 @@ AC_CONFIG_COMMANDS([time-stamp], [date >time-stamp])
 
 The following two macros look similar, but in fact they are not of the same
 breed: they are executed directly by @file{configure}, so you cannot use
-@file{config.status} to re-run them.
+@file{config.status} to rerun them.
 
 @c Yet it is good to leave them here.  The user sees them together and
 @c decides which best fits their needs.
@@ -3160,7 +3191,7 @@ to create the links.
 @cindex Subdirectory configure
 
 In most situations, calling @code{AC_OUTPUT} is sufficient to produce
-@file{Makefile}s in subdirectories.  However, @command{configure} scripts
+makefiles in subdirectories.  However, @command{configure} scripts
 that control more than one independent package can use
 @code{AC_CONFIG_SUBDIRS} to run @command{configure} scripts for other
 packages in subdirectories.
@@ -3181,7 +3212,7 @@ AC_CONFIG_SUBDIRS([$my_subdirs])
 
 @noindent
 because this prevents @samp{./configure --help=recursive} from
-displaying the options of the package @code{foo}.  Rather, you should
+displaying the options of the package @code{foo}.  Instead, you should
 write:
 
 @example
@@ -3226,7 +3257,7 @@ defaulted, and if the default values of the top level and of the subdirectory
 @end itemize
 
 This macro also sets the output variable @code{subdirs} to the list of
-directories @samp{@var{dir} @dots{}}.  @file{Makefile} rules can use
+directories @samp{@var{dir} @dots{}}.  Make rules can use
 this variable to determine which subdirectories to recurse into.
 
 This macro may be called multiple times.
@@ -3330,7 +3361,7 @@ rules.
 @cindex Standard symbols
 
 All the generic macros that @code{AC_DEFINE} a symbol as a result of
-their test transform their @var{argument}s to a standard alphabet.
+their test transform their @var{argument} values to a standard alphabet.
 First, @var{argument} is converted to upper case and any asterisks
 (@samp{*}) are each converted to @samp{P}.  Any remaining characters
 that are not alphanumeric are converted to underscores.
@@ -3342,7 +3373,7 @@ AC_CHECK_TYPES([struct $Expensive*])
 @end example
 
 @noindent
-will define the symbol @samp{HAVE_STRUCT__EXPENSIVEP} if the check
+defines the symbol @samp{HAVE_STRUCT__EXPENSIVEP} if the check
 succeeds.
 
 
@@ -3426,8 +3457,8 @@ headers and their compatibility, i.e., you don't need to run
 
 These headers are checked for in the same order as they are included.
 For instance, on some systems @file{string.h} and @file{strings.h} both
-exist, but conflict.  Then @code{HAVE_STRING_H} will be defined, but
-@code{HAVE_STRINGS_H} won't.
+exist, but conflict.  Then @code{HAVE_STRING_H} is defined, not
+@code{HAVE_STRINGS_H}.
 @end defmac
 
 @node Alternative Programs
@@ -3505,12 +3536,12 @@ This macro screens out various instances of @command{install} known not to
 work.  It prefers to find a C program rather than a shell script, for
 speed.  Instead of @file{install-sh}, it can also use @file{install.sh},
 but that name is obsolete because some @command{make} programs have a rule
-that creates @file{install} from it if there is no @file{Makefile}.
+that creates @file{install} from it if there is no makefile.
 
 Autoconf comes with a copy of @file{install-sh} that you can use.  If
 you use @code{AC_PROG_INSTALL}, you must include either
-@file{install-sh} or @file{install.sh} in your distribution, or
-@command{configure} will produce an error message saying it can't find
+@file{install-sh} or @file{install.sh} in your distribution; otherwise
+@command{configure} produces an error message saying it can't find
 them---even if the system you're on has a good @command{install} program.
 This check is a safety measure to prevent you from accidentally leaving
 that file out, which would prevent your package from installing on
@@ -3594,7 +3625,7 @@ The shell script @command{missing} can be found in the Automake
 distribution.
 
 To ensure backward compatibility, Automake's @code{AM_PROG_LEX} invokes
-(indirectly) this macro twice, which will cause an annoying but benign
+(indirectly) this macro twice, which causes an annoying but benign
 ``@code{AC_PROG_LEX} invoked multiple times'' warning.  Future versions
 of Automake will fix this issue; meanwhile, just ignore this message.
 
@@ -3706,10 +3737,10 @@ types are equal, then it is also searched for without a prefix.
 As noted in @ref{Specifying Names, , Specifying the system type}, the
 target is rarely specified, because most of the time it is the same
 as the host: it is the type of system for which any compiler tools in
-the package will produce code.  What this macro will look for is,
+the package produce code.  What this macro looks for is,
 for example, @emph{a tool @r{(assembler, linker, etc.)}@: that the
 compiler driver @r{(@command{gcc} for the @acronym{GNU} C Compiler)}
-will use to produce objects, archives or executables}.
+uses to produce objects, archives or executables}.
 @end defmac
 
 @defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
@@ -3835,21 +3866,21 @@ the @var{library} argument.
 @var{action-if-found} is a list of shell commands to run if the link
 with the library succeeds; @var{action-if-not-found} is a list of shell
 commands to run if the link fails.  If @var{action-if-found} is not
-specified, the default action will prepend @option{-l@var{library}} to
-@code{LIBS} and define @samp{HAVE_LIB@var{library}} (in all
+specified, the default action prepends @option{-l@var{library}} to
+@code{LIBS} and defines @samp{HAVE_LIB@var{library}} (in all
 capitals).  This macro is intended to support building @code{LIBS} in
 a right-to-left (least-dependent to most-dependent) fashion such that
 library dependencies are satisfied as a natural side-effect of
-consecutive tests.  Some linkers are very sensitive to library ordering
+consecutive tests.  Some linkers are sensitive to library ordering
 so the order in which @code{LIBS} is generated is important to reliable
 detection of libraries.
 
 If linking with @var{library} results in unresolved symbols that would
 be resolved by linking with additional libraries, give those libraries
 as the @var{other-libraries} argument, separated by spaces:
-e.g., @option{-lXt -lX11}.  Otherwise, this macro will fail to detect
-that @var{library} is present, because linking the test program will
-always fail with unresolved symbols.  The @var{other-libraries} argument
+e.g., @option{-lXt -lX11}.  Otherwise, this macro fails to detect
+that @var{library} is present, because linking the test program
+always fails with unresolved symbols.  The @var{other-libraries} argument
 should be limited to cases where it is desirable to test for one library
 in the presence of another that is not already in @code{LIBS}.
 
@@ -3877,9 +3908,9 @@ function is not found, run @var{action-if-not-found}.
 If linking with @var{library} results in unresolved symbols that would
 be resolved by linking with additional libraries, give those libraries
 as the @var{other-libraries} argument, separated by spaces:
-e.g., @option{-lXt -lX11}.  Otherwise, this macro will fail to detect
-that @var{function} is present, because linking the test program will
-always fail with unresolved symbols.
+e.g., @option{-lXt -lX11}.  Otherwise, this macro fails to detect
+that @var{function} is present, because linking the test program
+always fails with unresolved symbols.
 @end defmac
 
 
@@ -3905,7 +3936,7 @@ it, then you can use one of the general function-check macros.
 
 Most usual functions can either be missing, or be buggy, or be limited
 on some architectures.  This section tries to make an inventory of these
-portability issues.  By definition, this list will always require
+portability issues.  By definition, this list always requires
 additions.  Please help us keeping it as complete as possible.
 
 @table @asis
@@ -4119,7 +4150,7 @@ The C99 standard provides @code{va_copy} for copying
 @code{va_list} variables.  It may be available in older environments
 too, though possibly as @code{__va_copy} (e.g., @command{gcc} in strict
 pre-C99 mode).  These can be tested with @code{#ifdef}.  A fallback to
-@code{memcpy (&dst, &src, sizeof (va_list))} will give maximum
+@code{memcpy (&dst, &src, sizeof (va_list))} gives maximum
 portability.
 
 @item @code{va_list}
@@ -4855,7 +4886,7 @@ to @samp{AC_CONFIG_LIBOBJ_DIR([lib])}.
 following reasons: (i) some checks use the replacement files, (ii) some
 macros bypass broken system headers by installing links to the
 replacement headers (iii) when used in conjunction with Automake,
-within each @file{Makefile}, @var{directory} is used as a relative path
+within each makefile, @var{directory} is used as a relative path
 from @code{$(top_srcdir)} to each object named in @code{LIBOBJS} and
 @code{LTLIBOBJS}, etc.
 @end defmac
@@ -4898,7 +4929,7 @@ it, then you can use one of the general header-file check macros.
 @cindex Header portability
 
 This section tries to collect knowledge about common headers, and the
-problems they cause.  By definition, this list will always require
+problems they cause.  By definition, this list always requires
 additions.  Please help us keeping it as complete as possible.
 
 @table @asis
@@ -5247,7 +5278,7 @@ char *strchr (), *strrchr ();
 
 @noindent
 If you use a function like @code{memchr}, @code{memset}, @code{strtok},
-or @code{strspn}, which have no @acronym{BSD} equivalent, then macros won't
+or @code{strspn}, which have no @acronym{BSD} equivalent, then macros don't
 suffice to port to ancient hosts; you must provide an implementation of
 each function.  An easy
 way to incorporate your implementations only when needed (since the ones
@@ -5669,7 +5700,7 @@ AC_CHECK_MEMBER([struct passwd.pw_gecos], [],
                 [#include <pwd.h>])
 @end example
 
-You can use this macro for sub-members:
+You can use this macro for submembers:
 
 @example
 AC_CHECK_MEMBER(struct top.middle.bot)
@@ -6010,7 +6041,7 @@ Some compilers exhibit different behaviors.
 @item Static/Dynamic Expressions
 Autoconf relies on a trick to extract one bit of information from the C
 compiler: using negative array sizes.  For instance the following
-excerpt of a C source demonstrates how to test whether @samp{int}s are 4
+excerpt of a C source demonstrates how to test whether @samp{int} objects are 4
 bytes wide:
 
 @example
@@ -6071,11 +6102,11 @@ macro to work correctly.
 @defmac AC_LANG_WERROR
 @acindex{LANG_WERROR}
 Normally Autoconf ignores warnings generated by the compiler, linker, and
-preprocessor.  If this macro is used, warnings will be treated as fatal
-errors instead for the current language.  This macro is useful when the
-results of configuration will be used where warnings are unacceptable; for
+preprocessor.  If this macro is used, warnings count as fatal
+errors for the current language.  This macro is useful when the
+results of configuration are used where warnings are unacceptable; for
 instance, if parts of a program are built with the GCC @option{-Werror}
-option.  If the whole program will be built using @option{-Werror} it is
+option.  If the whole program is built using @option{-Werror} it is
 often simpler to put @option{-Werror} in the compiler flags (@code{CFLAGS},
 etc.).
 @end defmac
@@ -6306,8 +6337,8 @@ define @code{const} to be empty.  Some C compilers that do
 not define @code{__STDC__} do support @code{const}; some compilers that
 define @code{__STDC__} do not completely support @code{const}.  Programs
 can simply use @code{const} as if every C compiler supported it; for
-those that don't, the @file{Makefile} or configuration header file will
-define it as empty.
+those that don't, the makefile or configuration header file
+defines it as empty.
 
 Occasionally installers use a C++ compiler to compile C code, typically
 because they lack a C compiler.  This causes problems with @code{const},
@@ -6340,7 +6371,7 @@ If it recognizes only a variant spelling (@code{__restrict},
 @code{restrict} to that.
 Otherwise, define @code{restrict} to be empty.
 Thus, programs may simply use @code{restrict} as if every C compiler
-supported it; for those that do not, the @file{Makefile}
+supported it; for those that do not, the makefile
 or configuration header defines it away.
 
 Although support in C++ for the @code{restrict} keyword is not
@@ -6354,14 +6385,14 @@ This macro works for them, too.
 If the C compiler does not understand the keyword @code{volatile},
 define @code{volatile} to be empty.  Programs can simply use
 @code{volatile} as if every C compiler supported it; for those that do
-not, the @file{Makefile} or configuration header will define it as
+not, the makefile or configuration header defines it as
 empty.
 
 If the correctness of your program depends on the semantics of
 @code{volatile}, simply defining it to be empty does, in a sense, break
 your code.  However, given that the compiler does not support
 @code{volatile}, you are at its mercy anyway.  At least your
-program will compile, when it wouldn't before.
+program compiles, when it wouldn't before.
 
 In general, the @code{volatile} keyword is a standard C feature, so
 you might expect that @code{volatile} is available only when
@@ -6634,7 +6665,7 @@ AC_PROG_F77([fl32 f77 fort77 xlf g77 f90 xlf90])
 @end example
 
 If using @code{g77} (the @acronym{GNU} Fortran 77 compiler), then
-@code{AC_PROG_F77} will set the shell variable @code{G77} to @samp{yes}.
+set the shell variable @code{G77} to @samp{yes}.
 If the output variable @code{FFLAGS} was not already set in the
 environment, then set it to @option{-g -02} for @code{g77} (or @option{-O2}
 where @code{g77} does not accept @option{-g}).  Otherwise, set
@@ -6719,7 +6750,7 @@ these Fortran 77 libraries.  Hence, this macro was created to determine
 these Fortran libraries.
 
 The macros @code{AC_F77_DUMMY_MAIN} and @code{AC_FC_DUMMY_MAIN} or
-@code{AC_F77_MAIN} and @code{AC_FC_MAIN} will probably also be necessary to
+@code{AC_F77_MAIN} and @code{AC_FC_MAIN} are probably also necessary to
 link C/C++ with Fortran; see below.
 @end defmac
 
@@ -6844,7 +6875,7 @@ Automake}).
 Although Autoconf tries to be intelligent about detecting the
 name-mangling scheme of the Fortran compiler, there may be Fortran
 compilers that it doesn't support yet.  In this case, the above code
-will generate a compile-time error, but some other behavior
+generates a compile-time error, but some other behavior
 (e.g., disabling Fortran-related features) can be induced by checking
 whether @code{F77_FUNC} or @code{FC_FUNC} is defined.
 
@@ -6872,7 +6903,7 @@ Given an identifier @var{name}, set the shell variable @var{shellvar} to
 hold the mangled version @var{name} according to the rules of the
 Fortran linker (see also @code{AC_F77_WRAPPERS} or
 @code{AC_FC_WRAPPERS}).  @var{shellvar} is optional; if it is not
-supplied, the shell variable will be simply @var{name}.  The purpose of
+supplied, the shell variable is simply @var{name}.  The purpose of
 this macro is to give the caller a way to access the name-mangling
 information other than through the C preprocessor as above, for example,
 to call Fortran routines from some language other than C/C++.
@@ -6906,12 +6937,12 @@ compilers.  First, only one @code{FCFLAGS_}@var{ext} can be used at a
 time, so files with different extensions must be compiled separately.
 Second, @code{FCFLAGS_}@var{ext} must appear @emph{immediately} before
 the source-code file name when compiling.  So, continuing the example
-above, you might compile a @file{foo.f90} file in your Makefile with the
+above, you might compile a @file{foo.f90} file in your makefile with the
 command:
 
 @example
 foo.o: foo.f90
-     $(FC) -c $(FCFLAGS) $(FCFLAGS_f90) foo.f90
+     $(FC) -c $(FCFLAGS) $(FCFLAGS_f90) $(srcdir)/foo.f90
 @end example
 
 If @code{AC_FC_SRCEXT} succeeds in compiling files with the @var{ext}
@@ -6934,8 +6965,8 @@ This macro is most important if you are using the default @file{.f}
 extension, since many compilers interpret this extension as indicating
 fixed-format source unless an additional flag is supplied.  If you
 specify a different extension with @code{AC_FC_SRCEXT}, such as
-@file{.f90} or @file{.f95}, then @code{AC_FC_FREEFORM} will ordinarily
-succeed without modifying @code{FCFLAGS}.
+@file{.f90} or @file{.f95}, then @code{AC_FC_FREEFORM} ordinarily
+succeeds without modifying @code{FCFLAGS}.
 
 If @code{AC_FC_FREEFORM} succeeds in compiling free-form source, it
 calls @var{action-if-success} (defaults to nothing).  If it fails, it
@@ -6959,11 +6990,11 @@ user gave the command line options @option{--x-includes=@var{dir}} and
 If either or both were not given, get the missing values by running
 @code{xmkmf} (or an executable pointed to by the @code{XMKMF}
 environment variable) on a trivial @file{Imakefile} and examining the
-@file{Makefile} that it produces.  Setting @code{XMKMF} to @samp{false}
-will disable this method.
+makefile that it produces.  Setting @code{XMKMF} to @samp{false}
+disables this method.
 
 If this method fails to find the X Window System, @command{configure}
-will look for the files in several directories where they often reside.
+looks for the files in several directories where they often reside.
 If either method is successful, set the shell variables
 @code{x_includes} and @code{x_libraries} to their locations, unless they
 are in directories the compiler searches by default.
@@ -7002,7 +7033,7 @@ any found to the output variable @code{X_PRE_LIBS}.
 Check whether the system supports starting scripts with a line of the
 form @samp{#!/bin/sh} to select the interpreter to use for the script.
 After running this macro, shell code in @file{configure.ac} can check
-the shell variable @code{interpval}; it will be set to @samp{yes}
+the shell variable @code{interpval}; it is set to @samp{yes}
 if the system supports @samp{#!}, @samp{no} if not.
 @end defmac
 
@@ -7307,7 +7338,7 @@ Select the language that is saved on the top of the stack, as set by
 
 If given, @var{language} specifies the language we just @emph{quit}.  It
 is a good idea to specify it when it's known (which should be the
-case@dots{}), since Autoconf will detect inconsistencies.
+case@dots{}), since Autoconf detects inconsistencies.
 
 @example
 AC_LANG_PUSH([Fortran 77])
@@ -7371,8 +7402,8 @@ avoid ``shortcuts'' and simplifications.
 
 Don't just play with the preprocessor if you want to prepare a
 compilation.  For instance, using @command{cpp} to check whether a header is
-functional might let your @command{configure} accept a header which will
-cause some @emph{compiler} error.  Do not hesitate checking header with
+functional might let your @command{configure} accept a header which
+causes some @emph{compiler} error.  Do not hesitate checking a header with
 other headers included before, especially required headers.
 
 Make sure the symbols you use are properly defined, i.e., refrain for
@@ -7807,7 +7838,7 @@ last argument to @code{AC_RUN_IFELSE}.  @command{autoconf} prints a
 warning message when creating @command{configure} each time it
 encounters a call to @code{AC_RUN_IFELSE} with no
 @var{action-if-cross-compiling} argument given.  You may ignore the
-warning, though users will not be able to configure your package for
+warning, though users cannot configure your package for
 cross-compiling.  A few of the macros distributed with Autoconf produce
 this warning message.
 
@@ -8096,8 +8127,8 @@ variables that are always available.
 @acindex{SUBST}
 Create an output variable from a shell variable.  Make @code{AC_OUTPUT}
 substitute the variable @var{variable} into output files (typically one
-or more @file{Makefile}s).  This means that @code{AC_OUTPUT} will
-replace instances of @samp{@@@var{variable}@@} in input files with the
+or more makefiles).  This means that @code{AC_OUTPUT}
+replaces instances of @samp{@@@var{variable}@@} in input files with the
 value that the shell variable @var{variable} has when @code{AC_OUTPUT}
 is called.  The value can contain newlines.
 The substituted value is not rescanned for more output variables;
@@ -8117,7 +8148,7 @@ The string @var{variable} is passed to @code{m4_pattern_allow}
 Another way to create an output variable from a shell variable.  Make
 @code{AC_OUTPUT} insert (without substitutions) the contents of the file
 named by shell variable @var{variable} into output files.  This means
-that @code{AC_OUTPUT} will replace instances of
+that @code{AC_OUTPUT} replaces instances of
 @samp{@@@var{variable}@@} in output files (such as @file{Makefile.in})
 with the contents of the file that the shell variable @var{variable}
 names when @code{AC_OUTPUT} is called.  Set the variable to
@@ -8127,9 +8158,9 @@ line by itself, optionally surrounded by spaces and tabs.  The
 substitution replaces the whole line, including the spaces, tabs, and
 the terminating newline.
 
-This macro is useful for inserting @file{Makefile} fragments containing
+This macro is useful for inserting makefile fragments containing
 special dependencies or other @code{make} directives for particular host
-or target types into @file{Makefile}s.  For example, @file{configure.ac}
+or target types into makefiles.  For example, @file{configure.ac}
 could contain:
 
 @example
@@ -8153,7 +8184,7 @@ The string @var{variable} is passed to @code{m4_pattern_allow}
 Running @command{configure} in varying environments can be extremely
 dangerous.  If for instance the user runs @samp{CC=bizarre-cc
 ./configure}, then the cache, @file{config.h}, and many other output
-files will depend upon @command{bizarre-cc} being the C compiler.  If
+files depend upon @command{bizarre-cc} being the C compiler.  If
 for some reason the user runs @command{./configure} again, or if it is
 run via @samp{./config.status --recheck}, (@xref{Automatic Remaking},
 and @pxref{config.status Invocation}), then the configuration can be
@@ -8185,7 +8216,7 @@ which, unfortunately, is what most users do.
 We emphasize that it is the @emph{initial} value of @var{variable} which
 is saved, not that found during the execution of @command{configure}.
 Indeed, specifying @samp{./configure FOO=foo} and letting
-@samp{./configure} guess that @code{FOO} is @code{foo} can be two very
+@samp{./configure} guess that @code{FOO} is @code{foo} can be two
 different runs.
 
 @item
@@ -8270,7 +8301,7 @@ available.  If the results of the check were in the cache file that was
 read, and @command{configure} was not given the @option{--quiet} or
 @option{--silent} option, print a message saying that the result was
 cached; otherwise, run the shell commands @var{commands-to-set-it}.  If
-the shell commands are run to determine the value, the value will be
+the shell commands are run to determine the value, the value is
 saved in the cache file just before @command{configure} creates its output
 files.  @xref{Cache Variable Names}, for how to choose the name of the
 @var{cache-id} variable.
@@ -8291,7 +8322,7 @@ The @var{commands-to-set-it} @emph{must have no side effects} except for
 setting the variable @var{cache-id}, see below.
 @end defmac
 
-It is very common to find buggy macros using @code{AC_CACHE_VAL} or
+It is common to find buggy macros using @code{AC_CACHE_VAL} or
 @code{AC_CACHE_CHECK}, because people are tempted to call
 @code{AC_DEFINE} in the @var{commands-to-set-it}.  Instead, the code that
 @emph{follows} the call to @code{AC_CACHE_VAL} should call
@@ -8314,7 +8345,7 @@ AC_DEFUN([AC_SHELL_TRUE],
 
 @noindent
 This fails if the cache is enabled: the second time this macro is run,
-@code{TRUE_WORKS} @emph{will not be defined}.  The proper implementation
+@code{TRUE_WORKS} @emph{is not defined}.  The proper implementation
 is:
 
 @example
@@ -8385,7 +8416,7 @@ be omitted if it does not apply.
 @end table
 
 The values assigned to cache variables may not contain newlines.
-Usually, their values will be Boolean (@samp{yes} or @samp{no}) or the
+Usually, their values are Boolean (@samp{yes} or @samp{no}) or the
 names of files or functions; so this is not an important restriction.
 
 @node Cache Files
@@ -8421,7 +8452,7 @@ system type and linking files (@pxref{Manual Configuration}).
 
 The site initialization script can specify a site-wide cache file to
 use, instead of the usual per-program cache.  In this case, the cache
-file will gradually accumulate information whenever someone runs a new
+file gradually accumulates information whenever someone runs a new
 @command{configure} script.  (Running @command{configure} merges the new cache
 results with the existing cache file.)  This may cause problems,
 however, if the system configuration (e.g., the installed libraries or
@@ -8432,8 +8463,8 @@ compilers) changes and the stale cache file is not deleted.
 
 If your configure script, or a macro called from @file{configure.ac}, happens
 to abort the configure process, it may be useful to checkpoint the cache
-a few times at key points using @code{AC_CACHE_SAVE}.  Doing so will
-reduce the amount of time it takes to re-run the configure script with
+a few times at key points using @code{AC_CACHE_SAVE}.  Doing so
+reduces the amount of time it takes to rerun the configure script with
 (hopefully) the error that caused the previous abort corrected.
 
 @c FIXME: Do we really want to document this guy?
@@ -8488,13 +8519,13 @@ for each kind.  The arguments to all of them get enclosed in shell
 double quotes, so the shell performs variable and back-quote
 substitution on them.
 
-These macros are all wrappers around the @command{echo} shell command,
-and will direct output to the appropriate file descriptor (@pxref{File
+These macros are all wrappers around the @command{echo} shell command.
+They direct output to the appropriate file descriptor (@pxref{File
 Descriptor Macros}).
 @command{configure} scripts should rarely need to run @command{echo} directly
 to print messages for the user.  Using these macros makes it easy to
 change how and when each kind of message is printed; such changes need
-only be made to the macro definitions and all the callers will change
+only be made to the macro definitions and all the callers change
 automatically.
 
 To diagnose static issues, i.e., when @command{autoconf} is run, see
@@ -8652,7 +8683,7 @@ int tab[10];
 @result{}int tab[10];
 @end example
 
-Without this in mind, the reader will try hopelessly to use her macro
+Without this in mind, the reader might try hopelessly to use her macro
 @code{array}:
 
 @example
@@ -8928,7 +8959,7 @@ M4 script, as opposed to its initialization.  This, if not carefully
 thought out, can lead to disastrous effects: @emph{you are changing the
 language in the middle of the execution}.  Changing and restoring the
 syntax is often not enough: if you happened to invoke macros in between,
-these macros will be lost, as the current syntax will probably not be
+these macros are lost, as the current syntax is probably not
 the one they were implemented with.
 
 @c FIXME: I've been looking for a short, real case example, but I
@@ -8971,7 +9002,7 @@ Expands to nothing.
 Quadrigraphs are replaced at a late stage of the translation process,
 after @command{m4} is run, so they do not get in the way of M4 quoting.
 For example, the string @samp{^@@<:@@}, independently of its quotation,
-will appear as @samp{^[} in the output.
+appears as @samp{^[} in the output.
 
 The empty quadrigraph can be used:
 
@@ -8987,7 +9018,7 @@ For instance @samp{@@<@@&t@@:@@} produces @samp{@@<:@@}.
 @item to escape @emph{occurrences} of forbidden patterns
 
 For instance you might want to mention @code{AC_FOO} in a comment, while
-still being sure that @command{autom4te} will still catch unexpanded
+still being sure that @command{autom4te} still catches unexpanded
 @samp{AC_*}.  Then write @samp{AC@@&t@@_FOO}.
 @end itemize
 
@@ -9053,7 +9084,7 @@ extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 @end example
 
 @noindent
-The M4-fluent reader will note that these two examples are rigorously
+The M4-fluent reader might note that these two examples are rigorously
 equivalent, since M4 swallows both the @samp{changequote(<<, >>)}
 and @samp{<<} @samp{>>} when it @dfn{collects} the arguments: these
 quotes are not part of the arguments!
@@ -9218,8 +9249,8 @@ disable warnings falling into @var{category}
 
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
-honored.  @command{autom4te -W @var{category}} will actually
-behave as if you had run:
+honored.  @samp{autom4te -W @var{category}} actually
+behaves as if you had run:
 
 @example
 autom4te --warnings=syntax,$WARNINGS,@var{category}
@@ -9237,8 +9268,8 @@ warnings; if you want them, just pass @option{-W error}.
 
 @item --melt
 @itemx -m
-Do not use frozen files.  Any argument @code{@var{file}.m4f} will be
-replaced with @code{@var{file}.m4}.  This helps tracing the macros which
+Do not use frozen files.  Any argument @code{@var{file}.m4f} is
+replaced by @code{@var{file}.m4}.  This helps tracing the macros which
 are executed only when the files are frozen, typically
 @code{m4_define}.  For instance, running:
 
@@ -9392,7 +9423,7 @@ not.
 Cache the traces of @var{macro}, but do not enable traces.  This is
 especially important to save CPU cycles in the future.  For instance,
 when invoked, @command{autoconf} preselects all the macros that
-@command{autoheader}, @command{automake}, @command{autoreconf} etc.@: will
+@command{autoheader}, @command{automake}, @command{autoreconf}, etc.,
 trace, so that running @command{m4} is not needed to trace them: the
 cache suffices.  This results in a huge speed-up.
 @end table
@@ -9425,8 +9456,8 @@ reading @file{aclocal.m4}.
 
 @item Autoconf
 create Autoconf executable configure scripts.  This language inherits
-all the characteristics of @code{Autoconf-without-aclocal-m4} and will
-additionally read @file{aclocal.m4}.
+all the characteristics of @code{Autoconf-without-aclocal-m4} and
+additionally reads @file{aclocal.m4}.
 @end table
 
 @item --prepend-include=@var{dir}
@@ -9642,8 +9673,8 @@ order.
 @defmac m4_foreach (@var{var}, @var{list}, @var{expression})
 @msindex{foreach}
 Loop over the comma-separated m4 list @var{list}, assigning each value
-to @var{var}, and expand @var{expression}.  The following example will
-output two lines:
+to @var{var}, and expand @var{expression}.  The following example
+outputs two lines:
 
 @example
 m4_foreach([myvar], [[foo], [bar, baz]],
@@ -9863,8 +9894,8 @@ AS_IF([test "$foo" = yes], [HANDLE_FOO([yes])],
 @end example
 
 @noindent
-will make sure any @code{AC_REQUIRE}'s macros of @code{HANDLE_FOO} will
-be expanded before the first test.
+ensures any @code{AC_REQUIRE}'s macros of @code{HANDLE_FOO}
+are expanded before the first test.
 @end defmac
 
 @defmac AS_MKDIR_P (@var{file-name})
@@ -9950,11 +9981,11 @@ level macros as described below.
 The file descriptor for @samp{checking for...}  messages and results.
 Normally this directs messages to the standard output, however when
 @command{configure} is run with the @option{-q} option, messages sent to
-@code{AS_MESSAGE_FD} will be discarded.
+@code{AS_MESSAGE_FD} are discarded.
 
 If you want to display some messages, consider using one of the printing
 macros (@pxref{Printing Messages}) instead.  Copies of messages output
-via these macros will additionally be recorded in @file{config.log}.
+via these macros are also recorded in @file{config.log}.
 @end defmac
 
 @defmac AS_MESSAGE_LOG_FD
@@ -10040,11 +10071,11 @@ m4_define([AC_MSG_ERROR],
 @end example
 
 Comments about the macro should be left in the header comment.  Most
-other comments will make their way into @file{configure}, so just keep
+other comments make their way into @file{configure}, so just keep
 using @samp{#} to introduce comments.
 
 @cindex @code{dnl}
-If you have some very special comments about pure M4 code, comments
+If you have some special comments about pure M4 code, comments
 that make no sense in @file{configure} and in the header comment, then
 use the builtin @code{dnl}: it causes M4 to discard the text
 through the next newline.
@@ -10209,8 +10240,8 @@ must not be called from the top level.
 
 @code{AC_REQUIRE} is often misunderstood.  It really implements
 dependencies between macros in the sense that if one macro depends upon
-another, the latter will be expanded @emph{before} the body of the
-former.  To be more precise, the required macro will be expanded before
+another, the latter is expanded @emph{before} the body of the
+former.  To be more precise, the required macro is expanded before
 the outermost @code{AC_DEFUN}'d macro in the current expansion stack.
 In particular, @samp{AC_REQUIRE([FOO])} is not replaced with the body of
 @code{FOO}.  For instance, this definition of macros:
@@ -10246,7 +10277,7 @@ fi
 @end example
 
 @noindent
-will not leave you with a better chance to meet a kindred soul at
+does not leave you with a better chance to meet a kindred soul at
 other times than Saturday night since it expands into:
 
 @example
@@ -10279,7 +10310,7 @@ SOME_CHECK
 
 The helper macros @code{AS_IF} and @code{AS_CASE} may be used to
 enforce expansion of required macros outside of shell conditional
-constructs.  You are furthermore encouraged to put all @code{AC_REQUIRE}s
+constructs.  You are furthermore encouraged to put all @code{AC_REQUIRE} calls
 at the beginning of a macro.  You can use @code{dnl} to avoid the empty
 lines they leave.
 
@@ -10344,8 +10375,8 @@ once.
 @end defmac
 
 Obviously it is not sensible to evaluate a macro defined by
-@code{AC_DEFUN_ONCE} in a macro defined by @code{AC_DEFUN}, most of the
-times you will want to use @code{AC_REQUIRE} (@pxref{Prerequisite
+@code{AC_DEFUN_ONCE} in a macro defined by @code{AC_DEFUN}.
+Most of the time you want to use @code{AC_REQUIRE} (@pxref{Prerequisite
 Macros}).
 
 @node Obsoleting Macros
@@ -10367,19 +10398,19 @@ Autoconf provides a simple means to obsolete a macro.
 @defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message})
 @auindex{DEFUN}
 Define @var{old-macro} as @var{implementation}.  The only difference
-with @code{AC_DEFUN} is that the user will be warned that
+with @code{AC_DEFUN} is that the user is warned that
 @var{old-macro} is now obsolete.
 
-If she then uses @command{autoupdate}, the call to @var{old-macro} will be
+If she then uses @command{autoupdate}, the call to @var{old-macro} is
 replaced by the modern @var{implementation}.  @var{message} should
 include information on what to do after running @command{autoupdate};
-@command{autoupdate} will print it as a warning, and include it
+@command{autoupdate} prints it as a warning, and includes it
 in the updated @file{configure.ac} file.
 
 The details of this macro are hairy: if @command{autoconf} encounters an
 @code{AU_DEFUN}ed macro, all macros inside its second argument are expanded
 as usual.  However, when @command{autoupdate} is run, only M4 and M4sugar
-macros will be expanded here, while all other macros are disabled and will
+macros are expanded here, while all other macros are disabled and
 appear literally in the updated @file{configure.ac}.
 @end defmac
 
@@ -10414,7 +10445,7 @@ If you stick to the suggested M4 naming scheme (@pxref{Macro Names}),
 you are unlikely to generate conflicts.  Nevertheless, when you need to
 set a special value, @emph{avoid using a regular macro name}; rather,
 use an ``impossible'' name.  For instance, up to version 2.13, the macro
-@code{AC_SUBST} used to remember what @var{symbol}s were already defined
+@code{AC_SUBST} used to remember what @var{symbol} macros were already defined
 by setting @code{AC_SUBST_@var{symbol}}, which is a regular macro name.
 But since there is a macro named @code{AC_SUBST_FILE}, it was just
 impossible to @samp{AC_SUBST(FILE)}!  In this case,
@@ -10527,7 +10558,7 @@ to the shell and are less likely to occur in file names.
 @xref{Macro Definitions}, for details on how to define a macro.  If a
 macro doesn't use @code{AC_REQUIRE}, is expected to never be the object
 of an @code{AC_REQUIRE} directive, and macros required by other macros
-inside arguments will not need to be expanded before this macro, then
+inside arguments do not need to be expanded before this macro, then
 use @code{m4_define}.  In case of doubt, use @code{AC_DEFUN}.
 All the @code{AC_REQUIRE} statements should be at the beginning of the
 macro, @code{dnl}'ed.
@@ -10661,7 +10692,6 @@ subset described above, is fairly portable nowadays.  Also please see
 * Special Shell Variables::     Variables you should not change
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
-* Limitations of Make::         Portable Makefiles
 @end menu
 
 @node Shellology
@@ -10767,7 +10797,7 @@ the standard shell conform to Posix.
 @prindex @samp{pdksh}
 A public-domain clone of the Korn shell called @command{pdksh} is widely
 available: it has most of the @samp{ksh88} features along with a few of
-its own.  It will usually set @code{KSH_VERSION}, except if invoked as
+its own.  It usually sets @code{KSH_VERSION}, except if invoked as
 @command{/bin/sh} on Open@acronym{BSD}, and similarly to Bash you can require
 Posix compatibility by running @samp{set -o posix}.  Unfortunately, with
 @command{pdksh} 5.2.14 (the latest stable version as of February 2006)
@@ -10944,7 +10974,7 @@ It is worth noting that Zsh (but not Ash nor Bash) makes it possible
 in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
 
 Most shells, if not all (including Bash, Zsh, Ash), output traces on
-stderr, even for sub-shells.  This might result in undesirable content
+stderr, even for subshells.  This might result in undesirable content
 if you meant to capture the standard-error output of the inner command:
 
 @example
@@ -11056,8 +11086,8 @@ not otherwise reachable from @file{/}.  The super-root tradition began
 with Apollo Domain/OS, which died out long ago, but unfortunately Cygwin
 has revived it.
 
-While @command{autoconf} and friends will usually be run on some Posix
-variety, it can and will be used on other systems, most notably @acronym{DOS}
+While @command{autoconf} and friends are usually run on some Posix
+variety, they can be used on other systems, most notably @acronym{DOS}
 variants.  This impacts several assumptions regarding file names.
 
 @noindent
@@ -11073,8 +11103,8 @@ esac
 @end example
 
 @noindent
-will fail to properly detect absolute file names on those systems, because
-they can use a drivespec, and will usually use a backslash as directory
+fails to properly detect absolute file names on those systems, because
+they can use a drivespec, and usually use a backslash as directory
 separator.  If you want to be portable to @acronym{DOS} variants (at the
 price of rejecting valid but oddball Posix file names like @file{a:\b}),
 you can check for absolute file names like this:
@@ -11098,8 +11128,8 @@ use it as path separator.  When creating or accessing paths, you can use the
 to the appropriate value (@samp{:} or @samp{;}) when it starts up.
 
 File names need extra care as well.  While @acronym{DOS} variants
-that are Posixy enough to run @command{autoconf} (such as @acronym{DJGPP}) will
-usually be able to handle long file names properly, there are still
+that are Posixy enough to run @command{autoconf} (such as @acronym{DJGPP})
+are usually able to handle long file names properly, there are still
 limitations that can seriously break packages.  Several of these issues
 can be easily detected by the
 @uref{ftp://ftp.gnu.org/gnu/non-gnu/doschk/doschk-1.1.tar.gz, doschk}
@@ -11138,13 +11168,13 @@ AC_OUTPUT
 
 @item No leading dot (@sc{sfn})
 @acronym{DOS} cannot handle file names that start with a dot.  This is usually
-not a very important issue for @command{autoconf}.
+not important for @command{autoconf}.
 
 @item Case insensitivity (@sc{lfn})
 @acronym{DOS} is case insensitive, so you cannot, for example, have both a
 file called @samp{INSTALL} and a directory called @samp{install}.  This
 also affects @command{make}; if there's a file called @samp{INSTALL} in
-the directory, @samp{make install} will do nothing (unless the
+the directory, @samp{make install} does nothing (unless the
 @samp{install} target is marked as PHONY).
 
 @item The 8+3 limit (@sc{sfn})
@@ -11296,7 +11326,7 @@ Be sure to quote:
 @end example
 
 @noindent
-otherwise some shells, such as on Digital Unix V 5.0, will die because
+otherwise some shells, such as on Digital Unix V 5.0, die because
 of a ``bad substitution''.
 
 @sp 1
@@ -11336,8 +11366,8 @@ default="yu,yaa"
 @end example
 
 @noindent
-will set @var{var} to @samp{M-yM-uM-,M-yM-aM-a}, i.e., the 8th bit of
-each char will be set.  You won't observe the phenomenon using a simple
+sets @var{var} to @samp{M-yM-uM-,M-yM-aM-a}, i.e., the 8th bit of
+each char is set.  You don't observe the phenomenon using a simple
 @samp{echo $var} since apparently the shell resets the 8th bit when it
 expands $var.  Here are two means to make this shell confess its sins:
 
@@ -11395,7 +11425,7 @@ test "$@{var+set@}" = set || var=@var{@{value@}}
 @cindex Command Substitution
 Posix requires shells to trim all trailing newlines from command
 output before substituting it, so assignments like
-@samp{dir=`echo "$file" | tr a A`} will not work as expected if
+@samp{dir=`echo "$file" | tr a A`} do not work as expected if
 @samp{$file} ends in a newline.
 
 While in general it makes no sense, do not substitute a single builtin
@@ -11532,7 +11562,7 @@ brace, use:
 
 @item
 If the default value contains no closing brace, has to be expanded, and
-the variable being initialized will never be IFS-split (i.e., it's not a
+the variable being initialized is never IFS-split (i.e., it's not a
 list), then use:
 
 @example
@@ -11541,7 +11571,7 @@ list), then use:
 
 @item
 If the default value contains no closing brace, has to be expanded, and
-the variable being initialized will be IFS-split (i.e., it's a list),
+the variable being initialized is IFS-split (i.e., it's a list),
 then use:
 
 @example
@@ -11630,7 +11660,7 @@ fallback value is needed.
 As a general rule, shell variable names containing a lower-case letter
 are safe; you can define and use these variables without worrying about
 their effect on the underlying system, and without worrying about
-whether the shell will change them unexpectedly.  (The exception is the
+whether the shell changes them unexpectedly.  (The exception is the
 shell variable @code{status}, as described below.)
 
 Here is a list of names that are known to cause trouble.  This list is
@@ -11712,7 +11742,7 @@ settings for @env{IFS}.
 
 Don't set the first character of @code{IFS} to backslash.  Indeed,
 Bourne shells use the first character (backslash) when joining the
-components in @samp{"$@@"} and some shells then re-interpret (!)@: the
+components in @samp{"$@@"} and some shells then reinterpret (!)@: the
 backslash escapes, so you can end up with backspace and other strange
 characters.
 
@@ -11886,8 +11916,8 @@ Posix 1003.1-2001 requires that @command{cd} and
 to the logical name of the current directory, but traditional shells
 do not support this.  This can cause confusion if one shell instance
 maintains @env{PWD} but a subsidiary and different shell does not know
-about @env{PWD} and executes @command{cd}; in this case @env{PWD} will
-point to the wrong directory.  Use @samp{`pwd`} rather than
+about @env{PWD} and executes @command{cd}; in this case @env{PWD}
+points to the wrong directory.  Use @samp{`pwd`} rather than
 @samp{$PWD}.
 
 @item RANDOM
@@ -11911,7 +11941,7 @@ hence read-only.  Do not use it.
 No, no, we are serious: some shells do have limitations!  :)
 
 You should always keep in mind that any builtin or command may support
-options, and therefore have a very different behavior with arguments
+options, and therefore differ in behavior with arguments
 starting with a dash.  For instance, the innocent @samp{echo "$word"}
 can give unexpected results when @code{word} starts with a dash.  It is
 often possible to avoid this problem using @samp{echo "x$word"}, taking
@@ -12105,8 +12135,8 @@ once for the @command{eval} and once for the command itself.  It is
 therefore safer to use @samp{eval "$cmd"}.  For example, if @var{cmd}
 has the value @samp{cat test?.c}, @samp{eval $cmd} might expand to the
 equivalent of @samp{cat test;.c} if there happens to be a file named
-@file{test;.c} in the current directory; and this in turn will
-mistakenly attempt to invoke @command{cat} on the file @file{test} and
+@file{test;.c} in the current directory; and this in turn
+mistakenly attempts to invoke @command{cat} on the file @file{test} and
 then execute the command @command{.c}.  To avoid this problem, use
 @samp{eval "$cmd"} rather than @samp{eval $cmd}.
 
@@ -12114,9 +12144,9 @@ However, suppose that you want to output the text of the evaluated
 command just before executing it.  Assuming the previous example,
 @samp{echo "Executing: $cmd"} outputs @samp{Executing: cat test?.c}, but
 this output doesn't show the user that @samp{test;.c} is the actual name
-of the copied file.  Conversely, @samp{eval "echo Executing: $cmd"} will
-work on this example, but it will fail with @samp{cmd='cat foo >bar'},
-since it will mistakenly replace the contents of @file{bar} by the
+of the copied file.  Conversely, @samp{eval "echo Executing: $cmd"}
+works on this example, but it fails with @samp{cmd='cat foo >bar'},
+since it mistakenly replaces the contents of @file{bar} by the
 string @samp{cat foo}.  No simple, general, and portable solution to
 this problem is known.
 
@@ -12192,8 +12222,8 @@ exec /bin/sh $0
 @end example
 
 @noindent
-when run with @samp{FOO=foo} in the environment, these shells will print
-alternately @samp{foo} and @samp{bar}, although it should only print
+when run with @samp{FOO=foo} in the environment, these shells print
+alternately @samp{foo} and @samp{bar}, although they should print only
 @samp{foo} and then a sequence of @samp{bar}s.
 
 Therefore you should @command{export} again each environment variable
@@ -12273,8 +12303,8 @@ $ @kbd{if (exit 42); then true; fi; echo $?}
 
 @noindent
 whereas a proper shell should have printed @samp{0}.  This is especially
-bad in Makefiles since it produces false failures.  This is why properly
-written Makefiles, such as Automake's, have such hairy constructs:
+bad in makefiles since it produces false failures.  This is why properly
+written makefiles, such as Automake's, have such hairy constructs:
 
 @example
 if test -f "$file"; then
@@ -12289,9 +12319,9 @@ fi
 @c ------------------
 @prindex @command{printf}
 A format string starting with a @samp{-} can cause problems.
-Bash (e.g., 2.05b) will interpret it as an options string and
+Bash (e.g., 2.05b) interpret it as an options argument and
 give an error.  And @samp{--} to mark the end of options is not good
-in the Net@acronym{BSD} Almquist shell (e.g., 0.4.6) which will take that
+in the Net@acronym{BSD} Almquist shell (e.g., 0.4.6) which takes that
 literally as the format string.  Putting the @samp{-} in a @samp{%c}
 or @samp{%s} is probably the easiest way to avoid doubt,
 
@@ -12379,7 +12409,7 @@ set -ex
 The @acronym{BSD} shell has had several problems with the @option{-e}
 option, partly because @acronym{BSD} @command{make} traditionally used
 @option{-e} even though this was incompatible with Posix
-(@pxref{Limitations of Make}).  Older versions of the @acronym{BSD}
+(@pxref{Failure in Make Rules}).  Older versions of the @acronym{BSD}
 shell (circa 1990) mishandled @samp{&&}, @samp{||}, @samp{if}, and
 @samp{case} when @option{-e} was in effect, causing the shell to exit
 unexpectedly in some cases.  This was particularly a problem with
@@ -12601,8 +12631,8 @@ funny side effect: when asked whether @command{false} is more portable
 than @command{true} Alexandre Oliva answered:
 
 @quotation
-In a sense, yes, because if it doesn't exist, the shell will produce an
-exit status of failure, which is correct for @command{false}, but not
+In a sense, yes, because if it doesn't exist, the shell exits
+with a failure status, which is correct for @command{false}, but not
 for @command{true}.
 @end quotation
 
@@ -12695,7 +12725,7 @@ length of regular expressions and literal strings in an Awk program.
 Traditional Awk implementations derived from Unix version 7, such as
 Solaris @command{/bin/awk}, have many limitations and do not
 conform to Posix.  Nowadays @code{AC_PROG_AWK} (@pxref{Particular
-Programs}) will find you an Awk that doesn't have these problems, but if
+Programs}) finds you an Awk that doesn't have these problems, but if
 for some reason you prefer not to use @code{AC_PROG_AWK} you may need to
 address them.
 
@@ -12778,7 +12808,7 @@ When a compilation such as @samp{cc -o foo foo.c} fails, some compilers
 (such as @sc{cds} on Reliant Unix) leave a @file{foo.o}.
 
 HP-UX @command{cc} doesn't accept @file{.S} files to preprocess and
-assemble.  @samp{cc -c foo.S} will appear to succeed, but in fact does
+assemble.  @samp{cc -c foo.S} appears to succeed, but in fact does
 nothing.
 
 The default executable, produced by @samp{cc foo.c}, can be
@@ -13058,8 +13088,8 @@ $ @kbd{expr 'a' : '\(a\)' || echo 'a' | sed 's/^\(a\)$/\1/'}
 @end example
 
 @noindent
-will output @samp{a} on most hosts, but @samp{aa} on @acronym{QNX} 4.25.  A
-simple workaround consists in testing @command{expr} and use a variable
+outputs @samp{a} on most hosts, but @samp{aa} on @acronym{QNX} 4.25.  A
+simple workaround consists of testing @command{expr} and using a variable
 set to @command{expr} or to @command{false} according to the result.
 
 Tru64 @command{expr} incorrectly treats the result as a number, if it
@@ -13142,7 +13172,7 @@ bar' in.txt
 @end example
 
 @noindent
-except that this will fail with traditional @command{grep}
+except that this fails with traditional @command{grep}
 implementations and with Open@acronym{BSD} 3.8 @command{grep}.
 
 Traditional @command{grep} implementations (e.g., Solaris) do not
@@ -13190,8 +13220,8 @@ For versions of the @acronym{DJGPP} before 2.04,
 @command{ln} emulates symbolic links
 to executables by generating a stub that in turn calls the real
 program.  This feature also works with nonexistent files like in the
-Posix spec.  So @samp{ln -s file link} will generate @file{link.exe},
-which will attempt to call @file{file.exe} if run.  But this feature only
+Posix spec.  So @samp{ln -s file link} generates @file{link.exe},
+which attempts to call @file{file.exe} if run.  But this feature only
 works for executables, so @samp{cp -p} is used instead for these
 systems.  @acronym{DJGPP} versions 2.04 and later have full support
 for symbolic links.
@@ -13237,7 +13267,7 @@ race-free when two processes invoke @code{mkdir -p} simultaneously, but
 earlier versions are vulnerable.  Solaris @command{mkdir} is still
 vulnerable as of Solaris 10, and other traditional Unix systems are
 probably vulnerable too.  This possible race is harmful in parallel
-builds when several @file{Makefile} rules call @code{mkdir -p} to
+builds when several Make rules call @code{mkdir -p} to
 construct directories.  You may use
 @code{install-sh -d} as a safe replacement, provided this script is
 recent enough; the copy shipped with Autoconf 2.60 and Automake 1.10 is
@@ -13345,7 +13375,7 @@ This problem no longer exists in Mac OS X 10.4.3.
 @prindex @command{sed}
 Patterns should not include the separator (unless escaped), even as part
 of a character class.  In conformance with Posix, the Cray
-@command{sed} will reject @samp{s/[^/]*$//}: use @samp{s,[^/]*$,,}.
+@command{sed} rejects @samp{s/[^/]*$//}: use @samp{s,[^/]*$,,}.
 
 Avoid empty patterns within parentheses (i.e., @samp{\(\)}).  Posix does
 not require support for empty patterns, and Unicos 9 @command{sed} rejects
@@ -13439,7 +13469,7 @@ Contrary to yet another urban legend, you may portably use @samp{&} in
 the replacement part of the @code{s} command to mean ``what was
 matched''.  All descendants of Unix version 7 @command{sed}
 (at least; we
-don't have first hand experience with older @command{sed}s) have
+don't have first hand experience with older @command{sed} implementations) have
 supported it.
 
 Posix requires that you must not have any white space between
@@ -13560,31 +13590,51 @@ However, these problems are no longer of practical concern.
 @end table
 
 
-@node Limitations of Make
-@section Limitations of Make
+@node Portable Make
+@chapter Portable Make Programming
 @prindex @command{make}
 @cindex Limitations of @command{make}
 
-@command{make} itself suffers a great number of limitations, only a few
-of which are listed here.  First of all, remember that since commands
-are executed by the shell, all its weaknesses are inherited@enddots{}
+Writing portable makefiles is an art.  Since a makefile's commands are
+executed by the shell, you must consider the shell portability issues
+already mentioned.  However, other issues are specific to @command{make}
+itself.
 
-@table @asis
+@menu
+* $< in Ordinary Make Rules::   $< in ordinary rules
+* Failure in Make Rules::       Failing portably in rules
+* Leading _ in Macro Names::    $(_FOO) on ancient hosts
+* Backslash-Newline-Newline::   Empty last lines in macro definitions
+* Backslash-Newline Comments::  Spanning comments across line boundaries
+* Long Lines in Makefiles::     Line length limitations
+* Macros and Submakes::         @code{make macro=value} and submakes
+* The Make Macro SHELL::        @code{$(SHELL)} portability issues
+* Comments in Make Rules::      Other problems with Make comments
+* obj/ and Make::               Don't name a subdirectory @file{obj}
+* make -k Status::              Exit status of @samp{make -k}
+* VPATH and Make::              @code{VPATH} and its many discontents
+* Single Suffix Rules::         Single suffix rules and separated dependencies
+* Timestamps and Make::         Subsecond timestamp resolution
+@end menu
 
-@item @code{$<}
+@node $< in Ordinary Make Rules
+@section @code{$<} in Ordinary Make Rules
+
 Posix says that the @samp{$<} construct in makefiles can be
 used only in inference rules and in the @samp{.DEFAULT} rule; its
 meaning in ordinary rules is unspecified.  Solaris @command{make}
-for instance will replace it with the empty string.  Open@acronym{BSD} (3.0 and
-later) @command{make} will diagnose these uses and error out.
+for instance replaces it with the empty string.  Open@acronym{BSD} (3.0 and
+later) @command{make} diagnoses these uses and errors out.
 
-@item Command execution
+@node Failure in Make Rules
+@section Failure in Make Rules
+
 Since 1992 Posix has required that @command{make} must invoke
 each command with the equivalent of a @samp{sh -c} subshell.  However,
 many @command{make} implementations, including @acronym{BSD} make through 2004,
 use @samp{sh -e -c} instead, and the @option{-e} option causes the
 subshell to exit immediately if a subsidiary simple-command fails.  For
-example, the command @samp{touch T; rm -f U} will always attempt to
+example, the command @samp{touch T; rm -f U} always attempts to
 remove @file{U} with Posix make, but incompatible
 @command{make} implementations skip the @command{rm} if the
 @command{touch} fails.  One way to work around this is to reword the
@@ -13596,9 +13646,11 @@ implementations of the @option{-e} option of @command{sh} and
 about porting to buggy BSD shells it may be simpler to migrate
 complicated @command{make} actions into separate scripts.
 
-@item Leading underscore in macro names
-Some @command{make}s don't support leading underscores in macro names,
-such as on NEWS-OS 4.2R.
+@node Leading _ in Macro Names
+@section Leading @samp{_} in Make Macro Names
+
+Some ancient @command{make} implementations don't support leading
+underscores in macro names.  An example is @acronym{NEWS-OS} 4.2R.
 
 @example
 $ @kbd{cat Makefile}
@@ -13615,11 +13667,16 @@ $ @kbd{make -f Makefile2}
 this is test
 @end example
 
-@item Trailing backslash in macro
+@noindent
+However, this problem is no longer of practical concern.
+
+@node Backslash-Newline-Newline
+@section Backslash-Newline-Newline in Make Macro Values
+
 @c  This has been seen on ia64 hpux 11.20, and on one hppa hpux 10.20,
 @c  but another hppa hpux 10.20 didn't have it.  Bob Proulx
 @c  <bob@proulx.com> thinks it was in hpux 8.0 too.
-On some versions of HP-UX, @command{make} will read multiple newlines
+On some versions of HP-UX, @command{make} reads multiple newlines
 following a backslash, continuing to the next non-empty line.  For
 example,
 
@@ -13634,13 +13691,14 @@ test:
 @end example
 
 @noindent
-shows @code{FOO} equal to @code{one BAR = two}.  Other @command{make}s
+shows @code{FOO} equal to @code{one BAR = two}.  Other implementations
 sensibly let a backslash continue only to the immediately following
 line.
 
-@item Escaped newline in comments
+@node Backslash-Newline Comments
+@section Backslash-Newline in Make Comments
 
-According to Posix, @file{Makefile} comments start with @code{#}
+According to Posix, Make comments start with @code{#}
 and continue until an unescaped newline is reached.
 
 @example
@@ -13656,8 +13714,8 @@ ok
 @end example
 
 @noindent
-However in Real World this is not always the case.  Some implementations
-discards anything from @code{#} up to the end of line, ignoring any
+However this is not always the case.  Some implementations
+discard everything from @code{#} through the end of the line, ignoring any
 trailing backslash.
 
 @example
@@ -13676,20 +13734,22 @@ line with @code{#}, not only the first.
 #     baz
 @end example
 
-@item Long lines.
+@node Long Lines in Makefiles
+@section Long Lines in Makefiles
 
-OSF/1 4.0d's @command{make} cannot process @file{Makefile}s with lines
+OSF/1 4.0d's @command{make} cannot process makefiles with lines
 longer than 38912 bytes.  It exits with a @code{Line too long}
 diagnostic.  A later version, Tru64 5.1's @command{make} has been
 reported to crash with lines around 20 kB.
 
-@item @code{make macro=value} and sub-@command{make}s.
+@node Macros and Submakes
+@section @code{make macro=value} and Submakes
 
 A command-line variable definition such as @code{foo=bar} overrides any
-definition of @code{foo} in the @file{Makefile}.  Some @command{make}
-implementations (such as @acronym{GNU} @command{make}) will propagate this
-override to sub-invocations of @command{make}.  Some other implementation
-will not pass the substitution along to sub-@command{make}s.
+definition of @code{foo} in a makefile.  Some @command{make}
+implementations (such as @acronym{GNU} @command{make}) propagate this
+override to subsidiary invocations of @command{make}.  Some other
+implementations do not pass the substitution along to submakes.
 
 @example
 $ @kbd{cat Makefile}
@@ -13712,33 +13772,33 @@ foo
 @end example
 
 You have a few possibilities if you do want the @code{foo=bar} override
-to propagate to sub-@command{make}s.  One is to use the @option{-e}
+to propagate to submakes.  One is to use the @option{-e}
 option, which causes all environment variables to have precedence over
-the @file{Makefile} macro definitions, and declare foo as an environment
+the makefile macro definitions, and declare foo as an environment
 variable:
 
 @example
 $ @kbd{env foo=bar make -e}
 @end example
 
-The @option{-e} option is propagated to sub-@command{make}s automatically,
+The @option{-e} option is propagated to submakes automatically,
 and since the environment is inherited between @command{make}
-invocations, the @code{foo} macro will be overridden in
-sub-@code{make}s as expected.
+invocations, the @code{foo} macro is overridden in
+submakes as expected.
 
 This syntax (@code{foo=bar make -e}) is portable only when used
-outside of a @file{Makefile}, for instance from a script or from the
+outside of a makefile, for instance from a script or from the
 command line.  When run inside a @command{make} rule, @acronym{GNU}
 @command{make} 3.80 and prior versions forget to propagate the
-@option{-e} option to sub-@command{make}s.
+@option{-e} option to submakes.
 
 Moreover, using @option{-e} could have unexpected side-effects if your
 environment contains some other macros usually defined by the
-Makefile.  (See also the note about @code{make -e} and @code{SHELL}
+makefile.  (See also the note about @code{make -e} and @code{SHELL}
 below.)
 
-Another way to propagate overrides to sub-@command{make}s is to do it
-manually, from your @file{Makefile}:
+Another way to propagate overrides to submakes is to do it
+manually, from your makefile:
 
 @example
 foo = foo
@@ -13752,19 +13812,21 @@ two:
 You need to foresee all macros that a user might want to override if
 you do that.
 
-@item The @code{SHELL} macro
+@node The Make Macro SHELL
+@section The Make Macro @code{SHELL}
 @cindex @code{SHELL} and @command{make}
 @cindex @command{make} and @code{SHELL}
 
-Posix-compliant @command{make}s internally use the @code{$(SHELL)}
-macro to spawn shell processes and execute @file{Makefile} rules.  This
+Posix-compliant @command{make} internally uses the @code{$(SHELL)}
+macro to spawn shell processes and execute Make rules.  This
 is a builtin macro supplied by @command{make}, but it can be modified
-from the @file{Makefile} or a command-line argument.
+by a makefile or by a command-line argument.
 
-Not all @command{make}s will define this @code{SHELL} macro.  OSF/Tru64
-@command{make} is an example; this implementation will always use
+Not all @command{make} implementations define this @code{SHELL} macro.
+OSF/Tru64
+@command{make} is an example; this implementation always uses
 @code{/bin/sh}.  So it's a good idea to always define @code{SHELL} in
-your @file{Makefile}s.  If you use Autoconf, do
+your makefiles.  If you use Autoconf, do
 
 @example
 SHELL = @@SHELL@@
@@ -13778,12 +13840,12 @@ on top of DOS's @command{command.com}.  Unfortunately this emulation is
 incomplete; for instance it does not handle command substitutions.
 On @acronym{DJGPP} @code{SHELL} should point to Bash.
 
-Posix-compliant @command{make}s should never acquire the value of
+Posix-compliant @command{make} should never acquire the value of
 $(SHELL) from the environment, even when @code{make -e} is used
 (otherwise, think about what would happen to your rules if
 @code{SHELL=/bin/tcsh}).
 
-However not all @command{make} implementations will make this exception.
+However not all @command{make} implementations have this exception.
 For instance it's not surprising that OSF/Tru64 @command{make} doesn't
 protect @code{SHELL}, since it doesn't use it.
 
@@ -13802,7 +13864,8 @@ $ @kbd{env SHELL=/bin/tcsh FOO=bar gmake -e}  # GNU make
 bar
 @end example
 
-@item Comments in rules
+@node Comments in Make Rules
+@section Comments in Make Rules
 @cindex Comments in @file{Makefile} rules
 @cindex @file{Makefile} rules and comments
 
@@ -13811,23 +13874,24 @@ Never put comments in a rule.
 Some @command{make} treat anything starting with a tab as a command for
 the current rule, even if the tab is immediately followed by a @code{#}.
 The @command{make} from Tru64 Unix V5.1 is one of them.  The following
-@file{Makefile} will run @code{# foo} through the shell.
+makefile runs @code{# foo} through the shell.
 
 @example
 all:
         # foo
 @end example
 
-@item The @file{obj/} subdirectory.
+@node obj/ and Make
+@section The @file{obj/} Subdirectory and Make
 @cindex @file{obj/}, subdirectory
 @cindex @acronym{BSD} @command{make} and @file{obj/}
 
 Never name one of your subdirectories @file{obj/} if you don't like
 surprises.
 
-If an @file{obj/} directory exists, @acronym{BSD} @command{make} will enter it
-before reading @file{Makefile}.  Hence the @file{Makefile} in the
-current directory will not be read.
+If an @file{obj/} directory exists, @acronym{BSD} @command{make} enters it
+before reading the makefile.  Hence the makefile in the
+current directory is not read.
 
 @example
 $ @kbd{cat Makefile}
@@ -13844,7 +13908,8 @@ echo World
 World
 @end example
 
-@item @code{make -k}
+@node make -k Status
+@section Exit Status of @code{make -k}
 @cindex @code{make -k}
 
 Do not rely on the exit status of @code{make -k}.  Some implementations
@@ -13865,49 +13930,58 @@ false
 exit status: 0
 @end example
 
-@item @code{VPATH}
+@node VPATH and Make
+@section @code{VPATH} and Make
 @cindex @code{VPATH}
 
-There is no @code{VPATH} support specified in Posix.  Many
-@command{make}s have a form of @code{VPATH} support, but its
-implementation is not consistent amongst @command{make}s.
+Posix does not specify the semantics of @code{VPATH}.  Typically,
+@command{make} supports @code{VPATH}, but its implementation is not
+consistent.
 
-Maybe the best suggestion to give to people who need the @code{VPATH}
-feature is to choose a @command{make} implementation and stick to it.
-Since the resulting @file{Makefile}s are not portable anyway, better
-choose a portable @command{make} (hint, hint).
+Autoconf and Automake support makefiles whose usages of @code{VPATH} are
+portable to recent-enough popular implementations of @command{make}, but
+to keep the resulting makefiles portable, a package's makefile
+prototypes must take the following issues into account.  These issues
+are complicated and are often poorly understood, and installers who use
+@code{VPATH} should expect to find many bugs in this area.  If you use
+@code{VPATH}, the simplest way to avoid these portability bugs is to
+stick with @acronym{GNU} @command{make}, since it is the most
+commonly-used @command{make} among Autoconf users.
 
-Here are a couple of known issues with some @code{VPATH}
+Here are some known issues with some @code{VPATH}
 implementations.
 
-@table @asis
+@menu
+* VPATH and Double-colon::      Problems with @samp{::} on ancient hosts
+* $< in Explicit Rules::        @code{$<} does not work in ordinary rules
+* Automatic Rule Rewriting::    @code{VPATH} goes wild on Solaris
+* OSF/Tru64 Directory Magic::   @command{mkdir} goes wild on OSF/Tru64
+* Make Target Lookup::          More details about @code{VPATH} lookup
+@end menu
 
-@item @code{VPATH} and double-colon rules
+@node VPATH and Double-colon
+@subsection @code{VPATH} and Double-colon Rules
 @cindex @code{VPATH} and double-colon rules
 @cindex double-colon rules and @code{VPATH}
 
 With ancient versions of Sun @command{make},
-any assignment to @code{VPATH} @command{make} to only execute
+any assignment to @code{VPATH} causes @command{make} to execute only
 the first set of double-colon rules.
 However, this problem is no longer of practical concern.
 
-@item @code{$<} not supported in explicit rules
+@node $< in Explicit Rules
+@subsection @code{$<} Not Supported in Explicit Rules
 @cindex explicit rules, @code{$<}, and @code{VPATH}
 @cindex @code{$<}, explicit rules, and @code{VPATH}
 @cindex @code{VPATH}, explicit rules, and @code{$<}
 
-As said elsewhere, using @code{$<} in explicit rules is not portable.
+Using @code{$<} in explicit rules is not portable.
 The prerequisite file must be named explicitly in the rule.  If you want
 to find the prerequisite via a @code{VPATH} search, you have to code the
-whole thing manually.  For instance, using the following pattern:
+whole thing manually.  @xref{Build Directories}.
 
-@example
-VPATH = ../pkg/src
-f.c: if.c
-        cp `test -f if.c || echo $(VPATH)/`if.c f.c
-@end example
-
-@item Automatic rule rewriting
+@node Automatic Rule Rewriting
+@subsection Automatic Rule Rewriting
 @cindex @code{VPATH} and automatic rule rewriting
 @cindex automatic rule rewriting and @code{VPATH}
 
@@ -13927,7 +14001,18 @@ f.c: if.c
 executes @code{cp ../pkg/src/if.c f.c} if @file{if.c} is
 found in @file{../pkg/src}.
 
-However, portable makefiles cannot rely on this behavior, and should
+However, this rule leads to real problems in practice.  For example, if
+the source directory contains an ordinary file named @file{test} that is
+used in a dependency, Solaris @command{make} rewrites commands like
+@samp{if test -r foo; @dots{}} to @samp{if ../pkg/src/test -r foo;
+@dots{}}, which is typically undesirable.  To avoid this problem,
+portable makefiles should never mention a source file whose name is that
+of a shell keyword like @file{until} or a shell command like
+@command{cat} or @command{gcc} or @command{test}.
+
+Because of these problems @acronym{GNU} @command{make} and many other
+@command{make} implementations do not rewrite commands, so portable
+makefiles should
 search @code{VPATH} manually.  It is tempting to write this:
 
 @smallexample
@@ -13938,9 +14023,9 @@ f.c: if.c
 @end smallexample
 
 @noindent
-However the ``prerequisite rewriting'' still applies here.  So if
+However, the ``prerequisite rewriting'' still applies here.  So if
 @file{if.c} is in @file{../pkg/src}, Solaris @command{make} and OSF1/Tru64
-@command{make} will execute
+@command{make} executes
 
 @smallexample
 cp `test -f ../pkg/src/if.c || echo ../pkg/src/`if.c f.c
@@ -13996,7 +14081,7 @@ install-HEADERS: $(HEADERS)
 @end example
 
 The above @code{install-HEADERS} rule is not Solaris-proof because @code{for
-i in $(HEADERS);} will be expanded as @code{for i in f.h g.h h.h;}
+i in $(HEADERS);} is expanded to @code{for i in f.h g.h h.h;}
 where @code{f.h} and @code{g.h} are plain words and are hence
 subject to @code{VPATH} adjustments.
 
@@ -14010,7 +14095,7 @@ for i in ../pkg/src/f.h ../pkg/src/g.h h.h; do \
 done
 @end example
 
-where the two first @command{install} calls will fail.  For instance,
+where the two first @command{install} calls fail.  For instance,
 consider the @code{f.h} installation:
 
 @example
@@ -14020,6 +14105,7 @@ install -m 644 \
   `../pkg/src/f.h \
   /usr/local/include/../pkg/src/f.h;
 @end example
+
 @noindent
 It reduces to:
 
@@ -14033,7 +14119,7 @@ Note that the manual @code{VPATH} search did not cause any problems here;
 however this command installs @file{f.h} in an incorrect directory.
 
 Trying to quote @code{$(HEADERS)} in some way, as we did for
-@code{foo.c} a few @file{Makefile}s ago, does not help:
+@code{foo.c} a few makefiles ago, does not help:
 
 @example
 install-HEADERS: $(HEADERS)
@@ -14058,6 +14144,7 @@ idea if @code{$(HEADERS)} can be empty, because some shells diagnose a
 syntax error on @code{for i in;}.)
 
 One workaround is to strip this unwanted @file{../pkg/src/} prefix manually:
+
 @example
 VPATH = ../pkg/src
 HEADERS = f.h g.h h.h
@@ -14077,12 +14164,13 @@ subdirectory; they should not be in an enclosing directory.  If we had
 @code{HEADERS = ../f.h}, the above fragment would fail in a VPATH
 build with OSF1/Tru64 @command{make}.  The reason is that not only does
 OSF1/Tru64 @command{make} rewrite dependencies, but it also simplifies
-them.  Hence @code{../f.h} will become @code{../pkg/f.h} instead of
+them.  Hence @code{../f.h} becomes @code{../pkg/f.h} instead of
 @code{../pkg/src/../f.h}.  This obviously defeats any attempt to strip
 a leading @file{../pkg/src/} component.
 
 The following example makes the behavior of OSF1/Tru64 @command{make}
 more apparent.
+
 @example
 $ @kbd{cat Makefile}
 VPATH = sub
@@ -14094,6 +14182,7 @@ $ @kbd{make}
 echo foo
 foo
 @end example
+
 @noindent
 Dependency @file{../foo} was found in @file{sub/../foo}, but OSF1/Tru64
 @command{make} simplified it as @file{foo}.  (Note that the @file{sub/}
@@ -14101,7 +14190,8 @@ directory does not even exist, this just means that the simplification
 occurred before the file was checked for.)
 
 For the record here is how SunOS 4 @command{make} behaves on this
-very same example.
+example.
+
 @smallexample
 $ @kbd{make}
 make: Fatal error: Don't know how to make target `../foo'
@@ -14112,12 +14202,13 @@ sub/../foo
 @end smallexample
 
 
-@item OSF/Tru64 @command{make} creates prerequisite directories magically
+@node OSF/Tru64 Directory Magic
+@subsection OSF/Tru64 @command{make} Creates Prerequisite Directories Magically
 @cindex @code{VPATH} and prerequisite directories
 @cindex prerequisite directories and @code{VPATH}
 
-When a prerequisite is a sub-directory of @code{VPATH}, Tru64
-@command{make} will create it in the current directory.
+When a prerequisite is a subdirectory of @code{VPATH}, Tru64
+@command{make} creates it in the current directory.
 
 @example
 $ @kbd{mkdir -p foo/bar build}
@@ -14140,40 +14231,41 @@ all : foo/bar
         command `test -d foo/bar || echo ../`foo/bar
 @end example
 
-The above @command{command} will be run on the empty @file{foo/bar}
+The above @command{command} is run on the empty @file{foo/bar}
 directory that was created in the current directory.
 
-@item target lookup
+@node Make Target Lookup
+@subsection Make Target Lookup
 @cindex @code{VPATH}, resolving target pathnames
 
-@acronym{GNU} @command{make} uses a rather complex algorithm to decide when it
+@acronym{GNU} @command{make} uses a complex algorithm to decide when it
 should use files found via a @code{VPATH} search.  @xref{Search
 Algorithm, , How Directory Searches are Performed, make, The @acronym{GNU} Make
 Manual}.
 
 If a target needs to be rebuilt, @acronym{GNU} @command{make} discards the
 file name found during the @code{VPATH} search for this target, and
-builds the file locally using the file name given in the @file{Makefile}.
+builds the file locally using the file name given in the makefile.
 If a target does not need to be rebuilt, @acronym{GNU} @command{make} uses the
 file name found during the @code{VPATH} search.
 
 Other @command{make} implementations, like Net@acronym{BSD} @command{make}, are
 easier to describe: the file name found during the @code{VPATH} search
-will be used whether the target needs to be rebuilt or not.  Therefore
+is used whether the target needs to be rebuilt or not.  Therefore
 new files are created locally, but existing files are updated at their
 @code{VPATH} location.
 
-Open@acronym{BSD} and Free@acronym{BSD} @command{make}s, however, will
+Open@acronym{BSD} and Free@acronym{BSD} @command{make}, however,
 never perform a
-@code{VPATH} search for a dependency which has an explicit rule.
+@code{VPATH} search for a dependency that has an explicit rule.
 This is extremely annoying.
 
 When attempting a @code{VPATH} build for an autoconfiscated package
-(e.g., @code{mkdir build && cd build && ../configure}), this means the
+(e.g., @code{mkdir build && cd build && ../configure}), this means
 @acronym{GNU}
-@command{make} will build everything locally in the @file{build}
-directory, while @acronym{BSD} @command{make} will build new files locally and
-update existing files in the source directory.
+@command{make} builds everything locally in the @file{build}
+directory, while @acronym{BSD} @command{make} builds new files locally and
+updates existing files in the source directory.
 
 @example
 $ @kbd{cat Makefile}
@@ -14215,7 +14307,7 @@ update @file{bar.x}, even when @file{../bar.x} is up to date.
 
 Another point worth mentioning is that once @acronym{GNU} @command{make} has
 decided to ignore a @code{VPATH} file name (e.g., it ignored
-@file{../bar.x} in the above example) it will continue to ignore it when
+@file{../bar.x} in the above example) it continues to ignore it when
 the target occurs as a prerequisite of another rule.
 
 The following example shows that @acronym{GNU} @command{make} does not look up
@@ -14255,10 +14347,10 @@ cp: bar.x: No such file or directory
 @end example
 
 Note that if you drop away the command from the @code{bar.x: newer.x}
-rule, @acronym{GNU} @command{make} will magically start to work: it
+rule, @acronym{GNU} @command{make} magically starts to work: it
 knows that @code{bar.x} hasn't been updated, therefore it doesn't
 discard the result from @code{VPATH} (@file{../bar.x}) in succeeding
-uses.  Tru64 will also work, but Free@acronym{BSD} and Open@acronym{BSD}
+uses.  Tru64 also works, but Free@acronym{BSD} and Open@acronym{BSD}
 still don't.
 
 @example
@@ -14289,10 +14381,9 @@ It seems the sole solution that would please every @command{make}
 implementation is to never rely on @code{VPATH} searches for targets.
 In other words, @code{VPATH} should be reserved to unbuilt sources.
 
-@end table
-@c end item about VPATH
 
-@item Single Suffix Rules and Separated Dependencies
+@node Single Suffix Rules
+@section Single Suffix Rules and Separated Dependencies
 @cindex Single Suffix Inference Rule
 @cindex Rule, Single Suffix Inference
 A @dfn{Single Suffix Rule} is basically a usual suffix (inference) rule
@@ -14355,7 +14446,8 @@ cp foo.in foo.out
 
 As a result, in such a case, you have to write target rules.
 
-@item Timestamp Resolution
+@node Timestamps and Make
+@section Timestamp Resolution and Make
 @cindex timestamp resolution
 Traditionally, file timestamps had 1-second resolution, and
 @command{make} used those timestamps to determine whether one file was
@@ -14375,7 +14467,7 @@ dest: src
         cp -p src dest
 @end example
 
-as @file{dest} will often appear to be older than @file{src} after the
+as @file{dest} often appears to be older than @file{src} after the
 timestamp is truncated, and this can cause @command{make} to do
 needless rework the next time it is invoked.  To work around this
 problem, you can use a timestamp file, e.g.:
@@ -14385,8 +14477,6 @@ dest-stamp: src
         cp -p src dest
         date >dest-stamp
 @end example
-
-@end table
 
 
 
@@ -14403,7 +14493,7 @@ platforms.
 
 Several standards have been developed to help make your programs more
 portable.  If you write programs with these standards in mind, you can
-have greater confidence that your programs will work on a wide variety
+have greater confidence that your programs work on a wide variety
 of systems.  @xref{Standards, , Language Standards Supported by GCC,
 gcc, Using the GNU Compiler Collection (GCC)}, for a list of C-related
 standards.  Many programs also assume the
@@ -14441,7 +14531,7 @@ and undefined behavior.
 In C, a @dfn{constraint} is a rule that the compiler must enforce.  An
 example constraint is that C programs must not declare a bit-field with
 negative width.  Tests can therefore reliably assume that programs with
-negative-width bit-fields will be rejected by a compiler that conforms
+negative-width bit-fields are rejected by a compiler that conforms
 to the standard.
 
 @dfn{Unspecified behavior} is valid behavior, where the standard allows
@@ -14536,11 +14626,11 @@ Buffer overruns are usually caused by off-by-one errors, but there are
 more subtle ways to get them.
 
 Using @code{int} values to index into an array or compute array sizes
-will cause problems on typical 64-bit hosts where an array index might
+causes problems on typical 64-bit hosts where an array index might
 be @math{2^31} or larger.
 
 If you add or multiply two numbers to calculate an array size, e.g.,
-@code{malloc (x * sizeof y + z)}, havoc will ensue if the addition or
+@code{malloc (x * sizeof y + z)}, havoc ensues if the addition or
 multiplication overflows.
 
 Many implementations of the @code{alloca} function silently misbehave
@@ -14643,12 +14733,12 @@ the type of system on which the package is being configured and
 compiled.  It defaults to the result of running @command{config.guess}.
 
 @item --host=@var{host-type}
-the type of system on which the package will run.  By default it is the
+the type of system on which the package runs.  By default it is the
 same as the build machine.  Specifying it enables the cross-compilation
 mode.
 
 @item --target=@var{target-type}
-the type of system for which any compiler tools in the package will
+the type of system for which any compiler tools in the package
 produce code (rarely needed).  By default, it is the same as host.
 @end table
 
@@ -14664,9 +14754,9 @@ future.  So, to enter cross-compilation mode, use a command like this
 @end example
 
 @noindent
-Note that if you do not specify @option{--host}, @command{configure} will
-fail if it can't run the code generated by the specified compiler.  For
-example, configuring as follows will fail:
+Note that if you do not specify @option{--host}, @command{configure}
+fails if it can't run the code generated by the specified compiler.  For
+example, configuring as follows fails:
 
 @example
 ./configure CC=m68k-coff-gcc
@@ -14781,7 +14871,7 @@ be used to match a group of system types.
 
 For example, an extra assembler code object file could be chosen, giving
 access to a CPU cycle counter register.  @code{$(CYCLE_OBJ)} in the
-following would be used in a @file{Makefile} to add the object to a
+following would be used in a makefile to add the object to a
 program or library.
 
 @example
@@ -14817,7 +14907,7 @@ Whenever you're tempted to use @samp{$host} it's worth considering
 whether some sort of probe would be better.  New system types come along
 periodically or previously missing features are added.  Well-written
 probes can adapt themselves to such things, but hard-coded lists of
-names won't.  Here are some guidelines,
+names can't.  Here are some guidelines,
 
 @itemize @bullet
 @item
@@ -14841,7 +14931,7 @@ For ordinary packages it's meaningless and should not be used.  It
 indicates what the created compiler should generate code for, if it can
 cross-compile.  @samp{$target} generally selects various hard-coded CPU
 and system conventions, since usually the compiler or tools under
-construction will themselves determine how the target will work.
+construction themselves determine how the target works.
 
 
 @c ===================================================== Site Configuration.
@@ -14868,7 +14958,7 @@ options.
 @node Help Formatting
 @section Controlling Help Output
 
-Users will consult @samp{configure --help} to learn of configuration
+Users consult @samp{configure --help} to learn of configuration
 decisions specific to your package.  By default, @command{configure}
 breaks this output into sections for each type of option; within each
 section, help strings appear in the order @file{configure.ac} defines
@@ -15155,7 +15245,7 @@ strings} do.  This is the purpose of the @code{AS_HELP_STRING} macro.
 Expands into an help string that looks pretty when the user executes
 @samp{configure --help}.  It is typically used in @code{AC_ARG_WITH}
 (@pxref{External Software}) or @code{AC_ARG_ENABLE} (@pxref{Package
-Options}).  The following example will make this clearer.
+Options}).  The following example makes this clearer.
 
 @example
 AC_ARG_WITH([foo],
@@ -15168,7 +15258,7 @@ AC_ARG_WITH([foo],
 The second argument of @code{AS_HELP_STRING} is
 not a literal, and should not be double quoted.
 @xref{Autoconf Language}, for a more detailed explanation.
-Then the last few lines of @samp{configure --help} will appear like
+Then the last few lines of @samp{configure --help} appear like
 this:
 
 @example
@@ -15237,7 +15327,7 @@ Otherwise, no program name transformation is done.
 @menu
 * Transformation Options::      @command{configure} options to transform names
 * Transformation Examples::     Sample uses of transforming names
-* Transformation Rules::        @file{Makefile} uses of transforming names
+* Transformation Rules::        Makefile uses of transforming names
 @end menu
 
 @node Transformation Options
@@ -15476,7 +15566,7 @@ not
 ./config.status foobar:foo.in:bar.in
 @end example
 
-The supported @var{option}s are:
+The supported options are:
 
 @table @option
 @item --help
@@ -15521,12 +15611,12 @@ Same as @option{--file} above, but with @samp{AC_CONFIG_HEADERS}.
 Ask @file{config.status} to update itself and exit (no instantiation).
 This option is useful if you change @command{configure}, so that the
 results of some tests might be different from the previous run.  The
-@option{--recheck} option re-runs @command{configure} with the same arguments
+@option{--recheck} option reruns @command{configure} with the same arguments
 you used before, plus the @option{--no-create} option, which prevents
 @command{configure} from running @file{config.status} and creating
 @file{Makefile} and other files, and the @option{--no-recursion} option,
 which prevents @command{configure} from running other @command{configure}
-scripts in subdirectories.  (This is so other @file{Makefile} rules can
+scripts in subdirectories.  (This is so other Make rules can
 run @file{config.status} when it changes; @pxref{Automatic Remaking},
 for an example).
 @end table
@@ -15553,7 +15643,7 @@ useful when one package uses parts of another and the @command{configure}
 scripts shouldn't be merged because they are maintained separately.
 @end defvar
 
-You can use @file{./config.status} in your Makefiles.  For example, in
+You can use @file{./config.status} in your makefiles.  For example, in
 the dependencies given above (@pxref{Automatic Remaking}),
 @file{config.status} is run twice when @file{configure.ac} has changed.
 If that bothers you, you can make each run only regenerate the files for
@@ -15821,8 +15911,8 @@ other macros.
 @defmac AC_CHECK_TYPE (@var{type}, @var{default})
 @acindex{CHECK_TYPE}
 Autoconf, up to 2.13, used to provide this version of
-@code{AC_CHECK_TYPE}, deprecated because of its flaws.  Firstly, although
-it is a member of the @code{CHECK} clan, singular sub-family, it does
+@code{AC_CHECK_TYPE}, deprecated because of its flaws.  First, although
+it is a member of the @code{CHECK} clan, it does
 more than just checking.  Secondly, missing types are not
 @code{typedef}'d, they are @code{#define}'d, which can lead to
 incompatible code in the case of pointer types.
@@ -15918,7 +16008,7 @@ case $host_os in
 esac
 @end example
 
-Beware that the variable @code{CYGWIN} has a very special meaning when
+Beware that the variable @code{CYGWIN} has a special meaning when
 running Cygwin, and should not be changed.  That's yet another reason
 not to use this macro.
 @end defmac
@@ -16502,7 +16592,7 @@ AC_COMPILE_IFELSE(
 This macro double quotes both @var{includes} and @var{function-body}.
 
 For C and C++, @var{includes} is any @code{#include} statements needed
-by the code in @var{function-body} (@var{includes} will be ignored if
+by the code in @var{function-body} (@var{includes} is ignored if
 the currently selected language is Fortran or Fortran 77).  The compiler
 and compilation flags are determined by the current language
 (@pxref{Language Choice}).
@@ -16551,7 +16641,7 @@ otherwise run @var{action-if-not-found}.
 This macro double quotes both @var{includes} and @var{function-body}.
 
 For C and C++, @var{includes} is any @code{#include} statements needed
-by the code in @var{function-body} (@var{includes} will be ignored if
+by the code in @var{function-body} (@var{includes} is ignored if
 the currently selected language is Fortran or Fortran 77).  The compiler
 and compilation flags are determined by the current language
 (@pxref{Language Choice}), and in addition @code{LDFLAGS} and
@@ -16697,12 +16787,12 @@ in a particular package's source directory), you must rename it to
 @file{acsite.m4}.  @xref{autoconf Invocation}.
 
 If you distribute @file{install.sh} with your package, rename it to
-@file{install-sh} so @code{make} builtin rules won't inadvertently
+@file{install-sh} so @code{make} builtin rules don't inadvertently
 create a file called @file{install} from it.  @code{AC_PROG_INSTALL}
 looks for the script under both names, but it is best to use the new name.
 
 If you were using @file{config.h.top}, @file{config.h.bot}, or
-@file{acconfig.h}, you still can, but you will have less clutter if you
+@file{acconfig.h}, you still can, but you have less clutter if you
 use the @code{AH_} macros.  @xref{Autoheader Macros}.
 
 @node Changed Makefiles
@@ -16714,7 +16804,7 @@ of those variables in the environment when @command{configure} is run.
 Doing this isn't necessary, but it's a convenience for users.
 
 Also add @samp{@@configure_input@@} in a comment to each input file for
-@code{AC_OUTPUT}, so that the output files will contain a comment saying
+@code{AC_OUTPUT}, so that the output files contain a comment saying
 they were produced by @command{configure}.  Automatically selecting the
 right comment syntax for all the kinds of files that people call
 @code{AC_OUTPUT} on became too much work.
@@ -16754,12 +16844,12 @@ convert your @file{configure.ac} to using the new macro names.
 Some macros have been superseded by similar ones that do the job better,
 but are not call-compatible.  If you get warnings about calling obsolete
 macros while running @command{autoconf}, you may safely ignore them, but
-your @command{configure} script will generally work better if you follow
+your @command{configure} script generally works better if you follow
 the advice that is printed about what to replace the obsolete macros with.  In
 particular, the mechanism for reporting the results of tests has
 changed.  If you were using @command{echo} or @code{AC_VERBOSE} (perhaps
-via @code{AC_COMPILE_CHECK}), your @command{configure} script's output will
-look better if you switch to @code{AC_MSG_CHECKING} and
+via @code{AC_COMPILE_CHECK}), your @command{configure} script's output
+looks better if you switch to @code{AC_MSG_CHECKING} and
 @code{AC_MSG_RESULT}.  @xref{Printing Messages}.  Those macros work best
 in conjunction with cache variables.  @xref{Caching Results}.
 
@@ -16909,7 +16999,7 @@ $
 @end example
 
 @noindent
-while Autoconf 2.50 will produce a broken @file{configure}:
+while Autoconf 2.50 produces a broken @file{configure}:
 
 @example
 $ @kbd{autoconf-2.50; ./configure --silent}
@@ -16971,8 +17061,8 @@ Therefore, when @command{m4} finds something like
 @code{AM_TYPE_PTRDIFF_T} is
 expanded, replaced with its Autoconf definition.
 
-Fortunately Autoconf catches pre-@code{AC_INIT} expansions, and will
-complain, in its own words:
+Fortunately Autoconf catches pre-@code{AC_INIT} expansions, and
+complains, in its own words:
 
 @example
 $ @kbd{cat configure.ac}
@@ -16987,7 +17077,7 @@ $
 @end example
 
 Modern versions of Automake no longer define most of these
-macros, and will properly quote the names of the remaining macros.
+macros, and properly quote the names of the remaining macros.
 If you must use an old Automake, do not depend upon macros from Automake
 as it is simply not its job
 to provide macros (but the one it requires itself):
@@ -17042,8 +17132,8 @@ proves to cause more problems than it cures).
 They all default to the result of running @command{config.guess}, unless
 you specify either @option{--build} or @option{--host}.  In this case,
 the default becomes the system type you specified.  If you specify both,
-and they're different, @command{configure} will enter cross compilation
-mode, so it won't run any tests that require execution.
+and they're different, @command{configure} enters cross compilation
+mode, so it doesn't run any tests that require execution.
 
 Hint: if you mean to override the result of @command{config.guess},
 prefer @option{--build} over @option{--host}.  In the future,
@@ -17053,12 +17143,12 @@ too.
 
 @sp 1
 
-For backward compatibility, @command{configure} will accept a system
-type as an option by itself.  Such an option will override the
+For backward compatibility, @command{configure} accepts a system
+type as an option by itself.  Such an option overrides the
 defaults for build, host, and target system types.  The following
-configure statement will configure a cross toolchain that will run on
-Net@acronym{BSD}/alpha but generate code for @acronym{GNU} Hurd/sparc, which is
-also the build platform.
+configure statement configures a cross toolchain that runs on
+Net@acronym{BSD}/alpha but generates code for @acronym{GNU} Hurd/sparc,
+which is also the build platform.
 
 @example
 ./configure --host=alpha-netbsd sparc-gnu
@@ -17077,8 +17167,8 @@ rely on this broken feature.
 
 For consistency with the backward compatibility scheme exposed above,
 when @option{--host} is specified but @option{--build} isn't, the build
-system will be assumed to be the same as @option{--host}, and
-@samp{build_alias} will be set to that value.  Eventually, this
+system is assumed to be the same as @option{--host}, and
+@samp{build_alias} is set to that value.  Eventually, this
 historically incorrect behavior will go away.
 
 @sp 1
@@ -17099,9 +17189,9 @@ its successors, a more complicated scheme is implemented.  @emph{Do not
 rely on the following}, as it will be removed in the near future.
 
 If you specify @option{--host}, but not @option{--build}, when
-@command{configure} performs the first compiler test it will try to run
-an executable produced by the compiler.  If the execution fails, it will
-enter cross-compilation mode.  This is fragile.  Moreover, by the time
+@command{configure} performs the first compiler test it tries to run
+an executable produced by the compiler.  If the execution fails, it
+enters cross-compilation mode.  This is fragile.  Moreover, by the time
 the compiler test is performed, it may be too late to modify the
 build-system type: other tests may have already been performed.
 Therefore, whenever you specify @option{--host}, be sure to specify
@@ -17112,10 +17202,10 @@ Therefore, whenever you specify @option{--host}, be sure to specify
 @end example
 
 @noindent
-will enter cross-compilation mode.  The former interface, which
+enters cross-compilation mode.  The former interface, which
 consisted in setting the compiler to a cross-compiler without informing
-@command{configure} is obsolete.  For instance, @command{configure} will
-fail if it can't run the code generated by the specified compiler if you
+@command{configure} is obsolete.  For instance, @command{configure}
+fails if it can't run the code generated by the specified compiler if you
 configure as follows:
 
 @example
@@ -17166,7 +17256,7 @@ AC_LIBOBJ([malloc])
 When used with Automake 1.10 or newer, a suitable value for
 @code{LIBOBJDIR} is set so that the @code{LIBOBJS} and @code{LTLIBOBJS}
 can be referenced from any @file{Makefile.am}.  Even without Automake,
-arranging for @code{LIBOBJDIR} to be set correctly will enable
+arranging for @code{LIBOBJDIR} to be set correctly enables
 referencing @code{LIBOBJS} and @code{LTLIBOBJS} in another directory.
 The @code{LIBOJBDIR} feature is experimental.
 
@@ -17204,7 +17294,7 @@ find out whether a header file contains a particular declaration, such
 as a typedef, a structure, a structure member, or a function.  Use
 @code{AC_EGREP_HEADER} instead of running @code{grep} directly on the
 header file; on some systems the symbol might be defined in another
-header file that the file you are checking @samp{#include}s.
+header file that the file you are checking includes.
 
 As a (bad) example, here is how you should not check for C preprocessor
 symbols, either defined by header files or predefined by the C
@@ -17418,9 +17508,9 @@ need, but therefore most of the time it contains all that is needed:
 @table @asis
 @item command line arguments
 @c akim s/to consist in/to consist of/
-A very bad but unfortunately widespread Posix habit consists of
+A bad but unfortunately widespread habit consists of
 setting environment variables before the command, such as in
-@samp{CC=my-home-grown-cc ./testsuite}.  The test suite will not
+@samp{CC=my-home-grown-cc ./testsuite}.  The test suite does not
 know this change, hence (i) it cannot report it to you, and (ii)
 it cannot preserve the value of @code{CC} for subsequent runs.
 Autoconf faced exactly the same problem, and solved it by asking
@@ -17429,7 +17519,7 @@ Autotest requires this rule, too, but has no means to enforce it; the log
 then contains a trace of the variables that were changed by the user.
 
 @item @file{ChangeLog} excerpts
-The topmost lines of all the @file{ChangeLog}s found in the source
+The topmost lines of all the @file{ChangeLog} files found in the source
 hierarchy.  This is especially useful when bugs are reported against
 development versions of the package, since the version string does not
 provide sufficient information to know the exact state of the sources
@@ -17487,7 +17577,7 @@ State that, in addition to the Free Software Foundation's copyright on
 the Autotest macros, parts of your test suite are covered by
 @var{copyright-notice}.
 
-The @var{copyright-notice} will show up in both the head of
+The @var{copyright-notice} shows up in both the head of
 @command{testsuite} and in @samp{testsuite --version}.
 @end defmac
 
@@ -17544,7 +17634,7 @@ Determine whether the test is expected to fail because it is a known
 bug (for unsupported features, you should skip the test).
 @var{shell-condition} is a shell expression such as a @code{test}
 command; you can instantiate this macro many times from within the
-same test group, and one of the conditions will be enough to turn
+same test group, and one of the conditions is enough to turn
 the test into an expected failure.
 @end defmac
 
@@ -17604,7 +17694,7 @@ Display the version of the test suite and exit successfully.
 @item --clean
 @itemx -c
 Remove all the files the test suite might have created and exit.  Meant
-for @code{clean} Makefile targets.
+for @code{clean} Make targets.
 
 @item --list
 @itemx -l
@@ -17660,7 +17750,7 @@ For example, running
 @end example
 
 @noindent
-will select all tests tagged @samp{autoupdate} @emph{and} with tags
+selects all tests tagged @samp{autoupdate} @emph{and} with tags
 containing @samp{FUNC} (as in @samp{AC_CHECK_FUNC}, @samp{AC_FUNC_FNMATCH},
 etc.), while
 
@@ -17669,7 +17759,7 @@ etc.), while
 @end example
 
 @noindent
-will select all tests not tagged @samp{autoupdate} @emph{or} with tags
+selects all tests not tagged @samp{autoupdate} @emph{or} with tags
 containing @samp{FUNC}.
 
 @item --errexit
@@ -17704,9 +17794,9 @@ Trigger shell tracing of the test groups.
 @section Making @command{testsuite} Scripts
 
 For putting Autotest into movement, you need some configuration and
-Makefile machinery.  We recommend, at least if your package uses deep or
+makefile machinery.  We recommend, at least if your package uses deep or
 shallow hierarchies, that you use @file{tests/} as the name of the
-directory holding all your tests and their @file{Makefile}.  Here is a
+directory holding all your tests and their makefile.  Here is a
 check list of things to do.
 
 @itemize @minus
@@ -17720,7 +17810,7 @@ address to which bug reports should be sent.  For sake of completeness,
 we suggest that you also define @code{AT_PACKAGE_NAME},
 @code{AT_PACKAGE_TARNAME}, and @code{AT_PACKAGE_VERSION}.
 @xref{Initializing configure}, for a description of these variables.  We
-suggest the following Makefile excerpt:
+suggest the following makefile excerpt:
 
 @smallexample
 $(srcdir)/package.m4: $(top_srcdir)/configure.ac
@@ -17803,7 +17893,7 @@ and manage to have @file{atconfig.in} and @code{$(EXTRA_DIST)}
 distributed.
 
 With all this in place, and if you have not initialized @samp{TESTSUITEFLAGS}
-within your Makefile, you can fine-tune test suite execution with this variable,
+within your makefile, you can fine-tune test suite execution with this variable,
 for example:
 
 @example
@@ -17943,7 +18033,7 @@ Here is some further explanation, written by Per Bothner:
 
 @quotation
 One of the advantages of Imake is that it easy to generate large
-Makefiles using @code{cpp}'s @samp{#include} and macro mechanisms.
+makefiles using @code{cpp}'s @samp{#include} and macro mechanisms.
 However, @code{cpp} is not programmable: it has limited conditional
 facilities, and no looping.  And @code{cpp} cannot inspect its
 environment.
@@ -17976,7 +18066,7 @@ processor.
 Also, Imake often suffers from unexpected interactions between
 @command{make} and the installer's C preprocessor.  The fundamental problem
 here is that the C preprocessor was designed to preprocess C programs,
-not @file{Makefile}s.  This is much less of a problem with Autoconf,
+not makefiles.  This is much less of a problem with Autoconf,
 which uses the general-purpose preprocessor M4, and where the
 package's author (rather than the installer) does the preprocessing in a
 standard way.
@@ -17996,10 +18086,10 @@ leverage---since they don't cover anything that your own project needs
 On the other side, though:
 
 The one advantage that Imake has over @command{configure}:
-@file{Imakefile}s tend to be much shorter (likewise, less redundant)
-than @file{Makefile.in}s.  There is a fix to this, however---at least
+@file{Imakefile} files tend to be much shorter (likewise, less redundant)
+than @file{Makefile.in} files.  There is a fix to this, however---at least
 for the Kerberos V5 tree, we've modified things to call in common
-@file{post.in} and @file{pre.in} @file{Makefile} fragments for the
+@file{post.in} and @file{pre.in} makefile fragments for the
 entire tree.  This means that a lot of common things don't have to be
 duplicated, even though they normally are in @command{configure} setups.
 @end quotation
@@ -18032,9 +18122,9 @@ Variables}.  There are several means to achieve a similar goal:
 
 @itemize @minus
 @item
-Do not use @code{AC_DEFINE} but use your @file{Makefile} to pass the
-actual value of @code{datadir} via compilation flags, see
-@ref{Installation Directory Variables}, for the details.
+Do not use @code{AC_DEFINE} but use your makefile to pass the
+actual value of @code{datadir} via compilation flags.
+@xref{Installation Directory Variables}, for the details.
 
 @item
 This solution can be simplified when compiling a program: you may either
@@ -18089,15 +18179,15 @@ role and is read by many tools: @command{autoconf} to create
 check the completeness of @file{configure.ac}, @command{autoreconf} to
 check the @acronym{GNU} Build System components that are used.  To
 ``read @file{configure.ac}'' actually means to compile it with M4,
-which can be a very long process for complex @file{configure.ac}.
+which can be a long process for complex @file{configure.ac}.
 
 This is why all these tools, instead of running directly M4, invoke
 @command{autom4te} (@pxref{autom4te Invocation}) which, while answering to
 a specific demand, stores additional information in
 @file{autom4te.cache} for future runs.  For instance, if you run
-@command{autoconf}, behind the scenes, @command{autom4te} will also
-store information for the other tools, so that when you invoke
-@command{autoheader} or @command{automake} etc., re-processing
+@command{autoconf}, behind the scenes, @command{autom4te} also
+stores information for the other tools, so that when you invoke
+@command{autoheader} or @command{automake} etc., reprocessing
 @file{configure.ac} is not needed.  The speed up is frequently of 30%,
 and is increasing with the size of @file{configure.ac}.
 
@@ -18242,7 +18332,7 @@ then let there be light@enddots{}
 In June 1991 I was maintaining many of the @acronym{GNU} utilities for the
 Free Software Foundation.  As they were ported to more platforms and
 more programs were added, the number of @option{-D} options that users
-had to select in the @file{Makefile} (around 20) became burdensome.
+had to select in @file{Makefile} (around 20) became burdensome.
 Especially for me---I had to test each new release on a bunch of
 different systems.  So I wrote a little shell script to guess some of
 the correct settings for the fileutils package, and released it as part
@@ -18298,7 +18388,7 @@ which I find quite inconvenient; I didn't like the ways it checked for
 some features (such as library functions); I didn't know that it was
 still being maintained, and the @command{Configure} scripts I had
 seen didn't work on many modern systems (such as System V R4 and NeXT);
-it wasn't very flexible in what it could do in response to a feature's
+it wasn't flexible in what it could do in response to a feature's
 presence or absence; I found it confusing to learn; and it was too big
 and complex for my needs (I didn't realize then how much Autoconf would
 eventually have to grow).
@@ -18333,7 +18423,7 @@ include files and symbols, for more accurate results; Karl Berry, who
 got Autoconf to configure @TeX{} and added the macro index to the
 documentation; and Ian Lance Taylor, who added support for creating a C
 header file as an alternative to putting @option{-D} options in a
-@file{Makefile}, so he could use Autoconf for his @acronym{UUCP} package.
+makefile, so he could use Autoconf for his @acronym{UUCP} package.
 The alpha testers cheerfully adjusted their files again and again as the
 names and calling conventions of the Autoconf macros changed from
 release to release.  They all contributed many specific checks, great
@@ -18462,7 +18552,7 @@ checks.
 
 This is an alphabetical list of the variables that Autoconf can
 substitute into files that it creates, typically one or more
-@file{Makefile}s.  @xref{Setting Output Variables}, for more information
+makefiles.  @xref{Setting Output Variables}, for more information
 on how this is done.
 
 @printindex ov

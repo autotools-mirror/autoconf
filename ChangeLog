@@ -1,3 +1,45 @@
+2006-06-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Some systematic minor improvements, as
+	follows.  Use "makefile" when talking about makefiles
+	generally (which might be named "makefile" or "Makefile" or even
+	"foo.mk"), "Makefile" when talking about a specific makefile
+	called "Makefile".  This unclutters the text from weird quotes
+	(e.g., "`Makefile's" in info mode).  Similarly, use "@var{foo}
+	values" rather than "@var{foo}s" and similar constructs containing
+	"}s".  Use "Make rules" rather than "Makefile rules".  Minor
+	English-language improvements.  Change the prefix "sub-" to "sub"
+	and "re-" to "re".
+	Put blank lines around examples more consistently.
+	Avoid "rather" and "very" as intensifiers.
+	Avoid "will" as an auxiliary.
+	(Limitations of Make): Split this node into....
+	(Portable Make, $< in Ordinary Make Rules, Failure in Make Rules):
+	(Leading _ in Macro Names, Backslash-Newline-Newline):
+	(Backslash-Newline Comments, Long Lines in Makefiles):
+	(Macros and Submakes, The Make Macro SHELL, Comments in Make Rules):
+	(obj/ and Make, make -k Status, VPATH and Make):
+	(VPATH and Double-colon, $< in Explicit Rules):
+	(Automatic Rule Rewriting, OSF/Tru64 Directory Magic):
+	(Make Target Lookup, Single Suffix Rules, Timestamps and Make):
+	New nodes, resulting from splitup of Limitations of Make.
+	All cross-references changed.  Raise the top node from
+	a section to a chapter, and all subnodes accordingly.
+	Redo the introductory wording to match the new organization.
+	(Installation Directory Variables): Use an example that is
+	closer to what Autoconf actually does.  Mention that VPATH's
+	value should not contain metacharacters or white space.
+	(Fortran Compiler): Fix a VPATH bug in an example.
+	(Leading _ in Macro Names): Mention that this problem is no longer
+	of practical concern.
+	(VPATH and Make): Reword the advice to make it clearer
+	that Autoconf and Automake support VPATH in non-GNU make, but
+	many packages have bugs in this area.
+	($< in Explicit Rules): Refer to Build Directories rather
+	than using a (non-VPATH-safe) example.
+	(Automatic Rule Rewriting): Mention the sort of disaster that
+	can ensue with Solaris-style rule rewriting with VPATH.
+
 2006-06-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/install.texi (Compilers and Options): Weaken the
