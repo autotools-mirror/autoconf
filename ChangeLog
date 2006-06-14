@@ -1,5 +1,8 @@
 2006-06-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/install.texi (Compilers and Options): Weaken the
+	suggestion to use GNU make for VPATH builds.
+
 	* lib/autom4te.in (Automake-preselections): Add AM_PROG_CXX_C_O,
 	AM_PROG_F77_C_O, AM_PROG_FC_C_O, AC_FC_SRCEXT, AC_FC_FREEFORM.
 

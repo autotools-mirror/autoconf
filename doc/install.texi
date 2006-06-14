@@ -104,13 +104,14 @@ Here is an example:
 
 You can compile the package for more than one kind of computer at the
 same time, by placing the object files for each architecture in their
-own directory.  To do this, you should use @acronym{GNU} @command{make}.
+own directory.  To do this, you can use @acronym{GNU} @command{make}.
 @command{cd} to the directory where you want the object files and
 executables to go and run the @command{configure} script.
 @command{configure} automatically checks for the source code in the
 directory that @command{configure} is in and in @file{..}.
 
-With a non-@acronym{GNU} @command{make}, you should compile the package for one
+With a non-@acronym{GNU} @command{make},
+it is safer to compile the package for one
 architecture at a time in the source code directory.  After you have
 installed the package for one architecture, use @samp{make distclean}
 before reconfiguring for another architecture.
