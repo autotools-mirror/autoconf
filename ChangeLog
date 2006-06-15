@@ -1,3 +1,11 @@
+2006-06-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Configuration Actions): Remove duplicate
+	`@var', for texi2html.
+	(Systemology): Some more word wrapping, for DVI output.
+	(autom4te Invocation): The short option for `--melt' is `-M',
+	not `-m'.
+
 2006-06-15  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: More formatting and English tweaks,

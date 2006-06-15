@@ -2000,7 +2000,7 @@ AC_CONFIG_FOOS(@var{tag}@dots{}, [@var{commands}], [@var{init-cmds}])
 where the arguments are:
 
 @table @var
-@item @var{tag}@dots{}
+@item tag@dots{}
 A blank-or-newline-separated list of tags, which are typically the names of
 the files to instantiate.
 
@@ -7950,7 +7950,7 @@ formats.
 Officially this was called the ``Seventh Edition'' of ``the @sc{unix}
 time-sharing system'' but we use the more-common name ``Unix version 7''.
 Documentation is available in the
-@uref{http://plan9.bell-labs.com/7thEdMan/, Unix Seventh Edition Manual}.
+@uref{http://plan9.bell-labs.com/@/7thEdMan/, Unix Seventh Edition Manual}.
 Previous versions of Unix are called ``Unix version 6'', etc., but
 they were not as widely used.
 @end table
@@ -9276,7 +9276,7 @@ constructs, you would use @option{-W none,obsolete}.
 warnings; if you want them, just pass @option{-W error}.
 
 @item --melt
-@itemx -m
+@itemx -M
 Do not use frozen files.  Any argument @code{@var{file}.m4f} is
 replaced by @code{@var{file}.m4}.  This helps tracing the macros which
 are executed only when the files are frozen, typically
