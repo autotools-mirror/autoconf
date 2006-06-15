@@ -494,7 +494,7 @@ Portable Make Programming
 * Comments in Make Rules::      Other problems with Make comments
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
-* VPATH and Make::              @code{VPATH} and its many discontents
+* VPATH and Make::              @code{VPATH} woes
 * Single Suffix Rules::         Single suffix rules and separated dependencies
 * Timestamps and Make::         Subsecond timestamp resolution
 
@@ -1091,8 +1091,8 @@ AC_CHECK_HEADER([stdio.h],
 @noindent
 because @samp{1} cannot contain a macro call.  Here, the argument of
 @code{AC_MSG_ERROR} must be quoted; otherwise, its comma would be
-interpreted as an argument separator.  Also, @samp{AC_CHECK_HEADER}'s
-second and third arguments must be quoted, since those arguments contain
+interpreted as an argument separator.  Also, the second and third arguments
+of @samp{AC_CHECK_HEADER} must be quoted, since they contain
 macro calls.  The three arguments @samp{HAVE_STDIO_H}, @samp{stdio.h},
 and @samp{Define to 1 if you have <stdio.h>.} do not need quoting, but
 if you unwisely defined a macro with a name like @samp{Define} or
@@ -2058,7 +2058,7 @@ The variables set during the execution of @command{configure} are
 @item srcdir
 The name of the top source directory, assuming that the working
 directory is the top build directory.  This
-is what @command{configure}'s option @option{--srcdir} sets.
+is what the @command{configure} option @option{--srcdir} sets.
 
 @item ac_top_srcdir
 The name of the top source directory, assuming that the working
@@ -2132,7 +2132,7 @@ Make @code{AC_OUTPUT} create each @file{@var{file}} by copying an input
 file (by default @file{@var{file}.in}), substituting the output variable
 values.
 @c Before we used to have this feature, which was later rejected
-@c because it complicates the write of makefiles:
+@c because it complicates the writing of makefiles:
 @c If the file would be unchanged, it is left untouched, to preserve
 @c timestamp.
 This macro is one of the instantiating macros; see @ref{Configuration
@@ -2400,8 +2400,8 @@ Absolute name of @code{top_srcdir}.
 @cindex Installation directories
 @cindex Directories, installation
 
-The following variables specify the directories where the package
-is installed, see @ref{Directory Variables, , Variables for
+The following variables specify the directories for
+package installation, see @ref{Directory Variables, , Variables for
 Installation Directories, standards, The @acronym{GNU} Coding
 Standards}, for more information.  See the end of this section for
 details on when and how to use these variables.
@@ -2945,12 +2945,12 @@ however, you'll be thankful for the existence of @command{autoheader}.
 
 The fact that the symbols are documented is important in order to
 @emph{check} that @file{config.h} makes sense.  The fact that there is a
-well-defined list of symbols that should be @code{#define}'d (or not) is
+well-defined list of symbols that should be defined (or not) is
 also important for people who are porting packages to environments where
 @command{configure} cannot be run: they just have to @emph{fill in the
 blanks}.
 
-But let's come back to the point: @command{autoheader}'s invocation@dots{}
+But let's come back to the point: the invocation of @command{autoheader}@dots{}
 
 If you give @command{autoheader} an argument, it uses that file instead
 of @file{configure.ac} and writes the header file to the standard output
@@ -3036,7 +3036,7 @@ the @var{description} argument to an @samp{AC_DEFINE(@var{symbol})}; see
 Tell @command{autoheader} to include the @var{template} as-is in the header
 template file.  This @var{template} is associated with the @var{key},
 which is used to sort all the different templates and guarantee their
-uniqueness.  It should be a symbol that can be @code{AC_DEFINE}'d.
+uniqueness.  It should be a symbol that can be defined via @code{AC_DEFINE}.
 
 For example:
 
@@ -3122,7 +3122,7 @@ AC_CONFIG_COMMANDS([fubar],
 
 Here is a better one:
 @example
-AC_CONFIG_COMMANDS([time-stamp], [date >time-stamp])
+AC_CONFIG_COMMANDS([timestamp], [date >timestamp])
 @end example
 @end defmac
 
@@ -3329,7 +3329,7 @@ checking for, and what they find.  They cache their results for future
 
 Some of these macros set output variables.  @xref{Makefile
 Substitutions}, for how to get their values.  The phrase ``define
-@var{name}'' is used below as a shorthand to mean ``define C
+@var{name}'' is used below as a shorthand to mean ``define the C
 preprocessor symbol @var{name} to the value 1''.  @xref{Defining
 Symbols}, for how to get those symbol definitions into your program.
 
@@ -3745,8 +3745,8 @@ types are equal, then it is also searched for without a prefix.
 
 As noted in @ref{Specifying Names, , Specifying the system type}, the
 target is rarely specified, because most of the time it is the same
-as the host: it is the type of system for which any compiler tools in
-the package produce code.  What this macro looks for is,
+as the host: it is the type of system for which any compiler tool in
+the package produces code.  What this macro looks for is,
 for example, @emph{a tool @r{(assembler, linker, etc.)}@: that the
 compiler driver @r{(@command{gcc} for the @acronym{GNU} C Compiler)}
 uses to produce objects, archives or executables}.
@@ -3879,8 +3879,8 @@ specified, the default action prepends @option{-l@var{library}} to
 @code{LIBS} and defines @samp{HAVE_LIB@var{library}} (in all
 capitals).  This macro is intended to support building @code{LIBS} in
 a right-to-left (least-dependent to most-dependent) fashion such that
-library dependencies are satisfied as a natural side-effect of
-consecutive tests.  Some linkers are sensitive to library ordering
+library dependencies are satisfied as a natural side effect of
+consecutive tests.  Linkers are sensitive to library ordering
 so the order in which @code{LIBS} is generated is important to reliable
 detection of libraries.
 
@@ -7412,7 +7412,7 @@ avoid ``shortcuts'' and simplifications.
 Don't just play with the preprocessor if you want to prepare a
 compilation.  For instance, using @command{cpp} to check whether a header is
 functional might let your @command{configure} accept a header which
-causes some @emph{compiler} error.  Do not hesitate checking a header with
+causes some @emph{compiler} error.  Do not hesitate to check a header with
 other headers included before, especially required headers.
 
 Make sure the symbols you use are properly defined, i.e., refrain for
@@ -8212,7 +8212,7 @@ Declare @var{variable} is a precious variable, and include its
 Being precious means that
 @itemize @minus
 @item
-@var{variable} is @code{AC_SUBST}'d.
+@var{variable} is substituted via @code{AC_SUBST}.
 
 @item
 The value of @var{variable} when @command{configure} was launched is
@@ -8226,7 +8226,7 @@ We emphasize that it is the @emph{initial} value of @var{variable} which
 is saved, not that found during the execution of @command{configure}.
 Indeed, specifying @samp{./configure FOO=foo} and letting
 @samp{./configure} guess that @code{FOO} is @code{foo} can be two
-different runs.
+different things.
 
 @item
 @var{variable} is checked for consistency between two
@@ -8354,7 +8354,7 @@ AC_DEFUN([AC_SHELL_TRUE],
 
 @noindent
 This fails if the cache is enabled: the second time this macro is run,
-@code{TRUE_WORKS} @emph{is not defined}.  The proper implementation
+@code{TRUE_WORKS} @emph{will not be defined}.  The proper implementation
 is:
 
 @example
@@ -9266,8 +9266,8 @@ autom4te --warnings=syntax,$WARNINGS,@var{category}
 @end example
 
 @noindent
-For example, if you want to disable @command{autom4te}'s defaults and
-@env{WARNINGS}, but enable the warnings about obsolete
+For example, if you want to disable defaults and @env{WARNINGS}
+of @command{autom4te}, but enable the warnings about obsolete
 constructs, you would use @option{-W none,obsolete}.
 
 @cindex Back trace
@@ -9903,7 +9903,7 @@ AS_IF([test "$foo" = yes], [HANDLE_FOO([yes])],
 @end example
 
 @noindent
-ensures any @code{AC_REQUIRE}'s macros of @code{HANDLE_FOO}
+ensures any required macros of @code{HANDLE_FOO}
 are expanded before the first test.
 @end defmac
 
@@ -10243,7 +10243,7 @@ square brackets.  @var{macro-name} must have been defined using
 @code{AC_DEFUN} or else contain a call to @code{AC_PROVIDE} to indicate
 that it has been called.
 
-@code{AC_REQUIRE} must be used inside an @code{AC_DEFUN}'d macro; it
+@code{AC_REQUIRE} must be used inside a macro defined by @code{AC_DEFUN}; it
 must not be called from the top level.
 @end defmac
 
@@ -10251,7 +10251,7 @@ must not be called from the top level.
 dependencies between macros in the sense that if one macro depends upon
 another, the latter is expanded @emph{before} the body of the
 former.  To be more precise, the required macro is expanded before
-the outermost @code{AC_DEFUN}'d macro in the current expansion stack.
+the outermost defined macro in the current expansion stack.
 In particular, @samp{AC_REQUIRE([FOO])} is not replaced with the body of
 @code{FOO}.  For instance, this definition of macros:
 
@@ -10570,7 +10570,7 @@ of an @code{AC_REQUIRE} directive, and macros required by other macros
 inside arguments do not need to be expanded before this macro, then
 use @code{m4_define}.  In case of doubt, use @code{AC_DEFUN}.
 All the @code{AC_REQUIRE} statements should be at the beginning of the
-macro, @code{dnl}'ed.
+macro, and each statement should be followed by @code{dnl}.
 
 You should not rely on the number of arguments: instead of checking
 whether an argument is missing, test that it is not empty.  It provides
@@ -11576,8 +11576,8 @@ brace, use:
 
 @item
 If the default value contains no closing brace, has to be expanded, and
-the variable being initialized is never IFS-split (i.e., it's not a
-list), then use:
+the variable being initialized is not intended to be IFS-split
+(i.e., it's not a list), then use:
 
 @example
 : $@{var="$default"@}
@@ -11585,7 +11585,7 @@ list), then use:
 
 @item
 If the default value contains no closing brace, has to be expanded, and
-the variable being initialized is IFS-split (i.e., it's a list),
+the variable being initialized is intended to be IFS-split (i.e., it's a list),
 then use:
 
 @example
@@ -11596,7 +11596,7 @@ var=$@{var="$default"@}
 If the default value contains a closing brace, then use:
 
 @example
-test "$@{var+set@}" = set || var='$@{indirection@}'
+test "$@{var+set@}" = set || var="$default"
 @end example
 @end enumerate
 
@@ -12333,8 +12333,8 @@ fi
 @c ------------------
 @prindex @command{printf}
 A format string starting with a @samp{-} can cause problems.
-Bash (e.g., 2.05b) interpret it as an options argument and
-give an error.  And @samp{--} to mark the end of options is not good
+Bash (e.g., 2.05b) interprets it as an options argument and
+gives an error.  And @samp{--} to mark the end of options is not good
 in the Net@acronym{BSD} Almquist shell (e.g., 0.4.6) which takes that
 literally as the format string.  Putting the @samp{-} in a @samp{%c}
 or @samp{%s} is probably the easiest way to avoid doubt,
@@ -12645,8 +12645,8 @@ funny side effect: when asked whether @command{false} is more portable
 than @command{true} Alexandre Oliva answered:
 
 @quotation
-In a sense, yes, because if it doesn't exist, the shell exits
-with a failure status, which is correct for @command{false}, but not
+In a sense, yes, because if it doesn't exist, the shell will produce an
+exit status of failure, which is correct for @command{false}, but not
 for @command{true}.
 @end quotation
 
@@ -12899,7 +12899,7 @@ the system calls that @command{cp} uses; traditionally this was
 1-microsecond resolution.  These newer implementations include @acronym{GNU}
 Core Utilities 5.0.91 or later, and Solaris 8 (sparc) patch 109933-02 or
 later.  Unfortunately as of January 2006 there is still no system
-call to set time stamps to the full nanosecond resolution.
+call to set timestamps to the full nanosecond resolution.
 
 Bob Proulx notes that @samp{cp -p} always @emph{tries} to copy
 ownerships.  But whether it actually does copy ownerships or not is a
@@ -13260,7 +13260,7 @@ was equivalent to @samp{sources='*.c not found'} in the absence of
 @c ------------------
 @prindex @command{mkdir}
 @cindex Making directories
-None of @command{mkdir}'s options are portable to older systems.  Instead of
+No @command{mkdir} option is portable to older systems.  Instead of
 @samp{mkdir -p @var{file-name}}, you should use use
 @code{AS_MKDIR_P(@var{file-name})} (@pxref{Programming in M4sh})
 or @code{AC_PROG_MKDIR_P} (@pxref{Particular Programs}).
@@ -13334,7 +13334,7 @@ On some systems moving files from @file{/tmp} can sometimes cause
 undesirable (but perfectly valid) warnings, even if you created these
 files.  This is because @file{/tmp} belongs to a group that ordinary
 users are not members of, and files created in @file{/tmp} inherit
-@file{/tmp}'s group.  When the file is copied, @command{mv} issues
+the group of @file{/tmp}.  When the file is copied, @command{mv} issues
 a diagnostic without failing:
 
 @smallexample
@@ -13627,7 +13627,7 @@ itself.
 * Comments in Make Rules::      Other problems with Make comments
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
-* VPATH and Make::              @code{VPATH} and its many discontents
+* VPATH and Make::              @code{VPATH} woes
 * Single Suffix Rules::         Single suffix rules and separated dependencies
 * Timestamps and Make::         Subsecond timestamp resolution
 @end menu
@@ -13812,7 +13812,7 @@ command line.  When run inside a @command{make} rule, @acronym{GNU}
 @command{make} 3.80 and prior versions forget to propagate the
 @option{-e} option to submakes.
 
-Moreover, using @option{-e} could have unexpected side-effects if your
+Moreover, using @option{-e} could have unexpected side effects if your
 environment contains some other macros usually defined by the
 makefile.  (See also the note about @code{make -e} and @code{SHELL}
 below.)
@@ -14687,7 +14687,7 @@ The standard functions @code{asctime}, @code{asctime_r}, @code{ctime},
 @code{ctime_r}, and @code{gets} are prone to buffer overflows, and
 portable code should not use them unless the inputs are known to be
 within certain limits.  The time-related functions can overflow their
-buffers if given time stamps out of range (e.g., a year less than -999
+buffers if given timestamps out of range (e.g., a year less than -999
 or greater than 9999).  Time-related buffer overflows cannot happen with
 recent-enough versions of the GNU C library, but are possible with other
 implementations.  The @code{gets} function is the worst, since it almost
@@ -15958,9 +15958,9 @@ other macros.
 Autoconf, up to 2.13, used to provide this version of
 @code{AC_CHECK_TYPE}, deprecated because of its flaws.  First, although
 it is a member of the @code{CHECK} clan, it does
-more than just checking.  Secondly, missing types are not
-@code{typedef}'d, they are @code{#define}'d, which can lead to
-incompatible code in the case of pointer types.
+more than just checking.  Secondly, missing types are defined
+using @code{#define}, not @code{typedef}, and this can lead to
+problems in the case of pointer types.
 
 This use of @code{AC_CHECK_TYPE} is obsolete and discouraged; see
 @ref{Generic Types}, for the description of the current macro.
@@ -18078,7 +18078,7 @@ Here is some further explanation, written by Per Bothner:
 
 @quotation
 One of the advantages of Imake is that it easy to generate large
-makefiles using @code{cpp}'s @samp{#include} and macro mechanisms.
+makefiles using the @samp{#include} and macro mechanisms of @command{cpp}.
 However, @code{cpp} is not programmable: it has limited conditional
 facilities, and no looping.  And @code{cpp} cannot inspect its
 environment.
@@ -18377,7 +18377,7 @@ then let there be light@enddots{}
 In June 1991 I was maintaining many of the @acronym{GNU} utilities for the
 Free Software Foundation.  As they were ported to more platforms and
 more programs were added, the number of @option{-D} options that users
-had to select in @file{Makefile} (around 20) became burdensome.
+had to select in the makefile (around 20) became burdensome.
 Especially for me---I had to test each new release on a bunch of
 different systems.  So I wrote a little shell script to guess some of
 the correct settings for the fileutils package, and released it as part

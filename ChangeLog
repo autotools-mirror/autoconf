@@ -1,3 +1,12 @@
+2006-06-15  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: More formatting and English tweaks,
+	many suggested by Ralf Wildenhues.
+	Reword to avoid "@code{...}'s" and the like, since it's ugly
+	with Emacs info mode.  discontents -> woes.
+	Put a few "will"s back.  time stamp -> timestamp.
+	side-effect -> side effect.
+
 2006-06-14  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Initializing configure, Shell Substitutions):
