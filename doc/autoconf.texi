@@ -11306,7 +11306,7 @@ case $# in
 esac
 @end example
 
-Autocoonf macros often use the @command{set} command to update
+Autoconf macros often use the @command{set} command to update
 @samp{$@@}, so if you are writing shell code intended for
 @command{configure} you should not assume that the value of @samp{$@@}
 persists for any length of time.
