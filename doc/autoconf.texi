@@ -484,7 +484,7 @@ Portable Make Programming
 
 * $< in Ordinary Make Rules::   $< in ordinary rules
 * Failure in Make Rules::       Failing portably in rules
-* Special Chars in Names::      $(.FOO), $(_FOO), $(007), etc.
+* Special Chars in Names::      Special Characters in Macro Names
 * Backslash-Newline-Newline::   Empty last lines in macro definitions
 * Backslash-Newline Comments::  Spanning comments across line boundaries
 * Long Lines in Makefiles::     Line length limitations
@@ -689,7 +689,7 @@ Autoconf imposes some restrictions on the names of macros used with
 
 Autoconf requires @acronym{GNU} M4 in order to generate the scripts.  It uses
 features that some versions of M4, including @acronym{GNU} M4 1.3,
-do not have.  You should use version 1.4.3 or later of @acronym{GNU} M4.
+do not have.  You should use version 1.4.4 or later of @acronym{GNU} M4.
 
 @xref{Autoconf 1}, for information about upgrading from version 1.
 @xref{History}, for the story of Autoconf's development.  @xref{FAQ},
@@ -13617,7 +13617,7 @@ itself.
 @menu
 * $< in Ordinary Make Rules::   $< in ordinary rules
 * Failure in Make Rules::       Failing portably in rules
-* Special Chars in Names::      $(.FOO), $(_FOO), $(007), etc.
+* Special Chars in Names::      Special Characters in Macro Names
 * Backslash-Newline-Newline::   Empty last lines in macro definitions
 * Backslash-Newline Comments::  Spanning comments across line boundaries
 * Long Lines in Makefiles::     Line length limitations
@@ -13667,7 +13667,8 @@ complicated @command{make} actions into separate scripts.
 Posix limits macro names to nonempty strings containing only
 @acronym{ASCII} letters and digits, @samp{.}, and @samp{_}.  Many
 @command{make} implementations allow a wider variety of characters, but
-portable makefiles should avoid them.
+portable makefiles should avoid them.  It is portable to start a name
+with a special character, e.g., @samp{$(.FOO)}.
 
 Some ancient @command{make} implementations don't support leading
 underscores in macro names.  An example is @acronym{NEWS-OS} 4.2R.
@@ -18009,7 +18010,7 @@ __file__
 __line__
 @end example
 
-Autoconf requires version 1.4.3 or later of @acronym{GNU} M4.
+Autoconf requires version 1.4.4 or later of @acronym{GNU} M4.
 
 Since only software maintainers need to use Autoconf, and since @acronym{GNU}
 M4 is simple to configure and install, it seems reasonable to require

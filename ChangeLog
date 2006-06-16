@@ -1,3 +1,10 @@
+2006-06-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* README: Recomment m4 1.4.4 instead of 1.4.3..
+	* doc/autoconf.texi: Likewise.
+	(Special Chars in Names): Say that $(.FOO) is portable, as
+	suggested by Stepan Kasal.
+
 2006-06-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Configuration Actions): Remove duplicate
