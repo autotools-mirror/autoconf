@@ -2577,7 +2577,7 @@ edit = sed \
 @group
 autoheader autom4te: Makefile
         rm -f $@@ $@@.tmp
-        $(edit) $(srcdir)/$@@.in >$@@.tmp
+        $(edit) '$(srcdir)/$@@.in' >$@@.tmp
         chmod +x $@@.tmp
         chmod a-w $@@.tmp
         mv $@@.tmp $@@
@@ -2591,31 +2591,38 @@ autom4te: $(srcdir)/autom4te.in
 
 Some details are noteworthy:
 
-@table @samp
-@item @@datadir[@@]
+@table @asis
+@item @samp{@@datadir[@@]}
 The brackets prevent @command{configure} from replacing
 @samp{@@datadir@@} in the Sed expression itself.
 Brackets are preferable to a backslash here, since
 Posix says @samp{\@@} is not portable.
 
-@item $(pkgdatadir)
+@item @samp{$(pkgdatadir)}
 Don't use @samp{@@pkgdatadir@@}!  Use the matching makefile variable
 instead.
 
-@item ,
-Don't use @samp{/} in the Sed expression(s) since most likely the
+@item @samp{/}
+Don't use @samp{/} in the Sed expressions that replace file names since
+most likely the
 variables you use, such as @samp{$(pkgdatadir)}, contain @samp{/}.
+Use a shell metacharacter instead, such as @samp{|}.
 
-@item Dependency on @file{Makefile}
+@item special characters
+File names, file name components, and the value of @code{VPATH} should
+not contain shell metacharacters or white
+space.  @xref{Special Chars in Variables}.
+
+@item dependency on @file{Makefile}
 Since @code{edit} uses values that depend on the configuration specific
 values (@code{prefix}, etc.)@: and not only on @code{VERSION} and so forth,
 the output depends on @file{Makefile}, not @file{configure.ac}.
 
-@item $@@
+@item @samp{$@@}
 The main rule is generic, and uses @samp{$@@} extensively to
 avoid the need for multiple copies of the rule.
 
-@item Separated dependencies and Single Suffix Rules
+@item Separated dependencies and single suffix rules
 You can't use them!  The above snippet cannot be (portably) rewritten
 as:
 
@@ -2632,13 +2639,9 @@ autoconf autoheader: Makefile
 
 @xref{Single Suffix Rules}, for details.
 
-@item $(srcdir)
+@item @samp{$(srcdir)}
 Be sure to specify the name of the source directory,
 otherwise the package won't support separated builds.
-
-@item VPATH
-The value of @code{VPATH} should not contain shell metacharacters or white
-space.  @xref{Special Chars in Variables}.
 @end table
 
 For the more specific installation of Erlang libraries, the following variables
@@ -2706,7 +2709,7 @@ files by prefixing them with @samp{$(srcdir)/}.  For example:
 
 @example
 time.info: time.texinfo
-        $(MAKEINFO) $(srcdir)/time.texinfo
+        $(MAKEINFO) '$(srcdir)/time.texinfo'
 @end example
 
 @node Automatic Remaking
@@ -2737,13 +2740,13 @@ conflicts, etc.).
 @example
 @group
 $(srcdir)/configure: configure.ac aclocal.m4
-        cd $(srcdir) && autoconf
+        cd '$(srcdir)' && autoconf
 
 # autoheader might not change config.h.in, so touch a stamp file.
 $(srcdir)/config.h.in: stamp-h.in
 $(srcdir)/stamp-h.in: configure.ac aclocal.m4
-        cd $(srcdir) && autoheader
-        echo timestamp > $(srcdir)/stamp-h.in
+        cd '$(srcdir)' && autoheader
+        echo timestamp > '$(srcdir)/stamp-h.in'
 
 config.h: stamp-h
 stamp-h: config.h.in config.status
@@ -3234,7 +3237,7 @@ If a given @var{dir} is not found, an error is reported: if the
 subdirectory is optional, write:
 
 @example
-if test -d $srcdir/foo; then
+if test -d "$srcdir/foo"; then
   AC_CONFIG_SUBDIRS([foo])
 fi
 @end example
@@ -6951,7 +6954,7 @@ command:
 
 @example
 foo.o: foo.f90
-     $(FC) -c $(FCFLAGS) $(FCFLAGS_f90) $(srcdir)/foo.f90
+     $(FC) -c $(FCFLAGS) $(FCFLAGS_f90) '$(srcdir)/foo.f90'
 @end example
 
 If @code{AC_FC_SRCEXT} succeeds in compiling files with the @var{ext}
@@ -8282,12 +8285,13 @@ arbitrarily be replaced by a single space during substitution.
 These restrictions apply both to the values that @command{configure}
 computes, and to the values set directly by the user.  For example, the
 following invocations of @command{configure} are problematic, since they
-attempt to use special characters within @code{CPPFLAGS}:
+attempt to use special characters within @code{CPPFLAGS} and white space
+within @code{$(srcdir)}:
 
 @example
-CPPFLAGS='-DOUCH="&\"#$*?"' ./configure
+CPPFLAGS='-DOUCH="&\"#$*?"' '../My Source/ouch-1.0/configure'
 
-./configure CPPFLAGS='-DOUCH="&\"#$*?"'
+'../My Source/ouch-1.0/configure' CPPFLAGS='-DOUCH="&\"#$*?"'
 @end example
 
 @node Caching Results
@@ -11596,12 +11600,12 @@ var=$@{var="$default"@}
 If the default value contains a closing brace, then use:
 
 @example
-test "$@{var+set@}" = set || var="$default"
+test "$@{var+set@}" = set || var="has a '@}'"
 @end example
 @end enumerate
 
 In most cases @samp{var=$@{var="$default"@}} is fine, but in case of
-doubt, just use the latter.  @xref{Shell Substitutions}, items
+doubt, just use the last form.  @xref{Shell Substitutions}, items
 @samp{$@{@var{var}:-@var{value}@}} and @samp{$@{@var{var}=@var{value}@}}
 for the rationale.
 
@@ -11697,7 +11701,8 @@ Autoconf-generated scripts export this variable when they start up.
 @item CDPATH
 @evindex CDPATH
 When this variable is set it specifies a list of directories to search
-when invoking @code{cd} with a relative file name.  Posix
+when invoking @code{cd} with a relative file name that did not start
+with @samp{./} or @samp{../}.  Posix
 1003.1-2001 says that if a nonempty directory name from @env{CDPATH}
 is used successfully, @code{cd} prints the resulting absolute
 file name.  Unfortunately this output can break idioms like
@@ -11712,6 +11717,9 @@ In practice the shells that have this problem also support
 @example
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 @end example
+
+You can also avoid output by ensuring that your directory name is
+absolute or anchored at @samp{./}, as in @samp{abs=`cd ./src && pwd`}.
 
 Autoconf-generated scripts automatically unset @env{CDPATH} if
 possible, so you need not worry about this problem in those scripts.
@@ -12097,6 +12105,8 @@ Also, Autoconf-generated scripts check for this problem when computing
 variables like @code{ac_top_srcdir} (@pxref{Configuration Actions}),
 so it is safe to @command{cd} to these variables.
 
+See @xref{Special Shell Variables}, for portability problems involving
+@command{cd} and the @env{CDPATH} environment variable.
 Also please see the discussion of the @command{pwd} command.
 
 
@@ -13851,7 +13861,7 @@ contains single-letter options, since in the Cygwin version of
 @example
 $ @kbd{cat Makefile}
 all:
-	@@echo MAKEFLAGS = $(MAKEFLAGS)
+        @@echo MAKEFLAGS = $(MAKEFLAGS)
 $ @kbd{make}
 MAKEFLAGS = --unix
 $ @kbd{make -k}
@@ -17867,7 +17877,7 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
           echo 'm4_define([AT_PACKAGE_VERSION],   [@@PACKAGE_VERSION@@])'; \
           echo 'm4_define([AT_PACKAGE_STRING],    [@@PACKAGE_STRING@@])'; \
           echo 'm4_define([AT_PACKAGE_BUGREPORT], [@@PACKAGE_BUGREPORT@@])'; \
-        @} >$(srcdir)/package.m4
+        @} >'$(srcdir)/package.m4'
 @end smallexample
 
 @noindent
@@ -17904,15 +17914,19 @@ EXTRA_DIST = testsuite.at $(TESTSUITE) atlocal.in
 TESTSUITE = $(srcdir)/testsuite
 
 check-local: atconfig atlocal $(TESTSUITE)
-        $(SHELL) $(TESTSUITE) $(TESTSUITEFLAGS)
+        $(SHELL) '$(TESTSUITE)' $(TESTSUITEFLAGS)
 
 installcheck-local: atconfig atlocal $(TESTSUITE)
-        $(SHELL) $(TESTSUITE) AUTOTEST_PATH="$(bindir)" \
+        $(SHELL) '$(TESTSUITE)' AUTOTEST_PATH='$(bindir)' \
           $(TESTSUITEFLAGS)
+
+clean-local:
+        test ! -f '$(TESTSUITE)' || \
+         $(SHELL) '$(TESTSUITE)' --clean
 
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at
-        $(AUTOTEST) -I $(srcdir) -o $@@.tmp $@@.at
+        $(AUTOTEST) -I '$(srcdir)' -o $@@.tmp $@@.at
         mv $@@.tmp $@@
 @end example
 
@@ -18177,7 +18191,7 @@ This solution can be simplified when compiling a program: you may either
 extend the @code{CPPFLAGS}:
 
 @example
-CPPFLAGS = -DDATADIR=\"$(datadir)\" @@CPPFLAGS@@
+CPPFLAGS = -DDATADIR='"$(datadir)"' @@CPPFLAGS@@
 @end example
 
 @noindent

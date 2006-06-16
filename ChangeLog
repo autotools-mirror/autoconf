@@ -4,6 +4,25 @@
 	* doc/autoconf.texi: Likewise.
 	(Special Chars in Names): Say that $(.FOO) is portable, as
 	suggested by Stepan Kasal.
+	(Installation Directory Variables, Build Directories):
+	(Automatic Remaking, Subdirectories, Fortran Compiler):
+	(Making testsuite Scripts, Defining Directories):
+	Quote variable usages better.
+	(Installation Directory Variables): Fix table item font.
+	Reword slightly to clarify.  Generalize advice about
+	not using special characters to include all file-related
+	vars, not just VPATH.
+	(Special Chars in Variables): Warn about special characters in
+	$(srcdir) too.
+	(Assignments): Clarify default-value example as suggested by
+	Ralf Wildenhues in
+	<http://lists.gnu.org/archive/html/autoconf-patches/2006-06/msg00072.html>.
+	(Special Shell Variables): Note leading ./ or ../, as suggested
+	by Stepan Kasal.
+	(Limitations of Builtins): Under cd, warn about CDPATH.
+	(The Make Macro MAKEFLAGS): Untabify.  Problem reported by
+	Ralf Wildenhues.
+
 
 2006-06-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
