@@ -23,7 +23,6 @@
 	(The Make Macro MAKEFLAGS): Untabify.  Problem reported by
 	Ralf Wildenhues.
 
-
 2006-06-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Configuration Actions): Remove duplicate
