@@ -1,5 +1,7 @@
 2006-06-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* config/config.guess, config/config.sub: Sync from upstream.
+
 	* bin/Makefile.am (autoconf.in): Use `--melt' for autom4te,
 	in order to avoid picking up an older installed frozen m4sh.m4f.
 	Besides an outdated shell startup, this could have been created
