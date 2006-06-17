@@ -52,8 +52,11 @@ edit = sed \
 	-e 's|@configure_input[@]|Generated from $@.in; do not edit by hand.|g'
 
 # autoconf is written in M4sh.
+# FIXME: this target should depend on the frozen files below lib/m4sugar,
+# otherwise autom4te may pick up a frozen m4sh.m4f from an earlier
+# installation below the same $(prefix); work around this with --melt.
 autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
-	$(MY_AUTOM4TE) --language M4sh --cache '' $(srcdir)/autoconf.as -o $@
+	$(MY_AUTOM4TE) --language M4sh --cache '' --melt $(srcdir)/autoconf.as -o $@
 
 ## All the scripts depend on Makefile so that they are rebuilt when the
 ## prefix etc. changes.  It took quite a while to have the rule correct,

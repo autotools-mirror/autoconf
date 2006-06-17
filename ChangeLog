@@ -1,6 +1,13 @@
+2006-06-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/Makefile.am (autoconf.in): Use `--melt' for autom4te,
+	in order to avoid picking up an older installed frozen m4sh.m4f.
+	Besides an outdated shell startup, this could have been created
+	by an earlier M4 version with incompatible frozen file format.
+
 2006-06-16  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* README: Recomment m4 1.4.4 instead of 1.4.3..
+	* README: Recommend m4 1.4.4 instead of 1.4.3..
 	* doc/autoconf.texi: Likewise.
 	(Special Chars in Names): Say that $(.FOO) is portable, as
 	suggested by Stepan Kasal.
