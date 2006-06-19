@@ -1,3 +1,12 @@
+2006-06-19  Paul Eggert  <eggert@cs.ucla.edu>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* NEWS: Document that m4wrap/m4_wrap might not be LIFO.
+	* doc/autoconf.texi (): Likewise.
+	Rework example of m4wrap token-pasting trouble so that it doesn't
+	care whether it's LIFO or FIFO.
+	Fix some "contrary to"s that are awkward in English.
+
 2006-06-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/types.m4 (_AC_TYPE_INT): Set `$ac_cv_c_int$1_t'

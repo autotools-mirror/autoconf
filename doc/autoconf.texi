@@ -4300,9 +4300,10 @@ If the @code{fnmatch} function conforms to Posix, define
 @code{HAVE_FNMATCH}.  Detect common implementation bugs, for example,
 the bugs in Solaris 2.4.
 
-Note that for historical reasons, contrary to the other specific
+Unlike the other specific
 @code{AC_FUNC} macros, @code{AC_FUNC_FNMATCH} does not replace a
-broken/missing @code{fnmatch}.  See @code{AC_REPLACE_FNMATCH} below.
+broken/missing @code{fnmatch}.  This is for historical reasons.
+See @code{AC_REPLACE_FNMATCH} below.
 @end defmac
 
 @defmac AC_FUNC_FNMATCH_GNU
@@ -9316,8 +9317,8 @@ m4 --reload-state=4.m4f input.m4
 Produce a frozen state file.  @command{autom4te} freezing is stricter
 than M4's: it must produce no warnings, and no output other than empty
 lines (a line with white space is @emph{not} empty) and comments
-(starting with @samp{#}).  Please, note that contrary to @command{m4},
-this options takes no argument:
+(starting with @samp{#}).  Unlike @command{m4}'s similarly-named option,
+this option takes no argument:
 
 @example
 autom4te 1.m4 2.m4 3.m4 --freeze --output=3.m4f
@@ -9592,7 +9593,7 @@ This macro kept its original name: no @code{m4_dnl} is defined.
 
 @defmac m4_defn (@var{macro})
 @msindex{defn}
-Contrary to the M4 builtin, this macro fails if @var{macro} is not
+Unlike the M4 builtin, this macro fails if @var{macro} is not
 defined.  See @code{m4_undefine}.
 @end defmac
 
@@ -9624,7 +9625,7 @@ provide extended regular expression syntax via @code{epatsubst}.
 
 @defmac m4_popdef (@var{macro})
 @msindex{popdef}
-Contrary to the M4 builtin, this macro fails if @var{macro} is not
+Unlike the M4 builtin, this macro fails if @var{macro} is not
 defined.  See @code{m4_undefine}.
 @end defmac
 
@@ -9639,23 +9640,26 @@ provide extended regular expression syntax via @code{eregexp}.
 @msindex{wrap}
 This macro corresponds to @code{m4wrap}.
 
-You are encouraged to end @var{text} with @samp{[]}, so that there are
-no risks that two consecutive invocations of @code{m4_wrap} result in an
-unexpected pasting of tokens, as in
+Posix requires arguments of multiple @code{m4wrap} calls to be
+reprocessed at @acronym{EOF} in the same order as the original calls.
+@acronym{GNU} M4 versions through 1.4.x, however, reprocess them in
+reverse order.  Your code should not depend on the order.
+
+You are encouraged to end @var{text} with @samp{[]}, to avoid unexpected
+token pasting between consecutive invocations of @code{m4_wrap}, as in:
 
 @example
-m4_define([foo], [Foo])
-m4_define([bar], [Bar])
-m4_define([foobar], [FOOBAR])
-m4_wrap([bar])
+m4_define([foo], [bar])
+m4_define([foofoo], [OUCH])
 m4_wrap([foo])
-@result{}FOOBAR
+m4_wrap([foo])
+@result{}OUCH
 @end example
 @end defmac
 
 @defmac m4_undefine (@var{macro})
 @msindex{undefine}
-Contrary to the M4 builtin, this macro fails if @var{macro} is not
+Unlike the M4 builtin, this macro fails if @var{macro} is not
 defined.  Use
 
 @example

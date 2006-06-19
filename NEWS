@@ -1,5 +1,9 @@
 * Major changes in Autoconf 2.59e
 
+** Autoconf no longer depends on whether m4wrap is FIFO (as Posix requires)
+  or LIFO (as in GNU m4 1.4.x).  GNU m4 2.0 is expected to conform to Posix
+  here, so m4wrap/m4_wrap users should no longer depend on LIFO behavior.
+
 * Major changes in Autoconf 2.59d
 
   Released 2006-06-05, by Ralf Wildenhues.
