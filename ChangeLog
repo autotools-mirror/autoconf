@@ -1,5 +1,11 @@
 2006-06-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/types.m4 (_AC_TYPE_INT): Set `$ac_cv_c_int$1_t'
+	to `yes' instead of `int$1_t' if the type is found, for more
+	consistent configure output (where $1 is the number of bits).
+	(_AC_TYPE_UINT): Likewise for `uint$1_t'.
+	Suggested by Bruno Haible.
+
 	* lib/autoconf/types.m4 (_AC_TYPE_UNSIGNED_INT): Solaris 2.5.1
 	needs _UINT8_T and _UINT64_T defines as well, to avoid clashes
 	with system headers.  Report by Bruno Haible.

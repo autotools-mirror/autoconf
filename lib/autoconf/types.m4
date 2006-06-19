@@ -590,11 +590,13 @@ AC_DEFUN([_AC_TYPE_INT],
 	       [[($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 1)
 	         < ($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 2)]])],
 	    [],
-	    [ac_cv_c_int$1_t=$ac_type])])
+	    [AS_CASE([$ac_type], [int$1_t],
+	       [ac_cv_c_int$1_t=yes],
+	       [ac_cv_c_int$1_t=$ac_type])])])
        test "$ac_cv_c_int$1_t" != no && break
      done])
   case $ac_cv_c_int$1_t in #(
-  no|int$1_t) ;; #(
+  no|yes) ;; #(
   *)
     AC_DEFINE_UNQUOTED([int$1_t], [$ac_cv_c_int$1_t],
       [Define to the type of a signed integer type of width exactly $1 bits
@@ -614,11 +616,13 @@ AC_DEFUN([_AC_TYPE_UNSIGNED_INT],
 	 [AC_LANG_BOOL_COMPILE_TRY(
 	    [AC_INCLUDES_DEFAULT],
 	    [[($ac_type) -1 >> ($1 - 1) == 1]])],
-	 [ac_cv_c_uint$1_t=$ac_type])
+	 [AS_CASE([$ac_type], [uint$1_t],
+	    [ac_cv_c_uint$1_t=yes],
+	    [ac_cv_c_uint$1_t=$ac_type])])
        test "$ac_cv_c_uint$1_t" != no && break
      done])
   case $ac_cv_c_uint$1_t in #(
-  no|uint$1_t) ;; #(
+  no|yes) ;; #(
   *)
     m4_bmatch([$1], [^\(8\|32\|64\)$],
       [AC_DEFINE([_UINT$1_T], 1,
