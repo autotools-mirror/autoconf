@@ -620,7 +620,7 @@ AC_DEFUN([_AC_TYPE_UNSIGNED_INT],
   case $ac_cv_c_uint$1_t in #(
   no|uint$1_t) ;; #(
   *)
-    m4_if([$1], 32,
+    m4_bmatch([$1], [^\(8\|32\|64\)$],
       [AC_DEFINE([_UINT$1_T], 1,
 	 [Define for Solaris 2.5.1 so the uint$1_t typedef from
 	  <sys/synch.h>, <pthread.h>, or <semaphore.h> is not used.

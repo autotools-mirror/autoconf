@@ -1,3 +1,9 @@
+2006-06-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/types.m4 (_AC_TYPE_UNSIGNED_INT): Solaris 2.5.1
+	needs _UINT8_T and _UINT64_T defines as well, to avoid clashes
+	with system headers.  Report by Bruno Haible.
+
 2006-06-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* config/config.guess, config/config.sub: Sync from upstream.
