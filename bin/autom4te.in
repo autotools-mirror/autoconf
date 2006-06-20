@@ -572,7 +572,7 @@ sub handle_output ($$)
       foreach (split (/\W+/))
 	{
 	  $prohibited{$_} = $.
-	    if /$forbidden/o && !/$allowed/o && ! exists $prohibited{$_};
+	    if !/^$/ && /$forbidden/o && !/$allowed/o && ! exists $prohibited{$_};
 	}
 
       # Performed *last*: the empty quadrigraph.

@@ -322,8 +322,23 @@ AT_CHECK_AUTOCONF
 AT_CLEANUP
 
 
+# autoconf: do not forbid the empty token
+# ---------------------------------------
+AT_SETUP([autoconf: the empty token])
+
+AT_DATA_M4SH([configure.ac],
+[[m4_pattern_allow([^foo$])
+m4_divert([0])dnl
+ line that begins with a space
+]])
+
+AT_CHECK_AUTOCONF
+
+AT_CLEANUP
+
+
 # autoconf: subdirectories
-# --------------------------------------
+# ------------------------
 AT_SETUP([autoconf: subdirectories])
 
 AT_DATA([configure.ac],
