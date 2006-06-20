@@ -62,7 +62,7 @@ AT_DATA_M4SUGAR([script.4s],
 m4_defun([cross_warning],
 [m4_warn([cross],  [cross])])
 
-m4_divert_push([0])m4_wrap([m4_divert_pop([0])[]])dnl
+m4_divert([0])dnl
 m4_warn([obsolete],  [obsolete])dnl
 cross_warning[]dnl
 m4_warn([syntax], [syntax])dnl
@@ -135,7 +135,7 @@ m4_defun([baz],
 [m4_require([foo])])
 
 m4_init
-m4_divert_push([0])m4_wrap([m4_divert_pop([0])[]])dnl
+m4_divert([0])dnl
 baz
 ]])
 
@@ -161,7 +161,7 @@ AT_SETUP([m4@&t@_text_wrap])
 # m4-listification.
 
 AT_DATA_M4SUGAR([script.4s],
-[[m4_divert_push([0])m4_wrap([m4_divert_pop([0])])dnl
+[[m4_divert([0])dnl
 m4_text_wrap([Short string */], [   ], [/* ], 20)
 
 m4_text_wrap([Much longer string */], [   ], [/* ], 20)
@@ -303,7 +303,7 @@ outer value
 
 AT_DATA_M4SUGAR([script.4s],
 [[m4_init
-m4_divert_push([0])m4_wrap([m4_divert_pop([0])[]])dnl
+m4_divert([0])dnl
 m4_for([myvar], 1, 3,-1, [ myvar])
 ]])
 
@@ -315,7 +315,7 @@ autom4te: m4 failed with exit status: 1
 
 AT_DATA_M4SUGAR([script.4s],
 [[m4_init
-m4_divert_push([0])m4_wrap([m4_divert_pop([0])[]])dnl
+m4_divert([0])dnl
 m4_for([myvar], 1, 2, 0, [ myvar])
 ]])
 
@@ -327,7 +327,7 @@ autom4te: m4 failed with exit status: 1
 
 AT_DATA_M4SUGAR([script.4s],
 [[m4_init
-m4_divert_push([0])m4_wrap([m4_divert_pop([0])[]])dnl
+m4_divert([0])dnl
 m4_for([myvar], 2, 1, 0, [ myvar])
 ]])
 

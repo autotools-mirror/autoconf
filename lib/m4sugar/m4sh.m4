@@ -1493,6 +1493,6 @@ m4_divert_text([M4SH-SANITIZE], [AS_SHELL_SANITIZE])
 AS_REQUIRE([_AS_SHELL_FN_SPY])
 
 # Let's go!
-m4_wrap([m4_divert_pop([BODY])[]])
+m4_divert_pop([KILL])[]dnl
 m4_divert_push([BODY])[]dnl
 ])

@@ -1,8 +1,21 @@
+2006-06-20  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sugar.m4 (m4_init): Merge the two m4_wrap
+	calls, so that we do not care whether they are LIFO or FIFO;
+	in the m4_wrap, do not check which diversion is the topmost
+	one, just check that the stack is balanced at the end.
+	* lib/m4sugar/m4sh.m4 (AS_INIT): We are going to change the
+	base diversion forever--pop the previous diversion before
+	opening the new one; consequently, remove the m4_wrap call.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* tests/m4sugar.at: Do not use
+	m4_wrap([m4_diversion_pop([..])]), for educational purposes.
+
 2006-06-19  Paul Eggert  <eggert@cs.ucla.edu>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* NEWS: Document that m4wrap/m4_wrap might not be LIFO.
-	* doc/autoconf.texi (): Likewise.
+	* doc/autoconf.texi (Redefined M4 Macros): Likewise.
 	Rework example of m4wrap token-pasting trouble so that it doesn't
 	care whether it's LIFO or FIFO.
 	Fix some "contrary to"s that are awkward in English.
