@@ -1,3 +1,15 @@
+2006-06-20  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Use "M4" rather than "m4" when appropriate.
+	Problem reported by Eric Blake.
+	* doc/autoconf.texi: Likewise.
+	Use @acronym around BSD, GCC, and GNU when appropriate.
+	(Why GNU M4): Renamed from "Why GNU m4".
+	(Redefined M4 Macros): Mention that Posix
+	m4wrap takes only 1 argument, but GNU M4 1.4.x takes more.
+	(Buffer Overruns): Mention size_t and ptrdiff_t as alternatives
+	to int.
+
 2006-06-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* bin/autom4te.in (handle_output): Do not forbid the empty

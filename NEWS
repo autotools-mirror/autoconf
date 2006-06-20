@@ -1,7 +1,7 @@
 * Major changes in Autoconf 2.59e
 
 ** Autoconf no longer depends on whether m4wrap is FIFO (as Posix requires)
-  or LIFO (as in GNU m4 1.4.x).  GNU m4 2.0 is expected to conform to Posix
+  or LIFO (as in GNU M4 1.4.x).  GNU M4 2.0 is expected to conform to Posix
   here, so m4wrap/m4_wrap users should no longer depend on LIFO behavior.
 
 * Major changes in Autoconf 2.59d
@@ -257,7 +257,7 @@
   especially useful for initial "bootstrapping" of fresh CVS checkouts.
 
 ** AC_CONFIG_MACRO_DIR
-  Use this macro to declare the directory for local m4 macros for aclocal.
+  Use this macro to declare the directory for local M4 macros for aclocal.
 
 ** AC_LIBOBJS
   No longer includes twice the same file in LIBOBJS if invoked
@@ -325,7 +325,7 @@
   Released 2002-12-03 by Paul Eggert.
 
 Bug fixes for problems with AIX linker, with freestanding C compilers,
-with GNU m4 limitations, and with obsolete copies of GNU documents.
+with GNU M4 limitations, and with obsolete copies of GNU documents.
 
 The Free Documentation License has been upgraded from 1.1 to 1.2.
 
@@ -767,7 +767,7 @@ In particular, portability issues are better covered.
 
 ** Use of Automake
 All the standard GNU Makefile targets are supported.  The layout has
-changed: m4/ holds the m4 extensions Autoconf needs for its
+changed: m4/ holds the M4 extensions Autoconf needs for its
 configuration, doc/ contains the documentation, and tests/ contains
 the test suite.
 
@@ -1146,9 +1146,9 @@ Library, need major changes because they relied on undocumented
 internals of version 1.  Future releases of those packages will have
 updated configure.in files.
 
-It's best to use GNU m4 1.3 (or later) with Autoconf version 2.
-Autoconf now makes heavy use of m4 diversions, which were implemented
-inefficiently in GNU m4 releases before 1.3.
+It's best to use GNU M4 1.3 (or later) with Autoconf version 2.
+Autoconf now makes heavy use of M4 diversions, which were implemented
+inefficiently in GNU M4 releases before 1.3.
 
 Major changes in Autoconf 2.0:
 
@@ -1349,7 +1349,7 @@ Major changes in Autoconf 1.4:
 * New macros AC_HAVE_POUNDBANG, AC_TIME_WITH_SYS_TIME, AC_LONG_DOUBLE,
   AC_GETGROUPS_T, AC_DEFINE_UNQUOTED.
 * autoconf and autoheader use the M4 environment variable to determine the
-  name of the m4 program to use.
+  name of the M4 program to use.
 * The --macrodir option to autoconf and autoheader specifies the directory
   in which acspecific.m4, acgeneral.m4, etc. reside if not the default.
 * autoconf and autoheader can take `-' as their file names, which means to
@@ -1361,7 +1361,7 @@ Major changes in Autoconf 1.4:
   expansion done by the shell.  If you don't want this, use
   AC_DEFINE_UNQUOTED instead.
 * Much textual processing done with external calls to tr and sed have been
-  internalized with builtin m4 `patsubst' and `translit' calls.
+  internalized with builtin M4 `patsubst' and `translit' calls.
 * AC_OUTPUT doesn't hardwire the file names it outputs.  Instead, you can
   set the shell variables `gen_files' and `gen_config' to the list of
   file names to output.
