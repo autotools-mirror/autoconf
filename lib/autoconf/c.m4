@@ -1043,6 +1043,11 @@ static char *f (char * (*g) (char **, int), char **p, ...)
    that's true only with -std.  */
 int osf4_cc_array ['\x00' == 0 ? 1 : -1];
 
+/* IBM C 6 for AIX is almost-ANSI by default, but it replaces macro parameters
+   inside strings and character constants.  */
+#define FOO(x) 'x'
+int xlc6_cc_array[FOO(a) == 'x' ? 1 : -1];
+
 int test (int i, double x);
 struct s1 {int (*f) (int a);};
 struct s2 {int (*f) (double a);};
