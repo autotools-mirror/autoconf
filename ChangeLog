@@ -1,3 +1,9 @@
+2006-06-22  Alexandre Julliard <julliard@winehq.org>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): Avoid warning
+	about literal '${datarootdir}' if a definition is found in the
+	output file.
+
 2006-06-20  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Use "M4" rather than "m4" when appropriate.

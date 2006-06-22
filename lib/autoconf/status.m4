@@ -555,6 +555,7 @@ $ac_datarootdir_hack
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
+  { ac_out=`sed -n '/^[[	 ]]*datarootdir[[	 ]]*:*=/p' "$tmp/out"`; test -z "$ac_out"; } &&
   AC_MSG_WARN([$ac_file contains a reference to the variable `datarootdir'
 which seems to be undefined.  Please make sure it is defined.])
 
