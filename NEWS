@@ -4,6 +4,8 @@
   or LIFO (as in GNU M4 1.4.x).  GNU M4 2.0 is expected to conform to Posix
   here, so m4wrap/m4_wrap users should no longer depend on LIFO behavior.
 
+** Provide a way to turn off warnings about the changed directory variables.
+
 * Major changes in Autoconf 2.59d
 
   Released 2006-06-05, by Ralf Wildenhues.

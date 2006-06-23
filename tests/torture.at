@@ -673,6 +673,8 @@ AT_DATA([Bar.in],
 
 AT_DATA([configure.ac],
 [[AC_INIT
+d@&t@nl The following line silences the warnings, if uncommented:
+d@&t@nl AC_DEFUN([AC_DATAROOTDIR_CHECKED])
 AC_CONFIG_AUX_DIR($top_srcdir/config)
 
 # This substitution is wrong and bogus!  Don't use it in your own code!
@@ -690,6 +692,14 @@ config.status: WARNING: Bar contains a reference to the variable `datarootdir'
 which seems to be undefined.  Please make sure it is defined.
 ])
 AT_CHECK([grep datarootdir Foo], 1, [])
+
+rm configure
+sed '/AC_DEFUN/s/^d@&t@nl //' configure.ac >t
+mv t configure.ac
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
 AT_CLEANUP
 
 

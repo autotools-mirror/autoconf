@@ -318,6 +318,7 @@ Substitutions in Makefiles
 
 * Preset Output Variables::     Output variables that are always set
 * Installation Directory Variables::  Other preset output variables
+* Changed Directory Variables:: Warnings about @file{datarootdir}
 * Build Directories::           Supporting multiple concurrent compiles
 * Automatic Remaking::          Makefile rules for configuring
 
@@ -2197,6 +2198,7 @@ makefiles.
 @menu
 * Preset Output Variables::     Output variables that are always set
 * Installation Directory Variables::  Other preset output variables
+* Changed Directory Variables:: Warnings about @file{datarootdir}
 * Build Directories::           Supporting multiple concurrent compiles
 * Automatic Remaking::          Makefile rules for configuring
 @end menu
@@ -2665,6 +2667,87 @@ macro in @file{configure.ac}.
 @end defvar
 
 @xref{Erlang Libraries}, for details.
+
+
+@node Changed Directory Variables
+@subsection Changed Directory Variables
+@cindex @file{datarootdir}
+
+In Autoconf 2.60, the set of directory variables has changed, and the
+defaults of some variables have been adjusted
+(@pxref{Installation Directory Variables}) to changes in the
+@acronym{GNU} Coding Standards.  Notably, @file{datadir}, @file{infodir}, and
+@file{mandir} are now expressed in terms of @file{datarootdir}.  If you are
+upgrading from an earlier Autoconf version, you may need to adjust your files
+to ensure that the directory variables are substituted correctly
+(@pxref{Defining Directories}), and that a definition of @file{datarootdir} is
+in place.  For example, in a @file{Makefile.in}, adding
+
+@example
+datarootdir = @@datarootdir@@
+@end example
+
+@noindent
+is usually sufficient.  If you use Automake to create @file{Makefile.in},
+it will add this for you.
+
+To help with the transition, Autoconf warns about files that seem to use
+@code{datarootdir} without defining it.  In some cases, it then expands
+the value of @code{$datarootdir} in substitutions of the directory
+variables.  The following example shows such a warning:
+
+@example
+$ @kbd{cat configure.ac}
+AC_INIT
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+$ @kbd{cat Makefile.in}
+prefix = @@prefix@@
+datadir = @@datadir@@
+$ @kbd{autoconf}
+$ @kbd{configure}
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: WARNING:
+               Makefile.in seems to ignore the --datarootdir setting
+$ @kbd{cat Makefile}
+prefix = /usr/local
+datadir = $@{prefix@}/share
+@end example
+
+Usually one can easily change the file to accommodate both older and newer
+Autoconf releases:
+
+@example
+$ @kbd{cat Makefile.in}
+prefix = @@prefix@@
+datarootdir = @@datarootdir@@
+datadir = @@datadir@@
+$ @kbd{configure}
+configure: creating ./config.status
+config.status: creating Makefile
+$ @kbd{cat Makefile}
+prefix = /usr/local
+datarootdir = $@{prefix@}/share
+datadir = $@{datarootdir@}
+@end example
+
+@acindex{DATAROOTDIR_CHECKED}
+In some cases, however, the checks may not be able to detect that a suitable
+initialization of @code{datarootdir} is in place, or they may fail to detect
+that such an initialization is necessary in the output file.  If, after
+auditing your package, there are still spurious @file{configure} warnings about
+@code{datarootdir}, you may add the line
+
+@example
+AC_DEFUN([AC_DATAROOTDIR_CHECKED])
+@end example
+
+@noindent
+to your @file{configure.ac} to disable the warnings.  This is an exception
+to the usual rule that you should not define a macro whose name begins with
+@code{AC_} (@pxref{Macro Names}).
+
 
 
 @node Build Directories

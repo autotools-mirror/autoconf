@@ -505,7 +505,8 @@ AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P],
 ])dnl
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF
+m4_ifndef([AC_DATAROOTDIR_CHECKED],
+[cat >>$CONFIG_STATUS <<\_ACEOF
 # If the template does not know about datarootdir, expand it.
 # FIXME: This hack should be removed a few years after 2.60.
 ac_datarootdir_hack=; ac_datarootdir_seen=
@@ -530,6 +531,7 @@ cat >>$CONFIG_STATUS <<_ACEOF
   s&\\\${datarootdir}&$datarootdir&g' ;;
 esac
 _ACEOF
+])dnl
 
 # Neutralize VPATH when `$srcdir' = `.'.
 # Shell code in configure.ac might set extrasub.
@@ -550,14 +552,17 @@ m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]])AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P], [[, MKDIR_P]]),
 	   [s&@_AC_Var@&$ac_[]_AC_Var&;t t[]AC_SUBST_TRACE(_AC_Var)
 ])dnl
-$ac_datarootdir_hack
+m4_ifndef([AC_DATAROOTDIR_CHECKED], [$ac_datarootdir_hack
+])dnl
 " $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
 
-test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
+m4_ifndef([AC_DATAROOTDIR_CHECKED],
+[test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
   { ac_out=`sed -n '/^[[	 ]]*datarootdir[[	 ]]*:*=/p' "$tmp/out"`; test -z "$ac_out"; } &&
   AC_MSG_WARN([$ac_file contains a reference to the variable `datarootdir'
 which seems to be undefined.  Please make sure it is defined.])
+])dnl
 
   rm -f "$tmp/stdin"
   case $ac_file in
