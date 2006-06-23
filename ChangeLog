@@ -1,5 +1,10 @@
 2006-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* configure.ac (AC_INIT): Bump to 2.60a.
+	* NEWS: Update.
+
+2006-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
 	Version 2.60.
 
 	* configure.ac, NEWS: Update.
