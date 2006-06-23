@@ -836,7 +836,7 @@ EOF
       # It makes no sense to try to transform __oline__.
       s/\@<:\@/[/g;
       s/\@:>\@/]/g;
-      s/\@\$\|\@/\$/g;
+      s/\@S\|\@/\$/g;
       s/\@%:\@/#/g;
       s/\@&t\@//g;
       print $out $_;

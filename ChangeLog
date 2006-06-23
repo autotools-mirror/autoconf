@@ -1,5 +1,8 @@
 2006-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* bin/autom4te.in (handle_traces): Transform the `@S|@'
+	quadrigraph correctly in traces.
+
 	* NEWS, lib/Autom4te/C4che.pm, lib/autoconf/functions.m4:
 	Fix typos.
 
