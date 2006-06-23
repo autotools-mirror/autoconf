@@ -1,5 +1,8 @@
 2006-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* NEWS, lib/Autom4te/C4che.pm, lib/autoconf/functions.m4:
+	Fix typos.
+
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): Expand tests for
 	datarootdir-related errors only if AC_DATAROOTDIR_CHECKED is
 	not defined.
@@ -890,7 +893,6 @@
 2006-05-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Use @option systematically.
-	(Integer Overflow):
 
 2006-05-02  Paul Eggert  <eggert@cs.ucla.edu>
 	and Bruno Haible  <bruno@clisp.org>

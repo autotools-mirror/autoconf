@@ -1617,7 +1617,7 @@ LIBS="-lintl $LIBS"])])dnl
 
 
 # AC_FUNC_STRNLEN
-# --------------
+# ---------------
 AN_FUNCTION([strnlen], [AC_FUNC_STRNLEN])
 AC_DEFUN([AC_FUNC_STRNLEN],
 [AC_CACHE_CHECK([for working strnlen], ac_cv_func_strnlen_working,

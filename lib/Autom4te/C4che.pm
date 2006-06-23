@@ -1,5 +1,5 @@
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 2003  Free Software Foundation, Inc.
+# Copyright (C) 2003, 2006  Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -134,10 +134,9 @@ sub request ($%)
 	}
     }
 
-  # It would be great to have $REQ check that it up to date wrt its
-  # dependencies, but that requires getting traces (to fetch the
-  # included files), which is out of the scope of Request
-  # (currently?).
+  # It would be great to have $REQ check that it is up to date wrt
+  # its dependencies, but that requires getting traces (to fetch the
+  # included files), which is out of the scope of Request (currently?).
 
   return $req;
 }

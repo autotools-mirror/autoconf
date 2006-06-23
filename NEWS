@@ -151,7 +151,7 @@
   New macros for checking commonly-used members of struct dirent.
 
 ** AC_SUBST
-  The subtituted value can now contain newlines.
+  The substituted value can now contain newlines.
 
 ** AC_SUBST_FILE
   The substitution now occurs only when @variable@ is on a line by itself,
