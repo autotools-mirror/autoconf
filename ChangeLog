@@ -1,5 +1,11 @@
 2006-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Version 2.60.
+
+	* configure.ac, NEWS: Update.
+
+2006-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
 	* config/texinfo.tex: Sync from upstream.
 
 	* bin/autom4te.in (handle_traces): Transform the `@S|@'
