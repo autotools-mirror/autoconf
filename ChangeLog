@@ -1,3 +1,14 @@
+2006-06-26  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Use -lX11, not
+	-lXt in LIBS, idea from Karsten Hopp; this was due since
+	this change:
+
+	2005-09-18  Paul Eggert  <eggert@cs.ucla.edu>
+	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Look for X11/Xlib.h
+	and XrmInitialize rather than X11/Intrinsic.h and XtMalloc
+	(which belong to Xt, not X itself).  See Debian bug 327655.
+
 2006-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* configure.ac (AC_INIT): Bump to 2.60a.
