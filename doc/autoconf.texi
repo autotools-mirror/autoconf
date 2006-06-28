@@ -504,7 +504,7 @@ Portable Make Programming
 * VPATH and Double-colon::      Problems with @samp{::} on ancient hosts
 * $< in Explicit Rules::        @code{$<} does not work in ordinary rules
 * Automatic Rule Rewriting::    @code{VPATH} goes wild on Solaris
-* OSF/Tru64 Directory Magic::   @command{mkdir} goes wild on OSF/Tru64
+* Tru64 Directory Magic::       @command{mkdir} goes wild on Tru64
 * Make Target Lookup::          More details about @code{VPATH} lookup
 
 Portable C and C++ Programming
@@ -4061,7 +4061,7 @@ some old systems don't support this (e.g., NextStep).
 @prindex @code{isnan}
 The C99 standard says that @code{isinf} and @code{isnan} are
 macros.  On some systems just macros are available
-(e.g., HP-UX and Solaris 10), on
+(e.g., @acronym{HP-UX} and Solaris 10), on
 some systems both macros and functions (e.g., glibc 2.3.2), and on some
 systems only functions (e.g., IRIX 6 and Solaris 9).  In some cases
 these functions are declared in nonstandard headers like
@@ -4110,8 +4110,9 @@ probably not worth worrying about.
 @c @fuindex malloc
 @prindex @code{malloc}
 The C standard says a call @code{malloc (0)} is implementation
-dependent.  It may either return @code{NULL} (e.g., OSF 4) or
-non-@code{NULL} (e.g., @acronym{GNU} C Library).  @code{AC_FUNC_MALLOC}
+dependent.  It can return either @code{NULL} or a new non-null pointer.
+The latter is more common (e.g., the @acronym{GNU} C Library) but is by
+no means universal.  @code{AC_FUNC_MALLOC}
 can be used to insist on non-@code{NULL} (@pxref{Particular Functions}).
 
 @item @code{putenv}
@@ -4181,7 +4182,7 @@ longer need to be worried about.
 @item @code{sscanf}
 @c @fuindex sscanf
 @prindex @code{sscanf}
-On various old systems, e.g., HP-UX 9, @code{sscanf} requires that its
+On various old systems, e.g., @acronym{HP-UX} 9, @code{sscanf} requires that its
 input string be writable (though it doesn't actually change it).  This
 can be a problem when using @command{gcc} since it normally puts
 constant strings in read-only memory (@pxref{Incompatibilities,
@@ -4219,7 +4220,7 @@ strnlen ("foobar", 9) = 6
 @item @code{sysconf}
 @c @fuindex sysconf
 @prindex @code{sysconf}
-@code{_SC_PAGESIZE} is standard, but some older systems (e.g., HP-UX
+@code{_SC_PAGESIZE} is standard, but some older systems (e.g., @acronym{HP-UX}
 9) have @code{_SC_PAGE_SIZE} instead.  This can be tested with
 @code{#ifdef}.
 
@@ -5122,7 +5123,7 @@ On Darwin, @file{stdlib.h} is a prerequisite.
 
 @item @file{sys/ucred.h}
 @hdrindex{sys/ucred.h}
-On HP Tru64 5.1, @file{sys/types.h} is a prerequisite.
+On Tru64 5.1, @file{sys/types.h} is a prerequisite.
 
 @item @file{X11/extensions/scrnsaver.h}
 @hdrindex{X11/extensions/scrnsaver.h}
@@ -6142,21 +6143,16 @@ excerpt of a C source demonstrates how to test whether @samp{int} objects are 4
 bytes wide:
 
 @example
-int
-main (void)
-@{
-  static int test_array [sizeof (int) == 4 ? 1 : -1];
-  test_array [0] = 0;
-  return 0;
-@}
+static int test_array[sizeof (int) == 4 ? 1 : -1];
 @end example
 
 @noindent
 To our knowledge, there is a single compiler that does not support this
-trick: the HP C compilers (the real one, not only the ``bundled'') on
-HP-UX 11.00.  They incorrectly reject the above program with the diagnostic
+trick: the @acronym{HP} C compilers (the real ones, not only the ``bundled'') on
+@acronym{HP-UX} 11.00.
+They incorrectly reject the above program with the diagnostic
 ``Variable-length arrays cannot have static storage.''
-This bug comes from HP compilers' mishandling of @code{sizeof (int)},
+This bug comes from @acronym{HP} compilers' mishandling of @code{sizeof (int)},
 not from the @code{? 1 : -1}, and
 Autoconf works around this problem by casting @code{sizeof (int)} to
 @code{long int} before comparing it.
@@ -6218,7 +6214,8 @@ being checked for, since they can easily be worked around.
 
 @table @asis
 @item Don't use lines containing solitary backslashes
-They tickle a bug in the HP-UX C compiler (checked on HP-UX 10.20,
+They tickle a bug in the @acronym{HP-UX} C compiler (checked on
+@acronym{HP-UX} 10.20,
 11.00, and 11i).  When given the following source:
 
 @example
@@ -6243,8 +6240,8 @@ comment at end of file'' and ``Missing @samp{#endif} at end of file.''
 Removing the lines with solitary backslashes solves the problem.
 
 @item Don't compile several files at once if output matters to you
-Some compilers, such as the HP's, reports the name of the file it is
-compiling @emph{when} they are several.  For instance:
+Some compilers, such as @acronym{HP}'s, report names of files being
+compiled when given more than one file operand.  For instance:
 
 @example
 $ @kbd{cc a.c b.c}
@@ -11059,32 +11056,6 @@ executing the macro at all.
 @cindex File descriptors
 @cindex Shell file descriptors
 
-Don't redirect the same file descriptor several times, as you are doomed
-to failure under Ultrix.
-
-@example
-ULTRIX V4.4 (Rev. 69) System #31: Thu Aug 10 19:42:23 GMT 1995
-UWS V4.4 (Rev. 11)
-$ @kbd{eval 'echo matter >fullness' >void}
-illegal io
-$ @kbd{eval '(echo matter >fullness)' >void}
-illegal io
-$ @kbd{(eval '(echo matter >fullness)') >void}
-Ambiguous output redirect.
-@end example
-
-@noindent
-In each case the expected result is of course @file{fullness} containing
-@samp{matter} and @file{void} being empty.
-
-Don't try to redirect the standard error of a command substitution: it
-must be done @emph{inside} the command substitution: when running
-@samp{: `cd /zorglub` 2>/dev/null} expect the error message to
-escape, while @samp{: `cd /zorglub 2>/dev/null`} works properly.
-
-It is worth noting that Zsh (but not Ash nor Bash) makes it possible
-in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
-
 Most shells, if not all (including Bash, Zsh, Ash), output traces on
 stderr, even for subshells.  This might result in undesirable content
 if you meant to capture the standard-error output of the inner command:
@@ -11109,19 +11080,52 @@ foo
 @end example
 
 @noindent
-You'll appreciate the various levels of detail@enddots{}
-
 One workaround is to grep out uninteresting lines, hoping not to remove
-good ones@enddots{}
+good ones.
 
-Don't try to move/delete open files, such as in @samp{exec >foo; mv foo
-bar}; see @ref{Limitations of Builtins}, @command{mv} for more details.
+If you intend to redirect both standard error and standard output,
+redirect standard output first.  This works better with @acronym{HP-UX},
+since its shell mishandles tracing if standard error is redirected
+first:
+
+@example
+$ @kbd{sh -x -c ': 2>err >out'}
++ :
++ 2> err $ @kbd{cat err}
+1> out
+@end example
+
+Don't try to redirect the standard error of a command substitution.  It
+must be done @emph{inside} the command substitution.  When running
+@samp{: `cd /zorglub` 2>/dev/null} expect the error message to
+escape, while @samp{: `cd /zorglub 2>/dev/null`} works properly.
+
+It is worth noting that Zsh (but not Ash nor Bash) makes it possible
+in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
+
+Don't redirect the same file descriptor several times, as you are doomed
+to failure under Ultrix.
+
+@example
+ULTRIX V4.4 (Rev. 69) System #31: Thu Aug 10 19:42:23 GMT 1995
+UWS V4.4 (Rev. 11)
+$ @kbd{eval 'echo matter >fullness' >void}
+illegal io
+$ @kbd{eval '(echo matter >fullness)' >void}
+illegal io
+$ @kbd{(eval '(echo matter >fullness)') >void}
+Ambiguous output redirect.
+@end example
+
+@noindent
+In each case the expected result is of course @file{fullness} containing
+@samp{matter} and @file{void} being empty.
 
 Don't rely on file descriptors 0, 1, and 2 remaining closed in a
 subsidiary program.  If any of these descriptors is closed, the
 operating system may open an unspecified file for the descriptor in the
 new process image.  Posix says this may be done only if the subsidiary
-program is set-user-ID or set-group-ID, but HP-UX 11.23 does it even for
+program is set-user-ID or set-group-ID, but @acronym{HP-UX} 11.23 does it even for
 ordinary programs.
 
 Don't rely on open file descriptors being open in child processes.  In
@@ -11155,6 +11159,10 @@ $
 @noindent
 Within the process which runs the @samp{descrips} script, file
 descriptor 5 is closed.
+
+@acronym{DOS} variants cannot rename or remove open files, such as in
+@samp{mv foo bar >foo} or @samp{rm foo >foo}, even though this is
+perfectly portable among Posix hosts.
 
 A few ancient systems reserved some file descriptors.  By convention,
 file descriptor 3 was opened to @file{/dev/tty} when you logged into
@@ -12826,7 +12834,7 @@ bar
 foo
 @end example
 
-Some Awk implementations, such as HP-UX 11.0's native one, mishandle anchors:
+Some Awk implementations, such as @acronym{HP-UX} 11.0's native one, mishandle anchors:
 
 @example
 $ @kbd{echo xfoo | $AWK '/foo|^bar/ @{ print @}'}
@@ -12930,7 +12938,7 @@ tests for this feature with @code{AC_PROG_CC_C_O}.
 When a compilation such as @samp{cc -o foo foo.c} fails, some compilers
 (such as @sc{cds} on Reliant Unix) leave a @file{foo.o}.
 
-HP-UX @command{cc} doesn't accept @file{.S} files to preprocess and
+@acronym{HP-UX} @command{cc} doesn't accept @file{.S} files to preprocess and
 assemble.  @samp{cc -c foo.S} appears to succeed, but in fact does
 nothing.
 
@@ -13243,7 +13251,7 @@ commands do not understand it.
 
 The replacement of @samp{@{@}} is guaranteed only if the argument is
 exactly @emph{@{@}}, not if it's only a part of an argument.  For
-instance on DU, and HP-UX 10.20 and HP-UX 11:
+instance on DU, and @acronym{HP-UX} 10.20 and @acronym{HP-UX} 11:
 
 @example
 $ @kbd{touch foo}
@@ -13462,21 +13470,9 @@ This annoying behavior conforms to Posix, unfortunately.
 Moving directories across mount points is not portable, use @command{cp}
 and @command{rm}.
 
-Moving/Deleting open files isn't portable.  The following can't be done
-on @acronym{DOS} variants:
-
-@example
-exec > foo
-mv foo bar
-@end example
-
-@noindent
-nor can
-
-@example
-exec > foo
-rm -f foo
-@end example
+@acronym{DOS} variants cannot rename or remove open files, and do not
+support commands like @samp{mv foo bar >foo}, even though this is
+perfectly portable among Posix hosts.
 
 
 @item @command{od}
@@ -13493,6 +13489,21 @@ supported Posix option is @option{-v}, and the only supported
 This problem no longer exists in Mac OS X 10.4.3.
 
 
+@item @command{rm}
+@c ---------------
+@prindex @command{rm}
+The @option{-f} and @option{-r} options are portable.
+
+A file might not be be removed even if its parent directory is writable
+and searchable.  Many Posix hosts cannot remove a mount point, a named
+stream, a working directory, or a last link to a file that is being
+executed.
+
+@acronym{DOS} variants cannot rename or remove open files, and do not
+support commands like @samp{rm foo >foo}, even though this is
+perfectly portable among Posix hosts.
+
+
 @item @command{sed}
 @c ----------------
 @prindex @command{sed}
@@ -13507,7 +13518,7 @@ them.
 Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
 
 Sed scripts should not use branch labels longer than 8 characters and
-should not contain comments.  HP-UX sed has a limit of 99 commands
+should not contain comments.  @acronym{HP-UX} sed has a limit of 99 commands
 (not counting @samp{:} commands) and
 48 labels, which can not be circumvented by using more than one script
 file.  It can execute up to 19 reads with the @samp{r} command per cycle.
@@ -13806,7 +13817,7 @@ However, this problem is no longer of practical concern.
 @c  This has been seen on ia64 hpux 11.20, and on one hppa hpux 10.20,
 @c  but another hppa hpux 10.20 didn't have it.  Bob Proulx
 @c  <bob@proulx.com> thinks it was in hpux 8.0 too.
-On some versions of HP-UX, @command{make} reads multiple newlines
+On some versions of @acronym{HP-UX}, @command{make} reads multiple newlines
 following a backslash, continuing to the next non-empty line.  For
 example,
 
@@ -13867,10 +13878,9 @@ line with @code{#}, not only the first.
 @node Long Lines in Makefiles
 @section Long Lines in Makefiles
 
-OSF/1 4.0d's @command{make} cannot process makefiles with lines
-longer than 38912 bytes.  It exits with a @code{Line too long}
-diagnostic.  A later version, Tru64 5.1's @command{make} has been
-reported to crash with lines around 20 kB.
+Tru64 5.1's @command{make} has been reported to crash when given a
+makefile with lines longer than around 20 kB.  Earlier versions are
+reported to exit with @code{Line too long} diagnostics.
 
 @node Macros and Submakes
 @section @code{make macro=value} and Submakes
@@ -13978,7 +13988,7 @@ is a builtin macro supplied by @command{make}, but it can be modified
 by a makefile or by a command-line argument.
 
 Not all @command{make} implementations define this @code{SHELL} macro.
-OSF/Tru64
+Tru64
 @command{make} is an example; this implementation always uses
 @code{/bin/sh}.  So it's a good idea to always define @code{SHELL} in
 your makefiles.  If you use Autoconf, do
@@ -14001,7 +14011,7 @@ $(SHELL) from the environment, even when @code{make -e} is used
 @code{SHELL=/bin/tcsh}).
 
 However not all @command{make} implementations have this exception.
-For instance it's not surprising that OSF/Tru64 @command{make} doesn't
+For instance it's not surprising that Tru64 @command{make} doesn't
 protect @code{SHELL}, since it doesn't use it.
 
 @example
@@ -14011,7 +14021,7 @@ FOO = foo
 all:
         @@echo $(SHELL)
         @@echo $(FOO)
-$ @kbd{env SHELL=/bin/tcsh FOO=bar make -e}   # OSF1 V4.0 Make
+$ @kbd{env SHELL=/bin/tcsh FOO=bar make -e}   # Tru64 Make
 /bin/tcsh
 bar
 $ @kbd{env SHELL=/bin/tcsh FOO=bar gmake -e}  # GNU make
@@ -14110,7 +14120,7 @@ implementations.
 * VPATH and Double-colon::      Problems with @samp{::} on ancient hosts
 * $< in Explicit Rules::        @code{$<} does not work in ordinary rules
 * Automatic Rule Rewriting::    @code{VPATH} goes wild on Solaris
-* OSF/Tru64 Directory Magic::   @command{mkdir} goes wild on OSF/Tru64
+* Tru64 Directory Magic::       @command{mkdir} goes wild on Tru64
 * Make Target Lookup::          More details about @code{VPATH} lookup
 @end menu
 
@@ -14140,8 +14150,8 @@ whole thing manually.  @xref{Build Directories}.
 @cindex @code{VPATH} and automatic rule rewriting
 @cindex automatic rule rewriting and @code{VPATH}
 
-Some @command{make} implementations, such as Solaris @command{make} and
-OSF1/Tru64 @command{make}, search for prerequisites in @code{VPATH} and
+Some @command{make} implementations, such as Solaris and Tru64,
+search for prerequisites in @code{VPATH} and
 then rewrite each occurrence as a plain word in the rule.
 For instance:
 
@@ -14179,8 +14189,8 @@ f.c: if.c
 
 @noindent
 However, the ``prerequisite rewriting'' still applies here.  So if
-@file{if.c} is in @file{../pkg/src}, Solaris @command{make} and OSF1/Tru64
-@command{make} executes
+@file{if.c} is in @file{../pkg/src}, Solaris and Tru64 @command{make}
+execute
 
 @smallexample
 cp `test -f ../pkg/src/if.c || echo ../pkg/src/`if.c f.c
@@ -14317,13 +14327,13 @@ Automake does something similar.  However the above hack works only if
 the files listed in @code{HEADERS} are in the current directory or a
 subdirectory; they should not be in an enclosing directory.  If we had
 @code{HEADERS = ../f.h}, the above fragment would fail in a VPATH
-build with OSF1/Tru64 @command{make}.  The reason is that not only does
-OSF1/Tru64 @command{make} rewrite dependencies, but it also simplifies
+build with Tru64 @command{make}.  The reason is that not only does
+Tru64 @command{make} rewrite dependencies, but it also simplifies
 them.  Hence @code{../f.h} becomes @code{../pkg/f.h} instead of
 @code{../pkg/src/../f.h}.  This obviously defeats any attempt to strip
 a leading @file{../pkg/src/} component.
 
-The following example makes the behavior of OSF1/Tru64 @command{make}
+The following example makes the behavior of Tru64 @command{make}
 more apparent.
 
 @example
@@ -14339,7 +14349,7 @@ foo
 @end example
 
 @noindent
-Dependency @file{../foo} was found in @file{sub/../foo}, but OSF1/Tru64
+Dependency @file{../foo} was found in @file{sub/../foo}, but Tru64
 @command{make} simplified it as @file{foo}.  (Note that the @file{sub/}
 directory does not even exist, this just means that the simplification
 occurred before the file was checked for.)
@@ -14357,8 +14367,8 @@ sub/../foo
 @end smallexample
 
 
-@node OSF/Tru64 Directory Magic
-@subsection OSF/Tru64 @command{make} Creates Prerequisite Directories Magically
+@node Tru64 Directory Magic
+@subsection Tru64 @command{make} Creates Prerequisite Directories Magically
 @cindex @code{VPATH} and prerequisite directories
 @cindex prerequisite directories and @code{VPATH}
 
@@ -16269,7 +16279,7 @@ and sets @code{EMXOS2}.
 @acindex{FUNC_WAIT3}
 @cvindex HAVE_WAIT3
 If @code{wait3} is found and fills in the contents of its third argument
-(a @samp{struct rusage *}), which HP-UX does not do, define
+(a @samp{struct rusage *}), which @acronym{HP-UX} does not do, define
 @code{HAVE_WAIT3}.
 
 These days portable programs should use @code{waitpid}, not
@@ -18810,7 +18820,7 @@ introduced in this document.
 @c  LocalWords:  LEXLIB YYTEXT lfl nonportable Automake's LN RANLIB byacc INETD
 @c  LocalWords:  inetd prog PROGS progs ranlib lmp lXt lX nsl gethostbyname UX
 @c  LocalWords:  NextStep isinf isnan glibc IRIX sunmath lm lsunmath pre sizeof
-@c  LocalWords:  ld inline malloc OSF putenv setenv FreeBSD realloc SunOS MinGW
+@c  LocalWords:  ld inline malloc putenv setenv FreeBSD realloc SunOS MinGW
 @c  LocalWords:  snprintf vsnprintf sprintf vsprintf sscanf gcc strerror ifdef
 @c  LocalWords:  strnlen sysconf PAGESIZE unsetenv va fallback memcpy dst FUNC
 @c  LocalWords:  PowerPC GNUC libPW pragma Olibcalls CHOWN chown CLOSEDIR VFORK
@@ -18850,7 +18860,7 @@ introduced in this document.
 @c  LocalWords:  yM uM aM firebird IP subdir misparses ok Unpatched abc bc zA
 @c  LocalWords:  CDPATH DUALCASE LINENO prepass Subshells lineno NULLCMD cmp wc
 @c  LocalWords:  MAILPATH scanset arg NetBSD Almquist printf expr cp
-@c  LocalWords:  Oliva awk Aaaaarg cmd regex xfoo GNV OpenVMS unwriteable te VM
+@c  LocalWords:  Oliva awk Aaaaarg cmd regex xfoo GNV OpenVMS VM
 @c  LocalWords:  sparc Proulx SysV nbar nfoo maxdepth acdilrtu TWG mc
 @c  LocalWords:  mkdir exe uname OpenBSD Fileutils mktemp umask TMPDIR guid os
 @c  LocalWords:  fooXXXXXX Unicos parenthesization utimes hpux hppa unescaped

@@ -1,3 +1,21 @@
+2006-06-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Be more consistent about using @acronym with
+	"HP" and "HP-UX".  Remove mention of OSF; the old version wasn't
+	quite right (it talked about "OSF/Tru64", even though the
+	operating systems were called OSF/1, Digital UNIX, and Tru64 UNIX,
+	and it even mentioned "OSF 4"!) and at this point there's little
+	reason to talk about OSF any more, since it died in 1994.
+	(Specific Compiler Characteristics): Simplify example of
+	negative-size array.
+	(File Descriptors): Reorder to make the text flow better.
+	Remove joke about "appreciate the various levels"; I didn't get it.
+	Add remark about HP-UX sh -x bug with stderr noted by Bob Proulx in
+	<http://lists.gnu.org/archive/html/bug-coreutils/2006-06/msg00225.html>.
+	(File Descriptors, Limitations of Usual Tools):
+	Tone down the advice against renaming or removing open files.
+	(Limitations of Usual Tools): Add a new section, on 'rm'.
+
 2006-06-26  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Use -lX11, not
