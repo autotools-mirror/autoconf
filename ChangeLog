@@ -1,3 +1,13 @@
+2006-07-02  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/types.m4 (AC_TYPE_LONG_LONG_INT):
+	Require that long long int be at least 64 bits wide.  C99 requires
+	this and enough programs depend on it so we should check for it.
+	Bruno Haible reports in
+	<http://lists.gnu.org/archive/html/bug-gnulib/2006-06/msg00286.html>
+	that long long int is 32 bits wide with some nonstandard compilers.
+	(AC_TYPE_UNSIGNED_LONG_LONG_INT): Likewise.
+
 2006-06-30  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/torture.at (Configuring subdirectories): Set CONFIG_SITE

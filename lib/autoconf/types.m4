@@ -472,9 +472,15 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
   AC_CACHE_CHECK([for long long int], [ac_cv_type_long_long_int],
     [AC_LINK_IFELSE(
        [AC_LANG_PROGRAM(
-	  [long long int ll = 1LL; int i = 63;],
-	  [long long int llmax = (long long int) -1;
-	   return ll << i | ll >> i | llmax / ll | llmax % ll;])],
+	  [[long long int ll = 9223372036854775807ll;
+	    long long int nll = -9223372036854775807LL;
+	    typedef int a[((-9223372036854775807LL < 0
+			    && 0 < 9223372036854775807ll)
+			   ? 1 : -1)];
+	    int i = 63;]],
+	  [[long long int llmax = 9223372036854775807ll;
+	    return (ll << 63 | ll >> 63 | ll < i | ll > i
+		    | llmax / ll | llmax % ll);]])],
        [ac_cv_type_long_long_int=yes],
        [ac_cv_type_long_long_int=no])])
   if test $ac_cv_type_long_long_int = yes; then
@@ -492,9 +498,13 @@ AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
     [ac_cv_type_unsigned_long_long_int],
     [AC_LINK_IFELSE(
        [AC_LANG_PROGRAM(
-	  [unsigned long long int ull = 1ULL; int i = 63;],
-	  [unsigned long long int ullmax = (unsigned long long int) -1;
-	   return ull << i | ull >> i | ullmax / ull | ullmax % ull;])],
+	  [[unsigned long long int ull = 18446744073709551615ULL;
+	    typedef int a[(18446744073709551615ULL <= (unsigned long long int) -1
+			   ? 1 : -1)];
+	   int i = 63;]],
+	  [[unsigned long long int ullmax = 18446744073709551615ull;
+	    return (ull << 63 | ull >> 63 | ull << i | ull >> i
+		    | ullmax / ull | ullmax % ull);]])],
        [ac_cv_type_unsigned_long_long_int=yes],
        [ac_cv_type_unsigned_long_long_int=no])])
   if test $ac_cv_type_unsigned_long_long_int = yes; then
