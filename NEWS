@@ -1,5 +1,9 @@
 * Major changes in Autoconf 2.60a
 
+** AC_TYPE_LONG_LONG_INT and AC_TYPE_UNSIGNED_LONG_LONG_INT now require
+   that long long types be at least 64 bits wide, as C99 and tradition
+   requires.  Formerly, they accepted implementations of any width.
+
 
 * Major changes in Autoconf 2.60
 
