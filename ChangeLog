@@ -1,3 +1,9 @@
+2006-07-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Volatile Objects): New section.
+
+	* NEWS: Document previous change.
+
 2006-07-02  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/types.m4 (AC_TYPE_LONG_LONG_INT):

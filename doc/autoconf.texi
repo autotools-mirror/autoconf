@@ -513,6 +513,7 @@ Portable C and C++ Programming
 * Integer Overflow::            When integers get too large
 * Null Pointers::               Properties of null pointers
 * Buffer Overruns::             Subscript errors and the like
+* Volatile Objects::            @code{volatile} and signals
 * Floating Point Portability::  Portable floating-point arithmetic
 * Exiting Portably::            Exiting and the exit status
 
@@ -14679,6 +14680,7 @@ more information.
 * Integer Overflow::            When integers get too large
 * Null Pointers::               Properties of null pointers
 * Buffer Overruns::             Subscript errors and the like
+* Volatile Objects::            @code{volatile} and signals
 * Floating Point Portability::  Portable floating-point arithmetic
 * Exiting Portably::            Exiting and the exit status
 @end menu
@@ -14818,6 +14820,88 @@ with other
 implementations.  The @code{gets} function is the worst, since it almost
 invariably overflows its buffer when presented with an input line larger
 than the buffer.
+
+@node Volatile Objects
+@section Volatile Objects
+@cindex volatile objects
+
+The keyword @code{volatile} is often misunderstood in portable code.
+Its use inhibits some memory-access optimizations, but programmers often
+wish that it had a different meaning that it actually does.
+
+One area of confusion is the distinction between a volatile objects and
+volatile lvalues.  From the C standard's point of view, a volatile
+object has externally visible behavior.  You can think of such objects
+as having little oscilloscope probes attached to them, so that the user
+can observe every access to them, just as the user can observe data
+written to output files.  This is not true of ordinary objects accessed
+via volatile lvalues; only volatile objects can be observed by the user.
+Hence in general it does not help to use pointer-to-volatile to control
+access to ordinary objects.  For example:
+
+@example
+/* Declare and access a volatile object.
+   The keyword 'volatile' has an effect here.  */
+static int volatile x;
+x = 1;
+
+/* Access two ordinary objects via a volatile lvalue.
+   The keyword 'volatile' has no effect here.  */
+int y;
+int volatile *p;
+p = &y;
+*p = 1;
+p = malloc (sizeof (int));
+*p = 1;
+@end example
+
+Programmers often wish that @code{volatile} meant ``Perform the memory
+access here and now, without merging several memory accesses, without
+changing the memory word size width, and without reordering.''  But the
+C standard does not require this.  For volatile @emph{objects}, accesses
+must be done before the next sequence point; but otherwise merging,
+reordering, and word-size change is allowed.  Worse, in general volatile
+@emph{lvalues} provide no more guarantees than nonvolatile lvalues, when
+the underlying objects are nonvolatile.
+
+Even when accessing volatile objects, the C standard allows only
+extremely limited signal handlers: the behavior is undefined if a signal
+handler reads any nonlocal object, or writes to any nonlocal object
+whose type is not @code{sig_atomic_t volatile}, or calls any standard
+library function other than @code{abort}, @code{signal}, and (if C99)
+@code{_Exit}.  Hence C compilers do not need to worry about a signal
+disturbing ordinary computation, unless the computation accesses a
+@code{sig_atomic_t volatile} object that is not a local variable.  Posix
+adds to the list of library functions callable from a portable signal
+handler, but otherwise is like the C standard in this area.
+
+Some C implementations allow memory-access optimizations within each
+translation unit, such that actual behavior agrees with the behavior
+required by the standard only when calling a function in some other
+translation unit, and a signal handler acts like it was called from a
+different translation unit.  The C standard hints that in these
+implementations, objects referred to by signal handlers ``would require
+explicit specification of @code{volatile} storage, as well as other
+implementation-defined restrictions.''  But unfortunately even for this
+special case these other restrictions are often not documented well.
+@xref{Volatiles, , When is a Volatile Object Accessed?, gcc, Using the
+@acronym{GNU} Compiler Collection (@acronym{GCC})}, for some
+restrictions imposed by @acronym{GCC}.  @xref{Defining Handlers, ,
+Defining Signal Handlers, libc, The @acronym{GNU} C Library}, for some
+restrictions imposed by the @acronym{GNU} C library.  Restrictions
+differ on other platforms.
+
+If possible, it is best to use a signal handler that fits within the
+limits imposed by the C and Posix standards.  If this is not practical,
+then a signal handler should access only volatile objects, and should
+not assume that volatile objects larger than a machine word have an
+internally consistent state.  If that is not practical either, then it
+may be difficult to write portable code, and it is not clear whether
+using volatile lvalues will help much.
+
+For @code{volatile}, C++ has the same problems that C does.
+Multithreaded applications have even more problems with @code{volatile},
+but they are beyond the scope of this section.
 
 @node Floating Point Portability
 @section Floating Point Portability
