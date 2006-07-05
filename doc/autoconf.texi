@@ -14827,9 +14827,9 @@ than the buffer.
 
 The keyword @code{volatile} is often misunderstood in portable code.
 Its use inhibits some memory-access optimizations, but programmers often
-wish that it had a different meaning that it actually does.
+wish that it had a different meaning than it actually does.
 
-One area of confusion is the distinction between a volatile objects and
+One area of confusion is the distinction between volatile objects and
 volatile lvalues.  From the C standard's point of view, a volatile
 object has externally visible behavior.  You can think of such objects
 as having little oscilloscope probes attached to them, so that the user
@@ -14841,28 +14841,29 @@ access to ordinary objects.  For example:
 
 @example
 /* Declare and access a volatile object.
-   The keyword 'volatile' has an effect here.  */
+   'volatile' has a well-defined effect here.  */
 static int volatile x;
 x = 1;
 
 /* Access two ordinary objects via a volatile lvalue.
-   The keyword 'volatile' has no effect here.  */
+   It's not clear what 'volatile' means here.  */
 int y;
+int *z = malloc (sizeof (int));
 int volatile *p;
 p = &y;
 *p = 1;
-p = malloc (sizeof (int));
+p = z;
 *p = 1;
 @end example
 
 Programmers often wish that @code{volatile} meant ``Perform the memory
 access here and now, without merging several memory accesses, without
-changing the memory word size width, and without reordering.''  But the
+changing the memory word size, and without reordering.''  But the
 C standard does not require this.  For volatile @emph{objects}, accesses
 must be done before the next sequence point; but otherwise merging,
-reordering, and word-size change is allowed.  Worse, in general volatile
-@emph{lvalues} provide no more guarantees than nonvolatile lvalues, when
-the underlying objects are nonvolatile.
+reordering, and word-size change is allowed.  Worse, volatile
+@emph{lvalues} provide no more guarantees in general than nonvolatile
+lvalues, when the underlying objects are nonvolatile.
 
 Even when accessing volatile objects, the C standard allows only
 extremely limited signal handlers: the behavior is undefined if a signal
