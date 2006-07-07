@@ -6507,6 +6507,7 @@ If the correctness of your program depends on the semantics of
 your code.  However, given that the compiler does not support
 @code{volatile}, you are at its mercy anyway.  At least your
 program compiles, when it wouldn't before.
+@xref{Volatile Objects}, for more about @code{volatile}.
 
 In general, the @code{volatile} keyword is a standard C feature, so
 you might expect that @code{volatile} is available only when
@@ -14846,24 +14847,33 @@ The keyword @code{volatile} is often misunderstood in portable code.
 Its use inhibits some memory-access optimizations, but programmers often
 wish that it had a different meaning than it actually does.
 
-One area of confusion is the distinction between volatile objects and
-volatile lvalues.  From the C standard's point of view, a volatile
-object has externally visible behavior.  You can think of such objects
-as having little oscilloscope probes attached to them, so that the user
-can observe every access to them, just as the user can observe data
-written to output files.  This is not true of ordinary objects accessed
-via volatile lvalues; only volatile objects can be observed by the user.
-Hence in general it does not help to use pointer-to-volatile to control
-access to ordinary objects.  For example:
+@code{volatile} was designed for code that accesses special objects like
+memory-mapped device registers whose contents spontaneously change.
+Such code is inherently low-level, and it is difficult to specify
+portably what @code{volatile} means in these cases.  The C standard
+says, ``What constitutes an access to an object that has
+volatile-qualified type is implementation-defined,'' so in theory each
+implementation is supposed to fill in the gap by documenting what
+@code{volatile} means for that implementation.  In practice, though,
+this documentation is usually absent or incomplete.
+
+One area of confusion is the distinction between objects defined with
+volatile types, and volatile lvalues.  From the C standard's point of
+view, an object defined with a volatile type has externally visible
+behavior.  You can think of such objects as having little oscilloscope
+probes attached to them, so that the user can observe some properties of
+accesses to them, just as the user can observe data written to output
+files.  However, the standard does not make it clear whether users can
+observe accesses by volatile lvalues to ordinary objects.  For example:
 
 @example
 /* Declare and access a volatile object.
-   'volatile' has a well-defined effect here.  */
+   Accesses to X are "visible" to users.  */
 static int volatile x;
 x = 1;
 
 /* Access two ordinary objects via a volatile lvalue.
-   It's not clear what 'volatile' means here.  */
+   It's not clear whether accesses to *P are "visible".  */
 int y;
 int *z = malloc (sizeof (int));
 int volatile *p;
@@ -14875,21 +14885,26 @@ p = z;
 
 Programmers often wish that @code{volatile} meant ``Perform the memory
 access here and now, without merging several memory accesses, without
-changing the memory word size, and without reordering.''  But the
-C standard does not require this.  For volatile @emph{objects}, accesses
-must be done before the next sequence point; but otherwise merging,
-reordering, and word-size change is allowed.  Worse, volatile
-@emph{lvalues} provide no more guarantees in general than nonvolatile
-lvalues, when the underlying objects are nonvolatile.
+changing the memory word size, and without reordering.''  But the C
+standard does not require this.  For objects defined with a volatile
+type, accesses must be done before the next sequence point; but
+otherwise merging, reordering, and word-size change is allowed.  Worse,
+it is not clear from the standard whether volatile lvalues provide more
+guarantees in general than nonvolatile lvalues, if the underlying
+objects are ordinary.
 
-Even when accessing volatile objects, the C standard allows only
+Even when accessing objects defined with a volatile type,
+the C standard allows only
 extremely limited signal handlers: the behavior is undefined if a signal
 handler reads any nonlocal object, or writes to any nonlocal object
 whose type is not @code{sig_atomic_t volatile}, or calls any standard
 library function other than @code{abort}, @code{signal}, and (if C99)
-@code{_Exit}.  Hence C compilers do not need to worry about a signal
+@code{_Exit}.  Hence C compilers need not worry about a signal handler
 disturbing ordinary computation, unless the computation accesses a
-@code{sig_atomic_t volatile} object that is not a local variable.  Posix
+@code{sig_atomic_t volatile} lvalue that is not a local variable.
+(There is an obscure exception for accesses via a pointer to a volatile
+character, since it may point into part of a @code{sig_atomic_t
+volatile} object.)  Posix
 adds to the list of library functions callable from a portable signal
 handler, but otherwise is like the C standard in this area.
 
@@ -14911,9 +14926,10 @@ differ on other platforms.
 
 If possible, it is best to use a signal handler that fits within the
 limits imposed by the C and Posix standards.  If this is not practical,
-then a signal handler should access only volatile objects, and should
-not assume that volatile objects larger than a machine word have an
-internally consistent state.  If that is not practical either, then it
+then a signal handler should access only objects defined with a volatile
+type, and should not assume that these objects have an internally
+consistent state if they are larger than a machine word.  If that is not
+practical either, then it
 may be difficult to write portable code, and it is not clear whether
 using volatile lvalues will help much.
 
@@ -18967,7 +18983,7 @@ introduced in this document.
 @c  LocalWords:  mkdir exe uname OpenBSD Fileutils mktemp umask TMPDIR guid os
 @c  LocalWords:  fooXXXXXX Unicos parenthesization utimes hpux hppa unescaped
 @c  LocalWords:  pmake DOS's gmake ifoo DESTDIR autoconfiscated pc coff mips gg
-@c  LocalWords:  dec ultrix cpu wildcards rpcc rdtsc powerpc behaviour readline
+@c  LocalWords:  dec ultrix cpu wildcards rpcc rdtsc powerpc readline
 @c  LocalWords:  withval vxworks gless localcache usr LOFF loff CYGWIN Cygwin
 @c  LocalWords:  cygwin SIGLIST siglist SYSNDIR SYSDIR ptx lseq rusage elif MSC
 @c  LocalWords:  lfoo POUNDBANG lsun NIS getpwnam SYSCALLS RSH INTL lintl aix
