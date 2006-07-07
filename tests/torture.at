@@ -794,16 +794,6 @@ AT_CHECK([aclocal --version || exit 77], [], [stdout], [ignore])
 # It should understand configure.ac.
 AT_CHECK([[grep '1.[01234]' stdout && exit 77]], [1], [ignore])
 
-# We don't want to run this test if this shell doesn't support
-# `unset'.
-AT_CHECK([
-if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
-  exit 0
-else
-  exit 77
-fi
-])
-
 # Set CONFIG_SITE to a nonexistent file, so that there are
 # no worries about nonstandard values for 'prefix'.
 CONFIG_SITE=no-such-file
@@ -893,8 +883,6 @@ AT_CHECK([autoreconf inner], [], [], [ignore])
 # Make sure we can pass a configure.ac name
 AT_CHECK([cd inner && autoreconf configure.in], [], [], [ignore])
 AT_CHECK([autoreconf inner/configure.in], [], [], [ignore])
-
-unset CONFIG_SITE
 
 AT_CLEANUP
 
