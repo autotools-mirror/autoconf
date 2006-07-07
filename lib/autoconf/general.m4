@@ -2716,9 +2716,14 @@ m4_define([_AC_COMPUTE_INT_RUN],
 		[$2=`cat conftest.val`], [$4])])
 
 
-# _AC_COMPUTE_INT(EXPRESSION, VARIABLE, PROLOGUE, IF-FAILS)
+# _AC_COMPUTE_INT(EXPRESSION, VARIABLE, PROLOGUE, [IF-FAILS])
 # ---------------------------------------------------------
-m4_define([_AC_COMPUTE_INT],
+# FIXME: this private interface was used by several packages.
+# Give them time to transition to AC_COMPUTE_INT (which is cleaner)
+# and then delete this one.  Or if they do not transition,
+# it may make sense to limit the code duplication and use
+# _AC_COMPUTE_INT from within the public macro.
+AC_DEFUN([_AC_COMPUTE_INT],
 [AC_LANG_COMPILER_REQUIRE()dnl
 if test "$cross_compiling" = yes; then
   _AC_COMPUTE_INT_COMPILE([$1], [$2], [$3], [$4])
@@ -2726,4 +2731,24 @@ else
   _AC_COMPUTE_INT_RUN([$1], [$2], [$3], [$4])
 fi
 rm -f conftest.val[]dnl
+AC_DIAGNOSE([obsolete],
+[The macro `_AC_COMPUTE_INT' is obsolete and will be deleted in a
+future version or Autoconf.  Hence, it is suggested that you use
+instead the public AC_COMPUTE_INT macro.  Note that the arguments are
+slightly different between the two.])dnl
 ])# _AC_COMPUTE_INT
+
+# AC_COMPUTE_INT(MESSAGE, CACHE-ID, EXPRESSION, [PROLOGUE = DEFAULT-INCLUDES],
+#		 [IF-FAILS])
+# ---------------------------------------------------------
+AC_DEFUN([AC_COMPUTE_INT],
+[AC_LANG_COMPILER_REQUIRE()dnl
+AC_CACHE_CHECK([$1], [$2],
+[if test "$cross_compiling" = yes; then
+  _AC_COMPUTE_INT_COMPILE([$3], [$2], [AC_INCLUDES_DEFAULT([$4])], [$5])
+else
+  _AC_COMPUTE_INT_RUN([$3], [$2], [AC_INCLUDES_DEFAULT([$4])], [$5])
+fi
+rm -f conftest.val[]dnl
+])
+])# AC_COMPUTE_INT

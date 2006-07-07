@@ -1,3 +1,16 @@
+2006-07-07  Paolo Bonzini  <bonzini@gnu.org>
+
+	* doc/autoconf.texi (Generic compiler characteristics):
+	Document AC_COMPUTE_INT.  Fix wrong statements on Default
+	Includes for AC_CHECK_SIZEOF and AC_CHECK_ALIGNOF.
+
+	* lib/autoconf/general.m4 (AC_COMPUTE_INT): New.
+	(_AC_COMPUTE_INT): Add obsoletion warnings.
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF, AC_CHECK_ALIGNOF): Use
+	AC_COMPUTE_INT.
+
+	* NEWS: Document change.
+
 2006-07-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Volatile Objects): New section.

@@ -6167,8 +6167,7 @@ Autoconf works around this problem by casting @code{sizeof (int)} to
 Define @code{SIZEOF_@var{type}} (@pxref{Standard Symbols}) to be the
 size in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
 of 0.  If no @var{includes} are specified, the default includes are used
-(@pxref{Default Includes}).  If you provide @var{include}, be sure to
-include @file{stdio.h} which is required for this macro to run.
+(@pxref{Default Includes}).
 
 This macro now works even when cross-compiling.  The @var{unused}
 argument was used when cross-compiling.
@@ -6188,9 +6187,27 @@ defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 Define @code{ALIGNOF_@var{type}} (@pxref{Standard Symbols}) to be the
 alignment in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
 of 0.  If no @var{includes} are specified, the default includes are used
-(@pxref{Default Includes}).  If you provide @var{include}, be sure to
-include @file{stddef.h} and @file{stdio.h} which are required for this
-macro to work correctly.
+(@pxref{Default Includes}).
+@end defmac
+
+@defmac AC_COMPUTE_INT (@var{message}, @var{cache-id}, @var{expression}, @dvar{includes, default-includes}, @ovar{if-fails})
+@acindex{COMPUTE_INT}
+Compute the value of the integer @var{expression} in @var{cache-id}.  The
+value should fit in an initializer in a C variable of type @code{signed
+long}.  To support cross compilation (in which case, the macro only works on
+hosts that use twos-complement arithmetic), it should be possible to evaluate
+the expression at compile-time.  If no @var{includes} are specified, the default
+includes are used (@pxref{Default Includes}).
+
+The macro also takes care of checking if the result is already in the
+cache, and of reporting the test on the standard output
+with @code{AC_MSG_CHECKING} (which prints @var{message}) and
+@code{AC_MSG_RESULT}.
+
+If the value cannot be determined correctly, the code in @var{if-fails}
+is executed.  The @var{if-fails} commands @emph{must have no side effects}
+except for possibly setting the variable @var{cache-id}.
+@xref{Caching Results}, for more information.
 @end defmac
 
 @defmac AC_LANG_WERROR

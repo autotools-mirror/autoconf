@@ -680,20 +680,20 @@ AC_DEFUN([AC_CHECK_SIZEOF],
 [AS_LITERAL_IF([$1], [],
 	       [AC_FATAL([$0: requires literal arguments])])dnl
 AC_CHECK_TYPE([$1], [], [], [$3])
-AC_CACHE_CHECK([size of $1], AS_TR_SH([ac_cv_sizeof_$1]),
-[if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
-  # The cast to long int works around a bug in the HP C Compiler
-  # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
-  # declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
-  # This bug is HP SR number 8606223364.
-  _AC_COMPUTE_INT([(long int) (sizeof (ac__type_sizeof_))],
-		  [AS_TR_SH([ac_cv_sizeof_$1])],
-		  [AC_INCLUDES_DEFAULT([$3])
-		   typedef $1 ac__type_sizeof_;],
-		  [AC_MSG_FAILURE([cannot compute sizeof ($1)], 77)])
-else
-  AS_TR_SH([ac_cv_sizeof_$1])=0
-fi])dnl
+# The cast to long int works around a bug in the HP C Compiler
+# version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
+# declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
+# This bug is HP SR number 8606223364.
+AC_COMPUTE_INT([size of $1], [AS_TR_SH([ac_cv_sizeof_$1])],
+	       [(long int) (sizeof (ac__type_sizeof_))],
+	       [AC_INCLUDES_DEFAULT([$3])
+	        typedef $1 ac__type_sizeof_;],
+	       [if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
+	         AC_MSG_FAILURE([cannot compute sizeof ($1)], 77)
+	       else
+	         AS_TR_SH([ac_cv_sizeof_$1])=0
+	       fi])
+
 AC_DEFINE_UNQUOTED(AS_TR_CPP(sizeof_$1), $AS_TR_SH([ac_cv_sizeof_$1]),
 		   [The size of `$1', as computed by sizeof.])
 ])# AC_CHECK_SIZEOF
@@ -705,21 +705,21 @@ AC_DEFUN([AC_CHECK_ALIGNOF],
 [AS_LITERAL_IF([$1], [],
 	       [AC_FATAL([$0: requires literal arguments])])dnl
 AC_CHECK_TYPE([$1], [], [], [$2])
-AC_CACHE_CHECK([alignment of $1], AS_TR_SH([ac_cv_alignof_$1]),
-[if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
-  # The cast to long int works around a bug in the HP C Compiler,
-  # see AC_CHECK_SIZEOF for more information.
-  _AC_COMPUTE_INT([(long int) offsetof (ac__type_alignof_, y)],
-		  [AS_TR_SH([ac_cv_alignof_$1])],
-		  [AC_INCLUDES_DEFAULT([$2])
+# The cast to long int works around a bug in the HP C Compiler,
+# see AC_CHECK_SIZEOF for more information.
+AC_COMPUTE_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$1])],
+	       [(long int) offsetof (ac__type_alignof_, y)],
+	       [AC_INCLUDES_DEFAULT([$2])
 #ifndef offsetof
 # define offsetof(type, member) ((char *) &((type *) 0)->member - (char *) 0)
 #endif
 typedef struct { char x; $1 y; } ac__type_alignof_;],
-		  [AC_MSG_FAILURE([cannot compute alignment of ($1)], 77)])
-else
-  AS_TR_SH([ac_cv_alignof_$1])=0
-fi])dnl
+	       [if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
+	         AC_MSG_FAILURE([cannot compute alignment of $1], 77)
+	       else
+	         AS_TR_SH([ac_cv_alignof_$1])=0
+	       fi])
+
 AC_DEFINE_UNQUOTED(AS_TR_CPP(alignof_$1), $AS_TR_SH([ac_cv_alignof_$1]),
 		   [The normal alignment of `$1', in bytes.])
 ])# AC_CHECK_ALIGNOF

@@ -1,5 +1,10 @@
 * Major changes in Autoconf 2.60a
 
+** The functionality of the undocumented _AC_COMPUTE_INT is now provided
+  by a public and documented macro, AC_COMPUTE_INT.  The parameters to the
+  two macros are different, so autoupdate will not change the old private name
+  to the new one.  _AC_COMPUTE_INT may be removed in a future release.
+
 ** AC_TYPE_LONG_LONG_INT and AC_TYPE_UNSIGNED_LONG_LONG_INT now require
    that long long types be at least 64 bits wide, as C99 and tradition
    requires.  Formerly, they accepted implementations of any width.
