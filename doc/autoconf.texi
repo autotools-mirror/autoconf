@@ -7697,7 +7697,7 @@ one @code{start/0} function, which is called to perform the test.  The
 @var{prologue} is optional code that is inserted between the module header and
 the @code{start/0} function definition.  @var{body} is the body of the
 @code{start/0} function without the final period (@pxref{Runtime}, about
-constraints on this function's behaviour).
+constraints on this function's behavior).
 
 For instance:
 
@@ -12868,7 +12868,7 @@ bar
 Either do not depend on such patterns (i.e., use @samp{/^(.*foo|bar)/},
 or use a simple test to reject such implementations.
 
-@acronym{AIX} version 5.2 has an arbitrary limit of 399 on the the
+@acronym{AIX} version 5.2 has an arbitrary limit of 399 on the
 length of regular expressions and literal strings in an Awk program.
 
 Traditional Awk implementations derived from Unix version 7, such as
