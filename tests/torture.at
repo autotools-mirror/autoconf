@@ -794,6 +794,21 @@ AT_CHECK([aclocal --version || exit 77], [], [stdout], [ignore])
 # It should understand configure.ac.
 AT_CHECK([[grep '1.[01234]' stdout && exit 77]], [1], [ignore])
 
+# We don't want to run this test if this shell doesn't support
+# `unset'.
+AT_CHECK([
+if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
+  exit 0
+else
+  exit 77
+fi
+])
+
+# Set CONFIG_SITE to a nonexistent file, so that there are
+# no worries about nonstandard values for 'prefix'.
+CONFIG_SITE=no-such-file
+export CONFIG_SITE
+
 # The contents of `inner/', and `inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
 
@@ -840,7 +855,7 @@ AT_CHECK([test -f inner/configure])
 
 # Running the outer configure recursively should provide the innermost
 # help strings.
-AT_CHECK([CONFIG_SITE=no-such-file ./configure --help=recursive | grep INNER], 0, [ignore])
+AT_CHECK([./configure --help=recursive | grep INNER], 0, [ignore])
 
 # Running the outer configure should trigger the inner.
 AT_CHECK_CONFIGURE
@@ -853,7 +868,7 @@ prefix=/usr/local
 
 # The same, but from a builddir.
 AS_MKDIR_P([builddir])
-AT_CHECK([cd builddir && CONFIG_SITE=no-such-file ../configure], 0, [ignore])
+AT_CHECK([cd builddir && ../configure], 0, [ignore])
 AT_CHECK([cat builddir/inner/innermost/config], 0,
 [INNER=inner
 srcdir=../../../inner/innermost
@@ -862,12 +877,9 @@ prefix=/usr/local
 ])
 
 # Make sure precious variables and command line options are properly
-# passed, even when there are duplicates.  Run another directory so
-# that if the user has set config.site to have a config.cache, then
-# the two runs don't have colliding caches.
-AS_MKDIR_P([builddir2])
-AT_CHECK([cd builddir2 && CONFIG_SITE=no-such-file ../configure --prefix /bad --prefix /good INNER=bad INNER=good], 0, [ignore])
-AT_CHECK([cat builddir2/inner/innermost/config], 0,
+# passed, even when there are duplicates.
+AT_CHECK([cd builddir && ../configure --prefix /bad --prefix /good INNER=bad INNER=good], 0, [ignore])
+AT_CHECK([cat builddir/inner/innermost/config], 0,
 [INNER=good
 srcdir=../../../inner/innermost
 top_srcdir=../../../inner
@@ -881,6 +893,8 @@ AT_CHECK([autoreconf inner], [], [], [ignore])
 # Make sure we can pass a configure.ac name
 AT_CHECK([cd inner && autoreconf configure.in], [], [], [ignore])
 AT_CHECK([autoreconf inner/configure.in], [], [], [ignore])
+
+unset CONFIG_SITE
 
 AT_CLEANUP
 

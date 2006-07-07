@@ -1,3 +1,10 @@
+2006-07-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/torture.at (Configuring subdirectories): Set CONFIG_SITE
+	more globally, since the 2006-06-30 patch didn't suffice.  Problem
+	reported by Keith Marshall.  Also, don't bother with builddir2,
+	since it shouldn't be needed any more.
+
 2006-07-07  Paolo Bonzini  <bonzini@gnu.org>
 
 	* doc/autoconf.texi (Generic compiler characteristics):
