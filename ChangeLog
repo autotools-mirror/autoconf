@@ -1,7 +1,14 @@
 2006-07-17  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* README: Recommend M4 1.4.5.
+	* lib/autoconf/libs.m4 (AC_PATH_XTRA): Do the check for space after
+	-R regardless of host.  Patrick Welche reports that a space after -R
+	is also required for NetBSD 3.99.
+
+	* NEWS: Recommend M4 1.4.5.
+	* README: Likewise.
 	* doc/autoconf.texi (Introduction, Why GNU M4): Likewise.
+	* tests/tools.at (autom4te cache): Update wording of diagnostic
+	to match M4 1.4.5.
 
 2006-07-07  Paul Eggert  <eggert@cs.ucla.edu>
 

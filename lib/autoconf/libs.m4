@@ -395,29 +395,19 @@ else
   # It would also be nice to do this for all -L options, not just this one.
   if test -n "$x_libraries"; then
     X_LIBS="$X_LIBS -L$x_libraries"
-dnl FIXME: banish uname from this macro!
     # For Solaris; some versions of Sun CC require a space after -R and
     # others require no space.  Words are not sufficient . . . .
-    case `(uname -sr) 2>/dev/null` in
-    "SunOS 5"*)
-      AC_MSG_CHECKING([whether -R must be followed by a space])
-      ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
-      AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_R_nospace=yes, ac_R_nospace=no)
-      if test $ac_R_nospace = yes; then
-	AC_MSG_RESULT([no])
-	X_LIBS="$X_LIBS -R$x_libraries"
-      else
-	LIBS="$ac_xsave_LIBS -R $x_libraries"
-	AC_LINK_IFELSE([AC_LANG_PROGRAM()], ac_R_space=yes, ac_R_space=no)
-	if test $ac_R_space = yes; then
-	  AC_MSG_RESULT([yes])
-	  X_LIBS="$X_LIBS -R $x_libraries"
-	else
-	  AC_MSG_RESULT([neither works])
-	fi
-      fi
-      LIBS=$ac_xsave_LIBS
-    esac
+    AC_MSG_CHECKING([whether -R must be followed by a space])
+    ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+      [AC_MSG_RESULT([no])
+       X_LIBS="$X_LIBS -R$x_libraries"],
+      [LIBS="$ac_xsave_LIBS -R $x_libraries"
+       AC_LINK_IFELSE([AC_LANG_PROGRAM()],
+	 [AC_MSG_RESULT([yes])
+	  X_LIBS="$X_LIBS -R $x_libraries"],
+	 [AC_MSG_RESULT([neither works])])])
+    LIBS=$ac_xsave_LIBS
   fi
 
   # Check for system-dependent libraries X programs must link with.
