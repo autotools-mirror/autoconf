@@ -399,6 +399,8 @@ else
     # others require no space.  Words are not sufficient . . . .
     AC_MSG_CHECKING([whether -R must be followed by a space])
     ac_xsave_LIBS=$LIBS; LIBS="$LIBS -R$x_libraries"
+    ac_xsave_[]_AC_LANG_ABBREV[]_werror_flag=$ac_[]_AC_LANG_ABBREV[]_werror_flag
+    ac_[]_AC_LANG_ABBREV[]_werror_flag=yes
     AC_LINK_IFELSE([AC_LANG_PROGRAM()],
       [AC_MSG_RESULT([no])
        X_LIBS="$X_LIBS -R$x_libraries"],
@@ -407,6 +409,7 @@ else
 	 [AC_MSG_RESULT([yes])
 	  X_LIBS="$X_LIBS -R $x_libraries"],
 	 [AC_MSG_RESULT([neither works])])])
+    ac_[]_AC_LANG_ABBREV[]_werror_flag=ac_xsave_[]_AC_LANG_ABBREV[]_werror_flag
     LIBS=$ac_xsave_LIBS
   fi
 
