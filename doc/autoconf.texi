@@ -2228,7 +2228,7 @@ precious variables (@pxref{Setting Output Variables},
 Debugging and optimization options for the C compiler.  If it is not set
 in the environment when @command{configure} runs, the default value is set
 when you call @code{AC_PROG_CC} (or empty if you don't).  @command{configure}
-uses this variable when compiling programs to test for C features.
+uses this variable when compiling or linking programs to test for C features.
 @end defvar
 
 @defvar configure_input
@@ -2255,8 +2255,8 @@ needs to be processed by @command{configure} in order to be used.
 Header file search directory (@option{-I@var{dir}}) and any other
 miscellaneous options for the C and C++ preprocessors and compilers.  If
 it is not set in the environment when @command{configure} runs, the default
-value is empty.  @command{configure} uses this variable when compiling or
-preprocessing programs to test for C and C++ features.
+value is empty.  @command{configure} uses this variable when preprocessing,
+compiling, or linking programs to test for C and C++ features.
 @xref{Special Chars in Variables}, for limitations that @code{CPPFLAGS}
 might run into.
 @end defvar
@@ -2266,8 +2266,8 @@ might run into.
 Debugging and optimization options for the C++ compiler.  If it is not
 set in the environment when @command{configure} runs, the default value is
 set when you call @code{AC_PROG_CXX} (or empty if you don't).
-@command{configure} uses this variable when compiling programs to test for
-C++ features.
+@command{configure} uses this variable when compiling or linking
+programs to test for C++ features.
 @end defvar
 
 @defvar DEFS
@@ -2305,8 +2305,8 @@ want to use it.
 @ovindex ERLCFLAGS
 Debugging and optimization options for the Erlang compiler.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
-@command{configure} uses this variable when compiling programs to test for
-Erlang features.
+@command{configure} uses this variable when compiling or linking
+programs to test for Erlang features.
 @end defvar
 
 @defvar FCFLAGS
@@ -2314,8 +2314,8 @@ Erlang features.
 Debugging and optimization options for the Fortran compiler.  If it
 is not set in the environment when @command{configure} runs, the default
 value is set when you call @code{AC_PROG_FC} (or empty if you don't).
-@command{configure} uses this variable when compiling programs to test for
-Fortran features.
+@command{configure} uses this variable when compiling or linking
+programs to test for Fortran features.
 @end defvar
 
 @defvar FFLAGS
@@ -2323,8 +2323,8 @@ Fortran features.
 Debugging and optimization options for the Fortran 77 compiler.  If it
 is not set in the environment when @command{configure} runs, the default
 value is set when you call @code{AC_PROG_F77} (or empty if you don't).
-@command{configure} uses this variable when compiling programs to test for
-Fortran 77 features.
+@command{configure} uses this variable when compiling or linking
+programs to test for Fortran 77 features.
 @end defvar
 
 @defvar LDFLAGS
@@ -2351,8 +2351,8 @@ programs to test for C, C++, and Fortran features.
 Debugging and optimization options for the Objective C compiler.  If it is
 not set in the environment when @command{configure} runs, the default value
 is set when you call @code{AC_PROG_OBJC} (or empty if you don't).
-@command{configure} uses this variable when compiling programs to test for
-Objective C features.
+@command{configure} uses this variable when compiling or linking
+programs to test for Objective C features.
 @end defvar
 
 @defvar builddir
@@ -7979,7 +7979,7 @@ Erlang tests must exit themselves the Erlang VM by calling the @code{halt/1}
 function: the given status code is used to determine the success of the test
 (status is @code{0}) or its failure (status is different than @code{0}), as
 explained above.  It must be noted that data output through the standard output
-(e.g. using @code{io:format/2}) may be truncated when halting the VM.
+(e.g., using @code{io:format/2}) may be truncated when halting the VM.
 Therefore, if a test must output configuration information, it is recommended
 to create and to output data into the temporary file named @file{conftest.out},
 using the functions of module @code{file}.  The @code{conftest.out} file is
