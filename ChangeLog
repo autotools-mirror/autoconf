@@ -1,8 +1,8 @@
 2006-07-20  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* doc/autoconf.texi (Preset Output Variables): Document CFLAGS
-	better, since it's also used when linking.  Similarly for
-	CXXFLAGS etc.  Problem reported by Bruno Haible.
+	* doc/autoconf.texi (Preset Output Variables): Document CFLAGS,
+	CPPFLAGS, and LDFLAGS better.  Problem reported by Bruno Haible.
+	Similarly for CXXFLAGS, OBJCFLAGS, ERLCFLAGS.
 
 2006-07-17  Paul Eggert  <eggert@cs.ucla.edu>
 

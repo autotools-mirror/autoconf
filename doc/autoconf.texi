@@ -2229,6 +2229,17 @@ Debugging and optimization options for the C compiler.  If it is not set
 in the environment when @command{configure} runs, the default value is set
 when you call @code{AC_PROG_CC} (or empty if you don't).  @command{configure}
 uses this variable when compiling or linking programs to test for C features.
+
+If a compiler option affects only the behavior of the preprocessor
+(e.g., @option{-D @var{name}}), it should be put into @code{CPPFLAGS}
+instead.  If it affects only the linker (e.g., @option{-L
+@var{directory}}), it should be put into @code{LDFLAGS} instead.  If it
+affects only the compiler proper, @code{CFLAGS} is the natural home for
+it.  If an option affects multiple phases of the compiler, though,
+matters get tricky.  One approach to put such options directly into
+@code{CC}, e.g., @code{CC='gcc -m64'}.  Another is to put them into both
+@code{CPPFLAGS} and @code{LDFLAGS}, but not into @code{CFLAGS}.
+
 @end defvar
 
 @defvar configure_input
@@ -2252,22 +2263,32 @@ needs to be processed by @command{configure} in order to be used.
 
 @defvar CPPFLAGS
 @ovindex CPPFLAGS
-Header file search directory (@option{-I@var{dir}}) and any other
-miscellaneous options for the C and C++ preprocessors and compilers.  If
+Preprocessor options for the C, C++, and Objective C preprocessors and
+compilers.  If
 it is not set in the environment when @command{configure} runs, the default
-value is empty.  @command{configure} uses this variable when preprocessing,
-compiling, or linking programs to test for C and C++ features.
+value is empty.  @command{configure} uses this variable when preprocessing
+or compiling programs to test for C, C++, and Objective C features.
+
+This variable's contents should contain options like @option{-I},
+@option{-D}, and @option{-U} that affect only the behavior of the
+preprocessor.  Please see the explanation of @code{CFLAGS} for what you
+can do if an option affects other phases of the compiler as well.
+
+Currently, @command{configure} always links as part of a single
+invocation of the compiler that also preprocesses and compiles, so it
+uses this variable also when linking programs.  However, it is unwise to
+depend on this behavior because the @acronym{GNU} coding standards do
+not require it and many packages do not use @code{CPPFLAGS} when linking
+programs.
+
 @xref{Special Chars in Variables}, for limitations that @code{CPPFLAGS}
 might run into.
 @end defvar
 
 @defvar CXXFLAGS
 @ovindex CXXFLAGS
-Debugging and optimization options for the C++ compiler.  If it is not
-set in the environment when @command{configure} runs, the default value is
-set when you call @code{AC_PROG_CXX} (or empty if you don't).
-@command{configure} uses this variable when compiling or linking
-programs to test for C++ features.
+Debugging and optimization options for the C++ compiler.  It acts like
+@code{CFLAGS}, but for C++ instead of C.
 @end defvar
 
 @defvar DEFS
@@ -2305,7 +2326,7 @@ want to use it.
 @ovindex ERLCFLAGS
 Debugging and optimization options for the Erlang compiler.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
-@command{configure} uses this variable when compiling or linking
+@command{configure} uses this variable when compiling
 programs to test for Erlang features.
 @end defvar
 
@@ -2329,12 +2350,18 @@ programs to test for Fortran 77 features.
 
 @defvar LDFLAGS
 @ovindex LDFLAGS
-Stripping (@option{-s}), path (@option{-L}), and any other miscellaneous
-options for the linker.  Don't use this variable to pass library names
-(@option{-l}) to the linker, use @code{LIBS} instead.  If it is not set
+Options for the linker.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
 @command{configure} uses this variable when linking programs to test for
-C, C++, and Fortran features.
+C, C++, Objective C, and Fortran features.
+
+This variable's contents should contain options like @option{-s} and
+@option{-L} that affect only the behavior of the linker.  Please see the
+explanation of @code{CFLAGS} for what you can do if an option also
+affects other phases of the compiler.
+
+Don't use this variable to pass library names
+(@option{-l}) to the linker; use @code{LIBS} instead.
 @end defvar
 
 @defvar LIBS
@@ -2348,11 +2375,8 @@ programs to test for C, C++, and Fortran features.
 
 @defvar OBJCFLAGS
 @ovindex OBJCFLAGS
-Debugging and optimization options for the Objective C compiler.  If it is
-not set in the environment when @command{configure} runs, the default value
-is set when you call @code{AC_PROG_OBJC} (or empty if you don't).
-@command{configure} uses this variable when compiling or linking
-programs to test for Objective C features.
+Debugging and optimization options for the Objective C compiler.  It
+acts like @code{CFLAGS}, but for Objective C instead of C.
 @end defvar
 
 @defvar builddir
