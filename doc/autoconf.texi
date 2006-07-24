@@ -9838,7 +9838,7 @@ m4_foreach([myvar], [[foo], [bar, baz]],
 
 @defmac m4_foreach_w (@var{var}, @var{list}, @var{expression})
 @msindex{foreach_w}
-Loop over the whitespace-separated list @var{list}, assigning each value
+Loop over the white-space-separated list @var{list}, assigning each value
 to @var{var}, and expand @var{expression}.
 
 The deprecated macro @code{AC_FOREACH} is an alias of
@@ -13670,6 +13670,23 @@ Also note that Posix requires that the @samp{b}, @samp{t}, @samp{r}, and
 @samp{w} commands be followed by exactly one space before their argument.
 On the other hand, no white space is allowed between @samp{:} and the
 subsequent label name.
+
+Some @command{sed} implementations (e.g., MacOS X 10.4, Solaris 10
+@command{/usr/ucb/sed}) strip leading white space from the text of
+@samp{a}, @samp{c}, and @samp{i} commands.  Prepend a backslash to
+work around this incompatibility with Posix:
+
+@example
+$ @kbd{echo flushleft | sed -e 'a\}
+@kbd{   indented'}
+flushleft
+indented
+$ @kbd{echo foo | sed -e 'a\}
+@kbd{\   indented'}
+flushleft
+   indented
+@end example
+
 
 @item @command{sed} (@samp{t})
 @c ---------------------------

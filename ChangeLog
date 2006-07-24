@@ -3,6 +3,8 @@
 	* doc/autoconf.texi (Volatile Objects): Be even a little
 	less skeptical about "volatile", after discussion with
 	Bruno Haible on bug-gnulib.
+	(Limitations of Usual Tools): Warn about sed stripping
+	leading white space from text.  From Bruno Haible.
 
 2006-07-20  Paul Eggert  <eggert@cs.ucla.edu>
 
