@@ -14949,17 +14949,31 @@ restrictions imposed by the @acronym{GNU} C library.  Restrictions
 differ on other platforms.
 
 If possible, it is best to use a signal handler that fits within the
-limits imposed by the C and Posix standards.  If this is not practical,
-then a signal handler should access only objects defined with a volatile
-type, and should not assume that these objects have an internally
-consistent state if they are larger than a machine word.  If that is not
-practical either, then it
-may be difficult to write portable code, and it is not clear whether
-using volatile lvalues will help much.
+limits imposed by the C and Posix standards.
+
+If this is not practical, you can try the following rules of thumb.  A
+signal handler should access only volatile lvalues, preferably lvalues
+that refer to objects defined with a volatile type, and should not
+assume that the accessed objects have an internally consistent state
+if they are larger than a machine word.  Furthermore, installers
+should employ compilers and compiler options that are commonly used
+for building operating system kernels, because kernels often need more
+from @code{volatile} than the C Standard requires, and installers who
+compile an application in a similar environment can sometimes benefit
+from the extra constraints imposed by kernels on compilers.
+Admittedly we are handwaving somewhat here, as there are few
+guarantees in this area; the rules of thumb may help to fix some bugs
+but there is a good chance that they will not fix them all.
 
 For @code{volatile}, C++ has the same problems that C does.
 Multithreaded applications have even more problems with @code{volatile},
 but they are beyond the scope of this section.
+
+The bottom line is that using @code{volatile} typically hurts
+performance but should not hurt correctness.  In some cases its use
+does help correctness, but these cases are often so poorly understood
+that all too often adding @code{volatile} to a data structure merely
+alleviates some symptoms of a bug while not fixing the bug in general.
 
 @node Floating Point Portability
 @section Floating Point Portability

@@ -1,3 +1,9 @@
+2006-07-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Volatile Objects): Be even a little
+	less skeptical about "volatile", after discussion with
+	Bruno Haible on bug-gnulib.
+
 2006-07-20  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/libs.m4 (AC_PATH_XTRA): Don't use -R if the
