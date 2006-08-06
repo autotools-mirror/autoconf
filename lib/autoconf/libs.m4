@@ -409,7 +409,7 @@ else
 	 [AC_MSG_RESULT([yes])
 	  X_LIBS="$X_LIBS -R $x_libraries"],
 	 [AC_MSG_RESULT([neither works])])])
-    ac_[]_AC_LANG_ABBREV[]_werror_flag=ac_xsave_[]_AC_LANG_ABBREV[]_werror_flag
+    ac_[]_AC_LANG_ABBREV[]_werror_flag=$ac_xsave_[]_AC_LANG_ABBREV[]_werror_flag
     LIBS=$ac_xsave_LIBS
   fi
 
