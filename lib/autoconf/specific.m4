@@ -85,7 +85,7 @@ AC_DEFUN([AC_SYS_INTERPRETER],
 exit 69
 ' >conftest
 chmod u+x conftest
-(SHELL=/bin/sh; export SHELL; ./conftest >/dev/null)
+(SHELL=/bin/sh; export SHELL; ./conftest >/dev/null 2>&1)
 if test $? -ne 69; then
    ac_cv_sys_interpreter=yes
 else

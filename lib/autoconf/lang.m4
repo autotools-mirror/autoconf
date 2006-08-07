@@ -500,7 +500,7 @@ AS_IF([_AC_DO_VAR(ac_link_default)],
 # in a Makefile.  We should not override ac_cv_exeext if it was cached,
 # so that the user can short-circuit this test for compilers unknown to
 # Autoconf.
-for ac_file in $ac_files
+for ac_file in $ac_files ''
 do
   test -f "$ac_file" || continue
   case $ac_file in
@@ -527,10 +527,12 @@ do
 done
 test "$ac_cv_exeext" = no && ac_cv_exeext=
 ],
-      [_AC_MSG_LOG_CONFTEST
+      [ac_file=''])
+AC_MSG_RESULT([$ac_file])
+AS_IF([test -z "$ac_file"],
+[_AC_MSG_LOG_CONFTEST
 AC_MSG_FAILURE([_AC_LANG compiler cannot create executables], 77)])
 ac_exeext=$ac_cv_exeext
-AC_MSG_RESULT([$ac_file])
 ])# _AC_COMPILER_EXEEXT_DEFAULT
 
 

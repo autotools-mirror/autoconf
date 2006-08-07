@@ -1,3 +1,13 @@
+2006-08-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix test suite failures reported by Pierre in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2006-08/msg00005.html>.
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Don't claim
+	the compiler created a file "b.out" when it didn't create anything
+	at all.
+	* lib/autoconf/specific.m4 (AC_SYS_INTERPRETER):
+	Discard stderr too, when invoking the test script.
+
 2006-08-05  Alexandre Julliard  <julliard@winehq.org>  (tiny change)
 
 	* lib/autoconf/libs.m4 (AC_PATH_XTRA): Fixed a typo
