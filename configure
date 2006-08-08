@@ -3249,7 +3249,7 @@ current configuration.
 Usage: $0 [OPTIONS] [FILE]...
 
   -h, --help       print this help, then exit
-  -V, --version    print version number, then exit
+  -V, --version    print version number and configuration settings, then exit
   -q, --quiet      do not print progress messages
   -d, --debug      don't remove temporary files
       --recheck    update $as_me by reconfiguring in the same conditions

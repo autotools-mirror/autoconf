@@ -1,3 +1,9 @@
+2006-08-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): `config.status
+	--help' should mention that `--version' outputs configuration
+	settings.  Report by Bruno Haible.
+
 2006-08-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix test suite failures reported by Pierre in
