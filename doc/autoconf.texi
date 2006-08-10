@@ -15919,7 +15919,8 @@ files, and exit.
 
 @item --version
 @itemx -V
-Print the version number of Autoconf and exit.
+Print the version number of Autoconf and the configuration settings,
+and exit.
 
 @item --silent
 @itemx --quiet
