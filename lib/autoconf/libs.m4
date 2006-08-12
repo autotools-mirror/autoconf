@@ -299,7 +299,7 @@ for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r "$ac_dir/libXt.$ac_extension"; then
+    if test -r "$ac_dir/libX11.$ac_extension"; then
       ac_x_libraries=$ac_dir
       break 2
     fi
