@@ -13676,10 +13676,11 @@ subsequent label name.
 If a sed script is specified on the command line and ends in an
 @samp{a}, @samp{c}, or @samp{i} command, the last line of inserted text
 should be followed by a newline.  Otherwise some @command{sed}
-implementations (e.g., OpenBSD 3.9) do not append a newline to the
+implementations (e.g., Open@acronym{BSD} 3.9) do not append a newline to the
 inserted text.
 
-Many @command{sed} implementations (e.g., MacOS X 10.4, OpenBSD 3.9, Solaris 10
+Many @command{sed} implementations (e.g., MacOS X 10.4,
+Open@acronym{BSD} 3.9, Solaris 10
 @command{/usr/ucb/sed}) strip leading white space from the text of
 @samp{a}, @samp{c}, and @samp{i} commands.  Prepend a backslash to
 work around this incompatibility with Posix:
