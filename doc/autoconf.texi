@@ -13605,8 +13605,10 @@ $ @kbd{echo '1*23*4' | /usr/xpg4/bin/sed 's/\(.\)*/x/g'}
 x
 @end example
 
-The @option{-e} option is portable.
-Some people prefer to use it:
+The @option{-e} option is portable, so long as its argument
+does not begin with @samp{a}, @samp{c}, or @samp{i}
+(as this runs afoul of a Tru64 5.1 bug).
+Some people prefer to use @samp{-e}:
 
 @example
 sed -e '@var{command-1}' \
@@ -13671,18 +13673,26 @@ Also note that Posix requires that the @samp{b}, @samp{t}, @samp{r}, and
 On the other hand, no white space is allowed between @samp{:} and the
 subsequent label name.
 
-Some @command{sed} implementations (e.g., MacOS X 10.4, Solaris 10
+If a sed script is specified on the command line and ends in an
+@samp{a}, @samp{c}, or @samp{i} command, the last line of inserted text
+should be followed by a newline.  Otherwise some @command{sed}
+implementations (e.g., OpenBSD 3.9) do not append a newline to the
+inserted text.
+
+Many @command{sed} implementations (e.g., MacOS X 10.4, OpenBSD 3.9, Solaris 10
 @command{/usr/ucb/sed}) strip leading white space from the text of
 @samp{a}, @samp{c}, and @samp{i} commands.  Prepend a backslash to
 work around this incompatibility with Posix:
 
 @example
-$ @kbd{echo flushleft | sed -e 'a\}
-@kbd{   indented'}
+$ @kbd{echo flushleft | sed 'a\}
+> @kbd{   indented}
+> @kbd{'}
 flushleft
 indented
-$ @kbd{echo foo | sed -e 'a\}
-@kbd{\   indented'}
+$ @kbd{echo foo | sed 'a\}
+> @kbd{\   indented}
+> @kbd{'}
 flushleft
    indented
 @end example

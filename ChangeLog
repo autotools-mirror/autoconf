@@ -1,3 +1,9 @@
+2006-08-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Document sed
+	problems with arg script text that doesn't end in newline, and
+	with '-e a...'.  Problems reported by Ralf Wildenhues.
+
 2006-08-12  Alexandre Julliard  <julliard@winehq.org>  (tiny change)
 
 	* lib/autoconf/libs.m4 (AC_PATH_X_DIRECT): Replace another
