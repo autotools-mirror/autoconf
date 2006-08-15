@@ -63,7 +63,7 @@ AU_DEFUN([AC_DECL_SYS_SIGLIST],
 [AC_CHECK_DECLS([sys_siglist],,,
 [#include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 ])
@@ -256,7 +256,7 @@ AC_CACHE_CHECK(for restartable system calls, ac_cv_sys_restartable_syscalls,
 
 AC_INCLUDES_DEFAULT
 #include <signal.h>
-#if HAVE_SYS_WAIT_H
+#ifdef HAVE_SYS_WAIT_H
 # include <sys/wait.h>
 #endif
 

@@ -243,36 +243,36 @@ AC_DEFUN([_AC_INCLUDES_DEFAULT_REQUIREMENTS],
 dnl If ever you change this variable, please keep autoconf.texi in sync.
 ac_includes_default="\
 #include <stdio.h>
-#if HAVE_SYS_TYPES_H
+#ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
-#if HAVE_SYS_STAT_H
+#ifdef HAVE_SYS_STAT_H
 # include <sys/stat.h>
 #endif
-#if STDC_HEADERS
+#ifdef STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
 #else
-# if HAVE_STDLIB_H
+# ifdef HAVE_STDLIB_H
 #  include <stdlib.h>
 # endif
 #endif
-#if HAVE_STRING_H
-# if !STDC_HEADERS && HAVE_MEMORY_H
+#ifdef HAVE_STRING_H
+# if !defined STDC_HEADERS && defined HAVE_MEMORY_H
 #  include <memory.h>
 # endif
 # include <string.h>
 #endif
-#if HAVE_STRINGS_H
+#ifdef HAVE_STRINGS_H
 # include <strings.h>
 #endif
-#if HAVE_INTTYPES_H
+#ifdef HAVE_INTTYPES_H
 # include <inttypes.h>
 #endif
-#if HAVE_STDINT_H
+#ifdef HAVE_STDINT_H
 # include <stdint.h>
 #endif
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif"
 ])dnl
@@ -483,7 +483,7 @@ AN_HEADER(resolv.h,	[AC_HEADER_RESOLV])
 AC_DEFUN([AC_HEADER_RESOLV],
 [AC_CHECK_HEADERS(sys/types.h netinet/in.h arpa/nameser.h netdb.h resolv.h,
 		  [], [],
-[[#if HAVE_SYS_TYPES_H
+[[#ifdef HAVE_SYS_TYPES_H
 #  include <sys/types.h>
 #endif
 #ifdef HAVE_NETINET_IN_H
@@ -511,33 +511,25 @@ AN_IDENTIFIER([S_ISSOCK], [AC_HEADER_STAT])
 AC_DEFUN([AC_HEADER_STAT],
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
   ac_cv_header_stat_broken,
-[AC_EGREP_CPP([You lose], [#include <sys/types.h>
+[AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <sys/types.h>
 #include <sys/stat.h>
 
 #if defined S_ISBLK && defined S_IFDIR
-# if S_ISBLK (S_IFDIR)
-You lose.
-# endif
+extern char c1[S_ISBLK (S_IFDIR) ? -1 : 1];
 #endif
 
 #if defined S_ISBLK && defined S_IFCHR
-# if S_ISBLK (S_IFCHR)
-You lose.
-# endif
+extern char c2[S_ISBLK (S_IFCHR) ? -1 : 1];
 #endif
 
 #if defined S_ISLNK && defined S_IFREG
-# if S_ISLNK (S_IFREG)
-You lose.
-# endif
+extern char c3[S_ISLNK (S_IFREG) ? -1 : 1];
 #endif
 
 #if defined S_ISSOCK && defined S_IFREG
-# if S_ISSOCK (S_IFREG)
-You lose.
-# endif
+extern char c4[S_ISSOCK (S_IFREG) ? -1 : 1];
 #endif
-], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])
+]])], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])
 if test $ac_cv_header_stat_broken = yes; then
   AC_DEFINE(STAT_MACROS_BROKEN, 1,
 	    [Define to 1 if the `S_IS*' macros in <sys/stat.h> do not

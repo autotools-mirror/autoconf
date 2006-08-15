@@ -3007,7 +3007,7 @@ then decode the configuration header using the preprocessor directives:
 @group
 #include <conf.h>
 
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #else
 /* We are in trouble.  */
@@ -3508,11 +3508,11 @@ protected includes, such as:
 
 @example
 @group
-#if TIME_WITH_SYS_TIME
+#ifdef TIME_WITH_SYS_TIME
 # include <sys/time.h>
 # include <time.h>
 #else
-# if HAVE_SYS_TIME_H
+# ifdef HAVE_SYS_TIME_H
 #  include <sys/time.h>
 # else
 #  include <time.h>
@@ -3536,36 +3536,36 @@ Expand to @var{include-directives} if defined, otherwise to:
 @example
 @group
 #include <stdio.h>
-#if HAVE_SYS_TYPES_H
+#ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
-#if HAVE_SYS_STAT_H
+#ifdef HAVE_SYS_STAT_H
 # include <sys/stat.h>
 #endif
-#if STDC_HEADERS
+#ifdef STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
 #else
-# if HAVE_STDLIB_H
+# ifdef HAVE_STDLIB_H
 #  include <stdlib.h>
 # endif
 #endif
-#if HAVE_STRING_H
-# if !STDC_HEADERS && HAVE_MEMORY_H
+#ifdef HAVE_STRING_H
+# if !defined STDC_HEADERS && defined HAVE_MEMORY_H
 #  include <memory.h>
 # endif
 # include <string.h>
 #endif
-#if HAVE_STRINGS_H
+#ifdef HAVE_STRINGS_H
 # include <strings.h>
 #endif
-#if HAVE_INTTYPES_H
+#ifdef HAVE_INTTYPES_H
 # include <inttypes.h>
 #endif
-#if HAVE_STDINT_H
+#ifdef HAVE_STDINT_H
 # include <stdint.h>
 #endif
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 @end group
@@ -4346,7 +4346,7 @@ like the following, to declare it properly.
 
 @example
 @group
-#if HAVE_ALLOCA_H
+#ifdef HAVE_ALLOCA_H
 # include <alloca.h>
 #elif defined __GNUC__
 # define alloca __builtin_alloca
@@ -4455,7 +4455,7 @@ previous versions of @command{autoconf} you're encouraged to define it
 yourself in new code:
 @example
 @group
-#if !HAVE_WORKING_VFORK
+#ifndef HAVE_WORKING_VFORK
 # define vfork fork
 #endif
 @end group
@@ -4567,7 +4567,7 @@ systems, you must pass 0 to @code{getpgrp}, as it takes an argument and
 behaves like Posix's @code{getpgid}.
 
 @example
-#if GETPGRP_VOID
+#ifdef GETPGRP_VOID
   pid = getpgrp ();
 #else
   pid = getpgrp (0);
@@ -4617,7 +4617,7 @@ Typically, the replacement file @file{malloc.c} should look like (note
 the @samp{#undef malloc}):
 
 @verbatim
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
 #undef malloc
@@ -5024,7 +5024,7 @@ a convenient shorthand.
 @ovindex LIBOBJS
 Like @code{AC_CHECK_FUNCS}, but uses @samp{AC_LIBOBJ(@var{function})} as
 @var{action-if-not-found}.  You can declare your replacement function by
-enclosing the prototype in @samp{#if !HAVE_@var{function}}.  If the
+enclosing the prototype in @samp{#ifndef HAVE_@var{function}}.  If the
 system has the function, it probably declares it in a header file you
 should be including, so you shouldn't redeclare it lest your declaration
 conflict.
@@ -5089,15 +5089,15 @@ beforehand.  One should run:
 AC_CHECK_HEADERS([sys/socket.h])
 AC_CHECK_HEADERS([net/if.h], [], [],
 [#include <stdio.h>
-#if STDC_HEADERS
+#ifdef STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
 #else
-# if HAVE_STDLIB_H
+# ifdef HAVE_STDLIB_H
 #  include <stdlib.h>
 # endif
 #endif
-#if HAVE_SYS_SOCKET_H
+#ifdef HAVE_SYS_SOCKET_H
 # include <sys/socket.h>
 #endif
 ])
@@ -5112,15 +5112,15 @@ On Darwin, this file requires that @file{stdio.h} and
 AC_CHECK_HEADERS([sys/socket.h])
 AC_CHECK_HEADERS([netinet/if_ether.h], [], [],
 [#include <stdio.h>
-#if STDC_HEADERS
+#ifdef STDC_HEADERS
 # include <stdlib.h>
 # include <stddef.h>
 #else
-# if HAVE_STDLIB_H
+# ifdef HAVE_STDLIB_H
 #  include <stdlib.h>
 # endif
 #endif
-#if HAVE_SYS_SOCKET_H
+#ifdef HAVE_SYS_SOCKET_H
 # include <sys/socket.h>
 #endif
 ])
@@ -5210,13 +5210,13 @@ something like the following:
 #else
 # define dirent direct
 # define NAMLEN(dirent) ((dirent)->d_namlen)
-# if HAVE_SYS_NDIR_H
+# ifdef HAVE_SYS_NDIR_H
 #  include <sys/ndir.h>
 # endif
-# if HAVE_SYS_DIR_H
+# ifdef HAVE_SYS_DIR_H
 #  include <sys/dir.h>
 # endif
-# if HAVE_NDIR_H
+# ifdef HAVE_NDIR_H
 #  include <ndir.h>
 # endif
 #endif
@@ -5258,7 +5258,7 @@ To properly use @file{resolv.h}, your code should contain something like
 the following:
 
 @verbatim
-#if HAVE_SYS_TYPES_H
+#ifdef HAVE_SYS_TYPES_H
 #  include <sys/types.h>
 #endif
 #ifdef HAVE_NETINET_IN_H
@@ -5299,10 +5299,10 @@ If @file{stdbool.h} exists and conforms to C99, define
 @file{system.h} could contain the following code:
 
 @verbatim
-#if HAVE_STDBOOL_H
+#ifdef HAVE_STDBOOL_H
 # include <stdbool.h>
 #else
-# if ! HAVE__BOOL
+# ifndef HAVE__BOOL
 #  ifdef __cplusplus
 typedef bool _Bool;
 #  else
@@ -5383,15 +5383,15 @@ then, in your code, you can use declarations like this:
 @group
 /* This example is obsolescent.
    Nowadays you can just #include <string.h>.  */
-#if STDC_HEADERS
+#ifdef STDC_HEADERS
 # include <string.h>
 #else
-# if !HAVE_STRCHR
+# ifndef HAVE_STRCHR
 #  define strchr index
 #  define strrchr rindex
 # endif
 char *strchr (), *strrchr ();
-# if !HAVE_MEMCPY
+# ifndef HAVE_MEMCPY
 #  define memcpy(d, s, n) bcopy ((s), (d), (n))
 #  define memmove(d, s, n) bcopy ((s), (d), (n))
 # endif
@@ -5425,7 +5425,7 @@ example:
 @example
 @group
 #include <sys/types.h>
-#if HAVE_SYS_WAIT_H
+#ifdef HAVE_SYS_WAIT_H
 # include <sys/wait.h>
 #endif
 #ifndef WEXITSTATUS
@@ -5453,7 +5453,7 @@ The way to check whether the system supports Posix is:
 
 @example
 @group
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <sys/types.h>
 # include <unistd.h>
 #endif
@@ -5481,11 +5481,11 @@ example, @code{struct timeval} as well as
 
 @example
 @group
-#if TIME_WITH_SYS_TIME
+#ifdef TIME_WITH_SYS_TIME
 # include <sys/time.h>
 # include <time.h>
 #else
-# if HAVE_SYS_TIME_H
+# ifdef HAVE_SYS_TIME_H
 #  include <sys/time.h>
 # else
 #  include <time.h>
@@ -5514,11 +5514,11 @@ Use:
 
 @example
 @group
-#if HAVE_TERMIOS_H
+#ifdef HAVE_TERMIOS_H
 # include <termios.h>
 #endif
 
-#if GWINSZ_IN_SYS_IOCTL
+#ifdef GWINSZ_IN_SYS_IOCTL
 # include <sys/ioctl.h>
 #endif
 @end group
@@ -5578,7 +5578,7 @@ scheme:
 @verbatim
 AC_CHECK_HEADERS([foo.h])
 AC_CHECK_HEADERS([bar.h], [], [],
-[#if HAVE_FOO_H
+[#ifdef HAVE_FOO_H
 # include <foo.h>
 # endif
 ])
@@ -5659,7 +5659,7 @@ Unlike the other @samp{AC_CHECK_*S} macros, when a @var{symbol} is not
 declared, @code{HAVE_DECL_@var{symbol}} is defined to @samp{0} instead
 of leaving @code{HAVE_DECL_@var{symbol}} undeclared.  When you are
 @emph{sure} that the check was performed, use
-@code{HAVE_DECL_@var{symbol}} just like any other result of Autoconf:
+@code{HAVE_DECL_@var{symbol}} in @code{#if}:
 
 @example
 #if !HAVE_DECL_SYMBOL
@@ -7567,11 +7567,17 @@ example, if you call @code{AC_HEADER_STDBOOL}, then later on in
 
 @example
 @group
-#if HAVE_STDBOOL_H
+#ifdef HAVE_STDBOOL_H
 # include <stdbool.h>
 #endif
 @end group
 @end example
+
+Both @code{#if HAVE_STDBOOL_H} and @code{#ifdef HAVE_STDBOOL_H} will
+work with any standard C compiler.  Some developers prefer @code{#if}
+because it is easier to read, while others prefer @code{#ifdef} because
+it avoids diagnostics with picky compilers like @acronym{GCC} with the
+@option{-Wundef} option.
 
 If a test program needs to use or create a data file, give it a name
 that starts with @file{conftest}, such as @file{conftest.data}.  The
@@ -16315,7 +16321,7 @@ equivalent modern code (see above), or better yet, to use
 @code{AC_CHECK_TYPES} together with
 
 @example
-#if !HAVE_LOFF_T
+#ifndef HAVE_LOFF_T
 typedef loff_t off_t;
 #endif
 @end example
@@ -16377,7 +16383,7 @@ Same as:
 AC_CHECK_DECLS([sys_siglist], [], [],
 [#include <signal.h>
 /* NetBSD declares sys_siglist in unistd.h.  */
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 ])
@@ -17671,7 +17677,7 @@ The above example, properly written would (i) use
 @example
 @group
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-[[#if !defined _AIX
+[[#ifndef _AIX
  error: This isn't AIX!
 #endif
 ]])],
@@ -18643,7 +18649,7 @@ The proper way the handle this case is using the fourth argument
 $ @kbd{cat configure.ac}
 AC_INIT([Example], [1.0], [bug-example@@example.org])
 AC_CHECK_HEADERS([number.h pi.h], [], [],
-[[#if HAVE_NUMBER_H
+[[#ifdef HAVE_NUMBER_H
 # include <number.h>
 #endif
 ]])
@@ -18921,7 +18927,7 @@ on how this is done.
 
 This is an alphabetical list of the C preprocessor symbols that the
 Autoconf macros define.  To work with Autoconf, C source code needs to
-use these names in @code{#if} directives.
+use these names in @code{#if} or @code{#ifdef} directives.
 
 @printindex cv
 

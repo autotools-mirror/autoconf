@@ -1316,7 +1316,8 @@ AC_DEFUN([AC_C_BIGENDIAN],
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <sys/param.h>
 ],
-[#if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
+[#if  ! (defined BYTE_ORDER && defined BIG_ENDIAN && defined LITTLE_ENDIAN \
+	&& BYTE_ORDER && BIG_ENDIAN && LITTLE_ENDIAN)
  bogus endian macros
 #endif
 ])],

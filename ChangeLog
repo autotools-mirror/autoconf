@@ -1,3 +1,29 @@
+2006-08-15  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Autoconf now uses constructs like "#ifdef HAVE_STDLIB_H"
+	rather than "#if HAVE_STDLIB_H", so that it now works with "gcc
+	-Wundef -Werror".  Problem reported by David Fang in
+	<http://lists.gnu.org/archive/html/autoconf/2006-08/msg00045.html>.
+	* doc/autoconf.texi (Header Templates, Default Includes):
+	(Particular Functions, Generic Functions, Header Portability):
+	(Particular Headers, Generic Headers, Generic Declarations, Guidelines):
+	(Obsolete Macros, AC_FOO_IFELSE vs AC_TRY_FOO):
+	(Present But Cannot Be Compiled, Preprocessor Symbol Index):
+	Prefer #ifdef to #if.
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Prefer #ifdef to #if.
+	* lib/autoconf/functions.m4 (AC_FUNC_ALLOCA, _AC_FUNC_MALLOC_IF):
+	(AC_FUNC_MKTIME, AC_FUNC_MMAP, _AC_FUNC_REALLOC_IF):
+	(AC_FUNC_SELECT_ARGTYPES, AC_FUNC_SETVBUF_REVERSED, _AC_FUNC_VFORK):
+	Likewise.
+	* lib/autoconf/headers.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS):
+	(AC_HEADER_RESOLV, AC_HEADER_STAT): Likewise.
+	* lib/autoconf/specific.m4 (AC_DECL_SYS_SYGLIST):
+	(AC_SYS_RESTARTABLE_SYSCALLS): Likewise.
+	* lib/autoconf/types.m4 (AC_STRUCT_TIMEZONE): Likewise.
+	* lib/autoconf/headers.m4 (AC_HEADER_STAT): Don't assume that
+	S_ISDIR etc. are valid for use in #if; POSIX doesn't guarantee
+	this.
+
 2006-08-14  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Document sed

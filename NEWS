@@ -3,6 +3,9 @@
 ** GNU M4 1.4.5 or later is now recommended.  At least one "make check"
   test fails with earlier versions of M4.
 
+** Autoconf now uses constructs like "#ifdef HAVE_STDLIB_H" rather than
+  "#if HAVE_STDLIB_H", so that it now works with "gcc -Wundef -Werror".
+
 ** The functionality of the undocumented _AC_COMPUTE_INT is now provided
   by a public and documented macro, AC_COMPUTE_INT.  The parameters to the
   two macros are different, so autoupdate will not change the old private name

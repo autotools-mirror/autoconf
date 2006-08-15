@@ -370,7 +370,7 @@ AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
 #  include <malloc.h>
 #  define alloca _alloca
 # else
-#  if HAVE_ALLOCA_H
+#  ifdef HAVE_ALLOCA_H
 #   include <alloca.h>
 #  else
 #   ifdef _AIX
@@ -875,7 +875,7 @@ AC_CHECK_HEADERS(stdlib.h)
 AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 [AC_RUN_IFELSE(
 [AC_LANG_PROGRAM(
-[[#if STDC_HEADERS || HAVE_STDLIB_H
+[[#if defined STDC_HEADERS || defined HAVE_STDLIB_H
 # include <stdlib.h>
 #else
 char *malloc ();
@@ -977,26 +977,26 @@ AC_CHECK_FUNCS(alarm)
 AC_CACHE_CHECK([for working mktime], ac_cv_func_working_mktime,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
 [[/* Test program from Paul Eggert and Tony Leneis.  */
-#if TIME_WITH_SYS_TIME
+#ifdef TIME_WITH_SYS_TIME
 # include <sys/time.h>
 # include <time.h>
 #else
-# if HAVE_SYS_TIME_H
+# ifdef HAVE_SYS_TIME_H
 #  include <sys/time.h>
 # else
 #  include <time.h>
 # endif
 #endif
 
-#if HAVE_STDLIB_H
+#ifdef HAVE_STDLIB_H
 # include <stdlib.h>
 #endif
 
-#if HAVE_UNISTD_H
+#ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
 
-#if !HAVE_ALARM
+#ifndef HAVE_ALARM
 # define alarm(X) /* empty */
 #endif
 
@@ -1186,21 +1186,21 @@ AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
 #include <fcntl.h>
 #include <sys/mman.h>
 
-#if !STDC_HEADERS && !HAVE_STDLIB_H
+#if !defined STDC_HEADERS && !defined HAVE_STDLIB_H
 char *malloc ();
 #endif
 
 /* This mess was copied from the GNU getpagesize.h.  */
-#if !HAVE_GETPAGESIZE
+#ifndef HAVE_GETPAGESIZE
 /* Assume that all systems that can run configure have sys/param.h.  */
-# if !HAVE_SYS_PARAM_H
+# ifndef HAVE_SYS_PARAM_H
 #  define HAVE_SYS_PARAM_H 1
 # endif
 
 # ifdef _SC_PAGESIZE
 #  define getpagesize() sysconf(_SC_PAGESIZE)
 # else /* no _SC_PAGESIZE */
-#  if HAVE_SYS_PARAM_H
+#  ifdef HAVE_SYS_PARAM_H
 #   include <sys/param.h>
 #   ifdef EXEC_PAGESIZE
 #    define getpagesize() EXEC_PAGESIZE
@@ -1335,7 +1335,7 @@ AC_CHECK_HEADERS(stdlib.h)
 AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
 [AC_RUN_IFELSE(
 [AC_LANG_PROGRAM(
-[[#if STDC_HEADERS || HAVE_STDLIB_H
+[[#if defined STDC_HEADERS || defined HAVE_STDLIB_H
 # include <stdlib.h>
 #else
 char *realloc ();
@@ -1382,10 +1382,10 @@ AC_CACHE_CHECK([types of arguments for select],
    AC_COMPILE_IFELSE(
        [AC_LANG_PROGRAM(
 [AC_INCLUDES_DEFAULT
-#if HAVE_SYS_SELECT_H
+#ifdef HAVE_SYS_SELECT_H
 # include <sys/select.h>
 #endif
-#if HAVE_SYS_SOCKET_H
+#ifdef HAVE_SYS_SOCKET_H
 # include <sys/socket.h>
 #endif
 ],
@@ -1655,14 +1655,14 @@ AC_CACHE_CHECK(whether setvbuf arguments are reversed,
    AC_LINK_IFELSE(
      [AC_LANG_PROGRAM(
 	[[#include <stdio.h>
-#	  if PROTOTYPES
+#	  ifdef PROTOTYPES
 	   int (setvbuf) (FILE *, int, char *, size_t);
 #	  endif]],
 	[[char buf; return setvbuf (stdout, _IOLBF, &buf, 1);]])],
      [AC_LINK_IFELSE(
 	[AC_LANG_PROGRAM(
 	   [[#include <stdio.h>
-#	     if PROTOTYPES
+#	     ifdef PROTOTYPES
 	      int (setvbuf) (FILE *, int, char *, size_t);
 #	     endif]],
 	   [[char buf; return setvbuf (stdout, &buf, _IOLBF, 1);]])],
@@ -1822,7 +1822,7 @@ AC_DEFUN([_AC_FUNC_VFORK],
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[/* Thanks to Paul Eggert for this test.  */
 ]AC_INCLUDES_DEFAULT[
 #include <sys/wait.h>
-#if HAVE_VFORK_H
+#ifdef HAVE_VFORK_H
 # include <vfork.h>
 #endif
 /* On some sparc systems, changes by the child to local and incoming
