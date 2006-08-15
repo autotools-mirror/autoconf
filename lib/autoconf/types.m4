@@ -949,7 +949,7 @@ else
   AC_CACHE_CHECK(for tzname, ac_cv_var_tzname,
 [AC_LINK_IFELSE([AC_LANG_PROGRAM(
 [[#include <time.h>
-#ifndef HAVE_DECL_TZNAME
+#if !HAVE_DECL_TZNAME
 extern char *tzname[];
 #endif
 ]],
