@@ -1,5 +1,8 @@
 2006-08-22  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* lib/autoconf/c.m4 (AC_C_CONST): Don't used shadowed vars, to
+	pacify insanely picky compilers.  Problem reported by Eric Blake.
+
 	* doc/autoconf.texi (Posix Variants): INTERACTIVE Unix is no
 	longer supported by Sun.
 

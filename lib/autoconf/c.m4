@@ -1437,10 +1437,10 @@ AC_DEFUN([AC_C_CONST],
 #ifndef __cplusplus
   /* Ultrix mips cc rejects this.  */
   typedef int charset[2];
-  const charset x;
+  const charset cs;
   /* SunOS 4.1.1 cc rejects this.  */
-  char const *const *ccp;
-  char **p;
+  char const *const *pcpcc;
+  char **ppc;
   /* NEC SVR4.0.2 mips cc rejects this.  */
   struct point {int x, y;};
   static struct point const zero = {0,0};
@@ -1449,11 +1449,11 @@ AC_DEFUN([AC_C_CONST],
      an arm of an if-expression whose if-part is not a constant
      expression */
   const char *g = "string";
-  ccp = &g + (g ? g-g : 0);
+  pcpcc = &g + (g ? g-g : 0);
   /* HPUX 7.0 cc rejects these. */
-  ++ccp;
-  p = (char**) ccp;
-  ccp = (char const *const *) p;
+  ++pcpcc;
+  ppc = (char**) pcpcc;
+  pcpcc = (char const *const *) ppc;
   { /* SCO 3.2v4 cc rejects this.  */
     char *t;
     char const *s = 0 ? (char *) 0 : (char const *) 0;
@@ -1480,7 +1480,7 @@ AC_DEFUN([AC_C_CONST],
     const int foo = 10;
     if (!foo) return 0;
   }
-  return !x[0] && !zero.x;
+  return !cs[0] && !zero.x;
 #endif
 ]])],
 		   [ac_cv_c_const=yes],
