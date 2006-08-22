@@ -7254,9 +7254,11 @@ before any macros that run the C compiler.
 For @sc{interactive} Systems Corporation Unix, add @option{-lcposix} to output
 variable @code{LIBS} if necessary for Posix facilities.  Call this
 after @code{AC_PROG_CC} and before any other macros that use Posix
-interfaces.  @sc{interactive} Unix is no longer sold, and Sun says that
-they will drop support for it on 2006-07-23, so this macro is becoming
-obsolescent.
+interfaces.
+
+This macro is obsolescent, as @sc{interactive} Unix is obsolete, and Sun
+dropped support for it on 2006-07-23.  New programs need not use this
+macro.
 @end defmac
 
 @defmac AC_MINIX

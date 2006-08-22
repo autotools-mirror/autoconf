@@ -1,3 +1,8 @@
+2006-08-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Posix Variants): INTERACTIVE Unix is no
+	longer supported by Sun.
+
 2006-08-15  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Autoconf now uses constructs like "#ifdef HAVE_STDLIB_H"
