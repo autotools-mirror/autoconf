@@ -3,6 +3,9 @@
 ** GNU M4 1.4.5 or later is now recommended.  At least one "make check"
   test fails with earlier versions of M4.
 
+** The check for C99 now tests for varargs macros, as documented.
+  It also tests that the preprocessor supports 64-bit integers.
+
 ** Autoconf now uses constructs like "#ifdef HAVE_STDLIB_H" rather than
   "#if HAVE_STDLIB_H", so that it now works with "gcc -Wundef -Werror".
 

@@ -1,3 +1,12 @@
+2006-08-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: The C99 check now tests for vararg macros and 64-bit
+	preprocessor ints.
+	* doc/autoconf.texi (C Compiler): Document // comments, va_copy.
+	* lib/autoconf/c.m4 (_AC_PROG_CC_C99): Test varargs macros and
+	64-bit preprocessor ints.  Check for static initialization of
+	long long.  Remove unnecessary casts.
+
 2006-08-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Particular Programs): Mention that

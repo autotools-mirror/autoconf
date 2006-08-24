@@ -6433,10 +6433,10 @@ If the C compiler is not in C99 mode by default, try to add an
 option to output variable @code{CC} to make it so.  This macro tries
 various options that select C99 on some system or another.  It
 considers the compiler to be in C99 mode if it handles @code{_Bool},
-flexible arrays, @code{inline}, @code{long long int}, mixed code and
-declarations, named initialization of structs, @code{restrict}, varargs
-macros, variable declarations in @code{for} loops and variable length
-arrays.
+@code{//} comments, flexible array members, @code{inline}, @code{long
+long int}, mixed code and declarations, named initialization of structs,
+@code{restrict}, @code{va_copy}, varargs macros, variable declarations
+in @code{for} loops, and variable length arrays.
 
 After calling this macro you can check whether the C compiler has been
 set to accept C99; if not, the shell variable
