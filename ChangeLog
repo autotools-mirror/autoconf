@@ -1,3 +1,10 @@
+2006-08-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Also ignore
+	-lgcc?* and -lSystem, for Darwin/MacOS X.  Problem reported by
+	Bill Northcott in
+	<http://lists.gnu.org/archive/html/autoconf/2006-08/msg00083.html>.
+
 2006-08-22  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/c.m4 (AC_C_CONST): Don't used shadowed vars, to
