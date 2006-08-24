@@ -56,9 +56,8 @@ AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/tests/autoconf])
 AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/tests/testsuite])
 
 # These are not built, they are in the src tree.
-AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/config/install-sh])
-AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/config/mkinstalldirs])
-AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/config/missing])
+AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/build-aux/install-sh])
+AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/build-aux/missing])
 
 AT_CLEANUP
 

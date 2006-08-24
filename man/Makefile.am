@@ -1,7 +1,6 @@
-## Process this file with automake to create Makefile.in -*-Makefile-*-
+# Make Autoconf man pages.
 
-## Makefile for Autoconf.
-## Copyright (C) 2001, 2004, 2005 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2004, 2005, 2006 Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -44,8 +43,8 @@ $(srcdir)/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
 $(srcdir)/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
 
 # Independent from this package.
-$(srcdir)/config.guess.1: $(top_srcdir)/config/config.guess
-$(srcdir)/config.sub.1:   $(top_srcdir)/config/config.sub
+$(srcdir)/config.guess.1: $(top_srcdir)/build-aux/config.guess
+$(srcdir)/config.sub.1:   $(top_srcdir)/build-aux/config.sub
 
 remove_time_stamp = 's/^\(\.TH[^"]*"[^"]*"[^"]*\)"[^"]*"/\1/'
 
@@ -64,7 +63,7 @@ SUFFIXES = .x .1
 	  done;; \
 	esac
 	echo "Updating man page $@"
-	PATH="$(top_builddir)/tests@PATH_SEPARATOR@$(top_srcdir)/config@PATH_SEPARATOR@$$PATH"; \
+	PATH="$(top_builddir)/tests$(PATH_SEPARATOR)$(top_srcdir)/build-aux$(PATH_SEPARATOR)$$PATH"; \
 	export PATH; \
 	$(HELP2MAN) \
 	    --include=$*.x \

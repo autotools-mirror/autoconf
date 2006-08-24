@@ -18,7 +18,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301, USA.
 
-# We need a very up to date version of Autotest.
 m4_version_prereq([2.57])
 
 # Used in many tests.
@@ -194,7 +193,7 @@ ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$][1
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir/config)
+AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 AC_CONFIG_HEADER(config.h:config.hin)
 AC_STATE_SAVE(before)]
 $1

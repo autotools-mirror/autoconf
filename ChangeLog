@@ -1,5 +1,93 @@
 2006-08-24  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Rework to use more-modern build style.
+	Many files are renamed; all uses of their names were changed.
+	* .x-sc_trailing_blank: Renamed from .x-sc_trailing_blank.
+	* .x-sc_useless_cpp_parens: New file.
+	* build-aux/config.guess: Renamed from config/config.guess.  Update.
+	* build-aux/config.sub: Renamed from config/config.sub.  Update.
+	* build-aux/elisp-comp: Renamed from config/elisp-comp.
+	* build-aux/install-sh: Renamed from config/install-sh.  Update.
+	* build-aux/mdate-sh: Renamed from config/mdate-sh.
+	* build-aux/missing: Renamed from config/missing.
+	* build-aux/texinfo.tex: Renamed from config/texinfo.tex.  Update.
+	* build-aux/vc-list-files: Renamed from config/vc-list-files.
+	* config/Makefile.am: Removed.
+	* config/mkinstalldirs: Removed.
+	* config/move-if-change: Removed.
+	* m4/m4.m4: Renamed from config/m4.m4.  Add (C) to copyright notice.
+	* Makefile.am (SUBDIRS): Remove config.
+	(ACLOCAL_AMFLAGS): Include from m4, not config.
+	(EXTRA_DIST): Add config/announce-gen, config/prev-version.txt.
+	(WGET, WGETFLAGS): New macros, since Makefile.maint no longer does this.
+	(autom4te-update): Rewrite with a loop.  Get from gnulib, not automake.
+	Fail if there's an error.
+	* Makefile.cfg (move_if_change): Remove.
+	(wget_files): Remove.
+	(cvs_executable_files): New macro.
+	(cvs_files): Use it.  Remove mkinstalldirs.  Add fdl.texi.
+	(executable-update): Use $(cvs_executable_files).
+	(local-checks-to-skip): Remove.
+	* Makefile.maint: Merge from coreutils, plus add our own changes
+	(gzip_rsyncable): New macro.
+	(GZIP_ENV): Use it.
+	(CVS_LIST): Use build-aux/vc-list-files.
+	(VERSION_REGEXP): New macro.
+	(local-checks-available): Add patch-check, $(syntax-check-rules),
+	check-AUTHORS.
+	(syntax-check-rules): Compute dynamically.
+	(sc_cast_of_x_alloc_return_value): Work even if no source files.
+	(sc_cast_of_alloca_return_value): Likewise.
+	(sc_prohibit_atoi_atof): Simplify regexp.
+	(sc_no_if_have_config_h, sc_require_config_h):
+	(sc_prohibit_assert_without_use,
+	(sc_obsolete_symbols): Check for O_NDELAY.
+	(sc_texi_notab): Remove.
+	(sc-changelog): Don't make an exception for '----' lines.
+	(.re-list): Remove, so we don't have a junk file behind.
+	(sc_system_h_headers): Remove the need for .re-list.
+	(sc_the_the):  New rule.
+	(sc_tight_scope): Simplify.
+	(sc_trailing_space): Renamed from sc_trailing_blank.
+	(longopt_re): New macro.
+	(sc_two_space_separator_in_usage): New rule.
+	(sc_unmarked_diagnostics): Look at all files under CVS.
+	(sc_useless_cpp_parens, patch-check, check-AUTHORS): New rules.
+	(news-date-check, changelog-check): Version is OK.
+	(po-check): Look for lib files even if not in CVS.
+	(copyright-check): Use $() not ``.
+	(maintainer-distcheck): Do not depend on changelog-check.
+	(my-distcheck): Depend on $(release_archive_dir)/$(prev-tgz).
+	Also check for -Wpointer-arith.
+	(WGET, WGETFLAGS, tgz-md5, tgz-sha1, bz2-md5, bz2-sha1):
+	(xdelta-md5, xdelta-sha1, tgz-size, bz2-size, xd-size, rel-check):
+	Remove.
+	(announcement): Add --gpg-key-id arg.
+	(cvs-sv): Remove.
+	(move_if_change): Just use mv.
+	(local_updates: Remove wget-update, po-update.
+	(po_repo, do-po-update, po-update, wget_files, get-targets): Remove.
+	(config.guess-url_prefix, config.sub-url_prefix): Remove.
+	(ansi2knr.c-url_prefix, texinfo.tex-url_prefix):
+	(standards.texi-url_prefix, make-stds.texi-url_prefix, target, url):
+	($(get-targets)): Remove.
+	(cvs_files): Remove missing, mkinstalldirs, ansi2knr.c.
+	(gnulib_repo): Renamed from automake_repo.  Get from gnulib now.
+	(cvs-update): Get from gnulib.
+	(emut_upload_commands): gnupload is in build-aux now.
+	(alpha beta major): Add changelog-check.  Check version.
+	* configure.ac (AC_CONFIG_AUX_DIR): Renamed from config to build-aux.
+	(AC_CONFIG_FILES): Remove.
+	* bin/autoconf.as: Add spaces to avoid distcheck warning.
+	* config/announce-gen: Sync from coreutils.
+	* doc/make-stds.texi: Sync from gnulib.
+	* doc/standards.texi: Likewise.
+	* man/Makefile.am: Adjust for config -> build-aux renaming.
+	* tests/Makefile.am: Prefer $(FOO) to @FOO@.
+	* tests/local.at: Adjust from config -> build-aux renaming.
+	* tests/tools.at: Likewise.
+	* tests/torture.at: Likewise.
+
 	* NEWS: The C99 check now tests for vararg macros and 64-bit
 	preprocessor ints.
 	* doc/autoconf.texi (C Compiler): Document // comments, va_copy.
@@ -3346,7 +3434,7 @@
 2005-05-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* AUTHORS, BUGS, COPYING, ChangeLog, ChangeLog.0, ChangeLog.1,
-	ChangeLog.2, GNUmakefile, HACKING, Makefile.am, Makefile.cfg,
+	ChangeLog.2, GNUmakefile, Makefile.am, Makefile.cfg,
 	Makefile.maint, NEWS, README, README-alpha, TODO, configure.ac,
 	bin/Makefile.am, bin/autoconf.as, bin/autoheader.in,
 	bin/autom4te.in, bin/autoreconf.in, bin/autoscan.in,
@@ -4254,7 +4342,6 @@
 
 2004-11-28  Stepan Kasal  <kasal@ucw.cz>
 
-	* HACKING: Refer to "coreutils", not "File, Shell or Text utils".
 	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): A typo in the comment.
 
 2004-11-26  Paul Eggert  <eggert@cs.ucla.edu>
@@ -11819,23 +11906,25 @@
 
 	* configure.in: Bump to 2.50a.
 
------
 
-Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+	-----
 
-This file is part of GNU Autoconf.
+	Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+	Foundation, Inc.
 
-GNU Autoconf is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
+	This file is part of GNU Autoconf.
 
-GNU Autoconf is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+	GNU Autoconf is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2, or (at your option)
+	any later version.
 
-You should have received a copy of the GNU General Public License
-along with autoconf; see the file COPYING.  If not, write to
-the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA 02110-1301, USA.
+	GNU Autoconf is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with autoconf; see the file COPYING.  If not, write to
+	the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+	Boston, MA 02110-1301, USA.

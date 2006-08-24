@@ -106,8 +106,8 @@ while test $# -gt 0 ; do
        autom4te_options="$autom4te_options '$1'"; shift ;;
 
     # Options with separated arg passed as is to autom4te.
-    --include | -I | \
-    --prepend-include | -B | \
+    --include  | -I | \
+    --prepend-include  | -B | \
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        autom4te_options="$autom4te_options $option '$2'"

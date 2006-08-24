@@ -548,7 +548,7 @@ AT_DATA([Foo.in], [@foo@
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir/config)
+AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 AC_SUBST([foo], ]m4_for([n], 1, 100,, ....................)[)
 AC_CONFIG_FILES([Foo])
 AC_OUTPUT
@@ -619,7 +619,7 @@ AT_DATA([Foo.in],
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir/config)
+AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 foo='one
 two'
 AC_SUBST([foo])
@@ -675,7 +675,7 @@ AT_DATA([configure.ac],
 [[AC_INIT
 d@&t@nl The following line silences the warnings, if uncommented:
 d@&t@nl AC_DEFUN([AC_DATAROOTDIR_CHECKED])
-AC_CONFIG_AUX_DIR($top_srcdir/config)
+AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 
 # This substitution is wrong and bogus!  Don't use it in your own code!
 # Read `info Autoconf "Defining Directories"'!

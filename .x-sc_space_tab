@@ -1,4 +1,4 @@
-config/config.guess
-config/config.sub
+build-aux/config.guess
+build-aux/config.sub
 aclocal.m4
 configure

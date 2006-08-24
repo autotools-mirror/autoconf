@@ -26,8 +26,7 @@ AC_INIT([GNU Autoconf], [2.60a], [bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
 
-AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_FILES([config/Makefile])
+AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([check-news 1.7.9 dist-bzip2 readme-alpha])
 

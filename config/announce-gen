@@ -1,5 +1,22 @@
 #!/usr/bin/perl -w
 # Generate an announcement message.
+
+# Copyright (C) 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
 use strict;
 
 use Getopt::Long;
@@ -60,6 +77,7 @@ OPTIONS:
    --package-name=PACKAGE_NAME
    --previous-version=VER
    --current-version=VER
+   --gpg-key-id=ID         The GnuPG ID of the key used to sign the tarballs
    --release-archive-directory=DIR
    --url-directory=URL_DIR
    --news=NEWS_FILE             optional
@@ -124,17 +142,17 @@ sub print_locations ($\@\%@)
   print "\n";
 }
 
-=item C<print_signatures (@file)
+=item C<print_checksums (@file)
 
 Print the MD5 and SHA1 signature section for each C<@file>.
 
 =cut
 
-sub print_signatures (@)
+sub print_checksums (@)
 {
   my (@file) = @_;
 
-  print "Here are the MD5 and SHA1 signatures:\n";
+  print "Here are the MD5 and SHA1 checksums:\n";
   print "\n";
 
   foreach my $meth (qw (md5 sha1))
@@ -178,7 +196,7 @@ sub print_news_deltas ($$$)
     or die "$ME: $news_file: cannot open for reading: $!\n";
   while (defined (my $line = <NEWS>))
     {
-      if (! $in_items)
+      if ( ! $in_items)
 	{
 	  # Match lines like this one:
 	  # * Major changes in release 5.0.1:
@@ -203,7 +221,6 @@ sub print_news_deltas ($$$)
   $in_items
     or die "$ME: $news_file: no matching lines for `$curr_version'\n";
 }
-
 
 sub print_changelog_deltas ($$)
 {
@@ -301,6 +318,7 @@ sub print_changelog_deltas ($$)
   my $prev_version;
   my $curr_version;
   my $release_archive_dir;
+  my $gpg_key_id;
   my @url_dir_list;
   my @news_file;
 
@@ -310,6 +328,7 @@ sub print_changelog_deltas ($$)
      'package-name=s'     => \$package_name,
      'previous-version=s' => \$prev_version,
      'current-version=s'  => \$curr_version,
+     'gpg-key-id=s'       => \$gpg_key_id,
      'release-archive-directory=s' => \$release_archive_dir,
      'url-directory=s'    => \@url_dir_list,
      'news=s'             => \@news_file,
@@ -366,10 +385,27 @@ EOF
 		   $tgz, $tbz);
   print_locations ("xdelta-style diffs", @url_dir_list, %size,
 		   $xd);
-  print_locations ("GPG detached signatures", @url_dir_list, %size,
-		   "$tgz.asc", "$tbz.asc");
+  print_locations ("GPG detached signatures[*]", @url_dir_list, %size,
+		   "$tgz.sig", "$tbz.sig");
 
-  print_signatures ($tgz, $tbz, $xd);
+  print_checksums ($tgz, $tbz, $xd);
+
+  print <<EOF;
+
+[*] You can use either of the above signature files to verify that
+the corresponding file (without the .sig suffix) is intact.  First,
+be sure to download both the .sig file and the corresponding tarball.
+Then, run a command like this:
+
+  gpg --verify $tgz.sig
+
+If that command fails because you don't have the required public key,
+then run this command to import it:
+
+  gpg --keyserver wwwkeys.pgp.net --recv-keys $gpg_key_id
+
+and rerun the \`gpg --verify' command.
+EOF
 
   print_news_deltas ($_, $prev_version, $curr_version)
     foreach @news_file;

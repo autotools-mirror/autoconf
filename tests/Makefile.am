@@ -1,7 +1,6 @@
-## Process this file with automake to create Makefile.in. -*-Makefile-*-
+## Make Autoconf tests.
 
-## Makefile for Autoconf testsuite.
-## Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005
+## Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006
 ## Free Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
@@ -40,11 +39,11 @@ include ../lib/freeze.mk
 $(srcdir)/package.m4: $(top_srcdir)/configure.ac
 	{					\
 	  echo '# Signature of the current package.'; \
-	  echo 'm4_define([AT_PACKAGE_NAME],      [@PACKAGE_NAME@])'; \
-	  echo 'm4_define([AT_PACKAGE_TARNAME],   [@PACKAGE_TARNAME@])'; \
-	  echo 'm4_define([AT_PACKAGE_VERSION],   [@PACKAGE_VERSION@])'; \
-	  echo 'm4_define([AT_PACKAGE_STRING],    [@PACKAGE_STRING@])'; \
-	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
+	  echo 'm4_define([AT_PACKAGE_NAME],      [$(PACKAGE_NAME)])'; \
+	  echo 'm4_define([AT_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])'; \
+	  echo 'm4_define([AT_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])'; \
+	  echo 'm4_define([AT_PACKAGE_STRING],    [$(PACKAGE_STRING)])'; \
+	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'; \
 	} >$(srcdir)/package.m4
 
 
@@ -174,7 +173,7 @@ maintainer-check: maintainer-check-posix maintainer-check-c++
 CLEANFILES += expr
 expr:
 	echo '#! $(SHELL)'            >expr
-	echo 'result=`@EXPR@ "$$@"`' >>expr
+	echo 'result=`$(EXPR) "$$@"`'>>expr
 	echo 'estatus=$$?'           >>expr
 	echo 'cat <<EOF'             >>expr
 	echo '$${result:-0}'         >>expr

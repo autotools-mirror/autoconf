@@ -1,6 +1,6 @@
-## Process this file with automake to create Makefile.in
+# Make Autoconf library for M4sugar.
 
-## Copyright 2001, 2002 Free Software Foundation, Inc.
+## Copyright (C) 2001, 2002, 2006 Free Software Foundation, Inc.
 ##
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -33,11 +33,11 @@ version.m4: $(top_srcdir)/configure.ac
 	  echo '# Copyright (C) 1999, 2000, 2001, 2002'; \
 	  echo '# Free Software Foundation, Inc.'; \
 	  echo ;\
-	  echo 'm4_define([m4_PACKAGE_NAME],      [@PACKAGE_NAME@])'; \
-	  echo 'm4_define([m4_PACKAGE_TARNAME],   [@PACKAGE_TARNAME@])'; \
-	  echo 'm4_define([m4_PACKAGE_VERSION],   [@PACKAGE_VERSION@])'; \
-	  echo 'm4_define([m4_PACKAGE_STRING],    [@PACKAGE_STRING@])'; \
-	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
+	  echo 'm4_define([m4_PACKAGE_NAME],      [$(PACKAGE_NAME)])'; \
+	  echo 'm4_define([m4_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])'; \
+	  echo 'm4_define([m4_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])'; \
+	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])'; \
+	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'; \
 	} >version.m4
 
 

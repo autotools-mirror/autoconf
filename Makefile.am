@@ -2,8 +2,8 @@
 
 ## Makefile for Autoconf.
 
-## Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004 Free Software
-## Foundation, Inc.
+## Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2006 Free
+## Software Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -22,13 +22,14 @@
 
 # bin/ must be run first, as it builds executables needed for tests.
 # autom4te uses autotest.m4f to generate `testsuite', so build tests last.
-SUBDIRS = bin . lib config man doc tests
+SUBDIRS = bin . lib man doc tests
 
-ACLOCAL_AMFLAGS = -I config
+ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     BUGS \
-	     GNUmakefile Makefile.maint Makefile.cfg
+	     GNUmakefile Makefile.maint Makefile.cfg \
+	     config/announce-gen config/prev-version.txt
 
 MAINTAINERCLEANFILES = $(srcdir)/INSTALL
 
@@ -62,6 +63,9 @@ maintainer-check-tests:
 ## Updating Perl files from Automake.  ##
 ## ----------------------------------- ##
 
+WGET = wget
+WGETFLAGS = -C off
+
 ## Fetch the latest versions of files we care about.
 automake_cvsweb = \
    http://sources.redhat.com/cgi-bin/cvsweb.cgi/~checkout~/automake
@@ -76,16 +80,13 @@ autom4te_files = \
 
 autom4te-update:
 	rm -f -r Fetchdir > /dev/null 2>&1
-	mkdir Fetchdir; mkdir Fetchdir/Autom4te
-## If a get fails then that is a problem.
-	(cd Fetchdir && \
-	$(WGET) $(automake_cvsweb)/lib/Automake/Configure_ac.pm?$(automake_cvsargs) -O Autom4te/Configure_ac.pm; \
-	$(WGET) $(automake_cvsweb)/lib/Automake/Channels.pm?$(automake_cvsargs) -O Autom4te/Channels.pm; \
-	$(WGET) $(automake_cvsweb)/lib/Automake/FileUtils.pm?$(automake_cvsargs) -O Autom4te/FileUtils.pm; \
-	$(WGET) $(automake_cvsweb)/lib/Automake/Struct.pm?$(automake_cvsargs) -O Autom4te/Struct.pm; \
-	$(WGET) $(automake_cvsweb)/lib/Automake/XFile.pm?$(automake_cvsargs) -O Autom4te/XFile.pm; \
-	:)
+	mkdir -p Fetchdir/Autom4te
+	for file in $(autom4te_files); do \
+	  $(WGET) $(WGET_FLAGS) \
+	    "$(automake_cvsweb)/lib/$file?$(automake_cvsargs)" \
+	    -O "Fetchdir/$$file" || exit; \
+	done
 	perl -pi -e 's/Automake::/Autom4te::/g' Fetchdir/Autom4te/*.pm
 	for file in $(autom4te_files); do \
-	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file; \
+	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file || exit; \
 	done
