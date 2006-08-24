@@ -14,6 +14,8 @@
 
 @SET_MAKE@
 
+# Make Autoconf library for M4sugar.
+
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -454,11 +456,11 @@ version.m4: $(top_srcdir)/configure.ac
 	  echo '# Copyright (C) 1999, 2000, 2001, 2002'; \
 	  echo '# Free Software Foundation, Inc.'; \
 	  echo ;\
-	  echo 'm4_define([m4_PACKAGE_NAME],      [@PACKAGE_NAME@])'; \
-	  echo 'm4_define([m4_PACKAGE_TARNAME],   [@PACKAGE_TARNAME@])'; \
-	  echo 'm4_define([m4_PACKAGE_VERSION],   [@PACKAGE_VERSION@])'; \
-	  echo 'm4_define([m4_PACKAGE_STRING],    [@PACKAGE_STRING@])'; \
-	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [@PACKAGE_BUGREPORT@])'; \
+	  echo 'm4_define([m4_PACKAGE_NAME],      [$(PACKAGE_NAME)])'; \
+	  echo 'm4_define([m4_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])'; \
+	  echo 'm4_define([m4_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])'; \
+	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])'; \
+	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'; \
 	} >version.m4
 
 check-local: check-forbidden-patterns

@@ -38,11 +38,11 @@ subdir = lib/emacs
 DIST_COMMON = $(dist_lisp_LISP) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/config/m4.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/m4.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 SOURCES =
 DIST_SOURCES =
@@ -58,7 +58,7 @@ LISP = $(dist_lisp_LISP)
 am__ELFILES = autoconf-mode.el autotest-mode.el
 am__ELCFILES = $(am__ELFILES:.el=.elc)
 ELCFILES = $(LISP:.el=.elc)
-elisp_comp = $(top_srcdir)/config/elisp-comp
+elisp_comp = $(top_srcdir)/build-aux/elisp-comp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@

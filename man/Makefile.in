@@ -13,6 +13,8 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
+
+# Make Autoconf man pages.
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -369,7 +371,7 @@ $(srcdir)/config.sub.1:   $(top_srcdir)/build-aux/config.sub
 	  done;; \
 	esac
 	echo "Updating man page $@"
-	PATH="$(top_builddir)/tests@PATH_SEPARATOR@$(top_srcdir)/build-aux@PATH_SEPARATOR@$$PATH"; \
+	PATH="$(top_builddir)/tests$(PATH_SEPARATOR)$(top_srcdir)/build-aux$(PATH_SEPARATOR)$$PATH"; \
 	export PATH; \
 	$(HELP2MAN) \
 	    --include=$*.x \

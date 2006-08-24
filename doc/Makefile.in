@@ -38,17 +38,17 @@ DIST_COMMON = $(autoconf_TEXINFOS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/stamp-vti \
 	$(srcdir)/version.texi $(standards_TEXINFOS)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/config/m4.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/m4.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 SOURCES =
 DIST_SOURCES =
 INFO_DEPS = $(srcdir)/autoconf.info $(srcdir)/standards.info
-TEXINFO_TEX = $(top_srcdir)/config/texinfo.tex
-am__TEXINFO_TEX_DIR = $(top_srcdir)/config
+TEXINFO_TEX = $(top_srcdir)/build-aux/texinfo.tex
+am__TEXINFO_TEX_DIR = $(top_srcdir)/build-aux
 DVIS = autoconf.dvi standards.dvi
 PDFS = autoconf.pdf standards.pdf
 PSS = autoconf.ps standards.ps
@@ -233,7 +233,7 @@ autoconf.html: autoconf.texi $(srcdir)/version.texi $(autoconf_TEXINFOS)
 $(srcdir)/version.texi:  $(srcdir)/stamp-vti
 $(srcdir)/stamp-vti: autoconf.texi $(top_srcdir)/configure
 	@(dir=.; test -f ./autoconf.texi || dir=$(srcdir); \
-	set `$(SHELL) $(top_srcdir)/config/mdate-sh $$dir/autoconf.texi`; \
+	set `$(SHELL) $(top_srcdir)/build-aux/mdate-sh $$dir/autoconf.texi`; \
 	echo "@set UPDATED $$1 $$2 $$3"; \
 	echo "@set UPDATED-MONTH $$2 $$3"; \
 	echo "@set EDITION $(VERSION)"; \

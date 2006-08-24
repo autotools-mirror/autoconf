@@ -37,15 +37,18 @@ POST_UNINSTALL = :
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/configure AUTHORS COPYING \
-	ChangeLog INSTALL NEWS README-alpha THANKS TODO
+	ChangeLog INSTALL NEWS README-alpha THANKS TODO \
+	build-aux/config.guess build-aux/config.sub \
+	build-aux/elisp-comp build-aux/install-sh build-aux/mdate-sh \
+	build-aux/missing build-aux/texinfo.tex
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/config/m4.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/m4.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
-mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 SOURCES =
 DIST_SOURCES =
@@ -153,15 +156,18 @@ target_alias = @target_alias@
 
 # bin/ must be run first, as it builds executables needed for tests.
 # autom4te uses autotest.m4f to generate `testsuite', so build tests last.
-SUBDIRS = bin . lib config man doc tests
-ACLOCAL_AMFLAGS = -I config
+SUBDIRS = bin . lib man doc tests
+ACLOCAL_AMFLAGS = -I m4
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     BUGS \
-	     GNUmakefile Makefile.maint Makefile.cfg
+	     GNUmakefile Makefile.maint Makefile.cfg \
+	     config/announce-gen config/prev-version.txt
 
 MAINTAINERCLEANFILES = $(srcdir)/INSTALL
 pkgdata_DATA = $(srcdir)/INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
+WGET = wget
+WGETFLAGS = -C off
 automake_cvsweb = \
    http://sources.redhat.com/cgi-bin/cvsweb.cgi/~checkout~/automake
 
@@ -371,7 +377,7 @@ distdir: $(DISTFILES)
 	esac
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/config $(distdir)/tests
+	$(mkdir_p) $(distdir)/build-aux $(distdir)/config $(distdir)/m4 $(distdir)/tests
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -622,17 +628,15 @@ maintainer-check-tests:
 
 autom4te-update:
 	rm -f -r Fetchdir > /dev/null 2>&1
-	mkdir Fetchdir; mkdir Fetchdir/Autom4te
-	(cd Fetchdir && \
-	$(WGET) $(automake_cvsweb)/lib/Automake/Configure_ac.pm?$(automake_cvsargs) -O Autom4te/Configure_ac.pm; \
-	$(WGET) $(automake_cvsweb)/lib/Automake/Channels.pm?$(automake_cvsargs) -O Autom4te/Channels.pm; \
-	$(WGET) $(automake_cvsweb)/lib/Automake/FileUtils.pm?$(automake_cvsargs) -O Autom4te/FileUtils.pm; \
-	$(WGET) $(automake_cvsweb)/lib/Automake/Struct.pm?$(automake_cvsargs) -O Autom4te/Struct.pm; \
-	$(WGET) $(automake_cvsweb)/lib/Automake/XFile.pm?$(automake_cvsargs) -O Autom4te/XFile.pm; \
-	:)
+	mkdir -p Fetchdir/Autom4te
+	for file in $(autom4te_files); do \
+	  $(WGET) $(WGET_FLAGS) \
+	    "$(automake_cvsweb)/lib/$file?$(automake_cvsargs)" \
+	    -O "Fetchdir/$$file" || exit; \
+	done
 	perl -pi -e 's/Automake::/Autom4te::/g' Fetchdir/Autom4te/*.pm
 	for file in $(autom4te_files); do \
-	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file; \
+	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file || exit; \
 	done
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
