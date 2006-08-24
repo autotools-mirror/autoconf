@@ -37,11 +37,11 @@ subdir = man
 DIST_COMMON = $(dist_man_MANS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/config/m4.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/m4/m4.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 SOURCES =
 DIST_SOURCES =
@@ -355,8 +355,8 @@ $(srcdir)/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
 $(srcdir)/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
 
 # Independent from this package.
-$(srcdir)/config.guess.1: $(top_srcdir)/config/config.guess
-$(srcdir)/config.sub.1:   $(top_srcdir)/config/config.sub
+$(srcdir)/config.guess.1: $(top_srcdir)/build-aux/config.guess
+$(srcdir)/config.sub.1:   $(top_srcdir)/build-aux/config.sub
 
 .x.1:
 	@program=`expr "/$*" : '.*/\(.*\)'` && \
@@ -369,7 +369,7 @@ $(srcdir)/config.sub.1:   $(top_srcdir)/config/config.sub
 	  done;; \
 	esac
 	echo "Updating man page $@"
-	PATH="$(top_builddir)/tests@PATH_SEPARATOR@$(top_srcdir)/config@PATH_SEPARATOR@$$PATH"; \
+	PATH="$(top_builddir)/tests@PATH_SEPARATOR@$(top_srcdir)/build-aux@PATH_SEPARATOR@$$PATH"; \
 	export PATH; \
 	$(HELP2MAN) \
 	    --include=$*.x \
