@@ -3652,6 +3652,9 @@ default directories) to determine @var{dir} (@pxref{Output}).  Also set
 the variables @code{INSTALL_PROGRAM} and @code{INSTALL_SCRIPT} to
 @samp{$@{INSTALL@}} and @code{INSTALL_DATA} to @samp{$@{INSTALL@} -m 644}.
 
+@samp{@@INSTALL@@} is special, as its value may vary for different
+configuration files.
+
 This macro screens out various instances of @command{install} known not to
 work.  It prefers to find a C program rather than a shell script, for
 speed.  Instead of @file{install-sh}, it can also use @file{install.sh},
@@ -3703,6 +3706,9 @@ directory, and conversely a makefile should use @code{$(MKDIR_P) --
 $(FOO)} if @var{FOO} might yield a value that begins with @samp{-}.
 Finally, @code{AS_MKDIR_P} does not check for race condition
 vulnerability, whereas @code{AC_PROG_MKDIR_P} does.
+
+@samp{@@MKDIR_P@@} is special, as its value may vary for different
+configuration files.
 @end defmac
 
 @defmac AC_PROG_LEX

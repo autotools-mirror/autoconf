@@ -1,3 +1,9 @@
+2006-08-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Particular Programs): Mention that
+	@INSTALL@ and @MKDIR_P@ may vary for different output files.
+	Reported by Alexandre Duret-Lutz.
+
 2006-08-24  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Also ignore
