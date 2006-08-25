@@ -1,5 +1,5 @@
 # autoconf -- create `configure' using m4 macros
-# Copyright (C) 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004, 2006 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ use Exporter;
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
 use File::Basename;
+use File::Path ();
 use File::stat;
 use IO::File;
 use Carp;
@@ -191,24 +192,8 @@ sub END
 
   if (!$debug && defined $tmp && -d $tmp)
     {
-      if (<$tmp/*>)
-	{
-	  while (<$tmp/*>)
-	    {
-	      if (! unlink $_)
-		{
-		  print STDERR "$me: cannot empty $tmp ($_): $!\n";
-		  $? = 1;
-		  return;
-		}
-	    }
-	}
-      if (! rmdir $tmp)
-	{
-	  print STDERR "$me: cannot remove $tmp: $!\n";
-	  $? = 1;
-	  return;
-	}
+      local $SIG{__WARN__} = sub { $status = 1; warn $_[0] };
+      File::Path::rmtree $tmp;
     }
 
   # This is required if the code might send any output to stdout

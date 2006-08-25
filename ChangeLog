@@ -1,3 +1,8 @@
+2006-08-25  Noah Misch  <address@hidden>
+
+	* lib/Autom4te/General.pm (END): Use `File::Path::rmtree' to
+	simplify the code.
+
 2006-08-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix Lex library problem reported to us by Julio Garvia.
