@@ -1,6 +1,6 @@
 * Major changes in Autoconf 2.60a
 
-** GNU M4 1.4.5 or later is now recommended.  At least one "make check"
+** GNU M4 1.4.6 or later is now recommended.  At least one "make check"
   test fails with earlier versions of M4.
 
 ** The check for C99 now tests for varargs macros, as documented.

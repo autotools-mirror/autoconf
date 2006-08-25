@@ -1,3 +1,9 @@
+2006-08-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Recommend M4 1.4.6 instead of 1.4.5.
+	* README: Likewise.
+	* doc/autoconf.texi (Introduction, Why GNU M4): Likewise.
+
 2006-08-24  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Rework to use more-modern build style.
