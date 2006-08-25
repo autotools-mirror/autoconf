@@ -2,7 +2,7 @@
 
 	Rework to use more-modern build style.
 	Many files are renamed; all uses of their names were changed.
-	* .x-sc_trailing_blank: Renamed from .x-sc_trailing_blank.
+	* .x-sc_trailing_blank: Renamed from .x-sc_trailing_space.
 	* .x-sc_useless_cpp_parens: New file.
 	* build-aux/config.guess: Renamed from config/config.guess.  Update.
 	* build-aux/config.sub: Renamed from config/config.sub.  Update.
@@ -48,7 +48,7 @@
 	(sc_system_h_headers): Remove the need for .re-list.
 	(sc_the_the):  New rule.
 	(sc_tight_scope): Simplify.
-	(sc_trailing_space): Renamed from sc_trailing_blank.
+	(sc_trailing_blank): Renamed from sc_trailing_space.
 	(longopt_re): New macro.
 	(sc_two_space_separator_in_usage): New rule.
 	(sc_unmarked_diagnostics): Look at all files under CVS.
