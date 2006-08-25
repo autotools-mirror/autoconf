@@ -1,3 +1,7 @@
+2006-08-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Version 2.60a.
+
 2006-08-25  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/Autom4te/General.pm (END): Use `File::Path::rmtree' to
