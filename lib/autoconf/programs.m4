@@ -697,12 +697,6 @@ AN_PROGRAM([lex],  [AC_PROG_LEX])
 AN_PROGRAM([flex], [AC_PROG_LEX])
 AC_DEFUN_ONCE([AC_PROG_LEX],
 [AC_CHECK_PROGS(LEX, flex lex, :)
-if test -z "$LEXLIB"
-then
-  AC_CHECK_LIB(fl, yywrap, LEXLIB="-lfl",
-    [AC_CHECK_LIB(l, yywrap, LEXLIB="-ll")])
-fi
-AC_SUBST(LEXLIB)
 if test "x$LEX" != "x:"; then
   _AC_PROG_LEX_YYTEXT_DECL
 fi])
@@ -710,16 +704,30 @@ fi])
 
 # _AC_PROG_LEX_YYTEXT_DECL
 # ------------------------
-# Check if lex declares yytext as a char * by default, not a char[].
+# Check for the Lex output root, the Lex library, and whether Lex
+# declares yytext as a char * by default.
 m4_define([_AC_PROG_LEX_YYTEXT_DECL],
-[AC_CACHE_CHECK(lex output file root, ac_cv_prog_lex_root,
-[# The minimal lex program is just a single line: %%.  But some broken lexes
-# (Solaris, I think it was) want two %% lines, so accommodate them.
-cat >conftest.l <<_ACEOF
+[cat >conftest.l <<_ACEOF[
 %%
+a { ECHO; }
+b { REJECT; }
+c { yymore (); }
+d { yyless (1); }
+e { yyless (input () != 0); }
+f { unput (yytext[0]); }
+. { BEGIN INITIAL; }
 %%
-_ACEOF
+#ifdef YYTEXT_POINTER
+extern char *yytext;
+#endif
+int
+main (void)
+{
+  return ! yylex () + ! yywrap ();
+}
+]_ACEOF
 _AC_DO_VAR(LEX conftest.l)
+AC_CACHE_CHECK([lex output file root], [ac_cv_prog_lex_root], [
 if test -f lex.yy.c; then
   ac_cv_prog_lex_root=lex.yy
 elif test -f lexyy.c; then
@@ -727,20 +735,35 @@ elif test -f lexyy.c; then
 else
   AC_MSG_ERROR([cannot find output from $LEX; giving up])
 fi])
-rm -f conftest.l
 AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])dnl
+
+if test -z "${LEXLIB+set}"; then
+  AC_CACHE_CHECK([lex library], [ac_cv_lib_lex], [
+    ac_save_LIBS=$LIBS
+    ac_cv_lib_lex='none needed'
+    for ac_lib in '' -lfl -ll; do
+      LIBS="$ac_lib $ac_save_LIBS"
+      AC_LINK_IFELSE([`cat $LEX_OUTPUT_ROOT.c`], [ac_cv_lib_lex=$ac_lib])
+      test "$ac_cv_lib_lex" != 'none needed' && break
+    done
+    LIBS=$ac_save_LIBS
+  ])
+  test "$ac_cv_lib_lex" != 'none needed' && LEXLIB=$ac_cv_lib_lex
+fi
+AC_SUBST(LEXLIB)
 
 AC_CACHE_CHECK(whether yytext is a pointer, ac_cv_prog_lex_yytext_pointer,
 [# POSIX says lex can declare yytext either as a pointer or an array; the
-# default is implementation-dependent. Figure out which it is, since
+# default is implementation-dependent.  Figure out which it is, since
 # not all implementations provide the %pointer and %array declarations.
 ac_cv_prog_lex_yytext_pointer=no
-echo 'extern char *yytext;' >>$LEX_OUTPUT_ROOT.c
 ac_save_LIBS=$LIBS
-LIBS="$LIBS $LEXLIB"
-AC_LINK_IFELSE([`cat $LEX_OUTPUT_ROOT.c`], ac_cv_prog_lex_yytext_pointer=yes)
+LIBS="$LEXLIB $ac_save_LIBS"
+AC_LINK_IFELSE(
+  [#define YYTEXT_POINTER 1
+`cat $LEX_OUTPUT_ROOT.c`],
+  [ac_cv_prog_lex_yytext_pointer=yes])
 LIBS=$ac_save_LIBS
-rm -f "${LEX_OUTPUT_ROOT}.c"
 ])
 dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
@@ -748,6 +771,7 @@ if test $ac_cv_prog_lex_yytext_pointer = yes; then
 	    [Define to 1 if `lex' declares `yytext' as a `char *' by default,
 	     not a `char[]'.])
 fi
+rm -f conftest.l $LEX_OUTPUT_ROOT.c
 ])# _AC_PROG_LEX_YYTEXT_DECL
 
 

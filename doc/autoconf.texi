@@ -3722,8 +3722,8 @@ and @code{LEXLIB} to @option{-lfl}, if that library is in a standard
 place.  Otherwise set @code{LEX} to @samp{lex} and @code{LEXLIB} to
 @option{-ll}.
 
-Define @code{YYTEXT_POINTER} if @code{yytext} is a @samp{char *} instead
-of a @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
+Define @code{YYTEXT_POINTER} if @code{yytext} defaults to @samp{char *} instead
+of to @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
 the base of the file name that the lexer generates; usually
 @file{lex.yy}, but sometimes something else.  These results vary
 according to whether @code{lex} or @code{flex} is being used.

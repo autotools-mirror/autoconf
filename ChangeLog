@@ -1,5 +1,17 @@
 2006-08-25  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Fix Lex library problem reported to us by Julio Garvia.
+	* doc/autoconf.texi (Particular Programs): YYTEXT_POINTER is
+	for the default, which the user can override.
+	* lib/autoconf/programs.m4 (AC_PROG_LEX): Let _AC_PROG_LEX_YYTEXT_DECL
+	deal with LEXLIB.
+	(_AC_PROG_LEX_YYTEXT_DECL): Handle caching correctly; the old code
+	didn't work if some values were cached but not others.  Test for
+	broken lex libraries like native ia64-hp-hpux11.22; see
+	<http://sources.redhat.com/ml/binutils/2003-12/msg00337.html>, and
+	work around the problem by preferring an empty LEXLIB to -lfl or
+	-ll.  Let the user set LEXLIB='' to indicate no library needed.
+
 	* NEWS: Recommend M4 1.4.6 instead of 1.4.5.
 	* README: Likewise.
 	* doc/autoconf.texi (Introduction, Why GNU M4): Likewise.
