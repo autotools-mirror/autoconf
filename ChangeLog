@@ -1,4 +1,4 @@
-2006-08-25  Noah Misch  <address@hidden>
+2006-08-25  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/Autom4te/General.pm (END): Use `File::Path::rmtree' to
 	simplify the code.
