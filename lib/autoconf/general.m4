@@ -2403,7 +2403,10 @@ AS_IF([_AC_DO_STDERR($ac_link) &&
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
-rm -f core conftest.err conftest.$ac_objext \
+dnl Delete also the IPA/IPO (Inter Procedural Analysis/Optimization)
+dnl information created by the PGI compiler (conftest_ipa8_conftest.oo),
+dnl as it would interfere with the next link command.
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 

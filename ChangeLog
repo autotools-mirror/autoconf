@@ -2,6 +2,11 @@
 
 	* NEWS: Version 2.60a.
 
+2006-08-25  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_LINK_IFELSE): Remove the IPA/IPO
+	file created by the PGI compiler.
+
 2006-08-25  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/Autom4te/General.pm (END): Use `File::Path::rmtree' to
