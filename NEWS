@@ -1,3 +1,5 @@
+* Major changes in Autoconf 2.60b (??)
+
 * Major changes in Autoconf 2.60a (2006-08-25)
 
 ** GNU M4 1.4.6 or later is now recommended.  At least one "make check"
