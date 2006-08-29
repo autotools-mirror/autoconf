@@ -529,7 +529,7 @@ extern char c3[S_ISLNK (S_IFREG) ? -1 : 1];
 #if defined S_ISSOCK && defined S_IFREG
 extern char c4[S_ISSOCK (S_IFREG) ? -1 : 1];
 #endif
-]])], ac_cv_header_stat_broken=yes, ac_cv_header_stat_broken=no)])
+]])], ac_cv_header_stat_broken=no, ac_cv_header_stat_broken=yes)])
 if test $ac_cv_header_stat_broken = yes; then
   AC_DEFINE(STAT_MACROS_BROKEN, 1,
 	    [Define to 1 if the `S_IS*' macros in <sys/stat.h> do not
