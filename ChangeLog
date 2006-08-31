@@ -1,3 +1,12 @@
+2006-08-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: AC_FUNC_FNMATCH, AC_FUNC_FNMATCH_GNU, AC_FUNC_GETLOADVG,
+	and AC_REPLACE_FNMATCH are now obsolescent in Autoconf.  New
+	programs should use their Gnulib counterparts.
+	* doc/autoconf.texi (Particular Functions): Likewise.
+	(Macro Names, testsuite Invocation): Replace uses of these
+	obsolete macros with uses of non-obsolete macros.
+
 2006-08-29  Eric Blake  <ebb9@byu.net>
 
 	* configure.ac (AC_INIT): Bump to 2.60b.

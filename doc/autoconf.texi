@@ -4419,6 +4419,9 @@ Unlike the other specific
 @code{AC_FUNC} macros, @code{AC_FUNC_FNMATCH} does not replace a
 broken/missing @code{fnmatch}.  This is for historical reasons.
 See @code{AC_REPLACE_FNMATCH} below.
+
+This macro is obsolescent.  New programs should use Gnulib's
+@code{fnmatch-posix} module.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_FNMATCH_GNU
@@ -4429,6 +4432,9 @@ Behave like @code{AC_REPLACE_FNMATCH} (@emph{replace}) but also test
 whether @code{fnmatch} supports @acronym{GNU} extensions.  Detect common
 implementation bugs, for example, the bugs in the @acronym{GNU} C
 Library 2.1.
+
+This macro is obsolescent.  New programs should use Gnulib's
+@code{fnmatch-gnu} module.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_FORK
@@ -4547,6 +4553,9 @@ to @samp{true} (and otherwise to @samp{false}), and set
 @code{KMEM_GROUP} to the name of the group that should own the installed
 program.
 @end enumerate
+
+The @code{AC_FUNC_GETLOADVG} macro is obsolescent.  New programs should
+use Gnulib's @code{getloadavg} module.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_GETMNTENT
@@ -4891,6 +4900,10 @@ copy of the source code of @acronym{GNU} @code{fnmatch}.  If necessary,
 this source code is compiled as an @code{AC_LIBOBJ} replacement, and the
 @file{fnmatch_.h} file is linked to @file{fnmatch.h} so that it can be
 included in place of the system @code{<fnmatch.h>}.
+
+This macro is obsolescent, as it assumes the use of particular source
+files.  New programs should use Gnulib's @code{fnmatch-posix} module,
+which provides this macro along with the source files.  @xref{Gnulib}.
 @end defmac
 
 
@@ -10305,8 +10318,8 @@ C variables in libraries.
 
 After the category comes the name of the particular feature being
 tested.  Any further words in the macro name indicate particular aspects
-of the feature.  For example, @code{AC_FUNC_FNMATCH_GNU} checks whether
-the @code{fnmatch} function supports @acronym{GNU} extensions.
+of the feature.  For example, @code{AC_PROG_CC_STDC} checks whether the
+C compiler supports @acronym{ISO} Standard C.
 
 An internal macro should have a name that starts with an underscore;
 Autoconf internals should therefore start with @samp{_AC_}.
@@ -18120,7 +18133,7 @@ For example, running
 
 @noindent
 selects all tests tagged @samp{autoupdate} @emph{and} with tags
-containing @samp{FUNC} (as in @samp{AC_CHECK_FUNC}, @samp{AC_FUNC_FNMATCH},
+containing @samp{FUNC} (as in @samp{AC_CHECK_FUNC}, @samp{AC_FUNC_ALLOCA},
 etc.), while
 
 @example
