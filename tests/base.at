@@ -220,6 +220,31 @@ AT_CHECK_CONFIGURE([-q])
 AT_CLEANUP
 
 
+## -------------------- ##
+## AC_CACHE_CHECK_INT.  ##
+## -------------------- ##
+-
+# Make sure AC_CACHE_CHECK_INT fails properly.
+
+AT_SETUP([AC_CACHE_CHECK_INT])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CACHE_CHECK_INT([for division by zero],
+		   [my_cv_divide_by_zero],
+		   [1 / 0],
+		   [],
+		   [my_cv_divide_by_zero=failed])
+test "$my_cv_divide_by_zero" = failed ||
+  AC_MSG_ERROR([1 / 0 did not fail])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
 ## ---------------- ##
 ## AC_TRY_COMMAND.  ##
 ## ---------------- ##

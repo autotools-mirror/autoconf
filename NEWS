@@ -9,6 +9,10 @@
   New programs should use the Gnulib counterparts of these macros.
   We have no current plans to remove them from Autoconf.
 
+** AC_CACHE_CHECK_INT
+  New macro, with the behavior of the 2.60a AC_COMPUTE_INT macro.
+  AC_COMPUTE_INT no longer caches or reports results.
+
 * Major changes in Autoconf 2.60a (2006-08-25)
 
 ** GNU M4 1.4.6 or later is now recommended.  At least one "make check"

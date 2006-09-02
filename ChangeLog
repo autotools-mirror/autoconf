@@ -1,3 +1,18 @@
+2006-09-01  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: New macro AC_CACHE_CHECK_INT.  It replaces the
+	old AC_COMPUTE_INT, which now behaves like _AC_COMPUTE_INT
+	except the first two arguments are reversed.
+	* doc/autoconf.texi (Caching Results): New macro AC_CACHE_CHECK_INT.
+	(Generic Compiler Characteristics): AC_COMPUTE_INT no longer
+	caches nor outputs a diagnostic.  Suggested by Bruno Haible.
+	* lib/autoconf/general.m4 (AC_CACHE_CHECK_INT): New macro,
+	equivalent to the old AC_COMPUTE_INT.
+	(AC_COMPUTE_INT): No longer caches or reports.  New signature.
+	All uses changed to AC_CACHE_CHECK_INT.
+	* tests/base.at (AC_CACHE_CHECK_INT): New test.
+	* tests/mktests.sh (ac_exclude_lsit): Add AC_CACHE_CHECK_INT.
+
 2006-08-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: AC_FUNC_FNMATCH, AC_FUNC_FNMATCH_GNU, AC_FUNC_GETLOADVG,
