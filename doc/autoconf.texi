@@ -12850,21 +12850,27 @@ for @command{true}.
 @item @command{unset}
 @c ------------------
 @prindex @command{unset}
-You cannot assume the support of @command{unset}.  Nevertheless, because
+In some nonconforming shells (e.g., Bash 2.05a), @code{unset FOO} fails
+when @code{FOO} is not set.  Also, Bash 2.01 mishandles @code{unset
+MAIL} in some cases and dumps core.
+
+A few ancient shells lack @command{unset} entirely.  Nevertheless, because
 it is extremely useful to disable embarrassing variables such as
 @code{PS1}, you can test for its existence and use
 it @emph{provided} you give a neutralizing value when @command{unset} is
 not supported:
 
-@example
-if (unset FOO) >/dev/null 2>&1; then
+@smallexample
+# "|| exit" suppresses any "Segmentation fault" message.
+if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
   unset=unset
 else
   unset=false
 fi
 $unset PS1 || PS1='$ '
-@end example
+@end smallexample
 
+@noindent
 @xref{Special Shell Variables}, for some neutralizing values.  Also, see
 @ref{Limitations of Builtins}, documentation of @command{export}, for
 the case of environment variables.
