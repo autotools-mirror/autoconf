@@ -6852,6 +6852,9 @@ If the output variable @code{FCFLAGS} was not already set in the
 environment, then set it to @option{-g -02} for @acronym{GNU} @code{g77} (or
 @option{-O2} where @code{g77} does not accept @option{-g}).  Otherwise,
 set @code{FCFLAGS} to @option{-g} for all other Fortran compilers.
+
+Because of a bug in Autoconf, you should invoke @code{AC_PROG_CC} before
+invoking @code{AC_PROG_FC}.
 @end defmac
 
 @defmac AC_PROG_F77_C_O

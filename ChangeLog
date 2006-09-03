@@ -1,7 +1,10 @@
 2006-09-03  Paul Eggert  <eggert@cs.ucla.edu>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
-	* doc/autoconf.texi (Limitations of Builtins): Document
-	'unset' bugs of Bash 2.01 and 2.05a.
+	* doc/autoconf.texi (Limitations of Builtins): Document 'unset'
+	bugs of Bash 2.01 and 2.05a.
+	(Fortran Compiler): Document that AC_PROG_CC should be called
+	before AC_PROG_FC, due to a bug in Autoconf.
 
 2006-09-01  Paul Eggert  <eggert@cs.ucla.edu>
 
