@@ -2402,7 +2402,7 @@ Absolute name of @code{top_builddir}.
 
 @defvar srcdir
 @ovindex srcdir
-The relative name of the directory that contains the source code for
+The name of the directory that contains the source code for
 that makefile.
 @end defvar
 
@@ -2413,7 +2413,7 @@ Absolute name of @code{srcdir}.
 
 @defvar top_srcdir
 @ovindex top_srcdir
-The relative name of the top-level source code directory for the
+The name of the top-level source code directory for the
 package.  In the top-level directory, this is the same as @code{srcdir}.
 @end defvar
 

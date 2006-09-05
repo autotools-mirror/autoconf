@@ -1,3 +1,9 @@
+2006-09-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Preset Output Variables): srcdir and
+	top_srcdir are not necessarily relative.  Problem reported
+	by Dries Kimpe.
+
 2006-09-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Prefer xlf90/xlf95 over
@@ -13,7 +19,7 @@
 	of ERLANG_LIB_VER_* variables.
 	* doc/autoconf.texi (Erlang Libraries): Document ERLANG_LIB_VER_*
 	variables.
-		
+
 2006-09-03  Paul Eggert  <eggert@cs.ucla.edu>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
