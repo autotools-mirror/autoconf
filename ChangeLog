@@ -1,3 +1,12 @@
+2006-09-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Prefer xlf90/xlf95 over
+	f90/f95 because the latter drivers of AIX Fortran 9.1 do not
+	accept files with extension `.f'.  For consistency, also prefer
+	xlf over f77.
+	* doc/autoconf.texi (Fortran Compiler): Remove mention of bug
+	from last patch.
+
 2006-09-05  Romain Lenglet  <rlenglet@users.forge.objectweb.org>
 
 	* lib/autoconf/erlang.m4 (AC_ERLANG_CHECK_LIB): Added substitution
