@@ -7337,20 +7337,29 @@ when running @command{configure}.
 @defmac AC_ERLANG_CHECK_LIB (@var{library}, @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{ERLANG_CHECK_LIB}
 @ovindex ERLANG_LIB_DIR_@var{library}
+@ovindex ERLANG_LIB_VER_@var{library}
 
-Test whether the Erlang/OTP library @var{library} is installed by calling
-Erlang's @code{code:lib_dir/1} function.  The result of this test is cached if
-caching is enabled when running @command{configure}.  @var{action-if-found} is a
-list of shell commands to run if the library is installed;
-@var{action-if-not-found} is a list of shell commands to run if it is not.
-Additionally, if the library is installed, the output variable
-@samp{ERLANG_LIB_DIR_@var{library}} is set to the path to the library
-installation directory.  For example, to check if library @code{stdlib} is
-installed:
+Test whether the Erlang/OTP library @var{library} is installed by
+calling Erlang's @code{code:lib_dir/1} function.  The result of this
+test is cached if caching is enabled when running @command{configure}.
+@var{action-if-found} is a list of shell commands to run if the library
+is installed; @var{action-if-not-found} is a list of shell commands to
+run if it is not.  Additionally, if the library is installed, the output
+variable @samp{ERLANG_LIB_DIR_@var{library}} is set to the path to the
+library installation directory, and the output variable
+@samp{ERLANG_LIB_VER_@var{library}} is set to the version number that is
+part of the subdirectory name, if it is in the standard form
+(@code{@var{library}-@var{version}}).  If the directory name does not
+have a version part, @samp{ERLANG_LIB_VER_@var{library}} is set to the
+empty string.  If the library is not installed,
+@samp{ERLANG_LIB_DIR_@var{library}} and
+@samp{ERLANG_LIB_VER_@var{library}} are set to @code{"not found"}.  For
+example, to check if library @code{stdlib} is installed:
 
 @example
 AC_ERLANG_CHECK_LIB([stdlib],
-  [echo "stdlib is installed in $ERLANG_LIB_DIR_stdlib"],
+  [echo "stdlib version \"$ERLANG_LIB_VER_stdlib\""
+   echo "is installed in \"$ERLANG_LIB_DIR_stdlib\""],
   [AC_MSG_ERROR([stdlib was not found!])])
 @end example
 @end defmac

@@ -1,3 +1,10 @@
+2006-09-05  Romain Lenglet  <rlenglet@users.forge.objectweb.org>
+
+	* lib/autoconf/erlang.m4 (AC_ERLANG_CHECK_LIB): Added substitution
+	of ERLANG_LIB_VER_* variables.
+	* doc/autoconf.texi (Erlang Libraries): Document ERLANG_LIB_VER_*
+	variables.
+		
 2006-09-03  Paul Eggert  <eggert@cs.ucla.edu>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

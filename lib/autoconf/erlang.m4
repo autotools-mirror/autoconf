@@ -181,7 +181,8 @@ AC_DEFUN([AC_LANG_COMPILER(Erlang)],
 
 
 
-dnl Macro for checking if an Erlang library is installed
+dnl Macro for checking if an Erlang library is installed, and to
+dnl determine its version
 
 # AC_ERLANG_CHECK_LIB(LIBRARY, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -------------------------------------------------------------------
@@ -203,14 +204,21 @@ AC_CACHE_CHECK([for Erlang/OTP '$1' library subdirectory],
             end,
             halt(ReturnValue)])],
         [erlang_cv_lib_dir_$1=`cat conftest.out`],
-        [if ! test -f conftest.out; then
+        [if test ! -f conftest.out; then
              AC_MSG_FAILURE([test Erlang program execution failed])
          else
              erlang_cv_lib_dir_$1="not found"
          fi])
      AC_LANG_POP(Erlang)[]dnl
     ])
+AC_CACHE_CHECK([for Erlang/OTP '$1' library version],
+    [erlang_cv_lib_ver_$1],
+    [AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"],
+        [erlang_cv_lib_ver_$1="not found"],
+        [erlang_cv_lib_ver_$1=`echo "$erlang_cv_lib_dir_$1" | sed -n -e 's,^.*-\([[^/-]]*\)$,\1,p'`])[]dnl
+    ])
 AC_SUBST([ERLANG_LIB_DIR_$1], [$erlang_cv_lib_dir_$1])
+AC_SUBST([ERLANG_LIB_VER_$1], [$erlang_cv_lib_ver_$1])
 AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"], [$3], [$2])
 ])# AC_ERLANG_CHECK_LIB
 
