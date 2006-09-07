@@ -1,3 +1,8 @@
+2006-09-07  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autom4te.in (Automake-preselections): Preselect
+	AM_ENABLE_MULTILIB.
+
 2006-09-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Preset Output Variables): srcdir and

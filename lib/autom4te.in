@@ -57,6 +57,7 @@ args: --preselect AC_SUBST
 args: --preselect AC_SUBST_TRACE
 args: --preselect AM_AUTOMAKE_VERSION
 args: --preselect AM_CONDITIONAL
+args: --preselect AM_ENABLE_MULTILIB
 args: --preselect AM_GNU_GETTEXT
 args: --preselect AM_INIT_AUTOMAKE
 args: --preselect AM_MAINTAINER_MODE
