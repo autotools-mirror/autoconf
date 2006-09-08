@@ -89,97 +89,6 @@ args: --preselect AM_GNU_GETTEXT
 end-language: "Autoreconf-preselections"
 
 
-## ------------------------ ##
-## Autoscan-preselections.  ##
-## ------------------------ ##
-
-# To update the following list:
-#
-#$ tests/autom4te -l autoconf -M -t AN_OUTPUT:\$3 |
-# sed 's/(.*//' |
-# sort -u |
-# grep -v '^warn' |
-# sed 's/^/args: --preselect /'
-#
-# and add AC_CHECK_LIB by hand.
-#
-# I'm a bit frightened to put this into the Makefile, which was
-# my goal: running autom4te to get this list requires autom4te.cfg,
-# which is what we are building :(  In fact we need three files, not
-# two (autom4te.pre -> autom4te.in -> autom4te.cfg).
-begin-language: "Autoscan-preselections"
-args: --preselect AC_CHECK_FUNCS
-args: --preselect AC_CHECK_HEADERS
-args: --preselect AC_CHECK_LIB
-args: --preselect AC_CHECK_MEMBERS
-args: --preselect AC_CHECK_TYPES
-args: --preselect AC_C_CONST
-args: --preselect AC_C_INLINE
-args: --preselect AC_C_VOLATILE
-args: --preselect AC_DECL_SYS_SIGLIST
-args: --preselect AC_FUNC_ALLOCA
-args: --preselect AC_FUNC_CHOWN
-args: --preselect AC_FUNC_CLOSEDIR_VOID
-args: --preselect AC_FUNC_ERROR_AT_LINE
-args: --preselect AC_FUNC_FORK
-args: --preselect AC_FUNC_FSEEKO
-args: --preselect AC_FUNC_GETGROUPS
-args: --preselect AC_FUNC_GETLOADAVG
-args: --preselect AC_FUNC_GETMNTENT
-args: --preselect AC_FUNC_GETPGRP
-args: --preselect AC_FUNC_LSTAT
-args: --preselect AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
-args: --preselect AC_FUNC_MALLOC
-args: --preselect AC_FUNC_MBRTOWC
-args: --preselect AC_FUNC_MEMCMP
-args: --preselect AC_FUNC_MKTIME
-args: --preselect AC_FUNC_MMAP
-args: --preselect AC_FUNC_OBSTACK
-args: --preselect AC_FUNC_REALLOC
-args: --preselect AC_FUNC_SELECT_ARGTYPES
-args: --preselect AC_FUNC_SETPGRP
-args: --preselect AC_FUNC_SETVBUF_REVERSED
-args: --preselect AC_FUNC_STAT
-args: --preselect AC_FUNC_STRCOLL
-args: --preselect AC_FUNC_STRERROR_R
-args: --preselect AC_FUNC_STRFTIME
-args: --preselect AC_FUNC_STRNLEN
-args: --preselect AC_FUNC_STRTOD
-args: --preselect AC_FUNC_UTIME_NULL
-args: --preselect AC_FUNC_VPRINTF
-args: --preselect AC_FUNC_WAIT3
-args: --preselect AC_HEADER_DIRENT
-args: --preselect AC_HEADER_MAJOR
-args: --preselect AC_HEADER_STAT
-args: --preselect AC_HEADER_STDC
-args: --preselect AC_HEADER_SYS_WAIT
-args: --preselect AC_HEADER_TIME
-args: --preselect AC_PATH_X
-args: --preselect AC_PROG_AWK
-args: --preselect AC_PROG_CC
-args: --preselect AC_PROG_CPP
-args: --preselect AC_PROG_CXX
-args: --preselect AC_PROG_GCC_TRADITIONAL
-args: --preselect AC_PROG_INSTALL
-args: --preselect AC_PROG_LEX
-args: --preselect AC_PROG_LN_S
-args: --preselect AC_PROG_MAKE_SET
-args: --preselect AC_PROG_RANLIB
-args: --preselect AC_PROG_YACC
-args: --preselect AC_REPLACE_FNMATCH
-args: --preselect AC_STRUCT_ST_BLOCKS
-args: --preselect AC_STRUCT_TIMEZONE
-args: --preselect AC_STRUCT_TM
-args: --preselect AC_TYPE_MODE_T
-args: --preselect AC_TYPE_OFF_T
-args: --preselect AC_TYPE_PID_T
-args: --preselect AC_TYPE_SIGNAL
-args: --preselect AC_TYPE_SIZE_T
-args: --preselect AC_TYPE_UID_T
-args: --preselect AM_GNU_GETTEXT
-end-language: "Autoscan-preselections"
-
-
 ## ----------------------------- ##
 ## Autoconf without aclocal.m4.  ##
 ## ----------------------------- ##
@@ -192,10 +101,6 @@ args: --cache=autom4te.cache
 args: autoconf/autoconf.m4f
 args: acsite.m4?
 args: --mode 777
-args: --language Autoheader-preselections
-args: --language Automake-preselections
-args: --language Autoreconf-preselections
-args: --language Autoscan-preselections
 args: --language M4sh
 end-language: "Autoconf-without-aclocal-m4"
 
@@ -205,6 +110,9 @@ end-language: "Autoconf-without-aclocal-m4"
 ## ---------- ##
 
 begin-language: "Autoconf"
+args: --language Autoheader-preselections
+args: --language Automake-preselections
+args: --language Autoreconf-preselections
 args: --language Autoconf-without-aclocal-m4
 args: aclocal.m4?
 end-language: "Autoconf"

@@ -1,3 +1,10 @@
+2006-09-08  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autom4te.in (Autoconf-without-aclocal-m4): Move the
+	preselections ...
+	(Autoconf): ... here.
+	(Autoscan-preselections): Delete.
+
 2006-09-07  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autom4te.in (Automake-preselections): Preselect
