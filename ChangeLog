@@ -1,3 +1,14 @@
+2006-09-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_MKTIME):  Add year_2050_test
+	to catch glibc bug 2821
+	<http://sourceware.org/bugzilla/show_bug.cgi?id=2821>.
+
+	Merge from gnulib as follows: Use AC_CHECK_HEADERS_ONCE instead of
+	AC_CHECK_HEADERS, and likewise for AC_CHECK_FUNCS_ONCE and
+	AC_CHECK_FUNCS.  Don't check for stdlib.h, since we now
+	assume C89.
+
 2006-09-08  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autom4te.in (Autoconf-without-aclocal-m4): Move the
