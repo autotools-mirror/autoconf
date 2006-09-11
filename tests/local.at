@@ -63,40 +63,50 @@ m4_define([AT_CHECK_PERL_SYNTAX],
 
 # AT_CHECK_M4(COMMAND, [EXIT-STATUS = 0], STDOUT, STDERR)
 # -------------------------------------------------------
-# If stderr is specified, normalize the observed stderr.  E.g. (GNU M4 1.5):
+# If stderr is specified, normalize the observed stderr.
+# This (using GNU M4 1.4.6 or later)
 #
-#  /usr/local/bin/m4: script.4s: 1: Cannot open foo: No such file or directory
+#  /usr/local/bin/m4:script.4s:1: cannot open `foo': No such file or directory
 #  autom4te: /usr/local/bin/m4 failed with exit status: 1
 #
-# or (using gm4 as GNU M4 1.4):
+# or this (GNU M4 1.4 installed as gm4)
 #
 #  script.4s:1: /usr/local/bin/gm4: Cannot open foo: No such file or directory
 #  autom4te: /usr/local/bin/gm4 failed with exit status: 1
 #
 # becomes
 #
-#  m4: script.4s: 1: Cannot open foo: No such file or directory
+#  m4:script.4s:1: cannot open `foo': No such file or directory
 #  autom4te: m4 failed with exit status: 1
 #
 # We use the following sed patterns:
 #
-#     (file): (line): (m4):
-# or  (m4): (file): (line):
-# to  m4: (file): (line):
+#     (m4): ?(file): ?(line):
+# or  (file): ?(line): ?(m4):
+# to  m4:(file):(line):
+#
+# and
+#     m4:(file):(line): Cannot open foo:
+# to  m4:(file):(line): cannot open `foo':
 #
 # and
 #     autom4te: [^ ]m4
 # or  autom4te: [^ ]m4.exe
 # to  autom4te: m4
+#
+# Moreover, DJGPP error messages include the error code in brackets;
+# remove the error code during normalization.
+#
 m4_define([AT_CHECK_M4],
 [AT_CHECK([$1], [$2], [$3], m4_ifval([$4], [stderr]))
 m4_ifval([$4],
-[AT_CHECK([[sed -e 's/^\([^:]*\): *\([0-9][0-9]*\): *[^:]*m4: /m4: \1: \2: /' \
-		-e 's/^[^:]*m4: *\([^:]*\): *\([0-9][0-9]*\): /m4: \1: \2: /' \
-		-e 's/^autom4te: [^ ]*m4 /autom4te: m4 /' \
-		-e 's/^autom4te: [^ ]*m4\.exe /autom4te: m4 /' \
-		-e 's/ (E[A-Z]*)$//' \
-	   stderr]], [0],[$4])])
+[AT_CHECK([[sed 's/^[^:]*m4: *\([^:]*:\) *\([0-9][0-9]*: \)/m4:\1\2/
+	s/^\([^:]*:\) *\([0-9][0-9]*:\)[^:]*m4: /m4:\1\2 /
+	s/^\(m4:[^:]*:[0-9][0-9]*: \)C\(annot open \)\([^`:]*\):/\1c\2`\3'\'':/
+	s/^autom4te: [^ ]*m4 /autom4te: m4 /
+	s/^autom4te: [^ ]*m4\.exe /autom4te: m4 /
+	s/ (E[A-Z]*)$//
+    ' stderr]], [0],[$4])])
 ])
 
 # AT_CHECK_AUTOM4TE(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)

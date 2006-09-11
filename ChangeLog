@@ -1,3 +1,10 @@
+2006-09-11  Stepan Kasal  <kasal@ucw.cz>
+
+	* tests/local.at (AT_CHECK_M4): Fix this so that the testsuite
+	  works with GNU M4 1.4.3 again; make the normalized form
+	  match the current m4 message; fix the description.
+	* test/tools.at (autom4te cache): Adapt to the change.
+
 2006-09-11  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Here-Documents): Document bug in UnixWare
