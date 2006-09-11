@@ -11103,6 +11103,10 @@ be worked around by omitting the braces: @code{$variable}.  The bug was fixed in
 @samp{ksh93g} (1998-04-30) but as of 2006 many operating systems were
 still shipping older versions with the bug.
 
+The UnixWare 7.1.4 @command{/usr/bin/posix/sh} can mishandle words in
+here-documents that cross 8 KiB buffer boundaries.  The usual workaround
+for this bug is to use another shell.
+
 Many older shells (including the Bourne shell) implement here-documents
 inefficiently.  In particular, some shells can be extremely inefficient when
 a single statement contains many here-documents.  For instance if your
