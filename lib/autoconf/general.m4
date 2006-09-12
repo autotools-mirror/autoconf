@@ -1632,9 +1632,7 @@ AC_DEFUN([AC_CONFIG_MACRO_DIR],
 [case $1 in
   [[\\/]]* | ?:[[\\/]]* ) ac_macro_dir=$1         ;;
   *)                      ac_macro_dir=$srcdir/$1 ;;
-esac
-test -d "$ac_macro_dir" ||
-  AC_MSG_ERROR([cannot find macro directory `$1'])
+esac[]dnl
 ])# AC_CONFIG_MACRO_DIR
 
 

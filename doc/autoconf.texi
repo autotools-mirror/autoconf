@@ -1901,12 +1901,11 @@ local macros can be found using @code{AC_CONFIG_MACRO_DIR}.
 
 @defmac AC_CONFIG_MACRO_DIR (@var{dir})
 @acindex{CONFIG_MACRO_DIR}
-Future versions of @command{autopoint}, @command{libtoolize},
-@command{aclocal} and @command{autoreconf} will use directory
-@var{dir} as the location of additional local Autoconf macros.  Be
-sure to call this macro directly from @file{configure.ac} so that
-tools that install macros for @command{aclocal} can find the
-declaration before @option{--trace} can be called safely.
+Specify @var{dir} as the location of additional local Autoconf macros.
+This macro is intended for use by future versions of commands like
+@command{autoreconf} that trace macro calls.  It should be called
+directly from @file{configure.ac} so that tools that install macros for
+@command{aclocal} can find the macros' declarations.
 @end defmac
 
 
