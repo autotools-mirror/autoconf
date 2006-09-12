@@ -1,15 +1,15 @@
+2006-09-12  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_TEST_PREPARE): Avoid bug in UnixWare
+	7.1.4 /usr/bin/posix/sh described by Tim Rice in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2006-09/msg00017.html>.
+
 2006-09-11  Stepan Kasal  <kasal@ucw.cz>
 
 	* tests/local.at (AT_CHECK_M4): Fix this so that the testsuite
 	  works with GNU M4 1.4.3 again; make the normalized form
 	  match the current m4 message; fix the description.
 	* test/tools.at (autom4te cache): Adapt to the change.
-
-2006-09-11  Paul Eggert  <eggert@cs.ucla.edu>
-
-	* doc/autoconf.texi (Here-Documents): Document bug in UnixWare
-	7.1.4 /usr/bin/posix/sh described by Tim Rice in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-09/msg00017.html>.
 
 2006-09-08  Paul Eggert  <eggert@cs.ucla.edu>
 
