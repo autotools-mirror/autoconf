@@ -1021,10 +1021,7 @@ esac[]dnl
 m4_defun([_AS_TEST_PREPARE],
 [# Find out whether ``test -x'' works.  Don't use a zero-byte file, as
 # systems may use methods other than mode bits to determine executability.
-cat >conf$$.file <<_ASEOF
-#! /bin/sh
-exit 0
-_ASEOF
+echo '#! /bin/sh' >conf$$.file
 chmod +x conf$$.file
 if test -x conf$$.file >/dev/null 2>&1; then
   as_executable_p="test -x"
