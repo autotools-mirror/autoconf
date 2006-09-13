@@ -8415,7 +8415,7 @@ line argument, including when no cache is used:
 @example
 $ @kbd{CC=/usr/bin/cc ./configure undeclared_var=raboof --silent}
 $ @kbd{./config.status --recheck}
-running /bin/sh ./configure undeclared_var=raboof --silent \
+running CONFIG_SHELL=/bin/sh /bin/sh ./configure undeclared_var=raboof \
   CC=/usr/bin/cc  --no-create --no-recursion
 @end example
 @end itemize

@@ -1,3 +1,13 @@
+2006-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS): Quote the
+	argument to `--prefix' for sub-configure scripts.
+	Pass `--silent' to sub-configure scripts.
+	* tests/torture.at (Configuring subdirectories): Add tests
+	for both changes.
+	* doc/autoconf.texi (Setting Output Variables): Fix example to
+	not show `--silent' being passed to a `configure' re-run.
+
 2006-09-12  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Input): Clarify role of AC_CONFIG_MACRO_DIR.

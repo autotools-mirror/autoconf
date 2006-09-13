@@ -876,6 +876,21 @@ top_srcdir=../../../inner
 prefix=/good
 ])
 
+# Make sure --prefix is properly quoted
+AT_CHECK([cd builddir && ../configure --prefix "/a  b c$ 'd"], 0, [ignore])
+AT_CHECK([cat builddir/inner/innermost/config], 0,
+[INNER=inner
+srcdir=../../../inner/innermost
+top_srcdir=../../../inner
+prefix=/a  b c$ 'd
+])
+
+# Make sure --silent is properly passed...
+AT_CHECK([cd builddir && ../configure --silent], 0, [])
+# ...but not stored in config.status.
+AT_CHECK([cd builddir && ./config.status --recheck], 0, [stdout])
+AT_CHECK([grep 'creating \./config.status' stdout], 0, [ignore])
+
 # Make sure we can run autoreconf on a subdirectory
 rm -f configure configure.in
 AT_CHECK([autoreconf inner], [], [], [ignore])
