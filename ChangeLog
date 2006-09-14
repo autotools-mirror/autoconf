@@ -1,7 +1,7 @@
 2006-09-14  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (AC_CONFIG_MACRO_DIR): Remove a
-          mistaken comment: the path has to be relative; do not use
+	  mistaken comment: the path has to be relative; do not use
 	  the path at runtime.
 
 2006-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
