@@ -1627,13 +1627,7 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # AC_CONFIG_MACRO_DIR(DIR)
 # ------------------------
 # Declare directory containing additional macros for aclocal.
-# DIR can be either absolute or relative to $srcdir.
-AC_DEFUN([AC_CONFIG_MACRO_DIR],
-[case $1 in
-  [[\\/]]* | ?:[[\\/]]* ) ac_macro_dir=$1         ;;
-  *)                      ac_macro_dir=$srcdir/$1 ;;
-esac[]dnl
-])# AC_CONFIG_MACRO_DIR
+AC_DEFUN([AC_CONFIG_MACRO_DIR], [])
 
 
 
