@@ -1,8 +1,13 @@
+2006-09-15  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_GETMNTENT): Eliminate the
+	expansion of AC_CHECK_FUNCS.
+
 2006-09-14  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (AC_CONFIG_MACRO_DIR): Remove a
-	  mistaken comment: the path has to be relative; do not use
-	  the path at runtime.
+	mistaken comment: the path has to be relative; do not use
+	the path at runtime.
 
 2006-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -28,8 +33,8 @@
 2006-09-11  Stepan Kasal  <kasal@ucw.cz>
 
 	* tests/local.at (AT_CHECK_M4): Fix this so that the testsuite
-	  works with GNU M4 1.4.3 again; make the normalized form
-	  match the current m4 message; fix the description.
+	works with GNU M4 1.4.3 again; make the normalized form
+	match the current m4 message; fix the description.
 	* test/tools.at (autom4te cache): Adapt to the change.
 
 2006-09-08  Paul Eggert  <eggert@cs.ucla.edu>
