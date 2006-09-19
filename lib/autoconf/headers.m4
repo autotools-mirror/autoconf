@@ -412,8 +412,8 @@ AS_VAR_POPDEF([ac_Header])dnl
 # -----------------------------------
 m4_define([AH_CHECK_HEADERS_DIRENT],
 [m4_foreach_w([AC_Header], [$1],
-  [AH_TEMPLATE(AS_TR_CPP(HAVE_[]AC_Header),
-	       [Define to 1 if you have the <]AC_Header[> header file, and
+  [AH_TEMPLATE(AS_TR_CPP([HAVE_]m4_defn([AC_Header])),
+	       [Define to 1 if you have the <]m4_defn([AC_Header])[> header file, and
 		it defines `DIR'.])])])
 
 

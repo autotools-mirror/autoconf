@@ -1,3 +1,9 @@
+2006-09-19  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/libs.m4 (AH_CHECK_LIB): Fix quoting, to be
+	  consistent with _AH_CHECK_FUNCS and _AH_CHECK_HEADERS.
+	* lib/autoconf/headers.m4 (AH_CHECK_HEADERS_DIRENT): Likewise.
+
 2006-09-15  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_GETMNTENT): Eliminate the

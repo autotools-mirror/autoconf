@@ -142,8 +142,8 @@ AS_VAR_POPDEF([ac_Lib])dnl
 # AH_CHECK_LIB(LIBNAME)
 # ---------------------
 m4_define([AH_CHECK_LIB],
-[AH_TEMPLATE(AS_TR_CPP(HAVE_LIB$1),
-	     [Define to 1 if you have the `]$1[' library (-l]$1[).])])
+[AH_TEMPLATE(AS_TR_CPP([HAVE_LIB$1]),
+	     [Define to 1 if you have the `$1' library (-l$1).])])
 
 
 # AC_HAVE_LIBRARY(LIBRARY,
