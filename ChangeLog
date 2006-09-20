@@ -1,3 +1,11 @@
+2006-09-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/c.m4 (_AC_ARG_VAR_LDFLAGS): Update comment.
+	(_AC_ARG_VAR_LIBS): New macro: let LIBS be precious.
+	(AC_PROG_CC, AC_PROG_CXX, AC_PROG_OBJC): Call _AC_ARG_VAR_LIBS.
+	* lib/autoconf/fortran.m4 (AC_PROG_F77, AC_PROG_FC): Likewise.
+	Report by Olly Betts.
+
 2006-09-19  Eric Blake  <ebb9@byu.net>
 
 	* m4/m4.m4: Change copyright.

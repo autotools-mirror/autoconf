@@ -389,12 +389,20 @@ AC_DEFUN([_AC_ARG_VAR_CPPFLAGS],
 # _AC_ARG_VAR_LDFLAGS
 # -------------------
 # Document and register LDFLAGS, which is used by
-# AC_PROG_{CC, CXX, F77}.
+# AC_PROG_{CC, CXX, F77, FC, OBJC}.
 AC_DEFUN([_AC_ARG_VAR_LDFLAGS],
 [AC_ARG_VAR([LDFLAGS],
 	    [linker flags, e.g. -L<lib dir> if you have libraries in a
 	     nonstandard directory <lib dir>])])
 
+
+# _AC_ARG_VAR_LIBS
+# ----------------
+# Document and register LIBS, which is used by
+# AC_PROG_{CC, CXX, F77, FC, OBJS}.
+AC_DEFUN([_AC_ARG_VAR_LIBS],
+[AC_ARG_VAR([LIBS],
+	    [libraries to pass to the linker, e.g. -l<library>])])
 
 
 # AC_LANG_PREPROC(C)
@@ -517,6 +525,7 @@ AC_DEFUN([AC_PROG_CC],
 AC_ARG_VAR([CC],     [C compiler command])dnl
 AC_ARG_VAR([CFLAGS], [C compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
+_AC_ARG_VAR_LIBS()dnl
 _AC_ARG_VAR_CPPFLAGS()dnl
 m4_ifval([$1],
       [AC_CHECK_TOOLS(CC, [$1])],
@@ -756,6 +765,7 @@ AC_DEFUN([AC_PROG_CXX],
 AC_ARG_VAR([CXX],      [C++ compiler command])dnl
 AC_ARG_VAR([CXXFLAGS], [C++ compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
+_AC_ARG_VAR_LIBS()dnl
 _AC_ARG_VAR_CPPFLAGS()dnl
 _AC_ARG_VAR_PRECIOUS([CCC])dnl
 if test -z "$CXX"; then
@@ -926,6 +936,7 @@ AC_DEFUN([AC_PROG_OBJC],
 AC_ARG_VAR([OBJC],      [Objective C compiler command])dnl
 AC_ARG_VAR([OBJCFLAGS], [Objective C compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
+_AC_ARG_VAR_LIBS()dnl
 _AC_ARG_VAR_CPPFLAGS()dnl
 _AC_ARG_VAR_PRECIOUS([OBJC])dnl
 AC_CHECK_TOOLS(OBJC,

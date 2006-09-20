@@ -392,6 +392,7 @@ AC_DEFUN([AC_PROG_F77],
 AC_ARG_VAR([F77],    [Fortran 77 compiler command])dnl
 AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
+_AC_ARG_VAR_LIBS()dnl
 _AC_PROG_FC([Fortran 77], [$1])
 G77=`test $ac_compiler_gnu = yes && echo yes`
 AC_LANG_POP(Fortran 77)dnl
@@ -407,6 +408,7 @@ AC_DEFUN([AC_PROG_FC],
 AC_ARG_VAR([FC],    [Fortran compiler command])dnl
 AC_ARG_VAR([FCFLAGS], [Fortran compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
+_AC_ARG_VAR_LIBS()dnl
 _AC_PROG_FC([$2], [$1])
 AC_LANG_POP(Fortran)dnl
 ])# AC_PROG_FC
