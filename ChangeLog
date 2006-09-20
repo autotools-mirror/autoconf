@@ -1,5 +1,20 @@
 2006-09-19  Eric Blake  <ebb9@byu.net>
 
+	* m4/m4.m4: Change copyright.
+	* configure: Regenerate.
+	* Makefile.in: Likewise.
+	* bin/Makefile.in: Likewise.
+	* doc/Makefile.in: Likewise.
+	* lib/Makefile.in: Likewise.
+	* lib/Autom4te/Makefile.in: Likewise.
+	* lib/autoconf/Makefile.in: Likewise.
+	* lib/autoscan/Makefile.in: Likewise.
+	* lib/autotest/Makefile.in: Likewise.
+	* lib/emacs/Makefile.in: Likewise.
+	* lib/m4sugar/Makefile.in: Likewise.
+	* man/Makefile.in: Likewise.
+	* tests/Makefile.in: Likewise.
+
 	* m4/m4.m4 (AC_PROG_GNU_M4): Check for m4 --debugfile support.
 	* bin/Makefile.am (edit): Substitute M4_DEBUGFILE.
 	* bin/autom4te.in (handle_m4): Favor --debugfile over misnamed

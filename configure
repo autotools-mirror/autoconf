@@ -516,10 +516,7 @@ fi
 
 # Find out whether ``test -x'' works.  Don't use a zero-byte file, as
 # systems may use methods other than mode bits to determine executability.
-cat >conf$$.file <<_ASEOF
-#! /bin/sh
-exit 0
-_ASEOF
+echo '#! /bin/sh' >conf$$.file
 chmod +x conf$$.file
 if test -x conf$$.file >/dev/null 2>&1; then
   as_executable_p="test -x"
@@ -625,6 +622,7 @@ am__untar
 ac_cv_sh_n_works
 EXPR
 M4
+M4_DEBUGFILE
 HELP2MAN
 PERL
 TEST_EMACS
@@ -2284,6 +2282,23 @@ fi
 fi
 { echo "$as_me:$LINENO: result: $ac_cv_prog_gnu_m4" >&5
 echo "${ECHO_T}$ac_cv_prog_gnu_m4" >&6; }
+if test $ac_cv_prog_gnu_m4 = yes ; then
+  { echo "$as_me:$LINENO: checking how m4 supports trace files" >&5
+echo $ECHO_N "checking how m4 supports trace files... $ECHO_C" >&6; }
+if test "${ac_cv_prog_gnu_m4_debugfile+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case `$M4 --help < /dev/null 2>&1` in
+    *debugfile*) ac_cv_prog_gnu_m4_debugfile=--debugfile ;;
+    *) ac_cv_prog_gnu_m4_debugfile=--error-output ;;
+  esac
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_prog_gnu_m4_debugfile" >&5
+echo "${ECHO_T}$ac_cv_prog_gnu_m4_debugfile" >&6; }
+  M4_DEBUGFILE=$ac_cv_prog_gnu_m4_debugfile
+
+fi
+
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
   { { echo "$as_me:$LINENO: error: GNU M4 1.4 is required" >&5
 echo "$as_me: error: GNU M4 1.4 is required" >&2;}
@@ -3193,10 +3208,7 @@ fi
 
 # Find out whether ``test -x'' works.  Don't use a zero-byte file, as
 # systems may use methods other than mode bits to determine executability.
-cat >conf$$.file <<_ASEOF
-#! /bin/sh
-exit 0
-_ASEOF
+echo '#! /bin/sh' >conf$$.file
 chmod +x conf$$.file
 if test -x conf$$.file >/dev/null 2>&1; then
   as_executable_p="test -x"
@@ -3500,6 +3512,7 @@ am__untar!$am__untar$ac_delim
 ac_cv_sh_n_works!$ac_cv_sh_n_works$ac_delim
 EXPR!$EXPR$ac_delim
 M4!$M4$ac_delim
+M4_DEBUGFILE!$M4_DEBUGFILE$ac_delim
 HELP2MAN!$HELP2MAN$ac_delim
 PERL!$PERL$ac_delim
 TEST_EMACS!$TEST_EMACS$ac_delim
@@ -3513,7 +3526,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 72; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 73; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

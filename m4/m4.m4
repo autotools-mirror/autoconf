@@ -1,19 +1,8 @@
-# Copyright (C) 2000, 2006 Free Software Foundation, Inc.
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# m4.m4 serial 2
+dnl Copyright (C) 2000, 2006 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
 
 # AC_PROG_GNU_M4
 # --------------
@@ -31,10 +20,10 @@ if test x"$M4" != x; then
 fi])
 if test $ac_cv_prog_gnu_m4 = yes ; then
   AC_CACHE_CHECK([how m4 supports trace files], [ac_cv_prog_gnu_m4_debugfile],
-[case `$M4 --help < /dev/null 2>&1` in
-  *debugfile*) ac_cv_prog_gnu_m4_debugfile=--debugfile ;;
-  *) ac_cv_prog_gnu_m4_debugfile=--error-output ;;
-esac])
-AC_SUBST([M4_DEBUGFILE], $ac_cv_prog_gnu_m4_debugfile)
+  [case `$M4 --help < /dev/null 2>&1` in
+    *debugfile*) ac_cv_prog_gnu_m4_debugfile=--debugfile ;;
+    *) ac_cv_prog_gnu_m4_debugfile=--error-output ;;
+  esac])
+  AC_SUBST([M4_DEBUGFILE], $ac_cv_prog_gnu_m4_debugfile)
 fi
 ])
