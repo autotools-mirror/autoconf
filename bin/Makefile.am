@@ -2,7 +2,7 @@
 
 ## Makefile for Autoconf.
 
-## Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005 Free Software
+## Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
 ## Foundation, Inc.
 
 ## This program is free software; you can redistribute it and/or modify
@@ -46,6 +46,7 @@ edit = sed \
 	-e 's|@autoheader-name[@]|'`echo autoheader | sed '$(transform)'`'|g' \
 	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
 	-e 's|@M4[@]|$(M4)|g' \
+	-e 's|@M4_DEBUGFILE[@]|$(M4_DEBUGFILE)|g' \
 	-e 's|@AWK[@]|$(AWK)|g' \
 	-e 's|@VERSION[@]|$(VERSION)|g' \
 	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \

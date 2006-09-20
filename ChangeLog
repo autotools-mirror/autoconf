@@ -1,3 +1,10 @@
+2006-09-19  Eric Blake  <ebb9@byu.net>
+
+	* m4/m4.m4 (AC_PROG_GNU_M4): Check for m4 --debugfile support.
+	* bin/Makefile.am (edit): Substitute M4_DEBUGFILE.
+	* bin/autom4te.in (handle_m4): Favor --debugfile over misnamed
+	--error-output, to avoid warnings with M4 2.0.
+
 2006-09-19  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/libs.m4 (AH_CHECK_LIB): Fix quoting, to be
