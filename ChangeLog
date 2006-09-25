@@ -1,3 +1,14 @@
+2006-09-25  Paul Eggert  <eggert@cs.ucla.edu>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_OBSTACK): Avoid `gcc -Wall'
+	warnings (uninitialized value).
+	(AC_FUNC_UTIME_NULL): Likewise, test for and include <utime.h> if
+	present.
+	* lib/autoconf/types.m4 (AC_TYPE_LONG_LONG_INT): Likewise, add
+	parentheses.
+	(AC_STRUCT_TM): Likewise, avoid unused variables.
+
 2006-09-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/c.m4 (_AC_ARG_VAR_LDFLAGS): Update comment.

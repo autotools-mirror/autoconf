@@ -479,7 +479,7 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
 			   ? 1 : -1)];
 	    int i = 63;]],
 	  [[long long int llmax = 9223372036854775807ll;
-	    return (ll << 63 | ll >> 63 | ll < i | ll > i
+	    return ((ll << 63) | (ll >> 63) | (ll < i) | (ll > i)
 		    | llmax / ll | llmax % ll);]])],
        [ac_cv_type_long_long_int=yes],
        [ac_cv_type_long_long_int=no])])
@@ -919,7 +919,9 @@ AC_DEFUN([AC_STRUCT_TM],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <time.h>
 ],
-				    [struct tm *tp; tp->tm_sec;])],
+				    [struct tm tm;
+				     int *p = &tm.tm_sec;
+ 				     return !p;])],
 		   [ac_cv_struct_tm=time.h],
 		   [ac_cv_struct_tm=sys/time.h])])
 if test $ac_cv_struct_tm = sys/time.h; then

@@ -1340,7 +1340,9 @@ AC_DEFUN([AC_FUNC_OBSTACK],
 AC_CACHE_CHECK([for obstacks], ac_cv_func_obstack,
 [AC_LINK_IFELSE(
     [AC_LANG_PROGRAM([[@%:@include "obstack.h"]],
-		     [[struct obstack *mem; obstack_free(mem,(char *) 0)]])],
+		     [[struct obstack mem;
+		       obstack_init (&mem);
+		       obstack_free (&mem, 0);]])],
 		[ac_cv_func_obstack=yes],
 		[ac_cv_func_obstack=no])])
 if test $ac_cv_func_obstack = yes; then
@@ -1758,10 +1760,14 @@ AU_ALIAS([AC_STRCOLL], [AC_FUNC_STRCOLL])
 # ------------------
 AN_FUNCTION([utime], [AC_FUNC_UTIME_NULL])
 AC_DEFUN([AC_FUNC_UTIME_NULL],
-[AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
+[AC_CHECK_HEADERS_ONCE(utime.h)
+AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
 [rm -f conftest.data; >conftest.data
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
-AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
+	       #ifdef HAVE_UTIME_H
+	       # include <utime.h>
+	       #endif],
 [[struct stat s, t;
   return ! (stat ("conftest.data", &s) == 0
 	    && utime ("conftest.data", 0) == 0
