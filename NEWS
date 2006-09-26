@@ -13,6 +13,8 @@
   New macro, with the behavior of the 2.60a AC_COMPUTE_INT macro.
   AC_COMPUTE_INT no longer caches or reports results.
 
+** AC_CHECK_DECL now also works with aggregate objects.
+
 ** GNU M4 1.4.7 or later is now recommended.
 
 * Major changes in Autoconf 2.60a (2006-08-25)
