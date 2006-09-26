@@ -130,17 +130,18 @@ m4_define([_AC_SYS_LARGEFILE_TEST_INCLUDES],
 m4_define([_AC_SYS_LARGEFILE_MACRO_VALUE],
 [AC_CACHE_CHECK([for $1 value needed for large files], [$3],
 [while :; do
-  $3=no
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$5], [$6])],
-		    [break])
+		    [$3=no; break])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@define $1 $2
 $5], [$6])],
 		    [$3=$2; break])
+  $3=unknown
   break
 done])
-if test "$$3" != no; then
-  AC_DEFINE_UNQUOTED([$1], [$$3], [$4])
-fi
+case $$3 in #(
+  no | unknown) ;;
+  *) AC_DEFINE_UNQUOTED([$1], [$$3], [$4]);;
+esac
 rm -f conftest*[]dnl
 ])# _AC_SYS_LARGEFILE_MACRO_VALUE
 
@@ -181,10 +182,12 @@ if test "$enable_largefile" != no; then
     ac_cv_sys_file_offset_bits,
     [Number of bits in a file offset, on hosts where this is settable.],
     [_AC_SYS_LARGEFILE_TEST_INCLUDES])
-  _AC_SYS_LARGEFILE_MACRO_VALUE(_LARGE_FILES, 1,
-    ac_cv_sys_large_files,
-    [Define for large files, on AIX-style hosts.],
-    [_AC_SYS_LARGEFILE_TEST_INCLUDES])
+  if test $ac_cv_sys_file_offset_bits = unknown; then
+    _AC_SYS_LARGEFILE_MACRO_VALUE(_LARGE_FILES, 1,
+      ac_cv_sys_large_files,
+      [Define for large files, on AIX-style hosts.],
+      [_AC_SYS_LARGEFILE_TEST_INCLUDES])
+  fi
 fi
 ])# AC_SYS_LARGEFILE
 

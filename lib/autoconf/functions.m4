@@ -472,8 +472,8 @@ AN_FUNCTION([error_at_line], [AC_FUNC_ERROR_AT_LINE])
 AC_DEFUN([AC_FUNC_ERROR_AT_LINE],
 [AC_LIBSOURCES([error.h, error.c])dnl
 AC_CACHE_CHECK([for error_at_line], ac_cv_lib_error_at_line,
-[AC_LINK_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-				 [error_at_line (0, 0, "", 0, "");])],
+[AC_LINK_IFELSE([AC_LANG_PROGRAM([#include <error.h>],
+				 [error_at_line (0, 0, "", 0, "an error occurred");])],
 		[ac_cv_lib_error_at_line=yes],
 		[ac_cv_lib_error_at_line=no])])
 if test $ac_cv_lib_error_at_line = no; then
@@ -589,17 +589,13 @@ AC_DEFUN([AC_FUNC_FSEEKO],
 [_AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
    [ac_cv_sys_largefile_source],
    [Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2).],
-   [@%:@include <stdio.h>], [return !fseeko;])
+   [@%:@include <stdio.h>],
+   [[return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);]])
 
 # We used to try defining _XOPEN_SOURCE=500 too, to work around a bug
 # in glibc 2.1.3, but that breaks too many other things.
 # If you want fseeko and ftello with glibc, upgrade to a fixed glibc.
-AC_CACHE_CHECK([for fseeko], [ac_cv_func_fseeko],
-[AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <stdio.h>],
-				 [[return fseeko && fseeko (stdin, 0, 0);]])],
-		[ac_cv_func_fseeko=yes],
-		[ac_cv_func_fseeko=no])])
-if test $ac_cv_func_fseeko = yes; then
+if test $ac_cv_sys_largefile_source != unknown; then
   AC_DEFINE(HAVE_FSEEKO, 1,
     [Define to 1 if fseeko (and presumably ftello) exists and is declared.])
 fi
@@ -1653,7 +1649,8 @@ LIBS="-lintl $LIBS"])])dnl
 # ---------------
 AN_FUNCTION([strnlen], [AC_FUNC_STRNLEN])
 AC_DEFUN([AC_FUNC_STRNLEN],
-[AC_CACHE_CHECK([for working strnlen], ac_cv_func_strnlen_working,
+[AC_REQUIRE([AC_USE_SYSTEM_EXTENSIONS])dnl
+AC_CACHE_CHECK([for working strnlen], ac_cv_func_strnlen_working,
 [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [[
 #define S "foobar"
 #define S_LEN (sizeof S - 1)
@@ -1998,6 +1995,7 @@ AC_CACHE_CHECK([for wait3 that fills in rusage],
 [AC_INCLUDES_DEFAULT[
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/wait.h>
 /* HP-UX has wait3 but does not fill in rusage at all.  */
 int
 main ()

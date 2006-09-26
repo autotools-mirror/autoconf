@@ -1,3 +1,43 @@
+2006-09-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_FSEEKO): Don't compile the
+	fseeko testing program twice; just use the earlier result.
+	* lib/autoconf/specific.m4 (_AC_SYS_LARGEFILE_MACRO_VALUE):
+	Set cache var to 'unknown' (not 'no') if leaving the macro unset
+	still doesn't let the program compile.
+	(AC_SYS_LARGEFILE): Test for _LARGE_FILES only if earlier tests
+	failed.
+
+	* lib/autoconf/functions.m4: Fix problems reported by Ralf Wildenhues.
+	(AC_FUNC_ERROR_AT_LINE): Don't bother to check for error.h.  Just
+	include it, without including anything else.
+	(AC_FUNC_FSEEKO): Avoid gcc -Wall warnings about constant
+	expressions.
+	(AC_FUNC_STRNLEN): Require AC_USE_SYSTEM_EXTENSIONS.
+
+2006-09-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_ERROR_AT_LINE): Check for
+	`error.h', and include it, for a `error_at_line' prototype.
+	Use a nonempty format string in the link test.
+	* lib/autoconf/functions.m4 (AC_FUNC_WAIT3): Include <sys/wait.h>,
+	for a declaration of wait3.
+
+2006-09-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: AC_CHECK_DECL now also works with aggregate objects.
+	* doc/autoconf.texi (Generic Declarations): Clarify that AC_CHECK_DECL
+	can apply to constants too, and that it checks for macro defns.
+	* lib/autoconf/general.m4 (AC_CHECK_DECL): Assume C89 or better,
+	and simply cast the identifier to void.  This handles structure
+	values.  Problem reported by Ralf Wildenhues.
+	* tests/semantics.at (AC_CHECK_DECLS): Also check enums.
+
+2006-09-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/semantics.at (AC_CHECK_DECLS): Also check macros,
+	structure, and function symbols.
+
 2006-09-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/semantics.at (AC_CHECK_MEMBERS): Also test with a struct
