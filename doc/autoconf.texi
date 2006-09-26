@@ -5645,14 +5645,15 @@ test macros.
 
 @defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_DECL}
-If @var{symbol} (a function or a variable) is not declared in
+If @var{symbol} (a function, variable, or constant) is not declared in
 @var{includes} and a declaration is needed, run the shell commands
 @var{action-if-not-found}, otherwise @var{action-if-found}.  If no
 @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
 
-This macro actually tests whether it is valid to use @var{symbol} as an
-r-value, not if it is really declared, because it is much safer to avoid
+This macro actually tests whether @var{symbol} is defined as a macro or
+can be used as an r-value, not whether it is really declared, because it
+is much safer to avoid
 introducing extra declarations when they are not needed.
 @end defmac
 
