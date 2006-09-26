@@ -104,12 +104,21 @@ esac
 # AC_CHECK_DECLS
 # --------------
 # Check that it performs the correct actions:
-# Must define NEED_NO_DECL, but not NEED_YES_DECL.
 AT_CHECK_MACRO([AC_CHECK_DECLS],
-[[AC_CHECK_DECLS([yes, no],,,
-		 [int yes = 1;])]],
+[[AC_CHECK_DECLS([yes, no, myenum, mystruct, myfunc, mymacro1, mymacro2],,,
+		 [[int yes = 1;
+		   enum { myenum };
+		   struct { int x[20]; } mystruct;
+		   extern int myfunc();
+		   #define mymacro1(arg) arg
+		   #define mymacro2]])]],
 [AT_CHECK_DEFINES(
-[#define HAVE_DECL_NO 0
+[#define HAVE_DECL_MYENUM 1
+#define HAVE_DECL_MYFUNC 1
+#define HAVE_DECL_MYMACRO1 1
+#define HAVE_DECL_MYMACRO2 1
+#define HAVE_DECL_MYSTRUCT 1
+#define HAVE_DECL_NO 0
 #define HAVE_DECL_YES 1
 ])])
 
