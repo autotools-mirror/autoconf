@@ -1,4 +1,10 @@
 2006-09-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Recommend M4 1.4.7 instead of 1.4.6.
+	* README: Likewise.
+	* doc/autoconf.texi (Introduction, Why GNU M4): Likewise.
+
+2006-09-25  Paul Eggert  <eggert@cs.ucla.edu>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_OBSTACK): Avoid `gcc -Wall'
