@@ -234,10 +234,12 @@ AT_CLEANUP([header1.h header2.h header3.h])
 # Check that it performs the correct actions.
 # Must define HAVE_STRUCT_YES_S_YES, but not HAVE_STRUCT_YES_S_NO.
 AT_CHECK_MACRO([AC_CHECK_MEMBERS],
-[[AC_CHECK_MEMBERS([struct yes_s.yes, struct yes_s.no],,,
-		   [struct yes_s { int yes ;} ;])]],
+[[AC_CHECK_MEMBERS([struct yes_s.yes, struct yes_s.no, struct yes_s.substruct],,,
+		   [struct sub { int x; };
+		    struct yes_s { int yes; struct sub substruct; };])]],
 [AT_CHECK_DEFINES(
 [/* #undef HAVE_STRUCT_YES_S_NO */
+#define HAVE_STRUCT_YES_S_SUBSTRUCT 1
 #define HAVE_STRUCT_YES_S_YES 1
 ])])
 

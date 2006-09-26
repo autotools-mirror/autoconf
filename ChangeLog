@@ -1,3 +1,8 @@
+2006-09-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/semantics.at (AC_CHECK_MEMBERS): Also test with a struct
+	member.
+
 2006-09-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Recommend M4 1.4.7 instead of 1.4.6.
