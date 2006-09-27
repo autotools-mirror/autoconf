@@ -18078,7 +18078,7 @@ The special value @samp{expout} for @var{stdout} means the expected
 output of the @var{commands} is the content of the file @file{expout}.
 If @var{stdout} is @samp{stdout}, then the standard output of the
 @var{commands} is available for further tests in the file @file{stdout}.
-Similarly for @var{stderr} with @samp{expout} and @samp{stderr}.
+Similarly for @var{stderr} with @samp{experr} and @samp{stderr}.
 @end defmac
 
 
