@@ -59,6 +59,7 @@ args: --preselect AM_AUTOMAKE_VERSION
 args: --preselect AM_CONDITIONAL
 args: --preselect AM_ENABLE_MULTILIB
 args: --preselect AM_GNU_GETTEXT
+args: --preselect AM_GNU_GETTEXT_INTL_SUBDIR
 args: --preselect AM_INIT_AUTOMAKE
 args: --preselect AM_MAINTAINER_MODE
 args: --preselect AM_PROG_CC_C_O
