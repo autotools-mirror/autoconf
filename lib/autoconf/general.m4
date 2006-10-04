@@ -2358,8 +2358,10 @@ m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
 AS_IF([_AC_DO_STDERR($ac_compile) &&
-	 _AC_DO_TOKENS([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" || test ! -s conftest.err]) &&
-	 _AC_DO_TOKENS([test -s conftest.$ac_objext])],
+	 _AC_DO_TOKENS([{
+	      test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
+	      test ! -s conftest.err
+	    } && test -s conftest.$ac_objext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
@@ -2398,8 +2400,12 @@ m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
 AS_IF([_AC_DO_STDERR($ac_link) &&
-	 _AC_DO_TOKENS([test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" || test ! -s conftest.err]) &&
-	 _AC_DO_TOKENS([test -s conftest$ac_exeext])],
+       _AC_DO_TOKENS([{
+	   test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
+	   test ! -s conftest.err
+	 } &&
+	 test -s conftest$ac_exeext &&
+	 AS_EXECUTABLE_P([conftest$ac_exeext])])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
