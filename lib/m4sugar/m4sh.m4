@@ -161,9 +161,10 @@ $2
 # --------------------
 # Try to be as Bourne and/or POSIX as possible.
 #
-# FIXME: The assignment to BIN_SH is dubious; see
+# This does not set BIN_SH, due to the problems described in
 # <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
-# It might be better to remove it, but first please see
+# People who need BIN_SH should set it in their environment before invoking
+# configure; apparently this would include UnixWare, as described in
 # <http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00025.html>.
 m4_define([AS_BOURNE_COMPATIBLE],
 [# Be Bourne compatible
@@ -177,8 +178,6 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
 else
   case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
-BIN_SH=xpg4; export BIN_SH # for Tru64
-DUALCASE=1; export DUALCASE # for MKS sh
 ])
 
 
@@ -223,16 +222,9 @@ m4_expand_once([m4_append([_AS_DETECT_SUGGESTED_BODY], [
 # The real workhorse for detecting a shell with the correct
 # features.
 #
-# FIXME: The '/usr/bin/posix' below works around a shell bug in OSF
-# <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>
-# but this causes a regression on OpenServer 6.0.0
-# <http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00017.html>
-# The code should test for the OSF bug directly rather than look at
-# /usr/bin/posix here.
-#
-# FIXME: The 'test -f "$as_shell.exe"' works around a problem in OS/2
-# <http://lists.gnu.org/archive/html/autoconf/2006-06/msg00038.html>
-# but we should replace the two test -f calls with a single AS_EXECUTABLE_P.
+# FIXME: The code should test for the OSF bug described in
+# <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
+# Looking for /usr/bin/posix/sh causes more troubles than it cures.
 #
 m4_defun_once([_AS_DETECT_BETTER_SHELL],
 [m4_wrap([m4_divert_text([M4SH-SANITIZE], [
@@ -245,7 +237,7 @@ if test "x$CONFIG_SHELL" = x; then
 	 _AS_RUN([_AS_DETECT_SUGGESTED_BODY]) 2> /dev/null],
     [],
     [as_candidate_shells=
-    _AS_PATH_WALK([/usr/bin/posix$PATH_SEPARATOR/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
+    _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
       [case $as_dir in
 	 /*)
 	   for as_base in sh bash ksh sh5; do
@@ -255,7 +247,7 @@ if test "x$CONFIG_SHELL" = x; then
 
       for as_shell in $as_candidate_shells $SHELL; do
 	 # Try only shells that exist, to save several forks.
-	 AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
+	 AS_IF([AS_EXECUTABLE_P(["$as_shell"]) &&
 		_AS_RUN([_AS_DETECT_REQUIRED_BODY],
                         [("$as_shell") 2> /dev/null])],
 	       [CONFIG_SHELL=$as_shell
@@ -342,6 +334,7 @@ m4_defun([AS_SHELL_SANITIZE],
 ## --------------------- ##
 
 AS_BOURNE_COMPATIBLE
+DUALCASE=1; export DUALCASE # for MKS sh
 
 # PATH needs CR
 _AS_CR_PREPARE
@@ -785,7 +778,7 @@ fi
 # Check whether a file is executable.
 m4_defun([AS_EXECUTABLE_P],
 [AS_REQUIRE([_AS_TEST_PREPARE])dnl
-{ test -f $1 && $as_executable_p $1; }dnl
+$as_executable_p $1[]dnl
 ])# AS_EXECUTABLE_P
 
 
@@ -1021,7 +1014,7 @@ m4_defun([_AS_TEST_PREPARE],
 [if test -x / >/dev/null 2>&1; then
   as_executable_p='test -x'
 else
-  as_executable_p=:
+  as_executable_p='test -f'
 fi
 ])# _AS_TEST_PREPARE
 

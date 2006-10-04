@@ -1,5 +1,16 @@
 2006-10-04  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Special Shell Variables): Autoconf-generated
+	shel scripts no longer export BIN_SH, due to configuration
+	hassles with this.
+	* lib/m4sugar/m4sh.m4 (AS_BOURNE_COMPATIBLE): Don't set BIN_SH
+	or DUALCASE.
+	(_AS_DETECT_BETTER_SHELL): Don't look in /usr/bin/posix.
+	Use AS_EXECUTABLE_P rather than test -f.
+	(AS_SHELL_SANITIZE): Set DUALCASE.
+	(AS_EXECUTABLE_P): Just invoke as_executable_p.
+	(_AS_TEST_PREPARE): Default to test -f, rather than to nothing.
+
 	* lib/autoconf/general.m4 (_AC_COMPILE_IFELSE, _AC_LINK_IFELSE):
 	Use a single call to AC_DO_TOKENS rather than multiple, for
 	efficiency.
