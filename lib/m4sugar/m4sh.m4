@@ -1017,18 +1017,12 @@ esac[]dnl
 # ----------------
 # Find out ahead of time whether ``test -x'' can be used to distinguish
 # executables from other regular files.
-# FIXME: This should use "test -x /"; that's much faster.
 m4_defun([_AS_TEST_PREPARE],
-[# Find out whether ``test -x'' works.  Don't use a zero-byte file, as
-# systems may use methods other than mode bits to determine executability.
-echo '#! /bin/sh' >conf$$.file
-chmod +x conf$$.file
-if test -x conf$$.file >/dev/null 2>&1; then
-  as_executable_p="test -x"
+[if test -x / >/dev/null 2>&1; then
+  as_executable_p='test -x'
 else
   as_executable_p=:
 fi
-rm -f conf$$.file
 ])# _AS_TEST_PREPARE
 
 

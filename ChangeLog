@@ -1,3 +1,8 @@
+2006-10-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_TEST_PREPARE): Use "test -x /" rather
+	than creating a file to use with test -x; this is much faster.
+
 2006-10-02  Bruno Haible  <bruno@clisp.org>
 
 	* lib/autom4te.in (Automake-preselections): Add
