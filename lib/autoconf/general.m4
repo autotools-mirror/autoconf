@@ -2272,23 +2272,15 @@ AC_DEFUN([AC_RUN_LOG],
 # Try to preprocess PROGRAM.
 #
 # This macro can be used during the selection of a preprocessor.
-# Run cpp and set ac_cpp_err to "yes" for an error, to
-# "$ac_(c,cxx)_preproc_warn_flag" if there are warnings or to "" if
-# neither warnings nor errors have been detected.  eval is necessary
-# to expand ac_cpp.
+# eval is necessary to expand ac_cpp.
 AC_DEFUN([_AC_PREPROC_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-if _AC_DO_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null; then
-  if test -s conftest.err; then
-    ac_cpp_err=$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag
-    ac_cpp_err=$ac_cpp_err$ac_[]_AC_LANG_ABBREV[]_werror_flag
-  else
-    ac_cpp_err=
-  fi
-else
-  ac_cpp_err=yes
-fi
-AS_IF([test -z "$ac_cpp_err"], [$2], [_AC_MSG_LOG_CONFTEST
+AS_IF([_AC_DO_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null && {
+	 test -z "$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
+	 test ! -s conftest.err
+       }],
+  [$2],
+  [_AC_MSG_LOG_CONFTEST
   $3])
 rm -f conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_PREPROC_IFELSE
@@ -2357,11 +2349,10 @@ AC_DEFUN([AC_EGREP_HEADER],
 m4_define([_AC_COMPILE_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext
-AS_IF([_AC_DO_STDERR($ac_compile) &&
-	 _AC_DO_TOKENS([{
-	      test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
-	      test ! -s conftest.err
-	    } && test -s conftest.$ac_objext])],
+AS_IF([_AC_DO_STDERR($ac_compile) && {
+	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext],
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
@@ -2399,13 +2390,11 @@ AU_DEFUN([AC_TRY_COMPILE],
 m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
-AS_IF([_AC_DO_STDERR($ac_link) &&
-       _AC_DO_TOKENS([{
-	   test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
-	   test ! -s conftest.err
-	 } &&
-	 test -s conftest$ac_exeext &&
-	 AS_EXECUTABLE_P([conftest$ac_exeext])])],
+AS_IF([_AC_DO_STDERR($ac_link) && {
+	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       AS_EXECUTABLE_P([conftest$ac_exeext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])

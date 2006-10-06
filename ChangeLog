@@ -1,3 +1,20 @@
+2006-10-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/c.m4 (_AC_PROG_PREPROC_WORKS_IFELSE): Remove
+	comment about ac_cpp_err; it was incorrect, and anyway
+	ac_cpp_err is being removed below.
+	* lib/autoconf/general.m4 (_AC_PREPROC_IFELSE): Don't
+	set ac_cpp_err to 'yesyes' if preproc_warn_flag and werror_flag
+	are both 'yes'.  In fact, don't bother setting ac_cpp_err at all;
+	nobody uses it.
+	(_AC_COMPILE_IFELSE, _AC_LINK_IFELSE): Don't log our funky tests
+	with werror_flag and conftest.err and so forth.  This is more
+	compatible with how _AC_PROG_PREPROC_WORKS_IFELSE behaves,
+	and anyway the user shouldn't normally want to see this gorp logged.
+	Problem reported by Ralf Wildenhues.
+	* lib/autoconf/lang.m4 (AC_LANG_WERROR): werror_flag's default is
+	empty, not 'no', since the rest of the code uses 'test -z'.
+
 2006-10-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_COMPILE_IFELSE, _AC_LINK_IFELSE):

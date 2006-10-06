@@ -416,7 +416,6 @@ AC_DEFUN([AC_LANG_PREPROC(C)],
 # -----------------------------------------------
 # Check if $ac_cpp is a working preprocessor that can flag absent
 # includes either by the exit status or by warnings.
-# Set ac_cpp_err to a non-empty value if the preprocessor failed.
 # This macro is for all languages, not only C.
 AC_DEFUN([_AC_PROG_PREPROC_WORKS_IFELSE],
 [ac_preproc_ok=false

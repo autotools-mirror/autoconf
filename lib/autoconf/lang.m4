@@ -667,5 +667,5 @@ ac_objext=$OBJEXT
 # Treat warnings from the current language's preprocessor, compiler, and
 # linker as fatal errors.
 AC_DEFUN([AC_LANG_WERROR],
-[m4_divert_text([DEFAULTS], [ac_[]_AC_LANG_ABBREV[]_werror_flag=no])
+[m4_divert_text([DEFAULTS], [ac_[]_AC_LANG_ABBREV[]_werror_flag=])
 ac_[]_AC_LANG_ABBREV[]_werror_flag=yes])# AC_LANG_WERROR
