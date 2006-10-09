@@ -13476,6 +13476,13 @@ No @command{mkdir} option is portable to older systems.  Instead of
 @code{AS_MKDIR_P(@var{file-name})} (@pxref{Programming in M4sh})
 or @code{AC_PROG_MKDIR_P} (@pxref{Particular Programs}).
 
+Combining the @option{-m} and @option{-p} options, as in @samp{mkdir -m
+go-w -p @var{dir}}, often leads to trouble.  Free@acronym{BSD}
+@command{mkdir} incorrectly attempts to change the permissions of
+@var{dir} even if it already exists.  @acronym{HP-UX} 11.23 and
+@acronym{IRIX} 6.5 @command{mkdir} often assign the wrong permissions to
+any newly-created parents of @var{dir}.
+
 Posix does not clearly specify whether @samp{mkdir -p foo}
 should succeed when @file{foo} is a symbolic link to an already-existing
 directory.  The @acronym{GNU} Core Utilities 5.1.0 @command{mkdir}
