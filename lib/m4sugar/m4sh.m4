@@ -784,12 +784,21 @@ fi
 ])# _AS_DIRNAME_PREPARE
 
 
+# AS_TEST_X
+# ---------
+# Check whether a file has executable or search permissions.
+m4_defun([AS_TEST_X],
+[AS_REQUIRE([_AS_TEST_PREPARE])dnl
+$as_test_x $1[]dnl
+])# AS_EXECUTABLE_P
+
+
 # AS_EXECUTABLE_P
 # ---------------
-# Check whether a file is executable.
+# Check whether a file is a regular file that has executable permissions.
 m4_defun([AS_EXECUTABLE_P],
 [AS_REQUIRE([_AS_TEST_PREPARE])dnl
-{ test -f $1 && $as_executable_p $1; }dnl
+{ test -f $1 && AS_TEST_X([$1]); }dnl
 ])# AS_EXECUTABLE_P
 
 
@@ -1019,13 +1028,37 @@ esac[]dnl
 
 # _AS_TEST_PREPARE
 # ----------------
-# Find out ahead of time whether ``test -x'' can be used to distinguish
-# executables from other regular files.
+# Find out whether `test -x' works.  If not, prepare a substitute
+# that should work well enough for most scripts.
+#
+# Here are some of the problems with the substitute.
+# The 'ls' tests whether the owner, not the current user, can execute/search.
+# The eval means '*', '?', and '[' cause inadvertent file name globbing
+# after the 'eval', so jam together as many tokens as we can to minimize
+# the likelihood that the inadvertent globbing will actually do anything.
+# Luckily, this gorp is needed only on really ancient hosts.
+#
 m4_defun([_AS_TEST_PREPARE],
 [if test -x / >/dev/null 2>&1; then
-  as_executable_p='test -x'
+  as_test_x='test -x'
 else
-  as_executable_p=:
+  if ls -dL / >/dev/null 2>&1; then
+    as_ls_L_option=L
+  else
+    as_ls_L_option=
+  fi
+  as_test_x='
+    eval sh -c '\''
+      if test -d "$[]1"; then
+        test -d "$[]1/.";
+      else
+	case $[]1 in
+        -*)set "./$[]1";;
+	esac;
+	case `ls -ld'$as_ls_L_option' "$[]1" 2>/dev/null` in
+	???[[sx]]*):;;*)false;;esac;fi
+    '\'' sh
+  '
 fi
 ])# _AS_TEST_PREPARE
 

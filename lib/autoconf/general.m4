@@ -2394,7 +2394,7 @@ AS_IF([_AC_DO_STDERR($ac_link) && {
 	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest$ac_exeext &&
-       AS_EXECUTABLE_P([conftest$ac_exeext])],
+       AS_TEST_X([conftest$ac_exeext])],
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])
