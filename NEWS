@@ -21,6 +21,8 @@
 
 ** AC_CHECK_DECL now also works with aggregate objects.
 
+** AC_USE_SYSTEM_EXTENSIONS now defines _TANDEM_SOURCE for the NonStop platform.
+
 ** GNU M4 1.4.7 or later is now recommended.
 
 * Major changes in Autoconf 2.60a (2006-08-25)

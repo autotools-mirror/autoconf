@@ -7291,12 +7291,14 @@ facilities.  Should be called before any macros that run the C compiler.
 @cvindex _POSIX_1_SOURCE
 @cvindex _POSIX_PTHREAD_SEMANTICS
 @cvindex _POSIX_SOURCE
+@cvindex _TANDEM_SOURCE
 @cvindex __EXTENSIONS__
 If possible, enable extensions to Posix on hosts that normally disable
 the extensions, typically due to standards-conformance namespace issues.
 This may involve defining @code{__EXTENSIONS__} and
-@code{_POSIX_PTHREAD_SEMANTICS}, which are macros used by Solaris.  This
-macro also has the combined effects of @code{AC_GNU_SOURCE},
+@code{_POSIX_PTHREAD_SEMANTICS}, which are macros used by Solaris.
+It also defines @code{_TANDEM_SOURCE} for the @acronym{HP} NonStop platform.
+This macro also has the combined effects of @code{AC_GNU_SOURCE},
 @code{AC_AIX}, and @code{AC_MINIX}.
 @end defmac
 

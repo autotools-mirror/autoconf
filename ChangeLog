@@ -1,5 +1,10 @@
 2006-10-11  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* NEWS: AC_USE_SYSTEM_EXTENSIONS now defines _TANDEM_SOURCE for
+	the NonStop platform.
+	* doc/autoconf.texi (Posix Variants): Likewise.
+	* lib/autoconf/specific.m4 (AC_USE_SYSTEM_EXTENSIONS): Likewise.
+
 	* lib/m4sugar/m4sh.m4 (AS_TEST_X): New macro.
 	(AS_EXECUTABLE_P): Use as_test_x rather than as_executable_p.
 	(_AS_TEST_PREPARE): Set as_test_x rather than as_executable_p.
