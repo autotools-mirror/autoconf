@@ -1,5 +1,11 @@
 * Major changes in Autoconf 2.60b (??)
 
+** BIN_SH
+  Autoconf-generated shell scripts no longer export BIN_SH, due to
+  configuration hassles with this.  Installers who need BIN_SH in
+  their environment should set it before invoking 'configure' and
+  'make'.  As far as we know, this affects only Unixware installations.
+
 ** Obsolescent macros
   The documentation now says that the following macros are obsolescent,
   as they are superseded by Gnulib:

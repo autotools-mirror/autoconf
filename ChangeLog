@@ -1,3 +1,23 @@
+2006-10-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Autoconf-generated shell scripts no longer export BIN_SH,
+	due to configuration hassles with this.  See Tonya Underwood's report
+	<http://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00003.html>.
+	* doc/autoconf.texi (Special Shell Variables): Likewise.
+
+2006-10-11  Paul Eggert  <eggert@cs.ucla.edu>
+	    Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sh.m4 (AS_BOURNE_COMPATIBLE): Don't set BIN_SH.
+	(_AS_DETECT_BETTER_SHELL): Don't look in /usr/bin/posix.
+
+2006-10-11  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sh.m4 (AS_BOURNE_COMPATIBLE): Move the
+	  initialization which is not inherited through the environment
+	(_AS_BOURNE_COMPATIBLE): ... to this new macro.
+	(_AS_RUN): Call _AS_BOURNE_COMPATIBLE, not AS_BOURNE_COMPATIBLE.
+
 2006-10-09  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Describe
