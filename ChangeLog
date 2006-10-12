@@ -1,3 +1,9 @@
+2006-10-12  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_TEST_PREPARE): Set as_executable_p,
+	for backward compatibility with Libtool 1.5.22.  Problem reported
+	by Ralf Wildenhues.
+
 2006-10-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/c.m4 (AC_PROG_GCC_TRADITIONAL): Require

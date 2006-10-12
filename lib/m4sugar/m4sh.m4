@@ -1060,6 +1060,9 @@ else
     '\'' sh
   '
 fi
+dnl as_executable_p is present for backward compatibility with Libtool
+dnl 1.5.22, but it should go away at some point.
+as_executable_p=$as_test_x
 ])# _AS_TEST_PREPARE
 
 
