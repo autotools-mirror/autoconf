@@ -611,7 +611,8 @@ fi[]dnl
 # -----------------------
 AN_FUNCTION([ioctl],   [AC_PROG_GCC_TRADITIONAL])
 AC_DEFUN([AC_PROG_GCC_TRADITIONAL],
-[if test $ac_cv_c_compiler_gnu = yes; then
+[AC_REQUIRE([AC_PROG_CC])dnl
+if test $ac_cv_c_compiler_gnu = yes; then
     AC_CACHE_CHECK(whether $CC needs -traditional,
       ac_cv_prog_gcc_traditional,
 [  ac_pattern="Autoconf.*'x'"
