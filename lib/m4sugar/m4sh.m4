@@ -790,7 +790,7 @@ fi
 m4_defun([AS_TEST_X],
 [AS_REQUIRE([_AS_TEST_PREPARE])dnl
 $as_test_x $1[]dnl
-])# AS_EXECUTABLE_P
+])# AS_TEST_X
 
 
 # AS_EXECUTABLE_P
