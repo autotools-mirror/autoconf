@@ -1,3 +1,8 @@
+2006-10-13  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Autoheader Macros): Warn that the text
+	added to the template can get mangled.
+
 2006-10-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_OBSTACK): In the test,

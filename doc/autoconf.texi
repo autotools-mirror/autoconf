@@ -3137,27 +3137,12 @@ templates for symbols defined by @code{AC_CHECK_HEADERS},
 symbol, you must define a template for it.  If there are missing
 templates, @command{autoheader} fails with an error message.
 
-The simplest way to create a template for a @var{symbol} is to supply
-the @var{description} argument to an @samp{AC_DEFINE(@var{symbol})}; see
-@ref{Defining Symbols}.  You may also use one of the following macros.
+The template for a @var{symbol} is created
+by @command{autoheader} from
+the @var{description} argument to an @code{AC_DEFINE};
+see @ref{Defining Symbols}.
 
-@defmac AH_VERBATIM (@var{key}, @var{template})
-@ahindex{VERBATIM}
-Tell @command{autoheader} to include the @var{template} as-is in the header
-template file.  This @var{template} is associated with the @var{key},
-which is used to sort all the different templates and guarantee their
-uniqueness.  It should be a symbol that can be defined via @code{AC_DEFINE}.
-
-For example:
-
-@example
-AH_VERBATIM([_GNU_SOURCE],
-[/* Enable GNU extensions on systems that have them.  */
-#ifndef _GNU_SOURCE
-# define _GNU_SOURCE
-#endif])
-@end example
-@end defmac
+For special needs, you can use the following macros.
 
 
 @defmac AH_TEMPLATE (@var{key}, @var{description})
@@ -3189,6 +3174,14 @@ justified.
 @end defmac
 
 
+@defmac AH_VERBATIM (@var{key}, @var{template})
+@ahindex{VERBATIM}
+Tell @command{autoheader} to include the @var{template} as-is in the header
+template file.  This @var{template} is associated with the @var{key},
+which is used to sort all the different templates and guarantee their
+uniqueness.  It should be a symbol that can be defined via @code{AC_DEFINE}.
+
+
 @defmac AH_TOP (@var{text})
 @ahindex{TOP}
 Include @var{text} at the top of the header template file.
@@ -3199,6 +3192,16 @@ Include @var{text} at the top of the header template file.
 @ahindex{BOTTOM}
 Include @var{text} at the bottom of the header template file.
 @end defmac
+
+
+Please note that @var{text} gets included ``verbatim'' to the template file,
+not to the resulting config header, so it can easily get mangled when the
+template is processed.  There is rarely a need for something other than
+
+@example
+AH_BOTTOM([#include <custom.h>])
+@end example
+
 
 
 @node Configuration Commands
