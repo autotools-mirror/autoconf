@@ -1335,8 +1335,11 @@ AC_DEFUN([AC_FUNC_OBSTACK],
 [AC_LIBSOURCES([obstack.h, obstack.c])dnl
 AC_CACHE_CHECK([for obstacks], ac_cv_func_obstack,
 [AC_LINK_IFELSE(
-    [AC_LANG_PROGRAM([[@%:@include "obstack.h"]],
+    [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
+		      [@%:@include "obstack.h"]],
 		     [[struct obstack mem;
+		       @%:@define obstack_chunk_alloc malloc
+		       @%:@define obstack_chunk_free free
 		       obstack_init (&mem);
 		       obstack_free (&mem, 0);]])],
 		[ac_cv_func_obstack=yes],

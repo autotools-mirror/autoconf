@@ -1,3 +1,9 @@
+2006-10-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_OBSTACK): In the test,
+	include the default headers, and redefine obstack_chunk_alloc
+	and obstack_chunk_free.  Fixes false failure with glibc.
+
 2006-10-12  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_TEST_PREPARE): Set as_executable_p,
