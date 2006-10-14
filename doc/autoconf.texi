@@ -3180,6 +3180,7 @@ Tell @command{autoheader} to include the @var{template} as-is in the header
 template file.  This @var{template} is associated with the @var{key},
 which is used to sort all the different templates and guarantee their
 uniqueness.  It should be a symbol that can be defined via @code{AC_DEFINE}.
+@end defmac
 
 
 @defmac AH_TOP (@var{text})
