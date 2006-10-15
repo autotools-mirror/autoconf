@@ -104,8 +104,8 @@ AC_DEFUN([AC_CHECK_HEADER],
 # because of the cache variables, and the `checking...' messages.
 m4_define([_AC_CHECK_HEADER_MONGREL],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AS_VAR_SET_IF(ac_Header,
-	      [AC_CACHE_CHECK([for $1], ac_Header, [])],
+AS_VAR_SET_IF([ac_Header],
+	      [AC_CACHE_CHECK([for $1], [ac_Header], [])],
 	      [# Is the header compilable?
 AC_MSG_CHECKING([$1 usability])
 AC_COMPILE_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT([$4])
@@ -140,10 +140,10 @@ case $ac_header_compiler:$ac_header_preproc:$ac_[]_AC_LANG_ABBREV[]_preproc_warn
      ) | sed "s/^/$as_me: WARNING:     /" >&2])
     ;;
 esac
-AC_CACHE_CHECK([for $1], ac_Header,
-	       [AS_VAR_SET(ac_Header, $ac_header_preproc)])
+AC_CACHE_CHECK([for $1], [ac_Header],
+	       [AS_VAR_SET([ac_Header], [$ac_header_preproc])])
 ])dnl ! set ac_HEADER
-AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
+AS_IF([test AS_VAR_GET([ac_Header]) = yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_MONGREL
 
@@ -155,12 +155,12 @@ AS_VAR_POPDEF([ac_Header])dnl
 # Check the compiler accepts HEADER-FILE.  The INCLUDES are defaulted.
 m4_define([_AC_CHECK_HEADER_NEW],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AC_CACHE_CHECK([for $1], ac_Header,
+AC_CACHE_CHECK([for $1], [ac_Header],
 	       [AC_COMPILE_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT([$4])
 @%:@include <$1>])],
-				  [AS_VAR_SET(ac_Header, yes)],
-				  [AS_VAR_SET(ac_Header, no)])])
-AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
+				  [AS_VAR_SET([ac_Header], [yes])],
+				  [AS_VAR_SET([ac_Header], [no])])])
+AS_IF([test AS_VAR_GET([ac_Header]) = yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_NEW
 
@@ -171,11 +171,11 @@ AS_VAR_POPDEF([ac_Header])dnl
 # Check the preprocessor accepts HEADER-FILE.
 m4_define([_AC_CHECK_HEADER_OLD],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AC_CACHE_CHECK([for $1], ac_Header,
+AC_CACHE_CHECK([for $1], [ac_Header],
 	       [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
-					 [AS_VAR_SET(ac_Header, yes)],
-					 [AS_VAR_SET(ac_Header, no)])])
-AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
+					 [AS_VAR_SET([ac_Header], [yes])],
+					 [AS_VAR_SET([ac_Header], [no])])])
+AS_IF([test AS_VAR_GET([ac_Header]) = yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_OLD
 
@@ -395,15 +395,15 @@ AC_DEFUN([AC_HEADER_ASSERT],
 # defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
 m4_define([_AC_CHECK_HEADER_DIRENT],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_dirent_$1])dnl
-AC_CACHE_CHECK([for $1 that defines DIR], ac_Header,
+AC_CACHE_CHECK([for $1 that defines DIR], [ac_Header],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
 #include <$1>
 ],
 				    [if ((DIR *) 0)
 return 0;])],
-		   [AS_VAR_SET(ac_Header, yes)],
-		   [AS_VAR_SET(ac_Header, no)])])
-AS_IF([test AS_VAR_GET(ac_Header) = yes], [$2], [$3])[]dnl
+		   [AS_VAR_SET([ac_Header], [yes])],
+		   [AS_VAR_SET([ac_Header], [no])])])
+AS_IF([test AS_VAR_GET([ac_Header]) = yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_DIRENT
 

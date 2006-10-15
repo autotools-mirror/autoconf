@@ -632,3 +632,37 @@ foo9=9 bar9=9
 ]])
 
 AT_CLEANUP
+
+
+## --------------- ##
+## AS_LITERAL_IF.  ##
+## --------------- ##
+
+AT_SETUP([AS@&t@_LITERAL_IF])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+echo AS_LITERAL_IF([lit], [ok], [ERR]) 1
+echo AS_LITERAL_IF([l$it], [ERR], [ok]) 2
+echo AS_LITERAL_IF([l``it], [ERR], [ok]) 3
+m4_define([mac], [lit])
+echo AS_LITERAL_IF([mac], [ok], [ERR]) 4
+echo AS_LITERAL_IF([mac($, ``)], [ok], [ERR]) 5
+m4_define([mac], [l$it])
+echo AS_LITERAL_IF([mac], [ERR], [ok]) 6
+m4_define([mac], [l`it])
+echo AS_LITERAL_IF([mac], [ERR], [ok]) 7
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script], [],
+[[ok 1
+ok 2
+ok 3
+ok 4
+ok 5
+ok 6
+ok 7
+]])
+
+AT_CLEANUP

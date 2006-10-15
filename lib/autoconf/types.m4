@@ -149,16 +149,16 @@
 # constructs in general.
 m4_define([_AC_CHECK_TYPE_NEW],
 [AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
-AC_CACHE_CHECK([for $1], ac_Type,
+AC_CACHE_CHECK([for $1], [ac_Type],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])
 typedef $1 ac__type_new_;],
 [if ((ac__type_new_ *) 0)
   return 0;
 if (sizeof (ac__type_new_))
   return 0;])],
-		   [AS_VAR_SET(ac_Type, yes)],
-		   [AS_VAR_SET(ac_Type, no)])])
-AS_IF([test AS_VAR_GET(ac_Type) = yes], [$2], [$3])[]dnl
+		   [AS_VAR_SET([ac_Type], [yes])],
+		   [AS_VAR_SET([ac_Type], [no])])])
+AS_IF([test AS_VAR_GET([ac_Type]) = yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
 
@@ -774,23 +774,23 @@ m4_bmatch([$1], [\.], ,
 	 [m4_fatal([$0: Did not see any dot in `$1'])])dnl
 AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
 dnl Extract the aggregate name, and the member name
-AC_CACHE_CHECK([for $1], ac_Member,
+AC_CACHE_CHECK([for $1], [ac_Member],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [dnl AGGREGATE ac_aggr;
 static m4_bpatsubst([$1], [\..*]) ac_aggr;
 dnl ac_aggr.MEMBER;
 if (ac_aggr.m4_bpatsubst([$1], [^[^.]*\.]))
 return 0;])],
-		[AS_VAR_SET(ac_Member, yes)],
+		[AS_VAR_SET([ac_Member], [yes])],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [dnl AGGREGATE ac_aggr;
 static m4_bpatsubst([$1], [\..*]) ac_aggr;
 dnl sizeof ac_aggr.MEMBER;
 if (sizeof ac_aggr.m4_bpatsubst([$1], [^[^.]*\.]))
 return 0;])],
-		[AS_VAR_SET(ac_Member, yes)],
-		[AS_VAR_SET(ac_Member, no)])])])
-AS_IF([test AS_VAR_GET(ac_Member) = yes], [$2], [$3])dnl
+		[AS_VAR_SET([ac_Member], [yes])],
+		[AS_VAR_SET([ac_Member], [no])])])])
+AS_IF([test AS_VAR_GET([ac_Member]) = yes], [$2], [$3])dnl
 AS_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
 

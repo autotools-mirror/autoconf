@@ -1,3 +1,20 @@
+2006-10-14  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/m4sugar/m4sh.m4 (AS_LITERAL_IF): Expand $1 before
+	looking for special shell characters.
+	* lib/autoconf/functions.m4 (AC_CHECK_FUNC): Do not expand the
+	macro defined by AS_VAR_PUSHDEF before passing it as a
+	parameter.
+	* lib/autoconf/general.m4 (AC_CHECK_FILE, AC_CHECK_DECL):
+	* lib/autoconf/libs.m4 (AC_SEARCH_LIBS, AC_CHECK_LIB):
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW, AC_CHECK_MEMBER):
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL):
+	(_AC_CHECK_HEADER_NEW, _AC_CHECK_HEADER_OLD, _AC_CHECK_HEADER_DIRENT):
+	Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Quote parameters of
+	AS_VAR_* properly.
+	* tests/m4sh.at (AS_LITERAL_IF): New test.
+
 2006-10-14  Paul Eggert  <eggert@cs.ucla.edu>
 
 	(Imported from Automake.)

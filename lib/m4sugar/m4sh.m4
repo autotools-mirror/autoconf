@@ -1165,7 +1165,7 @@ m4_popdef([AS_Prefix])dnl
 # This is an *approximation*: for instance EXPRESSION = `\$' is
 # definitely a literal, but will not be recognized as such.
 m4_define([AS_LITERAL_IF],
-[m4_bmatch([$1], [[`$]],
+[m4_bmatch(m4_quote($1), [[`$]],
 	   [$3], [$2])])
 
 
