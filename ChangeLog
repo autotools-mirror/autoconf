@@ -1,3 +1,56 @@
+2006-10-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	(Imported from Automake.)
+	* build-aux/install-sh (posix_mkdir): Reject FreeBSD 6.1 mkdir -p -m,
+	which incorrectly sets the mode of an existing destination
+	directory.  In some cases the unpatched install-sh could do the
+	equivalent of "chmod 777 /" or "chmod 0 /" on a buggy FreeBSD
+	system.  We hope this is rare in practice, but it's clearly worth
+	fixing.  Problem reported by Alex Unleashed in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00012.html>.
+	Also, don't bother to check for -m bugs unless we're using -m;
+	suggested by Stepan Kasal.
+
+2006-10-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Import this change from Automake:
+
+	2006-08-23  Alexandre Duret-Lutz  <adl@gnu.org>
+	* lib/Autom4te/ChannelDefs.pm (usage): Mention that -Wportability
+	is enabled by default with gnu and gnits strictness.
+	Report from Bruno Haible.
+
+	2006-03-10  Alexandre Duret-Lutz  <adl@gnu.org>
+	* lib/Autom4te/ChannelDefs.pm: Make -Wportability the default in
+	gnu and gnits modes.
+
+	Import this change from Config:
+
+	2006-09-20  Ben Elliston  <bje@gnu.org>
+	* build-aux/config.sub (score, score-*): New.
+
+	Import this change from Gnulib:
+
+	2006-09-16  Karl Berry  <karl@gnu.org>
+	* doc/fdl.texi (ADDENDUM): switch to @heading from @appendixsubsec,
+	to avoid sectioning errors.
+
+	Import these changes from Texinfo:
+
+	2006-10-04  Karl Berry  <karl@gnu.org>
+	* build-aux/texinfo.tex (\singlequotechar): rename to \codequoteright.
+	(\quoteexpand): rename to \rquoteexpand.
+	(\codequoteleft): new def, to look for @set codequotebacktick.
+	(\lquoteexpand, \quoteexpand): new defs.
+	(\lquoteChar, \rquoteChar, \dashChar, \underChar: new \chardef's.
+	(\code): must use new \...Char values, since now ` is active.
+
+	2006-08-26  Karl Berry  <karl@gnu.org>
+	* build-aux/texinfo.tex (\textdegree): New command.
+
+	2006-08-12  Karl Berry  <karl@gnu.org>
+	* build-aux/texinfo.tex (error \box0): smaller font.
+
 2006-10-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Autoheader Macros): Fix syntax error.
