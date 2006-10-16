@@ -1,3 +1,14 @@
+2006-10-16  Eric Blake  <ebb9@byu.net>
+
+	* bin/autoconf.as (version): Reword to match GNU Coding
+	Standards.
+	* bin/autoheader.in (version): Likewise.
+	* bin/autom4te.in (version): Likewise.
+	* bin/autoreconf.in (version): Likewise.
+	* bin/autoscan.in (version): Likewise.
+	* bin/autoupdate.in (version): Likewise.
+	* bin/ifnames.in (version): Likewise.
+
 2006-10-14  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/m4sugar/m4sh.m4 (AS_LITERAL_IF): Expand $1 before
