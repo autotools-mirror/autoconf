@@ -8356,7 +8356,7 @@ The string @var{variable} is passed to @code{m4_pattern_allow}
 (@pxref{Forbidden Patterns}).
 @end defmac
 
-@cindex Previous Variable
+@cindex Precious Variable
 @cindex Variable, Precious
 Running @command{configure} in varying environments can be extremely
 dangerous.  If for instance the user runs @samp{CC=bizarre-cc

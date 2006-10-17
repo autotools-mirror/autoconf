@@ -1,5 +1,7 @@
 2006-10-16  Eric Blake  <ebb9@byu.net>
 
+	* doc/autoconf.texi (Setting Output Variables): Fix typo.
+
 	* bin/autoconf.as (version): Reword to match GNU Coding
 	Standards.
 	* bin/autoheader.in (version): Likewise.
