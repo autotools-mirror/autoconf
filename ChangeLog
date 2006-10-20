@@ -1,3 +1,7 @@
+2006-10-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Fix two typos.
+
 2006-10-19  Eric Blake  <ebb9@byu.net>
 
 	* lib/m4sugar/m4sugar.m4 (m4_mkstemp): New macro.

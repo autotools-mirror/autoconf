@@ -13490,7 +13490,7 @@ was equivalent to @samp{sources='*.c not found'} in the absence of
 @prindex @command{mkdir}
 @cindex Making directories
 No @command{mkdir} option is portable to older systems.  Instead of
-@samp{mkdir -p @var{file-name}}, you should use use
+@samp{mkdir -p @var{file-name}}, you should use
 @code{AS_MKDIR_P(@var{file-name})} (@pxref{Programming in M4sh})
 or @code{AC_PROG_MKDIR_P} (@pxref{Particular Programs}).
 
@@ -13613,7 +13613,7 @@ This problem no longer exists in Mac OS X 10.4.3.
 @prindex @command{rm}
 The @option{-f} and @option{-r} options are portable.
 
-A file might not be be removed even if its parent directory is writable
+A file might not be removed even if its parent directory is writable
 and searchable.  Many Posix hosts cannot remove a mount point, a named
 stream, a working directory, or a last link to a file that is being
 executed.
