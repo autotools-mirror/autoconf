@@ -1,3 +1,12 @@
+2006-10-19  Eric Blake  <ebb9@byu.net>
+
+	* lib/m4sugar/m4sugar.m4 (m4_mkstemp): New macro.
+	(m4_maketemp): Avoid warnings with M4 1.9a.
+	* lib/emacs/autoconf-mode.el (autoconf-font-lock-keywords): Color
+	m4_mkstemp.
+	* doc/autoconf.texi (Redefined M4 Macros): Document m4_mkstemp.
+	* NEWS: Likewise.
+
 2006-10-16  Eric Blake  <ebb9@byu.net>
 
 	* doc/autoconf.texi (Setting Output Variables): Fix typo.

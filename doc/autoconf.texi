@@ -9752,7 +9752,6 @@ M4sugar''.
 @msindex{index}
 @msindex{indir}
 @msindex{len}
-@msindex{maketemp}
 @msindex{pushdef}
 @msindex{shift}
 @msindex{substr}
@@ -9856,6 +9855,20 @@ m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
 to recover the behavior of the builtin.
 @end defmac
 
+@defmac m4_maketemp (@var{template})
+@defmacx m4_mkstemp (@var{template})
+@msindex{maketemp}
+@msindex{mkstemp}
+Posix requires @code{maketemp} to replace the trailing @samp{X}
+characters in @var{template} with the process id, without regards to the
+existence of a file by that name, but this a security hole.  When this
+was pointed out to the Posix folks, they agreed to invent a new macro
+@code{mkstemp} that always creates a uniquely named file, but not all
+versions of @acronym{GNU} M4 support the new macro.  In M4sugar,
+@code{m4_maketemp} and @code{m4_mkstemp} are synonyms for each other,
+and both have the secure semantics regardless of which macro the
+underlying M4 provides.
+@end defmac
 
 
 @node Looping constructs
@@ -19135,4 +19148,6 @@ introduced in this document.
 @c Local Variables:
 @c fill-column: 72
 @c ispell-local-dictionary: "american"
+@c indent-tabs-mode: nil
+@c whitespace-check-buffer-indent: nil
 @c End:

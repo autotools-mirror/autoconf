@@ -140,7 +140,12 @@ m4_rename_m4([indir])
 m4_rename_m4([len])
 m4_rename([m4exit], [m4_exit])
 m4_rename([m4wrap], [m4_wrap])
-m4_rename_m4([maketemp])
+m4_ifdef([mkstemp],dnl added in M4 1.4.8
+[m4_rename_m4([mkstemp])
+m4_copy([m4_mkstemp], [m4_maketemp])
+m4_undefine([maketemp])],
+[m4_rename_m4([maketemp])
+m4_copy([m4_maketemp], [m4_mkstemp])])
 m4_rename([patsubst], [m4_bpatsubst])
 m4_undefine([popdef])
 m4_rename_m4([pushdef])
