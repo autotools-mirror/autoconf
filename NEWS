@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.60b (??)
+* Major changes in Autoconf 2.60b (2006-10-22)
 
 ** BIN_SH
   Autoconf-generated shell scripts no longer export BIN_SH, due to
@@ -15,8 +15,7 @@
   New programs should use the Gnulib counterparts of these macros.
   We have no current plans to remove them from Autoconf.
 
-** AC_COMPUTE_INT
-  No longer caches or reports results.
+** AC_COMPUTE_INT no longer caches or reports results.
 
 ** AC_CHECK_DECL now also works with aggregate objects.
 

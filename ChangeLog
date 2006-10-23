@@ -1,5 +1,7 @@
 2006-10-22  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* NEWS: Version 2.60b.
+
 	Import this change from Texinfo:
 	2006-10-15  Karl Berry  <karl@gnu.org>
 	* build-aux/texinfo.tex: automake 1.10
