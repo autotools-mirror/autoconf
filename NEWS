@@ -15,13 +15,12 @@
   New programs should use the Gnulib counterparts of these macros.
   We have no current plans to remove them from Autoconf.
 
-** AC_CACHE_CHECK_INT
-  New macro, with the behavior of the 2.60a AC_COMPUTE_INT macro.
-  AC_COMPUTE_INT no longer caches or reports results.
+** AC_COMPUTE_INT
+  No longer caches or reports results.
 
 ** AC_CHECK_DECL now also works with aggregate objects.
 
-** AC_USE_SYSTEM_EXTENSIONS now defines _TANDEM_SOURCE for the NonStop platform.
+** AC_USE_SYSTEM_EXTENSIONS now defines _TANDEM_SOURCE for NonStop platforms.
 
 ** GNU M4 1.4.7 or later is now recommended.
 

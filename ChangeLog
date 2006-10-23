@@ -1,3 +1,12 @@
+2006-10-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Remove AC_CACHE_CHECK_INT.
+	* doc/autoconf.texi (Caching Results): Likewise.
+	* lib/autoconf/general.m4 (_AC_CACHE_CHECK_INT): Renamed from
+	AC_CACHE_CHECK_INT, since it's no longer public.
+	* lib/autoconf/types.m4: All uses of AC_CACHE_CHECK_INT changed.
+	* tests/base.at (AC_COMPUTE_INT): Test this, not AC_CACHE_CHECK_INT.
+
 2006-10-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Fix two typos.

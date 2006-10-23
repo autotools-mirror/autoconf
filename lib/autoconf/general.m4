@@ -1926,13 +1926,13 @@ AS_LITERAL_IF([$2],
 	       AC_MSG_RESULT([$ac_res])])dnl
 ])
 
-# AC_CACHE_CHECK_INT(MESSAGE, CACHE-ID, EXPRESSION,
-#                    [PROLOGUE = DEFAULT-INCLUDES], [IF-FAILS])
+# _AC_CACHE_CHECK_INT(MESSAGE, CACHE-ID, EXPRESSION,
+#                     [PROLOGUE = DEFAULT-INCLUDES], [IF-FAILS])
 # -------------------------------------------------------------
-AC_DEFUN([AC_CACHE_CHECK_INT],
+AC_DEFUN([_AC_CACHE_CHECK_INT],
 [AC_CACHE_CHECK([$1], [$2],
    [AC_COMPUTE_INT([$2], [$3], [$4], [$5])])
-])# AC_CACHE_CHECK_INT
+])# _AC_CACHE_CHECK_INT
 
 
 

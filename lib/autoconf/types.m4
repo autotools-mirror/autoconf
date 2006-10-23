@@ -684,7 +684,7 @@ AC_CHECK_TYPE([$1], [], [], [$3])
 # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
 # declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
 # This bug is HP SR number 8606223364.
-AC_CACHE_CHECK_INT([size of $1], [AS_TR_SH([ac_cv_sizeof_$1])],
+_AC_CACHE_CHECK_INT([size of $1], [AS_TR_SH([ac_cv_sizeof_$1])],
   [(long int) (sizeof (ac__type_sizeof_))],
   [AC_INCLUDES_DEFAULT([$3])
    typedef $1 ac__type_sizeof_;],
@@ -707,7 +707,7 @@ AC_DEFUN([AC_CHECK_ALIGNOF],
 AC_CHECK_TYPE([$1], [], [], [$2])
 # The cast to long int works around a bug in the HP C Compiler,
 # see AC_CHECK_SIZEOF for more information.
-AC_CACHE_CHECK_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$1])],
+_AC_CACHE_CHECK_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$1])],
   [(long int) offsetof (ac__type_alignof_, y)],
   [AC_INCLUDES_DEFAULT([$2])
 #ifndef offsetof

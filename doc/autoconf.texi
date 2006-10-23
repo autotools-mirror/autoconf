@@ -8500,22 +8500,6 @@ The @var{commands-to-set-it} @emph{must have no side effects} except for
 setting the variable @var{cache-id}, see below.
 @end defmac
 
-@defmac AC_CACHE_CHECK_INT (@var{message}, @var{cache-id}, @var{expression}, @dvar{includes, default-includes}, @ovar{action-if-fails})
-@acindex{CACHE_CHECK_INT}
-This is a convenience macro for invoking @code{AC_COMPUTE_INT} to store
-into @var{cache-id} the value of the integer @var{expression}.
-
-This macro also checks whether the result is cached,
-and reports the test on the standard output
-with @code{AC_MSG_CHECKING} (which prints @var{message}) and
-@code{AC_MSG_RESULT}.
-
-Execute @var{action-if-fails} if the value cannot be determined correctly.
-Commands in @var{action-if-fails} must have no side effects
-except for possibly setting the variable @var{cache-id}.
-@xref{Caching Results}, for more information.
-@end defmac
-
 It is common to find buggy macros using @code{AC_CACHE_VAL} or
 @code{AC_CACHE_CHECK}, because people are tempted to call
 @code{AC_DEFINE} in the @var{commands-to-set-it}.  Instead, the code that
