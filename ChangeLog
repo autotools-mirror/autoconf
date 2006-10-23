@@ -1,5 +1,9 @@
 2006-10-22  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Import this change from Texinfo:
+	2006-10-15  Karl Berry  <karl@gnu.org>
+	* build-aux/texinfo.tex: automake 1.10
+
 	* NEWS: Remove AC_CACHE_CHECK_INT.
 	* doc/autoconf.texi (Caching Results): Likewise.
 	* lib/autoconf/general.m4 (_AC_CACHE_CHECK_INT): Renamed from
