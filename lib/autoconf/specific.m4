@@ -130,11 +130,13 @@ m4_define([_AC_SYS_LARGEFILE_TEST_INCLUDES],
 m4_define([_AC_SYS_LARGEFILE_MACRO_VALUE],
 [AC_CACHE_CHECK([for $1 value needed for large files], [$3],
 [while :; do
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$5], [$6])],
-		    [$3=no; break])
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@define $1 $2
+  m4_ifval([$6], [AC_LINK_IFELSE], [AC_COMPILE_IFELSE])(
+    [AC_LANG_PROGRAM([$5], [$6])],
+    [$3=no; break])
+  m4_ifval([$6], [AC_LINK_IFELSE], [AC_COMPILE_IFELSE])(
+    [AC_LANG_PROGRAM([@%:@define $1 $2
 $5], [$6])],
-		    [$3=$2; break])
+    [$3=$2; break])
   $3=unknown
   break
 done])

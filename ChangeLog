@@ -1,3 +1,14 @@
+2006-10-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/specific.m4 (_AC_SYS_LARGEFILE_MACRO_VALUE):
+	If FUNCTION-BODY is nonempty, use AC_LINK_IFELSE rather than
+	AC_COMPILE_IFELSE, to work around problem with OSF/1 4.0F fseeko
+	reported by Nelson H. F. Beebe for Coreutils 6.4.
+
+	* tests/tools.at (autoconf --trace: user macros): Remove test
+	for tracing multiline macros, since m4 1.4.7a uses a different
+	way to number lines.  Problem reported by Ralf Wildenhues.
+
 2006-10-24  Stepan Kasal  <kasal@ucw.cz>
 
 	* bin/autom4te.in (handle_m4): Do not redirect stdin to
