@@ -1,3 +1,7 @@
+2006-10-24  Stepan Kasal  <kasal@ucw.cz>
+
+	* bin/autoconf.as: Fix the verbose message at the end.
+
 2006-10-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* configure.ac (AC_INIT): Bump to 2.60c.

@@ -178,5 +178,5 @@ test -z "$outfile" && outfile=-
 eval set x $autom4te_options \
   --language=autoconf --output=\$outfile "$traces" \$infile
 shift
-$verbose "$as_me: running $*" >&2
+$verbose "$as_me: running $AUTOM4TE $*" >&2
 exec "$AUTOM4TE" "$@"
