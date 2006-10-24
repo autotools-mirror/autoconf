@@ -140,11 +140,12 @@ TRACE1(foo, TRACE1(bar, baz))
 TRACE1(foo, active, baz)
 TRACE1(foo, [active], TRACE1(active, [active]))
 
-# With arguments, multiple lines.
-TRACE1(foo
-bar,
-bar
-foo)
+# Disable this since m4-1.4.7a behaves differently from m4-1.4.7 and earlier.
+## With arguments, multiple lines.
+#TRACE1(foo
+#bar,
+#bar
+#foo)
 ]])
 
 # Several --traces.
@@ -164,8 +165,6 @@ configure.ac:13:TRACE1:ACTIVE:active
 configure.ac:13:TRACE2:active
 configure.ac:13:TRACE1:foo:active::ACTIVE
 configure.ac:13:TRACE2:active::ACTIVE
-configure.ac:19:TRACE1:foo bar:bar foo
-configure.ac:19:TRACE2:bar foo
 ]])
 
 # Several line requests.
@@ -185,10 +184,6 @@ AT_CHECK_AUTOCONF([[-t TRACE1:'
 [ACTIVE], [active], [].
 
 [foo], [active], [].
-
-[foo
-bar], [bar
-foo], [].
 ]])
 
 # ${sep}@.
@@ -201,8 +196,6 @@ AT_CHECK_AUTOCONF([-t TRACE2:'${)===(}@'], 0,
 [ACTIVE])===([baz]
 [active]
 [active])===([])===([ACTIVE]
-[bar
-foo]
 ]])
 
 AT_CLEANUP
