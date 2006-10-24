@@ -454,8 +454,6 @@ sub handle_m4 ($@)
 
   # Run m4.
   #
-  # Neutralize its stdin, so that GNU M4 1.5 doesn't neutralize SIGINT.
-  #
   # We don't output directly to the cache files, to avoid problems
   # when we are interrupted (that leaves corrupted files).
   xsystem ("$m4"
@@ -465,7 +463,6 @@ sub handle_m4 ($@)
 	   . " @M4_DEBUGFILE@=$tcache" . $req->id . "t"
 	   . join (' --trace=',   '', sort @macro)
 	   . " " . files_to_options (@ARGV)
-	   . ' </dev/null'
 	   . " >$ocache" . $req->id . "t");
 
   # Everything went ok: preserve the outputs.

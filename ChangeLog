@@ -1,5 +1,11 @@
 2006-10-24  Stepan Kasal  <kasal@ucw.cz>
 
+	* bin/autom4te.in (handle_m4): Do not redirect stdin to
+	/dev/null since the heuristics for interactive behaviour was
+	fixed in CVS m4.
+
+2006-10-24  Stepan Kasal  <kasal@ucw.cz>
+
 	* bin/autom4te.in: With --force, always refresh the output
 	file.  Problem reported by Greg Schafer <gschafer@zip.com.au>.
 
