@@ -987,7 +987,7 @@ $req->valid (0)
 # We now know whether we can trust the Request object.  Say it.
 verb "the trace request object is:\n" . $req->marshall;
 
-# We need to run M4 if (i) the users wants it (--force), (ii) $REQ is
+# We need to run M4 if (i) the user wants it (--force), (ii) $REQ is
 # invalid.
 handle_m4 ($req, keys %{$req->macro})
   if $force || ! $req->valid;
@@ -1026,10 +1026,10 @@ if (%trace)
   }
 else
   {
-    # Actual M4 expansion, only if $output is too old. STDOUT is
-    # pretty old.
+    # Actual M4 expansion, if the user wants it, or if $output is old
+    # (STDOUT is pretty old).
     handle_output ($req, $output)
-      if mtime ($output) < mtime ($ocache . $req->id);
+      if $force || mtime ($output) < mtime ($ocache . $req->id);
   }
 
 # If we ran up to here, the cache is valid.
