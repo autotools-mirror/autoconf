@@ -11859,8 +11859,19 @@ $ @kbd{echo abc | tr -t ab //}
 /bc
 @end example
 
+Unpatched Tru64 4.0 @command{sh} adds a slash after @samp{"$var"} if the
+variable is empty and the second double-quote is followed by a word that
+begins and ends with slash:
+
+@example
+$ @kbd{sh -xc 'p=; echo "$p"/ouch/'}
+p=
++ echo //ouch/
+//ouch/
+@end example
+
 However, our understanding is that patches are available, so perhaps
-it's not worth worrying about working around this horrendous bug.
+it's not worth worrying about working around these horrendous bugs.
 
 @node Special Shell Variables
 @section Special Shell Variables
