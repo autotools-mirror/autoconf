@@ -114,6 +114,31 @@ AT_CHECK_M4SUGAR
 AT_CLEANUP
 
 
+# autom4te --force
+# ----------------
+
+AT_SETUP([autom4te --force])
+
+AT_DATA([file.m4],
+[[right
+]])
+AT_CHECK_AUTOM4TE([-o file file.m4])
+
+# Create a file whose time stamp is in the future.
+# (next year)-01-01 00:01 UTC should always be in the future,
+# even on slow machines.
+echo BAD >file
+this_year=`TZ=UTC0 date +%Y`
+TZ=UTC0 touch -t `expr $this_year + 1`01010001 file
+
+AT_CHECK_AUTOM4TE([--force -o file file.m4])
+AT_CHECK([cat file], 0,
+[[right
+]])
+
+AT_CLEANUP
+
+
 
 
 ## ------------------ ##
