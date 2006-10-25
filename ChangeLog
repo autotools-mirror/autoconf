@@ -1,3 +1,8 @@
+2006-10-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Document that rm
+	needs operands on NetBSD 2.0.2.  Problem reported by Bruno Haible.
+
 2006-10-24  Stepan Kasal  <kasal@ucw.cz>
 
 	* tools/trace.at (autoconf --trace: user macros): Test `$%'.

@@ -13597,6 +13597,11 @@ This problem no longer exists in Mac OS X 10.4.3.
 @prindex @command{rm}
 The @option{-f} and @option{-r} options are portable.
 
+It is not portable to invoke @command{rm} without operands.  For
+example, on many systems @samp{rm -f -r} (with no other arguments)
+silently succeeds without doing anything, but it fails with a diagnostic
+on Net@acronym{BSD} 2.0.2.
+
 A file might not be removed even if its parent directory is writable
 and searchable.  Many Posix hosts cannot remove a mount point, a named
 stream, a working directory, or a last link to a file that is being
