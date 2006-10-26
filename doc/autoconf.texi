@@ -9929,6 +9929,7 @@ show(m4_quote(a, b))
 show(m4_dquote(a, b))
 arg1(mkargs)
 arg1([mkargs])
+arg1(m4_defn([mkargs]))
 arg1(m4_quote(mkargs))
 arg1(m4_dquote(mkargs))
 $ @kbd{autom4te -l m4sugar example.m4}
@@ -9937,6 +9938,7 @@ $1 = a,b, $@@ = [a,b]
 $1 = [a],[b], $@@ = [[a],[b]]
 1
 mkargs
+1, 2, 3
 1,2,3
 [1],[2],[3]
 @end example

@@ -1,5 +1,10 @@
 2006-10-26  Eric Blake  <ebb9@byu.net>
 
+	* THANKS: Update.
+	* doc/autoconf.texi (Evaluation Macros): Improve the example to
+	show effect on macros that expand with commas.
+	Reported by Joel E. Denny.
+
 	* tests/m4sugar.at (m4_warn, m4_require: circular dependencies):
 	Also work with M4 1.4.8.
 
