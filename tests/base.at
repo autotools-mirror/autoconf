@@ -230,12 +230,12 @@ AT_SETUP([AC_COMPUTE_INT])
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_COMPUTE_INT([divide_by_zero],
-	       [1 / 0],
+AC_COMPUTE_INT([invalid_expression],
+	       [**0**],
 	       [],
-	       [divide_by_zero=failed])
-test "$divide_by_zero" = failed ||
-  AC_MSG_ERROR([1 / 0 did not fail])
+	       [invalid_expression=failed])
+test "$invalid_expression" = failed ||
+  AC_MSG_ERROR([**0** evaluated to $invalid_expression instead of failing])
 ]])
 
 AT_CHECK_AUTOCONF

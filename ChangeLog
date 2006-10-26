@@ -1,3 +1,10 @@
+2006-10-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/base.at (AC_COMPUTE_INT): Test **0** rather than 1 / 0,
+	since powerpc-apple-darwin8-gcc-4.0.1 (Apple Computer, Inc. build
+	5363) simply issues a warning when dividing by zero at compile
+	time.  Problem reported by Elias Pipping.
+
 2006-10-26  Eric Blake  <ebb9@byu.net>
 
 	* THANKS: Update.
