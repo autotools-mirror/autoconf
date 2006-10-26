@@ -9921,14 +9921,24 @@ using these macros, (ii), using @code{m4_quote}, and (iii), using
 $ @kbd{cat example.m4}
 # Overquote, so that quotes are visible.
 m4_define([show], [$[]1 = [$1], $[]@@ = [$@@]])
+m4_define([mkargs], [1, 2, 3])
+m4_define([arg1], [[$1]])
 m4_divert(0)dnl
 show(a, b)
 show(m4_quote(a, b))
 show(m4_dquote(a, b))
+arg1(mkargs)
+arg1([mkargs])
+arg1(m4_quote(mkargs))
+arg1(m4_dquote(mkargs))
 $ @kbd{autom4te -l m4sugar example.m4}
 $1 = a, $@@ = [a],[b]
 $1 = a,b, $@@ = [a,b]
 $1 = [a],[b], $@@ = [[a],[b]]
+1
+mkargs
+1,2,3
+[1],[2],[3]
 @end example
 
 
