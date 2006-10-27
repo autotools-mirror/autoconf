@@ -12813,7 +12813,9 @@ expr "X$ac_feature" : '.*[^-a-zA-Z0-9_]' >/dev/null &&
 @prindex @command{trap}
 It is safe to trap at least the signals 1, 2, 13, and 15.  You can also
 trap 0, i.e., have the @command{trap} run when the script ends (either via an
-explicit @command{exit}, or the end of the script).
+explicit @command{exit}, or the end of the script).  The trap for 0 should be
+installed outside of a shell function, or @acronym{AIX} 5.3 @command{/bin/sh}
+will invoke the trap at the end of this function.
 
 Posix says that @samp{trap - 1 2 13 15} resets the traps for the
 specified signals to their default values, but many common shells (e.g.,
