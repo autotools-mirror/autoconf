@@ -1,3 +1,32 @@
+2006-10-26  Joel E. Denny  <jdenny@ces.clemson.edu>
+	and Stepan Kasal  <kasal@ucw.cz>
+
+	Handle special characters in test case titles correctly.
+	* lib/autotest/general.m4 (AT_INIT): M4-quote and AS_ESCAPE AT_help_all
+	properly.
+	(AT_SETUP): M4-quote and AS_ESCAPE the title properly everywhere.
+	* tests/autotest.at (AT_CHECK_AT_TITLE): Add EXPANDED-TITLE-TO-TEST
+	argument.  Extend to check titles printed by ./micro-suite and
+	./micro-suite -l and the title in micro-suite.log.
+	(Backquote in a test title,
+	Single-quote in a test title,
+	Double-quote in a test title): Don't expect failure anymore.
+	(Backslash in a test title): Put a non-whitespace character after the
+	backslash so that Bourne shells might actually see it as an escape
+	sequence.
+	(Brackets in a test title,
+	Pound in a test title,
+	Comma in a test title,
+	Quoted Macro in a test title,
+	Macro in a test title,
+	Macro with single-quote in a test title): New tests.
+	(Macro with backquote in a test title,
+	Macro with double-quote in a test title,
+	Macro with backslash in a test title): New tests expected to fail.
+	* tests/torture.at (#define header templates): M4-quote this title in
+	AT_SETUP call so that no M4 code is commented inadvertently somewhere.
+	The visible effect was a stray [] in the testsuite output.
+
 2006-10-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Limitations of Builtins): Do not invoke

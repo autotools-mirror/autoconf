@@ -236,27 +236,62 @@ conf
 ## Funny characters in test names. ##
 ## ------------------------------- ##
 
-# AT_CHECK_AT_TITLE(TITLE, TITLE-TO-TEST, [XFAIL-CONDITION])
-# ----------------------------------------------------------
+# AT_CHECK_AT_TITLE(TITLE, TITLE-TO-TEST, EXPANDED-TITLE-TO-TEST
+#                   [XFAIL-CONDITION])
+# ---------------------------------------------------------------
 # Create a new test named TITLE that runs an Autotest test suite
-# comprised of a trivial test named TITLE-TO-TEST.  XFAIL-CONDITION
-# passes verbatim to AT_CHECK_AT.
+# comprised of a trivial test named TITLE-TO-TEST, which expands
+# to EXPANDED-TITLE-TO-TEST.  XFAIL-CONDITION passes verbatim to
+# AT_CHECK_AT.
 m4_define([AT_CHECK_AT_TITLE],
 [AT_CHECK_AT([$1],
 [[
+m4@&t@_define([macro_name],         [[macro_expanded]])
+m4@&t@_define([macro_expanded], [[macro_overexpanded]])
+m4@&t@_define([macro_backquote],    [`])
+m4@&t@_define([macro_single_quote], ['])
+m4@&t@_define([macro_double_quote], ["])
+m4@&t@_define([macro_backslash],   [\\])
 AT_INIT([artificial test suite])
 AT_SETUP([$2])
 AT_CHECK([:])
 AT_CLEANUP
-]], [$3])])
+]], [$4], [], [], [],
+[AT_CHECK([[./micro-suite | sed -n "s/[^:]*: \(.*[^ \t]\)[ \t]*ok.*/\1/p"]],,
+[[$3
+]])
+AT_CHECK([[./micro-suite -l \
+             | sed -n "s/.*[0-9]\+: [^ \t]\+[ \t]\+\(.*[^ \t]\)[ \t]*/\1/p"]],,
+[[$3
+]])
+AT_CHECK([[sed -n "s/[^.]*\. \(.*\) ([^)]*): ok.*/\1/p" micro-suite.log]],,
+[[$3
+]])
+])])
 
 m4_define([AT_CHECK_AT_TITLE_CHAR],
-[AT_CHECK_AT_TITLE([$1 in a test title], [A $2 in my name], $3)])
+[AT_CHECK_AT_TITLE([$1 in a test title], [A $2 in my name],
+                   [A ]m4_ifval([$3], [[$3]], [[$2]])[ in my name], $4)])
 
-AT_CHECK_AT_TITLE_CHAR([Backquote],    [`], [:])
-AT_CHECK_AT_TITLE_CHAR([Single-quote], ['], [:])
-AT_CHECK_AT_TITLE_CHAR([Double-quote], ["], [:])
-AT_CHECK_AT_TITLE_CHAR([Backslash],    [\])
+AT_CHECK_AT_TITLE_CHAR([Backquote],    [`])
+AT_CHECK_AT_TITLE_CHAR([Single-quote], ['])
+AT_CHECK_AT_TITLE_CHAR([Double-quote], ["])
+AT_CHECK_AT_TITLE_CHAR([Backslash],   [\\])
+AT_CHECK_AT_TITLE_CHAR([Brackets],  [[[]]], [[]])
+AT_CHECK_AT_TITLE_CHAR([Pound],      [[#]], [#])
+AT_CHECK_AT_TITLE_CHAR([Comma],        [,])
+
+AT_CHECK_AT_TITLE_CHAR([Quoted Macro],                  [[macro_name]],
+                                                          [macro_name])
+AT_CHECK_AT_TITLE_CHAR([Macro],                           [macro_name],
+                                                      [macro_expanded])
+AT_CHECK_AT_TITLE_CHAR([Macro with backquote],       [macro_backquote],
+                                                                   [`], [:])
+AT_CHECK_AT_TITLE_CHAR([Macro with single-quote], [macro_single_quote], ['])
+AT_CHECK_AT_TITLE_CHAR([Macro with double-quote], [macro_double_quote],
+                                                                   ["], [:])
+AT_CHECK_AT_TITLE_CHAR([Macro with backslash],       [macro_backslash],
+                                                                  [\\], [:])
 
 
 ## ----------------- ##

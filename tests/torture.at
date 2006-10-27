@@ -319,7 +319,7 @@ AT_CLEANUP
 # Use various forms of `#define' templates, and make sure there are no
 # problems when a symbol is prefix of another.
 
-AT_SETUP([#define header templates])
+AT_SETUP([[#define header templates]])
 
 AT_DATA([configure.ac],
 [[AC_INIT
