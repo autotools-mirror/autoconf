@@ -792,7 +792,7 @@ AT_KEYWORDS(autoreconf)
 # We use aclocal (via autoreconf).
 AT_CHECK([aclocal --version || exit 77], [], [stdout], [ignore])
 # It should understand configure.ac.
-AT_CHECK([[grep '1.[01234]' stdout && exit 77]], [1], [ignore])
+AT_CHECK([[grep '[^0-9]1.[01234][^0-9]' stdout && exit 77]], [1], [ignore])
 
 # Set CONFIG_SITE to a nonexistent file, so that there are
 # no worries about nonstandard values for 'prefix'.
