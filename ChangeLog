@@ -1,5 +1,11 @@
 2006-11-08  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* lib/autoconf/types.m4 (AC_TYPE_LONG_LONG_INT): Set
+	ac_cv_type_long_long_int to 'yes' instead of 'cross-compiling'.
+	Imported from a similar patch to gnulib by Bruno Haible.
+
+2006-11-08  Paul Eggert  <eggert@cs.ucla.edu>
+
 	* NEWS: New macros AC_C_FLEXIBLE_ARRAY_MEMBER, AC_C_VARARRAYS.
 	* doc/autoconf.texi (C Compiler): Document them.
 	* lib/autoconf/c.m4 (AC_C_FLEXIBLE_ARRAY_MEMBER, AC_C_VARARRAYS):

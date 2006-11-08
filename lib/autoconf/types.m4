@@ -505,9 +505,9 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
 	       return 0;]])],
 	  [ac_cv_type_long_long_int=yes],
 	  [ac_cv_type_long_long_int=no],
-	  [ac_cv_type_long_long_int=cross-compiling])],
+	  [ac_cv_type_long_long_int=yes])],
        [ac_cv_type_long_long_int=no])])
-  if test $ac_cv_type_long_long_int != no; then
+  if test $ac_cv_type_long_long_int = yes; then
     AC_DEFINE([HAVE_LONG_LONG_INT], 1,
       [Define to 1 if the system has the type `long long int'.])
   fi
