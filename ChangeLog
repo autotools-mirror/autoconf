@@ -1,3 +1,9 @@
+2006-11-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/types.m4 (AC_TYPE_LONG_LONG_INT): Detect bug in
+	Tandem NonStop Kernel (OSS) cc -O circa 2004, reported by
+	Matthew Woehlke.
+
 2006-10-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/torture.at (Configuring subdirectories): Do not skip
