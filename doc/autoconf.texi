@@ -6588,6 +6588,47 @@ This macro is obsolescent, as current C compilers support the
 stringizing operator.  New programs need not use this macro.
 @end defmac
 
+@defmac AC_C_FLEXIBLE_ARRAY_MEMBER
+@acindex{C_FLEXIBLE_ARRAY_MEMBER}
+@cvindex FLEXIBLE_ARRAY_MEMBER
+If the C compiler supports flexible array members, define
+@code{FLEXIBLE_ARRAY_MEMBER} to nothing; otherwise define it to 1.
+That way, a declaration like this:
+
+@example
+struct s
+  @{
+    size_t n_vals;
+    double val[FLEXIBLE_ARRAY_MEMBER];
+  @};
+@end example
+
+@noindent
+will let applications use the ``struct hack'' even with compilers that
+do not support flexible array members.  To allocate and use such an
+object, you can use code like this:
+
+@example
+size_t i;
+size_t n = compute_value_count ();
+struct s *p =
+   malloc (offsetof (struct s, val)
+           + n * sizeof (double));
+p->n_vals = n;
+for (i = 0; i < n; i++)
+  p->val[i] = compute_value (i);
+@end example
+@end defmac
+
+@defmac AC_C_VARARRAYS
+@acindex{C_VARARRAYS}
+@cvindex HAVE_C_VARARRAYS
+If the C compiler supports variable-length arrays, define
+@code{HAVE_C_VARRAYS}.  A variable-length array is an array of automatic
+storage duration whose length is determined at run time, when the array
+is declared.
+@end defmac
+
 @defmac AC_C_TYPEOF
 @acindex{C_TYPEOF}
 @cvindex HAVE_TYPEOF

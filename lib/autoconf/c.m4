@@ -1643,6 +1643,61 @@ fi
 ])# AC_C_PROTOTYPES
 
 
+# AC_C_FLEXIBLE_ARRAY_MEMBER
+# --------------------------
+# Check whether the C compiler supports flexible array members.
+AC_DEFUN([AC_C_FLEXIBLE_ARRAY_MEMBER],
+[
+  AC_CACHE_CHECK([for flexible array members],
+    ac_cv_c_flexmember,
+    [AC_COMPILE_IFELSE(
+       [AC_LANG_PROGRAM(
+	  [[#include <stdlib.h>
+	    #include <stdio.h>
+	    #include <stddef.h>
+	    struct s { int n; double d[]; };]],
+	  [[int m = getchar ();
+	    struct s *p = malloc (offsetof (struct s, d)
+				  + m * sizeof (double));
+	    p->d[0] = 0.0;
+	    return p->d != (double *) NULL;]])],
+       [ac_cv_c_flexmember=yes],
+       [ac_cv_c_flexmember=no])])
+  if test $ac_cv_c_flexmember = yes; then
+    AC_DEFINE([FLEXIBLE_ARRAY_MEMBER], [],
+      [Define to nothing if C supports flexible array members, and to
+       1 if it does not.  That way, with a declaration like `struct s
+       { int n; double d@<:@FLEXIBLE_ARRAY_MEMBER@:>@; };', the struct hack
+       can be used with pre-C99 compilers.
+       When computing the size of such an object, don't use 'sizeof (struct s)'
+       as it overestimates the size.  Use 'offsetof (struct s, d)' instead.
+       Don't use 'offsetof (struct s, d@<:@0@:>@)', as this doesn't work with
+       MSVC and with C++ compilers.])
+  else
+    AC_DEFINE([FLEXIBLE_ARRAY_MEMBER], 1)
+  fi
+])
+
+
+# AC_C_VARARRAYS
+# --------------
+# Check whether the C compiler supports variable-length arrays.
+AC_DEFUN([AC_C_VARARRAYS],
+[
+  AC_CACHE_CHECK([for variable-length arrays],
+    ac_cv_c_vararrays,
+    [AC_COMPILE_IFELSE(
+       [AC_LANG_PROGRAM([],
+	  [[static int x; char a[++x]; a[sizeof a - 1] = 0; return a[0];]])],
+       [ac_cv_c_vararrays=yes],
+       [ac_cv_c_vararrays=no])])
+  if test $ac_cv_c_vararrays = yes; then
+    AC_DEFINE([HAVE_C_VARARRAYS], 1,
+      [Define to 1 if C supports variable-length arrays.])
+  fi
+])
+
+
 # AC_C_TYPEOF
 # -----------
 # Check if the C compiler supports GCC's typeof syntax.

@@ -19,6 +19,8 @@
 
 ** AC_COMPUTE_INT no longer caches or reports results.
 
+** New macros AC_C_FLEXIBLE_ARRAY_MEMBER, AC_C_VARARRAYS.
+
 ** AC_CHECK_DECL now also works with aggregate objects.
 
 ** AC_USE_SYSTEM_EXTENSIONS now defines _TANDEM_SOURCE for NonStop platforms.
