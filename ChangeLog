@@ -1,3 +1,11 @@
+2006-11-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Joel E. Denny  <jdenny@ces.clemson.edu>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/autotest.at (AT_CHECK_AT_TITLE): Fix shell quoting bugs
+	and non-portable sed scripts, and use $CONFIG_SHELL when invoking
+	./micro-suite.
+
 2006-11-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/types.m4 (AC_TYPE_LONG_LONG_INT): Set

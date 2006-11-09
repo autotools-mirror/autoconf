@@ -257,14 +257,15 @@ AT_SETUP([$2])
 AT_CHECK([:])
 AT_CLEANUP
 ]], [$4], [], [], [],
-[AT_CHECK([[./micro-suite | sed -n "s/[^:]*: \(.*[^ \t]\)[ \t]*ok.*/\1/p"]],,
+[AT_CHECK([[$CONFIG_SHELL ./micro-suite |
+	    sed -n 's/[^:]*: \(.*[^	 ]\)[	 ]*ok.*/\1/p']],,
 [[$3
 ]])
-AT_CHECK([[./micro-suite -l \
-             | sed -n "s/.*[0-9]\+: [^ \t]\+[ \t]\+\(.*[^ \t]\)[ \t]*/\1/p"]],,
+AT_CHECK([[$CONFIG_SHELL ./micro-suite -l |
+	   sed -n 's/.*[0-9]: [^	 ][^	 ]*[	 ][	 ]*\(.*[^	 ]\)[	 ]*/\1/p']],,
 [[$3
 ]])
-AT_CHECK([[sed -n "s/[^.]*\. \(.*\) ([^)]*): ok.*/\1/p" micro-suite.log]],,
+AT_CHECK([[sed -n 's/[^.]*\. \(.*\) ([^)]*): ok.*/\1/p' micro-suite.log]],,
 [[$3
 ]])
 ])])
