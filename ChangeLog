@@ -1,3 +1,9 @@
+2006-11-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/mktests.sh (ac_exclude_list): Exclude AC_PROG_CXX_C_O, for
+	benefit of platforms like Solaris+GCC where it is common to have a
+	non-working g++ installation.
+
 2006-11-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 	and Joel E. Denny  <jdenny@ces.clemson.edu>
 	and Paul Eggert  <eggert@cs.ucla.edu>
