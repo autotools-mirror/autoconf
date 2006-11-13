@@ -15526,12 +15526,12 @@ or @option{--without-@var{package}}, run shell commands
 @var{action-if-given}.  If neither option was given, run shell commands
 @var{action-if-not-given}.  The name @var{package} indicates another
 software package that this program should work with.  It should consist
-only of alphanumeric characters and dashes.
+only of alphanumeric characters, dashes, and dots.
 
 The option's argument is available to the shell commands
 @var{action-if-given} in the shell variable @code{withval}, which is
 actually just the value of the shell variable @code{with_@var{package}},
-with any @option{-} characters changed into @samp{_}.  You may use that
+with any non-alphanumeric characters changed into @samp{_}.  You may use that
 variable instead, if you wish.
 
 The argument @var{help-string} is a description of the option that

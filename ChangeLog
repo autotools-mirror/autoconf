@@ -1,3 +1,15 @@
+2006-11-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Document the AC_ARG_WITH change.
+
+2006-11-13  Bruno Haible  <bruno@clisp.org>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): For --with, --without
+	options, transliterate also dots to underscores.
+	(_AC_ENABLE_IF): Transliterate also dots to underscores.
+	* doc/autoconf.texi (External Software): Document that AC_ARG_WITH's
+	first argument may also contain dots.
+
 2006-11-09  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/mktests.sh (ac_exclude_list): Exclude AC_PROG_CXX_C_O, for

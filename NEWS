@@ -21,6 +21,8 @@
 
 ** New macros AC_C_FLEXIBLE_ARRAY_MEMBER, AC_C_VARARRAYS.
 
+** AC_ARG_WITH now allows '.' in package names.
+
 ** AC_CHECK_DECL now also works with aggregate objects.
 
 ** AC_USE_SYSTEM_EXTENSIONS now defines _TANDEM_SOURCE for NonStop platforms.

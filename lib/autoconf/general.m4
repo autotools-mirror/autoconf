@@ -843,17 +843,17 @@ do
   -with-* | --with-*)
     ac_package=`expr "x$ac_option" : 'x-*with-\([[^=]]*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : "[.*[^-_$as_cr_alnum]]" >/dev/null &&
+    expr "x$ac_package" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
-    ac_package=`echo $ac_package| sed 's/-/_/g'`
+    [ac_package=`echo $ac_package | sed 's/[-.]/_/g'`]
     eval with_$ac_package=\$ac_optarg ;;
 
   -without-* | --without-*)
     ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : "[.*[^-_$as_cr_alnum]]" >/dev/null &&
+    expr "x$ac_package" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid package name: $ac_package])
-    ac_package=`echo $ac_package | sed 's/-/_/g'`
+    [ac_package=`echo $ac_package | sed 's/[-.]/_/g'`]
     eval with_$ac_package=no ;;
 
   --x)
@@ -1361,7 +1361,7 @@ m4_define([_m4_divert(HELP_ENABLE)],    _m4_divert(HELP_WITH))
 #
 m4_define([_AC_ENABLE_IF],
 [# Check whether --$1-$2 was given.
-_AC_ENABLE_IF_ACTION([$1], m4_bpatsubst([$2], -, _), [$3], [$4])[]dnl
+_AC_ENABLE_IF_ACTION([$1], m4_translit([$2], [-.], [__]), [$3], [$4])[]dnl
 ])
 
 m4_define([_AC_ENABLE_IF_ACTION],
