@@ -1,3 +1,52 @@
+2006-11-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Import these changes from config via gnulib:
+
+	2006-11-15  Ben Elliston  <bje@gnu.org>
+
+	From Josselin Mouette <joss@debian.org>:
+	* build-aux/config.guess (SX-8:SUPER-UX:*:*): New.
+
+	2006-11-08  Ben Elliston  <bje@gnu.org>
+
+	* build-aux/config.guess (authenticamd:Interix*:[3456]*): Another AMD64.
+
+	2006-11-07  Steve Woodford  <scw@NetBSD.org>
+		    Ben Elliston  <bje@gnu.org>
+
+	* build-aux/config.guess (*:NetBSD:*:*): Handle sh5el arch.
+	* build-aux/config.sub (sh5el): New basic_machine.
+
+
+	Import this change from coreutils:
+
+	2006-02-13  Jim Meyering  <jim@meyering.net>
+
+	* GNUmakefile (all): Emit diagnostics to stderr, not stdout.
+
+
+	Import this change from gnustandards via gnulib:
+
+	2006-11-15  Karl Berry  <karl@gnu.org>
+
+	* standards.texi: core -> memory, throughout.
+	(CPU Portability): show correct example of calling write
+	on a char value; thanks to Paul Eggert for the code.
+	Both of these suggestions from Eugene Y. Vasserman.
+
+
+	Import these changes from texinfo via gnulib:
+
+	2006-11-08  Karl Berry  <karl@gnu.org>
+
+	* build-aux/texinfo.tex (\dopdfimage): look for png, jpg/jpeg/JPG, and
+	  as well as pdf images, since they are supported in pdftex with
+	  no further ado.
+
+	2006-11-05  Karl Berry  <karl@gnu.org>
+
+	* doc/texinfo.tex (Image Syntax): don't mention GIF any more.
+
 2006-11-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Document the AC_ARG_WITH change.
