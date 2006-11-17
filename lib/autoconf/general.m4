@@ -929,7 +929,7 @@ m4_define([_AC_INIT_PARSE_ENABLE],
     # Reject names that are not valid shell variable names.
     expr "x$ac_$2" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid $2 name: $ac_$2])
-    [ac_$2=`echo $ac_$2 | sed 's/[-.]/_/g'`]
+    ac_$2=`AS_ECHO(["$ac_$2"]) | sed 's/[[-.]]/_/g'`
     eval m4_bmatch([$1], [^\(enable\|disable\)$], [enable], [with])_$ac_$2=$3 ;;dnl
 ])
 
@@ -1147,7 +1147,7 @@ do
     | -silent | --silent | --silen | --sile | --sil)
       continue ;;
     *\'*)
-      ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+      ac_arg=`AS_ECHO(["$ac_arg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
     esac
     case $ac_pass in
     1) ac_configure_args0="$ac_configure_args0 '$ac_arg'" ;;
@@ -1206,9 +1206,9 @@ trap 'exit_status=$?
     do
       eval ac_val=\$$ac_var
       case $ac_val in
-      *\'\''*) ac_val=`echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+      *\'\''*) ac_val=`AS_ECHO(["$ac_val"]) | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
       esac
-      echo "$ac_var='\''$ac_val'\''"
+      AS_ECHO(["$ac_var='\''$ac_val'\''"])
     done | sort
     echo
 
@@ -1219,9 +1219,9 @@ trap 'exit_status=$?
       do
 	eval ac_val=\$$ac_var
 	case $ac_val in
-	*\'\''*) ac_val=`echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+	*\'\''*) ac_val=`AS_ECHO(["$ac_val"]) | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
 	esac
-	echo "$ac_var='\''$ac_val'\''"
+	AS_ECHO(["$ac_var='\''$ac_val'\''"])
       done | sort
       echo
     fi
@@ -1233,8 +1233,8 @@ trap 'exit_status=$?
       echo
     fi
     test "$ac_signal" != 0 &&
-      echo "$as_me: caught signal $ac_signal"
-    echo "$as_me: exit $exit_status"
+      AS_ECHO(["$as_me: caught signal $ac_signal"])
+    AS_ECHO(["$as_me: exit $exit_status"])
   } >&AS_MESSAGE_LOG_FD
   rm -f core *.core core.conftest.* &&
     rm -f -r conftest* confdefs* conf$[$]* $ac_clean_files &&
@@ -1492,7 +1492,7 @@ for ac_var in $ac_precious_vars; do
   # Pass precious variables to config.status.
   if test "$ac_new_set" = set; then
     case $ac_new_val in
-    *\'*) ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
+    *\'*) ac_arg=$ac_var=`AS_ECHO(["$ac_new_val"]) | sed "s/'/'\\\\\\\\''/g"` ;;
     *) ac_arg=$ac_var=$ac_new_val ;;
     esac
     case " $ac_configure_args " in
@@ -1534,13 +1534,10 @@ test "$program_prefix" != NONE &&
 # Use a double $ so make ignores it.
 test "$program_suffix" != NONE &&
   program_transform_name="s&\$&$program_suffix&;$program_transform_name"
-# Double any \ or $.  echo might interpret backslashes.
+# Double any \ or $.
 # By default was `s,x,x', remove it if useless.
-cat <<\_ACEOF >conftest.sed
-[s/[\\$]/&&/g;s/;s,x,x,$//]
-_ACEOF
-program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
-rm -f conftest.sed
+[ac_script='s/[\\$]/&&/g;s/;s,x,x,$//']
+program_transform_name=`AS_ECHO(["$program_transform_name"]) | sed "$ac_script"`
 ])# AC_ARG_PROGRAM
 
 
@@ -2052,7 +2049,7 @@ _AS_ECHO_N([checking $1... ]); }dnl
 # ---------------------
 m4_define([AC_MSG_RESULT],
 [{ _AS_ECHO_LOG([result: $1])
-_AS_ECHO([${ECHO_T}$1]); }dnl
+_AS_ECHO([$1]); }dnl
 ])
 
 
@@ -2072,7 +2069,7 @@ See `config.log' for more details.], [$2])])
 # _AC_MSG_LOG_CONFTEST
 # --------------------
 m4_define([_AC_MSG_LOG_CONFTEST],
-[echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+[AS_ECHO(["$as_me: failed program was:"]) >&AS_MESSAGE_LOG_FD
 sed 's/^/| /' conftest.$ac_ext >&AS_MESSAGE_LOG_FD
 ])
 
@@ -2088,7 +2085,7 @@ AU_DEFUN([AC_CHECKING],
 # No escaping, so it performed also backtick substitution.
 AU_DEFUN([AC_MSG_RESULT_UNQUOTED],
 [_AS_ECHO_UNQUOTED([$as_me:$LINENO: result: $1], AS_MESSAGE_LOG_FD)
-_AS_ECHO_UNQUOTED([${ECHO_T}$1])[]dnl
+_AS_ECHO_UNQUOTED([$1])[]dnl
 ])
 
 
@@ -2144,7 +2141,7 @@ dnl If the string contains '"', '`', or '\', then just echo it rather
 dnl than expanding it.  This is a hack, but it is safer, while also
 dnl typically expanding simple substrings like '$CC', which is what we want.
 dnl
-dnl The rest of this macro body is quoted, to work around misuses like
+dnl Much of this macro body is quoted, to work around misuses like
 dnl `AC_CHECK_FUNC(sigblock, , AC_CHECK_LIB(bsd, sigblock))',
 dnl which underquotes the 3rd arg and would misbehave if we didn't quote here.
 dnl The "(($ac_try" instead of $ac_try avoids problems with even-worse
@@ -2157,7 +2154,8 @@ dnl minimize the integration hassle.
   *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
   *) ac_try_echo=$ac_try;;
 esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\""]])
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""]
+AS_ECHO(["$ac_try_echo"])])
 
 # _AC_DO(COMMAND)
 # ---------------
@@ -2247,7 +2245,7 @@ AC_DEFUN([AC_TRY_COMMAND],
 # -------------------
 AC_DEFUN([AC_RUN_LOG],
 [_AC_RUN_LOG([$1],
-	     [echo "$as_me:$LINENO: AS_ESCAPE([$1])"])])
+	     [AS_ECHO(["$as_me:$LINENO: AS_ESCAPE([$1])"])])])
 
 
 
@@ -2442,7 +2440,7 @@ m4_define([_AC_RUN_IFELSE],
 rm -f conftest$ac_exeext
 AS_IF([_AC_DO_VAR(ac_link) && _AC_DO_TOKENS(./conftest$ac_exeext)],
       [$2],
-      [echo "$as_me: program exited with status $ac_status" >&AS_MESSAGE_LOG_FD
+      [AS_ECHO(["$as_me: program exited with status $ac_status"]) >&AS_MESSAGE_LOG_FD
 _AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3],
 	  [( exit $ac_status )
@@ -2636,7 +2634,7 @@ ac_ltlibobjs=
 for ac_i in : $LIB@&t@OBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_script='s/\$U\././;s/\.o$//;s/\.obj$//'
-  ac_i=`echo "$ac_i" | sed "$ac_script"`
+  ac_i=`AS_ECHO(["$ac_i"]) | sed "$ac_script"`
   # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
   #    will be set to the directory where LIBOBJS objects are built.
   ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"

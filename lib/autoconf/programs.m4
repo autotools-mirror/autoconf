@@ -484,13 +484,13 @@ m4_define([_AC_FEATURE_CHECK_LENGTH],
   _AC_PATH_PROG_FLAVOR_GNU([$$1],
     [$2="$$1" $1_found=:],
   [ac_count=0
-  echo $ECHO_N "0123456789$ECHO_C" >"conftest.in"
+  AS_ECHO_N([0123456789]) >"conftest.in"
   while :
   do
     cat "conftest.in" "conftest.in" >"conftest.tmp"
     mv "conftest.tmp" "conftest.in"
     cp "conftest.in" "conftest.nl"
-    echo '$4' >> "conftest.nl"
+    AS_ECHO(['$4']) >> "conftest.nl"
     $3 < "conftest.nl" >"conftest.out" 2>/dev/null || break
     diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
@@ -804,7 +804,8 @@ AN_MAKEVAR([MAKE], [AC_PROG_MAKE_SET])
 AN_PROGRAM([make], [AC_PROG_MAKE_SET])
 AC_DEFUN([AC_PROG_MAKE_SET],
 [AC_MSG_CHECKING([whether ${MAKE-make} sets \$(MAKE)])
-set x ${MAKE-make}; ac_make=`echo "$[2]" | sed 's/+/p/g; s/[[^a-zA-Z0-9_]]/_/g'`
+set x ${MAKE-make}
+ac_make=`AS_ECHO(["$[2]"]) | sed 's/+/p/g; s/[[^a-zA-Z0-9_]]/_/g'`
 AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftest.make <<\_ACEOF
 SHELL = /bin/sh

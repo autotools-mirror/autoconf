@@ -474,7 +474,7 @@ m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 # It will help us diagnose broken compilers, and finding out an intuition
 # of exeext.
 AC_MSG_CHECKING([for _AC_LANG compiler default output file name])
-ac_link_default=`echo "$ac_link" | sed ['s/ -o *conftest[^ ]*//']`
+ac_link_default=`AS_ECHO(["$ac_link"]) | sed ['s/ -o *conftest[^ ]*//']`
 #
 # List of possible output files, starting from the most likely.
 # The algorithm is not robust to junk in `.', hence go to wildcards (a.*)

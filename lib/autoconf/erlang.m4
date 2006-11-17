@@ -112,7 +112,7 @@ dnl Extend Autoconf's AC_LANG macro to accept Erlang as a language for tests
 m4_define([AC_LANG(Erlang)],
 [ac_ext=erl
 ac_compile='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD ; echo "#!/bin/sh" > conftest$ac_exeext ; echo "\"$ERL\" -run conftest start -run init stop -noshell" >> conftest$ac_exeext ; chmod +x conftest$ac_exeext'
+ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD ; echo "#!/bin/sh" > conftest$ac_exeext ; AS_ECHO(["\"$ERL\" -run conftest start -run init stop -noshell"]) >> conftest$ac_exeext ; chmod +x conftest$ac_exeext'
 ])
 
 # AC_LANG_ERLANG
@@ -215,7 +215,7 @@ AC_CACHE_CHECK([for Erlang/OTP '$1' library version],
     [erlang_cv_lib_ver_$1],
     [AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"],
         [erlang_cv_lib_ver_$1="not found"],
-        [erlang_cv_lib_ver_$1=`echo "$erlang_cv_lib_dir_$1" | sed -n -e 's,^.*-\([[^/-]]*\)$,\1,p'`])[]dnl
+        [erlang_cv_lib_ver_$1=`AS_ECHO(["$erlang_cv_lib_dir_$1"]) | sed -n -e 's,^.*-\([[^/-]]*\)$,\1,p'`])[]dnl
     ])
 AC_SUBST([ERLANG_LIB_DIR_$1], [$erlang_cv_lib_dir_$1])
 AC_SUBST([ERLANG_LIB_VER_$1], [$erlang_cv_lib_ver_$1])
@@ -303,4 +303,3 @@ else
     AC_MSG_RESULT([$ERLANG_INSTALL_LIB_DIR/$1-$2])
 fi
 ])# AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR
-

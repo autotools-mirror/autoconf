@@ -295,7 +295,7 @@ if test "$ac_x_libraries" = no; then
 # We can link X programs with no special library path.
 ac_x_libraries=],
 		 [LIBS=$ac_save_LIBS
-for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
+for ac_dir in `AS_ECHO(["$ac_x_includes $ac_x_header_dirs"]) | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do

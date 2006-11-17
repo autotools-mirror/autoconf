@@ -349,6 +349,7 @@ AS_BOURNE_COMPATIBLE
 
 # PATH needs CR
 _AS_CR_PREPARE
+_AS_ECHO_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
 _AS_UNSET_PREPARE
 
@@ -357,8 +358,6 @@ _AS_UNSET_PREPARE
 # there to prevent editors from complaining about space-tab.
 # (If _AS_PATH_WALK were called with IFS unset, it would disable word
 # splitting by setting IFS to empty value.)
-as_nl='
-'
 IFS=" ""	$as_nl"
 
 # Find who we are.  Look in the path if we contain no directory separator.
@@ -374,7 +373,7 @@ if test "x$as_myself" = x; then
   as_myself=$[0]
 fi
 if test ! -f "$as_myself"; then
-  echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
+  AS_ECHO(["$as_myself: error: cannot find myself; rerun with an absolute file name"]) >&2
   AS_EXIT
 fi
 
@@ -427,7 +426,7 @@ m4_defun([_AS_PREPARE],
 [_AS_LINENO_PREPARE
 
 _AS_DIRNAME_PREPARE
-_AS_ECHO_N_PREPARE
+_AS_ECHO_N_PREPARE[]dnl We do not need this ourselves but user code might.
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
 _AS_MKDIR_P_PREPARE
@@ -600,7 +599,7 @@ $1])])
 # -----------------------------------------------
 # Perform shell expansions on STRING and echo the string to FD.
 m4_define([_AS_ECHO_UNQUOTED],
-[echo "$1" >&m4_default([$2], [AS_MESSAGE_FD])])
+[AS_ECHO(["$1"]) >&m4_default([$2], [AS_MESSAGE_FD])])
 
 
 # _AS_ECHO(STRING, [FD = AS_MESSAGE_FD])
@@ -644,9 +643,7 @@ esac
 # ----------------------------------------
 # Same as _AS_ECHO, but echo doesn't return to a new line.
 m4_define([_AS_ECHO_N],
-[AS_REQUIRE([_AS_ECHO_N_PREPARE])dnl
-echo $ECHO_N "_AS_QUOTE([$1])$ECHO_C" >&m4_default([$2],
-						    [AS_MESSAGE_FD])])
+[AS_ECHO_N(["_AS_QUOTE([$1])"]) >&m4_default([$2], [AS_MESSAGE_FD])])
 
 
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
@@ -693,7 +690,7 @@ $as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
 	 X[]$1 : 'X\(/\)' \| .])
 
 m4_defun([_AS_BASENAME_SED],
-[echo X/[]$1 |
+[AS_ECHO([X/[]$1]) |
     sed ['/^.*\/\([^/][^/]*\)\/*$/{
 	    s//\1/
 	    q
@@ -747,7 +744,7 @@ $as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
 	 X[]$1 : 'X\(/\)' \| .])
 
 m4_defun([_AS_DIRNAME_SED],
-[echo X[]$1 |
+[AS_ECHO([X[]$1]) |
     sed ['/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
 	    q
@@ -782,6 +779,55 @@ else
   as_dirname=false
 fi
 ])# _AS_DIRNAME_PREPARE
+
+
+# AS_ECHO(WORD)
+# -------------
+# Output WORD followed by a newline.  WORD must be a single shell word
+# (typically a quoted string).  The bytes of WORD are output as-is, even
+# if it starts with "-" or contains "\".
+m4_defun([AS_ECHO],
+[AS_REQUIRE([_$0_PREPARE])dnl
+$as_echo $1])
+
+
+# AS_ECHO_N(WORD)
+# -------------
+# Like AS_ECHO(WORD), except do not output the trailing newline.
+m4_defun([AS_ECHO_N],
+[AS_REQUIRE([_AS_ECHO_PREPARE])dnl
+$as_echo_n $1])
+
+
+# _AS_ECHO_PREPARE
+# -----------------
+# Arrange for $as_echo 'FOO' to echo FOO without escape-interpretation;
+# and similarly for $as_echo_foo, which omits the trailing newline.
+# 'FOO' is an optional single argument; a missing FOO is treated as empty.
+m4_defun([_AS_ECHO_PREPARE],
+[[as_nl='
+'
+export as_nl
+case `(printf %s foo) 2>/dev/null` in
+foo)
+  as_echo='printf %s\n'
+  as_echo_n='printf %s';;
+*)
+  as_echo_body='eval expr "X$1" : "X\\(.*\\)"'
+  as_echo_n_body='eval
+    arg=$1;
+    case $arg in
+    *"$as_nl"*)
+      expr "X$arg" : "X\\(.*\\)$as_nl";
+      arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
+    esac;
+    expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
+  '
+  export as_echo_body as_echo_n_body
+  as_echo='sh -c $as_echo_body X'
+  as_echo_n='sh -c $as_echo_n_body X';;
+esac
+]])# _AS_ECHO_PREPARE
 
 
 # AS_TEST_X
@@ -939,7 +985,7 @@ m4_define([AS_MKDIR_P],
     as_dirs=
     while :; do
       case $as_dir in #(
-      *\'*) as_qdir=`echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #(
+      *\'*) as_qdir=`AS_ECHO(["$as_dir"]) | sed "s/'/'\\\\\\\\''/g"`;; #(
       *) as_qdir=$as_dir;;
       esac
       as_dirs="'$as_qdir' $as_dirs"
@@ -1185,7 +1231,7 @@ m4_if([$2], [], [: ${TMPDIR=/tmp}])
   (umask 077 && mkdir "$tmp")
 } ||
 {
-   echo "$me: cannot create a temporary directory in m4_default([$2], [$TMPDIR])" >&2
+   AS_ECHO(["$me: cannot create a temporary directory in m4_default([$2], [$TMPDIR])"]) >&2
    AS_EXIT
 }dnl
 ])# AS_TMPDIR
@@ -1218,7 +1264,7 @@ uname -v = `(uname -v) 2>/dev/null || echo unknown`
 
 _ASUNAME
 
-_AS_PATH_WALK([$PATH], [echo "PATH: $as_dir"])
+_AS_PATH_WALK([$PATH], [AS_ECHO(["PATH: $as_dir"])])
 }])
 
 
@@ -1351,7 +1397,7 @@ m4_defun([AS_TR_SH],
 AS_LITERAL_IF([$1],
 	      [m4_bpatsubst(m4_translit([[$1]], [*+], [pp]),
 			    [[^a-zA-Z0-9_]], [_])],
-	      [`echo "$1" | $as_tr_sh`])])
+	      [`AS_ECHO(["$1"]) | $as_tr_sh`])])
 
 
 # _AS_TR_CPP_PREPARE
@@ -1375,7 +1421,7 @@ AS_LITERAL_IF([$1],
 					[*abcdefghijklmnopqrstuvwxyz],
 					[PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
 			   [[^A-Z0-9_]], [_])],
-	      [`echo "$1" | $as_tr_cpp`])])
+	      [`AS_ECHO(["$1"]) | $as_tr_cpp`])])
 
 
 # _AS_TR_PREPARE
@@ -1418,12 +1464,13 @@ m4_define([AS_VAR_SET],
 # Get the value of the shell VARIABLE.
 # Evaluates to $VARIABLE if there are no indirection in VARIABLE,
 # else into the appropriate `eval' sequence.
-# FIXME: This mishandles values that end in newlines, or have backslashes,
-# or are '-n'.  Fixing this will require changing the API.
+# FIXME: This mishandles values that end in newlines.
+# Fixing this will require changing the API.
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
 	       [$$1],
-	       [`eval echo '${'m4_bpatsubst($1, [[\\`]], [\\\&])'}'`])])
+	       [`eval 'as_val=${'m4_bpatsubst([$1], [[\\`]], [\\\&])'}
+		 AS_ECHO(["$as_val"])'`])])
 
 
 # AS_VAR_TEST_SET(VARIABLE)

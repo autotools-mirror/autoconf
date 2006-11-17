@@ -1,5 +1,60 @@
 2006-11-17  Paul Eggert  <eggert@cs.ucla.edu>
 
+	'echo' has some portability problems, when given a first argument
+	with a leading '-', or when given any argument containing '\'.
+	Avoid using 'echo' in these cases.
+	* bin/Makefile.am $(bin_SCRIPTS): Rewrite to avoid 'echo' entirely.
+	* lib/autoconf/c.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_OBJC): Likewise.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* bin/autoconf.as: Use AS_ECHO rather than plain echo, when the
+	argument might be unportable.
+	* lib/autoconf/c.m4 (AC_PROG_CC_C_O): Likewise.
+	* lib/autoconf/erlang.m4 (AC_LANG(Erlang)): Likewise.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT):
+	(_AC_FC_LIBRARY_LDFLAGS): Likewise.
+	* lib/autoconf/functions.m4 (AC_FUNC_GETLOADAVG): Likewise.
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ENABLE, _AC_INIT_PREPARE):
+	(_AC_ARG_VAR_VALIDATE, AC_ARG_PROGRAM, _AC_MSG_LOG_CONFTEST):
+	(AC_RUN_LOG, _AC_RUN_IFELSE, _AC_LIBOBJS_NORMALIZE): Likewise.
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Likewise.
+	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Likewise.
+	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH):
+	(AC_PROG_MAKE_SET): Likewise.
+	* lib/autoconf/status.m4 (_AC_SRCDIRS, _AC_OUTPUT_HEADER):
+	(_AC_OUTPUT_SUBDIRS, _AC_OUTPUT_CONFIG_STATUS): Likewise.
+	* lib/autotest/general.m4 (_AT_CREATE_DEBUGGING_SCRIPT, AT_INIT):
+	(AT_CLEANUP, _AT_DECIDE_TRACEABLE, _AT_CHECK): Likewise.
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE, _AS_ECHO_UNQUOTED):
+	(_AS_BASENAME_SED, _AS_DIRNAME_SED, AS_MKDIR_P, AS_TMPDIR, AS_UNAME):
+	(AS_TR_SH, AS_TR_CPP, AS_VAR_GET): Likewise.
+	* bin/autoconf.as: Redo verbose flag implementation, as the old
+	scheme wouldn't work with AS_ECHO.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/autoconf/general.m4 (AC_MSG_RESULT, AC_MSG_RESULT_UNQUOTED):
+	Don't use ECHO_T, since ECHO_N is now reliable.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/autoconf/general.m4 (AC_ARG_PROGRAM): Use sed "$script"
+	rather than using a here-document to put the script into a file.
+	(_AC_DO_ECHO): Hoist the eval out of the echo, so that we can
+	use AS_ECHO.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_GET): Likewise.
+	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Use
+	AS_ECHO_N rather than ECHO_N and ECHO_C.  This doesn't fix any
+	bug, but we might as well stop using ECHO_N and ECHO_C internally.
+	* lib/autotest/general.m4 (AT_SETUP): Likewise.
+	* lib/m4sugar/m4sh.m4 (_AS_ECHO_N): Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS):
+	(_AC_OUTPUT_MAIN_LOOP): Rework echo so that it has just one
+	operand, as AS_ECHO requires.  Avoid double file name expansion.
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Invoke _AS_ECHO_PREPARE.
+	Don't set as_nl, since _AS_ECHO_PREPARE does that now.
+	(_AS_PREPARE): Comment that _AS_ECHO_N_PREPARE is just for user code.
+	(AS_ECHO, AS_ECHO_N, _AS_ECHO_PREPARE): New macros.
+	* tests/c.at (AC_PROG_CPP without warnings, AC_PROG_CPP via CC):
+	Double-quote strings that would otherwise contain M4 comments.
+	* tests/m4sh.at (AS_ECHO and AS_ECHO_N): New test.
+
 	* configure.ac (AC_INIT): Bump to 2.61a.
 	* NEWS: Likewise.
 

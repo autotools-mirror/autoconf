@@ -170,9 +170,8 @@ m4_define([_AT_CREATE_DEBUGGING_SCRIPT],
 [	  {
 	    echo "#! /bin/sh"
 	    echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
-	    echo "cd '$at_dir'"
-	    echo 'exec ${CONFIG_SHELL-'"$SHELL"'}' "$[0]" \
-	         '-v -d' "$at_debug_args" "$at_group" '${1+"$[@]"}'
+	    AS_ECHO(["cd '$at_dir'"])
+	    AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} $[0] -v -d $at_debug_args $at_group \${1+\"\$[@]\"}"])
 	    echo 'exit 1'
 	  } >$at_group_dir/run
 	  chmod +x $at_group_dir/run
@@ -234,9 +233,9 @@ at_times_p=false
 at_debug_args=
 # -e sets to true
 at_errexit_p=false
-# Shall we be verbose?
+# Shall we be verbose?  ':' means no, empty means yes.
 at_verbose=:
-at_quiet=echo
+at_quiet=
 
 # Shall we keep the debug scripts?  Must be `:' when the suite is
 # run by a debug script, so that the script doesn't remove itself.
@@ -328,7 +327,7 @@ do
 	;;
 
     --verbose | -v )
-	at_verbose=echo; at_quiet=:
+	at_verbose=; at_quiet=:
 	;;
 
     --trace | -x )
@@ -342,14 +341,14 @@ do
     # Ranges
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
 	at_range_start=`echo $at_option |tr -d X-`
-	at_range=`echo " $at_groups_all " | \
+	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.* \('$at_range_start' \)/\1/'`
 	at_groups="$at_groups$at_range "
 	;;
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
 	at_range_end=`echo $at_option |tr -d X-`
-	at_range=`echo " $at_groups_all " | \
+	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/\( '$at_range_end'\) .*$/\1/'`
 	at_groups="$at_groups$at_range "
 	;;
@@ -367,7 +366,7 @@ do
 	  at_range_end=$at_range_start
 	  at_range_start=$at_tmp
 	fi
-	at_range=`echo " $at_groups_all " | \
+	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.*\( '$at_range_start' \)/\1/' \
 	      -e 's/\( '$at_range_end'\) .*$/\1/'`
 	at_groups="$at_groups$at_range "
@@ -394,12 +393,14 @@ do
 	    ;;
 	  esac
 	  # It is on purpose that we match the test group titles too.
-	  at_groups_selected=`echo "$at_groups_selected" |
+	  at_groups_selected=`AS_ECHO(["$at_groups_selected"]) |
 	      grep -i $at_invert ["^[1-9][^;]*;.*[; ]$at_keyword[ ;]"]`
 	done
-	at_groups_selected=`echo "$at_groups_selected" | sed 's/;.*//'`
 	# Smash the newlines.
-	at_groups="$at_groups`echo $at_groups_selected` "
+	at_groups_selected=`AS_ECHO(["$at_groups_selected"]) | sed 's/;.*//' |
+	  tr "$as_nl" ' '
+	`
+	at_groups="$at_groups$at_groups_selected "
 	;;
 m4_divert_pop([PARSE_ARGS])dnl
 dnl Process *=* last to allow for user specified --option=* type arguments.
@@ -410,15 +411,15 @@ m4_divert_push([PARSE_ARGS_END])dnl
 	# Reject names that are not valid shell variable names.
 	expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
 	  AS_ERROR([invalid variable name: $at_envvar])
-	at_value=`echo "$at_optarg" | sed "s/'/'\\\\\\\\''/g"`
+	at_value=`AS_ECHO(["$at_optarg"]) | sed "s/'/'\\\\\\\\''/g"`
 	eval "$at_envvar='$at_value'"
 	export $at_envvar
 	# Propagate to debug scripts.
 	at_debug_args="$at_debug_args $at_envvar='$at_value'"
 	;;
 
-     *) echo "$as_me: invalid option: $at_option" >&2
-	echo "Try \`$[0] --help' for more information." >&2
+     *) AS_ECHO(["$as_me: invalid option: $at_option"]) >&2
+	AS_ECHO(["Try \`$[0] --help' for more information."]) >&2
 	exit 1
 	;;
   esac
@@ -429,10 +430,10 @@ if test -z "$at_groups"; then
   at_groups=$at_groups_all
 else
   # Sort the tests, removing duplicates:
-  at_groups=`echo $at_groups | tr ' ' "$as_nl" | sort -nu`
+  at_groups=`AS_ECHO(["$at_groups"]) | tr ' ' "$as_nl" | sort -nu`
   # and add banners.  (Passing at_groups_all is tricky--see the comment
   # starting with "Passing at_groups is tricky.")
-  at_groups=`echo "$at_groups$as_nl $at_groups_all" |
+  at_groups=`AS_ECHO(["$at_groups$as_nl $at_groups_all"]) |
     awk ['BEGIN { FS = "@" } # Effectively switch off field splitting.
 	/^$/ { next }  # Ignore the empty line.
 	!/ / { groups++; selected[$ 0] = 1; next }
@@ -522,7 +523,7 @@ _ATEOF
   # Passing at_groups is tricky.  We cannot use it to form a literal string
   # or regexp because of the limitation of AIX awk.  And Solaris' awk
   # doesn't grok more than 99 fields in a record, so we have to use `split'.
-  echo "$at_groups$as_nl$at_help_all" |
+  AS_ECHO(["$at_groups$as_nl$at_help_all"]) |
     awk 'BEGIN { FS = ";" }
 	 NR == 1 {
 	   for (n = split($ 0, a, " "); n; n--) selected[[a[n]]] = 1
@@ -539,7 +540,7 @@ fi
 m4_divert_pop([HELP_END])dnl
 m4_divert_push([VERSION])dnl
 if $at_version_p; then
-  echo "$as_me (AT_PACKAGE_STRING)"
+  AS_ECHO(["$as_me (AT_PACKAGE_STRING)"])
   cat <<\_ACEOF
 m4_divert_pop([VERSION])dnl
 m4_divert_push([VERSION_END])dnl
@@ -556,7 +557,7 @@ m4_divert_push([PREPARE_TESTS])dnl
 # For embedded test suites, AUTOTEST_PATH is relative to the top level
 # of the package.  Then expand it into build/src parts, since users
 # may create executables in both places.
-AUTOTEST_PATH=`echo $AUTOTEST_PATH | sed "s&:&$PATH_SEPARATOR&g"`
+AUTOTEST_PATH=`AS_ECHO(["$AUTOTEST_PATH"]) | sed "s&:&$PATH_SEPARATOR&g"`
 at_path=
 _AS_PATH_WALK([$AUTOTEST_PATH $PATH],
 [test -n "$at_path" && at_path=$at_path$PATH_SEPARATOR
@@ -611,8 +612,8 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
   AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
   echo
 
-  echo "$as_me: command line was:"
-  echo "  $ $[0] $at_cli_args"
+  AS_ECHO(["$as_me: command line was:"])
+  AS_ECHO(["  \$ $[0] $at_cli_args"])
   echo
 
   # Try to find a few ChangeLogs in case it might help determining the
@@ -624,7 +625,7 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
     echo
     for at_file in `find "$at_top_srcdir" -name ChangeLog -print`
     do
-      echo "$as_me: $at_file:"
+      AS_ECHO(["$as_me: $at_file:"])
       sed 's/^/| /;10q' $at_file
       echo
     done
@@ -637,7 +638,7 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
   for at_file in atconfig atlocal
   do
     test -r $at_file || continue
-    echo "$as_me: $at_file:"
+    AS_ECHO(["$as_me: $at_file:"])
     sed 's/^/| /' $at_file
     echo
   done
@@ -653,7 +654,7 @@ do
   _AS_PATH_WALK([$PATH], [test -f "$as_dir/$at_program" && break])
   if test -f "$as_dir/$at_program"; then
     {
-      echo "$at_srcdir/AT_LINE: $as_dir/$at_program --version"
+      AS_ECHO(["$at_srcdir/AT_LINE: $as_dir/$at_program --version"])
       "$as_dir/$at_program" --version
       echo
     } >&AS_MESSAGE_LOG_FD 2>&1
@@ -668,7 +669,7 @@ done
 
 at_start_date=`date`
 at_start_time=`date +%s 2>/dev/null`
-echo "$as_me: starting at: $at_start_date" >&AS_MESSAGE_LOG_FD
+AS_ECHO(["$as_me: starting at: $at_start_date"]) >&AS_MESSAGE_LOG_FD
 at_xpass_list=
 at_xfail_list=
 at_pass_list=
@@ -730,11 +731,11 @@ do
   echo 0 > "$at_status_file"
 
   # Clearly separate the test groups when verbose.
-  test $at_group_count != 0 && $at_verbose
+  test $at_group_count != 0 && $at_verbose echo
 
   # In verbose mode, append to the log file *and* show on
   # the standard output; in quiet mode only write to the log
-  if test $at_verbose = echo; then
+  if test -z "$at_verbose"; then
     at_tee_pipe='tee -a "$at_group_log"'
   else
     at_tee_pipe='cat >> "$at_group_log"'
@@ -746,7 +747,7 @@ m4_divert_pop([TESTS])[]dnl
 m4_divert_push([TESTS_END])[]dnl
 
   * )
-    echo "$as_me: no such test group: $at_group" >&2
+    AS_ECHO(["$as_me: no such test group: $at_group"]) >&2
     continue
     ;;
   esac
@@ -764,11 +765,11 @@ m4_divert_push([TESTS_END])[]dnl
 	run. This means that test suite is improperly designed.  Please
 	report this failure to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
-	echo "$at_setup_line" >"$at_check_line_file"
+	AS_ECHO(["$at_setup_line"]) >"$at_check_line_file"
       fi
       at_group_count=`expr 1 + $at_group_count`
-      $at_verbose $ECHO_N "$at_group. $at_setup_line: $ECHO_C"
-      echo $ECHO_N "$at_group. $at_setup_line: $ECHO_C" >> "$at_group_log"
+      $at_verbose AS_ECHO_N(["$at_group. $at_setup_line: "])
+      AS_ECHO_N(["$at_group. $at_setup_line: "]) >> "$at_group_log"
       case $at_xfail:$at_status in
 	yes:0)
 	    at_msg="UNEXPECTED PASS"
@@ -797,7 +798,7 @@ _ATEOF
 	    ;;
       esac
       # Make sure there is a separator even with long titles.
-      echo " $at_msg"
+      AS_ECHO([" $at_msg"])
       at_log_msg="$at_group. $at_desc ($at_setup_line): $at_msg"
       case $at_status in
 	0|77)
@@ -809,8 +810,8 @@ _ATEOF
 	    at_log_msg="$at_log_msg	("`sed 1d "$at_times_file"`')'
 	    rm -f "$at_times_file"
           fi
-	  echo "$at_log_msg" >> "$at_group_log"
-	  echo "$at_log_msg" >&AS_MESSAGE_LOG_FD
+	  AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
+	  AS_ECHO(["$at_log_msg"]) >&AS_MESSAGE_LOG_FD
 
 	  # Cleanup the group directory, unless the user wants the files.
 	  if $at_debug_p ; then
@@ -824,7 +825,7 @@ _ATEOF
 	  # Upon failure, include the log into the testsuite's global
 	  # log.  The failure message is written in the group log.  It
 	  # is later included in the global log.
-	  echo "$at_log_msg" >> "$at_group_log"
+	  AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
 
 	  # Upon failure, keep the group directory for autopsy, and
 	  # create the debugging script.
@@ -842,7 +843,7 @@ cd "$at_dir"
 # Compute the duration of the suite.
 at_stop_date=`date`
 at_stop_time=`date +%s 2>/dev/null`
-echo "$as_me: ending at: $at_stop_date" >&AS_MESSAGE_LOG_FD
+AS_ECHO(["$as_me: ending at: $at_stop_date"]) >&AS_MESSAGE_LOG_FD
 case $at_start_time,$at_stop_time in
   [[0-9]*,[0-9]*])
     at_duration_s=`expr $at_stop_time - $at_start_time`
@@ -851,15 +852,15 @@ case $at_start_time,$at_stop_time in
     at_duration_s=`expr $at_duration_s % 60`
     at_duration_m=`expr $at_duration_m % 60`
     at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
-    echo "$as_me: test suite duration: $at_duration" >&AS_MESSAGE_LOG_FD
+    AS_ECHO(["$as_me: test suite duration: $at_duration"]) >&AS_MESSAGE_LOG_FD
     ;;
 esac
 
 # Wrap up the test suite with summary statistics.
-at_skip_count=`set dummy $at_skip_list; shift; echo $[@%:@]`
-at_fail_count=`set dummy $at_fail_list; shift; echo $[@%:@]`
-at_xpass_count=`set dummy $at_xpass_list; shift; echo $[@%:@]`
-at_xfail_count=`set dummy $at_xfail_list; shift; echo $[@%:@]`
+set X $at_skip_list; shift; at_skip_count=$[@%:@]
+set X $at_fail_list; shift; at_fail_count=$[@%:@]
+set X $at_xpass_list; shift; at_xpass_count=$[@%:@]
+set X $at_xfail_list; shift; at_xfail_count=$[@%:@]
 
 at_run_count=`expr $at_group_count - $at_skip_count`
 at_unexpected_count=`expr $at_xpass_count + $at_fail_count`
@@ -943,11 +944,11 @@ $at_skip_count tests were skipped." ;;
 esac
 
 if test $at_unexpected_count = 0; then
-  echo "$at_result"
-  echo "$at_result" >&AS_MESSAGE_LOG_FD
+  AS_ECHO(["$at_result"])
+  AS_ECHO(["$at_result"]) >&AS_MESSAGE_LOG_FD
 else
-  echo "ERROR: $at_result" >&2
-  echo "ERROR: $at_result" >&AS_MESSAGE_LOG_FD
+  AS_ECHO(["ERROR: $at_result"]) >&2
+  AS_ECHO(["ERROR: $at_result"]) >&AS_MESSAGE_LOG_FD
   {
     echo
     AS_BOX([Summary of the failures.])
@@ -990,18 +991,18 @@ else
   AS_BOX([$as_me.log was created.])
 
   echo
-  echo "Please send \`${at_testdir+${at_testdir}/}$as_me.log' and all information you think might help:"
-  echo
-  echo "   To: <AT_PACKAGE_BUGREPORT>"
-  echo "   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:dnl
+  AS_ECHO(["Please send \`${at_testdir+${at_testdir}/}$as_me.log' and all information you think might help:
+
+   To: <AT_PACKAGE_BUGREPORT>
+   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:dnl
 $at_fail_list${at_fail_list:+ failed${at_xpass_list:+,}}dnl
-$at_xpass_list${at_xpass_list:+ passed unexpectedly}"
-  echo
+$at_xpass_list${at_xpass_list:+ passed unexpectedly}
+"])
   if test $at_debug_p = false; then
     echo
     echo 'You may investigate any problem if you feel able to do so, in which'
     echo 'case the test suite provides a good starting point.  Its output may'
-    echo "be found below \`${at_testdir+${at_testdir}/}$as_me.dir'."
+    AS_ECHO(["be found below \`${at_testdir+${at_testdir}/}$as_me.dir'."])
     echo
   fi
     exit 1
@@ -1177,8 +1178,8 @@ m4_divert_push([TESTS])dnl
   AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): $1
     at_setup_line='m4_defn([AT_line])'
     at_desc="AS_ESCAPE([$1])"
-    $at_quiet $ECHO_N "m4_format([%3d: %-]m4_eval(47 - m4_qdelta([$1]))[s],
-	               AT_ordinal, AS_ESCAPE([[$1]]))[]$ECHO_C"
+    $at_quiet AS_ECHO_N(["m4_format([%3d: %-]m4_eval(47 - m4_qdelta([$1]))[s],
+	               AT_ordinal, AS_ESCAPE([[$1]]))[]"])
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 
@@ -1226,7 +1227,7 @@ m4_divert_pop([TEST_SCRIPT])dnl Back to TESTS
     AT_xfail
     echo "#                             -*- compilation -*-" >> "$at_group_log"
     (
-      echo "AT_ordinal. m4_defn([AT_line]): testing $1..."
+      AS_ECHO(["AT_ordinal. m4_defn([AT_line]): testing $1..."])
       $at_traceon
 m4_undivert([TEST_SCRIPT])dnl Insert the code here
       $at_traceoff
@@ -1419,7 +1420,7 @@ m4_pushdef([at_reason],
 ))dnl
 dnl
 m4_ifval(m4_defn([at_reason]),
-[echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'],
+[AS_ECHO(['Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'])],
 [m4_bmatch([$1], [\$],
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
 [case "AS_ESCAPE([$1], [`"\])" in
@@ -1468,7 +1469,7 @@ m4_popdef([at_reason])])
 #
 m4_define([_AT_CHECK],
 [$at_traceoff
-echo "$at_srcdir/AT_LINE: AS_ESCAPE([$1])"
+AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([$1])"])
 echo AT_LINE >"$at_check_line_file"
 
 at_trace_this=
@@ -1493,14 +1494,14 @@ m4_case([$4],
 	ignore, [echo stderr:; cat "$at_stderr"],
 	experr, [$at_diff experr "$at_stderr" || at_failed=:],
 	[],     [$at_diff "$at_devnull" "$at_stderr" || at_failed=:],
-	[echo >>"$at_stderr"; echo "m4_ifval([$7],[AS_ESCAPE([$4])],[$4])" | $at_diff - "$at_stderr" || at_failed=:])
+	[echo >>"$at_stderr"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$4])],[$4])"]) | $at_diff - "$at_stderr" || at_failed=:])
 dnl Check stdout.
 m4_case([$3],
 	stdout, [echo stdout:; tee stdout <"$at_stdout"],
 	ignore, [echo stdout:; cat "$at_stdout"],
 	expout, [$at_diff expout "$at_stdout" || at_failed=:],
 	[],     [$at_diff "$at_devnull" "$at_stdout" || at_failed=:],
-	[echo >>"$at_stdout"; echo "m4_ifval([$7],[AS_ESCAPE([$3])],[$3])" | $at_diff - "$at_stdout" || at_failed=:])
+	[echo >>"$at_stdout"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$3])],[$3])"]) | $at_diff - "$at_stdout" || at_failed=:])
 dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
 case $at_status in
 m4_if([$2], [77],
@@ -1510,13 +1511,13 @@ m4_if([$2], [77],
 m4_if([$2], [ignore],
     [   *);;],
     [   m4_default([$2], [0])) ;;
-   *) echo "$at_srcdir/AT_LINE: exit code was $at_status, expected m4_default([$2], [0])"
+   *) AS_ECHO(["$at_srcdir/AT_LINE: exit code was $at_status, expected m4_default([$2], [0])"])
       at_failed=:;;])
 esac
 AS_IF($at_failed, [$5
   m4_ifdef([AT_capture_files],
     [for file in AT_capture_files
-     do echo "$file:"; sed 's/^/> /' "$file"; done])
+     do AS_ECHO(["$file:"]); sed 's/^/> /' "$file"; done])
   echo 1 > "$at_status_file"
   exit 1], [$6])
 $at_traceon

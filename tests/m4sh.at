@@ -155,6 +155,54 @@ AT_CLEANUP
 
 
 
+## --------- ##
+## AS_ECHO.  ##
+## --------- ##
+
+# Build nested dirs.
+AT_SETUP([AS@&t@_ECHO and AS@&t@_ECHO_N])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+
+m4_define([ECHO_TEST],
+[echo=`AS_ECHO(['$1'])`
+test "X$echo" = 'X$1' ||
+  echo "AS@&t@_ECHO('"'$1'"') outputs '$echo'" >&2
+
+echo=`AS_ECHO_N(['$1'])`
+test "X$echo" = 'X$1' ||
+  echo "AS@&t@_ECHO_N('"'$1'"') outputs '$echo'" >&2])
+
+ECHO_TEST([-])
+ECHO_TEST([--])
+ECHO_TEST([---...---])
+ECHO_TEST([	 ])
+ECHO_TEST([-e])
+ECHO_TEST([-E])
+ECHO_TEST([-n])
+ECHO_TEST([-n -n])
+ECHO_TEST([-e -n])
+ECHO_TEST([ab\ncd])
+ECHO_TEST([abcd\c])
+ECHO_TEST([\a\b\c\f\n\r\t\v\"\])
+ECHO_TEST([ab
+cd
+e])
+ECHO_TEST([
+ ])
+ECHO_TEST([
+\c])
+AS_EXIT(0)
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script])
+
+AT_CLEANUP
+
+
+
 ## ------------- ##
 ## AS_BASENAME.  ##
 ## ------------- ##

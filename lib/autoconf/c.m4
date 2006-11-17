@@ -550,7 +550,8 @@ test -z "$CC" && AC_MSG_FAILURE([no acceptable C compiler found in \$PATH])
 
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
-ac_compiler=`set X $ac_compile; echo $[2]`
+set X $ac_compile
+ac_compiler=$[2]
 _AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
 _AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
@@ -558,7 +559,11 @@ _AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 _AC_LANG_COMPILER_GNU
-GCC=`test $ac_compiler_gnu = yes && echo yes`
+if test $ac_compiler_gnu = yes; then
+  GCC=yes
+else
+  GCC=
+fi
 _AC_PROG_CC_G
 _AC_PROG_CC_C89
 AC_LANG_POP(C)dnl
@@ -641,7 +646,7 @@ if test "x$CC" != xcc; then
 else
   AC_MSG_CHECKING([whether cc understands -c and -o together])
 fi
-set dummy $CC; ac_cc=`echo $[2] |
+set dummy $CC; ac_cc=`AS_ECHO(["$[2]"]) |
 		      sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
 AC_CACHE_VAL(ac_cv_prog_cc_${ac_cc}_c_o,
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
@@ -780,7 +785,8 @@ if test -z "$CXX"; then
 fi
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
-ac_compiler=`set X $ac_compile; echo $[2]`
+set X $ac_compile
+ac_compiler=$[2]
 _AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
 _AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
@@ -788,7 +794,11 @@ _AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 _AC_LANG_COMPILER_GNU
-GXX=`test $ac_compiler_gnu = yes && echo yes`
+if test $ac_compiler_gnu = yes; then
+  GXX=yes
+else
+  GXX=
+fi
 _AC_PROG_CXX_G
 AC_LANG_POP(C++)dnl
 ])# AC_PROG_CXX
@@ -944,7 +954,8 @@ AC_CHECK_TOOLS(OBJC,
 	       gcc)
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
-ac_compiler=`set X $ac_compile; echo $[2]`
+set X $ac_compile
+ac_compiler=$[2]
 _AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
 _AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
@@ -952,7 +963,11 @@ _AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
 _AC_LANG_COMPILER_GNU
-GOBJC=`test $ac_compiler_gnu = yes && echo yes`
+if test $ac_compiler_gnu = yes; then
+  GOBJC=yes
+else
+  GOBJC=
+fi
 _AC_PROG_OBJC_G
 AC_LANG_POP(Objective C)dnl
 ])# AC_PROG_OBJC

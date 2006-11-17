@@ -71,16 +71,17 @@ Written by David J. MacKenzie and Akim Demaille."]
 help="\
 Try \`$as_me --help' for more information."
 
-exit_missing_arg="\
-echo \"$as_me: option \\\`\$1' requires an argument\" >&2
-echo \"\$help\" >&2
-exit 1"
+exit_missing_arg='
+  AS_ECHO(["$as_me: option \`$[1]'\'' requires an argument"]) >&2
+  AS_ECHO(["$help"]) >&2
+  exit 1
+'
 
 # Variables.
 : ${AUTOM4TE='@bindir@/@autom4te-name@'}
 autom4te_options=
 outfile=
-verbose=:
+verbose=false
 
 # Parse command line.
 while test $# -gt 0 ; do
@@ -92,10 +93,10 @@ while test $# -gt 0 ; do
     --version | -V )
        echo "$version" ; exit ;;
     --help | -h )
-       echo "$usage"; exit ;;
+       AS_ECHO(["$usage"]); exit ;;
 
     --verbose | -v )
-       verbose=echo
+       verbose=:
        autom4te_options="$autom4te_options $1"; shift ;;
 
     # Arguments passed as is to autom4te.
@@ -115,11 +116,11 @@ while test $# -gt 0 ; do
        shift; shift ;;
 
     --trace=* | -t?* )
-       traces="$traces --trace='"`echo "$optarg" | sed "s/'/'\\\\\\\\''/g"`"'"
+       traces="$traces --trace='"`AS_ECHO(["$optarg"]) | sed "s/'/'\\\\\\\\''/g"`"'"
        shift ;;
     --trace | -t )
        test $# = 1 && eval "$exit_missing_arg"
-       traces="$traces --trace='"`echo "$2" | sed "s/'/'\\\\\\\\''/g"`"'"
+       traces="$traces --trace='"`AS_ECHO(["$[2]"]) | sed "s/'/'\\\\\\\\''/g"`"'"
        shift; shift ;;
     --initialization | -i )
        autom4te_options="$autom4te_options --melt"
@@ -139,8 +140,8 @@ while test $# -gt 0 ; do
        break ;;
     -* )
        exec >&2
-       echo "$as_me: invalid option $1"
-       echo "$help"
+       AS_ECHO(["$as_me: invalid option $[1]"])
+       AS_ECHO(["$help"])
        exit 1 ;;
     * )
        break ;;
@@ -152,22 +153,22 @@ case $# in
   0)
     if test -f configure.ac; then
       if test -f configure.in; then
-	echo "$as_me: warning: both \`configure.ac' and \`configure.in' are present." >&2
-	echo "$as_me: warning: proceeding with \`configure.ac'." >&2
+	AS_ECHO(["$as_me: warning: both \`configure.ac' and \`configure.in' are present."]) >&2
+	AS_ECHO(["$as_me: warning: proceeding with \`configure.ac'."]) >&2
       fi
       infile=configure.ac
     elif test -f configure.in; then
       infile=configure.in
     else
-      echo "$as_me: no input file" >&2
+      AS_ECHO(["$as_me: no input file"]) >&2
       exit 1
     fi
     test -z "$traces" && test -z "$outfile" && outfile=configure;;
   1) # autom4te doesn't like `-'.
      test "x$1" != "x-" && infile=$1 ;;
   *) exec >&2
-     echo "$as_me: invalid number of arguments."
-     echo "$help"
+     AS_ECHO(["$as_me: invalid number of arguments."])
+     AS_ECHO(["$help"])
      (exit 1); exit 1 ;;
 esac
 
@@ -178,5 +179,5 @@ test -z "$outfile" && outfile=-
 eval set x $autom4te_options \
   --language=autoconf --output=\$outfile "$traces" \$infile
 shift
-$verbose "$as_me: running $AUTOM4TE $*" >&2
+$verbose && AS_ECHO(["$as_me: running $AUTOM4TE $*"]) >&2
 exec "$AUTOM4TE" "$@"

@@ -768,7 +768,7 @@ if test $ac_cv_func_getloadavg_setgid = yes; then
   ac_ls_output=`ls -lgL /dev/kmem 2>/dev/null`
   # If we got an error (system does not support symlinks), try without -L.
   test -z "$ac_ls_output" && ac_ls_output=`ls -lg /dev/kmem`
-  ac_cv_group_kmem=`echo $ac_ls_output \
+  ac_cv_group_kmem=`AS_ECHO(["$ac_ls_output"]) \
     | sed -ne ['s/[	 ][	 ]*/ /g;
 	       s/^.[sSrwx-]* *[0-9]* *\([^0-9]*\)  *.*/\1/;
 	       / /s/.* //;p;']`
@@ -778,7 +778,7 @@ fi
 if test "x$ac_save_LIBS" = x; then
   GETLOADAVG_LIBS=$LIBS
 else
-  GETLOADAVG_LIBS=`echo "$LIBS" | sed "s!$ac_save_LIBS!!"`
+  GETLOADAVG_LIBS=`AS_ECHO(["$LIBS"]) | sed "s!$ac_save_LIBS!!"`
 fi
 LIBS=$ac_save_LIBS
 

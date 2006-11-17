@@ -365,7 +365,8 @@ AC_CHECK_TOOLS([]_AC_FC[],
 
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
-ac_compiler=`set X $ac_compile; echo $[2]`
+set X $ac_compile
+ac_compiler=$[2]
 _AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
 _AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
 _AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
@@ -394,7 +395,11 @@ AC_ARG_VAR([FFLAGS], [Fortran 77 compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 _AC_ARG_VAR_LIBS()dnl
 _AC_PROG_FC([Fortran 77], [$1])
-G77=`test $ac_compiler_gnu = yes && echo yes`
+if test $ac_compiler_gnu = yes; then
+  G77=yes
+else
+  G77=
+fi
 AC_LANG_POP(Fortran 77)dnl
 ])# AC_PROG_F77
 
@@ -535,7 +540,7 @@ eval "set x $ac_link"
 shift
 _AS_ECHO_LOG([$[*]])
 ac_[]_AC_LANG_ABBREV[]_v_output=`eval $ac_link AS_MESSAGE_LOG_FD>&1 2>&1 | grep -v 'Driving:'`
-echo "$ac_[]_AC_LANG_ABBREV[]_v_output" >&AS_MESSAGE_LOG_FD
+AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"]) >&AS_MESSAGE_LOG_FD
 _AC_LANG_PREFIX[]FLAGS=$ac_save_FFLAGS
 
 rm -f conftest*
@@ -685,7 +690,7 @@ while test $[@%:@] != 1; do
 	  esac
           ;;
         -YP,*)
-          for ac_j in `echo $ac_arg | sed -e 's/-YP,/-L/;s/:/ -L/g'`; do
+          for ac_j in `AS_ECHO(["$ac_arg"]) | sed -e 's/-YP,/-L/;s/:/ -L/g'`; do
             _AC_LIST_MEMBER_IF($ac_j, $ac_cv_[]_AC_LANG_ABBREV[]_libs, ,
                                [ac_arg="$ac_arg $ac_j"
                                ac_cv_[]_AC_LANG_ABBREV[]_libs="$ac_cv_[]_AC_LANG_ABBREV[]_libs $ac_j"])
@@ -709,7 +714,7 @@ set X $ac_save_positional; shift
 # must begin with a "/").
 case `(uname -sr) 2>/dev/null` in
    "SunOS 5"*)
-      ac_ld_run_path=`echo $ac_[]_AC_LANG_ABBREV[]_v_output |
+      ac_ld_run_path=`AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"]) |
                         sed -n 's,^.*LD_RUN_PATH *= *\(/[[^ ]]*\).*$,-R\1,p'`
       test "x$ac_ld_run_path" != x &&
         _AC_LINKER_OPTION([$ac_ld_run_path], ac_cv_[]_AC_LANG_ABBREV[]_libs)

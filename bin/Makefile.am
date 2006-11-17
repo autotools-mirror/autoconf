@@ -65,7 +65,9 @@ autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 ## Use chmod -w to prevent people from editing the wrong file by accident.
 $(bin_SCRIPTS): Makefile
 	rm -f $@ $@.tmp
-	$(edit) `test -f ./$@.in || echo $(srcdir)/`$@.in >$@.tmp
+	srcdir=''; \
+	  test -f ./$@.in || srcdir=$(srcdir)/; \
+	  $(edit) $${srcdir}$@.in >$@.tmp
 	chmod +x $@.tmp
 	chmod a-w $@.tmp
 	mv $@.tmp $@
