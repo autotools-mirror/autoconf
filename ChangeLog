@@ -1,5 +1,10 @@
 2006-11-17  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Version 2.61.
+
+	* configure.ac (AC_INIT): Bump to 2.61.
+	* NEWS: Likewise.
+
 	* tests/autotest.at (Macro with backslash in a test title):
 	Comment out for now, as this tests neither fails nor passes
 	reliably.  Problem reported by Ralf Wildenhues.

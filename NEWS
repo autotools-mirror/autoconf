@@ -1,4 +1,8 @@
-* Major changes in Autoconf 2.60c (??)
+* Major changes in Autoconf 2.61 (2006-11-17)
+
+** New macros AC_C_FLEXIBLE_ARRAY_MEMBER, AC_C_VARARRAYS.
+
+** AC_ARG_ENABLE and AC_ARG_WITH now allow '.' in feature and package names.
 
 * Major changes in Autoconf 2.60b (2006-10-22)
 
@@ -19,10 +23,6 @@
 
 ** AC_COMPUTE_INT no longer caches or reports results.
 
-** New macros AC_C_FLEXIBLE_ARRAY_MEMBER, AC_C_VARARRAYS.
-
-** AC_ARG_ENABLE and AC_ARG_WITH now allow '.' in feature and package names.
-
 ** AC_CHECK_DECL now also works with aggregate objects.
 
 ** AC_USE_SYSTEM_EXTENSIONS now defines _TANDEM_SOURCE for NonStop platforms.
@@ -37,8 +37,7 @@
 
 * Major changes in Autoconf 2.60a (2006-08-25)
 
-** GNU M4 1.4.6 or later is now recommended.  At least one "make check"
-  test fails with earlier versions of M4.
+** GNU M4 1.4.6 or later is now recommended.
 
 ** The check for C99 now tests for varargs macros, as documented.
   It also tests that the preprocessor supports 64-bit integers.
