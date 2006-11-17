@@ -1,3 +1,9 @@
+2006-11-17  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/autotest.at (Macro with backslash in a test title):
+	Comment out for now, as this tests neither fails nor passes
+	reliably.  Problem reported by Ralf Wildenhues.
+
 2006-11-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ENABLE): Fix some typos

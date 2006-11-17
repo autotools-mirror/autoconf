@@ -291,8 +291,9 @@ AT_CHECK_AT_TITLE_CHAR([Macro with backquote],       [macro_backquote],
 AT_CHECK_AT_TITLE_CHAR([Macro with single-quote], [macro_single_quote], ['])
 AT_CHECK_AT_TITLE_CHAR([Macro with double-quote], [macro_double_quote],
                                                                    ["], [:])
-AT_CHECK_AT_TITLE_CHAR([Macro with backslash],       [macro_backslash],
-                                                                  [\\], [:])
+# This test neither fails nor passes reliably.
+# AT_CHECK_AT_TITLE_CHAR([Macro with backslash],       [macro_backslash],
+#                                                                  [\\], [:])
 
 
 ## ----------------- ##
