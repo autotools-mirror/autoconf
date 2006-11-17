@@ -33,9 +33,10 @@ POST_UNINSTALL = :
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(top_srcdir)/configure AUTHORS COPYING \
-	ChangeLog INSTALL NEWS THANKS TODO build-aux/config.guess \
-	build-aux/config.sub build-aux/elisp-comp build-aux/install-sh \
-	build-aux/mdate-sh build-aux/missing build-aux/texinfo.tex
+	ChangeLog INSTALL NEWS README-alpha THANKS TODO \
+	build-aux/config.guess build-aux/config.sub \
+	build-aux/elisp-comp build-aux/install-sh build-aux/mdate-sh \
+	build-aux/missing build-aux/texinfo.tex
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/m4.m4 \
 	$(top_srcdir)/configure.ac
