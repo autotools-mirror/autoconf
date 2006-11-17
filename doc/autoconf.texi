@@ -15688,12 +15688,12 @@ If the user gave @command{configure} the option
 shell commands @var{action-if-given}.  If neither option was given, run
 shell commands @var{action-if-not-given}.  The name @var{feature}
 indicates an optional user-level facility.  It should consist only of
-alphanumeric characters and dashes.
+alphanumeric characters, dashes, and dots.
 
 The option's argument is available to the shell commands
 @var{action-if-given} in the shell variable @code{enableval}, which is
 actually just the value of the shell variable
-@code{enable_@var{feature}}, with any @option{-} characters changed into
+@code{enable_@var{feature}}, with any non-alphanumeric characters changed into
 @samp{_}.  You may use that variable instead, if you wish.  The
 @var{help-string} argument is like that of @code{AC_ARG_WITH}
 (@pxref{External Software}).

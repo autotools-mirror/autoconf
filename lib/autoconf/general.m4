@@ -626,13 +626,7 @@ do
   | --dataroot=* | --dataroo=* | --dataro=* | --datar=*)
     datarootdir=$ac_optarg ;;
 
-  -disable-* | --disable-*)
-    ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
-    # Reject names that are not valid shell variable names.
-    expr "x$ac_feature" : "[.*[^-_$as_cr_alnum]]" >/dev/null &&
-      AC_MSG_ERROR([invalid feature name: $ac_feature])
-    ac_feature=`echo $ac_feature | sed 's/-/_/g'`
-    eval enable_$ac_feature=no ;;
+  _AC_INIT_PARSE_ENABLE([disable], [feature], [no])
 
   -docdir | --docdir | --docdi | --doc | --do)
     ac_prev=docdir ;;
@@ -644,13 +638,7 @@ do
   -dvidir=* | --dvidir=* | --dvidi=* | --dvid=* | --dvi=* | --dv=*)
     dvidir=$ac_optarg ;;
 
-  -enable-* | --enable-*)
-    ac_feature=`expr "x$ac_option" : 'x-*enable-\([[^=]]*\)'`
-    # Reject names that are not valid shell variable names.
-    expr "x$ac_feature" : "[.*[^-_$as_cr_alnum]]" >/dev/null &&
-      AC_MSG_ERROR([invalid feature name: $ac_feature])
-    ac_feature=`echo $ac_feature | sed 's/-/_/g'`
-    eval enable_$ac_feature=\$ac_optarg ;;
+  _AC_INIT_PARSE_ENABLE([enable], [feature], [\$ac_optarg])
 
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
@@ -840,21 +828,9 @@ do
   -version | --version | --versio | --versi | --vers | -V)
     ac_init_version=: ;;
 
-  -with-* | --with-*)
-    ac_package=`expr "x$ac_option" : 'x-*with-\([[^=]]*\)'`
-    # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
-      AC_MSG_ERROR([invalid package name: $ac_package])
-    [ac_package=`echo $ac_package | sed 's/[-.]/_/g'`]
-    eval with_$ac_package=\$ac_optarg ;;
+  _AC_INIT_PARSE_ENABLE([with],    [package], [\$ac_optarg])
 
-  -without-* | --without-*)
-    ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
-    # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
-      AC_MSG_ERROR([invalid package name: $ac_package])
-    [ac_package=`echo $ac_package | sed 's/[-.]/_/g'`]
-    eval with_$ac_package=no ;;
+  _AC_INIT_PARSE_ENABLE([without], [package], [no])
 
   --x)
     # Obsolete; use --with-x.
@@ -941,6 +917,21 @@ test "$silent" = yes && exec AS_MESSAGE_FD>/dev/null
 
 m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_PARSE_ARGS
+
+
+# _AC_INIT_PARSE_ENABLE(OPTION-NAME, FEATURE, VALUE)
+# --------------------------------------------------
+# Handle an `--enable' or a `--with' option.
+#
+m4_define([_AC_INIT_PARSE_ENABLE],
+[-$1-* | --$1-*)
+    ac_$2=`expr "x$ac_option" : 'x-*$1-\(.*\)'`
+    # Reject names that are not valid shell variable names.
+    expr "x$ac_$2" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
+      AC_MSG_ERROR([invalid $2 name: $ac_$2])
+    [ac_$2=`echo $ac_$2 | sed 's/[-.]/_/g'`]
+    eval with_$ac_$2=$3 ;;dnl
+])
 
 
 # _AC_INIT_HELP

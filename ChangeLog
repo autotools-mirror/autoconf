@@ -1,3 +1,11 @@
+2006-11-16  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Factor out
+	code for --enable, --disable, --with, and --without to...
+	(_AC_INIT_PARSE_ENABLE): ... a new macro.
+	* doc/autoconf.texi (Package Options):
+	* NEWS: Document that AC_ARG_ENABLE allows dots, too.
+
 2006-11-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Import these changes from config via gnulib:
