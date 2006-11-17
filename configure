@@ -39,6 +39,29 @@ as_cr_Letters=$as_cr_letters$as_cr_LETTERS
 as_cr_digits='0123456789'
 as_cr_alnum=$as_cr_Letters$as_cr_digits
 
+as_nl='
+'
+export as_nl
+case `(printf %s foo) 2>/dev/null` in
+foo)
+  as_echo='printf %s\n'
+  as_echo_n='printf %s';;
+*)
+  as_echo_body='eval expr "X" : "X\\(.*\\)"'
+  as_echo_n_body='eval
+    arg=;
+    case $arg in
+    *"$as_nl"*)
+      expr "X$arg" : "X\\(.*\\)$as_nl";
+      arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
+    esac;
+    expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
+  '
+  export as_echo_body as_echo_n_body
+  as_echo='sh -c $as_echo_body X'
+  as_echo_n='sh -c $as_echo_n_body X';;
+esac
+
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! /bin/sh" >conf$$.sh
@@ -65,8 +88,6 @@ fi
 # there to prevent editors from complaining about space-tab.
 # (If _AS_PATH_WALK were called with IFS unset, it would disable word
 # splitting by setting IFS to empty value.)
-as_nl='
-'
 IFS=" ""	$as_nl"
 
 # Find who we are.  Look in the path if we contain no directory separator.
@@ -89,7 +110,7 @@ if test "x$as_myself" = x; then
   as_myself=$0
 fi
 if test ! -f "$as_myself"; then
-  echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
+  $as_echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
   { (exit 1); exit 1; }
 fi
 
@@ -134,7 +155,7 @@ as_me=`$as_basename -- "$0" ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
 	 X"$0" : 'X\(//\)$' \| \
 	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
-echo X/"$0" |
+$as_echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
 	    s//\1/
 	    q
@@ -453,7 +474,7 @@ test \$exitcode = 0") || {
       s/-\n.*//
     ' >$as_me.lineno &&
   chmod +x "$as_me.lineno" ||
-    { echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
+    { $as_echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
    { (exit 1); exit 1; }; }
 
   # Don't try to exec as it changes $[0], causing all sort of problems
@@ -481,7 +502,6 @@ case `echo -n x` in
 *)
   ECHO_N='-n';;
 esac
-
 if expr a : '\(a\)' >/dev/null 2>&1 &&
    test "X`expr 00001 : '.*\(...\)'`" = X001; then
   as_expr=expr
@@ -765,9 +785,9 @@ do
     ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_feature" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      { echo "$as_me: error: invalid feature name: $ac_feature" >&2
+      { $as_echo "$as_me: error: invalid feature name: $ac_feature" >&2
    { (exit 1); exit 1; }; }
-    ac_feature=`echo $ac_feature | sed 's/[-.]/_/g'`
+    ac_feature=`$as_echo "$ac_feature" | sed 's/[-.]/_/g'`
     eval enable_$ac_feature=no ;;
 
   -docdir | --docdir | --docdi | --doc | --do)
@@ -784,9 +804,9 @@ do
     ac_feature=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_feature" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      { echo "$as_me: error: invalid feature name: $ac_feature" >&2
+      { $as_echo "$as_me: error: invalid feature name: $ac_feature" >&2
    { (exit 1); exit 1; }; }
-    ac_feature=`echo $ac_feature | sed 's/[-.]/_/g'`
+    ac_feature=`$as_echo "$ac_feature" | sed 's/[-.]/_/g'`
     eval enable_$ac_feature=\$ac_optarg ;;
 
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
@@ -981,18 +1001,18 @@ do
     ac_package=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_package" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      { echo "$as_me: error: invalid package name: $ac_package" >&2
+      { $as_echo "$as_me: error: invalid package name: $ac_package" >&2
    { (exit 1); exit 1; }; }
-    ac_package=`echo $ac_package | sed 's/[-.]/_/g'`
+    ac_package=`$as_echo "$ac_package" | sed 's/[-.]/_/g'`
     eval with_$ac_package=\$ac_optarg ;;
 
   -without-* | --without-*)
     ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_package" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      { echo "$as_me: error: invalid package name: $ac_package" >&2
+      { $as_echo "$as_me: error: invalid package name: $ac_package" >&2
    { (exit 1); exit 1; }; }
-    ac_package=`echo $ac_package | sed 's/[-.]/_/g'`
+    ac_package=`$as_echo "$ac_package" | sed 's/[-.]/_/g'`
     eval with_$ac_package=no ;;
 
   --x)
@@ -1013,7 +1033,7 @@ do
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
     x_libraries=$ac_optarg ;;
 
-  -*) { echo "$as_me: error: unrecognized option: $ac_option
+  -*) { $as_echo "$as_me: error: unrecognized option: $ac_option
 Try \`$0 --help' for more information." >&2
    { (exit 1); exit 1; }; }
     ;;
@@ -1022,16 +1042,16 @@ Try \`$0 --help' for more information." >&2
     ac_envvar=`expr "x$ac_option" : 'x\([^=]*\)='`
     # Reject names that are not valid shell variable names.
     expr "x$ac_envvar" : ".*[^_$as_cr_alnum]" >/dev/null &&
-      { echo "$as_me: error: invalid variable name: $ac_envvar" >&2
+      { $as_echo "$as_me: error: invalid variable name: $ac_envvar" >&2
    { (exit 1); exit 1; }; }
     eval $ac_envvar=\$ac_optarg
     export $ac_envvar ;;
 
   *)
     # FIXME: should be removed in autoconf 3.0.
-    echo "$as_me: WARNING: you should use --build, --host, --target" >&2
+    $as_echo "$as_me: WARNING: you should use --build, --host, --target" >&2
     expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      echo "$as_me: WARNING: invalid host type: $ac_option" >&2
+      $as_echo "$as_me: WARNING: invalid host type: $ac_option" >&2
     : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
     ;;
 
@@ -1040,7 +1060,7 @@ done
 
 if test -n "$ac_prev"; then
   ac_option=--`echo $ac_prev | sed 's/_/-/g'`
-  { echo "$as_me: error: missing argument to $ac_option" >&2
+  { $as_echo "$as_me: error: missing argument to $ac_option" >&2
    { (exit 1); exit 1; }; }
 fi
 
@@ -1055,7 +1075,7 @@ do
     [\\/$]* | ?:[\\/]* )  continue;;
     NONE | '' ) case $ac_var in *prefix ) continue;; esac;;
   esac
-  { echo "$as_me: error: expected an absolute directory name for --$ac_var: $ac_val" >&2
+  { $as_echo "$as_me: error: expected an absolute directory name for --$ac_var: $ac_val" >&2
    { (exit 1); exit 1; }; }
 done
 
@@ -1070,7 +1090,7 @@ target=$target_alias
 if test "x$host_alias" != x; then
   if test "x$build_alias" = x; then
     cross_compiling=maybe
-    echo "$as_me: WARNING: If you wanted to set the --build type, don't use --host.
+    $as_echo "$as_me: WARNING: If you wanted to set the --build type, don't use --host.
     If a cross compiler is detected then cross compile mode will be used." >&2
   elif test "x$build_alias" != "x$host_alias"; then
     cross_compiling=yes
@@ -1086,10 +1106,10 @@ test "$silent" = yes && exec 6>/dev/null
 ac_pwd=`pwd` && test -n "$ac_pwd" &&
 ac_ls_di=`ls -di .` &&
 ac_pwd_ls_di=`cd "$ac_pwd" && ls -di .` ||
-  { echo "$as_me: error: Working directory cannot be determined" >&2
+  { $as_echo "$as_me: error: Working directory cannot be determined" >&2
    { (exit 1); exit 1; }; }
 test "X$ac_ls_di" = "X$ac_pwd_ls_di" ||
-  { echo "$as_me: error: pwd does not report name of working directory" >&2
+  { $as_echo "$as_me: error: pwd does not report name of working directory" >&2
    { (exit 1); exit 1; }; }
 
 
@@ -1102,7 +1122,7 @@ $as_expr X"$0" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$0" : 'X\(//\)[^/]' \| \
 	 X"$0" : 'X\(//\)$' \| \
 	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
-echo X"$0" |
+$as_echo X"$0" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
 	    q
@@ -1129,12 +1149,12 @@ else
 fi
 if test ! -r "$srcdir/$ac_unique_file"; then
   test "$ac_srcdir_defaulted" = yes && srcdir="$ac_confdir or .."
-  { echo "$as_me: error: cannot find sources ($ac_unique_file) in $srcdir" >&2
+  { $as_echo "$as_me: error: cannot find sources ($ac_unique_file) in $srcdir" >&2
    { (exit 1); exit 1; }; }
 fi
 ac_msg="sources are in $srcdir, but \`cd $srcdir' does not work"
 ac_abs_confdir=`(
-	cd "$srcdir" && test -r "./$ac_unique_file" || { echo "$as_me: error: $ac_msg" >&2
+	cd "$srcdir" && test -r "./$ac_unique_file" || { $as_echo "$as_me: error: $ac_msg" >&2
    { (exit 1); exit 1; }; }
 	pwd)`
 # When building in place, set srcdir=.
@@ -1258,9 +1278,9 @@ if test "$ac_init_help" = "recursive"; then
 case "$ac_dir" in
 .) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
 *)
-  ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
+  ac_dir_suffix=/`$as_echo "$ac_dir" | sed 's,^\.[\\/],,'`
   # A ".." for each directory in $ac_dir_suffix.
-  ac_top_builddir_sub=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,/..,g;s,/,,'`
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's,/[^\\/]*,/..,g;s,/,,'`
   case $ac_top_builddir_sub in
   "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
   *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
@@ -1296,7 +1316,7 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
       echo &&
       $SHELL "$ac_srcdir/configure" --help=recursive
     else
-      echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2
+      $as_echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2
     fi || ac_status=$?
     cd "$ac_pwd" || { ac_status=$?; break; }
   done
@@ -1356,7 +1376,7 @@ for as_dir in $PATH
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
-  echo "PATH: $as_dir"
+  $as_echo "PATH: $as_dir"
 done
 IFS=$as_save_IFS
 
@@ -1391,7 +1411,7 @@ do
     | -silent | --silent | --silen | --sile | --sil)
       continue ;;
     *\'*)
-      ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+      ac_arg=`$as_echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
     esac
     case $ac_pass in
     1) ac_configure_args0="$ac_configure_args0 '$ac_arg'" ;;
@@ -1443,8 +1463,8 @@ _ASBOX
     case $ac_val in #(
     *${as_nl}*)
       case $ac_var in #(
-      *_cv_*) { echo "$as_me:$LINENO: WARNING: Cache variable $ac_var contains a newline." >&5
-echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
+      *_cv_*) { $as_echo "$as_me:$LINENO: WARNING: Cache variable $ac_var contains a newline." >&5
+$as_echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
       esac
       case $ac_var in #(
       _ | IFS | as_nl) ;; #(
@@ -1477,9 +1497,9 @@ _ASBOX
     do
       eval ac_val=\$$ac_var
       case $ac_val in
-      *\'\''*) ac_val=`echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+      *\'\''*) ac_val=`$as_echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
       esac
-      echo "$ac_var='\''$ac_val'\''"
+      $as_echo "$ac_var='\''$ac_val'\''"
     done | sort
     echo
 
@@ -1494,9 +1514,9 @@ _ASBOX
       do
 	eval ac_val=\$$ac_var
 	case $ac_val in
-	*\'\''*) ac_val=`echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+	*\'\''*) ac_val=`$as_echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
 	esac
-	echo "$ac_var='\''$ac_val'\''"
+	$as_echo "$ac_var='\''$ac_val'\''"
       done | sort
       echo
     fi
@@ -1512,8 +1532,8 @@ _ASBOX
       echo
     fi
     test "$ac_signal" != 0 &&
-      echo "$as_me: caught signal $ac_signal"
-    echo "$as_me: exit $exit_status"
+      $as_echo "$as_me: caught signal $ac_signal"
+    $as_echo "$as_me: exit $exit_status"
   } >&5
   rm -f core *.core core.conftest.* &&
     rm -f -r conftest* confdefs* conf$$* $ac_clean_files &&
@@ -1568,8 +1588,8 @@ shift
 for ac_site_file
 do
   if test -r "$ac_site_file"; then
-    { echo "$as_me:$LINENO: loading site script $ac_site_file" >&5
-echo "$as_me: loading site script $ac_site_file" >&6;}
+    { $as_echo "$as_me:$LINENO: loading site script $ac_site_file" >&5
+$as_echo "$as_me: loading site script $ac_site_file" >&6;}
     sed 's/^/| /' "$ac_site_file" >&5
     . "$ac_site_file"
   fi
@@ -1579,16 +1599,16 @@ if test -r "$cache_file"; then
   # Some versions of bash will fail to source /dev/null (special
   # files actually), so we avoid doing that.
   if test -f "$cache_file"; then
-    { echo "$as_me:$LINENO: loading cache $cache_file" >&5
-echo "$as_me: loading cache $cache_file" >&6;}
+    { $as_echo "$as_me:$LINENO: loading cache $cache_file" >&5
+$as_echo "$as_me: loading cache $cache_file" >&6;}
     case $cache_file in
       [\\/]* | ?:[\\/]* ) . "$cache_file";;
       *)                      . "./$cache_file";;
     esac
   fi
 else
-  { echo "$as_me:$LINENO: creating cache $cache_file" >&5
-echo "$as_me: creating cache $cache_file" >&6;}
+  { $as_echo "$as_me:$LINENO: creating cache $cache_file" >&5
+$as_echo "$as_me: creating cache $cache_file" >&6;}
   >$cache_file
 fi
 
@@ -1602,29 +1622,29 @@ for ac_var in $ac_precious_vars; do
   eval ac_new_val=\$ac_env_${ac_var}_value
   case $ac_old_set,$ac_new_set in
     set,)
-      { echo "$as_me:$LINENO: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
-echo "$as_me: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&2;}
+      { $as_echo "$as_me:$LINENO: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
+$as_echo "$as_me: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&2;}
       ac_cache_corrupted=: ;;
     ,set)
-      { echo "$as_me:$LINENO: error: \`$ac_var' was not set in the previous run" >&5
-echo "$as_me: error: \`$ac_var' was not set in the previous run" >&2;}
+      { $as_echo "$as_me:$LINENO: error: \`$ac_var' was not set in the previous run" >&5
+$as_echo "$as_me: error: \`$ac_var' was not set in the previous run" >&2;}
       ac_cache_corrupted=: ;;
     ,);;
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
-	{ echo "$as_me:$LINENO: error: \`$ac_var' has changed since the previous run:" >&5
-echo "$as_me: error: \`$ac_var' has changed since the previous run:" >&2;}
-	{ echo "$as_me:$LINENO:   former value:  $ac_old_val" >&5
-echo "$as_me:   former value:  $ac_old_val" >&2;}
-	{ echo "$as_me:$LINENO:   current value: $ac_new_val" >&5
-echo "$as_me:   current value: $ac_new_val" >&2;}
+	{ $as_echo "$as_me:$LINENO: error: \`$ac_var' has changed since the previous run:" >&5
+$as_echo "$as_me: error: \`$ac_var' has changed since the previous run:" >&2;}
+	{ $as_echo "$as_me:$LINENO:   former value:  $ac_old_val" >&5
+$as_echo "$as_me:   former value:  $ac_old_val" >&2;}
+	{ $as_echo "$as_me:$LINENO:   current value: $ac_new_val" >&5
+$as_echo "$as_me:   current value: $ac_new_val" >&2;}
 	ac_cache_corrupted=:
       fi;;
   esac
   # Pass precious variables to config.status.
   if test "$ac_new_set" = set; then
     case $ac_new_val in
-    *\'*) ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
+    *\'*) ac_arg=$ac_var=`$as_echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
     *) ac_arg=$ac_var=$ac_new_val ;;
     esac
     case " $ac_configure_args " in
@@ -1634,10 +1654,10 @@ echo "$as_me:   current value: $ac_new_val" >&2;}
   fi
 done
 if $ac_cache_corrupted; then
-  { echo "$as_me:$LINENO: error: changes in the environment can compromise the build" >&5
-echo "$as_me: error: changes in the environment can compromise the build" >&2;}
-  { { echo "$as_me:$LINENO: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&5
-echo "$as_me: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&2;}
+  { $as_echo "$as_me:$LINENO: error: changes in the environment can compromise the build" >&5
+$as_echo "$as_me: error: changes in the environment can compromise the build" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&5
+$as_echo "$as_me: error: run \`make distclean' and/or \`rm $cache_file' and start over" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -1691,8 +1711,8 @@ for ac_dir in build-aux "$srcdir"/build-aux; do
   fi
 done
 if test -z "$ac_aux_dir"; then
-  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in build-aux \"$srcdir\"/build-aux" >&5
-echo "$as_me: error: cannot find install-sh or install.sh in build-aux \"$srcdir\"/build-aux" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in build-aux \"$srcdir\"/build-aux" >&5
+$as_echo "$as_me: error: cannot find install-sh or install.sh in build-aux \"$srcdir\"/build-aux" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -1721,11 +1741,11 @@ am__api_version='1.10'
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # OS/2's system install, which has a completely different semantic
 # ./install, which can be erroneously created by make from ./install.sh.
-{ echo "$as_me:$LINENO: checking for a BSD-compatible install" >&5
-echo $ECHO_N "checking for a BSD-compatible install... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for a BSD-compatible install" >&5
+$as_echo_n "checking for a BSD-compatible install... " >&6; }
 if test -z "$INSTALL"; then
 if test "${ac_cv_path_install+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 for as_dir in $PATH
@@ -1777,8 +1797,8 @@ fi
     INSTALL=$ac_install_sh
   fi
 fi
-{ echo "$as_me:$LINENO: result: $INSTALL" >&5
-echo "${ECHO_T}$INSTALL" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $INSTALL" >&5
+$as_echo "$INSTALL" >&6; }
 
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
 # It thinks the first close brace ends the variable substitution.
@@ -1788,8 +1808,8 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
-{ echo "$as_me:$LINENO: checking whether build environment is sane" >&5
-echo $ECHO_N "checking whether build environment is sane... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking whether build environment is sane" >&5
+$as_echo_n "checking whether build environment is sane... " >&6; }
 # Just in case
 sleep 1
 echo timestamp > conftest.file
@@ -1812,9 +1832,9 @@ if (
       # if, for instance, CONFIG_SHELL is bash and it inherits a
       # broken ls alias from the environment.  This has actually
       # happened.  Such a system could not be considered "sane".
-      { { echo "$as_me:$LINENO: error: ls -t appears to fail.  Make sure there is not a broken
+      { { $as_echo "$as_me:$LINENO: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&5
-echo "$as_me: error: ls -t appears to fail.  Make sure there is not a broken
+$as_echo "$as_me: error: ls -t appears to fail.  Make sure there is not a broken
 alias in your environment" >&2;}
    { (exit 1); exit 1; }; }
    fi
@@ -1825,26 +1845,23 @@ then
    # Ok.
    :
 else
-   { { echo "$as_me:$LINENO: error: newly created file is older than distributed files!
+   { { $as_echo "$as_me:$LINENO: error: newly created file is older than distributed files!
 Check your system clock" >&5
-echo "$as_me: error: newly created file is older than distributed files!
+$as_echo "$as_me: error: newly created file is older than distributed files!
 Check your system clock" >&2;}
    { (exit 1); exit 1; }; }
 fi
-{ echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
+{ $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
 test "$program_prefix" != NONE &&
   program_transform_name="s&^&$program_prefix&;$program_transform_name"
 # Use a double $ so make ignores it.
 test "$program_suffix" != NONE &&
   program_transform_name="s&\$&$program_suffix&;$program_transform_name"
-# Double any \ or $.  echo might interpret backslashes.
+# Double any \ or $.
 # By default was `s,x,x', remove it if useless.
-cat <<\_ACEOF >conftest.sed
-s/[\\$]/&&/g;s/;s,x,x,$//
-_ACEOF
-program_transform_name=`echo $program_transform_name | sed -f conftest.sed`
-rm -f conftest.sed
+ac_script='s/[\\$]/&&/g;s/;s,x,x,$//'
+program_transform_name=`$as_echo "$program_transform_name" | sed "$ac_script"`
 
 # expand $ac_aux_dir to an absolute path
 am_aux_dir=`cd $ac_aux_dir && pwd`
@@ -1855,15 +1872,15 @@ if eval "$MISSING --run true"; then
   am_missing_run="$MISSING --run "
 else
   am_missing_run=
-  { echo "$as_me:$LINENO: WARNING: \`missing' script is too old or missing" >&5
-echo "$as_me: WARNING: \`missing' script is too old or missing" >&2;}
+  { $as_echo "$as_me:$LINENO: WARNING: \`missing' script is too old or missing" >&5
+$as_echo "$as_me: WARNING: \`missing' script is too old or missing" >&2;}
 fi
 
-{ echo "$as_me:$LINENO: checking for a thread-safe mkdir -p" >&5
-echo $ECHO_N "checking for a thread-safe mkdir -p... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for a thread-safe mkdir -p" >&5
+$as_echo_n "checking for a thread-safe mkdir -p... " >&6; }
 if test -z "$MKDIR_P"; then
   if test "${ac_cv_path_mkdir+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 for as_dir in $PATH$PATH_SEPARATOR/opt/sfw/bin
@@ -1898,8 +1915,8 @@ fi
     MKDIR_P="$ac_install_sh -d"
   fi
 fi
-{ echo "$as_me:$LINENO: result: $MKDIR_P" >&5
-echo "${ECHO_T}$MKDIR_P" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $MKDIR_P" >&5
+$as_echo "$MKDIR_P" >&6; }
 
 mkdir_p="$MKDIR_P"
 case $mkdir_p in
@@ -1911,10 +1928,10 @@ for ac_prog in gawk mawk nawk awk
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_prog_AWK+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   if test -n "$AWK"; then
   ac_cv_prog_AWK="$AWK" # Let the user override the test.
@@ -1927,7 +1944,7 @@ do
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_AWK="$ac_prog"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
@@ -1938,22 +1955,23 @@ fi
 fi
 AWK=$ac_cv_prog_AWK
 if test -n "$AWK"; then
-  { echo "$as_me:$LINENO: result: $AWK" >&5
-echo "${ECHO_T}$AWK" >&6; }
+  { $as_echo "$as_me:$LINENO: result: $AWK" >&5
+$as_echo "$AWK" >&6; }
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
 
   test -n "$AWK" && break
 done
 
-{ echo "$as_me:$LINENO: checking whether ${MAKE-make} sets \$(MAKE)" >&5
-echo $ECHO_N "checking whether ${MAKE-make} sets \$(MAKE)... $ECHO_C" >&6; }
-set x ${MAKE-make}; ac_make=`echo "$2" | sed 's/+/p/g; s/[^a-zA-Z0-9_]/_/g'`
+{ $as_echo "$as_me:$LINENO: checking whether ${MAKE-make} sets \$(MAKE)" >&5
+$as_echo_n "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
+set x ${MAKE-make}
+ac_make=`$as_echo "$2" | sed 's/+/p/g; s/[^a-zA-Z0-9_]/_/g'`
 if { as_var=ac_cv_prog_make_${ac_make}_set; eval "test \"\${$as_var+set}\" = set"; }; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   cat >conftest.make <<\_ACEOF
 SHELL = /bin/sh
@@ -1970,12 +1988,12 @@ esac
 rm -f conftest.make
 fi
 if eval test \$ac_cv_prog_make_${ac_make}_set = yes; then
-  { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
+  { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
   SET_MAKE=
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
   SET_MAKE="MAKE=${MAKE-make}"
 fi
 
@@ -1994,8 +2012,8 @@ if test "`cd $srcdir && pwd`" != "`pwd`"; then
   am__isrc=' -I$(srcdir)'
   # test to see if srcdir already configured
   if test -f $srcdir/config.status; then
-    { { echo "$as_me:$LINENO: error: source directory already configured; run \"make distclean\" there first" >&5
-echo "$as_me: error: source directory already configured; run \"make distclean\" there first" >&2;}
+    { { $as_echo "$as_me:$LINENO: error: source directory already configured; run \"make distclean\" there first" >&5
+$as_echo "$as_me: error: source directory already configured; run \"make distclean\" there first" >&2;}
    { (exit 1); exit 1; }; }
   fi
 fi
@@ -2050,10 +2068,10 @@ if test "$cross_compiling" != no; then
   if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}strip", so it can be a program name with args.
 set dummy ${ac_tool_prefix}strip; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_prog_STRIP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   if test -n "$STRIP"; then
   ac_cv_prog_STRIP="$STRIP" # Let the user override the test.
@@ -2066,7 +2084,7 @@ do
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_STRIP="${ac_tool_prefix}strip"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
@@ -2077,11 +2095,11 @@ fi
 fi
 STRIP=$ac_cv_prog_STRIP
 if test -n "$STRIP"; then
-  { echo "$as_me:$LINENO: result: $STRIP" >&5
-echo "${ECHO_T}$STRIP" >&6; }
+  { $as_echo "$as_me:$LINENO: result: $STRIP" >&5
+$as_echo "$STRIP" >&6; }
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
 
@@ -2090,10 +2108,10 @@ if test -z "$ac_cv_prog_STRIP"; then
   ac_ct_STRIP=$STRIP
   # Extract the first word of "strip", so it can be a program name with args.
 set dummy strip; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_prog_ac_ct_STRIP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   if test -n "$ac_ct_STRIP"; then
   ac_cv_prog_ac_ct_STRIP="$ac_ct_STRIP" # Let the user override the test.
@@ -2106,7 +2124,7 @@ do
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_ac_ct_STRIP="strip"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
@@ -2117,11 +2135,11 @@ fi
 fi
 ac_ct_STRIP=$ac_cv_prog_ac_ct_STRIP
 if test -n "$ac_ct_STRIP"; then
-  { echo "$as_me:$LINENO: result: $ac_ct_STRIP" >&5
-echo "${ECHO_T}$ac_ct_STRIP" >&6; }
+  { $as_echo "$as_me:$LINENO: result: $ac_ct_STRIP" >&5
+$as_echo "$ac_ct_STRIP" >&6; }
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
   if test "x$ac_ct_STRIP" = x; then
@@ -2129,10 +2147,10 @@ fi
   else
     case $cross_compiling:$ac_tool_warned in
 yes:)
-{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
+{ $as_echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
 whose name does not start with the host triplet.  If you think this
 configuration is useful to you, please write to autoconf@gnu.org." >&5
-echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
+$as_echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
 whose name does not start with the host triplet.  If you think this
 configuration is useful to you, please write to autoconf@gnu.org." >&2;}
 ac_tool_warned=yes ;;
@@ -2182,10 +2200,10 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 # So before using `/bin/sh -n' to check our scripts, we first check
 # that `/bin/sh -n' is known to not have these problems.
 
-{ echo "$as_me:$LINENO: checking whether /bin/sh -n is known to work" >&5
-echo $ECHO_N "checking whether /bin/sh -n is known to work... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking whether /bin/sh -n is known to work" >&5
+$as_echo_n "checking whether /bin/sh -n is known to work... " >&6; }
 if test "${ac_cv_sh_n_works+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   if (
     unset BASH_VERSION ZSH_VERSION
@@ -2201,8 +2219,8 @@ else ac_cv_sh_n_works=no
 fi
 
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_sh_n_works" >&5
-echo "${ECHO_T}$ac_cv_sh_n_works" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_sh_n_works" >&5
+$as_echo "$ac_cv_sh_n_works" >&6; }
 
 
 # Initialize the test suite.
@@ -2213,10 +2231,10 @@ ac_config_files="$ac_config_files tests/Makefile tests/atlocal"
 
 # Extract the first word of "expr", so it can be a program name with args.
 set dummy expr; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_path_EXPR+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   case $EXPR in
   [\\/]* | ?:[\\/]*)
@@ -2231,7 +2249,7 @@ do
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_EXPR="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
@@ -2243,11 +2261,11 @@ esac
 fi
 EXPR=$ac_cv_path_EXPR
 if test -n "$EXPR"; then
-  { echo "$as_me:$LINENO: result: $EXPR" >&5
-echo "${ECHO_T}$EXPR" >&6; }
+  { $as_echo "$as_me:$LINENO: result: $EXPR" >&5
+$as_echo "$EXPR" >&6; }
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
 
@@ -2265,10 +2283,10 @@ for ac_prog in gm4 gnum4 m4
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_path_M4+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   case $M4 in
   [\\/]* | ?:[\\/]*)
@@ -2283,7 +2301,7 @@ do
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_M4="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
@@ -2295,11 +2313,11 @@ esac
 fi
 M4=$ac_cv_path_M4
 if test -n "$M4"; then
-  { echo "$as_me:$LINENO: result: $M4" >&5
-echo "${ECHO_T}$M4" >&6; }
+  { $as_echo "$as_me:$LINENO: result: $M4" >&5
+$as_echo "$M4" >&6; }
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
 
@@ -2307,10 +2325,10 @@ fi
 done
 test -n "$M4" || M4="m4"
 
-{ echo "$as_me:$LINENO: checking whether m4 supports frozen files" >&5
-echo $ECHO_N "checking whether m4 supports frozen files... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking whether m4 supports frozen files" >&5
+$as_echo_n "checking whether m4 supports frozen files... " >&6; }
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   ac_cv_prog_gnu_m4=no
 if test x"$M4" != x; then
@@ -2319,28 +2337,28 @@ if test x"$M4" != x; then
   esac
 fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_prog_gnu_m4" >&5
-echo "${ECHO_T}$ac_cv_prog_gnu_m4" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_prog_gnu_m4" >&5
+$as_echo "$ac_cv_prog_gnu_m4" >&6; }
 if test $ac_cv_prog_gnu_m4 = yes ; then
-  { echo "$as_me:$LINENO: checking how m4 supports trace files" >&5
-echo $ECHO_N "checking how m4 supports trace files... $ECHO_C" >&6; }
+  { $as_echo "$as_me:$LINENO: checking how m4 supports trace files" >&5
+$as_echo_n "checking how m4 supports trace files... " >&6; }
 if test "${ac_cv_prog_gnu_m4_debugfile+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   case `$M4 --help < /dev/null 2>&1` in
     *debugfile*) ac_cv_prog_gnu_m4_debugfile=--debugfile ;;
     *) ac_cv_prog_gnu_m4_debugfile=--error-output ;;
   esac
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_prog_gnu_m4_debugfile" >&5
-echo "${ECHO_T}$ac_cv_prog_gnu_m4_debugfile" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_prog_gnu_m4_debugfile" >&5
+$as_echo "$ac_cv_prog_gnu_m4_debugfile" >&6; }
   M4_DEBUGFILE=$ac_cv_prog_gnu_m4_debugfile
 
 fi
 
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  { { echo "$as_me:$LINENO: error: GNU M4 1.4 is required" >&5
-echo "$as_me: error: GNU M4 1.4 is required" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: GNU M4 1.4 is required" >&5
+$as_echo "$as_me: error: GNU M4 1.4 is required" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -2362,10 +2380,10 @@ HELP2MAN=${HELP2MAN-"${am_missing_run}help2man"}
 # We use an absolute name for perl so the #! line in autoscan will work.
 # Extract the first word of "perl", so it can be a program name with args.
 set dummy perl; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_path_PERL+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   case $PERL in
   [\\/]* | ?:[\\/]*)
@@ -2380,7 +2398,7 @@ do
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_path_PERL="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
@@ -2393,22 +2411,22 @@ esac
 fi
 PERL=$ac_cv_path_PERL
 if test -n "$PERL"; then
-  { echo "$as_me:$LINENO: result: $PERL" >&5
-echo "${ECHO_T}$PERL" >&6; }
+  { $as_echo "$as_me:$LINENO: result: $PERL" >&5
+$as_echo "$PERL" >&6; }
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
 
 if test "$PERL" = no; then
-  { { echo "$as_me:$LINENO: error: perl is not found" >&5
-echo "$as_me: error: perl is not found" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: perl is not found" >&5
+$as_echo "$as_me: error: perl is not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 $PERL -e 'require 5.005_03;' || {
-   { { echo "$as_me:$LINENO: error: Perl 5.005_03 or better is required" >&5
-echo "$as_me: error: Perl 5.005_03 or better is required" >&2;}
+   { { $as_echo "$as_me:$LINENO: error: Perl 5.005_03 or better is required" >&5
+$as_echo "$as_me: error: Perl 5.005_03 or better is required" >&2;}
    { (exit 1); exit 1; }; }
 }
 
@@ -2425,10 +2443,10 @@ for ac_prog in emacs xemacs
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_prog_TEST_EMACS+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   if test -n "$TEST_EMACS"; then
   ac_cv_prog_TEST_EMACS="$TEST_EMACS" # Let the user override the test.
@@ -2441,7 +2459,7 @@ do
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_TEST_EMACS="$ac_prog"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
@@ -2452,11 +2470,11 @@ fi
 fi
 TEST_EMACS=$ac_cv_prog_TEST_EMACS
 if test -n "$TEST_EMACS"; then
-  { echo "$as_me:$LINENO: result: $TEST_EMACS" >&5
-echo "${ECHO_T}$TEST_EMACS" >&6; }
+  { $as_echo "$as_me:$LINENO: result: $TEST_EMACS" >&5
+$as_echo "$TEST_EMACS" >&6; }
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
 
@@ -2470,20 +2488,20 @@ test -n "$TEST_EMACS" || TEST_EMACS="no"
 # "Variable (broken nil) seen on pass 2 of byte compiler but not pass 1"
 # We detect this problem here.
 if test "$TEST_EMACS" != no; then
-  { echo "$as_me:$LINENO: checking whether $TEST_EMACS is sufficiently recent" >&5
-echo $ECHO_N "checking whether $TEST_EMACS is sufficiently recent... $ECHO_C" >&6; }
+  { $as_echo "$as_me:$LINENO: checking whether $TEST_EMACS is sufficiently recent" >&5
+$as_echo_n "checking whether $TEST_EMACS is sufficiently recent... " >&6; }
 if test "${ac_cv_prog_emacs_ok+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   # Note: The quoted "EOF" is intentional.  It protects the ` in the text.
     cat >conftest.el << "EOF"
       (defvar broken)
       (defun broken-mode () (setq broken-defaults `(broken nil)))
 EOF
-    if { (echo "$as_me:$LINENO: \$TEST_EMACS -batch -q -f batch-byte-compile conftest.el 1>&2") >&5
+    if { ($as_echo "$as_me:$LINENO: \$TEST_EMACS -batch -q -f batch-byte-compile conftest.el 1>&2") >&5
   ($TEST_EMACS -batch -q -f batch-byte-compile conftest.el 1>&2) 2>&5
   ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
   ac_cv_prog_emacs_ok=yes
 else
@@ -2492,8 +2510,8 @@ fi
 
     rm -f conftest.el conftest.elc
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_prog_emacs_ok" >&5
-echo "${ECHO_T}$ac_cv_prog_emacs_ok" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_prog_emacs_ok" >&5
+$as_echo "$ac_cv_prog_emacs_ok" >&6; }
   if test $ac_cv_prog_emacs_ok = no; then
   TEST_EMACS=no
 fi
@@ -2511,10 +2529,10 @@ EMACS=$TEST_EMACS
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
 if test "${ac_cv_prog_EMACS+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   if test -n "$EMACS"; then
   ac_cv_prog_EMACS="$EMACS" # Let the user override the test.
@@ -2527,7 +2545,7 @@ do
   for ac_exec_ext in '' $ac_executable_extensions; do
   if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
     ac_cv_prog_EMACS="$ac_prog"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
 done
@@ -2538,11 +2556,11 @@ fi
 fi
 EMACS=$ac_cv_prog_EMACS
 if test -n "$EMACS"; then
-  { echo "$as_me:$LINENO: result: $EMACS" >&5
-echo "${ECHO_T}$EMACS" >&6; }
+  { $as_echo "$as_me:$LINENO: result: $EMACS" >&5
+$as_echo "$EMACS" >&6; }
 else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
 fi
 
 
@@ -2556,16 +2574,16 @@ test -n "$EMACS" || EMACS="no"
 # Check whether --with-lispdir was given.
 if test "${with_lispdir+set}" = set; then
   withval=$with_lispdir;  lispdir="$withval"
-   { echo "$as_me:$LINENO: checking where .elc files should go" >&5
-echo $ECHO_N "checking where .elc files should go... $ECHO_C" >&6; }
-   { echo "$as_me:$LINENO: result: $lispdir" >&5
-echo "${ECHO_T}$lispdir" >&6; }
+   { $as_echo "$as_me:$LINENO: checking where .elc files should go" >&5
+$as_echo_n "checking where .elc files should go... " >&6; }
+   { $as_echo "$as_me:$LINENO: result: $lispdir" >&5
+$as_echo "$lispdir" >&6; }
 else
 
- { echo "$as_me:$LINENO: checking where .elc files should go" >&5
-echo $ECHO_N "checking where .elc files should go... $ECHO_C" >&6; }
+ { $as_echo "$as_me:$LINENO: checking where .elc files should go" >&5
+$as_echo_n "checking where .elc files should go... " >&6; }
 if test "${am_cv_lispdir+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
 
    if test $EMACS != "no"; then
@@ -2575,10 +2593,10 @@ else
   #  which is non-obvious for non-emacs users.
   # Redirecting /dev/null should help a bit; pity we can't detect "broken"
   #  emacsen earlier and avoid running this altogether.
-  { (echo "$as_me:$LINENO: \$EMACS -batch -q -eval '(while load-path (princ (concat (car load-path) \"\\n\")) (setq load-path (cdr load-path)))' </dev/null >conftest.out") >&5
+  { ($as_echo "$as_me:$LINENO: \$EMACS -batch -q -eval '(while load-path (princ (concat (car load-path) \"\\n\")) (setq load-path (cdr load-path)))' </dev/null >conftest.out") >&5
   ($EMACS -batch -q -eval '(while load-path (princ (concat (car load-path) "\n")) (setq load-path (cdr load-path)))' </dev/null >conftest.out) 2>&5
   ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }
 	am_cv_lispdir=`sed -n \
        -e 's,/$,,' \
@@ -2591,8 +2609,8 @@ else
    test -z "$am_cv_lispdir" && am_cv_lispdir='${datadir}/emacs/site-lisp'
 
 fi
-{ echo "$as_me:$LINENO: result: $am_cv_lispdir" >&5
-echo "${ECHO_T}$am_cv_lispdir" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $am_cv_lispdir" >&5
+$as_echo "$am_cv_lispdir" >&6; }
   lispdir="$am_cv_lispdir"
 
 fi
@@ -2604,16 +2622,16 @@ fi
 ## ------------ ##
 ## Grep & sed.  ##
 ## ------------ ##
-{ echo "$as_me:$LINENO: checking for grep that handles long lines and -e" >&5
-echo $ECHO_N "checking for grep that handles long lines and -e... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for grep that handles long lines and -e" >&5
+$as_echo_n "checking for grep that handles long lines and -e... " >&6; }
 if test "${ac_cv_path_GREP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   # Extract the first word of "grep ggrep" to use in msg output
 if test -z "$GREP"; then
 set dummy grep ggrep; ac_prog_name=$2
 if test "${ac_cv_path_GREP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   ac_path_GREP_found=false
 # Loop through the user's path and test for each of PROGNAME-LIST
@@ -2633,13 +2651,13 @@ case `"$ac_path_GREP" --version 2>&1` in
   ac_cv_path_GREP="$ac_path_GREP" ac_path_GREP_found=:;;
 *)
   ac_count=0
-  echo $ECHO_N "0123456789$ECHO_C" >"conftest.in"
+  $as_echo_n 0123456789 >"conftest.in"
   while :
   do
     cat "conftest.in" "conftest.in" >"conftest.tmp"
     mv "conftest.tmp" "conftest.in"
     cp "conftest.in" "conftest.nl"
-    echo 'GREP' >> "conftest.nl"
+    $as_echo 'GREP' >> "conftest.nl"
     "$ac_path_GREP" -e 'GREP$' -e '-(cannot match)-' < "conftest.nl" >"conftest.out" 2>/dev/null || break
     diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
@@ -2667,8 +2685,8 @@ fi
 
 GREP="$ac_cv_path_GREP"
 if test -z "$GREP"; then
-  { { echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&5
-echo "$as_me: error: no acceptable $ac_prog_name could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&5
+$as_echo "$as_me: error: no acceptable $ac_prog_name could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -2678,15 +2696,15 @@ fi
 
 
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_path_GREP" >&5
-echo "${ECHO_T}$ac_cv_path_GREP" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_path_GREP" >&5
+$as_echo "$ac_cv_path_GREP" >&6; }
  GREP="$ac_cv_path_GREP"
 
 
-{ echo "$as_me:$LINENO: checking for egrep" >&5
-echo $ECHO_N "checking for egrep... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for egrep" >&5
+$as_echo_n "checking for egrep... " >&6; }
 if test "${ac_cv_path_EGREP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   if echo a | $GREP -E '(a|b)' >/dev/null 2>&1
    then ac_cv_path_EGREP="$GREP -E"
@@ -2695,7 +2713,7 @@ else
 if test -z "$EGREP"; then
 set dummy egrep; ac_prog_name=$2
 if test "${ac_cv_path_EGREP+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   ac_path_EGREP_found=false
 # Loop through the user's path and test for each of PROGNAME-LIST
@@ -2715,13 +2733,13 @@ case `"$ac_path_EGREP" --version 2>&1` in
   ac_cv_path_EGREP="$ac_path_EGREP" ac_path_EGREP_found=:;;
 *)
   ac_count=0
-  echo $ECHO_N "0123456789$ECHO_C" >"conftest.in"
+  $as_echo_n 0123456789 >"conftest.in"
   while :
   do
     cat "conftest.in" "conftest.in" >"conftest.tmp"
     mv "conftest.tmp" "conftest.in"
     cp "conftest.in" "conftest.nl"
-    echo 'EGREP' >> "conftest.nl"
+    $as_echo 'EGREP' >> "conftest.nl"
     "$ac_path_EGREP" 'EGREP$' < "conftest.nl" >"conftest.out" 2>/dev/null || break
     diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
@@ -2749,8 +2767,8 @@ fi
 
 EGREP="$ac_cv_path_EGREP"
 if test -z "$EGREP"; then
-  { { echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&5
-echo "$as_me: error: no acceptable $ac_prog_name could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&5
+$as_echo "$as_me: error: no acceptable $ac_prog_name could be found in $PATH$PATH_SEPARATOR/usr/xpg4/bin" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -2761,15 +2779,15 @@ fi
 
    fi
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_path_EGREP" >&5
-echo "${ECHO_T}$ac_cv_path_EGREP" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_path_EGREP" >&5
+$as_echo "$ac_cv_path_EGREP" >&6; }
  EGREP="$ac_cv_path_EGREP"
 
 
-{ echo "$as_me:$LINENO: checking for a sed that does not truncate output" >&5
-echo $ECHO_N "checking for a sed that does not truncate output... $ECHO_C" >&6; }
+{ $as_echo "$as_me:$LINENO: checking for a sed that does not truncate output" >&5
+$as_echo_n "checking for a sed that does not truncate output... " >&6; }
 if test "${ac_cv_path_SED+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
             ac_script=s/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb/
      for ac_i in 1 2 3 4 5 6 7; do
@@ -2781,7 +2799,7 @@ else
 if test -z "$SED"; then
 set dummy sed gsed; ac_prog_name=$2
 if test "${ac_cv_path_SED+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+  $as_echo_n "(cached) " >&6
 else
   ac_path_SED_found=false
 # Loop through the user's path and test for each of PROGNAME-LIST
@@ -2801,13 +2819,13 @@ case `"$ac_path_SED" --version 2>&1` in
   ac_cv_path_SED="$ac_path_SED" ac_path_SED_found=:;;
 *)
   ac_count=0
-  echo $ECHO_N "0123456789$ECHO_C" >"conftest.in"
+  $as_echo_n 0123456789 >"conftest.in"
   while :
   do
     cat "conftest.in" "conftest.in" >"conftest.tmp"
     mv "conftest.tmp" "conftest.in"
     cp "conftest.in" "conftest.nl"
-    echo '' >> "conftest.nl"
+    $as_echo '' >> "conftest.nl"
     "$ac_path_SED" -f conftest.sed < "conftest.nl" >"conftest.out" 2>/dev/null || break
     diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
     ac_count=`expr $ac_count + 1`
@@ -2835,8 +2853,8 @@ fi
 
 SED="$ac_cv_path_SED"
 if test -z "$SED"; then
-  { { echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in \$PATH" >&5
-echo "$as_me: error: no acceptable $ac_prog_name could be found in \$PATH" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: no acceptable $ac_prog_name could be found in \$PATH" >&5
+$as_echo "$as_me: error: no acceptable $ac_prog_name could be found in \$PATH" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -2845,8 +2863,8 @@ else
 fi
 
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_path_SED" >&5
-echo "${ECHO_T}$ac_cv_path_SED" >&6; }
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_path_SED" >&5
+$as_echo "$ac_cv_path_SED" >&6; }
  SED="$ac_cv_path_SED"
   rm -f conftest.sed
 
@@ -2886,8 +2904,8 @@ _ACEOF
     case $ac_val in #(
     *${as_nl}*)
       case $ac_var in #(
-      *_cv_*) { echo "$as_me:$LINENO: WARNING: Cache variable $ac_var contains a newline." >&5
-echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
+      *_cv_*) { $as_echo "$as_me:$LINENO: WARNING: Cache variable $ac_var contains a newline." >&5
+$as_echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
       esac
       case $ac_var in #(
       _ | IFS | as_nl) ;; #(
@@ -2923,12 +2941,12 @@ echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
 if diff "$cache_file" confcache >/dev/null 2>&1; then :; else
   if test -w "$cache_file"; then
     test "x$cache_file" != "x/dev/null" &&
-      { echo "$as_me:$LINENO: updating cache $cache_file" >&5
-echo "$as_me: updating cache $cache_file" >&6;}
+      { $as_echo "$as_me:$LINENO: updating cache $cache_file" >&5
+$as_echo "$as_me: updating cache $cache_file" >&6;}
     cat confcache >$cache_file
   else
-    { echo "$as_me:$LINENO: not updating unwritable cache $cache_file" >&5
-echo "$as_me: not updating unwritable cache $cache_file" >&6;}
+    { $as_echo "$as_me:$LINENO: not updating unwritable cache $cache_file" >&5
+$as_echo "$as_me: not updating unwritable cache $cache_file" >&6;}
   fi
 fi
 rm -f confcache
@@ -2974,7 +2992,7 @@ ac_ltlibobjs=
 for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_script='s/\$U\././;s/\.o$//;s/\.obj$//'
-  ac_i=`echo "$ac_i" | sed "$ac_script"`
+  ac_i=`$as_echo "$ac_i" | sed "$ac_script"`
   # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
   #    will be set to the directory where LIBOBJS objects are built.
   ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
@@ -2989,8 +3007,8 @@ LTLIBOBJS=$ac_ltlibobjs
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:$LINENO: creating $CONFIG_STATUS" >&5
-echo "$as_me: creating $CONFIG_STATUS" >&6;}
+{ $as_echo "$as_me:$LINENO: creating $CONFIG_STATUS" >&5
+$as_echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
 # Generated by $as_me.
@@ -3036,6 +3054,29 @@ as_cr_Letters=$as_cr_letters$as_cr_LETTERS
 as_cr_digits='0123456789'
 as_cr_alnum=$as_cr_Letters$as_cr_digits
 
+as_nl='
+'
+export as_nl
+case `(printf %s foo) 2>/dev/null` in
+foo)
+  as_echo='printf %s\n'
+  as_echo_n='printf %s';;
+*)
+  as_echo_body='eval expr "X" : "X\\(.*\\)"'
+  as_echo_n_body='eval
+    arg=;
+    case $arg in
+    *"$as_nl"*)
+      expr "X$arg" : "X\\(.*\\)$as_nl";
+      arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
+    esac;
+    expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
+  '
+  export as_echo_body as_echo_n_body
+  as_echo='sh -c $as_echo_body X'
+  as_echo_n='sh -c $as_echo_n_body X';;
+esac
+
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! /bin/sh" >conf$$.sh
@@ -3062,8 +3103,6 @@ fi
 # there to prevent editors from complaining about space-tab.
 # (If _AS_PATH_WALK were called with IFS unset, it would disable word
 # splitting by setting IFS to empty value.)
-as_nl='
-'
 IFS=" ""	$as_nl"
 
 # Find who we are.  Look in the path if we contain no directory separator.
@@ -3086,7 +3125,7 @@ if test "x$as_myself" = x; then
   as_myself=$0
 fi
 if test ! -f "$as_myself"; then
-  echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
+  $as_echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
   { (exit 1); exit 1; }
 fi
 
@@ -3131,7 +3170,7 @@ as_me=`$as_basename -- "$0" ||
 $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
 	 X"$0" : 'X\(//\)$' \| \
 	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
-echo X/"$0" |
+$as_echo X/"$0" |
     sed '/^.*\/\([^/][^/]*\)\/*$/{
 	    s//\1/
 	    q
@@ -3182,7 +3221,7 @@ $as_unset CDPATH
       s/-\n.*//
     ' >$as_me.lineno &&
   chmod +x "$as_me.lineno" ||
-    { echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
+    { $as_echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2
    { (exit 1); exit 1; }; }
 
   # Don't try to exec as it changes $[0], causing all sort of problems
@@ -3210,7 +3249,6 @@ case `echo -n x` in
 *)
   ECHO_N='-n';;
 esac
-
 if expr a : '\(a\)' >/dev/null 2>&1 &&
    test "X`expr 00001 : '.*\(...\)'`" = X001; then
   as_expr=expr
@@ -3334,7 +3372,7 @@ cat >>$CONFIG_STATUS <<_ACEOF
 ac_cs_version="\\
 GNU Autoconf config.status 2.61a
 configured by $0, generated by GNU Autoconf 2.61a,
-  with options \\"`echo "$ac_configure_args" | sed 's/^ //; s/[\\""\`\$]/\\\\&/g'`\\"
+  with options \\"`$as_echo "$ac_configure_args" | sed 's/^ //; s/[\\""\`\$]/\\\\&/g'`\\"
 
 Copyright (C) 2006 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
@@ -3370,7 +3408,7 @@ do
   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
     ac_cs_recheck=: ;;
   --version | --versio | --versi | --vers | --ver | --ve | --v | -V )
-    echo "$ac_cs_version"; exit ;;
+    $as_echo "$ac_cs_version"; exit ;;
   --debug | --debu | --deb | --de | --d | -d )
     debug=: ;;
   --file | --fil | --fi | --f )
@@ -3378,13 +3416,13 @@ do
     CONFIG_FILES="$CONFIG_FILES $ac_optarg"
     ac_need_defaults=false;;
   --he | --h |  --help | --hel | -h )
-    echo "$ac_cs_usage"; exit ;;
+    $as_echo "$ac_cs_usage"; exit ;;
   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
   | -silent | --silent | --silen | --sile | --sil | --si | --s)
     ac_cs_silent=: ;;
 
   # This is an error.
-  -*) { echo "$as_me: error: unrecognized option: $1
+  -*) { $as_echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2
    { (exit 1); exit 1; }; } ;;
 
@@ -3405,10 +3443,12 @@ fi
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
 if \$ac_cs_recheck; then
-  echo "running CONFIG_SHELL=$SHELL $SHELL $0 "$ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&6
-  CONFIG_SHELL=$SHELL
+  set X '$SHELL' '$0'$ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
+  shift
+  \$as_echo "running CONFIG_SHELL=$SHELL \$*" >&6
+  CONFIG_SHELL='$SHELL'
   export CONFIG_SHELL
-  exec $SHELL "$0"$ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
+  exec "\$@"
 fi
 
 _ACEOF
@@ -3419,7 +3459,7 @@ exec 5>>config.log
   sed 'h;s/./-/g;s/^.../## /;s/...$/ ##/;p;x;p;x' <<_ASBOX
 ## Running $as_me. ##
 _ASBOX
-  echo "$ac_log"
+  $as_echo "$ac_log"
 } >&5
 
 _ACEOF
@@ -3447,8 +3487,8 @@ do
     "lib/autotest/Makefile") CONFIG_FILES="$CONFIG_FILES lib/autotest/Makefile" ;;
     "bin/Makefile") CONFIG_FILES="$CONFIG_FILES bin/Makefile" ;;
 
-  *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
-echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
+  *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
+$as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
   esac
 done
@@ -3488,7 +3528,7 @@ $debug ||
   (umask 077 && mkdir "$tmp")
 } ||
 {
-   echo "$me: cannot create a temporary directory in ." >&2
+   $as_echo "$me: cannot create a temporary directory in ." >&2
    { (exit 1); exit 1; }
 }
 
@@ -3586,8 +3626,8 @@ _ACEOF
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 74; then
     break
   elif $ac_last_try; then
-    { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
-echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
+    { { $as_echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
+$as_echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
    { (exit 1); exit 1; }; }
   else
     ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
@@ -3647,8 +3687,8 @@ do
   esac
   case $ac_mode$ac_tag in
   :[FHL]*:*);;
-  :L* | :C*:*) { { echo "$as_me:$LINENO: error: Invalid tag $ac_tag." >&5
-echo "$as_me: error: Invalid tag $ac_tag." >&2;}
+  :L* | :C*:*) { { $as_echo "$as_me:$LINENO: error: Invalid tag $ac_tag." >&5
+$as_echo "$as_me: error: Invalid tag $ac_tag." >&2;}
    { (exit 1); exit 1; }; };;
   :[FH]-) ac_tag=-:-;;
   :[FH]*) ac_tag=$ac_tag:$ac_tag.in;;
@@ -3677,8 +3717,8 @@ echo "$as_me: error: Invalid tag $ac_tag." >&2;}
 	   [\\/$]*) false;;
 	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
 	   esac ||
-	   { { echo "$as_me:$LINENO: error: cannot find input file: $ac_f" >&5
-echo "$as_me: error: cannot find input file: $ac_f" >&2;}
+	   { { $as_echo "$as_me:$LINENO: error: cannot find input file: $ac_f" >&5
+$as_echo "$as_me: error: cannot find input file: $ac_f" >&2;}
    { (exit 1); exit 1; }; };;
       esac
       ac_file_inputs="$ac_file_inputs $ac_f"
@@ -3687,12 +3727,13 @@ echo "$as_me: error: cannot find input file: $ac_f" >&2;}
     # Let's still pretend it is `configure' which instantiates (i.e., don't
     # use $as_me), people would be surprised to read:
     #    /* config.h.  Generated by config.status.  */
-    configure_input="Generated from "`IFS=:
-	  echo $* | sed 's|^[^:]*/||;s|:[^:]*/|, |g'`" by configure."
+    configure_input='Generated from '`
+	  $as_echo "$*" | sed 's|^[^:]*/||;s|:[^:]*/|, |g'
+	`' by configure.'
     if test x"$ac_file" != x-; then
       configure_input="$ac_file.  $configure_input"
-      { echo "$as_me:$LINENO: creating $ac_file" >&5
-echo "$as_me: creating $ac_file" >&6;}
+      { $as_echo "$as_me:$LINENO: creating $ac_file" >&5
+$as_echo "$as_me: creating $ac_file" >&6;}
     fi
 
     case $ac_tag in
@@ -3706,7 +3747,7 @@ $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$ac_file" : 'X\(//\)[^/]' \| \
 	 X"$ac_file" : 'X\(//\)$' \| \
 	 X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
-echo X"$ac_file" |
+$as_echo X"$ac_file" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
 	    q
@@ -3732,7 +3773,7 @@ echo X"$ac_file" |
     as_dirs=
     while :; do
       case $as_dir in #(
-      *\'*) as_qdir=`echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #(
+      *\'*) as_qdir=`$as_echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #(
       *) as_qdir=$as_dir;;
       esac
       as_dirs="'$as_qdir' $as_dirs"
@@ -3741,7 +3782,7 @@ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"$as_dir" : 'X\(//\)[^/]' \| \
 	 X"$as_dir" : 'X\(//\)$' \| \
 	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
-echo X"$as_dir" |
+$as_echo X"$as_dir" |
     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
 	    s//\1/
 	    q
@@ -3762,17 +3803,17 @@ echo X"$as_dir" |
       test -d "$as_dir" && break
     done
     test -z "$as_dirs" || eval "mkdir $as_dirs"
-  } || test -d "$as_dir" || { { echo "$as_me:$LINENO: error: cannot create directory $as_dir" >&5
-echo "$as_me: error: cannot create directory $as_dir" >&2;}
+  } || test -d "$as_dir" || { { $as_echo "$as_me:$LINENO: error: cannot create directory $as_dir" >&5
+$as_echo "$as_me: error: cannot create directory $as_dir" >&2;}
    { (exit 1); exit 1; }; }; }
   ac_builddir=.
 
 case "$ac_dir" in
 .) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
 *)
-  ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
+  ac_dir_suffix=/`$as_echo "$ac_dir" | sed 's,^\.[\\/],,'`
   # A ".." for each directory in $ac_dir_suffix.
-  ac_top_builddir_sub=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,/..,g;s,/,,'`
+  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's,/[^\\/]*,/..,g;s,/,,'`
   case $ac_top_builddir_sub in
   "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
   *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
@@ -3834,8 +3875,8 @@ case `sed -n '/datarootdir/ {
 ' $ac_file_inputs` in
 *datarootdir*) ac_datarootdir_seen=yes;;
 *@datadir@*|*@docdir@*|*@infodir@*|*@localedir@*|*@mandir@*)
-  { echo "$as_me:$LINENO: WARNING: $ac_file_inputs seems to ignore the --datarootdir setting" >&5
-echo "$as_me: WARNING: $ac_file_inputs seems to ignore the --datarootdir setting" >&2;}
+  { $as_echo "$as_me:$LINENO: WARNING: $ac_file_inputs seems to ignore the --datarootdir setting" >&5
+$as_echo "$as_me: WARNING: $ac_file_inputs seems to ignore the --datarootdir setting" >&2;}
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
   ac_datarootdir_hack='
@@ -3875,9 +3916,9 @@ $ac_datarootdir_hack
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
   { ac_out=`sed -n '/^[	 ]*datarootdir[	 ]*:*=/p' "$tmp/out"`; test -z "$ac_out"; } &&
-  { echo "$as_me:$LINENO: WARNING: $ac_file contains a reference to the variable \`datarootdir'
+  { $as_echo "$as_me:$LINENO: WARNING: $ac_file contains a reference to the variable \`datarootdir'
 which seems to be undefined.  Please make sure it is defined." >&5
-echo "$as_me: WARNING: $ac_file contains a reference to the variable \`datarootdir'
+$as_echo "$as_me: WARNING: $ac_file contains a reference to the variable \`datarootdir'
 which seems to be undefined.  Please make sure it is defined." >&2;}
 
   rm -f "$tmp/stdin"
@@ -3888,8 +3929,8 @@ which seems to be undefined.  Please make sure it is defined." >&2;}
  ;;
 
 
-  :C)  { echo "$as_me:$LINENO: executing $ac_file commands" >&5
-echo "$as_me: executing $ac_file commands" >&6;}
+  :C)  { $as_echo "$as_me:$LINENO: executing $ac_file commands" >&5
+$as_echo "$as_me: executing $ac_file commands" >&6;}
  ;;
   esac
 

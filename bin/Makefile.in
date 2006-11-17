@@ -503,7 +503,9 @@ autoconf.in: $(srcdir)/autoconf.as $(m4sh_m4f_dependencies)
 
 $(bin_SCRIPTS): Makefile
 	rm -f $@ $@.tmp
-	$(edit) `test -f ./$@.in || echo $(srcdir)/`$@.in >$@.tmp
+	srcdir=''; \
+	  test -f ./$@.in || srcdir=$(srcdir)/; \
+	  $(edit) $${srcdir}$@.in >$@.tmp
 	chmod +x $@.tmp
 	chmod a-w $@.tmp
 	mv $@.tmp $@
