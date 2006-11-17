@@ -1,5 +1,10 @@
 2006-11-17  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* configure.ac (AC_INIT): Bump to 2.61a.
+	* NEWS: Likewise.
+
+2006-11-17  Paul Eggert  <eggert@cs.ucla.edu>
+
 	Version 2.61.
 
 	* configure.ac (AC_INIT): Bump to 2.61.
