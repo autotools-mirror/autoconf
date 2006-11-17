@@ -1,3 +1,8 @@
+2006-11-16  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ENABLE): Fix some typos
+	in previous change, which caused test failures.
+
 2006-11-16  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Factor out

@@ -925,12 +925,12 @@ m4_divert_pop([PARSE_ARGS])dnl
 #
 m4_define([_AC_INIT_PARSE_ENABLE],
 [-$1-* | --$1-*)
-    ac_$2=`expr "x$ac_option" : 'x-*$1-\(.*\)'`
+    ac_$2=`expr "x$ac_option" : 'x-*$1-\(m4_bmatch([$1], [^\(enable\|with\)$], [[[^=]]], [.])*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_$2" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid $2 name: $ac_$2])
     [ac_$2=`echo $ac_$2 | sed 's/[-.]/_/g'`]
-    eval with_$ac_$2=$3 ;;dnl
+    eval m4_bmatch([$1], [^\(enable\|disable\)$], [enable], [with])_$ac_$2=$3 ;;dnl
 ])
 
 
