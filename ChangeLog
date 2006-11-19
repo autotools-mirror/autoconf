@@ -1,3 +1,15 @@
+2006-11-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* tests/autotest.at (BSx641-newline in command):
+	(BS-BS-newline in command, BSx640-newline in command):
+	(Newline-CODE-BS-newline in command):
+	(Single-quote-BS-newline in command):
+	(Single-quote-newline-BS-newline in command):
+	Use printf '%s\n' instead of echo, for portability to hosts
+	where echo interprets backslashes.  This will break on hosts
+	that lack printf, but for now let's assume all such hosts
+	are dead (if not, we should get reports of test failures).
+
 2006-11-17  Paul Eggert  <eggert@cs.ucla.edu>
 
 	'echo' has some portability problems, when given a first argument
