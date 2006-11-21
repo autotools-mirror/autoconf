@@ -13046,22 +13046,25 @@ Traditional Awk supports only the predefined functions @code{exp},
 Traditional Awk @code{getline} is not at all compatible with Posix;
 avoid it.
 
-In traditional Awk, @code{FS} must be a string containing just one
-ordinary character, and similarly for the field-separator argument to
-@code{split}.
+Traditional Awk has @code{for (i in a) @dots{}} but no other uses of the
+@code{in} keyword.  For example, it lacks @code{if (i in a) @dots{}}.
+
+In code portable to both traditional and modern Awk, @code{FS} must be a
+string containing just one ordinary character, and similarly for the
+field-separator argument to @code{split}.
 
 Traditional Awk has a limit of 99
 fields in a record.  You may be able to circumvent this problem by using
 @code{split}.
 
+Traditional Awk has a limit of at most 99 bytes in a number formatted by
+@code{OFMT}; for example, @code{OFMT="%.300e"; print 0.1;} typically
+dumps core.
+
 The original version of Awk had a limit of at most 99 bytes per
 @code{split} field, 99 bytes per @code{substr} substring, and 99 bytes
 per run of non-special characters in a @code{printf} format, but these
 bugs have been fixed on all practical hosts that we know of.
-
-Traditional Awk has a limit of at most 99 bytes in a number formatted by
-@code{OFMT}; for example, @code{OFMT="%.300e"; print 0.1;} will dump
-core.
 
 @item @command{basename}
 @c ---------------------

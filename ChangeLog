@@ -4,6 +4,7 @@
 	that traditional Awk lacks 3-arg "split".  It has it.
 	Mention that FS must be a single character, and a few other
 	99-byte limits of traditional Awk.
+	Mention that if (i in a) doesn't work with traditional Awk.
 
 2006-11-18  Paul Eggert  <eggert@cs.ucla.edu>
 
