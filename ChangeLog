@@ -1,3 +1,10 @@
+2006-11-21  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): Don't claim
+	that traditional Awk lacks 3-arg "split".  It has it.
+	Mention that FS must be a single character, and a few other
+	99-byte limits of traditional Awk.
+
 2006-11-18  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/autotest.at (BSx641-newline in command):
