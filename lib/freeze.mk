@@ -115,13 +115,6 @@ ETAGS_FOR_AUTOCONF = \
   --regex='/AN_\(FUNCTION\|HEADER\|IDENTIFIER\|LIBRARY\|MAKEVAR\|PROGRAM\)(\[\([^]]*\)\]/\2/'
 
 
-## ---------- ##
-## Run GREP.  ##
-## ---------- ##
-
-GREP = @GREP@
-
-
 ## -------------------------------- ##
 ## Looking for forbidden patterns.  ##
 ## -------------------------------- ##
