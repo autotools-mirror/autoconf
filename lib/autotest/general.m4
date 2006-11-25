@@ -944,11 +944,11 @@ $at_skip_count tests were skipped." ;;
 esac
 
 if test $at_unexpected_count = 0; then
-  AS_ECHO(["$at_result"])
-  AS_ECHO(["$at_result"]) >&AS_MESSAGE_LOG_FD
+  echo "$at_result"
+  echo "$at_result" >&AS_MESSAGE_LOG_FD
 else
-  AS_ECHO(["ERROR: $at_result"]) >&2
-  AS_ECHO(["ERROR: $at_result"]) >&AS_MESSAGE_LOG_FD
+  echo "ERROR: $at_result" >&2
+  echo "ERROR: $at_result" >&AS_MESSAGE_LOG_FD
   {
     echo
     AS_BOX([Summary of the failures.])
@@ -1420,7 +1420,7 @@ m4_pushdef([at_reason],
 ))dnl
 dnl
 m4_ifval(m4_defn([at_reason]),
-[AS_ECHO(['Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'])],
+[echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'],
 [m4_bmatch([$1], [\$],
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
 [case "AS_ESCAPE([$1], [`"\])" in

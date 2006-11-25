@@ -1,3 +1,12 @@
+2006-11-25  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autotest/general.m4 (AT_INIT): Undo recent changes
+	that replaced echo with AS_ECHO where this wasn't necessary.
+	Problem reportd by Ralf Wildenhues.
+	* lib/m4sugar/m4sh.m4 (_AS_ECHO_PREPARE): Port to Solaris 7,
+	where "/usr/bin/printf '%s\n' S" dumps core if S is long.
+	This is Sun bug 4206210.  Problem reportd by Ralf Wildenhues.
+
 2006-11-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/freeze.mk (GREP): Removed, no need to initialize this.

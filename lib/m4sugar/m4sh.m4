@@ -808,25 +808,34 @@ m4_defun([_AS_ECHO_PREPARE],
 [[as_nl='
 '
 export as_nl
-case `(printf %s foo) 2>/dev/null` in
-foo)
+# Printing a 2060-byte string crashes Solaris 7 /usr/bin/printf.
+as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
+as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
+as_echo=$as_echo$as_echo$as_echo$as_echo
+if test "X`(printf %s $as_echo) 2>/dev/null`" = "X$as_echo"; then
   as_echo='printf %s\n'
-  as_echo_n='printf %s';;
-*)
-  as_echo_body='eval expr "X$1" : "X\\(.*\\)"'
-  as_echo_n_body='eval
-    arg=$1;
-    case $arg in
-    *"$as_nl"*)
-      expr "X$arg" : "X\\(.*\\)$as_nl";
-      arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
-    esac;
-    expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
-  '
-  export as_echo_body as_echo_n_body
+  as_echo_n='printf %s'
+else
+  if test "X`PATH=/usr/ucb; echo -n -n $as_echo`" = "X-n $as_echo"; then
+    as_echo_body='PATH=/usr/ucb; eval echo -n "$1$as_nl"'
+    as_echo_n='/usr/ucb/echo -n'
+  else
+    as_echo_body='eval expr "X$1" : "X\\(.*\\)"'
+    as_echo_n_body='eval
+      arg=$1;
+      case $arg in
+      *"$as_nl"*)
+	expr "X$arg" : "X\\(.*\\)$as_nl";
+	arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
+      esac;
+      expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
+    '
+    export as_echo_n_body
+    as_echo_n='sh -c $as_echo_n_body X'
+  fi
+  export as_echo_body
   as_echo='sh -c $as_echo_body X'
-  as_echo_n='sh -c $as_echo_n_body X';;
-esac
+fi
 ]])# _AS_ECHO_PREPARE
 
 
