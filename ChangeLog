@@ -1,3 +1,34 @@
+2006-11-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Rewrite config files generation: avoid quadratic growth in
+	the number of substituted variables by using awk instead of sed
+	for the bulk of the substitutions.
+	* NEWS: Mention this.
+	* doc/autoconf.texi (Setting Output Variables): `|#_!!_#|' is also
+	forbidden in the output (and thus input) file.
+	* lib/autoconf/status.m4 (_AC_AWK_LITERAL_LIMIT): New macro.
+	(_AC_OUTPUT_FILES_PREPARE): Instead of several sed scripts,
+	generate just one large awk script for substitutions,
+	eliminating much of the earlier complexity, while adding some
+	new complexity.  Only expand the substitution templates at
+	configure time, for smaller configure script size.  If
+	_AC_SUBST_FILES are used, test 'awk' for working getline support
+	at config.status time.  If absent, interpolate through the
+	shell.  The awk script was written with much help
+	from Paolo Bonzini and Paul Eggert.
+	(_AC_SED_CMD_NUM, _AC_SED_DELIM_NUM, _AC_SED_FRAG): Removed.
+	(_AC_SED_FRAG_NUM): Likewise.
+	(_AC_SUBST_CMDS): Renamed from...
+	(_AC_SED_CMDS): ...this.
+	(_AC_OUTPUT_FILE): Use _AC_SUBST_CMDS.
+	* tests/torture.at (Substitute a 2000-byte string): Also
+	substitute a line with 1000 words, and a variable with several
+	long lines.
+	(Substitute and define special characters): Test awk special
+	characters, and put substitution input strings `@foo@' in the
+	output, to test that no recursion happens; test several other
+	combinations from Paolo Bonzini.
+
 2006-11-25  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autotest/general.m4 (AT_INIT): Undo recent changes

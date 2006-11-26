@@ -8352,8 +8352,8 @@ is called.  The value can contain newlines.
 The substituted value is not rescanned for more output variables;
 occurrences of @samp{@@@var{variable}@@} in the value are inserted
 literally into the output file.  (The algorithm uses the special marker
-@code{|#_!!_#|} internally, so the substituted value cannot contain
-@code{|#_!!_#|}.)
+@code{|#_!!_#|} internally, so neither the substituted value nor the
+output file may contain @code{|#_!!_#|}.)
 
 If @var{value} is given, in addition assign it to @var{variable}.
 

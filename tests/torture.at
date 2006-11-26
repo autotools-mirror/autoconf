@@ -539,24 +539,37 @@ AT_CLEANUP
 # Solaris 9 /usr/ucb/sed that rejects commands longer than 4000 bytes.  HP/UX
 # sed dumps core around 8 KiB.  However, POSIX says that sed need not
 # handle lines longer than 2048 bytes (including the trailing newline).
-# So we'll just test a 2000-byte value.
+# So we'll just test a 2000-byte value, and for awk, we test a line with
+# almost 1000 words, and one variable with 4 lines of 500 bytes each.
 
 AT_SETUP([Substitute a 2000-byte string])
 
 AT_DATA([Foo.in], [@foo@
+])
+AT_DATA([Bar.in], [@bar@
+])
+AT_DATA([Baz.in], [@baz@
 ])
 
 AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 AC_SUBST([foo], ]m4_for([n], 1, 100,, ....................)[)
-AC_CONFIG_FILES([Foo])
+AC_SUBST([bar], "]m4_for([n], 1, 100,, @ @ @ @ @ @ @ @ @ @@)[")
+AC_SUBST([baz], "]m4_for([n], 1, 4,, m4_for([m], 1, 25,, ... ... ... ... ....)
+)[")
+AC_CONFIG_FILES([Foo Bar Baz])
 AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 AT_CHECK([cat Foo], 0, m4_for([n], 1, 100,, ....................)
+)
+AT_CHECK([cat Bar], 0, m4_for([n], 1, 100,, @ @ @ @ @ @ @ @ @ @@)
+)
+AT_CHECK([cat Baz], 0, m4_for([n], 1, 4,, m4_for([m], 1, 25,, ... ... ... ... ....)
+)
 )
 AT_CLEANUP
 
@@ -584,25 +597,57 @@ AT_CLEANUP
 ## Substitute and define special characters.  ##
 ## ------------------------------------------ ##
 
-# Use characters special to the shell, sed, and M4.
+# Use characters special to the shell, sed, awk, and M4.
 
 AT_SETUP([Substitute and define special characters])
 
 AT_DATA([Foo.in], [@foo@
+@bar@@notsubsted@@baz@ stray @ and more@@@baz@
+abc@bar@baz@baz
+abc@bar@@baz@baz
+abc@bar@@baz@baz@
+abc@bar @baz@baz
+abc@bar @baz@baz@
+abc@bar @baz@@baz@
+@file@
+	 @file@	 
+X@file@
+@file@X
+])
+
+AT_DATA([File],
+[@foo@@bar@
 ])
 
 AT_CONFIGURE_AC(
-[[foo="AS@&t@_ESCAPE([[X*'[]+ ", `\($foo]])"
+[[foo="AS@&t@_ESCAPE([[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\]])"
+bar="@foo@ @baz@"
+baz=bla
 AC_SUBST([foo])
-AC_DEFINE([foo], [[X*'[]+ ", `\($foo]], [Awful value.])
+AC_SUBST([bar])
+AC_SUBST([baz])
+file=File
+AC_SUBST_FILE([file])
+AC_DEFINE([foo], [[X*'[]+ ",& &`\($foo]], [Awful value.])
 AC_CONFIG_FILES([Foo])]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER
 AT_CHECK_CONFIGURE
-AT_CHECK([cat Foo], 0, [[X*'[]+ ", `\($foo
+AT_CHECK([cat Foo], 0, [[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\
+@foo@ @baz@@notsubsted@bla stray @ and more@@bla
+abc@foo@ @baz@baz@baz
+abc@foo@ @baz@blabaz
+abc@foo@ @baz@blabaz@
+abc@bar blabaz
+abc@bar blabaz@
+abc@bar blabla
+@foo@@bar@
+@foo@@bar@
+X@file@
+@file@X
 ]])
-AT_CHECK_DEFINES([[#define foo X*'[]+ ", `\($foo
+AT_CHECK_DEFINES([[#define foo X*'[]+ ",& &`\($foo
 ]])
 AT_CLEANUP
 

@@ -311,6 +311,16 @@ dnl One cannot portably go further than 99 commands because of HP-UX.
 [99])
 
 
+# _AC_AWK_LITERAL_LIMIT
+# ---------------------
+# Evaluate the maximum number of characters to put in an awk
+# string literal, not counting escape characters.
+#
+# Some awk's have small limits, such as Solaris and AIX awk.
+m4_define([_AC_AWK_LITERAL_LIMIT],
+[148])
+
+
 # _AC_OUTPUT_FILES_PREPARE
 # ------------------------
 # Create the sed scripts needed for CONFIG_FILES.
@@ -319,90 +329,80 @@ dnl One cannot portably go further than 99 commands because of HP-UX.
 # The intention is to have readable config.status and configure, even
 # though this m4 code might be scaring.
 #
-# This code was written by Dan Manthey.
+# This code was written by Dan Manthey and rewritten by Ralf Wildenhues.
 #
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
 #
 m4_define([_AC_OUTPUT_FILES_PREPARE],
-[#
-# Set up the sed scripts for CONFIG_FILES section.
-#
-dnl ... and define _AC_SED_CMDS, the pipeline which executes them.
-m4_define([_AC_SED_CMDS], [])dnl
-
-# No need to generate the scripts if there are no CONFIG_FILES.
-# This happens for instance when ./config.status config.h
+[# Set up the scripts for CONFIG_FILES section.
+# No need to generate them if there are no CONFIG_FILES.
+# This happens for instance with `./config.status config.h'.
 if test -n "$CONFIG_FILES"; then
 
-_ACEOF
-
-m4_pushdef([_AC_SED_FRAG_NUM], 0)dnl Fragment number.
-m4_pushdef([_AC_SED_CMD_NUM], 2)dnl Num of commands in current frag so far.
-m4_pushdef([_AC_SED_DELIM_NUM], 0)dnl Expected number of delimiters in file.
-m4_pushdef([_AC_SED_FRAG], [])dnl The constant part of the current fragment.
-dnl
+dnl For AC_SUBST_FILE, check for usable getline support in awk,
+dnl at config.status execution time.
+dnl Otherwise, do the interpolation in sh, which is slower.
+dnl Without any AC_SUBST_FILE, omit all related code.
+dnl Note the expansion is double-quoted for readability.
 m4_ifdef([_AC_SUBST_FILES],
-[# Create sed commands to just substitute file output variables.
-
-m4_foreach_w([_AC_Var], m4_defn([_AC_SUBST_FILES]),
-[dnl End fragments at beginning of loop so that last fragment is not ended.
-m4_if(m4_eval(_AC_SED_CMD_NUM + 3 > _AC_SED_CMD_LIMIT), 1,
-[dnl Fragment is full and not the last one, so no need for the final un-escape.
-dnl Increment fragment number.
-m4_define([_AC_SED_FRAG_NUM], m4_incr(_AC_SED_FRAG_NUM))dnl
-dnl Record that this fragment will need to be used.
-m4_define([_AC_SED_CMDS],
-  m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
-[cat >>$CONFIG_STATUS <<_ACEOF
-cat >"\$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <<\CEOF
-/@[a-zA-Z_][a-zA-Z_0-9]*@/!b
-]m4_defn([_AC_SED_FRAG])dnl
-[CEOF
-
-_ACEOF
-]m4_define([_AC_SED_CMD_NUM], 2)m4_define([_AC_SED_FRAG])dnl
-])dnl Last fragment ended.
-m4_define([_AC_SED_CMD_NUM], m4_eval(_AC_SED_CMD_NUM + 3))dnl
-m4_define([_AC_SED_FRAG],
-m4_defn([_AC_SED_FRAG])dnl
-[/^[	 ]*@]_AC_Var[@[	 ]*$/{
-r $]_AC_Var[
-d
-}
-])dnl
-])dnl
-# Remaining file output variables are in a fragment that also has non-file
-# output varibles.
-
-])
+[[if awk 'BEGIN { getline <"/dev/null" }' </dev/null 2>/dev/null; then
+  ac_cs_awk_getline=:
+  ac_cs_awk_pipe_init=
+  ac_cs_awk_read_file='
+      while ((getline aline < (F[key])) > 0)
+	print(aline)
+      close(F[key])'
+  ac_cs_awk_pipe_fini=
+else
+  ac_cs_awk_getline=false
+  ac_cs_awk_pipe_init="print \"cat <<'|#_!!_#|'\""
+  ac_cs_awk_read_file='
+      print "|#_!!_#|"
+      print "cat " F[key]
+      '$ac_cs_awk_pipe_init
+  ac_cs_awk_pipe_fini='END { print "|#_!!_#|" }'
+fi]])dnl
 dnl
-m4_define([_AC_SED_FRAG], [
-]m4_defn([_AC_SED_FRAG]))dnl
-m4_foreach_w([_AC_Var],
-m4_ifdef([_AC_SUBST_VARS], [m4_defn([_AC_SUBST_VARS]) ])[@END@],
-[m4_if(_AC_SED_DELIM_NUM, 0,
-[m4_if(_AC_Var, [@END@],
-[dnl The whole of the last fragment would be the final deletion of `|#_!!_#|'.
-m4_define([_AC_SED_CMDS], m4_defn([_AC_SED_CMDS])[| sed 's/|#_!!_#|//g' ])],
-[
+dnl Define the pipe that does the substitution.
+m4_ifdef([_AC_SUBST_FILES],
+[m4_define([_AC_SUBST_CMDS], [|
+if $ac_cs_awk_getline; then
+  awk -f "$tmp/subs.awk"
+else
+  awk -f "$tmp/subs.awk" | $SHELL
+fi])],
+[m4_define([_AC_SUBST_CMDS],
+[| awk -f "$tmp/subs.awk"])])dnl
+
+echo 'BEGIN {' >"$tmp/subs.awk"
+_ACEOF
+
+m4_ifdef([_AC_SUBST_FILES],
+[# Create commands to substitute file output variables.
+{
+  echo "cat >>$CONFIG_STATUS <<_ACEOF"
+  echo 'cat >>"\$tmp/subs.awk" <<\CEOF'
+  echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/'
+  echo "CEOF"
+  echo "_ACEOF"
+} >conf$$files.sh
+. ./conf$$files.sh
+rm -f conf$$files.sh
+])dnl
+
+{
+  echo "cat >conf$$subs.awk <<_ACEOF"
+  echo "$ac_subst_vars" | sed 's/.*/&!$&$ac_delim/'
+  echo "_ACEOF"
+} >conf$$subs.sh
+ac_delim_num=`echo "$ac_subst_vars" | grep -c '$'`
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
-  cat >conf$$subs.sed <<_ACEOF
-])])dnl
-m4_if(_AC_Var, [@END@],
-      [m4_if(m4_eval(_AC_SED_CMD_NUM + 2 <= _AC_SED_CMD_LIMIT), 1,
-             [m4_define([_AC_SED_FRAG], [ end]m4_defn([_AC_SED_FRAG]))])],
-[m4_define([_AC_SED_CMD_NUM], m4_incr(_AC_SED_CMD_NUM))dnl
-m4_define([_AC_SED_DELIM_NUM], m4_incr(_AC_SED_DELIM_NUM))dnl
-_AC_Var!$_AC_Var$ac_delim
-])dnl
-m4_if(_AC_SED_CMD_LIMIT,
-      m4_if(_AC_Var, [@END@], m4_if(_AC_SED_CMD_NUM, 2, 2, _AC_SED_CMD_LIMIT), _AC_SED_CMD_NUM),
-[_ACEOF
+  . ./conf$$subs.sh
 
-dnl Do not use grep on conf$$subs.sed, since AIX grep has a line length limit.
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = _AC_SED_DELIM_NUM; then
+dnl Do not use grep on conf$$subs.awk, since AIX grep has a line length limit.
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | grep -c X` = $ac_delim_num; then
     break
   elif $ac_last_try; then
     AC_MSG_ERROR([could not make $CONFIG_STATUS])
@@ -410,51 +410,104 @@ dnl Do not use grep on conf$$subs.sed, since AIX grep has a line length limit.
     ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
   fi
 done
+rm -f conf$$subs.sh
 
 dnl Similarly, avoid grep here too.
-ac_eof=`sed -n '/^CEOF[[0-9]]*$/s/CEOF/0/p' conf$$subs.sed`
+ac_eof=`sed -n '/^CEOF[[0-9]]*$/s/CEOF/0/p' conf$$subs.awk`
 if test -n "$ac_eof"; then
   ac_eof=`echo "$ac_eof" | sort -nru | sed 1q`
   ac_eof=`expr $ac_eof + 1`
 fi
-
-dnl Increment fragment number.
-m4_define([_AC_SED_FRAG_NUM], m4_incr(_AC_SED_FRAG_NUM))dnl
-dnl Record that this fragment will need to be used.
-m4_define([_AC_SED_CMDS],
-m4_defn([_AC_SED_CMDS])[| sed -f "$tmp/subs-]_AC_SED_FRAG_NUM[.sed" ])dnl
-[cat >>$CONFIG_STATUS <<_ACEOF
-cat >"\$tmp/subs-]_AC_SED_FRAG_NUM[.sed" <<\CEOF$ac_eof
-/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]m4_defn([_AC_SED_FRAG])dnl
-[_ACEOF
-sed '
-s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g
-s/^/s,@/; s/!/@,|#_!!_#|/
-:n
-t n
-s/'"$ac_delim"'$/,g/; t
-s/$/\\/; p
-N; s/^.*\n//; s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g; b n
-' >>$CONFIG_STATUS <conf$$subs.sed
-rm -f conf$$subs.sed
-cat >>$CONFIG_STATUS <<_ACEOF
-]m4_if(_AC_Var, [@END@],
-[m4_if(m4_eval(_AC_SED_CMD_NUM + 2 > _AC_SED_CMD_LIMIT), 1,
-[m4_define([_AC_SED_CMDS], m4_defn([_AC_SED_CMDS])[| sed 's/|#_!!_#|//g' ])],
-[[:end
-s/|#_!!_#|//g
-]])])dnl
-CEOF$ac_eof
-_ACEOF
-m4_define([_AC_SED_FRAG], [
-])m4_define([_AC_SED_DELIM_NUM], 0)m4_define([_AC_SED_CMD_NUM], 2)dnl
-
-])])dnl
+dnl Initialize an awk array of substitutions, keyed by variable name.
 dnl
-m4_popdef([_AC_SED_FRAG_NUM])dnl
-m4_popdef([_AC_SED_CMD_NUM])dnl
-m4_popdef([_AC_SED_DELIM_NUM])dnl
-m4_popdef([_AC_SED_FRAG])dnl
+dnl First read a whole (potentially multi-line) substitution,
+dnl and construct `S["VAR"]='.  Then, split it into pieces that fit
+dnl in an awk literal.  Each piece then gets active characters escaped
+dnl (if we escape earlier we risk splitting inside an escape sequence).
+dnl Output as separate string literals, joined with backslash-newline.
+dnl Eliminate the newline after `=' in a second script, for readability.
+dnl
+dnl Notes to the main part of the awk script:
+dnl - the unusual FS value helps prevent running into the limit of 99 fields,
+dnl - we avoid sub/gsub because of the \& quoting issues, see
+dnl   http://www.gnu.org/software/gawk/manual/html_node/Gory-Details.html
+dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
+dnl
+dnl m4-double-quote most of the scripting for readability.
+[cat >>$CONFIG_STATUS <<_ACEOF
+cat >>"\$tmp/subs.awk" <<\CEOF$ac_eof
+_ACEOF
+sed '
+t line
+:line
+s/'"$ac_delim"'$//; t gotline
+N; b line
+:gotline
+h
+s/^/S["/; s/!.*/"]=/; p
+g
+s/^.*!//
+:more
+t more
+h
+s/\(.\{]_AC_AWK_LITERAL_LIMIT[\}\).*/\1/
+t notlast
+s/["\\]/\\&/g; s/\n/\\n/g
+s/^/"/; s/$/"/
+b
+:notlast
+s/["\\]/\\&/g; s/\n/\\n/g
+s/^/"/; s/$/"\\/
+p
+g
+s/.\{]_AC_AWK_LITERAL_LIMIT[\}//
+b more
+' <conf$$subs.awk | sed '
+/^[^"]/{
+  N
+  s/\n//
+}
+' >>$CONFIG_STATUS
+rm -f conf$$subs.awk
+cat >>$CONFIG_STATUS <<_ACEOF
+CEOF$ac_eof
+cat >>"\$tmp/subs.awk" <<CEOF
+  for (key in S) S_is_set[key] = 1
+  FS = ""
+]m4_ifdef([_AC_SUBST_FILES],
+[  \$ac_cs_awk_pipe_init])[
+}
+{
+  line = $ 0
+  nfields = split(line, field, "@")
+  substed = 0
+  len = length(field[1])
+  for (i = 2; i < nfields; i++) {
+    key = field[i]
+    keylen = length(key)
+    if (S_is_set[key]) {
+      value = S[key]
+      line = substr(line, 1, len) "" value "" substr(line, len + keylen + 3)
+      len += length(value) + length(field[++i])
+      substed = 1
+    } else
+      len += 1 + keylen
+  }
+]m4_ifdef([_AC_SUBST_FILES],
+[[  if (nfields == 3 && !substed) {
+    key = field[2]
+    if (F[key] != "" && line ~ /^[	 ]*@.*@[	 ]*$/) {
+      \$ac_cs_awk_read_file
+      next
+    }
+  }]])[
+  print line
+}
+]m4_ifdef([_AC_SUBST_FILES],
+[\$ac_cs_awk_pipe_fini])[
+CEOF
+_ACEOF
+]dnl end of double-quoted part
 
 # VPATH may cause trouble with some makes, so we remove $(srcdir),
 # ${srcdir} and @srcdir@ from VPATH if srcdir is ".", strip leading and
@@ -554,7 +607,7 @@ m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 ])dnl
 m4_ifndef([AC_DATAROOTDIR_CHECKED], [$ac_datarootdir_hack
 ])dnl
-" $ac_file_inputs m4_defn([_AC_SED_CMDS])>$tmp/out
+" $ac_file_inputs m4_defn([_AC_SUBST_CMDS]) >$tmp/out
 
 m4_ifndef([AC_DATAROOTDIR_CHECKED],
 [test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&

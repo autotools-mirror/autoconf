@@ -1,5 +1,7 @@
 * Major changes in Autoconf 2.61a (??)
 
+** config.status now uses awk instead of sed for most substitutions, for speed.
+
 * Major changes in Autoconf 2.61 (2006-11-17)
 
 ** New macros AC_C_FLEXIBLE_ARRAY_MEMBER, AC_C_VARARRAYS.
