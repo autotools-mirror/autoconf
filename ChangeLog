@@ -1,3 +1,21 @@
+2006-11-27  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* Makefile.am: Put only a single '#' into the copyright notice,
+	so that it's also present in the output file.  Standardize wording
+	in makefile copyright notices to match GNU coding standards.
+	* bin/Makefile.am: Likewise.
+	* doc/Makefile.am: Likewise.
+	* lib/Makefile.am: Likewise.
+	* lib/freeze.mk: Likewise.
+	* lib/autoconf/Makefile.am: Likewise.
+	* lib/autoscan/Makefile.am: Likewise.
+	* lib/autotest/Makefile.am: Likewise.
+	* lib/m4sugar/Makefile.am: Likewise.
+	* man/Makefile.am: Likewise.
+	* tests/Makefile.am: Likewise.
+	* lib/emacs/Makefile.am: Remove copyright notice; it's just a
+	one-line file.
+
 2006-11-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Fix error
