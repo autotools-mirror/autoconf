@@ -1,3 +1,11 @@
+2006-11-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Fix error
+	in the sed script that mangles the awk script: delete up to the
+	first exclamation mark only.
+	* tests/torture.at (Substitute and define special characters):
+	Test '!' too.
+
 2006-11-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Rewrite config files generation: avoid quadratic growth in

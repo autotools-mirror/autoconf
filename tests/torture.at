@@ -620,7 +620,7 @@ AT_DATA([File],
 ])
 
 AT_CONFIGURE_AC(
-[[foo="AS@&t@_ESCAPE([[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\]])"
+[[foo="AS@&t@_ESCAPE([[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !]])"
 bar="@foo@ @baz@"
 baz=bla
 AC_SUBST([foo])
@@ -628,13 +628,13 @@ AC_SUBST([bar])
 AC_SUBST([baz])
 file=File
 AC_SUBST_FILE([file])
-AC_DEFINE([foo], [[X*'[]+ ",& &`\($foo]], [Awful value.])
+AC_DEFINE([foo], [[X*'[]+ ",& &`\($foo !]], [Awful value.])
 AC_CONFIG_FILES([Foo])]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER
 AT_CHECK_CONFIGURE
-AT_CHECK([cat Foo], 0, [[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\
+AT_CHECK([cat Foo], 0, [[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !
 @foo@ @baz@@notsubsted@bla stray @ and more@@bla
 abc@foo@ @baz@baz@baz
 abc@foo@ @baz@blabaz
@@ -647,7 +647,7 @@ abc@bar blabla
 X@file@
 @file@X
 ]])
-AT_CHECK_DEFINES([[#define foo X*'[]+ ",& &`\($foo
+AT_CHECK_DEFINES([[#define foo X*'[]+ ",& &`\($foo !
 ]])
 AT_CLEANUP
 

@@ -446,7 +446,7 @@ N; b line
 h
 s/^/S["/; s/!.*/"]=/; p
 g
-s/^.*!//
+s/^[^!]*!//
 :more
 t more
 h
