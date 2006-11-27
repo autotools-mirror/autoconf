@@ -8349,6 +8349,9 @@ or more makefiles).  This means that @code{AC_OUTPUT}
 replaces instances of @samp{@@@var{variable}@@} in input files with the
 value that the shell variable @var{variable} has when @code{AC_OUTPUT}
 is called.  The value can contain newlines.
+Variable occurrences should not overlap: e.g., an input file should
+not contain @samp{@@@var{var1}@@@var{var2}@@} if @var{var1} and @var{var2}
+are variable names.
 The substituted value is not rescanned for more output variables;
 occurrences of @samp{@@@var{variable}@@} in the value are inserted
 literally into the output file.  (The algorithm uses the special marker

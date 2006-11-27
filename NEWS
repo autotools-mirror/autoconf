@@ -1,6 +1,10 @@
 * Major changes in Autoconf 2.61a (??)
 
 ** config.status now uses awk instead of sed for most substitutions, for speed.
+   It is now documented that Makefile.in should not contain
+   overlapping variable occurrences, e.g., @VAR1@VAR2@.  Autoconf's
+   behavior was always iffy in such cases, and the awk implementation
+   has changed the behavior.
 
 * Major changes in Autoconf 2.61 (2006-11-17)
 

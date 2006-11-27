@@ -1,5 +1,10 @@
 2006-11-27  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Setting Output Variables): Mention that
+	@VAR1@VAR2 has unspecified behavior.  Problem reported by
+	Ralf Wildenhues.
+	* NEWS: Mention this.
+
 	* Makefile.am: Put only a single '#' into the copyright notice,
 	so that it's also present in the output file.  Standardize wording
 	in makefile copyright notices to match GNU coding standards.
