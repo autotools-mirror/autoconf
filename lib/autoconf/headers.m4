@@ -419,10 +419,6 @@ m4_define([AH_CHECK_HEADERS_DIRENT],
 
 # AC_HEADER_DIRENT
 # ----------------
-AN_HEADER([dirent.h],   [AC_HEADER_DIRENT])
-AN_HEADER([ndir.h],     [AC_HEADER_DIRENT])
-AN_HEADER([sys/dir.h],  [AC_HEADER_DIRENT])
-AN_HEADER([sys/ndir.h], [AC_HEADER_DIRENT])
 AC_DEFUN([AC_HEADER_DIRENT],
 [AH_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h)
 ac_header_dirent=no
@@ -501,13 +497,6 @@ AC_DEFUN([AC_HEADER_RESOLV],
 # AC_HEADER_STAT
 # --------------
 # FIXME: Shouldn't this be named AC_HEADER_SYS_STAT?
-AN_IDENTIFIER([S_ISBLK], [AC_HEADER_STAT])
-AN_IDENTIFIER([S_ISCHR], [AC_HEADER_STAT])
-AN_IDENTIFIER([S_ISDIR], [AC_HEADER_STAT])
-AN_IDENTIFIER([S_ISFIFO], [AC_HEADER_STAT])
-AN_IDENTIFIER([S_ISLNK], [AC_HEADER_STAT])
-AN_IDENTIFIER([S_ISREG], [AC_HEADER_STAT])
-AN_IDENTIFIER([S_ISSOCK], [AC_HEADER_STAT])
 AC_DEFUN([AC_HEADER_STAT],
 [AC_CACHE_CHECK(whether stat file-mode macros are broken,
   ac_cv_header_stat_broken,
@@ -628,28 +617,6 @@ fi
 
 # AC_HEADER_STDC
 # --------------
-# FIXME: I find this list very strange.  It comes from the original
-# autoscan list, but I don't think it is useful for the same reason
-# that we don't bind AC_PROG_CC to finding a C function calls: if the
-# user uses bcmp, then she will certainly have the `#include', and
-# therefore, we will trigger AC_HEADER_STDC elsewhere.  --akim 2002-09-28
-# FIXME: Err... index and rindex are _not_ to be used... --akim 2002-09-28
-AN_FUNCTION([bcmp],     [AC_HEADER_STDC])
-AN_FUNCTION([bcopy],    [AC_HEADER_STDC])
-AN_FUNCTION([bzero],    [AC_HEADER_STDC])
-AN_FUNCTION([index],    [AC_HEADER_STDC])
-AN_FUNCTION([memchr],   [AC_HEADER_STDC])
-AN_FUNCTION([memcpy],   [AC_HEADER_STDC])
-AN_FUNCTION([memmove],  [AC_HEADER_STDC])
-AN_FUNCTION([memset],   [AC_HEADER_STDC])
-AN_FUNCTION([rindex],   [AC_HEADER_STDC])
-
-AN_HEADER([float.h],    [AC_HEADER_STDC])
-AN_HEADER([stdarg.h],   [AC_HEADER_STDC])
-AN_HEADER([stddef.h],   [AC_HEADER_STDC])
-AN_HEADER([stdlib.h],   [AC_HEADER_STDC])
-AN_HEADER([string.h],   [AC_HEADER_STDC])
-
 AC_DEFUN([AC_HEADER_STDC],
 [AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
@@ -707,7 +674,6 @@ fi
 
 # AC_HEADER_SYS_WAIT
 # ------------------
-AN_HEADER([sys/wait.h], [AC_HEADER_SYS_WAIT])
 AC_DEFUN([AC_HEADER_SYS_WAIT],
 [AC_CACHE_CHECK([for sys/wait.h that is POSIX.1 compatible],
   ac_cv_header_sys_wait_h,
@@ -735,7 +701,6 @@ fi
 
 # AC_HEADER_TIME
 # --------------
-AN_IDENTIFIER([timeval],  [AC_HEADER_TIME])
 AC_DEFUN([AC_HEADER_TIME],
 [AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
   ac_cv_header_time,

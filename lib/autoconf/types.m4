@@ -936,7 +936,6 @@ the `AC_DEFINE' when you adjust the code.])# AC_STRUCT_ST_RDEV
 # ------------
 # FIXME: This macro is badly named, it should be AC_CHECK_TYPE_STRUCT_TM.
 # Or something else, but what? AC_CHECK_TYPE_STRUCT_TM_IN_SYS_TIME?
-AN_IDENTIFIER([tm], [AC_STRUCT_TM])
 AC_DEFUN([AC_STRUCT_TM],
 [AC_CACHE_CHECK([whether struct tm is in sys/time.h or time.h],
   ac_cv_struct_tm,

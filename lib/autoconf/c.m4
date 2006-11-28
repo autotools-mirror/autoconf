@@ -614,7 +614,6 @@ fi[]dnl
 
 # AC_PROG_GCC_TRADITIONAL
 # -----------------------
-AN_FUNCTION([ioctl],   [AC_PROG_GCC_TRADITIONAL])
 AC_DEFUN([AC_PROG_GCC_TRADITIONAL],
 [AC_REQUIRE([AC_PROG_CC])dnl
 if test $ac_cv_c_compiler_gnu = yes; then
@@ -1487,7 +1486,6 @@ esac
 
 # AC_C_CONST
 # ----------
-AN_IDENTIFIER([const],  [AC_C_CONST])
 AC_DEFUN([AC_C_CONST],
 [AC_CACHE_CHECK([for an ANSI C-conforming const], ac_cv_c_const,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
@@ -1601,7 +1599,6 @@ AC_DEFUN([AC_C_RESTRICT],
 # optimizations that could break the user's code.  So, do not #define
 # volatile away unless it is really necessary to allow the user's code
 # to compile cleanly.  Benign compiler failures should be tolerated.
-AN_IDENTIFIER([volatile], [AC_C_VOLATILE])
 AC_DEFUN([AC_C_VOLATILE],
 [AC_CACHE_CHECK([for working volatile], ac_cv_c_volatile,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [

@@ -442,7 +442,6 @@ fi
 # ---------------------
 # Check whether closedir returns void, and #define CLOSEDIR_VOID in
 # that case.
-AN_FUNCTION([closedir], [AC_FUNC_CLOSEDIR_VOID])
 AC_DEFUN([AC_FUNC_CLOSEDIR_VOID],
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_CACHE_CHECK([whether closedir returns void],
@@ -556,7 +555,6 @@ AC_DEFINE(fnmatch, rpl_fnmatch,
 
 # AC_REPLACE_FNMATCH
 # ------------------
-AN_FUNCTION([fnmatch], [AC_REPLACE_FNMATCH])
 AC_DEFUN([AC_REPLACE_FNMATCH],
 [_AC_FUNC_FNMATCH_IF([POSIX], [ac_cv_func_fnmatch_works],
 		     [rm -f "$ac_config_libobj_dir/fnmatch.h"],
@@ -694,7 +692,6 @@ AC_CHECK_HEADERS(nlist.h,
 
 # AC_FUNC_GETLOADAVG
 # ------------------
-AN_FUNCTION([getloadavg], [AC_FUNC_GETLOADAVG])
 AC_DEFUN([AC_FUNC_GETLOADAVG],
 [ac_have_func=no # yes means we've found a way to get the load average.
 
@@ -808,7 +805,6 @@ AC_SEARCH_LIBS(getmntent, [sun seq gen],
 # AC_FUNC_GETPGRP
 # ---------------
 # Figure out whether getpgrp requires zero arguments.
-AN_FUNCTION([getpgrp], [AC_FUNC_GETPGRP])
 AC_DEFUN([AC_FUNC_GETPGRP],
 [AC_CACHE_CHECK(whether getpgrp requires zero arguments,
  ac_cv_func_getpgrp_void,
@@ -931,7 +927,6 @@ AC_DEFUN([AC_FUNC_MBRTOWC],
 
 # AC_FUNC_MEMCMP
 # --------------
-AN_FUNCTION([memcmp], [AC_FUNC_MEMCMP])
 AC_DEFUN([AC_FUNC_MEMCMP],
 [AC_CACHE_CHECK([for working memcmp], ac_cv_func_memcmp_working,
 [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [[
@@ -1403,7 +1398,6 @@ AC_DEFUN([AC_FUNC_REALLOC],
 # Determine the correct type to be passed to each of the `select'
 # function's arguments, and define those types in `SELECT_TYPE_ARG1',
 # `SELECT_TYPE_ARG234', and `SELECT_TYPE_ARG5'.
-AN_FUNCTION([select], [AC_FUNC_SELECT_ARGTYPES])
 AC_DEFUN([AC_FUNC_SELECT_ARGTYPES],
 [AC_CHECK_HEADERS(sys/select.h sys/socket.h)
 AC_CACHE_CHECK([types of arguments for select],
@@ -1447,7 +1441,6 @@ rm -f conftest*
 
 # AC_FUNC_SETPGRP
 # ---------------
-AN_FUNCTION([setpgrp], [AC_FUNC_SETPGRP])
 AC_DEFUN([AC_FUNC_SETPGRP],
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
 [AC_RUN_IFELSE(
@@ -1496,9 +1489,7 @@ fi
 
 # AC_FUNC_STAT & AC_FUNC_LSTAT
 # ----------------------------
-AN_FUNCTION([stat], [AC_FUNC_STAT])
 AC_DEFUN([AC_FUNC_STAT],  [_AC_FUNC_STAT(stat)])
-AN_FUNCTION([lstat], [AC_FUNC_LSTAT])
 AC_DEFUN([AC_FUNC_LSTAT], [_AC_FUNC_STAT(lstat)])
 
 
@@ -1638,7 +1629,6 @@ fi
 
 # AC_FUNC_STRFTIME
 # ----------------
-AN_FUNCTION([strftime], [AC_FUNC_STRFTIME])
 AC_DEFUN([AC_FUNC_STRFTIME],
 [AC_CHECK_FUNCS(strftime, [],
 [# strftime is in -lintl on SCO UNIX.
@@ -1679,7 +1669,6 @@ test $ac_cv_func_strnlen_working = no && AC_LIBOBJ([strnlen])
 
 # AC_FUNC_SETVBUF_REVERSED
 # ------------------------
-AN_FUNCTION([setvbuf], [AC_FUNC_SETVBUF_REVERSED])
 AC_DEFUN([AC_FUNC_SETVBUF_REVERSED],
 [AC_REQUIRE([AC_C_PROTOTYPES])dnl
 AC_CACHE_CHECK(whether setvbuf arguments are reversed,
@@ -1758,7 +1747,6 @@ AU_ALIAS([AC_STRCOLL], [AC_FUNC_STRCOLL])
 
 # AC_FUNC_UTIME_NULL
 # ------------------
-AN_FUNCTION([utime], [AC_FUNC_UTIME_NULL])
 AC_DEFUN([AC_FUNC_UTIME_NULL],
 [AC_CHECK_HEADERS_ONCE(utime.h)
 AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
@@ -1964,10 +1952,6 @@ AU_ALIAS([AC_VFORK], [AC_FUNC_FORK])
 # ---------------
 # Why the heck is that _doprnt does not define HAVE__DOPRNT???
 # That the logical name!
-AN_FUNCTION([vfprintf], [AC_FUNC_VPRINTF])
-AN_FUNCTION([vprintf],  [AC_FUNC_VPRINTF])
-AN_FUNCTION([vsprintf], [AC_FUNC_VPRINTF])
-AN_FUNCTION([_doprnt],  [AC_FUNC_VPRINTF])
 AC_DEFUN([AC_FUNC_VPRINTF],
 [AC_CHECK_FUNCS(vprintf, []
 [AC_CHECK_FUNC(_doprnt,

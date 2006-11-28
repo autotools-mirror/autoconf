@@ -1,5 +1,18 @@
 2006-11-27  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* lib/autoconf/c.m4 (AC_PROG_GCC_TRADITIONAL, AC_C_CONST):
+	(AC_C_VOLATILE):
+	Do not recommend via AN_FUNCTION, AN_IDENTIFIER, or AN_HEADER.
+	These macros are obsolescent and new applications shouldn't need them.
+	* lib/autoconf/functions.m4 (AC_FUNC_CLOSEDIR_VOID, AC_REPLACE_FNMATCH):
+	(AC_FUNC_GETLOADAVG, AC_FUNC_GETPGRP, AC_FUNC_MEMCMP):
+	(AC_FUNC_SELECT_ARGTYPES, AC_FUNC_SETPGRP, AC_FUNC_STAT, AC_FUNC_LSTAT):
+	(AC_FUNC_STRFTIME, AC_FUNC_SETVBUF_REVERSED, AC_FUNC_UTIME_NULL):
+	(AC_FUNC_VPRINTF): Likewise.
+	* lib/autoconf/headers.m4 (AC_HEADER_DIRENT, AC_HEADER_STAT):
+	(AC_HEADER_STDC, AC_HEADER_SYS_WAIT, AC_HEADER_TIME): Likewise.
+	* lib/autoconf/types.m4 (AC_STRUCT_TM): Likewise.
+
 	* doc/autoconf.texi (Setting Output Variables): Mention that
 	@VAR1@VAR2 has unspecified behavior.  Problem reported by
 	Ralf Wildenhues.
