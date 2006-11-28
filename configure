@@ -1477,6 +1477,7 @@ $as_echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
       esac
       case $ac_var in #(
       _ | IFS | as_nl) ;; #(
+      BASH_ARGV | BASH_SOURCE) eval $ac_var= ;; #(
       *) $as_unset $ac_var ;;
       esac ;;
     esac
@@ -2918,6 +2919,7 @@ $as_echo "$as_me: WARNING: Cache variable $ac_var contains a newline." >&2;} ;;
       esac
       case $ac_var in #(
       _ | IFS | as_nl) ;; #(
+      BASH_ARGV | BASH_SOURCE) eval $ac_var= ;; #(
       *) $as_unset $ac_var ;;
       esac ;;
     esac
