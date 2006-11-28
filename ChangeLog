@@ -1,3 +1,9 @@
+2006-11-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_CACHE_DUMP): If `BASH_ARGV' or
+	`BASH_SOURCE' contain a newline, set them to empty, as they may
+	not be unset.
+
 2006-11-27  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Turn AC_FUNC_SETVBUF_REVERSED into a noop.  It's been obsolete for
