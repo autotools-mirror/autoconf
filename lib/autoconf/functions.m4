@@ -1670,48 +1670,9 @@ test $ac_cv_func_strnlen_working = no && AC_LIBOBJ([strnlen])
 # AC_FUNC_SETVBUF_REVERSED
 # ------------------------
 AC_DEFUN([AC_FUNC_SETVBUF_REVERSED],
-[AC_REQUIRE([AC_C_PROTOTYPES])dnl
-AC_CACHE_CHECK(whether setvbuf arguments are reversed,
-  ac_cv_func_setvbuf_reversed,
-  [ac_cv_func_setvbuf_reversed=no
-   AC_LINK_IFELSE(
-     [AC_LANG_PROGRAM(
-	[[#include <stdio.h>
-#	  ifdef PROTOTYPES
-	   int (setvbuf) (FILE *, int, char *, size_t);
-#	  endif]],
-	[[char buf; return setvbuf (stdout, _IOLBF, &buf, 1);]])],
-     [AC_LINK_IFELSE(
-	[AC_LANG_PROGRAM(
-	   [[#include <stdio.h>
-#	     ifdef PROTOTYPES
-	      int (setvbuf) (FILE *, int, char *, size_t);
-#	     endif]],
-	   [[char buf; return setvbuf (stdout, &buf, _IOLBF, 1);]])],
-	[# It compiles and links either way, so it must not be declared
-	 # with a prototype and most likely this is a K&R C compiler.
-	 # Try running it.
-	 AC_RUN_IFELSE(
-	   [AC_LANG_PROGRAM(
-	      [AC_INCLUDES_DEFAULT],
-	      [[/* This call has the arguments reversed.
-		   A reversed system may check and see that the address of buf
-		   is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
-		char buf;
-		if (setvbuf (stdout, _IOLBF, &buf, 1) != 0)
-		  return 1;
-		putchar ('\r');
-		return 0; /* Non-reversed systems SEGV here.  */]])],
-	   [ac_cv_func_setvbuf_reversed=yes],
-	   [],
-	   [[: # Assume setvbuf is not reversed when cross-compiling.]])]
-	ac_cv_func_setvbuf_reversed=yes)])])
-if test $ac_cv_func_setvbuf_reversed = yes; then
-  AC_DEFINE(SETVBUF_REVERSED, 1,
-	    [Define to 1 if the `setvbuf' function takes the buffering type as
-	     its second argument and the buffer pointer as the third, as on
-	     System V before release 3.])
-fi
+[AC_DIAGNOSE([obsolete],
+[The macro `$0' is obsolete.  Remove it and all references to SETVBUF_REVERSED.])dnl
+AC_CACHE_VAL([ac_cv_func_setvbuf_reversed], [ac_cv_func_setvbuf_reversed=no])
 ])# AC_FUNC_SETVBUF_REVERSED
 
 

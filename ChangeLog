@@ -1,5 +1,16 @@
 2006-11-27  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Turn AC_FUNC_SETVBUF_REVERSED into a noop.  It's been obsolete for
+	years and is too hard to maintain now.  The last straw was
+	reported by Jerker Baeck in
+	<http://lists.gnu.org/archive/html/autoconf/2006-11/msg00102.html>.
+	* NEWS: AC_FUNC_SETVBUF_REVERSED is now obsolete.
+	* doc/autoconf.texi (Particular Functions): Move
+	AC_FUNC_SETVBUF_REVERSED from here...
+	(Obsolete Macros): ... to here.  Say that it does nothing now.
+	* lib/autoconf/functions.m4 (AC_FUNC_SETVBUF_REVERSED):
+	Turn into (almost) a no-op.
+
 	* lib/autoconf/c.m4 (AC_PROG_GCC_TRADITIONAL, AC_C_CONST):
 	(AC_C_VOLATILE):
 	Do not recommend via AN_FUNCTION, AN_IDENTIFIER, or AN_HEADER.

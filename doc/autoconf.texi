@@ -4782,19 +4782,6 @@ These macros are obsolescent, as no current systems have the bug.
 New programs need not use these macros.
 @end defmac
 
-@defmac AC_FUNC_SETVBUF_REVERSED
-@acindex{FUNC_SETVBUF_REVERSED}
-@cvindex SETVBUF_REVERSED
-@c @fuindex setvbuf
-@prindex @code{setvbuf}
-If @code{setvbuf} takes the buffering type as its second argument and
-the buffer pointer as the third, instead of the other way around, define
-@code{SETVBUF_REVERSED}.
-
-This macro is obsolescent, as no current systems have the bug.
-New programs need not use this macro.
-@end defmac
-
 @defmac AC_FUNC_STRCOLL
 @acindex{FUNC_STRCOLL}
 @cvindex HAVE_STRCOLL
@@ -16605,6 +16592,19 @@ and sets @code{EMXOS2}.
 @defmac AC_FUNC_CHECK
 @acindex{FUNC_CHECK}
 @code{AC_CHECK_FUNC}
+@end defmac
+
+@defmac AC_FUNC_SETVBUF_REVERSED
+@acindex{FUNC_SETVBUF_REVERSED}
+@cvindex SETVBUF_REVERSED
+@c @fuindex setvbuf
+@prindex @code{setvbuf}
+Do nothing.  Formerly, this macro checked whether @code{setvbuf} takes
+the buffering type as its second argument and the buffer pointer as the
+third, instead of the other way around, and defined
+@code{SETVBUF_REVERSED}.  However, the last systems to have the problem
+were those based on SVR2, which became obsolete in 1987, and the macro
+is no longer needed.
 @end defmac
 
 @defmac AC_FUNC_WAIT3

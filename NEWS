@@ -1,5 +1,12 @@
 * Major changes in Autoconf 2.61a (??)
 
+** AC_FUNC_SETVBUF_REVERSED is now obsolete.  It is still defined for backward
+   compatibility but it does nothing.  The macro was already
+   obsolescent, as the last systems to have the problem were those
+   based on SVR2, which became obsolete in 1987.  The macro had bugs
+   on some modern systems and could no longer be maintained reliably
+   due to lack of ancient systems to test it on.
+
 ** config.status now uses awk instead of sed for most substitutions, for speed.
    It is now documented that Makefile.in should not contain
    overlapping variable occurrences, e.g., @VAR1@VAR2@.  Autoconf's
