@@ -284,15 +284,17 @@ static unsigned long int ulongval () { return $2; }
       long int i = longval ();
       if (i != ($2))
 	return 1;
-      fprintf (f, "%ld\n", i);
+      fprintf (f, "%ld", i);
     }
   else
     {
       unsigned long int i = ulongval ();
       if (i != ($2))
 	return 1;
-      fprintf (f, "%lu\n", i);
+      fprintf (f, "%lu", i);
     }
+  /* Do not output a trailing newline, as this causes \r\n confusion
+     on some platforms.  */
   return ferror (f) || fclose (f) != 0;
 ])])
 

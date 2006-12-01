@@ -1,3 +1,11 @@
+2006-12-01  Eric Blake  <ebb9@byu.net>
+
+	* lib/autoconf/c.m4 (AC_LANG_INT_SAVE): Avoid newline, to aid in
+	cross-compiling from cygwin to mingw.
+	Reported by Bob Rossi.  This resurrects the 2000-11-30 patch to
+	aclang.m4, which was mistakenly removed in the 2001-09-17 patch
+	to lib/autoconf/c.m4.
+
 2006-12-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/m4sugar/m4sh.m4 (_AS_ECHO_PREPARE): Use a longer test
