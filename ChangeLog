@@ -1,3 +1,14 @@
+2006-12-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (_AS_ECHO_PREPARE): Use a longer test
+	string for more reliable failure.  Wrap the entire test that
+	causes the broken Solaris printf to dump core, in a subshell,
+	so the segmentation fault message is reliably suppressed.
+	Fix shell expansion errors by using /usr/ucb/echo always;
+	avoid an error on systems without it by another subshell.
+	Avoid m4 expansion of `$1'.  Set the zeroth argument of the
+	subshell-$as_echo to `as_echo', for better error message.
+
 2006-11-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (_AC_CACHE_DUMP): If `BASH_ARGV' or
