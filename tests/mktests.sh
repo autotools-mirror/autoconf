@@ -118,6 +118,7 @@ ac_exclude_list='
 
 	# Obsolete, checked in semantics.
 	/^AC_FUNC_WAIT3$/ {next}
+	/^AC_FUNC_SETVBUF_REVERSED$/ {next}
 	/^AC_SYS_RESTARTABLE_SYSCALLS$/ {next}
 
 	# Not intended to be invoked at the top level.
