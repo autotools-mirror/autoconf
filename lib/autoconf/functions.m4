@@ -587,8 +587,10 @@ AC_DEFUN([AC_FUNC_FSEEKO],
 [_AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
    [ac_cv_sys_largefile_source],
    [Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2).],
-   [@%:@include <stdio.h>],
-   [[return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);]])
+   [[#include <sys/types.h> /* for off_t */
+     #include <stdio.h>]],
+   [[int (*fp) (FILE *, off_t, int) = fseeko;
+     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);]])
 
 # We used to try defining _XOPEN_SOURCE=500 too, to work around a bug
 # in glibc 2.1.3, but that breaks too many other things.

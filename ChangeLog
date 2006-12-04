@@ -1,3 +1,10 @@
+2006-12-04  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/functions.m4 (AC_FUNC_FSEEKO): Check that fseeko
+	can be assigned to a function pointer.  Problem reported by
+	Peter Palfrader in <http://bugs.debian.org/401377>.  Based on
+	part of a patch by Ralf Wildenhues in that same bug report.
+
 2006-12-01  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* tests/mktests.sh (ac_exclude_list): Exclude AC_FUNC_SETVBUF_REVERSED.
