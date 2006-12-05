@@ -1,5 +1,10 @@
 2006-12-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/torture.at (Substitute a 2000-byte string): Actually use
+	AC_PROG_AWK, so the last change works as intended.
+	(Substitute and define special characters): Likewise.
+	(Substitute a newline): Likewise.
+
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Use `$AWK'
 	instead of `awk' consistently.
 	(_AC_OUTPUT_CONFIG_STATUS): Initialize $AWK.

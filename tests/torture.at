@@ -563,6 +563,7 @@ AC_SUBST([foo], ]m4_for([n], 1, 100,, ....................)[)
 AC_SUBST([bar], "]m4_for([n], 1, 100,, @ @ @ @ @ @ @ @ @ @@)[")
 AC_SUBST([baz], "]m4_for([n], 1, 4,, m4_for([m], 1, 25,, ... ... ... ... ....)
 )[")
+AC_PROG_AWK
 AC_CONFIG_FILES([Foo Bar Baz])
 AC_OUTPUT
 ]])
@@ -637,6 +638,7 @@ AC_SUBST([baz])
 file=File
 AC_SUBST_FILE([file])
 AC_DEFINE([foo], [[X*'[]+ ",& &`\($foo !]], [Awful value.])
+AC_PROG_AWK
 AC_CONFIG_FILES([Foo])]])
 
 AT_CHECK_AUTOCONF
@@ -680,6 +682,7 @@ foo='one
 two'
 AC_SUBST([foo])
 AC_CONFIG_FILES([Foo])
+AC_PROG_AWK
 AC_OUTPUT
 ]])
 
