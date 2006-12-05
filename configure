@@ -3594,31 +3594,43 @@ fi
 cat >>$CONFIG_STATUS <<_ACEOF
 cat >>"\$tmp/subs.awk" <<\CEOF$ac_eof
 _ACEOF
-sed '
-t line
-:line
-s/'"$ac_delim"'$//; t gotline
-N; b line
-:gotline
+sed -n '
 h
-s/^/S["/; s/!.*/"]=/; p
+s/^/S["/; s/!.*/"]=/
+p
 g
 s/^[^!]*!//
-:more
-t more
+:repl
+t repl
+s/'"$ac_delim"'$//
+t delim
+:nl
 h
 s/\(.\{148\}\).*/\1/
-t notlast
-s/["\\]/\\&/g; s/\n/\\n/g
-s/^/"/; s/$/"/
-b
-:notlast
-s/["\\]/\\&/g; s/\n/\\n/g
-s/^/"/; s/$/"\\/
+t more1
+s/["\\]/\\&/g; s/^/"/; s/$/\\n"\\/
+p
+n
+b repl
+:more1
+s/["\\]/\\&/g; s/^/"/; s/$/"\\/
 p
 g
 s/.\{148\}//
-b more
+t nl
+:delim
+h
+s/\(.\{148\}\).*/\1/
+t more2
+s/["\\]/\\&/g; s/^/"/; s/$/"/
+p
+b
+:more2
+s/["\\]/\\&/g; s/^/"/; s/$/"\\/
+p
+g
+s/.\{148\}//
+t delim
 ' <conf$$subs.awk | sed '
 /^[^"]/{
   N
