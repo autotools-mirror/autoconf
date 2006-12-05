@@ -3402,6 +3402,8 @@ ac_pwd='$ac_pwd'
 srcdir='$srcdir'
 INSTALL='$INSTALL'
 MKDIR_P='$MKDIR_P'
+AWK='$AWK'
+test -n "\$AWK" || AWK=awk
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
@@ -3904,7 +3906,7 @@ s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
 s&@INSTALL@&$ac_INSTALL&;t t
 s&@MKDIR_P@&$ac_MKDIR_P&;t t
 $ac_datarootdir_hack
-" $ac_file_inputs | awk -f "$tmp/subs.awk" >$tmp/out
+" $ac_file_inputs | $AWK -f "$tmp/subs.awk" >$tmp/out
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
