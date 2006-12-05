@@ -1,5 +1,9 @@
 2006-12-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/tools.at (autom4te preselections): New test, to flag
+	entries missing from autom4te.cfg.
+	Report by David Byron <dbyron@hheld.com>.
+
 	* tests/torture.at (Substitute a 2000-byte string): Actually use
 	AC_PROG_AWK, so the last change works as intended.
 	(Substitute and define special characters): Likewise.

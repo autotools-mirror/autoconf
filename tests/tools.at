@@ -827,3 +827,50 @@ AT_CHECK([aclocal -I m4], [0], [ignore], [ignore])
 AT_CHECK_AUTOUPDATE
 
 AT_CLEANUP
+
+
+# Keeping autom4te.cfg complete
+# -----------------------------
+
+AT_SETUP([autom4te preselections])
+: ${sleep='sleep 1'}	# Command to force different time stamps.
+# If this test should run on FAT file systems and older w32,
+# then setting $sleep correctly needs to be revisited.
+
+# We use aclocal and automake.
+AT_CHECK([automake --version || exit 77], [], [ignore], [ignore])
+AT_CHECK([test ! -f $HOME/.autom4te.cfg || exit 77], [], [ignore], [ignore])
+
+AT_DATA([configure.in],
+[[AC_INIT(GNU foo, 1.0)
+AM_INIT_AUTOMAKE
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.am],
+[[AUTOMAKE_OPTIONS = foreign
+]])
+
+$sleep # `aclocal.m4' should be strictly younger than its inputs
+
+# If Autoconf is too old, or the user has turned caching off, skip:
+AT_CHECK([aclocal || { ret=$?; test $ret -eq 63 && ret=77; exit $ret; }],
+         [], [], [ignore])
+AT_CHECK([test -d autom4te.cache || exit 77])
+AT_CHECK([autoconf])
+
+# If this test fails due to missing entries in lib/autom4te.in, then
+# comparing the old and new requests is a good place to start debugging:
+cp autom4te.cache/requests old-requests
+$sleep # need to make sure the stamp file is strictly newer.
+echo newer >newer
+$sleep # if `configure' is regenerated, we want it to be strictly newer,
+       # to catch the error consistently.
+AT_CHECK([aclocal], [], [], [ignore])
+AT_CHECK([automake --no-force --add-missing], [], [], [ignore])
+AT_CHECK([autoconf])
+AT_CHECK([set x `ls -1t newer configure`; test "$2" = newer ||
+	  { diff old-requests autom4te.cache/requests; exit 1; }])
+
+AT_CLEANUP
