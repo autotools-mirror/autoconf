@@ -490,15 +490,18 @@ AC_CONFIG_HEADERS(config.h:config.hin)
 AC_CONFIG_FILES(dummy)
 m4_for(AC_Count, 1, 100, 1,
        [AC_DEFUBST(AC_Count)])
+AC_PROG_AWK
 AC_OUTPUT
 ]])# configure.ac
 
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER
-AT_CHECK_CONFIGURE
+# Check both awk and the result of AC_PROG_AWK
+for awk_arg in FOO= AWK=awk; do
+  AT_CHECK_CONFIGURE([$awk_arg])
 
-# Checking that AC_DEFINE worked properly.
-AT_DATA([expout],
+  # Checking that AC_DEFINE worked properly.
+  AT_DATA([expout],
 [/* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
 
@@ -518,16 +521,18 @@ m4_for(AT_Count, 1, 100, 1,
 /* AT_DESCRIPTION */
 [#define] AT_DUMMY_VAR(AT_Count) "AT_BIG_VALUE"
 ])])
-AT_CHECK([sed -n '4,$ p' config.h], 0, expout)
 
-# Checking that AC_SUBST worked properly.
-AT_DATA([expout],
+  AT_CHECK([sed -n '4,$ p' config.h], 0, expout)
+
+  # Checking that AC_SUBST worked properly.
+  AT_DATA([expout],
 [m4_for(AT_Count, 1, 100, 1,
 [AT_BIG_VALUE
 content of file AT_Count
 ])])
 
-AT_CHECK([cat dummy], 0, expout)
+  AT_CHECK([cat dummy], 0, expout)
+done
 
 AT_CLEANUP
 
@@ -563,14 +568,17 @@ AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE
-AT_CHECK([cat Foo], 0, m4_for([n], 1, 100,, ....................)
+# Check both awk and the result of AC_PROG_AWK
+for awk_arg in Foo= AWK=awk; do
+  AT_CHECK_CONFIGURE([$awk_arg])
+  AT_CHECK([cat Foo], 0, m4_for([n], 1, 100,, ....................)
 )
-AT_CHECK([cat Bar], 0, m4_for([n], 1, 100,, @ @ @ @ @ @ @ @ @ @@)
+  AT_CHECK([cat Bar], 0, m4_for([n], 1, 100,, @ @ @ @ @ @ @ @ @ @@)
 )
-AT_CHECK([cat Baz], 0, m4_for([n], 1, 4,, m4_for([m], 1, 25,, ... ... ... ... ....)
+  AT_CHECK([cat Baz], 0, m4_for([n], 1, 4,, m4_for([m], 1, 25,, ... ... ... ... ....)
 )
 )
+done
 AT_CLEANUP
 
 
@@ -633,8 +641,10 @@ AC_CONFIG_FILES([Foo])]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER
-AT_CHECK_CONFIGURE
-AT_CHECK([cat Foo], 0, [[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !
+# Check both awk and the result of AC_PROG_AWK
+for awk_arg in FOO= AWK=awk; do
+  AT_CHECK_CONFIGURE([$awk_arg])
+  AT_CHECK([cat Foo], 0, [[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !
 @foo@ @baz@@notsubsted@bla stray @ and more@@bla
 abc@foo@ @baz@baz@baz
 abc@foo@ @baz@blabaz
@@ -647,8 +657,9 @@ abc@bar blabla
 X@file@
 @file@X
 ]])
-AT_CHECK_DEFINES([[#define foo X*'[]+ ",& &`\($foo !
+  AT_CHECK_DEFINES([[#define foo X*'[]+ ",& &`\($foo !
 ]])
+done
 AT_CLEANUP
 
 
@@ -673,10 +684,13 @@ AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE
-AT_CHECK([cat Foo], 0, [one
+# Check both awk and the result of AC_PROG_AWK
+for awk_arg in FOO= AWK=awk; do
+  AT_CHECK_CONFIGURE([$awk_arg])
+  AT_CHECK([cat Foo], 0, [one
 two
 ])
+done
 AT_CLEANUP
 
 

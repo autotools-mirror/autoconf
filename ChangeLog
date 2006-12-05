@@ -1,3 +1,14 @@
+2006-12-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Use `$AWK'
+	instead of `awk' consistently.
+	(_AC_OUTPUT_CONFIG_STATUS): Initialize $AWK.
+	* tests/torture.at (Torturing config.status): Test both the
+	result of AC_PROG_AWK and plain awk.
+	(Substitute a 2000-byte string): Likewise.
+	(Substitute and define special characters): Likewise.
+	(Substitute a newline): Likewise.
+
 2006-12-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_FSEEKO): Check that fseeko

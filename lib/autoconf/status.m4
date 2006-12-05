@@ -346,7 +346,7 @@ dnl Otherwise, do the interpolation in sh, which is slower.
 dnl Without any AC_SUBST_FILE, omit all related code.
 dnl Note the expansion is double-quoted for readability.
 m4_ifdef([_AC_SUBST_FILES],
-[[if awk 'BEGIN { getline <"/dev/null" }' </dev/null 2>/dev/null; then
+[[if $AWK 'BEGIN { getline <"/dev/null" }' </dev/null 2>/dev/null; then
   ac_cs_awk_getline=:
   ac_cs_awk_pipe_init=
   ac_cs_awk_read_file='
@@ -368,12 +368,12 @@ dnl Define the pipe that does the substitution.
 m4_ifdef([_AC_SUBST_FILES],
 [m4_define([_AC_SUBST_CMDS], [|
 if $ac_cs_awk_getline; then
-  awk -f "$tmp/subs.awk"
+  $AWK -f "$tmp/subs.awk"
 else
-  awk -f "$tmp/subs.awk" | $SHELL
+  $AWK -f "$tmp/subs.awk" | $SHELL
 fi])],
 [m4_define([_AC_SUBST_CMDS],
-[| awk -f "$tmp/subs.awk"])])dnl
+[| $AWK -f "$tmp/subs.awk"])])dnl
 
 echo 'BEGIN {' >"$tmp/subs.awk"
 _ACEOF
@@ -1302,6 +1302,10 @@ AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
 AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P],
 [MKDIR_P='$MKDIR_P'
 ])dnl
+AC_PROVIDE_IFELSE([AC_PROG_AWK],
+[AWK='$AWK'
+])dnl
+test -n "\$AWK" || AWK=awk
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
