@@ -420,10 +420,20 @@ if test -n "$ac_eof"; then
 fi
 dnl Initialize an awk array of substitutions, keyed by variable name.
 dnl
-dnl First read a whole (potentially multi-line) substitution,
-dnl and construct `S["VAR"]='.  Then, split it into pieces that fit
-dnl in an awk literal.  Each piece then gets active characters escaped
-dnl (if we escape earlier we risk splitting inside an escape sequence).
+dnl The initial line contains the variable name VAR, then a `!'.
+dnl Construct `S["VAR"]=' from it.
+dnl The rest of the line, and potentially further lines, contain the
+dnl substituted value; the last of those ends with $ac_delim.  We split
+dnl the output both along those substituted newlines and at intervals of
+dnl length _AC_AWK_LITERAL_LIMIT.  The latter is done to comply with awk
+dnl string literal limitations, the former for simplicity in doing so.
+dnl
+dnl We deal with one input line at a time to avoid sed pattern space
+dnl limitations.  We kill the delimiter $ac_delim before splitting the
+dnl string (otherwise we risk splitting the delimiter).  And we do the
+dnl splitting before the quoting of awk special characters (otherwise we
+dnl risk splitting an escape sequence).
+dnl
 dnl Output as separate string literals, joined with backslash-newline.
 dnl Eliminate the newline after `=' in a second script, for readability.
 dnl
@@ -437,31 +447,43 @@ dnl m4-double-quote most of the scripting for readability.
 [cat >>$CONFIG_STATUS <<_ACEOF
 cat >>"\$tmp/subs.awk" <<\CEOF$ac_eof
 _ACEOF
-sed '
-t line
-:line
-s/'"$ac_delim"'$//; t gotline
-N; b line
-:gotline
+sed -n '
 h
-s/^/S["/; s/!.*/"]=/; p
+s/^/S["/; s/!.*/"]=/
+p
 g
 s/^[^!]*!//
-:more
-t more
+:repl
+t repl
+s/'"$ac_delim"'$//
+t delim
+:nl
 h
 s/\(.\{]_AC_AWK_LITERAL_LIMIT[\}\).*/\1/
-t notlast
-s/["\\]/\\&/g; s/\n/\\n/g
-s/^/"/; s/$/"/
-b
-:notlast
-s/["\\]/\\&/g; s/\n/\\n/g
-s/^/"/; s/$/"\\/
+t more1
+s/["\\]/\\&/g; s/^/"/; s/$/\\n"\\/
+p
+n
+b repl
+:more1
+s/["\\]/\\&/g; s/^/"/; s/$/"\\/
 p
 g
 s/.\{]_AC_AWK_LITERAL_LIMIT[\}//
-b more
+t nl
+:delim
+h
+s/\(.\{]_AC_AWK_LITERAL_LIMIT[\}\).*/\1/
+t more2
+s/["\\]/\\&/g; s/^/"/; s/$/"/
+p
+b
+:more2
+s/["\\]/\\&/g; s/^/"/; s/$/"\\/
+p
+g
+s/.\{]_AC_AWK_LITERAL_LIMIT[\}//
+t delim
 ' <conf$$subs.awk | sed '
 /^[^"]/{
   N
