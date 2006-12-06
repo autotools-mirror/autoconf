@@ -1,5 +1,9 @@
 2006-12-06  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ENABLE): Make it
+	more readable, using ...
+	(_AC_INIT_PARSE_ENABLE2): ... this new helper macro.
+
 	* doc/autoconf.texi (autoheader Invocation): Do not double-
 	quote the parameter of `AH_BOTTOM' in the example.
 

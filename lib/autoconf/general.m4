@@ -626,7 +626,7 @@ do
   | --dataroot=* | --dataroo=* | --dataro=* | --datar=*)
     datarootdir=$ac_optarg ;;
 
-  _AC_INIT_PARSE_ENABLE([disable], [feature], [no])
+  _AC_INIT_PARSE_ENABLE([disable])
 
   -docdir | --docdir | --docdi | --doc | --do)
     ac_prev=docdir ;;
@@ -638,7 +638,7 @@ do
   -dvidir=* | --dvidir=* | --dvidi=* | --dvid=* | --dvi=* | --dv=*)
     dvidir=$ac_optarg ;;
 
-  _AC_INIT_PARSE_ENABLE([enable], [feature], [\$ac_optarg])
+  _AC_INIT_PARSE_ENABLE([enable])
 
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
@@ -828,9 +828,9 @@ do
   -version | --version | --versio | --versi | --vers | -V)
     ac_init_version=: ;;
 
-  _AC_INIT_PARSE_ENABLE([with],    [package], [\$ac_optarg])
+  _AC_INIT_PARSE_ENABLE([with])
 
-  _AC_INIT_PARSE_ENABLE([without], [package], [no])
+  _AC_INIT_PARSE_ENABLE([without])
 
   --x)
     # Obsolete; use --with-x.
@@ -919,18 +919,35 @@ m4_divert_pop([PARSE_ARGS])dnl
 ])# _AC_INIT_PARSE_ARGS
 
 
-# _AC_INIT_PARSE_ENABLE(OPTION-NAME, FEATURE, VALUE)
+# _AC_INIT_PARSE_ENABLE(OPTION-NAME)
+# ----------------------------------
+# A trivial front-end for _AC_INIT_PARSE_ENABLE2.
+#
+m4_define([_AC_INIT_PARSE_ENABLE],
+[m4_bmatch([$1], [^with],
+	   [_AC_INIT_PARSE_ENABLE2([$1], [with])],
+	   [_AC_INIT_PARSE_ENABLE2([$1], [enable])])])
+
+
+# _AC_INIT_PARSE_ENABLE2(OPTION-NAME, POSITIVE-NAME)
 # --------------------------------------------------
 # Handle an `--enable' or a `--with' option.
 #
-m4_define([_AC_INIT_PARSE_ENABLE],
+# OPTION-NAME is `enable', `disable', `with', or `without'.
+# POSITIVE-NAME is the corresponding positive variant, i.e. `enable' or `with'.
+#
+# Positive variant of the option is recognized by the condition
+#	OPTION-NAME == POSITIVE-NAME .
+#
+m4_define([_AC_INIT_PARSE_ENABLE2],
 [-$1-* | --$1-*)
-    ac_$2=`expr "x$ac_option" : 'x-*$1-\(m4_bmatch([$1], [^\(enable\|with\)$], [[[^=]]], [.])*\)'`
+    ac_useropt=`expr "x$ac_option" : 'x-*$1-\(m4_if([$1], [$2], [[[^=]]], [.])*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_$2" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
-      AC_MSG_ERROR([invalid $2 name: $ac_$2])
-    ac_$2=`AS_ECHO(["$ac_$2"]) | sed 's/[[-.]]/_/g'`
-    eval m4_bmatch([$1], [^\(enable\|disable\)$], [enable], [with])_$ac_$2=$3 ;;dnl
+    expr "x$ac_useropt" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
+      AC_MSG_ERROR(
+	[invalid ]m4_if([$2], [with], [package], [feature])[ name: $ac_useropt])
+    ac_useropt=`AS_ECHO(["$ac_useropt"]) | sed 's/[[-.]]/_/g'`
+    eval $2_$ac_useropt=m4_if([$1], [$2], [\$ac_optarg], [no]) ;;dnl
 ])
 
 
