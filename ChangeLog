@@ -1,5 +1,8 @@
 2006-12-06  Stepan Kasal  <kasal@ucw.cz>
 
+	* tests/tools.at (autom4te preselections): Use `find -newer';
+	remove one of the sleeps.
+
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ENABLE): Make it
 	more readable, using ...
 	(_AC_INIT_PARSE_ENABLE2): ... this new helper macro.
