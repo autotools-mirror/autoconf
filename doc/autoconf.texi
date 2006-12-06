@@ -3032,7 +3032,7 @@ input file name, @command{autoheader} uses the first one.)
 
 It is recommended that only one input file is used.  If you want to append
 a boilerplate code, it is preferable to use
-@samp{AH_BOTTOM([[#include <conf_post.h>]])}.
+@samp{AH_BOTTOM([#include <conf_post.h>])}.
 File @file{conf_post.h} is not processed during the configuration then,
 which make things clearer.  Analogically, @code{AH_TOP} can be used to
 prepend a boilerplate code.
