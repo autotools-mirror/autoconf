@@ -1,3 +1,10 @@
+2006-12-05  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Configuration Headers): Remove the
+	example with multiple input files.
+	(autoheader Invocation): Encourage `AH_BOTTOM', discouraging
+	multiple input files.
+
 2006-12-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): When

@@ -2934,17 +2934,13 @@ object files that depend on the header file to be recompiled.
 
 Usually the input file is named @file{@var{header}.in}; however, you can
 override the input file name by appending to @var{header} a
-colon-separated list of input files.  Examples:
+colon-separated list of input files.  For example, you might need to make
+the input file name acceptable to @acronym{DOS} variants:
 
 @example
 AC_CONFIG_HEADERS([config.h:config.hin])
-AC_CONFIG_HEADERS([defines.h:defs.pre:defines.h.in:defs.post])
 @end example
 
-@noindent
-Doing this allows you to keep your file names acceptable to
-@acronym{DOS} variants, or
-to prepend and/or append boilerplate to the file.
 @end defmac
 
 @defmac AH_HEADER
@@ -3028,11 +3024,18 @@ use @command{autoheader} to generate it, see @ref{autoheader Invocation}.
 @cindex @command{autoheader}
 
 The @command{autoheader} program can create a template file of C
-@samp{#define} statements for @command{configure} to use.  If
-@file{configure.ac} invokes @code{AC_CONFIG_HEADERS(@var{file})},
-@command{autoheader} creates @file{@var{file}.in}; if multiple file
-arguments are given, the first one is used.  Otherwise,
-@command{autoheader} creates @file{config.h.in}.
+@samp{#define} statements for @command{configure} to use.
+It searches for the first invocation of @code{AC_CONFIG_HEADERS} in
+@file{configure} sources to determine the name of the template.
+(If the first call of @code{AC_CONFIG_HEADERS} specifies more than one
+input file name, @command{autoheader} uses the first one.)
+
+It is recommended that only one input file is used.  If you want to append
+a boilerplate code, it is preferable to use
+@samp{AH_BOTTOM([[#include <conf_post.h>]])}.
+File @file{conf_post.h} is not processed during the configuration then,
+which make things clearer.  Analogically, @code{AH_TOP} can be used to
+prepend a boilerplate code.
 
 In order to do its job, @command{autoheader} needs you to document all
 of the symbols that you might use.  Typically this is done via an
