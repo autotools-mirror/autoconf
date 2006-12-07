@@ -1,3 +1,11 @@
+2006-12-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Drop the
+	`CEOF$ac_eof' special marker, the awk script cannot contain a
+	line matching `^CEOF', so this is not needed any more.
+	* tests/torture.at (Substitute a newline): Expose the `%!_!# '
+	special marker in the test.
+
 2006-12-06  Stepan Kasal  <kasal@ucw.cz>
 
 	* tests/tools.at (autom4te preselections): Use `find -newer';

@@ -412,12 +412,6 @@ dnl Do not use grep on conf$$subs.awk, since AIX grep has a line length limit.
 done
 rm -f conf$$subs.sh
 
-dnl Similarly, avoid grep here too.
-ac_eof=`sed -n '/^CEOF[[0-9]]*$/s/CEOF/0/p' conf$$subs.awk`
-if test -n "$ac_eof"; then
-  ac_eof=`echo "$ac_eof" | sort -nru | sed 1q`
-  ac_eof=`expr $ac_eof + 1`
-fi
 dnl Initialize an awk array of substitutions, keyed by variable name.
 dnl
 dnl The initial line contains the variable name VAR, then a `!'.
@@ -445,7 +439,7 @@ dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
 [cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs.awk" <<\CEOF$ac_eof
+cat >>"\$tmp/subs.awk" <<\CEOF
 _ACEOF
 sed -n '
 h
@@ -492,7 +486,7 @@ t delim
 ' >>$CONFIG_STATUS
 rm -f conf$$subs.awk
 cat >>$CONFIG_STATUS <<_ACEOF
-CEOF$ac_eof
+CEOF
 cat >>"\$tmp/subs.awk" <<CEOF
   for (key in S) S_is_set[key] = 1
   FS = ""

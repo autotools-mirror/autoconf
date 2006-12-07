@@ -674,6 +674,7 @@ AT_SETUP([Substitute a newline])
 
 AT_DATA([Foo.in],
 [@foo@
+@bar@
 ])
 
 AT_DATA([configure.ac],
@@ -681,19 +682,25 @@ AT_DATA([configure.ac],
 AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 foo='one
 two'
+bar='%!_!# ''
+x'
 AC_SUBST([foo])
+AC_SUBST([bar])
 AC_CONFIG_FILES([Foo])
 AC_PROG_AWK
 AC_OUTPUT
 ]])
 
+echo 'one
+two
+%!_!# ''
+x' >expout
+
 AT_CHECK_AUTOCONF
 # Check both awk and the result of AC_PROG_AWK
 for awk_arg in FOO= AWK=awk; do
   AT_CHECK_CONFIGURE([$awk_arg])
-  AT_CHECK([cat Foo], 0, [one
-two
-])
+  AT_CHECK([cat Foo], 0, [expout])
 done
 AT_CLEANUP
 
