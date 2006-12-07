@@ -1,3 +1,9 @@
+2006-12-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/c.m4 (_AC_PROG_CC_C89): Also try -xc99=all, for Sun
+	C 5.8 on Solaris 10.  Using -xc99=all rather than -xc99 bypasses
+	the buggy -xc99 option of Forte Developer 7 C on Solaris 9.
+
 2006-12-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Drop the
