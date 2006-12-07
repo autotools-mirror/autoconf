@@ -791,13 +791,13 @@ do
     datarootdir=$ac_optarg ;;
 
   -disable-* | --disable-*)
-    ac_feature=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
+    ac_useropt=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_feature" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      { $as_echo "$as_me: error: invalid feature name: $ac_feature" >&2
+    expr "x$ac_useropt" : ".*[^-._$as_cr_alnum]" >/dev/null &&
+      { $as_echo "$as_me: error: invalid feature name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
-    ac_feature=`$as_echo "$ac_feature" | sed 's/[-.]/_/g'`
-    eval enable_$ac_feature=no ;;
+    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
+    eval enable_$ac_useropt=no ;;
 
   -docdir | --docdir | --docdi | --doc | --do)
     ac_prev=docdir ;;
@@ -810,13 +810,13 @@ do
     dvidir=$ac_optarg ;;
 
   -enable-* | --enable-*)
-    ac_feature=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
+    ac_useropt=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_feature" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      { $as_echo "$as_me: error: invalid feature name: $ac_feature" >&2
+    expr "x$ac_useropt" : ".*[^-._$as_cr_alnum]" >/dev/null &&
+      { $as_echo "$as_me: error: invalid feature name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
-    ac_feature=`$as_echo "$ac_feature" | sed 's/[-.]/_/g'`
-    eval enable_$ac_feature=\$ac_optarg ;;
+    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
+    eval enable_$ac_useropt=\$ac_optarg ;;
 
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
   | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
@@ -1007,22 +1007,22 @@ do
     ac_init_version=: ;;
 
   -with-* | --with-*)
-    ac_package=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
+    ac_useropt=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      { $as_echo "$as_me: error: invalid package name: $ac_package" >&2
+    expr "x$ac_useropt" : ".*[^-._$as_cr_alnum]" >/dev/null &&
+      { $as_echo "$as_me: error: invalid package name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
-    ac_package=`$as_echo "$ac_package" | sed 's/[-.]/_/g'`
-    eval with_$ac_package=\$ac_optarg ;;
+    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
+    eval with_$ac_useropt=\$ac_optarg ;;
 
   -without-* | --without-*)
-    ac_package=`expr "x$ac_option" : 'x-*without-\(.*\)'`
+    ac_useropt=`expr "x$ac_option" : 'x-*without-\(.*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_package" : ".*[^-._$as_cr_alnum]" >/dev/null &&
-      { $as_echo "$as_me: error: invalid package name: $ac_package" >&2
+    expr "x$ac_useropt" : ".*[^-._$as_cr_alnum]" >/dev/null &&
+      { $as_echo "$as_me: error: invalid package name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
-    ac_package=`$as_echo "$ac_package" | sed 's/[-.]/_/g'`
-    eval with_$ac_package=no ;;
+    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
+    eval with_$ac_useropt=no ;;
 
   --x)
     # Obsolete; use --with-x.
@@ -3586,13 +3586,8 @@ $as_echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
 done
 rm -f conf$$subs.sh
 
-ac_eof=`sed -n '/^CEOF[0-9]*$/s/CEOF/0/p' conf$$subs.awk`
-if test -n "$ac_eof"; then
-  ac_eof=`echo "$ac_eof" | sort -nru | sed 1q`
-  ac_eof=`expr $ac_eof + 1`
-fi
 cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs.awk" <<\CEOF$ac_eof
+cat >>"\$tmp/subs.awk" <<\CEOF
 _ACEOF
 sed -n '
 h
@@ -3639,7 +3634,7 @@ t delim
 ' >>$CONFIG_STATUS
 rm -f conf$$subs.awk
 cat >>$CONFIG_STATUS <<_ACEOF
-CEOF$ac_eof
+CEOF
 cat >>"\$tmp/subs.awk" <<CEOF
   for (key in S) S_is_set[key] = 1
   FS = ""
