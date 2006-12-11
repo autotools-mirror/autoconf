@@ -1,5 +1,15 @@
 2006-12-10  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Writing Autoconf Input): Renamed from
+	Writing configure.ac.
+	(Autoconf Input Layout): Renamed from configure.ac Layout.
+	(Recreating a Configuration): Renamed from config.status Invocation.
+	(Obsolete Recreation): Renamed from Obsolete config.status Use.
+	(acconfig Header): Renamed from acconfig.h.
+	(20th-century Autoconf 2): Renamed from Autoconf 2.13.
+	(Writing Testsuites): Renamed from Writing testsuite.at.
+	(Autom4te Cache): Renamed from autom4te.cache.
+
 	* BUGS: Remove mention of VPATH problem, since it's now documented
 	not to be a bug in the Autoconf build procedure itself, but rather
 	a problem with the proprietary `make' programs.

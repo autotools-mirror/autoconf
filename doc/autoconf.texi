@@ -224,7 +224,7 @@ published by the Free Software Foundation raise funds for
 * configure: (autoconf)configure Invocation.    Configuring a package.
 * autoupdate: (autoconf)autoupdate Invocation.
                                 Automatic update of @file{configure.ac}
-* config.status: (autoconf)config.status Invocation. Recreating configurations.
+* config.status: (autoconf)Recreating a Configuration. Recreating configurations.
 * testsuite: (autoconf)testsuite Invocation.    Running an Autotest test suite.
 @end direntry
 
@@ -267,7 +267,7 @@ published by the Free Software Foundation raise funds for
 * Manual Configuration::        Selecting features that can't be guessed
 * Site Configuration::          Local defaults for @command{configure}
 * Running configure Scripts::   How to use the Autoconf output
-* config.status Invocation::    Recreating a configuration
+* Recreating a Configuration::  Invoking @command{config.status}
 * Obsolete Constructs::         Kept for backward compatibility
 * Using Autotest::              Creating portable test suites
 * FAQ::                         Frequent Autoconf Questions, with answers
@@ -287,7 +287,7 @@ The @acronym{GNU} Build System
 
 Making @command{configure} Scripts
 
-* Writing configure.ac::        What to put in an Autoconf input file
+* Writing Autoconf Input::      What to put in an Autoconf input file
 * autoscan Invocation::         Semi-automatic @file{configure.ac} writing
 * ifnames Invocation::          Listing the conditionals in source code
 * autoconf Invocation::         How to create configuration scripts
@@ -297,7 +297,7 @@ Writing @file{configure.ac}
 
 * Shell Script Compiler::       Autoconf as solution of a problem
 * Autoconf Language::           Programming in Autoconf
-* configure.ac Layout::         Standard organization of @file{configure.ac}
+* Autoconf Input Layout::       Standard organization of @file{configure.ac}
 
 Initialization and Output Files
 
@@ -553,12 +553,12 @@ Running @command{configure} Scripts
 
 Obsolete Constructs
 
-* Obsolete config.status Use::  Different calling convention
-* acconfig.h::                  Additional entries in @file{config.h.in}
+* Obsolete Recreation::         Obsolete convention for @command{config.status}
+* acconfig Header::             Additional entries in @file{config.h.in}
 * autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
-* Autoconf 2.13::               Some fresher tips
+* 20th-century Autoconf 2::     Some fresher tips
 
 Upgrading From Version 1
 
@@ -579,7 +579,7 @@ Upgrading From Version 2.13
 Generating Test Suites with Autotest
 
 * Using an Autotest Test Suite::  Autotest and the user
-* Writing testsuite.at::        Autotest macros
+* Writing Testsuites::          Autotest macros
 * testsuite Invocation::        Running @command{testsuite} scripts
 * Making testsuite Scripts::    Using autom4te to create @command{testsuite}
 
@@ -595,7 +595,7 @@ Frequent Autoconf Questions, with answers
 * Bootstrapping::               Autoconf and @acronym{GNU} M4 require each other?
 * Why Not Imake::               Why @acronym{GNU} uses @command{configure} instead of Imake
 * Defining Directories::        Passing @code{datadir} to program
-* autom4te.cache::              What is it?  Can I remove it?
+* Autom4te Cache::              What is it?  Can I remove it?
 * Present But Cannot Be Compiled::  Compiler and Preprocessor Disagree
 
 History of Autoconf
@@ -912,7 +912,7 @@ containing @code{#define} directives (@pxref{Configuration Headers});
 
 @item
 a shell script called @file{config.status} that, when run, recreates
-the files listed above (@pxref{config.status Invocation});
+the files listed above (@pxref{Recreating a Configuration});
 
 @item
 an optional shell script normally called @file{config.cache}
@@ -971,14 +971,14 @@ Makefile.in ---'                    `-> Makefile ---'
 @end example
 
 @menu
-* Writing configure.ac::        What to put in an Autoconf input file
+* Writing Autoconf Input::      What to put in an Autoconf input file
 * autoscan Invocation::         Semi-automatic @file{configure.ac} writing
 * ifnames Invocation::          Listing the conditionals in source code
 * autoconf Invocation::         How to create configuration scripts
 * autoreconf Invocation::       Remaking multiple @command{configure} scripts
 @end menu
 
-@node Writing configure.ac
+@node Writing Autoconf Input
 @section Writing @file{configure.ac}
 
 To produce a @command{configure} script for a software package, create a
@@ -1003,7 +1003,7 @@ preferred.
 @menu
 * Shell Script Compiler::       Autoconf as solution of a problem
 * Autoconf Language::           Programming in Autoconf
-* configure.ac Layout::         Standard organization of @file{configure.ac}
+* Autoconf Input Layout::       Standard organization of @file{configure.ac}
 @end menu
 
 @node Shell Script Compiler
@@ -1208,7 +1208,7 @@ with the @samp{#}.  For example, it is helpful to begin
 # Process this file with autoconf to produce a configure script.
 @end example
 
-@node configure.ac Layout
+@node Autoconf Input Layout
 @subsection Standard @file{configure.ac} Layout
 
 The order in which @file{configure.ac} calls the Autoconf macros is not
@@ -2037,7 +2037,7 @@ The special value @samp{-} might be used to denote the standard output
 when used in @var{output}, or the standard input when used in the
 @var{inputs}.  You most probably don't need to use this in
 @file{configure.ac}, but it is convenient when using the command line
-interface of @file{./config.status}, see @ref{config.status Invocation},
+interface of @file{./config.status}, see @ref{Recreating a Configuration},
 for more details.
 
 The @var{inputs} may be absolute or relative file names.  In the latter
@@ -2883,7 +2883,7 @@ AC_CONFIG_FILES([stamp-h], [echo timestamp > stamp-h])
 so @file{config.status} ensures that @file{config.h} is considered up to
 date.  @xref{Output}, for more information about @code{AC_OUTPUT}.
 
-@xref{config.status Invocation}, for more examples of handling
+@xref{Recreating a Configuration}, for more examples of handling
 configuration-related dependencies.
 
 @node Configuration Headers
@@ -8400,7 +8400,7 @@ dangerous.  If for instance the user runs @samp{CC=bizarre-cc
 files depend upon @command{bizarre-cc} being the C compiler.  If
 for some reason the user runs @command{./configure} again, or if it is
 run via @samp{./config.status --recheck}, (@xref{Automatic Remaking},
-and @pxref{config.status Invocation}), then the configuration can be
+and @pxref{Recreating a Configuration}), then the configuration can be
 inconsistent, composed of results depending upon two different
 compilers.
 
@@ -8452,7 +8452,7 @@ and similarly if the variable is unset, or if its content is changed.
 
 @item
 @var{variable} is kept during automatic reconfiguration
-(@pxref{config.status Invocation}) as if it had been passed as a command
+(@pxref{Recreating a Configuration}) as if it had been passed as a command
 line argument, including when no cache is used:
 
 @example
@@ -16030,7 +16030,7 @@ may use comes with Autoconf.
 
 @c ============================================== Recreating a Configuration
 
-@node config.status Invocation
+@node Recreating a Configuration
 @chapter Recreating a Configuration
 @cindex @command{config.status}
 
@@ -16155,7 +16155,7 @@ Makefile: Makefile.in config.status
 @end example
 
 The calling convention of @file{config.status} has changed; see
-@ref{Obsolete config.status Use}, for details.
+@ref{Obsolete Recreation}, for details.
 
 
 @c =================================================== Obsolete Constructs
@@ -16174,19 +16174,19 @@ intention is mainly to help maintainers updating their packages by
 understanding how to move to more modern constructs.
 
 @menu
-* Obsolete config.status Use::  Different calling convention
-* acconfig.h::                  Additional entries in @file{config.h.in}
+* Obsolete Recreation::         Obsolete convention for @command{config.status}
+* acconfig Header::             Additional entries in @file{config.h.in}
 * autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
-* Autoconf 2.13::               Some fresher tips
+* 20th-century Autoconf 2::     Some fresher tips
 @end menu
 
-@node Obsolete config.status Use
+@node Obsolete Recreation
 @section Obsolete @file{config.status} Invocation
 
 @file{config.status} now supports arguments to specify the files to
-instantiate; see @ref{config.status Invocation}, for more details.
+instantiate; see @ref{Recreating a Configuration}, for more details.
 Before, environment variables had to be used.
 
 @defvar CONFIG_COMMANDS
@@ -16217,7 +16217,7 @@ The symbolic links to establish.  The default is the arguments given to
 @file{config.status} ignores this variable.
 @end defvar
 
-In @ref{config.status Invocation}, using this old interface, the example
+In @ref{Recreating a Configuration}, using this old interface, the example
 would be:
 
 @example
@@ -16240,7 +16240,7 @@ no need to set @code{CONFIG_HEADERS} in the @code{make} rules.  Equally
 for @code{CONFIG_COMMANDS}, etc.)
 
 
-@node acconfig.h
+@node acconfig Header
 @section @file{acconfig.h}
 
 @cindex @file{acconfig.h}
@@ -17447,7 +17447,7 @@ See whether any of your tests are of general enough usefulness to
 encapsulate them into macros that you can share.
 
 
-@node Autoconf 2.13
+@node 20th-century Autoconf 2
 @section Upgrading From Version 2.13
 @cindex Upgrading autoconf
 @cindex Autoconf upgrading
@@ -17881,7 +17881,7 @@ interactive tool testing, which is probably its main limitation.
 
 @menu
 * Using an Autotest Test Suite::  Autotest and the user
-* Writing testsuite.at::        Autotest macros
+* Writing Testsuites::          Autotest macros
 * testsuite Invocation::        Running @command{testsuite} scripts
 * Making testsuite Scripts::    Using autom4te to create @command{testsuite}
 @end menu
@@ -18047,7 +18047,7 @@ variables.
 
 @item tested programs
 The absolute file name and answers to @option{--version} of the tested
-programs (see @ref{Writing testsuite.at}, @code{AT_TESTED}).
+programs (see @ref{Writing Testsuites}, @code{AT_TESTED}).
 
 @item configuration log
 The contents of @file{config.log}, as created by @command{configure},
@@ -18056,7 +18056,7 @@ on the configuration itself.
 @end table
 
 
-@node Writing testsuite.at
+@node Writing Testsuites
 @section Writing @file{testsuite.at}
 
 The @file{testsuite.at} is a Bourne shell script making use of special
@@ -18427,7 +18427,7 @@ are addressed.
 * Bootstrapping::               Autoconf and @acronym{GNU} M4 require each other?
 * Why Not Imake::               Why @acronym{GNU} uses @command{configure} instead of Imake
 * Defining Directories::        Passing @code{datadir} to program
-* autom4te.cache::              What is it?  Can I remove it?
+* Autom4te Cache::              What is it?  Can I remove it?
 * Present But Cannot Be Compiled::  Compiler and Preprocessor Disagree
 @end menu
 
@@ -18676,7 +18676,7 @@ Autoconf Macro Archive}.
 @end itemize
 
 
-@node autom4te.cache
+@node Autom4te Cache
 @section What is @file{autom4te.cache}?
 
 @display
