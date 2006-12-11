@@ -1,5 +1,8 @@
 * Major changes in Autoconf 2.61a (??)
 
+** AC_FUNC_FSEEKO was broken in 2.61; it didn't make fseeko and ftello visible
+   on many platforms.  This has been fixed.
+
 ** AC_FUNC_SETVBUF_REVERSED is now obsolete.  It is still defined for backward
    compatibility but it does nothing.  The macro was already
    obsolescent, as the last systems to have the problem were those
