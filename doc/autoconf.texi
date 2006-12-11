@@ -2785,7 +2785,9 @@ for each architecture are kept in their own directory.
 
 To support doing this, @command{make} uses the @code{VPATH} variable to
 find the files that are in the source directory.  @acronym{GNU} Make
-and most other recent @command{make} programs can do this.  Older
+can do this.  Most other recent @command{make} programs can do this as
+well, though they may have difficulties and it is often simpler to
+recommend @acronym{GNU} @command{make} (@pxref{VPATH and Make}).  Older
 @command{make} programs do not support @code{VPATH}; when using them, the
 source code must be in the same directory as the object files.
 
