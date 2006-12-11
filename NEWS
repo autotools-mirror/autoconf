@@ -8,10 +8,25 @@
    due to lack of ancient systems to test it on.
 
 ** config.status now uses awk instead of sed for most substitutions, for speed.
-   It is now documented that Makefile.in should not contain
-   overlapping variable occurrences, e.g., @VAR1@VAR2@.  Autoconf's
-   behavior was always iffy in such cases, and the awk implementation
-   has changed the behavior.
+
+   - As a side effect multi-line values of substituted variables are
+     no longer limited in total size, though for portability each line
+     should not exceed the POSIX length limit for text lines.
+
+   - It is now documented that Makefile.in should not contain
+     overlapping variable occurrences, e.g., @VAR1@VAR2@.
+     Autoconf's behavior was always iffy in such cases, and the
+     awk implementation has changed the behavior.
+
+** Many uses of 'echo' have been rewritten so that Autoconf-generated
+   scripts have fewer problems with strings or file names containing
+   embedded special characters such as backslash or leading "-".  This
+   was implemented by using `printf '%s\n' "$foo"' instead of `echo
+   "$foo"' when printf works.  Due to the implementation technique
+   used, Autoconf-generated scripts now run considerably more slowly
+   on ancient implementations lacking printf.  However, this should
+   not be a problem, since Autoconf-generated scripts in practice
+   invariably find a more-modern shell these days.
 
 * Major changes in Autoconf 2.61 (2006-11-17)
 

@@ -1,3 +1,10 @@
+2006-12-11  Paul Eggert  <eggert@cs.ucla.edu>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* NEWS: Document changes with echo and printf, and the lack
+	of limits on the total size of multi-line values of substituted
+	variables.
+
 2006-12-10  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Writing Autoconf Input): Renamed from
