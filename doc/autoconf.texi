@@ -224,7 +224,7 @@ published by the Free Software Foundation raise funds for
 * configure: (autoconf)configure Invocation.    Configuring a package.
 * autoupdate: (autoconf)autoupdate Invocation.
                                 Automatic update of @file{configure.ac}
-* config.status: (autoconf)Recreating a Configuration. Recreating configurations.
+* config.status: (autoconf)config.status Invocation. Recreating configurations.
 * testsuite: (autoconf)testsuite Invocation.    Running an Autotest test suite.
 @end direntry
 
@@ -267,7 +267,7 @@ published by the Free Software Foundation raise funds for
 * Manual Configuration::        Selecting features that can't be guessed
 * Site Configuration::          Local defaults for @command{configure}
 * Running configure Scripts::   How to use the Autoconf output
-* Recreating a Configuration::  Invoking @command{config.status}
+* config.status Invocation::    Recreating a configuration
 * Obsolete Constructs::         Kept for backward compatibility
 * Using Autotest::              Creating portable test suites
 * FAQ::                         Frequent Autoconf Questions, with answers
@@ -553,12 +553,12 @@ Running @command{configure} Scripts
 
 Obsolete Constructs
 
-* Obsolete Recreation::         Obsolete convention for @command{config.status}
+* Obsolete config.status Use::  Obsolete convention for @command{config.status}
 * acconfig Header::             Additional entries in @file{config.h.in}
 * autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
-* 20th-century Autoconf 2::     Some fresher tips
+* Autoconf 2.13::               Some fresher tips
 
 Upgrading From Version 1
 
@@ -912,7 +912,7 @@ containing @code{#define} directives (@pxref{Configuration Headers});
 
 @item
 a shell script called @file{config.status} that, when run, recreates
-the files listed above (@pxref{Recreating a Configuration});
+the files listed above (@pxref{config.status Invocation});
 
 @item
 an optional shell script normally called @file{config.cache}
@@ -2037,7 +2037,7 @@ The special value @samp{-} might be used to denote the standard output
 when used in @var{output}, or the standard input when used in the
 @var{inputs}.  You most probably don't need to use this in
 @file{configure.ac}, but it is convenient when using the command line
-interface of @file{./config.status}, see @ref{Recreating a Configuration},
+interface of @file{./config.status}, see @ref{config.status Invocation},
 for more details.
 
 The @var{inputs} may be absolute or relative file names.  In the latter
@@ -2883,7 +2883,7 @@ AC_CONFIG_FILES([stamp-h], [echo timestamp > stamp-h])
 so @file{config.status} ensures that @file{config.h} is considered up to
 date.  @xref{Output}, for more information about @code{AC_OUTPUT}.
 
-@xref{Recreating a Configuration}, for more examples of handling
+@xref{config.status Invocation}, for more examples of handling
 configuration-related dependencies.
 
 @node Configuration Headers
@@ -8400,7 +8400,7 @@ dangerous.  If for instance the user runs @samp{CC=bizarre-cc
 files depend upon @command{bizarre-cc} being the C compiler.  If
 for some reason the user runs @command{./configure} again, or if it is
 run via @samp{./config.status --recheck}, (@xref{Automatic Remaking},
-and @pxref{Recreating a Configuration}), then the configuration can be
+and @pxref{config.status Invocation}), then the configuration can be
 inconsistent, composed of results depending upon two different
 compilers.
 
@@ -8452,7 +8452,7 @@ and similarly if the variable is unset, or if its content is changed.
 
 @item
 @var{variable} is kept during automatic reconfiguration
-(@pxref{Recreating a Configuration}) as if it had been passed as a command
+(@pxref{config.status Invocation}) as if it had been passed as a command
 line argument, including when no cache is used:
 
 @example
@@ -16028,10 +16028,10 @@ may use comes with Autoconf.
 @include install.texi
 
 
-@c ============================================== Recreating a Configuration
+@c ============================================== config.status Invocation
 
-@node Recreating a Configuration
-@chapter Recreating a Configuration
+@node config.status Invocation
+@chapter config.status Invocation
 @cindex @command{config.status}
 
 The @command{configure} script creates a file named @file{config.status},
@@ -16155,7 +16155,7 @@ Makefile: Makefile.in config.status
 @end example
 
 The calling convention of @file{config.status} has changed; see
-@ref{Obsolete Recreation}, for details.
+@ref{Obsolete config.status Use}, for details.
 
 
 @c =================================================== Obsolete Constructs
@@ -16174,19 +16174,19 @@ intention is mainly to help maintainers updating their packages by
 understanding how to move to more modern constructs.
 
 @menu
-* Obsolete Recreation::         Obsolete convention for @command{config.status}
+* Obsolete config.status Use::  Obsolete convention for @command{config.status}
 * acconfig Header::             Additional entries in @file{config.h.in}
 * autoupdate Invocation::       Automatic update of @file{configure.ac}
 * Obsolete Macros::             Backward compatibility macros
 * Autoconf 1::                  Tips for upgrading your files
-* 20th-century Autoconf 2::     Some fresher tips
+* Autoconf 2.13::               Some fresher tips
 @end menu
 
-@node Obsolete Recreation
+@node Obsolete config.status Use
 @section Obsolete @file{config.status} Invocation
 
 @file{config.status} now supports arguments to specify the files to
-instantiate; see @ref{Recreating a Configuration}, for more details.
+instantiate; see @ref{config.status Invocation}, for more details.
 Before, environment variables had to be used.
 
 @defvar CONFIG_COMMANDS
@@ -16217,7 +16217,7 @@ The symbolic links to establish.  The default is the arguments given to
 @file{config.status} ignores this variable.
 @end defvar
 
-In @ref{Recreating a Configuration}, using this old interface, the example
+In @ref{config.status Invocation}, using this old interface, the example
 would be:
 
 @example
@@ -17447,7 +17447,7 @@ See whether any of your tests are of general enough usefulness to
 encapsulate them into macros that you can share.
 
 
-@node 20th-century Autoconf 2
+@node Autoconf 2.13
 @section Upgrading From Version 2.13
 @cindex Upgrading autoconf
 @cindex Autoconf upgrading
