@@ -1,4 +1,4 @@
-* Major changes in Autoconf 2.61a (??)
+* Major changes in Autoconf 2.61a (2006-12-11)
 
 ** AC_FUNC_FSEEKO was broken in 2.61; it didn't make fseeko and ftello visible
    on many platforms.  This has been fixed.
@@ -12,9 +12,9 @@
 
 ** config.status now uses awk instead of sed for most substitutions, for speed.
 
-   - As a side effect multi-line values of substituted variables are
-     no longer limited in total size, though for portability each line
-     should not exceed the POSIX length limit for text lines.
+   - As a side effect multi-line values of substituted variables no
+     longer have a small limit in total size, though for portability
+     each line should not exceed the POSIX length limit for text lines.
 
    - It is now documented that Makefile.in should not contain
      overlapping variable occurrences, e.g., @VAR1@VAR2@.
