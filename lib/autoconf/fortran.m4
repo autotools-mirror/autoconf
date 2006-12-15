@@ -1051,12 +1051,12 @@ case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in #(
        [Define to 1 if upper case spelling should be used.]);;
 esac
 case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in #(
-  *,'underscore',*)
+  *,' underscore',*)
      AC_DEFINE(_AC_FC[_UNDERSCORE], 1,
        [Define to 1 if an underscore should be appended.]);;
 esac
 case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in #(
-  *,*,'extra underscore')
+  *,*,' extra underscore')
      AC_DEFINE(_AC_FC[_EXTRA_UNDERSCORE], 1,
        [Define to 1 if an extra underscore should be appended.]);;
 esac
@@ -1071,7 +1071,7 @@ AH_VERBATIM(_AC_FC[_FUNC],
 #undef ]_AC_FC[_EXTRA_UNDERSCORE
 
 /* Define to a macro mangling the given C identifier (in lower and upper
-   case), which must not contain underscores, for linking with Fortran.
+   case), which must not contain underscores, for linking with Fortran.  */
 #ifdef ]_AC_FC[_UPPER_CASE
 # ifdef ]_AC_FC[_UNDERSCORE
 #  ifdef ]_AC_FC[_EXTRA_UNDERSCORE
