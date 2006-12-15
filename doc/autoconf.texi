@@ -8250,7 +8250,9 @@ output.
 @defmac AC_DEFINE (@var{variable}, @var{value}, @ovar{description})
 @defmacx AC_DEFINE (@var{variable})
 @acindex{DEFINE}
-Define the C preprocessor variable @var{variable} to @var{value} (verbatim).
+Define @var{variable} to @var{value} (verbatim), by defining a C
+object-like macro for @var{variable}.  @var{variable} should be a C
+identifier that contains only letters, digits, and underscores.
 @var{value} should not contain literal newlines, and if you are not
 using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
 characters, as @command{make} tends to eat them.  To use a shell variable,

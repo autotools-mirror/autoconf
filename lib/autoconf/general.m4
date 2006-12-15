@@ -1951,7 +1951,10 @@ AC_DEFUN([_AC_CACHE_CHECK_INT],
 # -------------------------------------------
 # Used by --trace to collect the list of AC_DEFINEd macros.
 m4_define([AC_DEFINE_TRACE_LITERAL],
-[m4_pattern_allow([^$1$])])
+[m4_pattern_allow([^$1$])dnl
+m4_bmatch([$1], ^m4_defn([m4_re_word])$, [],
+  [m4_warn([syntax], [AC_DEFINE: not an identifier: $1])])dnl
+])# AC_DEFINE_TRACE_LITERAL
 
 
 # AC_DEFINE_TRACE(CPP-SYMBOL)
