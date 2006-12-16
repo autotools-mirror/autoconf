@@ -798,7 +798,7 @@ AC_DEFUN([AC_FUNC_GETMNTENT],
 # -lseq on Dynix/PTX, -lgen on Unixware.
 AC_SEARCH_LIBS(getmntent, [sun seq gen],
 	       [ac_cv_func_getmntent=yes
-		AC_DEFINE([HAVE_GETMNTENT], [],
+		AC_DEFINE([HAVE_GETMNTENT], 1,
 			  [Define to 1 if you have the `getmntent' function.])],
 	       [ac_cv_func_getmntent=no])
 ])
