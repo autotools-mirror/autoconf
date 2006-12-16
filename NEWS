@@ -1,3 +1,7 @@
+* Major changes in Autoconf 2.61b (????-??-??)
+
+** None yet...
+
 * Major changes in Autoconf 2.61a (2006-12-11)
 
 ** AC_FUNC_FSEEKO was broken in 2.61; it didn't make fseeko and ftello visible

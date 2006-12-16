@@ -1,3 +1,8 @@
+2006-12-16  Eric Blake  <ebb9@byu.net>
+
+	* configure.ac (AC_INIT): Bump version, since 2.61a is released.
+	* NEWS: Start news for current version.
+
 2006-12-15  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_GETMNTENT):
