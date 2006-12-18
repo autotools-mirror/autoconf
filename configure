@@ -683,6 +683,7 @@ SED
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
+ac_user_opts=':enable_option_checking:with_lispdir:'
       ac_precious_vars='build_alias
 host_alias
 target_alias
@@ -693,6 +694,8 @@ EMACSLOADPATH'
 # Initialize some variables set by options.
 ac_init_help=
 ac_init_version=false
+ac_unrecognized_opts=
+ac_unrecognized_sep=
 # The variables have the same names as the options, with
 # dashes changed to underlines.
 cache_file=/dev/null
@@ -797,6 +800,11 @@ do
       { $as_echo "$as_me: error: invalid feature name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
+    case $ac_user_opts in
+      *:enable_$ac_useropt:*) ;;
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--disable-$ac_useropt"
+         ac_unrecognized_sep=', ';;
+    esac
     eval enable_$ac_useropt=no ;;
 
   -docdir | --docdir | --docdi | --doc | --do)
@@ -816,6 +824,11 @@ do
       { $as_echo "$as_me: error: invalid feature name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
+    case $ac_user_opts in
+      *:enable_$ac_useropt:*) ;;
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--enable-$ac_useropt"
+         ac_unrecognized_sep=', ';;
+    esac
     eval enable_$ac_useropt=\$ac_optarg ;;
 
   -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
@@ -1013,6 +1026,11 @@ do
       { $as_echo "$as_me: error: invalid package name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
+    case $ac_user_opts in
+      *:with_$ac_useropt:*) ;;
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--with-$ac_useropt"
+         ac_unrecognized_sep=', ';;
+    esac
     eval with_$ac_useropt=\$ac_optarg ;;
 
   -without-* | --without-*)
@@ -1022,6 +1040,11 @@ do
       { $as_echo "$as_me: error: invalid package name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
+    case $ac_user_opts in
+      *:with_$ac_useropt:*) ;;
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--without-$ac_useropt"
+         ac_unrecognized_sep=', ';;
+    esac
     eval with_$ac_useropt=no ;;
 
   --x)
@@ -1071,6 +1094,15 @@ if test -n "$ac_prev"; then
   ac_option=--`echo $ac_prev | sed 's/_/-/g'`
   { $as_echo "$as_me: error: missing argument to $ac_option" >&2
    { (exit 1); exit 1; }; }
+fi
+
+if test -n "$ac_unrecognized_opts"; then
+  case $enable_option_checking in
+    no) ;;
+    fatal) { $as_echo "$as_me: error: Unrecognized options: $ac_unrecognized_opts" >&2
+   { (exit 1); exit 1; }; } ;;
+    *)     $as_echo "$as_me: WARNING: Unrecognized options: $ac_unrecognized_opts" >&2 ;;
+  esac
 fi
 
 # Be sure to have absolute directory names.
@@ -3991,6 +4023,10 @@ if test "$no_create" != yes; then
   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
   # would make configure fail if this is the last instruction.
   $ac_cs_success || { (exit 1); exit 1; }
+fi
+if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
+  { $as_echo "$as_me:$LINENO: WARNING: Unrecognized options: $ac_unrecognized_opts" >&5
+$as_echo "$as_me: WARNING: Unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 # Report the state of this version of Autoconf if this is a beta.
