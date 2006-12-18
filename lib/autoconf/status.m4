@@ -987,6 +987,7 @@ m4_define([AC_OUTPUT_COMMANDS_POST])
 #   This is used in _AC_OUTPUT_SUBDIRS.
 AC_DEFUN([AC_CONFIG_SUBDIRS],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+AC_REQUIRE([AC_DISABLE_OPTION_CHECKING])dnl
 m4_foreach_w([_AC_Sub], [$1],
 	     [_AC_CONFIG_UNIQUE([SUBDIRS],
 				m4_bpatsubst(m4_defn([_AC_Sub]), [:.*]))])dnl
@@ -1009,7 +1010,8 @@ m4_define([_AC_OUTPUT_SUBDIRS],
 #
 if test "$no_recursion" != yes; then
 
-  # Remove --cache-file and --srcdir arguments so they do not pile up.
+  # Remove --cache-file, --srcdir, and --disable-option-checking arguments
+  # so they do not pile up.
   ac_sub_configure_args=
   ac_prev=
   eval "set x $ac_configure_args"
@@ -1038,6 +1040,8 @@ if test "$no_recursion" != yes; then
       ac_prev=prefix ;;
     -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
       ;;
+    --disable-option-checking)
+      ;;
     *)
       case $ac_arg in
       *\'*) ac_arg=`AS_ECHO(["$ac_arg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
@@ -1058,6 +1062,10 @@ if test "$no_recursion" != yes; then
   if test "$silent" = yes; then
     ac_sub_configure_args="--silent $ac_sub_configure_args"
   fi
+
+  # Always prepend --disable-option-checking to silence warnings, since
+  # different subdirs can have different --enable and --with options.
+  ac_sub_configure_args="--disable-option-checking $ac_sub_configure_args"
 
   ac_popdir=`pwd`
   for ac_dir in : $subdirs; do test "x$ac_dir" = x: && continue
@@ -1186,6 +1194,9 @@ if test "$no_create" != yes; then
 fi
 dnl config.status should not do recursion.
 AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
+if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
+  AC_MSG_WARN([Unrecognized options: $ac_unrecognized_opts])
+fi
 ])# AC_OUTPUT
 
 

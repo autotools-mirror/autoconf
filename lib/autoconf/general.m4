@@ -409,6 +409,7 @@ m4_divert_pop([DEFAULTS])dnl
 m4_wrap([m4_divert_text([DEFAULTS],
 [ac_subst_vars='m4_ifdef([_AC_SUBST_VARS],  [m4_defn([_AC_SUBST_VARS])])'
 ac_subst_files='m4_ifdef([_AC_SUBST_FILES], [m4_defn([_AC_SUBST_FILES])])'
+ac_user_opts=':enable_option_checking:m4_ifdef([_AC_USER_OPTS], [m4_defn([_AC_USER_OPTS]):])'
 m4_ifdef([_AC_PRECIOUS_VARS],
   [_AC_ARG_VAR_STORE[]dnl
    _AC_ARG_VAR_VALIDATE[]dnl
@@ -527,6 +528,8 @@ m4_define([_AC_INIT_PARSE_ARGS],
 # Initialize some variables set by options.
 ac_init_help=
 ac_init_version=false
+ac_unrecognized_opts=
+ac_unrecognized_sep=
 # The variables have the same names as the options, with
 # dashes changed to underlines.
 cache_file=/dev/null
@@ -878,6 +881,14 @@ if test -n "$ac_prev"; then
   AC_MSG_ERROR([missing argument to $ac_option])
 fi
 
+if test -n "$ac_unrecognized_opts"; then
+  case $enable_option_checking in
+    no) ;;
+    fatal) AC_MSG_ERROR([Unrecognized options: $ac_unrecognized_opts]) ;;
+    *)     AC_MSG_WARN( [Unrecognized options: $ac_unrecognized_opts]) ;;
+  esac
+fi
+
 # Be sure to have absolute directory names.
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
@@ -947,6 +958,11 @@ m4_define([_AC_INIT_PARSE_ENABLE2],
       AC_MSG_ERROR(
 	[invalid ]m4_if([$2], [with], [package], [feature])[ name: $ac_useropt])
     ac_useropt=`AS_ECHO(["$ac_useropt"]) | sed 's/[[-.]]/_/g'`
+    case $ac_user_opts in
+      *:$2_$ac_useropt:*) ;;
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--$1-$ac_useropt"
+         ac_unrecognized_sep=', ';;
+    esac
     eval $2_$ac_useropt=m4_if([$1], [$2], [\$ac_optarg], [no]) ;;dnl
 ])
 
@@ -1355,6 +1371,7 @@ AC_LANG_PUSH(C)
 AC_DEFUN([AC_PRESERVE_HELP_ORDER],
 [m4_divert_once([HELP_ENABLE], [[
 Optional Features and Packages:
+  --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1373,7 +1390,8 @@ _AC_ENABLE_IF_ACTION([$1], m4_translit([$2], [-.], [__]), [$3], [$4])[]dnl
 ])
 
 m4_define([_AC_ENABLE_IF_ACTION],
-[AS_IF([test "${$1_$2+set}" = set], [$1val=$$1_$2; $3], [$4])dnl
+[m4_append_uniq([_AC_USER_OPTS], [$1_$2], [:])dnl
+AS_IF([test "${$1_$2+set}" = set], [$1val=$$1_$2; $3], [$4])dnl
 ])
 
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
@@ -1410,6 +1428,11 @@ _AC_ENABLE_IF([with], [$1], [$3], [$4])dnl
 AU_DEFUN([AC_WITH],
 [AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])])
 
+# AC_DISABLE_OPTION_CHECKING
+# --------------------------------------------------------------------
+AC_DEFUN([AC_DISABLE_OPTION_CHECKING],
+[m4_divert_once([DEFAULTS], [enable_option_checking=no])
+])# AC_DISABLE_OPTION_CHECKING
 
 
 ## ----------------------------------------- ##
