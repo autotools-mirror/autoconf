@@ -957,10 +957,11 @@ m4_define([_AC_INIT_PARSE_ENABLE2],
     expr "x$ac_useropt" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR(
 	[invalid ]m4_if([$2], [with], [package], [feature])[ name: $ac_useropt])
+    ac_useropt_orig=$ac_useropt
     ac_useropt=`AS_ECHO(["$ac_useropt"]) | sed 's/[[-.]]/_/g'`
     case $ac_user_opts in
       *:$2_$ac_useropt:*) ;;
-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--$1-$ac_useropt"
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--$1-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
     eval $2_$ac_useropt=m4_if([$1], [$2], [\$ac_optarg], [no]) ;;dnl
@@ -1401,6 +1402,7 @@ AC_DEFUN([AC_ARG_ENABLE],
 [],
 [m4_divert_once([HELP_ENABLE], [[
 Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]]])])dnl
 m4_divert_once([HELP_ENABLE], [$2])dnl
