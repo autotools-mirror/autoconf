@@ -562,8 +562,10 @@ AT_DATA([configure.ac],
 AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 AC_SUBST([foo], ]m4_for([n], 1, 100,, ....................)[)
 AC_SUBST([bar], "]m4_for([n], 1, 100,, @ @ @ @ @ @ @ @ @ @@)[")
-AC_SUBST([baz], "]m4_for([n], 1, 5,, m4_for([m], 1, 100,, ... ... ... ... ....)
-)[")
+baz="]m4_for([m], 1, 100,, ... ... ... ... ....)[
+"
+baz=$baz$baz$baz$baz$baz
+AC_SUBST([baz])
 AC_PROG_AWK
 AC_CONFIG_FILES([Foo Bar Baz])
 AC_OUTPUT
@@ -577,9 +579,10 @@ for awk_arg in Foo= AWK=awk; do
 )
   AT_CHECK([cat Bar], 0, m4_for([n], 1, 100,, @ @ @ @ @ @ @ @ @ @@)
 )
-  AT_CHECK([cat Baz], 0, m4_for([n], 1, 5,, m4_for([m], 1, 100,, ... ... ... ... ....)
-)
-)
+  AT_DATA([stdout],
+  [m4_for([n], 1, 5,, m4_for([m], 1, 100,, ... ... ... ... ....)
+)])
+  AT_CHECK([cat Baz], 0, [stdout])
 done
 AT_CLEANUP
 
