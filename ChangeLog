@@ -1,3 +1,12 @@
+2006-12-28  Malcolm Purvis <malcolmp@xemacs.org>  (trivial change)
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Insert a
+	space before "$ac_configure_args" to prevent a 'config.status
+	--recheck' failure if ac_configure_args doesn't contain a leading
+	space.  This works around a problem with the XEmacs configure.ac,
+	which uses the (undocumented) ac_configure_args variable
+	inconsistently with Autoconf.
+
 2006-12-22  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_MKTIME):
