@@ -1033,82 +1033,40 @@ AC_LANG_POP(Fortran)dnl
 # scheme used by the Fortran compiler.
 AC_DEFUN([_AC_FC_WRAPPERS],
 [_AC_FORTRAN_ASSERT()dnl
+AH_TEMPLATE(_AC_FC[_FUNC],
+    [Define to a macro mangling the given C identifier (in lower and upper
+     case), which must not contain underscores, for linking with Fortran.])dnl
+AH_TEMPLATE(_AC_FC[_FUNC_],
+    [As ]_AC_FC[_FUNC, but for C identifiers containing underscores.])dnl
 case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in
-  'lower case, no underscore, extra underscore' | \
-  'lower case, underscore, no extra underscore' | \
-  'lower case, underscore, extra underscore' | \
-  'upper case, no underscore, no extra underscore' | \
-  'upper case, no underscore, extra underscore' | \
-  'upper case, underscore, no extra underscore' | \
-  'upper case, underscore, extra underscore') ;;
+  "lower case, no underscore, no extra underscore")
+          AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name])
+          AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name]) ;;
+  "lower case, no underscore, extra underscore")
+          AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name])
+          AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name ## _]) ;;
+  "lower case, underscore, no extra underscore")
+          AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name ## _])
+          AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name ## _]) ;;
+  "lower case, underscore, extra underscore")
+          AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name ## _])
+          AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name ## __]) ;;
+  "upper case, no underscore, no extra underscore")
+          AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME])
+          AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME]) ;;
+  "upper case, no underscore, extra underscore")
+          AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME])
+          AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME ## _]) ;;
+  "upper case, underscore, no extra underscore")
+          AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME ## _])
+          AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME ## _]) ;;
+  "upper case, underscore, extra underscore")
+          AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME ## _])
+          AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME ## __]) ;;
   *)
           AC_MSG_WARN([unknown Fortran name-mangling scheme])
           ;;
 esac
-case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in #(
-  'upper case',*,)
-     AC_DEFINE(_AC_FC[_UPPER_CASE], 1,
-       [Define to 1 if upper case spelling should be used.]);;
-esac
-case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in #(
-  *,' underscore',*)
-     AC_DEFINE(_AC_FC[_UNDERSCORE], 1,
-       [Define to 1 if an underscore should be appended.]);;
-esac
-case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in #(
-  *,*,' extra underscore')
-     AC_DEFINE(_AC_FC[_EXTRA_UNDERSCORE], 1,
-       [Define to 1 if an extra underscore should be appended.]);;
-esac
-AH_VERBATIM(_AC_FC[_FUNC],
-[/* Define to 1 if upper case spelling should be used. */
-#undef ]_AC_FC[_UPPER_CASE
-
-/* Define to 1 if an underscore should be appended. */
-#undef ]_AC_FC[_UNDERSCORE
-
-/* Define to 1 if an extra underscore should be appended. */
-#undef ]_AC_FC[_EXTRA_UNDERSCORE
-
-/* Define to a macro mangling the given C identifier (in lower and upper
-   case), which must not contain underscores, for linking with Fortran.  */
-#ifdef ]_AC_FC[_UPPER_CASE
-# ifdef ]_AC_FC[_UNDERSCORE
-#  ifdef ]_AC_FC[_EXTRA_UNDERSCORE
-#   define ]_AC_FC[_FUNC(name, NAME)	NAME ## _
-#   define ]_AC_FC[_FUNC_(name, NAME)	NAME ## __
-#  else
-#   define ]_AC_FC[_FUNC(name, NAME)	NAME ## _
-#   define ]_AC_FC[_FUNC_(name, NAME)	NAME ## _
-#  endif
-# else
-#  ifdef ]_AC_FC[_EXTRA_UNDERSCORE
-#   define ]_AC_FC[_FUNC(name, NAME)	NAME
-#   define ]_AC_FC[_FUNC_(name, NAME)	NAME ## _
-#  else
-#   define ]_AC_FC[_FUNC(name, NAME)	NAME
-#   define ]_AC_FC[_FUNC_(name, NAME)	NAME
-#  endif
-# endif
-#else
-# ifdef ]_AC_FC[_UNDERSCORE
-#  ifdef ]_AC_FC[_EXTRA_UNDERSCORE
-#   define ]_AC_FC[_FUNC(name, NAME)	name ## _
-#   define ]_AC_FC[_FUNC_(name, NAME)	name ## __
-#  else
-#   define ]_AC_FC[_FUNC(name, NAME)	name ## _
-#   define ]_AC_FC[_FUNC_(name, NAME)	name ## _
-#  endif
-# else
-#  ifdef ]_AC_FC[_EXTRA_UNDERSCORE
-#   define ]_AC_FC[_FUNC(name, NAME)	name
-#   define ]_AC_FC[_FUNC_(name, NAME)	name ## _
-#  else
-#   define ]_AC_FC[_FUNC(name, NAME)	name
-#   define ]_AC_FC[_FUNC_(name, NAME)	name
-#  endif
-# endif
-#endif])
 ])# _AC_FC_WRAPPERS
 
 

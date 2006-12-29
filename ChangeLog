@@ -1,3 +1,14 @@
+2006-12-28  Steven G. Johnson  <stevenj@alum.mit.edu>
+
+	* lib/autoconf/general.m4 (AC_DEFINE_TRACE): Don't include
+	preprocessor macro arguments in traced name.
+	* doc/autoconf.texi (Defining symbols): Document longstanding
+	support for AC_DEFINE-ing macros with arguments, and document
+	behavior when the same variable has multiple AC_DEFINEs.
+	* lib/autoconf/fortran.m4 (_AC_FC_WRAPPERS): Revert to the
+	old implementation which AC_DEFINEs the FC_FUNC and FC_FUNC_
+	macros directly, giving much shorter and simpler code.
+
 2006-12-28  Malcolm Purvis <malcolmp@xemacs.org>  (trivial change)
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Insert a

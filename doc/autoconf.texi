@@ -8252,8 +8252,15 @@ output.
 @defmacx AC_DEFINE (@var{variable})
 @acindex{DEFINE}
 Define @var{variable} to @var{value} (verbatim), by defining a C
-object-like macro for @var{variable}.  @var{variable} should be a C
-identifier that contains only letters, digits, and underscores.
+preprocessor macro for @var{variable}.  @var{variable} should be a C
+identifier, optionally suffixed by a parenthesized argument list to
+define a C preprocessor macro with arguments.  The macro argument list,
+if present, should be a comma-separated list of C identifiers, possibly
+terminated by an ellipsis @samp{...} if C99 syntax is employed.
+@var{variable} should not contain comments, white space, trigraphs,
+backslash-newlines, universal character names, or non-@acronym{ASCII}
+characters.
+
 @var{value} should not contain literal newlines, and if you are not
 using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
 characters, as @command{make} tends to eat them.  To use a shell variable,
@@ -8276,6 +8283,10 @@ is obsolescent and may be withdrawn in future versions of Autoconf.
 
 If the @var{variable} is a literal string, it is passed to
 @code{m4_pattern_allow} (@pxref{Forbidden Patterns}).
+
+If multiple @code{AC_DEFINE} statements are executed for the same
+@var{variable} name (not counting any parenthesized argument list),
+the last one wins.
 @end defmac
 
 @defmac AC_DEFINE_UNQUOTED (@var{variable}, @var{value}, @ovar{description})

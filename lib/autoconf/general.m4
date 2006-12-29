@@ -1987,7 +1987,7 @@ m4_bmatch([$1], ^m4_defn([m4_re_word])$, [],
 # This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
 # out non literal symbols.
 m4_define([AC_DEFINE_TRACE],
-[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL([$1])])])
+[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL(m4_bpatsubst([[$1]], [(.*)]))])])
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
