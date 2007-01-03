@@ -1,5 +1,11 @@
 2007-01-02  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Integer Overflow): Revised based on today's
+	feedback.  The most important changes document what happens when
+	you convert an out-of-range value to a signed integer type, and
+	say that (sum < a) != (b < 0) reliably detects overflow when sum =
+	a + b.
+
 	* doc/autoconf.texi (Integer Overflow): Greatly expand and
 	rewrite, taking notions from the recent discussion on the gcc and
 	autoconf mailing lists; please see

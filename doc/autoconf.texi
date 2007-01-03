@@ -14954,12 +14954,12 @@ the programs work well enough in practice.
 @cindex signed integer overflow
 @cindex wraparound arithmetic
 
-Many portable C programs assume that signed integer overflow wraps
+In practice many portable C programs assume that signed integer overflow wraps
 around reliably using two's complement arithmetic.  Yet the C standard
 says that program behavior is undefined on overflow, and in a few cases
 C programs do not work on some modern implementations because their
-overflows do not wrap around as their authors intended.  Conversely, in
-at least one common case related to overflow, the C standard requires
+overflows do not wrap around as their authors expected.  Conversely, in
+signed integer remainder, the C standard requires overflow
 behavior that is commonly not implemented.
 
 @menu
@@ -14977,9 +14977,11 @@ behavior that is commonly not implemented.
 @cindex signed integer overflow
 @cindex wraparound arithmetic
 
-In languages like C, unsigned integer overflow reliably wraps around
-modulo the word size.  This is guaranteed by the C standard and is
-portable in practice, unless you specify aggressive optimization options
+In languages like C, unsigned integer overflow reliably wraps around;
+e.g., @code{UINT_MAX + 1} yields zero.
+This is guaranteed by the C standard and is
+portable in practice, unless you specify aggressive,
+nonstandard optimization options
 suitable only for special applications.
 
 In contrast, the C standard says that signed integer overflow leads to
@@ -14999,6 +15001,12 @@ platforms, with a few exceptions discussed later.
 For historical reasons the C standard also allows implementations with
 ones' complement or signed magnitude arithmetic, but it is safe to
 assume two's complement nowadays.
+
+Also, overflow can occur when converting an out-of-range value to a
+signed integer type.  Here a standard implementation must define what
+happens, but this might include raising an exception.  In practice all
+known implementations support silent wraparound in this case, so you need
+not worry about other possibilities.
 
 @node Signed Overflow Examples
 @subsection Examples of Code Assuming Wraparound Overflow
@@ -15038,7 +15046,7 @@ and generate code that allows superuser privileges unconditionally.
 Despite this requirement by the standard, it has long been common for C
 code to assume wraparound arithmetic after signed overflow, and all
 known practical C implementations support some C idioms that assume
-wraparound signed arithmetic, even if the idioms does not conform
+wraparound signed arithmetic, even if the idioms do not conform
 strictly to the standard.  If your code looks like the following
 examples it will almost surely work with real-world compilers.
 
@@ -15060,7 +15068,7 @@ signed overflow when computing the most negative integer (the @code{-n}
 overflows) or a value near an extreme integer (the first @code{+}
 overflows).
 
-Here is another example, taken from the 7th Edition implementation of
+Here is another example, derived from the 7th Edition implementation of
 @code{rand} (1979-01-10).  Here the programmer expects both
 multiplication and addition to wrap on overflow:
 
@@ -15186,7 +15194,7 @@ can convert them to unsigned integers, multiply the unsigned values,
 then test whether the result is in signed range.
 
 Rewriting code in this way will be inconvenient, though, particularly if
-the signed values might be negative.  Also, it will probably hurt
+the signed values might be negative.  Also, it may hurt
 performance.  Using unsigned arithmetic to check for overflow is
 particularly painful to do portably and efficiently when dealing with an
 integer type like @code{uid_t} whose width and signedness vary from
@@ -15197,6 +15205,10 @@ and typically it is not easy to find and remove all these assumptions.
 Hence it is often useful to maintain nonstandard code that assumes
 wraparound on overflow, instead of rewriting the code.  The rest of this
 section attempts to give practical advice for this situation.
+
+If your code wants to detect signed integer overflow in @code{sum = a +
+b}, it is generally safe to use an expression like @code{(sum < a) != (b
+< 0)}.
 
 If your code uses a signed loop index, make sure that the index cannot
 overflow, along with all signed expressions derived from the index.
@@ -15218,9 +15230,8 @@ transform the two comparisons in a way that is incompatible with the
 wraparound assumption.
 
 If your code uses an expression like @code{(i * 2000) / 1000} and you
-actually want the multiplication to wrap around reliably, put the
-product into a temporary variable and divide that by 1000.  This
-inhibits the algebraic optimization on many platforms.
+actually want the multiplication to wrap around, use unsigned arithmetic
+to do it, e.g., @code{((int) (i * 2000u)) / 1000}.
 
 If your code assumes wraparound behavior and you want to insulate it
 against any @acronym{GCC} optimizations that would fail to support that
