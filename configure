@@ -799,10 +799,11 @@ do
     expr "x$ac_useropt" : ".*[^-._$as_cr_alnum]" >/dev/null &&
       { $as_echo "$as_me: error: invalid feature name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
+    ac_useropt_orig=$ac_useropt
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
     case $ac_user_opts in
       *:enable_$ac_useropt:*) ;;
-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--disable-$ac_useropt"
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--disable-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
     eval enable_$ac_useropt=no ;;
@@ -823,10 +824,11 @@ do
     expr "x$ac_useropt" : ".*[^-._$as_cr_alnum]" >/dev/null &&
       { $as_echo "$as_me: error: invalid feature name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
+    ac_useropt_orig=$ac_useropt
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
     case $ac_user_opts in
       *:enable_$ac_useropt:*) ;;
-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--enable-$ac_useropt"
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--enable-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
     eval enable_$ac_useropt=\$ac_optarg ;;
@@ -1025,10 +1027,11 @@ do
     expr "x$ac_useropt" : ".*[^-._$as_cr_alnum]" >/dev/null &&
       { $as_echo "$as_me: error: invalid package name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
+    ac_useropt_orig=$ac_useropt
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
     case $ac_user_opts in
       *:with_$ac_useropt:*) ;;
-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--with-$ac_useropt"
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--with-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
     eval with_$ac_useropt=\$ac_optarg ;;
@@ -1039,10 +1042,11 @@ do
     expr "x$ac_useropt" : ".*[^-._$as_cr_alnum]" >/dev/null &&
       { $as_echo "$as_me: error: invalid package name: $ac_useropt" >&2
    { (exit 1); exit 1; }; }
+    ac_useropt_orig=$ac_useropt
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
     case $ac_user_opts in
       *:with_$ac_useropt:*) ;;
-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--without-$ac_useropt"
+      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--without-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
     eval with_$ac_useropt=no ;;
@@ -3497,7 +3501,7 @@ fi
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
 if \$ac_cs_recheck; then
-  set X '$SHELL' '$0'$ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
+  set X '$SHELL' '$0' $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
   shift
   \$as_echo "running CONFIG_SHELL=$SHELL \$*" >&6
   CONFIG_SHELL='$SHELL'

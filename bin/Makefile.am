@@ -1,6 +1,6 @@
 # Make Autoconf commands.
 
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
 # Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,9 @@ EXTRA_DIST = autoconf.as autoheader.in autoreconf.in autoupdate.in ifnames.in \
 # Files that should be removed, but which Automake does not know.
 MOSTLYCLEANFILES = $(bin_SCRIPTS) autoconf.in *.tmp
 
+# Get the release year from ../ChangeLog.
+RELEASE_YEAR = \
+  `sed 's/^\([0-9][0-9][0-9][0-9]\).*/\1/;q' $(top_srcdir)/ChangeLog`
 
 ## ------------- ##
 ## The scripts.  ##
@@ -46,6 +49,7 @@ edit = sed \
 	-e 's|@M4[@]|$(M4)|g' \
 	-e 's|@M4_DEBUGFILE[@]|$(M4_DEBUGFILE)|g' \
 	-e 's|@AWK[@]|$(AWK)|g' \
+	-e 's|@RELEASE_YEAR[@]|'$(RELEASE_YEAR)'|g' \
 	-e 's|@VERSION[@]|$(VERSION)|g' \
 	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \
 	-e 's|@configure_input[@]|Generated from $@.in; do not edit by hand.|g'

@@ -2,7 +2,7 @@ AS_INIT[]dnl                                            -*- shell-script -*-
 # autoconf -- create `configure' using m4 macros
 
 # Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003,
-# 2004, 2005, 2006 Free Software Foundation, Inc.
+# 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ Report bugs to <bug-autoconf@gnu.org>."]
 
 version=["\
 autoconf (@PACKAGE_NAME@) @VERSION@
-Copyright (C) 2006 Free Software Foundation, Inc.
+Copyright (C) @RELEASE_YEAR@ Free Software Foundation, Inc.
 This is free software.  You may redistribute copies of it under the terms of
 the GNU General Public License <http://www.gnu.org/licenses/gpl.html>.
 There is NO WARRANTY, to the extent permitted by law.
