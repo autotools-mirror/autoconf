@@ -15033,12 +15033,18 @@ overflow.  To take an extreme example:
 @example
 if (password == expected_password)
   allow_superuser_privileges ();
+else if (counter++ == INT_MAX)
+  abort ();
 else
-  printf ("%d password mismatches\n", counter++);
+  printf ("%d password mismatches\n", counter);
 @end example
 
 @noindent
-If @code{counter} is an @code{int} and a compiler can deduce that
+If the @code{int} variable @code{counter} equals @code{INT_MAX},
+@code{counter++} must overflow and the behavior is undefined, so the C
+standard allows the compiler to optimize away the test against
+@code{INT_MAX} and the @code{abort} call.
+Worse, if an earlier bug in the program lets the compiler deduce that
 @code{counter == INT_MAX} or that @code{counter} previously overflowed,
 the C standard allows the compiler to optimize away the password test
 and generate code that allows superuser privileges unconditionally.
@@ -15174,12 +15180,14 @@ for (j = 1; 0 < j; j *= 2)
 
 @noindent
 Here, the loop attempts to iterate through all powers of 2 that
-@code{int} can represent, but some test versions of @acronym{GCC}
-optimize away the comparison to zero and thus generate an infinite loop,
+@code{int} can represent, but the C standard allows a compiler to
+optimize away the comparison and generate an infinite loop,
 under the argument that behavior is undefined on overflow.  As of this
 writing this optimization is not done by any production version of
-@acronym{GCC} with @option{-O2}, but it might be performed by more
-aggressive @acronym{GCC} optimization options, or by other compilers.
+@acronym{GCC} with @option{-O2}, but it might be performed by other
+compilers, or by more aggressive @acronym{GCC} optimization options,
+and the @acronym{GCC} developers have not decided whether it will
+continue to work with @acronym{GCC} and @option{-O2}.
 
 @node Signed Overflow Advice
 @subsection Practical Advice for Signed Overflow Issues
@@ -15230,7 +15238,8 @@ transform the two comparisons in a way that is incompatible with the
 wraparound assumption.
 
 If your code uses an expression like @code{(i * 2000) / 1000} and you
-actually want the multiplication to wrap around, use unsigned arithmetic
+actually want the multiplication to wrap around on overflow, use
+unsigned arithmetic
 to do it, e.g., @code{((int) (i * 2000u)) / 1000}.
 
 If your code assumes wraparound behavior and you want to insulate it
@@ -15241,7 +15250,7 @@ remainder, as discussed in the next section).
 
 If you need to port to platforms where signed integer overflow does not
 reliably wrap around (e.g., due to hardware overflow checking, or to
-highly aggressive optimizations), you should consider using
+highly aggressive optimizations), you should consider debugging with
 @acronym{GCC}'s @option{-ftrapv} option, which causes signed overflow to
 raise an exception.
 

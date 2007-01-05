@@ -1,3 +1,16 @@
+2007-01-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix some wording problems noted by Paolo Bonzini in:
+	http://lists.gnu.org/archive/html/autoconf-patches/2007-01/msg00077.html
+	* doc/autoconf.texi (Signed Overflow Examples): Give more
+	discussion about the allow_superuser_privileges example,
+	and change it a bit to make things clearer.
+	(Optimization and Wraparound): Clarify whether the compiler
+	will generate an infinite loop for the example derived from
+	Autoconf's mktime test.
+	(Signed Overflow Advice): Say that -ftrapv is meant for debugging.
+	Also, clarify unsigned multiplication overflow.
+
 2007-01-04  Eric Blake  <ebb9@byu.net>
 
 	* bin/Makefile.am (RELEASE_YEAR): New macro.
