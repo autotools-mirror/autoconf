@@ -4515,7 +4515,7 @@ needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 @cvindex UMAX4_3
 @cvindex HAVE_NLIST_H
 @cvindex NLIST_NAME_UNION
-@cvindex GETLODAVG_PRIVILEGED
+@cvindex GETLOADAVG_PRIVILEGED
 @cvindex NEED_SETGID
 @cvindex C_GETLOADAVG
 @ovindex LIBOBJS
@@ -4563,7 +4563,7 @@ to @samp{true} (and otherwise to @samp{false}), and set
 program.
 @end enumerate
 
-The @code{AC_FUNC_GETLOADVG} macro is obsolescent.  New programs should
+The @code{AC_FUNC_GETLOADAVG} macro is obsolescent.  New programs should
 use Gnulib's @code{getloadavg} module.  @xref{Gnulib}.
 @end defmac
 
@@ -6617,7 +6617,7 @@ for (i = 0; i < n; i++)
 @acindex{C_VARARRAYS}
 @cvindex HAVE_C_VARARRAYS
 If the C compiler supports variable-length arrays, define
-@code{HAVE_C_VARRAYS}.  A variable-length array is an array of automatic
+@code{HAVE_C_VARARRAYS}.  A variable-length array is an array of automatic
 storage duration whose length is determined at run time, when the array
 is declared.
 @end defmac
@@ -6749,10 +6749,10 @@ compiler (@option{-O2} on systems where @command{gcc} does not accept
 @option{-g}), or @option{-g} for other compilers.
 @end defmac
 
-@defmac AC_PROG_OBJCCPP
-@acindex{PROG_OBJCCPP}
-@ovindex OBJCCPP
-Set output variable @code{OBJCCPP} to a command that runs the Objective C
+@defmac AC_PROG_OBJCPP
+@acindex{PROG_OBJCPP}
+@ovindex OBJCPP
+Set output variable @code{OBJCPP} to a command that runs the Objective C
 preprocessor.  If @samp{$OBJC -E} doesn't work, @file{/lib/cpp} is used.
 @end defmac
 
@@ -7500,7 +7500,7 @@ Do compilation tests using @code{CC} and @code{CPP} and use extension
 @item C++
 Do compilation tests using @code{CXX} and @code{CXXCPP} and use
 extension @file{.C} for test programs.  Use compilation flags:
-@code{CPPFLAGS} with @code{CXXPP}, and both @code{CPPFLAGS} and
+@code{CPPFLAGS} with @code{CXXCPP}, and both @code{CPPFLAGS} and
 @code{CXXFLAGS} with @code{CXX}.
 
 @item Fortran 77
@@ -7520,7 +7520,7 @@ Compile and execute tests using @code{ERLC} and @code{ERL} and use extension
 @file{.erl} for test Erlang modules.  Use compilation flags: @code{ERLCFLAGS}.
 
 @item Objective C
-Do compilation tests using @code{OBJC} and @code{OBJCCPP} and use
+Do compilation tests using @code{OBJC} and @code{OBJCPP} and use
 extension @file{.m} for test programs.  Use compilation flags:
 @code{CPPFLAGS} with @code{OBJCPP}, and both @code{CPPFLAGS} and
 @code{OBJCFLAGS} with @code{OBJC}.
@@ -11724,7 +11724,7 @@ $ @kbd{test -z "`cd /`" && pwd}
 The result of @samp{foo=`exit 1`} is left as an exercise to the reader.
 
 The MSYS shell leaves a stray byte in the expansion of a double-quoted
-command substitution of a native program, if the end of the substution
+command substitution of a native program, if the end of the substitution
 is not aligned with the end of the double quote.  This may be worked
 around by inserting another pair of quotes:
 
@@ -13743,7 +13743,7 @@ Similarly, @samp{\+} and @samp{\?} should be avoided.
 
 Anchors (@samp{^} and @samp{$}) inside groups are not portable.
 
-Nested parenthesization in patterns (e.g., @samp{\(\(a*\)b*)\)}) is
+Nested parentheses in patterns (e.g., @samp{\(\(a*\)b*)\)}) are
 quite portable to current hosts, but was not supported by some ancient
 @command{sed} implementations like SVR3.
 
@@ -14520,7 +14520,7 @@ install-HEADERS: $(HEADERS)
         done
 @end example
 
-Now, @code{headers='$(HEADERS)'} macroexpands to:
+Now, @code{headers='$(HEADERS)'} macro-expands to:
 
 @example
 headers='f.h g.h h.h'
@@ -18107,7 +18107,7 @@ When used with Automake 1.10 or newer, a suitable value for
 can be referenced from any @file{Makefile.am}.  Even without Automake,
 arranging for @code{LIBOBJDIR} to be set correctly enables
 referencing @code{LIBOBJS} and @code{LTLIBOBJS} in another directory.
-The @code{LIBOJBDIR} feature is experimental.
+The @code{LIBOBJDIR} feature is experimental.
 
 
 @node AC_FOO_IFELSE vs AC_TRY_FOO
@@ -19505,7 +19505,7 @@ introduced in this document.
 @c  LocalWords:  PowerPC GNUC libPW pragma Olibcalls CHOWN chown CLOSEDIR VFORK
 @c  LocalWords:  closedir FNMATCH fnmatch vfork FSEEKO LARGEFILE fseeko SVR sc
 @c  LocalWords:  largefile GETGROUPS getgroups GETLOADAVG DGUX UMAX NLIST KMEM
-@c  LocalWords:  GETLODAVG SETGID getloadavg nlist GETMNTENT irix
+@c  LocalWords:  SETGID getloadavg nlist GETMNTENT irix
 @c  LocalWords:  getmntent UnixWare GETPGRP getpgid getpgrp Posix's pid LSTAT
 @c  LocalWords:  lstat rpl MEMCMP memcmp OpenStep MBRTOWC mbrtowc MKTIME mktime
 @c  LocalWords:  localtime MMAP mmap OBSTACK obstack obstacks ARGTYPES timeval
@@ -19514,13 +19514,13 @@ introduced in this document.
 @c  LocalWords:  DOPRNT vprintf doprnt sp unfixable LIBSOURCE LIBSOURCES Eggert
 @c  LocalWords:  linux netinet ia Tru XFree DIRENT NDIR dirent ndir multitable
 @c  LocalWords:  NAMLEN strlen namlen MKDEV SYSMACROS makedev RESOLV resolv DNS
-@c  LocalWords:  inet structs NAMESER arpa NETDB netdb UTekV UTS autom GCC's kB
+@c  LocalWords:  inet structs NAMESER arpa NETDB netdb UTekV UTS GCC's kB
 @c  LocalWords:  STDBOOL BOOL stdbool conformant cplusplus bool Bool stdarg tm
 @c  LocalWords:  ctype strchr strrchr rindex bcopy memmove memchr WEXITSTATUS
 @c  LocalWords:  WIFEXITED TIOCGWINSZ GWINSZ termios preprocess preprocessable
 @c  LocalWords:  DECLS strdup calloc BLKSIZE blksize RDEV rdev TZNAME tzname pw
 @c  LocalWords:  passwd gecos pwd MBSTATE mbstate wchar RETSIGTYPE hup UID uid
-@c  LocalWords:  gid ptrdiff uintmax EXEEXT OBJEXT Ae Onolimit conftest AXP str
+@c  LocalWords:  gid ptrdiff uintmax EXEEXT OBJEXT Ae conftest AXP str
 @c  LocalWords:  ALIGNOF WERROR Werror cpp HP's WorkShop egcs un fied stdc CXX
 @c  LocalWords:  varargs BIGENDIAN Endianness SPARC endianness grep'ed CONST FC
 @c  LocalWords:  const STRINGIZE stringizing PARAMS unprotoize protos KCC cxx
@@ -19540,9 +19540,9 @@ introduced in this document.
 @c  LocalWords:  CDPATH DUALCASE LINENO prepass Subshells lineno NULLCMD cmp wc
 @c  LocalWords:  MAILPATH scanset arg NetBSD Almquist printf expr cp
 @c  LocalWords:  Oliva awk Aaaaarg cmd regex xfoo GNV OpenVMS VM
-@c  LocalWords:  sparc Proulx SysV nbar nfoo maxdepth acdilrtu TWG mc
+@c  LocalWords:  sparc Proulx nbar nfoo maxdepth acdilrtu TWG mc
 @c  LocalWords:  mkdir exe uname OpenBSD Fileutils mktemp umask TMPDIR guid os
-@c  LocalWords:  fooXXXXXX Unicos parenthesization utimes hpux hppa unescaped
+@c  LocalWords:  fooXXXXXX Unicos utimes hpux hppa unescaped
 @c  LocalWords:  pmake DOS's gmake ifoo DESTDIR autoconfiscated pc coff mips gg
 @c  LocalWords:  dec ultrix cpu wildcards rpcc rdtsc powerpc readline
 @c  LocalWords:  withval vxworks gless localcache usr LOFF loff CYGWIN Cygwin
@@ -19557,7 +19557,7 @@ introduced in this document.
 @c  LocalWords:  autoconfiscate Savoye Haertel Avera Meyering fdl appendixsec
 @c  LocalWords:  printindex american LIBOBJDIR LibdirTest ERLCFLAGS OBJCFLAGS
 @c  LocalWords:  VER Gnulib online xyes strcpy TYPEOF typeof OBJC objcc objc ln
-@c  LocalWords:  GOBJC OBJCCPP OTP ERLC erl valloc decr dumpdef errprint incr
+@c  LocalWords:  GOBJC OTP ERLC erl valloc decr dumpdef errprint incr
 @c  LocalWords:  esyscmd len maketemp pushdef substr syscmd sysval translit txt
 @c  LocalWords:  sinclude foreach myvar tolower toupper uniq BASENAME STDIN
 @c  LocalWords:  Dynix descrips basename aname cname macroexpands xno xcheck
