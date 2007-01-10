@@ -409,7 +409,10 @@ m4_divert_pop([DEFAULTS])dnl
 m4_wrap([m4_divert_text([DEFAULTS],
 [ac_subst_vars='m4_ifdef([_AC_SUBST_VARS],  [m4_defn([_AC_SUBST_VARS])])'
 ac_subst_files='m4_ifdef([_AC_SUBST_FILES], [m4_defn([_AC_SUBST_FILES])])'
-ac_user_opts=':enable_option_checking:m4_ifdef([_AC_USER_OPTS], [m4_defn([_AC_USER_OPTS]):])'
+ac_user_opts='
+enable_option_checking
+m4_ifdef([_AC_USER_OPTS], [m4_defn([_AC_USER_OPTS])
+])'
 m4_ifdef([_AC_PRECIOUS_VARS],
   [_AC_ARG_VAR_STORE[]dnl
    _AC_ARG_VAR_VALIDATE[]dnl
@@ -960,7 +963,9 @@ m4_define([_AC_INIT_PARSE_ENABLE2],
     ac_useropt_orig=$ac_useropt
     ac_useropt=`AS_ECHO(["$ac_useropt"]) | sed 's/[[-.]]/_/g'`
     case $ac_user_opts in
-      *:$2_$ac_useropt:*) ;;
+      *"
+"$2_$ac_useropt"
+"*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--$1-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
@@ -1391,7 +1396,8 @@ _AC_ENABLE_IF_ACTION([$1], m4_translit([$2], [-.], [__]), [$3], [$4])[]dnl
 ])
 
 m4_define([_AC_ENABLE_IF_ACTION],
-[m4_append_uniq([_AC_USER_OPTS], [$1_$2], [:])dnl
+[m4_append_uniq([_AC_USER_OPTS], [$1_$2], [
+])dnl
 AS_IF([test "${$1_$2+set}" = set], [$1val=$$1_$2; $3], [$4])dnl
 ])
 

@@ -1,3 +1,9 @@
+2007-01-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Use newlines to
+	separate items of `ac_user_opts', to avoid long lines.
+	(_AC_INIT_PARSE_ENABLE2, _AC_ENABLE_IF_ACTION): Adjust.
+
 2007-01-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi: Fix some typos.
