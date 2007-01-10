@@ -683,7 +683,10 @@ SED
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
-ac_user_opts=':enable_option_checking:with_lispdir:'
+ac_user_opts='
+enable_option_checking
+with_lispdir
+'
       ac_precious_vars='build_alias
 host_alias
 target_alias
@@ -802,7 +805,9 @@ do
     ac_useropt_orig=$ac_useropt
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
     case $ac_user_opts in
-      *:enable_$ac_useropt:*) ;;
+      *"
+"enable_$ac_useropt"
+"*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--disable-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
@@ -827,7 +832,9 @@ do
     ac_useropt_orig=$ac_useropt
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
     case $ac_user_opts in
-      *:enable_$ac_useropt:*) ;;
+      *"
+"enable_$ac_useropt"
+"*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--enable-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
@@ -1030,7 +1037,9 @@ do
     ac_useropt_orig=$ac_useropt
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
     case $ac_user_opts in
-      *:with_$ac_useropt:*) ;;
+      *"
+"with_$ac_useropt"
+"*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--with-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
@@ -1045,7 +1054,9 @@ do
     ac_useropt_orig=$ac_useropt
     ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-.]/_/g'`
     case $ac_user_opts in
-      *:with_$ac_useropt:*) ;;
+      *"
+"with_$ac_useropt"
+"*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--without-$ac_useropt_orig"
          ac_unrecognized_sep=', ';;
     esac
