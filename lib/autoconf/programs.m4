@@ -859,7 +859,7 @@ AC_DEFUN([AC_PROG_SED],
      for ac_i in 1 2 3 4 5 6 7; do
        ac_script="$ac_script$as_nl$ac_script"
      done
-     echo "$ac_script" | sed 99q >conftest.sed
+     echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
      $as_unset ac_script || ac_script=
      _AC_PATH_PROG_FEATURE_CHECK(SED, [sed gsed],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_SED], [ac_cv_path_SED],

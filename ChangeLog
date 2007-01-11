@@ -1,3 +1,11 @@
+2007-01-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/programs.m4 (AC_PROG_SED): When closing a pipe
+	early on the reader side, drop stderr of the input to avoid
+	`broken pipe' error output; this may happen even with shell
+	builtin `echo' of some bash versions.  Reports by Ian Macdonald
+	<iamacdo@telkomsa.net> and Sam Sexton <Sam.Sexton@reuters.com>.
+
 2007-01-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Use newlines to
