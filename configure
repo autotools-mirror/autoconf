@@ -2850,7 +2850,7 @@ else
      for ac_i in 1 2 3 4 5 6 7; do
        ac_script="$ac_script$as_nl$ac_script"
      done
-     echo "$ac_script" | sed 99q >conftest.sed
+     echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
      $as_unset ac_script || ac_script=
      # Extract the first word of "sed gsed" to use in msg output
 if test -z "$SED"; then
