@@ -213,7 +213,7 @@ published by the Free Software Foundation raise funds for
 * autoscan: (autoconf)autoscan Invocation.
                                 Semi-automatic @file{configure.ac} writing
 * ifnames: (autoconf)ifnames Invocation.        Listing conditionals in source.
-* autoconf: (autoconf)autoconf Invocation.
+* autoconf invocation: (autoconf)autoconf Invocation.
                                 How to create configuration scripts
 * autoreconf: (autoconf)autoreconf Invocation.
                                 Remaking multiple @command{configure} scripts
