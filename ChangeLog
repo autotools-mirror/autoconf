@@ -1,3 +1,14 @@
+2007-01-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Setting Output Variables): Mention that
+	all non-NUL characters are ok in substituted values.
+	* lib/autoconf/status.m4 (_AC_SED_CMD_LIMIT): Fix comment typo.
+	(_AC_OUTPUT_FILES_PREPARE): Test and use backslash escaping of
+	carriage return for $AWK, needed for BSD awk.
+	* tests/torture.at (Substitute and define special characters):
+	Test all 8 bit non-NUL characters.
+	Report against Automake by Patrick Welche.
+
 2007-01-15  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Specifying Names): `--host' does not

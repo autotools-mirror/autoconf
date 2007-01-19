@@ -632,18 +632,35 @@ AT_DATA([File],
 [@foo@@bar@
 ])
 
+AT_DATA([Zardoz.in], [@zardoz@
+])
+
 AT_CONFIGURE_AC(
 [[foo="AS@&t@_ESCAPE([[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !]])"
 bar="@foo@ @baz@"
 baz=bla
+( for i in 0 1 2 3; do
+    for j in 0 1 2 3 4 5 6 7; do
+      for k in 0 1 2 3 4 5 6 7; do
+	case $i$j$k in #(
+	000) ;; #(
+	*) printf \\$i$j$k ;;
+	esac
+      done
+    done
+  done
+  printf \\n
+) >allowed-chars
+zardoz=`cat allowed-chars`
 AC_SUBST([foo])
 AC_SUBST([bar])
 AC_SUBST([baz])
+AC_SUBST([zardoz])
 file=File
 AC_SUBST_FILE([file])
 AC_DEFINE([foo], [[X*'[]+ ",& &`\($foo !]], [Awful value.])
 AC_PROG_AWK
-AC_CONFIG_FILES([Foo])]])
+AC_CONFIG_FILES([Foo Zardoz])]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER
@@ -663,6 +680,7 @@ abc@bar blabla
 X@file@
 @file@X
 ]])
+  AT_CHECK([cmp allowed-chars Zardoz])
   AT_CHECK_DEFINES([[#define foo X*'[]+ ",& &`\($foo !
 ]])
 done

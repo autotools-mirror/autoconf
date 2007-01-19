@@ -313,7 +313,7 @@ dnl One cannot portably go further than 99 commands because of HP-UX.
 
 # _AC_AWK_LITERAL_LIMIT
 # ---------------------
-# Evaluate the maximum number of characters to put in an awk
+# Evaluate to the maximum number of characters to put in an awk
 # string literal, not counting escape characters.
 #
 # Some awk's have small limits, such as Solaris and AIX awk.
@@ -362,7 +362,9 @@ else
       print "cat " F[key]
       '$ac_cs_awk_pipe_init
   ac_cs_awk_pipe_fini='END { print "|#_!!_#|" }'
-fi]])dnl
+fi]])
+ac_cs_awk_cr=`$AWK 'BEGIN { print "ab" }' 2>/dev/null`
+if test "$ac_cs_awk_cr" = 'ab'; then ac_cs_awk_cr=; else ac_cs_awk_cr='\\'; fi
 dnl
 dnl Define the pipe that does the substitution.
 m4_ifdef([_AC_SUBST_FILES],
@@ -375,14 +377,14 @@ fi])],
 [m4_define([_AC_SUBST_CMDS],
 [| $AWK -f "$tmp/subs.awk"])])dnl
 
-echo 'BEGIN {' >"$tmp/subs.awk"
+echo 'BEGIN {' >"$tmp/subs1.awk"
 _ACEOF
 
 m4_ifdef([_AC_SUBST_FILES],
 [# Create commands to substitute file output variables.
 {
   echo "cat >>$CONFIG_STATUS <<_ACEOF"
-  echo 'cat >>"\$tmp/subs.awk" <<\CEOF'
+  echo 'cat >>"\$tmp/subs1.awk" <<\CEOF'
   echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/'
   echo "CEOF"
   echo "_ACEOF"
@@ -439,7 +441,7 @@ dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
 [cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs.awk" <<\CEOF
+cat >>"\$tmp/subs1.awk" <<\CEOF
 _ACEOF
 sed -n '
 h
@@ -487,7 +489,7 @@ t delim
 rm -f conf$$subs.awk
 cat >>$CONFIG_STATUS <<_ACEOF
 CEOF
-cat >>"\$tmp/subs.awk" <<CEOF
+cat >>"\$tmp/subs1.awk" <<CEOF
   for (key in S) S_is_set[key] = 1
   FS = ""
 ]m4_ifdef([_AC_SUBST_FILES],
@@ -522,6 +524,7 @@ cat >>"\$tmp/subs.awk" <<CEOF
 ]m4_ifdef([_AC_SUBST_FILES],
 [\$ac_cs_awk_pipe_fini])[
 CEOF
+sed "s,$,,; s,,\$ac_cs_awk_cr&,g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
 _ACEOF
 ]dnl end of double-quoted part
 

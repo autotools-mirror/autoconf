@@ -8354,7 +8354,8 @@ substitute the variable @var{variable} into output files (typically one
 or more makefiles).  This means that @code{AC_OUTPUT}
 replaces instances of @samp{@@@var{variable}@@} in input files with the
 value that the shell variable @var{variable} has when @code{AC_OUTPUT}
-is called.  The value can contain newlines.
+is called.  The value can contain any non-@code{NUL} character, including
+newline.
 Variable occurrences should not overlap: e.g., an input file should
 not contain @samp{@@@var{var1}@@@var{var2}@@} if @var{var1} and @var{var2}
 are variable names.
