@@ -3607,7 +3607,10 @@ $debug ||
 if test -n "$CONFIG_FILES"; then
 
 
-echo 'BEGIN {' >"$tmp/subs.awk"
+ac_cs_awk_cr=`$AWK 'BEGIN { print "ab" }' 2>/dev/null`
+if test "$ac_cs_awk_cr" = 'ab'; then ac_cs_awk_cr=; else ac_cs_awk_cr='\\'; fi
+
+echo 'BEGIN {' >"$tmp/subs1.awk"
 _ACEOF
 
 
@@ -3634,7 +3637,7 @@ done
 rm -f conf$$subs.sh
 
 cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs.awk" <<\CEOF
+cat >>"\$tmp/subs1.awk" <<\CEOF
 _ACEOF
 sed -n '
 h
@@ -3682,7 +3685,7 @@ t delim
 rm -f conf$$subs.awk
 cat >>$CONFIG_STATUS <<_ACEOF
 CEOF
-cat >>"\$tmp/subs.awk" <<CEOF
+cat >>"\$tmp/subs1.awk" <<CEOF
   for (key in S) S_is_set[key] = 1
   FS = ""
 
@@ -3708,6 +3711,7 @@ cat >>"\$tmp/subs.awk" <<CEOF
 }
 
 CEOF
+sed "s,$,,; s,,\$ac_cs_awk_cr&,g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
 _ACEOF
 
 # VPATH may cause trouble with some makes, so we remove $(srcdir),
