@@ -1,3 +1,9 @@
+2007-01-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (File System Conventions): Mention that
+	$PATH_SEPARATOR is for the build system only.
+	Report by Keith Marshall.
+
 2007-01-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Setting Output Variables): Mention that

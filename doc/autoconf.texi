@@ -11399,7 +11399,8 @@ first character (@pxref{Limitations of Builtins}).
 Also, because the colon is used as part of a drivespec, these systems don't
 use it as path separator.  When creating or accessing paths, you can use the
 @code{PATH_SEPARATOR} output variable instead.  @command{configure} sets this
-to the appropriate value (@samp{:} or @samp{;}) when it starts up.
+to the appropriate value for the build system (@samp{:} or @samp{;}) when it
+starts up.
 
 File names need extra care as well.  While @acronym{DOS} variants
 that are Posixy enough to run @command{autoconf} (such as @acronym{DJGPP})
