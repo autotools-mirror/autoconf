@@ -682,8 +682,12 @@ if test -z "$MKDIR_P"; then
     MKDIR_P="$ac_install_sh -d"
   fi
 fi
-dnl Do special magic for MKDIR_P instead of AC_SUBST, to get
-dnl relative names right.
+dnl status.m4 does special magic for MKDIR_P instead of AC_SUBST,
+dnl to get relative names right.  However, also AC_SUBST here so
+dnl that Automake versions before 1.10 will pick it up (they do not
+dnl trace AC_SUBST_TRACE).
+dnl FIXME: Remove this once we drop support for Automake < 1.10.
+AC_SUBST([MKDIR_P])dnl
 AC_MSG_RESULT([$MKDIR_P])
 ])# AC_PROG_MKDIR_P
 

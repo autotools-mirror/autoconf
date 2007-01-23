@@ -1,5 +1,11 @@
 2007-01-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Also
+	AC_SUBST([MKDIR_P]), so that Automake < 1.10 will pick up its
+	trace, if a package uses AC_PROG_MKDIR_P explicitly.  The actual
+	substitution will still be done by the special code.
+	Report by Jim Meyering.
+
 	* doc/autoconf.texi (File System Conventions): Mention that
 	$PATH_SEPARATOR is for the build system only.
 	Report by Keith Marshall.
