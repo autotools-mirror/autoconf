@@ -1,3 +1,12 @@
+2007-01-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Shellology): pdksh 5.2.14 is still the
+	latest version.
+	(Shell Substitutions): Note problems with @{var:=value} etc.
+	Add a new section for problems with @{#var} etc.  Problem noted
+	by Ralf Wildenhues.  See:
+	http://lists.gnu.org/archive/html/libtool-patches/2005-01/msg00157.html
+
 2007-01-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Also

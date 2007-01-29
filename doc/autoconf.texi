@@ -11063,7 +11063,7 @@ available: it has most of the @samp{ksh88} features along with a few of
 its own.  It usually sets @code{KSH_VERSION}, except if invoked as
 @command{/bin/sh} on Open@acronym{BSD}, and similarly to Bash you can require
 Posix compatibility by running @samp{set -o posix}.  Unfortunately, with
-@command{pdksh} 5.2.14 (the latest stable version as of February 2006)
+@command{pdksh} 5.2.14 (the latest stable version as of January 2007)
 Posix mode is buggy and causes @command{pdksh} to depart from Posix in
 at least one respect:
 
@@ -11596,6 +11596,7 @@ bad substitution
 @c @cindex $@{@var{var}:-@var{value}@}
 Old @acronym{BSD} shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
+Similarly for $@{@var{var}:=@var{value}@}, $@{@var{var}:?@var{value}@}, etc.
 
 @item $@{@var{var}=@var{literal}@}
 @cindex $@{@var{var}=@var{literal}@}
@@ -11699,6 +11700,24 @@ use:
 test "$@{var+set@}" = set || var=@var{@{value@}}
 @end example
 
+@item $@{#@var{var}@}
+@itemx $@{@var{var}%@var{word}@}
+@itemx $@{@var{var}%%@var{word}@}
+@itemx $@{@var{var}#@var{word}@}
+@itemx $@{@var{var}##@var{word}@}
+@cindex $@{#@var{var}@}
+@cindex $@{@var{var}%@var{word}@}
+@cindex $@{@var{var}%%@var{word}@}
+@cindex $@{@var{var}#@var{word}@}
+@cindex $@{@var{var}##@var{word}@}
+Posix requires support for these usages, but they do not work with many
+traditional shells, e.g., Solaris 10 @command{/bin/sh}.
+
+Also, @command{pdksh} 5.2.14 mishandles some @var{word} forms.  For
+example if @samp{$1} is @samp{a/b} and @samp{$2} is @samp{a}, then
+@samp{$@{1#$2@}} should yield @samp{/b}, but with @command{pdksh} it
+yields the empty string.
+
 
 @item `@var{commands}`
 @cindex `@var{commands}`
@@ -11749,7 +11768,7 @@ releases of Solaris don't support it:
 
 @example
 $ @kbd{showrev -c /bin/sh | grep version}
-Command version: SunOS 5.10 Generic 121004-01 Oct 2005
+Command version: SunOS 5.10 Generic 121005-03 Oct 2006
 $ @kbd{echo $(echo blah)}
 syntax error: `(' unexpected
 @end example
