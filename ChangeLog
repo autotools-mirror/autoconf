@@ -1,5 +1,7 @@
 2007-02-02  Eric Blake  <ebb9@byu.net>
 
+	* NEWS: Update copyright.
+
 	* m4/m4.m4 (AC_PROG_GNU_M4): Reject M4 1.4 through 1.4.4 as
 	broken.
 	* configure.ac: Update error message.
