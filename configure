@@ -660,6 +660,7 @@ MAKEINFO
 install_sh
 STRIP
 INSTALL_STRIP_PROGRAM
+MKDIR_P
 mkdir_p
 AWK
 SET_MAKE
@@ -2382,16 +2383,15 @@ fi
 done
 test -n "$M4" || M4="m4"
 
-{ $as_echo "$as_me:$LINENO: checking whether m4 supports frozen files" >&5
-$as_echo_n "checking whether m4 supports frozen files... " >&6; }
+{ $as_echo "$as_me:$LINENO: checking whether m4 supports accurate traces" >&5
+$as_echo_n "checking whether m4 supports accurate traces... " >&6; }
 if test "${ac_cv_prog_gnu_m4+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
   ac_cv_prog_gnu_m4=no
-if test x"$M4" != x; then
-  case `$M4 --help < /dev/null 2>&1` in
-    *reload-state*) ac_cv_prog_gnu_m4=yes ;;
-  esac
+if test x"$M4" != x \
+    && test -z "`echo if'def(mac,bug)d'nl | $M4 --trace=mac 2>&1`" ; then
+  ac_cv_prog_gnu_m4=yes
 fi
 fi
 { $as_echo "$as_me:$LINENO: result: $ac_cv_prog_gnu_m4" >&5
@@ -2414,8 +2414,8 @@ $as_echo "$ac_cv_prog_gnu_m4_debugfile" >&6; }
 fi
 
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  { { $as_echo "$as_me:$LINENO: error: GNU M4 1.4 is required" >&5
-$as_echo "$as_me: error: GNU M4 1.4 is required" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: GNU M4 1.4.5 or later is required; 1.4.8 is recommended" >&5
+$as_echo "$as_me: error: GNU M4 1.4.5 or later is required; 1.4.8 is recommended" >&2;}
    { (exit 1); exit 1; }; }
 fi
 

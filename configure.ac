@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 # Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002, 2003,
-# 2004, 2005, 2006 Free Software Foundation, Inc.
+# 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ AC_PATH_PROG([EXPR], [expr])
 # autoheader scripts.
 AC_PROG_GNU_M4
 if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  AC_MSG_ERROR([GNU M4 1.4 is required])
+  AC_MSG_ERROR([GNU M4 1.4.5 or later is required; 1.4.8 is recommended])
 fi
 
 ## ----------- ##
