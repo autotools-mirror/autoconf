@@ -690,9 +690,11 @@ for more information.
 Autoconf imposes some restrictions on the names of macros used with
 @code{#if} in C programs (@pxref{Preprocessor Symbol Index}).
 
-Autoconf requires @acronym{GNU} M4 in order to generate the scripts.  It uses
-features that some versions of M4, including @acronym{GNU} M4 1.3,
-do not have.  You should use version 1.4.7 or later of @acronym{GNU} M4.
+Autoconf requires @acronym{GNU} M4 version 1.4.5 or later in order to
+generate the scripts.  It uses features that some versions of M4,
+including @acronym{GNU} M4 1.3, do not have.  Autoconf works better
+with @acronym{GNU} M4 version 1.4.8 or later, though this is not
+required.
 
 @xref{Autoconf 1}, for information about upgrading from version 1.
 @xref{History}, for the story of Autoconf's development.  @xref{FAQ},
@@ -18838,7 +18840,7 @@ __file__
 __line__
 @end example
 
-Autoconf requires version 1.4.7 or later of @acronym{GNU} M4.
+Autoconf requires version 1.4.5 or later of @acronym{GNU} M4.
 
 Since only software maintainers need to use Autoconf, and since @acronym{GNU}
 M4 is simple to configure and install, it seems reasonable to require
