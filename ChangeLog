@@ -1,3 +1,10 @@
+2007-02-06  Ralf Menzel  <menzel@ls6.cs.uni-dortmund.de>  (tiny change)
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Redirect
+	input from /dev/null in awk test, so even Solaris /usr/bin/awk
+	will not wait for input with a script containing only a BEGIN
+	rule.
+
 2007-02-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Introduction, Why GNU M4): Clarify M4 version

@@ -363,7 +363,7 @@ else
       '$ac_cs_awk_pipe_init
   ac_cs_awk_pipe_fini='END { print "|#_!!_#|" }'
 fi]])
-ac_cs_awk_cr=`$AWK 'BEGIN { print "ab" }' 2>/dev/null`
+ac_cs_awk_cr=`$AWK 'BEGIN { print "ab" }' 2>/dev/null </dev/null`
 if test "$ac_cs_awk_cr" = 'ab'; then ac_cs_awk_cr=; else ac_cs_awk_cr='\\'; fi
 dnl
 dnl Define the pipe that does the substitution.
