@@ -12636,14 +12636,21 @@ fi
 @c ------------------
 @prindex @command{printf}
 A format string starting with a @samp{-} can cause problems.
-Bash (e.g., 2.05b) interprets it as an options argument and
+Bash interprets it as an option and
 gives an error.  And @samp{--} to mark the end of options is not good
 in the Net@acronym{BSD} Almquist shell (e.g., 0.4.6) which takes that
 literally as the format string.  Putting the @samp{-} in a @samp{%c}
-or @samp{%s} is probably the easiest way to avoid doubt,
+or @samp{%s} is probably easiest:
 
 @example
 printf %s -foo
+@end example
+
+Bash 2.03 mishandles an escape sequence that happens to evaluate to @samp{%}:
+
+@example
+$ @kbd{printf '\045'}
+bash: printf: `%': missing format character
 @end example
 
 
@@ -13007,6 +13014,17 @@ gawk: cmd. line:2:                      ^ parse error
 $ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
         BEGIN @{ die() @}'}
 Aaaaarg!
+@end example
+
+Posix says that if a program contains only @samp{BEGIN} actions, and
+contains no instances of @code{getline}, then the program merely
+executes the actions without reading input.  However, traditional Awk
+implementations (such as Solaris 10 @command{awk}) read and discard
+input in this case.  Portable scripts can redirect input from
+@file{/dev/null} to work around the problem.  For example:
+
+@example
+awk 'BEGIN @{print "hello world"@}' </dev/null
 @end example
 
 If you want your program to be deterministic, don't depend on @code{for}

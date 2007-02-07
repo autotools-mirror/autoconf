@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterizing and creating config.status.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -363,8 +363,13 @@ else
       '$ac_cs_awk_pipe_init
   ac_cs_awk_pipe_fini='END { print "|#_!!_#|" }'
 fi]])
-ac_cs_awk_cr=`$AWK 'BEGIN { print "ab" }' 2>/dev/null </dev/null`
-if test "$ac_cs_awk_cr" = 'ab'; then ac_cs_awk_cr=; else ac_cs_awk_cr='\\'; fi
+ac_cr=''
+ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
+if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
+  ac_cs_awk_cr='\\r'
+else
+  ac_cs_awk_cr=$ac_cr
+fi
 dnl
 dnl Define the pipe that does the substitution.
 m4_ifdef([_AC_SUBST_FILES],
@@ -524,7 +529,7 @@ cat >>"\$tmp/subs1.awk" <<CEOF
 ]m4_ifdef([_AC_SUBST_FILES],
 [\$ac_cs_awk_pipe_fini])[
 CEOF
-sed "s,$,,; s,,\$ac_cs_awk_cr&,g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
+sed 's/$ac_cr\$//; s/$ac_cr/$ac_cs_awk_cr/g' < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
 _ACEOF
 ]dnl end of double-quoted part
 
