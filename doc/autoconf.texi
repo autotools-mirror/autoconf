@@ -11896,9 +11896,13 @@ for the rationale.
 @section Parentheses in Shell Scripts
 @cindex Shell parentheses
 
-Beware of two opening parentheses in a row, as some shell
-implementations mishandle them.  For example, @samp{pdksh} 5.2.14
-misparses the following code:
+Beware of two opening parentheses in a row, as many shell
+implementations treat them specially.  Posix requires that the command
+@samp{((cat))} must behave like @samp{(cat)}, but many shells, including
+Bash and the Korn shell, treat @samp{((cat))} as an arithmetic
+expression equivalent to @samp{let "cat"}, and may or may not report an
+error when they detect that @samp{cat} is not a number.  As another
+example, @samp{pdksh} 5.2.14 misparses the following code:
 
 @example
 if ((true) || false); then
