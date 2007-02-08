@@ -529,7 +529,7 @@ cat >>"\$tmp/subs1.awk" <<CEOF
 ]m4_ifdef([_AC_SUBST_FILES],
 [\$ac_cs_awk_pipe_fini])[
 CEOF
-sed 's/$ac_cr\$//; s/$ac_cr/$ac_cs_awk_cr/g' < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
+sed "s/\$ac_cr\\\$//; s/\$ac_cr/\$ac_cs_awk_cr/g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
 _ACEOF
 ]dnl end of double-quoted part
 
