@@ -1,3 +1,11 @@
+2007-02-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT): With --clean, return exit
+	status of rm so we know when it failed.
+	If cleaning of test dir failed before running the test, warn.
+	Output the line separator in verbose mode before the warning
+	to make clear the warning belongs to the following test.
+
 2007-02-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Parentheses): Mention problem with (( in

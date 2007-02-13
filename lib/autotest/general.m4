@@ -1,8 +1,8 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
+# Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -314,7 +314,7 @@ do
 	test -d "$at_suite_dir" &&
 	  find "$at_suite_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
 	rm -f -r "$at_suite_dir" "$at_suite_log"
-	exit 0
+	exit $?
 	;;
 
     --debug | -d )
@@ -706,6 +706,9 @@ do
   # Be sure to come back to the top test directory.
   cd "$at_suite_dir"
 
+  # Clearly separate the test groups when verbose.
+  test $at_group_count != 0 && $at_verbose echo
+
   case $at_group in
     banner-*)
       at_group_log=$at_suite_log
@@ -720,7 +723,8 @@ do
       at_group_log=$at_group_dir/$as_me.log
       if test -d "$at_group_dir"; then
 	find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-	rm -fr "$at_group_dir"
+	rm -fr "$at_group_dir" ||
+	  AS_WARN([test directory could not be cleaned.])
       fi
       # Be tolerant if the above `rm' was not able to remove the directory.
       AS_MKDIR_P([$at_group_dir])
@@ -729,9 +733,6 @@ do
   esac
 
   echo 0 > "$at_status_file"
-
-  # Clearly separate the test groups when verbose.
-  test $at_group_count != 0 && $at_verbose echo
 
   # In verbose mode, append to the log file *and* show on
   # the standard output; in quiet mode only write to the log
