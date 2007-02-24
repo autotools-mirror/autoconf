@@ -191,7 +191,7 @@ m4_define([AT_groups_all], [])
 m4_define([AT_help_all], [])
 AS_INIT
 AT_COPYRIGHT(
-[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
 Foundation, Inc.
 This test suite is free software; the Free Software Foundation gives
 unlimited permission to copy, distribute and modify it.])
@@ -1424,7 +1424,7 @@ m4_ifval(m4_defn([at_reason]),
 [echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'],
 [m4_bmatch([$1], [\$],
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
-[case "AS_ESCAPE([$1], [`"\])" in
+[case "AS_ESCAPE([$1], [`\"])" in
         *'
 '*) echo 'Not enabling shell tracing (command contains an embedded newline)' ;;
  *) at_trace_this=yes ;;
