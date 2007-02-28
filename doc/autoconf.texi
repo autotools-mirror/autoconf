@@ -6457,7 +6457,7 @@ This macro is obsolescent, as current C compilers understand @samp{\a}.
 New programs need not use this macro.
 @end defmac
 
-@defmac AC_C_BIGENDIAN (@ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-unknown})
+@defmac AC_C_BIGENDIAN (@ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-unknown}, @ovar{action-if-universal})
 @acindex{C_BIGENDIAN}
 @cvindex WORDS_BIGENDIAN
 @cindex Endianness
@@ -6471,11 +6471,21 @@ system header files.  When cross-compiling, the test-case is not run but
 grep'ed for some magic values.  @var{action-if-unknown} is executed if
 the latter case fails to determine the byte sex of the host system.
 
+In some cases a single run of a compiler can generate code for multiple
+architectures.  This can happen, for example, when generating Mac OS X
+universal binary files, which work on both PowerPC and Intel
+architectures.  In this case, the different variants might be for
+different architectures whose endiannesses differ.  If
+@command{configure} detects this, it executes @var{action-if-universal}
+instead of @var{action-if-unknown}.
+
 The default for @var{action-if-true} is to define
 @samp{WORDS_BIGENDIAN}.  The default for @var{action-if-false} is to do
-nothing.  And finally, the default for @var{action-if-unknown} is to
-abort configure and tell the installer which variable he should preset
-to bypass this test.
+nothing.  The default for @var{action-if-unknown} is to
+abort configure and tell the installer how to bypass this test.
+And finally, the default for @var{action-if-universal} is to define
+@samp{WORDS_BIGENDIAN} or not, depending on the architecture that the
+code is being generated for.
 @end defmac
 
 @defmac AC_C_CONST
