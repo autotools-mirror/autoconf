@@ -1384,9 +1384,10 @@ AC_DEFUN([AC_C_BIGENDIAN],
     # See if __BIG_ENDIAN__ or __LITTLE_ENDIAN__ is defined.
     AC_COMPILE_IFELSE(
       [AC_LANG_SOURCE(
-	 [[#if ! (defined __BIG_ENDIAN__ || defined __LITLE_ENDIAN__)
+	 [[#if ! (defined __BIG_ENDIAN__ || defined __LITTLE_ENDIAN__)
 	    neither is defined;
 	  #endif
+	  typedef int dummy;
 	 ]])],
       [ac_cv_c_bigendian=universal])
     if test $ac_cv_c_bigendian = unknown; then
