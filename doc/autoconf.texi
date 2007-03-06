@@ -6486,6 +6486,11 @@ abort configure and tell the installer how to bypass this test.
 And finally, the default for @var{action-if-universal} is to define
 @samp{WORDS_BIGENDIAN} or not, depending on the architecture that the
 code is being generated for.
+
+If you use this macro without specifying @var{action-if-universal}, you
+should also use @code{AC_CONFIG_HEADERS}; otherwise
+@samp{WORDS_BIGENDIAN} may be set incorrectly for Mac OS X universal
+binary files.
 @end defmac
 
 @defmac AC_C_CONST

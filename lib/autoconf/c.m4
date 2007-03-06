@@ -1,6 +1,6 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
 # Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1381,15 +1381,17 @@ AC_DEFUN([AC_C_BIGENDIAN],
 #endif])dnl
  AC_CACHE_CHECK([whether byte ordering is bigendian], [ac_cv_c_bigendian],
    [ac_cv_c_bigendian=unknown
-    # See if __BIG_ENDIAN__ or __LITTLE_ENDIAN__ is defined.
-    AC_COMPILE_IFELSE(
-      [AC_LANG_SOURCE(
-	 [[#if ! (defined __BIG_ENDIAN__ || defined __LITTLE_ENDIAN__)
-	    neither is defined;
-	  #endif
-	  typedef int dummy;
-	 ]])],
-      [ac_cv_c_bigendian=universal])
+    m4_ifval(m4_ifdef([AH_HEADER], 1)[$4],
+      [# See if __BIG_ENDIAN__ or __LITTLE_ENDIAN__ is defined.
+       AC_COMPILE_IFELSE(
+	 [AC_LANG_SOURCE(
+	    [[#if ! (defined __BIG_ENDIAN__ || defined __LITTLE_ENDIAN__)
+	       neither is defined;
+	     #endif
+	     typedef int dummy;
+	    ]])],
+	 [ac_cv_c_bigendian=universal])],
+      [AC_DIAGNOSE([obsolete], [AC_C_BIGENDIAN suggests AC_CONFIG_HEADERS])])
     if test $ac_cv_c_bigendian = unknown; then
       # See if sys/param.h defines the BYTE_ORDER macro.
       AC_COMPILE_IFELSE(
