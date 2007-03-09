@@ -15571,7 +15571,7 @@ Autoconf provides a uniform method for handling unguessable features.
 @section Specifying the System Type
 @cindex System type
 
-Like other @acronym{GNU} @command{configure} scripts, Autoconf-generated
+Autoconf-generated
 @command{configure} scripts can make decisions based on a canonical name
 for the system type, which has the form:
 @samp{@var{cpu}-@var{vendor}-@var{os}}, where @var{os} can be
@@ -15604,8 +15604,8 @@ produce code (rarely needed).  By default, it is the same as host.
 
 If you mean to override the result of @command{config.guess}, use
 @option{--build}, not @option{--host}, since the latter enables
-cross-compilation.  For historical reasons, passing @option{--host} also
-changes the build type.  Therefore, whenever you specify @option{--host},
+cross-compilation.  For historical reasons,
+whenever you specify @option{--host},
 be sure to specify @option{--build} too; this will be fixed in the
 future.  So, to enter cross-compilation mode, use a command like this
 
