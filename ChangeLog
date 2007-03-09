@@ -125,8 +125,7 @@
 
 2007-01-15  Stepan Kasal  <kasal@ucw.cz>
 
-	* doc/autoconf.texi (Specifying Names): `--host' does not
-	change the build type.
+	* doc/autoconf.texi: Direntry for "autoconf Invocation" renamed.
 
 2007-01-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
