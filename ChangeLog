@@ -1,6 +1,8 @@
 2007-03-17  Jim Meyering  <jim@meyering.net>
 
 	* doc/autoconf.texi: Adjust grammar around use of "heuristics".
+	(Limitations of Usual Tools): Also list \< and \>, and mention that
+	HP-UX's grep, like the one from Solaris, does not support that syntax.
 
 2007-03-09  Stepan Kasal  <kasal@ucw.cz>
 
