@@ -6137,7 +6137,7 @@ AC_CHECK_TYPES([unsigned long long int, uintmax_t])
 
 Autoconf, up to 2.13, used to provide to another version of
 @code{AC_CHECK_TYPE}, broken by design.  In order to keep backward
-compatibility, a simple heuristics, quite safe but not totally, is
+compatibility, a simple heuristic, quite safe but not totally, is
 implemented.  In case of doubt, read the documentation of the former
 @code{AC_CHECK_TYPE}, see @ref{Obsolete Macros}.
 
@@ -16829,7 +16829,7 @@ AC_CHECK_TYPE([@var{type}], [],
 @end example
 
 In order to keep backward compatibility, the two versions of
-@code{AC_CHECK_TYPE} are implemented, selected by a simple heuristics:
+@code{AC_CHECK_TYPE} are implemented, selected using these heuristics:
 
 @enumerate
 @item
