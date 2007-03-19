@@ -13563,7 +13563,9 @@ escape characters in the string @samp{$()*.0123456789[\^@{@}}.  For example,
 alternation, @samp{\|}, is common but Posix does not require its
 support in basic regular expressions, so it should be avoided in
 portable scripts.  Solaris and HP-UX @command{grep} do not support it.
-Similarly, @samp{\<}, @samp{\>}, @samp{\+} and @samp{\?} should be avoided.
+Similarly, the following escape sequences should also be avoided:
+@samp{\<}, @samp{\>}, @samp{\+}, @samp{\?}, @samp{\`}, @samp{\'},
+@samp{\B}, @samp{\b}, @samp{\S}, @samp{\s}, @samp{\W}, and @samp{\w}.
 
 
 @item @command{join}
