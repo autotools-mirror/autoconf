@@ -1,3 +1,8 @@
+2007-03-23  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (C Compiler): Mention that AC_PROG_CC_C99 also
+	checks for unsigned long long int.
+
 2007-03-19  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Warn about other
