@@ -1,3 +1,9 @@
+2007-03-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Shellology): Rework treatment of the 'test'
+	command and case statements to make it a bit clearer and describe
+	more pitfalls.
+
 2007-03-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (C Compiler): Mention that AC_PROG_CC_C99 also

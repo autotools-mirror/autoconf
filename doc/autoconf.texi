@@ -473,6 +473,7 @@ Portable Shell Programming
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
 * File System Conventions::     File names
+* Shell Pattern Matching::      Pattern matching
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Parentheses::                 Parentheses in shell scripts
@@ -10966,6 +10967,7 @@ subset described above, is fairly portable nowadays.  Also please see
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
 * File System Conventions::     File names
+* Shell Pattern Matching::      Pattern matching
 * Shell Substitutions::         Variable and command expansions
 * Assignments::                 Varying side effects of assignments
 * Parentheses::                 Parentheses in shell scripts
@@ -11503,6 +11505,18 @@ File names are case insensitive, so even names like
 
 @end table
 
+@node Shell Pattern Matching
+@section Shell Pattern Matching
+@cindex Shell pattern matching
+
+Nowadays portable patterns can use negated character classes like
+@samp{[!-aeiou]}.  The older syntax @samp{[^-aeiou]} is supported by
+some shells but not others; hence portable scripts should never use
+@samp{^} as the first character of a bracket pattern.
+
+Outside the C locale, patterns like @samp{[a-z]} are problematic since
+they may match characters that are not lower-case letters.
+
 @node Shell Substitutions
 @section Shell Substitutions
 @cindex Shell substitutions
@@ -11931,19 +11945,6 @@ To work around this problem, insert a space between the two opening
 parentheses.  There is a similar problem and workaround with
 @samp{$((}; see @ref{Shell Substitutions}.
 
-Posix requires support for @code{case} patterns with opening
-parentheses like this:
-
-@example
-case $file_name in
-(*.c) echo "C source code";;
-esac
-@end example
-
-@noindent
-but the @code{(} in this example is not portable to many older Bourne
-shell implementations.  It can be omitted safely.
-
 @node Slashes
 @section Slashes in Shell Scripts
 @cindex Shell slashes
@@ -12330,6 +12331,19 @@ The use of @samp{break 2} etc.@: is safe.
 You don't need to quote the argument; no splitting is performed.
 
 You don't need the final @samp{;;}, but you should use it.
+
+Posix requires support for @code{case} patterns with opening
+parentheses like this:
+
+@example
+case $file_name in
+(*.c) echo "C source code";;
+esac
+@end example
+
+@noindent
+but the @code{(} in this example is not portable to many older Bourne
+shell implementations.  It can be omitted safely.
 
 Because of a bug in its @code{fnmatch}, Bash fails to properly
 handle backslashes in character classes:
@@ -12809,13 +12823,27 @@ tests.  It is often invoked by the alternate name @samp{[}, but using
 that name in Autoconf code is asking for trouble since it is an M4 quote
 character.
 
-If you need to make multiple checks using @code{test}, combine them with
-the shell operators @samp{&&} and @samp{||} instead of using the
-@code{test} operators @option{-a} and @option{-o}.  On System V, the
-precedence of @option{-a} and @option{-o} is wrong relative to the unary
-operators; consequently, Posix does not specify them, so using them
-is nonportable.  If you combine @samp{&&} and @samp{||} in the same
-statement, keep in mind that they have equal precedence.
+The @option{-a}, @option{-o}, @samp{(}, and @samp{)} operands are not
+portable and should be avoided.  Thus, portable uses of @command{test}
+should never have more than four arguments, and scripts should use shell
+constructs like @samp{&&} and @samp{||} instead.  If you combine
+@samp{&&} and @samp{||} in the same statement, keep in mind that they
+have equal precedence, so it is often better to parenthesize even when
+this is redundant.  For example:
+
+@smallexample
+# Not portable:
+test "X$a" = "X$b" -a \
+  '(' "X$c" != "X$d" -o "X$e" = "X$f" ')'
+
+# Portable:
+test "X$a" = "X$b" &&
+  @{ test "X$c" != "X$d" || test "X$e" = "X$f"; @}
+@end smallexample
+
+@command{test} does not process options like most other commands do; for
+example, it does not recognize the @option{--} argument as marking the
+end of options.
 
 It is safe to use @samp{!} as a @command{test} operator.  For example,
 @samp{if test ! -d foo; @dots{}} is portable even though @samp{if ! test
@@ -12837,23 +12865,32 @@ Posix 1003.1-2001, but older shells like Solaris 8
 
 @item @command{test} (strings)
 @c ---------------------------
-Avoid @samp{test "@var{string}"}, in particular if @var{string} might
-start with a dash, since @code{test} might interpret its argument as an
-option (e.g., @samp{@var{string} = "-n"}).
+Posix says that @samp{test "@var{string}"} succeeds if @var{string} is
+not null, but this usage is not portable to traditional platforms like
+Solaris 10 @command{/bin/sh}, which mishandle strings like @samp{!} and
+@samp{-n}.
 
-Contrary to a common belief, @samp{test -n @var{string}} and
-@samp{test -z @var{string}} @strong{are} portable.  Nevertheless many
+Posix says that @samp{test ! "@var{string}"}, @samp{test -n "@var{string}"} and
+@samp{test -z "@var{string}"} work with any string, but many
 shells (such as Solaris, @acronym{AIX} 3.2, @sc{unicos} 10.0.0.6,
-Digital Unix 4, etc.)@: have bizarre precedence and may be confused if
+Digital Unix 4, etc.)@: get confused if
 @var{string} looks like an operator:
 
 @example
 $ @kbd{test -n =}
 test: argument expected
+$ @kbd{test ! -n}
+test: argument expected
 @end example
 
-If there are risks, use @samp{test "x@var{string}" = x} or @samp{test
-"x@var{string}" != x} instead.
+Similarly, Posix says that @samp{test "@var{string1}" = "@var{string2"}}
+and @samp{test "@var{string1}" != "@var{string2"}} work for any pairs of
+strings, but in practice this is not true for troublesome strings that
+look like operators or parentheses, or that begin with @samp{-}.
+
+It is best to protect such strings with a leading @samp{X}, e.g.,
+@samp{test "X@var{string}" != X} rather than @samp{test -n
+"@var{string}"} or @samp{test ! "@var{string}"}.
 
 It is common to find variations of the following idiom:
 
@@ -12864,16 +12901,7 @@ test -n "`echo $ac_feature | sed 's/[-a-zA-Z0-9_]//g'`" &&
 
 @noindent
 to take an action when a token matches a given pattern.  Such constructs
-should always be avoided by using:
-
-@example
-echo "$ac_feature" | grep '[^-a-zA-Z0-9_]' >/dev/null 2>&1 &&
-  @var{action}
-@end example
-
-@noindent
-Use @code{case} where possible since it is faster, being a shell builtin:
-
+should be avoided by using:
 
 @example
 case $ac_feature in
@@ -12881,25 +12909,11 @@ case $ac_feature in
 esac
 @end example
 
-Alas, negated character classes are probably not portable, although no
-shell is known to not support the Posix syntax @samp{[!@dots{}]}
-(when in interactive mode, @command{zsh} is confused by the
-@samp{[!@dots{}]} syntax and looks for an event in its history because of
-@samp{!}).  Many shells do not support the alternative syntax
-@samp{[^@dots{}]} (Solaris, Digital Unix, etc.).
-
-One solution can be:
+If the pattern is a complicated regular expression that cannot be
+expressed as a shell pattern, use something like this instead:
 
 @example
-expr "$ac_feature" : '.*[^-a-zA-Z0-9_]' >/dev/null &&
-  @var{action}
-@end example
-
-@noindent
-or better yet
-
-@example
-expr "X$ac_feature" : '.*[^-a-zA-Z0-9_]' >/dev/null &&
+expr "X$ac_feature" : 'X.*[^-a-zA-Z0-9_]' >/dev/null &&
   @var{action}
 @end example
 
