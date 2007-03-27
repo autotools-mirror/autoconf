@@ -1,3 +1,7 @@
+2007-03-27  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/status.m4 (AC_CONFIG_SUBDIRS): Update comment.
+
 2007-03-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Shellology): Rework treatment of the 'test'

@@ -987,7 +987,6 @@ m4_define([AC_OUTPUT_COMMANDS_POST])
 #   A statically built list, should contain *all* the arguments of
 #   AC_CONFIG_SUBDIRS.  The final value is assigned to ac_subdirs_all in
 #   the `default' section, and used for --help=recursive.
-#   It is also used in _AC_CONFIG_UNIQUE.
 #   It makes no sense for arguments which are sh variables.
 # - subdirs
 #   Shell variable built at runtime, so some of these dirs might not be
