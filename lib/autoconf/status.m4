@@ -1343,8 +1343,7 @@ test -n "\$AWK" || AWK=awk
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
-# If no file are specified by the user, then we need to provide default
-# value.  By we need to know if files were specified by the user.
+# The default lists apply if the user does not specify any file.
 ac_need_defaults=:
 while test $[#] != 0
 do
