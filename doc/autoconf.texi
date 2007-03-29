@@ -11189,7 +11189,7 @@ be worked around by omitting the braces: @code{$variable}.  The bug was fixed in
 @samp{ksh93g} (1998-04-30) but as of 2006 many operating systems were
 still shipping older versions with the bug.
 
-Many older shells (including the Bourne shell) implement here-documents
+Many shells (including the Bourne shell) implement here-documents
 inefficiently.  In particular, some shells can be extremely inefficient when
 a single statement contains many here-documents.  For instance if your
 @file{configure.ac} includes something like:
@@ -12342,7 +12342,7 @@ esac
 @end example
 
 @noindent
-but the @code{(} in this example is not portable to many older Bourne
+but the @code{(} in this example is not portable to many Bourne
 shell implementations.  It can be omitted safely.
 
 Because of a bug in its @code{fnmatch}, Bash fails to properly
@@ -13341,7 +13341,7 @@ dir=`AS_DIRNAME(["$file"])` # This is more portable.
 @c ------------------
 @prindex @command{egrep}
 Posix 1003.1-2001 no longer requires @command{egrep},
-but many older hosts do not yet support the Posix
+but many hosts do not yet support the Posix
 replacement @code{grep -E}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_EGREP} and then use @code{$EGREP}.
@@ -13495,7 +13495,7 @@ $ @kbd{expr 00001 : '.*\(...\)'}
 @c ------------------
 @prindex @command{fgrep}
 Posix 1003.1-2001 no longer requires @command{fgrep},
-but many older hosts do not yet support the Posix
+but many hosts do not yet support the Posix
 replacement @code{grep -F}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_FGREP} and then use @code{$FGREP}.

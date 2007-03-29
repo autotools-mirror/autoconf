@@ -1,3 +1,9 @@
+2007-03-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Here-Documents, Limitations of Builtins):
+	(Limitations of Usual Tools): Don't say "older" if Solaris 10 by
+	default still has the problem.  Problem reported by Bruce Korb.
+
 2007-03-28  Stepan Kasal  <kasal@ucw.cz>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
