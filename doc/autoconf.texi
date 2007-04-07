@@ -5959,6 +5959,9 @@ exists.
 If the C compiler supports a working @code{long double} type, define
 @code{HAVE_LONG_DOUBLE}.  The @code{long double} type might have the
 same range and precision as @code{double}.
+
+This macro is obsolescent, as current C compilers support @code{long
+double}.  New programs need not use this macro.
 @end defmac
 
 @defmac AC_TYPE_LONG_DOUBLE_WIDER

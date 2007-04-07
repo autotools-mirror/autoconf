@@ -14,6 +14,13 @@
 ** For portability with the eventual M4 2.0, macros should no longer use
    anything larger than $9 to refer to arguments.
 
+** AC_C_LONG_DOUBLE is obsolescent.
+  The documentation now says that AC_C_LONG_DOUBLE is obsolescent: it
+  tests for problems that are so old that it is no longer of practical
+  importance on current systems.  New programs need not use
+  AC_C_LONG_DOUBLE.  We have no current plans to remove it.
+
+
 * Major changes in Autoconf 2.61a (2006-12-11)
 
 ** AC_FUNC_FSEEKO was broken in 2.61; it didn't make fseeko and ftello visible

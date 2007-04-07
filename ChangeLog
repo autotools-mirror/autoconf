@@ -1,3 +1,9 @@
+2007-04-06  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Particular Types): AC_C_LONG_DOUBLE is now
+	obsolescent.
+	* NEWS: Document this.
+
 2007-03-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Here-Documents, Limitations of Builtins):
