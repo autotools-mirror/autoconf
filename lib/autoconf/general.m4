@@ -2428,14 +2428,23 @@ AU_DEFUN([AC_TRY_COMPILE],
 # -------------------------------------------------------------
 # Try to link PROGRAM.
 # This macro can be used during the selection of a compiler.
+#
+# Test that resulting file is executable; see the problem reported by mwoehlke
+# in <http://lists.gnu.org/archive/html/bug-coreutils/2006-10/msg00048.html>.
+# But skip the test when cross-compiling, to prevent problems like the one
+# reported by Chris Johns in
+# <http://lists.gnu.org/archive/html/autoconf/2007-03/msg00085.html>.
+#
 m4_define([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
 rm -f conftest.$ac_objext conftest$ac_exeext
 AS_IF([_AC_DO_STDERR($ac_link) && {
 	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
 	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       AS_TEST_X([conftest$ac_exeext])],
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 AS_TEST_X([conftest$ac_exeext])
+       }],
       [$2],
       [_AC_MSG_LOG_CONFTEST
 	$3])

@@ -1,5 +1,10 @@
 2007-04-11  Stepan Kasal  <kasal@ucw.cz>
 
+	* lib/autoconf/general.m4 (_AC_LINK_IFELSE): Skip AS_TEST_X
+	when cross-compiling.
+
+2007-04-11  Stepan Kasal  <kasal@ucw.cz>
+
 	* doc/autoconf.texi (External Software): Fix a typo in the
 	previous change.
 
