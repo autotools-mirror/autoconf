@@ -1,3 +1,7 @@
+2007-04-12  Jim Meyering  <jim@meyering.net>
+
+	* doc/autoconf.texi (Libraries): Typo fix: insert missing "in".
+
 2007-04-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_LINK): Fix AC_CONFIG_LINKS

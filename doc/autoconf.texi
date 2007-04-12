@@ -4024,7 +4024,7 @@ in the presence of another that is not already in @code{LIBS}.
 
 @code{AC_CHECK_LIB} requires some care in usage, and should be avoided
 in some common cases.  Many standard functions like @code{gethostbyname}
-appear the standard C library on some hosts, and in special libraries
+appear in the standard C library on some hosts, and in special libraries
 like @code{nsl} on other hosts.  On some hosts the special libraries
 contain variant implementations that you may not want to use.  These
 days it is normally better to use @code{AC_SEARCH_LIBS([gethostbyname],
