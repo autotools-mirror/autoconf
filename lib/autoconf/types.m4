@@ -130,8 +130,11 @@
 # But this succeeds if TYPE is a variable: you get the size of the
 # variable's type!!!
 #
-# This time you tell yourself the last two options *together* will make
-# it.  And indeed this is the solution invented by Alexandre Oliva.
+# So, to filter out the last possibility, you try this too:
+#
+#	  sizeof ((TYPE));
+#
+# This fails if TYPE is a type, but succeeds if TYPE is actually a variable.
 #
 # Also note that we use
 #
@@ -140,24 +143,37 @@
 # to `read' sizeof (to avoid warnings), while not depending on its type
 # (not necessarily size_t etc.).  Equally, instead of defining an unused
 # variable, we just use a cast to avoid warnings from the compiler.
-# Suggested by Paul Eggert.
 #
 # Now, the next issue is that C++ disallows defining types inside casts
 # and inside `sizeof()', but we would like to allow unnamed structs, for
-# use inside AC_CHECK_SIZEOF, for example.  So we create a typedef of the
-# new type.  Note that this does not obviate the need for the other
-# constructs in general.
+# use inside AC_CHECK_SIZEOF, for example.  So for C++ we create a typedef
+# of the new type.  Note that this breaks for some types, e.g., function
+# types, but we don't know C++ well enough to fix this.
 m4_define([_AC_CHECK_TYPE_NEW],
 [AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], [ac_Type],
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])
-typedef $1 ac__type_new_;],
-[if ((ac__type_new_ *) 0)
+[AS_VAR_SET([ac_Type], [no])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])
+#ifdef __cplusplus
+typedef $1 ac__type_new_;
+#endif
+],
+[#ifdef __cplusplus
+if ((ac__type_new_ *) 0)
   return 0;
 if (sizeof (ac__type_new_))
-  return 0;])],
-		   [AS_VAR_SET([ac_Type], [yes])],
-		   [AS_VAR_SET([ac_Type], [no])])])
+  return 0;
+#else
+if (sizeof ($1))
+  return 0;
+#endif
+])],
+  [AC_COMPILE_IFELSE(
+     [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
+	[if (sizeof (($1)))
+	  return 0;])],
+     [],
+     [AS_VAR_SET([ac_Type], [yes])])])])
 AS_IF([test AS_VAR_GET([ac_Type]) = yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
@@ -703,15 +719,13 @@ AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 AC_DEFUN([AC_CHECK_SIZEOF],
 [AS_LITERAL_IF([$1], [],
 	       [AC_FATAL([$0: requires literal arguments])])dnl
-AC_CHECK_TYPE([$1], [], [], [$3])
 # The cast to long int works around a bug in the HP C Compiler
 # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
 # declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
 # This bug is HP SR number 8606223364.
 _AC_CACHE_CHECK_INT([size of $1], [AS_TR_SH([ac_cv_sizeof_$1])],
-  [(long int) (sizeof (ac__type_sizeof_))],
-  [AC_INCLUDES_DEFAULT([$3])
-   typedef $1 ac__type_sizeof_;],
+  [(long int) (sizeof ($1))],
+  [AC_INCLUDES_DEFAULT([$3])],
   [if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
      AC_MSG_FAILURE([cannot compute sizeof ($1)], 77)
    else
@@ -728,7 +742,6 @@ AC_DEFINE_UNQUOTED(AS_TR_CPP(sizeof_$1), $AS_TR_SH([ac_cv_sizeof_$1]),
 AC_DEFUN([AC_CHECK_ALIGNOF],
 [AS_LITERAL_IF([$1], [],
 	       [AC_FATAL([$0: requires literal arguments])])dnl
-AC_CHECK_TYPE([$1], [], [], [$2])
 # The cast to long int works around a bug in the HP C Compiler,
 # see AC_CHECK_SIZEOF for more information.
 _AC_CACHE_CHECK_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$1])],

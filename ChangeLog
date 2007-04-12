@@ -1,3 +1,19 @@
+2007-04-11  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Generic Types): Document the restrictions
+	on types imposed by AC_CHECK_TYPE, AC_CHECK_TYPES.
+	(Generic Compiler Characteristics): AC_CHECK_SIZEOF now works
+	with objects too.  Document the restrictions on its use.
+	Document the restrictions on AC_CHECK_ALIGNOF's type argument.
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW):
+	For C, just try sizeof (TYPE) and sizeof ((TYPE)); if the former
+	works but the latter doesn't, then it's a valid type.
+	This lets people use function types and so forth.
+	For C++ there doesn't seem to be a simple solution, so leave it alone.
+	(AC_CHECK_SIZEOF): Allow argument to be a variable.
+	(AC_CHECK_SIZEOF, AC_CHECK_ALIGNOF): Don't bother to invoke
+	AC_CHECK_TYPE; that wasn't documented or necessary.
+
 2007-04-11  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/general.m4 (_AC_LINK_IFELSE): Skip AS_TEST_X

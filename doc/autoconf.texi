@@ -6119,13 +6119,22 @@ test macros.
 @acindex{CHECK_TYPE}
 Check whether @var{type} is defined.  It may be a compiler builtin type
 or defined by the @var{includes} (@pxref{Default Includes}).
+
+In C, @var{type} must be a type-id, so that the expression @samp{sizeof
+(@var{type})} is valid (but @samp{sizeof ((@var{type}))} is not).  The
+rules in C++ are currently more complicated and restrictive: @var{type}
+must be a string of tokens such that @samp{typedef @var{type} foo;} is a
+valid type definition.  However, the C++ approach has problems (for
+example, it mishandles function types) and may change in future versions
+of Autoconf.
 @end defmac
 
 
 @defmac AC_CHECK_TYPES (@var{types}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_TYPES}
 For each @var{type} of the @var{types} that is defined, define
-@code{HAVE_@var{type}} (in all capitals).  If no @var{includes} are
+@code{HAVE_@var{type}} (in all capitals).  Each @var{type} must follow
+the rules of @code{AC_CHECK_TYPE}.  If no @var{includes} are
 specified, the default includes are used (@pxref{Default Includes}).  If
 @var{action-if-found} is given, it is additional shell code to execute
 when one of the types is found.  If @var{action-if-not-found} is given,
@@ -6208,11 +6217,13 @@ Autoconf works around this problem by casting @code{sizeof (int)} to
 @node Generic Compiler Characteristics
 @subsection Generic Compiler Characteristics
 
-@defmac AC_CHECK_SIZEOF (@var{type}, @ovar{unused}, @dvar{includes, default-includes})
+@defmac AC_CHECK_SIZEOF (@var{type-or-expr}, @ovar{unused}, @dvar{includes, default-includes})
 @acindex{CHECK_SIZEOF}
-Define @code{SIZEOF_@var{type}} (@pxref{Standard Symbols}) to be the
-size in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
-of 0.  If no @var{includes} are specified, the default includes are used
+Define @code{SIZEOF_@var{type-or-expr}} (@pxref{Standard Symbols}) to be
+the size in bytes of @var{type-or-expr}, which may be either a type or
+an expression returning a value that has a size.  If the expression
+@samp{sizeof (@var{type-or-expr})} is invalid, the result is 0.  If no
+@var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
 
 This macro now works even when cross-compiling.  The @var{unused}
@@ -6231,8 +6242,9 @@ defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @defmac AC_CHECK_ALIGNOF (@var{type}, @dvar{includes, default-includes})
 @acindex{CHECK_ALIGNOF}
 Define @code{ALIGNOF_@var{type}} (@pxref{Standard Symbols}) to be the
-alignment in bytes of @var{type}.  If @samp{type} is unknown, it gets a size
-of 0.  If no @var{includes} are specified, the default includes are used
+alignment in bytes of @var{type}.  @samp{@var{type} x;} must be valid as
+a structure member declaration.  If @samp{type} is unknown, the result
+is 0.  If no @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
 @end defmac
 
