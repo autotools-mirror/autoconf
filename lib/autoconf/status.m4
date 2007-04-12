@@ -873,22 +873,24 @@ m4_define([_AC_OUTPUT_LINK],
   # CONFIG_LINK
   #
 
-  AC_MSG_NOTICE([linking $srcdir/$ac_source to $ac_file])
+  test -r "$ac_source" || ac_source=$srcdir/$ac_source
 
-  if test ! -r "$srcdir/$ac_source"; then
-    AC_MSG_ERROR([$srcdir/$ac_source: file not found])
+  AC_MSG_NOTICE([linking $ac_source to $ac_file])
+
+  if test ! -r "$ac_source"; then
+    AC_MSG_ERROR([$ac_source: file not found])
   fi
   rm -f "$ac_file"
 
   # Try a relative symlink, then a hard link, then a copy.
   case $srcdir in
-  [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$srcdir/$ac_source ;;
-      *) ac_rel_source=$ac_top_build_prefix$srcdir/$ac_source ;;
+  [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$ac_source ;;
+      *) ac_rel_source=$ac_top_build_prefix$ac_source ;;
   esac
   ln -s "$ac_rel_source" "$ac_file" 2>/dev/null ||
-    ln "$srcdir/$ac_source" "$ac_file" 2>/dev/null ||
-    cp -p "$srcdir/$ac_source" "$ac_file" ||
-    AC_MSG_ERROR([cannot link or copy $srcdir/$ac_source to $ac_file])
+    ln "$ac_source" "$ac_file" 2>/dev/null ||
+    cp -p "$ac_source" "$ac_file" ||
+    AC_MSG_ERROR([cannot link or copy $ac_source to $ac_file])
 ])# _AC_OUTPUT_LINK
 
 

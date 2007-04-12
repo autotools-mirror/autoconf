@@ -1,3 +1,9 @@
+2007-04-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_LINK): Fix AC_CONFIG_LINKS
+	to prefer a link source from the build tree, if it exists.
+	Report by Pallav Gupta <pallavgupta@gmail.com>.
+
 2007-04-11  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Generic Types): Document the restrictions
