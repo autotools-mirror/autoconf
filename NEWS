@@ -2,6 +2,20 @@
 
 ** AC_C_BIGENDIAN now supports universal binaries a la Mac OS X.
 
+** AC_CHECK_ALIGNOF's type argument T is now documented better: it must
+   be a string of tokens such that "T y;" is a valid member declaration
+   in a struct.
+
+** AC_CHECK_SIZEOF now accepts objects as well as types: the general rule
+   is that sizeof (X) works, then AC_CHECK_SIZEOF (X) should work.
+
+** AC_CHECK_TYPE and AC_CHECK_TYPES now work on any C type-name; formerly,
+   they did not work for function types.  In C++, they now work on any
+   type-id that can be the operand of sizeof; this is similar to C,
+   except it excludes anonymous struct and union types.  Formerly,
+   some (but not all) C++ types involving anonymous struct and union
+   were accepted, though this was not documented.
+
 ** Autoconf now requires GNU M4 1.4.5 or later.  Earlier versions of M4 have
    a bug in macro tracing that interferes with the interaction between
    Autoconf and Automake.  GNU M4 1.4.8 or later is recommended.

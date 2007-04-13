@@ -6120,13 +6120,11 @@ test macros.
 Check whether @var{type} is defined.  It may be a compiler builtin type
 or defined by the @var{includes} (@pxref{Default Includes}).
 
-In C, @var{type} must be a type-id, so that the expression @samp{sizeof
+In C, @var{type} must be a type-name, so that the expression @samp{sizeof
 (@var{type})} is valid (but @samp{sizeof ((@var{type}))} is not).  The
-rules in C++ are currently more complicated and restrictive: @var{type}
-must be a string of tokens such that @samp{typedef @var{type} foo;} is a
-valid type definition.  However, the C++ approach has problems (for
-example, it mishandles function types) and may change in future versions
-of Autoconf.
+same test is applied when compiling for C++, which means that in C++
+@var{type} should be a type-id and should not be an anonymous
+@samp{struct} or @samp{union}.
 @end defmac
 
 
@@ -6242,7 +6240,7 @@ defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @defmac AC_CHECK_ALIGNOF (@var{type}, @dvar{includes, default-includes})
 @acindex{CHECK_ALIGNOF}
 Define @code{ALIGNOF_@var{type}} (@pxref{Standard Symbols}) to be the
-alignment in bytes of @var{type}.  @samp{@var{type} x;} must be valid as
+alignment in bytes of @var{type}.  @samp{@var{type} y;} must be valid as
 a structure member declaration.  If @samp{type} is unknown, the result
 is 0.  If no @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).

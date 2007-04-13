@@ -141,33 +141,19 @@
 #	  if (sizeof (TYPE))
 #
 # to `read' sizeof (to avoid warnings), while not depending on its type
-# (not necessarily size_t etc.).  Equally, instead of defining an unused
-# variable, we just use a cast to avoid warnings from the compiler.
+# (not necessarily size_t etc.).
 #
-# Now, the next issue is that C++ disallows defining types inside casts
-# and inside `sizeof()', but we would like to allow unnamed structs, for
-# use inside AC_CHECK_SIZEOF, for example.  So for C++ we create a typedef
-# of the new type.  Note that this breaks for some types, e.g., function
-# types, but we don't know C++ well enough to fix this.
+# C++ disallows defining types inside `sizeof ()', but that's OK,
+# since we don't want to consider unnamed structs to be types for C++,
+# precisely because they don't work in cases like that.
 m4_define([_AC_CHECK_TYPE_NEW],
 [AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
 AC_CACHE_CHECK([for $1], [ac_Type],
 [AS_VAR_SET([ac_Type], [no])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])
-#ifdef __cplusplus
-typedef $1 ac__type_new_;
-#endif
-],
-[#ifdef __cplusplus
-if ((ac__type_new_ *) 0)
-  return 0;
-if (sizeof (ac__type_new_))
-  return 0;
-#else
-if (sizeof ($1))
-  return 0;
-#endif
-])],
+AC_COMPILE_IFELSE(
+  [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
+     [if (sizeof ($1))
+       return 0;])],
   [AC_COMPILE_IFELSE(
      [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 	[if (sizeof (($1)))
