@@ -1,3 +1,9 @@
+2007-04-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Builtins): Warn about Solaris
+	/bin/printf '%010000x' 123.  Problem reported by Arto C. Nirkko
+	via Bruno Haible.
+
 2007-04-12  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Document recent changes to AC_CHECK_ALIGNOF, AC_CHECK_SIZEOF,
