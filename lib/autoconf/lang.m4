@@ -477,9 +477,9 @@ AC_MSG_CHECKING([for _AC_LANG compiler default output file name])
 ac_link_default=`AS_ECHO(["$ac_link"]) | sed ['s/ -o *conftest[^ ]*//']`
 #
 # List of possible output files, starting from the most likely.
-# The algorithm is not robust to junk in `.', hence go to wildcards (a.*)
-# only as a last resort.  b.out is created by i960 compilers.
-ac_files='a_out.exe a.exe conftest.exe a.out conftest a.* conftest.* b.out'
+# The algorithm is not robust to junk in `.', hence go to wildcards
+# (conftest.*) only as a last resort.  b.out is created by i960 compilers.
+ac_files='a_out.exe a.exe conftest.exe a.out conftest conftest.* b.out'
 #
 # The IRIX 6 linker writes into existing files which may not be
 # executable, retaining their permissions.  Remove them first so a

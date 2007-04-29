@@ -1,3 +1,11 @@
+2007-04-28  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Don't look
+	for a.* when searching for executables, as this prevents users
+	from having files like a.c.  Problem reported by Ralf Wildenhues in:
+	http://lists.gnu.org/archive/html/autoconf-patches/2007-04/msg00029.html
+	This fixes a problem introduced on 2000-12-19.
+
 2007-04-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Builtins): Warn about Solaris
