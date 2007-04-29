@@ -1,3 +1,9 @@
+2007-04-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Builtins): Correct the warning
+	about Solaris /bin/printf '%010000x' 123.  Problem reported by
+	Bruno Haible.
+
 2007-04-28  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Don't look

@@ -12700,11 +12700,10 @@ $ @kbd{printf '\045'}
 bash: printf: `%': missing format character
 @end example
 
-Large outputs may cause trouble.  On Solaris 8 through 10, for example,
-the command @samp{/bin/printf %010000x 123} dumps core.  This particular
-bug should have little practical effect since Solaris shells' builtin
-@command{printf} commands do not have the bug, but it indicates an area
-that other @command{printf} implementations may have trouble in.
+Large outputs may cause trouble.  On Solaris 2.5.1 through 10, for
+example, @file{/usr/bin/printf} is buggy, so when using
+@command{/bin/sh} the command @samp{printf %010000x 123} normally dumps
+core.
 
 
 @item @command{read}
