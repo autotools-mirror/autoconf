@@ -1560,7 +1560,7 @@ _AS_RUN([_AS_SHELL_FN_WORK]) || {
   echo No shell found that supports shell functions.
   echo Please tell bug-autoconf@gnu.org about your system,
   echo including any error possibly output before this message.
-  echo This can help us improve future autoconf version.
+  echo This can help us improve future autoconf versions.
   echo Configuration will now proceed without shell functions.
 }
 ])
