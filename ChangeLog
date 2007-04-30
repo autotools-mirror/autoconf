@@ -1,3 +1,9 @@
+2007-04-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_SPY): Don't imply that
+	'configure' will fail if the shell lacks proper support for shell
+	functions.  Suggested by RMS.
+
 2007-04-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Builtins): Correct the warning

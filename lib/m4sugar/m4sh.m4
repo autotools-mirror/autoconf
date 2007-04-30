@@ -2,8 +2,8 @@
 # M4 sugar for common shell constructs.
 # Requires GNU M4 and M4sugar.
 #
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
+# Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -180,7 +180,7 @@ m4_define([_AS_BOURNE_COMPATIBLE],
 [AS_IF([test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1],
  [emulate sh
   NULLCMD=:
-  [#] Zsh 3.x and 4.x performs word splitting on ${1+"$[@]"}, which
+  [#] Pre-4.2 versions of Zsh do word splitting on ${1+"$[@]"}, which
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$[@]"}'='"$[@]"'
   setopt NO_GLOB_SUBST],
@@ -1558,9 +1558,10 @@ m4_define([_AS_SHELL_FN_SPY],
 [_AS_DETECT_SUGGESTED([_AS_SHELL_FN_WORK])
 _AS_RUN([_AS_SHELL_FN_WORK]) || {
   echo No shell found that supports shell functions.
-  echo Please tell autoconf@gnu.org about your system,
-  echo including any error possibly output before this
-  echo message
+  echo Please tell bug-autoconf@gnu.org about your system,
+  echo including any error possibly output before this message.
+  echo This can help us improve future autoconf version.
+  echo Configuration will now proceed without shell functions.
 }
 ])
 
