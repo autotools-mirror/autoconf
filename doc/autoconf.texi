@@ -3689,7 +3689,7 @@ not found in standard @command{install} programs, there is no reason to use
 @end defmac
 
 @defmac AC_PROG_MKDIR_P
-@acindex{AC_PROG_MKDIR_P}
+@acindex{PROG_MKDIR_P}
 @ovindex MKDIR_P
 Set output variable @code{MKDIR_P} to a program that ensures that for
 each argument, a directory named by this argument exists, creating it
