@@ -54,29 +54,15 @@
 #
 # 1. Language selection
 #    and routines to produce programs in a given language.
-#  a. generic routines
-#  b. C
-#  c. C++
-#  d. Fortran 77
 #
 # 2. Producing programs in a given language.
-#  a. generic routines
-#  b. C
-#  c. C++
-#  d. Fortran 77
 #
 # 3. Looking for a compiler
 #    And possibly the associated preprocessor.
-#  a. Generic routines.
-#  b. C
-#  c. C++
-#  d. Fortran 77
+#
+#    3a. Computing EXEEXT and OBJEXT.
 #
 # 4. Compilers' characteristics.
-#  a. Generic routines.
-#  b. C
-#  c. C++
-#  d. Fortran 77
 
 
 
@@ -84,11 +70,6 @@
 ## 1. Language selection.  ##
 ## ----------------------- ##
 
-
-
-# -------------------------------- #
-# 1a. Generic language selection.  #
-# -------------------------------- #
 
 # AC_LANG_CASE(LANG1, IF-LANG1, LANG2, IF-LANG2, ..., DEFAULT)
 # ------------------------------------------------------------
@@ -201,14 +182,9 @@ m4_defun([AC_LANG_ASSERT],
 
 
 
-## ---------------------- ##
-## 2.Producing programs.  ##
-## ---------------------- ##
-
-
-# ---------------------- #
-# 2a. Generic routines.  #
-# ---------------------- #
+## ----------------------- ##
+## 2. Producing programs.  ##
+## ----------------------- ##
 
 
 # AC_LANG_CONFTEST(BODY)
@@ -270,13 +246,11 @@ AC_DEFUN([AC_LANG_INT_SAVE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
+
 ## -------------------------------------------- ##
 ## 3. Looking for Compilers and Preprocessors.  ##
 ## -------------------------------------------- ##
 
-# ----------------------------------------------------- #
-# 3a. Generic routines in compilers and preprocessors.  #
-# ----------------------------------------------------- #
 
 # AC_LANG_COMPILER
 # ----------------
@@ -405,9 +379,9 @@ m4_divert_pop()dnl
 
 
 
-# ----------------------------- #
-# Computing EXEEXT and OBJEXT.  #
-# ----------------------------- #
+# --------------------------------- #
+# 3a. Computing EXEEXT and OBJEXT.  #
+# --------------------------------- #
 
 
 # Files to ignore
@@ -653,7 +627,6 @@ rm -f conftest.$ac_cv_objext conftest.$ac_ext])
 AC_SUBST([OBJEXT], [$ac_cv_objext])dnl
 ac_objext=$OBJEXT
 ])# _AC_COMPILER_OBJEXT
-
 
 
 

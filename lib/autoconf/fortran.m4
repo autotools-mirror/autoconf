@@ -49,6 +49,29 @@
 # Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
+
+# Table of Contents:
+#
+# Preamble
+#
+# 0. Utility macros
+#
+# 1. Language selection
+#    and routines to produce programs in a given language.
+#
+# 2. Producing programs in a given language.
+#
+# 3. Looking for a compiler
+#    And possibly the associated preprocessor.
+#
+# 4. Compilers' characteristics.
+
+
+
+## ---------- ##
+## Preamble.  ##
+## ---------- ##
+
 # Fortran vs. Fortran 77:
 #   This file contains macros for both "Fortran 77" and "Fortran", where
 # the former is the "classic" autoconf Fortran interface and is intended
@@ -59,6 +82,12 @@
 # share the same _AC_*_FC_* backend.  This backend macro requires that
 # the appropriate language be AC_LANG_PUSH'ed, and uses _AC_LANG_ABBREV and
 # _AC_LANG_PREFIX in order to name cache and environment variables, etc.
+
+
+
+## ------------------- ##
+## 0. Utility macros.  ##
+## ------------------- ##
 
 
 # _AC_LIST_MEMBER_IF(ELEMENT, LIST, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
@@ -131,11 +160,6 @@ fi[]dnl
 ## ----------------------- ##
 
 
-# -------------------------- #
-# 1d. The Fortran language.  #
-# -------------------------- #
-
-
 # AC_LANG(Fortran 77)
 # -------------------
 m4_define([AC_LANG(Fortran 77)],
@@ -196,14 +220,11 @@ AC_LANG_CASE([Fortran 77], [F77],
              [Fortran],    [FC])])
 
 
-## ---------------------- ##
-## 2.Producing programs.  ##
-## ---------------------- ##
 
+## ----------------------- ##
+## 2. Producing programs.  ##
+## ----------------------- ##
 
-# --------------------- #
-# 2d. Fortran sources.  #
-# --------------------- #
 
 # AC_LANG_SOURCE(Fortran 77)(BODY)
 # AC_LANG_SOURCE(Fortran)(BODY)
@@ -259,11 +280,6 @@ m4_define([AC_LANG_CALL(Fortran)],
 ## -------------------------------------------- ##
 ## 3. Looking for Compilers and Preprocessors.  ##
 ## -------------------------------------------- ##
-
-
-# -------------------------- #
-# 3d. The Fortran compiler.  #
-# -------------------------- #
 
 
 # AC_LANG_PREPROC(Fortran 77)
@@ -508,14 +524,10 @@ AC_LANG_POP(Fortran)dnl
 ])# AC_PROG_FC_C_O
 
 
+
 ## ------------------------------- ##
 ## 4. Compilers' characteristics.  ##
 ## ------------------------------- ##
-
-
-# ---------------------------------------- #
-# 4d. Fortran 77 compiler characteristics. #
-# ---------------------------------------- #
 
 
 # _AC_PROG_FC_V_OUTPUT([FLAG = $ac_cv_prog_{f77/fc}_v])

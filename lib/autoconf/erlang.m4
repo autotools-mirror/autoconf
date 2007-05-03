@@ -47,8 +47,27 @@
 # Written by Romain Lenglet.
 
 
+# Table of Contents:
+#
+# 0. Utility macros
+#
+# 1. Language selection
+#    and routines to produce programs in a given language.
+#
+# 2. Producing programs in a given language.
+#
+# 3. Looking for a compiler
+#    And possibly the associated preprocessor.
+
+
+
+## ------------------- ##
+## 0. Utility macros.  ##
+## ------------------- ##
+
+
 # AC_ERLANG_PATH_ERLC([VALUE-IF-NOT-FOUND], [PATH])
-# ----------------------------------------------
+# -------------------------------------------------
 AC_DEFUN([AC_ERLANG_PATH_ERLC],
 [AC_ARG_VAR([ERLC], [Erlang/OTP compiler command [autodetected]])dnl
 if test -n "$ERLC"; then
@@ -58,19 +77,21 @@ else
     AC_PATH_TOOL(ERLC, erlc, [$1], [$2])
 fi
 AC_ARG_VAR([ERLCFLAGS], [Erlang/OTP compiler flags [none]])dnl
-])# AC_ERLANG_PATH_ERLC
+])
+
 
 # AC_ERLANG_NEED_ERLC([PATH])
-# ------------------------
+# ---------------------------
 AC_DEFUN([AC_ERLANG_NEED_ERLC],
 [AC_ERLANG_PATH_ERLC([not found], [$1])
 if test "$ERLC" = "not found"; then
     AC_MSG_ERROR([Erlang/OTP compiler (erlc) not found but required])
 fi
-])# AC_ERLANG_NEED_ERLC
+])
+
 
 # AC_ERLANG_PATH_ERL([VALUE-IF-NOT-FOUND], [PATH])
-# ---------------------------------------------
+# ------------------------------------------------
 AC_DEFUN([AC_ERLANG_PATH_ERL],
 [AC_ARG_VAR([ERL], [Erlang/OTP interpreter command [autodetected]])dnl
 if test -n "$ERL"; then
@@ -79,33 +100,24 @@ if test -n "$ERL"; then
 else
     AC_PATH_TOOL(ERL, erl, [$1], [$2])[]dnl
 fi
-])# AC_ERLANG_PATH_ERL
+])
+
 
 # AC_ERLANG_NEED_ERL([PATH])
-# -----------------------
+# --------------------------
 AC_DEFUN([AC_ERLANG_NEED_ERL],
 [AC_ERLANG_PATH_ERL([not found], [$1])
 if test "$ERL" = "not found"; then
     AC_MSG_ERROR([Erlang/OTP interpreter (erl) not found but required])
 fi
-])# AC_ERLANG_NEED_ERL
+])
 
 
-
-
-
-
-
-dnl Extend Autoconf's AC_LANG macro to accept Erlang as a language for tests
 
 ## ----------------------- ##
 ## 1. Language selection.  ##
 ## ----------------------- ##
 
-
-# ------------------------- #
-# 1x. The Erlang language.  #
-# ------------------------- #
 
 # AC_LANG(Erlang)
 # ---------------
@@ -114,6 +126,7 @@ m4_define([AC_LANG(Erlang)],
 ac_compile='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD ; echo "#!/bin/sh" > conftest$ac_exeext ; AS_ECHO(["\"$ERL\" -run conftest start -run init stop -noshell"]) >> conftest$ac_exeext ; chmod +x conftest$ac_exeext'
 ])
+
 
 # AC_LANG_ERLANG
 # --------------
@@ -130,14 +143,11 @@ m4_define([_AC_LANG_ABBREV(Erlang)], [erl])
 m4_define([_AC_LANG_PREFIX(Erlang)], [ERL])
 
 
+
 ## ---------------------- ##
 ## 2.Producing programs.  ##
 ## ---------------------- ##
 
-
-# ---------------------- #
-# 2x. Generic routines.  #
-# ---------------------- #
 
 # AC_LANG_SOURCE(Erlang)(BODY)
 # ----------------------------
@@ -156,13 +166,11 @@ $2
 ])
 
 
+
 ## -------------------------------------------- ##
 ## 3. Looking for Compilers and Preprocessors.  ##
 ## -------------------------------------------- ##
 
-# ------------------------- #
-# 3x. The Erlang compiler.  #
-# ------------------------- #
 
 # AC_LANG_PREPROC(Erlang)
 # -----------------------
@@ -172,20 +180,17 @@ AC_DEFUN([AC_LANG_PREPROC(Erlang)],
          [$0: No preprocessor defined for ]_AC_LANG)])
 
 # AC_LANG_COMPILER(Erlang)
-# ----------------------------
+# ------------------------
 # Find the Erlang compiler.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_COMPILER(Erlang)],
 [AC_REQUIRE([AC_ERLANG_PATH_ERLC])])
 
 
-
-
-
-dnl Macro for checking if an Erlang library is installed, and to
-dnl determine its version
-
 # AC_ERLANG_CHECK_LIB(LIBRARY, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
-# -------------------------------------------------------------------
+# ----------------------------------------------------------------------
+# Macro for checking if an Erlang library is installed, and to
+# determine its version
+#
 AC_DEFUN([AC_ERLANG_CHECK_LIB],
 [AC_REQUIRE([AC_ERLANG_PATH_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_PATH_ERL])[]dnl
@@ -223,11 +228,10 @@ AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"], [$3], [$2])
 ])# AC_ERLANG_CHECK_LIB
 
 
-
-dnl Determines the Erlang/OTP root directory
-
 # AC_ERLANG_SUBST_ROOT_DIR
-# ---------------
+# ------------------------
+# Determines the Erlang/OTP root directory
+#
 AC_DEFUN([AC_ERLANG_SUBST_ROOT_DIR],
 [AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
@@ -247,8 +251,9 @@ AC_CACHE_CHECK([for Erlang/OTP root directory],
 AC_SUBST([ERLANG_ROOT_DIR], [$erlang_cv_root_dir])
 ])# AC_ERLANG_SUBST_ROOT_DIR
 
+
 # AC_ERLANG_SUBST_LIB_DIR
-# ---------------
+# -----------------------
 AC_DEFUN([AC_ERLANG_SUBST_LIB_DIR],
 [AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
@@ -269,13 +274,13 @@ AC_SUBST([ERLANG_LIB_DIR], [$erlang_cv_lib_dir])
 ])# AC_ERLANG_SUBST_LIB_DIR
 
 
-dnl Directories for installing Erlang/OTP packages are separated from the
-dnl directories determined by running the Erlang/OTP installation that is used
-dnl for building.
-
-
 # AC_ERLANG_SUBST_INSTALL_LIB_DIR
-# ---------------
+# -------------------------------
+#
+# Directories for installing Erlang/OTP packages are separated from the
+# directories determined by running the Erlang/OTP installation that is used
+# for building.
+#
 AC_DEFUN([AC_ERLANG_SUBST_INSTALL_LIB_DIR],
 [AC_MSG_CHECKING([for Erlang/OTP library installation base directory])
 AC_ARG_VAR([ERLANG_INSTALL_LIB_DIR],
@@ -290,7 +295,7 @@ fi
 
 
 # AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR(PACKAGE_TARNAME, PACKAGE_VERSION)
-# ---------------
+# --------------------------------------------------------------------
 AC_DEFUN([AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR],
 [AC_REQUIRE([AC_ERLANG_SUBST_INSTALL_LIB_DIR])[]dnl
 AC_MSG_CHECKING([for Erlang/OTP '$1' library installation subdirectory])

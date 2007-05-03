@@ -51,8 +51,30 @@
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
+# Table of Contents:
+#
+# 1. Language selection
+#    and routines to produce programs in a given language.
+#      1a. C   1b. C++   1c. Objective C
+#
+# 2. Producing programs in a given language.
+#      2a. C   2b. C++   2c. Objective C
+#
+# 3. Looking for a compiler
+#    And possibly the associated preprocessor.
+#      3a. C   3b. C++   3c. Objective C
+#
+# 4. Compilers' characteristics.
+#      4a. C
+
+
+
+## ----------------------- ##
+## 1. Language selection.  ##
+## ----------------------- ##
+
 # -------------------- #
-# 1b. The C language.  #
+# 1a. The C language.  #
 # -------------------- #
 
 
@@ -83,8 +105,9 @@ m4_define([_AC_LANG_ABBREV(C)], [c])
 m4_define([_AC_LANG_PREFIX(C)], [C])
 
 
+
 # ---------------------- #
-# 1c. The C++ language.  #
+# 1b. The C++ language.  #
 # ---------------------- #
 
 
@@ -117,7 +140,7 @@ m4_define([_AC_LANG_PREFIX(C++)], [CXX])
 
 
 # ------------------------------ #
-# 1d. The Objective C language.  #
+# 1c. The Objective C language.  #
 # ------------------------------ #
 
 
@@ -148,14 +171,14 @@ m4_define([_AC_LANG_PREFIX(Objective C)], [OBJC])
 
 
 
-## ---------------------- ##
-## 2.Producing programs.  ##
-## ---------------------- ##
-
+## ----------------------- ##
+## 2. Producing programs.  ##
+## ----------------------- ##
 
 # --------------- #
-# 2b. C sources.  #
+# 2a. C sources.  #
 # --------------- #
+
 
 # AC_LANG_SOURCE(C)(BODY)
 # -----------------------
@@ -299,9 +322,11 @@ static unsigned long int ulongval () { return $2; }
 ])])
 
 
+
 # ----------------- #
-# 2c. C++ sources.  #
+# 2b. C++ sources.  #
 # ----------------- #
+
 
 # AC_LANG_SOURCE(C++)(BODY)
 # -------------------------
@@ -335,8 +360,9 @@ m4_copy([AC_LANG_INT_SAVE(C)], [AC_LANG_INT_SAVE(C++)])
 
 
 # ------------------------- #
-# 2d. Objective C sources.  #
+# 2c. Objective C sources.  #
 # ------------------------- #
+
 
 # AC_LANG_SOURCE(Objective C)(BODY)
 # ---------------------------------
@@ -374,7 +400,7 @@ m4_copy([AC_LANG_INT_SAVE(C)], [AC_LANG_INT_SAVE(Objective C)])
 ## -------------------------------------------- ##
 
 # -------------------- #
-# 3b. The C compiler.  #
+# 3a. The C compiler.  #
 # -------------------- #
 
 
@@ -691,8 +717,9 @@ fi
 ])# AC_PROG_CC_C_O
 
 
+
 # ---------------------- #
-# 3c. The C++ compiler.  #
+# 3b. The C++ compiler.  #
 # ---------------------- #
 
 
@@ -878,8 +905,9 @@ AC_LANG_POP([C++])dnl
 ])# AC_PROG_CXX_C_O
 
 
+
 # ------------------------------ #
-# 3d. The Objective C compiler.  #
+# 3c. The Objective C compiler.  #
 # ------------------------------ #
 
 
@@ -1017,17 +1045,14 @@ fi[]dnl
 
 
 
-
-
-
 ## ------------------------------- ##
 ## 4. Compilers' characteristics.  ##
 ## ------------------------------- ##
 
+# -------------------------------- #
+# 4a. C compiler characteristics.  #
+# -------------------------------- #
 
-# -------------------------------- #
-# 4b. C compiler characteristics.  #
-# -------------------------------- #
 
 # _AC_PROG_CC_C89 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
 # ----------------------------------------------------------------
