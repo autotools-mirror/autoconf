@@ -1,3 +1,8 @@
+2007-05-03  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Put a.out first.
+	Reorganize the comments before and in the macro.
+
 2007-05-02  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/lang.m4, lib/autoconf/c.m4,

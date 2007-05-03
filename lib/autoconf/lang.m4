@@ -436,28 +436,34 @@ AC_DEFUN([AC_OBJEXT],   [])
 # We do this in order to find out what is the extension we must add for
 # creating executables (see _AC_COMPILER_EXEEXT's comments).
 #
+# On OpenVMS 7.1 system, the DEC C 5.5 compiler when called through a
+# GNV (gnv.sourceforge.net) cc wrapper, produces the output file named
+# `a_out.exe'.
+# b.out is created by i960 compilers.
+#
+# Start with the most likely output file names, but:
+# 1) Beware the clever `test -f' on Cygwin, try the DOS-like .exe names
+# before the counterparts without the extension.
+# 2) The algorithm is not robust to junk in `.', hence go to wildcards
+# (conftest.*) only as a last resort.
 # Beware of `expr' that may return `0' or `'.  Since this macro is
 # the first one in touch with the compiler, it should also check that
 # it compiles properly.
 #
-# On OpenVMS 7.1 system, the DEC C 5.5 compiler when called through a
-# GNV (gnv.sourceforge.net) cc wrapper, produces the output file named
-# `a_out.exe'.
+# The IRIX 6 linker writes into existing files which may not be
+# executable, retaining their permissions.  Remove them first so a
+# subsequent execution test works.
+#
 m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 [# Try to create an executable without -o first, disregard a.out.
 # It will help us diagnose broken compilers, and finding out an intuition
 # of exeext.
 AC_MSG_CHECKING([for _AC_LANG compiler default output file name])
 ac_link_default=`AS_ECHO(["$ac_link"]) | sed ['s/ -o *conftest[^ ]*//']`
-#
-# List of possible output files, starting from the most likely.
-# The algorithm is not robust to junk in `.', hence go to wildcards
-# (conftest.*) only as a last resort.  b.out is created by i960 compilers.
-ac_files='a_out.exe a.exe conftest.exe a.out conftest conftest.* b.out'
-#
-# The IRIX 6 linker writes into existing files which may not be
-# executable, retaining their permissions.  Remove them first so a
-# subsequent execution test works.
+
+# The possible output files:
+ac_files="a.out conftest.exe conftest a.exe a_out.exe b.out conftest.*"
+
 ac_rmfiles=
 for ac_file in $ac_files
 do
