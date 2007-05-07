@@ -11600,6 +11600,10 @@ One workaround relies on Zsh's ``global aliases'' to convert
 test "$@{ZSH_VERSION+set@}" = set && alias -g '$@{1+"$@@"@}'='"$@@"'
 @end example
 
+Zsh only recognizes this alias when a shell word matches it exactly;
+@samp{"foo"$@{1+"$@@"@}} remains subject to word splitting.  Since this
+case always yields at least one shell word, use plain @samp{"$@@"}.
+
 A more conservative workaround is to avoid @samp{"$@@"} if it is
 possible that there may be no positional arguments.  For example,
 instead of:
@@ -12358,6 +12362,16 @@ esac
 but the @code{(} in this example is not portable to many Bourne
 shell implementations.  It can be omitted safely.
 
+Zsh handles pattern fragments derived from parameter expansions or
+command substitutions as though quoted:
+
+@example
+$ pat=\?; case aa in ?$pat) echo match;; esac
+$ pat=\?; case a? in ?$pat) echo match;; esac
+match
+@end example
+
+@noindent
 Because of a bug in its @code{fnmatch}, Bash fails to properly
 handle backslashes in character classes:
 

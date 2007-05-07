@@ -1,3 +1,8 @@
+2007-05-05  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autotest/general.m4 (_AT_NORMALIZE_TEST_GROUP_NUMBER): Use `eval'.
+	* doc/autoconf.texi ($@, case): Document Zsh limitations.
+
 2007-05-03  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Put a.out first.

@@ -154,12 +154,12 @@ m4_define([AT_LINE],
 # all the other test group numbers.
 m4_define([_AT_NORMALIZE_TEST_GROUP_NUMBER],
 [
-  while :; do
+  eval 'while :; do
     case $$1 in #(
-    $at_format*) break;;
+    '"$at_format"'*) break;;
     esac
     $1=0$$1
-  done
+  done'
 ])
 
 # _AT_CREATE_DEBUGGING_SCRIPT
