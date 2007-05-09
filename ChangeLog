@@ -1,3 +1,8 @@
+2007-05-09  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Caching Results): The CACHE-ID variable 
+	in the examples should not use the internal "ac_" prefix.
+
 2007-05-05  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/autotest/general.m4 (_AT_NORMALIZE_TEST_GROUP_NUMBER): Use `eval'.
