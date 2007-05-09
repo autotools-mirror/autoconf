@@ -1,5 +1,8 @@
 2007-05-09  Stepan Kasal  <kasal@ucw.cz>
 
+	* doc/autoconf.texi: Direntry for "autoconf Invocation"
+	renamed to "autoconf-invocation"
+
 	* doc/autoconf.texi (Caching Results): The CACHE-ID variable 
 	in the examples should not use the internal "ac_" prefix.
 
