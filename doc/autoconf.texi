@@ -6544,10 +6544,12 @@ New programs need not use this macro.
 @defmac AC_C_RESTRICT
 @acindex{C_RESTRICT}
 @cvindex restrict
-If the C compiler recognizes the @code{restrict} keyword, don't do anything.
-If it recognizes only a variant spelling (@code{__restrict},
-@code{__restrict__}, or @code{_Restrict}), then define
-@code{restrict} to that.
+If the C compiler recognizes a variant spelling for the @code{restrict}
+keyword (@code{__restrict}, @code{__restrict__}, or @code{_Restrict}),
+then define @code{restrict} to that; this is more likely to do the right
+thing with compilers that support language variants where plain
+@code{restrict} is not a keyword.  Otherwise, if the C compiler
+recognizes the @code{restrict} keyword, don't do anything.
 Otherwise, define @code{restrict} to be empty.
 Thus, programs may simply use @code{restrict} as if every C compiler
 supported it; for those that do not, the makefile

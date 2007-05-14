@@ -1647,9 +1647,10 @@ fi
 # http://autoconf-archive.cryp.to/acx_restrict.html
 #
 # Determine whether the C/C++ compiler supports the "restrict" keyword
-# introduced in ANSI C99, or an equivalent.  Do nothing if the compiler
-# accepts it.  Otherwise, if the compiler supports an equivalent,
-# define "restrict" to be that.  Here are some variants:
+# introduced in ANSI C99, or an equivalent.  Define "restrict" to the alternate
+# spelling, if any; these are more likely to work in both C and C++ compilers of
+# the same family, and in the presence of varying compiler options.  If only
+# plain "restrict" works, do nothing.  Here are some variants:
 # - GCC supports both __restrict and __restrict__
 # - older DEC Alpha C compilers support only __restrict
 # - _Restrict is the only spelling accepted by Sun WorkShop 6 update 2 C
@@ -1660,7 +1661,7 @@ AC_DEFUN([AC_C_RESTRICT],
   [ac_cv_c_restrict=no
    # Try the official restrict keyword, then gcc's __restrict, and
    # the less common variants.
-   for ac_kw in restrict __restrict __restrict__ _Restrict; do
+   for ac_kw in __restrict __restrict__ _Restrict restrict; do
      AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
       [[typedef int * int_ptr;
         int foo (int_ptr $ac_kw ip) {

@@ -1,9 +1,18 @@
+2007-05-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* NEWS: Document that AC_C_RESTRICT checks 'restrict' last.
+	* doc/autoconf.texi (C Compiler): Likewise.
+
+2007-05-14  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autoconf/c.m4 (AC_C_RESTRICT): Check `restrict' last.
+
 2007-05-09  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi: Direntry for "autoconf Invocation"
 	renamed to "autoconf-invocation"
 
-	* doc/autoconf.texi (Caching Results): The CACHE-ID variable 
+	* doc/autoconf.texi (Caching Results): The CACHE-ID variable
 	in the examples should not use the internal "ac_" prefix.
 
 2007-05-05  Noah Misch  <noah@cs.caltech.edu>

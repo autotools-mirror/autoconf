@@ -2,6 +2,10 @@
 
 ** AC_C_BIGENDIAN now supports universal binaries a la Mac OS X.
 
+** AC_C_RESTRICT now prefers to #define 'restrict' to a variant spelling
+   like '__restrict' if the variant spelling is available, as this is
+   more likely to work when mixing C and C++ code.
+
 ** AC_CHECK_ALIGNOF's type argument T is now documented better: it must
    be a string of tokens such that "T y;" is a valid member declaration
    in a struct.
