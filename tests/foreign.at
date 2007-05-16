@@ -91,4 +91,4 @@ AT_CHECK_AUTOCONF([], [], [], [ignore])
 # But the script executes properly.
 AT_CHECK_CONFIGURE([], [], [], [ignore])
 
-AT_CLEANUP(install-sh ltconfig libtool at-path ltmain.sh config.guess config.sub)
+AT_CLEANUP

@@ -1,3 +1,9 @@
+2007-05-16  Stepan Kasal  <kasal@ucw.cz>
+
+	* tests/foreign.at tests/semantics.at, tests/tools.at: Remove
+	parameters for AT_CLEANUP.
+	* tests/local.at (AT_CHECK_AU_MACRO): Likewise.
+
 2007-05-14  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* NEWS: Document that AC_C_RESTRICT checks 'restrict' last.

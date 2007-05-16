@@ -163,7 +163,7 @@ AT_CHECK([sed 's/  */ /g;s/^ //;s/ $//' config.libobjs], [],
 	 [${LIBOBJDIR}autoconf_ftnirp$U.o
 ])
 
-AT_CLEANUP([config.libobjs])
+AT_CLEANUP
 
 
 # AC_CHECK_HEADERS
@@ -202,7 +202,7 @@ AT_CHECK_DEFINES(
 [#define HAVE_HEADER2_H 1
 ])
 
-AT_CLEANUP([header1.h header2.h])
+AT_CLEANUP
 
 
 # AC_CHECK_HEADERS_NEW
@@ -235,7 +235,7 @@ AT_CHECK_DEFINES(
 /* #undef HAVE_HEADER3_H */
 ])
 
-AT_CLEANUP([header1.h header2.h header3.h])
+AT_CLEANUP
 
 
 # AC_CHECK_MEMBERS
@@ -455,7 +455,7 @@ AS_EXIT(0)
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 
-AT_CLEANUP(path)
+AT_CLEANUP
 
 
 
@@ -505,7 +505,7 @@ AT_CONFIGURE_AC([[AC_C_BIGENDIAN]])
 AT_CHECK_AUTOHEADER([--force])
 AT_CHECK([grep WORDS_BIGENDIAN config.hin], [], [ignore])
 
-AT_CLEANUP(at-endian)
+AT_CLEANUP
 
 
 # ------------------------------ #
@@ -546,7 +546,7 @@ AS_EXIT(0)
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 
-AT_CLEANUP(path)
+AT_CLEANUP
 
 
 

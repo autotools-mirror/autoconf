@@ -600,7 +600,7 @@ AT_CHECK([cat configure.ac], 0, [expout])
 AT_CHECK_AUTOUPDATE
 AT_CHECK([cat configure.ac], 0, [expout])
 
-AT_CLEANUP(configure.ac~)
+AT_CLEANUP
 
 
 # autoupdating AC_LINK_FILES
@@ -627,7 +627,7 @@ AT_CHECK([cat src1], 0, [dst1
 AT_CHECK([cat src2], 0, [dst2
 ])
 
-AT_CLEANUP(src1 src2 configure.ac~)
+AT_CLEANUP
 
 
 # autoupdating AC_PREREQ
