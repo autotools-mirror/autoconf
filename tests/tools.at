@@ -285,6 +285,8 @@ configure.ac:4: error: possibly undefined macro: AS@&t@_FOO
 configure.ac:5: error: possibly undefined macro: _AS@&t@_BAR
 configure.ac:6: error: possibly undefined macro: d@&t@nl
 ]])
+# Second run should succeed and yield no output.
+AT_CHECK([autoconf])
 
 AT_CLEANUP
 
@@ -385,6 +387,23 @@ AT_CHECK([[grep '^[^/].*/mkdir -p' sub/foo]], 1)
 
 AT_CLEANUP
 
+
+# autoconf: input from stdin
+# --------------------------
+AT_SETUP([autoconf: input from stdin])
+
+# Past Autoconf versions failed to read from stdin when other, non-frozen input
+# files were present.
+AT_DATA([aclocal.m4])
+
+AT_CHECK([echo 'AC_INIT(X, 1.0, bug-autoconf@gnu.org)' | autoconf -t AC_INIT -],
+	 0, [stdin:1:AC_INIT:X:1.0:bug-autoconf@gnu.org
+])
+AT_CHECK([echo 'AC_INIT(X, 2.0, bug-autoconf@gnu.org)' | autoconf -t AC_INIT -],
+	 0, [stdin:1:AC_INIT:X:2.0:bug-autoconf@gnu.org
+])
+
+AT_CLEANUP
 
 
 

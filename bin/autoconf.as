@@ -164,8 +164,8 @@ case $# in
       exit 1
     fi
     test -z "$traces" && test -z "$outfile" && outfile=configure;;
-  1) # autom4te doesn't like `-'.
-     test "x$1" != "x-" && infile=$1 ;;
+  1)
+    infile=$1 ;;
   *) exec >&2
      AS_ECHO(["$as_me: invalid number of arguments."])
      AS_ECHO(["$help"])

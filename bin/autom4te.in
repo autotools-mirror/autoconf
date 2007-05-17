@@ -418,7 +418,11 @@ Try `$me --help' for more information."
   my @argv;
   foreach (@ARGV)
     {
-      if (/\.m4f$/)
+      if ($_ eq '-')
+	{
+	  push @argv, $_;
+	}
+      elsif (/\.m4f$/)
 	{
 	  # Frozen files are optional => pass a `?' to `find_file'.
 	  my $file = find_file ("$_?", @include);
@@ -586,27 +590,30 @@ sub handle_output ($$)
 
   # Locate the forbidden words in the last input file.
   # This is unsatisfying but...
-  my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
-  my $file = new Autom4te::XFile ($ARGV[$#ARGV]);
   $exit_code = 1;
-
-  while ($_ = $file->getline)
+  if ($ARGV[$#ARGV] ne '-')
     {
-      # Don't complain in comments.  Well, until we have something
-      # better, don't consider `#include' etc. are comments.
-      s/\#.*//
-	unless /^\#(if|include|endif|ifdef|ifndef|define)\b/;
-
-      # Complain once per word, but possibly several times per line.
-      while (/$prohibited/)
+      my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
+      my $file = new Autom4te::XFile ($ARGV[$#ARGV]);
+      
+      while ($_ = $file->getline)
 	{
-	  my $word = $1;
-	  warn_forbidden ("$ARGV[$#ARGV]:$.", $word, %forbidden);
-	  delete $prohibited{$word};
-	  # If we're done, exit.
-	  return
-	    if ! %prohibited;
-	  $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
+	  # Don't complain in comments.  Well, until we have something
+	  # better, don't consider `#include' etc. to be comments.
+	  s/\#.*//
+	    unless /^\#(if|include|endif|ifdef|ifndef|define)\b/;
+
+	  # Complain once per word, but possibly several times per line.
+	  while (/$prohibited/)
+	    {
+	      my $word = $1;
+	      warn_forbidden ("$ARGV[$#ARGV]:$.", $word, %forbidden);
+	      delete $prohibited{$word};
+	      # If we're done, exit.
+	      return
+		if ! %prohibited;
+	      $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
+	    }
 	}
     }
   warn_forbidden ("$output:$prohibited{$_}", $_, %forbidden)
@@ -875,6 +882,10 @@ sub up_to_date ($)
 
   # We depend at least upon the arguments.
   my @dep = @ARGV;
+
+  # stdin is always out of date.
+  if (grep { $_ eq '-' } @dep)
+    { return 0 }
 
   # Files may include others.  We can use traces since we just checked
   # if they are available.
