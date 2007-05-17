@@ -1,3 +1,7 @@
+2007-05-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autom4te.in: Fix typos.
+
 2007-05-16  Noah Misch  <noah@cs.caltech.edu>
 
 	* bin/autoconf.as: Handle `-' just like other input files.

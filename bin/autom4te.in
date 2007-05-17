@@ -61,7 +61,7 @@ my $mode = "0666";
 my $melt = 0;
 
 # Names of the cache directory, cache directory index, trace cache
-# prefix, and output cache prefix.  And the IO objet for the index.
+# prefix, and output cache prefix.  And the IO object for the index.
 my $cache;
 my $icache;
 my $tcache;
@@ -135,7 +135,7 @@ map { s/:.*//;s/\W// } @m4_builtin;
 # | % m4 input.m4 -da -t m4_eval
 # | %
 #
-# So we will merge them, i.e.  tracing `BUILTIN' or tracing
+# So we will merge them, i.e., tracing `BUILTIN' or tracing
 # `m4_BUILTIN' will be the same: tracing both, but honoring the
 # *last* trace specification.
 #
@@ -483,7 +483,7 @@ sub handle_m4 ($@)
 # warn_forbidden ($WHERE, $WORD, %FORBIDDEN)
 # ------------------------------------------
 # $WORD is forbidden.  Warn with a dedicated error message if in
-# %FORBIDDEN, otherwise, a simple `error: possibly undefined macro'
+# %FORBIDDEN, otherwise a simple `error: possibly undefined macro'
 # will do.
 my $first_warn_forbidden = 1;
 sub warn_forbidden ($$%)
@@ -899,7 +899,7 @@ sub up_to_date ($)
       my $file = find_file ("$_?", @include);
       # If a file which used to be included is no longer there, then
       # don't say it's missing (it might no longer be included).  But
-      # of course, that cause the output to be outdated (as if the
+      # of course, that causes the output to be outdated (as if the
       # time stamp of that missing file was newer).
       return 0
 	if ! $file;
@@ -972,13 +972,13 @@ if (! -d "$cache")
   }
 
 # Open the index for update, and lock it.  autom4te handles several
-# files, but the index is the first and last file to be update, so
+# files, but the index is the first and last file to be updated, so
 # locking it is sufficient.
 $icache_file = new Autom4te::XFile $icache, O_RDWR|O_CREAT;
 $icache_file->lock (LOCK_EX);
 
 # Read the cache index if available and older than autom4te itself.
-# If autom4te is younger, then some structures such as C4che, might
+# If autom4te is younger, then some structures such as C4che might
 # have changed, which would corrupt its processing.
 Autom4te::C4che->load ($icache_file)
   if -f $icache && mtime ($icache) > mtime ($0);
