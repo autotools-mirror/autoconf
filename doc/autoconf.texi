@@ -6593,6 +6593,33 @@ Otherwise define @code{inline} to @code{__inline__} or @code{__inline}
 if it accepts one of those, otherwise define @code{inline} to be empty.
 @end defmac
 
+@defmac AC_C_OPENMP
+@acindex{C_OPENMP}
+@cvindex _OPENMP
+OpenMP (@url{http://www.openmp.org/}) specifies extensions of the C,
+C++, and Fortran languages that simplify optimization of shared memory
+parallelism, which is a common problem on multicore CPUs.
+
+The macro @code{AC_C_OPENMP} sets the variable @code{OPENMP_CFLAGS} to
+the C compiler flags needed for supporting OpenMP@.
+@code{OPENMP_CFLAGS} is set to empty if the compiler already supports
+OpenMP, if it has no way to activate OpenMP support, or if the user
+rejects OpenMP support by invoking @samp{configure} with the
+@samp{--disable-openmp} option.
+
+@code{OPENMP_CFLAGS} needs to be used when compiling programs, when
+preprocessing program source, and when linking programs.  Therefore you
+need to add @code{$(OPENMP_CFLAGS)} to the @code{CFLAGS} of programs
+that use OpenMP@.  If you preprocess OpenMP-specific code, you also need
+to add @code{$(OPENMP_CFLAGS)} to @code{CPPFLAGS}.  The presence of
+OpenMP support is revealed at compile time by the preprocessor macro
+@code{_OPENMP}.
+
+Linking a program with @code{OPENMP_CFLAGS} typically adds one more
+shared library to the program's dependencies, so its use is recommended
+only on programs that actually require OpenMP.
+@end defmac
+
 @defmac AC_C_CHAR_UNSIGNED
 @acindex{C_CHAR_UNSIGNED}
 @cvindex __CHAR_UNSIGNED__

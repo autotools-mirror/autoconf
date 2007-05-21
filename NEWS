@@ -1,5 +1,7 @@
 * Major changes in Autoconf 2.61b (????-??-??)
 
+** New macro AC_C_OPENMP.
+
 ** AC_C_BIGENDIAN now supports universal binaries a la Mac OS X.
 
 ** AC_C_RESTRICT now prefers to #define 'restrict' to a variant spelling

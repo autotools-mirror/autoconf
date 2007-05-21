@@ -1,3 +1,13 @@
+2007-05-21  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (C Compiler): Tweak OpenMP documentation a bit.
+
+2007-05-21  Bruno Haible  <bruno@clisp.org>
+
+	* lib/autoconf/c.m4 (AC_C_OPENMP): New macro.
+	* doc/autoconf.texi (C Compiler): Document AC_C_OPENMP.
+	* NEWS: Mention AC_C_OPENMP.
+
 2007-05-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* bin/autom4te.in: Fix typos.
