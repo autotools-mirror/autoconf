@@ -1843,17 +1843,49 @@ AC_DEFUN([AC_C_TYPEOF],
 ])
 
 
-# AC_C_OPENMP
-# -----------
+# _AC_LANG_OPENMP
+# ---------------
+# Expands to some language dependent source code for testing the presence of
+# OpenMP.
+AC_DEFUN([_AC_LANG_OPENMP],
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+# _AC_LANG_OPENMP(C)
+# ------------------
+m4_define([_AC_LANG_OPENMP(C)],
+[
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+])
+
+# _AC_LANG_OPENMP(C++)
+# --------------------
+m4_copy([_AC_LANG_OPENMP(C)], [_AC_LANG_OPENMP(C++)])
+
+# _AC_LANG_OPENMP(Fortran 77)
+# ---------------------------
+m4_define([_AC_LANG_OPENMP(Fortran 77)],
+[AC_LANG_FUNC_LINK_TRY([omp_get_num_threads])])
+
+# _AC_LANG_OPENMP(Fortran)
+# ---------------------------
+m4_copy([_AC_LANG_OPENMP(Fortran 77)], [_AC_LANG_OPENMP(Fortran)])
+
+# AC_OPENMP
+# ---------
 # Check which options need to be passed to the C compiler to support OpenMP.
-# Set the OPENMP_CFLAGS variable to these options.
+# Set the OPENMP_CFLAGS / OPENMP_CXXFLAGS / OPENMP_FFLAGS variable to these
+# options.
 # The options are necessary at compile time (so the #pragmas are understood)
 # and at link time (so the appropriate library is linked with).
 # This macro takes care to not produce redundant options if $CC $CFLAGS already
 # supports OpenMP. It also is careful to not pass options to compilers that
 # misinterpret them; for example, most compilers accept "-openmp" and create
 # an output file called 'penmp' rather than activating OpenMP support.
-AC_DEFUN([AC_C_OPENMP],
+AC_DEFUN([AC_OPENMP],
 [
   AC_MSG_CHECKING([whether to use OpenMP])
   AC_ARG_ENABLE(openmp,
@@ -1861,19 +1893,14 @@ AC_DEFUN([AC_C_OPENMP],
     [],
     [enable_openmp=yes])
   AC_MSG_RESULT([$enable_openmp])
-  OPENMP_CFLAGS=
+  OPENMP_[]_AC_LANG_PREFIX[]FLAGS=
   if test "$enable_openmp" = yes; then
     AC_MSG_CHECKING([for $CC option to support OpenMP])
-    AC_CACHE_VAL([ac_cv_prog_cc_openmp], [
-      ac_cv_prog_cc_openmp=unsupported
-      AC_LINK_IFELSE([
-#ifndef _OPENMP
- choke me
-#endif
-#include <omp.h>
-int main () { return omp_get_num_threads (); }
-        ], [ac_cv_prog_cc_openmp="none needed"])
-      if test "$ac_cv_prog_cc_openmp" = unsupported; then
+    AC_CACHE_VAL([ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp], [
+      ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=unsupported
+      AC_LINK_IFELSE([_AC_LANG_OPENMP],
+        [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp="none needed"])
+      if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" = unsupported; then
         dnl Try these flags:
         dnl   GCC >= 4.2           -fopenmp
         dnl   SunPRO C             -xopenmp
@@ -1881,8 +1908,8 @@ int main () { return omp_get_num_threads (); }
         dnl   SGI C, PGI C         -mp
         dnl   Tru64 Compaq C       -omp
         dnl   IBM C (AIX, Linux)   -qsmp=omp
-        for brand in GCC SunPRO Intel SGI/PGI Compaq IBM; do
-          case $brand in
+        for ac_brand in GCC SunPRO Intel SGI/PGI Compaq IBM; do
+          case $ac_brand in
             GCC)
               ac_conditional='defined __GNUC__'
               ac_option='-fopenmp' ;;
@@ -1902,8 +1929,8 @@ int main () { return omp_get_num_threads (); }
               ac_conditional='defined __xlc__ || defined __xlC__'
               ac_option='-qsmp=omp' ;;
           esac
-          if test $brand = GCC; then
-            if test "$GCC" = yes; then
+          if test $ac_brand = GCC; then
+            if test "$ac_compiler_gnu" = yes; then
               ac_openmp_result=yes
             else
               ac_openmp_result=no
@@ -1916,28 +1943,23 @@ int main () { return omp_get_num_threads (); }
               ], [ac_openmp_result=yes], [ac_openmp_result=no])
           fi
           if test $ac_openmp_result = yes; then
-            ac_save_CFLAGS=$CFLAGS
-            CFLAGS="$CFLAGS $ac_option"
-            AC_LINK_IFELSE([
-#ifndef _OPENMP
- choke me
-#endif
-#include <omp.h>
-int main () { return omp_get_num_threads (); }
-              ], [ac_cv_prog_cc_openmp=$ac_option])
-            CFLAGS=$ac_save_CFLAGS
+            ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+            _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
+            AC_LINK_IFELSE([_AC_LANG_OPENMP],
+              [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option])
+            _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
             break
           fi
         done
       fi
       ])
-    AC_MSG_RESULT([$ac_cv_prog_cc_openmp])
-    case $ac_cv_prog_cc_openmp in
+    AC_MSG_RESULT([$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp])
+    case $ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp in
       "none needed" | unsupported)
-        OPENMP_CFLAGS= ;;
+        OPENMP_[]_AC_LANG_PREFIX[]FLAGS= ;;
       *)
-        OPENMP_CFLAGS=$ac_cv_prog_cc_openmp ;;
+        OPENMP_[]_AC_LANG_PREFIX[]FLAGS=$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp ;;
     esac
   fi
-  AC_SUBST([OPENMP_CFLAGS])
+  AC_SUBST([OPENMP_]_AC_LANG_PREFIX[FLAGS])
 ])

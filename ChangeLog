@@ -1,12 +1,20 @@
+2007-05-21  Bruno Haible  <bruno@clisp.org>
+
+	* NEWS: Rename AC_C_OPENMP to AC_OPENMP.
+	* lib/autoconf/c.m4 (AC_OPENMP): Renamed from AC_C_OPENMP.
+	* doc/autoconf.texi (Generic Compiler Characteristics): Move
+	renamed AC_OPENMP documentation here, from "C compiler".
+	Mention C++ and Fortran.
+
 2007-05-21  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (C Compiler): Tweak OpenMP documentation a bit.
 
 2007-05-21  Bruno Haible  <bruno@clisp.org>
 
+	* NEWS: Mention AC_C_OPENMP.
 	* lib/autoconf/c.m4 (AC_C_OPENMP): New macro.
 	* doc/autoconf.texi (C Compiler): Document AC_C_OPENMP.
-	* NEWS: Mention AC_C_OPENMP.
 
 2007-05-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

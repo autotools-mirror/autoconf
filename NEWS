@@ -1,6 +1,6 @@
 * Major changes in Autoconf 2.61b (????-??-??)
 
-** New macro AC_C_OPENMP.
+** New macro AC_OPENMP.
 
 ** AC_C_BIGENDIAN now supports universal binaries a la Mac OS X.
 
