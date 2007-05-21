@@ -1887,74 +1887,71 @@ m4_copy([_AC_LANG_OPENMP(Fortran 77)], [_AC_LANG_OPENMP(Fortran)])
 # an output file called 'penmp' rather than activating OpenMP support.
 AC_DEFUN([AC_OPENMP],
 [
-  AC_MSG_CHECKING([whether to use OpenMP])
-  AC_ARG_ENABLE(openmp,
-    [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])
-  AC_MSG_RESULT([$enable_openmp])
   OPENMP_[]_AC_LANG_PREFIX[]FLAGS=
+  AC_ARG_ENABLE([openmp],
+    [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])
   if test "$enable_openmp" != no; then
-    AC_MSG_CHECKING([for $CC option to support OpenMP])
-    AC_CACHE_VAL([ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp], [
-      ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=unsupported
-      AC_LINK_IFELSE([_AC_LANG_OPENMP],
-        [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp="none needed"])
-      if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" = unsupported; then
-        dnl Try these flags:
-        dnl   GCC >= 4.2           -fopenmp
-        dnl   SunPRO C             -xopenmp
-        dnl   Intel C              -openmp
-        dnl   SGI C, PGI C         -mp
-        dnl   Tru64 Compaq C       -omp
-        dnl   IBM C (AIX, Linux)   -qsmp=omp
-        for ac_brand in GCC SunPRO Intel SGI/PGI Compaq IBM; do
-          case $ac_brand in
-            GCC)
-              ac_conditional='defined __GNUC__'
-              ac_option='-fopenmp' ;;
-            SunPRO)
-              ac_conditional='defined __SUNPRO_C || defined __SUNPRO_CC'
-              ac_option='-xopenmp' ;;
-            Intel)
-              ac_conditional='defined __INTEL_COMPILER'
-              ac_option='-openmp' ;;
-            SGI/PGI)
-              ac_conditional='defined __sgi || defined __PGI || defined __PGIC__'
-              ac_option='-mp' ;;
-            Compaq)
-              ac_conditional='defined __DECC || defined __DECCXX'
-              ac_option='-omp' ;;
-            IBM)
-              ac_conditional='defined __xlc__ || defined __xlC__'
-              ac_option='-qsmp=omp' ;;
-          esac
-          if test $ac_brand = GCC; then
-            if test "$ac_compiler_gnu" = yes; then
-              ac_openmp_result=yes
-            else
-              ac_openmp_result=no
-            fi
-          else
-            AC_EGREP_CPP([Brand], [
-              #if $ac_conditional
-               Brand
-              #endif
-              ], [ac_openmp_result=yes], [ac_openmp_result=no])
-          fi
-          if test $ac_openmp_result = yes; then
-            ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
-            _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
-            AC_LINK_IFELSE([_AC_LANG_OPENMP],
-              [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option])
-            _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
-            break
-          fi
-        done
-      fi
-      ])
-    AC_MSG_RESULT([$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp])
-    case $ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp in
+    AC_CACHE_CHECK([for $CC option to support OpenMP],
+      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp],
+      [AC_LINK_IFELSE([_AC_LANG_OPENMP],
+	 [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='none needed'],
+	 [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='unsupported'
+	  dnl Try these flags:
+	  dnl   GCC >= 4.2           -fopenmp
+	  dnl   SunPRO C             -xopenmp
+	  dnl   Intel C              -openmp
+	  dnl   SGI C, PGI C         -mp
+	  dnl   Tru64 Compaq C       -omp
+	  dnl   IBM C (AIX, Linux)   -qsmp=omp
+	  for ac_brand in GCC SunPRO Intel SGI/PGI Compaq IBM; do
+	    case $ac_brand in #(
+	      GCC)
+		ac_conditional='defined __GNUC__'
+		ac_option='-fopenmp' ;; #(
+	      SunPRO)
+		ac_conditional='defined __SUNPRO_C || defined __SUNPRO_CC'
+		ac_option='-xopenmp' ;; #(
+	      Intel)
+		ac_conditional='defined __INTEL_COMPILER'
+		ac_option='-openmp' ;; #(
+	      SGI/PGI)
+		ac_conditional='defined __sgi || defined __PGI || defined __PGIC__'
+		ac_option='-mp' ;; #(
+	      Compaq)
+		ac_conditional='defined __DECC || defined __DECCXX'
+		ac_option='-omp' ;; #(
+	      IBM)
+		ac_conditional='defined __xlc__ || defined __xlC__'
+		ac_option='-qsmp=omp' ;;
+	    esac
+	    if test $ac_brand = GCC; then
+	      if test "$ac_compiler_gnu" = yes; then
+		ac_openmp_result=yes
+	      else
+		ac_openmp_result=no
+	      fi
+	    else
+	      AC_EGREP_CPP([Brand],
+		[
+		  #if $ac_conditional
+		   Brand
+		  #endif
+		],
+		[ac_openmp_result=yes],
+		[ac_openmp_result=no])
+	    fi
+	    if test $ac_openmp_result = yes; then
+	      ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+	      _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
+	      AC_LINK_IFELSE([_AC_LANG_OPENMP],
+		[ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option])
+	      _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
+	      break
+	    fi
+	  done])])
+    case $ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp in #(
       "none needed" | unsupported)
-        OPENMP_[]_AC_LANG_PREFIX[]FLAGS= ;;
+        ;; #(
       *)
         OPENMP_[]_AC_LANG_PREFIX[]FLAGS=$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp ;;
     esac

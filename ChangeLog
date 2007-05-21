@@ -1,5 +1,10 @@
 2007-05-21  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* lib/autoconf/c.m4 (AC_OPENMP): Don't echo --enable-openmp
+	choice, since that's what we do with --enable-largefile etc.
+	Redo indenting and assignments to simplify things a bit, and make
+	the parens work with Emacs.
+
 	* doc/autoconf.texi (Generic Compiler Characteristics): Fix typo
 	in my previous change: AC_C_OPENMP -> AC_OPENMP.  Reported by Bruno
 	Haible.
