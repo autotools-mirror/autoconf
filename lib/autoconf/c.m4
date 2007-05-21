@@ -1889,12 +1889,10 @@ AC_DEFUN([AC_OPENMP],
 [
   AC_MSG_CHECKING([whether to use OpenMP])
   AC_ARG_ENABLE(openmp,
-    [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])],
-    [],
-    [enable_openmp=yes])
+    [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])
   AC_MSG_RESULT([$enable_openmp])
   OPENMP_[]_AC_LANG_PREFIX[]FLAGS=
-  if test "$enable_openmp" = yes; then
+  if test "$enable_openmp" != no; then
     AC_MSG_CHECKING([for $CC option to support OpenMP])
     AC_CACHE_VAL([ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp], [
       ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=unsupported

@@ -1,3 +1,8 @@
+2007-05-21  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autoconf/c.m4 (AC_OPENMP): Simplify use of AC_ARG_ENABLE. 
+	* tests/local.at (AT_CHECK_ENV): Exempt OPENMP_CFLAGS.
+
 2007-05-21  Bruno Haible  <bruno@clisp.org>
 
 	* NEWS: Rename AC_C_OPENMP to AC_OPENMP.
