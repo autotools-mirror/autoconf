@@ -6279,7 +6279,7 @@ OpenMP (@url{http://www.openmp.org/}) specifies extensions of C, C++,
 and Fortran that simplify optimization of shared memory parallelism,
 which is a common problem on multicore CPUs.
 
-If the current language is C, the macro @code{AC_C_OPENMP} sets the
+If the current language is C, the macro @code{AC_OPENMP} sets the
 variable @code{OPENMP_CFLAGS} to the C compiler flags needed for
 supporting OpenMP@.  @code{OPENMP_CFLAGS} is set to empty if the
 compiler already supports OpenMP, if it has no way to activate OpenMP
