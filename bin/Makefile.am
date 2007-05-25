@@ -54,6 +54,8 @@ edit = sed \
 	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \
 	-e 's|@configure_input[@]|Generated from $@.in; do not edit by hand.|g'
 
+$(top_builddir)/bin/autom4te: autom4te
+
 # autoconf is written in M4sh.
 # FIXME: this target should depend on the frozen files below lib/m4sugar,
 # otherwise autom4te may pick up a frozen m4sh.m4f from an earlier
