@@ -17,7 +17,7 @@ DUALCASE=1; export DUALCASE # for MKS sh
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
@@ -272,7 +272,7 @@ IFS=$as_save_IFS
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
@@ -293,7 +293,7 @@ _ASEOF
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
@@ -445,9 +445,10 @@ fi
 
 test \$exitcode = 0") || {
   echo No shell found that supports shell functions.
-  echo Please tell autoconf@gnu.org about your system,
-  echo including any error possibly output before this
-  echo message
+  echo Please tell bug-autoconf@gnu.org about your system,
+  echo including any error possibly output before this message.
+  echo This can help us improve future autoconf versions.
+  echo Configuration will now proceed without shell functions.
 }
 
 
@@ -3090,7 +3091,7 @@ DUALCASE=1; export DUALCASE # for MKS sh
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
   NULLCMD=:
-  # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
@@ -3454,8 +3455,7 @@ test -n "\$AWK" || AWK=awk
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF
-# If no file are specified by the user, then we need to provide default
-# value.  By we need to know if files were specified by the user.
+# The default lists apply if the user does not specify any file.
 ac_need_defaults=:
 while test $# != 0
 do
