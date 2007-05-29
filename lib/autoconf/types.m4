@@ -664,7 +664,7 @@ AC_DEFUN([_AC_TYPE_UNSIGNED_INT],
       [AC_DEFINE([_UINT$1_T], 1,
 	 [Define for Solaris 2.5.1 so the uint$1_t typedef from
 	  <sys/synch.h>, <pthread.h>, or <semaphore.h> is not used.
-	  If the typedef was allowed, the #define below would cause a
+	  If the typedef were allowed, the #define below would cause a
 	  syntax error.])])
     AC_DEFINE_UNQUOTED([uint$1_t], [$ac_cv_c_uint$1_t],
       [Define to the type of an unsigned integer type of width exactly $1 bits
