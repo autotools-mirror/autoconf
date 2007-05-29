@@ -5907,8 +5907,8 @@ is the base type of the array argument to @code{getgroups}.
 @acindex{TYPE_INT8_T}
 @cvindex HAVE_INT8_T
 @cvindex int8_t
-If @file{stdint.h} or @file{inttypes.h} defines the type @code{int8_t},
-define @code{HAVE_INT8_T}.  Otherwise, define @code{int8_t} to a signed
+If @file{stdint.h} or @file{inttypes.h} does not define the type
+@code{int8_t}, define @code{int8_t} to a signed
 integer type that is exactly 8 bits wide and that uses two's complement
 representation, if such a type exists.
 @end defmac
@@ -6056,8 +6056,8 @@ headers do not define them.
 @acindex{TYPE_UINT8_T}
 @cvindex HAVE_UINT8_T
 @cvindex uint8_t
-If @file{stdint.h} or @file{inttypes.h} defines the type @code{uint8_t},
-define @code{HAVE_UINT8_T}.  Otherwise, define @code{uint8_t} to an
+If @file{stdint.h} or @file{inttypes.h} does not define the type
+@code{uint8_t}, define @code{uint8_t} to an
 unsigned integer type that is exactly 8 bits wide, if such a type
 exists.
 @end defmac
