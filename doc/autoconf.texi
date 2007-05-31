@@ -5911,6 +5911,19 @@ If @file{stdint.h} or @file{inttypes.h} does not define the type
 @code{int8_t}, define @code{int8_t} to a signed
 integer type that is exactly 8 bits wide and that uses two's complement
 representation, if such a type exists.
+If you are worried about porting to hosts that lack such a type, you can
+use the results of this macro in C89-or-later code as follows:
+
+@example
+#if HAVE_STDINT_H
+# include <stdint.h>
+#endif
+#if defined INT8_MAX || defined int8_t
+ @emph{code using int8_t}
+#else
+ @emph{complicated alternative using >8-bit 'signed char'}
+#endif
+@end example
 @end defmac
 
 @defmac AC_TYPE_INT16_T
@@ -6060,27 +6073,28 @@ If @file{stdint.h} or @file{inttypes.h} does not define the type
 @code{uint8_t}, define @code{uint8_t} to an
 unsigned integer type that is exactly 8 bits wide, if such a type
 exists.
+This is like @code{AC_TYPE_INT8_T}, except for unsigned integers.
 @end defmac
 
 @defmac AC_TYPE_UINT16_T
 @acindex{TYPE_UINT16_T}
 @cvindex HAVE_UINT16_T
 @cvindex uint16_t
-This is like @code{AC_TYPE_UINT8_T}, except for 16-bit unsigned integers.
+This is like @code{AC_TYPE_UINT8_T}, except for 16-bit integers.
 @end defmac
 
 @defmac AC_TYPE_UINT32_T
 @acindex{TYPE_UINT32_T}
 @cvindex HAVE_UINT32_T
 @cvindex uint32_t
-This is like @code{AC_TYPE_UINT8_T}, except for 32-bit unsigned integers.
+This is like @code{AC_TYPE_UINT8_T}, except for 32-bit integers.
 @end defmac
 
 @defmac AC_TYPE_UINT64_T
 @acindex{TYPE_UINT64_T}
 @cvindex HAVE_UINT64_T
 @cvindex uint64_t
-This is like @code{AC_TYPE_UINT8_T}, except for 64-bit unsigned integers.
+This is like @code{AC_TYPE_UINT8_T}, except for 64-bit integers.
 @end defmac
 
 @defmac AC_TYPE_UINTMAX_T

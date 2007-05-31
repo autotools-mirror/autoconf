@@ -1,3 +1,8 @@
+2007-05-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Particular Types): Give example of use for
+	AC_TYPE_UINT8_T.
+
 2007-05-29  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autoconf/types.m4 (_AC_TYPE_UNSIGNED_INT): Fix a typo.
