@@ -1,7 +1,7 @@
 2007-05-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Particular Types): Give example of use for
-	AC_TYPE_UINT8_T.
+	AC_TYPE_INT8_T etc.
 
 2007-05-29  Stepan Kasal  <kasal@ucw.cz>
 
