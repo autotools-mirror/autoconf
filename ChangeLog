@@ -1,3 +1,8 @@
+2007-06-04  Noah Misch  <noah@cs.caltech.edu>
+
+	* doc/autoconf.texi (AC_F77_MAIN): Give a specific usage example that
+	works with both C and C++.
+
 2007-06-03  Noah Misch  <noah@cs.caltech.edu>,
 	    Bruno Haible  <bruno@clisp.org>
 

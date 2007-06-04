@@ -7094,8 +7094,16 @@ alternate main function name is found, @code{F77_MAIN} and @code{FC_MAIN} are
 simply defined to @code{main}.)
 
 Thus, when calling Fortran routines from C that perform things like I/O,
-one should use this macro and name the "main" function
-@code{F77_MAIN} or @code{FC_MAIN} instead of @code{main}.
+one should use this macro and declare the "main" function like so:
+
+@example
+#ifdef __cplusplus
+  extern "C"
+#endif
+int F77_MAIN(int argc, char *argv[]);
+@end example
+
+(Again, replace @code{F77} with @code{FC} for Fortran instead of Fortran 77.)
 @end defmac
 
 @defmac AC_F77_WRAPPERS
