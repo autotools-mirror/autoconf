@@ -1903,49 +1903,18 @@ AC_DEFUN([AC_OPENMP],
 	  dnl   SGI C, PGI C         -mp
 	  dnl   Tru64 Compaq C       -omp
 	  dnl   IBM C (AIX, Linux)   -qsmp=omp
-	  for ac_brand in GCC SunPRO Intel SGI/PGI Compaq IBM; do
-	    case $ac_brand in #(
-	      GCC)
-		ac_conditional='defined __GNUC__'
-		ac_option='-fopenmp' ;; #(
-	      SunPRO)
-		ac_conditional='defined __SUNPRO_C || defined __SUNPRO_CC'
-		ac_option='-xopenmp' ;; #(
-	      Intel)
-		ac_conditional='defined __INTEL_COMPILER'
-		ac_option='-openmp' ;; #(
-	      SGI/PGI)
-		ac_conditional='defined __sgi || defined __PGI || defined __PGIC__'
-		ac_option='-mp' ;; #(
-	      Compaq)
-		ac_conditional='defined __DECC || defined __DECCXX'
-		ac_option='-omp' ;; #(
-	      IBM)
-		ac_conditional='defined __xlc__ || defined __xlC__'
-		ac_option='-qsmp=omp' ;;
-	    esac
-	    if test $ac_brand = GCC; then
-	      if test "$ac_compiler_gnu" = yes; then
-		ac_openmp_result=yes
-	      else
-		ac_openmp_result=no
-	      fi
-	    else
-	      AC_EGREP_CPP([Brand],
-		[
-		  #if $ac_conditional
-		   Brand
-		  #endif
-		],
-		[ac_openmp_result=yes],
-		[ac_openmp_result=no])
-	    fi
-	    if test $ac_openmp_result = yes; then
-	      ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
-	      _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
-	      AC_LINK_IFELSE([_AC_LANG_OPENMP],
-		[ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option])
-	      _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
+	  dnl If in this loop a compiler is passed an option that it doesn't
+	  dnl understand or that it misinterprets, the AC_LINK_IFELSE test
+	  dnl will fail (since we know that it failed without the option),
+	  dnl therefore the loop will continue searching for an option, and
+	  dnl no output file called 'penmp' or 'mp' is created.
+	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp; do
+	    ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+	    _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
+	    AC_LINK_IFELSE([_AC_LANG_OPENMP],
+	      [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp=$ac_option])
+	    _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
+	    if test "$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp" != unsupported; then
 	      break
 	    fi
 	  done])])
