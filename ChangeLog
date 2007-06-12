@@ -1,3 +1,11 @@
+2007-06-12  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autoconf/general.m4 (AC_SUBST): Raise a fatal error if VARIABLE is
+	not a valid shell variable name.
+	* tests/mktests.sh (ac_exclude_list): Add AC_ARG_VAR.
+	* tests/torture.at (AC_SUBST: variable name validation): New test.
+	Reported by Andreas Schwab.
+
 2007-06-04  Noah Misch  <noah@cs.caltech.edu>
 
 	* doc/autoconf.texi (AC_F77_MAIN): Give a specific usage example that

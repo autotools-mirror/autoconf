@@ -744,6 +744,36 @@ two
 AT_CLEANUP
 
 
+## ------------------------------------ ##
+## AC_SUBST: variable name validation.  ##
+## ------------------------------------ ##
+
+AT_SETUP([AC_SUBST: variable name validation])
+
+AT_CONFIGURE_AC([[AC_SUBST(, [])
+AC_CONFIG_FILES([Makefile])
+]])
+AT_DATA([Makefile.in], [[
+]])
+mv -f configure.ac configure.tmpl
+
+# Invalid names.
+for var in ['' ab\~ ab\( ab[] ab\' ab\" ab\\\\]; do
+  sed ["s/AC_SUBST(/&[$var]/"] <configure.tmpl >configure.ac
+  AT_CHECK_AUTOCONF([], [1], [], [ignore])
+done
+
+# Valid names.
+for var in ab a4 'a@@&t@\&t@b'; do
+  sed ["s/AC_SUBST(/&[$var]/"] <configure.tmpl >configure.ac
+  AT_CHECK_AUTOCONF
+  AT_CHECK_AUTOHEADER
+  AT_CHECK_CONFIGURE
+done
+
+AT_CLEANUP
+
+
 ## ------------------------ ##
 ## datarootdir workaround.  ##
 ## ------------------------ ##

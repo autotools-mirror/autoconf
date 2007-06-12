@@ -2040,7 +2040,9 @@ m4_define([AC_SUBST_TRACE])
 # empty value, not an empty second argument.
 #
 m4_define([AC_SUBST],
-[AC_SUBST_TRACE([$1])dnl
+[m4_bmatch(m4_bpatsubst([[$1]], [@&t@]), ^m4_defn([m4_re_word])$, [],
+  [AC_FATAL([$0: `$1' is not a valid shell variable name])])dnl
+AC_SUBST_TRACE([$1])dnl
 m4_pattern_allow([^$1$])dnl
 m4_ifvaln([$2], [$1=$2])[]dnl
 m4_append_uniq([_AC_SUBST_VARS], [$1], [

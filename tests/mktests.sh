@@ -87,6 +87,7 @@ ac_exclude_list='
 	/^AC_(CANONICALIZE|PREFIX_PROGRAM|PREREQ)$/ {next}
 	/^AC_(SEARCH_LIBS|REPLACE_FUNCS)$/ {next}
 	/^AC_(CACHE_CHECK|COMPUTE)_INT$/ {next}
+	/^AC_ARG_VAR$/ {next}
 
 	# Performed in the semantics tests.
 	/^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$/ {next}
