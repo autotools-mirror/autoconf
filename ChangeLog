@@ -1,3 +1,16 @@
+2007-06-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE): Set FPATH too.
+	Problem reported by Fred Kreek in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2007-06/msg00009.html>.
+	* doc/autoconf.texi (Special Shell Variables): Warn about FPATH.
+	(Macro Names, Defining Directories): Don't mention PATH as a name
+	for a fully qualified file name, as this usage violates the GNU
+	coding standards and we shouldn't recommend it.
+
+	* lib/autotest/general.m4 (AT_INIT): Don't set PATH to the empty
+	string and then assume shell builtins like "test" will work.
+
 2007-06-12  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/autoconf/general.m4 (AC_SUBST): Raise a fatal error if VARIABLE is

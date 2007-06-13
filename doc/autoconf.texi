@@ -10479,8 +10479,6 @@ Posix group owners of files.
 Header files.
 @item LIB
 C libraries.
-@item PATH
-Absolute names of files, including programs.
 @item PROG
 The base names of programs.
 @item MEMBER
@@ -12147,6 +12145,13 @@ PS1='$ '
 PS2='> '
 PS4='+ '
 @end example
+
+@item FPATH
+The Korn shell uses @env{FPATH} to find shell functions, so avoid
+@env{FPATH} in portable scripts.  @env{FPATH} is consulted after
+@env{PATH}, but you still need to be wary of tests that use @env{PATH}
+to find whether a command exists, since they might report the wrong
+result if @env{FPATH} is also set.
 
 @item IFS
 @evindex IFS
@@ -19181,11 +19186,6 @@ Note that all the previous solutions hard wire the absolute name of
 these directories in the executables, which is not a good property.  You
 may try to compute the names relative to @code{prefix}, and try to
 find @code{prefix} at runtime, this way your package is relocatable.
-Some macros are already available to address this issue: see
-@code{adl_COMPUTE_RELATIVE_PATHS} and
-@code{adl_COMPUTE_STANDARD_RELATIVE_PATHS} on the
-@uref{http://autoconf-archive.cryp.to/,
-Autoconf Macro Archive}.
 @end itemize
 
 

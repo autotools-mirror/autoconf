@@ -581,19 +581,20 @@ esac])
 #
 # There might be directories that don't exist, but don't redirect
 # builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
-PATH=
+at_new_path=
 _AS_PATH_WALK([$at_path],
 [as_dir=`(cd "$as_dir" && pwd) 2>/dev/null`
 test -d "$as_dir" || continue
-case $PATH in
+case $at_new_path in
 	          $as_dir                 | \
 	          $as_dir$PATH_SEPARATOR* | \
   *$PATH_SEPARATOR$as_dir                 | \
   *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR* ) ;;
 
-  '') PATH=$as_dir ;;
-   *) PATH=$PATH$PATH_SEPARATOR$as_dir ;;
+  '') at_new_path=$as_dir ;;
+   *) at_new_path=$at_new_path$PATH_SEPARATOR$as_dir ;;
 esac])
+PATH=$at_new_path
 export PATH
 
 # Setting up the FDs.
