@@ -76,7 +76,7 @@ if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! /bin/sh" >conf$$.sh
   echo  "exit 0"   >>conf$$.sh
   chmod +x conf$$.sh
-  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
+  if (PATH="/nonexistent;."; FPATH=$PATH; conf$$.sh) >/dev/null 2>&1; then
     PATH_SEPARATOR=';'
   else
     PATH_SEPARATOR=:
@@ -3150,7 +3150,7 @@ if test "${PATH_SEPARATOR+set}" != set; then
   echo "#! /bin/sh" >conf$$.sh
   echo  "exit 0"   >>conf$$.sh
   chmod +x conf$$.sh
-  if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
+  if (PATH="/nonexistent;."; FPATH=$PATH; conf$$.sh) >/dev/null 2>&1; then
     PATH_SEPARATOR=';'
   else
     PATH_SEPARATOR=:
