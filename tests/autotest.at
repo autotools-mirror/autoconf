@@ -415,3 +415,64 @@ AT_CHECK_KEYS([-3], [none|first|second], [3], [both], [0])
 AT_CHECK_KEYS([4-], [both], [1], [none|first|second], [0])
 AT_CHECK_KEYS([-k second 4-], [second|both], [2], [none|first], [0])
 AT_CLEANUP
+
+
+## ------------------- ##
+## srcdir propagation. ##
+## ------------------- ##
+
+AT_SETUP([srcdir propagation])
+AT_KEYWORDS([autotest])
+AT_CAPTURE_FILE([suite.log])
+
+mkdir pkg vpath-outside
+mkdir pkg/t pkg/vpath-inside
+AT_DATA([pkg/a])
+AT_DATA([pkg/t/b])
+
+AT_DATA([pkg/configure.ac], [[AC_INIT
+AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
+AC_CONFIG_TESTDIR([t])
+AC_OUTPUT
+]])
+cd pkg
+AT_CHECK_AUTOCONF
+cd ..
+
+AT_DATA([pkg/t/suite.at],
+[[m4_define([AT_PACKAGE_NAME],    [GNU Nonsense])
+m4_define([AT_PACKAGE_TARNAME],   [nonsense])
+m4_define([AT_PACKAGE_VERSION],   [1.0])
+m4_define([AT_PACKAGE_STRING],    [GNU Nonsense 1.0])
+m4_define([AT_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
+AT_INIT([suite to check srcdir])
+AT_SETUP([my only test])
+AT_CHECK([test -f "$top_srcdir"/a && test -f "$srcdir"/b])
+AT_CLEANUP
+]])
+cd pkg/t
+AT_CHECK_AUTOM4TE([--language=autotest -o suite suite.at])
+cd ../..
+
+# Build directory totally outside source directory.
+cd vpath-outside
+AT_CHECK([top_srcdir=$abs_top_srcdir ../pkg/configure], [0], [ignore])
+cd t
+AT_CHECK([../../pkg/t/suite], [0], [ignore])
+cd ../..
+
+# Build directory as subdirectory of source directory.
+cd pkg/vpath-inside
+AT_CHECK([top_srcdir=$abs_top_srcdir ../configure], [0], [ignore])
+cd t
+AT_CHECK([../../t/suite], [0], [ignore])
+cd ../../..
+
+# Build directory as source directory.
+cd pkg
+AT_CHECK_CONFIGURE
+cd t
+AT_CHECK([./suite], [0], [ignore])
+cd ../..
+
+AT_CLEANUP

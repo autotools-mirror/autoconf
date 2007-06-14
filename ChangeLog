@@ -1,3 +1,10 @@
+2007-06-13  Noah Misch  <noah@cs.caltech.edu>
+
+	* lib/autotest/general.m4 (AT_INIT): Compute $srcdir correctly.
+	* tests/autotest.at (srcdir propagation): New test.
+	* THANKS: Update.
+	Reported by Mike Frysinger.
+
 2007-06-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE): Set FPATH too.
