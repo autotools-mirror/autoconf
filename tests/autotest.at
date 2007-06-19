@@ -425,7 +425,7 @@ AT_SETUP([srcdir propagation])
 AT_KEYWORDS([autotest])
 AT_CAPTURE_FILE([suite.log])
 
-mkdir pkg vpath-outside
+mkdir pkg vpath-outside vpath-abs
 mkdir pkg/t pkg/vpath-inside
 AT_DATA([pkg/a])
 AT_DATA([pkg/t/b])
@@ -461,12 +461,26 @@ cd t
 AT_CHECK([../../pkg/t/suite], [0], [ignore])
 cd ../..
 
+# Build directory totally outside source directory (absolute).
+my_srcdir=`pwd`/pkg
+cd vpath-abs
+AT_CHECK([top_srcdir=$abs_top_srcdir "$my_srcdir"/configure], [0], [ignore])
+cd t
+AT_CHECK(["$my_srcdir"/t/suite], [0], [ignore])
+cd ../..
+
 # Build directory as subdirectory of source directory.
 cd pkg/vpath-inside
 AT_CHECK([top_srcdir=$abs_top_srcdir ../configure], [0], [ignore])
 cd t
 AT_CHECK([../../t/suite], [0], [ignore])
 cd ../../..
+
+# Build directory as parent of source directory.
+AT_CHECK([top_srcdir=$abs_top_srcdir pkg/configure], [0], [ignore])
+cd t
+AT_CHECK([../pkg/t/suite], [0], [ignore])
+cd ..
 
 # Build directory as source directory.
 cd pkg

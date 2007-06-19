@@ -220,7 +220,11 @@ if test -n "$at_top_srcdir"; then
   for at_dir in srcdir top_srcdir top_build_prefix
   do
     at_val=AS_VAR_GET([at_$at_dir])
-    AS_VAR_SET([$at_dir], [../../$at_val])
+    case $at_val in
+      [[\\/$]]* | ?:[[\\/]]* ) at_prefix= ;;
+      *) at_prefix=../../ ;;
+    esac
+    AS_VAR_SET([$at_dir], [$at_prefix$at_val])
   done
 fi
 
