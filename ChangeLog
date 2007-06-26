@@ -1,3 +1,9 @@
+2007-06-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Usual Tools): sed -e ''
+	fails on AIX 5.3.
+
 2007-06-17  Noah Misch  <noah@cs.caltech.edu>
 
 	* lib/autotest/general.m4 (AT_INIT): Handle absolute `srcdir'.

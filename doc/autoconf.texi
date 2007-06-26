@@ -13933,9 +13933,11 @@ $ @kbd{echo '1*23*4' | /usr/xpg4/bin/sed 's/\(.\)*/x/g'}
 x
 @end example
 
-The @option{-e} option is portable, so long as its argument
-does not begin with @samp{a}, @samp{c}, or @samp{i}
-(as this runs afoul of a Tru64 5.1 bug).
+The @option{-e} option is mostly portable.
+However, its argument
+cannot start with @samp{a}, @samp{c}, or @samp{i},
+as this runs afoul of a Tru64 5.1 bug.
+Also, its argument cannot be empty, as this fails on @acronym{AIX} 5.3.
 Some people prefer to use @samp{-e}:
 
 @example
