@@ -1,3 +1,9 @@
+2007-07-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (autoreconf Invocation): Document ACLOCAL_AMFLAGS
+	limitation reported by Leo Moisio in
+	<http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=432941>.
+
 2007-07-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* COPYING: Update to GPLv3.  All uses changed.
