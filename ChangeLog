@@ -1,3 +1,9 @@
+2007-07-20  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Reword the copyright notices to match what's suggested in GPLv3.
+	In ChangeLog files, use more-permissive notice rather than GPL, as
+	per usual GNU standards these days.
+
 2007-07-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (autoreconf Invocation): Document ACLOCAL_AMFLAGS
@@ -13527,19 +13533,6 @@
 	Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
 	Software Foundation, Inc.
 
-	This file is part of GNU Autoconf.
-
-	GNU Autoconf is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; either version 3, or (at your option)
-	any later version.
-
-	GNU Autoconf is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with autoconf; see the file COPYING.  If not, write to
-	the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-	Boston, MA 02110-1301, USA.
+	Copying and distribution of this file, with or without
+	modification, are permitted provided the copyright notice and this
+	notice are preserved.
