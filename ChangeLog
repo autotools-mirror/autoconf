@@ -1,3 +1,11 @@
+2007-08-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/status.m4 (_AC_OUTPUT_LINK): Do not try to link a
+	file to itself if source and build trees coincide.
+	* tests/torture.at (AC_CONFIG_LINKS and identical files): New
+	test.
+	Report by Sebastian Freundt <hroptatyr@gna.org>.
+
 2007-07-20  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Reword the copyright notices to match what's suggested in GPLv3.

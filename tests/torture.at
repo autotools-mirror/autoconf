@@ -880,6 +880,40 @@ AT_CHECK_CONFIGURE([], 1, ignore, ignore)
 AT_CLEANUP
 
 
+## ------------------------------------- ##
+## AC_CONFIG_LINKS and identical files.  ##
+## ------------------------------------- ##
+AT_SETUP([AC_CONFIG_LINKS and identical files])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_LINKS([src/s:src/s])
+test "$srcdir" != '.' && AC_CONFIG_LINKS([src/t:src/t])
+AC_OUTPUT
+]])
+
+mkdir src build
+echo file1 > src/s
+echo file2 > src/t
+AT_CHECK_AUTOCONF
+cd build
+AT_CHECK([../configure && ../configure], 0, [ignore])
+AT_CHECK([cat src/s src/t], 0, [file1
+file2
+])
+cd ..
+AT_CHECK([./configure && ./configure], 0, [ignore], [stderr])
+AT_CHECK([grep src/t stderr], 1)
+AT_CHECK([cat src/s src/t], 0, [file1
+file2
+])
+AT_CHECK(["`pwd`"/configure && "`pwd`"/configure], 0, [ignore], [ignore])
+AT_CHECK([cat src/s src/t], 0, [file1
+file2
+])
+
+AT_CLEANUP
+
 
 AT_BANNER([autoreconf.])
 

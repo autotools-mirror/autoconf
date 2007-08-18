@@ -871,24 +871,31 @@ m4_define([_AC_OUTPUT_LINK],
   # CONFIG_LINK
   #
 
-  test -r "$ac_source" || ac_source=$srcdir/$ac_source
+  if test "$ac_source" = "$ac_file" && test "$srcdir" = '.'; then
+    AC_MSG_WARN([not linking $ac_source to itself])
+  else
+    # Prefer the file from the source tree if names are identical.
+    if test "$ac_source" = "$ac_file" || test ! -r "$ac_source"; then
+      ac_source=$srcdir/$ac_source
+    fi
 
-  AC_MSG_NOTICE([linking $ac_source to $ac_file])
+    AC_MSG_NOTICE([linking $ac_source to $ac_file])
 
-  if test ! -r "$ac_source"; then
-    AC_MSG_ERROR([$ac_source: file not found])
+    if test ! -r "$ac_source"; then
+      AC_MSG_ERROR([$ac_source: file not found])
+    fi
+    rm -f "$ac_file"
+
+    # Try a relative symlink, then a hard link, then a copy.
+    case $srcdir in
+    [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$ac_source ;;
+	*) ac_rel_source=$ac_top_build_prefix$ac_source ;;
+    esac
+    ln -s "$ac_rel_source" "$ac_file" 2>/dev/null ||
+      ln "$ac_source" "$ac_file" 2>/dev/null ||
+      cp -p "$ac_source" "$ac_file" ||
+      AC_MSG_ERROR([cannot link or copy $ac_source to $ac_file])
   fi
-  rm -f "$ac_file"
-
-  # Try a relative symlink, then a hard link, then a copy.
-  case $srcdir in
-  [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$ac_source ;;
-      *) ac_rel_source=$ac_top_build_prefix$ac_source ;;
-  esac
-  ln -s "$ac_rel_source" "$ac_file" 2>/dev/null ||
-    ln "$ac_source" "$ac_file" 2>/dev/null ||
-    cp -p "$ac_source" "$ac_file" ||
-    AC_MSG_ERROR([cannot link or copy $ac_source to $ac_file])
 ])# _AC_OUTPUT_LINK
 
 
