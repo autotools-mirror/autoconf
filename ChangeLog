@@ -1,5 +1,12 @@
 2007-08-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* build-aux/config.guess, build-aux/config.sub,
+	build-aux/elisp-comp, build-aux/install-sh, build-aux/mdate-sh,
+	build-aux/missing, build-aux/texinfo.tex, doc/fdl.texi,
+	doc/make-stds.texi, doc/standards.texi: Sync from gnulib.
+	* doc/autoconf.texi (GNU Free Documentation License): Adjust for
+	sectioning change in fdl.texi.
+
 	* bin/autoconf.as: Update --version output to match current GCS.
 	* bin/autoheader.in: Likewise.
 	* bin/autom4te.in: Likewise.
