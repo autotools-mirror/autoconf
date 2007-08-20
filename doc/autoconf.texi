@@ -11478,6 +11478,7 @@ separator.  If you want to be portable to @acronym{DOS} variants (at the
 price of rejecting valid but oddball Posix file names like @file{a:\b}),
 you can check for absolute file names like this:
 
+@cindex absolute file names, detect
 @example
 case $foo_dir in
   [\\/]* | ?:[\\/]* ) # Absolute
