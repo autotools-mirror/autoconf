@@ -1,3 +1,13 @@
+2007-08-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoconf.as: Update --version output to match current GCS.
+	* bin/autoheader.in: Likewise.
+	* bin/autom4te.in: Likewise.
+	* bin/autoreconf.in: Likewise.
+	* bin/autoscan.in: Likewise.
+	* bin/autoupdate.in: Likewise.
+	* bin/ifnames.in: Likewise.
+
 2007-08-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_LINK): Do not try to link a
