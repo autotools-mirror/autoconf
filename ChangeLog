@@ -1,5 +1,11 @@
 2007-08-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/general.m4 (AC_SITE_LOAD): Do not overwrite "$@"
+	here, this macro is expanded by AC_INIT.  Fixes 2.60 regression.
+	* tests/base.at (configure arguments): New test.
+	* THANKS: Update.
+	Report by Olaf Lenz.
+
 	* lib/autoconf/general.m4 (_AC_ENABLE_IF): Expand macro
 	arguments in comment.
 	Report by Vincent Torri <vtorri at univ minus evry dot fr>.

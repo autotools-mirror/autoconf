@@ -1805,20 +1805,23 @@ AU_DEFUN([AC_VALIDATE_CACHED_SYSTEM_TUPLE], [])
 
 # AC_SITE_LOAD
 # ------------
-# Look for site or system specific initialization scripts.
+# Look for site- or system-specific initialization scripts.
 m4_define([AC_SITE_LOAD],
-[# Prefer explicitly selected file to automatically selected ones.
+[# Prefer an explicitly selected file to automatically selected ones.
+ac_site_file1=NONE
+ac_site_file2=NONE
 if test -n "$CONFIG_SITE"; then
-  set x "$CONFIG_SITE"
+  ac_site_file1=$CONFIG_SITE
 elif test "x$prefix" != xNONE; then
-  set x "$prefix/share/config.site" "$prefix/etc/config.site"
+  ac_site_file1=$prefix/share/config.site
+  ac_site_file2=$prefix/etc/config.site
 else
-  set x "$ac_default_prefix/share/config.site" \
-	"$ac_default_prefix/etc/config.site"
+  ac_site_file1=$ac_default_prefix/share/config.site
+  ac_site_file2=$ac_default_prefix/etc/config.site
 fi
-shift
-for ac_site_file
+for ac_site_file in "$ac_site_file1" "$ac_site_file2"
 do
+  test "$ac_site_file" = NONE && continue
   if test -r "$ac_site_file"; then
     AC_MSG_NOTICE([loading site script $ac_site_file])
     sed 's/^/| /' "$ac_site_file" >&AS_MESSAGE_LOG_FD

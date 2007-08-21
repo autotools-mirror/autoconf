@@ -289,3 +289,21 @@ AT_CHECK([echo Hello | top_srcdir=$abs_top_srcdir ./configure | grep -v 'configu
 AT_CHECK([echo Hello | top_srcdir=$abs_top_srcdir ./configure --silent])
 
 AT_CLEANUP
+
+
+## ------------------- ##
+## configure arguments ##
+## ------------------- ##
+
+AT_SETUP([configure arguments])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+echo "$@"
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([FOO=bar --enable-baz --without-zork --silent], [0], [stdout], [ignore])
+AT_CHECK([grep 'FOO=bar --enable-baz --without-zork --silent' stdout], [0], [ignore], [ignore])
+
+AT_CLEANUP
