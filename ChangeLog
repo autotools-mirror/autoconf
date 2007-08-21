@@ -1,3 +1,9 @@
+2007-08-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (_AC_ENABLE_IF): Expand macro
+	arguments in comment.
+	Report by Vincent Torri <vtorri at univ minus evry dot fr>.
+
 2007-08-20  Benoit Sigoure  <tsuna@lrde.epita.fr>
 
 	* doc/autoconf.texi (File System Conventions): Index the proper

@@ -1389,7 +1389,7 @@ m4_define([_m4_divert(HELP_ENABLE)],    _m4_divert(HELP_WITH))
 # OPTION is either "enable" or "with".
 #
 m4_define([_AC_ENABLE_IF],
-[# Check whether --$1-$2 was given.
+[@%:@ Check whether --$1-$2 was given.
 _AC_ENABLE_IF_ACTION([$1], m4_translit([$2], [-.], [__]), [$3], [$4])[]dnl
 ])
 
