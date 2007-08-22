@@ -19170,11 +19170,18 @@ CPPFLAGS = -DDATADIR='"$(datadir)"' @@CPPFLAGS@@
 @end example
 
 @noindent
-or create a dedicated header file:
+If you are using Automake, you should use @code{AM_CPPFLAGS} instead:
 
 @example
-DISTCLEANFILES = datadir.h
-datadir.h: Makefile
+AM_CPPFLAGS = -DDATADIR='"$(datadir)"'
+@end example
+
+@noindent
+Alternatively, create a dedicated header file:
+
+@example
+DISTCLEANFILES = myprog-paths.h
+myprog-paths.h: Makefile
         echo '#define DATADIR "$(datadir)"' >$@@
 @end example
 

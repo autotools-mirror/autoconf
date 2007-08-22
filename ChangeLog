@@ -1,3 +1,9 @@
+2007-08-22  Stepan Kasal  <kasal@ucw.cz>
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Defining Directories): Mention
+	AM_CPPFLAGS, as the way to modify CPPFLAGS when using Automake.
+
 2007-08-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (AC_SITE_LOAD): Do not overwrite "$@"
