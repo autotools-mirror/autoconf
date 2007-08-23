@@ -1,3 +1,8 @@
+2007-08-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/general.m4 (AC_SITE_LOAD): Guard against file
+	names beginning with `-' again.
+
 2007-08-22  Stepan Kasal  <kasal@ucw.cz>
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

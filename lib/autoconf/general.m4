@@ -1821,7 +1821,7 @@ else
 fi
 for ac_site_file in "$ac_site_file1" "$ac_site_file2"
 do
-  test "$ac_site_file" = NONE && continue
+  test "x$ac_site_file" = xNONE && continue
   if test -r "$ac_site_file"; then
     AC_MSG_NOTICE([loading site script $ac_site_file])
     sed 's/^/| /' "$ac_site_file" >&AS_MESSAGE_LOG_FD
