@@ -1,5 +1,7 @@
 2007-09-03  Eric Blake  <ebb9@byu.net>
 
+	* NEWS: Document fixes that have been applied since 2.61a.
+
 	Housekeeping.
 	* THANKS: Update, and convert to UTF-8 encoding.
 	* AUTHORS: Likewise.
