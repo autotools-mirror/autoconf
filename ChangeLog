@@ -1,3 +1,9 @@
+2007-09-03  Eric Blake  <ebb9@byu.net>
+
+	Housekeeping.
+	* THANKS: Update, and convert to UTF-8 encoding.
+	* AUTHORS: Likewise.
+
 2007-08-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (AC_SITE_LOAD): Guard against file
