@@ -1,3 +1,8 @@
+2007-09-05  Eric Blake  <ebb9@byu.net>
+
+	* NEWS: Adjust wording for AC_CONFIG_LINKS.
+	Reported by Ralf Wildenhues.
+
 2007-09-03  Eric Blake  <ebb9@byu.net>
 
 	* NEWS: Document fixes that have been applied since 2.61a.
