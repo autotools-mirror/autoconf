@@ -1,5 +1,9 @@
 2007-09-06  Eric Blake  <ebb9@byu.net>
 
+	* doc/autoconf.texi (Generic Programs): Use $PATH_SEPARATOR, not
+	:, and make it clear that optional @var{path} defaults to $PATH.
+	(Erlang Compiler and Interpreter): Likewise.
+
 	Texinfo cleanup.
 	* doc/autoconf.texi: Avoid lines > 80 columns when possible.
 	Reword some paragraphs to avoid overfull, underfull hbox

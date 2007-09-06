@@ -3839,7 +3839,8 @@ instead, like this:
 
 @example
 AC_PATH_PROG([INETD], [inetd], [/usr/libexec/inetd],
-             [$PATH:/usr/libexec:/usr/sbin:/usr/etc:/etc])
+             [$PATH$PATH_SEPARATOR/usr/libexec$PATH_SEPARATOR]dnl
+[/usr/sbin$PATH_SEPARATOR/usr/etc$PATH_SEPARTOR/etc])
 @end example
 
 You are strongly encouraged to declare the @var{variable} passed to
@@ -3847,9 +3848,10 @@ You are strongly encouraged to declare the @var{variable} passed to
 @code{AC_ARG_VAR}, for more details.
 
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @
-  @var{value-if-found}, @ovar{value-if-not-found}, @ovar{path},  @ovar{reject})
+  @var{value-if-found}, @ovar{value-if-not-found}, @dvar{path, $PATH}, @
+  @ovar{reject})
 @acindex{CHECK_PROG}
-Check whether program @var{prog-to-check-for} exists in @env{PATH}.  If
+Check whether program @var{prog-to-check-for} exists in @var{path}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
 @var{value-if-not-found}, if given.  Always pass over @var{reject} (an
 absolute file name) even if it is the first found in the search path; in
@@ -3860,10 +3862,10 @@ that case, set @var{variable} using the absolute file name of the
 @end defmac
 
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_PROGS}
 Check for each program in the blank-separated list
-@var{progs-to-check-for} existing in the @env{PATH}.  If one is found, set
+@var{progs-to-check-for} existing in the @var{path}.  If one is found, set
 @var{variable} to the name of that program.  Otherwise, continue
 checking the next program in the list.  If none of the programs in the
 list are found, set @var{variable} to @var{value-if-not-found}; if
@@ -3872,7 +3874,7 @@ is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
 @defmac AC_CHECK_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_TARGET_TOOL}
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the target type as determined by
@@ -3890,7 +3892,7 @@ uses to produce objects, archives or executables}.
 @end defmac
 
 @defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_TOOL}
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the host type as determined by
@@ -3902,8 +3904,8 @@ AC_CHECK_TOOL([RANLIB], [ranlib], [:])
 @end example
 @noindent
 sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
-@env{PATH}, or otherwise to @samp{ranlib} if that program exists in
-@env{PATH}, or to @samp{:} if neither program exists.
+@var{path}, or otherwise to @samp{ranlib} if that program exists in
+@var{path}, or to @samp{:} if neither program exists.
 
 In the future, when cross-compiling this macro will @emph{only}
 accept program names that are prefixed with the host type.
@@ -3912,7 +3914,7 @@ system type}.
 @end defmac
 
 @defmac AC_CHECK_TARGET_TOOLS (@var{variable}, @var{progs-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_TARGET_TOOLS}
 Like @code{AC_CHECK_TARGET_TOOL}, each of the tools in the list
 @var{progs-to-check-for} are checked with a prefix of the target type as
@@ -3927,7 +3929,7 @@ is not specified, the value of @var{variable} is not changed.  Calls
 @end defmac
 
 @defmac AC_CHECK_TOOLS (@var{variable}, @var{progs-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_TOOLS}
 Like @code{AC_CHECK_TOOL}, each of the tools in the list
 @var{progs-to-check-for} are checked with a prefix of the host type as
@@ -3944,14 +3946,14 @@ accept program names that are not prefixed with the host type.
 @end defmac
 
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_PROG}
 Like @code{AC_CHECK_PROG}, but set @var{variable} to the absolute
 name of @var{prog-to-check-for} if found.
 @end defmac
 
 @defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_PROGS}
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
 are found, set @var{variable} to the absolute name of the program
@@ -3959,14 +3961,14 @@ found.
 @end defmac
 
 @defmac AC_PATH_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_TARGET_TOOL}
 Like @code{AC_CHECK_TARGET_TOOL}, but set @var{variable} to the absolute
 name of the program if it is found.
 @end defmac
 
 @defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for}, @
-  @ovar{value-if-not-found}, @ovar{path})
+  @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_TOOL}
 Like @code{AC_CHECK_TOOL}, but set @var{variable} to the absolute
 name of the program if it is found.
@@ -6896,7 +6898,7 @@ preprocessor.  If @samp{$OBJC -E} doesn't work, @file{/lib/cpp} is used.
 Autoconf defines the following macros for determining paths to the essential
 Erlang/OTP programs:
 
-@defmac AC_ERLANG_PATH_ERLC (@ovar{value-if-not-found}, @ovar{path})
+@defmac AC_ERLANG_PATH_ERLC (@ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{ERLANG_PATH_ERLC}
 @ovindex ERLC
 @ovindex ERLCFLAGS
@@ -6915,14 +6917,14 @@ AC_ERLANG_PATH_ERLC([not found], [/usr/lib/erlang/bin])
 @end example
 @end defmac
 
-@defmac AC_ERLANG_NEED_ERLC (@ovar{path})
+@defmac AC_ERLANG_NEED_ERLC (@dvar{path, $PATH})
 @acindex{ERLANG_NEED_ERLC}
 A simplified variant of the @code{AC_ERLANG_PATH_ERLC} macro, that prints an
 error message and exits the @command{configure} script if the @command{erlc}
 program is not found.
 @end defmac
 
-@defmac AC_ERLANG_PATH_ERL (@ovar{value-if-not-found}, @ovar{path})
+@defmac AC_ERLANG_PATH_ERL (@ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{ERLANG_PATH_ERL}
 @ovindex ERL
 Determine an Erlang interpreter to use.  If @code{ERL} is not already
@@ -6940,7 +6942,7 @@ AC_ERLANG_PATH_ERL([not found], [/usr/lib/erlang/bin])
 @end example
 @end defmac
 
-@defmac AC_ERLANG_NEED_ERL (@ovar{path})
+@defmac AC_ERLANG_NEED_ERL (@dvar{path, $PATH})
 @acindex{ERLANG_NEED_ERL}
 A simplified variant of the @code{AC_ERLANG_PATH_ERL} macro, that prints an
 error message and exits the @command{configure} script if the @command{erl}
