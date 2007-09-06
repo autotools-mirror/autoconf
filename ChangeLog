@@ -1,3 +1,10 @@
+2007-09-06  Eric Blake  <ebb9@byu.net>
+
+	Texinfo cleanup.
+	* doc/autoconf.texi: Avoid lines > 80 columns when possible.
+	Reword some paragraphs to avoid overfull, underfull hbox
+	warnings.  Add index entries to avoid overfull vbox warnings.
+
 2007-09-05  Eric Blake  <ebb9@byu.net>
 
 	* NEWS: Adjust wording for AC_CONFIG_LINKS.

@@ -1427,7 +1427,7 @@ disable warnings falling into @var{category}
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
 honored as well.  Passing @option{-W @var{category}} actually behaves as if
-you had passed @option{--warnings=syntax,$WARNINGS,@var{category}}.  If
+you had passed @option{--warnings syntax,$WARNINGS,@var{category}}.  If
 you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
 none,obsolete}.
@@ -1657,7 +1657,7 @@ disable warnings falling into @var{category}
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
 honored as well.  Passing @option{-W @var{category}} actually behaves as if
-you had passed @option{--warnings=syntax,$WARNINGS,@var{category}}.  If
+you had passed @option{--warnings syntax,$WARNINGS,@var{category}}.  If
 you want to disable the defaults and @env{WARNINGS}, but (for example)
 enable the warnings about obsolete constructs, you would use @option{-W
 none,obsolete}.
@@ -1701,7 +1701,8 @@ Every @command{configure} script must call @code{AC_INIT} before doing
 anything else.  The only other required macro is @code{AC_OUTPUT}
 (@pxref{Output}).
 
-@defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report}, @ovar{tarname})
+@defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report}, @
+  @ovar{tarname})
 @acindex{INIT}
 Process any command-line arguments and perform various initializations
 and verifications.
@@ -3285,7 +3286,8 @@ results of tests.  One can use @code{AC_CONFIG_COMMANDS} but the
 creation of relative symbolic links can be delicate when the package is
 built in a directory different from the source directory.
 
-@defmac AC_CONFIG_LINKS (@var{dest}:@var{source}@dots{}, @ovar{cmds}, @ovar{init-cmds})
+@defmac AC_CONFIG_LINKS (@var{dest}:@var{source}@dots{}, @ovar{cmds}, @
+  @ovar{init-cmds})
 @acindex{CONFIG_LINKS}
 @cindex Links
 Make @code{AC_OUTPUT} link each of the existing files @var{source} to
@@ -3844,7 +3846,8 @@ You are strongly encouraged to declare the @var{variable} passed to
 @code{AC_CHECK_PROG} etc.@: as precious, @xref{Setting Output Variables},
 @code{AC_ARG_VAR}, for more details.
 
-@defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @var{value-if-found}, @ovar{value-if-not-found}, @ovar{path},  @ovar{reject})
+@defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @
+  @var{value-if-found}, @ovar{value-if-not-found}, @ovar{path},  @ovar{reject})
 @acindex{CHECK_PROG}
 Check whether program @var{prog-to-check-for} exists in @env{PATH}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
@@ -3856,7 +3859,8 @@ that case, set @var{variable} using the absolute file name of the
 @var{variable}.
 @end defmac
 
-@defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{CHECK_PROGS}
 Check for each program in the blank-separated list
 @var{progs-to-check-for} existing in the @env{PATH}.  If one is found, set
@@ -3867,7 +3871,8 @@ list are found, set @var{variable} to @var{value-if-not-found}; if
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 @end defmac
 
-@defmac AC_CHECK_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_CHECK_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{CHECK_TARGET_TOOL}
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the target type as determined by
@@ -3884,7 +3889,8 @@ compiler driver @r{(@command{gcc} for the @acronym{GNU} C Compiler)}
 uses to produce objects, archives or executables}.
 @end defmac
 
-@defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{CHECK_TOOL}
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the host type as determined by
@@ -3905,7 +3911,8 @@ For more information, see @ref{Specifying Names, , Specifying the
 system type}.
 @end defmac
 
-@defmac AC_CHECK_TARGET_TOOLS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_CHECK_TARGET_TOOLS (@var{variable}, @var{progs-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{CHECK_TARGET_TOOLS}
 Like @code{AC_CHECK_TARGET_TOOL}, each of the tools in the list
 @var{progs-to-check-for} are checked with a prefix of the target type as
@@ -3919,7 +3926,8 @@ is not specified, the value of @var{variable} is not changed.  Calls
 @code{AC_SUBST} for @var{variable}.
 @end defmac
 
-@defmac AC_CHECK_TOOLS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_CHECK_TOOLS (@var{variable}, @var{progs-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{CHECK_TOOLS}
 Like @code{AC_CHECK_TOOL}, each of the tools in the list
 @var{progs-to-check-for} are checked with a prefix of the host type as
@@ -3935,26 +3943,30 @@ In the future, when cross-compiling this macro will @emph{not}
 accept program names that are not prefixed with the host type.
 @end defmac
 
-@defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_PROG}
 Like @code{AC_CHECK_PROG}, but set @var{variable} to the absolute
 name of @var{prog-to-check-for} if found.
 @end defmac
 
-@defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_PROGS}
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
 are found, set @var{variable} to the absolute name of the program
 found.
 @end defmac
 
-@defmac AC_PATH_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_PATH_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_TARGET_TOOL}
 Like @code{AC_CHECK_TARGET_TOOL}, but set @var{variable} to the absolute
 name of the program if it is found.
 @end defmac
 
-@defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for}, @ovar{value-if-not-found}, @ovar{path})
+@defmac AC_PATH_TOOL (@var{variable}, @var{prog-to-check-for}, @
+  @ovar{value-if-not-found}, @ovar{path})
 @acindex{PATH_TOOL}
 Like @code{AC_CHECK_TOOL}, but set @var{variable} to the absolute
 name of the program if it is found.
@@ -3973,14 +3985,16 @@ these macros, ask yourself whether a runtime test might not be a better
 solution.  Be aware that, like most Autoconf macros, they test a feature
 of the host machine, and therefore, they die when cross-compiling.
 
-@defmac AC_CHECK_FILE (@var{file}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_CHECK_FILE (@var{file}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found})
 @acindex{CHECK_FILE}
 Check whether file @var{file} exists on the native system.  If it is
 found, execute @var{action-if-found}, otherwise do
 @var{action-if-not-found}, if given.
 @end defmac
 
-@defmac AC_CHECK_FILES (@var{files}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_CHECK_FILES (@var{files}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found})
 @acindex{CHECK_FILES}
 Executes @code{AC_CHECK_FILE} once for each file listed in @var{files}.
 Additionally, defines @samp{HAVE_@var{file}} (@pxref{Standard Symbols})
@@ -3995,7 +4009,8 @@ for each file found.
 The following macros check for the presence of certain C, C++, or Fortran
 library archive files.
 
-@defmac AC_CHECK_LIB (@var{library}, @var{function}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
+@defmac AC_CHECK_LIB (@var{library}, @var{function}, @
+  @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{CHECK_LIB}
 Test whether the library @var{library} is available by trying to link
 a test program that calls function @var{function} with the library.
@@ -4035,7 +4050,8 @@ days it is normally better to use @code{AC_SEARCH_LIBS([gethostbyname],
 @end defmac
 
 
-@defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
+@defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}, @
+  @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{SEARCH_LIBS}
 Search for a library defining @var{function} if it's not already
 available.  This equates to calling
@@ -4228,7 +4244,8 @@ longer need to be worried about.
 @item @code{sscanf}
 @c @fuindex sscanf
 @prindex @code{sscanf}
-On various old systems, e.g., @acronym{HP-UX} 9, @code{sscanf} requires that its
+On various old systems, e.g., @acronym{HP-UX} 9, @code{sscanf} requires
+that its
 input string be writable (though it doesn't actually change it).  This
 can be a problem when using @command{gcc} since it normally puts
 constant strings in read-only memory (@pxref{Incompatibilities,
@@ -4389,6 +4406,7 @@ void *alloca (size_t);
 
 @defmac AC_FUNC_CHOWN
 @acindex{FUNC_CHOWN}
+@cvindex HAVE_CHOWN
 @c @fuindex chown
 @prindex @code{chown}
 If the @code{chown} function is available and works (in particular, it
@@ -4492,6 +4510,7 @@ yourself in new code:
 @defmac AC_FUNC_FSEEKO
 @acindex{FUNC_FSEEKO}
 @cvindex _LARGEFILE_SOURCE
+@cvindex HAVE_FSEEKO
 @c @fuindex fseeko
 @prindex @code{fseeko}
 If the @code{fseeko} function is available, define @code{HAVE_FSEEKO}.
@@ -4504,6 +4523,7 @@ largefile-sensitive systems where @code{off_t} does not default to a
 
 @defmac AC_FUNC_GETGROUPS
 @acindex{FUNC_GETGROUPS}
+@cvindex HAVE_GETGROUPS
 @ovindex GETGROUPS_LIBS
 @c @fuindex getgroups
 @prindex @code{getgroups}
@@ -4847,6 +4867,7 @@ variable @code{POW_LIB} to the extra library needed.
 
 @defmac AC_FUNC_STRTOLD
 @acindex{FUNC_STRTOLD}
+@cvindex HAVE_STRTOLD
 @prindex @code{strtold}
 If the @code{strtold} function exists and conforms to C99, define
 @code{HAVE_STRTOLD}.
@@ -4920,7 +4941,8 @@ If you need to check the behavior of a function as well as find out
 whether it is present, you have to write your own test for
 it (@pxref{Writing Tests}).
 
-@defmac AC_CHECK_FUNC (@var{function}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_CHECK_FUNC (@var{function}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found})
 @acindex{CHECK_FUNC}
 If C function @var{function} is available, run shell commands
 @var{action-if-found}, otherwise @var{action-if-not-found}.  If you just
@@ -4931,7 +4953,8 @@ standardized than C++.  (@pxref{Language Choice}, for more information
 about selecting the language for checks.)
 @end defmac
 
-@defmac AC_CHECK_FUNCS (@var{function}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_CHECK_FUNCS (@var{function}@dots{}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found})
 @acindex{CHECK_FUNCS}
 @cvindex HAVE_@var{function}
 For each @var{function} enumerated in the blank-or-newline-separated argument
@@ -5042,6 +5065,7 @@ a convenient shorthand.
 
 @defmac AC_REPLACE_FUNCS (@var{function}@dots{})
 @acindex{REPLACE_FUNCS}
+@cvindex HAVE_@var{function}
 @ovindex LIBOBJS
 Like @code{AC_CHECK_FUNCS}, but uses @samp{AC_LIBOBJ(@var{function})} as
 @var{action-if-not-found}.  You can declare your replacement function by
@@ -5554,7 +5578,8 @@ These macros are used to find system header files not covered by the
 as well as find out whether it is present, you have to write your own
 test for it (@pxref{Writing Tests}).
 
-@defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
+@defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_HEADER}
 If the system header file @var{header-file} is compilable, execute shell
 commands @var{action-if-found}, otherwise execute
@@ -5566,7 +5591,9 @@ For compatibility issues with older versions of Autoconf, please read
 below.
 @end defmac
 
-@defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
+@defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @
+  @ovar{action-if-found}, @ovar{action-if-not-found}, @
+  @dvar{includes, default-includes})
 @acindex{CHECK_HEADERS}
 @cvindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
@@ -5646,7 +5673,8 @@ There are no specific macros for declarations.
 These macros are used to find declarations not covered by the ``particular''
 test macros.
 
-@defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
+@defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_DECL}
 If @var{symbol} (a function, variable, or constant) is not declared in
 @var{includes} and a declaration is needed, run the shell commands
@@ -5660,7 +5688,8 @@ is much safer to avoid
 introducing extra declarations when they are not needed.
 @end defmac
 
-@defmac AC_CHECK_DECLS (@var{symbols}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
+@defmac AC_CHECK_DECLS (@var{symbols}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_DECLS}
 @cvindex HAVE_DECL_@var{symbol}
 For each of the @var{symbols} (@emph{comma}-separated list), define
@@ -5818,6 +5847,8 @@ current systems.  New programs need not use this macro.
 
 @defmac AC_STRUCT_TIMEZONE
 @acindex{STRUCT_TIMEZONE}
+@cvindex HAVE_DECL_TZNAME
+@cvindex HAVE_STRUCT_TM_TM_ZONE
 @cvindex HAVE_TM_ZONE
 @cvindex HAVE_TZNAME
 Figure out how to get the current timezone.  If @code{struct tm} has a
@@ -5833,7 +5864,9 @@ define @code{HAVE_DECL_TZNAME}.
 These macros are used to find structure members not covered by the
 ``particular'' test macros.
 
-@defmac AC_CHECK_MEMBER (@var{aggregate}.@var{member}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
+@defmac AC_CHECK_MEMBER (@var{aggregate}.@var{member}, @
+  @ovar{action-if-found}, @ovar{action-if-not-found}, @
+  @dvar{includes, default-includes})
 @acindex{CHECK_MEMBER}
 Check whether @var{member} is a member of the aggregate @var{aggregate}.
 If no @var{includes} are specified, the default includes are used
@@ -5852,8 +5885,10 @@ AC_CHECK_MEMBER(struct top.middle.bot)
 @end example
 @end defmac
 
-@defmac AC_CHECK_MEMBERS (@var{members}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
+@defmac AC_CHECK_MEMBERS (@var{members}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_MEMBERS}
+@cvindex HAVE_@var{aggregate}_@var{member}
 Check for the existence of each @samp{@var{aggregate}.@var{member}} of
 @var{members} using the previous macro.  When @var{member} belongs to
 @var{aggregate}, define @code{HAVE_@var{aggregate}_@var{member}} (in all
@@ -6132,7 +6167,8 @@ define @code{HAVE_UNSIGNED_LONG_LONG_INT}.
 These macros are used to check for types not covered by the ``particular''
 test macros.
 
-@defmac AC_CHECK_TYPE (@var{type}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
+@defmac AC_CHECK_TYPE (@var{type}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_TYPE}
 Check whether @var{type} is defined.  It may be a compiler builtin type
 or defined by the @var{includes} (@pxref{Default Includes}).
@@ -6145,8 +6181,10 @@ same test is applied when compiling for C++, which means that in C++
 @end defmac
 
 
-@defmac AC_CHECK_TYPES (@var{types}, @ovar{action-if-found}, @ovar{action-if-not-found}, @dvar{includes, default-includes})
+@defmac AC_CHECK_TYPES (@var{types}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_TYPES}
+@cvindex HAVE_@var{type}
 For each @var{type} of the @var{types} that is defined, define
 @code{HAVE_@var{type}} (in all capitals).  Each @var{type} must follow
 the rules of @code{AC_CHECK_TYPE}.  If no @var{includes} are
@@ -6219,8 +6257,8 @@ static int test_array[sizeof (int) == 4 ? 1 : -1];
 
 @noindent
 To our knowledge, there is a single compiler that does not support this
-trick: the @acronym{HP} C compilers (the real ones, not only the ``bundled'') on
-@acronym{HP-UX} 11.00.
+trick: the @acronym{HP} C compilers (the real ones, not only the
+``bundled'') on @acronym{HP-UX} 11.00.
 They incorrectly reject the above program with the diagnostic
 ``Variable-length arrays cannot have static storage.''
 This bug comes from @acronym{HP} compilers' mishandling of @code{sizeof (int)},
@@ -6232,8 +6270,10 @@ Autoconf works around this problem by casting @code{sizeof (int)} to
 @node Generic Compiler Characteristics
 @subsection Generic Compiler Characteristics
 
-@defmac AC_CHECK_SIZEOF (@var{type-or-expr}, @ovar{unused}, @dvar{includes, default-includes})
+@defmac AC_CHECK_SIZEOF (@var{type-or-expr}, @ovar{unused}, @
+  @dvar{includes, default-includes})
 @acindex{CHECK_SIZEOF}
+@cvindex SIZEOF_@var{type-or-expr}
 Define @code{SIZEOF_@var{type-or-expr}} (@pxref{Standard Symbols}) to be
 the size in bytes of @var{type-or-expr}, which may be either a type or
 an expression returning a value that has a size.  If the expression
@@ -6256,6 +6296,7 @@ defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 
 @defmac AC_CHECK_ALIGNOF (@var{type}, @dvar{includes, default-includes})
 @acindex{CHECK_ALIGNOF}
+@cvindex ALIGNOF_@var{type}
 Define @code{ALIGNOF_@var{type}} (@pxref{Standard Symbols}) to be the
 alignment in bytes of @var{type}.  @samp{@var{type} y;} must be valid as
 a structure member declaration.  If @samp{type} is unknown, the result
@@ -6263,15 +6304,16 @@ is 0.  If no @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
 @end defmac
 
-@defmac AC_COMPUTE_INT (@var{var}, @var{expression}, @dvar{includes, default-includes}, @ovar{action-if-fails})
+@defmac AC_COMPUTE_INT (@var{var}, @var{expression}, @
+  @dvar{includes, default-includes}, @ovar{action-if-fails})
 @acindex{COMPUTE_INT}
 Store into the shell variable @var{var} the value of the integer
 @var{expression}.  The
 value should fit in an initializer in a C variable of type @code{signed
 long}.  To support cross compilation (in which case, the macro only works on
 hosts that use twos-complement arithmetic), it should be possible to evaluate
-the expression at compile-time.  If no @var{includes} are specified, the default
-includes are used (@pxref{Default Includes}).
+the expression at compile-time.  If no @var{includes} are specified, the
+default includes are used (@pxref{Default Includes}).
 
 Execute @var{action-if-fails} if the value cannot be determined correctly.
 @end defmac
@@ -6518,7 +6560,8 @@ set to accept C99; if not, the shell variable
 @end defmac
 
 @defmac AC_C_BACKSLASH_A
-@acindex{HAVE_C_BACKSLASH_A}
+@acindex{C_BACKSLASH_A}
+@cvindex HAVE_C_BACKSLASH_A
 Define @samp{HAVE_C_BACKSLASH_A} to 1 if the C compiler understands
 @samp{\a}.
 
@@ -6526,7 +6569,8 @@ This macro is obsolescent, as current C compilers understand @samp{\a}.
 New programs need not use this macro.
 @end defmac
 
-@defmac AC_C_BIGENDIAN (@ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-unknown}, @ovar{action-if-universal})
+@defmac AC_C_BIGENDIAN (@ovar{action-if-true}, @ovar{action-if-false}, @
+  @ovar{action-if-unknown}, @ovar{action-if-universal})
 @acindex{C_BIGENDIAN}
 @cvindex WORDS_BIGENDIAN
 @cindex Endianness
@@ -6881,7 +6925,8 @@ program is not found.
 @defmac AC_ERLANG_PATH_ERL (@ovar{value-if-not-found}, @ovar{path})
 @acindex{ERLANG_PATH_ERL}
 @ovindex ERL
-Determine an Erlang interpreter to use.  If @code{ERL} is not already set in the
+Determine an Erlang interpreter to use.  If @code{ERL} is not already
+set in the
 environment, check for @command{erl}.  Set output variable @code{ERL} to the
 complete path of the interpreter command found.
 
@@ -7195,7 +7240,8 @@ information other than through the C preprocessor as above, for example,
 to call Fortran routines from some language other than C/C++.
 @end defmac
 
-@defmac AC_FC_SRCEXT (@var{ext}, @ovar{action-if-success}, @ovar{action-if-failure})
+@defmac AC_FC_SRCEXT (@var{ext}, @ovar{action-if-success}, @
+  @ovar{action-if-failure})
 @acindex{FC_SRCEXT}
 By default, the @code{FC} macros perform their tests using a @file{.f}
 extension for source-code files.  Some compilers, however, only enable
@@ -7450,10 +7496,10 @@ configuration of an Erlang interpreter and an Erlang compiler
 @acindex{ERLANG_SUBST_ROOT_DIR}
 @ovindex ERLANG_ROOT_DIR
 
-Set the output variable @code{ERLANG_ROOT_DIR} to the path to the base directory
-in which Erlang/OTP is installed (as returned by Erlang's @code{code:root_dir/0}
-function).  The result of this test is cached if caching is enabled when running
-@command{configure}.
+Set the output variable @code{ERLANG_ROOT_DIR} to the path to the base
+directory in which Erlang/OTP is installed (as returned by Erlang's
+@code{code:root_dir/0} function).  The result of this test is cached if
+caching is enabled when running @command{configure}.
 @end defmac
 
 @defmac AC_ERLANG_SUBST_LIB_DIR
@@ -7467,7 +7513,8 @@ Erlang/OTP library.  The result of this test is cached if caching is enabled
 when running @command{configure}.
 @end defmac
 
-@defmac AC_ERLANG_CHECK_LIB (@var{library}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_ERLANG_CHECK_LIB (@var{library}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found})
 @acindex{ERLANG_CHECK_LIB}
 @ovindex ERLANG_LIB_DIR_@var{library}
 @ovindex ERLANG_LIB_VER_@var{library}
@@ -7506,7 +7553,8 @@ Erlang libraries are to be installed:
 @ovindex ERLANG_INSTALL_LIB_DIR
 
 Set the @code{ERLANG_INSTALL_LIB_DIR} output variable to the directory into
-which every built Erlang library should be installed in a separate subdirectory.
+which every built Erlang library should be installed in a separate
+subdirectory.
 If this variable is not set in the environment when @command{configure} runs,
 its default value is @code{$ERLANG_LIB_DIR}, which value is set by the
 @code{AC_ERLANG_SUBST_LIB_DIR} macro.
@@ -7882,7 +7930,8 @@ fputs (hw, stdout);
 @end example
 
 In Erlang tests, the created source file is that of an Erlang module called
-@code{conftest} (@file{conftest.erl}).  This module defines and exports at least
+@code{conftest} (@file{conftest.erl}).  This module defines and exports
+at least
 one @code{start/0} function, which is called to perform the test.  The
 @var{prologue} is optional code that is inserted between the module header and
 the @code{start/0} function definition.  @var{body} is the body of the
@@ -7955,7 +8004,8 @@ Nevertheless, if you need to run the preprocessor, then use
 The macros described in this section cannot be used for tests in Erlang or
 Fortran, since those languages require no preprocessor.
 
-@defmac AC_PREPROC_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
+@defmac AC_PREPROC_IFELSE (@var{input}, @ovar{action-if-true}, @
+  @ovar{action-if-false})
 @acindex{PREPROC_IFELSE}
 Run the preprocessor of the current language (@pxref{Language Choice})
 on the @var{input}, run the shell commands @var{action-if-true} on
@@ -8009,7 +8059,8 @@ get rid of your old use of the macro @code{AC_TRY_CPP} in favor of
 @code{AC_PREPROC_IFELSE}, but, in the first place, are you sure you need
 to run the @emph{preprocessor} and not the compiler?
 
-@defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @var{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @
+  @var{action-if-found}, @ovar{action-if-not-found})
 @acindex{EGREP_HEADER}
 If the output of running the preprocessor on the system header file
 @var{header-file} matches the extended regular expression
@@ -8017,7 +8068,8 @@ If the output of running the preprocessor on the system header file
 execute @var{action-if-not-found}.
 @end defmac
 
-@defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @
+  @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{EGREP_CPP}
 @var{program} is the text of a C or C++ program, on which shell
 variable, back quote, and backslash substitutions are performed.  If the
@@ -8036,7 +8088,8 @@ Choice}) compiler, such as whether it recognizes a certain keyword, or
 simply to try some library feature, use @code{AC_COMPILE_IFELSE} to try
 to compile a small program that uses that feature.
 
-@defmac AC_COMPILE_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
+@defmac AC_COMPILE_IFELSE (@var{input}, @ovar{action-if-true}, @
+  @ovar{action-if-false})
 @acindex{COMPILE_IFELSE}
 Run the compiler and compilation flags of the current language
 (@pxref{Language Choice}) on the @var{input}, run the shell commands
@@ -8053,8 +8106,8 @@ Linker}).
 For tests in Erlang, the @var{input} must be the source code of a module named
 @code{conftest}.  @code{AC_COMPILE_IFELSE} generates a @file{conftest.beam}
 file that can be interpreted by the Erlang virtual machine (@code{ERL}).  It is
-recommended to use @code{AC_LANG_PROGRAM} to specify the test program, to ensure
-that the Erlang module has the right name.
+recommended to use @code{AC_LANG_PROGRAM} to specify the test program,
+to ensure that the Erlang module has the right name.
 
 @node Running the Linker
 @section Running the Linker
@@ -8078,7 +8131,8 @@ checked for to @code{LIBS} temporarily and trying to link a small
 program.
 
 
-@defmac AC_LINK_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false})
+@defmac AC_LINK_IFELSE (@var{input}, @ovar{action-if-true}, @
+  @ovar{action-if-false})
 @acindex{LINK_IFELSE}
 Run the compiler (and compilation flags) and the linker of the current
 language (@pxref{Language Choice}) on the @var{input}, run the shell
@@ -8114,7 +8168,8 @@ run it using @code{AC_RUN_IFELSE}.  Avoid running test programs if
 possible, because this prevents people from configuring your package for
 cross-compiling.
 
-@defmac AC_RUN_IFELSE (@var{input}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
+@defmac AC_RUN_IFELSE (@var{input}, @ovar{action-if-true}, @
+  @ovar{action-if-false}, @ovar{action-if-cross-compiling})
 @acindex{RUN_IFELSE}
 If @var{program} compiles and links successfully and returns an exit
 status of 0 when executed, run shell commands @var{action-if-true}.
@@ -8173,7 +8228,8 @@ Therefore, if a test must output configuration information, it is recommended
 to create and to output data into the temporary file named @file{conftest.out},
 using the functions of module @code{file}.  The @code{conftest.out} file is
 automatically deleted by the @code{AC_RUN_IFELSE} macro.  For instance, a
-simplified implementation of Autoconf's @code{AC_ERLANG_SUBST_LIB_DIR} macro is:
+simplified implementation of Autoconf's @code{AC_ERLANG_SUBST_LIB_DIR}
+macro is:
 
 @example
 AC_INIT([LibdirTest], [1.0], [bug-libdirtest@@example.org])
@@ -8346,6 +8402,7 @@ output.
 
 @defmac AC_DEFINE (@var{variable}, @var{value}, @ovar{description})
 @defmacx AC_DEFINE (@var{variable})
+@cvindex @var{variable}
 @acindex{DEFINE}
 Define @var{variable} to @var{value} (verbatim), by defining a C
 preprocessor macro for @var{variable}.  @var{variable} should be a C
@@ -8388,6 +8445,7 @@ the last one wins.
 @defmac AC_DEFINE_UNQUOTED (@var{variable}, @var{value}, @ovar{description})
 @defmacx AC_DEFINE_UNQUOTED (@var{variable})
 @acindex{DEFINE_UNQUOTED}
+@cvindex @var{variable}
 Like @code{AC_DEFINE}, but three shell expansions are
 performed---once---on @var{variable} and @var{value}: variable expansion
 (@samp{$}), command substitution (@samp{`}), and backslash escaping
@@ -8567,9 +8625,9 @@ and similarly if the variable is unset, or if its content is changed.
 line argument, including when no cache is used:
 
 @example
-$ @kbd{CC=/usr/bin/cc ./configure undeclared_var=raboof --silent}
+$ @kbd{CC=/usr/bin/cc ./configure var=raboof --silent}
 $ @kbd{./config.status --recheck}
-running CONFIG_SHELL=/bin/sh /bin/sh ./configure undeclared_var=raboof \
+running CONFIG_SHELL=/bin/sh /bin/sh ./configure var=raboof \
   CC=/usr/bin/cc  --no-create --no-recursion
 @end example
 @end itemize
@@ -8635,7 +8693,8 @@ The @var{commands-to-set-it} @emph{must have no side effects} except for
 setting the variable @var{cache-id}, see below.
 @end defmac
 
-@defmac AC_CACHE_CHECK (@var{message}, @var{cache-id}, @var{commands-to-set-it})
+@defmac AC_CACHE_CHECK (@var{message}, @var{cache-id}, @
+  @var{commands-to-set-it})
 @acindex{CACHE_CHECK}
 A wrapper for @code{AC_CACHE_VAL} that takes care of printing the
 messages.  This macro provides a convenient shorthand for the most
@@ -9871,8 +9930,13 @@ M4sugar''.
 @subsection Redefined M4 Macros
 
 @msindex{builtin}
+@msindex{changecom}
+@msindex{changequote}
+@msindex{debugfile}
+@msindex{debugmode}
 @msindex{decr}
 @msindex{define}
+@msindex{divnum}
 @msindex{dumpdef}
 @msindex{errprint}
 @msindex{esyscmd}
@@ -9888,6 +9952,8 @@ M4sugar''.
 @msindex{substr}
 @msindex{syscmd}
 @msindex{sysval}
+@msindex{traceoff}
+@msindex{traceon}
 @msindex{translit}
 @msindex{undefine}
 With a few exceptions, all the M4 native macros are moved in the
@@ -9907,6 +9973,9 @@ This macro kept its original name: no @code{m4_dnl} is defined.
 Unlike the M4 builtin, this macro fails if @var{macro} is not
 defined.  See @code{m4_undefine}.
 @end defmac
+
+@c FIXME: Need to document m4_divert, m4_undivert, m4_divert_push,
+@c m4_divert_pop, m4_divert_text, m4_divert_once
 
 @defmac m4_exit (@var{exit-status})
 @msindex{exit}
@@ -10007,7 +10076,8 @@ underlying M4 provides.
 
 The following macros implement loops in M4.
 
-@defmac m4_for (@var{var}, @var{first}, @var{last}, @ovar{step}, @var{expression})
+@defmac m4_for (@var{var}, @var{first}, @var{last}, @ovar{step}, @
+  @var{expression})
 @msindex{for}
 Loop over the numeric values between @var{first} and @var{last}
 including bounds by increments of @var{step}.  For each iteration,
@@ -10224,7 +10294,8 @@ environment variables, or setting options, or similar
 implementation-specific actions.
 @end defmac
 
-@defmac AS_CASE (@var{word}, @ovar{pattern1}, @ovar{if-matched1}, @dots{}, @ovar{default})
+@defmac AS_CASE (@var{word}, @ovar{pattern1}, @ovar{if-matched1}, @
+  @dots{}, @ovar{default})
 @asindex{CASE}
 Expand into a shell @samp{case} statement, where @var{word} is matched
 against one or more patterns.  @var{if-matched} is run if the
@@ -11260,7 +11331,8 @@ of @code{$@{ble@}}.  If the end of the variable name is aligned with the block
 boundary, the shell reports an error, as if you used @code{$@{@}}.
 Instead of @code{$@{variable-default@}}, the shell may expand
 @code{$@{riable-default@}}, or even @code{$@{fault@}}.  This bug can often
-be worked around by omitting the braces: @code{$variable}.  The bug was fixed in
+be worked around by omitting the braces: @code{$variable}.  The bug was
+fixed in
 @samp{ksh93g} (1998-04-30) but as of 2006 many operating systems were
 still shipping older versions with the bug.
 
@@ -11374,8 +11446,8 @@ Don't rely on file descriptors 0, 1, and 2 remaining closed in a
 subsidiary program.  If any of these descriptors is closed, the
 operating system may open an unspecified file for the descriptor in the
 new process image.  Posix says this may be done only if the subsidiary
-program is set-user-ID or set-group-ID, but @acronym{HP-UX} 11.23 does it even for
-ordinary programs.
+program is set-user-ID or set-group-ID, but @acronym{HP-UX} 11.23 does
+it even for ordinary programs.
 
 Don't rely on open file descriptors being open in child processes.  In
 @command{ksh}, file descriptors above 2 which are opened using
@@ -12840,7 +12912,8 @@ Also please see the discussion of the @command{cd} command.
 With the Free@acronym{BSD} 6.0 shell, the @command{set} command (without
 any options) does not sort its output.
 
-The @command{set} builtin faces the usual problem with arguments starting with a
+The @command{set} builtin faces the usual problem with arguments
+starting with a
 dash.  Modern shells such as Bash or Zsh understand @option{--} to specify
 the end of the options (any argument after @option{--} is a parameter,
 even @samp{-x} for instance), but many traditional shells (e.g., Solaris
@@ -12972,7 +13045,8 @@ not null, but this usage is not portable to traditional platforms like
 Solaris 10 @command{/bin/sh}, which mishandle strings like @samp{!} and
 @samp{-n}.
 
-Posix says that @samp{test ! "@var{string}"}, @samp{test -n "@var{string}"} and
+Posix also says that @samp{test ! "@var{string}"},
+@samp{test -n "@var{string}"} and
 @samp{test -z "@var{string}"} work with any string, but many
 shells (such as Solaris, @acronym{AIX} 3.2, @sc{unicos} 10.0.0.6,
 Digital Unix 4, etc.)@: get confused if
@@ -12985,7 +13059,7 @@ $ @kbd{test ! -n}
 test: argument expected
 @end example
 
-Similarly, Posix says that @samp{test "@var{string1}" = "@var{string2"}}
+Similarly, Posix says that both @samp{test "@var{string1}" = "@var{string2"}}
 and @samp{test "@var{string1}" != "@var{string2"}} work for any pairs of
 strings, but in practice this is not true for troublesome strings that
 look like operators or parentheses, or that begin with @samp{-}.
@@ -13182,7 +13256,8 @@ bar
 foo
 @end example
 
-Some Awk implementations, such as @acronym{HP-UX} 11.0's native one, mishandle anchors:
+Some Awk implementations, such as @acronym{HP-UX} 11.0's native one,
+mishandle anchors:
 
 @example
 $ @kbd{echo xfoo | $AWK '/foo|^bar/ @{ print @}'}
@@ -13533,7 +13608,7 @@ expr a : '\(b\)' \| ''
 Unfortunately this behaves exactly as the original expression; see the
 @command{expr} (@samp{|}) entry for more information.
 
-Ancient @command{expr} implementations (e.g., SunOS 4 @command{expr} and
+Some ancient @command{expr} implementations (e.g., SunOS 4 @command{expr} and
 Solaris 8 @command{/usr/ucb/expr}) have a silly length limit that causes
 @command{expr} to fail if the matched substring is longer than 120
 bytes.  In this case, you might want to fall back on @samp{echo|sed} if
@@ -16012,7 +16087,8 @@ should call @code{AC_ARG_WITH} to detect whether the @command{configure}
 user asked to use it.  Whether each package is used or not by default,
 and which arguments are valid, is up to you.
 
-@defmac AC_ARG_WITH (@var{package}, @var{help-string}, @ovar{action-if-given}, @ovar{action-if-not-given})
+@defmac AC_ARG_WITH (@var{package}, @var{help-string}, @
+  @ovar{action-if-given}, @ovar{action-if-not-given})
 @acindex{ARG_WITH}
 If the user gave @command{configure} the option @option{--with-@var{package}}
 or @option{--without-@var{package}}, run shell commands
@@ -16126,7 +16202,8 @@ These three examples can be easily adapted to the case where
 @ref{Package Options}).
 @end defmac
 
-@defmac AC_WITH (@var{package}, @var{action-if-given}, @ovar{action-if-not-given})
+@defmac AC_WITH (@var{package}, @var{action-if-given}, @
+  @ovar{action-if-not-given})
 @acindex{WITH}
 This is an obsolete version of @code{AC_ARG_WITH} that does not
 support providing a help string.
@@ -16171,7 +16248,8 @@ For each optional feature, @file{configure.ac} should call
 to include it.  Whether each feature is included or not by default, and
 which arguments are valid, is up to you.
 
-@defmac AC_ARG_ENABLE (@var{feature}, @var{help-string}, @ovar{action-if-given}, @ovar{action-if-not-given})
+@defmac AC_ARG_ENABLE (@var{feature}, @var{help-string}, @
+  @ovar{action-if-given}, @ovar{action-if-not-given})
 @acindex{ARG_ENABLE}
 If the user gave @command{configure} the option
 @option{--enable-@var{feature}} or @option{--disable-@var{feature}}, run
@@ -16196,7 +16274,8 @@ See the examples suggested with the definition of @code{AC_ARG_WITH}
 @code{AC_ARG_ENABLE}.
 @end defmac
 
-@defmac AC_ENABLE (@var{feature}, @var{action-if-given}, @ovar{action-if-not-given})
+@defmac AC_ENABLE (@var{feature}, @var{action-if-given}, @
+  @ovar{action-if-not-given})
 @acindex{ENABLE}
 This is an obsolete version of @code{AC_ARG_ENABLE} that does not
 support providing a help string.
@@ -16215,7 +16294,7 @@ your own @samp{help strings} to line up in the appropriate columns of
 strings} do.  This is the purpose of the @code{AS_HELP_STRING} macro.
 
 @defmac AS_HELP_STRING (@var{left-hand-side}, @var{right-hand-side})
-@acindex{HELP_STRING}
+@asindex{HELP_STRING}
 
 Expands into an help string that looks pretty when the user executes
 @samp{configure --help}.  It is typically used in @code{AC_ARG_WITH}
@@ -16277,16 +16356,15 @@ Even a warning message is undesirable here, so @code{AC_CONFIG_SUBDIRS}
 automatically disables the warnings.
 
 This default behavior may be modified in two ways.  First, the installer
-can invoke @command{configure} with the
-@option{--disable-option-checking} or
-@option{--enable-option-checking=fatal} options to disable these
-warnings or turn them into fatal errors, respectively.  Second, the
+can invoke @command{configure --disable-option-checking} to disable
+these warnings, or invoke @command{configure --enable-option-checking=fatal}
+options to turn them into fatal errors, respectively.  Second, the
 maintainer can use @code{AC_DISABLE_OPTION_CHECKING}.
 
 @defmac AC_DISABLE_OPTION_CHECKING
 @acindex{DISABLE_OPTION_CHECKING}
 
-By default, disable warnings for unrecognized
+By default, disable warnings related to any unrecognized
 @option{--with-@var{package}} or @option{--enable-@var{feature}}
 options.  This is implied by @code{AC_CONFIG_SUBDIRS}.
 
@@ -16990,7 +17068,8 @@ typedef loff_t off_t;
 Same as @samp{AC_MSG_NOTICE([checking @var{feature-description}@dots{}]}.
 @end defmac
 
-@defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @var{function-body}, @var{action-if-true}, @ovar{action-if-false})
+@defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @
+  @var{function-body}, @var{action-if-true}, @ovar{action-if-false})
 @acindex{COMPILE_CHECK}
 This is an obsolete version of @code{AC_TRY_COMPILE} itself replaced by
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}), with the
@@ -17058,7 +17137,7 @@ Does nothing, now integrated in @code{AC_PROG_LEX}.
 @cvindex SYSNDIR
 @cvindex SYSDIR
 @cvindex NDIR
-Like calling @code{AC_FUNC_CLOSEDIR_VOID} and@code{AC_HEADER_DIRENT},
+Like calling @code{AC_FUNC_CLOSEDIR_VOID} and @code{AC_HEADER_DIRENT},
 but defines a different set of C preprocessor macros to indicate which
 header file is found:
 
@@ -17172,7 +17251,8 @@ These days portable programs should use @code{waitpid}, not
 @code{AC_CHECK_HEADERS}
 @end defmac
 
-@defmac AC_HAVE_LIBRARY (@var{library}, @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
+@defmac AC_HAVE_LIBRARY (@var{library}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{HAVE_LIBRARY}
 This macro is equivalent to calling @code{AC_CHECK_LIB} with a
 @var{function} argument of @code{main}.  In addition, @var{library} can
@@ -17605,7 +17685,8 @@ issue.
 @code{AC_HEADER_TIME}
 @end defmac
 
-@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @ovar{action-if-true}, @ovar{action-if-false})
+@defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @
+  @ovar{action-if-true}, @ovar{action-if-false})
 @acindex{TRY_COMPILE}
 Same as:
 
@@ -17646,7 +17727,8 @@ AC_PREPROC_IFELSE(
 This macro double quotes the @var{input}.
 @end defmac
 
-@defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @ovar{action-if-true}, @ovar{action-if-false})
+@defmac AC_TRY_LINK (@var{includes}, @var{function-body}, @
+  @ovar{action-if-true}, @ovar{action-if-false})
 @acindex{TRY_LINK}
 Same as:
 
@@ -17679,14 +17761,16 @@ and compilation flags are determined by the current language
 @code{LIBS} are used for linking.
 @end defmac
 
-@defmac AC_TRY_LINK_FUNC (@var{function}, @ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_TRY_LINK_FUNC (@var{function}, @ovar{action-if-found}, @
+  @ovar{action-if-not-found})
 @acindex{TRY_LINK_FUNC}
 This macro is equivalent to
 @samp{AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])],
 [@var{action-if-found}], [@var{action-if-not-found}])}.
 @end defmac
 
-@defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @ovar{action-if-false}, @ovar{action-if-cross-compiling})
+@defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @
+  @ovar{action-if-false}, @ovar{action-if-cross-compiling})
 @acindex{TRY_RUN}
 Same as:
 
@@ -18684,7 +18768,8 @@ brackets to protect against included commas or spurious M4
 expansion.  The contents ought to end with an end of line.
 @end defmac
 
-@defmac AT_CHECK (@var{commands}, @dvar{status, 0}, @dvar{stdout, }, @dvar{stderr, }, @ovar{run-if-fail}, @ovar{run-if-pass})
+@defmac AT_CHECK (@var{commands}, @dvar{status, 0}, @dvar{stdout, }, @
+  @dvar{stderr, }, @ovar{run-if-fail}, @ovar{run-if-pass})
 @atindex{CHECK}
 Execute a test by performing given shell @var{commands}.  These commands
 should normally exit with @var{status}, while producing expected
@@ -18928,8 +19013,8 @@ and manage to have @file{atconfig.in} and @code{$(EXTRA_DIST)}
 distributed.
 
 With all this in place, and if you have not initialized @samp{TESTSUITEFLAGS}
-within your makefile, you can fine-tune test suite execution with this variable,
-for example:
+within your makefile, you can fine-tune test suite execution with this
+variable, for example:
 
 @example
 make check TESTSUITEFLAGS='-v -d -x 75 -k AC_PROG_CC CFLAGS=-g'
@@ -19645,7 +19730,7 @@ preceding @samp{AT_}.
 @node Program & Function Index
 @appendixsec Program and Function Index
 
-This is an alphabetical list of the programs and functions which
+This is an alphabetical list of the programs and functions whose
 portability is discussed in this document.
 
 @printindex pr
