@@ -1701,6 +1701,7 @@ Every @command{configure} script must call @code{AC_INIT} before doing
 anything else.  The only other required macro is @code{AC_OUTPUT}
 (@pxref{Output}).
 
+@anchor{AC_INIT}
 @defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report}, @
   @ovar{tarname})
 @acindex{INIT}
@@ -1833,7 +1834,7 @@ produces this in @command{configure}:
 @node Input
 @section Finding @command{configure} Input
 
-
+@anchor{AC_CONFIG_SRCDIR}
 @defmac AC_CONFIG_SRCDIR (@var{unique-file-in-source-dir})
 @acindex{CONFIG_SRCDIR}
 @var{unique-file-in-source-dir} is some file that is in the package's
@@ -1927,6 +1928,7 @@ calling @code{AC_OUTPUT}.  That is the macro that generates and runs
 other files resulting from configuration.  This is the only required
 macro besides @code{AC_INIT} (@pxref{Input}).
 
+@anchor{AC_OUTPUT}
 @defmac AC_OUTPUT
 @acindex{OUTPUT}
 @cindex Instantiation
@@ -1964,6 +1966,7 @@ set on the command line, so those are not passed on automatically.)
 Some old versions of @command{make} do not set this variable.  The
 following macro allows you to use it even with those versions.
 
+@anchor{AC_PROG_MAKE_SET}
 @defmac AC_PROG_MAKE_SET
 @acindex{PROG_MAKE_SET}
 @ovindex SET_MAKE
@@ -2135,6 +2138,7 @@ All these macros can be called multiple times, with different
 
 Be sure to read the previous section, @ref{Configuration Actions}.
 
+@anchor{AC_CONFIG_FILES}
 @defmac AC_CONFIG_FILES (@var{file}@dots{}, @ovar{cmds}, @ovar{init-cmds})
 @acindex{CONFIG_FILES}
 Make @code{AC_OUTPUT} create each @file{@var{file}} by copying an input
@@ -3229,6 +3233,7 @@ commands to run when they are called multiple times.
 @code{AC_CONFIG_COMMANDS} replaces the obsolete macro
 @code{AC_OUTPUT_COMMANDS}; see @ref{Obsolete Macros}, for details.
 
+@anchor{AC_CONFIG_COMMANDS}
 @defmac AC_CONFIG_COMMANDS (@var{tag}@dots{}, @ovar{cmds}, @ovar{init-cmds})
 @acindex{CONFIG_COMMANDS}
 Specify additional shell commands to run at the end of
@@ -3286,6 +3291,7 @@ results of tests.  One can use @code{AC_CONFIG_COMMANDS} but the
 creation of relative symbolic links can be delicate when the package is
 built in a directory different from the source directory.
 
+@anchor{AC_CONFIG_LINKS}
 @defmac AC_CONFIG_LINKS (@var{dest}:@var{source}@dots{}, @ovar{cmds}, @
   @ovar{init-cmds})
 @acindex{CONFIG_LINKS}
@@ -3426,6 +3432,7 @@ installation prefix from the location of a related program that they
 have already installed.  If you wish to do that, you can call
 @code{AC_PREFIX_PROGRAM}.
 
+@anchor{AC_PREFIX_PROGRAM}
 @defmac AC_PREFIX_PROGRAM (@var{program})
 @acindex{PREFIX_PROGRAM}
 If the user did not specify an installation prefix (using the
@@ -3728,6 +3735,7 @@ vulnerability, whereas @code{AC_PROG_MKDIR_P} does.
 configuration files.
 @end defmac
 
+@anchor{AC_PROG_LEX}
 @defmac AC_PROG_LEX
 @acindex{PROG_LEX}
 @ovindex LEX
@@ -3776,6 +3784,7 @@ As part of running the test, this macro may delete any file in the
 configuration directory named @file{lex.yy.c} or @file{lexyy.c}.
 @end defmac
 
+@anchor{AC_PROG_LN_S}
 @defmac AC_PROG_LN_S
 @acindex{PROG_LN_S}
 @ovindex LN_S
@@ -3847,6 +3856,7 @@ You are strongly encouraged to declare the @var{variable} passed to
 @code{AC_CHECK_PROG} etc.@: as precious, @xref{Setting Output Variables},
 @code{AC_ARG_VAR}, for more details.
 
+@anchor{AC_CHECK_PROG}
 @defmac AC_CHECK_PROG (@var{variable}, @var{prog-to-check-for}, @
   @var{value-if-found}, @ovar{value-if-not-found}, @dvar{path, $PATH}, @
   @ovar{reject})
@@ -3861,6 +3871,7 @@ that case, set @var{variable} using the absolute file name of the
 @var{variable}.
 @end defmac
 
+@anchor{AC_CHECK_PROGS}
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for}, @
   @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_PROGS}
@@ -3945,6 +3956,7 @@ In the future, when cross-compiling this macro will @emph{not}
 accept program names that are not prefixed with the host type.
 @end defmac
 
+@anchor{AC_PATH_PROG}
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for}, @
   @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_PROG}
@@ -3952,6 +3964,7 @@ Like @code{AC_CHECK_PROG}, but set @var{variable} to the absolute
 name of @var{prog-to-check-for} if found.
 @end defmac
 
+@anchor{AC_PATH_PROGS}
 @defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for}, @
   @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_PROGS}
@@ -4054,6 +4067,7 @@ for each file found.
 The following macros check for the presence of certain C, C++, or Fortran
 library archive files.
 
+@anchor{AC_CHECK_LIB}
 @defmac AC_CHECK_LIB (@var{library}, @var{function}, @
   @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{CHECK_LIB}
@@ -4393,6 +4407,7 @@ nowadays.
 These macros check for particular C functions---whether they exist, and
 in some cases how they respond when given certain arguments.
 
+@anchor{AC_FUNC_ALLOCA}
 @defmac AC_FUNC_ALLOCA
 @acindex{FUNC_ALLOCA}
 @cvindex C_ALLOCA
@@ -4459,7 +4474,7 @@ should accept @option{-1} for @code{uid} and @code{gid}), define
 @code{HAVE_CHOWN}.
 @end defmac
 
-
+@anchor{AC_FUNC_CLOSEDIR_VOID}
 @defmac AC_FUNC_CLOSEDIR_VOID
 @acindex{FUNC_CLOSEDIR_VOID}
 @cvindex CLOSEDIR_VOID
@@ -4515,6 +4530,7 @@ This macro is obsolescent.  New programs should use Gnulib's
 @code{fnmatch-gnu} module.  @xref{Gnulib}.
 @end defmac
 
+@anchor{AC_FUNC_FORK}
 @defmac AC_FUNC_FORK
 @acindex{FUNC_FORK}
 @cvindex HAVE_VFORK_H
@@ -4578,6 +4594,7 @@ Ultrix 4.3, where @samp{getgroups (0, 0)} always fails), define
 needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 @end defmac
 
+@anchor{AC_FUNC_GETLOADAVG}
 @defmac AC_FUNC_GETLOADAVG
 @acindex{FUNC_GETLOADAVG}
 @cvindex SVR4
@@ -4638,6 +4655,7 @@ The @code{AC_FUNC_GETLOADAVG} macro is obsolescent.  New programs should
 use Gnulib's @code{getloadavg} module.  @xref{Gnulib}.
 @end defmac
 
+@anchor{AC_FUNC_GETMNTENT}
 @defmac AC_FUNC_GETMNTENT
 @acindex{FUNC_GETMNTENT}
 @cvindex HAVE_GETMNTENT
@@ -4770,6 +4788,7 @@ Posix standard and should be the inverse of
 @code{localtime}.
 @end defmac
 
+@anchor{AC_FUNC_MMAP}
 @defmac AC_FUNC_MMAP
 @acindex{FUNC_MMAP}
 @cvindex HAVE_MMAP
@@ -4859,6 +4878,7 @@ These macros are obsolescent, as no current systems have the bug.
 New programs need not use these macros.
 @end defmac
 
+@anchor{AC_FUNC_STRCOLL}
 @defmac AC_FUNC_STRCOLL
 @acindex{FUNC_STRCOLL}
 @cvindex HAVE_STRCOLL
@@ -4887,6 +4907,7 @@ Library) return a @code{char *} value that is not necessarily equal to
 the buffer argument.
 @end defmac
 
+@anchor{AC_FUNC_STRFTIME}
 @defmac AC_FUNC_STRFTIME
 @acindex{FUNC_STRFTIME}
 @cvindex HAVE_STRFTIME
@@ -4927,6 +4948,7 @@ If the @code{strnlen} function is not available, or is buggy (like the one
 from @acronym{AIX} 4.3), require an @code{AC_LIBOBJ} replacement for it.
 @end defmac
 
+@anchor{AC_FUNC_UTIME_NULL}
 @defmac AC_FUNC_UTIME_NULL
 @acindex{FUNC_UTIME_NULL}
 @cvindex HAVE_UTIME_NULL
@@ -4939,6 +4961,7 @@ This macro is obsolescent, as all current systems have a @code{utime}
 that behaves this way.  New programs need not use this macro.
 @end defmac
 
+@anchor{AC_FUNC_VPRINTF}
 @defmac AC_FUNC_VPRINTF
 @acindex{FUNC_VPRINTF}
 @cvindex HAVE_VPRINTF
@@ -4986,6 +5009,7 @@ If you need to check the behavior of a function as well as find out
 whether it is present, you have to write your own test for
 it (@pxref{Writing Tests}).
 
+@anchor{AC_CHECK_FUNC}
 @defmac AC_CHECK_FUNC (@var{function}, @ovar{action-if-found}, @
   @ovar{action-if-not-found})
 @acindex{CHECK_FUNC}
@@ -4998,6 +5022,7 @@ standardized than C++.  (@pxref{Language Choice}, for more information
 about selecting the language for checks.)
 @end defmac
 
+@anchor{AC_CHECK_FUNCS}
 @defmac AC_CHECK_FUNCS (@var{function}@dots{}, @ovar{action-if-found}, @
   @ovar{action-if-not-found})
 @acindex{CHECK_FUNCS}
@@ -5268,6 +5293,7 @@ Assertions are enabled by default, but the user can override this by
 invoking @command{configure} with the @option{--disable-assert} option.
 @end defmac
 
+@anchor{AC_HEADER_DIRENT}
 @defmac AC_HEADER_DIRENT
 @acindex{HEADER_DIRENT}
 @cvindex HAVE_DIRENT_H
@@ -5327,6 +5353,7 @@ Also see @code{AC_STRUCT_DIRENT_D_INO} and
 @code{AC_STRUCT_DIRENT_D_TYPE} (@pxref{Particular Structures}).
 @end defmac
 
+@anchor{AC_HEADER_MAJOR}
 @defmac AC_HEADER_MAJOR
 @acindex{HEADER_MAJOR}
 @cvindex MAJOR_IN_MKDEV
@@ -5364,6 +5391,7 @@ the following:
 @end verbatim
 @end defmac
 
+@anchor{AC_HEADER_STAT}
 @defmac AC_HEADER_STAT
 @acindex{HEADER_STAT}
 @cvindex STAT_MACROS_BROKEN
@@ -5412,7 +5440,7 @@ and contains a few other bells and whistles.
 
 @end defmac
 
-
+@anchor{AC_HEADER_STDC}
 @defmac AC_HEADER_STDC
 @acindex{HEADER_STDC}
 @cvindex STDC_HEADERS
@@ -5554,6 +5582,7 @@ The way to check whether the system supports Posix is:
 @end group
 @end example
 
+@anchor{AC_HEADER_TIME}
 @defmac AC_HEADER_TIME
 @acindex{HEADER_TIME}
 @cvindex TIME_WITH_SYS_TIME
@@ -5623,6 +5652,7 @@ These macros are used to find system header files not covered by the
 as well as find out whether it is present, you have to write your own
 test for it (@pxref{Writing Tests}).
 
+@anchor{AC_CHECK_HEADER}
 @defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @
   @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_HEADER}
@@ -5636,6 +5666,7 @@ For compatibility issues with older versions of Autoconf, please read
 below.
 @end defmac
 
+@anchor{AC_CHECK_HEADERS}
 @defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @
   @ovar{action-if-found}, @ovar{action-if-not-found}, @
   @dvar{includes, default-includes})
@@ -5733,6 +5764,7 @@ is much safer to avoid
 introducing extra declarations when they are not needed.
 @end defmac
 
+@anchor{AC_CHECK_DECLS}
 @defmac AC_CHECK_DECLS (@var{symbols}, @ovar{action-if-found}, @
   @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_DECLS}
@@ -5837,20 +5869,7 @@ Headers}).  Then, if @code{struct dirent} contains a @code{d_type}
 member, define @code{HAVE_STRUCT_DIRENT_D_TYPE}.
 @end defmac
 
-@defmac AC_STRUCT_ST_BLKSIZE
-@acindex{STRUCT_ST_BLKSIZE}
-@cvindex HAVE_STRUCT_STAT_ST_BLKSIZE
-@cvindex HAVE_ST_BLKSIZE
-If @code{struct stat} contains an @code{st_blksize} member, define
-@code{HAVE_STRUCT_STAT_ST_BLKSIZE}.  The former name,
-@code{HAVE_ST_BLKSIZE} is to be avoided, as its support will cease in
-the future.  This macro is obsoleted, and should be replaced by
-
-@example
-AC_CHECK_MEMBERS([struct stat.st_blksize])
-@end example
-@end defmac
-
+@anchor{AC_STRUCT_ST_BLOCKS}
 @defmac AC_STRUCT_ST_BLOCKS
 @acindex{STRUCT_ST_BLOCKS}
 @cvindex HAVE_STRUCT_STAT_ST_BLOCKS
@@ -5861,20 +5880,6 @@ If @code{struct stat} contains an @code{st_blocks} member, define
 @code{AC_LIBOBJ} replacement of @samp{fileblocks}.  The former name,
 @code{HAVE_ST_BLOCKS} is to be avoided, as its support will cease in the
 future.
-@end defmac
-
-@defmac AC_STRUCT_ST_RDEV
-@acindex{STRUCT_ST_RDEV}
-@cvindex HAVE_ST_RDEV
-@cvindex HAVE_STRUCT_STAT_ST_RDEV
-If @code{struct stat} contains an @code{st_rdev} member, define
-@code{HAVE_STRUCT_STAT_ST_RDEV}.  The former name for this macro,
-@code{HAVE_ST_RDEV}, is to be avoided as it will cease to be supported
-in the future.  Actually, even the new macro is obsolete and should be
-replaced by:
-@example
-AC_CHECK_MEMBERS([struct stat.st_rdev])
-@end example
 @end defmac
 
 @defmac AC_STRUCT_TM
@@ -5890,6 +5895,7 @@ This macro is obsolescent, as @file{time.h} defines @code{struct tm} in
 current systems.  New programs need not use this macro.
 @end defmac
 
+@anchor{AC_STRUCT_TIMEZONE}
 @defmac AC_STRUCT_TIMEZONE
 @acindex{STRUCT_TIMEZONE}
 @cvindex HAVE_DECL_TZNAME
@@ -5930,6 +5936,7 @@ AC_CHECK_MEMBER(struct top.middle.bot)
 @end example
 @end defmac
 
+@anchor{AC_CHECK_MEMBERS}
 @defmac AC_CHECK_MEMBERS (@var{members}, @ovar{action-if-found}, @
   @ovar{action-if-not-found}, @dvar{includes, default-includes})
 @acindex{CHECK_MEMBERS}
@@ -5979,6 +5986,7 @@ The Gnulib @code{stdint} module is an alternate way to define many of
 these symbols; it is useful if you prefer your code to assume a
 C99-or-better environment.  @xref{Gnulib}.
 
+@anchor{AC_TYPE_GETGROUPS}
 @defmac AC_TYPE_GETGROUPS
 @acindex{TYPE_GETGROUPS}
 @cvindex GETGROUPS_T
@@ -6084,6 +6092,7 @@ Define @code{HAVE_MBSTATE_T} if @code{<wchar.h>} declares the
 @code{<wchar.h>} does not declare it.
 @end defmac
 
+@anchor{AC_TYPE_MODE_T}
 @defmac AC_TYPE_MODE_T
 @acindex{TYPE_MODE_T}
 @cvindex mode_t
@@ -6091,6 +6100,7 @@ Define @code{mode_t} to a suitable type, if standard headers do not
 define it.
 @end defmac
 
+@anchor{AC_TYPE_OFF_T}
 @defmac AC_TYPE_OFF_T
 @acindex{TYPE_OFF_T}
 @cvindex off_t
@@ -6098,6 +6108,7 @@ Define @code{off_t} to a suitable type, if standard headers do not
 define it.
 @end defmac
 
+@anchor{AC_TYPE_PID_T}
 @defmac AC_TYPE_PID_T
 @acindex{TYPE_PID_T}
 @cvindex pid_t
@@ -6105,6 +6116,7 @@ Define @code{pid_t} to a suitable type, if standard headers do not
 define it.
 @end defmac
 
+@anchor{AC_TYPE_SIGNAL}
 @defmac AC_TYPE_SIGNAL
 @acindex{TYPE_SIGNAL}
 @cvindex RETSIGTYPE
@@ -6126,6 +6138,7 @@ hup_handler ()
 @end example
 @end defmac
 
+@anchor{AC_TYPE_SIZE_T}
 @defmac AC_TYPE_SIZE_T
 @acindex{TYPE_SIZE_T}
 @cvindex size_t
@@ -6140,6 +6153,7 @@ Define @code{ssize_t} to a suitable type, if standard headers do not
 define it.
 @end defmac
 
+@anchor{AC_TYPE_UID_T}
 @defmac AC_TYPE_UID_T
 @acindex{TYPE_UID_T}
 @cvindex uid_t
@@ -6315,6 +6329,7 @@ Autoconf works around this problem by casting @code{sizeof (int)} to
 @node Generic Compiler Characteristics
 @subsection Generic Compiler Characteristics
 
+@anchor{AC_CHECK_SIZEOF}
 @defmac AC_CHECK_SIZEOF (@var{type-or-expr}, @ovar{unused}, @
   @dvar{includes, default-includes})
 @acindex{CHECK_SIZEOF}
@@ -6517,6 +6532,7 @@ where @acronym{GCC} does not accept @option{-g}), or @option{-g} for
 other compilers.
 @end defmac
 
+@anchor{AC_PROG_CC_C_O}
 @defmac AC_PROG_CC_C_O
 @acindex{PROG_CC_C_O}
 @cvindex NO_MINUS_C_MINUS_O
@@ -6614,6 +6630,7 @@ This macro is obsolescent, as current C compilers understand @samp{\a}.
 New programs need not use this macro.
 @end defmac
 
+@anchor{AC_C_BIGENDIAN}
 @defmac AC_C_BIGENDIAN (@ovar{action-if-true}, @ovar{action-if-false}, @
   @ovar{action-if-unknown}, @ovar{action-if-universal})
 @acindex{C_BIGENDIAN}
@@ -6651,6 +6668,7 @@ should also use @code{AC_CONFIG_HEADERS}; otherwise
 binary files.
 @end defmac
 
+@anchor{AC_C_CONST}
 @defmac AC_C_CONST
 @acindex{C_CONST}
 @cvindex const
@@ -6728,6 +6746,7 @@ This macro is obsolescent, as current C compilers support @code{volatile}.
 New programs need not use this macro.
 @end defmac
 
+@anchor{AC_C_INLINE}
 @defmac AC_C_INLINE
 @acindex{C_INLINE}
 @cvindex inline
@@ -6736,6 +6755,7 @@ Otherwise define @code{inline} to @code{__inline__} or @code{__inline}
 if it accepts one of those, otherwise define @code{inline} to be empty.
 @end defmac
 
+@anchor{AC_C_CHAR_UNSIGNED}
 @defmac AC_C_CHAR_UNSIGNED
 @acindex{C_CHAR_UNSIGNED}
 @cvindex __CHAR_UNSIGNED__
@@ -6824,6 +6844,7 @@ This macro is obsolescent, as current C compilers support prototypes.
 New programs need not use this macro.
 @end defmac
 
+@anchor{AC_PROG_GCC_TRADITIONAL}
 @defmac AC_PROG_GCC_TRADITIONAL
 @acindex{PROG_GCC_TRADITIONAL}
 @ovindex CC
@@ -7356,6 +7377,7 @@ message).
 
 The following macros check for operating system services or capabilities.
 
+@anchor{AC_PATH_X}
 @defmac AC_PATH_X
 @acindex{PATH_X}
 @evindex XMKMF
@@ -7381,6 +7403,7 @@ If both methods fail, or the user gave the command line option
 otherwise set it to the empty string.
 @end defmac
 
+@anchor{AC_PATH_XTRA}
 @defmac AC_PATH_XTRA
 @acindex{PATH_XTRA}
 @ovindex X_CFLAGS
@@ -7405,6 +7428,7 @@ any found to the output variable @code{X_PRE_LIBS}.
 @c @code{LIBS} temporarily, like this: (FIXME - add example)
 @end defmac
 
+@anchor{AC_SYS_INTERPRETER}
 @defmac AC_SYS_INTERPRETER
 @acindex{SYS_INTERPRETER}
 Check whether the system supports starting scripts with a line of the
@@ -7444,6 +7468,7 @@ prototypes available when using them and large-file support is
 enabled.
 @end defmac
 
+@anchor{AC_SYS_LONG_FILE_NAMES}
 @defmac AC_SYS_LONG_FILE_NAMES
 @acindex{SYS_LONG_FILE_NAMES}
 @cvindex HAVE_LONG_FILE_NAMES
@@ -7674,6 +7699,7 @@ compilers for the respective languages.  The following macros determine
 which programming language is used in the subsequent tests in
 @file{configure.ac}.
 
+@anchor{AC_LANG}
 @defmac AC_LANG (@var{language})
 Do compilation tests using the compiler, preprocessor, and file
 extensions for the specified @var{language}.
@@ -7716,6 +7742,7 @@ extension @file{.m} for test programs.  Use compilation flags:
 @end table
 @end defmac
 
+@anchor{AC_LANG_PUSH}
 @defmac AC_LANG_PUSH (@var{language})
 @acindex{LANG_PUSH}
 Remember the current language (as set by @code{AC_LANG}) on a stack, and
@@ -8049,6 +8076,7 @@ Nevertheless, if you need to run the preprocessor, then use
 The macros described in this section cannot be used for tests in Erlang or
 Fortran, since those languages require no preprocessor.
 
+@anchor{AC_PREPROC_IFELSE}
 @defmac AC_PREPROC_IFELSE (@var{input}, @ovar{action-if-true}, @
   @ovar{action-if-false})
 @acindex{PREPROC_IFELSE}
@@ -8104,6 +8132,7 @@ get rid of your old use of the macro @code{AC_TRY_CPP} in favor of
 @code{AC_PREPROC_IFELSE}, but, in the first place, are you sure you need
 to run the @emph{preprocessor} and not the compiler?
 
+@anchor{AC_EGREP_HEADER}
 @defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @
   @var{action-if-found}, @ovar{action-if-not-found})
 @acindex{EGREP_HEADER}
@@ -8113,6 +8142,7 @@ If the output of running the preprocessor on the system header file
 execute @var{action-if-not-found}.
 @end defmac
 
+@anchor{AC_EGREP_CPP}
 @defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @
   @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{EGREP_CPP}
@@ -8175,7 +8205,7 @@ to check for libraries (@pxref{Libraries}), by adding the library being
 checked for to @code{LIBS} temporarily and trying to link a small
 program.
 
-
+@anchor{AC_LINK_IFELSE}
 @defmac AC_LINK_IFELSE (@var{input}, @ovar{action-if-true}, @
   @ovar{action-if-false})
 @acindex{LINK_IFELSE}
@@ -8213,6 +8243,7 @@ run it using @code{AC_RUN_IFELSE}.  Avoid running test programs if
 possible, because this prevents people from configuring your package for
 cross-compiling.
 
+@anchor{AC_RUN_IFELSE}
 @defmac AC_RUN_IFELSE (@var{input}, @ovar{action-if-true}, @
   @ovar{action-if-false}, @ovar{action-if-cross-compiling})
 @acindex{RUN_IFELSE}
@@ -8974,6 +9005,7 @@ This macro prints nothing if @command{configure} is run with the
 @option{--quiet} or @option{--silent} option.
 @end defmac
 
+@anchor{AC_MSG_RESULT}
 @defmac AC_MSG_RESULT (@var{result-description})
 @acindex{MSG_RESULT}
 Notify the user of the results of a check.  @var{result-description} is
@@ -8987,6 +9019,7 @@ This macro prints nothing if @command{configure} is run with the
 @option{--quiet} or @option{--silent} option.
 @end defmac
 
+@anchor{AC_MSG_NOTICE}
 @defmac AC_MSG_NOTICE (@var{message})
 @acindex{MSG_NOTICE}
 Deliver the @var{message} to the user.  It is useful mainly to print a
@@ -9001,6 +9034,7 @@ This macro prints nothing if @command{configure} is run with the
 @option{--quiet} or @option{--silent} option.
 @end defmac
 
+@anchor{AC_MSG_ERROR}
 @defmac AC_MSG_ERROR (@var{error-description}, @ovar{exit-status})
 @acindex{MSG_ERROR}
 Notify the user of an error that prevents @command{configure} from
@@ -9021,6 +9055,7 @@ details are provided in @file{config.log}.  This is typically used when
 abnormal results are found during a compilation.
 @end defmac
 
+@anchor{AC_MSG_WARN}
 @defmac AC_MSG_WARN (@var{problem-description})
 @acindex{MSG_WARN}
 Notify the @command{configure} user of a possible problem.  This macro
@@ -10146,6 +10181,7 @@ m4_foreach([myvar], [[foo], [bar, baz]],
 @end example
 @end defmac
 
+@anchor{m4_foreach_w}
 @defmac m4_foreach_w (@var{var}, @var{list}, @var{expression})
 @msindex{foreach_w}
 Loop over the white-space-separated list @var{list}, assigning each value
@@ -10868,6 +10904,7 @@ with their modern implementation.
 
 Autoconf provides a simple means to obsolete a macro.
 
+@anchor{AU_DEFUN}
 @defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message})
 @auindex{DEFUN}
 Define @var{old-macro} as @var{implementation}.  The only difference
@@ -16132,6 +16169,7 @@ should call @code{AC_ARG_WITH} to detect whether the @command{configure}
 user asked to use it.  Whether each package is used or not by default,
 and which arguments are valid, is up to you.
 
+@anchor{AC_ARG_WITH}
 @defmac AC_ARG_WITH (@var{package}, @var{help-string}, @
   @ovar{action-if-given}, @ovar{action-if-not-given})
 @acindex{ARG_WITH}
@@ -16247,13 +16285,6 @@ These three examples can be easily adapted to the case where
 @ref{Package Options}).
 @end defmac
 
-@defmac AC_WITH (@var{package}, @var{action-if-given}, @
-  @ovar{action-if-not-given})
-@acindex{WITH}
-This is an obsolete version of @code{AC_ARG_WITH} that does not
-support providing a help string.
-@end defmac
-
 @node Package Options
 @section Choosing Package Options
 @cindex Package options
@@ -16293,6 +16324,7 @@ For each optional feature, @file{configure.ac} should call
 to include it.  Whether each feature is included or not by default, and
 which arguments are valid, is up to you.
 
+@anchor{AC_ARG_ENABLE}
 @defmac AC_ARG_ENABLE (@var{feature}, @var{help-string}, @
   @ovar{action-if-given}, @ovar{action-if-not-given})
 @acindex{ARG_ENABLE}
@@ -16319,14 +16351,6 @@ See the examples suggested with the definition of @code{AC_ARG_WITH}
 @code{AC_ARG_ENABLE}.
 @end defmac
 
-@defmac AC_ENABLE (@var{feature}, @var{action-if-given}, @
-  @ovar{action-if-not-given})
-@acindex{ENABLE}
-This is an obsolete version of @code{AC_ARG_ENABLE} that does not
-support providing a help string.
-@end defmac
-
-
 @node Pretty Help Strings
 @section Making Your Help Strings Look Pretty
 @cindex Help strings
@@ -16338,6 +16362,7 @@ your own @samp{help strings} to line up in the appropriate columns of
 @samp{configure --help} just like the standard Autoconf @samp{help
 strings} do.  This is the purpose of the @code{AS_HELP_STRING} macro.
 
+@anchor{AS_HELP_STRING}
 @defmac AS_HELP_STRING (@var{left-hand-side}, @var{right-hand-side})
 @asindex{HELP_STRING}
 
@@ -17008,12 +17033,12 @@ description.
 
 @defmac AC_ALLOCA
 @acindex{ALLOCA}
-@code{AC_FUNC_ALLOCA}
+Replaced by @code{AC_FUNC_ALLOCA} (@pxref{AC_FUNC_ALLOCA}).
 @end defmac
 
 @defmac AC_ARG_ARRAY
 @acindex{ARG_ARRAY}
-removed because of limited usefulness
+Removed because of limited usefulness.
 @end defmac
 
 @defmac AC_C_CROSS
@@ -17041,12 +17066,12 @@ variables this macro sets.
 The user is encouraged to use either @code{AC_CANONICAL_BUILD}, or
 @code{AC_CANONICAL_HOST}, or @code{AC_CANONICAL_TARGET}, depending on
 the needs.  Using @code{AC_CANONICAL_TARGET} is enough to run the two
-other macros.
+other macros (@pxref{Canonicalizing}).
 @end defmac
 
 @defmac AC_CHAR_UNSIGNED
 @acindex{CHAR_UNSIGNED}
-@code{AC_C_CHAR_UNSIGNED}
+Replaced by @code{AC_C_CHAR_UNSIGNED} (@pxref{AC_C_CHAR_UNSIGNED}).
 @end defmac
 
 @defmac AC_CHECK_TYPE (@var{type}, @var{default})
@@ -17110,7 +17135,14 @@ typedef loff_t off_t;
 
 @defmac AC_CHECKING (@var{feature-description})
 @acindex{CHECKING}
-Same as @samp{AC_MSG_NOTICE([checking @var{feature-description}@dots{}]}.
+Same as
+
+@example
+AC_MSG_NOTICE([checking @var{feature-description}@dots{}]
+@end example
+
+@noindent
+@xref{AC_MSG_NOTICE}.
 @end defmac
 
 @defmac AC_COMPILE_CHECK (@var{echo-text}, @var{includes}, @
@@ -17126,7 +17158,7 @@ messages (@pxref{Printing Messages}).
 
 @defmac AC_CONST
 @acindex{CONST}
-@code{AC_C_CONST}
+Replaced by @code{AC_C_CONST} (@pxref{AC_C_CONST}).
 @end defmac
 
 @defmac AC_CROSS_CHECK
@@ -17137,10 +17169,11 @@ Same as @code{AC_C_CROSS}, which is obsolete too, and does nothing
 
 @defmac AC_CYGWIN
 @acindex{CYGWIN}
+@evindex CYGWIN
 Check for the Cygwin environment in which case the shell variable
 @code{CYGWIN} is set to @samp{yes}.  Don't use this macro, the dignified
-means to check the nature of the host is using
-@code{AC_CANONICAL_HOST}.  As a matter of fact this macro is defined as:
+means to check the nature of the host is using @code{AC_CANONICAL_HOST}
+(@pxref{Canonicalizing}).  As a matter of fact this macro is defined as:
 
 @example
 AC_REQUIRE([AC_CANONICAL_HOST])[]dnl
@@ -17150,7 +17183,7 @@ case $host_os in
 esac
 @end example
 
-Beware that the variable @code{CYGWIN} has a special meaning when
+Beware that the variable @env{CYGWIN} has a special meaning when
 running Cygwin, and should not be changed.  That's yet another reason
 not to use this macro.
 @end defmac
@@ -17169,11 +17202,14 @@ AC_CHECK_DECLS([sys_siglist], [], [],
 #endif
 ])
 @end example
+
+@noindent
+@xref{AC_CHECK_DECLS}.
 @end defmac
 
 @defmac AC_DECL_YYTEXT
 @acindex{DECL_YYTEXT}
-Does nothing, now integrated in @code{AC_PROG_LEX}.
+Does nothing, now integrated in @code{AC_PROG_LEX} (@pxref{AC_PROG_LEX}).
 @end defmac
 
 @defmac AC_DIR_HEADER
@@ -17182,7 +17218,9 @@ Does nothing, now integrated in @code{AC_PROG_LEX}.
 @cvindex SYSNDIR
 @cvindex SYSDIR
 @cvindex NDIR
-Like calling @code{AC_FUNC_CLOSEDIR_VOID} and @code{AC_HEADER_DIRENT},
+Like calling @code{AC_FUNC_CLOSEDIR_VOID}
+(@pxref{AC_FUNC_CLOSEDIR_VOID}) and @code{AC_HEADER_DIRENT}
+(@pxref{AC_HEADER_DIRENT}),
 but defines a different set of C preprocessor macros to indicate which
 header file is found:
 
@@ -17205,7 +17243,7 @@ AC_CHECK_LIB([seq], [getmntent], [LIBS="-lseq $LIBS"])
 @end example
 
 @noindent
-now it is just @code{AC_FUNC_GETMNTENT}.
+now it is just @code{AC_FUNC_GETMNTENT} (@pxref{AC_FUNC_GETMNTENT}).
 @end defmac
 
 @defmac AC_EXEEXT
@@ -17219,34 +17257,44 @@ string if Posix and @samp{.exe} if a @acronym{DOS} variant.
 @defmac AC_EMXOS2
 @acindex{EMXOS2}
 Similar to @code{AC_CYGWIN} but checks for the EMX environment on OS/2
-and sets @code{EMXOS2}.
+and sets @code{EMXOS2}.  Don't use this macro, the dignified means to
+check the nature of the host is using @code{AC_CANONICAL_HOST}
+(@pxref{Canonicalizing}).
+@end defmac
+
+@defmac AC_ENABLE (@var{feature}, @var{action-if-given}, @
+  @ovar{action-if-not-given})
+@acindex{ENABLE}
+This is an obsolete version of @code{AC_ARG_ENABLE} that does not
+support providing a help string (@pxref{AC_ARG_ENABLE}).
 @end defmac
 
 @defmac AC_ERROR
 @acindex{ERROR}
-@code{AC_MSG_ERROR}
+Replaced by @code{AC_MSG_ERROR} (@pxref{AC_MSG_ERROR}).
 @end defmac
 
 @defmac AC_FIND_X
 @acindex{FIND_X}
-@code{AC_PATH_X}
+Replaced by @code{AC_PATH_X} (@pxref{AC_PATH_X}).
 @end defmac
 
 @defmac AC_FIND_XTRA
 @acindex{FIND_XTRA}
-@code{AC_PATH_XTRA}
+Replaced by @code{AC_PATH_XTRA} (@pxref{AC_PATH_XTRA}).
 @end defmac
 
 @defmac AC_FOREACH
 @acindex{FOREACH}
-@code{m4_foreach_w}
+Replaced by @code{m4_foreach_w} (@pxref{m4_foreach_w}).
 @end defmac
 
 @defmac AC_FUNC_CHECK
 @acindex{FUNC_CHECK}
-@code{AC_CHECK_FUNC}
+Replaced by @code{AC_CHECK_FUNC} (@pxref{AC_CHECK_FUNC}).
 @end defmac
 
+@anchor{AC_FUNC_SETVBUF_REVERSED}
 @defmac AC_FUNC_SETVBUF_REVERSED
 @acindex{FUNC_SETVBUF_REVERSED}
 @cvindex SETVBUF_REVERSED
@@ -17273,27 +17321,27 @@ These days portable programs should use @code{waitpid}, not
 
 @defmac AC_GCC_TRADITIONAL
 @acindex{GCC_TRADITIONAL}
-@code{AC_PROG_GCC_TRADITIONAL}
+Replaced by @code{AC_PROG_GCC_TRADITIONAL} (@pxref{AC_PROG_GCC_TRADITIONAL}).
 @end defmac
 
 @defmac AC_GETGROUPS_T
 @acindex{GETGROUPS_T}
-@code{AC_TYPE_GETGROUPS}
+Replaced by @code{AC_TYPE_GETGROUPS} (@pxref{AC_TYPE_GETGROUPS}).
 @end defmac
 
 @defmac AC_GETLOADAVG
 @acindex{GETLOADAVG}
-@code{AC_FUNC_GETLOADAVG}
+Replaced by @code{AC_FUNC_GETLOADAVG} (@pxref{AC_FUNC_GETLOADAVG}).
 @end defmac
 
 @defmac AC_HAVE_FUNCS
 @acindex{HAVE_FUNCS}
-@code{AC_CHECK_FUNCS}
+Replaced by @code{AC_CHECK_FUNCS} (@pxref{AC_CHECK_FUNCS}).
 @end defmac
 
 @defmac AC_HAVE_HEADERS
 @acindex{HAVE_HEADERS}
-@code{AC_CHECK_HEADERS}
+Replaced by @code{AC_CHECK_HEADERS} (@pxref{AC_CHECK_HEADERS}).
 @end defmac
 
 @defmac AC_HAVE_LIBRARY (@var{library}, @ovar{action-if-found}, @
@@ -17304,26 +17352,27 @@ This macro is equivalent to calling @code{AC_CHECK_LIB} with a
 be written as any of @samp{foo}, @option{-lfoo}, or @samp{libfoo.a}.  In
 all of those cases, the compiler is passed @option{-lfoo}.  However,
 @var{library} cannot be a shell variable; it must be a literal name.
+@xref{AC_CHECK_LIB}.
 @end defmac
 
 @defmac AC_HAVE_POUNDBANG
 @acindex{HAVE_POUNDBANG}
-@code{AC_SYS_INTERPRETER} (different calling convention)
+Replaced by @code{AC_SYS_INTERPRETER} (@pxref{AC_SYS_INTERPRETER}).
 @end defmac
 
 @defmac AC_HEADER_CHECK
 @acindex{HEADER_CHECK}
-@code{AC_CHECK_HEADER}
+Replaced by @code{AC_CHECK_HEADER} (@pxref{AC_CHECK_HEADER}).
 @end defmac
 
 @defmac AC_HEADER_EGREP
 @acindex{HEADER_EGREP}
-@code{AC_EGREP_HEADER}
+Replaced by @code{AC_EGREP_HEADER} (@pxref{AC_EGREP_HEADER}).
 @end defmac
 
 @defmac AC_HELP_STRING
 @acindex{HELP_STRING}
-@code{AS_HELP_STRING}
+Replaced by @code{AS_HELP_STRING} (@pxref{AS_HELP_STRING}).
 @end defmac
 
 @defmac AC_INIT (@var{unique-file-in-source-dir})
@@ -17335,18 +17384,19 @@ equivalent to:
 AC_INIT
 AC_CONFIG_SRCDIR(@var{unique-file-in-source-dir})
 @end example
+See @ref{AC_INIT} and @ref{AC_CONFIG_SRCDIR}.
 @end defmac
 
 @defmac AC_INLINE
 @acindex{INLINE}
-@code{AC_C_INLINE}
+Replaced by @code{AC_C_INLINE} (@pxref{AC_C_INLINE}).
 @end defmac
 
 @defmac AC_INT_16_BITS
 @acindex{INT_16_BITS}
 @cvindex INT_16_BITS
 If the C type @code{int} is 16 bits wide, define @code{INT_16_BITS}.
-Use @samp{AC_CHECK_SIZEOF(int)} instead.
+Use @samp{AC_CHECK_SIZEOF(int)} instead (@pxref{AC_CHECK_SIZEOF}).
 @end defmac
 
 @defmac AC_IRIX_SUN
@@ -17368,40 +17418,45 @@ now it is defined as
 AC_FUNC_GETMNTENT
 AC_CHECK_LIB([sun], [getpwnam])
 @end example
+
+@noindent
+See @ref{AC_FUNC_GETMNTENT} and @ref{AC_CHECK_LIB}.
 @end defmac
 
 @defmac AC_LANG_C
 @acindex{LANG_C}
-Same as @samp{AC_LANG([C])}.
+Same as @samp{AC_LANG([C])} (@pxref{AC_LANG}).
 @end defmac
 
 @defmac AC_LANG_CPLUSPLUS
 @acindex{LANG_CPLUSPLUS}
-Same as @samp{AC_LANG([C++])}.
+Same as @samp{AC_LANG([C++])} (@pxref{AC_LANG}).
 @end defmac
 
 @defmac AC_LANG_FORTRAN77
 @acindex{LANG_FORTRAN77}
-Same as @samp{AC_LANG([Fortran 77])}.
+Same as @samp{AC_LANG([Fortran 77])} (@pxref{AC_LANG}).
 @end defmac
 
 @defmac AC_LANG_RESTORE
 @acindex{LANG_RESTORE}
 Select the @var{language} that is saved on the top of the stack, as set
 by @code{AC_LANG_SAVE}, remove it from the stack, and call
-@code{AC_LANG(@var{language})}.
+@code{AC_LANG(@var{language})}.  @xref{Language Choice}, for the
+preferred way to change languages.
 @end defmac
 
 @defmac AC_LANG_SAVE
 @acindex{LANG_SAVE}
 Remember the current language (as set by @code{AC_LANG}) on a stack.
-The current language does not change.  @code{AC_LANG_PUSH} is preferred.
+The current language does not change.  @code{AC_LANG_PUSH} is preferred
+(@pxref{AC_LANG_PUSH}).
 @end defmac
 
 @defmac AC_LINK_FILES (@var{source}@dots{}, @var{dest}@dots{})
 @acindex{LINK_FILES}
-This is an obsolete version of @code{AC_CONFIG_LINKS}.  An updated
-version of:
+This is an obsolete version of @code{AC_CONFIG_LINKS}
+(@pxref{AC_CONFIG_LINKS}.  An updated version of:
 
 @example
 AC_LINK_FILES(config/$machine.h config/$obj_format.h,
@@ -17419,14 +17474,15 @@ AC_CONFIG_LINKS([host.h:config/$machine.h
 
 @defmac AC_LN_S
 @acindex{LN_S}
-@code{AC_PROG_LN_S}
+Replaced by @code{AC_PROG_LN_S} (@pxref{AC_PROG_LN_S}).
 @end defmac
 
 @defmac AC_LONG_64_BITS
 @acindex{LONG_64_BITS}
 @cvindex LONG_64_BITS
 Define @code{LONG_64_BITS} if the C type @code{long int} is 64 bits wide.
-Use the generic macro @samp{AC_CHECK_SIZEOF([long int])} instead.
+Use the generic macro @samp{AC_CHECK_SIZEOF([long int])} instead
+(@pxref{AC_CHECK_SIZEOF}).
 @end defmac
 
 @defmac AC_LONG_DOUBLE
@@ -17441,12 +17497,17 @@ You should use @code{AC_TYPE_LONG_DOUBLE} or
 
 @defmac AC_LONG_FILE_NAMES
 @acindex{LONG_FILE_NAMES}
-@code{AC_SYS_LONG_FILE_NAMES}
+Replaced by
+@example
+AC_SYS_LONG_FILE_NAMES
+@end example
+@noindent
+@xref{AC_SYS_LONG_FILE_NAMES}.
 @end defmac
 
 @defmac AC_MAJOR_HEADER
 @acindex{MAJOR_HEADER}
-@code{AC_HEADER_MAJOR}
+Replaced by @code{AC_HEADER_MAJOR} (@pxref{AC_HEADER_MAJOR}).
 @end defmac
 
 @defmac AC_MEMORY_H
@@ -17454,7 +17515,8 @@ You should use @code{AC_TYPE_LONG_DOUBLE} or
 @cvindex NEED_MEMORY_H
 Used to define @code{NEED_MEMORY_H} if the @code{mem} functions were
 defined in @file{memory.h}.  Today it is equivalent to
-@samp{AC_CHECK_HEADERS([memory.h])}.  Adjust your code to depend upon
+@samp{AC_CHECK_HEADERS([memory.h])} (@pxref{AC_CHECK_HEADERS}).  Adjust
+your code to depend upon
 @code{HAVE_MEMORY_H}, not @code{NEED_MEMORY_H}; see @ref{Standard
 Symbols}.
 @end defmac
@@ -17462,22 +17524,24 @@ Symbols}.
 @defmac AC_MINGW32
 @acindex{MINGW32}
 Similar to @code{AC_CYGWIN} but checks for the MinGW compiler
-environment and sets @code{MINGW32}.
+environment and sets @code{MINGW32}.  Don't use this macro, the
+dignified means to check the nature of the host is using
+@code{AC_CANONICAL_HOST} (@pxref{Canonicalizing}).
 @end defmac
 
 @defmac AC_MINUS_C_MINUS_O
 @acindex{MINUS_C_MINUS_O}
-@code{AC_PROG_CC_C_O}
+Replaced by @code{AC_PROG_CC_C_O} (@pxref{AC_PROG_CC_C_O}).
 @end defmac
 
 @defmac AC_MMAP
 @acindex{MMAP}
-@code{AC_FUNC_MMAP}
+Replaced by @code{AC_FUNC_MMAP} (@pxref{AC_FUNC_MMAP}).
 @end defmac
 
 @defmac AC_MODE_T
 @acindex{MODE_T}
-@code{AC_TYPE_MODE_T}
+Replaced by @code{AC_TYPE_MODE_T} (@pxref{AC_TYPE_MODE_T}).
 @end defmac
 
 @defmac AC_OBJEXT
@@ -17505,18 +17569,19 @@ For instance
 AC_OBSOLETE([$0], [; use AC_CHECK_HEADERS(unistd.h) instead])dnl
 @end example
 
+@noindent
 You are encouraged to use @code{AU_DEFUN} instead, since it gives better
-services to the user.
+services to the user (@pxref{AU_DEFUN}).
 @end defmac
 
 @defmac AC_OFF_T
 @acindex{OFF_T}
-@code{AC_TYPE_OFF_T}
+Replaced by @code{AC_TYPE_OFF_T} (@pxref{AC_TYPE_OFF_T}).
 @end defmac
 
 @defmac AC_OUTPUT (@ovar{file}@dots{}, @ovar{extra-cmds}, @ovar{init-cmds})
 @acindex{OUTPUT}
-The use of @code{AC_OUTPUT} with argument is deprecated.  This obsoleted
+The use of @code{AC_OUTPUT} with arguments is deprecated.  This obsoleted
 interface is equivalent to:
 
 @example
@@ -17527,6 +17592,9 @@ AC_CONFIG_COMMANDS([default],
 AC_OUTPUT
 @end group
 @end example
+
+@noindent
+See @ref{AC_CONFIG_FILES}, @ref{AC_CONFIG_COMMANDS}, and @ref{AC_OUTPUT}.
 @end defmac
 
 @defmac AC_OUTPUT_COMMANDS (@var{extra-cmds}, @ovar{init-cmds})
@@ -17534,7 +17602,7 @@ AC_OUTPUT
 Specify additional shell commands to run at the end of
 @file{config.status}, and shell commands to initialize any variables
 from @command{configure}.  This macro may be called multiple times.  It is
-obsolete, replaced by @code{AC_CONFIG_COMMANDS}.
+obsolete, replaced by @code{AC_CONFIG_COMMANDS} (@pxref{AC_CONFIG_COMMANDS}).
 
 Here is an unrealistic example:
 
@@ -17571,57 +17639,62 @@ AC_CONFIG_COMMANDS([default], [[echo "Square brackets: []"]])
 
 @defmac AC_PID_T
 @acindex{PID_T}
-@code{AC_TYPE_PID_T}
+Replaced by @code{AC_TYPE_PID_T} (@pxref{AC_TYPE_PID_T}).
 @end defmac
 
 @defmac AC_PREFIX
 @acindex{PREFIX}
-@code{AC_PREFIX_PROGRAM}
+Replaced by @code{AC_PREFIX_PROGRAM} (@pxref{AC_PREFIX_PROGRAM}).
 @end defmac
 
 @defmac AC_PROGRAMS_CHECK
 @acindex{PROGRAMS_CHECK}
-@code{AC_CHECK_PROGS}
+Replaced by @code{AC_CHECK_PROGS} (@pxref{AC_CHECK_PROGS}).
 @end defmac
 
 @defmac AC_PROGRAMS_PATH
 @acindex{PROGRAMS_PATH}
-@code{AC_PATH_PROGS}
+Replaced by @code{AC_PATH_PROGS} (@pxref{AC_PATH_PROGS}).
 @end defmac
 
 @defmac AC_PROGRAM_CHECK
 @acindex{PROGRAM_CHECK}
-@code{AC_CHECK_PROG}
+Replaced by @code{AC_CHECK_PROG} (@pxref{AC_CHECK_PROG}).
 @end defmac
 
 @defmac AC_PROGRAM_EGREP
 @acindex{PROGRAM_EGREP}
-@code{AC_EGREP_CPP}
+Replaced by @code{AC_EGREP_CPP} (@pxref{AC_EGREP_CPP}).
 @end defmac
 
 @defmac AC_PROGRAM_PATH
 @acindex{PROGRAM_PATH}
-@code{AC_PATH_PROG}
+Replaced by @code{AC_PATH_PROG} (@pxref{AC_PATH_PROG}).
 @end defmac
 
 @defmac AC_REMOTE_TAPE
 @acindex{REMOTE_TAPE}
-removed because of limited usefulness
+Removed because of limited usefulness.
 @end defmac
 
 @defmac AC_RESTARTABLE_SYSCALLS
 @acindex{RESTARTABLE_SYSCALLS}
-@code{AC_SYS_RESTARTABLE_SYSCALLS}
+This macro was renamed @code{AC_SYS_RESTARTABLE_SYSCALLS}.  However,
+these days portable programs should use @code{sigaction} with
+@code{SA_RESTART} if they want restartable system calls.  They should
+not rely on @code{HAVE_RESTARTABLE_SYSCALLS}, since nowadays whether a
+system call is restartable is a dynamic issue, not a configuration-time
+issue.
 @end defmac
 
 @defmac AC_RETSIGTYPE
 @acindex{RETSIGTYPE}
-@code{AC_TYPE_SIGNAL}
+Replaced by @code{AC_TYPE_SIGNAL} (@pxref{AC_TYPE_SIGNAL}).
 @end defmac
 
 @defmac AC_RSH
 @acindex{RSH}
-removed because of limited usefulness
+Removed because of limited usefulness.
 @end defmac
 
 @defmac AC_SCO_INTL
@@ -17635,57 +17708,94 @@ AC_CHECK_LIB([intl], [strftime], [LIBS="-lintl $LIBS"])
 @end example
 
 @noindent
-Now it just calls @code{AC_FUNC_STRFTIME} instead.
+Now it just calls @code{AC_FUNC_STRFTIME} instead (@pxref{AC_FUNC_STRFTIME}).
 @end defmac
 
 @defmac AC_SETVBUF_REVERSED
 @acindex{SETVBUF_REVERSED}
-@code{AC_FUNC_SETVBUF_REVERSED}
+Replaced by
+@example
+AC_FUNC_SETVBUF_REVERSED
+@end example
+@noindent
+@xref{AC_FUNC_SETVBUF_REVERSED}.
 @end defmac
 
 @defmac AC_SET_MAKE
 @acindex{SET_MAKE}
-@code{AC_PROG_MAKE_SET}
+Replaced by @code{AC_PROG_MAKE_SET} (@pxref{AC_PROG_MAKE_SET}).
 @end defmac
 
 @defmac AC_SIZEOF_TYPE
 @acindex{SIZEOF_TYPE}
-@code{AC_CHECK_SIZEOF}
+Replaced by @code{AC_CHECK_SIZEOF} (@pxref{AC_CHECK_SIZEOF}).
 @end defmac
 
 @defmac AC_SIZE_T
 @acindex{SIZE_T}
-@code{AC_TYPE_SIZE_T}
+Replaced by @code{AC_TYPE_SIZE_T} (@pxref{AC_TYPE_SIZE_T}).
 @end defmac
 
 @defmac AC_STAT_MACROS_BROKEN
 @acindex{STAT_MACROS_BROKEN}
-@code{AC_HEADER_STAT}
+Replaced by @code{AC_HEADER_STAT} (@pxref{AC_HEADER_STAT}).
 @end defmac
 
 @defmac AC_STDC_HEADERS
 @acindex{STDC_HEADERS}
-@code{AC_HEADER_STDC}
+Replaced by @code{AC_HEADER_STDC} (@pxref{AC_HEADER_STDC}).
 @end defmac
 
 @defmac AC_STRCOLL
 @acindex{STRCOLL}
-@code{AC_FUNC_STRCOLL}
+Replaced by @code{AC_FUNC_STRCOLL} (@pxref{AC_FUNC_STRCOLL}).
+@end defmac
+
+@defmac AC_STRUCT_ST_BLKSIZE
+@acindex{STRUCT_ST_BLKSIZE}
+@cvindex HAVE_STRUCT_STAT_ST_BLKSIZE
+@cvindex HAVE_ST_BLKSIZE
+If @code{struct stat} contains an @code{st_blksize} member, define
+@code{HAVE_STRUCT_STAT_ST_BLKSIZE}.  The former name,
+@code{HAVE_ST_BLKSIZE} is to be avoided, as its support will cease in
+the future.  This macro is obsoleted, and should be replaced by
+
+@example
+AC_CHECK_MEMBERS([struct stat.st_blksize])
+@end example
+@noindent
+@xref{AC_CHECK_MEMBERS}.
+@end defmac
+
+@defmac AC_STRUCT_ST_RDEV
+@acindex{STRUCT_ST_RDEV}
+@cvindex HAVE_ST_RDEV
+@cvindex HAVE_STRUCT_STAT_ST_RDEV
+If @code{struct stat} contains an @code{st_rdev} member, define
+@code{HAVE_STRUCT_STAT_ST_RDEV}.  The former name for this macro,
+@code{HAVE_ST_RDEV}, is to be avoided as it will cease to be supported
+in the future.  Actually, even the new macro is obsolete and should be
+replaced by:
+@example
+AC_CHECK_MEMBERS([struct stat.st_rdev])
+@end example
+@noindent
+@xref{AC_CHECK_MEMBERS}.
 @end defmac
 
 @defmac AC_ST_BLKSIZE
 @acindex{ST_BLKSIZE}
-@code{AC_CHECK_MEMBERS}
+Replaced by @code{AC_CHECK_MEMBERS} (@pxref{AC_CHECK_MEMBERS}).
 @end defmac
 
 @defmac AC_ST_BLOCKS
 @acindex{ST_BLOCKS}
-@code{AC_STRUCT_ST_BLOCKS}
+Replaced by @code{AC_STRUCT_ST_BLOCKS} (@pxref{AC_STRUCT_ST_BLOCKS}).
 @end defmac
 
 @defmac AC_ST_RDEV
 @acindex{ST_RDEV}
-@code{AC_CHECK_MEMBERS}
+Replaced by @code{AC_CHECK_MEMBERS} (@pxref{AC_CHECK_MEMBERS}).
 @end defmac
 
 @defmac AC_SYS_RESTARTABLE_SYSCALLS
@@ -17707,27 +17817,31 @@ issue.
 
 @defmac AC_SYS_SIGLIST_DECLARED
 @acindex{SYS_SIGLIST_DECLARED}
-@code{AC_DECL_SYS_SIGLIST}
+This macro was renamed @code{AC_DECL_SYS_SIGLIST}.  However, even that
+name is obsolete, as the same functionality is now acheived via
+@code{AC_CHECK_DECLS} (@pxref{AC_CHECK_DECLS}).
 @end defmac
 
 @defmac AC_TEST_CPP
 @acindex{TEST_CPP}
-@code{AC_TRY_CPP}, replaced by @code{AC_PREPROC_IFELSE}.
+This macro was renamed @code{AC_TRY_CPP}, which in turn was replaced by
+@code{AC_PREPROC_IFELSE} (@pxref{AC_PREPROC_IFELSE}).
 @end defmac
 
 @defmac AC_TEST_PROGRAM
 @acindex{TEST_PROGRAM}
-@code{AC_TRY_RUN}, replaced by @code{AC_RUN_IFELSE}.
+This macro was renamed @code{AC_TRY_RUN}, which in turn was replaced by
+@code{AC_RUN_IFELSE} (@pxref{AC_RUN_IFELSE}).
 @end defmac
 
 @defmac AC_TIMEZONE
 @acindex{TIMEZONE}
-@code{AC_STRUCT_TIMEZONE}
+Replaced by @code{AC_STRUCT_TIMEZONE} (@pxref{AC_STRUCT_TIMEZONE}).
 @end defmac
 
 @defmac AC_TIME_WITH_SYS_TIME
 @acindex{TIME_WITH_SYS_TIME}
-@code{AC_HEADER_TIME}
+Replaced by @code{AC_HEADER_TIME} (@pxref{AC_HEADER_TIME}).
 @end defmac
 
 @defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @
@@ -17810,8 +17924,12 @@ and compilation flags are determined by the current language
   @ovar{action-if-not-found})
 @acindex{TRY_LINK_FUNC}
 This macro is equivalent to
-@samp{AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])],
-[@var{action-if-found}], [@var{action-if-not-found}])}.
+@example
+AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])],
+  [@var{action-if-found}], [@var{action-if-not-found}])
+@end example
+@noindent
+@xref{AC_LINK_IFELSE}.
 @end defmac
 
 @defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @
@@ -17833,12 +17951,12 @@ AC_RUN_IFELSE(
 
 @defmac AC_UID_T
 @acindex{UID_T}
-@code{AC_TYPE_UID_T}
+Replaced by @code{AC_TYPE_UID_T} (@pxref{AC_TYPE_UID_T}).
 @end defmac
 
 @defmac AC_UNISTD_H
 @acindex{UNISTD_H}
-Same as @samp{AC_CHECK_HEADERS([unistd.h])}.
+Same as @samp{AC_CHECK_HEADERS([unistd.h])} (@pxref{AC_CHECK_HEADERS}).
 @end defmac
 
 @defmac AC_USG
@@ -17851,7 +17969,7 @@ Define @code{USG} if the @acronym{BSD} string functions are defined in
 
 @defmac AC_UTIME_NULL
 @acindex{UTIME_NULL}
-@code{AC_FUNC_UTIME_NULL}
+Replaced by @code{AC_FUNC_UTIME_NULL} (@pxref{AC_FUNC_UTIME_NULL}).
 @end defmac
 
 @defmac AC_VALIDATE_CACHED_SYSTEM_TUPLE (@ovar{cmd})
@@ -17863,32 +17981,41 @@ error message.  This is now handled by default.
 
 @defmac AC_VERBOSE (@var{result-description})
 @acindex{VERBOSE}
-@code{AC_MSG_RESULT}.
+Replaced by @code{AC_MSG_RESULT} (@pxref{AC_MSG_RESULT}).
 @end defmac
 
 @defmac AC_VFORK
 @acindex{VFORK}
-@code{AC_FUNC_VFORK}
+Replaced by @code{AC_FUNC_FORK} (@pxref{AC_FUNC_FORK}).
 @end defmac
 
 @defmac AC_VPRINTF
 @acindex{VPRINTF}
-@code{AC_FUNC_VPRINTF}
+Replaced by @code{AC_FUNC_VPRINTF} (@pxref{AC_FUNC_VPRINTF}).
 @end defmac
 
 @defmac AC_WAIT3
 @acindex{WAIT3}
-@code{AC_FUNC_WAIT3}
+This macro was renamed @code{AC_FUNC_WAIT3}.  However, these days
+portable programs should use @code{waitpid}, not @code{wait3}, as
+@code{wait3} has been removed from Posix.
 @end defmac
 
 @defmac AC_WARN
 @acindex{WARN}
-@code{AC_MSG_WARN}
+Replaced by @code{AC_MSG_WARN} (@pxref{AC_MSG_WARN}).
+@end defmac
+
+@defmac AC_WITH (@var{package}, @var{action-if-given}, @
+  @ovar{action-if-not-given})
+@acindex{WITH}
+This is an obsolete version of @code{AC_ARG_WITH} that does not
+support providing a help string (@pxref{AC_ARG_WITH}).
 @end defmac
 
 @defmac AC_WORDS_BIGENDIAN
 @acindex{WORDS_BIGENDIAN}
-@code{AC_C_BIGENDIAN}
+Replaced by @code{AC_C_BIGENDIAN} (@pxref{AC_C_BIGENDIAN}).
 @end defmac
 
 @defmac AC_XENIX_DIR
@@ -17909,11 +18036,15 @@ AC_EGREP_CPP([yes],
              [AC_MSG_RESULT([yes]); XENIX=yes],
              [AC_MSG_RESULT([no]); XENIX=])
 @end example
+@noindent
+Don't use this macro, the dignified means to check the nature of the
+host is using @code{AC_CANONICAL_HOST} (@pxref{Canonicalizing}).
 @end defmac
 
 @defmac AC_YYTEXT_POINTER
 @acindex{YYTEXT_POINTER}
-@code{AC_DECL_YYTEXT}
+This macro was renamed @code{AC_DECL_YYTEXT}, which in turn was
+integrated into @code{AC_PROG_LEX} (@pxref{AC_PROG_LEX}).
 @end defmac
 
 @node Autoconf 1

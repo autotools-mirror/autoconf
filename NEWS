@@ -53,12 +53,19 @@ GNU Autoconf NEWS - User visible changes.
 ** For portability with the eventual M4 2.0, macros should no longer use
    anything larger than $9 to refer to arguments.
 
-** AC_C_LONG_DOUBLE is obsolescent.
-  The documentation now says that AC_C_LONG_DOUBLE is obsolescent: it
-  tests for problems that are so old that it is no longer of practical
-  importance on current systems.  New programs need not use
-  AC_C_LONG_DOUBLE.  We have no current plans to remove it.
+** Obsolete macros
+   The documentation for the following macros is adjusted to make it
+   more clear that they have previously been marked obsolete, as their
+   functionality can be accomplished by other macros.  We have no
+   current plans to remove them from Autoconf.
 
+     AC_ENABLE  AC_STRUCT_ST_BLKSIZE  AC_STRUCT_ST_RDEV  AC_WITH
+
+** AC_C_LONG_DOUBLE is obsolescent.
+   The documentation now says that AC_C_LONG_DOUBLE is obsolescent: it
+   tests for problems that are so old that it is no longer of
+   practical importance on current systems.  New programs need not use
+   AC_C_LONG_DOUBLE.  We have no current plans to remove it.
 
 * Major changes in Autoconf 2.61a (2006-12-11)
 

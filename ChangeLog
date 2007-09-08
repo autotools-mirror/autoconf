@@ -1,5 +1,16 @@
 2007-09-08  Eric Blake  <ebb9@byu.net>
 
+	Clean up obsolete macros references.
+	* doc/autoconf.texi: Add anchors to support better
+	cross-referencing.
+	(Particular Structures): Move obsolete macros descriptions...
+	(External Software): Likewise.
+	(Package Options): Likewise.
+	(Obsolete Macros): ...to here.  Add cross-references to
+	documentation on replacements.
+	* NEWS: Mention that these macros have been obsolete for a while
+	now: AC_STRUCT_ST_BLKSIZE AC_STRUCT_ST_RDEV AC_WITH AC_ENABLE.
+
 	Improve M4 path searching during configure.
 	* lib/autoconf/programs.m4 (AC_PATH_PROGS_FEATURE_CHECK): New
 	macro.
