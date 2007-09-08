@@ -3840,7 +3840,7 @@ instead, like this:
 @example
 AC_PATH_PROG([INETD], [inetd], [/usr/libexec/inetd],
              [$PATH$PATH_SEPARATOR/usr/libexec$PATH_SEPARATOR]dnl
-[/usr/sbin$PATH_SEPARATOR/usr/etc$PATH_SEPARTOR/etc])
+[/usr/sbin$PATH_SEPARATOR/usr/etc$PATH_SEPARATOR/etc])
 @end example
 
 You are strongly encouraged to declare the @var{variable} passed to

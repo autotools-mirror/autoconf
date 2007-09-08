@@ -1,3 +1,7 @@
+2007-09-08  Eric Blake  <ebb9@byu.net>
+
+	* doc/autoconf.texi (Generic Programs): Fix typo.
+
 2007-09-06  Eric Blake  <ebb9@byu.net>
 
 	* doc/autoconf.texi (Generic Programs): Use $PATH_SEPARATOR, not
