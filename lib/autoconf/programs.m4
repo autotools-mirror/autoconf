@@ -2,7 +2,7 @@
 # Checking for programs.
 
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -422,54 +422,73 @@ AC_DEFUN([AC_PROG_GREP],
 # AIX silently truncates long lines before matching.
 # NeXT understands only one -e and truncates long lines.
 m4_define([_AC_PROG_GREP],
-[_AC_PATH_PROG_FEATURE_CHECK([$1], [$2],
+[_AC_PATH_PROGS_FEATURE_CHECK([$1], [$2],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_$1], [ac_cv_path_$1],
-		["$ac_path_$1" $3], [$1])], [$PATH$PATH_SEPARATOR/usr/xpg4/bin])
+		["$ac_path_$1" $3], [$1])], [],
+	[$PATH$PATH_SEPARATOR/usr/xpg4/bin])dnl
 ])
 
 
-# _AC_PATH_PROG_FEATURE_CHECK(VARIABLE, PROGNAME-LIST, FEATURE-TEST, [PATH])
-# --------------------------------------------------------------------------
+# _AC_PATH_PROGS_FEATURE_CHECK(VARIABLE, PROGNAME-LIST, FEATURE-TEST,
+#                              [ACTION-IF-NOT-FOUND], [PATH=$PATH])
+# -------------------------------------------------------------------
 # FEATURE-TEST is called repeatedly with $ac_path_VARIABLE set to the
 # name of a program in PROGNAME-LIST found in PATH.  FEATURE-TEST must set
 # $ac_cv_path_VARIABLE to the path of an acceptable program, or else
-# _AC_PATH_PROG_FEATURE_CHECK will report that no acceptable program
-# was found, and abort.  If a suitable $ac_path_VARIABLE is found in the
-# FEATURE-TEST macro, it can set $ac_path_VARIABLE_found=':' to accept
-# that value without any further checks.
-m4_define([_AC_PATH_PROG_FEATURE_CHECK],
-[# Extract the first word of "$2" to use in msg output
-if test -z "$$1"; then
-set dummy $2; ac_prog_name=$[2]
-AC_CACHE_VAL([ac_cv_path_$1],
-[ac_path_$1_found=false
-# Loop through the user's path and test for each of PROGNAME-LIST
-_AS_PATH_WALK([$4],
-[for ac_prog in $2; do
-  for ac_exec_ext in '' $ac_executable_extensions; do
-    ac_path_$1="$as_dir/$ac_prog$ac_exec_ext"
-    AS_EXECUTABLE_P(["$ac_path_$1"]) || continue
-    $3
-    $ac_path_$1_found && break 3
-  done
-done
-])
-])
-$1="$ac_cv_path_$1"
-if test -z "$$1"; then
-  AC_MSG_ERROR([no acceptable $ac_prog_name could be found in dnl
-m4_default([$4], [\$PATH])])
-fi
-AC_SUBST([$1])
+# ACTION-IF-NOT-FOUND is executed; the default action (for internal use
+# only) issues a fatal error message.  If a suitable $ac_path_VARIABLE is
+# found in the FEATURE-TEST macro, it can set $ac_path_VARIABLE_found=':'
+# to accept that value without any further checks.
+m4_define([_AC_PATH_PROGS_FEATURE_CHECK],
+[if test -z "$$1"; then
+  ac_path_$1_found=false
+  # Loop through the user's path and test for each of PROGNAME-LIST
+  _AS_PATH_WALK([$5],
+  [for ac_prog in $2; do
+    for ac_exec_ext in '' $ac_executable_extensions; do
+      ac_path_$1="$as_dir/$ac_prog$ac_exec_ext"
+      AS_EXECUTABLE_P(["$ac_path_$1"]) || continue
+$3
+      $ac_path_$1_found && break 3
+    done
+  done])dnl
+  if test -z "$ac_cv_path_$1"; then
+    m4_default([$4],
+      [AC_MSG_ERROR([no acceptable m4_bpatsubst([$2], [ .*]) could be dnl
+found in m4_default([$5], [\$PATH])])])
+  fi
 else
   ac_cv_path_$1=$$1
 fi
 ])
 
 
+# AC_PATH_PROGS_FEATURE_CHECK(VARIABLE, PROGNAME-LIST,
+#                             FEATURE-TEST, [ACTION-IF-NOT-FOUND=:],
+#                             [PATH=$PATH])
+# ----------------------------------------------------------------
+# Designed to be used inside AC_CACHE_VAL.  It is recommended,
+# but not required, that the user also use AC_ARG_VAR([VARIABLE]).
+# If VARIABLE is not empty, set the cache variable
+# $ac_cv_path_VARIABLE to VARIABLE without any further tests.
+# Otherwise, call FEATURE_TEST repeatedly with $ac_path_VARIABLE
+# set to the name of a program in PROGNAME-LIST found in PATH.  If
+# no invocation of FEATURE-TEST sets $ac_cv_path_VARIABLE to the
+# path of an acceptable program, ACTION-IF-NOT-FOUND is executed.
+# FEATURE-TEST is invoked even when $ac_cv_path_VARIABLE is set,
+# in case a better candidate occurs later in PATH; to accept the
+# current setting and bypass further checks, FEATURE-TEST can set
+# $ac_path_VARIABLE_found=':'.  Note that, unlike AC_CHECK_PROGS,
+# this macro does not have any side effect on the current value
+# of VARIABLE.
+m4_define([AC_PATH_PROGS_FEATURE_CHECK],
+[_$0([$1], [$2], [$3], m4_default([$4], [:]), [$5])dnl
+])
+
+
 # _AC_FEATURE_CHECK_LENGTH(PROGPATH, CACHE-VAR, CHECK-CMD, [MATCH-STRING])
 # ------------------------------------------------------------------------
-# For use as the FEATURE-TEST argument to _AC_PATH_PROG_FEATURE_TEST.
+# For use as the FEATURE-TEST argument to _AC_PATH_PROGS_FEATURE_TEST.
 # On each iteration run CHECK-CMD on an input file, storing the value
 # of PROGPATH in CACHE-VAR if the CHECK-CMD succeeds.  The input file
 # is always one line, starting with only 10 characters, and doubling
@@ -503,7 +522,7 @@ dnl   # for best performing tool in a list breaks down.
     # 10*(2^10) chars as input seems more than enough
     test $ac_count -gt 10 && break
   done
-  rm -f conftest.in conftest.tmp conftest.nl conftest.out])
+  rm -f conftest.in conftest.tmp conftest.nl conftest.out])dnl
 ])
 
 
@@ -863,7 +882,7 @@ AC_DEFUN([AC_PROG_SED],
      done
      echo "$ac_script" 2>/dev/null | sed 99q >conftest.sed
      $as_unset ac_script || ac_script=
-     _AC_PATH_PROG_FEATURE_CHECK(SED, [sed gsed],
+     _AC_PATH_PROGS_FEATURE_CHECK(SED, [sed gsed],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_SED], [ac_cv_path_SED],
 		["$ac_path_SED" -f conftest.sed])])])
  SED="$ac_cv_path_SED"

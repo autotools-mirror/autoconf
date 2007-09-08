@@ -2,7 +2,7 @@
 
 # Build some of the Autoconf test files.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
 # Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -91,6 +91,7 @@ ac_exclude_list='
 
 	# Performed in the semantics tests.
 	/^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$/ {next}
+	/^AC_PATH_PROGS_FEATURE_CHECK$/ {next}
 
 	# Fail when the source does not exist.
 	/^AC_CONFIG/ {next}
@@ -202,7 +203,8 @@ do
     ## Do not edit by hand.  ##
     ## --------------------- ##
 
-    # Copyright (C) 2000, 2001, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+    # Copyright (C) 2000, 2001, 2003, 2004, 2005, 2006, 2007 Free Software
+    # Foundation, Inc.
 
     AT_BANNER([Testing autoconf/$base macros.])
 

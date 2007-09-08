@@ -79,12 +79,9 @@ AC_PATH_PROG([EXPR], [expr])
 
 # We use an absolute name for GNU m4 so even if users have another m4 first in
 # their path, the installer can configure with a path that has GNU m4
-# first and get that path embedded in the installed autoconf and
+# on it and get that path embedded in the installed autoconf and
 # autoheader scripts.
 AC_PROG_GNU_M4
-if test x"$ac_cv_prog_gnu_m4" != xyes; then
-  AC_MSG_ERROR([GNU M4 1.4.5 or later is required; 1.4.8 is recommended])
-fi
 
 ## ----------- ##
 ## Man pages.  ##

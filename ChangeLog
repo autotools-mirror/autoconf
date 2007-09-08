@@ -1,5 +1,27 @@
 2007-09-08  Eric Blake  <ebb9@byu.net>
 
+	Improve M4 path searching during configure.
+	* lib/autoconf/programs.m4 (AC_PATH_PROGS_FEATURE_CHECK): New
+	macro.
+	(_AC_PATH_PROG_FEATURE_CHECK): Rename...
+	(_AC_PATH_PROGS_FEATURE_CHECK): ...to this, add defaulted action
+	parameter, and kill side effects.
+	(_AC_PROG_GREP, AC_PROG_SED): Adjust callers.
+	(_AC_FEATURE_CHECK_LENGTH): Kill extra whitespace.
+	* m4/m4.m4 (AC_PROG_GNU_M4): Don't stop searching until working m4
+	is found.
+	(AC_PATH_PROGS_FEATURE_CHECK): Add backwards compatibility hack to
+	allow bootstrapping with autoconf 2.61.
+	* configure.ac (M4): AC_PROG_GNU_M4 now exits on failure.
+	* configure: Regenerate.
+	* doc/autoconf.texi (Generic Programs): Document new macro.
+	* tests/mktests.sh (au_exclude_script): Exclude auto-testing new
+	macro.
+	* tests/semantics.at (AC_PATH_PROGS_FEATURE_CHECK): New test.
+	* NEWS: Document the change.
+	* THANKS: Update.
+	Reported by Hans Aberg.
+
 	* doc/autoconf.texi (Generic Programs): Fix typo.
 
 2007-09-06  Eric Blake  <ebb9@byu.net>
