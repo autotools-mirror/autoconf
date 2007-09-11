@@ -2,7 +2,7 @@
 # Macros that test for specific, unclassified, features.
 #
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -326,16 +326,7 @@ AC_DEFUN([AC_SYS_POSIX_TERMIOS],
 
 # AC_GNU_SOURCE
 # --------------
-AC_DEFUN([AC_GNU_SOURCE],
-[AH_VERBATIM([_GNU_SOURCE],
-[/* Enable GNU extensions on systems that have them.  */
-#ifndef _GNU_SOURCE
-# undef _GNU_SOURCE
-#endif])dnl
-AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
-AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
-AC_DEFINE([_GNU_SOURCE])
-])
+AU_DEFUN([AC_GNU_SOURCE], [AC_USE_SYSTEM_EXTENSIONS])
 
 
 # AC_CYGWIN
@@ -384,26 +375,49 @@ matches *mingw32*])# AC_MINGW32
 # ------------------------
 # Enable extensions on systems that normally disable them,
 # typically due to standards-conformance issues.
+#
+# Remember that #undef in AH_VERBATIM gets replaced with #define by
+# AC_DEFINE.  The goal here is to define all known feature-enabling
+# macros, then, if reports of conflicts are made, disable macros that
+# cause problems on some platforms (such as __EXTENSIONS__).
 AC_DEFUN([AC_USE_SYSTEM_EXTENSIONS],
-[
-  AC_BEFORE([$0], [AC_COMPILE_IFELSE])
-  AC_BEFORE([$0], [AC_RUN_IFELSE])
+[AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
+AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
 
-  AC_REQUIRE([AC_GNU_SOURCE])
-  AC_REQUIRE([AC_AIX])
-  AC_REQUIRE([AC_MINIX])
+  AC_CHECK_HEADER([minix/config.h], [MINIX=yes], [MINIX=])
+  if test "$MINIX" = yes; then
+    AC_DEFINE([_POSIX_SOURCE], [1],
+      [Define to 1 if you need to in order for `stat' and other
+       things to work.])
+    AC_DEFINE([_POSIX_1_SOURCE], [2],
+      [Define to 2 if the system does not provide POSIX.1 features
+       except with this defined.])
+    AC_DEFINE([_MINIX], [1],
+      [Define to 1 if on MINIX.])
+  fi
 
   AH_VERBATIM([__EXTENSIONS__],
-[/* Enable extensions on Solaris.  */
-#ifndef __EXTENSIONS__
-# undef __EXTENSIONS__
+[/* Enable extensions on AIX 3, Interix.  */
+#ifndef _ALL_SOURCE
+# undef _ALL_SOURCE
 #endif
+/* Enable GNU extensions on systems that have them.  */
+#ifndef _GNU_SOURCE
+# undef _GNU_SOURCE
+#endif
+/* Enable threading extensions on Solaris.  */
 #ifndef _POSIX_PTHREAD_SEMANTICS
 # undef _POSIX_PTHREAD_SEMANTICS
 #endif
+/* Enable extensions on HP NonStop.  */
 #ifndef _TANDEM_SOURCE
 # undef _TANDEM_SOURCE
-#endif])
+#endif
+/* Enable general extensions on Solaris.  */
+#ifndef __EXTENSIONS__
+# undef __EXTENSIONS__
+#endif
+])
   AC_CACHE_CHECK([whether it is safe to define __EXTENSIONS__],
     [ac_cv_safe_to_define___extensions__],
     [AC_COMPILE_IFELSE(
@@ -414,10 +428,11 @@ AC_DEFUN([AC_USE_SYSTEM_EXTENSIONS],
        [ac_cv_safe_to_define___extensions__=no])])
   test $ac_cv_safe_to_define___extensions__ = yes &&
     AC_DEFINE([__EXTENSIONS__])
+  AC_DEFINE([_ALL_SOURCE])
+  AC_DEFINE([_GNU_SOURCE])
   AC_DEFINE([_POSIX_PTHREAD_SEMANTICS])
   AC_DEFINE([_TANDEM_SOURCE])
-])
-
+])# AC_USE_SYSTEM_EXTENSIONS
 
 
 
@@ -431,57 +446,24 @@ AC_DEFUN([AC_USE_SYSTEM_EXTENSIONS],
 
 # AC_AIX
 # ------
-AC_DEFUN([AC_AIX],
-[AH_VERBATIM([_ALL_SOURCE],
-[/* Define to 1 if on AIX 3.
-   System headers sometimes define this.
-   We just want to avoid a redefinition error message.  */
-@%:@ifndef _ALL_SOURCE
-@%:@ undef _ALL_SOURCE
-@%:@endif])dnl
-AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
-AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
-AC_MSG_CHECKING([for AIX])
-AC_EGREP_CPP(yes,
-[#ifdef _AIX
-  yes
-#endif
-],
-[AC_MSG_RESULT([yes])
-AC_DEFINE(_ALL_SOURCE)],
-[AC_MSG_RESULT([no])])
-])# AC_AIX
+AU_DEFUN([AC_AIX], [AC_USE_SYSTEM_EXTENSIONS])
 
 
 # AC_MINIX
 # --------
-AC_DEFUN([AC_MINIX],
-[AC_BEFORE([$0], [AC_COMPILE_IFELSE])dnl
-AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
-AC_CHECK_HEADER(minix/config.h, MINIX=yes, MINIX=)
-if test "$MINIX" = yes; then
-  AC_DEFINE(_POSIX_SOURCE, 1,
-	    [Define to 1 if you need to in order for `stat' and other things to
-	     work.])
-  AC_DEFINE(_POSIX_1_SOURCE, 2,
-	    [Define to 2 if the system does not provide POSIX.1 features except
-	     with this defined.])
-  AC_DEFINE(_MINIX, 1,
-	    [Define to 1 if on MINIX.])
-fi
-])# AC_MINIX
+AU_DEFUN([AC_MINIX], [AC_USE_SYSTEM_EXTENSIONS])
 
 
 # AC_ISC_POSIX
 # ------------
-AC_DEFUN([AC_ISC_POSIX], [AC_SEARCH_LIBS(strerror, cposix)])
+AU_DEFUN([AC_ISC_POSIX], [AC_SEARCH_LIBS([strerror], [cposix])])
 
 
 # AC_XENIX_DIR
 # ------------
 AU_DEFUN([AC_XENIX_DIR],
 [AC_MSG_CHECKING([for Xenix])
-AC_EGREP_CPP(yes,
+AC_EGREP_CPP([yes],
 [#if defined M_XENIX && ! defined M_UNIX
   yes
 @%:@endif],
@@ -504,7 +486,7 @@ AU_DEFUN([AC_DYNIX_SEQ], [AC_FUNC_GETMNTENT])
 # -----------
 AU_DEFUN([AC_IRIX_SUN],
 [AC_FUNC_GETMNTENT
-AC_CHECK_LIB(sun, getpwnam)])
+AC_CHECK_LIB([sun], [getpwnam])])
 
 
 # AC_SCO_INTL

@@ -1,3 +1,21 @@
+2007-09-11  Eric Blake  <ebb9@byu.net>
+
+	Centralize all system extensions checks.
+	* lib/autoconf/specific.m4 (AC_USE_SYSTEM_EXTENSIONS): Inline code
+	from AC_AIX, AC_GNU_SOURCE, AC_MINIX.  Add Interix support.
+	(AC_AIX, AC_GNU_SOURCE, AC_MINIX): Obsolete, and point to
+	AC_USE_SYSTEM_EXTENSIONS.
+	(AC_ISC_POSIX): Obsolete, and point to AC_SEARCH_LIBS.
+	(AC_XENIX_DIR, AC_IRIX_SUN): Promote proper quoting in AU_DEFUN.
+	* doc/autoconf.texi (Posix Variants): Reword this section,
+	emphasizing that AC_USE_SYSTEM_EXTENSIONS is the preferred method,
+	rather than a series of system-specific checks.
+	(Obsolete Macros): Add AC_AIX, AC_GNU_SOURCE, AC_ISC_POSIX,
+	AC_MINIX.
+	* NEWS: Document this change.
+	* THANKS: Update.
+	Reported by Martin Koeppe.
+
 2007-09-08  Eric Blake  <ebb9@byu.net>
 
 	Clean up obsolete macros references.

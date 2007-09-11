@@ -4108,7 +4108,7 @@ days it is normally better to use @code{AC_SEARCH_LIBS([gethostbyname],
 [nsl])} instead of @code{AC_CHECK_LIB([nsl], [gethostbyname])}.
 @end defmac
 
-
+@anchor{AC_SEARCH_LIBS}
 @defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}, @
   @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{SEARCH_LIBS}
@@ -7488,51 +7488,10 @@ system.  If so, set the shell variable @code{ac_cv_sys_posix_termios} to
 @node Posix Variants
 @section Posix Variants
 
-The following macros check for certain operating systems that need
-special treatment for some programs, due to exceptional oddities in
-their header files or libraries.  These macros are warts; they will be
-replaced by a more systematic approach, based on the functions they make
-available or the environments they provide.
+The following macro makes it possible to use features of Posix that are
+extensions to C, as well as platform extensions not defined by Posix.
 
-@defmac AC_AIX
-@acindex{AIX}
-@cvindex _ALL_SOURCE
-If on @acronym{AIX}, define @code{_ALL_SOURCE}.
-Allows the use of some @acronym{BSD}
-functions.  Should be called before any macros that run the C compiler.
-@end defmac
-
-@defmac AC_GNU_SOURCE
-@acindex{GNU_SOURCE}
-@cvindex _GNU_SOURCE
-If using the @acronym{GNU} C library, define @code{_GNU_SOURCE}.
-Allows the use of some @acronym{GNU} functions.  Should be called
-before any macros that run the C compiler.
-@end defmac
-
-@defmac AC_ISC_POSIX
-@acindex{ISC_POSIX}
-@ovindex LIBS
-For @sc{interactive} Systems Corporation Unix, add @option{-lcposix} to output
-variable @code{LIBS} if necessary for Posix facilities.  Call this
-after @code{AC_PROG_CC} and before any other macros that use Posix
-interfaces.
-
-This macro is obsolescent, as @sc{interactive} Unix is obsolete, and Sun
-dropped support for it on 2006-07-23.  New programs need not use this
-macro.
-@end defmac
-
-@defmac AC_MINIX
-@acindex{MINIX}
-@cvindex _MINIX
-@cvindex _POSIX_SOURCE
-@cvindex _POSIX_1_SOURCE
-If on Minix, define @code{_MINIX} and @code{_POSIX_SOURCE} and define
-@code{_POSIX_1_SOURCE} to be 2.  This allows the use of Posix
-facilities.  Should be called before any macros that run the C compiler.
-@end defmac
-
+@anchor{AC_USE_SYSTEM_EXTENSIONS}
 @defmac AC_USE_SYSTEM_EXTENSIONS
 @acindex{USE_SYSTEM_EXTENSIONS}
 @cvindex _ALL_SOURCE
@@ -7543,13 +7502,31 @@ facilities.  Should be called before any macros that run the C compiler.
 @cvindex _POSIX_SOURCE
 @cvindex _TANDEM_SOURCE
 @cvindex __EXTENSIONS__
-If possible, enable extensions to Posix on hosts that normally disable
-the extensions, typically due to standards-conformance namespace issues.
-This may involve defining @code{__EXTENSIONS__} and
-@code{_POSIX_PTHREAD_SEMANTICS}, which are macros used by Solaris.
-It also defines @code{_TANDEM_SOURCE} for the @acronym{HP} NonStop platform.
-This macro also has the combined effects of @code{AC_GNU_SOURCE},
-@code{AC_AIX}, and @code{AC_MINIX}.
+This macro was introduced in Autoconf 2.60.  If possible, enable
+extensions to C or Posix on hosts that normally disable the extensions,
+typically due to standards-conformance namespace issues.  This should be
+called before any macros that run the C compiler.  The following
+preprocessor macros are defined where appropriate:
+
+@table @code
+@item _GNU_SOURCE
+Enable extensions on @acronym{GNU}/Linux.
+@item __EXTENSIONS__
+Enable general extensions on Solaris.
+@item _POSIX_PTHREAD_SEMANTICS
+Enable threading extensions on Solaris.
+@item _TANDEM_SOURCE
+Enable extensions for the @acronym{HP} NonStop platform.
+@item _ALL_SOURCE
+Enable extensions for @acronym{AIX} 3, and for Interix.
+@item _POSIX_SOURCE
+Enable Posix functions for Minix.
+@item _POSIX_1_SOURCE
+Enable additional Posix functions for Minix.
+@item _MINIX
+Identify Minix platform.  This particular preprocessor macro is
+obsolescent, and may be removed in a future release of Autoconf.
+@end table
 @end defmac
 
 
@@ -17031,6 +17008,13 @@ from old names to new names for these macros, the reader is invited to
 refer to the definition of the new macro for the signature and the
 description.
 
+@defmac AC_AIX
+@acindex{AIX}
+@cvindex _ALL_SOURCE
+This macro is a platform-specific subset of
+@code{AC_USE_SYSTEM_EXTENSIONS} (@pxref{AC_USE_SYSTEM_EXTENSIONS}).
+@end defmac
+
 @defmac AC_ALLOCA
 @acindex{ALLOCA}
 Replaced by @code{AC_FUNC_ALLOCA} (@pxref{AC_FUNC_ALLOCA}).
@@ -17334,6 +17318,13 @@ Replaced by @code{AC_TYPE_GETGROUPS} (@pxref{AC_TYPE_GETGROUPS}).
 Replaced by @code{AC_FUNC_GETLOADAVG} (@pxref{AC_FUNC_GETLOADAVG}).
 @end defmac
 
+@defmac AC_GNU_SOURCE
+@acindex{GNU_SOURCE}
+@cvindex _GNU_SOURCE
+This macro is a platform-specific subset of
+@code{AC_USE_SYSTEM_EXTENSIONS} (@pxref{AC_USE_SYSTEM_EXTENSIONS}).
+@end defmac
+
 @defmac AC_HAVE_FUNCS
 @acindex{HAVE_FUNCS}
 Replaced by @code{AC_CHECK_FUNCS} (@pxref{AC_CHECK_FUNCS}).
@@ -17421,6 +17412,16 @@ AC_CHECK_LIB([sun], [getpwnam])
 
 @noindent
 See @ref{AC_FUNC_GETMNTENT} and @ref{AC_CHECK_LIB}.
+@end defmac
+
+@defmac AC_ISC_POSIX
+@acindex{ISC_POSIX}
+@ovindex LIBS
+This macro adds @option{-lcposix} to output variable @code{LIBS} if
+necessary for Posix facilities.  Sun dropped support for the obsolete
+@sc{interactive} Systems Corporation Unix on 2006-07-23.  New programs
+need not use this macro.  It is implemented as
+@code{AC_SEARCH_LIBS([strerror], [cposix])} (@pxref{AC_SEARCH_LIBS}).
 @end defmac
 
 @defmac AC_LANG_C
@@ -17527,6 +17528,15 @@ Similar to @code{AC_CYGWIN} but checks for the MinGW compiler
 environment and sets @code{MINGW32}.  Don't use this macro, the
 dignified means to check the nature of the host is using
 @code{AC_CANONICAL_HOST} (@pxref{Canonicalizing}).
+@end defmac
+
+@defmac AC_MINIX
+@acindex{MINIX}
+@cvindex _MINIX
+@cvindex _POSIX_SOURCE
+@cvindex _POSIX_1_SOURCE
+This macro is a platform-specific subset of
+@code{AC_USE_SYSTEM_EXTENSIONS} (@pxref{AC_USE_SYSTEM_EXTENSIONS}).
 @end defmac
 
 @defmac AC_MINUS_C_MINUS_O

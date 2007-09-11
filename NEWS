@@ -36,6 +36,8 @@ GNU Autoconf NEWS - User visible changes.
 
 ** AC_INIT no longer alters $@; regression introduced in 2.60.
 
+** AC_USE_SYSTEM_EXTENSIONS now defines _ALL_SOURCE for Interix platforms.
+
 ** The command 'autoconf -' now correctly processes a file from stdin.
 
 ** Autotest now determines $srcdir correctly.
@@ -53,13 +55,20 @@ GNU Autoconf NEWS - User visible changes.
 ** For portability with the eventual M4 2.0, macros should no longer use
    anything larger than $9 to refer to arguments.
 
-** Obsolete macros
+** Existing obsolete macros
    The documentation for the following macros is adjusted to make it
    more clear that they have previously been marked obsolete, as their
    functionality can be accomplished by other macros.  We have no
    current plans to remove them from Autoconf.
 
      AC_ENABLE  AC_STRUCT_ST_BLKSIZE  AC_STRUCT_ST_RDEV  AC_WITH
+
+** Newly obsolete macros
+   The following macros have been marked obsolete, as they only
+   perform a subset of AC_USE_SYSTEM_EXTENSIONS.  We have no current
+   plans to remove them.
+
+     AC_AIX  AC_GNU_SOURCE  AC_ISC_POSIX  AC_MINIX
 
 ** AC_C_LONG_DOUBLE is obsolescent.
    The documentation now says that AC_C_LONG_DOUBLE is obsolescent: it
