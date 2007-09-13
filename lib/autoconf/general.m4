@@ -2192,7 +2192,7 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
 AC_DEFUN([_AC_DO_ECHO],
 [m4_if([$1], [$ac_try], [], [ac_try="$1"
 ])dnl
-dnl If the string contains '"', '`', or '\', then just echo it rather
+dnl If the string contains '\"', '`', or '\\', then just echo it rather
 dnl than expanding it.  This is a hack, but it is safer, while also
 dnl typically expanding simple substrings like '$CC', which is what we want.
 dnl
