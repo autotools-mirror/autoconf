@@ -1,3 +1,7 @@
+2007-09-13  Eric Blake  <ebb9@byu.net>
+
+	* AUTHORS: Add missing entries.
+
 2007-09-12  Eric Blake  <ebb9@byu.net>
 
 	Publish m4_ifndef, m4_version_compare, m4_AUTOCONF_VERSION.
