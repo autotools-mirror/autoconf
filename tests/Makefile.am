@@ -1,6 +1,6 @@
 ## Make Autoconf tests.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
 # Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -158,10 +158,21 @@ AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/types.m4 \
 		 $(autoconfdir)/programs.m4
 
-$(TESTSUITE_GENERATED_AT): mktests.sh $(AUTOCONF_FILES)
+$(TESTSUITE_GENERATED_AT): mktests.stamp
+## Recover from the removal of $@
+	@if test -f $@; then :; else \
+	  rm -f mktests.stamp; \
+	  $(MAKE) $(AM_MAKEFLAGS) mktests.stamp; \
+	fi
+
+mktests.stamp : mktests.sh $(AUTOCONF_FILES)
+	@rm -f mktests.tmp
+	@touch mktests.tmp
 	cd $(srcdir) && ./mktests.sh \
 	  `echo " "$(AUTOCONF_FILES) | sed 's, [^ ]*/, ../lib/autoconf/,g'`
+	@mv -f mktests.tmp $@
 
+CLEANFILES += mktests.stamp mktests.tmp
 
 ## maintainer-check ##
 

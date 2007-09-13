@@ -1,5 +1,11 @@
 2007-09-13  Eric Blake  <ebb9@byu.net>
 
+	Avoid parallel 'make check' issue.
+	* tests/Makefile.am (mktests.stamp): New witness.
+	(TESTSUITE_GENERATED_AT): Use it.
+	(CLEANFILES): Clean the witness.
+	* tests/.cvsignore (mktests.stamp): Ignore the witness.
+
 	Document another awk pitfall.
 	* doc/autoconf.texi (Limitations of Usual Tools) <awk>: Document
 	limitation of field variables in END.
