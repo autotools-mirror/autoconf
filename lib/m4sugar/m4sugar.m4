@@ -3,8 +3,8 @@ divert(-1)#                                                  -*- Autoconf -*-
 # Base M4 layer.
 # Requires GNU M4.
 #
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
-# Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1723,6 +1723,15 @@ m4_define([m4_version_compare],
 # m4_PACKAGE_BUGREPORT
 # --------------------
 m4_include([m4sugar/version.m4])
+
+
+# m4_AUTOCONF_VERSION
+# -------------------
+# A nicer synonym for the name m4_PACKAGE_VERSION.  However, since
+# automake 1.10 decided to use m4_PACKAGE_VERSION while it was still
+# undocumented, it will be a while before we can try to obsolete the
+# confusing name.
+m4_copy([m4_PACKAGE_VERSION], [m4_AUTOCONF_VERSION])
 
 
 # m4_version_prereq(VERSION, [IF-OK], [IF-NOT = FAIL])

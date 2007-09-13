@@ -10050,6 +10050,14 @@ This macro corresponds to @code{m4exit}.
 This macro corresponds to @code{ifelse}.
 @end defmac
 
+@defmac m4_ifndef (@var{macro}, @var{if-not-defined}, @ovar{if-defined})
+@msindex{ifndef}
+This is shorthand for:
+@example
+m4_ifdef([@var{macro}], [@var{if-defined}], [@var{if-not-defined}])
+@end example
+@end defmac
+
 @defmac m4_include (@var{file})
 @defmacx m4_sinclude (@var{file})
 @msindex{include}
@@ -10270,6 +10278,59 @@ added.  @code{m4_append} can be used to grow strings, and
 @code{m4_append_uniq} to grow strings without duplicating substrings.
 @end defmac
 
+@defmac m4_version_compare (@var{version-1}, @var{version-2})
+@msindex{version_compare}
+Introduced in autoconf 2.53.  Compare the version strings
+@var{version-1} and @var{version-2}, and expand to @samp{-1} if
+@var{version-1} is smaller, @samp{0} if they are the same, or @samp{1}
+@var{version-2} is smaller.  Version strings must be a list of elements
+separated by @samp{.}, where each element is a number along with an
+optional letter.  The comparison stops at the leftmost element that
+contains a difference, although a 0 element compares equal to a missing
+element.
+
+@example
+m4_version_compare([1.1], [2.0])
+@result{}-1
+m4_version_compare([2.0b], [2.0a])
+@result{}1
+m4_version_compare([1.1.1], [1.1.1a])
+@result{}-1
+m4_version_compare([1.2], [1.1.1a])
+@result{}1
+m4_version_compare([1.0], [1])
+@result{}0
+@end example
+@end defmac
+
+@defmac m4_AUTOCONF_VERSION
+@defmacx m4_PACKAGE_VERSION
+@msindex{AUTOCONF_VERSION}
+@msindex{PACKAGE_VERSION}
+These macros identify the version of Autoconf that is currently parsing
+the input file, in a format suitable for @code{m4_version_compare}.  The
+name @code{m4_AUTOCONF_VERSION} was introduced in Autoconf 2.62.  The
+synonym @code{m4_PACKAGE_VERSION} existed since Autoconf 2.53, but was
+undocumented for many years because it is not named very well, and it
+may be withdrawn in a future release.  One use of these macros is for
+writing conditional fallbacks based on when a feature was added to
+Autoconf, rather than using @code{AC_PREREQ} to require the newer
+version of Autoconf.
+
+For an example, @code{AC_USE_SYSTEM_EXTENSIONS} was only added in
+Autoconf 2.60 (@pxref{AC_USE_SYSTEM_EXTENSIONS}).  A @file{configure.ac}
+designed to work even with Autoconf 2.59 can do the following in a
+compatibility section, then use the newer macros elsewhere without
+worrying about Autoconf versions:
+
+@example
+m4_ifndef([m4_AUTOCONF_VERSION],
+          [m4_define([m4_AUTOCONF_VERSION],
+                     m4_defn([m4_PACKAGE_VERSION]))])
+m4_if(m4_version_compare(m4_AUTOCONF_VERSION, [2.60]), [-1],
+      [AC_DEFUN([AC_USE_SYSTEM_EXTENSIONS], [AC_GNU_SOURCE])])
+@end example
+@end defmac
 
 
 @node Forbidden Patterns

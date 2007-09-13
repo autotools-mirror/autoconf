@@ -1,5 +1,18 @@
 2007-09-12  Eric Blake  <ebb9@byu.net>
 
+	Publish m4_ifndef, m4_version_compare, m4_AUTOCONF_VERSION.
+	* doc/autoconf.texi (Text processing Macros): Document
+	m4_version_compare, m4_AUTOCONF_VERSION, m4_PACKAGE_VERSION.
+	(Redefined M4 Macros): Document m4_ifndef.
+	* lib/m4sugar/m4sugar.m4 (m4_AUTOCONF_VERSION): New macro; we
+	can't obsolete m4_PACKAGE_VERSION at this time since Autoconf 1.10
+	used it while it was undocumented.
+	* NEWS: Document this change.
+	* lib/m4sugar/Makefile.am (version.m4): Update copyright dates.
+	* lib/m4sugar/Makefile.in: Regenerate.
+	* tests/m4sugar.at (m4@&t@_version_compare): New test.
+	Reported by Bruno Haible.
+
 	* doc/autoconf.texi (Generic Compiler Characteristics): Add
 	missing index entries.
 

@@ -1,6 +1,6 @@
 # Make Autoconf library for M4sugar.
 
-# Copyright (C) 2001, 2002, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2006, 2007 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ version.m4: $(top_srcdir)/configure.ac
 	{					\
 	  echo '# This file is part of -*- Autoconf -*-.'; \
 	  echo '# Version of Autoconf.'; \
-	  echo '# Copyright (C) 1999, 2000, 2001, 2002'; \
+	  echo '# Copyright (C) 1999, 2000, 2001, 2002, 2006, 2007'; \
 	  echo '# Free Software Foundation, Inc.'; \
 	  echo ;\
 	  echo 'm4_define([m4_PACKAGE_NAME],      [$(PACKAGE_NAME)])'; \

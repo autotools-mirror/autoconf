@@ -2,7 +2,7 @@
 
 AT_BANNER([M4sugar.])
 
-# Copyright (C) 2000, 2001, 2002, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2005, 2006, 2007 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -117,10 +117,6 @@ AT_CLEANUP
 
 AT_SETUP([m4@&t@_require: circular dependencies])
 
-# m4_text_wrap is used to display the help strings.  Also, check that
-# commas are not swallowed.  This can easily happen because of
-# m4-listification.
-
 AT_DATA_M4SUGAR([script.4s],
 [[m4_defun([foo], [m4_require([bar])])
 
@@ -188,6 +184,41 @@ First, second , third, [,quoted]
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 0, [expout])
+
+AT_CLEANUP
+
+## -------------------- ##
+## m4_version_compare.  ##
+## -------------------- ##
+
+AT_SETUP([m4@&t@_version_compare])
+
+# In addition to version checks, also check m4_AUTOCONF_VERSION, added
+# for autoconf 2.62.
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_version_compare([1.1], [2.0])
+m4_version_compare([2.0b], [2.0a])
+m4_version_compare([2.0z], [2.0y])
+m4_version_compare([1.1.1], [1.1.1a])
+m4_version_compare([1.2], [1.1.1a])
+m4_version_compare([1.0], [1])
+m4_version_compare([1.0a], [1.0a])
+m4_version_compare([1.1a], [1.1a.1])
+m4_version_compare(m4_AUTOCONF_VERSION, [2.61])
+m4_version_compare(m4_defn([m4_AUTOCONF_VERSION]), [2.61])
+]],
+[[-1
+1
+1
+-1
+1
+0
+0
+-1
+1
+1
+]])
 
 AT_CLEANUP
 
