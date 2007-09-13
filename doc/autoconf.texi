@@ -6394,6 +6394,10 @@ etc.).
 @defmac AC_OPENMP
 @acindex{OPENMP}
 @cvindex _OPENMP
+@ovindex OPENMP_CFLAGS
+@ovindex OPENMP_CXXFLAGS
+@ovindex OPENMP_FFLAGS
+@ovindex OPENMP_FCFLAGS
 OpenMP (@url{http://www.openmp.org/}) specifies extensions of C, C++,
 and Fortran that simplify optimization of shared memory parallelism,
 which is a common problem on multicore CPUs.
