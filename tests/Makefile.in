@@ -161,14 +161,14 @@ top_srcdir = @top_srcdir@
 
 # We don't actually distribute the testsuite, since one only
 # needs m4 to build it, m4 being required anyway to install Autoconf.
-EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
-	     atlocal.in package.m4 wrapper.as
-
+EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh atlocal.in package.m4 \
+	wrapper.as mktests.stamp
 
 # Running the uninstalled scripts.
 check_SCRIPTS = $(wrappers)
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE)
-MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE_GENERATED_AT)
+MAINTAINERCLEANFILES = Makefile.in $(TESTSUITE_GENERATED_AT) \
+	mktests.stamp
 SUFFIXES = .m4 .m4f
 AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
 
@@ -239,7 +239,7 @@ ETAGS_FOR_AUTOCONF = \
 wrappers = autoconf autoheader autom4te autoreconf autoscan autoupdate ifnames
 
 # The hairy heredoc is more robust than using echo.
-CLEANFILES = wrapper.in $(wrappers) mktests.stamp mktests.tmp expr
+CLEANFILES = wrapper.in $(wrappers) mktests.tmp expr
 edit = sed \
 	-e 's|@wrap_program[@]|$@|g' \
 	-e 's|@abs_top_srcdir[@]|@abs_top_srcdir@|g' \

@@ -172,7 +172,10 @@ mktests.stamp : mktests.sh $(AUTOCONF_FILES)
 	  `echo " "$(AUTOCONF_FILES) | sed 's, [^ ]*/, ../lib/autoconf/,g'`
 	@mv -f mktests.tmp $@
 
-CLEANFILES += mktests.stamp mktests.tmp
+## Distribute the stamp file, since we distribute the generated files.
+EXTRA_DIST += mktests.stamp
+CLEANFILES += mktests.tmp
+MAINTAINERCLEANFILES += mktests.stamp
 
 ## maintainer-check ##
 

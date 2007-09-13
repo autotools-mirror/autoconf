@@ -1,5 +1,12 @@
 2007-09-13  Eric Blake  <ebb9@byu.net>
 
+	Clean up 'make dist' of previous patch.
+	* tests/Makefile.am (EXTRA_DIST): Distribute mktests.stamp.
+	(CLEANFILES): Don't clean the stamp, since we distribute the
+	generated files pre-built.
+	(MAINTAINERCLEANFILES): Clean it here instead.
+	* tests/Makefile.in: Regenerate.
+
 	Avoid parallel 'make check' issue.
 	* tests/Makefile.am (mktests.stamp): New witness.
 	(TESTSUITE_GENERATED_AT): Use it.
