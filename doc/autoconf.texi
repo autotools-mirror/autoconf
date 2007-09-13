@@ -13361,6 +13361,23 @@ input in this case.  Portable scripts can redirect input from
 awk 'BEGIN @{print "hello world"@}' </dev/null
 @end example
 
+Posix says that in an @samp{END} action, @samp{$NF} (and presumably,
+@samp{$1}) retain their value from the last record read, if no
+intervening @samp{getline} occurred.  However, some implementations
+(such as Solaris 10 @samp{/usr/bin/awk}, @samp{nawk}, or Darwin
+@samp{awk}) reset these variables.  A workaround is to use an
+intermediate variable prior to the @samp{END} block.  For example:
+
+@example
+$ @kbd{cat end.awk}
+@{ tmp = $1 @}
+END @{ print "a", $1, $NF, "b", tmp @}
+$ @kbd{echo 1 | awk -f end.awk}
+a   b 1
+$ @kbd{echo 1 | gawk -f end.awk}
+a 1 1 b 1
+@end example
+
 If you want your program to be deterministic, don't depend on @code{for}
 on arrays:
 

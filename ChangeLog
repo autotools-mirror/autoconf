@@ -1,5 +1,10 @@
 2007-09-13  Eric Blake  <ebb9@byu.net>
 
+	Document another awk pitfall.
+	* doc/autoconf.texi (Limitations of Usual Tools) <awk>: Document
+	limitation of field variables in END.
+	Reported by Gary V. Vaughan.
+
 	* AUTHORS: Add missing entries.
 
 2007-09-12  Eric Blake  <ebb9@byu.net>
