@@ -1,5 +1,11 @@
 2007-09-13  Eric Blake  <ebb9@byu.net>
 
+	Editing eye-candy.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Restore
+	font-lock balance.
+	* lib/m4sugar/m4sh.m4 (AS_MKDIR_P): Likewise.
+	* configure: Regenerate.
+
 	Clean up 'make dist' of previous patch.
 	* tests/Makefile.am (EXTRA_DIST): Distribute mktests.stamp.
 	(CLEANFILES): Don't clean the stamp, since we distribute the

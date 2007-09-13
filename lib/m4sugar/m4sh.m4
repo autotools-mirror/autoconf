@@ -992,7 +992,7 @@ m4_define([AS_MKDIR_P],
     as_dirs=
     while :; do
       case $as_dir in #(
-      *\'*) as_qdir=`AS_ECHO(["$as_dir"]) | sed "s/'/'\\\\\\\\''/g"`;; #(
+      *\'*) as_qdir=`AS_ECHO(["$as_dir"]) | sed "s/'/'\\\\\\\\''/g"`;; #'(
       *) as_qdir=$as_dir;;
       esac
       as_dirs="'$as_qdir' $as_dirs"

@@ -3621,7 +3621,7 @@ g
 s/.\{148\}//
 t delim
 ' <conf$$subs.awk | sed '
-/^[^"]/{
+/^[^""]/{
   N
   s/\n//
 }
@@ -3770,7 +3770,7 @@ $as_echo X"$ac_file" |
     as_dirs=
     while :; do
       case $as_dir in #(
-      *\'*) as_qdir=`$as_echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #(
+      *\'*) as_qdir=`$as_echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #'(
       *) as_qdir=$as_dir;;
       esac
       as_dirs="'$as_qdir' $as_dirs"

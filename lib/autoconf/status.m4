@@ -484,7 +484,7 @@ g
 s/.\{]_AC_AWK_LITERAL_LIMIT[\}//
 t delim
 ' <conf$$subs.awk | sed '
-/^[^"]/{
+/^[^""]/{
   N
   s/\n//
 }
