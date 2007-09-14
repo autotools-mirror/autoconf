@@ -1,3 +1,14 @@
+2007-09-14  Eric Blake  <ebb9@byu.net>
+
+	Prepare for conversion to git.
+	* doc/.cvsignore: Avoid multiple listings on one line.
+	* bin/.cvsignore: Likewise.
+	* .gitignore, bin/.gitignore, config/.gitignore, doc/.gitignore,
+	lib/.gitignore, lib/Autom4te/.gitignore, lib/autoconf/.gitignore,
+	lib/autoscan/.gitignore, lib/autotest/.gitignore,
+	lib/emacs/.gitignore, lib/m4sugar/.gitignore, man/.gitignore,
+	tests/.gitignore: New files, identical to .cvsignore counterpart.
+
 2007-09-13  Eric Blake  <ebb9@byu.net>
 
 	Editing eye-candy.
