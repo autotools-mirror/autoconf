@@ -25,6 +25,7 @@ autoscan
 autoupdate
 expr
 ifnames
+mktests.stamp
 package.m4
 testsuite
 testsuite.dir
