@@ -193,9 +193,6 @@ AT_CLEANUP
 
 AT_SETUP([m4@&t@_version_compare])
 
-# In addition to version checks, also check m4_AUTOCONF_VERSION, added
-# for autoconf 2.62.
-
 AT_CHECK_M4SUGAR_TEXT(
 [[m4_version_compare([1.1], [2.0])
 m4_version_compare([2.0b], [2.0a])
@@ -205,8 +202,6 @@ m4_version_compare([1.2], [1.1.1a])
 m4_version_compare([1.0], [1])
 m4_version_compare([1.0a], [1.0a])
 m4_version_compare([1.1a], [1.1a.1])
-m4_version_compare(m4_AUTOCONF_VERSION, [2.61])
-m4_version_compare(m4_defn([m4_AUTOCONF_VERSION]), [2.61])
 ]],
 [[-1
 1
@@ -216,8 +211,6 @@ m4_version_compare(m4_defn([m4_AUTOCONF_VERSION]), [2.61])
 0
 0
 -1
-1
-1
 ]])
 
 AT_CLEANUP

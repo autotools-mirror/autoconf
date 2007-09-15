@@ -302,6 +302,7 @@ Writing @file{configure.ac}
 Initialization and Output Files
 
 * Initializing configure::      Option processing etc.
+* Versioning::                  Dealing with Autoconf versions
 * Notices::                     Copyright, version numbers in @command{configure}
 * Input::                       Where Autoconf should find files
 * Output::                      Outputting results from the configuration
@@ -1681,6 +1682,7 @@ initialization and the creation of output files.
 
 @menu
 * Initializing configure::      Option processing etc.
+* Versioning::                  Dealing with Autoconf versions
 * Notices::                     Copyright, version numbers in @command{configure}
 * Input::                       Where Autoconf should find files
 * Output::                      Outputting results from the configuration
@@ -1767,15 +1769,15 @@ of updating @samp{$@@} and @samp{$*}.  However, we suggest that you use
 standard macros like @code{AC_ARG_ENABLE} instead of attempting to
 implement your own option processing.  @xref{Site Configuration}.
 
+@node Versioning
+@section Dealing with Autoconf versions
+@cindex Autoconf version
+@cindex version, Autoconf
 
-@node Notices
-@section Notices in @command{configure}
-@cindex Notices in @command{configure}
+The following optional macros can be used to help choose the minimum
+version of Autoconf that can successfully compile a given
+@file{configure.ac}.
 
-The following macros manage version numbers for @command{configure}
-scripts.  Using them is optional.
-
-@c FIXME: AC_PREREQ should not be here
 @defmac AC_PREREQ (@var{version})
 @acindex{PREREQ}
 @cindex Version
@@ -1791,6 +1793,26 @@ AC_PREREQ([@value{VERSION}])
 This macro is the only macro that may be used before @code{AC_INIT}, but
 for consistency, you are invited not to do so.
 @end defmac
+
+@defmac AC_VERSION
+@acindex{VERSION}
+This macro was introduced in Autoconf 2.62.  It identifies the version
+of Autoconf that is currently parsing the input file, in a format
+suitable for @code{m4_version_compare} (@pxref{m4_version_compare}); in
+other words, for this release of Autoconf, its value is
+@samp{@value{VERSION}}.  One potential use of this macro is for writing
+conditional fallbacks based on when a feature was added to Autoconf,
+rather than using @code{AC_PREREQ} to require the newer version of
+Autoconf.  However, remember that the Autoconf philosophy favors feature
+checks over version checks.
+@end defmac
+
+@node Notices
+@section Notices in @command{configure}
+@cindex Notices in @command{configure}
+
+The following macros manage version numbers for @command{configure}
+scripts.  Using them is optional.
 
 @defmac AC_COPYRIGHT (@var{copyright-notice})
 @acindex{COPYRIGHT}
@@ -10278,6 +10300,7 @@ added.  @code{m4_append} can be used to grow strings, and
 @code{m4_append_uniq} to grow strings without duplicating substrings.
 @end defmac
 
+@anchor{m4_version_compare}
 @defmac m4_version_compare (@var{version-1}, @var{version-2})
 @msindex{version_compare}
 Introduced in autoconf 2.53.  Compare the version strings
@@ -10285,9 +10308,9 @@ Introduced in autoconf 2.53.  Compare the version strings
 @var{version-1} is smaller, @samp{0} if they are the same, or @samp{1}
 @var{version-2} is smaller.  Version strings must be a list of elements
 separated by @samp{.}, where each element is a number along with an
-optional letter.  The comparison stops at the leftmost element that
-contains a difference, although a 0 element compares equal to a missing
-element.
+optional lower case letter.  The comparison stops at the leftmost
+element that contains a difference, although a 0 element compares equal
+to a missing element.
 
 @example
 m4_version_compare([1.1], [2.0])
@@ -10300,35 +10323,6 @@ m4_version_compare([1.2], [1.1.1a])
 @result{}1
 m4_version_compare([1.0], [1])
 @result{}0
-@end example
-@end defmac
-
-@defmac m4_AUTOCONF_VERSION
-@defmacx m4_PACKAGE_VERSION
-@msindex{AUTOCONF_VERSION}
-@msindex{PACKAGE_VERSION}
-These macros identify the version of Autoconf that is currently parsing
-the input file, in a format suitable for @code{m4_version_compare}.  The
-name @code{m4_AUTOCONF_VERSION} was introduced in Autoconf 2.62.  The
-synonym @code{m4_PACKAGE_VERSION} existed since Autoconf 2.53, but was
-undocumented for many years because it is not named very well, and it
-may be withdrawn in a future release.  One use of these macros is for
-writing conditional fallbacks based on when a feature was added to
-Autoconf, rather than using @code{AC_PREREQ} to require the newer
-version of Autoconf.
-
-For an example, @code{AC_USE_SYSTEM_EXTENSIONS} was only added in
-Autoconf 2.60 (@pxref{AC_USE_SYSTEM_EXTENSIONS}).  A @file{configure.ac}
-designed to work even with Autoconf 2.59 can do the following in a
-compatibility section, then use the newer macros elsewhere without
-worrying about Autoconf versions:
-
-@example
-m4_ifndef([m4_AUTOCONF_VERSION],
-          [m4_define([m4_AUTOCONF_VERSION],
-                     m4_defn([m4_PACKAGE_VERSION]))])
-m4_if(m4_version_compare(m4_AUTOCONF_VERSION, [2.60]), [-1],
-      [AC_DEFUN([AC_USE_SYSTEM_EXTENSIONS], [AC_GNU_SOURCE])])
 @end example
 @end defmac
 

@@ -1,3 +1,20 @@
+2007-09-15  Eric Blake  <ebb9@byu.net>
+
+	Provide AC_VERSION, not m4_AUTOCONF_VERSION.
+	* doc/autoconf.texi (Text processing Macros): Remove mention of
+	m4_AUTOCONF_VERSION, and leave m4_PACKAGE_VERSION undocumented
+	once again.
+	(Notices): Move AC_PREREQ...
+	(Versioning): ...to this new section, alongside the new AC_VERSION
+	alias for the undocumented m4_PACKAGE_VERSION.
+	* lib/m4sugar/m4sugar.m4 (m4_AUTOCONF_VERSION): Revert change.
+	* lib/autoconf/general.m4 (AC_VERSION): New macro.
+	* NEWS: Update to match this rename.
+	* tests/m4sugar.at (m4@&t@_version_compare): Remove tests of
+	m4_PACKAGE_VERSION.
+	* tests/tools.at (autoconf: AC_VERSION): New test.
+	Suggested by Paolo Bonzini and Benoit Sigoure.
+
 2007-09-14  Eric Blake  <ebb9@byu.net>
 
 	Prepare for conversion to git.

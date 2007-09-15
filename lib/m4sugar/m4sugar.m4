@@ -1725,15 +1725,6 @@ m4_define([m4_version_compare],
 m4_include([m4sugar/version.m4])
 
 
-# m4_AUTOCONF_VERSION
-# -------------------
-# A nicer synonym for the name m4_PACKAGE_VERSION.  However, since
-# automake 1.10 decided to use m4_PACKAGE_VERSION while it was still
-# undocumented, it will be a while before we can try to obsolete the
-# confusing name.
-m4_copy([m4_PACKAGE_VERSION], [m4_AUTOCONF_VERSION])
-
-
 # m4_version_prereq(VERSION, [IF-OK], [IF-NOT = FAIL])
 # ----------------------------------------------------
 # Check this Autoconf version against VERSION.
