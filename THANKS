@@ -58,12 +58,12 @@ Chad R. Larson              chad@anasazi.com
 Charles 'Buck' Krasic       krasic@cs.ubc.ca
 Chris P. Ross               cross@uu.net
 Chris Provenzano            proven@cygnus.com
+Chris Torek                 torek@bsdi.com
 Christian Cornelssen        ccorn@cs.tu-berlin.de
 Christian Krackowizer       ckrackowiz@std.schuler-ag.com
 Christian Krone             krischan@sql.de
 Christopher Hulbert         cchgroupmail@gmail.com
 Christopher Lee             chrislee@ri.cmu.edu
-Chris Torek                 torek@bsdi.com
 Cort Dougan                 cort@cs.nmt.edu
 D'Arcy A MacIsaac           ?
 Dalibor Topic               robilad@kaffe.org
@@ -102,8 +102,8 @@ Ezra Peisach                epeisach@zif.mit.edu
 Fedor Sergeev               ?
 Felix Lee                   flee@cygnus.com
 Franceseco Romani           fromani@gmail.com
-François Pinard             pinard@iro.umontreal.ca
 Frank Denis                 j@jedi.claranet.fr
+François Pinard             pinard@iro.umontreal.ca
 Fred Kreek                  Fred.Kreek@kadaster.nl
 Frederik Fouvry             fouvry@CoLi.Uni-SB.DE
 Gareth McCaughan            gareth.mccaughan@pobox.com
@@ -124,14 +124,14 @@ Guido Draheim               Guido.Draheim@gmx.de
 Guido Flohr                 gufl0000@stud.uni-sb.de
 Guido van Rossum            ?
 Guillermo Gomez             gomez@mi.uni-erlangen.de
+H. Merijn Brand             h.m.brand@hccnet.nl
+H. Peter Anvin              ?
+H.J. Lu                     hjl@gnu.org
 Hans Aberg                  haberg@math.su.se
 Hans Olsson                 Hans.Olsson@dna.lth.se
 Harlan Stenn                stenn@whimsy.udel.edu
 Henk Krus                   h.krus@cyclone.nl
 Howard Chu                  hyc@highlandsun.com
-H.J. Lu                     hjl@gnu.org
-H. Merijn Brand             h.m.brand@hccnet.nl
-H. Peter Anvin              ?
 Ian Lance Taylor            ian@cygnus.com
 Ian Macdonald               iamacdo@telkomsa.net
 Ian Redfern                 Ian.Redfern@logicacmg.com
@@ -160,20 +160,20 @@ John Fortin                 fortinj@attglobal.net
 John Interrante             interran@uluru.stanford.edu
 John W. Eaton               jwe@bevo.che.wisc.edu
 Jonathan Kamens             jik@kamens.brookline.ma.us
-Jörn Rennecke               amylaar@cygnus.co.uk
 Joseph S. Myers             jsm28@cam.ac.uk
 Julian Onions               j.onions@nexor.co.uk
 Julien Danjou               acid@debian.org
 Julio Garvia                ?
 Justace Clutter             ?
+Jörn Rennecke               amylaar@cygnus.co.uk
 Karl Berry                  karl@cs.umb.edu
 Karl Heuer                  kwzh@gnu.org
 Kate Hedstrom               ?
 Kathryn Hargreaves          kathryn@deas.harvard.edu
 Kaveh R. Ghazi              ghazi@caip.rutgers.edu
-Kelly Anderson              tgcorp@attglobal.net
 Keith Bostic                bostic@abyssinian.sleepycat.com
 Keith Marshall              keith.marshall@total.com
+Kelly Anderson              tgcorp@attglobal.net
 Ken Pizzini                 ken@halcyon.com
 Ken Raeburn                 raeburn@cygnus.com
 Kevin Ryde                  user42@zip.com.au
@@ -324,8 +324,8 @@ Tony Leneis                 tony@plaza.ds.adp.com
 Toshio Kuratomi             ?
 Uwe Seimet                  us@orbacus.com
 Vance Shipley               vances@motivity.ca
-Ville Karaila               karaila@iki.fi
 Viktor Dukhovni             viktor@anaheim.esm.com
+Ville Karaila               karaila@iki.fi
 Vincent Torri               vtorri at univ-evry.fr
 Vladimir Volovich           vvv@vsu.ru
 Volker Borchert             bt@teknon.de

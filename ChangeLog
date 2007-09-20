@@ -1,5 +1,9 @@
 2007-09-20  Eric Blake  <ebb9@byu.net>
 
+	More contribution housekeeping.
+	* THANKS: Sort.
+	* AUTHORS: Sort, reflect recent assignment from Helge Deller.
+
 	Ignore additional files, when copying cross-repository.
 	* .gitignore: Ignore CVS directories, emacs edits.
 	* .cvsignore: Ignore .git directory, emacs edits.
