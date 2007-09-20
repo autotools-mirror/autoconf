@@ -1,3 +1,9 @@
+2007-09-20  Eric Blake  <ebb9@byu.net>
+
+	Ignore additional files, when copying cross-repository.
+	* .gitignore: Ignore CVS directories, emacs edits.
+	* .cvsignore: Ignore .git directory, emacs edits.
+
 2007-09-15  Eric Blake  <ebb9@byu.net>
 
 	Provide AC_VERSION, not m4_AUTOCONF_VERSION.
