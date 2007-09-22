@@ -568,6 +568,8 @@ AC_DEFUN([AC_HEADER_STDBOOL],
 	char h[sizeof (_Bool)];
 	char i[sizeof s.t];
 	enum { j = false, k = true, l = false * true, m = true * 256 };
+	/* The following fails for
+	   HP aC++/ANSI C B3910B A.05.55 [Dec 04 2003]. */
 	_Bool n[m];
 	char o[sizeof n == m * sizeof n[0] ? 1 : -1];
 	char p[-1 - (_Bool) 0 < 0 && -1 - (bool) 0 < 0 ? 1 : -1];
