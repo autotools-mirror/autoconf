@@ -1,3 +1,19 @@
+2007-09-24  Jim Meyering  <jim@meyering.net>
+
+	Whenever possible, use the vertical bar as sed delimiter.
+	* lib/autoconf/functions.m4 (GETLOADAVG_LIBS) [AC_FUNC_GETLOADAVG]:
+	Use "|", not "!".
+	* lib/autoconf/status.m4 (_AC_SRCDIRS) [ac_top_builddir_sub]:
+	[ac_dir_suffix]: Use "|", not "," as sed delimiter.
+	* tests/mktests.sh (as_me): Likewise.
+	* lib/freeze.mk (check-forbidden-patterns): Likewise.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Likewise.
+	* configure: Regenerate.
+	* doc/autoconf.texi (Shell Substitutions): Use "|", not "," in examples.
+	* lib/autotest/general.m4 (AT_INIT): Use "|", not "&" as sed delimiter
+	in the : -> $PATH_SEPARATOR transformation of $AUTOTEST_PATH.
+	This is fine, as long as $PATH_SEPARATOR doesn't contain "|".
+
 2007-09-22  Jim Meyering  <jim@meyering.net>
 
 	Add a comment.

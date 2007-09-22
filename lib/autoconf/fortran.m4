@@ -560,7 +560,7 @@ rm -f conftest*
 # Here, we change these into -L/foo -L/bar -L/baz (and put it first):
 ac_[]_AC_LANG_ABBREV[]_v_output="`echo $ac_[]_AC_LANG_ABBREV[]_v_output |
 	grep 'LPATH is:' |
-	sed 's,.*LPATH is\(: *[[^ ]]*\).*,\1,;s,: */, -L/,g'` $ac_[]_AC_LANG_ABBREV[]_v_output"
+	sed 's|.*LPATH is\(: *[[^ ]]*\).*|\1|;s|: */| -L/|g'` $ac_[]_AC_LANG_ABBREV[]_v_output"
 
 # FIXME: we keep getting bitten by quoted arguments; a more general fix
 #        that detects unbalanced quotes in FLIBS should be implemented

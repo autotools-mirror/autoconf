@@ -11794,7 +11794,7 @@ For instance, the following code:
 
 @example
 case "$given_srcdir" in
-.)  top_srcdir="`echo "$dots" | sed 's,/$,,'`" ;;
+.)  top_srcdir="`echo "$dots" | sed 's|/$||'`" ;;
 *)  top_srcdir="$dots$given_srcdir" ;;
 esac
 @end example
@@ -11804,7 +11804,7 @@ is more readable when written as:
 
 @example
 case $given_srcdir in
-.)  top_srcdir=`echo "$dots" | sed 's,/$,,'` ;;
+.)  top_srcdir=`echo "$dots" | sed 's|/$||'` ;;
 *)  top_srcdir=$dots$given_srcdir ;;
 esac
 @end example

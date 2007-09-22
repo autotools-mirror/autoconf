@@ -23,7 +23,7 @@
 # If we fail, clean up, but touch the output files.  We probably failed
 # because we used some non-portable tool.
 
-as_me=`echo "$0" | sed 's,.*[\\/],,'`
+as_me=`echo "$0" | sed 's|.*[\\/]||'`
 
 trap 'echo "'"$as_me"': failed." >&2
       rm -f acdefuns audefuns requires *.tat
@@ -181,7 +181,7 @@ au_exclude_script="$exclude_list $au_exclude_list {print}"
 
 for file in $src
 do
-  base=`echo "$file" | sed 's,.*[\\/],,;s/\..*//'`
+  base=`echo "$file" | sed 's|.*[\\/]||;s|\..*||'`
   # Get the list of macros which are defined in Autoconf level.
   # Get rid of the macros we are not interested in.
   sed -n -e 's/^AC_DEFUN(\[*\([a-zA-Z0-9_]*\).*$/\1/p' \

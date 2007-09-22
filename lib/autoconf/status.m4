@@ -105,9 +105,9 @@ m4_define([_AC_SRCDIRS],
 case $1 in
 .) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
 *)
-  ac_dir_suffix=/`AS_ECHO([$1]) | sed 's,^\.[[\\/]],,'`
+  ac_dir_suffix=/`AS_ECHO([$1]) | sed 's|^\.[[\\/]]||'`
   # A ".." for each directory in $ac_dir_suffix.
-  ac_top_builddir_sub=`AS_ECHO(["$ac_dir_suffix"]) | sed 's,/[[^\\/]]*,/..,g;s,/,,'`
+  ac_top_builddir_sub=`AS_ECHO(["$ac_dir_suffix"]) | sed 's|/[[^\\/]]*|/..|g;s|/||'`
   case $ac_top_builddir_sub in
   "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
   *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;

@@ -775,7 +775,7 @@ fi
 if test "x$ac_save_LIBS" = x; then
   GETLOADAVG_LIBS=$LIBS
 else
-  GETLOADAVG_LIBS=`AS_ECHO(["$LIBS"]) | sed "s!$ac_save_LIBS!!"`
+  GETLOADAVG_LIBS=`AS_ECHO(["$LIBS"]) | sed "s|$ac_save_LIBS||"`
 fi
 LIBS=$ac_save_LIBS
 
