@@ -2042,7 +2042,7 @@ m4_define([AC_SUBST_TRACE])
 # AC_SUBST(VARIABLE, [VALUE])
 # ---------------------------
 # Create an output variable from a shell VARIABLE.  If VALUE is given
-# assign it to VARIABLE.  Use `""' is you want to set VARIABLE to an
+# assign it to VARIABLE.  Use `""' if you want to set VARIABLE to an
 # empty value, not an empty second argument.
 #
 m4_define([AC_SUBST],

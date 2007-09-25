@@ -1516,7 +1516,7 @@ m4_define([AS_VAR_SET_IF],
 #
 # If the value `$1' was a literal (e.g. `stdlib.h'), then `header' is
 # in fact the value `ac_cv_header_stdlib_h'.  If `$1' was indirect,
-# then `header's value in m4 is in fact `$ac_header', the shell
+# then `header's value in m4 is in fact `$as_header', the shell
 # variable that holds all of the magic to get the expansion right.
 #
 # At the end of the block, free the variable with
