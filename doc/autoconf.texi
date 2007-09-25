@@ -435,6 +435,7 @@ M4 Quotation
 
 * Active Characters::           Characters that change the behavior of M4
 * One Macro Call::              Quotation and one macro call
+* Quoting and Parameters::      M4 vs. shell parameters
 * Quotation and Nested Macros::  Macros calling macros
 * Changequote is Evil::         Worse than INTERCAL: M4 + changequote
 * Quadrigraphs::                Another way to escape special characters
@@ -9098,10 +9099,6 @@ and their interface might change in the future.  As a matter of fact,
 @cindex M4 quotation
 @cindex quotation
 
-@c FIXME: Grmph, yet another quoting myth: quotation has *never*
-@c prevented `expansion' of $1.  Unless it refers to the expansion
-@c of the value of $1?  Anyway, we need a rewrite here@enddots{}
-
 The most common problem with existing macros is an improper quotation.
 This section, which users of Autoconf can skip, but which macro writers
 @emph{must} read, first justifies the quotation scheme that was chosen
@@ -9111,6 +9108,7 @@ former helps one to follow the latter.
 @menu
 * Active Characters::           Characters that change the behavior of M4
 * One Macro Call::              Quotation and one macro call
+* Quoting and Parameters::      M4 vs. shell parameters
 * Quotation and Nested Macros::  Macros calling macros
 * Changequote is Evil::         Worse than INTERCAL: M4 + changequote
 * Quadrigraphs::                Another way to escape special characters
@@ -9124,8 +9122,8 @@ To fully understand where proper quotation is important, you first need
 to know what the special characters are in Autoconf: @samp{#} introduces
 a comment inside which no macro expansion is performed, @samp{,}
 separates arguments, @samp{[} and @samp{]} are the quotes themselves,
-and finally @samp{(} and @samp{)} (which M4 tries to match by
-pairs).
+@samp{(} and @samp{)} (which M4 tries to match by pairs), and finally
+@samp{$} inside a macro definition.
 
 In order to understand the delicate case of macro calls, we first have
 to present some obvious failures.  Below they are ``obvious-ified'',
@@ -9246,9 +9244,76 @@ car([[[a]]])
 @result{}[a]
 @end example
 
+@node Quoting and Parameters
+@subsection
+
+When M4 encounters @samp{$} within a macro definition, followed
+immediately by a character it recognizes (@samp{0}@dots{}@samp{9},
+@samp{#}, @samp{@@}, or @samp{*}), it will perform M4 parameter
+expansion.  This happens regardless of how many layers of quotes the
+parameter expansion is nested within, or even if it occurs in text that
+will be rescanned as a comment.
+
+@example
+define([none], [$1])
+@result{}
+define([one], [[$1]])
+@result{}
+define([two], [[[$1]]])
+@result{}
+define([comment], [# $1])
+@result{}
+define([active], [ACTIVE])
+@result{}
+none([active])
+@result{}ACTIVE
+one([active])
+@result{}active
+two([active])
+@result{}[active]
+comment([active])
+@result{}# active
+@end example
+
+On the other hand, since autoconf generates shell code, you often want
+to output shell variable expansion, rather than performing M4 parameter
+expansion.  To do this, you must use M4 quoting to separate the @samp{$}
+from the next character in the definition of your macro.  If the macro
+definition occurs in single-quoted text, then insert another level of
+quoting; if the usage is already inside a double-quoted string, then
+split it into concatenated strings.
+
+@example
+define([single], [a single-quoted $[]1 definition])
+@result{}
+define([double], [[a double-quoted $][1 definition]])
+@result{}
+single
+@result{}a single-quoted $1 definition
+double
+@result{}a double-quoted $1 definition
+@end example
+
+Posix states that M4 implementations are free to provide implementation
+extensions when @samp{$@{} is encountered in a macro definition.
+Autoconf reserves the longer sequence @samp{$@{@{} for use with planned
+extensions that will be available in the future @acronym{GNU} M4 2.0,
+but guarantees that all other instances of @samp{$@{} will be output
+literally.  Therefore, this idiom can also be used to output shell code
+parameter references:
+
+@example
+define([first], [$@{1@}])first
+@result{}$@{1@}
+@end example
+
+Posix also states that @samp{$11} should expand to the first parameter
+concatenated with a literal @samp{1}, although some versions of
+@acronym{GNU} M4 expand the eleventh parameter instead.  For
+portability, you should only use single-digit M4 parameter expansion.
+
 With this in mind, we can explore the cases where macros invoke
 macros@enddots{}
-
 
 @node Quotation and Nested Macros
 @subsection Quotation and Nested Macros
@@ -9343,17 +9408,19 @@ qar([int tab[10];])
 @noindent
 Ahhh!  That's much better.
 
-But note what you've done: now that the arguments are literal strings,
-if the user wants to use the results of expansions as arguments, she has
-to use an @emph{unquoted} macro call:
+But note what you've done: now that the result of @code{qar} is always
+a literal string, the only time a user can use nested macros is if she
+relies on an @emph{unquoted} macro call:
 
 @example
 qar(active)
 @result{}ACT
+qar([active])
+@result{}active
 @end example
 
 @noindent
-where she wanted to reproduce what she used to do with @code{car}:
+leaving no way for her to reproduce what she used to do with @code{car}:
 
 @example
 car([active])
@@ -9394,7 +9461,7 @@ needs.  For instance, by default M4 uses @samp{`} and @samp{'} as
 quotes, but in the context of shell programming (and actually of most
 programming languages), that's about the worst choice one can make:
 because of strings and back-quoted expressions in shell code (such as
-@samp{'this'} and @samp{`that`}), because of literal characters in usual
+@samp{'this'} and @samp{`that`}), and because of literal characters in usual
 programming languages (as in @samp{'0'}), there are many unbalanced
 @samp{`} and @samp{'}.  Proper M4 quotation then becomes a nightmare, if
 not impossible.  In order to make M4 useful in such a context, its
