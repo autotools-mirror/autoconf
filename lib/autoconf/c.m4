@@ -1299,13 +1299,14 @@ test_varargs (const char *format, ...)
 dnl Try
 dnl GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
 dnl AIX		-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
-dnl Intel ICC	-c99
+dnl HP cc	-AC99
+dnl Intel ICC	-std=c99, -c99 (deprecated)
 dnl IRIX	-c99
 dnl Solaris	-xc99=all (Forte Developer 7 C mishandles -xc99 on Solaris 9,
 dnl		as it incorrectly assumes C99 semantics for library functions)
 dnl Tru64	-c99
 dnl with extended modes being tried first.
-[[-std=gnu99 -c99 -xc99=all -qlanglvl=extc99]], [$1], [$2])[]dnl
+[[-std=gnu99 -std=c99 -c99 -AC99 -xc99=all -qlanglvl=extc99]], [$1], [$2])[]dnl
 ])# _AC_PROG_CC_C99
 
 
