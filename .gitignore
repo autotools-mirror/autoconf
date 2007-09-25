@@ -10,3 +10,4 @@ releases
 autom4te.cache
 .#*
 CVS
+*~
