@@ -1,5 +1,11 @@
 2007-09-26  Eric Blake  <ebb9@byu.net>
 
+	Fix testsuite breakage in last patch.
+	* tests/autotest.at (AT_CHECK_AT_TITLE): Properly quote the
+	font-lock fix.
+	* tests/torture.at (@%:@define header templates): Rename, so that
+	output lines up correctly.
+
 	More font-lock happiness.
 	* tests/autotest.at (AT_CHECK_AT_TITLE_CHAR): Clean up font
 	confusion.

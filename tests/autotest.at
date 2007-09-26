@@ -249,8 +249,8 @@ m4@&t@_define([macro_expanded], [[macro_overexpanded]])
 m4@&t@_define([macro_backquote],    [`])
 m4@&t@_define([macro_single_quote], ['])
 m4@&t@_define([macro_double_quote], ["])
-dnl restore font-lock: "
-m4@&t@_define([macro_backslash],   [\\])
+]]dnl restore font-lock: "
+[[m4@&t@_define([macro_backslash],   [\\])
 AT_INIT([artificial test suite])
 AT_SETUP([$2])
 AT_CHECK([:])
