@@ -2,7 +2,8 @@
 
 AT_BANNER([Low level compiling/preprocessing macros.])
 
-# Copyright (C) 2000, 2001, 2003, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007 Free Software
+# Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,7 +28,7 @@ AT_BANNER([Low level compiling/preprocessing macros.])
 ## AC_LANG, AC_LANG_PUSH & AC_LANG_POP.  ##
 ## ------------------------------------- ##
 
-AT_SETUP([AC_LANG, AC_LANG_PUSH & AC_LANG_POP])
+AT_SETUP([[AC_LANG, AC_LANG_PUSH & AC_LANG_POP]])
 
 AT_DATA([configure.ac],
 [[AC_INIT

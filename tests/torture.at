@@ -119,6 +119,7 @@ AT_CHECK_AC_ARG_VAR([apple of my {eye}], [orange of my eye])
 
 # Change a precious variable that contains all kinds of fun
 AT_CHECK_AC_ARG_VAR(['p  r	ec"iou$], [orange of my eye])
+dnl restore font-lock: "
 
 AT_CLEANUP
 
@@ -129,7 +130,7 @@ AT_CLEANUP
 ## AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS.  ##
 ## ---------------------------------------------- ##
 
-AT_SETUP([AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS])
+AT_SETUP([[AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS]])
 
 AT_DATA([configure.ac],
 [[AC_INIT
@@ -305,6 +306,7 @@ AT_CHECK_CONFIGURE([one="\"'$ " --enable-two="\" '  $" --with-three="	\"'$"|
 AT_CHECK([./config.status --recheck | sed -n 's/^result=//p'], 0,
 	 ["'$ " '  $	"'$
 ])
+dnl restore font-lock: "
 
 AT_CLEANUP
 

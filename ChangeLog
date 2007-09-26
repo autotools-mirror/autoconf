@@ -1,5 +1,18 @@
 2007-10-03  Eric Blake  <ebb9@byu.net>
 
+	Remove some XFAILs, and make AT_SETUP output line up.
+	* lib/autotest/general.m4 (AT_SETUP): Only expand description
+	once; thereafter, use its expansion, properly quoted.
+	* tests/autotest.at (AT_CHECK_AT_TITLE): Also check macro
+	expansion with arguments, and check for aligned output.
+	(AT_CHECK_AT_TITLE_CHAR): Remove XFAILs for tests that now pass.
+	Add a test for macros with parameters.
+	* NEWS: Document the semantics change.
+	* tests/base.at: Fix test titles containing commas.
+	* tests/compile.at: Likewise.
+	* tests/tools.at: Likewise.
+	* tests/torture.at: Likewise.
+
 	Another round of regex avoidance.
 	* lib/m4sugar/m4sugar.m4 (m4_cr_alnum, m4_cr_all)
 	(_m4_define_cr_not, m4_cr_not_letters, m4_cr_not_LETTERS)

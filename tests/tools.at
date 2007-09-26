@@ -264,7 +264,7 @@ AT_CLEANUP
 
 # autoconf: forbidden tokens, basic
 # ---------------------------------
-AT_SETUP([autoconf: forbidden tokens, basic])
+AT_SETUP([autoconf: forbidden tokens,[] basic])
 
 AT_DATA_M4SH([configure.ac],
 [[AS_INIT
@@ -292,7 +292,7 @@ AT_CLEANUP
 
 # autoconf: forbidden tokens, exceptions
 # --------------------------------------
-AT_SETUP([autoconf: forbidden tokens, exceptions])
+AT_SETUP([autoconf: forbidden tokens,[] exceptions])
 
 AT_DATA_M4SH([configure.ac],
 [[AS_INIT

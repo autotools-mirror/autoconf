@@ -245,20 +245,29 @@ m4_define([AT_CHECK_AT_TITLE],
 [AT_CHECK_AT([$1],
 [[
 m4@&t@_define([macro_name],         [[macro_expanded]])
-m4@&t@_define([macro_expanded], [[macro_overexpanded]])
+m4@&t@_define([macro_expanded],     [[macro_overexpanded]])
 m4@&t@_define([macro_backquote],    [`])
 m4@&t@_define([macro_single_quote], ['])
 m4@&t@_define([macro_double_quote], ["])
 ]]dnl restore font-lock: "
-[[m4@&t@_define([macro_backslash],   [\\])
+[[m4@&t@_define([macro_backslash],  [\])
+m4@&t@_define([macro_echo],         [$][1])
 AT_INIT([artificial test suite])
 AT_SETUP([$2])
 AT_CHECK([:])
 AT_CLEANUP
 ]], [$4], [], [], [],
+dnl This sed script checks for two things - that the output is properly
+dnl expanded, and that the 'ok' starts on column 53.
 [AT_CHECK([[$CONFIG_SHELL ./micro-suite |
-	    sed -n 's/[^:]*: \(.*[^	 ]\)[	 ]*ok.*/\1/p']],,
+	    sed -n '/^  1:/{
+h
+s/[^:]*: \(.*[^	 ]\)[	 ]*ok.*/\1/p
+x
+s/^.\{53\}ok.*/ok/p
+}']],,
 [[$3
+ok
 ]])
 AT_CHECK([[$CONFIG_SHELL ./micro-suite -l |
 	   sed -n 's/.*[0-9]: [^	 ][^	 ]*[	 ][	 ]*\(.*[^	 ]\)[	 ]*/\1/p']],,
@@ -273,28 +282,26 @@ m4_define([AT_CHECK_AT_TITLE_CHAR],
 [AT_CHECK_AT_TITLE([$1 in a test title], [A $2 in my name],
                    [A ]m4_ifval([$3], [[$3]], [[$2]])[ in my name], $4)])
 
-AT_CHECK_AT_TITLE_CHAR([Backquote],    [`])
-AT_CHECK_AT_TITLE_CHAR([Single-quote], ['])
-AT_CHECK_AT_TITLE_CHAR([Double-quote], ["])
+AT_CHECK_AT_TITLE_CHAR([Backquote],     [`])
+AT_CHECK_AT_TITLE_CHAR([Single-quote],  ['])
+AT_CHECK_AT_TITLE_CHAR([Double-quote],  ["])
 dnl restore font-lock: "
-AT_CHECK_AT_TITLE_CHAR([Backslash],   [\\])
-AT_CHECK_AT_TITLE_CHAR([Brackets],  [[[]]], [[]])
-AT_CHECK_AT_TITLE_CHAR([Pound],      [[#]], [#])
-AT_CHECK_AT_TITLE_CHAR([Comma],        [,])
+AT_CHECK_AT_TITLE_CHAR([Backslash],     [\])
+AT_CHECK_AT_TITLE_CHAR([Brackets],   [[[]]], [[]])
+AT_CHECK_AT_TITLE_CHAR([Pound],       [[#]], [#])
+AT_CHECK_AT_TITLE_CHAR([Quoted comma],[[,]], [,])
+AT_CHECK_AT_TITLE_CHAR([Comma],       [,[]], [,])
 
-AT_CHECK_AT_TITLE_CHAR([Quoted Macro],                  [[macro_name]],
-                                                          [macro_name])
-AT_CHECK_AT_TITLE_CHAR([Macro],                           [macro_name],
-                                                      [macro_expanded])
-AT_CHECK_AT_TITLE_CHAR([Macro with backquote],       [macro_backquote],
-                                                                   [`], [:])
+AT_CHECK_AT_TITLE_CHAR([Quoted Macro], [[macro_name]], [macro_name])
+AT_CHECK_AT_TITLE_CHAR([Macro],        [macro_name],   [macro_expanded])
+AT_CHECK_AT_TITLE_CHAR([Macro with backquote],       [macro_backquote], [`])
 AT_CHECK_AT_TITLE_CHAR([Macro with single-quote], [macro_single_quote], ['])
-AT_CHECK_AT_TITLE_CHAR([Macro with double-quote], [macro_double_quote],
-                                                                   ["], [:])
+AT_CHECK_AT_TITLE_CHAR([Macro with double-quote], [macro_double_quote], ["])
 dnl restore font-lock: "
-# This test neither fails nor passes reliably.
-# AT_CHECK_AT_TITLE_CHAR([Macro with backslash],       [macro_backslash],
-#                                                                  [\\], [:])
+AT_CHECK_AT_TITLE_CHAR([Macro with backslash],       [macro_backslash], [\])
+AT_CHECK_AT_TITLE_CHAR([Macro echoing macro], [macro_echo([macro_name])],
+                       [macro_expanded])
+AT_CHECK_AT_TITLE_CHAR([Macro echoing single-quote], [macro_echo(['])], ['])
 
 
 ## ----------------- ##

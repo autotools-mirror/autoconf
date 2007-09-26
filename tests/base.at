@@ -85,7 +85,7 @@ AT_CLEANUP
 ## AC_REQUIRE and AC_DEFUN_ONCE: Require, expand.  ##
 ## ----------------------------------------------- ##
 
-AT_SETUP([AC_REQUIRE & AC_DEFUN_ONCE: Require, expand])
+AT_SETUP([AC_REQUIRE & AC_DEFUN_ONCE: [Require, expand]])
 
 AT_DATA([configure.ac],
 [[AC_DEFUN([TEST],
@@ -129,7 +129,7 @@ AT_CLEANUP
 ## AC_REQUIRE and AC_DEFUN_ONCE: Expand, require.  ##
 ## ----------------------------------------------- ##
 
-AT_SETUP([AC_REQUIRE & AC_DEFUN_ONCE: Expand, require])
+AT_SETUP([AC_REQUIRE & AC_DEFUN_ONCE: [Expand, require]])
 
 AT_DATA([configure.ac],
 [[AC_DEFUN([TEST],

@@ -1171,15 +1171,15 @@ m4_define([AT_SETUP],
 m4_ifdef([AT_capture_files], [m4_undefine([AT_capture_files])])
 m4_define([AT_line], AT_LINE)
 m4_define([AT_xfail], [at_xfail=no])
-m4_define([AT_description], [$1])
+m4_define([AT_description], m4_quote($1))
 m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TESTS])dnl
-  AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): $1
+  AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
     at_setup_line='m4_defn([AT_line])'
-    at_desc="AS_ESCAPE([$1])"
-    $at_quiet AS_ECHO_N(["m4_format([%3d: %-]m4_eval(47 - m4_qdelta([$1]))[s],
-	               AT_ordinal, AS_ESCAPE([[$1]]))[]"])
+    at_desc="AS_ESCAPE(m4_defn([AT_description]))"
+    $at_quiet AS_ECHO_N(["m4_format([%3d: ], AT_ordinal)$at_desc"]dnl
+["m4_format(%m4_eval(47 - m4_qlen(m4_defn([AT_description])))[s])"])
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 
