@@ -2,7 +2,7 @@
 
 AT_BANNER([Autotest.])
 
-# Copyright (C) 2004, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -249,6 +249,7 @@ m4@&t@_define([macro_expanded], [[macro_overexpanded]])
 m4@&t@_define([macro_backquote],    [`])
 m4@&t@_define([macro_single_quote], ['])
 m4@&t@_define([macro_double_quote], ["])
+dnl restore font-lock: "
 m4@&t@_define([macro_backslash],   [\\])
 AT_INIT([artificial test suite])
 AT_SETUP([$2])
@@ -275,6 +276,7 @@ m4_define([AT_CHECK_AT_TITLE_CHAR],
 AT_CHECK_AT_TITLE_CHAR([Backquote],    [`])
 AT_CHECK_AT_TITLE_CHAR([Single-quote], ['])
 AT_CHECK_AT_TITLE_CHAR([Double-quote], ["])
+dnl restore font-lock: "
 AT_CHECK_AT_TITLE_CHAR([Backslash],   [\\])
 AT_CHECK_AT_TITLE_CHAR([Brackets],  [[[]]], [[]])
 AT_CHECK_AT_TITLE_CHAR([Pound],      [[#]], [#])
@@ -289,6 +291,7 @@ AT_CHECK_AT_TITLE_CHAR([Macro with backquote],       [macro_backquote],
 AT_CHECK_AT_TITLE_CHAR([Macro with single-quote], [macro_single_quote], ['])
 AT_CHECK_AT_TITLE_CHAR([Macro with double-quote], [macro_double_quote],
                                                                    ["], [:])
+dnl restore font-lock: "
 # This test neither fails nor passes reliably.
 # AT_CHECK_AT_TITLE_CHAR([Macro with backslash],       [macro_backslash],
 #                                                                  [\\], [:])
