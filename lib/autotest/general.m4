@@ -495,13 +495,13 @@ cat <<_ATEOF
 
 Execution tuning:
   -k, --keywords=KEYWORDS
-	         select the tests matching all the comma-separated KEYWORDS
-	         multiple \`-k' accumulate; prefixed \`!' negates a KEYWORD
+                 select the tests matching all the comma-separated KEYWORDS
+                 multiple \`-k' accumulate; prefixed \`!' negates a KEYWORD
   -e, --errexit  abort as soon as a test fails; implies --debug
   -v, --verbose  force more detailed output
-	         default for debugging scripts
+                 default for debugging scripts
   -d, --debug    inhibit clean up and top-level logging
-	         default for debugging scripts
+                 default for debugging scripts
   -x, --trace    enable tests shell tracing
 _ATEOF
 m4_divert_pop([HELP_TUNING])dnl
@@ -587,14 +587,10 @@ at_new_path=
 _AS_PATH_WALK([$at_path],
 [as_dir=`(cd "$as_dir" && pwd) 2>/dev/null`
 test -d "$as_dir" || continue
-case $at_new_path in
-	          $as_dir                 | \
-	          $as_dir$PATH_SEPARATOR* | \
-  *$PATH_SEPARATOR$as_dir                 | \
-  *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR* ) ;;
-
-  '') at_new_path=$as_dir ;;
-   *) at_new_path=$at_new_path$PATH_SEPARATOR$as_dir ;;
+case $PATH_SEPARATOR$at_new_path$PATH_SEPARATOR in
+  *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR*) ;;
+  $PATH_SEPARATOR$PATH_SEPARATOR) at_new_path=$as_dir ;;
+  *) at_new_path=$at_new_path$PATH_SEPARATOR$as_dir ;;
 esac])
 PATH=$at_new_path
 export PATH
@@ -813,7 +809,7 @@ _ATEOF
 	  if test -f "$at_times_file"; then
 	    at_log_msg="$at_log_msg	("`sed 1d "$at_times_file"`')'
 	    rm -f "$at_times_file"
-          fi
+	  fi
 	  AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
 	  AS_ECHO(["$at_log_msg"]) >&AS_MESSAGE_LOG_FD
 
@@ -1416,10 +1412,10 @@ dnl
 dnl Examine COMMANDS for a reason to never trace COMMANDS.
 m4_pushdef([at_reason],
 	   m4_bmatch([$1],
-	             [`.*`], [[a `...` command substitution]],
-	             [\$(],  [[a $(...) command substitution]],
-	             [\${],  [[a ${...} parameter expansion]],
-	             at_lf,  [[an embedded newline]],
+		     [`.*`], [[a `...` command substitution]],
+		     [\$(],  [[a $(...) command substitution]],
+		     [\${],  [[a ${...} parameter expansion]],
+		     at_lf,  [[an embedded newline]],
 		     [[]]dnl No reason.
 ))dnl
 dnl
@@ -1428,7 +1424,7 @@ m4_ifval(m4_defn([at_reason]),
 [m4_bmatch([$1], [\$],
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
 [case "AS_ESCAPE([$1], [`\"])" in
-        *'
+ *'
 '*) echo 'Not enabling shell tracing (command contains an embedded newline)' ;;
  *) at_trace_this=yes ;;
     esac],

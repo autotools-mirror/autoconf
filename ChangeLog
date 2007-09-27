@@ -1,3 +1,10 @@
+2007-09-27  Eric Blake  <ebb9@byu.net>
+
+	Autotest formatting touchups.
+	* lib/autotest/general.m4 (HELP_TUNING): Avoid TAB in terminal
+	output.
+	(PATH): Simplify computation of new PATH.
+
 2007-09-26  Eric Blake  <ebb9@byu.net>
 
 	Fix testsuite breakage in last patch.
