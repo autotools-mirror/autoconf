@@ -1295,21 +1295,17 @@ $2[]_ATEOF
 #    AT_CHECK([command], [], [stdout])
 #    # Some checks on `stdout'
 #
-# This is an unfortunate limitation inherited from Ultrix which will not
-# let you redirect several times the same FD (see the Autoconf documentation).
-# If you use the `AT_CHECK([command >out])' be sure to get a test suite
-# that will show spurious failures.
-#
-# You might wonder why not just use `ignore' and directly use stdout and
-# stderr left by the test suite.  Firstly because the names of these files
-# is an internal detail, and secondly, because
+# You might wonder why you can't just use `ignore', then directly use stdout
+# and stderr left by the test suite:
 #
 #    AT_CHECK([command], [], [ignore])
 #    AT_CHECK([check stdout])
 #
-# will use `stdout' both in input and output: undefined behavior would
-# certainly result.  That's why the test suite will save them in `at-stdout'
-# and `at-stderr', and will provide you with `stdout' and `stderr'.
+# If the test suite always captured data in the file `stdout', then the
+# second command would be trying to read and write from the same file, with
+# undefined behavior.  Therefore, the test suite actually captures data in
+# an internal file of a different name, and only creates `stdout' when
+# explicitly requested.
 #
 # Any line of stderr starting with leading blanks and a `+' are filtered
 # out, since most shells when tracing include subshell traces in stderr.

@@ -11609,8 +11609,8 @@ escape, while @samp{: `cd /zorglub 2>/dev/null`} works properly.
 It is worth noting that Zsh (but not Ash nor Bash) makes it possible
 in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
 
-Don't redirect the same file descriptor several times, as you are doomed
-to failure under Ultrix.
+When catering to old systems, don't redirect the same file descriptor
+several times, as you are doomed to failure under Ultrix.
 
 @example
 ULTRIX V4.4 (Rev. 69) System #31: Thu Aug 10 19:42:23 GMT 1995
@@ -11625,7 +11625,8 @@ Ambiguous output redirect.
 
 @noindent
 In each case the expected result is of course @file{fullness} containing
-@samp{matter} and @file{void} being empty.
+@samp{matter} and @file{void} being empty.  However, this bug is
+probably not of practical concern to modern platforms.
 
 Don't rely on file descriptors 0, 1, and 2 remaining closed in a
 subsidiary program.  If any of these descriptors is closed, the
@@ -11647,8 +11648,8 @@ echo hello >&5
 $ @kbd{exec 5>t}
 $ @kbd{./descrips}
 $ @kbd{cat t}
-$
 hello
+$
 @end example
 
 @noindent
@@ -19107,8 +19108,13 @@ status 77, then the whole test group is skipped.  Otherwise, if this test
 fails, run shell commands @var{run-if-fail} or, if this test passes, run shell
 commands @var{run-if-pass}.
 
-The @var{commands} @emph{must not} redirect the standard output, nor the
-standard error.
+@c Previously, we had this:
+@c  The @var{commands} @emph{must not} redirect the standard output, nor the
+@c  standard error.
+@c to prevent trigerring the double redirect bug on Ultrix, see
+@c `File Descriptors'.  This was too restricting, and Ultrix is pretty
+@c much dead, so we dropped the limitation; the obvious workaround on
+@c Ultrix is to use a working shell there.
 
 If @var{status}, or @var{stdout}, or @var{stderr} is @samp{ignore}, then
 the corresponding value is not checked.
