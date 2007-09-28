@@ -2,7 +2,7 @@
 
 AT_BANNER([M4sh.])
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
 # Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -533,6 +533,18 @@ echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@123456789012],
 [some other @<][:@ex@:][>@ which should wrap at our default of 80 characters.])"
 echo "AS_HELP_STRING([--foo@<][:@=bar@:][>@1234567890123],
 [some other @<][:@ex@:][>@ which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([[--foo[=bar]]],
+[some other t[]t which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([[--foo[=bar]123456789]],
+[some other t[]t which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([[--foo[=bar]1234567890]],
+[some other t[]t which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([[--foo[=bar]12345678901]],
+[some other t[]t which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([[--foo[=bar]123456789012]],
+[some other t[]t which should wrap at our default of 80 characters.])"
+echo "AS_HELP_STRING([[--foo[=bar]1234567890123]],
+[some other t[]t which should wrap at our default of 80 characters.])"
 ]])
 
 AT_CHECK_M4SH
@@ -574,6 +586,19 @@ AT_CHECK([./script], [0],
                           80 characters.
   --foo[=bar]1234567890123
                           some other [ex] which should wrap at our default of
+                          80 characters.
+  --foo[=bar]             some other t[]t which should wrap at our default of
+                          80 characters.
+  --foo[=bar]123456789    some other t[]t which should wrap at our default of
+                          80 characters.
+  --foo[=bar]1234567890   some other t[]t which should wrap at our default of
+                          80 characters.
+  --foo[=bar]12345678901  some other t[]t which should wrap at our default of
+                          80 characters.
+  --foo[=bar]123456789012 some other t[]t which should wrap at our default of
+                          80 characters.
+  --foo[=bar]1234567890123
+                          some other t[]t which should wrap at our default of
                           80 characters.
 ]])
 

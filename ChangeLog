@@ -1,5 +1,13 @@
 2007-09-27  Eric Blake  <ebb9@byu.net>
 
+	Fix underquotation in AS_HELP_STRING.
+	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): Don't underquote lhs
+	argument.
+	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Don't underquote
+	first-prefix argument.
+	* tests/m4sh.at (AS@&t@_HELP_STRING): Test this fix.
+	* NEWS: Document AS_HELP_STRING fix.
+
 	Autotest formatting touchups.
 	* lib/autotest/general.m4 (HELP_TUNING): Avoid TAB in terminal
 	output.

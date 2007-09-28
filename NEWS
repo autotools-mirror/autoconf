@@ -38,6 +38,8 @@ GNU Autoconf NEWS - User visible changes.
 
 ** AC_USE_SYSTEM_EXTENSIONS now defines _ALL_SOURCE for Interix platforms.
 
+** AS_HELP_STRING no longer underquotes its first argument.
+
 ** The command 'autoconf -' now correctly processes a file from stdin.
 
 ** Autotest now determines $srcdir correctly.

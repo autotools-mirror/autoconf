@@ -1576,16 +1576,16 @@ m4_define([m4_text_wrap],
 [m4_pushdef([m4_Prefix], [$2])dnl
 m4_pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
 m4_pushdef([m4_Width], m4_default([$4], 79))dnl
-m4_pushdef([m4_Cursor], m4_qlen(m4_Prefix1))dnl
+m4_pushdef([m4_Cursor], m4_qlen(m4_defn([m4_Prefix1])))dnl
 m4_pushdef([m4_Separator], [])dnl
-m4_Prefix1[]dnl
-m4_if(m4_eval(m4_qlen(m4_Prefix1) > m4_len(m4_Prefix)),
+m4_defn([m4_Prefix1])[]dnl
+m4_if(m4_eval(m4_qlen(m4_defn([m4_Prefix1])) > m4_len(m4_Prefix)),
       1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix],
-      m4_if(m4_eval(m4_qlen(m4_Prefix1) < m4_len(m4_Prefix)),
+      m4_if(m4_eval(m4_qlen(m4_defn([m4_Prefix1])) < m4_len(m4_Prefix)),
 	    [0], [],
 	    [m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
-m4_for(m4_Space, m4_qlen(m4_Prefix1), m4_eval(m4_len(m4_Prefix) - 1),
+m4_for(m4_Space, m4_qlen(m4_defn([m4_Prefix1])), m4_eval(m4_len(m4_Prefix) - 1),
 		    [], [ ])])[]dnl
 )[]dnl
 m4_foreach_w([m4_Word], [$1],
