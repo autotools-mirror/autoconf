@@ -190,7 +190,7 @@ else
   as_have_required=no
 fi
 
-  if test $as_have_required = yes && 	 (eval ":
+  if test $as_have_required = yes &&	 (eval ":
 (as_func_return () {
   (exit \$1)
 }
@@ -1262,9 +1262,9 @@ Configuration:
 
 Installation directories:
   --prefix=PREFIX         install architecture-independent files in PREFIX
-			  [$ac_default_prefix]
+                          [$ac_default_prefix]
   --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
-			  [PREFIX]
+                          [PREFIX]
 
 By default, \`make install' will install all the files in
 \`$ac_default_prefix/bin', \`$ac_default_prefix/lib' etc.  You can specify
@@ -1274,25 +1274,25 @@ for instance \`--prefix=\$HOME'.
 For better control, use the options below.
 
 Fine tuning of the installation directories:
-  --bindir=DIR           user executables [EPREFIX/bin]
-  --sbindir=DIR          system admin executables [EPREFIX/sbin]
-  --libexecdir=DIR       program executables [EPREFIX/libexec]
-  --sysconfdir=DIR       read-only single-machine data [PREFIX/etc]
-  --sharedstatedir=DIR   modifiable architecture-independent data [PREFIX/com]
-  --localstatedir=DIR    modifiable single-machine data [PREFIX/var]
-  --libdir=DIR           object code libraries [EPREFIX/lib]
-  --includedir=DIR       C header files [PREFIX/include]
-  --oldincludedir=DIR    C header files for non-gcc [/usr/include]
-  --datarootdir=DIR      read-only arch.-independent data root [PREFIX/share]
-  --datadir=DIR          read-only architecture-independent data [DATAROOTDIR]
-  --infodir=DIR          info documentation [DATAROOTDIR/info]
-  --localedir=DIR        locale-dependent data [DATAROOTDIR/locale]
-  --mandir=DIR           man documentation [DATAROOTDIR/man]
-  --docdir=DIR           documentation root [DATAROOTDIR/doc/autoconf]
-  --htmldir=DIR          html documentation [DOCDIR]
-  --dvidir=DIR           dvi documentation [DOCDIR]
-  --pdfdir=DIR           pdf documentation [DOCDIR]
-  --psdir=DIR            ps documentation [DOCDIR]
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+  --docdir=DIR            documentation root [DATAROOTDIR/doc/autoconf]
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
 _ACEOF
 
   cat <<\_ACEOF
@@ -3364,7 +3364,7 @@ Usage: $0 [OPTIONS] [FILE]...
   -d, --debug      don't remove temporary files
       --recheck    update $as_me by reconfiguring in the same conditions
   --file=FILE[:TEMPLATE]
-		   instantiate the configuration file FILE
+                   instantiate the configuration file FILE
 
 Configuration files:
 $config_files
@@ -4003,4 +4003,3 @@ Below you will find information on the status of this version of Autoconf.
 
 EOF
     sed -n '/^\* Status/,$p' $srcdir/BUGS
-

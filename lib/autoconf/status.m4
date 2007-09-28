@@ -1293,13 +1293,13 @@ Usage: $[0] [[OPTIONS]] [[FILE]]...
   -d, --debug      don't remove temporary files
       --recheck    update $as_me by reconfiguring in the same conditions
 m4_ifdef([_AC_SEEN_CONFIG(FILES)],
-[[  --file=FILE[:TEMPLATE]
-		   instantiate the configuration file FILE
-]])dnl
+  [AS_HELP_STRING([[--file=FILE[:TEMPLATE]]],
+    [instantiate the configuration file FILE], [                   ])
+])dnl
 m4_ifdef([_AC_SEEN_CONFIG(HEADERS)],
-[[  --header=FILE[:TEMPLATE]
-		   instantiate the configuration header FILE
-]])dnl
+  [AS_HELP_STRING([[--header=FILE[:TEMPLATE]]],
+    [instantiate the configuration header FILE], [                   ])
+])dnl
 
 m4_ifdef([_AC_SEEN_CONFIG(FILES)],
 [Configuration files:

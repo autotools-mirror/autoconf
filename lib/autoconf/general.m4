@@ -1012,10 +1012,10 @@ Configuration:
       --srcdir=DIR        find the sources in DIR [configure dir or \`..']
 
 Installation directories:
-  --prefix=PREFIX         install architecture-independent files in PREFIX
-			  [$ac_default_prefix]
-  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
-			  [PREFIX]
+]AS_HELP_STRING([--prefix=PREFIX],
+  [install architecture-independent files in PREFIX [$ac_default_prefix]])
+AS_HELP_STRING([--exec-prefix=EPREFIX],
+  [install architecture-dependent files in EPREFIX [PREFIX]])[
 
 By default, \`make install' will install all the files in
 \`$ac_default_prefix/bin', \`$ac_default_prefix/lib' etc.  You can specify
@@ -1025,25 +1025,27 @@ for instance \`--prefix=\$HOME'.
 For better control, use the options below.
 
 Fine tuning of the installation directories:
-  --bindir=DIR           user executables [EPREFIX/bin]
-  --sbindir=DIR          system admin executables [EPREFIX/sbin]
-  --libexecdir=DIR       program executables [EPREFIX/libexec]
-  --sysconfdir=DIR       read-only single-machine data [PREFIX/etc]
-  --sharedstatedir=DIR   modifiable architecture-independent data [PREFIX/com]
-  --localstatedir=DIR    modifiable single-machine data [PREFIX/var]
-  --libdir=DIR           object code libraries [EPREFIX/lib]
-  --includedir=DIR       C header files [PREFIX/include]
-  --oldincludedir=DIR    C header files for non-gcc [/usr/include]
-  --datarootdir=DIR      read-only arch.-independent data root [PREFIX/share]
-  --datadir=DIR          read-only architecture-independent data [DATAROOTDIR]
-  --infodir=DIR          info documentation [DATAROOTDIR/info]
-  --localedir=DIR        locale-dependent data [DATAROOTDIR/locale]
-  --mandir=DIR           man documentation [DATAROOTDIR/man]
-  --docdir=DIR           documentation root ]@<:@DATAROOTDIR/doc/m4_ifset([AC_PACKAGE_TARNAME], [AC_PACKAGE_TARNAME], [PACKAGE])@:>@[
-  --htmldir=DIR          html documentation [DOCDIR]
-  --dvidir=DIR           dvi documentation [DOCDIR]
-  --pdfdir=DIR           pdf documentation [DOCDIR]
-  --psdir=DIR            ps documentation [DOCDIR]
+  --bindir=DIR            user executables [EPREFIX/bin]
+  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+  --libexecdir=DIR        program executables [EPREFIX/libexec]
+  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --libdir=DIR            object code libraries [EPREFIX/lib]
+  --includedir=DIR        C header files [PREFIX/include]
+  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+  --infodir=DIR           info documentation [DATAROOTDIR/info]
+  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+  --mandir=DIR            man documentation [DATAROOTDIR/man]
+]AS_HELP_STRING([--docdir=DIR],
+  [documentation root ]@<:@DATAROOTDIR/doc/m4_ifset([AC_PACKAGE_TARNAME],
+    [AC_PACKAGE_TARNAME], [PACKAGE])@:>@)[
+  --htmldir=DIR           html documentation [DOCDIR]
+  --dvidir=DIR            dvi documentation [DOCDIR]
+  --pdfdir=DIR            pdf documentation [DOCDIR]
+  --psdir=DIR             ps documentation [DOCDIR]
 _ACEOF
 
   cat <<\_ACEOF]

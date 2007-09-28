@@ -1,5 +1,15 @@
 2007-09-27  Eric Blake  <ebb9@byu.net>
 
+	Configure whitespace touchups.
+	* lib/autoconf/general.m4 (_AC_INIT_HELP): Fix alignment of
+	installation directories, and avoid TAB, in configure --help
+	output.
+	* configure.ac: Avoid extra trailing newline.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Avoid space-tab.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Avoid TAB in
+	config.status --help output.
+	* configure: Regenerate.
+
 	Fix underquotation in AS_HELP_STRING.
 	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): Don't underquote lhs
 	argument.

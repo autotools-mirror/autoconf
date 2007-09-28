@@ -151,10 +151,10 @@ AC_PROG_SED
 ## ------------ ##
 
 AC_CONFIG_FILES([Makefile doc/Makefile
-                 lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
-                 lib/m4sugar/Makefile
-                 lib/autoconf/Makefile lib/autotest/Makefile
-                 bin/Makefile])
+		 lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
+		 lib/m4sugar/Makefile
+		 lib/autoconf/Makefile lib/autotest/Makefile
+		 bin/Makefile])
 
 AC_OUTPUT
 # Report the state of this version of Autoconf if this is a beta.
@@ -169,4 +169,4 @@ Below you will find information on the status of this version of Autoconf.
 
 EOF
     sed -n '/^\* Status/,$p' $srcdir/BUGS
-])
+])dnl

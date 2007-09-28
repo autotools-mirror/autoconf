@@ -243,7 +243,7 @@ if test "x$CONFIG_SHELL" = x; then
   AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY]) 2>/dev/null],
         [as_have_required=yes],
 	[as_have_required=no])
-  AS_IF([test $as_have_required = yes && dnl
+  AS_IF([test $as_have_required = yes &&dnl
 	 _AS_RUN([_AS_DETECT_SUGGESTED_BODY]) 2> /dev/null],
     [],
     [as_candidate_shells=
