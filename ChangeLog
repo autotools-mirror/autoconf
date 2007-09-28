@@ -1,5 +1,9 @@
 2007-09-27  Eric Blake  <ebb9@byu.net>
 
+	Squelch changeword in m4sugar.
+	* lib/m4sugar/m4sugar.m4 (changeword): Disable this experimental
+	feature of m4 1.4.x.
+
 	Configure whitespace touchups.
 	* lib/autoconf/general.m4 (_AC_INIT_HELP): Fix alignment of
 	installation directories, and avoid TAB, in configure --help

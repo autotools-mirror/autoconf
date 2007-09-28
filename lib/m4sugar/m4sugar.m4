@@ -119,6 +119,7 @@ m4_define([m4_copy_unm4],
 m4_rename_m4([builtin])
 m4_rename_m4([changecom])
 m4_rename_m4([changequote])
+m4_undefine([changeword])
 m4_rename_m4([debugfile])
 m4_rename_m4([debugmode])
 m4_rename_m4([decr])
