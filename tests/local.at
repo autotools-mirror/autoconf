@@ -96,8 +96,9 @@ m4_define([AT_CHECK_PERL_SYNTAX],
 # remove the error code during normalization.
 #
 m4_define([AT_CHECK_M4],
-[AT_CHECK([$1], [$2], [$3], m4_if([$4], [], [], [ignore], [ignore], [stderr]))
-m4_if([$4], [], [], [ignore], [],
+[AT_CHECK([$1], [$2], [$3],
+          m4_case([$4], [], [], [ignore], [ignore], [stderr]))
+m4_case([$4], [], [], [ignore], [],
 [AT_CHECK([[sed 's/^[^:]*m4: *\([^:]*:\) *\([0-9][0-9]*: \)/m4:\1\2/
 	s/^\([^:]*:\) *\([0-9][0-9]*:\)[^:]*m4: /m4:\1\2 /
 	s/^\(m4:[^:]*:[0-9][0-9]*: \)C\(annot open \)\([^`:]*\):/\1c\2`\3'\'':/
