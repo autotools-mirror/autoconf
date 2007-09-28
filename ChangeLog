@@ -1,3 +1,11 @@
+2007-09-27  Eric Blake  <ebb9@byu.net>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Catch even more common AC_CACHE_VAL mistakes.
+	* lib/autoconf/general.m4 (AC_CACHE_VAL): Warn if cache variable
+	lacks '_cv_', or if AC_SUBST appears in body.
+	* tests/base.at (AC_CACHE_CHECK): Test this change.
+
 2007-09-27  Stepan Kasal  <kasal@ucw.cz>
 	and Eric Blake  <ebb9@byu.net>
 

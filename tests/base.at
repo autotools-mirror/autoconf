@@ -2,7 +2,8 @@
 
 AT_BANNER([Autoconf base layer.])
 
-# Copyright (C) 2000, 2001, 2003, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007 Free Software
+# Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -202,16 +203,29 @@ AT_CLEANUP
 ## ---------------- ##
 
 # Make sure AC_CACHE_CHECK is silent with -q.
+# Also make sure we warn about cache id's not named with `_cv_'.
 
 AT_SETUP([AC_CACHE_CHECK])
 
 AT_DATA([configure.ac],
 [[AC_INIT
+# m4_define([ac_nothing], [ac_cv_absolutely_nothing])
 AC_CACHE_CHECK([for nothing],
 	       [ac_nothing],
 	       [ac_nothing=found])
 ]])
 
+AT_CHECK_AUTOCONF([], [], [], [stderr])
+AT_CHECK([grep 'must contain _cv_ to be cached' stderr], [], [ignore])
+
+# Do not warn about defines:
+sed 's/^# //' configure.ac > t
+mv -f t configure.ac
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([-q])
+
+sed '/m4_define/d; s/ac_nothing/ac_cv_nothing/' configure.ac > t
+mv -f t configure.ac
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([-q])
 
