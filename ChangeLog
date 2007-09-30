@@ -1,3 +1,18 @@
+2007-09-29  Eric Blake  <ebb9@byu.net>
+
+	Speed optimization: avoid m4 regex when other algorithms work.
+	* lib/m4sugar/m4sh.m4 (AS_LITERAL_IF): Rewrite without regex.
+	(_AS_QUOTE_IFELSE): Likewise.
+	* lib/m4sugar/m4sugar.m4 (m4_strip): Reduce from 3 to 2 regex.
+	(m4_bpatsubsts): Split...
+	(_m4_bpatsubsts): ...so that recursion can avoid patsubst on empty
+	regex.
+	(_m4_divert()): Define, to avoid m4 warning on `m4_divert'.
+	(m4_qlen): Optimize on short strings, to avoid regex.
+	(m4_sign): Avoid regex, and fix bug with `01' and `-0'.
+	* lib/autoconf/general.m4 (AC_CACHE_VAL): Rewrite without regex.
+	(AC_DEFINE_TRACE): Likewise.
+
 2007-09-28  Eric Blake  <ebb9@byu.net>
 
 	Oops - my earlier 'optimization' caused a regression.

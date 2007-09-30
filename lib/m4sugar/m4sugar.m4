@@ -438,10 +438,16 @@ m4_define([m4_map_sep],
 # I would have liked to name this macro `m4_bpatsubst', unfortunately,
 # due to quotation problems, I need to double quote $1 below, therefore
 # the anchors are broken :(  I can't let users be trapped by that.
+#
+# Recall that m4_shiftn always results in an argument.  Hence, we need
+# to distinguish between a final deletion vs. and ending recursion.
 m4_define([m4_bpatsubsts],
 [m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
        [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
        [$#], 2, [m4_builtin([patsubst], $@)],
+       [_$0($@m4_if(m4_eval($# & 1), 0, [,]))])])
+m4_define([_m4_bpatsubsts],
+[m4_if([$#], 2, [$1],
        [$0(m4_builtin([patsubst], [[$1]], [$2], [$3]),
 	   m4_shiftn(3, $@))])])
 
@@ -736,6 +742,9 @@ m4_define([_m4_divert],
 
 # KILL is only used to suppress output.
 m4_define([_m4_divert(KILL)],           -1)
+
+# The empty diversion name is a synonym for 0.
+m4_define([_m4_divert()],                0)
 
 
 # _m4_divert_n_stack
@@ -1449,16 +1458,20 @@ m4_define([m4_flatten],
 #
 # Because we want to preserve active symbols, STRING must be double-quoted.
 #
-# Then notice the 2 last patterns: they are in charge of removing the
+# First, notice that we guarantee trailing space.  Why?  Because regex
+# are greedy, and `.* ?' always groups the space into the .* portion.
+# The algorithm is simpler by avoiding `?' at the end.  The algorithm
+# correctly strips everything if STRING is just ` '.
+#
+# Then notice the second pattern: it is in charge of removing the
 # leading/trailing spaces.  Why not just `[^ ]'?  Because they are
-# applied to doubly quoted strings, i.e. more or less [[STRING]].  So
-# if there is a leading space in STRING, then it is the *third*
-# character, since there are two leading `['; equally for the last pattern.
+# applied to over-quoted strings, i.e. more or less [STRING], due
+# to the limitations of m4_bpatsubsts.  So the leading space in STRING
+# is the *second* character; equally for the trailing space.
 m4_define([m4_strip],
-[m4_bpatsubsts([[$1]],
+[m4_bpatsubsts([$1 ],
 	       [[	 ]+], [ ],
-	       [^\(..\) ],    [\1],
-	       [ \(..\)$],    [\1])])
+	       [^. ?\(.*\) .$], [[[\1]]])])
 
 
 # m4_normalize(STRING)
@@ -1620,8 +1633,11 @@ m4_define([m4_text_box],
 # m4_qlen(STRING)
 # ---------------
 # Expands to the length of STRING after autom4te converts all quadrigraphs.
+#
+# Avoid bpatsubsts for the common case of no quadrigraphs.
 m4_define([m4_qlen],
-[m4_len(m4_bpatsubsts([[$1]], [@\(<:\|:>\|S|\|%:\)@], [P], [@&t@]))])
+[m4_if(m4_index([$1], [@]), [-1], [m4_len([$1])],
+       [m4_len(m4_bpatsubsts([[$1]], [@\(<:\|:>\|S|\|%:\)@], [P], [@&t@]))])])
 
 
 # m4_qdelta(STRING)
@@ -1641,11 +1657,15 @@ m4_define([m4_qdelta],
 # ----------
 #
 # The sign of the integer A.
+#
+# Rather than resort to eval or regex, we merely delete [0\t ], collapse
+# all other digits to 1, then use the first two characters to decide.
 m4_define([m4_sign],
-[m4_bmatch([$1],
-	   [^-], -1,
-	   [^0+], 0,
-		  1)])
+[m4_case(m4_substr(m4_translit([[$1]], [2-90	 ], [11111111]), 0, 2),
+	 [-1], [-1],
+	 [-],  [0],
+	 [],   [0],
+	       [1])])
 
 # m4_cmp(A, B)
 # ------------

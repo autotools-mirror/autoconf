@@ -573,12 +573,22 @@ m4_define([AS_ESCAPE],
 # If STRING contains `\\' or `\$', it's modern.
 # If STRING contains `\"' or `\`', it's old.
 # Otherwise it's modern.
-# We use two quotes in the pattern to keep highlighting tools at peace.
+#
+# Profiling shows that m4_index is 5 to 8x faster than m4_bregexp.  The
+# slower implementation used:
+# m4_bmatch([$1],
+#	    [\\[\\$]], [$2],
+#	    [\\[`"]], [$3],
+#	    [$2])
+# The current implementation caters to the common case of no backslashes,
+# to minimize m4_index expansions (hence the nested if).
 m4_define([_AS_QUOTE_IFELSE],
-[m4_bmatch([$1],
-	  [\\[\\$]], [$2],
-	  [\\[`""]], [$3],
-	  [$2])])
+[m4_if(m4_index([$1], [\]), [-1], [$2],
+       [m4_if(m4_eval(m4_index([$1], [\\]) >= 0), [1], [$2],
+	      m4_eval(m4_index([$1], [\$]) >= 0), [1], [$2],
+	      m4_eval(m4_index([$1], [\`]) >= 0), [1], [$3],
+	      m4_eval(m4_index([$1], [\"]) >= 0), [1], [$3],
+	      [$2])])])
 
 
 # _AS_QUOTE(STRING, [CHARS = `"])
@@ -1217,9 +1227,13 @@ m4_popdef([AS_Prefix])dnl
 # IF-INDIR, else IF-NOT-INDIR.
 # This is an *approximation*: for instance EXPRESSION = `\$' is
 # definitely a literal, but will not be recognized as such.
+#
+# We used to use m4_bmatch(m4_quote($1), [[`$]], [$3], [$2]), but
+# profiling shows that it is faster to use m4_translit.
 m4_define([AS_LITERAL_IF],
-[m4_bmatch(m4_quote($1), [[`$]],
-	   [$3], [$2])])
+[m4_if(m4_len(m4_quote($1)),
+       m4_len(m4_translit(m4_dquote(m4_quote($1)), [`$])),
+       [$2], [$3])])
 
 
 # AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])

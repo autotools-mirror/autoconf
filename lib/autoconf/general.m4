@@ -1950,14 +1950,15 @@ rm -f confcache[]dnl
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
 m4_defun([AC_CACHE_VAL],
-[AS_LITERAL_IF([$1], [m4_bmatch(m4_quote($1), [_cv_], [],
-				[AC_DIAGNOSE([syntax],
+[AS_LITERAL_IF([$1], [m4_if(m4_index(m4_quote($1), [_cv_]), [-1],
+			    [AC_DIAGNOSE([syntax],
 [$0($1, ...): suspicious cache-id, must contain _cv_ to be cached])])])dnl
-m4_bmatch([$2], [AC_DEFINE],
-	   [AC_DIAGNOSE([syntax],
+m4_if(m4_index([$2], [AC_DEFINE]), [-1], [],
+      [AC_DIAGNOSE([syntax],
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
-[where no actions should be taken])],
-	   [AC_SUBST], [AC_DIAGNOSE([syntax],
+[where no actions should be taken])])dnl
+m4_if(m4_index([$2], [AC_SUBST]), [-1], [],
+      [AC_DIAGNOSE([syntax],
 [$0($1, ...): suspicious presence of an AC_SUBST in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AS_VAR_SET_IF([$1],
@@ -2006,8 +2007,12 @@ m4_bmatch([$1], ^m4_defn([m4_re_word])$, [],
 # ---------------------------
 # This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
 # out non literal symbols.
+#
+# m4_index is roughly 5 to 8 times faster than m4_bpatsubst.
 m4_define([AC_DEFINE_TRACE],
-[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL(m4_bpatsubst([[$1]], [(.*)]))])])
+[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL(
+  m4_if(m4_index([[$1]], [(]), [-1], [[$1]],
+	[m4_substr([[$1]], [0], m4_index([[$1]], [(]))]))])])
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
