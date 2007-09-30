@@ -1,3 +1,10 @@
+2007-09-30  Eric Blake  <ebb9@byu.net>
+
+	Allow nameless iteration.
+	* lib/m4sugar/m4sugar.m4 (m4_for, _m4_for): Access variable
+	indirectly.
+	* tests/m4sugar.at (myvar): Test this.
+
 2007-09-29  Eric Blake  <ebb9@byu.net>
 
 	Speed optimization: avoid m4 regex when other algorithms work.

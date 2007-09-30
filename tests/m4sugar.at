@@ -281,6 +281,9 @@ m4_for([myvar], -2+8, 3-5, , [ myvar])
 m4_for([myvar], 8, 16, 3 * 2, [ myvar])
 m4_for([myvar], 8, 16, -3 * -2, [ myvar])
 m4_for([myvar], [2<<2], [2<<3], [-3 * (-2)], [ myvar])
+dnl Make sure we can do nameless iteration
+m4_for(, 1, 10, , -)
+dnl foreach tests
 m4_foreach([myvar], [[a], [b, c], [d], [e
 ],[f]], [ myvar|])
 m4_foreach_w([myvar], [a  b c, d,e f
@@ -313,6 +316,7 @@ myvar
  8 14
  8 14
  8 14
+----------
  a| b, c| d| e
 | f|
  a| b| c,| d,e| f| g|
