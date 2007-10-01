@@ -2008,11 +2008,12 @@ m4_bmatch([$1], ^m4_defn([m4_re_word])$, [],
 # This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
 # out non literal symbols.
 #
-# m4_index is roughly 5 to 8 times faster than m4_bpatsubst.
+# m4_index is roughly 5 to 8 times faster than m4_bpatsubst, so only
+# use the regex when necessary.
 m4_define([AC_DEFINE_TRACE],
 [AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL(
-  m4_if(m4_index([[$1]], [(]), [-1], [[$1]],
-	[m4_substr([[$1]], [0], m4_index([[$1]], [(]))]))])])
+  m4_if(m4_index([$1], [(]), [-1], [[$1]],
+	[m4_bpatsubst([[$1]], [(.*)])]))])])
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])

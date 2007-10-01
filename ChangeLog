@@ -1,3 +1,9 @@
+2007-10-01  Eric Blake  <ebb9@byu.net>
+
+	Fix regression in AC_DEFINE([macro(with_arg)]).
+	* lib/autoconf/general.m4 (AC_DEFINE_TRACE): Don't chop off close
+	quotes with a careless m4_substr.
+
 2007-09-30  Eric Blake  <ebb9@byu.net>
 
 	Allow nameless iteration.
