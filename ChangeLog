@@ -1,5 +1,11 @@
 2007-10-01  Eric Blake  <ebb9@byu.net>
 
+	Once again, reject IRIX m4.
+	* m4/m4.m4 (AC_PROG_GNU_M4): Use indir builtin to root out non-GNU
+	implementations that ignore --trace.
+	* configure: Regenerate.
+	Reported by Ralf Wildenhues.
+
 	Fix regression in AC_DEFINE([macro(with_arg)]).
 	* lib/autoconf/general.m4 (AC_DEFINE_TRACE): Don't chop off close
 	quotes with a careless m4_substr.

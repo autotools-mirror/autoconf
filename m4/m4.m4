@@ -17,7 +17,9 @@ AC_DEFUN([AC_PROG_GNU_M4],
   AC_CACHE_CHECK([for GNU M4 that supports accurate traces], [ac_cv_path_M4],
     [AC_PATH_PROGS_FEATURE_CHECK([M4], [m4 gm4 gnum4],
       [dnl Creative quoting here to avoid raw dnl and ifdef in configure.
-      test -z "`echo if'def(mac,bug)d'nl | $ac_path_M4 --trace=mac 2>&1`" \
+      # Root out GNU M4 1.4.4, as well as non-GNU m4 that ignore --trace.
+      ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)d'nl
+      test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:],
       [AC_MSG_ERROR([no acceptable m4 could be found in \$PATH.
 GNU M4 1.4.5 or later is required; 1.4.8 is recommended])])])
