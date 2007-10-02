@@ -551,9 +551,16 @@ m4_define([m4_noquote],
 # m4_shiftn(N, ...)
 # -----------------
 # Returns ... shifted N times.  Useful for recursive "varargs" constructs.
+#
+# Internally, other m4sugar macros frequently use m4_shiftn(2, $@) and
+# m4_shiftn(3, $@).  Optimize these cases to avoid extra recursion and
+# expansion.
 m4_define([m4_shiftn],
-[m4_assert(($1 >= 0) && ($# > $1))dnl
-_m4_shiftn($@)])
+[m4_if(m4_eval(($1 >= 0) && ($# > $1)), 0,
+         [m4_assert(($1 >= 0) && ($# > $1))],
+       [$1], 2, [m4_shift(m4_shift(m4_shift($@)))],
+       [$1], 3, [m4_shift(m4_shift(m4_shift(m4_shift($@))))],
+       [_m4_shiftn($@)])])
 
 m4_define([_m4_shiftn],
 [m4_if([$1], 0,

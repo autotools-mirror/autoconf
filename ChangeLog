@@ -1,5 +1,9 @@
 2007-10-02  Eric Blake  <ebb9@byu.net>
 
+	Optimize recursion.
+	* lib/m4sugar/m4sugar.m4 (m4_shiftn): This macro is called in a
+	lot of hot spots; optimize it for 2 and 3 shifts.
+
 	Optimize AC_PREREQ and other m4sugar numerics.
 	* lib/m4sugar/m4sugar.m4 (m4_sign): Write with m4_eval.
 	(m4_cmp): Compare arbitrary expressions, without overflow.
