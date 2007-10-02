@@ -1660,27 +1660,18 @@ m4_define([m4_qdelta],
 
 # m4_sign(A)
 # ----------
-#
-# The sign of the integer A.
-#
-# Rather than resort to eval or regex, we merely delete [0\t ], collapse
-# all other digits to 1, then use the first two characters to decide.
+# The sign of the integer expression A.
 m4_define([m4_sign],
-[m4_case(m4_substr(m4_translit([[$1]], [2-90	 ], [11111111]), 0, 2),
-	 [-1], [-1],
-	 [-],  [0],
-	 [],   [0],
-	       [1])])
+[m4_eval((([$1]) > 0) - (([$1]) < 0))])
 
 # m4_cmp(A, B)
 # ------------
-#
-# Compare two integers.
+# Compare two integer expressions.
 # A < B -> -1
 # A = B ->  0
 # A > B ->  1
 m4_define([m4_cmp],
-[m4_sign(m4_eval([$1 - $2]))])
+[m4_eval((([$1]) > ([$2])) - (([$1]) < ([$2])))])
 
 
 # m4_list_cmp(A, B)
@@ -1720,7 +1711,7 @@ m4_define([m4_list_cmp],
 # This macro is absolutely not robust to active macro, it expects
 # reasonable version numbers and is valid up to `z', no double letters.
 m4_define([m4_version_unletter],
-[m4_translit(m4_bpatsubsts([$1],
+[m4_translit(m4_bpatsubsts(m4_tolower([[$1]]),
 			   [\([0-9]+\)\([abcdefghi]\)],
 			     [m4_eval(\1 + 1).-1.\2],
 			   [\([0-9]+\)\([jklmnopqrs]\)],
@@ -1738,8 +1729,8 @@ m4_define([m4_version_unletter],
 #   0 if           =
 #   1 if           >
 m4_define([m4_version_compare],
-[m4_list_cmp((m4_split(m4_version_unletter([$1]), [\.])),
-	     (m4_split(m4_version_unletter([$2]), [\.])))])
+[m4_list_cmp((m4_translit(m4_version_unletter([$1]), [.], [,])),
+	     (m4_translit(m4_version_unletter([$2]), [.], [,])))])
 
 
 # m4_PACKAGE_NAME
