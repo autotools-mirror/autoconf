@@ -373,10 +373,10 @@ fi
 
       if test "x$CONFIG_SHELL" != x; then
   for as_var in BASH_ENV ENV
-        do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-        done
-        export CONFIG_SHELL
-        exec "$CONFIG_SHELL" "$as_myself" ${1+"$@"}
+	do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+	done
+	export CONFIG_SHELL
+	exec "$CONFIG_SHELL" "$as_myself" ${1+"$@"}
 fi
 
 
@@ -561,10 +561,10 @@ else
   as_test_x='
     eval sh -c '\''
       if test -d "$1"; then
-        test -d "$1/.";
+	test -d "$1/.";
       else
 	case $1 in
-        -*)set "./$1";;
+	-*)set "./$1";;
 	esac;
 	case `ls -ld'$as_ls_L_option' "$1" 2>/dev/null` in
 	???[sx]*):;;*)false;;esac;fi
@@ -3307,10 +3307,10 @@ else
   as_test_x='
     eval sh -c '\''
       if test -d "$1"; then
-        test -d "$1/.";
+	test -d "$1/.";
       else
 	case $1 in
-        -*)set "./$1";;
+	-*)set "./$1";;
 	esac;
 	case `ls -ld'$as_ls_L_option' "$1" 2>/dev/null` in
 	???[sx]*):;;*)false;;esac;fi

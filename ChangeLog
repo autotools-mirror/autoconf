@@ -1,5 +1,13 @@
 2007-10-03  Eric Blake  <ebb9@byu.net>
 
+	Optimize checking for identifiers.
+	* lib/m4sugar/m4sh.m4 (AS_IDENTIFIER_IF, _AS_IDENTIFIER_IF): New
+	macros, more efficient than regex on m4_re_word.
+	* lib/autoconf/general.m4 (AC_SUBST, AC_DEFINE_TRACE_LITERAL):
+	Rewrite in terms of new macro.  As a side-effect, AC_DEFINE can
+	now use @&t@.
+	* configure: Regenerate.
+
 	Remove some XFAILs, and make AT_SETUP output line up.
 	* lib/autotest/general.m4 (AT_SETUP): Only expand description
 	once; thereafter, use its expansion, properly quoted.

@@ -1998,7 +1998,7 @@ AC_DEFUN([_AC_CACHE_CHECK_INT],
 # Used by --trace to collect the list of AC_DEFINEd macros.
 m4_define([AC_DEFINE_TRACE_LITERAL],
 [m4_pattern_allow([^$1$])dnl
-m4_bmatch([$1], ^m4_defn([m4_re_word])$, [],
+AS_IDENTIFIER_IF([$1], [],
   [m4_warn([syntax], [AC_DEFINE: not an identifier: $1])])dnl
 ])# AC_DEFINE_TRACE_LITERAL
 
@@ -2060,7 +2060,7 @@ m4_define([AC_SUBST_TRACE])
 # empty value, not an empty second argument.
 #
 m4_define([AC_SUBST],
-[m4_bmatch(m4_bpatsubst([[$1]], [@&t@]), ^m4_defn([m4_re_word])$, [],
+[AS_IDENTIFIER_IF([$1], [],
   [AC_FATAL([$0: `$1' is not a valid shell variable name])])dnl
 AC_SUBST_TRACE([$1])dnl
 m4_pattern_allow([^$1$])dnl

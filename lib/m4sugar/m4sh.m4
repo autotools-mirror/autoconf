@@ -1226,6 +1226,34 @@ m4_popdef([AS_Prefix])dnl
 ])# AS_HELP_STRING
 
 
+# AS_IDENTIFIER_IF(EXPRESSION, IF-IDENT, IF-NOT-IDENT)
+# ----------------------------------------------------
+# If EXPRESSION serves as an identifier (ie, after removal of @&t@, it
+# matches the regex `^[a-zA-Z_][a-zA-Z_0-9]*$'), execute IF-IDENT,
+# otherwise IF-NOT-IDENT.
+#
+# This is generally faster than the alternative:
+#   m4_bmatch(m4_bpatsubst([[$1]], [@&t@]), ^m4_defn([m4_re_word])$,
+#             [$2], [$3])
+#
+# Rather than expand m4_defn every time AS_IDENTIFIER_IF is expanded, we
+# inline its expansion up front.  Only use a regular expression if we
+# detect a potential quadrigraph.
+#
+# First, check if the entire string matches m4_cr_symbol2.  Only then do
+# we worry if the first character also matches m4_cr_symbol1 (ie. does not
+# match m4_cr_digit).
+m4_define([AS_IDENTIFIER_IF],
+[m4_if(m4_index([$1], [@]), [-1],
+       [_$0($@)],
+       [_$0(m4_bpatsubst([[$1]], [@&t@]), [$2], [$3])])])
+m4_define([_AS_IDENTIFIER_IF],
+[m4_if([$1], [], [$3],
+       m4_translit([$1], ]m4_dquote(m4_defn([m4_cr_symbols2]))[), [],
+       [m4_if(m4_len(m4_translit(m4_format([[%.1s]], [$1]), ]]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[)), [0], [$2], [$3])],
+       [$3])])
+
 # AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
 # -----------------------------------------------------
 # If EXPRESSION has shell indirections ($var or `expr`), expand
