@@ -1553,11 +1553,11 @@ m4_define([m4_append],
 
 # m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR])
 # -----------------------------------------------
-# As `m4_append', but append only if not yet present.
+# Like `m4_append', but append only if not yet present.
 m4_define([m4_append_uniq],
 [m4_ifdef([$1],
-	  [m4_bmatch([$3]m4_defn([$1])[$3], m4_re_escape([$3$2$3]), [],
-		     [m4_append($@)])],
+	  [m4_if(m4_index([$3]m4_defn([$1])[$3], [$3$2$3]), [-1],
+		 [m4_append($@)])],
 	  [m4_append($@)])])
 
 

@@ -1,5 +1,9 @@
 2007-10-02  Eric Blake  <ebb9@byu.net>
 
+	Optimize appending text.
+	* lib/m4sugar/m4sugar.m4 (m4_append_uniq): Use index, not regular
+	expressions.
+
 	Optimize recursion.
 	* lib/m4sugar/m4sugar.m4 (m4_shiftn): This macro is called in a
 	lot of hot spots; optimize it for 2 and 3 shifts.
