@@ -1,5 +1,21 @@
 2007-10-03  Eric Blake  <ebb9@byu.net>
 
+	Another round of regex avoidance.
+	* lib/m4sugar/m4sugar.m4 (m4_cr_alnum, m4_cr_all)
+	(_m4_define_cr_not, m4_cr_not_letters, m4_cr_not_LETTERS)
+	(m4_cr_not_Letters, m4_cr_not_digits, m4_cr_not_alnum)
+	(m4_cr_not_symbols1, m4_cr_not_symbols2): New macros, implementing
+	character ranges useful in m4_translit.
+	(m4_toupper, m4_tolower): Optimize the constant portion of
+	definition.
+	* lib/m4sugar/m4sh.m4 (AS_LITERAL_IF): Also reject @S|@ because it
+	creates $, and reject [] thanks to AS_TR_SH rewrite.
+	(AS_TR_SH, AS_TR_CPP): Use just translit, not bpatsubst.
+	(AS_ESCAPE): Factor...
+	(_AS_ESCAPE): ...into new macro, with second argument required.
+	Avoid regex in common case.
+	(_AS_QUOTE): Use new macro.
+
 	Whitespace cleanup.
 	* lib/autoconf/types.m4: Avoid space-tab.
 	* lib/m4sugar/m4sh.m4: Use tab consistently.

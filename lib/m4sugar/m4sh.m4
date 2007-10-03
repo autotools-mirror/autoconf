@@ -560,10 +560,15 @@ $as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
 # AS_ESCAPE(STRING, [CHARS = $"`\])
 # ---------------------------------
 # Escape the CHARS in STRING.
+#
+# Avoid the m4_bpatsubst if there are no interesting characters to escape.
+# _AS_ESCAPE bypasses argument defaulting.
 m4_define([AS_ESCAPE],
-[m4_bpatsubst([$1],
-	     m4_dquote(m4_default([$2], [\"$`])),
-	     [\\\&])])
+[_$0([$1], m4_default([$2], [\"$`]))])
+m4_define([_AS_ESCAPE],
+[m4_if(m4_len([$1]),
+       m4_len(m4_translit([[$1]], [$2])),
+       [$1], [m4_bpatsubst([$1], [[$2]], [\\\&])])])
 
 
 # _AS_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)
@@ -597,7 +602,7 @@ m4_define([_AS_QUOTE_IFELSE],
 # backslash all the quotes.
 m4_define([_AS_QUOTE],
 [_AS_QUOTE_IFELSE([$1],
-		  [AS_ESCAPE([$1], m4_default([$2], [`""]))],
+		  [_AS_ESCAPE([$1], m4_default([$2], [`""]))],
 		  [m4_warn([obsolete],
 	   [back quotes and double quotes must not be escaped in: $1])dnl
 $1])])
@@ -1228,12 +1233,31 @@ m4_popdef([AS_Prefix])dnl
 # This is an *approximation*: for instance EXPRESSION = `\$' is
 # definitely a literal, but will not be recognized as such.
 #
+# Why do we reject EXPRESSION expanding with `[' or `]' as a literal?
+# Because AS_TR_SH is MUCH faster if it can use m4_translit on literals
+# instead of m4_bpatsubst; but m4_translit is much tougher to do safely
+# if `[' is translated.
+#
+# Note that the quadrigraph @S|@ can result in non-literals, but outright
+# rejecting all @ would make AC_INIT complain on its bug report address.
+#
 # We used to use m4_bmatch(m4_quote($1), [[`$]], [$3], [$2]), but
 # profiling shows that it is faster to use m4_translit.
+#
+# Because the translit is stripping quotes, it must also neutralize anything
+# that might be in a macro name, as well as comments and commas.  All the
+# problem characters are unified so that a single m4_index can scan the
+# result.
+#
+# Rather than expand m4_defn every time AS_LITERAL_IF is expanded, we
+# inline its expansion up front.
 m4_define([AS_LITERAL_IF],
-[m4_if(m4_len(m4_quote($1)),
-       m4_len(m4_translit(m4_dquote(m4_quote($1)), [`$])),
-       [$2], [$3])])
+[m4_if(m4_eval(m4_index(m4_quote($1), [@S|@]) == -1), [0], [$3],
+       m4_index(m4_translit(m4_quote($1),
+			    [[]`,#]]m4_dquote(m4_defn([m4_cr_symbols2]))[,
+			    [$$$]),
+		[$]), [-1], [$2],
+       [$3])])
 
 
 # AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])
@@ -1413,11 +1437,22 @@ as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
 # Transform EXPRESSION into a valid shell variable name.
 # sh/m4 polymorphic.
 # Be sure to update the definition of `$as_tr_sh' if you change this.
+#
+# AS_LITERAL_IF guarantees that a literal does not have any nested quotes,
+# once $1 is expanded.  m4_translit silently uses only the first occurrence
+# of a character that appears multiple times in argument 2, since we know
+# that m4_cr_not_symbols2 also contains [ and ].  m4_translit also silently
+# ignores characters in argument 3 that do not match argument 2; we use this
+# fact to skip worrying about the length of m4_cr_not_symbols2.
+#
+# For speed, we inline the literal definitions that can be computed up front.
 m4_defun([AS_TR_SH],
 [AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
-	      [m4_bpatsubst(m4_translit([[$1]], [*+], [pp]),
-			    [[^a-zA-Z0-9_]], [_])],
+	      [m4_translit([$1], [*+[]]]]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_not_symbols2])))[[,
+				 [pp[]]]]dnl
+m4_dquote(m4_dquote(m4_for(,1,255,,[[_]])))[[)],
 	      [`AS_ECHO(["$1"]) | $as_tr_sh`])])
 
 
@@ -1435,13 +1470,15 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g
 # Map EXPRESSION to an upper case string which is valid as rhs for a
 # `#define'.  sh/m4 polymorphic.  Be sure to update the definition
 # of `$as_tr_cpp' if you change this.
+#
+# See implementation comments in AS_TR_SH.
 m4_defun([AS_TR_CPP],
 [AS_REQUIRE([_$0_PREPARE])dnl
 AS_LITERAL_IF([$1],
-	      [m4_bpatsubst(m4_translit([[$1]],
-					[*abcdefghijklmnopqrstuvwxyz],
-					[PABCDEFGHIJKLMNOPQRSTUVWXYZ]),
-			   [[^A-Z0-9_]], [_])],
+	      [m4_translit([$1], [*[]]]]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_letters])m4_defn([m4_cr_not_symbols2])))[[,
+				 [P[]]]]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_LETTERS])m4_for(,1,255,,[[_]])))[[)],
 	      [`AS_ECHO(["$1"]) | $as_tr_cpp`])])
 
 

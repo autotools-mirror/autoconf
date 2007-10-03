@@ -1367,6 +1367,14 @@ m4_defn([m4_cr_LETTERS])dnl
 m4_define([m4_cr_digits], [0123456789])
 
 
+# m4_cr_alnum
+# -----------
+m4_define([m4_cr_alnum],
+m4_defn([m4_cr_Letters])dnl
+m4_defn([m4_cr_digits])dnl
+)
+
+
 # m4_cr_symbols1
 # m4_cr_symbols2
 # -------------------------------
@@ -1378,6 +1386,52 @@ m4_define([m4_cr_symbols2],
 m4_defn([m4_cr_symbols1])dnl
 m4_defn([m4_cr_digits])dnl
 )
+
+# m4_cr_all
+# ---------
+# The character range representing everything, with `-' as the last
+# character, since it is special to m4_translit.  Use with care, because
+# it contains characters special to M4 (fortunately, both ASCII and EBCDIC
+# have [] in order, so m4_defn([m4_cr_all]) remains a valid string).  It
+# also contains characters special to terminals, so it should never be
+# displayed in an error message.  Also, attempts to map [ and ] to other
+# characters via m4_translit must deal with the fact that m4_translit does
+# not add quotes to the output.
+#
+# It is mainly useful in generating inverted character range maps, for use
+# in places where m4_translit is faster than an equivalent m4_bpatsubst;
+# the regex `[^a-z]' is equivalent to:
+#  m4_translit(m4_dquote(m4_defn([m4_cr_all])), [a-z])
+m4_define([m4_cr_all],
+m4_translit(m4_dquote(m4_format(m4_dquote(m4_for(
+  ,1,255,,[[%c]]))m4_for([i],1,255,,[,i]))), [-])-)
+
+
+# _m4_define_cr_not(CATEGORY)
+# ---------------------------
+# Define m4_cr_not_CATEGORY as the inverse of m4_cr_CATEGORY.
+m4_define([_m4_define_cr_not],
+[m4_define([m4_cr_not_$1],
+	   m4_translit(m4_dquote(m4_defn([m4_cr_all])),
+		       m4_defn([m4_cr_$1])))])
+
+
+# m4_cr_not_letters
+# m4_cr_not_LETTERS
+# m4_cr_not_Letters
+# m4_cr_not_digits
+# m4_cr_not_alnum
+# m4_cr_not_symbols1
+# m4_cr_not_symbols2
+# ------------------
+# Inverse character sets
+_m4_define_cr_not([letters])
+_m4_define_cr_not([LETTERS])
+_m4_define_cr_not([Letters])
+_m4_define_cr_not([digits])
+_m4_define_cr_not([alnum])
+_m4_define_cr_not([symbols1])
+_m4_define_cr_not([symbols2])
 
 
 # m4_re_escape(STRING)
@@ -1411,10 +1465,14 @@ m4_defn([m4_re_string])dnl
 # m4_toupper(STRING)
 # ------------------
 # These macros convert STRING to lowercase or uppercase.
+#
+# Rather than expand the m4_defn each time, we inline them up front.
 m4_define([m4_tolower],
-[m4_translit([$1], m4_defn([m4_cr_LETTERS]), m4_defn([m4_cr_letters]))])
+[m4_translit([$1], ]m4_dquote(m4_defn([m4_cr_LETTERS]))[,
+		   ]m4_dquote(m4_defn([m4_cr_letters]))[)])
 m4_define([m4_toupper],
-[m4_translit([$1], m4_defn([m4_cr_letters]), m4_defn([m4_cr_LETTERS]))])
+[m4_translit([$1], ]m4_dquote(m4_defn([m4_cr_letters]))[,
+		   ]m4_dquote(m4_defn([m4_cr_LETTERS]))[)])
 
 
 # m4_split(STRING, [REGEXP])
