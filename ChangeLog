@@ -1,3 +1,14 @@
+2007-10-03  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/m4sugar/m4sugar.m4 (m4_shift2, m4_shift3): New macros.
+	(m4_shiftn): Remove no-longer-needed optimization.  Perhaps we
+	should remove m4_shiftn entirely?
+	(m4_case, b4_bmatch, m4_map_sep, m4_bpatsubsts, m4_join):
+	Prefer m4_shift2 and m4_shift3 to m4_shiftn.
+	* lib/autoconf/lang.m4 (_AC_LANG_DISPATCH): Likewise.
+	* lib/m4sugar/m4sh.m4 (AS_CASE, AS_IF): Likewise.
+	* tests/autotest.at (AT_CHECK_AT_TEST): Likewise.
+
 2007-10-03  Eric Blake  <ebb9@byu.net>
 
 	Comment touchups.

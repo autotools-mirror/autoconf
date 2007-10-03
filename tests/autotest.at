@@ -63,7 +63,7 @@ AT_INIT([artificial test suite])
 AT_SETUP([my only test])
 $2
 AT_CLEANUP
-]], m4_shiftn(2, $@))])
+]], m4_shift2($@))])
 
 # Here documents for these tests contain forbidden macros.
 m4_pattern_allow([^AT_])

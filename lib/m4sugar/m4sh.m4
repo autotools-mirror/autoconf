@@ -462,7 +462,7 @@ m4_define([_AS_CASE],
        [$#], 1, [  *) $1 ;;],
        [$#], 2, [  $1) m4_default([$2], [:]) ;;],
        [  $1) m4_default([$2], [:]) ;;
-$0(m4_shiftn(2, $@))])dnl
+$0(m4_shift2($@))])dnl
 ])
 m4_defun([AS_CASE],
 [m4_ifval([$2$3],
@@ -504,7 +504,7 @@ m4_define([_AS_IF],
 [m4_ifval([$2$3],
 [elif $1; then
   m4_default([$2], [:])
-m4_ifval([$3], [$0(m4_shiftn(2, $@))])],
+m4_ifval([$3], [$0(m4_shift2($@))])],
 [m4_ifvaln([$1],
 [else
   $1])dnl
@@ -514,7 +514,7 @@ m4_defun([AS_IF],
 [m4_ifval([$2$3],
 [if $1; then
   m4_default([$2], [:])
-m4_ifval([$3], [_$0(m4_shiftn(2, $@))])[]dnl
+m4_ifval([$3], [_$0(m4_shift2($@))])[]dnl
 fi
 ])dnl
 ])# AS_IF

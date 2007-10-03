@@ -362,7 +362,7 @@ m4_define([m4_case],
        [$#], 1, [],
        [$#], 2, [$2],
        [$1], [$2], [$3],
-       [$0([$1], m4_shiftn(3, $@))])])
+       [$0([$1], m4_shift3($@))])])
 
 
 # m4_bmatch(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
@@ -384,7 +384,7 @@ m4_define([m4_bmatch],
 [m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
        [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
        [$#], 2, [$2],
-       [m4_if(m4_bregexp([$1], [$2]), -1, [$0([$1], m4_shiftn(3, $@))],
+       [m4_if(m4_bregexp([$1], [$2]), -1, [$0([$1], m4_shift3($@))],
 	      [$3])])])
 
 
@@ -442,7 +442,7 @@ m4_define([m4_map_sep],
 # due to quotation problems, I need to double quote $1 below, therefore
 # the anchors are broken :(  I can't let users be trapped by that.
 #
-# Recall that m4_shiftn always results in an argument.  Hence, we need
+# Recall that m4_shift3 always results in an argument.  Hence, we need
 # to distinguish between a final deletion vs. ending recursion.
 m4_define([m4_bpatsubsts],
 [m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
@@ -452,7 +452,7 @@ m4_define([m4_bpatsubsts],
 m4_define([_m4_bpatsubsts],
 [m4_if([$#], 2, [$1],
        [$0(m4_builtin([patsubst], [[$1]], [$2], [$3]),
-	   m4_shiftn(3, $@))])])
+	   m4_shift3($@))])])
 
 
 
@@ -560,22 +560,21 @@ m4_define([m4_noquote],
 # m4_shiftn(N, ...)
 # -----------------
 # Returns ... shifted N times.  Useful for recursive "varargs" constructs.
-#
-# Internally, other m4sugar macros frequently use m4_shiftn(2, $@) and
-# m4_shiftn(3, $@).  Optimize these cases to avoid extra recursion and
-# expansion.
 m4_define([m4_shiftn],
-[m4_if(m4_eval(($1 >= 0) && ($# > $1)), 0,
-	 [m4_assert(($1 >= 0) && ($# > $1))],
-       [$1], 2, [m4_shift(m4_shift(m4_shift($@)))],
-       [$1], 3, [m4_shift(m4_shift(m4_shift(m4_shift($@))))],
-       [_m4_shiftn($@)])])
+[m4_assert(0 <= $1 && $1 < $#)dnl
+_m4_shiftn($@)])
 
 m4_define([_m4_shiftn],
 [m4_if([$1], 0,
        [m4_shift($@)],
        [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
 
+# m4_shift2(...)
+# m4_shift3(...)
+# -----------------
+# Returns ... shifted twice, and three times.  Faster than m4_shiftn.
+m4_define([m4_shift2], [m4_shift(m4_shift($@))])
+m4_define([m4_shift3], [m4_shift(m4_shift(m4_shift($@)))])
 
 # m4_undefine(NAME)
 # -----------------
@@ -1522,7 +1521,7 @@ m4_defun([m4_join],
 [m4_case([$#],
 	 [1], [],
 	 [2], [[$2]],
-	 [[$2][$1]$0([$1], m4_shiftn(2, $@))])])
+	 [[$2][$1]$0([$1], m4_shift2($@))])])
 
 
 
