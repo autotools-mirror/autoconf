@@ -622,7 +622,7 @@ AC_DEFUN([_AC_TYPE_INT],
 	    [AC_LANG_BOOL_COMPILE_TRY(
 	       [AC_INCLUDES_DEFAULT],
 	       [[($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 1)
-	         < ($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 2)]])],
+		 < ($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 2)]])],
 	    [],
 	    [AS_CASE([$ac_type], [int$1_t],
 	       [ac_cv_c_int$1_t=yes],
@@ -941,7 +941,7 @@ AC_DEFUN([AC_STRUCT_TM],
 ],
 				    [struct tm tm;
 				     int *p = &tm.tm_sec;
- 				     return !p;])],
+				     return !p;])],
 		   [ac_cv_struct_tm=time.h],
 		   [ac_cv_struct_tm=sys/time.h])])
 if test $ac_cv_struct_tm = sys/time.h; then

@@ -1,3 +1,9 @@
+2007-10-03  Eric Blake  <ebb9@byu.net>
+
+	Whitespace cleanup.
+	* lib/autoconf/types.m4: Avoid space-tab.
+	* lib/m4sugar/m4sh.m4: Use tab consistently.
+
 2007-10-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/m4sugar/m4sugar.m4 (m4_shift2, m4_shift3): New macros.

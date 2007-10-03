@@ -150,7 +150,7 @@ m4_define([AS_REQUIRE],
 m4_define([AS_REQUIRE_SHELL_FN],
 [_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
 m4_provide_if([AS_SHELL_FN_$1], [],
-               [m4_provide([AS_SHELL_FN_$1])m4_divert_text([M4SH-INIT], [$1() {
+	       [m4_provide([AS_SHELL_FN_$1])m4_divert_text([M4SH-INIT], [$1() {
 $2
 }])])])
 
@@ -241,7 +241,7 @@ m4_defun_once([_AS_DETECT_BETTER_SHELL],
 AS_REQUIRE([_AS_UNSET_PREPARE])dnl
 if test "x$CONFIG_SHELL" = x; then
   AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY]) 2>/dev/null],
-        [as_have_required=yes],
+	[as_have_required=yes],
 	[as_have_required=no])
   AS_IF([test $as_have_required = yes &&dnl
 	 _AS_RUN([_AS_DETECT_SUGGESTED_BODY]) 2> /dev/null],
@@ -259,7 +259,7 @@ if test "x$CONFIG_SHELL" = x; then
 	 # Try only shells that exist, to save several forks.
 	 AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
 		_AS_RUN([_AS_DETECT_REQUIRED_BODY],
-                        [("$as_shell") 2> /dev/null])],
+			[("$as_shell") 2> /dev/null])],
 	       [CONFIG_SHELL=$as_shell
 	       as_have_required=yes
 	       AS_IF([_AS_RUN([_AS_DETECT_SUGGESTED_BODY], ["$as_shell" 2> /dev/null])],
@@ -267,11 +267,11 @@ if test "x$CONFIG_SHELL" = x; then
       done
 
       AS_IF([test "x$CONFIG_SHELL" != x],
-        [for as_var in BASH_ENV ENV
-        do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-        done
-        export CONFIG_SHELL
-        exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}])
+	[for as_var in BASH_ENV ENV
+	do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+	done
+	export CONFIG_SHELL
+	exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}])
 
     AS_IF([test $as_have_required = no],
       [echo This script requires a shell more modern than all the
@@ -1113,10 +1113,10 @@ else
   as_test_x='
     eval sh -c '\''
       if test -d "$[]1"; then
-        test -d "$[]1/.";
+	test -d "$[]1/.";
       else
 	case $[]1 in
-        -*)set "./$[]1";;
+	-*)set "./$[]1";;
 	esac;
 	case `ls -ld'$as_ls_L_option' "$[]1" 2>/dev/null` in
 	???[[sx]]*):;;*)false;;esac;fi
