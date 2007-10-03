@@ -1,3 +1,8 @@
+2007-10-03  Eric Blake  <ebb9@byu.net>
+
+	Comment touchups.
+	* lib/m4sugar/m4sugar.m4: Grammar fixes in comments.
+
 2007-10-02  Eric Blake  <ebb9@byu.net>
 
 	Optimize appending text.
