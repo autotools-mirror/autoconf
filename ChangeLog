@@ -1,3 +1,17 @@
+2007-10-04  Eric Blake  <ebb9@byu.net>
+
+	One more round of m4_foreach_w speedups.
+	* lib/m4sugar/m4sugar.m4 (m4_flatten): Only use regex if newline
+	is present.
+	(_m4_split): Avoid useless expansions inside definition.  Move
+	argument defaulting...
+	(m4_split): ...here.  Change alternate quote to something less
+	likely to appear in $1.  Also, special case space as regexp...
+	(m4_foreach_w): ...to avoid regexp on single-term list.
+	(m4_default, m4_defn, m4_popdef, m4_undefine, _m4_foreach): Avoid
+	useless expansions inside definition.
+	* tests/m4sugar.at (m4@&t@_split): Add tests.
+
 2007-10-04  Paolo Bonzini  <bonzini@gnu.org>
 
 	Fix previous commit.

@@ -40,7 +40,10 @@ AT_CHECK_M4SUGAR([-o-],, [$2], [$3])
 # - m4_require
 # uses warn/error code.
 #
+# - m4_split
+#
 # - m4_text_wrap
+# uses m4_split code.
 
 ## --------- ##
 ## m4_warn.  ##
@@ -137,6 +140,45 @@ script.4s:5: baz is expanded from...
 script.4s:9: the top level
 autom4te: m4 failed with exit status: 1
 ]])
+AT_CLEANUP
+
+
+## ---------- ##
+## m4_split.  ##
+## ---------- ##
+
+AT_SETUP([m4@&t@_split])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_define([active], [ACT, IVE])m4_define([bd], [oops])
+m4_split
+m4_split([[]])
+m4_split([ ])
+m4_split([active])
+m4_split([ active	active ])end
+m4_split([ ], [ ])
+m4_split([active], [ ])
+m4_split([ active	active ], [ ])end
+m4_split([abcde], [bd])
+m4_split([abcde], [[bd]])
+m4_split([foo=`` bar=''])
+m4_split([foo='' bar=``])
+]],
+[[
+
+[[]]
+[], []
+[active]
+[], [active], [active], []end
+[], []
+[active]
+[], [active	active], []end
+[abcde]
+[a], [c], [e]
+[foo=``], [bar='']
+[foo=''], [bar=``]
+]])
+
 AT_CLEANUP
 
 

@@ -477,18 +477,24 @@ m4_define([m4_define_default],
 # m4_default(EXP1, EXP2)
 # ----------------------
 # Returns EXP1 if non empty, otherwise EXP2.
+#
+# This macro is called on hot paths, so inline the contents of m4_ifval,
+# for one less round of expansion.
 m4_define([m4_default],
-[m4_ifval([$1], [$1], [$2])])
+[m4_if([$1], [], [$2], [$1])])
 
 
 # m4_defn(NAME)
 # -------------
 # Like the original, except don't tolerate popping something which is
-# undefined.
+# undefined, and only support one argument.
+#
+# This macro is called frequently, so minimize the amount of additional
+# expansions by skipping m4_ifndef.
 m4_define([m4_defn],
-[m4_ifndef([$1],
-	   [m4_fatal([$0: undefined macro: $1])])dnl
-m4_builtin([defn], $@)])
+[m4_ifdef([$1], [],
+	  [m4_fatal([$0: undefined macro: $1])])]dnl
+[m4_builtin([defn], $@)])
 
 
 # _m4_dumpdefs_up(NAME)
@@ -522,11 +528,14 @@ _m4_dumpdefs_down([$1])])
 # m4_popdef(NAME)
 # ---------------
 # Like the original, except don't tolerate popping something which is
-# undefined.
+# undefined, and only support one argument.
+#
+# This macro is called frequently, so minimize the amount of additional
+# expansions by skipping m4_ifndef.
 m4_define([m4_popdef],
-[m4_ifndef([$1],
-	   [m4_fatal([$0: undefined macro: $1])])dnl
-m4_builtin([popdef], $@)])
+[m4_ifdef([$1], [],
+	  [m4_fatal([$0: undefined macro: $1])])]dnl
+[m4_builtin([popdef], $@)])
 
 
 # m4_quote(ARGS)
@@ -579,11 +588,14 @@ m4_define([m4_shift3], [m4_shift(m4_shift(m4_shift($@)))])
 # m4_undefine(NAME)
 # -----------------
 # Like the original, except don't tolerate undefining something which is
-# undefined.
+# undefined, and only support one argument.
+#
+# This macro is called frequently, so minimize the amount of additional
+# expansions by skipping m4_ifndef.
 m4_define([m4_undefine],
-[m4_ifndef([$1],
-	   [m4_fatal([$0: undefined macro: $1])])dnl
-m4_builtin([undefine], $@)])
+[m4_ifdef([$1], [],
+	  [m4_fatal([$0: undefined macro: $1])])]dnl
+[m4_builtin([undefine], $@)])
 
 
 ## -------------------------- ##
@@ -724,13 +736,15 @@ m4_if(m4_defn([$1]), [$2], [],
 #
 #      | m4_foreach(Var, [[[active]], [[active]]], [-Var-])
 #     => -active--active-
+#
+# This macro is called frequently, so avoid extra expansions such as
+# m4_ifval and dnl.
 m4_define([m4_foreach],
-[m4_pushdef([$1])_m4_foreach($@)m4_popdef([$1])])
+[m4_pushdef([$1])_$0($@)m4_popdef([$1])])
 
 m4_define([_m4_foreach],
-[m4_ifval([$2],
-	  [m4_define([$1], m4_car($2))$3[]dnl
-_m4_foreach([$1], m4_cdr($2), [$3])])])
+[m4_if([$2], [], [],
+       [m4_define([$1], m4_car($2))$3[]$0([$1], m4_cdr($2), [$3])])])
 
 
 # m4_foreach_w(VARIABLE, LIST, EXPRESSION)
@@ -745,7 +759,7 @@ _m4_foreach([$1], m4_cdr($2), [$3])])])
 #    => -active--b--active-end
 #
 m4_define([m4_foreach_w],
-[m4_foreach([$1], m4_split(m4_normalize([$2])), [$3])])
+[m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])])
 
 
 
@@ -1488,28 +1502,32 @@ m4_define([m4_toupper],
 #
 # Pay attention to the m4_changequotes.  When m4 reads the definition of
 # m4_split, it still has quotes set to [ and ].  Luckily, these are matched
-# in the macro body, so the definition is stored correctly.
+# in the macro body, so the definition is stored correctly.  Use the same
+# alternate quotes as m4_noquote; it must be unlikely to appear in $1.
 #
 # Also, notice that $1 is quoted twice, since we want the result to
 # be quoted.  Then you should understand that the argument of
-# patsubst is ``STRING'' (i.e., with additional `` and '').
+# patsubst is -=<{STRING}>=- (i.e., with additional -=<{ and }>=-).
 #
 # This macro is safe on active symbols, i.e.:
 #   m4_define(active, ACTIVE)
 #   m4_split([active active ])end
 #   => [active], [active], []end
-
+#
+# Optimize on regex of ` ' (space), since m4_foreach_w already guarantees
+# that the list contains single space separators, and a common case is
+# splitting a single-element list.  This macro is called frequently,
+# so avoid unnecessary dnl inside the definition.
 m4_define([m4_split],
-[m4_ifval([$1], [_m4_split($@)])])
+[m4_if([$1], [], [],
+       [$2], [ ], [m4_if(m4_index([$1], [ ]), [-1], [[[$1]]], [_$0($@)])],
+       [$2], [], [_$0([$1], [[	 ]+])],
+       [_$0($@)])])
 
 m4_define([_m4_split],
-[m4_changequote(``, '')dnl
-[dnl Can't use m4_default here instead of m4_if, because m4_default uses
-dnl [ and ] as quotes.
-m4_bpatsubst(````$1'''',
-	     m4_if(``$2'',, ``[	 ]+'', ``$2''),
-	     ``], ['')]dnl
-m4_changequote([, ])])
+[m4_changequote(-=<{,}>=-)]dnl
+[[m4_bpatsubst(-=<{-=<{$1}>=-}>=-, -=<{$2}>=-,
+	       -=<{], [}>=-)]m4_changequote([, ])])
 
 
 
@@ -1523,10 +1541,14 @@ m4_changequote([, ])])
 #    act\
 #    ive])end
 #    => active activeend
+#
+# In m4, m4_bpatsubst is expensive, so first check for a newline.
 m4_define([m4_flatten],
-[m4_translit(m4_bpatsubst([[[$1]]], [\\
+[m4_if(m4_index([$1], [
+]), [-1], [[$1]],
+       [m4_translit(m4_bpatsubst([[[$1]]], [\\
 ]), [
-], [ ])])
+], [ ])])])
 
 
 # m4_strip(STRING)
