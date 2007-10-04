@@ -1249,7 +1249,7 @@ m4_define([AS_IDENTIFIER_IF],
        [_$0(m4_bpatsubst([[$1]], [@&t@]), [$2], [$3])])])
 m4_define([_AS_IDENTIFIER_IF],
 [m4_if([$1], [], [$3],
-       m4_translit([$1], ]m4_dquote(m4_defn([m4_cr_symbols2]))[), [],
+       m4_translit([[$1]], ]m4_dquote(m4_defn([m4_cr_symbols2]))[), [],
        [m4_if(m4_len(m4_translit(m4_format([[%.1s]], [$1]), ]]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[)), [0], [$2], [$3])],
        [$3])])

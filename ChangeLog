@@ -1,5 +1,11 @@
 2007-10-04  Eric Blake  <ebb9@byu.net>
 
+	Fix recent testsuite failures.
+	* lib/autotest/general.m4 (AT_INIT, AT_SETUP): Double-quote text
+	that must not be re-expanded after AS_ESCAPE.
+	* lib/m4sugar/m4sh.m4 (_AS_IDENTIFIER_IF): Don't expand $1 when
+	checking if it is an identifier.
+
 	Whitespace cleanup.
 	* lib/autotest/general.m4 (_AT_CREATE_DEBUGGING_SCRIPT): Avoid
 	leading whitespace, as it caused space-tab in testsuite.
