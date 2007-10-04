@@ -1,3 +1,21 @@
+2007-10-05  Eric Blake  <ebb9@byu.net>
+
+	Provide better short-circuiting operation.
+	* lib/m4sugar/m4sugar.m4 (m4_cond, m4_newline): New macros.
+	(m4_text_wrap): Use it.  Also avoid useless m4_for.
+	* lib/m4sugar/m4sh.m4 (_AS_QUOTE_IFELSE, AS_LITERAL_IF): Use
+	new macro.
+	(_AS_IDENTIFIER_IF): Likewise, and fix bug when $1 is [,].
+	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): Use new macros
+	to avoid regexps.
+	* doc/autoconf.texi (Redefined M4 Macros): Expand m4_if
+	documentation.  Sort m4_mkstemp, m4_undefine.  Move m4_ifndef...
+	(Conditional constructs): ...here, to new section.  Also document
+	m4_cond, m4_ifval, m4_n, m4_ifvaln, m4_ifset, m4_case, m4_bmatch,
+	m4_bpatsubsts, and m4_default.
+	(Looping constructs): Document m4_shiftn, m4_shift2, m4_shift3,
+	m4_do.
+
 2007-10-04  Eric Blake  <ebb9@byu.net>
 
 	Fix recent testsuite failures.

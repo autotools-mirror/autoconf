@@ -399,6 +399,42 @@ m4_define([m4_cdr],
        [m4_dquote(m4_shift($@))])])
 
 
+# m4_cond(TEST1, VAL1, IF-VAL1, TEST2, VAL2, IF-VAL2, ..., [DEFAULT])
+# -------------------------------------------------------------------
+# Similar to m4_if, except that each TEST is expanded when encountered.
+# If the expansion of TESTn matches the string VALn, the result is IF-VALn.
+# The result is DEFAULT if no tests passed.  This macro allows
+# short-circuiting of expensive tests, where it pays to arrange quick
+# filter tests to run first.
+#
+# For an example, consider a previous implementation of _AS_QUOTE_IFELSE:
+#
+#    m4_if(m4_index([$1], [\]), [-1], [$2],
+#          m4_eval(m4_index([$1], [\\]) >= 0), [1], [$2],
+#          m4_eval(m4_index([$1], [\$]) >= 0), [1], [$2],
+#          m4_eval(m4_index([$1], [\`]) >= 0), [1], [$3],
+#          m4_eval(m4_index([$1], [\"]) >= 0), [1], [$3],
+#          [$2])
+#
+# Here, m4_index is computed 5 times, and m4_eval 4, even if $1 contains
+# no backslash.  It is more efficient to do:
+#
+#    m4_cond([m4_index([$1], [\])], [-1], [$2],
+#            [m4_eval(m4_index([$1], [\\]) >= 0)], [1], [$2],
+#            [m4_eval(m4_index([$1], [\$]) >= 0)], [1], [$2],
+#            [m4_eval(m4_index([$1], [\`]) >= 0)], [1], [$3],
+#            [m4_eval(m4_index([$1], [\"]) >= 0)], [1], [$3],
+#            [$2])
+#
+# In the common case of $1 with no backslash, only one m4_index expansion
+# occurs, and m4_eval is avoided altogether.
+m4_define([m4_cond],
+[m4_if([$#], [0], [m4_fatal([$0: cannot be called without arguments])],
+       [$#], [1], [$1],
+       [$#], [2], [m4_fatal([$0: missing an argument])],
+       [m4_if($1, [$2], [$3], [$0(m4_shift3($@))])])])
+
+
 # m4_map(MACRO, LIST)
 # -------------------
 # Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
@@ -1448,6 +1484,13 @@ _m4_define_cr_not([symbols1])
 _m4_define_cr_not([symbols2])
 
 
+# m4_newline
+# ----------
+# Expands to a newline.  Exists for formatting reasons.
+m4_define([m4_newline], [
+])
+
+
 # m4_re_escape(STRING)
 # --------------------
 # Escape RE active characters in STRING.
@@ -1696,15 +1739,14 @@ m4_pushdef([m4_Width], m4_default([$4], 79))dnl
 m4_pushdef([m4_Cursor], m4_qlen(m4_defn([m4_Prefix1])))dnl
 m4_pushdef([m4_Separator], [])dnl
 m4_defn([m4_Prefix1])[]dnl
-m4_if(m4_eval(m4_qlen(m4_defn([m4_Prefix1])) > m4_len(m4_Prefix)),
-      1, [m4_define([m4_Cursor], m4_len(m4_Prefix))
+m4_cond([m4_eval(m4_qlen(m4_defn([m4_Prefix1])) > m4_len(m4_Prefix))],
+	[1], [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix],
-      m4_if(m4_eval(m4_qlen(m4_defn([m4_Prefix1])) < m4_len(m4_Prefix)),
-	    [0], [],
-	    [m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
-m4_for(m4_Space, m4_qlen(m4_defn([m4_Prefix1])), m4_eval(m4_len(m4_Prefix) - 1),
-		    [], [ ])])[]dnl
-)[]dnl
+	[m4_eval(m4_qlen(m4_defn([m4_Prefix1])) < m4_len(m4_Prefix))],
+	[0], [],
+	[m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
+m4_format(%m4_eval(m4_len(m4_Prefix) - 1 - m4_qlen(m4_defn([m4_Prefix1])))[s],
+	  [])])[]dnl
 m4_foreach_w([m4_Word], [$1],
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_qlen(m4_defn([m4_Word])) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first

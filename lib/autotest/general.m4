@@ -1426,18 +1426,19 @@ m4_define([AT_CHECK_NOESCAPE],
 # to safely expand arbitrary COMMANDS in an argument list, so the below tests
 # examine COMMANDS unexpanded.
 m4_define([_AT_DECIDE_TRACEABLE],
-[dnl Utility macros.
-m4_pushdef([at_lf], [
-])[]dnl
+dnl Utility macro.
 dnl
 dnl Examine COMMANDS for a reason to never trace COMMANDS.
-m4_pushdef([at_reason],
-	   m4_bmatch([$1],
-		     [`.*`], [[a `...` command substitution]],
-		     [\$(],  [[a $(...) command substitution]],
-		     [\${],  [[a ${...} parameter expansion]],
-		     at_lf,  [[an embedded newline]],
-		     [[]]dnl No reason.
+[m4_pushdef([at_reason],
+m4_cond([m4_eval(m4_index([$1], [`]) >= 0)], [1],
+		[[a `...` command substitution]],
+	[m4_eval(m4_index([$1], [$(]) >= 0)], [1],
+		[[a $(...) command substitution]],
+	[m4_eval(m4_index([$1], [${]) >= 0)], [1],
+		[[a ${...} parameter expansion]],
+	[m4_eval(m4_index([$1], m4_newline) >= 0)], [1],
+		[[an embedded newline]],
+	[]dnl No reason.
 ))dnl
 dnl
 m4_ifval(m4_defn([at_reason]),
@@ -1447,7 +1448,6 @@ dnl We know at build time that tracing COMMANDS is always safe.
 [test -n "$at_traceon"],
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
 [test -n "$at_traceon" && at_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
-m4_popdef([at_lf])[]dnl
 m4_popdef([at_reason])])
 
 

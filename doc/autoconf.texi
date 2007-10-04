@@ -449,6 +449,7 @@ Using @command{autom4te}
 Programming in M4sugar
 
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
+* Conditional constructs::      Conditions in M4
 * Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
 * Text processing Macros::      String manipulation in M4
@@ -10070,6 +10071,7 @@ M4sugar''.
 
 @menu
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
+* Conditional constructs::      Conditions in M4
 * Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
 * Text processing Macros::      String manipulation in M4
@@ -10136,15 +10138,10 @@ This macro corresponds to @code{m4exit}.
 @defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, @ovar{not-equal})
 @defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, @dots{})
 @msindex{if}
-This macro corresponds to @code{ifelse}.
-@end defmac
-
-@defmac m4_ifndef (@var{macro}, @var{if-not-defined}, @ovar{if-defined})
-@msindex{ifndef}
-This is shorthand for:
-@example
-m4_ifdef([@var{macro}], [@var{if-defined}], [@var{if-not-defined}])
-@end example
+This macro corresponds to @code{ifelse}.  @var{string-1} and
+@var{string-2} are compared literally, so usually one of the two
+arguments is passed unquoted.  @xref{Conditional constructs} for more
+conditional idioms.
 @end defmac
 
 @defmac m4_include (@var{file})
@@ -10154,11 +10151,26 @@ m4_ifdef([@var{macro}], [@var{if-defined}], [@var{if-not-defined}])
 Like the M4 builtins, but warn against multiple inclusions of @var{file}.
 @end defmac
 
+@defmac m4_mkstemp (@var{template})
+@defmacx m4_maketemp (@var{template})
+@msindex{maketemp}
+@msindex{mkstemp}
+Posix requires @code{maketemp} to replace the trailing @samp{X}
+characters in @var{template} with the process id, without regards to the
+existence of a file by that name, but this a security hole.  When this
+was pointed out to the Posix folks, they agreed to invent a new macro
+@code{mkstemp} that always creates a uniquely named file, but not all
+versions of @acronym{GNU} M4 support the new macro.  In M4sugar,
+@code{m4_maketemp} and @code{m4_mkstemp} are synonyms for each other,
+and both have the secure semantics regardless of which macro the
+underlying M4 provides.
+@end defmac
+
 @defmac m4_bpatsubst (@var{string}, @var{regexp}, @ovar{replacement})
 @msindex{bpatsubst}
 This macro corresponds to @code{patsubst}.  The name @code{m4_patsubst}
-is kept for future versions of M4sh, on top of @acronym{GNU} M4 which will
-provide extended regular expression syntax via @code{epatsubst}.
+is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
+released and supports extended regular expression syntax.
 @end defmac
 
 @defmac m4_popdef (@var{macro})
@@ -10170,8 +10182,21 @@ defined.  See @code{m4_undefine}.
 @defmac m4_bregexp (@var{string}, @var{regexp}, @ovar{replacement})
 @msindex{bregexp}
 This macro corresponds to @code{regexp}.  The name @code{m4_regexp}
-is kept for future versions of M4sh, on top of @acronym{GNU} M4 which will
-provide extended regular expression syntax via @code{eregexp}.
+is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
+released and supports extended regular expression syntax.
+@end defmac
+
+@defmac m4_undefine (@var{macro})
+@msindex{undefine}
+Unlike the M4 builtin, this macro fails if @var{macro} is not
+defined.  Use
+
+@example
+m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
+@end example
+
+@noindent
+to recover the behavior of the builtin.
 @end defmac
 
 @defmac m4_wrap (@var{text})
@@ -10200,32 +10225,131 @@ m4_wrap([foo])
 @end example
 @end defmac
 
-@defmac m4_undefine (@var{macro})
-@msindex{undefine}
-Unlike the M4 builtin, this macro fails if @var{macro} is not
-defined.  Use
 
+@node Conditional constructs
+@subsection Conditional constructs
+
+The following macros provide additional conditional contructs, as
+convenience wrappers around @code{m4_if}.
+
+@defmac m4_bmatch (@var{string}, @var{regex-1}, @var{value-1}, @dots{}, @
+  @ovar{default})
+@msindex{bmatch}
+The string @var{string} is repeatedly compared against a series of
+@var{regex} arguments; if a match is found, the expansion is the
+corresponding @var{value}, otherwise, the macro moves on to the next
+@var{regex}.  If no @var{regex} match, then the result is the optional
+@var{default}, or nothing.
+@end defmac
+
+@defmac m4_bpatsubsts (@var{string}, @var{regex-1}, @var{subst-1}, @dots{})
+@msindex{bpatsubsts}
+The string @var{string} is altered by @var{regex-1} and @var{subst-1},
+as if by:
 @example
-m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
+m4_bpatsubst([[@var{string}]], [@var{regex}], [@var{subst}])
 @end example
 
 @noindent
-to recover the behavior of the builtin.
+The result of the substitution is then passed through the next set of
+@var{regex} and @var{subst}, and so forth.  An empty @var{subst} implies
+deletion of any matched portions in the current string.  Note that this
+macro over-quotes @var{string}; this behavior is intentional, so that
+the result of each step of the recursion remains as a quoted string.
+However, it means that anchors (@samp{^} and @samp{$} in the @var{regex}
+will line up with the extra quotations, and not the characters of the
+original string.
 @end defmac
 
-@defmac m4_maketemp (@var{template})
-@defmacx m4_mkstemp (@var{template})
-@msindex{maketemp}
-@msindex{mkstemp}
-Posix requires @code{maketemp} to replace the trailing @samp{X}
-characters in @var{template} with the process id, without regards to the
-existence of a file by that name, but this a security hole.  When this
-was pointed out to the Posix folks, they agreed to invent a new macro
-@code{mkstemp} that always creates a uniquely named file, but not all
-versions of @acronym{GNU} M4 support the new macro.  In M4sugar,
-@code{m4_maketemp} and @code{m4_mkstemp} are synonyms for each other,
-and both have the secure semantics regardless of which macro the
-underlying M4 provides.
+@defmac m4_case (@var{string}, @var{value-1}, @var{if-value-1}, @dots{}, @
+  @ovar{default})
+@msindex{case}
+Test @var{string} against multiple @var{value} possibilities, resulting
+in the first @var{if-value} for a match, or in the optional
+@var{default}.  This is shorthand for:
+@example
+m4_if([@var{string}], [@var{value-1}], [@var{if-value-1}],
+      [@var{string}], [@var{value-2}], [@var{if-value-2}], @dots{},
+      [@var{default}])
+@end example
+@end defmac
+
+@defmac m4_cond (@var{test-1}, @var{value-1}, @var{if-value-1}, @
+  @var{test-2}, @var{value-2}, @var{if-value-2}, @dots{}, @ovar{default})
+@msindex{cond}
+Similar to @code{m4_if}, except that each @var{test} is expanded only
+when it is encountered.  This is useful for short-circuiting expensive
+tests; while @code{m4_if} requires all its strings to be expanded up
+front before doing comparisons, @code{m4_cond} only expands a @var{test}
+when all earlier tests have failed.
+
+For an example, these two sequences give the same result, but in the
+case where @samp{$1} does not contain a backslash, the @code{m4_cond}
+version only expands @code{m4_index} once, instead of five times, for
+faster computation if this is a common case for @samp{$1}.  Notice that
+every third argument is unquoted for @code{m4_if}, and quoted for
+@code{m4_cond}:
+
+@example
+m4_if(m4_index([$1], [\]), [-1], [$2],
+      m4_eval(m4_index([$1], [\\]) >= 0), [1], [$2],
+      m4_eval(m4_index([$1], [\$]) >= 0), [1], [$2],
+      m4_eval(m4_index([$1], [\`]) >= 0), [1], [$3],
+      m4_eval(m4_index([$1], [\"]) >= 0), [1], [$3],
+      [$2])
+m4_cond([m4_index([$1], [\])], [-1], [$2],
+        [m4_eval(m4_index([$1], [\\]) >= 0)], [1], [$2],
+        [m4_eval(m4_index([$1], [\$]) >= 0)], [1], [$2],
+        [m4_eval(m4_index([$1], [\`]) >= 0)], [1], [$3],
+        [m4_eval(m4_index([$1], [\"]) >= 0)], [1], [$3],
+        [$2])
+@end example
+@end defmac
+
+@defmac m4_default (@var{expr-1}, @var{expr-2})
+@msindex{default}
+If @var{expr-1} is not empty, use it.  Otherwise, expand to
+@var{expr-2}.  Useful for providing a fixed default if the expression
+that results in @var{expr-1} would otherwise be empty.
+@end defmac
+
+@defmac m4_ifndef (@var{macro}, @var{if-not-defined}, @ovar{if-defined})
+@msindex{ifndef}
+This is shorthand for:
+@example
+m4_ifdef([@var{macro}], [@var{if-defined}], [@var{if-not-defined}])
+@end example
+@end defmac
+
+@defmac m4_ifset (@var{macro}, @ovar{if-true}, @ovar{if-false})
+@msindex{ifset}
+If @var{macro} is undefined, or is defined as the empty string, expand
+to @var{if-false}.  Otherwise, expands to @var{if-true}.  Similar to:
+@example
+m4_ifval(m4_defn([@var{macro}]), [@var{if-true}], [@var{if-false}])
+@end example
+@noindent
+except that it is not an error if @var{macro} is undefined.
+@end defmac
+
+@defmac m4_ifval (@var{cond}, @ovar{if-true}, @ovar{if-false})
+@msindex{ifval}
+Expands to @var{if-true} if @var{cond} is not empty, otherwise to
+@var{if-false}.  This is shorthand for:
+@example
+m4_if([@var{cond}], [], [@var{if-true}], [@var{if-false}])
+@end example
+@end defmac
+
+@defmac m4_ifvaln (@var{cond}, @ovar{if-true}, @ovar{if-false})
+@msindex{ifvaln}
+Similar to @code{m4_ifval}, except guarantee that a newline is present
+after any non-empty expansion.
+@end defmac
+
+@defmac m4_n (@var{text})
+@msindex{n}
+Expand to @var{text}, and add a newline if @var{text} is not empty.
 @end defmac
 
 
@@ -10269,6 +10393,27 @@ The deprecated macro @code{AC_FOREACH} is an alias of
 @code{m4_foreach_w}.
 @end defmac
 
+The following macros are useful in implementing recursive algorithms.
+
+@defmac m4_do(@dots{})
+@msindex{do}
+This macro loops over its arguments and expands each one in sequence.
+Its main use is for readability; it allows the use of indentation and
+fewer @code{dnl} to result in the same expansion.
+@end defmac
+
+@defmac m4_shiftn (@var{count}, @dots{})
+@defmacx m4_shift2 (@dots{})
+@defmacx m4_shift3 (@dots{})
+@msindex{shift2}
+@msindex{shift3}
+@msindex{shiftn}
+@code{m4_shiftn} performs @var{count} iterations of @code{m4_shift},
+along with validation that enough arguments were passed in to match the
+shift count.  @code{m4_shift2} and @code{m4_shift3} are specializations
+of @code{m4_shiftn} that are more efficient for two and three shifts,
+respectively.
+@end defmac
 
 
 @node Evaluation Macros
