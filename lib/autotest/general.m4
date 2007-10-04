@@ -212,6 +212,19 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # How were we run?
 at_cli_args="$[@]"
 
+#######################
+### Shell functions ###
+#######################
+
+at_check_newline ()
+{
+  case "$[1]" in
+ *'
+'*) echo 'Not enabling shell tracing (command contains an embedded newline)' ; return 1 ;;
+ *) return 0 ;;
+  esac
+}
+
 # Load the config file.
 for at_file in atconfig atlocal
 do
@@ -1337,9 +1350,9 @@ m4_define([AT_CHECK_NOESCAPE],
 # _AT_DECIDE_TRACEABLE(COMMANDS)
 # ------------------------------
 # Worker for for _AT_CHECK that expands to shell code.  If COMMANDS are safe to
-# trace with `set -x', the shell code will set `at_trace_this=yes'.  Otherwise,
+# trace with `set -x', the shell code will evaluate to true.  Otherwise,
 # the shell code will print a message stating an aspect of COMMANDS that makes
-# tracing them unsafe.
+# tracing them unsafe, and evaluate to false.
 #
 # Tracing COMMANDS is not safe if they contain a command that spans multiple
 # lines.  When the test suite user passes `-x' or `--trace', the test suite
@@ -1427,16 +1440,12 @@ m4_pushdef([at_reason],
 ))dnl
 dnl
 m4_ifval(m4_defn([at_reason]),
-[echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'],
-[m4_bmatch([$1], [\$],
-dnl COMMANDS may contain parameter expansions; expand them at runtime.
-[case "AS_ESCAPE([$1], [`\"])" in
- *'
-'*) echo 'Not enabling shell tracing (command contains an embedded newline)' ;;
- *) at_trace_this=yes ;;
-    esac],
+[{ echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'; false; }],
+[m4_if(m4_index([$1], [$]), [-1],
 dnl We know at build time that tracing COMMANDS is always safe.
-[at_trace_this=yes])])[]dnl
+[test -n "$at_traceon"],
+dnl COMMANDS may contain parameter expansions; expand them at runtime.
+[test -n "$at_traceon" && at_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
 m4_popdef([at_lf])[]dnl
 m4_popdef([at_reason])])
 
@@ -1479,12 +1488,7 @@ m4_define([_AT_CHECK],
 AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([$1])"])
 echo AT_LINE >"$at_check_line_file"
 
-at_trace_this=
-if test -n "$at_traceon"; then
-    _AT_DECIDE_TRACEABLE([$1])
-fi
-
-if test -n "$at_trace_this"; then
+if _AT_DECIDE_TRACEABLE([$1]); then
     ( $at_traceon; $1 ) >"$at_stdout" 2>"$at_stder1"
     at_status=$?
     grep '^ *+' "$at_stder1" >&2

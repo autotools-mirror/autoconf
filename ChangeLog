@@ -14,6 +14,12 @@
 
 2007-10-04  Paolo Bonzini  <bonzini@gnu.org>
 
+	* general.m4 (AT_INIT): Add at_check_newline function.
+	(_AT_DECIDE_TRACEABLE): Include at_traceon test, use shell function.
+	(_AT_CHECK): Don't use at_trace_this.
+
+2007-10-04  Paolo Bonzini  <bonzini@gnu.org>
+
 	Fix previous commit.
 	* lib/autotest/general.m4 (AT_LINE): Fix regex.
 
