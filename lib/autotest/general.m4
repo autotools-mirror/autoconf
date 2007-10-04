@@ -152,7 +152,7 @@ m4_define([AT_LINE],
 [m4_if(m4_defn([_AT_LINE_file]), __file__, [],
        [m4_do([m4_define([_AT_LINE_file], __file__)],
 	      [m4_define([_AT_LINE_base],
-			 m4_bpatsubst(/__file__, [/\([^/]*\)$],
+			 m4_bpatsubst(__file__, [^.*/\([^/]*\)$],
 				      [[\1]]))])])dnl
 m4_defn([_AT_LINE_base]):__line__])
 

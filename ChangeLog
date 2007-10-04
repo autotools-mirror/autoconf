@@ -1,3 +1,8 @@
+2007-10-04  Paolo Bonzini  <bonzini@gnu.org>
+
+	Fix previous commit.
+	* lib/autotest/general.m4 (AT_LINE): Fix regex.
+
 2007-10-04  Eric Blake  <ebb9@byu.net>
 
 	Speed up building testsuites.
