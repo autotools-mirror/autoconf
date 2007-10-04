@@ -1,3 +1,9 @@
+2007-10-04  Eric Blake  <ebb9@byu.net>
+
+	Speed up building testsuites.
+	* lib/autotest/general.m4 (AT_LINE): Only use regex when file
+	changed since last time.  Use simpler regex.
+
 2007-10-03  Eric Blake  <ebb9@byu.net>
 
 	Optimize checking for identifiers.

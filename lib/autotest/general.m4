@@ -142,8 +142,19 @@ m4_define([_m4_divert(TEST_SCRIPT)],        403)
 # is one of the biggest junk in the whole universe wrt regexp, don't
 # even think about using `?' or `\?'.  Bah, `*' will do.
 # Pleeeeeeeease, Gary, provide us with dirname and ERE!
+#
+# M4 recompiles the regular expression for every m4_bpatsubst, but __file__
+# rarely changes.  Be fast - only compute the dirname when necessary; for
+# autoconf alone, this shaves off several seconds in building testsuite.
+m4_define([_AT_LINE_file])
+m4_define([_AT_LINE_base])
 m4_define([AT_LINE],
-[m4_bpatsubst(__file__, [^\(.*/\)*\(.*\)], [[\2]]):__line__])
+[m4_if(m4_defn([_AT_LINE_file]), __file__, [],
+       [m4_do([m4_define([_AT_LINE_file], __file__)],
+	      [m4_define([_AT_LINE_base],
+			 m4_bpatsubst(/__file__, [/\([^/]*\)$],
+				      [[\1]]))])])dnl
+m4_defn([_AT_LINE_base]):__line__])
 
 
 # _AT_NORMALIZE_TEST_GROUP_NUMBER(SHELL-VAR)
