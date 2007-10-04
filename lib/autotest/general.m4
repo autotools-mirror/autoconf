@@ -176,7 +176,7 @@ m4_define([_AT_NORMALIZE_TEST_GROUP_NUMBER],
 # Create the debugging script $at_group_dir/run which will reproduce the
 # current test group.
 m4_define([_AT_CREATE_DEBUGGING_SCRIPT],
-[	  {
+[{
 	    echo "#! /bin/sh"
 	    echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
 	    AS_ECHO(["cd '$at_dir'"])
@@ -198,14 +198,14 @@ m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_groups_all], [])
 m4_define([AT_help_all], [])
-AS_INIT
+AS_INIT[]dnl
+m4_divert_push([DEFAULTS])dnl
 AT_COPYRIGHT(
 [Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
 Foundation, Inc.
 This test suite is free software; the Free Software Foundation gives
 unlimited permission to copy, distribute and modify it.])
 AS_PREPARE
-m4_divert_push([DEFAULTS])dnl
 
 SHELL=${CONFIG_SHELL-/bin/sh}
 
@@ -517,15 +517,16 @@ m4_divert_pop([HELP_MODES])dnl
 m4_divert_push([HELP_TUNING])dnl
 cat <<_ATEOF
 
+dnl extra quoting prevents emacs whitespace mode from putting tabs in output
 Execution tuning:
   -k, --keywords=KEYWORDS
-                 select the tests matching all the comma-separated KEYWORDS
-                 multiple \`-k' accumulate; prefixed \`!' negates a KEYWORD
+[                 select the tests matching all the comma-separated KEYWORDS]
+[                 multiple \`-k' accumulate; prefixed \`!' negates a KEYWORD]
   -e, --errexit  abort as soon as a test fails; implies --debug
   -v, --verbose  force more detailed output
-                 default for debugging scripts
+[                 default for debugging scripts]
   -d, --debug    inhibit clean up and top-level logging
-                 default for debugging scripts
+[                 default for debugging scripts]
   -x, --trace    enable tests shell tracing
 _ATEOF
 m4_divert_pop([HELP_TUNING])dnl
@@ -998,10 +999,10 @@ else
       echo
       for at_group in $at_fail_list
       do
-        at_group_normalized=$at_group
-        _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
-        cat "$at_suite_dir/$at_group_normalized/$as_me.log"
-        echo
+	at_group_normalized=$at_group
+	_AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
+	cat "$at_suite_dir/$at_group_normalized/$as_me.log"
+	echo
       done
       echo
     fi

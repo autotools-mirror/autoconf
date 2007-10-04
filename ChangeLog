@@ -1,5 +1,10 @@
 2007-10-04  Eric Blake  <ebb9@byu.net>
 
+	Whitespace cleanup.
+	* lib/autotest/general.m4 (_AT_CREATE_DEBUGGING_SCRIPT): Avoid
+	leading whitespace, as it caused space-tab in testsuite.
+	(AT_INIT): Avoid trailing newlines in testsuite.
+
 	One more round of m4_foreach_w speedups.
 	* lib/m4sugar/m4sugar.m4 (m4_flatten): Only use regex if newline
 	is present.
