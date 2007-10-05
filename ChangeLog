@@ -1,5 +1,15 @@
 2007-10-05  Eric Blake  <ebb9@byu.net>
 
+	Resolve Python issue 1676135 regarding configure directory args.
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Strip trailing
+	slashes from directory arguments.
+	* tests/base.at (configure directories): New test.
+	* doc/autoconf.texi (Installation Directory Variables): Document
+	the change.
+	* NEWS: Likewise.
+	* THANKS: Update.
+	Reported by Björn Lindqvist.
+
 	Provide better short-circuiting operation.
 	* lib/m4sugar/m4sugar.m4 (m4_cond, m4_newline): New macros.
 	(m4_text_wrap): Use it.  Also avoid useless m4_for.

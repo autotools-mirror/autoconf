@@ -895,13 +895,19 @@ if test -n "$ac_unrecognized_opts"; then
   esac
 fi
 
-# Be sure to have absolute directory names.
+# Check all directory arguments for consistency.
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
 		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
+  # Remove trailing slashes.
+  case $ac_val in
+    / | // ) ;;
+    */ ) eval $ac_var='`echo "$ac_val" | sed "s|/*\$||"`' ;;
+  esac
+  # Be sure to have absolute directory names.
   case $ac_val in
     [[\\/$]]* | ?:[[\\/]]* )  continue;;
     NONE | '' ) case $ac_var in *prefix ) continue;; esac;;

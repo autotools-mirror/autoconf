@@ -1728,7 +1728,7 @@ M4.
 
 The following M4 macros (e.g., @code{AC_PACKAGE_NAME}), output variables
 (e.g., @code{PACKAGE_NAME}), and preprocessor symbols (e.g.,
-@code{PACKAGE_NAME}) are defined by @code{AC_INIT}:
+@code{PACKAGE_NAME}), are defined by @code{AC_INIT}:
 
 @table @asis
 @item @code{AC_PACKAGE_NAME}, @code{PACKAGE_NAME}
@@ -2465,7 +2465,10 @@ Absolute name of @code{top_srcdir}.
 The following variables specify the directories for
 package installation, see @ref{Directory Variables, , Variables for
 Installation Directories, standards, The @acronym{GNU} Coding
-Standards}, for more information.  See the end of this section for
+Standards}, for more information.  Each variable corresponds to an
+argument of @command{configure}; trailing slashes are stripped so that
+expressions such as @samp{$@{prefix@}/lib} expand with only one slash
+between directory names.  See the end of this section for
 details on when and how to use these variables.
 
 @defvar bindir

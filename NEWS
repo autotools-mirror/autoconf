@@ -42,6 +42,12 @@ GNU Autoconf NEWS - User visible changes.
 
 ** The command 'autoconf -' now correctly processes a file from stdin.
 
+** For all of the directory arguments for 'configure', such as '--prefix'
+   or '--bindir', trailing slashes are stripped.  As an example, if
+   tab completion in the user's shell appends trailing slashes, the
+   command './configure --prefix=/usr/' will still result in an
+   expanded libdir value of /usr/lib, not /usr//lib.
+
 ** AT_SETUP now handles macro expansions properly when calculating line
    length.  However, as a side effect, any whitespace immediately
    following a single-quoted comma is lost.  If you previously used

@@ -321,3 +321,37 @@ AT_CHECK_CONFIGURE([FOO=bar --enable-baz --without-zork --silent], [0], [stdout]
 AT_CHECK([grep 'FOO=bar --enable-baz --without-zork --silent' stdout], [0], [ignore], [ignore])
 
 AT_CLEANUP
+
+
+## --------------------- ##
+## configure directories ##
+## --------------------- ##
+
+AT_SETUP([configure directories])
+
+AT_DATA([foo.in],
+[[prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+]])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_FILES([foo])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+dnl check that relative paths are rejected
+AT_CHECK_CONFIGURE([--libdir=.], [1], [ignore], [stderr])
+AT_CHECK([grep 'expected an absolute directory name for --libdir: \.' stderr],
+	 [0], [ignore])
+
+dnl check that extra slashes are stripped, and that defaults are not expanded
+AT_CHECK_CONFIGURE([--prefix=/usr//])
+AT_CHECK([cat foo], [0], [[prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+]])
+
+AT_CLEANUP
