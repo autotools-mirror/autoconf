@@ -1,5 +1,10 @@
 2007-10-05  Paul Eggert  <eggert@cs.ucla.edu>
 
+	Don't assume "." is writeable, for commands like "autoconf --version".
+	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE): Use a
+	different heuristic instead, one that doesn't rely on creating
+	files.
+
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Handle "///"
 	correctly.
 
