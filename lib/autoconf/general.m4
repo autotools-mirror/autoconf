@@ -904,8 +904,9 @@ do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
   case $ac_val in
-    / | // ) ;;
-    */ ) eval $ac_var='`echo "$ac_val" | sed "s|/*\$||"`' ;;
+    */ )
+      ac_val=`expr "X$ac_val" : 'X\(.*[[^/]]\)' \| "X$ac_val" : 'X\(.*\)'`
+      eval $ac_var=\$ac_val;;
   esac
   # Be sure to have absolute directory names.
   case $ac_val in
