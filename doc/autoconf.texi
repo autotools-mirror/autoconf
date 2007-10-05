@@ -10143,7 +10143,7 @@ This macro corresponds to @code{m4exit}.
 @msindex{if}
 This macro corresponds to @code{ifelse}.  @var{string-1} and
 @var{string-2} are compared literally, so usually one of the two
-arguments is passed unquoted.  @xref{Conditional constructs} for more
+arguments is passed unquoted.  @xref{Conditional constructs}, for more
 conditional idioms.
 @end defmac
 
@@ -10398,7 +10398,7 @@ The deprecated macro @code{AC_FOREACH} is an alias of
 
 The following macros are useful in implementing recursive algorithms.
 
-@defmac m4_do(@dots{})
+@defmac m4_do (@dots{})
 @msindex{do}
 This macro loops over its arguments and expands each one in sequence.
 Its main use is for readability; it allows the use of indentation and

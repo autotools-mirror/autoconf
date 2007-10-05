@@ -1,3 +1,9 @@
+2007-10-05  Jim Meyering  <meyering@redhat.com>
+
+	Avoid makeinfo warnings.
+	* doc/autoconf.texi (Redefined M4 Macros): Add a `,' after @xref.
+	(Looping constructs): Add ` ' after @defmac'd name, m4_do.
+
 2007-10-05  Eric Blake  <ebb9@byu.net>
 
 	Resolve Python issue 1676135 regarding configure directory args.
