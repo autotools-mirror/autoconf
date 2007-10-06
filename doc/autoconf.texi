@@ -11412,10 +11412,20 @@ have evolved over the years, but to prevent trouble, do not take
 advantage of features that were added after Unix version 7, circa
 1977 (@pxref{Systemology}).
 
-You should not use shell functions, aliases, negated character
-classes, or other features that are not found in all Bourne-compatible
-shells; restrict yourself to the lowest common denominator.  Even
-@code{unset} is not supported by all shells!
+You should not use aliases, negated character classes, or other features
+that are not found in all Bourne-compatible shells; restrict yourself
+to the lowest common denominator.  Even @code{unset} is not supported
+by all shells!
+
+Shell functions are considered portable nowadays, though Autoconf
+still does not use them (Autotest does).  However, inside a shell
+function you should not be using @code{$?} to check the return code
+of a subshell invocation; in general, since the caller of a shell
+function might look at the function's return code, make sure that the
+last statement of a shell function does not invoke a subshell.
+Using subshells triggers bugs in zsh 4.x; while Autoconf tries
+to find a shell that does not exhibit the bug, zsh might be the
+only shell present on the user's machine.
 
 Some ancient systems have quite
 small limits on the length of the @samp{#!} line; for instance, 32

@@ -1,5 +1,10 @@
 2007-10-06  Paolo Bonzini  <bonzini@gnu.org>
 
+        * doc/autoconf.texi (Shell portability): Document shell function
+        portability.
+
+2007-10-06  Paolo Bonzini  <bonzini@gnu.org>
+
 	* lib/autotest/general.m4 (AT_INIT): Add at_func_diff_devnull,
 	at_func_check_skip, at_func_check_status, at_func_filter_trace,
 	at_func_log_failure shell functions.  Use test -s to avoid
