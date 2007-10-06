@@ -212,17 +212,71 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # How were we run?
 at_cli_args="$[@]"
 
-#######################
-### Shell functions ###
-#######################
+## --------------- ##
+## Shell functions ##
+## --------------- ##
 
-at_check_newline ()
+# at_func_check_newline COMMAND
+# Test if COMMAND includes a newline and, if so, print a message and return exit code 1
+at_func_check_newline ()
 {
   case "$[1]" in
  *'
 '*) echo 'Not enabling shell tracing (command contains an embedded newline)' ; return 1 ;;
  *) return 0 ;;
   esac
+}
+
+# at_func_filter_trace EXIT-CODE
+# Split the contents of file "$at_stder1" into the "set -x" trace (on stderr) and
+# the other lines (on file "$at_stderr").  Return the exit code EXIT-CODE.
+at_func_filter_trace ()
+{
+  grep '^ *+' "$at_stder1" >&2
+  grep -v '^ *+' "$at_stder1" >"$at_stderr"
+  return $[1]
+}
+
+# at_func_log_failure FILE-LIST
+# Copy the files in the list on stdout with a "> " prefix, and exit the shell
+# with a failure exit code.
+at_func_log_failure ()
+{
+  for file
+   do AS_ECHO(["$file:"]); sed 's/^/> /' "$file"; done
+  echo 1 > "$at_status_file"
+  exit 1
+}
+
+# at_func_check_skip EXIT-CODE
+# Check whether EXIT-CODE is the special exit code 77, and if so exit the shell
+# with that same exit code.
+at_func_check_skip () {
+  case $[1] in
+    77) echo 77 > "$at_status_file"; exit 77;;
+  esac
+}
+
+# at_func_check_status EXPECTED EXIT-CODE LINE
+# Check whether EXIT-CODE is the expected exit code, and if so do nothing.  Else,
+# if it is 77 exit the shell with that same exit code; if it is anything else
+# print an error message and fail the test.
+at_func_check_status () {
+  dnl This order ensures that we don't `skip' if we are precisely checking $? = 77.
+  case $[2] in
+    $[1] ) ;;
+    77) echo 77 > "$at_status_file"; exit 77;;
+    *) AS_ECHO(["$[3]: exit code was $[2], expected $[1]"])
+      at_failed=:;;
+  esac
+}
+
+# at_func_diff_devnull FILE
+# Emit a diff between /dev/null and FILE.  Uses "test -s" to avoid useless
+# diff invocations.
+at_func_diff_devnull () {
+  test -s "$[1]" || return 0
+  $at_diff "$at_devnull" "$[1]"
 }
 
 # Load the config file.
@@ -1193,7 +1247,7 @@ $1])])# AT_COPYRIGHT
 # The group is testing what DESCRIPTION says.
 m4_define([AT_SETUP],
 [m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])
-m4_ifdef([AT_capture_files], [m4_undefine([AT_capture_files])])
+m4_define([AT_capture_files], [])
 m4_define([AT_line], AT_LINE)
 m4_define([AT_xfail], [at_xfail=no])
 m4_define([AT_description], m4_quote($1))
@@ -1447,9 +1501,31 @@ m4_ifval(m4_defn([at_reason]),
 dnl We know at build time that tracing COMMANDS is always safe.
 [test -n "$at_traceon"],
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
-[test -n "$at_traceon" && at_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
+[test -n "$at_traceon" && at_func_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
 m4_popdef([at_reason])])
 
+
+# AT_DIFF_STDERR/AT_DIFF_STDOUT
+# -----------------------------
+# These are subroutines of AT_CHECK.  Using indirect dispatch is a tad
+# faster than using m4_case, and these are called very frequently.
+m4_define([AT_DIFF_STDERR(stderr)],
+	  [echo stderr:; tee stderr <"$at_stderr"])
+m4_define([AT_DIFF_STDERR(ignore)],
+	  [echo stderr:; cat "$at_stderr"])
+m4_define([AT_DIFF_STDERR(experr)],
+	  [$at_diff experr "$at_stderr" || at_failed=:])
+m4_define([AT_DIFF_STDERR()],
+	  [at_func_diff_devnull "$at_stderr" || at_failed=:])
+
+m4_define([AT_DIFF_STDOUT(stdout)],
+	  [echo stdout:; tee stdout <"$at_stdout"])
+m4_define([AT_DIFF_STDOUT(ignore)],
+	  [echo stdout:; cat "$at_stdout"])
+m4_define([AT_DIFF_STDOUT(expout)],
+	  [$at_diff expout "$at_stdout" || at_failed=:])
+m4_define([AT_DIFF_STDOUT()],
+	  [at_func_diff_devnull "$at_stdout" || at_failed=:])
 
 # _AT_CHECK(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #           [RUN-IF-FAIL], [RUN-IF-PASS], SHELL_ESCAPE_IO)
@@ -1491,46 +1567,22 @@ echo AT_LINE >"$at_check_line_file"
 
 if _AT_DECIDE_TRACEABLE([$1]); then
     ( $at_traceon; $1 ) >"$at_stdout" 2>"$at_stder1"
-    at_status=$?
-    grep '^ *+' "$at_stder1" >&2
-    grep -v '^ *+' "$at_stder1" >"$at_stderr"
+    at_func_filter_trace $?
 else
     ( :; $1 ) >"$at_stdout" 2>"$at_stderr"
-    at_status=$?
 fi
-
+at_status=$?
 at_failed=false
-dnl Check stderr.
-m4_case([$4],
-	stderr, [echo stderr:; tee stderr <"$at_stderr"],
-	ignore, [echo stderr:; cat "$at_stderr"],
-	experr, [$at_diff experr "$at_stderr" || at_failed=:],
-	[],     [$at_diff "$at_devnull" "$at_stderr" || at_failed=:],
-	[echo >>"$at_stderr"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$4])],[$4])"]) | $at_diff - "$at_stderr" || at_failed=:])
-dnl Check stdout.
-m4_case([$3],
-	stdout, [echo stdout:; tee stdout <"$at_stdout"],
-	ignore, [echo stdout:; cat "$at_stdout"],
-	expout, [$at_diff expout "$at_stdout" || at_failed=:],
-	[],     [$at_diff "$at_devnull" "$at_stdout" || at_failed=:],
-	[echo >>"$at_stdout"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$3])],[$3])"]) | $at_diff - "$at_stdout" || at_failed=:])
-dnl Check exit val.  Don't `skip' if we are precisely checking $? = 77.
-case $at_status in
-m4_if([$2], [77],
-    [],
-    [   77) echo 77 > "$at_status_file"; exit 77;;
-])dnl
-m4_if([$2], [ignore],
-    [   *);;],
-    [   m4_default([$2], [0])) ;;
-   *) AS_ECHO(["$at_srcdir/AT_LINE: exit code was $at_status, expected m4_default([$2], [0])"])
-      at_failed=:;;])
-esac
-AS_IF($at_failed, [$5
-  m4_ifdef([AT_capture_files],
-    [for file in AT_capture_files
-     do AS_ECHO(["$file:"]); sed 's/^/> /' "$file"; done])
-  echo 1 > "$at_status_file"
-  exit 1], [$6])
+m4_ifdef([AT_DIFF_STDERR($4)], [m4_indir([AT_DIFF_STDERR($4)])],
+	 [echo >>"$at_stderr"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$4])],[$4])"]) | \
+	  $at_diff - "$at_stderr" || at_failed=:])
+m4_ifdef([AT_DIFF_STDOUT($3)], [m4_indir([AT_DIFF_STDOUT($3)])],
+	 [echo >>"$at_stdout"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$3])],[$3])"]) | \
+	  $at_diff - "$at_stdout" || at_failed=:])
+m4_if([$2], [ignore], [at_func_check_skip],
+      [at_func_check_status m4_default([$2], [0])]) dnl
+     $at_status "$at_srcdir/AT_LINE"
+AS_IF($at_failed, [$5], [$6])
+$at_failed && at_func_log_failure AT_capture_files
 $at_traceon
 ])# _AT_CHECK
