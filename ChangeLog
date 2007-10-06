@@ -636,6 +636,8 @@
 	* NEWS: Mention AC_C_OPENMP.
 	* lib/autoconf/c.m4 (AC_C_OPENMP): New macro.
 	* doc/autoconf.texi (C Compiler): Document AC_C_OPENMP.
+	Based in part on Steven G. Johnson's investigations for the AX_OPENMP
+	macro in the Autoconf macro archive.
 
 2007-05-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
