@@ -1,7 +1,15 @@
+2007-10-08  Eric Blake  <ebb9@byu.net>
+
+	Avoid m4 warnings on bad m4_format usage.
+	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Use %*s, in case width
+	evaulates to 0.
+	* lib/autotest/general.m4 (AT_ordinal): Likewise; also ensure that
+	enough arguments are provided.
+
 2007-10-06  Paolo Bonzini  <bonzini@gnu.org>
 
-        * doc/autoconf.texi (Shell portability): Document shell function
-        portability.
+	* doc/autoconf.texi (Shell portability): Document shell function
+	portability.
 
 2007-10-06  Paolo Bonzini  <bonzini@gnu.org>
 

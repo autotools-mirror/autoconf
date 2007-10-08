@@ -1745,7 +1745,8 @@ m4_Prefix],
 	[m4_eval(m4_qlen(m4_defn([m4_Prefix1])) < m4_len(m4_Prefix))],
 	[0], [],
 	[m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
-m4_format(%m4_eval(m4_len(m4_Prefix) - 1 - m4_qlen(m4_defn([m4_Prefix1])))[s],
+m4_format([%*s],
+	  m4_eval(m4_len(m4_Prefix) - 1 - m4_qlen(m4_defn([m4_Prefix1]))),
 	  [])])[]dnl
 m4_foreach_w([m4_Word], [$1],
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_qlen(m4_defn([m4_Word])) + 1))dnl

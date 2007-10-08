@@ -1257,8 +1257,8 @@ m4_divert_push([TESTS])dnl
   AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
     at_setup_line='m4_defn([AT_line])'
     at_desc="AS_ESCAPE(m4_dquote(m4_defn([AT_description])))"
-    $at_quiet AS_ECHO_N(["m4_format([%3d: ], AT_ordinal)$at_desc"]dnl
-["m4_format(%m4_eval(47 - m4_qlen(m4_defn([AT_description])))[s])"])
+    $at_quiet AS_ECHO_N([m4_format(["%3d: $at_desc%*s"], AT_ordinal,
+      m4_eval(47 - m4_qlen(m4_defn([AT_description]))), [])])
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 
