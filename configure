@@ -73,15 +73,11 @@ fi
 
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
-  echo "#! /bin/sh" >conf$$.sh
-  echo  "exit 0"   >>conf$$.sh
-  chmod +x conf$$.sh
-  if (PATH="/nonexistent;."; FPATH=$PATH; conf$$.sh) >/dev/null 2>&1; then
-    PATH_SEPARATOR=';'
-  else
-    PATH_SEPARATOR=:
-  fi
-  rm -f conf$$.sh
+  PATH_SEPARATOR=:
+  (PATH='/bin;/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 && {
+    (PATH='/bin:/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 ||
+      PATH_SEPARATOR=';'
+  }
 fi
 
 # Support unset when possible.
@@ -1123,13 +1119,20 @@ if test -n "$ac_unrecognized_opts"; then
   esac
 fi
 
-# Be sure to have absolute directory names.
+# Check all directory arguments for consistency.
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
 		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
+  # Remove trailing slashes.
+  case $ac_val in
+    */ )
+      ac_val=`expr "X$ac_val" : 'X\(.*[^/]\)' \| "X$ac_val" : 'X\(.*\)'`
+      eval $ac_var=\$ac_val;;
+  esac
+  # Be sure to have absolute directory names.
   case $ac_val in
     [\\/$]* | ?:[\\/]* )  continue;;
     NONE | '' ) case $ac_var in *prefix ) continue;; esac;;
@@ -3088,15 +3091,11 @@ fi
 
 # The user is always right.
 if test "${PATH_SEPARATOR+set}" != set; then
-  echo "#! /bin/sh" >conf$$.sh
-  echo  "exit 0"   >>conf$$.sh
-  chmod +x conf$$.sh
-  if (PATH="/nonexistent;."; FPATH=$PATH; conf$$.sh) >/dev/null 2>&1; then
-    PATH_SEPARATOR=';'
-  else
-    PATH_SEPARATOR=:
-  fi
-  rm -f conf$$.sh
+  PATH_SEPARATOR=:
+  (PATH='/bin;/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 && {
+    (PATH='/bin:/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 ||
+      PATH_SEPARATOR=';'
+  }
 fi
 
 # Support unset when possible.

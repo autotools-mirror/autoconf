@@ -1,5 +1,8 @@
 2007-10-08  Eric Blake  <ebb9@byu.net>
 
+	Use recent changes.
+	* configure: Regenerate.
+
 	Fix regression in m4_text_wrap from 2007-10-05.
 	* lib/m4sugar/m4sugar.m4 (m4_max, m4_min): New macros.
 	(m4_sign): Sort.
