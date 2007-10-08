@@ -272,7 +272,7 @@ published by the Free Software Foundation raise funds for
 * Using Autotest::              Creating portable test suites
 * FAQ::                         Frequent Autoconf Questions, with answers
 * History::                     History of Autoconf
-* Copying This Manual::         How to make copies of this manual
+* GNU Free Documentation License::  License for copying this manual
 * Indices::                     Indices of symbols, concepts, etc.
 
 @detailmenu
@@ -610,10 +610,6 @@ History of Autoconf
 * Leviticus::                   The priestly code of portability arrives
 * Numbers::                     Growth and contributors
 * Deuteronomy::                 Approaching the promises of easy configuration
-
-Copying This Manual
-
-* GNU Free Documentation License::  License for copying this manual
 
 Indices
 
@@ -20130,19 +20126,9 @@ have free time again.  I think.  Yeah, right.)
 
 @c ========================================================== Appendices
 
-@node Copying This Manual
-@appendix Copying This Manual
-@cindex License
-
-@menu
-* GNU Free Documentation License::  License for copying this manual
-@end menu
-
 
 @node GNU Free Documentation License
-@appendixsec GNU Free Documentation License
-
-@cindex FDL, GNU Free Documentation License
+@appendix GNU Free Documentation License
 
 @include fdl.texi
 

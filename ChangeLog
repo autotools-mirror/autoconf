@@ -1,3 +1,13 @@
+2007-10-08  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Adjust doc. to match latest gnulib.
+	* build-aux/texinfo.tex: Sync from gnulib.
+	* doc/standards.texi: Likewise.
+	* doc/autoconf.texi (Copying This Manual): Rename to "GNU Free
+	Documentation License" and remove the subsection.  This simplifies
+	the manual a bit and is more like what other GNU projects do
+	nowadays.
+
 2007-10-08  Eric Blake  <ebb9@byu.net>
 
 	Use recent changes.
