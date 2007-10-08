@@ -13657,7 +13657,7 @@ or @code{@var{a}^=@var{b}}.
 
 Traditional Awk does not support the predefined @code{CONVFMT} variable.
 
-Traditional Awk supports only the predefined functions @code{exp},
+Traditional Awk supports only the predefined functions @code{exp}, @code{index},
 @code{int}, @code{length}, @code{log}, @code{split}, @code{sprintf},
 @code{sqrt}, and @code{substr}.
 

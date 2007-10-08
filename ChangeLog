@@ -1,5 +1,7 @@
 2007-10-08  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* doc/autoconf.texi (Limitations of Usual Tools): V7 awk had 'index'.
+
 	Adjust doc. to match latest gnulib.
 	* build-aux/texinfo.tex: Sync from gnulib.
 	* doc/standards.texi: Likewise.
