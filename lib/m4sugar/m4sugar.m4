@@ -1746,7 +1746,7 @@ m4_Prefix],
 	[0], [],
 	[m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
 m4_format([%*s],
-	  m4_eval(m4_len(m4_Prefix) - 1 - m4_qlen(m4_defn([m4_Prefix1]))),
+	  m4_max(0,m4_eval(m4_len(m4_Prefix) - m4_qlen(m4_defn([m4_Prefix1])))),
 	  [])])[]dnl
 m4_foreach_w([m4_Word], [$1],
 [m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_qlen(m4_defn([m4_Word])) + 1))dnl
@@ -1804,12 +1804,6 @@ m4_define([m4_qdelta],
 ## 10. Number processing.  ##
 ## ----------------------- ##
 
-# m4_sign(A)
-# ----------
-# The sign of the integer expression A.
-m4_define([m4_sign],
-[m4_eval((([$1]) > 0) - (([$1]) < 0))])
-
 # m4_cmp(A, B)
 # ------------
 # Compare two integer expressions.
@@ -1839,6 +1833,36 @@ m4_define([m4_list_cmp],
 		-1, -1,
 		 1, 1,
 		 0, [$0((m4_shift$1), (m4_shift$2))])])])
+
+# m4_max(A, B, ...)
+# m4_min(A, B, ...)
+# -----------------
+# Return the maximum (or minimum) of a series of integer expressions.
+#
+# M4 1.4.x doesn't provide ?:.  Hence this huge m4_eval.  Avoid m4_eval
+# if both arguments are identical, but be aware of m4_max(0xa, 10) (hence
+# the use of <=, not just <, in the second multiply).
+m4_define([m4_max],
+[m4_if([$#], [0], [m4_fatal([too few arguments to $0])],
+       [$#], [1], [$1],
+       [$#$1], [2$2], [$1],
+       [$#], [2],
+       [m4_eval((([$1]) > ([$2])) * ([$1]) + (([$1]) <= ([$2])) * ([$2]))],
+       [$0($0([$1], [$2]), m4_shift2($@))])])
+m4_define([m4_min],
+[m4_if([$#], [0], [m4_fatal([too few arguments to $0])],
+       [$#], [1], [$1],
+       [$#$1], [2$2], [$1],
+       [$#], [2],
+       [m4_eval((([$1]) < ([$2])) * ([$1]) + (([$1]) >= ([$2])) * ([$2]))],
+       [$0($0([$1], [$2]), m4_shift2($@))])])
+
+
+# m4_sign(A)
+# ----------
+# The sign of the integer expression A.
+m4_define([m4_sign],
+[m4_eval((([$1]) > 0) - (([$1]) < 0))])
 
 
 

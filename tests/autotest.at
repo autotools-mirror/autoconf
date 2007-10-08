@@ -235,12 +235,12 @@ conf
 ## ------------------------------- ##
 
 # AT_CHECK_AT_TITLE(TITLE, TITLE-TO-TEST, EXPANDED-TITLE-TO-TEST
-#                   [XFAIL-CONDITION])
+#                   [XFAIL-CONDITION], [COLUMN = 53])
 # ---------------------------------------------------------------
 # Create a new test named TITLE that runs an Autotest test suite
 # comprised of a trivial test named TITLE-TO-TEST, which expands
 # to EXPANDED-TITLE-TO-TEST.  XFAIL-CONDITION passes verbatim to
-# AT_CHECK_AT.
+# AT_CHECK_AT.  Verify that `ok' prints at COLUMN.
 m4_define([AT_CHECK_AT_TITLE],
 [AT_CHECK_AT([$1],
 [[
@@ -258,13 +258,13 @@ AT_CHECK([:])
 AT_CLEANUP
 ]], [$4], [], [], [],
 dnl This sed script checks for two things - that the output is properly
-dnl expanded, and that the 'ok' starts on column 53.
+dnl expanded, and that the 'ok' starts on the right column.
 [AT_CHECK([[$CONFIG_SHELL ./micro-suite |
 	    sed -n '/^  1:/{
 h
 s/[^:]*: \(.*[^	 ]\)[	 ]*ok.*/\1/p
 x
-s/^.\{53\}ok.*/ok/p
+s/^.\{]]]m4_default($5, 53)[[[\}ok.*/ok/p
 }']],,
 [[$3
 ok
@@ -280,7 +280,7 @@ AT_CHECK([[sed -n 's/[^.]*\. \(.*\) ([^)]*): ok.*/\1/p' micro-suite.log]],,
 
 m4_define([AT_CHECK_AT_TITLE_CHAR],
 [AT_CHECK_AT_TITLE([$1 in a test title], [A $2 in my name],
-                   [A ]m4_ifval([$3], [[$3]], [[$2]])[ in my name], $4)])
+                   [A ]m4_ifval([$3], [[$3]], [[$2]])[ in my name], $4, $5)])
 
 AT_CHECK_AT_TITLE_CHAR([Backquote],     [`])
 AT_CHECK_AT_TITLE_CHAR([Single-quote],  ['])
@@ -302,6 +302,9 @@ AT_CHECK_AT_TITLE_CHAR([Macro with backslash],       [macro_backslash], [\])
 AT_CHECK_AT_TITLE_CHAR([Macro echoing macro], [macro_echo([macro_name])],
                        [macro_expanded])
 AT_CHECK_AT_TITLE_CHAR([Macro echoing single-quote], [macro_echo(['])], ['])
+AT_CHECK_AT_TITLE_CHAR([Long test title], [0123456789012345678901234567890123])
+AT_CHECK_AT_TITLE_CHAR([Longer test title],
+		       [01234567890123456789012345678901234], [], [], [54])
 
 
 ## ----------------- ##

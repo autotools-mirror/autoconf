@@ -1,9 +1,18 @@
 2007-10-08  Eric Blake  <ebb9@byu.net>
 
+	Fix regression in m4_text_wrap from 2007-10-05.
+	* lib/m4sugar/m4sugar.m4 (m4_max, m4_min): New macros.
+	(m4_sign): Sort.
+	(m4_text_wrap): Fix off-by-one error in rewrite from m4_for to
+	m4_format.
+	* lib/autotest/general.m4 (AT_SETUP): Avoid negative width.
+	* tests/autotest.at (Long test title, Longer test title): Test
+	this fix, beyond what AS_HELP_STRING already tests.
+
 	Avoid m4 warnings on bad m4_format usage.
 	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Use %*s, in case width
 	evaulates to 0.
-	* lib/autotest/general.m4 (AT_ordinal): Likewise; also ensure that
+	* lib/autotest/general.m4 (AT_SETUP): Likewise; also ensure that
 	enough arguments are provided.
 
 2007-10-06  Paolo Bonzini  <bonzini@gnu.org>
