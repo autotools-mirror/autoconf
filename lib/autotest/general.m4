@@ -1289,7 +1289,7 @@ m4_define([AT_SETUP],
 m4_define([AT_capture_files], [])
 m4_define([AT_line], AT_LINE)
 m4_define([AT_xfail], [at_xfail=no])
-m4_define([AT_description], m4_quote($1))
+m4_define([AT_description], m4_expand([$1]))
 m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TEST_FUNCTIONS])dnl

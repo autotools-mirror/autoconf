@@ -615,6 +615,36 @@ m4_define([m4_do],
 m4_define([m4_dquote],  [[$@]])
 
 
+# m4_expand(ARG)
+# --------------
+# Return the expansion of ARG as a single string.  Unlike m4_quote($1), this
+# correctly preserves whitespace following single-quoted commas that appeared
+# within ARG (however, it does not preserve whitespace after any unquoted
+# commas encountered in the expansion).
+#
+#   m4_define([active], [ACT, IVE])
+#   m4_define([active2], [[ACT, IVE]])
+#   m4_quote(active, active2)
+#   => ACT,IVE,ACT, IVE
+#   m4_expand([active, active2])
+#   => ACT,IVE, ACT, IVE
+#
+# Splitting a quoted ARG on `,' preserves space, but produces a quoted list.
+# Unquote the list, then expand each argument while preserving the leading
+# spaces; finally, collect each argument back into the final string.
+m4_define([m4_expand],
+[m4_quote(_$0(m4_unquote(m4_split([$1], [,]))))])
+
+# _m4_expand(ARGS)
+# ----------------
+# Return the expansion of each ARG, separated by `,'.  Less efficient than
+# m4_unquote, but preserves quoted leading space in each ARG.
+m4_define([_m4_expand],
+[m4_if([$#], [0], [],
+       [$#], [1], [$1],
+       [$1,$0(m4_shift($@))])])
+
+
 # m4_ignore(ARGS)
 # ---------------
 # Expands to nothing.  Useful for conditionally ignoring an arbitrary
@@ -1834,7 +1864,7 @@ m4_builtin([popdef], [m4_Prefix])dnl
 # using FRAME-CHARACTER in the border.
 m4_define([m4_text_box],
 [m4_pushdef([m4_Border],
-	    m4_translit(m4_format([%*s], m4_qlen(m4_quote($1)), []),
+	    m4_translit(m4_format([%*s], m4_qlen(m4_expand([$1])), []),
 			[ ], m4_if([$2], [], [[-]], [[$2]])))dnl
 @%:@@%:@ m4_Border @%:@@%:@
 @%:@@%:@ $1 @%:@@%:@

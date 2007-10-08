@@ -1,3 +1,14 @@
+2007-10-15  Eric Blake  <ebb9@byu.net>
+
+	Fix 2007-10-03 regression with AT_SETUP([a, b]).
+	* lib/m4sugar/m4sugar.m4 (m4_expand): New macro.
+	(m4_text_box): Use it.
+	* lib/autotest/general.m4 (AT_SETUP): Use it.
+	* lib/m4sugar/m4sh.m4 (_AS_RUN): Use it.
+	* tests/autotest.at (AT_CHECK_AT_TITLE_CHAR): Test this.
+	* NEWS: Revert caveat about semantics change on comma.
+	* doc/autoconf.texi (Evaluation Macros): Document m4_expand.
+
 2007-10-13  Eric Blake  <ebb9@byu.net>
 
 	Change m4_join to match libtool's ltsugar semantics.

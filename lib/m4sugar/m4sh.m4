@@ -197,7 +197,7 @@ _AS_BOURNE_COMPATIBLE
 $1
 _ASEOF
 }],
-[(eval "AS_ESCAPE(m4_quote($1))")])])
+[(eval "AS_ESCAPE(m4_expand([$1]))")])])
 
 
 # _AS_DETECT_REQUIRED(TEST)

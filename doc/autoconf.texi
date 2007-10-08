@@ -10696,6 +10696,32 @@ Conveniently, if there is just one @var{arg}, this effectively adds a
 level of quoting.
 @end defmac
 
+@defmac m4_expand (@var{arg})
+@msindex{expand}
+Return the expansion of @var{arg} as a quoted string.  Whereas
+@code{m4_quote} is designed to collect expanded text into a single
+argument, @code{m4_expand} is designed to perform one level of expansion
+on quoted text.  The distinction is in the treatment of whitespace
+following a comma in the original @var{arg}.  Any time multiple
+arguments are collected into one with @code{m4_quote}, the M4 argument
+collection rules discard the whitespace.  But with @code{m4_quote},
+whitespace is discarded only if it results from unquoted commas in the
+expansion of macros contained in @var{arg}.
+
+@example
+m4_define([active], [ACT, IVE])dnl
+m4_define([active2], [[ACT, IVE]])dnl
+m4_quote(active, active)
+@result{}ACT,IVE,ACT,IVE
+m4_expand([active, active])
+@result{}ACT,IVE, ACT,IVE
+m4_quote(active2, active2)
+@result{}ACT, IVE,ACT, IVE
+m4_expand([active2, active2])
+@result{}ACT, IVE, ACT, IVE
+@end example
+@end defmac
+
 @defmac m4_ignore (@dots{})
 @msindex{ignore}
 This macro was introduced in Autoconf 2.62.  Expands to nothing,
@@ -10735,34 +10761,43 @@ with @code{m4_split}, in order to convert a single quoted list into a
 series of quoted elements.
 @end defmac
 
-The following example aims at emphasizing the difference between (i), not
-using these macros, (ii), using @code{m4_quote}, and (iii), using
-@code{m4_dquote}.
+The following example aims at emphasizing the difference between several
+scenarios: not using these macros, using @code{m4_defn}, using
+@code{m4_quote}, using @code{m4_dquote}, and using @code{m4_expand}.
 
 @example
 $ @kbd{cat example.m4}
 # Overquote, so that quotes are visible.
 m4_define([show], [$[]1 = [$1], $[]@@ = [$@@]])
-m4_define([mkargs], [1, 2, 3])
+m4_define([a], [A])
+m4_define([mkargs], [1, 2[,] 3])
 m4_define([arg1], [[$1]])
-m4_divert(0)dnl
+m4_divert([0])dnl
 show(a, b)
+show([a, b])
 show(m4_quote(a, b))
 show(m4_dquote(a, b))
+show(m4_expand([a, b]))
+
 arg1(mkargs)
 arg1([mkargs])
 arg1(m4_defn([mkargs]))
 arg1(m4_quote(mkargs))
 arg1(m4_dquote(mkargs))
+arg1(m4_expand([mkargs]))
 $ @kbd{autom4te -l m4sugar example.m4}
-$1 = a, $@@ = [a],[b]
-$1 = a,b, $@@ = [a,b]
-$1 = [a],[b], $@@ = [[a],[b]]
+$1 = A, $@@ = [A],[b]
+$1 = a, b, $@@ = [a, b]
+$1 = A,b, $@@ = [A,b]
+$1 = [A],[b], $@@ = [[A],[b]]
+$1 = A, b, $@@ = [A, b]
+
 1
 mkargs
-1, 2, 3
-1,2,3
-[1],[2],[3]
+1, 2[,] 3
+1,2, 3
+[1],[2, 3]
+1,2, 3
 @end example
 
 
