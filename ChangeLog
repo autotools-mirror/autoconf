@@ -1,3 +1,7 @@
+2007-10-09  Eric Blake  <ebb9@byu.net>
+
+	* bin/autoconf.as (exit_missing_arg): Font-lock tweak.
+
 2007-10-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/install.texi (Basic Installation): Document `uninstall'.

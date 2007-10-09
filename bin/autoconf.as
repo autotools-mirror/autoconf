@@ -73,7 +73,7 @@ exit_missing_arg='
   AS_ECHO(["$as_me: option \`$[1]'\'' requires an argument"]) >&2
   AS_ECHO(["$help"]) >&2
   exit 1
-'
+' # restore font-lock: "
 
 # Variables.
 : ${AUTOM4TE='@bindir@/@autom4te-name@'}
