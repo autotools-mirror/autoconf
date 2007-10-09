@@ -1651,6 +1651,8 @@ m4_pattern_forbid([^_?AS_])
 
 # Bangshe and minimal initialization.
 m4_divert_text([BINSH], [@%:@! /bin/sh])
+m4_divert_text([HEADER-COMMENT],
+	       [@%:@ Generated from __file__ by m4_PACKAGE_STRING.])
 m4_divert_text([M4SH-SANITIZE], [AS_SHELL_SANITIZE])
 AS_REQUIRE([_AS_SHELL_FN_SPY])
 

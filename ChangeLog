@@ -1,5 +1,11 @@
 2007-10-09  Eric Blake  <ebb9@byu.net>
 
+	Improve header of bin/autoconf.
+	* lib/m4sugar/m4sh.m4 (AS_INIT): Add a 'generated from' notice.
+	* lib/autoconf/general.m4 (_AC_INIT_NOTICE): Override new notice
+	from M4sh.
+	* bin/autoconf.as: Put copyright up front in generated file.
+
 	* bin/autoconf.as (exit_missing_arg): Font-lock tweak.
 
 2007-10-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
