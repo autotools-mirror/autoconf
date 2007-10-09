@@ -1,3 +1,9 @@
+2007-10-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/install.texi (Basic Installation): Document `uninstall'.
+	* INSTALL: Regenerate.
+	Suggestion by Roberto Bagnara.
+
 2007-10-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): V7 awk had 'index'.
