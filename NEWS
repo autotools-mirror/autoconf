@@ -2,6 +2,13 @@ GNU Autoconf NEWS - User visible changes.
 
 * Major changes in Autoconf 2.61b (????-??-??)
 
+** config.status now uses awk instead of sed also for config headers.
+
+   - As a side effect, AC_DEFINE and AC_DEFINE_UNQUOTED now handle multi-line
+     values, i.e., backslash-newline combinations are handled correctly.
+     Further, for config headers, the total size of values is not limited by
+     the POSIX length limit of text lines any more, only each single line.
+
 ** Autoconf is now licensed under the General Public License version 3
    or later (GPLv3+).  As with earlier versions, the license includes
    an exception clause so that you may release a configure script

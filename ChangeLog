@@ -1,5 +1,28 @@
 2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Use awk for config header generation.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Fix comments.
+	(_AC_OUTPUT_HEADERS_PREPARE): New macro.  Rewrite of the config
+	header machinery for use with awk and placement outside the main
+	config.status instantiation loop.  Retain multi-line defines
+	through backslash-newline combinations, do not split the script
+	any more.
+	(_AC_OUTPUT_HEADER): Simplify accordingly, use $AWK.
+	(_AC_OUTPUT_MAIN_LOOP): Call _AC_OUTPUT_HEADERS_PREPARE if
+	needed.
+	(AC_OUTPUT_MAKE_DEFS): Remove backslash-newline combinations
+	from define values.
+	* NEWS: Update.
+	* tests/torture.at (#define header templates): Extend test by
+	several more cases: white space before and after `#', macros
+	with parameters in config.hin and as defines, multi-line macro
+	values.
+	(Torturing config.status): Use a define value twice the length
+	in order to exercise the awk literal string limit.
+	(Substitute and define special characters): Also try special
+	delimiter, to exercise the special-case code.
+	Suggestion by Eric Lemings.
+
 	* tests/local.at (AT_COPYRIGHT): Bump copyright years.
 
 2007-10-09  Eric Blake  <ebb9@byu.net>
