@@ -1,5 +1,9 @@
 2007-10-10  Eric Blake  <ebb9@byu.net>
 
+	Whitespace cleanup.
+	* lib/autoconf/general.m4: Use consistent indentation.
+	* configure: Regenerate.
+
 	* NEWS: Announce recent round of speed optimizations.
 
 2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>

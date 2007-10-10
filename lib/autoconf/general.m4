@@ -979,7 +979,7 @@ m4_define([_AC_INIT_PARSE_ENABLE2],
 "$2_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--$1-$ac_useropt_orig"
-         ac_unrecognized_sep=', ';;
+	 ac_unrecognized_sep=', ';;
     esac
     eval $2_$ac_useropt=m4_if([$1], [$2], [\$ac_optarg], [no]) ;;dnl
 ])
