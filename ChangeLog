@@ -1,3 +1,7 @@
+2007-10-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4: Put function braces in separate line.
+
 2007-10-10  Eric Blake  <ebb9@byu.net>
 
 	Avoid some overhead from m4_defn and m4_popdef.

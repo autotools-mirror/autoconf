@@ -251,7 +251,8 @@ at_func_log_failure ()
 # at_func_check_skip EXIT-CODE
 # Check whether EXIT-CODE is the special exit code 77, and if so exit the shell
 # with that same exit code.
-at_func_check_skip () {
+at_func_check_skip ()
+{
   case $[1] in
     77) echo 77 > "$at_status_file"; exit 77;;
   esac
@@ -261,7 +262,8 @@ at_func_check_skip () {
 # Check whether EXIT-CODE is the expected exit code, and if so do nothing.  Else,
 # if it is 77 exit the shell with that same exit code; if it is anything else
 # print an error message and fail the test.
-at_func_check_status () {
+at_func_check_status ()
+{
   dnl This order ensures that we don't `skip' if we are precisely checking $? = 77.
   case $[2] in
     $[1] ) ;;
@@ -274,7 +276,8 @@ at_func_check_status () {
 # at_func_diff_devnull FILE
 # Emit a diff between /dev/null and FILE.  Uses "test -s" to avoid useless
 # diff invocations.
-at_func_diff_devnull () {
+at_func_diff_devnull ()
+{
   test -s "$[1]" || return 0
   $at_diff "$at_devnull" "$[1]"
 }
