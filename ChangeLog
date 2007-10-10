@@ -1,4 +1,5 @@
 2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Paul Eggert  <eggert@cs.ucla.edu>
 
 	Use awk for config header generation.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Fix comments.
@@ -22,6 +23,8 @@
 	(Substitute and define special characters): Also try special
 	delimiter, to exercise the special-case code.
 	Suggestion by Eric Lemings.
+
+2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/local.at (AT_COPYRIGHT): Bump copyright years.
 
