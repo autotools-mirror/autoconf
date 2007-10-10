@@ -1,3 +1,7 @@
+2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/local.at (AT_COPYRIGHT): Bump copyright years.
+
 2007-10-09  Eric Blake  <ebb9@byu.net>
 
 	Improve header of bin/autoconf.
