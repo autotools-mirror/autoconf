@@ -1,6 +1,6 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Checking for functions.
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
 # Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -88,7 +88,7 @@ AC_DEFUN([AC_CHECK_FUNCS],
 for ac_func in $1
 do
 AC_CHECK_FUNC($ac_func,
-	      [AC_DEFINE_UNQUOTED([AS_TR_CPP([HAVE_$ac_func])]) $2],
+	      [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$ac_func])) $2],
 	      [$3])dnl
 done
 ])

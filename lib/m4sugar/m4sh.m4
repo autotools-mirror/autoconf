@@ -1272,7 +1272,8 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [$2], [$3])])
 m4_define([AS_LITERAL_IF],
 [m4_cond([m4_eval(m4_index(m4_quote($1), [@S|@]) == -1)], [0], [$3],
 	 [m4_index(m4_translit(m4_quote($1),
-			       [[]`,#]]m4_dquote(m4_defn([m4_cr_symbols2]))[,
+			       [[]`,#]]]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[,
 			       [$$$]),
 		   [$])], [-1], [$2],
 	 [$3])])

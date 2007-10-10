@@ -2015,14 +2015,9 @@ AS_IDENTIFIER_IF([$1], [],
 # AC_DEFINE_TRACE(CPP-SYMBOL)
 # ---------------------------
 # This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
-# out non literal symbols.
-#
-# m4_index is roughly 5 to 8 times faster than m4_bpatsubst, so only
-# use the regex when necessary.
+# out non literal symbols.  CPP-SYMBOL must not include any parameters.
 m4_define([AC_DEFINE_TRACE],
-[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL(
-  m4_if(m4_index([$1], [(]), [-1], [[$1]],
-	[m4_bpatsubst([[$1]], [(.*)])]))])])
+[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL([$1])])])
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
@@ -2041,9 +2036,17 @@ m4_define([AC_DEFINE_UNQUOTED], [_AC_DEFINE_Q([], $@)])
 
 # _AC_DEFINE_Q(QUOTE, VARIABLE, [VALUE], [DESCRIPTION])
 # -----------------------------------------------------
+# Internal function that performs common elements of AC_DEFINE{,_UNQUOTED}.
+#
+# m4_index is roughly 5 to 8 times faster than m4_bpatsubst, so only
+# use the regex when necessary.  AC_name is defined with over-quotation,
+# so that we can avoid m4_defn.
 m4_define([_AC_DEFINE_Q],
-[AC_DEFINE_TRACE([$2])dnl
-m4_ifval([$4], [AH_TEMPLATE(m4_bpatsubst([[$2]], [(.*)]), [$4])])dnl
+[m4_pushdef([AC_name], m4_if(m4_index([$2], [(]), [-1], [[[$2]]],
+			     [m4_bpatsubst([[[$2]]], [(.*)])]))dnl
+AC_DEFINE_TRACE(AC_name)dnl
+m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])])dnl
+m4_popdef([AC_name])dnl
 cat >>confdefs.h <<$1_ACEOF
 [@%:@define] $2 m4_if($#, 2, 1, [$3])
 _ACEOF
