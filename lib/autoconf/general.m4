@@ -2045,6 +2045,12 @@ m4_define([_AC_DEFINE_Q],
 [m4_pushdef([AC_name], m4_if(m4_index([$2], [(]), [-1], [[[$2]]],
 			     [m4_bpatsubst([[[$2]]], [(.*)])]))dnl
 AC_DEFINE_TRACE(AC_name)dnl
+m4_cond([m4_index([$3], [
+])], [-1], [],
+	[AS_LITERAL_IF([$3], [m4_bregexp([[$3]], [[^\\]
+], [-])])], [], [],
+	[m4_warn([syntax], [AC_DEFINE]m4_ifval([$1], [], [[_UNQUOTED]])dnl
+[: `$3' is not a valid preprocessor define value])])dnl
 m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])])dnl
 m4_popdef([AC_name])dnl
 cat >>confdefs.h <<$1_ACEOF

@@ -1,3 +1,15 @@
+2007-10-11  Eric Blake  <ebb9@byu.net>
+
+	Config header generation followup.
+	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Check for raw newlines,
+	which won't work with the preprocessor nor with the awk
+	implementation.
+	* tests/torture.at (Define a newline): Test raw newline detection,
+	removing the XFAIL.
+	* doc/autoconf.texi (Defining Symbols): Document recent change to
+	allow backslash-newline.
+	* THANKS: Update.
+
 2007-10-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4: Put function braces in separate line.

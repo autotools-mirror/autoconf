@@ -763,16 +763,36 @@ AT_CLEANUP
 ## ------------------ ##
 
 AT_SETUP([Define a newline])
-AT_XFAIL_IF(:)
 AT_CONFIGURE_AC([[AC_DEFINE([foo], [one
 two], [This spans two lines.])
 ]])
-AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOCONF([], [], [],
+[[configure.ac:5: warning: AC_DEFINE: `one
+configure.ac:5: two' is not a valid preprocessor define value
+]])
+AT_CHECK_AUTOHEADER([], [], [],
+[[configure.ac:5: warning: AC_DEFINE: `one
+configure.ac:5: two' is not a valid preprocessor define value
+]])
 AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([[#define foo one
-two
 ]])
+
+AT_CONFIGURE_AC([[AC_DEFINE_UNQUOTED([foo], [one
+two], [This spans two lines.])
+]])
+AT_CHECK_AUTOCONF([], [], [],
+[[configure.ac:5: warning: AC_DEFINE_UNQUOTED: `one
+configure.ac:5: two' is not a valid preprocessor define value
+]])
+AT_CHECK_AUTOHEADER([], [], [],
+[[configure.ac:5: warning: AC_DEFINE_UNQUOTED: `one
+configure.ac:5: two' is not a valid preprocessor define value
+]])
+AT_CHECK_CONFIGURE
+AT_CHECK_DEFINES([[#define foo one
+]])
+
 AT_CLEANUP
 
 

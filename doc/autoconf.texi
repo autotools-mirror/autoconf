@@ -8494,10 +8494,15 @@ terminated by an ellipsis @samp{...} if C99 syntax is employed.
 backslash-newlines, universal character names, or non-@acronym{ASCII}
 characters.
 
-@var{value} should not contain literal newlines, and if you are not
-using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
-characters, as @command{make} tends to eat them.  To use a shell variable,
-use @code{AC_DEFINE_UNQUOTED} instead.
+@var{value} may contain backslash-escaped newlines, which will be
+preserved if you use @code{AC_CONFIG_HEADERS} but flattened if passed
+via @code{@@DEFS@@} (with no effect on the compilation, since the
+preprocessor sees only one line in the first place).  @var{value} should
+not contain raw newlines.  If you are not using
+@code{AC_CONFIG_HEADERS}, @var{value} should not contain any @samp{#}
+characters, as @command{make} tends to eat them.  To use a shell
+variable, use @code{AC_DEFINE_UNQUOTED} instead.
+
 @var{description} is only useful if you are using
 @code{AC_CONFIG_HEADERS}.  In this case, @var{description} is put into
 the generated @file{config.h.in} as the comment before the macro define.
