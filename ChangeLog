@@ -95,6 +95,7 @@
 	at_func_check_skip, at_func_check_status, at_func_filter_trace,
 	at_func_log_failure shell functions.  Use test -s to avoid
 	useless diff invocations.
+	(at_func_check_newline): Renamed from at_check_newline.
 	(AT_SETUP): Define AT_captured_files to empty.
 	(AT_DIFF_STDERR(*), AT_DIFF_STDOUT(*)): New, extracted from _AT_CHECK.
 	(_AT_CHECK): Replace m4_case with m4_ifdef/m4_indir.  Use all
