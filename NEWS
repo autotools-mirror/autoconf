@@ -2,6 +2,8 @@ GNU Autoconf NEWS - User visible changes.
 
 * Major changes in Autoconf 2.61b (????-??-??)
 
+** Many optimizations have been applied to make overall execution faster.
+
 ** Autotest now makes use of shell functions.
 
 ** config.status now uses awk instead of sed also for config headers.
