@@ -1,3 +1,7 @@
+2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* NEWS: Announce shell function usage in Autotest.
+
 2007-10-10  Eric Blake  <ebb9@byu.net>
 	and Paul Eggert  <eggert@cs.ucla.edu>
 

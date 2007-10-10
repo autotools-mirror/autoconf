@@ -2,6 +2,8 @@ GNU Autoconf NEWS - User visible changes.
 
 * Major changes in Autoconf 2.61b (????-??-??)
 
+** Autotest now makes use of shell functions.
+
 ** config.status now uses awk instead of sed also for config headers.
 
    - As a side effect, AC_DEFINE and AC_DEFINE_UNQUOTED now handle multi-line
