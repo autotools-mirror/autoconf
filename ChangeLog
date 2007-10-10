@@ -1,5 +1,14 @@
 2007-10-10  Eric Blake  <ebb9@byu.net>
 
+	Avoid some overhead from m4_defn and m4_popdef.
+	* lib/m4sugar/m4sugar.m4 (m4_defn, m4_popdef, m4_undefine): Only
+	pass on first argument, since we are documented that way.
+	(m4_for, m4_append_uniq, m4_text_wrap): Optimize out defined-ness
+	check where it is safe to do so.
+	(m4_append): Likewise, and quote the separator.
+	(m4_text_box): Likewise, and avoid regex, also be robust to
+	expansion and quadrigraphs.
+
 	Another AC_DEFINE speedup.
 	* lib/autoconf/general.m4 (AC_DEFINE_TRACE): Move parameter
 	elision...

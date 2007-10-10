@@ -530,7 +530,7 @@ m4_define([m4_default],
 m4_define([m4_defn],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([defn], $@)])
+[m4_builtin([defn], [$1])])
 
 
 # _m4_dumpdefs_up(NAME)
@@ -571,7 +571,7 @@ _m4_dumpdefs_down([$1])])
 m4_define([m4_popdef],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([popdef], $@)])
+[m4_builtin([popdef], [$1])])
 
 
 # m4_quote(ARGS)
@@ -631,7 +631,7 @@ m4_define([m4_shift3], [m4_shift(m4_shift(m4_shift($@)))])
 m4_define([m4_undefine],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([undefine], $@)])
+[m4_builtin([undefine], [$1])])
 
 
 ## -------------------------- ##
@@ -644,22 +644,23 @@ m4_define([m4_undefine],
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO with
 # increments of STEP.
 # Both limits are included, and bounds are checked for consistency.
-# The algorithm is robust to indirect VARIABLE names.
+# The algorithm is robust to indirect VARIABLE names, and uses m4_builtin
+# to avoid some of the m4_defn overhead.
 m4_define([m4_for],
 [m4_pushdef([$1], m4_eval([$2]))dnl
-m4_if(m4_eval(([$3]) > m4_defn([$1])), 1,
+m4_cond([m4_eval(([$3]) > m4_builtin([defn], [$1]))], 1,
 [m4_pushdef([_m4_step], m4_eval(m4_default([$4], 1)))dnl
 m4_assert(_m4_step > 0)dnl
-_m4_for([$1], m4_eval((([$3]) - m4_defn([$1]))
-		      / _m4_step * _m4_step + m4_defn([$1])),
+_m4_for([$1], m4_eval((([$3]) - m4_builtin([defn], [$1]))
+		      / _m4_step * _m4_step + m4_builtin([defn], [$1])),
 	_m4_step, [$5])],
-      m4_eval(([$3]) < m4_defn([$1])), 1,
+	[m4_eval(([$3]) < m4_builtin([defn], [$1]))], 1,
 [m4_pushdef([_m4_step], m4_eval(m4_default([$4], -1)))dnl
 m4_assert(_m4_step < 0)dnl
-_m4_for([$1], m4_eval((m4_defn([$1]) - ([$3]))
-		      / -(_m4_step) * _m4_step + m4_defn([$1])),
+_m4_for([$1], m4_eval((m4_builtin([defn], [$1]) - ([$3]))
+		      / -(_m4_step) * _m4_step + m4_builtin([defn], [$1])),
 	_m4_step, [$5])],
-      [m4_pushdef(_m4_step,[])dnl
+	[m4_pushdef([_m4_step])dnl
 $5])[]dnl
 m4_popdef([_m4_step])dnl
 m4_popdef([$1])])
@@ -1680,9 +1681,11 @@ m4_defun([m4_join],
 #    => act1
 #    =>
 #    => active
+#
+# Use m4_builtin to avoid overhead of m4_defn.
 m4_define([m4_append],
 [m4_define([$1],
-	   m4_ifdef([$1], [m4_defn([$1])$3])[$2])])
+	   m4_ifdef([$1], [m4_builtin([defn], [$1])[$3]])[$2])])
 
 
 # m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR])
@@ -1690,7 +1693,7 @@ m4_define([m4_append],
 # Like `m4_append', but append only if not yet present.
 m4_define([m4_append_uniq],
 [m4_ifdef([$1],
-	  [m4_if(m4_index([$3]m4_defn([$1])[$3], [$3$2$3]), [-1],
+	  [m4_if(m4_index([$3]m4_builtin([defn], [$1])[$3], [$3$2$3]), [-1],
 		 [m4_append($@)])],
 	  [m4_append($@)])])
 
@@ -1732,38 +1735,44 @@ m4_define([m4_append_uniq],
 # which complicates it a bit.  The algorithm is otherwise stupid and simple:
 # all the words are preceded by m4_Separator which is defined to empty for
 # the first word, and then ` ' (single space) for all the others.
+#
+# The algorithm overquotes m4_Prefix1 to avoid m4_defn overhead, and bypasses
+# m4_popdef overhead with m4_builtin since no user macro expansion occurs in
+# the meantime.
 m4_define([m4_text_wrap],
 [m4_pushdef([m4_Prefix], [$2])dnl
-m4_pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
+m4_pushdef([m4_Prefix1], m4_dquote(m4_default([$3], [m4_Prefix])))dnl
 m4_pushdef([m4_Width], m4_default([$4], 79))dnl
-m4_pushdef([m4_Cursor], m4_qlen(m4_defn([m4_Prefix1])))dnl
+m4_pushdef([m4_Cursor], m4_qlen(m4_Prefix1))dnl
 m4_pushdef([m4_Separator], [])dnl
-m4_defn([m4_Prefix1])[]dnl
-m4_cond([m4_eval(m4_qlen(m4_defn([m4_Prefix1])) > m4_len(m4_Prefix))],
+m4_Prefix1[]dnl
+m4_cond([m4_eval(m4_qlen(m4_Prefix1) > m4_len(m4_Prefix))],
 	[1], [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix],
-	[m4_eval(m4_qlen(m4_defn([m4_Prefix1])) < m4_len(m4_Prefix))],
+	[m4_eval(m4_qlen(m4_Prefix1) < m4_len(m4_Prefix))],
 	[0], [],
 	[m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
 m4_format([%*s],
-	  m4_max(0,m4_eval(m4_len(m4_Prefix) - m4_qlen(m4_defn([m4_Prefix1])))),
+	  m4_max([0], m4_eval(m4_len(m4_Prefix) - m4_qlen(m4_Prefix1))),
 	  [])])[]dnl
 m4_foreach_w([m4_Word], [$1],
-[m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_qlen(m4_defn([m4_Word])) + 1))dnl
+[m4_define([m4_Cursor],
+	   m4_eval(m4_Cursor + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
 m4_if(m4_eval(m4_Cursor > m4_Width),
       1, [m4_define([m4_Cursor],
-		    m4_eval(m4_len(m4_Prefix) + m4_qlen(m4_defn([m4_Word])) + 1))]
+		    m4_eval(m4_len(m4_Prefix)
+			    + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))]
 m4_Prefix,
        [m4_Separator])[]dnl
-m4_defn([m4_Word])[]dnl
+m4_builtin([defn], [m4_Word])[]dnl
 m4_define([m4_Separator], [ ])])dnl
-m4_popdef([m4_Separator])dnl
-m4_popdef([m4_Cursor])dnl
-m4_popdef([m4_Width])dnl
-m4_popdef([m4_Prefix1])dnl
-m4_popdef([m4_Prefix])dnl
+m4_builtin([popdef], [m4_Separator])dnl
+m4_builtin([popdef], [m4_Cursor])dnl
+m4_builtin([popdef], [m4_Width])dnl
+m4_builtin([popdef], [m4_Prefix1])dnl
+m4_builtin([popdef], [m4_Prefix])dnl
 ])
 
 
@@ -1775,9 +1784,13 @@ m4_popdef([m4_Prefix])dnl
 #  ## ------- ##
 # using FRAME-CHARACTER in the border.
 m4_define([m4_text_box],
-[@%:@@%:@ m4_bpatsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@
+[m4_pushdef([m4_Border],
+	    m4_translit(m4_format([%*s], m4_qlen(m4_quote($1)), []),
+			[ ], m4_if([$2], [], [[-]], [[$2]])))dnl
+@%:@@%:@ m4_Border @%:@@%:@
 @%:@@%:@ $1 @%:@@%:@
-@%:@@%:@ m4_bpatsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@[]dnl
+@%:@@%:@ m4_Border @%:@@%:@dnl
+m4_builtin([popdef], [m4_Border])dnl
 ])
 
 
