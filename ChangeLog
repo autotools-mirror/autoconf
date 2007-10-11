@@ -1,3 +1,7 @@
+2007-10-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* .gitignore: Ignore tags and TAGS files.
+
 2007-10-11  Eric Blake  <ebb9@byu.net>
 
 	Config header generation followup.
