@@ -78,16 +78,18 @@ GNU Autoconf NEWS - User visible changes.
    - The following macros were previously available as undocumented
      interfaces; the macros are now documented as stable interfaces.
 
-     m4_bmatch  m4_bpatsubsts  m4_case  m4_default  m4_do  m4_ifndef
-     m4_ifset  m4_ifval  m4_ifvaln  m4_n  m4_shiftn
-     m4_version_compare  m4_warn
+     __oline__  m4_assert  m4_bmatch  m4_bpatsubsts  m4_case
+     m4_default  m4_divert_once  m4_divert_pop  m4_divert_push
+     m4_divert_text  m4_do  m4_errprintn  m4_fatal  m4_flatten
+     m4_ifndef  m4_ifset  m4_ifval  m4_ifvaln  m4_location
+     m4_n  m4_shiftn  m4_strip  m4_version_compare  m4_warn
 
    - The following macros were previously available as undocumented
      interfaces, but had bugs.  Packages that relied on the
      undocumented and buggy behavior should analyze their code to make
      sure it still works with the new documented behavior.
 
-     m4_text_wrap
+     m4_join  m4_text_box  m4_text_wrap
 
    - Packages using the undocumented m4sugar macro m4_PACKAGE_VERSION
      should consider using the new AC_AUTOCONF_VERSION instead.
@@ -143,6 +145,15 @@ GNU Autoconf NEWS - User visible changes.
    tests for problems that are so old that it is no longer of
    practical importance on current systems.  New programs need not use
    AC_C_LONG_DOUBLE.  We have no current plans to remove it.
+
+** AC_DIAGNOSE, AC_WARNING, and AC_FATAL are obsolescent.
+   The documentation now favors the use of M4sugar macros m4_warn and
+   m4_fatal, since the naming makes it more obvious that the
+   diagnostics are associated with M4 expansion (ie. when running
+   `autoconf'), and offers less confusion with the AC_MSG_ERROR,
+   AC_MSG_FAILURE, and AC_MSG_WARN macros which manage diagnostics
+   when running `configure'.  We have no current plans to remove these
+   macros.
 
 * Major changes in Autoconf 2.61a (2006-12-11)
 

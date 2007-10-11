@@ -574,34 +574,6 @@ m4_define([m4_popdef],
 [m4_builtin([popdef], [$1])])
 
 
-# m4_quote(ARGS)
-# --------------
-# Return ARGS as a single argument.  Any whitespace after unquoted commas
-# is stripped.
-#
-# It is important to realize the difference between `m4_quote(exp)' and
-# `[exp]': in the first case you obtain the quoted *result* of the
-# expansion of EXP, while in the latter you just obtain the string
-# `exp'.
-m4_define([m4_quote],  [[$*]])
-
-
-# m4_dquote(ARGS)
-# ---------------
-# Return ARGS as a quoted list of quoted arguments.
-m4_define([m4_dquote],  [[$@]])
-
-
-# m4_noquote(STRING)
-# ------------------
-# Return the result of ignoring all quotes in STRING and invoking the
-# macros it contains.  Amongst other things, this is useful for enabling
-# macro invocations inside strings with [] blocks (for instance regexps
-# and help-strings).
-m4_define([m4_noquote],
-[m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
-
-
 # m4_shiftn(N, ...)
 # -----------------
 # Returns ... shifted N times.  Useful for recursive "varargs" constructs.
@@ -634,8 +606,40 @@ m4_define([m4_undefine],
 [m4_builtin([undefine], [$1])])
 
 
+## ------------------------- ##
+## 7. Quoting manipulation.  ##
+## ------------------------- ##
+
+# m4_quote(ARGS)
+# --------------
+# Return ARGS as a single argument.  Any whitespace after unquoted commas
+# is stripped.
+#
+# It is important to realize the difference between `m4_quote(exp)' and
+# `[exp]': in the first case you obtain the quoted *result* of the
+# expansion of EXP, while in the latter you just obtain the string
+# `exp'.
+m4_define([m4_quote],  [[$*]])
+
+
+# m4_dquote(ARGS)
+# ---------------
+# Return ARGS as a quoted list of quoted arguments.
+m4_define([m4_dquote],  [[$@]])
+
+
+# m4_noquote(STRING)
+# ------------------
+# Return the result of ignoring all quotes in STRING and invoking the
+# macros it contains.  Amongst other things, this is useful for enabling
+# macro invocations inside strings with [] blocks (for instance regexps
+# and help-strings).
+m4_define([m4_noquote],
+[m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
+
+
 ## -------------------------- ##
-## 7. Implementing m4 loops.  ##
+## 8. Implementing m4 loops.  ##
 ## -------------------------- ##
 
 
@@ -801,7 +805,7 @@ m4_define([m4_foreach_w],
 
 
 ## --------------------------- ##
-## 8. More diversion support.  ##
+## 9. More diversion support.  ##
 ## --------------------------- ##
 
 
@@ -889,14 +893,15 @@ m4_define([m4_divert_once],
 
 # m4_undivert(DIVERSION-NAME)
 # ---------------------------
-# Undivert DIVERSION-NAME.
+# Undivert DIVERSION-NAME.  Unlike the M4 version, this only takes a single
+# diversion identifier, and should not be used to undivert files.
 m4_define([m4_undivert],
 [m4_builtin([undivert], _m4_divert([$1]))])
 
 
-## -------------------------------------------- ##
-## 8. Defining macros with bells and whistles.  ##
-## -------------------------------------------- ##
+## --------------------------------------------- ##
+## 10. Defining macros with bells and whistles.  ##
+## --------------------------------------------- ##
 
 # `m4_defun' is basically `m4_define' but it equips the macro with the
 # needed machinery for `m4_require'.  A macro must be m4_defun'd if
@@ -1288,9 +1293,9 @@ m4_define([m4_pattern_forbid], [])
 m4_define([m4_pattern_allow], [])
 
 
-## ----------------------------- ##
-## Dependencies between macros.  ##
-## ----------------------------- ##
+## --------------------------------- ##
+## 11. Dependencies between macros.  ##
+## --------------------------------- ##
 
 
 # m4_before(THIS-MACRO-NAME, CALLED-MACRO-NAME)
@@ -1396,9 +1401,9 @@ m4_define([m4_provide_if],
 	  [$2], [$3])])
 
 
-## -------------------- ##
-## 9. Text processing.  ##
-## -------------------- ##
+## --------------------- ##
+## 12. Text processing.  ##
+## --------------------- ##
 
 
 # m4_cr_letters
@@ -1829,7 +1834,7 @@ m4_define([m4_qdelta],
 
 
 ## ----------------------- ##
-## 10. Number processing.  ##
+## 13. Number processing.  ##
 ## ----------------------- ##
 
 # m4_cmp(A, B)
@@ -1895,7 +1900,7 @@ m4_define([m4_sign],
 
 
 ## ------------------------ ##
-## 11. Version processing.  ##
+## 14. Version processing.  ##
 ## ------------------------ ##
 
 
@@ -1954,7 +1959,7 @@ m4_define([m4_version_prereq],
 
 
 ## ------------------- ##
-## 12. File handling.  ##
+## 15. File handling.  ##
 ## ------------------- ##
 
 
@@ -1976,7 +1981,7 @@ m4_if(m4_sysval, [0], [],
 
 
 ## ------------------------ ##
-## 13. Setting M4sugar up.  ##
+## 16. Setting M4sugar up.  ##
 ## ------------------------ ##
 
 

@@ -1,5 +1,21 @@
 2007-10-12  Eric Blake  <ebb9@byu.net>
 
+	Some more m4sugar documentation.
+	* lib/m4sugar/m4sugar.m4: Clean up macro order.
+	* doc/autoconf.texi (Programming in M4): Lighten the warning on
+	using m4sugar; it is stabilizing and useful.
+	(Redefined M4 Macros): Touch up wording on M4 builtins; sort.  Add
+	m4_divert, m4_undivert, __file__, __line__, __oline__.
+	(Diagnostics): New node, documenting m4_assert, m4_errprintn,
+	m4_fatal, m4_location, m4_warn.
+	(Diversion support): New node, documenting m4_divert_push,
+	m4_divert_pop, m4_divert_text, m4_divert_once.
+	(Text processing Macros): Sort.  Add m4_flatten, m4_join,
+	m4_newline, m4_strip, m4_text_box, m4_text_wrap.
+	(Reporting Messages): Mark AC_DIAGNOSE, AC_WARNING, and AC_FATAL
+	as obsolescent.
+	(Printing Messages): Change cross-reference.
+
 	Document interaction of recent m4_append change with Libtool HEAD.
 	* lib/m4sugar/m4sugar.m4 (m4_append): Document semantics change.
 	(m4_append_uniq): Add new parameters, based on lt_append_uniq.
