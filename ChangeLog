@@ -1,5 +1,12 @@
 2007-10-12  Eric Blake  <ebb9@byu.net>
 
+	Document interaction of recent m4_append change with Libtool HEAD.
+	* lib/m4sugar/m4sugar.m4 (m4_append): Document semantics change.
+	(m4_append_uniq): Add new parameters, based on lt_append_uniq.
+	* tests/m4sugar.at (m4@&t@_append): New test.
+	* NEWS: Document semantics change.
+	* doc/autoconf.texi (Text processing Macros): Likewise.
+
 	s/AC_VERSION/AC_AUTOCONF_VERSION/.
 	* doc/autoconf.texi (Versioning): Change the name.
 	* NEWS: Likewise.

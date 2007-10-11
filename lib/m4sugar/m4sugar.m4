@@ -1656,13 +1656,16 @@ m4_defun([m4_join],
 # in which case no SEPARATOR is added.  Be aware that the criterion is
 # `not being defined', and not `not being empty'.
 #
+# Note that neither STRING nor SEPARATOR are expanded here; rather, when
+# you expand MACRO-NAME, they will be expanded at that point in time.
+#
 # This macro is robust to active symbols.  It can be used to grow
 # strings.
 #
-#    | m4_define(active, ACTIVE)
-#    | m4_append([sentence], [This is an])
-#    | m4_append([sentence], [ active ])
-#    | m4_append([sentence], [symbol.])
+#    | m4_define(active, ACTIVE)dnl
+#    | m4_append([sentence], [This is an])dnl
+#    | m4_append([sentence], [ active ])dnl
+#    | m4_append([sentence], [symbol.])dnl
 #    | sentence
 #    | m4_undefine([active])dnl
 #    | sentence
@@ -1671,10 +1674,10 @@ m4_defun([m4_join],
 #
 # It can be used to define hooks.
 #
-#    | m4_define(active, ACTIVE)
-#    | m4_append([hooks], [m4_define([act1], [act2])])
-#    | m4_append([hooks], [m4_define([act2], [active])])
-#    | m4_undefine([active])
+#    | m4_define(active, ACTIVE)dnl
+#    | m4_append([hooks], [m4_define([act1], [act2])])dnl
+#    | m4_append([hooks], [m4_define([act2], [active])])dnl
+#    | m4_undefine([active])dnl
 #    | act1
 #    | hooks
 #    | act1
@@ -1682,20 +1685,32 @@ m4_defun([m4_join],
 #    =>
 #    => active
 #
+# It can also be used to create lists, although this particular usage was
+# broken prior to autoconf 2.62.
+#    | m4_append([list], [one], [, ])dnl
+#    | m4_append([list], [two], [, ])dnl
+#    | m4_append([list], [three], [, ])dnl
+#    | list
+#    | m4_dquote(list)
+#    => one, two, three
+#    => [one],[two],[three]
+#
 # Use m4_builtin to avoid overhead of m4_defn.
 m4_define([m4_append],
 [m4_define([$1],
 	   m4_ifdef([$1], [m4_builtin([defn], [$1])[$3]])[$2])])
 
 
-# m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR])
-# -----------------------------------------------
-# Like `m4_append', but append only if not yet present.
+# m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR], [IF-UNIQ], [IF-DUP])
+# --------------------------------------------------------------------
+# Like `m4_append', but append only if not yet present.  Additionally,
+# expand IF-UNIQ if STRING was appended, or IF-DUP if STRING was already
+# present.
 m4_define([m4_append_uniq],
 [m4_ifdef([$1],
 	  [m4_if(m4_index([$3]m4_builtin([defn], [$1])[$3], [$3$2$3]), [-1],
-		 [m4_append($@)])],
-	  [m4_append($@)])])
+		 [m4_append([$1], [$2], [$3])$4], [$5])],
+	  [m4_append([$1], [$2], [$3])$4])])
 
 
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])

@@ -10510,14 +10510,54 @@ single space.
 @end defmac
 
 @defmac m4_append (@var{macro-name}, @var{string}, @ovar{separator})
-@defmacx m4_append_uniq (@var{macro-name}, @var{string}, @ovar{separator})
+@defmacx m4_append_uniq (@var{macro-name}, @var{string}, @ovar{separator} @
+  @ovar{if-uniq}, @ovar{if-duplicate})
 @msindex{append}
 @msindex{append_uniq}
 Redefine @var{macro-name} to its former contents with @var{separator}
 and @var{string} added at the end.  If @var{macro-name} was undefined
 before (but not if it was defined but empty), then no @var{separator} is
-added.  @code{m4_append} can be used to grow strings, and
-@code{m4_append_uniq} to grow strings without duplicating substrings.
+added.  As of Autoconf 2.62, neither @var{string} nor @var{separator}
+are expanded during this macro; instead, they are expanded when
+@var{macro-name} is invoked.
+
+@code{m4_append} can be used to grow strings, and @code{m4_append_uniq}
+to grow strings without duplicating substrings.  Additionally,
+@code{m4_append_uniq} takes two optional parameters; @var{if-uniq} is
+expanded if @var{string} was appended, and @var{if-duplicate} is
+expanded if @var{string} was already present.
+
+@example
+m4_define([active], [ACTIVE])dnl
+m4_append([sentence], [This is an])dnl
+m4_append([sentence], [ active ])dnl
+m4_append([sentence], [symbol.])dnl
+sentence
+@result{}This is an ACTIVE symbol.
+m4_undefine([active])dnl
+@result{}This is an active symbol.
+m4_append_uniq([list], [one], [, ], [new], [existing])
+@result{}new
+m4_append_uniq([list], [one], [, ], [new], [existing])
+@result{}existing
+m4_append_uniq([list], [two], [, ], [new], [existing])
+@result{}new
+m4_append_uniq([list], [three], [, ], [new], [existing])
+@result{}new
+m4_append_uniq([list], [two], [, ], [new], [existing])
+@result{}existing
+list
+@result{}one, two, three
+m4_dquote(list)
+@result{}[one],[two],[three]
+m4_append([list2], [one], [[, ]])dnl
+m4_append_uniq([list2], [two], [[, ]])dnl
+m4_append([list2], [three], [[, ]])dnl
+list2
+@result{}one, two, three
+m4_dquote(list2)
+@result{}[one, two, three]
+@end example
 @end defmac
 
 @anchor{m4_version_compare}
