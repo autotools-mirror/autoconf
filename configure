@@ -3574,7 +3574,7 @@ done
 rm -f conf$$subs.sh
 
 cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs1.awk" <<\CEOF
+cat >>"\$tmp/subs1.awk" <<\_ACAWK
 _ACEOF
 sed -n '
 h
@@ -3621,8 +3621,8 @@ t delim
 ' >>$CONFIG_STATUS
 rm -f conf$$subs.awk
 cat >>$CONFIG_STATUS <<_ACEOF
-CEOF
-cat >>"\$tmp/subs1.awk" <<CEOF
+_ACAWK
+cat >>"\$tmp/subs1.awk" <<_ACAWK
   for (key in S) S_is_set[key] = 1
   FS = ""
 
@@ -3647,7 +3647,7 @@ cat >>"\$tmp/subs1.awk" <<CEOF
   print line
 }
 
-CEOF
+_ACAWK
 sed "s/\$ac_cr\\\$//; s/\$ac_cr/\$ac_cs_awk_cr/g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
 _ACEOF
 

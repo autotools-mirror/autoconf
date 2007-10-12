@@ -10073,6 +10073,10 @@ macros.  M4sugar introduces additional generic macros.  Its name was
 coined by Lars J. Aas: ``Readability And Greater Understanding Stands 4
 M4sugar''.
 
+M4sugar reserves the macro namespace @samp{^_m4_} for internal use, and
+the macro namespace @samp{^m4_} for M4sugar macros.  You should not
+define your own macros into these namespaces.
+
 @menu
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
 * Conditional constructs::      Conditions in M4
@@ -10554,7 +10558,9 @@ instance, if an Autoconf @file{configure} script includes tokens such as
 @samp{AC_DEFINE}, or @samp{dnl}, then most probably something went
 wrong (typically a macro was not evaluated because of overquotation).
 
-M4sugar forbids all the tokens matching @samp{^m4_} and @samp{^dnl$}.
+M4sugar forbids all the tokens matching @samp{^_?m4_} and @samp{^dnl$}.
+Additional layers, such as M4sh and Autoconf, add additional forbidden
+patterns to the list.
 
 @defmac m4_pattern_forbid (@var{pattern})
 @msindex{pattern_forbid}
@@ -10563,8 +10569,9 @@ Comments are not checked; this can be a problem if, for instance, you
 have some macro left unexpanded after an @samp{#include}.  No consensus
 is currently found in the Autoconf community, as some people consider it
 should be valid to name macros in comments (which doesn't make sense to
-the author of this documentation, as @samp{#}-comments should document
-the output, not the input, documented by @samp{dnl} comments).
+the authors of this documentation: input, such as macros, should be
+documented by @samp{dnl} comments; reserving @samp{#}-comments to
+document the output).
 @end defmac
 
 Of course, you might encounter exceptions to these generic rules, for
@@ -10605,6 +10612,13 @@ A mess; trouble.  [Obs.] --Beau.@: & Fl.
 
 
 For the time being, it is not mature enough to be widely used.
+
+M4sh reserves the M4 macro namespace @samp{^_AS_} for internal use, and
+the namespace @samp{^AS_} for M4sh macros.  It also reserves the shell
+and environment variable namespace @samp{^as_}, and the here-doc
+delimiter namespace @samp{^_AS[A-Z]} in the output file.  You should not
+define your own macros or output shell code that conflicts with these
+namespaces.
 
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
@@ -10851,14 +10865,36 @@ that produce no output, such as @code{AC_REQUIRE}.
 @node Macro Names
 @section Macro Names
 
-All of the Autoconf macros have all-uppercase names starting with
-@samp{AC_} to prevent them from accidentally conflicting with other
-text.  All shell variables that they use for internal purposes have
-mostly-lowercase names starting with @samp{ac_}.  To ensure that your
-macros don't conflict with present or future Autoconf macros, you should
-prefix your own macro names and any shell variables they use with some
-other sequence.  Possibilities include your initials, or an abbreviation
-for the name of your organization or software package.
+All of the public Autoconf macros have all-uppercase names in the
+namespace @samp{^AC_} to prevent them from accidentally conflicting with
+other text; Autoconf also reserves the namespace @samp{^_AC_} for
+internal macros.  All shell variables that they use for internal
+purposes have mostly-lowercase names starting with @samp{ac_}.  Autoconf
+also uses here-doc delimiters in the namespace @samp{^_AC[A-Z]}.  During
+@command{configure}, files produced by Autoconf make heavy use of the
+file system namespace @samp{^conf}.
+
+Since Autoconf is built on top of M4sugar (@pxref{Programming in
+M4sugar}) and M4sh (@pxref{Programming in M4sh}), you must also be aware
+of those namespaces (@samp{^_?\(m4\|AS\)_}).  And since
+@file{configure.ac} is also designed to be scanned by Autoheader,
+Autoscan, Autoupdate, and Automake, you should be aware of the
+@samp{^_?A[HNUM]_} namespaces.  In general, you @emph{should not use}
+the namespace of a package that does not own the macro or shell code you
+are writing.
+
+To ensure that your macros don't conflict with present or future
+Autoconf macros, you should prefix your own macro names and any shell
+variables they use with some other sequence.  Possibilities include your
+initials, or an abbreviation for the name of your organization or
+software package.  Historically, people have not always followed the
+rule of using a namespace appropriate for their package, and this has
+made it difficult for determining the origin of a macro (and where to
+report bugs about that macro), as well as difficult for the true
+namespace owner to add new macros without interference from pre-existing
+uses of third-party macros.  Perhaps the best example of this confusion
+is the @code{AM_GNU_GETTEXT} macro, which belongs, not to Automake, but
+to Gettext.
 
 Most of the Autoconf macros' names follow a structured naming convention
 that indicates the kind of feature check by the name.  The macro names
@@ -10867,7 +10903,8 @@ general to most specific.  The names of their cache variables use the
 same convention (@pxref{Cache Variable Names}, for more information on
 them).
 
-The first word of the name after @samp{AC_} usually tells the category
+The first word of the name after the namepace initials (such as
+@samp{AC_}) usually tells the category
 of the feature being tested.  Here are the categories used in Autoconf for
 specific test macros, the kind of macro that you are more likely to
 write.  They are also used for cache variables, in all-lowercase.  Use

@@ -387,9 +387,9 @@ m4_ifdef([_AC_SUBST_FILES],
 [# Create commands to substitute file output variables.
 {
   echo "cat >>$CONFIG_STATUS <<_ACEOF"
-  echo 'cat >>"\$tmp/subs1.awk" <<\CEOF'
+  echo 'cat >>"\$tmp/subs1.awk" <<\_ACAWK'
   echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/'
-  echo "CEOF"
+  echo "_ACAWK"
   echo "_ACEOF"
 } >conf$$files.sh
 . ./conf$$files.sh
@@ -444,7 +444,7 @@ dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
 [cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs1.awk" <<\CEOF
+cat >>"\$tmp/subs1.awk" <<\_ACAWK
 _ACEOF
 sed -n '
 h
@@ -491,8 +491,8 @@ t delim
 ' >>$CONFIG_STATUS
 rm -f conf$$subs.awk
 cat >>$CONFIG_STATUS <<_ACEOF
-CEOF
-cat >>"\$tmp/subs1.awk" <<CEOF
+_ACAWK
+cat >>"\$tmp/subs1.awk" <<_ACAWK
   for (key in S) S_is_set[key] = 1
   FS = ""
 ]m4_ifdef([_AC_SUBST_FILES],
@@ -526,7 +526,7 @@ cat >>"\$tmp/subs1.awk" <<CEOF
 }
 ]m4_ifdef([_AC_SUBST_FILES],
 [\$ac_cs_awk_pipe_fini])[
-CEOF
+_ACAWK
 sed "s/\$ac_cr\\\$//; s/\$ac_cr/\$ac_cs_awk_cr/g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
 _ACEOF
 ]dnl end of double-quoted part
@@ -586,13 +586,13 @@ m4_ifndef([AC_DATAROOTDIR_CHECKED],
 # FIXME: This hack should be removed a few years after 2.60.
 ac_datarootdir_hack=; ac_datarootdir_seen=
 m4_define([_AC_datarootdir_vars],
-          [datadir, docdir, infodir, localedir, mandir])
+	  [datadir, docdir, infodir, localedir, mandir])
 case `sed -n '/datarootdir/ {
   p
   q
 }
 m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
-           [/@_AC_Var@/p
+	   [/@_AC_Var@/p
 ])' $ac_file_inputs` in
 *datarootdir*) ac_datarootdir_seen=yes;;
 *@[]m4_join([@*|*@], _AC_datarootdir_vars)@*)
@@ -601,7 +601,7 @@ _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
   ac_datarootdir_hack='
   m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
-               [s&@_AC_Var@&$_AC_Var&g
+	       [s&@_AC_Var@&$_AC_Var&g
   ])dnl
   s&\\\${datarootdir}&$datarootdir&g' ;;
 esac
@@ -688,7 +688,7 @@ m4_define([_AC_OUTPUT_HEADERS_PREPARE],
 # No need to generate them if there are no CONFIG_HEADERS.
 # This happens for instance with `./config.status Makefile'.
 if test -n "$CONFIG_HEADERS"; then
-cat >"$tmp/defines.awk" <<\_CEOF
+cat >"$tmp/defines.awk" <<\_ACAWK
 BEGIN {
 _ACEOF
 
@@ -807,7 +807,7 @@ cat >>$CONFIG_STATUS <<_ACEOF
 }
 { print }
 ]dnl End of double-quoted section
-_CEOF
+_ACAWK
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF

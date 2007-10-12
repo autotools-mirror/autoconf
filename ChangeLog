@@ -1,4 +1,15 @@
 2007-10-12  Eric Blake  <ebb9@byu.net>
+
+	Namespace cleanup.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE)
+	(_AC_OUTPUT_HEADERS_PREPARE): Convert here-doc delimiters into
+	autoconf namespace.
+	* doc/autoconf.texi (Programming in M4sugar, Forbidden Patterns)
+	(Programming in M4sh, Macro Names): Beef up description of
+	namespaces reserved for autoconf.
+	* configure: Regenerate.
+
+2007-10-12  Eric Blake  <ebb9@byu.net>
 	and Paolo Bonzini  <bonzini@gnu.org>
 
 	Speed up execution of subset of testsuite.
