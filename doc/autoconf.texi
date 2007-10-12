@@ -1792,8 +1792,8 @@ This macro is the only macro that may be used before @code{AC_INIT}, but
 for consistency, you are invited not to do so.
 @end defmac
 
-@defmac AC_VERSION
-@acindex{VERSION}
+@defmac AC_AUTOCONF_VERSION
+@acindex{AUTOCONF_VERSION}
 This macro was introduced in Autoconf 2.62.  It identifies the version
 of Autoconf that is currently parsing the input file, in a format
 suitable for @code{m4_version_compare} (@pxref{m4_version_compare}); in

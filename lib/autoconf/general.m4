@@ -299,10 +299,10 @@ AU_DEFUN([AC_PREREQ],
 m4_copy([m4_version_prereq], [AC_PREREQ])
 
 
-# AC_VERSION
-# ----------
+# AC_AUTOCONF_VERSION
+# -------------------
 # The current version of Autoconf parsing this file.
-m4_copy([m4_PACKAGE_VERSION], [AC_VERSION])
+m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])
 
 
 

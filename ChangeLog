@@ -1,5 +1,12 @@
 2007-10-12  Eric Blake  <ebb9@byu.net>
 
+	s/AC_VERSION/AC_AUTOCONF_VERSION/.
+	* doc/autoconf.texi (Versioning): Change the name.
+	* NEWS: Likewise.
+	* lib/autoconf/general.m4 (AC_AUTOCONF_VERSION): Likewise.
+	* tests/tools.at (autoconf: AC_AUTOCONF_VERSION): Likewise.
+	Suggested by Ralf Wildenhues.
+
 	Namespace cleanup.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE)
 	(_AC_OUTPUT_HEADERS_PREPARE): Convert here-doc delimiters into

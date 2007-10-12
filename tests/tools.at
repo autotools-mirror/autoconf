@@ -405,13 +405,13 @@ AT_CHECK([echo 'AC_INIT(X, 2.0, bug-autoconf@gnu.org)' | autoconf -t AC_INIT -],
 AT_CLEANUP
 
 
-# autoconf: AC_VERSION
+# autoconf: AC_AUTOCONF_VERSION
 # --------------------------------------
-AT_SETUP([autoconf: AC_VERSION])
+AT_SETUP([autoconf: AC_AUTOCONF_VERSION])
 
 AT_DATA([configure.ac],
 [[AC_INIT
-version AC_VERSION version
+version AC_AUTOCONF_VERSION version
 AC_OUTPUT
 ]])
 
