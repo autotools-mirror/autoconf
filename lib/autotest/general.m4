@@ -105,7 +105,13 @@
 #    tail of the core for;case, overall wrap up, generation of debugging
 #    scripts and statistics.
 #  - TEST_SCRIPT
-#    The code for each test, the ``normal'' diversion
+#    The collector for code for each test, the ``normal'' diversion, but
+#    undiverted into other locations before final output.
+#
+#  - TEST_FUNCTIONS
+#    Series of functions for each test group.  The functions deliberately
+#    occur after the end of the shell script, so that the shell need not
+#    spend time parsing functions it will not execute.
 
 m4_define([_m4_divert(DEFAULTS)],           100)
 m4_define([_m4_divert(PARSE_ARGS_BEGIN)],   200)
@@ -123,6 +129,7 @@ m4_define([_m4_divert(PREPARE_TESTS)],      400)
 m4_define([_m4_divert(TESTS)],              401)
 m4_define([_m4_divert(TESTS_END)],          402)
 m4_define([_m4_divert(TEST_SCRIPT)],        403)
+m4_define([_m4_divert(TEST_FUNCTIONS)],     500)
 
 
 # AT_LINE
@@ -282,6 +289,24 @@ at_func_diff_devnull ()
   $at_diff "$at_devnull" "$[1]"
 }
 
+# at_func_test NUMBER
+# -------------------
+# Parse out at_func_test_NUMBER from the tail of this file, source it,
+# then invoke it.
+at_func_test ()
+{
+  if sed -n '/^@%:@AT_START_'$[1]$'/,/^@%:@AT_STOP_'$[1]$'/p' "$at_myself" \
+       > "$at_test_source" && . "$at_test_source" ; then
+    at_func_test_$[1] || {
+      AS_ECHO(["$as_me: unable to execute test group: $[1]"]) >&2
+      at_failed=:
+    }
+  else
+    AS_ECHO(["$as_me: unable to parse test group: $[1]"]) >&2
+    at_failed=:
+  fi
+}
+
 # Load the config file.
 for at_file in atconfig atlocal
 do
@@ -334,8 +359,14 @@ at_groups=
 
 # The directory we are in.
 at_dir=`pwd`
+# An absolute reference to this testsuite script.
+dnl m4-double quote, to preserve []
+[case $as_myself in
+  [\\/]* | ?:[\\/]* ) at_myself=$as_myself ;;
+  * ) at_myself=$at_dir/$as_myself ;;
+esac]
 # The directory the whole suite works in.
-# Should be absolutely to let the user `cd' at will.
+# Should be absolute to let the user `cd' at will.
 at_suite_dir=$at_dir/$as_me.dir
 # The file containing the suite.
 at_suite_log=$at_dir/$as_me.log
@@ -347,6 +378,8 @@ at_status_file=$at_suite_dir/at-status
 at_stdout=$at_suite_dir/at-stdout
 at_stder1=$at_suite_dir/at-stder1
 at_stderr=$at_suite_dir/at-stderr
+# The file containing the function to run a test group.
+at_test_source=$at_suite_dir/at-test-source
 # The file containing dates.
 at_times_file=$at_suite_dir/at-times
 m4_divert_pop([DEFAULTS])dnl
@@ -782,6 +815,7 @@ else
 fi
 
 
+m4_text_box([Driver loop.])
 for at_group in $at_groups
 do
   # Be sure to come back to the top test directory.
@@ -1091,6 +1125,8 @@ $at_xpass_list${at_xpass_list:+ passed unexpectedly}
 fi
 
 exit 0
+
+m4_text_box([Actual tests.])
 m4_divert_pop([TESTS_END])dnl
 dnl End of AT_INIT: divert to KILL, only test groups are to be
 dnl output, the rest is ignored.  Current diversion is BODY, inherited
@@ -1256,8 +1292,11 @@ m4_define([AT_xfail], [at_xfail=no])
 m4_define([AT_description], m4_quote($1))
 m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
-m4_divert_push([TESTS])dnl
-  AT_ordinal ) @%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
+m4_divert_push([TEST_FUNCTIONS])dnl
+[#AT_START_]AT_ordinal
+@%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
+at_func_test_[]AT_ordinal ()
+{
     at_setup_line='m4_defn([AT_line])'
     at_desc="AS_ESCAPE(m4_dquote(m4_defn([AT_description])))"
     $at_quiet AS_ECHO_N([m4_format(["%3d: $at_desc%*s"], AT_ordinal,
@@ -1305,7 +1344,7 @@ m4_define([AT_CLEANUP],
 [m4_append([AT_help_all],
 m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 )dnl
-m4_divert_pop([TEST_SCRIPT])dnl Back to TESTS
+m4_divert_pop([TEST_SCRIPT])dnl Back to TEST_FUNCTIONS
     AT_xfail
     echo "#                             -*- compilation -*-" >> "$at_group_log"
     (
@@ -1316,9 +1355,11 @@ m4_undivert([TEST_SCRIPT])dnl Insert the code here
       $at_times_p && times >"$at_times_file"
     ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
     at_status=`cat "$at_status_file"`
-    ;;
-
-m4_divert_pop([TESTS])dnl Back to KILL.
+}
+[#AT_STOP_]AT_ordinal
+m4_divert_pop([TEST_FUNCTIONS])dnl Back to KILL.
+m4_divert_text([TESTS],
+[  AT_ordinal ) at_func_test AT_ordinal ;;])
 ])# AT_CLEANUP
 
 

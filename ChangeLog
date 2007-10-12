@@ -1,3 +1,17 @@
+2007-10-12  Eric Blake  <ebb9@byu.net>
+	and Paolo Bonzini  <bonzini@gnu.org>
+
+	Speed up execution of subset of testsuite.
+	* lib/autotest/general.m4 (TEST_FUNCTIONS): New diversion.
+	(AT_INIT) <at_func_test>: New shell function.
+	(AT_INIT) <at_myself>: New variable, set to absolute $as_myself.
+	(AT_INIT) <at_test_source> New variable, names file that holds
+	current test function definition.
+	(AT_SETUP): Start the shell function at_func_test_#, into the
+	TEST_FUNCTIONS diversion.
+	(AT_CLEANUP): End the shell function.  Simplify the TESTS
+	diversion to invoke the function.
+
 2007-10-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* .gitignore: Ignore tags and TAGS files.
