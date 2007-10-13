@@ -1,5 +1,7 @@
 2007-10-12  Eric Blake  <ebb9@byu.net>
 
+	* doc/autoconf.texi (Text processing Macros): Fix bad merge.
+
 	Some more m4sugar documentation.
 	* lib/m4sugar/m4sugar.m4: Clean up macro order.
 	* doc/autoconf.texi (Programming in M4): Lighten the warning on

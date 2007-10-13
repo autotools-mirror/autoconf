@@ -10749,6 +10749,7 @@ list2
 m4_dquote(list2)
 @result{}[one, two, three]
 @end example
+@end defmac
 
 @defmac m4_flatten (@var{string})
 @msindex{flatten}
