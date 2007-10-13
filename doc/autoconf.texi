@@ -10832,8 +10832,14 @@ still a quoted string.
 
 @defmac m4_join (@ovar{separator}, @var{args}@dots{})
 @msindex{join}
-Concatenate each @var{arg}, separated by @var{separator}.  The result is
-a quoted string.
+Concatenate each @var{arg}, separated by @var{separator}, with the
+exception that no back-to-back separators are issued for empty
+arguments.  The result is a quoted string.
+@example
+m4_define([active], [ACTIVE])dnl
+m4_join([|], [one], [], [active], [two])
+@result{}one|active|two
+@end example
 @end defmac
 
 @defmac m4_newline

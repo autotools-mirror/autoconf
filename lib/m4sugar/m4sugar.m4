@@ -1663,13 +1663,24 @@ m4_define([m4_normalize],
 
 # m4_join(SEP, ARG1, ARG2...)
 # ---------------------------
-# Produce ARG1SEPARG2...SEPARGn.
-m4_defun([m4_join],
-[m4_case([$#],
-	 [1], [],
-	 [2], [[$2]],
-	 [[$2][$1]$0([$1], m4_shift2($@))])])
-
+# Produce ARG1SEPARG2...SEPARGn.  Avoid back-to-back SEP when a given ARG
+# is the empty string.
+#
+# Since the number of arguments to join can be arbitrarily long, we
+# want to avoid having more than one $@ in the macro definition;
+# otherwise, the expansion would require twice the memory of the already
+# long list.  Hence, m4_join merely looks for the first non-empty element,
+# and outputs just that element; while _m4_join looks for all non-empty
+# elements, and outputs them following a separator.  The final trick to
+# note is that we decide between recursing with $0 or _$0 based on the
+# nested m4_if ending with `_'.
+m4_define([m4_join],
+[m4_if([$#], [1], [],
+       [$#], [2], [[$2]],
+       [m4_if([$2], [], [], [[$2]_])$0([$1], m4_shift2($@))])])
+m4_define([_m4_join],
+[m4_if([$#$2], [2], [],
+       [m4_if([$2], [], [], [[$1$2]])$0([$1], m4_shift2($@))])])
 
 
 # m4_append(MACRO-NAME, STRING, [SEPARATOR])

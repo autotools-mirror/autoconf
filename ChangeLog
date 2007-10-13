@@ -1,5 +1,13 @@
 2007-10-13  Eric Blake  <ebb9@byu.net>
 
+	Change m4_join to match libtool's ltsugar semantics.
+	* lib/m4sugar/m4sugar.m4 (m4_join): Just define this, not defun.
+	Ignore empty arguments, using...
+	(_m4_join): ...this new helper.
+	* tests/m4sugar.at (m4@&t@_join): New test.
+	* doc/autoconf.texi (Text processing Macros): Document new
+	semantics of m4_join.
+
 	Make AC_PREREQ faster and more robust.
 	* lib/m4sugar/m4sugar.m4 (m4_ignore, m4_unquote): New macros.
 	(m4_version_prereq): Inline constant expansions.
