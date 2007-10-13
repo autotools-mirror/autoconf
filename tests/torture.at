@@ -335,6 +335,14 @@ AC_DEFINE(fubar, tutu)
 AC_DEFINE(a, A)
 AC_DEFINE(aaa, AAA)
 AC_DEFINE(aa, AA)
+
+# backslash-newline combinations
+AC_DEFINE([multiline], [line1\
+line2\
+line3 \
+line4])
+AC_DEFINE([multiline_args(ARG1, ARG2)], [ARG2 \
+ARG1])
 AC_CONFIG_FILES(defs)
 
 # Things included in confdefs.h, but which make no sense in
@@ -361,13 +369,22 @@ AT_DATA([config.hin],
 [[#define foo   0
 #  define bar bar
 #  define baz   "Archimedes was sinking in his baz"
-#  define fubar				tutu
+  #  define fubar				tutu
 #define a B
-#define aa BB
-#define aaa BBB
+ #define aa BB
+ #  define aaa BBB
 #undef a
-#undef aa
+ #  undef aa
 #undef aaa
+#define aaa(a, aa) aa a
+#define aaab
+#define aaac(a, aa) aa a
+#undef multiline
+#  undef multiline_args
+/* an ugly one: */
+#define str(define) \
+#define
+#define stringify(arg) str(arg)
 ]])
 
 AT_CHECK_AUTOCONF
@@ -378,19 +395,32 @@ AT_DATA([expout],
 #define foo toto
 #  define bar tata
 #  define baz titi
-#  define fubar tutu
+  #  define fubar tutu
 #define a A
-#define aa AA
-#define aaa AAA
+ #define aa AA
+ #  define aaa AAA
 #define a A
-#define aa AA
+ #  define aa AA
 #define aaa AAA
+#define aaa AAA
+#define aaab
+#define aaac(a, aa) aa a
+#define multiline line1\
+line2\
+line3 \
+line4
+#  define multiline_args(ARG1, ARG2) ARG2 \
+ARG1
+/* an ugly one: */
+#define str(define) \
+#define
+#define stringify(arg) str(arg)
 ]])
 AT_CHECK([cat config.h], 0, expout)
 
 # Check the value of DEFS.
 AT_DATA([expout],
-[[-DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA
+[[-DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA -Dmultiline=line1line2line3\ line4 -Dmultiline_args\(ARG1,\ ARG2\)=ARG2\ ARG1
 ]])
 
 # Because we strip trailing spaces in `testsuite' we can't leave one in
@@ -478,7 +508,7 @@ m4_dquote(m4_defn([AT_BIG_VALUE]))[)]]
 # used in the torture tests.
 m4_defun([AC_DEFUBST],
 [AC_DUMMY_VAR($1)="AC_BIG_VALUE"
-AC_DEFINE_UNQUOTED(AC_DUMMY_VAR($1), "$AC_DUMMY_VAR($1)",
+AC_DEFINE_UNQUOTED(AC_DUMMY_VAR($1), "$AC_DUMMY_VAR($1) $AC_DUMMY_VAR($1)",
 		   AC_DESCRIPTION)
 AC_SUBST(AC_DUMMY_VAR($1))
 AC_SUBST_FILE([f]$1)
@@ -519,7 +549,7 @@ for awk_arg in FOO= AWK=awk; do
 m4_for(AT_Count, 1, 100, 1,
 [
 /* AT_DESCRIPTION */
-[#define] AT_DUMMY_VAR(AT_Count) "AT_BIG_VALUE"
+[#define] AT_DUMMY_VAR(AT_Count) "AT_BIG_VALUE AT_BIG_VALUE"
 ])])
 
   AT_CHECK([sed -n '4,$ p' config.h], 0, expout)
@@ -659,6 +689,7 @@ AC_SUBST([zardoz])
 file=File
 AC_SUBST_FILE([file])
 AC_DEFINE([foo], [[X*'[]+ ",& &`\($foo !]], [Awful value.])
+AC_DEFINE([bar], [[%!_!# X]], [Value that is used as special delimiter.])
 AC_PROG_AWK
 AC_CONFIG_FILES([Foo Zardoz])]])
 
@@ -681,7 +712,8 @@ X@file@
 @file@X
 ]])
   AT_CHECK([cmp allowed-chars Zardoz])
-  AT_CHECK_DEFINES([[#define foo X*'[]+ ",& &`\($foo !
+  AT_CHECK_DEFINES([[#define bar %!_!# X
+#define foo X*'[]+ ",& &`\($foo !
 ]])
 done
 AT_CLEANUP
@@ -731,16 +763,36 @@ AT_CLEANUP
 ## ------------------ ##
 
 AT_SETUP([Define a newline])
-AT_XFAIL_IF(:)
 AT_CONFIGURE_AC([[AC_DEFINE([foo], [one
 two], [This spans two lines.])
 ]])
-AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOCONF([], [], [],
+[[configure.ac:5: warning: AC_DEFINE: `one
+configure.ac:5: two' is not a valid preprocessor define value
+]])
+AT_CHECK_AUTOHEADER([], [], [],
+[[configure.ac:5: warning: AC_DEFINE: `one
+configure.ac:5: two' is not a valid preprocessor define value
+]])
 AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([[#define foo one
-two
 ]])
+
+AT_CONFIGURE_AC([[AC_DEFINE_UNQUOTED([foo], [one
+two], [This spans two lines.])
+]])
+AT_CHECK_AUTOCONF([], [], [],
+[[configure.ac:5: warning: AC_DEFINE_UNQUOTED: `one
+configure.ac:5: two' is not a valid preprocessor define value
+]])
+AT_CHECK_AUTOHEADER([], [], [],
+[[configure.ac:5: warning: AC_DEFINE_UNQUOTED: `one
+configure.ac:5: two' is not a valid preprocessor define value
+]])
+AT_CHECK_CONFIGURE
+AT_CHECK_DEFINES([[#define foo one
+]])
+
 AT_CLEANUP
 
 

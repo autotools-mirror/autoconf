@@ -11,3 +11,5 @@ autom4te.cache
 .#*
 CVS
 *~
+tags
+TAGS

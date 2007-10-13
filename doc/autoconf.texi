@@ -449,6 +449,8 @@ Using @command{autom4te}
 Programming in M4sugar
 
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
+* Diagnostic Macros::           Diagnostic messages from M4sugar
+* Diversion support::           Diversions in M4sugar
 * Conditional constructs::      Conditions in M4
 * Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
@@ -1792,8 +1794,8 @@ This macro is the only macro that may be used before @code{AC_INIT}, but
 for consistency, you are invited not to do so.
 @end defmac
 
-@defmac AC_VERSION
-@acindex{VERSION}
+@defmac AC_AUTOCONF_VERSION
+@acindex{AUTOCONF_VERSION}
 This macro was introduced in Autoconf 2.62.  It identifies the version
 of Autoconf that is currently parsing the input file, in a format
 suitable for @code{m4_version_compare} (@pxref{m4_version_compare}); in
@@ -8494,10 +8496,15 @@ terminated by an ellipsis @samp{...} if C99 syntax is employed.
 backslash-newlines, universal character names, or non-@acronym{ASCII}
 characters.
 
-@var{value} should not contain literal newlines, and if you are not
-using @code{AC_CONFIG_HEADERS} it should not contain any @samp{#}
-characters, as @command{make} tends to eat them.  To use a shell variable,
-use @code{AC_DEFINE_UNQUOTED} instead.
+@var{value} may contain backslash-escaped newlines, which will be
+preserved if you use @code{AC_CONFIG_HEADERS} but flattened if passed
+via @code{@@DEFS@@} (with no effect on the compilation, since the
+preprocessor sees only one line in the first place).  @var{value} should
+not contain raw newlines.  If you are not using
+@code{AC_CONFIG_HEADERS}, @var{value} should not contain any @samp{#}
+characters, as @command{make} tends to eat them.  To use a shell
+variable, use @code{AC_DEFINE_UNQUOTED} instead.
+
 @var{description} is only useful if you are using
 @code{AC_CONFIG_HEADERS}.  In this case, @var{description} is put into
 the generated @file{config.h.in} as the comment before the macro define.
@@ -8993,7 +9000,7 @@ only be made to the macro definitions and all the callers change
 automatically.
 
 To diagnose static issues, i.e., when @command{autoconf} is run, see
-@ref{Reporting Messages}.
+@ref{Diagnostic Macros}.
 
 @defmac AC_MSG_CHECKING (@var{feature-description})
 @acindex{MSG_CHECKING}
@@ -9082,9 +9089,9 @@ Autoconf is written on top of two layers: @dfn{M4sugar}, which provides
 convenient macros for pure M4 programming, and @dfn{M4sh}, which
 provides macros dedicated to shell script generation.
 
-As of this version of Autoconf, these two layers are still experimental,
-and their interface might change in the future.  As a matter of fact,
-@emph{anything that is not documented must not be used}.
+As of this version of Autoconf, these two layers still contain
+experimental macros, whose interface might change in the future.  As a
+matter of fact, @emph{anything that is not documented must not be used}.
 
 @menu
 * M4 Quotation::                Protecting macros from unwanted expansion
@@ -10068,8 +10075,14 @@ macros.  M4sugar introduces additional generic macros.  Its name was
 coined by Lars J. Aas: ``Readability And Greater Understanding Stands 4
 M4sugar''.
 
+M4sugar reserves the macro namespace @samp{^_m4_} for internal use, and
+the macro namespace @samp{^m4_} for M4sugar macros.  You should not
+define your own macros into these namespaces.
+
 @menu
 * Redefined M4 Macros::         M4 builtins changed in M4sugar
+* Diagnostic Macros::           Diagnostic messages from M4sugar
+* Diversion support::           Diversions in M4sugar
 * Conditional constructs::      Conditions in M4
 * Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
@@ -10106,27 +10119,98 @@ M4sugar''.
 @msindex{traceoff}
 @msindex{traceon}
 @msindex{translit}
-@msindex{undefine}
 With a few exceptions, all the M4 native macros are moved in the
 @samp{m4_} pseudo-namespace, e.g., M4sugar renames @code{define} as
 @code{m4_define} etc.
 
+The list of macros unchanged from M4, except for their name, is:
+@itemize @minus
+@item m4_builtin
+@item m4_changecom
+@item m4_changequote
+@item m4_debugfile
+@item m4_debugmode
+@item m4_decr
+@item m4_define
+@item m4_divnum
+@item m4_dumpdef
+@item m4_errprint
+@item m4_esyscmd
+@item m4_eval
+@item m4_format
+@item m4_ifdef
+@item m4_incr
+@item m4_index
+@item m4_indir
+@item m4_len
+@item m4_pushdef
+@item m4_shift
+@item m4_substr
+@item m4_syscmd
+@item m4_sysval
+@item m4_traceoff
+@item m4_traceon
+@item m4_translit
+@end itemize
+
 Some M4 macros are redefined, and are slightly incompatible with their
 native equivalent.
 
+@defmac __file__
+@defmacx __line__
+@MSindex __file__
+@MSindex __line__
+All M4 macros starting with @samp{__} retain their original name: for
+example, no @code{m4__file__} is defined.
+@end defmac
+
+@defmac __oline__
+@MSindex __oline__
+This is not technically a macro, but a feature of Autom4te.  The
+sequence @code{__oline__} can be used similarly to the other m4sugar
+location macros, but rather than expanding to the location of the input
+file, it is translated to the line number where it appears in the output
+file after all other M4 expansions.
+@end defmac
+
 @defmac dnl
-@msindex{dnl}
+@MSindex dnl
 This macro kept its original name: no @code{m4_dnl} is defined.
+@end defmac
+
+@defmac m4_bpatsubst (@var{string}, @var{regexp}, @ovar{replacement})
+@msindex{bpatsubst}
+This macro corresponds to @code{patsubst}.  The name @code{m4_patsubst}
+is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
+released and supports extended regular expression syntax.
+@end defmac
+
+@defmac m4_bregexp (@var{string}, @var{regexp}, @ovar{replacement})
+@msindex{bregexp}
+This macro corresponds to @code{regexp}.  The name @code{m4_regexp}
+is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
+released and supports extended regular expression syntax.
 @end defmac
 
 @defmac m4_defn (@var{macro})
 @msindex{defn}
 Unlike the M4 builtin, this macro fails if @var{macro} is not
-defined.  See @code{m4_undefine}.
+defined.  Also, while newer M4 can concatenate multiple definitions,
+this version currently only supports a single @var{macro}.  See
+@code{m4_undefine}.
 @end defmac
 
-@c FIXME: Need to document m4_divert, m4_undivert, m4_divert_push,
-@c m4_divert_pop, m4_divert_text, m4_divert_once
+@defmac m4_divert (@var{diversion})
+@msindex{divert}
+M4sugar relies heavily on diversions, so rather than behaving as a
+primitive, @code{m4_divert} behaves like:
+@example
+m4_divert_pop()m4_divert_push([@var{diversion}])
+@end example
+@noindent
+@xref{Diversion support}, for more details about the use of the
+diversion stack.
+@end defmac
 
 @defmac m4_exit (@var{exit-status})
 @msindex{exit}
@@ -10165,30 +10249,19 @@ and both have the secure semantics regardless of which macro the
 underlying M4 provides.
 @end defmac
 
-@defmac m4_bpatsubst (@var{string}, @var{regexp}, @ovar{replacement})
-@msindex{bpatsubst}
-This macro corresponds to @code{patsubst}.  The name @code{m4_patsubst}
-is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
-released and supports extended regular expression syntax.
-@end defmac
-
 @defmac m4_popdef (@var{macro})
 @msindex{popdef}
 Unlike the M4 builtin, this macro fails if @var{macro} is not
-defined.  See @code{m4_undefine}.
-@end defmac
-
-@defmac m4_bregexp (@var{string}, @var{regexp}, @ovar{replacement})
-@msindex{bregexp}
-This macro corresponds to @code{regexp}.  The name @code{m4_regexp}
-is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
-released and supports extended regular expression syntax.
+defined.  Also, while newer M4 can pop multiple definitions at once,
+this version currently only supports a single @var{macro}.  See
+@code{m4_undefine}.
 @end defmac
 
 @defmac m4_undefine (@var{macro})
 @msindex{undefine}
 Unlike the M4 builtin, this macro fails if @var{macro} is not
-defined.  Use
+defined.  Also, while newer M4 can undefine multiple definitions at
+once, this version currently only supports a single @var{macro}.  Use
 
 @example
 m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
@@ -10196,6 +10269,15 @@ m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
 
 @noindent
 to recover the behavior of the builtin.
+@end defmac
+
+@defmac m4_undivert (@var{diversion})
+@msindex{undivert}
+Unlike the M4 builtin, only one diversion can be undiverted per
+invocation.  Also, since the M4sugar diversion stack prefers named
+diversions, the use of @code{m4_undivert} to include files is risky.
+@xref{Diversion support}, for more details about the use of the
+diversion stack.
 @end defmac
 
 @defmac m4_wrap (@var{text})
@@ -10225,14 +10307,160 @@ m4_wrap([foo])
 @end defmac
 
 
+@node Diagnostic Macros
+@subsection Diagnostic messages from M4sugar
+@cindex Messages, from @command{M4sugar}
+
+When macros statically diagnose abnormal situations, benign or fatal,
+they should report them using these macros.  For issuing dynamic issues,
+i.e., when @command{configure} is run, see @ref{Printing Messages}.
+
+@defmac m4_assert (@var{expression}, @dvar{exit-status, 1})
+@msindex{assert}
+Assert that the arithmetic @var{expression} evaluates to non-zero.
+Otherwise, issue a fatal error, and exit @command{autom4te} with
+@var{exit-status}.
+@end defmac
+
+@defmac m4_errprintn (@var{message})
+@msindex{errprintn}
+Similar to the builtin @code{m4_errprint}, except that a newline is
+guaranteed after @var{message}.
+@end defmac
+
+@anchor{m4_fatal}
+@defmac m4_fatal
+@msindex{fatal}
+Report a severe error @var{message} prefixed with the current location,
+and have @command{autom4te} die.
+@end defmac
+
+@defmac m4_location
+@msindex{location}
+Useful as a prefix in a message line.  Short for:
+@example
+__file__:__line__
+@end example
+@end defmac
+
+@anchor{m4_warn}
+@defmac m4_warn (@var{category}, @var{message})
+@msindex{warn}
+Report @var{message} as a warning (or as an error if requested by the
+user) if warnings of the @var{category} are turned on.  If the message
+is emitted, it is prefixed with the current location, and followed by a
+call trace of all macros defined via @code{AC_DEFUN} used to get to the
+current expansion.  You are encouraged to use standard categories, which
+currently include:
+
+@table @samp
+@item all
+messages that don't fall into one of the following categories.  Use of an
+empty @var{category} is equivalent.
+
+@item cross
+related to cross compilation issues.
+
+@item obsolete
+use of an obsolete construct.
+
+@item syntax
+dubious syntactic constructs, incorrectly ordered macro calls.
+@end table
+@end defmac
+
+
+@node Diversion support
+@subsection Diversion support
+
+M4sugar makes heavy use of diversions, because it is often the case that
+text that must appear early in the output is not discovered until late
+in the input.  Additionally, some of the topological sorting algorithms
+used in resolving macro dependencies use diversions.  Therefore, most
+macros should not need to change diversions directly, but rather rely on
+higher-level M4sugar macros to manage diversions transparently.
+
+To make diversion management easier, M4sugar uses the concept of named
+diversions.  Rather than using diversion numbers directly, it is nicer
+to associate a name with each diversion; the diversion number associated
+with a particular diversion name is an implementation detail, so you
+should only use diversion names.
+
+M4sugar defines two named diversions.
+@table @code
+@item KILL
+Text written to this diversion is discarded.  This is the default
+diversion once M4sugar is initialized.
+@item GROW
+This diversion is used behind the scenes by topological sorting macros,
+such as @code{AC_REQUIRE}.
+@end table
+
+M4sh adds several more named diversions.
+@table @code
+@item BINSH
+This diversion is reserved for the @samp{#!} interpreter line.
+@item HEADER-REVISION
+This diversion holds text from @code{AC_REVISION}.
+@item HEADER-COMMENT
+This diversion holds comments about the purpose of a file.
+@item HEADER-COPYRIGHT
+This diversion is managed by @code{AC_COPYRIGHT}.
+@item M4SH-SANITIZE
+This diversion contains M4sh sanitization code, used to ensure M4sh is
+executing in a reasonable shell environment.
+@item M4SH-INIT
+This diversion contains M4sh initialization code, initializing variables
+that are required by other M4sh macros.
+@item BODY
+This diversion contains the body of the shell code, and is the default
+diversion once M4sh is initialized.
+@end table
+
+For now, the named diversions of Autoconf, Autoheader, and Autotest are
+not documented.
+
+@defmac m4_divert_once (@var{diversion}, @ovar{content})
+@msindex{divert_once}
+Similar to @code{m4_divert_text}, except that @var{content} is only
+output to @var{diversion} if this is the first time that
+@code{m4_divert_once} has been called with its particular arguments.
+@end defmac
+
+@defmac m4_divert_pop (@ovar{diversion})
+@msindex{divert_pop}
+If provided, check that the current diversion is indeed @var{diversion}.
+Then change to the diversion located earlier on the stack, giving an
+error if an attempt is made to pop beyond the initial m4sugar diversion
+of @code{KILL}.
+@end defmac
+
+@defmac m4_divert_push (@var{diversion})
+@msindex{divert_push}
+Remember the former diversion on the diversion stack, and output
+subsequent text into @var{diversion}.  M4sugar maintains a diversion
+stack, and issues an error if there is not a matching pop for every
+push.
+@end defmac
+
+@defmac m4_divert_text (@var{diversion}, @ovar{content})
+@msindex{divert_text}
+Output @var{content} and a newline into @var{diversion}, without
+affecting the current diversion.  Shorthand for:
+@example
+m4_divert_push([@var{diversion}])@var{content}
+m4_divert_pop([@var{diversion}])dnl
+@end example
+@end defmac
+
 @node Conditional constructs
 @subsection Conditional constructs
 
 The following macros provide additional conditional contructs, as
 convenience wrappers around @code{m4_if}.
 
-@defmac m4_bmatch (@var{string}, @var{regex-1}, @var{value-1}, @dots{}, @
-  @ovar{default})
+@defmac m4_bmatch (@var{string}, @var{regex-1}, @var{value-1}, @
+  @ovar{regex-2}, @ovar{value-2}, @dots{}, @ovar{default})
 @msindex{bmatch}
 The string @var{string} is repeatedly compared against a series of
 @var{regex} arguments; if a match is found, the expansion is the
@@ -10241,7 +10469,8 @@ corresponding @var{value}, otherwise, the macro moves on to the next
 @var{default}, or nothing.
 @end defmac
 
-@defmac m4_bpatsubsts (@var{string}, @var{regex-1}, @var{subst-1}, @dots{})
+@defmac m4_bpatsubsts (@var{string}, @var{regex-1}, @var{subst-1}, @
+  @ovar{regex-2}, @ovar{subst-2}, @dots{})
 @msindex{bpatsubsts}
 The string @var{string} is altered by @var{regex-1} and @var{subst-1},
 as if by:
@@ -10260,8 +10489,8 @@ will line up with the extra quotations, and not the characters of the
 original string.
 @end defmac
 
-@defmac m4_case (@var{string}, @var{value-1}, @var{if-value-1}, @dots{}, @
-  @ovar{default})
+@defmac m4_case (@var{string}, @var{value-1}, @var{if-value-1}, @
+  @ovar{value-2}, @ovar{if-value-2}, @dots{}, @ovar{default})
 @msindex{case}
 Test @var{string} against multiple @var{value} possibilities, resulting
 in the first @var{if-value} for a match, or in the optional
@@ -10274,13 +10503,14 @@ m4_if([@var{string}], [@var{value-1}], [@var{if-value-1}],
 @end defmac
 
 @defmac m4_cond (@var{test-1}, @var{value-1}, @var{if-value-1}, @
-  @var{test-2}, @var{value-2}, @var{if-value-2}, @dots{}, @ovar{default})
+  @ovar{test-2}, @ovar{value-2}, @ovar{if-value-2}, @dots{}, @ovar{default})
 @msindex{cond}
-Similar to @code{m4_if}, except that each @var{test} is expanded only
-when it is encountered.  This is useful for short-circuiting expensive
-tests; while @code{m4_if} requires all its strings to be expanded up
-front before doing comparisons, @code{m4_cond} only expands a @var{test}
-when all earlier tests have failed.
+This macro was introduced in Autoconf 2.62.  Similar to @code{m4_if},
+except that each @var{test} is expanded only when it is encountered.
+This is useful for short-circuiting expensive tests; while @code{m4_if}
+requires all its strings to be expanded up front before doing
+comparisons, @code{m4_cond} only expands a @var{test} when all earlier
+tests have failed.
 
 For an example, these two sequences give the same result, but in the
 case where @samp{$1} does not contain a backslash, the @code{m4_cond}
@@ -10410,8 +10640,8 @@ fewer @code{dnl} to result in the same expansion.
 @code{m4_shiftn} performs @var{count} iterations of @code{m4_shift},
 along with validation that enough arguments were passed in to match the
 shift count.  @code{m4_shift2} and @code{m4_shift3} are specializations
-of @code{m4_shiftn} that are more efficient for two and three shifts,
-respectively.
+of @code{m4_shiftn}, introduced in Autoconf 2.62, and are more efficient
+for two and three shifts, respectively.
 @end defmac
 
 
@@ -10464,17 +10694,154 @@ mkargs
 @end example
 
 
-
 @node Text processing Macros
 @subsection Text processing Macros
 
 The following macros may be used to manipulate strings in M4.
 They are not intended for casual use.
 
+@defmac m4_append (@var{macro-name}, @var{string}, @ovar{separator})
+@defmacx m4_append_uniq (@var{macro-name}, @var{string}, @ovar{separator} @
+  @ovar{if-uniq}, @ovar{if-duplicate})
+@msindex{append}
+@msindex{append_uniq}
+Redefine @var{macro-name} to its former contents with @var{separator}
+and @var{string} added at the end.  If @var{macro-name} was undefined
+before (but not if it was defined but empty), then no @var{separator} is
+added.  As of Autoconf 2.62, neither @var{string} nor @var{separator}
+are expanded during this macro; instead, they are expanded when
+@var{macro-name} is invoked.
+
+@code{m4_append} can be used to grow strings, and @code{m4_append_uniq}
+to grow strings without duplicating substrings.  Additionally,
+@code{m4_append_uniq} takes two optional parameters; @var{if-uniq} is
+expanded if @var{string} was appended, and @var{if-duplicate} is
+expanded if @var{string} was already present.
+
+@example
+m4_define([active], [ACTIVE])dnl
+m4_append([sentence], [This is an])dnl
+m4_append([sentence], [ active ])dnl
+m4_append([sentence], [symbol.])dnl
+sentence
+@result{}This is an ACTIVE symbol.
+m4_undefine([active])dnl
+@result{}This is an active symbol.
+m4_append_uniq([list], [one], [, ], [new], [existing])
+@result{}new
+m4_append_uniq([list], [one], [, ], [new], [existing])
+@result{}existing
+m4_append_uniq([list], [two], [, ], [new], [existing])
+@result{}new
+m4_append_uniq([list], [three], [, ], [new], [existing])
+@result{}new
+m4_append_uniq([list], [two], [, ], [new], [existing])
+@result{}existing
+list
+@result{}one, two, three
+m4_dquote(list)
+@result{}[one],[two],[three]
+m4_append([list2], [one], [[, ]])dnl
+m4_append_uniq([list2], [two], [[, ]])dnl
+m4_append([list2], [three], [[, ]])dnl
+list2
+@result{}one, two, three
+m4_dquote(list2)
+@result{}[one, two, three]
+@end example
+@end defmac
+
+@defmac m4_flatten (@var{string})
+@msindex{flatten}
+Flatten @var{string} into a single line.  Delete all backslash-newline
+pairs, and replace all remaining newlines with a space.  The result is
+still a quoted string.
+@end defmac
+
+@defmac m4_join (@ovar{separator}, @var{args}@dots{})
+@msindex{join}
+Concatenate each @var{arg}, separated by @var{separator}.  The result is
+a quoted string.
+@end defmac
+
+@defmac m4_newline
+@msindex{newline}
+This macro was introduced in Autoconf 2.62, and expands to a newline.
+It is primarily useful for maintaining macro formatting, and ensuring
+that M4 does not discard leading whitespace during argument collection.
+@end defmac
+
+@defmac m4_normalize (@var{string})
+@msindex{normalize}
+Remove leading and trailing spaces and tabs, sequences of
+backslash-then-newline, and replace multiple spaces, tabs, and newlines
+with a single space.  This is a combination of @code{m4_flatten} and
+@code{m4_strip}.
+@end defmac
+
 @defmac m4_re_escape (@var{string})
 @msindex{re_escape}
 Backslash-escape all characters in @var{string} that are active in
 regexps.
+@end defmac
+
+@defmac m4_split (@var{string}, @dvar{regexp, [\t ]+})
+@msindex{split}
+Split @var{string} into an M4 list of elements quoted by @samp{[} and
+@samp{]}, while keeping white space at the beginning and at the end.
+If @var{regexp} is given, use it instead of @samp{[\t ]+} for splitting.
+If @var{string} is empty, the result is an empty list.
+@end defmac
+
+@defmac m4_strip (@var{string})
+@msindex{strip}
+Strip whitespace from @var{string}.  Sequences of space and tab are
+reduced to a single space, then leading and trailing spaces are
+removed.  The result is still a quoted string.
+@end defmac
+
+@defmac m4_text_box (@var{message}, @dvar{frame, -})
+@msindex{text_box}
+Add a text box around @var{message}, using @var{frame} as the border
+character above and below the message.  The frame correctly accounts for
+the subsequent expansion of @var{message}.  For example:
+@example
+m4_define([macro], [abc])dnl
+m4_text_box([macro])
+@result{}## --- ##
+@result{}## abc ##
+@result{}## --- ##
+@end example
+@end defmac
+
+@defmac m4_text_wrap (@var{string}, @ovar{prefix}, @
+  @dvar{prefix1, @var{prefix}}, @dvar{width, 79})
+@msindex{text_wrap}
+Break @var{string} into a series of whitespace-separated words, then
+format those words to wrap within @var{width} columns, and without
+trailing whitespace.  If given, @var{prefix1} is prepended to the first
+line, and @var{prefix} is prepended to each continuation line.  As a
+special case, if @var{prefix1} is longer than @var{prefix}, the first
+line will consist solely of @var{prefix1}.
+
+For some examples:
+@example
+m4_text_wrap([Short string */], [@ @ @ ], [/* ], [20])
+@result{}/* Short string */
+m4_text_wrap([Much longer string */], [@ @ @ ], [/* ], [20])
+@result{}/* Much longer
+@result{}@ @ @ string */
+m4_text_wrap([Short doc.], [@ @ @ @ @ @ @ @ @ @ ], [@ @ --short ], [30])
+@result{}@ @ --short Short doc.
+m4_text_wrap([Short doc.], [@ @ @ @ @ @ @ @ @ @ ], [@ @ --too-wide ], [30])
+@result{}@ @ --too-wide
+@result{}@ @ @ @ @ @ @ @ @ @ Short doc.
+m4_text_wrap([Super long documentation.], [@ @ @ @ @ ],
+             [@ @ --too-wide ], 30)
+@result{}@ @ --too-wide
+@result{}@ @ @ @ @ Super long
+@result{}@ @ @ @ @ documentation.
+@end example
 @end defmac
 
 @defmac m4_tolower (@var{string})
@@ -10485,36 +10852,10 @@ Return @var{string} with letters converted to upper or lower case,
 respectively.
 @end defmac
 
-@defmac m4_split (@var{string}, @ovar{regexp})
-@msindex{split}
-Split @var{string} into an M4 list of elements quoted by @samp{[} and
-@samp{]}, while keeping white space at the beginning and at the end.
-If @var{regexp} is given, use it instead of @samp{[\t ]+} for splitting.
-If @var{string} is empty, the result is an empty list.
-@end defmac
-
-@defmac m4_normalize (@var{string})
-@msindex{normalize}
-Remove leading and trailing spaces and tabs, sequences of
-backslash-then-newline, and replace multiple spaces and tabs with a
-single space.
-@end defmac
-
-@defmac m4_append (@var{macro-name}, @var{string}, @ovar{separator})
-@defmacx m4_append_uniq (@var{macro-name}, @var{string}, @ovar{separator})
-@msindex{append}
-@msindex{append_uniq}
-Redefine @var{macro-name} to its former contents with @var{separator}
-and @var{string} added at the end.  If @var{macro-name} was undefined
-before (but not if it was defined but empty), then no @var{separator} is
-added.  @code{m4_append} can be used to grow strings, and
-@code{m4_append_uniq} to grow strings without duplicating substrings.
-@end defmac
-
 @anchor{m4_version_compare}
 @defmac m4_version_compare (@var{version-1}, @var{version-2})
 @msindex{version_compare}
-Introduced in autoconf 2.53.  Compare the version strings
+This macro was introduced in Autoconf 2.53.  Compare the version strings
 @var{version-1} and @var{version-2}, and expand to @samp{-1} if
 @var{version-1} is smaller, @samp{0} if they are the same, or @samp{1}
 @var{version-2} is smaller.  Version strings must be a list of elements
@@ -10534,6 +10875,8 @@ m4_version_compare([1.2], [1.1.1a])
 @result{}1
 m4_version_compare([1.0], [1])
 @result{}0
+m4_version_compare([1.1a], [1,10])
+@result{}-1
 @end example
 @end defmac
 
@@ -10549,7 +10892,9 @@ instance, if an Autoconf @file{configure} script includes tokens such as
 @samp{AC_DEFINE}, or @samp{dnl}, then most probably something went
 wrong (typically a macro was not evaluated because of overquotation).
 
-M4sugar forbids all the tokens matching @samp{^m4_} and @samp{^dnl$}.
+M4sugar forbids all the tokens matching @samp{^_?m4_} and @samp{^dnl$}.
+Additional layers, such as M4sh and Autoconf, add additional forbidden
+patterns to the list.
 
 @defmac m4_pattern_forbid (@var{pattern})
 @msindex{pattern_forbid}
@@ -10558,8 +10903,9 @@ Comments are not checked; this can be a problem if, for instance, you
 have some macro left unexpanded after an @samp{#include}.  No consensus
 is currently found in the Autoconf community, as some people consider it
 should be valid to name macros in comments (which doesn't make sense to
-the author of this documentation, as @samp{#}-comments should document
-the output, not the input, documented by @samp{dnl} comments).
+the authors of this documentation: input, such as macros, should be
+documented by @samp{dnl} comments; reserving @samp{#}-comments to
+document the output).
 @end defmac
 
 Of course, you might encounter exceptions to these generic rules, for
@@ -10600,6 +10946,13 @@ A mess; trouble.  [Obs.] --Beau.@: & Fl.
 
 
 For the time being, it is not mature enough to be widely used.
+
+M4sh reserves the M4 macro namespace @samp{^_AS_} for internal use, and
+the namespace @samp{^AS_} for M4sh macros.  It also reserves the shell
+and environment variable namespace @samp{^as_}, and the here-doc
+delimiter namespace @samp{^_AS[A-Z]} in the output file.  You should not
+define your own macros or output shell code that conflicts with these
+namespaces.
 
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
@@ -10846,14 +11199,36 @@ that produce no output, such as @code{AC_REQUIRE}.
 @node Macro Names
 @section Macro Names
 
-All of the Autoconf macros have all-uppercase names starting with
-@samp{AC_} to prevent them from accidentally conflicting with other
-text.  All shell variables that they use for internal purposes have
-mostly-lowercase names starting with @samp{ac_}.  To ensure that your
-macros don't conflict with present or future Autoconf macros, you should
-prefix your own macro names and any shell variables they use with some
-other sequence.  Possibilities include your initials, or an abbreviation
-for the name of your organization or software package.
+All of the public Autoconf macros have all-uppercase names in the
+namespace @samp{^AC_} to prevent them from accidentally conflicting with
+other text; Autoconf also reserves the namespace @samp{^_AC_} for
+internal macros.  All shell variables that they use for internal
+purposes have mostly-lowercase names starting with @samp{ac_}.  Autoconf
+also uses here-doc delimiters in the namespace @samp{^_AC[A-Z]}.  During
+@command{configure}, files produced by Autoconf make heavy use of the
+file system namespace @samp{^conf}.
+
+Since Autoconf is built on top of M4sugar (@pxref{Programming in
+M4sugar}) and M4sh (@pxref{Programming in M4sh}), you must also be aware
+of those namespaces (@samp{^_?\(m4\|AS\)_}).  And since
+@file{configure.ac} is also designed to be scanned by Autoheader,
+Autoscan, Autoupdate, and Automake, you should be aware of the
+@samp{^_?A[HNUM]_} namespaces.  In general, you @emph{should not use}
+the namespace of a package that does not own the macro or shell code you
+are writing.
+
+To ensure that your macros don't conflict with present or future
+Autoconf macros, you should prefix your own macro names and any shell
+variables they use with some other sequence.  Possibilities include your
+initials, or an abbreviation for the name of your organization or
+software package.  Historically, people have not always followed the
+rule of using a namespace appropriate for their package, and this has
+made it difficult for determining the origin of a macro (and where to
+report bugs about that macro), as well as difficult for the true
+namespace owner to add new macros without interference from pre-existing
+uses of third-party macros.  Perhaps the best example of this confusion
+is the @code{AM_GNU_GETTEXT} macro, which belongs, not to Automake, but
+to Gettext.
 
 Most of the Autoconf macros' names follow a structured naming convention
 that indicates the kind of feature check by the name.  The macro names
@@ -10862,7 +11237,8 @@ general to most specific.  The names of their cache variables use the
 same convention (@pxref{Cache Variable Names}, for more information on
 them).
 
-The first word of the name after @samp{AC_} usually tells the category
+The first word of the name after the namepace initials (such as
+@samp{AC_}) usually tells the category
 of the feature being tested.  Here are the categories used in Autoconf for
 specific test macros, the kind of macro that you are more likely to
 write.  They are also used for cache variables, in all-lowercase.  Use
@@ -10910,46 +11286,57 @@ macro does.  For example, @code{AC_PATH_X} has internal macros
 @section Reporting Messages
 @cindex Messages, from @command{autoconf}
 
-When macros statically diagnose abnormal situations, benign or fatal,
-they should report them using these macros.  For dynamic issues, i.e.,
-when @command{configure} is run, see @ref{Printing Messages}.
+When macros statically diagnose abnormal situations, benign or fatal, it
+is possible to make @command{autoconf} detect the problem, and refuse to
+create @file{configure} in the case of an error.  The macros in this
+section are considered obsolescent, and new code should use M4sugar
+macros for this purpose, see @ref{Diagnostic Macros}.
+
+On the other hand, it is possible to want to detect errors when
+@command{configure} is run, which are dependent on the environment of
+the user rather than the maintainer.  For dynamic diagnostics, see
+@ref{Printing Messages}.
 
 @defmac AC_DIAGNOSE (@var{category}, @var{message})
 @acindex{DIAGNOSE}
 Report @var{message} as a warning (or as an error if requested by the
-user) if warnings of the @var{category} are turned on.  You are
-encouraged to use standard categories, which currently include:
-
-@table @samp
-@item all
-messages that don't fall into one of the following categories.  Use of an
-empty @var{category} is equivalent.
-
-@item cross
-related to cross compilation issues.
-
-@item obsolete
-use of an obsolete construct.
-
-@item syntax
-dubious syntactic constructs, incorrectly ordered macro calls.
-@end table
+user) if warnings of the @var{category} are turned on.  This macro is
+obsolescent; you are encouraged to use:
+@example
+m4_warn([@var{category}], [@var{message}])
+@end example
+@noindent
+instead.  @xref{m4_warn}, for more details, including valid
+@var{category} names.
 @end defmac
 
 @defmac AC_WARNING (@var{message})
 @acindex{WARNING}
-Equivalent to @samp{AC_DIAGNOSE([syntax], @var{message})}, but you are
-strongly encouraged to use a finer grained category.
+Report @var{message} as a syntax warning.  This macro is obsolescent;
+you are encouraged to use:
+@example
+m4_warn([syntax], [@var{message}])
+@end example
+@noindent
+instead.  @xref{m4_warn}, for more details, as well as better
+finer-grained categories of warnings (not all problems have to do with
+syntax).
 @end defmac
 
 @defmac AC_FATAL (@var{message})
 @acindex{FATAL}
 Report a severe error @var{message}, and have @command{autoconf} die.
+This macro is obsolescent; you are encouraged to use:
+@example
+m4_fatal([@var{message}])
+@end example
+@noindent
+instead.  @xref{m4_fatal}, for more details.
 @end defmac
 
 When the user runs @samp{autoconf -W error}, warnings from
-@code{AC_DIAGNOSE} and @code{AC_WARNING} are reported as error, see
-@ref{autoconf Invocation}.
+@code{m4_warn} (including those issued through @code{AC_DIAGNOSE} and
+@code{AC_WARNING}) are reported as errors, see @ref{autoconf Invocation}.
 
 @node Dependencies Between Macros
 @section Dependencies Between Macros

@@ -128,17 +128,10 @@ PS2='> '
 PS4='+ '
 
 # NLS nuisances.
-for as_var in \
-  LANG LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_CTYPE LC_IDENTIFICATION \
-  LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
-  LC_TELEPHONE LC_TIME
-do
-  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
-    eval $as_var=C; export $as_var
-  else
-    ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-  fi
-done
+LC_ALL=C
+export LC_ALL
+LANGUAGE=C
+export LANGUAGE
 
 # Required to use basename.
 if expr a : '\(a\)' >/dev/null 2>&1 &&
@@ -808,7 +801,7 @@ do
 "enable_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--disable-$ac_useropt_orig"
-         ac_unrecognized_sep=', ';;
+	 ac_unrecognized_sep=', ';;
     esac
     eval enable_$ac_useropt=no ;;
 
@@ -835,7 +828,7 @@ do
 "enable_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--enable-$ac_useropt_orig"
-         ac_unrecognized_sep=', ';;
+	 ac_unrecognized_sep=', ';;
     esac
     eval enable_$ac_useropt=\$ac_optarg ;;
 
@@ -1040,7 +1033,7 @@ do
 "with_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--with-$ac_useropt_orig"
-         ac_unrecognized_sep=', ';;
+	 ac_unrecognized_sep=', ';;
     esac
     eval with_$ac_useropt=\$ac_optarg ;;
 
@@ -1057,7 +1050,7 @@ do
 "with_$ac_useropt"
 "*) ;;
       *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--without-$ac_useropt_orig"
-         ac_unrecognized_sep=', ';;
+	 ac_unrecognized_sep=', ';;
     esac
     eval with_$ac_useropt=no ;;
 
@@ -2966,6 +2959,12 @@ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 # take arguments), then branch to the quote section.  Otherwise,
 # look for a macro that doesn't take arguments.
 ac_script='
+:mline
+/\\$/{
+ N
+ s,\\\n,,
+ b mline
+}
 t clear
 :clear
 s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\)/-D\1=\2/g
@@ -3146,17 +3145,10 @@ PS2='> '
 PS4='+ '
 
 # NLS nuisances.
-for as_var in \
-  LANG LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_CTYPE LC_IDENTIFICATION \
-  LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
-  LC_TELEPHONE LC_TIME
-do
-  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
-    eval $as_var=C; export $as_var
-  else
-    ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-  fi
-done
+LC_ALL=C
+export LC_ALL
+LANGUAGE=C
+export LANGUAGE
 
 # Required to use basename.
 if expr a : '\(a\)' >/dev/null 2>&1 &&
@@ -3582,7 +3574,7 @@ done
 rm -f conf$$subs.sh
 
 cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs1.awk" <<\CEOF
+cat >>"\$tmp/subs1.awk" <<\_ACAWK
 _ACEOF
 sed -n '
 h
@@ -3629,8 +3621,8 @@ t delim
 ' >>$CONFIG_STATUS
 rm -f conf$$subs.awk
 cat >>$CONFIG_STATUS <<_ACEOF
-CEOF
-cat >>"\$tmp/subs1.awk" <<CEOF
+_ACAWK
+cat >>"\$tmp/subs1.awk" <<_ACAWK
   for (key in S) S_is_set[key] = 1
   FS = ""
 
@@ -3655,7 +3647,7 @@ cat >>"\$tmp/subs1.awk" <<CEOF
   print line
 }
 
-CEOF
+_ACAWK
 sed "s/\$ac_cr\\\$//; s/\$ac_cr/\$ac_cs_awk_cr/g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
 _ACEOF
 

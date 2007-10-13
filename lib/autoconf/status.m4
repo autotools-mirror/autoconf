@@ -321,11 +321,11 @@ m4_define([_AC_AWK_LITERAL_LIMIT],
 
 # _AC_OUTPUT_FILES_PREPARE
 # ------------------------
-# Create the sed scripts needed for CONFIG_FILES.
+# Create the awk scripts needed for CONFIG_FILES.
 # Support multiline substitutions and make sure that the substitutions are
 # not evaluated recursively.
 # The intention is to have readable config.status and configure, even
-# though this m4 code might be scaring.
+# though this m4 code might be scary.
 #
 # This code was written by Dan Manthey and rewritten by Ralf Wildenhues.
 #
@@ -387,9 +387,9 @@ m4_ifdef([_AC_SUBST_FILES],
 [# Create commands to substitute file output variables.
 {
   echo "cat >>$CONFIG_STATUS <<_ACEOF"
-  echo 'cat >>"\$tmp/subs1.awk" <<\CEOF'
+  echo 'cat >>"\$tmp/subs1.awk" <<\_ACAWK'
   echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/'
-  echo "CEOF"
+  echo "_ACAWK"
   echo "_ACEOF"
 } >conf$$files.sh
 . ./conf$$files.sh
@@ -444,7 +444,7 @@ dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
 [cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs1.awk" <<\CEOF
+cat >>"\$tmp/subs1.awk" <<\_ACAWK
 _ACEOF
 sed -n '
 h
@@ -491,8 +491,8 @@ t delim
 ' >>$CONFIG_STATUS
 rm -f conf$$subs.awk
 cat >>$CONFIG_STATUS <<_ACEOF
-CEOF
-cat >>"\$tmp/subs1.awk" <<CEOF
+_ACAWK
+cat >>"\$tmp/subs1.awk" <<_ACAWK
   for (key in S) S_is_set[key] = 1
   FS = ""
 ]m4_ifdef([_AC_SUBST_FILES],
@@ -526,7 +526,7 @@ cat >>"\$tmp/subs1.awk" <<CEOF
 }
 ]m4_ifdef([_AC_SUBST_FILES],
 [\$ac_cs_awk_pipe_fini])[
-CEOF
+_ACAWK
 sed "s/\$ac_cr\\\$//; s/\$ac_cr/\$ac_cs_awk_cr/g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
 _ACEOF
 ]dnl end of double-quoted part
@@ -586,13 +586,13 @@ m4_ifndef([AC_DATAROOTDIR_CHECKED],
 # FIXME: This hack should be removed a few years after 2.60.
 ac_datarootdir_hack=; ac_datarootdir_seen=
 m4_define([_AC_datarootdir_vars],
-          [datadir, docdir, infodir, localedir, mandir])
+	  [datadir, docdir, infodir, localedir, mandir])
 case `sed -n '/datarootdir/ {
   p
   q
 }
 m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
-           [/@_AC_Var@/p
+	   [/@_AC_Var@/p
 ])' $ac_file_inputs` in
 *datarootdir*) ac_datarootdir_seen=yes;;
 *@[]m4_join([@*|*@], _AC_datarootdir_vars)@*)
@@ -601,7 +601,7 @@ _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF
   ac_datarootdir_hack='
   m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
-               [s&@_AC_Var@&$_AC_Var&g
+	       [s&@_AC_Var@&$_AC_Var&g
   ])dnl
   s&\\\${datarootdir}&$datarootdir&g' ;;
 esac
@@ -675,6 +675,147 @@ AC_DEFUN([AC_CONFIG_HEADER],
 [AC_CONFIG_HEADERS([$1])])
 
 
+# _AC_OUTPUT_HEADERS_PREPARE
+# --------------------------
+# Create the awk scripts needed for CONFIG_HEADERS.
+# Support multiline #defines.
+#
+# This macro is expanded inside a here document.  If the here document is
+# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
+#
+m4_define([_AC_OUTPUT_HEADERS_PREPARE],
+[# Set up the scripts for CONFIG_HEADERS section.
+# No need to generate them if there are no CONFIG_HEADERS.
+# This happens for instance with `./config.status Makefile'.
+if test -n "$CONFIG_HEADERS"; then
+cat >"$tmp/defines.awk" <<\_ACAWK
+BEGIN {
+_ACEOF
+
+# Transform confdefs.h into an awk script `defines.awk', embedded as
+# here-document in config.status, that substitutes the proper values into
+# config.h.in to produce config.h.
+
+# Create a delimiter string that does not exist in confdefs.h, to ease
+# handling of long lines.
+ac_delim='%!_!# '
+for ac_last_try in false false :; do
+  ac_t=`sed -n "/$ac_delim/p" confdefs.h`
+  if test -z "$ac_t"; then
+    break
+  elif $ac_last_try; then
+    AC_MSG_ERROR([could not make $CONFIG_HEADERS])
+  else
+    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
+  fi
+done
+
+# For the awk script, D is an array of macro values keyed by name,
+# likewise P contains macro parameters if any.  Preserve backslash
+# newline sequences.
+dnl
+dnl Structure of the sed script that reads confdefs.h:
+dnl rset:  main loop, searches for `#define' lines
+dnl def:   deal with a `#define' line
+dnl bsnl:  deal with a `#define' line that ends with backslash-newline
+dnl cont:  handle a continuation line
+dnl bsnlc: handle a continuation line that ends with backslash-newline
+dnl
+dnl Each sub part escapes the awk special characters and outputs a statement
+dnl inserting the macro value into the array D, keyed by name.  If the macro
+dnl uses parameters, they are added in the array P, keyed by name.
+dnl
+dnl Long values are split into several string literals with help of ac_delim.
+dnl Assume nobody uses macro names of nearly 150 bytes length.
+dnl
+dnl The initial replace for `#define' lines inserts a leading space
+dnl in order to ease later matching; otherwise, output lines may be
+dnl repeatedly matched.
+dnl
+dnl m4-double-quote most of this for [, ], define, and substr:
+[
+ac_word_re=[_$as_cr_Letters][_$as_cr_alnum]*
+sed -n '
+s/.\{]_AC_AWK_LITERAL_LIMIT[\}/&'"$ac_delim"'/g
+t rset
+:rset
+s/^[	 ]*#[	 ]*define[	 ][	 ]*/ /
+t def
+d
+:def
+s/\\$//
+t bsnl
+s/["\\]/\\&/g
+s/^ \('"$ac_word_re"'\)\(([^()]*)\)[	 ]*\(.*\)/P["\1"]="\2"\
+D["\1"]=" \3"/p
+s/^ \('"$ac_word_re"'\)[	 ]*\(.*\)/D["\1"]=" \2"/p
+d
+:bsnl
+s/["\\]/\\&/g
+s/^ \('"$ac_word_re"'\)\(([^()]*)\)[	 ]*\(.*\)/P["\1"]="\2"\
+D["\1"]=" \3\\\\\\n"\\/p
+t cont
+s/^ \('"$ac_word_re"'\)[	 ]*\(.*\)/D["\1"]=" \2\\\\\\n"\\/p
+t cont
+d
+:cont
+n
+s/.\{]_AC_AWK_LITERAL_LIMIT[\}/&'"$ac_delim"'/g
+t clear
+:clear
+s/\\$//
+t bsnlc
+s/["\\]/\\&/g; s/^/"/; s/$/"/p
+d
+:bsnlc
+s/["\\]/\\&/g; s/^/"/; s/$/\\\\\\n"\\/p
+b cont
+' <confdefs.h | sed '
+s/'"$ac_delim"'/"\\\
+"/g' >>$CONFIG_STATUS
+
+cat >>$CONFIG_STATUS <<_ACEOF
+  FS = ""
+}
+/^[\t ]*#[\t ]*(define|undef)[\t ]+$ac_word_re([\t (]|\$)/ {
+  line = \$ 0
+  split(line, arg, " ")
+  if (arg[1] == "#") {
+    defundef = arg[2]
+    mac1 = arg[3]
+  } else {
+    defundef = substr(arg[1], 2)
+    mac1 = arg[2]
+  }
+  split(mac1, mac2, "(") #)
+  macro = mac2[1]
+  definiens = D[macro]
+  if (definiens) {
+    # Preserve the white space surrounding the "#".
+    prefix = substr(line, 1, index(line, defundef) - 1)
+    print prefix "define", macro P[macro] definiens
+    next
+  } else {
+    # Replace #undef with comments.  This is necessary, for example,
+    # in the case of _POSIX_SOURCE, which is predefined and required
+    # on some systems where configure will not decide to define it.
+    if (defundef == "undef") {
+      print "/*", line, "*/"
+      next
+    }
+  }
+}
+{ print }
+]dnl End of double-quoted section
+_ACAWK
+_ACEOF
+
+cat >>$CONFIG_STATUS <<\_ACEOF
+fi # test -n "$CONFIG_HEADERS"
+
+])# _AC_OUTPUT_HEADERS_PREPARE
+
+
 # _AC_OUTPUT_HEADER
 # -----------------
 #
@@ -689,110 +830,9 @@ m4_define([_AC_OUTPUT_HEADER],
   #
   # CONFIG_HEADER
   #
-_ACEOF
-
-# Transform confdefs.h into a sed script `conftest.defines', that
-# substitutes the proper values into config.h.in to produce config.h.
-rm -f conftest.defines conftest.tail
-# First, append a space to every undef/define line, to ease matching.
-echo 's/$/ /' >conftest.defines
-# Then, protect against being on the right side of a sed subst, or in
-# an unquoted here document, in config.status.  If some macros were
-# called several times there might be several #defines for the same
-# symbol, which is useless.  But do not sort them, since the last
-# AC_DEFINE must be honored.
-dnl
-dnl Quote, for `[ ]' and `define'.
-[ac_word_re=[_$as_cr_Letters][_$as_cr_alnum]*
-# These sed commands are passed to sed as "A NAME B PARAMS C VALUE D", where
-# NAME is the cpp macro being defined, VALUE is the value it is being given.
-# PARAMS is the parameter list in the macro definition--in most cases, it's
-# just an empty string.
-ac_dA='s,^\\([	 #]*\\)[^	 ]*\\([	 ]*'
-ac_dB='\\)[	 (].*,\\1define\\2'
-ac_dC=' '
-ac_dD=' ,']
-dnl ac_dD used to contain `;t' at the end, but that was both slow and incorrect.
-dnl 1) Since the script must be broken into chunks containing 100 commands,
-dnl the extra command meant extra calls to sed.
-dnl 2) The code was incorrect: in the unusual case where a symbol has multiple
-dnl different AC_DEFINEs, the last one should be honored.
-dnl
-dnl ac_dB works because every line has a space appended.  ac_dD reinserts
-dnl the space, because some symbol may have been AC_DEFINEd several times.
-dnl
-dnl The first use of ac_dA has a space prepended, so that the second
-dnl use does not match the initial 's' of $ac_dA.
-[
-uniq confdefs.h |
-  sed -n '
-	t rset
-	:rset
-	s/^[	 ]*#[	 ]*define[	 ][	 ]*//
-	t ok
-	d
-	:ok
-	s/[\\&,]/\\&/g
-	s/^\('"$ac_word_re"'\)\(([^()]*)\)[	 ]*\(.*\)/ '"$ac_dA"'\1'"$ac_dB"'\2'"${ac_dC}"'\3'"$ac_dD"'/p
-	s/^\('"$ac_word_re"'\)[	 ]*\(.*\)/'"$ac_dA"'\1'"$ac_dB$ac_dC"'\2'"$ac_dD"'/p
-  ' >>conftest.defines
-]
-# Remove the space that was appended to ease matching.
-# Then replace #undef with comments.  This is necessary, for
-# example, in the case of _POSIX_SOURCE, which is predefined and required
-# on some systems where configure will not decide to define it.
-# (The regexp can be short, since the line contains either #define or #undef.)
-echo 's/ $//
-[s,^[	 #]*u.*,/* & */,]' >>conftest.defines
-
-# Break up conftest.defines:
-dnl If we cared only about not exceeding line count limits, we would use this:
-dnl ac_max_sed_lines=m4_eval(_AC_SED_CMD_LIMIT - 3)
-dnl But in practice this can generate scripts that contain too many bytes;
-dnl and this can cause obscure 'sed' failures, e.g.,
-dnl http://lists.gnu.org/archive/html/bug-coreutils/2006-05/msg00127.html
-dnl So instead, we use the following, which is about half the size we'd like:
-ac_max_sed_lines=50
-dnl In the future, let's use awk or sh instead of sed to do substitutions,
-dnl since we have so many problems with sed.
-
-# First sed command is:	 sed -f defines.sed $ac_file_inputs >"$tmp/out1"
-# Second one is:	 sed -f defines.sed "$tmp/out1" >"$tmp/out2"
-# Third one will be:	 sed -f defines.sed "$tmp/out2" >"$tmp/out1"
-# et cetera.
-ac_in='$ac_file_inputs'
-ac_out='"$tmp/out1"'
-ac_nxt='"$tmp/out2"'
-
-while :
-do
-  # Write a here document:
-  dnl Quote, for the `[ ]' and `define'.
-[  cat >>$CONFIG_STATUS <<_ACEOF
-    # First, check the format of the line:
-    cat >"\$tmp/defines.sed" <<\\CEOF
-/^[	 ]*#[	 ]*undef[	 ][	 ]*$ac_word_re[	 ]*\$/b def
-/^[	 ]*#[	 ]*define[	 ][	 ]*$ac_word_re[(	 ]/b def
-b
-:def
-_ACEOF]
-  sed ${ac_max_sed_lines}q conftest.defines >>$CONFIG_STATUS
-  echo 'CEOF
-    sed -f "$tmp/defines.sed"' "$ac_in >$ac_out" >>$CONFIG_STATUS
-  ac_in=$ac_out; ac_out=$ac_nxt; ac_nxt=$ac_in
-  sed 1,${ac_max_sed_lines}d conftest.defines >conftest.tail
-  grep . conftest.tail >/dev/null || break
-  rm -f conftest.defines
-  mv conftest.tail conftest.defines
-done
-rm -f conftest.defines conftest.tail
-
-dnl Now back to your regularly scheduled config.status.
-echo "ac_result=$ac_in" >>$CONFIG_STATUS
-cat >>$CONFIG_STATUS <<\_ACEOF
   if test x"$ac_file" != x-; then
     AS_ECHO(["/* $configure_input  */"]) >"$tmp/config.h"
-    cat "$ac_result" >>"$tmp/config.h"
+    $AWK -f "$tmp/defines.awk" $ac_file_inputs >>"$tmp/config.h"
     if diff $ac_file "$tmp/config.h" >/dev/null 2>&1; then
       AC_MSG_NOTICE([$ac_file is unchanged])
     else
@@ -801,9 +841,8 @@ cat >>$CONFIG_STATUS <<\_ACEOF
     fi
   else
     AS_ECHO(["/* $configure_input  */"])
-    cat "$ac_result"
+    $AWK -f "$tmp/defines.awk" $ac_file_inputs
   fi
-  rm -f "$tmp/out[12]"
 dnl If running for Automake, be ready to perform additional
 dnl commands to set up the timestamp files.
 m4_ifdef([_AC_AM_CONFIG_HEADER_HOOK],
@@ -1513,6 +1552,7 @@ dnl The comment above AS_TMPDIR says at most 4 chars are allowed.
 AS_TMPDIR([conf], [.])
 
 m4_ifdef([_AC_SEEN_CONFIG(FILES)], [_AC_OUTPUT_FILES_PREPARE])[]dnl
+m4_ifdef([_AC_SEEN_CONFIG(HEADERS)], [_AC_OUTPUT_HEADERS_PREPARE])[]dnl
 
 for ac_tag in[]dnl
   m4_ifdef([_AC_SEEN_CONFIG(FILES)],    [:F $CONFIG_FILES])[]dnl
@@ -1611,6 +1651,12 @@ m4_define([AC_OUTPUT_MAKE_DEFS],
 # take arguments), then branch to the quote section.  Otherwise,
 # look for a macro that doesn't take arguments.
 ac_script='
+:mline
+/\\$/{
+ N
+ s,\\\n,,
+ b mline
+}
 t clear
 :clear
 s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\)/-D\1=\2/g

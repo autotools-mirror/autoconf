@@ -1,3 +1,164 @@
+2007-10-12  Eric Blake  <ebb9@byu.net>
+
+	* doc/autoconf.texi (Text processing Macros): Fix bad merge.
+	(Reporting Messages): Fix underfull hbox.
+
+	Some more m4sugar documentation.
+	* lib/m4sugar/m4sugar.m4: Clean up macro order.
+	* doc/autoconf.texi (Programming in M4): Lighten the warning on
+	using m4sugar; it is stabilizing and useful.
+	(Redefined M4 Macros): Touch up wording on M4 builtins; sort.  Add
+	m4_divert, m4_undivert, __file__, __line__, __oline__.
+	(Diagnostics): New node, documenting m4_assert, m4_errprintn,
+	m4_fatal, m4_location, m4_warn.
+	(Diversion support): New node, documenting m4_divert_push,
+	m4_divert_pop, m4_divert_text, m4_divert_once.
+	(Text processing Macros): Sort.  Add m4_flatten, m4_join,
+	m4_newline, m4_strip, m4_text_box, m4_text_wrap.
+	(Reporting Messages): Mark AC_DIAGNOSE, AC_WARNING, and AC_FATAL
+	as obsolescent.
+	(Printing Messages): Change cross-reference.
+
+	Document interaction of recent m4_append change with Libtool HEAD.
+	* lib/m4sugar/m4sugar.m4 (m4_append): Document semantics change.
+	(m4_append_uniq): Add new parameters, based on lt_append_uniq.
+	* tests/m4sugar.at (m4@&t@_append): New test.
+	* NEWS: Document semantics change.
+	* doc/autoconf.texi (Text processing Macros): Likewise.
+
+	s/AC_VERSION/AC_AUTOCONF_VERSION/.
+	* doc/autoconf.texi (Versioning): Change the name.
+	* NEWS: Likewise.
+	* lib/autoconf/general.m4 (AC_AUTOCONF_VERSION): Likewise.
+	* tests/tools.at (autoconf: AC_AUTOCONF_VERSION): Likewise.
+	Suggested by Ralf Wildenhues.
+
+	Namespace cleanup.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE)
+	(_AC_OUTPUT_HEADERS_PREPARE): Convert here-doc delimiters into
+	autoconf namespace.
+	* doc/autoconf.texi (Programming in M4sugar, Forbidden Patterns)
+	(Programming in M4sh, Macro Names): Beef up description of
+	namespaces reserved for autoconf.
+	* configure: Regenerate.
+
+2007-10-12  Eric Blake  <ebb9@byu.net>
+	and Paolo Bonzini  <bonzini@gnu.org>
+
+	Speed up execution of subset of testsuite.
+	* lib/autotest/general.m4 (TEST_FUNCTIONS): New diversion.
+	(AT_INIT) <at_func_test>: New shell function.
+	(AT_INIT) <at_myself>: New variable, set to absolute $as_myself.
+	(AT_INIT) <at_test_source> New variable, names file that holds
+	current test function definition.
+	(AT_SETUP): Start the shell function at_func_test_#, into the
+	TEST_FUNCTIONS diversion.
+	(AT_CLEANUP): End the shell function.  Simplify the TESTS
+	diversion to invoke the function.
+
+2007-10-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* .gitignore: Ignore tags and TAGS files.
+
+2007-10-11  Eric Blake  <ebb9@byu.net>
+
+	Config header generation followup.
+	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Check for raw newlines,
+	which won't work with the preprocessor nor with the awk
+	implementation.
+	* tests/torture.at (Define a newline): Test raw newline detection,
+	removing the XFAIL.
+	* doc/autoconf.texi (Defining Symbols): Document recent change to
+	allow backslash-newline.
+	* THANKS: Update.
+
+2007-10-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4: Put function braces in separate line.
+
+2007-10-10  Eric Blake  <ebb9@byu.net>
+
+	Avoid some overhead from m4_defn and m4_popdef.
+	* lib/m4sugar/m4sugar.m4 (m4_defn, m4_popdef, m4_undefine): Only
+	pass on first argument, since we are documented that way.
+	(m4_for, m4_append_uniq, m4_text_wrap): Optimize out defined-ness
+	check where it is safe to do so.
+	(m4_append): Likewise, and quote the separator.
+	(m4_text_box): Likewise, and avoid regex, also be robust to
+	expansion and quadrigraphs.
+
+	Another AC_DEFINE speedup.
+	* lib/autoconf/general.m4 (AC_DEFINE_TRACE): Move parameter
+	elision...
+	(_AC_DEFINE_Q): ...here, and only do it once.
+	* lib/autoconf/functions.m4 (AC_CHECK_FUNCS): Avoid overquoting.
+	* lib/m4sugar/m4sh.m4 (AS_LITERAL_IF): Fix m4_defn overquoting
+	introduced 2007-10-05.
+
+	Whitespace cleanup.
+	* lib/autoconf/general.m4: Use consistent indentation.
+	* configure: Regenerate.
+
+	* NEWS: Announce recent round of speed optimizations.
+
+2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* NEWS: Announce shell function usage in Autotest.
+
+2007-10-10  Eric Blake  <ebb9@byu.net>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	Reduce number of forks at startup.
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Speed up NLS
+	sanitization.
+	* configure: Regenerate.
+
+2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Paul Eggert  <eggert@cs.ucla.edu>
+
+	Use awk for config header generation.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Fix comments.
+	(_AC_OUTPUT_HEADERS_PREPARE): New macro.  Rewrite of the config
+	header machinery for use with awk and placement outside the main
+	config.status instantiation loop.  Retain multi-line defines
+	through backslash-newline combinations, do not split the script
+	any more.
+	(_AC_OUTPUT_HEADER): Simplify accordingly, use $AWK.
+	(_AC_OUTPUT_MAIN_LOOP): Call _AC_OUTPUT_HEADERS_PREPARE if
+	needed.
+	(AC_OUTPUT_MAKE_DEFS): Remove backslash-newline combinations
+	from define values.
+	* NEWS: Update.
+	* tests/torture.at (#define header templates): Extend test by
+	several more cases: white space before and after `#', macros
+	with parameters in config.hin and as defines, multi-line macro
+	values.
+	(Torturing config.status): Use a define value twice the length
+	in order to exercise the awk literal string limit.
+	(Substitute and define special characters): Also try special
+	delimiter, to exercise the special-case code.
+	Suggestion by Eric Lemings.
+
+2007-10-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/local.at (AT_COPYRIGHT): Bump copyright years.
+
+2007-10-09  Eric Blake  <ebb9@byu.net>
+
+	Improve header of bin/autoconf.
+	* lib/m4sugar/m4sh.m4 (AS_INIT): Add a 'generated from' notice.
+	* lib/autoconf/general.m4 (_AC_INIT_NOTICE): Override new notice
+	from M4sh.
+	* bin/autoconf.as: Put copyright up front in generated file.
+
+	* bin/autoconf.as (exit_missing_arg): Font-lock tweak.
+
+2007-10-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/install.texi (Basic Installation): Document `uninstall'.
+	* INSTALL: Regenerate.
+	Suggestion by Roberto Bagnara.
+
 2007-10-08  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): V7 awk had 'index'.
@@ -41,6 +202,7 @@
 	at_func_check_skip, at_func_check_status, at_func_filter_trace,
 	at_func_log_failure shell functions.  Use test -s to avoid
 	useless diff invocations.
+	(at_func_check_newline): Renamed from at_check_newline.
 	(AT_SETUP): Define AT_captured_files to empty.
 	(AT_DIFF_STDERR(*), AT_DIFF_STDOUT(*)): New, extracted from _AT_CHECK.
 	(_AT_CHECK): Replace m4_case with m4_ifdef/m4_indir.  Use all

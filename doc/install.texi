@@ -79,6 +79,10 @@ a @samp{make maintainer-clean} target, but that is intended mainly for
 the package's developers.  If you use it, you may have to get all sorts
 of other programs in order to regenerate files that came with the
 distribution.
+
+@item
+Often, you can also type @samp{make uninstall} to remove the installed
+files again.
 @end enumerate
 
 @node Compilers and Options

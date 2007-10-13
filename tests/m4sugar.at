@@ -42,6 +42,8 @@ AT_CHECK_M4SUGAR([-o-],, [$2], [$3])
 #
 # - m4_split
 #
+# - m4_append
+#
 # - m4_text_wrap
 # uses m4_split code.
 
@@ -177,6 +179,73 @@ m4_split([foo='' bar=``])
 [a], [c], [e]
 [foo=``], [bar='']
 [foo=''], [bar=``]
+]])
+
+AT_CLEANUP
+
+
+## ----------- ##
+## m4_append.  ##
+## ----------- ##
+
+AT_SETUP([m4@&t@_append])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_define([active], [ACTIVE])dnl
+m4_append([sentence], [This is an])dnl
+m4_append([sentence], [ active ])dnl
+m4_append([sentence], [symbol.])dnl
+sentence
+m4_undefine([active])dnl
+sentence
+m4_define([active], [ACTIVE])dnl
+m4_append([hooks], [m4_define([act1], [act2])])dnl
+m4_append([hooks], [m4_define([act2], [active])])dnl
+m4_undefine([active])dnl
+act1
+hooks
+act1
+dnl Test for bug fixed in 2.62 when separator is active.
+m4_define([a], [A])dnl
+m4_append_uniq([foo], [-], [a])dnl
+m4_append_uniq([foo], [-], [a])dnl
+m4_append_uniq([bar], [-], [a])dnl
+m4_append_uniq([bar], [~], [a])dnl
+m4_append_uniq([bar], [-], [a])dnl
+m4_defn([foo])
+m4_defn([bar])
+foo
+bar
+m4_append_uniq([blah], [one], [, ], [new], [existing])
+m4_append_uniq([blah], [two], [, ], [new], [existing])
+m4_append_uniq([blah], [two], [, ], [new], [existing])
+m4_append_uniq([blah], [three], [, ], [new], [existing])
+m4_append([blah], [two], [, ])dnl
+blah
+m4_dquote(blah)
+m4_append([list], [one], [[, ]])dnl
+m4_append([list], [two], [[, ]])dnl
+m4_append([list], [three], [[, ]])dnl
+list
+m4_dquote(list)
+]],
+[[This is an ACTIVE symbol.
+This is an active symbol.
+act1
+
+active
+-
+-a~
+-
+-A~
+new
+new
+existing
+new
+one, two, three, two
+[one],[two],[three],[two]
+one, two, three
+[one, two, three]
 ]])
 
 AT_CLEANUP

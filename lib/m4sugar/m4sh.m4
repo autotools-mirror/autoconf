@@ -384,17 +384,10 @@ PS2='> '
 PS4='+ '
 
 # NLS nuisances.
-for as_var in \
-  LANG LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_CTYPE LC_IDENTIFICATION \
-  LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
-  LC_TELEPHONE LC_TIME
-do
-  if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
-    eval $as_var=C; export $as_var
-  else
-    ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-  fi
-done
+LC_ALL=C
+export LC_ALL
+LANGUAGE=C
+export LANGUAGE
 
 # Required to use basename.
 _AS_EXPR_PREPARE
@@ -1279,7 +1272,8 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [$2], [$3])])
 m4_define([AS_LITERAL_IF],
 [m4_cond([m4_eval(m4_index(m4_quote($1), [@S|@]) == -1)], [0], [$3],
 	 [m4_index(m4_translit(m4_quote($1),
-			       [[]`,#]]m4_dquote(m4_defn([m4_cr_symbols2]))[,
+			       [[]`,#]]]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[,
 			       [$$$]),
 		   [$])], [-1], [$2],
 	 [$3])])
@@ -1651,6 +1645,8 @@ m4_pattern_forbid([^_?AS_])
 
 # Bangshe and minimal initialization.
 m4_divert_text([BINSH], [@%:@! /bin/sh])
+m4_divert_text([HEADER-COMMENT],
+	       [@%:@ Generated from __file__ by m4_PACKAGE_STRING.])
 m4_divert_text([M4SH-SANITIZE], [AS_SHELL_SANITIZE])
 AS_REQUIRE([_AS_SHELL_FN_SPY])
 

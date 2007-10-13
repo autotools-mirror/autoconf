@@ -530,7 +530,7 @@ m4_define([m4_default],
 m4_define([m4_defn],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([defn], $@)])
+[m4_builtin([defn], [$1])])
 
 
 # _m4_dumpdefs_up(NAME)
@@ -571,35 +571,7 @@ _m4_dumpdefs_down([$1])])
 m4_define([m4_popdef],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([popdef], $@)])
-
-
-# m4_quote(ARGS)
-# --------------
-# Return ARGS as a single argument.  Any whitespace after unquoted commas
-# is stripped.
-#
-# It is important to realize the difference between `m4_quote(exp)' and
-# `[exp]': in the first case you obtain the quoted *result* of the
-# expansion of EXP, while in the latter you just obtain the string
-# `exp'.
-m4_define([m4_quote],  [[$*]])
-
-
-# m4_dquote(ARGS)
-# ---------------
-# Return ARGS as a quoted list of quoted arguments.
-m4_define([m4_dquote],  [[$@]])
-
-
-# m4_noquote(STRING)
-# ------------------
-# Return the result of ignoring all quotes in STRING and invoking the
-# macros it contains.  Amongst other things, this is useful for enabling
-# macro invocations inside strings with [] blocks (for instance regexps
-# and help-strings).
-m4_define([m4_noquote],
-[m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
+[m4_builtin([popdef], [$1])])
 
 
 # m4_shiftn(N, ...)
@@ -631,11 +603,43 @@ m4_define([m4_shift3], [m4_shift(m4_shift(m4_shift($@)))])
 m4_define([m4_undefine],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([undefine], $@)])
+[m4_builtin([undefine], [$1])])
+
+
+## ------------------------- ##
+## 7. Quoting manipulation.  ##
+## ------------------------- ##
+
+# m4_quote(ARGS)
+# --------------
+# Return ARGS as a single argument.  Any whitespace after unquoted commas
+# is stripped.
+#
+# It is important to realize the difference between `m4_quote(exp)' and
+# `[exp]': in the first case you obtain the quoted *result* of the
+# expansion of EXP, while in the latter you just obtain the string
+# `exp'.
+m4_define([m4_quote],  [[$*]])
+
+
+# m4_dquote(ARGS)
+# ---------------
+# Return ARGS as a quoted list of quoted arguments.
+m4_define([m4_dquote],  [[$@]])
+
+
+# m4_noquote(STRING)
+# ------------------
+# Return the result of ignoring all quotes in STRING and invoking the
+# macros it contains.  Amongst other things, this is useful for enabling
+# macro invocations inside strings with [] blocks (for instance regexps
+# and help-strings).
+m4_define([m4_noquote],
+[m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
 
 
 ## -------------------------- ##
-## 7. Implementing m4 loops.  ##
+## 8. Implementing m4 loops.  ##
 ## -------------------------- ##
 
 
@@ -644,22 +648,23 @@ m4_define([m4_undefine],
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO with
 # increments of STEP.
 # Both limits are included, and bounds are checked for consistency.
-# The algorithm is robust to indirect VARIABLE names.
+# The algorithm is robust to indirect VARIABLE names, and uses m4_builtin
+# to avoid some of the m4_defn overhead.
 m4_define([m4_for],
 [m4_pushdef([$1], m4_eval([$2]))dnl
-m4_if(m4_eval(([$3]) > m4_defn([$1])), 1,
+m4_cond([m4_eval(([$3]) > m4_builtin([defn], [$1]))], 1,
 [m4_pushdef([_m4_step], m4_eval(m4_default([$4], 1)))dnl
 m4_assert(_m4_step > 0)dnl
-_m4_for([$1], m4_eval((([$3]) - m4_defn([$1]))
-		      / _m4_step * _m4_step + m4_defn([$1])),
+_m4_for([$1], m4_eval((([$3]) - m4_builtin([defn], [$1]))
+		      / _m4_step * _m4_step + m4_builtin([defn], [$1])),
 	_m4_step, [$5])],
-      m4_eval(([$3]) < m4_defn([$1])), 1,
+	[m4_eval(([$3]) < m4_builtin([defn], [$1]))], 1,
 [m4_pushdef([_m4_step], m4_eval(m4_default([$4], -1)))dnl
 m4_assert(_m4_step < 0)dnl
-_m4_for([$1], m4_eval((m4_defn([$1]) - ([$3]))
-		      / -(_m4_step) * _m4_step + m4_defn([$1])),
+_m4_for([$1], m4_eval((m4_builtin([defn], [$1]) - ([$3]))
+		      / -(_m4_step) * _m4_step + m4_builtin([defn], [$1])),
 	_m4_step, [$5])],
-      [m4_pushdef(_m4_step,[])dnl
+	[m4_pushdef([_m4_step])dnl
 $5])[]dnl
 m4_popdef([_m4_step])dnl
 m4_popdef([$1])])
@@ -800,7 +805,7 @@ m4_define([m4_foreach_w],
 
 
 ## --------------------------- ##
-## 8. More diversion support.  ##
+## 9. More diversion support.  ##
 ## --------------------------- ##
 
 
@@ -888,14 +893,15 @@ m4_define([m4_divert_once],
 
 # m4_undivert(DIVERSION-NAME)
 # ---------------------------
-# Undivert DIVERSION-NAME.
+# Undivert DIVERSION-NAME.  Unlike the M4 version, this only takes a single
+# diversion identifier, and should not be used to undivert files.
 m4_define([m4_undivert],
 [m4_builtin([undivert], _m4_divert([$1]))])
 
 
-## -------------------------------------------- ##
-## 8. Defining macros with bells and whistles.  ##
-## -------------------------------------------- ##
+## --------------------------------------------- ##
+## 10. Defining macros with bells and whistles.  ##
+## --------------------------------------------- ##
 
 # `m4_defun' is basically `m4_define' but it equips the macro with the
 # needed machinery for `m4_require'.  A macro must be m4_defun'd if
@@ -1287,9 +1293,9 @@ m4_define([m4_pattern_forbid], [])
 m4_define([m4_pattern_allow], [])
 
 
-## ----------------------------- ##
-## Dependencies between macros.  ##
-## ----------------------------- ##
+## --------------------------------- ##
+## 11. Dependencies between macros.  ##
+## --------------------------------- ##
 
 
 # m4_before(THIS-MACRO-NAME, CALLED-MACRO-NAME)
@@ -1395,9 +1401,9 @@ m4_define([m4_provide_if],
 	  [$2], [$3])])
 
 
-## -------------------- ##
-## 9. Text processing.  ##
-## -------------------- ##
+## --------------------- ##
+## 12. Text processing.  ##
+## --------------------- ##
 
 
 # m4_cr_letters
@@ -1655,13 +1661,16 @@ m4_defun([m4_join],
 # in which case no SEPARATOR is added.  Be aware that the criterion is
 # `not being defined', and not `not being empty'.
 #
+# Note that neither STRING nor SEPARATOR are expanded here; rather, when
+# you expand MACRO-NAME, they will be expanded at that point in time.
+#
 # This macro is robust to active symbols.  It can be used to grow
 # strings.
 #
-#    | m4_define(active, ACTIVE)
-#    | m4_append([sentence], [This is an])
-#    | m4_append([sentence], [ active ])
-#    | m4_append([sentence], [symbol.])
+#    | m4_define(active, ACTIVE)dnl
+#    | m4_append([sentence], [This is an])dnl
+#    | m4_append([sentence], [ active ])dnl
+#    | m4_append([sentence], [symbol.])dnl
 #    | sentence
 #    | m4_undefine([active])dnl
 #    | sentence
@@ -1670,29 +1679,43 @@ m4_defun([m4_join],
 #
 # It can be used to define hooks.
 #
-#    | m4_define(active, ACTIVE)
-#    | m4_append([hooks], [m4_define([act1], [act2])])
-#    | m4_append([hooks], [m4_define([act2], [active])])
-#    | m4_undefine([active])
+#    | m4_define(active, ACTIVE)dnl
+#    | m4_append([hooks], [m4_define([act1], [act2])])dnl
+#    | m4_append([hooks], [m4_define([act2], [active])])dnl
+#    | m4_undefine([active])dnl
 #    | act1
 #    | hooks
 #    | act1
 #    => act1
 #    =>
 #    => active
+#
+# It can also be used to create lists, although this particular usage was
+# broken prior to autoconf 2.62.
+#    | m4_append([list], [one], [, ])dnl
+#    | m4_append([list], [two], [, ])dnl
+#    | m4_append([list], [three], [, ])dnl
+#    | list
+#    | m4_dquote(list)
+#    => one, two, three
+#    => [one],[two],[three]
+#
+# Use m4_builtin to avoid overhead of m4_defn.
 m4_define([m4_append],
 [m4_define([$1],
-	   m4_ifdef([$1], [m4_defn([$1])$3])[$2])])
+	   m4_ifdef([$1], [m4_builtin([defn], [$1])[$3]])[$2])])
 
 
-# m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR])
-# -----------------------------------------------
-# Like `m4_append', but append only if not yet present.
+# m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR], [IF-UNIQ], [IF-DUP])
+# --------------------------------------------------------------------
+# Like `m4_append', but append only if not yet present.  Additionally,
+# expand IF-UNIQ if STRING was appended, or IF-DUP if STRING was already
+# present.
 m4_define([m4_append_uniq],
 [m4_ifdef([$1],
-	  [m4_if(m4_index([$3]m4_defn([$1])[$3], [$3$2$3]), [-1],
-		 [m4_append($@)])],
-	  [m4_append($@)])])
+	  [m4_if(m4_index([$3]m4_builtin([defn], [$1])[$3], [$3$2$3]), [-1],
+		 [m4_append([$1], [$2], [$3])$4], [$5])],
+	  [m4_append([$1], [$2], [$3])$4])])
 
 
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
@@ -1732,38 +1755,44 @@ m4_define([m4_append_uniq],
 # which complicates it a bit.  The algorithm is otherwise stupid and simple:
 # all the words are preceded by m4_Separator which is defined to empty for
 # the first word, and then ` ' (single space) for all the others.
+#
+# The algorithm overquotes m4_Prefix1 to avoid m4_defn overhead, and bypasses
+# m4_popdef overhead with m4_builtin since no user macro expansion occurs in
+# the meantime.
 m4_define([m4_text_wrap],
 [m4_pushdef([m4_Prefix], [$2])dnl
-m4_pushdef([m4_Prefix1], m4_default([$3], [m4_Prefix]))dnl
+m4_pushdef([m4_Prefix1], m4_dquote(m4_default([$3], [m4_Prefix])))dnl
 m4_pushdef([m4_Width], m4_default([$4], 79))dnl
-m4_pushdef([m4_Cursor], m4_qlen(m4_defn([m4_Prefix1])))dnl
+m4_pushdef([m4_Cursor], m4_qlen(m4_Prefix1))dnl
 m4_pushdef([m4_Separator], [])dnl
-m4_defn([m4_Prefix1])[]dnl
-m4_cond([m4_eval(m4_qlen(m4_defn([m4_Prefix1])) > m4_len(m4_Prefix))],
+m4_Prefix1[]dnl
+m4_cond([m4_eval(m4_qlen(m4_Prefix1) > m4_len(m4_Prefix))],
 	[1], [m4_define([m4_Cursor], m4_len(m4_Prefix))
 m4_Prefix],
-	[m4_eval(m4_qlen(m4_defn([m4_Prefix1])) < m4_len(m4_Prefix))],
+	[m4_eval(m4_qlen(m4_Prefix1) < m4_len(m4_Prefix))],
 	[0], [],
 	[m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
 m4_format([%*s],
-	  m4_max(0,m4_eval(m4_len(m4_Prefix) - m4_qlen(m4_defn([m4_Prefix1])))),
+	  m4_max([0], m4_eval(m4_len(m4_Prefix) - m4_qlen(m4_Prefix1))),
 	  [])])[]dnl
 m4_foreach_w([m4_Word], [$1],
-[m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_qlen(m4_defn([m4_Word])) + 1))dnl
+[m4_define([m4_Cursor],
+	   m4_eval(m4_Cursor + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))dnl
 dnl New line if too long, else insert a space unless it is the first
 dnl of the words.
 m4_if(m4_eval(m4_Cursor > m4_Width),
       1, [m4_define([m4_Cursor],
-		    m4_eval(m4_len(m4_Prefix) + m4_qlen(m4_defn([m4_Word])) + 1))]
+		    m4_eval(m4_len(m4_Prefix)
+			    + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))]
 m4_Prefix,
        [m4_Separator])[]dnl
-m4_defn([m4_Word])[]dnl
+m4_builtin([defn], [m4_Word])[]dnl
 m4_define([m4_Separator], [ ])])dnl
-m4_popdef([m4_Separator])dnl
-m4_popdef([m4_Cursor])dnl
-m4_popdef([m4_Width])dnl
-m4_popdef([m4_Prefix1])dnl
-m4_popdef([m4_Prefix])dnl
+m4_builtin([popdef], [m4_Separator])dnl
+m4_builtin([popdef], [m4_Cursor])dnl
+m4_builtin([popdef], [m4_Width])dnl
+m4_builtin([popdef], [m4_Prefix1])dnl
+m4_builtin([popdef], [m4_Prefix])dnl
 ])
 
 
@@ -1775,9 +1804,13 @@ m4_popdef([m4_Prefix])dnl
 #  ## ------- ##
 # using FRAME-CHARACTER in the border.
 m4_define([m4_text_box],
-[@%:@@%:@ m4_bpatsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@
+[m4_pushdef([m4_Border],
+	    m4_translit(m4_format([%*s], m4_qlen(m4_quote($1)), []),
+			[ ], m4_if([$2], [], [[-]], [[$2]])))dnl
+@%:@@%:@ m4_Border @%:@@%:@
 @%:@@%:@ $1 @%:@@%:@
-@%:@@%:@ m4_bpatsubst([$1], [.], m4_if([$2], [], [[-]], [[$2]])) @%:@@%:@[]dnl
+@%:@@%:@ m4_Border @%:@@%:@dnl
+m4_builtin([popdef], [m4_Border])dnl
 ])
 
 
@@ -1801,7 +1834,7 @@ m4_define([m4_qdelta],
 
 
 ## ----------------------- ##
-## 10. Number processing.  ##
+## 13. Number processing.  ##
 ## ----------------------- ##
 
 # m4_cmp(A, B)
@@ -1867,7 +1900,7 @@ m4_define([m4_sign],
 
 
 ## ------------------------ ##
-## 11. Version processing.  ##
+## 14. Version processing.  ##
 ## ------------------------ ##
 
 
@@ -1926,7 +1959,7 @@ m4_define([m4_version_prereq],
 
 
 ## ------------------- ##
-## 12. File handling.  ##
+## 15. File handling.  ##
 ## ------------------- ##
 
 
@@ -1948,7 +1981,7 @@ m4_if(m4_sysval, [0], [],
 
 
 ## ------------------------ ##
-## 13. Setting M4sugar up.  ##
+## 16. Setting M4sugar up.  ##
 ## ------------------------ ##
 
 

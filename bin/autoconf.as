@@ -1,4 +1,6 @@
 AS_INIT[]dnl                                            -*- shell-script -*-
+m4_divert_push([HEADER-COPYRIGHT])dnl
+# @configure_input@
 # autoconf -- create `configure' using m4 macros
 
 # Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003,
@@ -16,6 +18,8 @@ AS_INIT[]dnl                                            -*- shell-script -*-
 
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+m4_divert_pop([HEADER-COPYRIGHT])dnl back to BODY
 
 usage=["\
 Usage: $0 [OPTION] ... [TEMPLATE-FILE]
@@ -73,7 +77,7 @@ exit_missing_arg='
   AS_ECHO(["$as_me: option \`$[1]'\'' requires an argument"]) >&2
   AS_ECHO(["$help"]) >&2
   exit 1
-'
+' # restore font-lock: "
 
 # Variables.
 : ${AUTOM4TE='@bindir@/@autom4te-name@'}
