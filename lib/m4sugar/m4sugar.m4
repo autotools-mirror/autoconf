@@ -491,18 +491,6 @@ m4_define([_m4_bpatsubsts],
 	   m4_shift3($@))])])
 
 
-
-# m4_do(STRING, ...)
-# ------------------
-# This macro invokes all its arguments (in sequence, of course).  It is
-# useful for making your macros more structured and readable by dropping
-# unnecessary dnl's and have the macros indented properly.
-m4_define([m4_do],
-[m4_if($#, 0, [],
-       $#, 1, [$1],
-       [$1[]m4_do(m4_shift($@))])])
-
-
 # m4_define_default(MACRO, VALUE)
 # -------------------------------
 # If MACRO is undefined, set it to VALUE.
@@ -610,6 +598,43 @@ m4_define([m4_undefine],
 ## 7. Quoting manipulation.  ##
 ## ------------------------- ##
 
+# m4_do(STRING, ...)
+# ------------------
+# This macro invokes all its arguments (in sequence, of course).  It is
+# useful for making your macros more structured and readable by dropping
+# unnecessary dnl's and have the macros indented properly.
+m4_define([m4_do],
+[m4_if([$#], 0, [],
+       [$#], 1, [$1],
+       [$1[]m4_do(m4_shift($@))])])
+
+
+# m4_dquote(ARGS)
+# ---------------
+# Return ARGS as a quoted list of quoted arguments.
+m4_define([m4_dquote],  [[$@]])
+
+
+# m4_ignore(ARGS)
+# ---------------
+# Expands to nothing.  Useful for conditionally ignoring an arbitrary
+# number of arguments (see _m4_list_cmp for an example).
+m4_define([m4_ignore])
+
+
+# m4_noquote(STRING)
+# ------------------
+# Return the result of ignoring all quotes in STRING and invoking the
+# macros it contains.  Amongst other things, this is useful for enabling
+# macro invocations inside strings with [] blocks (for instance regexps
+# and help-strings).  On the other hand, since all quotes are disabled,
+# any macro expanded during this time that relies on nested [] quoting
+# will likely crash and burn.  This macro is seldom useful; consider
+# m4_unquote instead.
+m4_define([m4_noquote],
+[m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
+
+
 # m4_quote(ARGS)
 # --------------
 # Return ARGS as a single argument.  Any whitespace after unquoted commas
@@ -622,20 +647,13 @@ m4_define([m4_undefine],
 m4_define([m4_quote],  [[$*]])
 
 
-# m4_dquote(ARGS)
-# ---------------
-# Return ARGS as a quoted list of quoted arguments.
-m4_define([m4_dquote],  [[$@]])
-
-
-# m4_noquote(STRING)
-# ------------------
-# Return the result of ignoring all quotes in STRING and invoking the
-# macros it contains.  Amongst other things, this is useful for enabling
-# macro invocations inside strings with [] blocks (for instance regexps
-# and help-strings).
-m4_define([m4_noquote],
-[m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
+# m4_unquote(ARGS)
+# ----------------
+# Remove one layer of quotes from each ARG, performing one level of
+# expansion.  For one argument, m4_unquote([arg]) is more efficient than
+# m4_do([arg]), but for multiple arguments, the difference is that
+# m4_unquote separates arguments with commas while m4_do concatenates.
+m4_define([m4_unquote], [$*])
 
 
 ## -------------------------- ##
@@ -1850,42 +1868,50 @@ m4_define([m4_cmp],
 # m4_list_cmp(A, B)
 # -----------------
 #
-# Compare the two lists of integers A and B.  For instance:
-#   m4_list_cmp((1, 0),     (1))    ->  0
-#   m4_list_cmp((1, 0),     (1, 0)) ->  0
-#   m4_list_cmp((1, 2),     (1, 0)) ->  1
-#   m4_list_cmp((1, 2, 3),  (1, 2)) ->  1
-#   m4_list_cmp((1, 2, -3), (1, 2)) -> -1
-#   m4_list_cmp((1, 0),     (1, 2)) -> -1
-#   m4_list_cmp((1),        (1, 2)) -> -1
+# Compare the two lists of integer expressions A and B.  For instance:
+#   m4_list_cmp([1, 0],     [1])    ->  0
+#   m4_list_cmp([1, 0],     [1, 0]) ->  0
+#   m4_list_cmp([1, 2],     [1, 0]) ->  1
+#   m4_list_cmp([1, 2, 3],  [1, 2]) ->  1
+#   m4_list_cmp([1, 2, -3], [1, 2]) -> -1
+#   m4_list_cmp([1, 0],     [1, 2]) -> -1
+#   m4_list_cmp([1],        [1, 2]) -> -1
+#   m4_define([xa], [oops])dnl
+#   m4_list_cmp([[0xa]],    [5+5])  -> 0
+#
+# Rather than face the overhead of m4_case, we use a helper function whose
+# expansion includes the name of the macro to invoke on the tail, either
+# m4_ignore or m4_unquote.  This is particularly useful when comparing
+# long lists, since less text is being expanded to determine when to recurse.
 m4_define([m4_list_cmp],
-[m4_if([$1$2], [()()], 0,
-       [$1], [()], [$0((0), [$2])],
-       [$2], [()], [$0([$1], (0))],
-       [m4_case(m4_cmp(m4_car$1, m4_car$2),
-		-1, -1,
-		 1, 1,
-		 0, [$0((m4_shift$1), (m4_shift$2))])])])
+[m4_if([$1$2], [], 0,
+       [$1], [], [$0(0, [$2])],
+       [$2], [], [$0([$1], 0)],
+       [$1], [$2], 0,
+       [_$0(m4_cmp(m4_car($1), m4_car($2)))([$0(m4_cdr($1), m4_cdr($2))])])])
+m4_define([_m4_list_cmp],
+[m4_if([$1], 0, [m4_unquote], [$1m4_ignore])])
 
-# m4_max(A, B, ...)
-# m4_min(A, B, ...)
+# m4_max(EXPR, ...)
+# m4_min(EXPR, ...)
 # -----------------
-# Return the maximum (or minimum) of a series of integer expressions.
+# Return the decimal value of the maximum (or minimum) in a series of
+# integer expressions.
 #
 # M4 1.4.x doesn't provide ?:.  Hence this huge m4_eval.  Avoid m4_eval
 # if both arguments are identical, but be aware of m4_max(0xa, 10) (hence
 # the use of <=, not just <, in the second multiply).
 m4_define([m4_max],
 [m4_if([$#], [0], [m4_fatal([too few arguments to $0])],
-       [$#], [1], [$1],
-       [$#$1], [2$2], [$1],
+       [$#], [1], [m4_eval([$1])],
+       [$#$1], [2$2], [m4_eval([$1])],
        [$#], [2],
        [m4_eval((([$1]) > ([$2])) * ([$1]) + (([$1]) <= ([$2])) * ([$2]))],
        [$0($0([$1], [$2]), m4_shift2($@))])])
 m4_define([m4_min],
 [m4_if([$#], [0], [m4_fatal([too few arguments to $0])],
-       [$#], [1], [$1],
-       [$#$1], [2$2], [$1],
+       [$#], [1], [m4_eval([$1])],
+       [$#$1], [2$2], [m4_eval([$1])],
        [$#], [2],
        [m4_eval((([$1]) < ([$2])) * ([$1]) + (([$1]) >= ([$2])) * ([$2]))],
        [$0($0([$1], [$2]), m4_shift2($@))])])
@@ -1906,23 +1932,28 @@ m4_define([m4_sign],
 
 # m4_version_unletter(VERSION)
 # ----------------------------
-# Normalize beta version numbers with letters to numbers only for comparison.
+# Normalize beta version numbers with letters to numeric expressions, which
+# can then be handed to m4_eval for the purpose of comparison.
 #
 #   Nl -> (N+1).-1.(l#)
 #
-#i.e., 2.14a -> 2.15.-1.1, 2.14b -> 2.15.-1.2, etc.
-# This macro is absolutely not robust to active macro, it expects
-# reasonable version numbers and is valid up to `z', no double letters.
+# for example:
+#   [2.14a] -> [2.14+1.-1.[0r36:a]] -> 2.15.-1.10
+#   [2.14b] -> [2.15+1.-1.[0r36:b]] -> 2.15.-1.11
+#   [2.61aa.b] -> [2.61+1.-1.[0r36:aa],+1.-1.[0r36:b]] -> 2.62.-1.370.1.-1.11
+#
+# This macro expects reasonable version numbers, but can handle double
+# letters and does not expand one-letter macros.  Inline constant expansions,
+# to avoid m4_defn overhead.  _m4_version_unletter is the real workhorse
+# used by m4_version_compare, but since [0r36:a] is less readable than 10,
+# we provide a wrapper for human use.
 m4_define([m4_version_unletter],
-[m4_translit(m4_bpatsubsts(m4_tolower([[$1]]),
-			   [\([0-9]+\)\([abcdefghi]\)],
-			     [m4_eval(\1 + 1).-1.\2],
-			   [\([0-9]+\)\([jklmnopqrs]\)],
-			     [m4_eval(\1 + 1).-1.1\2],
-			   [\([0-9]+\)\([tuvwxyz]\)],
-			     [m4_eval(\1 + 1).-1.2\2]),
-	     [abcdefghijklmnopqrstuvwxyz],
-	     [12345678901234567890123456])])
+[m4_map_sep([m4_eval], [.], _$0([$1]))])
+m4_define([_m4_version_unletter],
+[m4_translit(m4_bpatsubst([[[$1]]], ]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_Letters])))[[+],
+			  [+1.-1.[0r36:\&]]),
+	     [.], [,])])
 
 
 # m4_version_compare(VERSION-1, VERSION-2)
@@ -1932,8 +1963,7 @@ m4_define([m4_version_unletter],
 #   0 if           =
 #   1 if           >
 m4_define([m4_version_compare],
-[m4_list_cmp((m4_translit(m4_version_unletter([$1]), [.], [,])),
-	     (m4_translit(m4_version_unletter([$2]), [.], [,])))])
+[m4_list_cmp(_m4_version_unletter([$1]), _m4_version_unletter([$2]))])
 
 
 # m4_PACKAGE_NAME
@@ -1949,12 +1979,12 @@ m4_include([m4sugar/version.m4])
 # ----------------------------------------------------
 # Check this Autoconf version against VERSION.
 m4_define([m4_version_prereq],
-[m4_if(m4_version_compare(m4_defn([m4_PACKAGE_VERSION]), [$1]), -1,
+[m4_if(m4_version_compare(]m4_dquote(m4_defn([m4_PACKAGE_VERSION]))[, [$1]),
+       [-1],
        [m4_default([$3],
 		   [m4_fatal([Autoconf version $1 or higher is required],
-			     63)])],
-       [$2])[]dnl
-])
+			     [63])])],
+       [$2])])
 
 
 

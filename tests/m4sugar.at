@@ -313,10 +313,19 @@ m4_version_compare([1.2], [1.1.1a])
 m4_version_compare([1.0], [1])
 m4_version_compare([1.0a], [1.0a])
 m4_version_compare([1.1a], [1.1a.1])
+m4_version_compare([1.10], [1.1a])
+m4_version_compare([1.1a], [1.1A])
+m4_define([a], [oops])dnl
+m4_version_compare([1.1a], [1.1A])
+m4_version_compare([1z], [1aa])
 ]],
 [[-1
 1
 1
+-1
+1
+0
+0
 -1
 1
 0

@@ -1,3 +1,27 @@
+2007-10-13  Eric Blake  <ebb9@byu.net>
+
+	Make AC_PREREQ faster and more robust.
+	* lib/m4sugar/m4sugar.m4 (m4_ignore, m4_unquote): New macros.
+	(m4_version_prereq): Inline constant expansions.
+	(m4_list_cmp): Reduce number of expansions, by avoiding m4_case.
+	Rewrite in terms of [] list, not () list.
+	(_m4_list_cmp, _m4_version_unletter): New helper macros.
+	(m4_version_unletter): Write wrapper around new implementation to
+	preserve old semantics.
+	(m4_version_compare): Pass correct type of list, and avoid
+	overhead of flattening expressions too early.
+	(m4_do): Move to be near other quoting macros.
+	(m4_max, m4_min): Always result in decimal output.
+	* doc/autoconf.texi (Looping constructs): Add m4_car, m4_cdr.
+	Move m4_do...
+	(Evaluation Macros): ...here.  Add m4_ignore, m4_unquote.
+	(Text processing Macros): Move m4_version_compare...
+	(Number processing Macros): ...to this new node; document m4_cmp,
+	m4_list_cmp, m4_sign, m4_max, m4_min.
+	* tests/m4sugar.at (m4@&t@_version_compare): Enhance test, to pick
+	up on bugs fixed by this patch.
+	* NEWS: Document new macros.
+
 2007-10-12  Eric Blake  <ebb9@byu.net>
 
 	* doc/autoconf.texi (Text processing Macros): Fix bad merge.

@@ -455,6 +455,7 @@ Programming in M4sugar
 * Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
 * Text processing Macros::      String manipulation in M4
+* Number processing Macros::    Arithmetic computation in M4
 * Forbidden Patterns::          Catching unexpanded macros
 
 Writing Autoconf Macros
@@ -10087,6 +10088,7 @@ define your own macros into these namespaces.
 * Looping constructs::          Iteration in M4
 * Evaluation Macros::           More quotation and evaluation control
 * Text processing Macros::      String manipulation in M4
+* Number processing Macros::    Arithmetic computation in M4
 * Forbidden Patterns::          Catching unexpanded macros
 @end menu
 
@@ -10585,7 +10587,42 @@ Expand to @var{text}, and add a newline if @var{text} is not empty.
 @node Looping constructs
 @subsection Looping constructs
 
-The following macros implement loops in M4.
+The following macros are useful in implementing recursive algorithms in
+M4, including loop operations.  An M4 list is formed by quoting a list
+of quoted elements; generally the lists are comma-separated, although
+@code{m4_foreach_w} is whitespace-separated.  For example, the list
+@samp{[[a], [b,c]]} contains two elements: @samp{[a]} and @samp{[b,c]}.
+It is common to see lists with unquoted elements when those elements are
+not likely to be macro names, as in @samp{[fputc_unlocked,
+fgetc_unlocked]}.
+
+@defmac m4_car (@var{list})
+@msindex{car}
+Expands to the quoted first element of the comma-separated quoted
+@var{list}.  Often used with @code{m4_cdr} to recursively iterate
+through a list.  Generally, when using quoted lists of quoted elements,
+@code{m4_car} should be called without any extra quotes.
+@end defmac
+
+@defmac m4_cdr (@var{list})
+@msindex{cdr}
+Expands to a quoted list of all but the first element of the
+comma-separated quoted @var{list}, or the empty string if @var{list} had
+only one element.  Generally, when using quoted lists of quoted
+elements, @code{m4_cdr} should be called without any extra quotes.
+
+For example, this is an implementation of @code{m4_map}; note how each
+iteration of the helper macro @code{_m4_map} checks for the end of
+recursion, then merely applies the first argument to the first element
+of the list, then recurses with the rest of the list.
+@example
+m4_define([m4_map], [m4_if([$2], [[]], [], [_$0($@@)])])dnl
+m4_define([_m4_map], [m4_ifval([$2],
+  [$1(m4_unquote(m4_car($2)))[]$0([$1], m4_cdr($2))])])dnl
+m4_map([ m4_eval], [[1],[1+1]])
+@result{} 1 2
+@end example
+@end defmac
 
 @defmac m4_for (@var{var}, @var{first}, @var{last}, @ovar{step}, @
   @var{expression})
@@ -10607,8 +10644,9 @@ outputs two lines:
 @example
 m4_foreach([myvar], [[foo], [bar, baz]],
            [echo myvar
-])
-
+])dnl
+@result{}echo foo
+@result{}echo bar, baz
 @end example
 @end defmac
 
@@ -10622,14 +10660,7 @@ The deprecated macro @code{AC_FOREACH} is an alias of
 @code{m4_foreach_w}.
 @end defmac
 
-The following macros are useful in implementing recursive algorithms.
-
-@defmac m4_do (@dots{})
-@msindex{do}
-This macro loops over its arguments and expands each one in sequence.
-Its main use is for readability; it allows the use of indentation and
-fewer @code{dnl} to result in the same expansion.
-@end defmac
+@c TODO document m4_map, m4_map_sep
 
 @defmac m4_shiftn (@var{count}, @dots{})
 @defmacx m4_shift2 (@dots{})
@@ -10649,18 +10680,59 @@ for two and three shifts, respectively.
 @subsection Evaluation Macros
 
 The following macros give some control over the order of the evaluation
-by adding or removing levels of quotes.  They are meant for hard-core M4
-programmers.
+by adding or removing levels of quotes.
+
+@defmac m4_do (@var{arg1}, @dots{})
+@msindex{do}
+This macro loops over its arguments and expands each @var{arg} in
+sequence.  Its main use is for readability; it allows the use of
+indentation and fewer @code{dnl} to result in the same expansion.
+@end defmac
 
 @defmac m4_dquote (@var{arg1}, @dots{})
 @msindex{dquote}
 Return the arguments as a quoted list of quoted arguments.
+Conveniently, if there is just one @var{arg}, this effectively adds a
+level of quoting.
 @end defmac
+
+@defmac m4_ignore (@dots{})
+@msindex{ignore}
+This macro was introduced in Autoconf 2.62.  Expands to nothing,
+ignoring all of its arguments.  By itself, this isn't very useful.
+However, it can be used to conditionally ignore an arbitrary number of
+arguments, by making a decision about which macro name to apply to a
+list of arguments.
+@example
+dnl foo outputs a message only if [debug] is defined.
+m4_define([foo],
+[m4_ifdef([debug],[AC_MSG_NOTICE],[m4_ignore])([debug message])])
+@end example
+
+Note that for earlier versions of Autoconf, the macro @code{__gnu__} can
+serve the same purpose, although it is less readable.
+@end defmac
+
+@c m4_noquote is too dangerous to document - it invokes macros that
+@c probably rely on @samp{[]} nested quoting for proper operation.  The
+@c user should generally prefer m4_unquote instead.
 
 @defmac m4_quote (@var{arg1}, @dots{})
 @msindex{quote}
 Return the arguments as a single entity, i.e., wrap them into a pair of
-quotes.
+quotes.  This effectively collapses multiple arguments into one,
+although it loses whitespace after unquoted commas in the process.
+@end defmac
+
+@defmac m4_unquote (@var{arg1}, @dots{})
+@msindex{unquote}
+This macro was introduced in Autoconf 2.62.  Expand each argument,
+separated by commas.  For a single @var{arg}, this effectively removes a
+layer of quoting, and @code{m4_unquote([@var{arg}])} is more efficient
+than the equivalent @code{m4_do([@var{arg}])}.  For multiple arguments,
+this results in an unquoted list of expansions.  This is commonly used
+with @code{m4_split}, in order to convert a single quoted list into a
+series of quoted elements.
 @end defmac
 
 The following example aims at emphasizing the difference between (i), not
@@ -10695,7 +10767,7 @@ mkargs
 
 
 @node Text processing Macros
-@subsection Text processing Macros
+@subsection String manipulation in M4
 
 The following macros may be used to manipulate strings in M4.
 They are not intended for casual use.
@@ -10852,17 +10924,76 @@ Return @var{string} with letters converted to upper or lower case,
 respectively.
 @end defmac
 
+@node Number processing Macros
+@subsection Arithmetic computation in M4
+
+The following macros make it easier to deal with arithmetic operations.
+Where a parameter is documented as taking an arithmetic expression, you
+can use anything that can be parsed by @code{m4_eval}.
+
+@defmac m4_cmp (@var{expr-1}, @var{expr-2})
+@msindex{cmp}
+Compare the arithmetic expressions @var{expr-1} and @var{expr-2}, and
+expand to @samp{-1} if @var{expr-1} is smaller, @samp{0} if they are
+equal, and @samp{1} if @var{expr-1} is larger.
+@end defmac
+
+@defmac m4_list_cmp (@var{list-1}, @var{list-2})
+@msindex{list_cmp}
+Compare the two M4 lists consisting of comma-separated arithmetic
+expressions, left to right.  Expand to @samp{-1} for the first element
+pairing where the value from @var{list-1} is smaller, @samp{1} where the
+value from @var{list-2} is smaller, or @samp{0} if both lists have the
+same values.  If one list is shorter than the other, the remaining
+elements of the longer list are compared against 0.
+@example
+m4_list_cmp([1, 0],       [1])
+@result{}0
+m4_list_cmp([1, [1 * 0]], [1, 0])
+@result{}0
+m4_list_cmp([1, 2],       [1, 0])
+@result{}1
+m4_list_cmp([1, [1+1], 3],[1, 2])
+@result{}1
+m4_list_cmp([1, 2, -3],   [1, 2])
+@result{}-1
+m4_list_cmp([1, 0],       [1, 2])
+@result{}-1
+m4_list_cmp([1],          [1, 2])
+@result{}-1
+@end example
+@end defmac
+
+@defmac m4_max (@var{arg1}, @dots{})
+@msindex{max}
+This macro was introduced in Autoconf 2.62.  Expand to the decimal value
+of the maximum arithmetic expression among all the arguments.
+@end defmac
+
+@defmac m4_min (@var{arg1}, @dots{})
+@msindex{min}
+This macro was introduced in Autoconf 2.62.  Expand to the decimal value
+of the minimum arithmetic expression among all the arguments.
+@end defmac
+
+@defmac m4_sign (@var{expr})
+@msindex{sign}
+Expand to @samp{-1} if the arithmetic expression @var{expr} is negative,
+@samp{1} if it is positive, and @samp{0} if it is zero.
+@end defmac
+
 @anchor{m4_version_compare}
 @defmac m4_version_compare (@var{version-1}, @var{version-2})
 @msindex{version_compare}
-This macro was introduced in Autoconf 2.53.  Compare the version strings
-@var{version-1} and @var{version-2}, and expand to @samp{-1} if
-@var{version-1} is smaller, @samp{0} if they are the same, or @samp{1}
-@var{version-2} is smaller.  Version strings must be a list of elements
-separated by @samp{.}, where each element is a number along with an
-optional lower case letter.  The comparison stops at the leftmost
-element that contains a difference, although a 0 element compares equal
-to a missing element.
+This macro was introduced in Autoconf 2.53, but had a number of
+usability limitations that were not lifted until Autoconf 2.62.  Compare
+the version strings @var{version-1} and @var{version-2}, and expand to
+@samp{-1} if @var{version-1} is smaller, @samp{0} if they are the same,
+or @samp{1} @var{version-2} is smaller.  Version strings must be a list
+of elements separated by @samp{.}, where each element is a number along
+with optional case-insensitive letters designating beta releases.  The
+comparison stops at the leftmost element that contains a difference,
+although a 0 element compares equal to a missing element.
 
 @example
 m4_version_compare([1.1], [2.0])
@@ -10874,6 +11005,8 @@ m4_version_compare([1.1.1], [1.1.1a])
 m4_version_compare([1.2], [1.1.1a])
 @result{}1
 m4_version_compare([1.0], [1])
+@result{}0
+m4_version_compare([1.1pre], [1.1PRE])
 @result{}0
 m4_version_compare([1.1a], [1,10])
 @result{}-1
