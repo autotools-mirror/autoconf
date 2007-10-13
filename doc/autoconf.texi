@@ -11335,8 +11335,8 @@ instead.  @xref{m4_fatal}, for more details.
 @end defmac
 
 When the user runs @samp{autoconf -W error}, warnings from
-@code{m4_warn} (and thus @code{AC_DIAGNOSE} and @code{AC_WARNING}) are
-reported as errors, see @ref{autoconf Invocation}.
+@code{m4_warn} (including those issued through @code{AC_DIAGNOSE} and
+@code{AC_WARNING}) are reported as errors, see @ref{autoconf Invocation}.
 
 @node Dependencies Between Macros
 @section Dependencies Between Macros

@@ -1,6 +1,7 @@
 2007-10-12  Eric Blake  <ebb9@byu.net>
 
 	* doc/autoconf.texi (Text processing Macros): Fix bad merge.
+	(Reporting Messages): Fix underfull hbox.
 
 	Some more m4sugar documentation.
 	* lib/m4sugar/m4sugar.m4: Clean up macro order.
