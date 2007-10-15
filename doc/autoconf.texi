@@ -10821,9 +10821,9 @@ are expanded during this macro; instead, they are expanded when
 
 @code{m4_append} can be used to grow strings, and @code{m4_append_uniq}
 to grow strings without duplicating substrings.  Additionally,
-@code{m4_append_uniq} takes two optional parameters; @var{if-uniq} is
-expanded if @var{string} was appended, and @var{if-duplicate} is
-expanded if @var{string} was already present.
+@code{m4_append_uniq} takes two optional parameters as of Autoconf 2.62;
+@var{if-uniq} is expanded if @var{string} was appended, and
+@var{if-duplicate} is expanded if @var{string} was already present.
 
 @example
 m4_define([active], [ACTIVE])dnl
@@ -10935,25 +10935,27 @@ format those words to wrap within @var{width} columns, and without
 trailing whitespace.  If given, @var{prefix1} is prepended to the first
 line, and @var{prefix} is prepended to each continuation line.  As a
 special case, if @var{prefix1} is longer than @var{prefix}, the first
-line will consist solely of @var{prefix1}.
+line will consist solely of @var{prefix1}.  No expansions occur on
+@var{prefix}, @var{prefix1}, or the words of @var{string}, although
+quadrigraphs are recognized.
 
 For some examples:
 @example
-m4_text_wrap([Short string */], [@ @ @ ], [/* ], [20])
+m4_text_wrap([Short string */], [   ], [/* ], [20])
 @result{}/* Short string */
-m4_text_wrap([Much longer string */], [@ @ @ ], [/* ], [20])
+m4_text_wrap([Much longer string */], [   ], [/* ], [20])
 @result{}/* Much longer
-@result{}@ @ @ string */
-m4_text_wrap([Short doc.], [@ @ @ @ @ @ @ @ @ @ ], [@ @ --short ], [30])
-@result{}@ @ --short Short doc.
-m4_text_wrap([Short doc.], [@ @ @ @ @ @ @ @ @ @ ], [@ @ --too-wide ], [30])
-@result{}@ @ --too-wide
-@result{}@ @ @ @ @ @ @ @ @ @ Short doc.
-m4_text_wrap([Super long documentation.], [@ @ @ @ @ ],
-             [@ @ --too-wide ], 30)
-@result{}@ @ --too-wide
-@result{}@ @ @ @ @ Super long
-@result{}@ @ @ @ @ documentation.
+@result{}   string */
+m4_text_wrap([Short doc.], [          ], [  --short ], [30])
+@result{}  --short Short doc.
+m4_text_wrap([Short doc.], [          ], [  --too-wide ], [30])
+@result{}  --too-wide
+@result{}          Short doc.
+m4_text_wrap([Super long documentation.], [     ],
+             [  --too-wide ], 30)
+@result{}  --too-wide
+@result{}     Super long
+@result{}     documentation.
 @end example
 @end defmac
 
@@ -17199,7 +17201,8 @@ your own @samp{help strings} to line up in the appropriate columns of
 strings} do.  This is the purpose of the @code{AS_HELP_STRING} macro.
 
 @anchor{AS_HELP_STRING}
-@defmac AS_HELP_STRING (@var{left-hand-side}, @var{right-hand-side})
+@defmac AS_HELP_STRING (@var{left-hand-side}, @var{right-hand-side} @
+  @dvar{indent-column, 26}, @dvar{wrap-column, 79})
 @asindex{HELP_STRING}
 
 Expands into an help string that looks pretty when the user executes
@@ -17215,9 +17218,6 @@ AC_ARG_WITH([foo],
   [use_foo=no])
 @end example
 
-The second argument of @code{AS_HELP_STRING} is
-not a literal, and should not be double quoted.
-@xref{Autoconf Language}, for a more detailed explanation.
 Then the last few lines of @samp{configure --help} appear like
 this:
 
@@ -17226,16 +17226,42 @@ this:
   --with-foo              use foo (default is no)
 @end example
 
+Macro expansion is performed on the first argument.  However, the second
+argument of @code{AS_HELP_STRING} is treated as a whitespace separated
+list of text to be reformatted, and is not subject to macro expansion.
+Since it is not expanded, it should not be double quoted.
+@xref{Autoconf Language}, for a more detailed explanation.
+
 The @code{AS_HELP_STRING} macro is particularly helpful when the
 @var{left-hand-side} and/or @var{right-hand-side} are composed of macro
 arguments, as shown in the following example.
 
 @example
 AC_DEFUN([MY_ARG_WITH],
-  [AC_ARG_WITH([$1],
-     [AS_HELP_STRING([--with-$1], [use $1 (default is $2)])],
+  [AC_ARG_WITH(m4_translit([[$1]], [_], [-]),
+     [AS_HELP_STRING([--with-m4_translit([$1], [_], [-])],
+                     [use $1 (default is $2)])],
      [use_[]$1=$withval],
      [use_[]$1=$2])])
+MY_ARG_WITH([a_b], [no])
+@end example
+@noindent
+Here, the last few lines of @samp{configure --help} will include:
+
+@example
+--enable and --with options recognized:
+  --with-a-b              use a_b (default is no)
+@end example
+
+The parameters @var{indent-column} and @var{wrap-column} were introduced
+in Autoconf 2.62.  Generally, they should not be specified; they exist
+for fine-tuning of the wrapping.
+@example
+AS_HELP_STRING([--option], [description of option])
+@result{}  --option                description of option
+AS_HELP_STRING([--option], [description of option], [15], [30])
+@result{}  --option     description of
+@result{}               option
 @end example
 @end defmac
 

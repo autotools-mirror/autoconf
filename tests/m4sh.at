@@ -490,10 +490,8 @@ AT_CLEANUP
 ## AS_HELP_STRING ##
 ## -------------- ##
 
-# I'm not totally certain that we want to enforce the defaults here,
-# but at least it is being tested.
-
 AT_SETUP([AS@&t@_HELP_STRING])
+AT_KEYWORDS([m4@&t@_text_wrap])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -545,6 +543,18 @@ echo "AS_HELP_STRING([[--foo[=bar]123456789012]],
 [some other t[]t which should wrap at our default of 80 characters.])"
 echo "AS_HELP_STRING([[--foo[=bar]1234567890123]],
 [some other t[]t which should wrap at our default of 80 characters.])"
+m4_define([mac], [MACRO])dnl
+echo "AS_HELP_STRING([--mac], [mac])"
+echo "AS_HELP_STRING([--o1, --o2], [two
+options,	one  description])"
+echo "AS_HELP_STRING([--tune1], [check out the tuned formatting],
+[            ])"
+echo "AS_HELP_STRING([--tune2], [check out the tuned formatting],
+[12])"
+echo "AS_HELP_STRING([--tune3], [check out the tuned formatting],
+[], [40])"
+echo "AS_HELP_STRING([--tune4], [check out the tuned formatting],
+[12], [40])"
 ]])
 
 AT_CHECK_M4SH
@@ -600,6 +610,15 @@ AT_CHECK([./script], [0],
   --foo[=bar]1234567890123
                           some other t[]t which should wrap at our default of
                           80 characters.
+  --MACRO                 mac
+  --o1, --o2              two options, one description
+  --tune1   check out the tuned formatting
+  --tune2   check out the tuned formatting
+  --tune3                 check out the
+                          tuned
+                          formatting
+  --tune4   check out the tuned
+            formatting
 ]])
 
 AT_CLEANUP

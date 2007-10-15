@@ -50,7 +50,13 @@ GNU Autoconf NEWS - User visible changes.
 
 ** AC_USE_SYSTEM_EXTENSIONS now defines _ALL_SOURCE for Interix platforms.
 
-** AS_HELP_STRING no longer underquotes its first argument.
+** AS_HELP_STRING no longer underquotes its first argument; it also handles
+   the case where the first argument contains single-quoted commas.
+   For example, "AS_HELP_STRING([-a, [--arg[=foo]]], [bar])" produces:
+     "  -a, --arg=[foo]         bar"
+   Additionally, the macro now takes two additional arguments,
+   indent-column and wrap-column; these should not normally be needed,
+   but can be used to fine-tune how the output text is wrapped.
 
 ** The command 'autoconf -' now correctly processes a file from stdin.
 

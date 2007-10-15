@@ -1,5 +1,16 @@
 2007-10-15  Eric Blake  <ebb9@byu.net>
 
+	Enhance AS_HELP_STRING.
+	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Don't expand arguments,
+	and reduce number of expansions.
+	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): Rework to use m4_expand,
+	and to take indent and wrap column numbers.
+	* tests/m4sh.at (AS@&t@_HELP_STRING): Update the test.
+	* doc/autoconf.texi (Pretty Help Strings): Document details about
+	arguments.
+	(Text processing Macros): Minor tweaks.
+	* NEWS: Document this change.
+
 	Fix 2007-10-03 regression with AT_SETUP([a, b]).
 	* lib/m4sugar/m4sugar.m4 (m4_expand): New macro.
 	(m4_text_box): Use it.

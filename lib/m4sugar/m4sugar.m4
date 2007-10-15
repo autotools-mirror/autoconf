@@ -1785,6 +1785,9 @@ m4_define([m4_append_uniq],
 # if the length of FIRST-PREFIX is greater than that of PREFIX, then
 # FIRST-PREFIX will be left alone on the first line.
 #
+# No expansion occurs on the contents STRING, PREFIX, or FIRST-PREFIX,
+# although quadrigraphs are correctly recognized.
+#
 # Typical outputs are:
 #
 # m4_text_wrap([Short string */], [   ], [/* ], 20)
@@ -1815,44 +1818,49 @@ m4_define([m4_append_uniq],
 # all the words are preceded by m4_Separator which is defined to empty for
 # the first word, and then ` ' (single space) for all the others.
 #
-# The algorithm overquotes m4_Prefix1 to avoid m4_defn overhead, and bypasses
-# m4_popdef overhead with m4_builtin since no user macro expansion occurs in
-# the meantime.
+# The algorithm overquotes m4_Prefix and m4_Prefix1 to avoid m4_defn
+# overhead, and bypasses m4_popdef overhead with m4_builtin since no user
+# macro expansion occurs in the meantime.  Also, the definition is written
+# with m4_do, to avoid time wasted on dnl during expansion (since this is
+# already a time-consuming macro).
 m4_define([m4_text_wrap],
-[m4_pushdef([m4_Prefix], [$2])dnl
-m4_pushdef([m4_Prefix1], m4_dquote(m4_default([$3], [m4_Prefix])))dnl
-m4_pushdef([m4_Width], m4_default([$4], 79))dnl
-m4_pushdef([m4_Cursor], m4_qlen(m4_Prefix1))dnl
-m4_pushdef([m4_Separator], [])dnl
-m4_Prefix1[]dnl
-m4_cond([m4_eval(m4_qlen(m4_Prefix1) > m4_len(m4_Prefix))],
-	[1], [m4_define([m4_Cursor], m4_len(m4_Prefix))
-m4_Prefix],
-	[m4_eval(m4_qlen(m4_Prefix1) < m4_len(m4_Prefix))],
-	[0], [],
-	[m4_define([m4_Cursor], m4_len(m4_Prefix))[]dnl
-m4_format([%*s],
-	  m4_max([0], m4_eval(m4_len(m4_Prefix) - m4_qlen(m4_Prefix1))),
-	  [])])[]dnl
-m4_foreach_w([m4_Word], [$1],
-[m4_define([m4_Cursor],
-	   m4_eval(m4_Cursor + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))dnl
-dnl New line if too long, else insert a space unless it is the first
-dnl of the words.
-m4_if(m4_eval(m4_Cursor > m4_Width),
-      1, [m4_define([m4_Cursor],
-		    m4_eval(m4_len(m4_Prefix)
-			    + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))]
-m4_Prefix,
-       [m4_Separator])[]dnl
-m4_builtin([defn], [m4_Word])[]dnl
-m4_define([m4_Separator], [ ])])dnl
-m4_builtin([popdef], [m4_Separator])dnl
-m4_builtin([popdef], [m4_Cursor])dnl
-m4_builtin([popdef], [m4_Width])dnl
-m4_builtin([popdef], [m4_Prefix1])dnl
-m4_builtin([popdef], [m4_Prefix])dnl
-])
+m4_do(dnl set up local variables, to avoid repeated calculations
+[[m4_pushdef([m4_Prefix], [[$2]])]],
+[[m4_pushdef([m4_Prefix1], m4_if([$3], [], [m4_Prefix], [[[$3]]]))]],
+[[m4_pushdef([m4_Width], m4_default([$4], 79))]],
+[[m4_pushdef([m4_Indent], m4_qlen(m4_Prefix))]],
+[[m4_pushdef([m4_Cursor], m4_qlen(m4_Prefix1))]],
+[[m4_pushdef([m4_Separator], [m4_define([m4_Separator], [ ])])]],
+dnl expand the first prefix, then check its length vs. regular prefix
+dnl same length: nothing special
+dnl prefix1 longer: output on line by itself, and reset cursor
+dnl prefix1 shorter: pad to length of prefix, and reset cursor
+[[m4_Prefix1[]m4_cond([m4_Cursor], m4_Indent, [],
+		      [m4_eval(m4_Cursor > m4_Indent)], [1], [
+m4_Prefix[]m4_define([m4_Cursor], m4_Indent)],
+		      [m4_format([%*s], m4_max([0],
+  m4_eval(m4_Indent - m4_Cursor)), [])m4_define([m4_Cursor], m4_Indent)])]],
+dnl now, for each word, compute the curser after the word is output, then
+dnl check if the cursor would exceed the wrap column
+dnl if so, reset cursor, and insert newline and prefix
+dnl if not, insert the separator (usually a space)
+dnl either way, insert the word
+[[m4_foreach_w([m4_Word], [$1],
+  [m4_define([m4_Cursor],
+	     m4_eval(m4_Cursor + m4_qlen(m4_builtin([defn], [m4_Word]))
+		     + 1))m4_if(m4_eval(m4_Cursor > m4_Width),
+      [1], [m4_define([m4_Cursor],
+		      m4_eval(m4_Indent
+			      + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))
+m4_Prefix[]],
+      [m4_Separator[]])m4_builtin([defn], [m4_Word])])]],
+dnl finally, clean up the local variabls
+[[m4_builtin([popdef], [m4_Separator])]],
+[[m4_builtin([popdef], [m4_Cursor])]],
+[[m4_builtin([popdef], [m4_Indent])]],
+[[m4_builtin([popdef], [m4_Width])]],
+[[m4_builtin([popdef], [m4_Prefix1])]],
+[[m4_builtin([popdef], [m4_Prefix])]]))
 
 
 # m4_text_box(MESSAGE, [FRAME-CHARACTER = `-'])
