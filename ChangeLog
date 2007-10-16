@@ -1,3 +1,22 @@
+2007-10-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix `configure --help=recursive' in unconfigured/read-only trees.
+	* lib/m4sugar/m4sh.m4 (_AS_LN_S_PREPARE): Avoid errors when `.'
+	is not writable, use 'cp -p' in this case, in the hope that it
+	will not actually be needed.  Still try removing files, in case
+	of other write errors.
+	* lib/autoconf/general.m4 (_AC_INIT_SRCDIR): For ac_confdir,
+	use $as_myself, not $0.
+	(_AC_INIT_HELP): For --help=recursive, if the subdir does not
+	exist, try again in the the source tree.  This change assumes
+	that the subpackage configure script is capable of running
+	--help=recursive in the source tree.
+	* tests/torture.at (Configuring subdirectories, Deep Package):
+	Adjust tests to expose both issues, also try invocation as
+	`sh configure ...' and plain `configure ...' with PATH adjusted.
+	* NEWS, THANKS: Update.
+	Report by Hans Ulrich Niedermann.
+
 2007-10-16  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Check for 64-bit int errors in HP-UX 10.20 preprocessor.

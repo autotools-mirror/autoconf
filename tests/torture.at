@@ -1052,7 +1052,9 @@ AT_CHECK([test -f inner/configure])
 
 # Running the outer configure recursively should provide the innermost
 # help strings.
+chmod a-w inner/innermost inner .
 AT_CHECK([./configure --help=recursive | grep INNER], 0, [ignore])
+chmod u+w . inner inner/innermost
 
 # Running the outer configure should trigger the inner.
 AT_CHECK_CONFIGURE
@@ -1154,8 +1156,13 @@ AT_CHECK([test -f inner/innermost/config.hin])
 
 # Running the outer configure recursively should provide the innermost
 # help strings.
+chmod a-w inner/innermost inner
 AT_CHECK([./configure --help=recursive | grep " INNER "],     0, [ignore])
 AT_CHECK([./configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+AT_CHECK([/bin/sh ./configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+AT_CHECK([PATH=.$PATH_SEPARATOR$PATH /bin/sh configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+AT_CHECK([PATH=.$PATH_SEPARATOR$PATH; export PATH; configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+chmod u+w inner inner/innermost
 
 # Running the outer configure should trigger the inner.
 AT_CHECK_CONFIGURE([INNERMOST=tsomrenni])
@@ -1165,6 +1172,13 @@ AT_CHECK([grep INNERMOST inner/innermost/config.h], 0,
 
 # The same, but from a builddir.
 AS_MKDIR_P([builddir])
+chmod a-w builddir inner/innermost inner
+AT_CHECK([cd builddir && ../configure --help=recursive | grep " INNER "],     0, [ignore])
+AT_CHECK([cd builddir && ../configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+AT_CHECK([cd builddir && /bin/sh ../configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+AT_CHECK([cd builddir && PATH=`pwd`/..$PATH_SEPARATOR$PATH /bin/sh configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+AT_CHECK([PATH=`pwd`$PATH_SEPARATOR$PATH; export PATH; cd builddir && configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+chmod u+w builddir inner inner/innermost
 AT_CHECK([cd builddir && ../configure INNERMOST=build/tsomrenni], 0, [ignore])
 AT_CHECK([grep INNERMOST builddir/inner/innermost/config.h], 0,
 [[#define INNERMOST build/tsomrenni

@@ -66,6 +66,9 @@ GNU Autoconf NEWS - User visible changes.
    command './configure --prefix=/usr/' will still result in an
    expanded libdir value of /usr/lib, not /usr//lib.
 
+** `configure --help=recursive' now works in read-only trees and from
+   unconfigured build trees.
+
 ** AT_SETUP now handles macro expansions properly when calculating line
    length.
 

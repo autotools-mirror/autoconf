@@ -498,7 +498,7 @@ m4_divert_push([PARSE_ARGS])dnl
 if test -z "$srcdir"; then
   ac_srcdir_defaulted=yes
   # Try the directory containing this script, then the parent directory.
-  ac_confdir=`AS_DIRNAME(["$[0]"])`
+  ac_confdir=`AS_DIRNAME(["$as_myself"])`
   srcdir=$ac_confdir
   if test ! -r "$srcdir/$ac_unique_file"; then
     srcdir=..
@@ -1102,7 +1102,9 @@ fi
 if test "$ac_init_help" = "recursive"; then
   # If there are subdirs, report their specific --help.
   for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
-    test -d "$ac_dir" || continue
+    test -d "$ac_dir" ||
+      { cd "$srcdir" && srcdir=. && test -d "$ac_dir"; } ||
+      continue
     _AC_SRCDIRS(["$ac_dir"])
     cd "$ac_dir" || { ac_status=$?; continue; }
     # Check for guested configure.
