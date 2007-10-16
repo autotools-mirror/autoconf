@@ -1,7 +1,7 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Type related macros: existence, sizeof, and structure members.
 #
-# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006 Free Software
+# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2007 Free Software
 # Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -472,7 +472,10 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
   AC_CACHE_CHECK([for long long int], [ac_cv_type_long_long_int],
     [AC_LINK_IFELSE(
        [AC_LANG_PROGRAM(
-	  [[long long int ll = 9223372036854775807ll;
+	  [[#if ! (-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
+	      error in preprocessor;
+	    #endif
+	    long long int ll = 9223372036854775807ll;
 	    long long int nll = -9223372036854775807LL;
 	    typedef int a[((-9223372036854775807LL < 0
 			    && 0 < 9223372036854775807ll)
@@ -522,7 +525,10 @@ AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
     [ac_cv_type_unsigned_long_long_int],
     [AC_LINK_IFELSE(
        [AC_LANG_PROGRAM(
-	  [[unsigned long long int ull = 18446744073709551615ULL;
+	  [[#if ! (18446744073709551615ULL <= -1u)
+	      error in preprocessor;
+	    #endif
+	    unsigned long long int ull = 18446744073709551615ULL;
 	    typedef int a[(18446744073709551615ULL <= (unsigned long long int) -1
 			   ? 1 : -1)];
 	   int i = 63;]],
