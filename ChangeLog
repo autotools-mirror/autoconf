@@ -1,5 +1,8 @@
 2007-10-16  Eric Blake  <ebb9@byu.net>
 
+	m4_map is a looping construct.
+	* lib/m4sugar/m4sugar.m4 (m4_map, _m4_map, m4_map_sep): Move.
+
 	Fix m4_map, and add some more utility macros.
 	* lib/m4sugar/m4sugar.m4 (m4_apply, m4_count, m4_dquote_elt)
 	(m4_echo, m4_make_list): New documented macros.

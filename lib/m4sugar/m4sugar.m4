@@ -447,32 +447,6 @@ m4_define([m4_cond],
        [m4_if($1, [$2], [$3], [$0(m4_shift3($@))])])])
 
 
-# m4_map(MACRO, LIST)
-# -------------------
-# Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
-# of LIST.  $1, $2... must in turn be lists, appropriate for m4_apply.
-#
-# Since LIST may be quite large, we want to minimize how often it appears
-# in the expansion.  Rather than use m4_car/m4_cdr iteration, we unbox the
-# list, and use _m4_shift2 to detect the end of recursion.
-m4_define([m4_map],
-[m4_if([$2], [], [],
-       [_$0([$1], $2)])])
-m4_define([_m4_map],
-[m4_if([$#], [1], [],
-       [m4_apply([$1], [$2])$0([$1]_m4_shift2($@))])])
-
-
-# m4_map_sep(MACRO, SEPARATOR, LIST)
-# ----------------------------------
-# Invoke MACRO($1), SEPARATOR, MACRO($2), ..., MACRO($N) where $1, $2... $N
-# are the elements of LIST, and are in turn lists appropriate for m4_apply.
-# SEPARATOR is not further expanded.
-m4_define([m4_map_sep],
-[m4_if([$3], [], [],
-       [m4_apply([$1], m4_car($3))m4_map([[$2]$1]_m4_cdr($3))])])
-
-
 ## ---------------------------------------- ##
 ## 6. Enhanced version of some primitives.  ##
 ## ---------------------------------------- ##
@@ -950,6 +924,31 @@ m4_define([_m4_foreach],
 m4_define([m4_foreach_w],
 [m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])])
 
+
+# m4_map(MACRO, LIST)
+# -------------------
+# Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
+# of LIST.  $1, $2... must in turn be lists, appropriate for m4_apply.
+#
+# Since LIST may be quite large, we want to minimize how often it appears
+# in the expansion.  Rather than use m4_car/m4_cdr iteration, we unbox the
+# list, and use _m4_shift2 to detect the end of recursion.
+m4_define([m4_map],
+[m4_if([$2], [], [],
+       [_$0([$1], $2)])])
+m4_define([_m4_map],
+[m4_if([$#], [1], [],
+       [m4_apply([$1], [$2])$0([$1]_m4_shift2($@))])])
+
+
+# m4_map_sep(MACRO, SEPARATOR, LIST)
+# ----------------------------------
+# Invoke MACRO($1), SEPARATOR, MACRO($2), ..., MACRO($N) where $1, $2... $N
+# are the elements of LIST, and are in turn lists appropriate for m4_apply.
+# SEPARATOR is not further expanded.
+m4_define([m4_map_sep],
+[m4_if([$3], [], [],
+       [m4_apply([$1], m4_car($3))m4_map([[$2]$1]_m4_cdr($3))])])
 
 
 ## --------------------------- ##
