@@ -450,23 +450,27 @@ m4_define([m4_cond],
 # m4_map(MACRO, LIST)
 # -------------------
 # Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
-# of LIST (which can be lists themselves, for multiple arguments MACROs).
+# of LIST.  $1, $2... must in turn be lists, appropriate for m4_apply.
+#
+# Since LIST may be quite large, we want to minimize how often it appears
+# in the expansion.  Rather than use m4_car/m4_cdr iteration, we unbox the
+# list, and use _m4_shift2 to detect the end of recursion.
 m4_define([m4_map],
-[m4_if([$2], [[]], [],
-       [_m4_map([$1], [$2])])])
+[m4_if([$2], [], [],
+       [_$0([$1], $2)])])
 m4_define([_m4_map],
 [m4_if([$#], [1], [],
-       [$1(m4_unquote(m4_car($2)))[]_m4_map([$1]_m4_cdr($2))])])
+       [m4_apply([$1], [$2])$0([$1]_m4_shift2($@))])])
 
 
 # m4_map_sep(MACRO, SEPARATOR, LIST)
 # ----------------------------------
 # Invoke MACRO($1), SEPARATOR, MACRO($2), ..., MACRO($N) where $1, $2... $N
-# are the elements of LIST (which can be lists themselves, for multiple
-# arguments MACROs).
+# are the elements of LIST, and are in turn lists appropriate for m4_apply.
+# SEPARATOR is not further expanded.
 m4_define([m4_map_sep],
-[m4_if([$3], [[]], [],
-       [$1(m4_unquote(m4_car($3)))[]_m4_map([$2[]$1]_m4_cdr($3))])])
+[m4_if([$3], [], [],
+       [m4_apply([$1], m4_car($3))m4_map([[$2]$1]_m4_cdr($3))])])
 
 
 ## ---------------------------------------- ##
@@ -602,12 +606,16 @@ m4_define([_m4_shiftn],
 m4_define([m4_shift2], [m4_shift(m4_shift($@))])
 m4_define([m4_shift3], [m4_shift(m4_shift(m4_shift($@)))])
 
+# _m4_shift2(...)
 # _m4_shift3(...)
 # ---------------
-# Like m4_shift3, except include a leading comma unless there were exactly
-# three arguments.  Why?  Because in recursion, it is nice to distinguish
-# between 1 element left and 0 elements left, based on how many arguments
-# this shift expands to.
+# Like m4_shift2 or m4_shift3, except include a leading comma unless shifting
+# consumes all arguments.  Why?  Because in recursion, it is nice to
+# distinguish between 1 element left and 0 elements left, based on how many
+# arguments this shift expands to.
+m4_define([_m4_shift2],
+[m4_if([$#], [2], [],
+       [, m4_shift(m4_shift($@))])])
 m4_define([_m4_shift3],
 [m4_if([$#], [3], [],
        [, m4_shift(m4_shift(m4_shift($@)))])])
@@ -630,6 +638,22 @@ m4_define([m4_undefine],
 ## 7. Quoting manipulation.  ##
 ## ------------------------- ##
 
+
+# m4_apply(MACRO, LIST)
+# ---------------------
+# Invoke MACRO, with arguments provided from the quoted list of
+# comma-separated quoted arguments.  If LIST is empty, invoke MACRO
+# without arguments.
+m4_define([m4_apply],
+[m4_if([$2], [], [$1], [$1($2)])[]])
+
+
+# m4_count(ARGS)
+# --------------
+# Return a count of how many ARGS are present.
+m4_define([m4_count], [$#])
+
+
 # m4_do(STRING, ...)
 # ------------------
 # This macro invokes all its arguments (in sequence, of course).  It is
@@ -645,6 +669,22 @@ m4_define([m4_do],
 # ---------------
 # Return ARGS as a quoted list of quoted arguments.
 m4_define([m4_dquote],  [[$@]])
+
+
+# m4_dquote_elt(ARGS)
+# -------------------
+# Return ARGS as an unquoted list of double-quoted arguments.
+m4_define([m4_dquote_elt],
+[m4_if([$#], [0], [],
+       [$#], [1], [[[$1]]],
+       [[[$1]],$0(m4_shift($@))])])
+
+
+# m4_echo(ARGS)
+# -------------
+# Return the ARGS, with the same level of quoting.  Whitespace after
+# unquoted commas are consumed.
+m4_define([m4_echo], [$@])
 
 
 # m4_expand(ARG)
@@ -684,6 +724,18 @@ m4_define([_m4_expand],
 m4_define([m4_ignore])
 
 
+# m4_make_list(ARGS)
+# ------------------
+# Similar to m4_dquote, this creates a quoted list of quoted ARGS.  This
+# version is less efficient than m4_dquote, but separates each argument
+# with a comma and newline, rather than just comma, for readability.
+# When developing an m4sugar algorithm, you could temporarily use
+#   m4_pushdef([m4_dquote],m4_defn([m4_make_list]))
+# around your code to make debugging easier.
+m4_define([m4_make_list], [m4_join([,
+], m4_dquote_elt($@))])
+
+
 # m4_noquote(STRING)
 # ------------------
 # Return the result of ignoring all quotes in STRING and invoking the
@@ -700,13 +752,24 @@ m4_define([m4_noquote],
 # m4_quote(ARGS)
 # --------------
 # Return ARGS as a single argument.  Any whitespace after unquoted commas
-# is stripped.
+# is stripped.  There is always output, even when there were no arguments.
 #
 # It is important to realize the difference between `m4_quote(exp)' and
 # `[exp]': in the first case you obtain the quoted *result* of the
 # expansion of EXP, while in the latter you just obtain the string
 # `exp'.
 m4_define([m4_quote],  [[$*]])
+
+
+# _m4_quote(ARGS)
+# ---------------
+# Like m4_quote, except that when there are no arguments, there is no
+# output.  For conditional scenarios (such as passing _m4_quote as the
+# macro name in m4_map), this feature can be used to distinguish between
+# one argument of the empty string vs. no arguments.  However, in the
+# normal case with arguments present, this is less efficient than m4_quote.
+m4_define([_m4_quote],
+[m4_if([$#], [0], [], [[$*]])])
 
 
 # m4_unquote(ARGS)
@@ -1731,7 +1794,7 @@ m4_define([m4_normalize],
 # m4_join(SEP, ARG1, ARG2...)
 # ---------------------------
 # Produce ARG1SEPARG2...SEPARGn.  Avoid back-to-back SEP when a given ARG
-# is the empty string.
+# is the empty string.  No expansion is performed on SEP or ARGs.
 #
 # Since the number of arguments to join can be arbitrarily long, we
 # want to avoid having more than one $@ in the macro definition;
@@ -2034,7 +2097,8 @@ m4_define([m4_sign],
 # used by m4_version_compare, but since [0r36:a] is less readable than 10,
 # we provide a wrapper for human use.
 m4_define([m4_version_unletter],
-[m4_map_sep([m4_eval], [.], _$0([$1]))])
+[m4_map_sep([m4_eval], [.],
+	    m4_dquote(m4_dquote_elt(m4_unquote(_$0([$1])))))])
 m4_define([_m4_version_unletter],
 [m4_translit(m4_bpatsubst([[[$1]]], ]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_Letters])))[[+],

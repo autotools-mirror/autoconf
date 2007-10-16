@@ -1,5 +1,21 @@
 2007-10-16  Eric Blake  <ebb9@byu.net>
 
+	Fix m4_map, and add some more utility macros.
+	* lib/m4sugar/m4sugar.m4 (m4_apply, m4_count, m4_dquote_elt)
+	(m4_echo, m4_make_list): New documented macros.
+	(_m4_quote, _m4_shift2): New helper macros.
+	(m4_map): Change semantics to allow calling macro without
+	arguments.
+	(m4_map_sep): Likewise.  Also change semantics to quote separator,
+	to match m4_join and m4_append.
+	(m4_version_unletter): Fix use of m4_map.
+	* doc/autoconf.texi (Evaluation Macros): Document m4_apply,
+	m4_count, m4_dquote_elt, m4_echo, m4_make_list.
+	(Text processing Macros): Mention m4_dquote as a faster
+	alternative to joining with commas.
+	(Looping constructs): Document m4_map, m4_map_sep.
+	* NEWS: Mention new macros.
+
 	A few more m4sugar improvements, to benefit libtool.
 	* lib/m4sugar/m4sugar.m4 (m4_bpatsubsts, _m4_shiftn): Reduce size
 	of expansion by avoiding extra uses of $@.

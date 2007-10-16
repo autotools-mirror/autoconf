@@ -10611,16 +10611,16 @@ comma-separated quoted @var{list}, or the empty string if @var{list} had
 only one element.  Generally, when using quoted lists of quoted
 elements, @code{m4_cdr} should be called without any extra quotes.
 
-For example, this is an implementation of @code{m4_map}; note how each
-iteration of the helper macro @code{_m4_map} checks for the end of
-recursion, then merely applies the first argument to the first element
-of the list, then recurses with the rest of the list.
+For example, this is a simple implementation of @code{m4_map}; note how
+each iteration checks for the end of recursion, then merely applies the
+first argument to the first element of the list, then recurses with the
+rest of the list.  (The actual implementation in M4sugar is a bit more
+involved, to gain some speed and share code with @code{m4_map_sep}).
 @example
-m4_define([m4_map], [m4_if([$2], [[]], [], [_$0($@@)])])dnl
-m4_define([_m4_map], [m4_ifval([$2],
-  [$1(m4_unquote(m4_car($2)))[]$0([$1], m4_cdr($2))])])dnl
-m4_map([ m4_eval], [[1],[1+1]])
-@result{} 1 2
+m4_define([m4_map], [m4_ifval([$2],
+  [m4_apply([$1], m4_car($2))[]$0([$1], m4_cdr($2))])])dnl
+m4_map([ m4_eval], [[[1]], [[1+1]], [[10],[16]]])
+@result{} 1 2 a
 @end example
 @end defmac
 
@@ -10660,7 +10660,27 @@ The deprecated macro @code{AC_FOREACH} is an alias of
 @code{m4_foreach_w}.
 @end defmac
 
-@c TODO document m4_map, m4_map_sep
+@defmac m4_map (@var{macro}, @var{list})
+@defmacx m4_map_sep (@var{macro}, @var{separator}, @var{list})
+Loop over the comma separated quoted list of argument descriptions in
+@var{list}, and invoke @var{macro} with the arguments.  An argument
+description is in turn a comma-separated quoted list of quoted elements,
+suitable for @code{m4_apply}, making it possible to invoke @var{macro}
+without arguments if an argument description is empty.
+@code{m4_map_sep} additionally outputs @var{separator} between macro
+invocations, with no additional expansion of the separator.
+@example
+m4_map([m4_count], [])
+@result{}
+m4_map([ m4_count], [[],
+                     [[1]],
+                     [[1], [2]]])
+@result{} 0 1 2
+m4_map_sep([m4_eval], [,], [[[1+2]],
+                            [[10], [16]]])
+@result{}3,a
+@end example
+@end defmac
 
 @defmac m4_shiftn (@var{count}, @dots{})
 @defmacx m4_shift2 (@dots{})
@@ -10683,6 +10703,29 @@ for two and three shifts, respectively.
 The following macros give some control over the order of the evaluation
 by adding or removing levels of quotes.
 
+@defmac m4_apply (@var{macro}, @var{list})
+@msindex apply
+Apply the elements of the quoted, comma-separated @var{list} as the
+arguments to @var{macro}.  If @var{list} is empty, invoke @var{macro}
+without arguments.
+@example
+m4_apply([m4_count], [])
+@result{}0
+m4_apply([m4_count], [[]])
+@result{}1
+m4_apply([m4_count], [[1], [2]])
+@result{}2
+m4_apply([m4_join], [[|], [1], [2]])
+@result{}1|2
+@end example
+@end defmac
+
+@defmac m4_count (@var{arg1}, @dots{})
+@msindex{count}
+This macro returns the decimal count of the number of arguments it was
+passed.
+@end defmac
+
 @defmac m4_do (@var{arg1}, @dots{})
 @msindex{do}
 This macro loops over its arguments and expands each @var{arg} in
@@ -10695,6 +10738,19 @@ indentation and fewer @code{dnl} to result in the same expansion.
 Return the arguments as a quoted list of quoted arguments.
 Conveniently, if there is just one @var{arg}, this effectively adds a
 level of quoting.
+@end defmac
+
+@defmac m4_dquote_elt (@var{arg1}, @dots{})
+@msindex{dquote_elt}
+Return the arguments as a series of double-quoted arguments.  Whereas
+@code{m4_dquote} returns a single argument, @code{m4_dquote_elt} returns
+as many arguments as it was passed.
+@end defmac
+
+@defmac m4_echo (@var{arg1}, @dots{})
+@msindex{echo}
+Return the arguments, with the same level of quoting.  Other than
+discarding whitespace after unquoted commas, this macro is a no-op.
 @end defmac
 
 @defmac m4_expand (@var{arg})
@@ -10738,6 +10794,29 @@ m4_define([foo],
 
 Note that for earlier versions of Autoconf, the macro @code{__gnu__} can
 serve the same purpose, although it is less readable.
+@end defmac
+
+@defmac m4_make_list (@var{arg1}, @dots{})
+@msindex{make_list}
+This macro exists to aid debugging of M4sugar algorithms.  Its net
+effect is similar to @code{m4_dquote}---it produces a quoted list of
+quoted arguments, for each @var{arg}.  The difference is that this
+version uses a comma-newline separator instead of just comma, to improve
+readability of the list; with the result that it is less efficient than
+@code{m4_dquote}.
+@example
+m4_define([zero],[0])m4_define([one],[1])m4_define([two],[2])dnl
+m4_dquote(zero, [one], [[two]])
+@result{}[0],[one],[[two]]
+m4_make_list(zero, [one], [[two]])
+@result{}[0],
+@result{}[one],
+@result{}[[two]]
+m4_foreach([number], m4_dquote(zero, [one], [[two]]), [ number])
+@result{} 0 1 two
+m4_foreach([number], m4_make_list(zero, [one], [[two]]), [ number])
+@result{} 0 1 two
+@end example
 @end defmac
 
 @c m4_noquote is too dangerous to document - it invokes macros that
@@ -10876,6 +10955,10 @@ m4_define([active], [ACTIVE])dnl
 m4_join([|], [one], [], [active], [two])
 @result{}one|active|two
 @end example
+
+Note that if all you intend to do is join @var{args} with commas between
+them, to form a quoted list suitable for @code{m4_foreach}, it is more
+efficient to use @code{m4_dquote}.
 @end defmac
 
 @defmac m4_newline
