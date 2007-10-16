@@ -398,6 +398,18 @@ m4_define([m4_cdr],
        [$#], 1, [],
        [m4_dquote(m4_shift($@))])])
 
+# _m4_cdr(LIST)
+# -------------
+# Like m4_cdr, except include a leading comma unless only one element
+# remains.  Why?  Because comparing a large list against [] is more
+# expensive in expansion time than comparing the number of arguments; so
+# _m4_cdr can be used to reduce the number of arguments when it is time
+# to end recursion.
+m4_define([_m4_cdr],
+[m4_if([$#], 1, [],
+       [, m4_dquote(m4_shift($@))])])
+
+
 
 # m4_cond(TEST1, VAL1, IF-VAL1, TEST2, VAL2, IF-VAL2, ..., [DEFAULT])
 # -------------------------------------------------------------------
@@ -439,13 +451,12 @@ m4_define([m4_cond],
 # -------------------
 # Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
 # of LIST (which can be lists themselves, for multiple arguments MACROs).
-m4_define([m4_fst], [$1])
 m4_define([m4_map],
 [m4_if([$2], [[]], [],
        [_m4_map([$1], [$2])])])
 m4_define([_m4_map],
-[m4_ifval([$2],
-	  [$1(m4_fst($2))[]_m4_map([$1], m4_cdr($2))])])
+[m4_if([$#], [1], [],
+       [$1(m4_unquote(m4_car($2)))[]_m4_map([$1]_m4_cdr($2))])])
 
 
 # m4_map_sep(MACRO, SEPARATOR, LIST)
@@ -455,7 +466,7 @@ m4_define([_m4_map],
 # arguments MACROs).
 m4_define([m4_map_sep],
 [m4_if([$3], [[]], [],
-       [$1(m4_fst($3))[]_m4_map([$2[]$1], m4_cdr($3))])])
+       [$1(m4_unquote(m4_car($3)))[]_m4_map([$2[]$1]_m4_cdr($3))])])
 
 
 ## ---------------------------------------- ##
@@ -483,7 +494,7 @@ m4_define([m4_map_sep],
 m4_define([m4_bpatsubsts],
 [m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
        [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
-       [$#], 2, [m4_builtin([patsubst], $@)],
+       [$#], 2, [m4_builtin([patsubst], [$1], [$2])],
        [_$0($@m4_if(m4_eval($# & 1), 0, [,]))])])
 m4_define([_m4_bpatsubsts],
 [m4_if([$#], 2, [$1],
@@ -565,14 +576,24 @@ m4_define([m4_popdef],
 # m4_shiftn(N, ...)
 # -----------------
 # Returns ... shifted N times.  Useful for recursive "varargs" constructs.
+#
+# Autoconf does not use this macro, because it is inherently slower than
+# calling the common cases of m4_shift2 or m4_shift3 directly.  But it
+# might as well be fast for other clients, such as Libtool.  One way to
+# do this is to expand $@ only once in _m4_shiftn (otherwise, for long
+# lists, the expansion of m4_if takes twice as much memory as what the
+# list itself occupies, only to throw away the unused branch).  The end
+# result is strictly equivalent to
+#   m4_if([$1], 1, [m4_shift(,m4_shift(m4_shift($@)))],
+#         [_m4_shiftn(m4_decr([$1]), m4_shift(m4_shift($@)))])
+# but with the final `m4_shift(m4_shift($@)))' shared between the two
+# paths.  The first leg uses a no-op m4_shift(,$@) to balance out the ().
 m4_define([m4_shiftn],
-[m4_assert(0 <= $1 && $1 < $#)dnl
-_m4_shiftn($@)])
+[m4_assert(0 < $1 && $1 < $#)_$0($@)])
 
 m4_define([_m4_shiftn],
-[m4_if([$1], 0,
-       [m4_shift($@)],
-       [_m4_shiftn(m4_eval([$1]-1), m4_shift(m4_shift($@)))])])
+[m4_if([$1], 1, [m4_shift(],
+       [$0(m4_decr([$1])]), m4_shift(m4_shift($@)))])
 
 # m4_shift2(...)
 # m4_shift3(...)
@@ -580,6 +601,17 @@ m4_define([_m4_shiftn],
 # Returns ... shifted twice, and three times.  Faster than m4_shiftn.
 m4_define([m4_shift2], [m4_shift(m4_shift($@))])
 m4_define([m4_shift3], [m4_shift(m4_shift(m4_shift($@)))])
+
+# _m4_shift3(...)
+# ---------------
+# Like m4_shift3, except include a leading comma unless there were exactly
+# three arguments.  Why?  Because in recursion, it is nice to distinguish
+# between 1 element left and 0 elements left, based on how many arguments
+# this shift expands to.
+m4_define([_m4_shift3],
+[m4_if([$#], [3], [],
+       [, m4_shift(m4_shift(m4_shift($@)))])])
+
 
 # m4_undefine(NAME)
 # -----------------
@@ -827,13 +859,18 @@ m4_if(m4_defn([$1]), [$2], [],
 #     => -active--active-
 #
 # This macro is called frequently, so avoid extra expansions such as
-# m4_ifval and dnl.
+# m4_ifval and dnl.  Also, since $2 might be quite large, try to use it
+# as little as possible in _m4_foreach; each extra use requires that much
+# more memory for expansion.  So, rather than directly compare $2 against
+# [] and use m4_car/m4_cdr for recursion, we instead unbox the list (which
+# requires swapping the argument order in the helper) and use _m4_shift3
+# to detect when recursion is complete.
 m4_define([m4_foreach],
-[m4_pushdef([$1])_$0($@)m4_popdef([$1])])
+[m4_pushdef([$1])_$0([$1], [$3]m4_if([$2], [], [], [, $2]))m4_popdef([$1])])
 
 m4_define([_m4_foreach],
-[m4_if([$2], [], [],
-       [m4_define([$1], m4_car($2))$3[]$0([$1], m4_cdr($2), [$3])])])
+[m4_if([$#], [2], [],
+       [m4_define([$1], [$3])$2[]$0([$1], [$2]_m4_shift3($@))])])
 
 
 # m4_foreach_w(VARIABLE, LIST, EXPRESSION)

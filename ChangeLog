@@ -1,5 +1,17 @@
 2007-10-16  Eric Blake  <ebb9@byu.net>
 
+	A few more m4sugar improvements, to benefit libtool.
+	* lib/m4sugar/m4sugar.m4 (m4_bpatsubsts, _m4_shiftn): Reduce size
+	of expansion by avoiding extra uses of $@.
+	(m4_shiftn): Avoid extra dnl, and forbid shifting by 0.
+	(_m4_cdr): New helper macro.
+	(_m4_map, m4_map_sep): Use it to reduce size of expansion.
+	(_m4_shift3): New helper macro.
+	(_m4_foreach): Swap argument order, and use new macro to reduce
+	size of expansion.
+	* doc/autoconf.texi (Looping constructs) <m4_shiftn>: Mention that
+	count must be positive.
+
 	* doc/autoconf.texi (Evaluation Macros) <m4_expand>: Fix typo.
 	Reported by Ralf Wildenhues.
 

@@ -10670,7 +10670,8 @@ The deprecated macro @code{AC_FOREACH} is an alias of
 @msindex{shiftn}
 @code{m4_shiftn} performs @var{count} iterations of @code{m4_shift},
 along with validation that enough arguments were passed in to match the
-shift count.  @code{m4_shift2} and @code{m4_shift3} are specializations
+shift count, and that the count is positive.  @code{m4_shift2} and
+@code{m4_shift3} are specializations
 of @code{m4_shiftn}, introduced in Autoconf 2.62, and are more efficient
 for two and three shifts, respectively.
 @end defmac
