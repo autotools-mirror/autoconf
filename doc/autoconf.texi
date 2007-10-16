@@ -10704,7 +10704,7 @@ argument, @code{m4_expand} is designed to perform one level of expansion
 on quoted text.  The distinction is in the treatment of whitespace
 following a comma in the original @var{arg}.  Any time multiple
 arguments are collected into one with @code{m4_quote}, the M4 argument
-collection rules discard the whitespace.  But with @code{m4_quote},
+collection rules discard the whitespace.  However, with @code{m4_expand},
 whitespace is discarded only if it results from unquoted commas in the
 expansion of macros contained in @var{arg}.
 

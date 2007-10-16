@@ -1,3 +1,8 @@
+2007-10-16  Eric Blake  <ebb9@byu.net>
+
+	* doc/autoconf.texi (Evaluation Macros) <m4_expand>: Fix typo.
+	Reported by Ralf Wildenhues.
+
 2007-10-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Portable Shell): Improve description of zsh
