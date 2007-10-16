@@ -1,3 +1,98 @@
+2007-10-16  Eric Blake  <ebb9@byu.net>
+
+	m4_map is a looping construct.
+	* lib/m4sugar/m4sugar.m4 (m4_map, _m4_map, m4_map_sep): Move.
+
+	Fix m4_map, and add some more utility macros.
+	* lib/m4sugar/m4sugar.m4 (m4_apply, m4_count, m4_dquote_elt)
+	(m4_echo, m4_make_list): New documented macros.
+	(_m4_quote, _m4_shift2): New helper macros.
+	(m4_map): Change semantics to allow calling macro without
+	arguments.
+	(m4_map_sep): Likewise.  Also change semantics to quote separator,
+	to match m4_join and m4_append.
+	(m4_version_unletter): Fix use of m4_map.
+	* doc/autoconf.texi (Evaluation Macros): Document m4_apply,
+	m4_count, m4_dquote_elt, m4_echo, m4_make_list.
+	(Text processing Macros): Mention m4_dquote as a faster
+	alternative to joining with commas.
+	(Looping constructs): Document m4_map, m4_map_sep.
+	* NEWS: Mention new macros.
+
+	A few more m4sugar improvements, to benefit libtool.
+	* lib/m4sugar/m4sugar.m4 (m4_bpatsubsts, _m4_shiftn): Reduce size
+	of expansion by avoiding extra uses of $@.
+	(m4_shiftn): Avoid extra dnl, and forbid shifting by 0.
+	(_m4_cdr): New helper macro.
+	(_m4_map, m4_map_sep): Use it to reduce size of expansion.
+	(_m4_shift3): New helper macro.
+	(_m4_foreach): Swap argument order, and use new macro to reduce
+	size of expansion.
+	* doc/autoconf.texi (Looping constructs) <m4_shiftn>: Mention that
+	count must be positive.
+
+	* doc/autoconf.texi (Evaluation Macros) <m4_expand>: Fix typo.
+	Reported by Ralf Wildenhues.
+
+2007-10-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Portable Shell): Improve description of zsh
+	4.x function subshell bug with exit and trap.
+
+2007-10-15  Eric Blake  <ebb9@byu.net>
+
+	Enhance AS_HELP_STRING.
+	* lib/m4sugar/m4sugar.m4 (m4_text_wrap): Don't expand arguments,
+	and reduce number of expansions.
+	* lib/m4sugar/m4sh.m4 (AS_HELP_STRING): Rework to use m4_expand,
+	and to take indent and wrap column numbers.
+	* tests/m4sh.at (AS@&t@_HELP_STRING): Update the test.
+	* doc/autoconf.texi (Pretty Help Strings): Document details about
+	arguments.
+	(Text processing Macros): Minor tweaks.
+	* NEWS: Document this change.
+
+	Fix 2007-10-03 regression with AT_SETUP([a, b]).
+	* lib/m4sugar/m4sugar.m4 (m4_expand): New macro.
+	(m4_text_box): Use it.
+	* lib/autotest/general.m4 (AT_SETUP): Use it.
+	* lib/m4sugar/m4sh.m4 (_AS_RUN): Use it.
+	* tests/autotest.at (AT_CHECK_AT_TITLE_CHAR): Test this.
+	* NEWS: Revert caveat about semantics change on comma.
+	* doc/autoconf.texi (Evaluation Macros): Document m4_expand.
+
+2007-10-13  Eric Blake  <ebb9@byu.net>
+
+	Change m4_join to match libtool's ltsugar semantics.
+	* lib/m4sugar/m4sugar.m4 (m4_join): Just define this, not defun.
+	Ignore empty arguments, using...
+	(_m4_join): ...this new helper.
+	* tests/m4sugar.at (m4@&t@_join): New test.
+	* doc/autoconf.texi (Text processing Macros): Document new
+	semantics of m4_join.
+
+	Make AC_PREREQ faster and more robust.
+	* lib/m4sugar/m4sugar.m4 (m4_ignore, m4_unquote): New macros.
+	(m4_version_prereq): Inline constant expansions.
+	(m4_list_cmp): Reduce number of expansions, by avoiding m4_case.
+	Rewrite in terms of [] list, not () list.
+	(_m4_list_cmp, _m4_version_unletter): New helper macros.
+	(m4_version_unletter): Write wrapper around new implementation to
+	preserve old semantics.
+	(m4_version_compare): Pass correct type of list, and avoid
+	overhead of flattening expressions too early.
+	(m4_do): Move to be near other quoting macros.
+	(m4_max, m4_min): Always result in decimal output.
+	* doc/autoconf.texi (Looping constructs): Add m4_car, m4_cdr.
+	Move m4_do...
+	(Evaluation Macros): ...here.  Add m4_ignore, m4_unquote.
+	(Text processing Macros): Move m4_version_compare...
+	(Number processing Macros): ...to this new node; document m4_cmp,
+	m4_list_cmp, m4_sign, m4_max, m4_min.
+	* tests/m4sugar.at (m4@&t@_version_compare): Enhance test, to pick
+	up on bugs fixed by this patch.
+	* NEWS: Document new macros.
+
 2007-10-12  Eric Blake  <ebb9@byu.net>
 
 	* doc/autoconf.texi (Text processing Macros): Fix bad merge.

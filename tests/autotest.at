@@ -290,7 +290,7 @@ AT_CHECK_AT_TITLE_CHAR([Backslash],     [\])
 AT_CHECK_AT_TITLE_CHAR([Brackets],   [[[]]], [[]])
 AT_CHECK_AT_TITLE_CHAR([Pound],       [[#]], [#])
 AT_CHECK_AT_TITLE_CHAR([Quoted comma],[[,]], [,])
-AT_CHECK_AT_TITLE_CHAR([Comma],       [,[]], [,])
+AT_CHECK_AT_TITLE_CHAR([Comma],         [,], [,])
 
 AT_CHECK_AT_TITLE_CHAR([Quoted Macro], [[macro_name]], [macro_name])
 AT_CHECK_AT_TITLE_CHAR([Macro],        [macro_name],   [macro_expanded])

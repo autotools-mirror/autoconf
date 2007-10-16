@@ -44,6 +44,8 @@ AT_CHECK_M4SUGAR([-o-],, [$2], [$3])
 #
 # - m4_append
 #
+# - m4_join
+#
 # - m4_text_wrap
 # uses m4_split code.
 
@@ -251,6 +253,43 @@ one, two, three
 AT_CLEANUP
 
 
+## --------- ##
+## m4_join.  ##
+## --------- ##
+
+AT_SETUP([m4@&t@_join])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_define([active], [ACTIVE])
+m4_join
+m4_join([|])
+m4_join([, ], [one], [two])
+m4_dquote(m4_join([, ], [one], [two]))
+m4_join([|], [active], [active])
+m4_join([|], ,,,[one])
+m4_join([|], [one],,,)
+m4_join([], ,,,[two])
+m4_join([], [two],,,)
+m4_join([ active ], [one], , [two])
+m4_join([], [one], [two])
+]],
+[[
+
+
+one, two
+[one, two]
+active|active
+one
+one
+two
+two
+one active two
+onetwo
+]])
+
+AT_CLEANUP
+
+
 ## -------------- ##
 ## m4_text_wrap.  ##
 ## -------------- ##
@@ -313,10 +352,19 @@ m4_version_compare([1.2], [1.1.1a])
 m4_version_compare([1.0], [1])
 m4_version_compare([1.0a], [1.0a])
 m4_version_compare([1.1a], [1.1a.1])
+m4_version_compare([1.10], [1.1a])
+m4_version_compare([1.1a], [1.1A])
+m4_define([a], [oops])dnl
+m4_version_compare([1.1a], [1.1A])
+m4_version_compare([1z], [1aa])
 ]],
 [[-1
 1
 1
+-1
+1
+0
+0
 -1
 1
 0

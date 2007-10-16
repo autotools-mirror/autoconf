@@ -197,7 +197,7 @@ _AS_BOURNE_COMPATIBLE
 $1
 _ASEOF
 }],
-[(eval "AS_ESCAPE(m4_quote($1))")])])
+[(eval "AS_ESCAPE(m4_expand([$1]))")])])
 
 
 # _AS_DETECT_REQUIRED(TEST)
@@ -1158,14 +1158,21 @@ m4_define([_AS_BOX_INDIR],
 _ASBOX])
 
 
-# AS_HELP_STRING(LHS, RHS, [COLUMN])
-# ----------------------------------
+# AS_HELP_STRING(LHS, RHS, [INDENT-COLUMN = 26], [WRAP-COLUMN = 79])
+# ------------------------------------------------------------------
 #
-# Format a help string so that it looks pretty when
-# the user executes "script --help".  This macro takes three
-# arguments, a "left hand side" (LHS), a "right hand side" (RHS), and
-# the COLUMN which is a string of white spaces which leads to the
-# the RHS column (default: 26 white spaces).
+# Format a help string so that it looks pretty when the user executes
+# "script --help".  This macro takes up to four arguments, a
+# "left hand side" (LHS), a "right hand side" (RHS), a decimal
+# INDENT-COLUMN which is the column where wrapped lines should begin
+# (the default of 26 is recommended), and a decimal WRAP-COLUMN which is
+# the column where lines should wrap (the default of 79 is recommended).
+# LHS is expanded, RHS is not.
+#
+# For backwards compatibility not documented in the manual, INDENT-COLUMN
+# can also be specified as a string of white spaces, whose width
+# determines the indentation column.  Using TABs in INDENT-COLUMN is not
+# recommended, since screen width of TAB is not computed.
 #
 # The resulting string is suitable for use in other macros that require
 # a help string (e.g. AC_ARG_WITH).
@@ -1185,9 +1192,9 @@ _ASBOX])
 # "--with-readline", while the RHS is "support fancy command line
 # editing".
 #
-# If the LHS contains more than (COLUMN - 3) characters, then the LHS is
-# terminated with a newline so that the RHS starts on a line of its own
-# beginning with COLUMN.  In the default case, this corresponds to an
+# If the LHS contains more than (INDENT-COLUMN - 3) characters, then the
+# LHS is terminated with a newline so that the RHS starts on a line of its
+# own beginning at INDENT-COLUMN.  In the default case, this corresponds to an
 # LHS with more than 23 characters.
 #
 # Therefore, in the example, if the LHS were instead
@@ -1206,12 +1213,10 @@ _ASBOX])
 # know quadrigraphs.
 #
 m4_define([AS_HELP_STRING],
-[m4_pushdef([AS_Prefix], m4_default([$3], [                          ]))dnl
-m4_pushdef([AS_Prefix_Format],
-	   [  %-]m4_eval(m4_len(AS_Prefix) - 3)[s ])dnl [  %-23s ]
-m4_text_wrap([$2], AS_Prefix, m4_format(AS_Prefix_Format, [[$1]]))dnl
-m4_popdef([AS_Prefix_Format])dnl
-m4_popdef([AS_Prefix])dnl
+[m4_text_wrap([$2], m4_cond([[$3]], [], [                          ],
+			    [m4_eval([$3]+0)], [0], [[$3]],
+			    [m4_format([[%*s]], [$3], [])]),
+	      m4_expand([  $1 ]), [$4])dnl
 ])# AS_HELP_STRING
 
 
