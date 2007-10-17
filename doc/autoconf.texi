@@ -10707,7 +10707,10 @@ by adding or removing levels of quotes.
 @msindex apply
 Apply the elements of the quoted, comma-separated @var{list} as the
 arguments to @var{macro}.  If @var{list} is empty, invoke @var{macro}
-without arguments.
+without arguments.  Note the difference between @code{m4_indir}, which
+expects its first argument to be a macro name but can use names that are
+otherwise invalid, and @code{m4_apply}, where @var{macro} can contain
+other text, but must end in a valid macro name.
 @example
 m4_apply([m4_count], [])
 @result{}0

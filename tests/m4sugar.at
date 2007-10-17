@@ -518,3 +518,138 @@ script.4s:3: the top level
 autom4te: m4 failed with exit status: 1
 ]])
 AT_CLEANUP
+
+
+## --------------- ##
+## m4_map{,_sep}.  ##
+## --------------- ##
+
+AT_SETUP([m4@&t@_map])
+AT_KEYWORDS([m4@&t@_apply])
+AT_KEYWORDS([m4@&t@_count])
+
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_map([m4_count], [])
+m4_map([ m4_count], [[],
+                     [[1]],
+                     [[1], [2]]])
+m4_map_sep([m4_eval], [,], [[[1+2]],
+                            [[10], [16]]])
+m4_define([a], [m4_if([$#], [0], [oops], [$1], [a], [pass], [oops])])dnl
+m4_define([a1], [oops])dnl
+m4_define([pass1], [oops])dnl
+m4_map([a], [[[a]]])1
+m4_map([m4_unquote([a])], [m4_dquote([a])])
+]],
+[[
+ 0 1 2
+3,a
+pass1
+pass
+]], [])
+
+AT_CLEANUP
+
+
+## ------------ ##
+## m4_combine.  ##
+## ------------ ##
+
+AT_SETUP([m4@&t@_combine])
+
+AT_CHECK_M4SUGAR_TEXT([[m4_define([a], [oops])dnl
+m4_combine([, ], [[a], [b], [c]], [-], [1], [2], [3])
+m4_combine([, ], [[a], [b]], [-])
+m4_combine([, ], [[a], [b]], [-], [])
+m4_combine([, ], [], [-], [a], [b])
+m4_combine([, ], [[]], [-], [a], [b])
+m4_combine([ a ], [[-], [+]], [a], [-], [+])
+]],
+[[a-1, a-2, a-3, b-1, b-2, b-3, c-1, c-2, c-3
+
+a-, b-
+
+-a, -b
+-a- a -a+ a +a- a +a+
+]], [])
+
+AT_CLEANUP
+
+
+## -------------- ##
+## m4_{max,min}.  ##
+## -------------- ##
+
+AT_SETUP([m4@&t@_max and m4@&t@_min])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_max
+]])
+
+AT_CHECK_M4SUGAR([], 1, [],
+[[script.4s:1: error: too few arguments to m4@&t@_max
+script.4s:1: the top level
+autom4te: m4 failed with exit status: 1
+]])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_min
+]])
+
+AT_CHECK_M4SUGAR([], 1, [],
+[[script.4s:1: error: too few arguments to m4@&t@_min
+script.4s:1: the top level
+autom4te: m4 failed with exit status: 1
+]])
+
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_min(0)
+m4_min(0xa)
+m4_min(0, 0)
+m4_min(0, 1)
+m4_min(1, 0)
+m4_min(0+1, 1+1)
+m4_min(0+1, 1+0)
+m4_min(0, 1, 2)
+m4_min(2, 1, 0)
+m4_min(1m4_for([i], 2, 100, , [,i]))
+m4_min(m4_for([i], 100, 2, , [i,])1)
+----
+m4_max(0)
+m4_max(0xa)
+m4_max(0, 0)
+m4_max(0, 1)
+m4_max(1, 0)
+m4_max(1+0, 1+1)
+m4_max(1+0, 1+0)
+m4_max(0, 1, 2)
+m4_max(2, 1, 0)
+m4_max(1m4_for([i], 2, 100, , [,i]))
+m4_max(m4_for([i], 100, 2, , [i,])1)
+]],
+[[0
+10
+0
+0
+0
+1
+1
+0
+0
+1
+1
+----
+0
+10
+0
+1
+1
+2
+1
+2
+2
+100
+100
+]], [])
+
+AT_CLEANUP
