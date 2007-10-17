@@ -1348,7 +1348,7 @@ at_status=`cat "$at_status_file"`
 m4_divert_pop([TEST_FUNCTIONS])dnl Back to KILL.
 m4_divert_text([TESTS],
 [  AT_ordinal )
-    if at_func_test AT_ordinal && . "$at_test_source"; then :; else 
+    if at_func_test AT_ordinal && . "$at_test_source"; then :; else
       AS_ECHO(["$as_me: unable to parse test group: $[1]"]) >&2
       at_failed=:
     fi ;;])
