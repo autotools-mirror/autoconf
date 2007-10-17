@@ -1,5 +1,13 @@
 2007-10-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Autotest: do not use shell functions for individual tests.
+	* lib/autotest/general.m4 (AT_INIT) <at_func_test>: Merely
+	extract the source test source, do not invoke it.
+	(AT_SETUP, AT_CLEANUP): Source test code outside shell function.
+	* tests/autotest.at (Fallacy): Actually let the inner suite fail,
+	expect exit status of 1.
+	* tests/autotest.at (Skip): New test, for bogus zsh exit status.
+
 	* lib/autotest/general.m4 (at_func_test): Fix test extraction
 	script.
 

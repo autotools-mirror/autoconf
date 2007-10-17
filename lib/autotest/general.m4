@@ -291,20 +291,11 @@ at_func_diff_devnull ()
 
 # at_func_test NUMBER
 # -------------------
-# Parse out at_func_test_NUMBER from the tail of this file, source it,
-# then invoke it.
+# Parse out test NUMBER from the tail of this file.
 at_func_test ()
 {
-  if sed -n '/^@%:@AT_START_'$[1]'$/,/^@%:@AT_STOP_'$[1]'$/p' "$at_myself" \
-       > "$at_test_source" && . "$at_test_source" ; then
-    at_func_test_$[1] || {
-      AS_ECHO(["$as_me: unable to execute test group: $[1]"]) >&2
-      at_failed=:
-    }
-  else
-    AS_ECHO(["$as_me: unable to parse test group: $[1]"]) >&2
-    at_failed=:
-  fi
+  sed -n '/^@%:@AT_START_'$[1]'$/,/^@%:@AT_STOP_'$[1]'$/p' "$at_myself" \
+       > "$at_test_source"
 }
 
 # Load the config file.
@@ -1295,12 +1286,10 @@ m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TEST_FUNCTIONS])dnl
 [#AT_START_]AT_ordinal
 @%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
-at_func_test_[]AT_ordinal ()
-{
-    at_setup_line='m4_defn([AT_line])'
-    at_desc="AS_ESCAPE(m4_dquote(m4_defn([AT_description])))"
-    $at_quiet AS_ECHO_N([m4_format(["%3d: $at_desc%*s"], AT_ordinal,
-      m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])])
+at_setup_line='m4_defn([AT_line])'
+at_desc="AS_ESCAPE(m4_dquote(m4_defn([AT_description])))"
+$at_quiet AS_ECHO_N([m4_format(["%3d: $at_desc%*s"], AT_ordinal,
+  m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])])
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 
@@ -1345,21 +1334,24 @@ m4_define([AT_CLEANUP],
 m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 )dnl
 m4_divert_pop([TEST_SCRIPT])dnl Back to TEST_FUNCTIONS
-    AT_xfail
-    echo "#                             -*- compilation -*-" >> "$at_group_log"
-    (
-      AS_ECHO(["AT_ordinal. m4_defn([AT_line]): testing $1..."])
-      $at_traceon
+AT_xfail
+echo "#                             -*- compilation -*-" >> "$at_group_log"
+(
+  AS_ECHO(["AT_ordinal. m4_defn([AT_line]): testing $1..."])
+  $at_traceon
 m4_undivert([TEST_SCRIPT])dnl Insert the code here
-      $at_traceoff
-      $at_times_p && times >"$at_times_file"
-    ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
-    at_status=`cat "$at_status_file"`
-}
+  $at_traceoff
+  $at_times_p && times >"$at_times_file"
+) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
+at_status=`cat "$at_status_file"`
 [#AT_STOP_]AT_ordinal
 m4_divert_pop([TEST_FUNCTIONS])dnl Back to KILL.
 m4_divert_text([TESTS],
-[  AT_ordinal ) at_func_test AT_ordinal ;;])
+[  AT_ordinal )
+    if at_func_test AT_ordinal && . "$at_test_source"; then :; else 
+      AS_ECHO(["$as_me: unable to parse test group: $[1]"]) >&2
+      at_failed=:
+    fi ;;])
 ])# AT_CLEANUP
 
 

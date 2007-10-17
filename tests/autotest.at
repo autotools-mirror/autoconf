@@ -98,7 +98,14 @@ AT_CHECK_AT_TEST([Truth],
   [AT_CHECK([:], 0, [], [])])
 
 AT_CHECK_AT_TEST([Fallacy],
-  [AT_CHECK([false], ignore, [], [])])
+  [AT_CHECK([false], [], [], [])],
+  [], [1], [], [ignore],
+  [AT_CHECK([grep failed micro-suite.log], [], [ignore])])
+
+AT_CHECK_AT_TEST([Skip],
+  [AT_CHECK([exit 77], 0, [], [])],
+  [], [], [], [],
+  [AT_CHECK([grep skipped micro-suite.log], [], [ignore])])
 
 AT_CHECK_AT_TEST([Literal multiline command],
   [AT_CHECK([echo Auto'
