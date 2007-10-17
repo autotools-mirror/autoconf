@@ -10950,11 +10950,20 @@ of every element of the quoted, comma-separated @var{prefix-list}, and
 every element from the @var{suffix} arguments.  Each pairwise
 combination is joined with @var{infix} in the middle, and successive
 pairs are joined by @var{separator}.  No expansion occurs on any of the
-arguments.
+arguments.  No output occurs if either the @var{prefix} or @var{suffix}
+list is empty, but the lists can contain empty elements.
 @example
 m4_define([a], [oops])dnl
 m4_combine([, ], [[a], [b], [c]], [-], [1], [2], [3])
 @result{}a-1, a-2, a-3, b-1, b-2, b-3, c-1, c-2, c-3
+m4_combine([, ], [[a], [b]], [-])
+@result{}
+m4_combine([, ], [[a], [b]], [-], [])
+@result{}a-, b-
+m4_combine([, ], [], [-], [1], [2])
+@result{}
+m4_combine([, ], [[]], [-], [1], [2])
+@result{}-1, -2
 @end example
 @end defmac
 

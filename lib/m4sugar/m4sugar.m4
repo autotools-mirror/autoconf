@@ -1830,13 +1830,14 @@ m4_define([_m4_join],
 # we compute the m4_shift3 only once, rather than in each iteration of the
 # outer m4_foreach.
 m4_define([m4_combine],
-[m4_pushdef([m4_Separator], [m4_define([m4_Separator], [[$1]])])]dnl
-[m4_foreach([m4_Prefix], [$2],
-	    [m4_foreach([m4_Suffix], ]m4_dquote(m4_dquote(m4_shift3($@)))[,
-			[m4_Separator[]m4_builtin([defn],
-				       [m4_Prefix])[$3]m4_builtin([defn],
-						       [m4_Suffix])])])]dnl
-[m4_builtin([popdef], [m4_Separator])])
+[m4_if(m4_eval([$# > 3]), [1],
+       [m4_pushdef([m4_Separator], [m4_define([m4_Separator], [[$1]])])]]dnl
+[[m4_foreach([m4_Prefix], [$2],
+	     [m4_foreach([m4_Suffix], ]m4_dquote(m4_dquote(m4_shift3($@)))[,
+			 [m4_Separator[]m4_builtin([defn],
+					[m4_Prefix])[$3]m4_builtin([defn],
+							[m4_Suffix])])])]]dnl
+[[m4_builtin([popdef], [m4_Separator])])])
 
 
 # m4_append(MACRO-NAME, STRING, [SEPARATOR])
