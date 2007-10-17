@@ -1,5 +1,7 @@
 2007-10-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* TODO: multiline args in config files and headers work now.
+
 	Autotest: do not use shell functions for individual tests.
 	* lib/autotest/general.m4 (AT_INIT) <at_func_test>: Merely
 	extract the source test source, do not invoke it.

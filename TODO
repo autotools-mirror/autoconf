@@ -9,10 +9,6 @@ these suggestions... their presence here doesn't imply my endorsement.
 
 * Soon
 
-** AC_CHECK_HEADERS
-and the like, don't have a consistent way to handle multi-line
-arguments.  Fix, test, and document.
-
 ** AC_PROG_INSTALL
 This test should be extended to check that install supports the GNU
 Install syntax: install FILES... DIR.  This will relieve everybody
@@ -651,8 +647,8 @@ with autoconf scripts.
 
 ------------------------------------------------------------------------------
 
-Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002 Free Software
-Foundation, Inc.
+Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2007 Free
+Software Foundation, Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
