@@ -1,3 +1,8 @@
+2007-10-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (at_func_test): Fix test extraction
+	script.
+
 2007-10-17  Eric Blake  <ebb9@byu.net>
 
 	Fix m4_combine for empty suffix list.

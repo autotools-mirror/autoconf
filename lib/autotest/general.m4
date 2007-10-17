@@ -295,7 +295,7 @@ at_func_diff_devnull ()
 # then invoke it.
 at_func_test ()
 {
-  if sed -n '/^@%:@AT_START_'$[1]$'/,/^@%:@AT_STOP_'$[1]$'/p' "$at_myself" \
+  if sed -n '/^@%:@AT_START_'$[1]'$/,/^@%:@AT_STOP_'$[1]'$/p' "$at_myself" \
        > "$at_test_source" && . "$at_test_source" ; then
     at_func_test_$[1] || {
       AS_ECHO(["$as_me: unable to execute test group: $[1]"]) >&2
