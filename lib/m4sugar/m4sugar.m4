@@ -1812,6 +1812,33 @@ m4_define([_m4_join],
        [m4_if([$2], [], [], [[$1$2]])$0([$1], m4_shift2($@))])])
 
 
+# m4_combine([SEPARATOR], PREFIX-LIST, [INFIX], SUFFIX...)
+# --------------------------------------------------------
+# Produce the pairwise combination of every element in the quoted,
+# comma-separated PREFIX-LIST with every element from the SUFFIX arguments.
+# Each pair is joined with INFIX, and pairs are separated by SEPARATOR.
+# No expansion occurs on SEPARATOR, INFIX, or elements of either list.
+#
+# For example:
+#   m4_combine([, ], [[a], [b], [c]], [-], [1], [2], [3])
+#   => a-1, a-2, a-3, b-1, b-2, b-3, c-1, c-2, c-3
+#
+# In order to have the correct number of SEPARATORs, we use a temporary
+# variable that redefines itself after the first use.  Note that since there
+# is no user expansion, we can avoid m4_defn overhead by overquoting the
+# second definition of m4_Separator, and by using m4_builtin.  Likewise,
+# we compute the m4_shift3 only once, rather than in each iteration of the
+# outer m4_foreach.
+m4_define([m4_combine],
+[m4_pushdef([m4_Separator], [m4_define([m4_Separator], [[$1]])])]dnl
+[m4_foreach([m4_Prefix], [$2],
+	    [m4_foreach([m4_Suffix], ]m4_dquote(m4_dquote(m4_shift3($@)))[,
+			[m4_Separator[]m4_builtin([defn],
+				       [m4_Prefix])[$3]m4_builtin([defn],
+						       [m4_Suffix])])])]dnl
+[m4_builtin([popdef], [m4_Separator])])
+
+
 # m4_append(MACRO-NAME, STRING, [SEPARATOR])
 # ------------------------------------------
 # Redefine MACRO-NAME to hold its former content plus `SEPARATOR`'STRING'

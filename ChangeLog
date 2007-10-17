@@ -1,3 +1,10 @@
+2007-10-17  Eric Blake  <ebb9@byu.net>
+
+	Add m4_combine, based on Libtool's lt_combine.
+	* lib/m4sugar/m4sugar.m4 (m4_combine): New macro.
+	* doc/autoconf.texi (Text processing Macros): Document it.
+	* NEWS: Likewise.
+
 2007-10-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix `configure --help=recursive' in unconfigured/read-only trees.

@@ -10884,8 +10884,12 @@ mkargs
 @node Text processing Macros
 @subsection String manipulation in M4
 
-The following macros may be used to manipulate strings in M4.
-They are not intended for casual use.
+The following macros may be used to manipulate strings in M4.  Many of
+the macros in this section intentionally result in quoted strings as
+output, rather than subjecting the arguments to further expansions.  As
+a result, if you are manipulating text that contains active M4
+characters, the arguments are passed with single quoting rather than
+double.
 
 @defmac m4_append (@var{macro-name}, @var{string}, @ovar{separator})
 @defmacx m4_append_uniq (@var{macro-name}, @var{string}, @ovar{separator} @
@@ -10935,6 +10939,22 @@ list2
 @result{}one, two, three
 m4_dquote(list2)
 @result{}[one, two, three]
+@end example
+@end defmac
+
+@defmac m4_combine (@ovar{separator}, @var{prefix-list}, @ovar{infix}, @
+  @var{suffix-1}, @dots{})
+@msindex{combine}
+This macro produces a quoted string containing the pairwise combination
+of every element of the quoted, comma-separated @var{prefix-list}, and
+every element from the @var{suffix} arguments.  Each pairwise
+combination is joined with @var{infix} in the middle, and successive
+pairs are joined by @var{separator}.  No expansion occurs on any of the
+arguments.
+@example
+m4_define([a], [oops])dnl
+m4_combine([, ], [[a], [b], [c]], [-], [1], [2], [3])
+@result{}a-1, a-2, a-3, b-1, b-2, b-3, c-1, c-2, c-3
 @end example
 @end defmac
 
