@@ -15,12 +15,16 @@ AC_DEFUN([AC_PROG_GNU_M4],
   [AC_ARG_VAR([M4], [Location of GNU M4 1.4.5 or later.  Defaults to the first
     program of `m4', `gm4', or `gnum4' on PATH that meets Autoconf needs.])
   AC_CACHE_CHECK([for GNU M4 that supports accurate traces], [ac_cv_path_M4],
-    [AC_PATH_PROGS_FEATURE_CHECK([M4], [m4 gm4 gnum4],
+    [rm -f conftest.m4f
+AC_PATH_PROGS_FEATURE_CHECK([M4], [m4 gm4 gnum4],
       [dnl Creative quoting here to avoid raw dnl and ifdef in configure.
-      # Root out GNU M4 1.4.4, as well as non-GNU m4 that ignore --trace.
+      # Root out GNU M4 1.4.4, as well as non-GNU m4 that ignore -t, -F.
       ac_snippet=change'quote(<,>)in''dir(<if''def>,mac,bug)d'nl
-      test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
-      && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:],
+      test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
+      && test -z "`echo $ac_snippet | $ac_path_M4 --trace=mac 2>&1`" \
+      && test -f conftest.m4f \
+      && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
+      rm -f conftest.m4f],
       [AC_MSG_ERROR([no acceptable m4 could be found in \$PATH.
 GNU M4 1.4.5 or later is required; 1.4.8 is recommended])])])
   M4=$ac_cv_path_M4
