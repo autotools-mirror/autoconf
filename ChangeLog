@@ -1,5 +1,16 @@
 2007-10-17  Eric Blake  <ebb9@byu.net>
 
+	Function cleanup.
+	* lib/autotest/general.m4 (_AT_CREATE_DEBUGGING_SCRIPT): Convert
+	from m4 macro...
+	(AT_INIT) <at_func_create_debugging_script>: ...to shell
+	function.
+	(AT_INIT): Defer function declarations until after --help,
+	--version.  Format functions consistently, trying to fit in 80
+	columns.
+	(TEST_FUNCTIONS): Based on recent changes, rename...
+	(TEST_GROUPS): ...to this.
+
 	Reject FreeBSD m4.
 	* m4/m4.m4 (AC_PROG_GNU_M4): Also check for frozen file support.
 	* configure: Regenerate.

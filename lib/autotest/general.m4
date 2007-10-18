@@ -99,6 +99,7 @@
 #    Like DEFAULTS but run after argument processing for purposes of
 #    optimization.  Do anything else that needs to be done to prepare for
 #    tests.  Sets up verbose and log file descriptors.  Sets and logs PATH.
+#    Declares functions shared among the tests.
 #  - TESTS
 #    The core of the test suite.
 #  - TESTS_END
@@ -108,10 +109,10 @@
 #    The collector for code for each test, the ``normal'' diversion, but
 #    undiverted into other locations before final output.
 #
-#  - TEST_FUNCTIONS
-#    Series of functions for each test group.  The functions deliberately
-#    occur after the end of the shell script, so that the shell need not
-#    spend time parsing functions it will not execute.
+#  - TEST_GROUPS
+#    Contents of each test group.  The tests deliberately occur after the
+#    end of the shell script, so that the shell need not spend time parsing
+#    commands it will not execute.
 
 m4_define([_m4_divert(DEFAULTS)],           100)
 m4_define([_m4_divert(PARSE_ARGS_BEGIN)],   200)
@@ -129,7 +130,7 @@ m4_define([_m4_divert(PREPARE_TESTS)],      400)
 m4_define([_m4_divert(TESTS)],              401)
 m4_define([_m4_divert(TESTS_END)],          402)
 m4_define([_m4_divert(TEST_SCRIPT)],        403)
-m4_define([_m4_divert(TEST_FUNCTIONS)],     500)
+m4_define([_m4_divert(TEST_GROUPS)],     500)
 
 
 # AT_LINE
@@ -178,21 +179,6 @@ m4_define([_AT_NORMALIZE_TEST_GROUP_NUMBER],
   done'
 ])
 
-# _AT_CREATE_DEBUGGING_SCRIPT
-# ---------------------------
-# Create the debugging script $at_group_dir/run which will reproduce the
-# current test group.
-m4_define([_AT_CREATE_DEBUGGING_SCRIPT],
-[{
-	    echo "#! /bin/sh"
-	    echo 'test "${ZSH_VERSION+set}" = set && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
-	    AS_ECHO(["cd '$at_dir'"])
-	    AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} $[0] -v -d $at_debug_args $at_group \${1+\"\$[@]\"}"])
-	    echo 'exit 1'
-	  } >$at_group_dir/run
-	  chmod +x $at_group_dir/run
-])# _AT_CREATE_DEBUGGING_SCRIPT
-
 
 # AT_INIT([TESTSUITE-NAME])
 # -------------------------
@@ -219,24 +205,29 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # How were we run?
 at_cli_args="$[@]"
 
+m4_divert_push([PREPARE_TESTS])dnl
 ## --------------- ##
 ## Shell functions ##
 ## --------------- ##
 
 # at_func_check_newline COMMAND
-# Test if COMMAND includes a newline and, if so, print a message and return exit code 1
+# -----------------------------
+# Test if COMMAND includes a newline and, if so, print a message and return
+# exit code 1
 at_func_check_newline ()
 {
   case "$[1]" in
  *'
-'*) echo 'Not enabling shell tracing (command contains an embedded newline)' ; return 1 ;;
+'*) echo 'Not enabling shell tracing (command contains an embedded newline)'
+    return 1 ;;
  *) return 0 ;;
   esac
 }
 
 # at_func_filter_trace EXIT-CODE
-# Split the contents of file "$at_stder1" into the "set -x" trace (on stderr) and
-# the other lines (on file "$at_stderr").  Return the exit code EXIT-CODE.
+# ------------------------------
+# Split the contents of file "$at_stder1" into the "set -x" trace (on stderr)
+# and the other lines (on file "$at_stderr").  Return the exit code EXIT-CODE.
 at_func_filter_trace ()
 {
   grep '^ *+' "$at_stder1" >&2
@@ -245,6 +236,7 @@ at_func_filter_trace ()
 }
 
 # at_func_log_failure FILE-LIST
+# -----------------------------
 # Copy the files in the list on stdout with a "> " prefix, and exit the shell
 # with a failure exit code.
 at_func_log_failure ()
@@ -256,6 +248,7 @@ at_func_log_failure ()
 }
 
 # at_func_check_skip EXIT-CODE
+# ----------------------------
 # Check whether EXIT-CODE is the special exit code 77, and if so exit the shell
 # with that same exit code.
 at_func_check_skip ()
@@ -266,12 +259,14 @@ at_func_check_skip ()
 }
 
 # at_func_check_status EXPECTED EXIT-CODE LINE
-# Check whether EXIT-CODE is the expected exit code, and if so do nothing.  Else,
-# if it is 77 exit the shell with that same exit code; if it is anything else
-# print an error message and fail the test.
+# --------------------------------------------
+# Check whether EXIT-CODE is the expected exit code, and if so do nothing.
+# Otherwise, if it is 77 exit the shell with that same exit code; if it is
+# anything else print an error message and fail the test.
 at_func_check_status ()
 {
-  dnl This order ensures that we don't `skip' if we are precisely checking $? = 77.
+dnl This order ensures that we don't `skip' if we are precisely checking
+dnl $? = 77.
   case $[2] in
     $[1] ) ;;
     77) echo 77 > "$at_status_file"; exit 77;;
@@ -281,6 +276,7 @@ at_func_check_status ()
 }
 
 # at_func_diff_devnull FILE
+# -------------------------
 # Emit a diff between /dev/null and FILE.  Uses "test -s" to avoid useless
 # diff invocations.
 at_func_diff_devnull ()
@@ -297,6 +293,29 @@ at_func_test ()
   sed -n '/^@%:@AT_START_'$[1]'$/,/^@%:@AT_STOP_'$[1]'$/p' "$at_myself" \
        > "$at_test_source"
 }
+
+# at_func_create_debugging_script
+# -------------------------------
+# Create the debugging script $at_group_dir/run which will reproduce the
+# current test group.
+at_func_create_debugging_script ()
+{
+  {
+    echo "#! /bin/sh"
+    echo 'test "${ZSH_VERSION+set}" = set dnl
+&& alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
+    AS_ECHO(["cd '$at_dir'"])
+    AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} $[0] -v -d ]dnl
+[$at_debug_args $at_group \${1+\"\$[@]\"}"])
+    echo 'exit 1'
+  } >$at_group_dir/run
+  chmod +x $at_group_dir/run
+}
+
+## ---------------------- ##
+## End of shell functions ##
+## ---------------------- ##
+m4_divert_pop([PREPARE_TESTS])dnl back to DEFAULTS
 
 # Load the config file.
 for at_file in atconfig atlocal
@@ -922,7 +941,7 @@ _ATEOF
 
 	  # Cleanup the group directory, unless the user wants the files.
 	  if $at_debug_p ; then
-	    _AT_CREATE_DEBUGGING_SCRIPT
+	    at_func_create_debugging_script
 	  elif test -d "$at_group_dir"; then
 	    find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
 	    rm -fr "$at_group_dir"
@@ -936,7 +955,7 @@ _ATEOF
 
 	  # Upon failure, keep the group directory for autopsy, and
 	  # create the debugging script.
-	  _AT_CREATE_DEBUGGING_SCRIPT
+	  at_func_create_debugging_script
 	  $at_errexit && break
 	  ;;
       esac
@@ -1023,9 +1042,11 @@ $at_xpass_count passed unexpectedly." ;;
 
     # No expected failures, but failures and xpasses
     *:1:0) at_result="$at_result $at_were run,
-$at_unexpected_count did not behave as expected ($at_fail_count unexpected failure)." ;;
+$at_unexpected_count did not behave as expected dnl
+($at_fail_count unexpected failure)." ;;
     *:*:0) at_result="$at_result $at_were run,
-$at_unexpected_count did not behave as expected ($at_fail_count unexpected failures)." ;;
+$at_unexpected_count did not behave as expected dnl
+($at_fail_count unexpected failures)." ;;
 
     # All of them.
     *:*:1) at_result="$at_result $at_were run,
@@ -1098,7 +1119,8 @@ else
   AS_BOX([$as_me.log was created.])
 
   echo
-  AS_ECHO(["Please send \`${at_testdir+${at_testdir}/}$as_me.log' and all information you think might help:
+  AS_ECHO(["Please send \`${at_testdir+${at_testdir}/}$as_me.log' ]dnl
+[and all information you think might help:
 
    To: <AT_PACKAGE_BUGREPORT>
    Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:dnl
@@ -1151,7 +1173,8 @@ m4_foreach([AT_option], m4_split(m4_normalize([$1]),[[ \|]+]),
 [m4_define_default([AT_first_option],AT_option)dnl
 m4_append([AT_case],m4_if(m4_len(AT_option),1,[],[-])[-]AT_option, [ | ])dnl
 m4_append([AT_case_no],[--no]AT_option, [ | ])dnl
-m4_append([AT_case_arg],m4_if(m4_len(AT_option),1,[],[-])[-]AT_option[=*], [ | ])dnl
+m4_append([AT_case_arg],
+          m4_if(m4_len(AT_option),1,[],[-])[-]AT_option[=*], [ | ])dnl
 ])dnl m4_foreach AT_option
 dnl keep track so we or the user may process ACTION-IF-NOT-GIVEN
 m4_divert_once([PARSE_ARGS_BEGIN],
@@ -1283,7 +1306,7 @@ m4_define([AT_xfail], [at_xfail=no])
 m4_define([AT_description], m4_expand([$1]))
 m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
-m4_divert_push([TEST_FUNCTIONS])dnl
+m4_divert_push([TEST_GROUPS])dnl
 [#AT_START_]AT_ordinal
 @%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
 at_setup_line='m4_defn([AT_line])'
@@ -1331,9 +1354,10 @@ m4_define([AT_CAPTURE_FILE],
 # Complete a group of related tests.
 m4_define([AT_CLEANUP],
 [m4_append([AT_help_all],
-m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
+m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);dnl
+m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 )dnl
-m4_divert_pop([TEST_SCRIPT])dnl Back to TEST_FUNCTIONS
+m4_divert_pop([TEST_SCRIPT])dnl Back to TEST_GROUPS
 AT_xfail
 echo "#                             -*- compilation -*-" >> "$at_group_log"
 (
@@ -1345,7 +1369,7 @@ m4_undivert([TEST_SCRIPT])dnl Insert the code here
 ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
 at_status=`cat "$at_status_file"`
 [#AT_STOP_]AT_ordinal
-m4_divert_pop([TEST_FUNCTIONS])dnl Back to KILL.
+m4_divert_pop([TEST_GROUPS])dnl Back to KILL.
 m4_divert_text([TESTS],
 [  AT_ordinal )
     if at_func_test AT_ordinal && . "$at_test_source"; then :; else
@@ -1462,10 +1486,10 @@ m4_define([AT_CHECK_NOESCAPE],
 # + foo
 # bar
 #
-# In a subset of cases, one could filter such extended shell traces from stderr.
-# Since test commands spanning several lines are rare, I chose instead to simply
-# not trace COMMANDS that could yield multiple trace lines.  Distinguishing such
-# COMMANDS became the task at hand.
+# In a subset of cases, one could filter such extended shell traces from
+# stderr.  Since test commands spanning several lines are rare, I chose
+# instead to simply not trace COMMANDS that could yield multiple trace lines.
+# Distinguishing such COMMANDS became the task at hand.
 #
 # These features may cause a shell command to span multiple lines:
 #
@@ -1492,12 +1516,12 @@ m4_define([AT_CHECK_NOESCAPE],
 #   'bar
 #   echo "$var"
 # Parameter expansions appear in COMMANDS with much greater frequency than do
-# newlines and command substitutions, so disabling tracing for all such COMMANDS
-# would much more substantially devalue `testsuite -x'.  To determine which
-# parameter expansions yield multiple lines, we escape all ``', `"', and `\' in
-# a copy of COMMANDS and expand that string within double quotes at runtime.  If
-# the result of that expansion contains multiple lines, the test suite disables
-# tracing for the command in question.
+# newlines and command substitutions, so disabling tracing for all such
+# COMMANDS would much more substantially devalue `testsuite -x'.  To determine
+# which parameter expansions yield multiple lines, we escape all ``', `"',
+# and `\' in a copy of COMMANDS and expand that string within double quotes
+# at runtime.  If the result of that expansion contains multiple lines, the
+# test suite disables tracing for the command in question.
 #
 # This method leads the test suite to expand some parameters that the shell
 # itself will never expand due to single-quotes or backslash escapes.  This is
@@ -1532,12 +1556,14 @@ m4_cond([m4_eval(m4_index([$1], [`]) >= 0)], [1],
 ))dnl
 dnl
 m4_ifval(m4_defn([at_reason]),
-[{ echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'; false; }],
+[{ echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'
+   false; }],
 [m4_if(m4_index([$1], [$]), [-1],
 dnl We know at build time that tracing COMMANDS is always safe.
 [test -n "$at_traceon"],
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
-[test -n "$at_traceon" && at_func_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
+[test -n "$at_traceon" \
+  && at_func_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
 m4_popdef([at_reason])])
 
 
