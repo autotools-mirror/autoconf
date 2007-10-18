@@ -22,7 +22,10 @@ m4_version_prereq([2.57])
 m4_pattern_allow([^AS_EXIT$])
 m4_pattern_allow([^m4_(define|shift)$])
 
+# Programs this package provides
 AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
+# Programs this package depends on
+AT_TESTED([m4 perl])
 
 
 ## ---------------- ##

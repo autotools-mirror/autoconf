@@ -1896,12 +1896,27 @@ m4_define([m4_append],
 # --------------------------------------------------------------------
 # Like `m4_append', but append only if not yet present.  Additionally,
 # expand IF-UNIQ if STRING was appended, or IF-DUP if STRING was already
-# present.
+# present.  Also, warn if SEPARATOR is not empty and occurs within STRING,
+# as the algorithm no longer guarantees uniqueness.
 m4_define([m4_append_uniq],
+[m4_ifval([$3], [m4_if(m4_index([$2], [$3]), [-1], [],
+                       [m4_warn([syntax],
+		                [$0: `$2' contains `$3'])])])_$0($@)])
+m4_define([_m4_append_uniq],
 [m4_ifdef([$1],
 	  [m4_if(m4_index([$3]m4_builtin([defn], [$1])[$3], [$3$2$3]), [-1],
 		 [m4_append([$1], [$2], [$3])$4], [$5])],
 	  [m4_append([$1], [$2], [$3])$4])])
+
+# m4_append_uniq_w(MACRO-NAME, STRINGS)
+# -------------------------------------
+# For each of the words in the whitespace separated list STRINGS, append
+# only the unique strings to the definition of MACRO-NAME.
+#
+# Avoid overhead of m4_defn by using m4_builtin.
+m4_define([m4_append_uniq_w],
+[m4_foreach_w([m4_Word], [$2],
+              [_m4_append_uniq([$1], m4_builtin([defn], [m4_Word]), [ ])])])
 
 
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])

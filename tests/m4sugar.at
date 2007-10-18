@@ -230,6 +230,9 @@ m4_append([list], [two], [[, ]])dnl
 m4_append([list], [three], [[, ]])dnl
 list
 m4_dquote(list)
+m4_append_uniq_w([numbers], [1 1 2])dnl
+m4_append_uniq_w([numbers], [ 2 3 ])dnl
+numbers
 ]],
 [[This is an ACTIVE symbol.
 This is an active symbol.
@@ -248,6 +251,18 @@ one, two, three, two
 [one],[two],[three],[two]
 one, two, three
 [one, two, three]
+1 2 3
+]])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_append_uniq([str], [a], [ ])
+m4_append_uniq([str], [a b], [ ])
+m4_divert([0])dnl
+str
+]])
+
+AT_CHECK_M4SUGAR([-o-], 0, [[a a b
+]], [[script.4s:2: warning: m4@&t@_append_uniq: `a b' contains ` '
 ]])
 
 AT_CLEANUP

@@ -90,6 +90,17 @@ AT_CHECK_AT_TEST([Empty test], [])
 # And finally, an empty check should not cause a syntax error.
 AT_CHECK_AT_TEST([Empty check], [AT_CHECK])
 
+# Check for tested programs.  autoconf should only appear once.
+AT_CHECK_AT([Tested programs],
+[[AT_INIT([programs test suite])
+AT_TESTED([autoconf autom4te])
+AT_TESTED([autoconf])
+]], [], [], [], [],
+[AT_CHECK([[sed -n 's|.*/\([^ /]* --version\)|\1|p' micro-suite.log]], [],
+[[autoconf --version
+autom4te --version
+]])])
+
 ## ----------------------------------------------------- ##
 ## Newlines and command substitutions in test commands.  ##
 ## ----------------------------------------------------- ##
@@ -381,12 +392,14 @@ AT_KEYWORDS(key2)
 AT_CHECK(:)
 AT_CLEANUP
 AT_SETUP(both)
-AT_KEYWORDS(key1)
-AT_KEYWORDS(key2)
+AT_KEYWORDS([key1 key2])
+AT_KEYWORDS([key1])
 AT_CHECK(:)
 AT_CLEANUP
 ]])
 AT_CHECK_AUTOM4TE([--language=autotest -o k k.at])
+dnl check that AT_KEYWORDS does not duplicate words
+AT_CHECK([grep 'key1.*key1' k], [1])
 
 # AT_CHECK_EGREP(PATTERN, STATUS, COUNT)
 m4_define([AT_CHECK_EGREP],

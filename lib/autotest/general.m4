@@ -396,7 +396,8 @@ m4_divert_pop([DEFAULTS])dnl
 m4_wrap([m4_divert_text([DEFAULTS],
 [
 # List of the tested programs.
-at_tested='m4_ifdef([AT_tested], [AT_tested])'
+at_tested='m4_ifdef([AT_tested],
+  [m4_translit(m4_dquote(m4_defn([AT_tested])), [ ], m4_newline)])'
 # List of the all the test groups.
 at_groups_all='AT_groups_all'
 # As many question marks as there are digits in the last test group number.
@@ -779,7 +780,7 @@ do
   if test -f "$as_dir/$at_program"; then
     {
       AS_ECHO(["$at_srcdir/AT_LINE: $as_dir/$at_program --version"])
-      "$as_dir/$at_program" --version
+      "$as_dir/$at_program" --version </dev/null
       echo
     } >&AS_MESSAGE_LOG_FD 2>&1
   else
@@ -1174,7 +1175,7 @@ m4_foreach([AT_option], m4_split(m4_normalize([$1]),[[ \|]+]),
 m4_append([AT_case],m4_if(m4_len(AT_option),1,[],[-])[-]AT_option, [ | ])dnl
 m4_append([AT_case_no],[--no]AT_option, [ | ])dnl
 m4_append([AT_case_arg],
-          m4_if(m4_len(AT_option),1,[],[-])[-]AT_option[=*], [ | ])dnl
+	  m4_if(m4_len(AT_option),1,[],[-])[-]AT_option[=*], [ | ])dnl
 ])dnl m4_foreach AT_option
 dnl keep track so we or the user may process ACTION-IF-NOT-GIVEN
 m4_divert_once([PARSE_ARGS_BEGIN],
@@ -1279,8 +1280,7 @@ m4_defun([AT_ARG_OPTION_ARG],[_AT_ARG_OPTION([$1],[$2],1,[$3],[$4])])
 # must correspond to the version of the package.  PATH should be
 # already preset so the proper executable will be selected.
 m4_define([AT_TESTED],
-[m4_append_uniq([AT_tested], [$1], [
-])])
+[m4_append_uniq_w([AT_tested], [$1])])
 
 
 # AT_COPYRIGHT(TEXT)
@@ -1336,8 +1336,9 @@ m4_case([$1],
 # AT_KEYWORDS(KEYWORDS)
 # ---------------------
 # Declare a list of keywords associated to the current test group.
+# The list is stored in lower case, since the -k option is case-insensitive.
 m4_define([AT_KEYWORDS],
-[m4_append_uniq([AT_keywords], [$1], [ ])])
+[m4_append_uniq_w([AT_keywords], m4_tolower([[$1]]))])
 
 
 # AT_CAPTURE_FILE(FILE)

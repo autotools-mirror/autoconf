@@ -10911,6 +10911,8 @@ to grow strings without duplicating substrings.  Additionally,
 @code{m4_append_uniq} takes two optional parameters as of Autoconf 2.62;
 @var{if-uniq} is expanded if @var{string} was appended, and
 @var{if-duplicate} is expanded if @var{string} was already present.
+Also, @code{m4_append_uniq} warns if @var{separator} is not empty, but
+occurs within @var{string}, since that can lead to duplicates.
 
 @example
 m4_define([active], [ACTIVE])dnl
@@ -10942,6 +10944,20 @@ list2
 @result{}one, two, three
 m4_dquote(list2)
 @result{}[one, two, three]
+@end example
+@end defmac
+
+@defmac m4_append_uniq_w (@var{macro-name}, @var{strings})
+@msindex{append_uniq_w}
+This macro was introduced in Autoconf 2.62.  It is similar to
+@code{m4_append_uniq}, but treats @var{strings} as a whitespace
+separated list of words to append, and only appends unique words.
+@var{macro-name} is updated with a single space between new words.
+@example
+m4_append_uniq_w([numbers], [1 1 2])dnl
+m4_append_uniq_w([numbers], [ 2 3 ])dnl
+numbers
+@result{}1 2 3
 @end example
 @end defmac
 

@@ -1,3 +1,22 @@
+2007-10-18  Eric Blake  <ebb9@byu.net>
+
+	Fix AT_TESTED, AT_KEYWORDS.
+	* lib/m4sugar/m4sugar.m4 (m4_append_uniq): Warn if separator
+	occurs in string, as duplicates may be added.
+	(_m4_append_uniq): New helper macro.
+	(m4_append_uniq_w): New macro.
+	* lib/autotest/general.m4 (AT_TESTED, AT_KEYWORDS): Fix
+	duplication bug by using new macro.
+	(AT_INIT) <at_tested>: Restore newline separators.  Invoke tested
+	programs with stdin redirected, so programs that don't
+	understand --version won't try to behave interactively.
+	* tests/autotest.at (Tested programs): Catch this bug.
+	* tests/m4sugar.at (m4@&t@_append): Test new macro.
+	* tests/local.at (AT_TESTED): Add m4, perl.
+	* doc/autoconf.texi (Text processing Macros): Document
+	m4_append_uniq_w, and update text on m4_append.
+	* NEWS: Document the addition.
+
 2007-10-17  Eric Blake  <ebb9@byu.net>
 
 	Function cleanup.
