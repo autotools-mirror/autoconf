@@ -1,5 +1,9 @@
 2007-10-18  Eric Blake  <ebb9@byu.net>
 
+	Ignore `make dist' changelogs in testsuite.log.
+	* lib/autotest/general.m4 (AT_INIT) <ChangeLogs>: Prune
+	directories matching AT_PACKAGE_TARNAME-*.
+
 	Fix AT_TESTED, AT_KEYWORDS.
 	* lib/m4sugar/m4sugar.m4 (m4_append_uniq): Warn if separator
 	occurs in string, as duplicates may be added.
