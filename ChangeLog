@@ -1,5 +1,10 @@
 2007-10-19  Eric Blake  <ebb9@byu.net>
 
+	s/parenthesis/parentheses/ where appropriate.
+	* doc/autoconf.texi: Fix typos.
+	* lib/m4sugar/m4sugar.m4: Likewise.
+	Reported by Ralf Wildenhues.
+
 	Document m4_expand limitation.
 	* lib/m4sugar/m4sugar.m4 (m4_expand): Mention problem with
 	unbalanced parse.

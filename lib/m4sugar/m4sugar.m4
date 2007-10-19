@@ -676,7 +676,7 @@ m4_define([m4_echo], [$@])
 #   => ACT,IVE, ACT, IVE
 #
 # Unfortunately, due to limitations in m4, ARG must contain balanced quotes
-# (use quadrigraphs) and balanced parenthesis (use creative shell comments
+# (use quadrigraphs) and balanced parentheses (use creative shell comments
 # when writing shell case statements).
 #
 # Splitting a quoted ARG on `,' preserves space, but produces a quoted list.
@@ -866,7 +866,7 @@ m4_if(m4_defn([$1]), [$2], [],
 #
 # Now, just replace the `$2' with `m4_quote($2)' in the outer `m4_if'
 # to improve robustness, and you come up with a nice implementation
-# that doesn't require extra parenthesis in the user's LIST.
+# that doesn't require extra parentheses in the user's LIST.
 #
 # But wait -  now the algorithm is quadratic, because every recursion of
 # the algorithm keeps the entire LIST and merely adds another m4_shift to
