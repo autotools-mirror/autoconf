@@ -95,6 +95,8 @@
 #  - VERSION_END
 #    Tail of the handling of --version.
 #
+#  - BANNERS
+#    Output shell initialization for the associative array of banner text.
 #  - PREPARE_TESTS
 #    Like DEFAULTS but run after argument processing for purposes of
 #    optimization.  Do anything else that needs to be done to prepare for
@@ -102,9 +104,7 @@
 #    Declares functions shared among the tests.
 #  - TESTS
 #    The core of the test suite.
-#  - TESTS_END
-#    tail of the core for;case, overall wrap up, generation of debugging
-#    scripts and statistics.
+#
 #  - TEST_SCRIPT
 #    The collector for code for each test, the ``normal'' diversion, but
 #    undiverted into other locations before final output.
@@ -126,11 +126,11 @@ m4_define([_m4_divert(HELP_END)],           304)
 m4_define([_m4_divert(VERSION)],            350)
 m4_define([_m4_divert(VERSION_NOTICES)],    351)
 m4_define([_m4_divert(VERSION_END)],        352)
-m4_define([_m4_divert(PREPARE_TESTS)],      400)
-m4_define([_m4_divert(TESTS)],              401)
-m4_define([_m4_divert(TESTS_END)],          402)
-m4_define([_m4_divert(TEST_SCRIPT)],        403)
-m4_define([_m4_divert(TEST_GROUPS)],     500)
+m4_define([_m4_divert(BANNERS)],            400)
+m4_define([_m4_divert(PREPARE_TESTS)],      401)
+m4_define([_m4_divert(TESTS)],              402)
+m4_define([_m4_divert(TEST_SCRIPT)],        450)
+m4_define([_m4_divert(TEST_GROUPS)],        500)
 
 
 # AT_LINE
@@ -205,10 +205,35 @@ SHELL=${CONFIG_SHELL-/bin/sh}
 # How were we run?
 at_cli_args="$[@]"
 
+m4_divert_push([BANNERS])dnl
+
+# Should we print banners?  at_groups is space-separated for entire test,
+# newline-separated if only a subset of the testsuite is run.
+case $at_groups in
+  *' '*' '* | *"$as_nl"*"$as_nl"* )
+      at_print_banners=: ;;
+  * ) at_print_banners=false ;;
+esac
+# Text for banner N, set to empty once printed.
+m4_divert_pop([BANNERS])dnl back to DEFAULTS
 m4_divert_push([PREPARE_TESTS])dnl
+
 ## --------------- ##
 ## Shell functions ##
 ## --------------- ##
+
+# at_func_banner NUMBER
+# ---------------------
+# Output banner NUMBER, provided the testsuite is running multiple groups
+# and this particular banner has not yet been printed.
+at_func_banner ()
+{
+  $at_print_banners || return 0
+  eval at_banner_text=\$at_banner_text_$[1]
+  test "x$at_banner_text" = x && return 0
+  eval at_banner_text_$[1]=
+  AS_ECHO(["$as_nl$at_banner_text$as_nl"])
+} # at_func_banner
 
 # at_func_check_newline COMMAND
 # -----------------------------
@@ -556,31 +581,8 @@ done
 if test -z "$at_groups"; then
   at_groups=$at_groups_all
 else
-  # Sort the tests, removing duplicates:
+  # Sort the tests, removing duplicates.
   at_groups=`AS_ECHO(["$at_groups"]) | tr ' ' "$as_nl" | sort -nu`
-  # and add banners.  (Passing at_groups_all is tricky--see the comment
-  # starting with "Passing at_groups is tricky.")
-  at_groups=`AS_ECHO(["$at_groups$as_nl $at_groups_all"]) |
-    awk ['BEGIN { FS = "@" } # Effectively switch off field splitting.
-	/^$/ { next }  # Ignore the empty line.
-	!/ / { groups++; selected[$ 0] = 1; next }
-	# The last line, containing at_groups_all.
-	{
-		n = split($ 0, a, " ")
-		# If there are several tests, select their banners:
-		if (groups > 1) {
-			for (i = 1; i <= n; i++) {
-				if (a[i] ~ /^banner-/)
-					banner = a[i]
-				else if (banner != "" && selected[a[i]] == 1)
-					selected[banner] = 1
-			}
-		}
-		for (i = 1; i <= n; i++)
-			if (selected[a[i]] == 1)
-				list = list " " a[i]
-		print list
-	}']`
 fi
 m4_divert_pop([PARSE_ARGS_END])dnl
 m4_divert_push([HELP])dnl
@@ -838,28 +840,20 @@ do
   # Clearly separate the test groups when verbose.
   test $at_group_count != 0 && $at_verbose echo
 
-  case $at_group in
-    banner-*)
-      at_group_log=$at_suite_log
-      ;;
+  at_group_normalized=$at_group
+  _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
 
-    *)
-      at_group_normalized=$at_group
-      _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
-
-      # Create a fresh directory for the next test group, and enter.
-      at_group_dir=$at_suite_dir/$at_group_normalized
-      at_group_log=$at_group_dir/$as_me.log
-      if test -d "$at_group_dir"; then
-	find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-	rm -fr "$at_group_dir" ||
-	  AS_WARN([test directory could not be cleaned.])
-      fi
-      # Be tolerant if the above `rm' was not able to remove the directory.
-      AS_MKDIR_P([$at_group_dir])
-      cd $at_group_dir
-      ;;
-  esac
+  # Create a fresh directory for the next test group, and enter.
+  at_group_dir=$at_suite_dir/$at_group_normalized
+  at_group_log=$at_group_dir/$as_me.log
+  if test -d "$at_group_dir"; then
+    find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+    rm -fr "$at_group_dir" ||
+      AS_WARN([test directory could not be cleaned.])
+  fi
+  # Be tolerant if the above `rm' was not able to remove the directory.
+  AS_MKDIR_P([$at_group_dir])
+  cd $at_group_dir
 
   echo 0 > "$at_status_file"
 
@@ -871,98 +865,87 @@ do
     at_tee_pipe='cat >> "$at_group_log"'
   fi
 
-  case $at_group in
-dnl Test groups inserted here (TESTS).
-m4_divert_pop([TESTS])[]dnl
-m4_divert_push([TESTS_END])[]dnl
-
-  * )
-    AS_ECHO(["$as_me: no such test group: $at_group"]) >&2
-    continue
-    ;;
-  esac
+  if at_func_test $at_group && . "$at_test_source"; then :; else
+    AS_ECHO(["$as_me: unable to parse test group: $at_group"]) >&2
+    at_failed=:
+  fi
 
   # Be sure to come back to the suite directory, in particular
   # since below we might `rm' the group directory we are in currently.
   cd "$at_suite_dir"
 
-  case $at_group in
-    banner-*) ;;
-    *)
-      if test ! -f "$at_check_line_file"; then
-	sed "s/^ */$as_me: warning: /" <<_ATEOF
+  if test ! -f "$at_check_line_file"; then
+    sed "s/^ */$as_me: warning: /" <<_ATEOF
 	A failure happened in a test group before any test could be
 	run. This means that test suite is improperly designed.  Please
 	report this failure to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
-	AS_ECHO(["$at_setup_line"]) >"$at_check_line_file"
+    AS_ECHO(["$at_setup_line"]) >"$at_check_line_file"
+  fi
+  at_group_count=`expr 1 + $at_group_count`
+  $at_verbose AS_ECHO_N(["$at_group. $at_setup_line: "])
+  AS_ECHO_N(["$at_group. $at_setup_line: "]) >> "$at_group_log"
+  case $at_xfail:$at_status in
+    yes:0)
+	at_msg="UNEXPECTED PASS"
+	at_xpass_list="$at_xpass_list $at_group"
+	at_errexit=$at_errexit_p
+	;;
+    no:0)
+	at_msg="ok"
+	at_pass_list="$at_pass_list $at_group"
+	at_errexit=false
+	;;
+    *:77)
+	at_msg='skipped ('`cat "$at_check_line_file"`')'
+	at_skip_list="$at_skip_list $at_group"
+	at_errexit=false
+	;;
+    yes:*)
+	at_msg='expected failure ('`cat "$at_check_line_file"`')'
+	at_xfail_list="$at_xfail_list $at_group"
+	at_errexit=false
+	;;
+    no:*)
+	at_msg='FAILED ('`cat "$at_check_line_file"`')'
+	at_fail_list="$at_fail_list $at_group"
+	at_errexit=$at_errexit_p
+	;;
+  esac
+  # Make sure there is a separator even with long titles.
+  AS_ECHO([" $at_msg"])
+  at_log_msg="$at_group. $at_desc ($at_setup_line): $at_msg"
+  case $at_status in
+    0|77)
+      # $at_times_file is only available if the group succeeded.
+      # We're not including the group log, so the success message
+      # is written in the global log separately.  But we also
+      # write to the group log in case they're using -d.
+      if test -f "$at_times_file"; then
+	at_log_msg="$at_log_msg     ("`sed 1d "$at_times_file"`')'
+	rm -f "$at_times_file"
       fi
-      at_group_count=`expr 1 + $at_group_count`
-      $at_verbose AS_ECHO_N(["$at_group. $at_setup_line: "])
-      AS_ECHO_N(["$at_group. $at_setup_line: "]) >> "$at_group_log"
-      case $at_xfail:$at_status in
-	yes:0)
-	    at_msg="UNEXPECTED PASS"
-	    at_xpass_list="$at_xpass_list $at_group"
-	    at_errexit=$at_errexit_p
-	    ;;
-	no:0)
-	    at_msg="ok"
-	    at_pass_list="$at_pass_list $at_group"
-	    at_errexit=false
-	    ;;
-	*:77)
-	    at_msg='skipped ('`cat "$at_check_line_file"`')'
-	    at_skip_list="$at_skip_list $at_group"
-	    at_errexit=false
-	    ;;
-	yes:*)
-	    at_msg='expected failure ('`cat "$at_check_line_file"`')'
-	    at_xfail_list="$at_xfail_list $at_group"
-	    at_errexit=false
-	    ;;
-	no:*)
-	    at_msg='FAILED ('`cat "$at_check_line_file"`')'
-	    at_fail_list="$at_fail_list $at_group"
-	    at_errexit=$at_errexit_p
-	    ;;
-      esac
-      # Make sure there is a separator even with long titles.
-      AS_ECHO([" $at_msg"])
-      at_log_msg="$at_group. $at_desc ($at_setup_line): $at_msg"
-      case $at_status in
-	0|77)
-	  # $at_times_file is only available if the group succeeded.
-	  # We're not including the group log, so the success message
-	  # is written in the global log separately.  But we also
-	  # write to the group log in case they're using -d.
-	  if test -f "$at_times_file"; then
-	    at_log_msg="$at_log_msg	("`sed 1d "$at_times_file"`')'
-	    rm -f "$at_times_file"
-	  fi
-	  AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
-	  AS_ECHO(["$at_log_msg"]) >&AS_MESSAGE_LOG_FD
+      AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
+      AS_ECHO(["$at_log_msg"]) >&AS_MESSAGE_LOG_FD
 
-	  # Cleanup the group directory, unless the user wants the files.
-	  if $at_debug_p ; then
-	    at_func_create_debugging_script
-	  elif test -d "$at_group_dir"; then
-	    find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-	    rm -fr "$at_group_dir"
-	  fi
-	  ;;
-	*)
-	  # Upon failure, include the log into the testsuite's global
-	  # log.  The failure message is written in the group log.  It
-	  # is later included in the global log.
-	  AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
+      # Cleanup the group directory, unless the user wants the files.
+      if $at_debug_p ; then
+	at_func_create_debugging_script
+      elif test -d "$at_group_dir"; then
+	find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+	rm -fr "$at_group_dir"
+      fi
+      ;;
+    *)
+      # Upon failure, include the log into the testsuite's global
+      # log.  The failure message is written in the group log.  It
+      # is later included in the global log.
+      AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
 
-	  # Upon failure, keep the group directory for autopsy, and
-	  # create the debugging script.
-	  at_func_create_debugging_script
-	  $at_errexit && break
-	  ;;
-      esac
+      # Upon failure, keep the group directory for autopsy, and
+      # create the debugging script.
+      at_func_create_debugging_script
+      $at_errexit && break
       ;;
   esac
 done
@@ -1144,7 +1127,7 @@ fi
 exit 0
 
 m4_text_box([Actual tests.])
-m4_divert_pop([TESTS_END])dnl
+m4_divert_pop([TESTS])dnl
 dnl End of AT_INIT: divert to KILL, only test groups are to be
 dnl output, the rest is ignored.  Current diversion is BODY, inherited
 dnl from M4sh.
@@ -1313,6 +1296,8 @@ m4_divert_push([TEST_GROUPS])dnl
 [#AT_START_]AT_ordinal
 @%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
 at_setup_line='m4_defn([AT_line])'
+m4_if(AT_banner_ordinal, [0], [], [at_func_banner AT_banner_ordinal
+])dnl
 at_desc="AS_ESCAPE(m4_dquote(m4_defn([AT_description])))"
 $at_quiet AS_ECHO_N([m4_format(["%3d: $at_desc%*s"], AT_ordinal,
   m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])])
@@ -1374,31 +1359,20 @@ m4_undivert([TEST_SCRIPT])dnl Insert the code here
 at_status=`cat "$at_status_file"`
 [#AT_STOP_]AT_ordinal
 m4_divert_pop([TEST_GROUPS])dnl Back to KILL.
-m4_divert_text([TESTS],
-[  AT_ordinal )
-    if at_func_test AT_ordinal && . "$at_test_source"; then :; else
-      AS_ECHO(["$as_me: unable to parse test group: $[1]"]) >&2
-      at_failed=:
-    fi ;;])
 ])# AT_CLEANUP
 
 
-# AT_BANNER(TEXT)
-# ---------------
-# Output TEXT without any shell expansion.
+# AT_BANNER([TEXT])
+# -----------------
+# Start a category of related test groups.  If multiple groups are executed,
+# output TEXT as a banner without any shell expansion, prior to any test
+# from the category.  If TEXT is empty, no banner is printed.
 m4_define([AT_BANNER],
 [m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))
-m4_append([AT_groups_all], [ banner-]m4_defn([AT_banner_ordinal]))
-m4_divert_text([TESTS],
-[
-  banner-AT_banner_ordinal ) @%:@ Banner AT_banner_ordinal. AT_LINE
-    cat <<\_ATEOF
-
-$1
-
-_ATEOF
-    ;;
-])dnl
+m4_divert_text([BANNERS],
+[@%:@ Banner AT_banner_ordinal. AT_LINE
+@%:@ Category starts at test group m4_incr(AT_ordinal).
+at_banner_text_[]AT_banner_ordinal="AS_ESCAPE([$1])"])dnl
 ])# AT_BANNER
 
 

@@ -69,6 +69,8 @@ GNU Autoconf NEWS - User visible changes.
 ** `configure --help=recursive' now works in read-only trees and from
    unconfigured build trees.
 
+** AT_BANNER is now documented.
+
 ** AT_SETUP now handles macro expansions properly when calculating line
    length.
 

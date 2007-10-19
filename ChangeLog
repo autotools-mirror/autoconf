@@ -1,5 +1,22 @@
 2007-10-19  Eric Blake  <ebb9@byu.net>
 
+	Improve AT_BANNER handling.
+	* lib/autotest/general.m4 (BANNERS): New named diversion.
+	(TESTS_END): Diversion no longer used.
+	(AT_INIT) <at_func_banner, BANNERS>: Factor all banners into a
+	shell function, which prints only as needed, using an associative
+	array of banner text from a special diversion.
+	<PARSE_ARGS_END>: No longer need awk to find banners.
+	<TESTS>: Banners are no longer processed by main driver loop, so
+	we no longer need case statement.
+	(AT_BANNER): Rewrite to populate new diversion.
+	(AT_SETUP): Each test invokes its own banner.  No output is needed
+	to the TESTS diversion.
+	* doc/autoconf.texi (Writing Testsuites): Document slight
+	semantics change.
+	* tests/autotest.at (AT_BANNERS): Enhance test.
+	* NEWS: Document AT_BANNER.
+
 	Document and test AT_BANNER.
 	* doc/autoconf.texi (Writing Testsuites): Document AT_BANNER.
 	* tests/autotest.at (AT_CHECK_EGREP): Share between tests.
