@@ -1,5 +1,10 @@
 2007-10-19  Eric Blake  <ebb9@byu.net>
 
+	Document and test AT_BANNER.
+	* doc/autoconf.texi (Writing Testsuites): Document AT_BANNER.
+	* tests/autotest.at (AT_CHECK_EGREP): Share between tests.
+	(AT_CHECK_BANNERS): New test.
+
 	Doc touchups.
 	* doc/autoconf.texi (Text processing Macros) <m4_strip>
 	<m4_text_wrap>: Clarify and fix typos.

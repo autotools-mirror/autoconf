@@ -71,7 +71,17 @@ m4_pattern_allow([^AT_])
 # AT_NO_CMDSUBST
 # --------------
 m4_define([AT_NO_CMDSUBST],
-[if (eval 'foo=$(echo bar) && test "$foo" = bar') >/dev/null 2>&1; then false; else :; fi])
+[if (eval 'foo=$(echo bar) && test "$foo" = bar') >/dev/null 2>&1; then ]dnl
+[false; else :; fi])
+
+# AT_CHECK_EGREP(PATTERN, STATUS, COUNT)
+# --------------------------------------
+# Run grep -E, counting how many times PATTERN occurs in the file 'stdout',
+# and expecting exit STATUS and output COUNT.
+m4_define([AT_CHECK_EGREP],
+[AT_CHECK([$EGREP -c '$1' stdout], [$2], [$3
+], [ignore])
+])
 
 
 ## ------------------ ##
@@ -370,6 +380,60 @@ AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='one space')],
 ])
 
 
+## -------- ##
+## Banners. ##
+## -------- ##
+AT_SETUP([Banners])
+AT_KEYWORDS([autotest])
+
+AT_DATA([b.at],
+[[m4_define([AT_PACKAGE_STRING],[b])
+m4_define([AT_PACKAGE_BUGREPORT],[devnull])
+AT_INIT
+AT_SETUP(zero)# 1
+AT_CHECK(:)
+AT_CLEANUP
+
+AT_BANNER([first])
+AT_SETUP(one a)# 2
+AT_CHECK(:)
+AT_CLEANUP
+AT_SETUP(one b)# 3
+AT_CHECK(:)
+AT_CLEANUP
+
+AT_BANNER([second])
+AT_SETUP(two a)# 4
+AT_CHECK(:)
+AT_CLEANUP
+AT_SETUP(two b)# 5
+AT_CHECK(:)
+AT_CLEANUP
+]])
+AT_CHECK_AUTOM4TE([--language=autotest -o b b.at])
+
+# AT_CHECK_BANNERS(TESTSUITE-OPTIONS, PATTERN1, COUNT1, PATTERN2, COUNT2)
+m4_define([AT_CHECK_BANNERS],
+[AT_CHECK([./b $1], [], [stdout])
+AT_CHECK_EGREP([$2], m4_if([$3], [0], [1], [0]), [$3])
+AT_CHECK_EGREP([$4], m4_if([$5], [0], [1], [0]), [$5])
+])
+
+AT_CHECK_BANNERS([],		[first], [1], [second], [1])
+AT_CHECK_BANNERS([-k zero],	[first], [0], [second], [0])
+AT_CHECK_BANNERS([1],		[first], [0], [second], [0])
+AT_CHECK_BANNERS([-2],		[first], [1], [second], [0])
+AT_CHECK_BANNERS([-3],		[first], [1], [second], [0])
+AT_CHECK_BANNERS([-k one],	[first], [1], [second], [0])
+AT_CHECK_BANNERS([3-4],		[first], [1], [second], [1])
+AT_CHECK_BANNERS([3-],		[first], [1], [second], [1])
+AT_CHECK_BANNERS([-k a],	[first], [1], [second], [1])
+AT_CHECK_BANNERS([4],		[first], [0], [second], [0])
+AT_CHECK_BANNERS([4-],		[first], [0], [second], [1])
+AT_CHECK_BANNERS([-k two],	[first], [0], [second], [1])
+AT_CLEANUP
+
+
 ## --------- ##
 ## Keywords. ##
 ## --------- ##
@@ -400,12 +464,6 @@ AT_CLEANUP
 AT_CHECK_AUTOM4TE([--language=autotest -o k k.at])
 dnl check that AT_KEYWORDS does not duplicate words
 AT_CHECK([grep 'key1.*key1' k], [1])
-
-# AT_CHECK_EGREP(PATTERN, STATUS, COUNT)
-m4_define([AT_CHECK_EGREP],
-[AT_CHECK([$EGREP -c '$1' stdout], $2, [$3
-], ignore)
-])
 
 # AT_CHECK_KEYS(TESTSUITE-OPTIONS, PATTERN1, COUNT1, PATTERN2, COUNT2)
 m4_define([AT_CHECK_KEYS],

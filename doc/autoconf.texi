@@ -19880,7 +19880,8 @@ for tests.  Each such included file, or the remainder of
 @file{testsuite.at} if include files are not used, contain a sequence of
 test groups.  Each test group begins with a call to @code{AT_SETUP},
 then an arbitrary number of shell commands or calls to @code{AT_CHECK},
-and then completes with a call to @code{AT_CLEANUP}.
+and then completes with a call to @code{AT_CLEANUP}.  Multiple test
+groups can be categorized by a call to @code{AT_BANNER}.
 
 @defmac AT_INIT (@ovar{name})
 @atindex{INIT}
@@ -19919,6 +19920,15 @@ also subscribe foreign programs you depend upon, to avoid incompatible
 diagnostics.
 
 @sp 1
+
+@defmac AT_BANNER (@var{test-category-name})
+@atindex{BANNER}
+This macro identifies the start of a category of related test groups.
+When the resulting @file{testsuite} is invoked with more than one test
+group to run, its output will include a banner containing
+@var{test-category-name} prior to any tests run from that category.  The
+banner should be no more than about 40 or 50 characters.
+@end defmac
 
 @defmac AT_SETUP (@var{test-group-name})
 @atindex{SETUP}
