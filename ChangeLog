@@ -1,5 +1,12 @@
 2007-10-19  Eric Blake  <ebb9@byu.net>
 
+	Document m4_expand limitation.
+	* lib/m4sugar/m4sugar.m4 (m4_expand): Mention problem with
+	unbalanced parse.
+	* doc/autoconf.texi (Pretty Help Strings, Evaluation Macros)
+	(Writing Testsuites): Mention limitations inherited from
+	m4_expand.
+
 	Improve AT_BANNER handling.
 	* lib/autotest/general.m4 (BANNERS): New named diversion.
 	(TESTS_END): Diversion no longer used.

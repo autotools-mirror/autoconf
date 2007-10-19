@@ -675,6 +675,10 @@ m4_define([m4_echo], [$@])
 #   m4_expand([active, active2])
 #   => ACT,IVE, ACT, IVE
 #
+# Unfortunately, due to limitations in m4, ARG must contain balanced quotes
+# (use quadrigraphs) and balanced parenthesis (use creative shell comments
+# when writing shell case statements).
+#
 # Splitting a quoted ARG on `,' preserves space, but produces a quoted list.
 # Unquote the list, then expand each argument while preserving the leading
 # spaces; finally, collect each argument back into the final string.

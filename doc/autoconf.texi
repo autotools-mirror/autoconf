@@ -10768,6 +10768,12 @@ collection rules discard the whitespace.  However, with @code{m4_expand},
 whitespace is discarded only if it results from unquoted commas in the
 expansion of macros contained in @var{arg}.
 
+Note that @code{m4_expand} cannot parse everything.  The expansion of
+@var{arg} must not contain unbalanced quotes (although quadrigraphs can
+get around this), nor unbalanced parenthesis (portable shell @code{case}
+statements are a major culprit here, but creative shell comments can get
+around this).
+
 @example
 m4_define([active], [ACT, IVE])dnl
 m4_define([active2], [[ACT, IVE]])dnl
@@ -17369,7 +17375,8 @@ Since it is not expanded, it should not be double quoted.
 
 The @code{AS_HELP_STRING} macro is particularly helpful when the
 @var{left-hand-side} and/or @var{right-hand-side} are composed of macro
-arguments, as shown in the following example.
+arguments, as shown in the following example.  Be aware that
+@var{left-hand-side} may not contain unbalanced quotes or parenthesis.
 
 @example
 AC_DEFUN([MY_ARG_WITH],
@@ -19938,7 +19945,8 @@ isolation.
 This macro starts a group of related tests, all to be executed in the
 same subshell.  It accepts a single argument, which holds a few words
 (no more than about 30 or 40 characters) quickly describing the purpose
-of the test group being started.
+of the test group being started.  @var{test-group-name} must not contain
+unbalanced quotes or parenthesis.
 @end defmac
 
 @defmac AT_KEYWORDS (@var{keywords})
