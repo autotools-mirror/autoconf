@@ -11040,9 +11040,11 @@ If @var{string} is empty, the result is an empty list.
 
 @defmac m4_strip (@var{string})
 @msindex{strip}
-Strip whitespace from @var{string}.  Sequences of space and tab are
-reduced to a single space, then leading and trailing spaces are
-removed.  The result is still a quoted string.
+Strip whitespace from @var{string}.  Sequences of spaces and tabs are
+reduced to a single space, then leading and trailing spaces are removed.
+The result is still a quoted string.  Note that this does not interfere
+with newlines; if you want newlines stripped as well, consider
+@code{m4_flatten}, or do it all at once with @code{m4_normalize}.
 @end defmac
 
 @defmac m4_text_box (@var{message}, @dvar{frame, -})
@@ -11063,13 +11065,16 @@ m4_text_box([macro])
   @dvar{prefix1, @var{prefix}}, @dvar{width, 79})
 @msindex{text_wrap}
 Break @var{string} into a series of whitespace-separated words, then
-format those words to wrap within @var{width} columns, and without
-trailing whitespace.  If given, @var{prefix1} is prepended to the first
-line, and @var{prefix} is prepended to each continuation line.  As a
-special case, if @var{prefix1} is longer than @var{prefix}, the first
-line will consist solely of @var{prefix1}.  No expansions occur on
-@var{prefix}, @var{prefix1}, or the words of @var{string}, although
-quadrigraphs are recognized.
+output those words separated by spaces, and wrapping lines any time the
+output would exceed @var{width} columns.  If given, @var{prefix1} begins
+the first line, and @var{prefix} begins all wrapped lines.  If
+@var{prefix1} is longer than @var{prefix}, then the first line consists
+of just @var{prefix1}.  If @var{prefix} is longer than @var{prefix1},
+padding is inserted so that the first word of @var{string} begins at the
+same indentation as all wrapped lines.  Note that using literal tab
+characters in any of the arguments will interfere with the calculation
+of width.  No expansions occur on @var{prefix}, @var{prefix1}, or the
+words of @var{string}, although quadrigraphs are recognized.
 
 For some examples:
 @example

@@ -1,3 +1,9 @@
+2007-10-19  Eric Blake  <ebb9@byu.net>
+
+	Doc touchups.
+	* doc/autoconf.texi (Text processing Macros) <m4_strip>
+	<m4_text_wrap>: Clarify and fix typos.
+
 2007-10-18  Eric Blake  <ebb9@byu.net>
 
 	Ignore `make dist' changelogs in testsuite.log.
