@@ -1,5 +1,9 @@
 2007-10-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix config status generation with Tru64 ksh.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Fix
+	escaping of backslash in here-documents.
+
 	Fix `Deep Package' test failure on FreeBSD.
 	* tests/torture.at (Deep Package): Do not add `.' to $PATH
 	unnecessarily.  Do not try running `/bin/sh configure' with a

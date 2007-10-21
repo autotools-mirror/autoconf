@@ -387,7 +387,7 @@ m4_ifdef([_AC_SUBST_FILES],
 [# Create commands to substitute file output variables.
 {
   echo "cat >>$CONFIG_STATUS <<_ACEOF"
-  echo 'cat >>"\$tmp/subs1.awk" <<\_ACAWK'
+  echo 'cat >>"\$tmp/subs1.awk" <<\\_ACAWK'
   echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/'
   echo "_ACAWK"
   echo "_ACEOF"
@@ -444,7 +444,7 @@ dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
 [cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs1.awk" <<\_ACAWK
+cat >>"\$tmp/subs1.awk" <<\\_ACAWK
 _ACEOF
 sed -n '
 h
