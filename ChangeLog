@@ -1,4 +1,9 @@
-2007-10-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de> 
+2007-10-21  Eric Blake  <ebb9@byu.net>
+
+	* tests/autotest.at (Banners): Reinstate test, with typo
+	corrected.
+
+2007-10-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (Defaults): Validate input ranges ...
 	<at_func_validate_ranges>: ... using this new function.
