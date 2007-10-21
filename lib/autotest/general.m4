@@ -653,6 +653,11 @@ _ATEOF
   # Passing at_groups is tricky.  We cannot use it to form a literal string
   # or regexp because of the limitation of AIX awk.  And Solaris' awk
   # doesn't grok more than 99 fields in a record, so we have to use `split'.
+  # at_groups needs to be space-separated for this script to work.
+  case $at_groups in
+    *"$as_nl"* )
+      at_groups=`AS_ECHO(["$at_groups"]) | tr "$as_nl" ' '` ;;
+  esac
   AS_ECHO(["$at_groups$as_nl$at_help_all"]) |
     awk 'BEGIN { FS = ";" }
 	 NR == 1 {

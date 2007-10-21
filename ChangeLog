@@ -1,3 +1,10 @@
+2007-10-20  Eric Blake  <ebb9@byu.net>
+
+	Fix testsuite --list subset.
+	* lib/autotest/general.m4 (AT_INIT) <at_list_p>: Swap newlines
+	back to spaces, before listing subset of tests.
+	Reported by Ralf Wildenhues.
+
 2007-10-19  Eric Blake  <ebb9@byu.net>
 
 	s/parenthesis/parentheses/ where appropriate.
