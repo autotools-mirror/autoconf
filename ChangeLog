@@ -1,5 +1,11 @@
 2007-10-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix `Deep Package' test failure on FreeBSD.
+	* tests/torture.at (Deep Package): Do not add `.' to $PATH
+	unnecessarily.  Do not try running `/bin/sh configure' with a
+	configure script to be found in $PATH, if the shell does not do
+	this resolution.  Fixes test failure on FreeBSD.
+
 	Fix config header generation with AIX awk.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS_PREPARE): In awk
 	script, use helper array D_is_set, as `" 0"' does not evaluate
