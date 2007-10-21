@@ -1,3 +1,11 @@
+2007-10-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de> 
+
+	* lib/autotest/general.m4 (Defaults): Validate input ranges ...
+	<at_func_validate_ranges>: ... using this new function.
+	* tests/autotest.at (Keywords and ranges): Test invalid ranges.
+	Test --list with ranges and keywords.
+	(Banners): Remove one now-failing test.
+
 2007-10-20  Eric Blake  <ebb9@byu.net>
 
 	Fix testsuite --list subset.

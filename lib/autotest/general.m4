@@ -430,7 +430,21 @@ at_groups_all='AT_groups_all'
 # numerical order.
 at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [?])'
 # Description of all the test groups.
-at_help_all="AS_ESCAPE(m4_dquote(m4_defn([AT_help_all])))"])])dnl
+at_help_all="AS_ESCAPE(m4_dquote(m4_defn([AT_help_all])))"
+
+# at_func_validate_ranges [N...]
+# ------------------------------
+# validate test group ranges
+at_func_validate_ranges ()
+{
+  for at_grp
+  do
+    if test $at_grp -lt 1 || test $at_grp -gt AT_ordinal; then
+      AS_ECHO(["invalid test group: $at_grp"]) >&2
+      exit 1
+    fi
+  done
+}])])dnl
 m4_divert_push([PARSE_ARGS])dnl
 
 at_prev=
@@ -487,12 +501,14 @@ do
 	;;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
+	at_func_validate_ranges $at_option
 	at_groups="$at_groups$at_option "
 	;;
 
     # Ranges
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
 	at_range_start=`echo $at_option |tr -d X-`
+	at_func_validate_ranges $at_range_start
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.* \('$at_range_start' \)/\1/'`
 	at_groups="$at_groups$at_range "
@@ -500,6 +516,7 @@ do
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
 	at_range_end=`echo $at_option |tr -d X-`
+	at_func_validate_ranges $at_range_end
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/\( '$at_range_end'\) .*$/\1/'`
 	at_groups="$at_groups$at_range "
@@ -518,6 +535,7 @@ do
 	  at_range_end=$at_range_start
 	  at_range_start=$at_tmp
 	fi
+	at_func_validate_ranges $at_range_start $at_range_end
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.*\( '$at_range_start' \)/\1/' \
 	      -e 's/\( '$at_range_end'\) .*$/\1/'`
