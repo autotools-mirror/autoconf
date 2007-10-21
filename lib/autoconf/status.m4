@@ -775,6 +775,7 @@ s/'"$ac_delim"'/"\\\
 "/g' >>$CONFIG_STATUS
 
 cat >>$CONFIG_STATUS <<_ACEOF
+  for (key in D) D_is_set[key] = 1
   FS = ""
 }
 /^[\t ]*#[\t ]*(define|undef)[\t ]+$ac_word_re([\t (]|\$)/ {
@@ -789,11 +790,10 @@ cat >>$CONFIG_STATUS <<_ACEOF
   }
   split(mac1, mac2, "(") #)
   macro = mac2[1]
-  definiens = D[macro]
-  if (definiens) {
+  if (D_is_set[macro]) {
     # Preserve the white space surrounding the "#".
     prefix = substr(line, 1, index(line, defundef) - 1)
-    print prefix "define", macro P[macro] definiens
+    print prefix "define", macro P[macro] D[macro]
     next
   } else {
     # Replace #undef with comments.  This is necessary, for example,
