@@ -3586,7 +3586,7 @@ done
 rm -f conf$$subs.sh
 
 cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs1.awk" <<\_ACAWK
+cat >>"\$tmp/subs1.awk" <<\\_ACAWK
 _ACEOF
 sed -n '
 h
