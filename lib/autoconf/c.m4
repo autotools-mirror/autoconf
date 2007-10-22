@@ -1658,28 +1658,38 @@ AN_IDENTIFIER([restrict], [AC_C_RESTRICT])
 AC_DEFUN([AC_C_RESTRICT],
 [AC_CACHE_CHECK([for C/C++ restrict keyword], ac_cv_c_restrict,
   [ac_cv_c_restrict=no
-   # Try the official restrict keyword, then gcc's __restrict, and
-   # the less common variants.
+   # The order here caters to the fact that C++ does not require restrict.
    for ac_kw in __restrict __restrict__ _Restrict restrict; do
      AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
       [[typedef int * int_ptr;
-        int foo (int_ptr $ac_kw ip) {
-        return ip[0];
+	int foo (int_ptr $ac_kw ip) {
+	return ip[0];
        }]],
       [[int s[1];
-        int * $ac_kw t = s;
-        t[0] = 0;
-        return foo(t)]])],
+	int * $ac_kw t = s;
+	t[0] = 0;
+	return foo(t)]])],
       [ac_cv_c_restrict=$ac_kw])
      test "$ac_cv_c_restrict" != no && break
    done
   ])
+ AH_VERBATIM([restrict],
+[/* Define to the equivalent of the C99 'restrict' keyword, or to
+   nothing if this is not supported.  Do not define if restrict is
+   supported directly.  */
+#undef restrict
+/* Work around a bug in Sun C++: it does not support _Restrict, even
+   though the corresponding Sun C compiler does, which causes
+   "#define restrict _Restrict" in the previous line.  Perhaps some future
+   version of Sun C++ will work with _Restrict; if so, it'll probably
+   define __RESTRICT, just as Sun C does.  */
+#if defined __SUNPRO_CC && !defined __RESTRICT
+# define _Restrict
+#endif])
  case $ac_cv_c_restrict in
    restrict) ;;
-   no) AC_DEFINE(restrict,,
-	[Define to equivalent of C99 restrict keyword, or to nothing if this
-	is not supported.  Do not define if restrict is supported directly.]) ;;
-   *)  AC_DEFINE_UNQUOTED(restrict, $ac_cv_c_restrict) ;;
+   no) AC_DEFINE([restrict], []) ;;
+   *)  AC_DEFINE_UNQUOTED([restrict], [$ac_cv_c_restrict]) ;;
  esac
 ])# AC_C_RESTRICT
 
