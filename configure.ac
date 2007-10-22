@@ -20,13 +20,14 @@
 # We need AC_CONFIG_TESTDIR.
 AC_PREREQ([2.59])
 
-AC_INIT([GNU Autoconf], [2.61b], [bug-autoconf@gnu.org])
+AC_INIT([GNU Autoconf], m4_esyscmd([build-aux/git-version-gen .version]),
+	[bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
 
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([check-news 1.7.9 dist-bzip2 readme-alpha])
+AM_INIT_AUTOMAKE([1.7.9 dist-bzip2 readme-alpha])
 
 # We use `/bin/sh -n script' to check that there are no syntax errors
 # in the scripts.  Although incredible, there are /bin/sh that go into

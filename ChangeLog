@@ -1,3 +1,24 @@
+2007-10-28  Jim Meyering  <meyering@redhat.com>
+
+	Make inter-release --version output more useful.
+
+	Now, each unofficial build has a version "number" like 2.61a-19-58dd,
+	which indicates that it is built using the 19th change set
+	(in _some_ repository) following the "v2.61a" tag, and that 58dd
+	is a prefix of the commit SHA1.
+	* build-aux/git-version-gen: New file.
+	* configure.ac: Run it to set the version.
+	(AM_INIT_AUTOMAKE): Don't check NEWS here.
+	* Makefile.am (dist-hook): Arrange so that .version appears only
+	in distribution tarballs, never in a checked-out repository.
+	* .gitignore: Add .version here, too.  Just in case.
+	* tests/Makefile.am ($(srcdir)/package.m4): Depend on Makefile,
+	not configure.ac, now that the version number changes automatically.
+
+	Ensure that $(VERSION) is up to date for dist-related targets.
+	* GNUmakefile: Arrange to rerun autoconf, if the version reported by
+	git-version-gen doesn't match $(VERSION), but only for dist targets.
+
 2007-10-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix `Deep Package' failure with a configure script early in PATH

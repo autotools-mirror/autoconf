@@ -1,6 +1,7 @@
 *.log
 *~
 .#*
+.version
 CVS
 Makefile
 Makefile.in
