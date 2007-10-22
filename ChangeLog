@@ -1,3 +1,11 @@
+2007-10-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/autotest.at (Backquote command substitution)
+	(Multiline backquote command substitution)
+	(Parenthetical command substitution)
+	(Multiline parenthetical command substitution): Fix typos in
+	test names.
+
 2007-10-21  Eric Blake  <ebb9@byu.net>
 
 	* configure: Regenerate.
@@ -4758,8 +4766,8 @@
 
 	* tests/autotest.at (AT_NO_CMDSUBST): New macro to determine
 	failure condition for `$(cmd)' style command substitutions.
-	(Parenthetical command substition, Multiline parenthetical
-	command substition): Use it.
+	(Parenthetical command substitution, Multiline parenthetical
+	command substitution): Use it.
 
 	* doc/autoconf.texi (Special Shell Variables): Missing word.
 	Reported by Keith Marshall <keith.marshall@total.com>.

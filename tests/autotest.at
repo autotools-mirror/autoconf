@@ -141,12 +141,12 @@ two'
 two
 ], [])])
 
-AT_CHECK_AT_TEST([Backquote command substition],
+AT_CHECK_AT_TEST([Backquote command substitution],
   [AT_CHECK([echo `echo hi`], 0, [hi
 ], [])])
 
 
-AT_CHECK_AT_TEST([Multiline backquote command substition],
+AT_CHECK_AT_TEST([Multiline backquote command substitution],
   [AT_DATA([myfile],[foo
 bar
 ])
@@ -154,12 +154,12 @@ bar
 bar
 ], [])])
 
-AT_CHECK_AT_TEST([Parenthetical command substition],
+AT_CHECK_AT_TEST([Parenthetical command substitution],
   [AT_CHECK([echo $(echo hi)], 0, [hi
 ], [])],
   [AT_NO_CMDSUBST])
 
-AT_CHECK_AT_TEST([Multiline parenthetical command substition],
+AT_CHECK_AT_TEST([Multiline parenthetical command substitution],
   [AT_DATA([myfile],[foo
 bar
 ])
