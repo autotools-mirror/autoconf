@@ -6106,7 +6106,8 @@ range or precision than the @code{double} type, define
 @acindex{TYPE_LONG_LONG_INT}
 @cvindex HAVE_LONG_LONG_INT
 If the C compiler supports a working @code{long long int} type, define
-@code{HAVE_LONG_LONG_INT}.
+@code{HAVE_LONG_LONG_INT}.  This test also validates that the
+preprocessor can handle integers with the @samp{LL} suffix.
 @end defmac
 
 @defmac AC_TYPE_MBSTATE_T
@@ -6243,7 +6244,12 @@ exists.
 @acindex{TYPE_UNSIGNED_LONG_LONG_INT}
 @cvindex HAVE_UNSIGNED_LONG_LONG_INT
 If the C compiler supports a working @code{unsigned long long int} type,
-define @code{HAVE_UNSIGNED_LONG_LONG_INT}.
+define @code{HAVE_UNSIGNED_LONG_LONG_INT}.  This test also validates
+that the preprocessor can handle integers with the @samp{ULL} suffix.
+However, portable code cannot mix @code{unsigned long int} and
+@code{unsigned long long int} types in preprocessor expressions,
+since the @acronym{HP-UX} 11.00 preprocessor does not use consistent
+promotion rules.
 @end defmac
 
 @node Generic Types

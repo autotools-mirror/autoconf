@@ -1,3 +1,8 @@
+2007-10-22  Eric Blake  <ebb9@byu.net>
+
+	* doc/autoconf.texi (Particular Types): Mention bug in HP-UX 11.00
+	preprocessor.
+
 2007-10-22  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Don't check for bug in HP-UX 11.00 cpp.
