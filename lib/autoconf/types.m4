@@ -525,7 +525,7 @@ AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
     [ac_cv_type_unsigned_long_long_int],
     [AC_LINK_IFELSE(
        [AC_LANG_PROGRAM(
-	  [[#if ! (18446744073709551615ULL <= -1u)
+	  [[#if ! (18446744073709551615ULL <= -1ull)
 	      error in preprocessor;
 	    #endif
 	    unsigned long long int ull = 18446744073709551615ULL;
