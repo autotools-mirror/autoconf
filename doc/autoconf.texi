@@ -10771,8 +10771,8 @@ on quoted text.  The distinction is in the treatment of whitespace
 following a comma in the original @var{arg}.  Any time multiple
 arguments are collected into one with @code{m4_quote}, the M4 argument
 collection rules discard the whitespace.  However, with @code{m4_expand},
-whitespace is discarded only if it results from unquoted commas in the
-expansion of macros contained in @var{arg}.
+whitespace is preserved, even after the expansion of macros contained in
+@var{arg}.
 
 Note that @code{m4_expand} cannot parse everything.  The expansion of
 @var{arg} must not contain unbalanced quotes (although quadrigraphs can
@@ -10786,7 +10786,7 @@ m4_define([active2], [[ACT, IVE]])dnl
 m4_quote(active, active)
 @result{}ACT,IVE,ACT,IVE
 m4_expand([active, active])
-@result{}ACT,IVE, ACT,IVE
+@result{}ACT, IVE, ACT, IVE
 m4_quote(active2, active2)
 @result{}ACT, IVE,ACT, IVE
 m4_expand([active2, active2])

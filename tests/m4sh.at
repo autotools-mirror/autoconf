@@ -491,7 +491,7 @@ AT_CLEANUP
 ## -------------- ##
 
 AT_SETUP([AS@&t@_HELP_STRING])
-AT_KEYWORDS([m4@&t@_text_wrap])
+AT_KEYWORDS([m4@&t@_text_wrap m4@&t@_expand])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -547,6 +547,7 @@ m4_define([mac], [MACRO])dnl
 echo "AS_HELP_STRING([--mac], [mac])"
 echo "AS_HELP_STRING([--o1, --o2], [two
 options,	one  description])"
+echo "AS_HELP_STRING([[[--o3, --o4]]], [comma inside literal quoting])"
 echo "AS_HELP_STRING([--tune1], [check out the tuned formatting],
 [            ])"
 echo "AS_HELP_STRING([--tune2], [check out the tuned formatting],
@@ -612,6 +613,7 @@ AT_CHECK([./script], [0],
                           80 characters.
   --MACRO                 mac
   --o1, --o2              two options, one description
+  [--o3, --o4]            comma inside literal quoting
   --tune1   check out the tuned formatting
   --tune2   check out the tuned formatting
   --tune3                 check out the

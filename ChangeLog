@@ -1,3 +1,12 @@
+2007-10-23  Eric Blake  <ebb9@byu.net>
+
+	Improve corner case of m4_expand.
+	* lib/m4sugar/m4sugar.m4 (m4_expand, _m4_expand): Rewrite more
+	efficiently.
+	* tests/m4sh.at (AS@&t@_HELP_STRING): Test overquoted comma.
+	* doc/autoconf.texi (Evaluation Macros) <m4_expand>: Update
+	documentation.
+
 2007-10-23  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/make-stds.texi: Update from gnulib.

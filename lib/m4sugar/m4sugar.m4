@@ -665,34 +665,25 @@ m4_define([m4_echo], [$@])
 # --------------
 # Return the expansion of ARG as a single string.  Unlike m4_quote($1), this
 # correctly preserves whitespace following single-quoted commas that appeared
-# within ARG (however, it does not preserve whitespace after any unquoted
-# commas encountered in the expansion).
+# within ARG.
 #
 #   m4_define([active], [ACT, IVE])
 #   m4_define([active2], [[ACT, IVE]])
 #   m4_quote(active, active2)
 #   => ACT,IVE,ACT, IVE
 #   m4_expand([active, active2])
-#   => ACT,IVE, ACT, IVE
+#   => ACT, IVE, ACT, IVE
 #
 # Unfortunately, due to limitations in m4, ARG must contain balanced quotes
 # (use quadrigraphs) and balanced parentheses (use creative shell comments
 # when writing shell case statements).
 #
-# Splitting a quoted ARG on `,' preserves space, but produces a quoted list.
-# Unquote the list, then expand each argument while preserving the leading
-# spaces; finally, collect each argument back into the final string.
-m4_define([m4_expand],
-[m4_quote(_$0(m4_unquote(m4_split([$1], [,]))))])
-
-# _m4_expand(ARGS)
-# ----------------
-# Return the expansion of each ARG, separated by `,'.  Less efficient than
-# m4_unquote, but preserves quoted leading space in each ARG.
+# Exploit that extra () will group unquoted commas and the following
+# whitespace, then convert () to [].  m4_bpatsubst can't handle newlines
+# inside $1, and m4_substr strips quoting.  So we (ab)use m4_changequote.
+m4_define([m4_expand], [_$0(($1))])
 m4_define([_m4_expand],
-[m4_if([$#], [0], [],
-       [$#], [1], [$1],
-       [$1,$0(m4_shift($@))])])
+[m4_changequote([(], [)])$1m4_changequote`'m4_changequote(`[', `]')])
 
 
 # m4_ignore(ARGS)
@@ -1904,8 +1895,8 @@ m4_define([m4_append],
 # as the algorithm no longer guarantees uniqueness.
 m4_define([m4_append_uniq],
 [m4_ifval([$3], [m4_if(m4_index([$2], [$3]), [-1], [],
-                       [m4_warn([syntax],
-		                [$0: `$2' contains `$3'])])])_$0($@)])
+		       [m4_warn([syntax],
+				[$0: `$2' contains `$3'])])])_$0($@)])
 m4_define([_m4_append_uniq],
 [m4_ifdef([$1],
 	  [m4_if(m4_index([$3]m4_builtin([defn], [$1])[$3], [$3$2$3]), [-1],
@@ -1920,7 +1911,7 @@ m4_define([_m4_append_uniq],
 # Avoid overhead of m4_defn by using m4_builtin.
 m4_define([m4_append_uniq_w],
 [m4_foreach_w([m4_Word], [$2],
-              [_m4_append_uniq([$1], m4_builtin([defn], [m4_Word]), [ ])])])
+	      [_m4_append_uniq([$1], m4_builtin([defn], [m4_Word]), [ ])])])
 
 
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
