@@ -1160,7 +1160,7 @@ chmod a-w inner/innermost inner
 AT_CHECK([./configure --help=recursive | grep " INNER "],     0, [ignore])
 AT_CHECK([./configure --help=recursive | grep " INNERMOST "], 0, [ignore])
 AT_CHECK([/bin/sh ./configure --help=recursive | grep " INNERMOST "], 0, [ignore])
-AT_CHECK([/bin/sh configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+AT_CHECK([PATH=.$PATH_SEPARATOR$PATH; export PATH; /bin/sh configure --help=recursive | grep " INNERMOST "], 0, [ignore])
 AT_CHECK([PATH=.$PATH_SEPARATOR$PATH; export PATH; configure --help=recursive | grep " INNERMOST "], 0, [ignore])
 chmod u+w inner inner/innermost
 

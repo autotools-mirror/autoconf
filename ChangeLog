@@ -1,3 +1,9 @@
+2007-10-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix `Deep Package' failure with a configure script early in PATH
+	* tests/torture.at (Deep Package): Add `.' early in PATH.
+	Report by Jim Meyering.
+
 2007-10-27  Jim Meyering  <meyering@redhat.com>
 
 	Remove all generated files from version control.
