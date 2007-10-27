@@ -30,9 +30,7 @@ You can get a copy of the source repository like this:
 The next step is to generate files like configure and Makefile.in:
 
 	$ cd autoconf
-	$ aclocal -I m4
-	$ automake
-	$ autoconf
+	$ ( PATH=`pwd`/tests:$PATH; autoreconf -vi )
 
 And there you are!  Just
 

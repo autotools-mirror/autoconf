@@ -36,8 +36,6 @@ then
 elif test -d .git \
     && v=`git describe --abbrev=4 HEAD 2>/dev/null` \
     && case $v in
-	 # FIXME: remove this after v6.10.
-	 COREUTILS-[0-9]*) v=`echo "$v" | sed 's/^COREUTILS-//;s/_/./g'` ;;
 	 v[0-9]*) ;;
 	 *) (exit 1) ;;
        esac
@@ -50,7 +48,9 @@ fi
 
 v=`echo "$v" |sed 's/^v//'`
 
+# Don't declare a version "dirty" merely because a time stamp has changed.
 git-status > /dev/null 2>&1
+
 dirty=`sh -c 'git diff-index --name-only HEAD' 2>/dev/null` || dirty=
 case "$dirty" in
     '') ;;
