@@ -1,5 +1,10 @@
 2007-10-28  Jim Meyering  <meyering@redhat.com>
 
+	* README-hacking: Autoconf, Automake, and Perl are required to build.
+	List Gzip and Tar separately.  Suggested by Ralf Wildenhues.
+
+2007-10-28  Jim Meyering  <meyering@redhat.com>
+
 	README-hacking: Recommend running autoreconf -vi.
 	* GNUmakefile (dummy): Use autoreconf -i, with appropriate PATH,
 	so that we use just-built tools when they're available.

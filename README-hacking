@@ -13,9 +13,12 @@ tools we depend upon, including:
 
 - Autoconf <http://www.gnu.org/software/autoconf/>
 - Automake <http://www.gnu.org/software/automake/>
-- Gzip <http://www.gnu.org/software/gzip/>
 - Perl <http://www.cpan.org/>
-- Rsync <http://samba.anu.edu.au/rsync/>
+
+The following are useful as well, if you want to be able to run commands
+like "make dist" or "make distcheck":
+
+- Gzip <http://www.gnu.org/software/gzip/>
 - Tar <http://www.gnu.org/software/tar/>
 
 Only building the initial full source tree will be a bit painful.
