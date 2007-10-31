@@ -1,3 +1,12 @@
+2007-10-30  Bruno Haible  <bruno@clisp.org>
+
+	* lib/autoconf/types.m4 (_AC_TYPE_LONG_LONG_SNIPPET): New macro,
+	extracted from AC_TYPE_LONG_LONG_INT and AC_TYPE_UNSIGNED_LONG_LONG_INT.
+	(AC_TYPE_LONG_LONG_INT, AC_TYPE_UNSIGNED_LONG_LONG_INT): Use it.
+	Fixes problem with Sun C 5.[0-8] in 32-bit mode, reported in
+	<http://lists.gnu.org/archive/html/autoconf-patches/2007-10/msg00210.html>
+	Suggested by Paul Eggert.
+
 2007-10-28  Jim Meyering  <meyering@redhat.com>
 
 	* README-hacking: Autoconf, Automake, and Perl are required to build.

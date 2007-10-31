@@ -465,25 +465,50 @@ You should use `AC_TYPE_LONG_DOUBLE' or `AC_TYPE_LONG_DOUBLE_WIDER' instead.]
 )
 
 
+# _AC_TYPE_LONG_LONG_SNIPPET
+# --------------------------
+# Expands to a C program that can be used to test for simultaneous support
+# of 'long long' and 'unsigned long long'. We don't want to say that
+# 'long long' is available if 'unsigned long long' is not, or vice versa,
+# because too many programs rely on the symmetry between signed and unsigned
+# integer types (excluding 'bool').
+AC_DEFUN([_AC_TYPE_LONG_LONG_SNIPPET],
+[
+  AC_LANG_PROGRAM(
+    [[/* Test preprocessor.  */
+      #if ! (-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
+        error in preprocessor;
+      #endif
+      #if ! (18446744073709551615ULL <= -1ull)
+        error in preprocessor;
+      #endif
+      /* Test literals.  */
+      long long int ll = 9223372036854775807ll;
+      long long int nll = -9223372036854775807LL;
+      unsigned long long int ull = 18446744073709551615ULL;
+      /* Test constant expressions.   */
+      typedef int a[((-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
+		     ? 1 : -1)];
+      typedef int b[(18446744073709551615ULL <= (unsigned long long int) -1
+		     ? 1 : -1)];
+      int i = 63;]],
+    [[/* Test availability of runtime routines for shift and division.  */
+      long long int llmax = 9223372036854775807ll;
+      unsigned long long int ullmax = 18446744073709551615ull;
+      return ((ll << 63) | (ll >> 63) | (ll < i) | (ll > i)
+	      | (llmax / ll) | (llmax % ll)
+	      | (ull << 63) | (ull >> 63) | (ull << i) | (ull >> i)
+	      | (ullmax / ull) | (ullmax % ull));]])
+])
+
+
 # AC_TYPE_LONG_LONG_INT
 # ---------------------
 AC_DEFUN([AC_TYPE_LONG_LONG_INT],
 [
   AC_CACHE_CHECK([for long long int], [ac_cv_type_long_long_int],
     [AC_LINK_IFELSE(
-       [AC_LANG_PROGRAM(
-	  [[#if ! (-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
-	      error in preprocessor;
-	    #endif
-	    long long int ll = 9223372036854775807ll;
-	    long long int nll = -9223372036854775807LL;
-	    typedef int a[((-9223372036854775807LL < 0
-			    && 0 < 9223372036854775807ll)
-			   ? 1 : -1)];
-	    int i = 63;]],
-	  [[long long int llmax = 9223372036854775807ll;
-	    return ((ll << 63) | (ll >> 63) | (ll < i) | (ll > i)
-		    | (llmax / ll) | (llmax % ll));]])],
+       [_AC_TYPE_LONG_LONG_SNIPPET],
        [dnl This catches a bug in Tandem NonStop Kernel (OSS) cc -O circa 2004.
 	dnl If cross compiling, assume the bug isn't important, since
 	dnl nobody cross compiles for this platform as far as we know.
@@ -524,17 +549,7 @@ AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
   AC_CACHE_CHECK([for unsigned long long int],
     [ac_cv_type_unsigned_long_long_int],
     [AC_LINK_IFELSE(
-       [AC_LANG_PROGRAM(
-	  [[#if ! (18446744073709551615ULL <= -1ull)
-	      error in preprocessor;
-	    #endif
-	    unsigned long long int ull = 18446744073709551615ULL;
-	    typedef int a[(18446744073709551615ULL <= (unsigned long long int) -1
-			   ? 1 : -1)];
-	   int i = 63;]],
-	  [[unsigned long long int ullmax = 18446744073709551615ull;
-	    return (ull << 63 | ull >> 63 | ull << i | ull >> i
-		    | ullmax / ull | ullmax % ull);]])],
+       [_AC_TYPE_LONG_LONG_SNIPPET],
        [ac_cv_type_unsigned_long_long_int=yes],
        [ac_cv_type_unsigned_long_long_int=no])])
   if test $ac_cv_type_unsigned_long_long_int = yes; then
