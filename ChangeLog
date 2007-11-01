@@ -1,3 +1,13 @@
+2007-11-03  Jim Meyering  <meyering@redhat.com>
+
+	Remove automake-provided files from version control.
+	* build-aux/elisp-comp: Remove file.
+	* build-aux/install-sh: Remove file.
+	* build-aux/missing: Remove file.
+	* build-aux/mdate-sh: Remove file.
+	* build-aux/.gitignore: New file.
+	Suggestion from Ralf Wildenhues.
+
 2007-11-03  Eric Blake  <ebb9@byu.net>
 
 	Adjust version comparison to account for git snapshot numbers.
