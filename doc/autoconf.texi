@@ -13507,6 +13507,7 @@ the @samp{x} into account later in the pipe.
 
 @table @asis
 @item @command{.}
+@c --------------
 @prindex @command{.}
 Use @command{.} only with regular files (use @samp{test -f}).  Bash
 2.03, for instance, chokes on @samp{. /dev/null}.  Also, remember that
@@ -13515,6 +13516,7 @@ you want to use @command{.} on a file @file{foo} in the current
 directory, you must use @samp{. ./foo}.
 
 @item @command{!}
+@c --------------
 @prindex @command{!}
 The Unix version 7 shell did not support
 negating the exit status of commands with @command{!}, and this feature
@@ -13540,6 +13542,38 @@ More generally, one can always rewrite @samp{! @var{command}} as:
 @example
 if @var{command}; then (exit 1); else :; fi
 @end example
+
+
+@item @command{@{...@}}
+@c --------------------
+@prindex @command{@{...@}}
+As recently as GNU Bash 3.2, some shells do not properly set @samp{$?}
+when failing to write redirected output of any compound command other
+than a subshell group, when that compound command is the first thing
+executed.  This is most commonly observed with @{...@}, but also affects
+other compound commands.
+
+@example
+$ @kbd{bash -c '@{ echo foo; @} >/bad; echo $?'}
+bash: line 1: /bad: Permission denied
+0
+$ @kbd{bash -c 'while :; do echo; done >/bad; echo $?'}
+bash: line 1: /bad: Permission denied
+0
+@end example
+
+The workaround is simple: prime bash with a simple command before any
+compound command with redirection.
+
+@example
+$ @kbd{bash -c ':; @{ echo foo; @} >/bad; echo $?'}
+bash: line 1: /bad: Permission denied
+1
+$ @kbd{bash -c ':; while :; do echo; done >/bad; echo $?'}
+bash: line 1: /bad: Permission denied
+1
+@end example
+
 
 @item @command{break}
 @c ------------------

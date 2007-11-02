@@ -1,3 +1,13 @@
+2007-11-02  Benoit Sigoure  <tsuna@lrde.epita.fr>
+	and Jim Meyering  <meyering@redhat.com>
+	and Andreas Schwab <schwab@suse.de>
+	and Eric Blake  <ebb9@byu.net>
+
+	Document a bug in GNU Bash with compound commands and redirections.
+	* doc/autoconf.texi (Limitations of Builtins): Mention that GNU
+	Bash doesn't properly set $? when `{ ... } >/bad' fails, and give
+	workaround.
+
 2007-11-03  Eric Blake  <ebb9@byu.net>
 
 	Support m4 1.4.5 in testsuite.
