@@ -766,13 +766,17 @@ AT_SETUP([Define a newline])
 AT_CONFIGURE_AC([[AC_DEFINE([foo], [one
 two], [This spans two lines.])
 ]])
-AT_CHECK_AUTOCONF([], [], [],
-[[configure.ac:5: warning: AC_DEFINE: `one
-configure.ac:5: two' is not a valid preprocessor define value
+AT_CHECK_AUTOCONF([], [], [], [stderr])
+dnl Older versions of m4 report error at line 6 (end of macro);
+dnl newer versions report it at line 5 (start of macro).
+AT_CHECK([[sed 's/^configure.ac:[56]: //' stderr]], [],
+[[warning: AC_DEFINE: `one
+two' is not a valid preprocessor define value
 ]])
-AT_CHECK_AUTOHEADER([], [], [],
-[[configure.ac:5: warning: AC_DEFINE: `one
-configure.ac:5: two' is not a valid preprocessor define value
+AT_CHECK_AUTOHEADER([], [], [], [stderr])
+AT_CHECK([[sed 's/^configure.ac:[56]: //' stderr]], [],
+[[warning: AC_DEFINE: `one
+two' is not a valid preprocessor define value
 ]])
 AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([[#define foo one
@@ -781,13 +785,15 @@ AT_CHECK_DEFINES([[#define foo one
 AT_CONFIGURE_AC([[AC_DEFINE_UNQUOTED([foo], [one
 two], [This spans two lines.])
 ]])
-AT_CHECK_AUTOCONF([], [], [],
-[[configure.ac:5: warning: AC_DEFINE_UNQUOTED: `one
-configure.ac:5: two' is not a valid preprocessor define value
+AT_CHECK_AUTOCONF([], [], [], [stderr])
+AT_CHECK([[sed 's/^configure.ac:[56]: //' stderr]], [],
+[[warning: AC_DEFINE_UNQUOTED: `one
+two' is not a valid preprocessor define value
 ]])
-AT_CHECK_AUTOHEADER([], [], [],
-[[configure.ac:5: warning: AC_DEFINE_UNQUOTED: `one
-configure.ac:5: two' is not a valid preprocessor define value
+AT_CHECK_AUTOHEADER([], [], [], [stderr])
+AT_CHECK([[sed 's/^configure.ac:[56]: //' stderr]], [],
+[[warning: AC_DEFINE_UNQUOTED: `one
+two' is not a valid preprocessor define value
 ]])
 AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([[#define foo one

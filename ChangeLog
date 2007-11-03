@@ -1,3 +1,10 @@
+2007-11-03  Eric Blake  <ebb9@byu.net>
+
+	Support m4 1.4.5 in testsuite.
+	* tests/torture.at (Define a newline): Exclude line numbers in
+	error message.
+	Reported by Ralf Wildenhues.
+
 2007-11-03  Jim Meyering  <meyering@redhat.com>
 
 	Remove automake-provided files from version control.
