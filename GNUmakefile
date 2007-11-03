@@ -38,6 +38,9 @@ ifeq ($(have-Makefile),yes)
 # Make tar archive easier to reproduce.
 export TAR_OPTIONS = --owner=0 --group=0 --numeric-owner
 
+# Build with our own versions of these tools, when possible.
+export PATH = '$(shell echo "`pwd`/tests:$$PATH")'
+
 include Makefile
 
 # Ensure that $(VERSION) is up to date for dist-related targets, but not
@@ -48,7 +51,7 @@ ifeq (0,$(MAKELEVEL))
     _curr-ver := $(shell build-aux/git-version-gen .version)
     ifneq ($(_curr-ver),$(VERSION))
       $(info INFO: running autoreconf for new version string: $(_curr-ver))
-      dummy := $(shell rm -rf autom4te.cache; PATH=`pwd`/tests:$$PATH; autoreconf -i)
+      dummy := $(shell rm -rf autom4te.cache; autoreconf -i)
     endif
   endif
 endif
