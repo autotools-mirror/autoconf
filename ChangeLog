@@ -1,5 +1,8 @@
 2007-11-03  Jim Meyering  <meyering@redhat.com>
 
+	s/-/./ in snapshot version string: 2.61a-256-8b556 -> 2.61a.256-8b556
+	* build-aux/git-version-gen: This syncs from coreutils.
+
 	Adjust the build procedure so "make check" works reliably.
 	* README-hacking: Include an extra step between "make" and
 	"make check" to ensure that the latter passes.
