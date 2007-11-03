@@ -34,7 +34,9 @@ include ../lib/freeze.mk
 ## package.m4.  ##
 ## ------------ ##
 
+# The `:;' works around a redirected compound command bash exit status bug.
 $(srcdir)/package.m4: Makefile
+	:; \
 	{					\
 	  echo '# Signature of the current package.'; \
 	  echo 'm4_define([AT_PACKAGE_NAME],      [$(PACKAGE_NAME)])'; \
