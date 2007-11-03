@@ -33,12 +33,15 @@ You can get a copy of the source repository like this:
 The next step is to generate files like configure and Makefile.in:
 
 	$ cd autoconf
-	$ ( PATH=`pwd`/tests:$PATH; autoreconf -vi )
+	$ autoreconf -vi
 
-And there you are!  Just
+Since we're building autoconf itself, and its tests are picky, the
+following procedure includes an extra step to ensure that some
+generated files are regenerated using the tools just build by "make":
 
 	$ ./configure
 	$ make
+	$ ( PATH=`pwd`/tests:$PATH; autoreconf -vi )
 	$ make check
 
 At this point, there should be no difference between your local copy,
