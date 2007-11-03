@@ -17,8 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# We need AC_CONFIG_TESTDIR.
-AC_PREREQ([2.59])
+# We need AC_CONFIG_TESTDIR, AC_PROG_SED, AC_PROG_GREP.
+AC_PREREQ([2.60])
 
 AC_INIT([GNU Autoconf], m4_esyscmd([build-aux/git-version-gen .version]),
 	[bug-autoconf@gnu.org])

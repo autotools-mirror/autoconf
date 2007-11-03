@@ -1,3 +1,8 @@
+2007-11-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* configure.ac (AC_PREREQ): Require version 2.60, for
+	AC_PROG_SED, AC_PROG_GREP.
+
 2007-11-02  Benoit Sigoure  <tsuna@lrde.epita.fr>
 	and Jim Meyering  <meyering@redhat.com>
 	and Andreas Schwab <schwab@suse.de>
