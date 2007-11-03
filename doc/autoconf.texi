@@ -11182,10 +11182,19 @@ usability limitations that were not lifted until Autoconf 2.62.  Compare
 the version strings @var{version-1} and @var{version-2}, and expand to
 @samp{-1} if @var{version-1} is smaller, @samp{0} if they are the same,
 or @samp{1} @var{version-2} is smaller.  Version strings must be a list
-of elements separated by @samp{.}, where each element is a number along
-with optional case-insensitive letters designating beta releases.  The
-comparison stops at the leftmost element that contains a difference,
-although a 0 element compares equal to a missing element.
+of elements separated by @samp{.}, @samp{,} or @samp{-}, where each
+element is a number along with optional case-insensitive letters
+designating beta releases.  The comparison stops at the leftmost element
+that contains a difference, although a 0 element compares equal to a
+missing element.
+
+It is permissible to include commit identifiers in @var{version}, such
+as an abbreviated SHA1 of the commit, provided there is still a
+monotonically increasing prefix to allow for accurate version-based
+comparisons.  For example, this paragraph was written when the
+development snapshot of autoconf claimed to be at version
+@samp{2.61a-248-dc51}, or 248 commits after the 2.61a release, with an
+abbreviated commit identification of @samp{dc51}.
 
 @example
 m4_version_compare([1.1], [2.0])
@@ -11202,6 +11211,10 @@ m4_version_compare([1.1pre], [1.1PRE])
 @result{}0
 m4_version_compare([1.1a], [1,10])
 @result{}-1
+m4_version_compare([2.61a], [2.61a-248-dc51])
+@result{}-1
+m4_version_compare([2.61b], [2.61a-248-dc51])
+@result{}1
 @end example
 @end defmac
 

@@ -1,3 +1,12 @@
+2007-11-03  Eric Blake  <ebb9@byu.net>
+
+	Adjust version comparison to account for git snapshot numbers.
+	* lib/m4sugar/m4sugar.m4 (_m4_version_unletter): Also treat - as a
+	component separator.
+	* doc/autoconf.texi (Number processing Macros)
+	<m4_version_compare>: Document this change.
+	* tests/m4sugar.at (m4@&t@_version_compare): Test it.
+
 2007-10-30  Bruno Haible  <bruno@clisp.org>
 
 	* lib/autoconf/types.m4 (_AC_TYPE_LONG_LONG_SNIPPET): New macro,

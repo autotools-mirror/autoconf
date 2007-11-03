@@ -2129,18 +2129,20 @@ m4_define([m4_sign],
 #   [2.61aa.b] -> [2.61+1.-1.[0r36:aa],+1.-1.[0r36:b]] -> 2.62.-1.370.1.-1.11
 #
 # This macro expects reasonable version numbers, but can handle double
-# letters and does not expand one-letter macros.  Inline constant expansions,
-# to avoid m4_defn overhead.  _m4_version_unletter is the real workhorse
-# used by m4_version_compare, but since [0r36:a] is less readable than 10,
-# we provide a wrapper for human use.
+# letters and does not expand any macros.  Original version strings can
+# use both `.' and `-' separators.
+#
+# Inline constant expansions, to avoid m4_defn overhead.
+# _m4_version_unletter is the real workhorse used by m4_version_compare,
+# but since [0r36:a] is less readable than 10, we provide a wrapper for
+# human use.
 m4_define([m4_version_unletter],
 [m4_map_sep([m4_eval], [.],
 	    m4_dquote(m4_dquote_elt(m4_unquote(_$0([$1])))))])
 m4_define([_m4_version_unletter],
-[m4_translit(m4_bpatsubst([[[$1]]], ]dnl
+[m4_bpatsubst(m4_translit([[[$1]]], [.-], [,,]),]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_Letters])))[[+],
-			  [+1.-1.[0r36:\&]]),
-	     [.], [,])])
+	      [+1,-1,[0r36:\&]])])
 
 
 # m4_version_compare(VERSION-1, VERSION-2)
