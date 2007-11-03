@@ -20285,7 +20285,7 @@ $(TESTSUITE): $(srcdir)/testsuite.at
 You might want to list explicitly the dependencies, i.e., the list of
 the files @file{testsuite.at} includes.
 
-With strict Autoconf, you might need to add lines inspired from the
+If you don't use Automake, you might need to add lines inspired from the
 following:
 
 @example
@@ -20301,8 +20301,10 @@ atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
 @end example
 
 @noindent
-and manage to have @file{atconfig.in} and @code{$(EXTRA_DIST)}
-distributed.
+and manage to have @code{$(EXTRA_DIST)} distributed.
+
+If you use Automake, however, you don't need to add a rule to generate
+@file{atlocal}.
 
 With all this in place, and if you have not initialized @samp{TESTSUITEFLAGS}
 within your makefile, you can fine-tune test suite execution with this
