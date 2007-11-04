@@ -1549,7 +1549,7 @@ If you install a new version of some tool, you can make
 @option{--force} option.
 
 @xref{Automatic Remaking}, for Make rules to automatically
-remake @command{configure} scripts when their source files change.  That
+rebuild @command{configure} scripts when their source files change.  That
 method handles the timestamps of configuration header templates
 properly, but does not pass @option{--autoconf-dir=@var{dir}} or
 @option{--localdir=@var{dir}}.

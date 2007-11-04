@@ -1,3 +1,7 @@
+2007-11-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (autoreconf Invocation): Fix an underfull line.
+
 2007-11-03  Jim Meyering  <meyering@redhat.com>
 
 	s/-/./ in snapshot version string: 2.61a-256-8b556 -> 2.61a.256-8b556
