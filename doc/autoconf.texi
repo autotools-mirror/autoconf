@@ -720,13 +720,20 @@ not already solved in current development versions, and that it has not
 been reported yet.  Be sure to include all the needed information and a
 short @file{configure.ac} that demonstrates the problem.
 
-Autoconf's development tree is accessible via anonymous @acronym{CVS}; see the
+Autoconf's development tree is accessible via @command{git}; see the
 @uref{http://savannah.gnu.org/projects/autoconf/, Autoconf
-Summary} for details.  Patches relative to the
-current @acronym{CVS} version can be sent for review to the
+Summary} for details, or view
+@uref{http://git.sv.gnu.org/gitweb/?p=autoconf.git, the actual
+repository}.  Anonymous @acronym{CVS} access is also available, see
+@file{README} for more details.  Patches relative to the
+current @command{git} version can be sent for review to the
 @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
-Past patches are
-@uref{http://lists.gnu.org/@/archive/@/html/@/autoconf-patches/, archived}.
+Discussions on past patches are
+@uref{http://lists.gnu.org/@/archive/@/html/@/autoconf-patches/,
+archived}, and all commits are archived in the read-only
+@email{autoconf-commit@@gnu.org, Autoconf Commit mailing list}, which is
+also @uref{http://lists.gnu.org/@/archive/@/html/@/autoconf-commit/,
+archived}.
 
 Because of its mission, the Autoconf package itself
 includes only a set of often-used

@@ -34,6 +34,7 @@ release) and INSTALL.
 
 Mail suggestions to autoconf@gnu.org, report bugs to
 bug-autoconf@gnu.org, and submit patches to autoconf-patches@gnu.org.
+All changes can be tracked at the read-only autoconf-commit@gnu.org.
 Always include the Autoconf version number, which you can get by
 running `autoconf --version'.  Archives of bug-autoconf@gnu.org can be
 found in <http://lists.gnu.org/archive/html/bug-autoconf/>, and

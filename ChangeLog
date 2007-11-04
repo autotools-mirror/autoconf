@@ -1,3 +1,9 @@
+2007-11-04  Eric Blake  <ebb9@byu.net>
+
+	Update list information.
+	* README: Mention new autoconf-commit list.
+	* doc/autoconf.texi (Introduction): Mention autoconf-commit list.
+
 2007-11-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/functions.m4 (_AC_FUNC_MALLOC_IF): Fix comment typo.
