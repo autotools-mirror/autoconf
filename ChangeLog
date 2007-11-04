@@ -1,5 +1,7 @@
 2007-11-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/functions.m4 (_AC_FUNC_MALLOC_IF): Fix comment typo.
+
 	* lib/m4sugar/Makefile.am (version.m4): Another bash bug workaround.
 
 	* build-aux/.gitignore: Ignore mkinstalldirs.

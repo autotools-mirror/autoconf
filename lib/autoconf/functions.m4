@@ -881,7 +881,7 @@ char *malloc ();
 	       [ac_cv_func_malloc_0_nonnull=no],
 	       [ac_cv_func_malloc_0_nonnull=no])])
 AS_IF([test $ac_cv_func_malloc_0_nonnull = yes], [$1], [$2])
-])# AC_FUNC_MALLOC
+])# _AC_FUNC_MALLOC_IF
 
 
 # AC_FUNC_MALLOC
