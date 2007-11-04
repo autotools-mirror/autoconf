@@ -1,5 +1,7 @@
 2007-11-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/m4sugar/Makefile.am (version.m4): Another bash bug workaround.
+
 	* build-aux/.gitignore: Ignore mkinstalldirs.
 
 	* doc/autoconf.texi (autoreconf Invocation): Fix an underfull line.

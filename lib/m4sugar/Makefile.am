@@ -24,7 +24,9 @@ CLEANFILES = $(nodist_m4sugarlib_DATA)
 ## version.m4.  ##
 ## ------------ ##
 
+# The `:;' works around a redirected compound command bash exit status bug.
 version.m4: $(top_srcdir)/configure.ac
+	:; \
 	{					\
 	  echo '# This file is part of -*- Autoconf -*-.'; \
 	  echo '# Version of Autoconf.'; \
