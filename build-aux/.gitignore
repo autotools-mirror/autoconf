@@ -1,4 +1,5 @@
 elisp-comp
 install-sh
-missing
 mdate-sh
+missing
+mkinstalldirs
