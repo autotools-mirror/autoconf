@@ -2436,6 +2436,16 @@ The relative name of the top level of the current build tree.  In the
 top-level directory, this is the same as @code{builddir}.
 @end defvar
 
+@defvar top_build_prefix
+@ovindex top_build_prefix
+The relative name of the top level of the current build tree with final
+slash if nonemtpy.  This is the same as @code{top_builddir}, except that
+it contains of zero of more runs of @code{../}, so it should not be
+appended with a slash for concatenation.  This helps for @command{make}
+implementations that otherwise do not treat @file{./file} and @file{file}
+as equal in the toplevel build directory.
+@end defvar
+
 @defvar abs_top_builddir
 @ovindex abs_top_builddir
 Absolute name of @code{top_builddir}.

@@ -1,5 +1,12 @@
 2007-11-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	New config files output variable `top_build_prefix'.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): Substitute
+	`top_build_prefix'.
+	* doc/autoconf.texi (Preset Output Variables): Document it.
+	* NEWS: Update.
+	Report by Bob Friesenhahn.
+
 	Avoid expr for arithmetic evaluation if the shell accepts $((...)).
 	* lib/autotest/general.m4 (AT_INIT) <at_func_arith>: New
 	function, to parametrize arithmetic with expr vs. the shell.

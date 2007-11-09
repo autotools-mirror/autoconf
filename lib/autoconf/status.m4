@@ -622,6 +622,7 @@ dnl configure_input is a somewhat special, so we don't call AC_SUBST_TRACE.
 s&@configure_input@&$configure_input&;t t
 dnl During the transition period, this is a special case:
 s&@top_builddir@&$ac_top_builddir_sub&;t t[]AC_SUBST_TRACE([top_builddir])
+s&@top_build_prefix@&$ac_top_build_prefix&;t t[]AC_SUBST_TRACE([top_build_prefix])
 m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 			builddir, abs_builddir,
 			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]])AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P], [[, MKDIR_P]]),
