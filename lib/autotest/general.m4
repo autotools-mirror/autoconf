@@ -337,6 +337,24 @@ at_func_create_debugging_script ()
   chmod +x $at_group_dir/run
 }
 
+# at_func_arith
+# -------------
+# Arithmetic evaluation, avoids expr if the shell is sane.
+#
+# subshell and eval are needed to keep Solaris sh from bailing out:
+if ( eval 'test $(( 1 + 1 )) = 2' ) 2>/dev/null; then
+  [#] With "$[@]", bash does not split positional parameters:
+  eval 'at_func_arith ()
+  {
+    at_func_arith_result=$(( $[*] ))
+  }'
+else
+  at_func_arith ()
+  {
+    at_func_arith_result=`expr "$[@]"`
+  }
+fi
+
 ## ---------------------- ##
 ## End of shell functions ##
 ## ---------------------- ##
@@ -905,7 +923,8 @@ do
 _ATEOF
     AS_ECHO(["$at_setup_line"]) >"$at_check_line_file"
   fi
-  at_group_count=`expr 1 + $at_group_count`
+  at_func_arith 1 + $at_group_count
+  at_group_count=$at_func_arith_result
   $at_verbose AS_ECHO_N(["$at_group. $at_setup_line: "])
   AS_ECHO_N(["$at_group. $at_setup_line: "]) >> "$at_group_log"
   case $at_xfail:$at_status in
@@ -982,11 +1001,16 @@ at_stop_time=`date +%s 2>/dev/null`
 AS_ECHO(["$as_me: ending at: $at_stop_date"]) >&AS_MESSAGE_LOG_FD
 case $at_start_time,$at_stop_time in
   [[0-9]*,[0-9]*])
-    at_duration_s=`expr $at_stop_time - $at_start_time`
-    at_duration_m=`expr $at_duration_s / 60`
-    at_duration_h=`expr $at_duration_m / 60`
-    at_duration_s=`expr $at_duration_s % 60`
-    at_duration_m=`expr $at_duration_m % 60`
+    at_func_arith $at_stop_time - $at_start_time
+    at_duration_s=$at_func_arith_result
+    at_func_arith $at_duration_s / 60
+    at_duration_m=$at_func_arith_result
+    at_func_arith $at_duration_m / 60
+    at_duration_h=$at_func_arith_result
+    at_func_arith $at_duration_s % 60
+    at_duration_s=$at_func_arith_result
+    at_func_arith $at_duration_m % 60
+    at_duration_m=$at_func_arith_result
     at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
     AS_ECHO(["$as_me: test suite duration: $at_duration"]) >&AS_MESSAGE_LOG_FD
     ;;
@@ -998,9 +1022,12 @@ set X $at_fail_list; shift; at_fail_count=$[@%:@]
 set X $at_xpass_list; shift; at_xpass_count=$[@%:@]
 set X $at_xfail_list; shift; at_xfail_count=$[@%:@]
 
-at_run_count=`expr $at_group_count - $at_skip_count`
-at_unexpected_count=`expr $at_xpass_count + $at_fail_count`
-at_total_fail_count=`expr $at_xfail_count + $at_fail_count`
+at_func_arith $at_group_count - $at_skip_count
+at_run_count=$at_func_arith_result
+at_func_arith $at_xpass_count + $at_fail_count
+at_unexpected_count=$at_func_arith_result
+at_func_arith $at_xfail_count + $at_fail_count
+at_total_fail_count=$at_func_arith_result
 
 echo
 AS_BOX([Test results.])

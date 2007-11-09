@@ -1,3 +1,11 @@
+2007-11-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Avoid expr for arithmetic evaluation if the shell accepts $((...)).
+	* lib/autotest/general.m4 (AT_INIT) <at_func_arith>: New
+	function, to parametrize arithmetic with expr vs. the shell.
+	Use it where possible.
+	Suggestion by Benoit Sigoure.
+
 2007-11-03  Benoit Sigoure  <tsuna@lrde.epita.fr>
 
 	Adjust the documentation of autotest WRT atlocal.
