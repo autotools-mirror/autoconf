@@ -1,5 +1,12 @@
 2007-11-10  Jim Meyering  <meyering@redhat.com>
 
+	Avoid a race condition that would make parallel "distclean" fail.
+	* tests/Makefile.am (distclean-generic): Replace the default,
+	automake-provided rule with an identical one, but with an additional
+	dependency on distclean-local.  Simply adding the dependency would
+	cause automake not to emit the rule at all.
+	* BUGS: Building with -jN works, now.
+
 	Distribute git-version-gen.
 	* Makefile.am (EXTRA_DIST): Add build-aux/git-version-gen,
 	since GNUmakefile is distributed, and requires it for dist* rules.

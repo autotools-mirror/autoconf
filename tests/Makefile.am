@@ -120,6 +120,15 @@ $(TESTSUITE): $(srcdir)/package.m4 \
 atconfig: $(top_builddir)/config.status
 	cd $(top_builddir) && ./config.status tests/$@
 
+# Avoid a race condition that would make parallel "distclean" fail.
+# The rule in clean-local tests for existence of $(TESTSUITE), and
+# if found, attempts to run it.  But the distclean-generic rule may
+# be running in parallel, and it removes $(DISTCLEANFILES) which
+# includes $(TESTSUITE).
+distclean-generic: clean-local
+	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
+
 clean-local:
 	test ! -f $(TESTSUITE) || $(SHELL) $(TESTSUITE) --clean
 	rm -f *.tmp
