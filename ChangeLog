@@ -1,5 +1,13 @@
 2007-11-10  Jim Meyering  <meyering@redhat.com>
 
+	Generate package.m4 in build-dir, not srcdir.
+	* tests/Makefile.am (package.m4): Adjust target.
+	Don't redirect directly to $@.
+	(CLEANFILES): Add package.m4.
+	($(TESTSUITE)): Depend on just-built package.m4, not the one
+	in $(srcdir).
+	When running $(AUTOTEST), search "." before searching $(srcdir).
+
 	Avoid a race condition that would make parallel "distclean" fail.
 	* tests/Makefile.am (distclean-generic): Replace the default,
 	automake-provided rule with an identical one, but with an additional

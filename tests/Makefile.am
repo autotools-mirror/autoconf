@@ -35,7 +35,7 @@ include ../lib/freeze.mk
 ## ------------ ##
 
 # The `:;' works around a redirected compound command bash exit status bug.
-$(srcdir)/package.m4: Makefile
+package.m4: Makefile
 	:; \
 	{					\
 	  echo '# Signature of the current package.'; \
@@ -44,7 +44,8 @@ $(srcdir)/package.m4: Makefile
 	  echo 'm4_define([AT_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])'; \
 	  echo 'm4_define([AT_PACKAGE_STRING],    [$(PACKAGE_STRING)])'; \
 	  echo 'm4_define([AT_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'; \
-	} >$(srcdir)/package.m4
+	} > $@-t
+	mv $@-t $@
 
 
 
@@ -53,7 +54,7 @@ $(srcdir)/package.m4: Makefile
 ## ---------- ##
 
 wrappers = autoconf autoheader autom4te autoreconf autoscan autoupdate ifnames
-CLEANFILES = wrapper.in $(wrappers)
+CLEANFILES = wrapper.in $(wrappers) package.m4
 
 wrapper.in: $(srcdir)/wrapper.as $(m4sh_m4f_dependencies)
 	$(MY_AUTOM4TE) --language=M4sh $(srcdir)/wrapper.as -o $@
@@ -109,12 +110,12 @@ TESTSUITE = ./testsuite
 # Don't use AUTOM4TE since `make alpha' makes it unavailable although
 # we are allowed to use it (since we ship it).
 AUTOTEST = $(MY_AUTOM4TE) --language=autotest
-$(TESTSUITE): $(srcdir)/package.m4 \
+$(TESTSUITE): package.m4 \
 	      local.at \
 	      $(TESTSUITE_AT) \
 	      $(autotest_m4f_dependencies)
 	cd $(top_builddir)/lib/autotest && $(MAKE) $(AM_MAKEFLAGS) autotest.m4f
-	$(AUTOTEST) -I $(srcdir) suite.at -o $@.tmp
+	$(AUTOTEST) -I . -I $(srcdir) suite.at -o $@.tmp
 	mv $@.tmp $@
 
 atconfig: $(top_builddir)/config.status
