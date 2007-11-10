@@ -25,6 +25,7 @@ ACLOCAL_AMFLAGS = -I m4
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     BUGS \
 	     GNUmakefile Makefile.maint Makefile.cfg \
+	     build-aux/git-version-gen \
 	     config/announce-gen config/prev-version.txt
 
 MAINTAINERCLEANFILES = $(srcdir)/INSTALL

@@ -1,5 +1,9 @@
 2007-11-10  Jim Meyering  <meyering@redhat.com>
 
+	Distribute git-version-gen.
+	* Makefile.am (EXTRA_DIST): Add build-aux/git-version-gen,
+	since GNUmakefile is distributed, and requires it for dist* rules.
+
 	Remove two more generated files from version control.
 	* INSTALL: Remove generated file.
 	* lib/autoscan/autoscan.list: Remove generated file.
