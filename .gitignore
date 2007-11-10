@@ -3,6 +3,7 @@
 .#*
 .version
 CVS
+INSTALL
 Makefile
 Makefile.in
 TAGS

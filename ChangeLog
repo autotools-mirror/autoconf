@@ -1,3 +1,9 @@
+2007-11-10  Jim Meyering  <meyering@redhat.com>
+
+	Remove two more generated files from version control.
+	* INSTALL: Remove generated file.
+	* lib/autoscan/autoscan.list: Remove generated file.
+
 2007-11-09  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* GNUmakefile (PATH): Remove stray apostrophes; they become
