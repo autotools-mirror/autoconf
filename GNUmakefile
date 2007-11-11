@@ -47,13 +47,14 @@ include Makefile
 # for others: rerunning autoconf and recompiling everything isn't cheap.
 # The $(MAKE) clean is required, to remove all traces of the previous
 # version string, which would otherwise cause a few test failures.
+# Remove the autoreconf-provided INSTALL, so that we regenerate it.
 ifeq (0,$(MAKELEVEL))
   _is-dist-target = $(filter dist% alpha beta major,$(MAKECMDGOALS))
   ifneq (,$(_is-dist-target))
     _curr-ver := $(shell build-aux/git-version-gen $(srcdir) .version)
     ifneq ($(_curr-ver),$(VERSION))
       $(info INFO: running autoreconf for new version string: $(_curr-ver))
-      dummy := $(shell rm -rf autom4te.cache; autoreconf -i && $(MAKE) clean)
+      dummy := $(shell rm -rf autom4te.cache; autoreconf -i && $(MAKE) clean && rm -f INSTALL)
     endif
   endif
 endif

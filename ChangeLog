@@ -1,5 +1,8 @@
 2007-11-12  Jim Meyering  <meyering@redhat.com>
 
+	Remove the autoreconf-provided INSTALL, so that we regenerate it.
+	* GNUmakefile (dummy): Remove INSTALL.
+
 	Remove racy commands to build scripts in bin/ and tests/.
 	* man/Makefile.am (.x.1): Now that scripts in bin/ and tests/
 	are guaranteed to be built, remove the rules that tried to build
