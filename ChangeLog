@@ -1,5 +1,9 @@
 2007-11-12  Jim Meyering  <meyering@redhat.com>
 
+	Build in man/ only *after* building in bin/ and tests/.
+	* Makefile.am (SUBDIRS): The man-page-creation process runs $(MAKE)
+	in both bin/ and tests/.
+
 	Accommodate non-srcdir build-from-checkout.
 	* build-aux/git-version-gen: Require an additional parameter: $srcdir.
 	Use git's --git-dir=$srcdir/.git option.
