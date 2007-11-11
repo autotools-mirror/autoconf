@@ -1,3 +1,8 @@
+2007-11-11  Benoit Sigoure  <tsuna@lrde.epita.fr>
+
+	Document that $((expression)) is not portable.
+	* doc/autoconf.texi (Shell Substitutions): Here.
+
 2007-11-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Ignore configure --help* errors due to LINENO-impaired shells.
