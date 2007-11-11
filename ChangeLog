@@ -1,3 +1,12 @@
+2007-11-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Ignore configure --help* errors due to LINENO-impaired shells.
+	* tests/torture.at (Configuring subdirectories, Deep Package):
+	In the --help* tests in read-only trees, make `.' temporarily
+	writable again for the `stderr' file, and ignore errors due to
+	the attempt to write configure.lineno.
+	Report by Patrick Welche.
+
 2007-11-10  Jim Meyering  <meyering@redhat.com>
 
 	Generate package.m4 in build-dir, not srcdir.
