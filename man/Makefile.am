@@ -1,6 +1,6 @@
 # Make Autoconf man pages.
 
-# Copyright (C) 2001, 2004, 2005, 2006 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2004-2007 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -51,16 +51,7 @@ MOSTLYCLEANFILES = $(srcdir)/*.t
 SUFFIXES = .x .1
 
 .x.1:
-	@program=`expr "/$*" : '.*/\(.*\)'` && \
-	case $$program in \
-	config.*) ;; \
-	*) \
-	  for dir in $(top_builddir)/bin $(top_builddir)/tests; do \
-	    echo cd $$dir '&&' $(MAKE) $(AM_MAKEFLAGS) $$program && \
-	    (cd $$dir && $(MAKE) $(AM_MAKEFLAGS) $$program) || exit; \
-	  done;; \
-	esac
-	echo "Updating man page $@"
+	@echo "Updating man page $@"
 	PATH="$(top_builddir)/tests$(PATH_SEPARATOR)$(top_srcdir)/build-aux$(PATH_SEPARATOR)$$PATH"; \
 	export PATH; \
 	$(HELP2MAN) \

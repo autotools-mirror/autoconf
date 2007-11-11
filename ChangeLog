@@ -1,5 +1,11 @@
 2007-11-12  Jim Meyering  <meyering@redhat.com>
 
+	Remove racy commands to build scripts in bin/ and tests/.
+	* man/Makefile.am (.x.1): Now that scripts in bin/ and tests/
+	are guaranteed to be built, remove the rules that tried to build
+	them.  Before, with a parallel build, these rules could lead to
+	two processes writing tests/wrapper.in concurrently.
+
 	Build in man/ only *after* building in bin/ and tests/.
 	* Makefile.am (SUBDIRS): The man-page-creation process runs $(MAKE)
 	in both bin/ and tests/.
