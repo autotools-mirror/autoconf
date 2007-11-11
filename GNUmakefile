@@ -39,7 +39,7 @@ ifeq ($(have-Makefile),yes)
 export TAR_OPTIONS = --owner=0 --group=0 --numeric-owner
 
 # Build with our own versions of these tools, when possible.
-export PATH = '$(shell echo "`pwd`/tests:$$PATH")'
+export PATH = $(shell echo "`pwd`/tests:$$PATH")
 
 include Makefile
 

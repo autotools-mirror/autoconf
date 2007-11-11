@@ -1,3 +1,8 @@
+2007-11-09  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* GNUmakefile (PATH): Remove stray apostrophes; they become
+	part of PATH, which isn't wanted here.
+
 2007-11-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	New config files output variable `top_build_prefix'.
