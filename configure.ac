@@ -20,7 +20,7 @@
 # We need AC_CONFIG_TESTDIR, AC_PROG_SED, AC_PROG_GREP.
 AC_PREREQ([2.60])
 
-AC_INIT([GNU Autoconf], m4_esyscmd([build-aux/git-version-gen .version]),
+AC_INIT([GNU Autoconf], m4_esyscmd([build-aux/git-version-gen . .version]),
 	[bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])

@@ -1,5 +1,12 @@
 2007-11-12  Jim Meyering  <meyering@redhat.com>
 
+	Accommodate non-srcdir build-from-checkout.
+	* build-aux/git-version-gen: Require an additional parameter: $srcdir.
+	Use git's --git-dir=$srcdir/.git option.
+	Add quotes, in case tarball_version_file contains shell meta-characters.
+	* GNUmakefile (_curr-ver): Pass $(srcdir) to git-version-gen.
+	* configure.ac: Pass "." to git-version-gen.
+
 	Avoid spurious test failures due to version skew.
 	* GNUmakefile (dummy): Run $(MAKE) clean after autoreconf -i.
 
