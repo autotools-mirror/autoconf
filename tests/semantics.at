@@ -48,7 +48,7 @@ AC_CHECK_LIB($ac_m, acos,,
 
 ac_asin=asin
 AC_CHECK_LIB($ac_m, $ac_asin,,
-      [AC_MSG_ERROR([cannot find `\$ac_asin' (= `$ac_asin') in `\$ac_m' (= `$at_m')])])
+      [AC_MSG_ERROR([cannot find `\$ac_asin' (= `$ac_asin') in `\$ac_m' (= `$ac_m')])])
 
 # But if the bug is in the caching mechanism, then be sure we
 # correctly detect failures.
@@ -67,7 +67,7 @@ AC_CHECK_LIB($ac_m, acossack,
 
 ac_asinner=asinner
 AC_CHECK_LIB($ac_m, $ac_asinner,
-      [AC_MSG_ERROR([found `\$ac_asinner' (= `$ac_asinner') in `\$ac_m' (= `$at_m')])])
+      [AC_MSG_ERROR([found `\$ac_asinner' (= `$ac_asinner') in `\$ac_m' (= `$ac_m')])])
 
 ])
 

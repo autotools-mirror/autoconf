@@ -1,3 +1,8 @@
+2007-11-12  Benoit Sigoure  <tsuna@lrde.epita.fr>
+
+	Fix typos in variable names.
+	* tests/semantics.at (test for AC_CHECK_LIB): s/at_m/ac_m/.
+
 2007-11-11  Benoit Sigoure  <tsuna@lrde.epita.fr>
 
 	Document that $((expression)) is not portable.
