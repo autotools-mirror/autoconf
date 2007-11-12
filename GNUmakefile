@@ -51,10 +51,14 @@ include Makefile
 ifeq (0,$(MAKELEVEL))
   _is-dist-target = $(filter dist% alpha beta major,$(MAKECMDGOALS))
   ifneq (,$(_is-dist-target))
-    _curr-ver := $(shell build-aux/git-version-gen $(srcdir) .version)
+    _curr-ver := $(shell $(srcdir)/build-aux/git-version-gen $(srcdir) .version)
     ifneq ($(_curr-ver),$(VERSION))
       $(info INFO: running autoreconf for new version string; old: $(_curr-ver))
-      dummy := $(shell rm -rf autom4te.cache; autoreconf -i -v && $(MAKE) clean && rm -f INSTALL)
+      dummy := $(shell				\
+	rm -rf autom4te.cache;			\
+	(cd $(srcdir) && autoreconf -i -v)	\
+	  && $(MAKE) clean			\
+	  && rm -f INSTALL)
     endif
   endif
 endif

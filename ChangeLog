@@ -1,5 +1,9 @@
 2007-11-12  Jim Meyering  <meyering@redhat.com>
 
+	Add more non-srcdir build support.
+	* GNUmakefile (dummy): Split a long line.
+	Add -v option to autoreconf invocation.
+
 	Remove the autoreconf-provided INSTALL, so that we regenerate it.
 	* GNUmakefile (dummy): Remove INSTALL.
 
