@@ -401,6 +401,9 @@ m4_divert_pop()dnl
 #
 # - *.map, *.inf
 #   Created by the Green Hills compiler.
+#
+# - *.dSYM
+#   Directory created on Mac OS X Leopard.
 
 
 # _AC_COMPILER_OBJEXT_REJECT
@@ -408,7 +411,7 @@ m4_divert_pop()dnl
 # Case/esac pattern matching the files to be ignored when looking for
 # compiled object files.
 m4_define([_AC_COMPILER_OBJEXT_REJECT],
-[*.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf])
+[*.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM])
 
 
 # _AC_COMPILER_EXEEXT_REJECT

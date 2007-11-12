@@ -2493,6 +2493,7 @@ AS_IF([_AC_DO_STDERR($ac_link) && {
 dnl Delete also the IPA/IPO (Inter Procedural Analysis/Optimization)
 dnl information created by the PGI compiler (conftest_ipa8_conftest.oo),
 dnl as it would interfere with the next link command.
+rm -rf conftest.dSYM
 rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
@@ -2548,6 +2549,7 @@ _AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3],
 	  [( exit $ac_status )
 $3])dnl])[]dnl
+rm -rf conftest.dSYM
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
 						     [conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
