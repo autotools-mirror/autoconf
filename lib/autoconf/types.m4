@@ -475,14 +475,7 @@ You should use `AC_TYPE_LONG_DOUBLE' or `AC_TYPE_LONG_DOUBLE_WIDER' instead.]
 AC_DEFUN([_AC_TYPE_LONG_LONG_SNIPPET],
 [
   AC_LANG_PROGRAM(
-    [[/* Test preprocessor.  */
-      #if ! (-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
-        error in preprocessor;
-      #endif
-      #if ! (18446744073709551615ULL <= -1ull)
-        error in preprocessor;
-      #endif
-      /* Test literals.  */
+    [[/* Test literals.  */
       long long int ll = 9223372036854775807ll;
       long long int nll = -9223372036854775807LL;
       unsigned long long int ull = 18446744073709551615ULL;

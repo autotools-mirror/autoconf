@@ -1,3 +1,13 @@
+2007-11-13  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Don't worry about preprocessor when testing long long.
+	See: http://lists.gnu.org/archive/html/bug-gnulib/2007-11/msg00075.html
+	* doc/autoconf.texi (Preprocessor Arithmetic): New section.
+	(AC_TYPE_LONG_LONG_INT, AC_TYPE_UNSIGNED_LONG_LONG_INT):
+	These no longer check for preprocessor flaws.
+	* lib/autoconf/types.m4 (_AC_TYPE_LONG_LONG_SNIPPET):
+	Do not check for preprocessor flows.
+
 2007-11-13  Jim Meyering  <meyering@redhat.com>
 
 	Adapt dependencies, now that a version change doesn't modify configure.ac

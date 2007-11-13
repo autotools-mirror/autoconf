@@ -518,6 +518,7 @@ Portable C and C++ Programming
 
 * Varieties of Unportability::  How to make your programs unportable
 * Integer Overflow::            When integers get too large
+* Preprocessor Arithmetic::     @code{#if} expression problems
 * Null Pointers::               Properties of null pointers
 * Buffer Overruns::             Subscript errors and the like
 * Volatile Objects::            @code{volatile} and signals
@@ -6123,8 +6124,10 @@ range or precision than the @code{double} type, define
 @acindex{TYPE_LONG_LONG_INT}
 @cvindex HAVE_LONG_LONG_INT
 If the C compiler supports a working @code{long long int} type, define
-@code{HAVE_LONG_LONG_INT}.  This test also validates that the
-preprocessor can handle integers with the @samp{LL} suffix.
+@code{HAVE_LONG_LONG_INT}.  However, this test does not test
+@code{long long int} values in preprocessor @code{#if} expressions,
+because too many compilers mishandle such expressions.
+@xref{Preprocessor Arithmetic}.
 @end defmac
 
 @defmac AC_TYPE_MBSTATE_T
@@ -6261,12 +6264,10 @@ exists.
 @acindex{TYPE_UNSIGNED_LONG_LONG_INT}
 @cvindex HAVE_UNSIGNED_LONG_LONG_INT
 If the C compiler supports a working @code{unsigned long long int} type,
-define @code{HAVE_UNSIGNED_LONG_LONG_INT}.  This test also validates
-that the preprocessor can handle integers with the @samp{ULL} suffix.
-However, portable code cannot mix @code{unsigned long int} and
-@code{unsigned long long int} types in preprocessor expressions,
-since the @acronym{HP-UX} 11.00 preprocessor does not use consistent
-promotion rules.
+define @code{HAVE_UNSIGNED_LONG_LONG_INT}.  However, this test does not test
+@code{unsigned long long int} values in preprocessor @code{#if} expressions,
+because too many compilers mishandle such expressions.
+@xref{Preprocessor Arithmetic}.
 @end defmac
 
 @node Generic Types
@@ -16291,6 +16292,7 @@ more information.
 @menu
 * Varieties of Unportability::  How to make your programs unportable
 * Integer Overflow::            When integers get too large
+* Preprocessor Arithmetic::     @code{#if} expression problems
 * Null Pointers::               Properties of null pointers
 * Buffer Overruns::             Subscript errors and the like
 * Volatile Objects::            @code{volatile} and signals
@@ -16655,6 +16657,20 @@ which by default terminates the program.  Worse, taking the remainder
 of these two values typically yields the same signal on these CPUs,
 even though the C standard requires @code{INT_MIN % -1} to yield zero
 because the expression does not overflow.
+
+@node Preprocessor Arithmetic
+@section Preprocessor Arithmetic
+@cindex preprocessor arithmetic
+
+In C99, preprocessor arithmetic, used for @code{#if} expressions, must
+be evaluated as if all signed values are of type @code{intmax_t} and all
+unsigned values of type @code{uintmax_t}.  Many compilers are buggy in
+this area, though.  For example, as of 2007, Sun C mishandles @code{#if
+LLONG_MIN < 0} on a platform with 32-bit @code{long int} and 64-bit
+@code{long long int}.  Also, some older preprocessors mishandle
+constants ending in @code{LL}.  To work around these problems, you can
+compute the value of expressions like @code{LONG_MAX < LLONG_MAX} at
+@code{configure}-time rather than at @code{#if}-time.
 
 @node Null Pointers
 @section Properties of Null Pointers
