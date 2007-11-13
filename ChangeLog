@@ -1,3 +1,10 @@
+2007-11-13  Jim Meyering  <meyering@redhat.com>
+
+	Clean up the rule to create "expr".
+	* tests/Makefile.am (expr): Don't redirect directly to target.
+	Redirect just once, not for each echo statement.
+	Use $@, not literal "expr".
+
 2007-11-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Don't worry about preprocessor when testing long long.

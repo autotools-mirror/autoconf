@@ -195,14 +195,17 @@ maintainer-check: maintainer-check-posix maintainer-check-c++
 # The hairy heredoc is more robust than using echo.
 CLEANFILES += expr
 expr:
-	echo '#! $(SHELL)'            >expr
-	echo 'result=`$(EXPR) "$$@"`'>>expr
-	echo 'estatus=$$?'           >>expr
-	echo 'cat <<EOF'             >>expr
-	echo '$${result:-0}'         >>expr
-	echo 'EOF'                   >>expr
-	echo 'exit $$estatus'        >>expr
-	chmod +x expr
+	:;{					\
+	  echo '#! $(SHELL)';			\
+	  echo 'result=`$(EXPR) "$$@"`';	\
+	  echo 'estatus=$$?';			\
+	  echo 'cat <<EOF';			\
+	  echo '$${result:-0}';			\
+	  echo 'EOF';				\
+	  echo 'exit $$estatus';		\
+	} > $@-t
+	chmod +x $@-t
+	mv $@-t $@
 
 # Try the test suite with more severe environments.
 maintainer-check-posix: expr
