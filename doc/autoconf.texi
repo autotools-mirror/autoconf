@@ -13572,11 +13572,10 @@ if @var{command}; then (exit 1); else :; fi
 @item @command{@{...@}}
 @c --------------------
 @prindex @command{@{...@}}
-As recently as GNU Bash 3.2, some shells do not properly set @samp{$?}
-when failing to write redirected output of any compound command other
-than a subshell group, when that compound command is the first thing
-executed.  This is most commonly observed with @{...@}, but also affects
-other compound commands.
+Bash 3.2 (and earlier versions) sometimes does not properly set
+@samp{$?} when failing to write redirected output of a compound command.
+This problem is most commonly observed with @samp{@{@dots{}@}}; it does
+not occur with @samp{(@dots{})}.  For example:
 
 @example
 $ @kbd{bash -c '@{ echo foo; @} >/bad; echo $?'}
@@ -13587,14 +13586,10 @@ bash: line 1: /bad: Permission denied
 0
 @end example
 
-The workaround is simple: prime bash with a simple command before any
-compound command with redirection.
+To work around the bug, prepend @samp{:;}:
 
 @example
-$ @kbd{bash -c ':; @{ echo foo; @} >/bad; echo $?'}
-bash: line 1: /bad: Permission denied
-1
-$ @kbd{bash -c ':; while :; do echo; done >/bad; echo $?'}
+$ @kbd{bash -c ':;@{ echo foo; @} >/bad; echo $?'}
 bash: line 1: /bad: Permission denied
 1
 @end example
@@ -20239,13 +20234,14 @@ we suggest that you also define @code{AT_PACKAGE_NAME},
 suggest the following makefile excerpt:
 
 @smallexample
+# The `:;' works around a Bash 3.2 bug when the output is not writeable.
 $(srcdir)/package.m4: $(top_srcdir)/configure.ac
-        @{                                      \
-          echo '# Signature of the current package.'; \
-          echo 'm4_define([AT_PACKAGE_NAME],      [@@PACKAGE_NAME@@])'; \
-          echo 'm4_define([AT_PACKAGE_TARNAME],   [@@PACKAGE_TARNAME@@])'; \
-          echo 'm4_define([AT_PACKAGE_VERSION],   [@@PACKAGE_VERSION@@])'; \
-          echo 'm4_define([AT_PACKAGE_STRING],    [@@PACKAGE_STRING@@])'; \
+        :;@{ \
+          echo '# Signature of the current package.' && \
+          echo 'm4_define([AT_PACKAGE_NAME],      [@@PACKAGE_NAME@@])' && \
+          echo 'm4_define([AT_PACKAGE_TARNAME],   [@@PACKAGE_TARNAME@@])' && \
+          echo 'm4_define([AT_PACKAGE_VERSION],   [@@PACKAGE_VERSION@@])' && \
+          echo 'm4_define([AT_PACKAGE_STRING],    [@@PACKAGE_STRING@@])' && \
           echo 'm4_define([AT_PACKAGE_BUGREPORT], [@@PACKAGE_BUGREPORT@@])'; \
         @} >'$(srcdir)/package.m4'
 @end smallexample

@@ -26,17 +26,16 @@ CLEANFILES = $(nodist_m4sugarlib_DATA)
 
 # The `:;' works around a redirected compound command bash exit status bug.
 version.m4: $(top_srcdir)/configure.ac
-	:; \
-	{					\
-	  echo '# This file is part of -*- Autoconf -*-.'; \
-	  echo '# Version of Autoconf.'; \
-	  echo '# Copyright (C) 1999, 2000, 2001, 2002, 2006, 2007'; \
-	  echo '# Free Software Foundation, Inc.'; \
-	  echo ;\
-	  echo 'm4_define([m4_PACKAGE_NAME],      [$(PACKAGE_NAME)])'; \
-	  echo 'm4_define([m4_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])'; \
-	  echo 'm4_define([m4_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])'; \
-	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])'; \
+	:;{ \
+	  echo '# This file is part of -*- Autoconf -*-.' && \
+	  echo '# Version of Autoconf.' && \
+	  echo '# Copyright (C) 1999, 2000, 2001, 2002, 2006, 2007' && \
+	  echo '# Free Software Foundation, Inc.' && \
+	  echo  &&\
+	  echo 'm4_define([m4_PACKAGE_NAME],      [$(PACKAGE_NAME)])' && \
+	  echo 'm4_define([m4_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])' && \
+	  echo 'm4_define([m4_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])' && \
+	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])' && \
 	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'; \
 	} >version.m4
 

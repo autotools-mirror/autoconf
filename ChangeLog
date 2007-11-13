@@ -1,3 +1,17 @@
+2007-11-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Making testsuite Scripts): Document
+	":;{" shorthand as in previous patch.
+
+2007-11-12  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (Limitations of Builtins): Document problem
+	with { ... } a bit more clearly.  Suggest ":;{" as a shorthand
+	for the workaround.
+	* lib/m4sugar/Makefile.am (version.m4): Detect 'echo' failure.
+	Use ":;{" shorthand.
+	* tests/Makefile.am ($(srcdir)/package.m4): Likewise.
+
 2007-11-12  Jim Meyering  <meyering@redhat.com>
 
 	Add more non-srcdir build support.
