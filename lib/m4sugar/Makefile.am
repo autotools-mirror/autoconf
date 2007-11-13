@@ -25,7 +25,7 @@ CLEANFILES = $(nodist_m4sugarlib_DATA)
 ## ------------ ##
 
 # The `:;' works around a redirected compound command bash exit status bug.
-version.m4: $(top_srcdir)/configure.ac
+version.m4: Makefile
 	:;{ \
 	  echo '# This file is part of -*- Autoconf -*-.' && \
 	  echo '# Version of Autoconf.' && \
@@ -37,7 +37,8 @@ version.m4: $(top_srcdir)/configure.ac
 	  echo 'm4_define([m4_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])' && \
 	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])' && \
 	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'; \
-	} >version.m4
+	} > $@-t
+	mv $@-t $@
 
 
 ## --------------- ##

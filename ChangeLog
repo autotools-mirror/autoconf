@@ -1,3 +1,12 @@
+2007-11-13  Jim Meyering  <meyering@redhat.com>
+
+	Adapt dependencies, now that a version change doesn't modify configure.ac
+	* GNUmakefile: Remove "make clean" kludge.
+	* lib/m4sugar/Makefile.am (version.m4): Depend on Makefile, not
+	configure.ac.
+	Don't redirect directly to target.
+	Use $@, not literal "version.m4".
+
 2007-11-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Making testsuite Scripts): Document

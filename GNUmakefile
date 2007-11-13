@@ -45,8 +45,6 @@ include Makefile
 
 # Ensure that $(VERSION) is up to date for dist-related targets, but not
 # for others: rerunning autoconf and recompiling everything isn't cheap.
-# The $(MAKE) clean is required, to remove all traces of the previous
-# version string, which would otherwise cause a few test failures.
 # Remove the autoreconf-provided INSTALL, so that we regenerate it.
 ifeq (0,$(MAKELEVEL))
   _is-dist-target = $(filter dist% alpha beta major,$(MAKECMDGOALS))
@@ -57,7 +55,6 @@ ifeq (0,$(MAKELEVEL))
       dummy := $(shell				\
 	rm -rf autom4te.cache;			\
 	(cd $(srcdir) && autoreconf -i -v)	\
-	  && $(MAKE) clean			\
 	  && rm -f INSTALL)
     endif
   endif
