@@ -13,7 +13,7 @@
 	(AC_TYPE_LONG_LONG_INT, AC_TYPE_UNSIGNED_LONG_LONG_INT):
 	These no longer check for preprocessor flaws.
 	* lib/autoconf/types.m4 (_AC_TYPE_LONG_LONG_SNIPPET):
-	Do not check for preprocessor flows.
+	Do not check for preprocessor flaws.
 
 2007-11-13  Jim Meyering  <meyering@redhat.com>
 
