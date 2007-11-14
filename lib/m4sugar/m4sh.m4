@@ -1304,7 +1304,7 @@ m4_if([$2], [], [: ${TMPDIR=/tmp}])
   (umask 077 && mkdir "$tmp")
 } ||
 {
-   AS_ECHO(["$me: cannot create a temporary directory in m4_default([$2], [$TMPDIR])"]) >&2
+   AS_ECHO(["$as_me: cannot create a temporary directory in m4_default([$2], [$TMPDIR])"]) >&2
    AS_EXIT
 }dnl
 ])# AS_TMPDIR

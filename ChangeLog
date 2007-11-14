@@ -1,3 +1,7 @@
+2007-11-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): Use $as_me, not $me.
+
 2007-11-13  Jim Meyering  <meyering@redhat.com>
 
 	Clean up the rule to create "expr".
