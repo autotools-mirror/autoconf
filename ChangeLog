@@ -1,3 +1,8 @@
+2007-11-14  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/types.m4 (_AC_TYPE_LONG_LONG_SNIPPET): Make comment match
+	gnulib.
+
 2007-11-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/status.m4: Fix a couple of comment typos.
