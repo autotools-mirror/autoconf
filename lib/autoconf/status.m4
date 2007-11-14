@@ -189,10 +189,10 @@ m4_define([_AC_CONFIG_DEPENDENCY],
 # ------------------------------------------------------
 # Expand to `:DEST.in' if appropriate, or to empty string otherwise.
 #
-# More detailed edscription:
+# More detailed description:
 # If the tag contains `:', expand to nothing.
 # Otherwise, for a config file or header, add `:DEST.in'.
-# For config link, DEST.in is not appropriate:
+# For a config link, DEST.in is not appropriate:
 #  - if the tag is literal, complain.
 #  - otherwise, just expand to nothing and proceed with fingers crossed.
 #    (We get to this case from the obsolete AC_LINK_FILES, for example.)
