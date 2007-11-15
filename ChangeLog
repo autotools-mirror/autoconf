@@ -1,3 +1,12 @@
+2007-11-15  Paolo Bonzini  <bonzini@gnu.org>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (at_func_test): Remove.
+	(AT_INIT): Pre-extract test groups into separate files.
+	(AT_CLEANUP): Source pre-extracted file instead of calling at_func_test.
+	Remove at-test-source files together with the $at_group_dir.
+	* tests/autotest.at (Long test source lines): New test.
+
 2007-11-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Shell functions and variables may share a namespace.

@@ -335,6 +335,21 @@ AT_CHECK_AT_TITLE_CHAR([Longer test title],
 		       [01234567890123456789012345678901234], [], [], [54])
 
 
+## ----------------------- ##
+## Long test source lines. ##
+## ----------------------- ##
+
+# Create a test file that has more than 99 words in a line, for Solaris awk.
+# While at that, try out the limit of 2000 bytes in a text file line.
+
+AT_CHECK_AT_TEST([Long test source lines],
+[m4_for([nnn], [1], [999], [], [: ])
+AT_CHECK([:])
+], [], [], [], [ignore],
+[AT_CHECK([$CONFIG_SHELL ./micro-suite -k skipalltests], [], [ignore], [ignore])
+])
+
+
 ## ----------------- ##
 ## Debugging a test. ##
 ## ----------------- ##

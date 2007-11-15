@@ -185,6 +185,7 @@ m4_define([_AT_NORMALIZE_TEST_GROUP_NUMBER],
 # Begin test suite.
 m4_define([AT_INIT],
 [m4_pattern_forbid([^_?AT_])
+m4_pattern_allow([^_AT_T_EOF$])
 m4_define([AT_TESTSUITE_NAME],
 	  m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
 m4_define([AT_ordinal], 0)
@@ -310,15 +311,6 @@ at_func_diff_devnull ()
   $at_diff "$at_devnull" "$[1]"
 }
 
-# at_func_test NUMBER
-# -------------------
-# Parse out test NUMBER from the tail of this file.
-at_func_test ()
-{
-  sed -n '/^@%:@AT_START_'$[1]'$/,/^@%:@AT_STOP_'$[1]'$/p' "$at_myself" \
-       > "$at_test_source"
-}
-
 # at_func_create_debugging_script
 # -------------------------------
 # Create the debugging script $at_group_dir/run which will reproduce the
@@ -431,7 +423,7 @@ at_status_file=$at_suite_dir/at-status
 at_stdout=$at_suite_dir/at-stdout
 at_stder1=$at_suite_dir/at-stder1
 at_stderr=$at_suite_dir/at-stderr
-# The file containing the function to run a test group.
+# The stem for files containing a test group.
 at_test_source=$at_suite_dir/at-test-source
 # The file containing dates.
 at_times_file=$at_suite_dir/at-times
@@ -871,6 +863,36 @@ else
   at_diff=diff
 fi
 
+{
+  echo 'BEGIN {'
+  for at_group in $at_groups; do
+    at_group_normalized=$at_group
+    _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
+    echo "  outfile[[\"$at_group\"]] = \"$at_test_source-$at_group_normalized\""
+  done
+  AS_ECHO(['}
+emit == 0 && /^@%:@AT_START_/ {
+  test = substr($ 0, 11);
+  if (outfile[[test]]) {
+    emit = 1
+    print "cat >\"" outfile[[test]] "\" <<'\''_AT_T_EOF'\''"
+  }
+}
+emit != 0 && /^@%:@AT_STOP_/ {
+  print "_AT_T_EOF"
+  emit = 0
+}
+emit != 0 { print }
+'])
+} > "$at_test_source.awk"
+
+# Extract test group that will be run from the tail of this file
+if awk -f "$at_test_source.awk" "$at_myself" >"$at_test_source.sh" \
+   && . "$at_test_source.sh" \
+   && rm -f "$at_test_source.awk" "$at_test_source.sh"; then :; else
+  AS_ECHO(["$as_me: unable to parse test groups"]) >&2
+  exit 1
+fi
 
 m4_text_box([Driver loop.])
 for at_group in $at_groups
@@ -906,10 +928,7 @@ do
     at_tee_pipe='cat >> "$at_group_log"'
   fi
 
-  if at_func_test $at_group && . "$at_test_source"; then :; else
-    AS_ECHO(["$as_me: unable to parse test group: $at_group"]) >&2
-    at_failed=:
-  fi
+  . "$at_test_source-$at_group_normalized"
 
   # Be sure to come back to the suite directory, in particular
   # since below we might `rm' the group directory we are in currently.
@@ -973,9 +992,12 @@ _ATEOF
       # Cleanup the group directory, unless the user wants the files.
       if $at_debug_p ; then
 	at_func_create_debugging_script
-      elif test -d "$at_group_dir"; then
-	find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-	rm -fr "$at_group_dir"
+      else
+	if test -d "$at_group_dir"; then
+	  find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+	  rm -fr "$at_group_dir"
+        fi
+	rm -f "$at_test_source-$at_group_normalized"
       fi
       ;;
     *)
