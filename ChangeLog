@@ -1,3 +1,9 @@
+2007-11-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Shell functions and variables may share a namespace.
+	* doc/autoconf.texi (Portable Shell): Mention Solaris sh
+	limitation.
+
 2007-11-14  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/types.m4 (_AC_TYPE_LONG_LONG_SNIPPET): Make comment match

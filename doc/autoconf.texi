@@ -12162,7 +12162,16 @@ you should not rely on the error status of a subshell if the last
 command of that subshell was @code{exit} or @code{trap}, as this
 triggers bugs in zsh 4.x; while Autoconf tries to find a shell that
 does not exhibit the bug, zsh might be the only shell present on the
-user's machine.
+user's machine.  Also, variables and functions may share a namespace,
+for example with Solaris 10 @command{/bin/sh}:
+
+@example
+$ @kbd{f () @{ :; @}; f=; f}
+f: not found
+@end example
+
+@noindent
+For this reason, Autotest uses the prefix @samp{at_func_} for its functions.
 
 Some ancient systems have quite
 small limits on the length of the @samp{#!} line; for instance, 32
