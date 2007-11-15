@@ -1,3 +1,9 @@
+2007-11-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Add witness macro for @top_build_prefix@ substitution.
+	* lib/autoconf/status.m4 (_AC_HAVE_TOP_BUILD_PREFIX): New macro.
+	(_AC_OUTPUT_FILE): Mention it here.
+
 2007-11-15  Paolo Bonzini  <bonzini@gnu.org>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
