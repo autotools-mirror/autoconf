@@ -268,7 +268,7 @@ at_func_filter_trace ()
 at_func_log_failure ()
 {
   for file
-   do AS_ECHO(["$file:"]); sed 's/^/> /' "$file"; done
+    do AS_ECHO(["$file:"]); sed 's/^/> /' "$file"; done
   echo 1 > "$at_status_file"
   exit 1
 }
@@ -1678,22 +1678,21 @@ AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([$1])"])
 echo AT_LINE >"$at_check_line_file"
 
 if _AT_DECIDE_TRACEABLE([$1]); then
-    ( $at_traceon; $1 ) >"$at_stdout" 2>"$at_stder1"
-    at_func_filter_trace $?
+  ( $at_traceon; $1 ) >"$at_stdout" 2>"$at_stder1"
+  at_func_filter_trace $?
 else
-    ( :; $1 ) >"$at_stdout" 2>"$at_stderr"
+  ( :; $1 ) >"$at_stdout" 2>"$at_stderr"
 fi
 at_status=$?
 at_failed=false
 m4_ifdef([AT_DIFF_STDERR($4)], [m4_indir([AT_DIFF_STDERR($4)])],
-	 [echo >>"$at_stderr"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$4])],[$4])"]) | \
-	  $at_diff - "$at_stderr" || at_failed=:])
+  [echo >>"$at_stderr"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$4])],[$4])"]) | \
+  $at_diff - "$at_stderr" || at_failed=:])
 m4_ifdef([AT_DIFF_STDOUT($3)], [m4_indir([AT_DIFF_STDOUT($3)])],
-	 [echo >>"$at_stdout"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$3])],[$3])"]) | \
-	  $at_diff - "$at_stdout" || at_failed=:])
+  [echo >>"$at_stdout"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$3])],[$3])"]) | \
+  $at_diff - "$at_stdout" || at_failed=:])
 m4_if([$2], [ignore], [at_func_check_skip],
-      [at_func_check_status m4_default([$2], [0])]) dnl
-     $at_status "$at_srcdir/AT_LINE"
+  [at_func_check_status m4_default([$2], [0])]) $at_status "$at_srcdir/AT_LINE"
 AS_IF($at_failed, [$5], [$6])
 $at_failed && at_func_log_failure AT_capture_files
 $at_traceon

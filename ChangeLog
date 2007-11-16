@@ -1,3 +1,10 @@
+2007-11-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Indentation fixups.
+	* lib/autotest/general.m4 (AT_INIT) <at_func_log_failure>: Fix
+	indentation.
+	(_AT_CHECK): Use less indentation, to save space.
+
 2007-11-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Add witness macro for @top_build_prefix@ substitution.
