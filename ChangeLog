@@ -1,3 +1,10 @@
+2007-11-16  Stepan Kasal  <kasal@ucw.cz>
+
+	AC_*_TOOL does not canonicalize the prefix
+	* doc/autoconf.texi (Generic Programs): Do not say that
+	the *_TOOL macros canonicalize, they simply use the `host_alias'.
+
+
 2007-11-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Diagnose write errors in config.status instantiations.
