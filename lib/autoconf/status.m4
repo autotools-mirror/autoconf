@@ -636,7 +636,8 @@ m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 ])dnl
 m4_ifndef([AC_DATAROOTDIR_CHECKED], [$ac_datarootdir_hack
 ])dnl
-" $ac_file_inputs m4_defn([_AC_SUBST_CMDS]) >$tmp/out
+" $ac_file_inputs m4_defn([_AC_SUBST_CMDS]) >$tmp/out \
+  || AC_MSG_ERROR([could not create $ac_file])
 
 m4_ifndef([AC_DATAROOTDIR_CHECKED],
 [test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
@@ -648,9 +649,10 @@ which seems to be undefined.  Please make sure it is defined.])
 
   rm -f "$tmp/stdin"
   case $ac_file in
-  -) cat "$tmp/out"; rm -f "$tmp/out";;
-  *) rm -f "$ac_file"; mv "$tmp/out" $ac_file;;
-  esac
+  -) cat "$tmp/out" && rm -f "$tmp/out";;
+  *) rm -f "$ac_file" && mv "$tmp/out" $ac_file;;
+  esac \
+  || AC_MSG_ERROR([could not create $ac_file])
 dnl This would break Makefile dependencies:
 dnl  if diff $ac_file "$tmp/out" >/dev/null 2>&1; then
 dnl    echo "$ac_file is unchanged"
@@ -838,17 +840,22 @@ m4_define([_AC_OUTPUT_HEADER],
   # CONFIG_HEADER
   #
   if test x"$ac_file" != x-; then
-    AS_ECHO(["/* $configure_input  */"]) >"$tmp/config.h"
-    $AWK -f "$tmp/defines.awk" $ac_file_inputs >>"$tmp/config.h"
+    {
+      AS_ECHO(["/* $configure_input  */"]) \
+      && $AWK -f "$tmp/defines.awk" $ac_file_inputs
+    } >"$tmp/config.h" \
+      || AC_MSG_ERROR([could not create $ac_file])
     if diff $ac_file "$tmp/config.h" >/dev/null 2>&1; then
       AC_MSG_NOTICE([$ac_file is unchanged])
     else
       rm -f $ac_file
-      mv "$tmp/config.h" $ac_file
+      mv "$tmp/config.h" $ac_file \
+	|| AC_MSG_ERROR([could not create $ac_file])
     fi
   else
-    AS_ECHO(["/* $configure_input  */"])
-    $AWK -f "$tmp/defines.awk" $ac_file_inputs
+    AS_ECHO(["/* $configure_input  */"]) \
+      && $AWK -f "$tmp/defines.awk" $ac_file_inputs \
+      || AC_MSG_ERROR([could not create -])
   fi
 dnl If running for Automake, be ready to perform additional
 dnl commands to set up the timestamp files.
@@ -1617,7 +1624,8 @@ do
     fi
 
     case $ac_tag in
-    *:-:* | *:-) cat >"$tmp/stdin";;
+    *:-:* | *:-) cat >"$tmp/stdin" \
+      || AC_MSG_ERROR([could not create $ac_file]) ;;
     esac
     ;;
   esac

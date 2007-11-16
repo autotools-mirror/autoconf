@@ -193,6 +193,29 @@ AT_CHECK([grep OK var-$1], [], [OK
 ])# AT_CHECK_CONFIG_CREATION
 
 
+# AT_CHECK_CONFIG_CREATION_NOWRITE(THING = (header | link | file | command))
+# ------------------------------------------------------------------
+# Check that THING and var-THING (which uses variables in AC_CONFIG_THING)
+# are properly created, with the right content.
+# Use `grep OK' instead of a simple `cat' to avoid banners such as in
+# AC_CONFIG_HEADERS.
+m4_define([AT_CHECK_CONFIG_CREATION_NOWRITE],
+[AT_CHECK_CONFIGURE([what_to_test=$1])
+AT_CHECK([ls header var-header file var-file command var-command link var-link 2>/dev/null],
+	 [ignore], [$1
+])
+AT_CHECK([grep OK $1], [], [OK
+])
+
+AT_CHECK_CONFIGURE([what_to_test=var-$1 --no-create])
+# config.status might be stupidly expecting data on stdin, if it's
+# really broken...
+chmod a-w .
+AT_CHECK([./config.status var-$1 </dev/null], [1], [ignore], [ignore])
+chmod u+w .
+])# AT_CHECK_CONFIG_CREATION_NOWRITE
+
+
 # Create a file
 AT_CHECK_CONFIG_CREATION(file)
 
@@ -204,6 +227,24 @@ AT_CHECK_CONFIG_CREATION(command)
 
 # Create a link
 AT_CHECK_CONFIG_CREATION(link)
+
+# Now check for write errors
+
+# Create a file
+AT_CHECK_CONFIG_CREATION_NOWRITE(file)
+AT_CHECK([./config.status --file=-:input </dev/null >/dev/full],
+	 [1], [ignore], [ignore])
+
+# Create a header
+AT_CHECK_CONFIG_CREATION_NOWRITE(header)
+AT_CHECK([./config.status --header=-:input </dev/null >/dev/full],
+	 [1], [ignore], [ignore])
+
+# Execute a command
+AT_CHECK_CONFIG_CREATION_NOWRITE(command)
+
+# Create a link
+AT_CHECK_CONFIG_CREATION_NOWRITE(link)
 
 AT_CLEANUP
 

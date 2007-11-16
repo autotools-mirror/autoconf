@@ -1,5 +1,14 @@
 2007-11-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Diagnose write errors in config.status instantiations.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE)
+	(_AC_OUTPUT_HEADER, _AC_OUTPUT_MAIN_LOOP): Bail out
+	on write errors.
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Extend test to also check for some write error failures, using...
+	<AT_CHECK_CONFIG_CREATION_NOWRITE>: ...this new macro.
+	Report by Bruno Haible.
+
 	Indentation fixups.
 	* lib/autotest/general.m4 (AT_INIT) <at_func_log_failure>: Fix
 	indentation.
