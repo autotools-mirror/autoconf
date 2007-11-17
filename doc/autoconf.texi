@@ -3950,7 +3950,7 @@ uses to produce objects, archives or executables}.
   @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_TOOL}
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
-with a prefix of the host type as specified by @option{--host} , followed by a
+with a prefix of the host type as specified by @option{--host}, followed by a
 dash.  For example, if the user runs
 @samp{configure --build=x86_64-gnu --host=i386-gnu}, then this call:
 @example
