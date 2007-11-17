@@ -1,5 +1,11 @@
 2007-11-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Avoid error with Tru64 awk and testsuite lines with many words.
+	* lib/autotest/general.m4 (AT_INIT): In the awk script that
+	reads the testsuite, set the field separator to an unusual value,
+	in order to not run over the limit of 199 fields.  Tru64 4.0D awk
+	even splits the input if $i, i>0, was never accessed in the script.
+
 	Revert 2007-10-17 change.
 	* TODO: Multiline args in config files and headers mean something
 	different and are not fixed, see

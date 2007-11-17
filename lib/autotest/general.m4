@@ -870,7 +870,9 @@ fi
     _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
     echo "  outfile[[\"$at_group\"]] = \"$at_test_source-$at_group_normalized\""
   done
-  AS_ECHO(['}
+  AS_ECHO(['
+  FS = ""
+}
 emit == 0 && /^@%:@AT_START_/ {
   test = substr($ 0, 11);
   if (outfile[[test]]) {
