@@ -335,7 +335,8 @@ m4_define([_AC_AWK_LITERAL_LIMIT],
 # This code was written by Dan Manthey and rewritten by Ralf Wildenhues.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with
+# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
 #
 m4_define([_AC_OUTPUT_FILES_PREPARE],
 [# Set up the scripts for CONFIG_FILES section.
@@ -359,12 +360,13 @@ m4_ifdef([_AC_SUBST_FILES],
   ac_cs_awk_pipe_fini=
 else
   ac_cs_awk_getline=false
-  ac_cs_awk_pipe_init="print \"cat <<'|#_!!_#|'\""
+  ac_cs_awk_pipe_init="print \"cat <<'|#_!!_#|' &&\""
   ac_cs_awk_read_file='
       print "|#_!!_#|"
-      print "cat " F[key]
+      print "cat " F[key] " &&"
       '$ac_cs_awk_pipe_init
-  ac_cs_awk_pipe_fini='END { print "|#_!!_#|" }'
+  # The final `:' finishes the AND list.
+  ac_cs_awk_pipe_fini='END { print "|#_!!_#|"; print ":" }'
 fi]])
 ac_cr=''
 ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
@@ -385,31 +387,34 @@ fi])],
 [m4_define([_AC_SUBST_CMDS],
 [| $AWK -f "$tmp/subs.awk"])])dnl
 
-echo 'BEGIN {' >"$tmp/subs1.awk"
+echo 'BEGIN {' >"$tmp/subs1.awk" &&
 _ACEOF
 
 m4_ifdef([_AC_SUBST_FILES],
 [# Create commands to substitute file output variables.
 {
-  echo "cat >>$CONFIG_STATUS <<_ACEOF"
-  echo 'cat >>"\$tmp/subs1.awk" <<\\_ACAWK'
-  echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/'
-  echo "_ACAWK"
+  echo "cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1" &&
+  echo 'cat >>"\$tmp/subs1.awk" <<\\_ACAWK &&' &&
+  echo "$ac_subst_files" | sed 's/.*/F@<:@"&"@:>@="$&"/' &&
+  echo "_ACAWK" &&
   echo "_ACEOF"
-} >conf$$files.sh
-. ./conf$$files.sh
+} >conf$$files.sh &&
+. ./conf$$files.sh ||
+  AC_MSG_ERROR([could not make $CONFIG_STATUS])
 rm -f conf$$files.sh
 ])dnl
 
 {
-  echo "cat >conf$$subs.awk <<_ACEOF"
-  echo "$ac_subst_vars" | sed 's/.*/&!$&$ac_delim/'
+  echo "cat >conf$$subs.awk <<_ACEOF" &&
+  echo "$ac_subst_vars" | sed 's/.*/&!$&$ac_delim/' &&
   echo "_ACEOF"
-} >conf$$subs.sh
+} >conf$$subs.sh ||
+  AC_MSG_ERROR([could not make $CONFIG_STATUS])
 ac_delim_num=`echo "$ac_subst_vars" | grep -c '$'`
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
-  . ./conf$$subs.sh
+  . ./conf$$subs.sh ||
+    AC_MSG_ERROR([could not make $CONFIG_STATUS])
 
 dnl Do not use grep on conf$$subs.awk, since AIX grep has a line length limit.
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | grep -c X` = $ac_delim_num; then
@@ -448,8 +453,8 @@ dnl   http://www.gnu.org/software/gawk/manual/html_node/Gory-Details.html
 dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
-[cat >>$CONFIG_STATUS <<_ACEOF
-cat >>"\$tmp/subs1.awk" <<\\_ACAWK
+[cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+cat >>"\$tmp/subs1.awk" <<\\_ACAWK &&
 _ACEOF
 sed -n '
 h
@@ -493,11 +498,11 @@ t delim
   N
   s/\n//
 }
-' >>$CONFIG_STATUS
+' >>$CONFIG_STATUS || ac_write_fail=1
 rm -f conf$$subs.awk
-cat >>$CONFIG_STATUS <<_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 _ACAWK
-cat >>"\$tmp/subs1.awk" <<_ACAWK
+cat >>"\$tmp/subs1.awk" <<_ACAWK &&
   for (key in S) S_is_set[key] = 1
   FS = ""
 ]m4_ifdef([_AC_SUBST_FILES],
@@ -529,12 +534,15 @@ cat >>"\$tmp/subs1.awk" <<_ACAWK
   }]])[
   print line
 }
-]m4_ifdef([_AC_SUBST_FILES],
-[\$ac_cs_awk_pipe_fini])[
-_ACAWK
-sed "s/\$ac_cr\\\$//; s/\$ac_cr/\$ac_cs_awk_cr/g" < "\$tmp/subs1.awk" > "\$tmp/subs.awk"
-_ACEOF
 ]dnl end of double-quoted part
+m4_ifdef([_AC_SUBST_FILES],
+[\$ac_cs_awk_pipe_fini])
+_ACAWK
+_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+sed "s/$ac_cr\$//; s/$ac_cr/$ac_cs_awk_cr/g" < "$tmp/subs1.awk" > "$tmp/subs.awk" \
+  || AC_MSG_ERROR([could not setup config files machinery])
+_ACEOF
 
 # VPATH may cause trouble with some makes, so we remove $(srcdir),
 # ${srcdir} and @srcdir@ from VPATH if srcdir is ".", strip leading and
@@ -551,7 +559,7 @@ s/^[^=]*=[	 ]*$//
 }']
 fi
 
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 fi # test -n "$CONFIG_FILES"
 
 ])# _AC_OUTPUT_FILES_PREPARE
@@ -562,7 +570,8 @@ fi # test -n "$CONFIG_FILES"
 # Do the variable substitutions to create the Makefiles or whatever.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with
+# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
 #
 m4_define([_AC_OUTPUT_FILE],
 [
@@ -586,7 +595,7 @@ AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P],
 _ACEOF
 
 m4_ifndef([AC_DATAROOTDIR_CHECKED],
-[cat >>$CONFIG_STATUS <<\_ACEOF
+[cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 # If the template does not know about datarootdir, expand it.
 # FIXME: This hack should be removed a few years after 2.60.
 ac_datarootdir_hack=; ac_datarootdir_seen=
@@ -603,7 +612,7 @@ m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
 *@[]m4_join([@*|*@], _AC_datarootdir_vars)@*)
   AC_MSG_WARN([$ac_file_inputs seems to ignore the --datarootdir setting])
 _ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
   ac_datarootdir_hack='
   m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
 	       [s&@_AC_Var@&$_AC_Var&g
@@ -616,11 +625,11 @@ _ACEOF
 # Neutralize VPATH when `$srcdir' = `.'.
 # Shell code in configure.ac might set extrasub.
 # FIXME: do we really want to maintain this feature?
-cat >>$CONFIG_STATUS <<_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
   sed "$ac_vpsub
 $extrasub
 _ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 :t
 [/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
 dnl configure_input is a somewhat special, so we don't call AC_SUBST_TRACE.
@@ -690,14 +699,16 @@ AC_DEFUN([AC_CONFIG_HEADER],
 # Support multiline #defines.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with
+# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
 #
 m4_define([_AC_OUTPUT_HEADERS_PREPARE],
 [# Set up the scripts for CONFIG_HEADERS section.
 # No need to generate them if there are no CONFIG_HEADERS.
 # This happens for instance with `./config.status Makefile'.
 if test -n "$CONFIG_HEADERS"; then
-cat >"$tmp/defines.awk" <<\_ACAWK
+dnl This `||' list is finished at the end of _AC_OUTPUT_HEADERS_PREPARE.
+cat >"$tmp/defines.awk" <<\_ACAWK ||
 BEGIN {
 _ACEOF
 
@@ -781,9 +792,9 @@ s/["\\]/\\&/g; s/^/"/; s/$/\\\\\\n"\\/p
 b cont
 ' <confdefs.h | sed '
 s/'"$ac_delim"'/"\\\
-"/g' >>$CONFIG_STATUS
+"/g' >>$CONFIG_STATUS || ac_write_fail=1
 
-cat >>$CONFIG_STATUS <<_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
   for (key in D) D_is_set[key] = 1
   FS = ""
 }
@@ -818,8 +829,9 @@ cat >>$CONFIG_STATUS <<_ACEOF
 ]dnl End of double-quoted section
 _ACAWK
 _ACEOF
-
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+dnl finish `||' list indicating write error:
+  AC_MSG_ERROR([could not setup config headers machinery])
 fi # test -n "$CONFIG_HEADERS"
 
 ])# _AC_OUTPUT_HEADERS_PREPARE
@@ -832,7 +844,8 @@ fi # test -n "$CONFIG_HEADERS"
 # `config.h.in'.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with
+# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
 #
 m4_define([_AC_OUTPUT_HEADER],
 [
@@ -917,7 +930,8 @@ update, you should probably tune the result yourself.])# AC_LINK_FILES
 # _AC_OUTPUT_LINK
 # ---------------
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with
+# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
 m4_define([_AC_OUTPUT_LINK],
 [
   #
@@ -993,7 +1007,8 @@ AC_CONFIG_COMMANDS([default-]_AC_OUTPUT_COMMANDS_CNT, [[$1]], [[$2]])dnl
 # _AC_OUTPUT_COMMAND
 # ------------------
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with
+# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
 m4_define([_AC_OUTPUT_COMMAND],
 [  AC_MSG_NOTICE([executing $ac_file commands])
 ])
@@ -1231,10 +1246,14 @@ dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
 
 : ${CONFIG_STATUS=./config.status}
+ac_write_fail=0
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
 _AC_OUTPUT_CONFIG_STATUS()dnl
 ac_clean_files=$ac_clean_files_save
+
+test $ac_write_fail = 0 ||
+  AC_MSG_ERROR([write failure creating $CONFIG_STATUS])
 
 dnl Commands to run after config.status was created
 AC_OUTPUT_COMMANDS_POST()dnl
@@ -1276,7 +1295,7 @@ m4_define([_AC_OUTPUT_CONFIG_STATUS],
 [AC_MSG_NOTICE([creating $CONFIG_STATUS])
 dnl AS_MESSAGE_LOG_FD is not available yet:
 m4_rename([AS_MESSAGE_LOG_FD], [_AC_save_AS_MESSAGE_LOG_FD])dnl
-cat >$CONFIG_STATUS <<_ACEOF
+cat >$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 #! $SHELL
 # Generated by $as_me.
 # Run this file to recreate the current configuration.
@@ -1289,7 +1308,7 @@ ac_cs_silent=false
 SHELL=\${CONFIG_SHELL-$SHELL}
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 AS_SHELL_SANITIZE
 dnl Watch out, this is directly the initializations, do not use
 dnl AS_PREPARE, otherwise you'd get it output in the initialization
@@ -1316,7 +1335,7 @@ on `(hostname || uname -n) 2>/dev/null | sed 1q`
 
 _ACEOF
 
-cat >>$CONFIG_STATUS <<_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 # Files that config.status was made for.
 m4_ifdef([_AC_SEEN_CONFIG(FILES)],
 [config_files="$ac_config_files"
@@ -1333,7 +1352,7 @@ m4_ifdef([_AC_SEEN_CONFIG(COMMANDS)],
 
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 ac_cs_usage="\
 \`$as_me' instantiates files from templates according to the
 current configuration.
@@ -1377,7 +1396,7 @@ $config_commands
 Report bugs to <bug-autoconf@gnu.org>."
 
 _ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 ac_cs_version="\\
 m4_ifset([AC_PACKAGE_NAME], [AC_PACKAGE_NAME ])config.status[]dnl
 m4_ifset([AC_PACKAGE_VERSION], [ AC_PACKAGE_VERSION])
@@ -1402,7 +1421,7 @@ AC_PROVIDE_IFELSE([AC_PROG_AWK],
 test -n "\$AWK" || AWK=awk
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 # The default lists apply if the user does not specify any file.
 ac_need_defaults=:
 while test $[#] != 0
@@ -1469,7 +1488,7 @@ if $ac_cs_silent; then
 fi
 
 _ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 dnl Check this before opening the log, to avoid a bug on MinGW,
 dnl which prohibits the recursive instance from truncating an open log.
 if \$ac_cs_recheck; then
@@ -1482,7 +1501,7 @@ if \$ac_cs_recheck; then
 fi
 
 _ACEOF
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 dnl Open the log:
 m4_rename([_AC_save_AS_MESSAGE_LOG_FD], [AS_MESSAGE_LOG_FD])dnl
 exec AS_MESSAGE_LOG_FD>>config.log
@@ -1493,7 +1512,7 @@ exec AS_MESSAGE_LOG_FD>>config.log
 } >&AS_MESSAGE_LOG_FD
 
 _ACEOF
-cat >>$CONFIG_STATUS <<_ACEOF
+cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 m4_ifdef([_AC_OUTPUT_COMMANDS_INIT],
 [#
 # INIT-COMMANDS
@@ -1502,7 +1521,7 @@ _AC_OUTPUT_COMMANDS_INIT
 ])dnl
 _ACEOF
 
-cat >>$CONFIG_STATUS <<\_ACEOF
+cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 
 # Handling of arguments.
 for ac_config_target in $ac_config_targets
@@ -1525,7 +1544,8 @@ chmod +x $CONFIG_STATUS
 # The main loop in $CONFIG_STATUS.
 #
 # This macro is expanded inside a here document.  If the here document is
-# closed, it has to be reopened with "cat >>$CONFIG_STATUS <<\_ACEOF".
+# closed, it has to be reopened with
+# "cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1".
 #
 AC_DEFUN([_AC_OUTPUT_MAIN_LOOP],
 [

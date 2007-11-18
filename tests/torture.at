@@ -232,11 +232,23 @@ AT_CHECK_CONFIG_CREATION(link)
 
 # Create a file
 AT_CHECK_CONFIG_CREATION_NOWRITE(file)
+# Create a file with bits from stdin
+AT_CHECK([echo from-stdin | ./config.status --file=file:-],
+	 [0], [ignore])
+AT_CHECK([grep from-stdin file], [], [from-stdin
+])
+# Force write error creating a file on stdout
 AT_CHECK([./config.status --file=-:input </dev/null >/dev/full],
 	 [1], [ignore], [ignore])
 
 # Create a header
 AT_CHECK_CONFIG_CREATION_NOWRITE(header)
+# Create a header on stdout
+AT_CHECK([./config.status --header=-:input </dev/null],
+	 [0], [stdout], [ignore])
+AT_CHECK([grep OK stdout], [], [OK
+])
+# Force write error creating a header on stdout
 AT_CHECK([./config.status --header=-:input </dev/null >/dev/full],
 	 [1], [ignore], [ignore])
 
@@ -245,6 +257,9 @@ AT_CHECK_CONFIG_CREATION_NOWRITE(command)
 
 # Create a link
 AT_CHECK_CONFIG_CREATION_NOWRITE(link)
+
+# Check that no use of `ac_write_fail' escaped into config.status
+AT_CHECK([grep ac_write_fail config.status], [1])
 
 AT_CLEANUP
 

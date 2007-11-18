@@ -1,3 +1,30 @@
+2007-11-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Diagnose and guard against write errors dealing with config.status.
+	The general idea is this: all write failures from `configure'
+	writing `config.status' are indicated by $ac_write_error, which
+	is only checked at the end.  This is safe because config.status
+	code is not executed before the file is complete.  Other write
+	failures, be they inside config.status, or in sub shell/awk
+	scripts spawned from configure or config.status, typically need
+	earlier checking, as their results are used right afterwards.
+	* lib/autoconf/status.m4 (AC_OUTPUT): Initialize `ac_write_fail'
+	before writing config.status, check afterwards.
+	(_AC_OUTPUT_FILES_PREPARE, _AC_OUTPUT_FILE)
+	(_AC_OUTPUT_HEADERS_PREPARE,_AC_OUTPUT_CONFIG_STATUS):
+	Set `ac_write_error' for write failures to config.status.  Barf
+	upon write failures to temporary files.
+	Adjust note about closing and reopening the here-document.
+	(_AC_OUTPUT_HEADER, _AC_OUTPUT_LINK, _AC_OUTPUT_COMMAND)
+	(_AC_OUTPUT_MAIN_LOOP): Likewise, adjust note about closing and
+	reopening the here-document.
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Ensure `ac_write_error' does not escape into config.status.
+	Also, add a couple of code paths not yet exercised in the test
+	suite: a config file with input from stdin, and a config header
+	output to stdout.
+	Suggestion for catching write errors by Bruno Haible.
+
 2007-11-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Avoid error with Tru64 awk and testsuite lines with many words.
