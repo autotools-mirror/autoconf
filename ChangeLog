@@ -1,5 +1,7 @@
 2007-11-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/local.at: Do not test m4, perl with AT_TESTED.
+
 	Diagnose and guard against write errors dealing with config.status.
 	The general idea is this: all write failures from `configure'
 	writing `config.status' are indicated by $ac_write_error, which

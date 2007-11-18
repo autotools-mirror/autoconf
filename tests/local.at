@@ -24,8 +24,6 @@ m4_pattern_allow([^m4_(define|shift)$])
 
 # Programs this package provides
 AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
-# Programs this package depends on
-AT_TESTED([m4 perl])
 
 
 ## ---------------- ##
