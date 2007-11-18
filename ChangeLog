@@ -1,3 +1,9 @@
+2007-11-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4: Revert 2007-11-15 patch and
+	subsequent fixups; the awk -> here-document conversion trashes
+	performance too much with AIX sh.
+
 2007-11-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/local.at: Do not test m4, perl with AT_TESTED.
