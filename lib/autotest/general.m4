@@ -316,8 +316,8 @@ at_func_diff_devnull ()
 # Parse out test NUMBER from the tail of this file.
 at_func_test ()
 {
-  sed -n '/^@%:@AT_START_'$[1]'$/,/^@%:@AT_STOP_'$[1]'$/p' "$at_myself" \
-       > "$at_test_source"
+  eval at_sed=\$at_sed$[1]
+  sed "$at_sed" "$at_myself" > "$at_test_source"
 }
 
 # at_func_create_debugging_script
@@ -871,6 +871,18 @@ then
 else
   at_diff=diff
 fi
+
+# Extract the start and end lines of each test group at the tail
+# of this file
+awk '
+BEGIN { FS="" }
+/^@%:@AT_START_/ {
+  start = NR
+}
+/^@%:@AT_STOP_/ {
+  print "at_sed" substr ($ 0, 10) "=\"1," start "d;" NR "q\""
+}' "$at_myself" > "$at_test_source"
+. "$at_test_source"
 
 
 m4_text_box([Driver loop.])

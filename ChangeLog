@@ -1,3 +1,10 @@
+2007-11-18  Paolo Bonzini  <bonzini@gnu.org>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (at_func_test): Use cached line numbers
+	to extract test scripts.
+	(AT_INIT): Extract and cache test script line numbers.
+
 2007-11-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4: Revert 2007-11-15 patch and
