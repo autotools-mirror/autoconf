@@ -331,7 +331,7 @@ at_func_create_debugging_script ()
     echo 'test "${ZSH_VERSION+set}" = set dnl
 && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
     AS_ECHO(["cd '$at_dir'"])
-    AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} $[0] -v -d ]dnl
+    AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} $at_myself -v -d ]dnl
 [$at_debug_args $at_group \${1+\"\$[@]\"}"])
     echo 'exit 1'
   } >$at_group_dir/run

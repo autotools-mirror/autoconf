@@ -1,4 +1,11 @@
-2007-11-18  Paolo Bonzini  <bonzini@gnu.org>
+2007-11-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix IRIX testsuite debugging failures: $0 in functions.
+	* lib/autotest/general.m4 (AT_INIT) <at_func_create_debugging_script>:
+	Do not use $0 inside a function, as IRIX sh will set that to the
+	function name rather than the script invocation name.
+
+2007-11-19  Paolo Bonzini  <bonzini@gnu.org>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (at_func_test): Use cached line numbers
