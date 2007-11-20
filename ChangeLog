@@ -1,3 +1,8 @@
+2007-11-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT) <at_func_create_debugging_script>:
+	Fix quoting.
+
 2007-11-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix IRIX testsuite debugging failures: $0 in functions.
