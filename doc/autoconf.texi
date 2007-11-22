@@ -485,6 +485,7 @@ Portable Shell Programming
 * Parentheses::                 Parentheses in shell scripts
 * Slashes::                     Slashes in shell scripts
 * Special Shell Variables::     Variables you should not change
+* Shell Functions::             What to look out for if you use them
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
 
@@ -1040,6 +1041,8 @@ make it easy to write @command{configure} scripts by hand.  Sigh!
 Unfortunately, shell functions do not belong to the least common
 denominator; therefore, where you would like to define a function and
 use it ten times, you would instead need to copy its body ten times.
+Even in 2007, where shells without any function support are far and
+few between, there are pitfalls to avoid when making use of them.
 
 So, what is really needed is some kind of compiler, @command{autoconf},
 that takes an Autoconf program, @file{configure.ac}, and transforms it
@@ -12156,21 +12159,8 @@ to the lowest common denominator.  Even @code{unset} is not supported
 by all shells!
 
 Shell functions are considered portable nowadays, though Autoconf still
-does not use them (Autotest does).  However, inside a shell function,
-you should not rely on the error status of a subshell if the last
-command of that subshell was @code{exit} or @code{trap}, as this
-triggers bugs in zsh 4.x; while Autoconf tries to find a shell that
-does not exhibit the bug, zsh might be the only shell present on the
-user's machine.  Also, variables and functions may share a namespace,
-for example with Solaris 10 @command{/bin/sh}:
-
-@example
-$ @kbd{f () @{ :; @}; f=; f}
-f: not found
-@end example
-
-@noindent
-For this reason, Autotest uses the prefix @samp{at_func_} for its functions.
+does not use them (Autotest does).  However, some pitfalls have to be
+avoided for portable use of shell functions.
 
 Some ancient systems have quite
 small limits on the length of the @samp{#!} line; for instance, 32
@@ -12207,6 +12197,7 @@ subset described above, is fairly portable nowadays.  Also please see
 * Parentheses::                 Parentheses in shell scripts
 * Slashes::                     Slashes in shell scripts
 * Special Shell Variables::     Variables you should not change
+* Shell Functions::             What to look out for if you use them
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
 @end menu
@@ -13524,6 +13515,45 @@ shouldn't rely on @code{$RANDOM} expanding to a nonempty string.
 This variable is an alias to @samp{$?} for @code{zsh} (at least 3.1.6),
 hence read-only.  Do not use it.
 @end table
+
+@node Shell Functions
+@section Shell Functions
+@cindex Shell Functions
+
+Nowadays, it is difficult to find a shell that does not support
+shell functions at all.  However, some differences should be expected:
+
+Inside a shell function, you should not rely on the error status of a
+subshell if the last command of that subshell was @code{exit} or
+@code{trap}, as this triggers bugs in zsh 4.x; while Autoconf tries to
+find a shell that does not exhibit the bug, zsh might be the only shell
+present on the user's machine.
+
+Shell variables and functions may share the same namespace, for example
+with Solaris 10 @command{/bin/sh}:
+
+@example
+$ @kbd{f () @{ :; @}; f=; f}
+f: not found
+@end example
+
+@noindent
+For this reason, Autotest uses the prefix @samp{at_func_} for its
+functions.
+
+Handling of positional parameters and shell options varies among shells.
+For example, Korn shells reset and restore trace output (@samp{set -x})
+and other options upon function entry and exit.  Inside a function,
+@acronym{IRIX} sh sets @samp{$0} to the function name.
+
+Some ancient Bourne shell variants with function support did not reset
+@samp{$@var{i}, @var{i} >= 0}, upon function exit, so effectively the
+arguments of the script were lost after the first function invocation.
+It is probably not worth worrying about these shells any more.
+
+With @acronym{AIX} sh, a @command{trap} on 0 installed in a shell function
+triggers at function exit rather than at script exit, see @xref{Limitations
+of Builtins}.
 
 @node Limitations of Builtins
 @section Limitations of Shell Builtins

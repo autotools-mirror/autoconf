@@ -1,3 +1,11 @@
+2007-11-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Shell Functions): New chapter.  Document
+	IRIX sh $0 issue in functions, move content from ...
+	(Portable Shell): ... here.
+	(Shell Script Compiler): Note that shell functions are not
+	totally unportable any more.
+
 2007-11-22  Stepan Kasal  <kasal@ucw.cz>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
