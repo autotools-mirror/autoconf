@@ -872,6 +872,9 @@ else
   at_diff=diff
 fi
 
+# Get the last needed group.
+for at_group in $at_groups; do :; done
+
 # Extract the start and end lines of each test group at the tail
 # of this file
 awk '
@@ -880,7 +883,9 @@ BEGIN { FS="" }
   start = NR
 }
 /^@%:@AT_STOP_/ {
-  print "at_sed" substr ($ 0, 10) "=\"1," start "d;" NR "q\""
+  test = substr ($ 0, 10)
+  print "at_sed" test "=\"1," start "d;" NR "q\""
+  if (test == '$at_group') exit
 }' "$at_myself" > "$at_test_source"
 . "$at_test_source"
 

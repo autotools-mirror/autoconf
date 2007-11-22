@@ -1,3 +1,9 @@
+2007-11-22  Stepan Kasal  <kasal@ucw.cz>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT): Exit awk script after
+	extracting the line numbers of the last needed test.
+
 2007-11-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (AT_INIT) <at_func_create_debugging_script>:
