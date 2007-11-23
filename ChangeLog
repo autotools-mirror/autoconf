@@ -1,3 +1,8 @@
+2007-11-24  Stepan Kasal  <kasal@ucw.cz>
+
+	* lib/autotest/general.m4 (AT_INIT): Do not extract the
+	`#AT_STOP_...' line at the end of each test.
+
 2007-11-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (AT_INIT): For awk line number

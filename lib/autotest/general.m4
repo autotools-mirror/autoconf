@@ -884,7 +884,7 @@ BEGIN { FS="" }
 }
 /^@%:@AT_STOP_/ {
   test = substr ($ 0, 10)
-  print "at_sed" test "=\"1," start "d;" NR "q\""
+  print "at_sed" test "=\"1," start "d;" (NR-1) "q\""
   if (test == "'"$at_group"'") exit
 }' "$at_myself" > "$at_test_source"
 . "$at_test_source"
