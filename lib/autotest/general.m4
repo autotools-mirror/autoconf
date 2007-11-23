@@ -873,7 +873,7 @@ else
 fi
 
 # Get the last needed group.
-for at_group in $at_groups; do :; done
+for at_group in : $at_groups; do :; done
 
 # Extract the start and end lines of each test group at the tail
 # of this file
@@ -885,7 +885,7 @@ BEGIN { FS="" }
 /^@%:@AT_STOP_/ {
   test = substr ($ 0, 10)
   print "at_sed" test "=\"1," start "d;" NR "q\""
-  if (test == '$at_group') exit
+  if (test == "'"$at_group"'") exit
 }' "$at_myself" > "$at_test_source"
 . "$at_test_source"
 

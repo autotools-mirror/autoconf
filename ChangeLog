@@ -1,3 +1,10 @@
+2007-11-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT): For awk line number
+	extraction script, ensure `$at_group' has a defined value
+	even for the empty set, and properly quote its usage inside
+	the awk script.
+
 2007-11-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Shell Functions): New chapter.  Document
