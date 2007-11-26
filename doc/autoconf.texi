@@ -14487,9 +14487,10 @@ In code portable to both traditional and modern Awk, @code{FS} must be a
 string containing just one ordinary character, and similarly for the
 field-separator argument to @code{split}.
 
-Traditional Awk has a limit of 99
-fields in a record.  You may be able to circumvent this problem by using
-@code{split}.
+Traditional Awk has a limit of 99 fields in a record.  Since some Awk
+implementations, like Tru64's, split the input even if you don't refer
+to any field in the script, to circumvent this problem, set @samp{FS}
+to an unusual character and use @code{split}.
 
 Traditional Awk has a limit of at most 99 bytes in a number formatted by
 @code{OFMT}; for example, @code{OFMT="%.300e"; print 0.1;} typically

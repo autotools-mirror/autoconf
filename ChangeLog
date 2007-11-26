@@ -1,3 +1,8 @@
+2007-11-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Limitations of Usual Tools) <awk>:
+	Document that Tru64 awk always splits $0.
+
 2007-11-24  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/autotest/general.m4 (AT_INIT): Do not extract the
