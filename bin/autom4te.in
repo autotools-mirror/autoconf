@@ -235,14 +235,16 @@ sub files_to_options (@)
   my @res;
   foreach my $file (@file)
     {
+      (my $arg = $file) =~ s/'/'\\''/g;
       if ($file =~ /\.m4f$/)
 	{
-	  push @res, "--reload-state=$file";
+	  $arg = "--reload-state=$file";
 	}
-      else
+      if ($file =~ /[\t "'\\\$()]/)
 	{
-	  push @res, $file;
+	  $arg = "'$arg'";
 	}
+      push @res, $arg;
     }
   return join ' ', @res;
 }

@@ -138,6 +138,24 @@ AT_CHECK([cat file], 0,
 AT_CLEANUP
 
 
+# autom4te and file names containing white space
+# ----------------------------------------------
+
+AT_SETUP([autom4te and white space in file names])
+
+file='file with  funny \ '\'' \'\'' $ & #!*? name'
+cat >"$file.m4" <<'END'
+right
+END
+# skip if we cannot create such a file
+AT_CHECK([test -f "$file.m4" || exit 77])
+AT_CHECK_AUTOM4TE([-o "$file" "$file.m4"])
+
+AT_CHECK([cat "$file"], [],
+[[right
+]])
+
+AT_CLEANUP
 
 
 ## ------------------ ##

@@ -1,5 +1,11 @@
 2007-11-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix autom4te for unusual characters in input file names.
+	* bin/autom4te.in (files_to_options): Quote active characters
+	for the shell.
+	* tests/tools.at (autom4te and white space in file names):
+	New test.
+
 	* doc/autoconf.texi (Limitations of Usual Tools) <awk>:
 	Document that Tru64 awk always splits $0.
 
