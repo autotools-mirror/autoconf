@@ -1401,7 +1401,7 @@ AC_DEFUN([AC_C_BIGENDIAN],
 #if defined __BIG_ENDIAN__
 # define WORDS_BIGENDIAN 1
 #elif ! defined __LITTLE_ENDIAN__
-/* #undef WORDS_BIGENDIAN */
+# undef WORDS_BIGENDIAN
 #endif])dnl
  AC_CACHE_CHECK([whether byte ordering is bigendian], [ac_cv_c_bigendian],
    [ac_cv_c_bigendian=unknown

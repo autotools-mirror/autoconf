@@ -1,3 +1,11 @@
+2007-11-27  Paul Eggert  <eggert@cs.ucla.edu>
+
+	Fix AC_C_BIGENDIAN bug caused by new awk method of substitution.
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Don't comment out the
+	#undef as this runs afoul of our new way of creating config.h.
+	Problem reported by Jim Meyering in
+	<http://lists.gnu.org/archive/html/autoconf-patches/2007-11/msg00164.html>.
+
 2007-11-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix autom4te for unusual characters in input file names.
