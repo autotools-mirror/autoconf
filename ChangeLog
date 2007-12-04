@@ -1,5 +1,8 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/semantics.at (AC_PATH_PROGS_FEATURE_CHECK): Skip test
+	if `pwd` contains whitespace.
+
 	Quote $abs_top_srcdir in tests.
 	* tests/local.at (AT_CHECK_PERL_SYNTAX): Likewise.
 	* tests/tools.at (Syntax of the shell scripts): Likewise.

@@ -554,6 +554,11 @@ AT_CLEANUP
 
 AT_SETUP([AC_PATH_PROGS_FEATURE_CHECK])
 
+# This test doesn't work if `pwd` contains white space
+case `pwd` in
+  *\ * | *\	*) AT_CHECK([exit 77]) ;;
+esac
+
 AT_CHECK_PROGS_PREPARE
 
 AT_DATA([configure.ac],
