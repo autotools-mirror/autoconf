@@ -1,3 +1,9 @@
+2007-12-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix copyright years.
+	* Makefile.am, doc/install.texi, lib/autoconf/fortran.m4,
+	lib/autoconf/lang.m4, lib/freeze.mk: Likewise.
+
 2007-12-04  Eric Blake  <ebb9@byu.net>
 
 	Manually resync with gnulib, since 'make cvs-update' no longer works.
