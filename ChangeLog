@@ -1,5 +1,14 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix testsuite program wrapper for whitespace in `pwd`.
+	The problem here is that the usual mantra is that command
+	variables can contain arguments, thus we cannot just escape
+	$AUTOCONF, $AUTOM4TE etc.  The compromise is to put the
+	$top_builddir/tests directory early in $PATH, so that the
+	wrappers are found by their plain name.
+	* tests/wrapper.as: Put $testdir early in $PATH.
+	(AUTOCONF, AUTOHEADER, AUTOM4TE): Set to plain command names.
+
 	Proper config.status --file/--header and $srcdir escaping.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_MAIN_LOOP): Quote special
 	characters in $ac_file_inputs.
