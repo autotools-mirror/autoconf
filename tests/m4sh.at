@@ -54,7 +54,7 @@ if $2; then
 fi
 _AS@&t@_PREPARE
 echo "Line: $3"
-grep 'Line: .*$4' $[0] >/dev/null ||
+grep 'Line: .*$4' "$[0]" >/dev/null ||
   AS@&t@_ERROR([cannot find original script])
 exit 0
 ]])
