@@ -559,10 +559,11 @@ AT_DATA([pkg/a])
 AT_DATA([pkg/t/b])
 
 AT_DATA([pkg/configure.ac], [[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 AC_CONFIG_TESTDIR([t])
 AC_OUTPUT
 ]])
+cp "$abs_top_srcdir/build-aux/install-sh" pkg
+
 cd pkg
 AT_CHECK_AUTOCONF
 cd ..
@@ -584,7 +585,7 @@ cd ../..
 
 # Build directory totally outside source directory.
 cd vpath-outside
-AT_CHECK([top_srcdir=$abs_top_srcdir ../pkg/configure], [0], [ignore])
+AT_CHECK([../pkg/configure], [0], [ignore])
 cd t
 AT_CHECK([../../pkg/t/suite], [0], [ignore])
 cd ../..
@@ -592,20 +593,20 @@ cd ../..
 # Build directory totally outside source directory (absolute).
 my_srcdir=`pwd`/pkg
 cd vpath-abs
-AT_CHECK([top_srcdir=$abs_top_srcdir "$my_srcdir"/configure], [0], [ignore])
+AT_CHECK(["$my_srcdir"/configure], [0], [ignore])
 cd t
 AT_CHECK(["$my_srcdir"/t/suite], [0], [ignore])
 cd ../..
 
 # Build directory as subdirectory of source directory.
 cd pkg/vpath-inside
-AT_CHECK([top_srcdir=$abs_top_srcdir ../configure], [0], [ignore])
+AT_CHECK([../configure], [0], [ignore])
 cd t
 AT_CHECK([../../t/suite], [0], [ignore])
 cd ../../..
 
 # Build directory as parent of source directory.
-AT_CHECK([top_srcdir=$abs_top_srcdir pkg/configure], [0], [ignore])
+AT_CHECK([pkg/configure], [0], [ignore])
 cd t
 AT_CHECK([../pkg/t/suite], [0], [ignore])
 cd ..

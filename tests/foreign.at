@@ -2,8 +2,8 @@
 
 AT_BANNER([Compatibility with other tools.])
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,9 +45,8 @@ esac]],
 # Using a configure.in, have libtoolize confess where libtool.m4 is.
 AT_DATA([configure.in],
 [[AC_INIT
-# The other tests are relying on Autoconf's own copy of install-sh
-# etc. via AC_CONFIG_AUX_DIR(..).  Don't do that here, since we don't
-# want libtoolize to pollute Autoconf's srcdir.
+# State that we explicitly want auxiliary files here, so libtoolize
+# won't pollute files outside the test directory.
 AC_CONFIG_AUX_DIR(.)
 AC_PROG_LIBTOOL
 ]])

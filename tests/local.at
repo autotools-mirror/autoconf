@@ -203,13 +203,15 @@ ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$][1
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 AC_CONFIG_HEADER(config.h:config.hin)
 AC_STATE_SAVE(before)]
 $1
 [AC_OUTPUT
 AC_STATE_SAVE(after)
 ]])
+cp "$abs_top_srcdir/build-aux/install-sh" \
+   "$abs_top_srcdir/build-aux/config.guess" \
+   "$abs_top_srcdir/build-aux/config.sub" .
 ])# AT_CONFIGURE_AC
 
 
@@ -240,7 +242,7 @@ m4_define([AT_CHECK_AUTOHEADER],
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
 [AT_CAPTURE_FILE([config.log])[]dnl
- AT_CHECK([top_srcdir=$abs_top_srcdir ./configure $1],
+ AT_CHECK([./configure $1],
 	  [$2],
 	  m4_default([$3], [ignore]), [$4])])
 

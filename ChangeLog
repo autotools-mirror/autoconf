@@ -1,5 +1,20 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Do not pass top_srcdir to configure scripts in testsuite.
+	* tests/autotest.at (srcdir propagation): Copy install-sh to
+	source tree.
+	(my only test): Drop setting of `top_srcdir'.
+	* tests/base.at (Input/Output): Likewise.
+	* tests/local.at (AT_CONFIGURE_AC): Copy install-sh,
+	config.guess, and config.sub to test source tree.
+	Drop AC_CONFIG_AUX_DIR setting.
+	(AT_CHECK_CONFIGURE): Drop setting of `top_srcdir'.
+	* tests/torture.at (Substitute a 2000-byte string): Drop
+	AC_CONFIG_AUX_DIR setting, copy install-sh to test source tree.
+	(Substitute a newline, datarootdir workaround): Likewise.
+	(Define a newline): Adjust for linenumber changes in configure.ac.
+	* tests/foreign.at (Libtool): Adjust comment to reflect changes.
+
 	* tests/semantics.at (AC_PATH_PROGS_FEATURE_CHECK): Skip test
 	if `pwd` contains whitespace.
 

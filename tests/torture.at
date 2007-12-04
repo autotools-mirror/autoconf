@@ -660,7 +660,6 @@ AT_DATA([Baz.in], [@baz@
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 AC_SUBST([foo], ]m4_for([n], 1, 100,, ....................)[)
 AC_SUBST([bar], "]m4_for([n], 1, 100,, @ @ @ @ @ @ @ @ @ @@)[")
 baz="]m4_for([m], 1, 100,, ... ... ... ... ....)[
@@ -671,6 +670,8 @@ AC_PROG_AWK
 AC_CONFIG_FILES([Foo Bar Baz])
 AC_OUTPUT
 ]])
+
+cp "$abs_top_srcdir/build-aux/install-sh" .
 
 AT_CHECK_AUTOCONF
 # Check both awk and the result of AC_PROG_AWK
@@ -803,7 +804,6 @@ AT_DATA([Foo.in],
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 foo='one
 two'
 bar='%!_!# ''
@@ -814,6 +814,8 @@ AC_CONFIG_FILES([Foo])
 AC_PROG_AWK
 AC_OUTPUT
 ]])
+
+cp "$abs_top_srcdir/build-aux/install-sh" .
 
 echo 'one
 two
@@ -838,14 +840,14 @@ AT_CONFIGURE_AC([[AC_DEFINE([foo], [one
 two], [This spans two lines.])
 ]])
 AT_CHECK_AUTOCONF([], [], [], [stderr])
-dnl Older versions of m4 report error at line 6 (end of macro);
-dnl newer versions report it at line 5 (start of macro).
-AT_CHECK([[sed 's/^configure.ac:[56]: //' stderr]], [],
+dnl Older versions of m4 report error at line 5 (end of macro);
+dnl newer versions report it at line 4 (start of macro).
+AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE: `one
 two' is not a valid preprocessor define value
 ]])
 AT_CHECK_AUTOHEADER([], [], [], [stderr])
-AT_CHECK([[sed 's/^configure.ac:[56]: //' stderr]], [],
+AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE: `one
 two' is not a valid preprocessor define value
 ]])
@@ -857,12 +859,12 @@ AT_CONFIGURE_AC([[AC_DEFINE_UNQUOTED([foo], [one
 two], [This spans two lines.])
 ]])
 AT_CHECK_AUTOCONF([], [], [], [stderr])
-AT_CHECK([[sed 's/^configure.ac:[56]: //' stderr]], [],
+AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE_UNQUOTED: `one
 two' is not a valid preprocessor define value
 ]])
 AT_CHECK_AUTOHEADER([], [], [], [stderr])
-AT_CHECK([[sed 's/^configure.ac:[56]: //' stderr]], [],
+AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE_UNQUOTED: `one
 two' is not a valid preprocessor define value
 ]])
@@ -925,7 +927,6 @@ AT_DATA([configure.ac],
 [[AC_INIT
 d@&t@nl The following line silences the warnings, if uncommented:
 d@&t@nl AC_DEFUN([AC_DATAROOTDIR_CHECKED])
-AC_CONFIG_AUX_DIR($top_srcdir/build-aux)
 
 # This substitution is wrong and bogus!  Don't use it in your own code!
 # Read `info Autoconf "Defining Directories"'!
@@ -934,6 +935,8 @@ AC_SUBST([mydatadir], [${datadir}/my])
 AC_CONFIG_FILES([Foo Bar])
 AC_OUTPUT
 ]])
+
+cp "$abs_top_srcdir/build-aux/install-sh" .
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [], [],
