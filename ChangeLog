@@ -1,5 +1,9 @@
 2007-12-04  Eric Blake  <ebb9@byu.net>
 
+	Manually resync with gnulib, since 'make cvs-update' no longer works.
+	* build-aux/config.guess: New upstream version.
+	* build-aux/config.sub: Likewise.
+
 	When using older automake, don't downgrade build-aux/texinfo.tex.
 	* configure.ac (AM_INIT_AUTOMAKE): Add no-texinfo.tex option.
 	* doc/Makefile.am (TEXINFO_TEX): Add.
