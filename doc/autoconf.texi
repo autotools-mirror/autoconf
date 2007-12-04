@@ -9906,7 +9906,7 @@ traces are cached while performing regular expansion,
 and conversely.  This cache is (actually, the caches are) stored in
 the directory @file{autom4te.cache}.  @emph{It can safely be removed}
 at any moment (especially if for some reason @command{autom4te}
-considers it is trashed).
+considers it trashed).
 
 @table @option
 @item --cache=@var{directory}
@@ -20673,7 +20673,7 @@ a specific demand, stores additional information in
 @command{autoconf}, behind the scenes, @command{autom4te} also
 stores information for the other tools, so that when you invoke
 @command{autoheader} or @command{automake} etc., reprocessing
-@file{configure.ac} is not needed.  The speed up is frequently of 30%,
+@file{configure.ac} is not needed.  The speed up is frequently 30%,
 and is increasing with the size of @file{configure.ac}.
 
 But it is and remains being simply a cache: you can safely remove it.

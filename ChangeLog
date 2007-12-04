@@ -1,5 +1,7 @@
 2007-12-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* doc/autoconf.texi (autom4te Invocation, Autom4te Cache): Fix typos.
+
 	Fix copyright years.
 	* Makefile.am, doc/install.texi, lib/autoconf/fortran.m4,
 	lib/autoconf/lang.m4, lib/freeze.mk: Likewise.
