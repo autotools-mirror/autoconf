@@ -50,13 +50,13 @@ AT_CHECK([test "$ac_cv_sh_n_works" = yes || exit 77])
 # Specify the absolute name of the tool, as some shells don't honor PATH when
 # running `sh PROG'.
 
-AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/bin/autoconf])
-AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/tests/autoconf])
-AT_CHECK_SHELL_SYNTAX([$abs_top_builddir/tests/testsuite])
+AT_CHECK_SHELL_SYNTAX(["$abs_top_builddir/bin/autoconf"])
+AT_CHECK_SHELL_SYNTAX(["$abs_top_builddir/tests/autoconf"])
+AT_CHECK_SHELL_SYNTAX(["$abs_top_builddir/tests/testsuite"])
 
 # These are not built, they are in the src tree.
-AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/build-aux/install-sh])
-AT_CHECK_SHELL_SYNTAX([$abs_top_srcdir/build-aux/missing])
+AT_CHECK_SHELL_SYNTAX(["$abs_top_srcdir/build-aux/install-sh"])
+AT_CHECK_SHELL_SYNTAX(["$abs_top_srcdir/build-aux/missing"])
 
 AT_CLEANUP
 

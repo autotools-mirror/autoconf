@@ -1,5 +1,9 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Quote $abs_top_srcdir in tests.
+	* tests/local.at (AT_CHECK_PERL_SYNTAX): Likewise.
+	* tests/tools.at (Syntax of the shell scripts): Likewise.
+
 	* tests/m4sh.at (LINENO): Quote $0.
 
 	Fix testsuite program wrapper for whitespace in `pwd`.
