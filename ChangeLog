@@ -1,3 +1,9 @@
+2007-12-04  Eric Blake  <ebb9@byu.net>
+
+	When using older automake, don't downgrade build-aux/texinfo.tex.
+	* configure.ac (AM_INIT_AUTOMAKE): Add no-texinfo.tex option.
+	* doc/Makefile.am (TEXINFO_TEX): Add.
+
 2007-11-27  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix AC_C_BIGENDIAN bug caused by new awk method of substitution.

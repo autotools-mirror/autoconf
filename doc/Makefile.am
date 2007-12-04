@@ -1,6 +1,6 @@
 # Make Autoconf documentation.
 
-# Copyright (C) 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2007 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@ AM_MAKEINFOFLAGS = --no-split
 TEXI2DVI = texi2dvi --batch
 TEXI2HTML = texi2html
 TEXI2HTML_FLAGS = -split_chapter
+TEXINFO_TEX = ../build-aux/texinfo.tex
 
 info_TEXINFOS = autoconf.texi standards.texi
 autoconf_TEXINFOS = fdl.texi install.texi
