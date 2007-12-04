@@ -334,8 +334,8 @@ at_func_create_debugging_script ()
     AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} \"$at_myself\" -v -d ]dnl
 [$at_debug_args $at_group \${1+\"\$[@]\"}"])
     echo 'exit 1'
-  } >$at_group_dir/run
-  chmod +x $at_group_dir/run
+  } >"$at_group_dir/run"
+  chmod +x "$at_group_dir/run"
 }
 
 # at_func_arith
@@ -911,8 +911,8 @@ do
       AS_WARN([test directory could not be cleaned.])
   fi
   # Be tolerant if the above `rm' was not able to remove the directory.
-  AS_MKDIR_P([$at_group_dir])
-  cd $at_group_dir
+  AS_MKDIR_P(["$at_group_dir"])
+  cd "$at_group_dir"
 
   echo 0 > "$at_status_file"
 

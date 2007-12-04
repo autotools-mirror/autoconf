@@ -1,5 +1,11 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix Autotest for whitespace in `pwd`.
+	* lib/autotest/general.m4 (AT_INIT)
+	<at_func_create_debugging_script, Driver Loop>:
+	Quote $at_group_dir.
+	* tests/autotest.at (whitespace in absolute testdir): New test.
+
 	* lib/autom4te.in: Quote @datadir@.
 
 	Proper file name escaping in Autoconf programs and Perl modules.

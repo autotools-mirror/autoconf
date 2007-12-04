@@ -618,3 +618,34 @@ AT_CHECK([./suite], [0], [ignore])
 cd ../..
 
 AT_CLEANUP
+
+
+## ------------------------------ ##
+## whitespace in absolute testdir ##
+## ------------------------------ ##
+
+AT_SETUP([whitespace in absolute testdir])
+AT_KEYWORDS([autotest])
+
+dir='dir with  whitespace'
+mkdir "$dir"
+cd "$dir"
+wd=`pwd`
+
+AT_DATA([a])
+AT_DATA([suite.at],
+[[m4_define([AT_PACKAGE_NAME],    [GNU Nonsense])
+m4_define([AT_PACKAGE_TARNAME],   [nonsense])
+m4_define([AT_PACKAGE_VERSION],   [1.0])
+m4_define([AT_PACKAGE_STRING],    [GNU Nonsense 1.0])
+m4_define([AT_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
+AT_INIT([suite to check srcdir])
+AT_SETUP([my only test])
+AT_CHECK([test -f "$top_srcdir"/a])
+AT_CLEANUP
+]])
+AT_CHECK_AUTOM4TE([--language=autotest -o suite suite.at])
+AT_CHECK([top_srcdir=$wd ./suite], [0], [ignore])
+AT_CHECK([top_srcdir=$wd ./suite -d], [0], [ignore])
+AT_CHECK([cd suite.dir/1 && ./run top_srcdir="$wd"], [0], [ignore])
+AT_CLEANUP
