@@ -1,5 +1,13 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Proper config.status --file/--header and $srcdir escaping.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_MAIN_LOOP): Quote special
+	characters in $ac_file_inputs.
+	(_AC_OUTPUT_FILE, _AC_OUTPUT_HEADER): eval $ac_file_inputs
+	accordingly.
+	* tests/torture.at (datarootdir workaround): Adjust.
+	(AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS): Extend test.
+
 	Fix Autotest for whitespace in `pwd`.
 	* lib/autotest/general.m4 (AT_INIT)
 	<at_func_create_debugging_script, Driver Loop>:

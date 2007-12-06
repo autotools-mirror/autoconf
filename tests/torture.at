@@ -261,6 +261,21 @@ AT_CHECK_CONFIG_CREATION_NOWRITE(link)
 # Check that no use of `ac_write_fail' escaped into config.status
 AT_CHECK([grep ac_write_fail config.status], [1])
 
+# Check that --file and --header accept funny file names
+file='file with  funny \ '\'' \'\'' $ & #!*? name'
+cat >"$file.in" <<'END'
+OK
+END
+# skip if we cannot create such a file
+AT_CHECK([test -f "$file.in" || exit 77])
+AT_CHECK([./config.status "--file=$file:$file.in"],
+	 [0], [ignore])
+AT_CHECK([grep OK "$file"], [], [OK
+])
+AT_CHECK([./config.status "--header=$file:$file.in"],
+	 [0], [ignore])
+AT_CHECK([grep OK "$file"], [], [OK
+])
 AT_CLEANUP
 
 
@@ -922,7 +937,7 @@ AC_OUTPUT
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [], [],
-  [config.status: WARNING:  Foo.in seems to ignore the --datarootdir setting
+  [config.status: WARNING:  'Foo.in' seems to ignore the --datarootdir setting
 config.status: WARNING: Bar contains a reference to the variable `datarootdir'
 which seems to be undefined.  Please make sure it is defined.
 ])

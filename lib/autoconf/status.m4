@@ -601,13 +601,15 @@ m4_ifndef([AC_DATAROOTDIR_CHECKED],
 ac_datarootdir_hack=; ac_datarootdir_seen=
 m4_define([_AC_datarootdir_vars],
 	  [datadir, docdir, infodir, localedir, mandir])
-case `sed -n '/datarootdir/ {
+ac_sed_dataroot='
+/datarootdir/ {
   p
   q
 }
 m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
 	   [/@_AC_Var@/p
-])' $ac_file_inputs` in
+])'
+case `eval "sed -n \"\$ac_sed_dataroot\" $ac_file_inputs"` in
 *datarootdir*) ac_datarootdir_seen=yes;;
 *@[]m4_join([@*|*@], _AC_datarootdir_vars)@*)
   AC_MSG_WARN([$ac_file_inputs seems to ignore the --datarootdir setting])
@@ -626,7 +628,7 @@ _ACEOF
 # Shell code in configure.ac might set extrasub.
 # FIXME: do we really want to maintain this feature?
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
-  sed "$ac_vpsub
+ac_sed_extra="$ac_vpsub
 $extrasub
 _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
@@ -645,7 +647,8 @@ m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
 ])dnl
 m4_ifndef([AC_DATAROOTDIR_CHECKED], [$ac_datarootdir_hack
 ])dnl
-" $ac_file_inputs m4_defn([_AC_SUBST_CMDS]) >$tmp/out \
+"
+eval sed \"\$ac_sed_extra\" "$ac_file_inputs" m4_defn([_AC_SUBST_CMDS]) >$tmp/out \
   || AC_MSG_ERROR([could not create $ac_file])
 
 m4_ifndef([AC_DATAROOTDIR_CHECKED],
@@ -659,14 +662,14 @@ which seems to be undefined.  Please make sure it is defined.])
   rm -f "$tmp/stdin"
   case $ac_file in
   -) cat "$tmp/out" && rm -f "$tmp/out";;
-  *) rm -f "$ac_file" && mv "$tmp/out" $ac_file;;
+  *) rm -f "$ac_file" && mv "$tmp/out" "$ac_file";;
   esac \
   || AC_MSG_ERROR([could not create $ac_file])
 dnl This would break Makefile dependencies:
-dnl  if diff $ac_file "$tmp/out" >/dev/null 2>&1; then
+dnl  if diff "$ac_file" "$tmp/out" >/dev/null 2>&1; then
 dnl    echo "$ac_file is unchanged"
 dnl  else
-dnl     rm -f $ac_file; mv "$tmp/out" $ac_file
+dnl     rm -f "$ac_file"; mv "$tmp/out" "$ac_file"
 dnl  fi
 ])# _AC_OUTPUT_FILE
 
@@ -855,19 +858,19 @@ m4_define([_AC_OUTPUT_HEADER],
   if test x"$ac_file" != x-; then
     {
       AS_ECHO(["/* $configure_input  */"]) \
-      && $AWK -f "$tmp/defines.awk" $ac_file_inputs
+      && eval '$AWK -f "$tmp/defines.awk"' "$ac_file_inputs"
     } >"$tmp/config.h" \
       || AC_MSG_ERROR([could not create $ac_file])
     if diff $ac_file "$tmp/config.h" >/dev/null 2>&1; then
       AC_MSG_NOTICE([$ac_file is unchanged])
     else
       rm -f $ac_file
-      mv "$tmp/config.h" $ac_file \
+      mv "$tmp/config.h" "$ac_file" \
 	|| AC_MSG_ERROR([could not create $ac_file])
     fi
   else
     AS_ECHO(["/* $configure_input  */"]) \
-      && $AWK -f "$tmp/defines.awk" $ac_file_inputs \
+      && eval '$AWK -f "$tmp/defines.awk"' "$ac_file_inputs" \
       || AC_MSG_ERROR([could not create -])
   fi
 dnl If running for Automake, be ready to perform additional
@@ -1450,13 +1453,19 @@ do
 m4_ifdef([_AC_SEEN_CONFIG(FILES)], [dnl
   --file | --fil | --fi | --f )
     $ac_shift
-    CONFIG_FILES="$CONFIG_FILES $ac_optarg"
+    case $ac_optarg in
+    *\'*) ac_optarg=`AS_ECHO(["$ac_optarg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+    esac
+    CONFIG_FILES="$CONFIG_FILES '$ac_optarg'"
     ac_need_defaults=false;;
 ])dnl
 m4_ifdef([_AC_SEEN_CONFIG(HEADERS)], [dnl
   --header | --heade | --head | --hea )
     $ac_shift
-    CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
+    case $ac_optarg in
+    *\'*) ac_optarg=`AS_ECHO(["$ac_optarg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+    esac
+    CONFIG_HEADERS="$CONFIG_HEADERS '$ac_optarg'"
     ac_need_defaults=false;;
   --he | --h)
     # Conflict between --help and --header
@@ -1588,11 +1597,14 @@ AS_TMPDIR([conf], [.])
 m4_ifdef([_AC_SEEN_CONFIG(FILES)], [_AC_OUTPUT_FILES_PREPARE])[]dnl
 m4_ifdef([_AC_SEEN_CONFIG(HEADERS)], [_AC_OUTPUT_HEADERS_PREPARE])[]dnl
 
-for ac_tag in[]dnl
+eval set X "dnl
   m4_ifdef([_AC_SEEN_CONFIG(FILES)],    [:F $CONFIG_FILES])[]dnl
   m4_ifdef([_AC_SEEN_CONFIG(HEADERS)],  [:H $CONFIG_HEADERS])[]dnl
   m4_ifdef([_AC_SEEN_CONFIG(LINKS)],    [:L $CONFIG_LINKS])[]dnl
-  m4_ifdef([_AC_SEEN_CONFIG(COMMANDS)], [:C $CONFIG_COMMANDS])
+  m4_ifdef([_AC_SEEN_CONFIG(COMMANDS)], [:C $CONFIG_COMMANDS])[]dnl
+"
+shift
+for ac_tag
 do
   case $ac_tag in
   :[[FHLC]]) ac_mode=$ac_tag; continue;;
@@ -1629,7 +1641,8 @@ do
 	   esac ||
 	   AC_MSG_ERROR([cannot find input file: $ac_f]);;
       esac
-      ac_file_inputs="$ac_file_inputs $ac_f"
+      case $ac_f in *\'*) ac_f=`AS_ECHO(["$ac_f"]) | sed "s/'/'\\\\\\\\''/g"`;; esac
+      ac_file_inputs="$ac_file_inputs '$ac_f'"
     done
 
     # Let's still pretend it is `configure' which instantiates (i.e., don't
