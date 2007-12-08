@@ -1,5 +1,7 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/torture.at (srcdir): Fix quoting.
+
 	Do not pass top_srcdir to configure scripts in testsuite.
 	* tests/autotest.at (srcdir propagation): Copy install-sh to
 	source tree.

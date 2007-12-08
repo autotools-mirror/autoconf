@@ -972,10 +972,13 @@ AT_DATA([configure.ac],
 
 AC_CONFIG_FILES([foo at-dir/bar])
 
+# Use quotes in the INIT-COMMANDS to accommodate a value of $srcdir
+# containing e.g., spaces or shell meta-characters.
+# Use *single* quotes because the context is an unquoted here-doc.
 AC_CONFIG_COMMANDS([report],
-[test -f $srcdir/configure.ac ||
+[test -f "$srcdir/configure.ac" ||
    AC_MSG_ERROR([cannot find $srcdir/configure.ac])],
-		   [srcdir=$srcdir])
+		   [srcdir='$srcdir'])
 
 AC_OUTPUT
 rm -f -r foo at-dir/bar
