@@ -1,9 +1,9 @@
-# Copyright (C) 2003, 2004, 2005, 2006  Free Software Foundation, Inc.
+# Copyright (C) 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc.
 
-# This program is free software: you can redistribute it and/or modify
+# This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
 
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -44,11 +44,37 @@ use Autom4te::ChannelDefs;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&contents
+@EXPORT = qw (&open_quote &contents
 	      &find_file &mtime
 	      &update_file &up_to_date_p
 	      &xsystem &xqx &dir_has_case_matching_file &reset_dir_cache);
 
+
+=item C<open_quote ($file_name)>
+
+Quote C<$file_name> for open.
+
+=cut
+
+# $FILE_NAME
+# open_quote ($FILE_NAME)
+# -----------------------
+# If the string $S is a well-behaved file name, simply return it.
+# If it starts with white space, prepend `./', if it ends with
+# white space, add `\0'.  Return the new string.
+sub open_quote($)
+{
+  my ($s) = @_;
+  if ($s =~ m/^\s/)
+    {
+      $s = "./$s";
+    }
+  if ($s =~ m/\s$/)
+    {
+      $s = "$s\0";
+    }
+  return $s;
+}
 
 =item C<find_file ($file_name, @include)>
 
@@ -139,7 +165,7 @@ sub update_file ($$;$)
 
   if ($to eq '-')
     {
-      my $in = new IO::File ("$from");
+      my $in = new IO::File ("< " . open_quote ($from));
       my $out = new IO::File (">-");
       while ($_ = $in->getline)
 	{
@@ -303,7 +329,7 @@ sub contents ($)
   my ($file) = @_;
   verb "reading $file";
   local $/;			# Turn on slurp-mode.
-  my $f = new Autom4te::XFile "< $file";
+  my $f = new Autom4te::XFile "< " . open_quote ($file);
   my $contents = $f->getline;
   $f->close;
   return $contents;

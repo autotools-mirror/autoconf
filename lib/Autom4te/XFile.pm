@@ -1,9 +1,9 @@
 # Copyright (C) 2001, 2003, 2004, 2006 Free Software Foundation, Inc.
 
-# This program is free software: you can redistribute it and/or modify
+# This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
 
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -64,7 +64,7 @@ Autom4te::XFile - supply object methods for filehandles with error handling
 C<Autom4te::XFile> inherits from C<IO::File>.  It provides the method
 C<name> returning the file name.  It provides dying version of the
 methods C<close>, C<lock> (corresponding to C<flock>), C<new>,
-C<open>, C<seek>, and C<trunctate>.  It also overrides the C<getline>
+C<open>, C<seek>, and C<truncate>.  It also overrides the C<getline>
 and C<getlines> methods to translate C<\r\n> to C<\n>.
 
 =head1 SEE ALSO

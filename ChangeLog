@@ -1,5 +1,11 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Sync from Automake.
+	* lib/Autom4te/Channels.pm, lib/Autom4te/Configure_ac.pm,
+	lib/Autom4te/Struct.pm, lib/Autom4te/XFile.pm: Likewise.
+	* lib/Autom4te/FileUtils.pm (open_quote): New function.
+	(update_file, contents): Use it.
+
 	* Makefile.am (autom4te-update): Rewrite for git.
 
 2007-12-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
