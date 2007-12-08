@@ -65,10 +65,8 @@ WGET = wget
 WGETFLAGS = -C off
 
 ## Fetch the latest versions of files we care about.
-automake_cvsweb = \
-   http://sources.redhat.com/cgi-bin/cvsweb.cgi/~checkout~/automake
-automake_cvsargs = \
-   'content-type=text/plain&cvsroot=automake'
+automake_gitweb = \
+  http://git.savannah.gnu.org/gitweb/?p=automake.git;a=blob_plain;hb=HEAD;
 autom4te_files = \
   Autom4te/Configure_ac.pm \
   Autom4te/Channels.pm \
@@ -80,8 +78,9 @@ autom4te-update:
 	rm -f -r Fetchdir > /dev/null 2>&1
 	mkdir -p Fetchdir/Autom4te
 	for file in $(autom4te_files); do \
+	  infile=`echo $$file | sed 's/Autom4te/Automake/g'`; \
 	  $(WGET) $(WGET_FLAGS) \
-	    "$(automake_cvsweb)/lib/$file?$(automake_cvsargs)" \
+	    "$(automake_gitweb)f=lib/$$infile" \
 	    -O "Fetchdir/$$file" || exit; \
 	done
 	perl -pi -e 's/Automake::/Autom4te::/g' Fetchdir/Autom4te/*.pm

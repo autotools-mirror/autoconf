@@ -1,3 +1,7 @@
+2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* Makefile.am (autom4te-update): Rewrite for git.
+
 2007-12-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (autom4te Invocation, Autom4te Cache): Fix typos.
