@@ -138,22 +138,73 @@ AT_CHECK([cat file], 0,
 AT_CLEANUP
 
 
-# autom4te and file names containing white space
-# ----------------------------------------------
+# autom4te and file names containing whitespace
+# ---------------------------------------------
 
-AT_SETUP([autom4te and white space in file names])
+AT_SETUP([autom4te and whitespace in file names])
 
-file='file with  funny \ '\'' \'\'' $ & #!*? name'
-cat >"$file.m4" <<'END'
-right
+x=
+export x
+rm -f a b
+# the first one omits special characters that are not w32 safe.
+for funny in \
+  'with  funny '\'' $x & #! name ' \
+  'with  funny \ '\'' \'\'' " <a >b * ? name '
+do
+  file=" file $funny"
+  outfile="$file out "
+  dir=" dir $funny"
+  cachedir=" cache$dir"
+  TMPDIR=" tmp$dir"
+  export TMPDIR
+
+  cat >"$file" <<'END'
+[m4@&t@_include(foo.m4)
+m4@&t@_divert(0)d@&t@nl
+FOO]
 END
-# skip if we cannot create such a file
-AT_CHECK([test -f "$file.m4" || exit 77])
-AT_CHECK_AUTOM4TE([-o "$file" "$file.m4"])
+  # skip if we cannot create such a file or directory
+  AT_CHECK([mkdir "$dir" "$cachedir" "$TMPDIR" && test -f "$file" || exit 77])
+  cat >"$dir"/foo.m4 <<'END'
+[m4@&t@_define([FOO], [bar])]
+END
 
-AT_CHECK([cat "$file"], [],
-[[right
+  AT_CHECK_AUTOM4TE([-C "$cachedir" -B "$dir" --language=m4sugar -o "$outfile" "$file"])
+  AT_CHECK([cat "$outfile"], [],
+  [[bar
 ]])
+  rm -rf "$outfile" "$cachedir"
+  AT_CHECK_AUTOM4TE([-C "$cachedir" -I "$dir" --language=m4sugar -o "$outfile" "$file"])
+  AT_CHECK([cat "$outfile"], [],
+  [[bar
+]])
+
+  # This exercises a slightly different code path and will catch an open with
+  # trailing whitespace:
+  cat >"$file" <<'END'
+[m4@&t@_include(foo.m4)
+m4@&t@_pattern_forbid([^bar$])
+m4@&t@_divert(0)d@&t@nl
+FOO]
+END
+  rm -rf "$outfile" "$cachedir"
+  AT_CHECK_AUTOM4TE([-C "$cachedir" -I "$dir" --language=m4sugar -o "$outfile" "$file"],
+		    [1], [], [stderr])
+  AT_CHECK([grep 'possibly undefined macro' stderr], [], [ignore])
+
+  cat >"$file" <<'END'
+[m4@&t@_include(foo.m4)
+m4@&t@_divert(0)d@&t@nl]
+END
+  rm -rf "$file.m4f"
+  AT_CHECK_AUTOM4TE([-C "$cachedir" -I "$dir" --language=m4sugar --freeze -o "$file.m4f" "$file"])
+  AT_CHECK([test -s "$file.m4f"])
+
+  # Check --reload-state
+  AT_CHECK_AUTOM4TE([-C "$cachedir" --language=m4sugar -o "$outfile" "$file.m4f" /dev/null])
+
+  test ! -f b
+done
 
 AT_CLEANUP
 
@@ -923,5 +974,66 @@ AT_CHECK([automake --no-force --add-missing], [], [], [ignore])
 AT_CHECK([autoconf])
 AT_CHECK([test "`find configure -newer newer`" = "" ||
 	  { diff old-requests autom4te.cache/requests; exit 1; }])
+
+AT_CLEANUP
+
+
+# autotools and file names containing whitespace
+# ---------------------------------------------
+
+AT_SETUP([autotools and whitespace in file names])
+
+x=
+export x
+rm -f a b
+# the first one omits special characters that are not w32 safe.
+for funny in \
+  'with  funny '\'' $x & #! name ' \
+  'with  funny \ '\'' \'\'' " <a >b * ? name '
+do
+  file=" file $funny"
+  dir=" dir $funny"
+  TMPDIR=" tmp$dir"
+  export TMPDIR
+
+  cat >"$file.in" <<'END'
+[AC_INIT(x,0)
+m4@&t@_include([foo.m4])
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_MACRO
+AC_OUTPUT]
+END
+  # skip if we cannot create such a file or directory
+  AT_CHECK([mkdir "$dir" "$TMPDIR" && test -f "$file.in" || exit 77])
+  cat >"$dir"/foo.m4 <<'END'
+[AC_DEFUN([AC_MACRO], [echo hi])]
+END
+
+  AT_CHECK_AUTOHEADER([-B "$dir" "$file.in"])
+  AT_CHECK_AUTOHEADER([-I "$dir" "$file.in"])
+  AT_CHECK_AUTOUPDATE([-B "$dir" "$file.in"])
+  AT_CHECK_AUTOUPDATE([-I "$dir" "$file.in"])
+  AT_CHECK_AUTOUPDATE([-B "$dir" - < "$file.in"], [], [ignore])
+  AT_CHECK_AUTOCONF([-B "$dir" -o "$file" "$file.in"])
+  AT_CHECK_AUTOCONF([-I "$dir" -o "$file" "$file.in"])
+  # In autoconf, these exercise a slightly different code path:
+  AT_CHECK_AUTOCONF([--prepend-include="$dir" -o "$file" "$file.in"])
+  AT_CHECK_AUTOCONF([--include="$dir" -o "$file" "$file.in"])
+  AT_CHECK([autoscan -B "$dir"], [], [], [ignore])
+  AT_CHECK([autoscan -I "$dir"], [], [], [ignore])
+  # autoreconf requires a sane input file name.  Also, disable aclocal.
+  mv -f "$file.in" configure.in
+  AT_DATA([aclocal.m4])
+  AT_CHECK([autoreconf -B "$dir"])
+  AT_CHECK([autoreconf -I "$dir"])
+
+  cat >"$file.c" <<'END'
+#if FOO
+#endif
+END
+  AT_CHECK([ifnames "$file.c"], [], [ignore])
+
+  test ! -f b
+done
 
 AT_CLEANUP

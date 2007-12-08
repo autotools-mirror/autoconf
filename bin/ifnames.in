@@ -43,6 +43,7 @@ BEGIN
 
 use Autom4te::General;
 use Autom4te::XFile;
+use Autom4te::FileUtils;
 
 # $HELP
 # -----
@@ -92,7 +93,7 @@ my %occurrence;
 sub scan_file ($)
 {
   my ($file_name) = @_;
-  my $file = new Autom4te::XFile ($file_name);
+  my $file = new Autom4te::XFile ("< " . open_quote ($file_name));
   while ($_ = $file->getline)
     {
       # Continuation lines.

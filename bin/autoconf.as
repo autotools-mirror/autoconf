@@ -107,14 +107,21 @@ while test $# -gt 0 ; do
     --include=*  | -I?* | \
     --prepend-include=* | -B?* | \
     --warnings=* | -W?* )
-       autom4te_options="$autom4te_options '$1'"; shift ;;
-
+       case $1 in
+         *\'*) arg=`AS_ECHO(["$1"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+	 *) arg=$1 ;;
+       esac
+       autom4te_options="$autom4te_options '$arg'"; shift ;;
     # Options with separated arg passed as is to autom4te.
     --include  | -I | \
     --prepend-include  | -B | \
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
-       autom4te_options="$autom4te_options $option '$2'"
+       case $2 in
+         *\'*) arg=`AS_ECHO(["$2"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+	 *) arg=$2 ;;
+       esac
+       autom4te_options="$autom4te_options $option '$arg'"
        shift; shift ;;
 
     --trace=* | -t?* )
@@ -178,8 +185,8 @@ esac
 test -z "$outfile" && outfile=-
 
 # Run autom4te with expansion.
-eval set x $autom4te_options \
-  --language=autoconf --output=\$outfile "$traces" \$infile
+eval set x "$autom4te_options" \
+  --language=autoconf --output=\"\$outfile\" "$traces" \"\$infile\"
 shift
 $verbose && AS_ECHO(["$as_me: running $AUTOM4TE $*"]) >&2
 exec "$AUTOM4TE" "$@"

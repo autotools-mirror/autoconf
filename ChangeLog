@@ -1,5 +1,28 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Proper file name escaping in Autoconf programs and Perl modules.
+	This includes escaping of characters special to the shell
+	as well as special to Perl, e.g., leading `<' or `>'.
+	For example, when $file starts with `>', `open ">$file"'
+	wrongly tries to append to a different file.
+	* bin/autoconf.as: Fix quoting for autom4te options.
+	* lib/Autom4te/General.pm (shell_quote): New function, taken
+	from coreutils, written by Jim Meyering.
+	(mktmpdir): Use it.
+	* bin/autom4te.in (files_to_options, handle_m4): Use shell_quote
+	and open_quote.
+	* bin/autoreconf.in (parse_args): Likewise.
+	* bin/autoscan.in (main): Likewise.
+	* bin/autoupdate.in (main): Likewise.
+	* bin/autoheader.in: Likewise, fixing old insufficient escaping.
+	* bin/ifnames.in: Likewise, XFile usage fixes.
+	* tests/tools.at (autom4te and whitespace in file names): Extend
+	test.  Test twice, with special characters allowed on w32, and the
+	rest.  Test leading and trailing whitespace, for `open_quote'.
+	(autotools and whitespace in file names): New, analogous test.
+	Reported by Paul Eggert and Benoit Sigoure, additional suggestions
+	by Russ Allbery and Eric Blake.
+
 	Sync from Automake.
 	* lib/Autom4te/Channels.pm, lib/Autom4te/Configure_ac.pm,
 	lib/Autom4te/Struct.pm, lib/Autom4te/XFile.pm: Likewise.
