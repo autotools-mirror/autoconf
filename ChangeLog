@@ -1,5 +1,7 @@
 2007-12-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autom4te.in: Quote @datadir@.
+
 	Proper file name escaping in Autoconf programs and Perl modules.
 	This includes escaping of characters special to the shell
 	as well as special to Perl, e.g., leading `<' or `>'.
