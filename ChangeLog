@@ -1,5 +1,8 @@
 2007-12-12  Eric Blake  <ebb9@byu.net>
 
+	Fix spurious testsuite failure with M4 1.4.11.
+	* tests/local.at (AT_CHECK_M4): Cater to new m4 error message.
+
 	Optimize AC_REQUIRE.
 	* lib/m4sugar/m4sugar.m4 (m4_expansion_stack_push, _m4_defun_pro)
 	(_m4_defun_pro_outer, _m4_defun_epi, _m4_defun_epi_outer)
