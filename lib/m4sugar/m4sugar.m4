@@ -1321,10 +1321,11 @@ m4_define([m4_undivert],
 
 # m4_expansion_stack_push(TEXT)
 # -----------------------------
+# Use m4_builtin to avoid m4_defn overhead.
 m4_define([m4_expansion_stack_push],
 [m4_pushdef([m4_expansion_stack],
 	    [$1]m4_ifdef([m4_expansion_stack], [
-m4_defn([m4_expansion_stack])]))])
+m4_builtin([defn], [m4_expansion_stack])]))])
 
 
 # m4_expansion_stack_pop
@@ -1364,33 +1365,38 @@ m4_define([_m4_divert(GROW)],       10000)
 # _m4_defun_pro(MACRO-NAME)
 # -------------------------
 # The prologue for Autoconf macros.
+#
+# This is called frequently, so minimize the number of macro invocations
+# by avoiding dnl and m4_defn overhead.
 m4_define([_m4_defun_pro],
-[m4_ifndef([m4_expansion_stack], [_m4_defun_pro_outer[]])dnl
-m4_expansion_stack_push(m4_defn([m4_location($1)])[: $1 is expanded from...])dnl
-m4_pushdef([_m4_expanding($1)])dnl
-])
+m4_join([],
+	[m4_ifdef([m4_expansion_stack], [], [_m4_defun_pro_outer[]])],
+	[m4_expansion_stack_push(m4_builtin([defn],
+		[m4_location($1)])[: $1 is expanded from...])],
+	[m4_pushdef([_m4_expanding($1)])]))
 
 m4_define([_m4_defun_pro_outer],
-[m4_copy([_m4_divert_diversion], [_m4_divert_dump])dnl
-m4_divert_push([GROW])dnl
-])
+[m4_copy([_m4_divert_diversion], [_m4_divert_dump])m4_divert_push([GROW])])
 
 # _m4_defun_epi(MACRO-NAME)
 # -------------------------
 # The Epilogue for Autoconf macros.  MACRO-NAME only helps tracing
 # the PRO/EPI pairs.
+#
+# This is called frequently, so minimize the number of macro invocations
+# by avoiding dnl and m4_popdef overhead.
 m4_define([_m4_defun_epi],
-[m4_popdef([_m4_expanding($1)])dnl
-m4_expansion_stack_pop()dnl
-m4_ifndef([m4_expansion_stack], [_m4_defun_epi_outer[]])dnl
-m4_provide([$1])dnl
-])
+m4_join([],
+	[m4_builtin([popdef], [_m4_expanding($1)])],
+	[m4_expansion_stack_pop()],
+	[m4_ifdef([m4_expansion_stack], [], [_m4_defun_epi_outer[]])],
+	[m4_provide([$1])]))
 
 m4_define([_m4_defun_epi_outer],
-[m4_undefine([_m4_divert_dump])dnl
-m4_divert_pop([GROW])dnl
-m4_undivert([GROW])dnl
-])
+m4_join([],
+	[m4_builtin([undefine], [_m4_divert_dump])],
+	[m4_divert_pop([GROW])],
+	[m4_undivert([GROW])]))
 
 
 # m4_defun(NAME, EXPANSION)
@@ -1480,34 +1486,40 @@ m4_define([m4_before],
 #   such as `C' should dispatch the call to `AC_LANG_COMPILER(C)'.  But this
 #   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
 #   it passes to `AC_LANG_COMPILER(C)'.
+#
+# This is called frequently, so minimize the number of macro invocations
+# by avoiding dnl and other overhead on the common path.
 m4_define([m4_require],
-[m4_ifdef([_m4_expanding($1)],
-	 [m4_fatal([$0: circular dependency of $1])])dnl
-m4_ifndef([_m4_divert_dump],
-	  [m4_fatal([$0($1): cannot be used outside of an ]dnl
-m4_bmatch([$0], [^AC_], [[AC_DEFUN]], [[m4_defun]])['d macro])])dnl
-m4_provide_if([$1],
-	      [],
-	      [_m4_require_call([$1], [$2])])dnl
-])
+m4_join([],
+	[m4_ifdef([_m4_expanding($1)],
+		  [m4_fatal([$0: circular dependency of $1])])],
+	[m4_ifdef([_m4_divert_dump], [],
+		  [m4_fatal([$0($1): cannot be used outside of an ]dnl
+m4_bmatch([$0], [^AC_], [[AC_DEFUN]], [[m4_defun]])['d macro])])],
+	[m4_provide_if([$1],
+		       [],
+		       [_m4_require_call([$1], [$2])])]))
 
 
-# _m4_require_call(BODY-TO-EXPAND)
-# --------------------------------
+# _m4_require_call(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK])
+# -----------------------------------------------------------------
 # If m4_require decides to expand the body, it calls this macro.
+#
+# This is called frequently, so minimize the number of macro invocations
+# by avoiding dnl and other overhead on the common path.
 m4_define([_m4_require_call],
-[m4_define([_m4_divert_grow], m4_decr(_m4_divert_grow))dnl
-m4_divert_push(_m4_divert_grow)dnl
-m4_default([$2], [$1])
+m4_join([],
+	[m4_define([_m4_divert_grow], m4_decr(_m4_divert_grow))],
+	[m4_divert_push(_m4_divert_grow)],
+	[m4_default([$2], [$1])
 m4_provide_if([$1],
 	      [],
 	      [m4_warn([syntax],
-		       [$1 is m4_require'd but not m4_defun'd])])dnl
-m4_divert(m4_defn([_m4_divert_dump]))dnl
-m4_undivert(_m4_divert_grow)dnl
-m4_divert_pop(_m4_divert_grow)dnl
-m4_define([_m4_divert_grow], m4_incr(_m4_divert_grow))dnl
-])
+		       [$1 is m4_require'd but not m4_defun'd])])],
+	[m4_divert(m4_builtin([defn], [_m4_divert_dump]))],
+	[m4_undivert(_m4_divert_grow)],
+	[m4_divert_pop(_m4_divert_grow)],
+	[m4_define([_m4_divert_grow], m4_incr(_m4_divert_grow))]))
 
 
 # _m4_divert_grow
