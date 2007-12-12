@@ -1,3 +1,8 @@
+2007-12-12  Eric Blake  <ebb9@byu.net>
+
+	Fix spurious testsuite failure with M4 1.4.11.
+	* tests/local.at (AT_CHECK_M4): Cater to new m4 error message.
+
 2006-10-26  Eric Blake  <ebb9@byu.net>
 
 	* tests/m4sugar.at (m4_warn, m4_require: circular dependencies):

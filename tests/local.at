@@ -34,9 +34,14 @@ AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 # AT_CHECK_AUTOM4TE(FLAGS, [EXIT-STATUS = 0], STDOUT, STDERR)
 # -----------------------------------------------------------
 # If stderr is specified, normalize the observed stderr.
-# This (using GNU M4 1.4.6 or later)
+# This (using GNU M4 1.4.6)
 #
 #  /usr/local/bin/m4:script.4s:1: cannot open `foo': No such file or directory
+#  autom4te: /usr/local/bin/m4 failed with exit status: 1
+#
+# or this (GNU M4 1.4.11)
+#
+#  /usr/local/bin/m4:script.4s:1: include: cannot open `foo': No such file or directory
 #  autom4te: /usr/local/bin/m4 failed with exit status: 1
 #
 # or this (GNU M4 1.4 installed as gm4)
@@ -57,6 +62,7 @@ AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 #
 # and
 #     m4:(file):(line): Cannot open foo:
+# or  m4:(file):(line): include: cannot open `foo':
 # to  m4:(file):(line): cannot open `foo':
 #
 # and
@@ -67,7 +73,8 @@ m4_define([AT_CHECK_AUTOM4TE],
 m4_ifval([$4],
 [AT_CHECK([[sed 's/^[^:]*m4: *\([^:]*:\) *\([0-9][0-9]*: \)/m4:\1\2/
 	s/^\([^:]*:\) *\([0-9][0-9]*:\)[^:]*m4: /m4:\1\2 /
-	s/^\(m4:[^:]*:[0-9][0-9]*: \)C\(annot open \)\([^`:]*\):/\1c\2`\3'\'':/
+	s/: C\(annot open \)\([^`:]*\):/: c\1`\2'\'':/
+	s/: include:\( cannot open\)/:\1/
 	s/^autom4te: [^ ]*m4 /autom4te: m4 /
 	s/^autom4te: [^ ]*m4\.exe /autom4te: m4 /
 	s/ (E[A-Z]*)$//
