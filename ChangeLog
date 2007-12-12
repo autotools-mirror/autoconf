@@ -1,5 +1,10 @@
 2007-12-12  Eric Blake  <ebb9@byu.net>
 
+	Fix thinko in earlier patch - m4_join isn't defined yet.
+	* lib/m4sugar/m4sugar.m4 (m4_expansion_stack_push, _m4_defun_pro)
+	(_m4_defun_pro_outer, _m4_defun_epi, _m4_defun_epi_outer)
+	(m4_require): Use m4_do, not m4_join.
+
 	Fix some whitespace tests on cygwin.
 	* tests/tools.at (autom4te and whitespace in file names): Restore
 	font-lock.  Create $TMPDIR before it might be used.
