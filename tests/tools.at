@@ -146,10 +146,11 @@ AT_SETUP([autom4te and whitespace in file names])
 x=
 export x
 rm -f a b
-# the first one omits special characters that are not w32 safe.
+# the first one omits special characters and trailing spaces,
+# which are not w32 safe.
 for funny in \
-  'with  funny '\'' $x & #! name ' \
-  'with  funny \ '\'' \'\'' " <a >b * ? name '
+  'with  funny '\'' $x & #! name' \
+  'with  funny \ '\'' \'\'' " <a >b * ? name ' # "restore font-lock
 do
   file=" file $funny"
   outfile="$file out "
@@ -158,13 +159,14 @@ do
   TMPDIR=" tmp$dir"
   export TMPDIR
 
+  # skip if we cannot create such a file or directory
+  AT_CHECK([mkdir "$dir" "$cachedir" "$TMPDIR" && touch "$file" || exit 77])
+
   cat >"$file" <<'END'
 [m4@&t@_include(foo.m4)
 m4@&t@_divert(0)d@&t@nl
 FOO]
 END
-  # skip if we cannot create such a file or directory
-  AT_CHECK([mkdir "$dir" "$cachedir" "$TMPDIR" && test -f "$file" || exit 77])
   cat >"$dir"/foo.m4 <<'END'
 [m4@&t@_define([FOO], [bar])]
 END

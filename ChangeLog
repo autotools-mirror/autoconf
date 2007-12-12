@@ -1,5 +1,9 @@
 2007-12-12  Eric Blake  <ebb9@byu.net>
 
+	Fix some whitespace tests on cygwin.
+	* tests/tools.at (autom4te and whitespace in file names): Restore
+	font-lock.  Create $TMPDIR before it might be used.
+
 	Fix spurious testsuite failure with M4 1.4.11.
 	* tests/local.at (AT_CHECK_M4): Cater to new m4 error message.
 
