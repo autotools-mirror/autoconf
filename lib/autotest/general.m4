@@ -327,14 +327,14 @@ at_func_test ()
 at_func_create_debugging_script ()
 {
   {
-    echo "#! /bin/sh"
+    echo "#! /bin/sh" &&
     echo 'test "${ZSH_VERSION+set}" = set dnl
-&& alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\'''
-    AS_ECHO(["cd '$at_dir'"])
+&& alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\''' &&
+    AS_ECHO(["cd '$at_dir'"]) &&
     AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} \"$at_myself\" -v -d ]dnl
-[$at_debug_args $at_group \${1+\"\$[@]\"}"])
+[$at_debug_args $at_group \${1+\"\$[@]\"}"]) &&
     echo 'exit 1'
-  } >"$at_group_dir/run"
+  } >"$at_group_dir/run" &&
   chmod +x "$at_group_dir/run"
 }
 
@@ -410,6 +410,8 @@ at_version_p=false
 at_list_p=false
 # Test groups to run
 at_groups=
+# Whether a write failure occurred
+at_write_fail=0
 
 # The directory we are in.
 at_dir=`pwd`
@@ -626,7 +628,7 @@ m4_divert_push([HELP])dnl
 
 # Help message.
 if $at_help_p; then
-  cat <<_ATEOF
+  cat <<_ATEOF || at_write_fail=1
 Usage: $[0] [[OPTION]... [VARIABLE=VALUE]... [TESTS]]
 
 Run all the tests, or the selected TESTS, given by numeric ranges, and
@@ -645,7 +647,7 @@ possibly amounts into
 _ATEOF
 m4_divert_pop([HELP])dnl
 m4_divert_push([HELP_MODES])dnl
-cat <<_ATEOF
+cat <<_ATEOF || at_write_fail=1
 
 Operation modes:
   -h, --help     print the help message, then exit
@@ -655,7 +657,7 @@ Operation modes:
 _ATEOF
 m4_divert_pop([HELP_MODES])dnl
 m4_divert_push([HELP_TUNING])dnl
-cat <<_ATEOF
+cat <<_ATEOF || at_write_fail=1
 
 dnl extra quoting prevents emacs whitespace mode from putting tabs in output
 Execution tuning:
@@ -671,16 +673,16 @@ Execution tuning:
 _ATEOF
 m4_divert_pop([HELP_TUNING])dnl
 m4_divert_push([HELP_END])dnl
-cat <<_ATEOF
+cat <<_ATEOF || at_write_fail=1
 
 Report bugs to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
-  exit 0
+  exit $at_write_fail
 fi
 
 # List of tests.
 if $at_list_p; then
-  cat <<_ATEOF
+  cat <<_ATEOF || at_write_fail=1
 AT_TESTSUITE_NAME test groups:
 
  NUM: FILE-NAME:LINE     TEST-GROUP-NAME
@@ -706,18 +708,18 @@ _ATEOF
 	     printf " %3d: %-18s %s\n", $ 1, $ 2, $ 3
 	     if ($ 4) printf "      %s\n", $ 4
 	   }
-	 }'
-  exit 0
+	 }' || at_write_fail=1
+  exit $at_write_fail
 fi
 m4_divert_pop([HELP_END])dnl
 m4_divert_push([VERSION])dnl
 if $at_version_p; then
-  AS_ECHO(["$as_me (AT_PACKAGE_STRING)"])
-  cat <<\_ACEOF
+  AS_ECHO(["$as_me (AT_PACKAGE_STRING)"]) &&
+  cat <<\_ACEOF || at_write_fail=1
 m4_divert_pop([VERSION])dnl
 m4_divert_push([VERSION_END])dnl
 _ACEOF
-  exit 0
+  exit $at_write_fail
 fi
 m4_divert_pop([VERSION_END])dnl
 m4_divert_push([PREPARE_TESTS])dnl
@@ -886,8 +888,9 @@ BEGIN { FS="" }
   test = substr ($ 0, 10)
   print "at_sed" test "=\"1," start "d;" (NR-1) "q\""
   if (test == "'"$at_group"'") exit
-}' "$at_myself" > "$at_test_source"
-. "$at_test_source"
+}' "$at_myself" > "$at_test_source" &&
+. "$at_test_source" ||
+  AS_ERROR([cannot create test line number cache])
 
 
 m4_text_box([Driver loop.])

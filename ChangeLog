@@ -1,3 +1,12 @@
+2007-12-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix some write failure cases in Autotest.
+	* lib/autotest/general.m4 (AT_INIT): Do not exit successfully
+	upon write failures for --help, --version, --list.
+	Guard against write failures for intermediate created scripts.
+	<at_func_create_debugging_script>: Do not make the debugging
+	script executable if it is not complete.
+
 2007-12-12  Eric Blake  <ebb9@byu.net>
 
 	Fix thinko in earlier patch - m4_join isn't defined yet.
