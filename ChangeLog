@@ -1,5 +1,14 @@
 2008-03-01  Benoit Sigoure  <tsuna@lrde.epita.fr>
 
+	Be nice with file systems that don't handle unusual characters.
+	* tests/atlocal.in (func_sanitize_file_name)
+	(func_sanitize_dir_name): New shell functions.
+	* tests/tools.at (autom4te and whitespace in file names)
+	(autotools and whitespace in file names): Use them.
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Cover more potentially problemtic file names.  Use the new
+	functions.
+
 	Properly handle funny file names for headers in config.status.
 	The test suite did not cover this bug because the code was not
 	quoting properly the arguments of `rm -f' (which "fails" silently)

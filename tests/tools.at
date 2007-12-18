@@ -146,15 +146,14 @@ AT_SETUP([autom4te and whitespace in file names])
 x=
 export x
 rm -f a b
-# the first one omits special characters and trailing spaces,
-# which are not w32 safe.
 for funny in \
   'with  funny '\'' $x & #! name' \
   'with  funny \ '\'' \'\'' " <a >b * ? name ' # "restore font-lock
 do
+  funny=`func_sanitize_file_name "$funny"`
   file=" file $funny"
   outfile="$file out "
-  dir=" dir $funny"
+  dir=`func_sanitize_dir_name " dir $funny"`
   cachedir=" cache$dir"
   TMPDIR=" tmp$dir"
   export TMPDIR
@@ -988,13 +987,13 @@ AT_SETUP([autotools and whitespace in file names])
 x=
 export x
 rm -f a b
-# the first one omits special characters that are not w32 safe.
 for funny in \
   'with  funny '\'' $x & #! name ' \
   'with  funny \ '\'' \'\'' " <a >b * ? name '
 do
+  funny=`func_sanitize_file_name "$funny"`
   file=" file $funny"
-  dir=" dir $funny"
+  dir=`func_sanitize_dir_name " dir $funny"`
   TMPDIR=" tmp$dir"
   export TMPDIR
 
