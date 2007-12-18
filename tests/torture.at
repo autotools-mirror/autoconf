@@ -274,6 +274,15 @@ AT_CHECK([grep OK "$file"], [], [OK
 ])
 AT_CHECK([./config.status "--header=$file:$file.in"],
 	 [0], [ignore])
+# Run the same test a 2nd time to see that config.status does not recreate
+# the header (regression test)
+AT_CHECK([./config.status "--header=$file:$file.in"],
+	 [0], [config.status: creating file with  funny \ ' \' $ & #!*? name
+config.status: file with  funny \ ' \' $ & #!*? name is unchanged
+])
+AT_CHECK([grep ' & ' "$file"], [],
+[/* file with  funny \ ' \' $ & #!*? name.  Generated from file with  funny \ ' \' $ & #!*? name.in by configure.  */
+])
 AT_CHECK([grep OK "$file"], [], [OK
 ])
 AT_CLEANUP

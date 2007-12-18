@@ -864,10 +864,10 @@ m4_define([_AC_OUTPUT_HEADER],
       && eval '$AWK -f "$tmp/defines.awk"' "$ac_file_inputs"
     } >"$tmp/config.h" \
       || AC_MSG_ERROR([could not create $ac_file])
-    if diff $ac_file "$tmp/config.h" >/dev/null 2>&1; then
+    if diff "$ac_file" "$tmp/config.h" >/dev/null 2>&1; then
       AC_MSG_NOTICE([$ac_file is unchanged])
     else
-      rm -f $ac_file
+      rm -f "$ac_file"
       mv "$tmp/config.h" "$ac_file" \
 	|| AC_MSG_ERROR([could not create $ac_file])
     fi
@@ -879,7 +879,7 @@ m4_define([_AC_OUTPUT_HEADER],
 dnl If running for Automake, be ready to perform additional
 dnl commands to set up the timestamp files.
 m4_ifdef([_AC_AM_CONFIG_HEADER_HOOK],
-	 [_AC_AM_CONFIG_HEADER_HOOK([$ac_file])
+	 [_AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
 ])dnl
 ])# _AC_OUTPUT_HEADER
 

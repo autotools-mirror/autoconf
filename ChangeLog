@@ -1,4 +1,16 @@
 2008-03-01  Benoit Sigoure  <tsuna@lrde.epita.fr>
+
+	Properly handle funny file names for headers in config.status.
+	The test suite did not cover this bug because the code was not
+	quoting properly the arguments of `rm -f' (which "fails" silently)
+	as well as the arguments of `diff' (whose output was redirected to
+	/dev/null so we couldn't see its error message).
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADER): Properly quote the
+	file names passed to `rm' and `diff'.
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Add a regression test.
+
+2008-03-01  Benoit Sigoure  <tsuna@lrde.epita.fr>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Properly expand @configure_input@ in config.status.
