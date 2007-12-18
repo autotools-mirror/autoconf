@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterizing and creating config.status.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -635,7 +635,10 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 :t
 [/@[a-zA-Z_][a-zA-Z_0-9]*@/!b]
 dnl configure_input is a somewhat special, so we don't call AC_SUBST_TRACE.
-s&@configure_input@&$configure_input&;t t
+dnl Note if you change the s||| delimiter here, don't forget to adjust
+dnl ac_sed_conf_input accordingly.  Using & is a bad idea if & appears in
+dnl the replacement string.
+s|@configure_input@|$ac_sed_conf_input|;t t
 dnl During the transition period, this is a special case:
 s&@top_builddir@&$ac_top_builddir_sub&;t t[]AC_SUBST_TRACE([top_builddir])
 dnl For this substitution see the witness macro _AC_HAVE_TOP_BUILD_PREFIX above.
@@ -1655,6 +1658,13 @@ do
       configure_input="$ac_file.  $configure_input"
       AC_MSG_NOTICE([creating $ac_file])
     fi
+    # Neutralize special characters interpreted by sed in replacement strings.
+    case $configure_input in #(
+    *\&* | *\|* | *\\* )
+       ac_sed_conf_input=`AS_ECHO(["$configure_input"]) |
+       sed 's/[[\\\\&|]]/\\\\&/g'`;; #(
+    *) ac_sed_conf_input=$configure_input;;
+    esac
 
     case $ac_tag in
     *:-:* | *:-) cat >"$tmp/stdin" \
