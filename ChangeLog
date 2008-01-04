@@ -1,3 +1,10 @@
+2008-03-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Actually test that @configure_input@ is expanded correctly.
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Actually check generated file contents for the name of the
+	generated file, using AC_PROG_FGREP and $FGREP.
+
 2008-03-01  Benoit Sigoure  <tsuna@lrde.epita.fr>
 
 	Be nice with file systems that don't handle unusual characters.

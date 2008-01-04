@@ -134,6 +134,7 @@ AT_SETUP([[AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS]])
 
 AT_DATA([configure.ac],
 [[AC_INIT
+AC_PROG_FGREP
 rm -f -r header var-header file var-file link var-link command var-command
 echo 'OK' >input
 
@@ -262,23 +263,27 @@ AT_CHECK_CONFIG_CREATION_NOWRITE(link)
 AT_CHECK([grep ac_write_fail config.status], [1])
 
 # Check that --file and --header accept funny file names
+AT_DATA([fgrep.in],
+[[FGREP="@FGREP@"
+]])
+./config.status --file=fgrep:fgrep.in
+. ./fgrep
 
 x=
 export x
 for file in \
   'with  funny '\'' $x & #! name' \
   'file with  funny \ '\'' \'\'' $ & #!*? name' \
-  'with  funny \ '\'' \'\'' " <a >b & * ? name ' # "restore font-lock
+  'with  funny \ '\'' \'\'' " | <a >b & * ? name ' # "restore font-lock
 do
   # The function func_sanitize_file_name comes from tools.at
   file=`func_sanitize_file_name "$file"`
   cat >"$file.in" <<'END'
-OK
+@configure_input@
 END
   AT_CHECK([./config.status "--file=$file:$file.in"],
 	   [0], [ignore])
-  AT_CHECK([grep OK "$file"], [], [OK
-])
+  AT_CHECK([$FGREP "$file" "$file"], [0], [ignore])
   AT_CHECK([./config.status "--header=$file:$file.in"],
 	   [0], [ignore])
   # Run the same test a 2nd time to see that config.status does not recreate
@@ -290,8 +295,7 @@ config.status: $file is unchanged
   AT_CHECK_NOESCAPE([grep ' & ' "$file"], [],
 [/* $file.  Generated from $file.in by configure.  */
 ])
-  AT_CHECK([grep OK "$file"], [], [OK
-])
+  AT_CHECK([$FGREP "$file" "$file"], [0], [ignore])
 done
 AT_CLEANUP
 
