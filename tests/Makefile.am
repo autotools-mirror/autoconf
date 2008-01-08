@@ -1,6 +1,6 @@
 ## Make Autoconf tests.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 # Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -21,8 +21,8 @@
 EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 	     atlocal.in package.m4 wrapper.as
 
-# Running the uninstalled scripts.
-check_SCRIPTS = $(wrappers)
+# Running the uninstalled scripts.  Build them upon `all', for the manpages.
+noinst_SCRIPTS = $(wrappers)
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE)
 MAINTAINERCLEANFILES = Makefile.in
 

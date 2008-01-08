@@ -1,5 +1,10 @@
 2008-01-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/Makefile.am (noinst_SCRIPTS): Renamed from
+	check_SCRIPTS.  Building the wrappers for `all' allows help2man
+	to use them for the manpages.
+	Report by Benoit Sigoure.
+
 	* bin/autoreconf.in: Discard stderr for $autoconf/$aclocal --help.
 
 2007-12-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
