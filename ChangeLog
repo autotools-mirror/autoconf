@@ -1,3 +1,7 @@
+2008-01-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* bin/autoreconf.in: Discard stderr for $autoconf/$aclocal --help.
+
 2007-12-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix some write failure cases in Autotest.
