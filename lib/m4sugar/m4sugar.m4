@@ -3,8 +3,8 @@ divert(-1)#                                                  -*- Autoconf -*-
 # Base M4 layer.
 # Requires GNU M4.
 #
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
-# Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
+# 2008 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1760,7 +1760,7 @@ m4_define([m4_flatten],
 #    => active activeend
 #
 # First, notice that we guarantee trailing space.  Why?  Because regular
-# expressions are greedy, and `.* ?' would alway groups the space into the
+# expressions are greedy, and `.* ?' would always group the space into the
 # .* portion.  The algorithm is simpler by avoiding `?' at the end.  The
 # algorithm correctly strips everything if STRING is just ` '.
 #
@@ -2032,7 +2032,8 @@ m4_builtin([popdef], [m4_Border])dnl
 # Avoid bpatsubsts for the common case of no quadrigraphs.
 m4_define([m4_qlen],
 [m4_if(m4_index([$1], [@]), [-1], [m4_len([$1])],
-       [m4_len(m4_bpatsubsts([[$1]], [@\(<:\|:>\|S|\|%:\)@], [P], [@&t@]))])])
+       [m4_len(m4_bpatsubst([[$1]], [@\(\(<:\|:>\|S|\|%:\)\(@\)\|&t@\)],
+			    [\3]))])])
 
 
 # m4_qdelta(STRING)

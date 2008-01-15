@@ -1,3 +1,7 @@
+2008-01-15  Eric Blake  <ebb9@byu.net>
+
+	* lib/m4sugar/m4sugar.m4 (m4_qlen): Use fewer macros.
+
 2008-01-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/Makefile.am (noinst_SCRIPTS): Renamed from
