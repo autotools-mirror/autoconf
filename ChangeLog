@@ -1,3 +1,12 @@
+2008-01-21  Eric Blake  <ebb9@byu.net>
+
+	Improve documentation about default include directives.
+	* doc/autoconf.texi (Generic Headers, Generic Declarations)
+	(Generic Structures, Generic Types)
+	(Generic Compiler Characteristics): Add links to
+	AC_INCLUDES_DEFAULT.
+	Reported by Reuben Thomas.
+
 2008-01-15  Eric Blake  <ebb9@byu.net>
 
 	* lib/m4sugar/m4sugar.m4 (m4_qlen): Use fewer macros.

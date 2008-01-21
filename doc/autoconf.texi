@@ -5700,13 +5700,17 @@ test for it (@pxref{Writing Tests}).
 
 @anchor{AC_CHECK_HEADER}
 @defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @
-  @ovar{action-if-not-found}, @dvar{includes, default-includes})
+  @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_HEADER}
 If the system header file @var{header-file} is compilable, execute shell
 commands @var{action-if-found}, otherwise execute
 @var{action-if-not-found}.  If you just want to define a symbol if the
 header file is available, consider using @code{AC_CHECK_HEADERS}
 instead.
+
+@var{includes} is a series of include directives, defaulting to
+@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), which are used
+prior to the header under test.
 
 For compatibility issues with older versions of Autoconf, please read
 below.
@@ -5715,7 +5719,7 @@ below.
 @anchor{AC_CHECK_HEADERS}
 @defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @
   @ovar{action-if-found}, @ovar{action-if-not-found}, @
-  @dvar{includes, default-includes})
+  @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_HEADERS}
 @cvindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
@@ -5725,6 +5729,10 @@ is given, it is additional shell code to execute when one of the header
 files is found.  You can give it a value of @samp{break} to break out of
 the loop on the first match.  If @var{action-if-not-found} is given, it
 is executed when one of the header files is not found.
+
+@var{includes} is a series of include directives, defaulting to
+@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), which are used
+prior to the headers under test.
 
 For compatibility issues with older versions of Autoconf, please read
 below.
@@ -5796,13 +5804,14 @@ These macros are used to find declarations not covered by the ``particular''
 test macros.
 
 @defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @
-  @ovar{action-if-not-found}, @dvar{includes, default-includes})
+  @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_DECL}
 If @var{symbol} (a function, variable, or constant) is not declared in
 @var{includes} and a declaration is needed, run the shell commands
-@var{action-if-not-found}, otherwise @var{action-if-found}.  If no
-@var{includes} are specified, the default includes are used
-(@pxref{Default Includes}).
+@var{action-if-not-found}, otherwise @var{action-if-found}.
+@var{includes} is a series of include directives, defaulting to
+@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), which are used
+prior to the declaration under test.
 
 This macro actually tests whether @var{symbol} is defined as a macro or
 can be used as an r-value, not whether it is really declared, because it
@@ -5812,7 +5821,7 @@ introducing extra declarations when they are not needed.
 
 @anchor{AC_CHECK_DECLS}
 @defmac AC_CHECK_DECLS (@var{symbols}, @ovar{action-if-found}, @
-  @ovar{action-if-not-found}, @dvar{includes, default-includes})
+  @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_DECLS}
 @cvindex HAVE_DECL_@var{symbol}
 For each of the @var{symbols} (@emph{comma}-separated list), define
@@ -5822,11 +5831,16 @@ For each of the @var{symbols} (@emph{comma}-separated list), define
 execute when one of the function declarations is needed, otherwise
 @var{action-if-found} is executed.
 
+@var{includes} is a series of include directives, defaulting to
+@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), which are used
+prior to the declarations under test.
+
 This macro uses an M4 list as first argument:
 @example
 AC_CHECK_DECLS([strdup])
 AC_CHECK_DECLS([strlen])
 AC_CHECK_DECLS([malloc, realloc, calloc, free])
+AC_CHECK_DECLS([j0], [], [], [[#include <math.h>]])
 @end example
 
 Unlike the other @samp{AC_CHECK_*S} macros, when a @var{symbol} is not
@@ -5963,7 +5977,7 @@ These macros are used to find structure members not covered by the
 
 @defmac AC_CHECK_MEMBER (@var{aggregate}.@var{member}, @
   @ovar{action-if-found}, @ovar{action-if-not-found}, @
-  @dvar{includes, default-includes})
+  @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_MEMBER}
 Check whether @var{member} is a member of the aggregate @var{aggregate}.
 If no @var{includes} are specified, the default includes are used
@@ -5972,7 +5986,7 @@ If no @var{includes} are specified, the default includes are used
 @example
 AC_CHECK_MEMBER([struct passwd.pw_gecos], [],
                 [AC_MSG_ERROR([We need `passwd.pw_gecos'!])],
-                [#include <pwd.h>])
+                [[#include <pwd.h>]])
 @end example
 
 You can use this macro for submembers:
@@ -5984,7 +5998,7 @@ AC_CHECK_MEMBER(struct top.middle.bot)
 
 @anchor{AC_CHECK_MEMBERS}
 @defmac AC_CHECK_MEMBERS (@var{members}, @ovar{action-if-found}, @
-  @ovar{action-if-not-found}, @dvar{includes, default-includes})
+  @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_MEMBERS}
 @cvindex HAVE_@var{aggregate}_@var{member}
 Check for the existence of each @samp{@var{aggregate}.@var{member}} of
@@ -5994,6 +6008,10 @@ capitals, with spaces and dots replaced by underscores).  If
 @var{action-if-found} is given, it is executed for each of the found
 members.  If @var{action-if-not-found} is given, it is executed for each
 of the members that could not be found.
+
+@var{includes} is a series of include directives, defaulting to
+@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), which are used
+prior to the members under test.
 
 This macro uses M4 lists:
 @example
@@ -6279,10 +6297,12 @@ These macros are used to check for types not covered by the ``particular''
 test macros.
 
 @defmac AC_CHECK_TYPE (@var{type}, @ovar{action-if-found}, @
-  @ovar{action-if-not-found}, @dvar{includes, default-includes})
+  @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_TYPE}
 Check whether @var{type} is defined.  It may be a compiler builtin type
-or defined by the @var{includes} (@pxref{Default Includes}).
+or defined by the @var{includes}.  @var{includes} is a series of include
+directives, defaulting to @code{AC_INCLUDES_DEFAULT} (@pxref{Default
+Includes}), which are used prior to the type under test.
 
 In C, @var{type} must be a type-name, so that the expression @samp{sizeof
 (@var{type})} is valid (but @samp{sizeof ((@var{type}))} is not).  The
@@ -6293,7 +6313,7 @@ same test is applied when compiling for C++, which means that in C++
 
 
 @defmac AC_CHECK_TYPES (@var{types}, @ovar{action-if-found}, @
-  @ovar{action-if-not-found}, @dvar{includes, default-includes})
+  @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_TYPES}
 @cvindex HAVE_@var{type}
 For each @var{type} of the @var{types} that is defined, define
@@ -6308,6 +6328,7 @@ This macro uses M4 lists:
 @example
 AC_CHECK_TYPES([ptrdiff_t])
 AC_CHECK_TYPES([unsigned long long int, uintmax_t])
+AC_CHECK_TYPES([float_t], [], [], [[#include <math.h>]])
 @end example
 
 @end defmac
@@ -6383,15 +6404,16 @@ Autoconf works around this problem by casting @code{sizeof (int)} to
 
 @anchor{AC_CHECK_SIZEOF}
 @defmac AC_CHECK_SIZEOF (@var{type-or-expr}, @ovar{unused}, @
-  @dvar{includes, default-includes})
+  @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_SIZEOF}
 @cvindex SIZEOF_@var{type-or-expr}
 Define @code{SIZEOF_@var{type-or-expr}} (@pxref{Standard Symbols}) to be
 the size in bytes of @var{type-or-expr}, which may be either a type or
 an expression returning a value that has a size.  If the expression
-@samp{sizeof (@var{type-or-expr})} is invalid, the result is 0.  If no
-@var{includes} are specified, the default includes are used
-(@pxref{Default Includes}).
+@samp{sizeof (@var{type-or-expr})} is invalid, the result is 0.
+@var{includes} is a series of include directives, defaulting to
+@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), which are used
+prior to the expression under test.
 
 This macro now works even when cross-compiling.  The @var{unused}
 argument was used when cross-compiling.
@@ -6406,7 +6428,7 @@ AC_CHECK_SIZEOF([int *])
 defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
 @end defmac
 
-@defmac AC_CHECK_ALIGNOF (@var{type}, @dvar{includes, default-includes})
+@defmac AC_CHECK_ALIGNOF (@var{type}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_ALIGNOF}
 @cvindex ALIGNOF_@var{type}
 Define @code{ALIGNOF_@var{type}} (@pxref{Standard Symbols}) to be the
@@ -6417,7 +6439,7 @@ is 0.  If no @var{includes} are specified, the default includes are used
 @end defmac
 
 @defmac AC_COMPUTE_INT (@var{var}, @var{expression}, @
-  @dvar{includes, default-includes}, @ovar{action-if-fails})
+  @dvar{includes, AC_INCLUDES_DEFAULT}, @ovar{action-if-fails})
 @acindex{COMPUTE_INT}
 Store into the shell variable @var{var} the value of the integer
 @var{expression}.  The
