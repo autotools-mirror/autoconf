@@ -89,7 +89,7 @@ In configure.ac.  Run `make', check this in.
 
 ** Announce
 Complete/fix the announcement file, and send it at least to
-info@gnu.org (if a real release, or a ``serious beta''),
+info-gnu@gnu.org (if a real release, or a ``serious beta''),
 autotools-announce@gnu.org (even for ``non serious beta''),
 autoconf@gnu.org, automake@gnu.org, libtool@gnu.org, and
 bug-gnu-utils@gnu.org.
@@ -97,7 +97,7 @@ bug-gnu-utils@gnu.org.
 
 -----
 
-Copyright (C) 2002 Free Software Foundation, Inc.
+Copyright (C) 2002, 2008 Free Software Foundation, Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
