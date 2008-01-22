@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -969,11 +969,11 @@ m4_define([_AC_INIT_PARSE_ENABLE2],
 [-$1-* | --$1-*)
     ac_useropt=`expr "x$ac_option" : 'x-*$1-\(m4_if([$1], [$2], [[[^=]]], [.])*\)'`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_useropt" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
+    expr "x$ac_useropt" : "[.*[^-+._$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR(
 	[invalid ]m4_if([$2], [with], [package], [feature])[ name: $ac_useropt])
     ac_useropt_orig=$ac_useropt
-    ac_useropt=`AS_ECHO(["$ac_useropt"]) | sed 's/[[-.]]/_/g'`
+    ac_useropt=`AS_ECHO(["$ac_useropt"]) | sed 's/[[-+.]]/_/g'`
     case $ac_user_opts in
       *"
 "$2_$ac_useropt"

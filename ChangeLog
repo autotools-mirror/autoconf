@@ -1,5 +1,9 @@
 2008-01-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ENABLE2): Accept `+'
+	in feature string for --enable/--with.  Convert to underscore
+	for variable name.
+
 	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Require that
 	`install -c file1 file2 dir' works.
 	* doc/autoconf.texi (Particular Programs): Document this.
