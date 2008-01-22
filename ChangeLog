@@ -1,5 +1,12 @@
 2008-01-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix parallel `maintainer-check'.
+	* Makefile.am (maintainer-check-tests): Depend on `all'.
+	Use `$(MAKE) $(AM_MAKEFLAGS)' instead of plain `make'.
+	* tests/Makefile.am (maintainer-check-c++, maintainer-check-posix):
+	Likewise.
+	(maintainer-check): Serialize the testsuite runs.
+
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ENABLE2): Accept `+'
 	in feature string for --enable/--with.  Convert to underscore
 	for variable name.

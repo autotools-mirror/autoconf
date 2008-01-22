@@ -1,6 +1,6 @@
 # Make Autoconf.
 
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007 Free
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008 Free
 # Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -53,8 +53,8 @@ $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 
 ## maintainer-check ##
 maintainer-check: maintainer-check-tests
-maintainer-check-tests:
-	cd tests && make maintainer-check
+maintainer-check-tests: all
+	cd tests && $(MAKE) $(AM_MAKEFLAGS) maintainer-check
 
 
 ## ----------------------------------- ##

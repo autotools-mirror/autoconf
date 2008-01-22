@@ -190,7 +190,10 @@ MAINTAINERCLEANFILES += mktests.stamp
 
 ## maintainer-check ##
 
-maintainer-check: maintainer-check-posix maintainer-check-c++
+# These cannot be run in parallel.
+maintainer-check:
+	$(MAKE) $(AM_MAKEFLAGS) maintainer-check-posix
+	$(MAKE) $(AM_MAKEFLAGS) maintainer-check-c++
 
 # The hairy heredoc is more robust than using echo.
 CLEANFILES += expr
@@ -209,9 +212,9 @@ expr:
 
 # Try the test suite with more severe environments.
 maintainer-check-posix: expr
-	POSIXLY_CORRECT=yes make check
+	POSIXLY_CORRECT=yes $(MAKE) $(AM_MAKEFLAGS) check
 	rm expr
 
 # Try using G++ as a C compiler.
 maintainer-check-c++:
-	CC=g++ make check
+	CC=g++ $(MAKE) $(AM_MAKEFLAGS) check
