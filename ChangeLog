@@ -1,5 +1,12 @@
 2008-01-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix --help=recursive with multiple AC_CONFIG_SUBDIRS.
+	* lib/autoconf/general.m4 (_AC_INIT_HELP): If, for recursive help
+	mode, we change to the source directory, also set $ac_pwd so we
+	do not go back to the build tree for the next config subdir.
+	* tests/torture.at (Deep Package): Extend test to contain two
+	config subdirs on the top level.
+
 	Fix parallel `maintainer-check'.
 	* Makefile.am (maintainer-check-tests): Depend on `all'.
 	Use `$(MAKE) $(AM_MAKEFLAGS)' instead of plain `make'.
