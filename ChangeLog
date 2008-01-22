@@ -1,3 +1,10 @@
+2008-01-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Require that
+	`install -c file1 file2 dir' works.
+	* doc/autoconf.texi (Particular Programs): Document this.
+	* NEWS: Update.
+
 2008-01-21  Eric Blake  <ebb9@byu.net>
 
 	Improve documentation about default include directives.

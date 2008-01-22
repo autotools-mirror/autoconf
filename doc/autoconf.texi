@@ -183,7 +183,7 @@ a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
 
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
-2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -3730,7 +3730,9 @@ This macro screens out various instances of @command{install} known not to
 work.  It prefers to find a C program rather than a shell script, for
 speed.  Instead of @file{install-sh}, it can also use @file{install.sh},
 but that name is obsolete because some @command{make} programs have a rule
-that creates @file{install} from it if there is no makefile.
+that creates @file{install} from it if there is no makefile.  Starting with
+Autoconf 2.62, this macro requires @command{install} to be able to install
+multiple files into a target directory in a single invocation.
 
 Autoconf comes with a copy of @file{install-sh} that you can use.  If
 you use @code{AC_PROG_INSTALL}, you must include either

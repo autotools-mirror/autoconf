@@ -60,6 +60,9 @@ GNU Autoconf NEWS - User visible changes.
    indent-column and wrap-column; these should not normally be needed,
    but can be used to fine-tune how the output text is wrapped.
 
+** AC_PROG_INSTALL now requires an install program that can install multiple
+   files into a target directory.
+
 ** The command 'autoconf -' now correctly processes a file from stdin.
 
 ** For all of the directory arguments for 'configure', such as '--prefix'
@@ -1669,7 +1672,7 @@ Various bug fixes.
 -----
 
 Copyright (C) 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001, 2002,
-2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
