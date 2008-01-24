@@ -1,5 +1,9 @@
 2008-01-28  Eric Blake  <ebb9@byu.net>
 
+	Document grep peculiarity.
+	* doc/autoconf.texi (Limitations of Usual Tools) <grep>: Document
+	BSD behavior on binary input.
+
 	Minor testsuite improvements.
 	* lib/autotest/general.m4 (AT_INIT) <PREPARE_TESTS>: Use fewer
 	forks when sanitizing PATH.  Always output machine information,

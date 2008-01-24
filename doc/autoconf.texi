@@ -14957,6 +14957,20 @@ Similarly, the following escape sequences should also be avoided:
 @samp{\<}, @samp{\>}, @samp{\+}, @samp{\?}, @samp{\`}, @samp{\'},
 @samp{\B}, @samp{\b}, @samp{\S}, @samp{\s}, @samp{\W}, and @samp{\w}.
 
+Posix does not specify the behavior of @command{grep} on binary files.
+An example where this matters is using @acronym{BSD} @command{grep} to
+search text that includes embedded @acronym{ANSI} escape sequences for
+colored output to terminals (@samp{\033[m} is the sequence to restore
+normal output); the behavior depends on whether input is seekable:
+
+@example
+$ @kbd{printf 'esc\033[mape\n' > sample}
+$ @kbd{grep . sample}
+Binary file sample matches
+$ @kbd{cat file | grep .}
+escape
+@end example
+
 
 @item @command{join}
 @c -----------------
