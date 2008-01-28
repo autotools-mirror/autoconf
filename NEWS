@@ -81,6 +81,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Autotest now determines $srcdir correctly.
 
+** Testsuites built by autotest now accept a -C/--directory=DIR option
+   to adjust the working directory prior to creating files.
+
 ** Autoconf now requires GNU M4 1.4.5 or later.  Earlier versions of M4 have
    a bug in macro tracing that interferes with the interaction between
    Autoconf and Automake.  GNU M4 1.4.8 or later is recommended.  The

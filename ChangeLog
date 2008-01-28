@@ -1,3 +1,21 @@
+2008-01-28  Eric Blake  <ebb9@byu.net>
+
+	Add 'testsuite -C dir'.
+	* lib/autotest/general.m4 (_AT_ARG_OPTION): Move missing argument
+	detection...
+	(AT_INIT) <PARSE_ARGS_END>: ...here, since -k always takes
+	argument.
+	<DEFAULTS>: Delay computation of variables based on $at_dir...
+	<PREPARE_TESTS>: ...to here, since -C can change $at_dir.
+	<TESTS>: Re-invoke via absolute name, since -C may be in effect.
+	<PARSE_ARGS>: Parse new option.
+	<HELP_TUNING>: Document it.
+	* tests/autotest.at (Choosing where testsuite is run): New test
+	for this feature.
+	(Keywords and ranges): Add test for missing -k argument.
+	* NEWS: Document this.
+	* doc/autoconf.texi (testsuite Invocation): Likewise.
+
 2008-01-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* build-aux/config.guess, build-aux/config.sub,

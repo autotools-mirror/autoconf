@@ -20191,6 +20191,12 @@ Display the list of options and exit successfully.
 @itemx -V
 Display the version of the test suite and exit successfully.
 
+@item --directory=@var{dir}
+@itemx -C @var{dir}
+Change the current directory to @var{dir} before creating any files.
+Useful for running the testsuite in a subdirectory from a top-level
+Makefile.
+
 @item --clean
 @itemx -c
 Remove all the files the test suite might have created and exit.  Meant

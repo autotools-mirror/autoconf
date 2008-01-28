@@ -2,7 +2,8 @@
 
 AT_BANNER([Autotest.])
 
-# Copyright (C) 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2004, 2005, 2006, 2007, 2008 Free Software Foundation,
+# Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -395,6 +396,29 @@ AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='one space')],
 ])
 
 
+# Controlling where the testsuite is run.
+AT_CHECK_AT_TEST([Choosing where testsuite is run],
+  [AT_CHECK([:])], [], [], [], [], [
+dnl AT_CHECK_AT_TEST tests the default of running in `.'.
+AT_CHECK([rm micro-suite.log && mkdir sub1 sub2])
+dnl check specifying a different relative path to run in.
+AT_CHECK([./micro-suite -C sub1], [0], [ignore], [])
+AT_CHECK([test -f micro-suite.log], [1])
+AT_CHECK([test -f sub1/micro-suite.log], [0])
+dnl check specifying an absolute path to run in.
+AT_CHECK([./micro-suite --directory="`pwd`/sub2"], [0], [ignore], [])
+AT_CHECK([test -f micro-suite.log], [1])
+AT_CHECK([test -f sub2/micro-suite.log], [0])
+dnl check for failure detection with bad, missing, or empty directory.
+AT_CHECK([./micro-suite -C nonesuch], [1], [ignore], [ignore])
+AT_CHECK([./micro-suite -C ''], [1], [ignore], [ignore])
+AT_CHECK([./micro-suite -C -], [1], [ignore], [ignore])
+AT_CHECK([./micro-suite -C], [1], [ignore], [ignore])
+dnl check that --help overrides bad directory selection.
+AT_CHECK([./micro-suite -C nonesuch --help], [0], [ignore], [])
+])
+
+
 ## -------- ##
 ## Banners. ##
 ## -------- ##
@@ -491,6 +515,8 @@ AT_CLEANUP
 AT_CHECK_AUTOM4TE([--language=autotest -o k k.at])
 dnl check that AT_KEYWORDS does not duplicate words
 AT_CHECK([grep 'key1.*key1' k], [1])
+dnl check that -k requires an argument
+AT_CHECK([./k -k], [1], [], [ignore])
 
 # AT_CHECK_KEYS(TESTSUITE-OPTIONS, PATTERN1, COUNT1, PATTERN2, COUNT2)
 m4_define([AT_CHECK_KEYS],

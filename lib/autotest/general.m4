@@ -1,8 +1,8 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
-# Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+# Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -195,8 +195,8 @@ m4_define([AT_help_all], [])
 AS_INIT[]dnl
 m4_divert_push([DEFAULTS])dnl
 AT_COPYRIGHT(
-[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
-Foundation, Inc.
+[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+Free Software Foundation, Inc.
 This test suite is free software; the Free Software Foundation gives
 unlimited permission to copy, distribute and modify it.])
 AS_PREPARE
@@ -361,31 +361,6 @@ fi
 ## ---------------------- ##
 m4_divert_pop([PREPARE_TESTS])dnl back to DEFAULTS
 
-# Load the config file.
-for at_file in atconfig atlocal
-do
-  test -r $at_file || continue
-  . ./$at_file || AS_ERROR([invalid content: $at_file])
-done
-
-# Autoconf <=2.59b set at_top_builddir instead of at_top_build_prefix:
-: ${at_top_build_prefix=$at_top_builddir}
-
-# atconfig delivers names relative to the directory the test suite is
-# in, but the groups themselves are run in testsuite-dir/group-dir.
-if test -n "$at_top_srcdir"; then
-  builddir=../..
-  for at_dir in srcdir top_srcdir top_build_prefix
-  do
-    at_val=AS_VAR_GET([at_$at_dir])
-    case $at_val in
-      [[\\/$]]* | ?:[[\\/]]* ) at_prefix= ;;
-      *) at_prefix=../../ ;;
-    esac
-    AS_VAR_SET([$at_dir], [$at_prefix$at_val])
-  done
-fi
-
 # Not all shells have the 'times' builtin; the subshell is needed to make
 # sure we discard the 'times: not found' message from the shell.
 at_times_p=false
@@ -413,7 +388,7 @@ at_groups=
 # Whether a write failure occurred
 at_write_fail=0
 
-# The directory we are in.
+# The directory we run the suite in.  Default to . if no -C option.
 at_dir=`pwd`
 # An absolute reference to this testsuite script.
 dnl m4-double quote, to preserve []
@@ -421,23 +396,8 @@ dnl m4-double quote, to preserve []
   [\\/]* | ?:[\\/]* ) at_myself=$as_myself ;;
   * ) at_myself=$at_dir/$as_myself ;;
 esac]
-# The directory the whole suite works in.
-# Should be absolute to let the user `cd' at will.
-at_suite_dir=$at_dir/$as_me.dir
-# The file containing the suite.
-at_suite_log=$at_dir/$as_me.log
-# The file containing the location of the last AT_CHECK.
-at_check_line_file=$at_suite_dir/at-check-line
-# The file containing the exit status of the last command.
-at_status_file=$at_suite_dir/at-status
-# The files containing the output of the tested commands.
-at_stdout=$at_suite_dir/at-stdout
-at_stder1=$at_suite_dir/at-stder1
-at_stderr=$at_suite_dir/at-stderr
-# The file containing the function to run a test group.
-at_test_source=$at_suite_dir/at-test-source
-# The file containing dates.
-at_times_file=$at_suite_dir/at-times
+# Whether -C is in effect.
+at_change_dir=false
 m4_divert_pop([DEFAULTS])dnl
 m4_wrap([m4_divert_text([DEFAULTS],
 [
@@ -563,6 +523,15 @@ do
 	at_groups="$at_groups$at_range "
 	;;
 
+    # Directory selection.
+    --directory | -C )
+        at_prev=--directory
+	;;
+    --directory=* )
+        at_change_dir=:
+        at_dir=$at_optarg
+	;;
+
     # Keywords.
     --keywords | -k )
 	at_prev=--keywords
@@ -616,6 +585,9 @@ m4_divert_push([PARSE_ARGS_END])dnl
   esac
 done
 
+# Verify our last option didn't require an argument
+AS_IF([test -n "$at_prev"], [AS_ERROR([`$at_prev' requires an argument.])])
+
 # Selected test groups.
 if test -z "$at_groups"; then
   at_groups=$at_groups_all
@@ -661,6 +633,8 @@ cat <<_ATEOF || at_write_fail=1
 
 dnl extra quoting prevents emacs whitespace mode from putting tabs in output
 Execution tuning:
+  -C, --directory=DIR
+[                 change to directory DIR before starting]
   -k, --keywords=KEYWORDS
 [                 select the tests matching all the comma-separated KEYWORDS]
 [                 multiple \`-k' accumulate; prefixed \`!' negates a KEYWORD]
@@ -724,9 +698,63 @@ fi
 m4_divert_pop([VERSION_END])dnl
 m4_divert_push([PREPARE_TESTS])dnl
 
+# Take any -C into account.
+if $at_change_dir ; then
+  if test x- = x$"at_dir" ; then
+    at_dir=./-
+  fi
+  test x != x"$at_dir" && cd "$at_dir" \
+    || AS_ERROR([unable to change directory])
+  at_dir=`pwd`
+fi
+
+# Load the config file.
+for at_file in atconfig atlocal
+do
+  test -r $at_file || continue
+  . $at_file || AS_ERROR([invalid content: $at_file])
+done
+
+# Autoconf <=2.59b set at_top_builddir instead of at_top_build_prefix:
+: ${at_top_build_prefix=$at_top_builddir}
+
+# atconfig delivers names relative to the directory the test suite is
+# in, but the groups themselves are run in testsuite-dir/group-dir.
+if test -n "$at_top_srcdir"; then
+  builddir=../..
+  for at_dir_var in srcdir top_srcdir top_build_prefix
+  do
+    at_val=AS_VAR_GET([at_$at_dir_var])
+    case $at_val in
+      [[\\/$]]* | ?:[[\\/]]* ) at_prefix= ;;
+      *) at_prefix=../../ ;;
+    esac
+    AS_VAR_SET([$at_dir_var], [$at_prefix$at_val])
+  done
+fi
+
+# The directory the whole suite works in.
+# Should be absolute to let the user `cd' at will.
+at_suite_dir=$at_dir/$as_me.dir
+# The file containing the suite.
+at_suite_log=$at_dir/$as_me.log
+# The file containing the location of the last AT_CHECK.
+at_check_line_file=$at_suite_dir/at-check-line
+# The file containing the exit status of the last command.
+at_status_file=$at_suite_dir/at-status
+# The files containing the output of the tested commands.
+at_stdout=$at_suite_dir/at-stdout
+at_stder1=$at_suite_dir/at-stder1
+at_stderr=$at_suite_dir/at-stderr
+# The file containing the function to run a test group.
+at_test_source=$at_suite_dir/at-test-source
+# The file containing dates.
+at_times_file=$at_suite_dir/at-times
+
 # Don't take risks: use only absolute directories in PATH.
 #
-# For stand-alone test suites, AUTOTEST_PATH is relative to `.'.
+# For stand-alone test suites (ie. atconfig was not found),
+# AUTOTEST_PATH is relative to `.'.
 #
 # For embedded test suites, AUTOTEST_PATH is relative to the top level
 # of the package.  Then expand it into build/src parts, since users
@@ -1145,17 +1173,17 @@ else
     # Summary of failed and skipped tests.
     if test $at_fail_count != 0; then
       echo "Failed tests:"
-      $SHELL "$[0]" $at_fail_list --list
+      $SHELL "$at_myself" $at_fail_list --list
       echo
     fi
     if test $at_skip_count != 0; then
       echo "Skipped tests:"
-      $SHELL "$[0]" $at_skip_list --list
+      $SHELL "$at_myself" $at_skip_list --list
       echo
     fi
     if test $at_xpass_count != 0; then
       echo "Unexpected passes:"
-      $SHELL "$[0]" $at_xpass_list --list
+      $SHELL "$at_myself" $at_xpass_list --list
       echo
     fi
     if test $at_fail_count != 0; then
@@ -1249,12 +1277,6 @@ m4_divert_text([PARSE_ARGS_BEGIN],
 m4_ifvaln([$3],,[at_arg_[]m4_bpatsubst([AT_first_option], -, _)=false])dnl
 at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)=false
 ])dnl m4_divert_text DEFAULTS
-m4_ifval([$3],[m4_divert_once([PARSE_ARGS_END],
-[
-##
-## Verify our last option didn't require an argument
-##
-AS_IF([test -n "$at_prev"],[AS_ERROR([`$at_prev' requires an argument.])])])])
 m4_divert_text([PARSE_ARGS],
 [dnl Parse the options and args when necessary.
 m4_ifvaln([$3],
