@@ -785,8 +785,11 @@ esac])
 # builtins' (eg., cd) stderr directly: Ultrix's sh hates that.
 at_new_path=
 _AS_PATH_WALK([$at_path],
-[as_dir=`(cd "$as_dir" && pwd) 2>/dev/null`
-test -d "$as_dir" || continue
+[test -d "$as_dir" || continue
+case $as_dir in
+  [[\\/]]* | ?:[[\\/]]* ) ;;
+  * ) as_dir=`(cd "$as_dir" && pwd) 2>/dev/null` ;;
+esac
 case $PATH_SEPARATOR$at_new_path$PATH_SEPARATOR in
   *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR*) ;;
   $PATH_SEPARATOR$PATH_SEPARATOR) at_new_path=$as_dir ;;
@@ -832,9 +835,10 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
       echo
     done
 
-    AS_UNAME
-    echo
   fi
+
+  AS_UNAME
+  echo
 
   # Contents of the config files.
   for at_file in atconfig atlocal

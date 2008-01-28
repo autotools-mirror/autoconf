@@ -1,5 +1,10 @@
 2008-01-28  Eric Blake  <ebb9@byu.net>
 
+	Minor testsuite improvements.
+	* lib/autotest/general.m4 (AT_INIT) <PREPARE_TESTS>: Use fewer
+	forks when sanitizing PATH.  Always output machine information,
+	not just when atconfig was located.
+
 	Add 'testsuite -C dir'.
 	* lib/autotest/general.m4 (_AT_ARG_OPTION): Move missing argument
 	detection...
