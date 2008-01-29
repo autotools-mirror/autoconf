@@ -97,11 +97,13 @@
 #
 #  - BANNERS
 #    Output shell initialization for the associative array of banner text.
-#  - PREPARE_TESTS
+#  - TESTS_BEGIN
 #    Like DEFAULTS but run after argument processing for purposes of
 #    optimization.  Do anything else that needs to be done to prepare for
 #    tests.  Sets up verbose and log file descriptors.  Sets and logs PATH.
-#    Declares functions shared among the tests.
+#  - PREPARE_TESTS
+#    Declares functions shared among the tests.  Perform any user
+#    initialization to be shared among all tests.
 #  - TESTS
 #    The core of the test suite.
 #
@@ -127,8 +129,9 @@ m4_define([_m4_divert(VERSION)],            350)
 m4_define([_m4_divert(VERSION_NOTICES)],    351)
 m4_define([_m4_divert(VERSION_END)],        352)
 m4_define([_m4_divert(BANNERS)],            400)
-m4_define([_m4_divert(PREPARE_TESTS)],      401)
-m4_define([_m4_divert(TESTS)],              402)
+m4_define([_m4_divert(TESTS_BEGIN)],        401)
+m4_define([_m4_divert(PREPARE_TESTS)],      402)
+m4_define([_m4_divert(TESTS)],              403)
 m4_define([_m4_divert(TEST_SCRIPT)],        450)
 m4_define([_m4_divert(TEST_GROUPS)],        500)
 
@@ -160,8 +163,7 @@ m4_define([AT_LINE],
 [m4_if(m4_defn([_AT_LINE_file]), __file__, [],
        [m4_do([m4_define([_AT_LINE_file], __file__)],
 	      [m4_define([_AT_LINE_base],
-			 m4_bpatsubst(__file__, [^.*/\([^/]*\)$],
-				      [[\1]]))])])dnl
+			 m4_bregexp(/__file__, [/\([^/]*\)$], [[\1]]))])])dnl
 m4_defn([_AT_LINE_base]):__line__])
 
 
@@ -697,7 +699,7 @@ _ACEOF
   exit $at_write_fail
 fi
 m4_divert_pop([VERSION_END])dnl
-m4_divert_push([PREPARE_TESTS])dnl
+m4_divert_push([TESTS_BEGIN])dnl
 
 # Take any -C into account.
 if $at_change_dir ; then
@@ -852,7 +854,11 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
     sed 's/^/| /' $at_file
     echo
   done
+} >&AS_MESSAGE_LOG_FD
 
+m4_divert_pop([TESTS_BEGIN])dnl
+m4_divert_push([PREPARE_TESTS])dnl
+{
   AS_BOX([Tested programs.])
   echo
 } >&AS_MESSAGE_LOG_FD
@@ -1252,13 +1258,13 @@ m4_divert_push([KILL])
 # Internal implementation of AT_ARG_OPTION & AT_ARG_OPTION_ARG
 m4_defun([_AT_ARG_OPTION],
 [m4_divert_once([HELP_OTHER],
-[cat <<_ATEOF
+[cat <<_ATEOF || at_write_fail=1
 
 Other options:
 _ATEOF
 ])dnl m4_divert_once HELP_OTHER
 m4_divert_text([HELP_OTHER],
-[cat <<_ATEOF
+[cat <<_ATEOF || at_write_fail=1
 $2
 _ATEOF])dnl
 dnl Turn our options into our desired strings

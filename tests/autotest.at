@@ -495,7 +495,7 @@ AT_CHECK_AUTOM4TE([--language=autotest -o b b.at])
 
 # AT_CHECK_BANNERS(TESTSUITE-OPTIONS, PATTERN1, COUNT1, PATTERN2, COUNT2)
 m4_define([AT_CHECK_BANNERS],
-[AT_CHECK([./b $1], [], [stdout])
+[AT_CHECK([$CONFIG_SHELL ./b $1], [], [stdout])
 AT_CHECK_EGREP([$2], m4_if([$3], [0], [1], [0]), [$3])
 AT_CHECK_EGREP([$4], m4_if([$5], [0], [1], [0]), [$5])
 ])
@@ -552,11 +552,11 @@ AT_CHECK_AUTOM4TE([--language=autotest -o k k.at])
 dnl check that AT_KEYWORDS does not duplicate words
 AT_CHECK([grep 'key1.*key1' k], [1])
 dnl check that -k requires an argument
-AT_CHECK([./k -k], [1], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./k -k], [1], [], [ignore])
 
 # AT_CHECK_KEYS(TESTSUITE-OPTIONS, PATTERN1, COUNT1, PATTERN2, COUNT2)
 m4_define([AT_CHECK_KEYS],
-[AT_CHECK([./k $1], 0, [stdout])
+[AT_CHECK([$CONFIG_SHELL ./k $1], 0, [stdout])
 AT_CHECK_EGREP([$2], 0, [$3])
 AT_CHECK_EGREP([$4], 1, [$5])
 ])
@@ -593,13 +593,13 @@ AT_CHECK_KEYS([-3], [none|first|second], [3], [both], [0])
 AT_CHECK_KEYS([4-], [both], [1], [none|first|second], [0])
 AT_CHECK_KEYS([-k second 4-], [second|both], [2], [none|first], [0])
 
-AT_CHECK([./k 0], [1], [ignore], [ignore])
-AT_CHECK([./k 0-], [1], [ignore], [ignore])
-AT_CHECK([./k -0], [1], [ignore], [ignore])
-AT_CHECK([./k 5], [1], [ignore], [ignore])
-AT_CHECK([./k 5-], [1], [ignore], [ignore])
-AT_CHECK([./k 1-5], [1], [ignore], [ignore])
-AT_CHECK([./k -k nonexistent], [0], [ignore])
+AT_CHECK([$CONFIG_SHELL ./k 0], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./k 0-], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./k -0], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./k 5], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./k 5-], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./k 1-5], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./k -k nonexistent], [0], [ignore])
 
 AT_CHECK_KEYS([--list -k nonexistent], [KEYWORDS], [1], [first|second|both], [0])
 AT_CHECK_KEYS([--list 1], [none], [1], [first|second|both], [0])
@@ -711,4 +711,40 @@ AT_CHECK_AUTOM4TE([--language=autotest -o suite suite.at])
 AT_CHECK([top_srcdir=$wd ./suite], [0], [ignore])
 AT_CHECK([top_srcdir=$wd ./suite -d], [0], [ignore])
 AT_CHECK([cd suite.dir/1 && ./run top_srcdir="$wd"], [0], [ignore])
+AT_CLEANUP
+
+
+## ------------------ ##
+## unusual file names ##
+## ------------------ ##
+
+AT_SETUP([unusual file names])
+AT_KEYWORDS([autotest])
+
+AT_DATA_M4SUGAR([d@&t@nl.at],
+[[AT_SETUP([test one])
+m4_pattern_allow([^dnl$])
+AT_CHECK([test "]m4_dquote(AT_LINE)[" = dn[]l.at:3])
+AT_CLEANUP
+]])
+
+mkdir sub
+AT_DATA_M4SUGAR([sub/"two  spaces".at],
+[[AT_SETUP([test two])
+AT_CHECK([test "]m4_dquote(AT_LINE)[" = "two  spaces.at:2"])
+AT_CLEANUP
+]])
+
+AT_DATA([suite.at],
+[[m4_define([AT_PACKAGE_NAME],    [GNU Nonsense])
+m4_define([AT_PACKAGE_TARNAME],   [nonsense])
+m4_define([AT_PACKAGE_VERSION],   [1.0])
+m4_define([AT_PACKAGE_STRING],    [GNU Nonsense 1.0])
+m4_define([AT_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
+AT_INIT([suite to check included file names])
+m4@&t@_include([d][nl.at])
+m4@&t@_include([sub/two  spaces.at])
+]])
+AT_CHECK_AUTOM4TE([--language=autotest -o suite suite.at])
+AT_CHECK([$CONFIG_SHELL ./suite], [0], [ignore])
 AT_CLEANUP

@@ -1,5 +1,19 @@
 2008-01-29  Eric Blake  <ebb9@byu.net>
 
+	Fix more autotest regressions.
+	* lib/autotest/general.m4 (AT_LINE): Fix regression from
+	2007-10-04 when file name is `dnl'.
+	(AT_INIT) <PREPARE_TESTS>: Move command-line assignments...
+	<TESTS_BEGIN>: ...to this new diversion, to fix regression from
+	yesterday in libtool's testsuite.
+	(_AT_ARG_OPTION): Detect write failure.
+	* doc/autoconf.texi (Diversion support): Document PREPARE_TESTS to
+	make libtool's use kosher.  Document m4_init.
+	(Programming in M4sh): Document AS_INIT.
+	(Writing Testsuites): Document limitation of AT_DATA file name.
+	* tests/autotest.at (unusual file names): New test.
+	(Banners, Keywords and ranges): Use correct shell.
+
 	More corner cases in testsuite VAR=VALUE handling.
 	* lib/autotest/general.m4 (AT_INIT) <PREPARE_TESTS): Fix quoting
 	bug.

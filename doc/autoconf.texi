@@ -10436,7 +10436,11 @@ To make diversion management easier, M4sugar uses the concept of named
 diversions.  Rather than using diversion numbers directly, it is nicer
 to associate a name with each diversion; the diversion number associated
 with a particular diversion name is an implementation detail, so you
-should only use diversion names.
+should only use diversion names.  In general, you should not output text
+to a named diversion until after calling the appropriate initialization
+routine for your language (@code{m4_init}, @code{AS_INIT},
+@code{AT_INIT}, @dots{}), although there are some exceptions documented
+below.
 
 M4sugar defines two named diversions.
 @table @code
@@ -10469,8 +10473,23 @@ This diversion contains the body of the shell code, and is the default
 diversion once M4sh is initialized.
 @end table
 
-For now, the named diversions of Autoconf, Autoheader, and Autotest are
-not documented.
+Autotest inherits diversions from M4sh, and changes the default
+diversion from @code{BODY} back to @code{KILL}.  It also adds several
+more named diversions, with the following subset designed for developer
+use.
+@table @code
+@item PREPARE_TESTS
+This diversion contains initialization sequences which are executed
+after @file{atconfig} and @file{atlocal}, and after all command line
+arguments have been parsed, but prior to running any tests.  It can be
+used to set up state that is required across all tests.  This diversion
+will work even before @code{AT_INIT}.
+@end table
+
+For now, the named diversions of Autoconf and Autoheader, and the
+remaining diversions of Autotest, are not documented.  In other words,
+intentionally outputting text into an undocumented diversion is subject
+to breakage in a future release of Autoconf.
 
 @defmac m4_divert_once (@var{diversion}, @ovar{content})
 @msindex{divert_once}
@@ -10503,6 +10522,12 @@ affecting the current diversion.  Shorthand for:
 m4_divert_push([@var{diversion}])@var{content}
 m4_divert_pop([@var{diversion}])dnl
 @end example
+@end defmac
+
+@defmac m4_init
+@msindex{init}
+Initialize the M4sugar environment, setting up the default named
+diversion to be @code{KILL}.
 @end defmac
 
 @node Conditional constructs
@@ -11389,6 +11414,14 @@ AS_IF([test "$foo" = yes], [HANDLE_FOO([yes])],
 @noindent
 ensures any required macros of @code{HANDLE_FOO}
 are expanded before the first test.
+@end defmac
+
+@defmac AS_INIT
+@asindex{INIT}
+Initialize the M4sh environment.  This macro calls @code{m4_init}, then
+outputs the @code{#! /bin/sh} line, a notice about where the output was
+generated from, and code to sanitize the environment for the rest of the
+script.  Finally, it changes the current diversion to @code{BODY}.
 @end defmac
 
 @defmac AS_MKDIR_P (@var{file-name})
@@ -20160,7 +20193,8 @@ End the current test group.
 Initialize an input data @var{file} with given @var{contents}.  Of
 course, the @var{contents} have to be properly quoted between square
 brackets to protect against included commas or spurious M4
-expansion.  The contents ought to end with an end of line.
+expansion.  The contents must end with an end of line.  @var{file} must
+be a single shell word that expands into a single file name.
 @end defmac
 
 @defmac AT_CHECK (@var{commands}, @dvar{status, 0}, @dvar{stdout, }, @
