@@ -1,3 +1,8 @@
+2008-01-29  Eric Blake  <ebb9@byu.net>
+
+	* doc/autoconf.texi (Limitations of Builtins) <.>: Mention bash
+	bug.
+
 2008-01-28  Eric Blake  <ebb9@byu.net>
 
 	Fix regression in handling VAR=VALUE arguments to testsuite.

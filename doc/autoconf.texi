@@ -13598,10 +13598,12 @@ the @samp{x} into account later in the pipe.
 @c --------------
 @prindex @command{.}
 Use @command{.} only with regular files (use @samp{test -f}).  Bash
-2.03, for instance, chokes on @samp{. /dev/null}.  Also, remember that
-@command{.} uses @env{PATH} if its argument contains no slashes, so if
-you want to use @command{.} on a file @file{foo} in the current
-directory, you must use @samp{. ./foo}.
+2.03, for instance, chokes on @samp{. /dev/null}.  Remember that
+@command{.} uses @env{PATH} if its argument contains no slashes.  Also,
+some shells, including bash 3.2, implicitly append the current directory
+to this @env{PATH} search, even though Posix forbids it.  So if you want
+to use @command{.} on a file @file{foo} in the current directory, you
+must use @samp{. ./foo}.
 
 @item @command{!}
 @c --------------
