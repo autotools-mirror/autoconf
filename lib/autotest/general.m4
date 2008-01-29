@@ -569,12 +569,12 @@ m4_divert_push([PARSE_ARGS_END])dnl
     *=*)
 	at_envvar=`expr "x$at_option" : 'x\([[^=]]*\)='`
 	# Reject names that are not valid shell variable names.
-	expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
+	test "x$at_envvar" = "x" ||
+	  expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
 	  AS_ERROR([invalid variable name: $at_envvar])
 	at_value=`AS_ECHO(["$at_optarg"]) | sed "s/'/'\\\\\\\\''/g"`
-	eval "$at_envvar='$at_value'"
+	# Export now, but save eval for later and for debug scripts.
 	export $at_envvar
-	# Propagate to debug scripts.
 	at_debug_args="$at_debug_args $at_envvar='$at_value'"
 	;;
 
@@ -708,15 +708,18 @@ if $at_change_dir ; then
   at_dir=`pwd`
 fi
 
-# Load the config file.
+# Load the config files for any default variable assignments.
 for at_file in atconfig atlocal
 do
   test -r $at_file || continue
-  . $at_file || AS_ERROR([invalid content: $at_file])
+  . ./$at_file || AS_ERROR([invalid content: $at_file])
 done
 
 # Autoconf <=2.59b set at_top_builddir instead of at_top_build_prefix:
 : ${at_top_build_prefix=$at_top_builddir}
+
+# Perform any assignments requested during argument parsing.
+eval $at_debug_args
 
 # atconfig delivers names relative to the directory the test suite is
 # in, but the groups themselves are run in testsuite-dir/group-dir.

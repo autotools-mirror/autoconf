@@ -359,7 +359,7 @@ AT_CHECK_AT_TEST([Debugging a successful test],
   [AT_CHECK([:])], [], [], [], [ignore],
 [# Without options, when all tests pass, no test directory should exist.
 AT_CHECK([test -d micro-suite.dir/1 && exit 42
-          ./micro-suite -d 1], [], [ignore], [ignore])
+          $CONFIG_SHELL ./micro-suite -d 1], [], [ignore], [ignore])
 # Running with -d should leave a reproducible test group.
 # Also, running the test script from the test group locks the
 # directory from removal on some platforms; the script should still be
@@ -396,26 +396,61 @@ AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='one space')],
 ])
 
 
+# Setting default variable values via atlocal.
+AT_CHECK_AT_TEST([Using atlocal],
+  [AT_CHECK([test "x$MY_VAR" = xset || exit 42])],
+  [], [1], [ignore], [ignore], [
+dnl check that command line can set variable
+AT_CHECK([$CONFIG_SHELL ./micro-suite MY_VAR=set], [0], [ignore])
+dnl check that command line overrides environment
+AT_CHECK([MY_VAR=set $CONFIG_SHELL ./micro-suite MY_VAR=unset],
+         [1], [ignore], [ignore])
+dnl check that atlocal can give it a default
+AT_CHECK([cat <<EOF >atlocal
+MY_VAR=set
+export MY_VAR
+dnl Also populate enough of atlocal to do what atconfig normally does.
+at_testdir=.
+abs_builddir=`pwd`
+at_srcdir=.
+abs_srcdir=`pwd`
+at_top_srcdir=.
+abs_top_srcdir=`pwd`
+at_top_build_prefix=
+abs_top_builddir=`pwd`
+EOF
+])
+AT_CHECK([$CONFIG_SHELL ./micro-suite], [0], [ignore])
+dnl check that atlocal overrides environment
+AT_CHECK([MY_VAR=unset $CONFIG_SHELL ./micro-suite], [0], [ignore])
+dnl check that command line overrides atlocal
+AT_CHECK([$CONFIG_SHELL ./micro-suite MY_VAR=], [1], [ignore], [ignore])
+dnl check that syntax error is detected
+AT_CHECK([$CONFIG_SHELL ./micro-suite =], [1], [], [ignore], [ignore])
+])
+
+
 # Controlling where the testsuite is run.
 AT_CHECK_AT_TEST([Choosing where testsuite is run],
   [AT_CHECK([:])], [], [], [], [], [
 dnl AT_CHECK_AT_TEST tests the default of running in `.'.
 AT_CHECK([rm micro-suite.log && mkdir sub1 sub2])
 dnl check specifying a different relative path to run in.
-AT_CHECK([./micro-suite -C sub1], [0], [ignore], [])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C sub1], [0], [ignore], [])
 AT_CHECK([test -f micro-suite.log], [1])
 AT_CHECK([test -f sub1/micro-suite.log], [0])
 dnl check specifying an absolute path to run in.
-AT_CHECK([./micro-suite --directory="`pwd`/sub2"], [0], [ignore], [])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --directory="`pwd`/sub2"],
+         [0], [ignore], [])
 AT_CHECK([test -f micro-suite.log], [1])
 AT_CHECK([test -f sub2/micro-suite.log], [0])
 dnl check for failure detection with bad, missing, or empty directory.
-AT_CHECK([./micro-suite -C nonesuch], [1], [ignore], [ignore])
-AT_CHECK([./micro-suite -C ''], [1], [ignore], [ignore])
-AT_CHECK([./micro-suite -C -], [1], [ignore], [ignore])
-AT_CHECK([./micro-suite -C], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C nonesuch], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C ''], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C -], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C], [1], [ignore], [ignore])
 dnl check that --help overrides bad directory selection.
-AT_CHECK([./micro-suite -C nonesuch --help], [0], [ignore], [])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C nonesuch --help], [0], [ignore], [])
 ])
 
 

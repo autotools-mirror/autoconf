@@ -1,5 +1,16 @@
 2008-01-28  Eric Blake  <ebb9@byu.net>
 
+	Fix regression in handling VAR=VALUE arguments to testsuite.
+	* lib/autotest/general.m4 (AT_INIT) <PARSE_ARGS_END>: Detect
+	leading = as invalid.  Defer use of command-line variable
+	assignments...
+	<PREPARE_TESTS>: ...here, after atconfig has been sourced.  Fix
+	regression in sourcing files.
+	* tests/autotest.at (Using atlocal): New test to catch this.
+	(Debugging a successful test, Choosing where testsuite is run):
+	Use correct shell.
+	Reported by Ralf Wildenhues.
+
 	Document grep peculiarity.
 	* doc/autoconf.texi (Limitations of Usual Tools) <grep>: Document
 	BSD behavior on binary input.
