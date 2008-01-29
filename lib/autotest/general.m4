@@ -525,11 +525,11 @@ do
 
     # Directory selection.
     --directory | -C )
-        at_prev=--directory
+	at_prev=--directory
 	;;
     --directory=* )
-        at_change_dir=:
-        at_dir=$at_optarg
+	at_change_dir=:
+	at_dir=$at_optarg
 	;;
 
     # Keywords.
@@ -569,9 +569,10 @@ m4_divert_push([PARSE_ARGS_END])dnl
     *=*)
 	at_envvar=`expr "x$at_option" : 'x\([[^=]]*\)='`
 	# Reject names that are not valid shell variable names.
-	test "x$at_envvar" = "x" ||
-	  expr "x$at_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
-	  AS_ERROR([invalid variable name: $at_envvar])
+	case $at_envvar in
+	  '' | [[0-9]]* | *[[!_$as_cr_alnum]]* )
+	    AS_ERROR([invalid variable name: $at_envvar]) ;;
+	esac
 	at_value=`AS_ECHO(["$at_optarg"]) | sed "s/'/'\\\\\\\\''/g"`
 	# Export now, but save eval for later and for debug scripts.
 	export $at_envvar
@@ -719,7 +720,7 @@ done
 : ${at_top_build_prefix=$at_top_builddir}
 
 # Perform any assignments requested during argument parsing.
-eval $at_debug_args
+eval "$at_debug_args"
 
 # atconfig delivers names relative to the directory the test suite is
 # in, but the groups themselves are run in testsuite-dir/group-dir.
@@ -1033,7 +1034,7 @@ _ATEOF
 	if test -d "$at_group_dir"; then
 	  find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
 	  rm -fr "$at_group_dir"
-        fi
+	fi
 	rm -f "$at_test_source"
       fi
       ;;

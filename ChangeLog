@@ -1,5 +1,12 @@
 2008-01-29  Eric Blake  <ebb9@byu.net>
 
+	More corner cases in testsuite VAR=VALUE handling.
+	* lib/autotest/general.m4 (AT_INIT) <PREPARE_TESTS): Fix quoting
+	bug.
+	<PARSE_ARGS_END>: Also detect leading digits in assignments.
+	* tests/autotest.at (Using atlocal): Enhance test to catch last
+	bug.
+
 	* doc/autoconf.texi (Limitations of Builtins) <.>: Mention bash
 	bug.
 

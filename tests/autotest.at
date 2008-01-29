@@ -398,16 +398,16 @@ AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='one space')],
 
 # Setting default variable values via atlocal.
 AT_CHECK_AT_TEST([Using atlocal],
-  [AT_CHECK([test "x$MY_VAR" = xset || exit 42])],
+  [AT_CHECK([test "x$MY_VAR" = "xodd;  'string" || exit 42])],
   [], [1], [ignore], [ignore], [
 dnl check that command line can set variable
-AT_CHECK([$CONFIG_SHELL ./micro-suite MY_VAR=set], [0], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite MY_VAR="odd;  'string"], [0], [ignore])
 dnl check that command line overrides environment
-AT_CHECK([MY_VAR=set $CONFIG_SHELL ./micro-suite MY_VAR=unset],
+AT_CHECK([MY_VAR="odd;  'string" $CONFIG_SHELL ./micro-suite MY_VAR=unset],
          [1], [ignore], [ignore])
 dnl check that atlocal can give it a default
 AT_CHECK([cat <<EOF >atlocal
-MY_VAR=set
+MY_VAR="odd;  'string"
 export MY_VAR
 dnl Also populate enough of atlocal to do what atconfig normally does.
 at_testdir=.
@@ -427,6 +427,7 @@ dnl check that command line overrides atlocal
 AT_CHECK([$CONFIG_SHELL ./micro-suite MY_VAR=], [1], [ignore], [ignore])
 dnl check that syntax error is detected
 AT_CHECK([$CONFIG_SHELL ./micro-suite =], [1], [], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite 1=2], [1], [], [ignore], [ignore])
 ])
 
 
