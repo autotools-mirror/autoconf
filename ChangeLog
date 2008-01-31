@@ -1,3 +1,7 @@
+2008-01-30  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi: Update Back-Cover text to reflect new GNU wording.
+
 2008-01-29  Eric Blake  <ebb9@byu.net>
 
 	Fix more autotest regressions.
