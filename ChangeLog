@@ -1,3 +1,9 @@
+2008-02-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT): Fix --clean to work
+	again, broken since introduction of `-C dir'.
+	* tests/autotest.at (Choosing where testsuite is run): Test it.
+
 2008-01-30  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Update Back-Cover text to reflect new GNU wording.

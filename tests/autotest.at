@@ -435,16 +435,27 @@ AT_CHECK([$CONFIG_SHELL ./micro-suite 1=2], [1], [], [ignore], [ignore])
 AT_CHECK_AT_TEST([Choosing where testsuite is run],
   [AT_CHECK([:])], [], [], [], [], [
 dnl AT_CHECK_AT_TEST tests the default of running in `.'.
-AT_CHECK([rm micro-suite.log && mkdir sub1 sub2])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --clean])
+AT_CHECK([test -f micro-suite.log], [1])
+AT_CHECK([test -d micro-suite.dir], [1])
+AT_CHECK([mkdir sub1 sub2])
 dnl check specifying a different relative path to run in.
 AT_CHECK([$CONFIG_SHELL ./micro-suite -C sub1], [0], [ignore], [])
 AT_CHECK([test -f micro-suite.log], [1])
 AT_CHECK([test -f sub1/micro-suite.log], [0])
+AT_CHECK([test -d micro-suite.dir], [1])
+AT_CHECK([test -d sub1/micro-suite.dir], [0])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C sub1 --clean])
+AT_CHECK([test -f sub1/micro-suite.log], [1])
+AT_CHECK([test -d sub1/micro-suite.dir], [1])
 dnl check specifying an absolute path to run in.
 AT_CHECK([$CONFIG_SHELL ./micro-suite --directory="`pwd`/sub2"],
          [0], [ignore], [])
 AT_CHECK([test -f micro-suite.log], [1])
 AT_CHECK([test -f sub2/micro-suite.log], [0])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --clean --directory="`pwd`/sub2"])
+AT_CHECK([test -f sub2/micro-suite.log], [1])
+AT_CHECK([test -f sub2/micro-suite.dir], [1])
 dnl check for failure detection with bad, missing, or empty directory.
 AT_CHECK([$CONFIG_SHELL ./micro-suite -C nonesuch], [1], [ignore], [ignore])
 AT_CHECK([$CONFIG_SHELL ./micro-suite -C ''], [1], [ignore], [ignore])

@@ -385,6 +385,8 @@ at_help_p=false
 at_version_p=false
 # List test groups?
 at_list_p=false
+# --clean
+at_clean=false
 # Test groups to run
 at_groups=
 # Whether a write failure occurred
@@ -460,10 +462,7 @@ do
 	;;
 
     --clean | -c )
-	test -d "$at_suite_dir" &&
-	  find "$at_suite_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-	rm -f -r "$at_suite_dir" "$at_suite_log"
-	exit $?
+	at_clean=:
 	;;
 
     --debug | -d )
@@ -756,6 +755,13 @@ at_stderr=$at_suite_dir/at-stderr
 at_test_source=$at_suite_dir/at-test-source
 # The file containing dates.
 at_times_file=$at_suite_dir/at-times
+
+if $at_clean; then
+  test -d "$at_suite_dir" &&
+    find "$at_suite_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
+  rm -f -r "$at_suite_dir" "$at_suite_log"
+  exit $?
+fi
 
 # Don't take risks: use only absolute directories in PATH.
 #
