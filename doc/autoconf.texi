@@ -15002,7 +15002,7 @@ normal output); the behavior depends on whether input is seekable:
 $ @kbd{printf 'esc\033[mape\n' > sample}
 $ @kbd{grep . sample}
 Binary file sample matches
-$ @kbd{cat file | grep .}
+$ @kbd{cat sample | grep .}
 escape
 @end example
 
