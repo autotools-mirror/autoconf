@@ -17865,8 +17865,8 @@ file (if @code{CONFIG_SITE} is not set to a different file).
 # Change some defaults.
 test "$prefix" = NONE && prefix=/usr/share/local/gnu
 test "$exec_prefix" = NONE && exec_prefix=/usr/local/gnu
-test "$sharedstatedir" = '$prefix/com' && sharedstatedir=/var
-test "$localstatedir" = '$prefix/var' && localstatedir=/var
+test "$sharedstatedir" = '${prefix}/com' && sharedstatedir=/var
+test "$localstatedir" = '${prefix}/var' && localstatedir=/var
 
 # Give Autoconf 2.x generated configure scripts a shared default
 # cache file for feature test results, architecture-specific.
@@ -17874,6 +17874,26 @@ if test "$cache_file" = /dev/null; then
   cache_file="$prefix/var/config.cache"
   # A cache file is only valid for one C compiler.
   CC=gcc
+fi
+@end example
+
+@cindex Filesystem Hierarchy Standard
+@cindex FHS
+
+Another use of @file{config.site} is for priming the directory variables
+in a manner consistent with the Filesystem Hierarchy Standard
+(@acronym{FHS}).  Once the following file is installed at
+@file{/usr/share/config.site}, a user can execute simply
+@command{./configure --prefix=/usr} to get all the directories chosen in
+the locations recommended by @acronym{FHS}.
+
+@example
+# /usr/local/config.site for FHS defaults when installing below /usr,
+# and the respective settings were not changed on the command line.
+if test "$prefix" = /usr; then
+  test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
+  test "$sharedstatedir" = '${prefix}/com' && sharedstatedir=/var
+  test "$localstatedir" = '${prefix}/var' && localstatedir=/var
 fi
 @end example
 
