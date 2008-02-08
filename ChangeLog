@@ -1,5 +1,9 @@
 2008-02-08  Eric Blake  <ebb9@byu.net>
 
+	Fix texinfo typos in previous patch.
+	* doc/autoconf.texi (Site Defaults): s/[{}]/@&/g.
+	Reported by Ralf Wildenhues.
+
 	Describe a config.site that can be used for FHS compliance.
 	* doc/autoconf.texi (Site Defaults): Fix typo.  Add new example
 	for FHS.

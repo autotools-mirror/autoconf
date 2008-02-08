@@ -17865,8 +17865,8 @@ file (if @code{CONFIG_SITE} is not set to a different file).
 # Change some defaults.
 test "$prefix" = NONE && prefix=/usr/share/local/gnu
 test "$exec_prefix" = NONE && exec_prefix=/usr/local/gnu
-test "$sharedstatedir" = '${prefix}/com' && sharedstatedir=/var
-test "$localstatedir" = '${prefix}/var' && localstatedir=/var
+test "$sharedstatedir" = '$@{prefix@}/com' && sharedstatedir=/var
+test "$localstatedir" = '$@{prefix@}/var' && localstatedir=/var
 
 # Give Autoconf 2.x generated configure scripts a shared default
 # cache file for feature test results, architecture-specific.
@@ -17891,9 +17891,9 @@ the locations recommended by @acronym{FHS}.
 # /usr/local/config.site for FHS defaults when installing below /usr,
 # and the respective settings were not changed on the command line.
 if test "$prefix" = /usr; then
-  test "$sysconfdir" = '${prefix}/etc' && sysconfdir=/etc
-  test "$sharedstatedir" = '${prefix}/com' && sharedstatedir=/var
-  test "$localstatedir" = '${prefix}/var' && localstatedir=/var
+  test "$sysconfdir" = '$@{prefix@}/etc' && sysconfdir=/etc
+  test "$sharedstatedir" = '$@{prefix@}/com' && sharedstatedir=/var
+  test "$localstatedir" = '$@{prefix@}/var' && localstatedir=/var
 fi
 @end example
 
