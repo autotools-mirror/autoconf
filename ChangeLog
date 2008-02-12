@@ -1,3 +1,9 @@
+2008-02-12  Eric Blake  <ebb9@byu.net>
+
+	Avoid trailing space in config.h with AC_DEFINE([var], []).
+	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Explicitly mark empty
+	defines with a comment.
+
 2008-02-08  Eric Blake  <ebb9@byu.net>
 
 	Fix texinfo typos in previous patch.

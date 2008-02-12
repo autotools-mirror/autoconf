@@ -2056,7 +2056,7 @@ m4_cond([m4_index([$3], [
 m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])])dnl
 m4_popdef([AC_name])dnl
 cat >>confdefs.h <<$1_ACEOF
-[@%:@define] $2 m4_if($#, 2, 1, [$3])
+[@%:@define] $2 m4_if([$#], 2, 1, [$3], [], [/**/], [$3])
 _ACEOF
 ])
 
