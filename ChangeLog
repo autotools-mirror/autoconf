@@ -1,3 +1,9 @@
+2008-02-21  Eric Blake  <ebb9@byu.net>
+
+	Sync git-version-gen from upstream.
+	* build-aux/git-version-gen: Pull from gnulib.
+	* configure.ac (AC_INIT): Adjust to new calling convention.
+
 2008-02-12  Eric Blake  <ebb9@byu.net>
 
 	Avoid trailing space in config.h with AC_DEFINE([var], []).

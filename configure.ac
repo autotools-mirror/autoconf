@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 # Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002, 2003,
-# 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+# 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 # We need AC_CONFIG_TESTDIR, AC_PROG_SED, AC_PROG_GREP.
 AC_PREREQ([2.60])
 
-AC_INIT([GNU Autoconf], m4_esyscmd([build-aux/git-version-gen . .version]),
+AC_INIT([GNU Autoconf], m4_esyscmd([build-aux/git-version-gen .version]),
 	[bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
