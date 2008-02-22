@@ -20227,6 +20227,8 @@ status 77, then the whole test group is skipped.  Otherwise, if this test
 fails, run shell commands @var{run-if-fail} or, if this test passes, run shell
 commands @var{run-if-pass}.
 
+This macro must be invoked in between @code{AT_SETUP} and @code{AT_CLEANUP}.
+
 @c Previously, we had this:
 @c  The @var{commands} @emph{must not} redirect the standard output, nor the
 @c  standard error.

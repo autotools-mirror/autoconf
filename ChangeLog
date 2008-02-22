@@ -1,3 +1,10 @@
+2008-02-22  Eric Blake  <ebb9@byu.net>
+
+	Improve documentation for writing autotest suites.
+	* doc/autoconf.texi (Writing Testsuites) <AT_CHECK>: Mention that
+	checks must live inside a test group.
+	Reported by Christopher Hulbert.
+
 2008-02-21  Eric Blake  <ebb9@byu.net>
 
 	Sync git-version-gen from upstream.
