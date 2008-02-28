@@ -4,18 +4,18 @@
 # It is necessary if you want to build targets usually of interest
 # only to the maintainer.
 
-# Copyright (C) 2001, 2003, 2006-2007 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2003, 2006-2008 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#
+
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -29,11 +29,11 @@ else
 SHELL = sh
 endif
 
-have-Makefile := $(shell test -f Makefile && echo yes)
+_have-Makefile := $(shell test -f Makefile && echo yes)
 
 # If the user runs GNU make but has not yet run ./configure,
 # give them a diagnostic.
-ifeq ($(have-Makefile),yes)
+ifeq ($(_have-Makefile),yes)
 
 # Make tar archive easier to reproduce.
 export TAR_OPTIONS = --owner=0 --group=0 --numeric-owner
@@ -49,10 +49,11 @@ include Makefile
 ifeq (0,$(MAKELEVEL))
   _is-dist-target = $(filter dist% alpha beta major,$(MAKECMDGOALS))
   ifneq (,$(_is-dist-target))
-    _curr-ver := $(shell $(srcdir)/build-aux/git-version-gen $(srcdir) .version)
+    _curr-ver := $(shell cd $(srcdir) && ./build-aux/git-version-gen \
+                   $(srcdir)/.tarball-version)
     ifneq ($(_curr-ver),$(VERSION))
-      $(info INFO: running autoreconf for new version string; old: $(_curr-ver))
-      dummy := $(shell				\
+      $(info INFO: running autoreconf for new version string: $(_curr-ver))
+      _dummy := $(shell				\
 	rm -rf autom4te.cache;			\
 	(cd $(srcdir) && autoreconf -i -v)	\
 	  && rm -f INSTALL)

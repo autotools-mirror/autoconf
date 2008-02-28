@@ -88,7 +88,7 @@ autom4te-update:
 	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file || exit; \
 	done
 
-# Arrange so that .version appears only in distribution tarballs,
+# Arrange so that .tarball-version appears only in distribution tarballs,
 # never in a checked-out repository.
 dist-hook:
-	echo $(VERSION) > $(distdir)/.version
+	echo $(VERSION) > $(distdir)/.tarball-version
