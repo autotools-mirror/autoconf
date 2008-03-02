@@ -721,7 +721,7 @@ AT_CLEANUP
 AT_CHECK_AUTOM4TE([--language=autotest -o suite suite.at])
 AT_CHECK([top_srcdir=$wd ./suite], [0], [ignore])
 AT_CHECK([top_srcdir=$wd ./suite -d], [0], [ignore])
-AT_CHECK([cd suite.dir/1 && ./run top_srcdir="$wd"], [0], [ignore])
+AT_CHECK([cd suite.dir/1 && ./run top_srcdir="$wd"], [0], [ignore], [ignore])
 AT_CLEANUP
 
 
