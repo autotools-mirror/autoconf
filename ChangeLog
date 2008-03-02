@@ -1,3 +1,10 @@
+2008-03-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Ignore errors from ./run on w32.
+	* tests/autotest.at (whitespace in absolute testdir):
+	Ignore stderr for `./run' which fails to remove the
+	busy test directory on w32.
+
 2008-02-22  Eric Blake  <ebb9@byu.net>
 
 	Improve documentation for writing autotest suites.
