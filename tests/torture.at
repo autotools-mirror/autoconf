@@ -239,8 +239,10 @@ AT_CHECK([echo from-stdin | ./config.status --file=file:-],
 AT_CHECK([grep from-stdin file], [], [from-stdin
 ])
 # Force write error creating a file on stdout
-AT_CHECK([./config.status --file=-:input </dev/null >/dev/full],
-	 [1], [ignore], [ignore])
+if test -w /dev/full && test -c /dev/full; then
+  AT_CHECK([./config.status --file=-:input </dev/null >/dev/full],
+	   [1], [ignore], [ignore])
+fi
 
 # Create a header
 AT_CHECK_CONFIG_CREATION_NOWRITE(header)
@@ -250,8 +252,10 @@ AT_CHECK([./config.status --header=-:input </dev/null],
 AT_CHECK([grep OK stdout], [], [OK
 ])
 # Force write error creating a header on stdout
-AT_CHECK([./config.status --header=-:input </dev/null >/dev/full],
-	 [1], [ignore], [ignore])
+if test -w /dev/full && test -c /dev/full; then
+  AT_CHECK([./config.status --header=-:input </dev/null >/dev/full],
+	   [1], [ignore], [ignore])
+fi
 
 # Execute a command
 AT_CHECK_CONFIG_CREATION_NOWRITE(command)

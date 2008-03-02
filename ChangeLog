@@ -1,5 +1,10 @@
 2008-03-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Before using /dev/full, check that it is a writable character
+	special device.
+	Report by Benoit Sigoure and Eric Blake.
+
 	Actually test that @configure_input@ is expanded correctly.
 	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
 	Actually check generated file contents for the name of the
