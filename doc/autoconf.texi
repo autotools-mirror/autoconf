@@ -10688,7 +10688,7 @@ elements, @code{m4_cdr} should be called without any extra quotes.
 
 For example, this is a simple implementation of @code{m4_map}; note how
 each iteration checks for the end of recursion, then merely applies the
-first argument to the first element of the list, then recurses with the
+first argument to the first element of the list, then repeats with the
 rest of the list.  (The actual implementation in M4sugar is a bit more
 involved, to gain some speed and share code with @code{m4_map_sep}).
 @example
@@ -10798,34 +10798,34 @@ m4_apply([m4_join], [[|], [1], [2]])
 @end example
 @end defmac
 
-@defmac m4_count (@var{arg1}, @dots{})
+@defmac m4_count (@var{arg}, @dots{})
 @msindex{count}
 This macro returns the decimal count of the number of arguments it was
 passed.
 @end defmac
 
-@defmac m4_do (@var{arg1}, @dots{})
+@defmac m4_do (@var{arg}, @dots{})
 @msindex{do}
 This macro loops over its arguments and expands each @var{arg} in
 sequence.  Its main use is for readability; it allows the use of
 indentation and fewer @code{dnl} to result in the same expansion.
 @end defmac
 
-@defmac m4_dquote (@var{arg1}, @dots{})
+@defmac m4_dquote (@var{arg}, @dots{})
 @msindex{dquote}
 Return the arguments as a quoted list of quoted arguments.
 Conveniently, if there is just one @var{arg}, this effectively adds a
 level of quoting.
 @end defmac
 
-@defmac m4_dquote_elt (@var{arg1}, @dots{})
+@defmac m4_dquote_elt (@var{arg}, @dots{})
 @msindex{dquote_elt}
 Return the arguments as a series of double-quoted arguments.  Whereas
 @code{m4_dquote} returns a single argument, @code{m4_dquote_elt} returns
 as many arguments as it was passed.
 @end defmac
 
-@defmac m4_echo (@var{arg1}, @dots{})
+@defmac m4_echo (@var{arg}, @dots{})
 @msindex{echo}
 Return the arguments, with the same level of quoting.  Other than
 discarding whitespace after unquoted commas, this macro is a no-op.
@@ -10868,8 +10868,7 @@ m4_expand([active2, active2])
 This macro was introduced in Autoconf 2.62.  Expands to nothing,
 ignoring all of its arguments.  By itself, this isn't very useful.
 However, it can be used to conditionally ignore an arbitrary number of
-arguments, by making a decision about which macro name to apply to a
-list of arguments.
+arguments, by deciding which macro name to apply to a list of arguments.
 @example
 dnl foo outputs a message only if [debug] is defined.
 m4_define([foo],
@@ -10880,7 +10879,7 @@ Note that for earlier versions of Autoconf, the macro @code{__gnu__} can
 serve the same purpose, although it is less readable.
 @end defmac
 
-@defmac m4_make_list (@var{arg1}, @dots{})
+@defmac m4_make_list (@var{arg}, @dots{})
 @msindex{make_list}
 This macro exists to aid debugging of M4sugar algorithms.  Its net
 effect is similar to @code{m4_dquote}---it produces a quoted list of
@@ -10907,14 +10906,14 @@ m4_foreach([number], m4_make_list(zero, [one], [[two]]), [ number])
 @c probably rely on @samp{[]} nested quoting for proper operation.  The
 @c user should generally prefer m4_unquote instead.
 
-@defmac m4_quote (@var{arg1}, @dots{})
+@defmac m4_quote (@var{arg}, @dots{})
 @msindex{quote}
 Return the arguments as a single entity, i.e., wrap them into a pair of
 quotes.  This effectively collapses multiple arguments into one,
 although it loses whitespace after unquoted commas in the process.
 @end defmac
 
-@defmac m4_unquote (@var{arg1}, @dots{})
+@defmac m4_unquote (@var{arg}, @dots{})
 @msindex{unquote}
 This macro was introduced in Autoconf 2.62.  Expand each argument,
 separated by commas.  For a single @var{arg}, this effectively removes a
@@ -11043,7 +11042,7 @@ numbers
 @end defmac
 
 @defmac m4_combine (@ovar{separator}, @var{prefix-list}, @ovar{infix}, @
-  @var{suffix-1}, @dots{})
+  @var{suffix-1}, @ovar{suffix-2}, @dots{})
 @msindex{combine}
 This macro produces a quoted string containing the pairwise combination
 of every element of the quoted, comma-separated @var{prefix-list}, and
@@ -11188,7 +11187,7 @@ respectively.
 @node Number processing Macros
 @subsection Arithmetic computation in M4
 
-The following macros make it easier to deal with arithmetic operations.
+The following macros facilitate integer arithmetic operations.
 Where a parameter is documented as taking an arithmetic expression, you
 can use anything that can be parsed by @code{m4_eval}.
 
@@ -11206,7 +11205,7 @@ expressions, left to right.  Expand to @samp{-1} for the first element
 pairing where the value from @var{list-1} is smaller, @samp{1} where the
 value from @var{list-2} is smaller, or @samp{0} if both lists have the
 same values.  If one list is shorter than the other, the remaining
-elements of the longer list are compared against 0.
+elements of the longer list are compared against zero.
 @example
 m4_list_cmp([1, 0],       [1])
 @result{}0
@@ -11225,13 +11224,13 @@ m4_list_cmp([1],          [1, 2])
 @end example
 @end defmac
 
-@defmac m4_max (@var{arg1}, @dots{})
+@defmac m4_max (@var{arg}, @dots{})
 @msindex{max}
 This macro was introduced in Autoconf 2.62.  Expand to the decimal value
 of the maximum arithmetic expression among all the arguments.
 @end defmac
 
-@defmac m4_min (@var{arg1}, @dots{})
+@defmac m4_min (@var{arg}, @dots{})
 @msindex{min}
 This macro was introduced in Autoconf 2.62.  Expand to the decimal value
 of the minimum arithmetic expression among all the arguments.

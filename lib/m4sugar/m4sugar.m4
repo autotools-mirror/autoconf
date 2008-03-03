@@ -2076,7 +2076,8 @@ m4_define([m4_cmp],
 # Rather than face the overhead of m4_case, we use a helper function whose
 # expansion includes the name of the macro to invoke on the tail, either
 # m4_ignore or m4_unquote.  This is particularly useful when comparing
-# long lists, since less text is being expanded to determine when to recurse.
+# long lists, since less text is being expanded for deciding when to end
+# recursion.
 m4_define([m4_list_cmp],
 [m4_if([$1$2], [], 0,
        [$1], [], [$0(0, [$2])],

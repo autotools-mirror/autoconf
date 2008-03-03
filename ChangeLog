@@ -1,3 +1,16 @@
+2008-03-03  Eric Blake  <ebb9@byu.net>
+
+	Documentation improvements.
+	* doc/autoconf.texi (Looping constructs): s/recurses/repeats/.
+	(Evaluation Macros): Drop `1' suffix from metasyntax variable name
+	that preceeds @dots.  Improve wording.
+	(Text processing Macros): Drop `1' suffix from metasyntax variable
+	name that preceeds @dots.
+	(Number processing Macros): Drop `1' suffix from metasyntax
+	variable name that preceeds @dots.  Improve wording.
+	* lib/m4sugar/m4sugar.m4 (m4_cmp): Comment wording fix.
+	Suggested by Ralf Wildenhues.
+
 2008-03-02  Jim Meyering  <meyering@redhat.com>
 
 	Don't infloop upon "make dist".
