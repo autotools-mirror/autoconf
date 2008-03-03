@@ -1,3 +1,14 @@
+2008-03-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	autoreconf -m now honors $MAKE.
+	* bin/autoreconf.in ($run_make): Renamed from ...
+	($make): ... this.  Use now as command to run `make',
+	overridden by $MAKE.  Document this in --help output.
+	* doc/autoconf.texi (autoreconf Invocation): Document
+	all environment variables honored by autoreconf.
+	* NEWS: Update.
+	Report by Paul Eggert.
+
 2008-03-03  Eric Blake  <ebb9@byu.net>
 
 	Documentation improvements.

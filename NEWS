@@ -65,6 +65,8 @@ GNU Autoconf NEWS - User visible changes.
 
 ** The command 'autoconf -' now correctly processes a file from stdin.
 
+** 'autoreconf -m' now honors $MAKE.
+
 ** For all of the directory arguments for 'configure', such as '--prefix'
    or '--bindir', trailing slashes are stripped.  As an example, if
    tab completion in the user's shell appends trailing slashes, the

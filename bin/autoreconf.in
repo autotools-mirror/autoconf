@@ -87,7 +87,7 @@ Library directories:
   -I, --include=DIR          append directory DIR to search path
 
 The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL,
-AUTOPOINT, LIBTOOLIZE, M4 are honored.
+AUTOPOINT, LIBTOOLIZE, M4, and MAKE are honored.
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";
@@ -110,6 +110,7 @@ my $automake   = $ENV{'AUTOMAKE'}   || 'automake';
 my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
 my $libtoolize = $ENV{'LIBTOOLIZE'} || 'libtoolize';
 my $autopoint  = $ENV{'AUTOPOINT'}  || 'autopoint';
+my $make       = $ENV{'MAKE'}       || 'make';
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
@@ -127,7 +128,7 @@ my @include;
 my @warning;
 
 # Rerun `./configure && make'?
-my $make = 0;
+my $run_make = 0;
 
 # Recurse into subpackages
 my $recursive = 1;
@@ -149,7 +150,7 @@ sub parse_args ()
 	  'B|prepend-include=s'	 => \@prepend_include,
 	  'i|install'            => \$install,
 	  's|symlink'            => \$symlink,
-	  'm|make'               => \$make,
+	  'm|make'               => \$run_make,
 	  'recursive!'           => \$recursive);
 
   # Split the warnings as a list of elements instead of a list of
@@ -613,7 +614,7 @@ sub autoreconf_current_directory ()
   # Running make.  #
   # -------------- #
 
-  if ($make)
+  if ($run_make)
     {
       if (!-f "config.status")
 	{
@@ -629,7 +630,7 @@ sub autoreconf_current_directory ()
 	    }
 	  else
 	    {
-	      xsystem ("make");
+	      xsystem ("$make");
 	    }
 	}
     }
