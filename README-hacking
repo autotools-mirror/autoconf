@@ -51,11 +51,14 @@ and the GIT master copy:
 
 should output no difference.
 
+You may find it useful to install the git-merge-changelog merge driver:
+http://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/git-merge-changelog.c
+
 Enjoy!
 
 -----
 
-Copyright (C) 2002-2007 Free Software Foundation, Inc.
+Copyright (C) 2002-2008 Free Software Foundation, Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,5 +1,9 @@
 2008-03-04  Eric Blake  <ebb9@byu.net>
 
+	Use git-merge-changelog when available.
+	* .gitattributes: New file.
+	* README-hacking: Document use of git-merge-changelog.
+
 	Work around cygwin bug.
 	* tests/atlocal.in (unsupported_fs_chars): Avoid cygwin bug where
 	"touch 't\'" creates regular file 't'.
