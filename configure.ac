@@ -152,6 +152,20 @@ AC_PROG_SED
 ## Conclusion.  ##
 ## ------------ ##
 
+dnl Allow maintainer rules under GNU make even in VPATH builds.  This does
+dnl not work in autoconf 2.61 or earlier, but we don't want to require
+dnl unreleased autoconf during bootstrap, hence the version test.
+dnl TODO remove the version check once we depend on autoconf 2.62.
+dnl Meanwhile, we must use a shell variable so that we bypass automake's
+dnl attempts to remove the sole copy of GNUmakefile in a non-VPATH build
+dnl during 'make distclean'.
+dnl TODO avoid the shell variable once automake is fixed.
+GNUmakefile=GNUmakefile
+m4_if(m4_version_compare([2.61a.100],
+	m4_defn([m4_PACKAGE_VERSION])), [1], [],
+      [AC_CONFIG_LINKS([$GNUmakefile:$GNUmakefile], [],
+	[GNUmakefile=$GNUmakefile])])
+
 AC_CONFIG_FILES([Makefile doc/Makefile
 		 lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
 		 lib/m4sugar/Makefile

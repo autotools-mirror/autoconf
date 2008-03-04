@@ -47,15 +47,17 @@ include Makefile
 # for others: rerunning autoconf and recompiling everything isn't cheap.
 # Remove the autoreconf-provided INSTALL, so that we regenerate it.
 ifeq (0,$(MAKELEVEL))
-  _is-dist-target = $(filter dist% alpha beta major,$(MAKECMDGOALS))
+  _is-dist-target = $(filter-out %clean, \
+    $(filter dist% alpha beta major,$(MAKECMDGOALS)))
   ifneq (,$(_is-dist-target))
     _curr-ver := $(shell cd $(srcdir) && ./build-aux/git-version-gen \
                    $(srcdir)/.tarball-version)
     ifneq ($(_curr-ver),$(VERSION))
       $(info INFO: running autoreconf for new version string: $(_curr-ver))
       _dummy := $(shell				\
-	rm -rf autom4te.cache;			\
-	(cd $(srcdir) && autoreconf -i -v)	\
+	cd $(srcdir)				\
+	  && rm -rf autom4te.cache		\
+	  && autoreconf -i -v			\
 	  && rm -f INSTALL)
     endif
   endif
@@ -70,6 +72,8 @@ all:
 	@echo There seems to be no Makefile in this directory.   1>&2
 	@echo "You must run ./configure before running \`make'." 1>&2
 	@exit 1
+
+check dist distcheck install: all
 
 endif
 

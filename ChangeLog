@@ -1,5 +1,16 @@
 2008-03-04  Eric Blake  <ebb9@byu.net>
 
+	Pull in recent maintainer improvements from coreutils.
+	* GNUmakefile (_is-dist-target): 'make distclean' should not
+	trigger autoreconf.
+	(_dummy): Change directories before removing autom4te.cache.
+	(check dist distcheck install) [!_have-Makefile]: Provide nicer
+	diagnostics.
+	* configure.ac (AC_CONFIG_LINKS): Copy GNUmakefile into VPATH
+	builds, after initial bootstrap.
+	* Makefile.am (distclean-local): Work around current automake bug.
+	* Makefile.maint (ME): Allow VPATH usage.
+
 	Use git-merge-changelog when available.
 	* .gitattributes: New file.
 	* README-hacking: Document use of git-merge-changelog.

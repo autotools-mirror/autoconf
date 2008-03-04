@@ -92,3 +92,8 @@ autom4te-update:
 # never in a checked-out repository.
 dist-hook:
 	echo $(VERSION) > $(distdir)/.tarball-version
+
+# Arrange to remove the symlink to GNUmakefile in VPATH builds.
+# TODO remove this once automake vs. AC_CONFIG_LINKS issue is fixed.
+distclean-local:
+	if test x"$(VPATH)" != x ; then rm -f GNUmakefile ; fi
