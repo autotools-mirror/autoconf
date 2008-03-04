@@ -1,3 +1,9 @@
+2008-03-04  Eric Blake  <ebb9@byu.net>
+
+	Make AT_CHECK act like a simple command.
+	* lib/autotest/general.m4 (_AT_CHECK): Wrap commands in {;}.
+	* tests/torture.at (AT_CHECK_CONFIG_CREATION_NOWRITE): Test it.
+
 2008-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	On MinGW, substitution of CR and 0xFF fails.

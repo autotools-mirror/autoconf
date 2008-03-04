@@ -215,11 +215,8 @@ AT_CHECK_CONFIGURE([what_to_test=var-$1 --no-create])
 # run by root or on w32).
 touch t
 chmod a-w .
-if mv t t1 >/dev/null 2>&1 ; then
-  :
-else
-  AT_CHECK([./config.status var-$1 </dev/null], [1], [ignore], [ignore])
-fi
+mv t t1 >/dev/null 2>&1 \
+  || AT_CHECK([./config.status var-$1 </dev/null], [1], [ignore], [ignore])
 chmod u+w .
 rm -rf t t1
 ])# AT_CHECK_CONFIG_CREATION_NOWRITE

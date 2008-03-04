@@ -1717,7 +1717,7 @@ m4_define([AT_DIFF_STDOUT()],
 #  ( $at_traceon; $1 ) >at-stdout 2>at-stder1
 #
 m4_define([_AT_CHECK],
-[$at_traceoff
+[{ $at_traceoff
 AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([$1])"])
 echo AT_LINE >"$at_check_line_file"
 
@@ -1739,5 +1739,5 @@ m4_if([$2], [ignore], [at_func_check_skip],
   [at_func_check_status m4_default([$2], [0])]) $at_status "$at_srcdir/AT_LINE"
 AS_IF($at_failed, [$5], [$6])
 $at_failed && at_func_log_failure AT_capture_files
-$at_traceon
+$at_traceon; }
 ])# _AT_CHECK
