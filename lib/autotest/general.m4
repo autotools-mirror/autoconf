@@ -702,10 +702,10 @@ m4_divert_push([TESTS_BEGIN])dnl
 
 # Take any -C into account.
 if $at_change_dir ; then
-  if test x- = x$"at_dir" ; then
+  if test x- = "x$at_dir" ; then
     at_dir=./-
   fi
-  test x != x"$at_dir" && cd "$at_dir" \
+  test x != "x$at_dir" && cd "$at_dir" \
     || AS_ERROR([unable to change directory])
   at_dir=`pwd`
 fi

@@ -1,3 +1,7 @@
+2008-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_INIT): Fix detection of '-C -'.
+
 2008-03-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	autoreconf -m now honors $MAKE.
