@@ -1,5 +1,9 @@
 2008-03-04  Eric Blake  <ebb9@byu.net>
 
+	Work around cygwin bug.
+	* tests/atlocal.in (unsupported_fs_chars): Avoid cygwin bug where
+	"touch 't\'" creates regular file 't'.
+
 	Ignore tests that require read-only directories under root.
 	* tests/torture.at (AT_CHECK_CONFIG_CREATION_NOWRITE): Skip
 	no-write portion if user has root-like privileges.
