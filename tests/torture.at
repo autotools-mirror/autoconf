@@ -778,7 +778,9 @@ baz=bla
     for j in 0 1 2 3 4 5 6 7; do
       for k in 0 1 2 3 4 5 6 7; do
 	case $i$j$k in #(
-	000) ;; #(
+	000 | 015 | 377) ;; # MinGW awk dislikes 0xFF, and the test does
+			    # the wrong thing for CR on MinGW.
+			    #(
 	*) printf \\$i$j$k's' ;; # The 's' works around a Solaris 8 /bin/bash bug.
 	esac
       done
