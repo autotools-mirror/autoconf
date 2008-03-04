@@ -211,9 +211,17 @@ AT_CHECK([grep OK $1], [], [OK
 AT_CHECK_CONFIGURE([what_to_test=var-$1 --no-create])
 # config.status might be stupidly expecting data on stdin, if it's
 # really broken...
+# Skip check if user can rename files into a read-only directory (when
+# run by root or on w32).
+touch t
 chmod a-w .
-AT_CHECK([./config.status var-$1 </dev/null], [1], [ignore], [ignore])
+if mv t t1 >/dev/null 2>&1 ; then
+  :
+else
+  AT_CHECK([./config.status var-$1 </dev/null], [1], [ignore], [ignore])
+fi
 chmod u+w .
+rm -rf t t1
 ])# AT_CHECK_CONFIG_CREATION_NOWRITE
 
 

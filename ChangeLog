@@ -1,3 +1,9 @@
+2008-03-04  Eric Blake  <ebb9@byu.net>
+
+	Ignore tests that require read-only directories under root.
+	* tests/torture.at (AT_CHECK_CONFIG_CREATION_NOWRITE): Skip
+	no-write portion if user has root-like privileges.
+
 2008-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (AT_INIT): Fix detection of '-C -'.
