@@ -181,19 +181,37 @@ m4_define([_AT_NORMALIZE_TEST_GROUP_NUMBER],
   done'
 ])
 
+# _AT_DEFINE_INIT(NAME, [DEFINITION])
+# -----------------------------------
+# Define macro NAME to die if invoked prior to AT_INIT, and to DEFINITION
+# after AT_INIT.
+m4_define([_AT_DEFINE_INIT],
+[m4_define($@)m4_pushdef([$1], [m4_fatal([$1: missing AT_INIT detected])])dnl
+m4_append([_AT_DEFINE_INIT_LIST], [[$1]], [,])])
+
+# _AT_DEFINE_SETUP(NAME, [DEFINITION])
+# -----------------------------------
+# Define macro NAME to die if invoked outside AT_SETUP/AT_CLEANUP, and
+# to DEFINITION otherwise.
+m4_define([_AT_DEFINE_SETUP],
+[m4_define([$1], [m4_ifndef([AT_ingroup],
+ [m4_fatal([$1: missing AT_SETUP detected])])$2])])
+
 
 # AT_INIT([TESTSUITE-NAME])
 # -------------------------
 # Begin test suite.
 m4_define([AT_INIT],
-[m4_pattern_forbid([^_?AT_])
+[m4_pushdef([AT_INIT], [m4_fatal([$0: invoked multiple times])])
+m4_pattern_forbid([^_?AT_])
 m4_pattern_allow([^_AT_T_EOF$])
 m4_define([AT_TESTSUITE_NAME],
-	  m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1], [: $1]))
+  m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1], [m4_expand([: $1])]))
 m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_groups_all], [])
 m4_define([AT_help_all], [])
+m4_foreach([AT_name], [_AT_DEFINE_INIT_LIST], [m4_popdef(m4_defn([AT_name]))])
 m4_wrap([_AT_FINISH])
 AS_INIT[]dnl
 m4_divert_push([DEFAULTS])dnl
@@ -404,7 +422,9 @@ esac]
 # Whether -C is in effect.
 at_change_dir=false
 m4_divert_pop([DEFAULTS])dnl
-m4_define([_AT_FINISH], [m4_divert_text([DEFAULTS],
+m4_define([_AT_FINISH],
+[m4_ifdef([AT_ingroup], [m4_fatal([missing AT_CLEANUP detected])])dnl
+m4_divert_text([DEFAULTS],
 [
 # List of the tested programs.
 at_tested='m4_ifdef([AT_tested],
@@ -1401,8 +1421,10 @@ $1])])# AT_COPYRIGHT
 # ---------------------
 # Start a group of related tests, all to be executed in the same subshell.
 # The group is testing what DESCRIPTION says.
-m4_define([AT_SETUP],
-[m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])
+_AT_DEFINE_INIT([AT_SETUP],
+[m4_ifdef([AT_ingroup], [m4_fatal([$0: nested AT_SETUP detected])],
+  [m4_define([AT_ingroup])])
+m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])
 m4_define([AT_capture_files], [])
 m4_define([AT_line], AT_LINE)
 m4_define([AT_xfail], [at_xfail=no])
@@ -1426,7 +1448,7 @@ m4_divert_push([TEST_SCRIPT])dnl
 # -----------------------------
 # Set up the test to be expected to fail if SHELL-EXPRESSION evaluates to
 # true (exitcode = 0).
-m4_define([AT_XFAIL_IF],
+_AT_DEFINE_SETUP([AT_XFAIL_IF],
 [dnl
 dnl Try to limit the amount of conditionals that we emit.
 m4_case([$1],
@@ -1442,7 +1464,7 @@ m4_case([$1],
 # ---------------------
 # Declare a list of keywords associated to the current test group.
 # The list is stored in lower case, since the -k option is case-insensitive.
-m4_define([AT_KEYWORDS],
+_AT_DEFINE_SETUP([AT_KEYWORDS],
 [m4_append_uniq_w([AT_keywords], m4_tolower([[$1]]))])
 
 
@@ -1450,7 +1472,7 @@ m4_define([AT_KEYWORDS],
 # ---------------------
 # If the current test group does not behave as expected, save the contents of
 # FILE in the test suite log.
-m4_define([AT_CAPTURE_FILE],
+_AT_DEFINE_SETUP([AT_CAPTURE_FILE],
 [m4_append_uniq([AT_capture_files], ["$1"], [ \
 ])])
 
@@ -1458,8 +1480,10 @@ m4_define([AT_CAPTURE_FILE],
 # AT_CLEANUP
 # ----------
 # Complete a group of related tests.
-m4_define([AT_CLEANUP],
-[m4_append([AT_help_all],
+_AT_DEFINE_INIT([AT_CLEANUP],
+[m4_ifdef([AT_ingroup], [m4_undefine([AT_ingroup])],
+  [m4_fatal([$0: missing AT_SETUP detected])])dnl
+m4_append([AT_help_all],
 m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);dnl
 m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 )dnl
@@ -1484,8 +1508,9 @@ m4_divert_pop([TEST_GROUPS])dnl Back to KILL.
 # Start a category of related test groups.  If multiple groups are executed,
 # output TEXT as a banner without any shell expansion, prior to any test
 # from the category.  If TEXT is empty, no banner is printed.
-m4_define([AT_BANNER],
-[m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))
+_AT_DEFINE_INIT([AT_BANNER],
+[m4_ifdef([AT_ingroup], [m4_fatal([$0: nested AT_SETUP detected])])dnl
+m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))
 m4_divert_text([BANNERS],
 [@%:@ Banner AT_banner_ordinal. AT_LINE
 @%:@ Category starts at test group m4_incr(AT_ordinal).
@@ -1499,7 +1524,7 @@ at_banner_text_[]AT_banner_ordinal="AS_ESCAPE([$1])"])dnl
 # an end of line.
 # This macro is not robust to active symbols in CONTENTS *on purpose*.
 # If you don't want CONTENTS to be evaluated, quote it twice.
-m4_define([AT_DATA],
+_AT_DEFINE_SETUP([AT_DATA],
 [cat >$1 <<'_ATEOF'
 $2[]_ATEOF
 ])
@@ -1545,7 +1570,7 @@ $2[]_ATEOF
 # out, since most shells when tracing include subshell traces in stderr.
 # This may cause spurious failures when the test suite is run with `-x'.
 #
-m4_define([AT_CHECK],
+_AT_DEFINE_SETUP([AT_CHECK],
 [_AT_CHECK([$1],[$2],[$3],[$4],[$5],[$6],1)])
 
 # AT_CHECK_NOESCAPE(COMMANDS, [STATUS = 0], STDOUT, STDERR,
@@ -1553,7 +1578,7 @@ m4_define([AT_CHECK],
 # ---------------------------------------------------------
 # Like AT_CHECK, but do not AS_ESCAPE shell metacharacters in the STDOUT
 # and STDERR arguments before running the comparison.
-m4_define([AT_CHECK_NOESCAPE],
+_AT_DEFINE_SETUP([AT_CHECK_NOESCAPE],
 [_AT_CHECK([$1],[$2],[$3],[$4],[$5],[$6])])
 
 

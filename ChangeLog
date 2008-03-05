@@ -1,5 +1,21 @@
 2008-03-11  Eric Blake  <ebb9@byu.net>
 
+	Improve error messages for common testsuite bugs.
+	* lib/autotest/general.m4 (_AT_DEFINE_INIT, _AT_DEFINE_SETUP): New
+	macros for defining order-enforced macros.
+	(AT_INIT, AT_SETUP, AT_CLEANUP, AT_BANNER, AT_XFAIL_IF)
+	(AT_CAPTURE_FILE, AT_DATA, AT_CHECK, AT_CHECK_NOESCAPE): Add error
+	messages when order violations are detected.
+	* tests/autotest.at (AT_CHECK_AT_SYNTAX): New helper macro.
+	(AT_SETUP without AT_INIT, AT_BANNER without AT_INIT)
+	(AT_CLEANUP without AT_INIT, Missing AT_CLEANUP)
+	(AT_CHECK without AT_SETUP, AT_DATA without AT_SETUP)
+	(AT_XFAIL_IF without AT_DATA, AT_KEYWORDS without AT_SETUP,
+	(AT_CLEANUP without AT_SETUP, AT_BANNER inside AT_SETUP)
+	(AT_SETUP inside AT_SETUP, Multiple AT_INIT)
+	(Banner-only test suite): New tests.
+	Reported by Christopher Hulbert.
+
 	Tweak m4_wrap to force FIFO or LIFO semantics.
 	* lib/m4sugar/m4sugar.m4 (m4_wrap): Override M4 implementation.
 	(m4_wrap_lifo, _m4_wrap): New macros.

@@ -81,7 +81,20 @@ AT_INIT([artificial test suite])
 AT_SETUP([my only test])
 $2
 AT_CLEANUP
-]], m4_shift2($@))])
+]], m4_shift2($@))]) # AT_CHECK_AT_TEST
+
+# AT_CHECK_AT_SYNTAX(TITLE, SUITE, MESSAGE)
+# -----------------------------------------
+# Create a test named TITLE that tries compiling SUITE with syntax
+# errors with autotest.  Expect a failed compilation, and grep for
+# MESSAGE occuring within the error output.
+m4_define([AT_CHECK_AT_SYNTAX],
+[AT_SETUP([$1])
+AT_CHECK_AT_PREP([micro-suite], [$2], [1], [], [stderr])
+AT_CHECK([grep '$3' stderr], [0], [ignore])
+AT_CLEANUP
+])# AT_CHECK_AT_SYNTAX
+
 
 # AT_NO_CMDSUBST
 # --------------
@@ -109,11 +122,85 @@ AT_CHECK_AT([Empty test suite],
 [[AT_INIT([empty test suite])
 ]])
 
+AT_CHECK_AT([Banner-only test suite],
+[[AT_INIT([empty test suite])
+AT_BANNER([banner])
+]])
+
 # Next level of emptiness.
 AT_CHECK_AT_TEST([Empty test], [])
 
 # And finally, an empty check should not cause a syntax error.
 AT_CHECK_AT_TEST([Empty check], [AT_CHECK])
+
+# Check for sensible error messages for common bugs.
+AT_CHECK_AT_SYNTAX([AT@&t@_SETUP without AT@&t@_INIT],
+[[AT_SETUP([only test])
+AT_CHECK([:])
+AT_CLEANUP
+]], [AT@&t@_SETUP: missing AT@&t@_INIT detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_BANNER without AT@&t@_INIT],
+[[AT_BANNER([just a banner])
+]], [AT@&t@_BANNER: missing AT@&t@_INIT detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_CLEANUP without AT@&t@_INIT],
+[[AT_CLEANUP
+]], [AT@&t@_CLEANUP: missing AT@&t@_INIT detected])
+
+AT_CHECK_AT_SYNTAX([Missing AT@&t@_CLEANUP],
+[[AT_INIT([incomplete test suite])
+AT_SETUP([only test])
+AT_CHECK([:])
+]], [missing AT@&t@_CLEANUP detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_CHECK without AT@&t@_SETUP],
+[[AT_INIT([incomplete test suite])
+AT_CHECK([:])
+]], [AT@&t@_CHECK: missing AT@&t@_SETUP detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_DATA without AT@&t@_SETUP],
+[[AT_INIT([incomplete test suite])
+AT_DATA([file])
+]], [AT@&t@_DATA: missing AT@&t@_SETUP detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_XFAIL_IF without AT@&t@_SETUP],
+[[AT_INIT([incomplete test suite])
+AT_XFAIL_IF([:])
+]], [AT@&t@_XFAIL_IF: missing AT@&t@_SETUP detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_KEYWORDS without AT@&t@_SETUP],
+[[AT_INIT([incomplete test suite])
+AT_KEYWORDS([keyword])
+]], [AT@&t@_KEYWORDS: missing AT@&t@_SETUP detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_CLEANUP without AT@&t@_SETUP],
+[[AT_INIT([incomplete test suite])
+AT_CLEANUP
+]], [AT@&t@_CLEANUP: missing AT@&t@_SETUP detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_BANNER inside AT@&t@_SETUP],
+[[AT_INIT([incomplete test suite])
+AT_SETUP([only test])
+AT_BANNER([banner])
+AT_CHECK([:])
+AT_CLEANUP
+]], [AT@&t@_BANNER: nested AT@&t@_SETUP detected])
+
+AT_CHECK_AT_SYNTAX([AT@&t@_SETUP inside AT@&t@_SETUP],
+[[AT_INIT([incomplete test suite])
+AT_SETUP([only test])
+ AT_SETUP([nested test])
+ AT_CHECK([:])
+ AT_CLEANUP
+AT_CHECK([:])
+AT_CLEANUP
+]], [AT@&t@_SETUP: nested AT@&t@_SETUP detected])
+
+AT_CHECK_AT_SYNTAX([Multiple AT@&t@_INIT],
+[[AT_INIT([[suite, take one]])
+AT_INIT([repeat])
+]], [AT@&t@_INIT: invoked multiple times])
 
 # Check for tested programs.  autoconf should only appear once.
 AT_CHECK_AT([Tested programs],
