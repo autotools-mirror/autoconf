@@ -35,14 +35,14 @@ dnl
 AT_CAPTURE_FILE([$1.log])dnl
 dnl
 AT_DATA(AT_dir[/package.m4],
-[[m4_define([AT_PACKAGE_NAME],      [GNU Nonsense])
-m4_define([AT_PACKAGE_TARNAME],   [nonsense])
-m4_define([AT_PACKAGE_VERSION],   [1.0])
-m4_define([AT_PACKAGE_STRING],    [GNU Nonsense 1.0])
-m4_define([AT_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
+[[m4_define([AT@&t@_PACKAGE_NAME],      [GNU Nonsense])
+m4_define([AT@&t@_PACKAGE_TARNAME],   [nonsense])
+m4_define([AT@&t@_PACKAGE_VERSION],   [1.0])
+m4_define([AT@&t@_PACKAGE_STRING],    [GNU Nonsense 1.0])
+m4_define([AT@&t@_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
 ]])
 dnl
-AT_DATA(AT_dir[/$1.at], [$2])
+AT_DATA(AT_dir[/$1.at], m4_bpatsubst([[$2]], [AT_], [AT@&t@_]))
 m4_ifval([$6], [(cd AT_dir])
 AT_CHECK_AUTOM4TE([--language=autotest -o $1 $1.at], [$3], [$4], [$5])
 m4_ifval([$6], [)])
@@ -82,9 +82,6 @@ AT_SETUP([my only test])
 $2
 AT_CLEANUP
 ]], m4_shift2($@))])
-
-# Here documents for these tests contain forbidden macros.
-m4_pattern_allow([^AT_])
 
 # AT_NO_CMDSUBST
 # --------------
@@ -723,17 +720,17 @@ AT_CLEANUP
 AT_SETUP([unusual file names])
 
 AT_DATA_M4SUGAR([d@&t@nl.at],
-[[AT_SETUP([test one])
+[[AT@&t@_SETUP([test one])
 m4_pattern_allow([^dnl$])
-AT_CHECK([test "]m4_dquote(AT_LINE)[" = dn[]l.at:3])
-AT_CLEANUP
+AT@&t@_CHECK([test "]m4_dquote(AT@&t@_LINE)[" = dn[]l.at:3])
+AT@&t@_CLEANUP
 ]])
 
 mkdir sub
 AT_DATA_M4SUGAR([sub/"two  spaces".at],
-[[AT_SETUP([test two])
-AT_CHECK([test "]m4_dquote(AT_LINE)[" = "two  spaces.at:2"])
-AT_CLEANUP
+[[AT@&t@_SETUP([test two])
+AT@&t@_CHECK([test "]m4_dquote(AT@&t@_LINE)[" = "two  spaces.at:2"])
+AT@&t@_CLEANUP
 ]])
 
 AT_CHECK_AT_PREP([suite],

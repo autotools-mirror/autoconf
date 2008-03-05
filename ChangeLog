@@ -1,5 +1,11 @@
 2008-03-10  Eric Blake  <ebb9@byu.net>
 
+	Encode nested autotest data.
+	* tests/autotest.at (AT_CHECK_AT_PREP): Avoid raw AT_ in output.
+	(unusual file names): Likewise.
+	(m4_pattern_allow): Remove loophole, to make it easier to catch
+	poorly written tests.
+
 	Factor some autotest tests.
 	* tests/autotest.at (AT_CHECK_AT_PREP): New macro, to factor out
 	common initialization.
