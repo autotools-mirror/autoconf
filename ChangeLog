@@ -1,3 +1,11 @@
+2008-03-10  Eric Blake  <ebb9@byu.net>
+
+	Factor some autotest tests.
+	* tests/autotest.at (AT_CHECK_AT_PREP): New macro, to factor out
+	common initialization.
+	(AT_CHECK_AT, Banners, Keywords and ranges, srcdir propagation)
+	(whitespace in absolute testdir, unusual file names): Use it.
+
 2008-03-06  Eric Blake  <ebb9@byu.net>
 
 	Minor documentation fix.
