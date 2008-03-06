@@ -10933,7 +10933,7 @@ scenarios: not using these macros, using @code{m4_defn}, using
 
 @example
 $ @kbd{cat example.m4}
-# Overquote, so that quotes are visible.
+dnl Overquote, so that quotes are visible.
 m4_define([show], [$[]1 = [$1], $[]@@ = [$@@]])
 m4_define([a], [A])
 m4_define([mkargs], [1, 2[,] 3])
@@ -10963,7 +10963,7 @@ mkargs
 1, 2[,] 3
 1,2, 3
 [1],[2, 3]
-1,2, 3
+1, 2, 3
 @end example
 
 

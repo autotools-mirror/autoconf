@@ -1,3 +1,8 @@
+2008-03-06  Eric Blake  <ebb9@byu.net>
+
+	Minor documentation fix.
+	* doc/autoconf.texi (Evaluation Macros): Fix typo.
+
 2008-03-04  Eric Blake  <ebb9@byu.net>
 
 	Make AT_CHECK act like a simple command.
