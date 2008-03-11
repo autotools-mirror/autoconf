@@ -1,3 +1,21 @@
+2008-03-11  Eric Blake  <ebb9@byu.net>
+
+	Tweak m4_wrap to force FIFO or LIFO semantics.
+	* lib/m4sugar/m4sugar.m4 (m4_wrap): Override M4 implementation.
+	(m4_wrap_lifo, _m4_wrap): New macros.
+	* lib/m4sugar/m4sh.m4 (AS_INIT): Combine all cleanup into known
+	order, prior to m4sugar's.
+	(_AS_DETECT_BETTER_SHELL): Use cleanup parameter, rather than
+	m4_wrap.
+	* lib/autotest/general.m4 (AT_INIT): Combine all cleanup into
+	known order, prior to m4sh's.
+	* doc/autoconf.texi (Diagnostic Macros) <m4_fatal>: Document
+	argument.
+	(Redefined M4 Macros) <m4_wrap>: Rewrite documentation to match
+	new behavior.
+	* tests/m4sh.at (AS_INIT cleanup): New test.
+	* NEWS: Document the change.
+
 2008-03-10  Eric Blake  <ebb9@byu.net>
 
 	Encode nested autotest data.

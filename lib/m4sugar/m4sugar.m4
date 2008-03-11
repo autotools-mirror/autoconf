@@ -138,7 +138,7 @@ m4_rename_m4([index])
 m4_rename_m4([indir])
 m4_rename_m4([len])
 m4_rename([m4exit], [m4_exit])
-m4_rename([m4wrap], [m4_wrap])
+m4_undefine([m4wrap])
 m4_ifdef([mkstemp],dnl added in M4 1.4.8
 [m4_rename_m4([mkstemp])
 m4_copy([m4_mkstemp], [m4_maketemp])
@@ -607,6 +607,31 @@ m4_define([m4_undefine],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
 [m4_builtin([undefine], [$1])])
 
+# _m4_wrap(PRE, POST)
+# -------------------
+# Helper macro for m4_wrap and m4_wrap_lifo.  Allows nested calls to
+# m4_wrap within wrapped text.
+m4_define([_m4_wrap],
+[m4_ifdef([$0_text],
+	  [m4_define([$0_text], [$1]m4_builtin([defn], [$0_text])[$2])],
+	  [m4_builtin([m4wrap], [$0_text(m4_builtin([popdef],
+  [$0_text]))])m4_define([$0_text], [$1$2])])])
+
+# m4_wrap(TEXT)
+# -------------
+# Append TEXT to the list of hooks to be executed at the end of input.
+# Whereas the order of the original may be LIFO in the underlying m4,
+# this version is always FIFO.
+m4_define([m4_wrap],
+[_m4_wrap([], [$1[]])])
+
+# m4_wrap_lifo(TEXT)
+# ------------------
+# Prepend TEXT to the list of hooks to be executed at the end of input.
+# Whereas the order of m4_wrap may be FIFO in the underlying m4, this
+# version is always LIFO.
+m4_define([m4_wrap_lifo],
+[_m4_wrap([$1[]])])
 
 ## ------------------------- ##
 ## 7. Quoting manipulation.  ##
@@ -2215,6 +2240,7 @@ m4_if(m4_sysval, [0], [],
 
 # m4_init
 # -------
+# Initialize the m4sugar language.
 m4_define([m4_init],
 [# All the M4sugar macros start with `m4_', except `dnl' kept as is
 # for sake of simplicity.

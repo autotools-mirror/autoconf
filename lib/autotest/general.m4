@@ -194,6 +194,7 @@ m4_define([AT_ordinal], 0)
 m4_define([AT_banner_ordinal], 0)
 m4_define([AT_groups_all], [])
 m4_define([AT_help_all], [])
+m4_wrap([_AT_FINISH])
 AS_INIT[]dnl
 m4_divert_push([DEFAULTS])dnl
 AT_COPYRIGHT(
@@ -403,7 +404,7 @@ esac]
 # Whether -C is in effect.
 at_change_dir=false
 m4_divert_pop([DEFAULTS])dnl
-m4_wrap([m4_divert_text([DEFAULTS],
+m4_define([_AT_FINISH], [m4_divert_text([DEFAULTS],
 [
 # List of the tested programs.
 at_tested='m4_ifdef([AT_tested],

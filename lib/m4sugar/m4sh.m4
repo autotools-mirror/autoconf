@@ -2,8 +2,8 @@
 # M4 sugar for common shell constructs.
 # Requires GNU M4 and M4sugar.
 #
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free
-# Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+# Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -237,7 +237,7 @@ m4_expand_once([m4_append([_AS_DETECT_SUGGESTED_BODY], [
 # <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
 #
 m4_defun_once([_AS_DETECT_BETTER_SHELL],
-[m4_wrap([m4_divert_text([M4SH-SANITIZE], [
+[m4_append([_AS_CLEANUP], [m4_divert_text([M4SH-SANITIZE], [
 AS_REQUIRE([_AS_UNSET_PREPARE])dnl
 if test "x$CONFIG_SHELL" = x; then
   AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY]) 2>/dev/null],
@@ -1647,7 +1647,9 @@ _AS_RUN([_AS_SHELL_FN_WORK]) || {
 # -------
 # Initialize m4sh.
 m4_define([AS_INIT],
-[m4_init
+[# Wrap our cleanup prior to m4sugar's cleanup.
+m4_wrap([_AS_CLEANUP])
+m4_init
 
 # Forbidden tokens and exceptions.
 m4_pattern_forbid([^_?AS_])

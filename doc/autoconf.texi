@@ -10336,29 +10336,21 @@ diversion stack.
 @end defmac
 
 @defmac m4_wrap (@var{text})
+@defmacx m4_wrap_lifo (@var{text})
 @msindex{wrap}
-This macro corresponds to @code{m4wrap}.
+@msindex{wrap_lifo}
+These macros correspond to @code{m4wrap}.  Posix requires arguments of
+multiple wrap calls to be reprocessed at @acronym{EOF} in the same order
+as the original calls (first-in, first-out).  @acronym{GNU} M4 versions
+through 1.4.10, however, reprocess them in reverse order (last-in,
+first-out).  Both orders are useful, therefore, you can rely on
+@code{m4_wrap} to provide FIFO semantics and @code{m4_wrap_lifo} for
+LIFO semantics, regardless of the underlying @acronym{GNU} M4 version.
 
-Posix requires arguments of multiple @code{m4wrap} calls to be
-reprocessed at @acronym{EOF} in the same order as the original calls.
-@acronym{GNU} M4 versions through 1.4.x, however, reprocess them in
-reverse order.  Your code should not depend on the order.
-
-Also, Posix requires @code{m4wrap} to ignore its second and succeeding
-arguments, but @acronym{GNU} M4 versions through 1.4.x concatenate the
-arguments with intervening spaces.  Your code should not pass more than
-one argument.
-
-You are encouraged to end @var{text} with @samp{[]}, to avoid unexpected
-token pasting between consecutive invocations of @code{m4_wrap}, as in:
-
-@example
-m4_define([foo], [bar])
-m4_define([foofoo], [OUCH])
-m4_wrap([foo])
-m4_wrap([foo])
-@result{}OUCH
-@end example
+Unlike the @acronym{GNU} M4 builtin, these macros only recognize one
+argument, and avoid token pasting between consecutive invocations.  On
+the other hand, nested calls to @code{m4_wrap} from within wrapped text
+work just as in the builtin.
 @end defmac
 
 
@@ -10384,7 +10376,7 @@ guaranteed after @var{message}.
 @end defmac
 
 @anchor{m4_fatal}
-@defmac m4_fatal
+@defmac m4_fatal (@var{message})
 @msindex{fatal}
 Report a severe error @var{message} prefixed with the current location,
 and have @command{autom4te} die.
