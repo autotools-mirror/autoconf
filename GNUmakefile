@@ -38,14 +38,15 @@ ifeq ($(_have-Makefile),yes)
 # Make tar archive easier to reproduce.
 export TAR_OPTIONS = --owner=0 --group=0 --numeric-owner
 
-# Build with our own versions of these tools, when possible.
-export PATH = $(shell echo "`pwd`/tests:$$PATH")
-
 include Makefile
 
+# Some projects override e.g., _autoreconf here.
+-include $(srcdir)/GNUmakefile.cfg
+
+_autoreconf ?= autoreconf
+
 # Ensure that $(VERSION) is up to date for dist-related targets, but not
-# for others: rerunning autoconf and recompiling everything isn't cheap.
-# Remove the autoreconf-provided INSTALL, so that we regenerate it.
+# for others: rerunning autoreconf and recompiling everything isn't cheap.
 ifeq (0,$(MAKELEVEL))
   _is-dist-target = $(filter-out %clean, \
     $(filter dist% alpha beta major,$(MAKECMDGOALS)))
@@ -54,11 +55,7 @@ ifeq (0,$(MAKELEVEL))
                    $(srcdir)/.tarball-version)
     ifneq ($(_curr-ver),$(VERSION))
       $(info INFO: running autoreconf for new version string: $(_curr-ver))
-      _dummy := $(shell				\
-	cd $(srcdir)				\
-	  && rm -rf autom4te.cache		\
-	  && autoreconf -i -v			\
-	  && rm -f INSTALL)
+      _dummy := $(shell cd $(srcdir) && rm -rf autom4te.cache && $(_autoreconf)))
     endif
   endif
 endif
