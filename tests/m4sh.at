@@ -776,8 +776,10 @@ AS_INIT
 dnl Registered after AS_INIT's cleanups, thus goes to KILL diversion
 m4_wrap([echo cleanup 2
 dnl However, nested wraps and diversions can still be used
+dnl Also, test wrapping text that looks like parameter reference
 m4_wrap([echo cleanup 3
-m4_divert_text([M4SH-INIT], [echo prep 4
+m4_divert_text([M4SH-INIT], [m4_define([foo], [$1])dnl
+echo prep foo([4])
 ])])])
 dnl Registered before AS_INIT's cleanups
 m4_wrap_lifo([echo cleanup 5

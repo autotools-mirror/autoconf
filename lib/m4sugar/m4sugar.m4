@@ -611,11 +611,12 @@ m4_define([m4_undefine],
 # -------------------
 # Helper macro for m4_wrap and m4_wrap_lifo.  Allows nested calls to
 # m4_wrap within wrapped text.
+# Skip m4_defn and m4_popdef for speed.
 m4_define([_m4_wrap],
 [m4_ifdef([$0_text],
 	  [m4_define([$0_text], [$1]m4_builtin([defn], [$0_text])[$2])],
-	  [m4_builtin([m4wrap], [$0_text(m4_builtin([popdef],
-  [$0_text]))])m4_define([$0_text], [$1$2])])])
+	  [m4_builtin([m4wrap], [m4_unquote(m4_builtin([defn],
+  [$0_text])m4_builtin([popdef], [$0_text]))])m4_define([$0_text], [$1$2])])])
 
 # m4_wrap(TEXT)
 # -------------
