@@ -1,6 +1,7 @@
 2008-03-14  Stepan Kasal  <kasal@ucw.cz>
 
-	* lib/Autom4te/ChannelDefs.pm: Fix typos.
+	* lib/Autom4te/ChannelDefs.pm, tests/fortran.at,
+	tests/mktests.sh, tests/wrapper.as: Fix typos.
 
 2008-03-12  Eric Blake  <ebb9@byu.net>
 
