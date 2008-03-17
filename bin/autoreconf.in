@@ -364,7 +364,7 @@ sub autoreconf_current_directory ()
     }
   else
     {
-      xsystem "$autopoint";
+      xsystem_hint ("autopoint is needed because this package uses Gettext", "$autopoint");
     }
 
 
@@ -528,7 +528,7 @@ sub autoreconf_current_directory ()
 	{
 	  $libtoolize .= " --ltdl";
 	}
-      xsystem ($libtoolize);
+      xsystem_hint ("libtoolize is needed because this package uses Libtool", $libtoolize);
       $rerun_aclocal = 1;
     }
   else

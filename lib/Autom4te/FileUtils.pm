@@ -1,4 +1,4 @@
-# Copyright (C) 2003, 2004, 2005, 2006, 2007  Free Software Foundation, Inc.
+# Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ use vars qw (@ISA @EXPORT);
 @EXPORT = qw (&open_quote &contents
 	      &find_file &mtime
 	      &update_file &up_to_date_p
-	      &xsystem &xqx &dir_has_case_matching_file &reset_dir_cache);
+	      &xsystem &xsystem_hint &xqx &dir_has_case_matching_file &reset_dir_cache);
 
 
 =item C<open_quote ($file_name)>
@@ -231,23 +231,32 @@ sub up_to_date_p ($@)
 }
 
 
-=item C<handle_exec_errors ($command, [$expected_exit_code = 0])>
+=item C<handle_exec_errors ($command, [$expected_exit_code = 0], [$hint])>
 
 Display an error message for C<$command>, based on the content of
 C<$?> and C<$!>.  Be quiet if the command exited normally
-with C<$expected_exit_code>.
+with C<$expected_exit_code>.  If C<$hint> is given, display that as well
+if the command failed to run at all.
 
 =cut
 
-sub handle_exec_errors ($;$)
+sub handle_exec_errors ($;$$)
 {
-  my ($command, $expected) = @_;
+  my ($command, $expected, $hint) = @_;
   $expected = 0 unless defined $expected;
+  if (defined $hint)
+    {
+      $hint = "\n" . $hint;
+    }
+  else
+    {
+      $hint = '';
+    }
 
   $command = (split (' ', $command))[0];
   if ($!)
     {
-      fatal "failed to run $command: $!";
+      fatal "failed to run $command: $!" . $hint;
     }
   else
     {
@@ -312,6 +321,25 @@ sub xsystem (@)
 
   $! = 0;
   handle_exec_errors "@command"
+    if system @command;
+}
+
+
+=item C<xsystem_hint ($msg, @argv)>
+
+Same as C<xsystem>, but allows to pass a hint that will be displayed
+in case the command failed to run at all.
+
+=cut
+
+sub xsystem_hint (@)
+{
+  my ($hint, @command) = @_;
+
+  verb "running: @command";
+
+  $! = 0;
+  handle_exec_errors "@command", 0, $hint
     if system @command;
 }
 

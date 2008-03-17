@@ -1,3 +1,13 @@
+2008-03-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/Autom4te/FileUtils.pm (handle_exec_errors): New argument
+	$hint, show if the executing program does not exist.
+	(xsystem_hint): New function, like xsystem but allows to pass
+	a hint.
+	* bin/autoreconf.in: Use xsystem_hint for spawning autopoint and
+	libtoolize.
+	Report by Bruce Korb.
+
 2008-03-14  Stepan Kasal  <kasal@ucw.cz>
 
 	* lib/Autom4te/ChannelDefs.pm, tests/fortran.at,
