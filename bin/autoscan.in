@@ -3,8 +3,8 @@
 # @configure_input@
 
 # autoscan - Create configure.scan (a preliminary configure.ac) for a package.
-# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
-#  Free Software Foundation, Inc.
+# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+#  2007, 2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -529,7 +529,7 @@ sub output ($)
   if (defined $cfiles[0])
     {
       print $file "AC_CONFIG_SRCDIR([$cfiles[0]])\n";
-      print $file "AC_CONFIG_HEADER([config.h])\n";
+      print $file "AC_CONFIG_HEADERS([config.h])\n";
     }
 
   output_kind ($file, 'program');

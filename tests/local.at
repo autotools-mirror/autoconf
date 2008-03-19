@@ -1,7 +1,7 @@
 # M4 macros used in building Autoconf test suites.        -*- Autotest -*-
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+# Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -210,7 +210,7 @@ ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$][1
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_HEADER(config.h:config.hin)
+AC_CONFIG_HEADERS(config.h:config.hin)
 AC_STATE_SAVE(before)]
 $1
 [AC_OUTPUT

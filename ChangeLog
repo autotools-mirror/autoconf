@@ -1,5 +1,11 @@
 2008-03-19  Eric Blake  <ebb9@byu.net>
 
+	AC_CONFIG_HEADERS replaced AC_CONFIG_HEADER.
+	* bin/autoscan.in (output): Avoid obsolete spelling.
+	* tests/local.at (AC_STATE_SAVE): Update usage.
+	* THANKS: Update.
+	Reported by John Calcote.
+
 	Emphasize that ease of configure triumphs over ease of autoconf.
 	* doc/autoconf.texi (Introduction): Expand on primary
 	vs. secondary goal of autoconf.
