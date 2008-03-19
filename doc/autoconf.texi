@@ -678,10 +678,12 @@ reason, it needs to be changed in only one place; all of the
 configuration scripts can be regenerated automatically to take advantage
 of the updated code.
 
-Those who do not understand Autoconf are doomed to reinvent it.  The
-primary goal of Autoconf is making the @emph{user's} life easier; making
-the @emph{maintainer's} life easier is only a secondary goal.  Put
-another way, the primary goal is not to make the generation of
+@c "Those who do not understand Unix are condemned to reinvent it, poorly."
+@c --Henry Spencer, 1987 (see http://en.wikipedia.org/wiki/Unix_philosophy)
+Those who do not understand Autoconf are condemned to reinvent it, poorly.
+The primary goal of Autoconf is making the @emph{user's} life easier;
+making the @emph{maintainer's} life easier is only a secondary goal.
+Put another way, the primary goal is not to make the generation of
 @file{configure} automatic for package maintainers (although patches
 along that front are welcome, since package maintainers form the user
 base of Autoconf); rather, the goal is to make @file{configure}

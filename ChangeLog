@@ -1,3 +1,8 @@
+2008-03-19  Stepan Kasal  <kasal@ucw.cz>
+
+	* doc/autoconf.texi (Introduction): Improve the paraphrase of
+	Henry Spencer's quotation.
+
 2008-03-19  Eric Blake  <ebb9@byu.net>
 
 	AC_CONFIG_HEADERS replaced AC_CONFIG_HEADER.
