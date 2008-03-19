@@ -1,3 +1,11 @@
+2008-03-19  Eric Blake  <ebb9@byu.net>
+
+	Emphasize that ease of configure triumphs over ease of autoconf.
+	* doc/autoconf.texi (Introduction): Expand on primary
+	vs. secondary goal of autoconf.
+	* THANKS: Update.
+	Inspired by Paul Smith.
+
 2008-03-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/Autom4te/FileUtils.pm (handle_exec_errors): New argument

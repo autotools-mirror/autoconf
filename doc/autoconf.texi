@@ -678,6 +678,23 @@ reason, it needs to be changed in only one place; all of the
 configuration scripts can be regenerated automatically to take advantage
 of the updated code.
 
+Those who do not understand Autoconf are doomed to reinvent it.  The
+primary goal of Autoconf is making the @emph{user's} life easier; making
+the @emph{maintainer's} life easier is only a secondary goal.  Put
+another way, the primary goal is not to make the generation of
+@file{configure} automatic for package maintainers (although patches
+along that front are welcome, since package maintainers form the user
+base of Autoconf); rather, the goal is to make @file{configure}
+painless, portable, and predictable for the end user of each
+@dfn{autoconfiscated} package.  And to this degree, Autoconf is highly
+successful at its goal --- most complaints to the Autoconf list are
+about difficulties in writing Autoconf input, and not in the behavior of
+the resulting @file{configure}.  Even packages that don't use Autoconf
+will generally provide a @file{configure} script, and the most common
+complaint about these alternative home-grown scripts is that they fail
+to meet one or more of the @acronym{GNU} Coding Standards that users
+have come to expect from Autoconf-generated @file{configure} scripts.
+
 The Metaconfig package is similar in purpose to Autoconf, but the
 scripts it produces require manual user intervention, which is quite
 inconvenient when configuring large source trees.  Unlike Metaconfig
