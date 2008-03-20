@@ -1,3 +1,10 @@
+2008-03-20  Eric Blake  <ebb9@byu.net>
+
+	Kill more CVS references.
+	* README-cvs: Delete.  See README-hacking instead.
+	* README-hacking: Update wording, based on older file.
+	* BUGS: Remove CVS mention.
+
 2008-03-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* tests/tools.at (autotools and whitespace in file names): Skip
