@@ -1,3 +1,26 @@
+2008-03-20  Eric Blake  <ebb9@byu.net>
+
+	Sync GNUmakefile with gnulib.
+	* GNUmakefile (Makefile.cfg): Rename...
+	(cfg.mk): ...to this, and make optional.
+	(GNUmakefile.cfg): Delete, redundant with cfg.mk.
+	(Makefile.maint): Rename...
+	(maint.mk): ...to this.
+	(all) [!_have-Makefile]: Rename...
+	(abort-due-to-no-makefile): ...to this, and invoke via
+	.DEFAULT_GOAL to pick up all targets.
+	* Makefile.cfg: Rename...
+	* cfg.mk: ...to this.
+	* Makefile.maint: Rename...
+	* maint.mk ...to this.
+	(ME): Reflect name change.
+	(makefile-check, m4-check, author_mark_check, msg): Use $(ME)
+	rather than hard-coded name.
+	* GNUmakefile.cfg: Delete; move rules into cfg.mk.
+	* Makefile.am (EXTRA_DIST): Reflect file name changes.
+	* .x-sc_prohibit_atoi_atof: Likewise.
+	* lib/freeze.mk: Likewise.
+
 2008-03-19  Stepan Kasal  <kasal@ucw.cz>
 
 	* doc/autoconf.texi (Introduction): Improve the paraphrase of

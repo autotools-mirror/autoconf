@@ -1,6 +1,6 @@
 # Freeze M4 files.
 
-# Copyright (C) 2002, 2004, 2006, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
 $(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
 	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
 
-# Do not use AUTOM4TE here, since Makefile.maint (my-distcheck)
+# Do not use AUTOM4TE here, since maint.mk (my-distcheck)
 # checks if we are independent of Autoconf by defining AUTOM4TE (and
 # others) to `false'.  Autoconf provides autom4te, so that doesn't
 # apply to us.

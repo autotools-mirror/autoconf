@@ -1,5 +1,5 @@
-# Customize Makefile.maint for Autoconf.            -*- Makefile -*-
-# Copyright (C) 2003, 2004, 2006 Free Software Foundation, Inc.
+# Customize maint.mk for Autoconf.            -*- Makefile -*-
+# Copyright (C) 2003, 2004, 2006, 2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,6 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# This file is '-include'd into GNUmakefile.
+
+# Build with our own versions of these tools, when possible.
+export PATH = $(shell echo "`pwd`/tests:$$PATH")
+
+# Remove the autoreconf-provided INSTALL, so that we regenerate it.
+_autoreconf = autoreconf -i -v && rm -f INSTALL
+
+# Version management.
 prev_version_file = $(srcdir)/config/prev-version.txt
 announce_gen   = $(srcdir)/config/announce-gen
 release_archive_dir = releases
