@@ -1,3 +1,8 @@
+2008-03-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/tools.at (autotools and whitespace in file names): Skip
+	if aclocal is not present.
+
 2008-03-20  Eric Blake  <ebb9@byu.net>
 
 	Sync GNUmakefile with gnulib.
