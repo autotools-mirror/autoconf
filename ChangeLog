@@ -1,3 +1,8 @@
+2008-03-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autom4te.in (Automake-preselections): Trace
+	_AM_COND_IF, _AM_COND_ELSE, _AM_COND_ENDIF.
+
 2008-03-20  Eric Blake  <ebb9@byu.net>
 
 	Kill more CVS references.
