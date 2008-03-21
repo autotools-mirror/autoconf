@@ -209,3 +209,24 @@ AT_CHECK_DEFINES(
 ])
 
 AT_CLEANUP
+
+
+## ------------------------------------ ##
+## AC_NO_EXECUTABLES (working linker).  ##
+## ------------------------------------ ##
+
+AT_CHECK_MACRO([AC_NO_EXECUTABLES (working linker)],
+[AC_NO_EXECUTABLES
+AC_PROG_CC
+])
+
+
+## ----------------------------------- ##
+## AC_NO_EXECUTABLES (broken linker).  ##
+## ----------------------------------- ##
+
+AT_CHECK_MACRO([AC_NO_EXECUTABLES (broken linker)],
+[LDFLAGS=-lnosuchlibrary
+AC_NO_EXECUTABLES
+AC_PROG_CC
+])

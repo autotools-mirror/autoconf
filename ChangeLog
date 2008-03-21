@@ -1,5 +1,14 @@
 2008-03-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Avoid leftover files on Leopard.
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT): Remove a.out.dSYM
+	directory created on darwin.
+	(AC_NO_EXECUTABLES): Likewise; also remove objects which may be
+	left over from a broken link.
+	* tests/c.at (AC_NO_EXECUTABLES (working linker))
+	(AC_NO_EXECUTABLES (broken linker)): New tests.
+	Report by Gary V. Vaughan.
+
 	* lib/autom4te.in (Automake-preselections): Trace
 	_AM_COND_IF, _AM_COND_ELSE, _AM_COND_ENDIF.
 

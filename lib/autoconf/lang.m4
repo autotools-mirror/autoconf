@@ -356,6 +356,7 @@ if _AC_DO_VAR(ac_link); then
   ac_no_link=no
   ]m4_defn([_AC_COMPILER_EXEEXT])[
 else
+  rm -f -r a.out a.exe b.out conftest.$ac_ext conftest.o conftest.obj conftest.dSYM
   ac_no_link=yes
   # Setting cross_compile will disable run tests; it will
   # also disable AC_CHECK_FILE but that's generally
@@ -592,10 +593,10 @@ AC_MSG_RESULT([$ac_cv_exeext])
 m4_define([_AC_COMPILER_EXEEXT],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 ac_clean_files_save=$ac_clean_files
-ac_clean_files="$ac_clean_files a.out a.exe b.out"
+ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
 _AC_COMPILER_EXEEXT_DEFAULT
 _AC_COMPILER_EXEEXT_WORKS
-rm -f a.out a.exe conftest$ac_cv_exeext b.out
+rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out
 ac_clean_files=$ac_clean_files_save
 _AC_COMPILER_EXEEXT_CROSS
 _AC_COMPILER_EXEEXT_O
