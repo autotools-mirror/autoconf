@@ -1,5 +1,11 @@
 2008-03-21  Eric Blake  <ebb9@byu.net>
 
+	Document more uses of $cross_compiling.
+	* doc/autoconf.texi (Runtime): Document that a temporary override
+	is permissible.
+	* THANKS: Update.
+	Reported by Ineiev, example by Ralf Wildenhues.
+
 	Don't swallow $1 in textual local variables.
 	* lib/m4sugar/m4sugar.m4 (m4_combine): Don't use overquoting and
 	expansion of text arguments, as that swallows $1.

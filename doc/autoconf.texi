@@ -8371,6 +8371,21 @@ you can test whether the shell variable @code{cross_compiling} is set to
 @samp{yes}, and then use an alternate method to get the results instead
 of calling the macros.
 
+It is also permissible to temporarily assign to @code{cross_compiling}
+in order to force tests to behave as though they are in a
+cross-compilation environment, particularly since this provides a way to
+test your @var{action-if-cross-compiling} even when you are not using a
+cross-compiler.
+
+@example
+# We temporarily set cross-compile mode to force AC_COMPUTE_INT
+# to use the slow link-only method
+save_cross_compiling=$cross_compiling
+cross_compiling=yes
+AC_COMPUTE_INT([@dots{}])
+cross_compiling=$save_cross_compiling
+@end example
+
 A C or C++ runtime test should be portable.
 @xref{Portable C and C++}.
 
