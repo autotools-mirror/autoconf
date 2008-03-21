@@ -1852,19 +1852,19 @@ m4_define([_m4_join],
 #   => a-1, a-2, a-3, b-1, b-2, b-3, c-1, c-2, c-3
 #
 # In order to have the correct number of SEPARATORs, we use a temporary
-# variable that redefines itself after the first use.  Note that since there
-# is no user expansion, we can avoid m4_defn overhead by overquoting the
-# second definition of m4_Separator, and by using m4_builtin.  Likewise,
-# we compute the m4_shift3 only once, rather than in each iteration of the
-# outer m4_foreach.
+# variable that redefines itself after the first use.  We use m4_builtin
+# to avoid m4_defn overhead, but must use defn rather than overquoting
+# in case PREFIX or SUFFIX contains $1.  Likewise, we compute the m4_shift3
+# only once, rather than in each iteration of the outer m4_foreach.
 m4_define([m4_combine],
 [m4_if(m4_eval([$# > 3]), [1],
-       [m4_pushdef([m4_Separator], [m4_define([m4_Separator], [[$1]])])]]dnl
+       [m4_pushdef([m4_Separator], [m4_define([m4_Separator],
+				    m4_builtin([defn], [m4_echo]))])]]dnl
 [[m4_foreach([m4_Prefix], [$2],
 	     [m4_foreach([m4_Suffix], ]m4_dquote(m4_dquote(m4_shift3($@)))[,
-			 [m4_Separator[]m4_builtin([defn],
-					[m4_Prefix])[$3]m4_builtin([defn],
-							[m4_Suffix])])])]]dnl
+			 [m4_Separator([$1])[]m4_builtin([defn],
+				      [m4_Prefix])[$3]m4_builtin([defn],
+						      [m4_Suffix])])])]]dnl
 [[m4_builtin([popdef], [m4_Separator])])])
 
 
@@ -1988,27 +1988,28 @@ m4_define([m4_append_uniq_w],
 # all the words are preceded by m4_Separator which is defined to empty for
 # the first word, and then ` ' (single space) for all the others.
 #
-# The algorithm overquotes m4_Prefix and m4_Prefix1 to avoid m4_defn
-# overhead, and bypasses m4_popdef overhead with m4_builtin since no user
+# The algorithm uses a helper that uses $2 through $4 directly, rather than
+# using local variables, to avoid m4_defn overhead, or expansion swallowing
+# any $.  It also bypasses m4_popdef overhead with m4_builtin since no user
 # macro expansion occurs in the meantime.  Also, the definition is written
 # with m4_do, to avoid time wasted on dnl during expansion (since this is
 # already a time-consuming macro).
 m4_define([m4_text_wrap],
+[_$0([$1], [$2], m4_if([$3], [], [[$2]], [[$3]]),
+     m4_if([$4], [], [79], [[$4]]))])
+m4_define([_m4_text_wrap],
 m4_do(dnl set up local variables, to avoid repeated calculations
-[[m4_pushdef([m4_Prefix], [[$2]])]],
-[[m4_pushdef([m4_Prefix1], m4_if([$3], [], [m4_Prefix], [[[$3]]]))]],
-[[m4_pushdef([m4_Width], m4_default([$4], 79))]],
-[[m4_pushdef([m4_Indent], m4_qlen(m4_Prefix))]],
-[[m4_pushdef([m4_Cursor], m4_qlen(m4_Prefix1))]],
+[[m4_pushdef([m4_Indent], m4_qlen([$2]))]],
+[[m4_pushdef([m4_Cursor], m4_qlen([$3]))]],
 [[m4_pushdef([m4_Separator], [m4_define([m4_Separator], [ ])])]],
 dnl expand the first prefix, then check its length vs. regular prefix
 dnl same length: nothing special
 dnl prefix1 longer: output on line by itself, and reset cursor
 dnl prefix1 shorter: pad to length of prefix, and reset cursor
-[[m4_Prefix1[]m4_cond([m4_Cursor], m4_Indent, [],
-		      [m4_eval(m4_Cursor > m4_Indent)], [1], [
-m4_Prefix[]m4_define([m4_Cursor], m4_Indent)],
-		      [m4_format([%*s], m4_max([0],
+[[[$3]m4_cond([m4_Cursor], m4_Indent, [],
+	      [m4_eval(m4_Cursor > m4_Indent)], [1], [
+[$2]m4_define([m4_Cursor], m4_Indent)],
+	      [m4_format([%*s], m4_max([0],
   m4_eval(m4_Indent - m4_Cursor)), [])m4_define([m4_Cursor], m4_Indent)])]],
 dnl now, for each word, compute the curser after the word is output, then
 dnl check if the cursor would exceed the wrap column
@@ -2018,19 +2019,16 @@ dnl either way, insert the word
 [[m4_foreach_w([m4_Word], [$1],
   [m4_define([m4_Cursor],
 	     m4_eval(m4_Cursor + m4_qlen(m4_builtin([defn], [m4_Word]))
-		     + 1))m4_if(m4_eval(m4_Cursor > m4_Width),
+		     + 1))m4_if(m4_eval(m4_Cursor > ([$4])),
       [1], [m4_define([m4_Cursor],
 		      m4_eval(m4_Indent
 			      + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))
-m4_Prefix[]],
+[$2]],
       [m4_Separator[]])m4_builtin([defn], [m4_Word])])]],
 dnl finally, clean up the local variabls
 [[m4_builtin([popdef], [m4_Separator])]],
 [[m4_builtin([popdef], [m4_Cursor])]],
-[[m4_builtin([popdef], [m4_Indent])]],
-[[m4_builtin([popdef], [m4_Width])]],
-[[m4_builtin([popdef], [m4_Prefix1])]],
-[[m4_builtin([popdef], [m4_Prefix])]]))
+[[m4_builtin([popdef], [m4_Indent])]]))
 
 
 # m4_text_box(MESSAGE, [FRAME-CHARACTER = `-'])

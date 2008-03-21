@@ -1,3 +1,14 @@
+2008-03-21  Eric Blake  <ebb9@byu.net>
+
+	Don't swallow $1 in textual local variables.
+	* lib/m4sugar/m4sugar.m4 (m4_combine): Don't use overquoting and
+	expansion of text arguments, as that swallows $1.
+	(m4_text_wrap): Likewise, by splitting out...
+	(_m4_text_wrap): ...new helper macro.  Also, allow arbitrary
+	expression for width.
+	* tests/m4sugar.at (m4@&t@_text_wrap): Test this.
+	(m4@&t@_combine): Likewise.
+
 2008-03-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Avoid leftover files on Leopard.

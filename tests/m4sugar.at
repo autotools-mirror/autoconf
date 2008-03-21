@@ -2,7 +2,8 @@
 
 AT_BANNER([M4sugar.])
 
-# Copyright (C) 2000, 2001, 2002, 2005, 2006, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2005, 2006, 2007, 2008 Free Software
+# Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -312,7 +313,7 @@ AT_CLEANUP
 AT_SETUP([m4@&t@_text_wrap])
 
 # m4_text_wrap is used to display the help strings.  Also, check that
-# commas are not swallowed.  This can easily happen because of
+# commas and $ are not swallowed.  This can easily happen because of
 # m4-listification.
 
 AT_DATA_M4SUGAR([script.4s],
@@ -328,6 +329,8 @@ m4_text_wrap([Short doc.], [          ], [  --too-wide], 30)
 m4_text_wrap([Super long documentation.], [          ], [  --too-wide], 30)
 
 m4_text_wrap([First, second  , third, [,quoted]])
+m4_define([xfff], [oops])
+m4_text_wrap([Some $1 $2 $3 $4 embedded dollars.], [ $* ], [ $@ ], [0xfff & 20])
 ]])
 
 AT_DATA([expout],
@@ -346,6 +349,10 @@ AT_DATA([expout],
           documentation.
 
 First, second , third, [,quoted]
+
+ $@ Some $1 $2 $3
+ $* $4 embedded
+ $* dollars.
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 0, [expout])
@@ -583,6 +590,7 @@ m4_combine([, ], [[a], [b]], [-], [])
 m4_combine([, ], [], [-], [a], [b])
 m4_combine([, ], [[]], [-], [a], [b])
 m4_combine([ a ], [[-], [+]], [a], [-], [+])
+m4_combine([$* ], [[$1], [$2]], [$#], [$@])
 ]],
 [[a-1, a-2, a-3, b-1, b-2, b-3, c-1, c-2, c-3
 
@@ -590,6 +598,7 @@ a-, b-
 
 -a, -b
 -a- a -a+ a +a- a +a+
+$1$#$@$* $2$#$@
 ]], [])
 
 AT_CLEANUP
