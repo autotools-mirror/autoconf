@@ -1,5 +1,7 @@
 2008-03-21  Eric Blake  <ebb9@byu.net>
 
+	* GNUmakefile: Resynchronize with gnulib.
+
 	Document more uses of $cross_compiling.
 	* doc/autoconf.texi (Runtime): Document that a temporary override
 	is permissible.
