@@ -1,7 +1,7 @@
 #                                                       -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002, 2003
+# Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002, 2003, 2008
 # Free Software Foundation, Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,14 @@
 
 # We need AC_CONFIG_TESTDIR.
 AC_PREREQ([2.57])
+
+# M4 1.6 and newer have FIFO m4wrap, as mandated by POSIX, but we want
+# LIFO m4_wrap.
+m4_define([m4_wrap],
+[m4_ifdef([_$0_text],
+  [m4_define([_$0_text], [$1]m4_defn([_$0_text]))],
+  [m4_define([_$0_text], [$1])m4_builtin([m4wrap],
+    [m4_default(m4_defn([_$0_text])m4_undefine([_$0_text]))])])])
 
 AC_INIT([GNU Autoconf], [2.59], [bug-autoconf@gnu.org])
 AC_SUBST([PACKAGE_NAME])dnl

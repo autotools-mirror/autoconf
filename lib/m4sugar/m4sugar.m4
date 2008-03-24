@@ -3,7 +3,7 @@ divert(-1)#                                                  -*- Autoconf -*-
 # Base M4 layer.
 # Requires GNU M4.
 #
-# Copyright (C) 1999, 2000, 2001, 2002, 2003 Free Software Foundation,
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2008 Free Software Foundation,
 # Inc.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1748,6 +1748,13 @@ m4_if(m4_sysval, [0], [],
 ## 13. Setting M4sugar up.  ##
 ## ------------------------ ##
 
+# M4 1.6 and newer have FIFO m4wrap, as mandated by POSIX, but we want
+# LIFO m4_wrap.
+m4_define([m4_wrap],
+[m4_ifdef([_$0_text],
+  [m4_define([_$0_text], [$1]m4_defn([_$0_text]))],
+  [m4_define([_$0_text], [$1])m4_builtin([m4wrap],
+    [m4_default(m4_defn([_$0_text])m4_undefine([_$0_text]))])])])
 
 # m4_init
 # -------
