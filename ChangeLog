@@ -1,3 +1,12 @@
+2008-03-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix Fortran testsuite failures with gfortran 4.3.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): When scanning
+	verbose compiler output, skip lines that set variables; gfortran
+	4.3 sets LIBRARY_PATH, COMPILER_PATH, COLLECT_GCC_OPTIONS.
+	* THANKS: Update.
+	Report by Vincent Lefèvre.
+
 2008-03-21  Eric Blake  <ebb9@byu.net>
 
 	* GNUmakefile: Resynchronize with gnulib.

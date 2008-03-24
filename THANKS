@@ -334,6 +334,7 @@ Uwe Seimet                  us@orbacus.com
 Vance Shipley               vances@motivity.ca
 Viktor Dukhovni             viktor@anaheim.esm.com
 Ville Karaila               karaila@iki.fi
+Vincent Lefèvre             vincent@vinc17.org
 Vincent Torri               vtorri at univ-evry.fr
 Vladimir Volovich           vvv@vsu.ru
 Volker Borchert             bt@teknon.de
@@ -355,7 +356,7 @@ mode: text
 coding: utf-8
 End:
 
-Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007
+Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
