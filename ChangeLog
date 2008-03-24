@@ -1,5 +1,9 @@
 2008-03-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix .exe-related test failure on MinGW.
+	* tests/local.at (AT_CHECK_M4): Normalize `/bin/m4.exe' correctly
+	for comparing warning output.
+
 	Fix Fortran testsuite failures with gfortran 4.3.
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): When scanning
 	verbose compiler output, skip lines that set variables; gfortran
