@@ -1,5 +1,7 @@
 2008-03-25  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* tests/autotest.at (Using atlocal): Quote instances of `pwd`.
+
 	* tests/local.at (AT_CHECK_M4): Factorize warning output
 	normalization.
 	Suggested by Eric Blake.
