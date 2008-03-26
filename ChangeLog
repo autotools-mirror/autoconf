@@ -1,3 +1,8 @@
+2008-03-26  Jim Meyering  <meyering@redhat.com>
+
+	Fix texinfo syntax error.
+	* doc/autoconf.texi (Limitations of Usual Tools): s/@kbd {/@kbd{/
+
 2008-03-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Warn, not fail on whitespace-only precious variable differences.

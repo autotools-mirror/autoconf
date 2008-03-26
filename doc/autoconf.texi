@@ -15398,9 +15398,9 @@ an empty regular expression; the workaround is repeating the regular
 expression.
 
 @example
-@kbd {echo abc | busybox sed '/a\(b\)c/ s//\1/'}
+@kbd{echo abc | busybox sed '/a\(b\)c/ s//\1/'}
 sed: No previous regexp.
-@kbd {echo abc | busybox sed '/a\(b\)c/ s/a\(b\)c/\1/'}
+@kbd{echo abc | busybox sed '/a\(b\)c/ s/a\(b\)c/\1/'}
 b
 @end example
 
