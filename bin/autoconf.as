@@ -4,7 +4,7 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 # autoconf -- create `configure' using m4 macros
 
 # Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003,
-# 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+# 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,10 +54,11 @@ Library directories:
   -I, --include=DIR          append directory DIR to search path
 
 Tracing:
-  -t, --trace=MACRO     report the list of calls to MACRO
-  -i, --initialization  also trace Autoconf's initialization process
+  -t, --trace=MACRO[:FORMAT]  report the list of calls to MACRO
+  -i, --initialization        also trace Autoconf's initialization process
 
-In tracing mode, no configuration script is created.
+In tracing mode, no configuration script is created.  FORMAT defaults
+to \`\$f:\$l:\$n:\$%'; see \`autom4te --help' for information about FORMAT.
 
 Report bugs to <bug-autoconf@gnu.org>."]
 

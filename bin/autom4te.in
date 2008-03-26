@@ -6,7 +6,7 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
 # autom4te - Wrapper around M4 libraries.
-# Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007 Free Software
+# Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007, 2008 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -197,11 +197,24 @@ Library directories:
   -I, --include=DIR          append directory DIR to search path
 
 Tracing:
-  -t, --trace=MACRO      report the MACRO invocations
-  -p, --preselect=MACRO  prepare to trace MACRO in a future run
+  -t, --trace=MACRO[:FORMAT]  report the MACRO invocations
+  -p, --preselect=MACRO       prepare to trace MACRO in a future run
 
 Freezing:
   -F, --freeze   produce an M4 frozen state file for FILES
+
+FORMAT defaults to \`\$f:\$l:\$n:\$%\', and can use the following escapes:
+  \$\$     literal \$
+  \$f     file where macro was called
+  \$l     line where macro was called
+  \$d     nesting depth of macro call
+  \$n     name of the macro
+  \$NUM   argument NUM, unquoted and with newlines
+  \$SEP\@  all arguments, with newlines, quoted, and separated by SEP
+  \$SEP*  all arguments, with newlines, unquoted, and separated by SEP
+  \$SEP%  all arguments, without newlines, unquoted, and separated by SEP
+SEP can be empty for the default (comma for \@ and *, colon for %),
+a single character for that character, or {STRING} to use a string.
 
 Report bugs to <bug-autoconf\@gnu.org>.
 ";

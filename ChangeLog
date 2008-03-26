@@ -1,5 +1,9 @@
 2008-03-26  Eric Blake  <ebb9@byu.net>
 
+	Document --trace=macro:format in --help output.
+	* bin/autom4te.in (help): Mention optional trace format.
+	* bin/autoconf.as (usage): Likewise.
+
 	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: Fix
 	typos in last patch.
 	Reported by Ralf Wildenhues.
