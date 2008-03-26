@@ -1,5 +1,11 @@
 2008-03-26  Eric Blake  <ebb9@byu.net>
 
+	Document busybox sed bug.
+	* doc/autoconf.texi (Limitations of Usual Tools): Mention
+	restrictions when using back-references.
+	Reported by Vincent Lefevre:
+	<http://thread.gmane.org/gmane.comp.gnu.coreutils.bugs/13013>.
+
 	Document Automake interaction with AC_CONFIG_MACRO_DIR.
 	* doc/autoconf.texi (Input): Mention ACLOCAL_AMFLAGS for automake
 	users.

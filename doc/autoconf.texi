@@ -15389,6 +15389,20 @@ flushleft
    indented
 @end example
 
+Posix requires that with an empty regular expression, the last non-empty
+regular expression from either an address specification or substitution
+command is applied.  However, busybox 1.6.1 complains when using a
+substitution command with a replacement containing a back-reference to
+an empty regular expression; the workaround is repeating the regular
+expression.
+
+@example
+@kbd {echo abc | busybox sed '/a\(b\)c/ s//\1/'}
+sed: No previous regexp.
+@kbd {echo abc | busybox sed '/a\(b\)c/ s/a\(b\)c/\1/'}
+b
+@end example
+
 
 @item @command{sed} (@samp{t})
 @c ---------------------------
