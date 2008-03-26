@@ -1547,10 +1547,18 @@ for ac_var in $ac_precious_vars; do
     ,);;
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
-	AS_MESSAGE([error: `$ac_var' has changed since the previous run:], 2)
-	AS_MESSAGE([  former value:  $ac_old_val], 2)
-	AS_MESSAGE([  current value: $ac_new_val], 2)
-	ac_cache_corrupted=:
+	# differences in whitespace do not lead to failure.
+	ac_old_val_w=`echo x $ac_old_val`
+	ac_new_val_w=`echo x $ac_new_val`
+	if test "$ac_old_val_w" != "$ac_new_val_w"; then
+	  AS_MESSAGE([error: `$ac_var' has changed since the previous run:], 2)
+	  ac_cache_corrupted=:
+	else
+	  AS_MESSAGE([warning: ignoring whitespace changes in `$ac_var' since the previous run:], 2)
+	  eval $ac_var=\$ac_old_val
+	fi
+	AS_MESSAGE([  former value:  `$ac_old_val'], 2)
+	AS_MESSAGE([  current value: `$ac_new_val'], 2)
       fi;;
   esac
   # Pass precious variables to config.status.

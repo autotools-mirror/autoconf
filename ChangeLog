@@ -1,3 +1,19 @@
+2008-03-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Warn, not fail on whitespace-only precious variable differences.
+	* lib/autoconf/general.m4 (_AC_ARG_VAR_VALIDATE): Output
+	precious variable differences less ambiguous with `ugly-quotes'.
+	If their settings differ only in whitespace, do not fail, but
+	reuse the old value.
+	* tests/torture.at (AT_CHECK_AC_ARG_VAR): Extend macro to allow
+	an optional status and expected-warning argument.  Fix m4
+	quotation for initial value.
+	(AC_ARG_VAR): Also test for whitespace-only differences, and
+	that the old value is retained in this case.
+	* doc/autoconf.texi (Setting Output Variables): Document this.
+	* NEWS: Update.
+	Report and initial patch by Paolo Bonzini.
+
 2008-03-26  Eric Blake  <ebb9@byu.net>
 
 	Document busybox sed bug.

@@ -46,16 +46,18 @@ AT_CLEANUP
 ## AC_ARG_VAR.  ##
 ## ------------ ##
 
-# AT_CHECK_AC_ARG_VAR(FIRST-VALUE, SECOND-VALUE)
-# ----------------------------------------------
+# AT_CHECK_AC_ARG_VAR(FIRST-VALUE, SECOND-VALUE, [STATUS = 1])
+# ------------------------------------------------------------
 # Check that AC_ARG_VAR caches the latest values, diagnoses
-# inconsistencies, and arms config.status.
+# inconsistencies, and arms config.status.  Check that recheck
+# returns STATUS, save configure output in files 'stdout' and 'stderr'
+# for further inspection.
 m4_define([AT_CHECK_AC_ARG_VAR],
 [rm -f config.cache
 
 # Initial value.
 m4_ifval([$1],
-	 [precious='m4_bpatsubst($1, [[']], ['\\''])'; export precious],
+	 [precious='m4_bpatsubst([$1], [[']], ['\\''])'; export precious],
 	 [unset precious])
 AT_CHECK_CONFIGURE([--config-cache -q])
 AT_CHECK([cat file], [], [`$1'
@@ -75,7 +77,7 @@ AT_CHECK([cat file], [], [`$1'
 m4_ifval([$2],
 	 [precious='$2'; export precious],
 	 [unset precious])
-AT_CHECK_CONFIGURE([--config-cache], [1], [], [ignore])
+AT_CHECK_CONFIGURE([--config-cache], [m4_default([$3], [1])], [stdout], [stderr])
 
 ])# AT_CHECK_AC_ARG_VAR
 
@@ -120,6 +122,13 @@ AT_CHECK_AC_ARG_VAR([apple of my {eye}], [orange of my eye])
 # Change a precious variable that contains all kinds of fun
 AT_CHECK_AC_ARG_VAR(['p  r	ec"iou$], [orange of my eye])
 dnl restore font-lock: "
+
+# Warn (but do not fail) about a whitespace-only change
+AT_CHECK_AC_ARG_VAR([	 apple  of	 my eye	 ], [apple of my eye],
+		    [0], ["has whitespace changes"])
+mv stdout configure-output
+AT_CHECK([grep "ignoring whitespace changes" stderr], [], [ignore])
+AT_CHECK([grep "precious:	 apple" configure-output], [], [ignore])
 
 AT_CLEANUP
 

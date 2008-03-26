@@ -8799,7 +8799,8 @@ configure: error: run `make distclean' and/or \
 
 @noindent
 and similarly if the variable is unset, or if its content is changed.
-
+If the content has white space changes only, then the error is degraded
+to a warning only, but the old value is reused.
 
 @item
 @var{variable} is kept during automatic reconfiguration

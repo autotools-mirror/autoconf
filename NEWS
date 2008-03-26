@@ -76,6 +76,9 @@ GNU Autoconf NEWS - User visible changes.
 ** `configure --help=recursive' now works in read-only trees and from
    unconfigured build trees.
 
+** If precious variables differ only in whitespace, then the cache consistency
+   check warns instead of fails, and reuses the old value.
+
 ** AT_BANNER is now documented.
 
 ** AT_SETUP now handles macro expansions properly when calculating line
