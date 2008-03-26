@@ -1971,6 +1971,13 @@ This macro is intended for use by future versions of commands like
 @command{autoreconf} that trace macro calls.  It should be called
 directly from @file{configure.ac} so that tools that install macros for
 @command{aclocal} can find the macros' declarations.
+
+Note that if you use @command{aclocal} from Automake to generate
+@file{aclocal.m4}, you must also set @code{ACLOCAL_AMFLAGS = -I
+@var{dir}} in your top-level @file{Makefile.am}.  Due to a limitation in
+the Autoconf implementation of @command{autoreconf}, these include
+directives currently must be set on a single line in @file{Makefile.am},
+without any backslash-newlines.
 @end defmac
 
 
