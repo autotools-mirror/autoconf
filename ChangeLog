@@ -1,3 +1,14 @@
+2008-03-28  Eric Blake  <ebb9@byu.net>
+
+	Update TODO based on completed tasks.
+	* TODO (AC_PROG_INSTALL takes multiple files): Done.
+	(AC_GNU_SOURCE deprecation): Done, see AC_USE_SYSTEM_EXTENSIONS.
+	(AC_COMPILE_IFELSE documentation): Done.
+	(Tracing builtins): Done, now that we require M4 1.4.5.
+	(AC_PROG_CC_POSIX suggestion, providing header files)
+	(AC_TYPE_SIGNAL): Not needed; gnulib's approach is better.
+	(cache consistency): Done with precious variables.
+
 2008-03-26  Eric Blake  <ebb9@byu.net>
 
 	Document --trace=macro:format in --help output.

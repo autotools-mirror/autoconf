@@ -13,18 +13,6 @@ these suggestions... their presence here doesn't imply my endorsement.
 and the like, don't have a consistent way to handle multi-line
 arguments.  Fix, test, and document.
 
-** AC_PROG_INSTALL
-This test should be extended to check that install supports the GNU
-Install syntax: install FILES... DIR.  This will relieve everybody
-form having to use mkinstalldirs to create the directories, as install
-does it itself.  install-sh is already handling this case.  This also
-makes it simple not to create the directories where nothing will be
-installed because of configuration options, which is next to
-impossible using the current setting.
-
-In other words: everything is ready (install-sh and Automake), we just
-need a good reimplementation of AC_PROG_INSTALL.
-
 ** --target & AC_ARG_PROGRAM
 Shouldn't *any* `program' be installed as `$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
@@ -53,9 +41,6 @@ features (currently ISO C99) plus support for all vendor extensions,
 even if they are slightly incompatible with C99.  The basic idea here
 is that AC_PROG_CC should disable pedanticisms and should enable
 extensions.
-
-** AC_GNU_SOURCE, AC_AIX, and AC_MINIX
-Deprecate these, as they will be superseded by the AC_PROG_CC changes.
 
 
 * Later
@@ -107,9 +92,6 @@ I have still not understood what's the difference  between the two
 which requires to have two different sources: AC_LANG_CALL and
 AC_LANG_FUNC_LINK_TRY (which names seem to be inappropriate).
 Wouldn't one be enough?
-
-** Document AC_COMPILE_IFELSE, AC_LANG_PROGRAM etc.
-And make AC_TRY_COMPILE etc. obsolete.
 
 ** Libtool
 Define once for all the hooks they need, any redefinition of
@@ -240,32 +222,7 @@ this for translators.
 
 ** Tracing `builtin'
 F**k!  --trace FOO does not catch indir([FOO], $@)!
-
-** Tracing builtins
-GNU M4 1.4's tracing of builtins is buggy.  When run on this input:
-
-| divert(-1)
-| changequote([, ])
-| define([m4_eval], defn([eval]))
-| eval(1)
-| m4_eval(2)
-| undefine([eval])
-| m4_eval(3)
-
-it behaves this way:
-
-| % m4 input.m4 -da -t eval
-| m4trace: -1- eval(1)
-| m4trace: -1- m4_eval(2)
-| m4trace: -1- m4_eval(3)
-| %
-
-Conversely:
-
-| % m4 input.m4 -da -t m4_eval
-| %
-
-------------------------------------------------------------------------------
+Fixed in M4 1.6, but we can't rely on it yet.
 
 * Autoconf 3
 
@@ -354,11 +311,6 @@ require a specific AC_ tests, but a specialized AS_ macro.
 
 ------------------------------------------------------------------------------
 
-* Add AC_PROG_CC_POSIX to replace the current ad-hoc macros for AIX,
-  Minix, ISC, etc.
-
-------------------------------------------------------------------------------
-
 * Select the right CONFIG_SHELL automatically (for Ultrix, Lynx especially.)
 
 ------------------------------------------------------------------------------
@@ -369,8 +321,6 @@ require a specific AC_ tests, but a specialized AS_ macro.
 ------------------------------------------------------------------------------
 
 * Mike Haertel's suggestions:
-
-** Provide header files containing decls for alloca, strings, etc.
 
 ** Cross compiling:
 
@@ -393,12 +343,6 @@ config.site.
 
 * Provide a way to create a config.h *and* set the DEFS variable from within
 the same configure script.
-
-------------------------------------------------------------------------------
-
-For AC_TYPE_SIGNAL signal handlers, provide a way for code to know
-whether to do "return 0" or "return" (int vs void) to avoid compiler
-warnings.  (Roland McGrath)
 
 ------------------------------------------------------------------------------
 
@@ -542,22 +486,6 @@ Slaven Rezic <eserte@cabulja.herceg.de>
 
 ------------------------------------------------------------------------------
 
-Cache consistency checking: ignore cache if environment
-(CC or PATH) differs.
-From Mike Haertel
-
-So we need a general mechanism for storing variables' values in the cache,
-and checking if they are the same after reading the cache.  Then we can add
-to the list of variables as we come across the need.  So far we want
-LD_LIBRARY_PATH and the internal variables for some of (all?) the args.
-From: roland@gnu.ai.mit.edu (Roland McGrath)
-
-Hmm.  That list might include LD_LIBRARY_PATH, LD_RUN_PATH (for solaris),
-and PATH.  I can't think of any others so far.
-From: friedman@splode.com (Noah Friedman)
-
-------------------------------------------------------------------------------
-
 Every user running X11 usually has a directory like *X11* in his PATH
 variable. By replacing bin by include, you can find good places to
 look for the include files or libraries.
@@ -651,8 +579,8 @@ with autoconf scripts.
 
 ------------------------------------------------------------------------------
 
-Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2007 Free
-Software Foundation, Inc.
+Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2007, 2008
+Free Software Foundation, Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
