@@ -1,3 +1,11 @@
+2008-03-28  Peter O'Gorman  <peter@pogma.com>
+
+       Find X11 on Mac OS X too.
+       * lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT,_AC_PATH_X_XMKMF):
+       Check for libX11 with extensions dylib la and dll too.
+       * THANKS: Update.
+       Reported by Martin Costabel.
+
 2008-03-28  Eric Blake  <ebb9@byu.net>
 
 	Update TODO based on completed tasks.
