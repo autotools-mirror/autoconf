@@ -91,7 +91,7 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Autoconf now requires GNU M4 1.4.5 or later.  Earlier versions of M4 have
    a bug in macro tracing that interferes with the interaction between
-   Autoconf and Automake.  GNU M4 1.4.8 or later is recommended.  The
+   Autoconf and Automake.  GNU M4 1.4.11 or later is recommended.  The
    configure search for a working M4 is improved.
 
 ** Documentation for m4sugar is improved.
