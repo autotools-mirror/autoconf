@@ -46,7 +46,7 @@ rm -rf 'tdir /'
 mkdir 'tdir ' && touch 'tdir /tfile' 2>/dev/null
 if test -f 'tdir /tfile'; then
   func_sanitize_dir_name () { echo "$@"; }
-  rm -rf 'tdir /'
 else
   func_sanitize_dir_name () { echo "$@" | sed 's/  *$//'; }
 fi
+rm -rf 'tdir /'

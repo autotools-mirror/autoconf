@@ -1,5 +1,13 @@
 2008-04-03  Eric Blake  <ebb9@byu.net>
 
+	More maintainer tweaks: pass 'make maintainer-distcheck'.
+	* GNUmakefile (_is-dist-target): Sync from upstream.
+	* build-aux/vc-list-files: Sync from upstream, yet again.
+	* tests/atlocal.in (unsupported_fs_chars): Always remove tdir.
+	* tests/Makefile.am (EXTRA_DIST): Don't distribute the built
+	package.m4.
+	* lib/autoconf/general.m4 (_AC_INIT_COPYRIGHT): Bump year.
+
 	Fix VPATH 'make syntax-check'.
 	* maint.mk (VC_LIST, VC_LIST_EXCEPT, sc_changelog)
 	(sc_prohibit_jm_in_m4, makefile-check): Support VPATH.

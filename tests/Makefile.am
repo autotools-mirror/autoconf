@@ -16,10 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# We don't actually distribute the testsuite, since one only
-# needs m4 to build it, m4 being required anyway to install Autoconf.
+# We don't actually distribute the built testsuite or package.m4, since one
+# only needs m4 to build them, and m4 is required to install Autoconf.
+# But if you are borrowing from this file for setting up autotest in your
+# project, remember to distribute both testsuite and package.m4.
 EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
-	     atlocal.in package.m4 wrapper.as
+	     atlocal.in wrapper.as
 
 # Running the uninstalled scripts.  Build them upon `all', for the manpages.
 noinst_SCRIPTS = $(wrappers)
