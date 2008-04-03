@@ -31,10 +31,14 @@ GIT = git
 VC = $(GIT)
 VC-tag = git tag -s -m '$(VERSION)'
 
-VC_LIST = build-aux/vc-list-files
+VC_LIST = $(srcdir)/build-aux/vc-list-files -C $(srcdir)
 
 VC_LIST_EXCEPT = \
-  $(VC_LIST) | if test -f .x-$@; then grep -vEf .x-$@; else grep -v ChangeLog; fi
+  $(VC_LIST) | if test -f $(srcdir)/.x-$@; then	\
+    grep -vEf $(srcdir)/.x-$@;			\
+  else						\
+    grep -v ChangeLog;				\
+  fi
 
 ifeq ($(origin prev_version_file), undefined)
   prev_version_file = $(srcdir)/.prev-version
@@ -63,7 +67,7 @@ export LC_ALL = C
 
 # Collect the names of rules starting with `sc_'.
 syntax-check-rules := $(shell sed -n 's/^\(sc_[a-zA-Z0-9_-]*\):.*/\1/p' \
-                        $(srcdir)/$(ME))
+			$(srcdir)/$(ME))
 .PHONY: $(syntax-check-rules)
 
 local-checks-available = \
@@ -225,7 +229,7 @@ sc_obsolete_symbols:
 
 # Each nonempty line must start with a year number, or a TAB.
 sc_changelog:
-	@grep -n '^[^12	]' $$(find . -maxdepth 2 -name ChangeLog) &&	\
+	@grep -n '^[^12	]' $$(find $(srcdir) -maxdepth 2 -name ChangeLog) && \
 	  { echo '$(ME): found unexpected prefix in a ChangeLog' 1>&2;	\
 	    exit 1; } || :
 
@@ -251,7 +255,7 @@ endif
 # Make sure that none are inadvertently reintroduced.
 sc_prohibit_jm_in_m4:
 	@grep -nE 'jm_[A-Z]'					\
-		$$($(VC_LIST) $(srcdir)/m4 |grep '\.m4$$') &&	\
+		$$($(VC_LIST) m4 |grep '\.m4$$') &&		\
 	    { echo '$(ME): do not use jm_ in m4 macro names'	\
 	      1>&2; exit 1; } || :
 
@@ -364,7 +368,7 @@ check-AUTHORS:
 # not @...@ in Makefile.am, now that we can rely on automake
 # to emit a definition for each substituted variable.
 makefile-check:
-	grep -nE '@[A-Z_0-9]+@' `find . -name Makefile.am` \
+	grep -nE '@[A-Z_0-9]+@' `find $(srcdir) -name Makefile.am` \
 	  && { echo '$(ME): use $$(...), not @...@' 1>&2; exit 1; } || :
 
 news-date-check: NEWS
@@ -421,7 +425,9 @@ po-check:
 # the English word `and', the string must be marked with `N_ (...)' so that
 # gettext recognizes it as a string requiring translation.
 author_mark_check:
-	@grep -n '^# *define AUTHORS "[^"]* and ' src/*.c |grep -v ' N_ (' && \
+	@shopt -s nullglob;						\
+	grep -n '^# *define AUTHORS "[^"]* and ' src/*.c /dev/null	\
+	  | grep -v ' N_ (' &&						\
 	  { echo '$(ME): enclose the above strings in N_ (...)' 1>&2; \
 	    exit 1; } || :
 

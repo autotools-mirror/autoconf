@@ -1,5 +1,12 @@
 2008-04-03  Eric Blake  <ebb9@byu.net>
 
+	Fix VPATH 'make syntax-check'.
+	* maint.mk (VC_LIST, VC_LIST_EXCEPT, sc_changelog)
+	(sc_prohibit_jm_in_m4, makefile-check): Support VPATH.
+	(author_mark_check): Avoid error message.
+	* build-aux/vc-list-files: Sync from upstream again.
+	* build-aux/texinfo.tex: Likewise.
+
 	Sync files from upstream, and pass 'make syntax-check'.
 	* config/announce-gen: Move...
 	* build-aux/announce-gen: ...here, and sync from gnulib.
