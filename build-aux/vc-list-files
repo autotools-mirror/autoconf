@@ -1,7 +1,7 @@
 #!/bin/sh
-# List the specified version-controlled files.
+# List version-controlled file names.
 
-# Copyright (C) 2006 Free Software Foundation, Inc.
+# Copyright (C) 2006-2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,41 +18,40 @@
 
 
 # List the specified version-controlled files.
-# With no argument, list them all.
+# With no argument, list them all.  With a single DIRECTORY argument,
+# list the version-controlled files in that directory.
 # This script must be run solely from the top of a $srcdir build directory.
 
-# If there's an argument, it must be a single, "."-relative directory name,
-# with no trailing slashes.  In mercurial mode, it's used as part of a
-# "grep" pattern (prepend "^", append "/"), and in cvs mode, it's simply
-# used as an argument to the cvsu script.
+# If there's an argument, it must be a single, "."-relative directory name.
+# cvsu is part of the cvsutils package: http://www.red-bean.com/cvsutils/
 
-include_prefix=
+dir=
 case $# in
   0) ;;
-  1) include_prefix=$1 ;;
-  *) echo "$0: too many arguments" 1>&2; exit 1 ;;
+  1) dir=$1 ;;
+  *) echo "$0: too many arguments" 1>&2
+     echo "Usage: $0 [DIR]" 1>&2; exit 1;;
 esac
 
+test "x$dir" = x && dir=.
+
 if test -d .git; then
-  if test "x$include_prefix" = x; then
-    git-ls-files | cut -d ' ' -f 3
-  else
-    git-ls-files | cut -d ' ' -f 3 | grep "^$include_prefix/"
-  fi
+  exec git ls-files "$dir"
 elif test -d .hg; then
-  if test "x$include_prefix" = x; then
-    hg manifest | cut -d ' ' -f 3
+  exec hg locate "$dir/*"
+elif test -d CVS; then
+  if test -x build-aux/cvsu; then
+    build-aux/cvsu --find --types=AFGM "$dir"
   else
-    hg manifest | cut -d ' ' -f 3 | grep "^$include_prefix/"
+    awk -F/ '{				\
+	if (!$1 && $3 !~ /^-/) {	\
+	  f=FILENAME;			\
+	  sub(/CVS\/Entries/, "", f);	\
+	  print f $2;			\
+	}}'				\
+      $(find ${*-*} -name Entries -print) /dev/null;
   fi
-elif test -x build-aux/cvsu; then
-  build-aux/cvsu --find --types=AFGM $include_prefix
 else
-  awk -F/ '{				\
-      if (!$1 && $3 !~ /^-/) {		\
-	f=FILENAME;			\
-	sub(/CVS\/Entries/, "", f);	\
-	print f $2;			\
-      }}'				\
-    $(find ${*-*} -name Entries -print) /dev/null;
+  echo "$0: Failed to determine type of version control used in "`pwd` 1>&2
+  exit 1
 fi

@@ -27,7 +27,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     BUGS \
 	     GNUmakefile maint.mk cfg.mk \
 	     build-aux/git-version-gen \
-	     config/announce-gen config/prev-version.txt
+	     build-aux/announce-gen .prev-version
 
 MAINTAINERCLEANFILES = $(srcdir)/INSTALL
 

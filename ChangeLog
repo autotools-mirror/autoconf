@@ -1,3 +1,35 @@
+2008-04-03  Eric Blake  <ebb9@byu.net>
+
+	Sync files from upstream, and pass 'make syntax-check'.
+	* config/announce-gen: Move...
+	* build-aux/announce-gen: ...here, and sync from gnulib.
+	* Makefile.am (EXTRA_DIST): Adjust accordingly.
+	* cfg.mk (announce_gen): Likewise.
+	(prev_version_file): Delete, relying on default in maint.mk.
+	(gpg_key_ID): New macro.
+	(url_dir_list): Rewrite to match coreutils.
+	* config/prev-version.txt: Move...
+	* .prev-version: ...here, and adjust to 2.61.
+	* build-aux/vc-list-files: Sync from coreutils.
+	* maint.mk: Resynchronize with coreutils, where possible.
+	(ME): Remove $(srcdir) from definition.
+	(CVS): Delete.
+	(GIT, VC, VC-tag): New macros.
+	(CVS_LIST, CVS_LIST_EXCEPT): Rename...
+	(VC_LIST, VC_LIST_EXCEPT): ...to this.
+	(cvs-tag-check): Delete.
+	(cvs-diff-check): Rename...
+	(vc-diff-check): ...to this.
+	(sc_file_system): Allow FHS acronym.
+	* doc/autoconf.texi (Particular Functions): Recommend
+	unconditional <config.h>.
+	* build-aux/config.guess: Sync from upstream (manually).
+	* build-aux/config.sub: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+	* doc/make-stds.texi: Likewise.
+	* doc/standards.texi: Likewise.
+	* .gitattributes: Ignore whitespace problems in upstream files.
+
 2008-04-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Mention awk %u
@@ -19,11 +51,11 @@
 
 2008-03-28  Peter O'Gorman  <peter@pogma.com>
 
-       Find X11 on Mac OS X too.
-       * lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT,_AC_PATH_X_XMKMF):
-       Check for libX11 with extensions dylib la and dll too.
-       * THANKS: Update.
-       Reported by Martin Costabel.
+	Find X11 on Mac OS X too.
+	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT,_AC_PATH_X_XMKMF):
+	Check for libX11 with extensions dylib la and dll too.
+	* THANKS: Update.
+	Reported by Martin Costabel.
 
 2008-03-28  Eric Blake  <ebb9@byu.net>
 

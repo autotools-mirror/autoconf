@@ -1,26 +1,25 @@
 # -*-Makefile-*-
-# This Makefile fragment is shared between the coreutils,
-# CPPI, Bison, and Autoconf.
+# This Makefile fragment tries to be general-purpose enough to be
+# used by at least coreutils, idutils, CPPI, Bison, and Autoconf.
 
-# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2008 Free Software
-# Foundation, Inc.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+## Copyright (C) 2001-2008 Free Software Foundation, Inc.
+##
+## This program is free software: you can redistribute it and/or modify
+## it under the terms of the GNU General Public License as published by
+## the Free Software Foundation, either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+##
+## You should have received a copy of the GNU General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # This is reported not to work with make-3.79.1
 # ME := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
-ME := $(srcdir)/maint.mk
+ME := maint.mk
 
 # Do not save the original name or timestamp in the .tar.gz file.
 # Use --rsyncable if available.
@@ -28,24 +27,24 @@ gzip_rsyncable := \
   $(shell gzip --help 2>/dev/null|grep rsyncable >/dev/null && echo --rsyncable)
 GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
 
-CVS = cvs
+GIT = git
+VC = $(GIT)
+VC-tag = git tag -s -m '$(VERSION)'
 
-# cvsu is part of the cvsutils package: http://www.red-bean.com/cvsutils/
-CVS_LIST = build-aux/vc-list-files
+VC_LIST = build-aux/vc-list-files
 
-CVS_LIST_EXCEPT = \
-  $(CVS_LIST) | if test -f .x-$@; then grep -vEf .x-$@; else grep -v ChangeLog; fi
+VC_LIST_EXCEPT = \
+  $(VC_LIST) | if test -f .x-$@; then grep -vEf .x-$@; else grep -v ChangeLog; fi
 
 ifeq ($(origin prev_version_file), undefined)
-  prev_version_file = .prev-version
+  prev_version_file = $(srcdir)/.prev-version
 endif
 
 PREV_VERSION := $(shell cat $(prev_version_file))
 VERSION_REGEXP = $(subst .,\.,$(VERSION))
 
-tag-package = $(shell echo "$(PACKAGE)" | tr '[:lower:]' '[:upper:]')
-tag-this-version = $(subst .,_,$(VERSION))
-this-cvs-tag = $(tag-package)-$(tag-this-version)
+this-vc-tag = v$(VERSION)
+this-vc-tag-regexp = v$(VERSION_REGEXP)
 my_distdir = $(PACKAGE)-$(VERSION)
 
 # Old releases are stored here.
@@ -62,13 +61,11 @@ export LC_ALL = C
 ## Sanity checks.  ##
 ## --------------- ##
 
-# FIXME: add a check to prohibit definition in src/*.c of symbols defined
-# in system.h.  E.g. today I removed from tail.c a useless definition of
-# ENOSYS.  It was useless because system.h ensures it's defined.
+# Collect the names of rules starting with `sc_'.
+syntax-check-rules := $(shell sed -n 's/^\(sc_[a-zA-Z0-9_-]*\):.*/\1/p' \
+                        $(srcdir)/$(ME))
+.PHONY: $(syntax-check-rules)
 
-# Checks that don't require cvs.
-# Run `changelog-check' last, as previous test may reveal problems requiring
-# new ChangeLog entries.
 local-checks-available = \
   po-check copyright-check writable-files m4-check author_mark_check \
   changelog-check patch-check strftime-check $(syntax-check-rules) \
@@ -76,13 +73,9 @@ local-checks-available = \
   makefile-check check-AUTHORS
 .PHONY: $(local-checks-available)
 
-local-check = $(filter-out $(local-checks-to-skip), $(local-checks-available))
+local-check := $(filter-out $(local-checks-to-skip), $(local-checks-available))
 
-# Collect the names of rules starting with `sc_'.
-syntax-check-rules := $(shell sed -n 's/^\(sc_[a-zA-Z0-9_-]*\):.*/\1/p' $(ME))
-.PHONY: $(syntax-check-rules)
-
-syntax-check: $(syntax-check-rules)
+syntax-check: $(local-check)
 #	@shopt -s nullglob;						\
 #	grep -nE '#  *include <(limits|std(def|arg|bool))\.h>'		\
 #	    $$(find -type f -name '*.[chly]') /dev/null &&		\
@@ -118,16 +111,16 @@ sc_cast_of_alloca_return_value:
 	    exit 1; } || :
 
 sc_space_tab:
-	@grep -n '[ ]	' $$($(CVS_LIST_EXCEPT)) &&			\
+	@grep -n '[ ]	' $$($(VC_LIST_EXCEPT)) &&			\
 	  { echo '$(ME): found SPACE-TAB sequence; remove the SPACE'	\
 		1>&2; exit 1; } || :
 
-# Don't use the old ato* functions in `real' code.
+# Don't use *scanf or the old ato* functions in `real' code.
 # They provide no error checking mechanism.
 # Instead, use strto* functions.
 sc_prohibit_atoi_atof:
-	@grep -nE '\<ato([filq]|ll)\>' $$($(CVS_LIST_EXCEPT)) &&	\
-	  { echo '$(ME): do not use ato''f, ato''i, ato''l, ato''ll, or ato''q'	\
+	@grep -nE '\<([fs]?scanf|ato([filq]|ll))\>' $$($(VC_LIST_EXCEPT)) && \
+	  { echo '$(ME): do not use *scan''f, ato''f, ato''i, ato''l, ato''ll, ato''q, or ss''canf'	\
 		1>&2; exit 1; } || :
 
 # Using EXIT_SUCCESS as the first argument to error is misleading,
@@ -139,36 +132,92 @@ sc_error_exit_success:
 	    exit 1; } || :
 
 sc_file_system:
-	@grep -ni 'file''system' $$($(CVS_LIST_EXCEPT)) &&		\
+	@grep -ni 'file''system' $$($(VC_LIST_EXCEPT))			\
+	  | grep -v 'File''system Hierarchy Standard' &&		\
 	  { echo '$(ME): found use of "file''system";'			\
 	    'rewrite to use "file system"' 1>&2;			\
 	    exit 1; } || :
 
-sc_no_if_have_config_h:
-	@grep -n '^# *if HAVE_CONFIG_H' $$($(CVS_LIST_EXCEPT)) &&	\
-	  { echo '$(ME): found use of #if HAVE_CONFIG_H; use #ifdef'	\
+sc_no_have_config_h:
+	@grep -n '^# *if.*HAVE''_CONFIG_H' $$($(VC_LIST_EXCEPT)) &&	\
+	  { echo '$(ME): found use of HAVE''_CONFIG_H; remove'		\
 		1>&2; exit 1; } || :
 
 # Nearly all .c files must include <config.h>.
 sc_require_config_h:
-	@grep -L '^# *include <config\.h>' /dev/null			\
-		$$($(CVS_LIST_EXCEPT) | grep '\.c$$')			\
-	    | grep -v /dev/null &&					\
+	@if $(VC_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then		\
+	  grep -L '^# *include <config\.h>'				\
+		$$($(VC_LIST_EXCEPT) | grep '\.c$$')			\
+	      | grep . &&						\
 	  { echo '$(ME): the above files do not include <config.h>'	\
-		1>&2; exit 1; } || :
+		1>&2; exit 1; } || :;					\
+	else :;								\
+	fi
+
+# To use this "command" macro, you must first define two shell variables:
+# h: the header, enclosed in <> or ""
+# re: a regular expression that matches IFF something provided by $h is used.
+define _header_without_use
+  h_esc=`echo "$$h"|sed 's/\./\\./'`;					\
+  if $(VC_LIST_EXCEPT) | grep '\.c$$' > /dev/null; then			\
+    files=$$(grep -l '^# *include '"$$h_esc"				\
+	     $$($(VC_LIST_EXCEPT) | grep '\.c$$')) &&			\
+    grep -LE "$$re" $$files | grep . &&					\
+      { echo "$(ME): the above files include $$h but don't use it"	\
+	1>&2; exit 1; } || :;						\
+  else :;								\
+  fi
+endef
 
 # Prohibit the inclusion of assert.h without an actual use of assert.
 sc_prohibit_assert_without_use:
-	@files=$$(grep -l '# *include <assert\.h>' /dev/null		\
-		    $$($(CVS_LIST_EXCEPT) | grep '\.c$$')) &&		\
-	grep -L '\<assert (' $$files /dev/null				\
-	    | grep -v /dev/null &&					\
-	  { echo "$(ME): the above files include <assert.h> but don't use it" \
-		1>&2; exit 1; } || :
+	@h='<assert.h>' re='\<assert *\(' $(_header_without_use)
+
+# Prohibit the inclusion of getopt.h without an actual use.
+sc_prohibit_getopt_without_use:
+	@h='<getopt.h>' re='\<getopt(_long)? *\(' $(_header_without_use)
+
+# Don't include quotearg.h unless you use one of its functions.
+sc_prohibit_quotearg_without_use:
+	@h='"quotearg.h"' re='\<quotearg(_[^ ]+)? *\(' $(_header_without_use)
+
+# Don't include quote.h unless you use one of its functions.
+sc_prohibit_quote_without_use:
+	@h='"quote.h"' re='\<quote(_n)? *\(' $(_header_without_use)
+
+# Don't include this header unless you use one of its functions.
+sc_prohibit_long_options_without_use:
+	@h='"long-options.h"' re='\<parse_long_options *\(' \
+	  $(_header_without_use)
+
+# Don't include this header unless you use one of its functions.
+sc_prohibit_inttostr_without_use:
+	@h='"inttostr.h"' re='\<(off|[iu]max|uint)tostr *\(' \
+	  $(_header_without_use)
+
+# Don't include this header unless you use one of its functions.
+sc_prohibit_error_without_use:
+	@h='"error.h"' \
+	re='\<error(_at_line|_print_progname|_one_per_line|_message_count)? *\('\
+	  $(_header_without_use)
+
+sc_prohibit_safe_read_without_use:
+	@h='"safe-read.h"' re='(\<SAFE_READ_ERROR\>|\<safe_read *\()' \
+	  $(_header_without_use)
+
+sc_prohibit_argmatch_without_use:
+	@h='"argmatch.h"' \
+	re='(\<(ARRAY_CARDINALITY|X?ARGMATCH(|_TO_ARGUMENT|_VERIFY))\>|\<argmatch(_exit_fn|_(in)?valid) *\()' \
+	  $(_header_without_use)
+
+sc_prohibit_root_dev_ino_without_use:
+	@h='"root-dev-ino.h"' \
+	re='(\<ROOT_DEV_INO_(CHECK|WARN)\>|\<get_root_dev_ino *\()' \
+	  $(_header_without_use)
 
 sc_obsolete_symbols:
 	@grep -nE '\<(HAVE''_FCNTL_H|O''_NDELAY)\>'			\
-	     $$($(CVS_LIST_EXCEPT)) &&					\
+	     $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo '$(ME): do not use HAVE''_FCNTL_H or O''_NDELAY'	\
 		1>&2; exit 1; } || :
 
@@ -202,14 +251,14 @@ endif
 # Make sure that none are inadvertently reintroduced.
 sc_prohibit_jm_in_m4:
 	@grep -nE 'jm_[A-Z]'					\
-		$$($(CVS_LIST) $(srcdir)/m4 |grep '\.m4$$') &&	\
+		$$($(VC_LIST) $(srcdir)/m4 |grep '\.m4$$') &&	\
 	    { echo '$(ME): do not use jm_ in m4 macro names'	\
 	      1>&2; exit 1; } || :
 
 sc_root_tests:
 	@t1=sc-root.expected; t2=sc-root.actual;			\
 	grep -nl '^PRIV_CHECK_ARG=require-root'				\
-	  $$($(CVS_LIST) tests) |sed s/tests/./ |sort > $$t1;		\
+	  $$($(VC_LIST) tests) |sed s/tests/./ |sort > $$t1;		\
 	sed -n 's,	cd \([^ ]*\) .*MAKE..check TESTS=\(.*\),./\1/\2,p' \
 	  $(srcdir)/tests/Makefile.am |sort > $$t2;			\
 	diff -u $$t1 $$t2 || diff=1;					\
@@ -228,7 +277,7 @@ sc_system_h_headers:
 	    | sed 's/ .*//;;s/^["<]/^# *include [<"]/;s/\.h[">]$$/\\.h[">]/' \
 	  ) &&								\
 	  grep -nE -f "$pat"						\
-	      $$($(CVS_LIST) src |					\
+	      $$($(VC_LIST) src |					\
 		 grep -Ev '((copy|system)\.h|parse-gram\.c)$$')		\
 	    && { echo '$(ME): the above are already included via system.h'\
 		  1>&2;  exit 1; } || :;				\
@@ -237,12 +286,12 @@ sc_system_h_headers:
 sc_sun_os_names:
 	@grep -nEi \
 	    'solaris[^[:alnum:]]*2\.(7|8|9|[1-9][0-9])|sunos[^[:alnum:]][6-9]' \
-	    $$($(CVS_LIST_EXCEPT)) &&					\
+	    $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo '$(ME): found misuse of Sun OS version numbers' 1>&2;	\
 	    exit 1; } || :
 
 sc_the_the:
-	@grep -ni '\<the ''the\>' $$($(CVS_LIST_EXCEPT)) &&		\
+	@grep -ni '\<the ''the\>' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): found use of "the ''the";' 1>&2;		\
 	    exit 1; } || :
 
@@ -250,17 +299,17 @@ sc_tight_scope:
 	test ! -d src || $(MAKE) -C src $@
 
 sc_trailing_blank:
-	@grep -n '[	 ]$$' $$($(CVS_LIST_EXCEPT)) &&			\
+	@grep -n '[	 ]$$' $$($(VC_LIST_EXCEPT)) &&			\
 	  { echo '$(ME): found trailing blank(s)'			\
 		1>&2; exit 1; } || :
 
 # Match lines like the following, but where there is only one space
 # between the options and the description:
 #   -D, --all-repeated[=delimit-method]  print all duplicate lines\n
-longopt_re = --[a-z][0-9A-Za-z-]*(\[=[0-9A-Za-z-]*\])?
+longopt_re = --[a-z][0-9A-Za-z-]*(\[?=[0-9A-Za-z-]*\]?)?
 sc_two_space_separator_in_usage:
 	@grep -nE '^   *(-[A-Za-z],)? $(longopt_re) [^ ].*\\$$'		\
-	    $$($(CVS_LIST_EXCEPT)) &&					\
+	    $$($(VC_LIST_EXCEPT)) &&					\
 	  { echo "$(ME): help2man requires at least two spaces between"; \
 	    echo "$(ME): an option and its description"; \
 		1>&2; exit 1; } || :
@@ -269,7 +318,7 @@ sc_two_space_separator_in_usage:
 # This won't find any for which error's format string is on a separate line.
 sc_unmarked_diagnostics:
 	@grep -nE							\
-	    '\<error \([^"]*"[^"]*[a-z]{3}' $$($(CVS_LIST_EXCEPT))	\
+	    '\<error \([^"]*"[^"]*[a-z]{3}' $$($(VC_LIST_EXCEPT))	\
 	  | grep -v '_''(' &&						\
 	  { echo '$(ME): found unmarked diagnostic(s)' 1>&2;		\
 	    exit 1; } || :
@@ -277,7 +326,7 @@ sc_unmarked_diagnostics:
 # Avoid useless parentheses like those in this example:
 # #if defined (SYMBOL) || defined (SYM2)
 sc_useless_cpp_parens:
-	@grep -n '^# *if .*defined *(' $$($(CVS_LIST_EXCEPT)) &&	\
+	@grep -n '^# *if .*defined *(' $$($(VC_LIST_EXCEPT)) &&		\
 	  { echo '$(ME): found useless parentheses in cpp directive'	\
 		1>&2; exit 1; } || :
 
@@ -319,22 +368,22 @@ makefile-check:
 	  && { echo '$(ME): use $$(...), not @...@' 1>&2; exit 1; } || :
 
 news-date-check: NEWS
-	today=`date +%Y-%m-%d`;	\
-	if head NEWS | grep '^\*.* $(VERSION_REGEXP) ('$$today')' \
-	    >/dev/null; then \
-	  :; \
-	else \
-	  echo "version or today's date is not in NEWS" 1>&2; \
-	  exit 1; \
+	today=`date +%Y-%m-%d`;						\
+	if head NEWS | grep '^\*.* $(VERSION_REGEXP) ('$$today')'	\
+	    >/dev/null; then						\
+	  :;								\
+	else								\
+	  echo "version or today's date is not in NEWS" 1>&2;		\
+	  exit 1;							\
 	fi
 
 changelog-check:
-	if head ChangeLog | grep 'Version $(VERSION_REGEXP)\.$$' \
-	    >/dev/null; then \
-	  :; \
-	else \
-	  echo "$(VERSION) not in ChangeLog" 1>&2; \
-	  exit 1; \
+	if head ChangeLog | grep 'Version $(VERSION_REGEXP)\.$$'	\
+	    >/dev/null; then						\
+	  :;								\
+	else								\
+	  echo "$(VERSION) not in ChangeLog" 1>&2;			\
+	  exit 1;							\
 	fi
 
 m4-check:
@@ -350,9 +399,10 @@ po-check:
 	  grep -E -v '^(#|$$)' po/POTFILES.in				\
 	    | grep -v '^src/false\.c$$' | sort > $@-1;			\
 	  files=;							\
-	  for file in $$($(CVS_LIST_EXCEPT)) lib/*.[ch]; do		\
+	  for file in $$($(VC_LIST_EXCEPT)) lib/*.[ch]; do		\
 	    case $$file in						\
 	    djgpp/* | man/*) continue;;					\
+	    */c99-to-c89.diff) continue;;				\
 	    esac;							\
 	    case $$file in						\
 	    *.[ch])							\
@@ -361,7 +411,8 @@ po-check:
 	    esac;							\
 	    files="$$files $$file";					\
 	  done;								\
-	  grep -E -l '\bN?_\([^)"]*("|$$)' $$files | sort -u > $@-2;	\
+	  grep -E -l '\b(N?_|gettext *)\([^)"]*("|$$)' $$files		\
+	    | sort -u > $@-2;						\
 	  diff -u $@-1 $@-2 || exit 1;					\
 	  rm -f $@-1 $@-2;						\
 	fi
@@ -409,37 +460,25 @@ copyright-check:
 	       exit 1; }; \
 	fi
 
-
-# Sanity checks with the CVS repository.
-cvs-tag-check:
-	echo $(this-cvs-tag); \
-	if $(CVS) -n log -h README | grep -e $(this-cvs-tag): >/dev/null; then \
-	  echo "$(this-cvs-tag) as already been used; not tagging" 1>&2; \
-	  exit 1; \
-	else :; fi
-
-cvs-diff-check:
-	if $(CVS) diff >cvs-diffs; then				\
-	  rm cvs-diffs;						\
-	else							\
+vc-diff-check:
+	(CDPATH=; cd $(srcdir) && $(VC) diff) > vc-diffs || :
+	if test -s vc-diffs; then				\
+	  cat vc-diffs;						\
 	  echo "Some files are locally modified:" 1>&2;		\
-	  cat cvs-diffs;					\
 	  exit 1;						\
+	else							\
+	  rm vc-diffs;						\
 	fi
 
-cvs-check: cvs-diff-check cvs-tag-check
+cvs-check: vc-diff-check
 
 maintainer-distcheck:
 	$(MAKE) distcheck
 	$(MAKE) my-distcheck
 
-
-# Tag before making distribution.  Also, don't make a distribution if
-# checks fail.  Also, make sure the NEWS file is up-to-date.
-# FIXME: use dist-hook/my-dist like distcheck-hook/my-distcheck.
-cvs-dist: $(local-check) cvs-check maintainer-distcheck
-	$(CVS) update po
-	$(CVS) tag -c $(this-cvs-tag)
+# Don't make a distribution if checks fail.
+# Also, make sure the NEWS file is up-to-date.
+vc-dist: $(local-check) cvs-check maintainer-distcheck
 	$(MAKE) dist
 
 # Use this to make sure we don't run these programs when building
@@ -491,9 +530,9 @@ announcement: NEWS ChangeLog $(rel-files)
 	    --curr=$(VERSION)						\
 	    --release-archive-directory=$(release_archive_dir)		\
 	    --gpg-key-id=$(gpg_key_ID)					\
-	    --news=NEWS							\
-	    $(addprefix --url-dir=, $(url_dir_list))			\
-
+	    --news=$(srcdir)/NEWS					\
+	    --bootstrap-tools=automake					\
+	    $(addprefix --url-dir=, $(url_dir_list))
 
 ## ---------------- ##
 ## Updating files.  ##
@@ -502,8 +541,8 @@ announcement: NEWS ChangeLog $(rel-files)
 ftp-gnu = ftp://ftp.gnu.org/gnu
 www-gnu = http://www.gnu.org
 
-# Use mv-if-change if you prefer it.
-move_if_change ?= mv
+# Use mv, if you don't have/want move-if-change.
+move_if_change ?= move-if-change
 
 
 # --------------------- #
@@ -547,7 +586,7 @@ emit_upload_commands:
 	@echo =====================================
 	@echo =====================================
 	@echo "$(srcdir)/build-aux/gnupload $(GNUPLOADFLAGS) \\"
-	@echo "    --to $(gnu_rel_host):coreutils \\"
+	@echo "    --to $(gnu_rel_host):$(PACKAGE) \\"
 	@echo "  $(rel-files)"
 	@echo '# send the /tmp/announcement e-mail'
 	@echo =====================================
@@ -562,11 +601,13 @@ alpha beta major: news-date-check changelog-check $(local-check)
 	  && { echo $(VERSION) | grep -E '^[0-9]+(\.[0-9]+)+$$'	\
 	       || { echo "invalid version string: $(VERSION)" 1>&2; exit 1;};}\
 	  || :
-	$(MAKE) cvs-dist
+	$(MAKE) vc-dist
 	$(MAKE) $(xd-delta)
 	$(MAKE) -s announcement RELEASE_TYPE=$@ > /tmp/announce-$(my_distdir)
 	ln $(rel-files) $(release_archive_dir)
 	chmod a-w $(rel-files)
 	$(MAKE) -s emit_upload_commands RELEASE_TYPE=$@
 	echo $(VERSION) > $(prev_version_file)
-	$(CVS) ci -m. $(prev_version_file)
+	$(VC) commit -m \
+	  '$(prev_version_file): Record previous version: $(VERSION).' \
+	  $(prev_version_file)

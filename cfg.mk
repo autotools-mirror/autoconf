@@ -23,19 +23,21 @@ export PATH = $(shell echo "`pwd`/tests:$$PATH")
 _autoreconf = autoreconf -i -v && rm -f INSTALL
 
 # Version management.
-prev_version_file = $(srcdir)/config/prev-version.txt
-announce_gen   = $(srcdir)/config/announce-gen
+announce_gen   = $(srcdir)/build-aux/announce-gen
 release_archive_dir = releases
 
 # Use alpha.gnu.org for alpha and beta releases.
 # Use ftp.gnu.org for major releases.
-gnu_ftp_host-alpha = alpha
-gnu_ftp_host-beta = alpha
-gnu_ftp_host-major = ftp
+gnu_ftp_host-alpha = alpha.gnu.org
+gnu_ftp_host-beta = alpha.gnu.org
+gnu_ftp_host-major = ftp.gnu.org
 gnu_rel_host = $(gnu_ftp_host-$(RELEASE_TYPE))
 
 url_dir_list = \
-  ftp://$(gnu_rel_host).gnu.org/gnu/autoconf
+  ftp://$(gnu_rel_host)/gnu/autoconf
+
+# The GnuPG ID of the key used to sign the tarballs.
+gpg_key_ID = F4850180
 
 # Files to update automatically.
 cvs_executable_files = \
@@ -62,4 +64,4 @@ executable-update: wget-update cvs-update autom4te-update
 
 # Tests not to run.
 local-checks-to-skip ?= \
-  sc_unmarked_diagnostics
+  changelog-check sc_unmarked_diagnostics

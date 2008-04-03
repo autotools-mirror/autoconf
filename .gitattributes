@@ -1,1 +1,11 @@
-ChangeLog merge=merge-changelog
+ChangeLog	merge=merge-changelog
+config.guess	-whitespace
+config.sub	-whitespace
+elisp-comp	-whitespace
+install-sh	-whitespace
+mdate-sh	-whitespace
+missing		-whitespace
+texinfo.tex	-whitespace
+fdl.texi	-whitespace
+make-stds.texi	-whitespace
+standards.texi	-whitespace
