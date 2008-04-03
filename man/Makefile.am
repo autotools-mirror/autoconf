@@ -1,6 +1,6 @@
 # Make Autoconf man pages.
 
-# Copyright (C) 2001, 2004-2007 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2004-2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@ dist_man_MANS = \
 EXTRA_DIST = $(dist_man_MANS:.1=.x) common.x
 MAINTAINERCLEANFILES = $(dist_man_MANS)
 
-# Depend on configure.ac to get version number changes.
-common_dep = $(top_srcdir)/configure.ac $(srcdir)/common.x
+# Depend on .version to get version number changes.
+common_dep = $(top_srcdir)/.version $(srcdir)/common.x
 binsrcdir = $(top_srcdir)/bin
 $(srcdir)/autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
 $(srcdir)/autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
@@ -57,6 +57,7 @@ SUFFIXES = .x .1
 	$(HELP2MAN) \
 	    --include=$*.x \
 	    --include=$(srcdir)/common.x \
+	    --source='$(PACKAGE_STRING)' \
 	    --output=$@.t `echo '$*' | sed 's,.*/,,'`
 	if sed $(remove_time_stamp) $@ >$@a.t 2>/dev/null && \
 	   sed $(remove_time_stamp) $@.t | cmp $@a.t - >/dev/null 2>&1; then \

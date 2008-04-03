@@ -1,5 +1,14 @@
 2008-04-03  Eric Blake  <ebb9@byu.net>
 
+	Fix version number generation in man pages.
+	* Makefile.am (EXTRA_DIST): Distribute .version.
+	(.version): New rule.
+	* man/Makefile.am (common_dep): Depend on .version, not
+	configure.ac.
+	(.x.1): Use package name for version string.
+	* GNUmakefile [!_have-Makefile]: Sync from upstream, again.
+	* build-aux/git-version-gen: Sync from upstream.
+
 	More maintainer tweaks: pass 'make maintainer-distcheck'.
 	* GNUmakefile (_is-dist-target): Sync from upstream.
 	* build-aux/vc-list-files: Sync from upstream, yet again.
