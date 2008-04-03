@@ -14541,6 +14541,14 @@ bar
 Either do not depend on such patterns (i.e., use @samp{/^(.*foo|bar)/},
 or use a simple test to reject such implementations.
 
+On @samp{ia64-hp-hpux11.23}, Awk mishandles @code{printf} conversions
+after @code{%u}:
+
+@example
+$ @kbd{awk 'BEGIN @{ printf "%u %d\n", 0, -1 @}'}
+0 0
+@end example
+
 @acronym{AIX} version 5.2 has an arbitrary limit of 399 on the
 length of regular expressions and literal strings in an Awk program.
 
