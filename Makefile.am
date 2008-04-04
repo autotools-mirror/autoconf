@@ -24,7 +24,7 @@ SUBDIRS = bin . lib doc tests man
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
-	     BUGS \
+	     BUGS COPYINGv3 \
 	     GNUmakefile maint.mk cfg.mk \
 	     build-aux/git-version-gen \
 	     build-aux/announce-gen build-aux/gnupload \

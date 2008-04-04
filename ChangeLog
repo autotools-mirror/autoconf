@@ -1,3 +1,16 @@
+2008-04-04  Stepan Kasal  <kasal@ucw.cz>
+	and Eric Blake  <ebb9@byu.net>
+
+	Return back to GPLv2+, until the text of the exceptions is
+	finalized, reverting the change from 2007-07-03 and the first
+	part of the change from 2007-07-20.
+	* COPYING: Revert to GPLv2.
+	* COPYINGv3: New file, since some auxiliary build tools, used for
+	building autoconf and not installed, are GPLv3.
+	* Makefile.am (EXTRA_DIST): Distribute COPYINGv3.
+	* NEWS: Remove mention of GPLv3.
+	* README: Clarify situation regarding GPLv3.
+
 2008-04-05  Eric Blake  <ebb9@byu.net>
 
 	Prepare for release.
