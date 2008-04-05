@@ -1,6 +1,7 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Major changes in Autoconf 2.61b (????-??-??)
+* Major changes in Autoconf 2.62 (2008-04-05) [stable]
+  Released by Eric Blake, based on git versions 2.61a.*.
 
 ** Many optimizations have been applied to make overall execution faster.
 
@@ -49,7 +50,7 @@ GNU Autoconf NEWS - User visible changes.
 ** AS_HELP_STRING no longer underquotes its first argument; it also handles
    the case where the first argument contains single-quoted commas.
    For example, "AS_HELP_STRING([-a, [--arg[=foo]]], [bar])" produces:
-     "  -a, --arg=[foo]         bar"
+     "  -a, --arg[=foo]         bar"
    Additionally, the macro now takes two additional arguments,
    indent-column and wrap-column; these should not normally be needed,
    but can be used to fine-tune how the output text is wrapped.
@@ -87,6 +88,9 @@ GNU Autoconf NEWS - User visible changes.
    a bug in macro tracing that interferes with the interaction between
    Autoconf and Automake.  GNU M4 1.4.11 or later is recommended.  The
    configure search for a working M4 is improved.
+
+** For portability with the eventual M4 2.0, macros should no longer use
+   anything larger than $9 to refer to arguments.
 
 ** Documentation for m4sugar is improved.
 
@@ -146,9 +150,6 @@ GNU Autoconf NEWS - User visible changes.
    'configure' with an unknown --enable-* or --with-* option.
    These warnings can be disabled with the new AC_DISABLE_OPTION_CHECKING
    macro, or by invoking 'configure' with --disable-option-checking.
-
-** For portability with the eventual M4 2.0, macros should no longer use
-   anything larger than $9 to refer to arguments.
 
 ** Existing obsolete macros
    The documentation for the following macros is adjusted to make it
