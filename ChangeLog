@@ -1,3 +1,20 @@
+2008-04-05  Eric Blake  <ebb9@byu.net>
+
+	Avoid some autoreconf -Wall warnings.
+	* configure.ac: Use proper quoting, to be a good example.
+	(PACKAGE_NAME): Remove setting covered by autoconf.
+	(AM_INIT_AUTOMAKE): Bump automake requirement, for html rules.
+	* doc/Makefile.am (TEXI2DVI): Remove settings covered by
+	automake.
+	(html, autoconf_1.html, standards_1.html): Likewise.
+	(TEXI2HTML, TEXI2HTML_FLAGS): Remove unused macros.
+	* Makefile.am (html): Likewise.
+	* doc/autoconf.texi (Quoting and Parameters): Add missing section
+	name.
+	* tests/Makefile.am (AUTOMAKE_OPTIONS): Intentionally ignore
+	warning about our override, until Automake is fixed.
+	* README-hacking: Document minimum requirements for bootstrap.
+
 2008-04-03  Eric Blake  <ebb9@byu.net>
 
 	Fix version number generation in man pages.

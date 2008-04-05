@@ -9346,7 +9346,7 @@ car([[[a]]])
 @end example
 
 @node Quoting and Parameters
-@subsection
+@subsection Quoting and Parameters
 
 When M4 encounters @samp{$} within a macro definition, followed
 immediately by a character it recognizes (@samp{0}@dots{}@samp{9},

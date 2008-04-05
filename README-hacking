@@ -11,12 +11,12 @@ requirements on anyone wishing to build from the just-checked-out sources.
 For example, you have to use the latest stable versions of the maintainer
 tools we depend upon, including:
 
-- Autoconf <http://www.gnu.org/software/autoconf/>
-- Automake <http://www.gnu.org/software/automake/>
-- Help2man <http://www.gnu.org/software/help2man/>
-- M4 <http://www.gnu.org/software/m4/>
-- Perl <http://www.cpan.org/>
-- Texinfo <http://www.gnu.org/software/texinfo/>
+- Autoconf 2.60+ <http://www.gnu.org/software/autoconf/>
+- Automake 1.10+ <http://www.gnu.org/software/automake/>
+- Help2man 1.29+ <http://www.gnu.org/software/help2man/>
+- M4 1.4.5+ <http://www.gnu.org/software/m4/>
+- Perl 5.005_03+ <http://www.cpan.org/>
+- Texinfo 4.8+ <http://www.gnu.org/software/texinfo/>
 
 The following are useful as well, if you want to be able to run commands
 like "make dist" or "make distcheck":

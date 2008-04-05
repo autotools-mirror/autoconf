@@ -23,12 +23,11 @@ AC_PREREQ([2.60])
 AC_INIT([GNU Autoconf],
 	m4_esyscmd([build-aux/git-version-gen .tarball-version]),
 	[bug-autoconf@gnu.org])
-AC_SUBST([PACKAGE_NAME])dnl
 AC_CONFIG_SRCDIR([ChangeLog])
 
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.7.9 dist-bzip2 readme-alpha no-texinfo.tex])
+AM_INIT_AUTOMAKE([1.10 dist-bzip2 readme-alpha no-texinfo.tex])
 
 # We use `/bin/sh -n script' to check that there are no syntax errors
 # in the scripts.  Although incredible, there are /bin/sh that go into
@@ -53,7 +52,7 @@ AM_INIT_AUTOMAKE([1.7.9 dist-bzip2 readme-alpha no-texinfo.tex])
 # So before using `/bin/sh -n' to check our scripts, we first check
 # that `/bin/sh -n' is known to not have these problems.
 
-AC_CACHE_CHECK([whether /bin/sh -n is known to work], ac_cv_sh_n_works,
+AC_CACHE_CHECK([whether /bin/sh -n is known to work], [ac_cv_sh_n_works],
 [if (
     unset BASH_VERSION ZSH_VERSION
     /bin/sh -c '
@@ -67,7 +66,7 @@ then ac_cv_sh_n_works=yes
 else ac_cv_sh_n_works=no
 fi
 ])
-AC_SUBST(ac_cv_sh_n_works)
+AC_SUBST([ac_cv_sh_n_works])
 
 # Initialize the test suite.
 AC_CONFIG_TESTDIR([tests])
@@ -89,8 +88,8 @@ AC_PROG_GNU_M4
 ## Man pages.  ##
 ## ----------- ##
 
-AC_CONFIG_FILES(man/Makefile)
-AM_MISSING_PROG(HELP2MAN, help2man)
+AC_CONFIG_FILES([man/Makefile])
+AM_MISSING_PROG([HELP2MAN], [help2man])
 
 
 ## ------ ##
@@ -98,7 +97,7 @@ AM_MISSING_PROG(HELP2MAN, help2man)
 ## ------ ##
 
 # We use an absolute name for perl so the #! line in autoscan will work.
-AC_PATH_PROG([PERL], perl, no)
+AC_PATH_PROG([PERL], [perl], [no])
 AC_SUBST([PERL])dnl
 if test "$PERL" = no; then
   AC_MSG_ERROR([perl is not found])

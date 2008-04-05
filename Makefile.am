@@ -31,16 +31,6 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 
 MAINTAINERCLEANFILES = $(srcdir)/INSTALL
 
-## -------------------- ##
-## Forwarding targets.  ##
-## -------------------- ##
-
-html:
-	cd doc && $(MAKE) $(AM_MAKEFLAGS) $@
-
-.PHONY: html
-
-
 ## --------- ##
 ## INSTALL.  ##
 ## --------- ##

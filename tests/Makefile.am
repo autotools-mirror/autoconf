@@ -126,7 +126,10 @@ atconfig: $(top_builddir)/config.status
 # The rule in clean-local tests for existence of $(TESTSUITE), and
 # if found, attempts to run it.  But the distclean-generic rule may
 # be running in parallel, and it removes $(DISTCLEANFILES) which
-# includes $(TESTSUITE).
+# includes $(TESTSUITE).  This is the Automake rule, plus our
+# dependency, and we silence the warning from 'automake -Wall'.
+# TODO - fix this if newer automake accomodates the dependency.
+AUTOMAKE_OPTIONS = -Wno-override
 distclean-generic: clean-local
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
