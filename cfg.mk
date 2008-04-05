@@ -24,7 +24,6 @@ _autoreconf = autoreconf -i -v && rm -f INSTALL
 
 # Version management.
 announce_gen   = $(srcdir)/build-aux/announce-gen
-release_archive_dir = releases
 
 # Use alpha.gnu.org for alpha and beta releases.
 # Use ftp.gnu.org for major releases.

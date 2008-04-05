@@ -534,7 +534,6 @@ announcement: NEWS ChangeLog $(rel-files)
 	    --package=$(PACKAGE)					\
 	    --prev=$(PREV_VERSION)					\
 	    --curr=$(VERSION)						\
-	    --release-archive-directory=$(release_archive_dir)		\
 	    --gpg-key-id=$(gpg_key_ID)					\
 	    --news=$(srcdir)/NEWS					\
 	    --bootstrap-tools=automake					\

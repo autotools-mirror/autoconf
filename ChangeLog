@@ -1,3 +1,13 @@
+2008-04-05  Eric Blake  <ebb9@byu.net>
+
+	Prepare for release.
+	* maint.mk (announcement): Avoid deleted option.
+	* cfg.mk (release_archive_dir): Use default.
+	* build-aux/gnupload: New file, from automake/gnulib.
+	* Makefile.am (EXTRA_DIST): Distribute it.
+	* .x-sc_two_space_separator_in_usage: New file, to exempt gnupload
+	from syntax check.
+
 2008-04-05  Jim Meyering  <meyering@redhat.com>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
