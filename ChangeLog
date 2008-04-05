@@ -1,3 +1,13 @@
+2008-04-05  Jim Meyering  <meyering@redhat.com>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Work around CR EOL markers on OS/2 (www.ecomstation.com Ecs v2 rc4)
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): When CR
+	is the EOL marker, skip a step that would remove and translate
+	carriage return bytes.
+	* THANKS: Update.
+	Reported by Elbert Pol.
+
 2008-04-05  Eric Blake  <ebb9@byu.net>
 
 	Avoid some autoreconf -Wall warnings.

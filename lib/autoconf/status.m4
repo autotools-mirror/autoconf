@@ -539,8 +539,22 @@ m4_ifdef([_AC_SUBST_FILES],
 [\$ac_cs_awk_pipe_fini])
 _ACAWK
 _ACEOF
+dnl See if CR is the EOL marker.  If not, remove any EOL-related
+dnl ^M bytes and escape any remaining ones.  If so, just use mv.
+dnl In case you're wondering how ^M bytes can make it into subs1.awk,
+dnl [from Ralf Wildenhues] one way is if you have e.g.,
+dnl AC_SUBST([variable_that_contains_cr], ["
+dnl "])
+dnl The original aim was that users should be able to substitute any
+dnl characters they like (except for \0).  And the above is not so
+dnl unlikely if the configure script itself happens to be converted
+dnl to w32 text mode.
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-sed "s/$ac_cr\$//; s/$ac_cr/$ac_cs_awk_cr/g" < "$tmp/subs1.awk" > "$tmp/subs.awk" \
+if sed "s/$ac_cr//" < /dev/null > /dev/null 2>&1; then
+  sed "s/$ac_cr\$//; s/$ac_cr/$ac_cs_awk_cr/g"
+else
+  cat
+fi < "$tmp/subs1.awk" > "$tmp/subs.awk" \
   || AC_MSG_ERROR([could not setup config files machinery])
 _ACEOF
 
