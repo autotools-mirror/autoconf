@@ -1,3 +1,11 @@
+2008-04-08  Eric Blake  <ebb9@byu.net>
+
+	Generate web docs for 2.62.
+	* doc/autoconf.texi (Evaluation Macros): Fix typo.
+	(Notices): Use recommended means to escape RCS keyword.
+	* cfg.mk (gnulib_dir): New macro.
+	(web-manual): New target.
+
 2008-04-05  Eric Blake  <ebb9@byu.net>
 
 	Release Version 2.62.

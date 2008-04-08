@@ -1872,9 +1872,9 @@ without @acronym{RCS} or @acronym{CVS} changing it when you check in
 
 For example, this line in @file{configure.ac}:
 
-@c The asis prevents RCS from changing the example in the manual.
+@c The @w prevents RCS from changing the example in the manual.
 @example
-AC_REVISION([$@asis{Revision: 1.30 }$])
+AC_REVISION([@w{$}Revision: 1.30 $])
 @end example
 
 @noindent
@@ -10814,7 +10814,7 @@ The following macros give some control over the order of the evaluation
 by adding or removing levels of quotes.
 
 @defmac m4_apply (@var{macro}, @var{list})
-@msindex apply
+@msindex{apply}
 Apply the elements of the quoted, comma-separated @var{list} as the
 arguments to @var{macro}.  If @var{list} is empty, invoke @var{macro}
 without arguments.  Note the difference between @code{m4_indir}, which

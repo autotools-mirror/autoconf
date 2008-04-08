@@ -64,3 +64,15 @@ executable-update: wget-update cvs-update autom4te-update
 # Tests not to run.
 local-checks-to-skip ?= \
   changelog-check sc_unmarked_diagnostics
+
+# The local directory containing the checked-out copy of gnulib used in this
+# release.  For now, used solely for generating the web-manual.
+gnulib_dir = '$(abs_srcdir)'/../gnulib
+
+.PHONY: web-manual
+web-manual:
+	@cd $(srcdir)/doc ; \
+	GENDOCS_TEMPLATE_DIR=$(gnulib_dir)/doc; export GENDOCS_TEMPLATE_DIR; \
+	$(SHELL) $(gnulib_dir)/build-aux/gendocs.sh autoconf \
+	    "$(PACKAGE_NAME) - Creating Automatic Configuration Scripts"
+	@echo " *** Upload the doc/manual directory to web-cvs."

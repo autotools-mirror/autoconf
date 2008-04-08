@@ -14,7 +14,7 @@
 *.fns
 *.html
 *.htp
-*.info
+*.info*
 *.ky
 *.log
 *.MS
@@ -32,6 +32,7 @@
 *.vr
 *.vrs
 Makefile
+manual
 stamp-vti
 standards
 version.texi
