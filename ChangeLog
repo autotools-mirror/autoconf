@@ -1,3 +1,11 @@
+2008-08-21  Eric Blake  <ebb9@byu.net>
+
+	Tweak wording about SHELL in Makefile.
+	* doc/autoconf.texi (The Make Macro SHELL): Stronger wording on
+	the importance of proper SHELL settings.
+	Reported by Bruno Haible, in
+	http://lists.gnu.org/archive/html/bug-libtool/2008-04/msg00029.html.
+
 2008-08-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Avoid timestamp races for updated input.

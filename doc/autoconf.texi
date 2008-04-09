@@ -16327,13 +16327,22 @@ your makefiles.  If you use Autoconf, do
 SHELL = @@SHELL@@
 @end example
 
+@noindent
+If you use Automake, this is done for you.
+
 Do not force @code{SHELL = /bin/sh} because that is not correct
-everywhere.  For instance @acronym{DJGPP} lacks @code{/bin/sh}, and when
-its @acronym{GNU} @code{make} port sees such a setting it enters a special
-emulation mode where features like pipes and redirections are emulated
-on top of DOS's @command{command.com}.  Unfortunately this emulation is
-incomplete; for instance it does not handle command substitutions.
-On @acronym{DJGPP} @code{SHELL} should point to Bash.
+everywhere.  Remember, @file{/bin/sh} is not Posix compliant on many
+systems, such as FreeBSD 4, NetBSD 3, AIX 3, Solaris 10, or Tru64.
+Additionally, @acronym{DJGPP} lacks @code{/bin/sh}, and when its
+@acronym{GNU} @command{make} port sees such a setting it enters a
+special emulation mode where features like pipes and redirections are
+emulated on top of DOS's @command{command.com}.  Unfortunately this
+emulation is incomplete; for instance it does not handle command
+substitutions.  Using @code{@@SHELL@@} means that your makefile will
+benefit from the same improved shell, such as @command{bash} or
+@command{ksh}, that was discovered during @command{configure}, so that
+you aren't fighting two different sets of shell bugs between the two
+contexts.
 
 Posix-compliant @command{make} should never acquire the value of
 $(SHELL) from the environment, even when @code{make -e} is used
