@@ -1,5 +1,9 @@
 2008-08-21  Eric Blake  <ebb9@byu.net>
 
+	Formatting improvements.
+	* doc/autoconf.texi: Use @file and @command, rather than @code,
+	where appropriate.
+
 	Document another make bug.
 	* doc/autoconf.texi (The Make Macro SHELL): Mention bug in BSD
 	make, GNU make <= 3.80.

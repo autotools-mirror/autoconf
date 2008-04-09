@@ -804,15 +804,15 @@ to the quirks of @command{make} on many systems.  On top of all this is the
 manual labor required to implement the many standard targets that users
 have come to expect (@code{make install}, @code{make distclean},
 @code{make uninstall}, etc.).  Since you are, of course, using Autoconf,
-you also have to insert repetitive code in your @code{Makefile.in} to
+you also have to insert repetitive code in your @file{Makefile.in} to
 recognize @code{@@CC@@}, @code{@@CFLAGS@@}, and other substitutions
 provided by @command{configure}.  Into this mess steps @dfn{Automake}.
 @cindex Automake
 
-Automake allows you to specify your build needs in a @code{Makefile.am}
+Automake allows you to specify your build needs in a @file{Makefile.am}
 file with a vastly simpler and more powerful syntax than that of a plain
-makefile, and then generates a portable @code{Makefile.in} for
-use with Autoconf.  For example, the @code{Makefile.am} to build and
+makefile, and then generates a portable @file{Makefile.in} for
+use with Autoconf.  For example, the @file{Makefile.am} to build and
 install a simple ``Hello world'' program might look like:
 
 @example
@@ -821,7 +821,7 @@ hello_SOURCES = hello.c
 @end example
 
 @noindent
-The resulting @code{Makefile.in} (~400 lines) automatically supports all
+The resulting @file{Makefile.in} (~400 lines) automatically supports all
 the standard targets, the substitutions provided by Autoconf, automatic
 dependency tracking, @code{VPATH} building, and so on.  @command{make}
 builds the @code{hello} program, and @code{make install} installs it
@@ -1955,7 +1955,7 @@ either absolute or relative to @file{@var{srcdir}}.  The default is
 @file{install-sh}.  The other files are not checked for, so that using
 @code{AC_PROG_INSTALL} does not automatically require distributing the
 other auxiliary files.  It checks for @file{install.sh} also, but that
-name is obsolete because some @code{make} have a rule that creates
+name is obsolete because some @command{make} have a rule that creates
 @file{install} from it if there is no makefile.
 
 The auxiliary directory is commonly named @file{build-aux}.
@@ -2021,7 +2021,7 @@ are honored.
 
 The location of your @code{AC_OUTPUT} invocation is the exact point
 where configuration actions are taken: any code afterwards is
-executed by @code{configure} once @command{config.status} was run.  If
+executed by @command{configure} once @command{config.status} was run.  If
 you want to bind actions to @command{config.status} itself
 (independently of whether @command{configure} is being run), see
 @ref{Configuration Commands, , Running Arbitrary Configuration
@@ -2034,7 +2034,7 @@ Historically, the usage of @code{AC_OUTPUT} was somewhat different.
 
 
 If you run @command{make} in subdirectories, you should run it using the
-@code{make} variable @code{MAKE}.  Most versions of @command{make} set
+@command{make} variable @code{MAKE}.  Most versions of @command{make} set
 @code{MAKE} to the name of the @command{make} program plus any options it
 was given.  (But many do not include in it the values of any variables
 set on the command line, so those are not passed on automatically.)
@@ -2053,7 +2053,7 @@ Otherwise, define @code{SET_MAKE} to a macro definition that sets
 @end defmac
 
 If you use this macro, place a line like this in each @file{Makefile.in}
-that runs @code{MAKE} on other directories:
+that runs @command{MAKE} on other directories:
 
 @example
 @@SET_MAKE@@
@@ -2906,7 +2906,7 @@ variable substitutions on the value of @code{VPATH}.
 @command{configure} substitutes the correct value for @code{srcdir} when
 it produces @file{Makefile}.
 
-Do not use the @code{make} variable @code{$<}, which expands to the
+Do not use the @command{make} variable @code{$<}, which expands to the
 file name of the file in the source directory (found with @code{VPATH}),
 except in implicit rules.  (An implicit rule is one such as @samp{.c.o},
 which tells how to create a @file{.o} file from a @file{.c} file.)  Some
@@ -8749,7 +8749,7 @@ substitution replaces the whole line, including the spaces, tabs, and
 the terminating newline.
 
 This macro is useful for inserting makefile fragments containing
-special dependencies or other @code{make} directives for particular host
+special dependencies or other @command{make} directives for particular host
 or target types into makefiles.  For example, @file{configure.ac}
 could contain:
 
@@ -11831,7 +11831,7 @@ Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Particular Programs}).
 
 @defmac AS_SHELL_SANITIZE
 @asindex{SHELL_SANITIZE}
-Initialize the shell suitably for @code{configure} scripts.  This has
+Initialize the shell suitably for @command{configure} scripts.  This has
 the effect of @code{AS_BOURNE_COMPATIBLE}, and sets some other
 environment variables for predictable results from configuration tests.
 For example, it sets @env{LC_ALL} to change to the default C locale.
@@ -14312,7 +14312,7 @@ assume neither behavior is the default.  This can be a bit tricky,
 since the Posix default behavior means that, for example,
 @samp{ls ..} and @samp{cd ..} may refer to different directories if
 the current logical directory is a symbolic link.  It is safe to use
-@command{cd @var{dir}} if @var{dir} contains no @file{..} components.
+@code{cd @var{dir}} if @var{dir} contains no @file{..} components.
 Also, Autoconf-generated scripts check for this problem when computing
 variables like @code{ac_top_srcdir} (@pxref{Configuration Actions}),
 so it is safe to @command{cd} to these variables.
@@ -15086,7 +15086,7 @@ Traditional Awk does not support multidimensional arrays or user-defined
 functions.
 
 Traditional Awk does not support the @option{-v} option.  You can use
-assignments after the program instead, e.g., @command{$AWK '@{print v
+assignments after the program instead, e.g., @code{$AWK '@{print v
 $1@}' v=x}; however, don't forget that such assignments are not
 evaluated until they are encountered (e.g., after any @code{BEGIN}
 action).
@@ -15226,7 +15226,7 @@ newline encoding.
 Avoid the @option{-r} option, since Posix 1003.1-2004 marks it as
 obsolescent and its behavior on special files is implementation-defined.
 Use @option{-R} instead.  On @acronym{GNU} hosts the two options
-are equivalent, but on Solaris hosts (for example) @command{cp -r}
+are equivalent, but on Solaris hosts (for example) @code{cp -r}
 reads from pipes instead of replicating them.
 
 Some @command{cp} implementations (e.g., @acronym{BSD/OS} 4.2) do not allow
@@ -18261,8 +18261,8 @@ Even a warning message is undesirable here, so @code{AC_CONFIG_SUBDIRS}
 automatically disables the warnings.
 
 This default behavior may be modified in two ways.  First, the installer
-can invoke @command{configure --disable-option-checking} to disable
-these warnings, or invoke @command{configure --enable-option-checking=fatal}
+can invoke @code{configure --disable-option-checking} to disable
+these warnings, or invoke @code{configure --enable-option-checking=fatal}
 options to turn them into fatal errors, respectively.  Second, the
 maintainer can use @code{AC_DISABLE_OPTION_CHECKING}.
 
@@ -18514,7 +18514,7 @@ Another use of @file{config.site} is for priming the directory variables
 in a manner consistent with the Filesystem Hierarchy Standard
 (@acronym{FHS}).  Once the following file is installed at
 @file{/usr/share/config.site}, a user can execute simply
-@command{./configure --prefix=/usr} to get all the directories chosen in
+@code{./configure --prefix=/usr} to get all the directories chosen in
 the locations recommended by @acronym{FHS}.
 
 @example
@@ -18764,7 +18764,7 @@ Makefile: Makefile.in config.status
 
 @noindent
 (If @file{configure.ac} does not call @code{AC_CONFIG_HEADERS}, there is
-no need to set @code{CONFIG_HEADERS} in the @code{make} rules.  Equally
+no need to set @code{CONFIG_HEADERS} in the @command{make} rules.  Equally
 for @code{CONFIG_COMMANDS}, etc.)
 
 
@@ -19993,7 +19993,7 @@ in a particular package's source directory), you must rename it to
 @file{acsite.m4}.  @xref{autoconf Invocation}.
 
 If you distribute @file{install.sh} with your package, rename it to
-@file{install-sh} so @code{make} builtin rules don't inadvertently
+@file{install-sh} so @command{make} builtin rules don't inadvertently
 create a file called @file{install} from it.  @code{AC_PROG_INSTALL}
 looks for the script under both names, but it is best to use the new name.
 
@@ -21466,7 +21466,7 @@ result, incompatibilities between headers went unnoticed during
 configuration, and maintainers finally had to deal with this issue
 elsewhere.
 
-As of Autoconf 2.56 both checks are performed, and @code{configure}
+As of Autoconf 2.56 both checks are performed, and @command{configure}
 complains loudly if the compiler and the preprocessor do not agree.
 For the time being the result used is that of the preprocessor, to give
 maintainers time to adjust their @file{configure.ac}, but in the
