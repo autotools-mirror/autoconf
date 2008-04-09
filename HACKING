@@ -1,8 +1,10 @@
--*- outline -*-or
+-*- outline -*-
 
-This file attempts to describe the rules to use when hacking Autoconf.
-Don't put this file into the distribution.  Don't mention it in the
-ChangeLog.
+This file attempts to describe the maintainer-specific notes to follow
+when hacking Autoconf.  Don't put this file into the distribution.
+Don't mention it in the ChangeLog.  You may want to first see
+README-hacking for more general rules on building Autoconf from
+checked-out sources.
 
 * Administrivia
 
@@ -31,6 +33,12 @@ Discoveries in portability matters should be written down in the
 documentation (what fails, why it fails, *where* it fails, and what's
 to be written instead?).
 
+** Allow bootstrapping
+Make sure that a fresh checkout of Autoconf can be bootstrapped using
+the previous stable release of Autoconf.  In other words, do not use
+newly-added features in configure.ac if doing so would require an
+installed git checkout to rerun `autoreconf -i' successfully.
+
 * Test suite
 
 ** make check
@@ -40,60 +48,126 @@ Use liberally.
 Try to run the test suite with more severe conditions before a
 release:
 
+- Run `make syntax-check'
+  This makes sure that the source files follow some consistent rules.
+  The checks live in maint.mk, which is intended to be shared across
+  several projects.
+
 - Run `make maintainer-check'
   This is quite long.  It basically runs the test suite using a C++
   compiler instead of a C compiler, and within a severe environment
   (POSIXLY_CORRECT).
 
 - Try some real world packages
-  Good example is the coreutils package.
+  A good example is the coreutils package.
 
 * Release Procedure
+These steps describe what a maintainer does to make a release; they
+are not needed for ordinary patch submission.
 
-** Tests
-See above.
+** Upload Privileges
+If you have not yet registered your gpg public key and (preferred)
+email address with the FSF in relation to the Autoconf package, send
+an email, preferably GPG-signed, to <ftp-upload@gnu.org> that includes
+the following:
+
+  (a) name of package(s) that you are the maintainer for, and your
+      preferred email address.
+
+  (b) an ASCII armored copy of your GnuPG key, as an attachment.
+      ("gpg --export -a YOUR_KEY_ID > mykey.asc" should give you
+      this.)
+
+When you have received acknowledgement of your message, the proper GPG
+keys will be registered on ftp-upload.gnu.org and only then will you
+be authorized to upload files to the FSF ftp machines.  Beware; this
+process can take several days.
+
+** Mailing list Admin Privileges
+If you do not have access to the mailing list administrative
+interface, approach the list owners for the password.  Be sure to
+check the lists (esp. bug-autoconf) for outstanding bug reports also
+in the list of pending moderation requests.  This step is not strictly
+necessary, but helps.
+
+** Preparation for release
+Make sure you have GNU make installed.  Make sure your PATH includes a
+released version of Automake (and not a development snapshot);
+preferably 1.10.1 or later so you can build an LZMA tarball.  Make
+sure your locale is sane, e.g. by exporting LC_ALL=C.  Bootstrap the
+checkout, and make sure the testsuite passes.  See above for more
+hints on the testsuite.  Update cfg.mk with details specific to your
+environment, such as your GPG key and the location of a gnulib
+checkout.
 
 ** Update the foreign files
 Running `make update' in the top level should make it all for you.
+FIXME - this is broken as of 2.62, now that most upstream files are
+stored in git rather than CVS.  Until this is fixed, manually copy the
+files listed in cfg.mk from a gnulib git checkout.
+
+** Set the version number
+Update the version number in NEWS (with version, date, and release
+type) and ChangeLog, and mention in README whether the release is
+stable.  `make news-date-check' and `make changelog-check' will
+validate that the information is formatted correctly.  Make sure all
+changes are committed, then run `git tag -s -m <version> -u <gpg_key>
+v<version>'.  Do not push anything upstream at this point.
 
 ** Update configure
-As much as possible, to try an Autoconf that uses itself.  That's
-easy: just be in the top level, and run tests/autoconf.  Or install
-this autoconf and autoreconf -f.
+As much as possible, make sure to release an Autoconf that uses
+itself.  That's easy: just be in the top level, and run
+`tests/autoconf'.  Or install this autoconf and run `autoreconf -f'.
 
-** Update NEWS
-The version number, *and* the date of the release (including for
-betas).
+** LZMA tarball creation
+Using the `dist-lzma' option of Automake requires Automake 1.10.1, and
+fails for everyone who does not have LZMA installed, so for now
+Autoconf only requires Automake 1.10.  However, as maintainer, you
+should build an LZMA tarball.  By using Automake 1.10.1 or newer, you
+can run `make dist-lzma'; run this prior to the release target so that
+the release announcement will include the .tar.lzma file.
 
-** Update ChangeLog
-Should have an entry similar to `Version 2.53b.'.
-Check all this in once `make distcheck' passes.
+** Make the release
+Run `make {alpha,beta,major}' depending on which type of release this
+is.  This runs the various checks, creates delta files, creates a
+preliminary announcement in /tmp/announce-autoconf-<version>, prints
+out the command to upload the files, and updates the previous version
+file.
 
-** make alpha
-Running `make alpha' is absolutely perfect for beta releases: it makes
-the tarballs, the xdeltas, and prepares (in /tmp/) a proto
-announcement.  It is so neat, that that's what I use anyway for
-genuine releases, but adjusting things by hand (e.g., the urls in the
-announcement file, the ChangeLog which is not needed etc.).
-
-If it fails, you're on your own...
-
-It requires GNU Make.
+If it fails, run `git tag -d v<version>', fix the problems, and go
+back to the step of setting the version.
 
 ** Upload
-Put the tarballs/xdeltas where they should be.  Or put it somewhere,
-and send the URL to ftp-upload@gnu.org.
+Put the tarballs/xdeltas where they should be, using the instructions
+regarding gnupload that were printed during the previous step.  Verify
+that the files are correctly uploaded before sending a release
+announcement.
 
-** Bump the version number
-In configure.ac.  Run `make', check this in.
+** Push the updates
+Run `git push origin refs/tags/v<version>' to push the release tag.
 
 ** Announce
-Complete/fix the announcement file, and send it at least to
-info-gnu@gnu.org (if a real release, or a ``serious beta''),
-autotools-announce@gnu.org (even for ``non serious beta''),
-autoconf@gnu.org, automake@gnu.org, libtool@gnu.org, and
-bug-gnu-utils@gnu.org.
+Complete/fix the announcement file, and email it at least to
+autoconf@gnu.org and autotools-announce@gnu.org.  If this is a major
+release, also mail to info-gnu@gnu.org.
 
+** Other web updates
+For alpha and beta releases, the process is complete.  For major
+releases, there are several other web pages that need updates.
+
+Update the online manual: Run `make web-manual', then copy the
+contents of doc/manual into a CVS checkout of the documentation
+repository.  Remember to use `cvs add -ko' so that RCS keywords in the
+generated output do not get expanded improperly.
+  $ export CVS_RSH=ssh
+  $ cvs -z3 -d:ext:<user>@cvs.sv.gnu.org:/web/autoconf co autoconf
+
+Post a news blurb on https://savannah.gnu.org/projects/autoconf.
+
+Update the Free Software Directory: Checkout the CVS source, then
+after making edits, mail the diff to <bug-directory@gnu.org>.
+  $ cvs -d:pserver:anonymous@cvs.sv.gnu.org:/sources/directory \
+      co directory/autoconf.txt
 
 -----
 

@@ -1,7 +1,10 @@
 -*- outline -*-
 
 These notes intend to help people working on the checked-out sources.
-These requirements do not apply when building from a distribution tarball.
+These requirements do not apply when building from a distribution
+tarball.  Don't put this file into the distribution.  Don't mention it
+in the ChangeLog.  You may want to also see HACKING for
+maintainer-specific rules.
 
 * Requirements
 
@@ -19,43 +22,86 @@ tools we depend upon, including:
 - Texinfo 4.8+ <http://www.gnu.org/software/texinfo/>
 
 The following are useful as well, if you want to be able to run commands
-like "make dist" or "make distcheck":
+like "make dist-lzma" or "make distcheck":
 
 - Gzip <http://www.gnu.org/software/gzip/>
 - Tar <http://www.gnu.org/software/tar/>
+- LZMA Utils 4.32+ <http://tukaani.org/lzma/>
 
 Only building the initial full source tree will be a bit painful.
 Later, a plain `git pull && make' should be sufficient.
 
 * First GIT checkout
 
-You can get a copy of the source repository like this:
+You can get an anonymous copy of the source repository using any one
+of these three methods, although the CVS mirror is less tested:
 
-	$ git clone git://git.sv.gnu.org/autoconf
+  $ git clone git://git.sv.gnu.org/autoconf
+  $ git clone http://git.sv.gnu.org/r/autoconf.git
+  $ cvs -d:pserver:anonymous@pserver.git.sv.gnu.org:/srv/git/autoconf.git \
+      co -d autoconf HEAD
+
+If you have a Savannah user name and commit rights to the Autoconf
+project, you should use this instead:
+
+  $ git clone <username>@git.sv.gnu.org:/srv/git/autoconf.git
 
 The next step is to generate files like configure and Makefile.in:
 
-	$ cd autoconf
-	$ autoreconf -vi
+  $ cd autoconf
+  $ autoreconf -vi
 
 Since we're building autoconf itself, and its tests are picky, the
 following procedure includes an extra step to ensure that some
-generated files are regenerated using the tools just build by "make":
+generated files are regenerated using the tools just build by "make"
+(if you use GNU make, the file GNUmakefile sets PATH for you):
 
-	$ ./configure
-	$ make
-	$ ( PATH=`pwd`/tests:$PATH; autoreconf -vi )
-	$ make check
+  $ ./configure
+  $ make
+  $ ( PATH=`pwd`/tests:$PATH; autoreconf -vi )
+  $ make check
 
 At this point, there should be no difference between your local copy,
 and the GIT master copy:
 
-	$ git diff
+  $ git diff
 
 should output no difference.
 
+The testsuite is run by 'make check'.  You may find it useful to run a
+subset of the testsuite; for example, all tests with the 'm4sugar'
+keyword as well as test 10:
+
+  $ make check TESTSUITEFLAGS='10 -k m4sugar'
+
+* Submitting patches
+
+All patches should be submitted to <autoconf-patches@gnu.org> for
+review, in context or unified diff format against the latest sources.
+In most cases, a patch should include a test case, to ensure that
+regressions do not creep back in.  Remember to add documentation and a
+NEWS entry for anything that is visible to the user.
+
 You may find it useful to install the git-merge-changelog merge driver:
 http://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/git-merge-changelog.c
+
+If your change is significant (i.e., if it adds more than ~10 lines),
+then you'll have to have a copyright assignment on file with the FSF.
+Since that involves first an email exchange between you and the FSF,
+and then the exchange (FSF to you, then back) of an actual sheet of paper
+with your signature on it, and finally, some administrative processing
+in Boston, the process can take a few weeks.
+
+The forms to choose from are in gnulib's doc/Copyright/ directory.
+If you want to assign a single change, you should use the file,
+doc/Copyright/request-assign.changes:
+
+    http://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=doc/Copyright/request-assign.changes;hb=HEAD
+
+If you would like to assign past and future autoconf work,
+you'd use doc/Copyright/request-assign.future:
+
+    http://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=doc/Copyright/request-assign.future;hb=HEAD
 
 Enjoy!
 
