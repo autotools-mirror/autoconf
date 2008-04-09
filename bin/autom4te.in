@@ -596,6 +596,8 @@ sub handle_output ($$)
       print $out "$res\n";
     }
 
+  $out->close();
+
   # If no forbidden words, we're done.
   return
     if ! %prohibited;

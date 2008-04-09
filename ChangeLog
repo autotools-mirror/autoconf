@@ -1,3 +1,10 @@
+2008-04-09  Slava Sysoltsev <Viatcheslav.Sysoltsev@h-d-gmbh.de>  (tiny change)
+
+	Flush buffered output before exit.
+	* bin/autom4te.in (handle_output): Explicitly close file.
+	* THANKS: Update.
+	See http://lists.gnu.org/archive/html/autoconf/2008-04/msg00026.html.
+
 2008-04-08  Eric Blake  <ebb9@byu.net>
 
 	Generate web docs for 2.62.
