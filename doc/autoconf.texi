@@ -1839,6 +1839,15 @@ conditional fallbacks based on when a feature was added to Autoconf,
 rather than using @code{AC_PREREQ} to require the newer version of
 Autoconf.  However, remember that the Autoconf philosophy favors feature
 checks over version checks.
+
+You should never expand this macro directly, but instead use
+@samp{m4_defn([AC_AUTOCONF_VERSION])}.  This is because some users might
+have a beta version of Autoconf installed, with arbitrary letters
+included in its version string.  This means it is possible for the
+version string to contain the name of a defined macro, such that
+expanding @code{AC_AUTOCONF_VERSION} would trigger the expansion of that
+macro during rescanning, and change the version string to be different
+than what you intended to check.
 @end defmac
 
 @node Notices

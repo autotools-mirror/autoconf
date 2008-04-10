@@ -483,7 +483,7 @@ AT_SETUP([autoconf: AC_AUTOCONF_VERSION])
 
 AT_DATA([configure.ac],
 [[AC_INIT
-version AC_AUTOCONF_VERSION version
+version m4@&t@_defn([AC_AUTOCONF_VERSION]) version
 AC_OUTPUT
 ]])
 

@@ -1,3 +1,9 @@
+2008-04-10  Eric Blake  <ebb9@byu.net>
+
+	AC_AUTOCONF_VERSION might contain arbitrary macro names.
+	* doc/autoconf.texi (Versioning): Mention problem with expansion.
+	* tests/tools.at (autoconf: AC_AUTOCONF_VERSION): Adjust test.
+
 2008-04-09  Slava Sysoltsev <Viatcheslav.Sysoltsev@h-d-gmbh.de>  (tiny change)
 
 	Flush buffered output before exit.
