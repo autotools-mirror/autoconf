@@ -1,5 +1,8 @@
 GNU Autoconf NEWS - User visible changes.
 
+* Major changes in Autoconf 2.62a (2008-??-??)
+
+
 * Major changes in Autoconf 2.62 (2008-04-05) [stable]
   Released by Eric Blake, based on git versions 2.61a.*.
 
@@ -181,6 +184,7 @@ GNU Autoconf NEWS - User visible changes.
    when running `configure'.  We have no current plans to remove these
    macros.
 
+
 * Major changes in Autoconf 2.61a (2006-12-11)
 
 ** AC_FUNC_FSEEKO was broken in 2.61; it didn't make fseeko and ftello visible
@@ -214,12 +218,14 @@ GNU Autoconf NEWS - User visible changes.
    not be a problem, since Autoconf-generated scripts in practice
    invariably find a more-modern shell these days.
 
+
 * Major changes in Autoconf 2.61 (2006-11-17)
 
 ** New macros AC_C_FLEXIBLE_ARRAY_MEMBER, AC_C_VARARRAYS.
 
 ** AC_ARG_ENABLE and AC_ARG_WITH now allow '.' in feature and package names.
 
+
 * Major changes in Autoconf 2.60b (2006-10-22)
 
 ** BIN_SH
