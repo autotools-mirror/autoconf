@@ -11,7 +11,7 @@ maintainer-specific rules.
 We've opted to keep only the highest-level sources in the GIT repository.
 This eases our maintenance burden, (fewer merges etc.), but imposes more
 requirements on anyone wishing to build from the just-checked-out sources.
-For example, you have to use the latest stable versions of the maintainer
+For example, you have to use recent stable versions of the maintainer
 tools we depend upon, including:
 
 - Autoconf 2.60+ <http://www.gnu.org/software/autoconf/>
@@ -28,8 +28,23 @@ like "make dist-lzma" or "make distcheck":
 - Tar <http://www.gnu.org/software/tar/>
 - LZMA Utils 4.32+ <http://tukaani.org/lzma/>
 
+Although we try to keep the CVS mirror of the git repository usable,
+some of the tests in the testsuite will fail if git was not used to
+generate the version string.  Therefore, we recommend:
+
+- Git 1.4.4+ <http://git.or.cz/>
+
+You may find it useful to install the git-merge-changelog merge driver:
+http://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/git-merge-changelog.c
+
 Only building the initial full source tree will be a bit painful.
 Later, a plain `git pull && make' should be sufficient.
+
+If you want to test Autoconf on a machine without git, it may be
+easier to first bootstrap Autoconf on a different machine with git,
+run `make dist', and copy the tarball to the machine under test.  It
+should always be possible to create a self-contained tarball which
+does not rely on the bootstrap-only tools.
 
 * First GIT checkout
 
@@ -81,9 +96,6 @@ review, in context or unified diff format against the latest sources.
 In most cases, a patch should include a test case, to ensure that
 regressions do not creep back in.  Remember to add documentation and a
 NEWS entry for anything that is visible to the user.
-
-You may find it useful to install the git-merge-changelog merge driver:
-http://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/git-merge-changelog.c
 
 If your change is significant (i.e., if it adds more than ~10 lines),
 then you'll have to have a copyright assignment on file with the FSF.
