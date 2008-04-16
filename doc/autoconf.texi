@@ -13945,6 +13945,54 @@ but portable scripts should not rely on this.
 You should not rely on @code{LINENO} within @command{eval}.
 @xref{Special Shell Variables}.
 
+@item @command{exec}
+@c -----------------
+@prindex @command{exec}
+Posix describes several categories of shell built-ins.  Special
+built-ins (such as @command{exit}) must impact the environment of the
+current shell, and need not be available through @command{exec}.  All
+other built-ins are regular, and must not propagate variable assignments
+to the environment of the current shell.  However, the group of regular
+built-ins is further distinguished by commands that do not require a
+@env{PATH} search (such as @command{cd}), in contrast to built-ins that
+are offered as a more efficient version of something that must still be
+found in a @env{PATH} search (such as @command{echo}).  Posix is not
+clear on whether @command{exec} must work with the list of 17 utilities
+that are invoked without a @env{PATH} search, and many platforms lack an
+executable for some of those built-ins:
+
+@example
+$ @kbd{sh -c 'exec cd /tmp'}
+sh: line 0: exec: cd: not found
+@end example
+
+All other built-ins that provide utilities specified by Posix must have
+a counterpart executable that exists on @env{PATH}, although Posix
+allows @command{exec} to use the built-in instead of the executable.
+For example, contrast @command{bash} 3.2 and @command{pdksh} 5.2.14:
+
+@example
+$ @kbd{bash -c 'pwd --version' | head -n1}
+bash: line 0: pwd: --: invalid option
+pwd: usage: pwd [-LP]
+$ @kbd{bash -c 'exec pwd --version' | head -n1}
+pwd (GNU coreutils) 6.10
+$ @kbd{pdksh -c 'exec pwd --version' | head -n1}
+pdksh: pwd: --: unknown option
+@end example
+
+When it is desired to avoid a regular shell built-in, the workaround is
+to use some other forwarding command, such as @command{env} or
+@command{nice}, that will ensure a path search:
+
+@example
+$ @kbd{pdksh -c 'exec true --version' | head -n1}
+$ @kbd{pdksh -c 'nice true --version' | head -n1}
+true (GNU coreutils) 6.10
+$ @kbd{pdksh -c 'env true --version' | head -n1}
+true (GNU coreutils) 6.10
+@end example
+
 @item @command{exit}
 @c -----------------
 @prindex @command{exit}
