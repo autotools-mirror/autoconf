@@ -1,3 +1,21 @@
+2008-04-22  Eric Blake  <ebb9@byu.net>
+
+	Support unbalanced () in AT_SETUP by adding two new quadrigraphs.
+	* bin/autom4te.in (handle_output): Substitute @{:@ and @:}@.
+	(handle_traces): Likewise.
+	* lib/m4sugar/m4sugar.m4 (m4_qlen): Account for new quadrigraphs.
+	* tests/autotest.at (AT_CHECK_AT_TITLE_CHAR): Add new tests.
+	* doc/autoconf.texi (Quadrigraphs): Document them.
+	(Evaluation Macros) <m4_expand>: Enhance documentation.
+	(Text processing Macros) <m4_text_box>: Document cases where
+	quadrigraphs can help for problemetic unbalanced parentheses.
+	(Pretty Help Strings) <AS_HELP_STRING>: Likewise.
+	(Writing Testsuites) <AT_SETUP>: Likewise.
+	(Limitations of Builtins) <case>: Consolidate text on unbalanced
+	parentheses, and add an example of creative comments.
+	* NEWS: Document the addition.
+	Reported by Joel E. Denny.
+
 2008-04-16  Eric Blake  <ebb9@byu.net>
 
 	Document pdksh exec behavior.

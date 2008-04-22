@@ -2058,7 +2058,8 @@ m4_builtin([popdef], [m4_Border])dnl
 # Avoid bpatsubsts for the common case of no quadrigraphs.
 m4_define([m4_qlen],
 [m4_if(m4_index([$1], [@]), [-1], [m4_len([$1])],
-       [m4_len(m4_bpatsubst([[$1]], [@\(\(<:\|:>\|S|\|%:\)\(@\)\|&t@\)],
+       [m4_len(m4_bpatsubst([[$1]],
+			    [@\(\(<:\|:>\|S|\|%:\|\{:\|:\}\)\(@\)\|&t@\)],
 			    [\3]))])])
 
 

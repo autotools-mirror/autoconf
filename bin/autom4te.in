@@ -575,6 +575,8 @@ sub handle_output ($$)
       s/__oline__/$./g;
       s/\@<:\@/[/g;
       s/\@:>\@/]/g;
+      s/\@\{:\@/(/g;
+      s/\@:\}\@/)/g;
       s/\@S\|\@/\$/g;
       s/\@%:\@/#/g;
 
@@ -856,6 +858,8 @@ EOF
       # It makes no sense to try to transform __oline__.
       s/\@<:\@/[/g;
       s/\@:>\@/]/g;
+      s/\@\{:\@/(/g;
+      s/\@:\}\@/)/g;
       s/\@S\|\@/\$/g;
       s/\@%:\@/#/g;
       s/\@&t\@//g;

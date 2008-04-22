@@ -9619,13 +9619,18 @@ the one they were implemented with.
 @c @cindex @samp{@@<:@@}
 @c @cindex @samp{@@:>@@}
 @c @cindex @samp{@@%:@@}
+@c @cindex @samp{@@@{:@@}
+@c @cindex @samp{@@:@}@@}
 
 When writing an Autoconf macro you may occasionally need to generate
 special characters that are difficult to express with the standard
 Autoconf quoting rules.  For example, you may need to output the regular
 expression @samp{[^[]}, which matches any character other than @samp{[}.
 This expression contains unbalanced brackets so it cannot be put easily
-into an M4 macro.
+into an M4 macro.  There are also a few macros, such as
+@code{m4_text_box}, @code{AS_HELP_STRING}, or @code{AT_SETUP}, which
+require balanced parentheses, regardless of the quoting, because the
+macro needs to compute the length of the expansion of its arguments.
 
 You can work around this problem by using one of the following
 @dfn{quadrigraphs}:
@@ -9639,6 +9644,10 @@ You can work around this problem by using one of the following
 @samp{$}
 @item @@%:@@
 @samp{#}
+@item @@@{:@@
+@samp{(}
+@item @@:@}@@
+@samp{)}
 @item @@&t@@
 Expands to nothing.
 @end table
@@ -10887,12 +10896,6 @@ collection rules discard the whitespace.  However, with @code{m4_expand},
 whitespace is preserved, even after the expansion of macros contained in
 @var{arg}.
 
-Note that @code{m4_expand} cannot parse everything.  The expansion of
-@var{arg} must not contain unbalanced quotes (although quadrigraphs can
-get around this), nor unbalanced parentheses (portable shell @code{case}
-statements are a major culprit here, but creative shell comments can get
-around this).
-
 @example
 m4_define([active], [ACT, IVE])dnl
 m4_define([active2], [[ACT, IVE]])dnl
@@ -10904,6 +10907,21 @@ m4_quote(active2, active2)
 @result{}ACT, IVE,ACT, IVE
 m4_expand([active2, active2])
 @result{}ACT, IVE, ACT, IVE
+@end example
+
+Note that @code{m4_expand} cannot parse everything.  The expansion of
+@var{arg} must not contain literal unbalanced quotes or parentheses;
+however, quadrigraphs can be used to generate unbalanced output.
+
+@example
+m4_define([pattern], [[!@@<:@@]])dnl
+m4_define([bar], [BAR])dnl
+m4_expand([case $foo in
+  m4_defn([pattern])@@:@}@@ bar ;;
+esac])
+@result{}case $foo in
+@result{}  [![]) BAR ;;
+@result{}esac
 @end example
 @end defmac
 
@@ -11183,6 +11201,9 @@ m4_text_box([macro])
 @result{}## abc ##
 @result{}## --- ##
 @end example
+
+The @var{message} must contain balanced quotes and parentheses, although
+quadrigraphs can be used to work around this.
 @end defmac
 
 @defmac m4_text_wrap (@var{string}, @ovar{prefix}, @
@@ -13754,13 +13775,32 @@ parentheses like this:
 
 @example
 case $file_name in
-(*.c) echo "C source code";;
+  (*.c) echo "C source code";;
 esac
 @end example
 
 @noindent
 but the @code{(} in this example is not portable to many Bourne
-shell implementations.  It can be omitted safely.
+shell implementations, which is a pity for those of us using tools that
+rely on balanced parentheses.  For instance, with Solaris
+@command{/bin/sh}:
+
+@example
+$ @kbd{case foo in (foo) echo foo;; esac}
+@error{}syntax error: `(' unexpected
+@end example
+
+@noindent
+The leading @samp{(} can be omitted safely.  In contexts where
+unbalanced parentheses cause other problems, such as when using a case
+statement as an argument to an Autoconf macro, you can also resort to
+creative shell comments to supply the balance:
+
+@example
+case $file_name in #(
+  *.c) echo "C source code";;
+esac
+@end example
 
 Zsh handles pattern fragments derived from parameter expansions or
 command substitutions as though quoted:
@@ -13828,15 +13868,6 @@ Some shells, such as Ash 0.3.8, are confused by an empty
 @example
 ash-0.3.8 $ @kbd{case foo in esac;}
 @error{}Syntax error: ";" unexpected (expecting ")")
-@end example
-
-Many shells still do not support parenthesized cases, which is a pity
-for those of us using tools that rely on balanced parentheses.  For
-instance, Solaris @command{/bin/sh}:
-
-@example
-$ @kbd{case foo in (foo) echo foo;; esac}
-@error{}syntax error: `(' unexpected
 @end example
 
 
@@ -17690,7 +17721,8 @@ Since it is not expanded, it should not be double quoted.
 The @code{AS_HELP_STRING} macro is particularly helpful when the
 @var{left-hand-side} and/or @var{right-hand-side} are composed of macro
 arguments, as shown in the following example.  Be aware that
-@var{left-hand-side} may not contain unbalanced quotes or parentheses.
+@var{left-hand-side} may not contain unbalanced quotes or parentheses,
+although quadrigraphs can be used.
 
 @example
 AC_DEFUN([MY_ARG_WITH],
@@ -20280,7 +20312,7 @@ This macro starts a group of related tests, all to be executed in the
 same subshell.  It accepts a single argument, which holds a few words
 (no more than about 30 or 40 characters) quickly describing the purpose
 of the test group being started.  @var{test-group-name} must not contain
-unbalanced quotes or parentheses.
+unbalanced quotes or parentheses, although quadrigraphs can be used.
 @end defmac
 
 @defmac AT_KEYWORDS (@var{keywords})
