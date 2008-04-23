@@ -702,16 +702,17 @@ m4_define([m4_echo], [$@])
 #   m4_expand([active, active2])
 #   => ACT, IVE, ACT, IVE
 #
-# Unfortunately, due to limitations in m4, ARG must contain balanced quotes
-# (use quadrigraphs) and balanced parentheses (use creative shell comments
-# when writing shell case statements).
+# Unfortunately, due to limitations in m4, ARG must expand to something
+# with balanced quotes (use quadrigraphs to get around this).  The input
+# is not likely to have unbalanced -=<{(/)}>=- quotes, and it is possible
+# to have unbalanced (), provided it was specified with proper [] quotes.
 #
 # Exploit that extra () will group unquoted commas and the following
 # whitespace, then convert () to [].  m4_bpatsubst can't handle newlines
 # inside $1, and m4_substr strips quoting.  So we (ab)use m4_changequote.
-m4_define([m4_expand], [_$0(($1))])
+m4_define([m4_expand], [_$0(-=<{($1)}>=-)])
 m4_define([_m4_expand],
-[m4_changequote([(], [)])$1m4_changequote`'m4_changequote(`[', `]')])
+[m4_changequote([-=<{(], [)}>=-])$1m4_changequote([, ])])
 
 
 # m4_ignore(ARGS)
@@ -741,9 +742,9 @@ m4_define([m4_make_list], [m4_join([,
 # and help-strings).  On the other hand, since all quotes are disabled,
 # any macro expanded during this time that relies on nested [] quoting
 # will likely crash and burn.  This macro is seldom useful; consider
-# m4_unquote instead.
+# m4_unquote or m4_expand instead.
 m4_define([m4_noquote],
-[m4_changequote(-=<{,}>=-)$1-=<{}>=-m4_changequote([,])])
+[m4_changequote([-=<{(],[)}>=-])$1-=<{()}>=-m4_changequote([,])])
 
 
 # m4_quote(ARGS)
@@ -1733,7 +1734,7 @@ m4_define([m4_toupper],
 #
 # Also, notice that $1 is quoted twice, since we want the result to
 # be quoted.  Then you should understand that the argument of
-# patsubst is -=<{STRING}>=- (i.e., with additional -=<{ and }>=-).
+# patsubst is -=<{(STRING)}>=- (i.e., with additional -=<{( and )}>=-).
 #
 # This macro is safe on active symbols, i.e.:
 #   m4_define(active, ACTIVE)
@@ -1751,9 +1752,9 @@ m4_define([m4_split],
        [_$0($@)])])
 
 m4_define([_m4_split],
-[m4_changequote(-=<{,}>=-)]dnl
-[[m4_bpatsubst(-=<{-=<{$1}>=-}>=-, -=<{$2}>=-,
-	       -=<{], [}>=-)]m4_changequote([, ])])
+[m4_changequote([-=<{(],[)}>=-])]dnl
+[[m4_bpatsubst(-=<{(-=<{($1)}>=-)}>=-, -=<{($2)}>=-,
+	       -=<{(], [)}>=-)]m4_changequote([, ])])
 
 
 

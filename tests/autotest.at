@@ -424,7 +424,8 @@ AT_CLEANUP
 ]], [$4], [], [], [],
 dnl This sed script checks for two things - that the output is properly
 dnl expanded, and that the 'ok' starts on the right column.
-[AT_CHECK([[$CONFIG_SHELL ./micro-suite |
+[AT_KEYWORDS([m4@&t@_expand])
+AT_CHECK([[$CONFIG_SHELL ./micro-suite |
 	    sed -n '/^  1:/{
 h
 s/[^:]*: \(.*[^	 ]\)[	 ]*ok.*/\1/p
@@ -458,9 +459,10 @@ AT_CHECK_AT_TITLE_CHAR([Right bracket], [@:@&t@>@], [@:>@])
 AT_CHECK_AT_TITLE_CHAR([Pound],       [[#]], [#])
 AT_CHECK_AT_TITLE_CHAR([Quoted comma],[[,]], [,])
 AT_CHECK_AT_TITLE_CHAR([Comma],         [,], [,])
-AT_CHECK_AT_TITLE_CHAR([Parentheses],   [()])
-AT_CHECK_AT_TITLE_CHAR([Left paren],    [@{@&t@:@], [(])
-AT_CHECK_AT_TITLE_CHAR([Right paren],   [@:@&t@}@], [)])
+dnl this test also hits quadrigraphs for ()
+AT_CHECK_AT_TITLE_CHAR([Parentheses],   [(@{:@)@:}@], [(())])
+AT_CHECK_AT_TITLE_CHAR([Left paren],    [[(]], [(])
+AT_CHECK_AT_TITLE_CHAR([Right paren],   [[)]], [)])
 
 AT_CHECK_AT_TITLE_CHAR([Quoted Macro], [[macro_name]], [macro_name])
 AT_CHECK_AT_TITLE_CHAR([Macro],        [macro_name],   [macro_expanded])

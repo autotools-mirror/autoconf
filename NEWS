@@ -2,10 +2,12 @@ GNU Autoconf NEWS - User visible changes.
 
 * Major changes in Autoconf 2.62a (2008-??-??)
 
+** Clients of m4_expand, such as AS_HELP_STRING and AT_SETUP, can now
+   handle properly quoted but otherwise unbalanced parentheses (for
+   some macros, this fixes a regression in 2.62).
+
 ** Two new quadrigraphs have been introduced: @{:@ for (, and @:}@ for ),
-   allowing the output of unbalanced parantheses in contexts such as
-   AS_HELP_STRING or AT_SETUP that must determine the length of
-   expanded text.
+   allowing the output of unbalanced parantheses in more contexts.
 
 
 * Major changes in Autoconf 2.62 (2008-04-05) [stable]

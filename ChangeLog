@@ -1,3 +1,21 @@
+2008-04-23  Eric Blake  <ebb9@byu.net>
+
+	Allow unbalanced () in m4_expand.
+	* lib/m4sugar/m4sugar.m4 (m4_expand, _m4_expand): Use more complex
+	quotes.
+	(m4_noquote, _m4_split): Use consistent complex quote.
+	* tests/autotest.at (Left paren, Right paren): Test this.
+	(Parentheses): Ensure new quadrigraphs still work.
+	(AT_CHECK_AT_TITLE_CHAR): All title char tests exercise m4_expand.
+	* NEWS: Mention the fix.
+	* doc/autoconf.texi (Quadrigraphs): Revert mention of macros that
+	require quadrigraphs for ().
+	(Evaluation Macros) <m4_expand>: Relax the restriction against
+	unbalanced ().
+	(Pretty Help Strings) <AS_HELP_STRING>: Likewise.
+	(Writing Testsuites) <AT_SETUP>: Likewise.
+	Reported by Joel E. Denny, fix suggested by Noah Misch.
+
 2008-04-22  Eric Blake  <ebb9@byu.net>
 
 	Support unbalanced () in AT_SETUP by adding two new quadrigraphs.
