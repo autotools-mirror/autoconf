@@ -1,3 +1,11 @@
+2008-04-24  Eric Blake  <ebb9@byu.net>
+
+	Mention m4sugar's internal quote strings.
+	* doc/autoconf.texi (Quadrigraphs): Mention alternate quote used
+	in m4sugar, and how to still output it literally.
+	* tests/m4sugar.at (m4@&t@_split): And test it.
+	Reported by Joel E. Denny.
+
 2008-04-23  Eric Blake  <ebb9@byu.net>
 
 	Allow unbalanced () in m4_expand.

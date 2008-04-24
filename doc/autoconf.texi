@@ -9629,7 +9629,13 @@ expression @samp{[^[]}, which matches any character other than @samp{[}.
 This expression contains unbalanced brackets so it cannot be put easily
 into an M4 macro.
 
-You can work around this problem by using one of the following
+Additionally, there are a few m4sugar macros (such as @code{m4_split}
+and @code{m4_expand}) which internally use special markers in addition
+to the regular quoting characters.  If the arguments to these macros
+contain the literal strings @samp{-=<@{(} or @samp{)@}>=-}, the macros
+might behave incorrectly.
+
+You can work around these problems by using one of the following
 @dfn{quadrigraphs}:
 
 @table @samp
@@ -9661,9 +9667,18 @@ The empty quadrigraph can be used:
 
 Trailing spaces are smashed by @command{autom4te}.  This is a feature.
 
-@item to produce other quadrigraphs
+@item to produce quadrigraphs and other strings reserved by m4sugar
 
-For instance @samp{@@<@@&t@@:@@} produces @samp{@@<:@@}.
+For instance @samp{@@<@@&t@@:@@} produces @samp{@@<:@@}.  For a more
+contrived example:
+
+@example
+m4_define([a], [A])m4_define([b], [B])m4_define([c], [C])dnl
+m4_split([a )@}>=- b -=<@{( c])
+@result{}[a], [], [B], [], [c]
+m4_split([a )@}@@&t@@>=- b -=<@@&t@@@{( c])
+@result{}[a], [)@}>=-], [b], [-=<@{(], [c]
+@end example
 
 @item to escape @emph{occurrences} of forbidden patterns
 

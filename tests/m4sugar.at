@@ -170,6 +170,11 @@ m4_split([abcde], [bd])
 m4_split([abcde], [[bd]])
 m4_split([foo=`` bar=''])
 m4_split([foo='' bar=``])
+dnl these next two are from the manual; keep this in sync if the internal
+dnl quoting strings in m4_split are changed
+m4_define([a], [A])m4_define([b], [B])m4_define([c], [C])dnl
+m4_split([a )}>=- b -=<{( c])
+m4_split([a )}@&t@>=- b -=<@&t@{( c])
 ]],
 [[
 
@@ -184,6 +189,8 @@ m4_split([foo='' bar=``])
 [a], [c], [e]
 [foo=``], [bar='']
 [foo=''], [bar=``]
+[a], [], [B], [], [c]
+[a], [)}>=-], [b], [-=<{(], [c]
 ]])
 
 AT_CLEANUP
