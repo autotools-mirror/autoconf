@@ -1,3 +1,9 @@
+2008-04-26  Eric Blake  <ebb9@byu.net>
+
+	Mention Solaris /usr/ucb/tr pitfall.
+	* doc/autoconf.texi (Limitations of Usual Tools) <tr>: Add section.
+	Reported by Bruno Haible and Jim Meyering.
+
 2008-04-24  Eric Blake  <ebb9@byu.net>
 
 	Mention m4sugar's internal quote strings.

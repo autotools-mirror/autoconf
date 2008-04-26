@@ -15607,6 +15607,28 @@ fails to work on SunOS 4.1.3 when the empty file is on an
 @acronym{NFS}-mounted 4.2 volume.
 However, these problems are no longer of practical concern.
 
+@item @command{tr}
+@c ---------------
+@prindex @command{tr}
+@cindex carriage return, deleting
+@cindex deleting carriage return
+Not all versions of @command{tr} handle all backslash character escapes.
+For example, Solaris 10 @command{/usr/ucb/tr} falls over, even though
+Solaris contains more modern @command{tr} in other locations.
+Therefore, it is more portable to use octal escapes, even though this
+ties the result to @acronym{ASCII}, when using @command{tr} to delete
+newlines or carriage returns.
+
+@example
+$ @kbd{@{ echo moon; echo light; @} | /usr/ucb/tr -d '\n' ; echo}
+moo
+light
+$ @kbd{@{ echo moon; echo light; @} | /usr/bin/tr -d '\n' ; echo}
+moonlight
+$ @kbd{@{ echo moon; echo light; @} | /usr/ucb/tr -d '\012' ; echo}
+moonlight
+@end example
+
 @end table
 
 
