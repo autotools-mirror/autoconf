@@ -1,5 +1,8 @@
 2008-05-06  Eric Blake  <ebb9@byu.net>
 
+	Avoid overfull \hbox.
+	* doc/autoconf.texi (Versioning): Reword to fit line size.
+
 	Document $(( )) pitfalls.
 	* doc/autoconf.texi (Shell Substitutions): Mention octal
 	vs. decimal.  Mention autotest's at_func_arith.
