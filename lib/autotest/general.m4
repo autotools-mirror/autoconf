@@ -363,7 +363,8 @@ at_func_create_debugging_script ()
 
 # at_func_arith
 # -------------
-# Arithmetic evaluation, avoids expr if the shell is sane.
+# Arithmetic evaluation, avoids expr if the shell is sane.  The
+# interpretation of leading zeroes is unspecified.
 #
 # subshell and eval are needed to keep Solaris sh from bailing out:
 if ( eval 'test $(( 1 + 1 )) = 2' ) 2>/dev/null; then
@@ -440,17 +441,27 @@ at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [?])'
 # Description of all the test groups.
 at_help_all="AS_ESCAPE(m4_dquote(m4_defn([AT_help_all])))"
 
-# at_func_validate_ranges [N...]
-# ------------------------------
-# validate test group ranges
+# at_func_validate_ranges [NAME...]
+# ---------------------------------
+# Validate and normalize the test group number contained in each
+# variable NAME.  Leading zeroes are treated as decimal.
 at_func_validate_ranges ()
 {
   for at_grp
   do
-    if test $at_grp -lt 1 || test $at_grp -gt AT_ordinal; then
-      AS_ECHO(["invalid test group: $at_grp"]) >&2
+    eval at_value=\$$at_grp
+    if test $at_value -lt 1 || test $at_value -gt AT_ordinal; then
+      AS_ECHO(["invalid test group: $at_value"]) >&2
       exit 1
     fi
+    case $at_value in
+      0*) # We want to treat leading 0 as decimal, like expr and test, but
+	  # at_func_arith treats it as octal if it uses $(( )).
+	  # With XSI shells, ${at_value#${at_value%%[1-9]*}} avoids the
+	  # expr fork, but it is not worth the effort to determine if the
+	  # shell supports XSI when the user can just avoid leading 0.
+	  eval $at_grp='`expr $at_value + 0`' ;;
+    esac
   done
 }])])dnl
 m4_divert_push([PARSE_ARGS])dnl
@@ -506,14 +517,14 @@ do
 	;;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
-	at_func_validate_ranges $at_option
+	at_func_validate_ranges at_option
 	at_groups="$at_groups$at_option "
 	;;
 
     # Ranges
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
 	at_range_start=`echo $at_option |tr -d X-`
-	at_func_validate_ranges $at_range_start
+	at_func_validate_ranges at_range_start
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.* \('$at_range_start' \)/\1/'`
 	at_groups="$at_groups$at_range "
@@ -521,7 +532,7 @@ do
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
 	at_range_end=`echo $at_option |tr -d X-`
-	at_func_validate_ranges $at_range_end
+	at_func_validate_ranges at_range_end
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/\( '$at_range_end'\) .*$/\1/'`
 	at_groups="$at_groups$at_range "
@@ -540,7 +551,7 @@ do
 	  at_range_end=$at_range_start
 	  at_range_start=$at_tmp
 	fi
-	at_func_validate_ranges $at_range_start $at_range_end
+	at_func_validate_ranges at_range_start at_range_end
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.*\( '$at_range_start' \)/\1/' \
 	      -e 's/\( '$at_range_end'\) .*$/\1/'`

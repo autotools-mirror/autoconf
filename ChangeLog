@@ -1,3 +1,12 @@
+2008-05-06  Eric Blake  <ebb9@byu.net>
+
+	Improve behavior of './testsuite 01'.
+	* lib/autotest/general.m4 (AT_INIT) <at_func_validate_ranges>:
+	Alter usage to eval its arguments, in order to normalize away
+	leading zero.  All callers updated.
+	* tests/autotest.at (Keywords and ranges): Test range
+	normalization with leading 0.
+
 2008-04-26  Eric Blake  <ebb9@byu.net>
 
 	Mention Solaris /usr/ucb/tr pitfall.
