@@ -1,3 +1,11 @@
+2008-05-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Let AC_MSG_FAILURE report pwd.
+	* lib/autoconf/general.m4 (_AC_ARG_VAR_VALIDATE, AC_MSG_FAILURE):
+	Output $ac_pwd along with fatal failure.
+	* tests/torture.at (Deep Package): Extend test.
+	Reported numerous times against GCC, and probably other packages.
+
 2008-05-12  Eric Blake  <ebb9@byu.net>
 
 	Enforce --help and --version compliance.

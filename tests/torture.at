@@ -1275,6 +1275,9 @@ AT_DATA([inner/innermost/configure.in],
 AC_ARG_VAR([INNERMOST], [an innermost variable])
 AC_CONFIG_HEADERS(config.h:config.hin)
 AC_DEFINE_UNQUOTED([INNERMOST], [$INNERMOST], [an innermost variable])
+if test -n "$innermost_error"; then
+  AC_MSG_FAILURE([Error in $PACKAGE_NAME])
+fi
 AC_OUTPUT
 ]])
 
@@ -1323,6 +1326,14 @@ AT_CHECK_CONFIGURE([INNERMOST=tsomrenni])
 AT_CHECK([grep INNERMOST inner/innermost/config.h], 0,
 [[#define INNERMOST tsomrenni
 ]])
+
+# Ensure we point to the right config.log file for errors.
+AT_CHECK_CONFIGURE([innermost_error=:], [1], [], [stderr])
+AT_CHECK([grep 'inner/innermost' stderr], [], [ignore])
+cd inner
+AT_CHECK_CONFIGURE([innermost_error=:], [1], [], [stderr])
+AT_CHECK([grep 'innermost' stderr], [], [ignore])
+cd ..
 
 # The same, but from a builddir.
 AS_MKDIR_P([builddir])
