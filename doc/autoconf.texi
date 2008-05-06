@@ -13203,6 +13203,44 @@ echo $(case x in x) echo hello;; esac)
 Arithmetic expansion is not portable as some shells (most
 notably Solaris 10 @command{/bin/sh}) don't support it.
 
+Among shells that do support @samp{$(( ))}, not all of them obey the
+Posix rule that octal and hexadecimal constants must be recognized:
+
+@example
+$ @kbd{bash -c 'echo $(( 010 + 0x10 ))'}
+24
+$ @kbd{zsh -c 'echo $(( 010 + 0x10 ))'}
+26
+$ @kbd{zsh -c 'emulate sh; echo $(( 010 + 0x10 ))'}
+24
+$ @kbd{pdksh -c 'echo $(( 010 + 0x10 ))'}
+pdksh:  010 + 0x10 : bad number `0x10'
+$ @kbd{pdksh -c 'echo $(( 010 ))'}
+10
+@end example
+
+When it is available, using arithmetic expansion provides a noticeable
+speedup in script execution; but testing for support requires
+@command{eval} to avoid syntax errors.  If shell function support has
+also been detected, then this construct can be used to assign @samp{foo}
+to an arithmetic result, provided all numeric arguments are provided in
+decimal and without a leading zero:
+
+@example
+if ( eval 'test $(( 1 + 1 )) = 2' ) 2>/dev/null; then
+  eval 'func_arith ()
+  @{
+    func_arith_result=$(( $* ))
+  @}'
+else
+  at_func_arith ()
+  @{
+    func_arith_result=`expr "$@@"`
+  @}
+fi
+func_arith 1 + 1
+foo=$func_arith_result
+@end example
 
 
 @item ^

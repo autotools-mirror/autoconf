@@ -1,5 +1,9 @@
 2008-05-06  Eric Blake  <ebb9@byu.net>
 
+	Document $(( )) pitfalls.
+	* doc/autoconf.texi (Shell Substitutions): Mention octal
+	vs. decimal.  Mention autotest's at_func_arith.
+
 	Improve behavior of './testsuite 01'.
 	* lib/autotest/general.m4 (AT_INIT) <at_func_validate_ranges>:
 	Alter usage to eval its arguments, in order to normalize away
