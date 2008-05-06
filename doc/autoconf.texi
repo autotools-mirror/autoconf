@@ -13234,7 +13234,7 @@ if ( eval 'test $(( 1 + 1 )) = 2' ) 2>/dev/null; then
     func_arith_result=$(( $* ))
   @}'
 else
-  at_func_arith ()
+  func_arith ()
   @{
     func_arith_result=`expr "$@@"`
   @}
