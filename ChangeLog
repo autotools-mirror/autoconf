@@ -1,3 +1,8 @@
+2008-05-12  Eric Blake  <ebb9@byu.net>
+
+	Enforce --help and --version compliance.
+	* configure.ac (AM_INIT_AUTOMAKE): Add std-options option.
+
 2008-05-08  Keith Marshall  <keithmarshall@users.sourceforge.net>  (tiny change)
 
 	Avoid case-insensitive `make install' vs. `INSTALL' conflict.
