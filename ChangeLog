@@ -1,3 +1,9 @@
+2008-05-08  Keith Marshall  <keithmarshall@users.sourceforge.net>  (tiny change)
+
+	Avoid case-insensitive `make install' vs. `INSTALL' conflict.
+	* Makefile.am ($(srcdir)/INSTALL): Replace all references...
+	($(abs_srcdir)/INSTALL): ...with this.
+
 2008-05-06  Eric Blake  <ebb9@byu.net>
 
 	Fix typo.

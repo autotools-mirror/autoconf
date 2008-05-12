@@ -30,15 +30,15 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     build-aux/announce-gen build-aux/gnupload \
 	     .prev-version .version
 
-MAINTAINERCLEANFILES = $(srcdir)/INSTALL
+MAINTAINERCLEANFILES = $(abs_srcdir)/INSTALL
 
 ## --------- ##
 ## INSTALL.  ##
 ## --------- ##
 
-pkgdata_DATA = $(srcdir)/INSTALL
+pkgdata_DATA = $(abs_srcdir)/INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
-$(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
+$(abs_srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $@ \
 	  $(top_srcdir)/doc/install.texi
 
