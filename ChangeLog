@@ -1,3 +1,10 @@
+2008-05-13  Stepan Kasal  <kasal@ucw.cz>
+
+	Work around MSYS and Cygwin bugs when dealing with trailing space.
+	* tests/atlocal.in (func_sanitize_dir_name): Let atlocal succeed,
+	even when platform bugs are tickled.
+	Reported by Keith Marshall and Eric Blake.
+
 2008-05-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Let AC_MSG_FAILURE report pwd.

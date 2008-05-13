@@ -44,11 +44,12 @@ else
 fi
 
 # Can we create directories with trailing whitespaces in their name?
-rm -rf 'tdir /'
-mkdir 'tdir ' && touch 'tdir /tfile' 2>/dev/null
-if test -f 'tdir /tfile'; then
-  func_sanitize_dir_name () { echo "$@"; }
-else
-  func_sanitize_dir_name () { echo "$@" | sed 's/  *$//'; }
-fi
-rm -rf 'tdir /'
+rm -rf 'tdir ' && mkdir 'tdir ' && touch 'tdir /tfile' 2>/dev/null
+a=$?
+rm -rf 'tdir '
+case $a$? in #(
+00)
+  func_sanitize_dir_name () { echo "$@"; } ;; #(
+*)
+  func_sanitize_dir_name () { echo "$@" | sed 's/  *$//'; } ;;
+esac
