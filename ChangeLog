@@ -1,3 +1,12 @@
+2008-05-14  Eric Blake  <ebb9@byu.net>
+
+	Document some FreeBSD shell bugs.
+	* doc/autoconf.texi (Limitations of Builtins) <!>: Mention ! issue
+	in compound pipe commands.
+	<export>: Mention difference of exporting an undefined variable.
+	(Shell Functions): Mention loss of $? in entry to shell functions.
+	Extracted from the git mailing list.
+
 2008-05-13  Stepan Kasal  <kasal@ucw.cz>
 
 	Work around MSYS and Cygwin bugs when dealing with trailing space.

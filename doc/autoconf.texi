@@ -12297,7 +12297,7 @@ by all shells!
 
 Shell functions are considered portable nowadays, though Autoconf still
 does not use them (Autotest does).  However, some pitfalls have to be
-avoided for portable use of shell functions.
+avoided for portable use of shell functions (@pxref{Shell Functions}).
 
 Some ancient systems have quite
 small limits on the length of the @samp{#!} line; for instance, 32
@@ -13704,6 +13704,19 @@ subshell if the last command of that subshell was @code{exit} or
 find a shell that does not exhibit the bug, zsh might be the only shell
 present on the user's machine.
 
+Likewise, the state of @samp{$?} is not reliable when entering a shell
+function.  This has the effect that using a function as the first
+command in a @command{trap} handler can cause problems.
+
+@example
+$ @kbd{bash -c 'foo()@{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
+2
+2
+$ @kbd{ash -c 'foo()@{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
+0
+2
+@end example
+
 Shell variables and functions may share the same namespace, for example
 with Solaris 10 @command{/bin/sh}:
 
@@ -13762,6 +13775,16 @@ must use @samp{. ./foo}.
 The Unix version 7 shell did not support
 negating the exit status of commands with @command{!}, and this feature
 is still absent from some shells (e.g., Solaris @command{/bin/sh}).
+Other shells, such as FreeBSD @command{/bin/sh} or @command{ash}, have
+bugs when using @command{!} in compound commands:
+
+@example
+$ @kbd{sh -c 'true && ! true | true; echo $?'}
+1
+$ @kbd{ash -c 'true && ! true | true; echo $?'}
+0
+@end example
+
 Shell code like this:
 
 @example
@@ -14138,8 +14161,18 @@ alternately @samp{foo} and @samp{bar}, although they should print only
 @samp{foo} and then a sequence of @samp{bar}s.
 
 Therefore you should @command{export} again each environment variable
-that you update.
+that you update; the export can occur before or after the assignment.
 
+Posix is not clear on whether the @command{export} of an undefined
+variable causes the variable to be defined with the value of an empty
+string, or merely marks any future definition of a variable by that name
+for export.  Various shells behave differently in this regard:
+
+@example
+$ @kbd{sh -c 'export foo; env | grep foo'}
+$ @kbd{ash -c 'export foo; env | grep foo'}
+foo=
+@end example
 
 @item @command{false}
 @c ------------------
