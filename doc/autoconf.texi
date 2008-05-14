@@ -13776,13 +13776,19 @@ The Unix version 7 shell did not support
 negating the exit status of commands with @command{!}, and this feature
 is still absent from some shells (e.g., Solaris @command{/bin/sh}).
 Other shells, such as FreeBSD @command{/bin/sh} or @command{ash}, have
-bugs when using @command{!} in compound commands:
+bugs when using @command{!}:
 
 @example
-$ @kbd{sh -c 'true && ! true | true; echo $?'}
+$ @kbd{sh -c '! : | :'; echo $?}
 1
-$ @kbd{ash -c 'true && ! true | true; echo $?'}
+$ @kbd{ash -c '! : | :'; echo $?}
 0
+$ @kbd{sh -c '! @{ :; @}'; echo $?}
+1
+$ @kbd{ash -c '! @{ :; @}'; echo $?}
+@{: not found
+Syntax error: "@}" unexpected
+2
 @end example
 
 Shell code like this:

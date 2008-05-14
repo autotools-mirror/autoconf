@@ -1,5 +1,9 @@
 2008-05-14  Eric Blake  <ebb9@byu.net>
 
+	Improve documentation of ! issues.
+	* doc/autoconf.texi (Limitations of Builtins) <!>: Touch up.
+	Reported by Noah Misch.
+
 	Document some FreeBSD shell bugs.
 	* doc/autoconf.texi (Limitations of Builtins) <!>: Mention ! issue
 	in compound pipe commands.
