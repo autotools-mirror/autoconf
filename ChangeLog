@@ -1,3 +1,12 @@
+2008-08-26  Stepan Kasal  <skasal@redhat.com>
+
+	Check for case sensitive make.
+	* m4/make-check.m4 (AC_PROG_MAKE_CASE_SENSITIVE): New macro,...
+	* configure.ac: ... called here.
+	* Makefile.am ($(abs_srcdir)/INSTALL, INSTALL): Return to...
+	($(srcdir)/INSTALL): ...this, but enclose the rule in
+	"if MAKE_CASE_SENSITIVE".
+
 2008-08-26  Eric Blake  <ebb9@byu.net>
 
 	Update invocation documentation.

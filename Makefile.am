@@ -30,22 +30,20 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     build-aux/announce-gen build-aux/gnupload \
 	     .prev-version .version
 
-MAINTAINERCLEANFILES = $(abs_srcdir)/INSTALL
-
 ## --------- ##
 ## INSTALL.  ##
 ## --------- ##
 
-## abs_srcdir is necessary for case-insensitive make to distinguish from
-## 'make install'.  But automake also insists that the plain target INSTALL
-## exist prior to 'make dist'.
-INSTALL: $(abs_srcdir)/INSTALL
-
-pkgdata_DATA = $(abs_srcdir)/INSTALL
+pkgdata_DATA = $(srcdir)/INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
-$(abs_srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
+
+if MAKE_CASE_SENSITIVE
+
+MAINTAINERCLEANFILES = $(srcdir)/INSTALL
+$(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $@ \
 	  $(top_srcdir)/doc/install.texi
+endif
 
 ## maintainer-check ##
 maintainer-check: maintainer-check-tests

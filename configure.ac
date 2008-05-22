@@ -147,6 +147,12 @@ AC_PROG_EGREP
 AC_PROG_SED
 
 
+## ----- ##
+## Make. ##
+## ----- ##
+AC_PROG_MAKE_CASE_SENSITIVE
+
+
 ## ------------ ##
 ## Conclusion.  ##
 ## ------------ ##
