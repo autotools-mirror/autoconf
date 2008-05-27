@@ -1,3 +1,8 @@
+2008-05-27  Eric Blake  <ebb9@byu.net>
+
+	Document Solaris /bin/sh redirection pitfall.
+	* doc/autoconf.texi (File Descriptors): Mention redirection bug.
+
 2008-05-14  Eric Blake  <ebb9@byu.net>
 
 	Improve documentation of ! issues.

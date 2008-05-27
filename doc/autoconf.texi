@@ -12698,6 +12698,19 @@ $
 Within the process which runs the @samp{descrips} script, file
 descriptor 5 is closed.
 
+Don't rely on redirection to a closed file descriptor to cause an
+error.  With Solaris @command{/bin/sh}, when the redirection fails, the
+output goes to the original file descriptor.
+
+@example
+$ @kbd{bash -c 'echo hi >&3' 3>&-; echo $?}
+bash: 3: Bad file descriptor
+1
+$ @kbd{/bin/sh -c 'echo hi >&3' 3>&-; echo $?}
+hi
+0
+@end example
+
 @acronym{DOS} variants cannot rename or remove open files, such as in
 @samp{mv foo bar >foo} or @samp{rm foo >foo}, even though this is
 perfectly portable among Posix hosts.
