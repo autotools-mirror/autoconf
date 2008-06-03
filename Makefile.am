@@ -36,6 +36,11 @@ MAINTAINERCLEANFILES = $(abs_srcdir)/INSTALL
 ## INSTALL.  ##
 ## --------- ##
 
+## abs_srcdir is necessary for case-insensitive make to distinguish from
+## 'make install'.  But automake also insists that the plain target INSTALL
+## exist prior to 'make dist'.
+INSTALL: $(abs_srcdir)/INSTALL
+
 pkgdata_DATA = $(abs_srcdir)/INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
 $(abs_srcdir)/INSTALL: $(top_srcdir)/doc/install.texi

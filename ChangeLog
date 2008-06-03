@@ -1,3 +1,9 @@
+2008-06-03  Eric Blake  <ebb9@byu.net>
+
+	Fix 'make dist' regression from 2008-05-08.
+	* Makefile.am (INSTALL): Add rule, to accomodate 'make dist' after
+	GNUmakefile's _autoconf rule removes INSTALL.
+
 2008-05-27  Eric Blake  <ebb9@byu.net>
 
 	Document Solaris /bin/sh redirection pitfall.
