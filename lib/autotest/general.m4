@@ -1476,9 +1476,10 @@ m4_case([$1],
 # AT_KEYWORDS(KEYWORDS)
 # ---------------------
 # Declare a list of keywords associated to the current test group.
-# The list is stored in lower case, since the -k option is case-insensitive.
+# Since the -k option is case-insensitive, the list is stored in lower case
+# to avoid duplicates that differ only by case.
 _AT_DEFINE_SETUP([AT_KEYWORDS],
-[m4_append_uniq_w([AT_keywords], m4_tolower([[$1]]))])
+[m4_append_uniq_w([AT_keywords], m4_tolower(m4_dquote(m4_expand([$1]))))])
 
 
 # AT_CAPTURE_FILE(FILE)

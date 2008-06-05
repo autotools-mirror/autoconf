@@ -1,3 +1,13 @@
+2008-06-05  Eric Blake  <ebb9@byu.net>
+
+	Fix regression in AT_KEYWORDS([Macro]), from 2007-10-18.
+	* lib/autotest/general.m4 (AT_KEYWORDS): Expand argument prior to
+	converting it to lower case.
+	* tests/autotest.at (Keywords and ranges): Test this.
+	* NEWS: Document the fix.
+	* THANKS: Update.
+	Reported by Karsten Hopp.
+
 2008-06-03  Eric Blake  <ebb9@byu.net>
 
 	Fix 'make dist' regression from 2008-05-08.

@@ -9,6 +9,10 @@ GNU Autoconf NEWS - User visible changes.
 ** Two new quadrigraphs have been introduced: @{:@ for (, and @:}@ for ),
    allowing the output of unbalanced parantheses in more contexts.
 
+** AT_KEYWORDS once again performs expansion on its argument, such that
+   AT_KEYWORDS([m4_if([$1], [], [default])]) no longer complains about
+   the possibly unexpanded m4_if [regression introduced in 2.62].
+
 
 * Major changes in Autoconf 2.62 (2008-04-05) [stable]
   Released by Eric Blake, based on git versions 2.61a.*.

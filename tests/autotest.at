@@ -690,7 +690,7 @@ AT_CHECK(:)
 AT_CLEANUP
 AT_SETUP(both) # 04
 AT_KEYWORDS([key1 key2])
-AT_KEYWORDS([key1])
+AT_KEYWORDS([m4@&t@_echo([Key1])])
 AT_CHECK(:)
 AT_CLEANUP
 AT_SETUP(test5) # 05
@@ -713,7 +713,7 @@ AT_CHECK(:)
 AT_CLEANUP
 ]])
 dnl check that AT_KEYWORDS does not duplicate words
-AT_CHECK([grep 'key1.*key1' k], [1])
+AT_CHECK([grep -i 'key1.*key1' k], [1])
 dnl check that -k requires an argument
 AT_CHECK([$CONFIG_SHELL ./k -k], [1], [], [ignore])
 
