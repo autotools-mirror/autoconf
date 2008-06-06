@@ -6,7 +6,8 @@
 	* tests/autotest.at (Keywords and ranges): Test this.
 	* NEWS: Document the fix.
 	* THANKS: Update.
-	Reported by Karsten Hopp.
+	Reported via Karsten Hopp, by Jochen Schmitt in
+	https://bugzilla.redhat.com/show_bug.cgi?id=449973
 
 2008-06-03  Eric Blake  <ebb9@byu.net>
 
