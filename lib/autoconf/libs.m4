@@ -217,7 +217,7 @@ _ACEOF
 	*) test -f "$ac_im_incroot/X11/Xos.h" && ac_x_includes=$ac_im_incroot;;
     esac
     case $ac_im_usrlibdir in
-	/usr/lib | /lib) ;;
+	/usr/lib | /usr/lib64 | /lib | /lib64) ;;
 	*) test -d "$ac_im_usrlibdir" && ac_x_libraries=$ac_im_usrlibdir ;;
     esac
   fi

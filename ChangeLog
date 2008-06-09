@@ -1,3 +1,11 @@
+2008-06-09  Eric Blake  <ebb9@byu.net>
+
+	Allow lib64 as a default X library location.
+	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): Add lib64.
+	* NEWS: Mention the change.
+	* THANKS: Update.
+	Reported by Brad Walker.
+
 2008-06-05  Eric Blake  <ebb9@byu.net>
 
 	Fix regression in AT_KEYWORDS([Macro]), from 2007-10-18.

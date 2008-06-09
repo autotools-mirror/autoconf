@@ -2,6 +2,9 @@ GNU Autoconf NEWS - User visible changes.
 
 * Major changes in Autoconf 2.62a (2008-??-??)
 
+** AC_PATH_X now includes /lib64 and /usr/lib64 in its list of default
+   library directories.
+
 ** Clients of m4_expand, such as AS_HELP_STRING and AT_SETUP, can now
    handle properly quoted but otherwise unbalanced parentheses (for
    some macros, this fixes a regression in 2.62).
