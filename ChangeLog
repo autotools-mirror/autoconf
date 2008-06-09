@@ -1,5 +1,11 @@
 2008-06-09  Eric Blake  <ebb9@byu.net>
 
+	Mark AC_TYPE_SIGNAL as obsolete.
+	* lib/autoconf/types.m4 (AC_TYPE_SIGNAL): Switch to AU_DEFUN.
+	* doc/autoconf.texi (Function Portability): Update documentation.
+	(Particular Types): Move AC_TYPE_SIGNAL...
+	(Obsolete Macros): ...here, and mention why.
+
 	Allow lib64 as a default X library location.
 	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): Add lib64.
 	* NEWS: Mention the change.

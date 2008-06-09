@@ -1,8 +1,8 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Type related macros: existence, sizeof, and structure members.
 #
-# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2007 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2007, 2008 Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -693,8 +693,10 @@ AC_DEFUN([_AC_TYPE_UNSIGNED_INT],
 # AC_TYPE_SIGNAL
 # --------------
 # Note that identifiers starting with SIG are reserved by ANSI C.
-AN_FUNCTION([signal],  [AC_TYPE_SIGNAL])
-AC_DEFUN([AC_TYPE_SIGNAL],
+# C89 requires signal handlers to return void; only K&R returned int;
+# modern code does not need to worry about using this macro (not to
+# mention that sigaction is better than signal).
+AU_DEFUN([AC_TYPE_SIGNAL],
 [AC_CACHE_CHECK([return type of signal handlers], ac_cv_type_signal,
 [AC_COMPILE_IFELSE(
 [AC_LANG_PROGRAM([#include <sys/types.h>
@@ -706,7 +708,8 @@ AC_DEFUN([AC_TYPE_SIGNAL],
 AC_DEFINE_UNQUOTED(RETSIGTYPE, $ac_cv_type_signal,
 		   [Define as the return type of signal handlers
 		    (`int' or `void').])
-])
+], [your code may safely assume C89 semantics that RETSIGTYPE is void.
+Remove this warning and the `AC_CACHE_CHECK' when you adjust the code.])
 
 
 ## ------------------------ ##
