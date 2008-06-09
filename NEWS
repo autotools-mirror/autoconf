@@ -5,6 +5,13 @@ GNU Autoconf NEWS - User visible changes.
 ** AC_PATH_X now includes /lib64 and /usr/lib64 in its list of default
    library directories.
 
+** Newly obsolete macros
+   The following macro has been marked obsolete, since current porting
+   targets can safely assume C89 semantics that signal handlers return
+   void.  We have no current plans to remove the macro.
+
+     AC_TYPE_SIGNAL
+
 ** Clients of m4_expand, such as AS_HELP_STRING and AT_SETUP, can now
    handle properly quoted but otherwise unbalanced parentheses (for
    some macros, this fixes a regression in 2.62).

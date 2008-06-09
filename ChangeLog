@@ -5,6 +5,7 @@
 	* doc/autoconf.texi (Function Portability): Update documentation.
 	(Particular Types): Move AC_TYPE_SIGNAL...
 	(Obsolete Macros): ...here, and mention why.
+	* NEWS: Mention the change.
 
 	Allow lib64 as a default X library location.
 	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): Add lib64.
