@@ -497,6 +497,8 @@ AT_DATA([config.hin],
 #define str(define) \
 #define
 #define stringify(arg) str(arg)
+#undef aaa /* with comments */
+#undef not_substed /* with comments */
 ]])
 
 AT_CHECK_AUTOCONF
@@ -527,6 +529,8 @@ ARG1
 #define str(define) \
 #define
 #define stringify(arg) str(arg)
+#define aaa AAA
+/* #undef not_substed */
 ]])
 AT_CHECK([cat config.h], 0, expout)
 

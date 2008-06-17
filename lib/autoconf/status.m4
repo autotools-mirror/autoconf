@@ -832,9 +832,9 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
   }
   split(mac1, mac2, "(") #)
   macro = mac2[1]
+  prefix = substr(line, 1, index(line, defundef) - 1)
   if (D_is_set[macro]) {
     # Preserve the white space surrounding the "#".
-    prefix = substr(line, 1, index(line, defundef) - 1)
     print prefix "define", macro P[macro] D[macro]
     next
   } else {
@@ -842,7 +842,7 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
     # in the case of _POSIX_SOURCE, which is predefined and required
     # on some systems where configure will not decide to define it.
     if (defundef == "undef") {
-      print "/*", line, "*/"
+      print "/*", prefix defundef, macro, "*/"
       next
     }
   }

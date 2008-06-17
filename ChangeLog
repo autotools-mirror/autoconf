@@ -1,3 +1,14 @@
+2008-06-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix '#undef variable /* comment */' transform in config headers.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS_PREPARE): For
+	undefined preprocessor macros that are followed by a comment
+	in the header template, do not create nested comments in the
+	output.
+	* tests/torture.at (@%:@define header templates): Extend test.
+	* NEWS: Update.
+	Report by Karsten Hopp <karsten@redhat.com>.
+
 2008-06-09  Eric Blake  <ebb9@byu.net>
 
 	Mark AC_TYPE_SIGNAL as obsolete.

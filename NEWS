@@ -23,6 +23,9 @@ GNU Autoconf NEWS - User visible changes.
    AT_KEYWORDS([m4_if([$1], [], [default])]) no longer complains about
    the possibly unexpanded m4_if [regression introduced in 2.62].
 
+** Config header templates `#undef UNDEFINED /* comment */' do not lead to
+   nested comments any more; regression introduced in 2.62.
+
 
 * Major changes in Autoconf 2.62 (2008-04-05) [stable]
   Released by Eric Blake, based on git versions 2.61a.*.
