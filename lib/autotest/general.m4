@@ -215,6 +215,8 @@ m4_define([AT_groups_all], [])
 m4_define([AT_help_all], [])
 m4_foreach([AT_name], [_AT_DEFINE_INIT_LIST], [m4_popdef(m4_defn([AT_name]))])
 m4_wrap([_AT_FINISH])
+dnl Define FDs.
+m4_define([AS_MESSAGE_LOG_FD], [5])
 AS_INIT[]dnl
 m4_divert_push([DEFAULTS])dnl
 AT_COPYRIGHT(
@@ -772,23 +774,45 @@ if test -n "$at_top_srcdir"; then
   done
 fi
 
+## ------------------- ##
+## Directory structure ##
+## ------------------- ##
+
+# This is the set of directories and files used by this script
+# (non-literals are capitalized):
+#
+# TESTSUITE         - the testsuite
+# TESTSUITE.log     - summarizes the complete testsuite run
+# TESTSUITE.dir/    - created during a run, remains after -d or failed test
+# + at-groups/      - during a run: status of all groups in run
+# | + NNN/          - during a run: meta-data about test group NNN
+# | | + check-line  - location (source file and line) of current AT_CHECK
+# | | + status      - exit status of current AT_CHECK
+# | | + stdout      - stdout of current AT_CHECK
+# | | + stder1      - stderr, including trace
+# | | + stderr      - stderr, with trace filtered out
+# | | + test-source - portion of testsuite that defines group
+# | | + times       - timestamps for computing duration
+# | | + pass        - created if group passed
+# | | + xpass       - created if group xpassed
+# | | + fail        - created if group failed
+# | | + xfail       - created if group xfailed
+# | | + skip        - created if group skipped
+# + at-stop         - during a run: end the run if this file exists
+# + at-source-lines - during a run: cache of TESTSUITE line numbers for extraction
+# + 0..NNN/         - created for each group NNN, remains after -d or failed test
+# | + TESTSUITE.log - summarizes the group results
+# | + ...           - files created during the group
+
 # The directory the whole suite works in.
 # Should be absolute to let the user `cd' at will.
 at_suite_dir=$at_dir/$as_me.dir
 # The file containing the suite.
 at_suite_log=$at_dir/$as_me.log
-# The file containing the location of the last AT_CHECK.
-at_check_line_file=$at_suite_dir/at-check-line
-# The file containing the exit status of the last command.
-at_status_file=$at_suite_dir/at-status
-# The files containing the output of the tested commands.
-at_stdout=$at_suite_dir/at-stdout
-at_stder1=$at_suite_dir/at-stder1
-at_stderr=$at_suite_dir/at-stderr
-# The file containing the function to run a test group.
-at_test_source=$at_suite_dir/at-test-source
-# The file containing dates.
-at_times_file=$at_suite_dir/at-times
+# The directory containing helper files per test group.
+at_helper_dir=$at_suite_dir/at-groups
+# Stop file: if it exists, do not start new jobs.
+at_stop_file=$at_suite_dir/at-stop
 
 if $at_clean; then
   test -d "$at_suite_dir" &&
@@ -846,7 +870,7 @@ export PATH
 
 # Setting up the FDs.
 # 5 is the log file.  Not to be overwritten if `-d'.
-m4_define([AS_MESSAGE_LOG_FD], [5])
+dnl FDs are defined earlier in this file.
 if $at_debug_p; then
   at_suite_log=/dev/null
 else
@@ -926,12 +950,6 @@ done
 at_start_date=`date`
 at_start_time=`date +%s 2>/dev/null`
 AS_ECHO(["$as_me: starting at: $at_start_date"]) >&AS_MESSAGE_LOG_FD
-at_xpass_list=
-at_xfail_list=
-at_pass_list=
-at_fail_list=
-at_skip_list=
-at_group_count=0
 m4_divert_pop([PREPARE_TESTS])dnl
 m4_divert_push([TESTS])dnl
 
@@ -970,19 +988,47 @@ BEGIN { FS="" }
   test = substr ($ 0, 10)
   print "at_sed" test "=\"1," start "d;" (NR-1) "q\""
   if (test == "'"$at_group"'") exit
-}' "$at_myself" > "$at_test_source" &&
-. "$at_test_source" ||
+}' "$at_myself" > "$at_suite_dir/at-source-lines" &&
+. "$at_suite_dir/at-source-lines" ||
   AS_ERROR([cannot create test line number cache])
+rm -f "$at_suite_dir/at-source-lines"
 
+# Set up helper dirs.
+rm -rf "$at_helper_dir" &&
+mkdir "$at_helper_dir" &&
+cd "$at_helper_dir" &&
+{ test -z "$at_groups" || mkdir $at_groups; } ||
+AS_ERROR([testsuite directory setup failed])
 
-m4_text_box([Driver loop.])
-for at_group in $at_groups
-do
+# Functions for running a test group.  We leave the actual
+# test group execution outside of a shell function in order
+# to avoid hitting zsh 4.x exit status bugs.
+
+# at_func_group_prepare
+# ---------------------
+# Prepare running a test group
+at_func_group_prepare ()
+{
+  # The directory for additional per-group helper files.
+  at_job_dir=$at_helper_dir/$at_group
+  # The file containing the location of the last AT_CHECK.
+  at_check_line_file=$at_job_dir/check-line
+  # The file containing the exit status of the last command.
+  at_status_file=$at_job_dir/status
+  # The files containing the output of the tested commands.
+  at_stdout=$at_job_dir/stdout
+  at_stder1=$at_job_dir/stder1
+  at_stderr=$at_job_dir/stderr
+  # The file containing the code for a test group.
+  at_test_source=$at_job_dir/test-source
+  # The file containing dates.
+  at_times_file=$at_job_dir/times
+
   # Be sure to come back to the top test directory.
   cd "$at_suite_dir"
 
   # Clearly separate the test groups when verbose.
-  test $at_group_count != 0 && $at_verbose echo
+  $at_first || $at_verbose echo
 
   at_group_normalized=$at_group
   _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
@@ -993,70 +1039,68 @@ do
   if test -d "$at_group_dir"; then
     find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
     rm -fr "$at_group_dir" ||
-      AS_WARN([test directory could not be cleaned.])
+    AS_WARN([test directory for $at_group_normalized could not be cleaned.])
   fi
   # Be tolerant if the above `rm' was not able to remove the directory.
   AS_MKDIR_P(["$at_group_dir"])
-  cd "$at_group_dir"
 
   echo 0 > "$at_status_file"
 
   # In verbose mode, append to the log file *and* show on
-  # the standard output; in quiet mode only write to the log
+  # the standard output; in quiet mode only write to the log.
   if test -z "$at_verbose"; then
     at_tee_pipe='tee -a "$at_group_log"'
   else
     at_tee_pipe='cat >> "$at_group_log"'
   fi
+}
 
-  if at_func_test $at_group && . "$at_test_source"; then :; else
-    AS_ECHO(["$as_me: unable to parse test group: $at_group"]) >&2
-    at_failed=:
-  fi
-
+# at_func_group_postprocess
+# -------------------------
+at_func_group_postprocess ()
+{
   # Be sure to come back to the suite directory, in particular
   # since below we might `rm' the group directory we are in currently.
   cd "$at_suite_dir"
 
   if test ! -f "$at_check_line_file"; then
-    sed "s/^ */$as_me: warning: /" <<_ATEOF
-	A failure happened in a test group before any test could be
-	run. This means that test suite is improperly designed.  Please
-	report this failure to <AT_PACKAGE_BUGREPORT>.
+    sed "s/^ */$as_me: WARNING: /" <<_ATEOF
+      A failure happened in a test group before any test could be
+      run. This means that test suite is improperly designed.  Please
+      report this failure to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
     AS_ECHO(["$at_setup_line"]) >"$at_check_line_file"
   fi
-  at_func_arith 1 + $at_group_count
-  at_group_count=$at_func_arith_result
   $at_verbose AS_ECHO_N(["$at_group. $at_setup_line: "])
   AS_ECHO_N(["$at_group. $at_setup_line: "]) >> "$at_group_log"
   case $at_xfail:$at_status in
     yes:0)
 	at_msg="UNEXPECTED PASS"
-	at_xpass_list="$at_xpass_list $at_group"
+	at_res=xpass
 	at_errexit=$at_errexit_p
 	;;
     no:0)
 	at_msg="ok"
-	at_pass_list="$at_pass_list $at_group"
+	at_res=pass
 	at_errexit=false
 	;;
     *:77)
 	at_msg='skipped ('`cat "$at_check_line_file"`')'
-	at_skip_list="$at_skip_list $at_group"
+	at_res=skip
 	at_errexit=false
 	;;
     yes:*)
 	at_msg='expected failure ('`cat "$at_check_line_file"`')'
-	at_xfail_list="$at_xfail_list $at_group"
+	at_res=xfail
 	at_errexit=false
 	;;
     no:*)
 	at_msg='FAILED ('`cat "$at_check_line_file"`')'
-	at_fail_list="$at_fail_list $at_group"
+	at_res=fail
 	at_errexit=$at_errexit_p
 	;;
   esac
+  echo "$at_res" > "$at_job_dir/$at_res"
   # Make sure there is a separator even with long titles.
   AS_ECHO([" $at_msg"])
   at_log_msg="$at_group. $at_desc ($at_setup_line): $at_msg"
@@ -1074,7 +1118,7 @@ _ATEOF
       AS_ECHO(["$at_log_msg"]) >&AS_MESSAGE_LOG_FD
 
       # Cleanup the group directory, unless the user wants the files.
-      if $at_debug_p ; then
+      if $at_debug_p; then
 	at_func_create_debugging_script
       else
 	if test -d "$at_group_dir"; then
@@ -1090,16 +1134,63 @@ _ATEOF
       # is later included in the global log.
       AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
 
-      # Upon failure, keep the group directory for autopsy, and
-      # create the debugging script.
+      # Upon failure, keep the group directory for autopsy, and create
+      # the debugging script.  With -e, do not start any further tests.
       at_func_create_debugging_script
-      $at_errexit && break
+      if $at_errexit; then
+	echo stop > "$at_stop_file"
+      fi
       ;;
   esac
+}
+
+
+m4_text_box([Driver loop.])
+
+rm -f "$at_stop_file"
+at_first=:
+
+for at_group in $at_groups; do
+  at_func_group_prepare
+  if cd "$at_group_dir" &&
+     at_func_test $at_group &&
+     . "$at_test_source"; then :; else
+    AS_WARN([unable to parse test group: $at_group])
+    at_failed=:
+  fi
+  at_func_group_postprocess
+  test -f "$at_stop_file" && break
+  at_first=false
 done
+
+# Wrap up the test suite with summary statistics.
+cd "$at_helper_dir"
+
+at_pass_list=`for f in */pass; do echo $f; done | sed '/\*/d; s,/pass,,'`
+at_skip_list=`for f in */skip; do echo $f; done | sed '/\*/d; s,/skip,,'`
+at_xfail_list=`for f in */xfail; do echo $f; done | sed '/\*/d; s,/xfail,,'`
+at_xpass_list=`for f in ?/xpass ??/xpass ???/xpass ????/xpass; do
+		 echo $f; done | sed '/?/d; s,/xpass,,'`
+at_fail_list=`for f in ?/fail ??/fail ???/fail ????/fail; do
+		echo $f; done | sed '/?/d; s,/fail,,'`
+
+set X $at_pass_list $at_xpass_list $at_xfail_list $at_fail_list $at_skip_list
+shift; at_group_count=$[@%:@]
+set X $at_xpass_list; shift; at_xpass_count=$[@%:@]; at_xpass_list=$[*]
+set X $at_xfail_list; shift; at_xfail_count=$[@%:@]
+set X $at_fail_list; shift; at_fail_count=$[@%:@]; at_fail_list=$[*]
+set X $at_skip_list; shift; at_skip_count=$[@%:@]
+
+at_func_arith $at_group_count - $at_skip_count
+at_run_count=$at_func_arith_result
+at_func_arith $at_xpass_count + $at_fail_count
+at_unexpected_count=$at_func_arith_result
+at_func_arith $at_xfail_count + $at_fail_count
+at_total_fail_count=$at_func_arith_result
 
 # Back to the top directory.
 cd "$at_dir"
+rm -rf "$at_helper_dir"
 
 # Compute the duration of the suite.
 at_stop_date=`date`
@@ -1121,19 +1212,6 @@ case $at_start_time,$at_stop_time in
     AS_ECHO(["$as_me: test suite duration: $at_duration"]) >&AS_MESSAGE_LOG_FD
     ;;
 esac
-
-# Wrap up the test suite with summary statistics.
-set X $at_skip_list; shift; at_skip_count=$[@%:@]
-set X $at_fail_list; shift; at_fail_count=$[@%:@]
-set X $at_xpass_list; shift; at_xpass_count=$[@%:@]
-set X $at_xfail_list; shift; at_xfail_count=$[@%:@]
-
-at_func_arith $at_group_count - $at_skip_count
-at_run_count=$at_func_arith_result
-at_func_arith $at_xpass_count + $at_fail_count
-at_unexpected_count=$at_func_arith_result
-at_func_arith $at_xfail_count + $at_fail_count
-at_total_fail_count=$at_func_arith_result
 
 echo
 AS_BOX([Test results.])
@@ -1266,8 +1344,8 @@ else
 [and all information you think might help:
 
    To: <AT_PACKAGE_BUGREPORT>
-   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me:dnl
-$at_fail_list${at_fail_list:+ failed${at_xpass_list:+,}}dnl
+   Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me: dnl
+$at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}dnl
 $at_xpass_list${at_xpass_list:+ passed unexpectedly}
 "])
   if test $at_debug_p = false; then

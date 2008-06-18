@@ -1,3 +1,23 @@
+2008-06-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Reorganize autotest files, factorize for parallel execution.
+	* lib/autotest/general.m4 (AS_MESSAGE_LOG_FD): Move definition
+	earlier in the file.
+	(AT_INIT): Create line number cache in
+	$at_suite_dir/at-source-lines.
+	<at_helper_dir>: New directory at-groups below $at_suite_dir.
+	Add comment explaining the new directory structure.
+	(at_func_group_prepare, at_func_group_postprocess): New shell
+	functions to factorize per-test group work.  Keep the actual
+	test execution outside of a shell function in order to avoid
+	zsh 4.x exit status bugs.
+	<at_check_line_file, at_status_file, at_stdout, at_stder1>
+	<at_stderr, at_test_source>: Turn these into per-group files
+	below $at_helper_dir.  Also store test results there in files
+	named pass, fail, xpass, xfail, skip.  Let the parent collect
+	results from $at_helper_dir.  Adjust summary statistics
+	computation and result output.
+
 2008-06-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix '#undef variable /* comment */' transform in config headers.
