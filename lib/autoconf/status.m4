@@ -961,7 +961,7 @@ m4_define([_AC_OUTPUT_LINK],
   #
 
   if test "$ac_source" = "$ac_file" && test "$srcdir" = '.'; then
-    AC_MSG_WARN([not linking $ac_source to itself])
+    :
   else
     # Prefer the file from the source tree if names are identical.
     if test "$ac_source" = "$ac_file" || test ! -r "$ac_source"; then
