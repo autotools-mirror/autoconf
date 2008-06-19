@@ -1166,6 +1166,7 @@ done
 # Wrap up the test suite with summary statistics.
 cd "$at_helper_dir"
 
+# Use ?..???? when the list must remain sorted, the faster * otherwise.
 at_pass_list=`for f in */pass; do echo $f; done | sed '/\*/d; s,/pass,,'`
 at_skip_list=`for f in */skip; do echo $f; done | sed '/\*/d; s,/skip,,'`
 at_xfail_list=`for f in */xfail; do echo $f; done | sed '/\*/d; s,/xfail,,'`
