@@ -1,3 +1,9 @@
+2008-06-19  Eric Blake  <ebb9@byu.net>
+
+	Resync with gnulib.
+	* GNUmakefile: Grab from upstream, to fix VPATH 'make dist' bug.
+	Reported by Stepan Kasal.
+
 2008-06-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Reorganize autotest files, factorize for parallel execution.
