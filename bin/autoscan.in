@@ -527,8 +527,8 @@ sub output ($)
     ("#                                               -*- Autoconf -*-\n" .
      "# Process this file with autoconf to produce a configure script.\n" .
      "\n" .
-     "AC_PREREQ(@VERSION@)\n" .
-     "AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)\n");
+     "AC_PREREQ([@VERSION@])\n" .
+     "AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])\n");
   if (defined $cfiles[0])
     {
       print $file "AC_CONFIG_SRCDIR([$cfiles[0]])\n";

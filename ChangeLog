@@ -1,3 +1,8 @@
+2008-07-02  Stepan Kasal  <skasal@redhat.com>
+
+	Add quotes to the header of autoscan-generated source.
+	* bin/autoscan.in: Add quotes to AC_PREREQ and AC_INIT.
+
 2008-06-28  Andreas Schwab  <schwab@suse.de>
 
 	* doc/autoconf.texi (autoscan Invocation): Fix spacing.
