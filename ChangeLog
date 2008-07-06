@@ -1,3 +1,8 @@
+2008-07-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (@dvar): Remove trailing newline.
+	(@ovar): Likewise.  Fix macro documentation.
+
 2008-07-02  Stepan Kasal  <skasal@redhat.com>
 
 	Add quotes to the header of autoscan-generated source.

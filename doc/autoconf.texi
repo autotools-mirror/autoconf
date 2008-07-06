@@ -10,12 +10,12 @@
 @end ifnothtml
 @finalout
 
-@c @ovar(ARG, DEFAULT)
-@c -------------------
+@c @ovar(ARG)
+@c ----------
 @c The ARG is an optional argument.  To be used for macro arguments in
 @c their documentation (@defmac).
 @macro ovar{varname}
-@r{[}@var{\varname\}@r{]}
+@r{[}@var{\varname\}@r{]}@c
 @end macro
 
 @c @dvar(ARG, DEFAULT)
@@ -23,7 +23,7 @@
 @c The ARG is an optional argument, defaulting to DEFAULT.  To be used
 @c for macro arguments in their documentation (@defmac).
 @macro dvar{varname, default}
-@r{[}@var{\varname\} = @samp{\default\}@r{]}
+@r{[}@var{\varname\} = @samp{\default\}@r{]}@c
 @end macro
 
 @c Handling the indexes with Texinfo yields several different problems.
