@@ -117,11 +117,16 @@ m4_define([m4_copy_unm4],
 
 
 # Some m4 internals have names colliding with tokens we might use.
-# Rename them a` la `m4 --prefix-builtins'.
+# Rename them a` la `m4 --prefix-builtins'.  Conditionals first, since
+# some subsequent renames are conditional.
+m4_rename_m4([ifdef])
+m4_rename([ifelse], [m4_if])
+
 m4_rename_m4([builtin])
 m4_rename_m4([changecom])
 m4_rename_m4([changequote])
-m4_undefine([changeword])
+m4_ifdef([changeword],dnl conditionally available in 1.4.x
+[m4_undefine([changeword])])
 m4_rename_m4([debugfile])
 m4_rename_m4([debugmode])
 m4_rename_m4([decr])
@@ -132,8 +137,6 @@ m4_rename_m4([errprint])
 m4_rename_m4([esyscmd])
 m4_rename_m4([eval])
 m4_rename_m4([format])
-m4_rename_m4([ifdef])
-m4_rename([ifelse], [m4_if])
 m4_undefine([include])
 m4_rename_m4([incr])
 m4_rename_m4([index])
@@ -154,7 +157,8 @@ m4_rename([regexp], [m4_bregexp])
 m4_rename_m4([shift])
 m4_undefine([sinclude])
 m4_rename_m4([substr])
-m4_rename_m4([symbols])
+m4_ifdef([symbols],dnl present only in alpha-quality 1.4o
+[m4_rename_m4([symbols])])
 m4_rename_m4([syscmd])
 m4_rename_m4([sysval])
 m4_rename_m4([traceoff])
