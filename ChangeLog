@@ -1,3 +1,16 @@
+2008-07-21  Eric Blake  <ebb9@byu.net>
+
+	Ignore undefined macros, necessary with m4 1.6.
+	* bin/autoupdate.in (_au___undefine): New macro,...
+	(_au__undefine): ...wrapped by ifdef to silence m4 warnings.
+	Reported by Ralf Wildenhues.
+
+2008-07-11  Eric Blake  <ebb9@byu.net>
+
+	Work around M4 1.6 warning on undefined macros.
+	* lib/m4sugar/m4sugar.m4 (changeword, symbols): Don't rename if
+	not already available as builtins.
+
 2008-04-05  Eric Blake  <ebb9@byu.net>
 
 	Release Version 2.62.

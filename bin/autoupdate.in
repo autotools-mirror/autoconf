@@ -267,8 +267,10 @@ foreach my $file (@ARGV)
       # Define our special macros:
       define([_au__defn], defn([defn]))
       define([_au__divert], defn([divert]))
+      define([_au__ifdef], defn([ifdef]))
       define([_au__include], defn([include]))
-      define([_au__undefine], defn([undefine]))
+      define([_au___undefine], defn([undefine]))
+      define([_au__undefine], [_au__ifdef([$1], [_au___undefine([$1])])])
       define([_au__save], [m4_ifdef([$1], [m4_copy([$1], [_au_$1])])])
       define([_au__restore],
 	[_au_m4_ifdef([_au_$1],
