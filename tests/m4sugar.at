@@ -278,6 +278,88 @@ AT_CHECK_M4SUGAR([-o-], 0, [[a a b
 AT_CLEANUP
 
 
+## ------------ ##
+## m4_prepend.  ##
+## ------------ ##
+
+AT_SETUP([m4@&t@_prepend])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_define([active], [ACTIVE])dnl
+m4_prepend([sentence], [This is an])dnl
+m4_prepend([sentence], [ active ])dnl
+m4_prepend([sentence], [symbol.])dnl
+sentence
+m4_undefine([active])dnl
+sentence
+m4_define([active], [ACTIVE])dnl
+m4_prepend([hooks], [m4_define([act1], [act2])])dnl
+m4_prepend([hooks], [m4_define([act2], [active])])dnl
+m4_undefine([active])dnl
+act1
+hooks
+act1
+dnl Test for bug fixed in 2.62 when separator is active.
+m4_define([a], [A])dnl
+m4_prepend_uniq([foo], [-], [a])dnl
+m4_prepend_uniq([foo], [-], [a])dnl
+m4_prepend_uniq([bar], [-], [a])dnl
+m4_prepend_uniq([bar], [~], [a])dnl
+m4_prepend_uniq([bar], [-], [a])dnl
+m4_defn([foo])
+m4_defn([bar])
+foo
+bar
+m4_prepend_uniq([blah], [one], [, ], [new], [existing])
+m4_prepend_uniq([blah], [two], [, ], [new], [existing])
+m4_prepend_uniq([blah], [two], [, ], [new], [existing])
+m4_prepend_uniq([blah], [three], [, ], [new], [existing])
+m4_prepend([blah], [two], [, ])dnl
+blah
+m4_dquote(blah)
+m4_prepend([list], [one], [[, ]])dnl
+m4_prepend([list], [two], [[, ]])dnl
+m4_prepend([list], [three], [[, ]])dnl
+list
+m4_dquote(list)
+m4_prepend_uniq_w([numbers], [1 1 2])dnl
+m4_prepend_uniq_w([numbers], [ 2 3 ])dnl
+numbers
+]],
+[[symbol. ACTIVE This is an
+symbol. active This is an
+act1
+
+active
+-
+~a-
+-
+~A-
+new
+new
+existing
+new
+two, three, two, one
+[two],[three],[two],[one]
+three, two, one
+[three, two, one]
+3 2 1
+]])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_prepend_uniq([str], [a], [ ])
+m4_prepend_uniq([str], [a b], [ ])
+m4_divert([0])dnl
+str
+]])
+
+AT_CHECK_M4SUGAR([-o-], 0, [[a b a
+]], [[script.4s:2: warning: m4@&t@_prepend_uniq: `a b' contains ` '
+]])
+
+AT_CLEANUP
+
+
 ## --------- ##
 ## m4_join.  ##
 ## --------- ##

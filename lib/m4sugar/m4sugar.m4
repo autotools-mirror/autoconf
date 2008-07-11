@@ -1876,9 +1876,11 @@ m4_define([m4_combine],
 
 
 # m4_append(MACRO-NAME, STRING, [SEPARATOR])
-# ------------------------------------------
+# m4_prepend(MACRO-NAME, STRING, [SEPARATOR])
+# -------------------------------------------
 # Redefine MACRO-NAME to hold its former content plus `SEPARATOR`'STRING'
-# at the end.  It is valid to use this macro with MACRO-NAME undefined,
+# at the end for m4_append, or `STRING`'SEPARATOR' at the beginning for
+# m4_prepend.  It is valid to use this macro with MACRO-NAME undefined,
 # in which case no SEPARATOR is added.  Be aware that the criterion is
 # `not being defined', and not `not being empty'.
 #
@@ -1921,37 +1923,67 @@ m4_define([m4_combine],
 #    => one, two, three
 #    => [one],[two],[three]
 #
+# Note that m4_append can benefit from amortized O(n log n) m4 behavior, if
+# the underlying m4 implementation is smart enough to avoid copying existing
+# contents when enlarging a macro's definition into any pre-allocated storage
+# (m4 1.4.x unfortunately does not implement this optimization).  m4_prepend
+# is inherently O(n^2), since pre-allocated storage only occurs at the end
+# of a macro, so the existing contents must always be moved.
+#
 # Use m4_builtin to avoid overhead of m4_defn.
 m4_define([m4_append],
 [m4_define([$1],
 	   m4_ifdef([$1], [m4_builtin([defn], [$1])[$3]])[$2])])
+m4_define([m4_prepend],
+[m4_define([$1],
+	   [$2]m4_ifdef([$1], [[$3]m4_builtin([defn], [$1])]))])
 
 
 # m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR], [IF-UNIQ], [IF-DUP])
-# --------------------------------------------------------------------
-# Like `m4_append', but append only if not yet present.  Additionally,
-# expand IF-UNIQ if STRING was appended, or IF-DUP if STRING was already
-# present.  Also, warn if SEPARATOR is not empty and occurs within STRING,
-# as the algorithm no longer guarantees uniqueness.
+# m4_prepend_uniq(MACRO-NAME, STRING, [SEPARATOR], [IF-UNIQ], [IF-DUP])
+# ---------------------------------------------------------------------
+# Like `m4_append'/`m4_prepend', but add STRING only if not yet present.
+# Additionally, expand IF-UNIQ if STRING was appended, or IF-DUP if STRING
+# was already present.  Also, warn if SEPARATOR is not empty and occurs
+# within STRING, as the algorithm no longer guarantees uniqueness.
+#
+# Note that while m4_append can be O(n log n) (depending on whether the
+# underlying M4 implementation), m4_append_uniq is inherently O(n^2)
+# because each append operation searches the entire string.
 m4_define([m4_append_uniq],
-[m4_ifval([$3], [m4_if(m4_index([$2], [$3]), [-1], [],
+[_m4_grow_uniq([m4_append], $@)])
+m4_define([m4_prepend_uniq],
+[_m4_grow_uniq([m4_prepend], $@)])
+
+# _m4_grow_uniq(HOW, MACRO-NAME, STRING, [SEP], [IF-UNIQ], [IF-DUP])
+# ------------------------------------------------------------------
+# Shared implementation of m4_append_uniq and m4_prepend_uniq.  HOW is
+# used to distinguish where the STRING will be added.
+m4_define([_m4_grow_uniq],
+[m4_ifval([$4], [m4_if(m4_index([$3], [$4]), [-1], [],
 		       [m4_warn([syntax],
-				[$0: `$2' contains `$3'])])])_$0($@)])
-m4_define([_m4_append_uniq],
-[m4_ifdef([$1],
-	  [m4_if(m4_index([$3]m4_builtin([defn], [$1])[$3], [$3$2$3]), [-1],
-		 [m4_append([$1], [$2], [$3])$4], [$5])],
-	  [m4_append([$1], [$2], [$3])$4])])
+				[$1_uniq: `$3' contains `$4'])])])]$0_1($@))
+m4_define([_m4_grow_uniq_1],
+[m4_ifdef([$2],
+	  [m4_if(m4_index([$4]m4_builtin([defn], [$2])[$4], [$4$3$4]), [-1],
+		 [$1([$2], [$3], [$4])$5], [$6])],
+	  [m4_define([$2], [$3])$5])])
 
 # m4_append_uniq_w(MACRO-NAME, STRINGS)
-# -------------------------------------
+# m4_prepend_uniq_w(MACRO-NAME, STRINGS)
+# --------------------------------------
 # For each of the words in the whitespace separated list STRINGS, append
 # only the unique strings to the definition of MACRO-NAME.
 #
 # Avoid overhead of m4_defn by using m4_builtin.
 m4_define([m4_append_uniq_w],
 [m4_foreach_w([m4_Word], [$2],
-	      [_m4_append_uniq([$1], m4_builtin([defn], [m4_Word]), [ ])])])
+	      [_m4_grow_uniq_1([m4_append], [$1],
+			       m4_builtin([defn], [m4_Word]), [ ])])])
+m4_define([m4_prepend_uniq_w],
+[m4_foreach_w([m4_Word], [$2],
+	      [_m4_grow_uniq_1([m4_prepend], [$1],
+			       m4_builtin([defn], [m4_Word]), [ ])])])
 
 
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
@@ -2202,7 +2234,9 @@ m4_define([m4_version_compare],
 # m4_PACKAGE_STRING
 # m4_PACKAGE_BUGREPORT
 # --------------------
-m4_include([m4sugar/version.m4])
+# If m4sugar/version.m4 is present, then define version strings.  This
+# file is optional, provided by Autoconf but absent in Bison.
+m4_sinclude([m4sugar/version.m4])
 
 
 # m4_version_prereq(VERSION, [IF-OK], [IF-NOT = FAIL])

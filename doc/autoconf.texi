@@ -11055,6 +11055,12 @@ to grow strings without duplicating substrings.  Additionally,
 Also, @code{m4_append_uniq} warns if @var{separator} is not empty, but
 occurs within @var{string}, since that can lead to duplicates.
 
+Note that @code{m4_append} can scale @dfn{linearithmically} (ie., O(n
+log n) in complexity notation), depending on the quality of the
+underlying M4 implementation, while @code{m4_append_uniq} has an
+inherent quadratic scaling factor.  If an algorithm can tolerate
+duplicates in the final string, use the former for speed.
+
 @example
 m4_define([active], [ACTIVE])dnl
 m4_append([sentence], [This is an])dnl
@@ -11163,6 +11169,23 @@ Remove leading and trailing spaces and tabs, sequences of
 backslash-then-newline, and replace multiple spaces, tabs, and newlines
 with a single space.  This is a combination of @code{m4_flatten} and
 @code{m4_strip}.
+@end defmac
+
+@defmac m4_prepend (@var{macro-name}, @var{string}, @ovar{separator})
+@defmacx m4_prepend_uniq (@var{macro-name}, @var{string}, @ovar{separator} @
+  @ovar{if-uniq}, @ovar{if-duplicate})
+@defmacx m4_append_uniq_w (@var{macro-name}, @var{strings})
+@msindex{prepend}
+@msindex{prepend_uniq}
+@msindex{prepend_uniq_w}
+These macros were introduced in Autoconf 2.63; they are like
+@code{m4_append}, @code{m4_append_uniq}, and @code{m4_append_uniq_w}
+respectively, except that the @var{string} argument is added at the
+beginning instead of the end of the definition of @code{macro-name}.
+
+Also note that unlike @code{m4_append}, @code{m4_prepend} has quadratic
+rather than linearithmic scaling behavior.  Thus, if the order of list
+elements does not matter, it is better to append.
 @end defmac
 
 @defmac m4_re_escape (@var{string})

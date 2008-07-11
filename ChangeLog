@@ -1,5 +1,21 @@
 2008-07-11  Eric Blake  <ebb9@byu.net>
 
+	Inherit improvements from bison's fork of m4sugar.
+	* lib/m4sugar/m4sugar.m4 (m4_PACKAGE_VERSION): Ignore failure to
+	find version.texi, since bison does not provide it.
+	(m4_prepend): Add new macro, from bison.
+	(m4_prepend_uniq, m4_prepend_uniq_w): Add new macros, for
+	completeness.
+	(_m4_append_uniq): Rename...
+	(_m4_grow_uniq_1): ...to this to share implementation, and
+	optimize initial assignment.
+	(m4_append_uniq_w): Adjust caller.
+	* NEWS: Document new macros.
+	* doc/autoconf.texi (Text processing Macros) <m4_append>: Mention
+	speed consideration.
+	<m4_prepend>: Document the new prepend variants.
+	* tests/m4sugar.at (m4@&t@_prepend): New test.
+
 	Work around M4 1.6 warning on undefined macros.
 	* lib/m4sugar/m4sugar.m4 (changeword, symbols): Don't rename if
 	not already available as builtins.
