@@ -1923,7 +1923,7 @@ m4_define([m4_combine],
 #    => one, two, three
 #    => [one],[two],[three]
 #
-# Note that m4_append can benefit from amortized O(n log n) m4 behavior, if
+# Note that m4_append can benefit from amortized O(n) m4 behavior, if
 # the underlying m4 implementation is smart enough to avoid copying existing
 # contents when enlarging a macro's definition into any pre-allocated storage
 # (m4 1.4.x unfortunately does not implement this optimization).  m4_prepend
@@ -1947,7 +1947,7 @@ m4_define([m4_prepend],
 # was already present.  Also, warn if SEPARATOR is not empty and occurs
 # within STRING, as the algorithm no longer guarantees uniqueness.
 #
-# Note that while m4_append can be O(n log n) (depending on whether the
+# Note that while m4_append can be O(n) (depending on the quality of the
 # underlying M4 implementation), m4_append_uniq is inherently O(n^2)
 # because each append operation searches the entire string.
 m4_define([m4_append_uniq],

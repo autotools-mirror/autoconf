@@ -1,3 +1,12 @@
+2008-07-14  Eric Blake  <ebb9@byu.net>
+
+	Tighten bound of potential speed of m4_append.
+	* doc/autoconf.texi (Text processing Macros) <m4_append>
+	<m4_prepend>: If m4 is fixed, m4_append can be linear rather than
+	O(n log n).
+	* lib/m4sugar/m4sugar.m4 (m4_append, m4_append_uniq): Fix comments.
+	Analysis by Bruno Haible.
+
 2008-07-11  Eric Blake  <ebb9@byu.net>
 
 	Inherit improvements from bison's fork of m4sugar.
