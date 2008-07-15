@@ -2243,12 +2243,14 @@ m4_sinclude([m4sugar/version.m4])
 # ----------------------------------------------------
 # Check this Autoconf version against VERSION.
 m4_define([m4_version_prereq],
-[m4_if(m4_version_compare(]m4_dquote(m4_defn([m4_PACKAGE_VERSION]))[, [$1]),
-       [-1],
-       [m4_default([$3],
-		   [m4_fatal([Autoconf version $1 or higher is required],
-			     [63])])],
-       [$2])])
+m4_ifdef([m4_PACKAGE_VERSION],
+[[m4_if(m4_version_compare(]m4_dquote(m4_defn([m4_PACKAGE_VERSION]))[, [$1]),
+	[-1],
+	[m4_default([$3],
+		    [m4_fatal([Autoconf version $1 or higher is required],
+			      [63])])],
+	[$2])]],
+[[m4_fatal([m4sugar/version.m4 not found])]]))
 
 
 

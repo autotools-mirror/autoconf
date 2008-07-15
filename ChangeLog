@@ -1,3 +1,9 @@
+2008-07-15  Eric Blake  <ebb9@byu.net>
+
+	Avoid failure if version.m4 is omitted but m4_PACKAGE_* unused.
+	* lib/m4sugar/m4sugar.m4 (m4_version_compare): Provide alternate
+	definition for non-Autoconf clients of m4sugar.
+
 2008-07-14  Eric Blake  <ebb9@byu.net>
 
 	Tighten bound of potential speed of m4_append.
