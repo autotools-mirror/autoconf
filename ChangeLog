@@ -1,3 +1,14 @@
+2008-07-16  Eric Blake  <ebb9@byu.net>
+
+	Revert m4_prepend; it is less efficient, and unused by bison.
+	* lib/m4sugar/m4sugar.m4 (m4_prepend, m4_prepend_uniq)
+	(m4_prepend_uniq_w): Delete addition from 2008-07-11.
+	(_m4_grow_uniq_1): Rename back...
+	(_m4_append_uniq): ...to this.
+	* NEWS: Revert NEWS blurb.
+	* doc/autoconf.texi (Text processing Macros) <m4_prepend>: Delete.
+	* tests/m4sugar.at (m4@&t@_prepend): Delete.
+
 2008-07-15  Eric Blake  <ebb9@byu.net>
 
 	Avoid failure if version.m4 is omitted but m4_PACKAGE_* unused.

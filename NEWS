@@ -26,9 +26,6 @@ GNU Autoconf NEWS - User visible changes.
 ** Config header templates `#undef UNDEFINED /* comment */' do not lead to
    nested comments any more; regression introduced in 2.62.
 
-** The following m4sugar macros are new:
-   m4_prepend  m4_prepend_uniq  m4_prepend_uniq_w
-
 
 * Major changes in Autoconf 2.62 (2008-04-05) [stable]
   Released by Eric Blake, based on git versions 2.61a.*.

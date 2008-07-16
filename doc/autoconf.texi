@@ -11171,23 +11171,6 @@ with a single space.  This is a combination of @code{m4_flatten} and
 @code{m4_strip}.
 @end defmac
 
-@defmac m4_prepend (@var{macro-name}, @var{string}, @ovar{separator})
-@defmacx m4_prepend_uniq (@var{macro-name}, @var{string}, @ovar{separator} @
-  @ovar{if-uniq}, @ovar{if-duplicate})
-@defmacx m4_append_uniq_w (@var{macro-name}, @var{strings})
-@msindex{prepend}
-@msindex{prepend_uniq}
-@msindex{prepend_uniq_w}
-These macros were introduced in Autoconf 2.63; they are like
-@code{m4_append}, @code{m4_append_uniq}, and @code{m4_append_uniq_w}
-respectively, except that the @var{string} argument is added at the
-beginning instead of the end of the definition of @code{macro-name}.
-
-Also note that unlike @code{m4_append}, @code{m4_prepend} has quadratic
-rather than linear scaling behavior.  Thus, if the order of list
-elements does not matter, it is better to append.
-@end defmac
-
 @defmac m4_re_escape (@var{string})
 @msindex{re_escape}
 Backslash-escape all characters in @var{string} that are active in
