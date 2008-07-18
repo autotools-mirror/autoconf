@@ -1,3 +1,11 @@
+2008-07-19  Eric Blake  <ebb9@byu.net>
+
+	Use warnings from m4 when available.
+	* lib/m4sugar/m4sugar.m4 (m4_defn, m4_popdef, m4_undefine): Don't
+	define slower wrapper if m4 will warn on our behalf; key off of
+	__m4_version__, added alongside the new warnings in m4 1.6.
+	* tests/m4sugar.at (m4@&t@_defn): New test.
+
 2008-07-18  Eric Blake  <ebb9@byu.net>
 
 	Add m4_joinall.

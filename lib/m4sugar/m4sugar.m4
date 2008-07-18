@@ -151,7 +151,7 @@ m4_undefine([maketemp])],
 [m4_rename_m4([maketemp])
 m4_copy([m4_maketemp], [m4_mkstemp])])
 m4_rename([patsubst], [m4_bpatsubst])
-m4_undefine([popdef])
+m4_rename_m4([popdef])
 m4_rename_m4([pushdef])
 m4_rename([regexp], [m4_bregexp])
 m4_rename_m4([shift])
@@ -505,15 +505,17 @@ m4_define([m4_default],
 
 # m4_defn(NAME)
 # -------------
-# Like the original, except don't tolerate popping something which is
-# undefined, and only support one argument.
+# Like the original, except guarantee a warning when using something which is
+# undefined (unlike M4 1.4.x), and only support one argument.
 #
 # This macro is called frequently, so minimize the amount of additional
-# expansions by skipping m4_ifndef.
-m4_define([m4_defn],
+# expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
+# (added in M4 1.6), then let m4 do the job for us.
+m4_ifdef([__m4_version__], [],
+[m4_define([m4_defn],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([defn], [$1])])
+[m4_builtin([defn], [$1])])])
 
 
 # _m4_dumpdefs_up(NAME)
@@ -546,15 +548,17 @@ _m4_dumpdefs_down([$1])])
 
 # m4_popdef(NAME)
 # ---------------
-# Like the original, except don't tolerate popping something which is
-# undefined, and only support one argument.
+# Like the original, except guarantee a warning when using something which is
+# undefined (unlike M4 1.4.x), and only support one argument.
 #
 # This macro is called frequently, so minimize the amount of additional
-# expansions by skipping m4_ifndef.
-m4_define([m4_popdef],
+# expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
+# (added in M4 1.6), then let m4 do the job for us.
+m4_ifdef([__m4_version__], [],
+[m4_define([m4_popdef],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([popdef], [$1])])
+[m4_builtin([popdef], [$1])])])
 
 
 # m4_shiftn(N, ...)
@@ -603,15 +607,17 @@ m4_define([_m4_shift3],
 
 # m4_undefine(NAME)
 # -----------------
-# Like the original, except don't tolerate undefining something which is
-# undefined, and only support one argument.
+# Like the original, except guarantee a warning when using something which is
+# undefined (unlike M4 1.4.x), and only support one argument.
 #
 # This macro is called frequently, so minimize the amount of additional
-# expansions by skipping m4_ifndef.
-m4_define([m4_undefine],
+# expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
+# (added in M4 1.6), then let m4 do the job for us.
+m4_ifdef([__m4_version__], [],
+[m4_define([m4_undefine],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([undefine], [$1])])
+[m4_builtin([undefine], [$1])])])
 
 # _m4_wrap(PRE, POST)
 # -------------------
