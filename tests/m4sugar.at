@@ -64,24 +64,30 @@ AT_KEYWORDS([m4@&t@_popdef m4@&t@_undefine])
 # this is provided by m4 natively or faked by wrappers in m4sugar.
 
 AT_DATA_M4SUGAR([script.4s],
-[[m4_defn([oops])
+[[m4_define([good])
+m4_defn([good], [oops])
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 1, [], [stderr])
+AT_CHECK([grep good stderr], [1])
 AT_CHECK([grep 'm4@&t@_defn: undefined.*oops' stderr], [0], [ignore])
 
 AT_DATA_M4SUGAR([script.4s],
-[[m4_popdef([oops])
+[[m4_define([good])
+m4_popdef([good], [oops])
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 1, [], [stderr])
+AT_CHECK([grep good stderr], [1])
 AT_CHECK([grep 'm4@&t@_popdef: undefined.*oops' stderr], [0], [ignore])
 
 AT_DATA_M4SUGAR([script.4s],
-[[m4_undefine([oops])
+[[m4_define([good])
+m4_undefine([good], [oops])
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 1, [], [stderr])
+AT_CHECK([grep good stderr], [1])
 AT_CHECK([grep 'm4@&t@_undefine: undefined.*oops' stderr], [0], [ignore])
 
 AT_CLEANUP

@@ -1,5 +1,14 @@
 2008-07-19  Eric Blake  <ebb9@byu.net>
 
+	Support multiple arguments to m4_defn, m4_popdef, and m4_undefine.
+	* lib/m4sugar/m4sugar.m4 (m4_defn, m4_popdef, m4_undefine): Loop
+	through all variables, per POSIX and newer m4.
+	(_m4_text_wrap): Exploit the looping capabilities.
+	* tests/m4sugar.at (m4@&t@_defn): Test this.
+	* NEWS: Document it.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_defn, m4_popdef>
+	<m4_undefine>: Likewise.
+
 	Reduce overhead of m4_builtin([defn]).
 	* lib/m4sugar/m4sugar.m4 (_m4_defn, _m4_popdef, _m4_undefine): New
 	internal macros, which are slightly more efficient than

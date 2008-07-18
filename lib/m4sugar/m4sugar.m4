@@ -506,7 +506,11 @@ m4_define([m4_default],
 # m4_defn(NAME)
 # -------------
 # Like the original, except guarantee a warning when using something which is
-# undefined (unlike M4 1.4.x), and only support one argument.
+# undefined (unlike M4 1.4.x).  This replacement is not a full-featured
+# replacement: if any of the defined macros contain unbalanced quoting, but
+# when pasted together result in a well-quoted string, then only native m4
+# support is able to get it correct.  But that's where quadrigraphs come in
+# handy, if you really need unbalanced quotes inside your macros.
 #
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
@@ -521,7 +525,7 @@ m4_ifdef([__m4_version__], [],
 [m4_define([m4_defn],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[_m4_defn([$1])])])
+[_m4_defn([$1])m4_if([$#], [1], [], [$0(m4_shift($@))])])])
 
 
 # _m4_dumpdefs_up(NAME)
@@ -555,7 +559,7 @@ _m4_dumpdefs_down([$1])])
 # m4_popdef(NAME)
 # ---------------
 # Like the original, except guarantee a warning when using something which is
-# undefined (unlike M4 1.4.x), and only support one argument.
+# undefined (unlike M4 1.4.x).
 #
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
@@ -569,7 +573,7 @@ m4_ifdef([__m4_version__], [],
 [m4_define([m4_popdef],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[_m4_popdef([$1])])])
+[_m4_popdef([$1])m4_if([$#], [1], [], [$0(m4_shift($@))])])])
 
 
 # m4_shiftn(N, ...)
@@ -619,7 +623,7 @@ m4_define([_m4_shift3],
 # m4_undefine(NAME)
 # -----------------
 # Like the original, except guarantee a warning when using something which is
-# undefined (unlike M4 1.4.x), and only support one argument.
+# undefined (unlike M4 1.4.x).
 #
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
@@ -633,7 +637,7 @@ m4_ifdef([__m4_version__], [],
 [m4_define([m4_undefine],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[_m4_undefine([$1])])])
+[_m4_undefine([$1])m4_if([$#], [1], [], [$0(m4_shift($@))])])])
 
 # _m4_wrap(PRE, POST)
 # -------------------
@@ -2067,9 +2071,7 @@ dnl either way, insert the word
 [$2]],
       [m4_Separator[]])_m4_defn([m4_Word])])]],
 dnl finally, clean up the local variabls
-[[_m4_popdef([m4_Separator])]],
-[[_m4_popdef([m4_Cursor])]],
-[[_m4_popdef([m4_Indent])]]))
+[[_m4_popdef([m4_Separator], [m4_Cursor], [m4_Indent])]]))
 
 
 # m4_text_box(MESSAGE, [FRAME-CHARACTER = `-'])

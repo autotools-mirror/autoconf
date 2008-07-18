@@ -22,6 +22,10 @@ GNU Autoconf NEWS - User visible changes.
 ** The following m4sugar macros are new:
    m4_joinall
 
+** The following m4sugar macros now accept multiple arguments, as is the
+   case with underlying m4:
+   m4_defn  m4_popdef  m4_undefine
+
 ** AT_KEYWORDS once again performs expansion on its argument, such that
    AT_KEYWORDS([m4_if([$1], [], [default])]) no longer complains about
    the possibly unexpanded m4_if [regression introduced in 2.62].

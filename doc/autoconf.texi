@@ -10323,12 +10323,14 @@ is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
 released and supports extended regular expression syntax.
 @end defmac
 
-@defmac m4_defn (@var{macro})
+@defmac m4_defn (@var{macro}@dots{})
 @msindex{defn}
-Unlike the M4 builtin, this macro fails if @var{macro} is not
-defined.  Also, while newer M4 can concatenate multiple definitions,
-this version currently only supports a single @var{macro}.  See
-@code{m4_undefine}.
+This macro fails if @var{macro} is not defined, even when using older
+versions of M4 that did not warn.  See @code{m4_undefine}.
+Unfortunately, in order to support these older versions of M4, there are
+some situations involving unbalanced quotes where concatenating multiple
+macros together will work in newer M4 but not in m4sugar; use
+quadrigraphs to work around this.
 @end defmac
 
 @defmac m4_divert (@var{diversion})
@@ -10380,26 +10382,23 @@ and both have the secure semantics regardless of which macro the
 underlying M4 provides.
 @end defmac
 
-@defmac m4_popdef (@var{macro})
+@defmac m4_popdef (@var{macro}@dots{})
 @msindex{popdef}
-Unlike the M4 builtin, this macro fails if @var{macro} is not
-defined.  Also, while newer M4 can pop multiple definitions at once,
-this version currently only supports a single @var{macro}.  See
-@code{m4_undefine}.
+This macro fails if @var{macro} is not defined, even when using older
+versions of M4 that did not warn.  See @code{m4_undefine}.
 @end defmac
 
-@defmac m4_undefine (@var{macro})
+@defmac m4_undefine (@var{macro}@dots{})
 @msindex{undefine}
-Unlike the M4 builtin, this macro fails if @var{macro} is not
-defined.  Also, while newer M4 can undefine multiple definitions at
-once, this version currently only supports a single @var{macro}.  Use
+This macro fails if @var{macro} is not defined, even when using older
+versions of M4 that did not warn.  Use
 
 @example
 m4_ifdef([@var{macro}], [m4_undefine([@var{macro}])])
 @end example
 
 @noindent
-to recover the behavior of the builtin.
+if you are not sure whether @var{macro} is defined.
 @end defmac
 
 @defmac m4_undivert (@var{diversion})
