@@ -3082,10 +3082,9 @@ AC_CHECK_HEADERS([unistd.h])
 @end example
 
 @noindent
-Then you could have code like the following in @file{conf.h.in}.  On
-systems that have @file{unistd.h}, @command{configure} defines
-@samp{HAVE_UNISTD_H} to 1.  On other systems, the whole line is
-commented out (in case the system predefines that symbol).
+Then you could have code like the following in @file{conf.h.in}.
+The @file{conf.h} created by @command{configure} defines @samp{HAVE_UNISTD_H}
+to 1, if and only if the system has @file{unistd.h}.
 
 @example
 @group
@@ -3094,29 +3093,52 @@ commented out (in case the system predefines that symbol).
 @end group
 @end example
 
-Pay attention that @samp{#undef} is in the first column, and there is
-nothing after @samp{HAVE_UNISTD_H}, not even white space.  You can
-then decode the configuration header using the preprocessor directives:
+The format of the template file is stricter than what the C preprocessor
+is required to accept.  A directive line should contain only whitespace,
+@samp{#undef}, and @samp{HAVE_UNISTD_H}.  The use of @samp{#define}
+instead of @samp{#undef}, or of comments on the same line as
+@samp{#undef}, is strongly discouraged.  Each hook should only be listed
+once.  Other preprocessor lines, such as @samp{#ifdef} or
+@samp{#include}, are copied verbatim from the template into the
+generated header.
+
+Since it is a tedious task to keep a template header up to date, you may
+use @command{autoheader} to generate it, see @ref{autoheader Invocation}.
+
+During the instantiation of the header, each @samp{#undef} line in the
+template file for each symbol defined by @samp{AC_DEFINE} is changed to an
+appropriate @samp{#define}. If the corresponding @samp{AC_DEFINE} has not
+been executed during the @command{configure} run, the @samp{#undef} line is
+commented out.  (This is important, e.g., for @samp{_POSIX_SOURCE}:
+on many systems, it can be implicitly defined by the compiler, and
+undefining it in the header would then break compilation of subsequent
+headers.)
+
+Currently, @emph{all} remaining @samp{#undef} lines in the header
+template are commented out, whether or not there was a corresponding
+@samp{AC_DEFINE} for the macro name; but this behavior is not guaranteed
+for future releases of Autoconf.
+
+Generally speaking, since you should not use @samp{#define}, and you
+cannot guarantee whether a @samp{#undef} directive in the header
+template will be converted to a @samp{#define} or commented out in the
+generated header file, the template file cannot be used for conditional
+definition effects.  Consequently, if you need to use the construct
 
 @example
 @group
-#include <conf.h>
-
-#ifdef HAVE_UNISTD_H
-# include <unistd.h>
-#else
-/* We are in trouble.  */
+#ifdef THIS
+# define THAT
 #endif
 @end group
 @end example
 
-The use of old form templates, with @samp{#define} instead of
-@samp{#undef} is strongly discouraged.  Similarly with old templates
-with comments on the same line as the @samp{#undef}.  Anyway, putting
-comments in preprocessor macros has never been a good idea.
-
-Since it is a tedious task to keep a template header up to date, you may
-use @command{autoheader} to generate it, see @ref{autoheader Invocation}.
+@noindent
+you must place it outside of the template.
+If you absolutely need to hook it to the config header itself, please put
+the directives to a separate file, and @samp{#include} that file from the
+config header template.  If you are using @command{autoheader}, you would
+probably use @samp{AH_BOTTOM} to append the @samp{#include} directive.
 
 
 @node autoheader Invocation

@@ -1,3 +1,11 @@
+2008-07-17  Stepan Kasal  <skasal@redhat.com>
+	and Eric Blake  <ebb9@byu.net>
+
+	Improve documentation of config.h.in template rules.
+	* doc/autoconf.texi (Header Templates): Mention rules on comments
+	and whitespace, and that the user cannot rely on #undef to survive
+	through config.status.
+
 2008-07-16  Eric Blake  <ebb9@byu.net>
 
 	Revert m4_prepend; it is less efficient, and unused by bison.
