@@ -1846,6 +1846,13 @@ m4_define([_m4_join],
 [m4_if([$#$2], [2], [],
        [m4_if([$2], [], [], [[$1$2]])$0([$1], m4_shift2($@))])])
 
+# m4_joinall(SEP, ARG1, ARG2...)
+# ------------------------------
+# Produce ARG1SEPARG2...SEPARGn.  An empty ARG results in back-to-back SEP.
+# No expansion is performed on SEP or ARGs.
+m4_define([m4_joinall], [[$2]_$0([$1], m4_shift($@))])
+m4_define([_m4_joinall],
+[m4_if([$#], [2], [], [[$1$3]$0([$1], m4_shift2($@))])])
 
 # m4_combine([SEPARATOR], PREFIX-LIST, [INFIX], SUFFIX...)
 # --------------------------------------------------------

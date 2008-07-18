@@ -11163,14 +11163,19 @@ still a quoted string.
 @end defmac
 
 @defmac m4_join (@ovar{separator}, @var{args}@dots{})
+@defmacx m4_joinall (@ovar{separator}, @var{args}@dots{})
 @msindex{join}
-Concatenate each @var{arg}, separated by @var{separator}, with the
-exception that no back-to-back separators are issued for empty
-arguments.  The result is a quoted string.
+@msindex{joinall}
+Concatenate each @var{arg}, separated by @var{separator}.
+@code{joinall} uses every argument, while @code{join} omits empty
+arguments so that there are no back-to-back separators in the output.
+The result is a quoted string.
 @example
 m4_define([active], [ACTIVE])dnl
 m4_join([|], [one], [], [active], [two])
 @result{}one|active|two
+m4_joinall([|], [one], [], [active], [two])
+@result{}one||active|two
 @end example
 
 Note that if all you intend to do is join @var{args} with commas between

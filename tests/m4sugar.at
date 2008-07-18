@@ -284,6 +284,8 @@ AT_CLEANUP
 
 AT_SETUP([m4@&t@_join])
 
+AT_KEYWORDS([m4@&t@_joinall])
+
 AT_CHECK_M4SUGAR_TEXT(
 [[m4_define([active], [ACTIVE])
 m4_join
@@ -297,6 +299,12 @@ m4_join([], ,,,[two])
 m4_join([], [two],,,)
 m4_join([ active ], [one], , [two])
 m4_join([], [one], [two])
+m4_joinall([-], [one], [], [two])
+m4_joinall([-], [], [], [three], [], [])
+m4_joinall([], [one], [], [two])
+m4_joinall
+m4_joinall([-])
+m4_joinall([-], [one])
 ]],
 [[
 
@@ -310,6 +318,12 @@ two
 two
 one active two
 onetwo
+one--two
+--three--
+onetwo
+
+
+one
 ]])
 
 AT_CLEANUP

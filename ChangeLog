@@ -1,3 +1,12 @@
+2008-07-18  Eric Blake  <ebb9@byu.net>
+
+	Add m4_joinall.
+	* lib/m4sugar/m4sugar.m4 (m4_joinall, _m4_joinall): New macros.
+	* tests/m4sugar.at (m4@&t@_join): Test them.
+	* doc/autoconf.texi (Text processing Macros) <m4_join>: Document
+	m4_joinall.
+	* NEWS: Likewise.
+
 2008-07-17  Stepan Kasal  <skasal@redhat.com>
 	and Eric Blake  <ebb9@byu.net>
 
