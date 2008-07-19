@@ -234,7 +234,7 @@ m4_define([_m4_warn], [])
 m4_define([m4_warn],
 [_m4_warn([$1], [$2],
 m4_ifdef([m4_expansion_stack],
-	 [m4_defn([m4_expansion_stack])
+	 [_m4_defn([m4_expansion_stack])
 m4_location[: the top level]]))dnl
 ])
 
@@ -335,7 +335,7 @@ m4_define([m4_ifvaln],
 # expand IF-FALSE, otherwise IF-TRUE.
 m4_define([m4_ifset],
 [m4_ifdef([$1],
-	  [m4_ifval(m4_defn([$1]), [$2], [$3])],
+	  [m4_ifval(_m4_defn([$1]), [$2], [$3])],
 	  [$3])])
 
 
@@ -511,20 +511,26 @@ m4_define([m4_default],
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
 # (added in M4 1.6), then let m4 do the job for us.
+#
+# _m4_defn is for internal use only - it bypasses the wrapper, so it
+# must only be used on one argument at a time, and only on macros
+# known to be defined.  Make sure this still works if the user renames
+# m4_defn but not _m4_defn.
+m4_copy([m4_defn], [_m4_defn])
 m4_ifdef([__m4_version__], [],
 [m4_define([m4_defn],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([defn], [$1])])])
+[_m4_defn([$1])])])
 
 
 # _m4_dumpdefs_up(NAME)
 # ---------------------
 m4_define([_m4_dumpdefs_up],
 [m4_ifdef([$1],
-	  [m4_pushdef([_m4_dumpdefs], m4_defn([$1]))dnl
+	  [m4_pushdef([_m4_dumpdefs], _m4_defn([$1]))dnl
 m4_dumpdef([$1])dnl
-m4_popdef([$1])dnl
+_m4_popdef([$1])dnl
 _m4_dumpdefs_up([$1])])])
 
 
@@ -532,8 +538,8 @@ _m4_dumpdefs_up([$1])])])
 # -----------------------
 m4_define([_m4_dumpdefs_down],
 [m4_ifdef([_m4_dumpdefs],
-	  [m4_pushdef([$1], m4_defn([_m4_dumpdefs]))dnl
-m4_popdef([_m4_dumpdefs])dnl
+	  [m4_pushdef([$1], _m4_defn([_m4_dumpdefs]))dnl
+_m4_popdef([_m4_dumpdefs])dnl
 _m4_dumpdefs_down([$1])])])
 
 
@@ -554,11 +560,16 @@ _m4_dumpdefs_down([$1])])
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
 # (added in M4 1.6), then let m4 do the job for us.
+#
+# _m4_popdef is for internal use only - it bypasses the wrapper, so it
+# must only be used on macros known to be defined.  Make sure this
+# still works if the user renames m4_popdef but not _m4_popdef.
+m4_copy([m4_popdef], [_m4_popdef])
 m4_ifdef([__m4_version__], [],
 [m4_define([m4_popdef],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([popdef], [$1])])])
+[_m4_popdef([$1])])])
 
 
 # m4_shiftn(N, ...)
@@ -613,22 +624,26 @@ m4_define([_m4_shift3],
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
 # (added in M4 1.6), then let m4 do the job for us.
+#
+# _m4_undefine is for internal use only - it bypasses the wrapper, so
+# it must only be used on macros known to be defined.  Make sure this
+# still works if the user renames m4_undefine but not _m4_undefine.
+m4_copy([m4_undefine], [_m4_undefine])
 m4_ifdef([__m4_version__], [],
 [m4_define([m4_undefine],
 [m4_ifdef([$1], [],
 	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[m4_builtin([undefine], [$1])])])
+[_m4_undefine([$1])])])
 
 # _m4_wrap(PRE, POST)
 # -------------------
 # Helper macro for m4_wrap and m4_wrap_lifo.  Allows nested calls to
-# m4_wrap within wrapped text.
-# Skip m4_defn and m4_popdef for speed.
+# m4_wrap within wrapped text.  Use _m4_defn and _m4_popdef for speed.
 m4_define([_m4_wrap],
 [m4_ifdef([$0_text],
-	  [m4_define([$0_text], [$1]m4_builtin([defn], [$0_text])[$2])],
-	  [m4_builtin([m4wrap], [m4_unquote(m4_builtin([defn],
-  [$0_text])m4_builtin([popdef], [$0_text]))])m4_define([$0_text], [$1$2])])])
+	  [m4_define([$0_text], [$1]_m4_defn([$0_text])[$2])],
+	  [m4_builtin([m4wrap], [m4_unquote(
+  _m4_defn([$0_text])_m4_popdef([$0_text]))])m4_define([$0_text], [$1$2])])])
 
 # m4_wrap(TEXT)
 # -------------
@@ -799,21 +814,21 @@ m4_define([m4_unquote], [$*])
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO with
 # increments of STEP.
 # Both limits are included, and bounds are checked for consistency.
-# The algorithm is robust to indirect VARIABLE names, and uses m4_builtin
-# to avoid some of the m4_defn overhead.
+# The algorithm is robust to indirect VARIABLE names, and uses _m4_defn
+# where possible for speed.
 m4_define([m4_for],
 [m4_pushdef([$1], m4_eval([$2]))dnl
-m4_cond([m4_eval(([$3]) > m4_builtin([defn], [$1]))], 1,
+m4_cond([m4_eval(([$3]) > _m4_defn([$1]))], 1,
 [m4_pushdef([_m4_step], m4_eval(m4_default([$4], 1)))dnl
 m4_assert(_m4_step > 0)dnl
-_m4_for([$1], m4_eval((([$3]) - m4_builtin([defn], [$1]))
-		      / _m4_step * _m4_step + m4_builtin([defn], [$1])),
+_m4_for([$1], m4_eval((([$3]) - _m4_defn([$1]))
+		      / _m4_step * _m4_step + _m4_defn([$1])),
 	_m4_step, [$5])],
-	[m4_eval(([$3]) < m4_builtin([defn], [$1]))], 1,
+	[m4_eval(([$3]) < _m4_defn([$1]))], 1,
 [m4_pushdef([_m4_step], m4_eval(m4_default([$4], -1)))dnl
 m4_assert(_m4_step < 0)dnl
-_m4_for([$1], m4_eval((m4_builtin([defn], [$1]) - ([$3]))
-		      / -(_m4_step) * _m4_step + m4_builtin([defn], [$1])),
+_m4_for([$1], m4_eval((_m4_defn([$1]) - ([$3]))
+		      / -(_m4_step) * _m4_step + _m4_defn([$1])),
 	_m4_step, [$5])],
 	[m4_pushdef([_m4_step])dnl
 $5])[]dnl
@@ -1011,7 +1026,7 @@ m4_define([_m4_divert()],                0)
 # Print m4_divert_stack with newline prepended, if it's nonempty.
 m4_define([_m4_divert_n_stack],
 [m4_ifdef([m4_divert_stack], [
-m4_defn([m4_divert_stack])])])
+_m4_defn([m4_divert_stack])])])
 
 
 # m4_divert(DIVERSION-NAME)
@@ -1048,7 +1063,7 @@ m4_popdef([m4_divert_stack])dnl
 m4_popdef([_m4_divert_diversion])dnl
 m4_builtin([divert],
 	   m4_ifdef([_m4_divert_diversion],
-		    [_m4_divert(m4_defn([_m4_divert_diversion]))],
+		    [_m4_divert(_m4_defn([_m4_divert_diversion]))],
 		    -1))dnl
 ])
 
@@ -1360,11 +1375,10 @@ m4_define([m4_undivert],
 
 # m4_expansion_stack_push(TEXT)
 # -----------------------------
-# Use m4_builtin to avoid m4_defn overhead.
 m4_define([m4_expansion_stack_push],
 [m4_pushdef([m4_expansion_stack],
 	    [$1]m4_ifdef([m4_expansion_stack], [
-m4_builtin([defn], [m4_expansion_stack])]))])
+_m4_defn([m4_expansion_stack])]))])
 
 
 # m4_expansion_stack_pop
@@ -1378,7 +1392,7 @@ m4_define([m4_expansion_stack_pop],
 # Dump the expansion stack.
 m4_define([m4_expansion_stack_dump],
 [m4_ifdef([m4_expansion_stack],
-	  [m4_errprintn(m4_defn([m4_expansion_stack]))])dnl
+	  [m4_errprintn(_m4_defn([m4_expansion_stack]))])dnl
 m4_errprintn(m4_location[: the top level])])
 
 
@@ -1409,7 +1423,7 @@ m4_define([_m4_divert(GROW)],       10000)
 # by avoiding dnl and m4_defn overhead.
 m4_define([_m4_defun_pro],
 m4_do([[m4_ifdef([m4_expansion_stack], [], [_m4_defun_pro_outer[]])]],
-      [[m4_expansion_stack_push(m4_builtin([defn],
+      [[m4_expansion_stack_push(_m4_defn(
 	  [m4_location($1)])[: $1 is expanded from...])]],
       [[m4_pushdef([_m4_expanding($1)])]]))
 
@@ -1424,15 +1438,13 @@ m4_define([_m4_defun_pro_outer],
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and m4_popdef overhead.
 m4_define([_m4_defun_epi],
-m4_do([[m4_builtin([popdef], [_m4_expanding($1)])]],
+m4_do([[_m4_popdef([_m4_expanding($1)])]],
       [[m4_expansion_stack_pop()]],
       [[m4_ifdef([m4_expansion_stack], [], [_m4_defun_epi_outer[]])]],
       [[m4_provide([$1])]]))
 
 m4_define([_m4_defun_epi_outer],
-m4_do([[m4_builtin([undefine], [_m4_divert_dump])]],
-      [[m4_divert_pop([GROW])]],
-      [[m4_undivert([GROW])]]))
+[_m4_undefine([_m4_divert_dump])m4_divert_pop([GROW])m4_undivert([GROW])])
 
 
 # m4_defun(NAME, EXPANSION)
@@ -1550,7 +1562,7 @@ m4_provide_if([$1],
 	      [],
 	      [m4_warn([syntax],
 		       [$1 is m4_require'd but not m4_defun'd])])]],
-      [[m4_divert(m4_builtin([defn], [_m4_divert_dump]))]],
+      [[m4_divert(_m4_defn([_m4_divert_dump]))]],
       [[m4_undivert(_m4_divert_grow)]],
       [[m4_divert_pop(_m4_divert_grow)]],
       [[m4_define([_m4_divert_grow], m4_incr(_m4_divert_grow))]]))
@@ -1872,20 +1884,19 @@ m4_define([_m4_joinall],
 #   => a-1, a-2, a-3, b-1, b-2, b-3, c-1, c-2, c-3
 #
 # In order to have the correct number of SEPARATORs, we use a temporary
-# variable that redefines itself after the first use.  We use m4_builtin
-# to avoid m4_defn overhead, but must use defn rather than overquoting
-# in case PREFIX or SUFFIX contains $1.  Likewise, we compute the m4_shift3
-# only once, rather than in each iteration of the outer m4_foreach.
+# variable that redefines itself after the first use.  We must use defn
+# rather than overquoting in case PREFIX or SUFFIX contains $1, but use
+# _m4_defn for speed.  Likewise, we compute the m4_shift3 only once,
+# rather than in each iteration of the outer m4_foreach.
 m4_define([m4_combine],
 [m4_if(m4_eval([$# > 3]), [1],
        [m4_pushdef([m4_Separator], [m4_define([m4_Separator],
-				    m4_builtin([defn], [m4_echo]))])]]dnl
+				    _m4_defn([m4_echo]))])]]dnl
 [[m4_foreach([m4_Prefix], [$2],
 	     [m4_foreach([m4_Suffix], ]m4_dquote(m4_dquote(m4_shift3($@)))[,
-			 [m4_Separator([$1])[]m4_builtin([defn],
-				      [m4_Prefix])[$3]m4_builtin([defn],
+	[m4_Separator([$1])[]_m4_defn([m4_Prefix])[$3]_m4_defn(
 						      [m4_Suffix])])])]]dnl
-[[m4_builtin([popdef], [m4_Separator])])])
+[[_m4_popdef([m4_Separator])])])
 
 
 # m4_append(MACRO-NAME, STRING, [SEPARATOR])
@@ -1942,10 +1953,9 @@ m4_define([m4_combine],
 # storage only occurs at the end of a macro, so the existing contents must
 # always be moved).
 #
-# Use m4_builtin to avoid overhead of m4_defn.
+# Use _m4_defn for speed.
 m4_define([m4_append],
-[m4_define([$1],
-	   m4_ifdef([$1], [m4_builtin([defn], [$1])[$3]])[$2])])
+[m4_define([$1], m4_ifdef([$1], [_m4_defn([$1])[$3]])[$2])])
 
 
 # m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR], [IF-UNIQ], [IF-DUP])
@@ -1964,7 +1974,7 @@ m4_define([m4_append_uniq],
 				[$0: `$2' contains `$3'])])])_$0($@)])
 m4_define([_m4_append_uniq],
 [m4_ifdef([$1],
-	  [m4_if(m4_index([$3]m4_builtin([defn], [$1])[$3], [$3$2$3]), [-1],
+	  [m4_if(m4_index([$3]_m4_defn([$1])[$3], [$3$2$3]), [-1],
 		 [m4_append([$1], [$2], [$3])$4], [$5])],
 	  [m4_define([$1], [$2])$4])])
 
@@ -1973,10 +1983,10 @@ m4_define([_m4_append_uniq],
 # For each of the words in the whitespace separated list STRINGS, append
 # only the unique strings to the definition of MACRO-NAME.
 #
-# Avoid overhead of m4_defn by using m4_builtin.
+# Use _m4_defn for speed.
 m4_define([m4_append_uniq_w],
 [m4_foreach_w([m4_Word], [$2],
-	      [_m4_append_uniq([$1], m4_builtin([defn], [m4_Word]), [ ])])])
+	      [_m4_append_uniq([$1], _m4_defn([m4_Word]), [ ])])])
 
 
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
@@ -2022,7 +2032,7 @@ m4_define([m4_append_uniq_w],
 #
 # The algorithm uses a helper that uses $2 through $4 directly, rather than
 # using local variables, to avoid m4_defn overhead, or expansion swallowing
-# any $.  It also bypasses m4_popdef overhead with m4_builtin since no user
+# any $.  It also bypasses m4_popdef overhead with _m4_popdef since no user
 # macro expansion occurs in the meantime.  Also, the definition is written
 # with m4_do, to avoid time wasted on dnl during expansion (since this is
 # already a time-consuming macro).
@@ -2050,17 +2060,16 @@ dnl if not, insert the separator (usually a space)
 dnl either way, insert the word
 [[m4_foreach_w([m4_Word], [$1],
   [m4_define([m4_Cursor],
-	     m4_eval(m4_Cursor + m4_qlen(m4_builtin([defn], [m4_Word]))
+	     m4_eval(m4_Cursor + m4_qlen(_m4_defn([m4_Word]))
 		     + 1))m4_if(m4_eval(m4_Cursor > ([$4])),
       [1], [m4_define([m4_Cursor],
-		      m4_eval(m4_Indent
-			      + m4_qlen(m4_builtin([defn], [m4_Word])) + 1))
+		      m4_eval(m4_Indent + m4_qlen(_m4_defn([m4_Word])) + 1))
 [$2]],
-      [m4_Separator[]])m4_builtin([defn], [m4_Word])])]],
+      [m4_Separator[]])_m4_defn([m4_Word])])]],
 dnl finally, clean up the local variabls
-[[m4_builtin([popdef], [m4_Separator])]],
-[[m4_builtin([popdef], [m4_Cursor])]],
-[[m4_builtin([popdef], [m4_Indent])]]))
+[[_m4_popdef([m4_Separator])]],
+[[_m4_popdef([m4_Cursor])]],
+[[_m4_popdef([m4_Indent])]]))
 
 
 # m4_text_box(MESSAGE, [FRAME-CHARACTER = `-'])
@@ -2076,8 +2085,7 @@ m4_define([m4_text_box],
 			[ ], m4_if([$2], [], [[-]], [[$2]])))dnl
 @%:@@%:@ m4_Border @%:@@%:@
 @%:@@%:@ $1 @%:@@%:@
-@%:@@%:@ m4_Border @%:@@%:@dnl
-m4_builtin([popdef], [m4_Border])dnl
+@%:@@%:@ m4_Border @%:@@%:@_m4_popdef([m4_Border])dnl
 ])
 
 
