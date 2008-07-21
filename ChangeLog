@@ -1,3 +1,9 @@
+2008-07-21  Eric Blake  <ebb9@byu.net>
+
+	Resync with gnulib.
+	* GNUmakefile: Grab from upstream, to fix issue where 'make
+	install' would allow installation of stale version string.
+
 2008-07-19  Eric Blake  <ebb9@byu.net>
 
 	Support multiple arguments to m4_defn, m4_popdef, and m4_undefine.
