@@ -1,5 +1,10 @@
 2008-07-21  Eric Blake  <ebb9@byu.net>
 
+	Ignore undefined macros, necessary with m4 1.6.
+	* bin/autoupdate.in (_au___undefine): New macro,...
+	(_au__undefine): ...wrapped by ifdef to silence m4 warnings.
+	Reported by Ralf Wildenhues.
+
 	Resync with gnulib.
 	* GNUmakefile: Grab from upstream, to fix issue where 'make
 	install' would allow installation of stale version string.
