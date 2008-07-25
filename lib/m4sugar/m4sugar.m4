@@ -523,9 +523,10 @@ m4_define([m4_default],
 m4_copy([m4_defn], [_m4_defn])
 m4_ifdef([__m4_version__], [],
 [m4_define([m4_defn],
-[m4_ifdef([$1], [],
-	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[_m4_defn([$1])m4_if([$#], [1], [], [$0(m4_shift($@))])])])
+[m4_if([$#], [0], [[$0]],
+       [$#], [1], [m4_ifdef([$1], [_m4_defn([$1])],
+			    [m4_fatal([$0: undefined macro: $1])])],
+       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])])
 
 
 # _m4_dumpdefs_up(NAME)
@@ -571,9 +572,10 @@ _m4_dumpdefs_down([$1])])
 m4_copy([m4_popdef], [_m4_popdef])
 m4_ifdef([__m4_version__], [],
 [m4_define([m4_popdef],
-[m4_ifdef([$1], [],
-	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[_m4_popdef([$1])m4_if([$#], [1], [], [$0(m4_shift($@))])])])
+[m4_if([$#], [0], [[$0]],
+       [$#], [1], [m4_ifdef([$1], [_m4_popdef([$1])],
+			    [m4_fatal([$0: undefined macro: $1])])],
+       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])])
 
 
 # m4_shiftn(N, ...)
@@ -635,9 +637,10 @@ m4_define([_m4_shift3],
 m4_copy([m4_undefine], [_m4_undefine])
 m4_ifdef([__m4_version__], [],
 [m4_define([m4_undefine],
-[m4_ifdef([$1], [],
-	  [m4_fatal([$0: undefined macro: $1])])]dnl
-[_m4_undefine([$1])m4_if([$#], [1], [], [$0(m4_shift($@))])])])
+[m4_if([$#], [0], [[$0]],
+       [$#], [1], [m4_ifdef([$1], [_m4_undefine([$1])],
+			    [m4_fatal([$0: undefined macro: $1])])],
+       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])])
 
 # _m4_wrap(PRE, POST)
 # -------------------
@@ -926,7 +929,9 @@ m4_if(m4_defn([$1]), [$2], [],
 # Hence the design below.
 #
 # The M4 manual now includes a chapter devoted to this issue, with
-# the lessons learned from m4sugar.
+# the lessons learned from m4sugar.  And still, this design is only
+# optimal for M4 1.6; see foreach.m4 for yet more comments on why
+# M4 1.4.x uses yet another implementation.
 
 
 # m4_foreach(VARIABLE, LIST, EXPRESSION)
@@ -1001,7 +1006,7 @@ m4_define([_m4_map],
 # SEPARATOR is not further expanded.
 m4_define([m4_map_sep],
 [m4_if([$3], [], [],
-       [m4_apply([$1], m4_car($3))m4_map([[$2]$1]_m4_cdr($3))])])
+       [m4_apply([$1], m4_car($3))_m4_map([[$2]$1]_m4_shift2(,$3))])])
 
 
 ## --------------------------- ##
@@ -2167,16 +2172,29 @@ m4_define([m4_max],
 [m4_if([$#], [0], [m4_fatal([too few arguments to $0])],
        [$#], [1], [m4_eval([$1])],
        [$#$1], [2$2], [m4_eval([$1])],
-       [$#], [2],
-       [m4_eval((([$1]) > ([$2])) * ([$1]) + (([$1]) <= ([$2])) * ([$2]))],
-       [$0($0([$1], [$2]), m4_shift2($@))])])
+       [$#], [2], [_$0($@)],
+       [_m4_minmax([_$0], $@)])])
+
+m4_define([_m4_max],
+[m4_eval((([$1]) > ([$2])) * ([$1]) + (([$1]) <= ([$2])) * ([$2]))])
+
 m4_define([m4_min],
 [m4_if([$#], [0], [m4_fatal([too few arguments to $0])],
        [$#], [1], [m4_eval([$1])],
        [$#$1], [2$2], [m4_eval([$1])],
-       [$#], [2],
-       [m4_eval((([$1]) < ([$2])) * ([$1]) + (([$1]) >= ([$2])) * ([$2]))],
-       [$0($0([$1], [$2]), m4_shift2($@))])])
+       [$#], [2], [_$0($@)],
+       [_m4_minmax([_$0], $@)])])
+
+m4_define([_m4_min],
+[m4_eval((([$1]) < ([$2])) * ([$1]) + (([$1]) >= ([$2])) * ([$2]))])
+
+# _m4_minmax(METHOD, ARG1, ARG2...)
+# ---------------------------------
+# Common recursion code for m4_max and m4_min.  METHOD must be _m4_max
+# or _m4_min, and there must be at least two arguments to combine.
+m4_define([_m4_minmax],
+[m4_if([$#], [3], [$1([$2], [$3])],
+       [$0([$1], $1([$2], [$3]), m4_shift3($@))])])
 
 
 # m4_sign(A)
@@ -2292,6 +2310,13 @@ m4_define([m4_init],
 # for sake of simplicity.
 m4_pattern_forbid([^_?m4_])
 m4_pattern_forbid([^dnl$])
+
+# If __m4_version__ is defined, we assume that we are being run by M4
+# 1.6 or newer, and thus that $@ recursion is linear; nothing further
+# needs to be done.  But if it is missing, we assume we are being run
+# by M4 1.4.x, that $@ recursion is quadratic, and that we need
+# foreach-based replacement macros.
+m4_ifndef([__m4_version__], [m4_include([m4sugar/foreach.m4])])
 
 # _m4_divert_diversion should be defined:
 m4_divert_push([KILL])

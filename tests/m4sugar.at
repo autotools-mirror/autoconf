@@ -429,6 +429,8 @@ AT_CLEANUP
 
 AT_SETUP([m4@&t@_version_compare])
 
+AT_KEYWORDS([m4@&t@_list_cmp])
+
 AT_CHECK_M4SUGAR_TEXT(
 [[m4_version_compare([1.1], [2.0])
 m4_version_compare([2.0b], [2.0a])
@@ -607,6 +609,7 @@ AT_CHECK_M4SUGAR([], 1, [],
 script.4s:3: the top level
 autom4te: m4 failed with exit status: 1
 ]])
+
 AT_CLEANUP
 
 
@@ -743,5 +746,86 @@ m4_max(m4_for([i], 100, 2, , [i,])1)
 100
 100
 ]], [])
+
+AT_CLEANUP
+
+
+## ----------- ##
+## Recursion.  ##
+## ----------- ##
+
+AT_SETUP([recursion])
+
+AT_KEYWORDS([m4@&t@_foreach m4@&t@_foreach_w m4@&t@_shiftn m4@&t@_dquote_elt
+m4@&t@_join m4@&t@_joinall m4@&t@_list_cmp m4@&t@_max m4@&t@_min])
+
+dnl This test completes in a reasonable time if m4_foreach is linear,
+dnl but thrashes if it is quadratic.  If we are testing with m4 1.4.x,
+dnl only the slower foreach.m4 implementation will work.  But if we
+dnl are testing with m4 1.6, we can rerun the test with __m4_version__
+dnl undefined to exercise the alternate code path.
+AT_DATA_M4SUGAR([script.4s],
+[[m4_init
+m4_divert_push(0)[]dnl
+m4_len(m4_foreach_w([j], m4_do(m4_for([i], [1], [10000], [], [,i ])), [j ]))
+m4_shiftn(9998m4_for([i], [1], [10000], [], [,i]))
+m4_len(m4_join([--],, m4_dquote_elt(m4_for([i], [1], [10000], [], [,i])),))
+m4_len(m4_joinall([--], m4_map([, m4_echo],
+  m4_dquote([1]m4_for([i], [2], [10000], [], [,i])))))
+m4_max(m4_min([1]m4_for([i], [2], [10000], [],
+  [,i]))m4_for([i], [2], [10000], [], [,i]))
+m4_case([10000]m4_for([i], [1], [10000], [], [,i]),[end])
+m4_list_cmp(m4_dquote(1m4_for([i], [2], [10000], [], [,i])),
+            m4_dquote(1m4_for([i], [2], [10000], [], [,i]), [0]))
+m4_for([i], [1], [10000], [], [m4_define(i)])dnl
+m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
+m4_divert_pop(0)
+]])
+
+AT_CHECK_M4SUGAR([-o-], [0], [[48894
+9999,10000
+78896
+58894
+10000
+end
+0
+]])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_ifdef([__m4_version__],
+[m4_undefine([__m4_version__])],
+[m4_divert_push(0)48894
+9999,10000
+78896
+58894
+10000
+end
+0
+m4_exit([0])])
+m4_init
+m4_divert_push(0)[]dnl
+m4_len(m4_foreach_w([j], m4_do(m4_for([i], [1], [10000], [], [,i ])), [j ]))
+m4_shiftn(9998m4_for([i], [1], [10000], [], [,i]))
+m4_len(m4_join([--],, m4_dquote_elt(m4_for([i], [1], [10000], [], [,i])),))
+m4_len(m4_joinall([--], m4_map([, m4_echo],
+  m4_dquote([1]m4_for([i], [2], [10000], [], [,i])))))
+m4_max(m4_min([1]m4_for([i], [2], [10000], [],
+  [,i]))m4_for([i], [2], [10000], [], [,i]))
+m4_case([10000]m4_for([i], [1], [10000], [], [,i]),[end])
+m4_list_cmp(m4_dquote(1m4_for([i], [2], [10000], [], [,i])),
+            m4_dquote(1m4_for([i], [2], [10000], [], [,i]), [0]))
+m4_for([i], [1], [10000], [], [m4_define(i)])dnl
+m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
+m4_divert_pop(0)
+]])
+
+AT_CHECK_M4SUGAR([-o-], [0], [[48894
+9999,10000
+78896
+58894
+10000
+end
+0
+]])
 
 AT_CLEANUP

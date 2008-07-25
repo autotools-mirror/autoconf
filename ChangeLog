@@ -1,3 +1,24 @@
+2008-07-25  Eric Blake  <ebb9@byu.net>
+
+	Provide O(n) replacement macros for M4 1.4.x.
+	* lib/m4sugar/foreach.m4: New file.
+	(m4_foreach, m4_case, _m4_shiftn, m4_do, m4_dquote_elt, _m4_map)
+	(m4_join, m4_joinall, m4_list_cmp, _m4_minmax): Replace m4sugar
+	macros based on $@ recursion [fast on M4 1.6, but quadratic on M4
+	1.4.x] with versions based on m4_for/m4_foreach [slow on 1.6, but
+	linear on 1.4.x].
+	* lib/m4sugar/m4sugar.m4 (m4_init): Dynamically load new file if
+	older M4 is assumed.
+	(m4_map_sep): Optimize.
+	(m4_max, m4_min): Refactor, by adding...
+	(_m4_max, _m4_min, _m4_minmax): ...more efficient helpers.
+	(m4_defn, m4_popdef, m4_undefine): Use foreach recursion.
+	* lib/m4sugar/Makefile.am (dist_m4sugarlib_DATA): Distribute new
+	file.
+	* tests/m4sugar.at (M4 loops): Add a stress test that takes
+	forever if m4_foreach and friends are quadratic.
+	* NEWS: Mention this.
+
 2008-07-21  Eric Blake  <ebb9@byu.net>
 
 	Ignore undefined macros, necessary with m4 1.6.

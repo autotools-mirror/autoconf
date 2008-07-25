@@ -1,6 +1,6 @@
 # Make Autoconf library for M4sugar.
 
-# Copyright (C) 2001, 2002, 2006, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 m4sugarlibdir = $(pkgdatadir)/m4sugar
-dist_m4sugarlib_DATA = m4sugar.m4 m4sh.m4
+dist_m4sugarlib_DATA = m4sugar.m4 foreach.m4 m4sh.m4
 nodist_m4sugarlib_DATA = version.m4 m4sugar.m4f m4sh.m4f
 CLEANFILES = $(nodist_m4sugarlib_DATA)
 

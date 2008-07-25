@@ -26,6 +26,13 @@ GNU Autoconf NEWS - User visible changes.
    case with underlying m4:
    m4_defn  m4_popdef  m4_undefine
 
+** The following m4sugar macros now guarantee linear scaling; they
+   previously had linear scaling with m4 1.6 but quadratic scaling
+   when using m4 1.4.x.  All macros built on top of these also gain
+   the scaling improvements.
+   m4_case  m4_do  m4_dquote_elt  m4_foreach  m4_join  m4_list_cmp
+   m4_map  m4_map_sep  m4_max  m4_min  m4_shiftn
+
 ** AT_KEYWORDS once again performs expansion on its argument, such that
    AT_KEYWORDS([m4_if([$1], [], [default])]) no longer complains about
    the possibly unexpanded m4_if [regression introduced in 2.62].
