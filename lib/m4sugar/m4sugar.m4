@@ -2315,8 +2315,9 @@ m4_pattern_forbid([^dnl$])
 # 1.6 or newer, and thus that $@ recursion is linear; nothing further
 # needs to be done.  But if it is missing, we assume we are being run
 # by M4 1.4.x, that $@ recursion is quadratic, and that we need
-# foreach-based replacement macros.
-m4_ifndef([__m4_version__], [m4_include([m4sugar/foreach.m4])])
+# foreach-based replacement macros.  Use the raw builtin to avoid
+# tripping up include tracing.
+m4_ifndef([__m4_version__], [m4_builtin([include], [m4sugar/foreach.m4])])
 
 # _m4_divert_diversion should be defined:
 m4_divert_push([KILL])

@@ -1,5 +1,9 @@
 2008-07-25  Eric Blake  <ebb9@byu.net>
 
+	Avoid infinite aclocal loop.
+	* lib/m4sugar/m4sugar.m4 (m4_init): Bypass m4_include tracing, so
+	that aclocal doesn't insist on finding m4sugar/foreach.m4.
+
 	Provide O(n) replacement macros for M4 1.4.x.
 	* lib/m4sugar/foreach.m4: New file.
 	(m4_foreach, m4_case, _m4_shiftn, m4_do, m4_dquote_elt, _m4_map)
