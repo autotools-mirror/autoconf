@@ -162,8 +162,8 @@ m4_define([m4_dquote_elt],
 # m4_map/m4_map_sep only execute once; the speedup comes in fixing
 # _m4_map.  m4_foreach to the rescue.
 m4_define([_m4_map],
-[m4_if([$#], [1], [],
-       [m4_foreach([_m4_elt], [m4_shift($@)],
+[m4_if([$#], [2], [],
+       [m4_foreach([_m4_elt], [m4_shift2($@)],
 		   [m4_apply([$1], m4_defn([_m4_elt]))])])])
 
 # m4_join(SEP, ARG1, ARG2...)

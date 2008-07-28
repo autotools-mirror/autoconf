@@ -958,14 +958,15 @@ m4_if(m4_defn([$1]), [$2], [],
 # as little as possible in _m4_foreach; each extra use requires that much
 # more memory for expansion.  So, rather than directly compare $2 against
 # [] and use m4_car/m4_cdr for recursion, we instead unbox the list (which
-# requires swapping the argument order in the helper) and use _m4_shift3
-# to detect when recursion is complete.
+# requires swapping the argument order in the helper), insert an ignored
+# third argument, and use m4_shift3 to detect when recursion is complete.
 m4_define([m4_foreach],
-[m4_pushdef([$1])_$0([$1], [$3]m4_if([$2], [], [], [, $2]))m4_popdef([$1])])
+[m4_if([$2], [], [],
+       [m4_pushdef([$1])_$0([$1], [$3], [], $2)m4_popdef([$1])])])
 
 m4_define([_m4_foreach],
-[m4_if([$#], [2], [],
-       [m4_define([$1], [$3])$2[]$0([$1], [$2]_m4_shift3($@))])])
+[m4_if([$#], [3], [],
+       [m4_define([$1], [$4])$2[]$0([$1], [$2], m4_shift3($@))])])
 
 
 # m4_foreach_w(VARIABLE, LIST, EXPRESSION)
@@ -990,13 +991,14 @@ m4_define([m4_foreach_w],
 #
 # Since LIST may be quite large, we want to minimize how often it appears
 # in the expansion.  Rather than use m4_car/m4_cdr iteration, we unbox the
-# list, and use _m4_shift2 to detect the end of recursion.
+# list, ignore the second argument, and use m4_shift2 to detect the end of
+# recursion.
 m4_define([m4_map],
 [m4_if([$2], [], [],
-       [_$0([$1], $2)])])
+       [_$0([$1], [], $2)])])
 m4_define([_m4_map],
-[m4_if([$#], [1], [],
-       [m4_apply([$1], [$2])$0([$1]_m4_shift2($@))])])
+[m4_if([$#], [2], [],
+       [m4_apply([$1], [$3])$0([$1], m4_shift2($@))])])
 
 
 # m4_map_sep(MACRO, SEPARATOR, LIST)
@@ -1006,7 +1008,7 @@ m4_define([_m4_map],
 # SEPARATOR is not further expanded.
 m4_define([m4_map_sep],
 [m4_if([$3], [], [],
-       [m4_apply([$1], m4_car($3))_m4_map([[$2]$1]_m4_shift2(,$3))])])
+       [m4_apply([$1], m4_car($3))_m4_map([[$2]$1], $3)])])
 
 
 ## --------------------------- ##

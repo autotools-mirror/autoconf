@@ -1,5 +1,10 @@
 2008-07-28  Eric Blake  <ebb9@byu.net>
 
+	Avoid _m4_shiftn for m4 1.6 speedup.
+	* lib/m4sugar/m4sugar.m4 (m4_foreach, _m4_foreach, m4_map)
+	(_m4_map, m4_map_sep): Rewrite recursion to use one less m4_if.
+	* lib/m4sugar/foreach.m4 (_m4_map): Accomodate changed signature.
+
 	Implement O(n) unique element set creation.
 	* lib/m4sugar/m4sugar.m4 (m4_set_add, m4_set_add_all)
 	(m4_set_contains, m4_set_contents, m4_set_delete)
