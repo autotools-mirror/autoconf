@@ -234,3 +234,21 @@ m4_define([_m4_minmax],
 [m4_pushdef([_m4_best], m4_eval([$2]))m4_foreach([_m4_arg], [m4_shift2($@)],
     [m4_define([_m4_best], $1(_m4_best, _m4_defn([_m4_arg])))])]dnl
 [_m4_best[]_m4_popdef([_m4_best])])
+
+# m4_set_add_all(SET, VALUE...)
+# -----------------------------
+# Add each VALUE into SET.  This is O(n) in the number of VALUEs, and
+# can be faster than calling m4_set_add for each VALUE.
+#
+# m4_foreach to the rescue.  If no deletions have occurred, then avoid
+# the speed penalty of m4_set_add.
+m4_define([m4_set_add_all],
+[m4_if([$#], [0], [], [$#], [1], [],
+       [m4_define([_m4_set_size($1)], m4_eval(m4_set_size([$1])
+	  + m4_len(m4_foreach([_m4_arg], [m4_shift($@)],
+    m4_ifdef([_m4_set_cleanup($1)],
+	     [[m4_set_add([$1], _m4_defn([_m4_arg]))]],
+	     [[m4_ifdef([_m4_set([$1],]_m4_defn([_m4_arg])[)], [],
+			[m4_define([_m4_set([$1],]_m4_defn([_m4_arg])[)],
+				   [1])m4_pushdef([_m4_set([$1])],
+	_m4_defn([_m4_arg]))-])]])))))])])

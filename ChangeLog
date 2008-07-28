@@ -1,3 +1,19 @@
+2008-07-28  Eric Blake  <ebb9@byu.net>
+
+	Implement O(n) unique element set creation.
+	* lib/m4sugar/m4sugar.m4 (m4_set_add, m4_set_add_all)
+	(m4_set_contains, m4_set_contents, m4_set_delete)
+	(m4_set_difference, m4_set_dump, m4_set_empty, m4_set_foreach)
+	(m4_set_intersection, m4_set_list, m4_set_listc, m4_set_remove)
+	(m4_set_size, m4_set_union): New macros.
+	* lib/m4sugar/foreach.m4 (m4_set_add_all): Add O(n) fallback for
+	m4 1.4.x.
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS, AC_SUBST): Use
+	new m4_set API for the set most likely to be large.
+	* doc/autoconf.texi (Set manipulation Macros): New node.
+	* NEWS: Mention new macros.
+	* tests/m4sugar.at (m4@&t@_set): New test.
+
 2008-07-25  Eric Blake  <ebb9@byu.net>
 
 	Avoid infinite aclocal loop.

@@ -456,6 +456,7 @@ Programming in M4sugar
 * Evaluation Macros::           More quotation and evaluation control
 * Text processing Macros::      String manipulation in M4
 * Number processing Macros::    Arithmetic computation in M4
+* Set manipulation Macros::     Set manipulation in M4
 * Forbidden Patterns::          Catching unexpanded macros
 
 Writing Autoconf Macros
@@ -10218,6 +10219,7 @@ define your own macros into these namespaces.
 * Evaluation Macros::           More quotation and evaluation control
 * Text processing Macros::      String manipulation in M4
 * Number processing Macros::    Arithmetic computation in M4
+* Set manipulation Macros::     Set manipulation in M4
 * Forbidden Patterns::          Catching unexpanded macros
 @end menu
 
@@ -11380,6 +11382,229 @@ m4_version_compare([2.61a], [2.61a-248-dc51])
 m4_version_compare([2.61b], [2.61a-248-dc51])
 @result{}1
 @end example
+@end defmac
+
+
+@node Set manipulation Macros
+@subsection Set manipulation in M4
+@cindex Set manipulation
+@cindex Data structure, set
+@cindex Unordered set manipulation
+
+Sometimes, it is necessary to track a set of data, where the order does
+not matter and where there are no duplicates in the set.  The following
+macros facilitate set manipulations.  Each set is an opaque object,
+which can only be accessed via these basic operations.  The underlying
+implementation guarantees linear scaling for set creation, which is more
+efficient than using the quadratic @code{m4_append_uniq}.  Both set
+names and values can be arbitrary strings, except for unbalanced quotes.
+This implementation ties up memory for removed elements until the next
+operation that must traverse all the elements of a set; and although
+that may slow down some operations until the memory for removed elements
+is pruned, it still guarantees linear performance.
+
+@defmac m4_set_add (@var{set}, @var{value}, @ovar{if-uniq}, @ovar{if-dup})
+@msindex{set_add}
+Adds the string @var{value} as a member of set @var{set}.  Expand
+@var{if-uniq} if the element was added, or @var{if-dup} if it was
+previously in the set.  Operates in amortized constant time, so that set
+creation scales linearly.
+@end defmac
+
+@defmac m4_set_add_all (@var{set}, @var{value}@dots{})
+@msindex{set_add_all}
+Adds each @var{value} to the set @var{set}.  This is slightly more
+efficient than repeatedly invoking @code{m4_set_add}.
+@end defmac
+
+@defmac m4_set_contains (@var{set}, @var{value}, @ovar{if-present}, @
+ @ovar{if-absent})
+@msindex{set_contains}
+Expands @var{if-present} if the string @var{value} is a member of
+@var{set}, otherwise @var{if-absent}.
+
+@example
+m4_set_contains([a], [1], [yes], [no])
+@result{}no
+m4_set_add([a], [1], [added], [dup])
+@result{}added
+m4_set_add([a], [1], [added], [dup])
+@result{}dup
+m4_set_contains([a], [1], [yes], [no])
+@result{}yes
+m4_set_remove([a], [1], [removed], [missing])
+@result{}removed
+m4_set_contains([a], [1], [yes], [no])
+@result{}no
+m4_set_remove([a], [1], [removed], [missing])
+@result{}missing
+@end example
+@end defmac
+
+@defmac m4_set_contents (@var{set}, @ovar{sep})
+@defmacx m4_set_dump (@var{set}, @ovar{sep})
+@msindex{set_contents}
+@msindex{set_dump}
+Expands to a single string consisting of all the members of the set
+@var{set}, each separated by @var{sep}, which is not expanded.
+@code{m4_set_contents} leaves the elements in @var{set} but reclaims any
+memory occupied by removed elements, while @code{m4_set_dump} is a
+faster one-shot action that also deletes the set.  No provision is made
+for disambiguating members that contain a non-empty @var{sep} as a
+substring; use @code{m4_set_empty} to distinguish between an empty set
+and the set containing only the empty string.  The order of the output
+is unspecified; in the current implementation, part of the speed of
+@code{m4_set_dump} results from using a different output order than
+@code{m4_set_contents}.  These macros scale linearly in the size of the
+set before memory pruning, and @code{m4_set_contents([@var{set}],
+[@var{sep}])} is faster than
+@code{m4_joinall([@var{sep}]m4_set_listc([@var{set}]))}.
+
+@example
+m4_set_add_all([a], [1], [2], [3])
+@result{}
+m4_set_contents([a], [-])
+@result{}1-2-3
+m4_joinall([-]m4_set_listc([a]))
+@result{}1-2-3
+m4_set_dump([a], [-])
+@result{}3-2-1
+m4_set_contents([a])
+@result{}
+m4_set_add([a], [])
+@result{}
+m4_set_contents([a], [-])
+@result{}
+@end example
+@end defmac
+
+@defmac m4_set_delete (@var{set})
+@msindex{set_delete}
+Delete all elements and memory associated with @var{set}.  This is
+linear in the set size, and faster than removing one element at a time.
+@end defmac
+
+@defmac m4_set_difference (@var{seta}, @var{setb})
+@defmacx m4_set_intersection (@var{seta}, @var{setb})
+@defmacx m4_set_union (@var{seta}, @var{setb})
+@msindex{set_difference}
+@msindex{set_intersection}
+@msindex{set_union}
+Compute the relation between @var{seta} and @var{setb}, and output the
+result as a list of quoted arguments without duplicates and with a
+leading comma.  Set difference selects the elements in @var{seta} but
+not @var{setb}, intersection selects only elements in both sets, and
+union selects elements in either set.  These actions are linear in the
+sum of the set sizes.  The leading comma is necessary to distinguish
+between no elements and the empty string as the only element.
+
+@example
+m4_set_add_all([a], [1], [2], [3])
+@result{}
+m4_set_add_all([b], [3], [], [4])
+@result{}
+m4_set_difference([a], [b])
+@result{},1,2
+m4_set_difference([b], [a])
+@result{},,4
+m4_set_intersection([a], [b])
+@result{},3
+m4_set_union([a], [b])
+@result{},1,2,3,,4
+@end example
+@end defmac
+
+@defmac m4_set_empty (@var{set}, @ovar{if-empty}, @ovar{if-elements})
+@msindex{set_empty}
+Expand @var{if-empty} if the set @var{set} has no elements, otherwise
+expand @var{if-elements}.  This macro operates in constant time.  Using
+this macro can help disambiguate output from @code{m4_set_contents} or
+@code{m4_set_list}.
+@end defmac
+
+@defmac m4_set_foreach (@var{set}, @var{variable}, @var{action})
+@msindex{set_foreach}
+For each element in the set @var{set}, expand @var{action} with the
+macro @var{variable} defined as the set element.  Behavior is
+unspecified if @var{action} recursively lists the contents of @var{set}
+(although listing other sets is acceptable), or if it modifies the set
+in any way other than removing the element currently contained in
+@var{variable}.  This macro is faster than the corresponding
+@code{m4_foreach([@var{variable}],
+m4_indir([m4_dquote]m4_set_listc([@var{set}])), [@var{action}])}.
+
+@example
+m4_set_add_all([a]m4_for([i], [1], [5], [], [,i]))
+@result{}
+m4_set_contents([a])
+@result{}12345
+m4_set_foreach([a], [i],
+  [m4_if(m4_eval(i&1), [0], [m4_set_remove([a], i, [i])])])
+@result{}24
+m4_set_contents([a])
+@result{}135
+@end example
+@end defmac
+
+@defmac m4_set_list (@var{set})
+@defmacx m4_set_listc (@var{set})
+@msindex{set_list}
+@msindex{set_listc}
+Produce a list of arguments, where each argument is a quoted element
+from the set @var{set}.  The variant @code{m4_set_listc} is unambiguous,
+by adding a leading comma if there are any set elements, whereas the
+variant @code{m4_set_list} cannot distinguish between an empty set and a
+set containing only the empty string.  These can be directly used in
+macros that take multiple arguments, such as @code{m4_join} or
+@code{m4_set_add_all}, or wrapped by @code{m4_dquote} for macros that
+take a quoted list, such as @code{m4_map} or @code{m4_foreach}.  Any
+memory occupied by removed elements is reclaimed during these macros.
+
+@example
+m4_set_add_all([a], [1], [2], [3])
+@result{}
+m4_set_list([a])
+@result{}1,2,3
+m4_set_list([b])
+@result{}
+m4_set_listc([b])
+@result{}
+m4_count(m4_set_list([b]))
+@result{}1
+m4_set_empty([b], [0], [m4_count(m4_set_list([b]))])
+@result{}0
+m4_set_add([b], [])
+@result{}
+m4_set_list([b])
+@result{}
+m4_set_listc([b])
+@result{},
+m4_count(m4_set_list([b]))
+@result{}1
+m4_set_empty([b], [0], [m4_count(m4_set_list([b]))])
+@result{}1
+@end example
+@end defmac
+
+@defmac m4_set_remove (@var{set}, @var{value}, @ovar{if-present}, @
+ @ovar{if-absent})
+@msindex{set_remove}
+If @var{value} is an element in the set @var{set}, then remove it and
+expand @var{if-present}.  Otherwise expand @var{if-absent}.  This macro
+operates in constant time so that multiple removals will scale linearly
+rather than quadratically; but when used outside of
+@code{m4_set_foreach}, it leaves memory occupied until the set is later
+compacted by @code{m4_set_contents} or @code{m4_set_list}.  Several
+other set operations are then less efficient between the time of element
+removal and subsequent memory compaction, but still maintain their
+guaranteed scaling performance.
+@end defmac
+
+@defmac m4_set_size (@var{set})
+@msindex{set_size}
+Expand to the size of the set @var{set}.  This implementation operates
+in constant time, and is thus more efficient than
+@code{m4_eval(m4_count(m4_set_listc([set])) - 1)}.
 @end defmac
 
 

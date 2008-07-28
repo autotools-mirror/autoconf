@@ -20,7 +20,10 @@ GNU Autoconf NEWS - User visible changes.
    allowing the output of unbalanced parantheses in more contexts.
 
 ** The following m4sugar macros are new:
-   m4_joinall
+   m4_joinall  m4_set_add  m4_set_add_all  m4_set_contains
+   m4_set_contents  m4_set_delete  m4_set_difference  m4_set_dump
+   m4_set_empty  m4_set_foreach  m4_set_intersection  m4_set_list
+   m4_set_listc  m4_set_remove  m4_set_size  m4_set_union
 
 ** The following m4sugar macros now accept multiple arguments, as is the
    case with underlying m4:

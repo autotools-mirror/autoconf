@@ -414,7 +414,7 @@ AC_SUBST([PACKAGE_BUGREPORT],
 
 m4_divert_pop([DEFAULTS])dnl
 m4_wrap([m4_divert_text([DEFAULTS],
-[ac_subst_vars='m4_ifdef([_AC_SUBST_VARS],  [m4_defn([_AC_SUBST_VARS])])'
+[ac_subst_vars='m4_set_dump([_AC_SUBST_VARS], m4_newline)'
 ac_subst_files='m4_ifdef([_AC_SUBST_FILES], [m4_defn([_AC_SUBST_FILES])])'
 ac_user_opts='
 enable_option_checking
@@ -2096,8 +2096,7 @@ m4_define([AC_SUBST],
 AC_SUBST_TRACE([$1])dnl
 m4_pattern_allow([^$1$])dnl
 m4_ifvaln([$2], [$1=$2])[]dnl
-m4_append_uniq([_AC_SUBST_VARS], [$1], [
-])dnl
+m4_set_add([_AC_SUBST_VARS], [$1])dnl
 ])# AC_SUBST
 
 

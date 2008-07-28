@@ -2274,9 +2274,330 @@ m4_ifdef([m4_PACKAGE_VERSION],
 [[m4_fatal([m4sugar/version.m4 not found])]]))
 
 
+## ------------------ ##
+## 15. Set handling.  ##
+## ------------------ ##
+
+# Autoconf likes to create arbitrarily large sets; for example, as of
+# this writing, the configure.ac for coreutils tracks a set of more
+# than 400 AC_SUBST.  How do we track all of these set members,
+# without introducing duplicates?  We could use m4_append_uniq, with
+# the set NAME residing in the contents of the macro NAME.
+# Unfortunately, m4_append_uniq is quadratic for set creation, because
+# it costs O(n) to search the string for each of O(n) insertions; not
+# to mention that with m4 1.4.x, even using m4_append is slow, costing
+# O(n) rather than O(1) per insertion.  Other set operations, not used
+# by Autoconf but still possible by manipulation of the definition
+# tracked in macro NAME, include O(n) deletion of one element and O(n)
+# computation of set size.  Because the set is exposed to the user via
+# the definition of a single macro, we cannot cache any data about the
+# set without risking the cache being invalidated by the user
+# redefining NAME.
+#
+# Can we do better?  Yes, because m4 gives us an O(1) search function
+# for free: ifdef.  Additionally, even m4 1.4.x gives us an O(1)
+# insert operation for free: pushdef.  But to use these, we must
+# represent the set via a group of macros; to keep the set consistent,
+# we must hide the set so that the user can only manipulate it through
+# accessor macros.  The contents of the set are maintained through two
+# access points; _m4_set([name]) is a pushdef stack of values in the
+# set, useful for O(n) traversal of the set contents; while the
+# existence of _m4_set([name],value) with no particular value is
+# useful for O(1) querying of set membership.  And since the user
+# cannot externally manipulate the set, we are free to add additional
+# caching macros for other performance improvements.  Deletion can be
+# O(1) per element rather than O(n), by reworking the definition of
+# _m4_set([name],value) to be 0 or 1 based on current membership, and
+# adding _m4_set_cleanup(name) to defer the O(n) cleanup of
+# _m4_set([name]) until we have another reason to do an O(n)
+# traversal.  The existence of _m4_set_cleanup(name) can then be used
+# elsewhere to determine if we must dereference _m4_set([name],value),
+# or assume that definition implies set membership.  Finally, size can
+# be tracked in an O(1) fashion with _m4_set_size(name).
+#
+# The quoting in _m4_set([name],value) is chosen so that there is no
+# ambiguity with a set whose name contains a comma, and so that we can
+# supply the value via _m4_defn([_m4_set([name])]) without needing any
+# quote manipulation.
+
+# m4_set_add(SET, VALUE, [IF-UNIQ], [IF-DUP])
+# -------------------------------------------
+# Add VALUE as an element of SET.  Expand IF-UNIQ on the first
+# addition, and IF-DUP if it is already in the set.  Addition of one
+# element is O(1), such that overall set creation is O(n).
+#
+# We do not want to add a duplicate for a previously deleted but
+# unpruned element, but it is just as easy to check existence directly
+# as it is to query _m4_set_cleanup($1).
+m4_define([m4_set_add],
+[m4_ifdef([_m4_set([$1],$2)],
+	  [m4_if(m4_indir([_m4_set([$1],$2)]), [0],
+		 [m4_define([_m4_set([$1],$2)],
+			    [1])_m4_set_size([$1], [m4_incr])$3], [$4])],
+	  [m4_define([_m4_set([$1],$2)],
+		     [1])m4_pushdef([_m4_set([$1])],
+				    [$2])_m4_set_size([$1], [m4_incr])$3])])
+
+# m4_set_add_all(SET, VALUE...)
+# -----------------------------
+# Add each VALUE into SET.  This is O(n) in the number of VALUEs, and
+# can be faster than calling m4_set_add for each VALUE.
+#
+# Implement two recursion helpers; the check variant is slower but
+# handles the case where an element has previously been removed but
+# not pruned.  The recursion helpers ignore their second argument, so
+# that we can use the faster m4_shift2 and 2 arguments, rather than
+# _m4_shift2 and one argument, as the signal to end recursion.
+m4_define([m4_set_add_all],
+[m4_define([_m4_set_size($1)], m4_eval(m4_set_size([$1])
+  + m4_len(m4_ifdef([_m4_set_cleanup($1)], [_$0_check], [_$0])([$1], $@))))])
+
+m4_define([_m4_set_add_all],
+[m4_if([$#], [2], [],
+       [m4_ifdef([_m4_set([$1],$3)], [],
+		 [m4_define([_m4_set([$1],$3)], [1])m4_pushdef([_m4_set([$1])],
+	   [$3])-])$0([$1], m4_shift2($@))])])
+
+m4_define([_m4_set_add_all_check],
+[m4_if([$#], [2], [],
+       [m4_set_add([$1], [$3])$0([$1], m4_shift2($@))])])
+
+# m4_set_contains(SET, VALUE, [IF-PRESENT], [IF-ABSENT])
+# ------------------------------------------------------
+# Expand IF-PRESENT if SET contains VALUE, otherwise expand IF-ABSENT.
+# This is always O(1).
+m4_define([m4_set_contains],
+[m4_ifdef([_m4_set_cleanup($1)],
+	  [m4_if(m4_ifdef([_m4_set([$1],$2)],
+		    [m4_indir([_m4_set([$1],$2)])], [0]), [1], [$3], [$4])],
+	  [m4_ifdef([_m4_set([$1],$2)], [$3], [$4])])])
+
+# m4_set_contents(SET, [SEP])
+# ---------------------------
+# Expand to a single string containing all the elements in SET,
+# separated by SEP, without modifying SET.  No provision is made for
+# disambiguating set elements that contain non-empty SEP as a
+# sub-string, or for recognizing a set that contains only the empty
+# string.  Order of the output is not guaranteed.  If any elements
+# have been previously removed from the set, this action will prune
+# the unused memory.  This is O(n) in the size of the set before
+# pruning.
+#
+# Use _m4_popdef for speed.  The existence of _m4_set_cleanup($1)
+# determines which version of _1 helper we use.
+m4_define([m4_set_contents],
+[m4_ifdef([_m4_set_cleanup($1)], [_$0_1c], [_$0_1])([$1])_$0_2([$1],
+    [_m4_defn([_m4_set_($1)])], [[$2]])])
+
+# _m4_set_contents_1(SET)
+# _m4_set_contents_1c(SET)
+# _m4_set_contents_2(SET, SEP, PREP)
+# ----------------------------------
+# Expand to a list of quoted elements currently in the set, separated
+# by SEP, and moving PREP in front of SEP on recursion.  To avoid
+# nesting limit restrictions, the algorithm must be broken into two
+# parts; _1 destructively copies the stack in reverse into
+# _m4_set_($1), producing no output; then _2 destructively copies
+# _m4_set_($1) back into the stack in reverse.  SEP is expanded while
+# _m4_set_($1) contains the current element, so a SEP containing
+# _m4_defn([_m4_set_($1)]) can produce output in the order the set was
+# created.  Behavior is undefined if SEP tries to recursively list or
+# modify SET in any way other than calling m4_set_remove on the
+# current element.  Use _1 if all entries in the stack are guaranteed
+# to be in the set, and _1c to prune removed entries.  Uses _m4_defn
+# and _m4_popdef for speed.
+m4_define([_m4_set_contents_1],
+[m4_ifdef([_m4_set([$1])], [m4_pushdef([_m4_set_($1)],
+    _m4_defn([_m4_set([$1])]))_m4_popdef([_m4_set([$1])])$0([$1])])])
+
+m4_define([_m4_set_contents_1c],
+[m4_ifdef([_m4_set([$1])],
+	  [m4_set_contains([$1], _m4_defn([_m4_set([$1])]),
+		   [m4_pushdef([_m4_set_($1)], _m4_defn([_m4_set([$1])]))],
+		   [_m4_popdef([_m4_set([$1],]_m4_defn(
+      [_m4_set([$1])])[)])])_m4_popdef([_m4_set([$1])])$0([$1])],
+	  [_m4_popdef([_m4_set_cleanup($1)])])])
+
+m4_define([_m4_set_contents_2],
+[m4_ifdef([_m4_set_($1)], [m4_pushdef([_m4_set([$1])],
+    _m4_defn([_m4_set_($1)]))$2[]_m4_popdef([_m4_set_($1)])$0([$1], [$3$2])])])
+
+# m4_set_delete(SET)
+# ------------------
+# Delete all elements in SET, and reclaim any memory occupied by the
+# set.  This is O(n) in the set size.
+#
+# Use _m4_defn and _m4_popdef for speed.
+m4_define([m4_set_delete],
+[m4_ifdef([_m4_set([$1])],
+	  [_m4_popdef([_m4_set([$1],]_m4_defn([_m4_set([$1])])[)],
+		      [_m4_set([$1])])$0([$1])],
+	  [m4_ifdef([_m4_set_cleanup($1)],
+		    [_m4_popdef([_m4_set_cleanup($1)])])m4_ifdef(
+		    [_m4_set_size($1)],
+		    [_m4_popdef([_m4_set_size($1)])])])])
+
+# m4_set_difference(SET1, SET2)
+# -----------------------------
+# Produce a LIST of quoted elements that occur in SET1 but not SET2.
+# Output a comma prior to any elements, to distinguish the empty
+# string from no elements.  This can be directly used as a series of
+# arguments, such as for m4_join, or wrapped inside quotes for use in
+# m4_foreach.  Order of the output is not guaranteed.
+#
+# Short-circuit the idempotence relation.  Use _m4_defn for speed.
+m4_define([m4_set_difference],
+[m4_if([$1], [$2], [],
+       [m4_set_foreach([$1], [_m4_element],
+		       [m4_set_contains([$2], _m4_defn([_m4_element]), [],
+					[,_m4_defn([_m4_element])])])])])
+
+# m4_set_dump(SET, [SEP])
+# -----------------------
+# Expand to a single string containing all the elements in SET,
+# separated by SEP, then delete SET.  In general, if you only need to
+# list the contents once, this is faster than m4_set_contents.  No
+# provision is made for disambiguating set elements that contain
+# non-empty SEP as a sub-string.  Order of the output is not
+# guaranteed.  This is O(n) in the size of the set before pruning.
+#
+# Use _m4_popdef for speed.  Use existence of _m4_set_cleanup($1) to
+# decide if more expensive recursion is needed.
+m4_define([m4_set_dump],
+[m4_ifdef([_m4_set_size($1)],
+	  [_m4_popdef([_m4_set_size($1)])])m4_ifdef([_m4_set_cleanup($1)],
+    [_$0_check], [_$0])([$1], [], [$2])])
+
+# _m4_set_dump(SET, SEP, PREP)
+# _m4_set_dump_check(SET, SEP, PREP)
+# ----------------------------------
+# Print SEP and the current element, then delete the element and
+# recurse with empty SEP changed to PREP.  The check variant checks
+# whether the element has been previously removed.  Use _m4_defn and
+# _m4_popdef for speed.
+m4_define([_m4_set_dump],
+[m4_ifdef([_m4_set([$1])],
+	  [[$2]_m4_defn([_m4_set([$1])])_m4_popdef([_m4_set([$1],]_m4_defn(
+		[_m4_set([$1])])[)], [_m4_set([$1])])$0([$1], [$2$3])])])
+
+m4_define([_m4_set_dump_check],
+[m4_ifdef([_m4_set([$1])],
+	  [m4_set_contains([$1], _m4_defn([_m4_set([$1])]),
+			   [[$2]_m4_defn([_m4_set([$1])])])_m4_popdef(
+    [_m4_set([$1],]_m4_defn([_m4_set([$1])])[)],
+    [_m4_set([$1])])$0([$1], [$2$3])],
+	  [_m4_popdef([_m4_set_cleanup($1)])])])
+
+# m4_set_empty(SET, [IF-EMPTY], [IF-ELEMENTS])
+# --------------------------------------------
+# Expand IF-EMPTY if SET has no elements, otherwise IF-ELEMENTS.
+m4_define([m4_set_empty],
+[m4_ifdef([_m4_set_size($1)],
+	  [m4_if(m4_indir([_m4_set_size($1)]), [0], [$2], [$3])], [$2])])
+
+# m4_set_foreach(SET, VAR, ACTION)
+# --------------------------------
+# For each element of SET, define VAR to the element and expand
+# ACTION.  ACTION should not recursively list SET's contents, add
+# elements to SET, nor delete any element from SET except the one
+# currently in VAR.  The order that the elements are visited in is not
+# guaranteed.  This is faster than the corresponding m4_foreach([VAR],
+#   m4_indir([m4_dquote]m4_set_listc([SET])), [ACTION])
+m4_define([m4_set_foreach],
+[m4_pushdef([$2])m4_ifdef([_m4_set_cleanup($1)],
+    [_m4_set_contents_1c], [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
+       [m4_define([$2], _m4_defn([_m4_set_($1)]))$3[]])m4_popdef([$2])])
+
+# m4_set_intersection(SET1, SET2)
+# -------------------------------
+# Produce a LIST of quoted elements that occur in both SET1 or SET2.
+# Output a comma prior to any elements, to distinguish the empty
+# string from no elements.  This can be directly used as a series of
+# arguments, such as for m4_join, or wrapped inside quotes for use in
+# m4_foreach.  Order of the output is not guaranteed.
+#
+# Iterate over the smaller set, and short-circuit the idempotence
+# relation.  Use _m4_defn for speed.
+m4_define([m4_set_intersection],
+[m4_if([$1], [$2], [m4_set_listc([$1])],
+       m4_eval(m4_set_size([$2]) < m4_set_size([$1])), [1], [$0([$2], [$1])],
+       [m4_set_foreach([$1], [_m4_element],
+		       [m4_set_contains([$2], _m4_defn([_m4_element]),
+					[,_m4_defn([_m4_element])])])])])
+
+# m4_set_list(SET)
+# m4_set_listc(SET)
+# -----------------
+# Produce a LIST of quoted elements of SET.  This can be directly used
+# as a series of arguments, such as for m4_join or m4_set_add_all, or
+# wrapped inside quotes for use in m4_foreach or m4_map.  With
+# m4_set_list, there is no way to distinguish an empty set from a set
+# containing only the empty string; with m4_set_listc, a leading comma
+# is output if there are any elements.
+m4_define([m4_set_list],
+[m4_ifdef([_m4_set_cleanup($1)], [_m4_set_contents_1c],
+	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
+	       [_m4_defn([_m4_set_($1)])], [,])])
+
+m4_define([m4_set_listc],
+[m4_ifdef([_m4_set_cleanup($1)], [_m4_set_contents_1c],
+	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
+	       [,_m4_defn([_m4_set_($1)])])])
+
+# m4_set_remove(SET, VALUE, [IF-PRESENT], [IF-ABSENT])
+# ----------------------------------------------------
+# If VALUE is an element of SET, delete it and expand IF-PRESENT.
+# Otherwise expand IF-ABSENT.  Deleting a single value is O(1),
+# although it leaves memory occupied until the next O(n) traversal of
+# the set which will compact the set.
+#
+# Optimize if the element being removed is the most recently added,
+# since defining _m4_set_cleanup($1) slows down so many other macros.
+# In particular, this plays well with m4_set_foreach.
+m4_define([m4_set_remove],
+[m4_set_contains([$1], [$2], [_m4_set_size([$1],
+    [m4_decr])m4_if(_m4_defn([_m4_set([$1])]), [$2],
+		    [_m4_popdef([_m4_set([$1],$2)], [_m4_set([$1])])],
+		    [m4_define([_m4_set_cleanup($1)])m4_define(
+		      [_m4_set([$1],$2)], [0])])$3], [$4])])
+
+# m4_set_size(SET)
+# ----------------
+# Expand to the number of elements currently in SET.  This operation
+# is O(1), and thus more efficient than m4_count(m4_set_list([SET])).
+m4_define([m4_set_size],
+[m4_ifdef([_m4_set_size($1)], [m4_indir([_m4_set_size($1)])], [0])])
+
+# _m4_set_size(SET, ACTION)
+# -------------------------
+# ACTION must be either m4_incr or m4_decr, and the size of SET is
+# changed accordingly.  If the set is empty, ACTION must not be
+# m4_decr.
+m4_define([_m4_set_size],
+[m4_define([_m4_set_size($1)],
+	   m4_ifdef([_m4_set_size($1)], [$2(m4_indir([_m4_set_size($1)]))],
+		    [1]))])
+
+# m4_set_union(SET1, SET2)
+# ------------------------
+# Produce a LIST of double quoted elements that occur in either SET1
+# or SET2, without duplicates.  Output a comma prior to any elements,
+# to distinguish the empty string from no elements.  This can be
+# directly used as a series of arguments, such as for m4_join, or
+# wrapped inside quotes for use in m4_foreach.  Order of the output is
+# not guaranteed.
+#
+# We can rely on the fact that m4_set_listc prunes SET1, so we don't
+# need to check _m4_set([$1],element) for 0.  Use _m4_defn for speed.
+# Short-circuit the idempotence relation.
+m4_define([m4_set_union],
+[m4_set_listc([$1])m4_if([$1], [$2], [], [m4_set_foreach([$2], [_m4_element],
+  [m4_ifdef([_m4_set([$1],]_m4_defn([_m4_element])[)], [],
+	    [,_m4_defn([_m4_element])])])])])
+
 
 ## ------------------- ##
-## 15. File handling.  ##
+## 16. File handling.  ##
 ## ------------------- ##
 
 
@@ -2298,7 +2619,7 @@ m4_if(m4_sysval, [0], [],
 
 
 ## ------------------------ ##
-## 16. Setting M4sugar up.  ##
+## 17. Setting M4sugar up.  ##
 ## ------------------------ ##
 
 

@@ -829,3 +829,145 @@ end
 ]])
 
 AT_CLEANUP
+
+
+## ---------- ##
+## m4_set_*.  ##
+## ---------- ##
+
+AT_SETUP([m4@&t@_set])
+
+AT_KEYWORDS([m4@&t@_set_add m4@&t@_set_add_all m4@&t@_set_contains
+m4@&t@_set_contents m4@&t@_set_delete m4@&t@_set_difference m4@&t@_set_dump
+m4@&t@_set_empty m4@&t@_set_foreach m4@&t@_set_intersection m4@&t@_set_list
+m4@&t@_set_listc m4@&t@_set_remove m4@&t@_set_size m4@&t@_set_union])
+
+# Simple tests
+AT_CHECK_M4SUGAR_TEXT([[m4_set_contains([a], [1], [yes], [no])
+m4_set_add([a], [1], [added], [dup])
+m4_set_contains([a], [1], [yes], [no])
+m4_set_add([a], [1], [added], [dup])
+m4_set_contents([a])
+m4_set_remove([a], [1], [removed], [missing])
+m4_set_contains([a], [1], [yes], [no])
+m4_set_remove([a], [1], [removed], [missing])
+m4_set_add([a], [2], [added], [dup])
+m4_set_empty([a], [yes], [no])
+m4_set_delete([a])
+m4_set_empty([a], [yes], [no])
+m4_set_add_all([c], [1], [2], [3])
+m4_set_add_all([a]m4_set_listc([c]))
+m4_set_contents([c], [-])
+m4_set_dump([a], [-])
+m4_set_contents([a])
+m4_set_add_all([a], [1], [2], [3])m4_set_add_all([b], [3], [], [4])
+m4_set_difference([a], [b])
+m4_set_difference([b], [a])
+m4_set_intersection([a], [b])
+m4_set_union([a], [b])
+m4_set_foreach([a], [i], [m4_if(m4_eval(i & 1), [1], [m4_set_remove([a], i)])])
+m4_set_list([a])
+m4_set_add([a], [])
+m4_set_list([a])
+m4_set_remove([a], [2])
+m4_dquote(m4_set_list([a]))
+m4_set_listc([a])
+m4_set_size([a])
+m4_set_delete([a])
+m4_dquote(m4_set_list([a]))
+m4_indir([m4_dquote]m4_set_listc([a]))
+m4_set_listc([a])
+m4_set_size([a])
+]], [[no
+added
+yes
+dup
+1
+removed
+no
+missing
+added
+no
+
+yes
+
+
+1-2-3
+3-2-1
+
+
+,1,2
+,,4
+,3
+,1,2,3,,4
+
+2
+
+2,
+
+[]
+,
+1
+
+[]
+
+
+0
+]])
+
+# Stress tests - check for unusual names/values
+AT_CHECK_M4SUGAR_TEXT([[m4_define([a], [oops])dnl
+m4_set_add([a], [a])dnl
+m4_set_remove([a], [oops], [yes], [no])
+m4_set_add([a,b], [c])dnl
+m4_set_add([a,b], [$*[]])dnl
+m4_set_add_all([a], [b,c])dnl
+m4_set_size([a])
+m4_count(m4_set_contents([a], [,]))
+m4_count(m4_set_list([a], [,]))
+m4_set_dump([a], [,])
+m4_set_contents([a,b], [,])
+m4_set_list([a,b])
+m4_set_foreach([$*[]], [$*[]], [oops])
+m4_set_add([$*[]], [])dnl
+m4_set_remove([$*[]], [a], [yes], [no])
+m4_set_add([$*[]], [a])dnl
+m4_set_foreach([$*[]], [$*[]], [-m4_defn([$*[]])m4_indir([$*[]])-])
+m4_set_remove([$*[]], [], [yes], [no])
+m4_set_add([c], [,])dnl
+m4_set_foreach([a,b], [set], [:m4_set_listc(_m4_defn([set])):])
+]],[[no
+2
+1
+2
+b,c,a
+c,$*[]
+c,$*[]
+
+no
+---aoops-
+yes
+:,,::,a:
+]])
+
+# Stress tests - check for linear scaling (won't necessarily fail if
+# quadratic, but hopefully users will complain if it appears to hang)
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_for([i], [1], [10000], [], [m4_set_add([a], i)])dnl
+m4_set_add_all([b]m4_for([i], [1], [10000], [], [,i]))dnl
+m4_set_remove([a], [1])dnl
+m4_set_remove([b], [10000])dnl
+m4_set_add_all([a]m4_for([i], [1], [10000], [], [,i]))dnl
+m4_for([i], [1], [10000], [], [m4_set_add([b], i)])dnl
+m4_len(m4_set_contents([a]))
+m4_len(m4_set_foreach([b], [b], [m4_if(m4_eval(b & 1), [1],
+  [m4_set_remove([b], b, [-])])]))
+m4_set_size([b])
+m4_count(m4_shift(m4_set_intersection([a], [b])))
+]], [[38894
+5000
+5000
+5000
+]])
+
+AT_CLEANUP
