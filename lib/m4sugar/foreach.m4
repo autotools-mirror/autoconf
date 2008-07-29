@@ -95,8 +95,8 @@ m4_define([m4_foreach],
 [m4_if([$2], [], [], [_$0([$1], [$3], $2)])])
 
 m4_define([_m4_foreach],
-[m4_define([$1], m4_pushdef([$1], [3])_m4_for([$1], [$#], [1],
-    [$0_([1], [2], m4_indir([$1]))])[m4_popdef([$1])])m4_indir([$1], $@)])
+[m4_define([$1], m4_pushdef([$1])_m4_for([$1], [3], [$#], [1],
+    [$0_([1], [2], _m4_defn([$1]))])[m4_popdef([$1])])m4_indir([$1], $@)])
 
 m4_define([_m4_foreach_],
 [[m4_define([$$1], [$$3])$$2[]]])
@@ -130,9 +130,9 @@ m4_define([_m4_case_],
 #   ,[$5],[$6],...,[$m]_m4_popdef([_m4_s])
 # before calling m4_shift(_m4_s($@)).
 m4_define([_m4_shiftn],
-[m4_define([_m4_s], m4_pushdef([_m4_s],
-			m4_incr(m4_incr([$1])))_m4_for([_m4_s], [$#], [1],
-    [[,]m4_dquote([$]_m4_s)])[_m4_popdef([_m4_s])])m4_shift(_m4_s($@))])
+[m4_define([_m4_s],
+	   m4_pushdef([_m4_s])_m4_for([_m4_s], m4_eval([$1 + 2]), [$#], [1],
+  [[,]m4_dquote([$]_m4_s)])[_m4_popdef([_m4_s])])m4_shift(_m4_s($@))])
 
 # m4_do(STRING, ...)
 # ------------------
@@ -143,8 +143,8 @@ m4_define([_m4_shiftn],
 # Here, we use the temporary macro _m4_do, defined as
 #   $1$2...$n[]_m4_popdef([_m4_do])
 m4_define([m4_do],
-[m4_define([_$0], m4_pushdef([_$0], [1])_m4_for([_$0], [$#], [1],
-    [$][_$0])[[]_m4_popdef([_$0])])_$0($@)])
+[m4_define([_$0], m4_pushdef([_$0])_m4_for([_$0], [1], [$#], [1],
+    [$_$0])[[]_m4_popdef([_$0])])_$0($@)])
 
 # m4_dquote_elt(ARGS)
 # -------------------
@@ -162,8 +162,8 @@ m4_define([m4_dquote_elt],
 #   [$m], [$m-1], ..., [$2], [$1]_m4_popdef([_m4_r])
 m4_define([m4_reverse],
 [m4_if([$#], [0], [], [$#], [1], [[$1]],
-[m4_define([_m4_r], m4_dquote([$$#])m4_pushdef([_m4_r],
-    m4_decr([$#]))_m4_for([_m4_r], [1], [-1],
+[m4_define([_m4_r], m4_dquote([$$#])m4_pushdef([_m4_r])_m4_for([_m4_r],
+      m4_decr([$#]), [1], [-1],
     [[, ]m4_dquote([$]_m4_r)])[_m4_popdef([_m4_r])])_m4_r($@)])])
 
 
@@ -218,16 +218,17 @@ m4_define([m4_joinall],
 # then calls _m4_cmp([1+0], [0], [1], [2+0])
 m4_define([m4_list_cmp],
 [m4_if([$1], [$2], 0,
-       [_$0($1+0_m4_list_pad(m4_count($1), m4_count($2)),
-	    $2+0_m4_list_pad(m4_count($2), m4_count($1)))])])
+  [m4_pushdef([_m4_size])_$0($1+0_m4_list_pad(m4_count($1), m4_count($2)),
+			     $2+0_m4_list_pad(m4_count($2), m4_count($1)))])])
 
 m4_define([_m4_list_pad],
-[m4_if(m4_eval($1 < $2), [1], [m4_for([], [$1 + 1], [$2], [], [,0])])])
+[m4_if(m4_eval($1 < $2), [1],
+       [_m4_for([_m4_size], m4_incr([$1]), [$2], [1], [,0])])])
 
 m4_define([_m4_list_cmp],
-[m4_pushdef([_m4_size], m4_eval([$# >> 1]))]dnl
-[m4_define([_m4_cmp], m4_pushdef([_m4_cmp], [1])[m4_if(]_m4_for([_m4_cmp],
-   _m4_size, [1], [$0_(_m4_cmp, m4_eval(_m4_cmp + _m4_size))])[
+[m4_define([_m4_size], m4_eval([$# >> 1]))]dnl
+[m4_define([_m4_cmp], m4_pushdef([_m4_cmp])[m4_if(]_m4_for([_m4_cmp],
+   [1], _m4_size, [1], [$0_(_m4_cmp, m4_eval(_m4_cmp + _m4_size))])[
       [0]_m4_popdef([_m4_cmp], [_m4_size]))])_m4_cmp($@)])
 
 m4_define([_m4_list_cmp_],

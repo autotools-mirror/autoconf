@@ -532,6 +532,8 @@ m4_for([myvar], -2+8, 3-5, , [ myvar])
 m4_for([myvar], 8, 16, 3 * 2, [ myvar])
 m4_for([myvar], 8, 16, -3 * -2, [ myvar])
 m4_for([myvar], [2<<2], [2<<3], [-3 * (-2)], [ myvar])
+dnl Modifying var does not affect the number of iterations
+m4_for([myvar], 1, 5, , [ myvar[]m4_define([myvar], 5)])
 dnl Make sure we can do nameless iteration
 m4_for(, 1, 10, , -)
 dnl foreach tests
@@ -567,6 +569,7 @@ myvar
  8 14
  8 14
  8 14
+ 1 2 3 4 5
 ----------
  a| b, c| d| e
 | f|

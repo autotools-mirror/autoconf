@@ -1,5 +1,14 @@
 2008-07-29  Eric Blake  <ebb9@byu.net>
 
+	Optimize m4_for.
+	* lib/m4sugar/m4sugar.m4 (m4_for): Use fewer macros.
+	(_m4_for): Take additional parameter, for fewer m4_indir calls.
+	* lib/m4sugar/foreach.m4 (_m4_foreach, _m4_shiftn, m4_do)
+	(m4_reverse, _m4_list_pad, _m4_list_cmp): Adjust all callers.
+	* doc/autoconf.texi (Looping constructs) <m4_for>: Document subtle
+	semantic change caused by the optimization.
+	* tests/m4sugar.at (M4 loops): Test the new semantics.
+
 	One more m4_list_cmp tweak.
 	* lib/m4sugar/m4sugar.m4 (_m4_list_cmp_1): Don't defer shift.
 	* lib/m4sugar/foreach.m4 (m4_list_cmp): Fix comment.

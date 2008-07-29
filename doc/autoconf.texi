@@ -10779,7 +10779,9 @@ including bounds by increments of @var{step}.  For each iteration,
 expand @var{expression} with the numeric value assigned to @var{var}.
 If @var{step} is omitted, it defaults to @samp{1} or @samp{-1} depending
 on the order of the limits.  If given, @var{step} has to match this
-order.
+order.  The number of iterations is determined independently from
+definition of @var{var}; iteration cannot be short-circuited or
+lengthened by modifying @var{var} from within @var{expression}.
 @end defmac
 
 @defmac m4_foreach (@var{var}, @var{list}, @var{expression})

@@ -827,37 +827,36 @@ m4_define([m4_unquote], [$*])
 # m4_for(VARIABLE, FIRST, LAST, [STEP = +/-1], EXPRESSION)
 # --------------------------------------------------------
 # Expand EXPRESSION defining VARIABLE to FROM, FROM + 1, ..., TO with
-# increments of STEP.
-# Both limits are included, and bounds are checked for consistency.
-# The algorithm is robust to indirect VARIABLE names, and uses _m4_defn
-# where possible for speed.
+# increments of STEP.  Both limits are included, and bounds are
+# checked for consistency.  The algorithm is robust to indirect
+# VARIABLE names.  Changing VARIABLE inside EXPRESSION will not impact
+# the number of iterations.
+#
+# Uses _m4_defn for speed, and avoid dnl in the macro body.
 m4_define([m4_for],
-[m4_pushdef([$1], m4_eval([$2]))dnl
-m4_cond([m4_eval(([$3]) > _m4_defn([$1]))], 1,
-[m4_pushdef([_m4_step], m4_eval(m4_default([$4], 1)))dnl
-m4_assert(_m4_step > 0)dnl
-_m4_for([$1], m4_eval((([$3]) - _m4_defn([$1]))
-		      / _m4_step * _m4_step + _m4_defn([$1])),
-	_m4_step, [$5])],
-	[m4_eval(([$3]) < _m4_defn([$1]))], 1,
-[m4_pushdef([_m4_step], m4_eval(m4_default([$4], -1)))dnl
-m4_assert(_m4_step < 0)dnl
-_m4_for([$1], m4_eval((_m4_defn([$1]) - ([$3]))
-		      / -(_m4_step) * _m4_step + _m4_defn([$1])),
-	_m4_step, [$5])],
-	[m4_pushdef([_m4_step])dnl
-$5])[]dnl
-m4_popdef([_m4_step])dnl
-m4_popdef([$1])])
+[m4_pushdef([$1], m4_eval([$2]))]dnl
+[m4_cond([m4_eval(([$3]) > ([$2]))], 1,
+	   [m4_pushdef([_m4_step], m4_eval(m4_default([$4],
+	      1)))m4_assert(_m4_step > 0)_$0([$1], _m4_defn([$1]),
+  m4_eval((([$3]) - ([$2])) / _m4_step * _m4_step + ([$2])),
+  _m4_step, [$5])],
+	 [m4_eval(([$3]) < ([$2]))], 1,
+	   [m4_pushdef([_m4_step], m4_eval(m4_default([$4],
+	      -1)))m4_assert(_m4_step < 0)_$0([$1], _m4_defn([$1]),
+  m4_eval((([$2]) - ([$3])) / -(_m4_step) * _m4_step + ([$2])),
+  _m4_step, [$5])],
+	 [m4_pushdef([_m4_step])$5])[]]dnl
+[m4_popdef([_m4_step], [$1])])
 
 
-# _m4_for(VARIABLE, LAST, STEP, EXPRESSION)
-# -----------------------------------------
-# Core of the loop, no consistency checks, all arguments are plain numbers.
+# _m4_for(VARIABLE, COUNT, LAST, STEP, EXPRESSION)
+# ------------------------------------------------
+# Core of the loop, no consistency checks, all arguments are plain
+# numbers.  Define VARIABLE to COUNT, expand EXPRESSION, then alter
+# COUNT by STEP and iterate if COUNT is not LAST.
 m4_define([_m4_for],
-[$4[]dnl
-m4_if(m4_defn([$1]), [$2], [],
-      [m4_define([$1], m4_eval(m4_defn([$1])+[$3]))$0($@)])])
+[m4_define([$1], [$2])$5[]m4_if([$2], [$3], [],
+      [$0([$1], m4_eval([$2 + $4]), [$3], [$4], [$5])])])
 
 
 # Implementing `foreach' loops in m4 is much more tricky than it may
