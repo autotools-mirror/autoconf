@@ -692,11 +692,12 @@ m4_define([m4_count], [$#])
 # ------------------
 # This macro invokes all its arguments (in sequence, of course).  It is
 # useful for making your macros more structured and readable by dropping
-# unnecessary dnl's and have the macros indented properly.
+# unnecessary dnl's and have the macros indented properly.  No concatenation
+# occurs after a STRING; use m4_unquote(m4_join(,STRING)) for that.
 m4_define([m4_do],
 [m4_if([$#], 0, [],
-       [$#], 1, [$1],
-       [$1[]m4_do(m4_shift($@))])])
+       [$#], 1, [$1[]],
+       [$1[]$0(m4_shift($@))])])
 
 
 # m4_dquote(ARGS)
@@ -816,6 +817,8 @@ m4_define([m4_reverse],
 # expansion.  For one argument, m4_unquote([arg]) is more efficient than
 # m4_do([arg]), but for multiple arguments, the difference is that
 # m4_unquote separates arguments with commas while m4_do concatenates.
+# Follow this macro with [] if concatenation with subsequent text is
+# undesired.
 m4_define([m4_unquote], [$*])
 
 

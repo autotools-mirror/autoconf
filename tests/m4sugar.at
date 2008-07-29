@@ -237,6 +237,34 @@ m4_split([a )}@&t@>=- b -=<@&t@{( c])
 AT_CLEANUP
 
 
+## ------- ##
+## m4_do.  ##
+## ------- ##
+
+AT_SETUP([m4@&t@_do])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_define([ab], [1])m4_define([bc], [2])m4_define([abc], [3])dnl
+m4_define([AB], [4])m4_define([BC], [5])m4_define([ABC], [6])dnl
+m4_do
+m4_do([a])
+m4_do([a], [b])c
+m4_unquote(m4_join([], [a], [b]))c
+m4_define([a], [A])m4_define([b], [B])m4_define([c], [C])dnl
+m4_do([a], [b])c
+m4_unquote(m4_join([], [a], [b]))c
+]],
+[[
+a
+abc
+3
+ABC
+3
+]])
+
+AT_CLEANUP
+
+
 ## ----------- ##
 ## m4_append.  ##
 ## ----------- ##

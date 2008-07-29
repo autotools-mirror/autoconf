@@ -1,5 +1,14 @@
 2008-07-29  Eric Blake  <ebb9@byu.net>
 
+	Tweak m4_do semantics.
+	* lib/m4sugar/m4sugar.m4 (m4_do): Don't concat final argument with
+	subsequent text.
+	* lib/m4sugar/foreach.m4 (m4_do): Don't concat intermediate
+	arguments, and avoid infinite loop.
+	* doc/autoconf.texi (Evaluation Macros) <m4_do>: Document the
+	behavior.
+	* tests/m4sugar.at (m4@&t@_do): New test.
+
 	Optimize m4_for.
 	* lib/m4sugar/m4sugar.m4 (m4_for): Use fewer macros.
 	(_m4_for): Take additional parameter, for fewer m4_indir calls.

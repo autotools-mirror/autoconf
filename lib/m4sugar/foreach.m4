@@ -141,10 +141,11 @@ m4_define([_m4_shiftn],
 # unnecessary dnl's and have the macros indented properly.
 #
 # Here, we use the temporary macro _m4_do, defined as
-#   $1$2...$n[]_m4_popdef([_m4_do])
+#   $1[]$2[]...[]$n[]_m4_popdef([_m4_do])
 m4_define([m4_do],
-[m4_define([_$0], m4_pushdef([_$0])_m4_for([_$0], [1], [$#], [1],
-    [$_$0])[[]_m4_popdef([_$0])])_$0($@)])
+[m4_if([$#], [0], [],
+       [m4_define([_$0], m4_pushdef([_$0])_m4_for([_$0], [1], [$#], [1],
+		  [$_$0[[]]])[_m4_popdef([_$0])])_$0($@)])])
 
 # m4_dquote_elt(ARGS)
 # -------------------
@@ -200,7 +201,7 @@ m4_define([m4_join],
 #
 # A bit easier than m4_join.  m4_foreach to the rescue.
 m4_define([m4_joinall],
-[[$2]m4_if([$#], [1], [], [$#], [2], [],
+[[$2]m4_if(m4_eval([$# <= 2]), [1], [],
 	   [m4_foreach([_m4_arg], [m4_shift2($@)],
 		       [[$1]_m4_defn([_m4_arg])])])])
 

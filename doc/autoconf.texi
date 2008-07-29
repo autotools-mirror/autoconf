@@ -10882,7 +10882,24 @@ passed.
 @msindex{do}
 This macro loops over its arguments and expands each @var{arg} in
 sequence.  Its main use is for readability; it allows the use of
-indentation and fewer @code{dnl} to result in the same expansion.
+indentation and fewer @code{dnl} to result in the same expansion.  This
+macro guarantees that no expansion will be concatenated with subsequent
+text; to achieve full concatenation, use @code{m4_unquote(m4_join([],
+@var{arg@dots{}}))}.
+
+@example
+m4_define([ab],[1])m4_define([bc],[2])m4_define([abc],[3])dnl
+m4_do([a],[b])c
+@result{}abc
+m4_unquote(m4_join([],[a],[b]))c
+@result{}3
+m4_define([a],[A])m4_define([b],[B])m4_define([c],[C])dnl
+m4_define([AB],[4])m4_define([BC],[5])m4_define([ABC],[6])dnl
+m4_do([a],[b])c
+@result{}ABC
+m4_unquote(m4_join([],[a],[b]))c
+@result{}3
+@end example
 @end defmac
 
 @defmac m4_dquote (@var{arg}, @dots{})
