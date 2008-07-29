@@ -10997,6 +10997,19 @@ quotes.  This effectively collapses multiple arguments into one,
 although it loses whitespace after unquoted commas in the process.
 @end defmac
 
+@defmac m4_reverse (@var{arg}, @dots{})
+@msindex{reverse}
+Outputs each argument with the same level of quoting, but in reverse
+order, and with space following each comma for readability.
+
+@example
+m4_define([active], [ACT,IVE])
+@result{}
+m4_reverse(active, [active])
+@result{}active, IVE, ACT
+@end example
+@end defmac
+
 @defmac m4_unquote (@var{arg}, @dots{})
 @msindex{unquote}
 This macro was introduced in Autoconf 2.62.  Expand each argument,
@@ -11082,7 +11095,8 @@ Note that @code{m4_append} can scale linearly in the length of the final
 string, depending on the quality of the underlying M4 implementation,
 while @code{m4_append_uniq} has an inherent quadratic scaling factor.
 If an algorithm can tolerate duplicates in the final string, use the
-former for speed.
+former for speed.  If duplicates must be avoided, consider using
+@code{m4_set_add} instead (@pxref{Set manipulation Macros}).
 
 @example
 m4_define([active], [ACTIVE])dnl

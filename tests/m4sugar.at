@@ -757,7 +757,8 @@ AT_CLEANUP
 AT_SETUP([recursion])
 
 AT_KEYWORDS([m4@&t@_foreach m4@&t@_foreach_w m4@&t@_shiftn m4@&t@_dquote_elt
-m4@&t@_join m4@&t@_joinall m4@&t@_list_cmp m4@&t@_max m4@&t@_min])
+m4@&t@_join m4@&t@_joinall m4@&t@_list_cmp m4@&t@_max m4@&t@_min
+m4@&t@_reverse])
 
 dnl This test completes in a reasonable time if m4_foreach is linear,
 dnl but thrashes if it is quadratic.  If we are testing with m4 1.4.x,
@@ -776,7 +777,7 @@ m4_max(m4_min([1]m4_for([i], [2], [10000], [],
   [,i]))m4_for([i], [2], [10000], [], [,i]))
 m4_case([10000]m4_for([i], [1], [10000], [], [,i]),[end])
 m4_list_cmp(m4_dquote(1m4_for([i], [2], [10000], [], [,i])),
-            m4_dquote(1m4_for([i], [2], [10000], [], [,i]), [0]))
+  m4_dquote(m4_reverse(10000m4_for([i], [9999], [1], [], [,i])), [0]))
 m4_for([i], [1], [10000], [], [m4_define(i)])dnl
 m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
 m4_divert_pop(0)
@@ -813,7 +814,7 @@ m4_max(m4_min([1]m4_for([i], [2], [10000], [],
   [,i]))m4_for([i], [2], [10000], [], [,i]))
 m4_case([10000]m4_for([i], [1], [10000], [], [,i]),[end])
 m4_list_cmp(m4_dquote(1m4_for([i], [2], [10000], [], [,i])),
-            m4_dquote(1m4_for([i], [2], [10000], [], [,i]), [0]))
+  m4_dquote(m4_reverse(10000m4_for([i], [9999], [1], [], [,i])), [0]))
 m4_for([i], [1], [10000], [], [m4_define(i)])dnl
 m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
 m4_divert_pop(0)

@@ -802,6 +802,14 @@ m4_define([_m4_quote],
 [m4_if([$#], [0], [], [[$*]])])
 
 
+# m4_reverse(ARGS)
+# ----------------
+# Output ARGS in reverse order.
+m4_define([m4_reverse],
+[m4_if([$#], [0], [], [$#], [1], [[$1]],
+       [$0(m4_shift($@)), [$1]])])
+
+
 # m4_unquote(ARGS)
 # ----------------
 # Remove one layer of quotes from each ARG, performing one level of
@@ -2151,15 +2159,21 @@ m4_define([m4_cmp],
 # expansion includes the name of the macro to invoke on the tail, either
 # m4_ignore or m4_unquote.  This is particularly useful when comparing
 # long lists, since less text is being expanded for deciding when to end
-# recursion.
+# recursion.  The recursion is between a pair of macros that alternate
+# which list is trimmed by one element; this is more efficient than
+# calling m4_cdr on both lists from a single macro.
 m4_define([m4_list_cmp],
-[m4_if([$1$2], [], 0,
-       [$1], [], [$0(0, [$2])],
-       [$2], [], [$0([$1], 0)],
-       [$1], [$2], 0,
-       [_$0(m4_cmp(m4_car($1), m4_car($2)))([$0(m4_cdr($1), m4_cdr($2))])])])
+[m4_if([$1], [$2], [0], [_m4_list_cmp_1([$1], $2)])])
+
 m4_define([_m4_list_cmp],
-[m4_if([$1], 0, [m4_unquote], [$1m4_ignore])])
+[m4_if([$1], [], [0m4_ignore], [$2], [0], [m4_unquote], [$2m4_ignore])])
+
+m4_define([_m4_list_cmp_1],
+[_m4_list_cmp_2([$2], [m4_shift2($@)], $1)])
+
+m4_define([_m4_list_cmp_2],
+[_m4_list_cmp([$1$3], m4_cmp([$3+0], [$1+0]))(
+  [_m4_list_cmp_1(m4_dquote(m4_shift3($@)), $2)])])
 
 # m4_max(EXPR, ...)
 # m4_min(EXPR, ...)

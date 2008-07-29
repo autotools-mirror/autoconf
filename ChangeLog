@@ -1,3 +1,17 @@
+2008-07-29  Eric Blake  <ebb9@byu.net>
+
+	Add m4_reverse, and improve m4_list_cmp.
+	* lib/m4sugar/m4sugar.m4 (m4_reverse): New macro.
+	(m4_list_cmp): Rewrite to give linear behavior with M4 1.6 on an
+	m4_reverse'd list.
+	* lib/m4sugar/foreach.m4 (m4_reverse): Add the M4 1.4.x
+	counterpart.
+	* tests/m4sugar.at (recursion): Test it.
+	* doc/autoconf.texi (Evaluation Macros) <m4_reverse>: Document
+	it.
+	(Text processing Macros) <m4_append>: Cross-reference to m4_set.
+	* NEWS: Mention new macro.
+
 2008-07-28  Eric Blake  <ebb9@byu.net>
 
 	Avoid _m4_shiftn for m4 1.6 speedup.

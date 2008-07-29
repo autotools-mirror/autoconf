@@ -154,6 +154,19 @@ m4_define([m4_do],
 m4_define([m4_dquote_elt],
 [m4_shift(m4_foreach([_m4_elt], [$@], [,m4_dquote(_m4_defn([_m4_elt]))]))])
 
+# m4_reverse(ARGS)
+# ----------------
+# Output ARGS in reverse order.
+#
+# Invoke _m4_r($@) with the temporary _m4_r built as
+#   [$m], [$m-1], ..., [$2], [$1]_m4_popdef([_m4_r])
+m4_define([m4_reverse],
+[m4_if([$#], [0], [], [$#], [1], [[$1]],
+[m4_define([_m4_r], m4_dquote([$$#])m4_pushdef([_m4_r],
+    m4_decr([$#]))_m4_for([_m4_r], [1], [-1],
+    [[, ]m4_dquote([$]_m4_r)])[_m4_popdef([_m4_r])])_m4_r($@)])])
+
+
 # m4_map(MACRO, LIST)
 # -------------------
 # Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
