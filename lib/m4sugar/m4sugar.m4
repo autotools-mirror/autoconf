@@ -2169,7 +2169,7 @@ m4_define([_m4_list_cmp],
 [m4_if([$1], [], [0m4_ignore], [$2], [0], [m4_unquote], [$2m4_ignore])])
 
 m4_define([_m4_list_cmp_1],
-[_m4_list_cmp_2([$2], [m4_shift2($@)], $1)])
+[_m4_list_cmp_2([$2], m4_dquote(m4_shift2($@)), $1)])
 
 m4_define([_m4_list_cmp_2],
 [_m4_list_cmp([$1$3], m4_cmp([$3+0], [$1+0]))(

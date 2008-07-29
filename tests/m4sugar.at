@@ -778,6 +778,8 @@ m4_max(m4_min([1]m4_for([i], [2], [10000], [],
 m4_case([10000]m4_for([i], [1], [10000], [], [,i]),[end])
 m4_list_cmp(m4_dquote(1m4_for([i], [2], [10000], [], [,i])),
   m4_dquote(m4_reverse(10000m4_for([i], [9999], [1], [], [,i])), [0]))
+m4_list_cmp([0], [0m4_for([i], [1], [10000], [], [,0])])
+m4_list_cmp([0m4_for([i], [1], [10000], [], [,0])], [0])
 m4_for([i], [1], [10000], [], [m4_define(i)])dnl
 m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
 m4_divert_pop(0)
@@ -790,6 +792,8 @@ AT_CHECK_M4SUGAR([-o-], [0], [[48894
 10000
 end
 0
+0
+0
 ]])
 
 AT_DATA_M4SUGAR([script.4s],
@@ -801,6 +805,8 @@ AT_DATA_M4SUGAR([script.4s],
 58894
 10000
 end
+0
+0
 0
 m4_exit([0])])
 m4_init
@@ -815,6 +821,8 @@ m4_max(m4_min([1]m4_for([i], [2], [10000], [],
 m4_case([10000]m4_for([i], [1], [10000], [], [,i]),[end])
 m4_list_cmp(m4_dquote(1m4_for([i], [2], [10000], [], [,i])),
   m4_dquote(m4_reverse(10000m4_for([i], [9999], [1], [], [,i])), [0]))
+m4_list_cmp([0], [0m4_for([i], [1], [10000], [], [,0])])
+m4_list_cmp([0m4_for([i], [1], [10000], [], [,0])], [0])
 m4_for([i], [1], [10000], [], [m4_define(i)])dnl
 m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
 m4_divert_pop(0)
@@ -826,6 +834,8 @@ AT_CHECK_M4SUGAR([-o-], [0], [[48894
 58894
 10000
 end
+0
+0
 0
 ]])
 

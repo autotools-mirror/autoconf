@@ -212,8 +212,8 @@ m4_define([m4_joinall],
 # trailing +0 is necessary to handle a missing list.  Next, create a
 # temporary macro to perform pairwise comparisons until an inequality
 # is found.  For example, m4_list_cmp([1], [1,2]) creates _m4_cmp as
-#   m4_if([($1) != ($3)], [1], [m4_cmp([$1], [$3])],
-#         [($2) != ($4)], [1], [m4_cmp([$2], [$4])],
+#   m4_if(m4_eval([($1) != ($3)]), [1], [m4_cmp([$1], [$3])],
+#         m4_eval([($2) != ($4)]), [1], [m4_cmp([$2], [$4])],
 #         [0]_m4_popdef([_m4_cmp], [_m4_size]))
 # then calls _m4_cmp([1+0], [0], [1], [2+0])
 m4_define([m4_list_cmp],

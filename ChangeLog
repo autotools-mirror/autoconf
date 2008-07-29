@@ -1,5 +1,11 @@
 2008-07-29  Eric Blake  <ebb9@byu.net>
 
+	One more m4_list_cmp tweak.
+	* lib/m4sugar/m4sugar.m4 (_m4_list_cmp_1): Don't defer shift.
+	* lib/m4sugar/foreach.m4 (m4_list_cmp): Fix comment.
+	* tests/m4sugar.at (recursion): Test both directions of list
+	disparity.
+
 	Add m4_reverse, and improve m4_list_cmp.
 	* lib/m4sugar/m4sugar.m4 (m4_reverse): New macro.
 	(m4_list_cmp): Rewrite to give linear behavior with M4 1.6 on an
