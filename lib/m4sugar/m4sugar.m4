@@ -1055,19 +1055,17 @@ _m4_defn([m4_divert_stack])])])
 # -------------------------
 # Change the diversion stream to DIVERSION-NAME.
 m4_define([m4_divert],
-[m4_define([m4_divert_stack], m4_location[: $0: $1]_m4_divert_n_stack)dnl
-m4_builtin([divert], _m4_divert([$1]))dnl
-])
+[m4_define([m4_divert_stack], m4_location[: $0: $1]_m4_divert_n_stack)]dnl
+[m4_builtin([divert], _m4_divert([$1]))])
 
 
 # m4_divert_push(DIVERSION-NAME)
 # ------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 m4_define([m4_divert_push],
-[m4_pushdef([m4_divert_stack], m4_location[: $0: $1]_m4_divert_n_stack)dnl
-m4_pushdef([_m4_divert_diversion], [$1])dnl
-m4_builtin([divert], _m4_divert([$1]))dnl
-])
+[m4_pushdef([m4_divert_stack], m4_location[: $0: $1]_m4_divert_n_stack)]dnl
+[m4_pushdef([_m4_divert_diversion], [$1])]dnl
+[m4_builtin([divert], _m4_divert([$1]))])
 
 
 # m4_divert_pop([DIVERSION-NAME])
@@ -1077,17 +1075,15 @@ m4_builtin([divert], _m4_divert([$1]))dnl
 # When we pop the last value from the stack, we divert to -1.
 m4_define([m4_divert_pop],
 [m4_ifndef([_m4_divert_diversion],
-	   [m4_fatal([too many m4_divert_pop])])dnl
-m4_if([$1], [], [],
-      [$1], m4_defn([_m4_divert_diversion]), [],
-      [m4_fatal([$0($1): diversion mismatch: ]_m4_divert_n_stack)])dnl
-m4_popdef([m4_divert_stack])dnl
-m4_popdef([_m4_divert_diversion])dnl
-m4_builtin([divert],
-	   m4_ifdef([_m4_divert_diversion],
-		    [_m4_divert(_m4_defn([_m4_divert_diversion]))],
-		    -1))dnl
-])
+	   [m4_fatal([too many m4_divert_pop])])]dnl
+[m4_if([$1], [], [],
+       [$1], _m4_defn([_m4_divert_diversion]), [],
+       [m4_fatal([$0($1): diversion mismatch: ]_m4_divert_n_stack)])]dnl
+[_m4_popdef([m4_divert_stack], [_m4_divert_diversion])]dnl
+[m4_builtin([divert],
+	    m4_ifdef([_m4_divert_diversion],
+		     [_m4_divert(_m4_defn([_m4_divert_diversion]))],
+		     -1))])
 
 
 # m4_divert_text(DIVERSION-NAME, CONTENT)
@@ -1095,10 +1091,8 @@ m4_builtin([divert],
 # Output CONTENT into DIVERSION-NAME (which may be a number actually).
 # An end of line is appended for free to CONTENT.
 m4_define([m4_divert_text],
-[m4_divert_push([$1])dnl
-$2
-m4_divert_pop([$1])dnl
-])
+[m4_divert_push([$1])$2
+m4_divert_pop([$1])])
 
 
 # m4_divert_once(DIVERSION-NAME, CONTENT)

@@ -1,5 +1,10 @@
 2008-08-06  Eric Blake  <ebb9@byu.net>
 
+	Speed up diversion handling.
+	* lib/m4sugar/m4sugar.m4 (m4_divert, m4_divert_push)
+	(m4_divert_pop, m4_divert_text): Avoid dnl for fewer macro
+	expansions.
+
 	AC_C_CHAR_UNSIGNED is not strictly necessary.
 	* doc/autoconf.texi (C Compiler) <AC_C_CHAR_UNSIGNED>: Mention a
 	portable alternative to this macro.
