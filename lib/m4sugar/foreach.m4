@@ -121,6 +121,33 @@ m4_define([m4_case],
 m4_define([_m4_case_],
 [[[$$1],[$$2],[$$3],]])
 
+# m4_bpatsubsts(STRING, RE1, SUBST1, RE2, SUBST2, ...)
+# ----------------------------------------------------
+# m4 equivalent of
+#
+#   $_ = STRING;
+#   s/RE1/SUBST1/g;
+#   s/RE2/SUBST2/g;
+#   ...
+#
+# m4_bpatsubsts already validated an odd number of arguments; we only
+# need to speed up _m4_bpatsubsts.  To avoid nesting, we build the
+# temporary _m4_p:
+#   m4_define([_m4_p], [$1])m4_define([_m4_p],
+#   m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$2], [$3]))m4_define([_m4_p],
+#   m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$4], [$5]))m4_define([_m4_p],...
+#   m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$m-1], [$m]))m4_unquote(
+#   _m4_defn([_m4_p]))[]_m4_popdef([_m4_p])
+m4_define([_m4_bpatsubsts],
+[m4_define([_m4_p], m4_pushdef([_m4_p])[m4_define([_m4_p],
+  [$1])]_m4_for([_m4_p], [3], [$#], [2], [$0_(m4_decr(_m4_p),
+  _m4_p)])[m4_unquote(_m4_defn([_m4_p]))[]_m4_popdef([_m4_p])])_m4_p($@)])
+
+m4_define([_m4_bpatsubsts_],
+[[m4_define([_m4_p],
+m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$$1], [$$2]))]])
+
+
 # m4_shiftn(N, ...)
 # -----------------
 # Returns ... shifted N times.  Useful for recursive "varargs" constructs.

@@ -521,6 +521,30 @@ AT_CHECK_M4RE([m4_re_string], [9a@_c])
 
 AT_CLEANUP
 
+## --------------- ##
+## m4_bpatsubsts.  ##
+## --------------- ##
+
+AT_SETUP([m4@&t@_bpatsubsts])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_bpatsubsts([11], [^..$])
+m4_bpatsubsts([11], [\(.\)1], [\12])
+m4_bpatsubsts([11], [^..$], [], [1], [2])
+m4_bpatsubsts([11], [\(.\)1], [\12], [1], [3])
+m4_define([a], [oops])m4_define([AB], [good])dnl
+m4_bpatsubsts([abc], [a], [A], [b], [B], [c])
+m4_bpatsubsts([$1$*$@], [\$\*], [$#])
+]], [[11
+21
+22
+23
+good
+$1$#$@
+]])
+
+AT_CLEANUP
+
 ## ---------- ##
 ## M4 Loops.  ##
 ## ---------- ##
@@ -787,9 +811,9 @@ AT_CLEANUP
 
 AT_SETUP([recursion])
 
-AT_KEYWORDS([m4@&t@_foreach m4@&t@_foreach_w m4@&t@_shiftn m4@&t@_dquote_elt
-m4@&t@_join m4@&t@_joinall m4@&t@_list_cmp m4@&t@_max m4@&t@_min
-m4@&t@_reverse])
+AT_KEYWORDS([m4@&t@_foreach m4@&t@_foreach_w m4@&t@_case m4@&t@_bpatsubsts
+m4@&t@_shiftn m4@&t@_do m4@&t@_dquote_elt m4@&t@_reverse m4@&t@_map
+m4@&t@_join m4@&t@_joinall m4@&t@_list_cmp m4@&t@_max m4@&t@_min])
 
 dnl This test completes in a reasonable time if m4_foreach is linear,
 dnl but thrashes if it is quadratic.  If we are testing with m4 1.4.x,
@@ -813,6 +837,7 @@ m4_list_cmp([0], [0m4_for([i], [1], [10000], [], [,0])])
 m4_list_cmp([0m4_for([i], [1], [10000], [], [,0])], [0])
 m4_for([i], [1], [10000], [], [m4_define(i)])dnl
 m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
+m4_bpatsubsts([a1]m4_for([i], [1], [10000], [], [,i]), [a2], [A])
 m4_divert_pop(0)
 ]])
 
@@ -825,6 +850,7 @@ end
 0
 0
 0
+A
 ]])
 
 AT_DATA_M4SUGAR([script.4s],
@@ -839,6 +865,7 @@ end
 0
 0
 0
+A
 m4_exit([0])])
 m4_init
 m4_divert_push(0)[]dnl
@@ -856,6 +883,7 @@ m4_list_cmp([0], [0m4_for([i], [1], [10000], [], [,0])])
 m4_list_cmp([0m4_for([i], [1], [10000], [], [,0])], [0])
 m4_for([i], [1], [10000], [], [m4_define(i)])dnl
 m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
+m4_bpatsubsts([a1]m4_for([i], [1], [10000], [], [,i]), [a2], [A])
 m4_divert_pop(0)
 ]])
 
@@ -868,6 +896,7 @@ end
 0
 0
 0
+A
 ]])
 
 AT_CLEANUP

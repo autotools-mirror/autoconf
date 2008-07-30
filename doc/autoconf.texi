@@ -10635,7 +10635,8 @@ macro over-quotes @var{string}; this behavior is intentional, so that
 the result of each step of the recursion remains as a quoted string.
 However, it means that anchors (@samp{^} and @samp{$} in the @var{regex}
 will line up with the extra quotations, and not the characters of the
-original string.
+original string.  The overquoting is removed after the final
+substitution.
 @end defmac
 
 @defmac m4_case (@var{string}, @var{value-1}, @var{if-value-1}, @

@@ -1,5 +1,15 @@
 2008-07-29  Eric Blake  <ebb9@byu.net>
 
+	Add linear m4_bpatsubsts for m4 1.4.x.
+	* lib/m4sugar/m4sugar.m4 (m4_bpatsubsts): Match documentation
+	about anchors, even for only one substitution.
+	* lib/m4sugar/foreach.m4 (_m4_bpatsubsts): New implementation.
+	* doc/autoconf.texi (Conditional constructs) <m4_bpatsubsts>:
+	Clarify behavior with regard to quoting.
+	* tests/m4sugar.at (recursion): Test scaling of m4_bpatsubsts.
+	(m4@&t@_bpatsubsts): New test.
+	* NEWS: Document the linear guarantee.
+
 	Tweak m4_do semantics.
 	* lib/m4sugar/m4sugar.m4 (m4_do): Don't concat final argument with
 	subsequent text.
