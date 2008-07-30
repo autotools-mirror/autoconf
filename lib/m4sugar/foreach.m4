@@ -121,6 +121,29 @@ m4_define([m4_case],
 m4_define([_m4_case_],
 [[[$$1],[$$2],[$$3],]])
 
+# m4_cond(TEST1, VAL1, IF-VAL1, TEST2, VAL2, IF-VAL2, ..., [DEFAULT])
+# -------------------------------------------------------------------
+# Similar to m4_if, except that each TEST is expanded when encountered.
+# If the expansion of TESTn matches the string VALn, the result is IF-VALn.
+# The result is DEFAULT if no tests passed.  This macro allows
+# short-circuiting of expensive tests, where it pays to arrange quick
+# filter tests to run first.
+#
+# m4_cond already guarantees either 3*n or 3*n + 1 arguments, 1 <= n.
+# We only have to speed up _m4_cond, by building the temporary _m4_c:
+#   m4_define([_m4_c], _m4_defn([m4_unquote]))_m4_c([m4_if(($1), [($2)],
+#   [$3[]m4_define([_m4_c])])])_m4_c([m4_if(($4), [($5)],
+#   [$6[]m4_define([_m4_c])])])..._m4_c([m4_if(($m-2), [($m-1)],
+#   [$m[]m4_define([_m4_c])])])_m4_c([$m+1]_m4_popdef([_m4_c]))
+m4_define([_m4_cond],
+[m4_define([_m4_c], m4_pushdef([_m4_c])[m4_define([_m4_c],
+  _m4_defn([m4_unquote]))]_m4_for([_m4_c], [2], m4_eval([$# / 3 * 3 - 1]), [3],
+  [$0_(m4_decr(_m4_c), _m4_c, m4_incr(_m4_c))])[_m4_c(]m4_dquote(
+  [$]m4_eval([$# / 3 * 3 + 1]))[_m4_popdef([_m4_c]))])_m4_c($@)])
+
+m4_define([_m4_cond_],
+[[_m4_c([m4_if(($$1), [($$2)], [$$3[]m4_define([_m4_c])])])]])
+
 # m4_bpatsubsts(STRING, RE1, SUBST1, RE2, SUBST2, ...)
 # ----------------------------------------------------
 # m4 equivalent of
@@ -146,7 +169,6 @@ m4_define([_m4_bpatsubsts],
 m4_define([_m4_bpatsubsts_],
 [[m4_define([_m4_p],
 m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$$1], [$$2]))]])
-
 
 # m4_shiftn(N, ...)
 # -----------------

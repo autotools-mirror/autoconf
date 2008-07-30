@@ -449,8 +449,14 @@ m4_define([_m4_cdr],
 m4_define([m4_cond],
 [m4_if([$#], [0], [m4_fatal([$0: cannot be called without arguments])],
        [$#], [1], [$1],
-       [$#], [2], [m4_fatal([$0: missing an argument])],
-       [m4_if($1, [$2], [$3], [$0(m4_shift3($@))])])])
+       m4_eval([$# % 3]), [2], [m4_fatal([$0: missing an argument])],
+       [_$0($@)])])
+
+m4_define([_m4_cond],
+[m4_if(($1), [($2)], [$3],
+       [$#], [3], [],
+       [$#], [4], [$4],
+       [$0(m4_shift3($@))])])
 
 
 ## ---------------------------------------- ##
