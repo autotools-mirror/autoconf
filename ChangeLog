@@ -1,3 +1,10 @@
+2008-07-30  Eric Blake  <ebb9@byu.net>
+
+	Fix bugs in previous version of m4_bpatsubsts.
+	* lib/m4sugar/foreach.m4 (_m4_bpatsubsts): Don't expand $1, and
+	allow concatenation with subsequent text.
+	* tests/m4sugar.at (m4@&t@_bpatsubsts): Enhance test.
+
 2008-07-29  Eric Blake  <ebb9@byu.net>
 
 	Add linear m4_bpatsubsts for m4 1.4.x.

@@ -137,11 +137,11 @@ m4_define([_m4_case_],
 #   m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$2], [$3]))m4_define([_m4_p],
 #   m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$4], [$5]))m4_define([_m4_p],...
 #   m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$m-1], [$m]))m4_unquote(
-#   _m4_defn([_m4_p]))[]_m4_popdef([_m4_p])
+#   _m4_defn([_m4_p])_m4_popdef([_m4_p]))
 m4_define([_m4_bpatsubsts],
 [m4_define([_m4_p], m4_pushdef([_m4_p])[m4_define([_m4_p],
-  [$1])]_m4_for([_m4_p], [3], [$#], [2], [$0_(m4_decr(_m4_p),
-  _m4_p)])[m4_unquote(_m4_defn([_m4_p]))[]_m4_popdef([_m4_p])])_m4_p($@)])
+  ]m4_dquote([$]1)[)]_m4_for([_m4_p], [3], [$#], [2], [$0_(m4_decr(_m4_p),
+  _m4_p)])[m4_unquote(_m4_defn([_m4_p])_m4_popdef([_m4_p]))])_m4_p($@)])
 
 m4_define([_m4_bpatsubsts_],
 [[m4_define([_m4_p],
