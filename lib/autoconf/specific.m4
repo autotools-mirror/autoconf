@@ -2,7 +2,8 @@
 # Macros that test for specific, unclassified, features.
 #
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005, 2006, 2007 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation,
+# Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -398,7 +399,9 @@ AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
       [Define to 1 if on MINIX.])
   fi
 
-  AH_VERBATIM([__EXTENSIONS__],
+dnl Use a different key than __EXTENSIONS__, as that name broke existing
+dnl configure.ac when using autoheader 2.62.
+  AH_VERBATIM([USE_SYSTEM_EXTENSIONS],
 [/* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE

@@ -1,5 +1,12 @@
 2008-08-06  Eric Blake  <ebb9@byu.net>
 
+	Fix autoheader 2.62 regression on AC_DEFINE([__EXTENSIONS__]).
+	* lib/autoconf/specific.m4 (AC_USE_SYSTEM_EXTENSIONS): Use a
+	unique key for the AH_VERBATIM.
+	* tests/c.at (AC_USE_SYSTEM_EXTENSIONS): New test.
+	* NEWS: Mention the fix.
+	Reported by Andreas Schwab, analyzed by Stepan Kasal.
+
 	Add linear m4_cond for m4 1.4.x.
 	* lib/m4sugar/m4sugar.m4 (m4_cond): Split into...
 	(_m4_cond): ...this, for fewer macros per iteration.

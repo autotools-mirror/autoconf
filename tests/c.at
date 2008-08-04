@@ -2,8 +2,8 @@
 
 AT_BANNER([C low level compiling/preprocessing macros.])
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008 Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -232,3 +232,26 @@ AT_CHECK_MACRO([AC_NO_EXECUTABLES (broken linker)],
 AC_NO_EXECUTABLES
 AC_PROG_CC
 ])
+
+
+## -------------------------- ##
+## AC_USE_SYSTEM_EXTENSIONS.  ##
+## -------------------------- ##
+
+AT_SETUP([AC_USE_SYSTEM_EXTENSIONS])
+
+# Some existing configure.ac mixed AC_AIX (now an alias for
+# AC_USE_SYSTEM_EXTENSIONS) and AC_DEFINE([__EXTENSIONS__]), which
+# broke autoheader in 2.62.  Test that this is supported.
+
+_AT_CHECK_AC_MACRO(
+[[AC_AIX
+AC_DEFINE([__EXTENSIONS__], [1], [Manually defined for Solaris])
+]])
+
+_AT_CHECK_AC_MACRO(
+[[AC_USE_SYSTEM_EXTENSIONS
+AC_DEFINE([__EXTENSIONS__], [1], [Manually defined for Solaris])
+]])
+
+AT_CLEANUP

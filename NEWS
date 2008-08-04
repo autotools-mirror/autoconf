@@ -5,6 +5,11 @@ GNU Autoconf NEWS - User visible changes.
 ** AC_PATH_X now includes /lib64 and /usr/lib64 in its list of default
    library directories.
 
+** AC_USE_SYSTEM_EXTENSIONS no longer conflicts with an external
+   AC_DEFINE([__EXTENSIONS__]).  This fixes a regression introduced in
+   2.62 when using macros such as AC_AIX that were made obsolete in
+   favor of the more portable AC_USE_SYSTEM_EXTENSIONS.
+
 ** Newly obsolete macros
    The following macro has been marked obsolete, since current porting
    targets can safely assume C89 semantics that signal handlers return
