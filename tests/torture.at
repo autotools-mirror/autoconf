@@ -43,6 +43,23 @@ AT_CHECK_AUTOCONF([], 1, [], [ignore])
 AT_CLEANUP
 
 
+## ------------------------------- ##
+## parameterized AC_CONFIG_FILES.  ##
+## ------------------------------- ##
+
+AT_SETUP([Parameterized AC_CONFIG_FILES])
+
+AT_CONFIGURE_AC([[
+files="foo
+bar"
+AC_CONFIG_FILES([$files])]])
+AT_CHECK_AUTOCONF([], [], [], [ignore])
+touch foo.in bar.in config.hin
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
 
 ## ------------ ##
 ## AC_ARG_VAR.  ##

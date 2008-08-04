@@ -1357,6 +1357,18 @@ on `(hostname || uname -n) 2>/dev/null | sed 1q`
 
 _ACEOF
 
+dnl remove any newlines from these variables.
+m4_ifdef([_AC_SEEN_CONFIG(FILES)],
+[case $ac_config_files in *"
+"*) set x $ac_config_files; shift; ac_config_files=$[*];;
+esac
+])
+m4_ifdef([_AC_SEEN_CONFIG(HEADERS)],
+[case $ac_config_headers in *"
+"*) set x $ac_config_headers; shift; ac_config_headers=$[*];;
+esac
+])
+
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 # Files that config.status was made for.
 m4_ifdef([_AC_SEEN_CONFIG(FILES)],

@@ -1,3 +1,12 @@
+2008-08-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix AC_CONFIG_FILES([$var]) 2.62 regression.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Flatten
+	whitespace in $ac_config_files and $ac_config_headers.
+	* tests/torture.at (Parameterized AC_CONFIG_FILES): New test.
+	Report by Andreas Schwab and Per Øyvind Karlsen.
+	* THANKS: Update.
+
 2008-07-30  Eric Blake  <ebb9@byu.net>
 
 	Fix bugs in previous version of m4_bpatsubsts.
