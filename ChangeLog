@@ -1,3 +1,16 @@
+2008-08-06  Eric Blake  <ebb9@byu.net>
+
+	Update some files from upstream.
+	* GNUmakefile: Update.
+	* build-aux/announce-gen: Likewise.
+	* build-aux/config.guess: Likewise.
+	* build-aux/config.sub: Likewise.
+	* build-aux/git-version-gen: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+	* build-aux/vc-list-files: Likewise.
+	* doc/make-stds.texi: Likewise.
+	* doc/standards.texi: Likewise.
+
 2008-08-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix AC_CONFIG_FILES([$var]) 2.62 regression.
