@@ -6884,6 +6884,17 @@ if it accepts one of those, otherwise define @code{inline} to be empty.
 @cvindex __CHAR_UNSIGNED__
 If the C type @code{char} is unsigned, define @code{__CHAR_UNSIGNED__},
 unless the C compiler predefines it.
+
+These days, using this macro is not necessary.  The same information can
+be determined by this portable alternative, thus avoiding the use of
+preprocessor macros in the namespace reserved for the implementation.
+
+@example
+#include <limits.h>
+#if CHAR_MIN == 0
+# define CHAR_UNSIGNED 1
+#endif
+@end example
 @end defmac
 
 @defmac AC_C_STRINGIZE

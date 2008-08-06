@@ -1,5 +1,11 @@
 2008-08-06  Eric Blake  <ebb9@byu.net>
 
+	AC_C_CHAR_UNSIGNED is not strictly necessary.
+	* doc/autoconf.texi (C Compiler) <AC_C_CHAR_UNSIGNED>: Mention a
+	portable alternative to this macro.
+	* THANKS: Update.
+	Reported by Hallvard B Furuseth.
+
 	Update some files from upstream.
 	* GNUmakefile: Update.
 	* build-aux/announce-gen: Likewise.
