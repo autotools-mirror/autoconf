@@ -1,5 +1,12 @@
 2008-08-12  Eric Blake  <ebb9@byu.net>
 
+	Optimize m4_bmatch.
+	* lib/m4sugar/foreach.m4 (m4_bmatch): Provide linear
+	implementation for m4 1.4.x.
+	* tests/m4sugar.at (m4@&t@_bmatch): New test.
+	(recursion): Test the linear nature.
+	* NEWS: Document the fix.
+
 	Fix m4_cond corner case.
 	* lib/m4sugar/foreach.m4 (_m4_cond): Ensure alternate
 	implementation allows concatenation with subsequent text.

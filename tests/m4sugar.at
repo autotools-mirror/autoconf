@@ -573,6 +573,38 @@ AT_CHECK_M4RE([m4_re_string], [9a@_c])
 
 AT_CLEANUP
 
+## ----------- ##
+## m4_bmatch.  ##
+## ----------- ##
+
+AT_SETUP([m4@&t@_bmatch])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_bmatch([abc], [default\])
+m4_bmatch([abc], [^a], [yes])
+m4_bmatch([abc], [^a], [yes], [no])
+m4_bmatch([abc], [^.a], [yes])
+m4_bmatch([abc], [^.a], [yes], [no\])
+m4_bmatch([abc], [a], [1], [b], [2])
+m4_bmatch([abc], [A], [1], [b], [2])
+m4_define([ab], [AB])dnl
+m4_bmatch([$*], [a])b
+m4_bmatch([$*], [\*], [a])b
+m4_bmatch([$*], [1], [2], [a])b
+]], [[default\
+yes
+yes
+
+no\
+1
+2
+AB
+AB
+AB
+]])
+
+AT_CLEANUP
+
 ## --------------- ##
 ## m4_bpatsubsts.  ##
 ## --------------- ##
@@ -870,7 +902,8 @@ AT_SETUP([recursion])
 
 AT_KEYWORDS([m4@&t@_foreach m4@&t@_foreach_w m4@&t@_case m4@&t@_cond
 m4@&t@_bpatsubsts m4@&t@_shiftn m4@&t@_do m4@&t@_dquote_elt m4@&t@_reverse
-m4@&t@_map m4@&t@_join m4@&t@_joinall m4@&t@_list_cmp m4@&t@_max m4@&t@_min])
+m4@&t@_map m4@&t@_join m4@&t@_joinall m4@&t@_list_cmp m4@&t@_max m4@&t@_min
+m4@&t@_bmatch])
 
 dnl This test completes in a reasonable time if m4_foreach is linear,
 dnl but thrashes if it is quadratic.  If we are testing with m4 1.4.x,
@@ -895,6 +928,7 @@ m4_list_cmp([0m4_for([i], [1], [10000], [], [,0])], [0])
 m4_for([i], [1], [10000], [], [m4_define(i)])dnl
 m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
 m4_bpatsubsts([a1]m4_for([i], [1], [10000], [], [,i]), [a2], [A])
+m4_bmatch([9997]m4_for([i], [1], [10000], [], [,^i$]))
 m4_define([up], [m4_define([$1], m4_incr($1))$1])m4_define([j], 0)dnl
 m4_cond(m4_for([i], [1], [10000], [], [[up([j])], [9990], i,]) [oops]) j
 m4_divert_pop(0)
@@ -910,6 +944,7 @@ end
 0
 0
 A
+^9998$
 9990 9990
 ]])
 
@@ -926,6 +961,7 @@ end
 0
 0
 A
+^9998$
 9990 9990
 m4_exit([0])])
 m4_init
@@ -945,6 +981,7 @@ m4_list_cmp([0m4_for([i], [1], [10000], [], [,0])], [0])
 m4_for([i], [1], [10000], [], [m4_define(i)])dnl
 m4_undefine(1m4_for([i], [2], [10000], [], [,i]))dnl
 m4_bpatsubsts([a1]m4_for([i], [1], [10000], [], [,i]), [a2], [A])
+m4_bmatch([9997]m4_for([i], [1], [10000], [], [,^i$]))
 m4_define([up], [m4_define([$1], m4_incr($1))$1])m4_define([j], 0)dnl
 m4_cond(m4_for([i], [1], [10000], [], [[up([j])], [9990], i,]) [oops])
 m4_divert_pop(0)
@@ -960,6 +997,7 @@ end
 0
 0
 A
+^9998$
 9990 9990
 ]])
 

@@ -121,6 +121,39 @@ m4_define([m4_case],
 m4_define([_m4_case_],
 [[[$$1],[$$2],[$$3],]])
 
+# m4_bmatch(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
+# -----------------------------------------------------
+# m4 equivalent of
+#
+# if (SWITCH =~ RE1)
+#   VAL1;
+# elif (SWITCH =~ RE2)
+#   VAL2;
+# elif ...
+#   ...
+# else
+#   DEFAULT
+#
+# We build the temporary macro _m4_b:
+#   m4_define([_m4_b], _m4_defn([_m4_bmatch]))_m4_b([$1], [$2], [$3])...
+#   _m4_b([$1], [$m-1], [$m])_m4_b([], [], [$m+1]_m4_popdef([_m4_b]))
+# then invoke m4_unquote(_m4_b($@)), for concatenation with later text.
+m4_define([m4_bmatch],
+[m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
+       [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
+       [$#], 2, [$2],
+       [m4_define([_m4_b], m4_pushdef([_m4_b])[m4_define([_m4_b],
+  _m4_defn([_$0]))]_m4_for([_m4_b], [3], m4_eval([($# + 1) / 2 * 2 - 1]),
+  [2], [_$0_([1], m4_decr(_m4_b), _m4_b)])[_m4_b([], [],]m4_dquote(
+  [$]m4_incr(_m4_b))[_m4_popdef([_m4_b]))])m4_unquote(_m4_b($@))])])
+
+m4_define([_m4_bmatch],
+[m4_if(m4_bregexp([$1], [$2]), [-1], [], [[$3]m4_define([$0])])])
+
+m4_define([_m4_bmatch_],
+[[_m4_b([$$1], [$$2], [$$3])]])
+
+
 # m4_cond(TEST1, VAL1, IF-VAL1, TEST2, VAL2, IF-VAL2, ..., [DEFAULT])
 # -------------------------------------------------------------------
 # Similar to m4_if, except that each TEST is expanded when encountered.
