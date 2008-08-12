@@ -1,3 +1,9 @@
+2008-08-12  Eric Blake  <ebb9@byu.net>
+
+	Add test for m4_cond.
+	* tests/m4sugar.at (m4@&t@_cond): New test.
+	Reported by Ralf Wildenhues.
+
 2008-08-06  Eric Blake  <ebb9@byu.net>
 
 	Fix autoheader 2.62 regression on AC_DEFINE([__EXTENSIONS__]).

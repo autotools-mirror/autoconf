@@ -191,6 +191,51 @@ autom4te: m4 failed with exit status: 1
 AT_CLEANUP
 
 
+## --------- ##
+## m4_cond.  ##
+## --------- ##
+
+AT_SETUP([m4@&t@_cond])
+
+AT_CHECK_M4SUGAR_TEXT([[m4_define([side], [m4_errprintn([$1])$1])
+m4_cond([side(1)], [1], [a],
+        [side(1)], [1], [b],
+        [side(1)], [2], [c])
+m4_cond([side(2)], [1], [a],
+        [side(2)], [1], [b],
+        [side(2)], [2], [c],
+        [side(2)])
+m4_cond([side(3)], [1], [a],
+        [side(3)], [1], [b],
+        [side(3)], [2], [c],
+        [side(3)])
+m4_cond([a,a], [a,a], [yes], [no])
+m4_cond([[a,a]], [a,a], [yes])
+m4_cond([a,a], [a,b], [yes], [no])
+m4_cond([a,a], [a,b], [yes])
+m4_cond([m4_eval([0xa])])
+]], [[
+a
+c
+3
+yes
+yes
+no
+
+10
+]], [[1
+2
+2
+2
+3
+3
+3
+3
+]])
+
+AT_CLEANUP
+
+
 ## ---------- ##
 ## m4_split.  ##
 ## ---------- ##
