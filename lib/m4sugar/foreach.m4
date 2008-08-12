@@ -132,17 +132,18 @@ m4_define([_m4_case_],
 # m4_cond already guarantees either 3*n or 3*n + 1 arguments, 1 <= n.
 # We only have to speed up _m4_cond, by building the temporary _m4_c:
 #   m4_define([_m4_c], _m4_defn([m4_unquote]))_m4_c([m4_if(($1), [($2)],
-#   [$3[]m4_define([_m4_c])])])_m4_c([m4_if(($4), [($5)],
-#   [$6[]m4_define([_m4_c])])])..._m4_c([m4_if(($m-2), [($m-1)],
-#   [$m[]m4_define([_m4_c])])])_m4_c([$m+1]_m4_popdef([_m4_c]))
+#   [[$3]m4_define([_m4_c])])])_m4_c([m4_if(($4), [($5)],
+#   [[$6]m4_define([_m4_c])])])..._m4_c([m4_if(($m-2), [($m-1)],
+#   [[$m]m4_define([_m4_c])])])_m4_c([[$m+1]]_m4_popdef([_m4_c]))
+# We invoke m4_unquote(_m4_c($@)), for concatenation with later text.
 m4_define([_m4_cond],
 [m4_define([_m4_c], m4_pushdef([_m4_c])[m4_define([_m4_c],
   _m4_defn([m4_unquote]))]_m4_for([_m4_c], [2], m4_eval([$# / 3 * 3 - 1]), [3],
-  [$0_(m4_decr(_m4_c), _m4_c, m4_incr(_m4_c))])[_m4_c(]m4_dquote(
-  [$]m4_eval([$# / 3 * 3 + 1]))[_m4_popdef([_m4_c]))])_m4_c($@)])
+  [$0_(m4_decr(_m4_c), _m4_c, m4_incr(_m4_c))])[_m4_c(]m4_dquote(m4_dquote(
+  [$]m4_eval([$# / 3 * 3 + 1])))[_m4_popdef([_m4_c]))])m4_unquote(_m4_c($@))])
 
 m4_define([_m4_cond_],
-[[_m4_c([m4_if(($$1), [($$2)], [$$3[]m4_define([_m4_c])])])]])
+[[_m4_c([m4_if(($$1), [($$2)], [[$$3]m4_define([_m4_c])])])]])
 
 # m4_bpatsubsts(STRING, RE1, SUBST1, RE2, SUBST2, ...)
 # ----------------------------------------------------

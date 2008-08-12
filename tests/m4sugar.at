@@ -214,6 +214,10 @@ m4_cond([[a,a]], [a,a], [yes])
 m4_cond([a,a], [a,b], [yes], [no])
 m4_cond([a,a], [a,b], [yes])
 m4_cond([m4_eval([0xa])])
+m4_define([ab], [AB])dnl
+m4_cond([a])b
+m4_cond([1], [1], [a])b
+m4_cond([1], [2], [3], [a])b
 ]], [[
 a
 c
@@ -223,6 +227,9 @@ yes
 no
 
 10
+AB
+AB
+AB
 ]], [[1
 2
 2

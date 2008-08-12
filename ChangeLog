@@ -1,5 +1,10 @@
 2008-08-12  Eric Blake  <ebb9@byu.net>
 
+	Fix m4_cond corner case.
+	* lib/m4sugar/foreach.m4 (_m4_cond): Ensure alternate
+	implementation allows concatenation with subsequent text.
+	* tests/m4sugar.at (m4@&t@_cond): Enhance test.
+
 	Add test for m4_cond.
 	* tests/m4sugar.at (m4@&t@_cond): New test.
 	Reported by Ralf Wildenhues.
