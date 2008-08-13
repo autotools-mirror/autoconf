@@ -1028,6 +1028,38 @@ m4_define([m4_map_sep],
        [m4_apply([$1], m4_car($3))_m4_map([[$2]$1], $3)])])
 
 
+# m4_transform(EXPRESSION, ARG...)
+# --------------------------------
+# Expand EXPRESSION([ARG]) for each argument.  More efficient than
+# m4_foreach([var], [ARG...], [EXPRESSION(m4_defn([var]))])
+m4_define([m4_transform],
+[m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
+       [$#], [1], [],
+       [$#], [2], [$1([$2])[]],
+       [$1([$2])[]$0([$1], m4_shift2($@))])])
+
+
+# m4_transform_pair(EXPRESSION, [END-EXPR = EXPRESSION], ARG...)
+# --------------------------------------------------------------
+# Perform a pairwise grouping of consecutive ARGs, by expanding
+# EXPRESSION([ARG1], [ARG2]).  If there are an odd number of ARGs, the
+# final argument is expanded with END-EXPR([ARGn]).
+#
+# For example:
+#   m4_define([show], [($*)m4_newline])dnl
+#   m4_transform_pair([show], [], [a], [b], [c], [d], [e])dnl
+#   => (a,b)
+#   => (c,d)
+#   => (e)
+m4_define([m4_transform_pair],
+[m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
+       [$#], [1], [m4_fatal([$0: too few arguments: $#: $1])],
+       [$#], [2], [],
+       [$#], [3], [m4_default([$2], [$1])([$3])[]],
+       [$#], [4], [$1([$3], [$4])[]],
+       [$1([$3], [$4])[]$0([$1], [$2], m4_shift(m4_shift3($@)))])])
+
+
 ## --------------------------- ##
 ## 9. More diversion support.  ##
 ## --------------------------- ##

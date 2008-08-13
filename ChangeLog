@@ -1,3 +1,13 @@
+2008-08-14  Eric Blake  <ebb9@byu.net>
+
+	Implement m4_transform_pair, to speed up AS_IF.
+	* lib/m4sugar/m4sugar.m4 (m4_transform, m4_transform_pair): New
+	macros, undocumented for now.
+	* lib/m4sugar/foreach.m4 (m4_transform, m4_transform_pair): Also
+	the m4 1.4.x counterparts.
+	* lib/m4sugar/m4sh.m4 (AS_IF, AS_CASE): Use it.
+	* tests/m4sh.at (AS@&t@_IF and AS@&t@_CASE): Test it.
+
 2008-08-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/programs.m4 (AC_PATH_TARGET_TOOL)
