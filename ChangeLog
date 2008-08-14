@@ -1,3 +1,13 @@
+2008-08-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autoconf/programs.m4 (AC_PATH_TARGET_TOOL)
+	(AC_CHECK_TARGET_TOOL, AC_CHECK_TARGET_TOOLS): Require, do not
+	warn about previous AC_CANONICAL_TARGET.
+	(AC_CHECK_TARGET_TOOL): Add missing `$' making the macro
+	unusable in the non-cross-compiling case.
+	* NEWS, THANKS: Update.
+	Report by Dave Erickson.
+
 2008-08-12  Eric Blake  <ebb9@byu.net>
 
 	Optimize m4_bmatch.
