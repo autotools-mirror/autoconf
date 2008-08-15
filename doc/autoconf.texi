@@ -10822,24 +10822,49 @@ The deprecated macro @code{AC_FOREACH} is an alias of
 @end defmac
 
 @defmac m4_map (@var{macro}, @var{list})
+@defmacx m4_mapall (@var{macro}, @var{list})
 @defmacx m4_map_sep (@var{macro}, @var{separator}, @var{list})
+@defmacx m4_mapall_sep (@var{macro}, @var{separator}, @var{list})
+@msindex{map}
+@msindex{mapall}
+@msindex{map_sep}
+@msindex{mapall_sep}
 Loop over the comma separated quoted list of argument descriptions in
 @var{list}, and invoke @var{macro} with the arguments.  An argument
 description is in turn a comma-separated quoted list of quoted elements,
-suitable for @code{m4_apply}, making it possible to invoke @var{macro}
-without arguments if an argument description is empty.
-@code{m4_map_sep} additionally outputs @var{separator} between macro
-invocations, with no additional expansion of the separator.
+suitable for @code{m4_apply}.  The macros @code{m4_map} and
+@code{m4_map_sep} ignore empty argument descriptions, while
+@code{m4_mapall} and @code{m4_mapall_sep} invoke @var{macro} with no
+arguments.  The macros @code{m4_map_sep} and @code{m4_mapall_sep}
+additionally expand @var{separator} between invocations of @var{macro}.
+
+Note that @var{separator} is expanded, unlike in @code{m4_join}.  When
+separating output with commas, this means that the map result can be
+used as a series of arguments, by using a single-quoted comma as
+@var{separator}, or as a single string, by using a double-quoted comma.
+
 @example
 m4_map([m4_count], [])
 @result{}
 m4_map([ m4_count], [[],
                      [[1]],
                      [[1], [2]]])
+@result{} 1 2
+m4_mapall([ m4_count], [[],
+                        [[1]],
+                        [[1], [2]]])
 @result{} 0 1 2
 m4_map_sep([m4_eval], [,], [[[1+2]],
                             [[10], [16]]])
 @result{}3,a
+m4_map_sep([m4_echo], [,], [[[a]], [[b]]])
+@result{}a,b
+m4_count(m4_map_sep([m4_echo], [,], [[[a]], [[b]]]))
+@result{}2
+m4_map_sep([m4_echo], [[,]], [[[a]], [[b]]])
+@result{}a,b
+m4_count(m4_map_sep([m4_echo], [[,]], [[[a]], [[b]]]))
+@result{}1
 @end example
 @end defmac
 

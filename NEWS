@@ -19,6 +19,14 @@ GNU Autoconf NEWS - User visible changes.
 
      AC_TYPE_SIGNAL
 
+** The macros m4_map and m4_map_sep now ignore any list elements
+   consisting of just empty quotes, and m4_map_sep now expands its
+   separator.  This fixes a regression in 2.62 when these macros were
+   first documented, for the sake of clients expecting the semantics
+   that these macros had prior to that time.  The new macros m4_mapall
+   and m4_mapall_sep, along with extra quoting of the separator, can
+   be used to get the semantics that m4_map_sep had in 2.62.
+
 ** Clients of m4_expand, such as AS_HELP_STRING and AT_SETUP, can now
    handle properly quoted but otherwise unbalanced parentheses (for
    some macros, this fixes a regression in 2.62).
@@ -27,10 +35,11 @@ GNU Autoconf NEWS - User visible changes.
    allowing the output of unbalanced parantheses in more contexts.
 
 ** The following m4sugar macros are new:
-   m4_joinall  m4_reverse  m4_set_add  m4_set_add_all  m4_set_contains
-   m4_set_contents  m4_set_delete  m4_set_difference  m4_set_dump
-   m4_set_empty  m4_set_foreach  m4_set_intersection  m4_set_list
-   m4_set_listc  m4_set_remove  m4_set_size  m4_set_union
+   m4_joinall  m4_mapall  m4_mapall_sep  m4_reverse  m4_set_add
+   m4_set_add_all  m4_set_contains  m4_set_contents  m4_set_delete
+   m4_set_difference  m4_set_dump  m4_set_empty  m4_set_foreach
+   m4_set_intersection  m4_set_list  m4_set_listc  m4_set_remove
+   m4_set_size  m4_set_union
 
 ** The following m4sugar macros now accept multiple arguments, as is the
    case with underlying m4:

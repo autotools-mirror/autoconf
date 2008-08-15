@@ -757,12 +757,12 @@ autom4te: m4 failed with exit status: 1
 AT_CLEANUP
 
 
-## --------------- ##
-## m4_map{,_sep}.  ##
-## --------------- ##
+## --------------------- ##
+## m4_map{,all}{,_sep}.  ##
+## --------------------- ##
 
 AT_SETUP([m4@&t@_map])
-AT_KEYWORDS([m4@&t@_apply])
+AT_KEYWORDS([m4@&t@_apply m4@&t@_map_sep m4@&t@_mapall m4@&t@_mapall_sep])
 AT_KEYWORDS([m4@&t@_count])
 
 AT_CHECK_M4SUGAR_TEXT([[dnl
@@ -770,8 +770,21 @@ m4_map([m4_count], [])
 m4_map([ m4_count], [[],
                      [[1]],
                      [[1], [2]]])
+m4_mapall([ m4_count], [[],
+                        [[1]],
+                        [[1], [2]]])
 m4_map_sep([m4_eval], [,], [[[1+2]],
                             [[10], [16]]])
+m4_count(m4_map_sep([m4_echo], [,], [[], [[1]], [[2]]]))
+m4_count(m4_mapall_sep([m4_echo], [,], [[], [[1]], [[2]]]))
+m4_map_sep([m4_eval], [[,]], [[[1+2]],
+                              [[10], [16]]])
+m4_count(m4_map_sep([m4_echo], [[,]], [[], [[1]], [[2]]]))
+m4_count(m4_mapall_sep([m4_echo], [[,]], [[], [[1]], [[2]]]))
+m4_map([-], [[]])
+m4_mapall([-], [[]])
+m4_map_sep([-], [:], [[]])
+m4_mapall_sep([-], [:], [[]])
 m4_define([a], [m4_if([$#], [0], [oops], [$1], [a], [pass], [oops])])dnl
 m4_define([a1], [oops])dnl
 m4_define([pass1], [oops])dnl
@@ -779,8 +792,18 @@ m4_map([a], [[[a]]])1
 m4_map([m4_unquote([a])], [m4_dquote([a])])
 ]],
 [[
+ 1 2
  0 1 2
 3,a
+2
+3
+3,a
+1
+1
+
+-
+
+-
 pass1
 pass
 ]], [])

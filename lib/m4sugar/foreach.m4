@@ -257,11 +257,16 @@ m4_define([m4_reverse],
 # of LIST.  $1, $2... must in turn be lists, appropriate for m4_apply.
 #
 # m4_map/m4_map_sep only execute once; the speedup comes in fixing
-# _m4_map.  m4_foreach to the rescue.
+# _m4_map.  The mismatch in () is intentional, since $1 supplies the
+# opening `(' (but it sure looks odd!).  Build the temporary _m4_m:
+#   $1, [$3])$1, [$4])...$1, [$m])_m4_popdef([_m4_m])
 m4_define([_m4_map],
 [m4_if([$#], [2], [],
-       [m4_foreach([_m4_elt], [m4_shift2($@)],
-		   [m4_apply([$1], m4_defn([_m4_elt]))])])])
+       [m4_define([_m4_m], m4_pushdef([_m4_m])_m4_for([_m4_m], [3], [$#], [1],
+   [$0_([1], _m4_m)])[_m4_popdef([_m4_m])])_m4_m($@)])])
+
+m4_define([_m4_map_],
+[[$$1, [$$2])]])
 
 # m4_transform(EXPRESSION, ARG...)
 # --------------------------------
