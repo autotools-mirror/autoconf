@@ -1892,8 +1892,8 @@ m4_define([AS_VAR_COPY],
 # AS_VAR_GET(VARIABLE)
 # --------------------
 # Get the value of the shell VARIABLE.
-# Evaluates to $VARIABLE if there are no indirection in VARIABLE,
-# else into the appropriate `eval' sequence.
+# Evaluates to $VARIABLE if there is no indirection in VARIABLE,
+# else to the appropriate `eval' sequence.
 # This macro is deprecated because it sometimes mishandles trailing newlines;
 # use AS_VAR_COPY instead.
 m4_define([AS_VAR_GET],
