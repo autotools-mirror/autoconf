@@ -37,6 +37,13 @@ generate the version string.  Therefore, we recommend:
 You may find it useful to install the git-merge-changelog merge driver:
 http://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/git-merge-changelog.c
 
+then add the following to .git/config or ~/.gitconfig:
+[merge "merge-changelog"]
+	name = GNU ChangeLog merge driver
+	driver = git-merge-changelog %O %A %B
+[diff "texinfo"]
+	funcname = ^@node[\t ][\t ]*\\([^,][^,]*\\)
+
 Only building the initial full source tree will be a bit painful.
 Later, a plain `git pull && make' should be sufficient.
 

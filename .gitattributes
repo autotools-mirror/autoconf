@@ -1,3 +1,5 @@
+# See README-hacking for ideas on making these settings useful.
+*.texi*		diff=texinfo
 ChangeLog	merge=merge-changelog
 config.guess	-whitespace
 config.sub	-whitespace

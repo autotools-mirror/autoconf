@@ -1,3 +1,10 @@
+2008-08-18  Eric Blake  <ebb9@byu.net>
+
+	Let 'git diff' give better context for doc updates.
+	* .gitattributes (*.texi*): Add new entry.
+	* README-hacking: Mention how to use it.
+	Inspired by a coreutils patch by Jim Meyering.
+
 2008-08-15  Eric Blake  <ebb9@byu.net>
 
 	Fix m4_map regression from 2007-10-16.
