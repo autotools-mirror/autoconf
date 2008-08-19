@@ -634,7 +634,7 @@ AT_CLEANUP
 
 AT_SETUP([AS@&t@_IF and AS@&t@_CASE])
 
-AT_KEYWORDS([m4@&t@_foreach_pair])
+AT_KEYWORDS([m4@&t@_transform_pair])
 
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
@@ -728,13 +728,15 @@ foo9=9 bar9=9
 ]])
 
 dnl stress test for large number of conditionals
+dnl too large, and we start tickling shell bugs
+m4_pushdef([limit], [100])dnl
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
-AS_IF(m4_shift(m4_for([i], [1], [1000], [], [, test $[1] = i, echo i])))
-AS_IF(m4_shift(m4_for([i], [1], [1000], [], [, test $[1] = i, echo i])),
+AS_IF(m4_shift(m4_for([i], [1], ]limit[, [], [, test $[1] = i, echo i])))
+AS_IF(m4_shift(m4_for([i], [1], ]limit[, [], [, test $[1] = i, echo i])),
       [echo default])
-AS_CASE([$[1]]m4_for([i], [1], [1000], [], [, i, echo i]))
-AS_CASE([$[1]]m4_for([i], [1], [1000], [], [, i, echo i]), [echo default])
+AS_CASE([$[1]]m4_for([i], [1], ]limit[, [], [, i, echo i]))
+AS_CASE([$[1]]m4_for([i], [1], ]limit[, [], [, i, echo i]), [echo default])
 ]])
 
 AT_CHECK_M4SH
@@ -743,14 +745,15 @@ AT_CHECK([./script 1], [0], [[1
 1
 1
 ]])
-AT_CHECK([./script 1000], [0], [[1000
-1000
-1000
-1000
-]])
+AT_CHECK([./script limit], [0], [limit
+limit
+limit
+limit
+])
 AT_CHECK([./script default], [0], [[default
 default
 ]])
+m4_popdef([limit])
 
 AT_CLEANUP
 

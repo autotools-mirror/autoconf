@@ -1,5 +1,12 @@
 2008-08-18  Eric Blake  <ebb9@byu.net>
 
+	Test m4_transform without tickling shell bugs.
+	* tests/m4sh.at (AS@&t@_IF and AS@&t@_CASE): Relax test to
+	something more manageable.
+	* tests/m4sugar.at (recursion): Move stress test of
+	m4_transform_pair here.
+	Reported by Ralf Wildenhues.
+
 	Let 'git diff' give better context for doc updates.
 	* .gitattributes (*.texi*): Add new entry.
 	* README-hacking: Mention how to use it.
