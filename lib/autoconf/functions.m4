@@ -70,7 +70,7 @@ AC_CACHE_CHECK([for $1], [ac_var],
 [AC_LINK_IFELSE([AC_LANG_FUNC_LINK_TRY([$1])],
 		[AS_VAR_SET([ac_var], [yes])],
 		[AS_VAR_SET([ac_var], [no])])])
-AS_IF([test AS_VAR_GET([ac_var]) = yes], [$2], [$3])dnl
+AS_VAR_IF([ac_var], [yes], [$2], [$3])dnl
 AS_VAR_POPDEF([ac_var])dnl
 ])# AC_CHECK_FUNC
 

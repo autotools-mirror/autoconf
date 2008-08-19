@@ -1576,6 +1576,17 @@ m4_define([AS_VAR_SET_IF],
 [AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])])
 
 
+# AS_VAR_IF(VARIABLE, VALUE, IF-TRUE, IF-FALSE)
+# ---------------------------------------------
+# Implement a shell `if test $VARIABLE = VALUE; then-else'.
+# Polymorphic, and avoids sh expansion error upon interrupt or term signal.
+m4_define([AS_VAR_IF],
+[AS_LITERAL_IF([$1],
+  [AS_IF([test "x$$1" = x""$2], [$3], [$4])],
+  [as_val=AS_VAR_GET([$1])
+   AS_IF([test "x$as_val" = x""$2], [$3], [$4])])])
+
+
 # AS_VAR_PUSHDEF and AS_VAR_POPDEF
 # --------------------------------
 #

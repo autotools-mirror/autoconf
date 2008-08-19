@@ -1,3 +1,23 @@
+2008-08-19  Jim Meyering  <jim@meyering.net>
+	    Eric Blake  <ebb9@byu.net>
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Avoid shell parse errors after interrupt due to empty ``.
+	* doc/autoconf.texi (Shell Substitutions): Document the issue.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_IF): New function.
+	* lib/autoconf/functions.m4 (AC_CHECK_FUNC): Use it in place of
+	"test AS_VAR_GET([...]) = yes"
+	* lib/autoconf/general.m4 (AC_CHECK_FILE, AC_CHECK_DECL): Likewise.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): Likewise.
+	(_AC_CHECK_HEADER_NEW, _AC_CHECK_HEADER_OLD): Likewise.
+	(_AC_CHECK_HEADER_DIRENT): Likewise.
+	* lib/autoconf/libs.m4 (AC_CHECK_LIB): Likewise.
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW, AC_CHECK_MEMBER): Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Use
+	temporary variable to work around the issue.
+	* tests/foreign.at (Libtool): Quote result of command
+	substitution.
+
 2008-08-18  Eric Blake  <ebb9@byu.net>
 
 	Test m4_transform without tickling shell bugs.

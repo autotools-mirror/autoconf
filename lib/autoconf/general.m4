@@ -2614,7 +2614,7 @@ if test -r "$1"; then
 else
   AS_VAR_SET([ac_File], [no])
 fi])
-AS_IF([test AS_VAR_GET([ac_File]) = yes], [$2], [$3])[]dnl
+AS_VAR_IF([ac_File], [yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_File])dnl
 ])# AC_CHECK_FILE
 
@@ -2651,7 +2651,7 @@ AC_CACHE_CHECK([whether $1 is declared], [ac_Symbol],
 ])],
 		   [AS_VAR_SET([ac_Symbol], [yes])],
 		   [AS_VAR_SET([ac_Symbol], [no])])])
-AS_IF([test AS_VAR_GET([ac_Symbol]) = yes], [$2], [$3])[]dnl
+AS_VAR_IF([ac_Symbol], [yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Symbol])dnl
 ])# AC_CHECK_DECL
 

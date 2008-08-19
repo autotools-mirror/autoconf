@@ -160,7 +160,7 @@ AC_COMPILE_IFELSE(
 	  return 0;])],
      [],
      [AS_VAR_SET([ac_Type], [yes])])])])
-AS_IF([test AS_VAR_GET([ac_Type]) = yes], [$2], [$3])[]dnl
+AS_VAR_IF([ac_Type], [yes], [$2], [$3])[]dnl
 AS_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
 
@@ -834,7 +834,7 @@ if (sizeof ac_aggr.m4_bpatsubst([$1], [^[^.]*\.]))
 return 0;])],
 		[AS_VAR_SET([ac_Member], [yes])],
 		[AS_VAR_SET([ac_Member], [no])])])])
-AS_IF([test AS_VAR_GET([ac_Member]) = yes], [$2], [$3])dnl
+AS_VAR_IF([ac_Member], [yes], [$2], [$3])dnl
 AS_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
 

@@ -69,7 +69,7 @@ AT_CHECK([test -f "`cat stdout`"])
 touch install-sh
 
 # Build the concatenation of libtool.m4 and configure.ac.
-cp `cat stdout` configure.in
+cp "`cat stdout`" configure.in
 cat >>configure.in <<_EOF
 AC_INIT
 AC_CONFIG_AUX_DIR(.)

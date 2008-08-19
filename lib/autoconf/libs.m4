@@ -130,7 +130,7 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [$2])],
 	       [AS_VAR_SET([ac_Lib], [yes])],
 	       [AS_VAR_SET([ac_Lib], [no])])
 LIBS=$ac_check_lib_save_LIBS])
-AS_IF([test AS_VAR_GET([ac_Lib]) = yes],
+AS_VAR_IF([ac_Lib], [yes],
       [m4_default([$3], [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
 ])],

@@ -419,7 +419,8 @@ for ac_last_try in false false false false false :; do
     AC_MSG_ERROR([could not make $CONFIG_STATUS])
 
 dnl Do not use grep on conf$$subs.awk, since AIX grep has a line length limit.
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | grep -c X` = $ac_delim_num; then
+  ac_delim_n=`sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | grep -c X`
+  if test $ac_delim_n = $ac_delim_num; then
     break
   elif $ac_last_try; then
     AC_MSG_ERROR([could not make $CONFIG_STATUS])

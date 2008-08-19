@@ -13479,6 +13479,26 @@ $ @kbd{echo "`printf 'foo\r\n'`"" bar" | cmp - broken}
 - broken differ: char 4, line 1
 @end example
 
+Upon interrupt or SIGTERM, some shells may abort a command substitution,
+replace it with a null string, and wrongly evaluate the enclosing
+command before entering the trap or ending the script.  This can lead to
+spurious errors:
+
+@example
+$ @kbd{sh -c 'if test `sleep 5; echo hi` = hi; then echo yes; fi'}
+$ @kbd{^C}
+sh: test: hi: unexpected operator/operand
+@end example
+
+@noindent
+You can avoid this by assigning the command substitution to a temporary
+variable:
+
+@example
+$ @kbd{sh -c 'res=`sleep 5; echo hi`
+         if test "x$res" = xhi; then echo yes; fi'}
+$ @kbd{^C}
+@end example
 
 @item $(@var{commands})
 @cindex $(@var{commands})
