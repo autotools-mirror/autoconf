@@ -739,7 +739,8 @@ AS_CASE([$[1]]m4_for([i], [1], ]limit[, [], [, i, echo i]))
 AS_CASE([$[1]]m4_for([i], [1], ]limit[, [], [, i, echo i]), [echo default])
 ]])
 
-AT_CHECK_M4SH
+dnl Add --force so autom4te doesn't think `script' is still up to date.
+AT_CHECK_M4SH([--force])
 AT_CHECK([./script 1], [0], [[1
 1
 1

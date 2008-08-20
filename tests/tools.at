@@ -1016,9 +1016,9 @@ END
 END
 
   AT_CHECK_AUTOHEADER([-B "$dir" "$file.in"])
-  AT_CHECK_AUTOHEADER([-I "$dir" "$file.in"])
+  AT_CHECK_AUTOHEADER([--force -I "$dir" "$file.in"])
   AT_CHECK_AUTOUPDATE([-B "$dir" "$file.in"])
-  AT_CHECK_AUTOUPDATE([-I "$dir" "$file.in"])
+  AT_CHECK_AUTOUPDATE([--force -I "$dir" "$file.in"])
   AT_CHECK_AUTOUPDATE([-B "$dir" - < "$file.in"], [], [ignore])
   AT_CHECK_AUTOCONF([-B "$dir" -o "$file" "$file.in"])
   AT_CHECK_AUTOCONF([-I "$dir" -o "$file" "$file.in"])
@@ -1026,12 +1026,12 @@ END
   AT_CHECK_AUTOCONF([--prepend-include="$dir" -o "$file" "$file.in"])
   AT_CHECK_AUTOCONF([--include="$dir" -o "$file" "$file.in"])
   AT_CHECK([autoscan -B "$dir"], [], [], [ignore])
-  AT_CHECK([autoscan -I "$dir"], [], [], [ignore])
+  AT_CHECK([autoscan --force -I "$dir"], [], [], [ignore])
   # autoreconf requires a sane input file name.  Also, disable aclocal.
   mv -f "$file.in" configure.in
   AT_DATA([aclocal.m4])
   AT_CHECK([autoreconf -B "$dir"])
-  AT_CHECK([autoreconf -I "$dir"])
+  AT_CHECK([autoreconf --force -I "$dir"])
 
   cat >"$file.c" <<'END'
 #if FOO
