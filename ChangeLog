@@ -1,3 +1,10 @@
+2008-08-19  Bruno Haible  <bruno@clisp.org>
+	and Peter O'Gorman  <peter@pogma.com>
+
+	Mention universal binaries in INSTALL.
+	* doc/install.texi (Compiling For Multiple Architectures): Explain
+	how to create universal binaries on MacOS X.
+
 2008-08-19  Jim Meyering  <jim@meyering.net>
 	    Eric Blake  <ebb9@byu.net>
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>

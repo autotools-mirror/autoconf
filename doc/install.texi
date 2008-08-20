@@ -6,7 +6,7 @@
 @unnumbered Installation Instructions
 
 Copyright @copyright{} 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004,
-2005, 2006, 2007 Free Software Foundation, Inc.
+2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 This file is free documentation; the Free Software Foundation gives
 unlimited permission to copy, distribute and modify it.
@@ -119,6 +119,22 @@ it is safer to compile the package for one
 architecture at a time in the source code directory.  After you have
 installed the package for one architecture, use @samp{make distclean}
 before reconfiguring for another architecture.
+
+On MacOS X 10.5 and later systems, you can create libraries and
+executables that work on multiple system types---known as @dfn{fat} or
+@dfn{universal} binaries---by specifying multiple @option{-arch} options
+to the compiler but only a single @option{-arch} option to the
+preprocessor.  Like this:
+
+@example
+./configure CC="gcc -arch i386 -arch x86_64 -arch ppc -arch ppc64" \
+            CXX="g++ -arch i386 -arch x86_64 -arch ppc -arch ppc64" \
+            CPP="gcc -E" CXXCPP="g++ -E"
+@end example
+
+This is not guaranteed to produce working output in all cases, you may
+have to build one architecture at a time and combine the results
+using the @command{lipo} tool if you have problems.
 
 @node Installation Names
 @section Installation Names
