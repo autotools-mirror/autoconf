@@ -179,6 +179,36 @@ doesn't, you can use the @command{configure} options
 @option{--x-includes=@var{dir}} and @option{--x-libraries=@var{dir}} to
 specify their locations.
 
+@node Particular Systems
+@section Particular systems
+
+On HP-UX, the default C compiler is not ANSI C compatible.  If GNU CC is
+not installed, it is recommended to use the following options in order to
+use an ANSI C compiler:
+
+@example
+./configure CC="cc -Ae"
+@end example
+
+@noindent
+and if that doesn't work, install pre-built binaries of GCC for HP-UX.
+
+On OSF/1 a.k.a.@: Tru64, some versions of the default C compiler cannot
+parse its @code{<wchar.h>} header file.  The option @option{-nodtk} can be
+used as a workaround.  If GNU CC is not installed, it is therefore
+recommended to try
+
+@example
+./configure CC="cc"
+@end example
+
+@noindent
+and if that doesn't work, try
+
+@example
+./configure CC="cc -nodtk"
+@end example
+
 @node System Type
 @section Specifying the System Type
 

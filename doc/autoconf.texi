@@ -557,6 +557,7 @@ Running @command{configure} Scripts
 * Multiple Architectures::      Compiling for multiple architectures at once
 * Installation Names::          Installing in different directories
 * Optional Features::           Selecting optional features
+* Particular Systems::          Particular systems
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @command{configure}
 * Defining Variables::          Specifying the compiler etc.
@@ -18518,6 +18519,7 @@ may use comes with Autoconf.
 * Multiple Architectures::      Compiling for multiple architectures at once
 * Installation Names::          Installing in different directories
 * Optional Features::           Selecting optional features
+* Particular Systems::          Particular systems
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @command{configure}
 * Defining Variables::          Specifying the compiler etc.
