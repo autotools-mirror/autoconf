@@ -729,7 +729,7 @@ foo9=9 bar9=9
 
 dnl stress test for large number of conditionals
 dnl too large, and we start tickling shell bugs
-m4_pushdef([limit], [100])dnl
+m4_pushdef([limit], [1000])dnl
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
 AS_IF(m4_shift(m4_for([i], [1], ]limit[, [], [, test $[1] = i, echo i])))

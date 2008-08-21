@@ -1,3 +1,8 @@
+2008-08-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* tests/m4sh.at (AS_IF and AS_CASE): Set the expansion limit
+	back to 1000.
+
 2008-08-21  Eric Blake  <ebb9@byu.net>
 
 	Formatting improvements.
