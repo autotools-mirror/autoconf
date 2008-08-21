@@ -42,6 +42,10 @@ even if they are slightly incompatible with C99.  The basic idea here
 is that AC_PROG_CC should disable pedanticisms and should enable
 extensions.
 
+Have a way to specify different default flags to try; see this thread
+for more information:
+<http://lists.gnu.org/archive/html/bug-autoconf/2008-08/msg00009.html>.
+
 
 * Later
 
