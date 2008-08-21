@@ -1,5 +1,9 @@
 2008-08-21  Eric Blake  <ebb9@byu.net>
 
+	Document another make bug.
+	* doc/autoconf.texi (The Make Macro SHELL): Mention bug in BSD
+	make, GNU make <= 3.80.
+
 	Tweak wording about SHELL in Makefile.
 	* doc/autoconf.texi (The Make Macro SHELL): Stronger wording on
 	the importance of proper SHELL settings.

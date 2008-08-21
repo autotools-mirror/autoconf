@@ -16368,6 +16368,23 @@ $ @kbd{env SHELL=/bin/tcsh FOO=bar gmake -e}  # GNU make
 bar
 @end example
 
+Conversely, @command{make} is not supposed to export any changes to the
+macro @code{SHELL} to child processes.  Again, many implementations
+break this rule:
+
+@example
+$ @kbd{cat Makefile}
+all:
+        @@echo $(SHELL)
+        @@printenv SHELL
+$ @kbd{env SHELL=sh make -e SHELL=/bin/ksh}   # BSD Make, GNU make 3.80
+/bin/ksh
+/bin/ksh
+$ @kbd{env SHELL=sh gmake -e SHELL=/bin/ksh}  # GNU make 3.81
+/bin/ksh
+sh
+@end example
+
 @node Comments in Make Rules
 @section Comments in Make Rules
 @cindex Comments in @file{Makefile} rules
