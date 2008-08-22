@@ -353,7 +353,7 @@ if test "x$with_x" = xno; then
   have_x=disabled
 else
   case $x_includes,$x_libraries in #(
-    *\'*) AC_MSG_ERROR([Cannot use X directory names containing ']);; #(
+    *\'*) AC_MSG_ERROR([cannot use X directory names containing ']);; #(
     *,NONE | NONE,*) _AC_PATH_X;; #(
     *) have_x=yes;;
   esac

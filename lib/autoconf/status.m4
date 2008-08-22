@@ -1304,7 +1304,7 @@ fi
 dnl config.status should not do recursion.
 AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
-  AC_MSG_WARN([Unrecognized options: $ac_unrecognized_opts])
+  AC_MSG_WARN([unrecognized options: $ac_unrecognized_opts])
 fi
 ])# AC_OUTPUT
 
@@ -1643,7 +1643,7 @@ do
   esac
   case $ac_mode$ac_tag in
   :[[FHL]]*:*);;
-  :L* | :C*:*) AC_MSG_ERROR([Invalid tag $ac_tag.]);;
+  :L* | :C*:*) AC_MSG_ERROR([invalid tag $ac_tag]);;
   :[[FH]]-) ac_tag=-:-;;
   :[[FH]]*) ac_tag=$ac_tag:$ac_tag.in;;
   esac

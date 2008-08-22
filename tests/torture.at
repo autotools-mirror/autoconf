@@ -1297,7 +1297,7 @@ AC_ARG_VAR([INNERMOST], [an innermost variable])
 AC_CONFIG_HEADERS(config.h:config.hin)
 AC_DEFINE_UNQUOTED([INNERMOST], [$INNERMOST], [an innermost variable])
 if test -n "$innermost_error"; then
-  AC_MSG_FAILURE([Error in $PACKAGE_NAME])
+  AC_MSG_FAILURE([error in $PACKAGE_NAME])
 fi
 AC_OUTPUT
 ]])

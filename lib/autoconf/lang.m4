@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2007 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2007, 2008 Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -371,7 +371,7 @@ fi
 
 m4_define([AC_LINK_IFELSE],
 [if test x$ac_no_link = xyes; then
-  AC_MSG_ERROR([Link tests are not allowed after AC@&t@_NO_EXECUTABLES.])
+  AC_MSG_ERROR([link tests are not allowed after AC@&t@_NO_EXECUTABLES])
 fi
 ]m4_defn([AC_LINK_IFELSE]))
 

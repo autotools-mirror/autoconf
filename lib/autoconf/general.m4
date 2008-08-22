@@ -479,7 +479,7 @@ AC_DEFUN([_AC_INIT_DIRCHECK],
 ac_pwd=`pwd` && test -n "$ac_pwd" &&
 ac_ls_di=`ls -di .` &&
 ac_pwd_ls_di=`cd "$ac_pwd" && ls -di .` ||
-  AC_MSG_ERROR([Working directory cannot be determined])
+  AC_MSG_ERROR([working directory cannot be determined])
 test "X$ac_ls_di" = "X$ac_pwd_ls_di" ||
   AC_MSG_ERROR([pwd does not report name of working directory])
 
@@ -894,8 +894,8 @@ fi
 if test -n "$ac_unrecognized_opts"; then
   case $enable_option_checking in
     no) ;;
-    fatal) AC_MSG_ERROR([Unrecognized options: $ac_unrecognized_opts]) ;;
-    *)     AC_MSG_WARN( [Unrecognized options: $ac_unrecognized_opts]) ;;
+    fatal) AC_MSG_ERROR([unrecognized options: $ac_unrecognized_opts]) ;;
+    *)     AC_MSG_WARN( [unrecognized options: $ac_unrecognized_opts]) ;;
   esac
 fi
 
@@ -1895,7 +1895,7 @@ m4_define([_AC_CACHE_DUMP],
     case $ac_val in #(
     *${as_nl}*)
       case $ac_var in #(
-      *_cv_*) AC_MSG_WARN([Cache variable $ac_var contains a newline.]) ;;
+      *_cv_*) AC_MSG_WARN([cache variable $ac_var contains a newline]) ;;
       esac
       case $ac_var in #(
       _ | IFS | as_nl) ;; #(

@@ -1,3 +1,16 @@
+2008-08-22  Peter Eisentraut  <peter_e@gmx.net>  (tiny change)
+
+	Format warning and error messages to match GCS.
+	* lib/autoconf/general.m4 (_AC_INIT_DIRCHECK)
+	(_AC_INIT_PARSE_ARGS, _AC_CACHE_DUMP): Start warning and error
+	messages with a lowercase letter, end them without punctuation.
+	* lib/autoconf/lang.m4 (AC_NO_EXECUTABLES): Likewise.
+	* lib/autoconf/libs.m4 (AC_PATH_X): Likewise.
+	* lib/autoconf/status.m4 (AC_OUTPUT, _AC_OUTPUT_MAIN_LOOP):
+	Likewise.
+	* tests/fortran.at (GNU Fortran): Likewise.
+	* tests/torture.at (Deep Package): Likewise.
+
 2008-08-21  Eric Blake  <ebb9@byu.net>
 
 	Avoid extra side effects in m4sugar list expansion.
