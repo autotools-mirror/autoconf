@@ -363,6 +363,8 @@ m4_define([m4_ifndef],
 # }.
 # All the values are optional, and the macro is robust to active
 # symbols properly quoted.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_case],
 [m4_if([$#], 0, [],
        [$#], 1, [],
@@ -386,6 +388,8 @@ m4_define([m4_case],
 #
 # All the values are optional, and the macro is robust to active symbols
 # properly quoted.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_bmatch],
 [m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
        [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
@@ -446,6 +450,8 @@ m4_define([_m4_cdr],
 #
 # In the common case of $1 with no backslash, only one m4_index expansion
 # occurs, and m4_eval is avoided altogether.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_cond],
 [m4_if([$#], [0], [m4_fatal([$0: cannot be called without arguments])],
        [$#], [1], [$1],
@@ -481,6 +487,8 @@ m4_define([_m4_cond],
 #
 # Recall that m4_shift3 always results in an argument.  Hence, we need
 # to distinguish between a final deletion vs. ending recursion.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_bpatsubsts],
 [m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
        [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
@@ -600,6 +608,8 @@ m4_ifdef([__m4_version__], [],
 #         [_m4_shiftn(m4_decr([$1]), m4_shift(m4_shift($@)))])
 # but with the final `m4_shift(m4_shift($@)))' shared between the two
 # paths.  The first leg uses a no-op m4_shift(,$@) to balance out the ().
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_shiftn],
 [m4_assert(0 < $1 && $1 < $#)_$0($@)])
 
@@ -708,6 +718,8 @@ m4_define([m4_count], [$#])
 # useful for making your macros more structured and readable by dropping
 # unnecessary dnl's and have the macros indented properly.  No concatenation
 # occurs after a STRING; use m4_unquote(m4_join(,STRING)) for that.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_do],
 [m4_if([$#], 0, [],
        [$#], 1, [$1[]],
@@ -723,6 +735,8 @@ m4_define([m4_dquote],  [[$@]])
 # m4_dquote_elt(ARGS)
 # -------------------
 # Return ARGS as an unquoted list of double-quoted arguments.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_dquote_elt],
 [m4_if([$#], [0], [],
        [$#], [1], [[[$1]]],
@@ -820,6 +834,8 @@ m4_define([_m4_quote],
 # m4_reverse(ARGS)
 # ----------------
 # Output ARGS in reverse order.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_reverse],
 [m4_if([$#], [0], [], [$#], [1], [[$1]],
        [$0(m4_shift($@)), [$1]])])
@@ -984,6 +1000,8 @@ m4_define([_m4_for],
 # [] and use m4_car/m4_cdr for recursion, we instead unbox the list (which
 # requires swapping the argument order in the helper), insert an ignored
 # third argument, and use m4_shift3 to detect when recursion is complete.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_foreach],
 [m4_if([$2], [], [],
        [m4_pushdef([$1])_$0([$1], [$3], [], $2)m4_popdef([$1])])])
@@ -1023,6 +1041,8 @@ m4_define([m4_foreach_w],
 # _m4_map.  For m4_map, an empty list behaves like an empty sublist
 # and gets ignored; for m4_mapall, we must special-case the empty
 # list.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_map],
 [_m4_map([_m4_apply([$1]], [], $2)])
 
@@ -1066,6 +1086,8 @@ m4_define([_m4_mapall_sep],
 # then appends `,', the current SUBLIST and the closing `)', then
 # recurses to the next SUBLIST.  IGNORED is an aid to ending recursion
 # efficiently.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([_m4_map],
 [m4_if([$#], [2], [],
        [$1, [$3])$0([$1], m4_shift2($@))])])
@@ -1074,6 +1096,8 @@ m4_define([_m4_map],
 # --------------------------------
 # Expand EXPRESSION([ARG]) for each argument.  More efficient than
 # m4_foreach([var], [ARG...], [EXPRESSION(m4_defn([var]))])
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_transform],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
        [$#], [1], [],
@@ -1093,6 +1117,8 @@ m4_define([m4_transform],
 #   => (a,b)
 #   => (c,d)
 #   => (e)
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_transform_pair],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
        [$#], [1], [m4_fatal([$0: too few arguments: $#: $1])],
@@ -1952,6 +1978,8 @@ m4_define([m4_normalize],
 # elements, and outputs them following a separator.  The final trick to
 # note is that we decide between recursing with $0 or _$0 based on the
 # nested m4_if ending with `_'.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_join],
 [m4_if([$#], [1], [],
        [$#], [2], [[$2]],
@@ -1964,6 +1992,8 @@ m4_define([_m4_join],
 # ------------------------------
 # Produce ARG1SEPARG2...SEPARGn.  An empty ARG results in back-to-back SEP.
 # No expansion is performed on SEP or ARGs.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_joinall], [[$2]_$0([$1], m4_shift($@))])
 m4_define([_m4_joinall],
 [m4_if([$#], [2], [], [[$1$3]$0([$1], m4_shift2($@))])])
@@ -2240,6 +2270,8 @@ m4_define([m4_cmp],
 # which list is trimmed by one element; this is more efficient than
 # calling m4_cdr on both lists from a single macro.  Guarantee exactly
 # one expansion of both lists' side effects.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_list_cmp],
 [_$0_raw(m4_dquote($1), m4_dquote($2))])
 
@@ -2265,6 +2297,8 @@ m4_define([_m4_list_cmp_2],
 # M4 1.4.x doesn't provide ?:.  Hence this huge m4_eval.  Avoid m4_eval
 # if both arguments are identical, but be aware of m4_max(0xa, 10) (hence
 # the use of <=, not just <, in the second multiply).
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_max],
 [m4_if([$#], [0], [m4_fatal([too few arguments to $0])],
        [$#], [1], [m4_eval([$1])],
@@ -2289,6 +2323,8 @@ m4_define([_m4_min],
 # ---------------------------------
 # Common recursion code for m4_max and m4_min.  METHOD must be _m4_max
 # or _m4_min, and there must be at least two arguments to combine.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([_m4_minmax],
 [m4_if([$#], [3], [$1([$2], [$3])],
        [$0([$1], $1([$2], [$3]), m4_shift3($@))])])
@@ -2448,6 +2484,8 @@ m4_define([m4_set_add],
 # not pruned.  The recursion helpers ignore their second argument, so
 # that we can use the faster m4_shift2 and 2 arguments, rather than
 # _m4_shift2 and one argument, as the signal to end recursion.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_set_add_all],
 [m4_define([_m4_set_size($1)], m4_eval(m4_set_size([$1])
   + m4_len(m4_ifdef([_m4_set_cleanup($1)], [_$0_check], [_$0])([$1], $@))))])

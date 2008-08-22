@@ -76,6 +76,8 @@
 # are not future-proof.  Thus, this file is conditionally included as
 # part of m4_init(), only when it is detected that M4 probably has
 # quadratic behavior (ie. it lacks the macro __m4_version__).
+#
+# Please keep this file in sync with m4sugar.m4.
 
 # m4_foreach(VARIABLE, LIST, EXPRESSION)
 # --------------------------------------
