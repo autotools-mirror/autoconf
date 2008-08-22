@@ -1043,7 +1043,8 @@ m4_define([m4_mapall],
 # arguments.
 #
 # For m4_mapall_sep, merely expand the first iteration without the
-# separator, then include separator as part of subsequent recursion.
+# separator, then include separator as part of subsequent recursion;
+# but avoid extra expansion of LIST's side-effects via a helper macro.
 # For m4_map_sep, things are trickier - we don't know if the first
 # list element is an empty sublist, so we must define a self-modifying
 # helper macro and use that as the separator instead.
@@ -1052,8 +1053,10 @@ m4_define([m4_map_sep],
 [_m4_map([_m4_apply([m4_Sep([$2])[]$1]], [], $3)m4_popdef([m4_Sep])])
 
 m4_define([m4_mapall_sep],
-[m4_if([$3], [], [],
-       [m4_apply([$1], m4_car($3))_m4_map([m4_apply([$2[]$1]], $3)])])
+[m4_if([$3], [], [], [_$0([$1], [$2], $3)])])
+
+m4_define([_m4_mapall_sep],
+[m4_apply([$1], [$3])_m4_map([m4_apply([$2[]$1]], m4_shift2($@))])
 
 # _m4_map(PREFIX, IGNORED, SUBLIST, ...)
 # --------------------------------------
@@ -2235,15 +2238,19 @@ m4_define([m4_cmp],
 # long lists, since less text is being expanded for deciding when to end
 # recursion.  The recursion is between a pair of macros that alternate
 # which list is trimmed by one element; this is more efficient than
-# calling m4_cdr on both lists from a single macro.
+# calling m4_cdr on both lists from a single macro.  Guarantee exactly
+# one expansion of both lists' side effects.
 m4_define([m4_list_cmp],
+[_$0_raw(m4_dquote($1), m4_dquote($2))])
+
+m4_define([_m4_list_cmp_raw],
 [m4_if([$1], [$2], [0], [_m4_list_cmp_1([$1], $2)])])
 
 m4_define([_m4_list_cmp],
 [m4_if([$1], [], [0m4_ignore], [$2], [0], [m4_unquote], [$2m4_ignore])])
 
 m4_define([_m4_list_cmp_1],
-[_m4_list_cmp_2([$2], m4_dquote(m4_shift2($@)), $1)])
+[_m4_list_cmp_2([$2], [m4_shift2($@)], $1)])
 
 m4_define([_m4_list_cmp_2],
 [_m4_list_cmp([$1$3], m4_cmp([$3+0], [$1+0]))(
@@ -2335,8 +2342,11 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_Letters])))[[+],
 #  -1 if VERSION-1 < VERSION-2
 #   0 if           =
 #   1 if           >
+#
+# Since _m4_version_unletter does not output side effects, we can
+# safely bypass the overhead of m4_version_cmp.
 m4_define([m4_version_compare],
-[m4_list_cmp(_m4_version_unletter([$1]), _m4_version_unletter([$2]))])
+[_m4_list_cmp_raw(_m4_version_unletter([$1]), _m4_version_unletter([$2]))])
 
 
 # m4_PACKAGE_NAME

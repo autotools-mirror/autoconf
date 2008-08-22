@@ -10756,6 +10756,22 @@ It is common to see lists with unquoted elements when those elements are
 not likely to be macro names, as in @samp{[fputc_unlocked,
 fgetc_unlocked]}.
 
+Although not generally recommended, it is possible for quoted lists to
+have side effects; all side effects are expanded only once, and prior to
+visiting any list element.  On the other hand, the fact that unquoted
+macros are expanded exactly once means that macros without side effects
+can be used to generate lists.  For example,
+
+@example
+m4_foreach([i], [[1], [2], [3]m4_errprintn([hi])], [i])
+@error{}hi
+@result{}123
+m4_define([list], [[1], [2], [3]])
+@result{}
+m4_foreach([i], [list], [i])
+@result{}123
+@end example
+
 @defmac m4_car (@var{list})
 @msindex{car}
 Expands to the quoted first element of the comma-separated quoted

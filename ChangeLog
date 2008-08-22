@@ -1,3 +1,20 @@
+2008-08-21  Eric Blake  <ebb9@byu.net>
+
+	Avoid extra side effects in m4sugar list expansion.
+	* lib/m4sugar/m4sugar.m4 (m4_mapall_sep, m4_list_cmp): Wrap
+	around...
+	(_m4_mapall_sep, _m4_list_cmp_raw): ...new helpers, to avoid
+	duplicate side effects.
+	(m4_version_compare): Adjust caller.
+	* lib/m4sugar/foreach.m4 (m4_list_cmp): Rename...
+	(_m4_list_cmp_raw): ...to match m4sugar.
+	* doc/autoconf.texi (Looping constructs): Document the behavior of
+	side effects.
+	* tests/m4sugar.at (M4 loops, m4@&t@_map, m4@&t@_version_compare):
+	Ensure only one side effect.
+	(recursion): Fix test typo.
+	Reported by Ralf Wildenhues.
+
 2008-08-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* TODO: Add item for compiler default flags.
