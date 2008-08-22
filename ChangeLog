@@ -1,3 +1,7 @@
+2008-08-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* NEWS: Fix typo.
+
 2008-08-22  Eric Blake  <ebb9@byu.net>
 
 	* TODO: Add an item for additional m4sugar looping constructs.
