@@ -1399,24 +1399,34 @@ fi
 AC_DEFUN([AC_C_BIGENDIAN],
 [AH_VERBATIM([WORDS_BIGENDIAN],
 [/* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
-   significant byte first (like Motorola and SPARC, unlike Intel and VAX). */
-#if defined __BIG_ENDIAN__
-# define WORDS_BIGENDIAN 1
-#elif ! defined __LITTLE_ENDIAN__
-# undef WORDS_BIGENDIAN
+   significant byte first (like Motorola and SPARC, unlike Intel). */
+#if defined AC_APPLE_UNIVERSAL_BUILD
+# if defined __BIG_ENDIAN__
+#  define WORDS_BIGENDIAN 1
+# endif
+#else
+# ifndef WORDS_BIGENDIAN
+#  undef WORDS_BIGENDIAN
+# endif
 #endif])dnl
  AC_CACHE_CHECK([whether byte ordering is bigendian], [ac_cv_c_bigendian],
    [ac_cv_c_bigendian=unknown
     m4_ifval(m4_ifdef([AH_HEADER], 1)[$4],
-      [# See if __BIG_ENDIAN__ or __LITTLE_ENDIAN__ is defined.
+      [# See if we're dealing with a universal compiler.
        AC_COMPILE_IFELSE(
 	 [AC_LANG_SOURCE(
-	    [[#if ! (defined __BIG_ENDIAN__ || defined __LITTLE_ENDIAN__)
-	       neither is defined;
+	    [[#ifndef __APPLE_CC__
+	       not a universal capable compiler
 	     #endif
 	     typedef int dummy;
 	    ]])],
-	 [ac_cv_c_bigendian=universal])],
+	 [
+	# Check for potential -arch flags.  It is not universal unless
+	# there are some -arch flags.  Note that *ppc* also matches
+	# ppc64.  This check is also rather less than ideal.
+	case "${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}" in  #(
+	  *-arch*ppc*|*-arch*i386*|*-arch*x86_64*) ac_cv_c_bigendian=universal;;
+	esac])],
       [AC_DIAGNOSE([obsolete], [AC_C_BIGENDIAN suggests AC_CONFIG_HEADERS])])
     if test $ac_cv_c_bigendian = unknown; then
       # See if sys/param.h defines the BYTE_ORDER macro.
@@ -1521,7 +1531,10 @@ AC_DEFUN([AC_C_BIGENDIAN],
    no)
      $2 ;; #(
    universal)
-     $4 ;; #(
+     m4_default([$4],
+       [AC_DEFINE([AC_APPLE_UNIVERSAL_BUILD],1,
+          [Define if building universal (internal helper macro)])])
+     ;; #(
    *)
      m4_default([$3],
        [AC_MSG_ERROR([unknown endianness

@@ -1,3 +1,10 @@
+2008-08-22  Peter O'Gorman  <pogma@thewrittenword.com>
+
+	Limit AC_C_BIGENDIAN univeral checks to Mac OS X.
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Limit the check to
+	__APPLE_CC__ with possible -arch flags.
+	* NEWS: Document it.
+
 2008-08-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* NEWS: Fix typo.

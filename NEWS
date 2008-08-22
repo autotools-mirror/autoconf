@@ -2,6 +2,10 @@ GNU Autoconf NEWS - User visible changes.
 
 * Major changes in Autoconf 2.62a (2008-??-??)
 
+** AC_C_BIGENDIAN does not mistakenly report "universal" for some
+   bigendian hosts, a regression introduced with universal binary
+   support in 2.62.
+
 ** AC_PATH_X now includes /lib64 and /usr/lib64 in its list of default
    library directories.
 
