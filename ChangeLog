@@ -1,5 +1,8 @@
 2008-08-22  Eric Blake  <ebb9@byu.net>
 
+	* TODO: Add an item for additional m4sugar looping constructs.
+	Suggested by Ralf Wildenhues.
+
 	Add reminder to keep dual implementations in sync.
 	* lib/m4sugar/m4sugar.m4: Add comments.
 	* lib/m4sugar/foreach.m4: Likewise.

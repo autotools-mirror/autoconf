@@ -228,6 +228,15 @@ this for translators.
 F**k!  --trace FOO does not catch indir([FOO], $@)!
 Fixed in M4 1.6, but we can't rely on it yet.
 
+** m4 loops
+As of 2.63, m4_for has a fixed iteration count for speed in the common
+usage case.  But it used to allow the user to alter iteration count by
+reassigning the iterator, allowing a break-like functionality (or even
+infloops).  Does this need a new (but maybe slower) macro?  Should we
+also provide something like m4_while([TEST], [EXPR])?  Maybe an
+m4_break() that works inside a looping construct?
+http://lists.gnu.org/archive/html/autoconf-patches/2008-08/msg00121.html
+
 * Autoconf 3
 
 ** Cache name spaces.
@@ -246,7 +255,7 @@ should depend upon the current language.
 I think one sad decision in Autoconf was to use white space separated
 lists for some arguments.  For instance AC_CHECK_FUNCS(foo bar).  I
 tend to think that, even if it is not as nice, we should use m4 lists,
-i.e., AC_CHECK_FUNCS((foo, bar)) in this case.  This would ease
+i.e., AC_CHECK_FUNCS([foo, bar]) in this case.  This would ease
 specializing loops, and more importantly, make them much more robust.
 
 A typical example of things that can be performed if we use m4 lists
@@ -255,7 +264,7 @@ a space in their names, eg, structures.
 
 With the current scheme it would be extremely difficult to loop over
 AC_CHECK_STRUCTS(struct foo struct bar), while it natural and well
-defined for m4 lists: AC_CHECK_STRUCTS((struct foo, struct bar)).
+defined for m4 lists: AC_CHECK_STRUCTS([struct foo, struct bar]).
 
 I know that makes a huge difference in syntax, but a major release
 should be ready to settle a new world.  We *can* provide helping tools
