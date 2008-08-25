@@ -1,3 +1,11 @@
+2008-08-25  Eric Blake  <ebb9@byu.net>
+
+	Adjust to recent m4 1.6 change to support m4_debugmode(d).
+	* lib/m4sugar/m4sugar.m4 (m4_defn, m4_popdef, m4_undefine): Move
+	freeze-time decision of using faster 1.6 implementation...
+	(m4_init): ...to a runtime decision, and add use of new debugmode
+	flag.
+
 2008-08-22  Peter O'Gorman  <pogma@thewrittenword.com>
 
 	Limit AC_C_BIGENDIAN univeral checks to Mac OS X.

@@ -529,19 +529,18 @@ m4_define([m4_default],
 #
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
-# (added in M4 1.6), then let m4 do the job for us.
+# (added in M4 1.6), then let m4 do the job for us (see m4_init).
 #
 # _m4_defn is for internal use only - it bypasses the wrapper, so it
 # must only be used on one argument at a time, and only on macros
 # known to be defined.  Make sure this still works if the user renames
 # m4_defn but not _m4_defn.
 m4_copy([m4_defn], [_m4_defn])
-m4_ifdef([__m4_version__], [],
-[m4_define([m4_defn],
+m4_define([m4_defn],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_defn([$1])],
 			    [m4_fatal([$0: undefined macro: $1])])],
-       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])])
+       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
 
 
 # _m4_dumpdefs_up(NAME)
@@ -579,18 +578,17 @@ _m4_dumpdefs_down([$1])])
 #
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
-# (added in M4 1.6), then let m4 do the job for us.
+# (added in M4 1.6), then let m4 do the job for us (see m4_init).
 #
 # _m4_popdef is for internal use only - it bypasses the wrapper, so it
 # must only be used on macros known to be defined.  Make sure this
 # still works if the user renames m4_popdef but not _m4_popdef.
 m4_copy([m4_popdef], [_m4_popdef])
-m4_ifdef([__m4_version__], [],
-[m4_define([m4_popdef],
+m4_define([m4_popdef],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_popdef([$1])],
 			    [m4_fatal([$0: undefined macro: $1])])],
-       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])])
+       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
 
 
 # m4_shiftn(N, ...)
@@ -646,18 +644,17 @@ m4_define([_m4_shift3],
 #
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
-# (added in M4 1.6), then let m4 do the job for us.
+# (added in M4 1.6), then let m4 do the job for us (see m4_init).
 #
 # _m4_undefine is for internal use only - it bypasses the wrapper, so
 # it must only be used on macros known to be defined.  Make sure this
 # still works if the user renames m4_undefine but not _m4_undefine.
 m4_copy([m4_undefine], [_m4_undefine])
-m4_ifdef([__m4_version__], [],
-[m4_define([m4_undefine],
+m4_define([m4_undefine],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_undefine([$1])],
 			    [m4_fatal([$0: undefined macro: $1])])],
-       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])])
+       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
 
 # _m4_wrap(PRE, POST)
 # -------------------
@@ -2771,12 +2768,18 @@ m4_pattern_forbid([^_?m4_])
 m4_pattern_forbid([^dnl$])
 
 # If __m4_version__ is defined, we assume that we are being run by M4
-# 1.6 or newer, and thus that $@ recursion is linear; nothing further
-# needs to be done.  But if it is missing, we assume we are being run
-# by M4 1.4.x, that $@ recursion is quadratic, and that we need
-# foreach-based replacement macros.  Use the raw builtin to avoid
-# tripping up include tracing.
-m4_ifndef([__m4_version__], [m4_builtin([include], [m4sugar/foreach.m4])])
+# 1.6 or newer, and thus that $@ recursion is linear and debugmode(d)
+# is available for faster checks of dereferencing undefined macros.
+# But if it is missing, we assume we are being run by M4 1.4.x, that
+# $@ recursion is quadratic, and that we need foreach-based
+# replacement macros.  Use the raw builtin to avoid tripping up
+# include tracing.
+m4_ifdef([__m4_version__],
+[m4_debugmode([+d])
+m4_copy([_m4_defn], [m4_defn])
+m4_copy([_m4_popdef], [m4_popdef])
+m4_copy([_m4_undefine], [m4_undefine])],
+[m4_builtin([include], [m4sugar/foreach.m4])])
 
 # _m4_divert_diversion should be defined:
 m4_divert_push([KILL])
