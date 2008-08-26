@@ -1,3 +1,11 @@
+2008-08-26  Eric Blake  <ebb9@byu.net>
+
+	Improve INSTALL formatting.
+	* doc/install.texi [!autoconf]: Ensure first paragraphs are
+	indented like all others in a plain text rendering.
+	* Makefile.am ($(srcdir)/INSTALL): Ensure plaintext formatting.
+	Reported by Bruno Haible.
+
 2008-08-26  Stepan Kasal  <skasal@redhat.com>
 
 	Check for case sensitive make.

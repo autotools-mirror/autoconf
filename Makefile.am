@@ -41,7 +41,7 @@ if MAKE_CASE_SENSITIVE
 
 MAINTAINERCLEANFILES = $(srcdir)/INSTALL
 $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -o $@ \
+	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) --plaintext -o $@ \
 	  $(top_srcdir)/doc/install.texi
 endif
 

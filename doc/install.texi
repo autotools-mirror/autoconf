@@ -2,6 +2,7 @@
 @c the INSTALL file.
 
 @ifclear autoconf
+@firstparagraphindent insert
 
 @unnumbered Installation Instructions
 
