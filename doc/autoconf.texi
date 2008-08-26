@@ -1335,6 +1335,10 @@ Print the version number of Autoconf and exit.
 Print the names of the files it examines and the potentially interesting
 symbols it finds in them.  This output can be voluminous.
 
+@item --debug
+@itemx -d
+Don't remove temporary files.
+
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Append @var{dir} to the include path.  Multiple invocations accumulate.
@@ -1611,6 +1615,7 @@ Print a summary of the command line options and exit.
 Print the version number of Autoconf and exit.
 
 @item --verbose
+@itemx -V
 Print the name of each directory @command{autoreconf} examines and the
 commands it runs.  If given two or more times, pass @option{--verbose}
 to subordinate tools that support it.
@@ -9984,7 +9989,7 @@ m4 --reload-state=4.m4f input.m4
 @end example
 
 @item --freeze
-@itemx -f
+@itemx -F
 Produce a frozen state file.  @command{autom4te} freezing is stricter
 than M4's: it must produce no warnings, and no output other than empty
 lines (a line with white space is @emph{not} empty) and comments
@@ -18885,6 +18890,11 @@ Force the update even if the file has not changed.  Disregard the cache.
 @itemx -I @var{dir}
 Also look for input files in @var{dir}.  Multiple invocations accumulate.
 Directories are browsed from last to first.
+
+@item --prepend-include=@var{dir}
+@itemx -B @var{dir}
+Prepend directory @var{dir} to the search path.  This is used to include
+the language-specific files before any third-party macros.
 @end table
 
 @node Obsolete Macros

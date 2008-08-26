@@ -61,9 +61,9 @@ my $m4 = $ENV{"M4"} || '@M4@';
 
 # $HELP
 # -----
-$help = "Usage: $0 [OPTION] ...  [TEMPLATE-FILE...]
+$help = "Usage: $0 [OPTION]... [TEMPLATE-FILE]...
 
-Update the TEMPLATE-FILE... if given, or `configure.ac' if present,
+Update each TEMPLATE-FILE if given, or `configure.ac' if present,
 or else `configure.in', to the syntax of the current version of
 Autoconf.  The original files are backed up.
 

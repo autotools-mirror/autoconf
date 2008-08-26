@@ -24,7 +24,7 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 m4_divert_pop([HEADER-COPYRIGHT])dnl back to BODY
 
 usage=["\
-Usage: $0 [OPTION] ... [TEMPLATE-FILE]
+Usage: $0 [OPTION]... [TEMPLATE-FILE]
 
 Generate a configuration script from a TEMPLATE-FILE if given, or
 \`configure.ac' if present, or else \`configure.in'.  Output is sent
@@ -112,7 +112,7 @@ while test $# -gt 0 ; do
     --prepend-include=* | -B?* | \
     --warnings=* | -W?* )
        case $1 in
-         *\'*) arg=`AS_ECHO(["$1"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+	 *\'*) arg=`AS_ECHO(["$1"]) | sed "s/'/'\\\\\\\\''/g"` ;;
 	 *) arg=$1 ;;
        esac
        autom4te_options="$autom4te_options '$arg'"; shift ;;
@@ -122,7 +122,7 @@ while test $# -gt 0 ; do
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        case $2 in
-         *\'*) arg=`AS_ECHO(["$2"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+	 *\'*) arg=`AS_ECHO(["$2"]) | sed "s/'/'\\\\\\\\''/g"` ;;
 	 *) arg=$2 ;;
        esac
        autom4te_options="$autom4te_options $option '$arg'"

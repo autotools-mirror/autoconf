@@ -1,5 +1,23 @@
 2008-08-26  Eric Blake  <ebb9@byu.net>
 
+	Update invocation documentation.
+	* doc/autoconf.texi (autoscan Invocation): Mention --debug.
+	(autoreconf Invocation): Mention -v.
+	(autom4te Invocation): Tie --freeze to -F, not -f.
+	(autoupdate Invocation): Mention --prepend-include.
+	* doc/install.texi (configure Invocation): Mention --help=short,
+	--help=recursive, -n/--no-create, --prefix.  Avoid TABs.
+	* bin/autoscan.in ($help): Omit space before `...'.
+	* bin/ifnames.in ($help): Likewise.
+	* bin/autoconf.as (Usage): Likewise.
+	* bin/autoreconf.in ($help): Likewise.
+	* bin/autoheader.in ($help): Likewise.
+	* bin/autom4te.in ($help): Likewise.
+	* bin/autoupdate.in ($help): Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Use
+	`[OPTION]...', rather than `[OPTIONS]'.  Mention --silent.  Indent
+	--file correctly.
+
 	Don't let frozen __m4_version__ break downgrade to m4 1.4.x.
 	* bin/autom4te.in: Adjust comments, now that we rely on 1.4.5+.
 	(files_to_options): Avoid inheriting __m4_version__ from frozen

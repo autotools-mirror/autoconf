@@ -55,7 +55,7 @@ use strict;
 
 # $HELP
 # -----
-$help = "Usage: $0 [OPTION] ... [DIRECTORY] ...
+$help = "Usage: $0 [OPTION]... [DIRECTORY]...
 
 Run `autoconf' (and `autoheader', `aclocal', `automake', `autopoint'
 (formerly `gettextize'), and `libtoolize' where appropriate)

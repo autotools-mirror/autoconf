@@ -101,7 +101,7 @@ my @include = ('@datadir@');
 
 # $help
 # -----
-$help = "Usage: $0 [OPTION] ... [SRCDIR]
+$help = "Usage: $0 [OPTION]... [SRCDIR]
 
 Examine source files in the directory tree rooted at SRCDIR, or the
 current directory if none is given.  Search the source files for

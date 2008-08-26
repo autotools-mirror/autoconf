@@ -49,7 +49,7 @@ use Autom4te::FileUtils;
 
 # $HELP
 # -----
-$help = "Usage: $0 [OPTION] ...  [FILE] ...
+$help = "Usage: $0 [OPTION]... [FILE]...
 
 Scan all of the C source FILES (or the standard input, if none are
 given) and write to the standard output a sorted list of all the

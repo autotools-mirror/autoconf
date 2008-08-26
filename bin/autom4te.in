@@ -135,7 +135,7 @@ my %m4_builtin_alternate_name;
 
 # $HELP
 # -----
-$help = "Usage: $0 [OPTION] ... [FILES]
+$help = "Usage: $0 [OPTION]... [FILES]
 
 Run GNU M4 on the FILES, avoiding useless runs.  Output the traces if tracing,
 the frozen file if freezing, otherwise the expansion of the FILES.

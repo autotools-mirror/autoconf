@@ -61,7 +61,7 @@ my @include;
 
 # $HELP
 # -----
-$help = "Usage: $0 [OPTION] ... [TEMPLATE-FILE]
+$help = "Usage: $0 [OPTION]... [TEMPLATE-FILE]
 
 Create a template file of C \`\#define\' statements for \`configure\' to
 use.  To this end, scan TEMPLATE-FILE, or \`configure.ac\' if present,

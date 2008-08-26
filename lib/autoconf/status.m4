@@ -1392,19 +1392,20 @@ ac_cs_usage="\
 \`$as_me' instantiates files from templates according to the
 current configuration.
 
-Usage: $[0] [[OPTIONS]] [[FILE]]...
+Usage: $[0] [[OPTION]]... [[FILE]]...
 
   -h, --help       print this help, then exit
   -V, --version    print version number and configuration settings, then exit
-  -q, --quiet      do not print progress messages
+  -q, --quiet, --silent
+[]                   do not print progress messages
   -d, --debug      don't remove temporary files
       --recheck    update $as_me by reconfiguring in the same conditions
 m4_ifdef([_AC_SEEN_CONFIG(FILES)],
-  [AS_HELP_STRING([[--file=FILE[:TEMPLATE]]],
+  [AS_HELP_STRING([[    --file=FILE[:TEMPLATE]]],
     [instantiate the configuration file FILE], [                   ])
 ])dnl
 m4_ifdef([_AC_SEEN_CONFIG(HEADERS)],
-  [AS_HELP_STRING([[--header=FILE[:TEMPLATE]]],
+  [AS_HELP_STRING([[    --header=FILE[:TEMPLATE]]],
     [instantiate the configuration header FILE], [                   ])
 ])dnl
 
