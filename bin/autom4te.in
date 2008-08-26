@@ -111,29 +111,8 @@ map { s/:.*//;s/\W// } @m4_builtin;
 # Some macros don't follow this scheme: be sure to properly map to their
 # alternate name too.
 #
-# This is because GNU M4 1.4's tracing of builtins is buggy.  When run on
-# this input:
-#
-# | divert(-1)
-# | changequote([, ])
-# | define([m4_eval], defn([eval]))
-# | eval(1)
-# | m4_eval(2)
-# | undefine([eval])
-# | m4_eval(3)
-#
-# it behaves this way:
-#
-# | % m4 input.m4 -da -t eval
-# | m4trace: -1- eval(1)
-# | m4trace: -1- m4_eval(2)
-# | m4trace: -1- m4_eval(3)
-# | %
-#
-# Conversely:
-#
-# | % m4 input.m4 -da -t m4_eval
-# | %
+# FIXME: Trace status of renamed builtins was fixed in M4 1.4.5, which
+# we now depend on; do we still need to do this mapping?
 #
 # So we will merge them, i.e., tracing `BUILTIN' or tracing
 # `m4_BUILTIN' will be the same: tracing both, but honoring the
@@ -245,6 +224,8 @@ EOF
 # ------------------------
 # Transform Autom4te conventions (e.g., using foo.m4f to designate a frozen
 # file) into a suitable command line for M4 (e.g., using --reload-state).
+# parse_args guarantees that we will see at most one frozen file, and that
+# if a frozen file is present, it is the first argument.
 sub files_to_options (@)
 {
   my (@file) = @_;
@@ -255,6 +236,12 @@ sub files_to_options (@)
       if ($file =~ /\.m4f$/)
 	{
 	  $arg = "--reload-state=$arg";
+	  # If the user downgraded M4 from 1.6 to 1.4.x after freezing
+	  # the file, then we ensure the frozen __m4_version__ will
+	  # not cause m4_init to make the wrong decision about the
+	  # current M4 version.
+	  $arg .= " --undefine=__m4_version__"
+	    unless grep {/__m4_version__/} @m4_builtin;
 	}
       push @res, $arg;
     }
@@ -416,6 +403,7 @@ Try `$me --help' for more information."
     }
 
   # Work around the M4 builtins tracing problem for @PRESELECT.
+  # FIXME: Is this still needed, now that we rely on M4 1.4.5?
   push (@preselect,
 	map { $m4_builtin_alternate_name{$_} }
 	grep { exists $m4_builtin_alternate_name{$_} } @preselect);

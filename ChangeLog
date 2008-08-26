@@ -1,3 +1,10 @@
+2008-08-26  Eric Blake  <ebb9@byu.net>
+
+	Don't let frozen __m4_version__ break downgrade to m4 1.4.x.
+	* bin/autom4te.in: Adjust comments, now that we rely on 1.4.5+.
+	(files_to_options): Avoid inheriting __m4_version__ from frozen
+	file if current M4 does not support it.
+
 2008-08-25  Eric Blake  <ebb9@byu.net>
 
 	Adjust to recent m4 1.6 change to support m4_debugmode(d).
