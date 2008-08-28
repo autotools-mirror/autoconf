@@ -215,9 +215,9 @@ m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$$1], [$$2]))]])
 #   ,[$5],[$6],...,[$m]_m4_popdef([_m4_s])
 # before calling m4_shift(_m4_s($@)).
 m4_define([_m4_shiftn],
-[m4_define([_m4_s],
+[m4_if(m4_incr([$1]), [$#], [], [m4_define([_m4_s],
 	   m4_pushdef([_m4_s])_m4_for([_m4_s], m4_eval([$1 + 2]), [$#], [1],
-  [[,]m4_dquote([$]_m4_s)])[_m4_popdef([_m4_s])])m4_shift(_m4_s($@))])
+  [[,]m4_dquote([$]_m4_s)])[_m4_popdef([_m4_s])])m4_shift(_m4_s($@))])])
 
 # m4_do(STRING, ...)
 # ------------------

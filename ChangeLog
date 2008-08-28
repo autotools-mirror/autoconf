@@ -1,3 +1,11 @@
+2008-08-27  Eric Blake  <ebb9@byu.net>
+
+	Fix off-by-one bug in _m4_shiftn.
+	* lib/m4sugar/foreach.m4 (_m4_shiftn): Handle case when shifting
+	all arguments.
+	* tests/m4sugar.at (M4 loops): Test it.
+	Reported by Akim Demaille.
+
 2008-08-26  Eric Blake  <ebb9@byu.net>
 
 	Improve INSTALL formatting.
