@@ -1,3 +1,10 @@
+2008-09-01  Eric Blake  <ebb9@byu.net>
+
+	Fix manual date information.
+	* doc/autoconf.tex: UPDATED refers to the day the manual was
+	built, not the release date of Autoconf.
+	Based on a bison patch by Akim Demaille.
+
 2008-08-27  Eric Blake  <ebb9@byu.net>
 
 	Fix off-by-one bug in _m4_shiftn.

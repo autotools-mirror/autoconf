@@ -177,8 +177,8 @@
 
 @copying
 
-This manual is for @acronym{GNU} Autoconf
-(version @value{VERSION}, @value{UPDATED}),
+This manual (@value{UPDATED}) is for @acronym{GNU} Autoconf
+(version @value{VERSION}),
 a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
 
