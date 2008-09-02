@@ -1,5 +1,13 @@
 2008-09-01  Eric Blake  <ebb9@byu.net>
 
+	Improve AC_C_BIGENDIAN.
+	* doc/autoconf.texi (C Compiler) <AC_C_BIGENDIAN>: Mention that
+	universal builds require a config header.
+	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Enhance comments.  Check
+	AH_HEADER at the last possible moment, so that users can use
+	AC_CONFIG_HEADER after this macro.
+	Reported by Stepan Kasal.
+
 	Fix manual date information.
 	* doc/autoconf.tex: UPDATED refers to the day the manual was
 	built, not the release date of Autoconf.

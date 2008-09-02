@@ -6787,9 +6787,10 @@ The default for @var{action-if-true} is to define
 @samp{WORDS_BIGENDIAN}.  The default for @var{action-if-false} is to do
 nothing.  The default for @var{action-if-unknown} is to
 abort configure and tell the installer how to bypass this test.
-And finally, the default for @var{action-if-universal} is to define
-@samp{WORDS_BIGENDIAN} or not, depending on the architecture that the
-code is being generated for.
+And finally, the default for @var{action-if-universal} is to ensure that
+@samp{WORDS_BIGENDIAN} is defined if and only if a universal build is
+detected and the current code is big-endian; this default works only if
+@command{autoheader} is used (@pxref{autoheader Invocation}).
 
 If you use this macro without specifying @var{action-if-universal}, you
 should also use @code{AC_CONFIG_HEADERS}; otherwise

@@ -1,7 +1,7 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
-# Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1411,9 +1411,8 @@ AC_DEFUN([AC_C_BIGENDIAN],
 #endif])dnl
  AC_CACHE_CHECK([whether byte ordering is bigendian], [ac_cv_c_bigendian],
    [ac_cv_c_bigendian=unknown
-    m4_ifval(m4_ifdef([AH_HEADER], 1)[$4],
-      [# See if we're dealing with a universal compiler.
-       AC_COMPILE_IFELSE(
+    # See if we're dealing with a universal compiler.
+    AC_COMPILE_IFELSE(
 	 [AC_LANG_SOURCE(
 	    [[#ifndef __APPLE_CC__
 	       not a universal capable compiler
@@ -1426,8 +1425,7 @@ AC_DEFUN([AC_C_BIGENDIAN],
 	# ppc64.  This check is also rather less than ideal.
 	case "${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}" in  #(
 	  *-arch*ppc*|*-arch*i386*|*-arch*x86_64*) ac_cv_c_bigendian=universal;;
-	esac])],
-      [AC_DIAGNOSE([obsolete], [AC_C_BIGENDIAN suggests AC_CONFIG_HEADERS])])
+	esac])
     if test $ac_cv_c_bigendian = unknown; then
       # See if sys/param.h defines the BYTE_ORDER macro.
       AC_COMPILE_IFELSE(
@@ -1531,8 +1529,15 @@ AC_DEFUN([AC_C_BIGENDIAN],
    no)
      $2 ;; #(
    universal)
+dnl Note that AC_APPLE_UNIVERSAL_BUILD sorts less than WORDS_BIGENDIAN;
+dnl this is a necessity for proper config header operation.  Warn if
+dnl the user did not specify a config header but is relying on the
+dnl default behavior for universal builds.
      m4_default([$4],
-       [AC_DEFINE([AC_APPLE_UNIVERSAL_BUILD],1,
+       [AC_CONFIG_COMMANDS_PRE([m4_ifset([AH_HEADER], [],
+         [AC_DIAGNOSE([obsolete],
+           [AC_C_BIGENDIAN should be used with AC_CONFIG_HEADERS])])])dnl
+        AC_DEFINE([AC_APPLE_UNIVERSAL_BUILD],1,
           [Define if building universal (internal helper macro)])])
      ;; #(
    *)
