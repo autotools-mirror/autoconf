@@ -1,3 +1,12 @@
+2008-09-09  Eric Blake  <ebb9@byu.net>
+
+	Resync from gnulib.
+	* cfg.mk (cvs_executable_files, cvs_files): Update list of files,
+	although for now, they are still manually sync'd.
+	* build-aux/gnupload: Update.
+	* build-aux/config.sub: Likewise.
+	* GNUmakefile: Likewise.
+
 2008-09-06  Eric Blake  <ebb9@byu.net>
 
 	Mention that Automake already supports VPATH.

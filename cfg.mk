@@ -40,18 +40,23 @@ gpg_key_ID = F4850180
 
 # Files to update automatically.
 cvs_executable_files = \
+  $(srcdir)/build-aux/announce-gen \
   $(srcdir)/build-aux/config.guess \
   $(srcdir)/build-aux/config.sub \
   $(srcdir)/build-aux/elisp-comp \
+  $(srcdir)/build-aux/git-version-gen \
+  $(srcdir)/build-aux/gnupload \
   $(srcdir)/build-aux/install-sh \
   $(srcdir)/build-aux/mdate-sh \
   $(srcdir)/build-aux/missing \
+  $(srcdir)/build-aux/vc-list-files
 
 cvs_files = $(cvs_executable_files) \
   $(srcdir)/build-aux/texinfo.tex \
   $(srcdir)/doc/fdl.texi \
   $(srcdir)/doc/make-stds.texi \
-  $(srcdir)/doc/standards.texi
+  $(srcdir)/doc/standards.texi \
+  $(srcdir)/GNUmakefile
 
 # Keep executables executable.  Make it robust to parallel makes.
 local_updates = executable-update
