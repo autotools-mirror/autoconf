@@ -1,5 +1,14 @@
 2008-09-09  Eric Blake  <ebb9@byu.net>
 
+	Formatting tweaks to the manual.
+	* doc/autoconf.texi (Introduction, Systemology)
+	(File System Conventions, Portable C and C++)
+	(Floating Point Portability): Allow URLs to split as needed.
+	(Indices): Add entries, to work around texinfo bug on indices that
+	start too close to a page break.
+	(Particular Functions): Mention ftello.
+	(Introduction, Language Choice): Use @enddots at sentence end.
+
 	Resync from gnulib.
 	* cfg.mk (cvs_executable_files, cvs_files): Update list of files,
 	although for now, they are still manually sync'd.

@@ -643,10 +643,10 @@ A physicist, an engineer, and a computer scientist were discussing the
 nature of God.  ``Surely a Physicist,'' said the physicist, ``because
 early in the Creation, God made Light; and you know, Maxwell's
 equations, the dual nature of electromagnetic waves, the relativistic
-consequences@dots{}'' ``An Engineer!,'' said the engineer, ``because
+consequences@enddots{}'' ``An Engineer!,'' said the engineer, ``because
 before making Light, God split the Chaos into Land and Water; it takes a
 hell of an engineer to handle that big amount of mud, and orderly
-separation of solids from liquids@dots{}'' The computer scientist
+separation of solids from liquids@enddots{}'' The computer scientist
 shouted: ``And the Chaos, where do you think it was coming from, hmm?''
 
 ---Anonymous
@@ -726,17 +726,17 @@ required.
 @xref{History}, for the story of Autoconf's development.  @xref{FAQ},
 for answers to some common questions about Autoconf.
 
-See the @uref{http://www.gnu.org/software/autoconf/,
+See the @uref{http://@/www.gnu.org/@/software/@/autoconf/,
 Autoconf web page} for up-to-date information, details on the mailing
 lists, pointers to a list of known bugs, etc.
 
 Mail suggestions to @email{autoconf@@gnu.org, the Autoconf mailing
 list}.  Past suggestions are
-@uref{http://lists.gnu.org/archive/html/autoconf/, archived}.
+@uref{http://@/lists.gnu.org/@/archive/@/html/@/autoconf/, archived}.
 
 Mail bug reports to @email{bug-autoconf@@gnu.org, the
 Autoconf Bugs mailing list}.  Past bug reports are
-@uref{http://lists.gnu.org/archive/html/bug-autoconf/, archived}.
+@uref{http://@/lists.gnu.org/@/archive/@/html/@/bug-autoconf/, archived}.
 
 If possible, first check that your bug is
 not already solved in current development versions, and that it has not
@@ -744,25 +744,25 @@ been reported yet.  Be sure to include all the needed information and a
 short @file{configure.ac} that demonstrates the problem.
 
 Autoconf's development tree is accessible via @command{git}; see the
-@uref{http://savannah.gnu.org/projects/autoconf/, Autoconf
+@uref{http://@/savannah.gnu.org/@/projects/@/autoconf/, Autoconf
 Summary} for details, or view
-@uref{http://git.sv.gnu.org/gitweb/?p=autoconf.git, the actual
+@uref{http://@/git.sv.gnu.org/@/gitweb/@/?p=autoconf.git, the actual
 repository}.  Anonymous @acronym{CVS} access is also available, see
 @file{README} for more details.  Patches relative to the
 current @command{git} version can be sent for review to the
-@email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}.
-Discussions on past patches are
-@uref{http://lists.gnu.org/@/archive/@/html/@/autoconf-patches/,
-archived}, and all commits are archived in the read-only
+@email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}, with
+discussion on prior patches
+@uref{http://@/lists.gnu.org/@/archive/@/html/@/autoconf-@/patches/,
+archived}; and all commits are posted in the read-only
 @email{autoconf-commit@@gnu.org, Autoconf Commit mailing list}, which is
-also @uref{http://lists.gnu.org/@/archive/@/html/@/autoconf-commit/,
+also @uref{http://@/lists.gnu.org/@/archive/@/html/@/autoconf-commit/,
 archived}.
 
 Because of its mission, the Autoconf package itself
 includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
-@uref{http://autoconf-archive.cryp.to/, Autoconf Macro
+@uref{http://@/autoconf-archive.cryp.to/, Autoconf Macro
 Archive}, which is kindly run by @email{simons@@cryp.to,
 Peter Simons}.
 
@@ -903,11 +903,11 @@ the @acronym{GNU} build tools.
 
 @item Web
 
-The home pages for
-@uref{http://www.gnu.org/@/software/@/autoconf/, Autoconf},
-@uref{http://www.gnu.org/@/software/@/automake/, Automake},
-@uref{http://www.gnu.org/@/software/@/gnulib/, Gnulib}, and
-@uref{http://www.gnu.org/@/software/@/libtool/, Libtool}.
+The project home pages for
+@uref{http://@/www@/.gnu@/.org/@/software/@/autoconf/, Autoconf},
+@uref{http://@/www@/.gnu@/.org/@/software/@/automake/, Automake},
+@uref{http://@/www@/.gnu@/.org/@/software/@/gnulib/, Gnulib}, and
+@uref{http://@/www@/.gnu@/.org/@/software/@/libtool/, Libtool}.
 
 @item Automake Manual
 
@@ -921,7 +921,7 @@ Libtool}@footnote{@cite{@acronym{GNU} Autoconf, Automake and Libtool},
 by G. V. Vaughan, B. Elliston, T. Tromey, and I. L. Taylor.  SAMS (originally
 New Riders), 2000, ISBN 1578701902.} describes the complete @acronym{GNU}
 build environment.  You can also find
-@uref{http://sources.redhat.com/@/autobook/, the entire book on-line}.
+@uref{http://@/sources.redhat.com/@/autobook/, the entire book on-line}.
 
 @end itemize
 
@@ -1189,7 +1189,7 @@ AC_MSG_WARN([[AC_DC stinks  --Iron Maiden]])
 @end example
 
 You are now able to understand one of the constructs of Autoconf that
-has been continually misunderstood@dots{}  The rule of thumb is that
+has been continually misunderstood@enddots{}  The rule of thumb is that
 @emph{whenever you expect macro expansion, expect quote expansion};
 i.e., expect one level of quotes to be lost.  For instance:
 
@@ -4702,12 +4702,14 @@ yourself in new code:
 @cvindex HAVE_FSEEKO
 @c @fuindex fseeko
 @prindex @code{fseeko}
+@c @fuindex ftello
+@prindex @code{ftello}
 If the @code{fseeko} function is available, define @code{HAVE_FSEEKO}.
 Define @code{_LARGEFILE_SOURCE} if necessary to make the prototype
 visible on some systems (e.g., glibc 2.2).  Otherwise linkage problems
 may occur when compiling with @code{AC_SYS_LARGEFILE} on
 largefile-sensitive systems where @code{off_t} does not default to a
-64bit entity.
+64bit entity.  All systems with @code{fseeko} also supply @code{ftello}.
 @end defmac
 
 @defmac AC_FUNC_GETGROUPS
@@ -5094,6 +5096,8 @@ that behaves this way.  New programs need not use this macro.
 @cvindex HAVE_DOPRNT
 @c @fuindex vprintf
 @prindex @code{vprintf}
+@c @fuindex vsprintf
+@prindex @code{vsprintf}
 If @code{vprintf} is found, define @code{HAVE_VPRINTF}.  Otherwise, if
 @code{_doprnt} is found, define @code{HAVE_DOPRNT}.  (If @code{vprintf}
 is available, you may assume that @code{vfprintf} and @code{vsprintf}
@@ -6530,7 +6534,7 @@ etc.).
 @ovindex OPENMP_CXXFLAGS
 @ovindex OPENMP_FFLAGS
 @ovindex OPENMP_FCFLAGS
-OpenMP (@url{http://www.openmp.org/}) specifies extensions of C, C++,
+OpenMP (@url{http://@/www.openmp.org/}) specifies extensions of C, C++,
 and Fortran that simplify optimization of shared memory parallelism,
 which is a common problem on multicore CPUs.
 
@@ -7593,8 +7597,8 @@ if the system supports @samp{#!}, @samp{no} if not.
 @ovindex CC
 @cindex Large file support
 @cindex LFS
-Arrange for
-@uref{http://www.unix-systems.org/@/version2/@/whatsnew/@/lfs20mar.html,
+Arrange for 64-bit file offsets, known as
+@uref{http://@/www.unix-systems@/.org/@/version2/@/whatsnew/@/lfs20mar.html,
 large-file support}.  On some hosts, one must use special compiler
 options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
@@ -7907,7 +7911,7 @@ therefore as much as possible you ought to avoid using them to wrap
 your code, rather, require from the user to run the macro with a
 correct current language, and check it with @code{AC_LANG_ASSERT}.
 And anyway, that may help the user understand she is running a Fortran
-macro while expecting a result about her Fortran 77 compiler@dots{}
+macro while expecting a result about her Fortran 77 compiler@enddots{}
 @end defmac
 
 
@@ -8468,17 +8472,17 @@ This section aims at presenting some systems and pointers to
 documentation.  It may help you addressing particular problems reported
 by users.
 
-@uref{http://www.opengroup.org/susv3, Posix-conforming systems} are
-derived from the @uref{http://www.bell-labs.com/history/unix/, Unix
+@uref{http://@/www.opengroup.org/@/susv3, Posix-conforming systems} are
+derived from the @uref{http://@/www.bell-labs.com/@/history/@/unix/, Unix
 operating system}.
 
-The @uref{http://bhami.com/rosetta.html, Rosetta Stone for Unix}
+The @uref{http://@/bhami.com/@/rosetta.html, Rosetta Stone for Unix}
 contains a table correlating the features of various Posix-conforming
-systems.  @uref{http://www.levenez.com/unix/, Unix History} is a
+systems.  @uref{http://@/www.levenez.com/@/unix/, Unix History} is a
 simplified diagram of how many Unix systems were derived from each
 other.
 
-@uref{http://heirloom.sourceforge.net/, The Heirloom Project}
+@uref{http://@/heirloom.sourceforge.net/, The Heirloom Project}
 provides some variants of traditional implementations of Unix utilities.
 
 @table @asis
@@ -8506,11 +8510,11 @@ tree on the UFS).
 meant to be scalable from the small embedded systems to the hundred
 processor super-computer.  It claims to be Posix certified.  More
 information is available on the
-@uref{http://www.qnx.com/, @acronym{QNX} home page}.
+@uref{http://@/www.qnx.com/, @acronym{QNX} home page}.
 
 @item Tru64
 @cindex Tru64
-@uref{http://h30097.www3.hp.com/@/docs/,
+@uref{http://@/h30097.www3.hp.com/@/docs/,
 Documentation of several versions of Tru64} is available in different
 formats.
 
@@ -8520,7 +8524,7 @@ formats.
 Officially this was called the ``Seventh Edition'' of ``the @sc{unix}
 time-sharing system'' but we use the more-common name ``Unix version 7''.
 Documentation is available in the
-@uref{http://plan9.bell-labs.com/@/7thEdMan/, Unix Seventh Edition Manual}.
+@uref{http://@/plan9.bell-labs.com/@/7thEdMan/, Unix Seventh Edition Manual}.
 Previous versions of Unix are called ``Unix version 6'', etc., but
 they were not as widely used.
 @end table
@@ -12658,10 +12662,10 @@ Some of these external utilities have a portable subset of features; see
 
 There are other sources of documentation about shells.  The
 specification for the Posix
-@uref{http://www.opengroup.org/@/susv3/@/utilities/@/xcu_chap02.html, Shell
+@uref{http://@/www.opengroup.org/@/susv3/@/utilities/@/xcu_chap02@/.html, Shell
 Command Language}, though more generous than the restrictive shell
 subset described above, is fairly portable nowadays.  Also please see
-@uref{http://www.faqs.org/@/faqs/@/unix-faq/@/shell/, the Shell FAQs}.
+@uref{http://@/www.faqs.org/@/faqs/@/unix-faq/@/shell/, the Shell FAQs}.
 
 @menu
 * Shellology::                  A zoology of shells
@@ -12686,7 +12690,7 @@ subset described above, is fairly portable nowadays.  Also please see
 There are several families of shells, most prominently the Bourne family
 and the C shell family which are deeply incompatible.  If you want to
 write portable shell scripts, avoid members of the C shell family.  The
-@uref{http://www.faqs.org/@/faqs/@/unix-faq/@/shell/@/shell-differences/, the
+@uref{http://@/www.faqs.org/@/faqs/@/unix-faq/@/shell/@/shell-differences/, the
 Shell difference FAQ} includes a small history of Posix shells, and a
 comparison between several of them.
 
@@ -13145,7 +13149,7 @@ that are Posixy enough to run @command{autoconf} (such as @acronym{DJGPP})
 are usually able to handle long file names properly, there are still
 limitations that can seriously break packages.  Several of these issues
 can be easily detected by the
-@uref{ftp://ftp.gnu.org/gnu/non-gnu/doschk/doschk-1.1.tar.gz, doschk}
+@uref{ftp://@/ftp.gnu.org/@/gnu/@/non-gnu/@/doschk/@/doschk-1.1.tar.gz, doschk}
 package.
 
 A short overview follows; problems are marked with @sc{sfn}/@sc{lfn} to
@@ -17048,7 +17052,7 @@ of systems.  @xref{Standards, , Language Standards Supported by
 @acronym{GCC}, gcc, Using the @acronym{GNU} Compiler Collection
 (@acronym{GCC})}, for a list of C-related
 standards.  Many programs also assume the
-@uref{http://www.opengroup.org/susv3, Posix standard}.
+@uref{http://@/www.opengroup.org/@/susv3, Posix standard}.
 
 Some old code is written to be portable to K&R C, which predates any C
 standard.  K&R C compilers are no longer of practical interest, though,
@@ -17478,7 +17482,7 @@ reliable in general, and it is usually easy enough to avoid the
 potential portability problem, e.g., by allocating an extra unused array
 element at the start or end.
 
-@uref{http://valgrind.org/, Valgrind} can catch many overruns.
+@uref{http://@/valgrind.org/, Valgrind} can catch many overruns.
 @acronym{GCC}
 users might also consider using the @option{-fmudflap} option to catch
 overruns.
@@ -17632,7 +17636,7 @@ alleviates some symptoms of a bug while not fixing the bug in general.
 Almost all modern systems use IEEE-754 floating point, and it is safe to
 assume IEEE-754 in most portable code these days.  For more information,
 please see David Goldberg's classic paper
-@uref{http://www.validlab.com/goldberg/paper.pdf, What Every Computer
+@uref{http://@/www.validlab.com/@/goldberg/@/paper.pdf, What Every Computer
 Scientist Should Know About Floating-Point Arithmetic}.
 
 @node Exiting Portably
@@ -19206,6 +19210,8 @@ is no longer needed.
 @defmac AC_FUNC_WAIT3
 @acindex{FUNC_WAIT3}
 @cvindex HAVE_WAIT3
+@c @fuindex wait3
+@prindex @code{wait3}
 If @code{wait3} is found and fills in the contents of its third argument
 (a @samp{struct rusage *}), which @acronym{HP-UX} does not do, define
 @code{HAVE_WAIT3}.
@@ -21070,6 +21076,11 @@ check list of things to do.
 
 @item
 @cindex @file{package.m4}
+@atindex{PACKAGE_STRING}
+@atindex{PACKAGE_BUGREPORT}
+@atindex{PACKAGE_NAME}
+@atindex{PACKAGE_TARNAME}
+@atindex{PACKAGE_VERSION}
 Make sure to create the file @file{package.m4}, which defines the
 identity of the package.  It must define @code{AT_PACKAGE_STRING}, the
 full signature of the package, and @code{AT_PACKAGE_BUGREPORT}, the
@@ -21427,8 +21438,8 @@ myprog-paths.h: Makefile
 @item
 Use @code{AC_DEFINE} but have @command{configure} compute the literal
 value of @code{datadir} and others.  Many people have wrapped macros to
-automate this task.  For instance, the macro @code{AC_DEFINE_DIR} from
-the @uref{http://autoconf-archive.cryp.to/, Autoconf Macro
+automate this task; for an example, see the macro @code{AC_DEFINE_DIR} from
+the @uref{http://@/autoconf-archive@/.cryp.to/, Autoconf Macro
 Archive}.
 
 This solution does not conform to the @acronym{GNU} Coding Standards.
