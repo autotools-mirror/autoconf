@@ -2896,8 +2896,11 @@ recommend @acronym{GNU} @command{make} (@pxref{VPATH and Make}).  Older
 @command{make} programs do not support @code{VPATH}; when using them, the
 source code must be in the same directory as the object files.
 
-To support @code{VPATH}, each @file{Makefile.in} should contain two
-lines that look like:
+If you are using @acronym{GNU} Automake, the remaining details in this
+section are already covered for you, based on the contents of your
+@file{Makefile.am}.  But if you are using Autoconf in isolation, then
+supporting @code{VPATH} requires the following in your
+@file{Makefile.in}:
 
 @example
 srcdir = @@srcdir@@

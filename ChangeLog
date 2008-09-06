@@ -1,5 +1,11 @@
 2008-09-06  Eric Blake  <ebb9@byu.net>
 
+	Mention that Automake already supports VPATH.
+	* doc/autoconf.texi (Build Directories): Details in this section
+	only apply to users avoiding automake.
+	* THANKS: Update.
+	Reported by Matej Tyc.
+
 	Relax tone when warning about cross-compiler names.
 	* lib/autoconf/programs.m4 (_AC_TOOL_WARN): Support cross-compiles
 	with poorly named tools; the issue has been reported too many
