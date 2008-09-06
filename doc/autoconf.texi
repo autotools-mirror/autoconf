@@ -4034,8 +4034,8 @@ sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
 @var{path}, or otherwise to @samp{ranlib} if that program exists in
 @var{path}, or to @samp{:} if neither program exists.
 
-In the future, when cross-compiling this macro will @emph{only}
-accept program names that are prefixed with the host type.
+When cross-compiling, this macro will issue a warning if no program
+prefixed with the host type could be found.
 For more information, see @ref{Specifying Names, , Specifying the
 system type}.
 @end defmac
@@ -4068,8 +4068,10 @@ the list are found, set @var{variable} to @var{value-if-not-found}; if
 @var{value-if-not-found} is not specified, the value of @var{variable}
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 
-In the future, when cross-compiling this macro will @emph{not}
-accept program names that are not prefixed with the host type.
+When cross-compiling, this macro will issue a warning if no program
+prefixed with the host type could be found.
+For more information, see @ref{Specifying Names, , Specifying the
+system type}.
 @end defmac
 
 @anchor{AC_PATH_PROG}
@@ -4145,8 +4147,10 @@ name of the program if it is found.
 Like @code{AC_CHECK_TOOL}, but set @var{variable} to the absolute
 name of the program if it is found.
 
-In the future, when cross-compiling this macro will @emph{not}
-accept program names that are not prefixed with the host type.
+When cross-compiling, this macro will issue a warning if no program
+prefixed with the host type could be found.
+For more information, see @ref{Specifying Names, , Specifying the
+system type}.
 @end defmac
 
 
@@ -17731,17 +17735,15 @@ example, configuring as follows fails:
 ./configure CC=m68k-coff-gcc
 @end example
 
-In the future, when cross-compiling Autoconf will @emph{not}
-accept tools (compilers, linkers, assemblers) whose name is not
-prefixed with the host type.  The only case when this may be
-useful is when you really are not cross-compiling, but only
-building for a least-common-denominator architecture: an example
-is building for @code{i386-pc-linux-gnu} while running on an
-@code{i686-pc-linux-gnu} architecture.  In this case, some particular
-pairs might be similar enough to let you get away with the system
-compilers, but in general the compiler might make bogus assumptions
-on the host: if you know what you are doing, please create symbolic
-links from the host compiler to the build compiler.
+When cross-compiling, @command{configure} will warn about any tools
+(compilers, linkers, assemblers) whose name is not prefixed with the
+host type.  This is an aid to users performing cross-compilation.
+Continuing the example above, if a cross-compiler named @command{cc} is
+used with a native @command{pkg-config}, then libraries found by
+@command{pkg-config} will likely cause subtle build failures; but using
+the names @command{m68k-coff-cc} and @command{m68k-coff-pkg-config}
+avoids any confusion.  Avoiding the warning is as simple as creating the
+correct symlinks naming the cross tools.
 
 @cindex @command{config.sub}
 @command{configure} recognizes short aliases for many system types; for

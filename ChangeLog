@@ -1,3 +1,15 @@
+2008-09-06  Eric Blake  <ebb9@byu.net>
+
+	Relax tone when warning about cross-compiler names.
+	* lib/autoconf/programs.m4 (_AC_TOOL_WARN): Support cross-compiles
+	with poorly named tools; the issue has been reported too many
+	times in the last four years to pull support.
+	* doc/autoconf.texi (Specifying Names, Generic Programs): Update
+	documentation accordingly.
+	* THANKS: Update.
+	Reported by Josef Tran and others, wording suggested by Ralf
+	Wildenhues.
+
 2008-09-01  Eric Blake  <ebb9@byu.net>
 
 	Improve AC_C_BIGENDIAN.

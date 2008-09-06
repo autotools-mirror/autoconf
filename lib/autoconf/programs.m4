@@ -211,9 +211,7 @@ AU_DEFUN([AC_CHECK_TOOL_PREFIX])
 AC_DEFUN([_AC_TOOL_WARN],
 [case $cross_compiling:$ac_tool_warned in
 yes:)
-AC_MSG_WARN([In the future, Autoconf will not detect cross-tools
-whose name does not start with the host triplet.  If you think this
-configuration is useful to you, please write to autoconf@gnu.org.])
+AC_MSG_WARN([using cross tools not prefixed with host triplet])
 ac_tool_warned=yes ;;
 esac])
 
