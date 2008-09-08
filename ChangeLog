@@ -1,5 +1,8 @@
 2008-09-09  Eric Blake  <ebb9@byu.net>
 
+	Release Version 2.63.
+	* NEWS: Mention the release.
+
 	Formatting tweaks to the manual.
 	* doc/autoconf.texi (Introduction, Systemology)
 	(File System Conventions, Portable C and C++)

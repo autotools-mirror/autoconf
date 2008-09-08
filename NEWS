@@ -1,6 +1,7 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Major changes in Autoconf 2.62a (2008-??-??)
+* Major changes in Autoconf 2.63 (2008-09-09) [stable]
+  Released by Eric Blake, based on git versions 2.62.*.
 
 ** AC_C_BIGENDIAN does not mistakenly report "universal" for some
    bigendian hosts, a regression introduced with universal binary
