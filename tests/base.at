@@ -2,7 +2,7 @@
 
 AT_BANNER([Autoconf base layer.])
 
-# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007 Free Software
+# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007, 2008 Free Software
 # Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -294,15 +294,14 @@ AT_CLEANUP
 
 AT_SETUP([Input/Output])
 
-m4_pattern_allow([^AS_(MESSAGE|ORIGINAL_STDIN)_FD$])
 AT_DATA([configure.ac],
 [[AC_INIT
-cat <&AS_ORIGINAL_STDIN_FD >&AS_MESSAGE_FD
+cat <&AS@&t@_ORIGINAL_STDIN_FD >&AS@&t@_MESSAGE_FD
 ]])
 AT_CHECK_AUTOCONF
-AT_CHECK([echo Hello | ./configure | grep -v 'configure: loading site script '],, [Hello
+AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure | grep -v 'configure: loading site script '],, [Hello
 ])
-AT_CHECK([echo Hello | ./configure --silent])
+AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure --silent])
 
 AT_CLEANUP
 

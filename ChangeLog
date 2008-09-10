@@ -1,3 +1,9 @@
+2008-09-10  Eric Blake  <ebb9@byu.net>
+
+	Avoid testsuite bug in presence of verbose config.site.
+	* tests/base.at (Input/Output): Nullify config.site during test.
+	Reported by Bob Friesenhahn.
+
 2008-09-09  Eric Blake  <ebb9@byu.net>
 
 	Release Version 2.63.
