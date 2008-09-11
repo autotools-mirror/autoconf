@@ -347,6 +347,16 @@ _AS_BAR
 [dnl]
 ]])
 
+dnl This test needs autom4te's cache, in spite of any ~/.autom4te.cfg.
+AT_DATA([.autom4te.cfg], [[
+begin-language: "Autoconf"
+args: --cache=autom4te.cache
+end-language: "Autoconf"
+begin-language: "Autoconf-without-aclocal-m4"
+args: --cache=autom4te.cache
+end-language: "Autoconf-without-aclocal-m4"
+]])
+
 AT_CHECK_AUTOCONF([], 1, [],
 [[configure.ac:2: error: possibly undefined macro: m4@&t@_foo
       If this token and others are legitimate, please use m4@&t@_pattern_allow.

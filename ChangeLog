@@ -1,5 +1,10 @@
 2008-09-10  Eric Blake  <ebb9@byu.net>
 
+	Avoid testsuite bug when autom4te cache is disabled by user.
+	* tests/tools.at (autoconf: forbidden tokens, basic): Enable
+	cache, even if user normally disabled it.
+	Reported by Bruno Haible.
+
 	Avoid testsuite bug in presence of verbose config.site.
 	* tests/base.at (Input/Output): Nullify config.site during test.
 	Reported by Bob Friesenhahn.
