@@ -1,3 +1,9 @@
+2008-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Mention Solaris sh ':' redirection bug.
+	* doc/autoconf.texi (File Descriptors): Redirecting ':'
+	in a loop causes bogus optimization with Solaris sh.
+
 2008-09-10  Eric Blake  <ebb9@byu.net>
 
 	Avoid testsuite bug when autom4te cache is disabled by user.

@@ -13003,6 +13003,18 @@ In each case the expected result is of course @file{fullness} containing
 @samp{matter} and @file{void} being empty.  However, this bug is
 probably not of practical concern to modern platforms.
 
+Solaris 10 @command{sh} will try to optimize away a @command{:} command
+in a loop after the first iteration, even if it is redirected:
+
+@example
+$ @kbd{for i in 1 2 3 ; do : >x$i; done}
+$ @kbd{ls}
+x1
+@end example
+
+@noindent
+As a workaround, @command{echo} or @command{eval} can be used.
+
 Don't rely on file descriptors 0, 1, and 2 remaining closed in a
 subsidiary program.  If any of these descriptors is closed, the
 operating system may open an unspecified file for the descriptor in the
