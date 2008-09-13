@@ -1,5 +1,7 @@
 2008-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/autoconf/general.m4 (AC_CONFIG_AUX_DIRS): Improve a bit.
+
 	Mention Solaris sh ':' redirection bug.
 	* doc/autoconf.texi (File Descriptors): Redirecting ':'
 	in a loop causes bogus optimization with Solaris sh.

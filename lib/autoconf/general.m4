@@ -1650,22 +1650,16 @@ AC_DEFUN([AC_CONFIG_AUX_DIR_DEFAULT],
 AC_DEFUN([AC_CONFIG_AUX_DIRS],
 [ac_aux_dir=
 for ac_dir in $1; do
-  if test -f "$ac_dir/install-sh"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install-sh -c"
-    break
-  elif test -f "$ac_dir/install.sh"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install.sh -c"
-    break
-  elif test -f "$ac_dir/shtool"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/shtool install -c"
-    break
-  fi
+  for ac_t in install-sh install.sh shtool; do
+    if test -f "$ac_dir/$ac_t"; then
+      ac_aux_dir=$ac_dir
+      ac_install_sh="$ac_aux_dir/$ac_t -c"
+      break 2
+    fi
+  done
 done
 if test -z "$ac_aux_dir"; then
-  AC_MSG_ERROR([cannot find install-sh or install.sh in $1])
+  AC_MSG_ERROR([cannot find install-sh, install.sh, or shtool in $1])
 fi
 
 # These three variables are undocumented and unsupported,
