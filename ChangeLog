@@ -1,3 +1,12 @@
+2008-09-16  Eric Blake  <ebb9@byu.net>
+
+	Fix Erlang regression, introduced 2006-11-17.
+	* lib/autoconf/erlang.m4 (AC_LANG(Erlang)): Avoid M4 comment
+	caused by underquoting.
+	* NEWS: Mention this fix.
+	* THANKS: Update.
+	Reported by BJ Terry.
+
 2008-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/general.m4 (AC_CONFIG_AUX_DIRS): Improve a bit.

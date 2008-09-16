@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Erlang/OTP language support.
-# Copyright (C) 2006 Free Software Foundation, Inc.
+# Copyright (C) 2006, 2008 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -124,7 +124,7 @@ fi
 m4_define([AC_LANG(Erlang)],
 [ac_ext=erl
 ac_compile='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD ; echo "#!/bin/sh" > conftest$ac_exeext ; AS_ECHO(["\"$ERL\" -run conftest start -run init stop -noshell"]) >> conftest$ac_exeext ; chmod +x conftest$ac_exeext'
+ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD ; echo "[#]!/bin/sh" > conftest$ac_exeext ; AS_ECHO(["\"$ERL\" -run conftest start -run init stop -noshell"]) >> conftest$ac_exeext ; chmod +x conftest$ac_exeext'
 ])
 
 
