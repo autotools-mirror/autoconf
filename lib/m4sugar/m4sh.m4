@@ -68,8 +68,10 @@
 #   Copyright notice(s)
 # - M4SH-SANITIZE
 #   M4sh's shell setup
+# - M4SH-INIT-FN
+#   M4sh initialization (shell functions)
 # - M4SH-INIT
-#   M4sh initialization
+#   M4sh initialization (detection code)
 # - BODY
 #   The body of the script.
 
@@ -85,7 +87,8 @@ m4_define([_m4_divert(HEADER-REVISION)],   1)
 m4_define([_m4_divert(HEADER-COMMENT)],    2)
 m4_define([_m4_divert(HEADER-COPYRIGHT)],  3)
 m4_define([_m4_divert(M4SH-SANITIZE)],     4)
-m4_define([_m4_divert(M4SH-INIT)],         5)
+m4_define([_m4_divert(M4SH-INIT-FN)],      5)
+m4_define([_m4_divert(M4SH-INIT)],         6)
 m4_define([_m4_divert(BODY)],           1000)
 
 # Aaarg.  Yet it starts with compatibility issues...  Libtool wants to
@@ -100,10 +103,11 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 ## ------------------------- ##
 
 
-# AS_REQUIRE(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK])
+# AS_REQUIRE(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
+#            [DIVERSION = M4SH-INIT])
 # -----------------------------------------------------------
 # BODY-TO-EXPAND is some initialization which must be expanded in the
-# M4SH-INIT section when expanded (required or not).  This is very
+# given diversion when expanded (required or not).  This is very
 # different from m4_require.  For instance:
 #
 #      m4_defun([_FOO_PREPARE], [foo=foo])
@@ -140,21 +144,22 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 #
 m4_define([AS_REQUIRE],
 [m4_provide_if([$1], [],
-	       [m4_divert_text([M4SH-INIT], [m4_default([$2], [$1])])])])
+	       [m4_divert_text(m4_default_quoted([$3], [M4SH-INIT]),
+			       [m4_default([$2], [$1])])])])
 
 
-# AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, BODY-TO-EXPAND)
+# AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, BODY-TO-EXPAND,
+#                     [DIVERSION = M4SH-INIT-FN])
 # --------------------------------------------------
 # BODY-TO-EXPAND is the body of a shell function to be emitted in the
-# M4SH-INIT section when expanded (required or not).  Unlike other
+# given diversion when expanded (required or not).  Unlike other
 # xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
 #
 m4_define([AS_REQUIRE_SHELL_FN],
 [_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
-m4_provide_if([AS_SHELL_FN_$1], [],
-	       [m4_provide([AS_SHELL_FN_$1])m4_divert_text([M4SH-INIT], [$1() {
+AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1() {
 $2
-}])])])
+}], [m4_default_quoted([$3], [M4SH-INIT-FN])])])
 
 
 # AS_BOURNE_COMPATIBLE

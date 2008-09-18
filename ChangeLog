@@ -1,3 +1,11 @@
+2008-09-18  Paolo Bonzini  <bonzini@gnu.org>
+	and Eric Blake  <ebb9@byu.net>
+
+	Add a separate diversion for shell functions.
+	* lib/m4sugar/m4sh.m4 (M4SH-INIT-FN): New diversion.
+	(AS_REQUIRE): Accept diversion parameter.
+	(AS_REQUIRE_SHELL_FN): Use it.
+
 2008-10-06  Eric Blake  <ebb9@byu.net>
 
 	Add m4_default_quoted.
