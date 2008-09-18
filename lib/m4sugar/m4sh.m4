@@ -1656,22 +1656,6 @@ m4_define([AS_VAR_POPDEF],
 ## ----------------- ##
 
 
-# _AS_SHELL_FN_SPY
-# ----------------
-# This temporary macro checks "in the wild" for shells that do
-# not support shell functions.
-m4_define([_AS_SHELL_FN_SPY],
-[_AS_DETECT_SUGGESTED([_AS_SHELL_FN_WORK])
-_AS_RUN([_AS_SHELL_FN_WORK]) || {
-  echo No shell found that supports shell functions.
-  echo Please tell bug-autoconf@gnu.org about your system,
-  echo including any error possibly output before this message.
-  echo This can help us improve future autoconf versions.
-  echo Configuration will now proceed without shell functions.
-}
-])
-
-
 # AS_INIT
 # -------
 # Initialize m4sh.
@@ -1688,7 +1672,6 @@ m4_divert_text([BINSH], [@%:@! /bin/sh])
 m4_divert_text([HEADER-COMMENT],
 	       [@%:@ Generated from __file__ by m4_PACKAGE_STRING.])
 m4_divert_text([M4SH-SANITIZE], [AS_SHELL_SANITIZE])
-AS_REQUIRE([_AS_SHELL_FN_SPY])
 
 # Let's go!
 m4_divert_pop([KILL])[]dnl

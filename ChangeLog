@@ -1,5 +1,10 @@
 2008-09-18  Paolo Bonzini  <bonzini@gnu.org>
 
+	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_SPY): Remove.
+	(AS_INIT): Do not call it.
+
+2008-09-18  Paolo Bonzini  <bonzini@gnu.org>
+
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Expand
 	_AS_UNSET_PREPARE in M4SH-SANITIZE.
 
