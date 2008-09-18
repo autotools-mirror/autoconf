@@ -1059,11 +1059,10 @@ to their lowest common denominator of features.
 Naturally, you might then think of shell scripts; who needs
 @command{autoconf}?  A set of properly written shell functions is enough to
 make it easy to write @command{configure} scripts by hand.  Sigh!
-Unfortunately, shell functions do not belong to the least common
-denominator; therefore, where you would like to define a function and
-use it ten times, you would instead need to copy its body ten times.
-Even in 2007, where shells without any function support are far and
-few between, there are pitfalls to avoid when making use of them.
+Unfortunately, even in 2008, where shells without any function support are
+far and few between, there are pitfalls to avoid when making use of them.
+Also, finding a Bourne shell that accepts shell functions is not trivial,
+even though there is almost always one on interesting porting targets.
 
 So, what is really needed is some kind of compiler, @command{autoconf},
 that takes an Autoconf program, @file{configure.ac}, and transforms it
@@ -12673,9 +12672,9 @@ that are not found in all Bourne-compatible shells; restrict yourself
 to the lowest common denominator.  Even @code{unset} is not supported
 by all shells!
 
-Shell functions are considered portable nowadays, though Autoconf still
-does not use them (Autotest does).  However, some pitfalls have to be
-avoided for portable use of shell functions (@pxref{Shell Functions}).
+Shell functions are considered portable nowadays.  However, some pitfalls
+have to be avoided for portable use of shell functions (@pxref{Shell
+Functions}).
 
 Some ancient systems have quite
 small limits on the length of the @samp{#!} line; for instance, 32
@@ -13645,8 +13644,8 @@ $ @kbd{pdksh -c 'echo $(( 010 ))'}
 
 When it is available, using arithmetic expansion provides a noticeable
 speedup in script execution; but testing for support requires
-@command{eval} to avoid syntax errors.  If shell function support has
-also been detected, then this construct can be used to assign @samp{foo}
+@command{eval} to avoid syntax errors.  If shell function support can
+be assumed, then this construct can be used to assign @samp{foo}
 to an arithmetic result, provided all numeric arguments are provided in
 decimal and without a leading zero:
 
@@ -14149,8 +14148,8 @@ f: not found
 @end example
 
 @noindent
-For this reason, Autotest uses the prefix @samp{at_func_} for its
-functions.
+For this reason, Autoconf (actually M4sh, @pxref{Programming in M4sh})
+uses the prefix @samp{as_func_} for its functions.
 
 Handling of positional parameters and shell options varies among shells.
 For example, Korn shells reset and restore trace output (@samp{set -x})

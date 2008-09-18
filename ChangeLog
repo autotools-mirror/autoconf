@@ -1,5 +1,9 @@
 2008-10-10  Paolo Bonzini  <bonzini@gnu.org>
 
+	* doc/autoconf.texi: Be less wary of shell functions.
+
+2008-10-10  Paolo Bonzini  <bonzini@gnu.org>
+
 	* m4sugar/m4sh.m4 (_AS_MKDIR_P): New, from AS_MKDIR_P.  Adjust
 	meaning of as_mkdir_p to be `false' or a full `mkdir -p' command.
 	(AS_MKDIR_P): Just dispatch to as_func_mkdir_p.

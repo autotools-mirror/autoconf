@@ -10,6 +10,8 @@ GNU Autoconf NEWS - User visible changes.
 ** Autotest testsuites do not attempt to write startup error messages
    to the log file before that is opened (regression introduced in 2.63).
 
+** Configure scripts now use shell functions.
+
 ** The following m4sugar macros are new:
    m4_default_quoted
 
