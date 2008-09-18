@@ -187,8 +187,8 @@ m4_set_add([_AS_DETECT_SUGGESTED_BODY],
 # <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
 #
 m4_defun_once([_AS_DETECT_BETTER_SHELL],
-[m4_append([_AS_CLEANUP], [m4_divert_text([M4SH-SANITIZE], [
-AS_REQUIRE([_AS_UNSET_PREPARE])dnl
+[AS_REQUIRE([_AS_UNSET_PREPARE], , [M4SH-SANITIZE])dnl
+m4_append([_AS_CLEANUP], [m4_divert_text([M4SH-SANITIZE], [
 if test "x$CONFIG_SHELL" = x; then
 dnl Remove any tests from suggested that are also required
   m4_set_foreach([_AS_DETECT_SUGGESTED_BODY], [AS_snippet],
