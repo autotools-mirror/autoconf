@@ -4318,7 +4318,9 @@ typically assume @code{double} arguments.  On such a system,
 @code{isinf} incorrectly returns true for a finite @code{long double}
 argument that is outside the range of @code{double}.
 
-To work around this porting mess, you can use code like the following.
+The best workaround for these issues is to use gnulib modules
+@code{isinf} and @code{isnan} (@pxref{Gnulib}).  But a lighter weight
+solution involves code like the following.
 
 @smallexample
 #include <math.h>
@@ -4338,17 +4340,20 @@ static inline int isnan_ld (long double x) @{ return x != x; @}
     (sizeof (x) == sizeof (long double) ? isinf_ld (x) \
      : sizeof (x) == sizeof (double) ? isinf_d (x) \
      : isinf_f (x))
-static inline int isinf_f  (float       x) @{ return isnan (x - x); @}
-static inline int isinf_d  (double      x) @{ return isnan (x - x); @}
-static inline int isinf_ld (long double x) @{ return isnan (x - x); @}
+static inline int isinf_f  (float       x)
+@{ return !isnan (x) && isnan (x - x); @}
+static inline int isinf_d  (double      x)
+@{ return !isnan (x) && isnan (x - x); @}
+static inline int isinf_ld (long double x)
+@{ return !isnan (x) && isnan (x - x); @}
 #endif
 @end smallexample
 
 Use @code{AC_C_INLINE} (@pxref{C Compiler}) so that this code works on
 compilers that lack the @code{inline} keyword.  Some optimizing
 compilers mishandle these definitions, but systems with that bug
-typically have missing or broken @code{isnan} functions anyway, so it's
-probably not worth worrying about.
+typically have many other floating point corner-case compliance problems
+anyway, so it's probably not worth worrying about.
 
 @item @code{malloc}
 @c @fuindex malloc

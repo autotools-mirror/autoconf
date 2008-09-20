@@ -1,3 +1,11 @@
+2008-09-20  Eric Blake  <ebb9@byu.net>
+
+	Fix sample isinf definition.
+	* doc/autoconf.texi (Function Portability) <isinf>: Filter out NaN
+	first.
+	* THANKS: Update.
+	Reported by David Cournapeau.
+
 2008-09-16  Eric Blake  <ebb9@byu.net>
 
 	Fix Erlang regression, introduced 2006-11-17.
