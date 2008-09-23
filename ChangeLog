@@ -1,5 +1,11 @@
 2008-10-06  Eric Blake  <ebb9@byu.net>
 
+	Add m4_default_quoted.
+	* lib/m4sugar/m4sugar.m4 (m4_default_quoted): New macro.
+	(m4_for, m4_expand_once, m4_text_wrap, m4_text_box): Use it.
+	* doc/autoconf.texi (Conditional constructs): Document it.
+	* NEWS: Likewise.
+
 	Fix build with case-insensitive make, again.
 	* Makefile.am (pkgdata_DATA): Protect by MAKE_CASE_SENSITIVE.
 	Reported via Keith Marshall, originally by newthinker in

@@ -10720,10 +10720,27 @@ m4_cond([m4_index([$1], [\])], [-1], [$2],
 @end defmac
 
 @defmac m4_default (@var{expr-1}, @var{expr-2})
+@defmacx m4_default_quoted (@var{expr-1}, @var{expr-2})
 @msindex{default}
-If @var{expr-1} is not empty, use it.  Otherwise, expand to
-@var{expr-2}.  Useful for providing a fixed default if the expression
-that results in @var{expr-1} would otherwise be empty.
+@msindex{default_quoted}
+If @var{expr-1} is not empty, use it.  Otherwise, select @var{expr-2}.
+@code{m4_default} expands the result, while @code{m4_default_quoted}
+does not.  Useful for providing a fixed default if the expression that
+results in @var{expr-1} would otherwise be empty.
+
+@example
+m4_define([active], [ACTIVE])dnl
+m4_define([demo1], [m4_default([$1], [$2])])dnl
+m4_define([demo2], [m4_default_quoted([$1], [$2])])dnl
+demo1([active], [default])
+@result{}ACTIVE
+demo1([], [active])
+@result{}ACTIVE
+demo2([active], [default])
+@result{}active
+demo2([], [active])
+@result{}active
+@end example
 @end defmac
 
 @defmac m4_ifndef (@var{macro}, @var{if-not-defined}, @ovar{if-defined})

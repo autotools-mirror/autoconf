@@ -510,12 +510,29 @@ m4_define([m4_define_default],
 
 # m4_default(EXP1, EXP2)
 # ----------------------
-# Returns EXP1 if non empty, otherwise EXP2.
+# Returns EXP1 if non empty, otherwise EXP2.  Expand the result.
 #
 # This macro is called on hot paths, so inline the contents of m4_ifval,
 # for one less round of expansion.
 m4_define([m4_default],
 [m4_if([$1], [], [$2], [$1])])
+
+
+# m4_default_quoted(EXP1, EXP2)
+# -----------------------------
+# Returns EXP1 if non empty, otherwise EXP2.  Leave the result quoted.
+#
+# For comparison:
+#   m4_define([active], [ACTIVE])
+#   m4_default([active], [default]) => ACTIVE
+#   m4_default([], [active]) => ACTIVE
+#   m4_default_quoted([active], [default]) => active
+#   m4_default_quoted([], [active]) => active
+#
+# This macro is called on hot paths, so inline the contents of m4_ifval,
+# for one less round of expansion.
+m4_define([m4_default_quoted],
+[m4_if([$1], [], [[$2]], [[$1]])])
 
 
 # m4_defn(NAME)
@@ -866,12 +883,12 @@ m4_define([m4_unquote], [$*])
 m4_define([m4_for],
 [m4_pushdef([$1], m4_eval([$2]))]dnl
 [m4_cond([m4_eval(([$3]) > ([$2]))], 1,
-	   [m4_pushdef([_m4_step], m4_eval(m4_default([$4],
+	   [m4_pushdef([_m4_step], m4_eval(m4_default_quoted([$4],
 	      1)))m4_assert(_m4_step > 0)_$0([$1], _m4_defn([$1]),
   m4_eval((([$3]) - ([$2])) / _m4_step * _m4_step + ([$2])),
   _m4_step, [$5])],
 	 [m4_eval(([$3]) < ([$2]))], 1,
-	   [m4_pushdef([_m4_step], m4_eval(m4_default([$4],
+	   [m4_pushdef([_m4_step], m4_eval(m4_default_quoted([$4],
 	      -1)))m4_assert(_m4_step < 0)_$0([$1], _m4_defn([$1]),
   m4_eval((([$2]) - ([$3])) / -(_m4_step) * _m4_step + ([$2])),
   _m4_step, [$5])],
@@ -1698,9 +1715,9 @@ m4_define([_m4_divert_grow], _m4_divert([GROW]))
 # If TEXT has never been expanded, expand it *here*.  Use WITNESS as
 # as a memory that TEXT has already been expanded.
 m4_define([m4_expand_once],
-[m4_provide_if(m4_ifval([$2], [[$2]], [[$1]]),
+[m4_provide_if(m4_default_quoted([$2], [$1]),
 	       [],
-	       [m4_provide(m4_ifval([$2], [[$2]], [[$1]]))[]$1])])
+	       [m4_provide(m4_default_quoted([$2], [$1]))[]$1])])
 
 
 # m4_provide(MACRO-NAME)
@@ -2160,8 +2177,8 @@ m4_define([m4_append_uniq_w],
 # with m4_do, to avoid time wasted on dnl during expansion (since this is
 # already a time-consuming macro).
 m4_define([m4_text_wrap],
-[_$0([$1], [$2], m4_if([$3], [], [[$2]], [[$3]]),
-     m4_if([$4], [], [79], [[$4]]))])
+[_$0([$1], [$2], m4_default_quoted([$3], [$2]),
+     m4_default_quoted([$4], [79]))])
 m4_define([_m4_text_wrap],
 m4_do(dnl set up local variables, to avoid repeated calculations
 [[m4_pushdef([m4_Indent], m4_qlen([$2]))]],
@@ -2203,7 +2220,7 @@ dnl finally, clean up the local variabls
 m4_define([m4_text_box],
 [m4_pushdef([m4_Border],
 	    m4_translit(m4_format([%*s], m4_qlen(m4_expand([$1])), []),
-			[ ], m4_if([$2], [], [[-]], [[$2]])))dnl
+			[ ], m4_default_quoted([$2], [-])))dnl
 @%:@@%:@ m4_Border @%:@@%:@
 @%:@@%:@ $1 @%:@@%:@
 @%:@@%:@ m4_Border @%:@@%:@_m4_popdef([m4_Border])dnl

@@ -7,6 +7,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Autotest testsuites accept an option --jobs[=N] for parallel testing.
 
+** The following m4sugar macros are new:
+   m4_default_quoted
+
 
 * Major changes in Autoconf 2.63 (2008-09-09) [stable]
   Released by Eric Blake, based on git versions 2.62.*.
