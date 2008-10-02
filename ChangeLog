@@ -1,3 +1,20 @@
+2008-10-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Implement parallel Autotest test execution: testsuite --jobs.
+	* lib/autotest/general.m4 (AT_JOB_FIFO_FD): New macro.
+	(AT_INIT): <at_jobs>: New variable.
+	Accept -j, -jN, --jobs[=N], document them in --help output.
+	Implement parallel driver loop using a FIFO, enabled with --jobs
+	and if mkfifo works; otherwise, fall back to sequential loop.
+	(AT_SETUP): Store, do not output summary progress line if
+	parallel.
+	* tests/autotest.at (parallel test execution, parallel truth)
+	(parallel fallacy, parallel skip): New tests.
+	* doc/autoconf.texi (testsuite Invocation): Document -j, --jobs,
+	the mkfifo requirement, and that --errexit may cause concurrent
+	jobs to finish.
+	* NEWS: Update.
+
 2008-09-20  Eric Blake  <ebb9@byu.net>
 
 	Fix sample isinf definition.
