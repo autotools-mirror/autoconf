@@ -15849,7 +15849,9 @@ sed: 1: "s/x/x/;;s/x/x/": invalid command code ;
 @end example
 
 Input should not have unreasonably long lines, since some @command{sed}
-implementations have an input buffer limited to 4000 bytes.
+implementations have an input buffer limited to 4000 bytes.  Likewise,
+not all @command{sed} implementations can handle embedded @code{NUL} or
+a missing trailing newline.
 
 Portable @command{sed} regular expressions should use @samp{\} only to escape
 characters in the string @samp{$()*.0123456789[\^n@{@}}.  For example,
@@ -16099,6 +16101,19 @@ $ @kbd{@{ echo moon; echo light; @} | /usr/bin/tr -d '\n' ; echo}
 moonlight
 $ @kbd{@{ echo moon; echo light; @} | /usr/ucb/tr -d '\012' ; echo}
 moonlight
+@end example
+
+Posix requires @command{tr} to operate on binary files.  But at least
+Solaris @command{/usr/ucb/tr} still fails to handle @samp{\0} as the
+octal escape for @code{NUL}.  On Solaris, when using @command{tr} to
+neutralize a binary file by converting @code{NUL} to a different
+character, it is necessary to use @command{/usr/xpg4/bin/tr} instead.
+
+@example
+$ @kbd{printf 'a\0b\n' | /usr/ucb/tr '\0' '~' | wc -c}
+3
+$ @kbd{printf 'a\0b\n' | /usr/xpg4/bin/tr '\0' '~' | wc -c}
+4
 @end example
 
 @end table

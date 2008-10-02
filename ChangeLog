@@ -1,3 +1,10 @@
+2008-10-02  Eric Blake  <ebb9@byu.net>
+
+	Document more binary file portability traps.
+	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: Remind
+	reader that NUL and sed don't always mix.
+	<tr>: Mention Solaris /usr/ucb/tr bug with \0.
+
 2008-10-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Implement parallel Autotest test execution: testsuite --jobs.
