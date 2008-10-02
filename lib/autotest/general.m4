@@ -217,6 +217,7 @@ m4_foreach([AT_name], [_AT_DEFINE_INIT_LIST], [m4_popdef(m4_defn([AT_name]))])
 m4_wrap([_AT_FINISH])
 dnl Define FDs.
 m4_define([AS_MESSAGE_LOG_FD], [5])
+m4_define([AT_JOB_FIFO_FD], [6])
 AS_INIT[]dnl
 m4_divert_push([DEFAULTS])dnl
 AT_COPYRIGHT(
@@ -399,6 +400,8 @@ at_errexit_p=false
 # Shall we be verbose?  ':' means no, empty means yes.
 at_verbose=:
 at_quiet=
+# Running several jobs in parallel, 0 means as many as test groups.
+at_jobs=1
 
 # Shall we keep the debug scripts?  Must be `:' when the suite is
 # run by a debug script, so that the script doesn't remove itself.
@@ -569,6 +572,22 @@ do
 	at_dir=$at_optarg
 	;;
 
+    # Parallel execution.
+    --jobs | -j )
+	at_jobs=0
+	;;
+    --jobs=* | -j[[0-9]]* )
+	if test -n "$at_optarg"; then
+	  at_jobs=$at_optarg
+	else
+	  at_jobs=`expr X$at_option : 'X-j\(.*\)'`
+	fi
+	case $at_jobs in *[[!0-9]]*)
+	  at_optname=`echo " $at_option" | sed 's/^ //; s/[[0-9=]].*//'`
+	  AS_ERROR([non-numeric argument to $at_optname: $at_jobs]) ;;
+	esac
+	;;
+
     # Keywords.
     --keywords | -k )
 	at_prev=--keywords
@@ -673,6 +692,8 @@ dnl extra quoting prevents emacs whitespace mode from putting tabs in output
 Execution tuning:
   -C, --directory=DIR
 [                 change to directory DIR before starting]
+  -j, --jobs[[=N]]
+[                 Allow N jobs at once; infinite jobs with no arg (default 1)]
   -k, --keywords=KEYWORDS
 [                 select the tests matching all the comma-separated KEYWORDS]
 [                 multiple \`-k' accumulate; prefixed \`!' negates a KEYWORD]
@@ -813,6 +834,8 @@ at_suite_log=$at_dir/$as_me.log
 at_helper_dir=$at_suite_dir/at-groups
 # Stop file: if it exists, do not start new jobs.
 at_stop_file=$at_suite_dir/at-stop
+# The fifo used for the job dispatcher.
+at_job_fifo=$at_suite_dir/at-job-fifo
 
 if $at_clean; then
   test -d "$at_suite_dir" &&
@@ -993,6 +1016,18 @@ BEGIN { FS="" }
   AS_ERROR([cannot create test line number cache])
 rm -f "$at_suite_dir/at-source-lines"
 
+# Set number of jobs for `-j'; avoid more jobs than test groups.
+set X $at_groups; shift; at_max_jobs=$[@%:@]
+if test $at_jobs -eq 0 || test $at_jobs -gt $at_max_jobs; then
+  at_jobs=$at_max_jobs
+fi
+
+# If parallel mode, don't output banners, don't split summary lines.
+if test $at_jobs -ne 1; then
+  at_print_banners=false
+  at_quiet=:
+fi
+
 # Set up helper dirs.
 rm -rf "$at_helper_dir" &&
 mkdir "$at_helper_dir" &&
@@ -1101,8 +1136,13 @@ _ATEOF
 	;;
   esac
   echo "$at_res" > "$at_job_dir/$at_res"
-  # Make sure there is a separator even with long titles.
-  AS_ECHO([" $at_msg"])
+  # In parallel mode, output the summary line only afterwards.
+  if test $at_jobs -ne 1 && test -n "$at_verbose"; then
+    AS_ECHO(["$at_desc_line $at_msg"])
+  else
+    # Make sure there is a separator even with long titles.
+    AS_ECHO([" $at_msg"])
+  fi
   at_log_msg="$at_group. $at_desc ($at_setup_line): $at_msg"
   case $at_status in
     0|77)
@@ -1148,20 +1188,74 @@ _ATEOF
 m4_text_box([Driver loop.])
 
 rm -f "$at_stop_file"
+trap 'exit_status=$?
+  echo "signal received, bailing out" >&2
+  echo stop > "$at_stop_file"
+  exit $exit_status' 1 2 13 15
 at_first=:
 
-for at_group in $at_groups; do
-  at_func_group_prepare
-  if cd "$at_group_dir" &&
-     at_func_test $at_group &&
-     . "$at_test_source"; then :; else
-    AS_WARN([unable to parse test group: $at_group])
-    at_failed=:
+if test $at_jobs -ne 1 &&
+     rm -f "$at_job_fifo" &&
+     ( mkfifo "$at_job_fifo" ) 2>/dev/null &&
+     exec AT_JOB_FIFO_FD<> "$at_job_fifo"
+then
+  # FIFO job dispatcher.
+  echo
+  # Turn jobs into a list of numbers, starting from 1.
+  at_joblist=`AS_ECHO([" $at_groups_all "]) | \
+    sed 's/\( '$at_jobs'\) .*/\1/'`
+
+  set X $at_joblist
+  shift
+  for at_group in $at_groups; do
+    (
+      # Start one test group.
+      at_func_group_prepare
+      if cd "$at_group_dir" &&
+	 at_func_test $at_group &&
+	 . "$at_test_source" # AT_JOB_FIFO_FD<&-
+      then :; else
+	AS_WARN([unable to parse test group: $at_group])
+	at_failed=:
+      fi
+      at_func_group_postprocess
+      echo token >&AT_JOB_FIFO_FD
+    ) &
+    shift # Consume one token.
+    if test $[@%:@] -gt 0; then :; else
+      read at_token <&AT_JOB_FIFO_FD || break
+      set x $[*]
+    fi
+    test -f "$at_stop_file" && break
+    at_first=false
+  done
+  # Read back the remaining ($at_jobs - 1) tokens.
+  set X $at_joblist
+  shift
+  if test $[@%:@] -gt 0; then
+    shift
+    for at_job
+    do
+      read at_token
+    done <&AT_JOB_FIFO_FD
   fi
-  at_func_group_postprocess
-  test -f "$at_stop_file" && break
-  at_first=false
-done
+  exec AT_JOB_FIFO_FD<&-
+  wait
+else
+  # Run serially, avoid forks and other potential surprises.
+  for at_group in $at_groups; do
+    at_func_group_prepare
+    if cd "$at_group_dir" &&
+       at_func_test $at_group &&
+       . "$at_test_source"; then :; else
+      AS_WARN([unable to parse test group: $at_group])
+      at_failed=:
+    fi
+    at_func_group_postprocess
+    test -f "$at_stop_file" && break
+    at_first=false
+  done
+fi
 
 # Wrap up the test suite with summary statistics.
 cd "$at_helper_dir"
@@ -1530,8 +1624,9 @@ at_setup_line='m4_defn([AT_line])'
 m4_if(AT_banner_ordinal, [0], [], [at_func_banner AT_banner_ordinal
 ])dnl
 at_desc="AS_ESCAPE(m4_dquote(m4_defn([AT_description])))"
-$at_quiet AS_ECHO_N([m4_format(["%3d: $at_desc%*s"], AT_ordinal,
-  m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])])
+at_desc_line=m4_format(["%3d: $at_desc%*s"], AT_ordinal,
+  m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])
+$at_quiet AS_ECHO_N(["$at_desc_line"])
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 

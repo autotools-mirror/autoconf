@@ -20981,6 +20981,23 @@ Change the current directory to @var{dir} before creating any files.
 Useful for running the testsuite in a subdirectory from a top-level
 Makefile.
 
+@item --jobs@r{[}=@var{n}@r{]}
+@itemx -j@ovar{n}
+Run @var{n} tests in parallel, if possible.  If @var{n} is not given,
+run all given tests in parallel.  Note that there should be no space
+before the argument to @option{-j}, as @option{-j @var{number}} denotes
+the separate arguments @option{-j} and @option{@var{number}}, see below.
+
+In parallel mode, the standard input device of the testsuite script is
+not available to commands inside a test group.  Furthermore, banner
+lines are not printed, and the summary line for each test group is
+output after the test group completes.  Summary lines may appear
+unordered.  If verbose and trace output are enabled (see below), they
+may appear intermixed from concurrently running tests.
+
+Parallel mode requires the @command{mkfifo} command to work, and will be
+silently disabled otherwise.
+
 @item --clean
 @itemx -c
 Remove all the files the test suite might have created and exit.  Meant
@@ -21058,6 +21075,8 @@ If any test fails, immediately abort testing.  It implies
 @option{--debug}: post test group clean up, and top-level logging
 are inhibited.  This option is meant for the full test
 suite, it is not really useful for generated debugging scripts.
+If the testsuite is run in parallel mode using @option{--jobs},
+then concurrently running tests will finish before exiting.
 
 @item --verbose
 @itemx -v

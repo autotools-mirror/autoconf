@@ -5,6 +5,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** AC_LANG_ERLANG works once again (regression introduced in 2.61a).
 
+** Autotest testsuites accept an option --jobs[=N] for parallel testing.
+
+
 * Major changes in Autoconf 2.63 (2008-09-09) [stable]
   Released by Eric Blake, based on git versions 2.62.*.
 

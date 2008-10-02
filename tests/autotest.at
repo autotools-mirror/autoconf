@@ -773,6 +773,127 @@ AT_CHECK_KEYS([--list -k none -k first], [none|first], [2], [second|both], [0])
 AT_CLEANUP
 
 
+## ----------------------- ##
+## parallel test execution ##
+## ----------------------- ##
+
+AT_SETUP([parallel test execution])
+
+# This test tries to ensure that -j runs tests in parallel.
+# Such a test is inherently racy, because there are no real-time
+# guarantees about scheduling delays.  So we try to minimize
+# the chance to lose the race.
+
+# The time needed for a micro-suite consisting of NTESTS tests each
+# sleeping for a second is estimated by
+#   startup + ntests * (serial_overhead + 1 / njobs)
+#
+# in absence of major scheduling delays.  This leads to side conditions:
+# - NTESTS should be high, so the STARTUP time is small compared to the
+#   test run time, and scheduling delays can even out; it should not be
+#   too high, to not slow down the testsuite unnecessarily,
+# - the number of concurrent jobs NJOBS should not be too low, so the
+#   race is not lost so easily; it should not be too high, to avoid fork
+#   failures on tightly limited systems.  4 seems a good compromise
+#   here, considering that Autotest spawns several other processes.
+# - STARTUP is assumed to be the same for parallel and serial runs, so
+#   the latter can estimate the former.
+# - To avoid unportable output from time measurement commands, spawn
+#   both a parallel and a serial testsuite run; check that the former
+#   completes before the latter has completed a fraction SERIAL_NTESTS
+#   of the tests (the serial run is executed in a subdirectory), plus
+#   some additional time to allow for compensation of SERIAL_OVERHEAD.
+# - when adding this time to the serial test execution, an initial delay
+#   SERIAL_DELAY of the serial test helps to avoid unreliable scheduling
+#   due to the startup burst of the suites.
+
+dnl total number of tests.
+m4_define([AT_PARALLEL_NTESTS], [16])
+dnl number of jobs to run in parallel.
+m4_define([AT_PARALLEL_NJOBS], [4])
+dnl number of tests to run serially, as comparison.
+m4_define([AT_PARALLEL_SERIAL_NTESTS],
+  m4_eval(AT_PARALLEL_NTESTS / AT_PARALLEL_NJOBS))
+dnl initial delay of serial run, to compensate for SERIAL_OVERHEAD.
+dnl This corresponds to 0.67 s of overhead per test.
+m4_define([AT_PARALLEL_SERIAL_DELAY],
+  m4_eval((AT_PARALLEL_NTESTS - AT_PARALLEL_SERIAL_NTESTS + 1) * 2 / 3))
+
+
+AT_CHECK_AT_PREP([micro-suite],
+[[AT_INIT([suite to test parallel execution])
+m4_for([count], [1], ]]AT_PARALLEL_NTESTS[[, [],
+   [AT_SETUP([test number count])
+    AT_CHECK([sleep 1])
+    AT_CLEANUP
+])
+]])
+
+AT_CHECK([$CONFIG_SHELL ./micro-suite --help | grep " --jobs"], [0], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j2foo], [1], [], [stderr])
+AT_CHECK([grep 'non-numeric argument' stderr], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --jobs=foo], [1], [], [stderr])
+AT_CHECK([grep 'non-numeric argument' stderr], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j[]AT_PARALLEL_NJOBS], [], [stdout])
+# Ensure that all tests run, and lines are not split.
+AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [AT_PARALLEL_NTESTS
+])
+# Running one test with -j should produce correctly formatted output:
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j 3], [], [stdout])
+AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [1
+])
+# Specifying more jobs than tests should not hang:
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j3 3], [], [stdout])
+AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [1
+])
+
+# The parallel scheduler requires mkfifo to work.
+AT_CHECK([mkfifo fifo || exit 77])
+mkdir serial
+
+# Unfortunately, the return value of wait is unreliable,
+# so we check that kill fails.
+AT_CHECK([$CONFIG_SHELL ./micro-suite --jobs=[]AT_PARALLEL_NJOBS & ]dnl
+         [sleep AT_PARALLEL_SERIAL_DELAY && ]dnl
+         [cd serial && $CONFIG_SHELL ../micro-suite -AT_PARALLEL_SERIAL_NTESTS >/dev/null && ]dnl
+         [{ kill $! && exit 1; :; }], [], [stdout], [ignore])
+AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [AT_PARALLEL_NTESTS
+])
+AT_CHECK([grep 'AT_PARALLEL_NTESTS tests' stdout], [], [ignore])
+
+AT_CLEANUP
+
+AT_CHECK_AT_TEST([parallel truth],
+  [AT_CHECK([:], 0, [], [])],
+  [], [], [], [],
+  [], [-j])
+
+AT_CHECK_AT_TEST([parallel fallacy],
+  [AT_CHECK([false], [], [], [])],
+  [], [1], [], [ignore],
+  [AT_CHECK([grep failed micro-suite.log], [], [ignore])], [-j])
+
+AT_CHECK_AT_TEST([parallel skip],
+  [AT_CHECK([exit 77], 0, [], [])],
+  [], [], [], [],
+  [AT_CHECK([grep skipped micro-suite.log], [], [ignore])], [-j])
+
+AT_CHECK_AT_TEST([parallel errexit],
+  [AT_CHECK([false])
+   AT_CLEANUP
+   AT_SETUP([barrier test])
+   AT_CHECK([sleep 4])
+   AT_CLEANUP
+   AT_SETUP([test that should not be run])
+   AT_CHECK([:])],
+  [], [1], [stdout], [stderr],
+  [AT_CHECK([test -f micro-suite.log], [1])
+   touch micro-suite.log # shut up AT_CAPTURE_FILE.
+   AT_CHECK([grep "should not be run" stdout], [1])
+   AT_CHECK([grep "[[12]] .* inhibited subsequent" stderr], [], [ignore])],
+  [-j2 --errexit])
+
+
 ## ------------------- ##
 ## srcdir propagation. ##
 ## ------------------- ##
