@@ -1,3 +1,9 @@
+2008-10-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix hang with `testsuite -k notmatched'.
+	* lib/autotest/general.m4: Do not reset $at_jobs if it is equal
+	to one.  Fixes hang with `-k notmatched'.
+
 2008-10-02  Eric Blake  <ebb9@byu.net>
 
 	Document more binary file portability traps.

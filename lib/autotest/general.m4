@@ -1018,7 +1018,8 @@ rm -f "$at_suite_dir/at-source-lines"
 
 # Set number of jobs for `-j'; avoid more jobs than test groups.
 set X $at_groups; shift; at_max_jobs=$[@%:@]
-if test $at_jobs -eq 0 || test $at_jobs -gt $at_max_jobs; then
+if test $at_jobs -ne 1 &&
+   { test $at_jobs -eq 0 || test $at_jobs -gt $at_max_jobs; }; then
   at_jobs=$at_max_jobs
 fi
 
