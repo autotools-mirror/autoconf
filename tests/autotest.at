@@ -846,6 +846,9 @@ AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [1
 AT_CHECK([$CONFIG_SHELL ./micro-suite -j3 3], [], [stdout])
 AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [1
 ])
+# Not even with zero tests:
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j -k nomatch], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j3 -k nomatch], [], [ignore])
 
 # The parallel scheduler requires mkfifo to work.
 AT_CHECK([mkfifo fifo || exit 77])

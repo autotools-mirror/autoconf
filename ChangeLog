@@ -1,3 +1,11 @@
+2008-10-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix more testsuite hang corner cases.
+	* lib/autotest/general.m4: Use the serial code path if no test
+	is to be run.
+	* tests/autotest.at (parallel test execution): Test -j and -jN
+	with `-k notmatched'.
+
 2008-10-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix hang with `testsuite -k notmatched'.
