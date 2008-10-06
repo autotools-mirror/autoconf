@@ -1,3 +1,9 @@
+2008-10-06  Bruno Haible  <bruno@clisp.org>
+
+	Warn about /usr/ucb on Solaris.
+	* doc/install.texi (Particular Systems): Recommend putting
+	/usr/ucb late in PATH, if at all.
+
 2008-10-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix more testsuite hang corner cases.
