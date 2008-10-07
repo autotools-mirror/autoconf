@@ -1,5 +1,9 @@
 2008-10-07  Eric Blake  <ebb9@byu.net>
 
+	Ensure _AS_CLEANUP is defined.
+	* lib/m4sugar/m4sh.m4 (_AS_CLEANUP): Give initial definition.
+	* tests/m4sh.at (AS@&t@_INIT cleanup): Expose the need for this.
+
 	Improve m4sh maintainability.
 	* lib/m4sugar/m4sh.m4: Sort macros for sanitizing the shell; no
 	code change.

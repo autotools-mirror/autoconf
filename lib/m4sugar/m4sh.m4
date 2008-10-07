@@ -134,6 +134,13 @@ m4_define([_AS_BOURNE_COMPATIBLE],
 ])
 
 
+# _AS_CLEANUP
+# -----------
+# Expanded as the last thing before m4sugar cleanup begins.  Macros
+# may append m4sh cleanup hooks to this as appropriate.
+m4_define([_AS_CLEANUP])
+
+
 # AS_COPYRIGHT(TEXT)
 # ------------------
 # Emit TEXT, a copyright notice, as a shell comment near the top of the

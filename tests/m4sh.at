@@ -805,6 +805,7 @@ AT_DATA_M4SH([script.as], [[dnl
 dnl Registered before AS_INIT's cleanups
 m4_wrap([echo cleanup 1
 ])
+m4_pushdef([_AS_SHELL_FN_SPY])dnl neutralize the spy, we don't care about it
 AS_INIT
 dnl Registered after AS_INIT's cleanups, thus goes to KILL diversion
 m4_wrap([echo cleanup 2
