@@ -101,66 +101,7 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 ## ------------------------- ##
 ## 1. Sanitizing the shell.  ##
 ## ------------------------- ##
-
-
-# AS_REQUIRE(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
-#            [DIVERSION = M4SH-INIT])
-# -----------------------------------------------------------
-# BODY-TO-EXPAND is some initialization which must be expanded in the
-# given diversion when expanded (required or not).  This is very
-# different from m4_require.  For instance:
-#
-#      m4_defun([_FOO_PREPARE], [foo=foo])
-#      m4_defun([FOO],
-#      [m4_require([_FOO_PREPARE])dnl
-#      echo $foo])
-#
-#      m4_defun([_BAR_PREPARE], [bar=bar])
-#      m4_defun([BAR],
-#      [AS_REQUIRE([_BAR_PREPARE])dnl
-#      echo $bar])
-#
-#      AS_INIT
-#      foo1=`FOO`
-#      foo2=`FOO`
-#      bar1=`BAR`
-#      bar2=`BAR`
-#
-# gives
-#
-#      #! /bin/sh
-#      bar=bar
-#
-#      foo1=`foo=foo
-#      echo $foo`
-#      foo2=`echo $foo`
-#      bar1=`echo $bar`
-#      bar2=`echo $bar`
-#
-# Due to the simple implementation, all the AS_REQUIRE calls have to be at
-# the very beginning of the macro body, or the AS_REQUIREs may not be nested.
-# More exactly, if a macro doesn't have all AS_REQUIREs at its beginning,
-# it may not be AS_REQUIREd.
-#
-m4_define([AS_REQUIRE],
-[m4_provide_if([$1], [],
-	       [m4_divert_text(m4_default_quoted([$3], [M4SH-INIT]),
-			       [m4_default([$2], [$1])])])])
-
-
-# AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, BODY-TO-EXPAND,
-#                     [DIVERSION = M4SH-INIT-FN])
-# --------------------------------------------------
-# BODY-TO-EXPAND is the body of a shell function to be emitted in the
-# given diversion when expanded (required or not).  Unlike other
-# xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
-#
-m4_define([AS_REQUIRE_SHELL_FN],
-[_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
-AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1() {
-$2
-}], m4_default_quoted([$3], [M4SH-INIT-FN]))])
-
+# Please maintain lexicographic sorting of this section, ignoring leading _.
 
 # AS_BOURNE_COMPATIBLE
 # --------------------
@@ -193,18 +134,15 @@ m4_define([_AS_BOURNE_COMPATIBLE],
 ])
 
 
-# _AS_RUN(TEST, [SHELL])
-# ----------------------
-# Run TEST under the current shell (if one parameter is used)
-# or under the given SHELL, protecting it from syntax errors.
-m4_define([_AS_RUN],
-[m4_ifval([$2],
-[{ $2 <<\_ASEOF
-_AS_BOURNE_COMPATIBLE
-$1
-_ASEOF
-}],
-[(eval "AS_ESCAPE(m4_expand([$1]))")])])
+# AS_COPYRIGHT(TEXT)
+# ------------------
+# Emit TEXT, a copyright notice, as a shell comment near the top of the
+# script.  TEXT is evaluated once; to accomplish that, we do not prepend
+# `# ' but `@%:@ '.
+m4_define([AS_COPYRIGHT],
+[m4_divert_text([HEADER-COPYRIGHT],
+[m4_bpatsubst([
+$1], [^], [@%:@ ])])])
 
 
 # _AS_DETECT_REQUIRED(TEST)
@@ -291,6 +229,113 @@ fi
 ])])])# _AS_DETECT_BETTER_SHELL
 
 
+# _AS_PREPARE
+# -----------
+# This macro has a very special status.  Normal use of M4sh relies
+# heavily on AS_REQUIRE, so that needed initializations (such as
+# _AS_TEST_PREPARE) are performed on need, not on demand.  But
+# Autoconf is the first client of M4sh, and for two reasons: configure
+# and config.status.  Relying on AS_REQUIRE is of course fine for
+# configure, but fails for config.status (which is created by
+# configure).  So we need a means to force the inclusion of the
+# various _AS_PREPARE_* on top of config.status.  That's basically why
+# there are so many _AS_PREPARE_* below, and that's also why it is
+# important not to forget some: config.status needs them.
+m4_defun([_AS_PREPARE],
+[_AS_LINENO_PREPARE
+
+_AS_DIRNAME_PREPARE
+_AS_ECHO_N_PREPARE[]dnl We do not need this ourselves but user code might.
+_AS_EXPR_PREPARE
+_AS_LN_S_PREPARE
+_AS_MKDIR_P_PREPARE
+_AS_TEST_PREPARE
+_AS_TR_CPP_PREPARE
+_AS_TR_SH_PREPARE
+])
+
+
+# AS_PREPARE
+# ----------
+# Output all the M4sh possible initialization into the initialization
+# diversion.
+m4_defun([AS_PREPARE],
+[m4_divert_text([M4SH-INIT], [_AS_PREPARE])])
+
+
+# AS_REQUIRE(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
+#            [DIVERSION = M4SH-INIT])
+# -----------------------------------------------------------
+# BODY-TO-EXPAND is some initialization which must be expanded in the
+# given diversion when expanded (required or not).  This is very
+# different from m4_require.  For instance:
+#
+#      m4_defun([_FOO_PREPARE], [foo=foo])
+#      m4_defun([FOO],
+#      [m4_require([_FOO_PREPARE])dnl
+#      echo $foo])
+#
+#      m4_defun([_BAR_PREPARE], [bar=bar])
+#      m4_defun([BAR],
+#      [AS_REQUIRE([_BAR_PREPARE])dnl
+#      echo $bar])
+#
+#      AS_INIT
+#      foo1=`FOO`
+#      foo2=`FOO`
+#      bar1=`BAR`
+#      bar2=`BAR`
+#
+# gives
+#
+#      #! /bin/sh
+#      bar=bar
+#
+#      foo1=`foo=foo
+#      echo $foo`
+#      foo2=`echo $foo`
+#      bar1=`echo $bar`
+#      bar2=`echo $bar`
+#
+# Due to the simple implementation, all the AS_REQUIRE calls have to be at
+# the very beginning of the macro body, or the AS_REQUIREs may not be nested.
+# More exactly, if a macro doesn't have all AS_REQUIREs at its beginning,
+# it may not be AS_REQUIREd.
+#
+m4_define([AS_REQUIRE],
+[m4_provide_if([$1], [],
+	       [m4_divert_text(m4_default_quoted([$3], [M4SH-INIT]),
+			       [m4_default([$2], [$1])])])])
+
+
+# AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, BODY-TO-EXPAND,
+#                     [DIVERSION = M4SH-INIT-FN])
+# --------------------------------------------------
+# BODY-TO-EXPAND is the body of a shell function to be emitted in the
+# given diversion when expanded (required or not).  Unlike other
+# xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
+#
+m4_define([AS_REQUIRE_SHELL_FN],
+[_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
+AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1() {
+$2
+}], m4_default_quoted([$3], [M4SH-INIT-FN]))])
+
+
+# _AS_RUN(TEST, [SHELL])
+# ----------------------
+# Run TEST under the current shell (if one parameter is used)
+# or under the given SHELL, protecting it from syntax errors.
+m4_define([_AS_RUN],
+[m4_ifval([$2],
+[{ $2 <<\_ASEOF
+_AS_BOURNE_COMPATIBLE
+$1
+_ASEOF
+}],
+[(eval "AS_ESCAPE(m4_expand([$1]))")])])
+
+
 # _AS_SHELL_FN_WORK
 # -----------------
 # This is a spy to detect "in the wild" shells that do not support shell
@@ -330,17 +375,6 @@ AS_IF([( set x; as_func_ret_success y && test x = "[$]1" )], [],
   echo positional parameters were not saved.])
 test $exitcode = 0[]dnl
 ])# _AS_SHELL_FN_WORK
-
-
-# AS_COPYRIGHT(TEXT)
-# ------------------
-# Emit TEXT, a copyright notice, as a shell comment near the top of the
-# script.  TEXT is evaluated once; to accomplish that, we do not prepend
-# `# ' but `@%:@ '.
-m4_define([AS_COPYRIGHT],
-[m4_divert_text([HEADER-COPYRIGHT],
-[m4_bpatsubst([
-$1], [^], [@%:@ ])])])
 
 
 # AS_SHELL_SANITIZE
@@ -406,40 +440,6 @@ as_me=`AS_BASENAME("$[0]")`
 # CDPATH.
 $as_unset CDPATH
 ])# AS_SHELL_SANITIZE
-
-
-# _AS_PREPARE
-# -----------
-# This macro has a very special status.  Normal use of M4sh relies
-# heavily on AS_REQUIRE, so that needed initializations (such as
-# _AS_TEST_PREPARE) are performed on need, not on demand.  But
-# Autoconf is the first client of M4sh, and for two reasons: configure
-# and config.status.  Relying on AS_REQUIRE is of course fine for
-# configure, but fails for config.status (which is created by
-# configure).  So we need a means to force the inclusion of the
-# various _AS_PREPARE_* on top of config.status.  That's basically why
-# there are so many _AS_PREPARE_* below, and that's also why it is
-# important not to forget some: config.status needs them.
-m4_defun([_AS_PREPARE],
-[_AS_LINENO_PREPARE
-
-_AS_DIRNAME_PREPARE
-_AS_ECHO_N_PREPARE[]dnl We do not need this ourselves but user code might.
-_AS_EXPR_PREPARE
-_AS_LN_S_PREPARE
-_AS_MKDIR_P_PREPARE
-_AS_TEST_PREPARE
-_AS_TR_CPP_PREPARE
-_AS_TR_SH_PREPARE
-])
-
-
-# AS_PREPARE
-# ----------
-# Output all the M4sh possible initialization into the initialization
-# diversion.
-m4_defun([AS_PREPARE],
-[m4_divert_text([M4SH-INIT], [_AS_PREPARE])])
 
 
 ## ----------------------------- ##

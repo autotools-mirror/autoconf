@@ -1,5 +1,9 @@
 2008-10-07  Eric Blake  <ebb9@byu.net>
 
+	Improve m4sh maintainability.
+	* lib/m4sugar/m4sh.m4: Sort macros for sanitizing the shell; no
+	code change.
+
 	Fix m4 quoting in previous patch.
 	* lib/m4sugar/m4sh.m4 (AS_REQUIRE_SHELL_FN): Determine diversion
 	name prior to invoking AS_REQUIRE.
