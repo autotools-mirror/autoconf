@@ -1,3 +1,10 @@
+2008-10-07  Eric Blake  <ebb9@byu.net>
+
+	Fix m4 quoting in previous patch.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE_SHELL_FN): Determine diversion
+	name prior to invoking AS_REQUIRE.
+	Reported by Ralf Wildenhues.
+
 2008-09-18  Paolo Bonzini  <bonzini@gnu.org>
 	and Eric Blake  <ebb9@byu.net>
 

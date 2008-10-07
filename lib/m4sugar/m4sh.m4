@@ -159,7 +159,7 @@ m4_define([AS_REQUIRE_SHELL_FN],
 [_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
 AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1() {
 $2
-}], [m4_default_quoted([$3], [M4SH-INIT-FN])])])
+}], m4_default_quoted([$3], [M4SH-INIT-FN]))])
 
 
 # AS_BOURNE_COMPATIBLE
