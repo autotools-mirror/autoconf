@@ -34,10 +34,10 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 ## INSTALL.  ##
 ## --------- ##
 
-pkgdata_DATA = $(srcdir)/INSTALL
 AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
 
 if MAKE_CASE_SENSITIVE
+pkgdata_DATA = $(srcdir)/INSTALL
 
 MAINTAINERCLEANFILES = $(srcdir)/INSTALL
 $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi

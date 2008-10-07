@@ -1,3 +1,10 @@
+2008-10-06  Eric Blake  <ebb9@byu.net>
+
+	Fix build with case-insensitive make, again.
+	* Makefile.am (pkgdata_DATA): Protect by MAKE_CASE_SENSITIVE.
+	Reported via Keith Marshall, originally by newthinker in
+	<http://thread.gmane.org/gmane.comp.gnu.mingw.user/27725>.
+
 2008-10-06  Bruno Haible  <bruno@clisp.org>
 
 	Warn about /usr/ucb on Solaris.
