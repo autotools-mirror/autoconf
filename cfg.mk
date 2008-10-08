@@ -38,41 +38,32 @@ url_dir_list = \
 # The GnuPG ID of the key used to sign the tarballs.
 gpg_key_ID = F4850180
 
-# Files to update automatically.
-cvs_executable_files = \
-  $(srcdir)/build-aux/announce-gen \
-  $(srcdir)/build-aux/config.guess \
-  $(srcdir)/build-aux/config.sub \
-  $(srcdir)/build-aux/elisp-comp \
-  $(srcdir)/build-aux/git-version-gen \
-  $(srcdir)/build-aux/gnupload \
-  $(srcdir)/build-aux/install-sh \
-  $(srcdir)/build-aux/mdate-sh \
-  $(srcdir)/build-aux/missing \
-  $(srcdir)/build-aux/vc-list-files
+# The local directory containing the checked-out copy of gnulib used in this
+# release.
+gnulib_dir = '$(abs_srcdir)'/../gnulib
 
-cvs_files = $(cvs_executable_files) \
-  $(srcdir)/build-aux/texinfo.tex \
-  $(srcdir)/doc/fdl.texi \
-  $(srcdir)/doc/make-stds.texi \
-  $(srcdir)/doc/standards.texi \
-  $(srcdir)/GNUmakefile
-
-# Keep executables executable.  Make it robust to parallel makes.
-local_updates = executable-update
-
-.PHONY: executable-update
-# autom4te-update is defined in Makefile.am.
-executable-update: wget-update cvs-update autom4te-update
-	chmod a+x $(cvs_executable_files)
+# Update files from gnulib.
+.PHONY: fetch
+fetch:
+	cp $(gnulib_dir)/build-aux/announce-gen $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/config.guess $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/config.sub $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/elisp-comp $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/git-version-gen $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/gnupload $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/install-sh $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/mdate-sh $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/missing $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/vc-list-files $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/texinfo.tex $(srcdir)/build-aux
+	cp $(gnulib_dir)/doc/fdl.texi $(srcdir)/doc
+	cp $(gnulib_dir)/doc/make-stds.texi $(srcdir)/doc
+	cp $(gnulib_dir)/doc/standards.texi $(srcdir)/doc
+	cp $(gnulib_dir)/top/GNUmakefile $(srcdir)
 
 # Tests not to run.
 local-checks-to-skip ?= \
   changelog-check sc_unmarked_diagnostics
-
-# The local directory containing the checked-out copy of gnulib used in this
-# release.  For now, used solely for generating the web-manual.
-gnulib_dir = '$(abs_srcdir)'/../gnulib
 
 .PHONY: web-manual
 web-manual:

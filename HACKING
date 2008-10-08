@@ -101,10 +101,8 @@ environment, such as your GPG key and the location of a gnulib
 checkout.
 
 ** Update the foreign files
-Running `make update' in the top level should make it all for you.
-FIXME - this is broken as of 2.62, now that most upstream files are
-stored in git rather than CVS.  Until this is fixed, manually copy the
-files listed in cfg.mk from a gnulib git checkout.
+Running `make fetch' in the top level should grab it all for you; you
+should check the results before committing them in git.
 
 ** Set the version number
 Update the version number in NEWS (with version, date, and release

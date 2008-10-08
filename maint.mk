@@ -549,44 +549,6 @@ www-gnu = http://www.gnu.org
 # Use mv, if you don't have/want move-if-change.
 move_if_change ?= move-if-change
 
-
-# --------------------- #
-# Updating everything.  #
-# --------------------- #
-
-.PHONY: update
-local_updates ?= cvs-update
-update: $(local_updates)
-
-
-# -------------------------- #
-# Updating GNU build tools.  #
-# -------------------------- #
-
-cvs_files ?= \
-  $(srcdir)/build-aux/depcomp \
-  $(srcdir)/build-aux/install-sh \
-  $(srcdir)/build-aux/missing
-gnulib_repo=:pserver:anonymous@cvs.savannah.gnu.org:/sources/gnulib
-.PHONY: wget-update
-wget-update: $(get-targets)
-
-.PHONY: cvs-update
-cvs-update:
-	fail=;								\
-	for f in $(cvs_files) dummy; do					\
-	  test $$f = dummy && continue;					\
-	  test -f $$f || { echo "*** skipping $$f" 1>&2; continue; };	\
-	  cvs diff $$f > /dev/null					\
-	    || { echo "*** $$f is locally modified; skipping it" 1>&2;	\
-		 fail=yes; continue; };					\
-	  file=$$(expr "X$$f" : 'X$(srcdir)/\(.*\)');			\
-	  echo checking out $$file...;					\
-	  $(CVS) -d $(gnulib_repo) co -p gnulib/$$file >$$f.t		\
-	    && $(move_if_change) $$f.t $$f;				\
-	done;								\
-	test "$$fail" && exit 1
-
 emit_upload_commands:
 	@echo =====================================
 	@echo =====================================

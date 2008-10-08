@@ -1,3 +1,15 @@
+2008-10-08  Eric Blake  <ebb9@byu.net>
+
+	Resync from gnulib.
+	* cfg.mk (cvs_executable_files, cvs_files): Rewrite...
+	(fetch): ...into new target.
+	(executable-update): Delete, now that it is unused.
+	* maint.mk (update, local_updates, cvs_files, gnulib_repo)
+	(wget-update, cvs-update): Likewise.
+	* HACKING (Update the foreign files): Document new procedure.
+	* GNUmakefile: Resync from upstream, via new 'make fetch'.
+	* build-aux/config.guess: Likewise.
+
 2008-09-18  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_SPY): Remove.
