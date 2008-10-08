@@ -7,6 +7,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Autotest testsuites accept an option --jobs[=N] for parallel testing.
 
+** Autotest testsuites do not attempt to write startup error messages
+   to the log file before that is opened (regression introduced in 2.63).
+
 ** The following m4sugar macros are new:
    m4_default_quoted
 

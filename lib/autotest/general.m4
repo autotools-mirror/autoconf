@@ -215,9 +215,6 @@ m4_define([AT_groups_all], [])
 m4_define([AT_help_all], [])
 m4_foreach([AT_name], [_AT_DEFINE_INIT_LIST], [m4_popdef(m4_defn([AT_name]))])
 m4_wrap([_AT_FINISH])
-dnl Define FDs.
-m4_define([AS_MESSAGE_LOG_FD], [5])
-m4_define([AT_JOB_FIFO_FD], [6])
 AS_INIT[]dnl
 m4_divert_push([DEFAULTS])dnl
 AT_COPYRIGHT(
@@ -892,8 +889,9 @@ PATH=$at_new_path
 export PATH
 
 # Setting up the FDs.
-# 5 is the log file.  Not to be overwritten if `-d'.
-dnl FDs are defined earlier in this file.
+m4_define([AS_MESSAGE_LOG_FD], [5])
+m4_define([AT_JOB_FIFO_FD], [6])
+[#] AS_MESSAGE_LOG_FD is the log file.  Not to be overwritten if `-d'.
 if $at_debug_p; then
   at_suite_log=/dev/null
 else

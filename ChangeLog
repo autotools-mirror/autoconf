@@ -1,3 +1,12 @@
+2008-10-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Do not write to testsuite log fd before initialization.
+	* lib/autotest/general.m4 (AS_MESSAGE_LOG_FD, AT_JOB_FIFO_FD):
+	Define fds only when initializing the log fd so early error
+	messages do not try to write to it.
+	* tests/autotest.at (Startup error messages): New test.
+	* NEWS: Document this 2.63 regression.
+
 2008-10-07  Eric Blake  <ebb9@byu.net>
 
 	Ensure _AS_CLEANUP is defined.

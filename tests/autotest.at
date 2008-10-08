@@ -216,6 +216,14 @@ AT_TESTED([autoconf])
 autom4te --version
 ]])])
 
+AT_CHECK_AT([Startup error messages],
+[[AT_INIT([[suite]])
+AT_SETUP([only test])
+AT_CHECK([:])
+AT_CLEANUP
+]], [], [], [], [],
+[AT_CHECK([sed -n '/exec AS_MESSAGE_LOG_FD/q; />&AS_MESSAGE_LOG_FD/p' < micro-suite])])
+
 ## ----------------------------------------------------- ##
 ## Newlines and command substitutions in test commands.  ##
 ## ----------------------------------------------------- ##
