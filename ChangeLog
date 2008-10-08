@@ -1,5 +1,10 @@
 2008-10-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Document AS_VERSION_COMPARE.
+	* doc/autoconf.texi (Programming in M4sh): Document
+	AS_VERSION_COMPARE.
+	* NEWS: Update.
+
 	Do not write to testsuite log fd before initialization.
 	* lib/autotest/general.m4 (AS_MESSAGE_LOG_FD, AT_JOB_FIFO_FD):
 	Define fds only when initializing the log fd so early error

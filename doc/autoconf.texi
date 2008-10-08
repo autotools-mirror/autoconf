@@ -11924,6 +11924,18 @@ optimizing the common cases (@var{dir} or @var{file} is @samp{.},
 @var{file} is absolute, etc.).
 @end defmac
 
+@defmac AS_VERSION_COMPARE (@var{version-1}, @var{version-2}, @
+  @ovar{action-if-less}, @ovar{action-if-equal}, @ovar{action-if-greater})
+@asindex{VERSION_COMPARE}
+Compare two strings @var{version-1} and @var{version-2}, possibly
+containing shell variables, as version strings, and expand
+@var{action-if-less}, @var{action-if-equal}, or @var{action-if-greater}
+depending upon the result.
+The algorithm to compare is similar to the one used by strverscmp in
+glibc (@pxref{String/Array Comparison, , String/Array Comparison, libc,
+The @acronym{GNU} C Library}).
+@end defmac
+
 
 @node File Descriptor Macros
 @section File Descriptor Macros

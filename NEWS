@@ -13,6 +13,9 @@ GNU Autoconf NEWS - User visible changes.
 ** The following m4sugar macros are new:
    m4_default_quoted
 
+** The following m4sh macros are documented now:
+   AS_VERSION_COMPARE.
+
 
 * Major changes in Autoconf 2.63 (2008-09-09) [stable]
   Released by Eric Blake, based on git versions 2.62.*.
