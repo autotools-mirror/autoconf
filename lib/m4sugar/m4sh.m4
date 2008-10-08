@@ -155,23 +155,21 @@ $1], [^], [@%:@ ])])])
 # _AS_DETECT_REQUIRED(TEST)
 # -------------------------
 # Refuse to execute under a shell that does not pass the given TEST.
-m4_define([_AS_DETECT_REQUIRED_BODY], [:])
 m4_defun([_AS_DETECT_REQUIRED],
 [m4_require([_AS_DETECT_BETTER_SHELL])dnl
-m4_expand_once([m4_append([_AS_DETECT_REQUIRED_BODY], [
-($1) || AS_EXIT(1)
-])], [_AS_DETECT_REQUIRED_provide($1)])])
+m4_set_add([_AS_DETECT_REQUIRED_BODY],
+	   [($1) || AS_EXIT(1)
+])])
 
 
 # _AS_DETECT_SUGGESTED(TEST)
 # --------------------------
 # Prefer to execute under a shell that passes the given TEST.
-m4_define([_AS_DETECT_SUGGESTED_BODY], [:])
 m4_defun([_AS_DETECT_SUGGESTED],
 [m4_require([_AS_DETECT_BETTER_SHELL])dnl
-m4_expand_once([m4_append([_AS_DETECT_SUGGESTED_BODY], [
-($1) || AS_EXIT(1)
-])], [_AS_DETECT_SUGGESTED_provide($1)])])
+m4_set_add([_AS_DETECT_SUGGESTED_BODY],
+	   [($1) || AS_EXIT(1)
+])])
 
 
 # _AS_DETECT_BETTER_SHELL
@@ -192,11 +190,18 @@ m4_defun_once([_AS_DETECT_BETTER_SHELL],
 [m4_append([_AS_CLEANUP], [m4_divert_text([M4SH-SANITIZE], [
 AS_REQUIRE([_AS_UNSET_PREPARE])dnl
 if test "x$CONFIG_SHELL" = x; then
-  AS_IF([_AS_RUN([_AS_DETECT_REQUIRED_BODY]) 2>/dev/null],
-	[as_have_required=yes],
-	[as_have_required=no])
+dnl Remove any tests from suggested that are also required
+  m4_set_foreach([_AS_DETECT_SUGGESTED_BODY], [AS_snippet],
+		 [m4_set_contains([_AS_DETECT_REQUIRED_BODY],
+				  _m4_defn([AS_snippet]),
+				  [m4_set_remove([_AS_DETECT_SUGGESTED_BODY],
+						 _m4_defn([AS_snippet]))])])dnl
+  m4_set_empty([_AS_DETECT_REQUIRED_BODY], [as_have_required=yes],
+    [AS_IF([_AS_RUN(m4_set_contents([_AS_DETECT_REQUIRED_BODY])) 2>/dev/null],
+	  [as_have_required=yes],
+	  [as_have_required=no])])
   AS_IF([test $as_have_required = yes &&dnl
-	 _AS_RUN([_AS_DETECT_SUGGESTED_BODY]) 2> /dev/null],
+	 _AS_RUN(m4_set_contents([_AS_DETECT_SUGGESTED_BODY])) 2> /dev/null],
     [],
     [as_candidate_shells=
     _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
@@ -210,12 +215,14 @@ if test "x$CONFIG_SHELL" = x; then
       for as_shell in $as_candidate_shells $SHELL; do
 	 # Try only shells that exist, to save several forks.
 	 AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
-		_AS_RUN([_AS_DETECT_REQUIRED_BODY],
+		_AS_RUN(m4_set_contents([_AS_DETECT_REQUIRED_BODY]),
 			[("$as_shell") 2> /dev/null])],
 	       [CONFIG_SHELL=$as_shell
 	       as_have_required=yes
-	       AS_IF([_AS_RUN([_AS_DETECT_SUGGESTED_BODY], ["$as_shell" 2> /dev/null])],
-		     [break])])
+	       m4_set_empty([_AS_DETECT_SUGGESTED_BODY], [break],
+	         [AS_IF([_AS_RUN(m4_set_contents([_AS_DETECT_SUGGESTED_BODY]),
+			         ["$as_shell" 2> /dev/null])],
+		        [break])])])
       done
 
       AS_IF([test "x$CONFIG_SHELL" != x],

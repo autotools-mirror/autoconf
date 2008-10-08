@@ -1,3 +1,12 @@
+2008-10-08  Eric Blake  <ebb9@byu.net>
+
+	Avoid repeating required shell tests in suggested set.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_REQUIRED, _AS_DETECT_SUGGESTED):
+	Use m4_set, rather than m4_expand_once/m4_append.
+	(_AS_DETECT_SUGGESTED): Adjust to new storage layout, and filter
+	required tests out of suggested tests.
+	Reported by Paolo Bonzini.
+
 2008-10-08  Paolo Bonzini  <bonzini@gnu.org>
 
 	Add m4sh keyword to all m4sh.at tests.
