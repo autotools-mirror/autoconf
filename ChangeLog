@@ -1,3 +1,9 @@
+2008-10-08  Paolo Bonzini  <bonzini@gnu.org>
+
+	Add m4sh keyword to all m4sh.at tests.
+	* tests/m4sh.at: Add m4sh keyword to all tests.  Fix comment
+	pastos.
+
 2008-10-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Document AS_VERSION_COMPARE.

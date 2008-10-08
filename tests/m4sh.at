@@ -25,6 +25,7 @@ AT_BANNER([M4sh.])
 ## ---------------- ##
 
 AT_SETUP([LINENO])
+AT_KEYWORDS([m4sh])
 
 # We cannot unset LINENO with Zsh, yet this test case relies on
 # unsetting LINENO to compare its result when (i) LINENO is supported
@@ -99,8 +100,9 @@ AT_CLEANUP
 ## AS_DIRNAME.  ##
 ## ------------ ##
 
-# Build nested dirs.
+# Strip filename component.
 AT_SETUP([AS@&t@_DIRNAME])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -159,8 +161,9 @@ AT_CLEANUP
 ## AS_ECHO.  ##
 ## --------- ##
 
-# Build nested dirs.
+# Print literal strings, with/without newline.
 AT_SETUP([AS@&t@_ECHO and AS@&t@_ECHO_N])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -207,8 +210,9 @@ AT_CLEANUP
 ## AS_BASENAME.  ##
 ## ------------- ##
 
-# Build nested dirs.
+# Strip path from file.
 AT_SETUP([AS@&t@_BASENAME])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -266,6 +270,7 @@ AT_CLEANUP
 
 # Build nested dirs.
 AT_SETUP([AS@&t@_MKDIR_P])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -295,8 +300,9 @@ AT_CLEANUP
 ## AS_VERSION_COMPARE.  ##
 ## -------------------- ##
 
-# Build nested dirs.
+# Three-way version comparison.
 AT_SETUP([AS@&t@_VERSION_COMPARE])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -345,6 +351,7 @@ AT_CLEANUP
 # unknown for `[!...]'.
 
 AT_SETUP([Negated classes in globbing])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -375,6 +382,7 @@ AT_CLEANUP
 # $LINENO support, supports functions.
 
 AT_SETUP([Functions Support])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -417,6 +425,7 @@ AT_CLEANUP
 # $LINENO support, supports functions, and the `return' keyword.
 
 AT_SETUP([Functions and return Support])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -453,6 +462,7 @@ AT_CLEANUP
 # in the main diversion, and not in M4SH-INIT.
 
 AT_SETUP([AS@&t@_REQUIRE_SHELL_FN and m4@&t@_require])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
@@ -493,7 +503,7 @@ AT_CLEANUP
 ## -------------- ##
 
 AT_SETUP([AS@&t@_HELP_STRING])
-AT_KEYWORDS([m4@&t@_text_wrap m4@&t@_expand])
+AT_KEYWORDS([m4sh m4@&t@_text_wrap m4@&t@_expand])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
@@ -633,8 +643,7 @@ AT_CLEANUP
 ## ------------------- ##
 
 AT_SETUP([AS@&t@_IF and AS@&t@_CASE])
-
-AT_KEYWORDS([m4@&t@_transform_pair])
+AT_KEYWORDS([m4sh m4@&t@_transform_pair])
 
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
@@ -764,6 +773,7 @@ AT_CLEANUP
 ## --------------- ##
 
 AT_SETUP([AS@&t@_LITERAL_IF])
+AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
@@ -798,8 +808,7 @@ AT_CLEANUP
 ## ----------------- ##
 
 AT_SETUP([AS@&t@_INIT cleanup])
-
-AT_KEYWORDS([m4@&t@_wrap m4@&t@_wrap_lifo])
+AT_KEYWORDS([m4sh m4@&t@_wrap m4@&t@_wrap_lifo])
 
 AT_DATA_M4SH([script.as], [[dnl
 dnl Registered before AS_INIT's cleanups
