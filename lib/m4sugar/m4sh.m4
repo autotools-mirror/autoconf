@@ -256,12 +256,12 @@ fi
 # there are so many _AS_PREPARE_* below, and that's also why it is
 # important not to forget some: config.status needs them.
 m4_defun([_AS_PREPARE],
-[_AS_LINENO_PREPARE
-
-_AS_DIRNAME_PREPARE
+[_AS_EXPR_PREPARE
 _AS_BASENAME_PREPARE
+_AS_DIRNAME_PREPARE
+_AS_ME_PREPARE
+_AS_LINENO_PREPARE
 _AS_ECHO_N_PREPARE[]dnl We do not need this ourselves but user code might.
-_AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
 _AS_MKDIR_P_PREPARE
 _AS_TEST_PREPARE
@@ -269,13 +269,25 @@ _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
 ])
 
-
 # AS_PREPARE
 # ----------
 # Output all the M4sh possible initialization into the initialization
-# diversion.
+# diversion.  We do not use _AS_PREPARE so that the m4_provide symbols for
+# AS_REQUIRE and AS_REQUIRE_SHELL_FN are defined properly, and so that
+# shell functions are placed in M4SH-INIT-FN.
 m4_defun([AS_PREPARE],
-[m4_divert_text([M4SH-INIT], [_AS_PREPARE])])
+[AS_REQUIRE([_AS_EXPR_PREPARE])
+AS_REQUIRE([_AS_BASENAME_PREPARE])
+AS_REQUIRE([_AS_DIRNAME_PREPARE])
+AS_REQUIRE([_AS_ME_PREPARE])
+AS_REQUIRE([_AS_LINENO_PREPARE])
+AS_REQUIRE([_AS_ECHO_N_PREPARE])
+AS_REQUIRE([_AS_LN_S_PREPARE])
+AS_REQUIRE([_AS_MKDIR_P_PREPARE])
+AS_REQUIRE([_AS_TEST_PREPARE])
+AS_REQUIRE([_AS_TR_CPP_PREPARE])
+AS_REQUIRE([_AS_TR_SH_PREPARE])
+])
 
 
 # AS_REQUIRE(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
@@ -445,12 +457,8 @@ export LC_ALL
 LANGUAGE=C
 export LANGUAGE
 
-# Required to use basename.
-_AS_EXPR_PREPARE
-_AS_BASENAME_PREPARE
-
-# Name of the executable.
-as_me=`AS_BASENAME("$[0]")`
+dnl Delay this until after shell functions are defined.
+AS_REQUIRE([_AS_ME_PREPARE])
 
 # CDPATH.
 $as_unset CDPATH
@@ -900,6 +908,14 @@ fi
 ])# _AS_EXPR_PREPARE
 
 
+# _AS_ME_PREPARE
+# --------------
+# Define $as_me to the basename of the executable file's name.
+m4_defun([_AS_ME_PREPARE],
+[AS_REQUIRE([_AS_BASENAME_PREPARE])dnl
+as_me=`AS_BASENAME("$[0]")`
+])
+
 # _AS_LINENO_WORKS
 # ---------------
 # Succeed if the currently executing shell supports LINENO.
@@ -923,8 +939,9 @@ m4_define([_AS_LINENO_WORKS],
 # the case of embedded executables (such as config.status within
 # configure) you'd compare LINENO wrt config.status vs. _oline_ wrt
 # configure.
-m4_define([_AS_LINENO_PREPARE],
+m4_defun([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
+AS_REQUIRE([_AS_ME_PREPARE])dnl
 _AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])
 _AS_LINENO_WORKS || {
 

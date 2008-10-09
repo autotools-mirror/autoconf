@@ -1,5 +1,16 @@
 2008-10-09  Paolo Bonzini  <bonzini@gnu.org>
 
+	* m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Delay setting as_me
+	until the M4SH-INIT diversion using _AS_ME_PREPARE.
+	(_AS_PREPARE): Invoke _AS_EXPR_PREPARE before _AS_BASENAME_PREPARE
+	and _AS_DIRNAME_PREPARE, and _AS_BASENAME_PREPARE and _AS_ME_PREPARE
+	before _AS_LINENO_PREPARE.
+	(AS_PREPARE): Include all the AS_REQUIREs manually.
+	(_AS_ME_PREPARE): New.
+	(_AS_LINENO_PREPARE): Use m4_defun.
+
+2008-10-09  Paolo Bonzini  <bonzini@gnu.org>
+
 	* m4sugar/m4sh.m4 (_AS_BASENAME_EXPR, _AS_DIRNAME_EXPR): Do not
 	require _AS_EXPR_PREPARE.
 	(_AS_BASENAME_PREPARE, _AS_DIRNAME_PREPARE): Do it here.
@@ -17,12 +28,12 @@
 	* GNUmakefile: Resync from upstream, via new 'make fetch'.
 	* build-aux/config.guess: Likewise.
 
-2008-09-18  Paolo Bonzini  <bonzini@gnu.org>
+2008-10-08  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_SPY): Remove.
 	(AS_INIT): Do not call it.
 
-2008-09-18  Paolo Bonzini  <bonzini@gnu.org>
+2008-10-08  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Expand
 	_AS_UNSET_PREPARE in M4SH-SANITIZE.
