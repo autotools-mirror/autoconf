@@ -1,3 +1,12 @@
+2008-10-09  Eric Blake  <ebb9@byu.net>
+
+	Only prepare $as_me if it will be used.
+	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Avoid unconditional
+	preparation.
+	(_AS_ECHO_LOG): Depend on $LINENO preparation.
+	(AS_MESSAGE): Depend on $as_me preparation.
+	(AS_TMPDIR): Use AS_ERROR, rather than a hand-rolled copy.
+
 2008-10-09  Paolo Bonzini  <bonzini@gnu.org>
 
 	* m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Delay setting as_me

@@ -220,9 +220,9 @@ dnl Remove any tests from suggested that are also required
 	       [CONFIG_SHELL=$as_shell
 	       as_have_required=yes
 	       m4_set_empty([_AS_DETECT_SUGGESTED_BODY], [break],
-	         [AS_IF([_AS_RUN(m4_set_contents([_AS_DETECT_SUGGESTED_BODY]),
-			         ["$as_shell" 2> /dev/null])],
-		        [break])])])
+		 [AS_IF([_AS_RUN(m4_set_contents([_AS_DETECT_SUGGESTED_BODY]),
+				 ["$as_shell" 2> /dev/null])],
+			[break])])])
       done
 
       AS_IF([test "x$CONFIG_SHELL" != x],
@@ -457,9 +457,6 @@ export LC_ALL
 LANGUAGE=C
 export LANGUAGE
 
-dnl Delay this until after shell functions are defined.
-AS_REQUIRE([_AS_ME_PREPARE])
-
 # CDPATH.
 $as_unset CDPATH
 ])# AS_SHELL_SANITIZE
@@ -646,7 +643,8 @@ m4_define([_AS_ECHO],
 # --------------------
 # Log the string to AS_MESSAGE_LOG_FD.
 m4_define([_AS_ECHO_LOG],
-[_AS_ECHO([$as_me:$LINENO: $1], [AS_MESSAGE_LOG_FD])])
+[AS_REQUIRE([_AS_LINENO_PREPARE])dnl
+_AS_ECHO([$as_me:$LINENO: $1], [AS_MESSAGE_LOG_FD])])
 
 
 # _AS_ECHO_N_PREPARE
@@ -682,7 +680,8 @@ m4_define([_AS_ECHO_N],
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
 # ----------------------------------------
 m4_define([AS_MESSAGE],
-[m4_ifset([AS_MESSAGE_LOG_FD],
+[AS_REQUIRE([_AS_ME_PREPARE])dnl
+m4_ifset([AS_MESSAGE_LOG_FD],
 	  [{ _AS_ECHO_LOG([$1])
 _AS_ECHO([$as_me: $1], [$2]);}],
 	  [_AS_ECHO([$as_me: $1], [$2])])[]dnl
@@ -1332,7 +1331,8 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[,
 # Create as safely as possible a temporary directory in DIRECTORY
 # which name is inspired by PREFIX (should be 2-4 chars max).
 m4_define([AS_TMPDIR],
-[# Create a (secure) tmp directory for tmp files.
+[AS_REQUIRE([_AS_ME_PREPARE])dnl
+# Create a (secure) tmp directory for tmp files.
 m4_if([$2], [], [: ${TMPDIR=/tmp}])
 {
   tmp=`(umask 077 && mktemp -d "m4_default([$2], [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
@@ -1341,11 +1341,7 @@ m4_if([$2], [], [: ${TMPDIR=/tmp}])
 {
   tmp=m4_default([$2], [$TMPDIR])/$1$$-$RANDOM
   (umask 077 && mkdir "$tmp")
-} ||
-{
-   AS_ECHO(["$as_me: cannot create a temporary directory in m4_default([$2], [$TMPDIR])"]) >&2
-   AS_EXIT
-}dnl
+} || AS_ERROR([cannot create a temporary directory in m4_default([$2], [$TMPDIR])])dnl
 ])# AS_TMPDIR
 
 
