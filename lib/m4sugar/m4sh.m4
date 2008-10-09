@@ -259,6 +259,7 @@ m4_defun([_AS_PREPARE],
 [_AS_LINENO_PREPARE
 
 _AS_DIRNAME_PREPARE
+_AS_BASENAME_PREPARE
 _AS_ECHO_N_PREPARE[]dnl We do not need this ourselves but user code might.
 _AS_EXPR_PREPARE
 _AS_LN_S_PREPARE
@@ -708,8 +709,7 @@ m4_define([AS_ERROR],
 # Also see the comments for AS_DIRNAME.
 
 m4_defun([_AS_BASENAME_EXPR],
-[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
-$as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
+[$as_expr X/[]$1 : '.*/\([[^/][^/]*]\)/*$' \| \
 	 X[]$1 : 'X\(//\)$' \| \
 	 X[]$1 : 'X\(/\)' \| .])
 
@@ -739,9 +739,12 @@ _AS_BASENAME_SED([$1])])
 # _AS_BASENAME_PREPARE
 # --------------------
 # Avoid Solaris 9 /usr/ucb/basename, as `basename /' outputs an empty line.
-# Also, traditional basename mishandles --.
+# Also, traditional basename mishandles --.  Require here _AS_EXPR_PREPARE,
+# to avoid problems when _AS_BASENAME is called from the M4SH-INIT diversion
+# (AS_REQUIRE is nowhere near being as sophisticated as AC_REQUIRE).
 m4_defun([_AS_BASENAME_PREPARE],
-[if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
+[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
+if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
   as_basename=basename
 else
   as_basename=false
@@ -797,7 +800,8 @@ _AS_DIRNAME_SED([$1])])
 # _AS_DIRNAME_PREPARE
 # --------------------
 m4_defun([_AS_DIRNAME_PREPARE],
-[if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
+[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
+if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
   as_dirname=dirname
 else
   as_dirname=false

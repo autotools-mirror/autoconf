@@ -1,3 +1,10 @@
+2008-10-09  Paolo Bonzini  <bonzini@gnu.org>
+
+	* m4sugar/m4sh.m4 (_AS_BASENAME_EXPR, _AS_DIRNAME_EXPR): Do not
+	require _AS_EXPR_PREPARE.
+	(_AS_BASENAME_PREPARE, _AS_DIRNAME_PREPARE): Do it here.
+	(_AS_PREPARE): Add _AS_BASENAME_PREPARE.
+
 2008-10-08  Eric Blake  <ebb9@byu.net>
 
 	Resync from gnulib.
