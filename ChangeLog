@@ -1,3 +1,12 @@
+2008-10-10  Paolo Bonzini  <bonzini@gnu.org>
+
+	* m4sugar/m4sh.m4 (_AS_MKDIR_P): New, from AS_MKDIR_P.  Adjust
+	meaning of as_mkdir_p to be `false' or a full `mkdir -p' command.
+	(AS_MKDIR_P): Just dispatch to as_func_mkdir_p.
+	(_AS_PREPARE): Define shell functions.
+	(_AS_MKDIR_P_PREPARE): Set as_mkdir_p according to the above change.
+	Define shell functions.
+
 2008-10-09  Eric Blake  <ebb9@byu.net>
 
 	Only prepare $as_me if it will be used.

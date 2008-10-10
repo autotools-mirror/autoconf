@@ -256,7 +256,11 @@ fi
 # there are so many _AS_PREPARE_* below, and that's also why it is
 # important not to forget some: config.status needs them.
 m4_defun([_AS_PREPARE],
-[_AS_EXPR_PREPARE
+[as_func_mkdir_p() {
+  _AS_MKDIR_P([$[]1])
+}
+
+_AS_EXPR_PREPARE
 _AS_BASENAME_PREPARE
 _AS_DIRNAME_PREPARE
 _AS_ME_PREPARE
@@ -1029,16 +1033,14 @@ $as_ln_s $1 $2
 ])
 
 
-# AS_MKDIR_P(DIR)
-# ---------------
-# Emulate `mkdir -p' with plain `mkdir'.
-m4_define([AS_MKDIR_P],
-[AS_REQUIRE([_$0_PREPARE])dnl
-{ as_dir=$1
-  case $as_dir in #(
+# _AS_MKDIR_P(DIR)
+# ----------------
+# Emulate `mkdir -p` with plain `mkdir'.
+m4_define([_AS_MKDIR_P],
+[case $as_dir in #(
   -*) as_dir=./$as_dir;;
   esac
-  test -d "$as_dir" || { $as_mkdir_p && mkdir -p "$as_dir"; } || {
+  test -d "$as_dir" || eval $as_mkdir_p || {
     as_dirs=
     while :; do
       case $as_dir in #(
@@ -1050,15 +1052,25 @@ m4_define([AS_MKDIR_P],
       test -d "$as_dir" && break
     done
     test -z "$as_dirs" || eval "mkdir $as_dirs"
-  } || test -d "$as_dir" || AS_ERROR([cannot create directory $as_dir]); }dnl
-])# AS_MKDIR_P
+  } || test -d "$as_dir" || AS_ERROR([cannot create directory $as_dir])
+])
+
+# AS_MKDIR_P(DIR)
+# ---------------
+# Emulate `mkdir -p' with plain `mkdir' if needed.
+m4_define([AS_MKDIR_P],
+[AS_REQUIRE([_$0_PREPARE])dnl
+as_dir=$1; as_func_mkdir_p])# AS_MKDIR_P
 
 
 # _AS_MKDIR_P_PREPARE
 # -------------------
 m4_defun([_AS_MKDIR_P_PREPARE],
-[if mkdir -p . 2>/dev/null; then
-  as_mkdir_p=:
+[AS_REQUIRE_SHELL_FN([as_func_mkdir_p], [
+  _AS_MKDIR_P([$[]1])
+])
+if mkdir -p . 2>/dev/null; then
+  as_mkdir_p='mkdir -p "$as_dir"'
 else
   test -d ./-p && rmdir ./-p
   as_mkdir_p=false
