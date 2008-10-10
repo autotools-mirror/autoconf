@@ -1,5 +1,15 @@
 2008-10-10  Paolo Bonzini  <bonzini@gnu.org>
 
+	* lib/m4sugar/m4sh.m4 (AS_ME_PREPARE, AS_LINENO_PREPARE): New.
+	* doc/autoconf.texi (Initialization macros): Document them.
+	(Portable Shell): Refer to AS_LINENO_PREPARE.
+	* NEWS: Mention them.
+
+	* bin/autoconf.as: Invoke AS_ME_PREPARE.
+	* lib/autotest/general.m4: Likewise.
+
+2008-10-10  Paolo Bonzini  <bonzini@gnu.org>
+
 	* doc/autoconf.texi (Programming in M4sh): Make its own chapter.
 
 2008-10-10  Eric Blake  <ebb9@byu.net>

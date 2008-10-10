@@ -216,6 +216,7 @@ m4_define([AT_help_all], [])
 m4_foreach([AT_name], [_AT_DEFINE_INIT_LIST], [m4_popdef(m4_defn([AT_name]))])
 m4_wrap([_AT_FINISH])
 AS_INIT[]dnl
+AS_ME_PREPARE[]dnl
 m4_divert_push([DEFAULTS])dnl
 AT_COPYRIGHT(
 [Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008

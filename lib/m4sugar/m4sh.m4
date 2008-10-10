@@ -914,6 +914,7 @@ fi
 # _AS_ME_PREPARE
 # --------------
 # Define $as_me to the basename of the executable file's name.
+m4_defun([AS_ME_PREPARE], [AS_REQUIRE([_$0])])
 m4_defun([_AS_ME_PREPARE],
 [AS_REQUIRE([_AS_BASENAME_PREPARE])dnl
 as_me=`AS_BASENAME("$[0]")`
@@ -942,6 +943,7 @@ m4_define([_AS_LINENO_WORKS],
 # the case of embedded executables (such as config.status within
 # configure) you'd compare LINENO wrt config.status vs. _oline_ wrt
 # configure.
+m4_defun([AS_LINENO_PREPARE], [AS_REQUIRE([_$0])])
 m4_defun([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
 AS_REQUIRE([_AS_ME_PREPARE])dnl

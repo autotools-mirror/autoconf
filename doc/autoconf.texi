@@ -11943,6 +11943,21 @@ generated from, and code to sanitize the environment for the rest of the
 script.  Finally, it changes the current diversion to @code{BODY}.
 @end defmac
 
+@defmac AS_LINENO_PREPARE
+@asindex{LINENO_PREPARE}
+@evindex LINENO
+Find a shell that supports the special variable @env{LINENO}, which
+contains the number of the currently executing line.  This macro is
+automatically invoked by @code{AC_INIT} in configure scripts.
+@end defmac
+
+@defmac AS_ME_PREPARE
+@asindex{ME_PREPARE}
+Set up variable @env{as_me} to be the basename of the currently executing
+script.  This macro is automatically invoked by @code{AC_INIT} in
+configure scripts.
+@end defmac
+
 @defmac AS_SHELL_SANITIZE
 @asindex{SHELL_SANITIZE}
 Initialize the shell suitably for @command{configure} scripts.  This has
@@ -14002,12 +14017,13 @@ etc.)@: as described above.
 @item LINENO
 Most modern shells provide the current line number in @code{LINENO}.
 Its value is the line number of the beginning of the current command.
-Autoconf attempts to execute @command{configure} with a shell that
-supports @code{LINENO}.
-If no such shell is available, it attempts to implement @code{LINENO}
-with a Sed prepass that replaces each instance of the string
-@code{$LINENO} (not followed by an alphanumeric character) with the
-line's number.
+M4sh, and hence Autoconf, attempts to execute @command{configure} with
+a shell that supports @code{LINENO}.  If no such shell is available, it
+attempts to implement @code{LINENO} with a Sed prepass that replaces each
+instance of the string @code{$LINENO} (not followed by an alphanumeric
+character) with the line's number.  In M4sh scripts you should execute
+@code{AS_LINENO_PREPARE} so that these workarounds are included in
+your script; configure scripts do this automatically in @code{AC_INIT}.
 
 You should not rely on @code{LINENO} within @command{eval}, as the
 behavior differs in practice.  Also, the possibility of the Sed

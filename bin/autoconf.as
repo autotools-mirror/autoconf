@@ -22,6 +22,7 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 # 02110-1301, USA.
 
 m4_divert_pop([HEADER-COPYRIGHT])dnl back to BODY
+AS_ME_PREPARE[]dnl
 
 usage=["\
 Usage: $0 [OPTION]... [TEMPLATE-FILE]
