@@ -1695,6 +1695,17 @@ m4_define([AS_VAR_POPDEF],
 ## ----------------- ##
 
 
+# AS_INIT_GENERATED
+# -----------------
+# Emit m4sh initialization code in a suitable form for a quoted
+# here document.  Does not emit the `#!' sequence, which should be
+# generated with `#! $SHELL'; see the manual or autoconf/status.m4
+# for more detail.
+m4_defun([AS_INIT_GENERATED],
+[m4_require([AS_PREPARE])dnl
+AS_SHELL_SANITIZE
+_AS_PREPARE])
+
 # AS_INIT
 # -------
 # Initialize m4sh.

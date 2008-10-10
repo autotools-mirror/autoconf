@@ -1332,11 +1332,7 @@ SHELL=\${CONFIG_SHELL-$SHELL}
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-AS_SHELL_SANITIZE
-dnl Watch out, this is directly the initializations, do not use
-dnl AS_PREPARE, otherwise you'd get it output in the initialization
-dnl of configure, not config.status.
-_AS_PREPARE
+AS_INIT_GENERATED
 exec AS_MESSAGE_FD>&1
 
 # Save the log message, to keep $[0] and so on meaningful, and to

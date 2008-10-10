@@ -1,3 +1,10 @@
+2008-10-13  Paolo Bonzini  <bonzini@gnu.org>
+
+	Add and document AS_INIT_GENERATED.
+	* lib/m4sugar/m4sh.m4 (AS_INIT_GENERATED): New.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Use it.
+	* doc/autoconf.texi (Initialization macros): Document it.
+
 2008-10-13  Eric Blake  <ebb9@byu.net>
 
 	Use consistent shell function style.
