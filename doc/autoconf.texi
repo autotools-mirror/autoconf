@@ -260,6 +260,7 @@ freedom.''
 * Writing Tests::               How to write new feature checks
 * Results::                     What to do with results from feature checks
 * Programming in M4::           Layers on top of which Autoconf is written
+* Programming in M4sh::         Shell portability layer
 * Writing Autoconf Macros::     Adding new macros to Autoconf
 * Portable Shell::              Shell script portability pitfalls
 * Portable Make::               Makefile portability pitfalls
@@ -428,7 +429,11 @@ Programming in M4
 * M4 Quotation::                Protecting macros from unwanted expansion
 * Using autom4te::              The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
-* Programming in M4sh::         Common shell Constructs
+
+Programming in M4sh
+
+* Common Shell Constructs::     Portability layer for common shell constructs
+* Initialization Macros::       Macros to establish a sane shell environment
 * File Descriptor Macros::      File descriptor macros for input and output
 
 M4 Quotation
@@ -9240,8 +9245,6 @@ matter of fact, @emph{anything that is not documented must not be used}.
 * M4 Quotation::                Protecting macros from unwanted expansion
 * Using autom4te::              The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
-* Programming in M4sh::         Common shell Constructs
-* File Descriptor Macros::      File descriptor macros for input and output
 @end menu
 
 @node M4 Quotation
@@ -11770,10 +11773,7 @@ Any token matching @var{pattern} is allowed, including if it matches an
 @end defmac
 
 @node Programming in M4sh
-@section Programming in M4sh
-
-@c FIXME: Eventually will become a chapter, as it is not related to
-@c programming in M4 per se.
+@chapter Programming in M4sh
 
 M4sh, pronounced ``mash'', is aiming at producing portable Bourne shell
 scripts.  This name was coined by Lars J. Aas, who notes that,
@@ -11806,6 +11806,15 @@ delimiter namespace @samp{^_AS[A-Z]} in the output file.  You should not
 define your own macros or output shell code that conflicts with these
 namespaces.
 
+@menu
+* Common Shell Constructs::     Portability layer for common shell constructs
+* Initialization Macros::       Macros to establish a sane shell environment
+* File Descriptor Macros::      File descriptor macros for input and output
+@end menu
+
+@node Common Shell Constructs
+@section Common Shell Constructs
+
 M4sh provides portable alternatives for some common shell constructs
 that unfortunately are not portable in practice.
 
@@ -11819,14 +11828,6 @@ if @code{$file} is @samp{/one/two/three}, the command
 @end defmac
 @end ignore
 
-@defmac AS_BOURNE_COMPATIBLE
-@asindex{BOURNE_COMPATIBLE}
-Set up the shell to be more compatible with the Bourne shell as
-standardized by Posix, if possible.  This may involve setting
-environment variables, or setting options, or similar
-implementation-specific actions.
-@end defmac
-
 @defmac AS_CASE (@var{word}, @ovar{pattern1}, @ovar{if-matched1}, @
   @dots{}, @ovar{default})
 @asindex{CASE}
@@ -11835,12 +11836,15 @@ against one or more patterns.  @var{if-matched} is run if the
 corresponding pattern matched @var{word}, else @var{default} is run.
 @end defmac
 
+@c Deprecated, to be replaced by a better API
+@ignore
 @defmac AS_DIRNAME (@var{file-name})
 @asindex{DIRNAME}
 Output the directory portion of @var{file-name}.  For example,
 if @code{$file} is @samp{/one/two/three}, the command
 @code{dir=`AS_DIRNAME(["$file"])`} sets @code{dir} to @samp{/one/two}.
 @end defmac
+@end ignore
 
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
 @asindex{IF}
@@ -11861,14 +11865,6 @@ ensures any required macros of @code{HANDLE_FOO}
 are expanded before the first test.
 @end defmac
 
-@defmac AS_INIT
-@asindex{INIT}
-Initialize the M4sh environment.  This macro calls @code{m4_init}, then
-outputs the @code{#! /bin/sh} line, a notice about where the output was
-generated from, and code to sanitize the environment for the rest of the
-script.  Finally, it changes the current diversion to @code{BODY}.
-@end defmac
-
 @defmac AS_MKDIR_P (@var{file-name})
 @asindex{MKDIR_P}
 Make the directory @var{file-name}, including intervening directories
@@ -11882,15 +11878,6 @@ succeed in that case.  If creation of @var{file-name} fails, exit the
 script.
 
 Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Particular Programs}).
-@end defmac
-
-@defmac AS_SHELL_SANITIZE
-@asindex{SHELL_SANITIZE}
-Initialize the shell suitably for @command{configure} scripts.  This has
-the effect of @code{AS_BOURNE_COMPATIBLE}, and sets some other
-environment variables for predictable results from configuration tests.
-For example, it sets @env{LC_ALL} to change to the default C locale.
-@xref{Special Shell Variables}.
 @end defmac
 
 @defmac AS_TR_CPP (@var{expression})
@@ -11934,6 +11921,36 @@ depending upon the result.
 The algorithm to compare is similar to the one used by strverscmp in
 glibc (@pxref{String/Array Comparison, , String/Array Comparison, libc,
 The @acronym{GNU} C Library}).
+@end defmac
+
+@node Initialization Macros
+@section Initialization Macros
+
+@defmac AS_BOURNE_COMPATIBLE
+@asindex{BOURNE_COMPATIBLE}
+Set up the shell to be more compatible with the Bourne shell as
+standardized by Posix, if possible.  This may involve setting
+environment variables, or setting options, or similar
+implementation-specific actions.  This macro is deprecated, since
+@code{AS_INIT} already invokes it.
+@end defmac
+
+@defmac AS_INIT
+@asindex{INIT}
+Initialize the M4sh environment.  This macro calls @code{m4_init}, then
+outputs the @code{#! /bin/sh} line, a notice about where the output was
+generated from, and code to sanitize the environment for the rest of the
+script.  Finally, it changes the current diversion to @code{BODY}.
+@end defmac
+
+@defmac AS_SHELL_SANITIZE
+@asindex{SHELL_SANITIZE}
+Initialize the shell suitably for @command{configure} scripts.  This has
+the effect of @code{AS_BOURNE_COMPATIBLE}, and sets some other
+environment variables for predictable results from configuration tests.
+For example, it sets @env{LC_ALL} to change to the default C locale.
+@xref{Special Shell Variables}.  This macro is deprecated, since
+@code{AS_INIT} already invokes it.
 @end defmac
 
 
