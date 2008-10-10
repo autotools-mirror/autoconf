@@ -11872,9 +11872,10 @@ script.  Finally, it changes the current diversion to @code{BODY}.
 @defmac AS_MKDIR_P (@var{file-name})
 @asindex{MKDIR_P}
 Make the directory @var{file-name}, including intervening directories
-as necessary.  This is equivalent to @samp{mkdir -p @var{file-name}},
+as necessary.  This is equivalent to @samp{mkdir -p -- @var{file-name}},
 except that it is portable to older versions of @command{mkdir} that
-lack support for the @option{-p} option.  Also, @code{AS_MKDIR_P}
+lack support for the @option{-p} option or for the @option{--}
+delimiter.  Also, @code{AS_MKDIR_P}
 succeeds if @var{file-name} is a symbolic link to an existing directory,
 even though Posix is unclear whether @samp{mkdir -p} should
 succeed in that case.  If creation of @var{file-name} fails, exit the

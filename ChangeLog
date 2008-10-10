@@ -1,6 +1,16 @@
+2008-10-10  Eric Blake  <ebb9@byu.net>
+
+	Fix _AS_MKDIR_P usage.
+	* lib/m4sugar/m4sh.m4 (_AS_MKDIR_P): Correct documentation to
+	match implementation.
+	(_AS_PREPARE, _AS_MKDIR_P_PREPARE): Adjust callers.
+	* doc/autoconf.texi (Programming in M4sh) <AS_MKDIR_P>: Tweak
+	wording to better match behavior.
+
 2008-10-10  Paolo Bonzini  <bonzini@gnu.org>
 
 	* doc/autoconf.texi: Be less wary of shell functions.
+	* NEWS: Document the increased use of shell functions.
 
 2008-10-10  Paolo Bonzini  <bonzini@gnu.org>
 

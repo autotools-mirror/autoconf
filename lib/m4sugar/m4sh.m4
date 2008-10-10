@@ -257,7 +257,7 @@ fi
 # important not to forget some: config.status needs them.
 m4_defun([_AS_PREPARE],
 [as_func_mkdir_p() {
-  _AS_MKDIR_P([$[]1])
+  _AS_MKDIR_P
 }
 
 _AS_EXPR_PREPARE
@@ -1033,9 +1033,11 @@ $as_ln_s $1 $2
 ])
 
 
-# _AS_MKDIR_P(DIR)
-# ----------------
-# Emulate `mkdir -p` with plain `mkdir'.
+# _AS_MKDIR_P
+# -----------
+# Emit code that can be used to emulate `mkdir -p` with plain `mkdir';
+# the code assumes that "$as_dir" contains the directory to create.
+# $as_dir is normalized, so there is no need to worry about using --.
 m4_define([_AS_MKDIR_P],
 [case $as_dir in #(
   -*) as_dir=./$as_dir;;
@@ -1067,7 +1069,7 @@ as_dir=$1; as_func_mkdir_p])# AS_MKDIR_P
 # -------------------
 m4_defun([_AS_MKDIR_P_PREPARE],
 [AS_REQUIRE_SHELL_FN([as_func_mkdir_p], [
-  _AS_MKDIR_P([$[]1])
+  _AS_MKDIR_P
 ])
 if mkdir -p . 2>/dev/null; then
   as_mkdir_p='mkdir -p "$as_dir"'
