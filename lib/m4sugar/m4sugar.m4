@@ -1583,6 +1583,20 @@ m4_define([_m4_defun_epi_outer],
 [_m4_undefine([_m4_divert_dump])m4_divert_pop([GROW])m4_undivert([GROW])])
 
 
+# m4_divert_require(DIVERSION, NAME-TO-CHECK, [BODY-TO-EXPAND])
+# --------------------------------------------------------------
+# Same as m4_require, but BODY-TO-EXPAND goes into the named diversion;
+# requirements still go in the current diversion though.
+#
+m4_define([m4_divert_require],
+[m4_ifdef([_m4_expanding($2)],
+  [m4_fatal([$0: circular dependency of $2])])]dnl
+[m4_ifdef([_m4_divert_dump], [],
+  [m4_fatal([$0($2): cannot be used outside of an m4_defun'd macro])])]dnl
+[m4_provide_if([$2], [],
+  [_m4_require_call([$2], [$3], [$1])])])
+
+
 # m4_defun(NAME, EXPANSION)
 # -------------------------
 # Define a macro which automatically provides itself.  Add machinery
@@ -1681,12 +1695,13 @@ m4_do([[m4_ifdef([_m4_expanding($1)],
 m4_bmatch([$0], [^AC_], [[AC_DEFUN]], [[m4_defun]])['d macro])])]],
       [[m4_provide_if([$1],
 		      [],
-		      [_m4_require_call([$1], [$2])])]]))
+		      [_m4_require_call([$1], [$2], [_m4_defn([_m4_divert_dump])])])]]))
 
 
-# _m4_require_call(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK])
-# -----------------------------------------------------------------
-# If m4_require decides to expand the body, it calls this macro.
+# _m4_require_call(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK], DIVERSION)
+# ----------------------------------------------------------------------------
+# If m4_require decides to expand the body, it calls this macro.  The
+# expansion is placed in DIVERSION.
 #
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and other overhead on the common path.
@@ -1698,7 +1713,7 @@ m4_provide_if([$1],
 	      [],
 	      [m4_warn([syntax],
 		       [$1 is m4_require'd but not m4_defun'd])])]],
-      [[m4_divert(_m4_defn([_m4_divert_dump]))]],
+      [[m4_divert($3)]],
       [[m4_undivert(_m4_divert_grow)]],
       [[m4_divert_pop(_m4_divert_grow)]],
       [[m4_define([_m4_divert_grow], m4_incr(_m4_divert_grow))]]))

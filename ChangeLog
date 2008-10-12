@@ -1,3 +1,15 @@
+2008-10-14  Paolo Bonzini  <bonzini@gnu.org>
+
+	Use m4_require to implement AS_REQUIRE.
+	* lib/m4sugar/m4sugar.m4 (_m4_require_call): Accept a third argument.
+	(m4_require): Pass it.
+	(m4_divert_require): New.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): Rewrite using m4_divert_require.
+	Remove comment about differences with m4_require.
+	* tests/m4sh.at (AS_REQUIRE_SHELL_FN and m4_require): Update to test
+	the expected behavior.
+	(Nested AS_REQUIRE_SHELL_FN): New test.
+
 2008-10-13  Paolo Bonzini  <bonzini@gnu.org>
 
 	Test AS_LINENO_PREPARE.

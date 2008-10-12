@@ -299,45 +299,14 @@ AS_REQUIRE([_AS_TR_SH_PREPARE])
 #            [DIVERSION = M4SH-INIT])
 # -----------------------------------------------------------
 # BODY-TO-EXPAND is some initialization which must be expanded in the
-# given diversion when expanded (required or not).  This is very
-# different from m4_require.  For instance:
+# given diversion when expanded (required or not).  The expansion
+# goes in the named diversion or an earlier one.
 #
-#      m4_defun([_FOO_PREPARE], [foo=foo])
-#      m4_defun([FOO],
-#      [m4_require([_FOO_PREPARE])dnl
-#      echo $foo])
-#
-#      m4_defun([_BAR_PREPARE], [bar=bar])
-#      m4_defun([BAR],
-#      [AS_REQUIRE([_BAR_PREPARE])dnl
-#      echo $bar])
-#
-#      AS_INIT
-#      foo1=`FOO`
-#      foo2=`FOO`
-#      bar1=`BAR`
-#      bar2=`BAR`
-#
-# gives
-#
-#      #! /bin/sh
-#      bar=bar
-#
-#      foo1=`foo=foo
-#      echo $foo`
-#      foo2=`echo $foo`
-#      bar1=`echo $bar`
-#      bar2=`echo $bar`
-#
-# Due to the simple implementation, all the AS_REQUIRE calls have to be at
-# the very beginning of the macro body, or the AS_REQUIREs may not be nested.
-# More exactly, if a macro doesn't have all AS_REQUIREs at its beginning,
-# it may not be AS_REQUIREd.
-#
-m4_define([AS_REQUIRE],
-[m4_provide_if([$1], [],
-	       [m4_divert_text(m4_default_quoted([$3], [M4SH-INIT]),
-			       [m4_default([$2], [$1])])])])
+m4_defun([AS_REQUIRE],
+[m4_define([_m4_divert_desired], [m4_default_quoted([$3], [M4SH-INIT])])dnl
+m4_if(m4_eval(_m4_divert(_m4_divert_dump) <= _m4_divert(_m4_divert_desired)), 1,
+      [m4_require([$1], [$2])],
+      [m4_divert_require([_m4_divert_desired], [$1], [$2])])])
 
 
 # AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, BODY-TO-EXPAND,
