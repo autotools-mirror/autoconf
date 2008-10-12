@@ -1,5 +1,10 @@
 2008-10-13  Paolo Bonzini  <bonzini@gnu.org>
 
+	Test AS_LINENO_PREPARE.
+	* tests/m4sh.at: Use documented AS_LINENO_PREPARE.
+
+2008-10-13  Paolo Bonzini  <bonzini@gnu.org>
+
 	Test AS_ME_PREPARE.
 	* tests/m4sh.at (as_me): New test.
 

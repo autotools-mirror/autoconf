@@ -407,7 +407,7 @@ AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
-_AS_LINENO_PREPARE
+AS_LINENO_PREPARE
 
 func_return () {
   (exit $1)
@@ -450,7 +450,7 @@ AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
-_AS_LINENO_PREPARE
+AS_LINENO_PREPARE
 
 func_success () {
   return 0
@@ -528,7 +528,6 @@ AT_KEYWORDS([m4sh m4@&t@_text_wrap m4@&t@_expand])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
-_AS_LINENO_PREPARE
 
 echo "AS_HELP_STRING([--an-option],[some text])"
 echo "AS_HELP_STRING([--another-much-longer-option],
