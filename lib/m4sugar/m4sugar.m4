@@ -2717,6 +2717,19 @@ m4_define([m4_set_listc],
 	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
 	       [,_m4_defn([_m4_set_($1)])])])
 
+# m4_set_map(SET, ACTION)
+# -----------------------
+# For each element of SET, expand ACTION with a single argument of the
+# current element.  ACTION should not recursively list SET's contents,
+# add elements to SET, nor delete any element from SET except the one
+# passed as an argument.  The order that the elements are visited in
+# is not guaranteed.  This is faster than the corresponding
+#   m4_map_args([ACTION]m4_set_listc([SET]))
+m4_define([m4_set_map],
+[m4_ifdef([_m4_set_cleanup($1)],
+    [_m4_set_contents_1c], [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
+       [$2(_m4_defn([_m4_set_($1)]))])])
+
 # m4_set_remove(SET, VALUE, [IF-PRESENT], [IF-ABSENT])
 # ----------------------------------------------------
 # If VALUE is an element of SET, delete it and expand IF-PRESENT.
@@ -2726,7 +2739,7 @@ m4_define([m4_set_listc],
 #
 # Optimize if the element being removed is the most recently added,
 # since defining _m4_set_cleanup($1) slows down so many other macros.
-# In particular, this plays well with m4_set_foreach.
+# In particular, this plays well with m4_set_foreach and m4_set_map.
 m4_define([m4_set_remove],
 [m4_set_contains([$1], [$2], [_m4_set_size([$1],
     [m4_decr])m4_if(_m4_defn([_m4_set([$1])]), [$2],

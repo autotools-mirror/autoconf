@@ -1,5 +1,12 @@
 2008-10-17  Eric Blake  <ebb9@byu.net>
 
+	Add m4_set_map.
+	* lib/m4sugar/m4sugar.m4 (m4_set_foreach): New macro.
+	* tests/m4sugar.at (m4@&t@_set): Enhance test.
+	* doc/autoconf.texi (Set manipulation Macros) <m4_set_map>:
+	Document it.
+	* NEWS: Likewise.
+
 	Document m4_map_args.
 	* lib/m4sugar/m4sugar.m4 (m4_transform, m4_transform_pair):
 	Rename...

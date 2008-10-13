@@ -11751,6 +11751,17 @@ m4_set_empty([b], [0], [m4_count(m4_set_list([b]))])
 @end example
 @end defmac
 
+@defmac m4_set_map (@var{set}, @var{action})
+@msindex{set_map}
+For each element in the set @var{set}, expand @var{action} with a single
+argument of the set element.  Behavior is unspecified if @var{action}
+recursively lists the contents of @var{set} (although listing other sets
+is acceptable), or if it modifies the set in any way other than removing
+the element passed as an argument.  This macro is faster than the
+corresponding
+@code{m4_map_args([@var{action}]m4_set_listc([@var{set}]))}.
+@end defmac
+
 @defmac m4_set_remove (@var{set}, @var{value}, @ovar{if-present}, @
  @ovar{if-absent})
 @msindex{set_remove}
@@ -11758,7 +11769,8 @@ If @var{value} is an element in the set @var{set}, then remove it and
 expand @var{if-present}.  Otherwise expand @var{if-absent}.  This macro
 operates in constant time so that multiple removals will scale linearly
 rather than quadratically; but when used outside of
-@code{m4_set_foreach}, it leaves memory occupied until the set is later
+@code{m4_set_foreach} or @code{m4_set_map}, it leaves memory occupied
+until the set is later
 compacted by @code{m4_set_contents} or @code{m4_set_list}.  Several
 other set operations are then less efficient between the time of element
 removal and subsequent memory compaction, but still maintain their
