@@ -1,5 +1,23 @@
 2008-10-17  Eric Blake  <ebb9@byu.net>
 
+	Document m4_map_args.
+	* lib/m4sugar/m4sugar.m4 (m4_transform, m4_transform_pair):
+	Rename...
+	(m4_map_args, m4_map_args_pair): ...to these names, and document.
+	(m4_version_unletter): Use the interface.
+	* lib/m4sugar/foreach.m4 (m4_map_args, m4_map_args_pair)
+	(_m4_map_args_, _m4_map_args_pair_, _m4_map_args_pair_end):
+	Perform same renames.
+	* lib/m4sugar/m4sh.m4 (AS_CASE, AS_IF): Adjust callers.
+	* tests/m4sugar.at (m4@&t@_map_args): New test.
+	(recursion): Adjust caller.
+	* tests/m4sh.at (AS@&t@_IF and AS@&t@_CASE): Likewise.
+	* doc/autoconf.texi (Looping constructs) <m4_map_args>: Document
+	this interface.
+	* NEWS: Mention the new macros.
+
+2008-10-17  Eric Blake  <ebb9@byu.net>
+
 	Reduce vertical whitespace in configure.
 	* lib/autoconf/general.m4 (AC_INIT): Silence newline output during
 	m4 side effect initializations.

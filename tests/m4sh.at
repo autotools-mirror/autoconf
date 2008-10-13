@@ -724,7 +724,7 @@ AT_CLEANUP
 ## ------------------- ##
 
 AT_SETUP([AS@&t@_IF and AS@&t@_CASE])
-AT_KEYWORDS([m4sh m4@&t@_transform_pair])
+AT_KEYWORDS([m4sh m4@&t@_map_args_pair])
 
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT

@@ -10928,6 +10928,41 @@ m4_count(m4_map_sep([m4_echo], [[,]], [[[a]], [[b]]]))
 @end example
 @end defmac
 
+@defmac m4_map_args (@var{macro}, @var{arg}@dots{})
+@msindex{map_args}
+Repeatedly invoke @var{macro} with each successive @var{arg} as its
+argument.  In the following example, three solutions are presented with
+the same expansion; the solution using @code{m4_map_args} is the most
+efficient.
+@example
+m4_define([active], [ACTIVE])dnl
+m4_foreach([var], [[plain], [active]], [ m4_echo(m4_defn([var]))])
+@result{} plain active
+m4_map([ m4_echo], [[[plain]], [[active]]])
+@result{} plain active
+m4_map_args([ m4_echo], [plain], [active])
+@result{} plain active
+@end example
+@end defmac
+
+@defmac m4_map_args_pair (@var{macro}, @dvar{macro-end, macro}, @
+  @var{arg}@dots{})
+@msindex{map_args_pair}
+For every pair of arguments @var{arg}, invoke @var{macro} with two
+arguments.  If there is an odd number of arguments, invoke
+@var{macro-end}, which defaults to @var{macro}, with the remaining
+argument.
+
+@example
+m4_map_args_pair([, m4_reverse], [], [1], [2], [3])
+@result{}, 2, 1, 3
+m4_map_args_pair([, m4_reverse], [, m4_dquote], [1], [2], [3])
+@result{}, 2, 1, [3]
+m4_map_args_pair([, m4_reverse], [, m4_dquote], [1], [2], [3], [4])
+@result{}, 2, 1, 4, 3
+@end example
+@end defmac
+
 @defmac m4_shiftn (@var{count}, @dots{})
 @defmacx m4_shift2 (@dots{})
 @defmacx m4_shift3 (@dots{})

@@ -1106,34 +1106,34 @@ m4_define([_m4_map],
 [m4_if([$#], [2], [],
        [$1, [$3])$0([$1], m4_shift2($@))])])
 
-# m4_transform(EXPRESSION, ARG...)
-# --------------------------------
+# m4_map_args(EXPRESSION, ARG...)
+# -------------------------------
 # Expand EXPRESSION([ARG]) for each argument.  More efficient than
 # m4_foreach([var], [ARG...], [EXPRESSION(m4_defn([var]))])
 #
 # Please keep foreach.m4 in sync with any adjustments made here.
-m4_define([m4_transform],
+m4_define([m4_map_args],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
        [$#], [1], [],
        [$#], [2], [$1([$2])[]],
        [$1([$2])[]$0([$1], m4_shift2($@))])])
 
 
-# m4_transform_pair(EXPRESSION, [END-EXPR = EXPRESSION], ARG...)
-# --------------------------------------------------------------
+# m4_map_args_pair(EXPRESSION, [END-EXPR = EXPRESSION], ARG...)
+# -------------------------------------------------------------
 # Perform a pairwise grouping of consecutive ARGs, by expanding
 # EXPRESSION([ARG1], [ARG2]).  If there are an odd number of ARGs, the
 # final argument is expanded with END-EXPR([ARGn]).
 #
 # For example:
 #   m4_define([show], [($*)m4_newline])dnl
-#   m4_transform_pair([show], [], [a], [b], [c], [d], [e])dnl
+#   m4_map_args_pair([show], [], [a], [b], [c], [d], [e])dnl
 #   => (a,b)
 #   => (c,d)
 #   => (e)
 #
 # Please keep foreach.m4 in sync with any adjustments made here.
-m4_define([m4_transform_pair],
+m4_define([m4_map_args_pair],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
        [$#], [1], [m4_fatal([$0: too few arguments: $#: $1])],
        [$#], [2], [],
@@ -2387,9 +2387,9 @@ m4_define([m4_sign],
 #   Nl -> (N+1).-1.(l#)
 #
 # for example:
-#   [2.14a] -> [2.14+1.-1.[0r36:a]] -> 2.15.-1.10
-#   [2.14b] -> [2.15+1.-1.[0r36:b]] -> 2.15.-1.11
-#   [2.61aa.b] -> [2.61+1.-1.[0r36:aa],+1.-1.[0r36:b]] -> 2.62.-1.370.1.-1.11
+#   [2.14a] -> [2,14+1,-1,[0r36:a]] -> 2.15.-1.10
+#   [2.14b] -> [2,15+1,-1,[0r36:b]] -> 2.15.-1.11
+#   [2.61aa.b] -> [2.61,1,-1,[0r36:aa],+1,-1,[0r36:b]] -> 2.62.-1.370.1.-1.11
 #
 # This macro expects reasonable version numbers, but can handle double
 # letters and does not expand any macros.  Original version strings can
@@ -2397,11 +2397,10 @@ m4_define([m4_sign],
 #
 # Inline constant expansions, to avoid m4_defn overhead.
 # _m4_version_unletter is the real workhorse used by m4_version_compare,
-# but since [0r36:a] is less readable than 10, we provide a wrapper for
-# human use.
+# but since [0r36:a] and commas are less readable than 10 and dots, we
+# provide a wrapper for human use.
 m4_define([m4_version_unletter],
-[m4_map_sep([m4_eval], [.],
-	    m4_dquote(m4_dquote_elt(m4_unquote(_$0([$1])))))])
+[m4_substr(m4_map_args([.m4_eval], m4_unquote(_$0([$1]))), [1])])
 m4_define([_m4_version_unletter],
 [m4_bpatsubst(m4_translit([[[$1]]], [.-], [,,]),]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_Letters])))[[+],

@@ -270,33 +270,33 @@ m4_define([_m4_map],
 m4_define([_m4_map_],
 [[$$1, [$$2])]])
 
-# m4_transform(EXPRESSION, ARG...)
-# --------------------------------
+# m4_map_args(EXPRESSION, ARG...)
+# -------------------------------
 # Expand EXPRESSION([ARG]) for each argument.  More efficient than
 # m4_foreach([var], [ARG...], [EXPRESSION(m4_defn([var]))])
 #
-# Invoke the temporary macro _m4_transform, defined as:
-#   $1([$2])[]$1([$3])[]...$1([$m])[]_m4_popdef([_m4_transform])
-m4_define([m4_transform],
+# Invoke the temporary macro _m4_map_args, defined as:
+#   $1([$2])[]$1([$3])[]...$1([$m])[]_m4_popdef([_m4_map_args])
+m4_define([m4_map_args],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
        [$#], [1], [],
        [m4_define([_$0], m4_pushdef([_$0])_m4_for([_$0], [2], [$#], [1],
    [_$0_([1], _$0)])[_m4_popdef([_$0])])_$0($@)])])
 
-m4_define([_m4_transform_],
+m4_define([_m4_map_args_],
 [[$$1([$$2])[]]])
 
-# m4_transform_pair(EXPRESSION, [END-EXPR = EXPRESSION], ARG...)
-# --------------------------------------------------------------
+# m4_map_args_pair(EXPRESSION, [END-EXPR = EXPRESSION], ARG...)
+# -------------------------------------------------------------
 # Perform a pairwise grouping of consecutive ARGs, by expanding
 # EXPRESSION([ARG1], [ARG2]).  If there are an odd number of ARGs, the
 # final argument is expanded with END-EXPR([ARGn]).
 #
-# Build the temporary macro _m4_transform_pair, with the $2([$m+1])
+# Build the temporary macro _m4_map_args_pair, with the $2([$m+1])
 # only output if $# is odd:
 #   $1([$3], [$4])[]$1([$5], [$6])[]...$1([$m-1],
-#   [$m])[]m4_default([$2], [$1])([$m+1])[]_m4_popdef([_m4_transform_pair])
-m4_define([m4_transform_pair],
+#   [$m])[]m4_default([$2], [$1])([$m+1])[]_m4_popdef([_m4_map_args_pair])
+m4_define([m4_map_args_pair],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
        [$#], [1], [m4_fatal([$0: too few arguments: $#: $1])],
        [$#], [2], [],
@@ -305,10 +305,10 @@ m4_define([m4_transform_pair],
    m4_eval([$# / 2 * 2 - 1]), [2], [_$0_([1], _$0, m4_incr(_$0))])_$0_end(
    [1], [2], [$#])[_m4_popdef([_$0])])_$0($@)])])
 
-m4_define([_m4_transform_pair_],
+m4_define([_m4_map_args_pair_],
 [[$$1([$$2], [$$3])[]]])
 
-m4_define([_m4_transform_pair_end],
+m4_define([_m4_map_args_pair_end],
 [m4_if(m4_eval([$3 & 1]), [1], [[m4_default([$$2], [$$1])([$$3])[]]])])
 
 # m4_join(SEP, ARG1, ARG2...)
