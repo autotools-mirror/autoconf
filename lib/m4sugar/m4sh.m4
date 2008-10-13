@@ -950,16 +950,15 @@ AS_REQUIRE([_AS_ME_PREPARE])dnl
 _AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])
 _AS_LINENO_WORKS || {
 
-  # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
-  # uniformly replaced by the line number.  The first 'sed' inserts a
-  # line-number line after each line using $LINENO; the second 'sed'
-  # does the real work.  The second script uses 'N' to pair each
-  # line-number line with the line containing $LINENO, and appends
-  # trailing '-' during substitution so that $LINENO is not a special
-  # case at line end.
-  # (Raja R Harinath suggested sed '=', and Paul Eggert wrote the
-  # scripts with optimization help from Paolo Bonzini.  Blame Lee
-  # E. McMahon (1931-1989) for sed's syntax.  :-)
+  dnl Create $as_me.lineno as a copy of $as_myself, but with $LINENO
+  dnl uniformly replaced by the line number.  The first 'sed' inserts a
+  dnl line-number line after each line using $LINENO; the second 'sed'
+  dnl does the real work.  The second script uses 'N' to pair each
+  dnl line-number line with the line containing $LINENO, and appends
+  dnl trailing '-' during substitution so that $LINENO is not a special
+  dnl case at line end.  (Raja R Harinath suggested sed '=', and Paul
+  dnl Eggert wrote the scripts with optimization help from Paolo Bonzini).
+  # Blame Lee E. McMahon (1931-1989) for sed's syntax.  :-)
   sed -n '
     p
     /[[$]]LINENO/=
