@@ -1,3 +1,8 @@
+2008-10-13  Paolo Bonzini  <bonzini@gnu.org>
+
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Place names of
+	contributors under m4 rather than shell comments.
+
 2008-10-10  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/m4sugar/m4sh.m4 (AS_ME_PREPARE, AS_LINENO_PREPARE): New.
