@@ -1,3 +1,10 @@
+2008-10-13  Eric Blake  <ebb9@byu.net>
+
+	Use consistent shell function style.
+	* lib/m4sugar/m4sh.m4 (_AS_PREPARE, AS_REQUIRE_SHELL_FN)
+	(_AS_SHELL_FN_WORK): Imitate GNU Coding Standards for C
+	functions.
+
 2008-10-13  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Place names of

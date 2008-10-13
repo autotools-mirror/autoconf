@@ -256,7 +256,8 @@ fi
 # there are so many _AS_PREPARE_* below, and that's also why it is
 # important not to forget some: config.status needs them.
 m4_defun([_AS_PREPARE],
-[as_func_mkdir_p() {
+[as_func_mkdir_p ()
+{
   _AS_MKDIR_P
 }
 
@@ -348,7 +349,8 @@ m4_define([AS_REQUIRE],
 #
 m4_define([AS_REQUIRE_SHELL_FN],
 [_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
-AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1() {
+AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1 ()
+{
 $2
 }], m4_default_quoted([$3], [M4SH-INIT-FN]))])
 
@@ -372,19 +374,24 @@ _ASEOF
 # This is a spy to detect "in the wild" shells that do not support shell
 # functions correctly.  It is based on the m4sh.at Autotest testcases.
 m4_define([_AS_SHELL_FN_WORK],
-[as_func_return () {
+[as_func_return ()
+{
   (exit [$]1)
 }
-as_func_success () {
+as_func_success ()
+{
   as_func_return 0
 }
-as_func_failure () {
+as_func_failure ()
+{
   as_func_return 1
 }
-as_func_ret_success () {
+as_func_ret_success ()
+{
   return 0
 }
-as_func_ret_failure () {
+as_func_ret_failure ()
+{
   return 1
 }
 
