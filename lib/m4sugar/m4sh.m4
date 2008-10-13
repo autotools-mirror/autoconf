@@ -624,7 +624,7 @@ m4_define([_AS_ECHO],
 # Log the string to AS_MESSAGE_LOG_FD.
 m4_define([_AS_ECHO_LOG],
 [AS_REQUIRE([_AS_LINENO_PREPARE])dnl
-_AS_ECHO([$as_me:$LINENO: $1], [AS_MESSAGE_LOG_FD])])
+_AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], [AS_MESSAGE_LOG_FD])])
 
 
 # _AS_ECHO_N_PREPARE
@@ -680,6 +680,23 @@ m4_define([AS_ERROR],
 [{ AS_MESSAGE([error: $1], [2])
    AS_EXIT([$2]); }[]dnl
 ])# AS_ERROR
+
+
+
+# AS_LINENO_PUSH([LINENO])
+# ------------------------
+# If this is the outermost call to AS_LINENO_PUSH, make sure that
+# AS_MESSAGE will print LINENO as the line number.
+m4_defun([AS_LINENO_PUSH], 
+[as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack])
+
+
+# AS_LINENO_POP([LINENO])
+# ------------------------
+# If this is call balances the outermost call to AS_LINENO_PUSH,
+# AS_MESSAGE will restart printing $LINENO as the line number.
+m4_defun([AS_LINENO_POP],
+[eval $as_lineno_stack; test "x$as_lineno_stack" = x && AS_UNSET([as_lineno])])
 
 
 

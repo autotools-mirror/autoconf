@@ -96,6 +96,34 @@ AT_CLEANUP
 
 
 
+## ---------------------- ##
+## LINENO stack support.  ##
+## ---------------------- ##
+
+AT_SETUP([LINENO stack])
+AT_KEYWORDS([m4sh])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+
+AS_LINENO_PUSH([9999])
+test $as_lineno = 9999 || AS_ERROR([bad as_lineno at depth 1])
+AS_LINENO_PUSH([8888])
+test $as_lineno = 9999 || AS_ERROR([bad as_lineno at depth 2])
+AS_LINENO_POP
+test $as_lineno = 9999 || AS_ERROR([bad as_lineno at depth 1])
+AS_LINENO_POP
+test x${as_lineno+set} = xset && AS_ERROR([as_lineno set at depth 0])
+
+AS_EXIT([0])
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script])
+
+AT_CLEANUP
+
+
 ## ------------ ##
 ## AS_DIRNAME.  ##
 ## ------------ ##
