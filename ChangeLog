@@ -1,5 +1,20 @@
 2008-10-15  Paolo Bonzini  <bonzini@gnu.org>
 
+	Assume a (possibly buggy) `unset' is present after a
+	`better shell' was found.
+	* lib/autoconf/general.m4 (_AC_CACHE_DUMP): Use AS_UNSET.
+	* lib/autoconf/programs.m4 (AC_PROG_SED): Use AS_UNSET.
+	* lib/m4sugar/m4sh.m4 (_AS_UNSET_PREPARE): Provide $as_unset as an
+	alias for AS_UNSET, for backwards compatibility.
+	(_AS_DETECT_BETTER_SHELL): Set BASH_ENV and ENV to /dev/null in case
+	the shell does not support unset.
+	(_AS_SHELL_SANITIZE): Work around Bash 2.01 bugs.  Unset BASH_ENV.
+	(AS_INIT, _AS_PREPARE, AS_PREPARE): Call it.
+	(AS_UNSET): Assume it is there but it might fail if the variable is
+	not set.  Use it throughout instead of $as_unset.
+
+2008-10-15  Paolo Bonzini  <bonzini@gnu.org>
+
 	Turn AS_SHELL_SANITIZE into a for-Libtool-only wrapper.
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_REQUIRED, _AS_DETECT_SUGGESTED): Remove
 	m4_require of _AS_DETECT_BETTER_SHELL.

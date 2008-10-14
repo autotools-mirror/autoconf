@@ -224,9 +224,12 @@ dnl Remove any tests from suggested that are also required
       done
 
       AS_IF([test "x$CONFIG_SHELL" != x],
-	[for as_var in BASH_ENV ENV
-	do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
-	done
+	[# We cannot yet assume a decent shell, so we have to provide a
+	# neutralization value for shells without unset; and this also
+	# works around shells that cannot unset nonexistent variables.
+	BASH_ENV=/dev/null
+	ENV=/dev/null
+	(unset BASH_ENV) >/dev/null 2>&1 && unset BASH_ENV ENV
 	export CONFIG_SHELL
 	exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}])
 
@@ -270,6 +273,7 @@ _AS_MKDIR_P_PREPARE
 _AS_TEST_PREPARE
 _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
+_AS_UNSET_PREPARE
 ])
 
 # AS_PREPARE
@@ -290,6 +294,7 @@ AS_REQUIRE([_AS_MKDIR_P_PREPARE])
 AS_REQUIRE([_AS_TEST_PREPARE])
 AS_REQUIRE([_AS_TR_CPP_PREPARE])
 AS_REQUIRE([_AS_TR_SH_PREPARE])
+AS_REQUIRE([_AS_UNSET_PREPARE])
 ])
 
 
@@ -315,8 +320,7 @@ m4_if(m4_eval(_m4_divert(_m4_divert_dump) <= _m4_divert(_m4_divert_desired)), 1,
 # xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
 #
 m4_define([AS_REQUIRE_SHELL_FN],
-[_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
-AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1 ()
+[AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1 ()
 {
 $2
 }], m4_default_quoted([$3], [M4SH-INIT-FN]))])
@@ -391,7 +395,6 @@ AS_BOURNE_COMPATIBLE
 _AS_CR_PREPARE
 _AS_ECHO_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
-_AS_UNSET_PREPARE
 
 # IFS
 # We need space, tab and new line, in precisely that order.  Quoting is
@@ -417,9 +420,12 @@ if test ! -f "$as_myself"; then
   AS_EXIT
 fi
 
-# Work around bugs in pre-3.0 UWIN ksh.
-for as_var in ENV MAIL MAILPATH
-do ($as_unset $as_var) >/dev/null 2>&1 && $as_unset $as_var
+# Unset variables that we do not need and cause bugs (e.g. in pre-3.0 UWIN ksh).
+# But do not cause bugs in bash 2.01; the "|| exit 1" suppresses any
+# "Segmentation fault" message there.  '((' could trigger a bug in pdksh 5.2.14.
+for as_var in BASH_ENV ENV MAIL MAILPATH
+do eval test x\${$as_var+set} = xset && dnl
+ ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
 done
 PS1='$ '
 PS2='> '
@@ -432,7 +438,7 @@ LANGUAGE=C
 export LANGUAGE
 
 # CDPATH.
-$as_unset CDPATH
+(unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 ])# _AS_SHELL_SANITIZE
 
 
@@ -446,6 +452,7 @@ m4_provide_if([AS_INIT], [],
 [m4_provide([AS_INIT])
 _AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])
 _AS_DETECT_BETTER_SHELL
+_AS_UNSET_PREPARE
 ])])
 
 
@@ -526,27 +533,24 @@ fi
 
 # _AS_UNSET_PREPARE
 # -----------------
-# AS_UNSET depends upon $as_unset: compute it.
-# Use MAIL to trigger a bug in Bash 2.01;
-# the "|| exit" suppresses the resulting "Segmentation fault" message.
-# Avoid 'if ((', as that triggers a bug in pdksh 5.2.14.
+# Define $as_unset to execute AS_UNSET, for backwards compatibility
+# with older versions of M4sh.
 m4_defun([_AS_UNSET_PREPARE],
-[# Support unset when possible.
-if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
-  as_unset=unset
-else
-  as_unset=false
-fi
+[as_func_unset ()
+{
+  AS_UNSET([$[1]])
+}
+as_unset=as_func_unset
 ])
 
 
-# AS_UNSET(VAR, [VALUE-IF-UNSET-NOT-SUPPORTED = `'])
-# --------------------------------------------------
-# Try to unset the env VAR, otherwise set it to
-# VALUE-IF-UNSET-NOT-SUPPORTED.  `as_unset' must have been computed.
+# AS_UNSET(VAR)
+# -------------
+# Unset the env VAR, working around shells that do not allow unsetting
+# a variable that is not already set.  You should not unset MAIL and
+# MAILCHECK, as that triggers a bug in Bash 2.01.
 m4_defun([AS_UNSET],
-[AS_REQUIRE([_AS_UNSET_PREPARE])dnl
-$as_unset $1 || test "${$1+set}" != set || { $1=$2; export $1; }])
+[{ AS_LITERAL_IF([$1], [], [eval ])$1=; unset $1;}])
 
 
 
@@ -1720,4 +1724,6 @@ m4_divert_text([M4SH-SANITIZE], [_AS_SHELL_SANITIZE])
 # Let's go!
 m4_divert_pop([KILL])[]dnl
 m4_divert_push([BODY])[]dnl
+_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
+AS_REQUIRE([_AS_UNSET_PREPARE])dnl For backwards compatibility.
 ])

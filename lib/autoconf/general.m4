@@ -1894,7 +1894,7 @@ m4_define([_AC_CACHE_DUMP],
       case $ac_var in #(
       _ | IFS | as_nl) ;; #(
       BASH_ARGV | BASH_SOURCE) eval $ac_var= ;; #(
-      *) $as_unset $ac_var ;;
+      *) AS_UNSET([$ac_var]) ;;
       esac ;;
     esac
   done
