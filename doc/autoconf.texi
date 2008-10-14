@@ -14226,15 +14226,15 @@ and other options upon function entry and exit.  Inside a function,
 @acronym{IRIX} sh sets @samp{$0} to the function name.
 
 It is not portable to pass temporary environment variables to shell
-functions.  Solaris @command{/bin/sh} does not see the variable.  Meanwhile,
-@command{bash} 3.2 breaks the Posix rule that the assignment must not affect
-the current environment, but only when Posix compliance is requested!
+functions.  Solaris @command{/bin/sh} does not see the variable.
+Meanwhile, not all shells follow the Posix rule that the assignment must
+affect the current environment in the same manner as special built-ins.
 
 @example
 $ @kbd{/bin/sh -c 'func()@{ echo $a;@}; a=1 func; echo $a'}
 @result{}
 @result{}
-$ @kbd{bash -c 'func()@{ echo $a;@}; a=1 func; echo $a'}
+$ @kbd{ash -c 'func()@{ echo $a;@}; a=1 func; echo $a'}
 @result{}1
 @result{}
 $ @kbd{bash -c 'set -o posix; func()@{ echo $a;@}; a=1 func; echo $a'}

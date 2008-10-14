@@ -1,5 +1,9 @@
 2008-10-14  Eric Blake  <ebb9@byu.net>
 
+	Correct previous patch.
+	* doc/autoconf.texi (Shell Functions): Bash obeys Posix, after
+	all.
+
 	Document shell function environment pitfall.
 	* doc/autoconf.texi (Shell Functions): Document bugs in bash,
 	Solaris /bin/sh.
