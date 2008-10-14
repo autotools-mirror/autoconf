@@ -197,11 +197,13 @@ dnl Remove any tests from suggested that are also required
 				  [m4_set_remove([_AS_DETECT_SUGGESTED_BODY],
 						 _m4_defn([AS_snippet]))])])dnl
   m4_set_empty([_AS_DETECT_REQUIRED_BODY], [as_have_required=yes],
-    [AS_IF([_AS_RUN(m4_set_contents([_AS_DETECT_REQUIRED_BODY])) 2>/dev/null],
+    [as_bourne_compatible="AS_ESCAPE(m4_expand([_AS_BOURNE_COMPATIBLE]))"
+    as_required="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_REQUIRED_BODY])))"
+    as_suggested="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_SUGGESTED_BODY])))"
+    AS_IF([_AS_RUN(["$as_required"])],
 	  [as_have_required=yes],
 	  [as_have_required=no])])
-  AS_IF([test $as_have_required = yes &&dnl
-	 _AS_RUN(m4_set_contents([_AS_DETECT_SUGGESTED_BODY])) 2> /dev/null],
+  AS_IF([test $as_have_required = yes && _AS_RUN(["$as_suggested"])],
     [],
     [as_candidate_shells=
     _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
@@ -215,14 +217,11 @@ dnl Remove any tests from suggested that are also required
       for as_shell in $as_candidate_shells $SHELL; do
 	 # Try only shells that exist, to save several forks.
 	 AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
-		_AS_RUN(m4_set_contents([_AS_DETECT_REQUIRED_BODY]),
-			[("$as_shell") 2> /dev/null])],
+		_AS_RUN(["$as_required"], ["$as_shell"])],
 	       [CONFIG_SHELL=$as_shell
 	       as_have_required=yes
 	       m4_set_empty([_AS_DETECT_SUGGESTED_BODY], [break],
-		 [AS_IF([_AS_RUN(m4_set_contents([_AS_DETECT_SUGGESTED_BODY]),
-				 ["$as_shell" 2> /dev/null])],
-			[break])])])
+		 [AS_IF([_AS_RUN(["$as_suggested"], ["$as_shell"])], [break])])])
       done
 
       AS_IF([test "x$CONFIG_SHELL" != x],
@@ -329,13 +328,8 @@ $2
 # Run TEST under the current shell (if one parameter is used)
 # or under the given SHELL, protecting it from syntax errors.
 m4_define([_AS_RUN],
-[m4_ifval([$2],
-[{ $2 <<\_ASEOF
-_AS_BOURNE_COMPATIBLE
-$1
-_ASEOF
-}],
-[(eval "AS_ESCAPE(m4_expand([$1]))")])])
+[m4_ifval([$2], [{ $as_echo "$as_bourne_compatible"$1 | ($2); }],
+		[(eval $1)]) 2>/dev/null])
 
 
 # _AS_SHELL_FN_WORK

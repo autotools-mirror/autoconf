@@ -1,5 +1,12 @@
 2008-10-15  Paolo Bonzini  <bonzini@gnu.org>
 
+	Trim down the size of the better-shell test.
+	* lib/m4sugar/m4sh.at (_AT_DETECT_BETTER_SHELL): Store the common
+	snippets into shell variables.
+	(_AS_RUN): Rewrite.
+
+2008-10-15  Paolo Bonzini  <bonzini@gnu.org>
+
 	Support a stack of LINENO values for AS_MESSAGE.
 	* lib/m4sugar/m4sh.m4 (_AS_ECHO_LOG): If defined, use $as_lineno as
 	the line number emitted to the log file.
