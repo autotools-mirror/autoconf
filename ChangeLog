@@ -1,3 +1,9 @@
+2008-10-14  Eric Blake  <ebb9@byu.net>
+
+	Document shell function environment pitfall.
+	* doc/autoconf.texi (Shell Functions): Document bugs in bash,
+	Solaris /bin/sh.
+
 2008-10-14  Paolo Bonzini  <bonzini@gnu.org>
 
 	Use m4_require to implement AS_REQUIRE.
