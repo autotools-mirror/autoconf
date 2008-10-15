@@ -203,7 +203,7 @@ dnl Remove any tests from suggested that are also required
     AS_IF([_AS_RUN(["$as_required"])],
 	  [as_have_required=yes],
 	  [as_have_required=no])])
-  AS_IF([test $as_have_required = yes && _AS_RUN(["$as_suggested"])],
+  AS_IF([test x$as_have_required = xyes && _AS_RUN(["$as_suggested"])],
     [],
     [as_candidate_shells=
     _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
@@ -231,7 +231,7 @@ dnl Remove any tests from suggested that are also required
 	export CONFIG_SHELL
 	exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}])
 
-    AS_IF([test $as_have_required = no],
+    AS_IF([test x$as_have_required = xno],
       [echo This script requires a shell more modern than all the
       echo shells that I found on your system.  Please install a
       echo modern shell, or manually run the script under such a
@@ -374,7 +374,7 @@ AS_IF([as_func_ret_failure],
 AS_IF([( set x; as_func_ret_success y && test x = "[$]1" )], [],
   [exitcode=1
   echo positional parameters were not saved.])
-test $exitcode = 0[]dnl
+test x$exitcode = x0[]dnl
 ])# _AS_SHELL_FN_WORK
 
 

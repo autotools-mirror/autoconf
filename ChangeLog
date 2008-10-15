@@ -1,5 +1,11 @@
 2008-10-15  Paolo Bonzini  <bonzini@gnu.org>
 
+	Use "test x$foo = xyes" to avoid upsetting Libtool's sh.test.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL, _AS_SHELL_FN_WORK): Use
+	"test x$foo = xyes".
+
+2008-10-15  Paolo Bonzini  <bonzini@gnu.org>
+
 	Trim down the size of the better-shell test.
 	* lib/m4sugar/m4sh.at (_AT_DETECT_BETTER_SHELL): Store the common
 	snippets into shell variables.
