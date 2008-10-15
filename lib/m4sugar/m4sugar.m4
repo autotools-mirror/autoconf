@@ -726,6 +726,20 @@ m4_define([_m4_apply],
 m4_define([m4_count], [$#])
 
 
+# m4_curry(MACRO, ARG...)
+# -----------------------
+# Perform argument currying.  The expansion of this macro is another
+# macro that takes exactly one argument, appends it to the end of the
+# original ARG list, then invokes MACRO.  For example:
+#   m4_curry([m4_curry], [m4_reverse], [1])([2])([3]) => 3, 2, 1
+# Not quite as practical as m4_incr, but you could also do:
+#   m4_define([add], [m4_eval(([$1]) + ([$2]))])
+#   m4_define([add_one], [m4_curry([add], [1])])
+#   add_one()([2]) => 3
+m4_define([m4_curry], [$1(m4_shift($@,)_$0])
+m4_define([_m4_curry],               [[$1])])
+
+
 # m4_do(STRING, ...)
 # ------------------
 # This macro invokes all its arguments (in sequence, of course).  It is

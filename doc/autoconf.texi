@@ -10930,7 +10930,7 @@ m4_count(m4_map_sep([m4_echo], [[,]], [[[a]], [[b]]]))
 
 @defmac m4_map_args (@var{macro}, @var{arg}@dots{})
 @msindex{map_args}
-Repeatedly invoke @var{macro} with each successive @var{arg} as its
+Repeatedly invoke @var{macro} with each successive @var{arg} as its only
 argument.  In the following example, three solutions are presented with
 the same expansion; the solution using @code{m4_map_args} is the most
 efficient.
@@ -10942,6 +10942,30 @@ m4_map([ m4_echo], [[[plain]], [[active]]])
 @result{} plain active
 m4_map_args([ m4_echo], [plain], [active])
 @result{} plain active
+@end example
+
+In cases where it is useful to operate on additional parameters besides
+the list elements, the macro @code{m4_curry} can be used in @var{macro}
+to supply the argument currying necessary to generate the desired
+argument list.  In the following example, @code{list_add_n} is more
+efficient than @code{list_add_x}.
+
+@example
+m4_define([list], [[1], [2], [3]])dnl
+m4_define([add], [m4_eval(([$1]) + ([$2]))])dnl
+dnl list_add_n(N, ARG...)
+dnl Output a list consisting of each ARG added to N
+m4_define([list_add_n],
+[m4_shift(m4_map_args([,m4_curry([add], [$1])], m4_shift($@@)))])dnl
+list_add_n([1], list)
+@result{}2,3,4
+list_add_n([2], list)
+@result{}3,4,5
+m4_define([list_add_x],
+[m4_shift(m4_foreach([var], m4_dquote(m4_shift($@@)),
+  [,add([$1],m4_defn([var]))]))])dnl
+list_add_x([1], list)
+@result{}2,3,4
 @end example
 @end defmac
 
@@ -11008,6 +11032,19 @@ m4_apply([m4_join], [[|], [1], [2]])
 @msindex{count}
 This macro returns the decimal count of the number of arguments it was
 passed.
+@end defmac
+
+@defmac m4_curry (@var{macro}, @var{arg}@dots{})
+@msindex{curry}
+This macro performs argument currying.  The expansion of this macro is
+another macro name that expects exactly one argument; that argument is
+then appended to the @var{arg} list, and then @var{macro} is expanded
+with the resulting argument list.
+
+@example
+m4_curry([m4_curry], [m4_reverse], [1])([2])([3])
+@result{}3, 2, 1
+@end example
 @end defmac
 
 @defmac m4_do (@var{arg}, @dots{})

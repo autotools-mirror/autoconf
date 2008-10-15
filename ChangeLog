@@ -1,5 +1,14 @@
 2008-10-17  Eric Blake  <ebb9@byu.net>
 
+	Add m4_curry.
+	* lib/m4sugar/m4sugar.m4 (m4_curry, _m4_curry): New macros.
+	* tests/m4sugar.at (m4@&t@_map_args): Rename...
+	(m4@&t@_map_args and m4@&t@_curry): ...and add currying tests.
+	* doc/autoconf.texi (Looping constructs) <m4_map_args>: Document
+	currying as a way to add parameters.
+	(Evaluation Macros) <m4_curry>: Document the new macro.
+	* NEWS: Likewise.
+
 	Improve suggested test filtering.
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_SUGGESTED_PRUNE): New macro,
 	extracted from...
