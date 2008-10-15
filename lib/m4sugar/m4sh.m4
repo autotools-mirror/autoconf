@@ -138,7 +138,8 @@ m4_define([_AS_BOURNE_COMPATIBLE],
 # -----------
 # Expanded as the last thing before m4sugar cleanup begins.  Macros
 # may append m4sh cleanup hooks to this as appropriate.
-m4_define([_AS_CLEANUP])
+m4_define([_AS_CLEANUP],
+[m4_divert_text([M4SH-SANITIZE], [_AS_DETECT_BETTER_SHELL])])
 
 
 # AS_COPYRIGHT(TEXT)
@@ -155,9 +156,9 @@ $1], [^], [@%:@ ])])])
 # _AS_DETECT_REQUIRED(TEST)
 # -------------------------
 # Refuse to execute under a shell that does not pass the given TEST.
+# Does not do AS_REQUIRE for the better-shell detection code.
 m4_defun([_AS_DETECT_REQUIRED],
-[m4_require([_AS_DETECT_BETTER_SHELL])dnl
-m4_set_add([_AS_DETECT_REQUIRED_BODY],
+[m4_set_add([_AS_DETECT_REQUIRED_BODY],
 	   [($1) || AS_EXIT(1)
 ])])
 
@@ -165,9 +166,9 @@ m4_set_add([_AS_DETECT_REQUIRED_BODY],
 # _AS_DETECT_SUGGESTED(TEST)
 # --------------------------
 # Prefer to execute under a shell that passes the given TEST.
+# Does not do AS_REQUIRE for the better-shell detection code.
 m4_defun([_AS_DETECT_SUGGESTED],
-[m4_require([_AS_DETECT_BETTER_SHELL])dnl
-m4_set_add([_AS_DETECT_SUGGESTED_BODY],
+[m4_set_add([_AS_DETECT_SUGGESTED_BODY],
 	   [($1) || AS_EXIT(1)
 ])])
 
@@ -186,10 +187,8 @@ m4_set_add([_AS_DETECT_SUGGESTED_BODY],
 # FIXME: The code should test for the OSF bug described in
 # <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
 #
-m4_defun_once([_AS_DETECT_BETTER_SHELL],
-[AS_REQUIRE([_AS_UNSET_PREPARE], , [M4SH-SANITIZE])dnl
-m4_append([_AS_CLEANUP], [m4_divert_text([M4SH-SANITIZE], [
-if test "x$CONFIG_SHELL" = x; then
+m4_defun([_AS_DETECT_BETTER_SHELL],
+[if test "x$CONFIG_SHELL" = x; then
 dnl Remove any tests from suggested that are also required
   m4_set_foreach([_AS_DETECT_SUGGESTED_BODY], [AS_snippet],
 		 [m4_set_contains([_AS_DETECT_REQUIRED_BODY],
@@ -239,7 +238,7 @@ dnl Remove any tests from suggested that are also required
       AS_EXIT(1)])
     ])
 fi
-])])])# _AS_DETECT_BETTER_SHELL
+])# _AS_DETECT_BETTER_SHELL
 
 
 # _AS_PREPARE
@@ -378,9 +377,10 @@ test x$exitcode = x0[]dnl
 ])# _AS_SHELL_FN_WORK
 
 
-# AS_SHELL_SANITIZE
-# -----------------
-m4_defun([AS_SHELL_SANITIZE],
+# _AS_SHELL_SANITIZE
+# ------------------
+# This is the prolog that is emitted by AS_INIT and AS_INIT_GENERATED.
+m4_defun([_AS_SHELL_SANITIZE],
 [## --------------------- ##
 ## M4sh Initialization.  ##
 ## --------------------- ##
@@ -433,7 +433,20 @@ export LANGUAGE
 
 # CDPATH.
 $as_unset CDPATH
-])# AS_SHELL_SANITIZE
+])# _AS_SHELL_SANITIZE
+
+
+# AS_SHELL_SANITIZE
+# -----------------
+# This is only needed for the sake of Libtool, which screws up royally
+# in its usage of M4sh internals.
+m4_define([AS_SHELL_SANITIZE],
+[_AS_SHELL_SANITIZE
+m4_provide_if([AS_INIT], [],
+[m4_provide([AS_INIT])
+_AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])
+_AS_DETECT_BETTER_SHELL
+])])
 
 
 ## ----------------------------- ##
@@ -934,7 +947,7 @@ m4_defun([AS_LINENO_PREPARE], [AS_REQUIRE([_$0])])
 m4_defun([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
 AS_REQUIRE([_AS_ME_PREPARE])dnl
-_AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])
+_AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])dnl
 _AS_LINENO_WORKS || {
 
   dnl Create $as_me.lineno as a copy of $as_myself, but with $LINENO
@@ -1683,7 +1696,7 @@ m4_define([AS_VAR_POPDEF],
 # for more detail.
 m4_defun([AS_INIT_GENERATED],
 [m4_require([AS_PREPARE])dnl
-AS_SHELL_SANITIZE
+_AS_SHELL_SANITIZE
 _AS_PREPARE])
 
 # AS_INIT
@@ -1693,6 +1706,7 @@ m4_define([AS_INIT],
 [# Wrap our cleanup prior to m4sugar's cleanup.
 m4_wrap([_AS_CLEANUP])
 m4_init
+m4_provide([AS_INIT])
 
 # Forbidden tokens and exceptions.
 m4_pattern_forbid([^_?AS_])
@@ -1701,7 +1715,7 @@ m4_pattern_forbid([^_?AS_])
 m4_divert_text([BINSH], [@%:@! /bin/sh])
 m4_divert_text([HEADER-COMMENT],
 	       [@%:@ Generated from __file__ by m4_PACKAGE_STRING.])
-m4_divert_text([M4SH-SANITIZE], [AS_SHELL_SANITIZE])
+m4_divert_text([M4SH-SANITIZE], [_AS_SHELL_SANITIZE])
 
 # Let's go!
 m4_divert_pop([KILL])[]dnl
