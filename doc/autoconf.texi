@@ -12794,10 +12794,11 @@ while not in Unix version 7, were retrofitted in the original Bourne
 shell and can be assumed to be part of the least common denominator.
 
 On the other hand, if you're using M4sh you can assume that the shell
-has the features that were added in SVR2, including shell functions,
+has the features that were added in SVR2 (circa 1984), including shell
+functions,
 @command{return}, @command{unset}, and I/O redirection for builtins.  For
 more information, refer to @uref{http://@/www.in-ulm.de/@/~mascheck/@/bourne/}.
-However, some pitfalls have to be avoided for portable use of this
+However, some pitfalls have to be avoided for portable use of these
 constructs; these will be documented in the rest of this chapter.
 See in particular @ref{Shell Functions} and @ref{Limitations of
 Builtins, , Limitations of Shell Builtins}.
@@ -14555,10 +14556,11 @@ EOF
 @end example
 
 New applications which are not aiming at portability should use
-@samp{printf} instead of @samp{echo}.  M4sh provides the @code{AS_ECHO}
-and @code{AS_ECHO_N} macros (corresponding to @samp{echo -n} which use
-@samp{printf} if it is available, or otherwise resort to various creative
-tricks in order to work around the above problems.
+@command{printf} instead of @command{echo}.  M4sh provides the
+@code{AS_ECHO} and @code{AS_ECHO_N} macros, which choose between
+@samp{echo -n} on implementations where that works, @command{printf} if
+it is available, or other creative tricks in order to work around the
+above problems.
 
 
 @item @command{eval}
@@ -14799,7 +14801,7 @@ fi
 @noindent
 Or, especially if the @dfn{else} branch is short, you can use @code{||}.
 In M4sh, the @code{AS_IF} macro provides an easy way to write these kinds
-of conditionals as;
+of conditionals:
 
 @example
 AS_IF([cmp -s file file.new], [], [mv file.new file])

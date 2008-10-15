@@ -420,9 +420,10 @@ if test ! -f "$as_myself"; then
   AS_EXIT
 fi
 
-# Unset variables that we do not need and cause bugs (e.g. in pre-3.0 UWIN ksh).
-# But do not cause bugs in bash 2.01; the "|| exit 1" suppresses any
-# "Segmentation fault" message there.  '((' could trigger a bug in pdksh 5.2.14.
+# Unset variables that we do not need and which cause bugs (e.g. in
+# pre-3.0 UWIN ksh).  But do not cause bugs in bash 2.01; the "|| exit 1"
+# suppresses any "Segmentation fault" message there.  '((' could
+# trigger a bug in pdksh 5.2.14.
 for as_var in BASH_ENV ENV MAIL MAILPATH
 do eval test x\${$as_var+set} = xset && dnl
  ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
@@ -698,7 +699,7 @@ m4_define([AS_ERROR],
 # ------------------------
 # If this is the outermost call to AS_LINENO_PUSH, make sure that
 # AS_MESSAGE will print LINENO as the line number.
-m4_defun([AS_LINENO_PUSH], 
+m4_defun([AS_LINENO_PUSH],
 [as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack])
 
 
