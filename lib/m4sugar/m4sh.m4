@@ -953,6 +953,9 @@ m4_defun([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])dnl
 AS_REQUIRE([_AS_ME_PREPARE])dnl
 _AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])dnl
+dnl Even if the logging fd is open, we don't want to use $LINENO in the
+dnl AS_ERROR complaining that LINENO is broken.
+m4_pushdef([AS_MESSAGE_LOG_FD])dnl
 _AS_LINENO_WORKS || {
 
   dnl Create $as_me.lineno as a copy of $as_myself, but with $LINENO
@@ -989,6 +992,7 @@ _AS_LINENO_WORKS || {
   # Exit status is that of the last command.
   exit
 }
+m4_popdef([AS_MESSAGE_LOG_FD])dnl
 ])# _AS_LINENO_PREPARE
 
 
