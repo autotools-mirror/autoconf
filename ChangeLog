@@ -1,5 +1,24 @@
 2008-10-15  Paolo Bonzini  <bonzini@gnu.org>
 
+	Updates to shell portability documentation.
+	* doc/autoconf.texi: Updates all references to "Portable Shell" and
+	"Limitations of Builtins" to use three-argument commands.
+	(Programming in M4sh): Document AS_ECHO, AS_ECHO_N, AS_UNSET.
+	(Portable Shell): Move here discussion about "Where is the POSIX
+	shell?"  Mention that M4sh provides a SVR2 shell and takes care
+	of unsetting variables if necessary.  Talk about M4sh and not only
+	Autoconf-generated scripts.
+	(Special Shell Variables): Talk about M4sh and not only
+	Autoconf-generated scripts.  Don't talk about things that Autoconf
+	does not do.  Mention problems of $LINENO with shell functions.
+	(Limitations of Builtins).  Mention AS_ECHO and AS_ECHO_N.  Move
+	discussion of eval bugs before discussion on proper use of eval.
+	Mention AS_IF.  Reword why not to use "shift N".  Mention "foo=;
+	unset foo" trick.  Include M4sh code that unsets MAIL for Bash 2.01.
+	* NEWS: Update list of documented M4sh macros.
+
+2008-10-15  Paolo Bonzini  <bonzini@gnu.org>
+
 	Assume a (possibly buggy) `unset' is present after a
 	`better shell' was found.
 	* lib/autoconf/general.m4 (_AC_CACHE_DUMP): Use AS_UNSET.

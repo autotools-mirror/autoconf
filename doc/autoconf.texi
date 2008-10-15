@@ -1030,9 +1030,10 @@ use.  Autoconf macros already exist to check for many features; see
 you can use Autoconf template macros to produce custom checks; see
 @ref{Writing Tests}, for information about them.  For especially tricky
 or specialized features, @file{configure.ac} might need to contain some
-hand-crafted shell commands; see @ref{Portable Shell}.  The
-@command{autoscan} program can give you a good start in writing
-@file{configure.ac} (@pxref{autoscan Invocation}, for more information).
+hand-crafted shell commands; see @ref{Portable Shell, , Portable Shell
+Programming}.  The @command{autoscan} program can give you a good start
+in writing @file{configure.ac} (@pxref{autoscan Invocation}, for more
+information).
 
 Previous versions of Autoconf promoted the name @file{configure.in},
 which is somewhat ambiguous (the tool needed to process this file is not
@@ -11846,6 +11847,23 @@ if @code{$file} is @samp{/one/two/three}, the command
 @end defmac
 @end ignore
 
+@defmac AS_ECHO (@var{word})
+@asindex{ECHO}
+Emits @var{word} to the standard output, followed by a newline.  @var{word}
+must be a single shell word (typically a quoted string).  The bytes of
+@var{word} are output as-is, even if it starts with "-" or contains "\".
+Redirections can be placed outside the macro invocation.
+@end defmac
+
+@defmac AS_ECHO_N (@var{word})
+@asindex{ECHO_N}
+Emits @var{word} to the standard output, without a following newline.
+@var{word} must be a single shell word (typically a quoted string) and,
+for portability, should not include more than one newline.  The bytes of
+@var{word} are output as-is, even if it starts with "-" or contains "\".
+Redirections can be placed outside the macro invocation.
+@end defmac
+
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
 @asindex{IF}
 Run shell code @var{test1}.  If @var{test1} exits with a zero status then
@@ -11909,6 +11927,12 @@ if test "$HAVE_sys_some_file_h" = yes; then echo "Have it!"; fi
 Set the shell variable @var{var} to @var{dir}/@var{file}, but
 optimizing the common cases (@var{dir} or @var{file} is @samp{.},
 @var{file} is absolute, etc.).
+@end defmac
+
+@defmac AS_UNSET (@var{var})
+@asindex{UNSET}
+Unsets the shell variable @var{var}, working around bugs in older
+shells (@pxref{Limitations of Builtins, , Limitations of Shell Builtins}).
 @end defmac
 
 @defmac AS_VERSION_COMPARE (@var{version-1}, @var{version-2}, @
@@ -12731,18 +12755,52 @@ test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
 When writing your own checks, there are some shell-script programming
 techniques you should avoid in order to make your code portable.  The
 Bourne shell and upward-compatible shells like the Korn shell and Bash
-have evolved over the years, but to prevent trouble, do not take
-advantage of features that were added after Unix version 7, circa
-1977 (@pxref{Systemology}).
+have evolved over the years, and many features added to the original
+System7 shell are now supported on all interesting porting targets.
+However, the following discussion between Russ Allbery and Robert Lipe
+is worth reading:
 
-You should not use aliases, negated character classes, or other features
-that are not found in all Bourne-compatible shells; restrict yourself
-to the lowest common denominator.  Even @code{unset} is not supported
-by all shells!
+@noindent
+Russ Allbery:
 
-Shell functions are considered portable nowadays.  However, some pitfalls
-have to be avoided for portable use of shell functions (@pxref{Shell
-Functions}).
+@quotation
+The @acronym{GNU} assumption that @command{/bin/sh} is the one and only shell
+leads to a permanent deadlock.  Vendors don't want to break users'
+existing shell scripts, and there are some corner cases in the Bourne
+shell that are not completely compatible with a Posix shell.  Thus,
+vendors who have taken this route will @emph{never} (OK@dots{}``never say
+never'') replace the Bourne shell (as @command{/bin/sh}) with a
+Posix shell.
+@end quotation
+
+@noindent
+Robert Lipe:
+
+@quotation
+This is exactly the problem.  While most (at least most System V's) do
+have a Bourne shell that accepts shell functions most vendor
+@command{/bin/sh} programs are not the Posix shell.
+
+So while most modern systems do have a shell @emph{somewhere} that meets the
+Posix standard, the challenge is to find it.
+@end quotation
+
+For this reason, part of the job of M4sh (@pxref{Programming in M4sh})
+is to find such a shell.  But to prevent trouble, if you're not using
+M4sh you should not take advantage of features that were added after Unix
+version 7, circa 1977 (@pxref{Systemology}); you should not use aliases,
+negated character classes, or even @command{unset}.  @code{#} comments,
+while not in Unix version 7, were retrofitted in the original Bourne
+shell and can be assumed to be part of the least common denominator.
+
+On the other hand, if you're using M4sh you can assume that the shell
+has the features that were added in SVR2, including shell functions,
+@command{return}, @command{unset}, and I/O redirection for builtins.  For
+more information, refer to @uref{http://@/www.in-ulm.de/@/~mascheck/@/bourne/}.
+However, some pitfalls have to be avoided for portable use of this
+constructs; these will be documented in the rest of this chapter.
+See in particular @ref{Shell Functions} and @ref{Limitations of
+Builtins, , Limitations of Shell Builtins}.
 
 Some ancient systems have quite
 small limits on the length of the @samp{#!} line; for instance, 32
@@ -12919,34 +12977,6 @@ zsh, The Z Shell Manual}, for details.
 The default Mac OS X @command{sh} was originally Zsh; it was changed to
 Bash in Mac OS X 10.2.
 @end table
-
-The following discussion between Russ Allbery and Robert Lipe is worth
-reading:
-
-@noindent
-Russ Allbery:
-
-@quotation
-The @acronym{GNU} assumption that @command{/bin/sh} is the one and only shell
-leads to a permanent deadlock.  Vendors don't want to break users'
-existing shell scripts, and there are some corner cases in the Bourne
-shell that are not completely compatible with a Posix shell.  Thus,
-vendors who have taken this route will @emph{never} (OK@dots{}``never say
-never'') replace the Bourne shell (as @command{/bin/sh}) with a
-Posix shell.
-@end quotation
-
-@noindent
-Robert Lipe:
-
-@quotation
-This is exactly the problem.  While most (at least most System V's) do
-have a Bourne shell that accepts shell functions most vendor
-@command{/bin/sh} programs are not the Posix shell.
-
-So while most modern systems do have a shell @emph{somewhere} that meets the
-Posix standard, the challenge is to find it.
-@end quotation
 
 @node Here-Documents
 @section Here-Documents
@@ -13249,7 +13279,8 @@ esac
 
 @noindent
 Make sure you quote the brackets if appropriate and keep the backslash as
-first character (@pxref{Limitations of Builtins}).
+first character (@pxref{Limitations of Builtins, , Limitations of Shell
+Builtins}).
 
 Also, because the colon is used as part of a drivespec, these systems don't
 use it as path separator.  When creating or accessing paths, you can use the
@@ -13891,9 +13922,10 @@ it's not worth worrying about working around these horrendous bugs.
 
 Some shell variables should not be used, since they can have a deep
 influence on the behavior of the shell.  In order to recover a sane
-behavior from the shell, some variables should be unset, but
-@command{unset} is not portable (@pxref{Limitations of Builtins}) and a
-fallback value is needed.
+behavior from the shell, some variables should be unset; M4sh takes
+care of this and provides fallback values, whenever needed, to cater
+for a very old @file{/bin/sh} that does not support @command{unset}.
+(@pxref{Portable Shell, , Portable Shell Programming}).
 
 As a general rule, shell variable names containing a lower-case letter
 are safe; you can define and use these variables without worrying about
@@ -13940,7 +13972,7 @@ In practice the shells that have this problem also support
 You can also avoid output by ensuring that your directory name is
 absolute or anchored at @samp{./}, as in @samp{abs=`cd ./src && pwd`}.
 
-Autoconf-generated scripts automatically unset @env{CDPATH} if
+Configure scripts use M4sh, which automatically unsets @env{CDPATH} if
 possible, so you need not worry about this problem in those scripts.
 
 @item DUALCASE
@@ -13966,7 +13998,8 @@ supposed to affect only interactive shells.  However, at least one
 shell (the pre-3.0 @sc{uwin} Korn shell) gets confused about
 whether it is interactive, which means that (for example) a @env{PS1}
 with a side effect can unexpectedly modify @samp{$?}.  To work around
-this bug, Autoconf-generated scripts do something like this:
+this bug, M4sh scripts (including @file{configure} scripts) do something
+like this:
 
 @example
 (unset ENV) >/dev/null 2>&1 && unset ENV MAIL MAILPATH
@@ -13974,6 +14007,10 @@ PS1='$ '
 PS2='> '
 PS4='+ '
 @end example
+
+@noindent
+(actually, there is some complication due to bugs in @command{unset};
+see @pxref{Limitations of Builtins, , Limitations of Shell Builtins}).
 
 @item FPATH
 The Korn shell uses @env{FPATH} to find shell functions, so avoid
@@ -14017,20 +14054,23 @@ to this and join with a space anyway.
 @evindex LC_NUMERIC
 @evindex LC_TIME
 
-Autoconf-generated scripts normally set all these variables to
-@samp{C} because so much configuration code assumes the C locale and
-Posix requires that locale environment variables be set to
-@samp{C} if the C locale is desired.  However, some older, nonstandard
-systems (notably @acronym{SCO}) break if locale environment variables
-are set to @samp{C}, so when running on these systems
-Autoconf-generated scripts unset the variables instead.
+You should set all these variables to @samp{C} because so much
+configuration code assumes the C locale and Posix requires that locale
+environment variables be set to @samp{C} if the C locale is desired;
+@file{configure} scripts and M4sh do that for you.
+Export these variables after setting them.
+
+@c  However, some older, nonstandard
+@c  systems (notably @acronym{SCO}) break if locale environment variables
+@c  are set to @samp{C}, so when running on these systems
+@c  Autoconf-generated scripts unset the variables instead.
 
 @item LANGUAGE
 @evindex LANGUAGE
 
 @env{LANGUAGE} is not specified by Posix, but it is a @acronym{GNU}
-extension that overrides @env{LC_ALL} in some cases, so
-Autoconf-generated scripts set it too.
+extension that overrides @env{LC_ALL} in some cases, so you (or M4sh)
+should set it too.
 
 @item LC_ADDRESS
 @itemx LC_IDENTIFICATION
@@ -14060,13 +14100,13 @@ character) with the line's number.  In M4sh scripts you should execute
 @code{AS_LINENO_PREPARE} so that these workarounds are included in
 your script; configure scripts do this automatically in @code{AC_INIT}.
 
-You should not rely on @code{LINENO} within @command{eval}, as the
-behavior differs in practice.  Also, the possibility of the Sed
-prepass means that you should not rely on @code{$LINENO} when quoted,
-when in here-documents, or when in long commands that cross line
-boundaries.  Subshells should be OK, though.  In the following
-example, lines 1, 6, and 9 are portable, but the other instances of
-@code{LINENO} are not:
+You should not rely on @code{LINENO} within @command{eval} or shell
+functions, as the behavior differs in practice.  Also, the possibility
+of the Sed prepass means that you should not rely on @code{$LINENO} when
+quoted, when in here-documents, or when in long commands that cross line
+boundaries.  Subshells should be OK, though.  In the following example,
+lines 1, 6, and 9 are portable, but the other instances of @code{LINENO}
+are not:
 
 @example
 @group
@@ -14187,7 +14227,7 @@ hence read-only.  Do not use it.
 @cindex Shell Functions
 
 Nowadays, it is difficult to find a shell that does not support
-shell functions at all.  However, some differences should be expected:
+shell functions at all.  However, some differences should be expected.
 
 Inside a shell function, you should not rely on the error status of a
 subshell if the last command of that subshell was @code{exit} or
@@ -14260,10 +14300,11 @@ No, no, we are serious: some shells do have limitations!  :)
 
 You should always keep in mind that any builtin or command may support
 options, and therefore differ in behavior with arguments
-starting with a dash.  For instance, the innocent @samp{echo "$word"}
+starting with a dash.  For instance, even the innocent @samp{echo "$word"}
 can give unexpected results when @code{word} starts with a dash.  It is
 often possible to avoid this problem using @samp{echo "x$word"}, taking
-the @samp{x} into account later in the pipe.
+the @samp{x} into account later in the pipe.  Many of these limitations
+can be worked around using M4sh (@pxref{Programming in M4sh}).
 
 @table @asis
 @item @command{.}
@@ -14491,12 +14532,8 @@ Also please see the discussion of the @command{pwd} command.
 @prindex @command{echo}
 The simple @command{echo} is probably the most surprising source of
 portability troubles.  It is not possible to use @samp{echo} portably
-unless both options and escape sequences are omitted.  New applications
-which are not aiming at portability should use @samp{printf} instead of
-@samp{echo}.
-
-Don't expect any option.  @xref{Preset Output Variables}, @code{ECHO_N}
-etc.@: for a means to simulate @option{-n}.
+unless both options and escape sequences are omitted.  Don't expect any
+option.
 
 Do not use backslashes in the arguments, as there is no consensus on
 their handling.  For @samp{echo '\n' | wc -l}, the @command{sh} of
@@ -14517,6 +14554,12 @@ $foo
 EOF
 @end example
 
+New applications which are not aiming at portability should use
+@samp{printf} instead of @samp{echo}.  M4sh provides the @code{AS_ECHO}
+and @code{AS_ECHO_N} macros (corresponding to @samp{echo -n} which use
+@samp{printf} if it is available, or otherwise resort to various creative
+tricks in order to work around the above problems.
+
 
 @item @command{eval}
 @c -----------------
@@ -14524,9 +14567,27 @@ EOF
 The @command{eval} command is useful in limited circumstances, e.g.,
 using commands like @samp{eval table_$key=\$value} and @samp{eval
 value=table_$key} to simulate a hash table when the key is known to be
-alphanumeric.  However, @command{eval} is tricky to use on arbitrary
-arguments, even when it is implemented correctly.
+alphanumeric.
 
+You should also be wary of common bugs in @command{eval} implementations.
+In some shell implementations (e.g., older @command{ash}, Open@acronym{BSD} 3.8
+@command{sh}, @command{pdksh} v5.2.14 99/07/13.2, and @command{zsh}
+4.2.5), the arguments of @samp{eval} are evaluated in a context where
+@samp{$?} is 0, so they exhibit behavior like this:
+
+@example
+$ @kbd{false; eval 'echo $?'}
+0
+@end example
+
+The correct behavior here is to output a nonzero value,
+but portable scripts should not rely on this.
+
+You should not rely on @code{LINENO} within @command{eval}.
+@xref{Special Shell Variables}.
+
+Note that, even though these bugs are easily avoided,
+@command{eval} is tricky to use on arbitrary arguments.
 It is obviously unwise to use @samp{eval $cmd} if the string value of
 @samp{cmd} was derived from an untrustworthy source.  But even if the
 string value is valid, @samp{eval $cmd} might not work as intended,
@@ -14549,23 +14610,6 @@ works on this example, but it fails with @samp{cmd='cat foo >bar'},
 since it mistakenly replaces the contents of @file{bar} by the
 string @samp{cat foo}.  No simple, general, and portable solution to
 this problem is known.
-
-You should also be wary of common bugs in @command{eval} implementations.
-In some shell implementations (e.g., older @command{ash}, Open@acronym{BSD} 3.8
-@command{sh}, @command{pdksh} v5.2.14 99/07/13.2, and @command{zsh}
-4.2.5), the arguments of @samp{eval} are evaluated in a context where
-@samp{$?} is 0, so they exhibit behavior like this:
-
-@example
-$ @kbd{false; eval 'echo $?'}
-0
-@end example
-
-The correct behavior here is to output a nonzero value,
-but portable scripts should not rely on this.
-
-You should not rely on @code{LINENO} within @command{eval}.
-@xref{Special Shell Variables}.
 
 @item @command{exec}
 @c -----------------
@@ -14752,6 +14796,18 @@ if cmp -s file file.new; then :; else
 fi
 @end example
 
+@noindent
+Or, especially if the @dfn{else} branch is short, you can use @code{||}.
+In M4sh, the @code{AS_IF} macro provides an easy way to write these kinds
+of conditionals as;
+
+@example
+AS_IF([cmp -s file file.new], [], [mv file.new file])
+@end example
+
+This is especially useful in other M4 macros, where the @dfn{then} and
+@dfn{else} branches might be macro arguments.
+
 There are shells that do not reset the exit status from an @command{if}:
 
 @example
@@ -14917,8 +14973,8 @@ Not only is @command{shift}ing a bad idea when there is nothing left to
 shift, but in addition it is not portable: the shell of @acronym{MIPS
 RISC/OS} 4.52 refuses to do it.
 
-Don't use @samp{shift 2} etc.; it was not in the 7th Edition Bourne shell,
-and it is also absent in many pre-Posix shells.
+Don't use @samp{shift 2} etc.; while it in the SVR1 shell (1983),
+it is also absent in many pre-Posix shells.
 
 
 @item @command{source}
@@ -15115,23 +15171,29 @@ for @command{true}.
 @c ------------------
 @prindex @command{unset}
 In some nonconforming shells (e.g., Bash 2.05a), @code{unset FOO} fails
-when @code{FOO} is not set.  Also, Bash 2.01 mishandles @code{unset
-MAIL} in some cases and dumps core.
-
-A few ancient shells lack @command{unset} entirely.  Nevertheless, because
-it is extremely useful to disable embarrassing variables such as
-@code{PS1}, you can test for its existence and use
-it @emph{provided} you give a neutralizing value when @command{unset} is
-not supported:
+when @code{FOO} is not set.  You can use
 
 @smallexample
-# "|| exit" suppresses any "Segmentation fault" message.
-if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
-  unset=unset
-else
-  unset=false
-fi
-$unset PS1 || PS1='$ '
+FOO=; unset FOO
+@end smallexample
+
+if you are not sure that @code{FOO} is set.
+
+A few ancient shells lack @command{unset} entirely.  For some variables
+such as @code{PS1}, you can use a neutralizing value instead:
+
+@smallexample
+PS1='$ '
+@end smallexample
+
+Usually, shells that do not support @command{unset} need less effort to
+make the environment sane, so for example is not a problem if you cannot
+unset @command{CDPATH} on those shells.  However, Bash 2.01 mishandles
+@code{unset MAIL} in some cases and dumps core.  So, you should do
+something like
+
+@smallexample
+( (unset MAIL) || exit 1) >/dev/null 2>&1 && unset MAIL || :
 @end smallexample
 
 @noindent

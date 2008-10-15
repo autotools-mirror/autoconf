@@ -20,6 +20,9 @@ GNU Autoconf NEWS - User visible changes.
    AS_ME_PREPARE
 
 ** The following m4sh macros are documented now:
+   AS_ECHO
+   AS_ECHO_N
+   AS_UNSET
    AS_VERSION_COMPARE
 
 
