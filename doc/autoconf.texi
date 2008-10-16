@@ -21602,25 +21602,10 @@ full signature of the package, and @code{AT_PACKAGE_BUGREPORT}, the
 address to which bug reports should be sent.  For sake of completeness,
 we suggest that you also define @code{AT_PACKAGE_NAME},
 @code{AT_PACKAGE_TARNAME}, and @code{AT_PACKAGE_VERSION}.
-@xref{Initializing configure}, for a description of these variables.  We
-suggest the following makefile excerpt:
-
-@smallexample
-# The `:;' works around a Bash 3.2 bug when the output is not writeable.
-$(srcdir)/package.m4: $(top_srcdir)/configure.ac
-        :;@{ \
-          echo '# Signature of the current package.' && \
-          echo 'm4_define([AT_PACKAGE_NAME],      [@@PACKAGE_NAME@@])' && \
-          echo 'm4_define([AT_PACKAGE_TARNAME],   [@@PACKAGE_TARNAME@@])' && \
-          echo 'm4_define([AT_PACKAGE_VERSION],   [@@PACKAGE_VERSION@@])' && \
-          echo 'm4_define([AT_PACKAGE_STRING],    [@@PACKAGE_STRING@@])' && \
-          echo 'm4_define([AT_PACKAGE_BUGREPORT], [@@PACKAGE_BUGREPORT@@])'; \
-        @} >'$(srcdir)/package.m4'
-@end smallexample
-
-@noindent
+@xref{Initializing configure}, for a description of these variables.
 Be sure to distribute @file{package.m4} and to put it into the source
-hierarchy: the test suite ought to be shipped!
+hierarchy: the test suite ought to be shipped!  See below for an example
+@file{Makefile} excerpt.
 
 @item
 Invoke @code{AC_CONFIG_TESTDIR}.
@@ -21639,16 +21624,33 @@ Still within @file{configure.ac}, as appropriate, ensure that some
 @file{tests/atlocal}.
 
 @item
-The @file{tests/Makefile.in} should be modified so the validation in
+The appropriate @file{Makefile} should be modified so the validation in
 your package is triggered by @samp{make check}.  An example is provided
 below.
 @end itemize
 
-With Automake, here is a minimal example about how to link @samp{make
-check} with a validation suite.
+With Automake, here is a minimal example for inclusion in
+@file{tests/Makefile.am}, in order to link @samp{make check} with a
+validation suite.
 
 @example
-EXTRA_DIST = testsuite.at $(TESTSUITE) atlocal.in
+# The `:;' works around a Bash 3.2 bug when the output is not writeable.
+$(srcdir)/package.m4: $(top_srcdir)/configure.ac
+        :;@{ \
+          echo '# Signature of the current package.' && \
+          echo 'm4_define([AT_PACKAGE_NAME],' && \
+          echo '  [@@PACKAGE_NAME@@])' && \
+          echo 'm4_define([AT_PACKAGE_TARNAME],' && \
+          echo '  [@@PACKAGE_TARNAME@@])' && \
+          echo 'm4_define([AT_PACKAGE_VERSION],' && \
+          echo '  [@@PACKAGE_VERSION@@])' && \
+          echo 'm4_define([AT_PACKAGE_STRING],' && \
+          echo '  [@@PACKAGE_STRING@@])' && \
+          echo 'm4_define([AT_PACKAGE_BUGREPORT],' && \
+          echo '  [@@PACKAGE_BUGREPORT@@])'; \
+        @} >'$(srcdir)/package.m4'
+
+EXTRA_DIST = testsuite.at $(srcdir)/package.m4 $(TESTSUITE) atlocal.in
 TESTSUITE = $(srcdir)/testsuite
 
 check-local: atconfig atlocal $(TESTSUITE)
@@ -21662,17 +21664,25 @@ clean-local:
         test ! -f '$(TESTSUITE)' || \
          $(SHELL) '$(TESTSUITE)' --clean
 
+AUTOM4TE = $(SHELL) $(srcdir)/build-aux/missing --run autom4te
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at
         $(AUTOTEST) -I '$(srcdir)' -o $@@.tmp $@@.at
         mv $@@.tmp $@@
 @end example
 
+Note that the built testsuite is distributed; this is necessary because
+users might not have Autoconf installed, and thus would not be able to
+rebuild it.  Likewise, the use of @file{missing} provides the user with
+a nicer error message if they modify a source file to the testsuite, and
+accidentally trigger the rebuild rules.
+
 You might want to list explicitly the dependencies, i.e., the list of
 the files @file{testsuite.at} includes.
 
-If you don't use Automake, you might need to add lines inspired from the
-following:
+If you don't use Automake, you should include the above example in
+@file{tests/@/Makefile.in}, along with additional lines inspired from
+the following:
 
 @example
 subdir = tests
@@ -21687,10 +21697,9 @@ atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
 @end example
 
 @noindent
-and manage to have @code{$(EXTRA_DIST)} distributed.
-
-If you use Automake, however, you don't need to add a rule to generate
-@file{atlocal}.
+and manage to have @code{$(EXTRA_DIST)} distributed.  You will also want
+to distribute the file @file{build-aux/@/missing} from the Automake
+project; a copy of this file resides in the Autoconf source.
 
 With all this in place, and if you have not initialized @samp{TESTSUITEFLAGS}
 within your makefile, you can fine-tune test suite execution with this

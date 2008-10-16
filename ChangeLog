@@ -1,5 +1,14 @@
 2008-10-21  Eric Blake  <ebb9@byu.net>
 
+	Improve wording related to automake and autotest.
+	* doc/autoconf.texi (Making testsuite Scripts): Clarify wording in
+	relation to automake.  Mention dependency on package.m4.
+	Consolidate examples.  Define AUTOM4TE.
+	* THANKS: Update.
+	Reported by William Pursell.
+
+2008-10-21  Eric Blake  <ebb9@byu.net>
+
 	Allow AS_VAR_SET_IF in shell lists.
 	* lib/m4sugar/m4sh.m4 (AS_VAR_SET_IF): Allow continuation of
 	line.
