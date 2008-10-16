@@ -257,7 +257,8 @@ fi
 # there are so many _AS_PREPARE_* below, and that's also why it is
 # important not to forget some: config.status needs them.
 m4_defun([_AS_PREPARE],
-[as_func_mkdir_p ()
+[m4_pushdef([AS_REQUIRE], [])dnl
+as_func_mkdir_p ()
 {
   _AS_MKDIR_P
 }
@@ -274,6 +275,7 @@ _AS_TEST_PREPARE
 _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
 _AS_UNSET_PREPARE
+m4_popdef([AS_REQUIRE])dnl
 ])
 
 # AS_PREPARE
