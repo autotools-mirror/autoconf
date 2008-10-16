@@ -1,5 +1,10 @@
 2008-10-16  Paolo Bonzini  <bonzini@gnu.org>
 
+	Add a testcase using more then one language.
+	* tests/compile.at (Multiple languages): New test.
+
+2008-10-16  Paolo Bonzini  <bonzini@gnu.org>
+
 	Fix Libtool's config.lt test.
 	* lib/m4sugar/m4sh.m4 (_AS_PREPARE): Disable AS_REQUIRE while
 	expanding it.
