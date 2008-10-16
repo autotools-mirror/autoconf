@@ -2221,7 +2221,7 @@ dnl either way, insert the word
 		      m4_eval(m4_Indent + m4_qlen(_m4_defn([m4_Word])) + 1))
 [$2]],
       [m4_Separator[]])_m4_defn([m4_Word])])]],
-dnl finally, clean up the local variabls
+dnl finally, clean up the local variables
 [[_m4_popdef([m4_Separator], [m4_Cursor], [m4_Indent])]]))
 
 
@@ -2246,12 +2246,19 @@ m4_define([m4_text_box],
 # ---------------
 # Expands to the length of STRING after autom4te converts all quadrigraphs.
 #
-# Avoid bpatsubsts for the common case of no quadrigraphs.
+# Avoid bpatsubsts for the common case of no quadrigraphs.  Cache
+# results, as configure scripts tend to ask about lengths of common
+# strings like `/*' and `*/' rather frequently.  Minimize the number
+# of times that $1 occurs in m4_qlen, so there is less text to parse
+# on a cache hit.
 m4_define([m4_qlen],
-[m4_if(m4_index([$1], [@]), [-1], [m4_len([$1])],
-       [m4_len(m4_bpatsubst([[$1]],
-			    [@\(\(<:\|:>\|S|\|%:\|\{:\|:\}\)\(@\)\|&t@\)],
-			    [\3]))])])
+[m4_ifdef([$0-$1], [_m4_defn([$0-]], [_$0(])[$1])])
+m4_define([_m4_qlen],
+[m4_define([m4_qlen-$1],
+m4_if(m4_index([$1], [@]), [-1], [m4_len([$1])],
+      [m4_len(m4_bpatsubst([[$1]],
+			   [@\(\(<:\|:>\|S|\|%:\|\{:\|:\}\)\(@\)\|&t@\)],
+			   [\3]))]))_m4_defn([m4_qlen-$1])])
 
 
 # m4_qdelta(STRING)
