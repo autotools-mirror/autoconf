@@ -173,6 +173,14 @@ m4_defun([_AS_DETECT_SUGGESTED],
 ])])
 
 
+# _AS_DETECT_SUGGESTED_PRUNE(TEST)
+# --------------------------------
+# If TEST is also a required test, remove it from the set of suggested tests.
+m4_define([_AS_DETECT_SUGGESTED_PRUNE],
+[m4_set_contains([_AS_DETECT_REQUIRED_BODY], [$1],
+		 [m4_set_remove([_AS_DETECT_SUGGESTED_BODY], [$1])])])
+
+
 # _AS_DETECT_BETTER_SHELL
 # -----------------------
 # The real workhorse for detecting a shell with the correct
@@ -190,18 +198,13 @@ m4_defun([_AS_DETECT_SUGGESTED],
 m4_defun([_AS_DETECT_BETTER_SHELL],
 [if test "x$CONFIG_SHELL" = x; then
 dnl Remove any tests from suggested that are also required
-  m4_set_foreach([_AS_DETECT_SUGGESTED_BODY], [AS_snippet],
-		 [m4_set_contains([_AS_DETECT_REQUIRED_BODY],
-				  _m4_defn([AS_snippet]),
-				  [m4_set_remove([_AS_DETECT_SUGGESTED_BODY],
-						 _m4_defn([AS_snippet]))])])dnl
-  m4_set_empty([_AS_DETECT_REQUIRED_BODY], [as_have_required=yes],
-    [as_bourne_compatible="AS_ESCAPE(m4_expand([_AS_BOURNE_COMPATIBLE]))"
-    as_required="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_REQUIRED_BODY])))"
-    as_suggested="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_SUGGESTED_BODY])))"
-    AS_IF([_AS_RUN(["$as_required"])],
-	  [as_have_required=yes],
-	  [as_have_required=no])])
+  m4_set_map([_AS_DETECT_SUGGESTED_BODY], [_AS_DETECT_SUGGESTED_PRUNE])dnl
+  as_bourne_compatible="AS_ESCAPE(m4_expand([_AS_BOURNE_COMPATIBLE]))"
+  as_required="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_REQUIRED_BODY])))"
+  as_suggested="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_SUGGESTED_BODY])))"
+  AS_IF([_AS_RUN(["$as_required"])],
+	[as_have_required=yes],
+	[as_have_required=no])
   AS_IF([test x$as_have_required = xyes && _AS_RUN(["$as_suggested"])],
     [],
     [as_candidate_shells=

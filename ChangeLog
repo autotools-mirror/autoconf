@@ -1,5 +1,11 @@
 2008-10-17  Eric Blake  <ebb9@byu.net>
 
+	Improve suggested test filtering.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_SUGGESTED_PRUNE): New macro,
+	extracted from...
+	(_AS_DETECT_BETTER_SHELL): ...here, to use faster API.  No need to
+	check for an empty required set.
+
 	Add m4_set_map.
 	* lib/m4sugar/m4sugar.m4 (m4_set_foreach): New macro.
 	* tests/m4sugar.at (m4@&t@_set): Enhance test.
