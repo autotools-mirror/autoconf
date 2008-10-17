@@ -258,6 +258,8 @@ fi
 # important not to forget some: config.status needs them.
 m4_defun([_AS_PREPARE],
 [m4_pushdef([AS_REQUIRE], [])dnl
+AS_FUNCTION_DESCRIBE([as_func_mkdir_p], [],
+[Create "$as_dir" as a directory, including parents if necessary.])
 as_func_mkdir_p ()
 {
   _AS_MKDIR_P
@@ -314,18 +316,21 @@ m4_if(m4_eval(_m4_divert(_m4_divert_dump) <= _m4_divert(_m4_divert_desired)), 1,
       [m4_divert_require([_m4_divert_desired], [$1], [$2])])])
 
 
-# AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, BODY-TO-EXPAND,
+# AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, COMMENT, BODY-TO-EXPAND,
 #                     [DIVERSION = M4SH-INIT-FN])
-# --------------------------------------------------
+# -----------------------------------------------------------
 # BODY-TO-EXPAND is the body of a shell function to be emitted in the
 # given diversion when expanded (required or not).  Unlike other
-# xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.
-#
+# xx_REQUIRE macros, BODY-TO-EXPAND is mandatory.  If COMMENT is
+# provided (often via AS_FUNCTION_DESCRIBE), it is listed with a
+# newline before the function name.
 m4_define([AS_REQUIRE_SHELL_FN],
-[AS_REQUIRE([AS_SHELL_FN_$1], [m4_provide([AS_SHELL_FN_$1])$1 ()
+[AS_REQUIRE([AS_SHELL_FN_$1],
+[m4_provide([AS_SHELL_FN_$1])m4_n([$2])$1 ()
 {
-$2
-}], m4_default_quoted([$3], [M4SH-INIT-FN]))])
+$3
+} [#] $1
+], m4_default_quoted([$4], [M4SH-INIT-FN]))])
 
 
 # _AS_RUN(TEST, [SHELL])
@@ -539,7 +544,8 @@ fi
 # Define $as_unset to execute AS_UNSET, for backwards compatibility
 # with older versions of M4sh.
 m4_defun([_AS_UNSET_PREPARE],
-[as_func_unset ()
+[AS_FUNCTION_DESCRIBE([as_func_unset], [VAR], [Portably unset VAR.])
+as_func_unset ()
 {
   AS_UNSET([$[1]])
 }
@@ -1080,7 +1086,10 @@ as_dir=$1; as_func_mkdir_p])# AS_MKDIR_P
 # _AS_MKDIR_P_PREPARE
 # -------------------
 m4_defun([_AS_MKDIR_P_PREPARE],
-[AS_REQUIRE_SHELL_FN([as_func_mkdir_p], [
+[AS_REQUIRE_SHELL_FN([as_func_mkdir_p],
+  [AS_FUNCTION_DESCRIBE([as_func_mkdir_p], [],
+    [Create "$as_dir" as a directory, including parents if necessary.])],
+[
   _AS_MKDIR_P
 ])
 if mkdir -p . 2>/dev/null; then

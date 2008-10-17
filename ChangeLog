@@ -1,5 +1,11 @@
 2008-10-16  Eric Blake  <ebb9@byu.net>
 
+	Allow comments before functions emitted by m4sh.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE_SHELL_FN): Add comment
+	argument.  Supply closing comment, to ease readability.
+	(_AS_MKDIR_P_PREPARE): Adjust caller.
+	(_AS_UNSET_PREPARE): Add comment.
+
 	Add AS_FUNCTION_DESCRIBE.
 	* lib/m4sugar/m4sh.m4 (AS_FUNCTION_DESCRIBE): New macro.
 	* lib/autotest/general.m4 (AT_INIT): Use it.
