@@ -1,3 +1,10 @@
+2008-10-17  Eric Blake  <ebb9@byu.net>
+
+	Sort AS_VAR_* interfaces.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_GET): Reduce output to one line.
+	(AS_VAR_TEST_SET, AS_VAR_SET, AS_VAR_SET_IF, AS_VAR_POPDEF): Sort,
+	no code changes.
+
 2008-10-16  Eric Blake  <ebb9@byu.net>
 
 	Allow comments before functions emitted by m4sh.

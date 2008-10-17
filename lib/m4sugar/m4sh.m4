@@ -1515,9 +1515,9 @@ esac[]dnl
 
 
 
-## ------------------------------------ ##
-## Common m4/sh character translation.  ##
-## ------------------------------------ ##
+## --------------------------------------- ##
+## 6. Common m4/sh character translation.  ##
+## --------------------------------------- ##
 
 # The point of this section is to provide high level macros comparable
 # to m4's `translit' primitive, but m4/sh polymorphic.
@@ -1608,9 +1608,9 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
 
 
 
-## --------------------------------------------------- ##
-## Common m4/sh handling of variables (indirections).  ##
-## --------------------------------------------------- ##
+## ------------------------------------------------------ ##
+## 7. Common m4/sh handling of variables (indirections).  ##
+## ------------------------------------------------------ ##
 
 
 # The purpose of this section is to provide a uniform API for
@@ -1619,18 +1619,12 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
 #   AS_VAR_SET(var, val)
 # or
 #   AS_VAR_SET(as_$var, val)
-# and expect the right thing to happen.
+# and expect the right thing to happen.  In the descriptions below,
+# a literal name matches the regex [a-zA-Z_][a-zA-Z0-9_]*, an
+# indirect name is a shell expression that produces a literal name
+# when passed through eval, and a polymorphic name is either type.
 
 
-# AS_VAR_SET(VARIABLE, VALUE)
-# ---------------------------
-# Set the VALUE of the shell VARIABLE.
-# If the variable contains indirections (e.g. `ac_cv_func_$ac_func')
-# perform whenever possible at m4 level, otherwise sh level.
-m4_define([AS_VAR_SET],
-[AS_LITERAL_IF([$1],
-	       [$1=$2],
-	       [eval "$1=AS_ESCAPE([$2])"])])
 
 
 # AS_VAR_GET(VARIABLE)
@@ -1643,26 +1637,8 @@ m4_define([AS_VAR_SET],
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
 	       [$$1],
-	       [`eval 'as_val=${'m4_bpatsubst([$1], [[\\`]], [\\\&])'}
-		 AS_ECHO(["$as_val"])'`])])
-
-
-# AS_VAR_TEST_SET(VARIABLE)
-# -------------------------
-# Expands into the `test' expression which is true if VARIABLE
-# is set.  Polymorphic.  Should be dnl'ed.
-m4_define([AS_VAR_TEST_SET],
-[AS_LITERAL_IF([$1],
-	       [test "${$1+set}" = set],
-	       [{ as_var=$1; eval "test \"\${$as_var+set}\" = set"; }])])
-
-
-# AS_VAR_SET_IF(VARIABLE, IF-TRUE, IF-FALSE)
-# ------------------------------------------
-# Implement a shell `if-then-else' depending whether VARIABLE is set
-# or not.  Polymorphic.
-m4_define([AS_VAR_SET_IF],
-[AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])])
+	       [`eval 'as_val=${'m4_bpatsubst([$1], [[\\`]], [\\\&])'};dnl
+AS_ECHO(["$as_val"])'`])])
 
 
 # AS_VAR_IF(VARIABLE, VALUE, IF-TRUE, IF-FALSE)
@@ -1689,8 +1665,7 @@ m4_define([AS_VAR_IF],
 #   AS_VAR_PUSHDEF([header], [ac_cv_header_$1])
 #
 # and then in the body of the macro, use `header' as is.  It is of
-# first importance to use `AS_VAR_*' to access this variable.  Don't
-# quote its name: it must be used right away by m4.
+# first importance to use `AS_VAR_*' to access this variable.
 #
 # If the value `$1' was a literal (e.g. `stdlib.h'), then `header' is
 # in fact the value `ac_cv_header_stdlib_h'.  If `$1' was indirect,
@@ -1700,6 +1675,13 @@ m4_define([AS_VAR_IF],
 # At the end of the block, free the variable with
 #
 #   AS_VAR_POPDEF([header])
+
+
+# AS_VAR_POPDEF(VARNAME)
+# ----------------------
+# Free the shell variable accessor VARNAME.  To be dnl'ed.
+m4_define([AS_VAR_POPDEF],
+[m4_popdef([$1])])
 
 
 # AS_VAR_PUSHDEF(VARNAME, VALUE)
@@ -1714,16 +1696,37 @@ m4_define([AS_VAR_PUSHDEF],
 m4_pushdef([$1], [$as_[$1]])])])
 
 
-# AS_VAR_POPDEF(VARNAME)
-# ----------------------
-# Free the shell variable accessor VARNAME.  To be dnl'ed.
-m4_define([AS_VAR_POPDEF],
-[m4_popdef([$1])])
+# AS_VAR_SET(VARIABLE, VALUE)
+# ---------------------------
+# Set the contents of the polymorphic shell VARIABLE to the shell
+# expansion of VALUE.
+m4_define([AS_VAR_SET],
+[AS_LITERAL_IF([$1],
+	       [$1=$2],
+	       [eval "$1=AS_ESCAPE([$2])"])])
 
 
-## ----------------- ##
-## Setting M4sh up.  ##
-## ----------------- ##
+# AS_VAR_SET_IF(VARIABLE, IF-TRUE, IF-FALSE)
+# ------------------------------------------
+# Implement a shell `if-then-else' depending whether VARIABLE is set
+# or not.  Polymorphic.
+m4_define([AS_VAR_SET_IF],
+[AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])])
+
+
+# AS_VAR_TEST_SET(VARIABLE)
+# -------------------------
+# Expands into the `test' expression which is true if VARIABLE
+# is set.  Polymorphic.  Should be dnl'ed.
+m4_define([AS_VAR_TEST_SET],
+[AS_LITERAL_IF([$1],
+	       [test "${$1+set}" = set],
+	       [{ as_var=$1; eval "test \"\${$as_var+set}\" = set"; }])])
+
+
+## -------------------- ##
+## 8. Setting M4sh up.  ##
+## -------------------- ##
 
 
 # AS_INIT_GENERATED
