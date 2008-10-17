@@ -1226,6 +1226,24 @@ m4_define([_AS_BOX_INDIR],
 _ASBOX])
 
 
+# AS_FUNCTION_DESCRIBE(NAME, [ARGS], DESCRIPTION, [WRAP-COLUMN = 79])
+# -------------------------------------------------------------------
+# Output a shell comment describing NAME and its arguments ARGS, then
+# a separator line, then the DESCRIPTION wrapped at a decimal
+# WRAP-COLUMN.  The output resembles:
+#  # NAME ARGS
+#  # ---------
+#  # Wrapped DESCRIPTION text
+# NAME and ARGS are expanded, while DESCRIPTION is treated as a
+# whitespace-separated list of strings that are not expanded.
+m4_define([AS_FUNCTION_DESCRIBE],
+[@%:@ $1[]m4_ifval([$2], [ $2])
+@%:@ m4_translit(m4_format([%*s],
+		   m4_qlen(m4_expand([$1[]m4_ifval([$2], [ $2])])), []),
+		 [ ], [-])
+m4_text_wrap([$3], [@%:@ ], [], [$4])])
+
+
 # AS_HELP_STRING(LHS, RHS, [INDENT-COLUMN = 26], [WRAP-COLUMN = 79])
 # ------------------------------------------------------------------
 #

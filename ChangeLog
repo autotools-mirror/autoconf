@@ -1,5 +1,11 @@
 2008-10-16  Eric Blake  <ebb9@byu.net>
 
+	Add AS_FUNCTION_DESCRIBE.
+	* lib/m4sugar/m4sh.m4 (AS_FUNCTION_DESCRIBE): New macro.
+	* lib/autotest/general.m4 (AT_INIT): Use it.
+
+2008-10-16  Eric Blake  <ebb9@byu.net>
+
 	Speed up m4_qlen with caching.
 	* lib/m4sugar/m4sugar.m4 (_m4_qlen): Renamed from old m4_qlen.
 	(m4_qlen): Cache results for speed.

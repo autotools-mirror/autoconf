@@ -247,10 +247,9 @@ m4_divert_push([PREPARE_TESTS])dnl
 ## Shell functions ##
 ## --------------- ##
 
-# at_func_banner NUMBER
-# ---------------------
-# Output banner NUMBER, provided the testsuite is running multiple groups
-# and this particular banner has not yet been printed.
+AS_FUNCTION_DESCRIBE([at_func_banner], [NUMBER],
+[Output banner NUMBER, provided the testsuite is running multiple groups
+and this particular banner has not yet been printed.])
 at_func_banner ()
 {
   $at_print_banners || return 0
@@ -260,10 +259,9 @@ at_func_banner ()
   AS_ECHO(["$as_nl$at_banner_text$as_nl"])
 } # at_func_banner
 
-# at_func_check_newline COMMAND
-# -----------------------------
-# Test if COMMAND includes a newline and, if so, print a message and return
-# exit code 1
+AS_FUNCTION_DESCRIBE([at_func_check_newline], [COMMAND],
+[Test if COMMAND includes a newline and, if so, print a message and return
+exit code 1.])
 at_func_check_newline ()
 {
   case "$[1]" in
@@ -274,10 +272,10 @@ at_func_check_newline ()
   esac
 }
 
-# at_func_filter_trace EXIT-CODE
-# ------------------------------
-# Split the contents of file "$at_stder1" into the "set -x" trace (on stderr)
-# and the other lines (on file "$at_stderr").  Return the exit code EXIT-CODE.
+AS_FUNCTION_DESCRIBE([at_func_filter_trace], [EXIT-CODE],
+[Split the contents of file "$at_stder1" into the "set -x" trace (on
+stderr) and the other lines (on file "$at_stderr").  Return the exit
+code EXIT-CODE.])
 at_func_filter_trace ()
 {
   grep '^ *+' "$at_stder1" >&2
@@ -285,10 +283,9 @@ at_func_filter_trace ()
   return $[1]
 }
 
-# at_func_log_failure FILE-LIST
-# -----------------------------
-# Copy the files in the list on stdout with a "> " prefix, and exit the shell
-# with a failure exit code.
+AS_FUNCTION_DESCRIBE([at_func_log_failure], [FILE-LIST],
+[Copy the files in the list on stdout with a "> " prefix, and exit the shell
+with a failure exit code.])
 at_func_log_failure ()
 {
   for file
@@ -297,10 +294,9 @@ at_func_log_failure ()
   exit 1
 }
 
-# at_func_check_skip EXIT-CODE
-# ----------------------------
-# Check whether EXIT-CODE is the special exit code 77, and if so exit the shell
-# with that same exit code.
+AS_FUNCTION_DESCRIBE([at_func_check_skip], [EXIT-CODE],
+[Check whether EXIT-CODE is the special exit code 77, and if so exit the shell
+with that same exit code.])
 at_func_check_skip ()
 {
   case $[1] in
@@ -308,11 +304,10 @@ at_func_check_skip ()
   esac
 }
 
-# at_func_check_status EXPECTED EXIT-CODE LINE
-# --------------------------------------------
-# Check whether EXIT-CODE is the expected exit code, and if so do nothing.
-# Otherwise, if it is 77 exit the shell with that same exit code; if it is
-# anything else print an error message and fail the test.
+AS_FUNCTION_DESCRIBE([at_func_check_status], [EXPECTED EXIT-CODE LINE],
+[Check whether EXIT-CODE is the expected exit code, and if so do nothing.
+Otherwise, if it is 77 exit the shell with that same exit code; if it is
+anything else print an error message and fail the test.])
 at_func_check_status ()
 {
 dnl This order ensures that we don't `skip' if we are precisely checking
@@ -325,29 +320,26 @@ dnl $? = 77.
   esac
 }
 
-# at_func_diff_devnull FILE
-# -------------------------
-# Emit a diff between /dev/null and FILE.  Uses "test -s" to avoid useless
-# diff invocations.
+AS_FUNCTION_DESCRIBE([at_func_diff_devnull], [FILE],
+[Emit a diff between /dev/null and FILE.  Uses "test -s" to avoid useless
+diff invocations.])
 at_func_diff_devnull ()
 {
   test -s "$[1]" || return 0
   $at_diff "$at_devnull" "$[1]"
 }
 
-# at_func_test NUMBER
-# -------------------
-# Parse out test NUMBER from the tail of this file.
+AS_FUNCTION_DESCRIBE([at_func_test], [NUMBER],
+[Parse out test NUMBER from the tail of this file.])
 at_func_test ()
 {
   eval at_sed=\$at_sed$[1]
   sed "$at_sed" "$at_myself" > "$at_test_source"
 }
 
-# at_func_create_debugging_script
-# -------------------------------
-# Create the debugging script $at_group_dir/run which will reproduce the
-# current test group.
+AS_FUNCTION_DESCRIBE([at_func_create_debugging_script], [],
+[Create the debugging script $at_group_dir/run which will reproduce the
+current test group.])
 at_func_create_debugging_script ()
 {
   {
@@ -362,10 +354,9 @@ at_func_create_debugging_script ()
   chmod +x "$at_group_dir/run"
 }
 
-# at_func_arith
-# -------------
-# Arithmetic evaluation, avoids expr if the shell is sane.  The
-# interpretation of leading zeroes is unspecified.
+AS_FUNCTION_DESCRIBE([at_func_arith], [ARG...],
+[Arithmetic evaluation, avoids expr if the shell is sane.  The
+interpretation of leading zeroes is unspecified.])
 #
 # subshell and eval are needed to keep Solaris sh from bailing out:
 if ( eval 'test $(( 1 + 1 )) = 2' ) 2>/dev/null; then
@@ -444,10 +435,9 @@ at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [?])'
 # Description of all the test groups.
 at_help_all="AS_ESCAPE(m4_dquote(m4_defn([AT_help_all])))"
 
-# at_func_validate_ranges [NAME...]
-# ---------------------------------
-# Validate and normalize the test group number contained in each
-# variable NAME.  Leading zeroes are treated as decimal.
+AS_FUNCTION_DESCRIBE([at_func_validate_ranges], [NAME...],
+[Validate and normalize the test group number contained in each
+variable NAME.  Leading zeroes are treated as decimal.])
 at_func_validate_ranges ()
 {
   for at_grp
@@ -1042,9 +1032,8 @@ AS_ERROR([testsuite directory setup failed])
 # test group execution outside of a shell function in order
 # to avoid hitting zsh 4.x exit status bugs.
 
-# at_func_group_prepare
-# ---------------------
-# Prepare running a test group
+AS_FUNCTION_DESCRIBE([at_func_group_prepare], [],
+[Prepare running a test group.])
 at_func_group_prepare ()
 {
   # The directory for additional per-group helper files.
@@ -1093,8 +1082,8 @@ at_func_group_prepare ()
   fi
 }
 
-# at_func_group_postprocess
-# -------------------------
+AS_FUNCTION_DESCRIBE([at_func_group_postprocess], [],
+[Perform cleanup after running a test group.])
 at_func_group_postprocess ()
 {
   # Be sure to come back to the suite directory, in particular
