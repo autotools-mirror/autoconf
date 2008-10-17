@@ -1353,8 +1353,9 @@ m4_pattern_forbid([^LIBOBJS$],
 		  [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs LIBOBJS'])
 # Actually reserved by M4sh.
 m4_pattern_allow([^AS_FLAGS$])
-AS_INIT
-AS_PREPARE
+AS_INIT[]dnl
+AS_PREPARE[]dnl
+m4_divert_push([KILL])
 m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
 _AC_INIT_DEFAULTS
 _AC_INIT_PARSE_ARGS
@@ -1366,6 +1367,8 @@ _AC_INIT_CONFIG_LOG
 _AC_INIT_PREPARE
 _AC_INIT_NOTICE
 _AC_INIT_COPYRIGHT
+m4_divert_pop
+m4_text_box([Autoconf initialization])
 m4_ifval([$2], , [m4_ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 dnl
 dnl Substitute for predefined variables.

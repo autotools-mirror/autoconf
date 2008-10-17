@@ -1,5 +1,12 @@
 2008-10-17  Eric Blake  <ebb9@byu.net>
 
+	Reduce vertical whitespace in configure.
+	* lib/autoconf/general.m4 (AC_INIT): Silence newline output during
+	m4 side effect initializations.
+	* lib/m4sugar/m4sh.m4 (AS_PREPARE): Likewise.
+
+2008-10-17  Eric Blake  <ebb9@byu.net>
+
 	Document AS_VAR interfaces.
 	* doc/autoconf.texi (Programming in M4sh): M4sh is now prime-time.
 	(Polymorphic Variables): New node.
