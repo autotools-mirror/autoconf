@@ -433,6 +433,7 @@ Programming in M4
 Programming in M4sh
 
 * Common Shell Constructs::     Portability layer for common shell constructs
+* Polymorphic Variables::       Support for indirect variable names
 * Initialization Macros::       Macros to establish a sane shell environment
 * File Descriptor Macros::      File descriptor macros for input and output
 
@@ -11797,9 +11798,6 @@ A mess; trouble.  [Obs.] --Beau.@: & Fl.
 @end enumerate
 @end quotation
 
-
-For the time being, it is not mature enough to be widely used.
-
 M4sh reserves the M4 macro namespace @samp{^_AS_} for internal use, and
 the namespace @samp{^AS_} for M4sh macros.  It also reserves the shell
 and environment variable namespace @samp{^as_}, and the here-doc
@@ -11809,6 +11807,7 @@ namespaces.
 
 @menu
 * Common Shell Constructs::     Portability layer for common shell constructs
+* Polymorphic Variables::       Support for indirect variable names
 * Initialization Macros::       Macros to establish a sane shell environment
 * File Descriptor Macros::      File descriptor macros for input and output
 @end menu
@@ -11932,7 +11931,8 @@ optimizing the common cases (@var{dir} or @var{file} is @samp{.},
 @defmac AS_UNSET (@var{var})
 @asindex{UNSET}
 Unsets the shell variable @var{var}, working around bugs in older
-shells (@pxref{Limitations of Builtins, , Limitations of Shell Builtins}).
+shells (@pxref{Limitations of Builtins, , Limitations of Shell
+Builtins}).  @var{var} can be a literal or indirect variable name.
 @end defmac
 
 @defmac AS_VERSION_COMPARE (@var{version-1}, @var{version-2}, @
@@ -11945,6 +11945,154 @@ depending upon the result.
 The algorithm to compare is similar to the one used by strverscmp in
 glibc (@pxref{String/Array Comparison, , String/Array Comparison, libc,
 The @acronym{GNU} C Library}).
+@end defmac
+
+@node Polymorphic Variables
+@section Support for indirect variable names
+@cindex variable name indirection
+@cindex polymorphic variable name
+@cindex indirection, variable name
+
+Often, it is convenient to write a macro that will emit shell code
+operating on a shell variable.  The simplest case is when the variable
+name is known.  But a more powerful idiom is writing shell code that can
+work through an indirection, where another variable or command
+substitution produces the name of the variable to actually manipulate.
+M4sh supports the notion of polymorphic shell variables, making it easy
+to write a macro that can deal with either literal or indirect variable
+names and output shell code appropriate for both use cases.  Behavior is
+undefined if expansion of an indirect variable does not result in a
+literal variable name.  These macros are often followed with @code{dnl},
+to avoid excess newlines in the output.
+
+@defmac AS_LITERAL_IF (@var{expression}, @ovar{if-literal}, @ovar{if-not})
+@asindex{LITERAL_IF}
+If the expansion of @var{expression} is definitely a shell literal,
+expand @var{if-literal}.  If the expansion of @var{expression} looks
+like it might contain shell indirections (such as @code{$var} or
+@code{`expr`}), then @var{if-not} is expanded.  In order to reduce the
+time spent deciding whether an expression is literal, the implementation
+is somewhat conservative (for example, @samp{'[$]'} is a single-quoted
+shell literal, but causes @var{if-not} to be expanded).  While this
+macro is often used for recognizing shell variable names, it can also be
+used in other contexts.
+
+@example
+AC_DEFUN([MY_ACTION],
+[AS_LITERAL_IF([$1],
+[echo "$1"],
+[AS_VAR_COPY([tmp], [$1])
+echo "$tmp"])])
+@end example
+@end defmac
+
+@defmac AS_VAR_COPY (@var{dest}, @var{source})
+@asindex{VAR_COPY}
+Emit shell code to assign the contents of the polymorphic shell variable
+@var{source} to the polymorphic shell variable @var{dest}.  For example,
+executing this m4sh snippet will output @samp{bar hi}:
+
+@example
+foo=bar bar=hi
+AS_VAR_COPY([a], [foo])
+AS_VAR_COPY([b], [$foo])
+echo "$a $b"
+@end example
+
+When it is necessary to access the contents of an indirect variable
+inside a shell double-quoted context, the recommended idiom is to first
+copy the contents into a temporary literal shell variable.
+
+@smallexample
+for header in stdint_h inttypes_h ; do
+  AS_VAR_COPY([var], [ac_cv_header_$header])
+  echo "$header detected: $var"
+done
+@end smallexample
+@end defmac
+
+@comment AS_VAR_GET is intentionally undocumented; it can't handle
+@comment trailing newlines uniformly, and forks too much.
+
+@defmac AS_VAR_IF (@var{var}, @ovar{value}, @ovar{if-equal}, @
+  @ovar{if-not-equal})
+@asindex{VAR_IF}
+Output a shell conditional statement.  If the contents of the
+polymorphic shell variable @var{var} match the string @var{value},
+execute @var{if-equal}; otherwise execute @var{if-not-equal}.  Avoids
+shell bugs if an interrupt signal arrives while a command substitution
+in @var{var} is being expanded.
+@end defmac
+
+@defmac AS_VAR_PUSHDEF (@var{m4-name}, @var{value})
+@defmacx AS_VAR_POPDEF (@var{m4-name})
+@asindex{VAR_PUSHDEF}
+@asindex{VAR_POPDEF}
+@cindex composing variable names
+@cindex variable names, composing
+A common m4sh idiom involves composing shell variable names from an m4
+argument (for example, writing a macro that uses a cache variable).
+@var{value} can be an arbitrary string, which will be transliterated
+into a valid shell name by @code{AS_TR_SH}.  In order to access the
+composed variable name based on @var{value}, it is easier to declare a
+temporary m4 macro @var{m4-name} with @code{AS_VAR_PUSHDEF}, then use
+that macro as the argument to subsequent @code{AS_VAR} macros as a
+polymorphic variable name, and finally free the temporary macro with
+@code{AS_VAR_POPDEF}.
+
+Here is an involved example, that shows the power of writing macros that
+can handle composed shell variable names:
+
+@example
+m4_define([MY_CHECK_HEADER],
+[AS_VAR_PUSHDEF([my_Header], [ac_cv_header_$1])dnl
+AS_VAR_IF([my_Header], [yes], [echo "header $1 available"])dnl
+AS_VAR_POPDEF([my_Header])dnl
+])
+MY_CHECK_HEADER([stdint.h])
+for header in inttypes.h stdlib.h ; do
+  MY_CHECK_HEADER([$header])
+done
+@end example
+
+@noindent
+In the above example, @code{MY_CHECK_HEADER} can operate on polymorphic
+variable names.  In the first invocation, the m4 argument is
+@code{stdint.h}, which transliterates into a literal @code{stdint_h}.
+As a result, the temporary macro @code{my_Header} expands to the literal
+shell name @samp{ac_cv_header_stdint_h}.  In the second invocation, the
+m4 argument to @code{MY_CHECK_HEADER} is @code{$header}, and the
+temporary macro @code{my_Header} expands to the indirect shell name
+@samp{$as_my_Header}.  During the shell execution of the for loop, when
+@samp{$header} contains @samp{inttypes.h}, then @samp{$as_my_Header}
+contains @samp{ac_cv_header_inttypes_h}.  If this script is then run on a
+platform where all three headers have been previously detected, the
+output of the script will include:
+
+@smallexample
+header stdint.h detected
+header inttypes.h detected
+header stdlib.h detected
+@end smallexample
+@end defmac
+
+@defmac AS_VAR_SET (@var{var}, @ovar{value})
+@asindex{VAR_SET}
+Emit shell code to assign the contents of the polymorphic shell variable
+@var{var} to the shell expansion of @var{value}.
+@end defmac
+
+@defmac AS_VAR_SET_IF (@var{var}, @ovar{if-set}, @ovar{if-undef})
+@asindex{VAR_SET_IF}
+Emit a shell conditional statement, which executes @var{if-set} if the
+polymorphic shell variable @code{var} is set to any value, and
+@var{if-undef} otherwise.
+@end defmac
+
+@defmac AS_VAR_TEST_SET (@var{var})
+@asindex{VAR_TEST_SET}
+Emit a shell statement that results in a successful exit status only if
+the polymorphic shell variable @code{var} is set.
 @end defmac
 
 @node Initialization Macros
