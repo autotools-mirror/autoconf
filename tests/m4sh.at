@@ -884,6 +884,102 @@ ok 7
 AT_CLEANUP
 
 
+## ---------- ##
+## AS_VAR_*.  ##
+## ---------- ##
+
+AT_SETUP([AS@&t@_VAR])
+AT_KEYWORDS([m4sh AS@&t@_VAR_COPY AS@&t@_VAR_SET AS@&t@_VAR_GET])
+AT_KEYWORDS([AS@&t@_VAR_TEST_SET AS@&t@_VAR_SET_IF AS@&t@_VAR_IF])
+AT_KEYWORDS([AS@&t@_VAR_PUSHDEF AS@&t@_VAR_POPDEF])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+# Literals.
+dnl AS_VAR_SET_IF also covers AS_VAR_TEST_SET
+AS_VAR_SET_IF([foo], [echo oops], [echo ok])
+AS_VAR_SET([foo], ['\a  "weird" `value` with; $fun '\''characters
+']) # 'font-lock
+AS_VAR_COPY([bar], [foo])
+echo "$bar-"
+echo "AS_VAR_GET([foo])-"
+AS_VAR_SET_IF([foo], [echo ok], [echo oops])
+AS_VAR_IF([foo], [string], [echo oops], [echo ok])
+AS_VAR_PUSHDEF([tmp], [foo])
+AS_VAR_IF([tmp], ['\a  "weird" `value` with; $fun '\''characters
+'], [echo ok], [echo oops]) # 'font-lock
+AS_VAR_POPDEF([tmp])
+m4_ifdef([tmp], [echo oops])
+
+# Indirects via shell vars.
+echo '===='
+num=1
+AS_VAR_SET_IF([foo$num], [echo oops], [echo ok])
+AS_VAR_SET([foo$num], ['\a  "weird" `value` with; $fun '\''characters
+']) # 'font-lock
+AS_VAR_COPY([bar], [foo$num])
+num=2
+AS_VAR_COPY([foo$num], [bar])
+echo "$foo2-"
+echo "AS_VAR_GET([foo$num])-"
+AS_VAR_SET_IF([foo$num], [echo ok], [echo oops])
+AS_VAR_IF([foo$num], [string], [echo oops], [echo ok])
+AS_VAR_PUSHDEF([tmp], [foo$num])
+AS_VAR_IF([tmp], ['\a  "weird" `value` with; $fun '\''characters
+'], [echo ok], [echo oops]) # 'font-lock
+AS_VAR_POPDEF([tmp])
+m4_ifdef([tmp], [echo oops])
+
+# Indirects via command substitution.
+echo '===='
+AS_VAR_SET_IF([`echo foo3`], [echo oops], [echo ok])
+AS_VAR_SET([`echo foo3`], ['\a  "weird" `value` with; $fun '\''characters
+']) # 'font-lock
+AS_VAR_COPY([bar], [`echo foo3`])
+num=2
+AS_VAR_COPY([`echo foo4`], [bar])
+echo "$foo4-"
+echo "AS_VAR_GET([`echo foo4`])-"
+AS_VAR_SET_IF([`echo foo4`], [echo ok], [echo oops])
+AS_VAR_IF([`echo foo4`], [string], [echo oops], [echo ok])
+AS_VAR_PUSHDEF([tmp], [`echo foo4`])
+AS_VAR_IF([tmp], ['\a  "weird" `value` with; $fun '\''characters
+'], [echo ok], [echo oops]) # 'font-lock
+AS_VAR_POPDEF([tmp])
+m4_ifdef([tmp], [echo oops])
+:
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script], [], [[ok
+\a  "weird" `value` with; $fun 'characters
+-
+\a  "weird" `value` with; $fun 'characters
+-
+ok
+ok
+ok
+====
+ok
+\a  "weird" `value` with; $fun 'characters
+-
+\a  "weird" `value` with; $fun 'characters-
+ok
+ok
+ok
+====
+ok
+\a  "weird" `value` with; $fun 'characters
+-
+\a  "weird" `value` with; $fun 'characters-
+ok
+ok
+ok
+]])
+
+AT_CLEANUP
+
+
 ## ----------------- ##
 ## AS_INIT cleanup.  ##
 ## ----------------- ##

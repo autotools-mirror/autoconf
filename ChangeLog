@@ -1,5 +1,11 @@
 2008-10-17  Eric Blake  <ebb9@byu.net>
 
+	Test AS_VAR interfaces.
+	* tests/m4sh.at (AS@&t@_VAR): New test.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_PUSHDEF): Force expansion of
+	_AS_TR_SH_PREPARE at top level, rather than argument collection.
+	(AS_TR_SH): Support command substitution.
+
 	Add AS_VAR_COPY.
 	* lib/m4sugar/m4sh.m4 (AS_VAR_COPY): New macro.
 	(AS_VAR_IF): Use it, instead of the broken AS_VAR_GET.

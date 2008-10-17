@@ -1569,7 +1569,8 @@ AS_LITERAL_IF([$1],
 m4_dquote(m4_dquote(m4_defn([m4_cr_not_symbols2])))[[,
 				 [pp[]]]]dnl
 m4_dquote(m4_dquote(m4_for(,1,255,,[[_]])))[[)],
-	      [`AS_ECHO(["$1"]) | $as_tr_sh`])])
+	      [`AS_ECHO(["m4_bpatsubst(m4_dquote(m4_expand([$1])),
+				       [[\\`]], [\\\&])"]) | $as_tr_sh`])])
 
 
 # _AS_TR_CPP_PREPARE
@@ -1695,8 +1696,15 @@ m4_define([AS_VAR_POPDEF],
 # Define the m4 macro VARNAME to an accessor to the shell variable
 # named VALUE.  VALUE does not need to be a valid shell variable name:
 # the transliteration is handled here.  To be dnl'ed.
+#
+# AS_TR_SH attempts to play with diversions if _AS_TR_SH_PREPARE has
+# not been expanded.  However, users are expected to do subsequent
+# calls that trigger AS_LITERAL_IF([VARNAME]), and that macro performs
+# expansion inside an argument collection context, where diversions
+# don't work.  Therefore, we must require the preparation ourselves.
 m4_define([AS_VAR_PUSHDEF],
-[AS_LITERAL_IF([$2],
+[AS_REQUIRE([_AS_TR_SH_PREPARE])dnl
+AS_LITERAL_IF([$2],
 	       [m4_pushdef([$1], [AS_TR_SH($2)])],
 	       [as_$1=AS_TR_SH($2)
 m4_pushdef([$1], [$as_[$1]])])])
