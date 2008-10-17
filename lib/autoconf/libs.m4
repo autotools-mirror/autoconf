@@ -84,7 +84,7 @@ done
 AS_VAR_SET_IF([ac_Search], , [AS_VAR_SET([ac_Search], [no])])dnl
 rm conftest.$ac_ext
 LIBS=$ac_func_search_save_LIBS])
-ac_res=AS_VAR_GET([ac_Search])
+AS_VAR_COPY([ac_res], [ac_Search])
 AS_IF([test "$ac_res" != no],
   [test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
   $3],

@@ -774,7 +774,7 @@ if test -n "$at_top_srcdir"; then
   builddir=../..
   for at_dir_var in srcdir top_srcdir top_build_prefix
   do
-    at_val=AS_VAR_GET([at_$at_dir_var])
+    AS_VAR_COPY([at_val], [at_$at_dir_var])
     case $at_val in
       [[\\/$]]* | ?:[[\\/]]* ) at_prefix= ;;
       *) at_prefix=../../ ;;

@@ -1625,6 +1625,12 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
 # when passed through eval, and a polymorphic name is either type.
 
 
+# AS_VAR_COPY(DEST, SOURCE)
+# -------------------------
+# Set the polymorphic shell variable DEST to the contents of the polymorphic
+# shell variable SOURCE.
+m4_define([AS_VAR_COPY],
+[AS_LITERAL_IF([$1[]$2], [$1=$$2], [eval $1=\$$2])])
 
 
 # AS_VAR_GET(VARIABLE)
@@ -1632,8 +1638,8 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
 # Get the value of the shell VARIABLE.
 # Evaluates to $VARIABLE if there are no indirection in VARIABLE,
 # else into the appropriate `eval' sequence.
-# FIXME: This mishandles values that end in newlines.
-# Fixing this will require changing the API.
+# This macro is deprecated because it sometimes mishandles trailing newlines;
+# use AS_VAR_COPY instead.
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
 	       [$$1],
@@ -1648,7 +1654,7 @@ AS_ECHO(["$as_val"])'`])])
 m4_define([AS_VAR_IF],
 [AS_LITERAL_IF([$1],
   [AS_IF([test "x$$1" = x""$2], [$3], [$4])],
-  [as_val=AS_VAR_GET([$1])
+  [AS_VAR_COPY([as_val], [$1])
    AS_IF([test "x$as_val" = x""$2], [$3], [$4])])])
 
 

@@ -1,5 +1,12 @@
 2008-10-17  Eric Blake  <ebb9@byu.net>
 
+	Add AS_VAR_COPY.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_COPY): New macro.
+	(AS_VAR_IF): Use it, instead of the broken AS_VAR_GET.
+	* lib/autoconf/general.m4 (AC_CACHE_CHECK): Likewise.
+	* lib/autoconf/libs.m4 (AC_SEARCH_LIBS): Likewise.
+	* lib/autotest/general.m4 (_AT_FINISH): Likewise.
+
 	Sort AS_VAR_* interfaces.
 	* lib/m4sugar/m4sh.m4 (AS_VAR_GET): Reduce output to one line.
 	(AS_VAR_TEST_SET, AS_VAR_SET, AS_VAR_SET_IF, AS_VAR_POPDEF): Sort,

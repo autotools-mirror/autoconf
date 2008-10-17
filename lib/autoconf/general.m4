@@ -1990,7 +1990,7 @@ m4_defun([AC_CACHE_CHECK],
 AC_CACHE_VAL([$2], [$3])dnl
 AS_LITERAL_IF([$2],
 	      [AC_MSG_RESULT([$$2])],
-	      [ac_res=AS_VAR_GET([$2])
+	      [AS_VAR_COPY([ac_res], [$2])
 	       AC_MSG_RESULT([$ac_res])])dnl
 ])
 
