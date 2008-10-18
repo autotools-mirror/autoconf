@@ -1,3 +1,9 @@
+2008-10-20  Paolo Bonzini  <bonzini@gnu.org>
+
+	Add AC_REQUIRE_SHELL_FN and the SHELL_FN diversion.
+	* lib/autoconf/general.m4 (AC_REQUIRE_SHELL_FN): New.
+	(m4_divert(SHELL_FN)): New.
+
 2008-10-20  Eric Blake  <ebb9@byu.net>
 
 	Avoid unportable use of echo in testsuite.

@@ -104,6 +104,9 @@
 # - VERSION_END
 #   Tail of the handling of --version.
 #
+# - SHELL_FN
+#   Shell functions.
+#
 # - INIT_PREPARE
 #   Tail of initialization code.
 #
@@ -146,6 +149,8 @@ m4_define([_m4_divert(VERSION_FSF)],    201)
 m4_define([_m4_divert(VERSION_USER)],   202)
 m4_define([_m4_divert(VERSION_END)],    203)
 
+m4_define([_m4_divert(SHELL_FN)],       250)
+
 m4_define([_m4_divert(INIT_PREPARE)],   300)
 
 
@@ -182,6 +187,20 @@ m4_copy([m4_provide_if],  [AC_PROVIDE_IFELSE])
 # ------------------------------------------
 m4_define([AC_OBSOLETE],
 [AC_DIAGNOSE([obsolete], [$1 is obsolete$2])])
+
+
+
+## ----------------------------- ##
+## Implementing shell functions. ##
+## ----------------------------- ##
+
+
+# AC_REQUIRE_SHELL_FN(NAME-TO-CHECK, COMMENT, BODY, [DIVERSION = SHELL_FN]
+# ------------------------------------------------------------------------
+# Same as AS_REQUIRE_SHELL_FN except that the default diversion comes
+# later in the script (speeding up configure --help and --version).
+AC_DEFUN([AC_REQUIRE_SHELL_FN],
+[AS_REQUIRE_SHELL_FN([$1], [$2], [$3], m4_default_quoted([$4], [SHELL_FN]))])
 
 
 
