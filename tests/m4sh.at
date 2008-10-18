@@ -522,11 +522,11 @@ m4_defun([TEST_FUNC2_BODY], [
 ])
 
 m4_defun([TEST_FUNC1_BODY], [
-AS_REQUIRE_SHELL_FN([test_func2], [TEST_FUNC2_BODY])
+AS_REQUIRE_SHELL_FN([test_func2], [], [TEST_FUNC2_BODY])
 :
 ])
 
-AS_REQUIRE_SHELL_FN([test_func1], [TEST_FUNC1_BODY])
+AS_REQUIRE_SHELL_FN([test_func1], [], [TEST_FUNC1_BODY])
 test_func2
 ]])
 
@@ -566,7 +566,7 @@ m4_require([error_if_emitted_in_m4sh_init])
 
 m4_defun([test_init], [
 AS_REQUIRE([in_m4_sh_init], , [M4SH-INIT-FN])
-AS_REQUIRE_SHELL_FN([test_func], [TEST_FUNC_BODY])
+AS_REQUIRE_SHELL_FN([test_func], [], [TEST_FUNC_BODY])
 AS_REQUIRE([not_in_m4_sh_init])
 ])
 
