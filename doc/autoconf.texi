@@ -19100,7 +19100,14 @@ Doing so can be useful if some of the packages need a superset of the
 features that one of them, perhaps a common library, does.  These
 options allow a @file{config.status} file to create files other than the
 ones that its @file{configure.ac} specifies, so it can be used for a
-different package.
+different package, or for extracting a subset of values.  For example,
+
+@example
+echo '@@CC@@' | ./config.status --file=-
+@end example
+
+@noindent
+provides the value of @code{@@CC@@} on standard output.
 
 @item --header=@var{file}[:@var{template}]
 Same as @option{--file} above, but with @samp{AC_CONFIG_HEADERS}.

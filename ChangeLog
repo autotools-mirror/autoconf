@@ -1,3 +1,9 @@
+2008-10-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Show how to extract single substitutions from config.status.
+	* doc/autoconf.texi (config.status Invocation): Show example
+	using `--file=-'.
+
 2008-10-17  Eric Blake  <ebb9@byu.net>
 
 	Add m4_curry.
