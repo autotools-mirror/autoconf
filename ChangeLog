@@ -1,3 +1,11 @@
+2008-10-18  Paolo Bonzini  <bonzini@gnu.org>
+
+	Make sure that nested AS_REQUIRE do not lose the desired diversion.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): Expand _m4_divert_desired before
+	passing it to m4_divert_require, so that its content is not used
+	anymore.
+	* tests/m4sh.at (Nested AS_REQUIRE): New testcase.
+
 2008-10-18  Eric Blake  <ebb9@byu.net>
 
 	Document bugs in { } handling.

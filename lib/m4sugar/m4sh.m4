@@ -314,11 +314,14 @@ m4_divert_pop[]dnl
 # given diversion when expanded (required or not).  The expansion
 # goes in the named diversion or an earlier one.
 #
+# Note: we expand _m4_divert_desired before passing it to m4_divert_require,
+# otherwise we would need to use m4_pushdef and m4_popdef instead of
+# simply m4_define.
 m4_defun([AS_REQUIRE],
 [m4_define([_m4_divert_desired], [m4_default_quoted([$3], [M4SH-INIT])])dnl
 m4_if(m4_eval(_m4_divert(_m4_divert_dump) <= _m4_divert(_m4_divert_desired)), 1,
       [m4_require([$1], [$2])],
-      [m4_divert_require([_m4_divert_desired], [$1], [$2])])])
+      [m4_divert_require(_m4_divert(_m4_divert_desired), [$1], [$2])])])
 
 
 # AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, COMMENT, BODY-TO-EXPAND,
