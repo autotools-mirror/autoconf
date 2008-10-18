@@ -14624,6 +14624,22 @@ bash: line 1: /bad: Permission denied
 1
 @end example
 
+Posix requires a syntax error if a brace list has no contents.  However,
+not all shells obey this rule; and on shells where empty lists are
+permitted, the effect on @samp{$?} is inconsistent.  To avoid problems,
+ensure that a brace list is never empty.
+
+@example
+$ @kbd{bash -c 'false; @{ @}; echo $?' || echo $?}
+bash: line 1: syntax error near unexpected token `@}'
+bash: line 1: `false; @{ @}; echo $?'
+2
+$ @kbd{zsh -c 'false; @{ @}; echo $?' || echo $?}
+1
+$ @kbd{pdksh -c 'false; @{ @}; echo $?' || echo $?}
+0
+@end example
+
 
 @item @command{break}
 @c ------------------

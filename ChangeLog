@@ -1,5 +1,9 @@
 2008-10-18  Eric Blake  <ebb9@byu.net>
 
+	Document bugs in { } handling.
+	* doc/autoconf.texi (Limitations of Builtins): Mention bug on
+	empty list.
+
 	Fix some testsuite failures introduced two days ago.
 	* tests/m4sh.at (Nested AS@&t@_REQUIRE_SHELL_FN)
 	(AS@&t@_REQUIRE_SHELL_FN and m4@&t@_require): Adjust to changed
