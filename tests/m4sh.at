@@ -956,7 +956,7 @@ AS_VAR_COPY([bar], [foo])
 AS_ECHO(["$bar-"])
 AS_ECHO(["AS_VAR_GET([foo])-"])
 AS_VAR_SET_IF([foo], [echo ok], [echo oops])
-AS_VAR_IF([foo], [string], [echo oops], [echo ok])
+AS_VAR_IF([foo], [string], [echo oops]) && echo ok
 AS_VAR_PUSHDEF([tmp], [foo])
 AS_VAR_IF([tmp], ['\a  "weird" `value` with; $fun '\''characters
 '], [echo ok], [echo oops]) # 'font-lock
@@ -975,7 +975,7 @@ AS_VAR_COPY([foo$num], [bar])
 AS_ECHO(["$foo2-"])
 AS_ECHO(["AS_VAR_GET([foo$num])-"])
 AS_VAR_SET_IF([foo$num], [echo ok], [echo oops])
-AS_VAR_IF([foo$num], [string], [echo oops], [echo ok])
+AS_VAR_IF([foo$num], [string], [echo oops]) && echo ok
 AS_VAR_PUSHDEF([tmp], [foo$num])
 AS_VAR_IF([tmp], ['\a  "weird" `value` with; $fun '\''characters
 '], [echo ok], [echo oops]) # 'font-lock
@@ -993,7 +993,7 @@ AS_VAR_COPY([`echo foo4`], [bar])
 AS_ECHO(["$foo4-"])
 AS_ECHO(["AS_VAR_GET([`echo foo4`])-"])
 AS_VAR_SET_IF([`echo foo4`], [echo ok], [echo oops])
-AS_VAR_IF([`echo foo4`], [string], [echo oops], [echo ok])
+AS_VAR_IF([`echo foo4`], [string], [echo oops]) && echo ok
 AS_VAR_PUSHDEF([tmp], [`echo foo4`])
 AS_VAR_IF([tmp], ['\a  "weird" `value` with; $fun '\''characters
 '], [echo ok], [echo oops]) # 'font-lock

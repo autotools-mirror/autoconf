@@ -134,7 +134,7 @@ AS_VAR_IF([ac_Lib], [yes],
       [m4_default([$3], [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_LIB$1))
   LIBS="-l$1 $LIBS"
 ])],
-      [$4])dnl
+      [$4])
 AS_VAR_POPDEF([ac_Lib])dnl
 ])# AC_CHECK_LIB
 

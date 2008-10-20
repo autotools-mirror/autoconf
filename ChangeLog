@@ -1,5 +1,18 @@
 2008-10-21  Eric Blake  <ebb9@byu.net>
 
+	Allow AS_VAR_IF in shell lists.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_IF): Allow continuation of line.
+	* lib/autoconf/functions.m4 (AC_CHECK_FUNC): Adjust clients.
+	* lib/autoconf/general.m4 (AC_CHECK_FILE, AC_CHECK_DECL):
+	Likewise.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL)
+	(_AC_CHECK_HEADER_NEW, _AC_CHECK_HEADER_OLD)
+	(_AC_CHECK_HEADER_DIRENT): Likewise.
+	* lib/autoconf/libs.m4 (AC_CHECK_LIB): Likewise.
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW, AC_CHECK_MEMBER):
+	Likewise.
+	* tests/m4sh.at (AS@&t@_VAR basics): Enhance test.
+
 	Allow AS_CASE in shell lists.
 	* lib/m4sugar/m4sh.m4 (AS_CASE): Always execute test, in case of
 	side effects.  Allow continuation of script on same line as esac.

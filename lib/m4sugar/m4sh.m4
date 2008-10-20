@@ -1708,9 +1708,7 @@ m4_define([AS_VAR_IF],
 [AS_LITERAL_IF([$1],
   [AS_IF([test "x$$1" = x""$2], [$3], [$4])],
   [AS_VAR_COPY([as_val], [$1])
-   AS_IF([test "x$as_val" = x""$2], [$3], [$4])])
-dnl fixme: remove the newline?
-])
+   AS_IF([test "x$as_val" = x""$2], [$3], [$4])])])
 
 
 # AS_VAR_PUSHDEF and AS_VAR_POPDEF
