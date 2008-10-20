@@ -1,3 +1,11 @@
+2008-10-23  Paolo Bonzini  <bonzini@gnu.org>
+	and Eric Blake  <ebb9@byu.net>
+
+	Use a shell function for _AC_RUN_IFELSE.
+	* lib/autoconf/general.m4 (_AC_RUN_IFELSE_BODY): New macro.
+	(_AC_RUN_IFELSE): Use a shell function.
+	(_AC_RUN_LOG): Avoid subshell for logging.
+
 2008-10-23  Eric Blake  <ebb9@byu.net>
 
 	Formatting tweak: balance () with m4sh case statements.

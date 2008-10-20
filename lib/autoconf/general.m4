@@ -2230,7 +2230,7 @@ AU_ALIAS([AC_VERBOSE], [AC_MSG_RESULT])
 # ----------------------------------
 # Eval COMMAND, save the exit status in ac_status, and log it.
 AC_DEFUN([_AC_RUN_LOG],
-[{ ($2) >&AS_MESSAGE_LOG_FD
+[{ { $2; } >&AS_MESSAGE_LOG_FD
   ($1) 2>&AS_MESSAGE_LOG_FD
   ac_status=$?
   _AS_ECHO_LOG([\$? = $ac_status])
@@ -2606,6 +2606,23 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])])
 ## ------------------------------- ##
 
 
+# _AC_RUN_IFELSE_BODY
+# -------------------
+# Shell function body for _AC_RUN_IFELSE.
+m4_define([_AC_RUN_IFELSE_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AS_IF([_AC_DO_VAR(ac_link) && _AC_DO_TOKENS(./conftest$ac_exeext)],
+      [ac_retval=0],
+      [AS_ECHO(["$as_me: program exited with status $ac_status"]) >&AS_MESSAGE_LOG_FD
+       _AC_MSG_LOG_CONFTEST
+       ac_retval=$ac_status])
+  rm -rf conftest.dSYM
+  rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest$ac_exeext
+  AS_LINENO_POP
+  return $ac_retval
+])# _AC_RUN_IFELSE_BODY
+
+
 # _AC_RUN_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ------------------------------------------------------------
 # Compile, link, and run.
@@ -2613,21 +2630,16 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[$2]], [[$3]])], [$4], [$5])])
 # We also remove conftest.o as if the compilation fails, some compilers
 # don't remove it.  We remove gmon.out and bb.out, which may be
 # created during the run if the program is built with profiling support.
-m4_define([_AC_RUN_IFELSE],
-[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-rm -f conftest$ac_exeext
-AS_IF([_AC_DO_VAR(ac_link) && _AC_DO_TOKENS(./conftest$ac_exeext)],
-      [$2],
-      [AS_ECHO(["$as_me: program exited with status $ac_status"]) >&AS_MESSAGE_LOG_FD
-_AC_MSG_LOG_CONFTEST
-m4_ifvaln([$3],
-	  [( exit $ac_status )
-$3])dnl])
-rm -rf conftest.dSYM
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
-						     [conftest.$ac_ext])[]dnl
+AC_DEFUN([_AC_RUN_IFELSE],
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_run],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_run], [LINENO],
+    [Try to link conftest.$ac_ext, and return whether this succeeded.
+     Assumes that executables *can* be run.])],
+  [$0_BODY])]dnl
+[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
+[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_run "$LINENO"], [$2], [$3])
+m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
 ])# _AC_RUN_IFELSE
-
 
 # AC_RUN_IFELSE(PROGRAM,
 #               [ACTION-IF-TRUE], [ACTION-IF-FALSE],
