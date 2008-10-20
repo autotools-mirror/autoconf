@@ -12070,6 +12070,31 @@ echo "$tmp"])])
 @end example
 @end defmac
 
+@defmac AS_VAR_APPEND (@var{var}, @var{text})
+@asindex{APPEND}
+Emit shell code to append the shell expansion of @var{text} to the end
+of the current contents of the polymorphic shell variable @var{var},
+taking advantage of shells that provide the @samp{+=} extension for more
+efficient scaling.
+
+For situations where the final contents of @var{var} are relatively
+short (less than 256 bytes), it is more efficient to use the simpler
+code sequence of @code{@var{var}=$@{@var{var}@}@var{text}} (or its
+polymorphic equivalent of @code{AS_VAR_COPY([tmp], [@var{var}])} and
+@code{AS_VAR_SET([@var{var}], ["$tmp"@var{text}])}).  But in the case
+when the script will be repeatedly appending text into @code{var},
+issues of scaling start to become apparent.  A naive implementation
+requires execution time linear to the length of the current contents of
+@var{var} as well as the length of @var{text} for a single append, for
+an overall quadratic scaling with multiple appends.  This macro takes
+advantage of shells which provide the extension
+@code{@var{var}+=@var{text}}, which can provide amortized constant time
+for a single append, for an overall linear scaling with multiple
+appends.  Note that unlike @code{AS_VAR_SET}, this macro requires that
+@var{text} be quoted properly to avoid field splitting and file name
+expansion.
+@end defmac
+
 @defmac AS_VAR_COPY (@var{dest}, @var{source})
 @asindex{VAR_COPY}
 Emit shell code to assign the contents of the polymorphic shell variable
@@ -12163,7 +12188,10 @@ header stdlib.h detected
 @defmac AS_VAR_SET (@var{var}, @ovar{value})
 @asindex{VAR_SET}
 Emit shell code to assign the contents of the polymorphic shell variable
-@var{var} to the shell expansion of @var{value}.
+@var{var} to the shell expansion of @var{value}.  @var{value} is not
+subject to field splitting or file name expansion, so if command
+substitution is used, it may be done with @samp{`""`} rather than using
+an intermediate variable (@pxref{Shell Substitutions}).
 @end defmac
 
 @defmac AS_VAR_SET_IF (@var{var}, @ovar{if-set}, @ovar{if-undef})

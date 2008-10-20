@@ -1,3 +1,15 @@
+2008-10-21  Eric Blake  <ebb9@byu.net>
+
+	Add AS_VAR_APPEND.
+	* lib/m4sugar/m4sh.m4 (_AS_VAR_APPEND_PREPARE)
+	(_AS_VAR_APPEND_WORKS, AS_VAR_APPEND): New macros.
+	(AS_PREPARE, _AS_PREPARE): Emit preparation.
+	* tests/m4sh.at (AS@&t@_VAR_APPEND): New test.
+	* doc/autoconf.texi (Polymorphic Variables) <AS_VAR_APPEND>:
+	Document new macro.
+	<AS_VAR_SET>: Mention ramification of `""` rules.
+	* NEWS: Mention new macro.
+
 2008-10-21  Paolo Bonzini  <bonzini@gnu.org>
 	and Eric Blake  <ebb9@byu.net>
 

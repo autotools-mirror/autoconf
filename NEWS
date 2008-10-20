@@ -17,7 +17,7 @@ GNU Autoconf NEWS - User visible changes.
    m4_set_map
 
 ** The following documented m4sh macros are new:
-   AS_LINENO_PREPARE  AS_ME_PREPARE  AS_VAR_COPY
+   AS_LINENO_PREPARE  AS_ME_PREPARE  AS_VAR_APPEND  AS_VAR_COPY
 
 ** The following m4sh macros are documented now:
    AS_ECHO  AS_ECHO_N  AS_LITERAL_IF  AS_UNSET  AS_VAR_IF  AS_VAR_POPDEF

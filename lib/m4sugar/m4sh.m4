@@ -280,6 +280,7 @@ _AS_TEST_PREPARE
 _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
 _AS_UNSET_PREPARE
+_AS_VAR_APPEND_PREPARE
 m4_popdef([AS_REQUIRE])dnl
 ])
 
@@ -303,6 +304,7 @@ AS_REQUIRE([_AS_TEST_PREPARE])
 AS_REQUIRE([_AS_TR_CPP_PREPARE])
 AS_REQUIRE([_AS_TR_SH_PREPARE])
 AS_REQUIRE([_AS_UNSET_PREPARE])
+AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])
 m4_divert_pop[]dnl
 ])
 
@@ -1637,6 +1639,52 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
 # when passed through eval, and a polymorphic name is either type.
 
 
+# _AS_VAR_APPEND_PREPARE
+# ----------------------
+# Define as_func_append to the optimum definition for the current
+# shell (bash and zsh provide the += assignment operator to avoid
+# quadratic append growth over repeated appends).
+m4_defun([_AS_VAR_APPEND_PREPARE],
+[AS_FUNCTION_DESCRIBE([as_func_append], [VAR VALUE],
+[Append the text in VALUE to the end of the definition contained in
+VAR.  Take advantage of any shell optimizations that allow amortized
+linear growth over repeated appends, instead of the typical quadratic
+growth present in naive implementations.])
+AS_IF([_AS_RUN(["AS_ESCAPE([_AS_VAR_APPEND_WORKS])"])],
+[eval 'as_func_append ()
+  {
+    eval $[]1+=\$[]2
+  }'],
+[as_func_append ()
+  {
+    eval $[]1=\$$[]1\$[]2
+  }]) # as_func_append
+])
+
+
+# _AS_VAR_APPEND_WORKS
+# --------------------
+# Output a shell test to discover whether += works.
+m4_define([_AS_VAR_APPEND_WORKS],
+[as_var=1; as_var+=2; test x$as_var = x12])
+
+
+# AS_VAR_APPEND(VAR, VALUE)
+# -------------------------
+# Append the shell expansion of VALUE to the end of the existing
+# contents of the polymorphic shell variable VAR, taking advantage of
+# any shell optimizations that allow repeated appends to result in
+# amortized linear scaling rather than quadratic behavior.  This macro
+# is not worth the overhead unless the expected final size of the
+# contents of VAR outweigh the typical VALUE size of repeated appends.
+# Note that unlike AS_VAR_SET, VALUE must be properly quoted to avoid
+# field splitting and file name expansion.
+m4_define([AS_VAR_APPEND],
+[_AS_DETECT_SUGGESTED([_AS_VAR_APPEND_WORKS])dnl
+AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])dnl
+as_func_append $1 $2])
+
+
 # AS_VAR_COPY(DEST, SOURCE)
 # -------------------------
 # Set the polymorphic shell variable DEST to the contents of the polymorphic
@@ -1724,7 +1772,8 @@ m4_pushdef([$1], [$as_[$1]])])])
 # AS_VAR_SET(VARIABLE, VALUE)
 # ---------------------------
 # Set the contents of the polymorphic shell VARIABLE to the shell
-# expansion of VALUE.
+# expansion of VALUE.  VALUE is immune to field splitting and file
+# name expansion.
 m4_define([AS_VAR_SET],
 [AS_LITERAL_IF([$1],
 	       [$1=$2],
