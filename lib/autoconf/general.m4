@@ -2392,7 +2392,7 @@ m4_define([_AC_PREPROC_IFELSE_BODY],
   rm -f conftest.err
   AS_LINENO_POP
   return $ac_retval
-])
+])# _AC_PREPROC_IFELSE_BODY
 
 
 # _AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
@@ -2405,7 +2405,7 @@ AC_DEFUN([_AC_PREPROC_IFELSE],
 [AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_cpp],
   [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_cpp], [LINENO],
     [Try to preprocess conftest.$ac_ext, and return whether this succeeded.])],
-    [$0_BODY])]dnl
+  [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_cpp "$LINENO"], [$2], [$3])
 m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
@@ -2466,22 +2466,37 @@ AC_DEFUN([AC_EGREP_HEADER],
 ## Examining syntax.  ##
 ## ------------------ ##
 
+# _AC_COMPILE_IFELSE_BODY
+# -----------------------
+# Shell function body for _AC_COMPILE_IFELSE.
+m4_define([_AC_COMPILE_IFELSE_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  rm -f conftest.$ac_objext
+  AS_IF([_AC_DO_STDERR($ac_compile) && {
+	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext],
+      [ac_retval=0],
+      [_AC_MSG_LOG_CONFTEST
+	ac_retval=1])
+  rm -f core conftest.err conftest.$ac_objext
+  AS_LINENO_POP
+  return $ac_retval
+])# _AC_COMPILE_IFELSE_BODY
+
 
 # _AC_COMPILE_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ----------------------------------------------------------------
 # Try to compile PROGRAM.
 # This macro can be used during the selection of a compiler.
-m4_define([_AC_COMPILE_IFELSE],
-[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-rm -f conftest.$ac_objext
-AS_IF([_AC_DO_STDERR($ac_compile) && {
-	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext],
-      [$2],
-      [_AC_MSG_LOG_CONFTEST
-	$3])
-rm -f core conftest.err conftest.$ac_objext m4_ifval([$1], [conftest.$ac_ext])[]dnl
+AC_DEFUN([_AC_COMPILE_IFELSE],
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_compile],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_compile], [LINENO],
+    [Try to compile conftest.$ac_ext, and return whether this succeeded.])],
+  [$0_BODY])]dnl
+[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
+[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_compile "$LINENO"], [$2], [$3])
+m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
 ])# _AC_COMPILE_IFELSE
 
 

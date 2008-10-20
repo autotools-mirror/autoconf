@@ -1,3 +1,10 @@
+2008-10-21  Paolo Bonzini  <bonzini@gnu.org>
+	and Eric Blake  <ebb9@byu.net>
+
+	Use a shell function for _AC_COMPILE_IFELSE.
+	* lib/autoconf/general.m4 (_AC_COMPILE_IFELSE_BODY): New macro.
+	(_AC_COMPILE_IFELSE): Use a shell function.
+
 2008-10-21  Eric Blake  <ebb9@byu.net>
 
 	Use AS_VAR_APPEND.
