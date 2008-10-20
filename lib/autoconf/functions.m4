@@ -61,18 +61,34 @@
 ## 1. Generic tests for functions.  ##
 ## -------------------------------- ##
 
+# _AC_CHECK_FUNC_BODY
+# -------------------
+# Shell function body for AC_CHECK_FUNC.
+m4_define([_AC_CHECK_FUNC_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AC_CACHE_CHECK([for $[]2], [$[]3],
+  [AC_LINK_IFELSE([AC_LANG_FUNC_LINK_TRY($[]2)],
+		  [AS_VAR_SET([$[]3], [yes])],
+		  [AS_VAR_SET([$[]3], [no])])])
+  AS_LINENO_POP
+])# _AC_CHECK_FUNC_BODY
+
 
 # AC_CHECK_FUNC(FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------------------
+# Check whether FUNCTION links in the current language.  Set the cache
+# variable ac_cv_func_FUNCTION accordingly, then execute
+# ACTION-IF-FOUND or ACTION-IF-NOT-FOUND.
 AC_DEFUN([AC_CHECK_FUNC],
-[AS_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])dnl
-AC_CACHE_CHECK([for $1], [ac_var],
-[AC_LINK_IFELSE([AC_LANG_FUNC_LINK_TRY([$1])],
-		[AS_VAR_SET([ac_var], [yes])],
-		[AS_VAR_SET([ac_var], [no])])])
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_func],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_func],
+    [LINENO FUNC VAR],
+    [Tests whether FUNC exists, setting the cache variable VAR accordingly])],
+  [_$0_BODY])]dnl
+[AS_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])]dnl
+[ac_func_[]_AC_LANG_ABBREV[]_check_func "$LINENO" "$1" "ac_var"
 AS_VAR_IF([ac_var], [yes], [$2], [$3])
-AS_VAR_POPDEF([ac_var])dnl
-])# AC_CHECK_FUNC
+AS_VAR_POPDEF([ac_var])])# AC_CHECK_FUNC
 
 
 # _AH_CHECK_FUNCS(FUNCTION...)

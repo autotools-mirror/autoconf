@@ -189,8 +189,7 @@ m4_define([_AC_LANG_PREFIX(Objective C)], [OBJC])
 m4_define([AC_LANG_SOURCE(C)],
 [/* confdefs.h.  */
 _ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
+cat confdefs.h - <<_ACEOF >>conftest.$ac_ext
 /* end confdefs.h.  */
 $1])
 
@@ -883,7 +882,7 @@ AC_DEFUN([AC_PROG_CXX_C_O],
 [AC_REQUIRE([AC_PROG_CXX])dnl
 AC_LANG_PUSH([C++])dnl
 AC_CACHE_CHECK([whether $CXX understands -c and -o together],
-               [ac_cv_prog_cxx_c_o],
+	       [ac_cv_prog_cxx_c_o],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # We test twice because some compilers refuse to overwrite an existing
 # `.o' file with `-o', although they will create one.
@@ -899,8 +898,8 @@ fi
 rm -f conftest*])
 if test $ac_cv_prog_cxx_c_o = no; then
   AC_DEFINE(CXX_NO_MINUS_C_MINUS_O, 1,
-            [Define to 1 if your C++ compiler doesn't accept
-             -c and -o together.])
+	    [Define to 1 if your C++ compiler doesn't accept
+	     -c and -o together.])
 fi
 AC_LANG_POP([C++])dnl
 ])# AC_PROG_CXX_C_O
@@ -1343,7 +1342,7 @@ AC_DEFUN([AC_PROG_CC_STDC],
   AS_CASE([$ac_cv_prog_cc_stdc],
     [no], [AC_MSG_RESULT([unsupported])],
     [''], [AC_MSG_RESULT([none needed])],
-          [AC_MSG_RESULT([$ac_cv_prog_cc_stdc])])
+	  [AC_MSG_RESULT([$ac_cv_prog_cc_stdc])])
 ])
 
 
@@ -1536,10 +1535,10 @@ dnl the user did not specify a config header but is relying on the
 dnl default behavior for universal builds.
      m4_default([$4],
        [AC_CONFIG_COMMANDS_PRE([m4_ifset([AH_HEADER], [],
-         [AC_DIAGNOSE([obsolete],
-           [AC_C_BIGENDIAN should be used with AC_CONFIG_HEADERS])])])dnl
-        AC_DEFINE([AC_APPLE_UNIVERSAL_BUILD],1,
-          [Define if building universal (internal helper macro)])])
+	 [AC_DIAGNOSE([obsolete],
+	   [AC_C_BIGENDIAN should be used with AC_CONFIG_HEADERS])])])dnl
+	AC_DEFINE([AC_APPLE_UNIVERSAL_BUILD],1,
+	  [Define if building universal (internal helper macro)])])
      ;; #(
    *)
      m4_default([$3],
@@ -1950,9 +1949,9 @@ AC_DEFUN([AC_OPENMP],
 	  done])])
     case $ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp in #(
       "none needed" | unsupported)
-        ;; #(
+	;; #(
       *)
-        OPENMP_[]_AC_LANG_PREFIX[]FLAGS=$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp ;;
+	OPENMP_[]_AC_LANG_PREFIX[]FLAGS=$ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp ;;
     esac
   fi
   AC_SUBST([OPENMP_]_AC_LANG_PREFIX[FLAGS])
