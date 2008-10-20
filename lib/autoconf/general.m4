@@ -2524,6 +2524,33 @@ AU_DEFUN([AC_TRY_COMPILE],
 ## --------------------- ##
 
 
+# _AC_LINK_IFELSE_BODY
+# --------------------
+# Shell function body for _AC_LINK_IFELSE.
+m4_define([_AC_LINK_IFELSE_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  rm -f conftest.$ac_objext conftest$ac_exeext
+  AS_IF([_AC_DO_STDERR($ac_link) && {
+	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 AS_TEST_X([conftest$ac_exeext])
+       }],
+      [ac_retval=0],
+      [_AC_MSG_LOG_CONFTEST
+	ac_retval=1])
+  # Delete also the IPA/IPO (Inter Procedural Analysis/Optimization)
+  # information created by the PGI compiler (conftest_ipa8_conftest.oo),
+  # as it would interfere with the next link command.
+  rm -rf conftest.dSYM
+  rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext
+  AS_LINENO_POP
+  return $ac_retval
+])# _AC_LINK_IFELSE_BODY
+
+
 # _AC_LINK_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # -------------------------------------------------------------
 # Try to link PROGRAM.
@@ -2535,25 +2562,14 @@ AU_DEFUN([AC_TRY_COMPILE],
 # reported by Chris Johns in
 # <http://lists.gnu.org/archive/html/autoconf/2007-03/msg00085.html>.
 #
-m4_define([_AC_LINK_IFELSE],
-[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-rm -f conftest.$ac_objext conftest$ac_exeext
-AS_IF([_AC_DO_STDERR($ac_link) && {
-	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext && {
-	 test "$cross_compiling" = yes ||
-	 AS_TEST_X([conftest$ac_exeext])
-       }],
-      [$2],
-      [_AC_MSG_LOG_CONFTEST
-	$3])
-dnl Delete also the IPA/IPO (Inter Procedural Analysis/Optimization)
-dnl information created by the PGI compiler (conftest_ipa8_conftest.oo),
-dnl as it would interfere with the next link command.
-rm -rf conftest.dSYM
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext m4_ifval([$1], [conftest.$ac_ext])[]dnl
+AC_DEFUN([_AC_LINK_IFELSE],
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_link],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_link], [LINENO],
+    [Try to link conftest.$ac_ext, and return whether this succeeded.])],
+  [$0_BODY])]dnl
+[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
+[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_link "$LINENO"], [$2], [$3])
+m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
 ])# _AC_LINK_IFELSE
 
 
