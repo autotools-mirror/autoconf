@@ -1,3 +1,9 @@
+2008-10-20  Eric Blake  <ebb9@byu.net>
+
+	Avoid unportable use of echo in testsuite.
+	* tests/m4sh.at (AS@&t@_VAR basics): Use AS_ECHO, since string
+	contains backslash.
+
 2008-10-18  Paolo Bonzini  <bonzini@gnu.org>
 
 	Make sure that nested AS_REQUIRE do not lose the desired diversion.
