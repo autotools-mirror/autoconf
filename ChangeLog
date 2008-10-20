@@ -1,5 +1,11 @@
 2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
 
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW_BODY): Extract
+	test body here.  Move head comment of _AC_CHECK_TYPE_NEW here.
+	(_AC_CHECK_TYPE_NEW): Define a shell function and call it.
+
+2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
+
 	* lib/autoconf/general.m4 (_AC_CHECK_DECL_BODY): New.
 	(AC_CHECK_DECL): Use a shell function.
 

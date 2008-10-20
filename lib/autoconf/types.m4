@@ -76,16 +76,12 @@
 # arguments.
 
 
-
-# _AC_CHECK_TYPE_NEW(TYPE,
-#		     [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#		     [INCLUDES = DEFAULT-INCLUDES])
-# ------------------------------------------------------------
-# Check whether the type TYPE is supported by the system, maybe via the
-# the provided includes.  This macro implements the former task of
-# AC_CHECK_TYPE, with one big difference though: AC_CHECK_TYPE was
-# grepping in the headers, which, BTW, led to many problems until the
-# extended regular expression was correct and did not given false positives.
+# _AC_CHECK_TYPE_NEW_BODY
+# -----------------------
+# Shell function body for _AC_CHECK_TYPE_NEW.  This macro implements the
+# former task of AC_CHECK_TYPE, with one big difference though: AC_CHECK_TYPE
+# used to grep in the headers, which, BTW, led to many problems until the
+# extended regular expression was correct and did not give false positives.
 # It turned out there are even portability issues with egrep...
 #
 # The most obvious way to check for a TYPE is just to compile a variable
@@ -93,8 +89,9 @@
 #
 #	  TYPE my_var;
 #
-# Unfortunately this does not work for const qualified types in C++,
-# where you need an initializer.  So you think of
+# (TYPE being the second parameter to the shell function, hence $[]2 in m4).
+# Unfortunately this does not work for const qualified types in C++, where
+# you need an initializer.  So you think of
 #
 #	  TYPE my_var = (TYPE) 0;
 #
@@ -146,20 +143,39 @@
 # C++ disallows defining types inside `sizeof ()', but that's OK,
 # since we don't want to consider unnamed structs to be types for C++,
 # precisely because they don't work in cases like that.
-m4_define([_AC_CHECK_TYPE_NEW],
-[AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])dnl
-AC_CACHE_CHECK([for $1], [ac_Type],
-[AS_VAR_SET([ac_Type], [no])
-AC_COMPILE_IFELSE(
-  [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
-     [if (sizeof ($1))
-       return 0;])],
-  [AC_COMPILE_IFELSE(
-     [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
-	[if (sizeof (($1)))
-	  return 0;])],
-     [],
-     [AS_VAR_SET([ac_Type], [yes])])])])
+m4_define([_AC_CHECK_TYPE_NEW_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AC_CACHE_CHECK([for $[]2], [$[]3],
+  [AS_VAR_SET([$[]3], [no])
+  AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([$[]4],
+       [if (sizeof ($[]2))
+         return 0;])],
+    [AC_COMPILE_IFELSE(
+       [AC_LANG_PROGRAM([$[]4],
+	  [if (sizeof (($[]2)))
+	    return 0;])],
+       [],
+       [AS_VAR_SET([$[]3], [yes])])])])
+  AS_LINENO_POP
+])dnl
+
+# _AC_CHECK_TYPE_NEW(TYPE,
+#		     [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
+#		     [INCLUDES = DEFAULT-INCLUDES])
+# ------------------------------------------------------------
+# Check whether the type TYPE is supported by the system, maybe via the
+# the provided includes.
+AC_DEFUN([_AC_CHECK_TYPE_NEW],
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_type],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_type],
+    [LINENO TYPE VAR INCLUDES],
+    [Tests whether TYPE exists after having included INCLUDES, setting
+     cache variable VAR accordingly.])],
+    [$0_BODY])]dnl
+[AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])]dnl
+[ac_func_[]_AC_LANG_ABBREV[]_check_type "$LINENO" "$1" "ac_Type" ]dnl
+["AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
 AS_VAR_IF([ac_Type], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
