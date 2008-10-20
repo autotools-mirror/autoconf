@@ -1,3 +1,11 @@
+2008-10-25  Paolo Bonzini  <bonzini@gnu.org>
+	and Eric Blake  <ebb9@byu.net>
+
+	Use a shell function for _AC_CHECK_HEADER_MONGREL.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL_BODY): New
+	macro.
+	(_AC_CHECK_HEADER_MONGREL): Use a shell function.
+
 2008-10-25  Eric Blake  <ebb9@byu.net>
 
 	Simplify _AS_PREPARE handling of functions.

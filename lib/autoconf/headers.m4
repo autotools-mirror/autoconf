@@ -94,6 +94,52 @@ AC_DEFUN([AC_CHECK_HEADER],
 ])# AC_CHECK_HEADER
 
 
+# _AC_CHECK_HEADER_MONGREL_BODY
+# -----------------------------
+# Shell function body for _AC_CHECK_HEADER_MONGREL
+m4_define([_AC_CHECK_HEADER_MONGREL_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AS_VAR_SET_IF([$[]3],
+		[AC_CACHE_CHECK([for $[]2], [$[]3], [])],
+		[# Is the header compilable?
+AC_MSG_CHECKING([$[]2 usability])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([$[]4
+@%:@include <$[]2>])],
+		  [ac_header_compiler=yes],
+		  [ac_header_compiler=no])
+AC_MSG_RESULT([$ac_header_compiler])
+
+# Is the header present?
+AC_MSG_CHECKING([$[]2 presence])
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$[]2>])],
+		  [ac_header_preproc=yes],
+		  [ac_header_preproc=no])
+AC_MSG_RESULT([$ac_header_preproc])
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag in #((
+  yes:no: )
+    AC_MSG_WARN([$[]2: accepted by the compiler, rejected by the preprocessor!])
+    AC_MSG_WARN([$[]2: proceeding with the compiler's result])
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    AC_MSG_WARN([$[]2: present but cannot be compiled])
+    AC_MSG_WARN([$[]2:     check for missing prerequisite headers?])
+    AC_MSG_WARN([$[]2: see the Autoconf documentation])
+    AC_MSG_WARN([$[]2:     section "Present But Cannot Be Compiled"])
+    AC_MSG_WARN([$[]2: proceeding with the preprocessor's result])
+    AC_MSG_WARN([$[]2: in the future, the compiler will take precedence])
+m4_ifset([AC_PACKAGE_BUGREPORT],
+[m4_n([( AS_BOX([Report this to ]AC_PACKAGE_BUGREPORT)
+     ) | sed "s/^/$as_me: WARNING:     /" >&2])])dnl
+    ;;
+esac
+  AC_CACHE_CHECK([for $[]2], [$[]3],
+		 [AS_VAR_SET([$[]3], [$ac_header_preproc])])])
+  AS_LINENO_POP
+])#_AC_CHECK_HEADER_MONGREL_BODY
+
 # _AC_CHECK_HEADER_MONGREL(HEADER-FILE,
 #			   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #			   [INCLUDES = DEFAULT-INCLUDES])
@@ -105,49 +151,18 @@ AC_DEFUN([AC_CHECK_HEADER],
 # because it obfuscate the code to try to factor everything, in particular
 # because of the cache variables, and the `checking...' messages.
 m4_define([_AC_CHECK_HEADER_MONGREL],
-[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AS_VAR_SET_IF([ac_Header],
-	      [AC_CACHE_CHECK([for $1], [ac_Header], [])],
-	      [# Is the header compilable?
-AC_MSG_CHECKING([$1 usability])
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT([$4])
-@%:@include <$1>])],
-		  [ac_header_compiler=yes],
-		  [ac_header_compiler=no])
-AC_MSG_RESULT([$ac_header_compiler])
-
-# Is the header present?
-AC_MSG_CHECKING([$1 presence])
-AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
-		  [ac_header_preproc=yes],
-		  [ac_header_preproc=no])
-AC_MSG_RESULT([$ac_header_preproc])
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag in
-  yes:no: )
-    AC_MSG_WARN([$1: accepted by the compiler, rejected by the preprocessor!])
-    AC_MSG_WARN([$1: proceeding with the compiler's result])
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    AC_MSG_WARN([$1: present but cannot be compiled])
-    AC_MSG_WARN([$1:     check for missing prerequisite headers?])
-    AC_MSG_WARN([$1: see the Autoconf documentation])
-    AC_MSG_WARN([$1:     section "Present But Cannot Be Compiled"])
-    AC_MSG_WARN([$1: proceeding with the preprocessor's result])
-    AC_MSG_WARN([$1: in the future, the compiler will take precedence])
-    m4_ifset([AC_PACKAGE_BUGREPORT],
-    [( AS_BOX([Report this to ]AC_PACKAGE_BUGREPORT)
-     ) | sed "s/^/$as_me: WARNING:     /" >&2])
-    ;;
-esac
-AC_CACHE_CHECK([for $1], [ac_Header],
-	       [AS_VAR_SET([ac_Header], [$ac_header_preproc])])[]dnl
-])
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_header_mongrel],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_header_mongrel],
+    [LINENO FUNC VAR INCLUDES],
+    [Tests whether HEADER exists, giving a warning if it cannot be compiled
+     using the include files in INCLUDES and setting the cache variable VAR
+     accordingly.])],
+  [$0_BODY])]dnl
+[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])]dnl
+[ac_func_[]_AC_LANG_ABBREV[]_check_header_mongrel ]dnl
+["$LINENO" "$1" "ac_Header" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
-AS_VAR_POPDEF([ac_Header])dnl
-])# _AC_CHECK_HEADER_MONGREL
+AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_MONGREL
 
 
 # _AC_CHECK_HEADER_NEW(HEADER-FILE,
