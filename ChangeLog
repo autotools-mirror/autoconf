@@ -1,3 +1,8 @@
+2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
+
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_OLD,
+	_AC_CHECK_HEADER_NEW): Use a shell function.
+
 2008-10-25  Eric Blake  <ebb9@byu.net>
 
 	Track recent copyright assignments.

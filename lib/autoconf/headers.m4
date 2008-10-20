@@ -153,7 +153,7 @@ esac
 m4_define([_AC_CHECK_HEADER_MONGREL],
 [AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_header_mongrel],
   [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_header_mongrel],
-    [LINENO FUNC VAR INCLUDES],
+    [LINENO HEADER VAR INCLUDES],
     [Tests whether HEADER exists, giving a warning if it cannot be compiled
      using the include files in INCLUDES and setting the cache variable VAR
      accordingly.])],
@@ -165,33 +165,64 @@ AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_MONGREL
 
 
+# _AC_CHECK_HEADER_NEW_BODY
+# -------------------------
+# Shell function body for _AC_CHECK_HEADER_NEW
+m4_define([_AC_CHECK_HEADER_NEW_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AC_CACHE_CHECK([for $[]2], [$[]3],
+	         [AC_COMPILE_IFELSE([AC_LANG_SOURCE([$[]4
+@%:@include <$[]2>])],
+				    [AS_VAR_SET([$[]3], [yes])],
+				    [AS_VAR_SET([$[]3], [no])])])
+  AS_LINENO_POP
+])# _AC_CHECK_HEADER_NEW_BODY
+
 # _AC_CHECK_HEADER_NEW(HEADER-FILE,
 #		       [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #		       [INCLUDES = DEFAULT-INCLUDES])
 # --------------------------------------------------------------
 # Check the compiler accepts HEADER-FILE.  The INCLUDES are defaulted.
-m4_define([_AC_CHECK_HEADER_NEW],
-[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AC_CACHE_CHECK([for $1], [ac_Header],
-	       [AC_COMPILE_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT([$4])
-@%:@include <$1>])],
-				  [AS_VAR_SET([ac_Header], [yes])],
-				  [AS_VAR_SET([ac_Header], [no])])])
+AC_DEFUN([_AC_CHECK_HEADER_NEW],
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_header_new],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_header_new],
+    [LINENO HEADER VAR INCLUDES],
+    [Tests whether HEADER exists and can be compiled using the include files
+     in INCLUDES, setting the cache variable VAR accordingly.])],
+  [$0_BODY])]dnl
+[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])]dnl
+[ac_func_[]_AC_LANG_ABBREV[]_check_header_new ]dnl
+["$LINENO" "$1" "ac_Header" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
-AS_VAR_POPDEF([ac_Header])dnl
-])# _AC_CHECK_HEADER_NEW
+AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_NEW
+
+
+# _AC_CHECK_HEADER_OLD_BODY
+# -------------------------
+# Shell function body for _AC_CHECK_HEADER_OLD.
+m4_define([_AC_CHECK_HEADER_OLD_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AC_CACHE_CHECK([for $[]2], [$[]3],
+  [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$[]2>])],
+		     [AS_VAR_SET([$[]3], [yes])],
+		     [AS_VAR_SET([$[]3], [no])])])
+  AS_LINENO_POP
+])# _AC_CHECK_HEADER_OLD_BODY
+
 
 
 # _AC_CHECK_HEADER_OLD(HEADER-FILE,
 #		       [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------------
 # Check the preprocessor accepts HEADER-FILE.
-m4_define([_AC_CHECK_HEADER_OLD],
-[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])dnl
-AC_CACHE_CHECK([for $1], [ac_Header],
-	       [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
-					 [AS_VAR_SET([ac_Header], [yes])],
-					 [AS_VAR_SET([ac_Header], [no])])])
+AC_DEFUN([_AC_CHECK_HEADER_OLD],
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_header_old],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_header_old],
+    [LINENO HEADER VAR],
+    [Tests whether HEADER is present, setting the cache variable VAR accordingly.])],
+  [$0_BODY])]dnl
+[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])]dnl
+[ac_func_[]_AC_LANG_ABBREV[]_check_header_old "$LINENO" "$1" "ac_Header"
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_OLD
