@@ -2002,7 +2002,8 @@ m4_if(m4_index([$2], [AC_SUBST]), [-1], [],
 [where no actions should be taken])])dnl
 AS_VAR_SET_IF([$1],
 	      [_AS_ECHO_N([(cached) ])],
-	      [$2])])
+	      [$2])
+])
 
 
 # AC_CACHE_CHECK(MESSAGE, CACHE-ID, COMMANDS)

@@ -1,5 +1,15 @@
 2008-10-21  Eric Blake  <ebb9@byu.net>
 
+	Allow AS_VAR_SET_IF in shell lists.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_SET_IF): Allow continuation of
+	line.
+	* lib/autoconf/general.m4 (AC_CACHE_VAL): Supply newline no longer
+	provided by AS_VAR_SET_IF.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL): Adjust
+	clients.
+	* lib/autoconf/libs.m4 (AC_SEARCH_LIBS): Likewise.
+	* tests/m4sh.at (AS@&t@_VAR basics): Enhance test.
+
 	Allow AS_VAR_IF in shell lists.
 	* lib/m4sugar/m4sh.m4 (AS_VAR_IF): Allow continuation of line.
 	* lib/autoconf/functions.m4 (AC_CHECK_FUNC): Adjust clients.

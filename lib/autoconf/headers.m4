@@ -141,9 +141,9 @@ case $ac_header_compiler:$ac_header_preproc:$ac_[]_AC_LANG_ABBREV[]_preproc_warn
     ;;
 esac
 AC_CACHE_CHECK([for $1], [ac_Header],
-	       [AS_VAR_SET([ac_Header], [$ac_header_preproc])])
-])dnl ! set ac_HEADER
-AS_VAR_IF([ac_Header], [yes], [$2], [$3])[]dnl
+	       [AS_VAR_SET([ac_Header], [$ac_header_preproc])])[]dnl
+])
+AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_MONGREL
 
@@ -160,7 +160,7 @@ AC_CACHE_CHECK([for $1], [ac_Header],
 @%:@include <$1>])],
 				  [AS_VAR_SET([ac_Header], [yes])],
 				  [AS_VAR_SET([ac_Header], [no])])])
-AS_VAR_IF([ac_Header], [yes], [$2], [$3])[]dnl
+AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_NEW
 
@@ -175,7 +175,7 @@ AC_CACHE_CHECK([for $1], [ac_Header],
 	       [AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$1>])],
 					 [AS_VAR_SET([ac_Header], [yes])],
 					 [AS_VAR_SET([ac_Header], [no])])])
-AS_VAR_IF([ac_Header], [yes], [$2], [$3])[]dnl
+AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_OLD
 
@@ -403,7 +403,7 @@ AC_CACHE_CHECK([for $1 that defines DIR], [ac_Header],
 return 0;])],
 		   [AS_VAR_SET([ac_Header], [yes])],
 		   [AS_VAR_SET([ac_Header], [no])])])
-AS_VAR_IF([ac_Header], [yes], [$2], [$3])[]dnl
+AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_DIRENT
 

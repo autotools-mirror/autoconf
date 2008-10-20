@@ -79,9 +79,9 @@ for ac_lib in '' $2; do
     LIBS="-l$ac_lib $5 $ac_func_search_save_LIBS"
   fi
   AC_LINK_IFELSE([], [AS_VAR_SET([ac_Search], [$ac_res])])
-  AS_VAR_SET_IF([ac_Search], [break])dnl
+  AS_VAR_SET_IF([ac_Search], [break])
 done
-AS_VAR_SET_IF([ac_Search], , [AS_VAR_SET([ac_Search], [no])])dnl
+AS_VAR_SET_IF([ac_Search], , [AS_VAR_SET([ac_Search], [no])])
 rm conftest.$ac_ext
 LIBS=$ac_func_search_save_LIBS])
 AS_VAR_COPY([ac_res], [ac_Search])

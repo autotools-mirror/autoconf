@@ -949,7 +949,7 @@ AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
 # Literals.
 dnl AS_VAR_SET_IF also covers AS_VAR_TEST_SET
-AS_VAR_SET_IF([foo], [echo oops], [echo ok])
+AS_VAR_SET_IF([foo], [echo oops]) && echo ok
 AS_VAR_SET([foo], ['\a  "weird" `value` with; $fun '\''characters
 ']) # 'font-lock
 AS_VAR_COPY([bar], [foo])
@@ -966,7 +966,7 @@ m4_ifdef([tmp], [echo oops])
 # Indirects via shell vars.
 echo '===='
 num=1
-AS_VAR_SET_IF([foo$num], [echo oops], [echo ok])
+AS_VAR_SET_IF([foo$num], [echo oops]) && echo ok
 AS_VAR_SET([foo$num], ['\a  "weird" `value` with; $fun '\''characters
 ']) # 'font-lock
 AS_VAR_COPY([bar], [foo$num])
@@ -984,7 +984,7 @@ m4_ifdef([tmp], [echo oops])
 
 # Indirects via command substitution.
 echo '===='
-AS_VAR_SET_IF([`echo foo3`], [echo oops], [echo ok])
+AS_VAR_SET_IF([`echo foo3`], [echo oops]) && echo ok
 AS_VAR_SET([`echo foo3`], ['\a  "weird" `value` with; $fun '\''characters
 ']) # 'font-lock
 AS_VAR_COPY([bar], [`echo foo3`])

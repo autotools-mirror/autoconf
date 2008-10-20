@@ -1778,9 +1778,7 @@ m4_define([AS_VAR_SET],
 # Implement a shell `if-then-else' depending whether VARIABLE is set
 # or not.  Polymorphic.
 m4_define([AS_VAR_SET_IF],
-[AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])
-dnl fixme: remove the newline?
-])
+[AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])])
 
 
 # AS_VAR_TEST_SET(VARIABLE)
