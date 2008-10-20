@@ -24,6 +24,11 @@ GNU Autoconf NEWS - User visible changes.
    AS_VAR_PUSHDEF  AS_VAR_SET  AS_VAR_SET_IF  AS_VAR_TEST_SET
    AS_VERSION_COMPARE
 
+** The m4sh macros AS_IF and AS_CASE can now be used in shell lists.
+   The responsibility for supplying a trailing newline now belongs to
+   the call site, but since most users did not add dnl, this generally
+   results in fewer empty lines in configure.
+
 
 * Major changes in Autoconf 2.63 (2008-09-09) [stable]
   Released by Eric Blake, based on git versions 2.62.*.

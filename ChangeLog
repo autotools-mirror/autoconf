@@ -1,5 +1,12 @@
 2008-10-21  Eric Blake  <ebb9@byu.net>
 
+	Allow AS_CASE in shell lists.
+	* lib/m4sugar/m4sh.m4 (AS_CASE): Always execute test, in case of
+	side effects.  Allow continuation of script on same line as esac.
+	* lib/autoconf/c.m4 (AC_PROG_CC_STDC): Adjust client.
+	* tests/m4sh.at (AS@&t@_IF and AS@&t@_CASE): Enhance test.
+	* NEWS: Document the subtle change.
+
 	Allow AS_IF in shell lists.
 	* lib/m4sugar/m4sh.m4 (AS_IF): Always execute test, in case of
 	side effects.  Allow continuation of script on same line as fi.

@@ -498,12 +498,9 @@ m4_define([_AS_CASE_DEFAULT],
 [  *[)] $1 ;;
 ])
 m4_defun([AS_CASE],
-[m4_ifval([$2$3],
 [case $1 in
 m4_map_args_pair([_$0], [_$0_DEFAULT], m4_shift($@))dnl
-esac
-])dnl
-])# AS_CASE
+esac])# AS_CASE
 
 
 # AS_EXIT([EXIT-CODE = 1])

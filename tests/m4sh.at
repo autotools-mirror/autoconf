@@ -801,10 +801,12 @@ AS_CASE([foo],
 
 # check for nesting, lists, and side effects
 empty=
-AS_IF([AS_IF([$empty], [echo eleven])]) && echo twelve
+AS_IF([AS_IF([$empty], [echo eleven])]) && AS_CASE([foo]) && echo twelve
 rm -f file
 AS_IF([touch file; false]) && echo thirteen
 test -f file && echo fourteen
+rm -f file
+AS_CASE([`touch file; false`]) && test -f file && echo fifteen
 
 # check that require works correctly
 m4_for([n], 1, 9, [],
@@ -855,6 +857,7 @@ eleven
 twelve
 thirteen
 fourteen
+fifteen
 foo1=1 bar1=1
 foo2=2 bar2=
 foo3=3 bar3=
