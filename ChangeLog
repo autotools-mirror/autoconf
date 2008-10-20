@@ -1,4 +1,11 @@
 2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
+    
+	* lib/autoconf/general.m4 (_AC_COMPUTE_INT_COMPILE,
+	_AC_COMPUTE_INT_RUN): Add IF-SUCCESS argument.
+	(_AC_COMPUTE_INT_BODY): New.
+	(AC_COMPUTE_INT): Define and use a shell function.
+
+2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW_BODY): Extract
 	test body here.  Move head comment of _AC_CHECK_TYPE_NEW here.

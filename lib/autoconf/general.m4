@@ -2859,8 +2859,9 @@ AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])
 ## ----------------------------------- ##
 
 
-# _AC_COMPUTE_INT_COMPILE(EXPRESSION, VARIABLE, PROLOGUE, [IF-FAILS])
-# -------------------------------------------------------------------
+# _AC_COMPUTE_INT_COMPILE(EXPRESSION, VARIABLE, PROLOGUE, [IF-SUCCESS],
+#                         [IF-FAILURE])
+# ---------------------------------------------------------------------
 # Compute the integer EXPRESSION and store the result in the VARIABLE.
 # Works OK if cross compiling, but assumes twos-complement arithmetic.
 m4_define([_AC_COMPUTE_INT_COMPILE],
@@ -2896,32 +2897,60 @@ while test "x$ac_lo" != "x$ac_hi"; do
   _AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_mid])],
 		     [ac_hi=$ac_mid], [ac_lo=`expr '(' $ac_mid ')' + 1`])
 done
-case $ac_lo in
-?*) $2=$ac_lo;;
-'') $4 ;;
+case $ac_lo in @%:@((
+?*) AS_VAR_SET([$2], [$ac_lo]); $4 ;;
+'') $5 ;;
 esac[]dnl
 ])# _AC_COMPUTE_INT_COMPILE
 
 
-# _AC_COMPUTE_INT_RUN(EXPRESSION, VARIABLE, PROLOGUE, [IF-FAILS])
-# ---------------------------------------------------------------
+# _AC_COMPUTE_INT_RUN(EXPRESSION, VARIABLE, PROLOGUE, [IF-SUCCESS],
+#                     [IF-FAILURE])
+# -----------------------------------------------------------------
 # Store the evaluation of the integer EXPRESSION in VARIABLE.
 m4_define([_AC_COMPUTE_INT_RUN],
 [_AC_RUN_IFELSE([AC_LANG_INT_SAVE([$3], [$1])],
-		[$2=`cat conftest.val`], [$4])])
+	       [AS_VAR_SET([$2], [`cat conftest.val`]); $4], [$5])
+rm -f conftest.val
+])# _AC_COMPUTE_INT_RUN
 
+
+# _AC_COMPUTE_INT_BODY
+# --------------------
+# Shell function body for AC_COMPUTE_INT.
+m4_define([_AC_COMPUTE_INT_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  if test "$cross_compiling" = yes; then
+    _AC_COMPUTE_INT_COMPILE([$[]2], [$[]3], [$[]4],
+			    [ac_retval=0], [ac_retval=1])
+  else
+    _AC_COMPUTE_INT_RUN([$[]2], [$[]3], [$[]4],
+		        [ac_retval=0], [ac_retval=1])
+  fi
+  AS_LINENO_POP
+  return $ac_retval
+])# _AC_COMPUTE_INT_BODY
 
 # AC_COMPUTE_INT(VARIABLE, EXPRESSION, PROLOGUE, [IF-FAILS])
 # ----------------------------------------------------------
+# Store into the shell variable VARIABLE the value of the integer C expression
+# EXPRESSION.  The value should fit in an initializer in a C variable of type
+# `signed long'.  If no PROLOGUE are specified, the default includes are used.
+# IF-FAILS is evaluated if the value cannot be found (which includes the
+# case of cross-compilation, if EXPRESSION is not computable at compile-time.
 AC_DEFUN([AC_COMPUTE_INT],
-[AC_LANG_COMPILER_REQUIRE()dnl
-if test "$cross_compiling" = yes; then
-  _AC_COMPUTE_INT_COMPILE([$2], [$1], [$3], [$4])
-else
-  _AC_COMPUTE_INT_RUN([$2], [$1], [$3], [$4])
-fi
-rm -f conftest.val[]dnl
-])# _AC_COMPUTE_INT
+[AC_LANG_COMPILER_REQUIRE()]dnl
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_compute_int],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_compute_int],
+    [LINENO EXPR VAR INCLUDES],
+    [Tries to find the compile-time value of EXPR in a program that includes
+     INCLUDES, setting VAR accordingly.  Returns whether the value could
+     be computed])],
+    [_$0_BODY])]dnl
+[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_compute_int "$LINENO" "$2" "$1" ]dnl
+       ["AS_ESCAPE([$3], [""])"],
+       [], [$4])
+])# AC_COMPUTE_INT
 
 # _AC_COMPUTE_INT(EXPRESSION, VARIABLE, PROLOGUE, [IF-FAILS])
 # -----------------------------------------------------------
