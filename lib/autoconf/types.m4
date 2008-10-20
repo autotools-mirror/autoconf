@@ -642,56 +642,93 @@ AC_DEFUN([AC_TYPE_UINT16_T], [_AC_TYPE_UNSIGNED_INT(16)])
 AC_DEFUN([AC_TYPE_UINT32_T], [_AC_TYPE_UNSIGNED_INT(32)])
 AC_DEFUN([AC_TYPE_UINT64_T], [_AC_TYPE_UNSIGNED_INT(64)])
 
-# _AC_TYPE_INT(NBITS)
-# -------------------
-AC_DEFUN([_AC_TYPE_INT],
-[
-  AC_CACHE_CHECK([for int$1_t], [ac_cv_c_int$1_t],
-    [ac_cv_c_int$1_t=no
-     for ac_type in 'int$1_t' 'int' 'long int' \
+# _AC_TYPE_INT_BODY
+# -----------------
+# Shell function body for _AC_TYPE_INT.
+m4_define([_AC_TYPE_INT_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AC_CACHE_CHECK([for int$[]2${ac_nonexistent_var}_t], [$[]3],
+    [AS_VAR_SET([$[]3], [no])
+     for ac_type in int$[]2""_t 'int' 'long int' \
 	 'long long int' 'short int' 'signed char'; do
        AC_COMPILE_IFELSE(
 	 [AC_LANG_BOOL_COMPILE_TRY(
 	    [AC_INCLUDES_DEFAULT],
-	    [[0 < ($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 1)]])],
+	    [0 < ($ac_type) (((($ac_type) 1 << ($[]2 - 2)) - 1) * 2 + 1)])],
 	 [AC_COMPILE_IFELSE(
 	    [AC_LANG_BOOL_COMPILE_TRY(
 	       [AC_INCLUDES_DEFAULT],
-	       [[($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 1)
-		 < ($ac_type) (((($ac_type) 1 << ($1 - 2)) - 1) * 2 + 2)]])],
+	       [($ac_type) (((($ac_type) 1 << ($[]2 - 2)) - 1) * 2 + 1)
+		 < ($ac_type) (((($ac_type) 1 << ($[]2 - 2)) - 1) * 2 + 2)])],
 	    [],
-	    [AS_CASE([$ac_type], [int$1_t],
-	       [ac_cv_c_int$1_t=yes],
-	       [ac_cv_c_int$1_t=$ac_type])])])
-       test "$ac_cv_c_int$1_t" != no && break
+	    [AS_CASE([$ac_type], [int$[]2""_t],
+	       [AS_VAR_SET([$[]3], [yes])],
+	       [AS_VAR_SET([$[]3], [$ac_type])])])])
+       AS_VAR_IF([$[]3], [no], [], [break])
      done])
-  case $ac_cv_c_int$1_t in #(
+  AS_LINENO_POP
+])# _AC_TYPE_INT_BODY
+
+# _AC_TYPE_INT(NBITS)
+# -------------------
+# Set a variable ac_cv_c_intNBITS_t to `yes' if intNBITS_t is available,
+# `no' if it is not and no replacement types could be found, and a C type
+# if it is not available but a replacement signed integer type of width
+# exactly NBITS bits was found.  In the third case, intNBITS_t is AC_DEFINEd
+# to type, as well.
+AC_DEFUN([_AC_TYPE_INT],
+[AC_REQUIRE_SHELL_FN([ac_func_c_find_intX_t],
+  [AS_FUNCTION_DESCRIBE([ac_func_c_find_intX_t], [LINENO BITS VAR],
+    [Finds a signed integer type with width BITS, setting cache variable VAR
+     accordingly.])],
+    [$0_BODY])]dnl
+[ac_func_c_find_intX_t "$LINENO" "$1" "ac_cv_c_int$1_t"
+case $ac_cv_c_int$1_t in #(
   no|yes) ;; #(
   *)
     AC_DEFINE_UNQUOTED([int$1_t], [$ac_cv_c_int$1_t],
       [Define to the type of a signed integer type of width exactly $1 bits
        if such a type exists and the standard includes do not define it.]);;
-  esac
+esac
 ])# _AC_TYPE_INT
 
-# _AC_TYPE_UNSIGNED_INT(NBITS)
-# ----------------------------
-AC_DEFUN([_AC_TYPE_UNSIGNED_INT],
-[
-  AC_CACHE_CHECK([for uint$1_t], [ac_cv_c_uint$1_t],
-    [ac_cv_c_uint$1_t=no
-     for ac_type in 'uint$1_t' 'unsigned int' 'unsigned long int' \
+# _AC_TYPE_UNSIGNED_INT_BODY
+# --------------------------
+# Shell function body for _AC_TYPE_UNSIGNED_INT.
+m4_define([_AC_TYPE_UNSIGNED_INT_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AC_CACHE_CHECK([for uint$[]2${ac_nonexistent_var}_t], $[]3,
+    [AS_VAR_SET([$[]3], [no])
+     for ac_type in uint$[]2""_t 'unsigned int' 'unsigned long int' \
 	 'unsigned long long int' 'unsigned short int' 'unsigned char'; do
        AC_COMPILE_IFELSE(
 	 [AC_LANG_BOOL_COMPILE_TRY(
 	    [AC_INCLUDES_DEFAULT],
-	    [[($ac_type) -1 >> ($1 - 1) == 1]])],
-	 [AS_CASE([$ac_type], [uint$1_t],
-	    [ac_cv_c_uint$1_t=yes],
-	    [ac_cv_c_uint$1_t=$ac_type])])
-       test "$ac_cv_c_uint$1_t" != no && break
+	    [($ac_type) -1 >> ($[]2 - 1) == 1])],
+	 [AS_CASE([$ac_type], [uint$[]2""_t],
+	    [AS_VAR_SET([$[]3], [yes])],
+	    [AS_VAR_SET([$[]3], [$ac_type])])])
+       AS_VAR_IF([$[]3], [no], [], [break])
      done])
-  case $ac_cv_c_uint$1_t in #(
+  AS_LINENO_POP
+])# _AC_TYPE_UNSIGNED_INT_BODY
+
+
+# _AC_TYPE_UNSIGNED_INT(NBITS)
+# ----------------------------
+# Set a variable ac_cv_c_uintNBITS_t to `yes' if uintNBITS_t is available,
+# `no' if it is not and no replacement types could be found, and a C type
+# if it is not available but a replacement unsigned integer type of width
+# exactly NBITS bits was found.  In the third case, uintNBITS_t is AC_DEFINEd
+# to type, as well.
+AC_DEFUN([_AC_TYPE_UNSIGNED_INT],
+[AC_REQUIRE_SHELL_FN([ac_func_c_find_uintX_t],
+  [AS_FUNCTION_DESCRIBE([ac_func_c_find_uintX_t], [LINENO BITS VAR],
+    [Finds an unsigned integer type with width BITS, setting cache variable VAR
+     accordingly.])],
+  [$0_BODY])]dnl
+[ac_func_c_find_uintX_t "$LINENO" "$1" "ac_cv_c_uint$1_t"
+case $ac_cv_c_uint$1_t in #(
   no|yes) ;; #(
   *)
     m4_bmatch([$1], [^\(8\|32\|64\)$],

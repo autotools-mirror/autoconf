@@ -1,4 +1,11 @@
 2008-10-28  Paolo Bonzini  <bonzini@gnu.org>
+    
+	use a shell function for AC_TYPE_INTx_T
+	* lib/autoconf/types.m4 (_AC_TYPE_INT_BODY, _AC_TYPE_UNSIGNED_INT_BODY):
+	New.
+	(_AC_TYPE_INT, _AC_TYPE_UNSIGNED_INT): Define and use a shell function.
+
+2008-10-28  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/autoconf/general.m4 (AC_CHECK_DECL): Fix AS_ESCAPE usage.
 	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL,
