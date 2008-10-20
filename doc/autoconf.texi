@@ -11952,7 +11952,7 @@ Redirections can be placed outside the macro invocation.
 Run shell code @var{test1}.  If @var{test1} exits with a zero status then
 run shell code @var{run-if-true1}, else examine further tests.  If no test
 exits with a zero status, run shell code @var{run-if-false}, with
-simplifications if either @var{run-if-true1} or @var{run-if-false1}
+simplifications if either @var{run-if-true1} or @var{run-if-false}
 is empty.  For example,
 
 @example
@@ -12046,8 +12046,7 @@ M4sh supports the notion of polymorphic shell variables, making it easy
 to write a macro that can deal with either literal or indirect variable
 names and output shell code appropriate for both use cases.  Behavior is
 undefined if expansion of an indirect variable does not result in a
-literal variable name.  These macros are often followed with @code{dnl},
-to avoid excess newlines in the output.
+literal variable name.
 
 @defmac AS_LITERAL_IF (@var{expression}, @ovar{if-literal}, @ovar{if-not})
 @asindex{LITERAL_IF}
@@ -12147,7 +12146,8 @@ composed variable name based on @var{value}, it is easier to declare a
 temporary m4 macro @var{m4-name} with @code{AS_VAR_PUSHDEF}, then use
 that macro as the argument to subsequent @code{AS_VAR} macros as a
 polymorphic variable name, and finally free the temporary macro with
-@code{AS_VAR_POPDEF}.
+@code{AS_VAR_POPDEF}.  These macros are often followed with @code{dnl},
+to avoid excess newlines in the output.
 
 Here is an involved example, that shows the power of writing macros that
 can handle composed shell variable names:

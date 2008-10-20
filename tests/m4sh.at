@@ -799,6 +799,13 @@ AS_CASE([foo],
         [foo], [echo ten],
         [*],   [echo wrong])
 
+# check for nesting, lists, and side effects
+empty=
+AS_IF([AS_IF([$empty], [echo eleven])]) && echo twelve
+rm -f file
+AS_IF([touch file; false]) && echo thirteen
+test -f file && echo fourteen
+
 # check that require works correctly
 m4_for([n], 1, 9, [],
 [m4_defun([FOO]n, [foo]n[=]n)dnl
@@ -844,6 +851,10 @@ seven
 eight
 nine
 ten
+eleven
+twelve
+thirteen
+fourteen
 foo1=1 bar1=1
 foo2=2 bar2=
 foo3=3 bar3=

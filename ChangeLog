@@ -1,3 +1,19 @@
+2008-10-21  Eric Blake  <ebb9@byu.net>
+
+	Allow AS_IF in shell lists.
+	* lib/m4sugar/m4sh.m4 (AS_IF): Always execute test, in case of
+	side effects.  Allow continuation of script on same line as fi.
+	(_AS_DETECT_BETTER_SHELL): Adjust clients.
+	(AS_VAR_IF, AS_VAR_SET_IF): For now, supply newline no longer
+	given by AS_IF.
+	* lib/autoconf/c.m4 (_AC_PROG_PREPROC_WORKS_IFELSE): Likewise.
+	* lib/autoconf/general.m4 (_AC_ENABLE_IF): Likewise.
+	(AC_EGREP_CPP, _AC_RUN_IFELSE): Adjust client.
+	* lib/autoconf/libs.m4 (AC_SEARCH_LIBS): Likewise.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_IF>: Fix typo.
+	(Polymorphic Variables): Move mention of dnl to the only two
+	AS_VAR functions that need it.
+
 2008-10-21  Paolo Bonzini  <bonzini@gnu.org>
 	and Eric Blake  <ebb9@byu.net>
 

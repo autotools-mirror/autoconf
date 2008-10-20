@@ -1433,7 +1433,7 @@ m4_define([_m4_divert(HELP_ENABLE)],    _m4_divert(HELP_WITH))
 #
 m4_define([_AC_ENABLE_IF],
 [@%:@ Check whether --$1-$2 was given.
-_AC_ENABLE_IF_ACTION([$1], m4_translit([$2], [-.], [__]), [$3], [$4])[]dnl
+_AC_ENABLE_IF_ACTION([$1], m4_translit([$2], [-.], [__]), [$3], [$4])
 ])
 
 m4_define([_AC_ENABLE_IF_ACTION],
@@ -2446,7 +2446,7 @@ dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
 dnl Quote $1 to prevent m4 from eating character classes
   $EGREP "[$1]" >/dev/null 2>&1],
   [$3],
-  [$4])dnl
+  [$4])
 rm -f conftest*
 ])# AC_EGREP_CPP
 
@@ -2605,7 +2605,7 @@ AS_IF([_AC_DO_VAR(ac_link) && _AC_DO_TOKENS(./conftest$ac_exeext)],
 _AC_MSG_LOG_CONFTEST
 m4_ifvaln([$3],
 	  [( exit $ac_status )
-$3])dnl])[]dnl
+$3])dnl])
 rm -rf conftest.dSYM
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext m4_ifval([$1],
 						     [conftest.$ac_ext])[]dnl

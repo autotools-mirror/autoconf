@@ -241,8 +241,7 @@ dnl Remove any tests from suggested that are also required
       echo shells that I found on your system.  Please install a
       echo modern shell, or manually run the script under such a
       echo shell if you do have one.
-      AS_EXIT(1)])
-    ])
+      AS_EXIT(1)])])
 fi
 ])# _AS_DETECT_BETTER_SHELL
 
@@ -521,8 +520,8 @@ m4_define([AS_EXIT],
 [{ (exit m4_default([$1], 1)); exit m4_default([$1], 1); }])
 
 
-# AS_IF(TEST1, [IF-TRUE1]...[IF-FALSE])
-# -------------------------------------
+# AS_IF(TEST1, [IF-TRUE1 = :]...[IF-FALSE = :])
+# ---------------------------------------------
 # Expand into
 # | if TEST1; then
 # |   IF-TRUE1
@@ -543,13 +542,10 @@ m4_define([_AS_IF_ELSE],
 [else
   $1])])
 m4_defun([AS_IF],
-[m4_ifval([$2$3],
 [if $1; then
   m4_default([$2], [:])
 m4_map_args_pair([_$0], [_$0_ELSE], m4_shift2($@))dnl
-fi
-])dnl
-])# AS_IF
+fi])# AS_IF
 
 
 # _AS_UNSET_PREPARE
@@ -1715,7 +1711,9 @@ m4_define([AS_VAR_IF],
 [AS_LITERAL_IF([$1],
   [AS_IF([test "x$$1" = x""$2], [$3], [$4])],
   [AS_VAR_COPY([as_val], [$1])
-   AS_IF([test "x$as_val" = x""$2], [$3], [$4])])])
+   AS_IF([test "x$as_val" = x""$2], [$3], [$4])])
+dnl fixme: remove the newline?
+])
 
 
 # AS_VAR_PUSHDEF and AS_VAR_POPDEF
@@ -1785,13 +1783,15 @@ m4_define([AS_VAR_SET],
 # Implement a shell `if-then-else' depending whether VARIABLE is set
 # or not.  Polymorphic.
 m4_define([AS_VAR_SET_IF],
-[AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])])
+[AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])
+dnl fixme: remove the newline?
+])
 
 
 # AS_VAR_TEST_SET(VARIABLE)
 # -------------------------
 # Expands into the `test' expression which is true if VARIABLE
-# is set.  Polymorphic.  Should be dnl'ed.
+# is set.  Polymorphic.
 m4_define([AS_VAR_TEST_SET],
 [AS_LITERAL_IF([$1],
 	       [test "${$1+set}" = set],

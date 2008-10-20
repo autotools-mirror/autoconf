@@ -88,7 +88,7 @@ AS_VAR_COPY([ac_res], [ac_Search])
 AS_IF([test "$ac_res" != no],
   [test "$ac_res" = "none required" || LIBS="$ac_res $LIBS"
   $3],
-      [$4])dnl
+      [$4])
 AS_VAR_POPDEF([ac_Search])dnl
 ])
 
