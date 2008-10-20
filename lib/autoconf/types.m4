@@ -821,6 +821,26 @@ you adjust the code.])
 # Generic checks.  #
 # ---------------- #
 
+# _AC_CHECK_MEMBER_BODY
+# ---------------------
+# Shell function body for AC_CHECK_MEMBER.
+m4_define([_AC_CHECK_MEMBER_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AC_CACHE_CHECK([for $[]2.$[]3], [$[]4],
+  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$[]5],
+[static $[]2 ac_aggr;
+if (ac_aggr.$[]3)
+return 0;])],
+		[AS_VAR_SET([$[]4], [yes])],
+  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$[]5],
+[static $[]2 ac_aggr;
+if (sizeof ac_aggr.$[]3)
+return 0;])],
+		[AS_VAR_SET([$[]4], [yes])],
+		[AS_VAR_SET([$[]4], [no])])])])
+  AS_LINENO_POP
+])dnl
+
 # AC_CHECK_MEMBER(AGGREGATE.MEMBER,
 #		  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #		  [INCLUDES = DEFAULT-INCLUDES])
@@ -828,28 +848,18 @@ you adjust the code.])
 # AGGREGATE.MEMBER is for instance `struct passwd.pw_gecos', shell
 # variables are not a valid argument.
 AC_DEFUN([AC_CHECK_MEMBER],
-[AS_LITERAL_IF([$1], [],
-	       [AC_FATAL([$0: requires literal arguments])])]dnl
-[m4_if(m4_index([$1], [.]), [-1],
-       [m4_fatal([$0: Did not see any dot in `$1'])])]dnl
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_member],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_member],
+    [LINENO AGGR MEMBER VAR INCLUDES],
+    [Tries to find if the field MEMBER exists in type AGGR, after including
+     INCLUDES, setting cache variable VAR accordingly.])],
+    [_$0_BODY])]dnl
+[AS_LITERAL_IF([$1], [], [m4_fatal([$0: requires literal arguments])])]dnl
+[m4_if(m4_index([$1], [.]), -1, [m4_fatal([$0: Did not see any dot in `$1'])])]dnl
 [AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])]dnl
-dnl Extract the aggregate name, and the member name
-[AC_CACHE_CHECK([for $1], [ac_Member],
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
-[dnl AGGREGATE ac_aggr;
-static m4_bpatsubst([$1], [\..*]) ac_aggr;
-dnl ac_aggr.MEMBER;
-if (ac_aggr.m4_bpatsubst([$1], [^[^.]*\.]))
-return 0;])],
-		[AS_VAR_SET([ac_Member], [yes])],
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
-[dnl AGGREGATE ac_aggr;
-static m4_bpatsubst([$1], [\..*]) ac_aggr;
-dnl sizeof ac_aggr.MEMBER;
-if (sizeof ac_aggr.m4_bpatsubst([$1], [^[^.]*\.]))
-return 0;])],
-		[AS_VAR_SET([ac_Member], [yes])],
-		[AS_VAR_SET([ac_Member], [no])])])])
+[ac_func_[]_AC_LANG_ABBREV[]_check_member "$LINENO" ]dnl
+[m4_bpatsubst([$1], [^\([^.]*\)\.\(.*\)], ["\1" "\2"]) "ac_Member" ]dnl
+["AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
 AS_VAR_IF([ac_Member], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
