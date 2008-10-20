@@ -2714,21 +2714,36 @@ $2],
 ## ------------------------------- ##
 
 
+# _AC_CHECK_DECL_BODY
+# -------------------
+# Shell function body for AC_CHECK_DECL.
+m4_define([_AC_CHECK_DECL_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AC_CACHE_CHECK([whether $[]2 is declared], [$[]3],
+  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$[]4],
+[@%:@ifndef $[]2
+  (void) $[]2;
+@%:@endif
+])],
+		   [AS_VAR_SET([$[]3], [yes])],
+		   [AS_VAR_SET([$[]3], [no])])])
+  AS_LINENO_POP
+])# _AC_CHECK_DECL_BODY
+
 # AC_CHECK_DECL(SYMBOL,
 #               [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #               [INCLUDES = DEFAULT-INCLUDES])
 # -------------------------------------------------------
 # Check whether SYMBOL (a function, variable, or constant) is declared.
 AC_DEFUN([AC_CHECK_DECL],
-[AS_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])dnl
-AC_CACHE_CHECK([whether $1 is declared], [ac_Symbol],
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
-[#ifndef $1
-  (void) $1;
-#endif
-])],
-		   [AS_VAR_SET([ac_Symbol], [yes])],
-		   [AS_VAR_SET([ac_Symbol], [no])])])
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_decl],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_decl],
+    [LINENO SYMBOL VAR],
+    [Tests whether SYMBOL is declared, setting cache variable VAR accordingly.])],
+  [_$0_BODY])]dnl
+[AS_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])]dnl
+[ac_func_[]_AC_LANG_ABBREV[]_check_decl ]dnl
+["$LINENO" "$1" "ac_Symbol" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
 AS_VAR_IF([ac_Symbol], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Symbol])dnl
 ])# AC_CHECK_DECL

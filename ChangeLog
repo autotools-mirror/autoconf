@@ -1,5 +1,10 @@
 2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
 
+	* lib/autoconf/general.m4 (_AC_CHECK_DECL_BODY): New.
+	(AC_CHECK_DECL): Use a shell function.
+
+2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
+
 	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_OLD,
 	_AC_CHECK_HEADER_NEW): Use a shell function.
 
