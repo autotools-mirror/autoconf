@@ -1386,8 +1386,9 @@ _AC_INIT_CONFIG_LOG
 _AC_INIT_PREPARE
 _AC_INIT_NOTICE
 _AC_INIT_COPYRIGHT
+m4_divert_text([SHELL_FN], [
+m4_text_box([Autoconf initialization.])])
 m4_divert_pop
-m4_text_box([Autoconf initialization])
 m4_ifval([$2], , [m4_ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 dnl
 dnl Substitute for predefined variables.

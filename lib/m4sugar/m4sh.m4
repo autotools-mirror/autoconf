@@ -400,9 +400,7 @@ test x$exitcode = x0[]dnl
 # ------------------
 # This is the prolog that is emitted by AS_INIT and AS_INIT_GENERATED.
 m4_defun([_AS_SHELL_SANITIZE],
-[## --------------------- ##
-## M4sh Initialization.  ##
-## --------------------- ##
+[m4_text_box([M4sh Initialization.])
 
 AS_BOURNE_COMPATIBLE
 
@@ -1779,10 +1777,12 @@ m4_divert_text([BINSH], [@%:@! /bin/sh])
 m4_divert_text([HEADER-COMMENT],
 	       [@%:@ Generated from __file__ by m4_PACKAGE_STRING.])
 m4_divert_text([M4SH-SANITIZE], [_AS_SHELL_SANITIZE])
+m4_divert_text([M4SH-INIT-FN], [m4_text_box([M4sh Shell Functions.])])
 
 # Let's go!
 m4_divert_pop([KILL])[]dnl
-m4_divert_push([BODY])[]dnl
+m4_divert_push([BODY])
+m4_text_box([Main body of script.])
 _AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
 AS_REQUIRE([_AS_UNSET_PREPARE])dnl For backwards compatibility.
 ])

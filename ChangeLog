@@ -1,3 +1,12 @@
+2008-10-21  Eric Blake  <ebb9@byu.net>
+
+	Add banners to generated files.
+	* lib/m4sugar/m4sh.m4 (_AS_SHELL_SANITIZE): Use m4_text_box for
+	existing banner.
+	(AS_INIT): Add new banners at strategic points.
+	* lib/autoconf/general.m4 (AC_INIT): Alter banner location, and
+	make consistent with other banners.
+
 2008-10-20  Paolo Bonzini  <bonzini@gnu.org>
 
 	Add AC_REQUIRE_SHELL_FN and the SHELL_FN diversion.
