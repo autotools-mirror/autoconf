@@ -1,8 +1,8 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Checking for headers.
 #
-# Copyright (C) 1988, 1999, 2000, 2001, 2002, 2003, 2004, 2006 Free Software
-# Foundation, Inc.
+# Copyright (C) 1988, 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2008
+# Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -212,7 +212,7 @@ AC_DEFUN([AC_CHECK_HEADERS_ONCE],
   m4_foreach_w([AC_Header], [$1],
     [AC_DEFUN([_AC_Header_]m4_quote(m4_translit(AC_Header, [./-], [___])),
        [m4_divert_text([INIT_PREPARE],
-	  [ac_header_list="$ac_header_list AC_Header"])
+	  [AS_VAR_APPEND([ac_header_list], [" AC_Header"])])
 	_AC_HEADERS_EXPANSION])
      AC_REQUIRE([_AC_Header_]m4_quote(m4_translit(AC_Header, [./-], [___])))])
 ])

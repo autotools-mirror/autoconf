@@ -1,5 +1,14 @@
 2008-10-21  Eric Blake  <ebb9@byu.net>
 
+	Use AS_VAR_APPEND.
+	* lib/autoconf/functions.m4 (AC_CHECK_FUNCS_ONCE): Use new macro.
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE)
+	(_AC_LIBOBJS_NORMALIZE): Likewise.
+	* lib/autoconf/headers.m4 (AC_CHECK_HEADERS_ONCE): Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_SUBDIRS)
+	(_AC_OUTPUT_CONFIG_STATUS, _AC_OUTPUT_MAIN_LOOP): Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+
 	Add AS_VAR_APPEND.
 	* lib/m4sugar/m4sh.m4 (_AS_VAR_APPEND_PREPARE)
 	(_AS_VAR_APPEND_WORKS, AS_VAR_APPEND): New macros.

@@ -1151,7 +1151,7 @@ if test "$no_recursion" != yes; then
       case $ac_arg in
       *\'*) ac_arg=`AS_ECHO(["$ac_arg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
       esac
-      ac_sub_configure_args="$ac_sub_configure_args '$ac_arg'" ;;
+      AS_VAR_APPEND([ac_sub_configure_args], [" '$ac_arg'"]) ;;
     esac
   done
 
@@ -1485,7 +1485,7 @@ m4_ifdef([_AC_SEEN_CONFIG(FILES)], [dnl
     case $ac_optarg in
     *\'*) ac_optarg=`AS_ECHO(["$ac_optarg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
     esac
-    CONFIG_FILES="$CONFIG_FILES '$ac_optarg'"
+    AS_VAR_APPEND([CONFIG_FILES], [" '$ac_optarg'"])
     ac_need_defaults=false;;
 ])dnl
 m4_ifdef([_AC_SEEN_CONFIG(HEADERS)], [dnl
@@ -1494,7 +1494,7 @@ m4_ifdef([_AC_SEEN_CONFIG(HEADERS)], [dnl
     case $ac_optarg in
     *\'*) ac_optarg=`AS_ECHO(["$ac_optarg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
     esac
-    CONFIG_HEADERS="$CONFIG_HEADERS '$ac_optarg'"
+    AS_VAR_APPEND([CONFIG_HEADERS], [" '$ac_optarg'"])
     ac_need_defaults=false;;
   --he | --h)
     # Conflict between --help and --header
@@ -1511,7 +1511,7 @@ Try `$[0] --help' for more information.]);;
   -*) AC_MSG_ERROR([unrecognized option: $[1]
 Try `$[0] --help' for more information.]) ;;
 
-  *) ac_config_targets="$ac_config_targets $[1]"
+  *) AS_VAR_APPEND([ac_config_targets], [" $[1]"])
      ac_need_defaults=false ;;
 
   esac
@@ -1671,7 +1671,7 @@ do
 	   AC_MSG_ERROR([cannot find input file: $ac_f]);;
       esac
       case $ac_f in *\'*) ac_f=`AS_ECHO(["$ac_f"]) | sed "s/'/'\\\\\\\\''/g"`;; esac
-      ac_file_inputs="$ac_file_inputs '$ac_f'"
+      AS_VAR_APPEND([ac_file_inputs], [" '$ac_f'"])
     done
 
     # Let's still pretend it is `configure' which instantiates (i.e., don't

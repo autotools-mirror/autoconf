@@ -510,7 +510,7 @@ do
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
 	at_func_validate_ranges at_option
-	at_groups="$at_groups$at_option "
+	AS_VAR_APPEND([at_groups], ["$at_option "])
 	;;
 
     # Ranges
@@ -519,7 +519,7 @@ do
 	at_func_validate_ranges at_range_start
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.* \('$at_range_start' \)/\1/'`
-	at_groups="$at_groups$at_range "
+	AS_VAR_APPEND([at_groups], ["$at_range "])
 	;;
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
@@ -527,7 +527,7 @@ do
 	at_func_validate_ranges at_range_end
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/\( '$at_range_end'\) .*$/\1/'`
-	at_groups="$at_groups$at_range "
+	AS_VAR_APPEND([at_groups], ["$at_range "])
 	;;
 
     [[0-9]-[0-9] | [0-9]-[0-9][0-9] | [0-9]-[0-9][0-9][0-9]] | \
@@ -547,7 +547,7 @@ do
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.*\( '$at_range_start' \)/\1/' \
 	      -e 's/\( '$at_range_end'\) .*$/\1/'`
-	at_groups="$at_groups$at_range "
+	AS_VAR_APPEND([at_groups], ["$at_range "])
 	;;
 
     # Directory selection.
@@ -603,7 +603,7 @@ do
 	at_groups_selected=`AS_ECHO(["$at_groups_selected"]) | sed 's/;.*//' |
 	  tr "$as_nl" ' '
 	`
-	at_groups="$at_groups$at_groups_selected "
+	AS_VAR_APPEND([at_groups], ["$at_groups_selected "])
 	;;
 m4_divert_pop([PARSE_ARGS])dnl
 dnl Process *=* last to allow for user specified --option=* type arguments.
@@ -619,7 +619,7 @@ m4_divert_push([PARSE_ARGS_END])dnl
 	at_value=`AS_ECHO(["$at_optarg"]) | sed "s/'/'\\\\\\\\''/g"`
 	# Export now, but save eval for later and for debug scripts.
 	export $at_envvar
-	at_debug_args="$at_debug_args $at_envvar='$at_value'"
+	AS_VAR_APPEND([at_debug_args], [" $at_envvar='$at_value'"])
 	;;
 
      *) AS_ECHO(["$as_me: invalid option: $at_option"]) >&2
@@ -840,19 +840,19 @@ fi
 AUTOTEST_PATH=`AS_ECHO(["$AUTOTEST_PATH"]) | sed "s|:|$PATH_SEPARATOR|g"`
 at_path=
 _AS_PATH_WALK([$AUTOTEST_PATH $PATH],
-[test -n "$at_path" && at_path=$at_path$PATH_SEPARATOR
+[test -n "$at_path" && AS_VAR_APPEND([at_path], [$PATH_SEPARATOR])
 case $as_dir in
   [[\\/]]* | ?:[[\\/]]* )
-    at_path=$at_path$as_dir
+    AS_VAR_APPEND([at_path], ["$as_dir"])
     ;;
   * )
     if test -z "$at_top_build_prefix"; then
       # Stand-alone test suite.
-      at_path=$at_path$as_dir
+      AS_VAR_APPEND([at_path], ["$as_dir"])
     else
       # Embedded test suite.
-      at_path=$at_path$at_top_build_prefix$as_dir$PATH_SEPARATOR
-      at_path=$at_path$at_top_srcdir/$as_dir
+      AS_VAR_APPEND([at_path], ["$at_top_build_prefix$as_dir$PATH_SEPARATOR"])
+      AS_VAR_APPEND([at_path], ["$at_top_srcdir/$as_dir"])
     fi
     ;;
 esac])
@@ -871,7 +871,7 @@ esac
 case $PATH_SEPARATOR$at_new_path$PATH_SEPARATOR in
   *$PATH_SEPARATOR$as_dir$PATH_SEPARATOR*) ;;
   $PATH_SEPARATOR$PATH_SEPARATOR) at_new_path=$as_dir ;;
-  *) at_new_path=$at_new_path$PATH_SEPARATOR$as_dir ;;
+  *) AS_VAR_APPEND([at_new_path], ["$PATH_SEPARATOR$as_dir"]) ;;
 esac])
 PATH=$at_new_path
 export PATH

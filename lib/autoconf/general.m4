@@ -1226,9 +1226,9 @@ do
       ac_arg=`AS_ECHO(["$ac_arg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
     esac
     case $ac_pass in
-    1) ac_configure_args0="$ac_configure_args0 '$ac_arg'" ;;
+    1) AS_VAR_APPEND([ac_configure_args0], [" '$ac_arg'"]) ;;
     2)
-      ac_configure_args1="$ac_configure_args1 '$ac_arg'"
+      AS_VAR_APPEND([ac_configure_args1], [" '$ac_arg'"])
 dnl If trying to remove duplicates, be sure to (i) keep the *last*
 dnl value (e.g. --prefix=1 --prefix=2 --prefix=1 might keep 2 only),
 dnl and (ii) not to strip long options (--prefix foo --prefix bar might
@@ -1250,7 +1250,7 @@ dnl exit don't matter.
 	  -* ) ac_must_keep_next=true ;;
 	esac
       fi
-      ac_configure_args="$ac_configure_args '$ac_arg'"
+      AS_VAR_APPEND([ac_configure_args], [" '$ac_arg'"])
       ;;
     esac
   done
@@ -1594,7 +1594,7 @@ for ac_var in $ac_precious_vars; do
     esac
     case " $ac_configure_args " in
       *" '$ac_arg' "*) ;; # Avoid dups.  Use of quotes ensures accuracy.
-      *) ac_configure_args="$ac_configure_args '$ac_arg'" ;;
+      *) AS_VAR_APPEND([ac_configure_args], [" '$ac_arg'"]) ;;
     esac
   fi
 done
@@ -2784,8 +2784,8 @@ for ac_i in : $LIB@&t@OBJS; do test "x$ac_i" = x: && continue
   ac_i=`AS_ECHO(["$ac_i"]) | sed "$ac_script"`
   # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
   #    will be set to the directory where LIBOBJS objects are built.
-  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
+  AS_VAR_APPEND([ac_libobjs], [" \${LIBOBJDIR}$ac_i\$U.$ac_objext"])
+  AS_VAR_APPEND([ac_ltlibobjs], [" \${LIBOBJDIR}$ac_i"'$U.lo'])
 done
 AC_SUBST([LIB@&t@OBJS], [$ac_libobjs])
 AC_SUBST([LTLIBOBJS], [$ac_ltlibobjs])

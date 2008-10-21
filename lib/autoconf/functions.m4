@@ -1,7 +1,7 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Checking for functions.
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+# Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -104,7 +104,7 @@ AC_DEFUN([AC_CHECK_FUNCS_ONCE],
   m4_foreach_w([AC_Func], [$1],
     [AC_DEFUN([_AC_Func_]m4_defn([AC_Func]),
        [m4_divert_text([INIT_PREPARE],
-	  [ac_func_list="$ac_func_list AC_Func"])
+	  [AS_VAR_APPEND([ac_func_list], [" AC_Func"])])
 	_AC_FUNCS_EXPANSION])
      AC_REQUIRE([_AC_Func_]m4_defn([AC_Func]))])
 ])
