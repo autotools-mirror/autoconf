@@ -2377,6 +2377,23 @@ AC_DEFUN([AC_RUN_LOG],
 ## ------------------------ ##
 
 
+# _AC_PREPROC_IFELSE_BODY
+# -----------------------
+# Shell function body for _AC_PREPROC_IFELSE.
+m4_define([_AC_PREPROC_IFELSE_BODY],
+[  AS_LINENO_PUSH([$[]1])
+  AS_IF([_AC_DO_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null && {
+	 test -z "$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
+	 test ! -s conftest.err
+       }],
+    [ac_retval=0],
+    [_AC_MSG_LOG_CONFTEST
+    ac_retval=1])
+  rm -f conftest.err
+  AS_LINENO_POP
+  return $ac_retval
+])
+
 
 # _AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ----------------------------------------------------------------
@@ -2385,17 +2402,14 @@ AC_DEFUN([AC_RUN_LOG],
 # This macro can be used during the selection of a preprocessor.
 # eval is necessary to expand ac_cpp.
 AC_DEFUN([_AC_PREPROC_IFELSE],
-[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])dnl
-AS_IF([_AC_DO_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null && {
-	 test -z "$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
-	 test ! -s conftest.err
-       }],
-  [$2],
-  [_AC_MSG_LOG_CONFTEST
-  $3])
-rm -f conftest.err m4_ifval([$1], [conftest.$ac_ext])[]dnl
+[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_cpp],
+  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_cpp], [LINENO],
+    [Try to preprocess conftest.$ac_ext, and return whether this succeeded.])],
+    [$0_BODY])]dnl
+[m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
+[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_cpp "$LINENO"], [$2], [$3])
+m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
 ])# _AC_PREPROC_IFELSE
-
 
 # AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
 # ---------------------------------------------------------------

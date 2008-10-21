@@ -317,11 +317,14 @@ m4_divert_pop[]dnl
 # Note: we expand _m4_divert_desired before passing it to m4_divert_require,
 # otherwise we would need to use m4_pushdef and m4_popdef instead of
 # simply m4_define.
+#
+# Since $2 can be quite large, this is factored for faster execution, giving
+# either m4_require([$1], [$2]) or m4_divert_require(desired, [$1], [$2]).
 m4_defun([AS_REQUIRE],
-[m4_define([_m4_divert_desired], [m4_default_quoted([$3], [M4SH-INIT])])dnl
-m4_if(m4_eval(_m4_divert(_m4_divert_dump) <= _m4_divert(_m4_divert_desired)), 1,
-      [m4_require([$1], [$2])],
-      [m4_divert_require(_m4_divert(_m4_divert_desired), [$1], [$2])])])
+[m4_define([_m4_divert_desired], [m4_default_quoted([$3], [M4SH-INIT])])]dnl
+[m4_if(m4_eval(_m4_divert(_m4_divert_dump) <= _m4_divert(_m4_divert_desired)),
+       1, [m4_require(],
+	  [m4_divert_require(_m4_divert(_m4_divert_desired),]) [$1], [$2])])
 
 
 # AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, COMMENT, BODY-TO-EXPAND,
@@ -333,12 +336,14 @@ m4_if(m4_eval(_m4_divert(_m4_divert_dump) <= _m4_divert(_m4_divert_desired)), 1,
 # provided (often via AS_FUNCTION_DESCRIBE), it is listed with a
 # newline before the function name.
 m4_define([AS_REQUIRE_SHELL_FN],
+[m4_provide_if([AS_SHELL_FN_$1], [],
 [AS_REQUIRE([AS_SHELL_FN_$1],
-[m4_provide([AS_SHELL_FN_$1])m4_n([$2])$1 ()
+[m4_provide([AS_SHELL_FN_$1])
+m4_n([$2])$1 ()
 {
 $3
 } [#] $1
-], m4_default_quoted([$4], [M4SH-INIT-FN]))])
+], m4_default_quoted([$4], [M4SH-INIT-FN]))])])
 
 
 # _AS_RUN(TEST, [SHELL])

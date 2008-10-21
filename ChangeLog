@@ -1,3 +1,13 @@
+2008-10-21  Paolo Bonzini  <bonzini@gnu.org>
+	and Eric Blake  <ebb9@byu.net>
+
+	Use a shell function for _AC_PREPROC_IFELSE.
+	* lib/autoconf/general.m4 (_AC_PREPROC_IFELSE_BODY): New macro.
+	(_AC_PREPROC_IFELSE): Use a shell function.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): Factor for faster execution.
+	(AS_REQUIRE_SHELL_FN): Bypass AS_REQUIRE if function has already
+	been provided.
+
 2008-10-21  Eric Blake  <ebb9@byu.net>
 
 	Add banners to generated files.
