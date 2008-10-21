@@ -6,6 +6,7 @@
 	(AS_INIT): Add new banners at strategic points.
 	* lib/autoconf/general.m4 (AC_INIT): Alter banner location, and
 	make consistent with other banners.
+	* lib/autotest/general.m4 (AT_INIT): Make banners consistent.
 
 2008-10-20  Paolo Bonzini  <bonzini@gnu.org>
 

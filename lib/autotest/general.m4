@@ -216,6 +216,9 @@ m4_define([AT_help_all], [])
 m4_foreach([AT_name], [_AT_DEFINE_INIT_LIST], [m4_popdef(m4_defn([AT_name]))])
 m4_wrap([_AT_FINISH])
 AS_INIT[]dnl
+dnl We don't use m4sh's BODY diversion, but AS_INIT sticks a banner there.
+dnl This trick removes that banner, since it adds nothing to autotest.
+m4_divert_text([KILL], [m4_undivert([BODY])])dnl
 AS_ME_PREPARE[]dnl
 m4_divert_push([DEFAULTS])dnl
 AT_COPYRIGHT(
@@ -243,9 +246,7 @@ esac
 m4_divert_pop([BANNERS])dnl back to DEFAULTS
 m4_divert_push([PREPARE_TESTS])dnl
 
-## --------------- ##
-## Shell functions ##
-## --------------- ##
+m4_text_box([Autotest shell functions.])
 
 AS_FUNCTION_DESCRIBE([at_func_banner], [NUMBER],
 [Output banner NUMBER, provided the testsuite is running multiple groups
@@ -372,9 +373,7 @@ else
   }
 fi
 
-## ---------------------- ##
-## End of shell functions ##
-## ---------------------- ##
+m4_text_box([End of autotest shell functions.])
 m4_divert_pop([PREPARE_TESTS])dnl back to DEFAULTS
 
 # Not all shells have the 'times' builtin; the subshell is needed to make
@@ -783,9 +782,7 @@ if test -n "$at_top_srcdir"; then
   done
 fi
 
-## ------------------- ##
-## Directory structure ##
-## ------------------- ##
+m4_text_box([Directory structure.])
 
 # This is the set of directories and files used by this script
 # (non-literals are capitalized):
