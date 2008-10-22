@@ -2207,7 +2207,7 @@ AU_DEFUN([AC_CHECKING],
 # ----------------------------------
 # No escaping, so it performed also backtick substitution.
 AU_DEFUN([AC_MSG_RESULT_UNQUOTED],
-[_AS_ECHO_UNQUOTED([$as_me:$LINENO: result: $1], AS_MESSAGE_LOG_FD)
+[_AS_ECHO_UNQUOTED([$as_me:${as_lineno-$LINENO}: result: $1], AS_MESSAGE_LOG_FD)
 _AS_ECHO_UNQUOTED([$1])[]dnl
 ])
 
@@ -2245,7 +2245,7 @@ AC_DEFUN([_AC_RUN_LOG],
 # Note that when tracing, most shells will leave the traces in stderr
 # starting with "+": that's what this macro tries to address.
 AC_DEFUN([_AC_RUN_LOG_STDERR],
-[{ ($2) >&AS_MESSAGE_LOG_FD
+[{ { $2; } >&AS_MESSAGE_LOG_FD
   ($1) 2>conftest.er1
   ac_status=$?
   grep -v '^ *+' conftest.er1 >conftest.err
@@ -2259,7 +2259,7 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
 # Echo COMMAND.  This is designed to be used just before evaluating COMMAND.
 AC_DEFUN([_AC_DO_ECHO],
 [m4_if([$1], [$ac_try], [], [ac_try="$1"
-])dnl
+])]dnl
 dnl If the string contains '\"', '`', or '\\', then just echo it rather
 dnl than expanding it.  This is a hack, but it is safer, while also
 dnl typically expanding simple substrings like '$CC', which is what we want.
@@ -2273,11 +2273,11 @@ dnl `AC_CHECK_FUNC(foo, , AC_CHECK_LIB(a, foo, , AC_CHECK_LIB(b, foo)))'.
 dnl We normally wouldn't bother with this kind of workaround for invalid code
 dnl but this change was put in just before Autoconf 2.60 and we wanted to
 dnl minimize the integration hassle.
-[case "(($ac_try" in
+[[case "(($ac_try" in
   *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
   *) ac_try_echo=$ac_try;;
 esac
-eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""]
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""]
 AS_ECHO(["$ac_try_echo"])])
 
 # _AC_DO(COMMAND)
@@ -2322,7 +2322,7 @@ AC_DEFUN([_AC_DO_TOKENS],
 # It is present only for backward compatibility with previous Autoconf versions.
 AC_DEFUN([_AC_EVAL],
 [_AC_RUN_LOG([eval $1],
-	     [eval echo "$as_me:$LINENO: \"$1\""])])
+	     [eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$1\""])])
 
 
 # _AC_EVAL_STDERR(COMMAND)
@@ -2332,7 +2332,7 @@ AC_DEFUN([_AC_EVAL],
 # It is present only for backward compatibility with previous Autoconf versions.
 AC_DEFUN([_AC_EVAL_STDERR],
 [_AC_RUN_LOG_STDERR([eval $1],
-		    [eval echo "$as_me:$LINENO: \"$1\""])])
+		    [eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$1\""])])
 
 
 # AC_TRY_EVAL(VARIABLE)
@@ -2368,7 +2368,7 @@ AC_DEFUN([AC_TRY_COMMAND],
 # -------------------
 AC_DEFUN([AC_RUN_LOG],
 [_AC_RUN_LOG([$1],
-	     [AS_ECHO(["$as_me:$LINENO: AS_ESCAPE([$1])"])])])
+	     [AS_ECHO(["$as_me:${as_lineno-$LINENO}: AS_ESCAPE([$1])"])])])
 
 
 

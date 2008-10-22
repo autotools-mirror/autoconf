@@ -1,5 +1,13 @@
 2008-10-22  Eric Blake  <ebb9@byu.net>
 
+	Fix autoconf logging commands.
+	* lib/autoconf/general.m4 (AC_MSG_RESULT_UNQUOTED, _AC_EVAL)
+	(_AC_EVAL_STDERR, AC_RUN_LOG): Respect as_lineno.
+	(_AC_DO_ECHO): Likewise, and use fewer dnl.
+	(_AC_RUN_LOG_STDERR): Avoid subshell for logging.
+
+2008-10-22  Eric Blake  <ebb9@byu.net>
+
 	Fix testsuite failure.
 	* tests/mktests.sh (ac_exclude_list): Don't generate test for
 	AC_REQUIRE_SHELL_FN.
