@@ -1,3 +1,13 @@
+2008-10-22  Jim Meyering  <meyering@redhat.com>
+
+	AC_FUNC_GETGROUPS: always define $ac_cv_func_getgroups_works
+	* lib/autoconf/functions.m4 (AC_FUNC_GETGROUPS): Always define
+	the shell variable, $ac_cv_func_getgroups_works.  Otherwise, if
+	it is set to "yes" in the environment and configure is run on
+	a system like mingw that lacks the getgroups function, it would
+	mistakenly define HAVE_GETGROUPS.  Reported by Simon Josefsson in
+	<http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/15354>.
+
 2008-10-22  Paolo Bonzini  <bonzini@gnu.org>
 	and Eric Blake  <ebb9@byu.net>
 
