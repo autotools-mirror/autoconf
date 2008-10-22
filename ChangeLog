@@ -1,3 +1,14 @@
+2008-10-23  Eric Blake  <ebb9@byu.net>
+
+	Formatting tweak: balance () with m4sh case statements.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL)
+	(_AS_SHELL_SANITIZE, _AS_ECHO_N_PREPARE, _AS_ECHO_PREPARE)
+	(AS_SET_CATFILE, _AS_TEST_PREPARE): Add strategic shell comments.
+	(_AS_CASE, _AS_CASE_DEFAULT, AS_CASE): Rearrange newlines, to
+	allow output of strategic shell comments.
+	(AS_VERSION_COMPARE): Use AS_CASE.
+	* tests/m4sh.at (AS@&t@_IF and AS@&t@_CASE): Enhance test.
+
 2008-10-22  Jim Meyering  <meyering@redhat.com>
 
 	AC_FUNC_GETGROUPS: always define $ac_cv_func_getgroups_works

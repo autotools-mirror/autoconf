@@ -209,7 +209,7 @@ dnl Remove any tests from suggested that are also required
     [],
     [as_candidate_shells=
     _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
-      [case $as_dir in
+      [case $as_dir in @%:@(
 	 /*)
 	   for as_base in sh bash ksh sh5; do
 	     as_candidate_shells="$as_candidate_shells $as_dir/$as_base"
@@ -423,7 +423,7 @@ _AS_PATH_SEPARATOR_PREPARE
 IFS=" ""	$as_nl"
 
 # Find who we are.  Look in the path if we contain no directory separator.
-case $[0] in
+case $[0] in @%:@((
   *[[\\/]]* ) as_myself=$[0] ;;
   *) _AS_PATH_WALK([],
 		   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
@@ -486,20 +486,22 @@ _AS_UNSET_PREPARE
 # AS_CASE(WORD, [PATTERN1], [IF-MATCHED1]...[DEFAULT])
 # ----------------------------------------------------
 # Expand into
-# | case WORD in
-# | PATTERN1) IF-MATCHED1 ;;
-# | ...
-# | *) DEFAULT ;;
+# | case WORD in #(
+# |   PATTERN1) IF-MATCHED1 ;; #(
+# |   ...
+# |   *) DEFAULT ;;
 # | esac
+# The shell comments are intentional, to work around people who don't
+# realize the impacts of using insufficient m4 quoting.
 m4_define([_AS_CASE],
-[  $1[)] m4_default([$2], [:]) ;;
-])
+[ [@%:@(]
+  $1[)] $2 ;;])
 m4_define([_AS_CASE_DEFAULT],
-[  *[)] $1 ;;
-])
+[ [@%:@(]
+  *[)] $1 ;;])
+
 m4_defun([AS_CASE],
-[case $1 in
-m4_map_args_pair([_$0], [_$0_DEFAULT], m4_shift($@))dnl
+[case $1 in[]m4_map_args_pair([_$0], [_$0_DEFAULT], m4_shift($@))
 esac])# AS_CASE
 
 
@@ -664,7 +666,7 @@ _AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], [AS_MESSAGE_LOG_FD])])
 # failed there is also a newline to match.
 m4_defun([_AS_ECHO_N_PREPARE],
 [ECHO_C= ECHO_N= ECHO_T=
-case `echo -n x` in
+case `echo -n x` in @%:@((((
 -n*)
   case `echo 'x\c'` in
   *c*) ECHO_T='	';;	# ECHO_T is single tab character.
@@ -881,7 +883,7 @@ else
     as_echo_body='eval expr "X$][1" : "X\\(.*\\)"'
     as_echo_n_body='eval
       arg=$][1;
-      case $arg in
+      case $arg in @%:@(
       *"$as_nl"*)
 	expr "X$arg" : "X\\(.*\\)$as_nl";
 	arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
@@ -1154,10 +1156,10 @@ IFS=$as_save_IFS
 # Set VAR to DIR-NAME/FILE-NAME.
 # Optimize the common case where $2 or $3 is '.'.
 m4_define([AS_SET_CATFILE],
-[case $2 in
+[case $2 in @%:@((
 .) $1=$3;;
 *)
-  case $3 in
+  case $3 in @%:@(((
   .) $1=$2;;
   [[\\/]]* | ?:[[\\/]]* ) $1=$3;;
   *) $1=$2/$3;;
@@ -1192,10 +1194,10 @@ else
       if test -d "$[]1"; then
 	test -d "$[]1/.";
       else
-	case $[]1 in
+	case $[]1 in @%:@(
 	-*)set "./$[]1";;
 	esac;
-	case `ls -ld'$as_ls_L_option' "$[]1" 2>/dev/null` in
+	case `ls -ld'$as_ls_L_option' "$[]1" 2>/dev/null` in @%:@((
 	???[[sx]]*):;;*)false;;esac;fi
     '\'' sh
   '
@@ -1512,12 +1514,11 @@ as_arg_v2=$2
 dnl This usage is portable even to ancient awk,
 dnl so don't worry about finding a "nice" awk version.
 awk "$as_awk_strverscmp" v1="$as_arg_v1" v2="$as_arg_v2" /dev/null
-case $? in
-1) $3;;
-0) $4;;
-2) $5;;
-esac[]dnl
-])# _AS_VERSION_COMPARE
+AS_CASE([$?],
+	[1], [$3],
+	[0], [$4],
+	[2], [$5])[]dnl
+])# AS_VERSION_COMPARE
 
 
 
