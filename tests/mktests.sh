@@ -2,8 +2,8 @@
 
 # Build some of the Autoconf test files.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+# Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -88,6 +88,7 @@ ac_exclude_list='
 	/^AC_(SEARCH_LIBS|REPLACE_FUNCS)$/ {next}
 	/^AC_(CACHE_CHECK|COMPUTE)_INT$/ {next}
 	/^AC_ARG_VAR$/ {next}
+	/^AC_REQUIRE_SHELL_FN$/ {next}
 
 	# Performed in the semantics tests.
 	/^AC_CHECK_(ALIGNOF|DECL|FILE|FUNC|HEADER|LIB|MEMBER|PROG|SIZEOF|(TARGET_)?TOOL|TYPE)S?$/ {next}

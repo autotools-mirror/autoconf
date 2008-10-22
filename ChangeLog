@@ -1,3 +1,9 @@
+2008-10-22  Eric Blake  <ebb9@byu.net>
+
+	Fix testsuite failure.
+	* tests/mktests.sh (ac_exclude_list): Don't generate test for
+	AC_REQUIRE_SHELL_FN.
+
 2008-10-21  Eric Blake  <ebb9@byu.net>
 
 	Improve wording related to automake and autotest.
