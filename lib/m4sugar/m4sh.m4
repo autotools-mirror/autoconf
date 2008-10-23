@@ -196,9 +196,9 @@ m4_define([_AS_DETECT_SUGGESTED_PRUNE],
 # <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
 #
 m4_defun([_AS_DETECT_BETTER_SHELL],
-[if test "x$CONFIG_SHELL" = x; then
 dnl Remove any tests from suggested that are also required
-  m4_set_map([_AS_DETECT_SUGGESTED_BODY], [_AS_DETECT_SUGGESTED_PRUNE])dnl
+[m4_set_map([_AS_DETECT_SUGGESTED_BODY], [_AS_DETECT_SUGGESTED_PRUNE])]dnl
+[if test "x$CONFIG_SHELL" = x; then
   as_bourne_compatible="AS_ESCAPE(m4_expand([_AS_BOURNE_COMPATIBLE]))"
   as_required="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_REQUIRED_BODY])))"
   as_suggested="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_SUGGESTED_BODY])))"
@@ -259,8 +259,8 @@ fi
 # there are so many _AS_PREPARE_* below, and that's also why it is
 # important not to forget some: config.status needs them.
 m4_defun([_AS_PREPARE],
-[m4_pushdef([AS_REQUIRE], [])dnl
-AS_FUNCTION_DESCRIBE([as_func_mkdir_p], [],
+[m4_pushdef([AS_REQUIRE], [])]dnl
+[AS_FUNCTION_DESCRIBE([as_func_mkdir_p], [],
 [Create "$as_dir" as a directory, including parents if necessary.])
 as_func_mkdir_p ()
 {
@@ -272,7 +272,7 @@ _AS_BASENAME_PREPARE
 _AS_DIRNAME_PREPARE
 _AS_ME_PREPARE
 _AS_LINENO_PREPARE
-_AS_ECHO_N_PREPARE[]dnl We do not need this ourselves but user code might.
+_AS_ECHO_N_PREPARE
 _AS_LN_S_PREPARE
 _AS_MKDIR_P_PREPARE
 _AS_TEST_PREPARE
@@ -280,8 +280,7 @@ _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
 _AS_UNSET_PREPARE
 _AS_VAR_APPEND_PREPARE
-m4_popdef([AS_REQUIRE])dnl
-])
+m4_popdef([AS_REQUIRE])])
 
 # AS_PREPARE
 # ----------
@@ -304,8 +303,7 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])
 AS_REQUIRE([_AS_TR_SH_PREPARE])
 AS_REQUIRE([_AS_UNSET_PREPARE])
 AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])
-m4_divert_pop[]dnl
-])
+m4_divert_pop[]])
 
 
 # AS_REQUIRE(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
@@ -398,8 +396,7 @@ AS_IF([as_func_ret_failure],
 AS_IF([( set x; as_func_ret_success y && test x = "[$]1" )], [],
   [exitcode=1
   echo positional parameters were not saved.])
-test x$exitcode = x0[]dnl
-])# _AS_SHELL_FN_WORK
+test x$exitcode = x0[]])# _AS_SHELL_FN_WORK
 
 
 # _AS_SHELL_SANITIZE
@@ -444,8 +441,8 @@ fi
 # suppresses any "Segmentation fault" message there.  '((' could
 # trigger a bug in pdksh 5.2.14.
 for as_var in BASH_ENV ENV MAIL MAILPATH
-do eval test x\${$as_var+set} = xset && dnl
- ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
+do eval test x\${$as_var+set} = xset \
+  && ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
 done
 PS1='$ '
 PS2='> '
@@ -540,11 +537,12 @@ m4_define([_AS_IF_ELSE],
 [m4_ifvaln([$1],
 [else
   $1])])
+
 m4_defun([AS_IF],
 [if $1; then
   m4_default([$2], [:])
-m4_map_args_pair([_$0], [_$0_ELSE], m4_shift2($@))dnl
-fi])# AS_IF
+m4_map_args_pair([_$0], [_$0_ELSE], m4_shift2($@))]dnl
+[fi[]])# AS_IF
 
 
 # _AS_UNSET_PREPARE
@@ -651,8 +649,8 @@ m4_define([_AS_ECHO],
 # --------------------
 # Log the string to AS_MESSAGE_LOG_FD.
 m4_define([_AS_ECHO_LOG],
-[AS_REQUIRE([_AS_LINENO_PREPARE])dnl
-_AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], [AS_MESSAGE_LOG_FD])])
+[AS_REQUIRE([_AS_LINENO_PREPARE])]dnl
+[_AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], [AS_MESSAGE_LOG_FD])])
 
 
 # _AS_ECHO_N_PREPARE
@@ -688,12 +686,11 @@ m4_define([_AS_ECHO_N],
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
 # ----------------------------------------
 m4_define([AS_MESSAGE],
-[AS_REQUIRE([_AS_ME_PREPARE])dnl
-m4_ifset([AS_MESSAGE_LOG_FD],
+[AS_REQUIRE([_AS_ME_PREPARE])]dnl
+[m4_ifset([AS_MESSAGE_LOG_FD],
 	  [{ _AS_ECHO_LOG([$1])
 _AS_ECHO([$as_me: $1], [$2]);}],
-	  [_AS_ECHO([$as_me: $1], [$2])])[]dnl
-])
+	  [_AS_ECHO([$as_me: $1], [$2])])[]])
 
 
 # AS_WARN(PROBLEM)
@@ -706,8 +703,7 @@ m4_define([AS_WARN],
 # ----------------------------------
 m4_define([AS_ERROR],
 [{ AS_MESSAGE([error: $1], [2])
-   AS_EXIT([$2]); }[]dnl
-])# AS_ERROR
+   AS_EXIT([$2]); }])# AS_ERROR
 
 
 
@@ -762,8 +758,8 @@ m4_defun([_AS_BASENAME_SED],
 	  s/.*/./; q']])
 
 m4_defun([AS_BASENAME],
-[AS_REQUIRE([_$0_PREPARE])dnl
-$as_basename -- $1 ||
+[AS_REQUIRE([_$0_PREPARE])]dnl
+[$as_basename -- $1 ||
 _AS_BASENAME_EXPR([$1]) 2>/dev/null ||
 _AS_BASENAME_SED([$1])])
 
@@ -775,8 +771,8 @@ _AS_BASENAME_SED([$1])])
 # to avoid problems when _AS_BASENAME is called from the M4SH-INIT diversion
 # (AS_REQUIRE is nowhere near being as sophisticated as AC_REQUIRE).
 m4_defun([_AS_BASENAME_PREPARE],
-[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
-if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
+[AS_REQUIRE([_AS_EXPR_PREPARE])]dnl
+[if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
   as_basename=basename
 else
   as_basename=false
@@ -796,8 +792,8 @@ fi
 # substring is longer than 120 bytes.  So fall back on echo|sed if
 # expr fails.
 m4_defun([_AS_DIRNAME_EXPR],
-[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
-$as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
+[AS_REQUIRE([_AS_EXPR_PREPARE])]dnl
+[$as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
 	 X[]$1 : 'X\(//\)[[^/]]' \| \
 	 X[]$1 : 'X\(//\)$' \| \
 	 X[]$1 : 'X\(/\)' \| .])
@@ -823,8 +819,8 @@ m4_defun([_AS_DIRNAME_SED],
 	  s/.*/./; q']])
 
 m4_defun([AS_DIRNAME],
-[AS_REQUIRE([_$0_PREPARE])dnl
-$as_dirname -- $1 ||
+[AS_REQUIRE([_$0_PREPARE])]dnl
+[$as_dirname -- $1 ||
 _AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
 _AS_DIRNAME_SED([$1])])
 
@@ -832,8 +828,8 @@ _AS_DIRNAME_SED([$1])])
 # _AS_DIRNAME_PREPARE
 # --------------------
 m4_defun([_AS_DIRNAME_PREPARE],
-[AS_REQUIRE([_AS_EXPR_PREPARE])dnl
-if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
+[AS_REQUIRE([_AS_EXPR_PREPARE])]dnl
+[if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
   as_dirname=dirname
 else
   as_dirname=false
@@ -847,16 +843,16 @@ fi
 # (typically a quoted string).  The bytes of WORD are output as-is, even
 # if it starts with "-" or contains "\".
 m4_defun([AS_ECHO],
-[AS_REQUIRE([_$0_PREPARE])dnl
-$as_echo $1])
+[AS_REQUIRE([_$0_PREPARE])]dnl
+[$as_echo $1])
 
 
 # AS_ECHO_N(WORD)
 # -------------
 # Like AS_ECHO(WORD), except do not output the trailing newline.
 m4_defun([AS_ECHO_N],
-[AS_REQUIRE([_AS_ECHO_PREPARE])dnl
-$as_echo_n $1])
+[AS_REQUIRE([_AS_ECHO_PREPARE])]dnl
+[$as_echo_n $1])
 
 
 # _AS_ECHO_PREPARE
@@ -903,18 +899,16 @@ fi
 # ---------
 # Check whether a file has executable or search permissions.
 m4_defun([AS_TEST_X],
-[AS_REQUIRE([_AS_TEST_PREPARE])dnl
-$as_test_x $1[]dnl
-])# AS_TEST_X
+[AS_REQUIRE([_AS_TEST_PREPARE])]dnl
+[$as_test_x $1[]])# AS_TEST_X
 
 
 # AS_EXECUTABLE_P
 # ---------------
 # Check whether a file is a regular file that has executable permissions.
 m4_defun([AS_EXECUTABLE_P],
-[AS_REQUIRE([_AS_TEST_PREPARE])dnl
-{ test -f $1 && AS_TEST_X([$1]); }dnl
-])# AS_EXECUTABLE_P
+[AS_REQUIRE([_AS_TEST_PREPARE])]dnl
+[{ test -f $1 && AS_TEST_X([$1]); }])# AS_EXECUTABLE_P
 
 
 # _AS_EXPR_PREPARE
@@ -937,8 +931,8 @@ fi
 # Define $as_me to the basename of the executable file's name.
 m4_defun([AS_ME_PREPARE], [AS_REQUIRE([_$0])])
 m4_defun([_AS_ME_PREPARE],
-[AS_REQUIRE([_AS_BASENAME_PREPARE])dnl
-as_me=`AS_BASENAME("$[0]")`
+[AS_REQUIRE([_AS_BASENAME_PREPARE])]dnl
+[as_me=`AS_BASENAME("$[0]")`
 ])
 
 # _AS_LINENO_WORKS
@@ -966,22 +960,21 @@ m4_define([_AS_LINENO_WORKS],
 # configure.
 m4_defun([AS_LINENO_PREPARE], [AS_REQUIRE([_$0])])
 m4_defun([_AS_LINENO_PREPARE],
-[AS_REQUIRE([_AS_CR_PREPARE])dnl
-AS_REQUIRE([_AS_ME_PREPARE])dnl
-_AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])dnl
+[AS_REQUIRE([_AS_CR_PREPARE])]dnl
+[AS_REQUIRE([_AS_ME_PREPARE])]dnl
+[_AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])]dnl
 dnl Even if the logging fd is open, we don't want to use $LINENO in the
 dnl AS_ERROR complaining that LINENO is broken.
-m4_pushdef([AS_MESSAGE_LOG_FD])dnl
-_AS_LINENO_WORKS || {
-
-  dnl Create $as_me.lineno as a copy of $as_myself, but with $LINENO
-  dnl uniformly replaced by the line number.  The first 'sed' inserts a
-  dnl line-number line after each line using $LINENO; the second 'sed'
-  dnl does the real work.  The second script uses 'N' to pair each
-  dnl line-number line with the line containing $LINENO, and appends
-  dnl trailing '-' during substitution so that $LINENO is not a special
-  dnl case at line end.  (Raja R Harinath suggested sed '=', and Paul
-  dnl Eggert wrote the scripts with optimization help from Paolo Bonzini).
+[m4_pushdef([AS_MESSAGE_LOG_FD])]dnl
+dnl Create $as_me.lineno as a copy of $as_myself, but with $LINENO
+dnl uniformly replaced by the line number.  The first 'sed' inserts a
+dnl line-number line after each line using $LINENO; the second 'sed'
+dnl does the real work.  The second script uses 'N' to pair each
+dnl line-number line with the line containing $LINENO, and appends
+dnl trailing '-' during substitution so that $LINENO is not a special
+dnl case at line end.  (Raja R Harinath suggested sed '=', and Paul
+dnl Eggert wrote the scripts with optimization help from Paolo Bonzini).
+[_AS_LINENO_WORKS || {
   # Blame Lee E. McMahon (1931-1989) for sed's syntax.  :-)
   sed -n '
     p
@@ -1008,8 +1001,7 @@ _AS_LINENO_WORKS || {
   # Exit status is that of the last command.
   exit
 }
-m4_popdef([AS_MESSAGE_LOG_FD])dnl
-])# _AS_LINENO_PREPARE
+m4_popdef([AS_MESSAGE_LOG_FD])])# _AS_LINENO_PREPARE
 
 
 # _AS_LN_S_PREPARE
@@ -1054,9 +1046,8 @@ rmdir conf$$.dir 2>/dev/null
 # FIXME: Should we add the glue code to handle properly relative symlinks
 # simulated with `ln' or `cp'?
 m4_defun([AS_LN_S],
-[AS_REQUIRE([_AS_LN_S_PREPARE])dnl
-$as_ln_s $1 $2
-])
+[AS_REQUIRE([_AS_LN_S_PREPARE])]dnl
+[$as_ln_s $1 $2])
 
 
 # _AS_MKDIR_P
@@ -1087,8 +1078,8 @@ m4_define([_AS_MKDIR_P],
 # ---------------
 # Emulate `mkdir -p' with plain `mkdir' if needed.
 m4_define([AS_MKDIR_P],
-[AS_REQUIRE([_$0_PREPARE])dnl
-as_dir=$1; as_func_mkdir_p])# AS_MKDIR_P
+[AS_REQUIRE([_$0_PREPARE])]dnl
+[as_dir=$1; as_func_mkdir_p])# AS_MKDIR_P
 
 
 # _AS_MKDIR_P_PREPARE
@@ -1136,8 +1127,8 @@ fi
 # hole.  Optimize it away when not needed, i.e., if there are no literal
 # path separators.
 m4_define([_AS_PATH_WALK],
-[AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])dnl
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+[AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])]dnl
+[as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 m4_bmatch([$1], [[:;]],
 [as_dummy="$1"
 for as_dir in $as_dummy],
@@ -1164,8 +1155,7 @@ m4_define([AS_SET_CATFILE],
   [[\\/]]* | ?:[[\\/]]* ) $1=$3;;
   *) $1=$2/$3;;
   esac;;
-esac[]dnl
-])# AS_SET_CATFILE
+esac[]])# AS_SET_CATFILE
 
 
 # _AS_TEST_PREPARE
@@ -1319,8 +1309,7 @@ m4_define([AS_HELP_STRING],
 [m4_text_wrap([$2], m4_cond([[$3]], [], [                          ],
 			    [m4_eval([$3]+0)], [0], [[$3]],
 			    [m4_format([[%*s]], [$3], [])]),
-	      m4_expand([  $1 ]), [$4])dnl
-])# AS_HELP_STRING
+	      m4_expand([  $1 ]), [$4])])# AS_HELP_STRING
 
 
 # AS_IDENTIFIER_IF(EXPRESSION, IF-IDENT, IF-NOT-IDENT)
@@ -1392,8 +1381,7 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[,
 # Create as safely as possible a temporary directory in DIRECTORY
 # which name is inspired by PREFIX (should be 2-4 chars max).
 m4_define([AS_TMPDIR],
-[AS_REQUIRE([_AS_ME_PREPARE])dnl
-# Create a (secure) tmp directory for tmp files.
+[# Create a (secure) tmp directory for tmp files.
 m4_if([$2], [], [: ${TMPDIR=/tmp}])
 {
   tmp=`(umask 077 && mktemp -d "m4_default([$2], [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
@@ -1402,8 +1390,8 @@ m4_if([$2], [], [: ${TMPDIR=/tmp}])
 {
   tmp=m4_default([$2], [$TMPDIR])/$1$$-$RANDOM
   (umask 077 && mkdir "$tmp")
-} || AS_ERROR([cannot create a temporary directory in m4_default([$2], [$TMPDIR])])dnl
-])# AS_TMPDIR
+} || AS_ERROR([cannot create a temporary directory in m4_default([$2],
+	      [$TMPDIR])])])# AS_TMPDIR
 
 
 # AS_UNAME
@@ -1507,18 +1495,18 @@ m4_defun([_AS_VERSION_COMPARE_PREPARE],
 #                    [ACTION-IF-LESS], [ACTION-IF-EQUAL], [ACTION-IF-GREATER])
 # -----------------------------------------------------------------------------
 # Compare two strings possibly containing shell variables as version strings.
+#
+# This usage is portable even to ancient awk,
+# so don't worry about finding a "nice" awk version.
 m4_defun([AS_VERSION_COMPARE],
-[AS_REQUIRE([_$0_PREPARE])dnl
-as_arg_v1=$1
+[AS_REQUIRE([_$0_PREPARE])]dnl
+[as_arg_v1=$1
 as_arg_v2=$2
-dnl This usage is portable even to ancient awk,
-dnl so don't worry about finding a "nice" awk version.
 awk "$as_awk_strverscmp" v1="$as_arg_v1" v2="$as_arg_v2" /dev/null
 AS_CASE([$?],
 	[1], [$3],
 	[0], [$4],
-	[2], [$5])[]dnl
-])# AS_VERSION_COMPARE
+	[2], [$5])])# AS_VERSION_COMPARE
 
 
 
@@ -1549,8 +1537,8 @@ as_cr_alnum=$as_cr_Letters$as_cr_digits
 # _AS_TR_SH_PREPARE
 # -----------------
 m4_defun([_AS_TR_SH_PREPARE],
-[AS_REQUIRE([_AS_CR_PREPARE])dnl
-# Sed expression to map a string onto a valid variable name.
+[AS_REQUIRE([_AS_CR_PREPARE])]dnl
+[# Sed expression to map a string onto a valid variable name.
 as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
 ])
 
@@ -1570,8 +1558,8 @@ as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
 #
 # For speed, we inline the literal definitions that can be computed up front.
 m4_defun([AS_TR_SH],
-[AS_REQUIRE([_$0_PREPARE])dnl
-AS_LITERAL_IF([$1],
+[AS_REQUIRE([_$0_PREPARE])]dnl
+[AS_LITERAL_IF([$1],
 	      [m4_translit([$1], [*+[]]]]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_not_symbols2])))[[,
 				 [pp[]]]]dnl
@@ -1583,8 +1571,8 @@ m4_dquote(m4_dquote(m4_for(,1,255,,[[_]])))[[)],
 # _AS_TR_CPP_PREPARE
 # ------------------
 m4_defun([_AS_TR_CPP_PREPARE],
-[AS_REQUIRE([_AS_CR_PREPARE])dnl
-# Sed expression to map a string onto a valid CPP name.
+[AS_REQUIRE([_AS_CR_PREPARE])]dnl
+[# Sed expression to map a string onto a valid CPP name.
 as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g'"
 ])
 
@@ -1597,8 +1585,8 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g
 #
 # See implementation comments in AS_TR_SH.
 m4_defun([AS_TR_CPP],
-[AS_REQUIRE([_$0_PREPARE])dnl
-AS_LITERAL_IF([$1],
+[AS_REQUIRE([_$0_PREPARE])]dnl
+[AS_LITERAL_IF([$1],
 	      [m4_translit([$1], [*[]]]]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_letters])m4_defn([m4_cr_not_symbols2])))[[,
 				 [P[]]]]dnl
@@ -1609,9 +1597,7 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_LETTERS])m4_for(,1,255,,[[_]])))[[)],
 # _AS_TR_PREPARE
 # --------------
 m4_defun([_AS_TR_PREPARE],
-[AS_REQUIRE([_AS_TR_SH_PREPARE])dnl
-AS_REQUIRE([_AS_TR_CPP_PREPARE])dnl
-])
+[AS_REQUIRE([_AS_TR_SH_PREPARE])AS_REQUIRE([_AS_TR_CPP_PREPARE])])
 
 
 
@@ -1674,9 +1660,9 @@ m4_define([_AS_VAR_APPEND_WORKS],
 # Note that unlike AS_VAR_SET, VALUE must be properly quoted to avoid
 # field splitting and file name expansion.
 m4_define([AS_VAR_APPEND],
-[_AS_DETECT_SUGGESTED([_AS_VAR_APPEND_WORKS])dnl
-AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])dnl
-as_func_append $1 $2])
+[_AS_DETECT_SUGGESTED([_AS_VAR_APPEND_WORKS])]dnl
+[AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])]dnl
+[as_func_append $1 $2])
 
 
 # AS_VAR_COPY(DEST, SOURCE)
@@ -1756,8 +1742,8 @@ m4_define([AS_VAR_POPDEF],
 # expansion inside an argument collection context, where diversions
 # don't work.  Therefore, we must require the preparation ourselves.
 m4_define([AS_VAR_PUSHDEF],
-[AS_REQUIRE([_AS_TR_SH_PREPARE])dnl
-AS_LITERAL_IF([$2],
+[AS_REQUIRE([_AS_TR_SH_PREPARE])]dnl
+[AS_LITERAL_IF([$2],
 	       [m4_pushdef([$1], [AS_TR_SH($2)])],
 	       [as_$1=AS_TR_SH($2)
 m4_pushdef([$1], [$as_[$1]])])])
@@ -1804,8 +1790,8 @@ m4_define([AS_VAR_TEST_SET],
 # generated with `#! $SHELL'; see the manual or autoconf/status.m4
 # for more detail.
 m4_defun([AS_INIT_GENERATED],
-[m4_require([AS_PREPARE])dnl
-_AS_SHELL_SANITIZE
+[m4_require([AS_PREPARE])]dnl
+[_AS_SHELL_SANITIZE
 _AS_PREPARE])
 
 # AS_INIT
