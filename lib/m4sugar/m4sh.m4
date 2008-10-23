@@ -648,8 +648,8 @@ m4_define([_AS_ECHO],
 # _AS_ECHO_LOG(STRING)
 # --------------------
 # Log the string to AS_MESSAGE_LOG_FD.
-m4_define([_AS_ECHO_LOG],
-[AS_REQUIRE([_AS_LINENO_PREPARE])]dnl
+m4_defun_init([_AS_ECHO_LOG],
+[AS_REQUIRE([_AS_LINENO_PREPARE])],
 [_AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], [AS_MESSAGE_LOG_FD])])
 
 
@@ -685,8 +685,9 @@ m4_define([_AS_ECHO_N],
 
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
 # ----------------------------------------
-m4_define([AS_MESSAGE],
-[AS_REQUIRE([_AS_ME_PREPARE])]dnl
+# Output "`basename $0`: "STRING to the open file FD.
+m4_defun_init([AS_MESSAGE],
+[AS_REQUIRE([_AS_ME_PREPARE])],
 [m4_ifset([AS_MESSAGE_LOG_FD],
 	  [{ _AS_ECHO_LOG([$1])
 _AS_ECHO([$as_me: $1], [$2]);}],
@@ -757,8 +758,8 @@ m4_defun([_AS_BASENAME_SED],
 	  }
 	  s/.*/./; q']])
 
-m4_defun([AS_BASENAME],
-[AS_REQUIRE([_$0_PREPARE])]dnl
+m4_defun_init([AS_BASENAME],
+[AS_REQUIRE([_$0_PREPARE])],
 [$as_basename -- $1 ||
 _AS_BASENAME_EXPR([$1]) 2>/dev/null ||
 _AS_BASENAME_SED([$1])])
@@ -768,8 +769,7 @@ _AS_BASENAME_SED([$1])])
 # --------------------
 # Avoid Solaris 9 /usr/ucb/basename, as `basename /' outputs an empty line.
 # Also, traditional basename mishandles --.  Require here _AS_EXPR_PREPARE,
-# to avoid problems when _AS_BASENAME is called from the M4SH-INIT diversion
-# (AS_REQUIRE is nowhere near being as sophisticated as AC_REQUIRE).
+# to avoid problems when _AS_BASENAME is called from the M4SH-INIT diversion.
 m4_defun([_AS_BASENAME_PREPARE],
 [AS_REQUIRE([_AS_EXPR_PREPARE])]dnl
 [if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
@@ -791,8 +791,8 @@ fi
 # a silly length limit that causes expr to fail if the matched
 # substring is longer than 120 bytes.  So fall back on echo|sed if
 # expr fails.
-m4_defun([_AS_DIRNAME_EXPR],
-[AS_REQUIRE([_AS_EXPR_PREPARE])]dnl
+m4_defun_init([_AS_DIRNAME_EXPR],
+[AS_REQUIRE([_AS_EXPR_PREPARE])],
 [$as_expr X[]$1 : 'X\(.*[[^/]]\)//*[[^/][^/]]*/*$' \| \
 	 X[]$1 : 'X\(//\)[[^/]]' \| \
 	 X[]$1 : 'X\(//\)$' \| \
@@ -818,8 +818,8 @@ m4_defun([_AS_DIRNAME_SED],
 	  }
 	  s/.*/./; q']])
 
-m4_defun([AS_DIRNAME],
-[AS_REQUIRE([_$0_PREPARE])]dnl
+m4_defun_init([AS_DIRNAME],
+[AS_REQUIRE([_$0_PREPARE])],
 [$as_dirname -- $1 ||
 _AS_DIRNAME_EXPR([$1]) 2>/dev/null ||
 _AS_DIRNAME_SED([$1])])
@@ -842,16 +842,16 @@ fi
 # Output WORD followed by a newline.  WORD must be a single shell word
 # (typically a quoted string).  The bytes of WORD are output as-is, even
 # if it starts with "-" or contains "\".
-m4_defun([AS_ECHO],
-[AS_REQUIRE([_$0_PREPARE])]dnl
+m4_defun_init([AS_ECHO],
+[AS_REQUIRE([_$0_PREPARE])],
 [$as_echo $1])
 
 
 # AS_ECHO_N(WORD)
 # -------------
 # Like AS_ECHO(WORD), except do not output the trailing newline.
-m4_defun([AS_ECHO_N],
-[AS_REQUIRE([_AS_ECHO_PREPARE])]dnl
+m4_defun_init([AS_ECHO_N],
+[AS_REQUIRE([_AS_ECHO_PREPARE])],
 [$as_echo_n $1])
 
 
@@ -898,16 +898,16 @@ fi
 # AS_TEST_X
 # ---------
 # Check whether a file has executable or search permissions.
-m4_defun([AS_TEST_X],
-[AS_REQUIRE([_AS_TEST_PREPARE])]dnl
+m4_defun_init([AS_TEST_X],
+[AS_REQUIRE([_AS_TEST_PREPARE])],
 [$as_test_x $1[]])# AS_TEST_X
 
 
 # AS_EXECUTABLE_P
 # ---------------
 # Check whether a file is a regular file that has executable permissions.
-m4_defun([AS_EXECUTABLE_P],
-[AS_REQUIRE([_AS_TEST_PREPARE])]dnl
+m4_defun_init([AS_EXECUTABLE_P],
+[AS_REQUIRE([_AS_TEST_PREPARE])],
 [{ test -f $1 && AS_TEST_X([$1]); }])# AS_EXECUTABLE_P
 
 
@@ -1045,8 +1045,8 @@ rmdir conf$$.dir 2>/dev/null
 # -------------------
 # FIXME: Should we add the glue code to handle properly relative symlinks
 # simulated with `ln' or `cp'?
-m4_defun([AS_LN_S],
-[AS_REQUIRE([_AS_LN_S_PREPARE])]dnl
+m4_defun_init([AS_LN_S],
+[AS_REQUIRE([_AS_LN_S_PREPARE])],
 [$as_ln_s $1 $2])
 
 
@@ -1077,8 +1077,8 @@ m4_define([_AS_MKDIR_P],
 # AS_MKDIR_P(DIR)
 # ---------------
 # Emulate `mkdir -p' with plain `mkdir' if needed.
-m4_define([AS_MKDIR_P],
-[AS_REQUIRE([_$0_PREPARE])]dnl
+m4_defun_init([AS_MKDIR_P],
+[AS_REQUIRE([_$0_PREPARE])],
 [as_dir=$1; as_func_mkdir_p])# AS_MKDIR_P
 
 
@@ -1126,8 +1126,8 @@ fi
 # expansions, not on literal text.  This closes a longstanding sh security
 # hole.  Optimize it away when not needed, i.e., if there are no literal
 # path separators.
-m4_define([_AS_PATH_WALK],
-[AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])]dnl
+m4_defun_init([_AS_PATH_WALK],
+[AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])],
 [as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 m4_bmatch([$1], [[:;]],
 [as_dummy="$1"
@@ -1498,8 +1498,8 @@ m4_defun([_AS_VERSION_COMPARE_PREPARE],
 #
 # This usage is portable even to ancient awk,
 # so don't worry about finding a "nice" awk version.
-m4_defun([AS_VERSION_COMPARE],
-[AS_REQUIRE([_$0_PREPARE])]dnl
+m4_defun_init([AS_VERSION_COMPARE],
+[AS_REQUIRE([_$0_PREPARE])],
 [as_arg_v1=$1
 as_arg_v2=$2
 awk "$as_awk_strverscmp" v1="$as_arg_v1" v2="$as_arg_v2" /dev/null
@@ -1557,8 +1557,8 @@ as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
 # fact to skip worrying about the length of m4_cr_not_symbols2.
 #
 # For speed, we inline the literal definitions that can be computed up front.
-m4_defun([AS_TR_SH],
-[AS_REQUIRE([_$0_PREPARE])]dnl
+m4_defun_init([AS_TR_SH],
+[AS_REQUIRE([_$0_PREPARE])],
 [AS_LITERAL_IF([$1],
 	      [m4_translit([$1], [*+[]]]]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_not_symbols2])))[[,
@@ -1584,8 +1584,8 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g
 # of `$as_tr_cpp' if you change this.
 #
 # See implementation comments in AS_TR_SH.
-m4_defun([AS_TR_CPP],
-[AS_REQUIRE([_$0_PREPARE])]dnl
+m4_defun_init([AS_TR_CPP],
+[AS_REQUIRE([_$0_PREPARE])],
 [AS_LITERAL_IF([$1],
 	      [m4_translit([$1], [*[]]]]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_letters])m4_defn([m4_cr_not_symbols2])))[[,
@@ -1659,9 +1659,9 @@ m4_define([_AS_VAR_APPEND_WORKS],
 # contents of VAR outweigh the typical VALUE size of repeated appends.
 # Note that unlike AS_VAR_SET, VALUE must be properly quoted to avoid
 # field splitting and file name expansion.
-m4_define([AS_VAR_APPEND],
+m4_defun_init([AS_VAR_APPEND],
 [_AS_DETECT_SUGGESTED([_AS_VAR_APPEND_WORKS])]dnl
-[AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])]dnl
+[AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])],
 [as_func_append $1 $2])
 
 
@@ -1741,8 +1741,8 @@ m4_define([AS_VAR_POPDEF],
 # calls that trigger AS_LITERAL_IF([VARNAME]), and that macro performs
 # expansion inside an argument collection context, where diversions
 # don't work.  Therefore, we must require the preparation ourselves.
-m4_define([AS_VAR_PUSHDEF],
-[AS_REQUIRE([_AS_TR_SH_PREPARE])]dnl
+m4_defun_init([AS_VAR_PUSHDEF],
+[AS_REQUIRE([_AS_TR_SH_PREPARE])],
 [AS_LITERAL_IF([$2],
 	       [m4_pushdef([$1], [AS_TR_SH($2)])],
 	       [as_$1=AS_TR_SH($2)

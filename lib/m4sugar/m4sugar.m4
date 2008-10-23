@@ -1644,25 +1644,51 @@ m4_define([m4_divert_require],
   [_m4_require_call([$2], [$3], [$1])])])
 
 
-# m4_defun(NAME, EXPANSION)
-# -------------------------
-# Define a macro which automatically provides itself.  Add machinery
-# so the macro automatically switches expansion to the diversion
-# stack if it is not already using it.  In this case, once finished,
-# it will bring back all the code accumulated in the diversion stack.
-# This, combined with m4_require, achieves the topological ordering of
-# macros.  We don't use this macro to define some frequently called
-# macros that are not involved in ordering constraints, to save m4
-# processing.
+# m4_defun(NAME, EXPANSION, [MACRO = m4_define])
+# ----------------------------------------------
+# Define a macro NAME which automatically provides itself.  Add
+# machinery so the macro automatically switches expansion to the
+# diversion stack if it is not already using it, prior to EXPANSION.
+# In this case, once finished, it will bring back all the code
+# accumulated in the diversion stack.  This, combined with m4_require,
+# achieves the topological ordering of macros.  We don't use this
+# macro to define some frequently called macros that are not involved
+# in ordering constraints, to save m4 processing.
+#
+# MACRO is an undocumented argument; when set to m4_pushdef, and NAME
+# is already defined, the new definition is added to the pushdef
+# stack, rather than overwriting the current definition.  It can thus
+# be used to write self-modifying macros, which pop themselves to a
+# previously m4_define'd definition so that subsequent use of the
+# macro is faster.
 m4_define([m4_defun],
 [m4_define([m4_location($1)], m4_location)dnl
-m4_define([$1],
+m4_default([$3], [m4_define])([$1],
 	  [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])
+
+
+# m4_defun_init(NAME, INIT, COMMON)
+# ---------------------------------
+# Like m4_defun, but split EXPANSION into two portions: INIT which is
+# done only the first time NAME is invoked, and COMMON which is
+# expanded every time.
+#
+# For now, the COMMON definition is always m4_define'd, giving an even
+# lighter-weight definition.  m4_defun allows self-providing, but once
+# a macro is provided, m4_require no longer cares if it is m4_define'd
+# or m4_defun'd.  m4_defun also provides location tracking to identify
+# dependency bugs, but once the INIT has been expanded, we know there
+# are no dependency bugs.  However, if a future use needs COMMON to be
+# m4_defun'd, we can add a parameter, similar to the third parameter
+# to m4_defun.
+m4_define([m4_defun_init],
+[m4_define([$1], [$3])m4_defun([$1],
+   [$2[]_m4_popdef(]m4_dquote([$][0])[)$][0($][@)], [m4_pushdef])])
 
 
 # m4_defun_once(NAME, EXPANSION)
 # ------------------------------
-# As m4_defun, but issues the EXPANSION only once, and warns if used
+# Like m4_defun, but issues the EXPANSION only once, and warns if used
 # several times.
 m4_define([m4_defun_once],
 [m4_define([m4_location($1)], m4_location)dnl
