@@ -1,5 +1,11 @@
 2008-10-23  Paolo Bonzini  <bonzinI@gnu.org>
 
+	Avoid a fork in _AC_RUN_LOG and _AC_RUN_LOG_STDERR
+	* lib/autoconf/general.m4 (_AC_RUN_LOG, _AC_RUN_LOG_STDERR):
+	Return a boolean status code based on $ac_status.
+
+2008-10-23  Paolo Bonzini  <bonzinI@gnu.org>
+
 	Ensure actions can look at conftest* files.
 	* lib/autoconf/general.m4 (_AC_PREPROC_IFELSE_BODY,
 	_AC_COMPILE_IFELSE_BODY, _AC_LINK_IFELSE_BODY, _AC_RUN_IFELSE_BODY):

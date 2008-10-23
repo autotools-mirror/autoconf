@@ -2228,13 +2228,15 @@ AU_ALIAS([AC_VERBOSE], [AC_MSG_RESULT])
 
 # _AC_RUN_LOG(COMMAND, LOG-COMMANDS)
 # ----------------------------------
-# Eval COMMAND, save the exit status in ac_status, and log it.
+# Eval COMMAND, save the exit status in ac_status, and log it.  The return
+# code is 0 if COMMAND succeeded, so that it can be used directly in AS_IF
+# constructs.
 AC_DEFUN([_AC_RUN_LOG],
 [{ { $2; } >&AS_MESSAGE_LOG_FD
   ($1) 2>&AS_MESSAGE_LOG_FD
   ac_status=$?
   _AS_ECHO_LOG([\$? = $ac_status])
-  (exit $ac_status); }])
+  test $ac_status = 0; }])
 
 
 # _AC_RUN_LOG_STDERR(COMMAND, LOG-COMMANDS)
@@ -2244,6 +2246,8 @@ AC_DEFUN([_AC_RUN_LOG],
 # use.
 # Note that when tracing, most shells will leave the traces in stderr
 # starting with "+": that's what this macro tries to address.
+# The return code is 0 if COMMAND succeeded, so that it can be used directly
+# in AS_IF constructs.
 AC_DEFUN([_AC_RUN_LOG_STDERR],
 [{ { $2; } >&AS_MESSAGE_LOG_FD
   ($1) 2>conftest.er1
@@ -2252,7 +2256,7 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
   rm -f conftest.er1
   cat conftest.err >&AS_MESSAGE_LOG_FD
   _AS_ECHO_LOG([\$? = $ac_status])
-  (exit $ac_status); }])
+  test $ac_status = 0; }])
 
 # _AC_DO_ECHO(COMMAND)
 # --------------------
