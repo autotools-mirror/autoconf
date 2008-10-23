@@ -2390,7 +2390,6 @@ m4_define([_AC_PREPROC_IFELSE_BODY],
     [ac_retval=0],
     [_AC_MSG_LOG_CONFTEST
     ac_retval=1])
-  rm -f conftest.err
   AS_LINENO_POP
   return $ac_retval
 ])# _AC_PREPROC_IFELSE_BODY
@@ -2409,7 +2408,7 @@ AC_DEFUN([_AC_PREPROC_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_cpp "$LINENO"], [$2], [$3])
-m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
+rm -f conftest.err[]m4_ifval([$1], [ conftest.$ac_ext])
 ])# _AC_PREPROC_IFELSE
 
 # AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
@@ -2480,7 +2479,6 @@ m4_define([_AC_COMPILE_IFELSE_BODY],
       [ac_retval=0],
       [_AC_MSG_LOG_CONFTEST
 	ac_retval=1])
-  rm -f core conftest.err conftest.$ac_objext
   AS_LINENO_POP
   return $ac_retval
 ])# _AC_COMPILE_IFELSE_BODY
@@ -2497,7 +2495,7 @@ AC_DEFUN([_AC_COMPILE_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_compile "$LINENO"], [$2], [$3])
-m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
+rm -f core conftest.err conftest.$ac_objext[]m4_ifval([$1], [ conftest.$ac_ext])
 ])# _AC_COMPILE_IFELSE
 
 
@@ -2540,12 +2538,11 @@ m4_define([_AC_LINK_IFELSE_BODY],
       [ac_retval=0],
       [_AC_MSG_LOG_CONFTEST
 	ac_retval=1])
-  # Delete also the IPA/IPO (Inter Procedural Analysis/Optimization)
-  # information created by the PGI compiler (conftest_ipa8_conftest.oo),
-  # as it would interfere with the next link command.
-  rm -rf conftest.dSYM
-  rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext
+  # Delete the IPA/IPO (Inter Procedural Analysis/Optimization) information
+  # created by the PGI compiler (conftest_ipa8_conftest.oo), as it would
+  # interfere with the next link command; also delete a directory that is
+  # left behind by Apple's compiler.  We do this before executing the actions.
+  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
   AS_LINENO_POP
   return $ac_retval
 ])# _AC_LINK_IFELSE_BODY
@@ -2569,7 +2566,8 @@ AC_DEFUN([_AC_LINK_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_link "$LINENO"], [$2], [$3])
-m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])
 ])# _AC_LINK_IFELSE
 
 
@@ -2616,8 +2614,7 @@ m4_define([_AC_RUN_IFELSE_BODY],
       [AS_ECHO(["$as_me: program exited with status $ac_status"]) >&AS_MESSAGE_LOG_FD
        _AC_MSG_LOG_CONFTEST
        ac_retval=$ac_status])
-  rm -rf conftest.dSYM
-  rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest$ac_exeext
+  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
   AS_LINENO_POP
   return $ac_retval
 ])# _AC_RUN_IFELSE_BODY
@@ -2638,7 +2635,8 @@ AC_DEFUN([_AC_RUN_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_run "$LINENO"], [$2], [$3])
-m4_ifvaln([$1], [rm -f conftest.$ac_ext])dnl
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])
 ])# _AC_RUN_IFELSE
 
 # AC_RUN_IFELSE(PROGRAM,
