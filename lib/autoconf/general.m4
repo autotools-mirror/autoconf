@@ -2412,7 +2412,7 @@ AC_DEFUN([_AC_PREPROC_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_cpp "$LINENO"], [$2], [$3])
-rm -f conftest.err[]m4_ifval([$1], [ conftest.$ac_ext])
+rm -f conftest.err[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_PREPROC_IFELSE
 
 # AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
@@ -2499,7 +2499,7 @@ AC_DEFUN([_AC_COMPILE_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_compile "$LINENO"], [$2], [$3])
-rm -f core conftest.err conftest.$ac_objext[]m4_ifval([$1], [ conftest.$ac_ext])
+rm -f core conftest.err conftest.$ac_objext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
 
@@ -2571,7 +2571,7 @@ AC_DEFUN([_AC_LINK_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_link "$LINENO"], [$2], [$3])
 rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])
+    conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 
 
@@ -2640,7 +2640,7 @@ AC_DEFUN([_AC_RUN_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_run "$LINENO"], [$2], [$3])
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])
+  conftest.$ac_objext conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 
 # AC_RUN_IFELSE(PROGRAM,
