@@ -91,6 +91,10 @@ m4_undefine([undefine])
 # Nevertheless, one huge difference is the handling of `$0'.  If `from'
 # uses `$0', then with 1, `to''s `$0' is `to', while it is `from' in 2.
 # The user would certainly prefer to see `to'.
+#
+# This definition is in effect during m4sugar initialization, when
+# there are no pushdef stacks; later on, we redefine it to something
+# more powerful for all other clients to use.
 m4_define([m4_copy],
 [m4_define([$2], m4_defn([$1]))])
 
@@ -165,6 +169,28 @@ m4_rename_m4([traceoff])
 m4_rename_m4([traceon])
 m4_rename_m4([translit])
 m4_undefine([undivert])
+
+# _m4_defn(ARG)
+# ----------------
+# _m4_defn is for internal use only - it bypasses the wrapper, so it
+# must only be used on one argument at a time, and only on macros
+# known to be defined.  Make sure this still works if the user renames
+# m4_defn but not _m4_defn.
+m4_copy([m4_defn], [_m4_defn])
+
+# _m4_popdef(ARG...)
+# ------------------
+# _m4_popdef is for internal use only - it bypasses the wrapper, so it
+# must only be used on macros known to be defined.  Make sure this
+# still works if the user renames m4_popdef but not _m4_popdef.
+m4_copy([m4_popdef], [_m4_popdef])
+
+# _m4_undefine(ARG...)
+# --------------------
+# _m4_undefine is for internal use only - it bypasses the wrapper, so
+# it must only be used on macros known to be defined.  Make sure this
+# still works if the user renames m4_undefine but not _m4_undefine.
+m4_copy([m4_undefine], [_m4_undefine])
 
 
 ## ------------------- ##
@@ -501,6 +527,28 @@ m4_define([_m4_bpatsubsts],
 	   m4_shift3($@))])])
 
 
+# m4_copy(SRC, DST)
+# -----------------
+# Define the pushdef stack DST as a copy of the pushdef stack SRC;
+# give an error if DST is already defined.  This is particularly nice
+# for copying self-modifying pushdef stacks, where the top definition
+# includes one-shot initialization that is later popped to the normal
+# definition.
+#
+# The recursive worker destructively swaps the order of a stack.  We
+# use a temporary stack, and swap directions twice, using the third
+# argument to restore the original stack.
+#
+# Some macros simply can't be renamed with this method: namely,
+# anything involved in the implementation of _m4_copy.
+m4_define([m4_copy],
+[m4_ifdef([$2], [m4_fatal([$0: won't overwrite defined macro: $2])],
+	  [_$0([$1], [m4_tmp])_$0([m4_tmp], [$2],
+  [m4_pushdef([$1], _m4_defn([m4_tmp]))])])])
+m4_define([_m4_copy],
+[m4_ifdef([$1], [m4_pushdef([$2], _m4_defn([$1]))$3[]_m4_popdef([$1])$0($@)])])
+
+
 # m4_define_default(MACRO, VALUE)
 # -------------------------------
 # If MACRO is undefined, set it to VALUE.
@@ -547,12 +595,6 @@ m4_define([m4_default_quoted],
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
 # (added in M4 1.6), then let m4 do the job for us (see m4_init).
-#
-# _m4_defn is for internal use only - it bypasses the wrapper, so it
-# must only be used on one argument at a time, and only on macros
-# known to be defined.  Make sure this still works if the user renames
-# m4_defn but not _m4_defn.
-m4_copy([m4_defn], [_m4_defn])
 m4_define([m4_defn],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_defn([$1])],
@@ -596,11 +638,6 @@ _m4_dumpdefs_down([$1])])
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
 # (added in M4 1.6), then let m4 do the job for us (see m4_init).
-#
-# _m4_popdef is for internal use only - it bypasses the wrapper, so it
-# must only be used on macros known to be defined.  Make sure this
-# still works if the user renames m4_popdef but not _m4_popdef.
-m4_copy([m4_popdef], [_m4_popdef])
 m4_define([m4_popdef],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_popdef([$1])],
@@ -662,11 +699,6 @@ m4_define([_m4_shift3],
 # This macro is called frequently, so minimize the amount of additional
 # expansions by skipping m4_ifndef.  Better yet, if __m4_version__ exists,
 # (added in M4 1.6), then let m4 do the job for us (see m4_init).
-#
-# _m4_undefine is for internal use only - it bypasses the wrapper, so
-# it must only be used on macros known to be defined.  Make sure this
-# still works if the user renames m4_undefine but not _m4_undefine.
-m4_copy([m4_undefine], [_m4_undefine])
 m4_define([m4_undefine],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_undefine([$1])],
@@ -1578,7 +1610,8 @@ m4_do([[m4_ifdef([m4_expansion_stack], [], [_m4_defun_pro_outer[]])]],
       [[m4_pushdef([_m4_expanding($1)])]]))
 
 m4_define([_m4_defun_pro_outer],
-[m4_copy([_m4_divert_diversion], [_m4_divert_dump])m4_divert_push([GROW])])
+[m4_define([_m4_divert_dump],
+  m4_defn([_m4_divert_diversion]))m4_divert_push([GROW])])
 
 # _m4_defun_epi(MACRO-NAME)
 # -------------------------
@@ -2838,12 +2871,13 @@ m4_pattern_forbid([^dnl$])
 # But if it is missing, we assume we are being run by M4 1.4.x, that
 # $@ recursion is quadratic, and that we need foreach-based
 # replacement macros.  Use the raw builtin to avoid tripping up
-# include tracing.
+# include tracing.  Meanwhile, avoid m4_copy, since it temporarily
+# undefines m4_defn.
 m4_ifdef([__m4_version__],
 [m4_debugmode([+d])
-m4_copy([_m4_defn], [m4_defn])
-m4_copy([_m4_popdef], [m4_popdef])
-m4_copy([_m4_undefine], [m4_undefine])],
+m4_define([m4_defn], _m4_defn([m4_defn]))
+m4_define([m4_popdef], _m4_defn([m4_popdef]))
+m4_define([m4_undefine], _m4_defn([m4_undefine]))],
 [m4_builtin([include], [m4sugar/foreach.m4])])
 
 # _m4_divert_diversion should be defined:

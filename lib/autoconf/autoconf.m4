@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                -*- Autoconf -*-
 # Driver that loads the Autoconf macro files.
 #
-# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2006 Free Software
+# Copyright (C) 1994, 1999, 2000, 2001, 2002, 2006, 2008 Free Software
 # Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -76,6 +76,14 @@ m4_include([autoconf/oldnames.m4])
 # names too.  But users may still depend upon these, so reestablish
 # them.
 
+# In order to copy pushdef stacks, m4_copy temporarily destroys the
+# current pushdef stack.  But these builtins are so primitive that:
+#   1. they should not have more than one pushdef definition
+#   2. undefining the pushdef stack to copy breaks m4_copy
+# Hence, we temporarily restore a simpler m4_copy.
+
+m4_pushdef([m4_copy], [m4_define([$2], m4_defn([$1]))])
+
 m4_copy_unm4([m4_builtin])
 m4_copy_unm4([m4_changequote])
 m4_copy_unm4([m4_decr])
@@ -103,6 +111,8 @@ m4_copy_unm4([m4_traceon])
 m4_copy_unm4([m4_translit])
 m4_copy_unm4([m4_undefine])
 m4_copy_unm4([m4_undivert])
+
+m4_popdef([m4_copy])
 
 # Yet some people have started to use m4_patsubst and m4_regexp.
 m4_define([m4_patsubst],

@@ -271,7 +271,8 @@ foreach my $file (@ARGV)
       define([_au__include], defn([include]))
       define([_au___undefine], defn([undefine]))
       define([_au__undefine], [_au__ifdef([$1], [_au___undefine([$1])])])
-      define([_au__save], [m4_ifdef([$1], [m4_copy([$1], [_au_$1])])])
+      define([_au__save], [m4_ifdef([$1],
+	[m4_define([_au_$1], _m4_defn([$1]))])])
       define([_au__restore],
 	[_au_m4_ifdef([_au_$1],
 	  [_au_m4_define([$1], _au__defn([_au_$1]))])])

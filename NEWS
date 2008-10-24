@@ -12,9 +12,12 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Configure scripts now use shell functions.
 
-** The following m4sugar macros are new:
+** The following documented m4sugar macros are new:
    m4_curry  m4_default_quoted  m4_map_args  m4_map_args_pair
    m4_set_map
+
+** The following m4sugar macros are documented now:
+   m4_copy  m4_rename
 
 ** The following documented m4sh macros are new:
    AS_LINENO_PREPARE  AS_ME_PREPARE  AS_VAR_APPEND  AS_VAR_COPY

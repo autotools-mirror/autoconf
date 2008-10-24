@@ -1,5 +1,23 @@
 2008-10-24  Eric Blake  <ebb9@byu.net>
 
+	Improve m4_copy.
+	* lib/m4sugar/m4sugar.m4 (m4_copy): Add second implementation for
+	public use.
+	(_m4_copy): New macro, which preserves pushdef stacks.
+	(_m4_defun_pro_outer): Bypass it, for speed.
+	(m4_init): Bypass new implementation, since it breaks on m4_defn.
+	* bin/autoupdate.in (handle_autoconf_macros): Likewise.
+	* lib/autoconf/general.m4 (AC_PREREQ): Undefine before redefining,
+	now that m4_copy checks this.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_copy>: Document
+	this, as well as m4_rename.
+	* lib/autoconf/autoconf.m4 (m4_copy): Temporarily redefine when
+	renaming builtins, since it breaks on m4_ifdef.
+	* NEWS: Likewise.
+	* tests/m4sugar.at (m4@&t@_defn): Enhance test.
+
+2008-10-24  Eric Blake  <ebb9@byu.net>
+
 	AC_FUNC_GETGROUPS: Revert regression.
 	* lib/autoconf/functions.m4 (AC_FUNC_GETGROUPS): Only set
 	ac_cv_func_getgroups_works=no when it is not available.

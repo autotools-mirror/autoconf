@@ -43,7 +43,7 @@ AT_CHECK_M4SUGAR([-o-],, [$2], [$3])
 
 AT_SETUP([m4@&t@_defn])
 
-AT_KEYWORDS([m4@&t@_popdef m4@&t@_undefine])
+AT_KEYWORDS([m4@&t@_popdef m4@&t@_undefine m4@&t@_copy m4@&t@_rename])
 
 # Ensure that m4sugar dies when dereferencing undefined macros, whether
 # this is provided by m4 natively or faked by wrappers in m4sugar.
@@ -74,6 +74,25 @@ m4_undefine([good], [oops])
 AT_CHECK_M4SUGAR([-o-], 1, [], [stderr])
 AT_CHECK([grep good stderr], [1])
 AT_CHECK([grep 'm4@&t@_undefine: undefined.*oops' stderr], [0], [ignore])
+
+# Check that pushdef stacks can be renamed.
+AT_CHECK_M4SUGAR_TEXT([[m4_pushdef([a], [1])dnl
+m4_pushdef([a], [2])dnl
+a b c
+m4_rename([a], [b])dnl
+a b c
+m4_copy([b], [c])dnl
+a b c
+m4_popdef([b], [c])dnl
+a b c
+m4_popdef([b], [c])dnl
+a b c
+]], [[2 b c
+a 2 c
+a 2 2
+a 1 1
+a b c
+]])
 
 AT_CLEANUP
 

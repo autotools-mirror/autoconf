@@ -317,6 +317,7 @@ AU_DEFUN([AC_PREREQ],
 # AC_PREREQ(VERSION)
 # ------------------
 # Complain and exit if the Autoconf version is less than VERSION.
+m4_undefine([AC_PREREQ])
 m4_copy([m4_version_prereq], [AC_PREREQ])
 
 
