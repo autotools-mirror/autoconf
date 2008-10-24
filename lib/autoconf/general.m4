@@ -2788,7 +2788,7 @@ m4_define([AC_LIBSOURCE], [])
 # AC_LIBSOURCES([FILE-NAME1, ...])
 # -------------------------------
 # Announce we might need these files.
-m4_define([AC_LIBSOURCES],
+AC_DEFUN([AC_LIBSOURCES],
 [m4_foreach([_AC_FILE_NAME], [$1],
 	    [AC_LIBSOURCE(_AC_FILE_NAME)])])
 
@@ -2810,7 +2810,7 @@ esac
 # AC_LIBOBJ(FILE-NAME-NOEXT)
 # -------------------------
 # We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
-m4_define([AC_LIBOBJ],
+AC_DEFUN([AC_LIBOBJ],
 [_AC_LIBOBJ([$1],
 	    [AC_DIAGNOSE(syntax,
 			 [$0($1): you should use literals])])dnl

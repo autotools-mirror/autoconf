@@ -1,5 +1,10 @@
 2008-10-24  Eric Blake  <ebb9@byu.net>
 
+	Work around fact that gnulib-tool doesn't use m4_copy.
+	* lib/autoconf/general.m4 (AC_LIBOBJ, AC_LIBSOURCES): Defun, not
+	define, so that an initial location is present, to account for
+	fact that gnulib-tool pushes another AC_DEFUN'd macro on top.
+
 	Make m4_defun_init more robust.
 	* lib/m4sugar/m4sugar.m4 (m4_defun_init): Handle indirect macro
 	names, and correct number of arguments.
