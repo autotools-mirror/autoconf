@@ -186,6 +186,7 @@ sub parse_args ()
 
   # Dispatch autoreconf's option to the tools.
   # --include;
+  $aclocal    .= join (' -I ', '', map { shell_quote ($_) } @include);
   $autoconf   .= join (' --include=', '', map { shell_quote ($_) } @include);
   $autoconf   .= join (' --prepend-include=', '', map { shell_quote ($_) } @prepend_include);
   $autoheader .= join (' --include=', '', map { shell_quote ($_) } @include);

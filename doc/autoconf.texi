@@ -1663,7 +1663,8 @@ run @samp{make}.
 @item --include=@var{dir}
 @itemx -I @var{dir}
 Append @var{dir} to the include path.  Multiple invocations accumulate.
-Passed on to @command{autoconf} and @command{autoheader} internally.
+Passed on to @command{aclocal}, @command{autoconf} and
+@command{autoheader} internally.
 
 @item --prepend-include=@var{dir}
 @itemx -B @var{dir}

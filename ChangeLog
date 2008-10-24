@@ -1,3 +1,11 @@
+2008-11-10  Clinton Roy  <clinton.roy@gmail.com>  (tiny change)
+
+	Pass autoreconf -I to aclocal -I
+	* bin/autoreconf.in (parse_args): Pass --include to aclocal.
+	* doc/autoconf.texi (autoreconf Invocation): Updates for above.
+	* NEWS: Document it.
+	* THANKS: Update.
+
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
 	Try 'print -r --' as a non-forking variant of 'printf %s\\n'.
