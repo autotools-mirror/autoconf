@@ -84,11 +84,13 @@
 #
 # If INCLUDES is specified and different from `-', then use the new
 # semantics only.
+#
+# The m4_indir allows for fewer expansions of $@.
 AC_DEFUN([AC_CHECK_HEADER],
-[m4_case([$4],
-	 [],  [_AC_CHECK_HEADER_MONGREL($@)],
-	 [-], [_AC_CHECK_HEADER_OLD($@)],
-	      [_AC_CHECK_HEADER_NEW($@)])
+[m4_indir(m4_case([$4],
+		  [],  [[_AC_CHECK_HEADER_MONGREL]],
+		  [-], [[_AC_CHECK_HEADER_OLD]],
+		       [[_AC_CHECK_HEADER_NEW]]), $@)
 ])# AC_CHECK_HEADER
 
 
