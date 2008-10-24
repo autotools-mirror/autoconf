@@ -619,7 +619,6 @@ if test $ac_cv_func_getgroups = no; then
   AC_CHECK_LIB(bsd, getgroups, [GETGROUPS_LIB=-lbsd])
 fi
 
-ac_cv_func_getgroups_works=no
 # Run the program to test the functionality of the system-supplied
 # getgroups function only if there is such a function.
 if test $ac_cv_func_getgroups = yes; then
@@ -627,12 +626,16 @@ if test $ac_cv_func_getgroups = yes; then
    [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
       [[/* On Ultrix 4.3, getgroups (0, 0) always fails.  */
        return getgroups (0, 0) == -1;]])],
-		  [ac_cv_func_getgroups_works=yes])
+		  [ac_cv_func_getgroups_works=yes],
+		  [ac_cv_func_getgroups_works=no],
+		  [ac_cv_func_getgroups_works=no])
    ])
-  if test $ac_cv_func_getgroups_works = yes; then
-    AC_DEFINE(HAVE_GETGROUPS, 1,
-	      [Define to 1 if your system has a working `getgroups' function.])
-  fi
+else
+  ac_cv_func_getgroups_works=no
+fi
+if test $ac_cv_func_getgroups_works = yes; then
+  AC_DEFINE(HAVE_GETGROUPS, 1,
+	    [Define to 1 if your system has a working `getgroups' function.])
 fi
 LIBS=$ac_save_LIBS
 ])# AC_FUNC_GETGROUPS
