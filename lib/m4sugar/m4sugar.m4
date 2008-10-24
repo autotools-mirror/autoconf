@@ -544,7 +544,8 @@ m4_define([_m4_bpatsubsts],
 m4_define([m4_copy],
 [m4_ifdef([$2], [m4_fatal([$0: won't overwrite defined macro: $2])],
 	  [_$0([$1], [m4_tmp])_$0([m4_tmp], [$2],
-  [m4_pushdef([$1], _m4_defn([m4_tmp]))])])])
+  [m4_pushdef([$1], _m4_defn([m4_tmp]))])m4_ifdef([m4_location($1)],
+  [m4_define([m4_location($2)], m4_location)])])])
 m4_define([_m4_copy],
 [m4_ifdef([$1], [m4_pushdef([$2], _m4_defn([$1]))$3[]_m4_popdef([$1])$0($@)])])
 
@@ -1662,9 +1663,9 @@ m4_define([m4_divert_require],
 # previously m4_define'd definition so that subsequent use of the
 # macro is faster.
 m4_define([m4_defun],
-[m4_define([m4_location($1)], m4_location)dnl
-m4_default([$3], [m4_define])([$1],
-	  [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])
+[m4_define([m4_location($1)], m4_location)]dnl
+[m4_default([$3], [m4_define])([$1],
+  [_m4_defun_pro(]m4_dquote($[0])[)$2[]_m4_defun_epi(]m4_dquote($[0])[)])])
 
 
 # m4_defun_init(NAME, INIT, COMMON)
@@ -1683,7 +1684,8 @@ m4_default([$3], [m4_define])([$1],
 # to m4_defun.
 m4_define([m4_defun_init],
 [m4_define([$1], [$3])m4_defun([$1],
-   [$2[]_m4_popdef(]m4_dquote([$][0])[)$][0($][@)], [m4_pushdef])])
+   [$2[]_m4_popdef(]m4_dquote($[0])[)m4_indir(]m4_dquote($[0])dnl
+[m4_if(]m4_dquote($[#])[, [0], [], ]m4_dquote([,$]@)[))], [m4_pushdef])])
 
 
 # m4_defun_once(NAME, EXPANSION)

@@ -1,5 +1,13 @@
 2008-10-24  Eric Blake  <ebb9@byu.net>
 
+	Make m4_defun_init more robust.
+	* lib/m4sugar/m4sugar.m4 (m4_defun_init): Handle indirect macro
+	names, and correct number of arguments.
+	(m4_copy): Also set up location of the copy.
+	(m4_defun): When copied, use current macro name, not original.
+	* tests/m4sugar.at (m4@&t@_require: one-shot initialization):
+	Update test.
+
 	Optimize clients of AS_REQUIRE.
 	* lib/m4sugar/m4sugar.m4 (m4_defun): Add undocumented third
 	argument.
