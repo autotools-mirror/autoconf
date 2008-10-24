@@ -1,5 +1,9 @@
 2008-10-24  Eric Blake  <ebb9@byu.net>
 
+	Fix m4 underquoting in AC_PROG_INSTALL.
+	* lib/autoconf/programs.m4 (AC_PROG_INSTALL): Produce accurate
+	character ranges.
+
 	Speed up AC_CHECK_HEADER.
 	* lib/autoconf/headers.m4 (AC_CHECK_HEADER): Factor out $@.
 

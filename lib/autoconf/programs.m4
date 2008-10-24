@@ -565,13 +565,13 @@ AC_MSG_CHECKING([for a BSD-compatible install])
 if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
 [_AS_PATH_WALK([$PATH],
-[# Account for people who put trailing slashes in PATH elements.
-case $as_dir/ in
+[[# Account for people who put trailing slashes in PATH elements.
+case $as_dir/ in @%:@((
   ./ | .// | /[cC]/* | \
   /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
   ?:[\\/]os2[\\/]install[\\/]* | ?:[\\/]OS2[\\/]INSTALL[\\/]* | \
   /usr/ucb/* ) ;;
-  *)
+  *)]
     # OSF1 and SCO ODT 3.0 have their own names for install.
     # Don't use installbsd from OSF since it installs stuff as root
     # by default.
