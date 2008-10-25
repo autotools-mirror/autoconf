@@ -90,6 +90,8 @@ Joel Edward Denny           jdenny@clemson.edu                  2006-09-15
 Helge Deller                deller@gmx.de                       2007-02-01
 Benoit Sigoure              tsuna@lrde.epita.fr                 2007-04-20
 Bob Proulx                  bob@proulx.com                      2007-06-25
+Bruce Korb                  bkorb@gnu.org                       2008-05-06
+Benjamin Pfaff              blp@gnu.org                         2008-09-29
 
 ========================================================================
 
@@ -98,7 +100,8 @@ mode: text
 coding: utf-8
 End:
 
-Copyright (C) 1996, 2000, 2001, 2005, 2007 Free Software Foundation, Inc.
+Copyright (C) 1996, 2000, 2001, 2005, 2007, 2008 Free Software
+Foundation, Inc.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
