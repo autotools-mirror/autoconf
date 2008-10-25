@@ -23,9 +23,9 @@ GNU Autoconf NEWS - User visible changes.
    AS_LINENO_PREPARE  AS_ME_PREPARE  AS_VAR_APPEND  AS_VAR_COPY
 
 ** The following m4sh macros are documented now:
-   AS_ECHO  AS_ECHO_N  AS_LITERAL_IF  AS_UNSET  AS_VAR_IF  AS_VAR_POPDEF
-   AS_VAR_PUSHDEF  AS_VAR_SET  AS_VAR_SET_IF  AS_VAR_TEST_SET
-   AS_VERSION_COMPARE
+   AS_ECHO  AS_ECHO_N  AS_EXIT  AS_LITERAL_IF  AS_UNSET  AS_VAR_IF
+   AS_VAR_POPDEF  AS_VAR_PUSHDEF  AS_VAR_SET  AS_VAR_SET_IF
+   AS_VAR_TEST_SET  AS_VERSION_COMPARE
 
 ** The m4sh macros AS_IF and AS_CASE can now be used in shell lists.
    The responsibility for supplying a trailing newline now belongs to

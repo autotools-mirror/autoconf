@@ -1,5 +1,11 @@
 2008-10-25  Eric Blake  <ebb9@byu.net>
 
+	Document AS_EXIT.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_EXIT>: Document
+	this macro.
+	(Limitations of Builtins): Mention AS_EXIT.
+	* NEWS: Mention it.
+
 	Use AS_EXIT in autoconf.as.
 	* bin/autoconf.as: Consistently use AS_EXIT.
 

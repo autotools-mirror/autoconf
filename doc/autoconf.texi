@@ -11966,6 +11966,14 @@ for portability, should not include more than one newline.  The bytes of
 Redirections can be placed outside the macro invocation.
 @end defmac
 
+@defmac AS_EXIT (@dvar{status, 1})
+@asindex{EXIT}
+Emit code to exit the shell with @var{status}.  This works around shells
+that see the exit status of the command prior to @code{exit} inside a
+@samp{trap 0} handler (@pxref{Limitations of Builtins, , Limitations of
+Shell Builtins}).
+@end defmac
+
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
 @asindex{IF}
 Run shell code @var{test1}.  If @var{test1} exits with a zero status then
@@ -15433,7 +15441,8 @@ $ @kbd{bash trap.sh}
 The portable solution is then simple: when you want to @samp{exit 42},
 run @samp{(exit 42); exit 42}, the first @command{exit} being used to
 set the exit status to 42 for Zsh, and the second to trigger the trap
-and pass 42 as exit status for Bash.
+and pass 42 as exit status for Bash.  In m4sh, this is covered by using
+@code{AS_EXIT}.
 
 The shell in Free@acronym{BSD} 4.0 has the following bug: @samp{$?} is
 reset to 0 by empty lines if the code is inside @command{trap}.
