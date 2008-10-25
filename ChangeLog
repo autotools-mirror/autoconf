@@ -1,5 +1,17 @@
 2008-10-25  Eric Blake  <ebb9@byu.net>
 
+	Simplify _AS_PREPARE handling of functions.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE_SHELL_FN): Factor...
+	(_AS_REQUIRE_SHELL_FN): ...into new helper macro.
+	(_AS_PREPARE): Temporarily redefine AS_REQUIRE_SHELL_FN to make
+	this task easier.
+	(_AS_LINENO_PREPARE): Make more efficient.
+	(_AS_MKDIR_P_PREPARE): Simplify use in _AS_PREPARE.
+	(_AS_UNSET_PREPARE): Avoid blank newline.
+	(AS_INIT): Emit as_func_unset alongside other functions.
+
+2008-10-25  Eric Blake  <ebb9@byu.net>
+
 	Document AS_EXIT.
 	* doc/autoconf.texi (Common Shell Constructs) <AS_EXIT>: Document
 	this macro.

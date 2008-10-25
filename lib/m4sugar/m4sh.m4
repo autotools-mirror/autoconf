@@ -255,17 +255,17 @@ fi
 # and config.status.  Relying on AS_REQUIRE is of course fine for
 # configure, but fails for config.status (which is created by
 # configure).  So we need a means to force the inclusion of the
-# various _AS_PREPARE_* on top of config.status.  That's basically why
-# there are so many _AS_PREPARE_* below, and that's also why it is
+# various _AS_*_PREPARE on top of config.status.  That's basically why
+# there are so many _AS_*_PREPARE below, and that's also why it is
 # important not to forget some: config.status needs them.
+# List any preparations that create shell functions first, then
+# topologically sort the others by their dependencies.
 m4_defun([_AS_PREPARE],
-[m4_pushdef([AS_REQUIRE], [])]dnl
-[AS_FUNCTION_DESCRIBE([as_func_mkdir_p], [],
-[Create "$as_dir" as a directory, including parents if necessary.])
-as_func_mkdir_p ()
-{
-  _AS_MKDIR_P
-}
+[m4_pushdef([AS_REQUIRE])]dnl
+[m4_pushdef([AS_REQUIRE_SHELL_FN], _m4_defn([_AS_REQUIRE_SHELL_FN])
+)]dnl
+[_AS_UNSET_PREPARE
+_AS_VAR_APPEND_PREPARE
 
 _AS_EXPR_PREPARE
 _AS_BASENAME_PREPARE
@@ -278,9 +278,7 @@ _AS_MKDIR_P_PREPARE
 _AS_TEST_PREPARE
 _AS_TR_CPP_PREPARE
 _AS_TR_SH_PREPARE
-_AS_UNSET_PREPARE
-_AS_VAR_APPEND_PREPARE
-m4_popdef([AS_REQUIRE])])
+_m4_popdef([AS_REQUIRE], [AS_REQUIRE_SHELL_FN])])
 
 # AS_PREPARE
 # ----------
@@ -325,6 +323,14 @@ m4_defun([AS_REQUIRE],
        1, [m4_require(],
 	  [m4_divert_require(_m4_divert(_m4_divert_desired),]) [$1], [$2])])
 
+# _AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, COMMENT, BODY-TO-EXPAND)
+# ------------------------------------------------------------
+# Core of AS_REQUIRE_SHELL_FN, but without diversion support.
+m4_define([_AS_REQUIRE_SHELL_FN], [
+m4_n([$2])$1 ()
+{
+$3
+} @%:@ $1[]])
 
 # AS_REQUIRE_SHELL_FN(NAME-TO-CHECK, COMMENT, BODY-TO-EXPAND,
 #                     [DIVERSION = M4SH-INIT-FN])
@@ -337,12 +343,8 @@ m4_defun([AS_REQUIRE],
 m4_define([AS_REQUIRE_SHELL_FN],
 [m4_provide_if([AS_SHELL_FN_$1], [],
 [AS_REQUIRE([AS_SHELL_FN_$1],
-[m4_provide([AS_SHELL_FN_$1])
-m4_n([$2])$1 ()
-{
-$3
-} [#] $1
-], m4_default_quoted([$4], [M4SH-INIT-FN]))])])
+[m4_provide([AS_SHELL_FN_$1])_$0($@)],
+m4_default_quoted([$4], [M4SH-INIT-FN]))])])
 
 
 # _AS_RUN(TEST, [SHELL])
@@ -555,8 +557,7 @@ as_func_unset ()
 {
   AS_UNSET([$[1]])
 }
-as_unset=as_func_unset
-])
+as_unset=as_func_unset])
 
 
 # AS_UNSET(VAR)
@@ -1001,7 +1002,7 @@ dnl Eggert wrote the scripts with optimization help from Paolo Bonzini).
   # Exit status is that of the last command.
   exit
 }
-m4_popdef([AS_MESSAGE_LOG_FD])])# _AS_LINENO_PREPARE
+_m4_popdef([AS_MESSAGE_LOG_FD])])# _AS_LINENO_PREPARE
 
 
 # _AS_LN_S_PREPARE
@@ -1090,8 +1091,8 @@ m4_defun([_AS_MKDIR_P_PREPARE],
     [Create "$as_dir" as a directory, including parents if necessary.])],
 [
   _AS_MKDIR_P
-])
-if mkdir -p . 2>/dev/null; then
+])]dnl
+[if mkdir -p . 2>/dev/null; then
   as_mkdir_p='mkdir -p "$as_dir"'
 else
   test -d ./-p && rmdir ./-p
@@ -1818,5 +1819,5 @@ m4_divert_pop([KILL])[]dnl
 m4_divert_push([BODY])
 m4_text_box([Main body of script.])
 _AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
-AS_REQUIRE([_AS_UNSET_PREPARE])dnl For backwards compatibility.
+AS_REQUIRE([_AS_UNSET_PREPARE], [], [M4SH-INIT-FN])dnl
 ])
