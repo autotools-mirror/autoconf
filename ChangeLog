@@ -1,3 +1,8 @@
+2008-10-25  Eric Blake  <ebb9@byu.net>
+
+	Use AS_EXIT in autoconf.as.
+	* bin/autoconf.as: Consistently use AS_EXIT.
+
 2008-10-24  Eric Blake  <ebb9@byu.net>
 
 	Fix m4 underquoting in AC_PROG_INSTALL.
