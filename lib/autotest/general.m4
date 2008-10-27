@@ -1674,7 +1674,7 @@ m4_undivert([TEST_SCRIPT])dnl Insert the code here
   $at_traceoff
   $at_times_p && times >"$at_times_file"
 ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
-at_status=`cat "$at_status_file"`
+read at_status <"$at_status_file"
 [#AT_STOP_]AT_ordinal
 m4_divert_pop([TEST_GROUPS])dnl Back to KILL.
 ])# AT_CLEANUP

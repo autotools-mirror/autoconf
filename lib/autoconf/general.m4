@@ -2908,9 +2908,12 @@ esac[]dnl
 #                     [IF-FAILURE])
 # -----------------------------------------------------------------
 # Store the evaluation of the integer EXPRESSION in VARIABLE.
+#
+# AC_LANG_INT_SAVE intentionally does not end the file in a newline, so
+# we must add one to make it a text file before passing it to read.
 m4_define([_AC_COMPUTE_INT_RUN],
 [_AC_RUN_IFELSE([AC_LANG_INT_SAVE([$3], [$1])],
-	       [AS_VAR_SET([$2], [`cat conftest.val`]); $4], [$5])
+		[echo >>conftest.val; read $2 <conftest.val; $4], [$5])
 rm -f conftest.val
 ])# _AC_COMPUTE_INT_RUN
 
@@ -2925,7 +2928,7 @@ m4_define([_AC_COMPUTE_INT_BODY],
 			    [ac_retval=0], [ac_retval=1])
   else
     _AC_COMPUTE_INT_RUN([$[]2], [$[]3], [$[]4],
-		        [ac_retval=0], [ac_retval=1])
+			[ac_retval=0], [ac_retval=1])
   fi
   AS_LINENO_POP
   return $ac_retval

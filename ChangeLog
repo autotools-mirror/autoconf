@@ -1,3 +1,10 @@
+2008-10-27  Eric Blake  <ebb9@byu.net>
+
+	Use read, rather than `cat`, for safe one-line files.
+	* lib/autotest/general.m4 (AT_CLEANUP): Avoid a fork, since it is
+	known that the file has only one line and no \.
+	* lib/autoconf/general.m4 (_AC_COMPUTE_INT_RUN): Likewise.
+
 2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
     
 	* lib/autoconf/general.m4 (_AC_COMPUTE_INT_COMPILE,
