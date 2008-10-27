@@ -1,5 +1,14 @@
 2008-10-27  Eric Blake  <ebb9@byu.net>
 
+	Use AS_VAR_ARITH.
+	* lib/autotest/general.m4 (at_func_arith): Delete; replace all
+	clients with AS_VAR_ARITH instead.
+	* lib/autoconf/general.m4 (_AC_COMPUTE_INT_COMPILE): Use new
+	macro.
+	* lib/autoconf/programs.m4 (_AC_FEATURE_CHECK_LENGTH): Likewise.
+	* tests/torture.at (Torturing config.status): Likewise.
+	* tests/tools.at (autom4te --force): Likewise.
+
 	Add AS_VAR_ARITH.
 	* lib/m4sugar/m4sh.m4 (_AS_VAR_ARITH_PREPARE, _AS_VAR_ARITH_WORKS)
 	(AS_VAR_ARITH): New macros.

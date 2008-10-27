@@ -355,24 +355,6 @@ at_func_create_debugging_script ()
   chmod +x "$at_group_dir/run"
 }
 
-AS_FUNCTION_DESCRIBE([at_func_arith], [ARG...],
-[Arithmetic evaluation, avoids expr if the shell is sane.  The
-interpretation of leading zeroes is unspecified.])
-#
-# subshell and eval are needed to keep Solaris sh from bailing out:
-if ( eval 'test $(( 1 + 1 )) = 2' ) 2>/dev/null; then
-  [#] With "$[@]", bash does not split positional parameters:
-  eval 'at_func_arith ()
-  {
-    at_func_arith_result=$(( $[*] ))
-  }'
-else
-  at_func_arith ()
-  {
-    at_func_arith_result=`expr "$[@]"`
-  }
-fi
-
 m4_text_box([End of autotest shell functions.])
 m4_divert_pop([PREPARE_TESTS])dnl back to DEFAULTS
 
@@ -448,7 +430,7 @@ at_func_validate_ranges ()
     fi
     case $at_value in
       0*) # We want to treat leading 0 as decimal, like expr and test, but
-	  # at_func_arith treats it as octal if it uses $(( )).
+	  # AS_VAR_ARITH treats it as octal if it uses $(( )).
 	  # With XSI shells, ${at_value#${at_value%%[1-9]*}} avoids the
 	  # expr fork, but it is not worth the effort to determine if the
 	  # shell supports XSI when the user can just avoid leading 0.
@@ -1265,12 +1247,9 @@ set X $at_xfail_list; shift; at_xfail_count=$[@%:@]
 set X $at_fail_list; shift; at_fail_count=$[@%:@]; at_fail_list=$[*]
 set X $at_skip_list; shift; at_skip_count=$[@%:@]
 
-at_func_arith $at_group_count - $at_skip_count
-at_run_count=$at_func_arith_result
-at_func_arith $at_xpass_count + $at_fail_count
-at_unexpected_count=$at_func_arith_result
-at_func_arith $at_xfail_count + $at_fail_count
-at_total_fail_count=$at_func_arith_result
+AS_VAR_ARITH([at_run_count], [$at_group_count - $at_skip_count])
+AS_VAR_ARITH([at_unexpected_count], [$at_xpass_count + $at_fail_count])
+AS_VAR_ARITH([at_total_fail_count], [$at_xfail_count + $at_fail_count])
 
 # Back to the top directory.
 cd "$at_dir"
@@ -1282,16 +1261,11 @@ at_stop_time=`date +%s 2>/dev/null`
 AS_ECHO(["$as_me: ending at: $at_stop_date"]) >&AS_MESSAGE_LOG_FD
 case $at_start_time,$at_stop_time in
   [[0-9]*,[0-9]*])
-    at_func_arith $at_stop_time - $at_start_time
-    at_duration_s=$at_func_arith_result
-    at_func_arith $at_duration_s / 60
-    at_duration_m=$at_func_arith_result
-    at_func_arith $at_duration_m / 60
-    at_duration_h=$at_func_arith_result
-    at_func_arith $at_duration_s % 60
-    at_duration_s=$at_func_arith_result
-    at_func_arith $at_duration_m % 60
-    at_duration_m=$at_func_arith_result
+    AS_VAR_ARITH([at_duration_s], [$at_stop_time - $at_start_time])
+    AS_VAR_ARITH([at_duration_m], [$at_duration_s / 60])
+    AS_VAR_ARITH([at_duration_h], [$at_duration_m / 60])
+    AS_VAR_ARITH([at_duration_s], [$at_duration_s % 60])
+    AS_VAR_ARITH([at_duration_m], [$at_duration_m % 60])
     at_duration="${at_duration_h}h ${at_duration_m}m ${at_duration_s}s"
     AS_ECHO(["$as_me: test suite duration: $at_duration"]) >&AS_MESSAGE_LOG_FD
     ;;

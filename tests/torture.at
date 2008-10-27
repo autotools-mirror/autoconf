@@ -614,7 +614,7 @@ AT_DATA([dummy.in],
 i=1
 while test $i != 101; do
   echo "content of file $i" > file_$i
-  i=`expr $i + 1`
+  AS_VAR_ARITH([i], [$i + 1])
 done
 
 

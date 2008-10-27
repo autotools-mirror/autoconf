@@ -2871,31 +2871,32 @@ _AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= 0])],
   while :; do
     _AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_mid])],
 		       [ac_hi=$ac_mid; break],
-		       [ac_lo=`expr $ac_mid + 1`
+		       [AS_VAR_ARITH([ac_lo], [$ac_mid + 1])
 			if test $ac_lo -le $ac_mid; then
 			  ac_lo= ac_hi=
 			  break
 			fi
-			ac_mid=`expr 2 '*' $ac_mid + 1`])
+			AS_VAR_ARITH([ac_mid], [2 '*' $ac_mid + 1])])
   done],
 [AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) < 0])],
  [ac_hi=-1 ac_mid=-1
   while :; do
     _AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) >= $ac_mid])],
 		       [ac_lo=$ac_mid; break],
-		       [ac_hi=`expr '(' $ac_mid ')' - 1`
+		       [AS_VAR_ARITH([ac_hi], ['(' $ac_mid ')' - 1])
 			if test $ac_mid -le $ac_hi; then
 			  ac_lo= ac_hi=
 			  break
 			fi
-			ac_mid=`expr 2 '*' $ac_mid`])
+			AS_VAR_ARITH([ac_mid], [2 '*' $ac_mid])])
   done],
  [ac_lo= ac_hi=])])
 # Binary search between lo and hi bounds.
 while test "x$ac_lo" != "x$ac_hi"; do
-  ac_mid=`expr '(' $ac_hi - $ac_lo ')' / 2 + $ac_lo`
+  AS_VAR_ARITH([ac_mid], ['(' $ac_hi - $ac_lo ')' / 2 + $ac_lo])
   _AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([$3], [($1) <= $ac_mid])],
-		     [ac_hi=$ac_mid], [ac_lo=`expr '(' $ac_mid ')' + 1`])
+		     [ac_hi=$ac_mid],
+		     [AS_VAR_ARITH([ac_lo], ['(' $ac_mid ')' + 1])])
 done
 case $ac_lo in @%:@((
 ?*) AS_VAR_SET([$2], [$ac_lo]); $4 ;;

@@ -510,7 +510,7 @@ m4_define([_AC_FEATURE_CHECK_LENGTH],
     AS_ECHO(['$4']) >> "conftest.nl"
     $3 < "conftest.nl" >"conftest.out" 2>/dev/null || break
     diff "conftest.out" "conftest.nl" >/dev/null 2>&1 || break
-    ac_count=`expr $ac_count + 1`
+    AS_VAR_ARITH([ac_count], [$ac_count + 1])
     if test $ac_count -gt ${$1_max-0}; then
       # Best one so far, save it but keep looking for a better one
       $2="$$1"

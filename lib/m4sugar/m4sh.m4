@@ -944,7 +944,8 @@ m4_defun([_AS_ME_PREPARE],
 # This macro does not expand to a single shell command, so be careful
 # when using it.  Surrounding the body of this macro with {} would
 # cause "bash -c '_ASLINENO_WORKS'" to fail (with Bash 2.05, anyway),
-# but that bug is irrelevant to our use of LINENO.
+# but that bug is irrelevant to our use of LINENO.  We can't use
+# AS_VAR_ARITH, as this is expanded prior to shell functions.
 m4_define([_AS_LINENO_WORKS],
 [
   as_lineno_1=$LINENO
