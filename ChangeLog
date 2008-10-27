@@ -1,12 +1,26 @@
 2008-10-27  Eric Blake  <ebb9@byu.net>
 
+	Add AS_VAR_ARITH.
+	* lib/m4sugar/m4sh.m4 (_AS_VAR_ARITH_PREPARE, _AS_VAR_ARITH_WORKS)
+	(AS_VAR_ARITH): New macros.
+	(_AS_PREPARE, AS_PREPARE): Emit preparation.
+	* tests/m4sh.at (AS@&t@_VAR_ARITH): New test.
+	* doc/autoconf.texi (Polymorphic Variables) <AS_VAR_ARITH>:
+	Document new macro.
+	(Limitations of Usual Tools) <expr>: Mention portability problem
+	if first argument starts with -.
+	(Shell Substitutions) <$((expression))>: Mention it.
+	* NEWS: Likewise.
+
+2008-10-27  Eric Blake  <ebb9@byu.net>
+
 	Use read, rather than `cat`, for safe one-line files.
 	* lib/autotest/general.m4 (AT_CLEANUP): Avoid a fork, since it is
 	known that the file has only one line and no \.
 	* lib/autoconf/general.m4 (_AC_COMPUTE_INT_RUN): Likewise.
 
 2008-10-27  Paolo Bonzini  <bonzini@gnu.org>
-    
+
 	* lib/autoconf/general.m4 (_AC_COMPUTE_INT_COMPILE,
 	_AC_COMPUTE_INT_RUN): Add IF-SUCCESS argument.
 	(_AC_COMPUTE_INT_BODY): New.

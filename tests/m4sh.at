@@ -1070,6 +1070,37 @@ hello,  world
 AT_CLEANUP
 
 
+## -------------- ##
+## AS_VAR_ARITH.  ##
+## -------------- ##
+
+AT_SETUP([AS@&t@_VAR_ARITH])
+AT_KEYWORDS([m4sh AS@&t@_VAR])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+# Literals.
+AS_VAR_ARITH([foo], [1 + 1])
+echo "$foo"
+# Indirects via shell vars.
+num=1
+AS_VAR_ARITH([foo$num], [\( 2 + 3 \) \* 4])
+echo "$foo1"
+# Indirects via command substitution.
+AS_VAR_ARITH([`echo foo2`], [0 + -2 + $foo1 / 2])
+echo "$foo2"
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script], [],
+[[2
+20
+8
+]])
+
+AT_CLEANUP
+
+
 ## ----------------- ##
 ## AS_INIT cleanup.  ##
 ## ----------------- ##

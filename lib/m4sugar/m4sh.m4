@@ -266,6 +266,7 @@ m4_defun([_AS_PREPARE],
 )]dnl
 [_AS_UNSET_PREPARE
 _AS_VAR_APPEND_PREPARE
+_AS_VAR_ARITH_PREPARE
 
 _AS_EXPR_PREPARE
 _AS_BASENAME_PREPARE
@@ -301,6 +302,7 @@ AS_REQUIRE([_AS_TR_CPP_PREPARE])
 AS_REQUIRE([_AS_TR_SH_PREPARE])
 AS_REQUIRE([_AS_UNSET_PREPARE])
 AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])
+AS_REQUIRE([_AS_VAR_ARITH_PREPARE], [], [M4SH-INIT-FN])
 m4_divert_pop[]])
 
 
@@ -1642,13 +1644,11 @@ AS_IF([_AS_RUN(["AS_ESCAPE([_AS_VAR_APPEND_WORKS])"])],
   }]) # as_func_append
 ])
 
-
 # _AS_VAR_APPEND_WORKS
 # --------------------
 # Output a shell test to discover whether += works.
 m4_define([_AS_VAR_APPEND_WORKS],
 [as_var=1; as_var+=2; test x$as_var = x12])
-
 
 # AS_VAR_APPEND(VAR, VALUE)
 # -------------------------
@@ -1664,6 +1664,49 @@ m4_defun_init([AS_VAR_APPEND],
 [_AS_DETECT_SUGGESTED([_AS_VAR_APPEND_WORKS])]dnl
 [AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])],
 [as_func_append $1 $2])
+
+
+# _AS_VAR_ARITH_PREPARE
+# ---------------------
+# Define as_func_arith to the optimum definition for the current
+# shell (using POSIX $(()) where supported).
+m4_defun([_AS_VAR_ARITH_PREPARE],
+[AS_FUNCTION_DESCRIBE([as_func_arith], [ARG...],
+[Perform arithmetic evaluation on the ARGs, and store the result in
+the global $as_val.  Take advantage of shells that can avoid forks.
+The arguments must be portable across $(()) and expr.])
+AS_IF([_AS_RUN(["AS_ESCAPE([_AS_VAR_ARITH_WORKS])"])],
+[eval 'as_func_arith ()
+  {
+    as_val=$(( $[]* ))
+  }'],
+[as_func_arith ()
+  {
+    as_val=`expr "$[]@"`
+  }]) # as_func_arith
+])
+
+# _AS_VAR_ARITH_WORKS
+# -------------------
+# Output a shell test to discover whether $(()) works.
+m4_define([_AS_VAR_ARITH_WORKS],
+[test $(( 1 + 1 )) = 2])
+
+# AS_VAR_ARITH(VAR, EXPR)
+# -----------------------
+# Perform the arithmetic evaluation of the arguments in EXPR, and set
+# contents of the polymorphic shell variable VAR to the result, taking
+# advantage of any shell optimizations that perform arithmetic without
+# forks.  Note that numbers occuring within EXPR must be written in
+# decimal, and without leading zeroes; variables containing numbers
+# must be expanded prior to arithmetic evaluation; the first argument
+# must not be a negative number; there is no portable equality
+# operator; and operators must be given as separate arguments and
+# properly quoted.
+m4_defun_init([AS_VAR_ARITH],
+[_AS_DETECT_SUGGESTED([_AS_VAR_ARITH_WORKS])]dnl
+[AS_REQUIRE([_AS_VAR_ARITH_PREPARE], [], [M4SH-INIT-FN])],
+[as_func_arith $2 && AS_VAR_SET([$1], [$as_val])])
 
 
 # AS_VAR_COPY(DEST, SOURCE)

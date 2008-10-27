@@ -12121,6 +12121,27 @@ appends.  Note that unlike @code{AS_VAR_SET}, this macro requires that
 expansion.
 @end defmac
 
+@defmac AS_VAR_ARITH (@var{var}, @var{expression})
+@asindex{ARITH}
+Emit shell code to compute the arithmetic expansion of @var{expression},
+assigning the result as the contents of the polymorphic shell variable
+@var{var}.  The code takes advantage of shells that provide @samp{$(())}
+for fewer forks, but uses @command{expr} as a fallback.  Therefore, the
+syntax for a valid @var{expression} is rather limited: all operators
+must occur as separate shell arguments and with proper quoting, there is
+no portable equality operator, all variables containing numeric values
+must be expanded prior to the computation, all numeric values must be
+provided in decimal without leading zeroes, and the first shell argument
+should not be a negative number.  In the following example, this snippet
+will print @samp{(2+3)*4 == 20}.
+
+@example
+bar=3
+AS_VAR_ARITH([foo], [\( 2 + $bar \) \* 4])
+echo "(2+$bar)*4 == $foo"
+@end example
+@end defmac
+
 @defmac AS_VAR_COPY (@var{dest}, @var{source})
 @asindex{VAR_COPY}
 Emit shell code to assign the contents of the polymorphic shell variable
@@ -14034,10 +14055,10 @@ $ @kbd{pdksh -c 'echo $(( 010 ))'}
 
 When it is available, using arithmetic expansion provides a noticeable
 speedup in script execution; but testing for support requires
-@command{eval} to avoid syntax errors.  If shell function support can
-be assumed, then this construct can be used to assign @samp{foo}
-to an arithmetic result, provided all numeric arguments are provided in
-decimal and without a leading zero:
+@command{eval} to avoid syntax errors.  The following construct is used
+by @code{AS_VAR_ARITH} to provide arithmetic computation when all
+arguments are provided in decimal and without a leading zero, and all
+operators are properly quoted and appear as distinct arguments:
 
 @example
 if ( eval 'test $(( 1 + 1 )) = 2' ) 2>/dev/null; then
@@ -15880,6 +15901,14 @@ foo
 @item @command{expr}
 @c -----------------
 @prindex @command{expr}
+Not all implementations obey the Posix rule that @samp{--} separates
+options from arguments; likewise, not all implementations provide the
+extension to Posix that the first argument can be treated as part of a
+valid expression rather than an invalid option if it begins with
+@samp{-}.  When performing arithmetic, use @samp{expr 0 + $var} if
+@samp{$var} might be a negative number, to keep @command{expr} from
+interpreting it as an option.
+
 No @command{expr} keyword starts with @samp{X}, so use @samp{expr
 X"@var{word}" : 'X@var{regex}'} to keep @command{expr} from
 misinterpreting @var{word}.
