@@ -1,5 +1,13 @@
 2008-10-27  Eric Blake  <ebb9@byu.net>
 
+	Avoid raw carriage return in scripts.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Generate CR
+	via tr, rather than with literal byte.
+	* THANKS: Update.
+	Reported by Steven R. Loomis; patch suggested by Thomas Dickey.
+
+2008-10-27  Eric Blake  <ebb9@byu.net>
+
 	Use AS_VAR_ARITH.
 	* lib/autotest/general.m4 (at_func_arith): Delete; replace all
 	clients with AS_VAR_ARITH instead.
