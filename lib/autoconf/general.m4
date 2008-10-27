@@ -1722,7 +1722,7 @@ AC_DEFUN([AC_CONFIG_MACRO_DIR], [])
 # It announces FILE is required in the auxdir.
 m4_define([AC_REQUIRE_AUX_FILE],
 [AS_LITERAL_IF([$1], [],
-	       [AC_FATAL([$0: requires a literal argument])])])
+	       [m4_fatal([$0: requires a literal argument])])])
 
 
 
@@ -2111,12 +2111,11 @@ m4_define([AC_SUBST_TRACE])
 #
 m4_define([AC_SUBST],
 [AS_IDENTIFIER_IF([$1], [],
-  [AC_FATAL([$0: `$1' is not a valid shell variable name])])dnl
-AC_SUBST_TRACE([$1])dnl
-m4_pattern_allow([^$1$])dnl
-m4_ifvaln([$2], [$1=$2])[]dnl
-m4_set_add([_AC_SUBST_VARS], [$1])dnl
-])# AC_SUBST
+  [m4_fatal([$0: `$1' is not a valid shell variable name])])]dnl
+[AC_SUBST_TRACE([$1])]dnl
+[m4_pattern_allow([^$1$])]dnl
+[m4_ifvaln([$2], [$1=$2])[]]dnl
+[m4_set_add([_AC_SUBST_VARS], [$1])])# AC_SUBST
 
 
 # AC_SUBST_FILE(VARIABLE)

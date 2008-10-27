@@ -1,5 +1,17 @@
 2008-10-27  Eric Blake  <ebb9@byu.net>
 
+	Prefer m4_fatal over AC_FATAL.
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF, AC_CHECK_ALIGNOF)
+	(AC_CHECK_MEMBER): Use non-obsolete macro name.
+	* lib/autoconf/fortran.m4 (_AC_LIST_MEMBER_IF): Likewise.
+	* lib/autoconf/general.m4 (AC_REQUIRE_AUX_FILE, AC_SUBST):
+	Likewise.
+	* lib/autoconf/lang.m4 (_AC_LANG_DISPATCH): Likewise.
+	* lib/autoconf/status.m4 (_AC_CONFIG_DEPENDENCY_DEFAULT)
+	(_AC_CONFIG_UNIQUE, _AC_CONFIG_REGISTER_DEST): Likewise.
+
+2008-10-27  Eric Blake  <ebb9@byu.net>
+
 	Avoid raw carriage return in scripts.
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Generate CR
 	via tr, rather than with literal byte.

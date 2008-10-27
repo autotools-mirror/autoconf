@@ -100,10 +100,10 @@
 # if ELEMENT is a member of LIST, otherwise it executes
 # ACTION-IF-NOT-FOUND.
 AC_DEFUN([_AC_LIST_MEMBER_IF],
-[dnl Do some sanity checking of the arguments.
-m4_if([$1], , [AC_FATAL([$0: missing argument 1])])dnl
-m4_if([$2], , [AC_FATAL([$0: missing argument 2])])dnl
-  ac_exists=false
+dnl Do some sanity checking of the arguments.
+[m4_if([$1], , [m4_fatal([$0: missing argument 1])],
+      [$2], , [m4_fatal([$0: missing argument 2])])]dnl
+[  ac_exists=false
   for ac_i in $2; do
     if test x"$1" = x"$ac_i"; then
       ac_exists=true

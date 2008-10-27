@@ -86,7 +86,7 @@ m4_define([AC_LANG_CASE],
 m4_define([_AC_LANG_DISPATCH],
 [m4_ifdef([$1($2)],
        [m4_indir([$1($2)], m4_shift2($@))],
-       [AC_FATAL([$1: unknown language: $2])])])
+       [m4_fatal([$1: unknown language: $2])])])
 
 
 # _AC_LANG_SET(OLD, NEW)
@@ -495,7 +495,7 @@ do
 	# certainly right.
 	break;;
     *.* )
-        if test "${ac_cv_exeext+set}" = set && test "$ac_cv_exeext" != no;
+	if test "${ac_cv_exeext+set}" = set && test "$ac_cv_exeext" != no;
 	then :; else
 	   ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
 	fi

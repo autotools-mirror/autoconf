@@ -150,7 +150,7 @@ m4_define([_AC_CHECK_TYPE_NEW_BODY],
   AC_COMPILE_IFELSE(
     [AC_LANG_PROGRAM([$[]4],
        [if (sizeof ($[]2))
-         return 0;])],
+	 return 0;])],
     [AC_COMPILE_IFELSE(
        [AC_LANG_PROGRAM([$[]4],
 	  [if (sizeof (($[]2)))
@@ -741,8 +741,8 @@ Remove this warning and the `AC_CACHE_CHECK' when you adjust the code.])
 # ---------------------------------------------------------------
 AC_DEFUN([AC_CHECK_SIZEOF],
 [AS_LITERAL_IF([$1], [],
-	       [AC_FATAL([$0: requires literal arguments])])dnl
-# The cast to long int works around a bug in the HP C Compiler
+	       [m4_fatal([$0: requires literal arguments])])]dnl
+[# The cast to long int works around a bug in the HP C Compiler
 # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects
 # declarations like `int a3[[(sizeof (unsigned char)) >= 0]];'.
 # This bug is HP SR number 8606223364.
@@ -764,8 +764,8 @@ AC_DEFINE_UNQUOTED(AS_TR_CPP(sizeof_$1), $AS_TR_SH([ac_cv_sizeof_$1]),
 # -----------------------------------------------------
 AC_DEFUN([AC_CHECK_ALIGNOF],
 [AS_LITERAL_IF([$1], [],
-	       [AC_FATAL([$0: requires literal arguments])])dnl
-# The cast to long int works around a bug in the HP C Compiler,
+	       [m4_fatal([$0: requires literal arguments])])]dnl
+[# The cast to long int works around a bug in the HP C Compiler,
 # see AC_CHECK_SIZEOF for more information.
 _AC_CACHE_CHECK_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$1])],
   [(long int) offsetof (ac__type_alignof_, y)],
@@ -829,12 +829,12 @@ you adjust the code.])
 # variables are not a valid argument.
 AC_DEFUN([AC_CHECK_MEMBER],
 [AS_LITERAL_IF([$1], [],
-	       [AC_FATAL([$0: requires literal arguments])])dnl
-m4_bmatch([$1], [\.], ,
-	 [m4_fatal([$0: Did not see any dot in `$1'])])dnl
-AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])dnl
+	       [AC_FATAL([$0: requires literal arguments])])]dnl
+[m4_if(m4_index([$1], [.]), [-1],
+       [m4_fatal([$0: Did not see any dot in `$1'])])]dnl
+[AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])]dnl
 dnl Extract the aggregate name, and the member name
-AC_CACHE_CHECK([for $1], [ac_Member],
+[AC_CACHE_CHECK([for $1], [ac_Member],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT([$4])],
 [dnl AGGREGATE ac_aggr;
 static m4_bpatsubst([$1], [\..*]) ac_aggr;

@@ -207,7 +207,8 @@ m4_define([_AC_CONFIG_DEPENDENCY],
 m4_define([_AC_CONFIG_DEPENDENCY_DEFAULT],
 [m4_bmatch([$2], [:], [],
 	   [m4_if([$1], [LINKS],
-		  [AS_LITERAL_IF([$2], [AC_FATAL([Invalid AC_CONFIG_LINKS tag: `$2'])])],
+		  [AS_LITERAL_IF([$2],
+		    [m4_fatal([Invalid AC_CONFIG_LINKS tag: `$2'])])],
 		  [:$2.in])])dnl
 ])
 
@@ -220,7 +221,8 @@ m4_define([_AC_CONFIG_DEPENDENCY_DEFAULT],
 #
 m4_define([_AC_CONFIG_UNIQUE],
 [m4_ifdef([_AC_SEEN_TAG($2)],
-   [AC_FATAL([`$2' is already registered with AC_CONFIG_]m4_defn([_AC_SEEN_TAG($2)]).)],
+   [m4_fatal([`$2' is already registered with AC_CONFIG_]m4_defn(
+     [_AC_SEEN_TAG($2)]).)],
    [m4_define([_AC_SEEN_TAG($2)], [$1])])dnl
 ])
 
@@ -270,15 +272,15 @@ _AC_CONFIG_REGISTER_DEST([$1], [$2], m4_bpatsubst([[$2]], [:.*\(.\)$], [\1]), [$
 # Save the name of the first config header to AH_HEADER.
 #
 m4_define([_AC_CONFIG_REGISTER_DEST],
-[_AC_CONFIG_UNIQUE([$1], [$3])dnl
-m4_if([$1 $3], [LINKS .],
-      [AC_FATAL([invalid destination of a config link: `.'])])dnl
-m4_if([$1], [HEADERS],
-      [m4_define_default([AH_HEADER], [$3])])dnl
+[_AC_CONFIG_UNIQUE([$1], [$3])]dnl
+[m4_if([$1 $3], [LINKS .],
+       [m4_fatal([invalid destination of a config link: `.'])],
+       [$1], [HEADERS],
+       [m4_define_default([AH_HEADER], [$3])])]dnl
 dnl
 dnl Recognize TAG as an argument to config.status:
 dnl
-m4_append([_AC_LIST_TAGS],
+[m4_append([_AC_LIST_TAGS],
 [    "$3") CONFIG_$1="$CONFIG_$1 $2" ;;
 ])dnl
 dnl
