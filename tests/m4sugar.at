@@ -37,6 +37,60 @@ AT_CHECK_M4SUGAR([-o-],, [$2], [$3])
 ])# AT_CHECK_M4SUGAR_TEXT
 
 
+## ------------------ ##
+## m4_stack_foreach.  ##
+## ------------------ ##
+
+AT_SETUP([m4@&t@_stack_foreach])
+
+AT_KEYWORDS([m4@&t@_stack_foreach_lifo m4@&t@_copy m4@&t@_n])
+
+# Test the semantics of macros to walk stacked macro definitions.
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_pushdef([abc], [def])dnl
+m4_pushdef([abc], [ghi])dnl
+m4_pushdef([abc], [jkl])dnl
+m4_stack_foreach([abc], [m4_n])
+abc
+m4_stack_foreach_lifo([abc], [m4_n])
+m4_stack_foreach([abc], [m4_n])
+m4_copy([abc], [foo])dnl
+m4_stack_foreach([foo], [m4_n])
+m4_stack_foreach_lifo([foo], [m4_n])
+m4_pushdef([xyz], [123])dnl
+m4_pushdef([xyz], [456])dnl
+m4_define([doit], [[$1](m4_shift(m4_stack_foreach([xyz], [,m4_echo])))
+])dnl
+m4_stack_foreach([abc], [doit])]],
+[[def
+ghi
+jkl
+
+jkl
+jkl
+ghi
+def
+
+def
+ghi
+jkl
+
+def
+ghi
+jkl
+
+jkl
+ghi
+def
+
+def(123,456)
+ghi(123,456)
+jkl(123,456)
+]])
+
+AT_CLEANUP
+
+
 ## --------- ##
 ## m4_defn.  ##
 ## --------- ##

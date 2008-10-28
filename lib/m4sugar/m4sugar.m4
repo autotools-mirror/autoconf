@@ -535,19 +535,12 @@ m4_define([_m4_bpatsubsts],
 # includes one-shot initialization that is later popped to the normal
 # definition.
 #
-# The recursive worker destructively swaps the order of a stack.  We
-# use a temporary stack, and swap directions twice, using the third
-# argument to restore the original stack.
-#
-# Some macros simply can't be renamed with this method: namely,
-# anything involved in the implementation of _m4_copy.
+# Some macros simply can't be renamed with this method: namely, anything
+# involved in the implementation of m4_stack_foreach and m4_curry.
 m4_define([m4_copy],
 [m4_ifdef([$2], [m4_fatal([$0: won't overwrite defined macro: $2])],
-	  [_$0([$1], [m4_tmp])_$0([m4_tmp], [$2],
-  [m4_pushdef([$1], _m4_defn([m4_tmp]))])m4_ifdef([m4_location($1)],
-  [m4_define([m4_location($2)], m4_location)])])])
-m4_define([_m4_copy],
-[m4_ifdef([$1], [m4_pushdef([$2], _m4_defn([$1]))$3[]_m4_popdef([$1])$0($@)])])
+	  [m4_stack_foreach([$1], [m4_curry([m4_pushdef], [$2])])m4_ifdef([m4_location($1)],
+[m4_define([m4_location($2)], m4_location)])])])
 
 
 # m4_define_default(MACRO, VALUE)
@@ -603,32 +596,17 @@ m4_define([m4_defn],
        [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
 
 
-# _m4_dumpdefs_up(NAME)
-# ---------------------
-m4_define([_m4_dumpdefs_up],
-[m4_ifdef([$1],
-	  [m4_pushdef([_m4_dumpdefs], _m4_defn([$1]))dnl
-m4_dumpdef([$1])dnl
-_m4_popdef([$1])dnl
-_m4_dumpdefs_up([$1])])])
-
-
-# _m4_dumpdefs_down(NAME)
-# -----------------------
-m4_define([_m4_dumpdefs_down],
-[m4_ifdef([_m4_dumpdefs],
-	  [m4_pushdef([$1], _m4_defn([_m4_dumpdefs]))dnl
-_m4_popdef([_m4_dumpdefs])dnl
-_m4_dumpdefs_down([$1])])])
-
-
 # m4_dumpdefs(NAME)
 # -----------------
 # Similar to `m4_dumpdef(NAME)', but if NAME was m4_pushdef'ed, display its
 # value stack (most recent displayed first).
+#
+# This macro cheats, because it relies on the current definition of NAME
+# while the second argument of m4_stack_foreach_lifo is evaluated (which
+# would be undefined according to the API).  If m4_dumpdef is ever rewritten
+# not to use the builtin, revisit this.
 m4_define([m4_dumpdefs],
-[_m4_dumpdefs_up([$1])dnl
-_m4_dumpdefs_down([$1])])
+[m4_stack_foreach_lifo([$1], [m4_dumpdef([$1])m4_ignore])])
 
 
 # m4_popdef(NAME)
@@ -1187,6 +1165,32 @@ m4_define([m4_map_args_pair],
        [$#], [3], [m4_default([$2], [$1])([$3])[]],
        [$#], [4], [$1([$3], [$4])[]],
        [$1([$3], [$4])[]$0([$1], [$2], m4_shift(m4_shift3($@)))])])
+
+
+# m4_stack_foreach(MACRO, FUNC)
+# m4_stack_foreach_lifo(MACRO, FUNC)
+# ----------------------------------
+# Pass each stacked definition of MACRO to the one-argument macro FUNC.
+# m4_stack_foreach proceeds in FIFO order, while m4_stack_foreach_lifo
+# processes the topmost definitions first.  In addition, FUNC should
+# not push or pop definitions of MACRO, and should not expect anything about
+# the active definition of MACRO (it will not be the topmost, and may not
+# be the one passed to FUNC either).
+#
+# The recursive worker _m4_stack_reverse destructively swaps the order of a
+# stack.  We use a temporary stack, and swap directions twice.  Some macros
+# simply can't be examined with this method: namely, anything involved
+# in the implementation of _m4_stack_reverse.
+m4_define([_m4_stack_reverse],
+[m4_ifdef([$1], [m4_pushdef([$2], _m4_defn([$1]))$3[]_m4_popdef([$1])$0($@)])])
+
+m4_define([m4_stack_foreach],
+[_m4_stack_reverse([$1], [m4_tmp-$1])]dnl
+[_m4_stack_reverse([m4_tmp-$1], [$1], [$2(_m4_defn([m4_tmp-$1]))])])
+
+m4_define([m4_stack_foreach_lifo],
+[_m4_stack_reverse([$1], [m4_tmp-$1], [$2(_m4_defn([m4_tmp-$1]))])]dnl
+[_m4_stack_reverse([m4_tmp-$1], [$1])])
 
 
 ## --------------------------- ##

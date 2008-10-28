@@ -1,4 +1,14 @@
 2008-10-28  Paolo Bonzini  <bonzini@gnu.org>
+
+	Add m4_stack_foreach and m4_stack_foreach_lifo.
+	* lib/m4sugar/m4sugar.m4 (_m4_stack_reverse): New from _m4_copy.
+	(m4_stack_foreach, m4_stack_foreach_lifo): New.
+	(m4_copy): Use m4_stack_foreach and m4_curry.
+	(_m4_dumpdefs_down, _m4_dumpdefs_up): Remove.
+	(m4_dumpdefs): Rewrite using m4_stack_foreach_lifo.
+	* tests/m4sugar.at (m4_stack_foreach): New test.
+
+2008-10-28  Paolo Bonzini  <bonzini@gnu.org>
     
 	use a shell function for AC_TYPE_INTx_T
 	* lib/autoconf/types.m4 (_AC_TYPE_INT_BODY, _AC_TYPE_UNSIGNED_INT_BODY):
