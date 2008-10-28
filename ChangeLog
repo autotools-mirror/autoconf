@@ -1,5 +1,16 @@
 2008-10-29  Eric Blake  <ebb9@byu.net>
 
+	Alter signature of AS_INIT_GENERATED.
+	* lib/m4sugar/m4sh.m4 (AS_INIT_GENERATED): Add parameters, and
+	manage here-doc and chmod in place.  This also allows future
+	changes for optimizing the child via diversion/m4_wrap magic.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Update
+	caller.
+	* doc/autoconf.texi (Initialization Macros) <AS_INIT_GENERATED>:
+	Update the documentation.
+
+2008-10-29  Eric Blake  <ebb9@byu.net>
+
 	Use _m4_stack_reverse in m4_set.
 	* lib/m4sugar/m4sugar.m4 (_m4_set_contents_1)
 	(_m4_set_contents_2): Rewrite to share _m4_stack_reverse
