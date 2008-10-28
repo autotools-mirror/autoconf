@@ -2702,28 +2702,26 @@ m4_define([m4_set_contains],
 # determines which version of _1 helper we use.
 m4_define([m4_set_contents],
 [m4_ifdef([_m4_set_cleanup($1)], [_$0_1c], [_$0_1])([$1])_$0_2([$1],
-    [_m4_defn([_m4_set_($1)])], [[$2]])])
+  [], [], [[$2]])])
 
 # _m4_set_contents_1(SET)
 # _m4_set_contents_1c(SET)
-# _m4_set_contents_2(SET, SEP, PREP)
-# ----------------------------------
-# Expand to a list of quoted elements currently in the set, separated
-# by SEP, and moving PREP in front of SEP on recursion.  To avoid
-# nesting limit restrictions, the algorithm must be broken into two
-# parts; _1 destructively copies the stack in reverse into
-# _m4_set_($1), producing no output; then _2 destructively copies
-# _m4_set_($1) back into the stack in reverse.  SEP is expanded while
-# _m4_set_($1) contains the current element, so a SEP containing
-# _m4_defn([_m4_set_($1)]) can produce output in the order the set was
-# created.  Behavior is undefined if SEP tries to recursively list or
-# modify SET in any way other than calling m4_set_remove on the
-# current element.  Use _1 if all entries in the stack are guaranteed
-# to be in the set, and _1c to prune removed entries.  Uses _m4_defn
-# and _m4_popdef for speed.
+# _m4_set_contents_2(SET, PRE, POST, SEP)
+# ---------------------------------------
+# Expand to a list of quoted elements currently in the set, each
+# surrounded by PRE and POST, and moving SEP in front of PRE on
+# recursion.  To avoid nesting limit restrictions, the algorithm must
+# be broken into two parts; _1 destructively copies the stack in
+# reverse into _m4_set_($1), producing no output; then _2
+# destructively copies _m4_set_($1) back into the stack in reverse.
+# If no elements were deleted, then this visits the set in the order
+# that elements were inserted.  Behavior is undefined if PRE/POST/SEP
+# tries to recursively list or modify SET in any way other than
+# calling m4_set_remove on the current element.  Use _1 if all entries
+# in the stack are guaranteed to be in the set, and _1c to prune
+# removed entries.  Uses _m4_defn and _m4_popdef for speed.
 m4_define([_m4_set_contents_1],
-[m4_ifdef([_m4_set([$1])], [m4_pushdef([_m4_set_($1)],
-    _m4_defn([_m4_set([$1])]))_m4_popdef([_m4_set([$1])])$0([$1])])])
+[_m4_stack_reverse([_m4_set([$1])], [_m4_set_($1)])])
 
 m4_define([_m4_set_contents_1c],
 [m4_ifdef([_m4_set([$1])],
@@ -2734,8 +2732,8 @@ m4_define([_m4_set_contents_1c],
 	  [_m4_popdef([_m4_set_cleanup($1)])])])
 
 m4_define([_m4_set_contents_2],
-[m4_ifdef([_m4_set_($1)], [m4_pushdef([_m4_set([$1])],
-    _m4_defn([_m4_set_($1)]))$2[]_m4_popdef([_m4_set_($1)])$0([$1], [$3$2])])])
+[_m4_stack_reverse([_m4_set_($1)], [_m4_set([$1])],
+  [$2[]_m4_defn([_m4_set_($1)])$3], [$4])])
 
 # m4_set_delete(SET)
 # ------------------
@@ -2821,7 +2819,7 @@ m4_define([m4_set_empty],
 m4_define([m4_set_foreach],
 [m4_pushdef([$2])m4_ifdef([_m4_set_cleanup($1)],
     [_m4_set_contents_1c], [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
-       [m4_define([$2], _m4_defn([_m4_set_($1)]))$3[]])m4_popdef([$2])])
+       [m4_define([$2],], [)$3[]])m4_popdef([$2])])
 
 # m4_set_intersection(SET1, SET2)
 # -------------------------------
@@ -2851,13 +2849,11 @@ m4_define([m4_set_intersection],
 # is output if there are any elements.
 m4_define([m4_set_list],
 [m4_ifdef([_m4_set_cleanup($1)], [_m4_set_contents_1c],
-	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
-	       [_m4_defn([_m4_set_($1)])], [,])])
+	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1], [], [], [,])])
 
 m4_define([m4_set_listc],
 [m4_ifdef([_m4_set_cleanup($1)], [_m4_set_contents_1c],
-	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
-	       [,_m4_defn([_m4_set_($1)])])])
+	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1], [,])])
 
 # m4_set_map(SET, ACTION)
 # -----------------------
@@ -2870,7 +2866,7 @@ m4_define([m4_set_listc],
 m4_define([m4_set_map],
 [m4_ifdef([_m4_set_cleanup($1)],
     [_m4_set_contents_1c], [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
-       [$2(_m4_defn([_m4_set_($1)]))])])
+       [$2(], [)])])
 
 # m4_set_remove(SET, VALUE, [IF-PRESENT], [IF-ABSENT])
 # ----------------------------------------------------
