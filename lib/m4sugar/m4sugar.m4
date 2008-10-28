@@ -2232,7 +2232,9 @@ m4_define([m4_append_uniq_w],
 # FIRST-PREFIX will be left alone on the first line.
 #
 # No expansion occurs on the contents STRING, PREFIX, or FIRST-PREFIX,
-# although quadrigraphs are correctly recognized.
+# although quadrigraphs are correctly recognized.  More precisely,
+# you may redefine m4_qlen to recognize whatever escape sequences that
+# you will post-process.
 #
 # Typical outputs are:
 #
@@ -2311,19 +2313,28 @@ dnl finally, clean up the local variables
 #  ## MESSAGE ##
 #  ## ------- ##
 # using FRAME-CHARACTER in the border.
+#
+# Quadrigraphs are correctly recognized.  More precisely, you may
+# redefine m4_qlen to recognize whatever escape sequences that you
+# will post-process.
 m4_define([m4_text_box],
 [m4_pushdef([m4_Border],
 	    m4_translit(m4_format([%*s], m4_qlen(m4_expand([$1])), []),
 			[ ], m4_default_quoted([$2], [-])))dnl
-@%:@@%:@ m4_Border @%:@@%:@
-@%:@@%:@ $1 @%:@@%:@
-@%:@@%:@ m4_Border @%:@@%:@_m4_popdef([m4_Border])dnl
-])
+[##] m4_Border [##]
+[##] $1 [##]
+[##] m4_Border [##]_m4_popdef([m4_Border])])
 
 
 # m4_qlen(STRING)
 # ---------------
 # Expands to the length of STRING after autom4te converts all quadrigraphs.
+#
+# If you use some other means of post-processing m4 output rather than
+# autom4te, then you may redefine this macro to recognize whatever
+# escape sequences your post-processor will handle.  For that matter,
+# m4_define([m4_qlen], m4_defn([m4_len])) is sufficient if you don't
+# do any post-processing.
 #
 # Avoid bpatsubsts for the common case of no quadrigraphs.  Cache
 # results, as configure scripts tend to ask about lengths of common
@@ -2338,15 +2349,6 @@ m4_if(m4_index([$1], [@]), [-1], [m4_len([$1])],
       [m4_len(m4_bpatsubst([[$1]],
 			   [@\(\(<:\|:>\|S|\|%:\|\{:\|:\}\)\(@\)\|&t@\)],
 			   [\3]))]))_m4_defn([m4_qlen-$1])])
-
-
-# m4_qdelta(STRING)
-# -----------------
-# Expands to the net change in the length of STRING from autom4te converting the
-# quadrigraphs in STRING.  This number is always negative or zero.
-m4_define([m4_qdelta],
-[m4_eval(m4_qlen([$1]) - m4_len([$1]))])
-
 
 
 ## ----------------------- ##

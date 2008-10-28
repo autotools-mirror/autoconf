@@ -1,3 +1,11 @@
+2008-10-28  Eric Blake  <ebb9@byu.net>
+
+	Allow m4sugar to be used without autom4te, such as in bison.
+	* lib/m4sugar/m4sugar.m4 (m4_text_wrap, m4_qlen): Document that
+	alternate escape sequences can be used.
+	(m4_text_box): Likewise.  Don't output quadrigraphs.
+	(m4_qdelta): Delete unused macro.
+
 2008-10-28  Paolo Bonzini  <bonzini@gnu.org>
 
 	Add m4_stack_foreach and m4_stack_foreach_lifo.
@@ -9,7 +17,7 @@
 	* tests/m4sugar.at (m4_stack_foreach): New test.
 
 2008-10-28  Paolo Bonzini  <bonzini@gnu.org>
-    
+
 	use a shell function for AC_TYPE_INTx_T
 	* lib/autoconf/types.m4 (_AC_TYPE_INT_BODY, _AC_TYPE_UNSIGNED_INT_BODY):
 	New.
