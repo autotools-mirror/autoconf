@@ -175,7 +175,7 @@ AC_DEFUN([_AC_CHECK_TYPE_NEW],
     [$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])]dnl
 [ac_func_[]_AC_LANG_ABBREV[]_check_type "$LINENO" "$1" "ac_Type" ]dnl
-["AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
+["AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
 AS_VAR_IF([ac_Type], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
@@ -859,7 +859,7 @@ AC_DEFUN([AC_CHECK_MEMBER],
 [AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])]dnl
 [ac_func_[]_AC_LANG_ABBREV[]_check_member "$LINENO" ]dnl
 [m4_bpatsubst([$1], [^\([^.]*\)\.\(.*\)], ["\1" "\2"]) "ac_Member" ]dnl
-["AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
+["AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
 AS_VAR_IF([ac_Member], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER

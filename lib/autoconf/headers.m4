@@ -160,7 +160,7 @@ m4_define([_AC_CHECK_HEADER_MONGREL],
   [$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])]dnl
 [ac_func_[]_AC_LANG_ABBREV[]_check_header_mongrel ]dnl
-["$LINENO" "$1" "ac_Header" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
+["$LINENO" "$1" "ac_Header" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_MONGREL
 
@@ -192,7 +192,7 @@ AC_DEFUN([_AC_CHECK_HEADER_NEW],
   [$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])]dnl
 [ac_func_[]_AC_LANG_ABBREV[]_check_header_new ]dnl
-["$LINENO" "$1" "ac_Header" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
+["$LINENO" "$1" "ac_Header" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_NEW
 

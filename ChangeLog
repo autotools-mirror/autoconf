@@ -1,5 +1,12 @@
 2008-10-28  Paolo Bonzini  <bonzini@gnu.org>
 
+	* lib/autoconf/general.m4 (AC_CHECK_DECL): Fix AS_ESCAPE usage.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL,
+	_AC_CHECK_HEADER_NEW): Likewise.
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW, AC_CHECK_MEMBER): Likewise.
+
+2008-10-28  Paolo Bonzini  <bonzini@gnu.org>
+
 	* lib/autoconf/types.m4 (_AC_CHECK_MEMBER_BODY): New.
 	(AC_CHECK_MEMBER): Define and use a shell function.
 

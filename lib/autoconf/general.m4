@@ -2742,7 +2742,7 @@ AC_DEFUN([AC_CHECK_DECL],
   [_$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])]dnl
 [ac_func_[]_AC_LANG_ABBREV[]_check_decl ]dnl
-["$LINENO" "$1" "ac_Symbol" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4], [""])])"
+["$LINENO" "$1" "ac_Symbol" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
 AS_VAR_IF([ac_Symbol], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Symbol])dnl
 ])# AC_CHECK_DECL
