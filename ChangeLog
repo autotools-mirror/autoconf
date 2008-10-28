@@ -1,3 +1,13 @@
+2008-10-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix parallel test execution output lossage.
+	* lib/autotest/general.m4 (_AT_CHECK): Truncate files to hold
+	standard output and standard error before the test, use append
+	mode for writing.
+	* THANKS: Update.
+	Caught by Bob Proulx' build daemons, analysis and suggested fix
+	by StÃ©phane Chazelas.
+
 2008-10-28  Eric Blake  <ebb9@byu.net>
 
 	Use m4_map_args in more places.
@@ -1277,7 +1287,7 @@
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Flatten
 	whitespace in $ac_config_files and $ac_config_headers.
 	* tests/torture.at (Parameterized AC_CONFIG_FILES): New test.
-	Report by Andreas Schwab and Per Øyvind Karlsen.
+	Report by Andreas Schwab and Per Ã˜yvind Karlsen.
 	* THANKS: Update.
 
 2008-07-30  Eric Blake  <ebb9@byu.net>
@@ -1949,7 +1959,7 @@
 	verbose compiler output, skip lines that set variables; gfortran
 	4.3 sets LIBRARY_PATH, COMPILER_PATH, COLLECT_GCC_OPTIONS.
 	* THANKS: Update.
-	Report by Vincent Lefèvre.
+	Report by Vincent LefÃ¨vre.
 
 2008-03-21  Eric Blake  <ebb9@byu.net>
 
@@ -3547,7 +3557,7 @@
 	the change.
 	* NEWS: Likewise.
 	* THANKS: Update.
-	Reported by Björn Lindqvist.
+	Reported by BjÃ¶rn Lindqvist.
 
 	Provide better short-circuiting operation.
 	* lib/m4sugar/m4sugar.m4 (m4_cond, m4_newline): New macros.

@@ -1893,16 +1893,22 @@ m4_define([AT_DIFF_STDOUT()],
 #
 #  ( $at_traceon; $1 ) >at-stdout 2>at-stder1
 #
+# Note that we truncate and append to the output files, to avoid losing
+# output from multiple concurrent processes, e.g., an inner testsuite
+# with parallel jobs.
 m4_define([_AT_CHECK],
 [{ $at_traceoff
 AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([$1])"])
 echo AT_LINE >"$at_check_line_file"
 
+: >"$at_stdout"
 if _AT_DECIDE_TRACEABLE([$1]); then
-  ( $at_traceon; $1 ) >"$at_stdout" 2>"$at_stder1"
+  : >"$at_stder1"
+  ( $at_traceon; $1 ) >>"$at_stdout" 2>>"$at_stder1"
   at_func_filter_trace $?
 else
-  ( :; $1 ) >"$at_stdout" 2>"$at_stderr"
+  : >"$at_stderr"
+  ( :; $1 ) >>"$at_stdout" 2>>"$at_stderr"
 fi
 at_status=$?
 at_failed=false
