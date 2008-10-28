@@ -259,10 +259,8 @@ m4_define([_m4_warn], [])
 # Report a MESSAGE to the user if the CATEGORY of warnings is enabled.
 m4_define([m4_warn],
 [_m4_warn([$1], [$2],
-m4_ifdef([m4_expansion_stack],
-	 [_m4_defn([m4_expansion_stack])
-m4_location[: the top level]]))dnl
-])
+m4_ifdef([_m4_expansion_stack],
+	 [m4_expansion_stack[]m4_location[: the top level]]))])
 
 
 
@@ -1231,19 +1229,26 @@ m4_define([_m4_divert(KILL)],           -1)
 m4_define([_m4_divert()],                0)
 
 
-# _m4_divert_n_stack
+# m4_divert_stack
 # ------------------
 # Print m4_divert_stack with newline prepended, if it's nonempty.
-m4_define([_m4_divert_n_stack],
-[m4_ifdef([m4_divert_stack], [
-_m4_defn([m4_divert_stack])])])
+m4_define([m4_divert_stack],
+[m4_stack_foreach_lifo([_m4_divert_stack], [m4_newline])])
+
+
+# m4_divert_stack_push(LOCATION, MACRO-NAME, DIVERSION-NAME)
+# -----------------------------------------------------------
+# Form an entry of the diversion stack and push it.
+m4_define([m4_divert_stack_push],
+[m4_pushdef([_m4_divert_stack], [[$1: $2: $3]])])
 
 
 # m4_divert(DIVERSION-NAME)
 # -------------------------
 # Change the diversion stream to DIVERSION-NAME.
 m4_define([m4_divert],
-[m4_define([m4_divert_stack], m4_location[: $0: $1]_m4_divert_n_stack)]dnl
+[m4_popdef([_m4_divert_stack])]dnl
+[m4_divert_stack_push(m4_location, [$0], [$1])]dnl
 [m4_builtin([divert], _m4_divert([$1]))])
 
 
@@ -1251,7 +1256,7 @@ m4_define([m4_divert],
 # ------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 m4_define([m4_divert_push],
-[m4_pushdef([m4_divert_stack], m4_location[: $0: $1]_m4_divert_n_stack)]dnl
+[m4_divert_stack_push(m4_location, [$0], [$1])]dnl
 [m4_pushdef([_m4_divert_diversion], [$1])]dnl
 [m4_builtin([divert], _m4_divert([$1]))])
 
@@ -1266,8 +1271,8 @@ m4_define([m4_divert_pop],
 	   [m4_fatal([too many m4_divert_pop])])]dnl
 [m4_if([$1], [], [],
        [$1], _m4_defn([_m4_divert_diversion]), [],
-       [m4_fatal([$0($1): diversion mismatch: ]_m4_divert_n_stack)])]dnl
-[_m4_popdef([m4_divert_stack], [_m4_divert_diversion])]dnl
+       [m4_fatal([$0($1): diversion mismatch: ]m4_divert_stack)])]dnl
+[_m4_popdef([_m4_divert_stack], [_m4_divert_diversion])]dnl
 [m4_builtin([divert],
 	    m4_ifdef([_m4_divert_diversion],
 		     [_m4_divert(_m4_defn([_m4_divert_diversion]))],
@@ -1568,35 +1573,44 @@ m4_define([m4_undivert],
 # performance penalty this is implemented only for m4_defun'd macros,
 # not for define'd macros.
 #
-# The scheme is simplistic: each time we enter an m4_defun'd macros,
-# we prepend its name in m4_expansion_stack, and when we exit the
-# macro, we remove it (thanks to pushdef/popdef).
+# Each time we enter an m4_defun'd macros, we add a definition in
+# _m4_expansion_stack, and when we exit the macro, we remove it (thanks
+# to pushdef/popdef).  m4_stack_foreach is used to print the expansion
+# stack in the rare cases when it's needed.
 #
 # In addition, we want to detect circular m4_require dependencies.
 # Each time we expand a macro FOO we define _m4_expanding(FOO); and
 # m4_require(BAR) simply checks whether _m4_expanding(BAR) is defined.
 
 
+# m4_expansion_stack
+# ------------------
+# Expands to the entire contents of the expansion stack, if not empty,
+# with a newline at its end.
+m4_define([m4_expansion_stack],
+[m4_ifdef([_m4_expansion_stack],
+	  [m4_stack_foreach_lifo([_m4_expansion_stack], [m4_n])])])
+
 # m4_expansion_stack_push(TEXT)
 # -----------------------------
+# Form an entry of the expansion stack and push it.
 m4_define([m4_expansion_stack_push],
-[m4_pushdef([m4_expansion_stack],
-	    [$1]m4_ifdef([m4_expansion_stack], [
-_m4_defn([m4_expansion_stack])]))])
+[m4_pushdef([_m4_expansion_stack], [[$1]])])
 
 
 # m4_expansion_stack_pop
 # ----------------------
+# Pop the topmost entry of the expansion stack.
 m4_define([m4_expansion_stack_pop],
-[m4_popdef([m4_expansion_stack])])
+[m4_popdef([_m4_expansion_stack])])
 
 
 # m4_expansion_stack_dump
 # -----------------------
 # Dump the expansion stack.
 m4_define([m4_expansion_stack_dump],
-[m4_ifdef([m4_expansion_stack],
-	  [m4_errprintn(_m4_defn([m4_expansion_stack]))])dnl
+[m4_ifdef([_m4_expansion_stack],
+	  [m4_errprint(m4_expansion_stack)])dnl
 m4_errprintn(m4_location[: the top level])])
 
 
@@ -1626,7 +1640,7 @@ m4_define([_m4_divert(GROW)],       10000)
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and m4_defn overhead.
 m4_define([_m4_defun_pro],
-m4_do([[m4_ifdef([m4_expansion_stack], [], [_m4_defun_pro_outer[]])]],
+m4_do([[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_pro_outer[]])]],
       [[m4_expansion_stack_push(_m4_defn(
 	  [m4_location($1)])[: $1 is expanded from...])]],
       [[m4_pushdef([_m4_expanding($1)])]]))
@@ -1645,7 +1659,7 @@ m4_define([_m4_defun_pro_outer],
 m4_define([_m4_defun_epi],
 m4_do([[_m4_popdef([_m4_expanding($1)])]],
       [[m4_expansion_stack_pop()]],
-      [[m4_ifdef([m4_expansion_stack], [], [_m4_defun_epi_outer[]])]],
+      [[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_epi_outer[]])]],
       [[m4_provide([$1])]]))
 
 m4_define([_m4_defun_epi_outer],
@@ -1753,7 +1767,7 @@ m4_define([m4_before],
 # If NAME-TO-CHECK has never been expanded (actually, if it is not
 # m4_provide'd), expand BODY-TO-EXPAND *before* the current macro
 # expansion.  Once expanded, emit it in _m4_divert_dump.  Keep track
-# of the m4_require chain in m4_expansion_stack.
+# of the m4_require chain in _m4_expansion_stack.
 #
 # The normal cases are:
 #
@@ -1937,11 +1951,12 @@ _m4_define_cr_not([symbols1])
 _m4_define_cr_not([symbols2])
 
 
-# m4_newline
-# ----------
-# Expands to a newline.  Exists for formatting reasons.
+# m4_newline([STRING])
+# --------------------
+# Expands to a newline, possibly followed by STRING.  Exists mostly for
+# formatting reasons.
 m4_define([m4_newline], [
-])
+$1])
 
 
 # m4_re_escape(STRING)
@@ -2937,5 +2952,5 @@ m4_divert_push([KILL])
 # Check the divert push/pop perfect balance.
 m4_wrap([m4_divert_pop([])
 	 m4_ifdef([_m4_divert_diversion],
-	   [m4_fatal([$0: unbalanced m4_divert_push:]_m4_divert_n_stack)])[]])
+	   [m4_fatal([$0: unbalanced m4_divert_push:]m4_divert_stack)])[]])
 ])

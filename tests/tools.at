@@ -165,7 +165,7 @@ do
   AT_CHECK([mkdir "$dir" "$cachedir" "$TMPDIR" && touch "$file" || exit 77])
 
   cat >"$file" <<'END'
-[m4@&t@_include(foo.m4)
+[m4@&t@_init[]m4@&t@_include(foo.m4)
 m4@&t@_divert(0)d@&t@nl
 FOO]
 END
@@ -186,7 +186,7 @@ END
   # This exercises a slightly different code path and will catch an open with
   # trailing whitespace:
   cat >"$file" <<'END'
-[m4@&t@_include(foo.m4)
+[m4@&t@_init[]m4@&t@_include(foo.m4)
 m4@&t@_pattern_forbid([^bar$])
 m4@&t@_divert(0)d@&t@nl
 FOO]
@@ -197,7 +197,7 @@ END
   AT_CHECK([grep 'possibly undefined macro' stderr], [], [ignore])
 
   cat >"$file" <<'END'
-[m4@&t@_include(foo.m4)
+[m4@&t@_init[]m4@&t@_include(foo.m4)
 m4@&t@_divert(0)d@&t@nl]
 END
   rm -rf "$file.m4f"
@@ -434,7 +434,7 @@ AT_CLEANUP
 AT_SETUP([autoconf: the empty token])
 
 AT_DATA_M4SH([configure.ac],
-[[m4_pattern_allow([^foo$])
+[[m4_init[]m4_pattern_allow([^foo$])
 m4_divert([0])dnl
  line that begins with a space
 ]])

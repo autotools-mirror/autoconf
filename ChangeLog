@@ -1,3 +1,29 @@
+2008-10-29  Paolo Bonzini  <bonzini@gnu.org>
+
+	Rewrite handling of diversion and expansion stack.
+	* NEWS: Document stricter requirement on m4_init.
+	* lib/m4sugar/m4sugar.m4 (m4_divert_stack): New, replacing
+	_m4_divert_n_stack.
+	(_m4_divert_stack_push): New.
+	(m4_divert): Use _m4_divert_stack_push and replace m4_define with
+	m4_popdef.
+	(m4_divert_push): Use _m4_divert_stack_push.
+	(m4_divert_pop): Use m4_divert_stack instead of _m4_divert_n_stack,
+	pop _m4_divert_stack instead of m4_divert_stack.
+	(m4_expansion_stack): New.  Update comment above it.
+	(m4_expansion_stack_push, m4_expansion_stack_pop): Work on
+	_m4_expansion_stack instead of m4_expansion_stack.
+	(m4_expansion_stack_dump): Check presence of _m4_expansion_stack
+	instead of m4_expansion_stack.  Use m4_expansion_stack's expansion
+	instead of the definition, and compensate for the trailing newline
+	in the expansion.
+	(m4_warn, _m4_defun_pro, _m4_defun_epi): Check presence of
+	_m4_expansion_stack instead of m4_expansion_stack.
+	(m4_newline): Expand first argument after the newline.
+	(m4_init): Use m4_divert_stack instead of _m4_divert_n_stack,
+	* tests/m4sugar.at (m4_append, m4_text_wrap): Invoke m4_init.
+	* tests/tools.at (whitespace in file names, the empty token): Likewise.
+
 2008-10-28  Eric Blake  <ebb9@byu.net>
 
 	Reduce forks while searching for better shell.

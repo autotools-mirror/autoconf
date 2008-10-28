@@ -513,14 +513,15 @@ one, two, three
 ]])
 
 AT_DATA_M4SUGAR([script.4s],
-[[m4_append_uniq([str], [a], [ ])
+[[m4_init[]dnl
+m4_append_uniq([str], [a], [ ])
 m4_append_uniq([str], [a b], [ ])
 m4_divert([0])dnl
 str
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 0, [[a a b
-]], [[script.4s:2: warning: m4@&t@_append_uniq: `a b' contains ` '
+]], [[script.4s:3: warning: m4@&t@_append_uniq: `a b' contains ` '
 ]])
 
 AT_CLEANUP
@@ -588,7 +589,7 @@ AT_SETUP([m4@&t@_text_wrap])
 # m4-listification.
 
 AT_DATA_M4SUGAR([script.4s],
-[[m4_divert([0])dnl
+[[m4_init[]m4_divert([0])dnl
 m4_text_wrap([Short string */], [   ], [/* ], 20)
 
 m4_text_wrap([Much longer string */], [   ], [/* ], 20)
