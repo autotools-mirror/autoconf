@@ -539,8 +539,8 @@ m4_define([_m4_bpatsubsts],
 # involved in the implementation of m4_stack_foreach and m4_curry.
 m4_define([m4_copy],
 [m4_ifdef([$2], [m4_fatal([$0: won't overwrite defined macro: $2])],
-	  [m4_stack_foreach([$1], [m4_curry([m4_pushdef], [$2])])m4_ifdef([m4_location($1)],
-[m4_define([m4_location($2)], m4_location)])])])
+	  [m4_stack_foreach([$1], [m4_curry([m4_pushdef], [$2])])])]dnl
+[m4_ifdef([m4_location($1)], [m4_define([m4_location($2)], m4_location)])])
 
 
 # m4_define_default(MACRO, VALUE)
@@ -596,6 +596,24 @@ m4_define([m4_defn],
        [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
 
 
+# m4_dumpdef(NAME...)
+# -------------------
+# In m4 1.4.x, dumpdef writes to the current debugfile, rather than
+# stderr.  This in turn royally confuses autom4te; so we follow the
+# lead of newer m4 and always dump to stderr.  Unlike the original,
+# this version requires an argument, since there is no convenient way
+# in m4 1.4.x to grab the names of all defined macros.  Newer m4
+# always dumps to stderr, regardless of the current debugfile; it also
+# provides m4symbols as a way to grab all current macro names.  But
+# dumpdefs is not frequently called, so we don't need to worry about
+# conditionally using these newer features.
+m4_define([m4_dumpdef],
+[m4_if([$#], [0], [m4_fatal([$0: missing argument])],
+       [$#], [1], [m4_ifdef([$1], [m4_errprintn(
+  [$1:	]m4_dquote(_m4_defn([$1])))], [m4_fatal([$0: undefined macro: $1])])],
+       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
+
+
 # m4_dumpdefs(NAME)
 # -----------------
 # Similar to `m4_dumpdef(NAME)', but if NAME was m4_pushdef'ed, display its
@@ -603,8 +621,7 @@ m4_define([m4_defn],
 #
 # This macro cheats, because it relies on the current definition of NAME
 # while the second argument of m4_stack_foreach_lifo is evaluated (which
-# would be undefined according to the API).  If m4_dumpdef is ever rewritten
-# not to use the builtin, revisit this.
+# would be undefined according to the API).
 m4_define([m4_dumpdefs],
 [m4_stack_foreach_lifo([$1], [m4_dumpdef([$1])m4_ignore])])
 

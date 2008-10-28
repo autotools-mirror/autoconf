@@ -10272,7 +10272,6 @@ define your own macros into these namespaces.
 @msindex{decr}
 @msindex{define}
 @msindex{divnum}
-@msindex{dumpdef}
 @msindex{errprint}
 @msindex{esyscmd}
 @msindex{eval}
@@ -10304,7 +10303,6 @@ The list of macros unchanged from M4, except for their name, is:
 @item m4_decr
 @item m4_define
 @item m4_divnum
-@item m4_dumpdef
 @item m4_errprint
 @item m4_esyscmd
 @item m4_eval
@@ -10402,6 +10400,19 @@ m4_divert_pop()m4_divert_push([@var{diversion}])
 @noindent
 @xref{Diversion support}, for more details about the use of the
 diversion stack.
+@end defmac
+
+@defmac m4_dumpdef (@var{name}@dots{})
+@defmacx m4_dumpdefs (@var{name})
+@msindex{dumpdef}
+@msindex{dumpdefs}
+@code{m4_dumpdef} is like the M4 builtin, except that this version
+requires at least one argument, output always goes to standard error
+rather than the current debug file, and an error is issued if any
+@var{name} is undefined.  @code{m4_dumpdefs} is a convenience macro that
+takes exactly one @var{name}, and calls @code{m4_dumpdef} for all of the
+@code{m4_pushdef} stack of definitions, starting with the current, and
+silently does nothing if @var{name} is undefined.
 @end defmac
 
 @defmac m4_exit (@var{exit-status})

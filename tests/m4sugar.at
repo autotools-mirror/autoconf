@@ -151,6 +151,42 @@ a b c
 AT_CLEANUP
 
 
+## ------------ ##
+## m4_dumpdef.  ##
+## ------------ ##
+
+AT_SETUP([m4@&t@_dumpdef])
+
+AT_KEYWORDS([m4@&t@_dumpdefs])
+
+# Ensure that m4sugar dies when dereferencing undefined macros.
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_define([good], [yep])
+m4_dumpdef([good], [oops])
+]])
+
+AT_CHECK_M4SUGAR([-o-], 1, [], [stderr])
+AT_CHECK([grep '^good:	\[[yep\]]$' stderr], [0], [ignore])
+AT_CHECK([grep 'm4@&t@_dumpdef: undefined.*oops' stderr], [0], [ignore])
+
+# Check that pushdef stacks can be dumped.
+AT_CHECK_M4SUGAR_TEXT([[m4_divert_push([KILL])
+m4_pushdef([a], [1])
+m4_pushdef([a], [2])
+m4_dumpdef([a])
+m4_dumpdefs([a])
+m4_dumpdefs([oops])
+m4_divert_pop([KILL])dnl
+]], [],
+[[a:	[2]
+a:	[2]
+a:	[1]
+]])
+
+AT_CLEANUP
+
+
 ## --------- ##
 ## m4_warn.  ##
 ## --------- ##

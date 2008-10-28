@@ -1,5 +1,15 @@
 2008-10-28  Eric Blake  <ebb9@byu.net>
 
+	Override m4 1.4.x dumpdef, as it breaks autom4te.
+	* lib/m4sugar/m4sugar.m4 (m4_dumpdef): New implementation.
+	(m4_copy): Formatting touchup.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_dumpdef>: Mention
+	semantic differences as well as m4_dumpdefs.
+	* NEWS: Likewise.
+	* tests/m4sugar.at (m4@&t@_dumpdef): New test.
+
+2008-10-28  Eric Blake  <ebb9@byu.net>
+
 	Allow m4sugar to be used without autom4te, such as in bison.
 	* lib/m4sugar/m4sugar.m4 (m4_text_wrap, m4_qlen): Document that
 	alternate escape sequences can be used.
