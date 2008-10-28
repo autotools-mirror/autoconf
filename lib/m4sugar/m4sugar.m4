@@ -593,7 +593,7 @@ m4_define([m4_defn],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_defn([$1])],
 			    [m4_fatal([$0: undefined macro: $1])])],
-       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
+       [m4_map_args([$0], $@)])])
 
 
 # m4_dumpdef(NAME...)
@@ -611,7 +611,7 @@ m4_define([m4_dumpdef],
 [m4_if([$#], [0], [m4_fatal([$0: missing argument])],
        [$#], [1], [m4_ifdef([$1], [m4_errprintn(
   [$1:	]m4_dquote(_m4_defn([$1])))], [m4_fatal([$0: undefined macro: $1])])],
-       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
+       [m4_map_args([$0], $@)])])
 
 
 # m4_dumpdefs(NAME)
@@ -638,7 +638,7 @@ m4_define([m4_popdef],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_popdef([$1])],
 			    [m4_fatal([$0: undefined macro: $1])])],
-       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
+       [m4_map_args([$0], $@)])])
 
 
 # m4_shiftn(N, ...)
@@ -699,7 +699,7 @@ m4_define([m4_undefine],
 [m4_if([$#], [0], [[$0]],
        [$#], [1], [m4_ifdef([$1], [_m4_undefine([$1])],
 			    [m4_fatal([$0: undefined macro: $1])])],
-       [m4_foreach([_m4_macro], [$@], [$0(_m4_defn([_m4_macro]))])])])
+       [m4_map_args([$0], $@)])])
 
 # _m4_wrap(PRE, POST)
 # -------------------
@@ -2144,9 +2144,9 @@ m4_define([m4_combine],
        [m4_pushdef([m4_Separator], [m4_define([m4_Separator],
 				    _m4_defn([m4_echo]))])]]dnl
 [[m4_foreach([m4_Prefix], [$2],
-	     [m4_foreach([m4_Suffix], ]m4_dquote(m4_dquote(m4_shift3($@)))[,
-	[m4_Separator([$1])[]_m4_defn([m4_Prefix])[$3]_m4_defn(
-						      [m4_Suffix])])])]]dnl
+   [m4_map_args([m4_Separator([$1])]m4_dquote(_m4_defn(
+	 [m4_Prefix]))[[$3]m4_echo],
+		]]m4_dquote(m4_dquote(m4_shift3($@)))[[)])]]dnl
 [[_m4_popdef([m4_Separator])])])
 
 

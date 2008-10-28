@@ -1,5 +1,12 @@
 2008-10-28  Eric Blake  <ebb9@byu.net>
 
+	Use m4_map_args in more places.
+	* lib/m4sugar/m4sugar.m4 (m4_defn, m4_dumpdef, m4_popdef)
+	(m4_undefine, m4_combine): Use m4_map_args, rather than
+	m4_foreach.
+
+2008-10-28  Eric Blake  <ebb9@byu.net>
+
 	Override m4 1.4.x dumpdef, as it breaks autom4te.
 	* lib/m4sugar/m4sugar.m4 (m4_dumpdef): New implementation.
 	(m4_copy): Formatting touchup.
