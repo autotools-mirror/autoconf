@@ -534,10 +534,10 @@ m4_define([_m4_bpatsubsts],
 # definition.
 #
 # Some macros simply can't be renamed with this method: namely, anything
-# involved in the implementation of m4_stack_foreach and m4_curry.
+# involved in the implementation of m4_stack_foreach_sep.
 m4_define([m4_copy],
 [m4_ifdef([$2], [m4_fatal([$0: won't overwrite defined macro: $2])],
-	  [m4_stack_foreach([$1], [m4_curry([m4_pushdef], [$2])])])]dnl
+	  [m4_stack_foreach_sep([$1], [m4_pushdef([$2],], [)])])]dnl
 [m4_ifdef([m4_location($1)], [m4_define([m4_location($2)], m4_location)])])
 
 
@@ -1192,13 +1192,8 @@ m4_define([m4_map_args_pair],
 # the active definition of MACRO (it will not be the topmost, and may not
 # be the one passed to FUNC either).
 #
-# The recursive worker _m4_stack_reverse destructively swaps the order of a
-# stack.  We use a temporary stack, and swap directions twice.  Some macros
-# simply can't be examined with this method: namely, anything involved
-# in the implementation of _m4_stack_reverse.
-m4_define([_m4_stack_reverse],
-[m4_ifdef([$1], [m4_pushdef([$2], _m4_defn([$1]))$3[]_m4_popdef([$1])$0($@)])])
-
+# Some macros simply can't be examined with this method: namely,
+# anything involved in the implementation of _m4_stack_reverse.
 m4_define([m4_stack_foreach],
 [_m4_stack_reverse([$1], [m4_tmp-$1])]dnl
 [_m4_stack_reverse([m4_tmp-$1], [$1], [$2(_m4_defn([m4_tmp-$1]))])])
@@ -1206,6 +1201,40 @@ m4_define([m4_stack_foreach],
 m4_define([m4_stack_foreach_lifo],
 [_m4_stack_reverse([$1], [m4_tmp-$1], [$2(_m4_defn([m4_tmp-$1]))])]dnl
 [_m4_stack_reverse([m4_tmp-$1], [$1])])
+
+# m4_stack_foreach_sep(MACRO, PRE, POST, SEP)
+# m4_stack_foreach_sep_lifo(MACRO, PRE, POST, SEP)
+# ------------------------------------------------
+# Similar to m4_stack_foreach and m4_stack_foreach_lifo, in that every
+# definition of a pushdef stack will be visited.  But rather than
+# passing the definition as a single argument to a macro, this variant
+# expands the concatenation of PRE[]definition[]POST, and expands SEP
+# between consecutive expansions.  Note that m4_stack_foreach([a], [b])
+# is equivalent to m4_stack_foreach_sep([a], [b(], [)]).
+m4_define([m4_stack_foreach_sep],
+[_m4_stack_reverse([$1], [m4_tmp-$1])]dnl
+[_m4_stack_reverse([m4_tmp-$1], [$1], [$2[]_m4_defn([m4_tmp-$1])$3], [$4])])
+
+m4_define([m4_stack_foreach_sep_lifo],
+[_m4_stack_reverse([$1], [m4_tmp-$1], [$2[]_m4_defn([m4_tmp-$1])$3], [$4])]dnl
+[_m4_stack_reverse([m4_tmp-$1], [$1])])
+
+
+# _m4_stack_reverse(OLD, NEW, ACTION, SEP)
+# ----------------------------------------
+# A recursive worker for pushdef stack manipulation.  Destructively
+# copy the OLD stack into the NEW, and expanding ACTION for each
+# iteration.  After the first iteration, SEP is promoted to the front
+# of ACTION.  The current definition is examined after the NEW has
+# been pushed but before OLD has been popped; this order is important,
+# as ACTION is permitted to operate on either _m4_defn([OLD]) or
+# _m4_defn([NEW]).  Since the operation is destructive, this macro is
+# generally used twice, with a temporary macro name holding the
+# swapped copy.
+m4_define([_m4_stack_reverse],
+[m4_ifdef([$1], [m4_pushdef([$2],
+  _m4_defn([$1]))$3[]_m4_popdef([$1])$0([$1], [$2], [$4$3])])])
+
 
 
 ## --------------------------- ##

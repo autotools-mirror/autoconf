@@ -1,3 +1,13 @@
+2008-10-29  Eric Blake  <ebb9@byu.net>
+
+	Add m4_stack_foreach_sep.
+	* lib/m4sugar/m4sugar.m4 (m4_stack_foreach_sep)
+	(m4_stack_foreach_sep_lifo): New macros.
+	(_m4_stack_reverse): Adjust prototype, to support it.
+	(m4_copy): Use fewer macros.
+	* tests/m4sugar.at (m4@&t@_stack_foreach): Rename...
+	(m4@&t@_stack): ...and add m4_stack_foreach_sep tests.
+
 2008-10-29  Bruno Haible  <bruno@clisp.org>
 
 	Mention Sun WorkShop 6.2 OpenMP bug.
