@@ -238,14 +238,19 @@ dnl Remove any tests from suggested that are also required
 
 dnl Unfortunately, $as_me isn't available here.
     AS_IF([test x$as_have_required = xno],
-      [AS_ECHO("m4_text_wrap([This script requires a shell more modern than
-all the shells that I found on your system.  Please tell]
-m4_defn([m4_PACKAGE_BUGREPORT])
-m4_ifset([AC_PACKAGE_BUGREPORT], [m4_if(m4_defn([m4_PACKAGE_BUGREPORT]),
-m4_defn([AC_PACKAGE_BUGREPORT]), [], [ and m4_defn([AC_PACKAGE_BUGREPORT])])])
+      [AS_ECHO(["$[]0: This script requires a shell more modern than all"])
+  AS_ECHO(["$[]0: the shells that I found on your system."])
+  if test x${ZSH_VERSION+set} = xset ; then
+    AS_ECHO(["$[]0: In particular, zsh $ZSH_VERSION has bugs and should"])
+    AS_ECHO(["$[]0: be upgraded to zsh 4.3.4 or later."])
+  else
+    AS_ECHO("m4_text_wrap([Please tell ]_m4_defn([m4_PACKAGE_BUGREPORT])
+m4_ifset([AC_PACKAGE_BUGREPORT], [m4_if(_m4_defn([m4_PACKAGE_BUGREPORT]),
+_m4_defn([AC_PACKAGE_BUGREPORT]), [], [and _m4_defn([AC_PACKAGE_BUGREPORT])])])
 [about your system, including any error possibly output before this message.
 Then install a modern shell, or manually run the script under such a
 shell if you do have one.], [$[]0: ], [], [62])")
+  fi
       AS_EXIT(1)])])
 fi
 _m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL

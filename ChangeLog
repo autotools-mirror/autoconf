@@ -1,5 +1,10 @@
 2008-10-29  Eric Blake  <ebb9@byu.net>
 
+	Mention known zsh bug.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Recommend zsh
+	version known to work.
+	Suggested by Paolo Bonzini.
+
 	Document current beta-quality status.
 	* configure.ac: Reflect fact that change to git-version-gen
 	produces -, but not always a letter, on non-release builds.
