@@ -6577,6 +6577,11 @@ the variable @code{OPENMP_FFLAGS} or @code{OPENMP_FCFLAGS},
 respectively.  Similar remarks as for C hold, except that
 @code{CPPFLAGS} is not used for Fortran, and no preprocessor macro
 signals OpenMP support.
+
+For portability, it is best to avoid spaces between @samp{#} and
+@samp{pragma omp}.  That is, write @samp{#pragma omp}, not
+@samp{# pragma omp}.  The Sun WorkShop 6.2 C compiler chokes on the
+latter.
 @end defmac
 
 @node C Compiler
