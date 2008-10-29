@@ -1,6 +1,15 @@
 2008-10-29  Eric Blake  <ebb9@byu.net>
 
-	Mention known zsh bug.
+	Fix LINENO detection to work around bash and pdksh limitations.
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_WORKS): Enhance the test, so
+	that we can choose which of two tests to trust.
+	(_AS_RUN): Set flag when alternate shell is running.
+	(_AS_DETECT_EXPAND): New macro.
+	(_AS_DETECT_BETTER_SHELL): Use it to massage LINENO tests.
+
+2008-10-29  Eric Blake  <ebb9@byu.net>
+
+	Mention proper fix for zsh users.
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Recommend zsh
 	version known to work.
 	Suggested by Paolo Bonzini.

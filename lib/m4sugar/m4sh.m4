@@ -153,6 +153,22 @@ m4_define([AS_COPYRIGHT],
 $1], [^], [@%:@ ])])])
 
 
+# _AS_DETECT_EXPAND(VAR, SET)
+# ---------------------------
+# Assign the contents of VAR from the contents of SET, expanded in such
+# a manner that VAR can be passed to _AS_RUN.  In order to make
+# _AS_LINENO_WORKS operate correctly, we must specially handle the
+# first instance of $LINENO within any line being expanded (the first
+# instance is important to tests using the current shell, leaving
+# remaining instances for tests using a candidate shell).  Bash loses
+# track of line numbers if a double quote contains a newline, hence,
+# we must piece-meal the assignment of VAR such that $LINENO expansion
+# occurs in a single line.
+m4_define([_AS_DETECT_EXPAND],
+[$1="m4_bpatsubst(m4_dquote(AS_ESCAPE(m4_expand(m4_set_contents([$2], [
+])))), [\\\$LINENO\(.*\)$], [";$1=$$1$LINENO;$1=$$1"\1])"])
+
+
 # _AS_DETECT_REQUIRED(TEST)
 # -------------------------
 # Refuse to execute under a shell that does not pass the given TEST.
@@ -198,10 +214,8 @@ dnl Remove any tests from suggested that are also required
 [m4_pushdef([AS_EXIT], [exit m4_default([$1], 1)])]dnl
 [if test "x$CONFIG_SHELL" = x; then
   as_bourne_compatible="AS_ESCAPE(m4_expand([_AS_BOURNE_COMPATIBLE]))"
-  as_required="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_REQUIRED_BODY],
-    m4_newline)))"
-  as_suggested="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_SUGGESTED_BODY],
-    m4_newline)))"
+  _AS_DETECT_EXPAND([as_required], [_AS_DETECT_REQUIRED_BODY])
+  _AS_DETECT_EXPAND([as_suggested], [_AS_DETECT_SUGGESTED_BODY])
   AS_IF([_AS_RUN(["$as_required"])],
 	[as_have_required=yes],
 	[as_have_required=no])
@@ -363,8 +377,9 @@ m4_default_quoted([$4], [M4SH-INIT-FN]))])])
 # ----------------------
 # Run TEST under the current shell (if one parameter is used)
 # or under the given SHELL, protecting it from syntax errors.
+# Set as_run in order to assist _AS_LINENO_WORKS.
 m4_define([_AS_RUN],
-[m4_ifval([$2], [{ $as_echo "$as_bourne_compatible"$1 | ($2); }],
+[m4_ifval([$2], [{ $as_echo "$as_bourne_compatible"$1 | as_run=a $2; }],
 		[(eval $1)]) 2>/dev/null])
 
 
@@ -956,12 +971,22 @@ m4_defun([_AS_ME_PREPARE],
 # cause "bash -c '_ASLINENO_WORKS'" to fail (with Bash 2.05, anyway),
 # but that bug is irrelevant to our use of LINENO.  We can't use
 # AS_VAR_ARITH, as this is expanded prior to shell functions.
+#
+# Testing for LINENO support is hard; we use _AS_LINENO_WORKS inside
+# _AS_RUN, which sometimes eval's its argument (pdksh gives false
+# negatives if $LINENO is expanded by eval), and sometimes passes the
+# argument to another shell (if the current shell supports LINENO,
+# then expanding $LINENO prior to the string leads to false
+# positives).  Hence, we perform two tests, and coordinate with
+# _AS_DETECT_EXPAND (which ensures that only the first of two LINENO
+# is expanded in advance) and _AS_RUN (which sets $as_run to 'a' when
+# handing the test to another shell), so that we know which test to
+# trust.
 m4_define([_AS_LINENO_WORKS],
-[
-  as_lineno_1=$LINENO
-  as_lineno_2=$LINENO
-  test "x$as_lineno_1" != "x$as_lineno_2" &&
-  test "x`expr $as_lineno_1 + 1`" = "x$as_lineno_2"])
+[  as_lineno_1=$LINENO as_lineno_1a=$LINENO
+  as_lineno_2=$LINENO as_lineno_2a=$LINENO
+  eval 'test "x$as_lineno_1'$as_run'" != "x$as_lineno_2'$as_run'" &&
+  test "x`expr $as_lineno_1'$as_run' + 1`" = "x$as_lineno_2'$as_run'"'])
 
 
 # _AS_LINENO_PREPARE
