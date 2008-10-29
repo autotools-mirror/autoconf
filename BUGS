@@ -24,8 +24,14 @@ and use with caution an Autoconf with ``Important bugs''.
 
 * Status
 
-                    /*--------------------------.
-                    | Sane for full scale use.  |
-                    `--------------------------*/
+                 /*------------------------------------.
+                 | New features need further testing.  |
+                 `------------------------------------*/
 
-* No known serious or important bugs.
+* Now that configure depends on shell functions, it is possible that
+  configure scripts may fail to run on old platforms that lack a shell
+  with proper function support.
+
+* Cygwin has known problems with named fifos that cause failures when
+  attempting parallel tests in an autotest suite.  It is possible that
+  other platforms also have difficulty with parallel testing.

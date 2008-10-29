@@ -236,11 +236,16 @@ dnl Remove any tests from suggested that are also required
 	export CONFIG_SHELL
 	exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}])
 
+dnl Unfortunately, $as_me isn't available here.
     AS_IF([test x$as_have_required = xno],
-      [echo This script requires a shell more modern than all the
-      echo shells that I found on your system.  Please install a
-      echo modern shell, or manually run the script under such a
-      echo shell if you do have one.
+      [AS_ECHO("m4_text_wrap([This script requires a shell more modern than
+all the shells that I found on your system.  Please tell]
+m4_defn([m4_PACKAGE_BUGREPORT])
+m4_ifset([AC_PACKAGE_BUGREPORT], [m4_if(m4_defn([m4_PACKAGE_BUGREPORT]),
+m4_defn([AC_PACKAGE_BUGREPORT]), [], [ and m4_defn([AC_PACKAGE_BUGREPORT])])])
+[about your system, including any error possibly output before this message.
+Then install a modern shell, or manually run the script under such a
+shell if you do have one.], [$[]0: ], [], [62])")
       AS_EXIT(1)])])
 fi
 _m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL

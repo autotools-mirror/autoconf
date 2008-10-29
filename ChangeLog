@@ -1,5 +1,14 @@
 2008-10-29  Eric Blake  <ebb9@byu.net>
 
+	Document current beta-quality status.
+	* configure.ac: Reflect fact that change to git-version-gen
+	produces -, but not always a letter, on non-release builds.
+	* BUGS: Mention known issues.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Ask for help in
+	debugging platforms with deficient shells.
+
+2008-10-29  Eric Blake  <ebb9@byu.net>
+
 	Alter signature of AS_INIT_GENERATED.
 	* lib/m4sugar/m4sh.m4 (AS_INIT_GENERATED): Add parameters, and
 	manage here-doc and chmod in place.  This also allows future
