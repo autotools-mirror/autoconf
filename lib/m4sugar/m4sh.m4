@@ -158,9 +158,7 @@ $1], [^], [@%:@ ])])])
 # Refuse to execute under a shell that does not pass the given TEST.
 # Does not do AS_REQUIRE for the better-shell detection code.
 m4_defun([_AS_DETECT_REQUIRED],
-[m4_set_add([_AS_DETECT_REQUIRED_BODY],
-	   [($1) || AS_EXIT(1)
-])])
+[m4_set_add([_AS_DETECT_REQUIRED_BODY], [$1 || AS_EXIT])])
 
 
 # _AS_DETECT_SUGGESTED(TEST)
@@ -168,9 +166,7 @@ m4_defun([_AS_DETECT_REQUIRED],
 # Prefer to execute under a shell that passes the given TEST.
 # Does not do AS_REQUIRE for the better-shell detection code.
 m4_defun([_AS_DETECT_SUGGESTED],
-[m4_set_add([_AS_DETECT_SUGGESTED_BODY],
-	   [($1) || AS_EXIT(1)
-])])
+[m4_set_add([_AS_DETECT_SUGGESTED_BODY], [$1 || AS_EXIT])])
 
 
 # _AS_DETECT_SUGGESTED_PRUNE(TEST)
@@ -195,13 +191,17 @@ m4_define([_AS_DETECT_SUGGESTED_PRUNE],
 # FIXME: The code should test for the OSF bug described in
 # <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
 #
+# This code is run outside any trap 0 context, hence we can simplify AS_EXIT.
 m4_defun([_AS_DETECT_BETTER_SHELL],
 dnl Remove any tests from suggested that are also required
 [m4_set_map([_AS_DETECT_SUGGESTED_BODY], [_AS_DETECT_SUGGESTED_PRUNE])]dnl
+[m4_pushdef([AS_EXIT], [exit m4_default([$1], 1)])]dnl
 [if test "x$CONFIG_SHELL" = x; then
   as_bourne_compatible="AS_ESCAPE(m4_expand([_AS_BOURNE_COMPATIBLE]))"
-  as_required="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_REQUIRED_BODY])))"
-  as_suggested="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_SUGGESTED_BODY])))"
+  as_required="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_REQUIRED_BODY],
+    m4_newline)))"
+  as_suggested="AS_ESCAPE(m4_expand(m4_set_contents([_AS_DETECT_SUGGESTED_BODY],
+    m4_newline)))"
   AS_IF([_AS_RUN(["$as_required"])],
 	[as_have_required=yes],
 	[as_have_required=no])
@@ -243,7 +243,7 @@ dnl Remove any tests from suggested that are also required
       echo shell if you do have one.
       AS_EXIT(1)])])
 fi
-])# _AS_DETECT_BETTER_SHELL
+_m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL
 
 
 # _AS_PREPARE
