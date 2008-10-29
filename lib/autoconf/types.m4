@@ -647,9 +647,9 @@ AC_DEFUN([AC_TYPE_UINT64_T], [_AC_TYPE_UNSIGNED_INT(64)])
 # Shell function body for _AC_TYPE_INT.
 m4_define([_AC_TYPE_INT_BODY],
 [  AS_LINENO_PUSH([$[]1])
-  AC_CACHE_CHECK([for int$[]2${ac_nonexistent_var}_t], [$[]3],
+  AC_CACHE_CHECK([for int$[]2_t], [$[]3],
     [AS_VAR_SET([$[]3], [no])
-     for ac_type in int$[]2""_t 'int' 'long int' \
+     for ac_type in int$[]2_t 'int' 'long int' \
 	 'long long int' 'short int' 'signed char'; do
        AC_COMPILE_IFELSE(
 	 [AC_LANG_BOOL_COMPILE_TRY(
@@ -661,7 +661,7 @@ m4_define([_AC_TYPE_INT_BODY],
 	       [($ac_type) (((($ac_type) 1 << ($[]2 - 2)) - 1) * 2 + 1)
 		 < ($ac_type) (((($ac_type) 1 << ($[]2 - 2)) - 1) * 2 + 2)])],
 	    [],
-	    [AS_CASE([$ac_type], [int$[]2""_t],
+	    [AS_CASE([$ac_type], [int$[]2_t],
 	       [AS_VAR_SET([$[]3], [yes])],
 	       [AS_VAR_SET([$[]3], [$ac_type])])])])
        AS_VAR_IF([$[]3], [no], [], [break])
@@ -697,15 +697,15 @@ esac
 # Shell function body for _AC_TYPE_UNSIGNED_INT.
 m4_define([_AC_TYPE_UNSIGNED_INT_BODY],
 [  AS_LINENO_PUSH([$[]1])
-  AC_CACHE_CHECK([for uint$[]2${ac_nonexistent_var}_t], $[]3,
+  AC_CACHE_CHECK([for uint$[]2_t], $[]3,
     [AS_VAR_SET([$[]3], [no])
-     for ac_type in uint$[]2""_t 'unsigned int' 'unsigned long int' \
+     for ac_type in uint$[]2_t 'unsigned int' 'unsigned long int' \
 	 'unsigned long long int' 'unsigned short int' 'unsigned char'; do
        AC_COMPILE_IFELSE(
 	 [AC_LANG_BOOL_COMPILE_TRY(
 	    [AC_INCLUDES_DEFAULT],
 	    [($ac_type) -1 >> ($[]2 - 1) == 1])],
-	 [AS_CASE([$ac_type], [uint$[]2""_t],
+	 [AS_CASE([$ac_type], [uint$[]2_t],
 	    [AS_VAR_SET([$[]3], [yes])],
 	    [AS_VAR_SET([$[]3], [$ac_type])])])
        AS_VAR_IF([$[]3], [no], [], [break])

@@ -1,3 +1,9 @@
+2008-10-28  Eric Blake  <ebb9@byu.net>
+
+	Undo needless efforts to protect $2 in $2_t.
+	* lib/autoconf/types.m4 (_AC_TYPE_INT_BODY)
+	(_AC_TYPE_UNSIGNED_INT_BODY): Reduce extra quoting.
+
 2008-10-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix parallel test execution output lossage.
