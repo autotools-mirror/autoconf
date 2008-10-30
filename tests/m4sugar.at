@@ -181,8 +181,7 @@ AT_CHECK_M4SUGAR_TEXT([[m4_divert_push([KILL])
 m4_pushdef([a], [1])
 m4_pushdef([a], [2])
 m4_dumpdef([a])
-m4_dumpdefs([a])
-m4_dumpdefs([oops])
+m4_dumpdefs([oops], [a])
 m4_divert_pop([KILL])dnl
 ]], [],
 [[a:	[2]
@@ -248,14 +247,15 @@ AT_CLEANUP
 ## ----------------- ##
 
 AT_SETUP([m4@&t@_divert_stack])
+AT_KEYWORDS([m4@&t@_divert m4@&t@_divert_push m4@&t@_divert_pop
+m4@&t@_undivert])
 
 AT_CHECK_M4SUGAR_TEXT([[1.m4_divert_stack
 m4_divert_push([10])2.m4_divert_stack
 m4_divert_text([20], [3.m4_divert_stack])dnl
 m4_divert([30])4.m4_divert_stack
 m4_divert_pop([30])dnl
-5.m4_undivert([20])
-6.m4_undivert([30])
+5.m4_undivert([20], [30])
 m4_pattern_allow([^m4_divert])dnl
 ]], [[1.script.4s:2: m4@&t@_divert_push: 0
 script.4s:1: m4@&t@_divert: KILL
@@ -263,8 +263,7 @@ script.4s:1: m4@&t@_divert: KILL
 script.4s:4: m4@&t@_divert_push: 10
 script.4s:2: m4@&t@_divert_push: 0
 script.4s:1: m4@&t@_divert: KILL
-
-6.4.script.4s:6: m4@&t@_divert: 30
+4.script.4s:6: m4@&t@_divert: 30
 script.4s:2: m4@&t@_divert_push: 0
 script.4s:1: m4@&t@_divert: KILL
 

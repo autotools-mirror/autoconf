@@ -610,16 +610,19 @@ m4_define([m4_dumpdef],
        [m4_map_args([$0], $@)])])
 
 
-# m4_dumpdefs(NAME)
-# -----------------
+# m4_dumpdefs(NAME...)
+# --------------------
 # Similar to `m4_dumpdef(NAME)', but if NAME was m4_pushdef'ed, display its
-# value stack (most recent displayed first).
+# value stack (most recent displayed first).  Also, this version silently
+# ignores undefined macros, rather than erroring out.
 #
 # This macro cheats, because it relies on the current definition of NAME
 # while the second argument of m4_stack_foreach_lifo is evaluated (which
 # would be undefined according to the API).
 m4_define([m4_dumpdefs],
-[m4_stack_foreach_lifo([$1], [m4_dumpdef([$1])m4_ignore])])
+[m4_if([$#], [0], [m4_fatal([$0: missing argument])],
+       [$#], [1], [m4_stack_foreach_lifo([$1], [m4_dumpdef([$1])m4_ignore])],
+       [m4_map_args([$0], $@)])])
 
 
 # m4_popdef(NAME)
@@ -1325,12 +1328,15 @@ m4_define([m4_divert_once],
 [m4_expand_once([m4_divert_text([$1], [$2])])])
 
 
-# m4_undivert(DIVERSION-NAME)
-# ---------------------------
-# Undivert DIVERSION-NAME.  Unlike the M4 version, this only takes a single
-# diversion identifier, and should not be used to undivert files.
+# m4_undivert(DIVERSION-NAME...)
+# ------------------------------
+# Undivert DIVERSION-NAME.  Unlike the M4 version, this requires at
+# least one DIVERSION-NAME; also, due to support for named diversions,
+# this should not be used to undivert files.
 m4_define([m4_undivert],
-[m4_builtin([undivert], _m4_divert([$1]))])
+[m4_if([$#], [0], [m4_fatal([$0: missing argument])],
+       [$#], [1], [m4_builtin([undivert], _m4_divert([$1]))],
+       [m4_map_args([$0], $@)])])
 
 
 ## --------------------------------------------- ##

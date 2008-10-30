@@ -1,5 +1,13 @@
 2008-10-31  Eric Blake  <ebb9@byu.net>
 
+	Support multiple undiverts and dumpdefs at once.
+	* lib/m4sugar/m4sugar.m4 (m4_dumpdefs, m4_undivert): Allow extra
+	arguments.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_dumpdef>,
+	<m4_undivert>: Document argument list change.
+	* tests/m4sugar.at (m4@&t@_divert_stack, m4@&t@_dumpdef): Test
+	them.
+
 	Simplify diversion stack handling.
 	* lib/m4sugar/m4sugar.m4 (m4_divert_stack): Use fewer macros, and
 	avoid extra newlines.
