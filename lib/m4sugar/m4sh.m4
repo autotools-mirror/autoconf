@@ -221,24 +221,23 @@ dnl Remove any tests from suggested that are also required
 	[as_have_required=no])
   AS_IF([test x$as_have_required = xyes && _AS_RUN(["$as_suggested"])],
     [],
-    [as_candidate_shells=
-    _AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
+    [_AS_PATH_WALK([/bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH],
       [case $as_dir in @%:@(
 	 /*)
 	   for as_base in sh bash ksh sh5; do
-	     as_candidate_shells="$as_candidate_shells $as_dir/$as_base"
+	     # Try only shells that exist, to save several forks.
+	     as_shell=$as_dir/$as_base
+	     AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
+		    _AS_RUN(["$as_required"], ["$as_shell"])],
+	           [CONFIG_SHELL=$as_shell as_have_required=yes
+	           m4_set_empty([_AS_DETECT_SUGGESTED_BODY], [break 2],
+		     [AS_IF([_AS_RUN(["$as_suggested"], ["$as_shell"])],
+			    [break 2])])])
 	   done;;
-       esac])
-
-      for as_shell in $as_candidate_shells $SHELL; do
-	 # Try only shells that exist, to save several forks.
-	 AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
-		_AS_RUN(["$as_required"], ["$as_shell"])],
-	       [CONFIG_SHELL=$as_shell
-	       as_have_required=yes
-	       m4_set_empty([_AS_DETECT_SUGGESTED_BODY], [break],
-		 [AS_IF([_AS_RUN(["$as_suggested"], ["$as_shell"])], [break])])])
-      done
+       esac],
+      [AS_IF([{ test -f "$SHELL" || test -f "$SHELL.exe"; } &&
+	      _AS_RUN(["$as_required"], ["$SHELL"])],
+	     [CONFIG_SHELL=$SHELL as_have_required=yes])])
 
       AS_IF([test "x$CONFIG_SHELL" != x],
 	[# We cannot yet assume a decent shell, so we have to provide a
