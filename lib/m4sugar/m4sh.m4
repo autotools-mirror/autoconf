@@ -435,9 +435,6 @@ m4_defun([_AS_SHELL_SANITIZE],
 [m4_text_box([M4sh Initialization.])
 
 AS_BOURNE_COMPATIBLE
-
-# PATH needs CR
-_AS_CR_PREPARE
 _AS_ECHO_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
 
@@ -1154,9 +1151,10 @@ fi
 ])# _AS_PATH_SEPARATOR_PREPARE
 
 
-# _AS_PATH_WALK([PATH = $PATH], BODY)
-# -----------------------------------
-# Walk through PATH running BODY for each `as_dir'.
+# _AS_PATH_WALK([PATH = $PATH], BODY, [IF-NOT-FOUND])
+# ---------------------------------------------------
+# Walk through PATH running BODY for each `as_dir'.  If BODY never does a
+# `break', evaluate IF-NOT-FOUND.
 #
 # Still very private as its interface looks quite bad.
 #
@@ -1168,6 +1166,7 @@ fi
 m4_defun_init([_AS_PATH_WALK],
 [AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])],
 [as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+m4_ifvaln([$3], [as_found=false])dnl
 m4_bmatch([$1], [[:;]],
 [as_dummy="$1"
 for as_dir in $as_dummy],
@@ -1175,8 +1174,11 @@ for as_dir in $as_dummy],
 do
   IFS=$as_save_IFS
   test -z "$as_dir" && as_dir=.
+  m4_ifvaln([$3], [as_found=:])dnl
   $2
+  m4_ifvaln([$3], [as_found=false])dnl
 done
+m4_ifvaln([$3], [$as_found || { $3; }])dnl
 IFS=$as_save_IFS
 ])
 
