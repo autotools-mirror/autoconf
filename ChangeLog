@@ -1,3 +1,10 @@
+2008-10-30  Paolo Bonzini  <bonzini@gnu.org>
+
+	Pass CONFIG_SHELL down to generated scripts, and re-export SHELL.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): If proceeding
+	with a given CONFIG_SHELL, move it to SHELL.
+	(AS_INIT_GENERATED): Re-export SHELL.
+
 2008-10-30  Eric Blake  <ebb9@byu.net>
 
 	Work around Solaris /bin/sh case bug.
