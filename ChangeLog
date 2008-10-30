@@ -1,3 +1,12 @@
+2008-10-30  Eric Blake  <ebb9@byu.net>
+
+	Don't check for non-POSIX extensions in suggested tests.
+	* lib/m4sugar/m4sh.m4 (_AS_VAR_APPEND_WORKS): Remove suggestion;
+	we still use += if available, but should not reject shells (like
+	dash) that don't provide it.
+	(_AS_DETECT_SUGGESTED): Document a policy for m4sh.
+	Reported by Paolo Bonzini.
+
 2008-10-30  Paolo Bonzini  <bonzini@gnu.org>
 
 	Pass CONFIG_SHELL down to generated scripts, and re-export SHELL.

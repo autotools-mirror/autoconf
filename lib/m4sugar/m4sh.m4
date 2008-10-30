@@ -173,6 +173,9 @@ m4_define([_AS_DETECT_EXPAND],
 # -------------------------
 # Refuse to execute under a shell that does not pass the given TEST.
 # Does not do AS_REQUIRE for the better-shell detection code.
+#
+# M4sh should never require something not required by POSIX, although
+# other clients are free to do so.
 m4_defun([_AS_DETECT_REQUIRED],
 [m4_set_add([_AS_DETECT_REQUIRED_BODY], [$1 || AS_EXIT])])
 
@@ -181,6 +184,9 @@ m4_defun([_AS_DETECT_REQUIRED],
 # --------------------------
 # Prefer to execute under a shell that passes the given TEST.
 # Does not do AS_REQUIRE for the better-shell detection code.
+#
+# M4sh should never suggest something not required by POSIX, although
+# other clients are free to do so.
 m4_defun([_AS_DETECT_SUGGESTED],
 [m4_set_add([_AS_DETECT_SUGGESTED_BODY], [$1 || AS_EXIT])])
 
@@ -1682,7 +1688,6 @@ m4_define([_AS_VAR_APPEND_WORKS],
 # Note that unlike AS_VAR_SET, VALUE must be properly quoted to avoid
 # field splitting and file name expansion.
 m4_defun_init([AS_VAR_APPEND],
-[_AS_DETECT_SUGGESTED([_AS_VAR_APPEND_WORKS])]dnl
 [AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])],
 [as_func_append $1 $2])
 
