@@ -243,6 +243,30 @@ script.4s:6: the top level
 AT_CLEANUP
 
 
+## -------------------- ##
+## m4_expansion_stack.  ##
+## -------------------- ##
+
+AT_SETUP([m4@&t@_expansion_stack])
+
+AT_CHECK_M4SUGAR_TEXT([[1.m4_expansion_stack
+m4_defun([a], [b])dnl
+m4_define([c], [d])dnl
+m4_defun([d], [2.m4_expansion_stack])dnl
+m4_defun([b], [c])dnl
+a
+3.m4_ifdef([_m4_expansion_stack], [m4_expansion_stack])
+]], [[1.script.4s:3: the top level
+2.script.4s:6: d is expanded from...
+script.4s:7: b is expanded from...
+script.4s:4: a is expanded from...
+script.4s:8: the top level
+3.
+]])
+
+AT_CLEANUP
+
+
 ## --------------------------- ##
 ## m4_require: error message.  ##
 ## --------------------------- ##

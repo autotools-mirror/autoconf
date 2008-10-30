@@ -1,3 +1,16 @@
+2008-10-31  Eric Blake  <ebb9@byu.net>
+
+	Simplify expansion stack handling.
+	* lib/m4sugar/m4sugar.m4 (m4_expansion_stack): Use fewer macros;
+	always output 'top level'.
+	(_m4_expansion_stack_entry): New macro, to format the string only
+	when needed.
+	(m4_expansion_stack_push): Only push a macro name.
+	(m4_warn, _m4_defun_pro): Update callers.
+	(m4_expansion_stack_pop, m4_expansion_stack_dump): Delete.
+	(_m4_defun_epi, m4_fatal): Inline the calls.
+	* tests/m4sugar.at (m4@&t@_expansion_stack): New test.
+
 2008-10-30  Eric Blake  <ebb9@byu.net>
 
 	Better documentation of AC_CHECK_HEADER's fourth argument.

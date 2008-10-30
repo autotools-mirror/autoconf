@@ -223,9 +223,8 @@ m4_define([m4_warning],
 # ----------------------------
 # Fatal the user.                                                      :)
 m4_define([m4_fatal],
-[m4_errprintn(m4_location[: error: $1])dnl
-m4_expansion_stack_dump()dnl
-m4_exit(m4_if([$2],, 1, [$2]))])
+[m4_errprintn(m4_location[: error: $1]
+m4_expansion_stack)m4_exit(m4_if([$2],, 1, [$2]))])
 
 
 # m4_assert(EXPRESSION, [EXIT-STATUS = 1])
@@ -259,8 +258,7 @@ m4_define([_m4_warn], [])
 # Report a MESSAGE to the user if the CATEGORY of warnings is enabled.
 m4_define([m4_warn],
 [_m4_warn([$1], [$2],
-m4_ifdef([_m4_expansion_stack],
-	 [m4_expansion_stack[]m4_location[: the top level]]))])
+m4_ifdef([_m4_expansion_stack], [m4_expansion_stack]))])
 
 
 
@@ -1507,7 +1505,7 @@ m4_define([m4_undivert],
 # You should keep the definitions of _m4_defun_pro, _m4_defun_epi, and
 # m4_require at hand to follow the steps.
 #
-# This implements tries not to assume that the current diversion is
+# This implementation tries not to assume that the current diversion is
 # BODY, so as soon as a macro (m4_defun'd) is expanded, we first
 # record the current diversion under the name _m4_divert_dump (denoted
 # DUMP below for short).  This introduces an important difference with
@@ -1614,33 +1612,25 @@ m4_define([m4_undivert],
 
 # m4_expansion_stack
 # ------------------
-# Expands to the entire contents of the expansion stack, if not empty,
-# with a newline at its end.
+# Expands to the entire contents of the expansion stack.  The caller
+# must supply a trailing newline.  This macro always prints a
+# location; check whether _m4_expansion_stack is defined to filter out
+# the case when no defun'd macro is in force.
 m4_define([m4_expansion_stack],
-[m4_ifdef([_m4_expansion_stack],
-	  [m4_stack_foreach_lifo([_m4_expansion_stack], [m4_n])])])
+[m4_stack_foreach_sep_lifo([_$0], [_$0_entry(], [)
+])m4_location[: the top level]])
 
-# m4_expansion_stack_push(TEXT)
-# -----------------------------
-# Form an entry of the expansion stack and push it.
+# _m4_expansion_stack_entry(MACRO)
+# --------------------------------
+# Format an entry for MACRO found on the expansion stack.
+m4_define([_m4_expansion_stack_entry],
+[_m4_defn([m4_location($1)])[: $1 is expanded from...]])
+
+# m4_expansion_stack_push(MACRO)
+# ------------------------------
+# Form an entry of the expansion stack on entry to MACRO and push it.
 m4_define([m4_expansion_stack_push],
-[m4_pushdef([_m4_expansion_stack], [[$1]])])
-
-
-# m4_expansion_stack_pop
-# ----------------------
-# Pop the topmost entry of the expansion stack.
-m4_define([m4_expansion_stack_pop],
-[m4_popdef([_m4_expansion_stack])])
-
-
-# m4_expansion_stack_dump
-# -----------------------
-# Dump the expansion stack.
-m4_define([m4_expansion_stack_dump],
-[m4_ifdef([_m4_expansion_stack],
-	  [m4_errprint(m4_expansion_stack)])dnl
-m4_errprintn(m4_location[: the top level])])
+[m4_pushdef([_m4_expansion_stack], [$1])])
 
 
 # _m4_divert(GROW)
@@ -1669,10 +1659,8 @@ m4_define([_m4_divert(GROW)],       10000)
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and m4_defn overhead.
 m4_define([_m4_defun_pro],
-m4_do([[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_pro_outer[]])]],
-      [[m4_expansion_stack_push(_m4_defn(
-	  [m4_location($1)])[: $1 is expanded from...])]],
-      [[m4_pushdef([_m4_expanding($1)])]]))
+[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_pro_outer[]])]dnl
+[m4_expansion_stack_push([$1])m4_pushdef([_m4_expanding($1)])])
 
 m4_define([_m4_defun_pro_outer],
 [m4_define([_m4_divert_dump],
@@ -1686,10 +1674,9 @@ m4_define([_m4_defun_pro_outer],
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and m4_popdef overhead.
 m4_define([_m4_defun_epi],
-m4_do([[_m4_popdef([_m4_expanding($1)])]],
-      [[m4_expansion_stack_pop()]],
-      [[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_epi_outer[]])]],
-      [[m4_provide([$1])]]))
+[_m4_popdef([_m4_expanding($1)], [_m4_expansion_stack])]dnl
+[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_epi_outer[]])]dnl
+[m4_provide([$1])])
 
 m4_define([_m4_defun_epi_outer],
 [_m4_undefine([_m4_divert_dump])m4_divert_pop([GROW])m4_undivert([GROW])])
