@@ -12323,6 +12323,11 @@ __EOF__
 
 This, however, may change in the future as the M4sh interface is
 stabilized further.
+
+Also, be aware that use of @env{LINENO} within the child script may
+report line numbers relative to their location in the parent script,
+even when using @code{AS_LINENO_PREPARE}, if the parent script was
+unable to locate a shell with working @env{LINENO} support.
 @end defmac
 
 @defmac AS_LINENO_PREPARE
@@ -14425,59 +14430,95 @@ character) with the line's number.  In M4sh scripts you should execute
 your script; configure scripts do this automatically in @code{AC_INIT}.
 
 You should not rely on @code{LINENO} within @command{eval} or shell
-functions, as the behavior differs in practice.  Also, the possibility
-of the Sed prepass means that you should not rely on @code{$LINENO} when
-quoted, when in here-documents, or when in long commands that cross line
-boundaries.  Subshells should be OK, though.  In the following example,
-lines 1, 6, and 9 are portable, but the other instances of @code{LINENO}
-are not:
+functions, as the behavior differs in practice.  The presence of a
+quoted newline within simple commands can alter which line number is
+used as the starting point for @code{$LINENO} substitutions within that
+command.  Also, the possibility of the Sed prepass means that you should
+not rely on @code{$LINENO} when quoted, when in here-documents, or when
+line continuations are used.  Subshells should be OK, though.  In the
+following example, lines 1, 9, and 14 are portable, but the other
+instances of @code{$LINENO} do not have deterministic values:
 
 @example
 @group
 $ @kbd{cat lineno}
 echo 1. $LINENO
+echo "2. $LINENO
+3. $LINENO"
 cat <<EOF
-3. $LINENO
-4. $LINENO
+5. $LINENO
+6. $LINENO
+7. \$LINENO
 EOF
-( echo 6. $LINENO )
-eval 'echo 7. $LINENO'
-echo 8. '$LINENO'
-echo 9. $LINENO '
-10.' $LINENO
+( echo 9. $LINENO )
+eval 'echo 10. $LINENO'
+eval 'echo 11. $LINENO
+echo 12. $LINENO'
+echo 13. '$LINENO'
+echo 14. $LINENO '
+15.' $LINENO
+f () @{ echo $1 $LINENO;
+echo $1 $LINENO @}
+f 18.
+echo 19. \
+$LINENO
 @end group
 @group
-$ @kbd{bash-2.05 lineno}
+$ @kbd{bash-3.2 ./lineno}
 1. 1
-3. 2
-4. 2
-6. 6
-7. 1
-8. $LINENO
+2. 3
+3. 3
+5. 4
+6. 4
+7. $LINENO
 9. 9
-10. 9
+10. 10
+11. 12
+12. 13
+13. $LINENO
+14. 14
+15. 14
+18. 16
+18. 17
+19. 19
 @end group
 @group
-$ @kbd{zsh-3.0.6 lineno}
+$ @kbd{zsh-4.3.4 ./lineno}
 1. 1
+2. 2
 3. 2
-4. 2
-6. 6
-7. 7
-8. $LINENO
+5. 4
+6. 4
+7. $LINENO
 9. 9
-10. 9
+10. 1
+11. 1
+12. 2
+13. $LINENO
+14. 14
+15. 14
+18. 0
+18. 1
+19. 19
 @end group
 @group
-$ @kbd{pdksh-5.2.14 lineno}
+$ @kbd{pdksh-5.2.14 ./lineno}
 1. 1
+2. 2
 3. 2
-4. 2
-6. 6
-7. 0
-8. $LINENO
+5. 4
+6. 4
+7. $LINENO
 9. 9
-10. 9
+10. 0
+11. 0
+12. 0
+13. $LINENO
+14. 14
+15. 14
+18. 16
+18. 17
+19. 19
 @end group
 @group
 $ @kbd{sed '=' <lineno |}
@@ -14493,15 +14534,27 @@ $ @kbd{sed '=' <lineno |}
 > @kbd{  ' |}
 > @kbd{  sh}
 1. 1
+2. 2
 3. 3
-4. 4
+5. 5
 6. 6
-7. 7
-8. 8
+7. \7
 9. 9
 10. 10
+11. 11
+12. 12
+13. 13
+14. 14
+15. 15
+18. 16
+18. 17
+19. 20
 @end group
 @end example
+
+In particular, note that @file{config.status} (and any other subsidiary
+script created by @code{AS_INIT_GENERATED}) might report line numbers
+relative to the parent script as a result of the potential Sed pass.
 
 @item NULLCMD
 @evindex NULLCMD
