@@ -1258,16 +1258,19 @@ m4_define([_m4_divert()],                0)
 
 # m4_divert_stack
 # ------------------
-# Print m4_divert_stack with newline prepended, if it's nonempty.
+# Print the diversion stack, if it's nonempty.  The caller is
+# responsible for any leading or trailing newline.
 m4_define([m4_divert_stack],
-[m4_stack_foreach_lifo([_m4_divert_stack], [m4_newline])])
+[m4_stack_foreach_sep_lifo([_m4_divert_stack], [], [], [
+])])
 
 
-# m4_divert_stack_push(LOCATION, MACRO-NAME, DIVERSION-NAME)
-# -----------------------------------------------------------
-# Form an entry of the diversion stack and push it.
+# m4_divert_stack_push(MACRO-NAME, DIVERSION-NAME)
+# ------------------------------------------------
+# Form an entry of the diversion stack from caller MACRO-NAME and
+# entering DIVERSION-NAME and push it.
 m4_define([m4_divert_stack_push],
-[m4_pushdef([_m4_divert_stack], [[$1: $2: $3]])])
+[m4_pushdef([_m4_divert_stack], m4_location[: $1: $2])])
 
 
 # m4_divert(DIVERSION-NAME)
@@ -1275,7 +1278,8 @@ m4_define([m4_divert_stack_push],
 # Change the diversion stream to DIVERSION-NAME.
 m4_define([m4_divert],
 [m4_popdef([_m4_divert_stack])]dnl
-[m4_divert_stack_push(m4_location, [$0], [$1])]dnl
+[m4_define([_m4_divert_diversion], [$1])]dnl
+[m4_divert_stack_push([$0], [$1])]dnl
 [m4_builtin([divert], _m4_divert([$1]))])
 
 
@@ -1283,7 +1287,7 @@ m4_define([m4_divert],
 # ------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
 m4_define([m4_divert_push],
-[m4_divert_stack_push(m4_location, [$0], [$1])]dnl
+[m4_divert_stack_push([$0], [$1])]dnl
 [m4_pushdef([_m4_divert_diversion], [$1])]dnl
 [m4_builtin([divert], _m4_divert([$1]))])
 
@@ -1294,16 +1298,14 @@ m4_define([m4_divert_push],
 # If specified, verify we left DIVERSION-NAME.
 # When we pop the last value from the stack, we divert to -1.
 m4_define([m4_divert_pop],
-[m4_ifndef([_m4_divert_diversion],
-	   [m4_fatal([too many m4_divert_pop])])]dnl
 [m4_if([$1], [], [],
        [$1], _m4_defn([_m4_divert_diversion]), [],
-       [m4_fatal([$0($1): diversion mismatch: ]m4_divert_stack)])]dnl
+       [m4_fatal([$0($1): diversion mismatch:
+]m4_divert_stack)])]dnl
 [_m4_popdef([_m4_divert_stack], [_m4_divert_diversion])]dnl
-[m4_builtin([divert],
-	    m4_ifdef([_m4_divert_diversion],
-		     [_m4_divert(_m4_defn([_m4_divert_diversion]))],
-		     -1))])
+[m4_ifdef([_m4_divert_diversion], [],
+	   [m4_fatal([too many m4_divert_pop])])]dnl
+[m4_builtin([divert], _m4_divert(_m4_defn([_m4_divert_diversion])))])
 
 
 # m4_divert_text(DIVERSION-NAME, CONTENT)
@@ -1839,8 +1841,8 @@ m4_provide_if([$1],
 	      [],
 	      [m4_warn([syntax],
 		       [$1 is m4_require'd but not m4_defun'd])])]],
-      [[m4_divert($3)]],
-      [[m4_undivert(_m4_divert_grow)]],
+      [[m4_builtin([divert], _m4_divert($3))]],
+      [[m4_builtin([undivert], _m4_divert_grow)]],
       [[m4_divert_pop(_m4_divert_grow)]],
       [[m4_define([_m4_divert_grow], m4_incr(_m4_divert_grow))]]))
 
@@ -2933,6 +2935,8 @@ m4_if(m4_sysval, [0], [],
 ## 17. Setting M4sugar up.  ##
 ## ------------------------ ##
 
+# _m4_divert_diversion should be defined.
+m4_divert_push([KILL])
 
 # m4_init
 # -------
@@ -2958,11 +2962,14 @@ m4_define([m4_popdef], _m4_defn([m4_popdef]))
 m4_define([m4_undefine], _m4_defn([m4_undefine]))],
 [m4_builtin([include], [m4sugar/foreach.m4])])
 
-# _m4_divert_diversion should be defined:
-m4_divert_push([KILL])
+# Rewrite the first entry of the diversion stack.
+m4_divert([KILL])
 
 # Check the divert push/pop perfect balance.
-m4_wrap([m4_divert_pop([])
-	 m4_ifdef([_m4_divert_diversion],
-	   [m4_fatal([$0: unbalanced m4_divert_push:]m4_divert_stack)])[]])
+# Some users are prone to also use m4_wrap to register last-minute
+# m4_divert_text; so after our diversion cleanups, we restore
+# KILL as the bottom of the diversion stack.
+m4_wrap([m4_popdef([_m4_divert_diversion])m4_ifdef(
+  [_m4_divert_diversion], [m4_fatal([$0: unbalanced m4_divert_push:
+]m4_divert_stack)])_m4_popdef([_m4_divert_stack])m4_divert_push([KILL])])
 ])

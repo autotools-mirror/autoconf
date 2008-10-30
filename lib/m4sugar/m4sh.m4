@@ -235,8 +235,8 @@ dnl Remove any tests from suggested that are also required
 	     as_shell=$as_dir/$as_base
 	     AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
 		    _AS_RUN(["$as_required"], ["$as_shell"])],
-	           [CONFIG_SHELL=$as_shell as_have_required=yes
-	           m4_set_empty([_AS_DETECT_SUGGESTED_BODY], [break 2],
+		   [CONFIG_SHELL=$as_shell as_have_required=yes
+		   m4_set_empty([_AS_DETECT_SUGGESTED_BODY], [break 2],
 		     [AS_IF([_AS_RUN(["$as_suggested"], ["$as_shell"])],
 			    [break 2])])])
 	   done;;
@@ -1906,8 +1906,7 @@ m4_divert_text([M4SH-SANITIZE], [_AS_SHELL_SANITIZE])
 m4_divert_text([M4SH-INIT-FN], [m4_text_box([M4sh Shell Functions.])])
 
 # Let's go!
-m4_divert_pop([KILL])[]dnl
-m4_divert_push([BODY])
+m4_divert([BODY])dnl
 m4_text_box([Main body of script.])
 _AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
 AS_REQUIRE([_AS_UNSET_PREPARE], [], [M4SH-INIT-FN])dnl

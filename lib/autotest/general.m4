@@ -1423,8 +1423,7 @@ m4_divert_pop([TESTS])dnl
 dnl End of AT_INIT: divert to KILL, only test groups are to be
 dnl output, the rest is ignored.  Current diversion is BODY, inherited
 dnl from M4sh.
-m4_divert_pop([BODY])
-m4_divert_push([KILL])
+m4_divert([KILL])
 ])# AT_INIT
 
 

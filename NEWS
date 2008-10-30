@@ -12,8 +12,6 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Configure scripts now use shell functions.
 
-** m4sugar requires m4_init in order to use m4_divert.
-
 ** The following documented m4sugar macros are new:
    m4_curry  m4_default_quoted  m4_map_args  m4_map_args_pair
    m4_set_map

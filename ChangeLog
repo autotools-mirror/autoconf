@@ -1,5 +1,26 @@
 2008-10-31  Eric Blake  <ebb9@byu.net>
 
+	Simplify diversion stack handling.
+	* lib/m4sugar/m4sugar.m4 (m4_divert_stack): Use fewer macros, and
+	avoid extra newlines.
+	(m4_divert_stack_push): Compute location here, rather than caller.
+	(m4_divert_push): Update caller.
+	(m4_divert): Likewise, and also adjust current diversion name.
+	(m4_divert_pop): Simplify rule that diversion stack must never go
+	empty.
+	(_m4_require_call): Bypass diversion stack when collecting
+	required macro text.
+	(m4_init): Set current diversion without requiring m4_init.
+	* lib/m4sugar/m4sh.m4 (AS_INIT): Avoid too many pops.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Schedule wrapped
+	text to run prior to m4sugar cleanup.
+	* doc/autoconf.texi (Text processing Macros) <m4_newline>: Mention
+	optional argument.
+	(Conditional constructs) <m4_ifvaln, m4_n>: Mention use of dnl.
+	* NEWS: Undo blurb about m4_divert.
+	* tests/m4sugar.at (m4@&t@_divert_stack): New test.
+
 	Simplify expansion stack handling.
 	* lib/m4sugar/m4sugar.m4 (m4_expansion_stack): Use fewer macros;
 	always output 'top level'.

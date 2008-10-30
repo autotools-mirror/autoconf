@@ -10824,12 +10824,13 @@ m4_if([@var{cond}], [], [@var{if-true}], [@var{if-false}])
 @defmac m4_ifvaln (@var{cond}, @ovar{if-true}, @ovar{if-false})
 @msindex{ifvaln}
 Similar to @code{m4_ifval}, except guarantee that a newline is present
-after any non-empty expansion.
+after any non-empty expansion.  Often followed by @code{dnl}.
 @end defmac
 
 @defmac m4_n (@var{text})
 @msindex{n}
 Expand to @var{text}, and add a newline if @var{text} is not empty.
+Often followed by @code{dnl}.
 @end defmac
 
 
@@ -11432,9 +11433,10 @@ them, to form a quoted list suitable for @code{m4_foreach}, it is more
 efficient to use @code{m4_dquote}.
 @end defmac
 
-@defmac m4_newline
+@defmac m4_newline (@ovar{text})
 @msindex{newline}
-This macro was introduced in Autoconf 2.62, and expands to a newline.
+This macro was introduced in Autoconf 2.62, and expands to a newline,
+followed by any @var{text}.
 It is primarily useful for maintaining macro formatting, and ensuring
 that M4 does not discard leading whitespace during argument collection.
 @end defmac
