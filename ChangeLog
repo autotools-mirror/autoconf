@@ -1,3 +1,12 @@
+2008-10-30  Eric Blake  <ebb9@byu.net>
+
+	Work around Solaris /bin/sh case bug.
+	* lib/m4sugar/m4sh.m4 (_AS_CASE, _AS_CASE_DEFAULT): Always provide
+	a non-empty command list.
+	(AS_CASE): Always guarantee that a case will match.
+	* doc/autoconf.texi (Limitations of Builtins) <case>: Document the
+	Solaris bug, and mention AS_CASE.
+
 2008-10-30  Paolo Bonzini  <bonzini@gnu.org>
 
 	Require _AS_CR_PREPARE where appropriate.

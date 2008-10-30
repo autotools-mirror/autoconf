@@ -14842,6 +14842,19 @@ ash-0.3.8 $ @kbd{case foo in esac;}
 @error{}Syntax error: ";" unexpected (expecting ")")
 @end example
 
+Posix requires @command{case} to give an exit status of 0 if no cases
+match.  However, @command{/bin/sh} in Solaris 10 does not obey this
+rule.  Meanwhile, it is unclear whether a case that matches, but
+contains no statements, must also change the exit status to 0.  The M4sh
+macro @code{AS_CASE} works around these inconsistencies.
+
+@example
+$ @kbd{bash -c 'case `false` in ?) ;; esac; echo $?'}
+0
+$ @kbd{/bin/sh -c 'case `false` in ?) ;; esac; echo $?'}
+255
+@end example
+
 
 @item @command{cd}
 @c ---------------

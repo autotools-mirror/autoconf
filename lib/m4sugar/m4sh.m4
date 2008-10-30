@@ -492,16 +492,19 @@ _AS_UNSET_PREPARE
 # |   *) DEFAULT ;;
 # | esac
 # The shell comments are intentional, to work around people who don't
-# realize the impacts of using insufficient m4 quoting.
+# realize the impacts of using insufficient m4 quoting.  This macro
+# always provides a default case, to work around a Solaris /bin/sh
+# bug regarding the exit status when no case matches.
 m4_define([_AS_CASE],
 [ [@%:@(]
-  $1[)] $2 ;;])
+  $1[)] m4_default([$2], [:]) ;;])
 m4_define([_AS_CASE_DEFAULT],
 [ [@%:@(]
-  *[)] $1 ;;])
+  *[)] m4_default([$1], [:]) ;;])
 
 m4_defun([AS_CASE],
-[case $1 in[]m4_map_args_pair([_$0], [_$0_DEFAULT], m4_shift($@))
+[case $1 in[]m4_map_args_pair([_$0], [_$0_DEFAULT],
+   m4_shift($@m4_if(m4_eval([$# & 1]), [1], [,])))
 esac])# AS_CASE
 
 
