@@ -292,6 +292,10 @@ _m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL
 # important not to forget some: config.status needs them.
 # List any preparations that create shell functions first, then
 # topologically sort the others by their dependencies.
+#
+# Special case: we do not need _AS_LINENO_PREPARE, because the
+# parent will have substituted $LINENO for us when processing its
+# own invocation of _AS_LINENO_PREPARE.
 m4_defun([_AS_PREPARE],
 [m4_pushdef([AS_REQUIRE])]dnl
 [m4_pushdef([AS_REQUIRE_SHELL_FN], _m4_defn([_AS_REQUIRE_SHELL_FN])
@@ -305,7 +309,6 @@ _AS_BASENAME_PREPARE
 _AS_DIRNAME_PREPARE
 _AS_ME_PREPARE
 _AS_CR_PREPARE
-_AS_LINENO_PREPARE
 _AS_ECHO_N_PREPARE
 _AS_LN_S_PREPARE
 _AS_MKDIR_P_PREPARE

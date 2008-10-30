@@ -1,3 +1,9 @@
+2008-10-30  Paolo Bonzini  <bonzini@gnu.org>
+
+	Do not check for $LINENO in generated scripts.
+	* lib/m4sugar/m4sh.m4 (_AS_PREPARE): Do not call _AS_LINENO_PREPARE,
+	and explain why.
+
 2008-10-30  Eric Blake  <ebb9@byu.net>
 
 	Don't check for non-POSIX extensions in suggested tests.
