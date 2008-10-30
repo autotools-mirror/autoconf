@@ -1,3 +1,20 @@
+2008-10-30  Paolo Bonzini  <bonzini@gnu.org>
+
+	Require _AS_CR_PREPARE where appropriate.
+	* lib/m4sugar/m4sh.m4 (_AS_PREPARE): Call _AS_CR_PREPARE.
+	(AS_PREPARE): Require _AS_CR_PREPARE.
+
+	Avoid walking the entire PATH when looking for a better shell.
+	* lib/m4sugar/m4sh.m4 (_AS_SHELL_SANITIZE): Test shell characteristics
+	as the PATH is walked.
+
+	Add third argument to _AS_PATH_WALK
+	* lib/m4sugar/m4sh.m4 (_AS_SHELL_SANITIZE): Do not call _AS_CR_PREPARE.
+	(_AS_PATH_WALK): Add third optional argument.
+
+	Trim down the length of the shell function test.
+	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_WORK): Condense.
+
 2008-10-29  Eric Blake  <ebb9@byu.net>
 
 	Fix LINENO detection to work around bash and pdksh limitations.
