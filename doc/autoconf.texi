@@ -5795,7 +5795,7 @@ test for it (@pxref{Writing Tests}).
 
 @anchor{AC_CHECK_HEADER}
 @defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @
-  @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
+  @ovar{action-if-not-found}, @ovar{includes})
 @acindex{CHECK_HEADER}
 If the system header file @var{header-file} is compilable, execute shell
 commands @var{action-if-found}, otherwise execute
@@ -5803,9 +5803,20 @@ commands @var{action-if-found}, otherwise execute
 header file is available, consider using @code{AC_CHECK_HEADERS}
 instead.
 
-@var{includes} is a series of include directives, defaulting to
-@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), which are used
-prior to the header under test.
+@var{includes} is decoded to determine the appropriate include
+directives.  If omitted, @file{configure} will check for both header
+existence (with the preprocessor) and usability (with the compiler),
+using @code{AC_INCLUDES_DEFAULT} for the compile test.  Currently, if
+there is a discrepancy between the results, a warning is issued to the
+user, and the preprocessor results are favored (@pxref{Present But
+Cannot Be Compiled}); but a future release may switch to favoring the
+compiler results.  If @var{includes} is exactly @samp{-}, then only a
+preprocessor check is performed, without regard to prerequisite headers.
+For anything else, only a compiler check is performed, using
+@var{includes} as the set of preprocessor directives to use prior to
+including the header under test, in which case, it is common to manually
+list @code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}) along with
+any other prerequisite headers.
 
 For compatibility issues with older versions of Autoconf, please read
 below.
@@ -5814,7 +5825,7 @@ below.
 @anchor{AC_CHECK_HEADERS}
 @defmac AC_CHECK_HEADERS (@var{header-file}@dots{}, @
   @ovar{action-if-found}, @ovar{action-if-not-found}, @
-  @dvar{includes, AC_INCLUDES_DEFAULT})
+  @ovar{includes})
 @acindex{CHECK_HEADERS}
 @cvindex HAVE_@var{header}
 For each given system header file @var{header-file} in the
@@ -5825,9 +5836,9 @@ files is found.  You can give it a value of @samp{break} to break out of
 the loop on the first match.  If @var{action-if-not-found} is given, it
 is executed when one of the header files is not found.
 
-@var{includes} is a series of include directives, defaulting to
-@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), which are used
-prior to the headers under test.
+@var{includes} is interpreted as in @code{AC_CHECK_HEADER}, in order to
+choose the set of preprocessor directives supplied before the header
+under test.
 
 For compatibility issues with older versions of Autoconf, please read
 below.

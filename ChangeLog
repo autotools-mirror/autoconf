@@ -1,5 +1,12 @@
 2008-10-30  Eric Blake  <ebb9@byu.net>
 
+	Better documentation of AC_CHECK_HEADER's fourth argument.
+	* doc/autoconf.texi (Generic Headers) <AC_CHECK_HEADER>: Mention
+	how to suppress compiler or preprocessor header check.
+	Reported by Jeff Squyres.
+
+2008-10-30  Eric Blake  <ebb9@byu.net>
+
 	Fix LINENO testsuite failure.
 	* tests/m4sh.at (AT_DATA_LINENO): Use AS_LINENO_PREPARE, not
 	undocumented _AS_PREPARE, and move unset earlier in script.
