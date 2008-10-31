@@ -52,10 +52,12 @@ AT_CHECK([test -n "${ZSH_VERSION+set}" && exit 77], ignore)
 m4_define([AT_DATA_LINENO],
 [AT_DATA([$1.tas],
 [[AS@&t@_INIT
+m4@&t@_divert_text([0], [
 if $2; then
   AS@&t@_UNSET([LINENO])
 fi
-_AS@&t@_PREPARE
+])
+AS@&t@_LINENO_PREPARE
 echo "Line: $3"
 grep 'Line: .*$4' "$[0]" >/dev/null ||
   AS@&t@_ERROR([cannot find original script])

@@ -1,5 +1,9 @@
 2008-10-30  Eric Blake  <ebb9@byu.net>
 
+	Fix LINENO testsuite failure.
+	* tests/m4sh.at (AT_DATA_LINENO): Use AS_LINENO_PREPARE, not
+	undocumented _AS_PREPARE, and move unset earlier in script.
+
 	Update LINENO documentation.
 	* doc/autoconf.texi (Initialization Macros) <AS_INIT_GENERATED>:
 	(Special Shell Variables) <LINENO>: Mention that LINENO support in
