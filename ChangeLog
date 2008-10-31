@@ -1,3 +1,14 @@
+2008-10-31  Paolo Bonzini  <bonzini@gnu.org>
+
+	Rename _AC_CHECK_HEADER_OLD and _AC_CHECK_HEADER_NEW.
+	* lib/autoconf/headers.m4 (AC_CHECK_HEADER): Adjust naming.
+	(_AC_CHECK_HEADER_PREPROC_BODY): New name of _AC_CHECK_HEADER_OLD_BODY.
+	(_AC_CHECK_HEADER_COMPILE_BODY): New name of _AC_CHECK_HEADER_NEW_BODY.
+	(_AC_CHECK_HEADER_PREPROC): New name of _AC_CHECK_HEADER_OLD.
+	(_AC_CHECK_HEADER_COMPILE): New name of _AC_CHECK_HEADER_NEW.
+	* tests/semantics.at (AC_CHECK_HEADERS_OLD, AC_CHECK_HEADER_NEW):
+	Give better name.
+
 2008-10-31  Eric Blake  <ebb9@byu.net>
 
 	Support multiple undiverts and dumpdefs at once.

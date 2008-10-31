@@ -182,7 +182,7 @@ AT_CHECK_MACRO([AC_CHECK_HEADERS],
 # --------------------
 # Check that it performs the correct actions:
 # Must not check prerequisites, hence define header2.h
-AT_SETUP([AC_CHECK_HEADERS_OLD])
+AT_SETUP([AC_CHECK_HEADERS (preprocessor test)])
 
 AT_DATA([header1.h],
 [typedef int foo;
@@ -209,7 +209,7 @@ AT_CLEANUP
 # --------------------
 # Check that it performs the correct actions:
 # Must check prerequisites, hence define header2.h but not header3.h
-AT_SETUP([AC_CHECK_HEADERS_NEW])
+AT_SETUP([AC_CHECK_HEADERS (compiler test)])
 
 AT_DATA([header1.h],
 [typedef int foo;
