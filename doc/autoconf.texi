@@ -8761,7 +8761,12 @@ or more makefiles).  This means that @code{AC_OUTPUT}
 replaces instances of @samp{@@@var{variable}@@} in input files with the
 value that the shell variable @var{variable} has when @code{AC_OUTPUT}
 is called.  The value can contain any non-@code{NUL} character, including
-newline.
+newline.  If you are using Automake 1.11 or newer, for newlines in values
+you might want to consider using @code{AM_SUBST_NOTMAKE} to prevent
+@command{automake} from adding a line @code{@var{variable} =
+@@@var{variable}@@} to the @file{Makefile.in} files (@pxref{Optional, ,
+Automake, automake, Other things Automake recognizes}).
+
 Variable occurrences should not overlap: e.g., an input file should
 not contain @samp{@@@var{var1}@@@var{var2}@@} if @var{var1} and @var{var2}
 are variable names.

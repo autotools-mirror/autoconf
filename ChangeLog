@@ -1,3 +1,9 @@
+2008-11-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Point at AM_SUBST_NOTMAKE.
+	* doc/autoconf.texi (Setting Output Variables): Add cross
+	reference to new Automake macro AM_SUBST_NOTMAKE.
+
 2008-11-03  Paolo Bonzini  <bonzini@gnu.org>
 
 	Eliminate a fork per invocation of AC_LANG_CONFTEST.
