@@ -1,3 +1,8 @@
+2008-11-03  Paolo Bonzini  <bonzini@gnu.org>
+
+	Use preprocessor in cpp tests.
+	* tests/c.at (CPP tests): Use AC_CHECK_HEADERS(..., [-]).
+
 2008-10-31  Paolo Bonzini  <bonzini@gnu.org>
 
 	Rename _AC_CHECK_HEADER_OLD and _AC_CHECK_HEADER_NEW.
