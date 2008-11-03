@@ -124,7 +124,9 @@ _AT_CHECK_AC_MACRO(
 test "x$ac_c_preproc_warn_flag" = xyes &&
   AC_MSG_ERROR([preprocessor has no warning option], 77)
 CPP="./mycpp $CPP"
-AC_CHECK_HEADERS(stdio.h autoconf_io.h)]])
+
+# Exercise CPP.
+AC_CHECK_HEADERS(stdio.h autoconf_io.h, [], [], [-])]])
 
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
@@ -158,7 +160,9 @@ _AT_CHECK_AC_MACRO(
 AC_PROG_CPP
 test "x$ac_c_preproc_warn_flag" != xyes &&
   AC_MSG_ERROR([failed to detect preprocessor warning option])
-AC_CHECK_HEADERS(stdio.h autoconf_io.h)]])
+
+# Exercise CPP.
+AC_CHECK_HEADERS(stdio.h autoconf_io.h, [], [], [-])]])
 
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
@@ -203,7 +207,7 @@ test "$CPP" != "$CC -E" &&
   AC_MSG_ERROR([error messages on stderr cause the preprocessor selection to fail])
 
 # Exercise CPP.
-AC_CHECK_HEADERS(stdio.h autoconf_io.h)]])
+AC_CHECK_HEADERS(stdio.h autoconf_io.h, [], [], [-])]])
 
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
