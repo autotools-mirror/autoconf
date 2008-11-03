@@ -162,7 +162,7 @@ fi[]dnl
 
 # AC_LANG(Fortran 77)
 # -------------------
-m4_define([AC_LANG(Fortran 77)],
+AC_LANG_DEFINE([Fortran 77], [f77], [F], [],
 [ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
@@ -172,12 +172,13 @@ ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 
 # AC_LANG(Fortran)
 # ----------------
-m4_define([AC_LANG(Fortran)],
+AC_LANG_DEFINE([Fortran], [fc], [FC], [],
 [ac_ext=${ac_fc_srcext-f}
 ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_fc_compiler_gnu
 ])
+
 
 # AC_LANG_FORTRAN77
 # -----------------
@@ -193,24 +194,6 @@ m4_defun([_AC_FORTRAN_ASSERT],
 	      [m4_fatal([$0: current language is not Fortran: ] _AC_LANG)])])])
 
 
-# _AC_LANG_ABBREV(Fortran 77)
-# ---------------------------
-m4_define([_AC_LANG_ABBREV(Fortran 77)], [f77])
-
-# _AC_LANG_ABBREV(Fortran)
-# ------------------------
-m4_define([_AC_LANG_ABBREV(Fortran)], [fc])
-
-
-# _AC_LANG_PREFIX(Fortran 77)
-# ---------------------------
-m4_define([_AC_LANG_PREFIX(Fortran 77)], [F])
-
-# _AC_LANG_PREFIX(Fortran)
-# ------------------------
-m4_define([_AC_LANG_PREFIX(Fortran)], [FC])
-
-
 # _AC_FC
 # ------
 # Return F77 or FC, depending upon the language.
@@ -224,18 +207,6 @@ AC_LANG_CASE([Fortran 77], [F77],
 ## ----------------------- ##
 ## 2. Producing programs.  ##
 ## ----------------------- ##
-
-
-# AC_LANG_SOURCE(Fortran 77)(BODY)
-# AC_LANG_SOURCE(Fortran)(BODY)
-# --------------------------------
-# FIXME: Apparently, according to former AC_TRY_COMPILER, the CPP
-# directives must not be included.  But AC_TRY_RUN_NATIVE was not
-# avoiding them, so?
-m4_define([AC_LANG_SOURCE(Fortran 77)],
-[$1])
-m4_define([AC_LANG_SOURCE(Fortran)],
-[$1])
 
 
 # AC_LANG_PROGRAM(Fortran 77)([PROLOGUE], [BODY])

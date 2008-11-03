@@ -54,11 +54,10 @@
 # Table of Contents:
 #
 # 1. Language selection
-#    and routines to produce programs in a given language.
-#      1a. C   1b. C++   1c. Objective C
-#
-# 2. Producing programs in a given language.
-#      2a. C   2b. C++   2c. Objective C
+# 2. and routines to produce programs in a given language.
+#      1a. C   2a. C
+#      1b. C++
+#      1c. Objective C
 #
 # 3. Looking for a compiler
 #    And possibly the associated preprocessor.
@@ -70,18 +69,18 @@
 
 
 ## ----------------------- ##
-## 1. Language selection.  ##
+## 1a/2a. The C language.  ##
 ## ----------------------- ##
 
-# -------------------- #
-# 1a. The C language.  #
-# -------------------- #
 
+# ------------------------ #
+# 1a. Language selection.  #
+# ------------------------ #
 
 # AC_LANG(C)
 # ----------
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-m4_define([AC_LANG(C)],
+AC_LANG_DEFINE([C], [c], [C], [],
 [ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
@@ -95,89 +94,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 
 
-# _AC_LANG_ABBREV(C)
-# ------------------
-m4_define([_AC_LANG_ABBREV(C)], [c])
-
-
-# _AC_LANG_PREFIX(C)
-# ------------------
-m4_define([_AC_LANG_PREFIX(C)], [C])
-
-
-
-# ---------------------- #
-# 1b. The C++ language.  #
-# ---------------------- #
-
-
-# AC_LANG(C++)
-# ------------
-# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-m4_define([AC_LANG(C++)],
-[ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-])
-
-
-# AC_LANG_CPLUSPLUS
-# -----------------
-AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
-
-
-# _AC_LANG_ABBREV(C++)
-# --------------------
-m4_define([_AC_LANG_ABBREV(C++)], [cxx])
-
-
-# _AC_LANG_PREFIX(C++)
-# --------------------
-m4_define([_AC_LANG_PREFIX(C++)], [CXX])
-
-
-
-# ------------------------------ #
-# 1c. The Objective C language.  #
-# ------------------------------ #
-
-
-# AC_LANG(Objective C)
-# --------------------
-m4_define([AC_LANG(Objective C)],
-[ac_ext=m
-ac_cpp='$OBJCPP $CPPFLAGS'
-ac_compile='$OBJC -c $OBJCFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='$OBJC -o conftest$ac_exeext $OBJCFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
-ac_compiler_gnu=$ac_cv_objc_compiler_gnu
-])
-
-
-# AC_LANG_OBJC
-# ------------
-AU_DEFUN([AC_LANG_OBJC], [AC_LANG(Objective C)])
-
-
-# _AC_LANG_ABBREV(Objective C)
-# ----------------------------
-m4_define([_AC_LANG_ABBREV(Objective C)], [objc])
-
-
-# _AC_LANG_PREFIX(Objective C)
-# ----------------------------
-m4_define([_AC_LANG_PREFIX(Objective C)], [OBJC])
-
-
-
-## ----------------------- ##
-## 2. Producing programs.  ##
-## ----------------------- ##
-
-# --------------- #
-# 2a. C sources.  #
-# --------------- #
+# ------------------------ #
+# 2a. Producing programs.  #
+# ------------------------ #
 
 
 # AC_LANG_SOURCE(C)(BODY)
@@ -322,75 +241,48 @@ static unsigned long int ulongval () { return $2; }
 
 
 
-# ----------------- #
-# 2b. C++ sources.  #
-# ----------------- #
+## ---------------------- ##
+## 1b. The C++ language.  ##
+## ---------------------- ##
 
 
-# AC_LANG_SOURCE(C++)(BODY)
-# -------------------------
-m4_copy([AC_LANG_SOURCE(C)], [AC_LANG_SOURCE(C++)])
+# AC_LANG(C++)
+# ------------
+# CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
+AC_LANG_DEFINE([C++], [cxx], [CXX], [C],
+[ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+])
 
 
-# AC_LANG_PROGRAM(C++)([PROLOGUE], [BODY])
-# ----------------------------------------
-m4_copy([AC_LANG_PROGRAM(C)], [AC_LANG_PROGRAM(C++)])
-
-
-# AC_LANG_CALL(C++)(PROLOGUE, FUNCTION)
-# -------------------------------------
-m4_copy([AC_LANG_CALL(C)], [AC_LANG_CALL(C++)])
-
-
-# AC_LANG_FUNC_LINK_TRY(C++)(FUNCTION)
-# ------------------------------------
-m4_copy([AC_LANG_FUNC_LINK_TRY(C)], [AC_LANG_FUNC_LINK_TRY(C++)])
-
-
-# AC_LANG_BOOL_COMPILE_TRY(C++)(PROLOGUE, EXPRESSION)
-# ---------------------------------------------------
-m4_copy([AC_LANG_BOOL_COMPILE_TRY(C)], [AC_LANG_BOOL_COMPILE_TRY(C++)])
-
-
-# AC_LANG_INT_SAVE(C++)(PROLOGUE, EXPRESSION)
-# -------------------------------------------
-m4_copy([AC_LANG_INT_SAVE(C)], [AC_LANG_INT_SAVE(C++)])
+# AC_LANG_CPLUSPLUS
+# -----------------
+AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
 
 
 
-# ------------------------- #
-# 2c. Objective C sources.  #
-# ------------------------- #
+## ------------------------------ ##
+## 1c. The Objective C language.  ##
+## ------------------------------ ##
 
 
-# AC_LANG_SOURCE(Objective C)(BODY)
-# ---------------------------------
-m4_copy([AC_LANG_SOURCE(C)], [AC_LANG_SOURCE(Objective C)])
+# AC_LANG(Objective C)
+# --------------------
+AC_LANG_DEFINE([Objective C], [objc], [OBJC], [C],
+[ac_ext=m
+ac_cpp='$OBJCPP $CPPFLAGS'
+ac_compile='$OBJC -c $OBJCFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='$OBJC -o conftest$ac_exeext $OBJCFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+ac_compiler_gnu=$ac_cv_objc_compiler_gnu
+])
 
 
-# AC_LANG_PROGRAM(Objective C)([PROLOGUE], [BODY])
-# ------------------------------------------------
-m4_copy([AC_LANG_PROGRAM(C)], [AC_LANG_PROGRAM(Objective C)])
-
-
-# AC_LANG_CALL(Objective C)(PROLOGUE, FUNCTION)
-# ---------------------------------------------
-m4_copy([AC_LANG_CALL(C)], [AC_LANG_CALL(Objective C)])
-
-
-# AC_LANG_FUNC_LINK_TRY(Objective C)(FUNCTION)
-# --------------------------------------------
-m4_copy([AC_LANG_FUNC_LINK_TRY(C)], [AC_LANG_FUNC_LINK_TRY(Objective C)])
-
-
-# AC_LANG_BOOL_COMPILE_TRY(Objective C)(PROLOGUE, EXPRESSION)
-# -----------------------------------------------------------
-m4_copy([AC_LANG_BOOL_COMPILE_TRY(C)], [AC_LANG_BOOL_COMPILE_TRY(Objective C)])
-
-
-# AC_LANG_INT_SAVE(Objective C)(PROLOGUE, EXPRESSION)
-# ---------------------------------------------------
-m4_copy([AC_LANG_INT_SAVE(C)], [AC_LANG_INT_SAVE(Objective C)])
+# AC_LANG_OBJC
+# ------------
+AU_DEFUN([AC_LANG_OBJC], [AC_LANG(Objective C)])
 
 
 

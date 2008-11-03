@@ -1,5 +1,25 @@
 2008-11-03  Paolo Bonzini  <bonzini@gnu.org>
 
+	Reorganize definition of languages.
+	* lib/autoconf/c.m4 (AC_LANG(C), AC_LANG(C++), AC_LANG(Objective C),
+	_AC_LANG_ABBREV(C), _AC_LANG_ABBREV(C++), _AC_LANG_ABBREV(Objective C),
+	_AC_LANG_PREFIX(C), _AC_LANG_PREFIX(C++), _AC_LANG_PREFIX(Objective C)):
+	Replace definitions with usage of AC_LANG_DEFINE.
+	(Sections 2b, 2c): Delete.
+	(Sections 1b, 1c): Move after section 2a.
+	* lib/autoconf/erlang.m4 (AC_LANG(Erlang), _AC_LANG_ABBREV(Erlang),
+	_AC_LANG_PREFIX(Erlang), AC_LANG_SOURCE(Erlang)): Replace definitions
+	with usage of AC_LANG_DEFINE.
+	(AC_LANG_ERLANG): Define using AU_DEFUN.
+	* lib/autoconf/fortran.m4 (AC_LANG(Fortran), AC_LANG(Fortran 77),
+	_AC_LANG_ABBREV(Fortran), _AC_LANG_ABBREV(Fortran 77),
+	_AC_LANG_PREFIX(Fortran), _AC_LANG_PREFIX(Fortran 77),
+	_AC_LANG_SOURCE(Fortran), AC_LANG_SOURCE(Fortran 77)): Replace
+	definitions with usage of AC_LANG_DEFINE.
+	* lib/autoconf/lang.m4 (AC_LANG_DEFINE, AC_LANG_SOURCE()): New.
+
+2008-11-03  Paolo Bonzini  <bonzini@gnu.org>
+
 	Use preprocessor in cpp tests.
 	* tests/c.at (CPP tests): Use AC_CHECK_HEADERS(..., [-]).
 

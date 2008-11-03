@@ -182,6 +182,25 @@ m4_defun([AC_LANG_ASSERT],
 
 
 
+# AC_LANG_DEFINE(NAME, ABBREV, PREFIX, COPY-FROM, SHELL-VARS)
+# -----------------------------------------------------------
+# Define a language referenced by AC_LANG(NAME), with cache variable prefix
+# ABBREV and Makefile variable prefix PREFIX.  AC_LANG(NAME) is defined
+# to SHELL-VARS, other macros are copied from language COPY-FROM.  Even if
+# COPY-FROM is empty, a default definition is provided for language-specific
+# macro AC_LANG_SOURCE(NAME).
+m4_define([AC_LANG_DEFINE],
+[m4_define([AC_LANG($1)], [$5])]
+[m4_define([_AC_LANG_ABBREV($1)], [$2])]
+[m4_define([_AC_LANG_PREFIX($1)], [$3])]
+[m4_copy([AC_LANG_SOURCE($4)], [AC_LANG_SOURCE($1)])]
+[m4_ifval([$4],
+[m4_copy([AC_LANG_PROGRAM($4)], [AC_LANG_PROGRAM($1)])]
+[m4_copy([AC_LANG_CALL($4)], [AC_LANG_CALL($1)])]
+[m4_copy([AC_LANG_FUNC_LINK_TRY($4)], [AC_LANG_FUNC_LINK_TRY($1)])]
+[m4_copy([AC_LANG_BOOL_COMPILE_TRY($4)], [AC_LANG_BOOL_COMPILE_TRY($1)])]
+[m4_copy([AC_LANG_INT_SAVE($4)], [AC_LANG_INT_SAVE($1)])])])
+
 ## ----------------------- ##
 ## 2. Producing programs.  ##
 ## ----------------------- ##
@@ -202,6 +221,13 @@ _ACEOF])
 # BODY, and as much as possible `confdefs.h'.
 AC_DEFUN([AC_LANG_SOURCE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
+# AC_LANG_SOURCE()(BODY)
+# ----------------------
+# Default implementation of AC_LANG_SOURCE.
+m4_define([AC_LANG_SOURCE()],
+[$1])
 
 
 # AC_LANG_PROGRAM([PROLOGUE], [BODY])

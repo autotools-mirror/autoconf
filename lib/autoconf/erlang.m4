@@ -121,38 +121,24 @@ fi
 
 # AC_LANG(Erlang)
 # ---------------
-m4_define([AC_LANG(Erlang)],
+AC_LANG_DEFINE([Erlang], [erl], [ERL], [],
 [ac_ext=erl
 ac_compile='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD ; echo "[#]!/bin/sh" > conftest$ac_exeext ; AS_ECHO(["\"$ERL\" -run conftest start -run init stop -noshell"]) >> conftest$ac_exeext ; chmod +x conftest$ac_exeext'
 ])
 
 
+
 # AC_LANG_ERLANG
-# --------------
-m4_define([AC_LANG_ERLANG], [AC_LANG(Erlang)])
-
-
-# _AC_LANG_ABBREV(Erlang)
-# -----------------------
-m4_define([_AC_LANG_ABBREV(Erlang)], [erl])
-
-
-# _AC_LANG_PREFIX(Erlang)
-# -----------------------
-m4_define([_AC_LANG_PREFIX(Erlang)], [ERL])
+# -----------------
+AU_DEFUN([AC_LANG_ERLANG], [AC_LANG(Erlang)])
 
 
 
-## ---------------------- ##
-## 2.Producing programs.  ##
-## ---------------------- ##
+## ----------------------- ##
+## 2. Producing programs.  ##
+## ----------------------- ##
 
-
-# AC_LANG_SOURCE(Erlang)(BODY)
-# ----------------------------
-m4_define([AC_LANG_SOURCE(Erlang)],
-[$1])
 
 # AC_LANG_PROGRAM(Erlang)([PROLOGUE], [BODY])
 # -------------------------------------------
