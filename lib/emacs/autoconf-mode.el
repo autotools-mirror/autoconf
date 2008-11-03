@@ -41,7 +41,7 @@
   `(("\\bdnl \\(.*\\)"  1 font-lock-comment-face t)
     ("\\$[0-9*#@]" . font-lock-variable-name-face)
     ("\\b\\(m4_\\)?\\(builtin\\|change\\(com\\|quote\\|word\\)\\|d\\(e\\(bug\\(file\\|mode\\)\\|cr\\|f\\(ine\\|n\\)\\)\\|iv\\(ert\\|num\\)\\|nl\\|umpdef\\)\\|e\\(rrprint\\|syscmd\\|val\\)\\|f\\(ile\\|ormat\\)\\|gnu\\|i\\(f\\(def\\|else\\)\\|n\\(c\\(lude\\|r\\)\\|d\\(ex\\|ir\\)\\)\\)\\|l\\(en\\|ine\\)\\|m\\(4\\(exit\\|wrap\\)\\|aketemp\\|kstemp\\)\\|p\\(atsubst\\|opdef\\|ushdef\\)\\|regexp\\|s\\(hift\\|include\\|ubstr\\|ys\\(cmd\\|val\\)\\)\\|tra\\(ceo\\(ff\\|n\\)\\|nslit\\)\\|un\\(d\\(efine\\|ivert\\)\\|ix\\)\\)\\b" . font-lock-keyword-face)
-    ("^\\(\\(m4_\\)?define\\|A._DEFUN\\|m4_defun\\)(\\[?\\([A-Za-z0-9_]+\\)" 3 font-lock-function-name-face)
+    ("^\\(\\(m4_\\)?define\\(_default\\)?\\|A._DEFUN\\|m4_defun\\(_once\\|_init\\)?\\)(\\[?\\([A-Za-z0-9_]+\\)" 5 font-lock-function-name-face)
     "default font-lock-keywords")
 )
 
@@ -68,9 +68,9 @@
   "Autoconf value for `add-log-current-defun-function'.
 This tells add-log.el how to find the current macro."
   (save-excursion
-    (if (re-search-backward "^\\(m4_define\\|m4_defun\\|A._DEFUN\\)(\\[*\\([A-Za-z0-9_]+\\)" nil t)
-	(buffer-substring (match-beginning 2)
-			  (match-end 2))
+    (if (re-search-backward "^\\(m4_define\\(_default\\)?\\|m4_defun\\(_once\\|_init\\)?\\|A._DEFUN\\)(\\[*\\([A-Za-z0-9_]+\\)" nil t)
+	(buffer-substring (match-beginning 4)
+			  (match-end 4))
       nil)))
 
 ;;;###autoload

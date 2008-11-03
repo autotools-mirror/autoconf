@@ -1,5 +1,10 @@
 2009-07-25  Eric Blake  <ebb9@byu.net>
 
+	Recognize new m4sugar keywords.
+	* lib/emacs/autoconf-mode.el (autoconf-current-defun): Recognize
+	m4_define_default, m4_defun_init, m4_defun_once.
+	(autoconf-font-lock-keywords):  Likewise.
+
 	Require m4 1.4.6, and fix testsuite to support this version.
 	* m4/m4.m4 (AC_PROG_GNU_M4): Reject m4 1.4.5, now that we use
 	regexp it can't handle.
