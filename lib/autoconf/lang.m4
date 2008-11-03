@@ -188,11 +188,12 @@ m4_defun([AC_LANG_ASSERT],
 # ABBREV and Makefile variable prefix PREFIX.  AC_LANG(NAME) is defined
 # to SHELL-VARS, other macros are copied from language COPY-FROM.  Even if
 # COPY-FROM is empty, a default definition is provided for language-specific
-# macro AC_LANG_SOURCE(NAME).
+# macros AC_LANG_SOURCE(NAME) and AC_LANG_CONFTEST(NAME).
 m4_define([AC_LANG_DEFINE],
 [m4_define([AC_LANG($1)], [$5])]
 [m4_define([_AC_LANG_ABBREV($1)], [$2])]
 [m4_define([_AC_LANG_PREFIX($1)], [$3])]
+[m4_copy([AC_LANG_CONFTEST($4)], [AC_LANG_CONFTEST($1)])]
 [m4_copy([AC_LANG_SOURCE($4)], [AC_LANG_SOURCE($1)])]
 [m4_ifval([$4],
 [m4_copy([AC_LANG_PROGRAM($4)], [AC_LANG_PROGRAM($1)])]
@@ -210,7 +211,14 @@ m4_define([AC_LANG_DEFINE],
 # ----------------------
 # Save the BODY in `conftest.$ac_ext'.  Add a trailing new line.
 AC_DEFUN([AC_LANG_CONFTEST],
-[cat >conftest.$ac_ext <<_ACEOF
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+
+
+# AC_LANG_CONFTEST()(BODY)
+# ------------------------
+# Default implementation of AC_LANG_CONFTEST.
+m4_define([AC_LANG_CONFTEST()],
+[cat > conftest.$ac_ext <<_ACEOF
 $1
 _ACEOF])
 

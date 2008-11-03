@@ -1,5 +1,16 @@
 2008-11-03  Paolo Bonzini  <bonzini@gnu.org>
 
+	Eliminate a fork per invocation of AC_LANG_CONFTEST.
+	* lib/autoconf/c.m4 (AC_LANG_CONFTEST(C)): Define instead of
+	AC_LANG_SOURCE(C).
+	* lib/autoconf/general.m4 (_AC_INIT_PREPARE): Add a comment at the
+	top of confdefs.h, which also works around cpp deficiencies.
+	* lib/autoconf/lang.m4 (AC_LANG_DEFINE): Define AC_LANG_CONFTEST(xyz)
+	(AC_LANG_CONFTEST): Dispatch based on _AC_LANG.
+	(AC_LANG_CONFTEST()): New.
+
+2008-11-03  Paolo Bonzini  <bonzini@gnu.org>
+
 	Reorganize definition of languages.
 	* lib/autoconf/c.m4 (AC_LANG(C), AC_LANG(C++), AC_LANG(Objective C),
 	_AC_LANG_ABBREV(C), _AC_LANG_ABBREV(C++), _AC_LANG_ABBREV(Objective C),

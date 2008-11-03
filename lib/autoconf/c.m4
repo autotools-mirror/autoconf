@@ -99,18 +99,17 @@ AU_DEFUN([AC_LANG_C], [AC_LANG(C)])
 # ------------------------ #
 
 
-# AC_LANG_SOURCE(C)(BODY)
+# AC_LANG_CONFTEST(C)(BODY)
 # -----------------------
 # We can't use '#line $LINENO "configure"' here, since
 # Sun c89 (Sun WorkShop 6 update 2 C 5.3 Patch 111679-08 2002/05/09)
 # rejects $LINENO greater than 32767, and some configure scripts
 # are longer than 32767 lines.
-m4_define([AC_LANG_SOURCE(C)],
-[/* confdefs.h.  */
-_ACEOF
-cat confdefs.h - <<_ACEOF >>conftest.$ac_ext
+m4_define([AC_LANG_CONFTEST(C)],
+[cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-$1])
+$1
+_ACEOF])
 
 
 # AC_LANG_PROGRAM(C)([PROLOGUE], [BODY])
