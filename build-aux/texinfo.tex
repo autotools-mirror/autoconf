@@ -3,7 +3,7 @@
 % Load plain if necessary, i.e., if running under initex.
 \expandafter\ifx\csname fmtname\endcsname\relax\input plain\fi
 %
-\def\texinfoversion{2008-04-18.10}
+\def\texinfoversion{2008-10-30.07}
 %
 % Copyright (C) 1985, 1986, 1988, 1990, 1991, 1992, 1993, 1994, 1995,
 % 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
@@ -926,6 +926,7 @@ where each line of input produces a line of output.}
   {%
     \makevalueexpandable  % we want to expand any @value in FILE.
     \turnoffactive        % and allow special characters in the expansion
+    \indexnofonts         % Allow `@@' and other weird things in file names.
     \edef\temp{\noexpand\input #1 }%
     %
     % This trickery is to read FILE outside of a group, in case it makes
@@ -2489,6 +2490,7 @@ end
 {
   \catcode`\-=\active \catcode`\_=\active
   \catcode`\'=\active \catcode`\`=\active
+  \global\let'=\rq \global\let`=\lq  % default definitions
   %
   \global\def\code{\begingroup
     \catcode\rquoteChar=\active \catcode\lquoteChar=\active
@@ -3874,11 +3876,11 @@ end
 \def\dosynindex#1#2#3{%
   % Only do \closeout if we haven't already done it, else we'll end up
   % closing the target index.
-  \expandafter \ifx\csname donesynindex#2\endcsname \undefined
+  \expandafter \ifx\csname donesynindex#2\endcsname \relax
     % The \closeout helps reduce unnecessary open files; the limit on the
     % Acorn RISC OS is a mere 16 files.
     \expandafter\closeout\csname#2indfile\endcsname
-    \expandafter\let\csname\donesynindex#2\endcsname = 1
+    \expandafter\let\csname donesynindex#2\endcsname = 1
   \fi
   % redefine \fooindfile:
   \expandafter\let\expandafter\temp\expandafter=\csname#3indfile\endcsname
@@ -5970,7 +5972,7 @@ end
 % we're doing normal filling.  So, when using \aboveenvbreak and
 % \afterenvbreak, temporarily make \parskip 0.
 %
-\envdef\quotation{%
+\def\quotationstart{%
   {\parskip=0pt \aboveenvbreak}% because \aboveenvbreak inserts \parskip
   \parindent=0pt
   %
@@ -5984,6 +5986,17 @@ end
   \fi
   \parsearg\quotationlabel
 }
+
+\envdef\quotation{%
+  \setnormaldispenv
+  \quotationstart
+}
+
+\envdef\smallquotation{%
+  \setsmalldispenv
+  \quotationstart
+}
+\let\Esmallquotation = \Equotation
 
 % We have retained a nonzero parskip for the environment, since we're
 % doing normal filling.
@@ -6025,12 +6038,6 @@ end
 % [Knuth] p. 380
 \def\uncatcodespecials{%
   \def\do##1{\catcode`##1=\other}\dospecials}
-%
-% [Knuth] pp. 380,381,391
-% Disable Spanish ligatures ?` and !` of \tt font
-\begingroup
-  \catcode`\`=\active\gdef`{\relax\lq}
-\endgroup
 %
 % Setup for the @verb command.
 %
@@ -6081,7 +6088,7 @@ end
 \def\codequoteleft{%
   \expandafter\ifx\csname SETtxicodequotebacktick\endcsname\relax
     \expandafter\ifx\csname SETcodequotebacktick\endcsname\relax
-      `%
+      \relax`% the \relax disables the `! and `? ligatures
     \else \char'22 \fi
   \else \char'22 \fi
 }
@@ -6176,6 +6183,7 @@ end
   {%
     \makevalueexpandable
     \setupverbatim
+    \indexnofonts       % Allow `@@' and other weird things in file names.
     \input #1
     \afterenvbreak
   }%
@@ -7747,10 +7755,9 @@ end
 
 \message{localization,}
 
-% @documentlanguage is usually given very early, just after
-% @setfilename.  If done too late, it may not override everything
-% properly.  Single argument is the language (de) or locale (de_DE)
-% abbreviation.  It would be nice if we could set up a hyphenation file.
+% For single-language documents, @documentlanguage is usually given very
+% early, just after @documentencoding.  Single argument is the language
+% (de) or locale (de_DE) abbreviation.
 %
 {
   \catcode`\_ = \active
@@ -7763,10 +7770,11 @@ end
     \ifeof 1
       \documentlanguagetrywithoutunderscore{#1_\finish}%
     \else
+      \globaldefs = 1  % everything in the txi-LL files needs to persist
       \input txi-#1.tex
     \fi
     \closein 1
-  \endgroup
+  \endgroup % end raw TeX
 \endgroup}
 }
 %
@@ -7785,9 +7793,36 @@ end
 }
 %
 \newhelp\nolanghelp{The given language definition file cannot be found or
-is empty.  Maybe you need to install it?  In the current directory
-should work if nowhere else does.}
+is empty.  Maybe you need to install it?  Putting it in the current
+directory should work if nowhere else does.}
 
+% This macro is called from txi-??.tex files; the first argument is the
+% \language name to set (without the "\lang@" prefix), the second and
+% third args are \{left,right}hyphenmin.
+% 
+% The language names to pass are determined when the format is built.
+% See the etex.log file created at that time, e.g.,
+% /usr/local/texlive/2008/texmf-var/web2c/pdftex/etex.log.
+% 
+% With TeX Live 2008, etex now includes hyphenation patterns for all
+% available languages.  This means we can support hyphenation in
+% Texinfo, at least to some extent.  (This still doesn't solve the
+% accented characters problem.)
+% 
+\catcode`@=11
+\def\txisetlanguage#1#2#3{%
+  % do not set the language if the name is undefined in the current TeX.
+  \expandafter\ifx\csname lang@#1\endcsname \relax
+    \message{no patterns for #1}%
+  \else
+    \global\language = \csname lang@#1\endcsname
+  \fi
+  % but there is no harm in adjusting the hyphenmin values regardless.
+  \global\lefthyphenmin = #2\relax
+  \global\righthyphenmin = #3\relax
+}
+
+% Helpers for encodings.
 % Set the catcode of characters 128 through 255 to the specified number.
 %
 \def\setnonasciicharscatcode#1{%
@@ -8981,7 +9016,14 @@ should work if nowhere else does.}
 @catcode`@# = @other
 @catcode`@% = @other
 
-
+@c Finally, make ` and ' active, so that txicodequoteundirected and
+@c txicodequotebacktick work right in, e.g., @w{@code{`foo'}}.  If we
+@c don't make ` and ' active, @code will not get them as active chars.
+@c Do this last of all since we use ` in the previous @catcode assignments.
+@c (not ready yet, sigh)
+@c atcode`@'=@active @let'@rq
+@c atcode`@`=@active @let`@lq
+ 
 @c Local variables:
 @c eval: (add-hook 'write-file-hooks 'time-stamp)
 @c page-delimiter: "^\\\\message"

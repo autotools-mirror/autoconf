@@ -9,5 +9,6 @@ mdate-sh	-whitespace
 missing		-whitespace
 texinfo.tex	-whitespace
 fdl.texi	-whitespace
+fdl-1.3.texi	-whitespace
 make-stds.texi	-whitespace
 standards.texi	-whitespace
