@@ -264,38 +264,22 @@ m4_define([m4_reverse],
     [[, ]m4_dquote($], [)])[_m4_popdef([_m4_r])])_m4_r($@)])])
 
 
-# m4_map(MACRO, LIST)
-# -------------------
-# Invoke MACRO($1), MACRO($2) etc. where $1, $2... are the elements
-# of LIST.  $1, $2... must in turn be lists, appropriate for m4_apply.
+# _m4_map(PRE, POST, IGNORED, LIST)
+# ---------------------------------
+# Form the common basis of the m4_map macros.  For each element of
+# LIST, expand PRE[element]POST[].  The IGNORED argument makes
+# recursion easier, and must be supplied rather than implicit.
 #
-# m4_map/m4_map_sep only execute once; the speedup comes in fixing
-# _m4_map.  The mismatch in () is intentional, since $1 supplies the
-# opening `(' (but it sure looks odd!).  Build the temporary _m4_m:
-#   $1, [$3])$1, [$4])...$1, [$m])_m4_popdef([_m4_m])
+# m4_map{,all,_args}{,_sep} each only execute once; the speedup comes
+# in fixing _m4_map.  Build the temporary _m4_m:
+#   $1[$4]$2[]$1[$5]$2[]...$1[$m]$2[]_m4_popdef([_m4_m])
 m4_define([_m4_map],
-[m4_if([$#], [2], [],
-       [m4_pushdef([_m4_m], _m4_for([3], [$#], [1],
-   [$0_([1],], [)])[_m4_popdef([_m4_m])])_m4_m($@)])])
+[m4_if([$#], [3], [],
+       [m4_pushdef([_m4_m], _m4_for([4], [$#], [1],
+   [$0_([1], [2],], [)])[_m4_popdef([_m4_m])])_m4_m($@)])])
 
 m4_define([_m4_map_],
-[[$$1, [$$2])]])
-
-# m4_map_args(EXPRESSION, ARG...)
-# -------------------------------
-# Expand EXPRESSION([ARG]) for each argument.  More efficient than
-# m4_foreach([var], [ARG...], [EXPRESSION(m4_defn([var]))])
-#
-# Invoke the temporary macro _m4_map_args, defined as:
-#   $1([$2])[]$1([$3])[]...$1([$m])[]_m4_popdef([_m4_map_args])
-m4_define([m4_map_args],
-[m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
-       [$#], [1], [],
-       [m4_pushdef([_$0], _m4_for([2], [$#], [1],
-   [_$0_([1],], [)])[_m4_popdef([_$0])])_$0($@)])])
-
-m4_define([_m4_map_args_],
-[[$$1([$$2])[]]])
+[[$$1[$$3]$$2[]]])
 
 # m4_map_args_pair(EXPRESSION, [END-EXPR = EXPRESSION], ARG...)
 # -------------------------------------------------------------

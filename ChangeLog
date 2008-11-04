@@ -1,5 +1,13 @@
 2008-11-04  Eric Blake  <ebb9@byu.net>
 
+	Add m4_map_args_sep, undocumented for now.
+	* lib/m4sugar/m4sugar.m4 (m4_map_args_sep): New macro.
+	(_m4_map): Change API to cover more of m4_map*.
+	* lib/m4sugar/foreach.m4 (_m4_map): Adjust to new API.
+	(m4_map_args): Delete.
+	* tests/m4sugar.at (m4@&t@_map_args and m4@&t@_curry): Enhance
+	test.
+
 	Improve m4_for performance.
 	* lib/m4sugar/m4sugar.m4 (_m4_for): Alter API to make it easier to
 	avoid m4_define by some clients.

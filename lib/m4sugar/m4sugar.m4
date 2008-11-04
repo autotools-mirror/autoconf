@@ -1079,6 +1079,17 @@ m4_define([m4_foreach_w],
 [m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])])
 
 
+# _m4_map(PRE, POST, IGNORED, LIST)
+# ---------------------------------
+# Form the common basis of the m4_map macros.  For each element of
+# LIST, expand PRE[element]POST[].  The IGNORED argument makes
+# recursion easier, and must be supplied rather than implicit.
+#
+# Please keep foreach.m4 in sync with any adjustments made here.
+m4_define([_m4_map],
+[m4_if([$#], [3], [],
+       [$1[$4]$2[]$0([$1], [$2], m4_shift3($@))])])
+
 # m4_map(MACRO, LIST)
 # m4_mapall(MACRO, LIST)
 # ----------------------
@@ -1089,19 +1100,15 @@ m4_define([m4_foreach_w],
 #
 # Since LIST may be quite large, we want to minimize how often it
 # appears in the expansion.  Rather than use m4_car/m4_cdr iteration,
-# we unbox the list, ignore the second argument, and use m4_shift2 to
-# detect the end of recursion.  The mismatch in () is intentional; see
-# _m4_map.  For m4_map, an empty list behaves like an empty sublist
-# and gets ignored; for m4_mapall, we must special-case the empty
-# list.
-#
-# Please keep foreach.m4 in sync with any adjustments made here.
+# we unbox the list, and use _m4_map for iteration.  For m4_map, an
+# empty list behaves like an empty sublist and gets ignored; for
+# m4_mapall, we must special-case the empty list.
 m4_define([m4_map],
-[_m4_map([_m4_apply([$1]], [], $2)])
+[_m4_map([_m4_apply([$1],], [)], [], $2)])
 
 m4_define([m4_mapall],
 [m4_if([$2], [], [],
-       [_m4_map([m4_apply([$1]], [], $2)])])
+       [_m4_map([m4_apply([$1],], [)], [], $2)])])
 
 
 # m4_map_sep(MACRO, SEPARATOR, LIST)
@@ -1123,39 +1130,24 @@ m4_define([m4_mapall],
 # helper macro and use that as the separator instead.
 m4_define([m4_map_sep],
 [m4_pushdef([m4_Sep], [m4_define([m4_Sep], _m4_defn([m4_unquote]))])]dnl
-[_m4_map([_m4_apply([m4_Sep([$2])[]$1]], [], $3)m4_popdef([m4_Sep])])
+[_m4_map([_m4_apply([m4_Sep([$2])[]$1],], [)], [], $3)m4_popdef([m4_Sep])])
 
 m4_define([m4_mapall_sep],
 [m4_if([$3], [], [], [_$0([$1], [$2], $3)])])
 
 m4_define([_m4_mapall_sep],
-[m4_apply([$1], [$3])_m4_map([m4_apply([$2[]$1]], m4_shift2($@))])
-
-# _m4_map(PREFIX, IGNORED, SUBLIST, ...)
-# --------------------------------------
-# Common implementation for all four m4_map variants.  The mismatch in
-# the number of () is intentional.  PREFIX must supply a form of
-# m4_apply, the open `(', and the MACRO to be applied.  Each iteration
-# then appends `,', the current SUBLIST and the closing `)', then
-# recurses to the next SUBLIST.  IGNORED is an aid to ending recursion
-# efficiently.
-#
-# Please keep foreach.m4 in sync with any adjustments made here.
-m4_define([_m4_map],
-[m4_if([$#], [2], [],
-       [$1, [$3])$0([$1], m4_shift2($@))])])
+[m4_apply([$1], [$3])_m4_map([m4_apply([$2[]$1],], [)], m4_shift2($@))])
 
 # m4_map_args(EXPRESSION, ARG...)
 # -------------------------------
 # Expand EXPRESSION([ARG]) for each argument.  More efficient than
-# m4_foreach([var], [ARG...], [EXPRESSION(m4_defn([var]))])
-#
-# Please keep foreach.m4 in sync with any adjustments made here.
+#   m4_foreach([var], [ARG...], [EXPRESSION(m4_defn([var]))])
+# Shorthand for m4_map_args_sep([EXPRESSION(], [)], [], ARG...).
 m4_define([m4_map_args],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
        [$#], [1], [],
        [$#], [2], [$1([$2])[]],
-       [$1([$2])[]$0([$1], m4_shift2($@))])])
+       [_m4_map([$1(], [)], $@)])])
 
 
 # m4_map_args_pair(EXPRESSION, [END-EXPR = EXPRESSION], ARG...)
@@ -1179,6 +1171,18 @@ m4_define([m4_map_args_pair],
        [$#], [3], [m4_default([$2], [$1])([$3])[]],
        [$#], [4], [$1([$3], [$4])[]],
        [$1([$3], [$4])[]$0([$1], [$2], m4_shift(m4_shift3($@)))])])
+
+
+# m4_map_args_sep(PRE, POST, SEP, ARG...)
+# ---------------------------------------
+# Expand PRE[ARG]POST for each argument, with SEP between arguments.
+m4_define([m4_map_args_sep],
+[m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
+       [$#], [1], [],
+       [$#], [2], [],
+       [$#], [3], [],
+       [$#], [4], [$1[$4]$2[]],
+       [$1[$4]$2[]_m4_map([$3[]$1], [$2], m4_shift3($@))])])
 
 
 # m4_stack_foreach(MACRO, FUNC)
