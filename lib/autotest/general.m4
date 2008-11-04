@@ -596,7 +596,7 @@ m4_divert_push([PARSE_ARGS_END])dnl
 	# Reject names that are not valid shell variable names.
 	case $at_envvar in
 	  '' | [[0-9]]* | *[[!_$as_cr_alnum]]* )
-	    AS_ERROR([invalid variable name: $at_envvar]) ;;
+	    AS_ERROR([invalid variable name: `$at_envvar']) ;;
 	esac
 	at_value=`AS_ECHO(["$at_optarg"]) | sed "s/'/'\\\\\\\\''/g"`
 	# Export now, but save eval for later and for debug scripts.
@@ -947,7 +947,7 @@ m4_divert_push([TESTS])dnl
 # Create the master directory if it doesn't already exist.
 test -d "$at_suite_dir" ||
   mkdir "$at_suite_dir" ||
-  AS_ERROR([cannot create '$at_suite_dir'])
+  AS_ERROR([cannot create `$at_suite_dir'])
 
 # Can we diff with `/dev/null'?  DU 5.0 refuses.
 if diff /dev/null /dev/null >/dev/null 2>&1; then

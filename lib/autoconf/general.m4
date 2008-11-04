@@ -883,15 +883,17 @@ do
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
     x_libraries=$ac_optarg ;;
 
-  -*) AC_MSG_ERROR([unrecognized option: $ac_option
+  -*) AC_MSG_ERROR([unrecognized option: `$ac_option'
 Try `$[0] --help' for more information.])
     ;;
 
   *=*)
     ac_envvar=`expr "x$ac_option" : 'x\([[^=]]*\)='`
     # Reject names that are not valid shell variable names.
-    expr "x$ac_envvar" : "[.*[^_$as_cr_alnum]]" >/dev/null &&
-      AC_MSG_ERROR([invalid variable name: $ac_envvar])
+    case $ac_envvar in #(
+      '' | [[0-9]]* | *[[!_$as_cr_alnum]]* )
+      AC_MSG_ERROR([invalid variable name: `$ac_envvar']) ;;
+    esac
     eval $ac_envvar=\$ac_optarg
     export $ac_envvar ;;
 

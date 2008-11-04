@@ -1494,7 +1494,7 @@ m4_ifdef([_AC_SEEN_CONFIG(HEADERS)], [dnl
     ac_need_defaults=false;;
   --he | --h)
     # Conflict between --help and --header
-    AC_MSG_ERROR([ambiguous option: $[1]
+    AC_MSG_ERROR([ambiguous option: `$[1]'
 Try `$[0] --help' for more information.]);;
 ], [  --he | --h |])dnl
   --help | --hel | -h )
@@ -1504,7 +1504,7 @@ Try `$[0] --help' for more information.]);;
     ac_cs_silent=: ;;
 
   # This is an error.
-  -*) AC_MSG_ERROR([unrecognized option: $[1]
+  -*) AC_MSG_ERROR([unrecognized option: `$[1]'
 Try `$[0] --help' for more information.]) ;;
 
   *) AS_VAR_APPEND([ac_config_targets], [" $[1]"])
@@ -1562,7 +1562,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
 m4_ifdef([_AC_LIST_TAGS], [_AC_LIST_TAGS])
-  *) AC_MSG_ERROR([invalid argument: $ac_config_target]);;
+  *) AC_MSG_ERROR([invalid argument: `$ac_config_target']);;
   esac
 done
 
@@ -1635,7 +1635,7 @@ do
   esac
   case $ac_mode$ac_tag in
   :[[FHL]]*:*);;
-  :L* | :C*:*) AC_MSG_ERROR([invalid tag $ac_tag]);;
+  :L* | :C*:*) AC_MSG_ERROR([invalid tag `$ac_tag']);;
   :[[FH]]-) ac_tag=-:-;;
   :[[FH]]*) ac_tag=$ac_tag:$ac_tag.in;;
   esac
@@ -1663,7 +1663,7 @@ do
 	   [[\\/$]]*) false;;
 	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
 	   esac ||
-	   AC_MSG_ERROR([cannot find input file: $ac_f]);;
+	   AC_MSG_ERROR([cannot find input file: `$ac_f']);;
       esac
       case $ac_f in *\'*) ac_f=`AS_ECHO(["$ac_f"]) | sed "s/'/'\\\\\\\\''/g"`;; esac
       AS_VAR_APPEND([ac_file_inputs], [" '$ac_f'"])
