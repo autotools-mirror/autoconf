@@ -97,8 +97,8 @@ m4_define([m4_foreach],
 [m4_if([$2], [], [], [_$0([$1], [$3], $2)])])
 
 m4_define([_m4_foreach],
-[m4_define([$1], m4_pushdef([$1])_m4_for([$1], [3], [$#], [1],
-    [$0_([1], [2], _m4_defn([$1]))])[m4_popdef([$1])])m4_indir([$1], $@)])
+[m4_pushdef([$1], _m4_for([3], [$#], [1],
+    [$0_([1], [2],], [)])[m4_popdef([$1])])m4_indir([$1], $@)])
 
 m4_define([_m4_foreach_],
 [[m4_define([$$1], [$$3])$$2[]]])
@@ -116,11 +116,14 @@ m4_define([_m4_foreach_],
 #   m4_if([$1],[$2],[$3],[$1],[$4],[$5],_m4_popdef([_m4_case])[$6])
 m4_define([m4_case],
 [m4_if(m4_eval([$# <= 2]), [1], [$2],
-[m4_pushdef([_$0], [m4_if(]m4_for([_m4_count], [2], m4_decr([$#]), [2],
-     [_$0_([1], _m4_count, m4_incr(_m4_count))])[_m4_popdef(
+[m4_pushdef([_$0], [m4_if(]_m4_for([2], m4_eval([($# - 1) / 2 * 2]), [2],
+     [_$0_(], [)])[_m4_popdef(
 	 [_$0])]m4_dquote($m4_eval([($# + 1) & ~1]))[)])_$0($@)])])
 
 m4_define([_m4_case_],
+[$0_([1], [$1], m4_incr([$1]))])
+
+m4_define([_m4_case__],
 [[[$$1],[$$2],[$$3],]])
 
 # m4_bmatch(SWITCH, RE1, VAL1, RE2, VAL2, ..., DEFAULT)
@@ -144,15 +147,18 @@ m4_define([m4_bmatch],
 [m4_if([$#], 0, [m4_fatal([$0: too few arguments: $#])],
        [$#], 1, [m4_fatal([$0: too few arguments: $#: $1])],
        [$#], 2, [$2],
-       [m4_define([_m4_b], m4_pushdef([_m4_b])[m4_define([_m4_b],
-  _m4_defn([_$0]))]_m4_for([_m4_b], [3], m4_eval([($# + 1) / 2 * 2 - 1]),
-  [2], [_$0_([1], m4_decr(_m4_b), _m4_b)])[_m4_b([], [],]m4_dquote(
-  [$]m4_incr(_m4_b))[_m4_popdef([_m4_b]))])m4_unquote(_m4_b($@))])])
+       [m4_pushdef([_m4_b], [m4_define([_m4_b],
+  _m4_defn([_$0]))]_m4_for([3], m4_eval([($# + 1) / 2 * 2 - 1]),
+  [2], [_$0_(], [)])[_m4_b([], [],]m4_dquote([$]m4_eval(
+  [($# + 1) / 2 * 2]))[_m4_popdef([_m4_b]))])m4_unquote(_m4_b($@))])])
 
 m4_define([_m4_bmatch],
 [m4_if(m4_bregexp([$1], [$2]), [-1], [], [[$3]m4_define([$0])])])
 
 m4_define([_m4_bmatch_],
+[$0_([1], m4_decr([$1]), [$1])])
+
+m4_define([_m4_bmatch__],
 [[_m4_b([$$1], [$$2], [$$3])]])
 
 
@@ -172,12 +178,15 @@ m4_define([_m4_bmatch_],
 #   [[$m]m4_define([_m4_c])])])_m4_c([[$m+1]]_m4_popdef([_m4_c]))
 # We invoke m4_unquote(_m4_c($@)), for concatenation with later text.
 m4_define([_m4_cond],
-[m4_define([_m4_c], m4_pushdef([_m4_c])[m4_define([_m4_c],
-  _m4_defn([m4_unquote]))]_m4_for([_m4_c], [2], m4_eval([$# / 3 * 3 - 1]), [3],
-  [$0_(m4_decr(_m4_c), _m4_c, m4_incr(_m4_c))])[_m4_c(]m4_dquote(m4_dquote(
+[m4_pushdef([_m4_c], [m4_define([_m4_c],
+  _m4_defn([m4_unquote]))]_m4_for([2], m4_eval([$# / 3 * 3 - 1]), [3],
+  [$0_(], [)])[_m4_c(]m4_dquote(m4_dquote(
   [$]m4_eval([$# / 3 * 3 + 1])))[_m4_popdef([_m4_c]))])m4_unquote(_m4_c($@))])
 
 m4_define([_m4_cond_],
+[$0_(m4_decr([$1]), [$1], m4_incr([$1]))])
+
+m4_define([_m4_cond__],
 [[_m4_c([m4_if(($$1), [($$2)], [[$$3]m4_define([_m4_c])])])]])
 
 # m4_bpatsubsts(STRING, RE1, SUBST1, RE2, SUBST2, ...)
@@ -198,11 +207,14 @@ m4_define([_m4_cond_],
 #   m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$m-1], [$m]))m4_unquote(
 #   _m4_defn([_m4_p])_m4_popdef([_m4_p]))
 m4_define([_m4_bpatsubsts],
-[m4_define([_m4_p], m4_pushdef([_m4_p])[m4_define([_m4_p],
-  ]m4_dquote([$]1)[)]_m4_for([_m4_p], [3], [$#], [2], [$0_(m4_decr(_m4_p),
-  _m4_p)])[m4_unquote(_m4_defn([_m4_p])_m4_popdef([_m4_p]))])_m4_p($@)])
+[m4_pushdef([_m4_p], [m4_define([_m4_p],
+  ]m4_dquote([$]1)[)]_m4_for([3], [$#], [2], [$0_(],
+  [)])[m4_unquote(_m4_defn([_m4_p])_m4_popdef([_m4_p]))])_m4_p($@)])
 
 m4_define([_m4_bpatsubsts_],
+[$0_(m4_decr([$1]), [$1])])
+
+m4_define([_m4_bpatsubsts__],
 [[m4_define([_m4_p],
 m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$$1], [$$2]))]])
 
@@ -215,9 +227,9 @@ m4_bpatsubst(m4_dquote(_m4_defn([_m4_p])), [$$1], [$$2]))]])
 #   ,[$5],[$6],...,[$m]_m4_popdef([_m4_s])
 # before calling m4_shift(_m4_s($@)).
 m4_define([_m4_shiftn],
-[m4_if(m4_incr([$1]), [$#], [], [m4_define([_m4_s],
-	   m4_pushdef([_m4_s])_m4_for([_m4_s], m4_eval([$1 + 2]), [$#], [1],
-  [[,]m4_dquote([$]_m4_s)])[_m4_popdef([_m4_s])])m4_shift(_m4_s($@))])])
+[m4_if(m4_incr([$1]), [$#], [], [m4_pushdef([_m4_s],
+  _m4_for(m4_eval([$1 + 2]), [$#], [1],
+  [[,]m4_dquote($], [)])[_m4_popdef([_m4_s])])m4_shift(_m4_s($@))])])
 
 # m4_do(STRING, ...)
 # ------------------
@@ -229,8 +241,8 @@ m4_define([_m4_shiftn],
 #   $1[]$2[]...[]$n[]_m4_popdef([_m4_do])
 m4_define([m4_do],
 [m4_if([$#], [0], [],
-       [m4_define([_$0], m4_pushdef([_$0])_m4_for([_$0], [1], [$#], [1],
-		  [$_$0[[]]])[_m4_popdef([_$0])])_$0($@)])])
+       [m4_pushdef([_$0], _m4_for([1], [$#], [1],
+		   [$], [[[]]])[_m4_popdef([_$0])])_$0($@)])])
 
 # m4_dquote_elt(ARGS)
 # -------------------
@@ -248,9 +260,8 @@ m4_define([m4_dquote_elt],
 #   [$m], [$m-1], ..., [$2], [$1]_m4_popdef([_m4_r])
 m4_define([m4_reverse],
 [m4_if([$#], [0], [], [$#], [1], [[$1]],
-[m4_define([_m4_r], m4_dquote([$$#])m4_pushdef([_m4_r])_m4_for([_m4_r],
-      m4_decr([$#]), [1], [-1],
-    [[, ]m4_dquote([$]_m4_r)])[_m4_popdef([_m4_r])])_m4_r($@)])])
+[m4_pushdef([_m4_r], [[$$#]]_m4_for(m4_decr([$#]), [1], [-1],
+    [[, ]m4_dquote($], [)])[_m4_popdef([_m4_r])])_m4_r($@)])])
 
 
 # m4_map(MACRO, LIST)
@@ -264,8 +275,8 @@ m4_define([m4_reverse],
 #   $1, [$3])$1, [$4])...$1, [$m])_m4_popdef([_m4_m])
 m4_define([_m4_map],
 [m4_if([$#], [2], [],
-       [m4_define([_m4_m], m4_pushdef([_m4_m])_m4_for([_m4_m], [3], [$#], [1],
-   [$0_([1], _m4_m)])[_m4_popdef([_m4_m])])_m4_m($@)])])
+       [m4_pushdef([_m4_m], _m4_for([3], [$#], [1],
+   [$0_([1],], [)])[_m4_popdef([_m4_m])])_m4_m($@)])])
 
 m4_define([_m4_map_],
 [[$$1, [$$2])]])
@@ -280,8 +291,8 @@ m4_define([_m4_map_],
 m4_define([m4_map_args],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
        [$#], [1], [],
-       [m4_define([_$0], m4_pushdef([_$0])_m4_for([_$0], [2], [$#], [1],
-   [_$0_([1], _$0)])[_m4_popdef([_$0])])_$0($@)])])
+       [m4_pushdef([_$0], _m4_for([2], [$#], [1],
+   [_$0_([1],], [)])[_m4_popdef([_$0])])_$0($@)])])
 
 m4_define([_m4_map_args_],
 [[$$1([$$2])[]]])
@@ -301,11 +312,14 @@ m4_define([m4_map_args_pair],
        [$#], [1], [m4_fatal([$0: too few arguments: $#: $1])],
        [$#], [2], [],
        [$#], [3], [m4_default([$2], [$1])([$3])[]],
-       [m4_define([_$0], m4_pushdef([_$0])_m4_for([_$0], [3],
-   m4_eval([$# / 2 * 2 - 1]), [2], [_$0_([1], _$0, m4_incr(_$0))])_$0_end(
+       [m4_pushdef([_$0], _m4_for([3],
+   m4_eval([$# / 2 * 2 - 1]), [2], [_$0_(], [)])_$0_end(
    [1], [2], [$#])[_m4_popdef([_$0])])_$0($@)])])
 
 m4_define([_m4_map_args_pair_],
+[$0_([1], [$1], m4_incr([$1]))])
+
+m4_define([_m4_map_args_pair__],
 [[$$1([$$2], [$$3])[]]])
 
 m4_define([_m4_map_args_pair_end],
@@ -348,24 +362,26 @@ m4_define([m4_joinall],
 # is found.  For example, m4_list_cmp([1], [1,2]) creates _m4_cmp as
 #   m4_if(m4_eval([($1) != ($3)]), [1], [m4_cmp([$1], [$3])],
 #         m4_eval([($2) != ($4)]), [1], [m4_cmp([$2], [$4])],
-#         [0]_m4_popdef([_m4_cmp], [_m4_size]))
-# then calls _m4_cmp([1+0], [0], [1], [2+0])
+#         [0]_m4_popdef([_m4_cmp]))
+# then calls _m4_cmp([1+0], [0*2], [1], [2+0])
 m4_define([_m4_list_cmp_raw],
-[m4_if([$1], [$2], 0, [m4_pushdef(
-     [_m4_size])_m4_list_cmp($1+0_m4_list_pad(m4_count($1), m4_count($2)),
-			     $2+0_m4_list_pad(m4_count($2), m4_count($1)))])])
+[m4_if([$1], [$2], 0,
+       [_m4_list_cmp($1+0_m4_list_pad(m4_count($1), m4_count($2)),
+		     $2+0_m4_list_pad(m4_count($2), m4_count($1)))])])
 
 m4_define([_m4_list_pad],
 [m4_if(m4_eval($1 < $2), [1],
-       [_m4_for([_m4_size], m4_incr([$1]), [$2], [1], [,0])])])
+       [_m4_for(m4_incr([$1]), [$2], [1], [,0*])])])
 
 m4_define([_m4_list_cmp],
-[m4_define([_m4_size], m4_eval([$# >> 1]))]dnl
-[m4_define([_m4_cmp], m4_pushdef([_m4_cmp])[m4_if(]_m4_for([_m4_cmp],
-   [1], _m4_size, [1], [$0_(_m4_cmp, m4_eval(_m4_cmp + _m4_size))])[
-      [0]_m4_popdef([_m4_cmp], [_m4_size]))])_m4_cmp($@)])
+[m4_pushdef([_m4_cmp], [m4_if(]_m4_for(
+   [1], m4_eval([$# >> 1]), [1], [$0_(], [,]m4_eval([$# >> 1])[)])[
+      [0]_m4_popdef([_m4_cmp]))])_m4_cmp($@)])
 
 m4_define([_m4_list_cmp_],
+[$0_([$1], m4_eval([$1 + $2]))])
+
+m4_define([_m4_list_cmp__],
 [[m4_eval([($$1) != ($$2)]), [1], [m4_cmp([$$1], [$$2])],
 ]])
 

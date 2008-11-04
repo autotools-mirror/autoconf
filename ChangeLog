@@ -1,5 +1,16 @@
 2008-11-04  Eric Blake  <ebb9@byu.net>
 
+	Improve m4_for performance.
+	* lib/m4sugar/m4sugar.m4 (_m4_for): Alter API to make it easier to
+	avoid m4_define by some clients.
+	(m4_for): Adjust caller.
+	* lib/m4sugar/foreach.m4 (_m4_foreach, m4_case, m4_bmatch)
+	(_m4_cond, _m4_bpatsubsts, _m4_shiftn, m4_do, m4_reverse)
+	(_m4_map, m4_map_args, m4_map_args_pair, _m4_list_pad)
+	(_m4_list_cmp): Likewise.
+
+2008-11-04  Eric Blake  <ebb9@byu.net>
+
 	Adjust expected output.
 	* tests/torture.at (Missing templates): Reflect added quoting.
 	Detected by Bob Proulx's buildbot.

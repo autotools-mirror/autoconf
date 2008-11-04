@@ -920,31 +920,29 @@ m4_define([m4_unquote], [$*])
 # VARIABLE names.  Changing VARIABLE inside EXPRESSION will not impact
 # the number of iterations.
 #
-# Uses _m4_defn for speed, and avoid dnl in the macro body.
+# Uses _m4_defn for speed, and avoid dnl in the macro body.  Factor
+# the _m4_for call so that EXPRESSION is only parsed once.
 m4_define([m4_for],
 [m4_pushdef([$1], m4_eval([$2]))]dnl
 [m4_cond([m4_eval(([$3]) > ([$2]))], 1,
 	   [m4_pushdef([_m4_step], m4_eval(m4_default_quoted([$4],
-	      1)))m4_assert(_m4_step > 0)_$0([$1], _m4_defn([$1]),
-  m4_eval((([$3]) - ([$2])) / _m4_step * _m4_step + ([$2])),
-  _m4_step, [$5])],
+	      1)))m4_assert(_m4_step > 0)_$0(_m4_defn([$1]),
+  m4_eval((([$3]) - ([$2])) / _m4_step * _m4_step + ([$2])), _m4_step,],
 	 [m4_eval(([$3]) < ([$2]))], 1,
 	   [m4_pushdef([_m4_step], m4_eval(m4_default_quoted([$4],
-	      -1)))m4_assert(_m4_step < 0)_$0([$1], _m4_defn([$1]),
-  m4_eval((([$2]) - ([$3])) / -(_m4_step) * _m4_step + ([$2])),
-  _m4_step, [$5])],
-	 [m4_pushdef([_m4_step])$5])[]]dnl
-[m4_popdef([_m4_step], [$1])])
+	      -1)))m4_assert(_m4_step < 0)_$0(_m4_defn([$1]),
+  m4_eval((([$2]) - ([$3])) / -(_m4_step) * _m4_step + ([$2])), _m4_step,],
+	 [m4_pushdef([_m4_step])_$0(_m4_defn([$1]), _m4_defn([$1]), 0,])]dnl
+[[m4_define([$1],], [)$5])m4_popdef([_m4_step], [$1])])
 
-
-# _m4_for(VARIABLE, COUNT, LAST, STEP, EXPRESSION)
-# ------------------------------------------------
+# _m4_for(COUNT, LAST, STEP, PRE, POST)
+# -------------------------------------
 # Core of the loop, no consistency checks, all arguments are plain
-# numbers.  Define VARIABLE to COUNT, expand EXPRESSION, then alter
-# COUNT by STEP and iterate if COUNT is not LAST.
+# numbers.  Expand PRE[COUNT]POST, then alter COUNT by STEP and
+# iterate if COUNT is not LAST.
 m4_define([_m4_for],
-[m4_define([$1], [$2])$5[]m4_if([$2], [$3], [],
-      [$0([$1], m4_eval([$2 + $4]), [$3], [$4], [$5])])])
+[$4[$1]$5[]m4_if([$1], [$2], [],
+		 [$0(m4_eval([$1 + $3]), [$2], [$3], [$4], [$5])])])
 
 
 # Implementing `foreach' loops in m4 is much more tricky than it may
