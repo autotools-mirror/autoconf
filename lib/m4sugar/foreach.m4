@@ -248,9 +248,9 @@ m4_define([m4_do],
 # -------------------
 # Return ARGS as an unquoted list of double-quoted arguments.
 #
-# m4_foreach to the rescue.  It's easier to shift off the leading comma.
+# _m4_foreach to the rescue.
 m4_define([m4_dquote_elt],
-[m4_shift(m4_foreach([_m4_elt], [$@], [,m4_dquote(_m4_defn([_m4_elt]))]))])
+[m4_if([$#], [0], [], [[[$1]]_m4_foreach([,m4_dquote(], [)], $@)])])
 
 # m4_reverse(ARGS)
 # ----------------
@@ -299,23 +299,23 @@ m4_define([_m4_map_args_pair_end],
 #
 # Use a self-modifying separator, since we don't know how many
 # arguments might be skipped before a separator is first printed, but
-# be careful if the separator contains $.  m4_foreach to the rescue.
+# be careful if the separator contains $.  _m4_foreach to the rescue.
 m4_define([m4_join],
 [m4_pushdef([_m4_sep], [m4_define([_m4_sep], _m4_defn([m4_echo]))])]dnl
-[m4_foreach([_m4_arg], [m4_shift($@)],
-	    [m4_ifset([_m4_arg], [_m4_sep([$1])_m4_defn([_m4_arg])])])]dnl
-[_m4_popdef([_m4_sep])])
+[_m4_foreach([_$0([$1],], [)], $@)_m4_popdef([_m4_sep])])
+
+m4_define([_m4_join],
+[m4_if([$2], [], [], [_m4_sep([$1])[$2]])])
 
 # m4_joinall(SEP, ARG1, ARG2...)
 # ------------------------------
 # Produce ARG1SEPARG2...SEPARGn.  An empty ARG results in back-to-back SEP.
 # No expansion is performed on SEP or ARGs.
 #
-# A bit easier than m4_join.  m4_foreach to the rescue.
+# A bit easier than m4_join.  _m4_foreach to the rescue.
 m4_define([m4_joinall],
 [[$2]m4_if(m4_eval([$# <= 2]), [1], [],
-	   [m4_foreach([_m4_arg], [m4_shift2($@)],
-		       [[$1]_m4_defn([_m4_arg])])])])
+	   [_m4_foreach([$1], [], m4_shift($@))])])
 
 # m4_list_cmp(A, B)
 # -----------------
@@ -358,12 +358,12 @@ m4_define([_m4_list_cmp__],
 # Return the decimal value of the maximum (or minimum) in a series of
 # integer expressions.
 #
-# m4_foreach to the rescue; we only need to replace _m4_minmax.  Here,
+# _m4_foreach to the rescue; we only need to replace _m4_minmax.  Here,
 # we need a temporary macro to track the best answer so far, so that
 # the foreach expression is tractable.
 m4_define([_m4_minmax],
-[m4_pushdef([_m4_best], m4_eval([$2]))m4_foreach([_m4_arg], [m4_shift2($@)],
-    [m4_define([_m4_best], $1(_m4_best, _m4_defn([_m4_arg])))])]dnl
+[m4_pushdef([_m4_best], m4_eval([$2]))_m4_foreach(
+  [m4_define([_m4_best], $1(_m4_best,], [))], m4_shift($@))]dnl
 [_m4_best[]_m4_popdef([_m4_best])])
 
 # m4_set_add_all(SET, VALUE...)
@@ -371,15 +371,15 @@ m4_define([_m4_minmax],
 # Add each VALUE into SET.  This is O(n) in the number of VALUEs, and
 # can be faster than calling m4_set_add for each VALUE.
 #
-# m4_foreach to the rescue.  If no deletions have occurred, then avoid
-# the speed penalty of m4_set_add.
+# _m4_foreach to the rescue.  If no deletions have occurred, then
+# avoid the speed penalty of m4_set_add.
 m4_define([m4_set_add_all],
 [m4_if([$#], [0], [], [$#], [1], [],
        [m4_define([_m4_set_size($1)], m4_eval(m4_set_size([$1])
-	  + m4_len(m4_foreach([_m4_arg], [m4_shift($@)],
-    m4_ifdef([_m4_set_cleanup($1)],
-	     [[m4_set_add([$1], _m4_defn([_m4_arg]))]],
-	     [[m4_ifdef([_m4_set([$1],]_m4_defn([_m4_arg])[)], [],
-			[m4_define([_m4_set([$1],]_m4_defn([_m4_arg])[)],
-				   [1])m4_pushdef([_m4_set([$1])],
-	_m4_defn([_m4_arg]))-])]])))))])])
+	  + m4_len(_m4_foreach(m4_ifdef([_m4_set_cleanup($1)],
+  [[m4_set_add]], [[_$0]])[([$1],], [)], $@))))])])
+
+m4_define([_m4_set_add_all],
+[m4_ifdef([_m4_set([$1],$2)], [],
+	  [m4_define([_m4_set([$1],$2)],
+		     [1])m4_pushdef([_m4_set([$1])], [$2])-])])
