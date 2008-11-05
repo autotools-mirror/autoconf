@@ -7,6 +7,7 @@
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS)
 	(_AC_OUTPUT_MAIN_LOOP): Quote invalid arguments.
 	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* tests/base.at (configure arguments): Test this.
 	Reported by Jeff Squyres.
 
 2008-11-04  Eric Blake  <ebb9@byu.net>

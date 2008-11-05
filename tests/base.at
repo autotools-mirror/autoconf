@@ -321,6 +321,10 @@ AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([FOO=bar --enable-baz --without-zork --silent], [0], [stdout], [ignore])
 AT_CHECK([grep 'FOO=bar --enable-baz --without-zork --silent' stdout], [0], [ignore], [ignore])
 
+dnl check that syntax error is detected
+AT_CHECK_CONFIGURE([=], [1], [], [ignore], [ignore])
+AT_CHECK_CONFIGURE([1=2], [1], [], [ignore], [ignore])
+
 AT_CLEANUP
 
 
