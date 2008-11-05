@@ -2744,12 +2744,12 @@ m4_define([m4_set_delete],
 # arguments, such as for m4_join, or wrapped inside quotes for use in
 # m4_foreach.  Order of the output is not guaranteed.
 #
-# Short-circuit the idempotence relation.  Use _m4_defn for speed.
+# Short-circuit the idempotence relation.
 m4_define([m4_set_difference],
-[m4_if([$1], [$2], [],
-       [m4_set_foreach([$1], [_m4_element],
-		       [m4_set_contains([$2], _m4_defn([_m4_element]), [],
-					[,_m4_defn([_m4_element])])])])])
+[m4_if([$1], [$2], [], [m4_set_map_sep([$1], [_$0([$2],], [)])])])
+
+m4_define([_m4_set_difference],
+[m4_set_contains([$1], [$2], [], [,[$2]])])
 
 # m4_set_dump(SET, [SEP])
 # -----------------------
@@ -2814,13 +2814,14 @@ m4_define([m4_set_foreach],
 # m4_foreach.  Order of the output is not guaranteed.
 #
 # Iterate over the smaller set, and short-circuit the idempotence
-# relation.  Use _m4_defn for speed.
+# relation.
 m4_define([m4_set_intersection],
 [m4_if([$1], [$2], [m4_set_listc([$1])],
        m4_eval(m4_set_size([$2]) < m4_set_size([$1])), [1], [$0([$2], [$1])],
-       [m4_set_foreach([$1], [_m4_element],
-		       [m4_set_contains([$2], _m4_defn([_m4_element]),
-					[,_m4_defn([_m4_element])])])])])
+       [m4_set_map_sep([$1], [_$0([$2],], [)])])])
+
+m4_define([_m4_set_intersection],
+[m4_set_contains([$1], [$2], [,[$2]])])
 
 # m4_set_list(SET)
 # m4_set_listc(SET)
@@ -2901,12 +2902,14 @@ m4_define([_m4_set_size],
 # not guaranteed.
 #
 # We can rely on the fact that m4_set_listc prunes SET1, so we don't
-# need to check _m4_set([$1],element) for 0.  Use _m4_defn for speed.
-# Short-circuit the idempotence relation.
+# need to check _m4_set([$1],element) for 0.  Short-circuit the
+# idempotence relation.
 m4_define([m4_set_union],
-[m4_set_listc([$1])m4_if([$1], [$2], [], [m4_set_foreach([$2], [_m4_element],
-  [m4_ifdef([_m4_set([$1],]_m4_defn([_m4_element])[)], [],
-	    [,_m4_defn([_m4_element])])])])])
+[m4_set_listc([$1])m4_if([$1], [$2], [],
+  [m4_set_map_sep([$2], [_$0([$1],], [)])])])
+
+m4_define([_m4_set_union],
+[m4_ifdef([_m4_set([$1],$2)], [], [,[$2]])])
 
 
 ## ------------------- ##

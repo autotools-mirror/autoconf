@@ -1,5 +1,13 @@
 2008-11-05  Eric Blake  <ebb9@byu.net>
 
+	Use m4_set_map_sep in more places.
+	* lib/m4sugar/m4sugar.m4 (m4_set_difference, m4_set_intersection)
+	(m4_set_union): Use m4_set_map_sep rather than m4_set_foreach.
+	* doc/autoconf.texi (Set manipulation Macros) <m4_set_map>:
+	Enhance documentation.
+	<m4_set_foreach>: Mention faster alternative.
+	(Looping constructs) <m4_foreach>: Likewise.
+
 	Unify m4_set_foreach and m4_set_map.
 	* lib/m4sugar/m4sugar.m4 (m4_set_map_sep): New macro, undocumented
 	for now.

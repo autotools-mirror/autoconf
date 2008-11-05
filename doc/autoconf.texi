@@ -10921,6 +10921,9 @@ m4_foreach([myvar], [[foo], [bar, baz]],
 @result{}echo foo
 @result{}echo bar, baz
 @end example
+
+Note that for some forms of @var{expression}, it may be faster to use
+@code{m4_map_args}.
 @end defmac
 
 @anchor{m4_foreach_w}
@@ -11786,7 +11789,8 @@ unspecified if @var{action} recursively lists the contents of @var{set}
 in any way other than removing the element currently contained in
 @var{variable}.  This macro is faster than the corresponding
 @code{m4_foreach([@var{variable}],
-m4_indir([m4_dquote]m4_set_listc([@var{set}])), [@var{action}])}.
+m4_indir([m4_dquote]m4_set_listc([@var{set}])), [@var{action}])},
+although @code{m4_set_map} might be faster still.
 
 @example
 m4_set_add_all([a]m4_for([i], [1], [5], [], [,i]))
@@ -11847,9 +11851,11 @@ For each element in the set @var{set}, expand @var{action} with a single
 argument of the set element.  Behavior is unspecified if @var{action}
 recursively lists the contents of @var{set} (although listing other sets
 is acceptable), or if it modifies the set in any way other than removing
-the element passed as an argument.  This macro is faster than the
-corresponding
-@code{m4_map_args([@var{action}]m4_set_listc([@var{set}]))}.
+the element passed as an argument.  This macro is faster than either
+corresponding counterpart of
+@code{m4_map_args([@var{action}]m4_set_listc([@var{set}]))} or
+@code{m4_set_foreach([@var{set}], [var],
+[@var{action}(m4_defn([var]))])}.
 @end defmac
 
 @defmac m4_set_remove (@var{set}, @var{value}, @ovar{if-present}, @
