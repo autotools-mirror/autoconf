@@ -1,5 +1,9 @@
 2008-11-04  Eric Blake  <ebb9@byu.net>
 
+	Adjust expected output.
+	* tests/torture.at (Missing templates): Reflect added quoting.
+	Detected by Bob Proulx's buildbot.
+
 	Reject arguments with leading =.
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Detect case of
 	missing variable name, with fewer forks.  Quote invalid arguments
