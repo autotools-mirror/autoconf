@@ -1,3 +1,13 @@
+2008-11-05  Eric Blake  <ebb9@byu.net>
+
+	Unify _m4_foreach and _m4_map.
+	* lib/m4sugar/m4sugar.m4 (_m4_map): Delete, merged with...
+	(_m4_foreach): ...this.
+	(m4_foreach, m4_map, m4_mapall, m4_map_sep, _m4_mapall_sep)
+	(m4_map_args, m4_map_args_sep): Adjust callers.
+	* lib/m4sugar/foreach.m4 (_m4_map): Rename...
+	(_m4_foreach): ...to this, overwriting old definition.
+
 2008-11-04  Eric Blake  <ebb9@byu.net>
 
 	Add m4_map_args_sep, undocumented for now.

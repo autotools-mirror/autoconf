@@ -79,29 +79,29 @@
 #
 # Please keep this file in sync with m4sugar.m4.
 
-# m4_foreach(VARIABLE, LIST, EXPRESSION)
-# --------------------------------------
-# Expand EXPRESSION assigning each value of the LIST to VARIABLE.
-# LIST should have the form `item_1, item_2, ..., item_n', i.e. the
-# whole list must *quoted*.  Quote members too if you don't want them
-# to be expanded.
+# _m4_foreach(PRE, POST, IGNORED, ARG...)
+# ---------------------------------------
+# Form the common basis of the m4_foreach and m4_map macros.  For each
+# ARG, expand PRE[ARG]POST[].  The IGNORED argument makes recursion
+# easier, and must be supplied rather than implicit.
 #
 # This version minimizes the number of times that $@ is evaluated by
-# using m4_for to generate a boilerplate into VARIABLE then passing $@
-# to that temporary macro.  Thus, the recursion is done in m4_for
-# without reparsing any user input, and is not quadratic.  For an idea
-# of how this works, note that m4_foreach(i,[1,2],[i]) defines i to be
-#   m4_define([$1],[$3])$2[]m4_define([$1],[$4])$2[]m4_popdef([i])
-# then calls i([i],[i],[1],[2]).
-m4_define([m4_foreach],
-[m4_if([$2], [], [], [_$0([$1], [$3], $2)])])
-
+# using m4_for to generate a boilerplate into _m4_f then passing $@ to
+# that temporary macro.  Thus, the recursion is done in m4_for without
+# reparsing any user input, and is not quadratic.  For an idea of how
+# this works, note that m4_foreach(i,[1,2],[i]) calls
+#   _m4_foreach([m4_define([i],],[)i],[],[1],[2])
+# which defines _m4_f:
+#   $1[$4]$2[]$1[$5]$2[]_m4_popdef([_m4_f])
+# then calls _m4_f([m4_define([i],],[)i],[],[1],[2]) for a net result:
+#   m4_define([i],[1])i[]m4_define([i],[2])i[]_m4_popdef([_m4_f]).
 m4_define([_m4_foreach],
-[m4_pushdef([$1], _m4_for([3], [$#], [1],
-    [$0_([1], [2],], [)])[m4_popdef([$1])])m4_indir([$1], $@)])
+[m4_if([$#], [3], [],
+       [m4_pushdef([_m4_f], _m4_for([4], [$#], [1],
+   [$0_([1], [2],], [)])[_m4_popdef([_m4_f])])_m4_f($@)])])
 
 m4_define([_m4_foreach_],
-[[m4_define([$$1], [$$3])$$2[]]])
+[[$$1[$$3]$$2[]]])
 
 # m4_case(SWITCH, VAL1, IF-VAL1, VAL2, IF-VAL2, ..., DEFAULT)
 # -----------------------------------------------------------
@@ -263,23 +263,6 @@ m4_define([m4_reverse],
 [m4_pushdef([_m4_r], [[$$#]]_m4_for(m4_decr([$#]), [1], [-1],
     [[, ]m4_dquote($], [)])[_m4_popdef([_m4_r])])_m4_r($@)])])
 
-
-# _m4_map(PRE, POST, IGNORED, LIST)
-# ---------------------------------
-# Form the common basis of the m4_map macros.  For each element of
-# LIST, expand PRE[element]POST[].  The IGNORED argument makes
-# recursion easier, and must be supplied rather than implicit.
-#
-# m4_map{,all,_args}{,_sep} each only execute once; the speedup comes
-# in fixing _m4_map.  Build the temporary _m4_m:
-#   $1[$4]$2[]$1[$5]$2[]...$1[$m]$2[]_m4_popdef([_m4_m])
-m4_define([_m4_map],
-[m4_if([$#], [3], [],
-       [m4_pushdef([_m4_m], _m4_for([4], [$#], [1],
-   [$0_([1], [2],], [)])[_m4_popdef([_m4_m])])_m4_m($@)])])
-
-m4_define([_m4_map_],
-[[$$1[$$3]$$2[]]])
 
 # m4_map_args_pair(EXPRESSION, [END-EXPR = EXPRESSION], ARG...)
 # -------------------------------------------------------------
