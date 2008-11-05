@@ -1,5 +1,11 @@
 2008-11-05  Eric Blake  <ebb9@byu.net>
 
+	Unify m4_set_foreach and m4_set_map.
+	* lib/m4sugar/m4sugar.m4 (m4_set_map_sep): New macro, undocumented
+	for now.
+	(m4_set_contents, m4_set_foreach, m4_set_list, m4_set_listc)
+	(m4_set_map): Adjust callers.
+
 	Use _m4_foreach in more places.
 	* lib/m4sugar/foreach.m4 (m4_dquote_elt, m4_join, m4_joinall)
 	(_m4_minmax, m4_set_add_all): Use _m4_foreach instead of

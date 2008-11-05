@@ -2688,8 +2688,7 @@ m4_define([m4_set_contains],
 # Use _m4_popdef for speed.  The existence of _m4_set_cleanup($1)
 # determines which version of _1 helper we use.
 m4_define([m4_set_contents],
-[m4_ifdef([_m4_set_cleanup($1)], [_$0_1c], [_$0_1])([$1])_$0_2([$1],
-  [], [], [[$2]])])
+[m4_set_map_sep([$1], [], [], [[$2]])])
 
 # _m4_set_contents_1(SET)
 # _m4_set_contents_1c(SET)
@@ -2804,9 +2803,7 @@ m4_define([m4_set_empty],
 # guaranteed.  This is faster than the corresponding m4_foreach([VAR],
 #   m4_indir([m4_dquote]m4_set_listc([SET])), [ACTION])
 m4_define([m4_set_foreach],
-[m4_pushdef([$2])m4_ifdef([_m4_set_cleanup($1)],
-    [_m4_set_contents_1c], [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
-       [m4_define([$2],], [)$3[]])m4_popdef([$2])])
+[m4_pushdef([$2])m4_set_map_sep([$1], [m4_define([$2],], [)$3])])
 
 # m4_set_intersection(SET1, SET2)
 # -------------------------------
@@ -2835,12 +2832,10 @@ m4_define([m4_set_intersection],
 # containing only the empty string; with m4_set_listc, a leading comma
 # is output if there are any elements.
 m4_define([m4_set_list],
-[m4_ifdef([_m4_set_cleanup($1)], [_m4_set_contents_1c],
-	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1], [], [], [,])])
+[m4_set_map_sep([$1], [], [], [,])])
 
 m4_define([m4_set_listc],
-[m4_ifdef([_m4_set_cleanup($1)], [_m4_set_contents_1c],
-	  [_m4_set_contents_1])([$1])_m4_set_contents_2([$1], [,])])
+[m4_set_map_sep([$1], [,])])
 
 # m4_set_map(SET, ACTION)
 # -----------------------
@@ -2848,12 +2843,19 @@ m4_define([m4_set_listc],
 # current element.  ACTION should not recursively list SET's contents,
 # add elements to SET, nor delete any element from SET except the one
 # passed as an argument.  The order that the elements are visited in
-# is not guaranteed.  This is faster than the corresponding
+# is not guaranteed.  This is faster than either of the corresponding
 #   m4_map_args([ACTION]m4_set_listc([SET]))
+#   m4_set_foreach([SET], [VAR], [ACTION(m4_defn([VAR]))])
 m4_define([m4_set_map],
-[m4_ifdef([_m4_set_cleanup($1)],
-    [_m4_set_contents_1c], [_m4_set_contents_1])([$1])_m4_set_contents_2([$1],
-       [$2(], [)])])
+[m4_set_map_sep([$1], [$2(], [)])])
+
+# m4_set_map_sep(SET, PRE, POST, SEP)
+# -----------------------------------
+# For each element of SET, expand PRE[value]POST[], and expand SEP
+# between elements.
+m4_define([m4_set_map_sep],
+[m4_ifdef([_m4_set_cleanup($1)], [_m4_set_contents_1c],
+	  [_m4_set_contents_1])([$1])_m4_set_contents_2($@)])
 
 # m4_set_remove(SET, VALUE, [IF-PRESENT], [IF-ABSENT])
 # ----------------------------------------------------
