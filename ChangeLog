@@ -1,3 +1,9 @@
+2008-11-06  Eric Blake  <ebb9@byu.net>
+
+	Speed up AC_CHECK_TYPE.
+	* lib/autoconf/types.m4 (AC_CHECK_TYPE): Factor out $@, and avoid
+	regex when enough arguments are present.
+
 2008-11-06  Paolo Bonzini  <bonzini@gnu.org>
 
 	Remove three forks per _AC_RUN_LOG_STDERR in the common case.

@@ -248,17 +248,16 @@ m4_define([_AC_CHECK_TYPE_MAYBE_TYPE_P],
 # 3. $2 seems to be a type	     => NEW plus a warning
 # 4. default			     => NEW
 AC_DEFUN([AC_CHECK_TYPE],
-[m4_if($#, 3,
-	 [_AC_CHECK_TYPE_NEW($@)],
-       $#, 4,
-	 [_AC_CHECK_TYPE_NEW($@)],
-       _AC_CHECK_TYPE_REPLACEMENT_TYPE_P([$2]), 1,
-	 [_AC_CHECK_TYPE_OLD($@)],
-       _AC_CHECK_TYPE_MAYBE_TYPE_P([$2]), 1,
-	 [AC_DIAGNOSE([syntax],
-		    [$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW($@)],
-       [_AC_CHECK_TYPE_NEW($@)])[]dnl
-])# AC_CHECK_TYPE
+[m4_cond([$#], [3],
+  [_AC_CHECK_TYPE_NEW],
+	 [$#], [4],
+  [_AC_CHECK_TYPE_NEW],
+	 [_AC_CHECK_TYPE_REPLACEMENT_TYPE_P([$2])], [1],
+  [_AC_CHECK_TYPE_OLD],
+	 [_AC_CHECK_TYPE_MAYBE_TYPE_P([$2])], [1],
+  [AC_DIAGNOSE([syntax],
+	       [$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW],
+  [_AC_CHECK_TYPE_NEW])($@)])# AC_CHECK_TYPE
 
 
 
