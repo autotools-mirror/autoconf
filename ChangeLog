@@ -1,5 +1,15 @@
 2008-11-05  Eric Blake  <ebb9@byu.net>
 
+	Add m4_map_args_w.
+	* lib/m4sugar/m4sugar.m4 (m4_map_args_w): New macro, undocumented
+	for now.
+	(_m4_split): Allow user control over separator.
+	(m4_split): Adjust caller.
+	(m4_foreach_w, m4_append_uniq_w, _m4_text_wrap): Rewrite to use
+	m4_map_args_w.
+	* tests/m4sugar.at (m4@&t@_append): Augment test keywords.
+	(M4 loops): Test new interface.
+
 	Use m4_set_map_sep in more places.
 	* lib/m4sugar/m4sugar.m4 (m4_set_difference, m4_set_intersection)
 	(m4_set_union): Use m4_set_map_sep rather than m4_set_foreach.

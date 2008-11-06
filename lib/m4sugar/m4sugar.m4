@@ -1073,8 +1073,8 @@ m4_define([_m4_foreach],
 
 # m4_foreach_w(VARIABLE, LIST, EXPRESSION)
 # ----------------------------------------
-#
-# Like m4_foreach, but the list is whitespace separated.
+# Like m4_foreach, but the list is whitespace separated.  Depending on
+# EXPRESSION, it may be more efficient to use m4_map_args_w.
 #
 # This macro is robust to active symbols:
 #    m4_foreach_w([Var], [ active
@@ -1082,8 +1082,11 @@ m4_define([_m4_foreach],
 #    ive  ], [-Var-])end
 #    => -active--b--active-end
 #
+# This used to use a slower implementation based on m4_foreach:
+#   m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])
 m4_define([m4_foreach_w],
-[m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])])
+[m4_pushdef([$1])m4_map_args_w([$2],
+  [m4_define([$1],], [)$3])m4_popdef([$1])])
 
 
 # m4_map(MACRO, LIST)
@@ -1179,6 +1182,29 @@ m4_define([m4_map_args_sep],
        [$#], [3], [],
        [$#], [4], [$1[$4]$2[]],
        [$1[$4]$2[]_m4_foreach([$3[]$1], [$2], m4_shift3($@))])])
+
+
+# m4_map_args_w(STRING, [PRE], [POST])
+# ------------------------------------
+# Perform the expansion of PRE[word]POST[] for each word in STRING
+# separated by whitespace.  More efficient than:
+#   m4_foreach_w([var], [STRING], [PRE[]m4_defn([var])POST])
+#
+# As long as we have to use m4_bpatsubst to split the string, we might
+# as well make it also apply PRE and POST; this avoids iteration
+# altogether.  But we must be careful of any \ in PRE or POST.
+# _m4_strip returns a quoted string, but that's okay, since it also
+# supplies an empty leading and trailing argument due to our
+# intentional whitespace around STRING.  We use m4_substr to strip the
+# empty elements and remove the extra layer of quoting.
+m4_define([m4_map_args_w],
+[_$0(_m4_split([ ]m4_flatten([$1])[ ], [[	 ]+],
+	       m4_if(m4_index([$2$3], [\]), [-1], [[$3[]$2]],
+		     [m4_bpatsubst([[$3[]$2]], [\\], [\\\\])])),
+     m4_len([[]$3]), m4_len([$2[]]))])
+
+m4_define([_m4_map_args_w],
+[m4_substr([$1], [$2], m4_eval(m4_len([$1]) - [$2] - [$3]))])
 
 
 # m4_stack_foreach(MACRO, FUNC)
@@ -2024,7 +2050,6 @@ m4_define([m4_toupper],
 
 # m4_split(STRING, [REGEXP])
 # --------------------------
-#
 # Split STRING into an m4 list of quoted elements.  The elements are
 # quoted with [ and ].  Beginning spaces and end spaces *are kept*.
 # Use m4_strip to remove them.
@@ -2053,15 +2078,15 @@ m4_define([m4_toupper],
 # so avoid unnecessary dnl inside the definition.
 m4_define([m4_split],
 [m4_if([$1], [], [],
-       [$2], [ ], [m4_if(m4_index([$1], [ ]), [-1], [[[$1]]], [_$0($@)])],
-       [$2], [], [_$0([$1], [[	 ]+])],
-       [_$0($@)])])
+       [$2], [ ], [m4_if(m4_index([$1], [ ]), [-1], [[[$1]]],
+			 [_$0([$1], [$2], [, ])])],
+       [$2], [], [_$0([$1], [[	 ]+], [, ])],
+       [_$0([$1], [$2], [, ])])])
 
 m4_define([_m4_split],
 [m4_changequote([-=<{(],[)}>=-])]dnl
 [[m4_bpatsubst(-=<{(-=<{($1)}>=-)}>=-, -=<{($2)}>=-,
-	       -=<{(], [)}>=-)]m4_changequote([, ])])
-
+	       -=<{(]$3[)}>=-)]m4_changequote([, ])])
 
 
 # m4_flatten(STRING)
@@ -2267,8 +2292,7 @@ m4_define([_m4_append_uniq],
 #
 # Use _m4_defn for speed.
 m4_define([m4_append_uniq_w],
-[m4_foreach_w([m4_Word], [$2],
-	      [_m4_append_uniq([$1], _m4_defn([m4_Word]), [ ])])])
+[m4_map_args_w([$2], [_m4_append_uniq([$1],], [, [ ])])])
 
 
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
@@ -2342,17 +2366,16 @@ dnl check if the cursor would exceed the wrap column
 dnl if so, reset cursor, and insert newline and prefix
 dnl if not, insert the separator (usually a space)
 dnl either way, insert the word
-[[m4_foreach_w([m4_Word], [$1],
-  [m4_define([m4_Cursor],
-	     m4_eval(m4_Cursor + m4_qlen(_m4_defn([m4_Word]))
-		     + 1))m4_if(m4_eval(m4_Cursor > ([$4])),
-      [1], [m4_define([m4_Cursor],
-		      m4_eval(m4_Indent + m4_qlen(_m4_defn([m4_Word])) + 1))
-[$2]],
-      [m4_Separator[]])_m4_defn([m4_Word])])]],
+[[m4_map_args_w([$1], [$0_word(], [, [$2], [$4])])]],
 dnl finally, clean up the local variables
 [[_m4_popdef([m4_Separator], [m4_Cursor], [m4_Indent])]]))
 
+m4_define([_m4_text_wrap_word],
+[m4_define([m4_Cursor], m4_eval(m4_Cursor + m4_qlen([$1]) + 1))]dnl
+[m4_if(m4_eval(m4_Cursor > ([$3])),
+      [1], [m4_define([m4_Cursor], m4_eval(m4_Indent + m4_qlen([$1]) + 1))
+[$2]],
+      [m4_Separator[]])[$1]])
 
 # m4_text_box(MESSAGE, [FRAME-CHARACTER = `-'])
 # ---------------------------------------------

@@ -546,6 +546,7 @@ AT_CLEANUP
 ## ----------- ##
 
 AT_SETUP([m4@&t@_append])
+AT_KEYWORDS([m4@&t@_append_uniq m4@&t@_append_uniq_w])
 
 AT_CHECK_M4SUGAR_TEXT(
 [[m4_define([active], [ACTIVE])dnl
@@ -876,7 +877,7 @@ AT_CLEANUP
 
 AT_SETUP([M4 loops])
 
-AT_KEYWORDS([m4@&t@_for m4@&t@_foreach m4@&t@_foreach_w])
+AT_KEYWORDS([m4@&t@_for m4@&t@_foreach m4@&t@_foreach_w m4@&t@_map_args_w])
 
 AT_CHECK_M4SUGAR_TEXT([[dnl
 m4_define([myvar], [outer value])dnl
@@ -921,6 +922,10 @@ m4_foreach([myvar], [[a], [b, c], [d], [e
 m4_foreach_w([myvar], [a  b c, d,e f
 g], [ myvar|])
 myvar
+m4_map_args_w([a  b c, d,e f
+g], [ ], [|])
+m4_map_args_w([a b], [\1], [/])
+m4_map_args_w([a b], [/], [\1])
 dnl only one side effect expansion, prior to visiting list elements
 m4_foreach([i], [[1], [2], [3]m4_errprintn([hi])], [m4_errprintn(i)])dnl
 dnl shifting forms an important part of loops
@@ -959,6 +964,9 @@ m4_shiftn(3,1,2,3):m4_shiftn(3,1,2,3,4)
 | f|
  a| b| c,| d,e| f| g|
 outer value
+ a| b| c,| d,e| f| g|
+\1a/\1b/
+/a\1/b\1
 ::4
 :4
 ]], [[hi
