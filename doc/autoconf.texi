@@ -22192,11 +22192,10 @@ result, incompatibilities between headers went unnoticed during
 configuration, and maintainers finally had to deal with this issue
 elsewhere.
 
-As of Autoconf 2.56 both checks are performed, and @command{configure}
-complains loudly if the compiler and the preprocessor do not agree.
-For the time being the result used is that of the preprocessor, to give
-maintainers time to adjust their @file{configure.ac}, but in the
-future, only the compiler will be considered.
+The transition began with Autoconf 2.56.  As of Autoconf 2.64 both
+checks are performed, and @command{configure} complains loudly if the
+compiler and the preprocessor do not agree.  However, only the compiler
+result is considered.
 
 Consider the following example:
 
@@ -22238,8 +22237,7 @@ configure: WARNING: pi.h: present but cannot be compiled
 configure: WARNING: pi.h:     check for missing prerequisite headers?
 configure: WARNING: pi.h: see the Autoconf documentation
 configure: WARNING: pi.h:     section "Present But Cannot Be Compiled"
-configure: WARNING: pi.h: proceeding with the preprocessor's result
-configure: WARNING: pi.h: in the future, the compiler will take precedence
+configure: WARNING: pi.h: proceeding with the compiler's result
 configure: WARNING:     ## -------------------------------------- ##
 configure: WARNING:     ## Report this to bug-example@@example.org ##
 configure: WARNING:     ## -------------------------------------- ##
@@ -22274,7 +22272,7 @@ checking for pi.h... yes
 @end example
 
 See @ref{Particular Headers}, for a list of headers with their
-prerequisite.
+prerequisites.
 
 @c ===================================================== History of Autoconf.
 

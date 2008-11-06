@@ -121,22 +121,20 @@ case $ac_header_compiler:$ac_header_preproc:$ac_[]_AC_LANG_ABBREV[]_preproc_warn
   yes:no: )
     AC_MSG_WARN([$[]2: accepted by the compiler, rejected by the preprocessor!])
     AC_MSG_WARN([$[]2: proceeding with the compiler's result])
-    ac_header_preproc=yes
     ;;
   no:yes:* )
     AC_MSG_WARN([$[]2: present but cannot be compiled])
     AC_MSG_WARN([$[]2:     check for missing prerequisite headers?])
     AC_MSG_WARN([$[]2: see the Autoconf documentation])
     AC_MSG_WARN([$[]2:     section "Present But Cannot Be Compiled"])
-    AC_MSG_WARN([$[]2: proceeding with the preprocessor's result])
-    AC_MSG_WARN([$[]2: in the future, the compiler will take precedence])
+    AC_MSG_WARN([$[]2: proceeding with the compiler's result])
 m4_ifset([AC_PACKAGE_BUGREPORT],
 [m4_n([( AS_BOX([Report this to ]AC_PACKAGE_BUGREPORT)
      ) | sed "s/^/$as_me: WARNING:     /" >&2])])dnl
     ;;
 esac
   AC_CACHE_CHECK([for $[]2], [$[]3],
-		 [AS_VAR_SET([$[]3], [$ac_header_preproc])])])
+		 [AS_VAR_SET([$[]3], [$ac_header_compiler])])])
   AS_LINENO_POP
 ])#_AC_CHECK_HEADER_MONGREL_BODY
 

@@ -170,12 +170,29 @@ AT_CLEANUP
 # ----------------
 # Check that it performs the correct actions:
 # Must define HAVE_STDIO_H, but not HAVE_AUTOCONF_IO_H.
-AT_CHECK_MACRO([AC_CHECK_HEADERS],
-[AC_CHECK_HEADERS(stdio.h autoconf_io.h)],
-[AT_CHECK_DEFINES(
+AT_SETUP([AC_CHECK_HEADERS])
+
+AT_DATA([autoconf_io.h],
+[blah blah
+])
+
+AT_CONFIGURE_AC([AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
+AT_CHECK_AUTOCONF([-W obsolete])
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE([CPPFLAGS=-I.], [0], [ignore],
+[configure: WARNING: autoconf_io.h: present but cannot be compiled
+configure: WARNING: autoconf_io.h:     check for missing prerequisite headers?
+configure: WARNING: autoconf_io.h: see the Autoconf documentation
+configure: WARNING: autoconf_io.h:     section "Present But Cannot Be Compiled"
+configure: WARNING: autoconf_io.h: proceeding with the compiler's result
+])
+AT_CHECK_ENV
+AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
 #define HAVE_STDIO_H 1
-])])
+])
+
+AT_CLEANUP
 
 
 # AC_CHECK_HEADERS_OLD

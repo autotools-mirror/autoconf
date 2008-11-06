@@ -12,6 +12,11 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Configure scripts now use shell functions.
 
+** Present But Cannot Be Compiled: Autoconf will now proceed with
+   the compiler's result if a header is present but cannot be compiled.
+   The warning is still printed, and you should really fix it by
+   providing a fourth parameter to AC_CHECK_HEADER/AC_CHECK_HEADERS.
+
 ** The following documented m4sugar macros are new:
    m4_curry  m4_default_quoted  m4_map_args  m4_map_args_pair
    m4_set_map
