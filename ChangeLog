@@ -1,5 +1,13 @@
 2008-11-06  Paolo Bonzini  <bonzini@gnu.org>
 
+	Remove three forks per _AC_RUN_LOG_STDERR in the common case.
+	* lib/autoconf/general.m4 (_AC_RUN_LOG_STDERR): Avoid grep/rm/cat
+	sequence when the program's stderr was empty, while providing a
+	conftest.err file even in that case.
+	(_AC_CACHE_DUMP): Fix mismatched parenthesis.
+
+2008-11-06  Paolo Bonzini  <bonzini@gnu.org>
+
 	Change `present but cannot be compiled' behavior to use compiler result.
 	* NEWS: Document it.
 	* doc/autoconf.texi (Present But Cannot Be Compiled): Document it.

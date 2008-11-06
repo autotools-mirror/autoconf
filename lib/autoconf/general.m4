@@ -1929,7 +1929,7 @@ m4_define([_AC_CACHE_DUMP],
   (set) 2>&1 |
     case $as_nl`(ac_space=' '; set) 2>&1` in #(
     *${as_nl}ac_space=\ *)
-      # `set' does not quote correctly, so add quotes (double-quote
+      # `set' does not quote correctly, so add quotes: double-quote
       # substitution turns \\\\ into \\, and sed turns \\ into \).
       sed -n \
 	["s/'/'\\\\''/g;
@@ -2253,11 +2253,13 @@ AC_DEFUN([_AC_RUN_LOG],
 # in AS_IF constructs.
 AC_DEFUN([_AC_RUN_LOG_STDERR],
 [{ { $2; } >&AS_MESSAGE_LOG_FD
-  ($1) 2>conftest.er1
+  ($1) 2>conftest.err
   ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&AS_MESSAGE_LOG_FD
+  if test -s conftest.err; then
+    grep -v '^ *+' conftest.err >conftest.er1
+    cat conftest.er1 >&AS_MESSAGE_LOG_FD
+    mv -f conftest.er1 conftest.err
+  fi
   _AS_ECHO_LOG([\$? = $ac_status])
   test $ac_status = 0; }])
 
