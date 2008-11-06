@@ -91,19 +91,24 @@ AS_VAR_IF([ac_var], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_var])])# AC_CHECK_FUNC
 
 
-# _AH_CHECK_FUNCS(FUNCTION...)
-# ----------------------------
-m4_define([_AH_CHECK_FUNCS],
-[m4_foreach_w([AC_Func], [$1],
-   [AH_TEMPLATE(AS_TR_CPP([HAVE_]m4_defn([AC_Func])),
-      [Define to 1 if you have the `]m4_defn([AC_Func])[' function.])])])
+# _AH_CHECK_FUNC(FUNCTION)
+# ------------------------
+# Prepare the autoheader snippet for FUNCTION.
+m4_define([_AH_CHECK_FUNC],
+[AH_TEMPLATE(AS_TR_CPP([HAVE_$1]),
+  [Define to 1 if you have the `$1' function.])])
 
 
 # AC_CHECK_FUNCS(FUNCTION..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ---------------------------------------------------------------------
+# Check for each whitespace-separated FUNCTION, and perform
+# ACTION-IF-FOUND or ACTION-IF-NOT-FOUND for each function.
+# Additionally, make the preprocessor definition HAVE_FUNCTION
+# available for each found function.  Either ACTION may include
+# `break' to stop the search.
 AC_DEFUN([AC_CHECK_FUNCS],
-[_AH_CHECK_FUNCS([$1])dnl
-for ac_func in $1
+[m4_map_args_w([$1], [_AH_CHECK_FUNC(], [)])]dnl
+[for ac_func in $1
 do
 AC_CHECK_FUNC($ac_func,
 	      [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$ac_func])) $2],
@@ -112,18 +117,21 @@ done
 ])
 
 
+# _AC_CHECK_FUNC_ONCE(FUNCTION)
+# -----------------------------
+# Check for a single FUNCTION once.
+m4_define([_AC_CHECK_FUNC_ONCE],
+[_AH_CHECK_FUNC([$1])AC_DEFUN([_AC_Func_$1],
+  [m4_divert_text([INIT_PREPARE], [AS_VAR_APPEND([ac_func_list], [" $1"])])
+_AC_FUNCS_EXPANSION])AC_REQUIRE([_AC_Func_$1])])
+
 # AC_CHECK_FUNCS_ONCE(FUNCTION...)
 # --------------------------------
+# Add each whitespace-separated name in FUNCTION to the list of functions
+# to check once.
 AC_DEFUN([AC_CHECK_FUNCS_ONCE],
-[
-  _AH_CHECK_FUNCS([$1])
-  m4_foreach_w([AC_Func], [$1],
-    [AC_DEFUN([_AC_Func_]m4_defn([AC_Func]),
-       [m4_divert_text([INIT_PREPARE],
-	  [AS_VAR_APPEND([ac_func_list], [" AC_Func"])])
-	_AC_FUNCS_EXPANSION])
-     AC_REQUIRE([_AC_Func_]m4_defn([AC_Func]))])
-])
+[m4_map_args_w([$1], [_AC_CHECK_FUNC_ONCE(], [)])])
+
 m4_define([_AC_FUNCS_EXPANSION],
 [
   m4_divert_text([DEFAULTS], [ac_func_list=])
@@ -135,8 +143,8 @@ m4_define([_AC_FUNCS_EXPANSION],
 # AC_REPLACE_FUNCS(FUNCTION...)
 # -----------------------------
 AC_DEFUN([AC_REPLACE_FUNCS],
-[m4_foreach_w([AC_Func], [$1], [AC_LIBSOURCE(AC_Func.c)])dnl
-AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ($ac_func)])
+[m4_map_args_w([$1], [AC_LIBSOURCE(], [.c)])]dnl
+[AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ($ac_func)])
 ])
 
 

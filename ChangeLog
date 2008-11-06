@@ -1,5 +1,14 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Use more efficient macros in AC_CHECK_FUNCS.
+	* lib/autoconf/functions.m4 (_AH_CHECK_FUNCS): Rename...
+	(_AH_CHECK_FUNC): ...and take only one argument, rather than a
+	list.
+	(AC_CHECK_FUNCS, AC_CHECK_FUNCS_ONCE): Adjust callers to use
+	m4_map_args_w.
+	(_AC_CHECK_FUNC_ONCE): New helper macro.
+	(AC_REPLACE_FUNCS): Use m4_map_args_w.
+
 	Use more efficient macro in AT_INIT.
 	* lib/autotest/general.m4 (AT_INIT): Use m4_map_args.
 
