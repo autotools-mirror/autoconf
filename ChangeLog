@@ -1,5 +1,15 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Use more efficient macros in AC_CHECK_HEADERS.
+	* lib/autoconf/headers.m4 (AH_CHECK_HEADERS)
+	(AH_CHECK_HEADERS_DIRENT): Rename...
+	(_AH_CHECK_HEADER, _AH_CHECK_HEADER_DIRENT): ...and take only one
+	argument, rather than a list.
+	(AC_CHECK_HEADERS, AC_CHECK_HEADERS_ONCE):
+	Adjust callers to use m4_map_args_w.
+	(AC_HEADER_DIRENT): Adjust caller to use m4_map_args.
+	(_AC_CHECK_HEADER_ONCE): New helper macro.
+
 	Use more efficient macros in AC_CHECK_FUNCS.
 	* lib/autoconf/functions.m4 (_AH_CHECK_FUNCS): Rename...
 	(_AH_CHECK_FUNC): ...and take only one argument, rather than a

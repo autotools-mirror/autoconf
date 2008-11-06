@@ -226,21 +226,26 @@ AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_PREPROC
 
 
-# AH_CHECK_HEADERS(HEADER-FILE...)
-# --------------------------------
-m4_define([AH_CHECK_HEADERS],
-[m4_foreach_w([AC_Header], [$1],
-  [AH_TEMPLATE(AS_TR_CPP([HAVE_]m4_defn([AC_Header])),
-     [Define to 1 if you have the <]m4_defn([AC_Header])[> header file.])])])
+# _AH_CHECK_HEADER(HEADER-FILE)
+# -----------------------------
+# Prepare the autoheader snippet for HEADER-FILE.
+m4_define([_AH_CHECK_HEADER],
+[AH_TEMPLATE(AS_TR_CPP([HAVE_$1]),
+  [Define to 1 if you have the <$1> header file.])])
 
 
 # AC_CHECK_HEADERS(HEADER-FILE...,
 #		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #		   [INCLUDES])
 # ----------------------------------------------------------
+# Check for each whitespace-separated HEADER-FILE (omitting the <> or
+# ""), and perform ACTION-IF-FOUND or ACTION-IF-NOT-FOUND for each
+# header.  INCLUDES is as for AC_CHECK_HEADER.  Additionally, make the
+# preprocessor definition HAVE_HEADER_FILE available for each found
+# header.  Either ACTION may include `break' to stop the search.
 AC_DEFUN([AC_CHECK_HEADERS],
-[AH_CHECK_HEADERS([$1])dnl
-for ac_header in $1
+[m4_map_args_w([$1], [_AH_CHECK_HEADER(], [)])]dnl
+[for ac_header in $1
 do
 AC_CHECK_HEADER($ac_header,
 		[AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$ac_header)) $2],
@@ -250,18 +255,24 @@ done
 ])# AC_CHECK_HEADERS
 
 
+# _AC_CHECK_HEADER_ONCE(HEADER-FILE)
+# ----------------------------------
+# Check for a single HEADER-FILE once.
+m4_define([_AC_CHECK_HEADER_ONCE],
+[_AH_CHECK_HEADER([$1])AC_DEFUN([_AC_Header_]m4_translit([[$1]],
+    [./-], [___]),
+  [m4_divert_text([INIT_PREPARE], [AS_VAR_APPEND([ac_header_list], [" $1"])])
+_AC_HEADERS_EXPANSION])AC_REQUIRE([_AC_Header_]m4_translit([[$1]],
+    [./-], [___]))])
+
+
 # AC_CHECK_HEADERS_ONCE(HEADER-FILE...)
 # -------------------------------------
+# Add each whitespace-separated name in HEADER-FILE to the list of
+# headers to check once.
 AC_DEFUN([AC_CHECK_HEADERS_ONCE],
-[
-  AH_CHECK_HEADERS([$1])
-  m4_foreach_w([AC_Header], [$1],
-    [AC_DEFUN([_AC_Header_]m4_quote(m4_translit(AC_Header, [./-], [___])),
-       [m4_divert_text([INIT_PREPARE],
-	  [AS_VAR_APPEND([ac_header_list], [" AC_Header"])])
-	_AC_HEADERS_EXPANSION])
-     AC_REQUIRE([_AC_Header_]m4_quote(m4_translit(AC_Header, [./-], [___])))])
-])
+[m4_map_args_w([$1], [_AC_CHECK_HEADER_ONCE(], [)])])
+
 m4_define([_AC_HEADERS_EXPANSION],
 [
   m4_divert_text([DEFAULTS], [ac_header_list=])
@@ -454,20 +465,20 @@ AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_DIRENT
 
 
-# AH_CHECK_HEADERS_DIRENT(HEADERS...)
-# -----------------------------------
-m4_define([AH_CHECK_HEADERS_DIRENT],
-[m4_foreach_w([AC_Header], [$1],
-  [AH_TEMPLATE(AS_TR_CPP([HAVE_]m4_defn([AC_Header])),
-	       [Define to 1 if you have the <]m4_defn([AC_Header])[> header file, and
-		it defines `DIR'.])])])
+# _AH_CHECK_HEADER_DIRENT(HEADERS)
+# --------------------------------
+# Like _AH_CHECK_HEADER, but tuned to a dirent provider.
+m4_define([_AH_CHECK_HEADER_DIRENT],
+[AH_TEMPLATE(AS_TR_CPP([HAVE_$1]),
+  [Define to 1 if you have the <$1> header file, and it defines `DIR'.])])
 
 
 # AC_HEADER_DIRENT
 # ----------------
 AC_DEFUN([AC_HEADER_DIRENT],
-[AH_CHECK_HEADERS_DIRENT(dirent.h sys/ndir.h sys/dir.h ndir.h)
-ac_header_dirent=no
+[m4_map_args([_AH_CHECK_HEADER_DIRENT], [dirent.h], [sys/ndir.h],
+	     [sys/dir.h], [ndir.h])]dnl
+[ac_header_dirent=no
 for ac_hdr in dirent.h sys/ndir.h sys/dir.h ndir.h; do
   _AC_CHECK_HEADER_DIRENT($ac_hdr,
 			  [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$ac_hdr), 1)
