@@ -1,5 +1,11 @@
 2008-11-06  Eric Blake  <ebb9@byu.net>
 
+	Skip preprocessor check in AC_CHECK_HEADERS_ONCE.
+	* lib/autoconf/headers.m4 (_AC_HEADERS_EXPANSION): Provide fourth
+	argument to speed up check.
+
+2008-11-06  Eric Blake  <ebb9@byu.net>
+
 	Speed up AC_CHECK_TYPE.
 	* lib/autoconf/types.m4 (AC_CHECK_TYPE): Factor out $@, and avoid
 	regex when enough arguments are present.

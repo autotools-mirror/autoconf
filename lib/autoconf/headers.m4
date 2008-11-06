@@ -169,7 +169,7 @@ AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_MONGREL
 m4_define([_AC_CHECK_HEADER_COMPILE_BODY],
 [  AS_LINENO_PUSH([$[]1])
   AC_CACHE_CHECK([for $[]2], [$[]3],
-	         [AC_COMPILE_IFELSE([AC_LANG_SOURCE([$[]4
+		 [AC_COMPILE_IFELSE([AC_LANG_SOURCE([$[]4
 @%:@include <$[]2>])],
 				    [AS_VAR_SET([$[]3], [yes])],
 				    [AS_VAR_SET([$[]3], [no])])])
@@ -265,7 +265,7 @@ AC_DEFUN([AC_CHECK_HEADERS_ONCE],
 m4_define([_AC_HEADERS_EXPANSION],
 [
   m4_divert_text([DEFAULTS], [ac_header_list=])
-  AC_CHECK_HEADERS([$ac_header_list])
+  AC_CHECK_HEADERS([$ac_header_list], [], [], [AC_INCLUDES_DEFAULT])
   m4_define([_AC_HEADERS_EXPANSION], [])
 ])
 
