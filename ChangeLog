@@ -1,5 +1,10 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Use more efficient macro in AT_INIT.
+	* lib/autotest/general.m4 (AT_INIT): Use m4_map_args.
+
+2008-11-10  Eric Blake  <ebb9@byu.net>
+
 	More FDL 1.3 fallout.
 	* cfg.mk (fetch): Add gnu-oids.texi, drop fdl.texi.
 	* doc/Makefile.am (standards_TEXINFOS): Reflect upstream

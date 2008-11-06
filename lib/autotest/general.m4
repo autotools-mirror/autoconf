@@ -204,18 +204,19 @@ m4_define([_AT_DEFINE_SETUP],
 # -------------------------
 # Begin test suite.
 m4_define([AT_INIT],
-[m4_pushdef([AT_INIT], [m4_fatal([$0: invoked multiple times])])
-m4_pattern_forbid([^_?AT_])
-m4_pattern_allow([^_AT_T_EOF$])
-m4_define([AT_TESTSUITE_NAME],
-  m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1], [m4_expand([: $1])]))
-m4_define([AT_ordinal], 0)
-m4_define([AT_banner_ordinal], 0)
-m4_define([AT_groups_all], [])
-m4_define([AT_help_all], [])
-m4_foreach([AT_name], [_AT_DEFINE_INIT_LIST], [m4_popdef(m4_defn([AT_name]))])
-m4_wrap([_AT_FINISH])
-AS_INIT[]dnl
+[m4_pushdef([AT_INIT], [m4_fatal([$0: invoked multiple times])])]
+[m4_pattern_forbid([^_?AT_])]
+[m4_pattern_allow([^_AT_T_EOF$])]
+[m4_define([AT_TESTSUITE_NAME],
+  m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1],
+   [m4_expand([: $1])]))]
+[m4_define([AT_ordinal], 0)]
+[m4_define([AT_banner_ordinal], 0)]
+[m4_define([AT_groups_all], [])]
+[m4_define([AT_help_all], [])]
+[m4_map_args([_m4_popdef], _AT_DEFINE_INIT_LIST)]
+[m4_wrap([_AT_FINISH])]
+[AS_INIT[]dnl
 dnl We don't use m4sh's BODY diversion, but AS_INIT sticks a banner there.
 dnl This trick removes that banner, since it adds nothing to autotest.
 m4_divert_text([KILL], [m4_undivert([BODY])])dnl
