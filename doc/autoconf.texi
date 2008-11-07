@@ -14710,6 +14710,8 @@ often possible to avoid this problem using @samp{echo "x$word"}, taking
 the @samp{x} into account later in the pipe.  Many of these limitations
 can be worked around using M4sh (@pxref{Programming in M4sh}).
 
+@c This table includes things like `@command{test} (files)', so we can't
+@c use @table @command.
 @table @asis
 @item @command{.}
 @c --------------
@@ -15290,12 +15292,6 @@ example, @file{/usr/bin/printf} is buggy, so when using
 core.
 
 
-@item @command{read}
-@c ------------------
-@prindex @command{read}
-Not all shells support @option{-r} (Solaris @command{/bin/sh} for example).
-
-
 @item @command{pwd}
 @c ----------------
 @prindex @command{pwd}
@@ -15332,6 +15328,13 @@ reason.
 @end itemize
 
 Also please see the discussion of the @command{cd} command.
+
+
+@item @command{read}
+@c -----------------
+@prindex @command{read}
+No options are portable, not even support @option{-r} (Solaris
+@command{/bin/sh} for example).
 
 
 @item @command{set}
@@ -15635,6 +15638,11 @@ something like
 @xref{Special Shell Variables}, for some neutralizing values.  Also, see
 @ref{Limitations of Builtins}, documentation of @command{export}, for
 the case of environment variables.
+
+@item @command{wait}
+@c -----------------
+@prindex @command{wait}
+The exit status of @command{wait} is not always reliable.
 @end table
 
 @node Limitations of Usual Tools
@@ -15644,10 +15652,16 @@ the case of environment variables.
 The small set of tools you can expect to find on any machine can still
 include some limitations you should be aware of.
 
+@comment Between this list and the list of builtins above, we should
+@comment mention all the tools in GNU Coding Standards ``Utilities in
+@comment Makefiles''.
+
+@c This table includes things like `@command{expr} (|)', so we can't
+@c use @table @command.
 @table @asis
-@item Awk
-@c ------
-@prindex Awk
+@item @command{awk}
+@c ----------------
+@prindex @command{awk}
 Don't leave white space before the opening parenthesis in a user function call.
 Posix does not allow this and @acronym{GNU} Awk rejects it:
 
@@ -15857,6 +15871,13 @@ practice.  Typically the C compiler is invoked from makefiles that use
 @samp{$(CC)}, so the value of the @samp{CC} make variable selects the
 compiler name.
 
+@item @command{chgrp}
+@itemx @command{chown}
+@c -------------------
+@prindex @command{chgrp}
+@prindex @command{chown}
+It is not portable to change a file's group to a group that the owner
+does not belong to.
 
 @item @command{chmod}
 @c ------------------
@@ -16333,6 +16354,20 @@ recent enough; the copy shipped with Autoconf 2.60 and Automake 1.10 is
 OK, but copies from older versions are vulnerable.
 
 
+@item @command{mkfifo}
+@itemx @command{mknod}
+@c -------------------
+@prindex @command{mkfifo}
+@prindex @command{mknod}
+The GNU Coding Standards state that @command{mknod} is safe to use on
+platforms where it has been tested to exist; but it is generally portable
+only for creating named FIFOs, since device numbers are
+platform-specific.  Autotest uses @command{mkfifo} to implement parallel
+testsuites.  Posix states that behavior is unspecified when opening a
+named FIFO for both reading and writing; on at least Cygwin, this
+results in failure on any attempt to read or write to that file
+descriptor.
+
 @item @command{mktemp}
 @c -------------------
 @prindex @command{mktemp}
@@ -16436,6 +16471,11 @@ executed.
 support commands like @samp{rm foo >foo}, even though this is
 perfectly portable among Posix hosts.
 
+@item @command{rmdir}
+@c ------------------
+@prindex @command{rmdir}
+Just as with @command{rm}, some platforms refuse to remove a working
+directory.
 
 @item @command{sed}
 @c ----------------
@@ -16681,6 +16721,28 @@ t end
 s/.*/deleted/g
 :end
 @end example
+
+@item @command{sleep}
+@c ------------------
+@prindex @command{sleep}
+Using @command{sleep} is generally portable.  However, remember that
+adding a @command{sleep} to work around timestamp issues, with a minimum
+granularity of one second, doesn't scale well for parallel builds on
+modern machines with sub-second process completion.
+
+@item @command{sort}
+@c -----------------
+@prindex @command{sort}
+Remember that sort order is influenced by the current locale.  Inside
+@file{configure}, the C locale is in effect, but in Makefile snippets,
+you may need to specify @code{LC_ALL=C sort}.
+
+@item @command{tar}
+@c ----------------
+@prindex @command{tar}
+There are multiple file formats for @command{tar}; if you use Automake,
+the macro @code{AM_INIT_AUTOMAKE} has some options controlling which
+level of portability to use.
 
 @item @command{touch}
 @c ------------------

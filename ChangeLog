@@ -1,3 +1,11 @@
+2008-11-10  Eric Blake  <ebb9@byu.net>
+
+	Provide a section on all tools allowed in GNU Coding Standards.
+	* doc/autoconf.texi (Limitations of Builtins) <read>: Sort.
+	<wait>: Add section.
+	(Limitations of Usual Tools) <awk>: Make table entry consistent.
+	<chgrp, mkfifo, rmdir, sleep, sort, tar> Add sections.
+
 2008-11-09  Paolo Bonzini  <bonzini@gnu.org>
 
 	Balance parentheses in _AC_CACHE_DUMP.
