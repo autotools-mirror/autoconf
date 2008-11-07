@@ -1,5 +1,16 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Avoid some regex uses.
+	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Use m4_format rather
+	than m4_bpatsubst to grab string prefix.
+	* lib/autoconf/status.m4 (_AC_CONFIG_REGISTER)
+	(_AC_CONFIG_REGISTER_DEST, AC_CONFIG_SUBDIRS): Likewise.
+	(_AC_FILE_DEPENDENCY_TRACE_COLON): Use m4_translit instead of
+	m4_bpatsubst to change bytes.
+	(_AC_CONFIG_DEPENDENCY_DEFAULT): Use m4_index rather than
+	m4_bmatch to find byte.
+	(_AC_CONFIG_COMPUTE_DEST): New helper macro.
+
 	Use more efficient macros in AC_CONFIG_SUBDIRS.
 	* lib/autoconf/status.m4 (_AC_CONFIG_FOOS, AC_CONFIG_SUBDIRS): Use
 	m4_map_args_w.

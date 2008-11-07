@@ -2073,22 +2073,22 @@ m4_define([AC_DEFINE_UNQUOTED], [_AC_DEFINE_Q([], $@)])
 # -----------------------------------------------------
 # Internal function that performs common elements of AC_DEFINE{,_UNQUOTED}.
 #
-# m4_index is roughly 5 to 8 times faster than m4_bpatsubst, so only
-# use the regex when necessary.  AC_name is defined with over-quotation,
-# so that we can avoid m4_defn.
+# m4_index is roughly 5 to 8 times faster than m4_bpatsubst, so we use
+# m4_format rather than regex to grab prefix up to first ().  AC_name
+# is defined with over-quotation, so that we can avoid m4_defn; this
+# is only safe because the name should not contain $.
 m4_define([_AC_DEFINE_Q],
-[m4_pushdef([AC_name], m4_if(m4_index([$2], [(]), [-1], [[[$2]]],
-			     [m4_bpatsubst([[[$2]]], [(.*)])]))dnl
-AC_DEFINE_TRACE(AC_name)dnl
-m4_cond([m4_index([$3], [
+[m4_pushdef([AC_name], m4_format([[[%.*s]]], m4_index([$2], [(]), [$2]))]dnl
+[AC_DEFINE_TRACE(AC_name)]dnl
+[m4_cond([m4_index([$3], [
 ])], [-1], [],
 	[AS_LITERAL_IF([$3], [m4_bregexp([[$3]], [[^\\]
 ], [-])])], [], [],
 	[m4_warn([syntax], [AC_DEFINE]m4_ifval([$1], [], [[_UNQUOTED]])dnl
-[: `$3' is not a valid preprocessor define value])])dnl
-m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])])dnl
-m4_popdef([AC_name])dnl
-cat >>confdefs.h <<$1_ACEOF
+[: `$3' is not a valid preprocessor define value])])]dnl
+[m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])])]dnl
+[_m4_popdef([AC_name])]dnl
+[cat >>confdefs.h <<$1_ACEOF
 [@%:@define] $2 m4_if([$#], 2, 1, [$3], [], [/**/], [$3])
 _ACEOF
 ])

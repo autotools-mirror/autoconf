@@ -176,8 +176,7 @@ m4_define([AC_FILE_DEPENDENCY_TRACE], [])
 # Declare that DEST depends upon SOURCE1 etc.
 #
 m4_define([_AC_FILE_DEPENDENCY_TRACE_COLON],
-[AC_FILE_DEPENDENCY_TRACE(m4_bpatsubst([$1], [:], [,]))dnl
-])
+[AC_FILE_DEPENDENCY_TRACE(m4_translit([$1], [:], [,]))])
 
 
 # _AC_CONFIG_DEPENDENCY(MODE, DEST[:SOURCE1...])
@@ -205,12 +204,11 @@ m4_define([_AC_CONFIG_DEPENDENCY],
 #    (We get to this case from the obsolete AC_LINK_FILES, for example.)
 #
 m4_define([_AC_CONFIG_DEPENDENCY_DEFAULT],
-[m4_bmatch([$2], [:], [],
+[m4_if(m4_index([$2], [:]), [-1],
 	   [m4_if([$1], [LINKS],
 		  [AS_LITERAL_IF([$2],
 		    [m4_fatal([Invalid AC_CONFIG_LINKS tag: `$2'])])],
-		  [:$2.in])])dnl
-])
+		  [:$2.in])])])
 
 
 # _AC_CONFIG_UNIQUE(MODE, DEST)
@@ -246,6 +244,12 @@ m4_define([_AC_CONFIG_FOOS],
 [m4_if([$1], [COMMANDS], [$2], [m4_normalize([$2])])"
 ])
 
+# _AC_CONFIG_COMPUTE_DEST(STRING)
+# -------------------------------
+# Compute the DEST from STRING by stripping any : and following
+# characters.
+m4_define([_AC_CONFIG_COMPUTE_DEST],
+[m4_format([[%.*s]], m4_index([$1], [:]), [$1])])
 
 # _AC_CONFIG_REGISTER(MODE, TAG, [COMMANDS])
 # ------------------------------------------
@@ -254,9 +258,9 @@ m4_define([_AC_CONFIG_FOOS],
 m4_define([_AC_CONFIG_REGISTER],
 [m4_if([$1], [COMMANDS],
        [],
-       [_AC_CONFIG_DEPENDENCY([$1], [$2])])dnl
-_AC_CONFIG_REGISTER_DEST([$1], [$2], m4_bpatsubst([[$2]], [:.*\(.\)$], [\1]), [$3])dnl
-])
+       [_AC_CONFIG_DEPENDENCY([$1], [$2])])]dnl
+[_AC_CONFIG_REGISTER_DEST([$1], [$2],
+  _AC_CONFIG_COMPUTE_DEST([$2]), [$3])])
 
 
 # _AC_CONFIG_REGISTER_DEST(MODE, TAG, DEST, [COMMANDS])
@@ -281,15 +285,14 @@ dnl Recognize TAG as an argument to config.status:
 dnl
 [m4_append([_AC_LIST_TAGS],
 [    "$3") CONFIG_$1="$CONFIG_$1 $2" ;;
-])dnl
+])]dnl
 dnl
 dnl Register the associated commands, if any:
 dnl
-m4_ifval([$4],
+[m4_ifval([$4],
 [m4_append([_AC_LIST_TAG_COMMANDS],
-[    "$3":]m4_bpatsubst([$1], [^\(.\).*$], [\1])[) $4 ;;
-])])dnl
-])# _AC_CONFIG_REGISTER_DEST
+[    "$3":]m4_format([[%.1s]], [$1])[) $4 ;;
+])])])# _AC_CONFIG_REGISTER_DEST
 
 
 
@@ -1101,7 +1104,7 @@ AC_DEFUN([AC_CONFIG_SUBDIRS],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])]dnl
 [AC_REQUIRE([AC_DISABLE_OPTION_CHECKING])]dnl
 [m4_map_args_w([$1], [_AC_CONFIG_UNIQUE([SUBDIRS],
-  m4_bpatsubst(], [, [:.*]))])]dnl
+  _AC_CONFIG_COMPUTE_DEST(], [))])]dnl
 [m4_append([_AC_LIST_SUBDIRS], [$1], [
 ])]dnl
 [AS_LITERAL_IF([$1], [],
