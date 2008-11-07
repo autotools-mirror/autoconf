@@ -2701,16 +2701,23 @@ AS_VAR_POPDEF([ac_File])dnl
 ])# AC_CHECK_FILE
 
 
+# _AC_CHECK_FILES(FILE)
+# ---------------------
+# Helper to AC_CHECK_FILES, which generates two of the three arguments
+# to AC_CHECK_FILE based on FILE.
+m4_define([_AC_CHECK_FILES],
+[[$1], [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$1]), [1],
+  [Define to 1 if you have the file `$1'.])]])
+
+
 # AC_CHECK_FILES(FILE..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------------------
+# For each word in the whitespace-separated FILE list, perform either
+# ACTION-IF-FOUND or ACTION-IF-NOT-FOUND.  For files that exist, also
+# provide the preprocessor variable HAVE_FILE.
 AC_DEFUN([AC_CHECK_FILES],
-[m4_foreach_w([AC_FILE_NAME], [$1],
-  [AC_CHECK_FILE(AC_FILE_NAME,
-		 [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_FILE_NAME), 1,
-				    [Define to 1 if you have the
-				     file `]AC_File['.])
-$2],
-		 [$3])])])
+[m4_map_args_w([$1], [AC_CHECK_FILE(_$0(], [)[
+$2], [$3])])])
 
 
 ## ------------------------------- ##
@@ -2753,6 +2760,19 @@ AS_VAR_POPDEF([ac_Symbol])dnl
 ])# AC_CHECK_DECL
 
 
+# _AC_CHECK_DECLS(SYMBOL, ACTION-IF_FOUND, ACTION-IF-NOT-FOUND,
+#                 INCLUDES)
+# -------------------------------------------------------------
+# Helper to AC_CHECK_DECLS, which generates the check for a single
+# SYMBOL with INCLUDES, performs the AC_DEFINE, then expands
+# ACTION-IF-FOUND or ACTION-IF-NOT-FOUND.
+m4_define([_AC_CHECK_DECLS],
+[AC_CHECK_DECL([$1], [ac_have_decl=1], [ac_have_decl=0], [$4])]dnl
+[AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_DECL_$1]), [$ac_have_decl],
+  [Define to 1 if you have the declaration of `$1',
+   and to 0 if you don't.])]dnl
+[m4_ifvaln([$2$3], [AS_IF([test $ac_have_decl = 1], [$2], [$3])])])
+
 # AC_CHECK_DECLS(SYMBOLS,
 #                [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #                [INCLUDES = DEFAULT-INCLUDES])
@@ -2761,28 +2781,21 @@ AS_VAR_POPDEF([ac_Symbol])dnl
 # documentation for a detailed explanation of this difference with
 # other AC_CHECK_*S macros.  SYMBOLS is an m4 list.
 AC_DEFUN([AC_CHECK_DECLS],
-[m4_foreach([AC_Symbol], [$1],
-  [AC_CHECK_DECL(AC_Symbol,
-		 [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_DECL_]AC_Symbol), 1,
-				     [Define to 1 if you have the declaration
-				     of `]AC_Symbol[', and to 0 if you don't.])
-$2],
-		 [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_DECL_]AC_Symbol), 0)
-$3],
-		 [$4])])
-])# AC_CHECK_DECLS
+[m4_map_args_sep([_$0(], [, [$2], [$3], [$4])], [], $1)])
 
+
+# _AC_CHECK_DECL_ONCE(SYMBOL)
+# ---------------------------
+# Check for a single SYMBOL once.
+m4_define([_AC_CHECK_DECL_ONCE],
+[AC_DEFUN([_AC_Check_Decl_$1], [_AC_CHECK_DECLS([$1])])]dnl
+[AC_REQUIRE([_AC_Check_Decl_$1])])
 
 # AC_CHECK_DECLS_ONCE(SYMBOLS)
 # ----------------------------
 # Like AC_CHECK_DECLS(SYMBOLS), but do it at most once.
 AC_DEFUN([AC_CHECK_DECLS_ONCE],
-[
-  m4_foreach([AC_Symbol], [$1],
-    [AC_DEFUN([_AC_Check_Decl_]m4_defn([AC_Symbol]),
-       [AC_CHECK_DECLS(m4_defn([AC_Symbol]))])
-     AC_REQUIRE([_AC_Check_Decl_]m4_defn([AC_Symbol]))])
-])
+[m4_map_args_sep([_AC_CHECK_DECL_ONCE(], [)], [], $1)])
 
 
 
@@ -2808,8 +2821,7 @@ m4_define([AC_LIBSOURCE], [])
 # -------------------------------
 # Announce we might need these files.
 AC_DEFUN([AC_LIBSOURCES],
-[m4_foreach([_AC_FILE_NAME], [$1],
-	    [AC_LIBSOURCE(_AC_FILE_NAME)])])
+[m4_map_args([AC_LIBSOURCE], $1)])
 
 
 # _AC_LIBOBJ(FILE-NAME-NOEXT, ACTION-IF-INDIR)

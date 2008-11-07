@@ -1,5 +1,13 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Use more efficient macros in AC_CHECK_FILES and AC_CHECK_DECLS.
+	* lib/autoconf/general.m4 (AC_CHECK_FILES): Use m4_map_args_w,
+	and avoid typo.
+	(AC_CHECK_DECLS, AC_CHECK_DECLS_ONCE): Use m4_map_args_sep.
+	(_AC_CHECK_FILES, _AC_CHECK_DECLS, _AC_CHECK_DECL_ONCE): New
+	helper macros.
+	(AC_LIBSOURCES): Use m4_map_args.
+
 	Use more efficient macros in AC_CHECK_TYPES.
 	* lib/autoconf/types.m4 (AC_CHECK_TYPES, AC_CHECK_MEMBERS): Use
 	m4_map_args_sep.
