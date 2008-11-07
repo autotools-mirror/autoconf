@@ -5804,22 +5804,25 @@ header file is available, consider using @code{AC_CHECK_HEADERS}
 instead.
 
 @var{includes} is decoded to determine the appropriate include
-directives.  If omitted, @file{configure} will check for both header
+directives.  If omitted or empty, @file{configure} will check for both header
 existence (with the preprocessor) and usability (with the compiler),
-using @code{AC_INCLUDES_DEFAULT} for the compile test.  Currently, if
+using @code{AC_INCLUDES_DEFAULT} for the compile test.  If
 there is a discrepancy between the results, a warning is issued to the
-user, and the preprocessor results are favored (@pxref{Present But
-Cannot Be Compiled}); but a future release may switch to favoring the
-compiler results.  If @var{includes} is exactly @samp{-}, then only a
-preprocessor check is performed, without regard to prerequisite headers.
-For anything else, only a compiler check is performed, using
-@var{includes} as the set of preprocessor directives to use prior to
-including the header under test, in which case, it is common to manually
-list @code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}) along with
-any other prerequisite headers.
+user, and the compiler results are favored (@pxref{Present But
+Cannot Be Compiled}).  In general, favoring the compiler results means
+that a header will be treated as not found even though the file exists,
+because you did not provide enough prerequisites.
 
-For compatibility issues with older versions of Autoconf, please read
-below.
+Providing a non-empty @var{includes} argument allows the code to provide
+any prerequisites prior to including the header under test; it is common
+to use the argument @code{AC_INCLUDES_DEFAULT} (@pxref{Default
+Includes}).  With an explicit fourth argument, no preprocessor test is
+needed.  As a special case, an @var{includes} of exactly @samp{-}
+triggers the older preprocessor check, which merely determines existence
+of the file in the preprocessor search path; this should only be used as
+a last resort (it is safer to determine the actual prerequisites and
+perform a compiler check, or else use @code{AC_PREPROC_IFELSE} to make
+it obvious that only a preprocessor check is desired).
 @end defmac
 
 @anchor{AC_CHECK_HEADERS}
@@ -5839,20 +5842,18 @@ is executed when one of the header files is not found.
 @var{includes} is interpreted as in @code{AC_CHECK_HEADER}, in order to
 choose the set of preprocessor directives supplied before the header
 under test.
-
-For compatibility issues with older versions of Autoconf, please read
-below.
 @end defmac
 
 Previous versions of Autoconf merely checked whether the header was
 accepted by the preprocessor.  This was changed because the old test was
 inappropriate for typical uses.  Headers are typically used to compile,
 not merely to preprocess, and the old behavior sometimes accepted
-headers that clashed at compile-time.  If you need to check whether a
-header is preprocessable, you can use @code{AC_PREPROC_IFELSE}
-(@pxref{Running the Preprocessor}).
+headers that clashed at compile-time (@pxref{Present But Cannot Be
+Compiled}).  If you need to check whether a header is preprocessable,
+you can use @code{AC_PREPROC_IFELSE} (@pxref{Running the Preprocessor}).
 
-This scheme, which improves the robustness of the test, also requires
+Actually requiring a header to compile improves the robustness of the
+test, but it also requires
 that you make sure that headers that must be included before the
 @var{header-file} be part of the @var{includes}, (@pxref{Default
 Includes}).  If looking for @file{bar.h}, which requires that
@@ -5864,7 +5865,7 @@ AC_CHECK_HEADERS([foo.h])
 AC_CHECK_HEADERS([bar.h], [], [],
 [#ifdef HAVE_FOO_H
 # include <foo.h>
-# endif
+#endif
 ])
 @end verbatim
 
@@ -5880,7 +5881,9 @@ blank-separated argument list that exists, define
 This is a once-only variant of @code{AC_CHECK_HEADERS}.  It generates the
 checking code at most once, so that @command{configure} is smaller and
 faster; but the checks cannot be conditionalized and are always done once,
-early during the @command{configure} run.
+early during the @command{configure} run.  Thus, this macro is only safe
+for checking headers that do not have prerequisites beyond what
+@code{AC_INCLUDES_DEFAULT} provides.
 @end defmac
 
 @node Declarations

@@ -1,5 +1,12 @@
 2008-11-07  Eric Blake  <ebb9@byu.net>
 
+	Further doc updates for AC_CHECK_HEADER change.
+	* doc/autoconf.texi (Generic Headers) <AC_CHECK_HEADER>: Mention
+	new default, and make it more obvious that using [-] is generally
+	broken.
+
+2008-11-07  Eric Blake  <ebb9@byu.net>
+
 	* ChangeLog: Enforce UTF-8 encoding.
 
 2008-11-06  Eric Blake  <ebb9@byu.net>
