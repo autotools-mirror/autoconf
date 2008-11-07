@@ -181,6 +181,15 @@ AS_VAR_POPDEF([ac_Type])dnl
 ])# _AC_CHECK_TYPE_NEW
 
 
+# _AC_CHECK_TYPES(TYPE)
+# ---------------------
+# Helper to AC_CHECK_TYPES, which generates two of the four arguments
+# to _AC_CHECK_TYPE_NEW that are based on TYPE.
+m4_define([_AC_CHECK_TYPES],
+[[$1], [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$1]), [1],
+  [Define to 1 if the system has the type `$1'.])]])
+
+
 # AC_CHECK_TYPES(TYPES,
 #		 [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #		 [INCLUDES = DEFAULT-INCLUDES])
@@ -188,14 +197,8 @@ AS_VAR_POPDEF([ac_Type])dnl
 # TYPES is an m4 list.  There are no ambiguities here, we mean the newer
 # AC_CHECK_TYPE.
 AC_DEFUN([AC_CHECK_TYPES],
-[m4_foreach([AC_Type], [$1],
-  [_AC_CHECK_TYPE_NEW(AC_Type,
-		      [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_Type), 1,
-					  [Define to 1 if the system has the
-					   type `]AC_Type['.])
-$2],
-		      [$3],
-		      [$4])])])
+[m4_map_args_sep([_AC_CHECK_TYPE_NEW(_$0(], [)[
+$2], [$3], [$4])], [], $1)])
 
 
 # _AC_CHECK_TYPE_OLD(TYPE, DEFAULT)
@@ -901,21 +904,23 @@ AS_VAR_POPDEF([ac_Member])dnl
 ])# AC_CHECK_MEMBER
 
 
+# _AC_CHECK_MEMBERS(AGGREGATE.MEMBER)
+# -----------------------------------
+# Helper to AC_CHECK_MEMBERS, which generates two of the four
+# arguments to AC_CHECK_MEMBER that are based on AGGREGATE and MEMBER.
+m4_define([_AC_CHECK_MEMBERS],
+[[$1], [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$1]), [1],
+  [Define to 1 if `]m4_bpatsubst([$1],
+    [^\([^.]*\)\.\(.*\)], [[\1' is a member of `\2]])['.])]])
+
 # AC_CHECK_MEMBERS([AGGREGATE.MEMBER, ...],
 #		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
 #		   [INCLUDES = DEFAULT-INCLUDES])
 # ---------------------------------------------------------
 # The first argument is an m4 list.
 AC_DEFUN([AC_CHECK_MEMBERS],
-[m4_foreach([AC_Member], [$1],
-  [AC_CHECK_MEMBER(AC_Member,
-	 [AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_[]AC_Member), 1,
-			    [Define to 1 if `]m4_bpatsubst(AC_Member,
-						     [^[^.]*\.])[' is
-			     member of `]m4_bpatsubst(AC_Member, [\..*])['.])
-$2],
-		 [$3],
-		 [$4])])])
+[m4_map_args_sep([AC_CHECK_MEMBER(_$0(], [)[
+$2], [$3], [$4])], [], $1)])
 
 
 

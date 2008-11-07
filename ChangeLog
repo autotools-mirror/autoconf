@@ -1,5 +1,10 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Use more efficient macros in AC_CHECK_TYPES.
+	* lib/autoconf/types.m4 (AC_CHECK_TYPES, AC_CHECK_MEMBERS): Use
+	m4_map_args_sep.
+	(_AC_CHECK_TYPES, _AC_CHECK_MEMBERS): New helper macros.
+
 	Use more efficient macros in AC_CHECK_HEADERS.
 	* lib/autoconf/headers.m4 (AH_CHECK_HEADERS)
 	(AH_CHECK_HEADERS_DIRENT): Rename...
