@@ -1,5 +1,11 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Use more efficient macros in AC_CONFIG_SUBDIRS.
+	* lib/autoconf/status.m4 (_AC_CONFIG_FOOS, AC_CONFIG_SUBDIRS): Use
+	m4_map_args_w.
+	(_AC_OUTPUT_FILE): Use m4_map_args_sep and m4_map_args.
+	(_AC_OUTPUT_FILE_ADJUST_DIR): New helper macro.
+
 	Use more efficient macros in AC_CHECK_FILES and AC_CHECK_DECLS.
 	* lib/autoconf/general.m4 (AC_CHECK_FILES): Use m4_map_args_w,
 	and avoid typo.

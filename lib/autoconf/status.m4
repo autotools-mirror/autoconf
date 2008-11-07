@@ -238,13 +238,12 @@ m4_define([_AC_CONFIG_UNIQUE],
 # This historical difference allows macro calls in TAGS.
 #
 m4_define([_AC_CONFIG_FOOS],
-[m4_foreach_w([AC_File], [$2],
-	      [_AC_CONFIG_REGISTER([$1], m4_defn([AC_File]), [$3])])dnl
-m4_define([_AC_SEEN_CONFIG(ANY)])dnl
-m4_define([_AC_SEEN_CONFIG($1)])dnl
-_AC_CONFIG_COMMANDS_INIT([$4])dnl
-ac_config_[]m4_tolower([$1])="$ac_config_[]m4_tolower([$1]) dnl
-m4_if([$1], [COMMANDS], [$2], [m4_normalize([$2])])"
+[m4_map_args_w([$2], [_AC_CONFIG_REGISTER([$1],], [, [$3])])]dnl
+[m4_define([_AC_SEEN_CONFIG(ANY)])]dnl
+[m4_define([_AC_SEEN_CONFIG($1)])]dnl
+[_AC_CONFIG_COMMANDS_INIT([$4])]dnl
+[ac_config_[]m4_tolower([$1])="$ac_config_[]m4_tolower([$1]) ]dnl
+[m4_if([$1], [COMMANDS], [$2], [m4_normalize([$2])])"
 ])
 
 
@@ -583,6 +582,13 @@ fi # test -n "$CONFIG_FILES"
 
 ])# _AC_OUTPUT_FILES_PREPARE
 
+# _AC_OUTPUT_FILE_ADJUST_DIR(VAR)
+# -------------------------------
+# Generate the sed snippet needed to output VAR relative to the
+# top-level directory.
+m4_define([_AC_OUTPUT_FILE_ADJUST_DIR],
+[s&@$1@&$ac_$1&;t t[]AC_SUBST_TRACE([$1])])
+
 
 # _AC_OUTPUT_FILE
 # ---------------
@@ -619,15 +625,15 @@ m4_ifndef([AC_DATAROOTDIR_CHECKED],
 # FIXME: This hack should be removed a few years after 2.60.
 ac_datarootdir_hack=; ac_datarootdir_seen=
 m4_define([_AC_datarootdir_vars],
-	  [datadir, docdir, infodir, localedir, mandir])
-ac_sed_dataroot='
+	  [datadir, docdir, infodir, localedir, mandir])]dnl
+[m4_define([_AC_datarootdir_subst], [  s&@$][1@&$$][1&g])]dnl
+[ac_sed_dataroot='
 /datarootdir/ {
   p
   q
 }
-m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
-	   [/@_AC_Var@/p
-])'
+m4_map_args_sep([/@], [@/p], [
+], _AC_datarootdir_vars)'
 case `eval "sed -n \"\$ac_sed_dataroot\" $ac_file_inputs"` in
 *datarootdir*) ac_datarootdir_seen=yes;;
 *@[]m4_join([@*|*@], _AC_datarootdir_vars)@*)
@@ -635,9 +641,8 @@ case `eval "sed -n \"\$ac_sed_dataroot\" $ac_file_inputs"` in
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
   ac_datarootdir_hack='
-  m4_foreach([_AC_Var], m4_defn([_AC_datarootdir_vars]),
-	       [s&@_AC_Var@&$_AC_Var&g
-  ])dnl
+m4_map_args_sep([_AC_datarootdir_subst(], [)], [
+], _AC_datarootdir_vars)
   s&\\\${datarootdir}&$datarootdir&g' ;;
 esac
 _ACEOF
@@ -662,11 +667,11 @@ dnl During the transition period, this is a special case:
 s&@top_builddir@&$ac_top_builddir_sub&;t t[]AC_SUBST_TRACE([top_builddir])
 dnl For this substitution see the witness macro _AC_HAVE_TOP_BUILD_PREFIX above.
 s&@top_build_prefix@&$ac_top_build_prefix&;t t[]AC_SUBST_TRACE([top_build_prefix])
-m4_foreach([_AC_Var], [srcdir, abs_srcdir, top_srcdir, abs_top_srcdir,
-			builddir, abs_builddir,
-			abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL], [[, INSTALL]])AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P], [[, MKDIR_P]]),
-	   [s&@_AC_Var@&$ac_[]_AC_Var&;t t[]AC_SUBST_TRACE(_AC_Var)
-])dnl
+m4_map_args_sep([$0_ADJUST_DIR(], [)], [
+], [srcdir], [abs_srcdir], [top_srcdir], [abs_top_srcdir],
+   [builddir], [abs_builddir],
+   [abs_top_builddir]AC_PROVIDE_IFELSE([AC_PROG_INSTALL],
+     [, [INSTALL]])AC_PROVIDE_IFELSE([AC_PROG_MKDIR_P], [, [MKDIR_P]]))
 m4_ifndef([AC_DATAROOTDIR_CHECKED], [$ac_datarootdir_hack
 ])dnl
 "
@@ -1093,17 +1098,15 @@ m4_define([AC_OUTPUT_COMMANDS_POST])
 #   included, if for instance the user refused a part of the tree.
 #   This is used in _AC_OUTPUT_SUBDIRS.
 AC_DEFUN([AC_CONFIG_SUBDIRS],
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-AC_REQUIRE([AC_DISABLE_OPTION_CHECKING])dnl
-m4_foreach_w([_AC_Sub], [$1],
-	     [_AC_CONFIG_UNIQUE([SUBDIRS],
-				m4_bpatsubst(m4_defn([_AC_Sub]), [:.*]))])dnl
-m4_append([_AC_LIST_SUBDIRS], [$1], [
-])dnl
-AS_LITERAL_IF([$1], [],
-	      [AC_DIAGNOSE([syntax], [$0: you should use literals])])dnl
-AC_SUBST([subdirs], ["$subdirs m4_normalize([$1])"])dnl
-])
+[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])]dnl
+[AC_REQUIRE([AC_DISABLE_OPTION_CHECKING])]dnl
+[m4_map_args_w([$1], [_AC_CONFIG_UNIQUE([SUBDIRS],
+  m4_bpatsubst(], [, [:.*]))])]dnl
+[m4_append([_AC_LIST_SUBDIRS], [$1], [
+])]dnl
+[AS_LITERAL_IF([$1], [],
+	       [AC_DIAGNOSE([syntax], [$0: you should use literals])])]dnl
+[AC_SUBST([subdirs], ["$subdirs m4_normalize([$1])"])])
 
 
 # _AC_OUTPUT_SUBDIRS
