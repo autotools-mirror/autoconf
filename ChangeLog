@@ -1,3 +1,9 @@
+2008-11-09  Paolo Bonzini  <bonzini@gnu.org>
+
+	Balance parentheses in _AC_CACHE_DUMP.
+	* lib/autoconf/general.m4 (_AC_CACHE_DUMP): Balance parentheses
+	without introducing \).
+
 2008-11-07  Eric Blake  <ebb9@byu.net>
 
 	Further doc updates for AC_CHECK_HEADER change.

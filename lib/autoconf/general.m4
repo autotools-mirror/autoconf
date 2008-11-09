@@ -1930,7 +1930,7 @@ m4_define([_AC_CACHE_DUMP],
     case $as_nl`(ac_space=' '; set) 2>&1` in #(
     *${as_nl}ac_space=\ *)
       # `set' does not quote correctly, so add quotes: double-quote
-      # substitution turns \\\\ into \\, and sed turns \\ into \).
+      # substitution turns \\\\ into \\, and sed turns \\ into \.
       sed -n \
 	["s/'/'\\\\''/g;
 	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"]
