@@ -875,7 +875,7 @@ m4_defun_init([AS_ECHO_N],
 # _AS_ECHO_PREPARE
 # -----------------
 # Arrange for $as_echo 'FOO' to echo FOO without escape-interpretation;
-# and similarly for $as_echo_foo, which omits the trailing newline.
+# and similarly for $as_echo_n, which omits the trailing newline.
 # 'FOO' is an optional single argument; a missing FOO is treated as empty.
 m4_defun([_AS_ECHO_PREPARE],
 [[as_nl='
@@ -885,7 +885,13 @@ export as_nl
 as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
 as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
 as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo$as_echo
-if (test "X`printf %s $as_echo`" = "X$as_echo") 2>/dev/null; then
+# Prefer a ksh shell builtin over an external printf program on Solaris,
+# but without wasting forks for bash or zsh.
+if test -z "$BASH_VERSION$ZSH_VERSION" \
+    && (test "X`print -r -- $as_echo`" = "X$as_echo") 2>/dev/null; then
+  as_echo='print -r --'
+  as_echo_n='print -rn --'
+elif (test "X`printf %s $as_echo`" = "X$as_echo") 2>/dev/null; then
   as_echo='printf %s\n'
   as_echo_n='printf %s'
 else

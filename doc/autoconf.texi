@@ -15291,6 +15291,12 @@ example, @file{/usr/bin/printf} is buggy, so when using
 @command{/bin/sh} the command @samp{printf %010000x 123} normally dumps
 core.
 
+Since @command{printf} is not always a shell builtin, there is a
+potential speed penalty for using @code{printf %s\\n} as a replacement
+for an @command{echo} that does not interpret @samp{\} or leading
+@samp{-}. With Solaris @command{ksh}, it is possible to use @code{print
+-r --} for this role instead.
+
 
 @item @command{pwd}
 @c ----------------

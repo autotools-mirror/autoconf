@@ -1,5 +1,13 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Try 'print -r --' as a non-forking variant of 'printf %s\\n'.
+	* lib/m4sugar/m4sh.m4 (_AS_ECHO_PREPARE): Cater to Solaris ksh.
+	* doc/autoconf.texi (Limitations of Builtins) <printf>: Document
+	the print workaround.
+	Idea by Paolo Bonzini.
+
+2008-11-10  Eric Blake  <ebb9@byu.net>
+
 	Provide a section on all tools allowed in GNU Coding Standards.
 	* doc/autoconf.texi (Limitations of Builtins) <read>: Sort.
 	<wait>: Add section.
