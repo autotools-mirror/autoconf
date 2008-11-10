@@ -22,7 +22,7 @@ TEXINFO_TEX = ../build-aux/texinfo.tex
 
 info_TEXINFOS = autoconf.texi standards.texi
 autoconf_TEXINFOS = fdl-1.3.texi install.texi
-standards_TEXINFOS = fdl.texi make-stds.texi
+standards_TEXINFOS = fdl-1.3.texi gnu-oids.texi make-stds.texi
 
 # Files from texi2dvi that should be removed, but which Automake does
 # not know.

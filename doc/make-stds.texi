@@ -8,11 +8,11 @@
 @cindex conventions for makefiles
 @cindex standards for makefiles
 
-@c Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 2000, 2001,
+@c Copyright 1992, 1993, 1994, 1995, 1996, 1997, 1998, 2000, 2001,
 @c 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
-
+@c
 @c Permission is granted to copy, distribute and/or modify this document
-@c under the terms of the GNU Free Documentation License, Version 1.2
+@c under the terms of the GNU Free Documentation License, Version 1.3
 @c or any later version published by the Free Software Foundation;
 @c with no Invariant Sections, with no
 @c Front-Cover Texts, and with no Back-Cover Texts.
@@ -161,7 +161,7 @@ installation should not use any utilities directly except these:
 
 @example
 awk cat cmp cp diff echo egrep expr false grep install-info
-ln ls mkdir mv pwd rm rmdir sed sleep sort tar test touch true
+ln ls mkdir mv pwd rm rmdir sed sleep sort tar test touch tr true
 @end example
 
 Compression programs such as @code{gzip} can be used in the
