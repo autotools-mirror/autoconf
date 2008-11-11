@@ -1,5 +1,15 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Work around <=m4-1.4.9 bug in m4_format.
+	* lib/m4sugar/m4sugar.m4 (_m4_index): New internal macro.
+	(m4_init): Only use it in older m4.
+	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Use it to avoid
+	m4_format bug in older m4.
+	* lib/autoconf/status.m4 (_AC_CONFIG_COMPUTE_DEST): Likewise.
+	Reported by Bob Proulx.
+
+2008-11-10  Eric Blake  <ebb9@byu.net>
+
 	Match upstream standards.texi.
 	* doc/standards.texi: Resync from upstream.
 	* doc/fdl-1.3.texi: Rename...

@@ -247,9 +247,9 @@ m4_define([_AC_CONFIG_FOOS],
 # _AC_CONFIG_COMPUTE_DEST(STRING)
 # -------------------------------
 # Compute the DEST from STRING by stripping any : and following
-# characters.
+# characters.  Use _m4_index to avoid a bug in m4_format in older m4.
 m4_define([_AC_CONFIG_COMPUTE_DEST],
-[m4_format([[%.*s]], m4_index([$1], [:]), [$1])])
+[m4_format([[%.*s]], _m4_index([$1], [:]), [$1])])
 
 # _AC_CONFIG_REGISTER(MODE, TAG, [COMMANDS])
 # ------------------------------------------
