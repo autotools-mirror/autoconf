@@ -1,5 +1,14 @@
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
+	Match upstream standards.texi.
+	* doc/standards.texi: Resync from upstream.
+	* doc/fdl-1.3.texi: Rename...
+	* doc/fdl.texi: ...to this.
+	* doc/Makefile.am (autoconf_TEXINFOS, standards_TEXINFOS): Update
+	users.
+	* doc/autoconf.texi (GNU Free Documentation License): Likewise.
+	* cfg.mk (fetch): Likewise.
+
 	Yet more FDL 1.3 fallout.
 	* NEWS: Mention manual license change.
 

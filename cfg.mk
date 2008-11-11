@@ -56,7 +56,7 @@ fetch:
 	cp $(gnulib_dir)/build-aux/missing $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/vc-list-files $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/texinfo.tex $(srcdir)/build-aux
-	cp $(gnulib_dir)/doc/fdl-1.3.texi $(srcdir)/doc
+	cp $(gnulib_dir)/doc/fdl.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/gnu-oids.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/make-stds.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/standards.texi $(srcdir)/doc
