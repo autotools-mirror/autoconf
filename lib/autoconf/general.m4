@@ -1333,16 +1333,16 @@ AS_ECHO(["/* confdefs.h */"]) > confdefs.h
 
 # Predefined preprocessor variables.
 AC_DEFINE_UNQUOTED([PACKAGE_NAME], ["$PACKAGE_NAME"],
-		   [Define to the full name of this package.])
+		   [Define to the full name of this package.])dnl
 AC_DEFINE_UNQUOTED([PACKAGE_TARNAME], ["$PACKAGE_TARNAME"],
-		   [Define to the one symbol short name of this package.])
+		   [Define to the one symbol short name of this package.])dnl
 AC_DEFINE_UNQUOTED([PACKAGE_VERSION], ["$PACKAGE_VERSION"],
-		   [Define to the version of this package.])
+		   [Define to the version of this package.])dnl
 AC_DEFINE_UNQUOTED([PACKAGE_STRING], ["$PACKAGE_STRING"],
-		   [Define to the full name and version of this package.])
+		   [Define to the full name and version of this package.])dnl
 AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT], ["$PACKAGE_BUGREPORT"],
 		   [Define to the address where bug reports for this package
-		    should be sent.])
+		    should be sent.])dnl
 
 # Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
@@ -2088,8 +2088,8 @@ m4_define([_AC_DEFINE_Q],
 ], [-])])], [], [],
 	[m4_warn([syntax], [AC_DEFINE]m4_ifval([$1], [], [[_UNQUOTED]])dnl
 [: `$3' is not a valid preprocessor define value])])]dnl
-[m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])])]dnl
-[_m4_popdef([AC_name])]dnl
+[m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])
+])_m4_popdef([AC_name])]dnl
 [cat >>confdefs.h <<$1_ACEOF
 [@%:@define] $2 m4_if([$#], 2, 1, [$3], [], [/**/], [$3])
 _ACEOF
@@ -2718,8 +2718,7 @@ m4_define([_AC_CHECK_FILES],
 # ACTION-IF-FOUND or ACTION-IF-NOT-FOUND.  For files that exist, also
 # provide the preprocessor variable HAVE_FILE.
 AC_DEFUN([AC_CHECK_FILES],
-[m4_map_args_w([$1], [AC_CHECK_FILE(_$0(], [)[
-$2], [$3])])])
+[m4_map_args_w([$1], [AC_CHECK_FILE(_$0(], [)[$2], [$3])])])
 
 
 ## ------------------------------- ##
