@@ -1,5 +1,11 @@
 2008-11-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Wrap keywords in `testsuite --list' output.
+	* lib/autotest/general.m4 (AT_INIT): Rewrite --list awk script,
+	avoid lint warnings from gawk, wrap keyword lists to stay below
+	80 characters per line if possible.
+	* tests/autotest.at (Keyword wrapping): New test.
+
 	* tests/local.at (AT_COPYRIGHT): Bump copyright years.
 
 	* doc/autoconf.texi (Conditional constructs, Macro Names): Fix

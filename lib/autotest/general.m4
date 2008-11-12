@@ -703,13 +703,33 @@ _ATEOF
   AS_ECHO(["$at_groups$as_nl$at_help_all"]) |
     awk 'BEGIN { FS = ";" }
 	 NR == 1 {
-	   for (n = split($ 0, a, " "); n; n--) selected[[a[n]]] = 1
+	   for (n = split ($ 0, a, " "); n; n--)
+	     selected[[a[n]]] = 1
 	   next
 	 }
-	 {
+	 NF > 0 {
 	   if (selected[[$ 1]]) {
 	     printf " %3d: %-18s %s\n", $ 1, $ 2, $ 3
-	     if ($ 4) printf "      %s\n", $ 4
+	     if ($ 4) {
+	       lmax = 79
+	       indent = "     "
+	       line = indent
+	       len = length (line)
+	       n = split ($ 4, a, " ")
+	       for (i = 1; i <= n; i++) {
+		 l = length (a[[i]]) + 1
+		 if (i > 1 && len + l > lmax) {
+		   print line
+		   line = indent " " a[[i]]
+		   len = length (line)
+		 } else {
+		   line = line " " a[[i]]
+		   len += l
+		 }
+	       }
+	       if (n)
+		 print line
+	     }
 	   }
 	 }' || at_write_fail=1
   exit $at_write_fail

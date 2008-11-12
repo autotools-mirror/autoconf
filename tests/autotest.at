@@ -781,6 +781,34 @@ AT_CHECK_KEYS([--list -k none -k first], [none|first], [2], [second|both], [0])
 AT_CLEANUP
 
 
+## ----------------- ##
+## Keyword wrapping. ##
+## ----------------- ##
+AT_SETUP([Keyword wrapping])
+
+AT_CHECK_AT_PREP([k],
+[[AT_INIT
+AT_SETUP([test])
+AT_KEYWORDS([a1 b1 c1 d1 e1 f1 g1 h1 i1 j1 k1 l1 m1 n1 o1 p1 q1 r1 s1 t1])
+AT_KEYWORDS([u1 v1 w1 x1 y1 z1])
+AT_KEYWORDS([a b c d e f g h i j k l m n o p q r s t u v w x y z])
+AT_CLEANUP
+AT_SETUP([test with long keywords])
+AT_KEYWORDS(
+[this-is-a-long-keyword-that-cannot-be-wrapped-so-we-exceed-the-length-limit-here])
+# surrounded by short ones
+AT_KEYWORDS([s])
+AT_KEYWORDS(
+[another-very-long-keyword-that-hits-the-line-length-limit-bla-bla-bla-bla])
+AT_KEYWORDS([t])
+AT_CLEANUP
+]])
+
+AT_CHECK_KEYS([-l], [.{80}], [1], [.{87}], [0])
+
+AT_CLEANUP
+
+
 ## ----------------------- ##
 ## parallel test execution ##
 ## ----------------------- ##
