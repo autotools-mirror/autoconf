@@ -1,3 +1,8 @@
+2008-11-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi (Conditional constructs, Macro Names): Fix
+	typos.
+
 2008-11-10  Eric Blake  <ebb9@byu.net>
 
 	Work around <=m4-1.4.9 bug in m4_format.

@@ -10698,7 +10698,7 @@ diversion to be @code{KILL}.
 @node Conditional constructs
 @subsection Conditional constructs
 
-The following macros provide additional conditional contructs, as
+The following macros provide additional conditional constructs as
 convenience wrappers around @code{m4_if}.
 
 @defmac m4_bmatch (@var{string}, @var{regex-1}, @var{value-1}, @
@@ -12557,7 +12557,7 @@ general to most specific.  The names of their cache variables use the
 same convention (@pxref{Cache Variable Names}, for more information on
 them).
 
-The first word of the name after the namepace initials (such as
+The first word of the name after the namespace initials (such as
 @samp{AC_}) usually tells the category
 of the feature being tested.  Here are the categories used in Autoconf for
 specific test macros, the kind of macro that you are more likely to
