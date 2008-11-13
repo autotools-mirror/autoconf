@@ -1,3 +1,14 @@
+2008-11-12  Eric Blake  <ebb9@byu.net>
+
+	Make M4sh, not autoconf, guarantee sane $SHELL.
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Move setting of
+	SHELL...
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): ...to here.
+	* doc/autoconf.texi (Initialization Macros): Document the effect
+	on SHELL.
+	* tests/m4sh.at (AS@&t@_INIT_GENERATED): New test.
+	Reported by Ralf Wildenhues.
+
 2008-11-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Wrap keywords in `testsuite --list' output.

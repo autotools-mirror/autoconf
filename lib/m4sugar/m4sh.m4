@@ -271,10 +271,9 @@ Then install a modern shell, or manually run the script under such a
 shell if you do have one.], [$[]0: ], [], [62])")
   fi
       AS_EXIT(1)])])
-else
-  SHELL=$CONFIG_SHELL
-  export SHELL
 fi
+SHELL=${CONFIG_SHELL-/bin/sh}
+export SHELL
 _m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL
 
 

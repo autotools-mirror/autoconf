@@ -12313,10 +12313,15 @@ implementation-specific actions.  This macro is deprecated, since
 
 @defmac AS_INIT
 @asindex{INIT}
+@evindex LC_ALL
+@evindex SHELL
 Initialize the M4sh environment.  This macro calls @code{m4_init}, then
 outputs the @code{#! /bin/sh} line, a notice about where the output was
 generated from, and code to sanitize the environment for the rest of the
-script.  Finally, it changes the current diversion to @code{BODY}.
+script.  Among other initializations, this sets @env{SHELL} to the shell
+chosen to run the script (@pxref{CONFIG_SHELL}), and @env{LC_ALL} to
+ensure the C locale.  Finally, it changes the current diversion to
+@code{BODY}.
 @end defmac
 
 @defmac AS_INIT_GENERATED (@var{file}, @ovar{comment})
@@ -19404,6 +19409,7 @@ for an example).
 @file{config.status} checks several optional environment variables that
 can alter its behavior:
 
+@anchor{CONFIG_SHELL}
 @defvar CONFIG_SHELL
 @evindex CONFIG_SHELL
 The shell with which to run @command{configure} for the @option{--recheck}

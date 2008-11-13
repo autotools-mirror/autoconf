@@ -417,7 +417,7 @@ cross_compiling=no
 subdirs=
 MFLAGS=
 MAKEFLAGS=
-AC_SUBST([SHELL], [${CONFIG_SHELL-/bin/sh}])dnl
+AC_SUBST([SHELL])dnl
 AC_SUBST([PATH_SEPARATOR])dnl
 
 # Identity of this package.

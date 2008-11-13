@@ -1138,3 +1138,38 @@ cleanup 1
 ]])
 
 AT_CLEANUP
+
+
+## ------------------- ##
+## AS_INIT_GENERATED.  ##
+## ------------------- ##
+
+AT_SETUP([AS@&t@_INIT_GENERATED])
+
+AT_DATA_M4SH([script.as], [[dnl
+m4_define([AS_MESSAGE_FD], [1])
+AS_INIT
+AS_INIT_GENERATED([child], [echo hello from child])
+cat >>child <<\EOF
+AS_ECHO(["SHELL=$SHELL"])
+EOF
+echo hello from parent
+AS_ECHO(["SHELL=$SHELL"])
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script], [0], [stdout])
+AT_CHECK([grep 'SHELL=.' stdout], [0], [ignore])
+sed s/parent/child/ <stdout >expout
+AT_CHECK([./child], [0], [expout])
+SHELL=/bogus
+export SHELL
+cp stdout expout
+mv child child.bak
+AT_CHECK([./script], [0], [expout])
+AT_CHECK([cmp child child.bak])
+AT_CHECK([grep 'SHELL=.' stdout], [0], [ignore])
+sed s/parent/child/ <stdout >expout
+AT_CHECK([./child], [0], [expout])
+
+AT_CLEANUP
