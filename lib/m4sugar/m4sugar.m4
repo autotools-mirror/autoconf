@@ -625,22 +625,6 @@ m4_define([m4_dumpdefs],
        [m4_map_args([$0], $@)])])
 
 
-# _m4_index(HAYSTACK, NEEDLE)
-# ---------------------------
-# Like the original, except return -2 instead of -1 if NEEDLE is not
-# present in HAYSTACK.  That way, it can be used to work around a bug
-# in m4 1.4.9 and earlier where m4_format did not accept a precision
-# of -1; this macro can be safely used in the idiom:
-#   m4_format([[%.*s]], _m4_index([$1],[$2]), [$1])
-# to grab the prefix of $1 up to but excluding $2, if it was present,
-# otherwise the entire $1.
-m4_define([_m4_index],
-[$0_(m4_index($@))])
-
-m4_define([_m4_index_],
-[m4_if([$1], [-1], [-2], [$1])])
-
-
 # m4_popdef(NAME)
 # ---------------
 # Like the original, except guarantee a warning when using something which is
@@ -2991,8 +2975,7 @@ m4_pattern_forbid([^dnl$])
 
 # If __m4_version__ is defined, we assume that we are being run by M4
 # 1.6 or newer, and thus that $@ recursion is linear and debugmode(d)
-# is available for faster checks of dereferencing undefined macros,
-# and we don't need to worry about _m4_format bugs with _m4_index.
+# is available for faster checks of dereferencing undefined macros.
 # But if it is missing, we assume we are being run by M4 1.4.x, that
 # $@ recursion is quadratic, and that we need foreach-based
 # replacement macros.  Use the raw builtin to avoid tripping up
@@ -3001,7 +2984,6 @@ m4_pattern_forbid([^dnl$])
 m4_ifdef([__m4_version__],
 [m4_debugmode([+d])
 m4_define([m4_defn], _m4_defn([_m4_defn]))
-m4_define([_m4_index], _m4_defn([m4_index]))
 m4_define([m4_popdef], _m4_defn([_m4_popdef]))
 m4_define([m4_undefine], _m4_defn([_m4_undefine]))],
 [m4_builtin([include], [m4sugar/foreach.m4])])

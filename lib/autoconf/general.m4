@@ -2078,9 +2078,10 @@ m4_define([AC_DEFINE_UNQUOTED], [_AC_DEFINE_Q([], $@)])
 # is defined with over-quotation, so that we can avoid m4_defn; this
 # is only safe because the name should not contain $.
 #
-# Use _m4_index to avoid a bug in m4_format in older m4.
+# Guarantee a match in m4_index, so as to avoid a bug with precision
+# -1 in m4_format in older m4.
 m4_define([_AC_DEFINE_Q],
-[m4_pushdef([AC_name], m4_format([[[%.*s]]], _m4_index([$2], [(]), [$2]))]dnl
+[m4_pushdef([AC_name], m4_format([[[%.*s]]], m4_index([$2(], [(]), [$2]))]dnl
 [AC_DEFINE_TRACE(AC_name)]dnl
 [m4_cond([m4_index([$3], [
 ])], [-1], [],
