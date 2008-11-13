@@ -245,14 +245,16 @@ m4_define([_AH_CHECK_HEADER],
 # header.  Either ACTION may include `break' to stop the search.
 AC_DEFUN([AC_CHECK_HEADERS],
 [m4_map_args_w([$1], [_AH_CHECK_HEADER(], [)])]dnl
+[m4_pushdef([AC_header], m4_if(m4_index(m4_translit([$1], [	][
+$`], [    ]), [ ]), [-1], [[$1]], [[$ac_header]]))]dnl
 [for ac_header in $1
 do
-AC_CHECK_HEADER($ac_header,
-		[AC_DEFINE_UNQUOTED(AS_TR_CPP(HAVE_$ac_header)) $2],
+AC_CHECK_HEADER(AC_header,
+		[AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]AC_header)) $2],
 		[$3],
 		[$4])dnl
 done
-])# AC_CHECK_HEADERS
+_m4_popdef([AC_header])])# AC_CHECK_HEADERS
 
 
 # _AC_CHECK_HEADER_ONCE(HEADER-FILE)

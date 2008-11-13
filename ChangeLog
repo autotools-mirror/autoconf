@@ -1,5 +1,12 @@
 2008-11-13  Eric Blake  <ebb9@byu.net>
 
+	Optimize single-argument loop.
+	* lib/autoconf/functions.m4 (AC_CHECK_FUNCS): Avoid forks when
+	loop only has one argument.
+	* lib/autoconf/headers.m4 (AC_CHECK_HEADERS): Likewise.
+
+2008-11-13  Eric Blake  <ebb9@byu.net>
+
 	Fix AS_ESCAPE usage bugs.
 	* lib/m4sugar/m4sh.m4 (_AS_VAR_APPEND_PREPARE)
 	(_AS_VAR_ARITH_PREPARE): Expand macros prior to adding shell
