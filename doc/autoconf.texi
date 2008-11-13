@@ -10440,6 +10440,14 @@ calls @code{m4_dumpdef} for all of the
 silently does nothing if @var{name} is undefined.
 @end defmac
 
+@defmac m4_esyscmd_s (@var{command})
+@msindex{esyscmd_s}
+Like @code{m4_esyscmd}, this macro expands to the result of running
+@var{command} in a shell.  The difference is that any trailing newlines
+are removed, so that the output behaves more like shell command
+substitution.
+@end defmac
+
 @defmac m4_exit (@var{exit-status})
 @msindex{exit}
 This macro corresponds to @code{m4exit}.
@@ -11390,6 +11398,17 @@ m4_append_uniq_w([numbers], [ 2 3 ])dnl
 numbers
 @result{}1 2 3
 @end example
+@end defmac
+
+@defmac m4_chomp (@var{string})
+@defmacx m4_chomp_all (@var{string})
+@msindex{chomp}
+@msindex{chomp_all}
+Output @var{string} in quotes, but without a trailing newline.  The
+macro @code{m4_chomp} is slightly faster, and removes at most one
+newline; the macro @code{m4_chomp_all} removes all consecutive trailing
+newlines.  Unlike @code{m4_flatten}, embedded newlines are left intact,
+and backslash does not influence the result.
 @end defmac
 
 @defmac m4_combine (@ovar{separator}, @var{prefix-list}, @ovar{infix}, @

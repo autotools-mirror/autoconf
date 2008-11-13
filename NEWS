@@ -23,8 +23,8 @@ GNU Autoconf NEWS - User visible changes.
    `autoreconf -I dir' option.
 
 ** The following documented m4sugar macros are new:
-   m4_curry  m4_default_quoted  m4_map_args  m4_map_args_pair
-   m4_set_map
+   m4_chomp  m4_curry  m4_default_quoted  m4_esyscmd_s  m4_map_args
+   m4_map_args_pair  m4_set_map
 
 ** The following m4sugar macros are documented now:
    m4_copy  m4_dumpdefs  m4_rename

@@ -1,5 +1,14 @@
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
+	Add m4_chomp, m4_esyscmd_s.
+	* lib/m4sugar/m4sugar.m4 (m4_esyscmd_e, m4_chomp, m4_chomp_all):
+	New macros.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_esyscmd_s>: Document
+	them.
+	(Text processing Macros) <m4_chomp>: Likewise.
+	* NEWS: Likewise.
+	* tests/m4sugar.at (m4@&t@_esyscmd_s): New test.
+
 	Remove _m4_index.
 	* lib/m4sugar/m4sugar.m4 (_m4_index): Delete; it is more efficient
 	to make callers guarantee a match.

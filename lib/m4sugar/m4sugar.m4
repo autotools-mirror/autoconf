@@ -624,6 +624,13 @@ m4_define([m4_dumpdefs],
        [$#], [1], [m4_stack_foreach_lifo([$1], [m4_dumpdef([$1])m4_ignore])],
        [m4_map_args([$0], $@)])])
 
+# m4_esyscmd_s(COMMAND)
+# ---------------------
+# Like m4_esyscmd, except strip any trailing newlines, thus behaving
+# more like shell command substitution.
+m4_define([m4_esyscmd_s],
+[m4_chomp_all(m4_esyscmd([$1]))])
+
 
 # m4_popdef(NAME)
 # ---------------
@@ -822,6 +829,8 @@ m4_define([m4_echo], [$@])
 # with balanced quotes (use quadrigraphs to get around this).  The input
 # is not likely to have unbalanced -=<{(/)}>=- quotes, and it is possible
 # to have unbalanced (), provided it was specified with proper [] quotes.
+# Likewise, ARG must either avoid unquoted comments, or must be sure
+# to include the trailing newline to end the comment.
 #
 # Exploit that extra () will group unquoted commas and the following
 # whitespace, then convert () to [].  m4_bpatsubst can't handle newlines
@@ -2087,6 +2096,28 @@ m4_define([_m4_split],
 [m4_changequote([-=<{(],[)}>=-])]dnl
 [[m4_bpatsubst(-=<{(-=<{($1)}>=-)}>=-, -=<{($2)}>=-,
 	       -=<{(]$3[)}>=-)]m4_changequote([, ])])
+
+
+# m4_chomp(STRING)
+# m4_chomp_all(STRING)
+# --------------------
+# Return STRING quoted, but without a trailing newline.  m4_chomp
+# removes at most one newline, while m4_chomp_all removes all
+# consecutive trailing newlines.  Embedded newlines are not touched,
+# and a trailing backslash-newline leaves just a trailing backslash.
+#
+# m4_bregexp is slower than m4_index, and we don't always want to
+# remove all newlines; hence the two variants.  We massage characters
+# to give a nicer pattern to match, particularly since m4_bregexp is
+# line-oriented.  Both versions must guarantee a match, to avoid bugs
+# with precision -1 in m4_format in older m4.
+m4_define([m4_chomp],
+[m4_format([[%.*s]], m4_index(m4_translit([[$1]], [
+/.], [/  ])[./.], [/.]), [$1])])
+
+m4_define([m4_chomp_all],
+[m4_format([[%.*s]], m4_bregexp(m4_translit([[$1]], [
+/], [/ ]), [/*$]), [$1])])
 
 
 # m4_flatten(STRING)

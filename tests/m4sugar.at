@@ -871,6 +871,34 @@ $1$#$@
 
 AT_CLEANUP
 
+## -------------- ##
+## m4_esyscmd_s.  ##
+## -------------- ##
+
+AT_SETUP([m4@&t@_esyscmd_s])
+AT_KEYWORDS([m4@&t@_chomp m4@&t@_chomp_all])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_define([world], [WORLD])dnl
+m4_chomp([abc])
+m4_chomp([world
+
+])
+m4_esyscmd_s([echo hello world])
+m4_esyscmd_s([echo '[goodbye,
+cruel world
+
+]'])
+]], [[abc
+world
+
+hello WORLD
+goodbye,
+cruel world
+]])
+
+AT_CLEANUP
+
 ## ---------- ##
 ## M4 Loops.  ##
 ## ---------- ##
