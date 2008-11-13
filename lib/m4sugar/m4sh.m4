@@ -1602,8 +1602,7 @@ m4_defun_init([AS_TR_SH],
 m4_dquote(m4_dquote(m4_defn([m4_cr_not_symbols2])))[[,
 				 [pp[]]]]dnl
 m4_dquote(m4_dquote(m4_for(,1,255,,[[_]])))[[)],
-	      [`AS_ECHO(["m4_bpatsubst(m4_dquote(m4_expand([$1])),
-				       [[\\`]], [\\\&])"]) | $as_tr_sh`])])
+  [`AS_ECHO(["_AS_ESCAPE(m4_dquote(m4_expand([$1])), [\`])"]) | $as_tr_sh`])])
 
 
 # _AS_TR_CPP_PREPARE
@@ -1668,7 +1667,7 @@ m4_defun([_AS_VAR_APPEND_PREPARE],
 VAR.  Take advantage of any shell optimizations that allow amortized
 linear growth over repeated appends, instead of the typical quadratic
 growth present in naive implementations.])
-AS_IF([_AS_RUN(["AS_ESCAPE([_AS_VAR_APPEND_WORKS])"])],
+AS_IF([_AS_RUN(["AS_ESCAPE(m4_quote(_AS_VAR_APPEND_WORKS))"])],
 [eval 'as_func_append ()
   {
     eval $[]1+=\$[]2
@@ -1709,7 +1708,7 @@ m4_defun([_AS_VAR_ARITH_PREPARE],
 [Perform arithmetic evaluation on the ARGs, and store the result in
 the global $as_val.  Take advantage of shells that can avoid forks.
 The arguments must be portable across $(()) and expr.])
-AS_IF([_AS_RUN(["AS_ESCAPE([_AS_VAR_ARITH_WORKS])"])],
+AS_IF([_AS_RUN(["AS_ESCAPE(m4_quote(_AS_VAR_ARITH_WORKS))"])],
 [eval 'as_func_arith ()
   {
     as_val=$(( $[]* ))
@@ -1761,8 +1760,7 @@ m4_define([AS_VAR_COPY],
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
 	       [$$1],
-	       [`eval 'as_val=${'m4_bpatsubst([$1], [[\\`]], [\\\&])'};dnl
-AS_ECHO(["$as_val"])'`])])
+  [`eval 'as_val=${'_AS_ESCAPE([[$1]], [\`])'};AS_ECHO(["$as_val"])'`])])
 
 
 # AS_VAR_IF(VARIABLE, VALUE, IF-TRUE, IF-FALSE)

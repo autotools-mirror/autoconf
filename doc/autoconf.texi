@@ -12283,7 +12283,9 @@ Emit shell code to assign the contents of the polymorphic shell variable
 @var{var} to the shell expansion of @var{value}.  @var{value} is not
 subject to field splitting or file name expansion, so if command
 substitution is used, it may be done with @samp{`""`} rather than using
-an intermediate variable (@pxref{Shell Substitutions}).
+an intermediate variable (@pxref{Shell Substitutions}).  However,
+@var{value} does undergo rescanning for additional macro names; behavior
+is unspecified if late expansion results in any shell meta-characters.
 @end defmac
 
 @defmac AS_VAR_SET_IF (@var{var}, @ovar{if-set}, @ovar{if-undef})

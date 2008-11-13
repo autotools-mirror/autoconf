@@ -1,3 +1,14 @@
+2008-11-13  Eric Blake  <ebb9@byu.net>
+
+	Fix AS_ESCAPE usage bugs.
+	* lib/m4sugar/m4sh.m4 (_AS_VAR_APPEND_PREPARE)
+	(_AS_VAR_ARITH_PREPARE): Expand macros prior to adding shell
+	escapes.
+	(AS_TR_SH, AS_VAR_GET): Use _AS_ESCAPE for speed.
+	* doc/autoconf.texi (Polymorphic Variables) <AS_VAR_SET>: Document
+	caveat due to conditional AS_ESCAPE.
+	* tests/m4sh.at (AS@&t@_VAR basics): Enhance test.
+
 2008-11-12  Eric Blake  <ebb9@byu.net>
 
 	Whitespace reduction in configure.

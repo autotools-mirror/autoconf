@@ -952,6 +952,7 @@ AT_KEYWORDS([AS@&t@_VAR_PUSHDEF AS@&t@_VAR_POPDEF])
 
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
+ m4_define([with], [WITH])
 # Literals.
 dnl AS_VAR_SET_IF also covers AS_VAR_TEST_SET
 AS_VAR_SET_IF([foo], [echo oops]) && echo ok
@@ -1009,26 +1010,26 @@ m4_ifdef([tmp], [echo oops])
 
 AT_CHECK_M4SH
 AT_CHECK([./script], [], [[ok
-\a  "weird" `value` with; $fun 'characters
+\a  "weird" `value` WITH; $fun 'characters
 -
-\a  "weird" `value` with; $fun 'characters
+\a  "weird" `value` WITH; $fun 'characters
 -
 ok
 ok
 ok
 ====
 ok
-\a  "weird" `value` with; $fun 'characters
+\a  "weird" `value` WITH; $fun 'characters
 -
-\a  "weird" `value` with; $fun 'characters-
+\a  "weird" `value` WITH; $fun 'characters-
 ok
 ok
 ok
 ====
 ok
-\a  "weird" `value` with; $fun 'characters
+\a  "weird" `value` WITH; $fun 'characters
 -
-\a  "weird" `value` with; $fun 'characters-
+\a  "weird" `value` WITH; $fun 'characters-
 ok
 ok
 ok
