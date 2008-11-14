@@ -1032,25 +1032,25 @@ case $ac_cv_[]_AC_LANG_ABBREV[]_mangling in
 	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name]) ;;
   "lower case, no underscore, extra underscore")
 	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name])
-	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name ## _]) ;;
+	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name [##] _]) ;;
   "lower case, underscore, no extra underscore")
-	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name ## _])
-	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name ## _]) ;;
+	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name [##] _])
+	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name [##] _]) ;;
   "lower case, underscore, extra underscore")
-	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name ## _])
-	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name ## __]) ;;
+	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [name [##] _])
+	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [name [##] __]) ;;
   "upper case, no underscore, no extra underscore")
 	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME])
 	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME]) ;;
   "upper case, no underscore, extra underscore")
 	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME])
-	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME ## _]) ;;
+	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME [##] _]) ;;
   "upper case, underscore, no extra underscore")
-	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME ## _])
-	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME ## _]) ;;
+	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME [##] _])
+	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME [##] _]) ;;
   "upper case, underscore, extra underscore")
-	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME ## _])
-	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME ## __]) ;;
+	  AC_DEFINE(_AC_FC[_FUNC(name,NAME)],  [NAME [##] _])
+	  AC_DEFINE(_AC_FC[_FUNC_(name,NAME)], [NAME [##] __]) ;;
   *)
 	  AC_MSG_WARN([unknown Fortran name-mangling scheme])
 	  ;;

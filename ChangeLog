@@ -1,5 +1,17 @@
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
+	Reduce forks in AC_DEFINE.
+	* lib/autoconf/general.m4 (_AC_DEFINE_Q_PRINT): New macro.
+	(_AC_DEFINE_Q): Use it to avoid forks for all AC_DEFINE and most
+	AC_DEFINE_UNQUOTED.
+	* lib/autoconf/fortran.m4 (_AC_FC_WRAPPERS): Properly quote #.
+	* tests/torture.at (Substitute and define special characters):
+	(Define to a 2000-byte string): Enhance tests to cover
+	AC_DEFINE_UNQUOTED.
+	(@%:@define header templates): Enhance test to cover #.
+
+2008-11-20  Eric Blake  <ebb9@byu.net>
+
 	Improve m4_expand robustness, part 2.
 	* lib/m4sugar/m4sugar.m4 (m4_expand): Support unterminated
 	comments, by wrapping old implementation...

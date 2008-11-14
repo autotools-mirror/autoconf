@@ -449,6 +449,7 @@ AT_CLEANUP
 # problems when a symbol is prefix of another.
 
 AT_SETUP([@%:@define header templates])
+AT_KEYWORDS([AC@&t@_DEFINE])
 
 AT_DATA([configure.ac],
 [[AC_INIT
@@ -473,6 +474,9 @@ line4])
 AC_DEFINE([multiline_args(ARG1, ARG2)], [ARG2 \
 ARG1])
 AC_CONFIG_FILES(defs)
+
+# underquoted #
+AC_DEFINE([paste(a,b)], [a##b])
 
 # Things included in confdefs.h, but which make no sense in
 # config.h, nor in $DEFS.
@@ -510,6 +514,7 @@ AT_DATA([config.hin],
 #define aaac(a, aa) aa a
 #undef multiline
 #  undef multiline_args
+#define paste(a,b) a##b
 /* an ugly one: */
 #define str(define) \
 #define
@@ -542,6 +547,7 @@ line3 \
 line4
 #  define multiline_args(ARG1, ARG2) ARG2 \
 ARG1
+#define paste(a,b) a##b
 /* an ugly one: */
 #define str(define) \
 #define
@@ -553,7 +559,7 @@ AT_CHECK([cat config.h], 0, expout)
 
 # Check the value of DEFS.
 AT_DATA([expout],
-[[-DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA -Dmultiline=line1line2line3\ line4 -Dmultiline_args\(ARG1,\ ARG2\)=ARG2\ ARG1
+[[-DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA -Dmultiline=line1line2line3\ line4 -Dmultiline_args\(ARG1,\ ARG2\)=ARG2\ ARG1 -Dpaste\(a,b\)=a\#\#b
 ]])
 
 # Because we strip trailing spaces in `testsuite' we can't leave one in
@@ -756,16 +762,19 @@ AT_CLEANUP
 ## ------------------------------ ##
 
 AT_SETUP([Define to a 2000-byte string])
+AT_KEYWORDS([AC@&t@_DEFINE AC@&t@_DEFINE_UNQUOTED])
 
 AT_CONFIGURE_AC(
 [[
-AC_DEFINE([foo], ]m4_for([n], 1, 100,, ....................)[, [desc])
+AC_DEFINE_UNQUOTED([foo], ]m4_for([n], 1, 100,, ....................)[, [desc])
+AC_DEFINE([fooq], ]m4_for([n], 1, 100,, ....................)[, [desc])
 ]])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER
 AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([@%:@define foo m4_for([n], 1, 100,, ....................)
+@%:@define fooq m4_for([n], 1, 100,, ....................)
 ])
 AT_CLEANUP
 
@@ -777,6 +786,7 @@ AT_CLEANUP
 # Use characters special to the shell, sed, awk, and M4.
 
 AT_SETUP([Substitute and define special characters])
+AT_KEYWORDS([AC@&t@_DEFINE AC@&t@_DEFINE_UNQUOTED])
 
 AT_DATA([Foo.in], [@foo@
 @bar@@notsubsted@@baz@ stray @ and more@@@baz@
@@ -800,7 +810,8 @@ AT_DATA([Zardoz.in], [@zardoz@
 ])
 
 AT_CONFIGURE_AC(
-[[foo="AS@&t@_ESCAPE([[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !]])"
+[[foo="AS@&t@_ESCAPE([[X*'[]+ ", & &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !]])"
+#"
 bar="@foo@ @baz@"
 baz=bla
 ( for i in 0 1 2 3; do
@@ -824,8 +835,17 @@ AC_SUBST([baz])
 AC_SUBST([zardoz])
 file=File
 AC_SUBST_FILE([file])
-AC_DEFINE([foo], [[X*'[]+ ",& &`\($foo !]], [Awful value.])
-AC_DEFINE([bar], [[%!_!# X]], [Value that is used as special delimiter.])
+AC_DEFINE([fooq], [[X*'[]+ ", & &`\($foo !]], [Awful value.])
+AC_DEFINE([barq], [[%!_!# X]], [Value that is used as special delimiter.])
+AC_DEFINE_UNQUOTED([foo], [[X*'[]+ ", & &\`\\(\$foo !]], [Awful value.])
+AC_DEFINE_UNQUOTED([bar], [[%!_!# X]], [Value that is used as special delimiter.])
+AC_DEFINE_UNQUOTED([unq1], [$baz], [unquoted, test 1])
+AC_DEFINE_UNQUOTED([unq2], [\$baz], [unquoted, test 2])
+AC_DEFINE_UNQUOTED([unq3], ["$baz"], [unquoted, test 3])
+AC_DEFINE_UNQUOTED([unq4], [${baz+set}], [unquoted, test 4])
+AC_DEFINE_UNQUOTED([unq5], ["${baz+`echo "a b"`}"], [unquoted, test 5])
+AC_DEFINE_UNQUOTED([unq6], [`echo hi`], [unquoted, test 6])
+AC_DEFINE_UNQUOTED([unq7], ['\"'], [unquoted, test 7])
 AC_PROG_AWK
 AC_CONFIG_FILES([Foo Zardoz])]])
 
@@ -834,7 +854,7 @@ AT_CHECK_AUTOHEADER
 # Check both awk and the result of AC_PROG_AWK
 for awk_arg in FOO= AWK=awk; do
   AT_CHECK_CONFIGURE([$awk_arg])
-  AT_CHECK([cat Foo], 0, [[X*'[]+ ",& &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !
+  AT_CHECK([cat Foo], 0, [[X*'[]+ ", & &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !
 @foo@ @baz@@notsubsted@bla stray @ and more@@bla
 abc@foo@ @baz@baz@baz
 abc@foo@ @baz@blabaz
@@ -849,7 +869,16 @@ X@file@
 ]])
   AT_CHECK([cmp allowed-chars Zardoz])
   AT_CHECK_DEFINES([[#define bar %!_!# X
-#define foo X*'[]+ ",& &`\($foo !
+#define barq %!_!# X
+#define foo X*'[]+ ", & &`\($foo !
+#define fooq X*'[]+ ", & &`\($foo !
+#define unq1 bla
+#define unq2 $baz
+#define unq3 "bla"
+#define unq4 set
+#define unq5 "a b"
+#define unq6 hi
+#define unq7 '\"'
 ]])
 done
 AT_CLEANUP
@@ -900,6 +929,7 @@ AT_CLEANUP
 ## ------------------ ##
 
 AT_SETUP([Define a newline])
+AT_KEYWORDS([AC@&t@_DEFINE AC@&t@_DEFINE_UNQUOTED])
 AT_CONFIGURE_AC([[AC_DEFINE([foo], [one
 two], [This spans two lines.])
 ]])
