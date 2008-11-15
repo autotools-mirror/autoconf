@@ -906,6 +906,72 @@ m4_popdef([limit])
 AT_CLEANUP
 
 
+## -------- ##
+## AS_FOR.  ##
+## -------- ##
+
+AT_SETUP([AS@&t@_FOR])
+AT_KEYWORDS([m4sh])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+
+# Simple checks.
+AS_FOR([m4var], [shvar], [a],
+[echo "m4var $shvar"])
+AS_FOR([m4var], [shvar], [b c],
+[echo "m4var $shvar"])
+list='d e'
+AS_FOR([m4var], [shvar], [$list],
+[echo "m4var $shvar"])
+AS_FOR([m4var], [shvar], ["$list"],
+[echo "m4var $shvar"])
+AS_FOR([m4var], [shvar], ['$list'],
+[echo "m4var $shvar"])
+AS_FOR([m4var], [shvar], [\'],
+[echo "m4var $shvar"])
+
+# Syntax checks: cope with empty arguments.
+set f g
+AS_FOR([], [shvar], [],
+[echo "$shvar"])
+rm -f file
+AS_FOR([], [shvar], [`touch file`])
+test -f file || exit 1
+
+# Check that break works.
+while :
+do
+  AS_FOR([m4var], [shvar], [h i],
+    [echo "m4var"; break 2])
+  exit 1
+done
+while :
+do
+  AS_FOR([m4var], [shvar], [j],
+    [echo "m4var"; break 2])
+  exit 1
+done
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script], [0], [[a a
+b b
+c c
+d d
+e e
+d e d e
+$list $list
+' '
+f
+g
+h
+j
+]])
+
+AT_CLEANUP
+
+
 ## --------------- ##
 ## AS_LITERAL_IF.  ##
 ## --------------- ##

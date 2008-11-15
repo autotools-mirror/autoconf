@@ -533,6 +533,33 @@ m4_define([AS_EXIT],
 [{ (exit m4_default([$1], 1)); exit m4_default([$1], 1); }])
 
 
+# AS_FOR(MACRO, SHELL-VAR, [LIST = "$@"], [BODY = :])
+# ---------------------------------------------------
+# Expand to a shell loop that assigns SHELL-VAR to each of the
+# whitespace-separated entries in LIST (or "$@" if LIST is empty),
+# then executes BODY.  BODY may call break to abort the loop, or
+# continue to proceed with the next element of LIST.  Requires that
+# IFS be set to the normal space-tab-newline.  As an optimization,
+# BODY should access MACRO rather than $SHELL-VAR.  Normally, MACRO
+# expands to $SHELL-VAR, but if LIST contains only a single element
+# that needs no additional shell quoting, then MACRO will expand to
+# that element, thus providing a direct value rather than a shell
+# variable indirection.
+#
+# Only use the optimization if LIST can be used without additional
+# shell quoting in either a literal or double-quoted context (that is,
+# we give up on default IFS chars, parameter expansion, command
+# substitution, shell quoting, globs, or quadrigraphs).  Inline the
+# m4_defn for speed.
+m4_defun([AS_FOR],
+[m4_pushdef([$1], m4_if(m4_translit([$3], ]dnl
+m4_dquote(_m4_defn([m4_cr_symbols2]))[[%+=:,./-]), [], [[$3]], [[$$2]]))]dnl
+[for $2[]m4_ifval([$3], [ in $3])
+do
+  m4_default([$4], [:])
+done[]_m4_popdef([$1])])
+
+
 # AS_IF(TEST1, [IF-TRUE1 = :]...[IF-FALSE = :])
 # ---------------------------------------------
 # Expand into
