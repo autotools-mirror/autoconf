@@ -108,15 +108,11 @@ m4_define([_AH_CHECK_FUNC],
 # `break' to stop the search.
 AC_DEFUN([AC_CHECK_FUNCS],
 [m4_map_args_w([$1], [_AH_CHECK_FUNC(], [)])]dnl
-[m4_pushdef([AC_func], m4_if(m4_index(m4_translit([$1], [	][
-$`], [    ]), [ ]), [-1], [[$1]], [[$ac_func]]))]dnl
-[for ac_func in $1
-do
-AC_CHECK_FUNC(AC_func,
-	      [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]AC_func)) $2],
-	      [$3])dnl
-done
-_m4_popdef([AC_func])])
+[AS_FOR([AC_func], [ac_func], [$1],
+[AC_CHECK_FUNC(AC_func,
+	       [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]AC_func)) $2],
+	       [$3])dnl])
+])# AC_CHECK_FUNCS
 
 
 # _AC_CHECK_FUNC_ONCE(FUNCTION)
