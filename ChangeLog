@@ -1,3 +1,9 @@
+2008-11-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Do not use read-only variable $status.
+	* tests/compile.at (AC_RUN_IFELSE): Use $estatus instead of
+	$status, for zsh.
+
 2008-11-15  Eric Blake  <ebb9@byu.net>
 
 	Use the new AS_FOR function.

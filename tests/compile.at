@@ -2,7 +2,7 @@
 
 AT_BANNER([Low level compiling/preprocessing macros.])
 
-# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007 Free Software
+# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007, 2008 Free Software
 # Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -123,16 +123,16 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([], [return 0])],
 
 AC_RUN_IFELSE([AC_LANG_PROGRAM([], [return 2])],
 	      [AC_MSG_ERROR([saw `return 2' as a success])],
-	      [status=$?
-test $status != 2 &&
-  AC_MSG_ERROR([did not get as 2 exit status: $status])])
+	      [estatus=$?
+test $estatus != 2 &&
+  AC_MSG_ERROR([did not get as 2 exit status: $estatus])])
 
 # The old stinky one.
 AC_TRY_RUN([int main () { return 3; }],
 	   [AC_MSG_ERROR([saw `return 3' as a success])],
-	   [status=$?
-test $status != 3 &&
-  AC_MSG_ERROR([did not get 3 as exit status: $status])])
+	   [estatus=$?
+test $estatus != 3 &&
+  AC_MSG_ERROR([did not get 3 as exit status: $estatus])])
 
 ]])
 
