@@ -1,5 +1,13 @@
 2008-11-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Use a different workaround for an automake quirk.
+	* tests/Makefile.am (AUTOMAKE_OPTIONS): Remove.
+	(distclean_generic): New helper variable, to fool automake.
+	($(distclean_generic)): Depend on clean-local, to prevent
+	the race in the two rules with accessing and removing
+	$(TESTSUITE).
+	Report by Eric Blake.
+
 	* lib/m4sugar/m4sh.m4 (_AS_VAR_ARITH_PREPARE): Simplify, avoid
 	unbalanced parentheses from last change.
 	Spotted by Eric Blake, fix suggested by Paolo Bonzini.
