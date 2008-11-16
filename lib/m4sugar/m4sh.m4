@@ -1742,8 +1742,7 @@ AS_IF([_AS_RUN(["AS_ESCAPE(m4_quote(_AS_VAR_ARITH_WORKS))"])],
   }'],
 [as_func_arith ()
   {
-    as_val=`expr "$[]@"`
-    case $? in 0|1) :;; *) false;; esac
+    as_val=`expr "$[]@" || test $? -eq 1`
   }]) # as_func_arith
 ])
 

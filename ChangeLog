@@ -1,5 +1,9 @@
 2008-11-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* lib/m4sugar/m4sh.m4 (_AS_VAR_ARITH_PREPARE): Simplify, avoid
+	unbalanced parentheses from last change.
+	Spotted by Eric Blake, fix suggested by Paolo Bonzini.
+
 	Fix exit status of expr version of as_func_arith.
 	* lib/m4sugar/m4sh.m4 (_AS_VAR_ARITH_PREPARE): Count an exit
 	status of 1 of expr also as success, to avoid failure if the
