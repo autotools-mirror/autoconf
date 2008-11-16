@@ -1,5 +1,11 @@
 2008-11-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix exit status of expr version of as_func_arith.
+	* lib/m4sugar/m4sh.m4 (_AS_VAR_ARITH_PREPARE): Count an exit
+	status of 1 of expr also as success, to avoid failure if the
+	computation result is zero.  Fixes test failures with IRIX sh,
+	where the expr variant of as_func_arith is used.
+
 	Do not use read-only variable $status.
 	* tests/compile.at (AC_RUN_IFELSE): Use $estatus instead of
 	$status, for zsh.
