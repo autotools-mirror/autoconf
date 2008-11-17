@@ -126,6 +126,63 @@ AT_CHECK([./script])
 AT_CLEANUP
 
 
+## ------------- ##
+## AS_BASENAME.  ##
+## ------------- ##
+
+# Strip path from file.
+AT_SETUP([AS@&t@_BASENAME])
+AT_KEYWORDS([m4sh])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+
+m4_define([BASENAME_TEST],
+[base=`AS_BASENAME([$1])`
+test "$base" = "$2" ||
+  echo "basename($1) = $base instead of $2" >&2
+
+base=`_AS_BASENAME_SED([$1])`
+test "$base" = "$2" ||
+  echo "basename_sed($1) = $base instead of $2" >&2])
+
+BASENAME_TEST([//1],             [1])
+BASENAME_TEST([/1],              [1])
+BASENAME_TEST([./1],             [1])
+BASENAME_TEST([../../2],         [2])
+BASENAME_TEST([//1/],            [1])
+BASENAME_TEST([/1/],             [1])
+BASENAME_TEST([./1/],            [1])
+BASENAME_TEST([../../2],         [2])
+BASENAME_TEST([//1/3],           [3])
+BASENAME_TEST([/1/3],            [3])
+BASENAME_TEST([./1/3],           [3])
+BASENAME_TEST([../../2/3],       [3])
+BASENAME_TEST([//1/3///],        [3])
+BASENAME_TEST([/1/3///],         [3])
+BASENAME_TEST([./1/3///],        [3])
+BASENAME_TEST([../../2/3///],    [3])
+BASENAME_TEST([//1//3/],         [3])
+BASENAME_TEST([/1//3/],          [3])
+BASENAME_TEST([./1//3/],         [3])
+BASENAME_TEST([a.c],             [a.c])
+BASENAME_TEST([a.c/],            [a.c])
+BASENAME_TEST([/a.c/],           [a.c])
+BASENAME_TEST([/1/a.c],          [a.c])
+BASENAME_TEST([/1/a.c/],         [a.c])
+BASENAME_TEST([/1/../a.c],       [a.c])
+BASENAME_TEST([/1/../a.c/],      [a.c])
+BASENAME_TEST([./1/a.c],         [a.c])
+BASENAME_TEST([./1/a.c/],        [a.c])
+AS_EXIT(0)
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script])
+
+AT_CLEANUP
+
+
 ## ------------ ##
 ## AS_DIRNAME.  ##
 ## ------------ ##
@@ -236,59 +293,43 @@ AT_CLEANUP
 
 
 
-## ------------- ##
-## AS_BASENAME.  ##
-## ------------- ##
+## --------- ##
+## AS_EXIT.  ##
+## --------- ##
 
-# Strip path from file.
-AT_SETUP([AS@&t@_BASENAME])
-AT_KEYWORDS([m4sh])
+# Exit scripts with given status.
+AT_SETUP([AS@&t@_EXIT])
+AT_KEYWORDS([m4sh AS@&t@_SET_STATUS])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
-
-m4_define([BASENAME_TEST],
-[base=`AS_BASENAME([$1])`
-test "$base" = "$2" ||
-  echo "basename($1) = $base instead of $2" >&2
-
-base=`_AS_BASENAME_SED([$1])`
-test "$base" = "$2" ||
-  echo "basename_sed($1) = $base instead of $2" >&2])
-
-BASENAME_TEST([//1],             [1])
-BASENAME_TEST([/1],              [1])
-BASENAME_TEST([./1],             [1])
-BASENAME_TEST([../../2],         [2])
-BASENAME_TEST([//1/],            [1])
-BASENAME_TEST([/1/],             [1])
-BASENAME_TEST([./1/],            [1])
-BASENAME_TEST([../../2],         [2])
-BASENAME_TEST([//1/3],           [3])
-BASENAME_TEST([/1/3],            [3])
-BASENAME_TEST([./1/3],           [3])
-BASENAME_TEST([../../2/3],       [3])
-BASENAME_TEST([//1/3///],        [3])
-BASENAME_TEST([/1/3///],         [3])
-BASENAME_TEST([./1/3///],        [3])
-BASENAME_TEST([../../2/3///],    [3])
-BASENAME_TEST([//1//3/],         [3])
-BASENAME_TEST([/1//3/],          [3])
-BASENAME_TEST([./1//3/],         [3])
-BASENAME_TEST([a.c],             [a.c])
-BASENAME_TEST([a.c/],            [a.c])
-BASENAME_TEST([/a.c/],           [a.c])
-BASENAME_TEST([/1/a.c],          [a.c])
-BASENAME_TEST([/1/a.c/],         [a.c])
-BASENAME_TEST([/1/../a.c],       [a.c])
-BASENAME_TEST([/1/../a.c/],      [a.c])
-BASENAME_TEST([./1/a.c],         [a.c])
-BASENAME_TEST([./1/a.c/],        [a.c])
-AS_EXIT(0)
+test x${1} = xa && AS_EXIT
+test x${1} = xb && AS_EXIT([${2}])
+test x${1} = xc && trap 's=$?; echo $s; AS_EXIT([$s])' 0
+test x${2} = xd && set -e
+AS_SET_STATUS([3])
+dnl Solaris /bin/sh 'set -e' doesn't react to failed function calls
+test x${2} = xd \
+  && { echo 'skipping rest of test: set -e support is lousy'; exit 77; }
+AS_SET_STATUS([4])
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([./script], [4])
+AT_CHECK([./script a], [1])
+AT_CHECK([./script b], [0])
+AT_CHECK([./script b 2], [2])
+AT_CHECK([./script c], [4], [[4
+]])
+dnl If we got to this point without a FAIL, then AS_EXIT at least works.
+dnl The rest of this test relies on semi-decent 'set -e' support, even
+dnl though m4sh in general should not try to rely on it because of
+dnl portability nightmares on what constructs are considered errors across
+dnl various shells; therefore, an overall SKIP result is desirable on
+dnl broken shells like Solaris /bin/sh.
+AT_CHECK([./script '' d], [3])
+AT_CHECK([./script c d], [3], [[3
+]])
 
 AT_CLEANUP
 

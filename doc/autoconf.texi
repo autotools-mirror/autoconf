@@ -12052,6 +12052,14 @@ script.
 Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Particular Programs}).
 @end defmac
 
+@defmac AS_SET_STATUS (@var{status})
+@asindex{SET_STATUS}
+Emit shell code to set the value of @samp{$?} to @var{status} without
+forking.  However, this is not guaranteed to abort a shell running with
+@code{set -e} (@pxref{Limitations of Builtins, , Limitations of Shell
+Builtins}).
+@end defmac
+
 @defmac AS_TR_CPP (@var{expression})
 @asindex{TR_CPP}
 Transform @var{expression} into a valid right-hand side for a C @code{#define}.

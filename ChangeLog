@@ -1,5 +1,17 @@
 2008-11-18  Eric Blake  <ebb9@byu.net>
 
+	Add AS_SET_STATUS, make AS_EXIT more efficient.
+	* lib/m4sugar/m4sh.m4 (_AS_EXIT_PREPARE, AS_SET_STATUS): New
+	macros.
+	(AS_EXIT): Rewrite to avoid forks.
+	(_AS_SHELL_SANITIZE): Avoid AS_EXIT prior to shell functions.
+	(AS_PREPARE, _AS_PREPARE): Add new preparation.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_SET_STATUS>:
+	Document.
+	* NEWS: Mention new macro.
+	* tests/m4sh.at (AS@&t@_EXIT): New test.
+	(BASENAME_TEST): Sort.
+
 	Document Tru64 bug with 'set -e'.
 	* doc/autoconf.texi (Limitations of Builtins) <trap>: Mention a
 	bug in mixing 'set -e' with 'trap .. 0'.

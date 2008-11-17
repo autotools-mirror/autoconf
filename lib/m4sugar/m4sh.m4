@@ -299,7 +299,8 @@ m4_defun([_AS_PREPARE],
 [m4_pushdef([AS_REQUIRE])]dnl
 [m4_pushdef([AS_REQUIRE_SHELL_FN], _m4_defn([_AS_REQUIRE_SHELL_FN])
 )]dnl
-[_AS_UNSET_PREPARE
+[_AS_EXIT_PREPARE
+_AS_UNSET_PREPARE
 _AS_VAR_APPEND_PREPARE
 _AS_VAR_ARITH_PREPARE
 
@@ -331,6 +332,7 @@ AS_REQUIRE([_AS_ME_PREPARE])
 AS_REQUIRE([_AS_CR_PREPARE])
 AS_REQUIRE([_AS_LINENO_PREPARE])
 AS_REQUIRE([_AS_ECHO_N_PREPARE])
+AS_REQUIRE([_AS_EXIT_PREPARE])
 AS_REQUIRE([_AS_LN_S_PREPARE])
 AS_REQUIRE([_AS_MKDIR_P_PREPARE])
 AS_REQUIRE([_AS_TEST_PREPARE])
@@ -418,8 +420,11 @@ test x$exitcode = x0[]])# _AS_SHELL_FN_WORK
 
 # _AS_SHELL_SANITIZE
 # ------------------
-# This is the prolog that is emitted by AS_INIT and AS_INIT_GENERATED.
+# This is the prolog that is emitted by AS_INIT and AS_INIT_GENERATED;
+# it is executed prior to shell function definitions, hence the
+# temporary redefinition of AS_EXIT.
 m4_defun([_AS_SHELL_SANITIZE],
+[m4_pushdef([AS_EXIT], [exit m4_default([$1], 1)])]dnl
 [m4_text_box([M4sh Initialization.])
 
 AS_BOURNE_COMPATIBLE
@@ -470,7 +475,7 @@ export LANGUAGE
 
 # CDPATH.
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
-])# _AS_SHELL_SANITIZE
+_m4_popdef([AS_EXIT])])# _AS_SHELL_SANITIZE
 
 
 # AS_SHELL_SANITIZE
@@ -519,18 +524,34 @@ m4_defun([AS_CASE],
 esac])# AS_CASE
 
 
-# AS_EXIT([EXIT-CODE = 1])
-# ------------------------
-# Exit and set exit code to EXIT-CODE in the way that it's seen
-# within "trap 0".
+# _AS_EXIT_PREPARE
+# ----------------
+# Ensure AS_EXIT and AS_SET_STATUS will work.
 #
 # We cannot simply use "exit N" because some shells (zsh and Solaris sh)
 # will not set $? to N while running the code set by "trap 0"
-# So we set $? by executing "exit N" in the subshell and then exit.
+# Some shells fork even for (exit N), so we use a helper function
+# to set $? prior to the exit.
 # Other shells don't use `$?' as default for `exit', hence just repeating
 # the exit value can only help improving portability.
-m4_define([AS_EXIT],
-[{ (exit m4_default([$1], 1)); exit m4_default([$1], 1); }])
+m4_defun([_AS_EXIT_PREPARE],
+[AS_REQUIRE_SHELL_FN([as_func_set_status],
+  [AS_FUNCTION_DESCRIBE([as_func_set_status], [STATUS],
+    [Set $? to STATUS, without forking.])], [  return $[]1])]dnl
+[AS_REQUIRE_SHELL_FN([as_func_exit],
+  [AS_FUNCTION_DESCRIBE([as_func_exit], [STATUS],
+    [Exit the shell with STATUS, even in a "trap 0" or "set -e" context.])],
+[  set +e
+  as_func_set_status $[]1
+  exit $[]1])])#_AS_EXIT_PREPARE
+
+
+# AS_EXIT([EXIT-CODE = 1])
+# ------------------------
+# Exit, with status set to EXIT-CODE in the way that it's seen
+# within "trap 0", and without interference from "set -e".
+m4_defun([AS_EXIT],
+[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_func_exit m4_default([$1], 1)])
 
 
 # AS_FOR(MACRO, SHELL-VAR, [LIST = "$@"], [BODY = :])
@@ -587,6 +608,13 @@ m4_defun([AS_IF],
   m4_default([$2], [:])
 m4_map_args_pair([_$0], [_$0_ELSE], m4_shift2($@))]dnl
 [fi[]])# AS_IF
+
+
+# AS_SET_STATUS(STATUS)
+# ---------------------
+# Set the shell status ($?) to STATUS, without forking.
+m4_defun([AS_SET_STATUS],
+[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_func_set_status $1])
 
 
 # _AS_UNSET_PREPARE
