@@ -552,7 +552,7 @@ m4_define([AS_EXIT],
 # substitution, shell quoting, globs, or quadrigraphs).  Inline the
 # m4_defn for speed.
 m4_defun([AS_FOR],
-[m4_pushdef([$1], m4_if(m4_translit([$3], ]dnl
+[m4_pushdef([$1], m4_if([$3], [], [[$$2]], m4_translit([$3], ]dnl
 m4_dquote(_m4_defn([m4_cr_symbols2]))[[%+=:,./-]), [], [[$3]], [[$$2]]))]dnl
 [for $2[]m4_ifval([$3], [ in $3])
 do

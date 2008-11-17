@@ -1,3 +1,11 @@
+2008-11-17  Eric Blake  <ebb9@byu.net>
+
+	Detect empty list in AS_FOR.
+	* lib/m4sugar/m4sh.m4 (AS_FOR): Handle iteration over $@
+	properly.
+	* tests/m4sh.at (AS@&t@_FOR): Enhance test to catch it.
+	Reported by Paolo Bonzini.
+
 2008-11-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Use a different workaround for an automake quirk.

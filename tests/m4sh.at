@@ -934,7 +934,7 @@ AS_FOR([m4var], [shvar], [\'],
 # Syntax checks: cope with empty arguments.
 set f g
 AS_FOR([], [shvar], [],
-[echo "$shvar"])
+[echo "m4_defn([]) $shvar"])
 rm -f file
 AS_FOR([], [shvar], [`touch file`])
 test -f file || exit 1
@@ -963,8 +963,8 @@ e e
 d e d e
 $list $list
 ' '
-f
-g
+f f
+g g
 h
 j
 ]])
