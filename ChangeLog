@@ -1,3 +1,8 @@
+2008-11-18  Eric Blake  <ebb9@byu.net>
+
+	Document a Solaris /bin/sh bug with 'set -e'.
+	* doc/autoconf.texi (Shell Functions): Mention the bug.
+
 2008-11-17  Eric Blake  <ebb9@byu.net>
 
 	Detect empty list in AS_FOR.

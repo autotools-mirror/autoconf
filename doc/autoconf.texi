@@ -14660,6 +14660,15 @@ $ @kbd{ash -c 'foo()@{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
 2
 @end example
 
+Not all shells treat shell functions as simple commands impacted by
+@samp{set -e}, for example with Solaris 10 @command{bin/sh}:
+
+@example
+$ @kbd{bash -c 'f()@{ return 1; @}; set -e; f; echo oops}
+$ @kbd{/bin/sh -c 'f()@{ return 1; @}; set -e; f; echo oops}
+oops
+@end example
+
 Shell variables and functions may share the same namespace, for example
 with Solaris 10 @command{/bin/sh}:
 
