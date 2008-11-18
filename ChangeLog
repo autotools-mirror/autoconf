@@ -1,5 +1,10 @@
 2008-11-18  Eric Blake  <ebb9@byu.net>
 
+	Document Tru64 bug with 'set -e'.
+	* doc/autoconf.texi (Limitations of Builtins) <trap>: Mention a
+	bug in mixing 'set -e' with 'trap .. 0'.
+	Reported by Ralf Wildenhues.
+
 	Document a Solaris /bin/sh bug with 'set -e'.
 	* doc/autoconf.texi (Shell Functions): Mention the bug.
 

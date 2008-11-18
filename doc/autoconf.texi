@@ -15425,6 +15425,22 @@ does not print @samp{two}.  One workaround is to use @samp{if test -n
 "$foo"; then exit 1; fi} rather than @samp{test -n "$foo" && exit 1}.
 Another possibility is to warn @acronym{BSD} users not to use @samp{sh -e}.
 
+Portable scripts should not use @samp{set -e} if @command{trap} is used
+to install an exit handler.  This is because Tru64/OSF 5.1 @command{sh}
+enters the trap handler with the exit status of the command prior to the
+one that triggered the errexit handler:
+
+@example
+$ @kbd{bash -c 'trap '\''echo $?'\'' 0; set -e; false'}
+1
+$ @kbd{sh -c 'trap '\''echo $?'\'' 0; set -e; false'}
+0
+@end example
+
+@noindent
+Thus, when writing a script in M4sh, rather than trying to rely on
+@samp{set -e}, it is better to append @samp{|| AS_EXIT([$?])} to any
+statement where it is desirable to abort on failure.
 
 @item @command{shift}
 @c ------------------
