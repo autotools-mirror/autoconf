@@ -402,18 +402,18 @@ m4_define([_AS_RUN],
 # This is a spy to detect "in the wild" shells that do not support shell
 # functions correctly.  It is based on the m4sh.at Autotest testcases.
 m4_define([_AS_SHELL_FN_WORK],
-[as_func_return () { (exit [$]1); }
-as_func_success () { as_func_return 0; }
-as_func_failure () { as_func_return 1; }
-as_func_ret_success () { return 0; }
-as_func_ret_failure () { return 1; }
+[as_fn_return () { (exit [$]1); }
+as_fn_success () { as_fn_return 0; }
+as_fn_failure () { as_fn_return 1; }
+as_fn_ret_success () { return 0; }
+as_fn_ret_failure () { return 1; }
 
 exitcode=0
-as_func_success || { exitcode=1; echo as_func_success failed.; }
-as_func_failure && { exitcode=1; echo as_func_failure succeeded.; }
-as_func_ret_success || { exitcode=1; echo as_func_ret_success failed.; }
-as_func_ret_failure && { exitcode=1; echo as_func_ret_failure succeeded.; }
-AS_IF([( set x; as_func_ret_success y && test x = "[$]1" )], [],
+as_fn_success || { exitcode=1; echo as_fn_success failed.; }
+as_fn_failure && { exitcode=1; echo as_fn_failure succeeded.; }
+as_fn_ret_success || { exitcode=1; echo as_fn_ret_success failed.; }
+as_fn_ret_failure && { exitcode=1; echo as_fn_ret_failure succeeded.; }
+AS_IF([( set x; as_fn_ret_success y && test x = "[$]1" )], [],
       [exitcode=1; echo positional parameters were not saved.])
 test x$exitcode = x0[]])# _AS_SHELL_FN_WORK
 
@@ -535,17 +535,17 @@ esac])# AS_CASE
 # Other shells don't use `$?' as default for `exit', hence just repeating
 # the exit value can only help improving portability.
 m4_defun([_AS_EXIT_PREPARE],
-[AS_REQUIRE_SHELL_FN([as_func_set_status],
-  [AS_FUNCTION_DESCRIBE([as_func_set_status], [STATUS],
+[AS_REQUIRE_SHELL_FN([as_fn_set_status],
+  [AS_FUNCTION_DESCRIBE([as_fn_set_status], [STATUS],
     [Set $? to STATUS, without forking.])], [  return $[]1])]dnl
-[AS_REQUIRE_SHELL_FN([as_func_exit],
-  [AS_FUNCTION_DESCRIBE([as_func_exit], [[[STATUS]]],
+[AS_REQUIRE_SHELL_FN([as_fn_exit],
+  [AS_FUNCTION_DESCRIBE([as_fn_exit], [[[STATUS]]],
     [Exit the shell with STATUS, even in a "trap 0" or "set -e" context.
      If STATUS is omitted, use the maximum of $? and 1.])],
 [  as_status=$?
   set +e
   test $as_status = 0 && as_status=1
-  as_func_set_status ${1-$as_status}
+  as_fn_set_status ${1-$as_status}
   exit ${1-$as_status}])])#_AS_EXIT_PREPARE
 
 
@@ -555,7 +555,7 @@ m4_defun([_AS_EXIT_PREPARE],
 # within "trap 0", and without interference from "set -e".  If
 # EXIT-CODE is omitted, then use $?, except use 1 if $? is 0.
 m4_defun([AS_EXIT],
-[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_func_exit[]m4_ifval([$1], [ $1])])
+[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_fn_exit[]m4_ifval([$1], [ $1])])
 
 
 # AS_FOR(MACRO, SHELL-VAR, [LIST = "$@"], [BODY = :])
@@ -618,7 +618,7 @@ m4_map_args_pair([_$0], [_$0_ELSE], m4_shift2($@))]dnl
 # ---------------------
 # Set the shell status ($?) to STATUS, without forking.
 m4_defun([AS_SET_STATUS],
-[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_func_set_status $1])
+[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_fn_set_status $1])
 
 
 # _AS_UNSET_PREPARE
@@ -626,12 +626,12 @@ m4_defun([AS_SET_STATUS],
 # Define $as_unset to execute AS_UNSET, for backwards compatibility
 # with older versions of M4sh.
 m4_defun([_AS_UNSET_PREPARE],
-[AS_FUNCTION_DESCRIBE([as_func_unset], [VAR], [Portably unset VAR.])
-as_func_unset ()
+[AS_FUNCTION_DESCRIBE([as_fn_unset], [VAR], [Portably unset VAR.])
+as_fn_unset ()
 {
   AS_UNSET([$[1]])
 }
-as_unset=as_func_unset])
+as_unset=as_fn_unset])
 
 
 # AS_UNSET(VAR)
@@ -1171,14 +1171,14 @@ m4_define([_AS_MKDIR_P],
 # Emulate `mkdir -p' with plain `mkdir' if needed.
 m4_defun_init([AS_MKDIR_P],
 [AS_REQUIRE([_$0_PREPARE])],
-[as_dir=$1; as_func_mkdir_p])# AS_MKDIR_P
+[as_dir=$1; as_fn_mkdir_p])# AS_MKDIR_P
 
 
 # _AS_MKDIR_P_PREPARE
 # -------------------
 m4_defun([_AS_MKDIR_P_PREPARE],
-[AS_REQUIRE_SHELL_FN([as_func_mkdir_p],
-  [AS_FUNCTION_DESCRIBE([as_func_mkdir_p], [],
+[AS_REQUIRE_SHELL_FN([as_fn_mkdir_p],
+  [AS_FUNCTION_DESCRIBE([as_fn_mkdir_p], [],
     [Create "$as_dir" as a directory, including parents if necessary.])],
 [
   _AS_MKDIR_P
@@ -1717,24 +1717,24 @@ m4_defun([_AS_TR_PREPARE],
 
 # _AS_VAR_APPEND_PREPARE
 # ----------------------
-# Define as_func_append to the optimum definition for the current
+# Define as_fn_append to the optimum definition for the current
 # shell (bash and zsh provide the += assignment operator to avoid
 # quadratic append growth over repeated appends).
 m4_defun([_AS_VAR_APPEND_PREPARE],
-[AS_FUNCTION_DESCRIBE([as_func_append], [VAR VALUE],
+[AS_FUNCTION_DESCRIBE([as_fn_append], [VAR VALUE],
 [Append the text in VALUE to the end of the definition contained in
 VAR.  Take advantage of any shell optimizations that allow amortized
 linear growth over repeated appends, instead of the typical quadratic
 growth present in naive implementations.])
 AS_IF([_AS_RUN(["AS_ESCAPE(m4_quote(_AS_VAR_APPEND_WORKS))"])],
-[eval 'as_func_append ()
+[eval 'as_fn_append ()
   {
     eval $[]1+=\$[]2
   }'],
-[as_func_append ()
+[as_fn_append ()
   {
     eval $[]1=\$$[]1\$[]2
-  }]) # as_func_append
+  }]) # as_fn_append
 ])
 
 # _AS_VAR_APPEND_WORKS
@@ -1755,27 +1755,27 @@ m4_define([_AS_VAR_APPEND_WORKS],
 # field splitting and file name expansion.
 m4_defun_init([AS_VAR_APPEND],
 [AS_REQUIRE([_AS_VAR_APPEND_PREPARE], [], [M4SH-INIT-FN])],
-[as_func_append $1 $2])
+[as_fn_append $1 $2])
 
 
 # _AS_VAR_ARITH_PREPARE
 # ---------------------
-# Define as_func_arith to the optimum definition for the current
+# Define as_fn_arith to the optimum definition for the current
 # shell (using POSIX $(()) where supported).
 m4_defun([_AS_VAR_ARITH_PREPARE],
-[AS_FUNCTION_DESCRIBE([as_func_arith], [ARG...],
+[AS_FUNCTION_DESCRIBE([as_fn_arith], [ARG...],
 [Perform arithmetic evaluation on the ARGs, and store the result in
 the global $as_val.  Take advantage of shells that can avoid forks.
 The arguments must be portable across $(()) and expr.])
 AS_IF([_AS_RUN(["AS_ESCAPE(m4_quote(_AS_VAR_ARITH_WORKS))"])],
-[eval 'as_func_arith ()
+[eval 'as_fn_arith ()
   {
     as_val=$(( $[]* ))
   }'],
-[as_func_arith ()
+[as_fn_arith ()
   {
     as_val=`expr "$[]@" || test $? -eq 1`
-  }]) # as_func_arith
+  }]) # as_fn_arith
 ])
 
 # _AS_VAR_ARITH_WORKS
@@ -1798,7 +1798,7 @@ m4_define([_AS_VAR_ARITH_WORKS],
 m4_defun_init([AS_VAR_ARITH],
 [_AS_DETECT_SUGGESTED([_AS_VAR_ARITH_WORKS])]dnl
 [AS_REQUIRE([_AS_VAR_ARITH_PREPARE], [], [M4SH-INIT-FN])],
-[as_func_arith $2 && AS_VAR_SET([$1], [$as_val])])
+[as_fn_arith $2 && AS_VAR_SET([$1], [$as_val])])
 
 
 # AS_VAR_COPY(DEST, SOURCE)

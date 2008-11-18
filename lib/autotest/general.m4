@@ -249,22 +249,22 @@ m4_divert_push([PREPARE_TESTS])dnl
 
 m4_text_box([Autotest shell functions.])
 
-AS_FUNCTION_DESCRIBE([at_func_banner], [NUMBER],
+AS_FUNCTION_DESCRIBE([at_fn_banner], [NUMBER],
 [Output banner NUMBER, provided the testsuite is running multiple groups
 and this particular banner has not yet been printed.])
-at_func_banner ()
+at_fn_banner ()
 {
   $at_print_banners || return 0
   eval at_banner_text=\$at_banner_text_$[1]
   test "x$at_banner_text" = x && return 0
   eval at_banner_text_$[1]=
   AS_ECHO(["$as_nl$at_banner_text$as_nl"])
-} # at_func_banner
+} # at_fn_banner
 
-AS_FUNCTION_DESCRIBE([at_func_check_newline], [COMMAND],
+AS_FUNCTION_DESCRIBE([at_fn_check_newline], [COMMAND],
 [Test if COMMAND includes a newline and, if so, print a message and return
 exit code 1.])
-at_func_check_newline ()
+at_fn_check_newline ()
 {
   case "$[1]" in
  *'
@@ -274,21 +274,21 @@ at_func_check_newline ()
   esac
 }
 
-AS_FUNCTION_DESCRIBE([at_func_filter_trace], [EXIT-CODE],
+AS_FUNCTION_DESCRIBE([at_fn_filter_trace], [EXIT-CODE],
 [Split the contents of file "$at_stder1" into the "set -x" trace (on
 stderr) and the other lines (on file "$at_stderr").  Return the exit
 code EXIT-CODE.])
-at_func_filter_trace ()
+at_fn_filter_trace ()
 {
   grep '^ *+' "$at_stder1" >&2
   grep -v '^ *+' "$at_stder1" >"$at_stderr"
   return $[1]
 }
 
-AS_FUNCTION_DESCRIBE([at_func_log_failure], [FILE-LIST],
+AS_FUNCTION_DESCRIBE([at_fn_log_failure], [FILE-LIST],
 [Copy the files in the list on stdout with a "> " prefix, and exit the shell
 with a failure exit code.])
-at_func_log_failure ()
+at_fn_log_failure ()
 {
   for file
     do AS_ECHO(["$file:"]); sed 's/^/> /' "$file"; done
@@ -296,21 +296,21 @@ at_func_log_failure ()
   exit 1
 }
 
-AS_FUNCTION_DESCRIBE([at_func_check_skip], [EXIT-CODE],
+AS_FUNCTION_DESCRIBE([at_fn_check_skip], [EXIT-CODE],
 [Check whether EXIT-CODE is the special exit code 77, and if so exit the shell
 with that same exit code.])
-at_func_check_skip ()
+at_fn_check_skip ()
 {
   case $[1] in
     77) echo 77 > "$at_status_file"; exit 77;;
   esac
 }
 
-AS_FUNCTION_DESCRIBE([at_func_check_status], [EXPECTED EXIT-CODE LINE],
+AS_FUNCTION_DESCRIBE([at_fn_check_status], [EXPECTED EXIT-CODE LINE],
 [Check whether EXIT-CODE is the expected exit code, and if so do nothing.
 Otherwise, if it is 77 exit the shell with that same exit code; if it is
 anything else print an error message and fail the test.])
-at_func_check_status ()
+at_fn_check_status ()
 {
 dnl This order ensures that we don't `skip' if we are precisely checking
 dnl $? = 77.
@@ -322,27 +322,27 @@ dnl $? = 77.
   esac
 }
 
-AS_FUNCTION_DESCRIBE([at_func_diff_devnull], [FILE],
+AS_FUNCTION_DESCRIBE([at_fn_diff_devnull], [FILE],
 [Emit a diff between /dev/null and FILE.  Uses "test -s" to avoid useless
 diff invocations.])
-at_func_diff_devnull ()
+at_fn_diff_devnull ()
 {
   test -s "$[1]" || return 0
   $at_diff "$at_devnull" "$[1]"
 }
 
-AS_FUNCTION_DESCRIBE([at_func_test], [NUMBER],
+AS_FUNCTION_DESCRIBE([at_fn_test], [NUMBER],
 [Parse out test NUMBER from the tail of this file.])
-at_func_test ()
+at_fn_test ()
 {
   eval at_sed=\$at_sed$[1]
   sed "$at_sed" "$at_myself" > "$at_test_source"
 }
 
-AS_FUNCTION_DESCRIBE([at_func_create_debugging_script], [],
+AS_FUNCTION_DESCRIBE([at_fn_create_debugging_script], [],
 [Create the debugging script $at_group_dir/run which will reproduce the
 current test group.])
-at_func_create_debugging_script ()
+at_fn_create_debugging_script ()
 {
   {
     echo "#! /bin/sh" &&
@@ -417,10 +417,10 @@ at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [?])'
 # Description of all the test groups.
 at_help_all="AS_ESCAPE(m4_dquote(m4_defn([AT_help_all])))"
 
-AS_FUNCTION_DESCRIBE([at_func_validate_ranges], [NAME...],
+AS_FUNCTION_DESCRIBE([at_fn_validate_ranges], [NAME...],
 [Validate and normalize the test group number contained in each
 variable NAME.  Leading zeroes are treated as decimal.])
-at_func_validate_ranges ()
+at_fn_validate_ranges ()
 {
   for at_grp
   do
@@ -492,14 +492,14 @@ do
 	;;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
-	at_func_validate_ranges at_option
+	at_fn_validate_ranges at_option
 	AS_VAR_APPEND([at_groups], ["$at_option "])
 	;;
 
     # Ranges
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
 	at_range_start=`echo $at_option |tr -d X-`
-	at_func_validate_ranges at_range_start
+	at_fn_validate_ranges at_range_start
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.* \('$at_range_start' \)/\1/'`
 	AS_VAR_APPEND([at_groups], ["$at_range "])
@@ -507,7 +507,7 @@ do
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
 	at_range_end=`echo $at_option |tr -d X-`
-	at_func_validate_ranges at_range_end
+	at_fn_validate_ranges at_range_end
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/\( '$at_range_end'\) .*$/\1/'`
 	AS_VAR_APPEND([at_groups], ["$at_range "])
@@ -526,7 +526,7 @@ do
 	  at_range_end=$at_range_start
 	  at_range_start=$at_tmp
 	fi
-	at_func_validate_ranges at_range_start at_range_end
+	at_fn_validate_ranges at_range_start at_range_end
 	at_range=`AS_ECHO([" $at_groups_all "]) | \
 	  sed -e 's/^.*\( '$at_range_start' \)/\1/' \
 	      -e 's/\( '$at_range_end'\) .*$/\1/'`
@@ -1032,9 +1032,9 @@ AS_ERROR([testsuite directory setup failed])
 # test group execution outside of a shell function in order
 # to avoid hitting zsh 4.x exit status bugs.
 
-AS_FUNCTION_DESCRIBE([at_func_group_prepare], [],
+AS_FUNCTION_DESCRIBE([at_fn_group_prepare], [],
 [Prepare running a test group.])
-at_func_group_prepare ()
+at_fn_group_prepare ()
 {
   # The directory for additional per-group helper files.
   at_job_dir=$at_helper_dir/$at_group
@@ -1082,9 +1082,9 @@ at_func_group_prepare ()
   fi
 }
 
-AS_FUNCTION_DESCRIBE([at_func_group_postprocess], [],
+AS_FUNCTION_DESCRIBE([at_fn_group_postprocess], [],
 [Perform cleanup after running a test group.])
-at_func_group_postprocess ()
+at_fn_group_postprocess ()
 {
   # Be sure to come back to the suite directory, in particular
   # since below we might `rm' the group directory we are in currently.
@@ -1151,7 +1151,7 @@ _ATEOF
 
       # Cleanup the group directory, unless the user wants the files.
       if $at_debug_p; then
-	at_func_create_debugging_script
+	at_fn_create_debugging_script
       else
 	if test -d "$at_group_dir"; then
 	  find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
@@ -1168,7 +1168,7 @@ _ATEOF
 
       # Upon failure, keep the group directory for autopsy, and create
       # the debugging script.  With -e, do not start any further tests.
-      at_func_create_debugging_script
+      at_fn_create_debugging_script
       if $at_errexit; then
 	echo stop > "$at_stop_file"
       fi
@@ -1202,15 +1202,15 @@ then
   for at_group in $at_groups; do
     (
       # Start one test group.
-      at_func_group_prepare
+      at_fn_group_prepare
       if cd "$at_group_dir" &&
-	 at_func_test $at_group &&
+	 at_fn_test $at_group &&
 	 . "$at_test_source" # AT_JOB_FIFO_FD<&-
       then :; else
 	AS_WARN([unable to parse test group: $at_group])
 	at_failed=:
       fi
-      at_func_group_postprocess
+      at_fn_group_postprocess
       echo token >&AT_JOB_FIFO_FD
     ) &
     shift # Consume one token.
@@ -1236,14 +1236,14 @@ then
 else
   # Run serially, avoid forks and other potential surprises.
   for at_group in $at_groups; do
-    at_func_group_prepare
+    at_fn_group_prepare
     if cd "$at_group_dir" &&
-       at_func_test $at_group &&
+       at_fn_test $at_group &&
        . "$at_test_source"; then :; else
       AS_WARN([unable to parse test group: $at_group])
       at_failed=:
     fi
-    at_func_group_postprocess
+    at_fn_group_postprocess
     test -f "$at_stop_file" && break
     at_first=false
   done
@@ -1604,7 +1604,7 @@ m4_divert_push([TEST_GROUPS])dnl
 [#AT_START_]AT_ordinal
 @%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
 at_setup_line='m4_defn([AT_line])'
-m4_if(AT_banner_ordinal, [0], [], [at_func_banner AT_banner_ordinal
+m4_if(AT_banner_ordinal, [0], [], [at_fn_banner AT_banner_ordinal
 ])dnl
 at_desc="AS_ESCAPE(m4_dquote(m4_defn([AT_description])))"
 at_desc_line=m4_format(["%3d: $at_desc%*s"], AT_ordinal,
@@ -1854,7 +1854,7 @@ dnl We know at build time that tracing COMMANDS is always safe.
 [test -n "$at_traceon"],
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
 [test -n "$at_traceon" \
-  && at_func_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
+  && at_fn_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
 m4_popdef([at_reason])])
 
 
@@ -1869,7 +1869,7 @@ m4_define([AT_DIFF_STDERR(ignore)],
 m4_define([AT_DIFF_STDERR(experr)],
 	  [$at_diff experr "$at_stderr" || at_failed=:])
 m4_define([AT_DIFF_STDERR()],
-	  [at_func_diff_devnull "$at_stderr" || at_failed=:])
+	  [at_fn_diff_devnull "$at_stderr" || at_failed=:])
 
 m4_define([AT_DIFF_STDOUT(stdout)],
 	  [echo stdout:; tee stdout <"$at_stdout"])
@@ -1878,7 +1878,7 @@ m4_define([AT_DIFF_STDOUT(ignore)],
 m4_define([AT_DIFF_STDOUT(expout)],
 	  [$at_diff expout "$at_stdout" || at_failed=:])
 m4_define([AT_DIFF_STDOUT()],
-	  [at_func_diff_devnull "$at_stdout" || at_failed=:])
+	  [at_fn_diff_devnull "$at_stdout" || at_failed=:])
 
 # _AT_CHECK(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #           [RUN-IF-FAIL], [RUN-IF-PASS], SHELL_ESCAPE_IO)
@@ -1925,7 +1925,7 @@ echo AT_LINE >"$at_check_line_file"
 if _AT_DECIDE_TRACEABLE([$1]); then
   : >"$at_stder1"
   ( $at_traceon; $1 ) >>"$at_stdout" 2>>"$at_stder1"
-  at_func_filter_trace $?
+  at_fn_filter_trace $?
 else
   : >"$at_stderr"
   ( :; $1 ) >>"$at_stdout" 2>>"$at_stderr"
@@ -1938,9 +1938,9 @@ m4_ifdef([AT_DIFF_STDERR($4)], [m4_indir([AT_DIFF_STDERR($4)])],
 m4_ifdef([AT_DIFF_STDOUT($3)], [m4_indir([AT_DIFF_STDOUT($3)])],
   [echo >>"$at_stdout"; AS_ECHO(["m4_ifval([$7],[AS_ESCAPE([$3])],[$3])"]) | \
   $at_diff - "$at_stdout" || at_failed=:])
-m4_if([$2], [ignore], [at_func_check_skip],
-  [at_func_check_status m4_default([$2], [0])]) $at_status "$at_srcdir/AT_LINE"
+m4_if([$2], [ignore], [at_fn_check_skip],
+  [at_fn_check_status m4_default([$2], [0])]) $at_status "$at_srcdir/AT_LINE"
 AS_IF($at_failed, [$5], [$6])
-$at_failed && at_func_log_failure AT_capture_files
+$at_failed && at_fn_log_failure AT_capture_files
 $at_traceon; }
 ])# _AT_CHECK

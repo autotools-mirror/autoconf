@@ -14690,7 +14690,7 @@ f: not found
 
 @noindent
 For this reason, Autoconf (actually M4sh, @pxref{Programming in M4sh})
-uses the prefix @samp{as_func_} for its functions.
+uses the prefix @samp{as_fn_} for its functions.
 
 Handling of positional parameters and shell options varies among shells.
 For example, Korn shells reset and restore trace output (@samp{set -x})

@@ -1,5 +1,24 @@
 2008-11-18  Eric Blake  <ebb9@byu.net>
 
+	Use fn for shell functions, func for autoconf CHECK_FUNCS.
+	* lib/autoconf/functions.m4 (AC_CHECK_FUNC): Abbreviate shell
+	function names.
+	* lib/autoconf/general.m4 (_AC_PREPROC_IFELSE)
+	(_AC_COMPILE_IFELSE, _AC_LINK_IFELSE, _AC_RUN_IFELSE)
+	(AC_CHECK_DECL, AC_COMPUTE_INT): Likewise.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL)
+	(_AC_CHECK_HEADER_COMPILE, _AC_CHECK_HEADER_PREPROC): Likewise.
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW, _AC_TYPE_INT)
+	(_AC_TYPE_UNSIGNED_INT, AC_CHECK_MEMBER): Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/m4sugar/m4sh.m4 (_AS_SHELL_FN_WORK, _AS_EXIT_PREPARE)
+	(AS_EXIT, AS_SET_STATUS, _AS_UNSET_PREPARE, _AS_MKDIR_P)
+	(_AS_MKDIR_P_PREPARE, _AS_VAR_APPEND_PREPARE, AS_VAR_APPEND)
+	(_AS_VAR_ARITH_PREPARE, AS_VAR_ARITH): Likewise.
+	* doc/autoconf.texi (Shell Functions): Likewise.
+
+2008-11-18  Eric Blake  <ebb9@byu.net>
+
 	Alter default value of AS_EXIT.
 	* lib/m4sugar/m4sh.m4 (_AS_EXIT_PREPARE): Let as_func_exit
 	parameter be optional.

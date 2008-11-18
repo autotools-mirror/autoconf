@@ -2413,12 +2413,12 @@ m4_define([_AC_PREPROC_IFELSE_BODY],
 # This macro can be used during the selection of a preprocessor.
 # eval is necessary to expand ac_cpp.
 AC_DEFUN([_AC_PREPROC_IFELSE],
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_cpp],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_cpp], [LINENO],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_try_cpp],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_try_cpp], [LINENO],
     [Try to preprocess conftest.$ac_ext, and return whether this succeeded.])],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
-[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_cpp "$LINENO"], [$2], [$3])
+[AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_cpp "$LINENO"], [$2], [$3])
 rm -f conftest.err[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_PREPROC_IFELSE
 
@@ -2500,12 +2500,12 @@ m4_define([_AC_COMPILE_IFELSE_BODY],
 # Try to compile PROGRAM.
 # This macro can be used during the selection of a compiler.
 AC_DEFUN([_AC_COMPILE_IFELSE],
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_compile],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_compile], [LINENO],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_try_compile],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_try_compile], [LINENO],
     [Try to compile conftest.$ac_ext, and return whether this succeeded.])],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
-[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_compile "$LINENO"], [$2], [$3])
+[AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_compile "$LINENO"], [$2], [$3])
 rm -f core conftest.err conftest.$ac_objext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
@@ -2571,12 +2571,12 @@ m4_define([_AC_LINK_IFELSE_BODY],
 # <http://lists.gnu.org/archive/html/autoconf/2007-03/msg00085.html>.
 #
 AC_DEFUN([_AC_LINK_IFELSE],
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_link],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_link], [LINENO],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_try_link],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_try_link], [LINENO],
     [Try to link conftest.$ac_ext, and return whether this succeeded.])],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
-[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_link "$LINENO"], [$2], [$3])
+[AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_link "$LINENO"], [$2], [$3])
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
@@ -2639,13 +2639,13 @@ m4_define([_AC_RUN_IFELSE_BODY],
 # don't remove it.  We remove gmon.out and bb.out, which may be
 # created during the run if the program is built with profiling support.
 AC_DEFUN([_AC_RUN_IFELSE],
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_try_run],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_try_run], [LINENO],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_try_run],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_try_run], [LINENO],
     [Try to link conftest.$ac_ext, and return whether this succeeded.
      Assumes that executables *can* be run.])],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
-[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_try_run "$LINENO"], [$2], [$3])
+[AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_run "$LINENO"], [$2], [$3])
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
   conftest.$ac_objext conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
@@ -2748,13 +2748,13 @@ m4_define([_AC_CHECK_DECL_BODY],
 # -------------------------------------------------------
 # Check whether SYMBOL (a function, variable, or constant) is declared.
 AC_DEFUN([AC_CHECK_DECL],
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_decl],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_decl],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_decl],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_decl],
     [LINENO SYMBOL VAR],
     [Tests whether SYMBOL is declared, setting cache variable VAR accordingly.])],
   [_$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])]dnl
-[ac_func_[]_AC_LANG_ABBREV[]_check_decl ]dnl
+[ac_fn_[]_AC_LANG_ABBREV[]_check_decl ]dnl
 ["$LINENO" "$1" "ac_Symbol" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
 AS_VAR_IF([ac_Symbol], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Symbol])dnl
@@ -2961,14 +2961,14 @@ m4_define([_AC_COMPUTE_INT_BODY],
 # case of cross-compilation, if EXPRESSION is not computable at compile-time.
 AC_DEFUN([AC_COMPUTE_INT],
 [AC_LANG_COMPILER_REQUIRE()]dnl
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_compute_int],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_compute_int],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_compute_int],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_compute_int],
     [LINENO EXPR VAR INCLUDES],
     [Tries to find the compile-time value of EXPR in a program that includes
      INCLUDES, setting VAR accordingly.  Returns whether the value could
      be computed])],
     [_$0_BODY])]dnl
-[AS_IF([ac_func_[]_AC_LANG_ABBREV[]_compute_int "$LINENO" "$2" "$1" ]dnl
+[AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_compute_int "$LINENO" "$2" "$1" ]dnl
        ["AS_ESCAPE([$3], [""])"],
        [], [$4])
 ])# AC_COMPUTE_INT

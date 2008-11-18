@@ -80,13 +80,13 @@ m4_define([_AC_CHECK_FUNC_BODY],
 # variable ac_cv_func_FUNCTION accordingly, then execute
 # ACTION-IF-FOUND or ACTION-IF-NOT-FOUND.
 AC_DEFUN([AC_CHECK_FUNC],
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_func],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_func],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_func],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_func],
     [LINENO FUNC VAR],
     [Tests whether FUNC exists, setting the cache variable VAR accordingly])],
   [_$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])]dnl
-[ac_func_[]_AC_LANG_ABBREV[]_check_func "$LINENO" "$1" "ac_var"
+[ac_fn_[]_AC_LANG_ABBREV[]_check_func "$LINENO" "$1" "ac_var"
 AS_VAR_IF([ac_var], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_var])])# AC_CHECK_FUNC
 

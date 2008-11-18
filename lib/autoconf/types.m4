@@ -167,14 +167,14 @@ m4_define([_AC_CHECK_TYPE_NEW_BODY],
 # Check whether the type TYPE is supported by the system, maybe via the
 # the provided includes.
 AC_DEFUN([_AC_CHECK_TYPE_NEW],
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_type],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_type],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_type],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_type],
     [LINENO TYPE VAR INCLUDES],
     [Tests whether TYPE exists after having included INCLUDES, setting
      cache variable VAR accordingly.])],
     [$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_Type], [ac_cv_type_$1])]dnl
-[ac_func_[]_AC_LANG_ABBREV[]_check_type "$LINENO" "$1" "ac_Type" ]dnl
+[ac_fn_[]_AC_LANG_ABBREV[]_check_type "$LINENO" "$1" "ac_Type" ]dnl
 ["AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
 AS_VAR_IF([ac_Type], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Type])dnl
@@ -679,12 +679,12 @@ m4_define([_AC_TYPE_INT_BODY],
 # exactly NBITS bits was found.  In the third case, intNBITS_t is AC_DEFINEd
 # to type, as well.
 AC_DEFUN([_AC_TYPE_INT],
-[AC_REQUIRE_SHELL_FN([ac_func_c_find_intX_t],
-  [AS_FUNCTION_DESCRIBE([ac_func_c_find_intX_t], [LINENO BITS VAR],
+[AC_REQUIRE_SHELL_FN([ac_fn_c_find_intX_t],
+  [AS_FUNCTION_DESCRIBE([ac_fn_c_find_intX_t], [LINENO BITS VAR],
     [Finds a signed integer type with width BITS, setting cache variable VAR
      accordingly.])],
     [$0_BODY])]dnl
-[ac_func_c_find_intX_t "$LINENO" "$1" "ac_cv_c_int$1_t"
+[ac_fn_c_find_intX_t "$LINENO" "$1" "ac_cv_c_int$1_t"
 case $ac_cv_c_int$1_t in #(
   no|yes) ;; #(
   *)
@@ -724,12 +724,12 @@ m4_define([_AC_TYPE_UNSIGNED_INT_BODY],
 # exactly NBITS bits was found.  In the third case, uintNBITS_t is AC_DEFINEd
 # to type, as well.
 AC_DEFUN([_AC_TYPE_UNSIGNED_INT],
-[AC_REQUIRE_SHELL_FN([ac_func_c_find_uintX_t],
-  [AS_FUNCTION_DESCRIBE([ac_func_c_find_uintX_t], [LINENO BITS VAR],
+[AC_REQUIRE_SHELL_FN([ac_fn_c_find_uintX_t],
+  [AS_FUNCTION_DESCRIBE([ac_fn_c_find_uintX_t], [LINENO BITS VAR],
     [Finds an unsigned integer type with width BITS, setting cache variable VAR
      accordingly.])],
   [$0_BODY])]dnl
-[ac_func_c_find_uintX_t "$LINENO" "$1" "ac_cv_c_uint$1_t"
+[ac_fn_c_find_uintX_t "$LINENO" "$1" "ac_cv_c_uint$1_t"
 case $ac_cv_c_uint$1_t in #(
   no|yes) ;; #(
   *)
@@ -887,8 +887,8 @@ return 0;])],
 # AGGREGATE.MEMBER is for instance `struct passwd.pw_gecos', shell
 # variables are not a valid argument.
 AC_DEFUN([AC_CHECK_MEMBER],
-[AC_REQUIRE_SHELL_FN([ac_func_]_AC_LANG_ABBREV[_check_member],
-  [AS_FUNCTION_DESCRIBE([ac_func_]_AC_LANG_ABBREV[_check_member],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_member],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_member],
     [LINENO AGGR MEMBER VAR INCLUDES],
     [Tries to find if the field MEMBER exists in type AGGR, after including
      INCLUDES, setting cache variable VAR accordingly.])],
@@ -896,7 +896,7 @@ AC_DEFUN([AC_CHECK_MEMBER],
 [AS_LITERAL_IF([$1], [], [m4_fatal([$0: requires literal arguments])])]dnl
 [m4_if(m4_index([$1], [.]), -1, [m4_fatal([$0: Did not see any dot in `$1'])])]dnl
 [AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])]dnl
-[ac_func_[]_AC_LANG_ABBREV[]_check_member "$LINENO" ]dnl
+[ac_fn_[]_AC_LANG_ABBREV[]_check_member "$LINENO" ]dnl
 [m4_bpatsubst([$1], [^\([^.]*\)\.\(.*\)], ["\1" "\2"]) "ac_Member" ]dnl
 ["AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
 AS_VAR_IF([ac_Member], [yes], [$2], [$3])
