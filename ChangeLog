@@ -1,5 +1,19 @@
 2008-11-18  Eric Blake  <ebb9@byu.net>
 
+	Alter default value of AS_EXIT.
+	* lib/m4sugar/m4sh.m4 (_AS_EXIT_PREPARE): Let as_func_exit
+	parameter be optional.
+	(AS_EXIT): Use it to make better default.
+	(_AS_DETECT_BETTER_SHELL): Use new default.
+	* bin/autoconf.as (exit_missing_arg, getopt): Likewise.
+	* lib/autoconf/status.m4 (AC_OUTPUT): Likewise.
+	* tests/m4sh.at (AS@&t@_EXIT): Update test.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_EXIT>: Mention
+	new default behavior.
+	(Limitations of Builtins) <trap>: Adjust to use new default.
+	* NEWS: Mention the semantic change.
+	Suggested by Ralf Wildenhues.
+
 	Update example to match actual Tru64 behavior.
 	* doc/autoconf.texi (Limitations of Builtins) <trap>: Correct
 	the example.

@@ -305,11 +305,12 @@ AT_DATA_M4SH([script.as],
 [[AS_INIT
 test x${1} = xa && AS_EXIT
 test x${1} = xb && AS_EXIT([${2}])
-test x${1} = xc && trap 's=$?; echo $s; AS_EXIT([$s])' 0
-test x${2} = xd && set -e
+test x${1} = xc && { AS_SET_STATUS([${2}]); AS_EXIT; }
+test x${1} = xd && trap 's=$?; echo $s; AS_EXIT([$s])' 0
+test x${2} = xe && set -e
 AS_SET_STATUS([3])
 dnl Solaris /bin/sh 'set -e' doesn't react to failed function calls
-test x${2} = xd \
+test x${2} = xe \
   && { echo 'skipping rest of test: set -e support is lousy'; exit 77; }
 AS_SET_STATUS([4])
 ]])
@@ -317,9 +318,12 @@ AS_SET_STATUS([4])
 AT_CHECK_M4SH
 AT_CHECK([./script], [4])
 AT_CHECK([./script a], [1])
-AT_CHECK([./script b], [0])
+AT_CHECK([./script b], [1])
+AT_CHECK([./script b 0], [0])
 AT_CHECK([./script b 2], [2])
-AT_CHECK([./script c], [4], [[4
+AT_CHECK([./script c 0], [1])
+AT_CHECK([./script c 2], [2])
+AT_CHECK([./script d], [4], [[4
 ]])
 dnl If we got to this point without a FAIL, then AS_EXIT at least works.
 dnl The rest of this test relies on semi-decent 'set -e' support, even
@@ -327,8 +331,8 @@ dnl though m4sh in general should not try to rely on it because of
 dnl portability nightmares on what constructs are considered errors across
 dnl various shells; therefore, an overall SKIP result is desirable on
 dnl broken shells like Solaris /bin/sh.
-AT_CHECK([./script '' d], [3])
-AT_CHECK([./script c d], [3], [[3
+AT_CHECK([./script '' e], [3])
+AT_CHECK([./script d e], [3], [[3
 ]])
 
 AT_CLEANUP

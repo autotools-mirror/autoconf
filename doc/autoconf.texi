@@ -12010,12 +12010,15 @@ for portability, should not include more than one newline.  The bytes of
 Redirections can be placed outside the macro invocation.
 @end defmac
 
-@defmac AS_EXIT (@dvar{status, 1})
+@defmac AS_EXIT (@dvar{status, max($?/1)})
 @asindex{EXIT}
-Emit code to exit the shell with @var{status}.  This works around shells
-that see the exit status of the command prior to @code{exit} inside a
-@samp{trap 0} handler (@pxref{Limitations of Builtins, , Limitations of
-Shell Builtins}).
+Emit code to exit the shell with @var{status}.  If @var{status} is
+omitted, then @samp{$?} is used, except that a status of zero is
+converted to @samp{1}.  To exit with successful status, it is necessary
+to supply an explicit @var{status} that expands to @samp{0}.  This macro
+works around shells that see the exit status of the command prior to
+@code{exit} inside a @samp{trap 0} handler (@pxref{Limitations of
+Builtins, , Limitations of Shell Builtins}).
 @end defmac
 
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
@@ -15447,7 +15450,7 @@ $ @kbd{sh -c 'set -e; trap '\''echo $?'\'' 0; false'}
 
 @noindent
 Thus, when writing a script in M4sh, rather than trying to rely on
-@samp{set -e}, it is better to append @samp{|| AS_EXIT([$?])} to any
+@samp{set -e}, it is better to append @samp{|| AS_EXIT} to any
 statement where it is desirable to abort on failure.
 
 @item @command{shift}

@@ -1307,7 +1307,7 @@ if test "$no_create" != yes; then
   exec AS_MESSAGE_LOG_FD>>config.log
   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
   # would make configure fail if this is the last instruction.
-  $ac_cs_success || AS_EXIT([1])
+  $ac_cs_success || AS_EXIT
 fi
 dnl config.status should not do recursion.
 AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl

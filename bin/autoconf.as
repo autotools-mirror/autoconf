@@ -81,7 +81,7 @@ Try \`$as_me --help' for more information."
 exit_missing_arg='
   AS_ECHO(["$as_me: option \`$[1]'\'' requires an argument"]) >&2
   AS_ECHO(["$help"]) >&2
-  AS_EXIT([1])
+  AS_EXIT
 ' # restore font-lock: "
 
 # Variables.
@@ -156,7 +156,7 @@ while test $# -gt 0 ; do
        exec >&2
        AS_ECHO(["$as_me: invalid option $[1]"])
        AS_ECHO(["$help"])
-       AS_EXIT([1]) ;;
+       AS_EXIT ;;
     * )
        break ;;
   esac
@@ -175,7 +175,7 @@ case $# in
       infile=configure.in
     else
       AS_ECHO(["$as_me: no input file"]) >&2
-      AS_EXIT([1])
+      AS_EXIT
     fi
     test -z "$traces" && test -z "$outfile" && outfile=configure;;
   1)
@@ -183,7 +183,7 @@ case $# in
   *) exec >&2
      AS_ECHO(["$as_me: invalid number of arguments."])
      AS_ECHO(["$help"])
-     AS_EXIT([1]) ;;
+     AS_EXIT ;;
 esac
 
 # Unless specified, the output is stdout.

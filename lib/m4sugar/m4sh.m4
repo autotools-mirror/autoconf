@@ -270,7 +270,7 @@ _m4_defn([AC_PACKAGE_BUGREPORT]), [], [and _m4_defn([AC_PACKAGE_BUGREPORT])])])
 Then install a modern shell, or manually run the script under such a
 shell if you do have one.], [$[]0: ], [], [62])")
   fi
-      AS_EXIT(1)])])
+  AS_EXIT])])
 fi
 SHELL=${CONFIG_SHELL-/bin/sh}
 export SHELL
@@ -539,19 +539,23 @@ m4_defun([_AS_EXIT_PREPARE],
   [AS_FUNCTION_DESCRIBE([as_func_set_status], [STATUS],
     [Set $? to STATUS, without forking.])], [  return $[]1])]dnl
 [AS_REQUIRE_SHELL_FN([as_func_exit],
-  [AS_FUNCTION_DESCRIBE([as_func_exit], [STATUS],
-    [Exit the shell with STATUS, even in a "trap 0" or "set -e" context.])],
-[  set +e
-  as_func_set_status $[]1
-  exit $[]1])])#_AS_EXIT_PREPARE
+  [AS_FUNCTION_DESCRIBE([as_func_exit], [[[STATUS]]],
+    [Exit the shell with STATUS, even in a "trap 0" or "set -e" context.
+     If STATUS is omitted, use the maximum of $? and 1.])],
+[  as_status=$?
+  set +e
+  test $as_status = 0 && as_status=1
+  as_func_set_status ${1-$as_status}
+  exit ${1-$as_status}])])#_AS_EXIT_PREPARE
 
 
-# AS_EXIT([EXIT-CODE = 1])
-# ------------------------
+# AS_EXIT([EXIT-CODE = $?/1])
+# ---------------------------
 # Exit, with status set to EXIT-CODE in the way that it's seen
-# within "trap 0", and without interference from "set -e".
+# within "trap 0", and without interference from "set -e".  If
+# EXIT-CODE is omitted, then use $?, except use 1 if $? is 0.
 m4_defun([AS_EXIT],
-[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_func_exit m4_default([$1], 1)])
+[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_func_exit[]m4_ifval([$1], [ $1])])
 
 
 # AS_FOR(MACRO, SHELL-VAR, [LIST = "$@"], [BODY = :])
