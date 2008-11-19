@@ -676,6 +676,52 @@ one
 AT_CLEANUP
 
 
+## ----------- ##
+## m4_expand.  ##
+## ----------- ##
+
+AT_SETUP([m4@&t@_expand])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_define([active], [ACTIVE])dnl
+m4_expand([#active
+active])
+m4_expand([[active]])
+dnl properly quoted case statements
+m4_expand([case a in @%:@(
+  *) echo active, ;;
+esac
+case b in
+  *[)] echo active, ;;
+esac])
+dnl unbalanced underquoted `)', but we manage anyway (gasp!)
+m4_expand([case c in #(
+  *) echo active, ;;
+esac
+case d in
+  *) echo active, ;;
+esac])
+]],
+[[#active
+ACTIVE
+active
+case a in #(
+  *) echo ACTIVE, ;;
+esac
+case b in
+  *) echo ACTIVE, ;;
+esac
+case c in #(
+  *) echo ACTIVE, ;;
+esac
+case d in
+  *) echo ACTIVE, ;;
+esac
+]])
+
+AT_CLEANUP
+
+
 ## -------------- ##
 ## m4_text_wrap.  ##
 ## -------------- ##

@@ -814,9 +814,10 @@ m4_define([m4_echo], [$@])
 
 # m4_expand(ARG)
 # --------------
-# Return the expansion of ARG as a single string.  Unlike m4_quote($1), this
-# correctly preserves whitespace following single-quoted commas that appeared
-# within ARG.
+# Return the expansion of ARG as a single string.  Unlike
+# m4_quote($1), this preserves whitespace following single-quoted
+# commas that appear within ARG.  It also deals with shell case
+# statements.
 #
 #   m4_define([active], [ACT, IVE])
 #   m4_define([active2], [[ACT, IVE]])
@@ -825,19 +826,31 @@ m4_define([m4_echo], [$@])
 #   m4_expand([active, active2])
 #   => ACT, IVE, ACT, IVE
 #
-# Unfortunately, due to limitations in m4, ARG must expand to something
-# with balanced quotes (use quadrigraphs to get around this).  The input
-# is not likely to have unbalanced -=<{(/)}>=- quotes, and it is possible
-# to have unbalanced (), provided it was specified with proper [] quotes.
-# Likewise, ARG must either avoid unquoted comments, or must be sure
-# to include the trailing newline to end the comment.
+# Unfortunately, due to limitations in m4, ARG must expand to
+# something with balanced quotes (use quadrigraphs to get around
+# this), and should not contain the unlikely delimiters -=<{( or
+# )}>=-.  It is possible to have unbalanced quoted `(' or `)', as well
+# as unbalanced unquoted `)'.
 #
-# Exploit that extra () will group unquoted commas and the following
-# whitespace, then convert () to [].  m4_bpatsubst can't handle newlines
-# inside $1, and m4_substr strips quoting.  So we (ab)use m4_changequote.
-m4_define([m4_expand], [_$0(-=<{($1)}>=-)])
+# Exploit that extra unquoted () will group unquoted commas and the
+# following whitespace.  m4_bpatsubst can't handle newlines inside $1,
+# and m4_substr strips quoting.  So we (ab)use m4_changequote, using
+# temporary quotes to remove the delimiters that conveniently included
+# the unquoted () that were added prior to the changequote.
+#
+# Thanks to shell case statements, too many people are prone to pass
+# underquoted `)', so we try to detect that by passing a marker as a
+# fourth argument; if the marker is not present, then we assume that
+# we encountered an early `)', and re-expand the first argument, but
+# this time with one more `(' in the second argument and in the
+# open-quote delimiter.  We must also ignore the slop from the
+# previous try.  The final macro is thus half line-noise, half art.
+m4_define([m4_expand], [_$0([$1], [(], -=<{($1)}>=-, [}>=-])])
+
 m4_define([_m4_expand],
-[m4_changequote([-=<{(], [)}>=-])$1m4_changequote([, ])])
+[m4_if([$4], [}>=-],
+       [m4_changequote([-=<{$2], [)}>=-])$3m4_changequote([, ])],
+       [$0([$1], [($2], -=<{($2$1)}>=-, [}>=-])m4_ignore$2])])
 
 
 # m4_ignore(ARGS)
