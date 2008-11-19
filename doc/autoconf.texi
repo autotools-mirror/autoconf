@@ -15435,14 +15435,14 @@ Another possibility is to warn @acronym{BSD} users not to use @samp{sh -e}.
 
 Portable scripts should not use @samp{set -e} if @command{trap} is used
 to install an exit handler.  This is because Tru64/OSF 5.1 @command{sh}
-enters the trap handler with the exit status of the command prior to the
-one that triggered the errexit handler:
+sometimes enters the trap handler with the exit status of the command
+prior to the one that triggered the errexit handler:
 
 @example
-$ @kbd{bash -c 'trap '\''echo $?'\'' 0; set -e; false'}
-1
-$ @kbd{sh -c 'trap '\''echo $?'\'' 0; set -e; false'}
+$ @kbd{sh -ec 'trap '\''echo $?'\'' 0; false'}
 0
+$ @kbd{sh -c 'set -e; trap '\''echo $?'\'' 0; false'}
+1
 @end example
 
 @noindent

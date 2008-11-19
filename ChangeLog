@@ -1,5 +1,10 @@
 2008-11-18  Eric Blake  <ebb9@byu.net>
 
+	Update example to match actual Tru64 behavior.
+	* doc/autoconf.texi (Limitations of Builtins) <trap>: Correct
+	the example.
+	Reported by Ralf Wildenhues.
+
 	Add AS_SET_STATUS, make AS_EXIT more efficient.
 	* lib/m4sugar/m4sh.m4 (_AS_EXIT_PREPARE, AS_SET_STATUS): New
 	macros.
