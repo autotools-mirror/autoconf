@@ -1,3 +1,10 @@
+2008-11-19  Eric Blake  <ebb9@byu.net>
+
+	Improve testsuite generation.
+	* tests/local.at (AT_DATA_M4SUGAR, AT_DATA_M4SH)
+	(AT_DATA_AUTOCONF): Escape all quadrigraphs, not just @&t@.  Use
+	fewer macros.
+
 2008-11-18  Eric Blake  <ebb9@byu.net>
 
 	Use fn for shell functions, func for autoconf CHECK_FUNCS.
