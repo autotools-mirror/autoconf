@@ -701,6 +701,12 @@ esac
 case d in
   *) echo active, ;;
 esac])
+dnl unterminated comment/dnl
+m4_expand([active # active])
+m4_expand([a
+dnl])
+m4_expand([a
+-dnl])
 ]],
 [[#active
 ACTIVE
@@ -717,6 +723,10 @@ esac
 case d in
   *) echo ACTIVE, ;;
 esac
+ACTIVE # active
+a
+a
+-
 ]])
 
 AT_CLEANUP

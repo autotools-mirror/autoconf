@@ -1,5 +1,19 @@
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
+	Improve m4_expand robustness, part 2.
+	* lib/m4sugar/m4sugar.m4 (m4_expand): Support unterminated
+	comments, by wrapping old implementation...
+	(_m4_expand): ...as this, and renaming old core...
+	(_m4_expand_): ...to this.
+	(m4_text_box): Use lighter-weight _m4_expand.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_EXPAND)
+	(_AS_DETECT_BETTER_SHELL, AS_FUNCTION_DESCRIBE): Likewise.
+	* lib/autotest/general.m4 (AT_KEYWORDS): Likewise.
+	* tests/m4sugar.at (m4@&t@_expand): Enhance test.
+	* tests/autotest.at (AT_CHECK_AT_TITLE_CHAR): Likewise.
+	* doc/autoconf.texi (Evaluation Macros) <m4_expand>: Mention new
+	functionality.
+
 	Improve m4_expand robustness, part 1.
 	* lib/m4sugar/m4sugar.m4 (_m4_expand): Tolerate unquoted
 	unbalanced `)'.

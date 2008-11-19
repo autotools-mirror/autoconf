@@ -165,7 +165,7 @@ $1], [^], [@%:@ ])])])
 # we must piece-meal the assignment of VAR such that $LINENO expansion
 # occurs in a single line.
 m4_define([_AS_DETECT_EXPAND],
-[$1="m4_bpatsubst(m4_dquote(AS_ESCAPE(m4_expand(m4_set_contents([$2], [
+[$1="m4_bpatsubst(m4_dquote(AS_ESCAPE(_m4_expand(m4_set_contents([$2], [
 ])))), [\\\$LINENO\(.*\)$], [";$1=$$1$LINENO;$1=$$1"\1])"])
 
 
@@ -219,7 +219,7 @@ dnl Remove any tests from suggested that are also required
 [m4_set_map([_AS_DETECT_SUGGESTED_BODY], [_AS_DETECT_SUGGESTED_PRUNE])]dnl
 [m4_pushdef([AS_EXIT], [exit m4_default([$1], 1)])]dnl
 [if test "x$CONFIG_SHELL" = x; then
-  as_bourne_compatible="AS_ESCAPE(m4_expand([_AS_BOURNE_COMPATIBLE]))"
+  as_bourne_compatible="AS_ESCAPE(_m4_expand([_AS_BOURNE_COMPATIBLE]))"
   _AS_DETECT_EXPAND([as_required], [_AS_DETECT_REQUIRED_BODY])
   _AS_DETECT_EXPAND([as_suggested], [_AS_DETECT_SUGGESTED_BODY])
   AS_IF([_AS_RUN(["$as_required"])],
@@ -1341,8 +1341,8 @@ _ASBOX])
 m4_define([AS_FUNCTION_DESCRIBE],
 [@%:@ $1[]m4_ifval([$2], [ $2])
 @%:@ m4_translit(m4_format([%*s],
-		   m4_qlen(m4_expand([$1[]m4_ifval([$2], [ $2])])), []),
-		 [ ], [-])
+	   m4_decr(m4_qlen(_m4_expand([$1[]m4_ifval([$2], [ $2])
+]))), []), [ ], [-])
 m4_text_wrap([$3], [@%:@ ], [], [$4])])
 
 

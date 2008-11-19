@@ -813,7 +813,8 @@ m4_define([m4_echo], [$@])
 
 
 # m4_expand(ARG)
-# --------------
+# _m4_expand(ARG)
+# ---------------
 # Return the expansion of ARG as a single string.  Unlike
 # m4_quote($1), this preserves whitespace following single-quoted
 # commas that appear within ARG.  It also deals with shell case
@@ -830,7 +831,9 @@ m4_define([m4_echo], [$@])
 # something with balanced quotes (use quadrigraphs to get around
 # this), and should not contain the unlikely delimiters -=<{( or
 # )}>=-.  It is possible to have unbalanced quoted `(' or `)', as well
-# as unbalanced unquoted `)'.
+# as unbalanced unquoted `)'.  m4_expand can handle unterminated
+# comments or dnl on the final line, at the expense of speed, while
+# _m4_expand is faster but must be given a terminated expansion.
 #
 # Exploit that extra unquoted () will group unquoted commas and the
 # following whitespace.  m4_bpatsubst can't handle newlines inside $1,
@@ -845,9 +848,12 @@ m4_define([m4_echo], [$@])
 # this time with one more `(' in the second argument and in the
 # open-quote delimiter.  We must also ignore the slop from the
 # previous try.  The final macro is thus half line-noise, half art.
-m4_define([m4_expand], [_$0([$1], [(], -=<{($1)}>=-, [}>=-])])
+m4_define([m4_expand], [m4_chomp(_$0([$1
+]))])
 
-m4_define([_m4_expand],
+m4_define([_m4_expand], [$0_([$1], [(], -=<{($1)}>=-, [}>=-])])
+
+m4_define([_m4_expand_],
 [m4_if([$4], [}>=-],
        [m4_changequote([-=<{$2], [)}>=-])$3m4_changequote([, ])],
        [$0([$1], [($2], -=<{($2$1)}>=-, [}>=-])m4_ignore$2])])
@@ -2434,9 +2440,9 @@ m4_define([_m4_text_wrap_word],
 # will post-process.
 m4_define([m4_text_box],
 [m4_pushdef([m4_Border],
-	    m4_translit(m4_format([%*s], m4_qlen(m4_expand([$1])), []),
-			[ ], m4_default_quoted([$2], [-])))dnl
-[##] m4_Border [##]
+	    m4_translit(m4_format([%*s], m4_decr(m4_qlen(_m4_expand([$1
+]))), []), [ ], m4_default_quoted([$2], [-])))]dnl
+[[##] m4_Border [##]
 [##] $1 [##]
 [##] m4_Border [##]_m4_popdef([m4_Border])])
 

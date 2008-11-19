@@ -11163,12 +11163,15 @@ discarding whitespace after unquoted commas, this macro is a no-op.
 Return the expansion of @var{arg} as a quoted string.  Whereas
 @code{m4_quote} is designed to collect expanded text into a single
 argument, @code{m4_expand} is designed to perform one level of expansion
-on quoted text.  The distinction is in the treatment of whitespace
+on quoted text.  One distinction is in the treatment of whitespace
 following a comma in the original @var{arg}.  Any time multiple
 arguments are collected into one with @code{m4_quote}, the M4 argument
 collection rules discard the whitespace.  However, with @code{m4_expand},
 whitespace is preserved, even after the expansion of macros contained in
-@var{arg}.
+@var{arg}.  Additionally, @code{m4_expand} is able to expand text that
+would involve an unterminated comment, whereas expanding that same text
+as the argument to @code{m4_quote} runs into difficulty in finding the
+end of the argument.
 
 @example
 m4_define([active], [ACT, IVE])dnl
@@ -11181,11 +11184,17 @@ m4_quote(active2, active2)
 @result{}ACT, IVE,ACT, IVE
 m4_expand([active2, active2])
 @result{}ACT, IVE, ACT, IVE
+m4_expand([# m4_echo])
+@result{}# m4_echo
+m4_quote(# m4_echo)
+)
+@result{}# m4_echo)
+@result{}
 @end example
 
 Note that @code{m4_expand} cannot handle an @var{arg} that expands to
 literal unbalanced quotes, but that quadrigraphs can be used when
-unbalanced output is necessary.  Likewise, unbalanced parentheses must
+unbalanced output is necessary.  Likewise, unbalanced parentheses should
 be supplied with double quoting or a quadrigraph.
 
 @example
