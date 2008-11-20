@@ -669,8 +669,11 @@ m4_define([_AS_ESCAPE],
        [$1], [m4_bpatsubst([$1], [[$2]], [\\\&])])])
 
 
-# _AS_QUOTE_IFELSE(STRING, IF-MODERN-QUOTATION, IF-OLD-QUOTATION)
-# ---------------------------------------------------------------
+# _AS_QUOTE(STRING)
+# -----------------
+# If there are quoted (via backslash) backquotes, output STRING
+# literally and warn; otherwise, output STRING with ` and " quoted.
+#
 # Compatibility glue between the old AS_MSG suite which did not
 # quote anything, and the modern suite which quotes the quotes.
 # If STRING contains `\\' or `\$', it's modern.
@@ -685,25 +688,20 @@ m4_define([_AS_ESCAPE],
 #	    [$2])
 # The current implementation caters to the common case of no backslashes,
 # to minimize m4_index expansions (hence the nested if).
-m4_define([_AS_QUOTE_IFELSE],
-[m4_cond([m4_index([$1], [\])], [-1], [$2],
-	 [m4_eval(m4_index([$1], [\\]) >= 0)], [1], [$2],
-	 [m4_eval(m4_index([$1], [\$]) >= 0)], [1], [$2],
-	 [m4_eval(m4_index([$1], [\`]) >= 0)], [1], [$3],
-	 [m4_eval(m4_index([$1], [\"]) >= 0)], [1], [$3],
-	 [$2])])
-
-
-# _AS_QUOTE(STRING, [CHARS = `"])
-# -------------------------------
-# If there are quoted (via backslash) backquotes do nothing, else
-# backslash all the quotes.
 m4_define([_AS_QUOTE],
-[_AS_QUOTE_IFELSE([$1],
-		  [_AS_ESCAPE([$1], m4_default([$2], [`""]))],
-		  [m4_warn([obsolete],
-	   [back quotes and double quotes must not be escaped in: $1])dnl
-$1])])
+[m4_cond([m4_index([$1], [\])], [-1], [_AS_QUOTE_MODERN],
+	 [m4_eval(m4_index(m4_translit([[$1]], [$], [\]), [\\]) >= 0)],
+[1], [_AS_QUOTE_MODERN],
+	 [m4_eval(m4_index(m4_translit([[$1]], ["], [`]), [\`]) >= 0)],dnl"
+[1], [_AS_QUOTE_OLD],
+	 [_AS_QUOTE_MODERN])([$1])])
+
+m4_define([_AS_QUOTE_MODERN],
+[_AS_ESCAPE([$1], [`""])])
+
+m4_define([_AS_QUOTE_OLD],
+[m4_warn([obsolete],
+   [back quotes and double quotes must not be escaped in: $1])$1])
 
 
 # _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])

@@ -1,3 +1,11 @@
+2008-11-20  Eric Blake  <ebb9@byu.net>
+
+	Speed up _AS_QUOTE.
+	* lib/m4sugar/m4sh.m4 (_AS_QUOTE_IFELSE): Inline into...
+	(_AS_QUOTE): ...here, delete unused second paramenter, and factor
+	choice into...
+	(_AS_QUOTE_MODERN, _AS_QUOTE_OLD): ...new helpers.
+
 2008-11-20  Alfred G. de Wijn  <dwijn@iluvatar.eu.org>  (tiny change)
 
 	For consistency, make temporary variable match language name.
