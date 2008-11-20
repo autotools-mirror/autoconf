@@ -1,3 +1,11 @@
+2008-11-20  Alfred G. de Wijn  <dwijn@iluvatar.eu.org>  (tiny change)
+
+	For consistency, make temporary variable match language name.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_G, _AC_PROG_FC_V_OUTPUT):
+	Match the save/test variables' names to the FFLAGS/FCFLAGS being
+	saved.
+	* THANKS: Update.
+
 2008-11-19  Eric Blake  <ebb9@byu.net>
 
 	Improve testsuite generation.

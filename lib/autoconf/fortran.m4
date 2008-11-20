@@ -413,8 +413,8 @@ AC_LANG_POP(Fortran)dnl
 # versions of a library), tasteless as that idea is.
 m4_define([_AC_PROG_FC_G],
 [_AC_FORTRAN_ASSERT()dnl
-ac_test_FFLAGS=${[]_AC_LANG_PREFIX[]FLAGS+set}
-ac_save_FFLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+ac_test_[]_AC_LANG_PREFIX[]FLAGS=${[]_AC_LANG_PREFIX[]FLAGS+set}
+ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
 _AC_LANG_PREFIX[]FLAGS=
 AC_CACHE_CHECK(whether $[]_AC_FC[] accepts -g, ac_cv_prog_[]_AC_LANG_ABBREV[]_g,
 [_AC_LANG_PREFIX[]FLAGS=-g
@@ -422,8 +422,8 @@ _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 [ac_cv_prog_[]_AC_LANG_ABBREV[]_g=yes],
 [ac_cv_prog_[]_AC_LANG_ABBREV[]_g=no])
 ])
-if test "$ac_test_FFLAGS" = set; then
-  _AC_LANG_PREFIX[]FLAGS=$ac_save_FFLAGS
+if test "$ac_test_[]_AC_LANG_PREFIX[]FLAGS" = set; then
+  _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
 elif test $ac_cv_prog_[]_AC_LANG_ABBREV[]_g = yes; then
   if test "x$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu" = xyes; then
     _AC_LANG_PREFIX[]FLAGS="-g -O2"
@@ -517,7 +517,7 @@ AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # 1 to this macro) to the Fortran compiler in order to get
 # "verbose" output that we can then parse for the Fortran linker
 # flags.
-ac_save_FFLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
 _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS m4_default([$1], [$ac_cv_prog_[]_AC_LANG_ABBREV[]_v])"
 eval "set x $ac_link"
 shift
@@ -527,7 +527,7 @@ _AS_ECHO_LOG([$[*]])
 ac_[]_AC_LANG_ABBREV[]_v_output=`eval $ac_link AS_MESSAGE_LOG_FD>&1 2>&1 |
   grep -v 'Driving:' | grep -v "^[[_$as_cr_Letters]][[_$as_cr_alnum]]*="`
 AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"]) >&AS_MESSAGE_LOG_FD
-_AC_LANG_PREFIX[]FLAGS=$ac_save_FFLAGS
+_AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
 
 rm -rf conftest*
 
