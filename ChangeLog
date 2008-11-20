@@ -1,5 +1,11 @@
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
+	Describe different hacks for balancing ')' in case statements.
+	* doc/autoconf.texi (Limitations of Builtins) <case>: Add an
+	exposition on various quoting styles.
+
+2008-11-20  Eric Blake  <ebb9@byu.net>
+
 	Speed up _AS_QUOTE.
 	* lib/m4sugar/m4sh.m4 (_AS_QUOTE_IFELSE): Inline into...
 	(_AS_QUOTE): ...here, delete unused second paramenter, and factor

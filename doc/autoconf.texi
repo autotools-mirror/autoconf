@@ -14873,16 +14873,113 @@ $ @kbd{case foo in (foo) echo foo;; esac}
 @end example
 
 @noindent
-The leading @samp{(} can be omitted safely.  In contexts where
-unbalanced parentheses cause other problems, such as when using a case
-statement as an argument to an Autoconf macro, you can also resort to
-creative shell comments to supply the balance:
+@cindex balancing parentheses
+@cindex parentheses, balancing
+The leading @samp{(} can be omitted safely.  Unfortunately, there are
+contexts where unbalanced parentheses cause other problems, such as when
+using a syntax-highlighting editor that searches for the balancing
+counterpart, or more importantly, when using a case statement as an
+underquoted argument to an Autoconf macro:
 
 @example
-case $file_name in #(
+AC_DEFUN([my_case],
+[case $file_name in
   *.c) echo "C source code";;
-esac
+esac])
+AS_IF(:, my_case)
 @end example
+
+@noindent
+In the above example, the unbalanced @samp{)} in the premature expansion
+of @code{my_case} results in expanding @code{AS_IF} with a truncated
+parameter, and the expansion is syntactically invalid:
+
+@example
+if :; then
+  case $file_name in
+  *.c
+fi echo "C source code";;
+esac)
+@end example
+
+@noindent
+If nothing else, this should emphasize the importance of the quoting
+rule of thumb (@pxref{Quotation Rule Of Thumb}), that you should single
+quote all macro arguments that might be re-expanded, and double-quote
+macro arguments that are literal text.  On the other hand, there are
+several variations for defining @code{my_case} to be more robust, each
+with some benefits and some drawbacks.
+
+@table @asis
+@item Creative literal shell comment
+@example
+AC_DEFUN([my_case],
+[case $file_name in #(
+  *.c) echo "C source code";;
+esac])
+@end example
+@noindent
+This version provides balanced parentheses to several editors, and can
+be copied and pasted into a terminal as is.  Unfortunately, it is still
+unbalanced as an Autoconf argument, since @samp{#(} is an M4 comment
+that masks the normal properties of @samp{(}.
+
+@item Quadrigraph shell comment
+@example
+AC_DEFUN([my_case],
+[case $file_name in @@%:@@(
+  *.c) echo "C source code";;
+esac])
+@end example
+@noindent
+This version provides balanced parentheses to even more editors, and can
+be used as a balanced Autoconf argument.  Unfortunately, it requires
+some editing before it can be copied and pasted into a terminal, and the
+use of the quadrigraph @samp{@@%:@@} for @samp{#} reduces readability.
+
+@item Quoting just the parenthesis
+@example
+AC_DEFUN([my_case],
+[case $file_name in
+  *.c[)] echo "C source code";;
+esac])
+@end example
+@noindent
+This version quotes the @samp{)}, so that it can be used as a balanced
+Autoconf argument.  As written, this is not balanced to an editor, but
+it can be coupled with @samp{[#(]} to meet that need, too.  However, it
+still requires some edits before it can be copied and pasted into a
+terminal.
+
+@item Double-quoting the entire statement
+@example
+AC_DEFUN([my_case],
+[[case $file_name in #(
+  *.c) echo "C source code";;
+esac]])
+@end example
+@noindent
+Since the entire macro is double-quoted, there is no problem with using
+this as an Autoconf argument; and since the double-quoting is over the
+entire statement, this code can be easily copied and pasted into a
+terminal.  However, the double quoting prevents the expansion of any
+macros inside the case statement, which may cause its own set of
+problems.
+
+@item Using @code{AS_CASE}
+@example
+AC_DEFUN([my_case],
+[AS_CASE([$file_name],
+  [*.c], [echo "C source code"])])
+@end example
+@noindent
+This version avoids the balancing issue altogether, by relying on
+@code{AS_CASE} (@pxref{Common Shell Constructs}); it also allows for the
+expansion of @code{AC_REQUIRE} to occur prior to the entire case
+statement, rather than within a branch of the case statement that might
+not be taken.  However, the abstraction comes with a penalty that it is
+no longer a quick copy, paste, and edit to get back to shell code.
+@end table
 
 Zsh handles pattern fragments derived from parameter expansions or
 command substitutions as though quoted:
