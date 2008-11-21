@@ -1,3 +1,11 @@
+2008-11-21  Eric Blake  <ebb9@byu.net>
+
+	Move case statement style discussion to m4 quoting section.
+	* doc/autoconf.texi (Limitations of Builtins): Move comparison of
+	quoting styles...
+	(Balancing Parentheses): ...to this new node.
+	Suggested by Ralf Wildenhues.
+
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
 	Factor more common code out of AT_CHECK into shell function.
