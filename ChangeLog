@@ -1,5 +1,18 @@
 2008-11-21  Eric Blake  <ebb9@byu.net>
 
+	Fix typos in recent testsuite improvements.
+	* lib/autotest/general.m4 (AT_INIT) <at_fn_check_prepare_dynamic>:
+	Fix typo.
+	* NEWS: Clarify the potential impact to users.
+	* tests/autotest.at (AT_DATA_AUTOTEST): New macro, patterned after
+	AT_DATA_M4SUGAR.
+	(AT_CHECK_AT_PREP, AT_CHECK_AT_TITLE): Use it.
+	(unusual file names): Test that the recent echo fix does not
+	regress.  Fix quoting bug that made the test a no-op.
+	Reported by Paolo Bonzini and Ralf Wildenhues.
+
+2008-11-21  Eric Blake  <ebb9@byu.net>
+
 	Use modern m4sh constructs in autoconf.
 	* bin/autoconf.as (exit_missing_arg, getopt): Use AS_ERROR, rather
 	than AS_EXIT.

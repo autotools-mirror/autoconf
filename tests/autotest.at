@@ -20,6 +20,16 @@ AT_BANNER([Autotest.])
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 # 02110-1301, USA.
 
+
+# AT_DATA_AUTOTEST(FILE-NAME, CONTENTS)
+# -------------------------------------
+# Escape the invalid tokens with @&t@.
+m4_define([AT_DATA_AUTOTEST],
+[AT_DATA([$1],
+[m4_bpatsubst([$2], [\(@.\)\(.@\)\|\(m4\|AS\|AT\)\(_\)\|\(d\)\(nl\)],
+              [\1\3\5@&t@\2\4\6])])])
+
+
 # AT_CHECK_AT_PREP(NAME, SUITE-CODE, [STATUS = 0], [STDOUT], [STDERR],
 #                  [DIR = .])
 # --------------------------------------------------------------------
@@ -36,15 +46,15 @@ m4_pushdef([AT_dir], m4_ifval([$6], [[[$6]]], [.]))dnl
 dnl
 AT_CAPTURE_FILE([$1.log])dnl
 dnl
-AT_DATA(AT_dir[/package.m4],
-[[m4_define([AT@&t@_PACKAGE_NAME],      [GNU Nonsense])
-m4_define([AT@&t@_PACKAGE_TARNAME],   [nonsense])
-m4_define([AT@&t@_PACKAGE_VERSION],   [1.0])
-m4_define([AT@&t@_PACKAGE_STRING],    [GNU Nonsense 1.0])
-m4_define([AT@&t@_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
+AT_DATA_AUTOTEST(AT_dir[/package.m4],
+[[m4_define([AT_PACKAGE_NAME],      [GNU Nonsense])
+m4_define([AT_PACKAGE_TARNAME],   [nonsense])
+m4_define([AT_PACKAGE_VERSION],   [1.0])
+m4_define([AT_PACKAGE_STRING],    [GNU Nonsense 1.0])
+m4_define([AT_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
 ]])
 dnl
-AT_DATA(AT_dir[/$1.at], m4_bpatsubst([[$2]], [AT_], [AT@&t@_]))
+AT_DATA_AUTOTEST(AT_dir[/$1.at], [$2])
 m4_ifval([$6], [(cd AT_dir])
 AT_CHECK_AUTOM4TE([--language=autotest -o $1 $1.at], [$3], [$4], [$5])
 m4_ifval([$6], [)])
@@ -414,14 +424,14 @@ AT_CLEANUP
 m4_define([AT_CHECK_AT_TITLE],
 [AT_CHECK_AT([$1],
 [[
-m4@&t@_define([macro_name],         [[macro_expanded]])
-m4@&t@_define([macro_expanded],     [[macro_overexpanded]])
-m4@&t@_define([macro_backquote],    [`])
-m4@&t@_define([macro_single_quote], ['])
-m4@&t@_define([macro_double_quote], ["])
+m4_define([macro_name],         [[macro_expanded]])
+m4_define([macro_expanded],     [[macro_overexpanded]])
+m4_define([macro_backquote],    [`])
+m4_define([macro_single_quote], ['])
+m4_define([macro_double_quote], ["])
 ]]dnl restore font-lock: "
-[[m4@&t@_define([macro_backslash],  [\])
-m4@&t@_define([macro_echo],         [$][1])
+[[m4_define([macro_backslash],  [\])
+m4_define([macro_echo],         [$][1])
 AT_INIT([artificial test suite])
 AT_SETUP([$2])
 AT_CHECK([:])
@@ -459,8 +469,8 @@ AT_CHECK_AT_TITLE_CHAR([Double-quote],  ["])
 dnl restore font-lock: "
 AT_CHECK_AT_TITLE_CHAR([Backslash],     [\])
 AT_CHECK_AT_TITLE_CHAR([Brackets],   [[[]]], [[]])
-AT_CHECK_AT_TITLE_CHAR([Left bracket],  [@<@&t@:@], [@<:@])
-AT_CHECK_AT_TITLE_CHAR([Right bracket], [@:@&t@>@], [@:>@])
+AT_CHECK_AT_TITLE_CHAR([Left bracket],  [@<:@], [@<:@])
+AT_CHECK_AT_TITLE_CHAR([Right bracket], [@:>@], [@:>@])
 AT_CHECK_AT_TITLE_CHAR([Quoted pound],  [[#]], [#])
 AT_CHECK_AT_TITLE_CHAR([Pound],         [#])
 AT_CHECK_AT_TITLE_CHAR([Quoted comma],  [[,]], [,])
@@ -696,7 +706,7 @@ AT_CHECK(:)
 AT_CLEANUP
 AT_SETUP(both) # 04
 AT_KEYWORDS([key1 key2])
-AT_KEYWORDS([m4@&t@_echo([Key1])])
+AT_KEYWORDS([m4_echo([Key1])])
 AT_CHECK(:)
 AT_CLEANUP
 AT_SETUP(test5) # 05
@@ -1027,24 +1037,25 @@ AT_CLEANUP
 
 AT_SETUP([unusual file names])
 
-AT_DATA_M4SUGAR([d@&t@nl.at],
-[[AT@&t@_SETUP([test one])
+AT_DATA_AUTOTEST([d@&t@nl.at],
+[[AT_SETUP([test one])
 m4_pattern_allow([^dnl$])
-AT@&t@_CHECK([test "]m4_dquote(AT@&t@_LINE)[" = dn[]l.at:3])
-AT@&t@_CLEANUP
+AT_CHECK([test "]m4_dquote(AT_LINE)[" = dn[]l.at:3])
+AT_CLEANUP
 ]])
 
 mkdir sub
-AT_DATA_M4SUGAR([sub/"two  spaces".at],
-[[AT@&t@_SETUP([test two])
-AT@&t@_CHECK([test "]m4_dquote(AT@&t@_LINE)[" = "two  spaces.at:2"])
-AT@&t@_CLEANUP
+AT_DATA_AUTOTEST([sub/"two  spaces".at],
+[[AT_SETUP([test two])
+AT_CHECK([test "]m4_dquote(AT_LINE)[" = "two  spaces.at:2"])
+AT_CLEANUP
 ]])
 
 AT_CHECK_AT_PREP([suite],
 [[AT_INIT([suite to check included file names])
-m4@&t@_include([d][nl.at])
-m4@&t@_include([sub/two  spaces.at])
+m4_include([d][nl.at])
+m4_include([sub/two  spaces.at])
 ]])
-AT_CHECK([$CONFIG_SHELL ./suite], [0], [ignore])
+AT_CHECK([$CONFIG_SHELL ./suite], [0], [stdout])
+AT_CHECK([grep 'two spaces' suite.log], [1])
 AT_CLEANUP

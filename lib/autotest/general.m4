@@ -287,7 +287,7 @@ at_fn_check_prepare_trace ()
 
 AS_FUNCTION_DESCRIBE([at_fn_check_prepare_dynamic], [COMMAND LINE],
 [Decide if COMMAND at LINE is traceable at runtime, and call the
-appropriate prepation function.])
+appropriate preparation function.])
 at_fn_check_prepare_dynamic ()
 {
   case "$at_traceon:$[1]" in
