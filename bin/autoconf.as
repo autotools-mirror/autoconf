@@ -79,10 +79,9 @@ help="\
 Try \`$as_me --help' for more information."
 
 exit_missing_arg='
-  AS_ECHO(["$as_me: option \`$[1]'\'' requires an argument"]) >&2
-  AS_ECHO(["$help"]) >&2
-  AS_EXIT([1])
-' # restore font-lock: "
+  m4_bpatsubst([AS_ERROR([option `$[1]' requires an argument$as_nl$help])],
+    ['], ['\\''])'
+# restore font-lock: '
 
 # Variables.
 : ${AUTOM4TE='@bindir@/@autom4te-name@'}
@@ -113,7 +112,7 @@ while test $# -gt 0 ; do
     --prepend-include=* | -B?* | \
     --warnings=* | -W?* )
        case $1 in
-	 *\'*) arg=`AS_ECHO(["$1"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+	 *\'*) arg=`AS_ECHO(["$1"]) | sed "s/'/'\\\\\\\\''/g"` ;; #'
 	 *) arg=$1 ;;
        esac
        autom4te_options="$autom4te_options '$arg'"; shift ;;
@@ -123,7 +122,7 @@ while test $# -gt 0 ; do
     --warnings | -W )
        test $# = 1 && eval "$exit_missing_arg"
        case $2 in
-	 *\'*) arg=`AS_ECHO(["$2"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+	 *\'*) arg=`AS_ECHO(["$2"]) | sed "s/'/'\\\\\\\\''/g"` ;; #'
 	 *) arg=$2 ;;
        esac
        autom4te_options="$autom4te_options $option '$arg'"
@@ -154,9 +153,7 @@ while test $# -gt 0 ; do
        break ;;
     -* )
        exec >&2
-       AS_ECHO(["$as_me: invalid option $[1]"])
-       AS_ECHO(["$help"])
-       AS_EXIT([1]) ;;
+       AS_ERROR([invalid option `$[1]'$as_nl$help]) ;; #`
     * )
        break ;;
   esac
@@ -174,16 +171,13 @@ case $# in
     elif test -f configure.in; then
       infile=configure.in
     else
-      AS_ECHO(["$as_me: no input file"]) >&2
-      AS_EXIT([1])
+      AS_ERROR([no input file])
     fi
     test -z "$traces" && test -z "$outfile" && outfile=configure;;
   1)
     infile=$1 ;;
   *) exec >&2
-     AS_ECHO(["$as_me: invalid number of arguments."])
-     AS_ECHO(["$help"])
-     AS_EXIT([1]) ;;
+     AS_ERROR([invalid number of arguments$as_nl$help]) ;;
 esac
 
 # Unless specified, the output is stdout.
