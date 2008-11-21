@@ -1,5 +1,14 @@
 2008-11-21  Eric Blake  <ebb9@byu.net>
 
+	Use shell function for AS_ERROR.
+	* lib/m4sugar/m4sh.m4 (_AS_ERROR_PREPARE): New macro, defining a
+	new shell function.
+	(AS_ERROR): Use it.
+	(_AS_LINENO_PREPARE): Break circular dependency.
+	(AS_PREPARE, _AS_PREPARE): Initialize for child scripts.
+
+2008-11-21  Eric Blake  <ebb9@byu.net>
+
 	Fix typos in recent testsuite improvements.
 	* lib/autotest/general.m4 (AT_INIT) <at_fn_check_prepare_dynamic>:
 	Fix typo.

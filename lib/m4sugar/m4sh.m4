@@ -295,10 +295,17 @@ _m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL
 # Special case: we do not need _AS_LINENO_PREPARE, because the
 # parent will have substituted $LINENO for us when processing its
 # own invocation of _AS_LINENO_PREPARE.
+#
+# Special case: the full definition of _AS_ERROR_PREPARE is not output
+# unless AS_MESSAGE_LOG_FD is non-empty, although the value of
+# AS_MESSAGE_LOG_FD is not relevant.
 m4_defun([_AS_PREPARE],
 [m4_pushdef([AS_REQUIRE])]dnl
 [m4_pushdef([AS_REQUIRE_SHELL_FN], _m4_defn([_AS_REQUIRE_SHELL_FN])
 )]dnl
+[m4_pushdef([AS_MESSAGE_LOG_FD], [-1])]dnl
+[_AS_ERROR_PREPARE
+_m4_popdef([AS_MESSAGE_LOG_FD])]dnl
 [_AS_EXIT_PREPARE
 _AS_UNSET_PREPARE
 _AS_VAR_APPEND_PREPARE
@@ -325,6 +332,8 @@ _m4_popdef([AS_REQUIRE], [AS_REQUIRE_SHELL_FN])])
 # shell functions are placed in M4SH-INIT-FN.
 m4_defun([AS_PREPARE],
 [m4_divert_push([KILL])
+m4_append_uniq([_AS_CLEANUP],
+  [m4_divert_text([M4SH-INIT-FN], [_AS_ERROR_PREPARE[]])])
 AS_REQUIRE([_AS_EXPR_PREPARE])
 AS_REQUIRE([_AS_BASENAME_PREPARE])
 AS_REQUIRE([_AS_DIRNAME_PREPARE])
@@ -767,20 +776,51 @@ _AS_ECHO([$as_me: $1], [$2]);}],
 
 # AS_WARN(PROBLEM)
 # ----------------
-# Output "`basename $0`: WARNING: "STRING to stderr.
+# Output "`basename $0`: WARNING: PROBLEM" to stderr.
 m4_define([AS_WARN],
 [AS_MESSAGE([WARNING: $1], [2])])# AS_WARN
 
 
+# _AS_ERROR_PREPARE
+# -----------------
+# Output the shell function used by AS_ERROR.  This is designed to be
+# expanded during the m4_wrap cleanup.
+#
+# If AS_MESSAGE_LOG_FD is non-empty at the end of the script, then
+# make this function take optional parameters that use LINENO at the
+# points where AS_ERROR was expanded with non-empty AS_MESSAGE_LOG_FD;
+# otherwise, assume the entire script does not do logging.
+m4_define([_AS_ERROR_PREPARE],
+[AS_REQUIRE_SHELL_FN([as_fn_error],
+  [AS_FUNCTION_DESCRIBE([as_fn_error], [ERROR]m4_ifset([AS_MESSAGE_LOG_FD],
+      [[ [[LINENO LOG_FD]]]]),
+    [Output "`basename @S|@0`: error: ERROR" to stderr.]
+m4_ifset([AS_MESSAGE_LOG_FD],
+    [[If LINENO and LOG_FD are provided, also output the error to LOG_FD,
+      referencing LINENO.]])
+    [Then exit the script with status $?, using 1 if that was 0.])],
+[  as_status=$?; test $as_status -eq 0 && as_status=1
+m4_ifset([AS_MESSAGE_LOG_FD],
+[m4_pushdef([AS_MESSAGE_LOG_FD], [$[3]])dnl
+  if test "$[3]"; then
+    AS_LINENO_PUSH([$[2]])
+    _AS_ECHO_LOG([error: $[1]])
+  fi
+m4_define([AS_MESSAGE_LOG_FD])], [m4_pushdef([AS_MESSAGE_LOG_FD])])dnl
+  AS_MESSAGE([error: $[1]], [2])
+_m4_popdef([AS_MESSAGE_LOG_FD])dnl
+  AS_EXIT([$as_status])])])
+
 # AS_ERROR(ERROR, [EXIT-STATUS = max($?/1)])
 # ------------------------------------------
-# Output "`basename $0`: error: "STRING to stderr, then exit the
+# Output "`basename $0`: error: ERROR" to stderr, then exit the
 # script with EXIT-STATUS.
-m4_define([AS_ERROR],
-[{ m4_ifval([$2], [], [as_status=$?; test $as_status -eq 0 && as_status=1
-   ]) AS_MESSAGE([error: $1], [2])
-    AS_EXIT(m4_default([$2], [$as_status])); }])# AS_ERROR
-
+m4_defun_init([AS_ERROR],
+[m4_append_uniq([_AS_CLEANUP],
+  [m4_divert_text([M4SH-INIT-FN], [_AS_ERROR_PREPARE[]])])],
+[m4_ifvaln([$2], [{ AS_SET_STATUS([$2])])]dnl
+[as_fn_error "_AS_QUOTE([$1])"m4_ifset([AS_MESSAGE_LOG_FD],
+  [ "$LINENO" AS_MESSAGE_LOG_FD])[]m4_ifval([$2], [; }])])
 
 
 # AS_LINENO_PUSH([LINENO])
@@ -1050,14 +1090,19 @@ m4_define([_AS_LINENO_WORKS],
 # the case of embedded executables (such as config.status within
 # configure) you'd compare LINENO wrt config.status vs. _oline_ wrt
 # configure.
+#
+# AS_ERROR normally uses LINENO if logging, but AS_LINENO_PREPARE uses
+# AS_ERROR.  Besides, if the logging fd is open, we don't want to use
+# $LINENO in the log complaining about broken LINENO.  We break the
+# circular require by changing AS_ERROR and AS_MESSAGE_LOG_FD.
 m4_defun([AS_LINENO_PREPARE], [AS_REQUIRE([_$0])])
 m4_defun([_AS_LINENO_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])]dnl
 [AS_REQUIRE([_AS_ME_PREPARE])]dnl
 [_AS_DETECT_SUGGESTED([_AS_LINENO_WORKS])]dnl
-dnl Even if the logging fd is open, we don't want to use $LINENO in the
-dnl AS_ERROR complaining that LINENO is broken.
 [m4_pushdef([AS_MESSAGE_LOG_FD])]dnl
+[m4_pushdef([AS_ERROR],
+  [{ AS_MESSAGE(]m4_dquote([error: $][1])[, [2]); AS_EXIT([1]); }])]dnl
 dnl Create $as_me.lineno as a copy of $as_myself, but with $LINENO
 dnl uniformly replaced by the line number.  The first 'sed' inserts a
 dnl line-number line after each line using $LINENO; the second 'sed'
@@ -1093,7 +1138,7 @@ dnl Eggert wrote the scripts with optimization help from Paolo Bonzini).
   # Exit status is that of the last command.
   exit
 }
-_m4_popdef([AS_MESSAGE_LOG_FD])])# _AS_LINENO_PREPARE
+_m4_popdef([AS_MESSAGE_LOG_FD], [AS_ERROR])])# _AS_LINENO_PREPARE
 
 
 # _AS_LN_S_PREPARE
