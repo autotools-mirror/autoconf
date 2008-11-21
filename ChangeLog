@@ -1,5 +1,16 @@
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
+	Factor more common code out of AT_CHECK into shell function.
+	* lib/autotest/general.m4 (_AT_CHECK): Avoid echo bug if AT_LINE
+	starts with -.  Move preparations...
+	(AT_INIT) <at_fn_check_prepare_trace>
+	<at_fn_check_prepare_notrace, at_fn_check_prepare_dynamic>:
+	...into these new shell functions.
+	<at_fn_check_newline>: Inline into only caller.
+	(_AT_DECIDE_TRACEABLE): Use them to condense testsuite size.
+
+2008-11-20  Eric Blake  <ebb9@byu.net>
+
 	Handle version numbers as decimal, even if they start with 0.
 	* lib/m4sugar/m4sugar.m4 (_m4_version_unletter): Avoid
 	interpreting leading zeros as octal.

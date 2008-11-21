@@ -261,16 +261,43 @@ at_fn_banner ()
   AS_ECHO(["$as_nl$at_banner_text$as_nl"])
 } # at_fn_banner
 
-AS_FUNCTION_DESCRIBE([at_fn_check_newline], [COMMAND],
-[Test if COMMAND includes a newline and, if so, print a message and return
-exit code 1.])
-at_fn_check_newline ()
+AS_FUNCTION_DESCRIBE([at_fn_check_prepare_notrace], [LINE],
+[Perform AT_CHECK preparations for the command at LINE for an
+untraceable command, or when tracing is disabled.])
+at_fn_check_prepare_notrace ()
 {
-  case "$[1]" in
- *'
-'*) echo 'Not enabling shell tracing (command contains an embedded newline)'
-    return 1 ;;
- *) return 0 ;;
+  AS_ECHO(["$[1]"]) >"$at_check_line_file"
+  at_check_trace=: at_check_filter=:
+  : >"$at_stdout"; : >"$at_stderr"
+}
+
+AS_FUNCTION_DESCRIBE([at_fn_check_prepare_trace], [LINE],
+[Perform AT_CHECK preparations for the command at LINE for a traceable
+command.])
+at_fn_check_prepare_trace ()
+{
+  if test -n "$at_traceon"; then
+    AS_ECHO(["$[1]"]) >"$at_check_line_file"
+    at_check_trace=$at_traceon at_check_filter=at_fn_filter_trace
+    : >"$at_stdout"; : >"$at_stderr"
+  else
+    at_fn_check_prepare_notrace "$[1]"
+  fi
+}
+
+AS_FUNCTION_DESCRIBE([at_fn_check_prepare_dynamic], [COMMAND LINE],
+[Decide if COMMAND at LINE is traceable at runtime, and call the
+appropriate prepation function.])
+at_fn_check_prepare_dynamic ()
+{
+  case "$at_traceon:$[1]" in
+    :*$as_nl*)
+      at_fn_check_prepare_notrace "$[2]" ;;
+    *$as_nl*)
+      echo 'Not enabling shell tracing (command contains an embedded newline)'
+      at_fn_check_prepare_notrace "$[2]" ;;
+    *)
+      at_fn_check_prepare_trace "$[2]" ;;
   esac
 }
 
@@ -1841,19 +1868,17 @@ m4_cond([m4_eval(m4_index([$1], [`]) >= 0)], [1],
 		[[a ${...} parameter expansion]],
 	[m4_eval(m4_index([$1], m4_newline) >= 0)], [1],
 		[[an embedded newline]],
-	[]dnl No reason.
-))dnl
-dnl
-m4_ifval(m4_defn([at_reason]),
-[{ echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'
-   false; }],
-[m4_if(m4_index([$1], [$]), [-1],
+	[]))]dnl No reason.
+[m4_if(m4_index(_m4_defn([at_reason]), [a]), [0],]dnl
+dnl We know at build time that tracing COMMANDS is never safe.
+[[echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'
+at_fn_check_prepare_notrace],
+       m4_index([$1], [$]), [-1],]dnl
 dnl We know at build time that tracing COMMANDS is always safe.
-[test -n "$at_traceon"],
+[[at_fn_check_prepare_trace],]dnl
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
-[test -n "$at_traceon" \
-  && at_fn_check_newline "AS_ESCAPE([$1], [`\"])"])])[]dnl
-m4_popdef([at_reason])])
+[[at_fn_check_prepare_dynamic "AS_ESCAPE([$1], [`\"])"])])]dnl
+[_m4_popdef([at_reason])])
 
 
 # AT_DIFF_STDERR/AT_DIFF_STDOUT
@@ -1915,14 +1940,7 @@ m4_define([AT_DIFF_STDOUT()],
 m4_define([_AT_CHECK],
 [{ $at_traceoff
 AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([[$1]])"])
-echo AT_LINE >"$at_check_line_file"
-
-if _AT_DECIDE_TRACEABLE([$1]); then
-  at_check_trace=$at_traceon at_check_filter=at_fn_filter_trace
-else
-  at_check_trace=: at_check_filter=:
-fi
-: >"$at_stdout"; : >"$at_stderr"
+_AT_DECIDE_TRACEABLE([$1]) "AS_ESCAPE(m4_dquote(AT_LINE))"
 ( $at_check_trace; [$1]
 ) >>"$at_stdout" 2>>"$at_stderr"
 at_status=$? at_failed=false
