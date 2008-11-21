@@ -1,5 +1,15 @@
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
+	Speed up AT_CHECK.
+	* lib/autotest/general.m4 (AT_CHECK, AT_CHECK_UNQUOTED): Expand
+	third and fourth arguments once.
+	(_AT_CHECK): Don't re-expand expected output.  Rearrange code for
+	fewer scans of arguments.
+	(AT_CHECK): Update caller.
+	(AT_INIT) <at_fn_filter_trace>: Drop parameter.
+	* tests/m4sugar.at (m4@&t@_split): Protect test with
+	quadrigraphs.
+
 	Fix XFAIL related to AT_CHECK.
 	* lib/autotest/general.m4 (AT_CHECK, AT_CHECK_UNQUOTED): Expand
 	first argument once.
