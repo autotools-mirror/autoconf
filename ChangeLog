@@ -1,5 +1,10 @@
 2008-11-21  Eric Blake  <ebb9@byu.net>
 
+	Add @anchors within Builtins and Usual Tools lists.
+	* doc/autoconf.texi (Limitations of Builtins)
+	(Limitatations of Usual Tools): Add anchors for tools called out
+	by name.  Adjust callers to narrow in on tool of interest.
+
 	Move case statement style discussion to m4 quoting section.
 	* doc/autoconf.texi (Limitations of Builtins): Move comparison of
 	quoting styles...

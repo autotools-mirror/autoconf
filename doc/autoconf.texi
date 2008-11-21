@@ -2958,7 +2958,8 @@ them does not change their contents.  This feature avoids unnecessary
 recompilation.  You should include the file @file{stamp-h.in} your
 package's distribution, so that @command{make} considers
 @file{config.h.in} up to date.  Don't use @command{touch}
-(@pxref{Limitations of Usual Tools}); instead, use @command{echo} (using
+(@pxref{touch, , Limitations of Usual Tools}); instead, use
+@command{echo} (using
 @command{date} would cause needless differences, hence @acronym{CVS}
 conflicts, etc.).
 
@@ -3768,7 +3769,7 @@ best implementation.
 Look for the best available @code{grep} or @code{ggrep} that accepts the
 longest input lines possible, and that supports multiple @option{-e} options.
 Set the output variable @code{GREP} to whatever is chosen.
-@xref{Limitations of Usual Tools}, for more information about
+@xref{grep, , Limitations of Usual Tools}, for more information about
 portability problems with the @command{grep} command family.
 @end defmac
 
@@ -3951,7 +3952,7 @@ is found, and otherwise to @samp{:} (do nothing).
 @ovindex SED
 Set output variable @code{SED} to a Sed implementation that conforms to
 Posix and does not have arbitrary length limits.  Report an error if no
-acceptable Sed is found.  @xref{Limitations of Usual Tools}, for more
+acceptable Sed is found.  @xref{sed, , Limitations of Usual Tools}, for more
 information about portability problems with Sed.
 @end defmac
 
@@ -9788,8 +9789,8 @@ Cambridge University computer lab at the time.
 @cindex unbalanced parentheses, managing
 
 One of the pitfalls of portable shell programming is that @command{case}
-statements require unbalanced parentheses (@pxref{Limitations of
-Builtins, , Limitations of Shell Builtins}).  With syntax highlighting
+statements require unbalanced parentheses (@pxref{case, , Limitations of
+Shell Builtins}).  With syntax highlighting
 editors, the presence of unbalanced @samp{)} can interfere with editors
 that perform syntax highlighting of macro contents based on finding the
 matching @samp{(}.  Another concern is how much editing must be done
@@ -12131,6 +12132,8 @@ if @code{$file} is @samp{/one/two/three}, the command
 Expand into a shell @samp{case} statement, where @var{word} is matched
 against one or more patterns.  @var{if-matched} is run if the
 corresponding pattern matched @var{word}, else @var{default} is run.
+Avoids several portability issues (@pxref{case, , Limitations of Shell
+Builtins}).
 @end defmac
 
 @c Deprecated, to be replaced by a better API
@@ -12148,7 +12151,9 @@ if @code{$file} is @samp{/one/two/three}, the command
 Emits @var{word} to the standard output, followed by a newline.  @var{word}
 must be a single shell word (typically a quoted string).  The bytes of
 @var{word} are output as-is, even if it starts with "-" or contains "\".
-Redirections can be placed outside the macro invocation.
+Redirections can be placed outside the macro invocation.  This is much
+more portable than using @command{echo} (@pxref{echo, , Limitations of
+Shell Builtins}).
 @end defmac
 
 @defmac AS_ECHO_N (@var{word})
@@ -12167,8 +12172,8 @@ omitted, then @samp{$?} is used, except that a status of zero is
 converted to @samp{1}.  To exit with successful status, it is necessary
 to supply an explicit @var{status} that expands to @samp{0}.  This macro
 works around shells that see the exit status of the command prior to
-@code{exit} inside a @samp{trap 0} handler (@pxref{Limitations of
-Builtins, , Limitations of Shell Builtins}).
+@code{exit} inside a @samp{trap 0} handler (@pxref{trap, , Limitations
+of Shell Builtins}).
 @end defmac
 
 @defmac AS_IF (@var{test1}, @ovar{run-if-true1}, @dots{}, @ovar{run-if-false})
@@ -12196,7 +12201,8 @@ Make the directory @var{file-name}, including intervening directories
 as necessary.  This is equivalent to @samp{mkdir -p -- @var{file-name}},
 except that it is portable to older versions of @command{mkdir} that
 lack support for the @option{-p} option or for the @option{--}
-delimiter.  Also, @code{AS_MKDIR_P}
+delimiter (@pxref{mkdir, , Limitations of Usual Tools}).  Also,
+@code{AS_MKDIR_P}
 succeeds if @var{file-name} is a symbolic link to an existing directory,
 even though Posix is unclear whether @samp{mkdir -p} should
 succeed in that case.  If creation of @var{file-name} fails, exit the
@@ -12209,8 +12215,7 @@ Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Particular Programs}).
 @asindex{SET_STATUS}
 Emit shell code to set the value of @samp{$?} to @var{status} without
 forking.  However, this is not guaranteed to abort a shell running with
-@code{set -e} (@pxref{Limitations of Builtins, , Limitations of Shell
-Builtins}).
+@code{set -e} (@pxref{set, , Limitations of Shell Builtins}).
 @end defmac
 
 @defmac AS_TR_CPP (@var{expression})
@@ -12247,7 +12252,7 @@ optimizing the common cases (@var{dir} or @var{file} is @samp{.},
 @defmac AS_UNSET (@var{var})
 @asindex{UNSET}
 Unsets the shell variable @var{var}, working around bugs in older
-shells (@pxref{Limitations of Builtins, , Limitations of Shell
+shells (@pxref{unset, , Limitations of Shell
 Builtins}).  @var{var} can be a literal or indirect variable name.
 @end defmac
 
@@ -13804,8 +13809,7 @@ esac
 
 @noindent
 Make sure you quote the brackets if appropriate and keep the backslash as
-first character (@pxref{Limitations of Builtins, , Limitations of Shell
-Builtins}).
+first character (@pxref{case, , Limitations of Shell Builtins}).
 
 Also, because the colon is used as part of a drivespec, these systems don't
 use it as path separator.  When creating or accessing paths, you can use the
@@ -14535,7 +14539,7 @@ PS4='+ '
 
 @noindent
 (actually, there is some complication due to bugs in @command{unset};
-see @pxref{Limitations of Builtins, , Limitations of Shell Builtins}).
+see @pxref{unset, , Limitations of Shell Builtins}).
 
 @item FPATH
 The Korn shell uses @env{FPATH} to find shell functions, so avoid
@@ -14870,8 +14874,8 @@ arguments of the script were lost after the first function invocation.
 It is probably not worth worrying about these shells any more.
 
 With @acronym{AIX} sh, a @command{trap} on 0 installed in a shell function
-triggers at function exit rather than at script exit, see @xref{Limitations
-of Builtins}.
+triggers at function exit rather than at script exit, see @xref{trap, ,
+Limitations of Shell Builtins}.
 
 @node Limitations of Builtins
 @section Limitations of Shell Builtins
@@ -14995,6 +14999,7 @@ $ @kbd{pdksh -c 'false; @{ @}; echo $?' || echo $?}
 The use of @samp{break 2} etc.@: is safe.
 
 
+@anchor{case}
 @item @command{case}
 @c -----------------
 @prindex @command{case}
@@ -15137,6 +15142,7 @@ See @xref{Special Shell Variables}, for portability problems involving
 Also please see the discussion of the @command{pwd} command.
 
 
+@anchor{echo}
 @item @command{echo}
 @c -----------------
 @prindex @command{echo}
@@ -15300,6 +15306,7 @@ cannot determine whether it was invoked by plain @code{exit} or by
 @code{AC_MSG_ERROR} macro that has a workaround for this problem.
 
 
+@anchor{export}
 @item @command{export}
 @c -------------------
 @prindex @command{export}
@@ -15518,6 +15525,7 @@ No options are portable, not even support @option{-r} (Solaris
 @command{/bin/sh} for example).
 
 
+@anchor{set}
 @item @command{set}
 @c ----------------
 @prindex @command{set}
@@ -15726,6 +15734,7 @@ expr "X$ac_feature" : 'X.*[^-a-zA-Z0-9_]' >/dev/null &&
 @samp{@var{foo}} contains backslashes.
 
 
+@anchor{trap}
 @item @command{trap}
 @c -----------------
 @prindex @command{trap}
@@ -15802,6 +15811,7 @@ for @command{true}.
 @end quotation
 
 
+@anchor{unset}
 @item @command{unset}
 @c ------------------
 @prindex @command{unset}
@@ -15833,7 +15843,7 @@ something like
 
 @noindent
 @xref{Special Shell Variables}, for some neutralizing values.  Also, see
-@ref{Limitations of Builtins}, documentation of @command{export}, for
+@ref{export, , Limitations of Builtins}, for
 the case of environment variables.
 
 @item @command{wait}
@@ -16219,7 +16229,8 @@ foo
 |bar
 @end example
 
-@command{$EGREP} also suffers the limitations of @command{grep}.
+@command{$EGREP} also suffers the limitations of @command{grep}
+(@pxref{grep, , Limitations of Usual Tools}).
 
 @item @command{expr}
 @c -----------------
@@ -16386,6 +16397,7 @@ $ @kbd{find . -name foo -exec echo "@{@}-@{@}" \;}
 while @acronym{GNU} @command{find} reports @samp{./foo-./foo}.
 
 
+@anchor{grep}
 @item @command{grep}
 @c -----------------
 @prindex @command{grep}
@@ -16512,6 +16524,7 @@ was equivalent to @samp{sources='*.c not found'} in the absence of
 @samp{.c} files.  This is no longer a practical problem, since current
 @command{ls} implementations send diagnostics to standard error.
 
+@anchor{mkdir}
 @item @command{mkdir}
 @c ------------------
 @prindex @command{mkdir}
@@ -16674,6 +16687,7 @@ perfectly portable among Posix hosts.
 Just as with @command{rm}, some platforms refuse to remove a working
 directory.
 
+@anchor{sed}
 @item @command{sed}
 @c ----------------
 @prindex @command{sed}
@@ -16941,6 +16955,7 @@ There are multiple file formats for @command{tar}; if you use Automake,
 the macro @code{AM_INIT_AUTOMAKE} has some options controlling which
 level of portability to use.
 
+@anchor{touch}
 @item @command{touch}
 @c ------------------
 @prindex @command{touch}
@@ -17050,7 +17065,8 @@ affected simple-commands so that they always succeed, e.g., @samp{touch
 T || :; rm -f U}.
 However, even this approach can run into common bugs in @acronym{BSD}
 implementations of the @option{-e} option of @command{sh} and
-@command{set} (@pxref{Limitations of Builtins}), so if you are worried
+@command{set} (@pxref{set, , Limitations of Shell Builtins}), so if you
+are worried
 about porting to buggy @acronym{BSD} shells it may be simpler to migrate
 complicated @command{make} actions into separate scripts.
 
@@ -17923,7 +17939,7 @@ is not a problem, but in some extreme cases you may need to use tricks
 like @samp{sleep 1} to work around timestamp truncation bugs.
 
 Commands like @samp{cp -p} and @samp{touch -r} typically do not copy
-file timestamps to their full resolutions (@pxref{Limitations of Usual
+file timestamps to their full resolutions (@pxref{touch, , Limitations of Usual
 Tools}).  Hence you should be wary of rules like this:
 
 @example
