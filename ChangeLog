@@ -1,5 +1,20 @@
 2008-11-21  Eric Blake  <ebb9@byu.net>
 
+	Change the semantics of AS_EXIT without argument.
+	* lib/m4sugar/m4sh.m4 (_AS_EXIT_PREPARE): When defaulting, use $?
+	even if it is 0.
+	(AS_ERROR): Guarantee non-zero status.
+	* bin/autoconf.as (exit_missing_arg, getopt): Revert prior change;
+	we want non-zero status.
+	* tests/m4sh.at (AS@&t@_EXIT): Update test accordingly.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_EXIT>: Update
+	the documentation.
+	<AS_SET_STATUS>: Don't overly restrict implementation.
+	(Printing Messages) <AC_MSG_ERROR>: Describe better default.
+	Suggestions by Paolo Bonzini and Ralf Wildenhues.
+
+2008-11-21  Eric Blake  <ebb9@byu.net>
+
 	Add @anchors within Builtins and Usual Tools lists.
 	* doc/autoconf.texi (Limitations of Builtins)
 	(Limitatations of Usual Tools): Add anchors for tools called out

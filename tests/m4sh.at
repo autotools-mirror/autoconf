@@ -308,6 +308,7 @@ test x${1} = xb && AS_EXIT([${2}])
 test x${1} = xc && { AS_SET_STATUS([${2}]); AS_EXIT; }
 test x${1} = xd && trap 's=$?; echo $s; AS_EXIT([$s])' 0
 test x${2} = xe && set -e
+test $[#] -gt 0 || AS_EXIT
 AS_SET_STATUS([3])
 dnl Solaris /bin/sh 'set -e' doesn't react to failed function calls
 test x${2} = xe \
@@ -316,12 +317,13 @@ AS_SET_STATUS([4])
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [4])
-AT_CHECK([./script a], [1])
-AT_CHECK([./script b], [1])
+AT_CHECK([./script], [1])
+AT_CHECK([./script ''], [4])
+AT_CHECK([./script a], [0])
+AT_CHECK([./script b], [0])
 AT_CHECK([./script b 0], [0])
 AT_CHECK([./script b 2], [2])
-AT_CHECK([./script c 0], [1])
+AT_CHECK([./script c 0], [0])
 AT_CHECK([./script c 2], [2])
 AT_CHECK([./script d], [4], [[4
 ]])

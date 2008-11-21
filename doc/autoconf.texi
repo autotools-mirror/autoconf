@@ -9223,11 +9223,12 @@ This macro prints nothing if @command{configure} is run with the
 @end defmac
 
 @anchor{AC_MSG_ERROR}
-@defmac AC_MSG_ERROR (@var{error-description}, @ovar{exit-status})
+@defmac AC_MSG_ERROR (@var{error-description}, @dvar{exit-status, $?/1})
 @acindex{MSG_ERROR}
 Notify the user of an error that prevents @command{configure} from
 completing.  This macro prints an error message to the standard error
-output and exits @command{configure} with @var{exit-status} (1 by default).
+output and exits @command{configure} with @var{exit-status} (@samp{$?}
+by default, except that @samp{0} is converted to @samp{1}).
 @var{error-description} should be something like @samp{invalid value
 $HOME for \$HOME}.
 
@@ -12165,12 +12166,10 @@ for portability, should not include more than one newline.  The bytes of
 Redirections can be placed outside the macro invocation.
 @end defmac
 
-@defmac AS_EXIT (@dvar{status, max($?/1)})
+@defmac AS_EXIT (@dvar{status, $?})
 @asindex{EXIT}
-Emit code to exit the shell with @var{status}.  If @var{status} is
-omitted, then @samp{$?} is used, except that a status of zero is
-converted to @samp{1}.  To exit with successful status, it is necessary
-to supply an explicit @var{status} that expands to @samp{0}.  This macro
+Emit code to exit the shell with @var{status}, defaulting to @samp{$?}.
+This macro
 works around shells that see the exit status of the command prior to
 @code{exit} inside a @samp{trap 0} handler (@pxref{trap, , Limitations
 of Shell Builtins}).
@@ -12213,9 +12212,10 @@ Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Particular Programs}).
 
 @defmac AS_SET_STATUS (@var{status})
 @asindex{SET_STATUS}
-Emit shell code to set the value of @samp{$?} to @var{status} without
-forking.  However, this is not guaranteed to abort a shell running with
-@code{set -e} (@pxref{set, , Limitations of Shell Builtins}).
+Emit shell code to set the value of @samp{$?} to @var{status}, as
+efficiently as possible.  However, this is not guaranteed to abort a
+shell running with @code{set -e} (@pxref{set, , Limitations of Shell
+Builtins}).
 @end defmac
 
 @defmac AS_TR_CPP (@var{expression})

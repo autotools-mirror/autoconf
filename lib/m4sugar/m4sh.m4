@@ -539,21 +539,19 @@ m4_defun([_AS_EXIT_PREPARE],
   [AS_FUNCTION_DESCRIBE([as_fn_set_status], [STATUS],
     [Set $? to STATUS, without forking.])], [  return $[]1])]dnl
 [AS_REQUIRE_SHELL_FN([as_fn_exit],
-  [AS_FUNCTION_DESCRIBE([as_fn_exit], [[[STATUS]]],
-    [Exit the shell with STATUS, even in a "trap 0" or "set -e" context.
-     If STATUS is omitted, use the maximum of $? and 1.])],
+  [AS_FUNCTION_DESCRIBE([as_fn_exit], [[[STATUS=$?]]],
+    [Exit the shell with STATUS, even in a "trap 0" or "set -e" context.])],
 [  as_status=$?
   set +e
-  test $as_status = 0 && as_status=1
   as_fn_set_status ${1-$as_status}
   exit ${1-$as_status}])])#_AS_EXIT_PREPARE
 
 
-# AS_EXIT([EXIT-CODE = $?/1])
-# ---------------------------
+# AS_EXIT([EXIT-CODE = $?])
+# -------------------------
 # Exit, with status set to EXIT-CODE in the way that it's seen
 # within "trap 0", and without interference from "set -e".  If
-# EXIT-CODE is omitted, then use $?, except use 1 if $? is 0.
+# EXIT-CODE is omitted, then use $?.
 m4_defun([AS_EXIT],
 [AS_REQUIRE([_AS_EXIT_PREPARE])[]as_fn_exit[]m4_ifval([$1], [ $1])])
 
@@ -769,15 +767,19 @@ _AS_ECHO([$as_me: $1], [$2]);}],
 
 # AS_WARN(PROBLEM)
 # ----------------
+# Output "`basename $0`: WARNING: "STRING to stderr.
 m4_define([AS_WARN],
 [AS_MESSAGE([WARNING: $1], [2])])# AS_WARN
 
 
-# AS_ERROR(ERROR, [EXIT-STATUS = 1])
-# ----------------------------------
+# AS_ERROR(ERROR, [EXIT-STATUS = max($?/1)])
+# ------------------------------------------
+# Output "`basename $0`: error: "STRING to stderr, then exit the
+# script with EXIT-STATUS.
 m4_define([AS_ERROR],
-[{ AS_MESSAGE([error: $1], [2])
-   AS_EXIT([$2]); }])# AS_ERROR
+[{ m4_ifval([$2], [], [as_status=$?; test $as_status -eq 0 && as_status=1
+   ]) AS_MESSAGE([error: $1], [2])
+    AS_EXIT(m4_default([$2], [$as_status])); }])# AS_ERROR
 
 
 
