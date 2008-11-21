@@ -12500,15 +12500,21 @@ populates the child script with information learned from the parent
 (thus, the emitted code is equivalent in effect, but more efficient,
 than the code output by @code{AS_INIT}, @code{AS_BOURNE_COMPATIBLE}, and
 @code{AS_SHELL_SANITIZE}).  If present, @var{comment} is output near the
-beginning of the child, prior to the shell initialization code.  The
+beginning of the child, prior to the shell initialization code, and is
+subject to parameter expansion, command substitution, and backslash
+quote removal.  The
 parent script should check the exit status after this macro, in case
 @var{file} could not be properly created (for example, if the disk was
 full).  If successfully created, the parent script can then proceed to
 append additional M4sh constructs into the child script.
 
-Note that the child script starts life without a log file open, so you
+Note that the child script starts life without a log file open, so if
+the parent script uses logging (@pxref{AS_MESSAGE_LOG_FD}), you
 must temporarily disable any attempts to use the log file until after
-emitting code to open a log within the child.  Currently, the suggested
+emitting code to open a log within the child.  On the other hand, if the
+parent script has @code{AS_MESSAGE_FD} redirected somewhere besides
+@samp{1}, then the child script already has code that copies stdout to
+that descriptor.  Currently, the suggested
 idiom for writing a M4sh shell script from within another script is:
 
 @example
@@ -12583,27 +12589,36 @@ level macros as described below.
 @defmac AS_MESSAGE_FD
 @asindex{MESSAGE_FD}
 The file descriptor for @samp{checking for...}  messages and results.
-Normally this directs messages to the standard output, however when
-@command{configure} is run with the @option{-q} option, messages sent to
-@code{AS_MESSAGE_FD} are discarded.
+By default, @code{AS_INIT} sets this to @samp{1} for standalone M4sh
+clients.  However, @code{AC_INIT} shuffles things around to another file
+descriptor, in order to allow the @option{-q} option of
+@command{configure} to choose whether messages should go to the script's
+standard output or be discarded.
 
 If you want to display some messages, consider using one of the printing
 macros (@pxref{Printing Messages}) instead.  Copies of messages output
 via these macros are also recorded in @file{config.log}.
 @end defmac
 
+@anchor{AS_MESSAGE_LOG_FD}
 @defmac AS_MESSAGE_LOG_FD
 @asindex{MESSAGE_LOG_FD}
-
-The file descriptor for messages logged to @file{config.log}.  Macros
-that run tools, like @code{AC_COMPILE_IFELSE} (@pxref{Running the
+This must either be empty, or expand to a file descriptor for log
+messages.  By default, @code{AS_INIT} sets this macro to the empty
+string for standalone M4sh clients, thus disabling logging.  However,
+@code{AC_INIT} shuffles things around so that both @command{configure}
+and @command{config.status} use @file{config.log} for log messages.
+Macros that run tools, like @code{AC_COMPILE_IFELSE} (@pxref{Running the
 Compiler}), redirect all output to this descriptor.  You may want to do
 so if you develop such a low-level macro.
 @end defmac
 
 @defmac AS_ORIGINAL_STDIN_FD
 @asindex{ORIGINAL_STDIN_FD}
-The file descriptor for the original standard input.
+This must expand to a file descriptor for the original standard input.
+By default, @code{AS_INIT} sets this macro to @samp{0} for standalone
+M4sh clients.  However, @code{AC_INIT} shuffles things around for
+safety.
 
 When @command{configure} runs, it may accidentally execute an
 interactive command that has the same name as the non-interactive meant

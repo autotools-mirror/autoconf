@@ -1,5 +1,19 @@
 2008-11-21  Eric Blake  <ebb9@byu.net>
 
+	Clean up AS_MESSAGE_LOG_FD usage.
+	* lib/m4sugar/m4sh.m4 (AS_MESSAGE_FD, AS_MESSAGE_LOG_FD)
+	(AS_ORIGINAL_STDIN_FD): Provide default M4sh values.
+	(_AS_ECHO_LOG, AS_MESSAGE, _AS_ERROR_PREPARE, AS_ERROR): Simplify
+	usage.
+	(AS_INIT_GENERATED): Don't shuffle an unchanged AS_MESSAGE_FD.
+	* tests/m4sh.at (AS@&t@_INIT_GENERATED): Update test.
+	(AS@&t@_MESSAGE_FD): New test.
+	* doc/autoconf.texi (Initialization Macros) <AS_INIT_GENERATED>:
+	Give more details about fd manipulation.
+	(File Descriptor Macros): Describe M4sh defaults for the fds.
+
+2008-11-21  Eric Blake  <ebb9@byu.net>
+
 	Use shell function for AS_ERROR.
 	* lib/m4sugar/m4sh.m4 (_AS_ERROR_PREPARE): New macro, defining a
 	new shell function.

@@ -1259,9 +1259,10 @@ AT_CLEANUP
 ## ------------------- ##
 
 AT_SETUP([AS@&t@_INIT_GENERATED])
+AT_KEYWORDS([AS@&t@_MESSAGE AS@&t@_MESSAGE_LOG_FD])
 
+dnl First run, no logging, tests shell selection
 AT_DATA_M4SH([script.as], [[dnl
-m4_define([AS_MESSAGE_FD], [1])
 AS_INIT
 AS_INIT_GENERATED([child], [echo hello from child])
 cat >>child <<\EOF
@@ -1285,5 +1286,86 @@ AT_CHECK([cmp child child.bak])
 AT_CHECK([grep 'SHELL=.' stdout], [0], [ignore])
 sed s/parent/child/ <stdout >expout
 AT_CHECK([./child], [0], [expout])
+
+
+dnl Second run, with logging from parent and child, tests fd handling
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+child=${1-child}
+m4_define([AS_MESSAGE_LOG_FD], [5])
+exec AS_MESSAGE_LOG_FD>log
+AS_INIT_GENERATED([$child], [echo hello1 from $child]) || AS_EXIT([1])
+cat >>$child <<\EOF
+m4_pushdef([AS_MESSAGE_LOG_FD])
+AS_MESSAGE([hello2 from ${child}child])
+m4_popdef([AS_MESSAGE_LOG_FD])
+exec AS_MESSAGE_LOG_FD>>log
+AS_MESSAGE([hello3 from child])
+EOF
+AS_MESSAGE([hello from parent])
+dnl close log in parent before spawning child, for mingw
+exec AS_MESSAGE_LOG_FD>-
+./$child
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script], [0], [[script: hello from parent
+hello1 from child
+child: hello2 from child
+child: hello3 from child
+]])
+AT_CHECK([[sed 's,:[0-9][0-9]*:,:0:,' log]], [0],
+[[script:0: hello from parent
+child:0: hello3 from child
+]])
+
+# Force write error creating a file on stdout
+if test -w /dev/full && test -c /dev/full; then
+  AT_CHECK([./script /dev/full], [1], [ignore], [ignore])
+fi
+
+AT_CLEANUP
+
+
+## --------------- ##
+## AS_MESSAGE_FD.  ##
+## --------------- ##
+
+AT_SETUP([AS@&t@_MESSAGE_FD])
+AT_KEYWORDS([AS@&t@_MESSAGE AS@&t@_MESSAGE_LOG_FD AS@&t_ORIGINAL_STDIN_FD])
+AT_KEYWORDS([AS@&t@_LINENO_PUSH])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+m4_define([AS_ORIGINAL_STDIN_FD], [5])
+m4_define([AS_MESSAGE_LOG_FD], [6])
+m4_define([AS_MESSAGE_FD], [7])
+exec AS_ORIGINAL_STDIN_FD<&0 </dev/null AS_MESSAGE_LOG_FD>log
+if test $[#] -gt 0; then
+  exec AS_MESSAGE_FD>/dev/null
+else
+  exec AS_MESSAGE_FD>&1
+fi
+AS_LINENO_PUSH([100])
+cat # tests that stdin is neutralized
+AS_MESSAGE([hello world])
+cat <&AS_ORIGINAL_STDIN_FD
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([echo goodbye | ./script], [0],
+[[script: hello world
+goodbye
+]])
+AT_CHECK([cat log], [0],
+[[script:100: hello world
+]])
+rm log
+AT_CHECK([echo goodbye | ./script silent], [0],
+[[goodbye
+]])
+AT_CHECK([cat log], [0],
+[[script:100: hello world
+]])
 
 AT_CLEANUP

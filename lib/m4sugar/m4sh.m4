@@ -658,8 +658,30 @@ m4_defun([AS_UNSET],
 ## 3. Error and warnings at the shell level.  ##
 ## ------------------------------------------ ##
 
-# If AS_MESSAGE_LOG_FD is defined, shell messages are duplicated there
-# too.
+
+# AS_MESSAGE_FD
+# -------------
+# Must expand to the fd where messages will be sent.  Defaults to 1,
+# although a script may reassign this value and use exec to either
+# copy stdout to the new fd, or open the new fd on /dev/null.
+m4_define([AS_MESSAGE_FD], [1])
+
+# AS_MESSAGE_LOG_FD
+# -----------------
+# Must expand to either the empty string (when no logging is
+# performed), or to the fd of a log file.  Defaults to empty, although
+# a script may reassign this value and use exec to open a log.  When
+# not empty, messages to AS_MESSAGE_FD are duplicated to the log,
+# along with a LINENO reference.
+m4_define([AS_MESSAGE_LOG_FD])
+
+
+# AS_ORIGINAL_STDIN_FD
+# --------------------
+# Must expand to the fd of the script's original stdin.  Defaults to
+# 0, although the script may reassign this value and use exec to
+# shuffle fd's.
+m4_define([AS_ORIGINAL_STDIN_FD], [0])
 
 
 # AS_ESCAPE(STRING, [CHARS = $"`\])
@@ -730,7 +752,7 @@ m4_define([_AS_ECHO],
 # Log the string to AS_MESSAGE_LOG_FD.
 m4_defun_init([_AS_ECHO_LOG],
 [AS_REQUIRE([_AS_LINENO_PREPARE])],
-[_AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], [AS_MESSAGE_LOG_FD])])
+[_AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], AS_MESSAGE_LOG_FD)])
 
 
 # _AS_ECHO_N_PREPARE
@@ -765,10 +787,11 @@ m4_define([_AS_ECHO_N],
 
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
 # ----------------------------------------
-# Output "`basename $0`: "STRING to the open file FD.
+# Output "`basename $0`: STRING" to the open file FD, and if logging
+# is enabled, copy it to the log with a reference to LINENO.
 m4_defun_init([AS_MESSAGE],
 [AS_REQUIRE([_AS_ME_PREPARE])],
-[m4_ifset([AS_MESSAGE_LOG_FD],
+[m4_ifval(AS_MESSAGE_LOG_FD,
 	  [{ _AS_ECHO_LOG([$1])
 _AS_ECHO([$as_me: $1], [$2]);}],
 	  [_AS_ECHO([$as_me: $1], [$2])])[]])
@@ -792,15 +815,15 @@ m4_define([AS_WARN],
 # otherwise, assume the entire script does not do logging.
 m4_define([_AS_ERROR_PREPARE],
 [AS_REQUIRE_SHELL_FN([as_fn_error],
-  [AS_FUNCTION_DESCRIBE([as_fn_error], [ERROR]m4_ifset([AS_MESSAGE_LOG_FD],
+  [AS_FUNCTION_DESCRIBE([as_fn_error], [ERROR]m4_ifval(AS_MESSAGE_LOG_FD,
       [[ [[LINENO LOG_FD]]]]),
     [Output "`basename @S|@0`: error: ERROR" to stderr.]
-m4_ifset([AS_MESSAGE_LOG_FD],
+m4_ifval(AS_MESSAGE_LOG_FD,
     [[If LINENO and LOG_FD are provided, also output the error to LOG_FD,
       referencing LINENO.]])
     [Then exit the script with status $?, using 1 if that was 0.])],
 [  as_status=$?; test $as_status -eq 0 && as_status=1
-m4_ifset([AS_MESSAGE_LOG_FD],
+m4_ifval(AS_MESSAGE_LOG_FD,
 [m4_pushdef([AS_MESSAGE_LOG_FD], [$[3]])dnl
   if test "$[3]"; then
     AS_LINENO_PUSH([$[2]])
@@ -819,7 +842,7 @@ m4_defun_init([AS_ERROR],
 [m4_append_uniq([_AS_CLEANUP],
   [m4_divert_text([M4SH-INIT-FN], [_AS_ERROR_PREPARE[]])])],
 [m4_ifvaln([$2], [{ AS_SET_STATUS([$2])])]dnl
-[as_fn_error "_AS_QUOTE([$1])"m4_ifset([AS_MESSAGE_LOG_FD],
+[as_fn_error "_AS_QUOTE([$1])"m4_ifval([AS_MESSAGE_LOG_FD],
   [ "$LINENO" AS_MESSAGE_LOG_FD])[]m4_ifval([$2], [; }])])
 
 
@@ -1986,8 +2009,9 @@ _ASEOF
 cat >>$1 <<\_ASEOF || as_write_fail=1
 _AS_SHELL_SANITIZE
 _AS_PREPARE
-exec AS_MESSAGE_FD>&1
-m4_text_box([Main body of $1 script.])
+m4_if(AS_MESSAGE_FD, [1], [], [exec AS_MESSAGE_FD>&1
+])]dnl
+[m4_text_box([Main body of $1 script.])
 _ASEOF
 test $as_write_fail = 0 && chmod +x $1[]dnl
 _m4_popdef([AS_MESSAGE_LOG_FD])])# AS_INIT_GENERATED
