@@ -2589,9 +2589,10 @@ m4_define([m4_sign],
 #   Nl -> (N+1).-1.(l#)
 #
 # for example:
-#   [2.14a] -> [2,14+1,-1,[0r36:a]] -> 2.15.-1.10
-#   [2.14b] -> [2,15+1,-1,[0r36:b]] -> 2.15.-1.11
-#   [2.61aa.b] -> [2.61,1,-1,[0r36:aa],+1,-1,[0r36:b]] -> 2.62.-1.370.1.-1.11
+#   [2.14a] -> [0,2,14+1,-1,[0r36:a]] -> 2.15.-1.10
+#   [2.14b] -> [0,2,15+1,-1,[0r36:b]] -> 2.15.-1.11
+#   [2.61aa.b] -> [0,2.61,1,-1,[0r36:aa],+1,-1,[0r36:b]] -> 2.62.-1.370.1.-1.11
+#   [08] -> [0,[0r10:0]8] -> 8
 #
 # This macro expects reasonable version numbers, but can handle double
 # letters and does not expand any macros.  Original version strings can
@@ -2602,11 +2603,11 @@ m4_define([m4_sign],
 # but since [0r36:a] and commas are less readable than 10 and dots, we
 # provide a wrapper for human use.
 m4_define([m4_version_unletter],
-[m4_substr(m4_map_args([.m4_eval], m4_unquote(_$0([$1]))), [1])])
+[m4_substr(m4_map_args([.m4_eval], m4_unquote(_$0([$1]))), [3])])
 m4_define([_m4_version_unletter],
-[m4_bpatsubst(m4_translit([[[$1]]], [.-], [,,]),]dnl
+[m4_bpatsubst(m4_bpatsubst(m4_translit([[[[0,$1]]]], [.-], [,,]),]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_Letters])))[[+],
-	      [+1,-1,[0r36:\&]])])
+	      [+1,-1,[0r36:\&]]), [,0], [,[0r10:0]])])
 
 
 # m4_version_compare(VERSION-1, VERSION-2)

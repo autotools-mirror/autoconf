@@ -1,5 +1,11 @@
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
+	Handle version numbers as decimal, even if they start with 0.
+	* lib/m4sugar/m4sugar.m4 (_m4_version_unletter): Avoid
+	interpreting leading zeros as octal.
+
+2008-11-20  Eric Blake  <ebb9@byu.net>
+
 	Speed up AT_CHECK.
 	* lib/autotest/general.m4 (AT_CHECK, AT_CHECK_UNQUOTED): Expand
 	third and fourth arguments once.

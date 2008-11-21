@@ -809,6 +809,8 @@ m4_version_compare([1.1a], [1.1A])
 m4_version_compare([1z], [1aa])
 m4_version_compare([2.61a], [2.61a-248-dc51])
 m4_version_compare([2.61b], [2.61a-248-dc51])
+m4_version_compare([08], [09])
+m4_version_compare([010], [8])
 dnl Test that side effects to m4_list_cmp occur exactly once
 m4_list_cmp([[0], [0], [0]m4_errprintn([hi])],
             [[0], [0], [0]m4_errprintn([hi])])
@@ -827,6 +829,8 @@ m4_list_cmp([[0], [0], [0]m4_errprintn([hi])],
 0
 0
 -1
+-1
+1
 -1
 1
 0
