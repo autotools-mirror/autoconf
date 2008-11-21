@@ -1,5 +1,16 @@
 2008-11-20  Eric Blake  <ebb9@byu.net>
 
+	Fix XFAIL related to AT_CHECK.
+	* lib/autotest/general.m4 (AT_CHECK, AT_CHECK_UNQUOTED): Expand
+	first argument once.
+	(_AT_CHECK): Don't re-expand commands.
+	* tests/autotest.at (Multiline command from M4 expansion): Remove
+	XFAIL.
+	* tests/tools.at (autoupdating AU_ALIAS): Quote unbalanced paren.
+	* NEWS: Document the fallout.
+
+2008-11-20  Eric Blake  <ebb9@byu.net>
+
 	Reduce forks in AC_DEFINE.
 	* lib/autoconf/general.m4 (_AC_DEFINE_Q_PRINT): New macro.
 	(_AC_DEFINE_Q): Use it to avoid forks for all AC_DEFINE and most

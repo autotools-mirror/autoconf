@@ -1743,7 +1743,7 @@ $2[]_ATEOF
 # This may cause spurious failures when the test suite is run with `-x'.
 #
 _AT_DEFINE_SETUP([AT_CHECK],
-[_AT_CHECK([$1],[$2],[$3],[$4],[$5],[$6],1)])
+[_AT_CHECK(m4_expand([$1]),[$2],[$3],[$4],[$5],[$6],1)])
 
 # AT_CHECK_NOESCAPE(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #                   [RUN-IF-FAIL], [RUN-IF-PASS])
@@ -1751,7 +1751,7 @@ _AT_DEFINE_SETUP([AT_CHECK],
 # Like AT_CHECK, but do not AS_ESCAPE shell metacharacters in the STDOUT
 # and STDERR arguments before running the comparison.
 _AT_DEFINE_SETUP([AT_CHECK_NOESCAPE],
-[_AT_CHECK([$1],[$2],[$3],[$4],[$5],[$6])])
+[_AT_CHECK(m4_expand([$1]),[$2],[$3],[$4],[$5],[$6])])
 
 
 # _AT_DECIDE_TRACEABLE(COMMANDS)
@@ -1827,10 +1827,6 @@ _AT_DEFINE_SETUP([AT_CHECK_NOESCAPE],
 # just described, the test suite preemptively disables tracing for 31 of those,
 # and 268 contain parameter expansions that require runtime evaluation.  The
 # balance are always safe to trace.
-#
-# _AT_CHECK expands COMMANDS, but the Autoconf language does not provide a way
-# to safely expand arbitrary COMMANDS in an argument list, so the below tests
-# examine COMMANDS unexpanded.
 m4_define([_AT_DECIDE_TRACEABLE],
 dnl Utility macro.
 dnl
@@ -1919,17 +1915,17 @@ m4_define([AT_DIFF_STDOUT()],
 # with parallel jobs.
 m4_define([_AT_CHECK],
 [{ $at_traceoff
-AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([$1])"])
+AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([[$1]])"])
 echo AT_LINE >"$at_check_line_file"
 
 : >"$at_stdout"
 if _AT_DECIDE_TRACEABLE([$1]); then
   : >"$at_stder1"
-  ( $at_traceon; $1 ) >>"$at_stdout" 2>>"$at_stder1"
+  ( $at_traceon; [$1] ) >>"$at_stdout" 2>>"$at_stder1"
   at_fn_filter_trace $?
 else
   : >"$at_stderr"
-  ( :; $1 ) >>"$at_stdout" 2>>"$at_stderr"
+  ( :; [$1] ) >>"$at_stdout" 2>>"$at_stderr"
 fi
 at_status=$?
 at_failed=false

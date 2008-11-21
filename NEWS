@@ -29,6 +29,13 @@ GNU Autoconf NEWS - User visible changes.
 ** The following m4sugar macros are documented now:
    m4_copy  m4_dumpdefs  m4_rename
 
+** The m4sugar macro m4_expand has been taught to handle unterminated
+   comments and shell case statements.  As a result, it is used in
+   more places, such as AC_DEFINE and AT_CHECK.  Most uses should not
+   behave any differently; however, it may be necessary to add
+   double-quoting around unbalanced `(' where single-quoting used to
+   be sufficient.
+
 ** The following documented m4sh macros are new:
    AS_LINENO_PREPARE  AS_ME_PREPARE  AS_SET_STATUS  AS_VAR_APPEND
    AS_VAR_ARITH  AS_VAR_COPY
