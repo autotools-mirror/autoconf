@@ -1,3 +1,9 @@
+2008-11-22  Eric Blake  <ebb9@byu.net>
+
+	Fix testsuite failure on Solaris.
+	* tests/torture.at (AT_CHECK_CONFIG_CREATION_NOWRITE): Normalize
+	failure status to 1.
+
 2008-11-21  Eric Blake  <ebb9@byu.net>
 
 	Clean up AS_MESSAGE_LOG_FD usage.

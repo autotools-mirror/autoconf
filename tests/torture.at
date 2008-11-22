@@ -244,7 +244,8 @@ AT_CHECK_CONFIGURE([what_to_test=var-$1 --no-create])
 touch t
 chmod a-w .
 mv t t1 >/dev/null 2>&1 \
-  || AT_CHECK([./config.status var-$1 </dev/null], [1], [ignore], [ignore])
+  || AT_CHECK([./config.status var-$1 </dev/null || exit 1],
+   [1], [ignore], [ignore])
 chmod u+w .
 rm -rf t t1
 ])# AT_CHECK_CONFIG_CREATION_NOWRITE
