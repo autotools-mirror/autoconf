@@ -1205,19 +1205,109 @@ _ATEOF
 
 m4_text_box([Driver loop.])
 
+dnl Catching signals correctly:
+dnl
+dnl The first idea was: trap the signal, send it to all spawned jobs,
+dnl then reset the handler and reraise the signal for ourselves.
+dnl However, before exiting, ksh will then send the signal to all
+dnl process group members, potentially killing the outer testsuite
+dnl and/or the 'make' process driving us.
+dnl So now the strategy is: trap the signal, send it to all spawned jobs,
+dnl then exit the script with the right status.
+dnl
+dnl In order to let the jobs know about the signal, we cannot just send it
+dnl to the current process group (kill $SIG 0), for the same reason as above.
+dnl Also, it does not reliably stop the suite to send the signal to the
+dnl spawned processes, because they might not transport it further
+dnl (maybe this can be fixed?).
+dnl
+dnl So what we do is enable shell job control if available, which causes the
+dnl shell to start each parallel task as its own shell job, thus as a new
+dnl process group leader.  We then send the signal to all new process groups.
+
+dnl Do we have job control?
+if (set -m && set +m) >/dev/null 2>&1; then
+  at_job_control_on='set -m' at_job_control_off='set +m' at_job_group=-
+else
+  at_job_control_on=: at_job_control_off=: at_job_group=
+fi
+
+for at_signal in 1 2 15; do
+dnl This signal handler is not suitable for PIPE: it causes writes.
+dnl The code that was interrupted may have the errexit, monitor, or xtrace
+dnl flags enabled, so sanitize.
+  trap 'set +x; set +e
+	$at_job_control_off
+	at_signal='"$at_signal"'
+dnl Safety belt: even with runaway processes, prevent starting new jobs.
+	echo stop > "$at_stop_file"
+dnl Do not enter this area multiple times, do not kill self prematurely.
+	trap "" $at_signal
+dnl Gather process group IDs of currently running jobs.
+	at_pgids=
+	for at_pgid in `jobs -p 2>/dev/null`; do
+	  at_pgids="$at_pgids $at_job_group$at_pgid"
+	done
+dnl Ignore `kill' errors, as some jobs may have finished in the meantime.
+	test -z "$at_pgids" || kill -$at_signal $at_pgids 2>/dev/null
+dnl wait until all jobs have exited.
+	wait
+dnl Status output.  Do this after waiting for the jobs, for ordered output.
+dnl Avoid scribbling onto the end of a possibly incomplete line.
+	if test "$at_jobs" -eq 1 || test -z "$at_verbose"; then
+	  echo >&2
+	fi
+	at_signame=`kill -l $at_signal 2>&1 || echo $at_signal`
+	set x $at_signame
+	test $# -gt 2 && at_signame=$at_signal
+	AS_WARN([caught signal $at_signame, bailing out])
+dnl Do not reinstall the default handler here and reraise the signal to
+dnl let the default handler do its job, see the note about ksh above.
+dnl	trap - $at_signal
+dnl	kill -$at_signal $$
+dnl Instead, exit with appropriate status.
+	AS_VAR_ARITH([exit_status], [128 + $at_signal])
+	AS_EXIT([$exit_status])' $at_signal
+done
+
 rm -f "$at_stop_file"
-trap 'exit_status=$?
-  echo "signal received, bailing out" >&2
-  echo stop > "$at_stop_file"
-  exit $exit_status' 1 2 13 15
 at_first=:
 
 if test $at_jobs -ne 1 &&
      rm -f "$at_job_fifo" &&
-     ( mkfifo "$at_job_fifo" ) 2>/dev/null &&
+     test -n "$at_job_group" &&
+     ( mkfifo "$at_job_fifo" && trap 'exit 1' PIPE STOP TSTP ) 2>/dev/null &&
      exec AT_JOB_FIFO_FD<> "$at_job_fifo"
 then
   # FIFO job dispatcher.
+
+dnl Since we use job control, we need to propagate TSTP.
+dnl This handler need not be used for serial execution.
+dnl Again, we should stop all processes in the job groups, otherwise
+dnl the stopping will not be effective while one test group is running.
+dnl Apparently ksh does not honor the TSTP trap.
+dnl As a safety measure, not use the same variable names as in the
+dnl termination handlers above, one might get called during execution
+dnl of the other.
+  trap 'at_pids=
+	for at_pid in `jobs -p`; do
+	  at_pids="$at_pids $at_job_group$at_pid"
+	done
+dnl Send it to all spawned jobs, ignoring those finished meanwhile.
+	if test -n "$at_pids"; then
+dnl Unfortunately, ksh93 fork-bombs when we send TSTP, so send STOP
+dnl if this might be ksh (STOP prevents possible TSTP handlers inside
+dnl AT_CHECKs from running).  Then stop ourselves.
+	  at_sig=TSTP
+	  test "${TMOUT+set}" = set && at_sig=STOP
+	  kill -$at_sig $at_pids 2>/dev/null
+	fi
+	kill -STOP $$
+dnl We got a CONT, so let's go again.  Passing this to all processes
+dnl in the groups is necessary (because we stopped them), but it may
+dnl cause changed test semantics; e.g., a sleep will be interrupted.
+	test -z "$at_pids" || kill -CONT $at_pids 2>/dev/null' TSTP
+
   echo
   # Turn jobs into a list of numbers, starting from 1.
   at_joblist=`AS_ECHO([" $at_groups_all "]) | \
@@ -1226,8 +1316,28 @@ then
   set X $at_joblist
   shift
   for at_group in $at_groups; do
+dnl Enable job control only for spawning the test group:
+dnl Let the jobs to run in separate process groups, but
+dnl avoid all the status output by the shell.
+    $at_job_control_on
     (
       # Start one test group.
+      $at_job_control_off
+dnl When a child receives PIPE, be sure to write back the token,
+dnl so the master does not hang waiting for it.
+dnl errexit and xtrace should not be set in this shell instance,
+dnl except as debug measures.  However, shells such as dash may
+dnl optimize away the _AT_CHECK subshell, so normalize here.
+      trap 'set +x; set +e
+dnl Ignore PIPE signals that stem from writing back the token.
+	    trap "" PIPE
+	    echo stop > "$at_stop_file"
+	    echo token >&6
+dnl Do not reraise the default PIPE handler.
+dnl It wreaks havoc with ksh, see above.
+dnl	    trap - 13
+dnl	    kill -13 $$
+	    AS_EXIT([141])' PIPE
       at_fn_group_prepare
       if cd "$at_group_dir" &&
 	 at_fn_test $at_group &&
@@ -1239,6 +1349,7 @@ then
       at_fn_group_postprocess
       echo token >&AT_JOB_FIFO_FD
     ) &
+    $at_job_control_off
     shift # Consume one token.
     if test $[@%:@] -gt 0; then :; else
       read at_token <&AT_JOB_FIFO_FD || break

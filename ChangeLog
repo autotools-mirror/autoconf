@@ -1,3 +1,21 @@
+2008-11-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	More reliable signal handling in Autotest.
+	* lib/autotest/general.m4 (Driver loop): Rewrite signal handler.
+	Start parallel jobs in their own process group, enabling job
+	control in the shell if possible, for better signal handling.
+	Deal with INT, TERM, and HUP in the testsuite driver.  In the
+	parallel driver, propagate TSTP to jobs either as TSTP or as
+	STOP (to avoid fork bombs with ksh).
+	Inside the job processes, add PIPE handler to write back the
+	job token, so the master process does not hang.
+	Disable the parallel driver if job control is not provided or if
+	trap does not understand signal names.
+	* tests/autotest.at (parallel autotest and signals): New test,
+	exercises INT, TERM, and PIPE, serial and parallel, with and
+	without `make' in the loop.
+	Kudos to Richard Stevens for writing APUE.
+
 2008-11-22  Eric Blake  <ebb9@byu.net>
 
 	Fix testsuite failure on Solaris.

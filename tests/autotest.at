@@ -941,6 +941,121 @@ AT_CHECK_AT_TEST([parallel errexit],
   [-j2 --errexit])
 
 
+AT_SETUP([parallel autotest and signal handling])
+
+# Goals:
+# (1) interrupt `./testsuite -jN'
+# (2) interrupt `make check TESTSUITEFLAGS=-jN'
+# (3) no trailing verbose/trace output
+# (4) exit status should be 128+signal
+
+AT_DATA([atlocal],
+[[suite_pid=$$
+export suite_pid
+]])
+
+AT_CHECK_AT_PREP([micro-suite],
+[[AT_INIT([suite to test parallel execution])
+AT_SETUP([test number 1])
+AT_CHECK([sleep 2])
+AT_CLEANUP
+AT_SETUP([test number 2])
+AT_CHECK([sleep 1])
+AT_CLEANUP
+AT_SETUP([test number 3])
+AT_CHECK([sleep 1])
+AT_CLEANUP
+AT_SETUP([killer test])
+AT_CHECK([kill -$signal $suite_pid])
+AT_CLEANUP
+m4_for([count], [5], [7], [],
+   [AT_SETUP([test number count])
+    AT_CHECK([sleep 1])
+    AT_CLEANUP
+])
+]])
+
+AT_DATA([Makefile.in],
+[[@SET_MAKE@
+SHELL = @SHELL@
+TESTSUITE = ./micro-suite
+check:
+	$(SHELL) '$(TESTSUITE)' $(TESTSUITEFLAGS)
+.PHONY: check
+]])
+
+AT_CHECK([$CONFIG_SHELL $abs_top_builddir/config.status --file=Makefile:Makefile.in],
+	 [], [ignore])
+
+# Test INT and TERM.
+for signal in 2 15; do
+  export signal
+  AS_VAR_ARITH([expected_status], [128 + $signal])
+
+  # Sequential case.
+  AT_CHECK([$CONFIG_SHELL ./micro-suite], [$expected_status],
+	   [ignore], [stderr])
+  # Both stderr and the log should contain the notification about the signal.
+  AT_CHECK([grep 'bailing out' stderr], [], [ignore])
+  AT_CHECK([grep 'bailing out' micro-suite.log], [], [ignore])
+  # There should be no junk job status output.
+  AT_CHECK([[grep '[iI]nterrupt[	 ]' stderr]], [1])
+
+  # Parallel case.
+  AT_CHECK([$CONFIG_SHELL ./micro-suite --jobs=3], [$expected_status],
+	   [ignore], [stderr])
+  AT_CHECK([grep 'bailing out' stderr], [], [ignore])
+  AT_CHECK([grep 'bailing out' micro-suite.log], [], [ignore])
+  # We'd like to check this here, too, but some shells do not allow to
+  # turn off job control.
+  # AT_CHECK([[grep '[iI]nterrupt[	 ]' stderr]], [1])
+
+  # Ditto with `make' in the loop.
+  : ${MAKE=make}
+  unset MAKEFLAGS
+  # Need to eliminate outer TESTSUITEFLAGS here.
+  # Need to normalize exit status here: some make implementations
+  # exit 1 (BSD make), some exit 2 (GNU make).
+  AT_CHECK([$MAKE check TESTSUITEFLAGS=; ]dnl
+	   [case $? in 1|2) exit 1;; *) exit $?;; esac],
+	   [1], [ignore], [stderr])
+  AT_CHECK([grep 'bailing out' stderr], [], [ignore])
+  AT_CHECK([grep 'bailing out' micro-suite.log], [], [ignore])
+  # Ditto, parallel case.
+  AT_CHECK([$MAKE check TESTSUITEFLAGS=--jobs=3; ]dnl
+	   [case $? in 1|2) exit 1;; *) exit $?;; esac],
+	   [1], [ignore], [stderr])
+  AT_CHECK([grep 'bailing out' stderr], [], [ignore])
+  AT_CHECK([grep 'bailing out' micro-suite.log], [], [ignore])
+done
+
+
+# Test PIPE.
+# The most important part here is that things should not hang, nor
+# get out of hand.  OTOH, if the shell sets the default handler to
+# ignore PIPE (pdksh, dash), there is little we can do about having the
+# test run; it's only the output that won't be there.  So all we check
+# for is that, if test 7 didn't run serially, then it shouldn't be
+# run in the parallel case either; the intermediate tests serve as
+# parallel barrier.
+# Note that stderr may contain "Broken pipe" errors.
+AT_CHECK([($CONFIG_SHELL ./micro-suite -d -3 5-; echo $? >status) | sed 5q],
+	 [], [stdout], [stderr])
+AT_CHECK([grep '5.*ok' stdout], [1])
+# Apparently some shells don't get around to creating 'status' any more.
+# And ksh93 on FreeBSD uses 256 + 13 instead of 128 + 13
+AT_CHECK([test ! -s status || grep 141 status || grep 269 status],
+	 [], [ignore])
+AT_CHECK([if test -f micro-suite.dir/7/micro-suite.log; then ]dnl
+	 [  echo "shell ignores SIGPIPE" > sigpipe-stamp ]dnl
+	 [else :; fi])
+
+AT_CHECK([$CONFIG_SHELL ./micro-suite -d -3 5- --jobs=2 | sed 5q], [], [stdout], [ignore])
+AT_CHECK([grep '5.*ok' stdout], [1])
+AT_CHECK([test -s sigpipe-stamp || test ! -f micro-suite.dir/7/micro-suite.log], [0])
+
+AT_CLEANUP
+
 ## ------------------- ##
 ## srcdir propagation. ##
 ## ------------------- ##
