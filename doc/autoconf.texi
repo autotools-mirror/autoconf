@@ -10725,9 +10725,36 @@ dubious syntactic constructs, incorrectly ordered macro calls.
 M4sugar makes heavy use of diversions, because it is often the case that
 text that must appear early in the output is not discovered until late
 in the input.  Additionally, some of the topological sorting algorithms
-used in resolving macro dependencies use diversions.  Therefore, most
+used in resolving macro dependencies use diversions.  However, most
 macros should not need to change diversions directly, but rather rely on
 higher-level M4sugar macros to manage diversions transparently.
+
+In the rare case that it is necessary to write a macro that explicitly
+outputs text to a different diversion, it is important to be aware of an
+M4 limitation regarding diversions: text only goes to a diversion if it
+is not part of argument collection.  Therefore, any macro that changes
+the current diversion cannot be used as an unquoted argument to another
+macro, but must be expanded at the top level.  The macro
+@code{m4_expand} will diagnose any attempt to change diversions, since
+it is generally useful only as an argument to another macro.  The
+following example shows what happens when diversion manipulation is
+attempted within macro arguments:
+
+@example
+m4_do([normal text]
+m4_divert_push([KILL])unwanted[]m4_divert_pop([KILL])
+[m4_divert_push([KILL])discarded[]m4_divert_pop([KILL])])dnl
+@result{}normal text
+@result{}unwanted
+@end example
+
+@noindent
+Notice that the unquoted text @code{unwanted} is output, even though it
+was processed while the current diversion was @code{KILL}, because it
+was collected as part of the argument to @code{m4_do}.  However, the
+text @code{discarded} disappeared as desired, because the diversion
+changes were single-quoted, and were not expanded until the top-level
+rescan of the output of @code{m4_do}.
 
 To make diversion management easier, M4sugar uses the concept of named
 diversions.  Rather than using diversion numbers directly, it is nicer
@@ -11295,7 +11322,10 @@ whitespace is preserved, even after the expansion of macros contained in
 @var{arg}.  Additionally, @code{m4_expand} is able to expand text that
 would involve an unterminated comment, whereas expanding that same text
 as the argument to @code{m4_quote} runs into difficulty in finding the
-end of the argument.
+end of the argument.  Since manipulating diversions during argument
+collection is inherently unsafe, @code{m4_expand} issues an error if
+@var{arg} attempts to change the current diversion (@pxref{Diversion
+support}).
 
 @example
 m4_define([active], [ACT, IVE])dnl

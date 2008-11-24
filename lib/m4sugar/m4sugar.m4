@@ -832,8 +832,11 @@ m4_define([m4_echo], [$@])
 # this), and should not contain the unlikely delimiters -=<{( or
 # )}>=-.  It is possible to have unbalanced quoted `(' or `)', as well
 # as unbalanced unquoted `)'.  m4_expand can handle unterminated
-# comments or dnl on the final line, at the expense of speed, while
-# _m4_expand is faster but must be given a terminated expansion.
+# comments or dnl on the final line, at the expense of speed; it also
+# aids in detecting attempts to incorrectly change the current
+# diversion inside ARG.  Meanwhile, _m4_expand is faster but must be
+# given a terminated expansion, and has no safety checks for
+# mis-diverted text.
 #
 # Exploit that extra unquoted () will group unquoted commas and the
 # following whitespace.  m4_bpatsubst can't handle newlines inside $1,
@@ -848,8 +851,11 @@ m4_define([m4_echo], [$@])
 # this time with one more `(' in the second argument and in the
 # open-quote delimiter.  We must also ignore the slop from the
 # previous try.  The final macro is thus half line-noise, half art.
-m4_define([m4_expand], [m4_chomp(_$0([$1
-]))])
+m4_define([m4_expand],
+[m4_pushdef([m4_divert], _m4_defn([_m4_divert_unsafe]))]dnl
+[m4_pushdef([m4_divert_push], _m4_defn([_m4_divert_unsafe]))]dnl
+[m4_chomp(_$0([$1
+]))_m4_popdef([m4_divert], [m4_divert_push])])
 
 m4_define([_m4_expand], [$0_([$1], [(], -=<{($1)}>=-, [}>=-])])
 
@@ -1378,6 +1384,15 @@ m4_divert_pop([$1])])
 # An end of line is appended for free to CONTENT.
 m4_define([m4_divert_once],
 [m4_expand_once([m4_divert_text([$1], [$2])])])
+
+
+# _m4_divert_unsafe(DIVERSION-NAME)
+# ---------------------------------
+# Issue a warning that the attempt to change the current diversion to
+# DIVERSION-NAME is unsafe, because this macro is being expanded
+# during argument collection of m4_expand.
+m4_define([_m4_divert_unsafe],
+[m4_fatal([$0: cannot change diversion to `$1' inside m4_expand])])
 
 
 # m4_undivert(DIVERSION-NAME...)
