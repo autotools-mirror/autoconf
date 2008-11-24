@@ -1,3 +1,8 @@
+2008-11-24  Eric Blake  <ebb9@byu.net>
+
+	Fix typo in AS_MESSAGE_LOG_FD patch.
+	* lib/m4sugar/m4sh.m4 (AS_ERROR): Check correct condition.
+
 2008-11-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	More reliable signal handling in Autotest.
