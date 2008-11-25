@@ -248,7 +248,7 @@ AT_CLEANUP
 
 AT_SETUP([m4@&t@_divert_stack])
 AT_KEYWORDS([m4@&t@_divert m4@&t@_divert_push m4@&t@_divert_pop
-m4@&t@_undivert])
+m4@&t@_undivert m4@&t@_cleardivert m4@&t@_divert_text])
 
 AT_CHECK_M4SUGAR_TEXT([[1.m4_divert_stack
 m4_divert_push([10])2.m4_divert_stack
@@ -270,6 +270,17 @@ script.4s:1: m4@&t@_divert: KILL
 2.script.4s:4: m4@&t@_divert_push: 10
 script.4s:2: m4@&t@_divert_push: 0
 script.4s:1: m4@&t@_divert: KILL
+]])
+
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_divert_text([3], [three])dnl
+m4_divert_text([4], [four])dnl
+m4_divert_text([1], [one])dnl
+m4_divert_text([2], [two])dnl
+m4_cleardivert([2], [3])dnl
+]],
+[[one
+four
 ]])
 
 AT_DATA_M4SUGAR([script.4s],

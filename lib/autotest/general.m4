@@ -216,13 +216,13 @@ m4_define([AT_INIT],
 [m4_define([AT_help_all], [])]
 [m4_map_args([_m4_popdef], _AT_DEFINE_INIT_LIST)]
 [m4_wrap([_AT_FINISH])]
-[AS_INIT[]dnl
+[AS_INIT[]]dnl
 dnl We don't use m4sh's BODY diversion, but AS_INIT sticks a banner there.
 dnl This trick removes that banner, since it adds nothing to autotest.
-m4_divert_text([KILL], [m4_undivert([BODY])])dnl
-AS_ME_PREPARE[]dnl
-m4_divert_push([DEFAULTS])dnl
-AT_COPYRIGHT(
+[m4_cleardivert([BODY])]dnl
+[AS_ME_PREPARE[]]dnl
+[m4_divert_push([DEFAULTS])]dnl
+[AT_COPYRIGHT(
 [Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 Free Software Foundation, Inc.
 This test suite is free software; the Free Software Foundation gives

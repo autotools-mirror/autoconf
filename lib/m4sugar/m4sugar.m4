@@ -1301,6 +1301,17 @@ m4_define([_m4_stack_reverse],
 ## --------------------------- ##
 
 
+# m4_cleardivert(DIVERSION-NAME...)
+# ---------------------------------
+# Discard any text in DIVERSION-NAME.
+#
+# This works even inside m4_expand.
+m4_define([m4_cleardivert],
+[m4_if([$#], [0], [m4_fatal([$0: missing argument])],
+       [m4_builtin([divert], [-1])m4_undivert($@)m4_builtin([divert],
+	 _m4_divert(_m4_defn([_m4_divert_diversion])))])])
+
+
 # _m4_divert(DIVERSION-NAME or NUMBER)
 # ------------------------------------
 # If DIVERSION-NAME is the name of a diversion, return its number,

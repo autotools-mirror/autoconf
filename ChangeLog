@@ -1,5 +1,15 @@
 2008-11-25  Eric Blake  <ebb9@byu.net>
 
+	Add m4_cleardivert.
+	* lib/m4sugar/m4sugar.m4 (m4_cleardivert): New macro.
+	* lib/autotest/general.m4 (AT_INIT): Use it.
+	* lib/autoconf/general.m4 (_AC_INIT_NOTICE): Likewise.
+	* tests/m4sugar.at (m4@&t@_divert_stack): Test it.
+	* doc/autoconf.texi (Diversion support) <m4_cleardivert>: Document
+	it.
+	* NEWS: Likewise.
+	Suggested by Paolo Bonzini.
+
 	Add safety check for m4_expand vs. diversions.
 	* lib/m4sugar/m4sugar.m4 (m4_expand): Make more robust against
 	diverted text.

@@ -10815,6 +10815,12 @@ remaining diversions of Autotest, are not documented.  In other words,
 intentionally outputting text into an undocumented diversion is subject
 to breakage in a future release of Autoconf.
 
+@defmac m4_cleardivert (@var{diversion}@dots{})
+@msindex{cleardivert}
+Permanently discard any text that has been diverted into
+@var{diversion}.
+@end defmac
+
 @defmac m4_divert_once (@var{diversion}, @ovar{content})
 @msindex{divert_once}
 Similar to @code{m4_divert_text}, except that @var{content} is only
