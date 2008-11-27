@@ -1308,6 +1308,7 @@ exec AS_MESSAGE_LOG_FD>-
 ./$child
 ]])
 
+rm -f script
 AT_CHECK_M4SH
 AT_CHECK([./script], [0], [[script: hello from parent
 hello1 from child

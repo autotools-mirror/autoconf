@@ -616,9 +616,9 @@ AT_CHECK([$CONFIG_SHELL ./micro-suite --clean --directory="`pwd`/sub2"])
 AT_CHECK([test -f sub2/micro-suite.log], [1])
 AT_CHECK([test -f sub2/micro-suite.dir], [1])
 dnl check for failure detection with bad, missing, or empty directory.
-AT_CHECK([$CONFIG_SHELL ./micro-suite -C nonesuch], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C nonesuch || exit 1], [1], [ignore], [ignore])
 AT_CHECK([$CONFIG_SHELL ./micro-suite -C ''], [1], [ignore], [ignore])
-AT_CHECK([$CONFIG_SHELL ./micro-suite -C -], [1], [ignore], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C - || exit 1], [1], [ignore], [ignore])
 AT_CHECK([$CONFIG_SHELL ./micro-suite -C], [1], [ignore], [ignore])
 dnl check that --help overrides bad directory selection.
 AT_CHECK([$CONFIG_SHELL ./micro-suite -C nonesuch --help], [0], [ignore], [])

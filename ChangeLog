@@ -1,3 +1,11 @@
+2008-11-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix a couple of test failures with dash.
+	* tests/autotest.at (AT_CHECK_AT_TITLE_CHAR): Normalize
+	exit status of `cd'.
+	* tests/m4sh.at (AS_MESSAGE_LOG_FD): Remove script before
+	regeneration, to avoid timing effects.
+
 2008-11-25  Eric Blake  <ebb9@byu.net>
 
 	Add m4_cleardivert.
