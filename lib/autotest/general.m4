@@ -1319,7 +1319,7 @@ dnl cause changed test semantics; e.g., a sleep will be interrupted.
 dnl Enable job control only for spawning the test group:
 dnl Let the jobs to run in separate process groups, but
 dnl avoid all the status output by the shell.
-    $at_job_control_on
+    $at_job_control_on 2>/dev/null
     (
       # Start one test group.
       $at_job_control_off

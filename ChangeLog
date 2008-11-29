@@ -1,3 +1,8 @@
+2008-11-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* lib/autotest/general.m4 (AT_JOB_FIFO_FD): Hide zsh 4.3.4
+	error messages about `set -m'.
+
 2008-11-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix a couple of test failures with dash.
