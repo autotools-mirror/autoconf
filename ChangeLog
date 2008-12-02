@@ -1,3 +1,11 @@
+2008-12-03  Eric Blake  <ebb9@byu.net>
+
+	Improve AC_STATE_SAVE.
+	* tests/local.at (AC_STATE_SAVE): Avoid ls -1, and use one less
+	process by hoisting the uniqueness check into sed.
+	* doc/autoconf.texi (Limitations of Usual Tools) <ls>: Mention
+	MacOS bug.
+
 2008-12-02  Eric Blake  <ebb9@byu.net>
 
 	Avoid MacOS readdir bug in testsuite.

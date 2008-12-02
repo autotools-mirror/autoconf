@@ -16575,6 +16575,16 @@ was equivalent to @samp{sources='*.c not found'} in the absence of
 @samp{.c} files.  This is no longer a practical problem, since current
 @command{ls} implementations send diagnostics to standard error.
 
+The behavior of @command{ls} on a directory that is being concurrently
+modified is not always predictable, because of a data race where cached
+information returned by @code{readdir} does not match the current
+directory state.  In fact, MacOS 10.5 has an intermittent bug where
+@code{readdir}, and thus @command{ls}, sometimes lists a file more than
+once if other files were added or removed from the directory immediately
+prior to the @command{ls} call.  Since @command{ls} already sorts its
+output, the duplicate entries can be avoided by piping the results
+through @code{uniq}.
+
 @anchor{mkdir}
 @item @command{mkdir}
 @c ------------------
