@@ -197,9 +197,11 @@ m4_define([AT_CONFIGURE_AC],
 # confirm that no test modifies variables outside the Autoconf namespace or
 # leaves temporary files.  AT_CONFIG_CMP uses the variable dumps to confirm that
 # tests have the same side effects regardless of caching.
+# The sort -u is necessary, since MacOS 10.5 has a bug where readdir can
+# list a file multiple times in a rapidly changing directory.
 m4_defun([AC_STATE_SAVE],
 [(set) 2>&1 | sort >state-env.$][1
-ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort >state-ls.$][1
+ls -1 | sed '/^at-/d;/^state-/d;/^config\./d' | sort -u >state-ls.$][1
 ])# AC_STATE_SAVE
 ]])
 

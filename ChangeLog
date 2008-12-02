@@ -1,3 +1,11 @@
+2008-12-02  Eric Blake  <ebb9@byu.net>
+
+	Avoid MacOS readdir bug in testsuite.
+	* tests/local.at (AC_STATE_SAVE): Avoid spurious failures due to
+	duplicated ls entries.
+	* THANKS: Update.
+	Reported by Bruce Dugan and others.
+
 2008-11-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autotest/general.m4 (AT_JOB_FIFO_FD): Hide zsh 4.3.4
