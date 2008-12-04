@@ -1472,9 +1472,9 @@ disable warnings falling into @var{category}
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
 honored as well.  Passing @option{-W @var{category}} actually behaves as if
-you had passed @option{--warnings syntax,$WARNINGS,@var{category}}.  If
-you want to disable the defaults and @env{WARNINGS}, but (for example)
-enable the warnings about obsolete constructs, you would use @option{-W
+you had passed @option{--warnings syntax,$WARNINGS,@var{category}}.  To
+disable the defaults and @env{WARNINGS}, and then
+enable warnings about obsolete constructs, use @option{-W
 none,obsolete}.
 
 @cindex Back trace
@@ -1707,9 +1707,9 @@ disable warnings falling into @var{category}
 Warnings about @samp{syntax} are enabled by default, and the environment
 variable @env{WARNINGS}, a comma separated list of categories, is
 honored as well.  Passing @option{-W @var{category}} actually behaves as if
-you had passed @option{--warnings syntax,$WARNINGS,@var{category}}.  If
-you want to disable the defaults and @env{WARNINGS}, but (for example)
-enable the warnings about obsolete constructs, you would use @option{-W
+you had passed @option{--warnings syntax,$WARNINGS,@var{category}}.  To
+disable the defaults and @env{WARNINGS}, and then
+enable warnings about obsolete constructs, use @option{-W
 none,obsolete}.
 @end table
 
@@ -2146,7 +2146,7 @@ tree.
 @item commands
 Shell commands output literally into @file{config.status}, and
 associated with a tag that the user can use to tell @file{config.status}
-which the commands to run.  The commands are run each time a @var{tag}
+which commands to run.  The commands are run each time a @var{tag}
 request is given to @file{config.status}, typically each time the file
 @file{@var{tag}} is created.
 
@@ -2498,7 +2498,7 @@ top-level directory, this is the same as @code{builddir}.
 @ovindex top_build_prefix
 The relative name of the top level of the current build tree with final
 slash if nonemtpy.  This is the same as @code{top_builddir}, except that
-it contains of zero of more runs of @code{../}, so it should not be
+it contains zero or more runs of @code{../}, so it should not be
 appended with a slash for concatenation.  This helps for @command{make}
 implementations that otherwise do not treat @file{./file} and @file{file}
 as equal in the toplevel build directory.
@@ -2688,8 +2688,9 @@ the final locations to there.
 @end table
 
 In order to support these features, it is essential that
-@code{datarootdir} remains being defined as @samp{$@{prefix@}/share} to
-depend upon the current value of @code{prefix}.
+@code{datarootdir} remains defined as @samp{$@{prefix@}/share},
+so that its value can be expanded based
+on the current value of @code{prefix}.
 
 A corollary is that you should not use these variables except in
 makefiles.  For instance, instead of trying to evaluate @code{datadir}
@@ -2799,7 +2800,7 @@ macro in @file{configure.ac}.
 @acindex{ERLANG_SUBST_INSTALL_LIB_SUBDIR}
 The installation directory for Erlang library @var{library}.
 This variable is set by calling the
-@samp{AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR(@var{library}, @var{version}}
+@samp{AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR(@var{library}, @var{version})}
 macro in @file{configure.ac}.
 @end defvar
 
@@ -2955,7 +2956,7 @@ The @samp{$(srcdir)/} prefix is included because of limitations in the
 The @file{stamp-} files are necessary because the timestamps of
 @file{config.h.in} and @file{config.h} are not changed if remaking
 them does not change their contents.  This feature avoids unnecessary
-recompilation.  You should include the file @file{stamp-h.in} your
+recompilation.  You should include the file @file{stamp-h.in} in your
 package's distribution, so that @command{make} considers
 @file{config.h.in} up to date.  Don't use @command{touch}
 (@pxref{touch, , Limitations of Usual Tools}); instead, use

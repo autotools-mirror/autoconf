@@ -1,3 +1,8 @@
+2008-12-05  William Pursell  <bill.pursell@gmail.com>  (tiny change)
+
+	Fix some typos and grammatical errors in documentation.
+	* doc/autoconf.texi: Clean up some bad use of English.
+
 2008-12-03  Eric Blake  <ebb9@byu.net>
 
 	Improve AC_STATE_SAVE.
