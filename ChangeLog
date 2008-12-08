@@ -1,3 +1,9 @@
+2008-12-06  William Pursell  <bill.pursell@gmail.com>  (tiny change)
+
+	Fix AC_HEADER_ASSERT to honor --enable-assert, rather than
+	treat --enable-assert and --disable-assert equivalently.
+	* lib/autoconf/headers.m4 (AC_HEADER_ASSERT): Check value of $enableval.
+
 2008-12-05  William Pursell  <bill.pursell@gmail.com>  (tiny change)
 
 	Fix some typos and grammatical errors in documentation.
