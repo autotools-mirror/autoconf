@@ -436,13 +436,15 @@ AC_DEFUN([AC_HEADER_ASSERT],
   AC_MSG_CHECKING([whether to enable assertions])
   AC_ARG_ENABLE([assert],
     [AS_HELP_STRING([--disable-assert], [turn off assertions])],
-    [AS_IF([test "x$enableval" = xno],
-      [AC_DEFINE([NDEBUG], [1], [Define to 1 if assertions should be disabled.]),
+    [ac_enable_assert=$enableval
+     AS_IF([test "x$enableval" = xno],
+      [AC_DEFINE([NDEBUG], [1],
+	[Define to 1 if assertions should be disabled.])],
       [test "x$enableval" != xyes],
-      AC_MSG_WARN([invalid argument supplied to --enable-assert.])
-      [enable_assert=no]
-  ])])
-  AC_MSG_RESULT([$enable_assert])
+      [AC_MSG_WARN([invalid argument supplied to --enable-assert])
+      ac_enable_assert=no])],
+    [ac_enable_assert=no])
+  AC_MSG_RESULT([$ac_enable_assert])
 ])
 
 

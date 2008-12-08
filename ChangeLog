@@ -1,3 +1,11 @@
+2008-12-08  William Pursell  <bill.pursell@gmail.com>  (tiny change)
+	and Eric Blake  <ebb9@byu.net>
+
+	Fix AC_HEADER_ASSERT w.r.t. --enable-assert.
+	* lib/autoconf/headers.m4 (AC_HEADER_ASSERT): Honor --enable-assert,
+	rather than treating it as a synonym for --disable-assert.
+	* NEWS: Document the fix.
+
 2008-12-06  William Pursell  <bill.pursell@gmail.com>  (tiny change)
 
 	Fix AC_HEADER_ASSERT to honor --enable-assert, rather than

@@ -7,6 +7,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** AC_LANG_ERLANG works once again (regression introduced in 2.61a).
 
+** AC_HEADER_ASSERT is fixed so that './configure --enable-assert' no
+   longer mistakenly disables assertions.
+
 ** Autotest testsuites accept an option --jobs[=N] for parallel testing.
 
 ** Autotest testsuites do not attempt to write startup error messages
