@@ -200,6 +200,7 @@ m4_copy([m4_undefine], [_m4_undefine])
 
 # m4_location
 # -----------
+# Output the current file, colon, and the current line number.
 m4_define([m4_location],
 [__file__:__line__])
 
@@ -3055,15 +3056,19 @@ m4_pattern_forbid([^dnl$])
 # is available for faster checks of dereferencing undefined macros.
 # But if it is missing, we assume we are being run by M4 1.4.x, that
 # $@ recursion is quadratic, and that we need foreach-based
-# replacement macros.  Use the raw builtin to avoid tripping up
-# include tracing.  Meanwhile, avoid m4_copy, since it temporarily
-# undefines m4_defn.
+# replacement macros.  Also, m4 prior to 1.4.8 loses track of location
+# during m4wrap text; __line__ should never be 0.
+#
+# Use the raw builtin to avoid tripping up include tracing.
+# Meanwhile, avoid m4_copy, since it temporarily undefines m4_defn.
 m4_ifdef([__m4_version__],
 [m4_debugmode([+d])
 m4_define([m4_defn], _m4_defn([_m4_defn]))
 m4_define([m4_popdef], _m4_defn([_m4_popdef]))
 m4_define([m4_undefine], _m4_defn([_m4_undefine]))],
-[m4_builtin([include], [m4sugar/foreach.m4])])
+[m4_builtin([include], [m4sugar/foreach.m4])
+m4_wrap_lifo([m4_if(__line__, [0], [m4_pushdef([m4_location],
+]]m4_dquote(m4_dquote(m4_dquote(__file__:__line__)))[[)])])])
 
 # Rewrite the first entry of the diversion stack.
 m4_divert([KILL])

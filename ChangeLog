@@ -1,3 +1,10 @@
+2008-12-09  Eric Blake  <ebb9@byu.net>
+
+	Fix m4_location inside m4_wrap with m4 1.4.5.
+	* lib/m4sugar/m4sugar.m4 (m4_undefine): Redefine m4_location
+	inside wrapped text if older m4 is detected.
+	Reported by William Pursell.
+
 2008-12-08  William Pursell  <bill.pursell@gmail.com>  (tiny change)
 	and Eric Blake  <ebb9@byu.net>
 
