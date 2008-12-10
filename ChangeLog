@@ -1,3 +1,9 @@
+2009-06-06  Jim Meyering  <meyering@redhat.com>
+
+	Improve testsuite --help
+	* lib/autotest/general.m4: Correct the example in ./testsuite --help.
+	Improve wording.
+
 2009-06-06  Eric Blake  <ebb9@byu.net>
 
 	Document fallback behavior of AC_PROG_LEX.

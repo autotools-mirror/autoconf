@@ -667,16 +667,17 @@ Usage: $[0] [[OPTION]... [VARIABLE=VALUE]... [TESTS]]
 Run all the tests, or the selected TESTS, given by numeric ranges, and
 save a detailed log file.  Upon failure, create debugging scripts.
 
-You should not change environment variables unless explicitly passed
-as command line arguments.  Set \`AUTOTEST_PATH' to select the executables
+Do not change environment variables directly.  Instead, set them via
+command line arguments.  Set \`AUTOTEST_PATH' to select the executables
 to exercise.  Each relative directory is expanded as build and source
-directories relatively to the top level of this distribution.  E.g.,
+directories relative to the top level of this distribution.
+E.g., from within the build directory /tmp/foo-1.0, invoking this:
 
   $ $[0] AUTOTEST_PATH=bin
 
-possibly amounts into
+is equivalent to the following, assuming the source directory is /src/foo-1.0:
 
-  PATH=/tmp/foo-1.0/bin:/src/foo-1.0/bin:\$PATH
+  PATH=/tmp/foo-1.0/bin:/src/foo-1.0/bin:\$PATH $[0]
 _ATEOF
 m4_divert_pop([HELP])dnl
 m4_divert_push([HELP_MODES])dnl
