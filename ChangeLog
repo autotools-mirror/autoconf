@@ -1,5 +1,13 @@
 2008-12-18  Eric Blake  <ebb9@byu.net>
 
+	Mention limitation of M4 1.4.x on builtin tokens.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_dumpdef>: Document
+	ramification of M4 1.4.x's inability to pass builtin tokens
+	through text macros.
+	(Evaluation Macros) <m4_curry>: Likewise.
+	* tests/m4sugar.at (m4@&t@_defn): Enhance test.
+	* NEWS: Mention subtle change in m4_dumpdef semantics.
+
 	Document m4_version_prereq.
 	* doc/autoconf.texi (Number processing Macros)
 	<m4_version_prereq>: Add documentation.

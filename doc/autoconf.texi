@@ -10563,6 +10563,12 @@ rather than the current debug file, and an error is issued if any
 calls @code{m4_dumpdef} for all of the
 @code{m4_pushdef} stack of definitions, starting with the current, and
 silently does nothing if @var{name} is undefined.
+
+Unfortunately, due to a limitation in M4 1.4.x, any macro defined as a
+builtin is output as the empty string.  This behavior is rectified by
+using M4 1.6 or newer.  However, this behavior difference means that
+@code{m4_dumpdef} should only be used while developing m4sugar macros,
+and never in the final published form of a macro.
 @end defmac
 
 @defmac m4_esyscmd_s (@var{command})
@@ -11270,6 +11276,11 @@ with the resulting argument list.
 m4_curry([m4_curry], [m4_reverse], [1])([2])([3])
 @result{}3, 2, 1
 @end example
+
+Unfortunately, due to a limitation in M4 1.4.x, it is not possible to
+pass the definition of a builtin macro as the argument to the output of
+@code{m4_curry}; the empty string is used instead of the builtin token.
+This behavior is rectified by using M4 1.6 or newer.
 @end defmac
 
 @defmac m4_do (@var{arg}, @dots{})

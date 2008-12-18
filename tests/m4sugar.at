@@ -138,6 +138,7 @@ AT_CHECK([grep 'm4@&t@_undefine: undefined.*oops' stderr], [0], [ignore])
 # Check that pushdef stacks can be renamed.
 AT_CHECK_M4SUGAR_TEXT([[m4_pushdef([a], [1])dnl
 m4_pushdef([a], [2])dnl
+m4_pushdef([a], m4_defn([m4_divnum]))dnl
 a b c
 m4_rename([a], [b])dnl
 a b c
@@ -147,8 +148,11 @@ m4_popdef([b], [c])dnl
 a b c
 m4_popdef([b], [c])dnl
 a b c
-]], [[2 b c
-a 2 c
+m4_popdef([b], [c])dnl
+a b c
+]], [[0 b c
+a 0 c
+a 0 0
 a 2 2
 a 1 1
 a b c
