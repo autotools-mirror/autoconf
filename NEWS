@@ -30,7 +30,7 @@ GNU Autoconf NEWS - User visible changes.
    m4_map_args_pair  m4_set_map
 
 ** The following m4sugar macros are documented now:
-   m4_copy  m4_dumpdefs  m4_rename
+   m4_copy  m4_dumpdefs  m4_rename  m4_version_prereq
 
 ** The m4sugar macro m4_expand has been taught to handle unterminated
    comments and shell case statements.  As a result, it is used

@@ -1,3 +1,11 @@
+2008-12-18  Eric Blake  <ebb9@byu.net>
+
+	Document m4_version_prereq.
+	* doc/autoconf.texi (Number processing Macros)
+	<m4_version_prereq>: Add documentation.
+	* NEWS: Mention it.
+	Reported by Bruno Haible.
+
 2008-12-10  Jim Meyering  <meyering@redhat.com>
 
 	AC_HEADER_ASSERT: don't say assertions are disabled when they're not

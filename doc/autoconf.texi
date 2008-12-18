@@ -11835,6 +11835,18 @@ m4_version_compare([2.61b], [2.61a-248-dc51])
 @end example
 @end defmac
 
+@defmac m4_version_prereq (@var{version}, @ovar{if-new-enough}, @
+  @dvar{if-old, m4_fatal})
+@msindex{version_prereq}
+Compares @var{version} against the version of Autoconf currently
+running.  If the running version is at @var{version} or newer, expand
+@var{if-new-enough}, but if @var{version} is larger than the version
+currently executing, expand @var{if-old}, which defaults to printing an
+error message and exiting m4sugar with status 63.  When given only one
+argument, this behaves like @code{AC_PREREQ} (@pxref{Versioning}).
+Remember that the autoconf philosophy favors feature checks over version
+checks.
+@end defmac
 
 @node Set manipulation Macros
 @subsection Set manipulation in M4
