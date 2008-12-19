@@ -11106,7 +11106,9 @@ Note that for some forms of @var{expression}, it may be faster to use
 @defmac m4_foreach_w (@var{var}, @var{list}, @var{expression})
 @msindex{foreach_w}
 Loop over the white-space-separated list @var{list}, assigning each value
-to @var{var}, and expand @var{expression}.
+to @var{var}, and expand @var{expression}.  If @var{var} is only
+referenced once in @var{expression}, it is more efficient to use
+@code{m4_map_args_w}.
 
 The deprecated macro @code{AC_FOREACH} is an alias of
 @code{m4_foreach_w}.
@@ -11179,7 +11181,8 @@ In cases where it is useful to operate on additional parameters besides
 the list elements, the macro @code{m4_curry} can be used in @var{macro}
 to supply the argument currying necessary to generate the desired
 argument list.  In the following example, @code{list_add_n} is more
-efficient than @code{list_add_x}.
+efficient than @code{list_add_x}.  On the other hand, using
+@code{m4_map_args_sep} can be even more efficient.
 
 @example
 m4_define([list], [[1], [2], [3]])dnl
@@ -11218,6 +11221,30 @@ m4_map_args_pair([, m4_reverse], [, m4_dquote], [1], [2], [3], [4])
 @end example
 @end defmac
 
+@defmac m4_map_args_sep (@ovar{pre}, @ovar{post}, @ovar{sep}, @var{arg}@dots{})
+@msindex{map_args_sep}
+Expand the sequence @code{@var{pre}[@var{arg}]@var{post}} for each
+argument, additionally expanding @var{sep} between arguments.  One
+common use of this macro is constructing a macro call, where the opening
+and closing parentheses are split between @var{pre} and @var{post}; in
+particular, @code{m4_map_args([@var{macro}], [@var{arg}])} is equivalent
+to @code{m4_map_args_sep([@var{macro}(], [)], [], [@var{arg}])}.  This
+macro provides the most efficient means for iterating over an arbitrary
+list of arguments, particularly when repeatedly constructing a macro
+call with more arguments than @var{arg}.
+@end defmac
+
+@defmac m4_map_args_w (@var{string}, @ovar{pre}, @ovar{post}, @ovar{sep})
+@msindex{map_args_w}
+Expand the sequence @code{@var{pre}[word]@var{post}} for each word in
+the whitespace-separated @var{string}, additionally expanding @var{sep}
+between words.  This macro provides the most efficient means for
+iterating over a whitespace-separated string.  In particular,
+@code{m4_map_args_w([@var{string}], [@var{action}(], [)])} is more
+efficient than @code{m4_foreach_w([var], [@var{string}],
+[@var{action}(m4_defn([var]))])}.
+@end defmac
+
 @defmac m4_shiftn (@var{count}, @dots{})
 @defmacx m4_shift2 (@dots{})
 @defmacx m4_shift3 (@dots{})
@@ -11232,6 +11259,47 @@ of @code{m4_shiftn}, introduced in Autoconf 2.62, and are more efficient
 for two and three shifts, respectively.
 @end defmac
 
+@defmac m4_stack_foreach (@var{macro}, @var{action})
+@defmacx m4_stack_foreach_lifo (@var{macro}, @var{action})
+@msindex{stack_foreach}
+@msindex{stack_foreach_lifo}
+For each of the @code{m4_pushdef} definitions of @var{macro}, expand
+@var{action} with the single argument of a definition of @var{macro}.
+@code{m4_stack_foreach} starts with the oldest definition, while
+@code{m4_stack_foreach_lifo} starts with the current definition.
+@var{action} should not push or pop definitions of @var{macro}, nor is
+there any guarantee that the current definition of @var{macro} matches
+the argument that was passed to @var{action}.  The macro @code{m4_curry}
+can be used if @var{action} needs more than one argument, although in
+that case it is more efficient to use @var{m4_stack_foreach_sep}.
+
+Due to technical limitations, there are a few low-level m4sugar
+functions, such as @code{m4_pushdef}, that cannot be used as the
+@var{macro} argument.
+
+@example
+m4_pushdef([a], [1])m4_pushdef([a], [2])dnl
+m4_stack_foreach([a], [ m4_incr])
+@result{} 2 3
+m4_stack_foreach_lifo([a], [ m4_curry([m4_substr], [abcd])])
+@result{} cd bcd
+@end example
+@end defmac
+
+@defmac m4_stack_foreach_sep (@var{macro}, @ovar{pre}, @ovar{post}, @ovar{sep})
+@defmacx m4_stack_foreach_sep_lifo (@var{macro}, @ovar{pre}, @ovar{post}, @
+  @ovar{sep})
+@msindex{stack_foreach_sep}
+@msindex{stack_foreach_sep_lifo}
+Expand the sequence @code{@var{pre}[definition]@var{post}} for each
+@code{m4_pushdef} definition of @var{macro}, additionally expanding
+@var{sep} between definitions.  @code{m4_stack_foreach_sep} visits the
+oldest definition first, while @code{m4_stack_foreach_sep_lifo} visits
+the current definition first.  This macro provides the most efficient
+means for iterating over a pushdef stack.  In particular,
+@code{m4_stack_foreach([@var{macro}], [@var{action}])} is short for
+@code{m4_stack_foreach_sep([@var{macro}], [@var{action}(], [)])}.
+@end defmac
 
 @node Evaluation Macros
 @subsection Evaluation Macros
@@ -12071,7 +12139,22 @@ the element passed as an argument.  This macro is faster than either
 corresponding counterpart of
 @code{m4_map_args([@var{action}]m4_set_listc([@var{set}]))} or
 @code{m4_set_foreach([@var{set}], [var],
-[@var{action}(m4_defn([var]))])}.
+[@var{action}(m4_defn([var]))])}.  It is possible to use @code{m4_curry}
+if more than one argument is needed for @var{action}, although it is
+more efficient to use @code{m4_set_map_sep} in that case.
+@end defmac
+
+@defmac m4_set_map_sep (@var{set}, @ovar{pre}, @ovar{post}, @ovar{sep})
+@msindex{set_map_sep}
+For each element in the set @var{set}, expand
+@code{@var{pre}[element]@var{post}}, additionally expanding @var{sep}
+between elements.  Behavior is unspecified if the expansion recursively
+lists the contents of @var{set} (although listing other sets
+is acceptable), or if it modifies the set in any way other than removing
+the element visited by the expansion.  This macro provides the most
+efficient means for non-destructively visiting the elements of a set; in
+particular, @code(m4_set_map([@var{set}], [@var{action}]) is equivalent
+to @code{m4_set_map_sep([@var{set}], [@var{action}(], [)])}.
 @end defmac
 
 @defmac m4_set_remove (@var{set}, @var{value}, @ovar{if-present}, @

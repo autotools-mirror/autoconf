@@ -1145,9 +1145,9 @@ m4_define([m4_mapall],
        [_m4_foreach([m4_apply([$1],], [)], [], $2)])])
 
 
-# m4_map_sep(MACRO, SEPARATOR, LIST)
-# m4_mapall_sep(MACRO, SEPARATOR, LIST)
-# -------------------------------------
+# m4_map_sep(MACRO, [SEPARATOR], LIST)
+# m4_mapall_sep(MACRO, [SEPARATOR], LIST)
+# ---------------------------------------
 # Invoke MACRO($1), SEPARATOR, MACRO($2), ..., MACRO($N) where $1,
 # $2... $N are the elements of LIST, and are in turn lists appropriate
 # for m4_apply.  SEPARATOR is expanded, in order to allow the creation
@@ -1207,8 +1207,8 @@ m4_define([m4_map_args_pair],
        [$1([$3], [$4])[]$0([$1], [$2], m4_shift(m4_shift3($@)))])])
 
 
-# m4_map_args_sep(PRE, POST, SEP, ARG...)
-# ---------------------------------------
+# m4_map_args_sep([PRE], [POST], [SEP], ARG...)
+# ---------------------------------------------
 # Expand PRE[ARG]POST for each argument, with SEP between arguments.
 m4_define([m4_map_args_sep],
 [m4_if([$#], [0], [m4_fatal([$0: too few arguments: $#])],
@@ -1219,11 +1219,12 @@ m4_define([m4_map_args_sep],
        [$1[$4]$2[]_m4_foreach([$3[]$1], [$2], m4_shift3($@))])])
 
 
-# m4_map_args_w(STRING, [PRE], [POST])
-# ------------------------------------
+# m4_map_args_w(STRING, [PRE], [POST], [SEP])
+# -------------------------------------------
 # Perform the expansion of PRE[word]POST[] for each word in STRING
 # separated by whitespace.  More efficient than:
 #   m4_foreach_w([var], [STRING], [PRE[]m4_defn([var])POST])
+# Additionally, expand SEP between words.
 #
 # As long as we have to use m4_bpatsubst to split the string, we might
 # as well make it also apply PRE and POST; this avoids iteration
@@ -1234,9 +1235,9 @@ m4_define([m4_map_args_sep],
 # empty elements and remove the extra layer of quoting.
 m4_define([m4_map_args_w],
 [_$0(_m4_split([ ]m4_flatten([$1])[ ], [[	 ]+],
-	       m4_if(m4_index([$2$3], [\]), [-1], [[$3[]$2]],
-		     [m4_bpatsubst([[$3[]$2]], [\\], [\\\\])])),
-     m4_len([[]$3]), m4_len([$2[]]))])
+	       m4_if(m4_index([$2$3$4], [\]), [-1], [[$3[]$4[]$2]],
+		     [m4_bpatsubst([[$3[]$4[]$2]], [\\], [\\\\])])),
+     m4_len([[]$3[]$4]), m4_len([$4[]$2[]]))])
 
 m4_define([_m4_map_args_w],
 [m4_substr([$1], [$2], m4_eval(m4_len([$1]) - [$2] - [$3]))])
@@ -1262,9 +1263,9 @@ m4_define([m4_stack_foreach_lifo],
 [_m4_stack_reverse([$1], [m4_tmp-$1], [$2(_m4_defn([m4_tmp-$1]))])]dnl
 [_m4_stack_reverse([m4_tmp-$1], [$1])])
 
-# m4_stack_foreach_sep(MACRO, PRE, POST, SEP)
-# m4_stack_foreach_sep_lifo(MACRO, PRE, POST, SEP)
-# ------------------------------------------------
+# m4_stack_foreach_sep(MACRO, [PRE], [POST], [SEP])
+# m4_stack_foreach_sep_lifo(MACRO, [PRE], [POST], [SEP])
+# ------------------------------------------------------
 # Similar to m4_stack_foreach and m4_stack_foreach_lifo, in that every
 # definition of a pushdef stack will be visited.  But rather than
 # passing the definition as a single argument to a macro, this variant
@@ -1280,8 +1281,8 @@ m4_define([m4_stack_foreach_sep_lifo],
 [_m4_stack_reverse([m4_tmp-$1], [$1])])
 
 
-# _m4_stack_reverse(OLD, NEW, ACTION, SEP)
-# ----------------------------------------
+# _m4_stack_reverse(OLD, NEW, [ACTION], [SEP])
+# --------------------------------------------
 # A recursive worker for pushdef stack manipulation.  Destructively
 # copy the OLD stack into the NEW, and expanding ACTION for each
 # iteration.  After the first iteration, SEP is promoted to the front
@@ -2793,8 +2794,8 @@ m4_define([m4_set_contents],
 
 # _m4_set_contents_1(SET)
 # _m4_set_contents_1c(SET)
-# _m4_set_contents_2(SET, PRE, POST, SEP)
-# ---------------------------------------
+# _m4_set_contents_2(SET, [PRE], [POST], [SEP])
+# ---------------------------------------------
 # Expand to a list of quoted elements currently in the set, each
 # surrounded by PRE and POST, and moving SEP in front of PRE on
 # recursion.  To avoid nesting limit restrictions, the algorithm must
@@ -2868,9 +2869,9 @@ m4_define([m4_set_dump],
 	  [_m4_popdef([_m4_set_size($1)])])m4_ifdef([_m4_set_cleanup($1)],
     [_$0_check], [_$0])([$1], [], [$2])])
 
-# _m4_set_dump(SET, SEP, PREP)
-# _m4_set_dump_check(SET, SEP, PREP)
-# ----------------------------------
+# _m4_set_dump(SET, [SEP], [PREP])
+# _m4_set_dump_check(SET, [SEP], [PREP])
+# --------------------------------------
 # Print SEP and the current element, then delete the element and
 # recurse with empty SEP changed to PREP.  The check variant checks
 # whether the element has been previously removed.  Use _m4_defn and
@@ -2951,8 +2952,8 @@ m4_define([m4_set_listc],
 m4_define([m4_set_map],
 [m4_set_map_sep([$1], [$2(], [)])])
 
-# m4_set_map_sep(SET, PRE, POST, SEP)
-# -----------------------------------
+# m4_set_map_sep(SET, [PRE], [POST], [SEP])
+# -----------------------------------------
 # For each element of SET, expand PRE[value]POST[], and expand SEP
 # between elements.
 m4_define([m4_set_map_sep],

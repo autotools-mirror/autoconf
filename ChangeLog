@@ -1,3 +1,15 @@
+2008-12-19  Eric Blake  <ebb9@byu.net>
+
+	Document some recently added macros.
+	* lib/m4sugar/m4sugar.m4 (m4_map_args_w): Add optional sep
+	parameter.
+	* doc/autoconf.texi (Looping constructs) <m4_map_args_sep>
+	<m4_map_args_w, m4_stack_foreach, m4_stack_foreach_sep>: Document
+	new macros.
+	(Set manipulation Macros) <m4_set_map_sep>: Likewise.
+	* tests/m4sugar.at (m4@&t@_stack, M4 loops): Enhance tests.
+	* NEWS: Document new macros.
+
 2008-12-18  Eric Blake  <ebb9@byu.net>
 
 	Fix separator in m4_stack_foreach_sep.

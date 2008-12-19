@@ -60,8 +60,8 @@ m4_copy([abc], [foo])dnl
 m4_stack_foreach([foo], [m4_n])
 m4_stack_foreach_lifo([foo], [m4_n])
 m4_stack_foreach_sep([abc], [ m4_index([abcdefghijkl],], [)])
-m4_define([colon], [:])dnl
-m4_stack_foreach_sep_lifo([abc], [<], [>], [colon])
+m4_define([colon], [:])m4_define([lt], [<])m4_define([gt], [>])dnl
+m4_stack_foreach_sep_lifo([abc], [lt], [gt], [colon])
 m4_pushdef([xyz], [123])dnl
 m4_pushdef([xyz], [456])dnl
 m4_define([doit], [[$1](m4_stack_foreach_sep([xyz], [m4_dquote(], [)], [,]))
@@ -1029,7 +1029,8 @@ myvar
 m4_map_args_w([a  b c, d,e f
 g], [ ], [|])
 m4_map_args_w([a b], [\1], [/])
-m4_map_args_w([a b], [/], [\1])
+m4_define([dashes], [--])dnl
+m4_map_args_w([a b c], [/], [\1], [dashes])
 dnl only one side effect expansion, prior to visiting list elements
 m4_foreach([i], [[1], [2], [3]m4_errprintn([hi])], [m4_errprintn(i)])dnl
 dnl shifting forms an important part of loops
@@ -1070,7 +1071,7 @@ m4_shiftn(3,1,2,3):m4_shiftn(3,1,2,3,4)
 outer value
  a| b| c,| d,e| f| g|
 \1a/\1b/
-/a\1/b\1
+/a\1--/b\1--/c\1
 ::4
 :4
 ]], [[hi

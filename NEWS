@@ -27,7 +27,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** The following documented m4sugar macros are new:
    m4_chomp  m4_curry  m4_default_quoted  m4_esyscmd_s  m4_map_args
-   m4_map_args_pair  m4_set_map
+   m4_map_args_pair  m4_map_args_sep  m4_map_args_w  m4_set_map
+   m4_set_map_sep  m4_stack_foreach  m4_stack_foreach_lifo
+   m4_stack_foreach_sep  m4_stack_foreach_sep_lifo
 
 ** The following m4sugar macros are documented now, but in some cases
    with slightly different semantics than what the previous
