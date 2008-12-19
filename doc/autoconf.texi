@@ -12153,7 +12153,7 @@ lists the contents of @var{set} (although listing other sets
 is acceptable), or if it modifies the set in any way other than removing
 the element visited by the expansion.  This macro provides the most
 efficient means for non-destructively visiting the elements of a set; in
-particular, @code(m4_set_map([@var{set}], [@var{action}]) is equivalent
+particular, @code{m4_set_map([@var{set}], [@var{action}])} is equivalent
 to @code{m4_set_map_sep([@var{set}], [@var{action}(], [)])}.
 @end defmac
 

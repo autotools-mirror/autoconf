@@ -1,5 +1,9 @@
 2008-12-19  Eric Blake  <ebb9@byu.net>
 
+	Fix typo in previous commit.
+	* doc/autoconf.texi (Set manipulation Macros) <m4_set_map_sep>:
+	Fix typo.
+
 	Document some recently added macros.
 	* lib/m4sugar/m4sugar.m4 (m4_map_args_w): Add optional sep
 	parameter.
