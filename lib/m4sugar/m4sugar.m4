@@ -1293,7 +1293,7 @@ m4_define([m4_stack_foreach_sep_lifo],
 # swapped copy.
 m4_define([_m4_stack_reverse],
 [m4_ifdef([$1], [m4_pushdef([$2],
-  _m4_defn([$1]))$3[]_m4_popdef([$1])$0([$1], [$2], [$4$3])])])
+  _m4_defn([$1]))$3[]_m4_popdef([$1])$0([$1], [$2], [$4[]$3])])])
 
 
 

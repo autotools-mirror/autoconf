@@ -1,5 +1,12 @@
 2008-12-18  Eric Blake  <ebb9@byu.net>
 
+	Fix separator in m4_stack_foreach_sep.
+	* lib/m4sugar/m4sugar.m4 (_m4_stack_reverse): Separate separator
+	from prefix.
+	* tests/m4sugar.at (m4@&t@_stack): Enhance test.
+
+2008-12-18  Eric Blake  <ebb9@byu.net>
+
 	Mention limitation of M4 1.4.x on builtin tokens.
 	* doc/autoconf.texi (Redefined M4 Macros) <m4_dumpdef>: Document
 	ramification of M4 1.4.x's inability to pass builtin tokens

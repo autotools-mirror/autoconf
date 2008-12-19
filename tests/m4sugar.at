@@ -60,7 +60,8 @@ m4_copy([abc], [foo])dnl
 m4_stack_foreach([foo], [m4_n])
 m4_stack_foreach_lifo([foo], [m4_n])
 m4_stack_foreach_sep([abc], [ m4_index([abcdefghijkl],], [)])
-m4_stack_foreach_sep_lifo([abc], [<], [>], [:])
+m4_define([colon], [:])dnl
+m4_stack_foreach_sep_lifo([abc], [<], [>], [colon])
 m4_pushdef([xyz], [123])dnl
 m4_pushdef([xyz], [456])dnl
 m4_define([doit], [[$1](m4_stack_foreach_sep([xyz], [m4_dquote(], [)], [,]))
