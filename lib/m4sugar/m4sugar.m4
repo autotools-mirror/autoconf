@@ -603,12 +603,22 @@ m4_define([m4_defn],
 # always dumps to stderr, regardless of the current debugfile; it also
 # provides m4symbols as a way to grab all current macro names.  But
 # dumpdefs is not frequently called, so we don't need to worry about
-# conditionally using these newer features.
+# conditionally using these newer features.  Also, this version
+# doesn't sort multiple arguments.
+#
+# If we detect m4 1.6 or newer, then provide an alternate definition,
+# installed during m4_init, that allows builtins through.
+# Unfortunately, there is no nice way in m4 1.4.x to dump builtins.
 m4_define([m4_dumpdef],
 [m4_if([$#], [0], [m4_fatal([$0: missing argument])],
        [$#], [1], [m4_ifdef([$1], [m4_errprintn(
   [$1:	]m4_dquote(_m4_defn([$1])))], [m4_fatal([$0: undefined macro: $1])])],
        [m4_map_args([$0], $@)])])
+
+m4_define([_m4_dumpdef],
+[m4_if([$#], [0], [m4_fatal([$0: missing argument])],
+       [$#], [1], [m4_builtin([dumpdef], [$1])],
+       [m4_map_args_sep([m4_builtin([dumpdef],], [)], [], $@)])])
 
 
 # m4_dumpdefs(NAME...)
@@ -3053,8 +3063,9 @@ m4_pattern_forbid([^_?m4_])
 m4_pattern_forbid([^dnl$])
 
 # If __m4_version__ is defined, we assume that we are being run by M4
-# 1.6 or newer, and thus that $@ recursion is linear and debugmode(d)
-# is available for faster checks of dereferencing undefined macros.
+# 1.6 or newer, thus $@ recursion is linear, and debugmode(+do)
+# is available for faster checks of dereferencing undefined macros
+# and forcing dumpdef to print to stderr regardless of debugfile.
 # But if it is missing, we assume we are being run by M4 1.4.x, that
 # $@ recursion is quadratic, and that we need foreach-based
 # replacement macros.  Also, m4 prior to 1.4.8 loses track of location
@@ -3063,8 +3074,9 @@ m4_pattern_forbid([^dnl$])
 # Use the raw builtin to avoid tripping up include tracing.
 # Meanwhile, avoid m4_copy, since it temporarily undefines m4_defn.
 m4_ifdef([__m4_version__],
-[m4_debugmode([+d])
+[m4_debugmode([+do])
 m4_define([m4_defn], _m4_defn([_m4_defn]))
+m4_define([m4_dumpdef], _m4_defn([_m4_dumpdef]))
 m4_define([m4_popdef], _m4_defn([_m4_popdef]))
 m4_define([m4_undefine], _m4_defn([_m4_undefine]))],
 [m4_builtin([include], [m4sugar/foreach.m4])

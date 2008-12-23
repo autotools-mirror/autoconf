@@ -194,6 +194,30 @@ a:	[2]
 a:	[1]
 ]])
 
+# Check behavior when dumping builtins.  Unfortunately, when using M4 1.4.x
+# (or more precisely, when __m4_version__ is undefined), builtins get
+# flattened to an empty string.  It takes M4 1.6 to work around this.
+AT_DATA_M4SUGAR([script.4s],
+[[m4_ifdef([__m4_version__], [_m4_undefine([__m4_version__])])
+m4_init
+m4_dumpdef([m4_define])
+]])
+
+AT_CHECK_M4SUGAR([-o-], [0], [],
+[[m4_define:	[]
+]])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_init
+m4_ifdef([__m4_version__],
+[m4_dumpdef([m4_define])],
+[m4_errprintn([m4_define:	<define>])])
+]])
+
+AT_CHECK_M4SUGAR([-o-], [0], [],
+[[m4_define:	<define>
+]])
+
 AT_CLEANUP
 
 

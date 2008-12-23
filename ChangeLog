@@ -1,3 +1,12 @@
+2008-12-23  Eric Blake  <ebb9@byu.net>
+
+	Make m4_dumpdef more useful with M4 1.6.
+	* lib/m4sugar/m4sugar.m4 (_m4_dumpdef): New macro.
+	(m4_init): Install it for new enough m4.
+	* tests/m4sugar.at (m4@&t@_dumpdef): Enhance test.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_dumpdef>: Mention
+	lack of sorting.
+
 2008-12-24  Bruno Haible  <bruno@clisp.org>
 
 	Improve INSTALL for HP-UX.

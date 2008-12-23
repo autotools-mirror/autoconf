@@ -10558,7 +10558,8 @@ diversion stack.
 @msindex{dumpdefs}
 @code{m4_dumpdef} is like the M4 builtin, except that this version
 requires at least one argument, output always goes to standard error
-rather than the current debug file, and an error is issued if any
+rather than the current debug file, no sorting is done on multiple
+arguments, and an error is issued if any
 @var{name} is undefined.  @code{m4_dumpdefs} is a convenience macro that
 calls @code{m4_dumpdef} for all of the
 @code{m4_pushdef} stack of definitions, starting with the current, and
