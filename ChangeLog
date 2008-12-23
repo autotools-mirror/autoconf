@@ -1,3 +1,9 @@
+2008-12-22  Bruno Haible  <bruno@clisp.org>
+
+	Improve INSTALL for Haiku.
+	* doc/install.texi (Particular Systems): Add a recommendation
+	which prefix to use on Haiku.
+
 2008-12-19  Eric Blake  <ebb9@byu.net>
 
 	Fix typo in previous commit.
