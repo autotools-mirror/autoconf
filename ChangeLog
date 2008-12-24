@@ -1,3 +1,22 @@
+2008-12-24  Eric Blake  <ebb9@byu.net>
+
+	Regenerate files.
+	* Makefile.in: Regenerate with previous patch.
+	* bin/Makefile.in: Likewise.
+	* config/Makefile.in: Likewise.
+	* configure: Likewise.
+	* doc/Makefile.in: Likewise.
+	* lib/Autom4te/Makefile.in: Likewise.
+	* lib/Makefile.in: Likewise.
+	* lib/autoconf/Makefile.in: Likewise.
+	* lib/autoscan/Makefile.in: Likewise.
+	* lib/autotest/Makefile.in: Likewise.
+	* lib/emacs/Makefile.in: Likewise.
+	* lib/m4sugar/Makefile.in: Likewise.
+	* man/Makefile.in: Likewise.
+	* man/autom4te.1: Likewise.
+	* tests/Makefile.in: Likewise.
+
 2006-09-19  Eric Blake  <ebb9@byu.net>
 
 	Avoid M4 1.6 warnings about deprecated option.
