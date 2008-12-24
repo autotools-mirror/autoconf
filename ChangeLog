@@ -1,3 +1,10 @@
+2008-12-24  Bruno Haible  <bruno@clisp.org>
+
+	Improve INSTALL for HP-UX.
+	* doc/install.texi (Particular Systems): For HP-UX, also recommend
+	-D_XOPEN_SOURCE=500. Needed for the declaration of mbstate_t on
+	HP-UX 11.11.
+
 2008-12-22  Bruno Haible  <bruno@clisp.org>
 
 	Improve INSTALL for Haiku.
