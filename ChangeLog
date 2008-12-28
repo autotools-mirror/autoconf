@@ -1,3 +1,9 @@
+2008-12-28  William Pursell  <bill.pursell@gmail.com>  (tiny change)
+
+	Use AS_CASE in documented example.
+	* doc/autoconf.texi (Using the System Type): Use AS_CASE in
+	example instead of raw case.
+
 2008-12-23  Eric Blake  <ebb9@byu.net>
 
 	Make m4_dumpdef more useful with M4 1.6.

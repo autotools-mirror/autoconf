@@ -18948,11 +18948,11 @@ following would be used in a makefile to add the object to a
 program or library.
 
 @example
-case $host in
-  alpha*-*-*) CYCLE_OBJ=rpcc.o ;;
-  i?86-*-*)   CYCLE_OBJ=rdtsc.o ;;
-  *)          CYCLE_OBJ= ;;
-esac
+AS_CASE([$host],
+  [alpha*-*-*], [CYCLE_OBJ=rpcc.o],
+  [i?86-*-*],   [CYCLE_OBJ=rdtsc.o],
+  [CYCLE_OBJ=""]
+)
 AC_SUBST([CYCLE_OBJ])
 @end example
 
