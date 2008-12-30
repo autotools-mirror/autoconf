@@ -134,7 +134,6 @@ m4_ifdef([changeword],dnl conditionally available in 1.4.x
 m4_rename_m4([debugfile])
 m4_rename_m4([debugmode])
 m4_rename_m4([decr])
-m4_undefine([divert])
 m4_rename_m4([divnum])
 m4_rename_m4([dumpdef])
 m4_rename_m4([errprint])
@@ -168,15 +167,20 @@ m4_rename_m4([sysval])
 m4_rename_m4([traceoff])
 m4_rename_m4([traceon])
 m4_rename_m4([translit])
-m4_undefine([undivert])
 
 # _m4_defn(ARG)
-# ----------------
+# -------------
 # _m4_defn is for internal use only - it bypasses the wrapper, so it
 # must only be used on one argument at a time, and only on macros
 # known to be defined.  Make sure this still works if the user renames
 # m4_defn but not _m4_defn.
 m4_copy([m4_defn], [_m4_defn])
+
+# _m4_divert_raw(NUM)
+# -------------------
+# _m4_divert_raw is for internal use only.  Use this instead of
+# m4_builtin([divert], NUM), so that tracing diversion flow is easier.
+m4_rename([divert], [_m4_divert_raw])
 
 # _m4_popdef(ARG...)
 # ------------------
@@ -191,6 +195,13 @@ m4_copy([m4_popdef], [_m4_popdef])
 # it must only be used on macros known to be defined.  Make sure this
 # still works if the user renames m4_undefine but not _m4_undefine.
 m4_copy([m4_undefine], [_m4_undefine])
+
+# _m4_undivert(NUM...)
+# --------------------
+# _m4_undivert is for internal use only, and should always be given
+# arguments.  Use this instead of m4_builtin([undivert], NUM...), so
+# that tracing diversion flow is easier.
+m4_rename([undivert], [_m4_undivert])
 
 
 ## ------------------- ##
@@ -1320,7 +1331,7 @@ m4_define([_m4_stack_reverse],
 # This works even inside m4_expand.
 m4_define([m4_cleardivert],
 [m4_if([$#], [0], [m4_fatal([$0: missing argument])],
-       [m4_builtin([divert], [-1])m4_undivert($@)m4_builtin([divert],
+       [_m4_divert_raw([-1])m4_undivert($@)_m4_divert_raw(
 	 _m4_divert(_m4_defn([_m4_divert_diversion])))])])
 
 
@@ -1364,7 +1375,7 @@ m4_define([m4_divert],
 [m4_popdef([_m4_divert_stack])]dnl
 [m4_define([_m4_divert_diversion], [$1])]dnl
 [m4_divert_stack_push([$0], [$1])]dnl
-[m4_builtin([divert], _m4_divert([$1]))])
+[_m4_divert_raw(_m4_divert([$1]))])
 
 
 # m4_divert_push(DIVERSION-NAME)
@@ -1373,7 +1384,7 @@ m4_define([m4_divert],
 m4_define([m4_divert_push],
 [m4_divert_stack_push([$0], [$1])]dnl
 [m4_pushdef([_m4_divert_diversion], [$1])]dnl
-[m4_builtin([divert], _m4_divert([$1]))])
+[_m4_divert_raw(_m4_divert([$1]))])
 
 
 # m4_divert_pop([DIVERSION-NAME])
@@ -1389,7 +1400,7 @@ m4_define([m4_divert_pop],
 [_m4_popdef([_m4_divert_stack], [_m4_divert_diversion])]dnl
 [m4_ifdef([_m4_divert_diversion], [],
 	   [m4_fatal([too many m4_divert_pop])])]dnl
-[m4_builtin([divert], _m4_divert(_m4_defn([_m4_divert_diversion])))])
+[_m4_divert_raw(_m4_divert(_m4_defn([_m4_divert_diversion])))])
 
 
 # m4_divert_text(DIVERSION-NAME, CONTENT)
@@ -1425,7 +1436,7 @@ m4_define([_m4_divert_unsafe],
 # this should not be used to undivert files.
 m4_define([m4_undivert],
 [m4_if([$#], [0], [m4_fatal([$0: missing argument])],
-       [$#], [1], [m4_builtin([undivert], _m4_divert([$1]))],
+       [$#], [1], [_m4_undivert(_m4_divert([$1]))],
        [m4_map_args([$0], $@)])])
 
 
@@ -1930,17 +1941,14 @@ m4_bmatch([$0], [^AC_], [[AC_DEFUN]], [[m4_defun]])['d macro])])]],
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and other overhead on the common path.
 m4_define([_m4_require_call],
-m4_do([[m4_define([_m4_divert_grow], m4_decr(_m4_divert_grow))]],
-      [[m4_divert_push(_m4_divert_grow)]],
-      [[m4_default([$2], [$1])
-m4_provide_if([$1],
-	      [],
-	      [m4_warn([syntax],
-		       [$1 is m4_require'd but not m4_defun'd])])]],
-      [[m4_builtin([divert], _m4_divert($3))]],
-      [[m4_builtin([undivert], _m4_divert_grow)]],
-      [[m4_divert_pop(_m4_divert_grow)]],
-      [[m4_define([_m4_divert_grow], m4_incr(_m4_divert_grow))]]))
+[m4_pushdef([_m4_divert_grow], m4_decr(_m4_divert_grow))]dnl
+[m4_divert_push(_m4_divert_grow)]dnl
+[m4_if([$2], [], [$1], [$2])
+m4_provide_if([$1], [], [m4_warn([syntax],
+  [$1 is m4_require'd but not m4_defun'd])])]dnl
+[_m4_divert_raw(_m4_divert($3))]dnl
+[_m4_undivert(_m4_divert_grow)]dnl
+[m4_divert_pop(_m4_divert_grow)_m4_popdef([_m4_divert_grow])])
 
 
 # _m4_divert_grow

@@ -1,3 +1,13 @@
+2008-12-30  Eric Blake  <ebb9@byu.net>
+
+	Make it easier to track diversion bugs.
+	* lib/m4sugar/m4sugar.m4 (_m4_divert_raw, _m4_undivert): New
+	internal macros, which are easier to trace than m4_builtin.
+	(m4_cleardivert, m4_divert, m4_divert_push, m4_divert_pop)
+	(m4_undivert): Use them.
+	(_m4_require_call): Likewise.  Use fewer macros.
+	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): Fix typo.
+
 2008-12-26  Bruno Haible  <bruno@clisp.org>
 
 	Improve multiarch detection.

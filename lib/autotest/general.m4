@@ -1988,7 +1988,7 @@ at_fn_check_prepare_notrace],
 dnl We know at build time that tracing COMMANDS is always safe.
 [[at_fn_check_prepare_trace],]dnl
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
-[[at_fn_check_prepare_dynamic "AS_ESCAPE([$1], [`\"])"])])]dnl
+[[at_fn_check_prepare_dynamic "AS_ESCAPE([$1], [`\"])"])[]]dnl
 [_m4_popdef([at_reason])])
 
 
