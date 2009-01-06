@@ -1,3 +1,23 @@
+2009-01-06  Eric Blake  <ebb9@byu.net>
+
+	Maintainer cleanups.
+	* cfg.mk (web-manual): Use new feature of gendocs.
+	(fetch): Fetch gendocs.
+	* Makefile.am (EXTRA_DIST): Distribute new file.
+	* doc/Makefile.am (EXTRA_DIST): Likewise.
+	* .gitattributes: Ignore whitespace in upstream files.
+	* HACKING (Other web updates): Update Free Software Directory
+	instructions.
+	(Upload): No longer mention xdelta.
+	* maint.mk (xd-delta): Likewise.
+	* build-aux/gendocs.sh: New upstream file.
+	* doc/gendocs_template: Likewise.
+	* build-aux/announce-gen: Resync from upstream.
+	* build-aux/config.guess: Likewise.
+	* build-aux/config.sub: Likewise.
+	* build-aux/gnupload: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+
 2008-12-30  Eric Blake  <ebb9@byu.net>
 
 	Make it easier to track diversion bugs.
@@ -18628,8 +18648,8 @@
 	coding: utf-8
 	End:
 
-	Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free
-	Software Foundation, Inc.
+	Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
+	Free Software Foundation, Inc.
 
 	Copying and distribution of this file, with or without
 	modification, are permitted provided the copyright notice and this

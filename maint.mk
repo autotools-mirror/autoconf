@@ -2,7 +2,7 @@
 # This Makefile fragment tries to be general-purpose enough to be
 # used by at least coreutils, idutils, CPPI, Bison, and Autoconf.
 
-## Copyright (C) 2001-2008 Free Software Foundation, Inc.
+## Copyright (C) 2001-2009 Free Software Foundation, Inc.
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ this-vc-tag-regexp = v$(VERSION_REGEXP)
 my_distdir = $(PACKAGE)-$(VERSION)
 
 # Old releases are stored here.
-# Used for diffs and xdeltas.
+# Used for diffs.
 release_archive_dir ?= ../release
 
 # Prevent programs like 'sort' from considering distinct strings to be equal.
@@ -525,9 +525,8 @@ my-distcheck: $(local-check) $(release_archive_dir)/$(prev-tgz)
 	echo "========================"
 
 prev-tgz = $(PACKAGE)-$(PREV_VERSION).tar.gz
-xd-delta = $(PACKAGE)-$(PREV_VERSION)-$(VERSION).xdelta
 
-rel-files = $(xd-delta) $(DIST_ARCHIVES)
+rel-files = $(DIST_ARCHIVES)
 announcement: NEWS ChangeLog $(rel-files)
 	@$(announce_gen)						\
 	    --release-type=$(RELEASE_TYPE)				\
@@ -558,9 +557,6 @@ emit_upload_commands:
 	@echo '# send the /tmp/announcement e-mail'
 	@echo =====================================
 	@echo =====================================
-
-$(xd-delta): $(release_archive_dir)/$(prev-tgz) $(distdir).tar.gz
-	xdelta delta -9 $^ $@ || :
 
 .PHONY: alpha beta major
 alpha beta major: news-date-check changelog-check $(local-check)

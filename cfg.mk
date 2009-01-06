@@ -1,5 +1,6 @@
 # Customize maint.mk for Autoconf.            -*- Makefile -*-
-# Copyright (C) 2003, 2004, 2006, 2008 Free Software Foundation, Inc.
+# Copyright (C) 2003, 2004, 2006, 2008, 2009 Free Software Foundation,
+# Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -49,6 +50,7 @@ fetch:
 	cp $(gnulib_dir)/build-aux/config.guess $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/config.sub $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/elisp-comp $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/gendocs.sh $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/git-version-gen $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/gnupload $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/install-sh $(srcdir)/build-aux
@@ -57,6 +59,7 @@ fetch:
 	cp $(gnulib_dir)/build-aux/vc-list-files $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/texinfo.tex $(srcdir)/build-aux
 	cp $(gnulib_dir)/doc/fdl.texi $(srcdir)/doc
+	cp $(gnulib_dir)/doc/gendocs_template $(srcdir)/doc
 	cp $(gnulib_dir)/doc/gnu-oids.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/make-stds.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/standards.texi $(srcdir)/doc
@@ -69,7 +72,7 @@ local-checks-to-skip ?= \
 .PHONY: web-manual
 web-manual:
 	@cd $(srcdir)/doc ; \
-	GENDOCS_TEMPLATE_DIR=$(gnulib_dir)/doc; export GENDOCS_TEMPLATE_DIR; \
-	$(SHELL) $(gnulib_dir)/build-aux/gendocs.sh autoconf \
+	  $(SHELL) ../build-aux/gendocs.sh -o '$(abs_builddir)/doc/manual' \
+	    --email $(PACKAGE_BUGREPORT) $(PACKAGE) \
 	    "$(PACKAGE_NAME) - Creating Automatic Configuration Scripts"
 	@echo " *** Upload the doc/manual directory to web-cvs."

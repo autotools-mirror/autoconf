@@ -1,6 +1,6 @@
 # Make Autoconf documentation.
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2007, 2008 Free Software
+# Copyright (C) 2000, 2001, 2002, 2003, 2007, 2008, 2009 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,8 @@ TEXINFO_TEX = ../build-aux/texinfo.tex
 info_TEXINFOS = autoconf.texi standards.texi
 autoconf_TEXINFOS = fdl.texi install.texi
 standards_TEXINFOS = fdl.texi gnu-oids.texi make-stds.texi
+
+EXTRA_DIST = gendocs_template
 
 # Files from texi2dvi that should be removed, but which Automake does
 # not know.

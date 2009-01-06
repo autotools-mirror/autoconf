@@ -1,7 +1,7 @@
 # Make Autoconf.
 
-# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008 Free
-# Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2007, 2008,
+# 2009 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ ACLOCAL_AMFLAGS = -I m4
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
 	     BUGS COPYINGv3 \
 	     GNUmakefile maint.mk cfg.mk \
+	     build-aux/gendocs.sh \
 	     build-aux/git-version-gen \
 	     build-aux/announce-gen build-aux/gnupload \
 	     .prev-version .version
