@@ -334,8 +334,9 @@ dnl portability nightmares on what constructs are considered errors across
 dnl various shells; therefore, an overall SKIP result is desirable on
 dnl broken shells like Solaris /bin/sh.
 AT_CHECK([./script '' e], [3])
-AT_CHECK([./script d e], [3], [[3
-]])
+AT_CHECK([./script d e], [3], [stdout])
+dnl NetBSD sh fails to output on stderr here.
+AT_CHECK([grep 3 stdout || exit 77], [], [ignore])
 
 AT_CLEANUP
 

@@ -1,3 +1,9 @@
+2009-01-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Ignore `set -e'-related failure of NetBSD sh.
+	* tests/m4sh.at (AS@&t@_EXIT): Skip test if (NetBSD) shell
+	fails to finish EXIT trap after set -e.
+
 2009-01-06  Eric Blake  <ebb9@byu.net>
 
 	Maintainer cleanups.
