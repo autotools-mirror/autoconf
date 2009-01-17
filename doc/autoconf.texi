@@ -2799,8 +2799,8 @@ macro in @file{configure.ac}.
 @ovindex ERLANG_INSTALL_LIB_DIR_@var{library}
 @acindex{ERLANG_SUBST_INSTALL_LIB_SUBDIR}
 The installation directory for Erlang library @var{library}.
-This variable is set by calling the
-@samp{AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR(@var{library}, @var{version})}
+This variable is set by using the
+@samp{AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR}
 macro in @file{configure.ac}.
 @end defvar
 
