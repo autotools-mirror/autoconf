@@ -2,8 +2,8 @@
 
 AT_BANNER([M4sugar.])
 
-# Copyright (C) 2000, 2001, 2002, 2005, 2006, 2007, 2008 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2005, 2006, 2007, 2008, 2009 Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -379,6 +379,7 @@ AT_CLEANUP
 ## --------------------------- ##
 
 AT_SETUP([m4@&t@_require: error message])
+AT_KEYWORDS([m4@&t@_require])
 
 AT_DATA_M4SUGAR([script.4s],
 [[m4_defun([foo], [FOO])
@@ -398,6 +399,7 @@ AT_CLEANUP
 ## ----------------------------------- ##
 
 AT_SETUP([m4@&t@_require: circular dependencies])
+AT_KEYWORDS([m4@&t@_require])
 
 AT_DATA_M4SUGAR([script.4s],
 [[m4_defun([foo], [m4_require([bar])])
@@ -427,6 +429,7 @@ AT_CLEANUP
 ## ---------------------- ##
 
 AT_SETUP([m4@&t@_require: one-shot initialization])
+AT_KEYWORDS([m4@&t@_require])
 AT_KEYWORDS([m4@&t@_defun_init m4@&t@_copy])
 
 AT_CHECK_M4SUGAR_TEXT([[
@@ -452,6 +455,107 @@ hello, world
 goodbye
 hello, again
 ]])
+AT_CLEANUP
+
+
+## -------------------- ##
+## m4_require: nested.  ##
+## -------------------- ##
+
+AT_SETUP([m4@&t@_require: nested])
+AT_KEYWORDS([m4@&t@_require m4@&t@_defun])
+
+dnl From the m4sugar.m4 discourse: Require chains, top level
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_defun([a], [[a]])dnl aka TEST2a
+m4_defun([b], [[b]m4_require([a])])dnl aka TEST3
+m4_defun([c], [[c]m4_require([b])])dnl aka TEST2b
+m4_defun([d], [[d]m4_require([a])m4_require([c])])dnl aka TEST1
+pre
+d
+d
+post
+]],
+[[pre
+a
+b
+c
+d
+d
+post
+]])
+
+dnl From the m4sugar.m4 discourse: Require chains, nested
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_defun([a], [[a]])dnl aka TEST2a
+m4_defun([b], [[b]m4_require([a])])dnl aka TEST3
+m4_defun([c], [[c]m4_require([b])])dnl aka TEST2b
+m4_defun([d], [[d]m4_require([a])m4_require([c])])dnl aka TEST1
+m4_defun([wrap],
+[pre
+d
+d
+post])dnl
+wrap
+]],
+[[a
+b
+c
+pre
+d
+d
+post
+]])
+
+dnl Direct invocation, top level
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_defun([a], [[a]])dnl
+m4_defun([b], [[b]m4_require([a])])dnl
+m4_defun([c], [[c]m4_require([b])])dnl
+pre
+a
+c
+a
+c
+post
+]],
+[[pre
+a
+b
+c
+a
+c
+post
+]])
+
+dnl Direct invocation, nested.  This is an example of expansion before
+dnl requirement, such that b occurs before its prerequisite a.  This
+dnl indicates a bug in the macros (but not in autoconf), so we should
+dnl be emitting a warning.
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_defun([a], [[a]])dnl
+m4_defun([b], [[b]m4_require([a])])dnl
+m4_defun([c], [[c]m4_require([b])])dnl
+m4_defun([outer],
+[pre
+a
+c
+a
+c
+post])dnl
+outer
+]],
+[[b
+pre
+a
+c
+a
+c
+post
+]], [stderr])
+AT_XFAIL_IF([:])
+AT_CHECK([test -s stderr])
+
 AT_CLEANUP
 
 

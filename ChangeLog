@@ -1,5 +1,12 @@
 2009-01-19  Eric Blake  <ebb9@byu.net>
 
+	Improve AC_REQUIRE documentation.
+	* doc/autoconf.texi (Macro Definitions) <AC_DEFUN>: Add @defmac,
+	and mention interaction with AC_REQUIRE.
+	(Prerequisite Macros) <AC_REQUIRE>: Give more detail on user
+	ordering constraint bug, and how to fix it.
+	* tests/m4sugar.at (m4@&t@_require: nested): New test.
+
 	Speed up m4_require.
 	* lib/m4sugar/m4sugar.m4 (_m4_divert_dump): Change semantics to
 	always be defined, as either empty or a number.

@@ -183,7 +183,8 @@ a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
 
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000,
-2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software
+Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -12800,12 +12801,15 @@ Here are some instructions and guidelines for writing Autoconf macros.
 @node Macro Definitions
 @section Macro Definitions
 
+@defmac AC_DEFUN (@var{name}, @ovar{body})
 @acindex{DEFUN}
 Autoconf macros are defined using the @code{AC_DEFUN} macro, which is
-similar to the M4 builtin @code{m4_define} macro.  In addition to
+similar to the M4 builtin @code{m4_define} macro; this creates a macro
+named @var{name} and with @var{body} as its expansion.  In addition to
 defining a macro, @code{AC_DEFUN} adds to it some code that is used to
-constrain the order in which macros are called (@pxref{Prerequisite
-Macros}).
+constrain the order in which macros are called, while avoiding redundant
+output (@pxref{Prerequisite Macros}).
+@end defmac
 
 An Autoconf macro definition looks like this:
 
@@ -12816,6 +12820,16 @@ AC_DEFUN(@var{macro-name}, @var{macro-body})
 You can refer to any arguments passed to the macro as @samp{$1},
 @samp{$2}, etc.  @xref{Definitions, , How to define new macros, m4.info,
 @acronym{GNU} M4}, for more complete information on writing M4 macros.
+
+Most macros fall in one of two general categories.  The first category
+includes macros which take arguments, in order to generate output
+parameterized by those arguments.  Macros in this category are designed
+to be directly expanded, often multiple times, and should not be used as
+the argument to @code{AC_REQUIRE}.  The other category includes macros
+which are shorthand for a fixed block of text, and therefore do not take
+arguments.  For this category of macros, directly expanding the macro
+multiple times results in redundant output, so it is more common to use
+the macro as the argument to @code{AC_REQUIRE}.
 
 Be sure to properly quote both the @var{macro-body} @emph{and} the
 @var{macro-name} to avoid any problems if the macro happens to have
@@ -13030,7 +13044,8 @@ square brackets.  @var{macro-name} must have been defined using
 that it has been called.
 
 @code{AC_REQUIRE} must be used inside a macro defined by @code{AC_DEFUN}; it
-must not be called from the top level.
+must not be called from the top level.  Also, it does not make sense to
+require a macro that takes parameters.
 @end defmac
 
 @code{AC_REQUIRE} is often misunderstood.  It really implements
@@ -13103,9 +13118,75 @@ SOME_CHECK
 @end group
 @end example
 
+However, this implementation can lead to another class of problems.
+Since dependencies are hoisted prior to the outermost @code{AC_DEFUN}
+body, but only if they have not been previously seen, it is still
+possible to encounter out-of-order expansion.  Given this example:
+
+@example
+AC_DEFUN([A], [[in A]])
+AC_DEFUN([B], [AC_REQUIRE([A])[in B]])
+AC_DEFUN([C], [AC_REQUIRE([B])[in C]])
+AC_DEFUN([OUTER], [[in OUTER]
+A
+C])
+OUTER
+@end example
+
+@noindent
+observe that the expansion of @code{B} occurred prior to the expansion
+of @code{OUTER}, but because the requirement for @code{B} was not
+encountered until after @code{A} had already been directly expanded,
+there was no reason to hoist @code{A}.  Or, put another way, the fact
+that @code{B} was hoisted but not @code{A} means that @code{B} occurs
+before its prerequisite:
+
+@example
+in B
+in OUTER
+in A
+in C
+@end example
+
+The bug is not in Autoconf, but in the macro definitions.  If you ever
+pass a particular macro name to @code{AC_REQUIRE}, then you are implying
+that the macro only needs to be expanded once.  But to enforce this, all
+uses of that macro should be through @code{AC_REQUIRE}; directly
+expanding the macro defeats the point of using @code{AC_REQUIRE} to
+eliminate redundant expansion.  In the example, this rule of thumb was
+violated because @code{B} requires @code{A} while @code{OUTER} directly
+expands it.  One way of fixing the bug is to factor @code{A} into two
+macros, the portion designed for direct and repeated use (here, named
+@code{A}), and the portion designed for one-shot output and used only
+inside @code{AC_REQUIRE} (here, named @code{A_PREREQ}).  Then, by fixing
+all clients to use the correct macro according to their needs:
+
+@example
+AC_DEFUN([A], [AC_REQUIRE([A_PREREQ])[in A]])
+AC_DEFUN([A_PREREQ], [[in A_PREREQ]])
+AC_DEFUN([B], [AC_REQUIRE([A_PREREQ])[in B]])
+AC_DEFUN([C], [AC_REQUIRE([B])[in C]])
+AC_DEFUN([OUTER], [[in OUTER]
+A
+C])
+OUTER
+@end example
+
+@noindent
+the resulting output will then obey all dependency rules:
+
+@example
+in A_PREREQ
+in B
+in OUTER
+in A
+in C
+@end example
+
 The helper macros @code{AS_IF} and @code{AS_CASE} may be used to
 enforce expansion of required macros outside of shell conditional
-constructs.  You are furthermore encouraged to put all @code{AC_REQUIRE} calls
+constructs.  You are furthermore encouraged, although not required, to
+put all @code{AC_REQUIRE} calls
 at the beginning of a macro.  You can use @code{dnl} to avoid the empty
 lines they leave.
 
