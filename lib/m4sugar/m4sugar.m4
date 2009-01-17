@@ -4,7 +4,7 @@ divert(-1)#                                                  -*- Autoconf -*-
 # Requires GNU M4.
 #
 # Copyright (C) 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
-# 2008 Free Software Foundation, Inc.
+# 2008, 2009 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1772,8 +1772,7 @@ m4_define([_m4_defun_pro],
 [m4_expansion_stack_push([$1])m4_pushdef([_m4_expanding($1)])])
 
 m4_define([_m4_defun_pro_outer],
-[m4_define([_m4_divert_dump],
-  m4_defn([_m4_divert_diversion]))m4_divert_push([GROW])])
+[m4_pushdef([_m4_divert_dump], m4_divnum)m4_divert_push([GROW])])
 
 # _m4_defun_epi(MACRO-NAME)
 # -------------------------
@@ -1788,21 +1787,29 @@ m4_define([_m4_defun_epi],
 [m4_provide([$1])])
 
 m4_define([_m4_defun_epi_outer],
-[_m4_undefine([_m4_divert_dump])m4_divert_pop([GROW])m4_undivert([GROW])])
+[_m4_popdef([_m4_divert_dump])m4_divert_pop([GROW])m4_undivert([GROW])])
+
+
+# _m4_divert_dump
+# ---------------
+# If blank, we are outside of any defun'd macro.  Otherwise, expands
+# to the diversion number (not name) where require'd macros should be
+# moved once completed.
+m4_define([_m4_divert_dump])
 
 
 # m4_divert_require(DIVERSION, NAME-TO-CHECK, [BODY-TO-EXPAND])
 # --------------------------------------------------------------
-# Same as m4_require, but BODY-TO-EXPAND goes into the named diversion;
+# Same as m4_require, but BODY-TO-EXPAND goes into the named DIVERSION;
 # requirements still go in the current diversion though.
 #
 m4_define([m4_divert_require],
 [m4_ifdef([_m4_expanding($2)],
   [m4_fatal([$0: circular dependency of $2])])]dnl
-[m4_ifdef([_m4_divert_dump], [],
+[m4_if(_m4_divert_dump, [],
   [m4_fatal([$0($2): cannot be used outside of an m4_defun'd macro])])]dnl
 [m4_provide_if([$2], [],
-  [_m4_require_call([$2], [$3], [$1])])])
+  [_m4_require_call([$2], [$3], _m4_divert([$1]))])])
 
 
 # m4_defun(NAME, EXPANSION, [MACRO = m4_define])
@@ -1923,20 +1930,20 @@ m4_define([m4_before],
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and other overhead on the common path.
 m4_define([m4_require],
-m4_do([[m4_ifdef([_m4_expanding($1)],
-		 [m4_fatal([$0: circular dependency of $1])])]],
-      [[m4_ifdef([_m4_divert_dump], [],
-		 [m4_fatal([$0($1): cannot be used outside of an ]dnl
-m4_bmatch([$0], [^AC_], [[AC_DEFUN]], [[m4_defun]])['d macro])])]],
-      [[m4_provide_if([$1],
-		      [],
-		      [_m4_require_call([$1], [$2], [_m4_defn([_m4_divert_dump])])])]]))
+[m4_ifdef([_m4_expanding($1)],
+  [m4_fatal([$0: circular dependency of $1])])]dnl
+[m4_if(_m4_divert_dump, [],
+  [m4_fatal([$0($1): cannot be used outside of an ]dnl
+m4_if([$0], [m4_require], [[m4_defun]], [[AC_DEFUN]])['d macro])])]dnl
+[m4_provide_if([$1], [],
+	       [_m4_require_call([$1], [$2], _m4_divert_dump)])])
 
 
-# _m4_require_call(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK], DIVERSION)
-# ----------------------------------------------------------------------------
+# _m4_require_call(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
+#                  DIVERSION-NUMBER)
+# -----------------------------------------------------------------
 # If m4_require decides to expand the body, it calls this macro.  The
-# expansion is placed in DIVERSION.
+# expansion is placed in DIVERSION-NUMBER.
 #
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and other overhead on the common path.
@@ -1946,8 +1953,7 @@ m4_define([_m4_require_call],
 [m4_if([$2], [], [$1], [$2])
 m4_provide_if([$1], [], [m4_warn([syntax],
   [$1 is m4_require'd but not m4_defun'd])])]dnl
-[_m4_divert_raw(_m4_divert($3))]dnl
-[_m4_undivert(_m4_divert_grow)]dnl
+[_m4_divert_raw($3)_m4_undivert(_m4_divert_grow)]dnl
 [m4_divert_pop(_m4_divert_grow)_m4_popdef([_m4_divert_grow])])
 
 

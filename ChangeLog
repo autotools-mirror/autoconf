@@ -1,3 +1,14 @@
+2009-01-19  Eric Blake  <ebb9@byu.net>
+
+	Speed up m4_require.
+	* lib/m4sugar/m4sugar.m4 (_m4_divert_dump): Change semantics to
+	always be defined, as either empty or a number.
+	(_m4_defun_pro_outer, _m4_defun_epi_outer): Treat _m4_divert_dump
+	as a stack, rather than a one-shot macro.
+	(_m4_require_call): Expect third argument to be pre-expanded.
+	(m4_divert_require, m4_require): Adjust clients accordingly.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): Likewise.
+
 2009-01-17  Eric Blake  <ebb9@byu.net>
 
 	Avoid underfull hbox.
