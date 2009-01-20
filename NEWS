@@ -5,6 +5,15 @@ GNU Autoconf NEWS - User visible changes.
 
 ** The manual is now shipped under the terms of the GNU FDL 1.3.
 
+** AC_REQUIRE now detects the case of an outer macro which first expands
+   then later indirectly requires the same inner macro.  Previously,
+   this case led to silent out-of-order expansion (bug present since
+   2.50); it now issues a syntax warning, and duplicates the expansion
+   of the inner macro to guarantee dependencies have been met.  See
+   the manual for advice on how to refactor macros in order to avoid
+   the bug in earlier autoconf versions and avoid increased script
+   size in the current version.
+
 ** AC_LANG_ERLANG works once again (regression introduced in 2.61a).
 
 ** AC_HEADER_ASSERT is fixed so that './configure --enable-assert' no

@@ -1,5 +1,14 @@
 2009-01-21  Eric Blake  <ebb9@byu.net>
 
+	Fix out-of-order expansion with expand-before-require.
+	* lib/m4sugar/m4sugar.m4 (m4_require): Redundantly expand a
+	required macro when issuing expand-before-require warning.
+	* doc/autoconf.texi (Prerequisite Macros): Adjust documentation.
+	(Expanded Before Required): New node.
+	* tests/m4sugar.at (m4@&t@_require: nested): Adjust test.
+	* NEWS: Mention this fix.
+	Suggested by Bruno Haible.
+
 	Warn if macro is provided before indirectly required.
 	* lib/m4sugar/m4sugar.m4 (m4_provide): Track the set of all macros
 	provided since last outermost defun.

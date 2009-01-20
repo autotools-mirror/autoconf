@@ -545,7 +545,8 @@ c
 post])dnl
 outer
 ]],
-[[b
+[[a
+b
 pre
 a
 c

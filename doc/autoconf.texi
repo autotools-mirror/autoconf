@@ -617,6 +617,7 @@ Frequent Autoconf Questions, with answers
 * Defining Directories::        Passing @code{datadir} to program
 * Autom4te Cache::              What is it?  Can I remove it?
 * Present But Cannot Be Compiled::  Compiler and Preprocessor Disagree
+* Expanded Before Required::    Expanded Before Required
 
 History of Autoconf
 
@@ -13119,32 +13120,52 @@ SOME_CHECK
 @end example
 
 However, this implementation can lead to another class of problems.
-Since dependencies are hoisted prior to the outermost @code{AC_DEFUN}
-body, but only if they have not been previously seen, it is still
-possible to encounter out-of-order expansion.  Given this example:
+Consider the case where an outer macro first expands, then indirectly
+requires, an inner macro:
 
 @example
-AC_DEFUN([A], [[in A]])
-AC_DEFUN([B], [AC_REQUIRE([A])[in B]])
-AC_DEFUN([C], [AC_REQUIRE([B])[in C]])
-AC_DEFUN([OUTER], [[in OUTER]
+AC_DEFUN([TESTA], [[echo in A
+if test -n "$SEEN_A" ; then echo duplicate ; fi
+SEEN_A=:]])
+AC_DEFUN([TESTB], [AC_REQUIRE([TESTA])[echo in B
+if test -z "$SEEN_A" ; then echo bug ; fi]])
+AC_DEFUN([TESTC], [AC_REQUIRE([TESTB])[echo in C]])
+AC_DEFUN([OUTER], [[echo in OUTER]
 A
 C])
 OUTER
 @end example
 
 @noindent
-observe that the expansion of @code{B} occurred prior to the expansion
-of @code{OUTER}, but because the requirement for @code{B} was not
-encountered until after @code{A} had already been directly expanded,
-there was no reason to hoist @code{A}.  Or, put another way, the fact
-that @code{B} was hoisted but not @code{A} means that @code{B} occurs
-before its prerequisite:
+Prior to Autoconf 2.64, the implementation of @code{AC_REQUIRE}
+recognized that @code{TESTB} needed to be hoisted prior to the expansion
+of @code{OUTER}, but because @code{TESTA} had already been directly
+expanded, it failed to hoist @code{TESTA}.  Therefore, the expansion of
+@code{TESTB} occurs prior to its prerequisites, leading to the following
+output:
 
 @example
 in B
+bug
 in OUTER
 in A
+in C
+@end example
+
+@noindent
+Newer Autoconf is smart enough to recognize this situation, and hoists
+@code{TESTA} even though it has already been expanded, but issues a
+syntax warning in the process.  This is because the hoisted expansion of
+@code{TESTA} defeats the purpose of using @code{AC_REQUIRE} to avoid
+redundant code, and causes its own set of problems if the hoisted macro
+is not idempotent:
+
+@example
+in A
+in B
+in OUTER
+in A
+duplicate
 in C
 @end example
 
@@ -13154,26 +13175,32 @@ that the macro only needs to be expanded once.  But to enforce this, all
 uses of that macro should be through @code{AC_REQUIRE}; directly
 expanding the macro defeats the point of using @code{AC_REQUIRE} to
 eliminate redundant expansion.  In the example, this rule of thumb was
-violated because @code{B} requires @code{A} while @code{OUTER} directly
-expands it.  One way of fixing the bug is to factor @code{A} into two
-macros, the portion designed for direct and repeated use (here, named
-@code{A}), and the portion designed for one-shot output and used only
-inside @code{AC_REQUIRE} (here, named @code{A_PREREQ}).  Then, by fixing
-all clients to use the correct macro according to their needs:
+violated because @code{TESTB} requires @code{TESTA} while @code{OUTER}
+directly expands it.  One way of fixing the bug is to factor
+@code{TESTA} into two macros, the portion designed for direct and
+repeated use (here, named @code{TESTA}), and the portion designed for
+one-shot output and used only inside @code{AC_REQUIRE} (here, named
+@code{TESTA_PREREQ}).  Then, by fixing all clients to use the correct
+calling convention according to their needs:
 
 @example
-AC_DEFUN([A], [AC_REQUIRE([A_PREREQ])[in A]])
-AC_DEFUN([A_PREREQ], [[in A_PREREQ]])
-AC_DEFUN([B], [AC_REQUIRE([A_PREREQ])[in B]])
-AC_DEFUN([C], [AC_REQUIRE([B])[in C]])
-AC_DEFUN([OUTER], [[in OUTER]
-A
-C])
+AC_DEFUN([TESTA], [AC_REQUIRE([TESTA_PREREQ])[echo in A]])
+AC_DEFUN([TESTA_PREREQ], [[echo in A_PREREQ
+if test -n "$SEEN_A" ; then echo duplicate ; fi
+SEEN_A=:]])
+AC_DEFUN([TESTB], [AC_REQUIRE([TESTA_PREREQ])[echo in B
+if test -z "$SEEN_A" ; then echo bug ; fi]])
+AC_DEFUN([TESTC], [AC_REQUIRE([TESTB])[echo in C]])
+AC_DEFUN([OUTER], [[echo in OUTER]
+TESTA
+TESTC])
 OUTER
 @end example
 
 @noindent
-the resulting output will then obey all dependency rules:
+the resulting output will then obey all dependency rules and avoid any
+syntax warnings, whether the script is built with old or new Autoconf
+versions:
 
 @example
 in A_PREREQ
@@ -22415,6 +22442,7 @@ are addressed.
 * Defining Directories::        Passing @code{datadir} to program
 * Autom4te Cache::              What is it?  Can I remove it?
 * Present But Cannot Be Compiled::  Compiler and Preprocessor Disagree
+* Expanded Before Required::    Expanded Before Required
 @end menu
 
 @node Distributing
@@ -22802,6 +22830,48 @@ checking for pi.h... yes
 
 See @ref{Particular Headers}, for a list of headers with their
 prerequisites.
+
+@node Expanded Before Required
+@section Expanded Before Required
+
+@cindex expanded before required
+Older versions of Autoconf silently built files with incorrect ordering
+between dependent macros if an outer macro first expanded, then later
+indirectly required, an inner macro.  Starting with Autoconf 2.64, this
+situation no longer generates out-of-order code, but results in
+duplicate output and a diagnosis of a syntax warning:
+
+@example
+$ @kbd{cat configure.ac}
+@result{}AC_DEFUN([TESTA], [[echo in A
+@result{}if test -n "$SEEN_A" ; then echo duplicate ; fi
+@result{}SEEN_A=:]])
+@result{}AC_DEFUN([TESTB], [AC_REQUIRE([TESTA])[echo in B
+@result{}if test -z "$SEEN_A" ; then echo bug ; fi]])
+@result{}AC_DEFUN([TESTC], [AC_REQUIRE([TESTB])[echo in C]])
+@result{}AC_DEFUN([OUTER], [[echo in OUTER]
+@result{}TESTA
+@result{}TESTC])
+@result{}AC_INIT
+@result{}OUTER
+@result{}AC_OUTPUT
+$ @kbd{autoconf}
+@result{}configure.ac:11: warning: AC_REQUIRE:
+@result{} `TESTA' was expanded before it was required
+@result{}configure.ac:4: TESTB is expanded from...
+@result{}configure.ac:6: TESTC is expanded from...
+@result{}configure.ac:7: OUTER is expanded from...
+@result{}configure.ac:11: the top level
+@end example
+
+To avoid this warning, decide what purpose the macro in question serves.
+If it only needs to be expanded once (for example, if it provides
+initialization text used by later macros), then the fix is to change all
+instance of direct calls to instead go through @code{AC_REQUIRE}
+(@pxref{Prerequisite Macros}).  If, instead, the macro is parameterized
+by arguments or by the current definition of other macros in the m4
+environment, then the macro should always be directly expanded instead
+of required.
 
 @c ===================================================== History of Autoconf.
 
