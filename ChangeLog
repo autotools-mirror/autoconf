@@ -1,3 +1,15 @@
+2009-01-21  Eric Blake  <ebb9@byu.net>
+
+	Warn if macro is provided before indirectly required.
+	* lib/m4sugar/m4sugar.m4 (m4_provide): Track the set of all macros
+	provided since last outermost defun.
+	(_m4_defun_pro_outer): Empty the set.
+	(_m4_require_call): Distinguish between direct and indirect
+	requires, and remove required macros from the set.
+	(m4_require): Check the set, in order to warn.
+	* tests/m4sugar.at (m4@&t@_require: nested): Remove xfail, and add
+	test case for direct requires.
+
 2009-01-20  Eric Blake  <ebb9@byu.net>
 
 	Clean up some bugs caught by preliminary dependency validation.

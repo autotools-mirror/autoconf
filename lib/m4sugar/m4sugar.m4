@@ -1460,10 +1460,11 @@ m4_define([m4_undivert],
 # difficult part is the proper expansion of macros when they are
 # m4_require'd.
 #
-# The implementation is based on two ideas, (i) using diversions to
+# The implementation is based on three ideas, (i) using diversions to
 # prepare the expansion of the macro and its dependencies (by Franc,ois
-# Pinard), and (ii) expand the most recently m4_require'd macros _after_
-# the previous macros (by Axel Thimm).
+# Pinard), (ii) expand the most recently m4_require'd macros _after_
+# the previous macros (by Axel Thimm), and (iii) track instances of
+# provide before require (by Eric Blake).
 #
 #
 # The first idea: why use diversions?
@@ -1597,8 +1598,8 @@ m4_define([m4_undivert],
 #	   GROW:
 #	   BODY:     TEST2a; TEST3; TEST2b: TEST1
 #
-# The idea is simple, but the implementation is a bit evolved.  If you
-# are like me, you will want to see the actual functioning of this
+# The idea is simple, but the implementation is a bit involved.  If
+# you are like me, you will want to see the actual functioning of this
 # implementation to be convinced.  The next section gives the full
 # details.
 #
@@ -1649,7 +1650,7 @@ m4_define([m4_undivert],
 #   BODY:        empty
 #   GROW - 1:    TEST2a
 #   diversions:  GROW - 1, GROW, BODY |-
-# Than the content of the temporary diversion is moved to DUMP and the
+# Then the content of the temporary diversion is moved to DUMP and the
 # temporary diversion is popped.
 #   DUMP:        BODY
 #   BODY:        TEST2a
@@ -1669,7 +1670,7 @@ m4_define([m4_undivert],
 #   BODY:        TEST2a
 #   GROW - 2:    TEST3
 #   diversions:  GROW - 2, GROW - 1, GROW, BODY |-
-# Than the diversion is appended to DUMP, and popped.
+# Then the diversion is appended to DUMP, and popped.
 #   DUMP:        BODY
 #   BODY:        TEST2a; TEST3
 #   diversions:  GROW - 1, GROW, BODY |-
@@ -1695,6 +1696,52 @@ m4_define([m4_undivert],
 #   DUMP:       undefined
 #   BODY:       TEST2a; TEST3; TEST2b; TEST1
 #   diversions: BODY |-
+#
+#
+# The third idea: track macros provided before they were required
+# ---------------------------------------------------------------
+#
+# Using just the first two ideas, Autoconf 2.50 through 2.63 still had
+# a subtle bug for more than seven years.  Let's consider the
+# following example to explain the bug:
+#
+# | m4_defun([TEST1], [1])
+# | m4_defun([TEST2], [2[]REQUIRE([TEST1])])
+# | m4_defun([TEST3], [3 TEST1 REQUIRE([TEST2])])
+# | TEST3
+#
+# After the prologue of TEST3, we are collecting text in GROW with the
+# intent of dumping it in BODY during the epilogue.  Next, we
+# encounter the direct invocation of TEST1, which provides the macro
+# in place in GROW.  From there, we encounter a requirement for TEST2,
+# which must be collected in a new diversion.  While expanding TEST2,
+# we encounter a requirement for TEST1, but since it has already been
+# expanded, the Axel Thimm algorithm states that we can treat it as a
+# no-op.  But that would lead to an end result of `2 3 1', meaning
+# that we have once again output a macro (TEST2) prior to its
+# requirements (TEST1).
+#
+# The problem can only occur if a single defun'd macro first provides,
+# then later indirectly requires, the same macro.  Note that directly
+# expanding then requiring a macro is okay, since the requirement will
+# be a no-op; the problem is only present if the requirement is nested
+# inside a context that will be hoisted in front of the outermost
+# defun'd macro.  In other words, we must be careful not to warn on:
+#
+# | m4_defun([TEST1], [1])
+# | m4_defun([TEST2], [TEST1 REQUIRE([TEST1])])
+#
+# The implementation of the warning involves tracking the set of
+# macros which have been provided since the start of the outermost
+# defun'd macro (the set is named _m4_provide).  When starting an
+# outermost macro, the set is emptied; when a macro is provided, it is
+# added to the set; when require expands the body of a macro, it is
+# removed from the set; and when a macro is indirectly required (that
+# is, when m4_require detects a nested call), the set is checked.  If
+# a macro is in the set, then it has been provided before it was
+# required, and a warning is issued because the output will be out of
+# order and the user must fix her macros to reflect the true
+# dependencies.
 #
 #
 # 2. Keeping track of the expansion stack
@@ -1772,6 +1819,7 @@ m4_define([_m4_defun_pro],
 [m4_expansion_stack_push([$1])m4_pushdef([_m4_expanding($1)])])
 
 m4_define([_m4_defun_pro_outer],
+[m4_set_delete([_m4_provide])]dnl
 [m4_pushdef([_m4_divert_dump], m4_divnum)m4_divert_push([GROW])])
 
 # _m4_defun_epi(MACRO-NAME)
@@ -1935,8 +1983,10 @@ m4_define([m4_require],
 [m4_if(_m4_divert_dump, [],
   [m4_fatal([$0($1): cannot be used outside of an ]dnl
 m4_if([$0], [m4_require], [[m4_defun]], [[AC_DEFUN]])['d macro])])]dnl
-[m4_provide_if([$1], [],
-	       [_m4_require_call([$1], [$2], _m4_divert_dump)])])
+[m4_provide_if([$1], [m4_ifdef([_m4_require],
+  [m4_set_contains([_m4_provide], [$1],
+    [m4_warn([syntax], [$0: `$1' was expanded before it was required])])])],
+  [_m4_require_call([$1], [$2], _m4_divert_dump)])])
 
 
 # _m4_require_call(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
@@ -1949,12 +1999,13 @@ m4_if([$0], [m4_require], [[m4_defun]], [[AC_DEFUN]])['d macro])])]dnl
 # by avoiding dnl and other overhead on the common path.
 m4_define([_m4_require_call],
 [m4_pushdef([_m4_divert_grow], m4_decr(_m4_divert_grow))]dnl
+[m4_pushdef([_m4_require])]dnl
 [m4_divert_push(_m4_divert_grow)]dnl
 [m4_if([$2], [], [$1], [$2])
-m4_provide_if([$1], [], [m4_warn([syntax],
-  [$1 is m4_require'd but not m4_defun'd])])]dnl
+m4_provide_if([$1], [m4_set_remove([_m4_provide], [$1])],
+  [m4_warn([syntax], [$1 is m4_require'd but not m4_defun'd])])]dnl
 [_m4_divert_raw($3)_m4_undivert(_m4_divert_grow)]dnl
-[m4_divert_pop(_m4_divert_grow)_m4_popdef([_m4_divert_grow])])
+[m4_divert_pop(_m4_divert_grow)_m4_popdef([_m4_divert_grow], [_m4_require])])
 
 
 # _m4_divert_grow
@@ -1976,7 +2027,8 @@ m4_define([m4_expand_once],
 # m4_provide(MACRO-NAME)
 # ----------------------
 m4_define([m4_provide],
-[m4_define([m4_provide($1)])])
+[m4_ifdef([m4_provide($1)], [],
+[m4_set_add([_m4_provide], [$1], [m4_define([m4_provide($1)])])])])
 
 
 # m4_provide_if(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)

@@ -507,7 +507,7 @@ d
 post
 ]])
 
-dnl Direct invocation, top level
+dnl Direct invocation, nested requires, top level
 AT_CHECK_M4SUGAR_TEXT([[dnl
 m4_defun([a], [[a]])dnl
 m4_defun([b], [[b]m4_require([a])])dnl
@@ -528,10 +528,10 @@ c
 post
 ]])
 
-dnl Direct invocation, nested.  This is an example of expansion before
-dnl requirement, such that b occurs before its prerequisite a.  This
-dnl indicates a bug in the macros (but not in autoconf), so we should
-dnl be emitting a warning.
+dnl Direct invocation, nested requires, nested defun.  This is an example
+dnl of expansion before requirement, such that b occurs before its
+dnl prerequisite a.  This indicates a bug in the macros (but not in
+dnl autoconf), so we should be emitting a warning.
 AT_CHECK_M4SUGAR_TEXT([[dnl
 m4_defun([a], [[a]])dnl
 m4_defun([b], [[b]m4_require([a])])dnl
@@ -552,9 +552,50 @@ c
 a
 c
 post
-]], [stderr])
-AT_XFAIL_IF([:])
-AT_CHECK([test -s stderr])
+]],
+[[script.4s:14: warning: m4@&t@_require: `a' was expanded before it was required
+script.4s:5: b is expanded from...
+script.4s:6: c is expanded from...
+script.4s:7: outer is expanded from...
+script.4s:14: the top level
+]])
+
+dnl Direct invocation, expand-before-require but no nested require.  As this
+dnl is common in real life, but does not result in out-of-order expansion,
+dnl we silently permit this.
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_defun([a], [[a]])dnl
+m4_defun([b], [[b]m4_require([a])])dnl
+m4_defun([c], [[c]])dnl
+m4_defun([d], [[d]m4_require([c])])dnl
+pre1
+a
+b
+a
+b
+post1
+m4_defun([outer],
+[pre2
+c
+d
+c
+d
+post2])dnl
+outer
+]],
+[[pre1
+a
+b
+a
+b
+post1
+pre2
+c
+d
+c
+d
+post2
+]])
 
 AT_CLEANUP
 
