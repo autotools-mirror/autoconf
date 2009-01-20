@@ -217,7 +217,7 @@ m4_define([_AS_DETECT_SUGGESTED_PRUNE],
 m4_defun([_AS_DETECT_BETTER_SHELL],
 dnl Remove any tests from suggested that are also required
 [m4_set_map([_AS_DETECT_SUGGESTED_BODY], [_AS_DETECT_SUGGESTED_PRUNE])]dnl
-[m4_pushdef([AS_EXIT], [exit m4_default([$1], 1)])]dnl
+[m4_pushdef([AS_EXIT], [exit m4_default(]m4_dquote([$][1])[, 1)])]dnl
 [if test "x$CONFIG_SHELL" = x; then
   as_bourne_compatible="AS_ESCAPE(_m4_expand([_AS_BOURNE_COMPATIBLE]))"
   _AS_DETECT_EXPAND([as_required], [_AS_DETECT_REQUIRED_BODY])
@@ -429,7 +429,7 @@ test x$exitcode = x0[]])# _AS_SHELL_FN_WORK
 # it is executed prior to shell function definitions, hence the
 # temporary redefinition of AS_EXIT.
 m4_defun([_AS_SHELL_SANITIZE],
-[m4_pushdef([AS_EXIT], [exit m4_default([$1], 1)])]dnl
+[m4_pushdef([AS_EXIT], [exit m4_default(]m4_dquote([$][1])[, 1)])]dnl
 [m4_text_box([M4sh Initialization.])
 
 AS_BOURNE_COMPATIBLE

@@ -1,8 +1,8 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Checking for headers.
 #
-# Copyright (C) 1988, 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2008
-# Free Software Foundation, Inc.
+# Copyright (C) 1988, 1999, 2000, 2001, 2002, 2003, 2004, 2006, 2008,
+# 2009 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -439,11 +439,11 @@ AC_DEFUN([AC_HEADER_ASSERT],
     [ac_enable_assert=$enableval
      AS_IF(dnl
       [test "x$enableval" = xno],
-        [AC_DEFINE([NDEBUG], [1],
-          [Define to 1 if assertions should be disabled.])],
+	[AC_DEFINE([NDEBUG], [1],
+	  [Define to 1 if assertions should be disabled.])],
       [test "x$enableval" != xyes],
-        [AC_MSG_WARN([invalid argument supplied to --enable-assert])
-        ac_enable_assert=yes])],
+	[AC_MSG_WARN([invalid argument supplied to --enable-assert])
+	ac_enable_assert=yes])],
     [ac_enable_assert=yes])
   AC_MSG_RESULT([$ac_enable_assert])
 ])
@@ -887,8 +887,7 @@ use HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])
 # defines a different set of C preprocessor macros to indicate which
 # header file is found.
 AU_DEFUN([AC_DIR_HEADER],
-[AC_HEADER_DIRENT
-AC_FUNC_CLOSEDIR_VOID
+[AC_FUNC_CLOSEDIR_VOID
 test ac_cv_header_dirent_dirent_h &&
   AC_DEFINE([DIRENT], 1, [Same as `HAVE_DIRENT_H', don't depend on me.])
 test ac_cv_header_dirent_sys_ndir_h &&

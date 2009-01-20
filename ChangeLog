@@ -1,3 +1,11 @@
+2009-01-20  Eric Blake  <ebb9@byu.net>
+
+	Clean up some bugs caught by preliminary dependency validation.
+	* lib/autoconf/headers.m4 (AC_DIR_HEADER): Don't invoke
+	AC_HEADER_DIRENT, since AC_FUNC_CLOSEDIR_VOID requires it.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL)
+	(_AS_SHELL_SANITIZE): Fix quoting bugs.
+
 2009-01-19  Eric Blake  <ebb9@byu.net>
 
 	Improve AC_REQUIRE documentation.
