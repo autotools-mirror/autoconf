@@ -583,6 +583,13 @@ c
 d
 post2])dnl
 outer
+m4_defun([e], [[e]])dnl
+m4_defun([f], [[f]m4_require([e])])dnl
+m4_defun([g], [[g]
+e
+f])dnl
+m4_defun([h], [[h]m4_require([g])])dnl
+h
 ]],
 [[pre1
 a
@@ -596,6 +603,10 @@ d
 c
 d
 post2
+g
+e
+f
+h
 ]])
 
 AT_CLEANUP

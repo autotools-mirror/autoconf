@@ -1723,28 +1723,34 @@ m4_define([m4_undivert],
 #
 # The problem can only occur if a single defun'd macro first provides,
 # then later indirectly requires, the same macro.  Note that directly
-# expanding then requiring a macro is okay, since the requirement will
-# be a no-op; the problem is only present if the requirement is nested
-# inside a context that will be hoisted in front of the outermost
-# defun'd macro.  In other words, we must be careful not to warn on:
+# expanding then requiring a macro is okay, because the dependency was
+# met, the require phase will be a no-op; the out-of-order expansion
+# problem is only present if the requirement is nested inside a
+# context that will be hoisted in front of the outermost defun'd
+# macro.  In other words, we must be careful not to warn on:
 #
 # | m4_defun([TEST4], [4])
 # | m4_defun([TEST5], [TEST4 REQUIRE([TEST5])])
+#
+# So, to detect whether a require was direct or indirect, m4_provide
+# stores the diversion number at which a macro was provided.  A
+# require call is direct if it occurs within the same diversion that
+# the macro was provided.
 #
 # The implementation of the warning involves tracking the set of
 # macros which have been provided since the start of the outermost
 # defun'd macro (the set is named _m4_provide).  When starting an
 # outermost macro, the set is emptied; when a macro is provided, it is
 # added to the set; when require expands the body of a macro, it is
-# removed from the set; and when a macro is indirectly required (that
-# is, when m4_require detects a nested call), the set is checked.  If
-# a macro is in the set, then it has been provided before it was
-# required, and we satisfy dependencies by expanding the macro as if
-# it had never been provided; in the example given above, this means
-# we now output `1 2 3 1'.  Meanwhile, a warning is issued to inform
-# the user that her macros trigger the bug in older autoconf versions,
-# and that her outupt file now contains redundant contents (and
-# possibly new problems, if the repeated macro was not idempotent).
+# removed from the set; and when a macro is indirectly required, the
+# set is checked.  If a macro is in the set, then it has been provided
+# before it was required, and we satisfy dependencies by expanding the
+# macro as if it had never been provided; in the example given above,
+# this means we now output `1 2 3 1'.  Meanwhile, a warning is issued
+# to inform the user that her macros trigger the bug in older autoconf
+# versions, and that her output file now contains redundant contents
+# (and possibly new problems, if the repeated macro was not
+# idempotent).
 #
 #
 # 2. Keeping track of the expansion stack
@@ -1986,11 +1992,10 @@ m4_define([m4_require],
 [m4_if(_m4_divert_dump, [],
   [m4_fatal([$0($1): cannot be used outside of an ]dnl
 m4_if([$0], [m4_require], [[m4_defun]], [[AC_DEFUN]])['d macro])])]dnl
-[m4_provide_if([$1], [m4_ifdef([_m4_require],
-  [m4_set_contains([_m4_provide], [$1], [m4_warn([syntax],
-      [$0: `$1' was expanded before it was required])_m4_require_call],
-    [m4_ignore])], [m4_ignore])],
-  [_m4_require_call])([$1], [$2], _m4_divert_dump)])
+[m4_provide_if([$1], [m4_set_contains([_m4_provide], [$1], [m4_if(m4_divnum,
+      _m4_defn([m4_provide($1)]), [m4_ignore], [m4_warn([syntax],
+      [$0: `$1' was expanded before it was required])_m4_require_call])],
+    [m4_ignore])], [_m4_require_call])([$1], [$2], _m4_divert_dump)])
 
 
 # _m4_require_call(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
@@ -2032,7 +2037,7 @@ m4_define([m4_expand_once],
 # ----------------------
 m4_define([m4_provide],
 [m4_ifdef([m4_provide($1)], [],
-[m4_set_add([_m4_provide], [$1], [m4_define([m4_provide($1)])])])])
+[m4_set_add([_m4_provide], [$1], [m4_define([m4_provide($1)], m4_divnum)])])])
 
 
 # m4_provide_if(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)

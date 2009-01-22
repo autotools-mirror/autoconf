@@ -1,3 +1,13 @@
+2009-01-22  Eric Blake  <ebb9@byu.net>
+
+	Silence a false positive expand-before-require case.
+	* lib/m4sugar/m4sugar.m4 (m4_provide): Track the diversion in
+	which a macro was provided.
+	(m4_require): Compare diversion numbers, rather than m4_require
+	nesting, when determining direct requires.
+	* tests/m4sugar.at (m4@&t@_require: nested): Test it.
+	Reported by Ralf Wildenhues, affecting Libtool.
+
 2009-01-21  Eric Blake  <ebb9@byu.net>
 
 	Fix out-of-order expansion with expand-before-require.
