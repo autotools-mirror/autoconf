@@ -887,7 +887,8 @@ use HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])
 # defines a different set of C preprocessor macros to indicate which
 # header file is found.
 AU_DEFUN([AC_DIR_HEADER],
-[AC_FUNC_CLOSEDIR_VOID
+[AC_HEADER_DIRENT
+AC_FUNC_CLOSEDIR_VOID
 test ac_cv_header_dirent_dirent_h &&
   AC_DEFINE([DIRENT], 1, [Same as `HAVE_DIRENT_H', don't depend on me.])
 test ac_cv_header_dirent_sys_ndir_h &&
