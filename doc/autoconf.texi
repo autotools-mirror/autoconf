@@ -22839,7 +22839,7 @@ Older versions of Autoconf silently built files with incorrect ordering
 between dependent macros if an outer macro first expanded, then later
 indirectly required, an inner macro.  Starting with Autoconf 2.64, this
 situation no longer generates out-of-order code, but results in
-duplicate output and a diagnosis of a syntax warning:
+duplicate output and a syntax warning:
 
 @example
 $ @kbd{cat configure.ac}
@@ -22864,10 +22864,11 @@ $ @kbd{autoconf}
 @result{}configure.ac:11: the top level
 @end example
 
+@noindent
 To avoid this warning, decide what purpose the macro in question serves.
 If it only needs to be expanded once (for example, if it provides
 initialization text used by later macros), then the fix is to change all
-instance of direct calls to instead go through @code{AC_REQUIRE}
+instances of direct calls to instead go through @code{AC_REQUIRE}
 (@pxref{Prerequisite Macros}).  If, instead, the macro is parameterized
 by arguments or by the current definition of other macros in the m4
 environment, then the macro should always be directly expanded instead

@@ -1455,7 +1455,7 @@ m4_define([m4_undivert],
 # 1. Implementation of m4_require
 # ===============================
 #
-# Of course m4_defun AC_PROVIDE's the macro, so that a macro which has
+# Of course m4_defun calls m4_provide, so that a macro which has
 # been expanded is not expanded again when m4_require'd, but the
 # difficult part is the proper expansion of macros when they are
 # m4_require'd.
@@ -1476,8 +1476,8 @@ m4_define([m4_undivert],
 # undivert GROW.  To understand why we need several diversions,
 # consider the following example:
 #
-# | m4_defun([TEST1], [Test...REQUIRE([TEST2])1])
-# | m4_defun([TEST2], [Test...REQUIRE([TEST3])2])
+# | m4_defun([TEST1], [Test...m4_require([TEST2])1])
+# | m4_defun([TEST2], [Test...m4_require([TEST3])2])
 # | m4_defun([TEST3], [Test...3])
 #
 # Because m4_require is not required to be first in the outer macros, we
@@ -1509,10 +1509,10 @@ m4_define([m4_undivert],
 # very surprising results in some situations.  Let's consider the
 # following example to explain the bug:
 #
-# | m4_defun([TEST1],  [REQUIRE([TEST2a])REQUIRE([TEST2b])])
+# | m4_defun([TEST1],  [m4_require([TEST2a])m4_require([TEST2b])])
 # | m4_defun([TEST2a], [])
-# | m4_defun([TEST2b], [REQUIRE([TEST3])])
-# | m4_defun([TEST3],  [REQUIRE([TEST2a])])
+# | m4_defun([TEST2b], [m4_require([TEST3])])
+# | m4_defun([TEST3],  [m4_require([TEST2a])])
 # |
 # | AC_INIT
 # | TEST1
@@ -1547,7 +1547,7 @@ m4_define([m4_undivert],
 # Starting from 2.50, we use an implementation provided by Axel Thimm.
 # The idea is simple: the order in which macros are emitted must be the
 # same as the one in which macros are expanded.  (The bug above can
-# indeed be described as: a macro has been AC_PROVIDE'd before its
+# indeed be described as: a macro has been m4_provide'd before its
 # dependent, but it is emitted after: the lack of correlation between
 # emission and expansion order is guilty).
 #
@@ -1706,8 +1706,8 @@ m4_define([m4_undivert],
 # following example to explain the bug:
 #
 # | m4_defun([TEST1], [1])
-# | m4_defun([TEST2], [2[]REQUIRE([TEST1])])
-# | m4_defun([TEST3], [3 TEST1 REQUIRE([TEST2])])
+# | m4_defun([TEST2], [2[]m4_require([TEST1])])
+# | m4_defun([TEST3], [3 TEST1 m4_require([TEST2])])
 # | TEST3
 #
 # After the prologue of TEST3, we are collecting text in GROW with the
@@ -1730,7 +1730,7 @@ m4_define([m4_undivert],
 # macro.  In other words, we must be careful not to warn on:
 #
 # | m4_defun([TEST4], [4])
-# | m4_defun([TEST5], [TEST4 REQUIRE([TEST5])])
+# | m4_defun([TEST5], [TEST4 m4_require([TEST4])])
 #
 # So, to detect whether a require was direct or indirect, m4_provide
 # stores the diversion number at which a macro was provided.  A

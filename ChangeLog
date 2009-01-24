@@ -1,5 +1,10 @@
 2009-01-24  Eric Blake  <ebb9@byu.net>
 
+	Fix typos in recent patches.
+	* lib/m4sugar/m4sugar.m4: Improve m4_defun comments.
+	* doc/autoconf.texi (Expanded Before Required): Fix typos.
+	Reported by Ralf Wildenhues.
+
 	Revert change to AC_DIR_HEADER.
 	* lib/autoconf/headers.m4 (AC_DIR_HEADER): Explicitly expanding
 	AC_HEADER_DIRENT no longer triggers a warning, and helps the user
