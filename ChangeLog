@@ -1,3 +1,15 @@
+2009-01-27  Eric Blake  <ebb9@byu.net>
+
+	Use URLs in --help output, part 1: autoconf executables.
+	* bin/autoconf.as (usage): Make output consistent with recent
+	change in gnulib version-etc module.
+	* bin/autoheader.in ($help): Likewise.
+	* bin/autom4te.in ($help): Likewise.
+	* bin/autoreconf.in ($help): Likewise.
+	* bin/autoscan.in ($help): Likewise.
+	* bin/autoupdate.in ($help): Likewise.
+	* bin/ifnames.in ($help): Likewise.
+
 2009-01-27  Peter Breitenlohner  <peb@mppmu.mpg.de>  (tiny change)
 
 	Quote traced macros passed from autom4te to M4.

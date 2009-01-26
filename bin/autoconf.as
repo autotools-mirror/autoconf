@@ -4,7 +4,7 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 # autoconf -- create `configure' using m4 macros
 
 # Copyright (C) 1992, 1993, 1994, 1996, 1999, 2000, 2001, 2002, 2003,
-# 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+# 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -63,7 +63,9 @@ Tracing:
 In tracing mode, no configuration script is created.  FORMAT defaults
 to \`\$f:\$l:\$n:\$%'; see \`autom4te --help' for information about FORMAT.
 
-Report bugs to <bug-autoconf@gnu.org>."]
+Report bugs to <bug-autoconf@gnu.org>.
+GNU Autoconf home page: <http://www.gnu.org/software/autoconf/>.
+General help using GNU software: <http://www.gnu.org/gethelp/>."]
 
 version=["\
 autoconf (@PACKAGE_NAME@) @VERSION@
