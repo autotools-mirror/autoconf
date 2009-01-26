@@ -430,8 +430,9 @@ AT_CLEANUP
 
 AT_SETUP([m4@&t@_require: one-shot initialization])
 AT_KEYWORDS([m4@&t@_require])
-AT_KEYWORDS([m4@&t@_defun_init m4@&t@_copy])
+AT_KEYWORDS([m4@&t@_defun_init m4@&t@_copy m4@&t@_defun_once])
 
+dnl check out m4_defun_init, m4_copy, and odd macro names
 AT_CHECK_M4SUGAR_TEXT([[
 m4_defun_init([a], [[init a
 ]], [[common a]])dnl
@@ -455,6 +456,33 @@ hello, world
 goodbye
 hello, again
 ]])
+
+dnl Check m4_defun_once behavior
+AT_CHECK_M4SUGAR_TEXT([[
+m4_defun_once([a], [[a]])dnl
+m4_defun([b], [[b]m4_require([a])])dnl
+m4_defun([c], [[c]
+a[]m4_require([b])])dnl
+c
+a
+m4_defun_once([d], [[d]m4_require([a])])dnl
+d
+m4_defun_once([e], [[e]])dnl
+m4_defun([f], [[f]m4_require([e])e])dnl
+f
+]], [[
+a
+b
+c
+
+
+d
+e
+
+f
+]])
+
+
 AT_CLEANUP
 
 

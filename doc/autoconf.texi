@@ -12830,7 +12830,8 @@ the argument to @code{AC_REQUIRE}.  The other category includes macros
 which are shorthand for a fixed block of text, and therefore do not take
 arguments.  For this category of macros, directly expanding the macro
 multiple times results in redundant output, so it is more common to use
-the macro as the argument to @code{AC_REQUIRE}.
+the macro as the argument to @code{AC_REQUIRE}, or to declare the macro
+with @code{AC_DEFUN_ONCE} (@pxref{One-Shot Macros}).
 
 Be sure to properly quote both the @var{macro-body} @emph{and} the
 @var{macro-name} to avoid any problems if the macro happens to have
@@ -13171,7 +13172,9 @@ in C
 
 The bug is not in Autoconf, but in the macro definitions.  If you ever
 pass a particular macro name to @code{AC_REQUIRE}, then you are implying
-that the macro only needs to be expanded once.  But to enforce this, all
+that the macro only needs to be expanded once.  But to enforce this,
+either the macro must be declared with @code{AC_DEFUN_ONCE} (although
+this only helps in Autoconf 2.64 or newer), or all
 uses of that macro should be through @code{AC_REQUIRE}; directly
 expanding the macro defeats the point of using @code{AC_REQUIRE} to
 eliminate redundant expansion.  In the example, this rule of thumb was
@@ -13271,16 +13274,21 @@ macros can be defined using @code{AC_DEFUN_ONCE}.
 
 @defmac AC_DEFUN_ONCE (@var{macro-name}, @var{macro-body})
 @acindex{DEFUN_ONCE}
-
 Declare macro @var{macro-name} like @code{AC_DEFUN} would (@pxref{Macro
-Definitions}), and emit a warning any time the macro is called more than
-once.
+Definitions}), but add additional logic that guarantees that only the
+first use of the macro (whether by direct expansion or
+@code{AC_REQUIRE}) causes an expansion of @var{macro-body}; the
+expansion will occur before the start of any enclosing macro defined by
+@code{AC_DEFUN}.  Subsequent expansions are silently ignored.
+Generally, it does not make sense for @var{macro-body} to use parameters
+such as @code{$1}.
 @end defmac
 
-Obviously it is not sensible to evaluate a macro defined by
-@code{AC_DEFUN_ONCE} in a macro defined by @code{AC_DEFUN}.
-Most of the time you want to use @code{AC_REQUIRE} (@pxref{Prerequisite
-Macros}).
+Prior to Autoconf 2.64, a macro defined by @code{AC_DEFUN_ONCE} would
+emit a warning if it was directly expanded a second time, so for
+portability, it is better to use @code{AC_REQUIRE} than direct
+invocation of @var{macro-name} inside a macro defined by @code{AC_DEFUN}
+(@pxref{Prerequisite Macros}).
 
 @node Obsoleting Macros
 @section Obsoleting Macros
@@ -22867,7 +22875,10 @@ $ @kbd{autoconf}
 @noindent
 To avoid this warning, decide what purpose the macro in question serves.
 If it only needs to be expanded once (for example, if it provides
-initialization text used by later macros), then the fix is to change all
+initialization text used by later macros), then the simplest fix is to
+change the macro to be declared with @code{AC_DEFUN_ONCE}
+(@pxref{One-Shot Macros}), although this only works in Autoconf 2.64 and
+newer.  A more portable fix is to change all
 instances of direct calls to instead go through @code{AC_REQUIRE}
 (@pxref{Prerequisite Macros}).  If, instead, the macro is parameterized
 by arguments or by the current definition of other macros in the m4

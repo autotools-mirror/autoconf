@@ -2,8 +2,8 @@
 
 AT_BANNER([Autoconf base layer.])
 
-# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007, 2008 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007, 2008, 2009 Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ AT_BANNER([Autoconf base layer.])
 # Check that dependencies are always properly honored.
 
 AT_SETUP([AC_REQUIRE: topological sort])
+AT_KEYWORDS([m4@&t@_require])
 
 AT_DATA([configure.ac],
 [[define([REQUIRE_AND_CHECK],
@@ -71,6 +72,7 @@ AT_CLEANUP
 # Check that the message mentions AC_DEFUN, not m4_defun.
 
 AT_SETUP([AC_REQUIRE: error message])
+AT_KEYWORDS([m4@&t@_require])
 AT_DATA([configure.ac],
 [[AC_REQUIRE([AC_PROG_CC])
 ]])
@@ -88,6 +90,7 @@ AT_CLEANUP
 ## ----------------------------------------------- ##
 
 AT_SETUP([AC_REQUIRE & AC_DEFUN_ONCE: [Require, expand]])
+AT_KEYWORDS([m4@&t@_require m4@&t@_require_once])
 
 AT_DATA([configure.ac],
 [[AC_DEFUN([TEST],
@@ -116,10 +119,7 @@ case $multi_test:$single_test in
 esac
 ]])
 
-AT_CHECK_AUTOCONF([], 0, [],
-[configure.ac:17: warning: SINGLE_TEST invoked multiple times
-configure.ac:18: warning: SINGLE_TEST invoked multiple times
-])
+AT_CHECK_AUTOCONF([], 0, [])
 
 AT_CHECK_CONFIGURE
 
@@ -132,6 +132,7 @@ AT_CLEANUP
 ## ----------------------------------------------- ##
 
 AT_SETUP([AC_REQUIRE & AC_DEFUN_ONCE: [Expand, require]])
+AT_KEYWORDS([m4@&t@_require m4@&t@_require_once])
 
 AT_DATA([configure.ac],
 [[AC_DEFUN([TEST],
@@ -161,9 +162,7 @@ case $multi_test:$single_test in
 esac
 ]])
 
-AT_CHECK_AUTOCONF([], 0, [],
-[configure.ac:16: warning: SINGLE_TEST invoked multiple times
-])
+AT_CHECK_AUTOCONF([], 0, [])
 AT_CHECK_CONFIGURE
 
 AT_CLEANUP
@@ -175,6 +174,7 @@ AT_CLEANUP
 ## ------------------------- ##
 
 AT_SETUP([AC_REQUIRE & AC_PROVIDE])
+AT_KEYWORDS([m4@&t@_require])
 
 AT_DATA([configure.ac],
 [[AC_DEFUN([TEST],

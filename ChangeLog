@@ -1,3 +1,21 @@
+2009-01-26  Eric Blake  <ebb9@byu.net>
+
+	Improve AC_DEFUN_ONCE semantics.
+	* lib/m4sugar/m4sugar.m4 (m4_defun_once): Rewrite to be no-op,
+	rather than warning, on second use, and make sure first use never
+	occurs out of order.
+	* tests/m4sugar.at (m4@&t@_require: one-shot initialization):
+	Enhance test.
+	* tests/base.at (AC_REQUIRE & AC_DEFUN_ONCE: [Require, expand],
+	(AC_REQUIRE & AC_DEFUN_ONCE: [Expand, require]): Adjust tests.
+	* NEWS: Document this.
+	* doc/autoconf.texi (Macro Definitions) <AC_DEFUN>: Mention
+	AC_DEFUN_ONCE.
+	(Prerequisite Macros) <AC_REQUIRE>: Likewise.
+	(Expanded Before Required): Likewise.
+	(One-Shot Macros) <AC_DEFUN_ONCE>: Document new semantics.
+	Reported by Bruno Haible, with suggestion by Paolo Bonzini.
+
 2009-01-24  Eric Blake  <ebb9@byu.net>
 
 	Fix typos in recent patches.

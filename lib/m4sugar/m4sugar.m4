@@ -1914,14 +1914,17 @@ m4_define([m4_defun_init],
 
 # m4_defun_once(NAME, EXPANSION)
 # ------------------------------
-# Like m4_defun, but issues the EXPANSION only once, and warns if used
-# several times.
+# Like m4_defun, but guarantee that EXPANSION only happens once
+# (thereafter, using NAME is a no-op).
+#
+# If _m4_divert_dump is empty, we are called at the top level;
+# otherwise, we must ensure that we are required in front of the
+# current defun'd macro.
 m4_define([m4_defun_once],
-[m4_define([m4_location($1)], m4_location)dnl
-m4_define([$1],
-	  [m4_provide_if([$1],
-			 [m4_warn([syntax], [$1 invoked multiple times])],
-			 [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])])])])
+[m4_define([m4_location($1)], m4_location)]dnl
+[m4_define([$1], [m4_pushdef([$1])m4_if(_m4_divert_dump, [],
+  [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])],
+  [_m4_require_call([$1], [$2[]m4_provide([$1])], _m4_divert_dump)])])])
 
 
 # m4_pattern_forbid(ERE, [WHY])

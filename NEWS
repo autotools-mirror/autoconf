@@ -14,6 +14,12 @@ GNU Autoconf NEWS - User visible changes.
    the bug in earlier autoconf versions and avoid increased script
    size in the current version.
 
+** AC_DEFUN_ONCE has improved semantics.  Previously, a macro declared
+   with AC_DEFUN_ONCE warned on a second invocation; and out-of-order
+   expansion was still possible.  Now, dependencies are guaranteed,
+   and subsequent invocations are a silent no-op.  This makes
+   AC_DEFUN_ONCE an ideal macro for silencing AC_REQUIRE warnings.
+
 ** AC_LANG_ERLANG works once again (regression introduced in 2.61a).
 
 ** AC_HEADER_ASSERT is fixed so that './configure --enable-assert' no
