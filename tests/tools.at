@@ -604,6 +604,9 @@ AT_CHECK([cat config.hin], 0,
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 ]])
@@ -681,6 +684,9 @@ The Mouse in a h@t.
 
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION

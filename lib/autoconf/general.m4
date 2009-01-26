@@ -1,7 +1,8 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
 # Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+# 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software
+# Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -245,8 +246,8 @@ AU_ALIAS([AC_HELP_STRING], [AS_HELP_STRING])
 
 
 
-# _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION, BUG-REPORT, [TARNAME])
-# --------------------------------------------------------------
+# _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION, BUG-REPORT, [TARNAME], [URL])
+# ---------------------------------------------------------------------
 m4_define([_AC_INIT_PACKAGE],
 [AS_LITERAL_IF([$1], [], [m4_warn([syntax], [AC_INIT: not a literal: $1])])
 AS_LITERAL_IF([$2], [],  [m4_warn([syntax], [AC_INIT: not a literal: $2])])
@@ -266,6 +267,11 @@ m4_ifndef([AC_PACKAGE_STRING],
 	  [m4_define([AC_PACKAGE_STRING],    [$1 $2])])
 m4_ifndef([AC_PACKAGE_BUGREPORT],
 	  [m4_define([AC_PACKAGE_BUGREPORT], [$3])])
+m4_ifndef([AC_PACKAGE_URL],
+	  [m4_define([AC_PACKAGE_URL],
+  m4_if([$5], [], [m4_if(m4_index([$1], [GNU ]), [0],
+	  [[http://www.gnu.org/software/]m4_defn([AC_PACKAGE_TARNAME])[/]])],
+	[[$5]]))])
 ])
 
 
@@ -364,7 +370,8 @@ m4_ifset([AC_PACKAGE_BUGREPORT],
 m4_define([_AC_INIT_COPYRIGHT],
 [AC_COPYRIGHT(
 [Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-2002, 2003, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software
+Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.],
 	      [VERSION_FSF])dnl
@@ -431,6 +438,8 @@ AC_SUBST([PACKAGE_STRING],
 	 [m4_ifdef([AC_PACKAGE_STRING],    ['AC_PACKAGE_STRING'])])dnl
 AC_SUBST([PACKAGE_BUGREPORT],
 	 [m4_ifdef([AC_PACKAGE_BUGREPORT], ['AC_PACKAGE_BUGREPORT'])])dnl
+AC_SUBST([PACKAGE_URL],
+	 [m4_ifdef([AC_PACKAGE_URL],       ['AC_PACKAGE_URL'])])dnl
 
 m4_divert_pop([DEFAULTS])dnl
 m4_wrap_lifo([m4_divert_text([DEFAULTS],
@@ -1117,8 +1126,13 @@ m4_ifset([AC_PACKAGE_STRING],
   cat <<\_ACEOF
 m4_divert_pop([HELP_ENABLE])dnl
 m4_divert_push([HELP_END])dnl
-m4_ifset([AC_PACKAGE_BUGREPORT], [
-Report bugs to <AC_PACKAGE_BUGREPORT>.])
+
+Report bugs to m4_ifset([AC_PACKAGE_BUGREPORT], [<AC_PACKAGE_BUGREPORT>],
+  [the package provider]).dnl
+m4_ifdef([AC_PACKAGE_NAME], [m4_ifset([AC_PACKAGE_URL], [
+AC_PACKAGE_NAME home page: <AC_PACKAGE_URL>.])dnl
+m4_if(m4_index(m4_defn([AC_PACKAGE_NAME]), [GNU ]), [0], [
+General help using GNU software: <http://www.gnu.org/gethelp/>.])])
 _ACEOF
 ac_status=$?
 fi
@@ -1343,6 +1357,8 @@ AC_DEFINE_UNQUOTED([PACKAGE_STRING], ["$PACKAGE_STRING"],
 AC_DEFINE_UNQUOTED([PACKAGE_BUGREPORT], ["$PACKAGE_BUGREPORT"],
 		   [Define to the address where bug reports for this package
 		    should be sent.])dnl
+AC_DEFINE_UNQUOTED([PACKAGE_URL], ["$PACKAGE_URL"],
+		   [Define to the home page for this package.])
 
 # Let the site file select an alternate cache file if it wants to.
 AC_SITE_LOAD
@@ -1362,10 +1378,17 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 ])
 
 
-# AC_INIT([PACKAGE, VERSION, [BUG-REPORT])
-# ----------------------------------------
+# AC_INIT([PACKAGE, VERSION, [BUG-REPORT], [TARNAME], [URL])
+# ----------------------------------------------------------
 # Include the user macro files, prepare the diversions, and output the
 # preamble of the `configure' script.
+#
+# If BUG-REPORT is omitted, do without (unless the user previously
+# defined the m4 macro AC_PACKAGE_BUGREPORT).  If TARNAME is omitted,
+# use PACKAGE to seed it.  If URL is omitted, use
+# `http://www.gnu.org/software/TARNAME/' if PACKAGE begins with `GNU',
+# otherwise, do without.
+#
 # Note that the order is important: first initialize, then set the
 # AC_CONFIG_SRCDIR.
 m4_define([AC_INIT],

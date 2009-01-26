@@ -25,6 +25,10 @@ GNU Autoconf NEWS - User visible changes.
 ** AC_HEADER_ASSERT is fixed so that './configure --enable-assert' no
    longer mistakenly disables assertions.
 
+** AC_INIT now takes an optional fifth parameter that can be used to
+   set AC_PACKAGE_URL, a URL for the package's home page; the URL is
+   used in `configure --help' and is also available via AC_DEFINE.
+
 ** Autotest testsuites accept an option --jobs[=N] for parallel testing.
 
 ** Autotest testsuites do not attempt to write startup error messages
