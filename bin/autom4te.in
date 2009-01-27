@@ -6,8 +6,8 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
 # autom4te - Wrapper around M4 libraries.
-# Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007, 2008 Free Software
-# Foundation, Inc.
+# Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009 Free
+# Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -466,7 +466,7 @@ sub handle_m4 ($@)
 	   . ' --debug=aflq'
 	   . (!exists $ENV{'AUTOM4TE_NO_FATAL'} ? ' --fatal-warning' : '')
 	   . " @M4_DEBUGFILE@=" . shell_quote ("$tcache" . $req->id . "t")
-	   . join (' --trace=',   '', sort @macro)
+	   . join (' --trace=', '', map { shell_quote ($_) } sort @macro)
 	   . " " . files_to_options (@ARGV)
 	   . " > " . shell_quote ("$ocache" . $req->id . "t"));
 

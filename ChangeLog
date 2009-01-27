@@ -1,3 +1,11 @@
+2009-01-27  Peter Breitenlohner  <peb@mppmu.mpg.de>  (tiny change)
+
+	Quote traced macros passed from autom4te to M4.
+	* bin/autom4te (handle_m4): Apply shell_quote to macro names.
+	* tests/tools.at (autom4te --trace and unusual macro names): New
+	test.
+	* THANKS: Update.
+
 2009-01-26  Eric Blake  <ebb9@byu.net>
 
 	Improve AC_DEFUN_ONCE semantics.
