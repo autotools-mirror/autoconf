@@ -1,5 +1,15 @@
 2009-01-27  Eric Blake  <ebb9@byu.net>
 
+	Use URLs in --help output, part 3: testsuite.
+	* doc/autoconf.texi (Writing Testsuites): Mention autotest
+	namespace.
+	(Writing Testsuites) <AT_INIT>: Mention mandatory macros.
+	(Making testsuite Scripts): Document AT_PACKAGE_URL.
+	* tests/Makefile.am (package.m4): Follow our own advice.
+	* lib/autotest/general.m4 (AT_INIT): Give the user a hint about
+	package.m4.  Enhance --help output.
+	(_AT_COPYRIGHT_YEARS): New macro, to make copyright bump easier.
+
 	Use URLs in --help output, part 2: configure.
 	* lib/autoconf/general.m4 (_AC_INIT_COPYRIGHT): Bump copyright
 	date.

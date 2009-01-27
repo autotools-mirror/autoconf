@@ -21807,11 +21807,11 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
 @cindex Autotest
 
 @display
-@strong{N.B.: This section describes an experimental feature which will
-be part of Autoconf in a forthcoming release.  Although we believe
-Autotest is stabilizing, this documentation describes an interface which
-might change in the future: do not depend upon Autotest without
-subscribing to the Autoconf mailing lists.}
+@strong{N.B.: This section describes a feature which is still
+stabilizing.  Although we believe that Autotest is useful as-is, this
+documentation describes an interface which might change in the future:
+do not depend upon Autotest without subscribing to the Autoconf mailing
+lists.}
 @end display
 
 It is paradoxical that portable projects depend on nonportable tools
@@ -22035,13 +22035,31 @@ then an arbitrary number of shell commands or calls to @code{AT_CHECK},
 and then completes with a call to @code{AT_CLEANUP}.  Multiple test
 groups can be categorized by a call to @code{AT_BANNER}.
 
+All of the public Autotest macros have all-uppercase names in the
+namespace @samp{^AT_} to prevent them from accidentally conflicting with
+other text; Autoconf also reserves the namespace @samp{^_AT_} for
+internal macros.  All shell variables used in the testsuite for internal
+purposes have mostly-lowercase names starting with @samp{at_}.  Autotest
+also uses here-doc delimiters in the namespace @samp{^_AT[A-Z]}, and
+makes use of the file system namespace @samp{^at-}.
+
+Since Autoconf is built on top of M4sugar (@pxref{Programming in
+M4sugar}) and M4sh (@pxref{Programming in M4sh}), you must also be aware
+of those namespaces (@samp{^_?\(m4\|AS\)_}).  In general, you
+@emph{should not use} the namespace of a package that does not own the
+macro or shell code you are writing.
+
 @defmac AT_INIT (@ovar{name})
 @atindex{INIT}
 @c FIXME: Not clear, plus duplication of the information.
 Initialize Autotest.  Giving a @var{name} to the test suite is
-encouraged if your package includes several test suites.  In any case,
-the test suite always displays the package name and version.  It also
-inherits the package bug report address.
+encouraged if your package includes several test suites.  Before this
+macro is called, @code{AT_PACKAGE_STRING} and
+@code{AT_PACKAGE_BUGREPORT} must be defined, which are used to display
+information about the testsuite to the user.  Typically, these macros
+are provided by a file @file{package.m4} built by @command{make}
+(@pxref{Making testsuite Scripts}), in order to inherit the package
+name, version, and bug reporting address from @file{configure.ac}.
 @end defmac
 
 @defmac AT_COPYRIGHT (@var{copyright-notice})
@@ -22329,12 +22347,14 @@ check list of things to do.
 @atindex{PACKAGE_NAME}
 @atindex{PACKAGE_TARNAME}
 @atindex{PACKAGE_VERSION}
+@atindex{PACKAGE_URL}
 Make sure to create the file @file{package.m4}, which defines the
 identity of the package.  It must define @code{AT_PACKAGE_STRING}, the
 full signature of the package, and @code{AT_PACKAGE_BUGREPORT}, the
 address to which bug reports should be sent.  For sake of completeness,
 we suggest that you also define @code{AT_PACKAGE_NAME},
-@code{AT_PACKAGE_TARNAME}, and @code{AT_PACKAGE_VERSION}.
+@code{AT_PACKAGE_TARNAME}, @code{AT_PACKAGE_VERSION}, and
+@code{AT_PACKAGE_URL}.
 @xref{Initializing configure}, for a description of these variables.
 Be sure to distribute @file{package.m4} and to put it into the source
 hierarchy: the test suite ought to be shipped!  See below for an example
@@ -22381,6 +22401,8 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
           echo '  [@@PACKAGE_STRING@@])' && \
           echo 'm4_define([AT_PACKAGE_BUGREPORT],' && \
           echo '  [@@PACKAGE_BUGREPORT@@])'; \
+          echo 'm4_define([AT_PACKAGE_URL],' && \
+          echo '  [@@PACKAGE_URL@@])'; \
         @} >'$(srcdir)/package.m4'
 
 EXTRA_DIST = testsuite.at $(srcdir)/package.m4 $(TESTSUITE) atlocal.in

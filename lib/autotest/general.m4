@@ -1,8 +1,8 @@
 # This file is part of Autoconf.                          -*- Autoconf -*-
 # M4 macros used in building test suites.
-
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
-# Free Software Foundation, Inc.
+m4_define([_AT_COPYRIGHT_YEARS],
+[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+2009 Free Software Foundation, Inc.])
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -206,7 +206,9 @@ m4_define([_AT_DEFINE_SETUP],
 m4_define([AT_INIT],
 [m4_pushdef([AT_INIT], [m4_fatal([$0: invoked multiple times])])]
 [m4_pattern_forbid([^_?AT_])]
-[m4_pattern_allow([^_AT_T_EOF$])]
+[m4_pattern_allow([^_ATEOF$])]
+[m4_ifndef([AT_PACKAGE_BUGREPORT], [m4_fatal(
+  [$1: AT_PACKAGE_BUGREPORT is missing, consider writing package.m4])])]
 [m4_define([AT_TESTSUITE_NAME],
   m4_defn([AT_PACKAGE_STRING])[ test suite]m4_ifval([$1],
    [m4_expand([: $1])]))]
@@ -222,9 +224,7 @@ dnl This trick removes that banner, since it adds nothing to autotest.
 [m4_cleardivert([BODY])]dnl
 [AS_ME_PREPARE[]]dnl
 [m4_divert_push([DEFAULTS])]dnl
-[AT_COPYRIGHT(
-[Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
-Free Software Foundation, Inc.
+[AT_COPYRIGHT(m4_defn([_AT_COPYRIGHT_YEARS])[
 This test suite is free software; the Free Software Foundation gives
 unlimited permission to copy, distribute and modify it.])
 AS_PREPARE
@@ -704,7 +704,12 @@ m4_divert_pop([HELP_TUNING])dnl
 m4_divert_push([HELP_END])dnl
 cat <<_ATEOF || at_write_fail=1
 
-Report bugs to <AT_PACKAGE_BUGREPORT>.
+Report bugs to <AT_PACKAGE_BUGREPORT>.dnl
+m4_ifdef([AT_PACKAGE_NAME],
+[m4_ifset([AT_PACKAGE_URL], [
+m4_defn([AT_PACKAGE_NAME]) home page: <AT_PACKAGE_URL>.])dnl
+m4_if(m4_index(m4_defn([AT_PACKAGE_NAME]), [GNU ]), [0], [
+General help using GNU software: <http://www.gnu.org/gethelp/>.])])
 _ATEOF
   exit $at_write_fail
 fi
@@ -764,10 +769,10 @@ m4_divert_pop([HELP_END])dnl
 m4_divert_push([VERSION])dnl
 if $at_version_p; then
   AS_ECHO(["$as_me (AT_PACKAGE_STRING)"]) &&
-  cat <<\_ACEOF || at_write_fail=1
+  cat <<\_ATEOF || at_write_fail=1
 m4_divert_pop([VERSION])dnl
 m4_divert_push([VERSION_END])dnl
-_ACEOF
+_ATEOF
   exit $at_write_fail
 fi
 m4_divert_pop([VERSION_END])dnl
