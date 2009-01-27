@@ -1,3 +1,22 @@
+2009-01-28  Eric Blake  <ebb9@byu.net>
+
+	Fix years in copyright notices.
+	* lib/m4sugar/m4sugar.m4 (m4_copyright_condense): New macro,
+	undocumented for now.
+	* lib/m4sugar/Makefile.am (version.m4): Add m4_PACKAGE_YEAR,
+	m4_PACKAGE_URL.
+	(RELEASE_YEAR): New macro, copied from bin/Makefile.am.
+	* lib/autoconf/general.m4 (_AC_COPYRIGHT_YEARS): New macro.
+	(AC_COPYRIGHT): Add undocumented third parameter.
+	(_AC_INIT_COPYRIGHT): Avoid need to bump copyright years.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Likewise.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Likewise.
+	(AT_COPYRIGHT): Add undocumented third parameter.
+	* tests/local.at (AT_COPYRIGHT): Don't add an extra copyright
+	parameter; the generic copyright given by autotest is sufficient
+	since we are the package that owns autotest.
+
 2009-01-27  Eric Blake  <ebb9@byu.net>
 
 	Use URLs in --help output, part 3: testsuite.

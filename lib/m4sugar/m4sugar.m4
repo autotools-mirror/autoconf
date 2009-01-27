@@ -2587,6 +2587,13 @@ m4_if(m4_index([$1], [@]), [-1], [m4_len([$1])],
 			   [@\(\(<:\|:>\|S|\|%:\|\{:\|:\}\)\(@\)\|&t@\)],
 			   [\3]))]))_m4_defn([m4_qlen-$1])])
 
+# m4_copyright_condense(TEXT)
+# ---------------------------
+# Condense the copyright notice in TEXT to only display the final
+# year, wrapping the results to fit in 80 columns.
+m4_define([m4_copyright_condense],
+[m4_text_wrap(m4_bpatsubst(m4_flatten([[$1]]),
+[(C)[-	 ,0-9]*\([1-9][0-9][0-9][0-9]\)], [(C) \1]))])
 
 ## ----------------------- ##
 ## 13. Number processing.  ##

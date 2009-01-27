@@ -1,8 +1,9 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
-# Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-# 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software
-# Foundation, Inc.
+m4_define([_AC_COPYRIGHT_YEARS],
+[Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
+2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software
+Foundation, Inc.])
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -275,16 +276,17 @@ m4_ifndef([AC_PACKAGE_URL],
 ])
 
 
-# AC_COPYRIGHT(TEXT, [VERSION-DIVERSION = VERSION_USER])
+# AC_COPYRIGHT(TEXT, [VERSION-DIVERSION = VERSION_USER],
+#              [FILTER = m4_newline])
 # ------------------------------------------------------
 # Emit TEXT, a copyright notice, in the top of `configure' and in
-# --version output.  Macros in TEXT are evaluated once.
+# --version output.  Macros in TEXT are evaluated once.  Process
+# the --version output through FILTER (m4_newline, m4_do, and
+# m4_copyright_condense are common filters).
 m4_define([AC_COPYRIGHT],
-[AS_COPYRIGHT([$1])[]dnl
-m4_divert_text(m4_default([$2], [VERSION_USER]),
-[
-$1])dnl
-])# AC_COPYRIGHT
+[AS_COPYRIGHT([$1])[]]dnl
+[m4_divert_text(m4_default_quoted([$2], [VERSION_USER]),
+[m4_default([$3], [m4_newline])([$1])])])# AC_COPYRIGHT
 
 
 # AC_REVISION(REVISION-INFO)
@@ -368,14 +370,12 @@ m4_ifset([AC_PACKAGE_BUGREPORT],
 # We dump to VERSION_FSF to make sure we are inserted before the
 # user copyrights, and after the setup of the --version handling.
 m4_define([_AC_INIT_COPYRIGHT],
-[AC_COPYRIGHT(
-[Copyright (C) 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001,
-2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software
-Foundation, Inc.
-This configure script is free software; the Free Software Foundation
+[AC_COPYRIGHT(m4_defn([_AC_COPYRIGHT_YEARS]), [VERSION_FSF], [
+m4_copyright_condense])dnl
+AC_COPYRIGHT(
+[This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.],
-	      [VERSION_FSF])dnl
-])
+	     [VERSION_FSF], [m4_echo])])
 
 
 # File Descriptors

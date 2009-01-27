@@ -224,10 +224,12 @@ dnl This trick removes that banner, since it adds nothing to autotest.
 [m4_cleardivert([BODY])]dnl
 [AS_ME_PREPARE[]]dnl
 [m4_divert_push([DEFAULTS])]dnl
-[AT_COPYRIGHT(m4_defn([_AT_COPYRIGHT_YEARS])[
-This test suite is free software; the Free Software Foundation gives
-unlimited permission to copy, distribute and modify it.])
-AS_PREPARE
+[AT_COPYRIGHT(m4_defn([_AT_COPYRIGHT_YEARS]), [
+m4_copyright_condense])]
+[AT_COPYRIGHT(
+[This test suite is free software; the Free Software Foundation gives
+unlimited permission to copy, distribute and modify it.], [m4_echo])]
+[AS_PREPARE
 
 SHELL=${CONFIG_SHELL-/bin/sh}
 
@@ -1717,15 +1719,16 @@ m4_define([AT_TESTED],
 [m4_append_uniq_w([AT_tested], [$1])])
 
 
-# AT_COPYRIGHT(TEXT)
-# ------------------
+# AT_COPYRIGHT(TEXT, [FILTER = m4_newline])
+# -----------------------------------------
 # Emit TEXT, a copyright notice, in the top of the test suite and in
-# --version output.  Macros in TEXT are evaluated once.
+# --version output.  Macros in TEXT are evaluated once.  Process
+# the --version output through FILTER (m4_newline, m4_do, and
+# m4_copyright_condense are common filters).
 m4_define([AT_COPYRIGHT],
-[AS_COPYRIGHT([$1])[]dnl
-m4_divert_text([VERSION_NOTICES],
-[
-$1])])# AT_COPYRIGHT
+[AS_COPYRIGHT([$1])[]]dnl
+[m4_divert_text([VERSION_NOTICES],
+[m4_default([$2], [m4_newline])([$1])])])# AT_COPYRIGHT
 
 
 # AT_SETUP(DESCRIPTION)

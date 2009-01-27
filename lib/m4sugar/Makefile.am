@@ -1,6 +1,7 @@
 # Make Autoconf library for M4sugar.
 
-# Copyright (C) 2001, 2002, 2006, 2007, 2008 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2002, 2006, 2007, 2008, 2009 Free Software
+# Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,6 +21,10 @@ dist_m4sugarlib_DATA = m4sugar.m4 foreach.m4 m4sh.m4
 nodist_m4sugarlib_DATA = version.m4 m4sugar.m4f m4sh.m4f
 CLEANFILES = $(nodist_m4sugarlib_DATA)
 
+# Get the release year from ../ChangeLog.
+RELEASE_YEAR = \
+  `sed 's/^\([0-9][0-9][0-9][0-9]\).*/\1/;q' $(top_srcdir)/ChangeLog`
+
 ## ------------ ##
 ## version.m4.  ##
 ## ------------ ##
@@ -29,14 +34,16 @@ version.m4: Makefile
 	:;{ \
 	  echo '# This file is part of -*- Autoconf -*-.' && \
 	  echo '# Version of Autoconf.' && \
-	  echo '# Copyright (C) 1999, 2000, 2001, 2002, 2006, 2007' && \
+	  echo '# Copyright (C) 1999, 2000, 2001, 2002, 2006, 2007, 2009' && \
 	  echo '# Free Software Foundation, Inc.' && \
 	  echo  &&\
 	  echo 'm4_define([m4_PACKAGE_NAME],      [$(PACKAGE_NAME)])' && \
 	  echo 'm4_define([m4_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])' && \
 	  echo 'm4_define([m4_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])' && \
 	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])' && \
-	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])'; \
+	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])' && \
+	  echo 'm4_define([m4_PACKAGE_URL],       [$(PACKAGE_URL)])' && \
+	  echo 'm4_define([m4_PACKAGE_YEAR],      ['$(RELEASE_YEAR)'])'; \
 	} > $@-t
 	mv $@-t $@
 
