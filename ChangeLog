@@ -1,5 +1,11 @@
 2009-01-28  Eric Blake  <ebb9@byu.net>
 
+	Reduce blank lines in AC_DEFUN_ONCE macros.
+	* lib/m4sugar/m4sugar.m4 (m4_defun_once): Avoid redundant blank
+	line when a defun_once macro is required.
+	(_m4_defun_once): New helper macro, for less memory use.
+	* tests/m4sugar.at (m4@&t@_require: nested): Adjust test.
+
 	Silence another false positive expand-before-require.
 	* lib/m4sugar/m4sugar.m4 (_m4_defun_pro_outer)
 	(_m4_defun_epi_outer, _m4_require_call, m4_provide): Track name

@@ -1939,12 +1939,17 @@ m4_define([m4_defun_init],
 #
 # If _m4_divert_dump is empty, we are called at the top level;
 # otherwise, we must ensure that we are required in front of the
-# current defun'd macro.
+# current defun'd macro.  Use a helper macro so that EXPANSION need
+# only occur once in the definition of NAME, since it might be large.
 m4_define([m4_defun_once],
 [m4_define([m4_location($1)], m4_location)]dnl
-[m4_define([$1], [m4_pushdef([$1])m4_if(_m4_divert_dump, [],
-  [_m4_defun_pro([$1])$2[]_m4_defun_epi([$1])],
-  [_m4_require_call([$1], [$2[]m4_provide([$1])], _m4_divert_dump)])])])
+[m4_define([$1], [_m4_defun_once([$1], [$2], m4_if(_m4_divert_dump, [],
+  [[_m4_defun_pro([$1])m4_unquote(], [)_m4_defun_epi([$1])]],
+m4_ifdef([_m4_diverting([$1])], [-]), [-], [[m4_unquote(], [)]],
+  [[_m4_require_call([$1],], [, _m4_divert_dump)]]))])])
+
+m4_define([_m4_defun_once],
+[m4_pushdef([$1])$3[$2[]m4_provide([$1])]$4])
 
 
 # m4_pattern_forbid(ERE, [WHY])
@@ -1978,8 +1983,9 @@ m4_define([m4_before],
 # -----------------------------------------------------------
 # If NAME-TO-CHECK has never been expanded (actually, if it is not
 # m4_provide'd), expand BODY-TO-EXPAND *before* the current macro
-# expansion.  Once expanded, emit it in _m4_divert_dump.  Keep track
-# of the m4_require chain in _m4_expansion_stack.
+# expansion; follow the expansion with a newline.  Once expanded, emit
+# it in _m4_divert_dump.  Keep track of the m4_require chain in
+# _m4_expansion_stack.
 #
 # The normal cases are:
 #

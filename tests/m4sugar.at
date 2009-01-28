@@ -461,8 +461,7 @@ dnl Check m4_defun_once behavior
 AT_CHECK_M4SUGAR_TEXT([[
 m4_defun_once([a], [[a]])dnl
 m4_defun([b], [[b]m4_require([a])])dnl
-m4_defun([c], [[c]
-a[]m4_require([b])])dnl
+m4_defun([c], [[c]a[]m4_require([b])])dnl
 c
 a
 m4_defun_once([d], [[d]m4_require([a])])dnl
@@ -475,10 +474,8 @@ a
 b
 c
 
-
 d
 e
-
 f
 ]])
 
