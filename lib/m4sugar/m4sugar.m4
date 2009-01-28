@@ -1723,19 +1723,36 @@ m4_define([m4_undivert],
 #
 # The problem can only occur if a single defun'd macro first provides,
 # then later indirectly requires, the same macro.  Note that directly
-# expanding then requiring a macro is okay, because the dependency was
-# met, the require phase will be a no-op; the out-of-order expansion
-# problem is only present if the requirement is nested inside a
-# context that will be hoisted in front of the outermost defun'd
-# macro.  In other words, we must be careful not to warn on:
+# expanding then requiring a macro is okay: because the dependency was
+# met, the require phase can be a no-op.  For that matter, the outer
+# macro can even require two helpers, where the first helper expands
+# the macro, and the second helper indirectly requires the macro.
+# Out-of-order expansion is only present if the inner macro is
+# required by something that will be hoisted in front of where the
+# direct expansion occurred.  In other words, we must be careful not
+# to warn on:
 #
 # | m4_defun([TEST4], [4])
-# | m4_defun([TEST5], [TEST4 m4_require([TEST4])])
+# | m4_defun([TEST5], [5 TEST4 m4_require([TEST4])])
+# | TEST5 => 5 4
 #
-# So, to detect whether a require was direct or indirect, m4_provide
-# stores the diversion number at which a macro was provided.  A
-# require call is direct if it occurs within the same diversion that
-# the macro was provided.
+# or even the more complex:
+#
+# | m4_defun([TEST6], [6])
+# | m4_defun([TEST7], [7 TEST6])
+# | m4_defun([TEST8], [8 m4_require([TEST6])])
+# | m4_defun([TEST9], [9 m4_require([TEST8])])
+# | m4_defun([TEST10], [10 m4_require([TEST7]) m4_require([TEST9])])
+# | TEST10 => 7 6 8 9 10
+#
+# So, to detect whether a require was direct or indirect, m4_defun and
+# m4_require track the name of the macro that caused a diversion to be
+# created (using the stack _m4_diverting, coupled with an O(1) lookup
+# _m4_diverting([NAME])), and m4_provide stores the name associated
+# with the diversion at which a macro was provided.  A require call is
+# direct if it occurs within the same diversion where the macro was
+# provided, or if the diversion associated with the providing context
+# has been collected.
 #
 # The implementation of the warning involves tracking the set of
 # macros which have been provided since the start of the outermost
@@ -1750,7 +1767,8 @@ m4_define([m4_undivert],
 # to inform the user that her macros trigger the bug in older autoconf
 # versions, and that her output file now contains redundant contents
 # (and possibly new problems, if the repeated macro was not
-# idempotent).
+# idempotent).  Meanwhile, macros defined by m4_defun_once instead of
+# m4_defun are idempotent, avoiding any warning or duplicate output.
 #
 #
 # 2. Keeping track of the expansion stack
@@ -1824,11 +1842,12 @@ m4_define([_m4_divert(GROW)],       10000)
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and m4_defn overhead.
 m4_define([_m4_defun_pro],
-[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_pro_outer[]])]dnl
+[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_pro_outer([$1])])]dnl
 [m4_expansion_stack_push([$1])m4_pushdef([_m4_expanding($1)])])
 
 m4_define([_m4_defun_pro_outer],
 [m4_set_delete([_m4_provide])]dnl
+[m4_pushdef([_m4_diverting([$1])])m4_pushdef([_m4_diverting], [$1])]dnl
 [m4_pushdef([_m4_divert_dump], m4_divnum)m4_divert_push([GROW])])
 
 # _m4_defun_epi(MACRO-NAME)
@@ -1840,11 +1859,12 @@ m4_define([_m4_defun_pro_outer],
 # by avoiding dnl and m4_popdef overhead.
 m4_define([_m4_defun_epi],
 [_m4_popdef([_m4_expanding($1)], [_m4_expansion_stack])]dnl
-[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_epi_outer[]])]dnl
+[m4_ifdef([_m4_expansion_stack], [], [_m4_defun_epi_outer([$1])])]dnl
 [m4_provide([$1])])
 
 m4_define([_m4_defun_epi_outer],
-[_m4_popdef([_m4_divert_dump])m4_divert_pop([GROW])m4_undivert([GROW])])
+[_m4_popdef([_m4_divert_dump], [_m4_diverting([$1])], [_m4_diverting])]dnl
+[m4_divert_pop([GROW])m4_undivert([GROW])])
 
 
 # _m4_divert_dump
@@ -1995,10 +2015,9 @@ m4_define([m4_require],
 [m4_if(_m4_divert_dump, [],
   [m4_fatal([$0($1): cannot be used outside of an ]dnl
 m4_if([$0], [m4_require], [[m4_defun]], [[AC_DEFUN]])['d macro])])]dnl
-[m4_provide_if([$1], [m4_set_contains([_m4_provide], [$1], [m4_if(m4_divnum,
-      _m4_defn([m4_provide($1)]), [m4_ignore], [m4_warn([syntax],
-      [$0: `$1' was expanded before it was required])_m4_require_call])],
-    [m4_ignore])], [_m4_require_call])([$1], [$2], _m4_divert_dump)])
+[m4_provide_if([$1], [m4_set_contains([_m4_provide], [$1],
+    [_m4_require_check([$1], _m4_defn([m4_provide($1)]), [$0])], [m4_ignore])],
+  [_m4_require_call])([$1], [$2], _m4_divert_dump)])
 
 
 # _m4_require_call(NAME-TO-CHECK, [BODY-TO-EXPAND = NAME-TO-CHECK],
@@ -2011,13 +2030,26 @@ m4_if([$0], [m4_require], [[m4_defun]], [[AC_DEFUN]])['d macro])])]dnl
 # by avoiding dnl and other overhead on the common path.
 m4_define([_m4_require_call],
 [m4_pushdef([_m4_divert_grow], m4_decr(_m4_divert_grow))]dnl
-[m4_pushdef([_m4_require])]dnl
+[m4_pushdef([_m4_diverting([$1])])m4_pushdef([_m4_diverting], [$1])]dnl
 [m4_divert_push(_m4_divert_grow)]dnl
 [m4_if([$2], [], [$1], [$2])
 m4_provide_if([$1], [m4_set_remove([_m4_provide], [$1])],
   [m4_warn([syntax], [$1 is m4_require'd but not m4_defun'd])])]dnl
 [_m4_divert_raw($3)_m4_undivert(_m4_divert_grow)]dnl
-[m4_divert_pop(_m4_divert_grow)_m4_popdef([_m4_divert_grow], [_m4_require])])
+[m4_divert_pop(_m4_divert_grow)_m4_popdef([_m4_divert_grow],
+[_m4_diverting([$1])], [_m4_diverting])])
+
+
+# _m4_require_check(NAME-TO-CHECK, OWNER, CALLER)
+# -----------------------------------------------
+# NAME-TO-CHECK has been identified as previously expanded in the
+# diversion owned by OWNER.  If this is a problem, warn on behalf of
+# CALLER and return _m4_require_call; otherwise return m4_ignore.
+m4_define([_m4_require_check],
+[m4_if(_m4_defn([_m4_diverting]), [$2], [m4_ignore],
+       m4_ifdef([_m4_diverting([$2])], [-]), [-], [m4_warn([syntax],
+   [$3: `$1' was expanded before it was required])_m4_require_call],
+       [m4_ignore])])
 
 
 # _m4_divert_grow
@@ -2040,7 +2072,8 @@ m4_define([m4_expand_once],
 # ----------------------
 m4_define([m4_provide],
 [m4_ifdef([m4_provide($1)], [],
-[m4_set_add([_m4_provide], [$1], [m4_define([m4_provide($1)], m4_divnum)])])])
+[m4_set_add([_m4_provide], [$1], [m4_define([m4_provide($1)],
+  m4_ifdef([_m4_diverting], [_m4_defn([_m4_diverting])]))])])])
 
 
 # m4_provide_if(MACRO-NAME, IF-PROVIDED, IF-NOT-PROVIDED)

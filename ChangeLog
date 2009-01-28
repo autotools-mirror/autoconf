@@ -1,5 +1,17 @@
 2009-01-28  Eric Blake  <ebb9@byu.net>
 
+	Silence another false positive expand-before-require.
+	* lib/m4sugar/m4sugar.m4 (_m4_defun_pro_outer)
+	(_m4_defun_epi_outer, _m4_require_call, m4_provide): Track name
+	that caused a diversion change, not just diversion number.
+	(m4_require): Factor...
+	(_m4_require_check): ...into new macro, which also checks whether
+	diversion that performed the expansion has been collected.
+	* tests/m4sugar.at (m4@&t@_require: nested): Enhance test.
+	Reported by Ralf Wildenhues.
+
+2009-01-28  Eric Blake  <ebb9@byu.net>
+
 	Fix AC_C_RESTRICT for Sun Studio 12 C++.
 	* lib/autoconf/c.m4 (AC_C_RESTRICT): Newer Sun Studio C provides
 	__restrict__ rather than _Restrict, which still trips up Sun
