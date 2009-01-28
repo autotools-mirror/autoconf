@@ -1,5 +1,12 @@
 2009-02-03  Eric Blake  <ebb9@byu.net>
 
+	Use AC_DEFUN_ONCE for some one-shot AC_PROG macros.
+	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Switch to
+	AC_DEFUN_ONCE, since this is a one-shot macro.
+	(AC_PROG_INSTALL): Likewise.
+
+2009-02-03  Eric Blake  <ebb9@byu.net>
+
 	Mention that packagers should not pre-set CFLAGS.
 	* doc/autoconf.texi (Preset Output Variables) <CFLAGS>: Copy
 	advice given by automake on handling variables reserved by GNU
