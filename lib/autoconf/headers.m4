@@ -431,7 +431,7 @@ AN_HEADER([wctype.h],           [AC_CHECK_HEADERS])
 # AC_HEADER_ASSERT
 # ----------------
 # Check whether to enable assertions.
-AC_DEFUN([AC_HEADER_ASSERT],
+AC_DEFUN_ONCE([AC_HEADER_ASSERT],
 [
   AC_MSG_CHECKING([whether to enable assertions])
   AC_ARG_ENABLE([assert],

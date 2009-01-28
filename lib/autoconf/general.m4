@@ -1791,7 +1791,7 @@ AC_SUBST([$1_os])dnl
 
 # AC_CANONICAL_BUILD
 # ------------------
-AC_DEFUN([AC_CANONICAL_BUILD],
+AC_DEFUN_ONCE([AC_CANONICAL_BUILD],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_REQUIRE_AUX_FILE([config.sub])dnl
 AC_REQUIRE_AUX_FILE([config.guess])dnl
@@ -1818,7 +1818,7 @@ _AC_CANONICAL_SPLIT(build)
 
 # AC_CANONICAL_HOST
 # -----------------
-AC_DEFUN([AC_CANONICAL_HOST],
+AC_DEFUN_ONCE([AC_CANONICAL_HOST],
 [AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 m4_divert_once([HELP_CANON],
 [[  --host=HOST       cross-compile to build programs to run on HOST [BUILD]]])dnl
@@ -1836,7 +1836,7 @@ _AC_CANONICAL_SPLIT([host])
 
 # AC_CANONICAL_TARGET
 # -------------------
-AC_DEFUN([AC_CANONICAL_TARGET],
+AC_DEFUN_ONCE([AC_CANONICAL_TARGET],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_BEFORE([$0], [AC_ARG_PROGRAM])dnl
 m4_divert_once([HELP_CANON],
