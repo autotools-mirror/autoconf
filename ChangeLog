@@ -1,5 +1,14 @@
 2009-01-28  Eric Blake  <ebb9@byu.net>
 
+	Fix AC_C_RESTRICT for Sun Studio 12 C++.
+	* lib/autoconf/c.m4 (AC_C_RESTRICT): Newer Sun Studio C provides
+	__restrict__ rather than _Restrict, which still trips up Sun
+	Studio 12 C++.
+	* THANKS: Update.
+	Reported by Rolf Vandevaart.
+
+2009-01-28  Eric Blake  <ebb9@byu.net>
+
 	Fix years in copyright notices.
 	* lib/m4sugar/m4sugar.m4 (m4_copyright_condense): New macro,
 	undocumented for now.
