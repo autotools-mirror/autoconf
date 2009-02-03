@@ -1,5 +1,11 @@
 2009-02-03  Eric Blake  <ebb9@byu.net>
 
+	Mention that packagers should not pre-set CFLAGS.
+	* doc/autoconf.texi (Preset Output Variables) <CFLAGS>: Copy
+	advice given by automake on handling variables reserved by GNU
+	Coding Standards.
+	Reported by Karl Berry.
+
 	Document lib64 in config.site.
 	* doc/autoconf.texi (Site Defaults): Fix typo in FHS sample file.
 	Mention use of lib64.

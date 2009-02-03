@@ -2351,6 +2351,22 @@ matters get tricky.  One approach to put such options directly into
 @code{CC}, e.g., @code{CC='gcc -m64'}.  Another is to put them into both
 @code{CPPFLAGS} and @code{LDFLAGS}, but not into @code{CFLAGS}.
 
+However, remember that some @file{Makefile} variables are reserved by
+the GNU Coding Standards for the use of the ``user''---the person
+building the package.  For instance, @code{CFLAGS} is one such variable.
+
+Sometimes package developers are tempted to set user variables such as
+@code{CFLAGS} because it appears to make their job easier.  However, the
+package itself should never set a user variable, particularly not to
+include switches that are required for proper compilation of the
+package.  Since these variables are documented as being for the package
+builder, that person rightfully expects to be able to override any of
+these variables at build time.  If the package developer needs to add
+switches without interfering with the user, the proper way to do that is
+to introduce an additional variable.  Automake makes this easy by
+introducing @code{AM_CFLAGS} (@pxref{Flag Variables Ordering, , ,
+automake, @acronym{GNU} Automake}), but the concept is the same even if
+Automake is not used.
 @end defvar
 
 @defvar configure_input
