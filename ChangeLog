@@ -1,3 +1,11 @@
+2009-02-03  Eric Blake  <ebb9@byu.net>
+
+	Document lib64 in config.site.
+	* doc/autoconf.texi (Site Defaults): Fix typo in FHS sample file.
+	Mention use of lib64.
+	* THANKS: Update.
+	Reported by Tom Browder, with help from Peter Breitenlohner.
+
 2009-01-28  Eric Blake  <ebb9@byu.net>
 
 	Use AC_DEFUN_ONCE for uncontroversial one-shot macros.

@@ -19737,12 +19737,12 @@ site files.  Your code should check that variables such as @code{prefix}
 and @code{cache_file} have their default values (as set near the top of
 @command{configure}) before changing them.
 
-Here is a sample file @file{/usr/share/local/gnu/share/config.site}.  The
+Here is a sample file @file{/usr/share/local/@/gnu/share/@/config.site}.  The
 command @samp{configure --prefix=/usr/share/local/gnu} would read this
 file (if @code{CONFIG_SITE} is not set to a different file).
 
 @example
-# config.site for configure
+# /usr/share/local/gnu/share/config.site for configure
 #
 # Change some defaults.
 test "$prefix" = NONE && prefix=/usr/share/local/gnu
@@ -19770,13 +19770,25 @@ in a manner consistent with the Filesystem Hierarchy Standard
 the locations recommended by @acronym{FHS}.
 
 @example
-# /usr/local/config.site for FHS defaults when installing below /usr,
+# /usr/share/config.site for FHS defaults when installing below /usr,
 # and the respective settings were not changed on the command line.
 if test "$prefix" = /usr; then
   test "$sysconfdir" = '$@{prefix@}/etc' && sysconfdir=/etc
   test "$sharedstatedir" = '$@{prefix@}/com' && sharedstatedir=/var
   test "$localstatedir" = '$@{prefix@}/var' && localstatedir=/var
 fi
+@end example
+
+@cindex lib64
+@cindex 64-bit libraries
+Likewise, on platforms where 64-bit libraries are built by default, then
+installed in @file{/usr/local/@/lib64} instead of @file{/usr/local/@/lib},
+it is appropriate to install @file{/usr/local/@/share/config.site}:
+
+@example
+# /usr/local/share/config.site for platforms that prefer
+# the directory /usr/local/lib64 over /usr/local/lib.
+test "$libdir" = '$@{exec_prefix@}/lib' && libdir='$@{exec_prefix@}/lib64'
 @end example
 
 
