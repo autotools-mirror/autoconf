@@ -1,3 +1,9 @@
+2009-02-05  Eric Blake  <ebb9@byu.net>
+
+	Mention new AC_DEFUN_ONCE clients.
+	* NEWS: Mention recent semantic changes.
+	Reported by Ralf Wildenhues.
+
 2009-02-03  Eric Blake  <ebb9@byu.net>
 
 	Use AC_DEFUN_ONCE for some one-shot AC_PROG macros.
