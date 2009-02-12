@@ -1,3 +1,11 @@
+2009-02-12  Eric Blake  <ebb9@byu.net>
+
+	Fix m4_set speed regression introduced 2008-12-18.
+	* lib/m4sugar/m4sugar.m4 (_m4_stack_reverse): Alter API to avoid
+	creating larger argument on each iteration.
+	(m4_stack_foreach_sep, m4_stack_foreach_sep_lifo)
+	(_m4_set_contents_2): Adjust all four-argument callers.
+
 2009-02-05  Eric Blake  <ebb9@byu.net>
 
 	Mention new AC_DEFUN_ONCE clients.

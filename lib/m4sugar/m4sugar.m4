@@ -1295,10 +1295,10 @@ m4_define([m4_stack_foreach_lifo],
 # is equivalent to m4_stack_foreach_sep([a], [b(], [)]).
 m4_define([m4_stack_foreach_sep],
 [_m4_stack_reverse([$1], [m4_tmp-$1])]dnl
-[_m4_stack_reverse([m4_tmp-$1], [$1], [$2[]_m4_defn([m4_tmp-$1])$3], [$4])])
+[_m4_stack_reverse([m4_tmp-$1], [$1], [$2[]_m4_defn([m4_tmp-$1])$3], [$4[]])])
 
 m4_define([m4_stack_foreach_sep_lifo],
-[_m4_stack_reverse([$1], [m4_tmp-$1], [$2[]_m4_defn([m4_tmp-$1])$3], [$4])]dnl
+[_m4_stack_reverse([$1], [m4_tmp-$1], [$2[]_m4_defn([m4_tmp-$1])$3], [$4[]])]dnl
 [_m4_stack_reverse([m4_tmp-$1], [$1])])
 
 
@@ -1307,15 +1307,16 @@ m4_define([m4_stack_foreach_sep_lifo],
 # A recursive worker for pushdef stack manipulation.  Destructively
 # copy the OLD stack into the NEW, and expanding ACTION for each
 # iteration.  After the first iteration, SEP is promoted to the front
-# of ACTION.  The current definition is examined after the NEW has
-# been pushed but before OLD has been popped; this order is important,
-# as ACTION is permitted to operate on either _m4_defn([OLD]) or
-# _m4_defn([NEW]).  Since the operation is destructive, this macro is
-# generally used twice, with a temporary macro name holding the
-# swapped copy.
+# of ACTION (note that SEP should include a trailing [] if it is to
+# avoid interfering with ACTION).  The current definition is examined
+# after the NEW has been pushed but before OLD has been popped; this
+# order is important, as ACTION is permitted to operate on either
+# _m4_defn([OLD]) or _m4_defn([NEW]).  Since the operation is
+# destructive, this macro is generally used twice, with a temporary
+# macro name holding the swapped copy.
 m4_define([_m4_stack_reverse],
 [m4_ifdef([$1], [m4_pushdef([$2],
-  _m4_defn([$1]))$3[]_m4_popdef([$1])$0([$1], [$2], [$4[]$3])])])
+  _m4_defn([$1]))$3[]_m4_popdef([$1])$0([$1], [$2], [$4$3])])])
 
 
 
@@ -2955,7 +2956,7 @@ m4_define([_m4_set_contents_1c],
 
 m4_define([_m4_set_contents_2],
 [_m4_stack_reverse([_m4_set_($1)], [_m4_set([$1])],
-  [$2[]_m4_defn([_m4_set_($1)])$3], [$4])])
+  [$2[]_m4_defn([_m4_set_($1)])$3], [$4[]])])
 
 # m4_set_delete(SET)
 # ------------------
