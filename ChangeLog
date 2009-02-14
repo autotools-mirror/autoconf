@@ -1,3 +1,10 @@
+2009-02-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Add index for config.site.
+	* doc/autoconf.texi (Site Defaults): Add index for config.site.
+	* THANKS: Update.
+	Report by Stephen P. Schaefer.
+
 2009-02-12  Eric Blake  <ebb9@byu.net>
 
 	Fix m4_set speed regression introduced 2008-12-18.

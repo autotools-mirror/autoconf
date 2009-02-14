@@ -19696,6 +19696,7 @@ manuals.
 @node Site Defaults
 @section Setting Site Defaults
 @cindex Site defaults
+@cindex config.site
 
 Autoconf-generated @command{configure} scripts allow your site to provide
 default values for some configuration values.  You do this by creating
