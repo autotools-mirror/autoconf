@@ -680,18 +680,33 @@ m4_define([AS_MESSAGE_LOG_FD])
 m4_define([AS_ORIGINAL_STDIN_FD], [0])
 
 
-# AS_ESCAPE(STRING, [CHARS = $"`\])
+# AS_ESCAPE(STRING, [CHARS = `\"$])
 # ---------------------------------
-# Escape the CHARS in STRING.
+# Add backslash escaping to the CHARS in STRING.  In an effort to
+# optimize use of this macro inside double-quoted shell constructs,
+# the behavior is intentionally undefined if CHARS is longer than 4
+# bytes, or contains bytes outside of the set [`\"$].  However,
+# repeated bytes within the set are permissible (AS_ESCAPE([$1], [""])
+# being a common way to be nice to syntax highlighting).
 #
 # Avoid the m4_bpatsubst if there are no interesting characters to escape.
 # _AS_ESCAPE bypasses argument defaulting.
 m4_define([AS_ESCAPE],
-[_$0([$1], m4_default([$2], [\"$`]))])
+[_$0([$1], m4_if([$2], [], [[`], [\"$]], [m4_substr([$2], [0], [1]), [$2]]))])
+
+# _AS_ESCAPE(STRING, KEY, SET)
+# ----------------------------
+# Backslash-escape all instances of the singly byte KEY or up to four
+# bytes in SET occurring in STRING.  Although a character can occur
+# multiple times, optimum efficiency occurs when KEY and SET are
+# distinct, and when SET does not exceed two bytes.  These particular
+# semantics allow for the fewest number of parses of STRING, as well
+# as taking advantage of newer m4's optimizations when m4_translit is
+# passed SET of size 2 or smaller.
 m4_define([_AS_ESCAPE],
-[m4_if(m4_len([$1]),
-       m4_len(m4_translit([[$1]], [$2])),
-       [$1], [m4_bpatsubst([$1], [[$2]], [\\\&])])])
+[m4_if(m4_index(m4_translit([[$1]], [$3], [$2$2$2$2]), [$2]), [-1],
+       [$0_], [m4_bpatsubst])([$1], [[$2$3]], [\\\&])])
+m4_define([_AS_ESCAPE_], [$1])
 
 
 # _AS_QUOTE(STRING)
@@ -722,7 +737,7 @@ m4_define([_AS_QUOTE],
 	 [_AS_QUOTE_MODERN])([$1])])
 
 m4_define([_AS_QUOTE_MODERN],
-[_AS_ESCAPE([$1], [`""])])
+[_AS_ESCAPE([$1], [`], [""])])
 
 m4_define([_AS_QUOTE_OLD],
 [m4_warn([obsolete],
@@ -1725,7 +1740,8 @@ m4_defun_init([AS_TR_SH],
 m4_dquote(m4_dquote(m4_defn([m4_cr_not_symbols2])))[[,
 				 [pp[]]]]dnl
 m4_dquote(m4_dquote(m4_for(,1,255,,[[_]])))[[)],
-  [`AS_ECHO(["_AS_ESCAPE(m4_dquote(m4_expand([$1])), [\`])"]) | $as_tr_sh`])])
+  [`AS_ECHO(["_AS_ESCAPE(m4_dquote(m4_expand([$1])),
+    [`], [\])"]) | $as_tr_sh`])])
 
 
 # _AS_TR_CPP_PREPARE
@@ -1883,7 +1899,7 @@ m4_define([AS_VAR_COPY],
 m4_define([AS_VAR_GET],
 [AS_LITERAL_IF([$1],
 	       [$$1],
-  [`eval 'as_val=${'_AS_ESCAPE([[$1]], [\`])'};AS_ECHO(["$as_val"])'`])])
+  [`eval 'as_val=${'_AS_ESCAPE([[$1]], [`], [\])'};AS_ECHO(["$as_val"])'`])])
 
 
 # AS_VAR_IF(VARIABLE, VALUE, IF-TRUE, IF-FALSE)

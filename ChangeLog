@@ -1,5 +1,16 @@
 2009-02-19  Eric Blake  <ebb9@byu.net>
 
+	Use m4_translit more efficiently in AS_ESCAPE.
+	* lib/m4sugar/m4sh.m4 (_AS_ESCAPE): Alter API to take first byte
+	of set separately from rest.
+	(AS_ESCAPE, _AS_QUOTE_MODERN, AS_TR_SH, AS_VAR_GET): Adjust
+	callers.
+	* lib/autoconf/autoheader.m4 (AH_VERBATIM): Avoid duplicate
+	characters in translit request.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_ESCAPE>:
+	Document the macro.
+	* NEWS: Likewise.
+
 	Mention recently documented macros.
 	* NEWS: Update list of new documentation.
 

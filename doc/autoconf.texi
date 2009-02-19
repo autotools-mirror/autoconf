@@ -12338,6 +12338,51 @@ for portability, should not include more than one newline.  The bytes of
 Redirections can be placed outside the macro invocation.
 @end defmac
 
+@defmac AS_ESCAPE (@var{string}, @dvar{chars, `\"$})
+@asindex{ESCAPE}
+Expands to @var{string}, with any characters in @var{chars} escaped with
+a backslash (@samp{\}).  @var{chars} should be at most four bytes long,
+and only contain characters from the set @samp{`\"$}; however,
+characters may be safely listed more than once in @var{chars} for the
+sake of syntax highlighting editors.  The current implementation expands
+@var{string} after adding escapes; if @var{string} contains macro calls
+that have text that needs quoting, you can use
+@code{AS_ESCAPE(m4_dquote(m4_expand([string])))}.
+
+The default for @var{chars} (@samp{\"$`}) is the set of characters
+needing escapes when @var{string} will be used literally within double
+quotes.  One common variant is the set of characters to protect when
+@var{string} will be used literally within back-ticks or an unquoted
+here-doc (@samp{\$`}).  Another common variant is @samp{""}, which can
+be used to form a double-quoted string containing the same expansions
+that would have occurred if @var{string} were expanded in an unquoted
+here-doc; however, when using this variant, care must be taken that
+@var{string} does not use double quotes within complex variable
+expansions (such as @samp{$@{foo-`echo "hi"`@}}) that would be broken
+with improper escapes.
+
+This macro is often used with @code{AS_ECHO}.  For example, this snippet
+will produce shell code that outputs the four lines @samp{"$foo" =
+"bar"}, @samp{macro}, @samp{a, b}, and @samp{a, \b}:
+
+@example
+foo=bar
+AS_ECHO(["AS_ESCAPE(["$foo" = ])AS_ESCAPE(["$foo"], [""])"])
+m4_define([macro], [a, [\b]])
+AS_ECHO(["AS_ESCAPE([[macro]])"])
+AS_ECHO(["AS_ESCAPE([macro])"])
+AS_ECHO(["AS_ESCAPE(m4_dquote(m4_expand([macro])))"])
+@end example
+
+@comment Should we add AS_ESCAPE_SINGLE? If we do, we can optimize in
+@comment the case of @var{string} that does not contain '.
+To escape a string that will be placed within single quotes, use:
+
+@example
+m4_bpatsubst([[@var{string}]], ['], ['\\''])
+@end example
+@end defmac
+
 @defmac AS_EXIT (@dvar{status, $?})
 @asindex{EXIT}
 Emit code to exit the shell with @var{status}, defaulting to @samp{$?}.

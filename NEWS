@@ -80,8 +80,8 @@ GNU Autoconf NEWS - User visible changes.
 ** The following m4sh macros are documented now, but in some cases
    with slightly different semantics than what the previous
    undocumented version had:
-   AS_ECHO  AS_ECHO_N  AS_EXIT  AS_LITERAL_IF  AS_UNSET  AS_VAR_IF
-   AS_VAR_POPDEF  AS_VAR_PUSHDEF  AS_VAR_SET  AS_VAR_SET_IF
+   AS_ECHO  AS_ECHO_N  AS_ESCAPE  AS_EXIT  AS_LITERAL_IF  AS_UNSET
+   AS_VAR_IF  AS_VAR_POPDEF  AS_VAR_PUSHDEF  AS_VAR_SET  AS_VAR_SET_IF
    AS_VAR_TEST_SET  AS_VERSION_COMPARE
 
 ** The m4sh macros AS_IF and AS_CASE can now be used in shell lists.
