@@ -1,3 +1,8 @@
+2009-02-19  Eric Blake  <ebb9@byu.net>
+
+	Mention recently documented macros.
+	* NEWS: Update list of new documentation.
+
 2009-02-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Add index for config.site.

@@ -55,10 +55,11 @@ GNU Autoconf NEWS - User visible changes.
    `autoreconf -I dir' option.
 
 ** The following documented m4sugar macros are new:
-   m4_chomp  m4_curry  m4_default_quoted  m4_esyscmd_s  m4_map_args
-   m4_map_args_pair  m4_map_args_sep  m4_map_args_w  m4_set_map
-   m4_set_map_sep  m4_stack_foreach  m4_stack_foreach_lifo
-   m4_stack_foreach_sep  m4_stack_foreach_sep_lifo
+   m4_chomp  m4_chomp_all  m4_cleardivert  m4_curry  m4_default_quoted
+   m4_esyscmd_s  m4_map_args  m4_map_args_pair  m4_map_args_sep
+   m4_map_args_w  m4_set_map  m4_set_map_sep  m4_stack_foreach
+   m4_stack_foreach_lifo  m4_stack_foreach_sep
+   m4_stack_foreach_sep_lifo
 
 ** The following m4sugar macros are documented now, but in some cases
    with slightly different semantics than what the previous
@@ -73,8 +74,8 @@ GNU Autoconf NEWS - User visible changes.
    unbalanced `(' where single-quoting used to be sufficient.
 
 ** The following documented m4sh macros are new:
-   AS_LINENO_PREPARE  AS_ME_PREPARE  AS_SET_STATUS  AS_VAR_APPEND
-   AS_VAR_ARITH  AS_VAR_COPY
+   AS_INIT_GENERATED  AS_LINENO_PREPARE  AS_ME_PREPARE  AS_SET_STATUS
+   AS_VAR_APPEND  AS_VAR_ARITH  AS_VAR_COPY
 
 ** The following m4sh macros are documented now, but in some cases
    with slightly different semantics than what the previous
