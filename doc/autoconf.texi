@@ -2729,7 +2729,7 @@ you should add
 @code{CPPFLAGS} (@code{AM_CPPFLAGS} if you are also using Automake).
 
 Similarly, you should not rely on @code{AC_CONFIG_FILES} to replace
-@code{datadir} and friends in your shell scripts and other files; instead,
+@code{bindir} and friends in your shell scripts and other files; instead,
 let @command{make} manage their replacement.  For instance Autoconf
 ships templates of its shell scripts ending with @samp{.in}, and uses a
 makefile snippet similar to the following to build scripts like
@@ -2738,14 +2738,17 @@ makefile snippet similar to the following to build scripts like
 @example
 @group
 edit = sed \
-        -e 's|@@datadir[@@]|$(pkgdatadir)|g' \
+        -e 's|@@bindir[@@]|$(bindir)|g' \
+        -e 's|@@pkgdatadir[@@]|$(pkgdatadir)|g' \
         -e 's|@@prefix[@@]|$(prefix)|g'
 @end group
 
 @group
 autoheader autom4te: Makefile
         rm -f $@@ $@@.tmp
-        $(edit) '$(srcdir)/$@@.in' >$@@.tmp
+        srcdir=''; \
+          test -f ./$@@.in || srcdir=$(srcdir)/; \
+          $(edit) $$@{srcdir@}$@@.in >$@@.tmp
         chmod +x $@@.tmp
         chmod a-w $@@.tmp
         mv $@@.tmp $@@
@@ -2760,20 +2763,24 @@ autom4te: $(srcdir)/autom4te.in
 Some details are noteworthy:
 
 @table @asis
-@item @samp{@@datadir[@@]}
+@item @samp{@@bindir[@@]}
 The brackets prevent @command{configure} from replacing
-@samp{@@datadir@@} in the Sed expression itself.
+@samp{@@bindir@@} in the Sed expression itself.
 Brackets are preferable to a backslash here, since
 Posix says @samp{\@@} is not portable.
 
-@item @samp{$(pkgdatadir)}
-Don't use @samp{@@pkgdatadir@@}!  Use the matching makefile variable
+@item @samp{$(bindir)}
+Don't use @samp{@@bindir@@}!  Use the matching makefile variable
 instead.
+
+@item @samp{$(pkgdatadir)}
+The example takes advantage of the variable @samp{$(pkgdatadir)}
+provided by Automake; it is equivalent to @samp{$(datadir)/$(PACKAGE)}.
 
 @item @samp{/}
 Don't use @samp{/} in the Sed expressions that replace file names since
 most likely the
-variables you use, such as @samp{$(pkgdatadir)}, contain @samp{/}.
+variables you use, such as @samp{$(bindir)}, contain @samp{/}.
 Use a shell metacharacter instead, such as @samp{|}.
 
 @item special characters

@@ -31,8 +31,8 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 
 BEGIN
 {
-  my $datadir = $ENV{'autom4te_perllibdir'} || '@datadir@';
-  unshift @INC, "$datadir";
+  my $pkgdatadir = $ENV{'autom4te_perllibdir'} || '@pkgdatadir@';
+  unshift @INC, "$pkgdatadir";
 
   # Override SHELL.  On DJGPP SHELL may not be set to a shell
   # that can handle redirection and quote arguments correctly,

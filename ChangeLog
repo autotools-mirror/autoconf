@@ -1,3 +1,21 @@
+2009-02-24  Eric Blake  <ebb9@byu.net>
+
+	Use pkgdatadir consistently.
+	* bin/Makefile.am (edit): Substitute pkgdatadir, not datadir.
+	* lib/Makefile.am (edit): Likewise.
+	* lib/autom4te.in (Autoconf-without-aclocal-m4, Autotest, M4sh)
+	(M4sugar): Use @pkgdatadir@, not @datadir@.
+	* bin/autoheader.in ($datadir): Likewise.
+	* bin/autom4te.in ($datadir): Likewise.
+	* bin/autoreconf.in ($datadir): Likewise.
+	* bin/autoscan.in ($datadir): Likewise.
+	* bin/autoupdate.in ($datadir): Likewise.
+	* bin/ifnames.in ($datadir): Likewise.
+	* doc/autoconf.texi (Installation Directory Variables): Update
+	example to be consistent; focus on $(bindir) as an autoconf
+	variable, and mention that $(pkgdatadir) comes from automake.
+	Reported by Reuben Thomas.
+
 2009-02-19  Eric Blake  <ebb9@byu.net>
 
 	Use m4_translit more efficiently in AS_ESCAPE.
