@@ -1520,7 +1520,7 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [$2], [$3])])
 # AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
 # -----------------------------------------------------
 # If EXPRESSION has shell indirections ($var or `expr`), expand
-# IF-INDIR, else IF-NOT-INDIR.
+# IF-LITERAL, else IF-NOT-LITERAL.
 # This is an *approximation*: for instance EXPRESSION = `\$' is
 # definitely a literal, but will not be recognized as such.
 #

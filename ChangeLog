@@ -1,3 +1,10 @@
+2009-03-02  Allan Caffee  <allan.caffee@gmail.com>  (tiny change)
+
+	Fix a typo in comment for AS_LITERAL_IF.
+	* lib/m4sugar/m4sh.m4 (AS_LITERAL_IF): Update a comment that fell
+	out of date when this function was moved/renamed in 59ecd766.
+	* THANKS: Update.
+
 2009-03-02  Eric Blake  <ebb9@byu.net>
 
 	Improve wording for AS_ESCAPE.
