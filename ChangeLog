@@ -1,3 +1,11 @@
+2009-03-02  Eric Blake  <ebb9@byu.net>
+
+	Improve wording for AS_ESCAPE.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_ESCAPE>: Touch
+	up documentation.
+	* lib/m4sugar/m4sh.m4 (_AS_ESCAPE): Fix comment typos.
+	Reported by Ralf Wildenhues.
+
 2009-02-24  Eric Blake  <ebb9@byu.net>
 
 	Use pkgdatadir consistently.

@@ -696,13 +696,13 @@ m4_define([AS_ESCAPE],
 
 # _AS_ESCAPE(STRING, KEY, SET)
 # ----------------------------
-# Backslash-escape all instances of the singly byte KEY or up to four
+# Backslash-escape all instances of the single byte KEY or up to four
 # bytes in SET occurring in STRING.  Although a character can occur
 # multiple times, optimum efficiency occurs when KEY and SET are
 # distinct, and when SET does not exceed two bytes.  These particular
 # semantics allow for the fewest number of parses of STRING, as well
-# as taking advantage of newer m4's optimizations when m4_translit is
-# passed SET of size 2 or smaller.
+# as taking advantage of the optimizations in m4 1.4.13+ when
+# m4_translit is passed SET of size 2 or smaller.
 m4_define([_AS_ESCAPE],
 [m4_if(m4_index(m4_translit([[$1]], [$3], [$2$2$2$2]), [$2]), [-1],
        [$0_], [m4_bpatsubst])([$1], [[$2$3]], [\\\&])])
