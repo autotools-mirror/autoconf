@@ -1,3 +1,9 @@
+2009-03-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Manual: testsuite depends on package.m4.
+	* doc/autoconf.texi (Making testsuite Scripts): In the example
+	makefile snippet, $(TESTSUITE) depends on $(srcdir)/package.m4.
+
 2009-03-02  Allan Caffee  <allan.caffee@gmail.com>  (tiny change)
 
 	Fix a typo in comment for AS_LITERAL_IF.
