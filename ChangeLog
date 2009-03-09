@@ -1,3 +1,9 @@
+2009-03-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New test for SunStudio `restrict' handling.
+	* tests/c.at (AC_C_RESTRICT and C++): New test.
+	Prompted by bug report from Rolf Vandevaart.
+
 2009-03-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Manual: testsuite depends on package.m4.

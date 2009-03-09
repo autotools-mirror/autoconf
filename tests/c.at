@@ -2,8 +2,8 @@
 
 AT_BANNER([C low level compiling/preprocessing macros.])
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008 Free
-# Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2008, 2009
+# Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -257,5 +257,68 @@ _AT_CHECK_AC_MACRO(
 [[AC_USE_SYSTEM_EXTENSIONS
 AC_DEFINE([__EXTENSIONS__], [1], [Manually defined for Solaris])
 ]])
+
+AT_CLEANUP
+
+
+## ----------------------- ##
+## AC_C_RESTRICT and C++.  ##
+## ----------------------- ##
+
+AT_SETUP([AC_C_RESTRICT and C++])
+
+# In some compiler suites, the left hand doesn't know about everything
+# the right hand does; or the user mixes the C compiler from one suite
+# with the C++ compiler from another.  In this case, Sun WorkShop CC
+# not like the _Restrict accepted by cc.
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_CC
+AC_PROG_CXX
+AC_C_RESTRICT
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[CC = @CC@
+CXX = @CXX@
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+CPPFLAGS = -I. @CPPFLAGS@
+OBJEXT = @OBJEXT@
+all: foo.$(OBJEXT) bar.$(OBJEXT)
+cpp-works:
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c cpp-works.cpp
+foo.$(OBJEXT): foo.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c foo.c
+bar.$(OBJEXT): bar.cpp
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c bar.cpp
+]])
+
+AT_DATA([foo.c],
+[[#include <config.h>
+
+int foo (int * restrict i1, int * restrict i2)
+{
+  return i1[0] + i2[0];
+}
+]])
+
+cp foo.c bar.cpp
+
+AT_DATA([cpp-works.cpp],
+[[// This file is just to test whether we have a working C++ compiler at all
+class foo { int x; };
+class foo foobar;
+]])
+
+AT_CHECK([autoconf])
+AT_CHECK([autoheader])
+AT_CHECK([./configure], [], [ignore], [ignore])
+AT_CHECK([${MAKE-make} cpp-works || exit 77], [], [ignore], [ignore])
+AT_CHECK([${MAKE-make}], [], [ignore], [ignore])
 
 AT_CLEANUP
