@@ -1,3 +1,16 @@
+2009-03-14  Eric Blake  <ebb9@byu.net>
+
+	Resync upstream files.
+	* GNUmakefile: Run 'make fetch'.
+	* build-aux/announce-gen: Likewise.
+	* build-aux/config.guess: Likewise.
+	* build-aux/config.sub: Likewise.
+	* build-aux/gnupload: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+	* build-aux/vc-list-files: Likewise.
+	* doc/gnu-oids.texi: Likewise.
+	* doc/standards.texi: Likewise.
+
 2009-03-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	New test for SunStudio `restrict' handling.
