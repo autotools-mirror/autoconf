@@ -9866,7 +9866,7 @@ arguments to macro calls.  On the other hand, there are several
 variations for defining @code{my_case} to be more robust, even when used
 without proper quoting, each with some benefits and some drawbacks.
 
-@itemize @asis
+@itemize @w{}
 @item Creative literal shell comment
 @example
 AC_DEFUN([my_case],
