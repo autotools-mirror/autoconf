@@ -19328,11 +19328,8 @@ looks like this:
 @noindent
 @var{help-string} may be more than one line long, if more detail is
 needed.  Just make sure the columns line up in @samp{configure
---help}.  Avoid tabs in the help string.  You'll need to enclose the
-help string in @samp{[} and @samp{]} in order to produce the leading
-blanks.
-
-You should format your @var{help-string} with the macro
+--help}.  Avoid tabs in the help string.  The easiest way to provide the
+proper leading whitespace is to format your @var{help-string} with the macro
 @code{AS_HELP_STRING} (@pxref{Pretty Help Strings}).
 
 The following example shows how to use the @code{AC_ARG_WITH} macro in
