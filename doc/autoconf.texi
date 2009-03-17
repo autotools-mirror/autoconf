@@ -537,7 +537,7 @@ Portable C and C++ Programming
 
 Manual Configuration
 
-* Specifying Names::            Specifying the system type
+* Specifying Target Triplets::  Specifying target triplets
 * Canonicalizing::              Getting the canonical system type
 * Using System Type::           What to do with the system type
 
@@ -4058,7 +4058,7 @@ with a prefix of the target type as determined by
 If the tool cannot be found with a prefix, and if the build and target
 types are equal, then it is also searched for without a prefix.
 
-As noted in @ref{Specifying Names, , Specifying the system type}, the
+As noted in @ref{Specifying Target Triplets}, the
 target is rarely specified, because most of the time it is the same
 as the host: it is the type of system for which any compiler tool in
 the package produces code.  What this macro looks for is,
@@ -4084,8 +4084,7 @@ sets @code{RANLIB} to @file{i386-gnu-ranlib} if that program exists in
 
 When cross-compiling, this macro will issue a warning if no program
 prefixed with the host type could be found.
-For more information, see @ref{Specifying Names, , Specifying the
-system type}.
+For more information, see @ref{Specifying Target Triplets}.
 @end defmac
 
 @defmac AC_CHECK_TARGET_TOOLS (@var{variable}, @var{progs-to-check-for}, @
@@ -4118,8 +4117,7 @@ is not changed.  Calls @code{AC_SUBST} for @var{variable}.
 
 When cross-compiling, this macro will issue a warning if no program
 prefixed with the host type could be found.
-For more information, see @ref{Specifying Names, , Specifying the
-system type}.
+For more information, see @ref{Specifying Target Triplets}.
 @end defmac
 
 @anchor{AC_PATH_PROG}
@@ -4197,8 +4195,7 @@ name of the program if it is found.
 
 When cross-compiling, this macro will issue a warning if no program
 prefixed with the host type could be found.
-For more information, see @ref{Specifying Names, , Specifying the
-system type}.
+For more information, see @ref{Specifying Target Triplets}.
 @end defmac
 
 
@@ -18972,18 +18969,22 @@ looking for libraries that are unique to particular systems.  However,
 Autoconf provides a uniform method for handling unguessable features.
 
 @menu
-* Specifying Names::            Specifying the system type
+* Specifying Target Triplets::  Specifying target triplets
 * Canonicalizing::              Getting the canonical system type
 * Using System Type::           What to do with the system type
 @end menu
 
-@node Specifying Names
-@section Specifying the System Type
+@node Specifying Target Triplets
+@section Specifying target triplets
 @cindex System type
+@cindex Target triplet
+@c This node used to be named Specifying Names.  The @anchor allows old
+@c links to still work.
+@anchor{Specifying Names}
 
 Autoconf-generated
 @command{configure} scripts can make decisions based on a canonical name
-for the system type, which has the form:
+for the system type, or @dfn{target triplet}, which has the form:
 @samp{@var{cpu}-@var{vendor}-@var{os}}, where @var{os} can be
 @samp{@var{system}} or @samp{@var{kernel}-@var{system}}
 
@@ -18993,7 +18994,8 @@ system it's running on.  To do so it runs a script called
 command or symbols predefined by the C preprocessor.
 
 Alternately, the user can specify the system type with command line
-arguments to @command{configure}.  Doing so is necessary when
+arguments to @command{configure} (@pxref{System Type}.  Doing so is
+necessary when
 cross-compiling.  In the most complex case of cross-compiling, three
 system types are involved.  The options to specify them are:
 

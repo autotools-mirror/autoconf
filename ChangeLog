@@ -1,5 +1,13 @@
 2009-03-17  Eric Blake  <ebb9@byu.net>
 
+	Improve confusing section names.
+	* doc/autoconf.texi (Specifying Names): Rename node...
+	(Specifying Target Triplets): ...to this.
+	(Generic Programs): Adjust references.
+	* doc/install.texi (System Type): Touch up formatting.
+	* THANKS: Update.
+	Reported by Tim Freeman, in http://bugs.debian.org/312873.
+
 	Remove historical inaccuracy.
 	* doc/autoconf.texi (Portable Shell): Don't perpetuate myth about
 	#!/bin/sh needing a space.
