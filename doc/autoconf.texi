@@ -3510,7 +3510,7 @@ Make @code{AC_OUTPUT} run @command{configure} in each subdirectory
 be a literal, i.e., please do not use:
 
 @example
-if test "$package_foo_enabled" = yes; then
+if test "x$package_foo_enabled" = xyes; then
   $my_subdirs="$my_subdirs foo"
 fi
 AC_CONFIG_SUBDIRS([$my_subdirs])
@@ -3522,7 +3522,7 @@ displaying the options of the package @code{foo}.  Instead, you should
 write:
 
 @example
-if test "$package_foo_enabled" = yes; then
+if test "x$package_foo_enabled" = xyes; then
   AC_CONFIG_SUBDIRS([foo])
 fi
 @end example
@@ -3930,7 +3930,7 @@ is suggested that you use this Autoconf snippet:
 
 @example
 AC_PROG_LEX
-if test "$LEX" != flex; then
+if test "x$LEX" != xflex; then
   LEX="$SHELL $missing_dir/missing flex"
   AC_SUBST([LEX_OUTPUT_ROOT], [lex.yy])
   AC_SUBST([LEXLIB], [''])
@@ -8606,7 +8606,9 @@ easy to simulate by using a shell variable to keep track of whether a
 way to perform the operation has been found yet.
 
 Here is an example that uses the shell variable @code{fstype} to keep
-track of whether the remaining cases need to be checked.
+track of whether the remaining cases need to be checked.  Note that
+since the value of @code{fstype} is under our control, we don't have to
+use the longer @samp{test "x$fstype" = xno}.
 
 @example
 @group
@@ -8674,7 +8676,7 @@ appropriate cache variable, as in this example:
 @example
 AC_CHECK_FUNC([vprintf], [AC_DEFINE([HAVE_VPRINTF], [1],
                           [Define if vprintf exists.])])
-if test "$ac_cv_func_vprintf" != yes; then
+if test "x$ac_cv_func_vprintf" != xyes; then
   AC_CHECK_FUNC([_doprnt], [AC_DEFINE([HAVE_DOPRNT], [1],
                             [Define if _doprnt exists.])])
 fi
@@ -9016,7 +9018,7 @@ AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [my_cv_shell_true_works],
                 [my_cv_shell_true_works=no
                  (true) 2>/dev/null && my_cv_shell_true_works=yes
-                 if test "$my_cv_shell_true_works" = yes; then
+                 if test "x$my_cv_shell_true_works" = xyes; then
                    AC_DEFINE([TRUE_WORKS], [1],
                              [Define if `true(1)' works properly.])
                  fi])
@@ -9035,7 +9037,7 @@ AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [my_cv_shell_true_works],
                 [my_cv_shell_true_works=no
                  (true) 2>/dev/null && my_cv_shell_true_works=yes])
- if test "$my_cv_shell_true_works" = yes; then
+ if test "x$my_cv_shell_true_works" = xyes; then
    AC_DEFINE([TRUE_WORKS], [1],
              [Define if `true(1)' works properly.])
  fi
@@ -12408,8 +12410,8 @@ simplifications if either @var{run-if-true1} or @var{run-if-false}
 is empty.  For example,
 
 @example
-AS_IF([test "$foo" = yes], [HANDLE_FOO([yes])],
-      [test "$foo" != no], [HANDLE_FOO([maybe])],
+AS_IF([test "x$foo" = xyes], [HANDLE_FOO([yes])],
+      [test "x$foo" != xno], [HANDLE_FOO([maybe])],
       [echo foo not specified])
 @end example
 
@@ -12462,7 +12464,7 @@ Transform @var{expression} into a valid shell variable name.  For example:
 # This outputs "Have it!".
 header="sys/some file.h"
 AS_TR_SH([HAVE_$header])=yes
-if test "$HAVE_sys_some_file_h" = yes; then echo "Have it!"; fi
+if test "x$HAVE_sys_some_file_h" = xyes; then echo "Have it!"; fi
 @end example
 @end defmac
 
@@ -13142,7 +13144,7 @@ AC_DEFUN([TRAVOLTA],
 [test "$body_temperature_in_celsius" -gt "38" &&
   dance_floor=occupied])
 AC_DEFUN([NEWTON_JOHN],
-[test "$hair_style" = "curly" &&
+[test "x$hair_style" = xcurly &&
   dance_floor=occupied])
 @end group
 
@@ -13161,7 +13163,7 @@ with this @file{configure.ac}
 @example
 AC_INIT([Dance Manager], [1.0], [bug-dance@@example.org])
 RESERVE_DANCE_FLOOR
-if test "$dance_floor" = occupied; then
+if test "x$dance_floor" = xoccupied; then
   AC_MSG_ERROR([cannot pick up here, let's move])
 fi
 @end example
@@ -13174,7 +13176,7 @@ other times than Saturday night since it expands into:
 @group
 test "$body_temperature_in_Celsius" -gt "38" &&
   dance_floor=occupied
-test "$hair_style" = "curly" &&
+test "x$hair_style" = xcurly &&
   dance_floor=occupied
 fi
 if date | grep '^Sat.*pm' >/dev/null 2>&1; then
@@ -13606,7 +13608,7 @@ AC_DEFUN(_AC_EMXOS2,
 [AC_CACHE_CHECK(for EMX OS/2 environment, ac_cv_emxos2,
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM(, return __EMX__;)],
 ac_cv_emxos2=yes, ac_cv_emxos2=no)])
-test "$ac_cv_emxos2" = yes && EMXOS2=yes])
+test "x$ac_cv_emxos2" = xyes && EMXOS2=yes])
 @end example
 
 @noindent
@@ -13621,7 +13623,7 @@ m4_define([_AC_EMXOS2],
 [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return __EMX__;])],
                    [ac_cv_emxos2=yes],
                    [ac_cv_emxos2=no])])
-test "$ac_cv_emxos2" = yes && EMXOS2=yes[]dnl
+test "x$ac_cv_emxos2" = xyes && EMXOS2=yes[]dnl
 ])# _AC_EMXOS2
 @end example
 
@@ -21447,7 +21449,7 @@ Here is a way to write it for version 2:
 
 @example
 AC_CHECK_FUNCS([syslog])
-if test $ac_cv_func_syslog = no; then
+if test "x$ac_cv_func_syslog" = xno; then
   # syslog is not in the default libraries.  See if it's in some other.
   for lib in bsd socket inet; do
     AC_CHECK_LIB([$lib], [syslog], [AC_DEFINE([HAVE_SYSLOG])

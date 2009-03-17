@@ -1,5 +1,13 @@
 2009-03-17  Eric Blake  <ebb9@byu.net>
 
+	Use test consistently in examples.
+	* doc/autoconf.texi (Subdirectories, Caching Results)
+	(Common Shell Constructs, Prerequisite Macros, Coding Style)
+	(Changed Results, Particular Programs, Defining Symbols):
+	Protect against arbitrary user strings.
+	(Multiple Cases): Mention why $fstype does not need protection.
+	Reported by Reuben Thomas.
+
 	Improve confusing section names.
 	* doc/autoconf.texi (Specifying Names): Rename node...
 	(Specifying Target Triplets): ...to this.
