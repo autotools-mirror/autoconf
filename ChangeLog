@@ -1,5 +1,10 @@
 2009-03-17  Eric Blake  <ebb9@byu.net>
 
+	Remove historical inaccuracy.
+	* doc/autoconf.texi (Portable Shell): Don't perpetuate myth about
+	#!/bin/sh needing a space.
+	Reported by Reuben Thomas.
+
 	Recommend AS_HELP_STRING more prominently.
 	* doc/autoconf.texi (External Software): Reduce mention of
 	hand-written help strings.

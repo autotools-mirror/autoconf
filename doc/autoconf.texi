@@ -13691,8 +13691,6 @@ Builtins, , Limitations of Shell Builtins}.
 Some ancient systems have quite
 small limits on the length of the @samp{#!} line; for instance, 32
 bytes (not including the newline) on SunOS 4.
-A few ancient 4.2@acronym{BSD} based systems (such as Dynix circa 1984)
-required a single space between the @samp{#!} and the @samp{/}.
 However, these ancient systems are no longer of practical concern.
 
 The set of external programs you should run in a @command{configure} script
