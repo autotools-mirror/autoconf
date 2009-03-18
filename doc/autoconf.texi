@@ -16642,6 +16642,21 @@ Portable @command{expr} regular expressions should not begin with
 @samp{^}.  Patterns are automatically anchored so leading @samp{^} is
 not needed anyway.
 
+On the other hand, the behavior of the @samp{$} anchor is not portable
+on multi-line strings.  Posix is ambiguous whether the anchor applies to
+each line, as was done in older versions of @acronym{GNU} Coreutils, or
+whether it applies only to the end of the overall string, as in
+Coreutils 6.0 and most other implementations.
+
+@example
+$ @kbd{baz='foo}
+> @kbd{bar'}
+$ @kbd{expr "X$baz" : 'X\(foo\)$'}
+
+$ @kbd{expr-5.97 "X$baz" : 'X\(foo\)$'}
+foo
+@end example
+
 The Posix standard is ambiguous as to whether
 @samp{expr 'a' : '\(b\)'} outputs @samp{0} or the empty string.
 In practice, it outputs the empty string on most platforms, but portable
@@ -16716,6 +16731,14 @@ can be interpreted that way:
 @example
 $ @kbd{expr 00001 : '.*\(...\)'}
 1
+@end example
+
+On @acronym{HP-UX} 11, @command{expr} only supports a single
+sub-expression.
+
+@example
+$ @kbd{expr 'Xfoo' : 'X\(f\(oo\)*\)$'}
+expr: More than one '\(' was used.
 @end example
 
 
