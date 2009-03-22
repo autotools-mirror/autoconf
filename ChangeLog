@@ -1,3 +1,11 @@
+2009-03-24  Aaron W. LaFramboise  <aaronenvelope277@aaronwl.com>  (tiny change)
+
+	Work around cygwin bash igncr mode.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Fall back to
+	bash carriage returns if ac_cr lost \r from ``.
+	* THANKS: Update.
+	Suggested by Eric Blake.
+
 2009-03-24  Eric Blake  <ebb9@byu.net>
 
 	Fix underquoted example in manual.
