@@ -1,3 +1,10 @@
+2009-03-24  Andris Pavenis  <andris.pavenis@iki.fi>  (tiny change)
+
+	Fix awk substitution of carriage returns on DJGPP.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Fix typo in
+	generation of ac_cs_awk_cr.
+	* THANKS: Update.
+
 2009-03-24  Aaron W. LaFramboise  <aaronenvelope277@aaronwl.com>  (tiny change)
 
 	Work around cygwin bash igncr mode.
