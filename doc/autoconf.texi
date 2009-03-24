@@ -12451,8 +12451,9 @@ For example:
 
 @example
 # This outputs "#define HAVE_CHAR_P 1".
+# Notice the m4 quoting around #, to prevent an m4 comment
 type="char *"
-echo "#define AS_TR_CPP([HAVE_$type]) 1"
+echo "[#]define AS_TR_CPP([HAVE_$type]) 1"
 @end example
 @end defmac
 

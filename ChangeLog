@@ -1,3 +1,11 @@
+2009-03-24  Eric Blake  <ebb9@byu.net>
+
+	Fix underquoted example in manual.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_TR_CPP>:
+	Properly m4-quote #.
+	* THANKS: Update spelling.
+	Reported by Matěj Týč.
+
 2009-03-18  Eric Blake  <ebb9@byu.net>
 
 	Manual: mention more expr pitfalls.
