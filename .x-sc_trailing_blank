@@ -1,2 +1,5 @@
+build-aux/gendocs.sh
 build-aux/texinfo.tex
+doc/gendocs_template
+doc/gnu-oids.texi
 doc/standards.texi

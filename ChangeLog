@@ -1,3 +1,11 @@
+2009-03-31  Eric Blake  <ebb9@byu.net>
+
+	Beta Release Version 2.63b.
+	* NEWS: Mention the release.
+	* README: Clarify that this is a beta release.
+	* build-aux/texinfo.tex: Synchronize from upstream.
+	* .x-sc_trailing_blank: Exempt more upstream files.
+
 2009-03-30  Eric Blake  <ebb9@byu.net>
 
 	Fix testsuite failures under zsh.

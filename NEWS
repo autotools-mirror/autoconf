@@ -1,6 +1,6 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Major changes in Autoconf 2.64 (????-??-??) [stable]
+* Major changes in Autoconf 2.63b (2009-03-31) [beta]
   Released by Eric Blake, based on git versions 2.63.*.
 
 ** The manual is now shipped under the terms of the GNU FDL 1.3.
@@ -40,11 +40,14 @@ GNU Autoconf NEWS - User visible changes.
    used in `configure --help' and is also available via AC_DEFINE.
 
 ** Autotest testsuites accept an option --jobs[=N] for parallel testing.
+   This feature is still in testing, and may not work on every
+   platform, help in improving it would be appreciated.
 
 ** Autotest testsuites do not attempt to write startup error messages
    to the log file before that is opened (regression introduced in 2.63).
 
-** Configure scripts now use shell functions.
+** Configure scripts now use shell functions.  This feature leads to
+   smaller configure files and faster execution.
 
 ** Present But Cannot Be Compiled: Autoconf will now proceed with
    the compiler's result if a header is present but cannot be compiled.
