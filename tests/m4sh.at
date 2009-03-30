@@ -2,8 +2,8 @@
 
 AT_BANNER([M4sh.])
 
-# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
-# Free Software Foundation, Inc.
+# Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+# 2009 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ grep 'Line: .*$4' "$[0]" >/dev/null ||
   AS@&t@_ERROR([cannot find original script])
 exit 0
 ]])
-# If occurrences of $LINENO or __oline__ were wanted, create them.
+# If occurrences of $LINENO or __@&t@oline__ were wanted, create them.
 sed 's/__LINENO__/$''LINENO/g;s/__OLINE__/__''oline__/g' $1.tas >$1.as
 AT_CHECK([autom4te -l m4sh $1.as -o $1])
 ])# AT_DATA_LINENO

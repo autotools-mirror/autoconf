@@ -189,37 +189,7 @@ m4_define([AT_DATA_AUTOCONF],
 # Create a full configure.ac running BODY, with a config header set up,
 # AC_OUTPUT, and environment checking hooks.
 m4_define([AT_CONFIGURE_AC],
-[AT_DATA_AUTOCONF([aclocal.m4],
-[[
-# AC_STATE_SAVE(FILE)
-# -------------------
-# Save the shell variables and directory listing.  AT_CHECK_ENV uses these to
-# confirm that no test modifies variables outside the Autoconf namespace or
-# leaves temporary files.  AT_CONFIG_CMP uses the variable dumps to confirm that
-# tests have the same side effects regardless of caching.
-#
-# The sed script duplicates uniq functionality (thanks to 'info sed
-# uniq' for the recipe), in order to avoid a MacOS 10.5 bug where
-# readdir can list a file multiple times in a rapidly changing
-# directory, while avoiding yet another fork.
-m4_defun([AC_STATE_SAVE],
-[(set) 2>&1 | sort >state-env.$][1
-ls | sed '/^at-/d;/^state-/d;/^config\./d
-  h
-  :b
-  $b
-  N
-  /^\(.*\)\n\1$/ {
-    g
-    bb
-  }
-  $b
-  P
-  D' >state-ls.$][1
-])# AC_STATE_SAVE
-]])
-
-AT_DATA([configure.ac],
+[AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_HEADERS(config.h:config.hin)
 AC_STATE_SAVE(before)]
@@ -230,6 +200,7 @@ AC_STATE_SAVE(after)
 cp "$abs_top_srcdir/build-aux/install-sh" \
    "$abs_top_srcdir/build-aux/config.guess" \
    "$abs_top_srcdir/build-aux/config.sub" .
+cp "$abs_top_srcdir/tests/statesave.m4" aclocal.m4
 ])# AT_CONFIGURE_AC
 
 
@@ -303,10 +274,19 @@ m4_define([AT_CHECK_CONFIGURE],
 #      | '$'=6908
 #
 m4_define([AT_CHECK_ENV],
-[# Compare directory listings.
+[m4_divert_once([PREPARE_TESTS], [_AT_CHECK_ENV])dnl
+AT_CHECK([at_check_env])])
+m4_define([_AT_CHECK_ENV],
+[AS_FUNCTION_DESCRIBE([at_check_env], [],
+[Compare the directory and environment state both before and after a run,
+and return non-zero status if they differ inappropriately.])
+at_check_env ()
+{
+# Compare directory listings.
 test -f state-ls.before ||
   AS_ERROR([state-ls.before not present])
-test -f state-ls.after && { AT_CMP([state-ls.before], [state-ls.after]) }
+test -f state-ls.after \
+  && { $at_diff state-ls.before state-ls.after || return 1; }
 # Compare variable space dumps.
 if test -f state-env.before && test -f state-env.after; then
   for act_file in state-env.before state-env.after
@@ -336,9 +316,9 @@ if test -f state-env.before && test -f state-env.after; then
       # There may be variables spread on several lines; remove latter lines.
       $GREP '^m4_defn([m4_re_word])=' >clean-$act_file
   done
-  AT_CMP([clean-state-env.before], [clean-state-env.after])
+  $at_diff clean-state-env.before clean-state-env.after
 fi
-])
+} [#]at_check_env])
 
 
 # AT_CONFIG_CMP(VAR-FILE-A, VAR-FILE-B)

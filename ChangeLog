@@ -1,5 +1,14 @@
 2009-04-06  Eric Blake  <ebb9@byu.net>
 
+	Reduce testsuite size.
+	* tests/statesave.m4: New file.
+	* tests/Makefile.am (EXTRA_DIST): Distribute it.
+	* tests/local.at (AT_CONFIGURE_AC): Reuse file, rather than
+	repeating inline definition of AC_STATE_SAVE.
+	(AT_CHECK_ENV): Factor code...
+	(_AT_CHECK_ENV): ...into shell function.
+	* tests/m4sh.at (AT_DATA_LINENO): Avoid churn in testsuite.
+
 	Handle shell comments in AT_CHECK.
 	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): Handle # in
 	test correctly.  Latent bug in handling shell comment was first

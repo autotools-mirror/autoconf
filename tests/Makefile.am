@@ -21,7 +21,7 @@
 # But if you are borrowing from this file for setting up autotest in your
 # project, remember to distribute both testsuite and package.m4.
 EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
-	     atlocal.in wrapper.as
+	     atlocal.in wrapper.as statesave.m4
 
 # Running the uninstalled scripts.  Build them upon `all', for the manpages.
 noinst_SCRIPTS = $(wrappers)
