@@ -2,8 +2,8 @@
 
 AT_BANNER([Autotest.])
 
-# Copyright (C) 2004, 2005, 2006, 2007, 2008 Free Software Foundation,
-# Inc.
+# Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Free Software
+# Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -62,24 +62,26 @@ m4_popdef([AT_dir])dnl
 ]) # AT_CHECK_AT_PREP
 
 # AT_CHECK_AT(TITLE, SUITE-CODE, [XFAIL-CONDITION], [STATUS = 0],
-#             [STDOUT = ignore], STDERR, [POST-TEST-CODE], [SUITE-ARGS])
-# ----------------------------------------------------------------------
+#             [STDOUT = ignore], STDERR, [PRE-TEST-CODE],
+#             [POST-TEST-CODE], [SUITE-ARGS])
+# ---------------------------------------------------------------
 # Create a new test named TITLE that runs a minimal Autotest test suite,
 # SUITE-CODE with additional SUITE-ARGS, once without and once with
 # '-v -x' added.  Call AT_XFAIL_IF with XFAIL-CONDITION.  Pass STDERR
 # directly to the AT_CHECK that calls the minimal test suite, STDOUT to
 # the AT_CHECK without '-v -x'; ignore stdout for the latter.
-# Run POST-TEST-CODE at the top level after the micro-suite has been run.
+# Run PRE-TEST-CODE at the top level after the micro-suite is created, but
+# before it is run, and POST-TEST-CODE after the micro-suite has been run.
 m4_define([AT_CHECK_AT],
 [AT_SETUP([$1])
 AT_XFAIL_IF([$3])
 AT_CHECK_AT_PREP([micro-suite], [$2])
-
-AT_CHECK([$CONFIG_SHELL ./micro-suite $8],       m4_default([$4], 0),
-         m4_default([$5], [ignore]), [$6])
-AT_CHECK([$CONFIG_SHELL ./micro-suite -v -x $8], m4_default([$4], 0),
-         [ignore], [$6])
 $7
+AT_CHECK([$CONFIG_SHELL ./micro-suite $9],       m4_default([$4], 0),
+         m4_default([$5], [ignore]), [$6])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -v -x $9], m4_default([$4], 0),
+         [ignore], [$6])
+$8
 AT_CLEANUP
 ])# AT_CHECK_AT
 
@@ -220,7 +222,7 @@ AT_CHECK_AT([Tested programs],
 [[AT_INIT([programs test suite])
 AT_TESTED([autoconf autom4te])
 AT_TESTED([autoconf])
-]], [], [], [], [],
+]], [], [], [], [], [],
 [AT_CHECK([[sed -n 's|.*/\([^ /]* --version\)|\1|p' micro-suite.log]], [],
 [[autoconf --version
 autom4te --version
@@ -231,7 +233,7 @@ AT_CHECK_AT([Startup error messages],
 AT_SETUP([only test])
 AT_CHECK([:])
 AT_CLEANUP
-]], [], [], [], [],
+]], [], [], [], [], [],
 [AT_CHECK([sed -n '/exec AS_MESSAGE_LOG_FD/q; />&AS_MESSAGE_LOG_FD/p' < micro-suite])])
 
 ## ----------------------------------------------------- ##
@@ -243,12 +245,12 @@ AT_CHECK_AT_TEST([Truth],
 
 AT_CHECK_AT_TEST([Fallacy],
   [AT_CHECK([false], [], [], [])],
-  [], [1], [], [ignore],
+  [], [1], [], [ignore], [],
   [AT_CHECK([grep failed micro-suite.log], [], [ignore])])
 
 AT_CHECK_AT_TEST([Skip],
   [AT_CHECK([exit 77], 0, [], [])],
-  [], [], [], [],
+  [], [], [], [], [],
   [AT_CHECK([grep skipped micro-suite.log], [], [ignore])])
 
 AT_CHECK_AT_TEST([errexit],
@@ -256,7 +258,7 @@ AT_CHECK_AT_TEST([errexit],
    AT_CLEANUP
    AT_SETUP([test that should not be run])
    AT_CHECK([:])],
-  [], [1], [stdout], [stderr],
+  [], [1], [stdout], [stderr], [],
   [AT_CHECK([test -f micro-suite.log], [1])
    touch micro-suite.log # shut up AT_CAPTURE_FILE.
    AT_CHECK([grep "should not be run" stdout], [1])
@@ -436,7 +438,7 @@ AT_INIT([artificial test suite])
 AT_SETUP([$2])
 AT_CHECK([:])
 AT_CLEANUP
-]], [$4], [], [], [],
+]], [$4], [], [], [], [],
 dnl This sed script checks for two things - that the output is properly
 dnl expanded, and that the 'ok' starts on the right column.
 [AT_KEYWORDS([m4@&t@_expand])
@@ -505,7 +507,7 @@ AT_CHECK_AT_TITLE_CHAR([Longer test title],
 AT_CHECK_AT_TEST([Long test source lines],
 [m4_for([nnn], [1], [999], [], [: ])
 AT_CHECK([:])
-], [], [], [], [ignore],
+], [], [], [], [ignore], [],
 [AT_CHECK([$CONFIG_SHELL ./micro-suite -k skipalltests], [], [ignore], [ignore])
 ])
 
@@ -515,7 +517,7 @@ AT_CHECK([:])
 ## ----------------- ##
 
 AT_CHECK_AT_TEST([Debugging a successful test],
-  [AT_CHECK([:])], [], [], [], [ignore],
+  [AT_CHECK([:])], [], [], [], [ignore], [],
 [# Without options, when all tests pass, no test directory should exist.
 AT_CHECK([test -d micro-suite.dir/1 && exit 42
           $CONFIG_SHELL ./micro-suite -d 1], [], [ignore], [ignore])
@@ -530,7 +532,7 @@ AT_CHECK([(cd micro-suite.dir/1 && ./run)], [], [ignore], [ignore])
 
 AT_CHECK_AT_TEST([Debugging script and environment],
   [AT_CHECK([test "$MY_VAR" = pass || exit 42])],
-  [], [1], [], [ignore], [
+  [], [1], [], [ignore], [], [
 # Changing environment outside of debugging script is not preserved.
 AT_CHECK([(cd micro-suite.dir/1 && MY_VAR=pass ./run)],
          [0], [ignore], [ignore])
@@ -547,7 +549,7 @@ AT_CHECK([(cd micro-suite.dir/1; ./run)],
 # in via an environment option.
 AT_CHECK_AT_TEST([Debugging a failed test],
   [AT_CHECK([test "$MY_VAR" = "one space" || exit 42])],
-  [], [1], [], [ignore], [
+  [], [1], [], [ignore], [], [
 AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='two  spaces')],
          [1], [ignore], [ignore])
 AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='one space')],
@@ -558,7 +560,7 @@ AT_CHECK([(cd micro-suite.dir/1 && ./run MY_VAR='one space')],
 # Setting default variable values via atlocal.
 AT_CHECK_AT_TEST([Using atlocal],
   [AT_CHECK([test "x$MY_VAR" = "xodd;  'string" || exit 42])],
-  [], [1], [ignore], [ignore], [
+  [], [1], [ignore], [ignore], [], [
 dnl check that command line can set variable
 AT_CHECK([$CONFIG_SHELL ./micro-suite MY_VAR="odd;  'string"], [0], [ignore])
 dnl check that command line overrides environment
@@ -592,7 +594,7 @@ AT_CHECK([$CONFIG_SHELL ./micro-suite 1=2], [1], [], [ignore], [ignore])
 
 # Controlling where the testsuite is run.
 AT_CHECK_AT_TEST([Choosing where testsuite is run],
-  [AT_CHECK([:])], [], [], [], [], [
+  [AT_CHECK([:])], [], [], [], [], [], [
 dnl AT_CHECK_AT_TEST tests the default of running in `.'.
 AT_CHECK([$CONFIG_SHELL ./micro-suite --clean])
 AT_CHECK([test -f micro-suite.log], [1])
@@ -816,12 +818,22 @@ AT_CHECK_KEYS([-l], [.{80}], [1], [.{87}], [0])
 
 AT_CLEANUP
 
+m4_define([AT_SKIP_PARALLEL_TESTS],
+[# Per BUGS, we have not yet figured out how to run parallel tests cleanly
+# under dash and some ksh variants.  For now, only run this test under
+# limited conditions; help is appreciated in widening this test base.
+AT_CHECK([test -n "${BASH_VERSION+set}${ZSH_VERSION+set}]]dnl
+[[${TEST_PARALLEL_AUTOTEST+set}" || exit 77])
+])
+
 
 ## ----------------------- ##
 ## parallel test execution ##
 ## ----------------------- ##
 
 AT_SETUP([parallel test execution])
+
+AT_SKIP_PARALLEL_TESTS
 
 # This test tries to ensure that -j runs tests in parallel.
 # Such a test is inherently racy, because there are no real-time
@@ -912,17 +924,17 @@ AT_CLEANUP
 
 AT_CHECK_AT_TEST([parallel truth],
   [AT_CHECK([:], 0, [], [])],
-  [], [], [], [],
+  [], [], [], [], [AT_SKIP_PARALLEL_TESTS],
   [], [-j])
 
 AT_CHECK_AT_TEST([parallel fallacy],
   [AT_CHECK([false], [], [], [])],
-  [], [1], [], [ignore],
+  [], [1], [], [ignore], [AT_SKIP_PARALLEL_TESTS],
   [AT_CHECK([grep failed micro-suite.log], [], [ignore])], [-j])
 
 AT_CHECK_AT_TEST([parallel skip],
   [AT_CHECK([exit 77], 0, [], [])],
-  [], [], [], [],
+  [], [], [], [], [AT_SKIP_PARALLEL_TESTS],
   [AT_CHECK([grep skipped micro-suite.log], [], [ignore])], [-j])
 
 AT_CHECK_AT_TEST([parallel errexit],
@@ -933,7 +945,7 @@ AT_CHECK_AT_TEST([parallel errexit],
    AT_CLEANUP
    AT_SETUP([test that should not be run])
    AT_CHECK([:])],
-  [], [1], [stdout], [stderr],
+  [], [1], [stdout], [stderr], [AT_SKIP_PARALLEL_TESTS],
   [AT_CHECK([test -f micro-suite.log], [1])
    touch micro-suite.log # shut up AT_CAPTURE_FILE.
    AT_CHECK([grep "should not be run" stdout], [1])
@@ -942,6 +954,8 @@ AT_CHECK_AT_TEST([parallel errexit],
 
 
 AT_SETUP([parallel autotest and signal handling])
+
+AT_SKIP_PARALLEL_TESTS
 
 # Goals:
 # (1) interrupt `./testsuite -jN'

@@ -1,3 +1,21 @@
+2009-03-30  Eric Blake  <ebb9@byu.net>
+
+	For now, skip parallel tests under less-tested shells.
+	* tests/autotest.at (AT_CHECK_AT): Add pre-test argument.
+	(Tested programs, Startup error messages, AT_CHECK_AT_TITLE)
+	(Fallacy, Skip, errexit, Long test source lines)
+	(Debugging a successful test, Debugging script and environment)
+	(Debugging a failed test, Using atlocal)
+	(Choosing where testsuite is run): Adjust callers.
+	(AT_SKIP_PARALLEL_TESTS): New macro, to skip parallel tests except
+	under zsh, bash, or when TEST_PARALLEL_AUTOTEST is defined.  Makes
+	it easier to avoid testsuite hangs for users with dash or other
+	less-tested shell.
+	(parallel test execution, parallel truth, parallel fallacy)
+	(parallel skip, parallel errexit)
+	(parallel autotest and signal handling): Use it.
+	* BUGS: Mention this.
+
 2009-03-24  Andris Pavenis  <andris.pavenis@iki.fi>  (tiny change)
 
 	Fix awk substitution of carriage returns on DJGPP.
