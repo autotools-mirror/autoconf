@@ -295,7 +295,7 @@ m4_define([AT_CHECK_CONFIGURE],
 #   Set by AC_OUTPUT.
 # - AC_SUBST'ed variables
 #   (FIXME: Generate a list of these automatically.)
-# - _|@|.[*#?$].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
+# - _|@|.[*#?$].|argv|ARGC|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
 #   Some variables some shells use and change.
 #   `.[*#?$].' catches `$#' etc. which are displayed like this:
 #      | '!'=18186
@@ -330,7 +330,8 @@ if test -f state-env.before && test -f state-env.after; then
       [ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB],
       [AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|MKDIR_P|RANLIB|SET_MAKE|YACC],
       [GREP|[EF]GREP|SED],
-      [[_@]|.[*#?$].|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS]))=' \
+      [[_@]|.[*#?$].],
+      [argv|ARGC|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS]))=' \
      $act_file 2>/dev/null |
       # There may be variables spread on several lines; remove latter lines.
       $GREP '^m4_defn([m4_re_word])=' >clean-$act_file

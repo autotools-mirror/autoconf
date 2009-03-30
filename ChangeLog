@@ -1,5 +1,10 @@
 2009-03-30  Eric Blake  <ebb9@byu.net>
 
+	Fix testsuite failures under zsh.
+	* tests/local.at (AT_CHECK_ENV): Exempt $argv and $ARGC, which are
+	set by zsh -c 'emulate sh'.
+	Reported by Ralf Wildenhues.
+
 	For now, skip parallel tests under less-tested shells.
 	* tests/autotest.at (AT_CHECK_AT): Add pre-test argument.
 	(Tested programs, Startup error messages, AT_CHECK_AT_TITLE)
