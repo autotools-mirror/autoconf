@@ -322,6 +322,12 @@ bar
   [AT_NO_CMDSUBST])
 
 
+AT_CHECK_AT_TEST([Shell comment in command],
+  [my_echo=echo
+   AT_CHECK([$my_echo one [#] two], [], [one
+])])
+
+
 ## ------------------------- ##
 ## ${...} in test commands.  ##
 ## ------------------------- ##

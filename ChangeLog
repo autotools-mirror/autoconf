@@ -1,5 +1,12 @@
 2009-04-06  Eric Blake  <ebb9@byu.net>
 
+	Handle shell comments in AT_CHECK.
+	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): Handle # in
+	test correctly.  Latent bug in handling shell comment was first
+	fixed 2008-11-20, but regressed two patches later.
+	* tests/autotest.at (Shell comment in command): New test.
+	* NEWS: Document the fix.
+
 	Hard fail any test with syntax errors.
 	* lib/autotest/general.m4 (AT_INIT) <at_fn_group_postprocess>:
 	Guarantee test failure on syntax error, rather than inheriting
