@@ -236,9 +236,9 @@ AT_CLEANUP
 ]], [], [], [], [], [],
 [AT_CHECK([sed -n '/exec AS_MESSAGE_LOG_FD/q; />&AS_MESSAGE_LOG_FD/p' < micro-suite])])
 
-## ----------------------------------------------------- ##
-## Newlines and command substitutions in test commands.  ##
-## ----------------------------------------------------- ##
+## ----------------- ##
+## Status handling.  ##
+## ----------------- ##
 
 AT_CHECK_AT_TEST([Truth],
   [AT_CHECK([:], 0, [], [])])
@@ -253,6 +253,18 @@ AT_CHECK_AT_TEST([Skip],
   [], [], [], [], [],
   [AT_CHECK([grep skipped micro-suite.log], [], [ignore])])
 
+AT_CHECK_AT_TEST([Syntax error],
+  [AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([syntax])
+   AT_CHECK([if])
+   AT_CLEANUP
+   AT_SETUP([another test])
+   AT_CHECK([:])],
+  [], [1], [], [stderr], [],
+  [AT_CHECK([grep "unable to parse test group: 2" stderr], [0], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite 1 3], [0], [ignore])])
+
 AT_CHECK_AT_TEST([errexit],
   [AT_CHECK([false])
    AT_CLEANUP
@@ -264,6 +276,10 @@ AT_CHECK_AT_TEST([errexit],
    AT_CHECK([grep "should not be run" stdout], [1])
    AT_CHECK([grep "1 .* inhibited subsequent" stderr], [], [ignore])],
   [--errexit])
+
+## ----------------------------------------------------- ##
+## Newlines and command substitutions in test commands.  ##
+## ----------------------------------------------------- ##
 
 AT_CHECK_AT_TEST([Literal multiline command],
   [AT_CHECK([echo Auto'

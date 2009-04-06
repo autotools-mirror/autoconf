@@ -1130,6 +1130,7 @@ at_fn_group_postprocess ()
       report this failure to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
     AS_ECHO(["$at_setup_line"]) >"$at_check_line_file"
+    at_xfail=no at_status=99
   fi
   $at_verbose AS_ECHO_N(["$at_group. $at_setup_line: "])
   AS_ECHO_N(["$at_group. $at_setup_line: "]) >> "$at_group_log"
@@ -1903,7 +1904,7 @@ _AT_DEFINE_SETUP([AT_CHECK_NOESCAPE],
 
 # _AT_DECIDE_TRACEABLE(COMMANDS)
 # ------------------------------
-# Worker for for _AT_CHECK that expands to shell code.  If COMMANDS are safe to
+# Worker for _AT_CHECK that expands to shell code.  If COMMANDS are safe to
 # trace with `set -x', the shell code will evaluate to true.  Otherwise,
 # the shell code will print a message stating an aspect of COMMANDS that makes
 # tracing them unsafe, and evaluate to false.
@@ -2042,7 +2043,7 @@ m4_define([AT_DIFF_STDOUT()],
 # filter out the unadorned trace lines, we disable shell tracing entirely for
 # commands that could span multiple lines.
 #
-# Limiting COMMANDS to a single command is not good either, since them
+# Limiting COMMANDS to a single command is not good either, since then
 # the user herself would use {} or (), and then we face the same problem.
 #
 # But then, there is no point in running

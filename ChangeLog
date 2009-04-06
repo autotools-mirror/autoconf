@@ -1,3 +1,11 @@
+2009-04-06  Eric Blake  <ebb9@byu.net>
+
+	Hard fail any test with syntax errors.
+	* lib/autotest/general.m4 (AT_INIT) <at_fn_group_postprocess>:
+	Guarantee test failure on syntax error, rather than inheriting
+	status from previous test.
+	* tests/autotest.at (Syntax error): New test.
+
 2009-03-31  Eric Blake  <ebb9@byu.net>
 
 	Beta Release Version 2.63b.
