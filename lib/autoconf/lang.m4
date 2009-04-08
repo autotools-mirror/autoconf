@@ -626,6 +626,9 @@ AC_MSG_RESULT([$ac_cv_exeext])
 #
 # Must be run before _AC_COMPILER_OBJEXT because _AC_COMPILER_EXEEXT_DEFAULT
 # checks whether the compiler works.
+#
+# Do not rename this macro; Automake decides whether EXEEXT is used
+# by checking whether `_AC_COMPILER_EXEEXT' has been expanded.
 m4_define([_AC_COMPILER_EXEEXT],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
 ac_clean_files_save=$ac_clean_files

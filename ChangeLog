@@ -1,3 +1,9 @@
+2009-04-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Automake relies on the undocumented `_AC_COMPILER_EXEEXT' macro.
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT): Document that
+	Automake relies on this macro.
+
 2009-04-06  Eric Blake  <ebb9@byu.net>
 
 	Reduce testsuite size.
