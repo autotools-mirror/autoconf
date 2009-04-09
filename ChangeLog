@@ -1,5 +1,9 @@
 2009-04-09  Eric Blake  <ebb9@byu.net>
 
+	Avoid problems caused by deleting in-use directory.
+	* lib/autotest/general.m4 (AT_INIT) <at_fn_group_prepare>: Only
+	remove the contents of $at_group_dir, not the directory itself.
+
 	Fix regression in empty test.
 	* lib/autotest/general.m4 (AT_SETUP): Prep AT_ingroup for fallback
 	use in empty test.  Fixes regression introduced 2009-04-06.

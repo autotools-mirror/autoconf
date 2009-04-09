@@ -999,8 +999,7 @@ m4_divert_pop([PREPARE_TESTS])dnl
 m4_divert_push([TESTS])dnl
 
 # Create the master directory if it doesn't already exist.
-test -d "$at_suite_dir" ||
-  mkdir "$at_suite_dir" ||
+AS_MKDIR_P(["$at_suite_dir"]) ||
   AS_ERROR([cannot create `$at_suite_dir'])
 
 # Can we diff with `/dev/null'?  DU 5.0 refuses.
@@ -1094,11 +1093,15 @@ at_fn_group_prepare ()
   _AT_NORMALIZE_TEST_GROUP_NUMBER(at_group_normalized)
 
   # Create a fresh directory for the next test group, and enter.
+  # If one already exists, the user may have invoked ./run from
+  # within that directory; we remove the contents, but not the
+  # directory itself, so that we aren't pulling the rug out from
+  # under the shell's notion of the current directory.
   at_group_dir=$at_suite_dir/$at_group_normalized
   at_group_log=$at_group_dir/$as_me.log
   if test -d "$at_group_dir"; then
     find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-    rm -fr "$at_group_dir" ||
+    rm -fr "$at_group_dir"/* "$at_group_dir"/.[!.] "$at_group_dir"/.??* ||
     AS_WARN([test directory for $at_group_normalized could not be cleaned.])
   fi
   # Be tolerant if the above `rm' was not able to remove the directory.
