@@ -1757,8 +1757,9 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
 	    && t.st_mtime - s.st_mtime < 120);]])],
 	      ac_cv_func_utime_null=yes,
 	      ac_cv_func_utime_null=no,
-	      ac_cv_func_utime_null=no)])
-if test $ac_cv_func_utime_null = yes; then
+	      ac_cv_func_utime_null='guessing yes')])
+if test "x$ac_cv_func_utime_null" != xno; then
+  ac_cv_func_utime_null=yes
   AC_DEFINE(HAVE_UTIME_NULL, 1,
 	    [Define to 1 if `utime(file, NULL)' sets file's timestamp to the
 	     present.])

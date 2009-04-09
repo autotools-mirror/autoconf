@@ -1,3 +1,9 @@
+2009-04-09  Paolo Bonzini  <bonzini@gnu.org>
+
+	Make a less conservative cross-compilation guess for AC_FUNC_UTIME_NULL.
+	* lib/autoconf/functions.m4 (AC_FUNC_UTIME_NULL): Assume
+	not crosscompiling to an obsolete system.
+
 2009-04-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Automake relies on the undocumented `_AC_COMPILER_EXEEXT' macro.
