@@ -1738,7 +1738,8 @@ m4_define([AT_COPYRIGHT],
 # The group is testing what DESCRIPTION says.
 _AT_DEFINE_INIT([AT_SETUP],
 [m4_ifdef([AT_ingroup], [m4_fatal([$0: nested AT_SETUP detected])],
-  [m4_define([AT_ingroup])])
+  [m4_define([AT_ingroup], [AS_ECHO(["$at_setup_line"]) >"$at_check_line_file"
+])])
 m4_ifdef([AT_keywords], [m4_undefine([AT_keywords])])
 m4_define([AT_capture_files], [])
 m4_define([AT_line], AT_LINE)
@@ -1799,7 +1800,7 @@ _AT_DEFINE_SETUP([AT_CAPTURE_FILE],
 # ----------
 # Complete a group of related tests.
 _AT_DEFINE_INIT([AT_CLEANUP],
-[m4_ifdef([AT_ingroup], [m4_undefine([AT_ingroup])],
+[m4_ifdef([AT_ingroup], [AT_ingroup[]_m4_undefine([AT_ingroup])],
   [m4_fatal([$0: missing AT_SETUP detected])])dnl
 m4_append([AT_help_all],
 m4_defn([AT_ordinal]);m4_defn([AT_line]);m4_defn([AT_description]);dnl
@@ -2058,6 +2059,7 @@ m4_define([AT_DIFF_STDOUT()],
 # output from multiple concurrent processes, e.g., an inner testsuite
 # with parallel jobs.
 m4_define([_AT_CHECK],
+[m4_define([AT_ingroup])]dnl
 [{ $at_traceoff
 AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([[$1]])"])
 _AT_DECIDE_TRACEABLE([$1]) "AS_ESCAPE(m4_dquote(AT_LINE))"

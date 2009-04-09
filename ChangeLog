@@ -1,3 +1,11 @@
+2009-04-09  Eric Blake  <ebb9@byu.net>
+
+	Fix regression in empty test.
+	* lib/autotest/general.m4 (AT_SETUP): Prep AT_ingroup for fallback
+	use in empty test.  Fixes regression introduced 2009-04-06.
+	(_AT_CHECK): Undo fallback when a test is not empty.
+	(AT_CLEANUP): Expand AT_ingroup before deleting.
+
 2009-04-09  Paolo Bonzini  <bonzini@gnu.org>
 
 	Make a less conservative cross-compilation guess for AC_FUNC_UTIME_NULL.
