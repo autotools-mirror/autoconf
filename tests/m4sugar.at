@@ -649,6 +649,91 @@ m
 AT_CLEANUP
 
 
+## ------------------------------------------------- ##
+## m4_ifval, m4_ifblank, m4_ifset, m4_default, etc.  ##
+## ------------------------------------------------- ##
+
+AT_SETUP([m4sugar shorthand conditionals])
+AT_KEYWORDS([m4@&t@_ifval m4@&t@_ifblank m4@&t@_ifnblank m4@&t@_ifset
+m4@&t@_default m4@&t@_default_quoted m4@&t@_default_nblank
+m4@&t@_default_nblank_quoted])
+
+AT_CHECK_M4SUGAR_TEXT([[m4_define([active], [ACTIVE])m4_define([empty])
+m4_ifval([active], [yes], [no])
+m4_ifval([empty], [yes], [no])
+m4_ifval([ ], [yes], [no])
+m4_ifval([], [yes], [no])
+m4_ifblank([active], [yes], [no])
+m4_ifblank([empty], [yes], [no])
+m4_ifblank([ ], [yes], [no])
+m4_ifblank([], [yes], [no])
+m4_ifnblank([active], [yes], [no])
+m4_ifnblank([empty], [yes], [no])
+m4_ifnblank([ ], [yes], [no])
+m4_ifnblank([], [yes], [no])
+m4_ifset([active], [yes], [no])
+m4_ifset([empty], [yes], [no])
+m4_ifset([ ], [yes], [no])
+m4_ifset([], [yes], [no])
+---
+m4_define([demo1], [m4_default([$1], [$2])])dnl
+m4_define([demo2], [m4_default_quoted([$1], [$2])])dnl
+m4_define([demo3], [m4_default_nblank([$1], [$2])])dnl
+m4_define([demo4], [m4_default_nblank_quoted([$1], [$2])])dnl
+demo1([active], [default])
+demo1([], [active])
+demo1([empty], [text])
+-demo1([ ], [active])-
+demo2([active], [default])
+demo2([], [active])
+demo2([empty], [text])
+-demo2([ ], [active])-
+demo3([active], [default])
+demo3([], [active])
+demo3([empty], [text])
+-demo3([ ], [active])-
+demo4([active], [default])
+demo4([], [active])
+demo4([empty], [text])
+-demo4([ ], [active])-
+]], [[
+yes
+yes
+yes
+no
+no
+no
+yes
+yes
+yes
+yes
+no
+no
+yes
+no
+no
+no
+---
+ACTIVE
+ACTIVE
+
+- -
+active
+active
+empty
+- -
+ACTIVE
+ACTIVE
+
+-ACTIVE-
+active
+active
+empty
+-active-
+]])
+
+AT_CLEANUP
+
 ## --------- ##
 ## m4_cond.  ##
 ## --------- ##

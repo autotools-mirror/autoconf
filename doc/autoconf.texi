@@ -10988,25 +10988,74 @@ m4_cond([m4_index([$1], [\])], [-1], [$2],
 
 @defmac m4_default (@var{expr-1}, @var{expr-2})
 @defmacx m4_default_quoted (@var{expr-1}, @var{expr-2})
+@defmacx m4_default_nblank (@var{expr-1}, @ovar{expr-2})
+@defmacx m4_default_nblank_quoted (@var{expr-1}, @ovar{expr-2})
 @msindex{default}
 @msindex{default_quoted}
-If @var{expr-1} is not empty, use it.  Otherwise, select @var{expr-2}.
+@msindex{default_nblank}
+@msindex{default_nblank_quoted}
+If @var{expr-1} contains text, use it.  Otherwise, select @var{expr-2}.
 @code{m4_default} expands the result, while @code{m4_default_quoted}
 does not.  Useful for providing a fixed default if the expression that
-results in @var{expr-1} would otherwise be empty.
+results in @var{expr-1} would otherwise be empty.  The difference
+between @code{m4_default} and @code{m4_default_nblank} is whether an
+argument consisting of just blanks (space, tab, newline) is
+significant.  When using the expanding versions, note that an argument
+may contain text but still expand to an empty string.
 
 @example
 m4_define([active], [ACTIVE])dnl
+m4_define([empty], [])dnl
 m4_define([demo1], [m4_default([$1], [$2])])dnl
 m4_define([demo2], [m4_default_quoted([$1], [$2])])dnl
+m4_define([demo3], [m4_default_nblank([$1], [$2])])dnl
+m4_define([demo4], [m4_default_nblank_quoted([$1], [$2])])dnl
 demo1([active], [default])
 @result{}ACTIVE
 demo1([], [active])
 @result{}ACTIVE
+demo1([empty], [text])
+@result{}
+-demo1([ ], [active])-
+@result{}- -
 demo2([active], [default])
 @result{}active
 demo2([], [active])
 @result{}active
+demo2([empty], [text])
+@result{}empty
+-demo2([ ], [active])-
+@result{}- -
+demo3([active], [default])
+@result{}ACTIVE
+demo3([], [active])
+@result{}ACTIVE
+demo3([empty], [text])
+@result{}
+-demo3([ ], [active])-
+@result{}-ACTIVE-
+demo4([active], [default])
+@result{}active
+demo4([], [active])
+@result{}active
+demo4([empty], [text])
+@result{}empty
+-demo4([ ], [active])-
+@result{}-active-
+@end example
+@end defmac
+
+@defmac m4_ifblank (@var{cond}, @ovar{if-blank}, @ovar{if-text})
+@defmacx m4_ifnblank (@var{cond}, @ovar{if-text}, @ovar{if-blank})
+@msindex{ifblank}
+@msindex{ifnblank}
+If @var{cond} is empty or consists only of blanks (space, tab, newline),
+then expand @var{if-blank}; otherwise, expand @var{if-text}.  Two
+variants exist, in order to make it easier to select the correct logical
+sense when using only two parameters.  Note that this is more efficient
+than the equivalent behavior of:
+@example
+m4_ifval(m4_normalize([@var{cond}]), @var{if-text}, @var{if-cond})
 @end example
 @end defmac
 

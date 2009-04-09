@@ -335,6 +335,29 @@ m4_builtin([sinclude], [$1])])
 # it runs TRUE, etc.
 
 
+# m4_ifblank(COND, [IF-BLANK], [IF-TEXT])
+# m4_ifnblank(COND, [IF-TEXT], [IF-BLANK])
+# ----------------------------------------
+# If COND is empty, or consists only of blanks (space, tab, newline),
+# then expand IF-BLANK, otherwise expand IF-TEXT.  This differs from
+# m4_ifval only if COND has just whitespace, but it helps optimize in
+# spite of users who mistakenly leave trailing space after what they
+# thought was an empty argument:
+#   macro(
+#         []
+#        )
+#
+# Writing one macro in terms of the other causes extra overhead, so
+# we inline both definitions.
+m4_define([m4_ifblank],
+[m4_if(m4_translit([[$1]],  [ ][	][
+]), [], [$2], [$3])])
+
+m4_define([m4_ifnblank],
+[m4_if(m4_translit([[$1]],  [ ][	][
+]), [], [$3], [$2])])
+
+
 # m4_ifval(COND, [IF-TRUE], [IF-FALSE])
 # -------------------------------------
 # If COND is not the empty string, expand IF-TRUE, otherwise IF-FALSE.
@@ -559,30 +582,42 @@ m4_define([m4_define_default],
 
 
 # m4_default(EXP1, EXP2)
-# ----------------------
-# Returns EXP1 if non empty, otherwise EXP2.  Expand the result.
+# m4_default_nblank(EXP1, EXP2)
+# -----------------------------
+# Returns EXP1 if not empty/blank, otherwise EXP2.  Expand the result.
 #
-# This macro is called on hot paths, so inline the contents of m4_ifval,
+# m4_default is called on hot paths, so inline the contents of m4_ifval,
 # for one less round of expansion.
 m4_define([m4_default],
 [m4_if([$1], [], [$2], [$1])])
 
+m4_define([m4_default_nblank],
+[m4_ifblank([$1], [$2], [$1])])
+
 
 # m4_default_quoted(EXP1, EXP2)
-# -----------------------------
-# Returns EXP1 if non empty, otherwise EXP2.  Leave the result quoted.
+# m4_default_nblank_quoted(EXP1, EXP2)
+# ------------------------------------
+# Returns EXP1 if non empty/blank, otherwise EXP2.  Leave the result quoted.
 #
 # For comparison:
 #   m4_define([active], [ACTIVE])
 #   m4_default([active], [default]) => ACTIVE
 #   m4_default([], [active]) => ACTIVE
+#   -m4_default([ ], [active])- => - -
+#   -m4_default_nblank([ ], [active])- => -ACTIVE-
 #   m4_default_quoted([active], [default]) => active
 #   m4_default_quoted([], [active]) => active
+#   -m4_default_quoted([ ], [active])- => - -
+#   -m4_default_nblank_quoted([ ], [active])- => -active-
 #
-# This macro is called on hot paths, so inline the contents of m4_ifval,
+# m4_default macro is called on hot paths, so inline the contents of m4_ifval,
 # for one less round of expansion.
 m4_define([m4_default_quoted],
 [m4_if([$1], [], [[$2]], [[$1]])])
+
+m4_define([m4_default_nblank_quoted],
+[m4_ifblank([$1], [[$2]], [[$1]])])
 
 
 # m4_defn(NAME)

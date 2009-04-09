@@ -7,6 +7,9 @@ GNU Autoconf NEWS - User visible changes.
    proper m4 quoting.  For shell comments, this is a new feature; for
    non-shell comments, this fixes a regression introduced in 2.63b.
 
+** The following documented m4sugar macros are new:
+   m4_default_nblank  m4_default_nblank_quoted  m4_ifblank  m4_ifnblank
+
 * Major changes in Autoconf 2.63b (2009-03-31) [beta]
   Released by Eric Blake, based on git versions 2.63.*.
 
