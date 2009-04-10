@@ -1,5 +1,12 @@
 2009-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Skip `Multiple languages' test if CC is a C++ compiler.
+	* tests/compile.at (Multiple languages): Before starting the
+	test proper, build and run a configure script that tests the
+	C compiler only, and skips the test if this is found to be a
+	C++ compiler.
+	Report by Eric Blake.
+
 	Note that AC_DEFUN is needed for aclocal.
 	* doc/autoconf.texi (Coding Style): Public third-party macros
 	should be AC_DEFUN'ed.

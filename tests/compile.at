@@ -203,6 +203,22 @@ AC_TRY_LINK_FUNC(Be_doomed_if_your_libc_has_a_function_named_like_this,
 
 AT_SETUP([Multiple languages])
 
+# This test should be skipped if the C compiler is a C++ compiler.
+AT_DATA([configure.ac],
+[[AC_INIT
+
+AC_PROG_CC
+AC_COMPILE_IFELSE([
+  AC_LANG_PROGRAM([[
+    #ifdef __cplusplus
+    choke me
+    #endif
+  ]])], [], AS_EXIT([77]))
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
 AT_DATA([configure.ac],
 [[AC_INIT
 
