@@ -13553,6 +13553,9 @@ macro doesn't use @code{AC_REQUIRE}, is expected to never be the object
 of an @code{AC_REQUIRE} directive, and macros required by other macros
 inside arguments do not need to be expanded before this macro, then
 use @code{m4_define}.  In case of doubt, use @code{AC_DEFUN}.
+Also take into account that public third-party macros need to use
+@code{AC_DEFUN} in order to be found by @command{aclocal}
+(@pxref{Extending aclocal,,, automake, @acronym{GNU} Automake}).
 All the @code{AC_REQUIRE} statements should be at the beginning of the
 macro, and each statement should be followed by @code{dnl}.
 

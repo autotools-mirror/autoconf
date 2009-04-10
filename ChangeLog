@@ -1,3 +1,10 @@
+2009-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Note that AC_DEFUN is needed for aclocal.
+	* doc/autoconf.texi (Coding Style): Public third-party macros
+	should be AC_DEFUN'ed.
+	Report by John Calcote.
+
 2009-04-10  Eric Blake  <ebb9@byu.net>
 
 	Add undocumented _AS_CLEAN_DIR.
