@@ -1,5 +1,11 @@
 2009-04-13  Eric Blake  <ebb9@byu.net>
 
+	Mention latest rules about make and set -e.
+	* doc/autoconf.texi (Failure in Make Rules): Posix is now clear
+	that make must use set -e.
+	(Limitations of Builtins) <set>: Clarify more about set -e
+	behavior.
+
 	Improve documentation about if exit status.
 	* doc/autoconf.texi (Limitations of Builtins) <if>: Mention that
 	exit status bugs don't affect modern targets.

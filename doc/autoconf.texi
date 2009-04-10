@@ -15971,16 +15971,42 @@ better to combine them:
 set -ex
 @end example
 
+@cindex @command{set -e}
+The option @option{-e} has historically been underspecified, with enough
+ambiguities to cause numerous differences across various shell
+implementations.  Perhaps the best reference is
+@uref{http://www.opengroup.org/@/austin/@/mailarchives/@/ag-review/@/msg03507.html,
+this link}, recommending a change to Posix 2008 to match @command{ksh88}
+behavior.  Note that mixing @code{set -e} and shell functions is asking
+for surprises:
+
+@example
+set -e
+doit()
+@{
+  rm file
+  echo one
+@}
+doit || echo two
+@end example
+
+@noindent
+According to the recommendation, @samp{one} should always be output
+regardless of whether the @command{rm} failed, because it occurs within
+the body of the shell function @samp{doit} invoked on the left side of
+@samp{||}, where the effects of @samp{set -e} are not enforced.
+Likewise, @samp{two} should never be printed, since the failure of
+@command{rm} does not abort the function, such that the status of
+@samp{doit} is 0.
+
 The @acronym{BSD} shell has had several problems with the @option{-e}
-option, partly because @acronym{BSD} @command{make} traditionally used
-@option{-e} even though this was incompatible with Posix
-(@pxref{Failure in Make Rules}).  Older versions of the @acronym{BSD}
+option.  Older versions of the @acronym{BSD}
 shell (circa 1990) mishandled @samp{&&}, @samp{||}, @samp{if}, and
 @samp{case} when @option{-e} was in effect, causing the shell to exit
 unexpectedly in some cases.  This was particularly a problem with
 makefiles, and led to circumlocutions like @samp{sh -c 'test -f file ||
 touch file'}, where the seemingly-unnecessary @samp{sh -c '@dots{}'}
-wrapper works around the bug.
+wrapper works around the bug (@pxref{Failure in Make Rules}).
 
 Even relatively-recent versions of the @acronym{BSD} shell (e.g.,
 Open@acronym{BSD} 3.4) wrongly exit with @option{-e} if a command within
@@ -17500,16 +17526,15 @@ later) @command{make} diagnoses these uses and errors out.
 @node Failure in Make Rules
 @section Failure in Make Rules
 
-Since 1992 Posix has required that @command{make} must invoke
-each command with the equivalent of a @samp{sh -c} subshell.  However,
-many @command{make} implementations, including @acronym{BSD} make through 2004,
-use @samp{sh -e -c} instead, and the @option{-e} option causes the
-subshell to exit immediately if a subsidiary simple-command fails.  For
-example, the command @samp{touch T; rm -f U} always attempts to
-remove @file{U} with Posix make, but incompatible
-@command{make} implementations skip the @command{rm} if the
-@command{touch} fails.  One way to work around this is to reword the
-affected simple-commands so that they always succeed, e.g., @samp{touch
+Posix 2008 requires that @command{make} must invoke each command with
+the equivalent of a @samp{sh -e -c} subshell, which causes the
+subshell to exit immediately if a subsidiary simple-command fails,
+although not all @command{make} implementations have historically
+followed this rule.  For
+example, the command @samp{touch T; rm -f U} may attempt to
+remove @file{U} even if the @command{touch} fails, although this is not
+permitted with Posix make.  One way to work around failures in simple
+commands is to reword them so that they always succeed, e.g., @samp{touch
 T || :; rm -f U}.
 However, even this approach can run into common bugs in @acronym{BSD}
 implementations of the @option{-e} option of @command{sh} and
