@@ -15836,7 +15836,8 @@ AS_IF([cmp -s file file.new], [], [mv file.new file])
 This is especially useful in other M4 macros, where the @dfn{then} and
 @dfn{else} branches might be macro arguments.
 
-There are shells that do not reset the exit status from an @command{if}:
+Some very old shells did not reset the exit status from an @command{if}
+with no @command{else}:
 
 @example
 $ @kbd{if (exit 42); then true; fi; echo $?}
@@ -15844,9 +15845,10 @@ $ @kbd{if (exit 42); then true; fi; echo $?}
 @end example
 
 @noindent
-whereas a proper shell should have printed @samp{0}.  This is especially
-bad in makefiles since it produces false failures.  This is why properly
-written makefiles, such as Automake's, have such hairy constructs:
+whereas a proper shell should have printed @samp{0}.  But this is no
+longer a portability problem; any shell that supports functions gets it
+correct.  However, it explains why some makefiles have lengthy
+constructs:
 
 @example
 if test -f "$file"; then

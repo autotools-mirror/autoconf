@@ -1,5 +1,10 @@
 2009-04-13  Eric Blake  <ebb9@byu.net>
 
+	Improve documentation about if exit status.
+	* doc/autoconf.texi (Limitations of Builtins) <if>: Mention that
+	exit status bugs don't affect modern targets.
+	Reported by Andreas Schwab.
+
 	Add cross-reference to new macros.
 	* doc/autoconf.texi (Text processing Macros) <m4_normalize>
 	<m4_strip>: Reference the new m4_ifblank.
