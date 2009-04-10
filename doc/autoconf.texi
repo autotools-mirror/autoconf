@@ -11811,7 +11811,9 @@ that M4 does not discard leading whitespace during argument collection.
 Remove leading and trailing spaces and tabs, sequences of
 backslash-then-newline, and replace multiple spaces, tabs, and newlines
 with a single space.  This is a combination of @code{m4_flatten} and
-@code{m4_strip}.
+@code{m4_strip}.  To determine if @var{string} consists only of bytes
+that would be removed by @code{m4_normalize}, you can use
+@code{m4_ifblank}.
 @end defmac
 
 @defmac m4_re_escape (@var{string})
@@ -11834,7 +11836,8 @@ Strip whitespace from @var{string}.  Sequences of spaces and tabs are
 reduced to a single space, then leading and trailing spaces are removed.
 The result is still a quoted string.  Note that this does not interfere
 with newlines; if you want newlines stripped as well, consider
-@code{m4_flatten}, or do it all at once with @code{m4_normalize}.
+@code{m4_flatten}, or do it all at once with @code{m4_normalize}.  To
+quickly test if @var{string} has only whitespace, use @code{m4_ifblank}.
 @end defmac
 
 @defmac m4_text_box (@var{message}, @dvar{frame, -})
