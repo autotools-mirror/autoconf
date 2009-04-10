@@ -859,6 +859,11 @@ rm -f file
 AS_CASE([`touch file; false`]) && test -f file && echo fifteen
 dnl The next line is badly underquoted; don't intentionally copy this style.
 AS_CASE([foo], [foo], m4_do(AS_CASE([bar], [bar], [echo sixteen])))
+dnl Handle blank arguments.
+AS_IF([false], [:], [ ]) && AS_CASE([foo], [foo], []
+) && echo seventeen
+m4_define([empty])AS_IF([false], [:], [empty]
+) && AS_CASE([foo], [foo], [empty]) && echo eighteen
 
 # check that require works correctly
 m4_for([n], 1, 9, [],
@@ -911,6 +916,8 @@ thirteen
 fourteen
 fifteen
 sixteen
+seventeen
+eighteen
 foo1=1 bar1=1
 foo2=2 bar2=
 foo3=3 bar3=
@@ -979,13 +986,15 @@ AS_FOR([m4var], [shvar], ['$list'],
 AS_FOR([m4var], [shvar], [\'],
 [echo "m4var $shvar"])
 
-# Syntax checks: cope with empty arguments.
+# Syntax checks: cope with empty/blank arguments.
 set f g
 AS_FOR([], [shvar], [],
 [echo "m4_defn([]) $shvar"])
 rm -f file
 AS_FOR([], [shvar], [`touch file`])
 test -f file || exit 1
+AS_FOR([], [shvar], [], [ ])
+m4_define([empty])AS_FOR([], [shvar], [], [empty])
 
 # Check that break works.
 while :

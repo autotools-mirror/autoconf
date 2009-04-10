@@ -514,14 +514,16 @@ _AS_UNSET_PREPARE
 # | esac
 # The shell comments are intentional, to work around people who don't
 # realize the impacts of using insufficient m4 quoting.  This macro
-# always provides a default case, to work around a Solaris /bin/sh
-# bug regarding the exit status when no case matches.
+# always uses : and provides a default case, to work around Solaris
+# /bin/sh bugs regarding the exit status.
 m4_define([_AS_CASE],
 [ [@%:@(]
-  $1[)] m4_default([$2], [:]) ;;])
+  $1[)] :
+    $2 ;;])
 m4_define([_AS_CASE_DEFAULT],
 [ [@%:@(]
-  *[)] m4_default([$1], [:]) ;;])
+  *[)] :
+    $1 ;;])
 
 m4_defun([AS_CASE],
 [case $1 in[]m4_map_args_pair([_$0], [_$0_DEFAULT],
@@ -583,8 +585,8 @@ m4_defun([AS_FOR],
 [m4_pushdef([$1], m4_if([$3], [], [[$$2]], m4_translit([$3], ]dnl
 m4_dquote(_m4_defn([m4_cr_symbols2]))[[%+=:,./-]), [], [[$3]], [[$$2]]))]dnl
 [for $2[]m4_ifval([$3], [ in $3])
-do
-  m4_default([$4], [:])
+do :
+  $4
 done[]_m4_popdef([$1])])
 
 
@@ -602,17 +604,18 @@ done[]_m4_popdef([$1])])
 # with simplifications if IF-TRUE1 and/or IF-FALSE is empty.
 #
 m4_define([_AS_IF],
-[elif $1; then
-  m4_default([$2], [:])
+[elif $1; then :
+  $2
 ])
 m4_define([_AS_IF_ELSE],
-[m4_ifvaln([$1],
-[else
-  $1])])
+[m4_ifnblank([$1],
+[else :
+  $1
+])])
 
 m4_defun([AS_IF],
-[if $1; then
-  m4_default([$2], [:])
+[if $1; then :
+  $2
 m4_map_args_pair([_$0], [_$0_ELSE], m4_shift2($@))]dnl
 [fi[]])# AS_IF
 

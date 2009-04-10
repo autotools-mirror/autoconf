@@ -3,6 +3,9 @@ GNU Autoconf NEWS - User visible changes.
 * Major changes in Autoconf 2.64 (2009-??-??) [stable]
   Released by Eric Blake, based on git versions 2.63b.*.
 
+** AS_IF, AS_CASE, and AS_FOR have been taught to avoid syntax errors
+   even when given arguments that expand to just whitespace.
+
 ** Ensure AT_CHECK can support commands that include a # given with
    proper m4 quoting.  For shell comments, this is a new feature; for
    non-shell comments, this fixes a regression introduced in 2.63b.
