@@ -1099,11 +1099,8 @@ at_fn_group_prepare ()
   # under the shell's notion of the current directory.
   at_group_dir=$at_suite_dir/$at_group_normalized
   at_group_log=$at_group_dir/$as_me.log
-  if test -d "$at_group_dir"; then
-    find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;
-    rm -fr "$at_group_dir"/* "$at_group_dir"/.[!.] "$at_group_dir"/.??* ||
+  _AS_CLEAN_DIR("$at_group_dir") ||
     AS_WARN([test directory for $at_group_normalized could not be cleaned.])
-  fi
   # Be tolerant if the above `rm' was not able to remove the directory.
   AS_MKDIR_P(["$at_group_dir"])
 

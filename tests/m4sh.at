@@ -1371,3 +1371,32 @@ AT_CHECK([cat log], [0],
 ]])
 
 AT_CLEANUP
+
+
+## --------------- ##
+## _AS_CLEAN_DIR.  ##
+## --------------- ##
+
+AT_SETUP([_AS@&t@_CLEAN_DIR])
+
+dnl ensure that we can erase all files in a directory.  Note that
+dnl _AS_CLEAN_DIR needs three globs to catch all these files.
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+# Unwritable subdirectories are common during 'make distcheck'.
+mkdir sub sub/unwritable || AS_ERROR([failed to mkdir])
+touch sub/unwritable/file || AS_ERROR([failed to touch])
+chmod a-wx sub/unwritable || AS_ERROR([failed to chmod])
+# Cygwin 1.5 can't touch 'sub/...', so make that file optional.
+touch sub/a sub/aa sub/aaa sub/.a sub/..a sub/.aa \
+  || AS_ERROR([failed to touch])
+touch sub/... 2>/dev/null
+_AS_CLEAN_DIR([sub]) || AS_ERROR([failed to clean])
+# rmdir instead of 'rm -fr' here proves that we emptied sub.
+rmdir sub || AS_ERROR([failed to rmdir])
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script])
+
+AT_CLEANUP

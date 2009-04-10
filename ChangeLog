@@ -1,3 +1,13 @@
+2009-04-10  Eric Blake  <ebb9@byu.net>
+
+	Add undocumented _AS_CLEAN_DIR.
+	* lib/m4sugar/m4sh.m4 (_AS_CLEAN_DIR): New macro; fixes m4 quoting
+	in previous patch.
+	* lib/autotest/general.m4 (AT_INIT) <at_fn_group_prepare>: Use new
+	macro.
+	* tests/m4sh.at (_AS@&t@_CLEAN_DIR): New test.
+	Reported by Ralf Wildenhues.
+
 2009-04-09  Eric Blake  <ebb9@byu.net>
 
 	Avoid problems caused by deleting in-use directory.

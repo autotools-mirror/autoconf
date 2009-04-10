@@ -1409,6 +1409,17 @@ m4_define([_AS_BOX_INDIR],
 _ASBOX])
 
 
+# _AS_CLEAN_DIR(DIR)
+# ------------------
+# Remove all contents from within DIR, including any unwritable
+# subdirectories, but leave DIR itself untouched.
+m4_define([_AS_CLEAN_DIR],
+[if test -d $1; then
+  find $1 -type d ! -perm -700 -exec chmod u+rwx {} \;
+  rm -fr $1/* $1/.[[!.]] $1/.??*
+fi])
+
+
 # AS_FUNCTION_DESCRIBE(NAME, [ARGS], DESCRIPTION, [WRAP-COLUMN = 79])
 # -------------------------------------------------------------------
 # Output a shell comment describing NAME and its arguments ARGS, then
