@@ -6737,6 +6737,15 @@ If using the @acronym{GNU} C compiler, set shell variable @code{GCC} to
 it to @option{-g -O2} for the @acronym{GNU} C compiler (@option{-O2} on systems
 where @acronym{GCC} does not accept @option{-g}), or @option{-g} for
 other compilers.
+
+Many Autoconf macros use a compiler, and thus call
+@samp{AC_REQUIRE([AC_PROG_CC])} to ensure that the compiler has been
+determined before the body of the outermost @code{AC_DEFUN} macro.
+Although @code{AC_PROG_CC} is safe to directly expand multiple times, it
+performs certain checks (such as the proper value of @env{EXEEXT}) only
+on the first invocation.  Therefore, care must be used when invoking
+this macro from within another macro rather than at the top level
+(@pxref{Expanded Before Required}).
 @end defmac
 
 @anchor{AC_PROG_CC_C_O}
@@ -8371,6 +8380,12 @@ It is customary to report unexpected failures with
 @code{AC_MSG_FAILURE}.  This macro does not try to link; use
 @code{AC_LINK_IFELSE} if you need to do that (@pxref{Running the
 Linker}).
+
+This macro uses @code{AC_REQUIRE} for the compiler associated with the
+current language, which means that if the compiler has not yet been
+determined, the compiler determination will be made prior to the body of
+the outermust @code{AC_DEFUN} macro that triggered this macro to
+expand (@pxref{Expanded Before Required}).
 @end defmac
 
 @ovindex ERL
@@ -12997,6 +13012,24 @@ Keep in mind that @code{dnl} is rarely needed to introduce comments;
 @code{dnl} is more useful to get rid of the newlines following macros
 that produce no output, such as @code{AC_REQUIRE}.
 
+Public third-party macros need to use @code{AC_DEFUN}, and not
+@code{m4_define}, in order to be found by @command{aclocal}
+(@pxref{Extending aclocal,,, automake, @acronym{GNU} Automake}).
+Additionally, if it is ever determined that a macro should be made
+obsolete, it is easy to convert from @code{AC_DEFUN} to @code{AU_DEFUN}
+in order to have @command{autoupdate} assist the user in choosing a
+better alternative, but there is no corresponding way to make
+@code{m4_define} issue an upgrade notice (@pxref{AU_DEFUN}).
+
+There is another subtle, but important, difference between using
+@code{m4_define} and @code{AC_DEFUN}: only the former is unaffected by
+@code{AC_REQUIRE}.  When writing a file, it is always safe to replace a
+block of text with a @code{m4_define} macro that will expand to the same
+text.  But replacing a block of text with an @code{AC_DEFUN} macro with
+the same content does not necessarily give the same results, because it
+changes the location where any embedded but unsatisfied
+@code{AC_REQUIRE} invocations within the block will be expanded.  For an
+example of this, see @ref{Expanded Before Required}.
 
 @node Macro Names
 @section Macro Names
@@ -23109,6 +23142,97 @@ instances of direct calls to instead go through @code{AC_REQUIRE}
 by arguments or by the current definition of other macros in the m4
 environment, then the macro should always be directly expanded instead
 of required.
+
+For another case study, consider this example trimmed down from an
+actual package.  Originally, the package contained shell code and
+multiple macro invocations at the top level of @file{configure.ac}:
+
+@example
+AC_DEFUN([FOO], [AC_COMPILE_IFELSE([@dots{}])])
+foobar=
+AC_PROG_CC
+FOO
+@end example
+
+@noindent
+but that was getting complex, so the author wanted to offload some of
+the text into a new macro in another file included via
+@file{aclocal.m4}.  The na@"ive approach merely wraps the text in a new
+macro:
+
+@example
+AC_DEFUN([FOO], [AC_COMPILE_IFELSE([@dots{}])])
+AC_DEFUN([BAR], [
+foobar=
+AC_PROG_CC
+FOO
+])
+BAR
+@end example
+
+@noindent
+With older versions of Autoconf, the setting of @samp{foobar=} occurs
+before the single compiler check, as the author intended.  But with
+Autoconf 2.64, this issues the ``expanded before it was required''
+warning for @code{AC_PROG_CC}, and outputs two copies of the compiler
+check, one before @samp{foobar=}, and one after.  To understand why this
+is happening, remember that the use of @code{AC_COMPILE_IFELSE} includes
+a call to @code{AC_REQUIRE([AC_PROG_CC])} under the hood.  According to
+the documented semantics of @code{AC_REQUIRE}, this means that
+@code{AC_PROG_CC} @emph{must} occur before the body of the outermost
+@code{AC_DEFUN}, which in this case is @code{BAR}, thus preceeding the
+use of @samp{foobar=}.  The older versions of Autoconf were broken with
+regards to the rules of @code{AC_REQUIRE}, which explains why the code
+changed from one over to two copies of @code{AC_PROG_CC} when upgrading
+autoconf.  In other words, the author was unknowingly relying on a bug
+exploit to get the desired results, and that exploit broke once the bug
+was fixed.
+
+So, what recourse does the author have, to restore their intended
+semantics of setting @samp{foobar=} prior to a single compiler check,
+regardless of whether Autoconf 2.63 or 2.64 is used?  One idea is to
+remember that only @code{AC_DEFUN} is impacted by @code{AC_REQUIRE};
+there is always the possibility of using the lower-level
+@code{m4_define}:
+
+@example
+AC_DEFUN([FOO], [AC_COMPILE_IFELSE([@dots{}])])
+m4_define([BAR], [
+foobar=
+AC_PROG_CC
+FOO
+])
+BAR
+@end example
+
+@noindent
+This works great if everything is in the same file.  However, it does
+not help in the case where the author wants to have @command{aclocal}
+find the definition of @code{BAR} from its own file, since
+@command{aclocal} requires the use of @code{AC_DEFUN}.  In this case, a
+better fix is to recognize that if @code{BAR} also uses
+@code{AC_REQUIRE}, then there will no longer be direct expansion prior
+to a subsequent require.  Then, by creating yet another helper macro,
+the author can once again guarantee a single invocation of
+@code{AC_PROG_CC}, which will still occur after @code{foobar=}.  The
+author can also use @code{AC_BEFORE} to make sure no other macro
+appearing before @code{BAR} has triggered an unwanted expansion of
+@code{AC_PROG_CC}.
+
+@example
+AC_DEFUN([FOO], [AC_COMPILE_IFELSE([@dots{}])])
+AC_DEFUN([BEFORE_CC], [
+foobar=
+])
+AC_DEFUN([BAR], [
+AC_BEFORE([$0], [AC_PROG_CC])dnl
+AC_REQUIRE([BEFORE_CC])dnl
+AC_REQUIRE([AC_PROG_CC])dnl
+FOO
+])
+BAR
+@end example
+
 
 @c ===================================================== History of Autoconf.
 

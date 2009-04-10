@@ -1,5 +1,15 @@
 2009-04-13  Eric Blake  <ebb9@byu.net>
 
+	Improve documentation related to expanded-before-required.
+	* doc/autoconf.texi (Expanded Before Required): Add a case study.
+	(Running the Compiler) <AC_COMPILE_IFELSE>: Remind users that
+	running a compile test will AC_REQUIRE the compiler check.
+	(Macro Definitions) <AC_DEFUN>: Contrast AC_DEFUN and m4_define.
+	(C Compiler) <AC_PROG_CC>: Mention the fact that only first
+	invocation of this macro checks for $EXEEXT, and that many other
+	macros use it via AC_REQUIRE.
+	Reported by Andreas Schwab.
+
 	Mention latest rules about make and set -e.
 	* doc/autoconf.texi (Failure in Make Rules): Posix is now clear
 	that make must use set -e.
