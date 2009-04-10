@@ -1,3 +1,9 @@
+2009-04-10  Eric Blake  <ebb9@byu.net>
+
+	Test parallel handling of syntax error.
+	* tests/autotest.at (parallel syntax error): New test.
+	Suggested by Ralf Wildenhues.
+
 2009-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Document awk and config.status line length limitations.

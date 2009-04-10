@@ -959,6 +959,18 @@ AT_CHECK_AT_TEST([parallel skip],
   [], [], [], [], [AT_SKIP_PARALLEL_TESTS],
   [AT_CHECK([grep skipped micro-suite.log], [], [ignore])], [-j])
 
+AT_CHECK_AT_TEST([parallel syntax error],
+  [AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([syntax])
+   AT_CHECK([if])
+   AT_CLEANUP
+   AT_SETUP([another test])
+   AT_CHECK([:])],
+  [], [1], [], [stderr], [AT_SKIP_PARALLEL_TESTS],
+  [AT_CHECK([grep "unable to parse test group: 2" stderr], [0], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -j 3], [0], [ignore])], [-j])
+
 AT_CHECK_AT_TEST([parallel errexit],
   [AT_CHECK([false])
    AT_CLEANUP
