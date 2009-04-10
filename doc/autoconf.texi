@@ -2153,7 +2153,8 @@ for more details.
 
 The @var{inputs} may be absolute or relative file names.  In the latter
 case they are first looked for in the build tree, and then in the source
-tree.
+tree.  Input files should be text files, and a line length below 2000
+bytes should be safe.
 
 @item commands
 Shell commands output literally into @file{config.status}, and
@@ -16365,6 +16366,9 @@ The original version of Awk had a limit of at most 99 bytes per
 @code{split} field, 99 bytes per @code{substr} substring, and 99 bytes
 per run of non-special characters in a @code{printf} format, but these
 bugs have been fixed on all practical hosts that we know of.
+
+HP-UX 11.00 and IRIX 6.5 Awk require that input files have a line length
+of at most 3070 bytes.
 
 @item @command{basename}
 @c ---------------------

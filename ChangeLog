@@ -1,5 +1,12 @@
 2009-04-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Document awk and config.status line length limitations.
+	* doc/autoconf.texi (Configuration Actions): The input to
+	config.status should have reasonable line length.
+	(Limitations of Usual Tools): Document IRIX, HP-UX awk input
+	line length limit.
+	Report by Bruno Haible.
+
 	Skip `Multiple languages' test if CC is a C++ compiler.
 	* tests/compile.at (Multiple languages): Before starting the
 	test proper, build and run a configure script that tests the
