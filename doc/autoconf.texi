@@ -22424,9 +22424,18 @@ arguments.
 @table @samp
 @item ignore
 The content of the output is ignored, but still captured in the test
-group log (if the test group later fails, the test group log is then
-copied into the overall testsuite log).  This is valid for both
-@var{stdout} and @var{stderr}.
+group log (if the testsuite is run with option @option{-v}, the test
+group log is displayed as the test is run; if the test group later
+fails, the test group log is also copied into the overall testsuite
+log).  This action is valid for both @var{stdout} and @var{stderr}.
+
+@item ignore-nolog
+The content of the output is ignored, and nothing is captured in the log
+files.  If @var{commands} are likely to produce binary output (including
+long lines) or large amounts of output, then logging the output can make
+it harder to locate details related to subsequent tests within the
+group, and could potentially corrupt terminal display of a user running
+@command{testsuite -v}.
 
 @item stdout
 For the @var{stdout} parameter, capture the content of standard output
@@ -22440,6 +22449,14 @@ normalize error messages into a common form.
 Like @samp{stdout}, except that it only works for the @var{stderr}
 parameter, and the standard error capture file will be named
 @file{stderr}.
+
+@item stdout-nolog
+@itemx stderr-nolog
+Like @samp{stdout} or @samp{stderr}, except that the captured output is
+not duplicated into the test group log.  This action is particularly
+useful for an intermediate check that produces large amounts of data,
+which will be followed by another check that filters down to the
+relevant data, as it makes it easier to locate details in the log.
 
 @item expout
 For the @var{stdout} parameter, compare standard output contents with

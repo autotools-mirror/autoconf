@@ -2019,8 +2019,11 @@ dnl COMMANDS may contain parameter expansions; expand them at runtime.
 # faster than using m4_case, and these are called very frequently.
 m4_define([AT_DIFF_STDERR(stderr)],
 	  [echo stderr:; tee stderr <"$at_stderr"])
+m4_define([AT_DIFF_STDERR(stderr-nolog)],
+	  [echo stderr captured; cp "$at_stderr" stderr])
 m4_define([AT_DIFF_STDERR(ignore)],
 	  [echo stderr:; cat "$at_stderr"])
+m4_define([AT_DIFF_STDERR(ignore-nolog)])
 m4_define([AT_DIFF_STDERR(experr)],
 	  [$at_diff experr "$at_stderr" || at_failed=:])
 m4_define([AT_DIFF_STDERR()],
@@ -2028,8 +2031,11 @@ m4_define([AT_DIFF_STDERR()],
 
 m4_define([AT_DIFF_STDOUT(stdout)],
 	  [echo stdout:; tee stdout <"$at_stdout"])
+m4_define([AT_DIFF_STDOUT(stdout-nolog)],
+	  [echo stdout captured; cp "$at_stdout" stdout])
 m4_define([AT_DIFF_STDOUT(ignore)],
 	  [echo stdout:; cat "$at_stdout"])
+m4_define([AT_DIFF_STDOUT(ignore-nolog)])
 m4_define([AT_DIFF_STDOUT(expout)],
 	  [$at_diff expout "$at_stdout" || at_failed=:])
 m4_define([AT_DIFF_STDOUT()],

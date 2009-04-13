@@ -1,5 +1,15 @@
 2009-04-15  Eric Blake  <ebb9@byu.net>
 
+	Add stdout-nolog and ignore-nolog to AT_CHECK.
+	* lib/autotest/general.m4 (AT_DIFF_STDERR(stderr-nolog))
+	(AT_DIFF_STDERR(ignore-nolog), AT_DIFF_STDOUT(stdout-nolog))
+	(AT_DIFF_STDOUT(ignore-nolog)): New macros.
+	* tests/autotest.at (Logging): New test.
+	* doc/autoconf.texi (Writing Testsuites) <AT_CHECK>: Document the
+	new logging actions.
+	* NEWS: Likewise.
+	Reported by Ralf Wildenhues.
+
 	Teach AT_CHECK about hard failures.
 	* lib/autotest/general.m4 (AT_INIT) <at_fn_check_skip>
 	<at_fn_check_status, at_fn_group_postprocess>: Handle hard

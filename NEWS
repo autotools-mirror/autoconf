@@ -13,7 +13,8 @@ GNU Autoconf NEWS - User visible changes.
 ** The macro AT_CHECK now understands the concept of hard failure.  If
    a test exits with an unexpected status 99, cleanup actions for the
    test are inhibited and the test is treated as a failure regardless
-   of AT_XFAIL_IF.
+   of AT_XFAIL_IF.  It also understands the new directives
+   ignore-nolog, stdout-nolog, and stderr-nolog.
 
 ** The autotest macro AT_CHECK_NOESCAPE is now documented.
 

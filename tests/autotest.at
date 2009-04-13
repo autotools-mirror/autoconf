@@ -287,6 +287,51 @@ AT_CHECK_AT_TEST([errexit],
    AT_CHECK([grep "1 .* inhibited subsequent" stderr], [], [ignore])],
   [--errexit])
 
+AT_CHECK_AT([Logging],
+  [[AT_INIT([artificial test suite])
+    dnl intentionally write failing tests, to see what gets logged
+    AT_SETUP([one])
+    AT_CHECK([echo magicstring01], [1], [ignore])
+    AT_CLEANUP
+    AT_SETUP([two])
+    AT_CHECK([echo magicstring02 >&2], [1], [], [ignore])
+    AT_CLEANUP
+    AT_SETUP([three])
+    AT_CHECK([echo magicstring03], [1], [ignore-nolog])
+    AT_CLEANUP
+    AT_SETUP([four])
+    AT_CHECK([echo magicstring04 >&2], [1], [], [ignore-nolog])
+    AT_CLEANUP
+    AT_SETUP([five])
+    AT_CHECK([echo magicstring05], [1], [stdout])
+    AT_CLEANUP
+    AT_SETUP([six])
+    AT_CHECK([echo magicstring06 >&2], [1], [], [stderr])
+    AT_CLEANUP
+    AT_SETUP([seven])
+    AT_CHECK([echo magicstring07], [1], [stdout-nolog])
+    AT_CLEANUP
+    AT_SETUP([eight])
+    AT_CHECK([echo magicstring08 >&2], [1], [], [stderr-nolog])
+    AT_CLEANUP
+    AT_SETUP([nine])
+    echo magicstring09 > expout
+    AT_CHECK([echo magicstring09], [1], [expout])
+    AT_CLEANUP
+    AT_SETUP([ten])
+    echo magicstring10 > experr
+    AT_CHECK([echo magicstring10 >&2], [1], [], [experr])
+    AT_CLEANUP
+]], [], [1], [], [ignore], [],
+  [AT_CHECK([$CONFIG_SHELL ./micro-suite], [1], [ignore-nolog], [ignore-nolog])
+   AT_CHECK([grep '^magicstring' micro-suite.log], [],
+[[magicstring01
+magicstring02
+magicstring05
+magicstring06
+]])])
+
+
 AT_CHECK_AT_TEST([Cleanup],
   [AT_CHECK([test ! -f cleanup.success && test ! -f cleanup.failure])
    AT_CHECK_NOESCAPE([exit $value], [ignore], [$output],
