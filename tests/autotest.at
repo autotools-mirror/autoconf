@@ -253,6 +253,16 @@ AT_CHECK_AT_TEST([Skip],
   [], [], [], [], [],
   [AT_CHECK([grep skipped micro-suite.log], [], [ignore])])
 
+AT_CHECK_AT_TEST([Hard fail],
+  [AT_CHECK([exit 99])
+   AT_CLEANUP
+   AT_SETUP([another test])
+   AT_XFAIL_IF([:])
+   AT_CHECK([exit 99])],
+  [], [1], [], [ignore], [],
+  [AT_CHECK([grep '2 failed unexpectedly' micro-suite.log], [], [ignore])
+   AT_CHECK([grep ok micro-suite.log], [1])])
+
 AT_CHECK_AT_TEST([Syntax error],
   [AT_CHECK([:])
    AT_CLEANUP
@@ -276,6 +286,35 @@ AT_CHECK_AT_TEST([errexit],
    AT_CHECK([grep "should not be run" stdout], [1])
    AT_CHECK([grep "1 .* inhibited subsequent" stderr], [], [ignore])],
   [--errexit])
+
+AT_CHECK_AT_TEST([Cleanup],
+  [AT_CHECK([test ! -f cleanup.success && test ! -f cleanup.failure])
+   AT_CHECK_NOESCAPE([exit $value], [ignore], [$output],
+     [], [touch cleanup.failure], [touch cleanup.success])],
+  [], [], [], [],
+  [AT_KEYWORDS([AT@&t@_CHECK_NOESCAPE])
+    output=; export output],
+  [AT_CHECK([test -d micro-suite.dir/1])
+   AT_CHECK([test -f micro-suite.dir/1/cleanup.success])
+   AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
+
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -d value=1], [], [ignore])
+   AT_CHECK([test -f micro-suite.dir/1/cleanup.success])
+   AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
+
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -d value=1 output=mismatch],
+     [1], [ignore], [ignore])
+   AT_CHECK([test ! -f micro-suite.dir/1/cleanup.success])
+   AT_CHECK([test -f micro-suite.dir/1/cleanup.failure])
+
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -d value=77], [], [ignore])
+   AT_CHECK([test ! -f micro-suite.dir/1/cleanup.success])
+   AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
+
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -d value=99], [1], [ignore], [ignore])
+   AT_CHECK([test ! -f micro-suite.dir/1/cleanup.success])
+   AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
+  ], [-d value=0])
 
 ## ----------------------------------------------------- ##
 ## Newlines and command substitutions in test commands.  ##

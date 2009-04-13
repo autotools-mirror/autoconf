@@ -324,27 +324,33 @@ at_fn_log_failure ()
   exit 1
 }
 
-AS_FUNCTION_DESCRIBE([at_fn_check_skip], [EXIT-CODE],
-[Check whether EXIT-CODE is the special exit code 77, and if so exit the shell
-with that same exit code.])
+AS_FUNCTION_DESCRIBE([at_fn_check_skip], [EXIT-CODE LINE],
+[Check whether EXIT-CODE is a special exit code (77 or 99), and if so exit
+the test group subshell with that same exit code.  Use LINE in any report
+about test failure.])
 at_fn_check_skip ()
 {
   case $[1] in
+    99) echo 99 > "$at_status_file"; at_failed=:
+        AS_ECHO(["$[2]: hard failure"]); exit 99;;
     77) echo 77 > "$at_status_file"; exit 77;;
   esac
 }
 
 AS_FUNCTION_DESCRIBE([at_fn_check_status], [EXPECTED EXIT-CODE LINE],
-[Check whether EXIT-CODE is the expected exit code, and if so do nothing.
-Otherwise, if it is 77 exit the shell with that same exit code; if it is
-anything else print an error message and fail the test.])
+[Check whether EXIT-CODE is the EXPECTED exit code, and if so do nothing.
+Otherwise, if it is 77 or 99, exit the test group subshell with that same
+exit code; if it is anything else print an error message referring to LINE,
+and fail the test.])
 at_fn_check_status ()
 {
 dnl This order ensures that we don't `skip' if we are precisely checking
-dnl $? = 77.
+dnl $? = 77 or $? = 99.
   case $[2] in
     $[1] ) ;;
     77) echo 77 > "$at_status_file"; exit 77;;
+    99) echo 99 > "$at_status_file"; at_failed=:
+        AS_ECHO(["$[3]: hard failure"]); exit 99;;
     *) AS_ECHO(["$[3]: exit code was $[2], expected $[1]"])
       at_failed=:;;
   esac
@@ -1130,11 +1136,16 @@ at_fn_group_postprocess ()
       report this failure to <AT_PACKAGE_BUGREPORT>.
 _ATEOF
     AS_ECHO(["$at_setup_line"]) >"$at_check_line_file"
-    at_xfail=no at_status=99
+    at_status=99
   fi
   $at_verbose AS_ECHO_N(["$at_group. $at_setup_line: "])
   AS_ECHO_N(["$at_group. $at_setup_line: "]) >> "$at_group_log"
   case $at_xfail:$at_status in
+    *:99)
+	at_msg='FAILED ('`cat "$at_check_line_file"`')'
+	at_res=fail
+	at_errexit=$at_errexit_p
+	;;
     yes:0)
 	at_msg="UNEXPECTED PASS"
 	at_res=xpass

@@ -1,3 +1,14 @@
+2009-04-15  Eric Blake  <ebb9@byu.net>
+
+	Teach AT_CHECK about hard failures.
+	* lib/autotest/general.m4 (AT_INIT) <at_fn_check_skip>
+	<at_fn_check_status, at_fn_group_postprocess>: Handle hard
+	failures.
+	* doc/autoconf.texi (Writing Testsuites) <AT_CHECK>: Document
+	AT_CHECK_NOESCAPE and exit status 99.
+	* NEWS: Likewise.
+	* tests/autotest.at (Hard fail, Cleanup): New tests.
+
 2009-04-14  Eric Blake  <ebb9@byu.net>
 
 	Fix yesterday's regression in AS_IF.

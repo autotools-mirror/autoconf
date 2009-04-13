@@ -10,6 +10,13 @@ GNU Autoconf NEWS - User visible changes.
    proper m4 quoting.  For shell comments, this is a new feature; for
    non-shell comments, this fixes a regression introduced in 2.63b.
 
+** The macro AT_CHECK now understands the concept of hard failure.  If
+   a test exits with an unexpected status 99, cleanup actions for the
+   test are inhibited and the test is treated as a failure regardless
+   of AT_XFAIL_IF.
+
+** The autotest macro AT_CHECK_NOESCAPE is now documented.
+
 ** The following documented m4sugar macros are new:
    m4_default_nblank  m4_default_nblank_quoted  m4_ifblank  m4_ifnblank
 
