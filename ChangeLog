@@ -1,3 +1,9 @@
+2009-04-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Add traces for AM_SILENT_RULES.
+	* lib/autom4te.in (Automake-preselections): Trace
+	AM_SILENT_RULES.
+
 2009-04-13  Eric Blake  <ebb9@byu.net>
 
 	Improve documentation related to expanded-before-required.

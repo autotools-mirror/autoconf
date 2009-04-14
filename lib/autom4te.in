@@ -66,6 +66,7 @@ args: --preselect AM_PROG_CC_C_O
 args: --preselect AM_PROG_CXX_C_O
 args: --preselect AM_PROG_F77_C_O
 args: --preselect AM_PROG_FC_C_O
+args: --preselect AM_SILENT_RULES
 args: --preselect _AM_SUBST_NOTMAKE
 args: --preselect _AM_COND_IF
 args: --preselect _AM_COND_ELSE
