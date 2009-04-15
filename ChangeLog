@@ -1,3 +1,10 @@
+2009-04-14  Eric Blake  <ebb9@byu.net>
+
+	Fix yesterday's regression in AS_IF.
+	* lib/m4sugar/m4sh.m4 (_AS_IF_ELSE): Don't corrupt $? in else
+	branch; it is up to the user to avoid syntax errors.
+	* tests/m4sh.at (AS@&t@_IF and AS@&t@_CASE): Adjust test.
+
 2009-04-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Add traces for AM_SILENT_RULES.

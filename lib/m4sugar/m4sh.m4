@@ -609,7 +609,7 @@ m4_define([_AS_IF],
 ])
 m4_define([_AS_IF_ELSE],
 [m4_ifnblank([$1],
-[else :
+[else
   $1
 ])])
 

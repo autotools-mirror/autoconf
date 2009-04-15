@@ -862,8 +862,11 @@ AS_CASE([foo], [foo], m4_do(AS_CASE([bar], [bar], [echo sixteen])))
 dnl Handle blank arguments.
 AS_IF([false], [:], [ ]) && AS_CASE([foo], [foo], []
 ) && echo seventeen
-m4_define([empty])AS_IF([false], [:], [empty]
+m4_define([empty])AS_IF([:], [empty]
 ) && AS_CASE([foo], [foo], [empty]) && echo eighteen
+dnl We can't handle AS_IF([false], [:], [empty]) unless m4_expand is
+dnl taught how to handle m4_require.  The user is responsible for
+dnl avoiding the syntax error in that case.
 
 # check that require works correctly
 m4_for([n], 1, 9, [],
