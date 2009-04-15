@@ -332,6 +332,48 @@ magicstring06
 ]])])
 
 
+AT_CHECK_AT([Binary output],
+  [[AT_INIT([artificial test suite])
+    AT_SETUP([pass: no trailing newline])
+    AT_CHECK([printf short], [0], [stdout-nolog])
+    AT_CHECK([cat stdout], [0], [[short]])
+    AT_CLEANUP
+    AT_SETUP([pass: non-printing characters])
+    AT_CHECK([printf '\1\n' >&2], [0], [], [stderr-nolog])
+    printf '\1\n' > expout
+    AT_CHECK([cat stderr], [0], [expout])
+    AT_CLEANUP
+    AT_SETUP([pass: long lines])
+    # 5000 bytes in str
+    str=..........
+    str=$str$str$str$str$str$str$str$str$str$str
+    str=$str$str$str$str$str$str$str$str$str$str
+    str=$str$str$str$str$str
+    AT_CHECK_NOESCAPE([echo $str], [0], [[$str]m4_newline])
+    AT_CLEANUP
+    AT_SETUP([fail: no trailing newline])
+    AT_CHECK([printf short], [0], [stdout-nolog])
+    AT_CHECK([cat stdout], [0], [[long]])
+    AT_CLEANUP
+    AT_SETUP([fail: non-printing characters])
+    AT_CHECK([printf '\1\n' >&2], [0], [], [stderr-nolog])
+    printf '\2\n' > expout
+    AT_CHECK([cat stderr], [0], [expout])
+    AT_CLEANUP
+    AT_SETUP([fail: long lines])
+    # 5000 bytes in str
+    str=..........
+    str=$str$str$str$str$str$str$str$str$str$str
+    str=$str$str$str$str$str$str$str$str$str$str
+    str=$str$str$str$str$str
+    AT_CHECK_NOESCAPE([echo x$str], [0], [[${str}x]m4_newline])
+    AT_CLEANUP
+]], [], [0], [], [], [],
+  [AT_CHECK([$CONFIG_SHELL ./micro-suite 4], [1], [ignore], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite 5], [1], [ignore], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite 6], [1], [ignore], [ignore])], [1-3])
+
+
 AT_CHECK_AT_TEST([Cleanup],
   [AT_CHECK([test ! -f cleanup.success && test ! -f cleanup.failure])
    AT_CHECK_NOESCAPE([exit $value], [ignore], [$output],

@@ -1,5 +1,9 @@
 2009-04-15  Eric Blake  <ebb9@byu.net>
 
+	Test that autotest handles binary output.
+	* tests/autotest.at (Binary output): New test.
+	Suggested by Ralf Wildenhues.
+
 	Add stdout-nolog and ignore-nolog to AT_CHECK.
 	* lib/autotest/general.m4 (AT_DIFF_STDERR(stderr-nolog))
 	(AT_DIFF_STDERR(ignore-nolog), AT_DIFF_STDOUT(stdout-nolog))
