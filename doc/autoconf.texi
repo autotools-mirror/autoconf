@@ -10637,7 +10637,8 @@ This macro corresponds to @code{m4exit}.
 
 @defmac m4_if (@var{comment})
 @defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, @ovar{not-equal})
-@defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal}, @dots{})
+@defmacx m4_if (@var{string-1}, @var{string-2}, @var{equal-1}, @
+  @var{string-3}, @var{string-4}, @var{equal-2}, @dots{}, @ovar{not-equal})
 @msindex{if}
 This macro corresponds to @code{ifelse}.  @var{string-1} and
 @var{string-2} are compared literally, so usually one of the two

@@ -1,5 +1,9 @@
 2009-04-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	manual: clarify m4_if synopsis.
+	* doc/autoconf.texi (Redefined M4 Macros): Rewrite synopsis of
+	m4_if in the presence of more than three arguments.
+
 	Improve and clarify `config.status' usage documentation.
 	* doc/autoconf.texi (config.status Invocation): Fix markup in
 	synopsis.  Use `tag' instead of `file' notation for the
