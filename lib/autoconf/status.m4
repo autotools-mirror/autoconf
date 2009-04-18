@@ -1395,10 +1395,11 @@ _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 ac_cs_usage="\
-\`$as_me' instantiates files from templates according to the
-current configuration.
+\`$as_me' instantiates files and other configuration actions
+from templates according to the current configuration.  Unless the files
+and actions are specified as TAGs, all are instantiated by default.
 
-Usage: $[0] [[OPTION]]... [[FILE]]...
+Usage: $[0] [[OPTION]]... [[TAG]]...
 
   -h, --help       print this help, then exit
   -V, --version    print version number and configuration settings, then exit

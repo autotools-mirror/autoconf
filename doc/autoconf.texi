@@ -20047,12 +20047,14 @@ package was last configured in case reconfiguring is needed.
 
 Synopsis:
 @example
-./config.status @var{option}@dots{} [@var{file}@dots{}]
+./config.status @ovar{option}@dots{} @ovar{tag}@dots{}
 @end example
 
-It configures the @var{files}; if none are specified, all the templates
-are instantiated.  The files must be specified without their
-dependencies, as in
+It configures each @var{tag}; if none are specified, all the templates
+are instantiated.  A @var{tag} refers to a file or other tag associated
+with a configuration action, as specified by a @code{AC_CONFIG_FOOS}
+macro (@pxref{Configuration Actions}).  The files must be specified
+without their dependencies, as in
 
 @example
 ./config.status foobar

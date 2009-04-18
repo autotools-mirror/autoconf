@@ -1,3 +1,14 @@
+2009-04-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Improve and clarify `config.status' usage documentation.
+	* doc/autoconf.texi (config.status Invocation): Fix markup in
+	synopsis.  Use `tag' instead of `file' notation for the
+	non-option arguments, to be consistent with the documentation
+	of the AC_CONFIG_* macros.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Likewise,
+	use `tag' notation for non-option arguments.
+	Report by John Calcote.
+
 2009-04-15  Eric Blake  <ebb9@byu.net>
 
 	Test that autotest handles binary output.
