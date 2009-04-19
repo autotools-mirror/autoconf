@@ -1,5 +1,12 @@
 2009-04-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Adjust channel definitions for new Automake `ordered' flag.
+	* lib/Autom4te/ChannelDefs.pm (Autom4te::ChannelDefs): Set
+	`ordered' flag to zero for channels `fatal', `automake', and
+	`verb'.  This has currently no effect on actual semantics but
+	avoids a consistency check needed for Automake's usage of the
+	Channels.pm code.
+
 	manual: clarify m4_if synopsis.
 	* doc/autoconf.texi (Redefined M4 Macros): Rewrite synopsis of
 	m4_if in the presence of more than three arguments.
