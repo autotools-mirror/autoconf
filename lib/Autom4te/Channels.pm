@@ -45,6 +45,13 @@ Autom4te::Channels - support functions for error and warning management
   # Turn on all channels of type 'warning'.
   setup_channel_type 'warning', silent => 0;
 
+  # Redirect all channels to push messages on a Thread::Queue using
+  # the specified serialization key.
+  setup_channel_queue $queue, $key;
+
+  # Output a message pending in a Thread::Queue.
+  pop_channel_queue $queue;
+
   # Treat all warnings as errors.
   $warnings_are_errors = 1;
 
@@ -76,6 +83,7 @@ use vars qw (@ISA @EXPORT %channels $me);
 	      &setup_channel &setup_channel_type
 	      &dup_channel_setup &drop_channel_setup
 	      &buffer_messages &flush_messages
+	      &setup_channel_queue &pop_channel_queue
 	      US_GLOBAL US_LOCAL
 	      UP_NONE UP_TEXT UP_LOC_TEXT);
 
@@ -175,6 +183,11 @@ The file where the error should be output.
 Whether the channel should be silent.  Use this do disable a
 category of warning, for instance.
 
+=item C<ordered =E<gt> 1>
+
+Whether, with multi-threaded execution, the message should be queued
+for ordered output.
+
 =item C<uniq_part =E<gt> UP_LOC_TEXT>
 
 The part of the message subject to duplicate filtering.  See the
@@ -254,6 +267,9 @@ use vars qw (%_default_options %_global_duplicate_messages
    exit_code => 1,
    file => \*STDERR,
    silent => 0,
+   ordered => 1,
+   queue => 0,
+   queue_key => undef,
    uniq_scope => US_LOCAL,
    uniq_part => UP_LOC_TEXT,
    header => '',
@@ -324,6 +340,13 @@ sub _merge_options (\%%)
 	{
 	  confess "unknown option `$_'";
 	}
+    }
+  if ($hash->{'ordered'})
+    {
+      confess "fatal messages cannot be ordered"
+	if $hash->{'type'} eq 'fatal';
+      confess "backtrace cannot be output on ordered messages"
+	if $hash->{'backtrace'};
     }
 }
 
@@ -405,6 +428,63 @@ sub _format_message ($$%)
   return $msg;
 }
 
+# _enqueue ($QUEUE, $KEY, $UNIQ_SCOPE, $TO_FILTER, $MSG, $FILE)
+# ------------------------------------------------------------
+# Push message on a queue, to be processed by another thread.
+sub _enqueue ($$$$$$)
+{
+  my ($queue, $key, $uniq_scope, $to_filter, $msg, $file) = @_;
+  $queue->enqueue ($key, $msg, $to_filter, $uniq_scope);
+  confess "message queuing works only for STDERR"
+    if $file ne \*STDERR;
+}
+
+# _dequeue ($QUEUE)
+# -----------------
+# Pop a message from a queue, and print, similarly to how
+# _print_message would do it.  Return 0 if the queue is
+# empty.  Note that the key has already been dequeued.
+sub _dequeue ($)
+{
+  my ($queue) = @_;
+  my $msg = $queue->dequeue || return 0;
+  my $to_filter = $queue->dequeue;
+  my $uniq_scope = $queue->dequeue;
+  my $file = \*STDERR;
+
+  if ($to_filter ne '')
+    {
+      # Do we want local or global uniqueness?
+      my $dups;
+      if ($uniq_scope == US_LOCAL)
+	{
+	  $dups = \%_local_duplicate_messages;
+	}
+      elsif ($uniq_scope == US_GLOBAL)
+	{
+	  $dups = \%_global_duplicate_messages;
+	}
+      else
+	{
+	  confess "unknown value for uniq_scope: " . $uniq_scope;
+	}
+
+      # Update the hash of messages.
+      if (exists $dups->{$to_filter})
+	{
+	  ++$dups->{$to_filter};
+	  return 1;
+	}
+      else
+	{
+	  $dups->{$to_filter} = 0;
+	}
+    }
+  print $file $msg;
+  return 1;
+}
+
+
 # Store partial messages here. (See the 'partial' option.)
 use vars qw ($partial);
 $partial = '';
@@ -433,10 +513,10 @@ sub _print_message ($$%)
     }
 
   # Check for duplicate message if requested.
+  my $to_filter;
   if ($opts{'uniq_part'} ne UP_NONE)
     {
       # Which part of the error should we match?
-      my $to_filter;
       if ($opts{'uniq_part'} eq UP_TEXT)
 	{
 	  $to_filter = $message;
@@ -477,7 +557,15 @@ sub _print_message ($$%)
 	}
     }
   my $file = $opts{'file'};
-  print $file $msg;
+  if ($opts{'ordered'} && $opts{'queue'})
+    {
+      _enqueue ($opts{'queue'}, $opts{'queue_key'}, $opts{'uniq_scope'},
+		$to_filter, $msg, $file);
+    }
+  else
+    {
+      print $file $msg;
+    }
   return 1;
 }
 
@@ -527,7 +615,7 @@ both print
 =cut
 
 
-use vars qw (@backlog %buffering @chain);
+use vars qw (@backlog %buffering);
 
 # See buffer_messages() and flush_messages() below.
 %buffering = ();	# The map of channel types to buffer.
@@ -568,7 +656,12 @@ sub msg ($$;$%)
 
       # Die on fatal messages.
       confess if $opts{'backtrace'};
-      exit $exit_code if $opts{'type'} eq 'fatal';
+      if ($opts{'type'} eq 'fatal')
+        {
+	  # flush messages explicitly here, needed in worker threads.
+	  STDERR->flush;
+	  exit $exit_code;
+	}
     }
 }
 
@@ -675,6 +768,33 @@ sub flush_messages ()
       &msg (@$args);
     }
   @backlog = ();
+}
+
+=item C<setup_channel_queue ($queue, $key)>
+
+Set the queue to fill for each channel that is ordered,
+and the key to use for serialization.
+
+=cut
+sub setup_channel_queue ($$)
+{
+  my ($queue, $key) = @_;
+  foreach my $channel (keys %channels)
+    {
+      setup_channel $channel, queue => $queue, queue_key => $key
+        if $channels{$channel}{'ordered'};
+    }
+}
+
+=item C<pop_channel_queue ($queue)>
+
+pop a message off the $queue; the key has already been popped.
+
+=cut
+sub pop_channel_queue ($)
+{
+  my ($queue) = @_;
+  return _dequeue ($queue);
 }
 
 =back

@@ -50,7 +50,9 @@ use vars qw (@ISA @EXPORT);
 @EXPORT = qw (&open_quote &contents
 	      &find_file &mtime
 	      &update_file &up_to_date_p
-	      &xsystem &xsystem_hint &xqx &dir_has_case_matching_file &reset_dir_cache);
+	      &xsystem &xsystem_hint &xqx
+	      &dir_has_case_matching_file &reset_dir_cache
+	      &set_dir_cache_file);
 
 
 =item C<open_quote ($file_name)>
@@ -417,6 +419,19 @@ Clear C<dir_has_case_matching_file>'s cache for C<$dirname>.
 sub reset_dir_cache ($)
 {
   delete $_directory_cache{$_[0]};
+}
+
+=item C<set_dir_cache_file ($dirname, $file_name)>
+
+State that C<$dirname> contains C<$file_name> now.
+
+=cut
+
+sub set_dir_cache_file ($$)
+{
+  my ($dirname, $file_name) = @_;
+  $_directory_cache{$dirname}{$file_name} = 1
+    if exists $_directory_cache{$dirname};
 }
 
 1; # for require

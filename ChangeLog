@@ -1,5 +1,10 @@
 2009-04-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Sync autom4te perl modules from Automake.
+	* lib/Autom4te/Channels.pm: Sync from Automake.
+	* lib/Autom4te/FileUtils.pm: Likewise.
+	* lib/Autom4te/XFile.pm: Likewise.
+
 	Adjust channel definitions for new Automake `ordered' flag.
 	* lib/Autom4te/ChannelDefs.pm (Autom4te::ChannelDefs): Set
 	`ordered' flag to zero for channels `fatal', `automake', and
