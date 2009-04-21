@@ -12811,7 +12811,7 @@ emitting code to open a log within the child.  On the other hand, if the
 parent script has @code{AS_MESSAGE_FD} redirected somewhere besides
 @samp{1}, then the child script already has code that copies stdout to
 that descriptor.  Currently, the suggested
-idiom for writing an M4sh shell script from within another script is:
+idiom for writing a M4sh shell script from within another script is:
 
 @example
 AS_INIT_GENERATED([@var{file}], [[# My child script.

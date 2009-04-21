@@ -1,5 +1,9 @@
 2009-04-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Revert bogus change in last commit.
+	* doc/autoconf.texi (Initialization Macros): Revert change.
+	Spotted by Eric Blake.
+
 	manual: fix trivial grammar errors.
 	* doc/autoconf.texi (Fortran Compiler, Initialization Macros)
 	(Limitations of Usual Tools, Pretty Help Strings)
