@@ -1,3 +1,11 @@
+2009-04-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	manual: fix trivial grammar errors.
+	* doc/autoconf.texi (Fortran Compiler, Initialization Macros)
+	(Limitations of Usual Tools, Pretty Help Strings)
+	(config.status Invocation): Fix `a' vs. `an' errors.
+	Report by Eric Blake.
+
 2009-04-21  Eric Blake  <ebb9@byu.net>
 
 	Shuffle maintainer-specific rules.

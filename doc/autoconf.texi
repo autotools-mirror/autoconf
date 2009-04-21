@@ -7553,7 +7553,7 @@ extension and these flags are then used for all subsequent @code{FC} tests
 (until @code{AC_FC_SRCEXT} is called again).
 
 For example, you would use @code{AC_FC_SRCEXT(f90)} to employ the
-@file{.f90} extension in future tests, and it would set a
+@file{.f90} extension in future tests, and it would set an
 @code{FCFLAGS_f90} output variable with any extra flags that are needed
 to compile such files.
 
@@ -12811,7 +12811,7 @@ emitting code to open a log within the child.  On the other hand, if the
 parent script has @code{AS_MESSAGE_FD} redirected somewhere besides
 @samp{1}, then the child script already has code that copies stdout to
 that descriptor.  Currently, the suggested
-idiom for writing a M4sh shell script from within another script is:
+idiom for writing an M4sh shell script from within another script is:
 
 @example
 AS_INIT_GENERATED([@var{file}], [[# My child script.
@@ -17214,7 +17214,7 @@ should not contain comments.  @acronym{HP-UX} sed has a limit of 99 commands
 (not counting @samp{:} commands) and
 48 labels, which can not be circumvented by using more than one script
 file.  It can execute up to 19 reads with the @samp{r} command per cycle.
-Solaris @command{/usr/ucb/sed} rejects usages that exceed an limit of
+Solaris @command{/usr/ucb/sed} rejects usages that exceed a limit of
 about 6000 bytes for the internal representation of commands.
 
 Avoid redundant @samp{;}, as some @command{sed} implementations, such as
@@ -19642,7 +19642,7 @@ strings} do.  This is the purpose of the @code{AS_HELP_STRING} macro.
   @dvar{indent-column, 26}, @dvar{wrap-column, 79})
 @asindex{HELP_STRING}
 
-Expands into an help string that looks pretty when the user executes
+Expands into a help string that looks pretty when the user executes
 @samp{configure --help}.  It is typically used in @code{AC_ARG_WITH}
 (@pxref{External Software}) or @code{AC_ARG_ENABLE} (@pxref{Package
 Options}).  The following example makes this clearer.
@@ -20053,7 +20053,7 @@ Synopsis:
 
 It configures each @var{tag}; if none are specified, all the templates
 are instantiated.  A @var{tag} refers to a file or other tag associated
-with a configuration action, as specified by a @code{AC_CONFIG_FOOS}
+with a configuration action, as specified by an @code{AC_CONFIG_FOOS}
 macro (@pxref{Configuration Actions}).  The files must be specified
 without their dependencies, as in
 
