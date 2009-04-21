@@ -46,42 +46,6 @@ $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 	  $(top_srcdir)/doc/install.texi
 endif
 
-## maintainer-check ##
-maintainer-check: maintainer-check-tests
-maintainer-check-tests: all
-	cd tests && $(MAKE) $(AM_MAKEFLAGS) maintainer-check
-
-
-## ----------------------------------- ##
-## Updating Perl files from Automake.  ##
-## ----------------------------------- ##
-
-WGET = wget
-WGETFLAGS = -C off
-
-## Fetch the latest versions of files we care about.
-automake_gitweb = \
-  http://git.savannah.gnu.org/gitweb/?p=automake.git;a=blob_plain;hb=HEAD;
-autom4te_files = \
-  Autom4te/Configure_ac.pm \
-  Autom4te/Channels.pm \
-  Autom4te/FileUtils.pm \
-  Autom4te/Struct.pm \
-  Autom4te/XFile.pm
-
-autom4te-update:
-	rm -f -r Fetchdir > /dev/null 2>&1
-	mkdir -p Fetchdir/Autom4te
-	for file in $(autom4te_files); do \
-	  infile=`echo $$file | sed 's/Autom4te/Automake/g'`; \
-	  $(WGET) $(WGET_FLAGS) \
-	    "$(automake_gitweb)f=lib/$$infile" \
-	    -O "Fetchdir/$$file" || exit; \
-	done
-	perl -pi -e 's/Automake::/Autom4te::/g' Fetchdir/Autom4te/*.pm
-	for file in $(autom4te_files); do \
-	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file || exit; \
-	done
 
 # Version string management.  There are two files to be aware of:
 # .tarball-version - present only in a distribution tarball, and not in

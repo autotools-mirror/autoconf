@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate January 31, 2009
+@set lastupdate April 16, 2009
 @c %**end of header
 
 @dircategory GNU organization
@@ -313,7 +313,7 @@ Guile also includes bindings for GTK+/GNOME, making it practical to
 write modern GUI functionality within Guile.  We don't reject programs
 written in other ``scripting languages'' such as Perl and Python, but
 using Guile is very important for the overall consistency of the GNU
-system.  
+system.
 
 
 @node Compatibility
@@ -4041,7 +4041,7 @@ should contain an explanation of the installation procedure.
 The @file{README} file should also refer to the file which contains the
 copying conditions.  The GNU GPL, if used, should be in a file called
 @file{COPYING}.  If the GNU LGPL is used, it should be in a file called
-@file{COPYING.LIB}.
+@file{COPYING.LESSER}.
 
 Naturally, all the source files must be in the distribution.  It is okay
 to include non-source files in the distribution, provided they are

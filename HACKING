@@ -51,9 +51,10 @@ release:
 - Run `make syntax-check'
   This makes sure that the source files follow some consistent rules.
   The checks live in maint.mk, which is intended to be shared across
-  several projects.
+  several projects.  (Help in merging this to use gnulib's maint.mk
+  would be appreciated).
 
-- Run `make maintainer-check'
+- Run `make maintainer-distcheck'
   This is quite long.  It basically runs the test suite using a C++
   compiler instead of a C compiler, and within a severe environment
   (POSIXLY_CORRECT).

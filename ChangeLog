@@ -1,3 +1,25 @@
+2009-04-21  Eric Blake  <ebb9@byu.net>
+
+	Shuffle maintainer-specific rules.
+	* Makefile.am (maintainer-check-tests): Delete.
+	(autom4te-update): Move...
+	* cfg.mk (autom4te-update): ...here.
+	(fetch): Depend on autom4te-update.  Split...
+	(gnulib-update): ...into new rule.  Import move-if-change from
+	gnulib.
+	* maint.mk (maintainer-distcheck): Absorb former maintainer-check
+	rule.
+	* build-aux/move-if-change: New file, undistributed.
+	* .gitattributes: Handle new upstream file.
+	* .gitignore: Ignore maintainer cruft.
+	* HACKING: Update maintainer instructions.
+	* build-aux/config.guess: Update from upstream.
+	* build-aux/config.sub: Likewise.
+	* build-aux/gendocs.sh: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+	* doc/gendocs_template: Likewise.
+	* doc/standards.texi: Likewise.
+
 2009-04-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Sync autom4te perl modules from Automake.

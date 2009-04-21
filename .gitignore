@@ -3,6 +3,7 @@
 .#*
 .version
 CVS
+Fetchdir
 INSTALL
 Makefile
 Makefile.in

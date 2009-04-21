@@ -44,8 +44,10 @@ gpg_key_ID = F4850180
 gnulib_dir = '$(abs_srcdir)'/../gnulib
 
 # Update files from gnulib.
-.PHONY: fetch
-fetch:
+.PHONY: fetch gnulib-update autom4te-update
+fetch: gnulib-update autom4te-update
+
+gnulib-update:
 	cp $(gnulib_dir)/build-aux/announce-gen $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/config.guess $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/config.sub $(srcdir)/build-aux
@@ -56,6 +58,7 @@ fetch:
 	cp $(gnulib_dir)/build-aux/install-sh $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/mdate-sh $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/missing $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/move-if-change $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/vc-list-files $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/texinfo.tex $(srcdir)/build-aux
 	cp $(gnulib_dir)/doc/fdl.texi $(srcdir)/doc
@@ -64,6 +67,39 @@ fetch:
 	cp $(gnulib_dir)/doc/make-stds.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/standards.texi $(srcdir)/doc
 	cp $(gnulib_dir)/top/GNUmakefile $(srcdir)
+
+WGET = wget
+WGETFLAGS = -C off
+
+## Fetch the latest versions of files we care about.
+automake_gitweb = \
+  http://git.savannah.gnu.org/gitweb/?p=automake.git;a=blob_plain;hb=HEAD;
+autom4te_files = \
+  Autom4te/Configure_ac.pm \
+  Autom4te/Channels.pm \
+  Autom4te/FileUtils.pm \
+  Autom4te/Struct.pm \
+  Autom4te/XFile.pm
+
+move_if_change = '$(abs_srcdir)'/build-aux/move-if-change
+
+autom4te-update:
+	rm -fr Fetchdir > /dev/null 2>&1
+	mkdir -p Fetchdir/Autom4te
+	for file in $(autom4te_files); do \
+	  infile=`echo $$file | sed 's/Autom4te/Automake/g'`; \
+	  $(WGET) $(WGET_FLAGS) \
+	    "$(automake_gitweb)f=lib/$$infile" \
+	    -O "Fetchdir/$$file" || exit; \
+	done
+	perl -pi -e 's/Automake::/Autom4te::/g' Fetchdir/Autom4te/*.pm
+	for file in $(autom4te_files); do \
+	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file || exit; \
+	done
+	rm -fr Fetchdir > /dev/null 2>&1
+	@echo
+	@echo "Please avoid committing copyright changes until GPLv3 is sorted"
+	@echo
 
 # Tests not to run.
 local-checks-to-skip ?= \

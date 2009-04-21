@@ -480,6 +480,7 @@ cvs-check: vc-diff-check
 
 maintainer-distcheck:
 	$(MAKE) distcheck
+	$(MAKE) -C tests $(AM_MAKEFLAGS) maintainer-check
 	$(MAKE) my-distcheck
 
 # Don't make a distribution if checks fail.
