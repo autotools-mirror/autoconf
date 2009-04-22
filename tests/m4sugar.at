@@ -787,6 +787,58 @@ AT_CLEANUP
 
 
 ## ---------- ##
+## m4 lists.  ##
+## ---------- ##
+
+AT_SETUP([m4 lists])
+
+AT_KEYWORDS([m4@&t@_car m4@&t@_cdr m4@&t@_argn _m4@&t_cdr])
+
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_define([a], [A])m4_define([b], [B])m4_define([c], [C])
+m4_argn([1], [a], [b], [c])
+m4_argn([2], [a], [b], [c])
+m4_argn([3], [a], [b], [c])
+m4_argn([4], [a], [b], [c])
+m4_car([a], [b], [c])
+m4_cdr([a], [b], [c])
+m4_cdr([a], [b])
+m4_cdr([a])
+_m4_cdr([a], [b], [c])
+_m4_cdr([a], [b])
+_m4_cdr([a])
+m4_if(m4_cdr([], []), [[]], [good], [bad])
+m4_if(m4_cdr([]), [], [good], [bad])
+]], [[
+a
+b
+c
+
+a
+[b],[c]
+[b]
+
+, [b],[c]
+, [b]
+
+good
+good
+]])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_init
+m4_argn([0], [a], [b], [c])
+]])
+AT_CHECK_M4SUGAR([-o-], [1], [],
+[[script.4s:2: error: assert failed: 0 < 0
+script.4s:2: the top level
+autom4te: m4 failed with exit status: 1
+]])
+
+AT_CLEANUP
+
+
+## ---------- ##
 ## m4_split.  ##
 ## ---------- ##
 

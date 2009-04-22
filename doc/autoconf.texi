@@ -11146,26 +11146,35 @@ m4_foreach([i], [list], [i])
 @result{}123
 @end example
 
-@defmac m4_car (@var{list})
+@defmac m4_argn (@var{n}, @ovar{arg}@dots{})
+@msindex{argn}
+Extracts argument @var{n} (larger than 0) from the remaining arguments.
+If there are too few arguments, the empty string is used.  For any
+@var{n} besides 1, this is more efficient than the similar
+@samp{m4_car(m4_shiftn([@var{n}], [], [@var{arg}@dots{}]))}.
+@end defmac
+
+@defmac m4_car (@var{arg}@dots{})
 @msindex{car}
-Expands to the quoted first element of the comma-separated quoted
-@var{list}.  Often used with @code{m4_cdr} to recursively iterate
+Expands to the quoted first @var{arg}.  Can be used with @code{m4_cdr}
+to recursively iterate
 through a list.  Generally, when using quoted lists of quoted elements,
 @code{m4_car} should be called without any extra quotes.
 @end defmac
 
-@defmac m4_cdr (@var{list})
+@defmac m4_cdr (@var{arg}@dots{})
 @msindex{cdr}
-Expands to a quoted list of all but the first element of the
-comma-separated quoted @var{list}, or the empty string if @var{list} had
-only one element.  Generally, when using quoted lists of quoted
-elements, @code{m4_cdr} should be called without any extra quotes.
+Expands to a quoted list of all but the first @var{arg}, or the empty
+string if there was only one argument.  Generally, when using quoted
+lists of quoted elements, @code{m4_cdr} should be called without any
+extra quotes.
 
 For example, this is a simple implementation of @code{m4_map}; note how
 each iteration checks for the end of recursion, then merely applies the
 first argument to the first element of the list, then repeats with the
 rest of the list.  (The actual implementation in M4sugar is a bit more
-involved, to gain some speed and share code with @code{m4_map_sep}).
+involved, to gain some speed and share code with @code{m4_map_sep}, and
+also to avoid expanding side effects in @samp{$2} twice).
 @example
 m4_define([m4_map], [m4_ifval([$2],
   [m4_apply([$1], m4_car($2))[]$0([$1], m4_cdr($2))])])dnl

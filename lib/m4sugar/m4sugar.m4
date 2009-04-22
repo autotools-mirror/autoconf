@@ -454,20 +454,35 @@ m4_define([m4_bmatch],
        [m4_if(m4_bregexp([$1], [$2]), -1, [$0([$1], m4_shift3($@))],
 	      [$3])])])
 
+# m4_argn(N, ARGS...)
+# -------------------
+# Extract argument N (greater than 0) from ARGS.  Example:
+#   m4_define([b], [B])
+#   m4_argn([2], [a], [b], [c]) => b
+#
+# Rather than using m4_car(m4_shiftn([$1], $@)), we exploit the fact that
+# GNU m4 can directly reference any argument, through an indirect macro.
+m4_define([m4_argn],
+[m4_assert([0 < $1])]dnl
+[m4_pushdef([_$0], [_m4_popdef([_$0])]m4_dquote([$]m4_incr([$1])))_$0($@)])
 
-# m4_car(LIST)
-# m4_cdr(LIST)
-# ------------
-# Manipulate m4 lists.
+
+# m4_car(ARGS...)
+# m4_cdr(ARGS...)
+# ---------------
+# Manipulate m4 lists.  m4_car returns the first argument.  m4_cdr
+# bundles all but the first argument into a quoted list.  These two
+# macros are generally used with list arguments, with quoting removed
+# to break the list into multiple m4 ARGS.
 m4_define([m4_car], [[$1]])
 m4_define([m4_cdr],
 [m4_if([$#], 0, [m4_fatal([$0: cannot be called without arguments])],
        [$#], 1, [],
        [m4_dquote(m4_shift($@))])])
 
-# _m4_cdr(LIST)
-# -------------
-# Like m4_cdr, except include a leading comma unless only one element
+# _m4_cdr(ARGS...)
+# ----------------
+# Like m4_cdr, except include a leading comma unless only one argument
 # remains.  Why?  Because comparing a large list against [] is more
 # expensive in expansion time than comparing the number of arguments; so
 # _m4_cdr can be used to reduce the number of arguments when it is time

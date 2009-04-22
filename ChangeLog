@@ -1,3 +1,12 @@
+2009-04-22  Eric Blake  <ebb9@byu.net>
+
+	Add m4_argn.
+	* lib/m4sugar/m4sugar.m4 (m4_argn): New macro.
+	* NEWS: Document it.
+	* doc/autoconf.texi (Looping constructs) <m4_argn>: Likewise.
+	<m4_car, m4_cdr>: Improve documentation.
+	* tests/m4sugar.at (m4 lists): New test.
+
 2009-04-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Improve description of AC_PROG_CC_C89 and AC_PROG_CC_C99.
