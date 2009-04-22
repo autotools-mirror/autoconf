@@ -594,7 +594,7 @@ Upgrading From Version 2.13
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
 * AC_LIBOBJ vs LIBOBJS::        LIBOBJS is a forbidden token
-* AC_FOO_IFELSE vs AC_TRY_FOO::  A more generic scheme for testing sources
+* AC_ACT_IFELSE vs AC_TRY_ACT::  A more generic scheme for testing sources
 
 Generating Test Suites with Autotest
 
@@ -2105,7 +2105,7 @@ have this prototype:
 @c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
 @c awful.
 @example
-AC_CONFIG_FOOS(@var{tag}@dots{}, [@var{commands}], [@var{init-cmds}])
+AC_CONFIG_@var{ITEMS}(@var{tag}@dots{}, [@var{commands}], [@var{init-cmds}])
 @end example
 
 @noindent
@@ -2122,15 +2122,15 @@ should avoid
 @example
 @dots{} && my_foos="$my_foos fooo"
 @dots{} && my_foos="$my_foos foooo"
-AC_CONFIG_FOOS([$my_foos])
+AC_CONFIG_@var{ITEMS}([$my_foos])
 @end example
 
 @noindent
 and use this instead:
 
 @example
-@dots{} && AC_CONFIG_FOOS([fooo])
-@dots{} && AC_CONFIG_FOOS([foooo])
+@dots{} && AC_CONFIG_@var{ITEMS}([fooo])
+@dots{} && AC_CONFIG_@var{ITEMS}([foooo])
 @end example
 
 The macros @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
@@ -3434,7 +3434,7 @@ breed: they are executed directly by @file{configure}, so you cannot use
 Execute the @var{cmds} right before creating @file{config.status}.
 
 This macro presents the last opportunity to call @code{AC_SUBST},
-@code{AC_DEFINE}, or @code{AC_CONFIG_FOOS} macros.
+@code{AC_DEFINE}, or @code{AC_CONFIG_@var{ITEMS}} macros.
 @end defmac
 
 @defmac AC_CONFIG_COMMANDS_POST (@var{cmds})
@@ -20064,7 +20064,7 @@ Synopsis:
 
 It configures each @var{tag}; if none are specified, all the templates
 are instantiated.  A @var{tag} refers to a file or other tag associated
-with a configuration action, as specified by an @code{AC_CONFIG_FOOS}
+with a configuration action, as specified by an @code{AC_CONFIG_@var{ITEMS}}
 macro (@pxref{Configuration Actions}).  The files must be specified
 without their dependencies, as in
 
@@ -21678,7 +21678,7 @@ features in version 2.50; the changes are summarized in the file
 * New Macros::                  Interaction with foreign macros
 * Hosts and Cross-Compilation::  Bugward compatibility kludges
 * AC_LIBOBJ vs LIBOBJS::        LIBOBJS is a forbidden token
-* AC_FOO_IFELSE vs AC_TRY_FOO::  A more generic scheme for testing sources
+* AC_ACT_IFELSE vs AC_TRY_ACT::  A more generic scheme for testing sources
 @end menu
 
 @node Changed Quotation
@@ -21974,8 +21974,10 @@ referencing @code{LIBOBJS} and @code{LTLIBOBJS} in another directory.
 The @code{LIBOBJDIR} feature is experimental.
 
 
-@node AC_FOO_IFELSE vs AC_TRY_FOO
-@subsection @code{AC_FOO_IFELSE} vs.@: @code{AC_TRY_FOO}
+@node AC_ACT_IFELSE vs AC_TRY_ACT
+@subsection @code{AC_@var{ACT}_IFELSE} vs.@: @code{AC_TRY_@var{ACT}}
+@c the anchor keeps the old node name, to try to avoid breaking links
+@anchor{AC_FOO_IFELSE vs AC_TRY_FOO}
 
 Since Autoconf 2.50, internal codes uses @code{AC_PREPROC_IFELSE},
 @code{AC_COMPILE_IFELSE}, @code{AC_LINK_IFELSE}, and
