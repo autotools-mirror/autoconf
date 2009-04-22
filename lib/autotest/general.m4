@@ -332,7 +332,7 @@ at_fn_check_skip ()
 {
   case $[1] in
     99) echo 99 > "$at_status_file"; at_failed=:
-        AS_ECHO(["$[2]: hard failure"]); exit 99;;
+	AS_ECHO(["$[2]: hard failure"]); exit 99;;
     77) echo 77 > "$at_status_file"; exit 77;;
   esac
 }
@@ -350,7 +350,7 @@ dnl $? = 77 or $? = 99.
     $[1] ) ;;
     77) echo 77 > "$at_status_file"; exit 77;;
     99) echo 99 > "$at_status_file"; at_failed=:
-        AS_ECHO(["$[3]: hard failure"]); exit 99;;
+	AS_ECHO(["$[3]: hard failure"]); exit 99;;
     *) AS_ECHO(["$[3]: exit code was $[2], expected $[1]"])
       at_failed=:;;
   esac
@@ -1904,14 +1904,22 @@ _AT_DEFINE_SETUP([AT_CHECK],
 [_AT_CHECK(m4_expand([$1]), [$2], m4_expand([AS_ESCAPE([$3])]),
   m4_expand([AS_ESCAPE([$4])]), [$5], [$6])])
 
-# AT_CHECK_NOESCAPE(COMMANDS, [STATUS = 0], STDOUT, STDERR,
+# AT_CHECK_UNQUOTED(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #                   [RUN-IF-FAIL], [RUN-IF-PASS])
 # ---------------------------------------------------------
 # Like AT_CHECK, but do not AS_ESCAPE shell metacharacters in the STDOUT
 # and STDERR arguments before running the comparison.
-_AT_DEFINE_SETUP([AT_CHECK_NOESCAPE],
+_AT_DEFINE_SETUP([AT_CHECK_UNQUOTED],
 [_AT_CHECK(m4_expand([$1]), [$2], m4_expand([$3]),
   m4_expand([$4]), [$5], [$6])])
+
+# AT_CHECK_NOESCAPE(COMMANDS, [STATUS = 0], STDOUT, STDERR,
+#                   [RUN-IF-FAIL], [RUN-IF-PASS])
+# ---------------------------------------------------------
+# Obsolete spelling of AT_CHECK_UNQUOTED.
+m4_define([AT_CHECK_NOESCAPE],
+[m4_warn([obsolete], [use AT_CHECK_UNQUOTED instead of $0])]dnl
+[AT_CHECK_UNQUOTED($@)])
 
 
 # _AT_DECIDE_TRACEABLE(COMMANDS)

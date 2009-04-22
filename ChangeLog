@@ -1,3 +1,17 @@
+2009-04-24  Eric Blake  <ebb9@byu.net>
+
+	Rename AT_CHECK_NOESCAPE to AT_CHECK_UNQUOTED.
+	* lib/autotest/general.m4 (AT_CHECK_NOESCAPE): Deprecate, in favor
+	of new spelling...
+	(AT_CHECK_UNQUOTED): ...for consistency with AC_DEFINE_UNQUOTED.
+	* doc/autoconf.texi (Writing Testsuites) <AT_CHECK>: Document the
+	rename.
+	* NEWS: Likewise.
+	* tests/autotest.at (Binary output, Cleanup): Adjust tests.
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Likewise.
+	Reported by Ralf Wildenhues.
+
 2009-04-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	New test to ensure autom4te cache file locking works.

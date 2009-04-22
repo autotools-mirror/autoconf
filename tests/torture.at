@@ -326,11 +326,11 @@ END
 	   [0], [ignore])
   # Run the same test a 2nd time to see that config.status does not recreate
   # the header (regression test)
-  AT_CHECK_NOESCAPE([./config.status "--header=$file:$file.in"],
+  AT_CHECK_UNQUOTED([./config.status "--header=$file:$file.in"],
 		    [0], [config.status: creating $file
 config.status: $file is unchanged
 ])
-  AT_CHECK_NOESCAPE([grep ' & ' "$file"], [],
+  AT_CHECK_UNQUOTED([grep ' & ' "$file"], [],
 [/* $file.  Generated from $file.in by configure.  */
 ])
   AT_CHECK([$FGREP "$file" "$file"], [0], [ignore])

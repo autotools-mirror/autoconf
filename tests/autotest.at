@@ -349,7 +349,7 @@ AT_CHECK_AT([Binary output],
     str=$str$str$str$str$str$str$str$str$str$str
     str=$str$str$str$str$str$str$str$str$str$str
     str=$str$str$str$str$str
-    AT_CHECK_NOESCAPE([echo $str], [0], [[$str]m4_newline])
+    AT_CHECK_UNQUOTED([echo $str], [0], [[$str]m4_newline])
     AT_CLEANUP
     AT_SETUP([fail: no trailing newline])
     AT_CHECK([printf short], [0], [stdout-nolog])
@@ -366,7 +366,7 @@ AT_CHECK_AT([Binary output],
     str=$str$str$str$str$str$str$str$str$str$str
     str=$str$str$str$str$str$str$str$str$str$str
     str=$str$str$str$str$str
-    AT_CHECK_NOESCAPE([echo x$str], [0], [[${str}x]m4_newline])
+    AT_CHECK_UNQUOTED([echo x$str], [0], [[${str}x]m4_newline])
     AT_CLEANUP
 ]], [], [0], [], [], [],
   [AT_CHECK([$CONFIG_SHELL ./micro-suite 4], [1], [ignore], [ignore])
@@ -376,10 +376,10 @@ AT_CHECK_AT([Binary output],
 
 AT_CHECK_AT_TEST([Cleanup],
   [AT_CHECK([test ! -f cleanup.success && test ! -f cleanup.failure])
-   AT_CHECK_NOESCAPE([exit $value], [ignore], [$output],
+   AT_CHECK_UNQUOTED([exit $value], [ignore], [$output],
      [], [touch cleanup.failure], [touch cleanup.success])],
   [], [], [], [],
-  [AT_KEYWORDS([AT@&t@_CHECK_NOESCAPE])
+  [AT_KEYWORDS([AT@&t@_CHECK_UNQUOTED])
     output=; export output],
   [AT_CHECK([test -d micro-suite.dir/1])
    AT_CHECK([test -f micro-suite.dir/1/cleanup.success])
