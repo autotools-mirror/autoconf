@@ -1011,6 +1011,26 @@ AT_CHECK([test "`find configure -newer newer`" = "" ||
 AT_CLEANUP
 
 
+# autom4te cache locking
+# ----------------------
+
+AT_SETUP([autom4te cache locking])
+
+# Cannot use AT_CHECK here, autotest internals could be messed up.
+
+(echo AC_INIT; sleep 2; echo) \
+  | (autom4te --language=autoconf -o configure; echo $? >&2 ) 2>errlog &
+AT_CHECK([echo AC_INIT | autom4te --language=autoconf -o configure])
+wait
+
+# Ignore additional output from shell verbose or xtrace mode.
+AT_CHECK([grep 'cannot rename' errlog], [1])
+AT_CHECK([grep '^0$' errlog], [], [ignore])
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
 # autotools and file names containing whitespace
 # ---------------------------------------------
 

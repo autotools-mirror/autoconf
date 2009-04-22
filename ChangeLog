@@ -1,3 +1,9 @@
+2009-04-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New test to ensure autom4te cache file locking works.
+	* tests/tools.at (autom4te cache locking): New test.
+	Report by Eric Blake.
+
 2009-04-22  Paolo Bonzini  <bonzini@gnu.org>
 
 	manual: another grammar improvement.
