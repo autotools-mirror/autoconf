@@ -7555,7 +7555,7 @@ extension and these flags are then used for all subsequent @code{FC} tests
 (until @code{AC_FC_SRCEXT} is called again).
 
 For example, you would use @code{AC_FC_SRCEXT(f90)} to employ the
-@file{.f90} extension in future tests, and it would set an
+@file{.f90} extension in future tests, and it would set the
 @code{FCFLAGS_f90} output variable with any extra flags that are needed
 to compile such files.
 

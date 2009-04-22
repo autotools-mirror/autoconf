@@ -1,3 +1,9 @@
+2009-04-22  Paolo Bonzini  <bonzini@gnu.org>
+
+	manual: another grammar improvement.
+	* doc/autoconf.texi (Fortran Compiler): Avoid dependency on
+	pronunciation of `FCFLAGS_f90'.
+
 2009-04-23  Eric Blake  <ebb9@byu.net>
 
 	Change FOO placeholder to use @var{text} instead.
