@@ -6809,7 +6809,8 @@ set to accept Standard C; if not, the shell variable
 If the C compiler is not in @acronym{ANSI} C89 (@acronym{ISO} C90) mode by
 default, try to add an option to output variable @code{CC} to make it
 so.  This macro tries various options that select @acronym{ANSI} C89 on
-some system or another.  It considers the compiler to be in
+some system or another, preferring extended functionality modes over
+strict conformance modes.  It considers the compiler to be in
 @acronym{ANSI} C89 mode if it handles function prototypes correctly.
 
 After calling this macro you can check whether the C compiler has been
@@ -6823,7 +6824,8 @@ This macro is called automatically by @code{AC_PROG_CC}.
 @acindex{PROG_CC_C99}
 If the C compiler is not in C99 mode by default, try to add an
 option to output variable @code{CC} to make it so.  This macro tries
-various options that select C99 on some system or another.  It
+various options that select C99 on some system or another, preferring
+extended functionality modes over strict conformance modes.  It
 considers the compiler to be in C99 mode if it handles @code{_Bool},
 @code{//} comments, flexible array members, @code{inline}, signed and
 unsigned @code{long long int}, mixed code and declarations, named

@@ -1,3 +1,10 @@
+2009-04-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Improve description of AC_PROG_CC_C89 and AC_PROG_CC_C99.
+	* doc/autoconf.texi (C Compiler): Document that AC_PROG_CC_C89
+	and AC_PROG_CC_C99 prefer extended over strict conformance modes.
+	Report by Vincent Lefèvre.
+
 2009-04-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Revert bogus change in last commit.
