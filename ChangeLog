@@ -1,5 +1,13 @@
 2009-04-24  Eric Blake  <ebb9@byu.net>
 
+	Fix quoting of m4 macros in AT_CHECK.
+	* lib/autotest/general.m4 (AT_CHECK): Expand prior to adding
+	escapes, to avoid shell syntax errors caused by late macro
+	expansion.
+	* NEWS: Document this change.
+	* tests/autotest.at (Metacharacters in command from M4 expansion):
+	New test.
+
 	manual: Use consistent spelling of here-document.
 	* doc/autoconf.texi (Defining Symbols, Programming in M4sh)
 	(Common Shell Constructs, Macro Names, Writing Testsuites): Fix

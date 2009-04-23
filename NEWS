@@ -9,6 +9,9 @@ GNU Autoconf NEWS - User visible changes.
 ** Ensure AT_CHECK can support commands that include a # given with
    proper m4 quoting.  For shell comments, this is a new feature; for
    non-shell comments, this fixes a regression introduced in 2.63b.
+   Additionally, AT_CHECK correctly supplies shell escapes for
+   metacharacters occurring in m4 macro expansions within the expected
+   stdout and stderr parameters.
 
 ** The macro AT_CHECK now understands the concept of hard failure.  If
    a test exits with an unexpected status 99, cleanup actions for the

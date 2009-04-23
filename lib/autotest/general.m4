@@ -1901,8 +1901,8 @@ $2[]_ATEOF
 # This may cause spurious failures when the test suite is run with `-x'.
 #
 _AT_DEFINE_SETUP([AT_CHECK],
-[_AT_CHECK(m4_expand([$1]), [$2], m4_expand([AS_ESCAPE([$3])]),
-  m4_expand([AS_ESCAPE([$4])]), [$5], [$6])])
+[_AT_CHECK(m4_expand([$1]), [$2], AS_ESCAPE(m4_dquote(m4_expand([$3]))),
+  AS_ESCAPE(m4_dquote(m4_expand([$4]))), [$5], [$6])])
 
 # AT_CHECK_UNQUOTED(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #                   [RUN-IF-FAIL], [RUN-IF-PASS])

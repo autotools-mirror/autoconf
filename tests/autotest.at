@@ -491,6 +491,12 @@ bar'])
 ]], [])])
 
 
+AT_CHECK_AT_TEST([Metacharacters in command from M4 expansion],
+  [m4_define([GNU], [\"`])
+   AT_CHECK([echo '\"`' [GNU] 'GNU'], 0, [GNU [G][NU] [\"`
+]], [])])
+
+
 ## -------------------------------------- ##
 ## Backslash-<newline> in test commands.  ##
 ## -------------------------------------- ##
