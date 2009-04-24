@@ -1910,16 +1910,17 @@ _AT_DEFINE_SETUP([AT_CHECK],
 # Like AT_CHECK, but do not AS_ESCAPE shell metacharacters in the STDOUT
 # and STDERR arguments before running the comparison.
 _AT_DEFINE_SETUP([AT_CHECK_UNQUOTED],
-[_AT_CHECK(m4_expand([$1]), [$2], m4_expand([$3]),
-  m4_expand([$4]), [$5], [$6])])
+[_AT_CHECK(m4_expand([$1]), [$2], AS_ESCAPE(m4_dquote(m4_expand([$3])), [""]),
+  AS_ESCAPE(m4_dquote(m4_expand([$4])), [""]), [$5], [$6])])
 
 # AT_CHECK_NOESCAPE(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #                   [RUN-IF-FAIL], [RUN-IF-PASS])
 # ---------------------------------------------------------
 # Obsolete spelling of AT_CHECK_UNQUOTED.
 m4_define([AT_CHECK_NOESCAPE],
-[m4_warn([obsolete], [use AT_CHECK_UNQUOTED instead of $0])]dnl
-[AT_CHECK_UNQUOTED($@)])
+[m4_warn([obsolete], [consider using AT_CHECK_UNQUOTED instead of $0])]dnl
+[_AT_CHECK(m4_expand([$1]), [$2], m4_expand([$3]),
+  m4_expand([$4]), [$5], [$6])])
 
 
 # _AT_DECIDE_TRACEABLE(COMMANDS)

@@ -1,5 +1,15 @@
 2009-04-24  Eric Blake  <ebb9@byu.net>
 
+	Make AT_CHECK_UNQUOTED more like AC_DEFINE_UNQUOTED.
+	* lib/autotest/general.m4 (AT_CHECK_NOESCAPE): Keep older,
+	undocumented semantics, where unbalanced " cannot be used in the
+	stdout/stderr argument.
+	(AT_CHECK_UNQUOTED): Treat " in stdout/stderr as a literal, since
+	the text is used in double-quoted context.
+	* tests/autotest.at (unquoted output): New test.
+	* doc/autoconf.texi (Writing Testsuites) <AT_CHECK>: Mention which
+	shell expansions are handled.
+
 	Rename AT_CHECK_NOESCAPE to AT_CHECK_UNQUOTED.
 	* lib/autotest/general.m4 (AT_CHECK_NOESCAPE): Deprecate, in favor
 	of new spelling...

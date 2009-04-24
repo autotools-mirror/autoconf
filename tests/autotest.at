@@ -287,6 +287,13 @@ AT_CHECK_AT_TEST([errexit],
    AT_CHECK([grep "1 .* inhibited subsequent" stderr], [], [ignore])],
   [--errexit])
 
+AT_CHECK_AT_TEST([unquoted output],
+  [m4_define([backtick], [`])
+   a=a
+   AT_CHECK_UNQUOTED([echo 'a"b  backtick`'], [],
+     [${a}"`echo 'b  '`\`\backtick]m4_newline)],
+  [], [], [], [], [AT_KEYWORDS([AT@&t@_CHECK_UNQUOTED])])
+
 AT_CHECK_AT([Logging],
   [[AT_INIT([artificial test suite])
     dnl intentionally write failing tests, to see what gets logged
