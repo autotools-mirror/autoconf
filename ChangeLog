@@ -1,5 +1,11 @@
 2009-04-24  Eric Blake  <ebb9@byu.net>
 
+	manual: Use consistent spelling of here-document.
+	* doc/autoconf.texi (Defining Symbols, Programming in M4sh)
+	(Common Shell Constructs, Macro Names, Writing Testsuites): Fix
+	spelling.
+	Reported by Ralf Wildenhues.
+
 	Make AT_CHECK_UNQUOTED more like AC_DEFINE_UNQUOTED.
 	* lib/autotest/general.m4 (AT_CHECK_NOESCAPE): Keep older,
 	undocumented semantics, where unbalanced " cannot be used in the

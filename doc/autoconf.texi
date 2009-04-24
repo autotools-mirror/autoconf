@@ -8760,7 +8760,7 @@ the last one wins.
 Like @code{AC_DEFINE}, but three shell expansions are
 performed---once---on @var{variable} and @var{value}: variable expansion
 (@samp{$}), command substitution (@samp{`}), and backslash escaping
-(@samp{\}), as if in an unquoted here-doc.  Single and double quote
+(@samp{\}), as if in an unquoted here-document.  Single and double quote
 characters in the value have no
 special meaning.  Use this macro instead of @code{AC_DEFINE} when
 @var{variable} or @var{value} is a shell variable.  Examples:
@@ -12358,7 +12358,7 @@ A mess; trouble.  [Obs.] --Beau.@: & Fl.
 
 M4sh reserves the M4 macro namespace @samp{^_AS_} for internal use, and
 the namespace @samp{^AS_} for M4sh macros.  It also reserves the shell
-and environment variable namespace @samp{^as_}, and the here-doc
+and environment variable namespace @samp{^as_}, and the here-document
 delimiter namespace @samp{^_AS[A-Z]} in the output file.  You should not
 define your own macros or output shell code that conflicts with these
 namespaces.
@@ -12440,10 +12440,10 @@ The default for @var{chars} (@samp{\"$`}) is the set of characters
 needing escapes when @var{string} will be used literally within double
 quotes.  One common variant is the set of characters to protect when
 @var{string} will be used literally within back-ticks or an unquoted
-here-doc (@samp{\$`}).  Another common variant is @samp{""}, which can
+here-document (@samp{\$`}).  Another common variant is @samp{""}, which can
 be used to form a double-quoted string containing the same expansions
 that would have occurred if @var{string} were expanded in an unquoted
-here-doc; however, when using this variant, care must be taken that
+here-document; however, when using this variant, care must be taken that
 @var{string} does not use double quotes within complex variable
 expansions (such as @samp{$@{foo-`echo "hi"`@}}) that would be broken
 with improper escapes.
@@ -13052,7 +13052,7 @@ namespace @samp{^AC_} to prevent them from accidentally conflicting with
 other text; Autoconf also reserves the namespace @samp{^_AC_} for
 internal macros.  All shell variables that they use for internal
 purposes have mostly-lowercase names starting with @samp{ac_}.  Autoconf
-also uses here-doc delimiters in the namespace @samp{^_AC[A-Z]}.  During
+also uses here-document delimiters in the namespace @samp{^_AC[A-Z]}.  During
 @command{configure}, files produced by Autoconf make heavy use of the
 file system namespace @samp{^conf}.
 
@@ -22283,7 +22283,7 @@ namespace @samp{^AT_} to prevent them from accidentally conflicting with
 other text; Autoconf also reserves the namespace @samp{^_AT_} for
 internal macros.  All shell variables used in the testsuite for internal
 purposes have mostly-lowercase names starting with @samp{at_}.  Autotest
-also uses here-doc delimiters in the namespace @samp{^_AT[A-Z]}, and
+also uses here-document delimiters in the namespace @samp{^_AT[A-Z]}, and
 makes use of the file system namespace @samp{^at-}.
 
 Since Autoconf is built on top of M4sugar (@pxref{Programming in
@@ -22440,7 +22440,7 @@ expansion (@samp{$}), command substitution (@samp{`}), and backslash
 escaping (@samp{\}) on comparison text given in the @var{stdout} and
 @var{stderr} arguments; if the text includes a trailing newline, this
 would be the same as if it were specified via an unquoted
-here-doc.  (However, there is no difference in the interpretation
+here-document.  (However, there is no difference in the interpretation
 of @var{commands}).
 
 @table @samp
