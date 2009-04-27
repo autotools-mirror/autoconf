@@ -1,3 +1,17 @@
+2009-05-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Limit stderr logging for C compiler version.
+	* lib/autoconf/general.m4 (_AC_RUN_LOG_LIMIT, _AC_DO_LIMIT): New
+	internal macros, equivalent to _AC_RUN_LOG and _AC_DO, but with
+	an optional additional argument to limit the number of lines of
+	stderr output logged, defaulting to 10.
+	* lib/autoconf/c.m4 (AC_PROG_CC, AC_PROG_CXX, AC_PROG_OBJC): Use
+	_AC_DO_LIMIT for capturing compiler version output.  Also test
+	-qversion, for the IBM xlc compiler.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC): Likewise.
+	* THANKS: Update.
+	Report by Christian Rössel and John R. Cary against Libtool.
+
 2009-04-24  Eric Blake  <ebb9@byu.net>
 
 	Fix quoting of m4 macros in AT_CHECK.

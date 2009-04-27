@@ -2311,6 +2311,26 @@ AC_DEFUN([_AC_RUN_LOG_STDERR],
   _AS_ECHO_LOG([\$? = $ac_status])
   test $ac_status = 0; }])
 
+
+# _AC_RUN_LOG_LIMIT(COMMAND, LOG-COMMANDS, [LINES])
+# -------------------------------------------------
+# Like _AC_RUN_LOG, but only log LINES lines from stderr,
+# defaulting to 10 lines.
+AC_DEFUN([_AC_RUN_LOG_LIMIT],
+[{ { $2; } >&AS_MESSAGE_LOG_FD
+  ($1) 2>conftest.err
+  ac_status=$?
+  if test -s conftest.err; then
+    sed 'm4_default([$3], [10])a\
+... rest of stderr output deleted ...
+         m4_default([$3], [10])q' conftest.err >conftest.er1
+    cat conftest.er1 >&AS_MESSAGE_LOG_FD
+    rm -f conftest.er1 conftest.err
+  fi
+  _AS_ECHO_LOG([\$? = $ac_status])
+  test $ac_status = 0; }])
+
+
 # _AC_DO_ECHO(COMMAND)
 # --------------------
 # Echo COMMAND.  This is designed to be used just before evaluating COMMAND.
@@ -2370,6 +2390,15 @@ AC_DEFUN([_AC_DO_VAR],
 AC_DEFUN([_AC_DO_TOKENS],
 [{ ac_try='$1'
   _AC_DO([$ac_try]); }])
+
+
+# _AC_DO_LIMIT(COMMAND, [LINES])
+# ------------------------------
+# Like _AC_DO, but limit the amount of stderr lines logged to LINES.
+# For internal use only.
+AC_DEFUN([_AC_DO_LIMIT],
+[_AC_RUN_LOG_LIMIT([eval "$1"],
+		   [_AC_DO_ECHO([$1])], [$2])])
 
 
 # _AC_EVAL(COMMAND)

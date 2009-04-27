@@ -354,9 +354,9 @@ AC_CHECK_TOOLS([]_AC_FC[],
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
 set X $ac_compile
 ac_compiler=$[2]
-_AC_DO([$ac_compiler --version >&AS_MESSAGE_LOG_FD])
-_AC_DO([$ac_compiler -v >&AS_MESSAGE_LOG_FD])
-_AC_DO([$ac_compiler -V >&AS_MESSAGE_LOG_FD])
+for ac_option in --version -v -V -qversion; do
+  _AC_DO_LIMIT([$ac_compiler $ac_option >&AS_MESSAGE_LOG_FD])
+done
 rm -f a.out
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
