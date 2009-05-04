@@ -1,8 +1,12 @@
-# m4.m4 serial 5
-dnl Copyright (C) 2000, 2006, 2007, 2008 Free Software Foundation, Inc.
-dnl This file is free software; the Free Software Foundation
-dnl gives unlimited permission to copy and/or distribute it,
-dnl with or without modifications, as long as this notice is preserved.
+# m4.m4 serial 6
+
+# Copyright (C) 2000, 2006, 2007, 2008, 2009 Free Software Foundation,
+# Inc.
+
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.  This file is offered as-is,
+# without warranty of any kind.
 
 # AC_PROG_GNU_M4
 # --------------

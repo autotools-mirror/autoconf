@@ -1,5 +1,25 @@
 2009-05-19  Eric Blake  <ebb9@byu.net>
 
+	Update uses of all-permissive license.
+	* ChangeLog: Relicense under GPL.
+	* ChangeLog.0: Likewise.
+	* ChangeLog.1: Likewise.
+	* ChangeLog.2: Likewise.
+	* THANKS: Likewise.
+	* m4/m4.m4: Use latest wording of FSF all-permissive license.
+	* m4/make-case.m4: Likewise.
+	* doc/install.texi: Likewise.
+	* tests/statesave.m4: Relicense to match rest of testsuite; this
+	file does not need all-permissive license since it is not designed
+	for reuse by other packages.
+	* BUGS: Relicense under all-permissive license.
+	* HACKING: Likewise.
+	* NEWS: Likewise.
+	* README: Likewise.
+	* README-alpha: Likewise.
+	* README-hacking: Likewise.
+	* TODO: Likewise.
+
 	Update some upstream files.
 	* build-aux/config.guess: Resynchronize from upstream.
 	* build-aux/gnupload: Likewise.
@@ -19432,6 +19452,16 @@
 	Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 	Free Software Foundation, Inc.
 
-	Copying and distribution of this file, with or without
-	modification, are permitted provided the copyright notice and this
-	notice are preserved.
+	This program is free software: you can redistribute it and/or
+	modify it under the terms of the GNU General Public License as
+	published by the Free Software Foundation, either version 3 of the
+	License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see
+	<http://www.gnu.org/licenses/>.
