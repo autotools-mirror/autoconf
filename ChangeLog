@@ -1,3 +1,16 @@
+2009-05-26  Eric Blake  <ebb9@byu.net>
+
+	Sanitize more problematic environment variables.
+	* doc/autoconf.texi (Environment Variable Index): Add more
+	entries, particularly for precious variables and known culprit
+	variables.  Needed to avoid overfull vbox.
+	(Special Shell Variables) <CLICOLOR_FORCE, GREP_OPTIONS>: Add
+	variables known to cause misbehavior.
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Unset variables
+	known to cause problems.
+	* THANKS: Update.
+	Based on reports from Ilya Bobir and Joey Mingrone.
+
 2009-05-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Document VPATH = $(variable) issue in VPATH chapter.

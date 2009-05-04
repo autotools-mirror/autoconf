@@ -274,6 +274,9 @@ shell if you do have one.], [$[]0: ], [], [62])")
 fi
 SHELL=${CONFIG_SHELL-/bin/sh}
 export SHELL
+# Unset more variables known to interfere with behavior of common tools.
+CLICOLOR_FORCE= GREP_OPTIONS=
+unset CLICOLOR_FORCE GREP_OPTIONS
 _m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL
 
 

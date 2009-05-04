@@ -2099,6 +2099,7 @@ but there is actually a hidden slave: @file{config.status}.
 results of @file{configure}.  The most typical task of
 @file{config.status} is to @emph{instantiate} files.
 
+@acindex{CONFIG_@var{ITEMS}}
 This section describes the common behavior of the four standard
 instantiating macros: @code{AC_CONFIG_FILES}, @code{AC_CONFIG_HEADERS},
 @code{AC_CONFIG_COMMANDS} and @code{AC_CONFIG_LINKS}.  They all
@@ -2327,7 +2328,7 @@ Autoconf macros set additional output variables, which are mentioned in
 the descriptions for those macros.  @xref{Output Variable Index}, for a
 complete list of output variables.  @xref{Installation Directory
 Variables}, for the list of the preset ones related to installation
-directories.  Below are listed the other preset ones.  They all are
+directories.  Below are listed the other preset ones, many of which are
 precious variables (@pxref{Setting Output Variables},
 @code{AC_ARG_VAR}).
 
@@ -2338,6 +2339,7 @@ precious variables (@pxref{Setting Output Variables},
 @c actress
 
 @defvar CFLAGS
+@evindex CFLAGS
 @ovindex CFLAGS
 Debugging and optimization options for the C compiler.  If it is not set
 in the environment when @command{configure} runs, the default value is set
@@ -2392,6 +2394,7 @@ needs to be processed by @command{configure} in order to be used.
 @end defvar
 
 @defvar CPPFLAGS
+@evindex CPPFLAGS
 @ovindex CPPFLAGS
 Preprocessor options for the C, C++, and Objective C preprocessors and
 compilers.  If
@@ -2416,6 +2419,7 @@ might run into.
 @end defvar
 
 @defvar CXXFLAGS
+@evindex CXXFLAGS
 @ovindex CXXFLAGS
 Debugging and optimization options for the C++ compiler.  It acts like
 @code{CFLAGS}, but for C++ instead of C.
@@ -2453,6 +2457,7 @@ want to use it.
 @end defvar
 
 @defvar ERLCFLAGS
+@evindex ERLCFLAGS
 @ovindex ERLCFLAGS
 Debugging and optimization options for the Erlang compiler.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
@@ -2461,6 +2466,7 @@ programs to test for Erlang features.
 @end defvar
 
 @defvar FCFLAGS
+@evindex FCFLAGS
 @ovindex FCFLAGS
 Debugging and optimization options for the Fortran compiler.  If it
 is not set in the environment when @command{configure} runs, the default
@@ -2470,6 +2476,7 @@ programs to test for Fortran features.
 @end defvar
 
 @defvar FFLAGS
+@evindex FFLAGS
 @ovindex FFLAGS
 Debugging and optimization options for the Fortran 77 compiler.  If it
 is not set in the environment when @command{configure} runs, the default
@@ -2479,6 +2486,7 @@ programs to test for Fortran 77 features.
 @end defvar
 
 @defvar LDFLAGS
+@evindex LDFLAGS
 @ovindex LDFLAGS
 Options for the linker.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
@@ -2495,6 +2503,7 @@ Don't use this variable to pass library names
 @end defvar
 
 @defvar LIBS
+@evindex LIBS
 @ovindex LIBS
 @option{-l} options to pass to the linker.  The default value is empty,
 but some Autoconf macros may prepend extra libraries to this variable if
@@ -2504,6 +2513,7 @@ programs to test for C, C++, and Fortran features.
 @end defvar
 
 @defvar OBJCFLAGS
+@evindex OBJCFLAGS
 @ovindex OBJCFLAGS
 Debugging and optimization options for the Objective C compiler.  It
 acts like @code{CFLAGS}, but for Objective C instead of C.
@@ -3996,6 +4006,8 @@ information about portability problems with Sed.
 
 @defmac AC_PROG_YACC
 @acindex{PROG_YACC}
+@evindex YACC
+@evindex YFLAGS
 @ovindex YACC
 If @code{bison} is found, set output variable @code{YACC} to @samp{bison
 -y}.  Otherwise, if @code{byacc} is found, set @code{YACC} to
@@ -6704,6 +6716,8 @@ makes this invalid.  That is why Autoconf stopped issuing
 
 @defmac AC_PROG_CC (@ovar{compiler-search-list})
 @acindex{PROG_CC}
+@evindex CC
+@evindex CFLAGS
 @ovindex CC
 @ovindex CFLAGS
 Determine a C compiler to use.  If @code{CC} is not already set in the
@@ -6764,6 +6778,7 @@ rule.
 
 @defmac AC_PROG_CPP
 @acindex{PROG_CPP}
+@evindex CPP
 @ovindex CPP
 Set output variable @code{CPP} to a command that runs the
 C preprocessor.  If @samp{$CC -E} doesn't work, @file{/lib/cpp} is used.
@@ -7095,6 +7110,8 @@ compiler fix the header files automatically when installed.
 
 @defmac AC_PROG_CXX (@ovar{compiler-search-list})
 @acindex{PROG_CXX}
+@evindex CXX
+@evindex CXXFLAGS
 @ovindex CXX
 @ovindex CXXFLAGS
 Determine a C++ compiler to use.  Check whether the environment variable
@@ -7126,6 +7143,7 @@ compilers.
 
 @defmac AC_PROG_CXXCPP
 @acindex{PROG_CXXCPP}
+@evindex CXXCPP
 @ovindex CXXCPP
 Set output variable @code{CXXCPP} to a command that runs the C++
 preprocessor.  If @samp{$CXX -E} doesn't work, @file{/lib/cpp} is used.
@@ -7154,6 +7172,8 @@ if it does not.
 
 @defmac AC_PROG_OBJC (@ovar{compiler-search-list})
 @acindex{PROG_OBJC}
+@evindex OBJC
+@evindex OBJCFLAGS
 @ovindex OBJC
 @ovindex OBJCFLAGS
 Determine an Objective C compiler to use.  If @code{OBJC} is not already
@@ -7180,6 +7200,7 @@ compiler (@option{-O2} on systems where @command{gcc} does not accept
 
 @defmac AC_PROG_OBJCPP
 @acindex{PROG_OBJCPP}
+@evindex OBJCPP
 @ovindex OBJCPP
 Set output variable @code{OBJCPP} to a command that runs the Objective C
 preprocessor.  If @samp{$OBJC -E} doesn't work, @file{/lib/cpp} is used.
@@ -7195,6 +7216,8 @@ Erlang/OTP programs:
 
 @defmac AC_ERLANG_PATH_ERLC (@ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{ERLANG_PATH_ERLC}
+@evindex ERLC
+@evindex ERLCFLAGS
 @ovindex ERLC
 @ovindex ERLCFLAGS
 Determine an Erlang compiler to use.  If @code{ERLC} is not already set in the
@@ -7221,6 +7244,7 @@ program is not found.
 
 @defmac AC_ERLANG_PATH_ERL (@ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{ERLANG_PATH_ERL}
+@evindex ERL
 @ovindex ERL
 Determine an Erlang interpreter to use.  If @code{ERL} is not already
 set in the
@@ -7266,6 +7290,8 @@ section.
 
 @defmac AC_PROG_F77 (@ovar{compiler-search-list})
 @acindex{PROG_F77}
+@evindex F77
+@evindex FFLAGS
 @ovindex F77
 @ovindex FFLAGS
 Determine a Fortran 77 compiler to use.  If @code{F77} is not already
@@ -7294,6 +7320,8 @@ where @code{g77} does not accept @option{-g}).  Otherwise, set
 
 @defmac AC_PROG_FC (@ovar{compiler-search-list}, @ovar{dialect})
 @acindex{PROG_FC}
+@evindex FC
+@evindex FCFLAGS
 @ovindex FC
 @ovindex FCFLAGS
 Determine a Fortran compiler to use.  If @code{FC} is not already set in
@@ -14941,6 +14969,7 @@ $ @kbd{zsh -c 'false; $empty; echo $?'}
 @end example
 
 @item _
+@evindex _
 Many shells reserve @samp{$_} for various purposes, e.g., the name of
 the last command executed.
 
@@ -14974,6 +15003,14 @@ absolute or anchored at @samp{./}, as in @samp{abs=`cd ./src && pwd`}.
 
 Configure scripts use M4sh, which automatically unsets @env{CDPATH} if
 possible, so you need not worry about this problem in those scripts.
+
+@item CLICOLOR_FORCE
+@evindex CLICOLOR_FORCE
+When this variable is set, some implementations of tools like
+@command{ls} attempt to add color to their output via terminal escape
+sequences, even when the output is not directed to a terminal, and can
+thus cause spurious failures in scripts.  Configure scripts use M4sh,
+which automatically unsets this variable.
 
 @item DUALCASE
 @evindex DUALCASE
@@ -15013,11 +15050,20 @@ PS4='+ '
 see @pxref{unset, , Limitations of Shell Builtins}).
 
 @item FPATH
+@evindex FPATH
 The Korn shell uses @env{FPATH} to find shell functions, so avoid
 @env{FPATH} in portable scripts.  @env{FPATH} is consulted after
 @env{PATH}, but you still need to be wary of tests that use @env{PATH}
 to find whether a command exists, since they might report the wrong
 result if @env{FPATH} is also set.
+
+@item GREP_OPTIONS
+@evindex GREP_OPTIONS
+When this variable is set, some implementations of @command{grep} honor
+these options, even if the options include direction to enable colored
+output via terminal escape sequences, and the result can cause spurious
+failures when the output is not directed to a terminal.  Configure
+scripts use M4sh, which automatically unsets this variable.
 
 @item IFS
 @evindex IFS
@@ -15090,6 +15136,7 @@ are treated like their Posix brethren (@env{LC_COLLATE},
 etc.)@: as described above.
 
 @item LINENO
+@evindex LINENO
 Most modern shells provide the current line number in @code{LINENO}.
 Its value is the line number of the beginning of the current command.
 M4sh, and hence Autoconf, attempts to execute @command{configure} with
@@ -15258,6 +15305,7 @@ points to the wrong directory.  Use @samp{`pwd`} rather than
 @samp{$PWD}.
 
 @item RANDOM
+@evindex RANDOM
 Many shells provide @code{RANDOM}, a variable that returns a different
 integer each time it is used.  Most of the time, its value does not
 change when it is not used, but on @sc{irix} 6.5 the value changes all
@@ -15266,6 +15314,7 @@ practice to use @code{$RANDOM} as part of a file name, but code
 shouldn't rely on @code{$RANDOM} expanding to a nonempty string.
 
 @item status
+@evindex status
 This variable is an alias to @samp{$?} for @code{zsh} (at least 3.1.6),
 hence read-only.  Do not use it.
 @end table
@@ -22077,6 +22126,8 @@ The @code{LIBOBJDIR} feature is experimental.
 @c the anchor keeps the old node name, to try to avoid breaking links
 @anchor{AC_FOO_IFELSE vs AC_TRY_FOO}
 
+@acindex{@var{ACT}_IFELSE}
+@acindex{TRY_@var{ACT}}
 Since Autoconf 2.50, internal codes uses @code{AC_PREPROC_IFELSE},
 @code{AC_COMPILE_IFELSE}, @code{AC_LINK_IFELSE}, and
 @code{AC_RUN_IFELSE} on one hand and @code{AC_LANG_SOURCES},
@@ -23640,8 +23691,8 @@ have free time again.  I think.  Yeah, right.)
 @node Environment Variable Index
 @appendixsec Environment Variable Index
 
-This is an alphabetical list of the environment variables that Autoconf
-checks.
+This is an alphabetical list of the environment variables that might
+influence Autoconf checks.
 
 @printindex ev
 
