@@ -1,5 +1,12 @@
 2009-05-19  Eric Blake  <ebb9@byu.net>
 
+	Update some upstream files.
+	* build-aux/config.guess: Resynchronize from upstream.
+	* build-aux/gnupload: Likewise.
+	* build-aux/vc-list-files: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+	* doc/gendocs_template: Likewise.
+
 	Don't mention undocumented interface in NEWS.
 	* NEWS: Correct earlier entry about AS_FOR.
 
