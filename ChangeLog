@@ -1,3 +1,9 @@
+2009-05-13  Eric Blake  <ebb9@byu.net>
+
+	Document zsh bug with empty commands.
+	* doc/autoconf.texi (Special Shell Variables) <?>: Add mention of
+	more problems with $?.
+
 2009-05-11  Patrick Welche  <prlw1@cam.ac.uk>  (tiny change)
 
 	Also try X11R7 when looking for X11 files, for NetBSD.
