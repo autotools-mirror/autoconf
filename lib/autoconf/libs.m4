@@ -236,21 +236,25 @@ m4_define([_AC_PATH_X_DIRECT],
 # Check X11 before X11Rn because it is often a symlink to the current release.
 ac_x_header_dirs='
 /usr/X11/include
+/usr/X11R7/include
 /usr/X11R6/include
 /usr/X11R5/include
 /usr/X11R4/include
 
 /usr/include/X11
+/usr/include/X11R7
 /usr/include/X11R6
 /usr/include/X11R5
 /usr/include/X11R4
 
 /usr/local/X11/include
+/usr/local/X11R7/include
 /usr/local/X11R6/include
 /usr/local/X11R5/include
 /usr/local/X11R4/include
 
 /usr/local/include/X11
+/usr/local/include/X11R7
 /usr/local/include/X11R6
 /usr/local/include/X11R5
 /usr/local/include/X11R4

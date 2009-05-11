@@ -1,3 +1,9 @@
+2009-05-11  Patrick Welche  <prlw1@cam.ac.uk>  (tiny change)
+
+	Also try X11R7 when looking for X11 files, for NetBSD.
+	* lib/autoconf/libs.m4 (_AC_PATH_X_DIRECT): Also try directories
+	with X11R7 in the name.
+
 2009-05-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Limit stderr logging for C compiler version.
