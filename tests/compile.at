@@ -2,8 +2,8 @@
 
 AT_BANNER([Low level compiling/preprocessing macros.])
 
-# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007, 2008 Free Software
-# Foundation, Inc.
+# Copyright (C) 2000, 2001, 2003, 2005, 2006, 2007, 2008, 2009  Free
+# Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -214,6 +214,24 @@ AC_COMPILE_IFELSE([
     choke me
     #endif
   ]])], [], AS_EXIT([77]))
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+# This test should be skipped on systems without a C++ compiler.
+AT_DATA([configure.ac],
+[[AC_INIT
+
+AC_PROG_CXX
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([
+  AC_LANG_PROGRAM([[
+    #ifndef __cplusplus
+    choke me
+    #endif
+  ]])], [], AS_EXIT([77]))
+AC_LANG_POP([C++])
 ]])
 
 AT_CHECK_AUTOCONF
