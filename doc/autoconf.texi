@@ -509,6 +509,7 @@ Portable Make Programming
 * Macros and Submakes::         @code{make macro=value} and submakes
 * The Make Macro MAKEFLAGS::    @code{$(MAKEFLAGS)} portability issues
 * The Make Macro SHELL::        @code{$(SHELL)} portability issues
+* Parallel Make::               Parallel @command{make} quirks
 * Comments in Make Rules::      Other problems with Make comments
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
@@ -17567,6 +17568,7 @@ itself.
 * Macros and Submakes::         @code{make macro=value} and submakes
 * The Make Macro MAKEFLAGS::    @code{$(MAKEFLAGS)} portability issues
 * The Make Macro SHELL::        @code{$(SHELL)} portability issues
+* Parallel Make::               Parallel @command{make} quirks
 * Comments in Make Rules::      Other problems with Make comments
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
@@ -17877,6 +17879,66 @@ $ @kbd{env SHELL=sh gmake -e SHELL=/bin/ksh}  # GNU make 3.81
 /bin/ksh
 sh
 @end example
+
+@node Parallel Make
+@section Parallel Make
+@cindex Parallel @command{make}
+
+Support for parallel execution in @command{make} implementation varies.
+Generally, using @acronym{GNU} make is your best bet.  When NetBSD
+@command{make} is invoked with @option{-j@var{N}}, it will reuse the
+same shell for multiple commands within one recipe.  This can have
+unexpected consequences.@footnote{Note that @acronym{GNU} make has
+heuristics to avoid spawning a shell at all if the command is deemed
+safe to be executed directly.} For example, change of directories or
+variables persist between commands:
+
+@example
+all:
+        @@var=value; cd /; pwd; echo $$var; echo $$$$
+        @@pwd; echo $$var; echo $$$$
+@end example
+
+@noindent
+may output the following with @code{make -j1}:
+
+@example
+--- all ---
+/
+value
+32235
+/
+value
+32235
+@end example
+
+while without @option{-j1}, or with @option{-B}, the output looks less
+surprising:
+
+@example
+/
+value
+32238
+/tmp
+
+32239
+@end example
+
+Another consequence of this is that, if one command in a recipe uses
+@code{exit 0} to indicate a successful exit, the shell will be gone
+and the remaining commands of this recipe will not be executed.
+
+The above example also shows additional status output NetBSD
+@command{make} produces in parallel mode for targets being updated.
+
+Furthermore, parallel NetBSD @command{make} will route standard error
+from commands that it spawns into its own standard output, and may
+remove leading whitespace from output lines.
+
+You can avoid these issues by using the @option{-B} option to enable
+compatibility semantics.  However, that will effectively also disable
+all parallelism as that will cause prerequisites to be updated in the
+order they are listed in a rule.
 
 @node Comments in Make Rules
 @section Comments in Make Rules
