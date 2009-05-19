@@ -3,8 +3,8 @@ GNU Autoconf NEWS - User visible changes.
 * Major changes in Autoconf 2.64 (2009-??-??) [stable]
   Released by Eric Blake, based on git versions 2.63b.*.
 
-** AS_IF, AS_CASE, and AS_FOR have been taught to avoid syntax errors
-   even when given arguments that expand to just whitespace.
+** AS_IF and AS_CASE have been taught to avoid syntax errors even when
+   given arguments that expand to just whitespace.
 
 ** Ensure AT_CHECK can support commands that include a # given with
    proper m4 quoting.  For shell comments, this is a new feature; for
@@ -806,8 +806,8 @@ One packaging problem fixed (config/install-sh was not executable).
 
 Release tips:
 
-           Have your configure.ac checked by autoscan ("autoscan").
-             Try the warning options ("autoreconf -fv -Wall").
+	   Have your configure.ac checked by autoscan ("autoscan").
+	     Try the warning options ("autoreconf -fv -Wall").
 
 ** Documentation
 
@@ -870,8 +870,8 @@ Release tips:
   avoid useless backslashes-- because Libtool 1.4.3 contains a
 
   AC_DEFINE([error_t], [int],
-            [Define to a type to use for \`error_t' if it is not
-             otherwise available.])
+	    [Define to a type to use for \`error_t' if it is not
+	     otherwise available.])
 
   We have to quote the single quotes and backslashes with \.  The old
   compatibility scheme saw that ` was backslashed, and therefore did
@@ -1370,14 +1370,14 @@ test cases in this new framework.
   They now obey sh: you should no longer use shell variables as
   argument.  Instead of
 
-        test "$package_foo_enabled" = yes && $my_subdirs="$my_subdirs foo"
-        AC_CONFIG_SUBDIRS($my_subdirs)
+	test "$package_foo_enabled" = yes && $my_subdirs="$my_subdirs foo"
+	AC_CONFIG_SUBDIRS($my_subdirs)
 
   write
 
-        if test "$package_foo_enabled" = yes; then
-          AC_CONFIG_SUBDIRS(foo)
-        fi
+	if test "$package_foo_enabled" = yes; then
+	  AC_CONFIG_SUBDIRS(foo)
+	fi
 
 - AC_HELP_STRING
   To format an Autoconf macro's help string so that it looks pretty

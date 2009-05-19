@@ -1,3 +1,8 @@
+2009-05-19  Eric Blake  <ebb9@byu.net>
+
+	Don't mention undocumented interface in NEWS.
+	* NEWS: Correct earlier entry about AS_FOR.
+
 2009-05-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	New manual section `Parallel Make'.
