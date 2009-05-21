@@ -1,3 +1,11 @@
+2009-05-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Document VPATH = $(variable) issue in VPATH chapter.
+	* doc/autoconf.texi (Variables listed in VPATH): New node.
+	(Top, VPATH and Make): Adjust menus.
+	(Build Directories): Refer to it.
+	Prompted by report from Bruno Haible.
+
 2009-05-19  Eric Blake  <ebb9@byu.net>
 
 	Update uses of all-permissive license.

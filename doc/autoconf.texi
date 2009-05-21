@@ -519,6 +519,7 @@ Portable Make Programming
 
 @code{VPATH} and Make
 
+* Variables listed in VPATH::   @code{VPATH} must be literal on ancient hosts
 * VPATH and Double-colon::      Problems with @samp{::} on ancient hosts
 * $< in Explicit Rules::        @code{$<} does not work in ordinary rules
 * Automatic Rule Rewriting::    @code{VPATH} goes wild on Solaris
@@ -2953,9 +2954,8 @@ srcdir = @@srcdir@@
 VPATH = @@srcdir@@
 @end example
 
-Do not set @code{VPATH} to the value of another variable, for example
-@samp{VPATH = $(srcdir)}, because some versions of @command{make} do not do
-variable substitutions on the value of @code{VPATH}.
+Do not set @code{VPATH} to the value of another variable (@pxref{Variables
+listed in VPATH}.
 
 @command{configure} substitutes the correct value for @code{srcdir} when
 it produces @file{Makefile}.
@@ -18028,12 +18028,32 @@ Here are some known issues with some @code{VPATH}
 implementations.
 
 @menu
+* Variables listed in VPATH::   @code{VPATH} must be literal on ancient hosts
 * VPATH and Double-colon::      Problems with @samp{::} on ancient hosts
 * $< in Explicit Rules::        @code{$<} does not work in ordinary rules
 * Automatic Rule Rewriting::    @code{VPATH} goes wild on Solaris
 * Tru64 Directory Magic::       @command{mkdir} goes wild on Tru64
 * Make Target Lookup::          More details about @code{VPATH} lookup
 @end menu
+
+@node Variables listed in VPATH
+@subsection Variables listed in @code{VPATH}
+@cindex @code{VPATH} and variables
+@cindex variables and @code{VPATH}
+
+Do not set @code{VPATH} to the value of another variable, for example
+@samp{VPATH = $(srcdir)}, because some ancient versions of
+@command{make} do not do variable substitutions on the value of
+@code{VPATH}.  For example, use this
+
+@example
+srcdir = @@srcdir@@
+VPATH = @@srcdir@@
+@end example
+
+@noindent
+rather than @samp{VPATH = $(srcdir)}.  Note that with @acronym{GNU}
+Automake, there is no need to set this yourself.
 
 @node VPATH and Double-colon
 @subsection @code{VPATH} and Double-colon Rules
