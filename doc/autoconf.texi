@@ -7798,10 +7798,22 @@ presence of certain Erlang libraries.  All those macros require the
 configuration of an Erlang interpreter and an Erlang compiler
 (@pxref{Erlang Compiler and Interpreter}).
 
+@defmac AC_ERLANG_SUBST_ERTS_VER
+@acindex{ERLANG_SUBST_ERTS_VER}
+@ovindex ERLANG_ERTS_VER
+Set the output variable @code{ERLANG_ERTS_VER} to the version of the
+Erlang runtime system (as returned by Erlang's
+@code{erlang:system_info(version)} function).  The result of this test
+is cached if caching is enabled when running @command{configure}.  The
+@code{ERLANG_ERTS_VER} variable is not intended to be used for testing
+for features of specific ERTS versions, but to be used for substituting
+the ERTS version in Erlang/OTP release resource files (@code{.rel}
+files), as shown below.
+@end defmac
+
 @defmac AC_ERLANG_SUBST_ROOT_DIR
 @acindex{ERLANG_SUBST_ROOT_DIR}
 @ovindex ERLANG_ROOT_DIR
-
 Set the output variable @code{ERLANG_ROOT_DIR} to the path to the base
 directory in which Erlang/OTP is installed (as returned by Erlang's
 @code{code:root_dir/0} function).  The result of this test is cached if
@@ -7811,7 +7823,6 @@ caching is enabled when running @command{configure}.
 @defmac AC_ERLANG_SUBST_LIB_DIR
 @acindex{ERLANG_SUBST_LIB_DIR}
 @ovindex ERLANG_LIB_DIR
-
 Set the output variable @code{ERLANG_LIB_DIR} to the path of the library
 directory of Erlang/OTP (as returned by Erlang's
 @code{code:lib_dir/0} function), which subdirectories each contain an installed
@@ -7824,7 +7835,6 @@ when running @command{configure}.
 @acindex{ERLANG_CHECK_LIB}
 @ovindex ERLANG_LIB_DIR_@var{library}
 @ovindex ERLANG_LIB_VER_@var{library}
-
 Test whether the Erlang/OTP library @var{library} is installed by
 calling Erlang's @code{code:lib_dir/1} function.  The result of this
 test is cached if caching is enabled when running @command{configure}.
@@ -7847,6 +7857,35 @@ AC_ERLANG_CHECK_LIB([stdlib],
   [echo "stdlib version \"$ERLANG_LIB_VER_stdlib\""
    echo "is installed in \"$ERLANG_LIB_DIR_stdlib\""],
   [AC_MSG_ERROR([stdlib was not found!])])
+@end example
+
+The @samp{ERLANG_LIB_VER_@var{library}} variables (set by
+@code{AC_ERLANG_CHECK_LIB}) and the @code{ERLANG_ERTS_VER} variable (set
+by @code{AC_ERLANG_SUBST_ERTS_VER}) are not intended to be used for
+testing for features of specific versions of libraries or of the Erlang
+runtime system.  Those variables are intended to be substituted in
+Erlang release resource files (@code{.rel} files).  For instance, to
+generate a @file{example.rel} file for an application depending on the
+@code{stdlib} library, @file{configure.ac} could contain:
+
+@example
+AC_ERLANG_SUBST_ERTS_VER
+AC_ERLANG_CHECK_LIB([stdlib],
+  [],
+  [AC_MSG_ERROR([stdlib was not found!])])
+AC_CONFIG_FILES([example.rel])
+@end example
+
+@noindent
+The @file{example.rel.in} file used to generate @file{example.rel}
+should contain:
+
+@example
+{release,
+    {"@@PACKAGE@@", "@@VERSION@@"},
+    {erts, "@@ERLANG_ERTS_VER@@"},
+    [{stdlib, "@@ERLANG_LIB_VER_stdlib@@"},
+     {@@PACKAGE@@, "@@VERSION@@"}]}.
 @end example
 @end defmac
 

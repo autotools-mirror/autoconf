@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Erlang/OTP language support.
-# Copyright (C) 2006, 2008 Free Software Foundation, Inc.
+# Copyright (C) 2006, 2008, 2009 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -163,7 +163,7 @@ $2
 # Find the Erlang preprocessor.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_PREPROC(Erlang)],
 [m4_warn([syntax],
-         [$0: No preprocessor defined for ]_AC_LANG)])
+	 [$0: No preprocessor defined for ]_AC_LANG)])
 
 # AC_LANG_COMPILER(Erlang)
 # ------------------------
@@ -175,8 +175,7 @@ AC_DEFUN([AC_LANG_COMPILER(Erlang)],
 # AC_ERLANG_CHECK_LIB(LIBRARY, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ----------------------------------------------------------------------
 # Macro for checking if an Erlang library is installed, and to
-# determine its version
-#
+# determine its version.
 AC_DEFUN([AC_ERLANG_CHECK_LIB],
 [AC_REQUIRE([AC_ERLANG_PATH_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_PATH_ERL])[]dnl
@@ -184,29 +183,29 @@ AC_CACHE_CHECK([for Erlang/OTP '$1' library subdirectory],
     [erlang_cv_lib_dir_$1],
     [AC_LANG_PUSH(Erlang)[]dnl
      AC_RUN_IFELSE(
-        [AC_LANG_PROGRAM([], [dnl
-            ReturnValue = case code:lib_dir("[$1]") of
-            {error, bad_name} ->
-                file:write_file("conftest.out", "not found\n"),
-                1;
-            LibDir ->
-                file:write_file("conftest.out", LibDir),
-                0
-            end,
-            halt(ReturnValue)])],
-        [erlang_cv_lib_dir_$1=`cat conftest.out`],
-        [if test ! -f conftest.out; then
-             AC_MSG_FAILURE([test Erlang program execution failed])
-         else
-             erlang_cv_lib_dir_$1="not found"
-         fi])
+	[AC_LANG_PROGRAM([], [dnl
+	    ReturnValue = case code:lib_dir("[$1]") of
+	    {error, bad_name} ->
+		file:write_file("conftest.out", "not found\n"),
+		1;
+	    LibDir ->
+		file:write_file("conftest.out", LibDir),
+		0
+	    end,
+	    halt(ReturnValue)])],
+	[erlang_cv_lib_dir_$1=`cat conftest.out`],
+	[if test ! -f conftest.out; then
+	     AC_MSG_FAILURE([test Erlang program execution failed])
+	 else
+	     erlang_cv_lib_dir_$1="not found"
+	 fi])
      AC_LANG_POP(Erlang)[]dnl
     ])
 AC_CACHE_CHECK([for Erlang/OTP '$1' library version],
     [erlang_cv_lib_ver_$1],
     [AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"],
-        [erlang_cv_lib_ver_$1="not found"],
-        [erlang_cv_lib_ver_$1=`AS_ECHO(["$erlang_cv_lib_dir_$1"]) | sed -n -e 's,^.*-\([[^/-]]*\)$,\1,p'`])[]dnl
+	[erlang_cv_lib_ver_$1="not found"],
+	[erlang_cv_lib_ver_$1=`AS_ECHO(["$erlang_cv_lib_dir_$1"]) | sed -n -e 's,^.*-\([[^/-]]*\)$,\1,p'`])[]dnl
     ])
 AC_SUBST([ERLANG_LIB_DIR_$1], [$erlang_cv_lib_dir_$1])
 AC_SUBST([ERLANG_LIB_VER_$1], [$erlang_cv_lib_ver_$1])
@@ -216,8 +215,7 @@ AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"], [$3], [$2])
 
 # AC_ERLANG_SUBST_ROOT_DIR
 # ------------------------
-# Determines the Erlang/OTP root directory
-#
+# Determines the Erlang/OTP root directory.
 AC_DEFUN([AC_ERLANG_SUBST_ROOT_DIR],
 [AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
@@ -225,13 +223,13 @@ AC_CACHE_CHECK([for Erlang/OTP root directory],
     [erlang_cv_root_dir],
     [AC_LANG_PUSH(Erlang)[]dnl
      AC_RUN_IFELSE(
-        [AC_LANG_PROGRAM([], [dnl
-            RootDir = code:root_dir(),
-            file:write_file("conftest.out", RootDir),
-            ReturnValue = 0,
-            halt(ReturnValue)])],
-        [erlang_cv_root_dir=`cat conftest.out`],
-        [AC_MSG_FAILURE([test Erlang program execution failed])])
+	[AC_LANG_PROGRAM([], [dnl
+	    RootDir = code:root_dir(),
+	    file:write_file("conftest.out", RootDir),
+	    ReturnValue = 0,
+	    halt(ReturnValue)])],
+	[erlang_cv_root_dir=`cat conftest.out`],
+	[AC_MSG_FAILURE([test Erlang program execution failed])])
      AC_LANG_POP(Erlang)[]dnl
     ])
 AC_SUBST([ERLANG_ROOT_DIR], [$erlang_cv_root_dir])
@@ -247,13 +245,13 @@ AC_CACHE_CHECK([for Erlang/OTP library base directory],
     [erlang_cv_lib_dir],
     [AC_LANG_PUSH(Erlang)[]dnl
      AC_RUN_IFELSE(
-        [AC_LANG_PROGRAM([], [dnl
-            LibDir = code:lib_dir(),
-            file:write_file("conftest.out", LibDir),
-            ReturnValue = 0,
-            halt(ReturnValue)])],
-        [erlang_cv_lib_dir=`cat conftest.out`],
-        [AC_MSG_FAILURE([test Erlang program execution failed])])
+	[AC_LANG_PROGRAM([], [dnl
+	    LibDir = code:lib_dir(),
+	    file:write_file("conftest.out", LibDir),
+	    ReturnValue = 0,
+	    halt(ReturnValue)])],
+	[erlang_cv_lib_dir=`cat conftest.out`],
+	[AC_MSG_FAILURE([test Erlang program execution failed])])
      AC_LANG_POP(Erlang)[]dnl
     ])
 AC_SUBST([ERLANG_LIB_DIR], [$erlang_cv_lib_dir])
@@ -262,11 +260,9 @@ AC_SUBST([ERLANG_LIB_DIR], [$erlang_cv_lib_dir])
 
 # AC_ERLANG_SUBST_INSTALL_LIB_DIR
 # -------------------------------
-#
 # Directories for installing Erlang/OTP packages are separated from the
 # directories determined by running the Erlang/OTP installation that is used
 # for building.
-#
 AC_DEFUN([AC_ERLANG_SUBST_INSTALL_LIB_DIR],
 [AC_MSG_CHECKING([for Erlang/OTP library installation base directory])
 AC_ARG_VAR([ERLANG_INSTALL_LIB_DIR],
@@ -286,7 +282,8 @@ AC_DEFUN([AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR],
 [AC_REQUIRE([AC_ERLANG_SUBST_INSTALL_LIB_DIR])[]dnl
 AC_MSG_CHECKING([for Erlang/OTP '$1' library installation subdirectory])
 AC_ARG_VAR([ERLANG_INSTALL_LIB_DIR_$1],
-    [Erlang/OTP '$1' library installation subdirectory [ERLANG_INSTALL_LIB_DIR/$1-$2]])
+    [Erlang/OTP '$1' library installation subdirectory
+       [ERLANG_INSTALL_LIB_DIR/$1-$2]])
 if test -n "$ERLANG_INSTALL_LIB_DIR_$1"; then
     AC_MSG_RESULT([$ERLANG_INSTALL_LIB_DIR_$1])
 else
@@ -294,3 +291,26 @@ else
     AC_MSG_RESULT([$ERLANG_INSTALL_LIB_DIR/$1-$2])
 fi
 ])# AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR
+
+
+# AC_ERLANG_SUBST_ERTS_VER
+# ------------------------
+# Determines the Erlang runtime system version.
+AC_DEFUN([AC_ERLANG_SUBST_ERTS_VER],
+[AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
+AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
+AC_CACHE_CHECK([for Erlang/OTP ERTS version],
+    [erlang_cv_erts_ver],
+    [AC_LANG_PUSH([Erlang])[]dnl
+     AC_RUN_IFELSE(
+	[AC_LANG_PROGRAM([], [dnl
+	    Version = erlang:system_info(version),
+	    file:write_file("conftest.out", Version),
+	    ReturnValue = 0,
+	    halt(ReturnValue)])],
+	[erlang_cv_erts_ver=`cat conftest.out`],
+	[AC_MSG_FAILURE([test Erlang program execution failed])])
+     AC_LANG_POP([Erlang])[]dnl
+    ])
+AC_SUBST([ERLANG_ERTS_VER], [$erlang_cv_erts_ver])
+])# AC_ERLANG_SUBST_ERTS_VER

@@ -1,3 +1,14 @@
+2009-05-28  Romain Lenglet  <romain.lenglet@laposte.net>
+
+	New AC_ERLANG_SUBST_ERTS_VER macro.
+	* lib/autoconf/erlang.m4: Add macro AC_ERLANG_SUBST_ERTS_VER.
+	* doc/autoconf.texi (Erlang Libraries): Document
+	AC_ERLANG_SUBST_ERTS_VER.
+	* NEWS: Likewise.
+	* AUTHORS: Update Romain Lenglet's email address.
+	* THANKS: Update.
+	Suggested by Ruslan Babayev.
+
 2009-05-26  Eric Blake  <ebb9@byu.net>
 
 	Sanitize more problematic environment variables.
