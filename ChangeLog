@@ -1,3 +1,9 @@
+2009-05-28  Jim Meyering  <meyering@redhat.com>
+
+	Fix syntax errors in autoconf.texi.
+	* doc/autoconf.texi (Erlang Libraries): @-escape curly braces
+	in example code.
+
 2009-05-28  Romain Lenglet  <romain.lenglet@laposte.net>
 
 	New AC_ERLANG_SUBST_ERTS_VER macro.

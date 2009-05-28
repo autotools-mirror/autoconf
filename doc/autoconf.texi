@@ -7881,11 +7881,11 @@ The @file{example.rel.in} file used to generate @file{example.rel}
 should contain:
 
 @example
-{release,
-    {"@@PACKAGE@@", "@@VERSION@@"},
-    {erts, "@@ERLANG_ERTS_VER@@"},
-    [{stdlib, "@@ERLANG_LIB_VER_stdlib@@"},
-     {@@PACKAGE@@, "@@VERSION@@"}]}.
+@{release,
+    @{"@@PACKAGE@@", "@@VERSION@@"@},
+    @{erts, "@@ERLANG_ERTS_VER@@"@},
+    [@{stdlib, "@@ERLANG_LIB_VER_stdlib@@"@},
+     @{@@PACKAGE@@, "@@VERSION@@"@}]@}.
 @end example
 @end defmac
 
