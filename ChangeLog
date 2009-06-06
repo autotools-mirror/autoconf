@@ -1,3 +1,11 @@
+2009-06-06  Eric Blake  <ebb9@byu.net>
+
+	Document fallback behavior of AC_PROG_LEX.
+	* doc/autoconf.texi (Particular Programs) <AC_PROG_LEX>: Mention
+	why fallback is :, and that a --version check must be used to
+	determine whether flex was found.
+	Reported by Patrick Welche.
+
 2009-05-28  Jim Meyering  <meyering@redhat.com>
 
 	Fix syntax errors in autoconf.texi.

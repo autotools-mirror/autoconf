@@ -3922,7 +3922,11 @@ configuration files.
 If @code{flex} is found, set output variable @code{LEX} to @samp{flex}
 and @code{LEXLIB} to @option{-lfl}, if that library is in a standard
 place.  Otherwise set @code{LEX} to @samp{lex} and @code{LEXLIB} to
-@option{-ll}.
+@option{-ll}, if found.  If neither variant is available, set @code{LEX}
+to @samp{:}; for packages that ship the generated @file{file.yy.c}
+alongside the source @file{file.l}, this default allows users without a
+lexer generator to still build the package even if the timestamp for
+@file{file.l} is inadvertantly changed.
 
 Define @code{YYTEXT_POINTER} if @code{yytext} defaults to @samp{char *} instead
 of to @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
@@ -3951,6 +3955,11 @@ fi
 
 The shell script @command{missing} can be found in the Automake
 distribution.
+
+Remember that the user may have supplied an alternate location in
+@env{LEX}, so if Flex is required, it is better to check that the user
+provided something sufficient by parsing the output of @samp{$LEX
+--version} than by simply relying on @code{test "x$LEX" = xflex}.
 
 To ensure backward compatibility, Automake's @code{AM_PROG_LEX} invokes
 (indirectly) this macro twice, which causes an annoying but benign
