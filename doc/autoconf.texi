@@ -16188,6 +16188,16 @@ does not print @samp{two}.  One workaround is to use @samp{if test -n
 "$foo"; then exit 1; fi} rather than @samp{test -n "$foo" && exit 1}.
 Another possibility is to warn @acronym{BSD} users not to use @samp{sh -e}.
 
+When @samp{set -e} is in effect, a failed command substitution in
+Solaris @command{/bin/sh} cannot be ignored, even with @samp{||}.
+
+@example
+$ @kbd{/bin/sh -c 'set -d; foo=`false` || echo foo; echo bar'}
+$ @kbd{bash -c 'set -d; foo=`false` || echo foo; echo bar'}
+foo
+bar
+@end example
+
 Portable scripts should not use @samp{set -e} if @command{trap} is used
 to install an exit handler.  This is because Tru64/OSF 5.1 @command{sh}
 sometimes enters the trap handler with the exit status of the command
@@ -16345,7 +16355,11 @@ Posix says that @samp{trap - 1 2 13 15} resets the traps for the
 specified signals to their default values, but many common shells (e.g.,
 Solaris @command{/bin/sh}) misinterpret this and attempt to execute a
 ``command'' named @command{-} when the specified conditions arise.
-There is no portable workaround, except for @samp{trap - 0}, for which
+Posix 2008 also added a requirement to support @samp{trap 1 2 13 15} to
+reset traps, as this is supported by a larger set of shells, but there
+are still shells like @command{dash} that mistakenly try to execute
+@command{1} instead of resetting the traps.  Therefore, there is no
+portable workaround, except for @samp{trap - 0}, for which
 @samp{trap '' 0} is a portable substitute.
 
 Although Posix is not absolutely clear on this point, it is widely
@@ -16389,6 +16403,31 @@ $ @kbd{exit}
 
 @noindent
 Fortunately, this bug only affects @command{trap}.
+
+Several shells fail to execute an exit trap that is defined inside a
+subshell, when the last command of that subshell is not a builtin.  A
+workaround is to use @samp{exit $?} as the shell builtin.
+
+@example
+$ @kbd{bash -c '(trap "echo hi" 0; /bin/true)'}
+hi
+$ @kbd{/bin/sh -c '(trap "echo hi" 0; /bin/true)'}
+$ @kbd{/bin/sh -c '(trap "echo hi" 0; /bin/true; exit $?)'}
+hi
+@end example
+
+@noindent
+Likewise, older implementations of @command{bash} failed to preserve
+@samp{$?} across an exit trap consisting of a single cleanup command.
+
+@example
+$ @kbd{bash -c 'trap "/bin/true" 0; exit 2'; echo $?}
+2
+$ @kbd{bash-2.05b -c 'trap "/bin/true" 0; exit 2'; echo $?}
+0
+$ @kbd{bash-2.05b -c 'trap ":; /bin/true" 0; exit 2'; echo $?}
+2
+@end example
 
 @item @command{true}
 @c -----------------

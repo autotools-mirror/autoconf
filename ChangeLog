@@ -1,3 +1,13 @@
+2009-06-06  Eric Blake  <ebb9@byu.net>
+
+	Improve documentation on trap pitfalls.
+	* doc/autoconf.texi (Limitations of Builtins) <trap>: Mention new
+	Posix 2008 requirement on trap, and dash bug in implementing it.
+	Mention various shell bugs with traps defined inside subshells.
+	Mention older bash limitation with single-command exit trap.
+	<set>: Mention another 'set -e' limitation.
+	Reported by Jens Schmidt.
+
 2009-06-06  Jim Meyering  <meyering@redhat.com>
 
 	Improve testsuite --help
