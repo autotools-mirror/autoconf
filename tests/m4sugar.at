@@ -136,6 +136,14 @@ AT_CHECK_M4SUGAR([-o-], 1, [], [stderr])
 AT_CHECK([grep good stderr], [1])
 AT_CHECK([grep 'm4@&t@_undefine: undefined.*oops' stderr], [0], [ignore])
 
+# Cannot rename an undefined macro.
+AT_DATA_M4SUGAR([script.4s],
+[[m4_rename([oops], [good])
+]])
+
+AT_CHECK_M4SUGAR([-o-], 1, [], [stderr])
+AT_CHECK([grep 'm4@&t@_undefine: undefined.*oops' stderr], [0], [ignore])
+
 # Check that pushdef stacks can be renamed.
 AT_CHECK_M4SUGAR_TEXT([[m4_pushdef([a], [1])dnl
 m4_pushdef([a], [2])dnl
@@ -151,6 +159,8 @@ m4_popdef([b], [c])dnl
 a b c
 m4_popdef([b], [c])dnl
 a b c
+dnl m4_copy is intentionally a no-op on undefined source
+m4_copy([oops], [dummy])m4_ifdef([dummy], [[oops]])dnl
 ]], [[0 b c
 a 0 c
 a 0 0

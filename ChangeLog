@@ -1,3 +1,10 @@
+2009-06-11  Eric Blake  <ebb9@byu.net>
+
+	Clarify m4_copy semantics.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_copy>: Update
+	documentation.
+	* tests/m4sugar.at (m4@&t@_defn): Enhance test.
+
 2009-06-06  Eric Blake  <ebb9@byu.net>
 
 	Improve documentation on trap pitfalls.
