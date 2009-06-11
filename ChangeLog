@@ -1,3 +1,17 @@
+2009-06-11  Steven G. Johnson  <stevenj@alum.mit.edu>
+	and Eric Blake  <ebb9@byu.net>
+
+	Create a file in test program when detecting cross-compilation.
+	* lib/autoconf/lang.m4 (_AC_LANG_IO_PROGRAM): New macro, returns
+	program that creates a file.
+	(_AC_COMPILER_EXEEXT,_AC_COMPILER_EXEEXT_WORKS): Call new macro
+	and document why it's needed to robustly detect cross-compiling.
+	(AC_LANG_DEFINE): Copy implementation across similar languages.
+	* lib/autoconf/c.m4 (_AC_LANG_IO_PROGRAM(C)): Implement new macro.
+	* lib/autoconf/fortran.m4 (_AC_LANG_IO_PROGRAM(Fortran 77)):
+	Likewise.
+	* lib/autoconf/erlang.m4 (_AC_LANG_IO_PROGRAM(Erlang)): Likewise.
+
 2009-06-11  Eric Blake  <ebb9@byu.net>
 
 	Simplify AC_LANG(Fortran).

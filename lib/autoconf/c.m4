@@ -129,6 +129,17 @@ $2
 }])
 
 
+# _AC_LANG_IO_PROGRAM(C)
+# ----------------------
+# Produce source that performs I/O, necessary for proper
+# cross-compiler detection.
+m4_define([_AC_LANG_IO_PROGRAM(C)],
+[AC_LANG_PROGRAM([@%:@include <stdio.h>],
+[FILE *f = fopen ("conftest.out", "w");
+ return ferror (f) || fclose (f) != 0;
+])])
+
+
 # AC_LANG_CALL(C)(PROLOGUE, FUNCTION)
 # -----------------------------------
 # Avoid conflicting decl of main.

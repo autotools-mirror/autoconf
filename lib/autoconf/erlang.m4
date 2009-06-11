@@ -152,6 +152,17 @@ $2
 ])
 
 
+# _AC_LANG_IO_PROGRAM(Erlang)
+# ---------------------------
+# Produce source that performs I/O.
+m4_define([_AC_LANG_IO_PROGRAM(Erlang)],
+[AC_LANG_PROGRAM([], [dnl
+   ReturnValue = case file:write_file("conftest.out", "") of
+       {error, _} -> 1;
+       ok -> 0
+   end,
+   halt(ReturnValue)])])
+
 
 ## -------------------------------------------- ##
 ## 3. Looking for Compilers and Preprocessors.  ##

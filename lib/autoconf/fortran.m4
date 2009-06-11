@@ -210,6 +210,17 @@ $2
       end])
 
 
+# _AC_LANG_IO_PROGRAM(Fortran 77)
+# -------------------------------
+# Produce source that performs I/O.
+m4_define([_AC_LANG_IO_PROGRAM(Fortran 77)],
+[AC_LANG_PROGRAM([],
+[dnl
+      open(unit=9,file='conftest.out')
+      close(unit=9)
+])])
+
+
 # AC_LANG_CALL(Fortran 77)(PROLOGUE, FUNCTION)
 # --------------------------------------------
 # FIXME: This is a guess, help!

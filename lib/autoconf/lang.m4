@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2007, 2008 Free
+# Copyright (C) 2000, 2001, 2002, 2004, 2005, 2006, 2007, 2008, 2009 Free
 # Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -200,7 +200,8 @@ m4_define([AC_LANG_DEFINE],
 [m4_copy([AC_LANG_CALL($4)], [AC_LANG_CALL($1)])]
 [m4_copy([AC_LANG_FUNC_LINK_TRY($4)], [AC_LANG_FUNC_LINK_TRY($1)])]
 [m4_copy([AC_LANG_BOOL_COMPILE_TRY($4)], [AC_LANG_BOOL_COMPILE_TRY($1)])]
-[m4_copy([AC_LANG_INT_SAVE($4)], [AC_LANG_INT_SAVE($1)])])])
+[m4_copy([AC_LANG_INT_SAVE($4)], [AC_LANG_INT_SAVE($1)])]
+[m4_copy([_AC_LANG_IO_PROGRAM($4)], [_AC_LANG_IO_PROGRAM($1)])])])
 
 ## ----------------------- ##
 ## 2. Producing programs.  ##
@@ -245,6 +246,15 @@ m4_define([AC_LANG_SOURCE()],
 # execution the BODY (typically glued inside the `main' function, or
 # equivalent).
 AC_DEFUN([AC_LANG_PROGRAM],
+[AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
+
+
+# _AC_LANG_IO_PROGRAM
+# -----------------------------------
+# Produce valid source for the current language that creates
+# a file.  (This is used when detecting whether executables
+# work, e.g. to detect cross-compiling.)
+AC_DEFUN([_AC_LANG_IO_PROGRAM],
 [AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
 
 
@@ -556,11 +566,19 @@ ac_exeext=$ac_cv_exeext
 
 # _AC_COMPILER_EXEEXT_WORKS
 # -------------------------
+# FIXME: These cross compiler hacks should be removed for Autoconf 3.0
+#
+# It is not sufficient to run a no-op program -- this succeeds and gives
+# a false negative when cross-compiling for the compute nodes on the
+# IBM Blue Gene/L.  Instead, _AC_COMPILER_EXEEXT calls _AC_LANG_IO_PROGRAM
+# to create a program that writes to a file, which is sufficient to
+# detect cross-compiling on Blue Gene.  Note also that AC_COMPUTE_INT
+# requires programs that create files when not cross-compiling, so it
+# is safe and not a bad idea to check for this capability in general.
 m4_define([_AC_COMPILER_EXEEXT_WORKS],
 [# Check that the compiler produces executables we can run.  If not, either
 # the compiler is broken, or we cross compile.
 AC_MSG_CHECKING([whether the _AC_LANG compiler works])
-# FIXME: These cross compiler hacks should be removed for Autoconf 3.0
 # If not cross compiling, check that we can run a simple program.
 if test "$cross_compiling" != yes; then
   if _AC_DO_TOKENS([./$ac_file]); then
@@ -629,13 +647,15 @@ AC_MSG_RESULT([$ac_cv_exeext])
 #
 # Do not rename this macro; Automake decides whether EXEEXT is used
 # by checking whether `_AC_COMPILER_EXEEXT' has been expanded.
+#
+# See _AC_COMPILER_EXEEXT_WORKS for why we call _AC_LANG_IO_PROGRAM.
 m4_define([_AC_COMPILER_EXEEXT],
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+[AC_LANG_CONFTEST([_AC_LANG_IO_PROGRAM])
 ac_clean_files_save=$ac_clean_files
-ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
+ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out conftest.out"
 _AC_COMPILER_EXEEXT_DEFAULT
 _AC_COMPILER_EXEEXT_WORKS
-rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out
+rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out conftest.out
 ac_clean_files=$ac_clean_files_save
 _AC_COMPILER_EXEEXT_CROSS
 _AC_COMPILER_EXEEXT_O
