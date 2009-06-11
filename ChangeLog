@@ -1,5 +1,11 @@
 2009-06-11  Eric Blake  <ebb9@byu.net>
 
+	Simplify AC_LANG(Fortran).
+	* lib/autoconf/fortran.m4 (AC_LANG(Fortran)): Borrow from Fortran
+	77, which requires reordering portions of the file.
+	(AC_LANG_PROGRAM(Fortran), AC_LANG_CALL(Fortran)): Now defined
+	automatically.
+
 	Clarify m4_copy semantics.
 	* doc/autoconf.texi (Redefined M4 Macros) <m4_copy>: Update
 	documentation.

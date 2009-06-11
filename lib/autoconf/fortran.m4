@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Fortran languages support.
-# Copyright (C) 2001, 2003, 2004, 2005, 2006, 2007, 2008
+# Copyright (C) 2001, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 # Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -155,9 +155,9 @@ fi[]dnl
 
 
 
-## ----------------------- ##
-## 1. Language selection.  ##
-## ----------------------- ##
+## ------------------------ ##
+## 1a. Language selection.  ##
+## ------------------------ ##
 
 
 # AC_LANG(Fortran 77)
@@ -167,16 +167,6 @@ AC_LANG_DEFINE([Fortran 77], [f77], [F], [],
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-])
-
-
-# AC_LANG(Fortran)
-# ----------------
-AC_LANG_DEFINE([Fortran], [fc], [FC], [],
-[ac_ext=${ac_fc_srcext-f}
-ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
-ac_compiler_gnu=$ac_cv_fc_compiler_gnu
 ])
 
 
@@ -220,17 +210,6 @@ $2
       end])
 
 
-# AC_LANG_PROGRAM(Fortran)([PROLOGUE], [BODY])
-# -----------------------------------------------
-# FIXME: can the PROLOGUE be used?
-m4_define([AC_LANG_PROGRAM(Fortran)],
-[m4_ifval([$1],
-       [m4_warn([syntax], [$0: ignoring PROLOGUE: $1])])dnl
-      program main
-$2
-      end])
-
-
 # AC_LANG_CALL(Fortran 77)(PROLOGUE, FUNCTION)
 # --------------------------------------------
 # FIXME: This is a guess, help!
@@ -239,13 +218,20 @@ m4_define([AC_LANG_CALL(Fortran 77)],
 [      call $2])])
 
 
-# AC_LANG_CALL(Fortran)(PROLOGUE, FUNCTION)
-# --------------------------------------------
-# FIXME: This is a guess, help!
-m4_define([AC_LANG_CALL(Fortran)],
-[AC_LANG_PROGRAM([$1],
-[      call $2])])
 
+## ------------------------ ##
+## 1b. Language selection.  ##
+## ------------------------ ##
+
+
+# AC_LANG(Fortran)
+# ----------------
+AC_LANG_DEFINE([Fortran], [fc], [FC], [Fortran 77],
+[ac_ext=${ac_fc_srcext-f}
+ac_compile='$FC -c $FCFLAGS $ac_fcflags_srcext conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='$FC -o conftest$ac_exeext $FCFLAGS $LDFLAGS $ac_fcflags_srcext conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+ac_compiler_gnu=$ac_cv_fc_compiler_gnu
+])
 
 
 ## -------------------------------------------- ##
