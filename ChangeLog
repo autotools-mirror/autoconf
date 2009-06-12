@@ -1,3 +1,9 @@
+2009-06-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix concurrent autom4te.cache directory creation race.
+	* bin/autom4te.in: Do not error out if another `autom4te'
+	instance created the cache directory before we could.
+
 2009-06-11  Steven G. Johnson  <stevenj@alum.mit.edu>
 	and Eric Blake  <ebb9@byu.net>
 

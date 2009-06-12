@@ -972,10 +972,11 @@ if ($freeze)
     exit $exit_code;
   }
 
-# We need our cache directory.
+# We need our cache directory.  Don't fail with parallel creation.
 if (! -d "$cache")
   {
     mkdir "$cache", 0755
+      or -d "$cache"
       or fatal "cannot create $cache: $!";
   }
 
