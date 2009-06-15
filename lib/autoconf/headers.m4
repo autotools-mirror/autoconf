@@ -194,6 +194,13 @@ AC_DEFUN([_AC_CHECK_HEADER_COMPILE],
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_COMPILE
 
+# _AC_CHECK_HEADER_NEW(HEADER-FILE, [ACTION-IF-FOUND],
+#                      [ACTION-IF-NOT-FOUND])
+# ----------------------------------------------------
+# Some packages used this macro, even though it is undocumented.
+AU_DEFUN([_AC_CHECK_HEADER_NEW],
+[AC_CHECK_HEADER([$1], [$2], [$3], [AC_INCLUDES_DEFAULT])])
+
 
 # _AC_CHECK_HEADER_PREPROC_BODY
 # -----------------------------
@@ -224,6 +231,13 @@ AC_DEFUN([_AC_CHECK_HEADER_PREPROC],
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])dnl
 ])# _AC_CHECK_HEADER_PREPROC
+
+# _AC_CHECK_HEADER_OLD(HEADER-FILE, [ACTION-IF-FOUND],
+#                      [ACTION-IF-NOT-FOUND])
+# ----------------------------------------------------
+# Some packages used this macro, even though it is undocumented.
+AU_DEFUN([_AC_CHECK_HEADER_OLD],
+[AC_CHECK_HEADER([$1], [$2], [$3], [-])])
 
 
 # _AH_CHECK_HEADER(HEADER-FILE)

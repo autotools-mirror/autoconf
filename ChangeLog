@@ -1,3 +1,11 @@
+2009-06-15  Eric Blake  <ebb9@byu.net>
+
+	Reinstate _AC_CHECK_HEADER_OLD for gcc.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_NEW)
+	(_AC_CHECK_HEADER_OLD): Provide autoupdate versions, since gcc and
+	others used these undocumented macros.
+	Reported by Ralf Wildenhues.
+
 2009-06-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix concurrent autom4te.cache directory creation race.
