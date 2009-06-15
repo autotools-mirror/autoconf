@@ -1,5 +1,14 @@
 2009-06-15  Eric Blake  <ebb9@byu.net>
 
+	Add m4_copy_force, m4_rename_force.
+	* lib/m4sugar/m4sugar.m4 (m4_copy_force, m4_rename_force): New
+	macros.
+	* tests/m4sugar.at (m4@&t@_defn): Test them.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_copy>: Document
+	them.
+	* NEWS: Likewise.
+	Suggested by Ralf Wildenhues.
+
 	Reinstate _AC_CHECK_HEADER_OLD for gcc.
 	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_NEW)
 	(_AC_CHECK_HEADER_OLD): Provide autoupdate versions, since gcc and

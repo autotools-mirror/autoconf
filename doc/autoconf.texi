@@ -10642,16 +10642,23 @@ released and supports extended regular expression syntax.
 @end defmac
 
 @defmac m4_copy (@var{source}, @var{dest})
+@defmacx m4_copy_force (@var{source}, @var{dest})
 @defmacx m4_rename (@var{source}, @var{dest})
+@defmacx m4_rename_force (@var{source}, @var{dest})
 @msindex{copy}
+@msindex{copy_force}
 @msindex{rename}
+@msindex{rename_force}
 These macros aren't directly builtins, but are closely related to
-@code{m4_pushdef} and @code{m4_defn}.  They both ensure that @var{dest}
-is undefined, then proceed to copy the entire pushdef stack of
-definitions of @var{source}.  @code{m4_copy} preserves the source
-(including in the special case where @var{source} is undefined), while
-@code{m4_rename} undefines the original macro name (making it an error
-to rename an undefined @var{source}).
+@code{m4_pushdef} and @code{m4_defn}.  @code{m4_copy} and
+@code{m4_rename} ensure that @var{dest} is undefined, while
+@code{m4_copy_force} and @code{m4_rename_force} overwrite any existing
+definition.  All four macros then proceed to copy the entire pushdef
+stack of definitions of @var{source} over to @var{dest}.  @code{m4_copy}
+and @code{m4_copy_force} preserve the source (including in the special
+case where @var{source} is undefined), while @code{m4_rename} and
+@code{m4_rename_force} undefine the original macro name (making it an
+error to rename an undefined @var{source}).
 
 Note that attempting to invoke a renamed macro might not work, since the
 macro may have a dependence on helper macros accessed via composition of

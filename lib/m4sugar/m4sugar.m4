@@ -579,7 +579,8 @@ m4_define([_m4_bpatsubsts],
 # give an error if DST is already defined.  This is particularly nice
 # for copying self-modifying pushdef stacks, where the top definition
 # includes one-shot initialization that is later popped to the normal
-# definition.
+# definition.  This version intentionally does nothing if SRC is
+# undefined.
 #
 # Some macros simply can't be renamed with this method: namely, anything
 # involved in the implementation of m4_stack_foreach_sep.
@@ -587,6 +588,19 @@ m4_define([m4_copy],
 [m4_ifdef([$2], [m4_fatal([$0: won't overwrite defined macro: $2])],
 	  [m4_stack_foreach_sep([$1], [m4_pushdef([$2],], [)])])]dnl
 [m4_ifdef([m4_location($1)], [m4_define([m4_location($2)], m4_location)])])
+
+
+# m4_copy_force(SRC, DST)
+# m4_rename_force(SRC, DST)
+# -------------------------
+# Like m4_copy/m4_rename, except blindly overwrite any existing DST.
+# Note that m4_copy_force tolerates undefined SRC, while m4_rename_force
+# does not.
+m4_define([m4_copy_force],
+[m4_ifdef([$2], [_m4_undefine([$2])])m4_copy($@)])
+
+m4_define([m4_rename_force],
+[m4_ifdef([$2], [_m4_undefine([$2])])m4_rename($@)])
 
 
 # m4_define_default(MACRO, VALUE)

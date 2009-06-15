@@ -26,8 +26,8 @@ GNU Autoconf NEWS - User visible changes.
    AT_CHECK_UNQUOTED
 
 ** The following documented m4sugar macros are new:
-   m4_argn  m4_default_nblank  m4_default_nblank_quoted  m4_ifblank
-   m4_ifnblank
+   m4_argn  m4_copy_force  m4_default_nblank  m4_default_nblank_quoted
+   m4_ifblank  m4_ifnblank  m4_rename_force
 
 * Major changes in Autoconf 2.63b (2009-03-31) [beta]
   Released by Eric Blake, based on git versions 2.63.*.
