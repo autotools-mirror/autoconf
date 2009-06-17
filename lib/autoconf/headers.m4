@@ -194,14 +194,6 @@ AC_DEFUN([_AC_CHECK_HEADER_COMPILE],
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_COMPILE
 
-# _AC_CHECK_HEADER_NEW(HEADER-FILE, [ACTION-IF-FOUND],
-#                      [ACTION-IF-NOT-FOUND])
-# ----------------------------------------------------
-# Some packages used this macro, even though it is undocumented.
-AU_DEFUN([_AC_CHECK_HEADER_NEW],
-[AC_CHECK_HEADER([$1], [$2], [$3], [AC_INCLUDES_DEFAULT])])
-
-
 # _AC_CHECK_HEADER_PREPROC_BODY
 # -----------------------------
 # Shell function body for _AC_CHECK_HEADER_PREPROC.
@@ -234,10 +226,23 @@ AS_VAR_POPDEF([ac_Header])dnl
 
 # _AC_CHECK_HEADER_OLD(HEADER-FILE, [ACTION-IF-FOUND],
 #                      [ACTION-IF-NOT-FOUND])
+# _AC_CHECK_HEADER_NEW(HEADER-FILE, [ACTION-IF-FOUND],
+#                      [ACTION-IF-NOT-FOUND])
 # ----------------------------------------------------
-# Some packages used this macro, even though it is undocumented.
-AU_DEFUN([_AC_CHECK_HEADER_OLD],
-[AC_CHECK_HEADER([$1], [$2], [$3], [-])])
+# Some packages used these undocumented macros.  Even worse, gcc
+# redefined AC_CHECK_HEADER in terms of _AC_CHECK_HEADER_OLD, so we
+# can't do the simpler:
+#   AU_DEFUN([_AC_CHECK_HEADER_OLD],
+#     [AC_CHECK_HEADER([$1], [$2], [$3], [-])])
+AC_DEFUN([_AC_CHECK_HEADER_OLD],
+[AC_DIAGNOSE([obsolete], [The macro `$0' is obsolete.
+You should use AC_CHECK_HEADER with a fourth argument.])]dnl
+[_AC_CHECK_HEADER_PREPROC($@)])
+
+AC_DEFUN([_AC_CHECK_HEADER_NEW],
+[AC_DIAGNOSE([obsolete], [The macro `$0' is obsolete.
+You should use AC_CHECK_HEADER with a fourth argument.])]dnl
+[_AC_CHECK_HEADER_COMPILE($@)])
 
 
 # _AH_CHECK_HEADER(HEADER-FILE)
