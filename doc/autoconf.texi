@@ -8109,7 +8109,7 @@ functional might let your @command{configure} accept a header which
 causes some @emph{compiler} error.  Do not hesitate to check a header with
 other headers included before, especially required headers.
 
-Make sure the symbols you use are properly defined, i.e., refrain for
+Make sure the symbols you use are properly defined, i.e., refrain from
 simply declaring a function yourself instead of including the proper
 header.
 

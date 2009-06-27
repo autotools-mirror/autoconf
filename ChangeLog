@@ -1,3 +1,8 @@
+2009-06-27  William Pursell  <bill.pursell@gmail.com>  (tiny change)
+
+	Fix grammaro in documenation.
+	* doc/autoconf.texi (Guidelines): Fix grammaro.
+
 2009-06-17  Eric Blake  <ebb9@byu.net>
 
 	Fix AC_CHECK_HEADER infloop for gcc.
