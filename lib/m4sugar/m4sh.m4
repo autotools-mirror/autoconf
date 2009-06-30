@@ -780,14 +780,19 @@ m4_defun_init([_AS_ECHO_LOG],
 # display the checking message.  In addition, caching something used once
 # has little interest.
 # Idea borrowed from dist 3.0.  Use `*c*,', not `*c,' because if `\c'
-# failed there is also a newline to match.
+# failed there is also a newline to match.  Use `xy' because `\c' echoed
+# in a command substitution prints only the first character of the output
+# with ksh version M-11/16/88f on AIX 6.1; it needs to be reset by another
+# backquoted echo.
 m4_defun([_AS_ECHO_N_PREPARE],
 [ECHO_C= ECHO_N= ECHO_T=
-case `echo -n x` in @%:@((((
+case `echo -n x` in @%:@(((((
 -n*)
-  case `echo 'x\c'` in
+  case `echo 'xy\c'` in
   *c*) ECHO_T='	';;	# ECHO_T is single tab character.
-  *)   ECHO_C='\c';;
+  xy)  ECHO_C='\c';;
+  *)   echo `echo ksh88 bug on AIX 6.1` > /dev/null
+       ECHO_T='	';;
   esac;;
 *)
   ECHO_N='-n';;

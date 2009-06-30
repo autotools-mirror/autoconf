@@ -1,3 +1,14 @@
+2009-06-30  Jan Madzik  <jmadzik@gmail.com>  (tiny change)
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Avoid AIX 6.1 ksh88 ECHO_C command substitution bug.
+	* lib/m4sugar/m4sh.m4 (_AS_ECHO_N_PREPARE): Ensure more than
+	one character is output with `\c'; reset echo output state
+	if buggy ksh was detected, and set ECHO_T instead of ECHO_C.
+	* doc/autoconf.texi (Limitations of Builtins): Document it.
+	* tests/m4sh.at (ECHO_C): New test.
+	* THANKS: Update.
+
 2009-06-27  William Pursell  <bill.pursell@gmail.com>  (tiny change)
 
 	Fix grammaro in documenation.

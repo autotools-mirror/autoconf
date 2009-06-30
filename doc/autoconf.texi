@@ -15733,7 +15733,10 @@ their handling.  For @samp{echo '\n' | wc -l}, the @command{sh} of
 Solaris outputs 2, but Bash and Zsh (in @command{sh} emulation mode) output 1.
 The problem is truly @command{echo}: all the shells
 understand @samp{'\n'} as the string composed of a backslash and an
-@samp{n}.
+@samp{n}.  Within a command substitution, @samp{echo 'string\c'} will
+mess up the internal state of ksh88 on AIX 6.1 so that it will print
+the first character @samp{s} only, followed by a newline, and then
+entirely drop the output of the next echo in a command substitution.
 
 Because of these problems, do not pass a string containing arbitrary
 characters to @command{echo}.  For example, @samp{echo "$foo"} is safe

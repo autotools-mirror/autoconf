@@ -1412,3 +1412,23 @@ AT_CHECK_M4SH
 AT_CHECK([./script])
 
 AT_CLEANUP
+
+
+## -------- ##
+## ECHO_C.  ##
+## -------- ##
+
+AT_SETUP([ECHO_C])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+_AS_PREPARE
+foo=`echo foobar`
+echo "$foo"
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([./script], [], [foobar
+])
+
+AT_CLEANUP
