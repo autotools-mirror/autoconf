@@ -15483,6 +15483,24 @@ to this @env{PATH} search, even though Posix forbids it.  So if you want
 to use @command{.} on a file @file{foo} in the current directory, you
 must use @samp{. ./foo}.
 
+Not all shells gracefully handle syntax errors within a sourced file.
+On one extreme, some non-interactive shells abort the entire script.  On
+the other, @command{zsh} 4.3.10 has a bug where it fails to react to the
+syntax error.
+
+@example
+$ @kbd{echo 'fi' > syntax}
+$ @kbd{bash -c '. ./syntax; echo $?'}
+./syntax: line 1: syntax error near unexpected token `fi'
+./syntax: line 1: `fi'
+1
+$ @kbd{ash -c '. ./syntax; echo $?'}
+./syntax: 1: Syntax error: "fi" unexpected
+$ @kbd{zsh -c '. ./syntax; echo $?'}
+./syntax:1: parse error near `fi'
+0
+@end example
+
 @item @command{!}
 @c --------------
 @prindex @command{!}

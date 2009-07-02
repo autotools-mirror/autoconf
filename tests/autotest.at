@@ -271,9 +271,16 @@ AT_CHECK_AT_TEST([Syntax error],
    AT_CLEANUP
    AT_SETUP([another test])
    AT_CHECK([:])],
-  [], [1], [], [stderr], [],
-  [AT_CHECK([grep "unable to parse test group: 2" stderr], [0], [ignore])
-   AT_CHECK([$CONFIG_SHELL ./micro-suite 1 3], [0], [ignore])])
+  [], [0], [], [], [],
+  [dnl Until we can find a way to avoid catastrophic failure (ash) or
+   dnl lack of failure (zsh), skip the rest of this test on such shells.
+   echo 'if' > syntax
+   AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'case `. ./syntax; echo $?` in
+		  0|"") exit 77;;
+		esac'], [0], [ignore], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite], [1], [ignore], [stderr])
+   AT_CHECK([grep "unable to parse test group: 2" stderr], [0], [ignore])],
+  [1 3])
 
 AT_CHECK_AT_TEST([errexit],
   [AT_CHECK([false])
