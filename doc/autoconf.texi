@@ -14187,6 +14187,18 @@ escape, while @samp{: `cd /zorglub 2>/dev/null`} works properly.
 It is worth noting that Zsh (but not Ash nor Bash) makes it possible
 in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
 
+Some shells, like @command{ash}, don't recognize bi-directional
+redirection (@samp{<>}).  And even on shells that recognize it, it is
+not portable to use on fifos: Posix does not require read-write support
+for named pipes, and Cygwin does not support it:
+
+@example
+$ @kbd{mkfifo fifo}
+$ @kbd{exec 5<>fifo}
+$ @kbd{echo hi >&5}
+bash: echo: write error: Communication error on send
+@end example
+
 When catering to old systems, don't redirect the same file descriptor
 several times, as you are doomed to failure under Ultrix.
 

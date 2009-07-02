@@ -990,8 +990,11 @@ m4_define([AT_SKIP_PARALLEL_TESTS],
 [# Per BUGS, we have not yet figured out how to run parallel tests cleanly
 # under dash and some ksh variants.  For now, only run this test under
 # limited conditions; help is appreciated in widening this test base.
-AT_CHECK([test -n "${BASH_VERSION+set}${ZSH_VERSION+set}]]dnl
-[[${TEST_PARALLEL_AUTOTEST+set}" || exit 77])
+AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'test -n "${BASH_VERSION+set}]]dnl
+[[${ZSH_VERSION+set}${TEST_PARALLEL_AUTOTEST+set}"' || exit 77])
+# The parallel scheduler requires mkfifo and bidirectional redirection to work.
+AT_CHECK([mkfifo fifo || exit 77])
+AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'eval "exec 5<>fifo"' || exit 77])
 ])
 
 
@@ -1000,8 +1003,6 @@ AT_CHECK([test -n "${BASH_VERSION+set}${ZSH_VERSION+set}]]dnl
 ## ----------------------- ##
 
 AT_SETUP([parallel test execution])
-
-AT_SKIP_PARALLEL_TESTS
 
 # This test tries to ensure that -j runs tests in parallel.
 # Such a test is inherently racy, because there are no real-time
@@ -1053,13 +1054,17 @@ m4_for([count], [1], ]]AT_PARALLEL_NTESTS[[, [],
 ])
 ]])
 
+# Even if parallel jobs are not supported, the command line must work.
 AT_CHECK([$CONFIG_SHELL ./micro-suite --help | grep " --jobs"], [0], [ignore])
 AT_CHECK([$CONFIG_SHELL ./micro-suite -j2foo], [1], [], [stderr])
 AT_CHECK([grep 'non-numeric argument' stderr], [], [ignore])
 AT_CHECK([$CONFIG_SHELL ./micro-suite --jobs=foo], [1], [], [stderr])
 AT_CHECK([grep 'non-numeric argument' stderr], [], [ignore])
-AT_CHECK([$CONFIG_SHELL ./micro-suite -j[]AT_PARALLEL_NJOBS], [], [stdout])
+
+AT_SKIP_PARALLEL_TESTS
+
 # Ensure that all tests run, and lines are not split.
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j[]AT_PARALLEL_NJOBS], [], [stdout])
 AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [AT_PARALLEL_NTESTS
 ])
 # Running one test with -j should produce correctly formatted output:
@@ -1074,8 +1079,6 @@ AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [1
 AT_CHECK([$CONFIG_SHELL ./micro-suite -j -k nomatch], [], [ignore])
 AT_CHECK([$CONFIG_SHELL ./micro-suite -j3 -k nomatch], [], [ignore])
 
-# The parallel scheduler requires mkfifo to work.
-AT_CHECK([mkfifo fifo || exit 77])
 mkdir serial
 
 # Unfortunately, the return value of wait is unreliable,
@@ -1113,9 +1116,16 @@ AT_CHECK_AT_TEST([parallel syntax error],
    AT_CLEANUP
    AT_SETUP([another test])
    AT_CHECK([:])],
-  [], [1], [], [stderr], [AT_SKIP_PARALLEL_TESTS],
-  [AT_CHECK([grep "unable to parse test group: 2" stderr], [0], [ignore])
-   AT_CHECK([$CONFIG_SHELL ./micro-suite -j 3], [0], [ignore])], [-j])
+  [], [0], [], [], [AT_SKIP_PARALLEL_TESTS],
+  [dnl Until we can find a way to avoid catastrophic failure (ash) or
+   dnl lack of failure (zsh), skip the rest of this test on such shells.
+   echo 'if' > syntax
+   AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'case `. ./syntax; echo $?` in
+		  0|"") exit 77;;
+		esac'], [0], [ignore], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -j], [1], [ignore], [stderr])
+   AT_CHECK([grep "unable to parse test group: 2" stderr], [0], [ignore])],
+  [-j2 1 3])
 
 AT_CHECK_AT_TEST([parallel errexit],
   [AT_CHECK([false])

@@ -1296,8 +1296,9 @@ at_first=:
 if test $at_jobs -ne 1 &&
      rm -f "$at_job_fifo" &&
      test -n "$at_job_group" &&
-     ( mkfifo "$at_job_fifo" && trap 'exit 1' PIPE STOP TSTP ) 2>/dev/null &&
-     exec AT_JOB_FIFO_FD<> "$at_job_fifo"
+     ( mkfifo "$at_job_fifo" && eval 'exec AT_JOB_FIFO_FD<> "$at_job_fifo"' \
+       && trap 'exit 1' PIPE STOP TSTP ) 2>/dev/null &&
+     eval 'exec AT_JOB_FIFO_FD<> "$at_job_fifo"'
 then
   # FIFO job dispatcher.
 
@@ -1352,7 +1353,7 @@ dnl optimize away the _AT_CHECK subshell, so normalize here.
 dnl Ignore PIPE signals that stem from writing back the token.
 	    trap "" PIPE
 	    echo stop > "$at_stop_file"
-	    echo token >&6
+	    echo token >&AT_JOB_FIFO_FD
 dnl Do not reraise the default PIPE handler.
 dnl It wreaks havoc with ksh, see above.
 dnl	    trap - 13
