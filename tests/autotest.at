@@ -992,9 +992,8 @@ m4_define([AT_SKIP_PARALLEL_TESTS],
 # limited conditions; help is appreciated in widening this test base.
 AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'test -n "${BASH_VERSION+set}]]dnl
 [[${ZSH_VERSION+set}${TEST_PARALLEL_AUTOTEST+set}"' || exit 77])
-# The parallel scheduler requires mkfifo and bidirectional redirection to work.
+# The parallel scheduler requires mkfifo to work.
 AT_CHECK([mkfifo fifo || exit 77])
-AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'eval "exec 5<>fifo"' || exit 77])
 ])
 
 

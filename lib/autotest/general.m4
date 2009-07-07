@@ -1296,9 +1296,7 @@ at_first=:
 if test $at_jobs -ne 1 &&
      rm -f "$at_job_fifo" &&
      test -n "$at_job_group" &&
-     ( mkfifo "$at_job_fifo" && eval 'exec AT_JOB_FIFO_FD<> "$at_job_fifo"' \
-       && trap 'exit 1' PIPE STOP TSTP ) 2>/dev/null &&
-     eval 'exec AT_JOB_FIFO_FD<> "$at_job_fifo"'
+     ( mkfifo "$at_job_fifo" && trap 'exit 1' PIPE STOP TSTP ) 2>/dev/null
 then
   # FIFO job dispatcher.
 
@@ -1344,6 +1342,7 @@ dnl avoid all the status output by the shell.
     (
       # Start one test group.
       $at_job_control_off
+      exec AT_JOB_FIFO_FD>"$at_job_fifo"
 dnl When a child receives PIPE, be sure to write back the token,
 dnl so the master does not hang waiting for it.
 dnl errexit and xtrace should not be set in this shell instance,
@@ -1362,7 +1361,7 @@ dnl	    kill -13 $$
       at_fn_group_prepare
       if cd "$at_group_dir" &&
 	 at_fn_test $at_group &&
-	 . "$at_test_source" # AT_JOB_FIFO_FD<&-
+	 . "$at_test_source" # AT_JOB_FIFO_FD>&-
       then :; else
 	AS_WARN([unable to parse test group: $at_group])
 	at_failed=:
@@ -1371,13 +1370,16 @@ dnl	    kill -13 $$
       echo token >&AT_JOB_FIFO_FD
     ) &
     $at_job_control_off
+    if $at_first; then
+      at_first=false
+      exec AT_JOB_FIFO_FD<"$at_job_fifo"
+    fi
     shift # Consume one token.
     if test $[@%:@] -gt 0; then :; else
       read at_token <&AT_JOB_FIFO_FD || break
       set x $[*]
     fi
     test -f "$at_stop_file" && break
-    at_first=false
   done
   # Read back the remaining ($at_jobs - 1) tokens.
   set X $at_joblist
