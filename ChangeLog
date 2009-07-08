@@ -1,5 +1,10 @@
 2009-07-07  Eric Blake  <ebb9@byu.net>
 
+	Skip parallel tests when zsh 'set -m' fails.
+	* tests/autotest.at (AT_SKIP_PARALLEL_TESTS): Skip test if set -m
+	is not supported.
+	Reported by Ralf Wildenhues.
+
 	Make parallel testsuite more portable.
 	* lib/autotest/general.m4 (AT_INIT) <AT_JOB_FIFO_FD>: Avoid <>;
 	instead open write descriptor in each group and read descriptor in
