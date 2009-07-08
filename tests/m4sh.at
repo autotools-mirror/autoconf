@@ -121,7 +121,7 @@ AS_EXIT([0])
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -178,7 +178,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -238,7 +238,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -287,7 +287,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -317,15 +317,15 @@ AS_SET_STATUS([4])
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [1])
-AT_CHECK([./script ''], [4])
-AT_CHECK([./script a], [0])
-AT_CHECK([./script b], [0])
-AT_CHECK([./script b 0], [0])
-AT_CHECK([./script b 2], [2])
-AT_CHECK([./script c 0], [0])
-AT_CHECK([./script c 2], [2])
-AT_CHECK([./script d], [4], [[4
+AT_CHECK([$CONFIG_SHELL ./script], [1])
+AT_CHECK([$CONFIG_SHELL ./script ''], [4])
+AT_CHECK([$CONFIG_SHELL ./script a], [0])
+AT_CHECK([$CONFIG_SHELL ./script b], [0])
+AT_CHECK([$CONFIG_SHELL ./script b 0], [0])
+AT_CHECK([$CONFIG_SHELL ./script b 2], [2])
+AT_CHECK([$CONFIG_SHELL ./script c 0], [0])
+AT_CHECK([$CONFIG_SHELL ./script c 2], [2])
+AT_CHECK([$CONFIG_SHELL ./script d], [4], [[4
 ]])
 dnl If we got to this point without a FAIL, then AS_EXIT at least works.
 dnl The rest of this test relies on semi-decent 'set -e' support, even
@@ -333,8 +333,8 @@ dnl though m4sh in general should not try to rely on it because of
 dnl portability nightmares on what constructs are considered errors across
 dnl various shells; therefore, an overall SKIP result is desirable on
 dnl broken shells like Solaris /bin/sh.
-AT_CHECK([./script '' e], [3])
-AT_CHECK([./script d e], [3], [stdout])
+AT_CHECK([$CONFIG_SHELL ./script '' e], [3])
+AT_CHECK([$CONFIG_SHELL ./script d e], [3], [stdout])
 dnl NetBSD sh fails to output on stderr here.
 AT_CHECK([grep 3 stdout || exit 77], [], [ignore])
 
@@ -367,7 +367,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -414,7 +414,7 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -435,7 +435,7 @@ test "$as_me" = script || AS_ECHO([["incorrect value of \$as_me: $as_me"]])
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -466,7 +466,7 @@ esac
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -509,7 +509,7 @@ fi
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -548,7 +548,7 @@ fi
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -581,7 +581,7 @@ test_func2
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -619,7 +619,7 @@ if test $nested_require_in_fn_diversion != no; then AS_EXIT([1]); fi
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -663,7 +663,7 @@ test_func parameter1
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -740,7 +740,7 @@ echo "AS_HELP_STRING([--tune4], [check out the tuned formatting],
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [0],
+AT_CHECK([$CONFIG_SHELL ./script], [0],
 [[  --an-option             some text
   --another-much-longer-option
                           some other text which should wrap at our default of
@@ -903,7 +903,7 @@ echo "foo9=$foo9 bar9=$bar9"
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [0], [[one
+AT_CHECK([$CONFIG_SHELL ./script], [0], [[one
 two
 three
 four
@@ -946,17 +946,17 @@ AS_CASE([$[1]]m4_for([i], [1], ]limit[, [], [, i, echo i]), [echo default])
 
 dnl Add --force so autom4te doesn't think `script' is still up to date.
 AT_CHECK_M4SH([--force])
-AT_CHECK([./script 1], [0], [[1
+AT_CHECK([$CONFIG_SHELL ./script 1], [0], [[1
 1
 1
 1
 ]])
-AT_CHECK([./script limit], [0], [limit
+AT_CHECK([$CONFIG_SHELL ./script limit], [0], [limit
 limit
 limit
 limit
 ])
-AT_CHECK([./script default], [0], [[default
+AT_CHECK([$CONFIG_SHELL ./script default], [0], [[default
 default
 ]])
 m4_popdef([limit])
@@ -1015,7 +1015,7 @@ done
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [0], [[a a
+AT_CHECK([$CONFIG_SHELL ./script], [0], [[a a
 b b
 c c
 d d
@@ -1054,7 +1054,7 @@ echo AS_LITERAL_IF([mac], [ERR], [ok]) 7
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [],
+AT_CHECK([$CONFIG_SHELL ./script], [],
 [[ok 1
 ok 2
 ok 3
@@ -1135,7 +1135,7 @@ m4_ifdef([tmp], [echo oops])
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [], [[ok
+AT_CHECK([$CONFIG_SHELL ./script], [], [[ok
 \a  "weird" `value` WITH; $fun 'characters
 -
 \a  "weird" `value` WITH; $fun 'characters
@@ -1190,7 +1190,7 @@ echo "$foo2"
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [],
+AT_CHECK([$CONFIG_SHELL ./script], [],
 [[hello,  world
 hello,  world
 hello,  world
@@ -1221,7 +1221,7 @@ echo "$foo2"
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [],
+AT_CHECK([$CONFIG_SHELL ./script], [],
 [[2
 20
 8
@@ -1258,7 +1258,7 @@ echo body
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [], [[prep 4
+AT_CHECK([$CONFIG_SHELL ./script], [], [[prep 4
 body
 cleanup 5
 cleanup 1
@@ -1286,7 +1286,7 @@ AS_ECHO(["SHELL=$SHELL"])
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [0], [stdout])
+AT_CHECK([$CONFIG_SHELL ./script], [0], [stdout])
 AT_CHECK([grep 'SHELL=.' stdout], [0], [ignore])
 sed s/parent/child/ <stdout >expout
 AT_CHECK([./child], [0], [expout])
@@ -1294,7 +1294,7 @@ SHELL=/bogus
 export SHELL
 cp stdout expout
 mv child child.bak
-AT_CHECK([./script], [0], [expout])
+AT_CHECK([$CONFIG_SHELL ./script], [0], [expout])
 AT_CHECK([cmp child child.bak])
 AT_CHECK([grep 'SHELL=.' stdout], [0], [ignore])
 sed s/parent/child/ <stdout >expout
@@ -1323,7 +1323,7 @@ exec AS_MESSAGE_LOG_FD>-
 
 rm -f script
 AT_CHECK_M4SH
-AT_CHECK([./script], [0], [[script: hello from parent
+AT_CHECK([$CONFIG_SHELL ./script], [0], [[script: hello from parent
 hello1 from child
 child: hello2 from child
 child: hello3 from child
@@ -1335,7 +1335,7 @@ child:0: hello3 from child
 
 # Force write error creating a file on stdout
 if test -w /dev/full && test -c /dev/full; then
-  AT_CHECK([./script /dev/full], [1], [ignore], [ignore])
+  AT_CHECK([$CONFIG_SHELL ./script /dev/full], [1], [ignore], [ignore])
 fi
 
 AT_CLEANUP
@@ -1367,7 +1367,7 @@ cat <&AS_ORIGINAL_STDIN_FD
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([echo goodbye | ./script], [0],
+AT_CHECK([echo goodbye | $CONFIG_SHELL ./script], [0],
 [[script: hello world
 goodbye
 ]])
@@ -1375,7 +1375,7 @@ AT_CHECK([cat log], [0],
 [[script:100: hello world
 ]])
 rm log
-AT_CHECK([echo goodbye | ./script silent], [0],
+AT_CHECK([echo goodbye | $CONFIG_SHELL ./script silent], [0],
 [[goodbye
 ]])
 AT_CHECK([cat log], [0],
@@ -1409,7 +1409,7 @@ rmdir sub || AS_ERROR([failed to rmdir])
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script])
+AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
@@ -1428,7 +1428,7 @@ echo "$foo"
 ]])
 
 AT_CHECK_M4SH
-AT_CHECK([./script], [], [foobar
+AT_CHECK([$CONFIG_SHELL ./script], [], [foobar
 ])
 
 AT_CLEANUP

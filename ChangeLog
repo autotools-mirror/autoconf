@@ -1,3 +1,19 @@
+2009-07-09  Eric Blake  <ebb9@byu.net>
+
+	Fix testsuite under dash.
+	* tests/m4sh.at (LINENO stack, AS@&t@_BASENAME, AS@&t@_DIRNAME)
+	(AS@&t@_ECHO and AS@&t@_ECHO_N, AS@&t@_EXIT, AS@&t@_MKDIR_P)
+	(AS@&t@_VERSION_COMPARE, as_me, Negated classes in globbing)
+	(Functions Support, Functions and return Support)
+	(Nested AS@&t@_REQUIRE_SHELL_FN, Nested AS@&t@_REQUIRE)
+	(AS@&t@_REQUIRE_SHELL_FN and m4@&t@_require, AS@&t@_HELP_STRING)
+	(AS@&t@_IF and AS@&t@_CASE, AS@&t@_FOR, AS@&t@_LITERAL_IF)
+	(AS@&t@_VAR basics, AS@&t@_VAR_APPEND, AS@&t@_VAR_ARITH)
+	(AS@&t@_INIT cleanup, AS@&t@_INIT_GENERATED, AS@&t@_MESSAGE_FD)
+	(_AS@&t@_CLEAN_DIR, ECHO_C): Allow testing different CONFIG_SHELL
+	options during the testsuite run.
+	Reported by Ralf Wildenhues.
+
 2009-07-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Ignore messages on stderr when testing for the zsh issue.
