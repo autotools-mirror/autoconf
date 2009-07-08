@@ -1,5 +1,9 @@
 2009-07-09  Eric Blake  <ebb9@byu.net>
 
+	Fix test typo.
+	* tests/m4sh.at (AS@&t@_INIT_GENERATED): Close fd, rather than
+	creating file named -.
+
 	Fix testsuite under dash.
 	* tests/m4sh.at (LINENO stack, AS@&t@_BASENAME, AS@&t@_DIRNAME)
 	(AS@&t@_ECHO and AS@&t@_ECHO_N, AS@&t@_EXIT, AS@&t@_MKDIR_P)

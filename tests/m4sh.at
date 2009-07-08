@@ -1317,7 +1317,7 @@ AS_MESSAGE([hello3 from child])
 EOF
 AS_MESSAGE([hello from parent])
 dnl close log in parent before spawning child, for mingw
-exec AS_MESSAGE_LOG_FD>-
+exec AS_MESSAGE_LOG_FD>&-
 ./$child
 ]])
 
