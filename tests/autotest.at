@@ -994,7 +994,8 @@ AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'test -n "${BASH_VERSION+set}]]dnl
 [[${ZSH_VERSION+set}${TEST_PARALLEL_AUTOTEST+set}"' || exit 77])
 # The parallel scheduler requires mkfifo and job control to work.
 AT_CHECK([mkfifo fifo || exit 77])
-AT_CHECK([${CONFIG_SHELL-$SHELL} -c '(set -m && set +m) || exit 77'])
+AT_CHECK([${CONFIG_SHELL-$SHELL} -c '(set -m && set +m) || exit 77'],
+	 [], [], [ignore])
 ])
 
 

@@ -1,3 +1,8 @@
+2009-07-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Ignore messages on stderr when testing for the zsh issue.
+	* tests/autotest.at (AT_SKIP_PARALLEL_TESTS): Ignore stderr.
+
 2009-07-07  Eric Blake  <ebb9@byu.net>
 
 	Skip parallel tests when zsh 'set -m' fails.
