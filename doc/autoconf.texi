@@ -2180,7 +2180,6 @@ is what the @command{configure} option @option{--srcdir} sets.
 The name of the top source directory, assuming that the working
 directory is the current build directory.
 
-
 @item ac_top_build_prefix
 The name of the top build directory, assuming that the working
 directory is the current build directory.
@@ -2331,6 +2330,15 @@ Variables}, for the list of the preset ones related to installation
 directories.  Below are listed the other preset ones, many of which are
 precious variables (@pxref{Setting Output Variables},
 @code{AC_ARG_VAR}).
+
+The preset variables which are available during @file{config.status}
+(@pxref{Configuration Actions}) may also be used during
+@command{configure} tests.  For example, it is permissible to reference
+@samp{$srcdir} when constructing a list of directories to pass via
+option @option{-I} during a compiler feature check.  When used in this
+manner, coupled with the fact that @command{configure} is always run
+from the top build directory, it is sufficient to use just
+@samp{$srcdir} instead of @samp{$top_srcdir}.
 
 @c Just say no to ASCII sorting!  We're humans, not computers.
 @c These variables are listed as they would be in a dictionary:
