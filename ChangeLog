@@ -1,3 +1,16 @@
+2009-07-13  Paolo Bonzini  <bonzini@gnu.org>
+
+	* lib/autotest/general.m4 (at_fn_check_prepare_notrace): Use
+	$at_trace_echo.  Add new REASON argument.
+	(at_fn_check_prepare_trace): Do not call at_fn_check_prepare_notrace.
+	Use $at_check_filter_trace.
+	(at_fn_check_prepare_dynamic): Use at_fn_check_prepare_notrace.
+	(at_traceon): Initialize to ':'.
+	(at_traceoff): Remove, use 'set +x' instead throughout.
+	(at_check_filter_trace, at_trace_echo): New shell variables.
+	Initialize them if tracing is requested.
+	(_AT_DECIDE_TRACEABLE): Adjust call to at_fn_check_prepare_notrace.
+
 2009-07-12  Paolo Bonzini  <bonzini@gnu.org>
 
 	Move atlocal feature tests to configure
