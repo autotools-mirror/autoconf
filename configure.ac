@@ -68,6 +68,37 @@ fi
 ])
 AC_SUBST([ac_cv_sh_n_works])
 
+AC_MSG_CHECKING([for characters that cannot appear in file names])
+AC_CACHE_VAL( [ac_cv_unsupported_fs_chars],
+[ac_cv_unsupported_fs_chars=
+for c in '\\' '"' '<' '>' '*' '?' '|'
+do
+  touch "t${c}t" 2>/dev/null
+  test -f "t${c}t" && rm -f "t${c}t" && continue
+  # $c cannot be used in a file name.
+  ac_cv_unsupported_fs_chars=$ac_cv_unsupported_fs_chars$c
+done
+])
+if test -n "$ac_cv_unsupported_fs_chars"; then
+  AC_MSG_RESULT([$ac_cv_unsupported_fs_chars])
+else
+  AC_MSG_RESULT([none])
+fi
+
+AC_SUBST([ac_cv_unsupported_fs_chars])
+
+AC_CACHE_CHECK([whether directories can have trailing spaces],
+	       [ac_cv_dir_trailing_space],
+[rm -rf 'tdir ' && mkdir 'tdir ' && touch 'tdir /tfile' 2>/dev/null
+a=$?
+rm -rf 'tdir '
+case $a$? in #(
+   00) ac_cv_dir_trailing_space=yes ;; #(
+   *) ac_cv_dir_trailing_space=no ;;
+esac
+])
+AC_SUBST([ac_cv_dir_trailing_space])
+
 # Initialize the test suite.
 AC_CONFIG_TESTDIR([tests])
 AC_CONFIG_FILES([tests/Makefile tests/atlocal])
