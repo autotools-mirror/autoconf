@@ -1,3 +1,10 @@
+2009-07-12  Paolo Bonzini  <bonzini@gnu.org>
+
+	Move atlocal feature tests to configure
+	* configure.ac: Test for unsupported characters in files and
+	directories here...
+	* tests/atlocal.in: ... and not here.
+
 2009-07-09  Eric Blake  <ebb9@byu.net>
 
 	Fix test typo.
