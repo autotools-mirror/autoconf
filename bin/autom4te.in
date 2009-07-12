@@ -463,7 +463,7 @@ sub handle_m4 ($@)
   #
   # We don't output directly to the cache files, to avoid problems
   # when we are interrupted (that leaves corrupted files).
-  xsystem ("$m4"
+  xsystem ("$m4 @M4_GNU@"
 	   . join (' --include=', '', map { shell_quote ($_) } @include)
 	   . ' --debug=aflq'
 	   . (!exists $ENV{'AUTOM4TE_NO_FATAL'} ? ' --fatal-warning' : '')
