@@ -268,12 +268,13 @@ at_fn_banner ()
   AS_ECHO(["$as_nl$at_banner_text$as_nl"])
 } # at_fn_banner
 
-AS_FUNCTION_DESCRIBE([at_fn_check_prepare_notrace], [LINE],
+AS_FUNCTION_DESCRIBE([at_fn_check_prepare_notrace], [REASON LINE],
 [Perform AT_CHECK preparations for the command at LINE for an
-untraceable command, or when tracing is disabled.])
+untraceable command; REASON is the reason for disabling tracing.])
 at_fn_check_prepare_notrace ()
 {
-  AS_ECHO(["$[1]"]) >"$at_check_line_file"
+  $at_trace_echo "Not enabling shell tracing (command contains $1)"
+  AS_ECHO(["$[2]"]) >"$at_check_line_file"
   at_check_trace=: at_check_filter=:
   : >"$at_stdout"; : >"$at_stderr"
 }
@@ -283,13 +284,9 @@ AS_FUNCTION_DESCRIBE([at_fn_check_prepare_trace], [LINE],
 command.])
 at_fn_check_prepare_trace ()
 {
-  if test -n "$at_traceon"; then
-    AS_ECHO(["$[1]"]) >"$at_check_line_file"
-    at_check_trace=$at_traceon at_check_filter=at_fn_filter_trace
-    : >"$at_stdout"; : >"$at_stderr"
-  else
-    at_fn_check_prepare_notrace "$[1]"
-  fi
+  AS_ECHO(["$[1]"]) >"$at_check_line_file"
+  at_check_trace=$at_traceon at_check_filter=$at_check_filter_trace
+  : >"$at_stdout"; : >"$at_stderr"
 }
 
 AS_FUNCTION_DESCRIBE([at_fn_check_prepare_dynamic], [COMMAND LINE],
@@ -297,12 +294,9 @@ AS_FUNCTION_DESCRIBE([at_fn_check_prepare_dynamic], [COMMAND LINE],
 appropriate preparation function.])
 at_fn_check_prepare_dynamic ()
 {
-  case "$at_traceon:$[1]" in
-    :*$as_nl*)
-      at_fn_check_prepare_notrace "$[2]" ;;
+  case $[1] in
     *$as_nl*)
-      echo 'Not enabling shell tracing (command contains an embedded newline)'
-      at_fn_check_prepare_notrace "$[2]" ;;
+      at_fn_check_prepare_notrace 'an embedded newline' "$[2]" ;;
     *)
       at_fn_check_prepare_trace "$[2]" ;;
   esac
@@ -412,6 +406,9 @@ at_verbose=:
 at_quiet=
 # Running several jobs in parallel, 0 means as many as test groups.
 at_jobs=1
+at_traceon=:
+at_trace_echo=:
+at_check_filter_trace=:
 
 # Shall we keep the debug scripts?  Must be `:' when the suite is
 # run by a debug script, so that the script doesn't remove itself.
@@ -527,7 +524,9 @@ do
 	;;
 
     --trace | -x )
-	at_traceon='set -x'; at_traceoff='set +x'
+	at_traceon='set -x'
+	at_trace_echo=echo
+	at_check_filter_trace=at_fn_filter_trace
 	;;
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
@@ -1863,7 +1862,7 @@ echo "#                             -*- compilation -*-" >> "$at_group_log"
   AS_ECHO(["AT_ordinal. m4_defn([AT_line]): testing $1..."])
   $at_traceon
 m4_undivert([TEST_SCRIPT])dnl Insert the code here
-  $at_traceoff
+  set +x
   $at_times_p && times >"$at_times_file"
 ) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
 read at_status <"$at_status_file"
@@ -2051,8 +2050,7 @@ m4_cond([m4_eval(m4_index([$1], [`]) >= 0)], [1],
 	[]))]dnl No reason.
 [m4_if(m4_index(_m4_defn([at_reason]), [a]), [0],]dnl
 dnl We know at build time that tracing COMMANDS is never safe.
-[[echo 'Not enabling shell tracing (command contains ]m4_defn([at_reason])[)'
-at_fn_check_prepare_notrace],
+[[at_fn_check_prepare_notrace 'm4_defn([at_reason])'],dnl
        m4_index([$1], [$]), [-1],]dnl
 dnl We know at build time that tracing COMMANDS is always safe.
 [[at_fn_check_prepare_trace],]dnl
@@ -2125,7 +2123,7 @@ m4_define([AT_DIFF_STDOUT()],
 # with parallel jobs.
 m4_define([_AT_CHECK],
 [m4_define([AT_ingroup])]dnl
-[{ $at_traceoff
+[{ set +x
 AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([[$1]])"])
 _AT_DECIDE_TRACEABLE([$1]) _AT_LINE_ESCAPED
 ( $at_check_trace; [$1]
