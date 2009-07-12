@@ -22653,6 +22653,44 @@ If the current test group fails, log the contents of @var{file}.
 Several identical calls within one test group have no additional effect.
 @end defmac
 
+@defmac AT_FAIL_IF (@var{shell-condition})
+@atindex{FAIL_IF}
+Make the test group fail, skipping the rest of its execution if
+@var{shell-condition} is true.  @var{shell-condition} is a shell expression
+such as a @code{test} command.  Tests before @command{AT_FAIL_IF}
+will be executed and may still cause the test group to be skipped.
+You can instantiate this macro many times from within the same test group.
+
+You should use this macro only for very simple failure conditions.  If the
+@var{shell-condition} could emit any kind of output you should instead
+use @command{AT_CHECK} like
+@example
+AT_CHECK([@var{shell-condition}] || exit 99)
+@end example
+@noindent
+so that such output is properly recorded in the @file{testsuite.log}
+file.
+@end defmac
+
+@defmac AT_SKIP_IF (@var{shell-condition})
+@atindex{SKIP_IF}
+Determine whether the test should be skipped because it requires
+features that are unsupported on the machine under test.
+@var{shell-condition} is a shell expression such as a @code{test}
+command.  Tests before @command{AT_SKIP_IF} will be executed
+and may still cause the test group to fail.  You can instantiate this
+macro many times from within the same test group.
+
+You should use this macro only for very simple skip conditions.  If the
+@var{shell-condition} could emit any kind of output you should instead
+use @command{AT_CHECK} like
+@example
+AT_CHECK([@var{shell-condition}] || exit 77)
+@end example
+so that such output is properly recorded in the @file{testsuite.log}
+file.
+@end defmac
+
 @defmac AT_XFAIL_IF (@var{shell-condition})
 @atindex{XFAIL_IF}
 Determine whether the test is expected to fail because it is a known

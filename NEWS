@@ -75,6 +75,9 @@ GNU Autoconf NEWS - User visible changes.
 ** Autotest testsuites do not attempt to write startup error messages
    to the log file before that is opened (regression introduced in 2.63).
 
+** The following Autotest macros are new:
+   AT_SKIP_IF  AT_FAIL_IF
+
 ** Configure scripts now use shell functions.  This feature leads to
    smaller configure files and faster execution.
 

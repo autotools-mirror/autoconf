@@ -168,6 +168,11 @@ m4_define([AT_LINE],
 			 m4_bregexp(/__file__, [/\([^/]*\)$], [[\1]]))])])dnl
 m4_defn([_AT_LINE_base]):__line__])
 
+# _AT_LINE_ESCAPED
+# ----------------
+# Same as AT_LINE, but already escaped for the shell.
+m4_define([_AT_LINE_ESCAPED], ["AS_ESCAPE(m4_dquote(AT_LINE))"])
+
 
 # _AT_NORMALIZE_TEST_GROUP_NUMBER(SHELL-VAR)
 # ------------------------------------------
@@ -1776,6 +1781,36 @@ m4_divert_push([TEST_SCRIPT])dnl
 ])
 
 
+# AT_FAIL_IF(SHELL-EXPRESSION)
+# -----------------------------
+# Set up the test to be expected to fail if SHELL-EXPRESSION evaluates to
+# true (exitcode = 0).
+_AT_DEFINE_SETUP([AT_FAIL_IF],
+[dnl
+dnl Try to limit the amount of conditionals that we emit.
+m4_case([$1],
+      [], [],
+      [false], [],
+      [:], [_AT_CHECK_EXIT([], [99])],
+      [true], [_AT_CHECK_EXIT([], [99])],
+      [_AT_CHECK_EXIT([$1], [99])])])
+
+
+# AT_SKIP_IF(SHELL-EXPRESSION)
+# -----------------------------
+# Set up the test to be expected to fail if SHELL-EXPRESSION evaluates to
+# true (exitcode = 0).
+_AT_DEFINE_SETUP([AT_SKIP_IF],
+[dnl
+dnl Try to limit the amount of conditionals that we emit.
+m4_case([$1],
+      [], [],
+      [false], [],
+      [:], [_AT_CHECK_EXIT([], [77])],
+      [true], [_AT_CHECK_EXIT([], [77])],
+      [_AT_CHECK_EXIT([$1], [77])])])
+
+
 # AT_XFAIL_IF(SHELL-EXPRESSION)
 # -----------------------------
 # Set up the test to be expected to fail if SHELL-EXPRESSION evaluates to
@@ -2092,7 +2127,7 @@ m4_define([_AT_CHECK],
 [m4_define([AT_ingroup])]dnl
 [{ $at_traceoff
 AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([[$1]])"])
-_AT_DECIDE_TRACEABLE([$1]) "AS_ESCAPE(m4_dquote(AT_LINE))"
+_AT_DECIDE_TRACEABLE([$1]) _AT_LINE_ESCAPED
 ( $at_check_trace; [$1]
 ) >>"$at_stdout" 2>>"$at_stderr"
 at_status=$? at_failed=false
@@ -2109,3 +2144,11 @@ m4_ifvaln([$5$6], [AS_IF($at_failed, [$5], [$6])])]dnl
 [$at_failed && at_fn_log_failure AT_capture_files
 $at_traceon; }
 ])# _AT_CHECK
+
+# _AT_CHECK_EXIT(COMMANDS, [EXIT-STATUS-IF-PASS])
+# -----------------------------------------------
+# Minimal version of _AT_CHECK for AT_SKIP_IF and AT_FAIL_IF.
+m4_define([_AT_CHECK_EXIT],
+[m4_define([AT_ingroup])]dnl
+[AS_ECHO(_AT_LINE_ESCAPED) >"$at_check_line_file"
+m4_ifval([$1], [$1 && ])at_fn_check_skip $2])# _AT_CHECK_EXIT
