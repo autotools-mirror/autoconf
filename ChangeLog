@@ -1,3 +1,11 @@
+2009-07-13  Paolo Bonzini  <bonzini@gnu.org>
+
+	Use m4 -g when available.
+	* m4/m4.m4: Unset POSIXLY_CORRECT during first test.  Test for -g.
+	Warn user if he has POSIXLY_CORRECT set but -g is not supported.
+	* bin/Makefile.am: Substitute @M4_GNU@ into generated files.
+	* bin/autom4te.in: Pass @M4_GNU@ to m4.
+
 2009-07-13  Eric Blake  <ebb9@byu.net>
 
 	Fix previous patch.

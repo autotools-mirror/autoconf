@@ -1,4 +1,4 @@
-# m4.m4 serial 6
+# m4.m4 serial 7
 
 # Copyright (C) 2000, 2006, 2007, 2008, 2009 Free Software Foundation,
 # Inc.
@@ -20,6 +20,8 @@ AC_DEFUN([AC_PROG_GNU_M4],
     program of `m4', `gm4', or `gnum4' on PATH that meets Autoconf needs.])
   AC_CACHE_CHECK([for GNU M4 that supports accurate traces], [ac_cv_path_M4],
     [rm -f conftest.m4f
+ac_had_posixly_correct=${POSIXLY_CORRECT:+yes}
+AS_UNSET([POSIXLY_CORRECT])
 AC_PATH_PROGS_FEATURE_CHECK([M4], [m4 gm4 gnum4],
       [dnl Creative quoting here to avoid raw dnl and ifdef in configure.
       # Root out GNU M4 1.4.4, as well as non-GNU m4 that ignore -t, -F.
@@ -32,6 +34,24 @@ AC_PATH_PROGS_FEATURE_CHECK([M4], [m4 gm4 gnum4],
       [AC_MSG_ERROR([no acceptable m4 could be found in \$PATH.
 GNU M4 1.4.5 or later is required; 1.4.11 is recommended])])])
   M4=$ac_cv_path_M4
+  AC_CACHE_CHECK([whether $ac_cv_path_M4 accepts -g], [ac_cv_prog_gnu_m4_gnu],
+    [case `$M4 --help < /dev/null 2>&1` in
+      *--gnu*) ac_cv_prog_gnu_m4_gnu=yes ;;
+      *) ac_cv_prog_gnu_m4_gnu=no ;;
+    esac])
+  if test "$ac_cv_prog_gnu_m4_gnu" = yes; then
+    M4_GNU=-g
+  else
+    M4_GNU=
+  fi
+  AC_SUBST([M4_GNU])
+  if test x$ac_had_posixly_correct = xyes; then
+    POSIXLY_CORRECT=:
+    if test $ac_cv_prog_gnu_m4_gnu = no; then
+      AC_MSG_WARN([The version of M4 that was found does not support -g.])
+      AC_MSG_WARN([Using it with POSIXLY_CORRECT set may cause problems.])
+    fi
+  fi
   AC_CACHE_CHECK([how m4 supports trace files], [ac_cv_prog_gnu_m4_debugfile],
     [case `$M4 --help < /dev/null 2>&1` in
       *debugfile*) ac_cv_prog_gnu_m4_debugfile=--debugfile ;;
