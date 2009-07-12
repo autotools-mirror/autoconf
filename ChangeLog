@@ -1,5 +1,17 @@
 2009-07-13  Paolo Bonzini  <bonzini@gnu.org>
 
+	Introduce AT_SKIP_IF and AT_FAIL_IF
+	* NEWS: Mention AT_SKIP_IF and AT_FAIL_IF.
+	* doc/autoconf.texi (Autotest): Document them.
+	* lib/autotest/general.m4 (_AT_LINE_ESCAPED, AT_SKIP_IF,
+	AT_FAIL_IF, _AT_CHECK_EXIT): New.
+	(AT_CHECK): Use _AT_LINE_ESCAPED.
+	* tests/autotest.st: Add tests for AT_SKIP_IF and AT_FAIL_IF.
+	Use AT_SKIP_IF.
+	* tests/local.st: Use AT_SKIP_IF.
+
+2009-07-13  Paolo Bonzini  <bonzini@gnu.org>
+
 	Use m4 -g when available.
 	* m4/m4.m4: Unset POSIXLY_CORRECT during first test.  Test for -g.
 	Warn user if he has POSIXLY_CORRECT set but -g is not supported.

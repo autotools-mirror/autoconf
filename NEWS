@@ -23,7 +23,7 @@ GNU Autoconf NEWS - User visible changes.
    ignore-nolog, stdout-nolog, and stderr-nolog.
 
 ** The following documented autotest macros are new:
-   AT_CHECK_UNQUOTED
+   AT_CHECK_UNQUOTED  AT_FAIL_IF  AT_SKIP_IF
 
 ** The following documented m4sugar macros are new:
    m4_argn  m4_copy_force  m4_default_nblank  m4_default_nblank_quoted
