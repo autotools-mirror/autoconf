@@ -1,3 +1,10 @@
+2009-07-16  Eric Blake  <ebb9@byu.net>
+
+	Don't hide leading space in autom4te --trace output.
+	* bin/autom4te.in (handle_traces): Don't flatten leading and
+	trailing space, since tracing spacing bugs can be useful.
+	* tests/tools.at (autom4te --trace and whitespace): New test.
+
 2009-07-13  Eric Blake  <ebb9@byu.net>
 
 	Document that $srcdir can be used during configure.

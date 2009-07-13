@@ -226,6 +226,21 @@ AT_CHECK_AUTOM4TE([-t 'TR A CE' -t 'TR(A)CE' file.m4])
 AT_CLEANUP
 
 
+AT_SETUP([autom4te --trace and whitespace])
+
+AT_DATA([file.m4],
+[[m4@&t@_echo([  a
+b	c  ], [\
+d\
+])
+]])
+AT_CHECK_AUTOM4TE([--language=m4sugar -t 'm4@&t@_echo' file.m4], [0],
+[[file.m4:1:m4@&t@_echo: a b c :d
+]])
+
+AT_CLEANUP
+
+
 ## ------------------ ##
 ## autoconf --trace.  ##
 ## ------------------ ##
