@@ -1250,7 +1250,8 @@ dnl shell to start each parallel task as its own shell job, thus as a new
 dnl process group leader.  We then send the signal to all new process groups.
 
 dnl Do we have job control?
-if (set -m && set +m) >/dev/null 2>&1; then
+if (set -m && set +m && set +b) >/dev/null 2>&1; then
+  set +b
   at_job_control_on='set -m' at_job_control_off='set +m' at_job_group=-
 else
   at_job_control_on=: at_job_control_off=: at_job_group=

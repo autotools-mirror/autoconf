@@ -16257,6 +16257,35 @@ Thus, when writing a script in M4sh, rather than trying to rely on
 @samp{set -e}, it is better to append @samp{|| AS_EXIT} to any
 statement where it is desirable to abort on failure.
 
+@cindex @command{set -b}
+@cindex @command{set -m}
+Job control is not provided by all shells, so the use of @samp{set -m}
+or @samp{set -b} must be done with care.  When using @command{zsh} in
+native mode, asynchronous notification (@samp{set -b}) is enabled by
+default, and using @samp{emulate sh} to switch to Posix mode does not
+clear this setting (although asynchronous notification has no impact
+unless job monitoring is also enabled).  Also, @command{zsh} 4.3.10 and
+earlier have a bug where job control can be manipulated in interactive
+shells, but not in subshells or scripts.  Furthermore, some shells, like
+@command{pdksh}, fail to treat subshells as interactive, even though the
+parent shell was.
+
+@example
+$ @kbd{echo $ZSH_VERSION}
+4.3.10
+$ @kbd{set -m; echo $?}
+0
+$ @kbd{zsh -c 'set -m; echo $?'}
+set: can't change option: -m
+$ @kbd{(set -m); echo $?}
+set: can't change option: -m
+1
+$ @kbd{pdksh -ci 'echo $-; (echo $-)'}
+cim
+c
+@end example
+
+
 @item @command{shift}
 @c ------------------
 @prindex @command{shift}
