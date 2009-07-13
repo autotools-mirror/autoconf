@@ -169,21 +169,6 @@ AT_SETUP([only test])
 AT_CHECK([:])
 ]], [missing AT@&t@_CLEANUP detected])
 
-AT_CHECK_AT_SYNTAX([AT@&t@_FAIL_IF without AT@&t@_SETUP],
-[[AT_INIT([incomplete test suite])
-AT_FAIL_IF([:])
-]], [AT@&t@_FAIL_IF: missing AT@&t@_SETUP detected])
-
-AT_CHECK_AT_SYNTAX([AT@&t@_SKIP_IF without AT@&t@_SETUP],
-[[AT_INIT([incomplete test suite])
-AT_SKIP_IF([:])
-]], [AT@&t@_SKIP_IF: missing AT@&t@_SETUP detected])
-
-AT_CHECK_AT_SYNTAX([AT@&t@_CHECK without AT@&t@_SETUP],
-[[AT_INIT([incomplete test suite])
-AT_CHECK([:])
-]], [AT@&t@_CHECK: missing AT@&t@_SETUP detected])
-
 AT_CHECK_AT_SYNTAX([AT@&t@_CHECK without AT@&t@_SETUP],
 [[AT_INIT([incomplete test suite])
 AT_CHECK([:])
@@ -277,46 +262,6 @@ AT_CHECK_AT_TEST([Hard fail],
   [], [1], [], [ignore], [],
   [AT_CHECK([grep '2 failed unexpectedly' micro-suite.log], [], [ignore])
    AT_CHECK([grep ok micro-suite.log], [1])])
-
-AT_CHECK_AT_TEST([AT@&t@_FAIL_IF],
-  [AT_FAIL_IF([:])
-  AT_CLEANUP
-  AT_SETUP
-  AT_FAIL_IF([false])
-  AT_CLEANUP
-  AT_SETUP
-  AT_FAIL_IF([test x = y])
-  AT_CLEANUP
-  AT_SETUP
-  AT_FAIL_IF([bah])
-  AT_CLEANUP
-  AT_SETUP
-  AT_FAIL_IF([test x = x])
-  AT_CLEANUP
-  AT_SETUP
-  AT_FAIL_IF([test $foo = x])],
-  [], [1], [stdout], [ignore], [],
-  [AT_CHECK([grep '1 5 failed' stdout], [], [ignore], [ignore])])
-
-AT_CHECK_AT_TEST([AT@&t@_SKIP_IF],
-  [AT_SKIP_IF([:])
-  AT_CLEANUP
-  AT_SETUP
-  AT_SKIP_IF([false])
-  AT_CLEANUP
-  AT_SETUP
-  AT_SKIP_IF([test x = y])
-  AT_CLEANUP
-  AT_SETUP
-  AT_SKIP_IF([bah])
-  AT_CLEANUP
-  AT_SETUP
-  AT_SKIP_IF([test x = x])
-  AT_CLEANUP
-  AT_SETUP
-  AT_SKIP_IF([test $foo = x])],
-  [], [], [], [], [],
-  [AT_CHECK([grep '2.*skipped' micro-suite.log], [], [ignore], [ignore])])
 
 AT_CHECK_AT_TEST([Syntax error],
   [AT_CHECK([:])
@@ -1045,8 +990,8 @@ m4_define([AT_SKIP_PARALLEL_TESTS],
 [# Per BUGS, we have not yet figured out how to run parallel tests cleanly
 # under dash and some ksh variants.  For now, only run this test under
 # limited conditions; help is appreciated in widening this test base.
-AT_SKIP_IF([${CONFIG_SHELL-$SHELL} -c 'test -z "${BASH_VERSION+set}]]dnl
-[[${ZSH_VERSION+set}${TEST_PARALLEL_AUTOTEST+set}"'])
+AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'test -n "${BASH_VERSION+set}]]dnl
+[[${ZSH_VERSION+set}${TEST_PARALLEL_AUTOTEST+set}"' || exit 77])
 # The parallel scheduler requires mkfifo and job control to work.
 AT_CHECK([mkfifo fifo || exit 77])
 AT_CHECK([${CONFIG_SHELL-$SHELL} -c '(set -m && set +m) || exit 77'],

@@ -46,7 +46,6 @@ edit = sed \
 	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
 	-e 's|@M4[@]|$(M4)|g' \
 	-e 's|@M4_DEBUGFILE[@]|$(M4_DEBUGFILE)|g' \
-	-e 's|@M4_GNU[@]|$(M4_GNU)|g' \
 	-e 's|@AWK[@]|$(AWK)|g' \
 	-e 's|@RELEASE_YEAR[@]|'$(RELEASE_YEAR)'|g' \
 	-e 's|@VERSION[@]|$(VERSION)|g' \
