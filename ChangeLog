@@ -1,3 +1,10 @@
+2009-07-13  Eric Blake  <ebb9@byu.net>
+
+	Fix previous patch.
+	* lib/autotest/general.m4 (at_fn_check_prepare_notrace): Use
+	proper m4 quoting.
+	(_AT_DECIDE_TRACEABLE): Likewise.
+
 2009-07-13  Paolo Bonzini  <bonzini@gnu.org>
 
 	* lib/autotest/general.m4 (at_fn_check_prepare_notrace): Use

@@ -268,7 +268,7 @@ AS_FUNCTION_DESCRIBE([at_fn_check_prepare_notrace], [REASON LINE],
 untraceable command; REASON is the reason for disabling tracing.])
 at_fn_check_prepare_notrace ()
 {
-  $at_trace_echo "Not enabling shell tracing (command contains $1)"
+  $at_trace_echo "Not enabling shell tracing (command contains $[1])"
   AS_ECHO(["$[2]"]) >"$at_check_line_file"
   at_check_trace=: at_check_filter=:
   : >"$at_stdout"; : >"$at_stderr"
@@ -2015,7 +2015,7 @@ m4_cond([m4_eval(m4_index([$1], [`]) >= 0)], [1],
 	[]))]dnl No reason.
 [m4_if(m4_index(_m4_defn([at_reason]), [a]), [0],]dnl
 dnl We know at build time that tracing COMMANDS is never safe.
-[[at_fn_check_prepare_notrace 'm4_defn([at_reason])'],dnl
+[[at_fn_check_prepare_notrace '_m4_defn([at_reason])'],
        m4_index([$1], [$]), [-1],]dnl
 dnl We know at build time that tracing COMMANDS is always safe.
 [[at_fn_check_prepare_trace],]dnl
