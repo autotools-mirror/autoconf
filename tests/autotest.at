@@ -259,7 +259,7 @@ AT_CHECK_AT_TEST([Fallacy],
   [AT_CHECK([grep failed micro-suite.log], [], [ignore])])
 
 AT_CHECK_AT_TEST([Skip],
-  [AT_CHECK([exit 77], 0, [], [])],
+  [AT_CHECK([echo output; echo irrelevant >&2; exit 77], 0, [mismatch], [])],
   [], [], [], [], [],
   [AT_CHECK([grep skipped micro-suite.log], [], [ignore])])
 
@@ -1155,7 +1155,7 @@ AT_CHECK_AT_TEST([parallel fallacy],
   [AT_CHECK([grep failed micro-suite.log], [], [ignore])], [-j])
 
 AT_CHECK_AT_TEST([parallel skip],
-  [AT_CHECK([exit 77], 0, [], [])],
+  [AT_CHECK([echo output; echo irrelevant >&2; exit 77], 0, [mismatch], [])],
   [], [], [], [], [AT_SKIP_PARALLEL_TESTS],
   [AT_CHECK([grep skipped micro-suite.log], [], [ignore])], [-j])
 

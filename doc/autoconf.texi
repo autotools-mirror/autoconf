@@ -22750,7 +22750,8 @@ according to the rules of that literal.  Otherwise, the value of the
 parameter is treated as text that must exactly match the output given by
 @var{commands} on standard out and standard error (including an empty
 parameter for no output); any differences are captured in the testsuite
-log and the test is failed.  The difference between @code{AT_CHECK} and
+log and the test is failed (unless an unexpected exit status of 77
+skipped the test instead).  The difference between @code{AT_CHECK} and
 @code{AT_CHECK_UNQUOTED} is that only the latter performs shell variable
 expansion (@samp{$}), command substitution (@samp{`}), and backslash
 escaping (@samp{\}) on comparison text given in the @var{stdout} and
