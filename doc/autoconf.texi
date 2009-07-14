@@ -730,7 +730,7 @@ Autoconf imposes some restrictions on the names of macros used with
 Autoconf requires @acronym{GNU} M4 version 1.4.5 or later in order to
 generate the scripts.  It uses features that some versions of M4,
 including @acronym{GNU} M4 1.3, do not have.  Autoconf works better
-with @acronym{GNU} M4 version 1.4.11 or later, though this is not
+with @acronym{GNU} M4 version 1.4.13 or later, though this is not
 required.
 
 @xref{Autoconf 1}, for information about upgrading from version 1.
@@ -22655,7 +22655,7 @@ Several identical calls within one test group have no additional effect.
 
 @defmac AT_FAIL_IF (@var{shell-condition})
 @atindex{FAIL_IF}
-Make the test group fail, skipping the rest of its execution if
+Make the test group fail and skip the rest of its execution, if
 @var{shell-condition} is true.  @var{shell-condition} is a shell expression
 such as a @code{test} command.  Tests before @command{AT_FAIL_IF}
 will be executed and may still cause the test group to be skipped.
@@ -22665,7 +22665,7 @@ You should use this macro only for very simple failure conditions.  If the
 @var{shell-condition} could emit any kind of output you should instead
 use @command{AT_CHECK} like
 @example
-AT_CHECK([@var{shell-condition} || exit 99])
+AT_CHECK([if @var{shell-condition}; then exit 99; fi])
 @end example
 @noindent
 so that such output is properly recorded in the @file{testsuite.log}
@@ -22685,7 +22685,7 @@ You should use this macro only for very simple skip conditions.  If the
 @var{shell-condition} could emit any kind of output you should instead
 use @command{AT_CHECK} like
 @example
-AT_CHECK([@var{shell-condition} || exit 77])
+AT_CHECK([if @var{shell-condition}; then exit 77; fi])
 @end example
 @noindent
 so that such output is properly recorded in the @file{testsuite.log}

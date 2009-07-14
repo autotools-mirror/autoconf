@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 # Copyright (C) 1992, 1993, 1994, 1995, 1999, 2000, 2001, 2002, 2003,
-# 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+# 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -90,9 +90,9 @@ AC_SUBST([ac_cv_unsupported_fs_chars])
 AC_CACHE_CHECK([whether directories can have trailing spaces],
 	       [ac_cv_dir_trailing_space],
 [rm -rf 'conftest.d ' && mkdir 'conftest.d ' && touch 'conftest.d /tfile' 2>/dev/null
-status=$?
+stat=$?
 rm -rf 'conftest.d '
-case $status$? in #(
+case $stat$? in #(
    00) ac_cv_dir_trailing_space=yes ;; #(
    *) ac_cv_dir_trailing_space=no ;;
 esac
