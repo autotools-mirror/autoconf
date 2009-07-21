@@ -1,3 +1,19 @@
+2009-09-15  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	Implement and document Objective C++ support.
+	* lib/autoconf/c.m4 (AC_LANG(Objective C++), AC_LANG_OBJCXX)
+	(AC_LANG_PREPROC(Objective C++), AC_PROG_OBJCXXCPP)
+	(AC_LANG_COMPILER(Objective C++), AC_PROG_OBJCXX)
+	(_AC_PROG_OBJCXX_G): New macros.
+	(_AC_ARG_VAR_CPPFLAGS, _AC_ARG_VAR_LDFLAGS)
+	(_AC_ARG_VAR_LIBS): Adjusted.
+	* doc/autoconf.texi (Objective C++ Compiler): New node.
+	(Preset Output Variables): Document OBJCXXFLAGS.
+	(Language Choice): Document `Objective C++' language.
+	* NEWS: Updated.
+	* tests/local.at (AT_CHECK_ENV): Ignore AC_SUBSTed Objective C++
+	related variables.
+
 2009-09-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Work around DJGPP shell function return bug with command substitutions.

@@ -391,6 +391,7 @@ Compilers and Preprocessors
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
 * Objective C Compiler::        Likewise
+* Objective C++ Compiler::      Likewise
 * Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
 
@@ -2432,11 +2433,12 @@ needs to be processed by @command{configure} in order to be used.
 @defvar CPPFLAGS
 @evindex CPPFLAGS
 @ovindex CPPFLAGS
-Preprocessor options for the C, C++, and Objective C preprocessors and
-compilers.  If
+Preprocessor options for the C, C++, Objective C, and Objective C++
+preprocessors and compilers.  If
 it is not set in the environment when @command{configure} runs, the default
 value is empty.  @command{configure} uses this variable when preprocessing
-or compiling programs to test for C, C++, and Objective C features.
+or compiling programs to test for C, C++, Objective C, and Objective C++
+features.
 
 This variable's contents should contain options like @option{-I},
 @option{-D}, and @option{-U} that affect only the behavior of the
@@ -2527,7 +2529,7 @@ programs to test for Fortran 77 features.
 Options for the linker.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
 @command{configure} uses this variable when linking programs to test for
-C, C++, Objective C, and Fortran features.
+C, C++, Objective C, Objective C++, and Fortran features.
 
 This variable's contents should contain options like @option{-s} and
 @option{-L} that affect only the behavior of the linker.  Please see the
@@ -2545,7 +2547,8 @@ Don't use this variable to pass library names
 but some Autoconf macros may prepend extra libraries to this variable if
 those libraries are found and provide necessary functions, see
 @ref{Libraries}.  @command{configure} uses this variable when linking
-programs to test for C, C++, and Fortran features.
+programs to test for C, C++, Objective C, Objective C++, and Fortran
+features.
 @end defvar
 
 @defvar OBJCFLAGS
@@ -2553,6 +2556,13 @@ programs to test for C, C++, and Fortran features.
 @ovindex OBJCFLAGS
 Debugging and optimization options for the Objective C compiler.  It
 acts like @code{CFLAGS}, but for Objective C instead of C.
+@end defvar
+
+@defvar OBJCXXFLAGS
+@evindex OBJCXXFLAGS
+@ovindex OBJCXXFLAGS
+Debugging and optimization options for the Objective C++ compiler.  It
+acts like @code{CXXFLAGS}, but for Objective C++ instead of C++.
 @end defvar
 
 @defvar builddir
@@ -6549,6 +6559,7 @@ compiling.
 * C Compiler::                  Checking its characteristics
 * C++ Compiler::                Likewise
 * Objective C Compiler::        Likewise
+* Objective C++ Compiler::      Likewise
 * Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
 @end menu
@@ -7249,6 +7260,47 @@ compiler (@option{-O2} on systems where @command{gcc} does not accept
 @ovindex OBJCPP
 Set output variable @code{OBJCPP} to a command that runs the Objective C
 preprocessor.  If @samp{$OBJC -E} doesn't work, @file{/lib/cpp} is used.
+@end defmac
+
+
+@node Objective C++ Compiler
+@subsection Objective C++ Compiler Characteristics
+
+
+@defmac AC_PROG_OBJCXX (@ovar{compiler-search-list})
+@acindex{PROG_OBJCXX}
+@evindex OBJCXX
+@evindex OBJCXXFLAGS
+@ovindex OBJCXX
+@ovindex OBJCXXFLAGS
+Determine an Objective C++ compiler to use.  If @code{OBJCXX} is not already
+set in the environment, check for Objective C++ compilers.  Set output
+variable @code{OBJCXX} to the name of the compiler found.
+
+This macro may, however, be invoked with an optional first argument
+which, if specified, must be a blank-separated list of Objective C++ compilers
+to search for.  This just gives the user an opportunity to specify an
+alternative search list for the Objective C++ compiler.  For example, if you
+didn't like the default order, then you could invoke @code{AC_PROG_OBJCXX}
+like this:
+
+@example
+AC_PROG_OBJCXX([gcc g++ objcc++ objcxx])
+@end example
+
+If using the @acronym{GNU} Objective C++ compiler, set shell variable
+@code{GOBJCXX} to @samp{yes}.  If output variable @code{OBJCXXFLAGS} was not
+already set, set it to @option{-g -O2} for the @acronym{GNU} Objective C++
+compiler (@option{-O2} on systems where @command{gcc} does not accept
+@option{-g}), or @option{-g} for other compilers.
+@end defmac
+
+@defmac AC_PROG_OBJCXXCPP
+@acindex{PROG_OBJCXXCPP}
+@evindex OBJCXXCPP
+@ovindex OBJCXXCPP
+Set output variable @code{OBJCXXCPP} to a command that runs the Objective C++
+preprocessor.  If @samp{$OBJCXX -E} doesn't work, @file{/lib/cpp} is used.
 @end defmac
 
 
@@ -8059,6 +8111,12 @@ Do compilation tests using @code{OBJC} and @code{OBJCPP} and use
 extension @file{.m} for test programs.  Use compilation flags:
 @code{CPPFLAGS} with @code{OBJCPP}, and both @code{CPPFLAGS} and
 @code{OBJCFLAGS} with @code{OBJC}.
+
+@item Objective C++
+Do compilation tests using @code{OBJCXX} and @code{OBJCXXCPP} and use
+extension @file{.mm} for test programs.  Use compilation flags:
+@code{CPPFLAGS} with @code{OBJCXXCPP}, and both @code{CPPFLAGS} and
+@code{OBJCXXFLAGS} with @code{OBJCXX}.
 @end table
 @end defmac
 

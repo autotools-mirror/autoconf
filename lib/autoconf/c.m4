@@ -36,10 +36,11 @@
 #      1a. C   2a. C
 #      1b. C++
 #      1c. Objective C
+#      1d. Objective C++
 #
 # 3. Looking for a compiler
 #    And possibly the associated preprocessor.
-#      3a. C   3b. C++   3c. Objective C
+#      3a. C   3b. C++   3c. Objective C   3d. Objective C++
 #
 # 4. Compilers' characteristics.
 #      4a. C
@@ -274,6 +275,23 @@ AU_DEFUN([AC_LANG_OBJC], [AC_LANG(Objective C)])
 
 
 
+## -------------------------------- ##
+## 1d. The Objective C++ language.  ##
+## -------------------------------- ##
+
+
+# AC_LANG(Objective C++)
+# ----------------------
+AC_LANG_DEFINE([Objective C++], [objcxx], [OBJCXX], [C++],
+[ac_ext=mm
+ac_cpp='$OBJCXXCPP $CPPFLAGS'
+ac_compile='$OBJCXX -c $OBJCXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
+ac_link='$OBJCXX -o conftest$ac_exeext $OBJCXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
+ac_compiler_gnu=$ac_cv_objcxx_compiler_gnu
+])
+
+
+
 ## -------------------------------------------- ##
 ## 3. Looking for Compilers and Preprocessors.  ##
 ## -------------------------------------------- ##
@@ -286,17 +304,17 @@ AU_DEFUN([AC_LANG_OBJC], [AC_LANG(Objective C)])
 # _AC_ARG_VAR_CPPFLAGS
 # --------------------
 # Document and register CPPFLAGS, which is used by
-# AC_PROG_{CC, CPP, CXX, CXXCPP, OBJC, OBJCPP}.
+# AC_PROG_{CC, CPP, CXX, CXXCPP, OBJC, OBJCPP, OBJCXX, OBJCXXCPP}.
 AC_DEFUN([_AC_ARG_VAR_CPPFLAGS],
 [AC_ARG_VAR([CPPFLAGS],
-	    [C/C++/Objective C preprocessor flags, e.g. -I<include dir>
+	    [(Objective) C/C++ preprocessor flags, e.g. -I<include dir>
 	     if you have headers in a nonstandard directory <include dir>])])
 
 
 # _AC_ARG_VAR_LDFLAGS
 # -------------------
 # Document and register LDFLAGS, which is used by
-# AC_PROG_{CC, CXX, F77, FC, OBJC}.
+# AC_PROG_{CC, CXX, F77, FC, OBJC, OBJCXX}.
 AC_DEFUN([_AC_ARG_VAR_LDFLAGS],
 [AC_ARG_VAR([LDFLAGS],
 	    [linker flags, e.g. -L<lib dir> if you have libraries in a
@@ -306,7 +324,7 @@ AC_DEFUN([_AC_ARG_VAR_LDFLAGS],
 # _AC_ARG_VAR_LIBS
 # ----------------
 # Document and register LIBS, which is used by
-# AC_PROG_{CC, CXX, F77, FC, OBJS}.
+# AC_PROG_{CC, CXX, F77, FC, OBJC, OBJCXX}.
 AC_DEFUN([_AC_ARG_VAR_LIBS],
 [AC_ARG_VAR([LIBS],
 	    [libraries to pass to the linker, e.g. -l<library>])])
@@ -922,6 +940,145 @@ else
   fi
 fi[]dnl
 ])# _AC_PROG_OBJC_G
+
+
+
+# -------------------------------- #
+# 3d. The Objective C++ compiler.  #
+# -------------------------------- #
+
+
+# AC_LANG_PREPROC(Objective C++)
+# ------------------------------
+# Find the Objective C++ preprocessor.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
+AC_DEFUN([AC_LANG_PREPROC(Objective C++)],
+[AC_REQUIRE([AC_PROG_OBJCXXCPP])])
+
+
+# AC_PROG_OBJCXXCPP
+# -----------------
+# Find a working Objective C++ preprocessor.
+AC_DEFUN([AC_PROG_OBJCXXCPP],
+[AC_REQUIRE([AC_PROG_OBJCXX])dnl
+AC_ARG_VAR([OBJCXXCPP],   [Objective C++ preprocessor])dnl
+_AC_ARG_VAR_CPPFLAGS()dnl
+AC_LANG_PUSH(Objective C++)dnl
+AC_MSG_CHECKING([how to run the Objective C++ preprocessor])
+if test -z "$OBJCXXCPP"; then
+  AC_CACHE_VAL(ac_cv_prog_OBJCXXCPP,
+  [dnl
+    # Double quotes because OBJCXXCPP needs to be expanded
+    for OBJCXXCPP in "$OBJCXX -E" "/lib/cpp"
+    do
+      _AC_PROG_PREPROC_WORKS_IFELSE([break])
+    done
+    ac_cv_prog_OBJCXXCPP=$OBJCXXCPP
+  ])dnl
+  OBJCXXCPP=$ac_cv_prog_OBJCXXCPP
+else
+  ac_cv_prog_OBJCXXCPP=$OBJCXXCPP
+fi
+AC_MSG_RESULT([$OBJCXXCPP])
+_AC_PROG_PREPROC_WORKS_IFELSE([],
+	  [AC_MSG_FAILURE([Objective C++ preprocessor "$OBJCXXCPP" fails sanity check])])
+AC_SUBST(OBJCXXCPP)dnl
+AC_LANG_POP(Objective C++)dnl
+])# AC_PROG_OBJCXXCPP
+
+
+# AC_LANG_COMPILER(Objective C++)
+# -------------------------------
+# Find the Objective C++ compiler.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
+AC_DEFUN([AC_LANG_COMPILER(Objective C++)],
+[AC_REQUIRE([AC_PROG_OBJCXX])])
+
+
+
+# AC_PROG_OBJCXX([LIST-OF-COMPILERS])
+# ---------------------------------
+# LIST-OF-COMPILERS is a space separated list of Objective C++ compilers to
+# search for (if not specified, a default list is used).  This just gives
+# the user an opportunity to specify an alternative search list for the
+# Objective C++ compiler.
+# FIXME: this list is pure guesswork
+# objc++ StepStone Objective-C++ compiler (also "standard" name for OBJCXX)
+# objcxx David Stes' POC.  If you installed this, you likely want it.
+# c++    Native C++ compiler (for instance, Apple).
+# CXX    You never know.
+AN_MAKEVAR([OBJCXX],  [AC_PROG_OBJCXX])
+AN_PROGRAM([objcxx],  [AC_PROG_OBJCXX])
+AC_DEFUN([AC_PROG_OBJCXX],
+[AC_LANG_PUSH(Objective C++)dnl
+AC_ARG_VAR([OBJCXX],      [Objective C++ compiler command])dnl
+AC_ARG_VAR([OBJCXXFLAGS], [Objective C++ compiler flags])dnl
+_AC_ARG_VAR_LDFLAGS()dnl
+_AC_ARG_VAR_LIBS()dnl
+_AC_ARG_VAR_CPPFLAGS()dnl
+_AC_ARG_VAR_PRECIOUS([OBJCXX])dnl
+AC_CHECK_TOOLS(OBJCXX,
+	       [m4_default([$1], [g++ objc++ objcxx c++ CXX])],
+	       g++)
+# Provide some information about the compiler.
+_AS_ECHO_LOG([checking for _AC_LANG compiler version])
+set X $ac_compile
+ac_compiler=$[2]
+for ac_option in --version -v -V -qversion; do
+  _AC_DO_LIMIT([$ac_compiler $ac_option >&AS_MESSAGE_LOG_FD])
+done
+
+m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
+m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
+_AC_LANG_COMPILER_GNU
+if test $ac_compiler_gnu = yes; then
+  GOBJCXX=yes
+else
+  GOBJCXX=
+fi
+_AC_PROG_OBJCXX_G
+AC_LANG_POP(Objective C++)dnl
+])# AC_PROG_OBJCXX
+
+
+# _AC_PROG_OBJCXX_G
+# -----------------
+# Check whether -g works, even if OBJCFLAGS is set, in case the package
+# plays around with OBJCFLAGS (such as to build both debugging and
+# normal versions of a library), tasteless as that idea is.
+# Don't consider -g to work if it generates warnings when plain compiles don't.
+m4_define([_AC_PROG_OBJCXX_G],
+[ac_test_OBJCXXFLAGS=${OBJCXXFLAGS+set}
+ac_save_OBJCXXFLAGS=$OBJCXXFLAGS
+AC_CACHE_CHECK(whether $OBJCXX accepts -g, ac_cv_prog_objcxx_g,
+  [ac_save_objcxx_werror_flag=$ac_objcxx_werror_flag
+   ac_objcxx_werror_flag=yes
+   ac_cv_prog_objcxx_g=no
+   OBJCXXFLAGS="-g"
+   _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+     [ac_cv_prog_objcxx_g=yes],
+     [OBJCXXFLAGS=""
+      _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+	[],
+	[ac_objcxx_werror_flag=$ac_save_objcxx_werror_flag
+	 OBJCXXFLAGS="-g"
+	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
+	   [ac_cv_prog_objcxx_g=yes])])])
+   ac_objcxx_werror_flag=$ac_save_objcx_werror_flag])
+if test "$ac_test_OBJCXXFLAGS" = set; then
+  OBJCXXFLAGS=$ac_save_OBJCXXFLAGS
+elif test $ac_cv_prog_objcxx_g = yes; then
+  if test "$GOBJCXX" = yes; then
+    OBJCXXFLAGS="-g -O2"
+  else
+    OBJCXXFLAGS="-g"
+  fi
+else
+  if test "$GOBJCXX" = yes; then
+    OBJCXXFLAGS="-O2"
+  else
+    OBJCXXFLAGS=
+  fi
+fi[]dnl
+])# _AC_PROG_OBJCXX_G
 
 
 
