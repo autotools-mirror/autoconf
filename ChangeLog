@@ -1,3 +1,12 @@
+2009-07-23  Romain Lenglet  <romain.lenglet@laposte.net>
+
+	Add autotests for Erlang macros.
+	* tests/erlang.at: Added tests for all macros in erlang.m4.
+	* tests/Makefile.am: Added erlang.at.
+	* tests/suite.at: Likewise.
+	* tests/compile.at: Added test for extension of Erlang files.
+	* NEWS: Mention this.
+
 2009-07-22  Eric Blake  <ebb9@byu.net>
 
 	Fix test of autom4te from stdin.

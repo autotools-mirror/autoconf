@@ -35,23 +35,27 @@ AT_SETUP([[AC_LANG, AC_LANG_PUSH & AC_LANG_POP]])
 AT_DATA([configure.ac],
 [[AC_INIT
 # C
-AC_LANG(C)
+AC_LANG([C])
 # C
-AC_LANG_PUSH(C)
+AC_LANG_PUSH([C])
 # C C
-AC_LANG_PUSH(C++)
+AC_LANG_PUSH([C++])
 # C++ C C
-AC_LANG(C++)
+AC_LANG([C++])
 # C++ C C
-AC_LANG_PUSH(Fortran 77)
-# F77 C++ C C
-AC_LANG_POP(Fortran 77)
+AC_LANG_PUSH([Erlang])
+# Erlang C++ C C
+AC_LANG_PUSH([Fortran 77])
+# F77 Erlang C++ C C
+AC_LANG_POP([Fortran 77])
+# Erlang C++ C C
+AC_LANG_POP([Erlang])
 # C++ C C
-AC_LANG(C++)
+AC_LANG([C++])
 # C++ C C
-AC_LANG_POP(C++)
+AC_LANG_POP([C++])
 # C C
-AC_LANG_POP(C)
+AC_LANG_POP([C])
 # C
 ]])
 
@@ -62,7 +66,9 @@ c
 c
 cpp
 cpp
+erl
 f
+erl
 cpp
 cpp
 c
@@ -243,16 +249,16 @@ AT_DATA([configure.ac],
 AC_PROG_CC
 AC_PROG_CXX
 
-AC_LANG_PUSH(C)
+AC_LANG_PUSH([C])
 AC_MSG_CHECKING([a simple C program that is not valid C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([enum a { A, B, C };
 				    enum a f(enum a in) { return in++; }], [])],
 		  [AC_MSG_RESULT([ok])],
 		  [AC_MSG_RESULT([failed])
 		   AC_MSG_ERROR([could not compile test program])])
-AC_LANG_POP(C)
+AC_LANG_POP([C])
 
-AC_LANG_PUSH(C++)
+AC_LANG_PUSH([C++])
 AC_MSG_CHECKING([a simple C++ program that is not valid C])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([class A {};], [])],
 		  [AC_MSG_RESULT([ok])],
@@ -260,7 +266,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([class A {};], [])],
 		   AC_MSG_ERROR([could not compile test program])])
 
 AC_CHECK_HEADER([cstring])
-AC_LANG_POP(C++)
+AC_LANG_POP([C++])
 ]])
 
 AT_CHECK_AUTOCONF

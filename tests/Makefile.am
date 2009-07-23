@@ -100,7 +100,7 @@ TESTSUITE_HAND_AT = \
 	suite.at \
 	m4sugar.at m4sh.at autotest.at \
 	base.at tools.at torture.at \
-	compile.at c.at fortran.at \
+	compile.at c.at erlang.at fortran.at \
 	semantics.at \
 	autoscan.at \
 	foreign.at
@@ -168,6 +168,7 @@ AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/functions.m4 \
 		 $(autoconfdir)/lang.m4 \
 		 $(autoconfdir)/c.m4 \
+		 $(autoconfdir)/erlang.m4 \
 		 $(autoconfdir)/fortran.m4 \
 		 $(autoconfdir)/headers.m4 \
 		 $(autoconfdir)/libs.m4 \

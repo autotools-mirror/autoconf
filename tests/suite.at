@@ -52,6 +52,7 @@ m4_include([c.at])
 m4_include([acc.at])
 m4_include([fortran.at])
 m4_include([acfortran.at])
+m4_include([erlang.at])
 
 # Checking that AC_CHECK_FOO macros work properly.
 m4_include([semantics.at])
