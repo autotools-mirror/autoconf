@@ -191,7 +191,7 @@ AC_DEFUN([AC_ERLANG_CHECK_LIB],
 [AC_REQUIRE([AC_ERLANG_PATH_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_PATH_ERL])[]dnl
 AC_CACHE_CHECK([for Erlang/OTP '$1' library subdirectory],
-    [erlang_cv_lib_dir_$1],
+    [ac_cv_erlang_lib_dir_$1],
     [AC_LANG_PUSH(Erlang)[]dnl
      AC_RUN_IFELSE(
 	[AC_LANG_PROGRAM([], [dnl
@@ -204,23 +204,25 @@ AC_CACHE_CHECK([for Erlang/OTP '$1' library subdirectory],
 		0
 	    end,
 	    halt(ReturnValue)])],
-	[erlang_cv_lib_dir_$1=`cat conftest.out`],
+	[ac_cv_erlang_lib_dir_$1=`cat conftest.out`
+	 rm -f conftest.out],
 	[if test ! -f conftest.out; then
 	     AC_MSG_FAILURE([test Erlang program execution failed])
 	 else
-	     erlang_cv_lib_dir_$1="not found"
+	     ac_cv_erlang_lib_dir_$1="not found"
+	     rm -f conftest.out
 	 fi])
      AC_LANG_POP(Erlang)[]dnl
     ])
 AC_CACHE_CHECK([for Erlang/OTP '$1' library version],
-    [erlang_cv_lib_ver_$1],
-    [AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"],
-	[erlang_cv_lib_ver_$1="not found"],
-	[erlang_cv_lib_ver_$1=`AS_ECHO(["$erlang_cv_lib_dir_$1"]) | sed -n -e 's,^.*-\([[^/-]]*\)$,\1,p'`])[]dnl
+    [ac_cv_erlang_lib_ver_$1],
+    [AS_IF([test "$ac_cv_erlang_lib_dir_$1" = "not found"],
+	[ac_cv_erlang_lib_ver_$1="not found"],
+	[ac_cv_erlang_lib_ver_$1=`AS_ECHO(["$ac_cv_erlang_lib_dir_$1"]) | sed -n -e 's,^.*-\([[^/-]]*\)$,\1,p'`])[]dnl
     ])
-AC_SUBST([ERLANG_LIB_DIR_$1], [$erlang_cv_lib_dir_$1])
-AC_SUBST([ERLANG_LIB_VER_$1], [$erlang_cv_lib_ver_$1])
-AS_IF([test "$erlang_cv_lib_dir_$1" = "not found"], [$3], [$2])
+AC_SUBST([ERLANG_LIB_DIR_$1], [$ac_cv_erlang_lib_dir_$1])
+AC_SUBST([ERLANG_LIB_VER_$1], [$ac_cv_erlang_lib_ver_$1])
+AS_IF([test "$ac_cv_erlang_lib_dir_$1" = "not found"], [$3], [$2])
 ])# AC_ERLANG_CHECK_LIB
 
 
@@ -231,7 +233,7 @@ AC_DEFUN([AC_ERLANG_SUBST_ROOT_DIR],
 [AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
 AC_CACHE_CHECK([for Erlang/OTP root directory],
-    [erlang_cv_root_dir],
+    [ac_cv_erlang_root_dir],
     [AC_LANG_PUSH(Erlang)[]dnl
      AC_RUN_IFELSE(
 	[AC_LANG_PROGRAM([], [dnl
@@ -239,11 +241,13 @@ AC_CACHE_CHECK([for Erlang/OTP root directory],
 	    file:write_file("conftest.out", RootDir),
 	    ReturnValue = 0,
 	    halt(ReturnValue)])],
-	[erlang_cv_root_dir=`cat conftest.out`],
-	[AC_MSG_FAILURE([test Erlang program execution failed])])
+	[ac_cv_erlang_root_dir=`cat conftest.out`
+	 rm -f conftest.out],
+	[rm -f conftest.out
+	 AC_MSG_FAILURE([test Erlang program execution failed])])
      AC_LANG_POP(Erlang)[]dnl
     ])
-AC_SUBST([ERLANG_ROOT_DIR], [$erlang_cv_root_dir])
+AC_SUBST([ERLANG_ROOT_DIR], [$ac_cv_erlang_root_dir])
 ])# AC_ERLANG_SUBST_ROOT_DIR
 
 
@@ -253,7 +257,7 @@ AC_DEFUN([AC_ERLANG_SUBST_LIB_DIR],
 [AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
 AC_CACHE_CHECK([for Erlang/OTP library base directory],
-    [erlang_cv_lib_dir],
+    [ac_cv_erlang_lib_dir],
     [AC_LANG_PUSH(Erlang)[]dnl
      AC_RUN_IFELSE(
 	[AC_LANG_PROGRAM([], [dnl
@@ -261,11 +265,13 @@ AC_CACHE_CHECK([for Erlang/OTP library base directory],
 	    file:write_file("conftest.out", LibDir),
 	    ReturnValue = 0,
 	    halt(ReturnValue)])],
-	[erlang_cv_lib_dir=`cat conftest.out`],
-	[AC_MSG_FAILURE([test Erlang program execution failed])])
+	[ac_cv_erlang_lib_dir=`cat conftest.out`
+	 rm -f conftest.out],
+	[rm -f conftest.out
+	 AC_MSG_FAILURE([test Erlang program execution failed])])
      AC_LANG_POP(Erlang)[]dnl
     ])
-AC_SUBST([ERLANG_LIB_DIR], [$erlang_cv_lib_dir])
+AC_SUBST([ERLANG_LIB_DIR], [$ac_cv_erlang_lib_dir])
 ])# AC_ERLANG_SUBST_LIB_DIR
 
 
@@ -311,7 +317,7 @@ AC_DEFUN([AC_ERLANG_SUBST_ERTS_VER],
 [AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
 AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
 AC_CACHE_CHECK([for Erlang/OTP ERTS version],
-    [erlang_cv_erts_ver],
+    [ac_cv_erlang_erts_ver],
     [AC_LANG_PUSH([Erlang])[]dnl
      AC_RUN_IFELSE(
 	[AC_LANG_PROGRAM([], [dnl
@@ -319,9 +325,11 @@ AC_CACHE_CHECK([for Erlang/OTP ERTS version],
 	    file:write_file("conftest.out", Version),
 	    ReturnValue = 0,
 	    halt(ReturnValue)])],
-	[erlang_cv_erts_ver=`cat conftest.out`],
-	[AC_MSG_FAILURE([test Erlang program execution failed])])
+	[ac_cv_erlang_erts_ver=`cat conftest.out`
+	 rm -f conftest.out],
+	[rm -f conftest.out
+	 AC_MSG_FAILURE([test Erlang program execution failed])])
      AC_LANG_POP([Erlang])[]dnl
     ])
-AC_SUBST([ERLANG_ERTS_VER], [$erlang_cv_erts_ver])
+AC_SUBST([ERLANG_ERTS_VER], [$ac_cv_erlang_erts_ver])
 ])# AC_ERLANG_SUBST_ERTS_VER

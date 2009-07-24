@@ -2722,7 +2722,7 @@ AC_DEFUN([_AC_RUN_IFELSE],
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_run "$LINENO"], [$2], [$3])
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
+  conftest.$ac_objext conftest.beam[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_RUN_IFELSE
 
 # AC_RUN_IFELSE(PROGRAM,

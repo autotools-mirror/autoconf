@@ -25,190 +25,112 @@ AT_BANNER([Erlang low level compiling and utility macros.])
 # primitive, so check those first.
 
 
-# AT_SETUP_ERLANG(title)
-# ----------------------
-# Setup a test group for Erlang, named TITLE.
-m4_define([AT_SETUP_ERLANG],
-[AT_SETUP([$1])
-AT_KEYWORDS([Erlang])
-found_erl=no
-found_erlc=no
-_AS_PATH_WALK([], [
-if AS_EXECUTABLE_P(["$as_dir/erl"]); then found_erl=yes; fi
-if AS_EXECUTABLE_P(["$as_dir/erlc"]); then found_erlc=yes; fi
-if test "${found_erl}${found_erlc}" = "yesyes"; then break; fi
-])
-AT_SKIP_IF([test "$found_erl$found_erlc" != "yesyes"])])
-
-
 ## ----------------- ##
 ## Erlang Compiler.  ##
 ## ----------------- ##
 
-AT_SETUP_ERLANG([Erlang])
-
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_ERLANG_NEED_ERL
-AC_ERLANG_NEED_ERLC
+AT_CHECK_MACRO([Erlang],
+[[AC_ERLANG_PATH_ERL([not found])
+AC_ERLANG_PATH_ERLC([not found])
+if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
 AC_LANG([Erlang])
 ## Can't compile, but can run an Erlang module:
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [halt(0)])],
-              [AC_MSG_RESULT([ok])
-               AC_MSG_ERROR([compiling Erlang program should fail])],
-              [AC_MSG_RESULT([failed])])
+		  [AC_MSG_RESULT([ok])
+		   AC_MSG_ERROR([compiling Erlang program should fail])],
+		  [AC_MSG_RESULT([failed])])
 AC_RUN_IFELSE([AC_LANG_PROGRAM([], [halt(0)])],
-              [AC_MSG_RESULT([ok])],
-              [AC_MSG_RESULT([failed])
-               AC_MSG_ERROR([could not run test program])])
-]])
-
-AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([-q])
-
-AT_CLEANUP
+	      [AC_MSG_RESULT([ok])],
+	      [AC_MSG_RESULT([failed])
+	       AC_MSG_ERROR([could not run test program])])
+]],
+[AT_KEYWORDS([Erlang])])
 
 
-## ----------------------- ##
-## Erlang path detection.  ##
-## ----------------------- ##
+## ---------------------- ##
+## Erlang lib detection.  ##
+## ---------------------- ##
 
-AT_SETUP_ERLANG([AC_ERLANG_CHECK_LIB])
-
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_ERLANG_NEED_ERL
-AC_ERLANG_NEED_ERLC
+AT_CHECK_MACRO([AC_ERLANG_CHECK_LIB],
+[[AC_ERLANG_PATH_ERL([not found])
+AC_ERLANG_PATH_ERLC([not found])
+if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
 AC_ERLANG_CHECK_LIB([stdlib],
-                    [AC_MSG_RESULT([ok])],
-                    [AC_MSG_RESULT([failed])])
-AC_CONFIG_FILES([dir])
-AC_OUTPUT
-]])
-
-AT_DATA([dir.in],
-[[@ERLANG_LIB_DIR_stdlib@
-]])
-
-AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([-q])
-
-dir=`cat dir`
-rm -f dir
-AT_CHECK([test "$dir" = "not found" || test -d "$dir"])
-
-AT_CLEANUP
+		    [AC_MSG_RESULT([ok])],
+		    [AC_MSG_RESULT([failed])])
+## Test that the lib path detection really detected a directory:
+if test "$ERLANG_LIB_DIR_stdlib" != "not found" \
+  && test ! -d "$ERLANG_LIB_DIR_stdlib"; then
+	AC_MSG_ERROR([incorrect ERLANG_LIB_DIR_stdlib variable])
+fi
+]],
+[AT_KEYWORDS([Erlang])])
 
 
 ## --------------------------- ##
 ## Erlang root dir detection.  ##
 ## --------------------------- ##
 
-AT_SETUP_ERLANG([AC_ERLANG_SUBST_ROOT_DIR])
-
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_ERLANG_NEED_ERL
-AC_ERLANG_NEED_ERLC
+AT_CHECK_MACRO([AC_ERLANG_SUBST_ROOT_DIR],
+[[AC_ERLANG_PATH_ERL([not found])
+AC_ERLANG_PATH_ERLC([not found])
+if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
 AC_ERLANG_SUBST_ROOT_DIR
-AC_CONFIG_FILES([dir])
-AC_OUTPUT
-]])
-
-AT_DATA([dir.in],
-[[@ERLANG_ROOT_DIR@
-]])
-
-AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([-q])
-
-dir=`cat dir`
-rm -f dir
-AT_CHECK([test -d "$dir"])
-
-AT_CLEANUP
+## Test that the root path detection really detected a directory:
+if test ! -d "$ERLANG_ROOT_DIR"; then
+	AC_MSG_ERROR([incorrect ERLANG_ROOT_DIR variable])
+fi
+]],
+[AT_KEYWORDS([Erlang])])
 
 
 ## -------------------------- ##
 ## Erlang lib dir detection.  ##
 ## -------------------------- ##
 
-AT_SETUP_ERLANG([AC_ERLANG_SUBST_LIB_DIR])
-
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_ERLANG_NEED_ERL
-AC_ERLANG_NEED_ERLC
+AT_CHECK_MACRO([AC_ERLANG_SUBST_LIB_DIR],
+[[AC_ERLANG_PATH_ERL([not found])
+AC_ERLANG_PATH_ERLC([not found])
+if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
 AC_ERLANG_SUBST_LIB_DIR
-AC_CONFIG_FILES([dir])
-AC_OUTPUT
-]])
-
-AT_DATA([dir.in],
-[[@ERLANG_LIB_DIR@
-]])
-
-AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([-q])
-
-dir=`cat dir`
-rm -f dir
-AT_CHECK([test -d "$dir"])
-
-AT_CLEANUP
-
-
-## ------------------------------- ##
-## Erlang installation detection.  ##
-## ------------------------------- ##
-
-AT_CHECK_MACRO([AC_ERLANG_SUBST_INSTALL_LIB_DIR], [],
+## Test that the lib path detection really detected a directory:
+if test ! -d "$ERLANG_LIB_DIR"; then
+	AC_MSG_ERROR([incorrect ERLANG_LIB_DIR variable])
+fi
+]],
 [AT_KEYWORDS([Erlang])])
 
 
-## ------------------------------- ##
-## Erlang installation detection.  ##
-## ------------------------------- ##
+## ----------------------------------- ##
+## Erlang install base dir detection.  ##
+## ----------------------------------- ##
 
-AT_SETUP([AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR])
-AT_KEYWORDS([Erlang])
+AT_CHECK_MACRO([AC_ERLANG_SUBST_INSTALL_LIB_DIR],
+	       [AT_KEYWORDS([Erlang])])
 
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR([test_blah], [1.24-b])
-AC_CONFIG_FILES([dir])
-AC_OUTPUT
-]])
 
-AT_DATA([dir.in],
-[[@ERLANG_INSTALL_LIB_DIR_test_blah@
-]])
+## ---------------------------------- ##
+## Erlang install lib dir detection.  ##
+## ---------------------------------- ##
 
-AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([-q])
-
-dir=`cat dir`
-subdir=`AS_BASENAME([$dir])`
-rm -f dir
-AT_CHECK([test "$subdir" = "test_blah-1.24-b"])
-
-AT_CLEANUP
+AT_CHECK_MACRO([AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR],
+[[AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR([test_blah], [1.24-b])
+## Test that the generated directory name is well-formed:
+if test `echo "$ERLANG_INSTALL_LIB_DIR_test_blah" | sed -e 's/^.*\///'` != "test_blah-1.24-b"; then
+	AC_MSG_ERROR([incorrect ERLANG_INSTALL_LIB_DIR_test_blah variable])
+fi
+]],
+[AT_KEYWORDS([Erlang])])
 
 
 ## -------------------------- ##
 ## Erlang version detection.  ##
 ## -------------------------- ##
 
-AT_SETUP_ERLANG([AC_ERLANG_SUBST_ERTS_VER])
-
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_ERLANG_NEED_ERL
-AC_ERLANG_NEED_ERLC
+AT_CHECK_MACRO([AC_ERLANG_SUBST_ERTS_VER],
+[[AC_ERLANG_PATH_ERL([not found])
+AC_ERLANG_PATH_ERLC([not found])
+if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
 AC_ERLANG_SUBST_ERTS_VER
-]])
-
-AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([-q])
-
-AT_CLEANUP
+]],
+[AT_KEYWORDS([Erlang])])
