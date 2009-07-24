@@ -210,8 +210,8 @@ cp "$abs_top_srcdir/tests/statesave.m4" aclocal.m4
 # were running too fast.
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CHECK_M4([autoconf --force $1], [$2], [$3], [$4])
-if test -s configure; then
-  AT_CHECK_SHELL_SYNTAX(configure)
+if test -s configure && test "$ac_cv_sh_n_works" = yes; then
+  AT_CHECK_SHELL_SYNTAX([configure])
 fi
 ])
 
