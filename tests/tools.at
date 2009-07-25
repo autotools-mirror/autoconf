@@ -228,14 +228,17 @@ AT_CLEANUP
 
 AT_SETUP([autom4te --trace and whitespace])
 
-AT_DATA([file.m4],
-[[m4@&t@_echo([  a
+dnl line numbering differs between m4 1.4.6 and 1.4.13 if we don't
+dnl go through a single line wrapper
+AT_DATA_M4SUGAR([file.m4],
+[[m4_define([foo], [m4_echo([  a
 b	c  ], [\
 d\
-])
+])])
+foo
 ]])
 AT_CHECK_AUTOM4TE([--language=m4sugar -t 'm4@&t@_echo' file.m4], [0],
-[[file.m4:1:m4@&t@_echo: a b c :d
+[[file.m4:5:m4@&t@_echo: a b c :d
 ]])
 
 AT_CLEANUP

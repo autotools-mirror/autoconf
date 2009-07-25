@@ -581,13 +581,14 @@ AT_CHECK_M4SUGAR_TEXT([[dnl
 m4_defun([a], [[a]])dnl
 m4_defun([b], [[b]m4_require([a])])dnl
 m4_defun([c], [[c]m4_require([b])])dnl
-m4_defun([outer],
+dnl the extra macro layer works around line number differences in older m4
+m4_define([foo], [m4_defun([outer],
 [pre
 a
 c
 a
 c
-post])dnl
+post])])foo[]dnl
 outer
 ]],
 [[a
@@ -599,11 +600,11 @@ a
 c
 post
 ]],
-[[script.4s:14: warning: m4@&t@_require: `a' was expanded before it was required
+[[script.4s:15: warning: m4@&t@_require: `a' was expanded before it was required
 script.4s:5: b is expanded from...
 script.4s:6: c is expanded from...
-script.4s:7: outer is expanded from...
-script.4s:14: the top level
+script.4s:14: outer is expanded from...
+script.4s:15: the top level
 ]])
 
 dnl Direct invocation, expand-before-require but no nested require.  As this

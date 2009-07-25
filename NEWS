@@ -3,6 +3,11 @@ GNU Autoconf NEWS - User visible changes.
 * Major changes in Autoconf 2.64 (2009-??-??) [stable]
   Released by Eric Blake, based on git versions 2.63b.*.
 
+** Autoconf now requires GNU M4 1.4.6 or later.  Earlier versions of M4
+   have a bug in regular expression handling that interferes with some
+   of the speedups provided since Autoconf 2.63.  GNU M4 1.4.13 or
+   later is recommended.
+
 ** AS_IF and AS_CASE have been taught to avoid syntax errors even when
    given arguments that expand to just whitespace.
 

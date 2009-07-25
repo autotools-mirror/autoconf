@@ -1,3 +1,17 @@
+2009-07-25  Eric Blake  <ebb9@byu.net>
+
+	Require m4 1.4.6, and fix testsuite to support this version.
+	* m4/m4.m4 (AC_PROG_GNU_M4): Reject m4 1.4.5, now that we use
+	regexp it can't handle.
+	* NEWS: Mention minimum version bump.
+	* README: Likewise.
+	* README-hacking: Likewise.
+	* doc/autoconf.texi (Introduction, Why GNU M4): Likewise.
+	* tests/tools.at (autom4te --trace and whitespace): Update test so
+	still work with older m4 line numbers.
+	* tests/m4sugar.at (m4@&t@_require: nested): Likewise.
+	Reported by Ralf Wildenhues.
+
 2009-07-25  Bruno Haible  <bruno@clisp.org>
 
 	Clarify autom4te debugging tips.
