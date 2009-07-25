@@ -69,9 +69,9 @@ fi
 AC_SUBST([ac_cv_sh_n_works])
 
 AC_MSG_CHECKING([for characters that cannot appear in file names])
-AC_CACHE_VAL( [ac_cv_unsupported_fs_chars],
+AC_CACHE_VAL([ac_cv_unsupported_fs_chars],
 [ac_cv_unsupported_fs_chars=
-for c in '\\' '"' '<' '>' '*' '?' '|'
+for c in '\\' \" '<' '>' '*' '?' '|'
 do
   touch "conftest.t${c}t" 2>/dev/null
   test -f "conftest.t${c}t" && rm -f "conftest.t${c}t" && continue
