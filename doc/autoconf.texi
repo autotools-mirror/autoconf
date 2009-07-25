@@ -430,6 +430,7 @@ Programming in M4
 * M4 Quotation::                Protecting macros from unwanted expansion
 * Using autom4te::              The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
+* Debugging via autom4te::      Figuring out what M4 was doing
 
 Programming in M4sh
 
@@ -9414,6 +9415,7 @@ matter of fact, @emph{anything that is not documented must not be used}.
 * M4 Quotation::                Protecting macros from unwanted expansion
 * Using autom4te::              The Autoconf executables backbone
 * Programming in M4sugar::      Convenient pure M4 macros
+* Debugging via autom4te::      Figuring out what M4 was doing
 @end menu
 
 @node M4 Quotation
@@ -12425,6 +12427,66 @@ instance you might have to refer to @samp{$m4_flags}.
 Any token matching @var{pattern} is allowed, including if it matches an
 @code{m4_pattern_forbid} pattern.
 @end defmac
+
+@node Debugging via autom4te
+@section Debugging via autom4te
+@cindex debugging tips
+@cindex autom4te debugging tips
+@cindex m4sugar debugging tips
+At times, it is desirable to see what was happening inside m4, to see
+why output was not matching expectations.  However, post-processing done
+by @command{autom4te} means that directly using the m4 builtin
+@code{m4_traceon} is likely to interfere with operation.  Also, frequent
+diversion changes and the concept of forbidden tokens make it difficult
+to use @code{m4_defn} to generate inline comments in the final output.
+
+There are a couple of tools to help with this.  One is the use of the
+@option{--trace} option provided by @command{autom4te} (as well as each
+of the programs that wrap @command{autom4te}, such as
+@command{autoconf}), in order to inspect when a macro is called and with
+which arguments.  For example, when this paragraph was written, the
+autoconf version could be found by:
+
+@example
+$ @kbd{autoconf --trace=AC_INIT}
+configure.ac:23:AC_INIT:GNU Autoconf:2.63b.95-3963:bug-autoconf@@gnu.org
+$ @kbd{autoconf --trace='AC_INIT:version is $2'}
+version is 2.63b.95-3963
+@end example
+
+Another trick is using @code{m4_errprintn} to output debugging messages
+to standard error with no further m4 expansion, and without interfering
+with the post-processing done to standard output.  For example, contrast
+these two attempts to learn how @code{m4_dquote} is implemented:
+
+@smallexample
+$ @kbd{cat <<\EOF > foo.m4}
+m4_init
+try one: [m4_dquote is ]m4_defn([m4_dquote])
+m4_divert([0])dnl
+try two: [m4_dquote is ]m4_defn([m4_dquote])
+m4_dquote([hi])
+EOF
+$ @kbd{autom4te --language=m4sugar -o foo foo.m4}
+foo.m4:2: error: possibly undefined macro: m4_dquote
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+$ @kbd{cat foo}
+try two: m4_dquote is [$@@]
+[hi]
+$ @kbd{cat <<\EOF > foo.m4}
+m4_init
+m4_errprintn([try one: m4_dquote is ]m4_defn([m4_dquote]))
+m4_divert([0])dnl
+m4_errprintn([try two: m4_dquote is ]m4_defn([m4_dquote]))dnl
+m4_dquote([hi])
+EOF
+$ @kbd{autom4te --language=m4sugar foo.m4}
+try one: m4_dquote is [$@@]
+try two: m4_dquote is [$@@]
+$ @kbd{cat foo}
+[hi]
+@end smallexample
 
 @node Programming in M4sh
 @chapter Programming in M4sh
