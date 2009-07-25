@@ -1,5 +1,13 @@
 2009-07-26  Eric Blake  <ebb9@byu.net>
 
+	Basic improvements to INSTALL.
+	* doc/install.texi (Basic Installation): Use better markup.
+	(Multiple Architectures): Introduce the term VPATH.
+	(Installation Names): Mention that --prefix must be absolute.
+	* doc/autoconf.texi (Preset Output Variables)
+	(Installation Directory Variables): Consistently refer to GNU
+	Coding Standards.
+
 	Update some upstream files.
 	* build-aux/config.guess: Resynchronize from upstream.
 	* build-aux/config.sub: Likewise.

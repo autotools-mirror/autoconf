@@ -2366,7 +2366,7 @@ matters get tricky.  One approach to put such options directly into
 @code{CPPFLAGS} and @code{LDFLAGS}, but not into @code{CFLAGS}.
 
 However, remember that some @file{Makefile} variables are reserved by
-the GNU Coding Standards for the use of the ``user''---the person
+the @acronym{GNU} Coding Standards for the use of the ``user''---the person
 building the package.  For instance, @code{CFLAGS} is one such variable.
 
 Sometimes package developers are tempted to set user variables such as
@@ -2419,7 +2419,7 @@ can do if an option affects other phases of the compiler as well.
 Currently, @command{configure} always links as part of a single
 invocation of the compiler that also preprocesses and compiles, so it
 uses this variable also when linking programs.  However, it is unwise to
-depend on this behavior because the @acronym{GNU} coding standards do
+depend on this behavior because the @acronym{GNU} Coding Standards do
 not require it and many packages do not use @code{CPPFLAGS} when linking
 programs.
 
@@ -2719,7 +2719,7 @@ variables keep them unexpanded: typically @samp{@@datarootdir@@} is
 replaced by @samp{$@{prefix@}/share}, not @samp{/usr/local/share}, and
 @samp{@@datadir@@} is replaced by @samp{$@{datarootdir@}}.
 
-This behavior is mandated by the @acronym{GNU} coding standards, so that when
+This behavior is mandated by the @acronym{GNU} Coding Standards, so that when
 the user runs:
 
 @table @samp
@@ -17368,7 +17368,7 @@ OK, but copies from older versions are vulnerable.
 @c -------------------
 @prindex @command{mkfifo}
 @prindex @command{mknod}
-The GNU Coding Standards state that @command{mknod} is safe to use on
+The @acronym{GNU} Coding Standards state that @command{mknod} is safe to use on
 platforms where it has been tested to exist; but it is generally portable
 only for creating named FIFOs, since device numbers are
 platform-specific.  Autotest uses @command{mkfifo} to implement parallel

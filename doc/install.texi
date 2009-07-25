@@ -47,16 +47,15 @@ cache, and at some point @file{config.cache} contains results you don't
 want to keep, you may remove or edit it.
 
 The file @file{configure.ac} (or @file{configure.in}) is used to create
-@file{configure} by a program called @code{autoconf}.  You need
+@file{configure} by a program called @command{autoconf}.  You need
 @file{configure.ac} if you want to change it or regenerate
-@file{configure} using a newer version of @code{autoconf}.
+@file{configure} using a newer version of @command{autoconf}.
 
-@noindent
 The simplest way to compile this package is:
 
 @enumerate
 @item
-@code{cd} to the directory containing the package's source code and type
+@command{cd} to the directory containing the package's source code and type
 @samp{./configure} to configure the package for your system.
 
 Running @command{configure} might take a while.  While running, it prints some
@@ -115,7 +114,8 @@ own directory.  To do this, you can use @acronym{GNU} @command{make}.
 @command{cd} to the directory where you want the object files and
 executables to go and run the @command{configure} script.
 @command{configure} automatically checks for the source code in the
-directory that @command{configure} is in and in @file{..}.
+directory that @command{configure} is in and in @file{..}.  This is
+known as a @dfn{VPATH} build.
 
 With a non-@acronym{GNU} @command{make},
 it is safer to compile the package for one
@@ -146,7 +146,8 @@ By default, @samp{make install} installs the package's commands under
 @file{/usr/local/bin}, include files under @file{/usr/local/include}, etc.
 You can specify an
 installation prefix other than @file{/usr/local} by giving
-@command{configure} the option @option{--prefix=@var{prefix}}.
+@command{configure} the option @option{--prefix=@var{prefix}}, where
+@var{prefix} must be an absolute path.
 
 You can specify separate installation prefixes for architecture-specific
 files and architecture-independent files.  If you pass the option
