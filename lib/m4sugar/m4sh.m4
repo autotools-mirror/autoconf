@@ -542,6 +542,8 @@ esac])# AS_CASE
 # will not set $? to N while running the code set by "trap 0"
 # Some shells fork even for (exit N), so we use a helper function
 # to set $? prior to the exit.
+# Then there are shells that don't inherit $? correctly into the start of
+# a shell function, so we must always be given an argument.
 # Other shells don't use `$?' as default for `exit', hence just repeating
 # the exit value can only help improving portability.
 m4_defun([_AS_EXIT_PREPARE],
@@ -549,12 +551,11 @@ m4_defun([_AS_EXIT_PREPARE],
   [AS_FUNCTION_DESCRIBE([as_fn_set_status], [STATUS],
     [Set $? to STATUS, without forking.])], [  return $[]1])]dnl
 [AS_REQUIRE_SHELL_FN([as_fn_exit],
-  [AS_FUNCTION_DESCRIBE([as_fn_exit], [[[STATUS=$?]]],
+  [AS_FUNCTION_DESCRIBE([as_fn_exit], [STATUS],
     [Exit the shell with STATUS, even in a "trap 0" or "set -e" context.])],
-[  as_status=$?
-  set +e
-  as_fn_set_status ${1-$as_status}
-  exit ${1-$as_status}])])#_AS_EXIT_PREPARE
+[  set +e
+  as_fn_set_status $[1]
+  exit $[1]])])#_AS_EXIT_PREPARE
 
 
 # AS_EXIT([EXIT-CODE = $?])
@@ -563,7 +564,7 @@ m4_defun([_AS_EXIT_PREPARE],
 # within "trap 0", and without interference from "set -e".  If
 # EXIT-CODE is omitted, then use $?.
 m4_defun([AS_EXIT],
-[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_fn_exit[]m4_ifval([$1], [ $1])])
+[AS_REQUIRE([_AS_EXIT_PREPARE])[]as_fn_exit m4_ifval([$1], [$1], [$][?])])
 
 
 # AS_FOR(MACRO, SHELL-VAR, [LIST = "$@"], [BODY = :])

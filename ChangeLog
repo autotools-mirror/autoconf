@@ -1,3 +1,11 @@
+2009-07-24  Eric Blake  <ebb9@byu.net>
+
+	Fix AS_EXIT for FreeBSD sh.
+	* lib/m4sugar/m4sh.m4 (AS_EXIT): Always supply an argument to the
+	shell function, since $? is not reliable on function entry.
+	(_AS_EXIT_PREPARE): Simplify to assume argument.
+	Reported by Ralf Wildenhues.
+
 2009-07-23  Eric Blake  <ebb9@byu.net>
 
 	Run more tests under Solaris.
