@@ -9,6 +9,9 @@ GNU Autoconf NEWS - User visible changes.
 ** The following documented autoconf macros are new:
    AC_ERLANG_SUBST_ERTS_VER
 
+** The autoheader tool now understands m4 macro arguments passed to
+   AC_DEFINE and AC_DEFINE_UNQUOTED.
+
 ** Ensure AT_CHECK can support commands that include a # given with
    proper m4 quoting.  For shell comments, this is a new feature; for
    non-shell comments, this fixes a regression introduced in 2.63b.

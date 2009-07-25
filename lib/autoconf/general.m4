@@ -2075,7 +2075,7 @@ AS_IDENTIFIER_IF([$1], [],
 # This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
 # out non literal symbols.  CPP-SYMBOL must not include any parameters.
 m4_define([AC_DEFINE_TRACE],
-[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL([$1])])])
+[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL(_m4_expand([$1]))])])
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])

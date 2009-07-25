@@ -717,6 +717,42 @@ The Dog in a h@t.
 AT_CLEANUP
 
 
+# autoheader should see through m4 macros, just like autoconf
+# http://lists.gnu.org/archive/html/bug-autoconf/2009-06/msg00000.html
+AT_SETUP([autoheader and macros])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_HEADER([config.h])
+m4_define([PETER], [SIMSALABIM])
+m4_define([PAUL], [OPENSESAME])
+AC_DEFINE([PETER], [10], [Peter's public info])
+AC_DEFINE_UNQUOTED([PAUL], [`expr 4 + 6`], [Paul's public info])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK([grep -c SIMSALABIM configure config.h.in], [0],
+[[configure:1
+config.h.in:1
+]])
+AT_CHECK([grep -c OPENSESAME configure config.h.in], [0],
+[[configure:1
+config.h.in:1
+]])
+AT_CHECK([grep -c PETER configure config.h.in], [1],
+[[configure:0
+config.h.in:0
+]])
+AT_CHECK([grep -c PAUL configure config.h.in], [1],
+[[configure:0
+config.h.in:0
+]])
+
+AT_CLEANUP
+
+
 
 
 ## ------------ ##
