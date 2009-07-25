@@ -12454,39 +12454,25 @@ $ @kbd{autoconf --trace='AC_INIT:version is $2'}
 version is 2.63b.95-3963
 @end example
 
-Another trick is using @code{m4_errprintn} to output debugging messages
-to standard error with no further m4 expansion, and without interfering
-with the post-processing done to standard output.  For example, contrast
-these two attempts to learn how @code{m4_dquote} is implemented:
+Another trick is to print out the expansion of various m4 expressions to
+standard error or to an independent file, with no further m4 expansion,
+and without interfering with diversion changes or the post-processing
+done to standard output.  @code{m4_errprintn} shows a given expression
+on standard error.  For example, if you want to see the expansion of an
+autoconf primitive or of one of your autoconf macros, you can do it like
+this:
 
-@smallexample
-$ @kbd{cat <<\EOF > foo.m4}
-m4_init
-try one: [m4_dquote is ]m4_defn([m4_dquote])
-m4_divert([0])dnl
-try two: [m4_dquote is ]m4_defn([m4_dquote])
-m4_dquote([hi])
+@example
+$ @kbd{cat <<\EOF > configure.ac}
+AC_INIT
+m4_errprintn([The definition of AC_DEFINE_UNQUOTED:])
+m4_errprintn(m4_defn([AC_DEFINE_UNQUOTED]))
+AC_OUTPUT
 EOF
-$ @kbd{autom4te --language=m4sugar -o foo foo.m4}
-foo.m4:2: error: possibly undefined macro: m4_dquote
-      If this token and others are legitimate, please use m4_pattern_allow.
-      See the Autoconf documentation.
-$ @kbd{cat foo}
-try two: m4_dquote is [$@@]
-[hi]
-$ @kbd{cat <<\EOF > foo.m4}
-m4_init
-m4_errprintn([try one: m4_dquote is ]m4_defn([m4_dquote]))
-m4_divert([0])dnl
-m4_errprintn([try two: m4_dquote is ]m4_defn([m4_dquote]))dnl
-m4_dquote([hi])
-EOF
-$ @kbd{autom4te --language=m4sugar foo.m4}
-try one: m4_dquote is [$@@]
-try two: m4_dquote is [$@@]
-$ @kbd{cat foo}
-[hi]
-@end smallexample
+$ @kbd{autoconf}
+@error{}The definition of AC_DEFINE_UNQUOTED:
+@error{}_AC_DEFINE_Q([], $@@)
+@end example
 
 @node Programming in M4sh
 @chapter Programming in M4sh
