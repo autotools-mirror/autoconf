@@ -118,13 +118,13 @@ As much as possible, make sure to release an Autoconf that uses
 itself.  That's easy: just be in the top level, and run
 `tests/autoconf'.  Or install this autoconf and run `autoreconf -f'.
 
-** LZMA tarball creation
-Using the `dist-lzma' option of Automake requires Automake 1.10.1, and
-fails for everyone who does not have LZMA installed, so for now
+** XZ tarball creation
+Using the `dist-xz' option of Automake requires Automake 1.11, and
+fails for everyone who does not have xz installed, but for now
 Autoconf only requires Automake 1.10.  However, as maintainer, you
-should build an LZMA tarball.  By using Automake 1.10.1 or newer, you
-can run `make dist-lzma'; run this prior to the release target so that
-the release announcement will include the .tar.lzma file.
+should build an xz tarball.  By using Automake 1.11 or newer, you
+can run `make dist-xz'; run this prior to the release target so that
+the release announcement will include the .tar.xz file.
 
 ** Make the release
 Run `make {alpha,beta,major}' depending on which type of release this

@@ -29,8 +29,7 @@ of the package, where to report bugs, and a pointer to INSTALL for
 instructions on compilation and installation.  This removes the need
 to maintain many similar sets of installation instructions.
 
-Be sure to read BUGS (in particular since this is a beta release) and
-INSTALL.
+Be sure to read BUGS and INSTALL.
 
 Mail suggestions to autoconf@gnu.org, report bugs to
 bug-autoconf@gnu.org, and submit patches to autoconf-patches@gnu.org.

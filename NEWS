@@ -1,6 +1,6 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Major changes in Autoconf 2.64 (2009-??-??) [stable]
+* Major changes in Autoconf 2.64 (2009-07-26) [stable]
   Released by Eric Blake, based on git versions 2.63b.*.
 
 ** Autoconf now requires GNU M4 1.4.6 or later.  Earlier versions of M4

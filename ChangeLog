@@ -1,5 +1,10 @@
 2009-07-26  Eric Blake  <ebb9@byu.net>
 
+	Release Version 2.64.
+	* NEWS: Mention the release.
+	* README: This release is stable.
+	* HACKING (release): Use dist-xz, not dist-lzma.
+
 	Document some optional features in INSTALL.
 	* doc/install.texi (Basic Installation): Mention that INSTALL is
 	generic, and that not all packages implement all features.
