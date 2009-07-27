@@ -23,6 +23,14 @@ Briefly, the shell commands @samp{./configure; make; make install}
 should configure, build, and install this package.  The following
 more-detailed instructions are generic; see the @file{README} file for
 instructions specific to this package.
+@ifclear autoconf
+Some packages provide this @file{INSTALL} file but do not implement all
+of the features documented below.  The lack of an optional feature in a
+given package is not necessarily a bug.
+@end ifclear
+More recommendations for @acronym{GNU} packages can be found in
+@ref{Makefile Conventions, , Makefile Conventions, standards,
+@acronym{GNU} Coding Standards}.
 
 The @command{configure} shell script attempts to guess correct values
 for various system-dependent variables used during compilation.  It uses
@@ -66,11 +74,17 @@ Type @samp{make} to compile the package.
 
 @item
 Optionally, type @samp{make check} to run any self-tests that come with
-the package.
+the package, generally using the just-built uninstalled binaries.
 
 @item
 Type @samp{make install} to install the programs and any data files and
-documentation.
+documentation.  When installing into a prefix owned by root, it is
+recommended that the package be configured and built as a regular user,
+and only the @samp{make install} phase executed with root privileges.
+
+@item
+Optionally, type @samp{make installcheck} to repeat any self-tests, but
+this time using the binaries in their final installed location.
 
 @item
 You can remove the program binaries and object files from the source
@@ -84,7 +98,15 @@ distribution.
 
 @item
 Often, you can also type @samp{make uninstall} to remove the installed
-files again.
+files again.  In practice, not all packages have tested that
+uninstallation works correctly, even though it is required by the
+@acronym{GNU} Coding Standards.
+
+@item
+Some packages, particularly those that use Automake, provide @samp{make
+distcheck}, which can by used by developers to test that all other
+targets like @samp{make install} and @samp{make uninstall} work
+correctly.  This target is generally not run by end users.
 @end enumerate
 
 @node Compilers and Options
@@ -159,15 +181,50 @@ regular prefix.
 In addition, if you use an unusual directory layout you can give options
 like @option{--bindir=@var{dir}} to specify different values for
 particular kinds of files.  Run @samp{configure --help} for a list of
-the directories you can set and what kinds of files go in them.
+the directories you can set and what kinds of files go in them.  In
+general, the default for these options is expressed in terms of
+@samp{$@{prefix@}}, so that specifying just @option{--prefix} will
+affect all of the other directory specifications.
+
+The most portable way to affect installation locations is to pass the
+correct locations to @command{configure}; however, many packages provide
+one or both of the following shortcuts of passing variable assignments
+to the @samp{make install} command line to change installation locations
+without having to reconfigure or recompile.
+
+The first method involves providing an override variable for each
+affected directory.  For example, @samp{make install
+prefix=/path/to/alternate} will choose an alternate location, as well as
+influencing all other directory configuration variables that were
+expressed in terms of @samp{$@{prefix@}} (or, put another way, all
+directories specified during @command{configure} but not in terms of the
+common prefix must each be overridden at install time for the entire
+installation to be relocated).  The approach of makefile variable
+overrides for each directory variable is required by the @acronym{GNU}
+Coding Standards, and ideally causes no recompilation.  However, some
+platforms have known limitations with the semantics of shared libraries
+that end up requiring recompilation when using this method, particularly
+noticeable in packages that use @acronym{GNU} Libtool.
+
+The second method involves providing the @samp{DESTDIR} variable.  For
+example, @samp{make install DESTDIR=/path/to/alternate} will prepend
+@samp{/path/to/alternate} before all installation paths.  The approach
+of @samp{DESTDIR} overrides is not required by the @acronym{GNU} Coding
+Standards, and does not work on platforms that have drive letters.  On
+the other hand, it does better at avoiding recompilation issues, and
+works well even when some directory options were not specified in terms
+of @samp{$@{prefix@}} at @command{configure} time.  For packages which
+support @samp{DESTDIR}, the variable should remain undefined during
+@command{configure} and @samp{make all}, and only be specified during
+@samp{make install}.
+
+@node Optional Features
+@section Optional Features
 
 If the package supports it, you can cause programs to be installed with
 an extra prefix or suffix on their names by giving @command{configure}
 the option @option{--program-prefix=@var{PREFIX}} or
 @option{--program-suffix=@var{SUFFIX}}.
-
-@node Optional Features
-@section Optional Features
 
 Some packages pay attention to @option{--enable-@var{feature}} options
 to @command{configure}, where @var{feature} indicates an optional part
@@ -182,6 +239,13 @@ usually find the X include and library files automatically, but if it
 doesn't, you can use the @command{configure} options
 @option{--x-includes=@var{dir}} and @option{--x-libraries=@var{dir}} to
 specify their locations.
+
+Some packages offer the ability to configure how verbose the execution
+of @command{make} will be.  For these packages, running
+@samp{./configure --enable-silent-rules} sets the default to minimal
+output, which can be overridden with @code{make V=1}; while running
+@samp{./configure --disable-silent-rules} sets the default to verbose,
+which can be overridden with @code{make V=0}.
 
 @node Particular Systems
 @section Particular systems
