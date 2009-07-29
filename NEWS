@@ -1,5 +1,14 @@
 GNU Autoconf NEWS - User visible changes.
 
+* Major changes in Autoconf 2.64a (????-??-??) [experimental]
+  Released by ???? ????
+
+** The following undocumented autoconf macros, removed in Autoconf 2.64,
+   have been reinstated:
+   AH_CHECK_HEADERS
+
+   These macros are present only for backwards compatibility purposes.
+
 * Major changes in Autoconf 2.64 (2009-07-26) [stable]
   Released by Eric Blake, based on git versions 2.63b.*.
 

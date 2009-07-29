@@ -253,6 +253,12 @@ m4_define([_AH_CHECK_HEADER],
   [Define to 1 if you have the <$1> header file.])])
 
 
+# AH_CHECK_HEADERS(HEADER-FILE...)
+# --------------------------------
+m4_define([AH_CHECK_HEADERS],
+[m4_foreach_w([AC_Header], [$1], [_AH_CHECK_HEADER(m4_defn([AC_Header]))])])
+
+
 # AC_CHECK_HEADERS(HEADER-FILE...,
 #		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #		   [INCLUDES])
