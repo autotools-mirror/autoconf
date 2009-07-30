@@ -15826,9 +15826,15 @@ entirely drop the output of the next echo in a command substitution.
 
 Because of these problems, do not pass a string containing arbitrary
 characters to @command{echo}.  For example, @samp{echo "$foo"} is safe
-if you know that @var{foo}'s value cannot contain backslashes and cannot
-start with @samp{-}, but otherwise you should use a here-document like
-this:
+only if you know that @var{foo}'s value cannot contain backslashes and
+cannot start with @samp{-}.
+
+If this may not be true, @command{printf} is in general safer and
+easier to use than @command{echo} and @command{echo -n}.  Thus, scripts
+where portability is not a major concern should use @command{printf
+'%s\n'} whenever @command{echo} could fail, and similarly use
+@command{printf %s} instead of @command{echo -n}. For portable shell
+scripts, instead, it is suggested to use a here-document like this:
 
 @example
 cat <<EOF
@@ -15836,12 +15842,10 @@ $foo
 EOF
 @end example
 
-New applications which are not aiming at portability should use
-@command{printf} instead of @command{echo}.  M4sh provides the
-@code{AS_ECHO} and @code{AS_ECHO_N} macros, which choose between
-@samp{echo -n} on implementations where that works, @command{printf} if
-it is available, or other creative tricks in order to work around the
-above problems.
+Alternatively, M4sh provides @code{AS_ECHO} and @code{AS_ECHO_N} macros
+which choose between various portable implementations: @samp{echo}
+or @samp{print} where they work, @command{printf} if it is available,
+or else other creative tricks in order to work around the above problems.
 
 
 @item @command{eval}
@@ -16143,10 +16147,13 @@ example, @file{/usr/bin/printf} is buggy, so when using
 core.
 
 Since @command{printf} is not always a shell builtin, there is a
-potential speed penalty for using @code{printf %s\\n} as a replacement
+potential speed penalty for using @code{printf '%s\n'} as a replacement
 for an @command{echo} that does not interpret @samp{\} or leading
 @samp{-}. With Solaris @command{ksh}, it is possible to use @code{print
 -r --} for this role instead.
+
+For a discussion of portable alternatives to both @command{printf}
+and @command{echo}, @xref{echo, , Limitations of Shell Builtins}.
 
 
 @item @command{pwd}
