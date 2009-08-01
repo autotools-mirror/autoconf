@@ -1429,3 +1429,93 @@ m4_include([sub/two  spaces.at])
 AT_CHECK([$CONFIG_SHELL ./suite], [0], [stdout])
 AT_CHECK([grep 'two spaces' suite.log], [1])
 AT_CLEANUP
+
+
+## ------------------------- ##
+## Erlang EUnit unit tests.  ##
+## ------------------------- ##
+
+AT_SETUP([Erlang Eunit unit tests])
+AT_KEYWORDS([Erlang])
+
+mkdir s t
+AT_DATA([configure.ac], [[AC_INIT
+AC_ERLANG_PATH_ERL([not found])
+AC_ERLANG_PATH_ERLC([not found])
+if test "$ERL" = "not found" || test "$ERLC" = "not found"; then
+  HAVE_ERLANG=no
+  HAVE_EUNIT=no
+else
+  HAVE_ERLANG=yes
+  AC_ERLANG_CHECK_LIB([eunit], [HAVE_EUNIT=yes], [HAVE_EUNIT=no])
+fi
+AC_SUBST([HAVE_ERLANG])
+AC_SUBST([HAVE_EUNIT])
+
+AC_CONFIG_TESTDIR([t])
+AC_CONFIG_FILES([s/compile], [chmod +x s/compile])
+AC_CONFIG_FILES([erlang.conf])
+AC_OUTPUT
+]])
+cp "$abs_top_srcdir/build-aux/install-sh" pkg
+
+# File to pass info back to us
+AT_DATA([erlang.conf.in],
+[[HAVE_ERLANG=@HAVE_ERLANG@
+HAVE_EUNIT=@HAVE_EUNIT@
+]])
+
+# Erlang module to test:
+AT_DATA([s/testme.erl],
+[[-module(testme).
+-export([foo/1]).
+foo(1) -> one;
+foo(2) -> two;
+foo(_) -> other.
+]])
+
+# Corresponding Eunit unit test module:
+AT_DATA([s/testme_tests.erl],
+[[-module(testme_tests).
+-include_lib("eunit/include/eunit.hrl").
+foo_one_test() -> ?assertEqual(one, testme:foo(1)).
+foo_two_test() -> ?assertEqual(two, testme:foo(2)).
+foo_other_test() -> ?assertEqual(other, testme:foo(42)).
+]])
+
+# Compilation script:
+AT_DATA([s/compile.in],
+[["@ERLC@" -b beam testme.erl testme_tests.erl
+]])
+
+AT_CHECK_AT_PREP([suite],
+[[AT_INIT([suite to check EUnit integration])
+AT_SETUP([my only test])
+AT_CHECK_EUNIT([my_testsuite], [{module, testme}],
+	       [-pa "${abs_top_builddir}/s"])
+AT_CLEANUP
+]], [], [], [], [t])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+. ./erlang.conf
+
+AT_CHECK([grep '^ERL='\''.*'\' t/atconfig], [], [ignore])
+AT_CHECK([grep '^ERLC='\''.*'\' t/atconfig], [], [ignore])
+AT_CHECK([grep '^ERLCFLAGS='\''.*'\' t/atconfig], [], [ignore])
+
+if test "$HAVE_ERLANG" = yes && test "$HAVE_EUNIT" = yes; then
+  AT_CHECK([cd s && $CONFIG_SHELL ./compile])
+fi
+
+AT_CHECK([cd t && $CONFIG_SHELL ./suite], [], [ignore])
+
+if test "$HAVE_EUNIT" = yes; then
+  AT_CHECK([grep 1.*successful t/suite.log], [], [ignore])
+  AT_CHECK([grep -v skipped t/suite.log], [], [ignore])
+else
+  AT_CHECK([grep 1.*skipped t/suite.log], [], [ignore])
+  AT_CHECK([grep 0.*successful t/suite.log], [], [ignore])
+fi
+
+AT_CLEANUP

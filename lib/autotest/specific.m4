@@ -1,6 +1,7 @@
-# This file is part of Autoconf.			-*- Autoconf -*-
-# M4 macros used in building test suites.
-# Copyright (C) 2000, 2001, 2002 Free Software Foundation, Inc.
+# This file is part of Autoconf.                          -*- Autoconf -*-
+# M4 macros used in running tests using third-party testing tools.
+m4_define([_AT_COPYRIGHT_YEARS],
+[Copyright (C) 2009 Free Software Foundation, Inc.])
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,5 +45,49 @@
 # such potential, you must delete any notice of this special exception
 # to the GPL from your modified version.
 
-m4_include([autotest/general.m4])
-m4_include([autotest/specific.m4])
+
+## ------------------------ ##
+## Erlang EUnit unit tests.  ##
+## ------------------------ ##
+
+# AT_CHECK_EUNIT(MODULE, SPEC, [ERLFLAGS], [RUN-IF-FAIL], [RUN-IF-PASS])
+# ----------------------------------------------------------------------
+# Check that the EUnit test specification SPEC passes. The ERLFLAGS
+# optional flags are passed to the Erlang interpreter command line to
+# execute the test. The test is executed from an automatically
+# generated Erlang module named MODULE. Each call to this macro should
+# have a distinct MODULE name within each test group, to ease
+# debugging.
+# An Erlang/OTP version which contains the eunit library must be
+# installed, in order to execute this macro in a test suite.  The ERL,
+# ERLC, and ERLCFLAGS variables must be defined in atconfig,
+# typically by using the AC_ERLANG_PATH_ERL and AC_ERLANG_PATH_ERLC
+# Autoconf macros.
+_AT_DEFINE_SETUP([AT_CHECK_EUNIT],
+[AT_SKIP_IF([test ! -f "$ERL" || test ! -f "$ERLC"])
+## A wrapper to EUnit, to exit the Erlang VM with the right exit code:
+AT_DATA([$1.erl],
+[[-module($1).
+-export([test/0, test/1]).
+test() -> test([]).
+test(Options) ->
+  TestSpec = $2,
+  ReturnValue = case code:load_file(eunit) of
+    {module, _} -> case eunit:test(TestSpec, Options) of
+        ok -> 0; %% test passes
+        _  -> 1  %% test fails
+      end;
+    _ -> 77 %% EUnit not found, test skipped
+  end,
+  init:stop(ReturnValue).
+]])
+AT_CHECK(["$ERLC" $ERLCFLAGS -b beam $1.erl])
+## Make EUnit verbose when testsuite is verbose:
+if test -z "$at_verbose"; then
+  at_eunit_options="verbose"
+else
+  at_eunit_options=""
+fi
+AT_CHECK(["$ERL" $3 -s $1 test $at_eunit_options -noshell], [0], [ignore], [],
+         [$4], [$5])
+])

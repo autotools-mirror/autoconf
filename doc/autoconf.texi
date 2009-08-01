@@ -22527,6 +22527,8 @@ of debugging scripts has the purpose of easing the chase for bugs.
 
 @item all the files created with @code{AT_DATA}
 
+@item all the Erlang source code files created with @code{AT_CHECK_EUNIT}
+
 @item a log of the run, named @file{testsuite.log}
 @end itemize
 
@@ -22899,6 +22901,56 @@ Like @samp{expout}, except that it only works for the @var{stderr}
 parameter, and the standard error contents are compared with
 @file{experr}.
 @end table
+@end defmac
+
+@defmac AT_CHECK_EUNIT (@var{module}, @var{test-spec}, @ovar{erlflags}, @
+  @ovar{run-if-fail}, @ovar{run-if-pass})
+@atindex{CHECK_EUNIT}
+Initialize and execute an Erlang module named @var{module} that performs
+tests following the @var{test-spec} EUnit test specification.
+@var{test-spec} must be a valid EUnit test specification, as defined in
+the @uref{http://@/erlang.org/@/doc/@/apps/@/eunit/@/index.html, EUnit
+Reference Manual}.  @var{erlflags} are optional command-line options
+passed to the Erlang interpreter to execute the test Erlang module.
+Typically, @var{erlflags} defines at least the paths to directories
+containing the compiled Erlang modules under test, as @samp{-pa path1
+path2 ...}.
+
+For example, the unit tests associated with Erlang module @samp{testme},
+which compiled code is in subdirectory @file{src}, can be performed
+with:
+
+@example
+AT_CHECK_EUNIT([testme_testsuite], [@{module, testme@}],
+               [-pa "$@{abs_top_builddir@}/src"])
+@end example
+
+This macro must be invoked in between @code{AT_SETUP} and @code{AT_CLEANUP}.
+
+Variables @code{ERL}, @code{ERLC}, and (optionally) @code{ERLCFLAGS}
+must be defined as the path of the Erlang interpreter, the path of the
+Erlang compiler, and the command-line flags to pass to the compiler,
+respectively.  Those variables should be configured in
+@file{configure.ac} using the @command{AC_ERLANG_PATH_ERL} and
+@command{AC_ERLANG_PATH_ERLC} macros, and the configured values of those
+variables are automatically defined in the testsuite.  If @code{ERL} or
+@code{ERLC} is not defined, the test group is skipped.
+
+If the EUnit library cannot be found, i.e. if module @code{eunit} cannot
+be loaded, the test group is skipped.  Otherwise, if @var{test-spec} is
+an invalid EUnit test specification, the test group fails.  Otherwise,
+if the EUnit test passes, shell commands @var{run-if-pass} are executed
+or, if the EUnit test fails, shell commands @var{run-if-fail} are
+executed and the test group fails.
+
+Only the generated test Erlang module is automatically compiled and
+executed.  If @var{test-spec} involves testing other Erlang modules,
+e.g. module @samp{testme} in the example above, those modules must be
+already compiled.
+
+If the testsuite is run in verbose mode, with option @option{--verbose},
+EUnit is also run in verbose mode to output more details about
+individual unit tests.
 @end defmac
 
 

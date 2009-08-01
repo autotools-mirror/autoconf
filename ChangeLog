@@ -1,3 +1,16 @@
+2009-08-01  Romain Lenglet  <romain.lenglet@laposte.net>
+	    Paolo Bonzini  <bonzini@gnu.org>
+
+	* lib/autotest/specific.m4 (AT_CHECK_EUNIT): New file.
+	* lib/autotest/Makefile.am (dist_autotestlib_DATA): Add specific.m4.
+	* lib/autoconf/autotest.m4 (AC_CONFIG_TESTDIR): Add definitions of
+	variables used by AT_CHECK_EUNIT macro: ERL, ERLC, ERLCFLAGS.
+	* tests/autotest.at (Erlang Eunit unit tests): Add test for macro
+	AT_CHECK_EUNIT.
+	* doc/autoconf.texi (Writing Testsuites): Document macro
+	AT_CHECK_EUNIT.
+	* NEWS: Mention macro AT_CHECK_EUNIT.
+
 2009-07-30  Paolo Bonzini  <bonzini@gnu.org>
 	    Joel E. Denny  <jdenny@clemson.edu>
 

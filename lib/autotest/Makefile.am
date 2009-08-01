@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 autotestlibdir = $(pkgdatadir)/autotest
-dist_autotestlib_DATA = autotest.m4 general.m4
+dist_autotestlib_DATA = autotest.m4 general.m4 specific.m4
 nodist_autotestlib_DATA = autotest.m4f
 CLEANFILES = $(nodist_autotestlib_DATA)
 

@@ -84,6 +84,16 @@ at_top_builddir=\$at_top_build_prefix
 AUTOTEST_PATH='m4_default([$2], [$1])'
 
 SHELL=\${CONFIG_SHELL-'$SHELL'}
+m4_provide_if([AC_ERLANG_PATH_ERL], [
+ERL='$ERL'
+])dnl
+m4_provide_if([AC_ERLANG_PATH_ERLC], [
+ERLC='$ERLC'
+ERLCFLAGS='$ERLCFLAGS'
+])dnl
 ATEOF
-])
-])# AC_CONFIG_TESTDIR
+],
+[m4_provide_if([AC_ERLANG_PATH_ERL], [ERL="$ERL"
+])m4_provide_if([AC_ERLANG_PATH_ERLC], [ERLC="$ERLC"
+ERLCFLAGS="$ERLCFLAGS"
+])])])# AC_CONFIG_TESTDIR
