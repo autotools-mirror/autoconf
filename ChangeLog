@@ -1,3 +1,8 @@
+2009-08-02  Paolo Bonzini  <bonzini@gnu.org>
+
+	Use exit code to detect no occurrences with grep.
+	* tests/autotest.at (Erlang Eunit unit tests): Fix grep invocation.
+
 2009-08-01  Romain Lenglet  <romain.lenglet@laposte.net>
 	    Paolo Bonzini  <bonzini@gnu.org>
 

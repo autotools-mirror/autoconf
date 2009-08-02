@@ -1512,7 +1512,7 @@ AT_CHECK([cd t && $CONFIG_SHELL ./suite], [], [ignore])
 
 if test "$HAVE_EUNIT" = yes; then
   AT_CHECK([grep 1.*successful t/suite.log], [], [ignore])
-  AT_CHECK([grep -v skipped t/suite.log], [], [ignore])
+  AT_CHECK([grep skipped t/suite.log], [1], [ignore])
 else
   AT_CHECK([grep 1.*skipped t/suite.log], [], [ignore])
   AT_CHECK([grep 0.*successful t/suite.log], [], [ignore])
