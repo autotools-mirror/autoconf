@@ -1,3 +1,8 @@
+2009-08-07  Romain Lenglet  <romain.lenglet@laposte.net>
+
+	* lib/autoconf/erlang.m4 (AC_LANG(Erlang)): Make AC_RUN_IFELSE
+	fail if the test module doesn't compile.
+
 2009-08-02  Paolo Bonzini  <bonzini@gnu.org>
 
 	Use exit code to detect no occurrences with grep.

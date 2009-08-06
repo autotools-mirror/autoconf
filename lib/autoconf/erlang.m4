@@ -124,7 +124,7 @@ fi
 AC_LANG_DEFINE([Erlang], [erl], [ERL], [],
 [ac_ext=erl
 ac_compile='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
-ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD ; echo "[#]!/bin/sh" > conftest$ac_exeext ; AS_ECHO(["\"$ERL\" -run conftest start -run init stop -noshell"]) >> conftest$ac_exeext ; chmod +x conftest$ac_exeext'
+ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD && echo "[#]!/bin/sh" > conftest$ac_exeext && AS_ECHO(["\"$ERL\" -run conftest start -run init stop -noshell"]) >> conftest$ac_exeext && chmod +x conftest$ac_exeext'
 ])
 
 
