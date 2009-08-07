@@ -195,6 +195,7 @@ m4_define([AC_LANG_DEFINE],
 [m4_define([_AC_LANG_PREFIX($1)], [$3])]
 [m4_copy([AC_LANG_CONFTEST($4)], [AC_LANG_CONFTEST($1)])]
 [m4_copy([AC_LANG_SOURCE($4)], [AC_LANG_SOURCE($1)])]
+[m4_copy([_AC_LANG_NULL_PROGRAM($4)], [_AC_LANG_NULL_PROGRAM($1)])]
 [m4_ifval([$4],
 [m4_copy([AC_LANG_PROGRAM($4)], [AC_LANG_PROGRAM($1)])]
 [m4_copy([AC_LANG_CALL($4)], [AC_LANG_CALL($1)])]
@@ -246,6 +247,21 @@ m4_define([AC_LANG_SOURCE()],
 # execution the BODY (typically glued inside the `main' function, or
 # equivalent).
 AC_DEFUN([AC_LANG_PROGRAM],
+[AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
+
+
+# _AC_LANG_NULL_PROGRAM()()
+# -------------------------
+# Default implementation of AC_LANG_NULL_PROGRAM
+m4_define([_AC_LANG_NULL_PROGRAM()],
+[AC_LANG_PROGRAM([], [])])
+
+
+# _AC_LANG_NULL_PROGRAM
+# ----------------------
+# Produce valid source for the current language that does
+# nothing.
+AC_DEFUN([_AC_LANG_NULL_PROGRAM],
 [AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
 
 
@@ -397,7 +413,7 @@ AC_BEFORE([$0], [_AC_COMPILER_EXEEXT])
 AC_BEFORE([$0], [AC_LINK_IFELSE])
 
 m4_define([_AC_COMPILER_EXEEXT],
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+[AC_LANG_CONFTEST([_AC_LANG_NULL_PROGRAM])
 if _AC_DO_VAR(ac_link); then
   ac_no_link=no
   ]m4_defn([_AC_COMPILER_EXEEXT])[
@@ -506,7 +522,7 @@ m4_define([_AC_COMPILER_EXEEXT_DEFAULT],
 [# Try to create an executable without -o first, disregard a.out.
 # It will help us diagnose broken compilers, and finding out an intuition
 # of exeext.
-AC_MSG_CHECKING([for _AC_LANG compiler default output file name])
+AC_MSG_CHECKING([whether the _AC_LANG compiler works])
 ac_link_default=`AS_ECHO(["$ac_link"]) | sed ['s/ -o *conftest[^ ]*//']`
 
 # The possible output files:
@@ -556,15 +572,18 @@ done
 test "$ac_cv_exeext" = no && ac_cv_exeext=
 ],
       [ac_file=''])
-AC_MSG_RESULT([$ac_file])
 AS_IF([test -z "$ac_file"],
-[_AC_MSG_LOG_CONFTEST
-AC_MSG_FAILURE([_AC_LANG compiler cannot create executables], 77)])
+[AC_MSG_RESULT([no])
+_AC_MSG_LOG_CONFTEST
+AC_MSG_FAILURE([_AC_LANG compiler cannot create executables], 77)],
+[AC_MSG_RESULT([yes])])
+AC_MSG_CHECKING([for _AC_LANG compiler default output file name])
+AC_MSG_RESULT([$ac_file])
 ac_exeext=$ac_cv_exeext
 ])# _AC_COMPILER_EXEEXT_DEFAULT
 
 
-# _AC_COMPILER_EXEEXT_WORKS
+# _AC_COMPILER_EXEEXT_CROSS
 # -------------------------
 # FIXME: These cross compiler hacks should be removed for Autoconf 3.0
 #
@@ -575,13 +594,13 @@ ac_exeext=$ac_cv_exeext
 # detect cross-compiling on Blue Gene.  Note also that AC_COMPUTE_INT
 # requires programs that create files when not cross-compiling, so it
 # is safe and not a bad idea to check for this capability in general.
-m4_define([_AC_COMPILER_EXEEXT_WORKS],
+m4_define([_AC_COMPILER_EXEEXT_CROSS],
 [# Check that the compiler produces executables we can run.  If not, either
 # the compiler is broken, or we cross compile.
-AC_MSG_CHECKING([whether the _AC_LANG compiler works])
-# If not cross compiling, check that we can run a simple program.
+AC_MSG_CHECKING([whether we are cross compiling])
 if test "$cross_compiling" != yes; then
-  if _AC_DO_TOKENS([./$ac_file]); then
+  _AC_DO_VAR(ac_link)
+  if _AC_DO_TOKENS([./conftest$ac_cv_exeext]); then
     cross_compiling=no
   else
     if test "$cross_compiling" = maybe; then
@@ -592,16 +611,6 @@ If you meant to cross compile, use `--host'.])
     fi
   fi
 fi
-AC_MSG_RESULT([yes])
-])# _AC_COMPILER_EXEEXT_WORKS
-
-
-# _AC_COMPILER_EXEEXT_CROSS
-# -------------------------
-m4_define([_AC_COMPILER_EXEEXT_CROSS],
-[# Check that the compiler produces executables we can run.  If not, either
-# the compiler is broken, or we cross compile.
-AC_MSG_CHECKING([whether we are cross compiling])
 AC_MSG_RESULT([$cross_compiling])
 ])# _AC_COMPILER_EXEEXT_CROSS
 
@@ -648,20 +657,23 @@ AC_MSG_RESULT([$ac_cv_exeext])
 # Do not rename this macro; Automake decides whether EXEEXT is used
 # by checking whether `_AC_COMPILER_EXEEXT' has been expanded.
 #
-# See _AC_COMPILER_EXEEXT_WORKS for why we call _AC_LANG_IO_PROGRAM.
+# See _AC_COMPILER_EXEEXT_CROSS for why we need _AC_LANG_IO_PROGRAM.
 m4_define([_AC_COMPILER_EXEEXT],
-[AC_LANG_CONFTEST([_AC_LANG_IO_PROGRAM])
+[AC_LANG_CONFTEST([_AC_LANG_NULL_PROGRAM])
 ac_clean_files_save=$ac_clean_files
-ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out conftest.out"
+ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
 _AC_COMPILER_EXEEXT_DEFAULT
-_AC_COMPILER_EXEEXT_WORKS
-rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out conftest.out
+rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out
 ac_clean_files=$ac_clean_files_save
-_AC_COMPILER_EXEEXT_CROSS
 _AC_COMPILER_EXEEXT_O
 rm -f conftest.$ac_ext
 AC_SUBST([EXEEXT], [$ac_cv_exeext])dnl
 ac_exeext=$EXEEXT
+AC_LANG_CONFTEST([_AC_LANG_IO_PROGRAM])
+ac_clean_files="$ac_clean_files conftest.out"
+_AC_COMPILER_EXEEXT_CROSS
+rm -f conftest.$ac_ext conftest$ac_cv_exeext conftest.out
+ac_clean_files=$ac_clean_files_save
 ])# _AC_COMPILER_EXEEXT
 
 
@@ -677,7 +689,7 @@ ac_exeext=$EXEEXT
 # it includes.  So do it by hand.
 m4_define([_AC_COMPILER_OBJEXT],
 [AC_CACHE_CHECK([for suffix of object files], ac_cv_objext,
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM()])
+[AC_LANG_CONFTEST([_AC_LANG_NULL_PROGRAM])
 rm -f conftest.o conftest.obj
 AS_IF([_AC_DO_VAR(ac_compile)],
 [for ac_file in conftest.o conftest.obj conftest.*; do

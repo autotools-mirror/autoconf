@@ -1,3 +1,20 @@
+2009-09-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	Use a separate program to test whether the compiler works.
+	* lib/autoconf/erlang.m4 (_AC_LANG_NULL_PROGRAM(Erlang)): New.
+	* lib/autoconf/lang.m4 (AC_LANG_DEFINE): Copy _AC_LANG_NULL_PROGRAM.
+	(_AC_LANG_NULL_PROGRAM(), _AC_LANG_NULL_PROGRAM): New.
+	(_AC_COMPILER_EXEEXT_DEFAULT): Print here "whether the xyz compiler
+	works", before exiting.
+	(_AC_COMPILER_EXEEXT_WORKS): Merge into _AC_COMPILER_EXEEXT_CROSS,
+	remove the "whether the xyz compiler works" message, use
+	conftest$ac_cv_exeext instead of $ac_file.
+	(_AC_COMPILER_EXEEXT): Try _AC_COMPILER_EXEEXT_DEFAULT using
+	the null program, and clean conftest.out only after
+	_AC_COMPILER_EXEEXT_CROSS.
+	(AC_NO_EXECUTABLES): Use _AC_LANG_NULL_PROGRAM.
+	(_AC_COMPILER_OBJEXT): Use _AC_LANG_NULL_PROGRAM.
+
 2009-08-18  Bruno Haible  <bruno@clisp.org>
 
 	Document Solaris tr range and NUL limitations.

@@ -152,6 +152,13 @@ $2
 ])
 
 
+# _AC_LANG_NULL_PROGRAM(Erlang)
+# -----------------------------
+# Produce source that does nothing.
+m4_define([_AC_LANG_NULL_PROGRAM(Erlang)],
+[AC_LANG_PROGRAM([], [halt(0)])])
+
+
 # _AC_LANG_IO_PROGRAM(Erlang)
 # ---------------------------
 # Produce source that performs I/O.
