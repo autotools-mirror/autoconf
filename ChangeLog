@@ -1,3 +1,10 @@
+2009-08-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Ensure we do not regress with AC_CHECK_MEMBERS.
+	* tests/semantics.at (AC_CHECK_MEMBERS): Expose the recent
+	AC_CHECK_MEMBERS fix.
+	(AC_CHECK_MEMBER): New test group.
+
 2009-08-10  Jeff Squyres  <jsquyres@cisco.com>  (tiny change)
 
 	Fix typo in AC_REQUIRE description.
