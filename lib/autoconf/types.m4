@@ -911,7 +911,7 @@ AS_VAR_POPDEF([ac_Member])dnl
 m4_define([_AC_CHECK_MEMBERS],
 [[$1], [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$1]), [1],
   [Define to 1 if `]m4_bpatsubst([$1],
-    [^\([^.]*\)\.\(.*\)], [[\1' is a member of `\2]])['.])]])
+    [^\([^.]*\)\.\(.*\)], [[\2' is a member of `\1]])['.])]])
 
 # AC_CHECK_MEMBERS([AGGREGATE.MEMBER, ...],
 #		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
