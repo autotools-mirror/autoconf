@@ -13454,8 +13454,8 @@ AC_DEFUN([TESTB], [AC_REQUIRE([TESTA])[echo in B
 if test -z "$SEEN_A" ; then echo bug ; fi]])
 AC_DEFUN([TESTC], [AC_REQUIRE([TESTB])[echo in C]])
 AC_DEFUN([OUTER], [[echo in OUTER]
-A
-C])
+TESTA
+TESTC])
 OUTER
 @end example
 
