@@ -44,7 +44,7 @@ m4_define([AT_CHECK_AT_PREP],
 dnl overquote AT_dir, to make it easier to use
 m4_pushdef([AT_dir], m4_ifval([$6], [[[$6]]], [.]))dnl
 dnl
-AT_CAPTURE_FILE([$1.log])dnl
+AT_CAPTURE_FILE(AT_dir[/$1.log])dnl
 dnl
 AT_DATA_AUTOTEST(AT_dir[/package.m4],
 [[m4_define([AT_PACKAGE_NAME],      [GNU Nonsense])
