@@ -21,6 +21,9 @@
 # ME := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 ME := maint.mk
 
+# Override this in cfg.mk if you use a non-standard build-aux directory.
+build_aux ?= $(srcdir)/build-aux
+
 # Do not save the original name or timestamp in the .tar.gz file.
 # Use --rsyncable if available.
 gzip_rsyncable := \
@@ -31,7 +34,7 @@ GIT = git
 VC = $(GIT)
 VC-tag = git tag -s -m '$(VERSION)'
 
-VC_LIST = $(srcdir)/build-aux/vc-list-files -C $(srcdir)
+VC_LIST = $(build_aux)/vc-list-files -C $(srcdir)
 
 VC_LIST_EXCEPT = \
   $(VC_LIST) | if test -f $(srcdir)/.x-$@; then	\
@@ -552,7 +555,7 @@ move_if_change ?= move-if-change
 emit_upload_commands:
 	@echo =====================================
 	@echo =====================================
-	@echo "$(srcdir)/build-aux/gnupload $(GNUPLOADFLAGS) \\"
+	@echo "$(build_aux)/gnupload $(GNUPLOADFLAGS) \\"
 	@echo "    --to $(gnu_rel_host):$(PACKAGE) \\"
 	@echo "  $(rel-files)"
 	@echo '# send the /tmp/announcement e-mail'
@@ -575,3 +578,27 @@ alpha beta major: news-date-check changelog-check $(local-check)
 	$(VC) commit -m \
 	  '$(prev_version_file): Record previous version: $(VERSION).' \
 	  $(prev_version_file)
+
+
+.PHONY: web-manual
+web-manual:
+	@test -z "$(manual_title)" \
+	  && { echo define manual_title in cfg.mk 1>&2; exit 1; } || :
+	@cd '$(srcdir)/doc'; \
+	  $(SHELL) ../build-aux/gendocs.sh -o '$(abs_builddir)/doc/manual' \
+	     --email $(PACKAGE_BUGREPORT) $(PACKAGE) \
+	    "$(PACKAGE_NAME) - $(manual_title)"
+	@echo " *** Upload the doc/manual directory to web-cvs."
+
+# If you have an additional project-specific rule,
+# define it in cfg.mk and set this variable to its name.
+update-copyright-local ?=
+
+# Run this rule once per year (usually early in January)
+# to update all FSF copyright year lists in your project.
+update-copyright-exclude-regexp ?= (^|/)COPYING$$
+.PHONY: update-copyright
+update-copyright: $(update-copyright-local)
+	grep -l -w Copyright $$($(VC_LIST_EXCEPT))		\
+	  | grep -v -E '$(update-copyright-exclude-regexp)'	\
+	  | xargs $(build_aux)/$@

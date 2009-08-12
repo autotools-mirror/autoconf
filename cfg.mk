@@ -33,6 +33,9 @@ gnu_ftp_host-beta = alpha.gnu.org
 gnu_ftp_host-major = ftp.gnu.org
 gnu_rel_host = $(gnu_ftp_host-$(RELEASE_TYPE))
 
+# Used in maint.mk's web-manual rule
+manual_title = Creating Automatic Configuration Scripts
+
 url_dir_list = \
   ftp://$(gnu_rel_host)/gnu/autoconf
 
@@ -59,8 +62,9 @@ gnulib-update:
 	cp $(gnulib_dir)/build-aux/mdate-sh $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/missing $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/move-if-change $(srcdir)/build-aux
-	cp $(gnulib_dir)/build-aux/vc-list-files $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/texinfo.tex $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/update-copyright $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/vc-list-files $(srcdir)/build-aux
 	cp $(gnulib_dir)/doc/fdl.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/gendocs_template $(srcdir)/doc
 	cp $(gnulib_dir)/doc/gnu-oids.texi $(srcdir)/doc
@@ -105,10 +109,8 @@ autom4te-update:
 local-checks-to-skip ?= \
   changelog-check sc_unmarked_diagnostics
 
-.PHONY: web-manual
-web-manual:
-	@cd $(srcdir)/doc ; \
-	  $(SHELL) ../build-aux/gendocs.sh -o '$(abs_builddir)/doc/manual' \
-	    --email $(PACKAGE_BUGREPORT) $(PACKAGE) \
-	    "$(PACKAGE_NAME) - Creating Automatic Configuration Scripts"
-	@echo " *** Upload the doc/manual directory to web-cvs."
+# Don't adjust copyright in upstream files.
+update-copyright-exclude-regexp = \
+(^|/)(COPYING|build-aux/|GNUmakefile\
+|Autom4te/(Configure_ac|Channels|FileUtils|Struct|XFile)\
+|doc/(fdl|gendocs|gnu-oids|make-stds|standards)).*$$

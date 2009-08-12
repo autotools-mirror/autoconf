@@ -1,3 +1,20 @@
+2009-08-14  Eric Blake  <ebb9@byu.net>
+
+	Prepare to bulk update copyright years.
+	* build-aux/update-copyright: New file.
+	* cfg.mk (gnulib-update): Sync it from gnulib.
+	(update-copyright-exclude-regexp): New varialbe.
+	(web-manual): Move...
+	* maint.mk (web-manual): ...here, to match gnulib.
+	(update-copyright): New target, copied from gnulib's
+	maint.mk (it would be nice to sync this file...).
+	(build_aux): New macro.
+	(VC_LIST, emit_upload_commands): Use it.
+	* build-aux/texinfo.tex: Resynchronize from upstream.
+	* lib/autoconf/general.m4 (_AC_COPYRIGHT_YEARS): Reformat to meet
+	expected pattern.
+	* lib/autotest/general.m4 (_AT_COPYRIGHT_YEARS): Likewise.
+
 2009-08-12  Paolo Bonzini  <bonzini@gnu.org>
 
 	Fix testsuite log capturing for tests 183 and 186.
