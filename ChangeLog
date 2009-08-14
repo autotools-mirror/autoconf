@@ -1,5 +1,40 @@
 2009-08-14  Eric Blake  <ebb9@byu.net>
 
+	Update copyright.
+	* AUTHORS: Include 2009 in copyright.
+	* lib/Autom4te/C4che.pm: Likewise.
+	* lib/Autom4te/Channels.pm: Likewise.
+	* lib/Autom4te/Configure_ac.pm: Likewise.
+	* lib/Autom4te/FileUtils.pm: Likewise.
+	* lib/Autom4te/General.pm: Likewise.
+	* lib/Autom4te/Request.pm: Likewise.
+	* lib/Autom4te/Struct.pm: Likewise.
+	* lib/autoconf/Makefile.am: Likewise.
+	* lib/autoconf/autoconf.m4: Likewise.
+	* lib/autoconf/autoscan.m4: Likewise.
+	* lib/autoconf/autoupdate.m4: Likewise.
+	* lib/autoconf/functions.m4: Likewise.
+	* lib/autoconf/libs.m4: Likewise.
+	* lib/autoconf/oldnames.m4: Likewise.
+	* lib/autoconf/types.m4: Likewise.
+	* lib/autoscan/Makefile.am: Likewise.
+	* lib/autoscan/autoscan.pre: Likewise.
+	* lib/autotest/Makefile.am: Likewise.
+	* lib/autotest/autotest.m4: Likewise.
+	* lib/emacs/autoconf-mode.el: Likewise.
+	* lib/emacs/autotest-mode.el: Likewise.
+	* lib/freeze.mk: Likewise.
+	* lib/m4sugar/foreach.m4: Likewise.
+	* man/Makefile.am: Likewise.
+	* tests/atlocal.in: Likewise.
+	* tests/autoscan.at: Likewise.
+	* tests/foreign.at: Likewise.
+	* tests/fortran.at: Likewise.
+	* tests/mktests.sh: Likewise.
+	* tests/semantics.at: Likewise.
+	* tests/suite.at: Likewise.
+	* tests/wrapper.as: Likewise.
+
 	Prepare to bulk update copyright years.
 	* build-aux/update-copyright: New file.
 	* cfg.mk (gnulib-update): Sync it from gnulib.
