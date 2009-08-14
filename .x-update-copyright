@@ -1,0 +1,16 @@
+# Prior year changelogs don't need update.
+ChangeLog..*
+# Upstream files that should not have copyright updated here.
+COPYING.*
+GNUmakefile
+build-aux/.*
+lib/Autom4te/Configure_ac.pm
+lib/Autom4te/Channels.pm
+lib/Autom4te/FileUtils.pm
+lib/Autom4te/Struct.pm
+lib/Autom4te/XFile.pm
+doc/fdl.*
+doc/gendocs_template
+doc/gnu-oids.texi
+doc/make-stds.texi
+doc/standards.texi

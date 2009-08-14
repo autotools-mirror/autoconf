@@ -1,5 +1,20 @@
 2009-08-14  Eric Blake  <ebb9@byu.net>
 
+	Improve copyright updating.
+	* build-aux/update-copyright: Resynchronize from upstream.
+	* maint.mk (update-copyright): Simplify based on gnulib.
+	(update-copyright-env): New variable.
+	* cfg.mk (update-copyright-exclude-regexp): Delete.
+	(update-copyright-env): New override.
+	* .x-update-copyright: New file.
+	* lib/Autom4te/Makefile.am: Add copyright.
+	* lib/Autom4te/Channels.pm: Revert copyright update to upstream
+	file.
+	* lib/Autom4te/Configure_ac.pm: Likewise.
+	* lib/Autom4te/FileUtils.pm: Likewise.
+	* lib/Autom4te/Struct.pm: Likewise.
+	* lib/Autom4te/XFile.pm: Likewise.
+
 	Update copyright.
 	* AUTHORS: Include 2009 in copyright.
 	* lib/Autom4te/C4che.pm: Likewise.
@@ -38,7 +53,7 @@
 	Prepare to bulk update copyright years.
 	* build-aux/update-copyright: New file.
 	* cfg.mk (gnulib-update): Sync it from gnulib.
-	(update-copyright-exclude-regexp): New varialbe.
+	(update-copyright-exclude-regexp): New variable.
 	(web-manual): Move...
 	* maint.mk (web-manual): ...here, to match gnulib.
 	(update-copyright): New target, copied from gnulib's

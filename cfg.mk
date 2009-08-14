@@ -109,8 +109,5 @@ autom4te-update:
 local-checks-to-skip ?= \
   changelog-check sc_unmarked_diagnostics
 
-# Don't adjust copyright in upstream files.
-update-copyright-exclude-regexp = \
-(^|/)(COPYING|build-aux/|GNUmakefile\
-|Autom4te/(Configure_ac|Channels|FileUtils|Struct|XFile)\
-|doc/(fdl|gendocs|gnu-oids|make-stds|standards)).*$$
+# Always use longhand copyrights.
+update-copyright-env = UPDATE_COPYRIGHT_USE_INTERVALS=0
