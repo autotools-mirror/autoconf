@@ -1,5 +1,34 @@
 2009-08-14  Eric Blake  <ebb9@byu.net>
 
+	Simplify version control metadata.
+	* .cvsignore: Delete.
+	* bin/.cvsignore: Likewise.
+	* config/.cvsignore: Likewise.
+	* doc/.cvsignore: Likewise.
+	* lib/.cvsignore: Likewise.
+	* lib/autoconf/.cvsignore: Likewise.
+	* lib/Autom4te/.cvsignore: Likewise.
+	* lib/autoscan/.cvsignore: Likewise.
+	* lib/autotest/.cvsignore: Likewise.
+	* lib/emacs/.cvsignore: Likewise.
+	* lib/m4sugar/.cvsignore: Likewise.
+	* man/.cvsignore: Likewise.
+	* tests/.cvsignore: Likewise.
+	* bin/.gitignore: Likewise.
+	* build-aux/.gitignore: Likewise.
+	* config/.gitignore: Likewise.
+	* doc/.gitignore: Likewise.
+	* lib/.gitignore: Likewise.
+	* lib/autoconf/.gitignore: Likewise.
+	* lib/Autom4te/.gitignore: Likewise.
+	* lib/autoscan/.gitignore: Likewise.
+	* lib/autotest/.gitignore: Likewise.
+	* lib/emacs/.gitignore: Likewise.
+	* lib/m4sugar/.gitignore: Likewise.
+	* man/.gitignore: Likewise.
+	* tests/.gitignore: Likewise.
+	* .gitignore: Consolidate all rules into one file.
+
 	Normalize remaining copyright lines.
 	* BUGS: Reformat copyright line, using UPDATE_COPYRIGHT_FORCE.
 	* NEWS: Likewise.
