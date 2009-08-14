@@ -1,5 +1,18 @@
 2009-08-14  Eric Blake  <ebb9@byu.net>
 
+	Normalize remaining copyright lines.
+	* BUGS: Reformat copyright line, using UPDATE_COPYRIGHT_FORCE.
+	* NEWS: Likewise.
+	* README-hacking: Likewise.
+	* TODO: Likewise.
+	* lib/Autom4te/ChannelDefs.pm: Likewise.
+	* lib/autoconf/fortran.m4: Likewise.
+	* lib/autoconf/general.m4: Likewise.
+	* lib/autoconf/lang.m4: Likewise.
+	* lib/autotest/general.m4: Likewise.
+	* maint.mk: Likewise.
+	* tests/compile.at: Likewise.
+
 	Improve copyright updating.
 	* build-aux/update-copyright: Resynchronize from upstream.
 	* maint.mk (update-copyright): Simplify based on gnulib.
@@ -19989,8 +20002,8 @@
 	coding: utf-8
 	End:
 
-	Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
-	Free Software Foundation, Inc.
+	Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
+	2009 Free Software Foundation, Inc.
 
 	This program is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as
