@@ -17802,11 +17802,23 @@ $ @kbd{@{ echo moon; echo light; @} | /usr/ucb/tr -d '\012' ; echo}
 moonlight
 @end example
 
+Not all versions of @command{tr} recognize ranges of characters: at
+least Solaris @command{/usr/bin/tr} still fails to do so.  But you can
+use @command{/usr/xpg4/bin/tr} instead.
+
+@example
+$ @kbd{echo "Hazy Fantazy" | LC_ALL=C /usr/bin/tr a-z A-Z}
+HAZy FAntAZy
+$ @kbd{echo "Hazy Fantazy" | LC_ALL=C /usr/xpg4/bin/tr a-z A-Z}
+HAZY FANTAZY
+@end example
+
 Posix requires @command{tr} to operate on binary files.  But at least
-Solaris @command{/usr/ucb/tr} still fails to handle @samp{\0} as the
-octal escape for @code{NUL}.  On Solaris, when using @command{tr} to
-neutralize a binary file by converting @code{NUL} to a different
-character, it is necessary to use @command{/usr/xpg4/bin/tr} instead.
+Solaris @command{/usr/ucb/tr} and @command{/usr/bin/tr} still fail to
+handle @samp{\0} as the octal escape for @code{NUL}.  On Solaris, when
+using @command{tr} to neutralize a binary file by converting @code{NUL}
+to a different character, it is necessary to use
+@command{/usr/xpg4/bin/tr} instead.
 
 @example
 $ @kbd{printf 'a\0b\n' | /usr/ucb/tr '\0' '~' | wc -c}

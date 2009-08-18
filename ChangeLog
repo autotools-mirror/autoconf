@@ -1,3 +1,10 @@
+2009-08-18  Bruno Haible  <bruno@clisp.org>
+
+	Document Solaris tr range and NUL limitations.
+	* doc/autoconf.texi (Limitations of Usual Tools): Mention that
+	Solaris /usr/bin/tr does not support ranges, nor the '\0' octal
+	escape.
+
 2009-08-14  Eric Blake  <ebb9@byu.net>
 
 	Simplify version control metadata.
