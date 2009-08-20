@@ -34,6 +34,7 @@ Makefile.in
 /doc/*.??
 !/doc/Makefile.am
 /doc/*.???
+/doc/*.html
 /doc/*.info*
 /doc/manual
 /doc/stamp-vti
