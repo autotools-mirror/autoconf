@@ -1457,7 +1457,6 @@ AC_CONFIG_FILES([s/compile], [chmod +x s/compile])
 AC_CONFIG_FILES([erlang.conf])
 AC_OUTPUT
 ]])
-cp "$abs_top_srcdir/build-aux/install-sh" pkg
 
 # File to pass info back to us
 AT_DATA([erlang.conf.in],

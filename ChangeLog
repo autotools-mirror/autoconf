@@ -1,5 +1,9 @@
 2009-08-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Drop unneeded line in Eunit test.
+	* tests/autotest.at (Erlang Eunit unit tests): Do not copy
+	install-sh.
+
 	Fix build dependencies for Erlang macro files.
 	* lib/freeze.mk (autotest_m4f_dependencies): Add
 	$(src_libdir)/autotest/specific.m4.
