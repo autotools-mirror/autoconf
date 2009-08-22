@@ -1,3 +1,10 @@
+2009-08-22  Romain Lenglet  <romain.lenglet@laposte.net>
+
+	Fix AT_CHECK_EUNIT for versions of Erlang/OTP without init:stop/1.
+	* lib/autotest/specific.m4 (AT_CHECK_EUNIT): Support older
+	versions of Erlang/OTP with an erlang:stop() function that doesn't
+	take arguments.
+
 2009-08-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Drop unneeded line in Eunit test.

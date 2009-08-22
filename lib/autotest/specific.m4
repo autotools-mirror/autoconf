@@ -74,12 +74,13 @@ test(Options) ->
   TestSpec = $2,
   ReturnValue = case code:load_file(eunit) of
     {module, _} -> case eunit:test(TestSpec, Options) of
-        ok -> 0; %% test passes
-        _  -> 1  %% test fails
+        ok -> "0\n"; %% test passes
+        _  -> "1\n"  %% test fails
       end;
-    _ -> 77 %% EUnit not found, test skipped
+    _ -> "77\n" %% EUnit not found, test skipped
   end,
-  init:stop(ReturnValue).
+  file:write_file("$1.result", ReturnValue),
+  init:stop().
 ]])
 AT_CHECK(["$ERLC" $ERLCFLAGS -b beam $1.erl])
 ## Make EUnit verbose when testsuite is verbose:
@@ -90,4 +91,6 @@ else
 fi
 AT_CHECK(["$ERL" $3 -s $1 test $at_eunit_options -noshell], [0], [ignore], [],
          [$4], [$5])
+AT_CAPTURE_FILE([$1.result])
+AT_CHECK([test -f "$1.result" && (exit `cat "$1.result"`)])
 ])
