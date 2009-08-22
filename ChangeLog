@@ -1,3 +1,10 @@
+2009-08-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix build dependencies for Erlang macro files.
+	* lib/freeze.mk (autotest_m4f_dependencies): Add
+	$(src_libdir)/autotest/specific.m4.
+	* tests/Makefile.am (AUTOCONF_FILES): Add erlang.m4.
+
 2009-09-19  Paolo Bonzini  <bonzini@gnu.org>
 
 	Use a separate program to test whether the compiler works.

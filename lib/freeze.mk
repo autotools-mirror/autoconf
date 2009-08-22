@@ -74,7 +74,8 @@ m4sh_m4f_dependencies =				\
 autotest_m4f_dependencies =			\
 	$(m4sh_m4f_dependencies)		\
 	$(src_libdir)/autotest/autotest.m4	\
-	$(src_libdir)/autotest/general.m4
+	$(src_libdir)/autotest/general.m4	\
+	$(src_libdir)/autotest/specific.m4
 
 autoconf_m4f_dependencies =			\
 	$(m4sh_m4f_dependencies)		\
