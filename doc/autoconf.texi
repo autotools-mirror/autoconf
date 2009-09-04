@@ -17817,15 +17817,20 @@ HAZY FANTAZY
 
 Posix requires @command{tr} to operate on binary files.  But at least
 Solaris @command{/usr/ucb/tr} and @command{/usr/bin/tr} still fail to
-handle @samp{\0} as the octal escape for @code{NUL}.  On Solaris, when
-using @command{tr} to neutralize a binary file by converting @code{NUL}
-to a different character, it is necessary to use
-@command{/usr/xpg4/bin/tr} instead.
+handle @samp{\0} as the octal escape for @code{NUL}; these programs
+always discard all @code{NUL} bytes from the input.  On Solaris, when
+using @command{tr} to process a binary file that may contain @code{NUL}
+bytes, it is necessary to use @command{/usr/xpg4/bin/tr} instead, or
+@command{/usr/xpg6/bin/tr} if that is available.
 
 @example
 $ @kbd{printf 'a\0b\n' | /usr/ucb/tr '\0' '~' | wc -c}
 3
 $ @kbd{printf 'a\0b\n' | /usr/xpg4/bin/tr '\0' '~' | wc -c}
+4
+$ @kbd{printf 'a\0b\n' | /usr/ucb/tr x x | wc -c}
+3
+$ @kbd{printf 'a\0b\n' | /usr/xpg4/bin/tr x x | wc -c}
 4
 @end example
 

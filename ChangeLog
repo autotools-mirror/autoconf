@@ -1,3 +1,10 @@
+2009-08-30  Bruno Haible  <bruno@clisp.org>
+
+	Document another Solaris tr pitfall.
+	* doc/autoconf.texi (Limitations of Usual Tools) <tr>: Mention
+	that Solaris /usr/bin/tr does not only have problems with
+	replacing NUL bytes but discards all NUL bytes from the input.
+
 2009-09-04  Eric Blake  <ebb9@byu.net>
 
 	Improve wording about what goes before AC_INIT.
