@@ -9,6 +9,10 @@ GNU Autoconf NEWS - User visible changes.
 
    These macros are present only for backwards compatibility purposes.
 
+** The AC_FC_FREEFORM macro no longer suffers from a whitespace bug that
+   made it fail with some Fortran compilers (regression introduced in
+   2.64).
+
 ** The following documented autotest macros are new:
    AT_CHECK_EUNIT
 

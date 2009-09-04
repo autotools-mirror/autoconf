@@ -1200,11 +1200,12 @@ for ac_flag in none -ffree-form -FR -free -qfree -Mfree -Mfreeform \
 	       -freeform "-f free"
 do
   test "x$ac_flag" != xnone && FCFLAGS="$ac_fc_freeform_FCFLAGS_save $ac_flag"
+dnl Use @&t@ below to ensure that editors don't turn 8+ spaces into tab.
   AC_COMPILE_IFELSE([
   program freeform
        ! FIXME: how to best confuse non-freeform compilers?
        print *, 'Hello ', &
-	   'world.'
+     @&t@     'world.'
        end],
 		    [ac_cv_fc_freeform=$ac_flag; break])
 done
