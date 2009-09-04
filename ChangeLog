@@ -1,3 +1,8 @@
+2009-09-04  Reuben Thomas <rrt@sc3d.org>  (tiny change)
+
+	Mention the Autoconf archive.
+	* doc/autoconf.texi (Coding Style): Add a link.
+
 2009-08-30  Bruno Haible  <bruno@clisp.org>
 
 	Document another Solaris tr pitfall.

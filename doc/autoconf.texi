@@ -13662,7 +13662,9 @@ with the same parameters.  This happens for example if the macro was renamed.
 
 The Autoconf macros follow a strict coding style.  You are encouraged to
 follow this style, especially if you intend to distribute your macro,
-either by contributing it to Autoconf itself, or via other means.
+either by contributing it to Autoconf itself or the
+@uref{http://@/www.nongnu.org/@/autoconf-archive, Autoconf
+archive}, or by other means.
 
 The first requirement is to pay great attention to the quotation.  For
 more details, see @ref{Autoconf Language}, and @ref{M4 Quotation}.
