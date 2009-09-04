@@ -1,3 +1,12 @@
+2009-09-04  Eric Blake  <ebb9@byu.net>
+
+	Improve wording about what goes before AC_INIT.
+	* doc/autoconf.texi (Initializing configure): Update wording.
+	(Versioning) <AC_PREREQ>: Remove misleading text, to match
+	autoupdate's behavior.
+	* THANKS: Update.
+	Reported by NightStrike, with input from Ralf Wildenhues.
+
 2009-09-04  Thomas Jahns  <jahns@dkrz.de>  (tiny change)
 
 	Fix illegal tab character in Fortran source.

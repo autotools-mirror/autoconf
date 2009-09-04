@@ -1754,8 +1754,11 @@ initialization and the creation of output files.
 @section Initializing @command{configure}
 
 Every @command{configure} script must call @code{AC_INIT} before doing
-anything else.  The only other required macro is @code{AC_OUTPUT}
-(@pxref{Output}).
+anything else that produces output.  Calls to silent macros, such as
+@code{AC_DEFUN}, may also occur prior to @code{AC_INIT}, although these
+are generally used via @file{aclocal.m4}, since that is implicitly
+included before the start of @file{configure.ac}.  The only other
+required macro is @code{AC_OUTPUT} (@pxref{Output}).
 
 @anchor{AC_INIT}
 @defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report}, @
@@ -1854,8 +1857,7 @@ error output and exit with failure (exit status is 63).  For example:
 AC_PREREQ([@value{VERSION}])
 @end example
 
-This macro is the only macro that may be used before @code{AC_INIT}, but
-for consistency, you are invited not to do so.
+This macro may be used before @code{AC_INIT}.
 @end defmac
 
 @defmac AC_AUTOCONF_VERSION
