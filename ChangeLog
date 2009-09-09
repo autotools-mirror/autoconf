@@ -1,5 +1,10 @@
 2010-02-26  Eric Blake  <eblake@redhat.com>
 
+	Optimize AC_REPLACE_FUNCS.
+	* lib/autoconf/functions.m4 (_AC_REPLACE_FUNC): New helper macro.
+	(AC_REPLACE_FUNCS): Use it to reduce forks when checking for
+	replacements, by using literal rather than shell variable.
+
 	Document how to safely override CFLAGS default.
 	* doc/autoconf.texi (C Compiler) <AC_PROG_CC>: Document a way to
 	change the default CFLAGS.

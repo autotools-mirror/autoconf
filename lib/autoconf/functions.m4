@@ -116,12 +116,23 @@ m4_define([_AC_FUNCS_EXPANSION],
 ])
 
 
+# _AC_REPLACE_FUNC(FUNCTION)
+# --------------------------
+# If FUNCTION exists, define HAVE_FUNCTION; else add FUNCTION.c
+# to the list of library objects.  FUNCTION must be literal.
+m4_define([_AC_REPLACE_FUNC],
+[AC_CHECK_FUNC([$1],
+  [_AH_CHECK_FUNC([$1])AC_DEFINE(AS_TR_CPP([HAVE_$1]))],
+  [AC_LIBOBJ([$1])])])
+
 # AC_REPLACE_FUNCS(FUNCTION...)
 # -----------------------------
+# For each FUNCTION in the whitespace separated list, perform the
+# equivalent of AC_CHECK_FUNC, then call AC_LIBOBJ if the function
+# was not found.
 AC_DEFUN([AC_REPLACE_FUNCS],
-[m4_map_args_w([$1], [AC_LIBSOURCE(], [.c)])]dnl
-[AC_CHECK_FUNCS([$1], , [_AC_LIBOBJ($ac_func)])
-])
+[m4_map_args_w([$1], [_AC_REPLACE_FUNC(], [)
+])])
 
 
 # AC_TRY_LINK_FUNC(FUNC, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
