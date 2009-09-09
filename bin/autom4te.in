@@ -68,6 +68,8 @@ my $tcache;
 my $ocache;
 my $icache_file;
 
+my $flock_implemented = '@PERL_FLOCK@';
+
 # The macros to trace mapped to their format, as specified by the
 # user.
 my %trace;
@@ -981,7 +983,8 @@ if (! -d "$cache")
 # files, but the index is the first and last file to be updated, so
 # locking it is sufficient.
 $icache_file = new Autom4te::XFile $icache, O_RDWR|O_CREAT;
-$icache_file->lock (LOCK_EX);
+$icache_file->lock (LOCK_EX)
+  if ($flock_implemented eq "yes");
 
 # Read the cache index if available and older than autom4te itself.
 # If autom4te is younger, then some structures such as C4che might

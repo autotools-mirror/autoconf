@@ -1,3 +1,12 @@
+2009-09-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Allow to work on systems without Fcntl::flock implementation.
+	* configure.ac (PERL_FLOCK): New substitution variable with test
+	whether Fcntl::flock is implemented by the system.
+	* bin/Makefile.am (edit): Substitute @PERL_FLOCK@.
+	* bin/autom4te.in: Call XFile::lock only if flock is
+	implemented.
+
 2009-09-04  Reuben Thomas <rrt@sc3d.org>  (tiny change)
 
 	Mention the Autoconf archive.

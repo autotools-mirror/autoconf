@@ -38,6 +38,7 @@ RELEASE_YEAR = \
 edit = sed \
 	-e 's|@SHELL[@]|$(SHELL)|g' \
 	-e 's|@PERL[@]|$(PERL)|g' \
+	-e 's|@PERL_FLOCK[@]|$(PERL_FLOCK)|g' \
 	-e 's|@bindir[@]|$(bindir)|g' \
 	-e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
 	-e 's|@prefix[@]|$(prefix)|g' \

@@ -137,6 +137,22 @@ $PERL -e 'require 5.005_03;' || {
    AC_MSG_ERROR([Perl 5.005_03 or better is required])
 }
 
+# Find out whether the system supports flock
+# Note this test does not try to find out whether it works with this
+# particular file system.  It merely avoids us running flock on systems
+# where that bails out.
+AC_CACHE_CHECK([whether $PERL Fcntl::flock is implemented],
+  [ac_cv_perl_flock_implemented],
+  [echo lock me > conftest.fil
+   if $PERL -e 'use Fcntl ":flock"; flock("conftest.fil", LOCK_EX); 1;'; then
+     ac_cv_perl_flock_implemented=yes
+   else
+     ac_cv_perl_flock_implemented=no
+   fi
+   rm -f conftest.fil
+  ])
+AC_SUBST([PERL_FLOCK], [$ac_cv_perl_flock_implemented])
+
 
 ## ------- ##
 ## Emacs.  ##
