@@ -101,9 +101,6 @@ autom4te-update:
 	  $(move_if_change) Fetchdir/$$file $(srcdir)/lib/$$file || exit; \
 	done
 	rm -fr Fetchdir > /dev/null 2>&1
-	@echo
-	@echo "Please avoid committing copyright changes until GPLv3 is sorted"
-	@echo
 
 # Tests not to run.
 local-checks-to-skip ?= \

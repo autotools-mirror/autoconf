@@ -1,5 +1,39 @@
 2009-09-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Update License to GPLv3+ including new Autoconf Exception.
+	* NEWS, README: Update licensing information.
+	* COPYING.EXCEPTION: New file.
+	* Makefile.am (EXTRA_DIST): Distribute it.
+	* cfg.mk (autom4te-update): Remove copyright change warning.
+	* lib/autoconf/autoconf.m4, lib/autoconf/autoheader.m4,
+	lib/autoconf/autoscan.m4, lib/autoconf/autotest.m4,
+	lib/autoconf/autoupdate.m4, lib/autoconf/c.m4,
+	lib/autoconf/erlang.m4, lib/autoconf/fortran.m4,
+	lib/autoconf/functions.m4, lib/autoconf/general.m4,
+	lib/autoconf/headers.m4, lib/autoconf/lang.m4,
+	lib/autoconf/libs.m4, lib/autoconf/oldnames.m4,
+	lib/autoconf/programs.m4, lib/autoconf/specific.m4,
+	lib/autoconf/status.m4, lib/autoconf/types.m4,
+	lib/autotest/autotest.m4, lib/autotest/general.m4,
+	lib/autotest/specific.m4, lib/m4sugar/foreach.m4,
+	lib/m4sugar/m4sh.m4, lib/m4sugar/m4sugar.m4: Update exception
+	statement, bump to GPLv3.
+	* bin/autoconf.as, bin/autoheader.in, bin/autom4te.in,
+	bin/autoreconf.in, bin/autoscan.in, bin/autoupdate.in,
+	bin/ifnames.in: Bump to GPLv3+, adjust --version output
+	to reflect the GPLv3+ and the Autoconf Exception.
+	* lib/Autom4te/C4che.pm, lib/Autom4te/ChannelDefs.pm,
+	lib/Autom4te/General.pm, lib/Autom4te/Request.pm,
+	lib/autom4te.in, lib/autoscan/autoscan.pre,
+	lib/emacs/autoconf-mode.el, lib/emacs/autotest-mode.el,
+	lib/freeze.mk, tests/atlocal.in, tests/autoscan.at,
+	tests/autotest.at, tests/base.at, tests/c.at,
+	tests/compile.at, tests/erlang.at, tests/foreign.at,
+	tests/fortran.at, tests/local.at, tests/m4sh.at,
+	tests/m4sugar.at, tests/mktests.sh, tests/semantics.at,
+	tests/statesave.m4, tests/suite.at, tests/tools.at,
+	tests/torture.at, tests/wrapper.as: Bump to GPLv3+.
+
 	Allow to work on systems without Fcntl::flock implementation.
 	* configure.ac (PERL_FLOCK): New substitution variable with test
 	whether Fcntl::flock is implemented by the system.

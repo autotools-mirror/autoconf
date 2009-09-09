@@ -8,8 +8,8 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,9 +17,7 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 m4_divert_pop([HEADER-COPYRIGHT])dnl back to BODY
 AS_ME_PREPARE[]dnl
@@ -70,8 +68,8 @@ General help using GNU software: <http://www.gnu.org/gethelp/>."]
 version=["\
 autoconf (@PACKAGE_NAME@) @VERSION@
 Copyright (C) @RELEASE_YEAR@ Free Software Foundation, Inc.
-License GPLv2+: GNU GPL version 2 or later
-<http://gnu.org/licenses/old-licenses/gpl-2.0.html>
+License GPLv3+/Autoconf: GNU GPL version 3 or later
+<http://gnu.org/licenses/gpl.html>, <http://gnu.org/licenses/exceptions.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
