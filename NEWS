@@ -21,6 +21,9 @@ GNU Autoconf NEWS - User visible changes.
 ** The following documented autotest macros are new:
    AT_CHECK_EUNIT
 
+** The `$tmp' temporary directory used in config.status is documented for
+   public use now.
+
 * Major changes in Autoconf 2.64 (2009-07-26) [stable]
   Released by Eric Blake, based on git versions 2.63b.*.
 
