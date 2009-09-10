@@ -1,5 +1,13 @@
 2009-09-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Document sed limitation with escaped metacharacters.
+	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: Use `%'
+	rather than `/' as delimiter in an example `s' command.
+	Document inconsistent treatment of escaped metacharacters.
+	* THANKS: Update.
+	Report by Dave Korn, with additional input from Paolo Bonzini
+	and Eric Blake.
+
 	Document temporary directory `$tmp' for use in config.status.
 	* doc/autoconf.texi (Configuration Actions): Document `$tmp'.
 	* NEWS: Update.

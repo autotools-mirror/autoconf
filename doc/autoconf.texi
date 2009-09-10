@@ -17511,7 +17511,11 @@ directory.
 @prindex @command{sed}
 Patterns should not include the separator (unless escaped), even as part
 of a character class.  In conformance with Posix, the Cray
-@command{sed} rejects @samp{s/[^/]*$//}: use @samp{s,[^/]*$,,}.
+@command{sed} rejects @samp{s/[^/]*$//}: use @samp{s%[^/]*$%%}.
+Even when escaped, patterns should not include separators that are also
+used as @command{sed} metacharacters.  For example, GNU sed 4.0.9 rejects
+@samp{s,x\@{1\,\@},,}, while sed 4.1 strips the backslash before the comma
+before evaluating the basic regular expression.
 
 Avoid empty patterns within parentheses (i.e., @samp{\(\)}).  Posix does
 not require support for empty patterns, and Unicos 9 @command{sed} rejects
