@@ -16388,12 +16388,18 @@ that name in Autoconf code is asking for trouble since it is an M4 quote
 character.
 
 The @option{-a}, @option{-o}, @samp{(}, and @samp{)} operands are not
-portable and should be avoided.  Thus, portable uses of @command{test}
-should never have more than four arguments, and scripts should use shell
-constructs like @samp{&&} and @samp{||} instead.  If you combine
-@samp{&&} and @samp{||} in the same statement, keep in mind that they
-have equal precedence, so it is often better to parenthesize even when
-this is redundant.  For example:
+present in all implementations, and have been marked obsolete by Posix
+2008.  This is because there are inherent ambiguities in using them.
+For example, @samp{test "$1" -a "$2"} looks like a binary operator to
+check whether two strings are both non-empty, but if @samp{$1} is the
+literal @samp{!}, then some implementations of @command{test} treat it
+as a negation of the unary operator @option{-a}.
+
+Thus, portable uses of @command{test} should never have more than four
+arguments, and scripts should use shell constructs like @samp{&&} and
+@samp{||} instead.  If you combine @samp{&&} and @samp{||} in the same
+statement, keep in mind that they have equal precedence, so it is often
+better to parenthesize even when this is redundant.  For example:
 
 @smallexample
 # Not portable:
