@@ -20502,6 +20502,22 @@ files, and exit.
 Print the version number of Autoconf and the configuration settings,
 and exit.
 
+@item --config
+Print the configuration settings in reusable way, quoted for the shell,
+and exit.  For example, for a debugging build that otherwise reuses the
+configuration from a different build directory @var{build-dir} of a
+package in @var{src-dir}, you could use the following:
+
+@example
+args=`@var{build-dir}/config.status --config`
+eval @var{src-dir}/configure "$args" CFLAGS=-g --srcdir=@var{src-dir}
+@end example
+
+@noindent
+Note that it may be necessary to override a @option{--srcdir} setting
+that was saved in the configuration, if the arguments are used in a
+different build directory.
+
 @item --silent
 @itemx --quiet
 @itemx -q

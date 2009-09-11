@@ -390,8 +390,9 @@ AT_CLEANUP
 # We run `./configure one=val1 --enable-two=val2 --with-three=val3'
 # and verify that (i) `configure' correctly receives the arguments,
 # (ii) correctly passes them to `config.status', which we check by
-# running `config.status --recheck', and (iii) correctly passes them
-# to sub-configure scripts.
+# running `config.status --recheck', (iii) correctly passes them
+# to sub-configure scripts, and (iv) correctly reproduces them with
+# `config.status --config'.
 
 AT_SETUP([configure invocation])
 
@@ -425,6 +426,11 @@ AT_CHECK_CONFIGURE([one=one --enable-two=two --with-three=three |
 AT_CHECK([./config.status --recheck | sed -n 's/^result=//p'], 0,
 	 [onetwothree
 ])
+AT_CHECK([args=`./config.status --config` && eval ./configure "$args" |
+	    sed -n -e 's/^result=//p'], 0,
+	 [m4_do([onetwothree
+],		[onetwothree
+])])
 
 AT_CHECK_CONFIGURE([one="\"'$ " --enable-two="\" '  $" --with-three="	\"'$"|
 		      sed -n -e 's/^result=//p'], 0,
@@ -435,6 +441,11 @@ AT_CHECK([./config.status --recheck | sed -n 's/^result=//p'], 0,
 	 ["'$ " '  $	"'$
 ])
 dnl restore font-lock: "
+AT_CHECK([args=`./config.status --config` && eval ./configure "$args" |
+	    sed -n -e 's/^result=//p'], 0,
+	 [m4_do(["'$ " '  $	"'$
+],		["'$ " '  $	"'$
+])])
 
 AT_CLEANUP
 

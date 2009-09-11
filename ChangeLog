@@ -1,3 +1,13 @@
+2009-09-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New config.status option --config.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Implement
+	--config.
+	* doc/autoconf.texi (config.status Invocation): Document it.
+	* NEWS: Update.
+	* tests/torture.at (configure invocation): Test it.
+	Suggested several times, by several people, in the past.
+
 2009-09-10  Eric Blake  <ebb9@byu.net>
 
 	Document that AS_INIT is automatically used.
