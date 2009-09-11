@@ -12949,7 +12949,10 @@ generated from, and code to sanitize the environment for the rest of the
 script.  Among other initializations, this sets @env{SHELL} to the shell
 chosen to run the script (@pxref{CONFIG_SHELL}), and @env{LC_ALL} to
 ensure the C locale.  Finally, it changes the current diversion to
-@code{BODY}.
+@code{BODY}.  @code{AS_INIT} is called automatically by @code{AC_INIT}
+and @code{AT_INIT}, so shell code in @file{configure},
+@file{config.status}, and @file{testsuite} all benefit from a sanitized
+shell environment.
 @end defmac
 
 @defmac AS_INIT_GENERATED (@var{file}, @ovar{comment})

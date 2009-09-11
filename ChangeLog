@@ -1,5 +1,10 @@
 2009-09-10  Eric Blake  <ebb9@byu.net>
 
+	Document that AS_INIT is automatically used.
+	* doc/autoconf.texi (Initialization Macros) <AS_INIT>: Add words
+	to clarify that only bare-bones scripts need a direct AS_INIT.
+	Suggested by Reuben Thomas.
+
 	Clarify portability pitfall of test.
 	* doc/autoconf.texi (Limitations of Builtins) <test>: Give more
 	reasons why -a and -o are not portable.
