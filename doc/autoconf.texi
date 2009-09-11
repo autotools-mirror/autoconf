@@ -1177,16 +1177,20 @@ AC_CHECK_HEADER(stdio.h,
 
 In other cases, you may have to use text that also resembles a macro
 call.  You must quote that text even when it is not passed as a macro
-argument:
+argument.  For example, these two approaches in @file{configure.ac}
+(quoting just the potential problems, or quoting the entire line) will
+protect your script in case autoconf ever adds a macro @code{AC_DC}:
 
 @example
 echo "Hard rock was here!  --[AC_DC]"
+[echo "Hard rock was here!  --AC_DC"]
 @end example
 
 @noindent
-which results in:
+which results in this text in @file{configure}:
 
 @example
+echo "Hard rock was here!  --AC_DC"
 echo "Hard rock was here!  --AC_DC"
 @end example
 
@@ -1194,10 +1198,23 @@ echo "Hard rock was here!  --AC_DC"
 When you use the same text in a macro argument, you must therefore have
 an extra quotation level (since one is stripped away by the macro
 substitution).  In general, then, it is a good idea to @emph{use double
-quoting for all literal string arguments}:
+quoting for all literal string arguments}, either around just the
+problematic portions, or over the entire argument:
 
 @example
+AC_MSG_WARN([[AC_DC] stinks  --Iron Maiden])
 AC_MSG_WARN([[AC_DC stinks  --Iron Maiden]])
+@end example
+
+However, the above example triggers a warning about a possibly
+unexpanded macro when running @command{autoconf}, because it collides
+with the namespace of macros reserved for the Autoconf language.  To be
+really safe, you can use additional escaping (either a quadrigraph, or
+creative shell constructs) to silence that particular warning:
+
+@example
+echo "Hard rock was here!  --AC""_DC"
+AC_MSG_WARN([[AC@@&t@@_DC stinks  --Iron Maiden]])
 @end example
 
 You are now able to understand one of the constructs of Autoconf that

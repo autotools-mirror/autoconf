@@ -1,3 +1,10 @@
+2009-09-12  Eric Blake  <ebb9@byu.net>
+
+	Improve documentation on quoting.
+	* doc/autoconf.texi (Autoconf Language): Clarify quoting example.
+	* THANKS: Update.
+	Reported by santilín.
+
 2009-09-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	New config.status option --config.
