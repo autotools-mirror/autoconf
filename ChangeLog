@@ -1,5 +1,8 @@
 2009-09-12  Eric Blake  <ebb9@byu.net>
 
+	Track recent copyright assignments.
+	* AUTHORS: Update.
+
 	Improve documentation on quoting.
 	* doc/autoconf.texi (Autoconf Language): Clarify quoting example.
 	* THANKS: Update.
