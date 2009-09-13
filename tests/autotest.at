@@ -1438,9 +1438,9 @@ AT_KEYWORDS([Erlang])
 
 mkdir s t
 AT_DATA([configure.ac], [[AC_INIT
-AC_ERLANG_PATH_ERL([not found])
-AC_ERLANG_PATH_ERLC([not found])
-if test "$ERL" = "not found" || test "$ERLC" = "not found"; then
+AC_ERLANG_PATH_ERL([no])
+AC_ERLANG_PATH_ERLC([no])
+if test "$ERL" = "no" || test "$ERLC" = "no"; then
   HAVE_ERLANG=no
   HAVE_EUNIT=no
 else

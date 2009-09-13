@@ -30,9 +30,9 @@ AT_BANNER([Erlang low level compiling and utility macros.])
 ## ----------------- ##
 
 AT_CHECK_MACRO([Erlang],
-[[AC_ERLANG_PATH_ERL([not found])
-AC_ERLANG_PATH_ERLC([not found])
-if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
+[[AC_ERLANG_PATH_ERL([no])
+AC_ERLANG_PATH_ERLC([no])
+if test "$ERL" = "no" || test "$ERLC" = "no"; then AS_EXIT([77]); fi
 AC_LANG([Erlang])
 ## Can't compile, but can run an Erlang module:
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [halt(0)])],
@@ -52,9 +52,9 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([], [halt(0)])],
 ## ---------------------- ##
 
 AT_CHECK_MACRO([AC_ERLANG_CHECK_LIB],
-[[AC_ERLANG_PATH_ERL([not found])
-AC_ERLANG_PATH_ERLC([not found])
-if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
+[[AC_ERLANG_PATH_ERL([no])
+AC_ERLANG_PATH_ERLC([no])
+if test "$ERL" = "no" || test "$ERLC" = "no"; then AS_EXIT([77]); fi
 AC_ERLANG_CHECK_LIB([stdlib],
 		    [AC_MSG_RESULT([ok])],
 		    [AC_MSG_RESULT([failed])])
@@ -72,9 +72,9 @@ fi
 ## --------------------------- ##
 
 AT_CHECK_MACRO([AC_ERLANG_SUBST_ROOT_DIR],
-[[AC_ERLANG_PATH_ERL([not found])
-AC_ERLANG_PATH_ERLC([not found])
-if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
+[[AC_ERLANG_PATH_ERL([no])
+AC_ERLANG_PATH_ERLC([no])
+if test "$ERL" = "no" || test "$ERLC" = "no"; then AS_EXIT([77]); fi
 AC_ERLANG_SUBST_ROOT_DIR
 ## Test that the root path detection really detected a directory:
 if test ! -d "$ERLANG_ROOT_DIR"; then
@@ -89,9 +89,9 @@ fi
 ## -------------------------- ##
 
 AT_CHECK_MACRO([AC_ERLANG_SUBST_LIB_DIR],
-[[AC_ERLANG_PATH_ERL([not found])
-AC_ERLANG_PATH_ERLC([not found])
-if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
+[[AC_ERLANG_PATH_ERL([no])
+AC_ERLANG_PATH_ERLC([no])
+if test "$ERL" = "no" || test "$ERLC" = "no"; then AS_EXIT([77]); fi
 AC_ERLANG_SUBST_LIB_DIR
 ## Test that the lib path detection really detected a directory:
 if test ! -d "$ERLANG_LIB_DIR"; then
@@ -128,9 +128,9 @@ fi
 ## -------------------------- ##
 
 AT_CHECK_MACRO([AC_ERLANG_SUBST_ERTS_VER],
-[[AC_ERLANG_PATH_ERL([not found])
-AC_ERLANG_PATH_ERLC([not found])
-if test "$ERL" = "not found" || test "$ERLC" = "not found"; then exit 77; fi
+[[AC_ERLANG_PATH_ERL([no])
+AC_ERLANG_PATH_ERLC([no])
+if test "$ERL" = "no" || test "$ERLC" = "no"; then AS_EXIT([77]); fi
 AC_ERLANG_SUBST_ERTS_VER
 ]],
 [AT_KEYWORDS([Erlang])])

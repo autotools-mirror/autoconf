@@ -1,3 +1,11 @@
+2009-09-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	testsuite: improve Erlang tests portability, overridability.
+	* tests/autotest.at (Erlang Eunit unit tests): Use "no" as
+	value-if-not-found for Erlang tools.
+	* tests/erlang.at: Likewise.  Also, use AS_EXIT instead of plain
+	exit.
+
 2009-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* bin/autoupdate.in: Fix typos in comments.
