@@ -1,3 +1,10 @@
+2009-09-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	DJGPP fix: Do not redirect standard input in configure scripts.
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): If $DJGPP is
+	nonempty, do not dup fd 0 to AS_ORIGINAL_STDIN_FD, do not close
+	fd 0.
+
 2009-09-14  Eric Blake  <ebb9@byu.net>
 
 	Quote result of m4_toupper and m4_tolower.

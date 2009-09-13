@@ -385,7 +385,8 @@ AU_ALIAS([AC_FD_MSG], [AS_MESSAGE_FD])
 m4_define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
 
-exec AS_ORIGINAL_STDIN_FD<&0 </dev/null AS_MESSAGE_FD>&1
+test -n "$DJDIR" || exec AS_ORIGINAL_STDIN_FD<&0 </dev/null
+exec AS_MESSAGE_FD>&1
 
 # Name of the host.
 # hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
