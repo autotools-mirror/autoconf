@@ -1,5 +1,12 @@
 2009-09-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	DJGPP fix: remove both conftest and conftest.exe.
+	The DJGPP compiler may create both `a.out' and `a.exe' without -o,
+	and both `conftest' and `conftest.exe' with `-o conftest', but not
+	with `-o conftest.exe'.
+	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_O): Also remove
+	`conftest' without $ac_exeext suffix.
+
 	DJGPP fix: do not try to source /dev/null as cache or site file.
 	* lib/autoconf/general.m4 (AC_SITE_LOAD, AC_CACHE_LOAD): Do not
 	load the cache or site file if it is `/dev/null', as DJGPP treats

@@ -614,7 +614,7 @@ for ac_file in conftest.exe conftest conftest.*; do
   esac
 done],
 	      [AC_MSG_FAILURE([cannot compute suffix of executables: cannot compile and link])])
-rm -f conftest$ac_cv_exeext
+rm -f conftest conftest$ac_cv_exeext
 AC_MSG_RESULT([$ac_cv_exeext])
 ])# _AC_COMPILER_EXEEXT_O
 
