@@ -1,5 +1,10 @@
 2009-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Four new autoupdate tests, expected failures.
+	* tests/tools.at (autoupdating macros recursively)
+	(autoupdating with m4@&t@_pushdef, autoupdating with AC_REQUIRE)
+	(autoupdating with complex quoting): New tests.
+
 	Fix description of AC_CHECK_LIB regarding other deplibs.
 	* doc/autoconf.texi (Libraries): Library linking may not fail
 	even without missing additional libs.

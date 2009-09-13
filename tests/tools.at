@@ -890,6 +890,31 @@ AT_CHECK([[grep 'NEW(\[0, 0], *\[0])' configure.ac]], 0, [ignore], [ignore])
 AT_CLEANUP
 
 
+# autoupdating macros recursively
+# -------------------------------
+
+AT_SETUP([autoupdating macros recursively])
+
+AT_XFAIL_IF([:])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_CC
+AC_TRY_COMPILE([], [choke me], [echo bogus1],
+	       [AC_TRY_COMPILE([], [return 0;], [echo good], [echo bogus2])])
+AC_OUTPUT
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE
+AT_CHECK([grep changequote configure.ac], [1])
+AT_CHECK([grep TRY_COMPILE configure.ac], [1])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
 # autoupdating AC_HELP_STRING
 # ---------------------------
 AT_SETUP([autoupdating AC_HELP_STRING])
@@ -939,6 +964,85 @@ AC_OUTPUT([foo])
 # Checking `autoupdate'.
 AT_CHECK_AUTOUPDATE([], [], [], [ignore])
 AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [], [ignore])
+
+AT_CLEANUP
+
+
+# autoupdating with m4_pushdef
+# ----------------------------
+AT_SETUP([autoupdating with m4@&t@_pushdef])
+
+AT_XFAIL_IF([:])
+
+touch foo.in
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_CC
+# temporarily override this macro
+m4@&t@_pushdef([AC_MSG_RESULT_UNQUOTED], [:])
+AC_C_BIGENDIAN
+m4@&t@_popdef([AC_MSG_RESULT_UNQUOTED])
+AC_OUTPUT
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE([], [], [], [ignore])
+AT_CHECK([grep changequote configure.ac], [1])
+AT_CHECK([grep [pushdef.*AC_MSG_RESULT_UNQUOTED] configure.ac], [0], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [], [ignore])
+
+AT_CLEANUP
+
+
+# autoupdating with AC_REQUIRE
+# ----------------------------
+AT_SETUP([autoupdating with AC_REQUIRE])
+
+AT_XFAIL_IF([:])
+
+AT_DATA([configure.ac],
+[[AC_DEFUN([MACRO],
+[AC_REQUIRE([AC_DECL_SYS_SIGLIST])
+AC_CHECK_DECLS([_sys_siglist], [], [], [#include <signal.h>])
+])
+
+AC_INIT
+MACRO
+AC_OUTPUT
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE([], [], [], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [], [ignore])
+
+AT_CLEANUP
+
+
+# autoupdating with complex quoting
+# ---------------------------------
+AT_SETUP([autoupdating with complex quoting])
+
+AT_XFAIL_IF([:])
+
+AT_DATA([configure.ac],
+[[m4_define([MACRO],
+[[#define STRING "hello, world\n"
+]])
+
+AC_INIT
+AC_TRY_COMPILE([#include <stdio.h>
+	       ]MACRO[], [printf (STRING);],
+	       [], [AS_EXIT([1])])
+AC_OUTPUT
+]])
+
+# Checking `autoupdate'.
+AT_CHECK_AUTOUPDATE([], [], [], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK([grep MACRO configure], [1])
 AT_CHECK_CONFIGURE([], [], [], [ignore])
 
 AT_CLEANUP
