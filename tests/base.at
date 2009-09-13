@@ -297,9 +297,9 @@ AT_DATA([configure.ac],
 cat <&AS@&t@_ORIGINAL_STDIN_FD >&AS@&t@_MESSAGE_FD
 ]])
 AT_CHECK_AUTOCONF
-AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure | grep -v 'configure: loading site script '],, [Hello
+AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure $configure_options | grep -v 'configure: loading site script '],, [Hello
 ])
-AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure --silent])
+AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure $configure_options --silent])
 
 AT_CLEANUP
 

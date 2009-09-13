@@ -315,7 +315,7 @@ class foo foobar;
 
 AT_CHECK([autoconf])
 AT_CHECK([autoheader])
-AT_CHECK([./configure], [], [ignore], [ignore])
+AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
 AT_CHECK([${MAKE-make} cpp-works || exit 77], [], [ignore], [ignore])
 AT_CHECK([${MAKE-make}], [], [ignore], [ignore])
 

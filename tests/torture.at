@@ -426,7 +426,7 @@ AT_CHECK_CONFIGURE([one=one --enable-two=two --with-three=three |
 AT_CHECK([./config.status --recheck | sed -n 's/^result=//p'], 0,
 	 [onetwothree
 ])
-AT_CHECK([args=`./config.status --config` && eval ./configure "$args" |
+AT_CHECK([args=`./config.status --config` && eval ./configure \$configure_options "$args" |
 	    sed -n -e 's/^result=//p'], 0,
 	 [m4_do([onetwothree
 ],		[onetwothree
@@ -441,7 +441,7 @@ AT_CHECK([./config.status --recheck | sed -n 's/^result=//p'], 0,
 	 ["'$ " '  $	"'$
 ])
 dnl restore font-lock: "
-AT_CHECK([args=`./config.status --config` && eval ./configure "$args" |
+AT_CHECK([args=`./config.status --config` && eval ./configure \$configure_options "$args" |
 	    sed -n -e 's/^result=//p'], 0,
 	 [m4_do(["'$ " '  $	"'$
 ],		["'$ " '  $	"'$
@@ -1094,14 +1094,14 @@ rm -f -r foo at-dir/bar
 AT_CHECK_AUTOCONF
 
 # In place.
-AT_CHECK([./configure], [], [ignore])
+AT_CHECK([./configure $configure_options], [], [ignore])
 
 # Relative name.
-AT_CHECK([cd at-dir && ../configure], [], [ignore])
+AT_CHECK([cd at-dir && ../configure $configure_options], [], [ignore])
 
 # Absolute name.
 at_here=`pwd`
-AT_CHECK([cd at-dir && "$at_here/configure"], [], [ignore])
+AT_CHECK([cd at-dir && "$at_here/configure" $configure_options], [], [ignore])
 
 AT_CLEANUP
 
@@ -1141,17 +1141,20 @@ echo file1 > src/s
 echo file2 > src/t
 AT_CHECK_AUTOCONF
 cd build
-AT_CHECK([../configure && ../configure], 0, [ignore])
+AT_CHECK([../configure $configure_options && ../configure $configure_options],
+	 0, [ignore])
 AT_CHECK([cat src/s src/t], 0, [file1
 file2
 ])
 cd ..
-AT_CHECK([./configure && ./configure], 0, [ignore], [stderr])
+AT_CHECK([./configure $configure_options && ./configure $configure_options],
+	 0, [ignore], [stderr])
 AT_CHECK([grep src/t stderr], 1)
 AT_CHECK([cat src/s src/t], 0, [file1
 file2
 ])
-AT_CHECK(["`pwd`"/configure && "`pwd`"/configure], 0, [ignore], [ignore])
+AT_CHECK(["`pwd`"/configure $configure_options && "`pwd`"/configure $configure_options],
+	 0, [ignore], [ignore])
 AT_CHECK([cat src/s src/t], 0, [file1
 file2
 ])
@@ -1243,7 +1246,7 @@ AT_CHECK([test -f inner/configure])
 # Running the outer configure recursively should provide the innermost
 # help strings.
 chmod a-w inner/innermost inner .
-AT_CHECK([{ ./configure --help=recursive; chmod u+w .; } | grep INNER], 0,
+AT_CHECK([{ ./configure $configure_options --help=recursive; chmod u+w .; } | grep INNER], 0,
 	 [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod u+w . inner inner/innermost
@@ -1259,7 +1262,7 @@ prefix=/usr/local
 
 # The same, but from a builddir.
 AS_MKDIR_P([builddir])
-AT_CHECK([cd builddir && ../configure], 0, [ignore])
+AT_CHECK([cd builddir && ../configure $configure_options], 0, [ignore])
 AT_CHECK([cat builddir/inner/innermost/config], 0,
 [INNER=inner
 srcdir=../../../inner/innermost
@@ -1269,7 +1272,8 @@ prefix=/usr/local
 
 # Make sure precious variables and command line options are properly
 # passed, even when there are duplicates.
-AT_CHECK([cd builddir && ../configure --prefix /bad --prefix /good INNER=bad INNER=good], 0, [ignore])
+AT_CHECK([cd builddir && ../configure $configure_options --prefix /bad --prefix /good INNER=bad INNER=good],
+	 0, [ignore])
 AT_CHECK([cat builddir/inner/innermost/config], 0,
 [INNER=good
 srcdir=../../../inner/innermost
@@ -1287,7 +1291,7 @@ prefix=/a  b c$ 'd
 ])
 
 # Make sure --silent is properly passed...
-AT_CHECK([cd builddir && ../configure --silent], 0, [])
+AT_CHECK([cd builddir && ../configure $configure_options --silent], 0, [])
 # ...but not stored in config.status.
 AT_CHECK([cd builddir && ./config.status --recheck], 0, [stdout])
 AT_CHECK([grep 'creating \./config.status' stdout], 0, [ignore])
@@ -1360,27 +1364,27 @@ AT_CHECK([test -f inner2/configure])
 # Running the outer configure recursively should provide the innermost
 # help strings.
 chmod a-w inner/innermost inner
-AT_CHECK([{ ./configure --help=recursive; chmod u+w .; } | grep " INNER "],
+AT_CHECK([{ ./configure $configure_options --help=recursive; chmod u+w .; } | grep " INNER "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w .
-AT_CHECK([{ ./configure --help=recursive; chmod u+w .; } | grep " INNER2 "],
+AT_CHECK([{ ./configure $configure_options --help=recursive; chmod u+w .; } | grep " INNER2 "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w .
-AT_CHECK([{ ./configure --help=recursive; chmod u+w .; } | grep " INNERMOST "],
+AT_CHECK([{ ./configure $configure_options --help=recursive; chmod u+w .; } | grep " INNERMOST "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w .
-AT_CHECK([{ /bin/sh ./configure --help=recursive; chmod u+w .; } | grep " INNERMOST "],
+AT_CHECK([{ /bin/sh ./configure $configure_options --help=recursive; chmod u+w .; } | grep " INNERMOST "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w .
-AT_CHECK([PATH=.$PATH_SEPARATOR$PATH; export PATH; { /bin/sh configure --help=recursive; chmod +w .; } | grep " INNERMOST "],
+AT_CHECK([PATH=.$PATH_SEPARATOR$PATH; export PATH; { /bin/sh configure $configure_options --help=recursive; chmod +w .; } | grep " INNERMOST "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w .
-AT_CHECK([PATH=.$PATH_SEPARATOR$PATH; export PATH; { configure --help=recursive; chmod u+w .; } | grep " INNERMOST "],
+AT_CHECK([PATH=.$PATH_SEPARATOR$PATH; export PATH; { configure $configure_options --help=recursive; chmod u+w .; } | grep " INNERMOST "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod u+w inner inner/innermost
@@ -1402,31 +1406,31 @@ cd ..
 # The same, but from a builddir.
 AS_MKDIR_P([builddir])
 chmod a-w builddir inner/innermost inner
-AT_CHECK([cd builddir && { ../configure --help=recursive; chmod u+w .; } | grep " INNER "],
+AT_CHECK([cd builddir && { ../configure $configure_options --help=recursive; chmod u+w .; } | grep " INNER "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w builddir
-AT_CHECK([cd builddir && { ../configure --help=recursive; chmod u+w .; } | grep " INNER2 "],
+AT_CHECK([cd builddir && { ../configure $configure_options --help=recursive; chmod u+w .; } | grep " INNER2 "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w builddir
-AT_CHECK([cd builddir && { ../configure --help=recursive; chmod u+w .; } | grep " INNERMOST "],
+AT_CHECK([cd builddir && { ../configure $configure_options --help=recursive; chmod u+w .; } | grep " INNERMOST "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w builddir
-AT_CHECK([cd builddir && { /bin/sh ../configure --help=recursive; chmod u+w .; } | grep " INNERMOST "],
+AT_CHECK([cd builddir && { /bin/sh ../configure $configure_options --help=recursive; chmod u+w .; } | grep " INNERMOST "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod a-w builddir
 # Not all shells search $PATH for scripts.
-if (cd builddir && PATH=`pwd`/..$PATH_SEPARATOR$PATH /bin/sh configure --help) >/dev/null 2>&1; then
-  AT_CHECK([cd builddir && PATH=`pwd`/..$PATH_SEPARATOR$PATH /bin/sh configure --help=recursive | grep " INNERMOST "], 0, [ignore])
+if (cd builddir && PATH=`pwd`/..$PATH_SEPARATOR$PATH /bin/sh configure $configure_options --help) >/dev/null 2>&1; then
+  AT_CHECK([cd builddir && PATH=`pwd`/..$PATH_SEPARATOR$PATH /bin/sh configure $configure_options --help=recursive | grep " INNERMOST "], 0, [ignore])
 fi
-AT_CHECK([PATH=`pwd`$PATH_SEPARATOR$PATH; export PATH; cd builddir && { configure --help=recursive; chmod u+w .; } | grep " INNERMOST "],
+AT_CHECK([PATH=`pwd`$PATH_SEPARATOR$PATH; export PATH; cd builddir && { configure $configure_options --help=recursive; chmod u+w .; } | grep " INNERMOST "],
 	 0, [ignore], [stderr],
 	 [AT_CHECK([grep 'rerun with a POSIX shell' stderr], [], [ignore])])
 chmod u+w builddir inner inner/innermost
-AT_CHECK([cd builddir && ../configure INNERMOST=build/tsomrenni], 0, [ignore])
+AT_CHECK([cd builddir && ../configure $configure_options INNERMOST=build/tsomrenni], 0, [ignore])
 AT_CHECK([grep INNERMOST builddir/inner/innermost/config.h], 0,
 [[#define INNERMOST build/tsomrenni
 ]])
@@ -1468,10 +1472,10 @@ AT_CHECK([autoreconf -Wall -v], 0, [ignore], [ignore])
 
 # Running the outer configure recursively should provide the innermost
 # help strings.
-AT_CHECK([./configure --help=recursive | grep "folks"], 0, [ignore])
+AT_CHECK([./configure $configure_options --help=recursive | grep "folks"], 0, [ignore])
 
 # Running the outer configure should trigger the inner.
-AT_CHECK([./configure], 0, [ignore])
+AT_CHECK([./configure $configure_options], 0, [ignore])
 AT_CHECK([test -f inner/myfile], 0)
 
 AT_CLEANUP

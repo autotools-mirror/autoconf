@@ -1,5 +1,12 @@
 2009-09-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	testsuite: pass $configure_options to configure invocations.
+	* tests/local.at (AT_CHECK_CONFIGURE): Add $configure_options
+	to configure command line.
+	* tests/autotest.at, tests/base.at, tests/c.at, tests/torture.at:
+	Likewise for each configure invocation.
+	* README-hacking: Document configure_options.
+
 	testsuite: improve Erlang tests portability, overridability.
 	* tests/autotest.at (Erlang Eunit unit tests): Use "no" as
 	value-if-not-found for Erlang tools.

@@ -96,6 +96,11 @@ keyword as well as test 10:
 
   $ make check TESTSUITEFLAGS='10 -k m4sugar'
 
+You can pass options to configure scripts invoked by the testsuite by
+setting the configure_options variable:
+
+  $ make check TESTSUITEFLAGS='configure_options="CC=gcc-2.95"'
+
 * Submitting patches
 
 All patches should be submitted to <autoconf-patches@gnu.org> for

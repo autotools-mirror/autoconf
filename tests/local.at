@@ -229,7 +229,7 @@ m4_define([AT_CHECK_AUTOHEADER],
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
 [AT_CAPTURE_FILE([config.log])[]dnl
- AT_CHECK([./configure $1],
+ AT_CHECK([./configure $configure_options $1],
 	  [$2],
 	  m4_default([$3], [ignore]), [$4])])
 
