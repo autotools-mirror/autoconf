@@ -1,3 +1,9 @@
+2009-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix description of AC_CHECK_LIB regarding other deplibs.
+	* doc/autoconf.texi (Libraries): Library linking may not fail
+	even without missing additional libs.
+
 2009-09-12  Eric Blake  <ebb9@byu.net>
 
 	Track recent copyright assignments.

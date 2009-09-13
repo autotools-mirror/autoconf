@@ -4317,9 +4317,9 @@ detection of libraries.
 If linking with @var{library} results in unresolved symbols that would
 be resolved by linking with additional libraries, give those libraries
 as the @var{other-libraries} argument, separated by spaces:
-e.g., @option{-lXt -lX11}.  Otherwise, this macro fails to detect
-that @var{library} is present, because linking the test program
-always fails with unresolved symbols.  The @var{other-libraries} argument
+e.g., @option{-lXt -lX11}.  Otherwise, this macro may fail to detect
+that @var{library} is present, because linking the test program can
+fail with unresolved symbols.  The @var{other-libraries} argument
 should be limited to cases where it is desirable to test for one library
 in the presence of another that is not already in @code{LIBS}.
 
