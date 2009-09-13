@@ -1874,7 +1874,7 @@ fi
 for ac_site_file in "$ac_site_file1" "$ac_site_file2"
 do
   test "x$ac_site_file" = xNONE && continue
-  if test -r "$ac_site_file"; then
+  if test /dev/null != "$ac_site_file" && test -r "$ac_site_file"; then
     AC_MSG_NOTICE([loading site script $ac_site_file])
     sed 's/^/| /' "$ac_site_file" >&AS_MESSAGE_LOG_FD
     . "$ac_site_file"
@@ -1887,9 +1887,9 @@ done
 # -------------
 m4_define([AC_CACHE_LOAD],
 [if test -r "$cache_file"; then
-  # Some versions of bash will fail to source /dev/null (special
-  # files actually), so we avoid doing that.
-  if test -f "$cache_file"; then
+  # Some versions of bash will fail to source /dev/null (special files
+  # actually), so we avoid doing that.  DJGPP emulates it as a regular file.
+  if test /dev/null != "$cache_file" && test -f "$cache_file"; then
     AC_MSG_NOTICE([loading cache $cache_file])
     case $cache_file in
       [[\\/]]* | ?:[[\\/]]* ) . "$cache_file";;

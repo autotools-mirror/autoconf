@@ -1,5 +1,11 @@
 2009-09-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	DJGPP fix: do not try to source /dev/null as cache or site file.
+	* lib/autoconf/general.m4 (AC_SITE_LOAD, AC_CACHE_LOAD): Do not
+	load the cache or site file if it is `/dev/null', as DJGPP treats
+	it as a regular file, but the shell then warns about it later.
+	Fixes several test suite failures on DJGPP.
+
 	testsuite: pass $configure_options to configure invocations.
 	* tests/local.at (AT_CHECK_CONFIGURE): Add $configure_options
 	to configure command line.
