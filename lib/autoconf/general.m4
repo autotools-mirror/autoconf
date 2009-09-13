@@ -2457,7 +2457,7 @@ m4_define([_AC_PREPROC_IFELSE_BODY],
     [_AC_MSG_LOG_CONFTEST
     ac_retval=1])
   AS_LINENO_POP
-  return $ac_retval
+  AS_SET_STATUS([$ac_retval])
 ])# _AC_PREPROC_IFELSE_BODY
 
 
@@ -2546,7 +2546,7 @@ m4_define([_AC_COMPILE_IFELSE_BODY],
       [_AC_MSG_LOG_CONFTEST
 	ac_retval=1])
   AS_LINENO_POP
-  return $ac_retval
+  AS_SET_STATUS([$ac_retval])
 ])# _AC_COMPILE_IFELSE_BODY
 
 
@@ -2610,7 +2610,7 @@ m4_define([_AC_LINK_IFELSE_BODY],
   # left behind by Apple's compiler.  We do this before executing the actions.
   rm -rf conftest.dSYM conftest_ipa8_conftest.oo
   AS_LINENO_POP
-  return $ac_retval
+  AS_SET_STATUS([$ac_retval])
 ])# _AC_LINK_IFELSE_BODY
 
 
@@ -2682,7 +2682,7 @@ m4_define([_AC_RUN_IFELSE_BODY],
        ac_retval=$ac_status])
   rm -rf conftest.dSYM conftest_ipa8_conftest.oo
   AS_LINENO_POP
-  return $ac_retval
+  AS_SET_STATUS([$ac_retval])
 ])# _AC_RUN_IFELSE_BODY
 
 
@@ -3004,7 +3004,7 @@ m4_define([_AC_COMPUTE_INT_BODY],
 			[ac_retval=0], [ac_retval=1])
   fi
   AS_LINENO_POP
-  return $ac_retval
+  AS_SET_STATUS([$ac_retval])
 ])# _AC_COMPUTE_INT_BODY
 
 # AC_COMPUTE_INT(VARIABLE, EXPRESSION, PROLOGUE, [IF-FAILS])

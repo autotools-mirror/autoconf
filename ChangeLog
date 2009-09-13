@@ -1,5 +1,21 @@
 2009-09-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Work around DJGPP shell function return bug with command substitutions.
+	DJGPP bash 2.04 has a bug in that `return $ac_retval' done in a
+	shell function which also contains a command substitution causes
+	the shell to barf.  For more details and a fix see:
+	<http://www.delorie.com/djgpp/mail-archives/browse.cgi?p=djgpp-workers/2009/09/09/03:35:08>
+	Possible workaround include putting the `return' in a subshell
+	or calling another function to set the status.
+	* lib/autoconf/general.m4 (_AC_PREPROC_IFELSE_BODY)
+	(_AC_COMPILE_IFELSE_BODY, _AC_LINK_IFELSE_BODY)
+	(_AC_RUN_IFELSE_BODY, _AC_COMPUTE_INT_BODY): Use AS_SET_STATUS
+	instead of `return'.
+	* doc/autoconf.texi (Common Shell Constructs, Shell Functions):
+	Document the issue.
+	* THANKS: Update.
+	Report by Rugxulo and Reuben Thomas.
+
 	DJGPP fix: Do not redirect standard input in configure scripts.
 	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): If $DJGPP is
 	nonempty, do not dup fd 0 to AS_ORIGINAL_STDIN_FD, do not close

@@ -12691,7 +12691,9 @@ Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Particular Programs}).
 Emit shell code to set the value of @samp{$?} to @var{status}, as
 efficiently as possible.  However, this is not guaranteed to abort a
 shell running with @code{set -e} (@pxref{set, , Limitations of Shell
-Builtins}).
+Builtins}).  This should also be used at the end of a complex shell
+function instead of @samp{return} (@pxref{Shell Functions}) to avoid
+a @acronym{DJGPP} shell bug.
 @end defmac
 
 @defmac AS_TR_CPP (@var{expression})
@@ -15501,6 +15503,12 @@ $ @kbd{ash -c 'foo()@{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
 0
 2
 @end example
+
+@acronym{DJGPP} bash 2.04 has a bug in that @command{return} from a
+shell function which also used a command substitution causes a
+segmentation fault.  To work around the issue, you can use
+@command{return} from a subshell, or @samp{AS_SET_STATUS} as last command
+in the execution flow of the function (@pxref{Common Shell Constructs}).
 
 Not all shells treat shell functions as simple commands impacted by
 @samp{set -e}, for example with Solaris 10 @command{bin/sh}:
