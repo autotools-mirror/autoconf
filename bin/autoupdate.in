@@ -417,7 +417,7 @@ exit 0;
 # updated.  Finding a satisfying implementation proved to be quite hard,
 # as this is the fifth implementation of `autoupdate'.
 #
-# Below, we will use a simple example of obsolete macro:
+# Below, we will use a simple example of an obsolete macro:
 #
 #     AU_DEFUN([OLD], [NEW([$1, $2], m4_eval([$1 + $2]))])
 #     AC_DEFUN([NEW], [echo "sum($1) = $2"])
@@ -449,7 +449,7 @@ exit 0;
 # Updating merely consisted in running this script on the file to
 # update.
 #
-# This scheme suffers an obvious limitation: that `autoupdate' was
+# This scheme suffers from an obvious limitation: that `autoupdate' was
 # unable to cope with new macros that just swap some of its arguments
 # compared to the old macro.  Fortunately, that was enough to upgrade
 # from Autoconf 1 to Autoconf 2.  (But I have no idea whether the
@@ -460,15 +460,15 @@ exit 0;
 # # ============================
 #
 # The version 2.15 of Autoconf brought a vast number of changes compared
-# to 2.13, so a solution was needed.  One could think to extend the
-# `sed' scripts with specialized code for complex macros.  But this
+# to 2.13, so a solution was needed.  One could think of extending the
+# `sed' scripts with specialized code for complex macros.  However, this
 # approach is of course full of flaws:
 #
 # a. the Autoconf maintainers have to write these snippets, which we
 #    just don't want to,
 #
 # b. I really don't think you'll ever manage to handle the quoting of
-#    m4 from sed.
+#    m4 with a sed script.
 #
 # To satisfy a., let's remark that the code which implements the old
 # features in term of the new feature is exactly the code which should
@@ -482,7 +482,7 @@ exit 0;
 #
 #     I want to be able to tell Autoconf, well, m4, that the macro I
 #     am currently defining is an obsolete macro (so that the user is
-#     warned), which code is the code to use when running autoconf,
+#     warned), and its code is the code to use when running autoconf,
 #     but that the very same code has to be used when running
 #     autoupdate.  To summarize, the interface I want is
 #     `AU_DEFUN(OLD-NAME, NEW-CODE)'.
@@ -527,7 +527,7 @@ exit 0;
 # Well, in this case, when running in autoupdate code, each macro first
 # reestablishes the quotes, expands itself, and disables the quotes.
 #
-# Thinking a bit more, you realize that in fact, people may use `define'
+# Thinking a bit more, you realize that in fact, people may use `define',
 # `ifelse' etc. in their files, and you certainly don't want to process
 # them.  Another example is `dnl': you don't want to remove the
 # comments.  You then realize you don't want exactly to import m4sugar:
@@ -545,7 +545,7 @@ exit 0;
 # that is to say, to keep in some place m4 knows, late `define' to be
 # triggered *only* in AU mode.
 #
-# You first think to design AU_DEFUN like this:
+# You first think of designing AU_DEFUN like this:
 #
 # 1. AC_DEFUN(OLD-NAME,
 #	      [Warn the user OLD-NAME is obsolete.
@@ -556,7 +556,7 @@ exit 0;
 #				 NEW-CODE
 #				 Disable the quotes.])])
 #
-# but this will not work: NEW-CODE has probably $1, $2 etc. and these
+# but this will not work: NEW-CODE probably uses $1, $2 etc. and these
 # guys will be replaced with the argument of `Store for late AU binding'
 # when you call it.
 #

@@ -1,5 +1,7 @@
 2009-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	* bin/autoupdate.in: Fix typos in comments.
+
 	Improve autotest testsuite summary message.
 	* lib/autotest/general.m4 (AT_INIT): Hint at the toplevel log
 	only if not $at_debug_p.  Always hint at the per-test output.
