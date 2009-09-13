@@ -1564,22 +1564,23 @@ else
   AS_BOX([$as_me.log was created.])
 
   echo
-  AS_ECHO(["Please send \`${at_testdir+${at_testdir}/}$as_me.log' ]dnl
-[and all information you think might help:
+  if $at_debug_p; then
+    at_msg='per-test log files'
+  else
+    at_msg="\`${at_testdir+${at_testdir}/}$as_me.log'"
+  fi
+  AS_ECHO(["Please send $at_msg and all information you think might help:
 
    To: <AT_PACKAGE_BUGREPORT>
    Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me: dnl
 $at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}dnl
 $at_xpass_list${at_xpass_list:+ passed unexpectedly}
+
+You may investigate any problem if you feel able to do so, in which
+case the test suite provides a good starting point.  Its output may
+be found below \`${at_testdir+${at_testdir}/}$as_me.dir'.
 "])
-  if test $at_debug_p = false; then
-    echo
-    echo 'You may investigate any problem if you feel able to do so, in which'
-    echo 'case the test suite provides a good starting point.  Its output may'
-    AS_ECHO(["be found below \`${at_testdir+${at_testdir}/}$as_me.dir'."])
-    echo
-  fi
-    exit 1
+  exit 1
 fi
 
 exit 0
@@ -1595,7 +1596,7 @@ m4_divert([KILL])
 
 # _AT_ARG_OPTION(OPTIONS,HELP-TEXT,[ARGS],[ACTION-IF-GIVEN],
 #                [ACTION-IF-NOT-GIVEN])
-# ---------------------------------------------------------------------------
+# ----------------------------------------------------------
 # Internal implementation of AT_ARG_OPTION & AT_ARG_OPTION_ARG
 m4_defun([_AT_ARG_OPTION],
 [m4_divert_once([HELP_OTHER],
