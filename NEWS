@@ -21,6 +21,9 @@ GNU Autoconf NEWS - User visible changes.
 ** The following documented autotest macros are new:
    AT_CHECK_EUNIT
 
+** The following m4sugar macros now quote their expansion:
+   m4_toupper  m4_tolower
+
 ** The `$tmp' temporary directory used in config.status is documented for
    public use now.
 

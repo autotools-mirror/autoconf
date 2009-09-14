@@ -1,3 +1,13 @@
+2009-09-14  Eric Blake  <ebb9@byu.net>
+
+	Quote result of m4_toupper and m4_tolower.
+	* lib/m4sugar/m4sugar.m4 (m4_tolower, m4_toupper): Quote result.
+	* lib/autotest/general.m4 (AT_KEYWORDS): Adjust caller.
+	* tests/m4sugar.at (m4@&t@_toupper and m4@&t@_tolower): New test.
+	* NEWS: Document this.
+	* THANKS: Update.
+	Reported by Sam Steingold.
+
 2009-09-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	DJGPP fix: remove both conftest and conftest.exe.

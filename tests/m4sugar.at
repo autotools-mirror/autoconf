@@ -1292,6 +1292,43 @@ AB
 
 AT_CLEANUP
 
+## ------------------------ ##
+## m4_toupper, m4_tolower.  ##
+## ------------------------ ##
+
+AT_SETUP([m4@&t@_toupper and m4@&t@_tolower])
+
+AT_CHECK_M4SUGAR_TEXT(
+[[m4_define([abc], [hI])m4_define([ABC], [Hi])
+m4_toupper(abc aBc ABC)
+m4_tolower(abc aBc ABC)
+m4_toupper([abc aBc ABC])
+m4_tolower([abc aBc ABC])
+m4_echo(m4_toupper(abc aBc ABC))
+m4_echo(m4_tolower(abc aBc ABC))
+m4_echo(m4_toupper([abc aBc ABC]))
+m4_echo(m4_tolower([abc aBc ABC]))
+m4_do(m4_toupper(abc aBc ABC))
+m4_do(m4_tolower(abc aBc ABC))
+m4_do(m4_toupper([abc aBc ABC]))
+m4_do(m4_tolower([abc aBc ABC]))
+]], [[
+HI ABC HI
+hi abc hi
+ABC ABC ABC
+abc abc abc
+HI ABC HI
+hi abc hi
+ABC ABC ABC
+abc abc abc
+HI Hi HI
+hi hI hi
+Hi Hi Hi
+hI hI hI
+]])
+
+AT_CLEANUP
+
 ## --------------- ##
 ## m4_bpatsubsts.  ##
 ## --------------- ##

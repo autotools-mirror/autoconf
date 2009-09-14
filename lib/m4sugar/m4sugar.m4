@@ -2266,11 +2266,11 @@ m4_defn([m4_re_string])dnl
 #
 # Rather than expand the m4_defn each time, we inline them up front.
 m4_define([m4_tolower],
-[m4_translit([$1], ]m4_dquote(m4_defn([m4_cr_LETTERS]))[,
-		   ]m4_dquote(m4_defn([m4_cr_letters]))[)])
+[m4_translit([[$1]], ]m4_dquote(m4_defn([m4_cr_LETTERS]))[,
+		     ]m4_dquote(m4_defn([m4_cr_letters]))[)])
 m4_define([m4_toupper],
-[m4_translit([$1], ]m4_dquote(m4_defn([m4_cr_letters]))[,
-		   ]m4_dquote(m4_defn([m4_cr_LETTERS]))[)])
+[m4_translit([[$1]], ]m4_dquote(m4_defn([m4_cr_letters]))[,
+		     ]m4_dquote(m4_defn([m4_cr_LETTERS]))[)])
 
 
 # m4_split(STRING, [REGEXP])
