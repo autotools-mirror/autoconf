@@ -198,6 +198,27 @@ AT_CHECK_CONFIGURE
 AT_CLEANUP
 
 
+## -------- ##
+## AC_INIT. ##
+## -------- ##
+
+# Make sure AC_INIT sets PACKAGE_TARNAME properly.
+
+AT_SETUP([AC_INIT])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU fu], [1.0], [bug-fu@gnu.org])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([-q])
+
+# Ensure we get the expected definition:
+AT_CHECK([grep "^PACKAGE_TARNAME='fu'\$" configure], [], [ignore])
+
+AT_CLEANUP
+
+
 ## ---------------- ##
 ## AC_CACHE_CHECK.  ##
 ## ---------------- ##
