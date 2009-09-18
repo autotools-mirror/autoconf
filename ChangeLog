@@ -1,5 +1,17 @@
 2009-09-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Documentation of specific and general cache variables.
+	* doc/autoconf.texi (Default Includes, Alternative Programs)
+	(Particular Programs, Generic Programs, Files, Libraries)
+	(Function Portability, Particular Functions, Generic Functions)
+	(Particular Headers, Generic Headers, Declarations)
+	(Generic Declarations, Particular Structures, Particular Types)
+	(Specific Compiler Characteristics)
+	(Generic Compiler Characteristics, C Compiler, System Services):
+	Document lots of cache variables.
+	* NEWS: Update.
+	Suggested by Bruno Haible.
+
 	New cache variable index in the manual.
 	* doc/autoconf.texi: Define new index `CA' for cache variables.
 	(caindex): New macro.

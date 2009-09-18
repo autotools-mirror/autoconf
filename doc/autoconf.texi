@@ -3869,36 +3869,44 @@ in some cases whether they support certain features.
 @defmac AC_PROG_AWK
 @acindex{PROG_AWK}
 @ovindex AWK
+@caindex prog_AWK
 Check for @code{gawk}, @code{mawk}, @code{nawk}, and @code{awk}, in that
 order, and set output variable @code{AWK} to the first one that is found.
 It tries @code{gawk} first because that is reported to be the
-best implementation.
+best implementation.  The result is cached in the @code{ac_cv_prog_AWK}
+variable.
 @end defmac
 
 @defmac AC_PROG_GREP
 @acindex{PROG_GREP}
 @ovindex GREP
+@caindex prog_GREP
 Look for the best available @code{grep} or @code{ggrep} that accepts the
 longest input lines possible, and that supports multiple @option{-e} options.
 Set the output variable @code{GREP} to whatever is chosen.
 @xref{grep, , Limitations of Usual Tools}, for more information about
-portability problems with the @command{grep} command family.
+portability problems with the @command{grep} command family.  The result
+is cached in the @code{ac_cv_path_GREP} variable.
 @end defmac
 
 @defmac AC_PROG_EGREP
 @acindex{PROG_EGREP}
 @ovindex EGREP
+@caindex prog_EGREP
 Check whether @code{$GREP -E} works, or else look for the best available
 @code{egrep} or @code{gegrep} that accepts the longest input lines possible.
-Set the output variable @code{EGREP} to whatever is chosen.
+Set the output variable @code{EGREP} to whatever is chosen.  The result
+is cached in the @code{ac_cv_path_EGREP} variable.
 @end defmac
 
 @defmac AC_PROG_FGREP
 @acindex{PROG_FGREP}
 @ovindex FGREP
+@caindex prog_FGREP
 Check whether @code{$GREP -F} works, or else look for the best available
 @code{fgrep} or @code{gfgrep} that accepts the longest input lines possible.
-Set the output variable @code{FGREP} to whatever is chosen.
+Set the output variable @code{FGREP} to whatever is chosen.  The result
+is cached in the @code{ac_cv_path_FGREP} variable.
 @end defmac
 
 @defmac AC_PROG_INSTALL
@@ -3907,6 +3915,7 @@ Set the output variable @code{FGREP} to whatever is chosen.
 @ovindex INSTALL_PROGRAM
 @ovindex INSTALL_DATA
 @ovindex INSTALL_SCRIPT
+@caindex path_install
 Set output variable @code{INSTALL} to the name of a @acronym{BSD}-compatible
 @command{install} program, if one is found in the current @env{PATH}.
 Otherwise, set @code{INSTALL} to @samp{@var{dir}/install-sh -c},
@@ -3939,11 +3948,15 @@ If you need to use your own installation program because it has features
 not found in standard @command{install} programs, there is no reason to use
 @code{AC_PROG_INSTALL}; just put the file name of your program into your
 @file{Makefile.in} files.
+
+The result of the test is cached in the @code{ac_cv_path_install} variable,
+if an @command{install} program other than the in-tree script is found.
 @end defmac
 
 @defmac AC_PROG_MKDIR_P
 @acindex{PROG_MKDIR_P}
 @ovindex MKDIR_P
+@caindex path_mkdir
 Set output variable @code{MKDIR_P} to a program that ensures that for
 each argument, a directory named by this argument exists, creating it
 and its parent directories if needed, and without race conditions when
@@ -3974,6 +3987,9 @@ vulnerability, whereas @code{AC_PROG_MKDIR_P} does.
 
 @samp{@@MKDIR_P@@} is special, as its value may vary for different
 configuration files.
+
+The result of the test is cached in the @code{ac_cv_path_mkdir} variable,
+if a @command{mkdir} program other than an in-tree script is found.
 @end defmac
 
 @anchor{AC_PROG_LEX}
@@ -3983,6 +3999,7 @@ configuration files.
 @ovindex LEXLIB
 @cvindex YYTEXT_POINTER
 @ovindex LEX_OUTPUT_ROOT
+@caindex prog_LEX
 If @code{flex} is found, set output variable @code{LEX} to @samp{flex}
 and @code{LEXLIB} to @option{-lfl}, if that library is in a standard
 place.  Otherwise set @code{LEX} to @samp{lex} and @code{LEXLIB} to
@@ -4032,6 +4049,8 @@ of Automake will fix this issue; meanwhile, just ignore this message.
 
 As part of running the test, this macro may delete any file in the
 configuration directory named @file{lex.yy.c} or @file{lexyy.c}.
+
+The result of this test is cached in the @code{ac_cv_prog_LEX} variable.
 @end defmac
 
 @anchor{AC_PROG_LN_S}
@@ -4064,6 +4083,8 @@ Instead, do:
 @defmac AC_PROG_RANLIB
 @acindex{PROG_RANLIB}
 @ovindex RANLIB
+@c @caindex prog_RANLIB
+@c @caindex prog_ac_ct_RANLIB
 Set output variable @code{RANLIB} to @samp{ranlib} if @code{ranlib}
 is found, and otherwise to @samp{:} (do nothing).
 @end defmac
@@ -4071,10 +4092,13 @@ is found, and otherwise to @samp{:} (do nothing).
 @defmac AC_PROG_SED
 @acindex{PROG_SED}
 @ovindex SED
+@caindex prog_SED
 Set output variable @code{SED} to a Sed implementation that conforms to
 Posix and does not have arbitrary length limits.  Report an error if no
 acceptable Sed is found.  @xref{sed, , Limitations of Usual Tools}, for more
 information about portability problems with Sed.
+
+The result of this test is cached in the @code{ac_cv_prog_SED} variable.
 @end defmac
 
 @defmac AC_PROG_YACC
@@ -4082,9 +4106,11 @@ information about portability problems with Sed.
 @evindex YACC
 @evindex YFLAGS
 @ovindex YACC
+@caindex prog_YACC
 If @code{bison} is found, set output variable @code{YACC} to @samp{bison
 -y}.  Otherwise, if @code{byacc} is found, set @code{YACC} to
 @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
+The result of this test is cached in the @code{ac_cv_prog_YACC} variable.
 @end defmac
 
 @node Generic Programs
@@ -4113,6 +4139,7 @@ You are strongly encouraged to declare the @var{variable} passed to
   @var{value-if-found}, @ovar{value-if-not-found}, @dvar{path, $PATH}, @
   @ovar{reject})
 @acindex{CHECK_PROG}
+@caindex prog_@var{variable}
 Check whether program @var{prog-to-check-for} exists in @var{path}.  If
 it is found, set @var{variable} to @var{value-if-found}, otherwise to
 @var{value-if-not-found}, if given.  Always pass over @var{reject} (an
@@ -4120,20 +4147,23 @@ absolute file name) even if it is the first found in the search path; in
 that case, set @var{variable} using the absolute file name of the
 @var{prog-to-check-for} found that is not @var{reject}.  If
 @var{variable} was already set, do nothing.  Calls @code{AC_SUBST} for
-@var{variable}.
+@var{variable}.  The result of this test is cached in the
+@code{ac_cv_prog_@var{variable}} variable.
 @end defmac
 
 @anchor{AC_CHECK_PROGS}
 @defmac AC_CHECK_PROGS (@var{variable}, @var{progs-to-check-for}, @
   @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_PROGS}
+@caindex prog_@var{variable}
 Check for each program in the blank-separated list
 @var{progs-to-check-for} existing in the @var{path}.  If one is found, set
 @var{variable} to the name of that program.  Otherwise, continue
 checking the next program in the list.  If none of the programs in the
 list are found, set @var{variable} to @var{value-if-not-found}; if
 @var{value-if-not-found} is not specified, the value of @var{variable}
-is not changed.  Calls @code{AC_SUBST} for @var{variable}.
+is not changed.  Calls @code{AC_SUBST} for @var{variable}.  The result of
+this test is cached in the @code{ac_cv_prog_@var{variable}} variable.
 @end defmac
 
 @defmac AC_CHECK_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @
@@ -4157,6 +4187,8 @@ uses to produce objects, archives or executables}.
 @defmac AC_CHECK_TOOL (@var{variable}, @var{prog-to-check-for}, @
   @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{CHECK_TOOL}
+@c @caindex prog_@var{VARIABLE}
+@c @caindex prog_ac_ct_@var{VARIABLE}
 Like @code{AC_CHECK_PROG}, but first looks for @var{prog-to-check-for}
 with a prefix of the host type as specified by @option{--host}, followed by a
 dash.  For example, if the user runs
@@ -4211,14 +4243,17 @@ For more information, see @ref{Specifying Target Triplets}.
 @defmac AC_PATH_PROG (@var{variable}, @var{prog-to-check-for}, @
   @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_PROG}
+@caindex path_@var{variable}
 Like @code{AC_CHECK_PROG}, but set @var{variable} to the absolute
-name of @var{prog-to-check-for} if found.
+name of @var{prog-to-check-for} if found.  A positive result of this
+test is cached in the @code{ac_cv_path_@var{variable}} variable.
 @end defmac
 
 @anchor{AC_PATH_PROGS}
 @defmac AC_PATH_PROGS (@var{variable}, @var{progs-to-check-for}, @
   @ovar{value-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_PROGS}
+@caindex path_@var{variable}
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
 are found, set @var{variable} to the absolute name of the program
 found.
@@ -4228,6 +4263,7 @@ found.
   @var{progs-to-check-for}, @var{feature-test}, @
   @ovar{action-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_PROGS_FEATURE_CHECK}
+@caindex path_@var{variable}
 This macro was introduced in Autoconf 2.62.  If @var{variable} is not
 empty, then set the cache variable @code{$ac_cv_path_@var{variable}} to
 its value.  Otherwise, check for each program in the blank-separated
@@ -4298,17 +4334,23 @@ of the host machine, and therefore, they die when cross-compiling.
 @defmac AC_CHECK_FILE (@var{file}, @ovar{action-if-found}, @
   @ovar{action-if-not-found})
 @acindex{CHECK_FILE}
+@caindex file_@var{file}
 Check whether file @var{file} exists on the native system.  If it is
 found, execute @var{action-if-found}, otherwise do
-@var{action-if-not-found}, if given.
+@var{action-if-not-found}, if given.  The result of this test is cached
+in the @code{ac_cv_file_@var{file}} variable, with characters not
+suitable for a variable name mapped to underscores.
 @end defmac
 
 @defmac AC_CHECK_FILES (@var{files}, @ovar{action-if-found}, @
   @ovar{action-if-not-found})
 @acindex{CHECK_FILES}
+@caindex file_@var{file}
 Executes @code{AC_CHECK_FILE} once for each file listed in @var{files}.
 Additionally, defines @samp{HAVE_@var{file}} (@pxref{Standard Symbols})
-for each file found.
+for each file found.  The results of each test are cached in the
+@code{ac_cv_file_@var{file}} variable, with characters not suitable for
+a variable name mapped to underscores.
 @end defmac
 
 
@@ -4323,6 +4365,7 @@ library archive files.
 @defmac AC_CHECK_LIB (@var{library}, @var{function}, @
   @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{CHECK_LIB}
+@caindex lib_@var{library}_@var{function}
 Test whether the library @var{library} is available by trying to link
 a test program that calls function @var{function} with the library.
 @var{function} should be a function provided by the library.
@@ -4358,12 +4401,16 @@ like @code{nsl} on other hosts.  On some hosts the special libraries
 contain variant implementations that you may not want to use.  These
 days it is normally better to use @code{AC_SEARCH_LIBS([gethostbyname],
 [nsl])} instead of @code{AC_CHECK_LIB([nsl], [gethostbyname])}.
+
+The result of this test is cached in the
+@code{ac_cv_lib_@var{library}_@var{function}} variable.
 @end defmac
 
 @anchor{AC_SEARCH_LIBS}
 @defmac AC_SEARCH_LIBS (@var{function}, @var{search-libs}, @
   @ovar{action-if-found}, @ovar{action-if-not-found}, @ovar{other-libraries})
 @acindex{SEARCH_LIBS}
+@caindex search_@var{function}
 Search for a library defining @var{function} if it's not already
 available.  This equates to calling
 @samp{AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])])} first with
@@ -4379,6 +4426,11 @@ as the @var{other-libraries} argument, separated by spaces:
 e.g., @option{-lXt -lX11}.  Otherwise, this macro fails to detect
 that @var{function} is present, because linking the test program
 always fails with unresolved symbols.
+
+The result of this test is cached in the
+@code{ac_cv_search_@var{function}} variable as @samp{no}, if no library
+containing @var{function} was found, otherwise as the
+@option{-l@var{library}} option that needs to be added to @code{LIBS}.
 @end defmac
 
 
@@ -4678,6 +4730,7 @@ in some cases how they respond when given certain arguments.
 @c @fuindex alloca
 @prindex @code{alloca}
 @hdrindex{alloca.h}
+@c @caindex working_alloca_h
 Check how to get @code{alloca}.  Tries to get a builtin version by
 checking for @file{alloca.h} or the predefined C preprocessor macros
 @code{__GNUC__} and @code{_AIX}.  If this macro finds @file{alloca.h},
@@ -4731,9 +4784,11 @@ void *alloca (size_t);
 @cvindex HAVE_CHOWN
 @c @fuindex chown
 @prindex @code{chown}
+@caindex func_chown_works
 If the @code{chown} function is available and works (in particular, it
 should accept @option{-1} for @code{uid} and @code{gid}), define
-@code{HAVE_CHOWN}.
+@code{HAVE_CHOWN}.  The result of this macro is cached in the
+@code{ac_cv_func_chown_works} variable.
 @end defmac
 
 @anchor{AC_FUNC_CLOSEDIR_VOID}
@@ -4742,6 +4797,7 @@ should accept @option{-1} for @code{uid} and @code{gid}), define
 @cvindex CLOSEDIR_VOID
 @c @fuindex closedir
 @prindex @code{closedir}
+@caindex func_closedir_void
 If the @code{closedir} function does not return a meaningful value,
 define @code{CLOSEDIR_VOID}.  Otherwise, callers ought to check its
 return value for an error indicator.
@@ -4749,6 +4805,9 @@ return value for an error indicator.
 Currently this test is implemented by running a test program.  When
 cross compiling the pessimistic assumption that @code{closedir} does not
 return a meaningful value is made.
+
+The result of this macro is cached in the @code{ac_cv_func_closedir_void}
+variable.
 
 This macro is obsolescent, as @code{closedir} returns a meaningful value
 on current systems.  New programs need not use this macro.
@@ -4758,14 +4817,19 @@ on current systems.  New programs need not use this macro.
 @acindex{FUNC_ERROR_AT_LINE}
 @c @fuindex error_at_line
 @prindex @code{error_at_line}
+@caindex lib_error_at_line
 If the @code{error_at_line} function is not found, require an
 @code{AC_LIBOBJ} replacement of @samp{error}.
+
+The result of this macro is cached in the @code{ac_cv_lib_error_at_line}
+variable.
 @end defmac
 
 @defmac AC_FUNC_FNMATCH
 @acindex{FUNC_FNMATCH}
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
+@caindex func_fnmatch_works
 If the @code{fnmatch} function conforms to Posix, define
 @code{HAVE_FNMATCH}.  Detect common implementation bugs, for example,
 the bugs in Solaris 2.4.
@@ -4775,6 +4839,9 @@ Unlike the other specific
 broken/missing @code{fnmatch}.  This is for historical reasons.
 See @code{AC_REPLACE_FNMATCH} below.
 
+The result of this macro is cached in the @code{ac_cv_func_fnmatch_works}
+variable.
+
 This macro is obsolescent.  New programs should use Gnulib's
 @code{fnmatch-posix} module.  @xref{Gnulib}.
 @end defmac
@@ -4783,10 +4850,14 @@ This macro is obsolescent.  New programs should use Gnulib's
 @acindex{FUNC_FNMATCH_GNU}
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
+@caindex func_fnmatch_gnu
 Behave like @code{AC_REPLACE_FNMATCH} (@emph{replace}) but also test
 whether @code{fnmatch} supports @acronym{GNU} extensions.  Detect common
 implementation bugs, for example, the bugs in the @acronym{GNU} C
 Library 2.1.
+
+The result of this macro is cached in the @code{ac_cv_func_fnmatch_gnu}
+variable.
 
 This macro is obsolescent.  New programs should use Gnulib's
 @code{fnmatch-gnu} module.  @xref{Gnulib}.
@@ -4804,6 +4875,8 @@ This macro is obsolescent.  New programs should use Gnulib's
 @c @fuindex vfork
 @prindex @code{vfork}
 @hdrindex{vfork.h}
+@c @caindex func_fork
+@c @caindex func_fork_works
 This macro checks for the @code{fork} and @code{vfork} functions.  If a
 working @code{fork} is found, define @code{HAVE_WORKING_FORK}.  This macro
 checks whether @code{fork} is just a stub by trying to run it.
@@ -4838,6 +4911,7 @@ yourself in new code:
 @prindex @code{fseeko}
 @c @fuindex ftello
 @prindex @code{ftello}
+@c @caindex sys_largefile_source
 If the @code{fseeko} function is available, define @code{HAVE_FSEEKO}.
 Define @code{_LARGEFILE_SOURCE} if necessary to make the prototype
 visible on some systems (e.g., glibc 2.2).  Otherwise linkage problems
@@ -4852,6 +4926,7 @@ largefile-sensitive systems where @code{off_t} does not default to a
 @ovindex GETGROUPS_LIBS
 @c @fuindex getgroups
 @prindex @code{getgroups}
+@caindex func_getgroups_works
 If the @code{getgroups} function is available and works (unlike on
 Ultrix 4.3, where @samp{getgroups (0, 0)} always fails), define
 @code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
@@ -4925,10 +5000,14 @@ use Gnulib's @code{getloadavg} module.  @xref{Gnulib}.
 @cvindex HAVE_GETMNTENT
 @c @fuindex getmntent
 @prindex @code{getmntent}
+@caindex func_getmntent
 Check for @code{getmntent} in the standard C library, and then in the
 @file{sun}, @file{seq}, and @file{gen} libraries, for @sc{unicos},
 @sc{irix} 4, @sc{ptx}, and UnixWare, respectively.  Then, if
 @code{getmntent} is available, define @code{HAVE_GETMNTENT}.
+
+The result of this macro is cached in the @code{ac_cv_func_getmntent}
+variable.
 @end defmac
 
 @defmac AC_FUNC_GETPGRP
@@ -4938,6 +5017,7 @@ Check for @code{getmntent} in the standard C library, and then in the
 @c @fuindex getpgrp
 @prindex @code{getpgid}
 @prindex @code{getpgrp}
+@caindex func_getpgrp_void
 Define @code{GETPGRP_VOID} if it is an error to pass 0 to
 @code{getpgrp}; this is the Posix behavior.  On older @acronym{BSD}
 systems, you must pass 0 to @code{getpgrp}, as it takes an argument and
@@ -4955,6 +5035,9 @@ This macro does not check whether
 @code{getpgrp} exists at all; if you need to work in that situation,
 first call @code{AC_CHECK_FUNC} for @code{getpgrp}.
 
+The result of this macro is cached in the @code{ac_cv_func_getpgrp_void}
+variable.
+
 This macro is obsolescent, as current systems have a @code{getpgrp}
 whose signature conforms to Posix.  New programs need not use this macro.
 @end defmac
@@ -4964,6 +5047,7 @@ whose signature conforms to Posix.  New programs need not use this macro.
 @cvindex LSTAT_FOLLOWS_SLASHED_SYMLINK
 @c @fuindex lstat
 @prindex @code{lstat}
+@caindex func_lstat_dereferences_slashed_symlink
 If @file{link} is a symbolic link, then @code{lstat} should treat
 @file{link/} the same as @file{link/.}.  However, many older
 @code{lstat} implementations incorrectly ignore trailing slashes.
@@ -4975,6 +5059,9 @@ trailing slashes, then other symbolic-link-aware functions like
 If @code{lstat} behaves properly, define
 @code{LSTAT_FOLLOWS_SLASHED_SYMLINK}, otherwise require an
 @code{AC_LIBOBJ} replacement of @code{lstat}.
+
+The result of this macro is cached in the
+@code{ac_cv_func_lstat_dereferences_slashed_symlink} variable.
 @end defmac
 
 @defmac AC_FUNC_MALLOC
@@ -4983,6 +5070,7 @@ If @code{lstat} behaves properly, define
 @cvindex malloc
 @c @fuindex malloc
 @prindex @code{malloc}
+@caindex func_malloc_0_nonnull
 If the @code{malloc} function is compatible with the @acronym{GNU} C
 library @code{malloc} (i.e., @samp{malloc (0)} returns a valid
 pointer), define @code{HAVE_MALLOC} to 1.  Otherwise define
@@ -5012,6 +5100,9 @@ rpl_malloc (size_t n)
   return malloc (n);
 }
 @end verbatim
+
+The result of this macro is cached in the
+@code{ac_cv_func_malloc_0_nonnull} variable.
 @end defmac
 
 @defmac AC_FUNC_MEMCMP
@@ -5019,11 +5110,15 @@ rpl_malloc (size_t n)
 @ovindex LIBOBJS
 @c @fuindex memcmp
 @prindex @code{memcmp}
+@caindex func_memcmp_working
 If the @code{memcmp} function is not available, or does not work on
 8-bit data (like the one on SunOS 4.1.3), or fails when comparing 16
 bytes or more and with at least one buffer not starting on a 4-byte
 boundary (such as the one on NeXT x86 OpenStep), require an
 @code{AC_LIBOBJ} replacement for @samp{memcmp}.
+
+The result of this macro is cached in the
+@code{ac_cv_func_memcmp_working} variable.
 
 This macro is obsolescent, as current systems have a working
 @code{memcmp}.  New programs need not use this macro.
@@ -5034,8 +5129,12 @@ This macro is obsolescent, as current systems have a working
 @cvindex HAVE_MBRTOWC
 @c @fuindex mbrtowc
 @prindex @code{mbrtowc}
+@caindex func_mbrtowc
 Define @code{HAVE_MBRTOWC} to 1 if the function @code{mbrtowc} and the
 type @code{mbstate_t} are properly declared.
+
+The result of this macro is cached in the @code{ac_cv_func_mbrtowc}
+variable.
 @end defmac
 
 @defmac AC_FUNC_MKTIME
@@ -5043,11 +5142,15 @@ type @code{mbstate_t} are properly declared.
 @ovindex LIBOBJS
 @c @fuindex mktime
 @prindex @code{mktime}
+@caindex func_working_mktime
 If the @code{mktime} function is not available, or does not work
 correctly, require an @code{AC_LIBOBJ} replacement for @samp{mktime}.
 For the purposes of this test, @code{mktime} should conform to the
 Posix standard and should be the inverse of
 @code{localtime}.
+
+The result of this macro is cached in the
+@code{ac_cv_func_working_mktime} variable.
 @end defmac
 
 @anchor{AC_FUNC_MMAP}
@@ -5056,17 +5159,25 @@ Posix standard and should be the inverse of
 @cvindex HAVE_MMAP
 @c @fuindex mmap
 @prindex @code{mmap}
+@caindex func_mmap_fixed_mapped
 If the @code{mmap} function exists and works correctly, define
 @code{HAVE_MMAP}.  This checks only private fixed mapping of already-mapped
 memory.
+
+The result of this macro is cached in the
+@code{ac_cv_func_mmap_fixed_mapped} variable.
 @end defmac
 
 @defmac AC_FUNC_OBSTACK
 @acindex{FUNC_OBSTACK}
 @cvindex HAVE_OBSTACK
 @cindex obstack
+@caindex func_obstack
 If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
 @code{AC_LIBOBJ} replacement for @samp{obstack}.
+
+The result of this macro is cached in the @code{ac_cv_func_obstack}
+variable.
 @end defmac
 
 @defmac AC_FUNC_REALLOC
@@ -5075,6 +5186,7 @@ If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
 @cvindex realloc
 @c @fuindex realloc
 @prindex @code{realloc}
+@caindex func_realloc_0_nonnull
 If the @code{realloc} function is compatible with the @acronym{GNU} C
 library @code{realloc} (i.e., @samp{realloc (NULL, 0)} returns a
 valid pointer), define @code{HAVE_REALLOC} to 1.  Otherwise define
@@ -5082,6 +5194,9 @@ valid pointer), define @code{HAVE_REALLOC} to 1.  Otherwise define
 @samp{realloc}, and define @code{realloc} to @code{rpl_realloc} so that
 the native @code{realloc} is not used in the main project.  See
 @code{AC_FUNC_MALLOC} for details.
+
+The result of this macro is cached in the
+@code{ac_cv_func_realloc_0_nonnull} variable.
 @end defmac
 
 @defmac AC_FUNC_SELECT_ARGTYPES
@@ -5091,6 +5206,7 @@ the native @code{realloc} is not used in the main project.  See
 @cvindex SELECT_TYPE_ARG5
 @c @fuindex select
 @prindex @code{select}
+@c @caindex func_select_args
 Determines the correct type to be passed for each of the
 @code{select} function's arguments, and defines those types
 in @code{SELECT_TYPE_ARG1}, @code{SELECT_TYPE_ARG234}, and
@@ -5107,11 +5223,15 @@ signature conforms to Posix.  New programs need not use this macro.
 @cvindex SETPGRP_VOID
 @c @fuindex setpgrp
 @prindex @code{setpgrp}
+@caindex func_setpgrp_void
 If @code{setpgrp} takes no argument (the Posix version), define
 @code{SETPGRP_VOID}.  Otherwise, it is the @acronym{BSD} version, which takes
 two process IDs as arguments.  This macro does not check whether
 @code{setpgrp} exists at all; if you need to work in that situation,
 first call @code{AC_CHECK_FUNC} for @code{setpgrp}.
+
+The result of this macro is cached in the @code{ac_cv_func_setpgrp_void}
+variable.
 
 This macro is obsolescent, as current systems have a @code{setpgrp}
 whose signature conforms to Posix.  New programs need not use this macro.
@@ -5127,6 +5247,8 @@ whose signature conforms to Posix.  New programs need not use this macro.
 @prindex @code{stat}
 @c @fuindex lstat
 @prindex @code{lstat}
+@caindex func_stat_empty_string_bug
+@caindex func_lstat_empty_string_bug
 Determine whether @code{stat} or @code{lstat} have the bug that it
 succeeds when given the zero-length file name as argument.  The @code{stat}
 and @code{lstat} from SunOS 4.1.4 and the Hurd (as of 1998-11-01) do
@@ -5135,6 +5257,10 @@ this.
 If it does, then define @code{HAVE_STAT_EMPTY_STRING_BUG} (or
 @code{HAVE_LSTAT_EMPTY_STRING_BUG}) and ask for an @code{AC_LIBOBJ}
 replacement of it.
+
+The results of these macros are cached in the
+@code{ac_cv_func_stat_empty_string_bug} and the
+@code{ac_cv_func_stat_empty_string_bug} variables, respectively.
 
 These macros are obsolescent, as no current systems have the bug.
 New programs need not use these macros.
@@ -5146,10 +5272,14 @@ New programs need not use these macros.
 @cvindex HAVE_STRCOLL
 @c @fuindex strcoll
 @prindex @code{strcoll}
+@caindex func_strcoll_works
 If the @code{strcoll} function exists and works correctly, define
 @code{HAVE_STRCOLL}.  This does a bit more than
 @samp{AC_CHECK_FUNCS(strcoll)}, because some systems have incorrect
 definitions of @code{strcoll} that should not be used.
+
+The result of this macro is cached in the @code{ac_cv_func_strcoll_works}
+variable.
 @end defmac
 
 @defmac AC_FUNC_STRERROR_R
@@ -5158,6 +5288,7 @@ definitions of @code{strcoll} that should not be used.
 @cvindex HAVE_DECL_STRERROR_R
 @cvindex STRERROR_R_CHAR_P
 @c @fuindex strerror_r
+@caindex func_strerror_r_char_p
 @prindex @code{strerror_r}
 If @code{strerror_r} is available, define @code{HAVE_STRERROR_R}, and if
 it is declared, define @code{HAVE_DECL_STRERROR_R}.  If it returns a
@@ -5167,6 +5298,9 @@ Posix requires @code{strerror_r} to return @code{int}, but
 many systems (including, for example, version 2.2.4 of the @acronym{GNU} C
 Library) return a @code{char *} value that is not necessarily equal to
 the buffer argument.
+
+The result of this macro is cached in the
+@code{ac_cv_func_strerror_r_char_p} variable.
 @end defmac
 
 @anchor{AC_FUNC_STRFTIME}
@@ -5187,18 +5321,26 @@ library for @code{strftime}.  New programs need not use this macro.
 @ovindex POW_LIB
 @c @fuindex strtod
 @prindex @code{strtod}
+@caindex func_strtod
+@caindex func_pow
 If the @code{strtod} function does not exist or doesn't work correctly,
 ask for an @code{AC_LIBOBJ} replacement of @samp{strtod}.  In this case,
 because @file{strtod.c} is likely to need @samp{pow}, set the output
 variable @code{POW_LIB} to the extra library needed.
+
+This macro caches its result in the @code{ac_cv_func_strtod} variable
+and depends upon the result in the @code{ac_cv_func_pow} variable.
 @end defmac
 
 @defmac AC_FUNC_STRTOLD
 @acindex{FUNC_STRTOLD}
 @cvindex HAVE_STRTOLD
 @prindex @code{strtold}
+@caindex func_strtold
 If the @code{strtold} function exists and conforms to C99, define
 @code{HAVE_STRTOLD}.
+
+This macro caches its result in the @code{ac_cv_func_strtold} variable.
 @end defmac
 
 @defmac AC_FUNC_STRNLEN
@@ -5206,8 +5348,12 @@ If the @code{strtold} function exists and conforms to C99, define
 @cvindex HAVE_STRNLEN
 @c @fuindex strnlen
 @prindex @code{strnlen}
+@caindex func_strnlen_working
 If the @code{strnlen} function is not available, or is buggy (like the one
 from @acronym{AIX} 4.3), require an @code{AC_LIBOBJ} replacement for it.
+
+This macro caches its result in the @code{ac_cv_func_strnlen_working}
+variable.
 @end defmac
 
 @anchor{AC_FUNC_UTIME_NULL}
@@ -5216,8 +5362,12 @@ from @acronym{AIX} 4.3), require an @code{AC_LIBOBJ} replacement for it.
 @cvindex HAVE_UTIME_NULL
 @c @fuindex utime
 @prindex @code{utime}
+@caindex func_utime_null
 If @samp{utime (@var{file}, NULL)} sets @var{file}'s timestamp to
 the present, define @code{HAVE_UTIME_NULL}.
+
+This macro caches its result in the @code{ac_cv_func_utime_null}
+variable.
 
 This macro is obsolescent, as all current systems have a @code{utime}
 that behaves this way.  New programs need not use this macro.
@@ -5246,6 +5396,7 @@ New programs need not use this macro.
 @c @fuindex fnmatch
 @prindex @code{fnmatch}
 @hdrindex{fnmatch.h}
+@caindex func_fnmatch_works
 If the @code{fnmatch} function does not conform to Posix (see
 @code{AC_FUNC_FNMATCH}), ask for its @code{AC_LIBOBJ} replacement.
 
@@ -5255,6 +5406,9 @@ copy of the source code of @acronym{GNU} @code{fnmatch}.  If necessary,
 this source code is compiled as an @code{AC_LIBOBJ} replacement, and the
 @file{fnmatch_.h} file is linked to @file{fnmatch.h} so that it can be
 included in place of the system @code{<fnmatch.h>}.
+
+This macro caches its result in the @code{ac_cv_func_fnmatch_works}
+variable.
 
 This macro is obsolescent, as it assumes the use of particular source
 files.  New programs should use Gnulib's @code{fnmatch-posix} module,
@@ -5277,6 +5431,7 @@ it (@pxref{Writing Tests}).
 @defmac AC_CHECK_FUNC (@var{function}, @ovar{action-if-found}, @
   @ovar{action-if-not-found})
 @acindex{CHECK_FUNC}
+@caindex func_@var{function}
 If C function @var{function} is available, run shell commands
 @var{action-if-found}, otherwise @var{action-if-not-found}.  If you just
 want to define a symbol if the function is available, consider using
@@ -5284,6 +5439,9 @@ want to define a symbol if the function is available, consider using
 linkage even when @code{AC_LANG(C++)} has been called, since C is more
 standardized than C++.  (@pxref{Language Choice}, for more information
 about selecting the language for checks.)
+
+This macro caches its result in the @code{ac_cv_func_@var{function}}
+variable.
 @end defmac
 
 @anchor{AC_CHECK_FUNCS}
@@ -5298,6 +5456,8 @@ execute when one of the functions is found.  You can give it a value of
 @samp{break} to break out of the loop on the first match.  If
 @var{action-if-not-found} is given, it is executed when one of the
 functions is not found.
+
+Results are cached for each @var{function} as in @code{AC_CHECK_FUNC}.
 @end defmac
 
 @defmac AC_CHECK_FUNCS_ONCE (@var{function}@dots{})
@@ -5675,6 +5835,7 @@ New programs need not use this macro.
 @cvindex HAVE__BOOL
 @hdrindex{stdbool.h}
 @hdrindex{system.h}
+@caindex header_stdbool_h
 If @file{stdbool.h} exists and conforms to C99, define
 @code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
 @code{HAVE__BOOL} to 1.  To fulfill the C99 requirements, your
@@ -5702,6 +5863,8 @@ Alternatively you can use the @samp{stdbool} package of Gnulib
 (@pxref{Gnulib}); it packages the above code into a replacement header
 and contains a few other bells and whistles.
 
+This macro caches its result in the @code{ac_cv_header_stdbool_h}
+variable.
 @end defmac
 
 @anchor{AC_HEADER_STDC}
@@ -5713,6 +5876,7 @@ and contains a few other bells and whistles.
 @hdrindex{string.h}
 @hdrindex{float.h}
 @hdrindex{ctype.h}
+@caindex header_stdc
 Define @code{STDC_HEADERS} if the system has C header files
 conforming to @acronym{ANSI} C89 (@acronym{ISO} C90).
 Specifically, this macro checks for @file{stdlib.h}, @file{stdarg.h},
@@ -5727,6 +5891,8 @@ with the high bit set, as the C standard requires.
 If you use this macro, your code can refer to @code{STDC_HEADERS} to
 determine whether the system has conforming header files (and probably C
 library functions).
+
+This macro caches its results in the @code{ac_cv_header_stdc} variable.
 
 This macro is obsolescent, as current systems have conforming header
 files.  New programs need not use this macro.
@@ -5796,6 +5962,7 @@ for example, put it in @file{memchr.c} and use
 @acindex{HEADER_SYS_WAIT}
 @cvindex HAVE_SYS_WAIT_H
 @hdrindex{sys/wait.h}
+@caindex header_sys_wait_h
 If @file{sys/wait.h} exists and is compatible with Posix, define
 @code{HAVE_SYS_WAIT_H}.  Incompatibility can occur if @file{sys/wait.h}
 does not exist, or if it uses the old @acronym{BSD} @code{union wait} instead
@@ -5820,6 +5987,9 @@ example:
 @end example
 
 @noindent
+This macro caches its result in the @code{ac_cv_header_sys_wait_h}
+variable.
+
 This macro is obsolescent, as current systems are compatible with Posix.
 New programs need not use this macro.
 @end defmac
@@ -5852,6 +6022,7 @@ The way to check whether the system supports Posix is:
 @cvindex TIME_WITH_SYS_TIME
 @hdrindex{time.h}
 @hdrindex{sys/time.h}
+@caindex header_time
 If a program may include both @file{time.h} and @file{sys/time.h},
 define @code{TIME_WITH_SYS_TIME}.  On some ancient systems,
 @file{sys/time.h} included @file{time.h}, but @file{time.h} was not
@@ -5878,6 +6049,8 @@ example, @code{struct timeval} as well as
 @end example
 
 @noindent
+This macro caches its result in the @code{ac_cv_header_time} variable.
+
 This macro is obsolescent, as current systems can include both files
 when they exist.  New programs need not use this macro.
 @end defmac
@@ -5920,6 +6093,7 @@ test for it (@pxref{Writing Tests}).
 @defmac AC_CHECK_HEADER (@var{header-file}, @ovar{action-if-found}, @
   @ovar{action-if-not-found}, @ovar{includes})
 @acindex{CHECK_HEADER}
+@caindex header_@var{header-file}
 If the system header file @var{header-file} is compilable, execute shell
 commands @var{action-if-found}, otherwise execute
 @var{action-if-not-found}.  If you just want to define a symbol if the
@@ -5946,6 +6120,10 @@ of the file in the preprocessor search path; this should only be used as
 a last resort (it is safer to determine the actual prerequisites and
 perform a compiler check, or else use @code{AC_PREPROC_IFELSE} to make
 it obvious that only a preprocessor check is desired).
+
+This macro caches its result in the @code{ac_cv_header_@var{header-file}}
+variable, with characters not suitable for a variable name mapped to
+underscores.
 @end defmac
 
 @anchor{AC_CHECK_HEADERS}
@@ -5954,6 +6132,7 @@ it obvious that only a preprocessor check is desired).
   @ovar{includes})
 @acindex{CHECK_HEADERS}
 @cvindex HAVE_@var{header}
+@caindex header_@var{header-file}
 For each given system header file @var{header-file} in the
 blank-separated argument list that exists, define
 @code{HAVE_@var{header-file}} (in all capitals).  If @var{action-if-found}
@@ -5965,6 +6144,10 @@ is executed when one of the header files is not found.
 @var{includes} is interpreted as in @code{AC_CHECK_HEADER}, in order to
 choose the set of preprocessor directives supplied before the header
 under test.
+
+This macro caches its result in the @code{ac_cv_header_@var{header-file}}
+variable, with characters not suitable for a variable name mapped to
+underscores.
 @end defmac
 
 Previous versions of Autoconf merely checked whether the header was
@@ -6038,6 +6221,7 @@ test macros.
 @defmac AC_CHECK_DECL (@var{symbol}, @ovar{action-if-found}, @
   @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_DECL}
+@caindex have_decl_@var{symbol}
 If @var{symbol} (a function, variable, or constant) is not declared in
 @var{includes} and a declaration is needed, run the shell commands
 @var{action-if-not-found}, otherwise @var{action-if-found}.
@@ -6049,6 +6233,10 @@ This macro actually tests whether @var{symbol} is defined as a macro or
 can be used as an r-value, not whether it is really declared, because it
 is much safer to avoid
 introducing extra declarations when they are not needed.
+
+This macro caches its result in the @code{ac_cv_have_decl_@var{symbol}}
+variable, with characters not suitable for a variable name mapped to
+underscores.
 @end defmac
 
 @anchor{AC_CHECK_DECLS}
@@ -6056,6 +6244,7 @@ introducing extra declarations when they are not needed.
   @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_DECLS}
 @cvindex HAVE_DECL_@var{symbol}
+@caindex have_decl_@var{symbol}
 For each of the @var{symbols} (@emph{comma}-separated list), define
 @code{HAVE_DECL_@var{symbol}} (in all capitals) to @samp{1} if
 @var{symbol} is declared, otherwise to @samp{0}.  If
@@ -6102,6 +6291,10 @@ void *malloc (size_t *s);
 You fall into the second category only in extreme situations: either
 your files may be used without being configured, or they are used during
 the configuration.  In most cases the traditional approach is enough.
+
+This macro caches its results in @code{ac_cv_have_decl_@var{symbol}}
+variables, with characters not suitable for a variable name mapped to
+underscores.
 @end defmac
 
 @defmac AC_CHECK_DECLS_ONCE (@var{symbols})
@@ -6140,6 +6333,8 @@ The following macros check for certain structures or structure members.
 @defmac AC_STRUCT_DIRENT_D_INO
 @acindex{STRUCT_DIRENT_D_INO}
 @cvindex HAVE_STRUCT_DIRENT_D_INO
+@c @caindex header_dirent_dirent_h
+@c @caindex member_struct_dirent_d_ino
 Perform all the actions of @code{AC_HEADER_DIRENT} (@pxref{Particular
 Headers}).  Then, if @code{struct dirent} contains a @code{d_ino}
 member, define @code{HAVE_STRUCT_DIRENT_D_INO}.
@@ -6156,6 +6351,8 @@ entry that is a mount point.
 @defmac AC_STRUCT_DIRENT_D_TYPE
 @acindex{STRUCT_DIRENT_D_TYPE}
 @cvindex HAVE_STRUCT_DIRENT_D_TYPE
+@c @caindex header_dirent_dirent_h
+@c @caindex member_struct_dirent_d_type
 Perform all the actions of @code{AC_HEADER_DIRENT} (@pxref{Particular
 Headers}).  Then, if @code{struct dirent} contains a @code{d_type}
 member, define @code{HAVE_STRUCT_DIRENT_D_TYPE}.
@@ -6167,11 +6364,15 @@ member, define @code{HAVE_STRUCT_DIRENT_D_TYPE}.
 @cvindex HAVE_STRUCT_STAT_ST_BLOCKS
 @cvindex HAVE_ST_BLOCKS
 @ovindex LIBOBJS
+@caindex member_struct_stat_st_blocks
 If @code{struct stat} contains an @code{st_blocks} member, define
 @code{HAVE_STRUCT_STAT_ST_BLOCKS}.  Otherwise, require an
 @code{AC_LIBOBJ} replacement of @samp{fileblocks}.  The former name,
 @code{HAVE_ST_BLOCKS} is to be avoided, as its support will cease in the
 future.
+
+This macro caches its result in the @code{ac_cv_member_struct_stat_st_blocks}
+variable.
 @end defmac
 
 @defmac AC_STRUCT_TM
@@ -6194,6 +6395,8 @@ current systems.  New programs need not use this macro.
 @cvindex HAVE_STRUCT_TM_TM_ZONE
 @cvindex HAVE_TM_ZONE
 @cvindex HAVE_TZNAME
+@c @caindex member_struct_tm_tm_zone
+@c @caindex struct_tm
 Figure out how to get the current timezone.  If @code{struct tm} has a
 @code{tm_zone} member, define @code{HAVE_STRUCT_TM_TM_ZONE} (and the
 obsoleted @code{HAVE_TM_ZONE}).  Otherwise, if the external array
@@ -6211,6 +6414,7 @@ These macros are used to find structure members not covered by the
   @ovar{action-if-found}, @ovar{action-if-not-found}, @
   @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_MEMBER}
+@caindex member_@var{aggregate}_@var{member}
 Check whether @var{member} is a member of the aggregate @var{aggregate}.
 If no @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
@@ -6226,6 +6430,10 @@ You can use this macro for submembers:
 @example
 AC_CHECK_MEMBER(struct top.middle.bot)
 @end example
+
+This macro caches its result in the
+@code{av_cv_member_@var{aggregate}_@var{member}} variable, with
+characters not suitable for a variable name mapped to underscores.
 @end defmac
 
 @anchor{AC_CHECK_MEMBERS}
@@ -6286,14 +6494,19 @@ C99-or-better environment.  @xref{Gnulib}.
 @defmac AC_TYPE_GETGROUPS
 @acindex{TYPE_GETGROUPS}
 @cvindex GETGROUPS_T
+@caindex type_getgroups
 Define @code{GETGROUPS_T} to be whichever of @code{gid_t} or @code{int}
 is the base type of the array argument to @code{getgroups}.
+
+This macro caches the base type in the @code{ac_cv_type_getgroups}
+variable.
 @end defmac
 
 @defmac AC_TYPE_INT8_T
 @acindex{TYPE_INT8_T}
 @cvindex HAVE_INT8_T
 @cvindex int8_t
+@caindex c_int8_t
 If @file{stdint.h} or @file{inttypes.h} does not define the type
 @code{int8_t}, define @code{int8_t} to a signed
 integer type that is exactly 8 bits wide and that uses two's complement
@@ -6311,12 +6524,15 @@ use the results of this macro in C89-or-later code as follows:
  @emph{complicated alternative using >8-bit 'signed char'}
 #endif
 @end example
+
+This macro caches the type in the @code{ac_cv_c_int8_t} variable.
 @end defmac
 
 @defmac AC_TYPE_INT16_T
 @acindex{TYPE_INT16_T}
 @cvindex HAVE_INT16_T
 @cvindex int16_t
+@caindex c_int16_t
 This is like @code{AC_TYPE_INT8_T}, except for 16-bit integers.
 @end defmac
 
@@ -6324,6 +6540,7 @@ This is like @code{AC_TYPE_INT8_T}, except for 16-bit integers.
 @acindex{TYPE_INT32_T}
 @cvindex HAVE_INT32_T
 @cvindex int32_t
+@caindex c_int32_t
 This is like @code{AC_TYPE_INT8_T}, except for 32-bit integers.
 @end defmac
 
@@ -6331,6 +6548,7 @@ This is like @code{AC_TYPE_INT8_T}, except for 32-bit integers.
 @acindex{TYPE_INT64_T}
 @cvindex HAVE_INT64_T
 @cvindex int64_t
+@caindex c_int64_t
 This is like @code{AC_TYPE_INT8_T}, except for 64-bit integers.
 @end defmac
 
@@ -6338,6 +6556,7 @@ This is like @code{AC_TYPE_INT8_T}, except for 64-bit integers.
 @acindex{TYPE_INTMAX_T}
 @cvindex HAVE_INTMAX_T
 @cvindex intmax_t
+@c @caindex type_intmax_t
 If @file{stdint.h} or @file{inttypes.h} defines the type @code{intmax_t},
 define @code{HAVE_INTMAX_T}.  Otherwise, define @code{intmax_t} to the
 widest signed integer type.
@@ -6347,6 +6566,7 @@ widest signed integer type.
 @acindex{TYPE_INTPTR_T}
 @cvindex HAVE_INTPTR_T
 @cvindex intptr_t
+@c @caindex type_intptr_t
 If @file{stdint.h} or @file{inttypes.h} defines the type @code{intptr_t},
 define @code{HAVE_INTPTR_T}.  Otherwise, define @code{intptr_t} to a
 signed integer type wide enough to hold a pointer, if such a type
@@ -6356,9 +6576,13 @@ exists.
 @defmac AC_TYPE_LONG_DOUBLE
 @acindex{TYPE_LONG_DOUBLE}
 @cvindex HAVE_LONG_DOUBLE
+@caindex type_long_double
 If the C compiler supports a working @code{long double} type, define
 @code{HAVE_LONG_DOUBLE}.  The @code{long double} type might have the
 same range and precision as @code{double}.
+
+This macro caches its result in the @code{ac_cv_type_long_double}
+variable.
 
 This macro is obsolescent, as current C compilers support @code{long
 double}.  New programs need not use this macro.
@@ -6367,67 +6591,94 @@ double}.  New programs need not use this macro.
 @defmac AC_TYPE_LONG_DOUBLE_WIDER
 @acindex{TYPE_LONG_DOUBLE_WIDER}
 @cvindex HAVE_LONG_DOUBLE_WIDER
+@caindex type_long_double_wider
 If the C compiler supports a working @code{long double} type with more
 range or precision than the @code{double} type, define
 @code{HAVE_LONG_DOUBLE_WIDER}.
+
+This macro caches its result in the @code{ac_cv_type_long_double_wider}
+variable.
 @end defmac
 
 @defmac AC_TYPE_LONG_LONG_INT
 @acindex{TYPE_LONG_LONG_INT}
 @cvindex HAVE_LONG_LONG_INT
+@caindex type_long_long_int
 If the C compiler supports a working @code{long long int} type, define
 @code{HAVE_LONG_LONG_INT}.  However, this test does not test
 @code{long long int} values in preprocessor @code{#if} expressions,
 because too many compilers mishandle such expressions.
 @xref{Preprocessor Arithmetic}.
+
+This macro caches its result in the @code{ac_cv_type_long_long_int}
+variable.
 @end defmac
 
 @defmac AC_TYPE_MBSTATE_T
 @acindex{TYPE_MBSTATE_T}
 @cvindex mbstate_t
 @hdrindex{wchar.h}
+@caindex type_mbstate_t
 Define @code{HAVE_MBSTATE_T} if @code{<wchar.h>} declares the
 @code{mbstate_t} type.  Also, define @code{mbstate_t} to be a type if
 @code{<wchar.h>} does not declare it.
+
+This macro caches its result in the @code{ac_cv_type_mbstate_t}
+variable.
 @end defmac
 
 @anchor{AC_TYPE_MODE_T}
 @defmac AC_TYPE_MODE_T
 @acindex{TYPE_MODE_T}
 @cvindex mode_t
+@caindex type_mode_t
 Define @code{mode_t} to a suitable type, if standard headers do not
 define it.
+
+This macro caches its result in the @code{ac_cv_type_mode_t} variable.
 @end defmac
 
 @anchor{AC_TYPE_OFF_T}
 @defmac AC_TYPE_OFF_T
 @acindex{TYPE_OFF_T}
 @cvindex off_t
+@caindex type_off_t
 Define @code{off_t} to a suitable type, if standard headers do not
 define it.
+
+This macro caches its result in the @code{ac_cv_type_off_t} variable.
 @end defmac
 
 @anchor{AC_TYPE_PID_T}
 @defmac AC_TYPE_PID_T
 @acindex{TYPE_PID_T}
 @cvindex pid_t
+@caindex type_pid_t
 Define @code{pid_t} to a suitable type, if standard headers do not
 define it.
+
+This macro caches its result in the @code{ac_cv_type_pid_t} variable.
 @end defmac
 
 @anchor{AC_TYPE_SIZE_T}
 @defmac AC_TYPE_SIZE_T
 @acindex{TYPE_SIZE_T}
 @cvindex size_t
+@caindex type_size_t
 Define @code{size_t} to a suitable type, if standard headers do not
 define it.
+
+This macro caches its result in the @code{ac_cv_type_size_t} variable.
 @end defmac
 
 @defmac AC_TYPE_SSIZE_T
 @acindex{TYPE_SSIZE_T}
 @cvindex ssize_t
+@caindex type_ssize_t
 Define @code{ssize_t} to a suitable type, if standard headers do not
 define it.
+
+This macro caches its result in the @code{ac_cv_type_ssize_t} variable.
 @end defmac
 
 @anchor{AC_TYPE_UID_T}
@@ -6435,14 +6686,18 @@ define it.
 @acindex{TYPE_UID_T}
 @cvindex uid_t
 @cvindex gid_t
+@caindex type_uid_t
 Define @code{uid_t} and @code{gid_t} to suitable types, if standard
 headers do not define them.
+
+This macro caches its result in the @code{ac_cv_type_uid_t} variable.
 @end defmac
 
 @defmac AC_TYPE_UINT8_T
 @acindex{TYPE_UINT8_T}
 @cvindex HAVE_UINT8_T
 @cvindex uint8_t
+@caindex c_uint8_t
 If @file{stdint.h} or @file{inttypes.h} does not define the type
 @code{uint8_t}, define @code{uint8_t} to an
 unsigned integer type that is exactly 8 bits wide, if such a type
@@ -6454,6 +6709,7 @@ This is like @code{AC_TYPE_INT8_T}, except for unsigned integers.
 @acindex{TYPE_UINT16_T}
 @cvindex HAVE_UINT16_T
 @cvindex uint16_t
+@caindex c_uint16_t
 This is like @code{AC_TYPE_UINT8_T}, except for 16-bit integers.
 @end defmac
 
@@ -6461,6 +6717,7 @@ This is like @code{AC_TYPE_UINT8_T}, except for 16-bit integers.
 @acindex{TYPE_UINT32_T}
 @cvindex HAVE_UINT32_T
 @cvindex uint32_t
+@caindex c_uint32_t
 This is like @code{AC_TYPE_UINT8_T}, except for 32-bit integers.
 @end defmac
 
@@ -6468,6 +6725,7 @@ This is like @code{AC_TYPE_UINT8_T}, except for 32-bit integers.
 @acindex{TYPE_UINT64_T}
 @cvindex HAVE_UINT64_T
 @cvindex uint64_t
+@caindex c_uint64_t
 This is like @code{AC_TYPE_UINT8_T}, except for 64-bit integers.
 @end defmac
 
@@ -6475,6 +6733,7 @@ This is like @code{AC_TYPE_UINT8_T}, except for 64-bit integers.
 @acindex{TYPE_UINTMAX_T}
 @cvindex HAVE_UINTMAX_T
 @cvindex uintmax_t
+@c @caindex type_uintmax_t
 If @file{stdint.h} or @file{inttypes.h} defines the type @code{uintmax_t},
 define @code{HAVE_UINTMAX_T}.  Otherwise, define @code{uintmax_t} to the
 widest unsigned integer type.
@@ -6484,6 +6743,7 @@ widest unsigned integer type.
 @acindex{TYPE_UINTPTR_T}
 @cvindex HAVE_UINTPTR_T
 @cvindex uintptr_t
+@c @caindex type_uintptr_t
 If @file{stdint.h} or @file{inttypes.h} defines the type @code{uintptr_t},
 define @code{HAVE_UINTPTR_T}.  Otherwise, define @code{uintptr_t} to an
 unsigned integer type wide enough to hold a pointer, if such a type
@@ -6493,11 +6753,15 @@ exists.
 @defmac AC_TYPE_UNSIGNED_LONG_LONG_INT
 @acindex{TYPE_UNSIGNED_LONG_LONG_INT}
 @cvindex HAVE_UNSIGNED_LONG_LONG_INT
+@caindex type_unsigned_long_long_int
 If the C compiler supports a working @code{unsigned long long int} type,
 define @code{HAVE_UNSIGNED_LONG_LONG_INT}.  However, this test does not test
 @code{unsigned long long int} values in preprocessor @code{#if} expressions,
 because too many compilers mishandle such expressions.
 @xref{Preprocessor Arithmetic}.
+
+This macro caches its result in the @code{ac_cv_type_unsigned_long_long_int}
+variable.
 @end defmac
 
 @node Generic Types
@@ -6509,6 +6773,7 @@ test macros.
 @defmac AC_CHECK_TYPE (@var{type}, @ovar{action-if-found}, @
   @ovar{action-if-not-found}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_TYPE}
+@caindex type_@var{type}
 Check whether @var{type} is defined.  It may be a compiler builtin type
 or defined by the @var{includes}.  @var{includes} is a series of include
 directives, defaulting to @code{AC_INCLUDES_DEFAULT} (@pxref{Default
@@ -6519,6 +6784,10 @@ In C, @var{type} must be a type-name, so that the expression @samp{sizeof
 same test is applied when compiling for C++, which means that in C++
 @var{type} should be a type-id and should not be an anonymous
 @samp{struct} or @samp{union}.
+
+This macro caches its result in the @code{ac_cv_type_@var{type}}
+variable, with @samp{*} mapped to @samp{p} and other characters not
+suitable for a variable name mapped to underscores.
 @end defmac
 
 
@@ -6618,6 +6887,7 @@ Autoconf works around this problem by casting @code{sizeof (int)} to
   @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_SIZEOF}
 @cvindex SIZEOF_@var{type-or-expr}
+@caindex sizeof_@var{type-or-expr}
 Define @code{SIZEOF_@var{type-or-expr}} (@pxref{Standard Symbols}) to be
 the size in bytes of @var{type-or-expr}, which may be either a type or
 an expression returning a value that has a size.  If the expression
@@ -6637,16 +6907,25 @@ AC_CHECK_SIZEOF([int *])
 
 @noindent
 defines @code{SIZEOF_INT_P} to be 8 on DEC Alpha AXP systems.
+
+This macro caches its result in the @code{ac_cv_sizeof_@var{type-or-expr}}
+variable, with @samp{*} mapped to @samp{p} and other characters not
+suitable for a variable name mapped to underscores.
 @end defmac
 
 @defmac AC_CHECK_ALIGNOF (@var{type}, @dvar{includes, AC_INCLUDES_DEFAULT})
 @acindex{CHECK_ALIGNOF}
 @cvindex ALIGNOF_@var{type}
+@caindex alignof_@var{type-or-expr}
 Define @code{ALIGNOF_@var{type}} (@pxref{Standard Symbols}) to be the
 alignment in bytes of @var{type}.  @samp{@var{type} y;} must be valid as
 a structure member declaration.  If @samp{type} is unknown, the result
 is 0.  If no @var{includes} are specified, the default includes are used
 (@pxref{Default Includes}).
+
+This macro caches its result in the @code{ac_cv_alignof_@var{type-or-expr}}
+variable, with @samp{*} mapped to @samp{p} and other characters not
+suitable for a variable name mapped to underscores.
 @end defmac
 
 @defmac AC_COMPUTE_INT (@var{var}, @var{expression}, @
@@ -6794,6 +7073,7 @@ makes this invalid.  That is why Autoconf stopped issuing
 @evindex CFLAGS
 @ovindex CC
 @ovindex CFLAGS
+@caindex prog_cc_c89
 Determine a C compiler to use.  If @code{CC} is not already set in the
 environment, check for @code{gcc} and @code{cc}, then for other C
 compilers.  Set output variable @code{CC} to the name of the compiler
@@ -6841,12 +7121,16 @@ this macro from within another macro rather than at the top level
 @defmac AC_PROG_CC_C_O
 @acindex{PROG_CC_C_O}
 @cvindex NO_MINUS_C_MINUS_O
+@caindex prog_cc_@var{compiler}_c_o
 If the C compiler does not accept the @option{-c} and @option{-o} options
 simultaneously, define @code{NO_MINUS_C_MINUS_O}.  This macro actually
 tests both the compiler found by @code{AC_PROG_CC}, and, if different,
 the first @code{cc} in the path.  The test fails if one fails.  This
 macro was created for @acronym{GNU} Make to choose the default C compilation
 rule.
+
+For the compiler @var{compiler}, this macro caches its result in the
+@code{ac_cv_prog_cc_@var{compiler}_c_o} variable.
 @end defmac
 
 
@@ -6884,6 +7168,7 @@ features.  To check for characteristics not listed here, use
 
 @defmac AC_PROG_CC_STDC
 @acindex{PROG_CC_STDC}
+@caindex prog_cc_stdc
 If the C compiler cannot compile @acronym{ISO} Standard C (currently
 C99), try to add an option to output variable @code{CC} to make it work.
 If the compiler does not support C99, fall back to supporting
@@ -6896,6 +7181,7 @@ set to accept Standard C; if not, the shell variable
 
 @defmac AC_PROG_CC_C89
 @acindex{PROG_CC_C89}
+@caindex prog_cc_c89
 If the C compiler is not in @acronym{ANSI} C89 (@acronym{ISO} C90) mode by
 default, try to add an option to output variable @code{CC} to make it
 so.  This macro tries various options that select @acronym{ANSI} C89 on
@@ -6912,6 +7198,7 @@ This macro is called automatically by @code{AC_PROG_CC}.
 
 @defmac AC_PROG_CC_C99
 @acindex{PROG_CC_C99}
+@caindex prog_cc_c99
 If the C compiler is not in C99 mode by default, try to add an
 option to output variable @code{CC} to make it so.  This macro tries
 various options that select C99 on some system or another, preferring
@@ -6981,6 +7268,7 @@ binary files.
 @defmac AC_C_CONST
 @acindex{C_CONST}
 @cvindex const
+@caindex c_const
 If the C compiler does not fully support the @code{const} keyword,
 define @code{const} to be empty.  Some C compilers that do
 not define @code{__STDC__} do support @code{const}; some compilers that
@@ -7007,6 +7295,8 @@ C++ compiler to compile C code is not recommended or supported, and
 installers who run into trouble in this area should get a C compiler
 like @acronym{GCC} to compile their C code.
 
+This macro caches its result in the @code{ac_cv_c_const} variable.
+
 This macro is obsolescent, as current C compilers support @code{const}.
 New programs need not use this macro.
 @end defmac
@@ -7014,6 +7304,7 @@ New programs need not use this macro.
 @defmac AC_C_RESTRICT
 @acindex{C_RESTRICT}
 @cvindex restrict
+@caindex c_restrict
 If the C compiler recognizes a variant spelling for the @code{restrict}
 keyword (@code{__restrict}, @code{__restrict__}, or @code{_Restrict}),
 then define @code{restrict} to that; this is more likely to do the right
@@ -7028,6 +7319,9 @@ or configuration header defines it away.
 Although support in C++ for the @code{restrict} keyword is not
 required, several C++ compilers do accept the keyword.
 This macro works for them, too.
+
+This macro caches @samp{no} in the @code{ac_cv_c_restrict} variable
+if @code{restrict} is not supported, and a supported spelling otherwise.
 @end defmac
 
 @defmac AC_C_VOLATILE
@@ -7854,6 +8148,7 @@ If the system supports file names longer than 14 characters, define
 @acindex{SYS_POSIX_TERMIOS}
 @cindex Posix termios headers
 @cindex termios Posix headers
+@caindex sys_posix_termios
 Check to see if the Posix termios headers and functions are available on the
 system.  If so, set the shell variable @code{ac_cv_sys_posix_termios} to
 @samp{yes}.  If not, set the variable to @samp{no}.
