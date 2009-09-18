@@ -4265,13 +4265,13 @@ found.
 @acindex{PATH_PROGS_FEATURE_CHECK}
 @caindex path_@var{variable}
 This macro was introduced in Autoconf 2.62.  If @var{variable} is not
-empty, then set the cache variable @code{$ac_cv_path_@var{variable}} to
+empty, then set the cache variable @code{ac_cv_path_@var{variable}} to
 its value.  Otherwise, check for each program in the blank-separated
 list @var{progs-to-check-for} existing in @var{path}.  For each program
-found, execute @var{feature-test} with @code{$ac_path_@var{variable}}
+found, execute @var{feature-test} with @code{ac_path_@var{variable}}
 set to the absolute name of the candidate program.  If no invocation of
 @var{feature-test} sets the shell variable
-@code{$ac_cv_path_@var{variable}}, then @var{action-if-not-found} is
+@code{ac_cv_path_@var{variable}}, then @var{action-if-not-found} is
 executed.  @var{feature-test} will be run even when
 @code{ac_cv_path_@var{variable}} is set, to provide the ability to
 choose a better candidate found later in @var{path}; to accept the

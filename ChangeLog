@@ -1,5 +1,9 @@
 2009-09-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Use consistent notation for cache variables.
+	* doc/autoconf.texi (Generic Programs): Remove `$' before
+	variable name.
+
 	Documentation of specific and general cache variables.
 	* doc/autoconf.texi (Default Includes, Alternative Programs)
 	(Particular Programs, Generic Programs, Files, Libraries)
