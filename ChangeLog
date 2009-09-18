@@ -1,5 +1,10 @@
 2009-09-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	New FAQ node: Debugging.
+	* doc/autoconf.texi (Debugging): New node.
+	(Top, FAQ): Adjust menus.
+	Report by Bruno Haible.
+
 	Document AM_MAKEFLAGS workaround to the macro override problem.
 	* doc/autoconf.texi (Macros and Submakes): Automake makefiles
 	provide AM_MAKEFLAGS to help with overriding macros in submake
