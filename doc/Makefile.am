@@ -30,4 +30,5 @@ EXTRA_DIST = gendocs_template
 # not know.
 CLEANFILES = autoconf.ACs  autoconf.cvs  autoconf.MSs  autoconf.prs \
 	     autoconf.ATs  autoconf.evs  autoconf.fns  autoconf.ovs \
+	     autoconf.ca   autoconf.CA   autoconf.cas  autoconf.CAs \
 	     autoconf.tmp

@@ -1,5 +1,13 @@
 2009-09-18  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	New cache variable index in the manual.
+	* doc/autoconf.texi: Define new index `CA' for cache variables.
+	(caindex): New macro.
+	(Cache Variable Index): New appendix node.
+	(Top, Indices): Adjust menus.
+	(Cache Variable Names, Site Defaults): Adjust text.
+	* doc/Makefile.am (CLEANFILES): Add files generated for CA index.
+
 	New FAQ node: Debugging.
 	* doc/autoconf.texi (Debugging): New node.
 	(Top, FAQ): Adjust menus.
