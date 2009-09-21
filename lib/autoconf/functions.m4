@@ -832,14 +832,14 @@ fi
 AN_FUNCTION([lstat], [AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK])
 AC_DEFUN([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK],
 [AC_CACHE_CHECK(
-       [whether lstat dereferences a symlink specified with a trailing slash],
+       [whether lstat correctly handles trailing slash],
        [ac_cv_func_lstat_dereferences_slashed_symlink],
 [rm -f conftest.sym conftest.file
 echo >conftest.file
 if test "$as_ln_s" = "ln -s" && ln -s conftest.file conftest.sym; then
   AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
     [struct stat sbuf;
-     /* Linux will dereference the symlink and fail.
+     /* Linux will dereference the symlink and fail, as required by POSIX.
 	That is better in the sense that it means we will not
 	have to compile and use the lstat wrapper.  */
      return lstat ("conftest.sym/", &sbuf) == 0;])],
@@ -855,12 +855,12 @@ rm -f conftest.sym conftest.file
 ])
 
 test $ac_cv_func_lstat_dereferences_slashed_symlink = yes &&
-  AC_DEFINE_UNQUOTED(LSTAT_FOLLOWS_SLASHED_SYMLINK, 1,
+  AC_DEFINE_UNQUOTED([LSTAT_FOLLOWS_SLASHED_SYMLINK], [1],
 		     [Define to 1 if `lstat' dereferences a symlink specified
 		      with a trailing slash.])
 
-if test $ac_cv_func_lstat_dereferences_slashed_symlink = no; then
-  AC_LIBOBJ(lstat)
+if test "x$ac_cv_func_lstat_dereferences_slashed_symlink" = xno; then
+  AC_LIBOBJ([lstat])
 fi
 ])
 
