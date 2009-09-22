@@ -17967,9 +17967,11 @@ Nested parentheses in patterns (e.g., @samp{\(\(a*\)b*)\)}) are
 quite portable to current hosts, but was not supported by some ancient
 @command{sed} implementations like SVR3.
 
-Some @command{sed} implementations, e.g., Solaris,
-restrict the special role of the asterisk to one-character regular expressions.
-This may lead to unexpected behavior:
+Some @command{sed} implementations, e.g., Solaris, restrict the special
+role of the asterisk @samp{*} to one-character regular expressions and
+back-references, and the special role of interval expressions
+@samp{\@{@var{m}\@}}, @samp{\@{@var{m},\@}}, or @samp{\@{@var{m},@var{n}\@}}
+to one-character regular expressions.  This may lead to unexpected behavior:
 
 @example
 $ @kbd{echo '1*23*4' | /usr/bin/sed 's/\(.\)*/x/g'}

@@ -1,3 +1,10 @@
+2009-09-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Clarify documentation about Solaris sed quantifier restriction.
+	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: '*' does
+	not work after subexpressions, \{M,N\} only after one-character
+	expressions.  From GCC PR 38923.
+
 2009-09-21  Eric Blake  <ebb9@byu.net>
 
 	Fit configure output in 80 columns.
