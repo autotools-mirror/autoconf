@@ -680,6 +680,7 @@ if test -z "$MKDIR_P"; then
 	   esac
 	 done
        done])])
+  test -d ./--version && rmdir ./--version
   if test "${ac_cv_path_mkdir+set}" = set; then
     MKDIR_P="$ac_cv_path_mkdir -p"
   else
@@ -687,7 +688,6 @@ if test -z "$MKDIR_P"; then
     # value for MKDIR_P within a source directory, because that will
     # break other packages using the cache if that directory is
     # removed, or if the value is a relative name.
-    test -d ./--version && rmdir ./--version
     MKDIR_P="$ac_install_sh -d"
   fi
 fi

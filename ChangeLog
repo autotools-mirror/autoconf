@@ -1,3 +1,9 @@
+2009-10-01  Paolo Bonzini  <bonzini@gnu.org>
+
+	Unconditionally check for junk ./--version after mkdir search loop.
+	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Always check for
+	presence of ./--version.  Reported by Eric Blake.
+
 2009-09-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Clarify documentation about Solaris sed quantifier restriction.
