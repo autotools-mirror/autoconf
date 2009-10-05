@@ -1,3 +1,8 @@
+2009-10-05  Bruno Haible  <bruno@clisp.org>
+
+	* doc/autoconf.texi (Particular Functions): Swap sections about
+	AC_FUNC_MBRTOWC and AC_FUNC_MEMCMP.
+
 2009-10-01  Paolo Bonzini  <bonzini@gnu.org>
 
 	Unconditionally check for junk ./--version after mkdir search loop.

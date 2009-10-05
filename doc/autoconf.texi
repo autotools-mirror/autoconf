@@ -5105,6 +5105,19 @@ The result of this macro is cached in the
 @code{ac_cv_func_malloc_0_nonnull} variable.
 @end defmac
 
+@defmac AC_FUNC_MBRTOWC
+@acindex{FUNC_MBRTOWC}
+@cvindex HAVE_MBRTOWC
+@c @fuindex mbrtowc
+@prindex @code{mbrtowc}
+@caindex func_mbrtowc
+Define @code{HAVE_MBRTOWC} to 1 if the function @code{mbrtowc} and the
+type @code{mbstate_t} are properly declared.
+
+The result of this macro is cached in the @code{ac_cv_func_mbrtowc}
+variable.
+@end defmac
+
 @defmac AC_FUNC_MEMCMP
 @acindex{FUNC_MEMCMP}
 @ovindex LIBOBJS
@@ -5122,19 +5135,6 @@ The result of this macro is cached in the
 
 This macro is obsolescent, as current systems have a working
 @code{memcmp}.  New programs need not use this macro.
-@end defmac
-
-@defmac AC_FUNC_MBRTOWC
-@acindex{FUNC_MBRTOWC}
-@cvindex HAVE_MBRTOWC
-@c @fuindex mbrtowc
-@prindex @code{mbrtowc}
-@caindex func_mbrtowc
-Define @code{HAVE_MBRTOWC} to 1 if the function @code{mbrtowc} and the
-type @code{mbstate_t} are properly declared.
-
-The result of this macro is cached in the @code{ac_cv_func_mbrtowc}
-variable.
 @end defmac
 
 @defmac AC_FUNC_MKTIME
