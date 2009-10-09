@@ -24280,6 +24280,13 @@ or listing some macro names and watch @command{m4} expand its input
 verbosely (@pxref{Debugging via autom4te}).
 
 @item
+Sometimes @command{autoconf} succeeds but the generated
+@command{configure} script has invalid shell syntax.  You can detect this
+case by running @samp{bash -n configure} or @samp{sh -n configure}.
+If this command fails, the same tips apply, as if @command{autoconf} had
+failed.
+
+@item
 Debugging @command{configure} script execution may be done by sprinkling
 pairs of @code{set -x} and @code{set +x} into the shell script before
 and after the region that contains a bug.  Running the whole script with
@@ -24339,7 +24346,8 @@ tests,
 @item
 by not requiring users of your macro to use the cache variables.
 Instead, expose the result of the test via @var{run-if-true} and
-@var{run-if-false} parameters.
+@var{run-if-false} parameters.  If the result is not a boolean,
+then provide it through documented shell variables.
 @end itemize
 
 
