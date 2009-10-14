@@ -4428,7 +4428,8 @@ that @var{function} is present, because linking the test program
 always fails with unresolved symbols.
 
 The result of this test is cached in the
-@code{ac_cv_search_@var{function}} variable as @samp{no}, if no library
+@code{ac_cv_search_@var{function}} variable as @samp{none required} if
+@var{function} is already available, as @samp{no} if no library
 containing @var{function} was found, otherwise as the
 @option{-l@var{library}} option that needs to be added to @code{LIBS}.
 @end defmac
@@ -24612,7 +24613,7 @@ use these names in @code{#if} or @code{#ifdef} directives.
 @appendixsec Cache Variable Index
 
 This is an alphabetical list of documented cache variables used
-by macros defined in Autoconf.  Autoconf macro may use additional cache
+by macros defined in Autoconf.  Autoconf macros may use additional cache
 variables internally.
 @ifset shortindexflag
 To make the list easier to use, the variables are listed without their

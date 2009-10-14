@@ -1,3 +1,9 @@
+2009-10-15  Peter Breitenlohner  <peb@mppmu.mpg.de>
+
+	Fix typos in documentation.
+	* doc/autoconf.texi (Cache Variable Index): Fix typo.
+	(Libraries) <AC_SEARCH_LIBS>: Mention 'none required' result.
+
 2009-10-09  Bruno Haible  <bruno@clisp.org>
 	    Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
 
