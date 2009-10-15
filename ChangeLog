@@ -1,3 +1,15 @@
+2009-10-15  Eric Blake  <ebb9@byu.net>
+
+	Improve INSTALL wording.
+	* doc/install.texi (Basic Installation): Clarify installcheck
+	behavior.
+	(Installation Names): Mention that --prefix only overrides
+	directory locations not specified on the command line.  Prefer
+	/alternate/directory over /path/to.  Remove a sentence targeted to
+	the developer, not the user.
+	* THANKS: Update.
+	Suggested by Alfred M. Szmidt.
+
 2009-10-15  Peter Breitenlohner  <peb@mppmu.mpg.de>
 
 	Fix typos in documentation.
