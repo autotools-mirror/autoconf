@@ -1,5 +1,10 @@
 2009-10-15  Eric Blake  <ebb9@byu.net>
 
+	Fix typos in INSTALL.
+	* doc/install.texi (Basic Installation, Installation Names): Fix
+	typos in last patch.
+	Repored by Ralf Wildenhues.
+
 	Improve INSTALL wording.
 	* doc/install.texi (Basic Installation): Clarify installcheck
 	behavior.

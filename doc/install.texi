@@ -86,7 +86,7 @@ and only the @samp{make install} phase executed with root privileges.
 Optionally, type @samp{make installcheck} to repeat any self-tests, but
 this time using the binaries in their final installed location.  This
 target does not install anything.  Running this target as a regular
-user, particlarly if the prior @samp{make install} required root
+user, particularly if the prior @samp{make install} required root
 privileges, verifies that the installation completed correctly.
 
 @item
@@ -201,7 +201,7 @@ affected directory.  For example, @samp{make install
 prefix=/alternate/directory} will choose an alternate location for all
 directory configuration variables that were expressed in terms of
 @samp{$@{prefix@}}.  Any directories that were specified during
-@command{configure}, but not in terms of the common prefix, must each be
+@command{configure}, but not in terms of @samp{$@{prefix@}}, must each be
 overridden at install time for the entire
 installation to be relocated.  The approach of makefile variable
 overrides for each directory variable is required by the @acronym{GNU}
