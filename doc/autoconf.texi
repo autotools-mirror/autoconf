@@ -13161,7 +13161,7 @@ echo "$tmp"])])
 @end defmac
 
 @defmac AS_VAR_APPEND (@var{var}, @var{text})
-@asindex{APPEND}
+@asindex{VAR_APPEND}
 Emit shell code to append the shell expansion of @var{text} to the end
 of the current contents of the polymorphic shell variable @var{var},
 taking advantage of shells that provide the @samp{+=} extension for more
@@ -13186,7 +13186,7 @@ expansion.
 @end defmac
 
 @defmac AS_VAR_ARITH (@var{var}, @var{expression})
-@asindex{ARITH}
+@asindex{VAR_ARITH}
 Emit shell code to compute the arithmetic expansion of @var{expression},
 assigning the result as the contents of the polymorphic shell variable
 @var{var}.  The code takes advantage of shells that provide @samp{$(())}

@@ -1,3 +1,9 @@
+2009-10-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix a couple of index entries in the manual.
+	* doc/autoconf.texi (Polymorphic Variables): Fix index entries
+	for AS_VAR_APPEND, AS_VAR_ARITH.
+
 2009-10-15  Eric Blake  <ebb9@byu.net>
 
 	Fix typos in INSTALL.
