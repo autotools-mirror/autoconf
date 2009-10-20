@@ -21,6 +21,10 @@ GNU Autoconf NEWS - User visible changes.
    made it fail with some Fortran compilers (regression introduced in
    2.64).
 
+** The AC_TYPE_UINT64_T and AC_TYPE_INT64_T macros have been fixed to no
+   longer mistakenly select a 32-bit type on some compilers (bug present
+   since macros were introduced in 2.59c).
+
 ** The following documented autotest macros are new:
    AT_CHECK_EUNIT
 

@@ -629,17 +629,21 @@ m4_define([_AC_TYPE_INT_BODY],
 [  AS_LINENO_PUSH([$[]1])
   AC_CACHE_CHECK([for int$[]2_t], [$[]3],
     [AS_VAR_SET([$[]3], [no])
+     # Order is important - never check a type that is potentially smaller
+     # than half of the expected target width.
      for ac_type in int$[]2_t 'int' 'long int' \
 	 'long long int' 'short int' 'signed char'; do
        AC_COMPILE_IFELSE(
 	 [AC_LANG_BOOL_COMPILE_TRY(
 	    [AC_INCLUDES_DEFAULT],
-	    [0 < ($ac_type) (((($ac_type) 1 << ($[]2 - 2)) - 1) * 2 + 1)])],
+	    [enum { N = $[]2 / 2 - 1 };
+	     0 < ($ac_type) ((((($ac_type) 1 << N) << N) - 1) * 2 + 1)])],
 	 [AC_COMPILE_IFELSE(
 	    [AC_LANG_BOOL_COMPILE_TRY(
 	       [AC_INCLUDES_DEFAULT],
-	       [($ac_type) (((($ac_type) 1 << ($[]2 - 2)) - 1) * 2 + 1)
-		 < ($ac_type) (((($ac_type) 1 << ($[]2 - 2)) - 1) * 2 + 2)])],
+	       [enum { N = $[]2 / 2 - 1 };
+		($ac_type) ((((($ac_type) 1 << N) << N) - 1) * 2 + 1)
+		 < ($ac_type) ((((($ac_type) 1 << N) << N) - 1) * 2 + 2)])],
 	    [],
 	    [AS_CASE([$ac_type], [int$[]2_t],
 	       [AS_VAR_SET([$[]3], [yes])],
@@ -679,12 +683,14 @@ m4_define([_AC_TYPE_UNSIGNED_INT_BODY],
 [  AS_LINENO_PUSH([$[]1])
   AC_CACHE_CHECK([for uint$[]2_t], $[]3,
     [AS_VAR_SET([$[]3], [no])
+     # Order is important - never check a type that is potentially smaller
+     # than half of the expected target width.
      for ac_type in uint$[]2_t 'unsigned int' 'unsigned long int' \
 	 'unsigned long long int' 'unsigned short int' 'unsigned char'; do
        AC_COMPILE_IFELSE(
 	 [AC_LANG_BOOL_COMPILE_TRY(
 	    [AC_INCLUDES_DEFAULT],
-	    [($ac_type) -1 >> ($[]2 - 1) == 1])],
+	    [(($ac_type) -1 >> ($[]2 / 2 - 1)) >> ($[]2 / 2 - 1) == 3])],
 	 [AS_CASE([$ac_type], [uint$[]2_t],
 	    [AS_VAR_SET([$[]3], [yes])],
 	    [AS_VAR_SET([$[]3], [$ac_type])])])

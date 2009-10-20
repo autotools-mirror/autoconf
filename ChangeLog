@@ -1,3 +1,12 @@
+2009-10-20  Eric Blake  <ebb9@byu.net>
+
+	Fix AC_TYPE_UINT64_T on Tru64 with gcc 3.4.4.
+	* lib/autoconf/types.m4 (_AC_TYPE_UNSIGNED_INT_BODY)
+	(_AC_TYPE_INT_BODY): Avoid undefined behavior of attempting shift
+	wider than type.
+	* NEWS: Document this.
+	Reported by Rainer Orth.
+
 2009-10-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix a couple of index entries in the manual.
