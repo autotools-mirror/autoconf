@@ -109,6 +109,7 @@ Written by David J. MacKenzie and Akim Demaille.
 # Lib files.
 my $autoconf   = $ENV{'AUTOCONF'}   || '@bindir@/@autoconf-name@';
 my $autoheader = $ENV{'AUTOHEADER'} || '@bindir@/@autoheader-name@';
+my $autom4te   = $ENV{'AUTOM4TE'}   || '@bindir@/@autom4te-name@';
 my $automake   = $ENV{'AUTOMAKE'}   || 'automake';
 my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
 my $libtoolize = $ENV{'LIBTOOLIZE'} || 'libtoolize';
@@ -677,6 +678,7 @@ parse_args;
 
 # Autoreconf all the given configure.ac.  Unless `--no-recursive' is passed,
 # AC_CONFIG_SUBDIRS will be traversed in &autoreconf_current_directory.
+$ENV{'AUTOM4TE'} = $autom4te;
 for my $directory (@ARGV)
   {
     require_configure_ac ($directory);

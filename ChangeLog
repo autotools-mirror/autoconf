@@ -1,3 +1,10 @@
+2009-10-26  Paolo Bonzini  <bonzini@gnu.org>
+
+	Pass Autom4te path down to programs that autoreconf invokes.
+	* bin/autoreconf.in (autom4te): New variable.  Export its value
+	as $ENV{'AUTOM4TE'}.  Suggested by Peter Johansson.
+	* THANKS: Update.
+
 2009-10-20  Eric Blake  <ebb9@byu.net>
 
 	Fix AC_TYPE_UINT64_T on Tru64 with gcc 3.4.4.
