@@ -31,6 +31,14 @@ GNU Autoconf NEWS - User visible changes.
 ** The following m4sugar macros now quote their expansion:
    m4_toupper  m4_tolower
 
+** The following m4sugar macros are new:
+   m4_escape
+
+** The m4sugar macro m4_text_wrap now copes with embedded quoting without
+   requiring quadrigraphs.  For uses like AC_ARG_VAR([a], [[b c]]),
+   this gives the intuitive behavior of "[b c]" in the output (2.63
+   gave the output of "[b], [c]", and 2.64 encountered a failure).
+
 ** The `$tmp' temporary directory used in config.status is documented for
    public use now.
 

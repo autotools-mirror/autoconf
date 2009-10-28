@@ -1,3 +1,14 @@
+2009-10-28  Eric Blake  <ebb9@byu.net>
+
+	Fix m4_text_wrap handling of quoted whitespace.
+	* lib/m4sugar/m4sugar.m4 (m4_escape): New macro.
+	(m4_text_wrap): Use it to avoid issues with embedded [ and ].
+	* tests/m4sugar.at (m4@&t@_text_wrap): Test it.
+	* NEWS: Document this.
+	* doc/autoconf.texi (Text processing Macros) <m4_escape>:
+	Likewise.
+	Reported by Mike Frysinger.
+
 2009-10-27  Eric Blake  <ebb9@byu.net>
 
 	Mention another feature of AC_RUN_IFELSE.

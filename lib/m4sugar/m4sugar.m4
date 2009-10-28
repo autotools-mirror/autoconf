@@ -2542,6 +2542,20 @@ m4_define([m4_append_uniq_w],
 [m4_map_args_w([$2], [_m4_append_uniq([$1],], [, [ ])])])
 
 
+# m4_escape(STRING)
+# -----------------
+# Output quoted STRING, but with embedded #, $, [ and ] turned into
+# quadrigraphs.
+m4_define([m4_escape],
+[m4_changequote([-=<{(],[)}>=-])]dnl
+[m4_bpatsubst(m4_bpatsubst(m4_bpatsubst(m4_bpatsubst(
+	  -=<{(-=<{(-=<{(-=<{(-=<{($1)}>=-)}>=-)}>=-)}>=-)}>=-,
+	-=<{(#)}>=-, -=<{(@%:@)}>=-),
+      -=<{(\[)}>=-, -=<{(@<:@)}>=-),
+    -=<{(\])}>=-, -=<{(@:>@)}>=-),
+  -=<{(\$)}>=-, -=<{(@S|@)}>=-)m4_changequote([,])])
+
+
 # m4_text_wrap(STRING, [PREFIX], [FIRST-PREFIX], [WIDTH])
 # -------------------------------------------------------
 # Expands into STRING wrapped to hold in WIDTH columns (default = 79).
@@ -2592,8 +2606,9 @@ m4_define([m4_append_uniq_w],
 # with m4_do, to avoid time wasted on dnl during expansion (since this is
 # already a time-consuming macro).
 m4_define([m4_text_wrap],
-[_$0([$1], [$2], m4_default_quoted([$3], [$2]),
+[_$0(m4_escape([$1]), [$2], m4_default_quoted([$3], [$2]),
      m4_default_quoted([$4], [79]))])
+
 m4_define([_m4_text_wrap],
 m4_do(dnl set up local variables, to avoid repeated calculations
 [[m4_pushdef([m4_Indent], m4_qlen([$2]))]],

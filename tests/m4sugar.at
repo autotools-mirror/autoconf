@@ -1127,6 +1127,7 @@ AT_CLEANUP
 ## -------------- ##
 
 AT_SETUP([m4@&t@_text_wrap])
+AT_KEYWORDS([m4@&t@_escape])
 
 # m4_text_wrap is used to display the help strings.  Also, check that
 # commas and $ are not swallowed.  This can easily happen because of
@@ -1134,6 +1135,11 @@ AT_SETUP([m4@&t@_text_wrap])
 
 AT_DATA_M4SUGAR([script.4s],
 [[m4_init[]m4_divert([0])dnl
+m4_define([a], [OOPS])dnl
+m4_escape([a[b $c#]d])
+m4_if(m4_escape([a[b $c#]d]), [a[b $c#]d], [oops],
+      m4_escape([a[b $c#]d]), [a@<:@b @S|@c@%:@@:>@d], [pass], [oops])
+
 m4_text_wrap([Short string */], [   ], [/* ], 20)
 
 m4_text_wrap([Much longer string */], [   ], [/* ], 20)
@@ -1144,13 +1150,16 @@ m4_text_wrap([Short doc.], [          ], [  --too-wide], 30)
 
 m4_text_wrap([Super long documentation.], [          ], [  --too-wide], 30)
 
-m4_text_wrap([First, second  , third, [,quoted]])
+m4_text_wrap([First, second  , third, [,quoted  space]])
 m4_define([xfff], [oops])
 m4_text_wrap([Some $1 $2 $3 $4 embedded dollars.], [ $* ], [ $@ ], [0xfff & 20])
 ]])
 
 AT_DATA([expout],
-[[/* Short string */
+[[a[b $c#]d
+pass
+
+/* Short string */
 
 /* Much longer
    string */
@@ -1164,7 +1173,7 @@ AT_DATA([expout],
           Super long
           documentation.
 
-First, second , third, [,quoted]
+First, second , third, [,quoted space]
 
  $@ Some $1 $2 $3
  $* $4 embedded

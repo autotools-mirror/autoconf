@@ -12298,6 +12298,13 @@ m4_combine([, ], [[]], [-], [1], [2])
 @end example
 @end defmac
 
+@defmac m4_escape (@var{string})
+@msindex{escape}
+Convert all instances of @samp{[}, @samp{]}, @samp{#}, and @samp{$}
+within @var{string} into their respective quadrigraphs.  The result is
+still a quoted string.
+@end defmac
+
 @defmac m4_flatten (@var{string})
 @msindex{flatten}
 Flatten @var{string} into a single line.  Delete all backslash-newline
