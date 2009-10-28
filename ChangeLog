@@ -1,3 +1,11 @@
+2009-10-27  Eric Blake  <ebb9@byu.net>
+
+	Mention another feature of AC_RUN_IFELSE.
+	* doc/autoconf.texi (Runtime) <AC_RUN_IFELSE>: Mention that
+	compiled test program still exists during if-true branch.
+	* THANKS: Update.
+	Reported by Stefano Lattarini, suggestion by Ralf Wildenhues.
+
 2009-10-26  Paolo Bonzini  <bonzini@gnu.org>
 
 	Pass Autom4te path down to programs that autoreconf invokes.

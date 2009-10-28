@@ -8952,6 +8952,8 @@ Otherwise, run shell commands @var{action-if-false}.
 The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
 @code{LDFLAGS} and @code{LIBS} are used for linking, in addition to the
 compilation flags of the current language (@pxref{Language Choice}).
+Additionally, @var{action-if-true} can run @command{./conftest$EXEEXT}
+for further testing.
 
 If the compiler being used does not produce executables that run on the
 system where @command{configure} is being run, then the test program is
