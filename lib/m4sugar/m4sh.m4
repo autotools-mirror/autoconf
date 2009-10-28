@@ -1537,15 +1537,18 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 # profiling shows that it is faster to use m4_translit.
 #
 # Because the translit is stripping quotes, it must also neutralize anything
-# that might be in a macro name, as well as comments and commas.  All the
-# problem characters are unified so that a single m4_index can scan the
-# result.
+# that might be in a macro name, as well as comments, commas, or unbalanced
+# parentheses.  All the problem characters are unified so that a single
+# m4_index can scan the result.
 #
 # Rather than expand m4_defn every time AS_LITERAL_IF is expanded, we
 # inline its expansion up front.
 m4_define([AS_LITERAL_IF],
-[m4_if(m4_cond([m4_eval(m4_index(m4_quote($1), [@S|@]) == -1)], [0], [],
-  [m4_index(m4_translit(m4_quote($1), [[]`,#]]]dnl
+[_$0(m4_expand([$1]), [$2], [$3])])
+
+m4_define([_AS_LITERAL_IF],
+[m4_if(m4_cond([m4_eval(m4_index([$1], [@S|@]) == -1)], [0], [],
+  [m4_index(m4_translit([$1], [[]`,#()]]]dnl
 m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[, [$$$]), [$])],
   [-1], [-]), [-], [$2], [$3])])
 
@@ -1733,13 +1736,18 @@ as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
 # For speed, we inline the literal definitions that can be computed up front.
 m4_defun_init([AS_TR_SH],
 [AS_REQUIRE([_$0_PREPARE])],
-[AS_LITERAL_IF([$1],
-	      [m4_translit([$1], [*+[]]]]dnl
-m4_dquote(m4_dquote(m4_defn([m4_cr_not_symbols2])))[[,
-				 [pp[]]]]dnl
-m4_dquote(m4_dquote(m4_for(,1,255,,[[_]])))[[)],
-  [`AS_ECHO(["_AS_ESCAPE(m4_dquote(m4_expand([$1])),
-    [`], [\])"]) | $as_tr_sh`])])
+[_$0(m4_expand([$1]))])
+
+m4_define([_AS_TR_SH],
+[_AS_LITERAL_IF([$1], [$0_LITERAL], [$0_INDIR])([$1])])
+
+m4_define([_AS_TR_SH_LITERAL],
+[m4_translit([[$1]],
+  [*+[]]]m4_dquote(m4_defn([m4_cr_not_symbols2]))[,
+  [pp[]]]m4_dquote(m4_for(,1,255,,[[_]]))[)])
+
+m4_define([_AS_TR_SH_INDIR],
+[`AS_ECHO(["_AS_ESCAPE([[$1]], [`], [\])"]) | $as_tr_sh`])
 
 
 # _AS_TR_CPP_PREPARE
@@ -1760,12 +1768,18 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g
 # See implementation comments in AS_TR_SH.
 m4_defun_init([AS_TR_CPP],
 [AS_REQUIRE([_$0_PREPARE])],
-[AS_LITERAL_IF([$1],
-	      [m4_translit([$1], [*[]]]]dnl
-m4_dquote(m4_dquote(m4_defn([m4_cr_letters])m4_defn([m4_cr_not_symbols2])))[[,
-				 [P[]]]]dnl
-m4_dquote(m4_dquote(m4_defn([m4_cr_LETTERS])m4_for(,1,255,,[[_]])))[[)],
-	      [`AS_ECHO(["$1"]) | $as_tr_cpp`])])
+[_$0(m4_expand([$1]))])
+
+m4_define([_AS_TR_CPP],
+[_AS_LITERAL_IF([$1], [$0_LITERAL], [$0_INDIR])([$1])])
+
+m4_define([_AS_TR_CPP_LITERAL],
+[m4_translit([$1],
+  [*[]]]m4_dquote(m4_defn([m4_cr_letters])m4_defn([m4_cr_not_symbols2]))[,
+  [P[]]]m4_dquote(m4_defn([m4_cr_LETTERS])m4_for(,1,255,,[[_]]))[)])
+
+m4_define([_AS_TR_CPP_INDIR],
+[`AS_ECHO(["$1"]) | $as_tr_cpp`])
 
 
 # _AS_TR_PREPARE
@@ -1956,9 +1970,12 @@ m4_define([AS_VAR_POPDEF],
 # don't work.  Therefore, we must require the preparation ourselves.
 m4_defun_init([AS_VAR_PUSHDEF],
 [AS_REQUIRE([_AS_TR_SH_PREPARE])],
-[AS_LITERAL_IF([$2],
-	       [m4_pushdef([$1], [AS_TR_SH($2)])],
-	       [as_$1=AS_TR_SH($2)
+[_$0([$1], m4_expand([$2]))])
+
+m4_define([_AS_VAR_PUSHDEF],
+[_AS_LITERAL_IF([$2],
+		[m4_pushdef([$1], [_AS_TR_SH_LITERAL([$2])])],
+		[as_$1=_AS_TR_SH_INDIR([$2])
 m4_pushdef([$1], [$as_[$1]])])])
 
 

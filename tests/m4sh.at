@@ -1041,13 +1041,13 @@ AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
 echo AS_LITERAL_IF([lit], [ok], [ERR]) 1
 echo AS_LITERAL_IF([l$it], [ERR], [ok]) 2
-echo AS_LITERAL_IF([l``it], [ERR], [ok]) 3
+echo AS_LITERAL_IF([l`case a in b) ;; esac`it], [ERR], [ok]) 3
 m4_define([mac], [lit])
 echo AS_LITERAL_IF([mac], [ok], [ERR]) 4
 echo AS_LITERAL_IF([mac($, ``)], [ok], [ERR]) 5
 m4_define([mac], [l$it])
 echo AS_LITERAL_IF([mac], [ERR], [ok]) 6
-m4_define([mac], [l`it])
+m4_define([mac], [l``it])
 echo AS_LITERAL_IF([mac], [ERR], [ok]) 7
 ]])
 

@@ -1,5 +1,17 @@
 2009-10-28  Eric Blake  <ebb9@byu.net>
 
+	Fix corner cases in AS_LITERAL_IF and AS_TR_SH.
+	* lib/m4sugar/m4sh.m4 (AS_LITERAL_IF): Fix bug with unbalanced
+	parens.  Move guts...
+	(_AS_LITERAL_IF): into new helper.
+	(AS_TR_SH, AS_TR_CPP): Fix bugs with expansion of wrong macro.
+	Move guts...
+	(_AS_TR_SH, _AS_TR_SH_LITERAL, _AS_TR_SH_INDIR, _AS_TR_CPP)
+	(_AS_TR_CPP_LITERAL, _AS_TR_CPP_INDIR): ...into new helpers.
+	(AS_VAR_PUSHDEF): Hoist m4_require, by moving guts...
+	(_AS_VAR_PUSHDEF): ...into new helper.
+	* tests/m4sh.at (AS@&t@_LITERAL_IF): Enhance test.
+
 	Minor optimizations to m4sh.
 	* lib/m4sugar/m4sh.m4 (AS_VAR_IF, AS_IDENTIFIER_IF)
 	(AS_LITERAL_IF): Parse fewer bytes during expansion, by visiting
