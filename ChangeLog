@@ -1,5 +1,10 @@
 2009-10-28  Eric Blake  <ebb9@byu.net>
 
+	Minor optimizations to m4sh.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_IF, AS_IDENTIFIER_IF)
+	(AS_LITERAL_IF): Parse fewer bytes during expansion, by visiting
+	if-true and if-false arguments only once.
+
 	Optimize m4_escape for common case.
 	* lib/m4sugar/m4sugar.m4 (m4_escape): Don't use regex if string is
 	already sane, by copying from AS_LITERAL_IF.  Move guts...

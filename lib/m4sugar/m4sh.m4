@@ -1507,15 +1507,15 @@ m4_define([AS_HELP_STRING],
 # we worry if the first character also matches m4_cr_symbol1 (ie. does not
 # match m4_cr_digit).
 m4_define([AS_IDENTIFIER_IF],
-[m4_if(m4_index([$1], [@]), [-1],
-       [_$0($@)],
-       [_$0(m4_bpatsubst([[$1]], [@&t@]), [$2], [$3])])])
+[m4_if(_$0(m4_if(m4_index([$1], [@]), [-1],
+  [[$1]], [m4_bpatsubst([[$1]], [@&t@])])), [-], [$2], [$3])])
+
 m4_define([_AS_IDENTIFIER_IF],
-[m4_cond([[$1]], [], [$3],
+[m4_cond([[$1]], [], [],
 	 [m4_eval(m4_len(m4_translit([[$1]], ]]dnl
-m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[)) > 0)], [1], [$3],
+m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[)) > 0)], [1], [],
 	 [m4_len(m4_translit(m4_format([[%.1s]], [$1]), ]]dnl
-m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [$2], [$3])])
+m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 
 
 # AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
@@ -1544,13 +1544,10 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [$2], [$3])])
 # Rather than expand m4_defn every time AS_LITERAL_IF is expanded, we
 # inline its expansion up front.
 m4_define([AS_LITERAL_IF],
-[m4_cond([m4_eval(m4_index(m4_quote($1), [@S|@]) == -1)], [0], [$3],
-	 [m4_index(m4_translit(m4_quote($1),
-			       [[]`,#]]]dnl
-m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[,
-			       [$$$]),
-		   [$])], [-1], [$2],
-	 [$3])])
+[m4_if(m4_cond([m4_eval(m4_index(m4_quote($1), [@S|@]) == -1)], [0], [],
+  [m4_index(m4_translit(m4_quote($1), [[]`,#]]]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[, [$$$]), [$])],
+  [-1], [-]), [-], [$2], [$3])])
 
 
 # AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])
@@ -1909,9 +1906,9 @@ m4_define([AS_VAR_GET],
 # Polymorphic, and avoids sh expansion error upon interrupt or term signal.
 m4_define([AS_VAR_IF],
 [AS_LITERAL_IF([$1],
-  [AS_IF([test "x$$1" = x""$2], [$3], [$4])],
+  [AS_IF([test "x$$1" = x""$2]],
   [AS_VAR_COPY([as_val], [$1])
-   AS_IF([test "x$as_val" = x""$2], [$3], [$4])])])
+   AS_IF([test "x$as_val" = x""$2]]), [$3], [$4])])
 
 
 # AS_VAR_PUSHDEF and AS_VAR_POPDEF
