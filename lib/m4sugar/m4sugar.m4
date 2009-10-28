@@ -2546,7 +2546,23 @@ m4_define([m4_append_uniq_w],
 # -----------------
 # Output quoted STRING, but with embedded #, $, [ and ] turned into
 # quadrigraphs.
+#
+# It is faster to check if STRING is already good using m4_translit
+# than to blindly perform four m4_bpatsubst.
+#
+# Because the translit is stripping quotes, it must also neutralize
+# anything that might be in a macro name, as well as comments, commas,
+# and parentheses.  All the problem characters are unified so that a
+# single m4_index can scan the result.
+#
+# Rather than expand m4_defn every time m4_escape is expanded, we
+# inline its expansion up front.
 m4_define([m4_escape],
+[m4_if(m4_index(m4_translit([$1],
+   [[]#,()]]m4_dquote(m4_defn([m4_cr_symbols2]))[, [$$$]), [$]),
+  [-1], [m4_echo], [_$0])([$1])])
+
+m4_define([_m4_escape],
 [m4_changequote([-=<{(],[)}>=-])]dnl
 [m4_bpatsubst(m4_bpatsubst(m4_bpatsubst(m4_bpatsubst(
 	  -=<{(-=<{(-=<{(-=<{(-=<{($1)}>=-)}>=-)}>=-)}>=-)}>=-,

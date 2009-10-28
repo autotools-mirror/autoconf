@@ -1,5 +1,10 @@
 2009-10-28  Eric Blake  <ebb9@byu.net>
 
+	Optimize m4_escape for common case.
+	* lib/m4sugar/m4sugar.m4 (m4_escape): Don't use regex if string is
+	already sane, by copying from AS_LITERAL_IF.  Move guts...
+	(_m4_escape): ...into new helper.
+
 	Fix m4_text_wrap handling of quoted whitespace.
 	* lib/m4sugar/m4sugar.m4 (m4_escape): New macro.
 	(m4_text_wrap): Use it to avoid issues with embedded [ and ].
