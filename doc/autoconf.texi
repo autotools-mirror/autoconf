@@ -3873,8 +3873,8 @@ in some cases whether they support certain features.
 Check for @code{gawk}, @code{mawk}, @code{nawk}, and @code{awk}, in that
 order, and set output variable @code{AWK} to the first one that is found.
 It tries @code{gawk} first because that is reported to be the
-best implementation.  The result is cached in the @code{ac_cv_prog_AWK}
-variable.
+best implementation.  The result can be overridden by setting the
+variable @code{AWK} or the cache variable @code{ac_cv_prog_AWK}.
 @end defmac
 
 @defmac AC_PROG_GREP
@@ -3886,7 +3886,8 @@ longest input lines possible, and that supports multiple @option{-e} options.
 Set the output variable @code{GREP} to whatever is chosen.
 @xref{grep, , Limitations of Usual Tools}, for more information about
 portability problems with the @command{grep} command family.  The result
-is cached in the @code{ac_cv_path_GREP} variable.
+can be overridden by setting the @code{GREP} variable and is cached in the
+@code{ac_cv_path_GREP} variable.
 @end defmac
 
 @defmac AC_PROG_EGREP
@@ -3896,7 +3897,8 @@ is cached in the @code{ac_cv_path_GREP} variable.
 Check whether @code{$GREP -E} works, or else look for the best available
 @code{egrep} or @code{gegrep} that accepts the longest input lines possible.
 Set the output variable @code{EGREP} to whatever is chosen.  The result
-is cached in the @code{ac_cv_path_EGREP} variable.
+can be overridden by setting the @code{EGREP} variable and is cached in the
+@code{ac_cv_path_EGREP} variable.
 @end defmac
 
 @defmac AC_PROG_FGREP
@@ -3906,7 +3908,8 @@ is cached in the @code{ac_cv_path_EGREP} variable.
 Check whether @code{$GREP -F} works, or else look for the best available
 @code{fgrep} or @code{gfgrep} that accepts the longest input lines possible.
 Set the output variable @code{FGREP} to whatever is chosen.  The result
-is cached in the @code{ac_cv_path_FGREP} variable.
+can be overridden by setting the @code{FGREP} variable and is cached in the
+@code{ac_cv_path_FGREP} variable.
 @end defmac
 
 @defmac AC_PROG_INSTALL
@@ -3949,8 +3952,8 @@ not found in standard @command{install} programs, there is no reason to use
 @code{AC_PROG_INSTALL}; just put the file name of your program into your
 @file{Makefile.in} files.
 
-The result of the test is cached in the @code{ac_cv_path_install} variable,
-if an @command{install} program other than the in-tree script is found.
+The result of the test can be overridden by setting the variable
+@code{INSTALL} or the cache variable @code{ac_cv_path_install}.
 @end defmac
 
 @defmac AC_PROG_MKDIR_P
@@ -3988,8 +3991,8 @@ vulnerability, whereas @code{AC_PROG_MKDIR_P} does.
 @samp{@@MKDIR_P@@} is special, as its value may vary for different
 configuration files.
 
-The result of the test is cached in the @code{ac_cv_path_mkdir} variable,
-if a @command{mkdir} program other than an in-tree script is found.
+The result of the test can be overridden by setting the variable
+@code{MKDIR_P} or the cache variable @code{ac_cv_path_mkdir}.
 @end defmac
 
 @anchor{AC_PROG_LEX}
@@ -4050,7 +4053,8 @@ of Automake will fix this issue; meanwhile, just ignore this message.
 As part of running the test, this macro may delete any file in the
 configuration directory named @file{lex.yy.c} or @file{lexyy.c}.
 
-The result of this test is cached in the @code{ac_cv_prog_LEX} variable.
+The result of this test can be influenced by setting the variable
+@code{LEX} or the cache variable @code{ac_cv_prog_LEX}.
 @end defmac
 
 @anchor{AC_PROG_LN_S}
@@ -4092,13 +4096,14 @@ is found, and otherwise to @samp{:} (do nothing).
 @defmac AC_PROG_SED
 @acindex{PROG_SED}
 @ovindex SED
-@caindex prog_SED
+@caindex path_SED
 Set output variable @code{SED} to a Sed implementation that conforms to
 Posix and does not have arbitrary length limits.  Report an error if no
 acceptable Sed is found.  @xref{sed, , Limitations of Usual Tools}, for more
 information about portability problems with Sed.
 
-The result of this test is cached in the @code{ac_cv_prog_SED} variable.
+The result of this test can be overridden by setting the @code{SED} variable
+and is cached in the @code{ac_cv_path_SED} variable.
 @end defmac
 
 @defmac AC_PROG_YACC
@@ -4110,7 +4115,8 @@ The result of this test is cached in the @code{ac_cv_prog_SED} variable.
 If @code{bison} is found, set output variable @code{YACC} to @samp{bison
 -y}.  Otherwise, if @code{byacc} is found, set @code{YACC} to
 @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
-The result of this test is cached in the @code{ac_cv_prog_YACC} variable.
+The result of this test can be influenced by setting the variable
+@code{YACC} or the cache variable @code{ac_cv_prog_YACC}.
 @end defmac
 
 @node Generic Programs
@@ -4147,8 +4153,9 @@ absolute file name) even if it is the first found in the search path; in
 that case, set @var{variable} using the absolute file name of the
 @var{prog-to-check-for} found that is not @var{reject}.  If
 @var{variable} was already set, do nothing.  Calls @code{AC_SUBST} for
-@var{variable}.  The result of this test is cached in the
-@code{ac_cv_prog_@var{variable}} variable.
+@var{variable}.  The result of this test can be overridden by setting the
+@var{variable} variable or the cache variable
+@code{ac_cv_prog_@var{variable}}.
 @end defmac
 
 @anchor{AC_CHECK_PROGS}
@@ -4163,7 +4170,8 @@ checking the next program in the list.  If none of the programs in the
 list are found, set @var{variable} to @var{value-if-not-found}; if
 @var{value-if-not-found} is not specified, the value of @var{variable}
 is not changed.  Calls @code{AC_SUBST} for @var{variable}.  The result of
-this test is cached in the @code{ac_cv_prog_@var{variable}} variable.
+this test can be overridden by setting the @var{variable} variable or the
+cache variable @code{ac_cv_prog_@var{variable}}.
 @end defmac
 
 @defmac AC_CHECK_TARGET_TOOL (@var{variable}, @var{prog-to-check-for}, @
@@ -4245,8 +4253,10 @@ For more information, see @ref{Specifying Target Triplets}.
 @acindex{PATH_PROG}
 @caindex path_@var{variable}
 Like @code{AC_CHECK_PROG}, but set @var{variable} to the absolute
-name of @var{prog-to-check-for} if found.  A positive result of this
-test is cached in the @code{ac_cv_path_@var{variable}} variable.
+name of @var{prog-to-check-for} if found.  The result of this test
+can be overridden by setting the @var{variable} variable.  A positive
+result of this test is cached in the @code{ac_cv_path_@var{variable}}
+variable.
 @end defmac
 
 @anchor{AC_PATH_PROGS}
@@ -4256,7 +4266,9 @@ test is cached in the @code{ac_cv_path_@var{variable}} variable.
 @caindex path_@var{variable}
 Like @code{AC_CHECK_PROGS}, but if any of @var{progs-to-check-for}
 are found, set @var{variable} to the absolute name of the program
-found.
+found.  The result of this test can be overridden by setting the
+@var{variable} variable.  A positive result of this test is cached in
+the @code{ac_cv_path_@var{variable}} variable.
 @end defmac
 
 @defmac AC_PATH_PROGS_FEATURE_CHECK (@var{variable}, @
@@ -5001,14 +5013,16 @@ use Gnulib's @code{getloadavg} module.  @xref{Gnulib}.
 @cvindex HAVE_GETMNTENT
 @c @fuindex getmntent
 @prindex @code{getmntent}
-@caindex func_getmntent
+@caindex search_getmntent
 Check for @code{getmntent} in the standard C library, and then in the
 @file{sun}, @file{seq}, and @file{gen} libraries, for @sc{unicos},
 @sc{irix} 4, @sc{ptx}, and UnixWare, respectively.  Then, if
-@code{getmntent} is available, define @code{HAVE_GETMNTENT}.
+@code{getmntent} is available, define @code{HAVE_GETMNTENT} and set
+@code{ac_cv_func_getmntent} to @code{yes}.  Otherwise set
+@code{ac_cv_func_getmntent} to @code{no}.
 
-The result of this macro is cached in the @code{ac_cv_func_getmntent}
-variable.
+The result of this macro can be overridden by setting the cache variable
+@code{ac_cv_search_getmntent}.
 @end defmac
 
 @defmac AC_FUNC_GETPGRP
@@ -5261,7 +5275,7 @@ replacement of it.
 
 The results of these macros are cached in the
 @code{ac_cv_func_stat_empty_string_bug} and the
-@code{ac_cv_func_stat_empty_string_bug} variables, respectively.
+@code{ac_cv_func_lstat_empty_string_bug} variables, respectively.
 
 These macros are obsolescent, as no current systems have the bug.
 New programs need not use these macros.
@@ -5893,7 +5907,7 @@ If you use this macro, your code can refer to @code{STDC_HEADERS} to
 determine whether the system has conforming header files (and probably C
 library functions).
 
-This macro caches its results in the @code{ac_cv_header_stdc} variable.
+This macro caches its result in the @code{ac_cv_header_stdc} variable.
 
 This macro is obsolescent, as current systems have conforming header
 files.  New programs need not use this macro.

@@ -1,3 +1,17 @@
+2009-10-31  Bruno Haible  <bruno@clisp.org>
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Improve cache variable documentation.
+	* doc/autoconf.texi (AC_PROG_AWK, AC_PROG_GREP, AC_PROG_EGREP,
+	AC_PROG_FGREP, AC_PROG_INSTALL, AC_PROG_MKDIR_P, AC_PROG_LEX,
+	AC_PROG_YACC, AC_CHECK_PROG, AC_CHECK_PROGS, AC_PATH_PROG,
+	AC_PATH_PROGS): Don't suggest to use the cache variable, only to
+	override it, or preferably, a non-cache variable associated with
+	the test.
+	(AC_PROG_SED): Likewise. Fix name of cache variable.
+	(AC_FUNC_GETMNTENT): Fix name cache variable.
+	(AC_FUNC_LSTAT): Fix typo.
+
 2009-10-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix AC_OPENMP for Fortran (F77 and FC).
