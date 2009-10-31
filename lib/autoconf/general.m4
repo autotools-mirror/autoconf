@@ -2305,8 +2305,8 @@ AC_DEFUN([_AC_RUN_LOG_LIMIT],
 ... rest of stderr output deleted ...
          m4_default([$3], [10])q' conftest.err >conftest.er1
     cat conftest.er1 >&AS_MESSAGE_LOG_FD
-    rm -f conftest.er1 conftest.err
   fi
+  rm -f conftest.er1 conftest.err
   _AS_ECHO_LOG([\$? = $ac_status])
   test $ac_status = 0; }])
 

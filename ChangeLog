@@ -1,5 +1,9 @@
 2009-10-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix testsuite failure on AIX 4.3.3.
+	* lib/autoconf/general.m4 (_AC_RUN_LOG_LIMIT): Remove conftest.err
+	also if it is empty.
+
 	Fix testsuite failure on IRIX and AIX.
 	* tests/torture.at (Substitute and define special characters):
 	Double the backslash before the double-quote in
