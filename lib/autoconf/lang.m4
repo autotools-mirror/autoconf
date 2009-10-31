@@ -160,27 +160,28 @@ m4_defun([AC_LANG_ASSERT],
 
 
 
-# AC_LANG_DEFINE(NAME, ABBREV, PREFIX, COPY-FROM, SHELL-VARS)
-# -----------------------------------------------------------
+# AC_LANG_DEFINE(NAME, ABBREV, PREFIX, COMPILER-VAR, COPY-FROM, SHELL-VARS)
+# -------------------------------------------------------------------------
 # Define a language referenced by AC_LANG(NAME), with cache variable prefix
-# ABBREV and Makefile variable prefix PREFIX.  AC_LANG(NAME) is defined
-# to SHELL-VARS, other macros are copied from language COPY-FROM.  Even if
-# COPY-FROM is empty, a default definition is provided for language-specific
-# macros AC_LANG_SOURCE(NAME) and AC_LANG_CONFTEST(NAME).
+# ABBREV, Makefile variable prefix PREFIX and compiler variable COMPILER-VAR.
+# AC_LANG(NAME) is defined to SHELL-VARS, other macros are copied from language
+# COPY-FROM.  Even if COPY-FROM is empty, a default definition is provided for
+# language-specific macros AC_LANG_SOURCE(NAME) and AC_LANG_CONFTEST(NAME).
 m4_define([AC_LANG_DEFINE],
-[m4_define([AC_LANG($1)], [$5])]
+[m4_define([AC_LANG($1)], [$6])]
 [m4_define([_AC_LANG_ABBREV($1)], [$2])]
 [m4_define([_AC_LANG_PREFIX($1)], [$3])]
-[m4_copy([AC_LANG_CONFTEST($4)], [AC_LANG_CONFTEST($1)])]
-[m4_copy([AC_LANG_SOURCE($4)], [AC_LANG_SOURCE($1)])]
-[m4_copy([_AC_LANG_NULL_PROGRAM($4)], [_AC_LANG_NULL_PROGRAM($1)])]
-[m4_ifval([$4],
-[m4_copy([AC_LANG_PROGRAM($4)], [AC_LANG_PROGRAM($1)])]
-[m4_copy([AC_LANG_CALL($4)], [AC_LANG_CALL($1)])]
-[m4_copy([AC_LANG_FUNC_LINK_TRY($4)], [AC_LANG_FUNC_LINK_TRY($1)])]
-[m4_copy([AC_LANG_BOOL_COMPILE_TRY($4)], [AC_LANG_BOOL_COMPILE_TRY($1)])]
-[m4_copy([AC_LANG_INT_SAVE($4)], [AC_LANG_INT_SAVE($1)])]
-[m4_copy([_AC_LANG_IO_PROGRAM($4)], [_AC_LANG_IO_PROGRAM($1)])])])
+[m4_define([_AC_CC($1)], [$4])]
+[m4_copy([AC_LANG_CONFTEST($5)], [AC_LANG_CONFTEST($1)])]
+[m4_copy([AC_LANG_SOURCE($5)], [AC_LANG_SOURCE($1)])]
+[m4_copy([_AC_LANG_NULL_PROGRAM($5)], [_AC_LANG_NULL_PROGRAM($1)])]
+[m4_ifval([$5],
+[m4_copy([AC_LANG_PROGRAM($5)], [AC_LANG_PROGRAM($1)])]
+[m4_copy([AC_LANG_CALL($5)], [AC_LANG_CALL($1)])]
+[m4_copy([AC_LANG_FUNC_LINK_TRY($5)], [AC_LANG_FUNC_LINK_TRY($1)])]
+[m4_copy([AC_LANG_BOOL_COMPILE_TRY($5)], [AC_LANG_BOOL_COMPILE_TRY($1)])]
+[m4_copy([AC_LANG_INT_SAVE($5)], [AC_LANG_INT_SAVE($1)])]
+[m4_copy([_AC_LANG_IO_PROGRAM($5)], [_AC_LANG_IO_PROGRAM($1)])])])
 
 ## ----------------------- ##
 ## 2. Producing programs.  ##
@@ -283,6 +284,12 @@ AC_DEFUN([AC_LANG_BOOL_COMPILE_TRY],
 AC_DEFUN([AC_LANG_INT_SAVE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
+
+# _AC_CC
+# ------
+# The variable name of the compiler.
+m4_define([_AC_CC],
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 ## -------------------------------------------- ##

@@ -59,7 +59,7 @@
 # AC_LANG(C)
 # ----------
 # CFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-AC_LANG_DEFINE([C], [c], [C], [],
+AC_LANG_DEFINE([C], [c], [C], [CC], [],
 [ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
@@ -238,7 +238,7 @@ static unsigned long int ulongval () { return $2; }
 # AC_LANG(C++)
 # ------------
 # CXXFLAGS is not in ac_cpp because -g, -O, etc. are not valid cpp options.
-AC_LANG_DEFINE([C++], [cxx], [CXX], [C],
+AC_LANG_DEFINE([C++], [cxx], [CXX], [CXX], [C],
 [ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
@@ -260,7 +260,7 @@ AU_DEFUN([AC_LANG_CPLUSPLUS], [AC_LANG(C++)])
 
 # AC_LANG(Objective C)
 # --------------------
-AC_LANG_DEFINE([Objective C], [objc], [OBJC], [C],
+AC_LANG_DEFINE([Objective C], [objc], [OBJC], [OBJC], [C],
 [ac_ext=m
 ac_cpp='$OBJCPP $CPPFLAGS'
 ac_compile='$OBJC -c $OBJCFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
@@ -282,7 +282,7 @@ AU_DEFUN([AC_LANG_OBJC], [AC_LANG(Objective C)])
 
 # AC_LANG(Objective C++)
 # ----------------------
-AC_LANG_DEFINE([Objective C++], [objcxx], [OBJCXX], [C++],
+AC_LANG_DEFINE([Objective C++], [objcxx], [OBJCXX], [OBJCXX], [C++],
 [ac_ext=mm
 ac_cpp='$OBJCXXCPP $CPPFLAGS'
 ac_compile='$OBJCXX -c $OBJCXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
@@ -1973,7 +1973,7 @@ AC_DEFUN([AC_OPENMP],
   AC_ARG_ENABLE([openmp],
     [AS_HELP_STRING([--disable-openmp], [do not use OpenMP])])
   if test "$enable_openmp" != no; then
-    AC_CACHE_CHECK([for $CC option to support OpenMP],
+    AC_CACHE_CHECK([for $[]_AC_CC[] option to support OpenMP],
       [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp],
       [AC_LINK_IFELSE([_AC_LANG_OPENMP],
 	 [ac_cv_prog_[]_AC_LANG_ABBREV[]_openmp='none needed'],
