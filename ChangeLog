@@ -1,3 +1,11 @@
+2009-10-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Do not fail OpenMP tests on systems without aclocal.
+	* tests/c.at (AC_OPENMP and C, AC_OPENMP and C++): Override
+	`ACLOCAL=true' for autoreconf, the tests don't need aclocal.
+	* tests/fortran.at (AC_OPENMP and Fortran 77)
+	(AC_OPENMP and Fortran): Likewise.
+
 2009-10-31  Bruno Haible  <bruno@clisp.org>
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

@@ -369,7 +369,7 @@ int main ()
 ]])
 
 : ${MAKE=make}
-AT_CHECK([autoreconf -vi], [], [ignore], [ignore])
+AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
 AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
 AT_CHECK([$MAKE], [], [ignore], [ignore])
 
@@ -412,7 +412,7 @@ AT_DATA([foo.cpp],
 ]])
 
 : ${MAKE=make}
-AT_CHECK([autoreconf -vi], [], [ignore], [ignore])
+AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
 AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
 AT_CHECK([$MAKE], [], [ignore], [ignore])
 
