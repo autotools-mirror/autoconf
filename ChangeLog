@@ -1,5 +1,10 @@
 2009-10-31  Eric Blake  <ebb9@byu.net>
 
+	Fix cross-manual link to gcc.
+	* doc/autoconf.texi (Portable C and C++): Provide uref rather than
+	xref when building for html.
+	Reported via Karl Berry.
+
 	Update authors.
 	* AUTHORS: Document recent copyright assignments.
 

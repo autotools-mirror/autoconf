@@ -19331,10 +19331,17 @@ platforms.
 Several standards have been developed to help make your programs more
 portable.  If you write programs with these standards in mind, you can
 have greater confidence that your programs work on a wide variety
-of systems.  @xref{Standards, , Language Standards Supported by
+of systems.
+@ifhtml
+@uref{http://@/gcc.gnu.org/@/onlinedocs/@/gcc/@/Standards.html, Language
+Standards Supported by @acronym{GCC}}
+@end ifhtml
+@ifnothtml
+@xref{Standards, , Language Standards Supported by
 @acronym{GCC}, gcc, Using the @acronym{GNU} Compiler Collection
-(@acronym{GCC})}, for a list of C-related
-standards.  Many programs also assume the
+(@acronym{GCC})},
+@end ifnothtml
+for a list of C-related standards.  Many programs also assume the
 @uref{http://@/www.opengroup.org/@/susv3, Posix standard}.
 
 Some old code is written to be portable to K&R C, which predates any C
