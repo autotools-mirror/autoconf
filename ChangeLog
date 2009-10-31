@@ -1,5 +1,14 @@
 2009-10-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix AC_OPENMP for Fortran (F77 and FC).
+	* lib/autoconf/fortran.m4 (AC_LANG_FUNC_LINK_TRY(Fortran): New.
+	* tests/c.at (AC_C_RESTRICT and C++, AC_OPENMP and C)
+	(AC_OPENMP and C++): New tests.
+	* tests/fortran.at (AC_OPENMP and Fortran 77)
+	(AC_OPENMP and Fortran): New tests.
+	* THANKS: Update.
+	Report by Bart Oldeman.
+
 	Perl coverage convenience targets.
 	* Makefile.am (PERL_COVERAGE_DB, PERL_COVERAGE_FLAGS)
 	(PERL_COVER): New variables.

@@ -207,6 +207,11 @@ m4_define([AC_LANG_CALL(Fortran 77)],
 [      call $2])])
 
 
+# AC_LANG_FUNC_LINK_TRY(Fortran 77)(FUNCTION)
+# -------------------------------------------
+m4_define([AC_LANG_FUNC_LINK_TRY(Fortran 77)],
+[AC_LANG_PROGRAM([],
+[      call $1])])
 
 ## ------------------------ ##
 ## 1b. Language selection.  ##

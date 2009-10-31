@@ -320,3 +320,100 @@ AT_CHECK([${MAKE-make} cpp-works || exit 77], [], [ignore], [ignore])
 AT_CHECK([${MAKE-make}], [], [ignore], [ignore])
 
 AT_CLEANUP
+
+
+## ---------------- ##
+## AC_OPENMP and C. ##
+## ---------------- ##
+
+AT_SETUP([AC_OPENMP and C])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_CC
+AC_OPENMP
+if test "X$ac_cv_prog_c_openmp" = Xunsupported; then
+  AS_EXIT([77])
+fi
+CFLAGS="$CFLAGS $OPENMP_CFLAGS"
+CPPFLAGS="$CPPFLAGS $OPENMP_CFLAGS"
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[foo@EXEEXT@: foo.@OBJEXT@
+	@CC@ @CFLAGS@ @LDFLAGS@ -o $@ foo.@OBJEXT@
+
+foo.@OBJEXT@: foo.c
+	@CC@ @CPPFLAGS@ @CFLAGS@ -c foo.c
+]])
+
+AT_DATA([foo.c],
+[[#ifdef _OPENMP
+#include <omp.h>
+#endif
+#include <stdio.h>
+
+int main ()
+{
+#ifdef _OPENMP
+#pragma omp parallel
+  {
+    int id = omp_get_thread_num ();
+    printf ("hello omp world from %d\n", id);
+  }
+#endif
+  return 0;
+}
+]])
+
+: ${MAKE=make}
+AT_CHECK([autoreconf -vi], [], [ignore], [ignore])
+AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+
+AT_CLEANUP
+
+
+## ------------------ ##
+## AC_OPENMP anc C++. ##
+## ------------------ ##
+
+AT_SETUP([AC_OPENMP and C++])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_CXX
+AC_LANG([C++])
+AC_OPENMP
+if test "X$ac_cv_prog_cxx_openmp" = Xunsupported; then
+  AS_EXIT([77])
+fi
+CXXFLAGS="$CXXFLAGS $OPENMP_CXXFLAGS"
+CPPFLAGS="$CPPFLAGS $OPENMP_CXXFLAGS"
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[foo@EXEEXT@: foo.@OBJEXT@
+	@CXX@ @CXXFLAGS@ @LDFLAGS@ -o $@ foo.@OBJEXT@
+
+foo.@OBJEXT@: foo.cpp
+	@CXX@ @CPPFLAGS@ @CXXFLAGS@ -c foo.cpp
+]])
+
+AT_DATA([foo.cpp],
+[[int main ()
+{
+  return 0;
+}
+]])
+
+: ${MAKE=make}
+AT_CHECK([autoreconf -vi], [], [ignore], [ignore])
+AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+
+AT_CLEANUP
