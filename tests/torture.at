@@ -858,7 +858,7 @@ AC_DEFINE_UNQUOTED([unq3], ["$baz"], [unquoted, test 3])
 AC_DEFINE_UNQUOTED([unq4], [${baz+set}], [unquoted, test 4])
 AC_DEFINE_UNQUOTED([unq5], ["${baz+`echo "a b"`}"], [unquoted, test 5])
 AC_DEFINE_UNQUOTED([unq6], [`echo hi`], [unquoted, test 6])
-AC_DEFINE_UNQUOTED([unq7], ['\"'], [unquoted, test 7])
+AC_DEFINE_UNQUOTED([unq7], ['\\"'], [unquoted, test 7])
 AC_PROG_AWK
 AC_CONFIG_FILES([Foo Zardoz])]])
 
