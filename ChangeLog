@@ -1,3 +1,12 @@
+2009-10-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Perl coverage convenience targets.
+	* Makefile.am (PERL_COVERAGE_DB, PERL_COVERAGE_FLAGS)
+	(PERL_COVER): New variables.
+	(check-coverage, check-coverage-run, check-coverage-report)
+	(clean-coverage): New phony targets.
+	(clean-local): Depend on clean-coverage.
+
 2009-10-28  Eric Blake  <ebb9@byu.net>
 
 	Fix corner cases in AS_LITERAL_IF and AS_TR_SH.
