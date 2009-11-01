@@ -1,5 +1,12 @@
 2009-10-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Micro-optimization of config.status substitution.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): No need to
+	concatenate an empty second string, when we have exactly 148
+	characters to substitute.
+	* tests/torture.at (Substitute a 2000-byte string): Add test
+	exposure for runs of backslashes near the 148 character limit.
+
 	Fix testsuite failure on AIX 4.3.3.
 	* lib/autoconf/general.m4 (_AC_RUN_LOG_LIMIT): Remove conftest.err
 	also if it is empty.

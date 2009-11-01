@@ -729,6 +729,9 @@ AT_CLEANUP
 # So we'll just test a 2000-byte value, and for awk, we test a line with
 # almost 1000 words, and one variable with 5 lines of 2000 bytes each:
 # multi-line values should allow to get around the limitations.
+# We also test runs of around 148 backslashes: they need to be escaped,
+# and 148 is the portable limit for awk string literals.  config.status
+# uses concatenation to generate longer strings.
 
 AT_SETUP([Substitute a 2000-byte string])
 
@@ -737,6 +740,13 @@ AT_DATA([Foo.in], [@foo@
 AT_DATA([Bar.in], [@bar@
 ])
 AT_DATA([Baz.in], [@baz@
+])
+AT_DATA([Boo.in], [@b147@
+@b148@
+@b149@
+@b295@
+@b296@
+@b297@
 ])
 
 AT_DATA([configure.ac],
@@ -747,12 +757,37 @@ baz="]m4_for([m], 1, 100,, ... ... ... ... ....)[
 "
 baz=$baz$baz$baz$baz$baz
 AC_SUBST([baz])
+b29='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
+b147=$b29$b29$b29$b29$b29'\\'
+b148=$b147'\'
+b149=$b148'\'
+b295=$b147$b147'\'
+b296=$b295'\'
+b297=$b296'\'
+AC_SUBST([b147])
+AC_SUBST([b148])
+AC_SUBST([b149])
+AC_SUBST([b295])
+AC_SUBST([b296])
+AC_SUBST([b297])
 AC_PROG_AWK
-AC_CONFIG_FILES([Foo Bar Baz])
+AC_CONFIG_FILES([Foo Bar Baz Boo])
 AC_OUTPUT
 ]])
 
 cp "$abs_top_srcdir/build-aux/install-sh" .
+
+b29='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
+b147=$b29$b29$b29$b29$b29'\\'
+b295=$b147$b147'\'
+cat >Boo-exp <<EOF
+$b147
+$b147\\
+$b147\\\\
+$b295
+$b295\\
+$b295\\\\
+EOF
 
 AT_CHECK_AUTOCONF
 # Check both awk and the result of AC_PROG_AWK
@@ -766,6 +801,7 @@ for awk_arg in Foo= AWK=awk; do
   [m4_for([n], 1, 5,, m4_for([m], 1, 100,, ... ... ... ... ....)
 )])
   AT_CHECK([cat Baz], 0, [stdout])
+  AT_CHECK([diff Boo-exp Boo])
 done
 AT_CLEANUP
 

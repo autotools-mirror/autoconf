@@ -462,7 +462,7 @@ s/'"$ac_delim"'$//
 t delim
 :nl
 h
-s/\(.\{]_AC_AWK_LITERAL_LIMIT[\}\).*/\1/
+s/\(.\{]_AC_AWK_LITERAL_LIMIT[\}\)..*/\1/
 t more1
 s/["\\]/\\&/g; s/^/"/; s/$/\\n"\\/
 p
@@ -476,7 +476,7 @@ s/.\{]_AC_AWK_LITERAL_LIMIT[\}//
 t nl
 :delim
 h
-s/\(.\{]_AC_AWK_LITERAL_LIMIT[\}\).*/\1/
+s/\(.\{]_AC_AWK_LITERAL_LIMIT[\}\)..*/\1/
 t more2
 s/["\\]/\\&/g; s/^/"/; s/$/"/
 p
