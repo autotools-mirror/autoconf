@@ -17,6 +17,10 @@ GNU Autoconf NEWS - User visible changes.
 
    These macros are present only for backwards compatibility purposes.
 
+** The macro AC_LANG_COMPILER no longer fails on embedded systems that
+   lack fopen in the C library, such as AVR or RTEMS (regression
+   introduced in 2.64).
+
 ** The AC_FC_FREEFORM macro no longer suffers from a whitespace bug that
    made it fail with some Fortran compilers (regression introduced in
    2.64).
@@ -45,6 +49,10 @@ GNU Autoconf NEWS - User visible changes.
 ** config.status now provides a --config option to produce the configuration.
 
 ** Many cache variables used by Autoconf's macros are now documented.
+
+** Configure scripts work better on DJGPP by avoiding a bug present in
+   the DJGPP port of bash 2.04 in handling 'return' in a shell
+   function (regression introduced in 2.64).
 
 * Major changes in Autoconf 2.64 (2009-07-26) [stable]
   Released by Eric Blake, based on git versions 2.63b.*.

@@ -1,3 +1,9 @@
+2009-11-03  Eric Blake  <ebb9@byu.net>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Update NEWS for recent fixes.
+	* NEWS: Add some entries.
+
 2009-10-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Micro-optimization of config.status substitution.
