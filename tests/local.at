@@ -336,6 +336,8 @@ fi
 # - RANDOM [zsh]
 # - SECONDS [zsh]
 # - '$' [zsh]
+# - argv [zsh]
+# - ARGC [zsh]
 #
 # Furthermore, it is okay for a non-cache variable initialized to empty in one
 # run to be unset in another run.  This happens when, for example, cache update
@@ -358,6 +360,8 @@ do
 	/^RANDOM=/ d
 	/^SECONDS=/ d
 	/'\'\\\$\''=/ d
+	/^argv=/ d
+	/^ARGC=/ d
 	' $act_file >at_config_vars-$act_file
 done
 AT_CMP([at_config_vars-$1], [at_config_vars-$2])[]dnl

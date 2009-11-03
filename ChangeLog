@@ -1,3 +1,9 @@
+2009-11-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix testsuite failures with SHELL=zsh.
+	* tests/statesave.m4 (AC_STATE_SAVE): Ignore argv and ARGC when
+	comparing configure variables.
+
 2009-11-03  Eric Blake  <ebb9@byu.net>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
