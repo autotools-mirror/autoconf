@@ -1,3 +1,8 @@
+2009-11-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Coverage for autom4te cache creation issues.
+	* tests/tools.at (autom4te cache creation): New test.
+
 2009-11-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix testsuite failures with SHELL=zsh.

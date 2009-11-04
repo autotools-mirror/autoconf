@@ -1167,6 +1167,47 @@ AT_CHECK([test "`find configure -newer newer`" = "" ||
 AT_CLEANUP
 
 
+# autom4te cache creation
+# -----------------------
+# Ensure autom4te fails when it cannot create the cache directory
+# or create files there.
+AT_SETUP([autom4te cache creation])
+
+# Work in a subdirectory so autotest can scribble in the toplevel.
+mkdir sub
+chmod a-w sub
+
+AT_DATA([configure.ac],
+[[AC_INIT
+]])
+
+AT_DATA([.autom4te.cfg],
+[[begin-language: "Autoconf-without-aclocal-m4"
+args: --cache=sub/autom4te.cache
+end-language: "Autoconf-without-aclocal-m4"
+]])
+
+# Do not try this when we are root or on systems without permissions.
+AT_CHECK([: > sub/some-file && exit 77], 1, [ignore], [ignore])
+
+# Failure to create cache directory.
+AT_CHECK_AUTOCONF([], [1], [ignore], [stderr])
+AT_CHECK([grep 'cannot create .*autom4te.cache' stderr], [0], [ignore])
+AT_CHECK([test -f configure], [1])
+
+chmod u+w sub
+AT_CHECK_AUTOCONF
+
+rm -f configure sub/autom4te.cache/*
+chmod a-w sub/autom4te.cache
+
+# Failure to create a file in the cache directory.
+AT_CHECK_AUTOCONF([], [1], [ignore], [stderr])
+AT_CHECK([grep 'cannot open.*autom4te.cache' stderr], [0], [ignore])
+
+AT_CLEANUP
+
+
 # autom4te cache locking
 # ----------------------
 
