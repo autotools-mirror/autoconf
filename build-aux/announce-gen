@@ -1,7 +1,9 @@
-#!/usr/bin/perl -w
+eval '(exit $?0)' && eval 'exec perl -wS "$0" ${1+"$@"}'
+  & eval 'exec perl -wS "$0" $argv:q'
+    if 0;
 # Generate a release announcement message.
 
-my $VERSION = '2009-03-05 09:52'; # UTC
+my $VERSION = '2009-10-30 15:59'; # UTC
 # The definition above must lie within the first 8 lines in order
 # for the Emacs time-stamp write hook (at end) to update it.
 # If you change this file with Emacs, please let the write hook
@@ -33,33 +35,8 @@ use POSIX qw(strftime);
 
 (my $ME = $0) =~ s|.*/||;
 
-my %valid_release_types = map {$_ => 1} qw (alpha beta major);
+my %valid_release_types = map {$_ => 1} qw (alpha beta stable);
 my @archive_suffixes = ('tar.gz', 'tar.bz2', 'tar.lzma', 'tar.xz');
-
-END
-{
-  # Nobody ever checks the status of print()s.  That's okay, because
-  # if any do fail, we're guaranteed to get an indicator when we close()
-  # the filehandle.
-  #
-  # Close stdout now, and if there were no errors, return happy status.
-  # If stdout has already been closed by the script, though, do nothing.
-  defined fileno STDOUT
-    or return;
-  close STDOUT
-    and return;
-
-  # Errors closing stdout.  Indicate that, and hope stderr is OK.
-  warn "$ME: closing standard output: $!\n";
-
-  # Don't be so arrogant as to assume that we're the first END handler
-  # defined, and thus the last one invoked.  There may be others yet
-  # to come.  $? will be passed on to them, and to the final _exit().
-  #
-  # If it isn't already an error, make it one (and if it _is_ an error,
-  # preserve the value: it might be important).
-  $? ||= 1;
-}
 
 sub usage ($)
 {
@@ -74,10 +51,9 @@ sub usage ($)
       my @types = sort keys %valid_release_types;
       print $STREAM <<EOF;
 Usage: $ME [OPTIONS]
+Generate an announcement message.
 
 OPTIONS:
-
-  Generate an announcement message.
 
 These options must be specified:
 
@@ -450,7 +426,7 @@ sub get_tool_versions ($$)
   # mail (or part of a diff), Gnus is not triggered.
   print <<EOF;
 
-Subject: $my_distdir released
+Subject: $my_distdir released [$release_type]
 
 <\#secure method=pgpmime mode=sign>
 
@@ -494,7 +470,7 @@ EOF
   print_news_deltas ($_, $prev_version, $curr_version)
     foreach @news_file;
 
-  $release_type eq 'major'
+  $release_type eq 'stable'
     or print_changelog_deltas ($package_name, $prev_version);
 
   exit 0;
@@ -502,19 +478,15 @@ EOF
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:
+## mode: perl
 ## perl-indent-level: 2
 ## perl-continued-statement-offset: 2
 ## perl-continued-brace-offset: 0
 ## perl-brace-offset: 0
 ## perl-brace-imaginary-offset: 0
 ## perl-label-offset: -2
-## cperl-indent-level: 2
-## cperl-brace-offset: 0
-## cperl-continued-brace-offset: 0
-## cperl-label-offset: -2
-## cperl-extra-newline-before-brace: t
-## cperl-merge-trailing-else: nil
-## cperl-continued-statement-offset: 2
+## perl-extra-newline-before-brace: t
+## perl-merge-trailing-else: nil
 ## eval: (add-hook 'write-file-hooks 'time-stamp)
 ## time-stamp-start: "my $VERSION = '"
 ## time-stamp-format: "%:y-%02m-%02d %02H:%02M"

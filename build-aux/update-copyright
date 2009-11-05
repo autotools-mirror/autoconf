@@ -1,11 +1,13 @@
-#!/usr/bin/perl -0777 -pi
+eval '(exit $?0)' && eval 'exec perl -wS -0777 -pi "$0" ${1+"$@"}'
+  & eval 'exec perl -wS -0777 -pi "$0" $argv:q'
+    if 0;
 # Update an FSF copyright year list to include the current year.
 
-my $VERSION = '2009-08-14.18:56'; # UTC
+my $VERSION = '2009-10-30.15:57'; # UTC
 
 # Copyright (C) 2009 Free Software Foundation, Inc.
 #
-# This program is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3, or (at your option)
 # any later version.
@@ -249,6 +251,7 @@ else
   }
 
 # Local variables:
+# mode: perl
 # indent-tabs-mode: nil
 # eval: (add-hook 'write-file-hooks 'time-stamp)
 # time-stamp-start: "my $VERSION = '"

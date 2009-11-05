@@ -1,3 +1,20 @@
+2009-11-04  Eric Blake  <ebb9@byu.net>
+
+	Update upstream files.
+	* build-aux/announce-gen: Synchronize from upstream.
+	* build-aux/config.guess: Likewise.
+	* build-aux/config.sub: Likewise.
+	* build-aux/gendocs.sh: Likewise.
+	* build-aux/git-version-gen: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+	* build-aux/update-copyright: Likewise.
+	* doc/standards.texi: Likewise.
+	* lib/Autom4te/Channels.pm: Likewise.
+	* lib/Autom4te/Configure_ac.pm: Likewise.
+	* lib/Autom4te/FileUtils.pm: Likewise.
+	* lib/Autom4te/Struct.pm: Likewise.
+	* lib/Autom4te/XFile.pm: Likewise.
+
 2009-11-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Coverage for autom4te cache creation issues.
@@ -449,7 +466,7 @@
 	Improve wording about what goes before AC_INIT.
 	* doc/autoconf.texi (Initializing configure): Update wording.
 	(Versioning) <AC_PREREQ>: Remove misleading text, to match
-	autoupdate's behavior.
+	autoscan's behavior.
 	* THANKS: Update.
 	Reported by NightStrike, with input from Ralf Wildenhues.
 
