@@ -12964,14 +12964,15 @@ Builtins}).
 @end defmac
 
 @c Deprecated, to be replaced by a better API
-@ignore
 @defmac AS_DIRNAME (@var{file-name})
 @asindex{DIRNAME}
 Output the directory portion of @var{file-name}.  For example,
 if @code{$file} is @samp{/one/two/three}, the command
 @code{dir=`AS_DIRNAME(["$file"])`} sets @code{dir} to @samp{/one/two}.
+
+This interface may be improved in the future to avoid forks and losing
+trailing newlines.
 @end defmac
-@end ignore
 
 @defmac AS_ECHO (@var{word})
 @asindex{ECHO}

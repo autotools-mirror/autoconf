@@ -1,5 +1,10 @@
 2009-11-04  Eric Blake  <ebb9@byu.net>
 
+	Redocument AS_DIRNAME, even with its flaws.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_DIRNAME>:
+	Restore documenatation, since dirname mentions it.
+	Reported by Peter Johansson.
+
 	Update upstream files.
 	* build-aux/announce-gen: Synchronize from upstream.
 	* build-aux/config.guess: Likewise.
