@@ -1186,9 +1186,9 @@ AU_ALIAS([AM_FUNC_MKTIME], [AC_FUNC_MKTIME])
 # ------------
 AN_FUNCTION([mmap], [AC_FUNC_MMAP])
 AC_DEFUN([AC_FUNC_MMAP],
-[AC_CHECK_HEADERS(stdlib.h unistd.h)
-AC_CHECK_FUNCS(getpagesize)
-AC_CACHE_CHECK(for working mmap, ac_cv_func_mmap_fixed_mapped,
+[AC_CHECK_HEADERS_ONCE([stdlib.h unistd.h sys/param.h])
+AC_CHECK_FUNCS([getpagesize])
+AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
 [AC_RUN_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
 [[/* malloc might have been renamed as rpl_malloc. */
 #undef malloc
@@ -1224,11 +1224,6 @@ char *malloc ();
 
 /* This mess was copied from the GNU getpagesize.h.  */
 #ifndef HAVE_GETPAGESIZE
-/* Assume that all systems that can run configure have sys/param.h.  */
-# ifndef HAVE_SYS_PARAM_H
-#  define HAVE_SYS_PARAM_H 1
-# endif
-
 # ifdef _SC_PAGESIZE
 #  define getpagesize() sysconf(_SC_PAGESIZE)
 # else /* no _SC_PAGESIZE */
@@ -1264,7 +1259,7 @@ main ()
 {
   char *data, *data2, *data3;
   int i, pagesize;
-  int fd;
+  int fd, fd2;
 
   pagesize = getpagesize ();
 
@@ -1277,27 +1272,41 @@ main ()
   umask (0);
   fd = creat ("conftest.mmap", 0600);
   if (fd < 0)
-    return 1;
+    return 2;
   if (write (fd, data, pagesize) != pagesize)
-    return 1;
+    return 3;
   close (fd);
+
+  /* Next, check that the tail of a page is zero-filled.  File must have
+     non-zero length, otherwise we risk SIGBUS for entire page.  */
+  fd2 = open ("conftest.txt", O_RDWR | O_CREAT | O_TRUNC, 0600);
+  if (fd2 < 0)
+    return 4;
+  data2 = "";
+  if (write (fd2, data2, 1) != 1)
+    return 5;
+  data2 = mmap (0, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd2, 0L);
+  if (data2 == MAP_FAILED)
+    return 6;
+  for (i = 0; i < pagesize; ++i)
+    if (*(data2 + i))
+      return 7;
+  close (fd2);
+  if (munmap (data2, pagesize))
+    return 8;
 
   /* Next, try to mmap the file at a fixed address which already has
      something else allocated at it.  If we can, also make sure that
      we see the same garbage.  */
   fd = open ("conftest.mmap", O_RDWR);
   if (fd < 0)
-    return 1;
-  data2 = (char *) malloc (2 * pagesize);
-  if (!data2)
-    return 1;
-  data2 += (pagesize - ((long int) data2 & (pagesize - 1))) & (pagesize - 1);
+    return 9;
   if (data2 != mmap (data2, pagesize, PROT_READ | PROT_WRITE,
 		     MAP_PRIVATE | MAP_FIXED, fd, 0L))
-    return 1;
+    return 10;
   for (i = 0; i < pagesize; ++i)
     if (*(data + i) != *(data2 + i))
-      return 1;
+      return 11;
 
   /* Finally, make sure that changes to the mapped area do not
      percolate back to the file as seen by read().  (This is a bug on
@@ -1306,12 +1315,12 @@ main ()
     *(data2 + i) = *(data2 + i) + 1;
   data3 = (char *) malloc (pagesize);
   if (!data3)
-    return 1;
+    return 12;
   if (read (fd, data3, pagesize) != pagesize)
-    return 1;
+    return 13;
   for (i = 0; i < pagesize; ++i)
     if (*(data + i) != *(data3 + i))
-      return 1;
+      return 14;
   close (fd);
   return 0;
 }]])],
@@ -1319,10 +1328,10 @@ main ()
 	       [ac_cv_func_mmap_fixed_mapped=no],
 	       [ac_cv_func_mmap_fixed_mapped=no])])
 if test $ac_cv_func_mmap_fixed_mapped = yes; then
-  AC_DEFINE(HAVE_MMAP, 1,
+  AC_DEFINE([HAVE_MMAP], [1],
 	    [Define to 1 if you have a working `mmap' system call.])
 fi
-rm -f conftest.mmap
+rm -f conftest.mmap conftest.txt
 ])# AC_FUNC_MMAP
 
 

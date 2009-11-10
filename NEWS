@@ -29,6 +29,9 @@ GNU Autoconf NEWS - User visible changes.
    longer mistakenly select a 32-bit type on some compilers (bug present
    since macros were introduced in 2.59c).
 
+** The AC_FUNC_MMAP macro has been fixed to be portable to systems like
+   Cygwin (bug present since macro was introduced in 2.0).
+
 ** The following documented autotest macros are new:
    AT_CHECK_EUNIT
 
