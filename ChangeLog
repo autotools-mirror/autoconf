@@ -1,3 +1,15 @@
+2009-11-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix AC_CONFIG_SUBDIRS tracing in autoreconf.
+	* bin/autoreconf.in (autoreconf_current_directory): Collapse
+	newlines in the autoconf trace output, similar to how automake
+	invokes autoconf, so that newlines do not matter in the argument
+	to AC_CONFIG_SUBDIRS.
+	* tests/torture.at (Deep Package): Expose this issue in the
+	test.
+	* THANKS: Update.
+	Report by Nathan Schulte.
+
 2009-11-09  Eric Blake  <ebb9@byu.net>
 
 	Fix AC_FUNC_MMAP for cygwin.

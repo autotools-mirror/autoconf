@@ -1359,7 +1359,10 @@ AT_DATA([install-sh], [])
 AT_DATA([configure.in],
 [[AC_INIT(GNU Outer, 1.0)
 AC_ARG_VAR([OUTER], [an outer variable])
-AC_CONFIG_SUBDIRS([inner inner2])
+AC_CONFIG_SUBDIRS([
+  inner
+  inner2
+])
 AC_OUTPUT
 ]])
 

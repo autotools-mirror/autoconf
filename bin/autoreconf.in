@@ -454,12 +454,13 @@ sub autoreconf_current_directory ()
   verb "$configure_ac: tracing";
   my $traces = new Autom4te::XFile
     ("$autoconf"
-     . join (' --trace=', '',
+     . join (' ',
+	     map { ' --trace=' . $_ . ':\$n::\${::}%' }
 	     # If you change this list, update the
 	     # `Autoreconf-preselections' section of autom4te.in.
-	     'AC_CONFIG_AUX_DIR:AC_CONFIG_AUX_DIR:\$1',
+	     'AC_CONFIG_AUX_DIR',
 	     'AC_CONFIG_HEADERS',
-	     'AC_CONFIG_SUBDIRS:AC_CONFIG_SUBDIRS:\$1',
+	     'AC_CONFIG_SUBDIRS',
 	     'AC_INIT',
 	     'AC_PROG_LIBTOOL',
 	     'LT_INIT',
@@ -470,14 +471,17 @@ sub autoreconf_current_directory ()
      . ' |');
   while ($_ = $traces->getline)
     {
-      $aux_dir = $1                 if /AC_CONFIG_AUX_DIR:(.*)/;
-      $uses_autoconf = 1            if /AC_INIT/;
-      $uses_gettext_via_traces = 1  if /AM_GNU_GETTEXT/;
-      $uses_libtool = 1             if /(AC_PROG_LIBTOOL|LT_INIT)/;
-      $uses_libltdl = 1             if /LT_CONFIG_LTDL_DIR/;
-      $uses_autoheader = 1          if /AC_CONFIG_HEADERS/;
-      $uses_automake = 1            if /AM_INIT_AUTOMAKE/;
-      push @subdir, split (' ', $1) if /AC_CONFIG_SUBDIRS:(.*)/ && $recursive;
+      my ($macro, @args) = split (/::/);
+      $aux_dir = $args[0]           if $macro eq "AC_CONFIG_AUX_DIR";
+      $uses_autoconf = 1            if $macro eq "AC_INIT";
+      $uses_gettext_via_traces = 1  if $macro eq "AM_GNU_GETTEXT";
+      $uses_libtool = 1             if $macro eq "AC_PROG_LIBTOOL"
+                                       || $macro eq "LT_INIT";
+      $uses_libltdl = 1             if $macro eq "LT_CONFIG_LTDL_DIR";
+      $uses_autoheader = 1          if $macro eq "AC_CONFIG_HEADERS";
+      $uses_automake = 1            if $macro eq "AM_INIT_AUTOMAKE";
+      push @subdir, split (' ', $args[0])
+                                    if $macro eq "AC_CONFIG_SUBDIRS" && $recursive;
     }
 
   # The subdirs are *optional*, they may not exist.
