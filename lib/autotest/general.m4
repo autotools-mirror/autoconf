@@ -967,11 +967,16 @@ m4_divert_push([PREPARE_TESTS])dnl
 for at_program in : $at_tested
 do
   test "$at_program" = : && continue
-  _AS_PATH_WALK([$PATH], [test -f "$as_dir/$at_program" && break])
-  if test -f "$as_dir/$at_program"; then
+  case $at_program in
+    [[\\/]* | ?:[\\/]* ) $at_program_=$at_program ;;]
+    * )
+    _AS_PATH_WALK([$PATH], [test -f "$as_dir/$at_program" && break])
+    at_program_=$as_dir/$at_program ;;
+  esac
+  if test -f "$at_program_"; then
     {
-      AS_ECHO(["$at_srcdir/AT_LINE: $as_dir/$at_program --version"])
-      "$as_dir/$at_program" --version </dev/null
+      AS_ECHO(["$at_srcdir/AT_LINE: $at_program_ --version"])
+      "$at_program_" --version </dev/null
       echo
     } >&AS_MESSAGE_LOG_FD 2>&1
   else

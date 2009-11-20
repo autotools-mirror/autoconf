@@ -1,3 +1,11 @@
+2009-11-20  Eric Blake  <ebb9@byu.net>
+
+	Allow absolute names in AT_TESTED.
+	* lib/autotest/general.m4 (AT_INIT) <PREPARE_TESTS>: Check for
+	absolute names before path walk.
+	* THANKS: Update.
+	Suggested by Allan Clark.
+
 2009-11-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix AC_CONFIG_SUBDIRS tracing in autoreconf.
