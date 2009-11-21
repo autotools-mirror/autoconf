@@ -1,5 +1,15 @@
 2009-11-21  Eric Blake  <ebb9@byu.net>
 
+	Prepare for release.
+	* build-aux/announce-gen: Sync from upstream.
+	* build-aux/config.guess: Likewise.
+	* build-aux/config.sub: Likewise.
+	* cfg.mk (gnu_rel_host, url_dir_list): Move...
+	* maint.mk: ...here, copying ideas from gnulib.
+	(major): Rename...
+	(stable): ...to this, copying gnulib.
+	* HACKING (release): Document changes in process.
+
 	Avoid spurious newline in traced macros.
 	* bin/autoreconf.in (tracing): Drop newline before parsing traced
 	arguments; regression from 2009-11-14.

@@ -108,10 +108,11 @@ should check the results before committing them in git.
 ** Set the version number
 Update the version number in NEWS (with version, date, and release
 type) and ChangeLog, and mention in README whether the release is
-stable.  `make news-date-check' and `make changelog-check' will
-validate that the information is formatted correctly.  Make sure all
-changes are committed, then run `git tag -s -m <version> -u <gpg_key>
-v<version>'.  Do not push anything upstream at this point.
+stable.  Make sure all changes are committed, then run `git tag -s -m
+<version> -u <gpg_key> v<version>'.  Do not push anything upstream at
+this point.  At this point, running `make _version', followed by `make
+news-date-check changelog-check' will validate that the information is
+formatted correctly.
 
 ** Update configure
 As much as possible, make sure to release an Autoconf that uses
@@ -127,7 +128,7 @@ can run `make dist-xz'; run this prior to the release target so that
 the release announcement will include the .tar.xz file.
 
 ** Make the release
-Run `make {alpha,beta,major}' depending on which type of release this
+Run `make {alpha,beta,stable}' depending on which type of release this
 is.  This runs the various checks, creates delta files, creates a
 preliminary announcement in /tmp/announce-autoconf-<version>, prints
 out the command to upload the files, and updates the previous version
@@ -147,11 +148,11 @@ Run `git push origin refs/tags/v<version>' to push the release tag.
 
 ** Announce
 Complete/fix the announcement file, and email it at least to
-autoconf@gnu.org and autotools-announce@gnu.org.  If this is a major
+autoconf@gnu.org and autotools-announce@gnu.org.  If this is a stable
 release, also mail to info-gnu@gnu.org.
 
 ** Other web updates
-For alpha and beta releases, the process is complete.  For major
+For alpha and beta releases, the process is complete.  For stable
 releases, there are several other web pages that need updates.
 
 Update the online manual: Run `make web-manual', then copy the
