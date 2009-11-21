@@ -1,5 +1,8 @@
 2009-11-21  Eric Blake  <ebb9@byu.net>
 
+	Release Version 2.65.
+	* NEWS: Mention the release.
+
 	Prepare for release.
 	* build-aux/announce-gen: Sync from upstream.
 	* build-aux/config.guess: Likewise.

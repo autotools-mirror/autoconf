@@ -1,7 +1,7 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Major changes in Autoconf 2.64a (????-??-??) [experimental]
-  Released by ???? ????
+* Major changes in Autoconf 2.65 (2009-11-21) [stable]
+  Released by Eric Blake, based on git versions 2.64.*.
 
 ** Autoconf is now licensed under the General Public License version 3
    or later (GPLv3+).  As with earlier versions, the license includes
