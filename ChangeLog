@@ -1,3 +1,9 @@
+2009-11-21  Eric Blake  <ebb9@byu.net>
+
+	Avoid spurious newline in traced macros.
+	* bin/autoreconf.in (tracing): Drop newline before parsing traced
+	arguments; regression from 2009-11-14.
+
 2009-11-20  Eric Blake  <ebb9@byu.net>
 
 	Allow absolute names in AT_TESTED.

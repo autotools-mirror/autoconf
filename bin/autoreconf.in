@@ -471,6 +471,7 @@ sub autoreconf_current_directory ()
      . ' |');
   while ($_ = $traces->getline)
     {
+      chomp;
       my ($macro, @args) = split (/::/);
       $aux_dir = $args[0]           if $macro eq "AC_CONFIG_AUX_DIR";
       $uses_autoconf = 1            if $macro eq "AC_INIT";
