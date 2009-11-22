@@ -1,3 +1,9 @@
+2009-11-22  Bruno Haible  <bruno@clisp.org>
+
+	Fix failure of test 35 when the user has a .autom4te.cfg file.
+	* tests/tools.at (autom4te cache creation): Skip the test if the
+	user has a .autom4te.cfg file.
+
 2009-11-21  Eric Blake  <ebb9@byu.net>
 
 	Release Version 2.65.

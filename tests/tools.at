@@ -1173,6 +1173,8 @@ AT_CLEANUP
 # or create files there.
 AT_SETUP([autom4te cache creation])
 
+AT_CHECK([test ! -f $HOME/.autom4te.cfg || exit 77], [], [ignore], [ignore])
+
 # Work in a subdirectory so autotest can scribble in the toplevel.
 mkdir sub
 chmod a-w sub
