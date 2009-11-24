@@ -1,3 +1,10 @@
+2009-11-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Add pgfortran to list of Fortran 95+ compilers.
+	* lib/autoconf/fortran.m4 (_AC_F95_FC): Add pgfortran before
+	pgf95.
+	Based on report by Jeff Squyres.
+
 2009-11-22  Bruno Haible  <bruno@clisp.org>
 
 	Fix failure of test 35 when the user has a .autom4te.cfg file.

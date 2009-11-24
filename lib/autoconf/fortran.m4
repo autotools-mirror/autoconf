@@ -306,7 +306,7 @@ AC_DEFUN([_AC_FC_DIALECT_YEAR],
 #  cf77: native F77 compiler under older Crays (prefer over fort77)
 #  fort77: native F77 compiler under HP-UX (and some older Crays)
 #  frt: Fujitsu F77 compiler
-#  pgf77/pgf90/pghpf/pgf95: Portland Group F77/F90/F95 compilers
+#  pgf77/pgf90/pghpf/pgf95/pgfortran: Portland Group F77/F90/F95 compilers
 #  xlf/xlf90/xlf95: IBM (AIX) F77/F90/F95 compilers
 #    Prefer xlf9x to the generic names because they do not reject file
 #    with extension `.f'.
@@ -317,7 +317,7 @@ AC_DEFUN([_AC_FC_DIALECT_YEAR],
 #  fort: Compaq (now HP) Fortran 90/95 compiler for Tru64 and Linux/Alpha
 #  ifort, previously ifc: Intel Fortran 95 compiler for Linux/x86
 #  efc: Intel Fortran 95 compiler for IA64
-m4_define([_AC_F95_FC], [gfortran g95 xlf95 f95 fort ifort ifc efc pgf95 lf95 ftn])
+m4_define([_AC_F95_FC], [gfortran g95 xlf95 f95 fort ifort ifc efc pgfortran pgf95 lf95 ftn])
 m4_define([_AC_F90_FC], [xlf90 f90 pgf90 pghpf epcf90])
 m4_define([_AC_F77_FC], [g77 xlf f77 frt pgf77 cf77 fort77 fl32 af77])
 AC_DEFUN([_AC_PROG_FC],
