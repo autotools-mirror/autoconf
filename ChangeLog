@@ -1,5 +1,11 @@
 2009-11-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix AC_FUNC_MMAP regression with C++ compiler in 2.65.
+	* lib/autoconf/functions.m4 (AC_FUNC_MMAP): Use const char*
+	for the constant string.  Cast void* to char* for assignment.
+	* NEWS, THANKS: Update.
+	Report by Michal Čihař.
+
 	Add pgfortran to list of Fortran 95+ compilers.
 	* lib/autoconf/fortran.m4 (_AC_F95_FC): Add pgfortran before
 	pgf95.
