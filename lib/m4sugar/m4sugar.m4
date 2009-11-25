@@ -1374,17 +1374,19 @@ m4_define([_m4_stack_reverse],
 m4_define([m4_cleardivert],
 [m4_if([$#], [0], [m4_fatal([$0: missing argument])],
        [_m4_divert_raw([-1])m4_undivert($@)_m4_divert_raw(
-	 _m4_divert(_m4_defn([_m4_divert_diversion])))])])
+	 _m4_divert(_m4_defn([_m4_divert_diversion]), [-]))])])
 
 
-# _m4_divert(DIVERSION-NAME or NUMBER)
-# ------------------------------------
+# _m4_divert(DIVERSION-NAME or NUMBER, [NOWARN])
+# ----------------------------------------------
 # If DIVERSION-NAME is the name of a diversion, return its number,
-# otherwise if it is a NUMBER return it.
+# otherwise if it is a NUMBER return it.  Issue a warning about
+# the use of a number instead of a name, unless NOWARN is provided.
 m4_define([_m4_divert],
 [m4_ifdef([_m4_divert($1)],
 	  [m4_indir([_m4_divert($1)])],
-	  [$1])])
+	  [m4_if([$2], [], [m4_warn([syntax],
+	     [prefer named diversions])])$1])])
 
 # KILL is only used to suppress output.
 m4_define([_m4_divert(KILL)],           -1)
@@ -1420,13 +1422,15 @@ m4_define([m4_divert],
 [_m4_divert_raw(_m4_divert([$1]))])
 
 
-# m4_divert_push(DIVERSION-NAME)
-# ------------------------------
+# m4_divert_push(DIVERSION-NAME, [NOWARN])
+# ----------------------------------------
 # Change the diversion stream to DIVERSION-NAME, while stacking old values.
+# For internal use only: if NOWARN is not empty, DIVERSION-NAME can be a
+# number instead of a name.
 m4_define([m4_divert_push],
 [m4_divert_stack_push([$0], [$1])]dnl
 [m4_pushdef([_m4_divert_diversion], [$1])]dnl
-[_m4_divert_raw(_m4_divert([$1]))])
+[_m4_divert_raw(_m4_divert([$1], [$2]))])
 
 
 # m4_divert_pop([DIVERSION-NAME])
@@ -1442,7 +1446,7 @@ m4_define([m4_divert_pop],
 [_m4_popdef([_m4_divert_stack], [_m4_divert_diversion])]dnl
 [m4_ifdef([_m4_divert_diversion], [],
 	   [m4_fatal([too many m4_divert_pop])])]dnl
-[_m4_divert_raw(_m4_divert(_m4_defn([_m4_divert_diversion])))])
+[_m4_divert_raw(_m4_divert(_m4_defn([_m4_divert_diversion]), [-]))])
 
 
 # m4_divert_text(DIVERSION-NAME, CONTENT)
@@ -1928,7 +1932,7 @@ m4_define([m4_divert_require],
 [m4_if(_m4_divert_dump, [],
   [m4_fatal([$0($2): cannot be used outside of an m4_defun'd macro])])]dnl
 [m4_provide_if([$2], [],
-  [_m4_require_call([$2], [$3], _m4_divert([$1]))])])
+  [_m4_require_call([$2], [$3], _m4_divert([$1], [-]))])])
 
 
 # m4_defun(NAME, EXPANSION, [MACRO = m4_define])
@@ -2079,7 +2083,7 @@ m4_if([$0], [m4_require], [[m4_defun]], [[AC_DEFUN]])['d macro])])]dnl
 m4_define([_m4_require_call],
 [m4_pushdef([_m4_divert_grow], m4_decr(_m4_divert_grow))]dnl
 [m4_pushdef([_m4_diverting([$1])])m4_pushdef([_m4_diverting], [$1])]dnl
-[m4_divert_push(_m4_divert_grow)]dnl
+[m4_divert_push(_m4_divert_grow, [-])]dnl
 [m4_if([$2], [], [$1], [$2])
 m4_provide_if([$1], [m4_set_remove([_m4_provide], [$1])],
   [m4_warn([syntax], [$1 is m4_require'd but not m4_defun'd])])]dnl

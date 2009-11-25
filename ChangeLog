@@ -1,3 +1,28 @@
+2009-12-04  Eric Blake  <ebb9@byu.net>
+
+	Warn if using unnamed diversion.
+	* lib/m4sugar/m4sugar.m4 (_m4_divert, m4_divert_push): Add
+	optional parameter, which controls warning.
+	(m4_divert_pop, m4_cleardivert, m4_divert_require)
+	(_m4_require_call): Adjust callers.
+	* lib/m4sugar/m4sh.m4 (AS_REQUIRE): Likewise.
+	* tests/m4sh.at (AT_DATA_LINENO): Avoid triggering the warning.
+	* tests/m4sugar.at (AT_CHECK_M4SUGAR_TEXT, m4@&t@_append)
+	(m4@&t@_text_wrap, recursion): Likewise.
+	(m4@&t@_warn, m4@&t@_divert_stack): Adjust expected output.
+	* tests/tools.at (autom4te and whitespace in file names)
+	(autoconf: the empty token): Avoid triggering the warning.
+	(autoconf: AC_PRESERVE_HELP_ORDER): New test.
+	* tests/mktests.sh (ac_exclude_list): Retire prior test.
+	* NEWS: Document the warning.
+	* doc/autoconf.texi (Redefined M4 Macros) <m4_divert>,
+	<m4_undivert>: Make even more explicit that using these directly
+	is discouraged.
+	(Diversion support): Further warn against improper diversion
+	changes.
+	<m4_divert_text>: Give an example of proper use.
+	Reported by Mike Frysinger.
+
 2009-11-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	manual: AC_SEARCH_LIBS also prepends to LIBS.

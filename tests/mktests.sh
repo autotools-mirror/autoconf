@@ -138,6 +138,9 @@ ac_exclude_list='
 
 	# Already tested by AT_CHECK_MACRO.
 	/^AC_OUTPUT$/ {next}
+
+	# Tested alongside m4_divert_text.
+	/^AC_PRESERVE_HELP_ORDER$/ {next}
 '
 
 

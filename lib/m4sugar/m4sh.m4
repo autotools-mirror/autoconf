@@ -345,7 +345,7 @@ m4_divert_pop[]])
 # either m4_require([$1], [$2]) or m4_divert_require(desired, [$1], [$2]).
 m4_defun([AS_REQUIRE],
 [m4_define([_m4_divert_desired], [m4_default_quoted([$3], [M4SH-INIT])])]dnl
-[m4_if(m4_eval(_m4_divert_dump - 0 <= _m4_divert(_m4_divert_desired)),
+[m4_if(m4_eval(_m4_divert_dump - 0 <= _m4_divert(_m4_divert_desired, [-])),
        1, [m4_require(],
 	  [m4_divert_require(_m4_divert_desired,]) [$1], [$2])])
 

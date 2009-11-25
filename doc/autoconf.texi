@@ -11116,7 +11116,11 @@ m4_divert_pop()m4_divert_push([@var{diversion}])
 @end example
 @noindent
 @xref{Diversion support}, for more details about the use of the
-diversion stack.
+diversion stack.  In particular, this implies that @var{diversion}
+should be a named diversion rather than a raw number.  But be aware that
+it is seldom necessary to explicitly change the diversion stack, and
+that when done incorrectly, it can lead to syntactically invalid
+scripts.
 @end defmac
 
 @defmac m4_dumpdef (@var{name}@dots{})
@@ -11210,7 +11214,9 @@ Unlike the M4 builtin, at least one @var{diversion} must be specified.
 Also, since the M4sugar diversion stack prefers named
 diversions, the use of @code{m4_undivert} to include files is risky.
 @xref{Diversion support}, for more details about the use of the
-diversion stack.
+diversion stack.  But be aware that it is seldom necessary to explicitly
+change the diversion stack, and that when done incorrectly, it can lead
+to syntactically invalid scripts.
 @end defmac
 
 @defmac m4_wrap (@var{text})
@@ -11298,12 +11304,19 @@ dubious syntactic constructs, incorrectly ordered macro calls.
 @node Diversion support
 @subsection Diversion support
 
-M4sugar makes heavy use of diversions, because it is often the case that
+M4sugar makes heavy use of diversions under the hood, because it is
+often the case that
 text that must appear early in the output is not discovered until late
 in the input.  Additionally, some of the topological sorting algorithms
 used in resolving macro dependencies use diversions.  However, most
 macros should not need to change diversions directly, but rather rely on
-higher-level M4sugar macros to manage diversions transparently.
+higher-level M4sugar macros to manage diversions transparently.  If you
+change diversions improperly, you risk generating a syntactically
+invalid script, because an incorrect diversion will violate assumptions
+made by many macros about whether prerequisite text has been previously
+output.  In short, if you manually change the diversion, you should not
+expect any macros provided by the Autoconf package to work until you
+have restored the diversion stack back to its original state.
 
 In the rare case that it is necessary to write a macro that explicitly
 outputs text to a different diversion, it is important to be aware of an
@@ -11334,9 +11347,10 @@ rescan of the output of @code{m4_do}.
 
 To make diversion management easier, M4sugar uses the concept of named
 diversions.  Rather than using diversion numbers directly, it is nicer
-to associate a name with each diversion; the diversion number associated
-with a particular diversion name is an implementation detail, so you
-should only use diversion names.  In general, you should not output text
+to associate a name with each diversion.  The diversion number associated
+with a particular diversion name is an implementation detail, and a
+syntax warning is issued if a diversion number is used instead of a
+name.  In general, you should not output text
 to a named diversion until after calling the appropriate initialization
 routine for your language (@code{m4_init}, @code{AS_INIT},
 @code{AT_INIT}, @dots{}), although there are some exceptions documented
@@ -11386,8 +11400,29 @@ used to set up state that is required across all tests.  This diversion
 will work even before @code{AT_INIT}.
 @end table
 
-For now, the named diversions of Autoconf and Autoheader, and the
-remaining diversions of Autotest, are not documented.  In other words,
+Autoconf inherits diversions from M4sh, and adds the following named
+diversions which developers can utilize.
+@table @code
+@item DEFAULTS
+This diversion contains shell variable assignments to set defaults that
+must be in place before arguments are parsed.  This diversion is placed
+early enough in @file{configure} that it is unsafe to expand any
+autoconf macros into this diversion.
+@item HELP_ENABLE
+If @code{AC_PRESERVE_HELP_ORDER} was used, then text placed in this
+diversion will be included as part of a quoted here-doc providing all of
+the @option{--help} output of @file{configure} related to options
+created by @code{AC_ARG_WITH} and @code{AC_ARG_ENABLE}.
+@item INIT_PREPARE
+This diversion occurs after all command line options have been parsed,
+but prior to the main body of the @file{configure} script.  This
+diversion is the last chance to insert shell code such as variable
+assignments or shell function declarations that will used by the
+expansion of other macros.
+@end table
+
+For now, the remaining named diversions of Autoconf, Autoheader, and
+Autotest are not documented.  In other words,
 intentionally outputting text into an undocumented diversion is subject
 to breakage in a future release of Autoconf.
 
@@ -11428,6 +11463,29 @@ affecting the current diversion.  Shorthand for:
 m4_divert_push([@var{diversion}])@var{content}
 m4_divert_pop([@var{diversion}])dnl
 @end example
+
+One use of @code{m4_divert_text} is to develop two related macros, where
+macro @samp{MY_A} does the work, but adjusts what work is performed
+based on whether the optional macro @samp{MY_B} has also been expanded.
+Of course, it is possible to use @code{AC_BEFORE} within @code{MY_A} to
+require that @samp{MY_B} occurs first, if it occurs at all.  But this
+imposes an ordering restriction on the user; it would be nicer if macros
+@samp{MY_A} and @samp{MY_B} can be invoked in either order.  The trick
+is to let @samp{MY_B} leave a breadcrumb in an early diversion, which
+@samp{MY_A} can then use to determine whether @samp{MY_B} has been
+expanded.
+
+@example
+AC_DEFUN([MY_A],
+[# various actions
+if test -n "$b_was_used"; then
+  # extra action
+fi])
+AC_DEFUN([MY_B],
+[AC_REQUIRE([MY_A])dnl
+m4_divert_text([INIT_PREPARE], [b_was_used=true])])
+@end example
+
 @end defmac
 
 @defmac m4_init

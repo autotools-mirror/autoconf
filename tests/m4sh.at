@@ -50,7 +50,7 @@ AT_CHECK([test -n "${ZSH_VERSION+set}" && exit 77], ignore)
 m4_define([AT_DATA_LINENO],
 [AT_DATA([$1.tas],
 [[AS@&t@_INIT
-m4@&t@_divert_text([0], [
+m4@&t@_divert_text([], [
 if $2; then
   AS@&t@_UNSET([LINENO])
 fi
