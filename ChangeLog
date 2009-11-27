@@ -1,3 +1,8 @@
+2009-11-27  Harald van Dijk  <truedfx@gentoo.org>
+
+	Fix m4 detection test on dash.
+	* m4/m4 (AC_PROG_GNU_M4): Use AS_ECHO.
+
 2009-11-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix AC_FUNC_MMAP regression with C++ compiler in 2.65.
