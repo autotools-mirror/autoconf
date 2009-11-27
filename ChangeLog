@@ -1,3 +1,8 @@
+2009-11-27  Paolo Bonzini  <bonzini@gnu.org>
+
+	Bump m4.m4 serial number.
+	* m4/m4: Bump serial number to 10.
+
 2009-11-27  Harald van Dijk  <truedfx@gentoo.org>
 
 	Fix m4 detection test on dash.

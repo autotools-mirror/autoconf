@@ -1,4 +1,4 @@
-# m4.m4 serial 9
+# m4.m4 serial 10
 
 # Copyright (C) 2000, 2006, 2007, 2008, 2009 Free Software Foundation,
 # Inc.
