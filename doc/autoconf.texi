@@ -4428,7 +4428,7 @@ available.  This equates to calling
 @samp{AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])])} first with
 no libraries, then for each library listed in @var{search-libs}.
 
-Add @option{-l@var{library}} to @code{LIBS} for the first library found
+Prepend @option{-l@var{library}} to @code{LIBS} for the first library found
 to contain @var{function}, and run @var{action-if-found}.  If the
 function is not found, run @var{action-if-not-found}.
 
@@ -4443,7 +4443,7 @@ The result of this test is cached in the
 @code{ac_cv_search_@var{function}} variable as @samp{none required} if
 @var{function} is already available, as @samp{no} if no library
 containing @var{function} was found, otherwise as the
-@option{-l@var{library}} option that needs to be added to @code{LIBS}.
+@option{-l@var{library}} option that needs to be prepended to @code{LIBS}.
 @end defmac
 
 

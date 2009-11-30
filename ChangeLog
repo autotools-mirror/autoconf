@@ -1,3 +1,9 @@
+2009-11-30  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	manual: AC_SEARCH_LIBS also prepends to LIBS.
+	* doc/autoconf.texi (Libraries): Document that AC_SEARCH_LIBS
+	prepends to LIBS, just like AC_CHECK_LIB.
+
 2009-11-27  Paolo Bonzini  <bonzini@gnu.org>
 
 	Bump m4.m4 serial number.
