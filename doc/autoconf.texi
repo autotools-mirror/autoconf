@@ -16794,10 +16794,21 @@ When @samp{set -e} is in effect, a failed command substitution in
 Solaris @command{/bin/sh} cannot be ignored, even with @samp{||}.
 
 @example
-$ @kbd{/bin/sh -c 'set -d; foo=`false` || echo foo; echo bar'}
-$ @kbd{bash -c 'set -d; foo=`false` || echo foo; echo bar'}
+$ @kbd{/bin/sh -c 'set -e; foo=`false` || echo foo; echo bar'}
+$ @kbd{bash -c 'set -e; foo=`false` || echo foo; echo bar'}
 foo
 bar
+@end example
+
+@noindent
+Moreover, a command substitution, successful or not, causes this shell to
+exit from a failing outer command even in presence of an @samp{&&} list:
+
+@example
+$ @kbd{bash -c 'set -e; false `true` && echo notreached; echo ok'}
+ok
+$ @kbd{sh -c 'set -e; false `true` && echo notreached; echo ok'}
+$
 @end example
 
 Portable scripts should not use @samp{set -e} if @command{trap} is used

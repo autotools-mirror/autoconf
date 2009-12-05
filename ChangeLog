@@ -1,3 +1,12 @@
+2009-12-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Document Solaris/Heirloom sh set -e issue with command substitutions.
+	* doc/autoconf.texi (Limitations of Builtins): Fix typos `set -d'
+	in previous example.  Document failure to honor && lists with set -e
+	and a command substitution in the failing command.
+	Report and initial patch by Stefano Lattarini against Automake.
+
 2009-12-04  Eric Blake  <ebb9@byu.net>
 
 	Warn if using unnamed diversion.
