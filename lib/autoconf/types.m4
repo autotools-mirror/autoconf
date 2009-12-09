@@ -635,14 +635,14 @@ m4_define([_AC_TYPE_INT_BODY],
 	 'long long int' 'short int' 'signed char'; do
        AC_COMPILE_IFELSE(
 	 [AC_LANG_BOOL_COMPILE_TRY(
-	    [AC_INCLUDES_DEFAULT],
-	    [enum { N = $[]2 / 2 - 1 };
-	     0 < ($ac_type) ((((($ac_type) 1 << N) << N) - 1) * 2 + 1)])],
+	    [AC_INCLUDES_DEFAULT
+	     enum { N = $[]2 / 2 - 1 };],
+	    [0 < ($ac_type) ((((($ac_type) 1 << N) << N) - 1) * 2 + 1)])],
 	 [AC_COMPILE_IFELSE(
 	    [AC_LANG_BOOL_COMPILE_TRY(
-	       [AC_INCLUDES_DEFAULT],
-	       [enum { N = $[]2 / 2 - 1 };
-		($ac_type) ((((($ac_type) 1 << N) << N) - 1) * 2 + 1)
+	       [AC_INCLUDES_DEFAULT
+	        enum { N = $[]2 / 2 - 1 };],
+	       [($ac_type) ((((($ac_type) 1 << N) << N) - 1) * 2 + 1)
 		 < ($ac_type) ((((($ac_type) 1 << N) << N) - 1) * 2 + 2)])],
 	    [],
 	    [AS_CASE([$ac_type], [int$[]2_t],

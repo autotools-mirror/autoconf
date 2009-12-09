@@ -8,6 +8,9 @@ GNU Autoconf NEWS - User visible changes.
 ** Use of m4_divert without a named diversion now issues a syntax warning,
    since it is seldom right to change diversions behind autoconf's back.
 
+** The macros AC_TYPE_INT8_T, AC_TYPE_INT16_T, AC_TYPE_INT32_T, and
+   AC_TYPE_INT64_T work again.  Regression introduced in 2.65.
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 
