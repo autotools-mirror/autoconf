@@ -1874,7 +1874,7 @@ A
 AT_DATA_M4SUGAR([script.4s],
 [[m4_ifdef([__m4_version__],
 [m4_undefine([__m4_version__])],
-[m4_divert_push(0)48894
+[m4_divert_push([])48894
 9999,10000
 78896
 58894

@@ -1,3 +1,8 @@
+2009-12-09  Paolo Bonzini  <bonzini@gnu.org>
+
+	Fix `recursion' test failure.
+	* tests/m4sugar.at (recursion): Use empty diversion, not 0.
+
 2009-12-05  Stefano Lattarini  <stefano.lattarini@gmail.com>
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
