@@ -1,5 +1,8 @@
 2009-12-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix NEWS description for AC_FUNC_MMAP entry.
+	* NEWS: Update.
+
 	Fix 2.65 AC_TYPE_INT*_T macro body text regression.
 	* lib/autoconf/types.m4 (_AC_TYPE_INT_BODY): Move helper enum
 	definition to prologue section, to avoid syntax error.

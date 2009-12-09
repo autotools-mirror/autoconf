@@ -3,7 +3,7 @@ GNU Autoconf NEWS - User visible changes.
 * Major changes in Autoconf 2.65a (????-??-??) [experimental]
   Released by ???? ????
 
-** AC_FUNC_MMAP works in C++ mode again.  Regression introduced in 2.64.
+** AC_FUNC_MMAP works in C++ mode again.  Regression introduced in 2.65.
 
 ** Use of m4_divert without a named diversion now issues a syntax warning,
    since it is seldom right to change diversions behind autoconf's back.
