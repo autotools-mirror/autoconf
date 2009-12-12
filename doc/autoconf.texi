@@ -1133,12 +1133,13 @@ quotation.
 
 When calling macros that take arguments, there must not be any white
 space between the macro name and the open parenthesis.  Arguments should
-be enclosed within the M4 quote characters @samp{[} and @samp{]}, and be
+be enclosed within the quote characters @samp{[} and @samp{]}, and be
 separated by commas.  Any leading blanks or newlines in arguments are ignored,
 unless they are quoted.  You should always quote an argument that
 might contain a macro name, comma, parenthesis, or a leading blank or
 newline.  This rule applies recursively for every macro
-call, including macros called from other macros.
+call, including macros called from other macros.  For more details on
+quoting rules, see @ref{Programming in M4}.
 
 For instance:
 
@@ -9864,7 +9865,9 @@ former helps one to follow the latter.
 To fully understand where proper quotation is important, you first need
 to know what the special characters are in Autoconf: @samp{#} introduces
 a comment inside which no macro expansion is performed, @samp{,}
-separates arguments, @samp{[} and @samp{]} are the quotes themselves,
+separates arguments, @samp{[} and @samp{]} are the quotes
+themselves@footnote{By itself, M4 uses @samp{`} and @samp{'}; it is the
+M4sugar layer that sets up the preferred quotes of @samp{[} and @samp{]}.},
 @samp{(} and @samp{)} (which M4 tries to match by pairs), and finally
 @samp{$} inside a macro definition.
 

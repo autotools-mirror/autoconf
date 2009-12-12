@@ -1,3 +1,13 @@
+2009-12-12  Eric Blake  <ebb9@byu.net>
+
+	Improve wording about m4 quote characters.
+	* doc/autoconf.texi (Autoconf Language): Autoconf quote characters
+	come from m4sugar, not raw m4.
+	(Active Characters): Mention that it is m4sugar which changes
+	quotes from `' to [].
+	* THANKS: Update.
+	Suggested by Josef Vukovic.
+
 2009-12-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Revert "Improve AC_CONFIG_AUX_DIRS a bit." to fix shtool usage.
