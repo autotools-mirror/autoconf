@@ -1,3 +1,12 @@
+2009-12-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Revert "Improve AC_CONFIG_AUX_DIRS a bit." to fix shtool usage.
+	* lib/autoconf/general.m4 (AC_CONFIG_AUX_DIRS): Revert test for
+	shtool as install script.  Regression introduced in 2.64.
+	* NEWS, THANKS: Update.
+	Report by Dmitry Grebeniuk.
+	This reverts commit 93d9386de9c1320afed43f1337ac5ddb2d2dcbb4.
+
 2009-12-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix NEWS description for AC_FUNC_MMAP entry.
