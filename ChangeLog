@@ -1,3 +1,9 @@
+2009-12-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Add testsuite exposure for shtool usage.
+	* tests/foreign.at (shtool): New test.
+	Report by Dmitry Grebeniuk.
+
 2009-12-12  Eric Blake  <ebb9@byu.net>
 
 	Improve wording about m4 quote characters.

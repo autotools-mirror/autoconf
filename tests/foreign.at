@@ -89,3 +89,54 @@ AT_CHECK_AUTOCONF([], [], [], [ignore])
 AT_CHECK_CONFIGURE([], [], [], [ignore])
 
 AT_CLEANUP
+
+
+AT_SETUP([shtool])
+
+AT_DATA([configure.ac],
+[[AC_INIT([shtool test], [1.0])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PATH_PROG([SHTOOL], [shtool], [false])
+AC_PROG_INSTALL
+AC_SUBST([ac_install_sh])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[SHTOOL = @SHTOOL@
+# fake these, so that we use shtool whereever possible.
+INSTALL_PROGRAM = $(ac_install_sh)
+INSTALL_DATA = $(ac_install_sh) -m 644
+prefix = @prefix@
+ac_install_sh = @ac_install_sh@
+
+install:
+	$(INSTALL_PROGRAM) file1 $(prefix)/file1
+	$(INSTALL_DATA) file2 $(prefix)/file2
+
+copy-shtool:
+	test '$(SHTOOL)' != false
+	cp '$(SHTOOL)' build-aux
+]])
+
+: >file1
+: >file2
+chmod +x file1
+: ${MAKE=make}
+mkdir build-aux inst
+instdir=`pwd`/inst
+AT_CHECK_AUTOCONF
+cp "$abs_top_srcdir/build-aux/install-sh" build-aux
+AT_CHECK_CONFIGURE
+AT_CHECK([$MAKE copy-shtool], [], [ignore], [ignore],
+	 [AT_CHECK([: >build-aux/shtool])])
+rm -f build-aux/install-sh
+AT_CHECK_CONFIGURE([--prefix="$instdir" ac_cv_path_SHTOOL=false])
+AT_CHECK([grep '^ac_install_sh = .*shtool install -c' Makefile], [], [ignore])
+if test -s build-aux/shtool; then
+  AT_CHECK([$MAKE install], [], [ignore], [ignore])
+  AT_CHECK([test -f inst/file1 && test -f inst/file2 && test -x inst/file1])
+fi
+
+AT_CLEANUP
