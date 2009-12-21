@@ -1,3 +1,9 @@
+2009-12-29  Eric Blake  <ebb9@byu.net>
+
+	Fix comment in AC_CHECK_DECLS.
+	* lib/autoconf/general.m4 (AC_CHECK_DECL): Document the includes
+	argument to the shell function.
+
 2009-12-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Add testsuite exposure for shtool usage.

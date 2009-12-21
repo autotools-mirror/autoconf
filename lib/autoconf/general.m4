@@ -2811,8 +2811,9 @@ m4_define([_AC_CHECK_DECL_BODY],
 AC_DEFUN([AC_CHECK_DECL],
 [AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_decl],
   [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_decl],
-    [LINENO SYMBOL VAR],
-    [Tests whether SYMBOL is declared, setting cache variable VAR accordingly.])],
+    [LINENO SYMBOL VAR INCLUDES],
+    [Tests whether SYMBOL is declared in INCLUDES, setting cache variable
+     VAR accordingly.])],
   [_$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])]dnl
 [ac_fn_[]_AC_LANG_ABBREV[]_check_decl ]dnl
