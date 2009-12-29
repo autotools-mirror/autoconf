@@ -1,5 +1,10 @@
 2009-12-29  Eric Blake  <ebb9@byu.net>
 
+	Improve documentation on tr portability.
+	* doc/autoconf.texi (Limitations of Usual Tools) <tr>: Refine
+	description of NUL handling.  Document set size issue.
+	Reported by Bruno Haible.
+
 	Fix comment in AC_CHECK_DECLS.
 	* lib/autoconf/general.m4 (AC_CHECK_DECL): Document the includes
 	argument to the shell function.

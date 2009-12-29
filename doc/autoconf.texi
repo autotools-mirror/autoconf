@@ -18336,23 +18336,31 @@ $ @kbd{echo "Hazy Fantazy" | LC_ALL=C /usr/xpg4/bin/tr a-z A-Z}
 HAZY FANTAZY
 @end example
 
+When providing two arguments, be sure the second string is at least as
+long as the first.
+
+@example
+$ @kbd{echo abc | /usr/xpg4/bin/tr bc d}
+adc
+$ @kbd{echo abc | tr bc d}
+add
+@end example
+
 Posix requires @command{tr} to operate on binary files.  But at least
-Solaris @command{/usr/ucb/tr} and @command{/usr/bin/tr} still fail to
-handle @samp{\0} as the octal escape for @code{NUL}; these programs
-always discard all @code{NUL} bytes from the input.  On Solaris, when
+Solaris @command{/usr/ucb/tr} fails to handle @samp{\0} as the octal
+escape for @code{NUL}, and Solaris @command{/usr/bin/tr} silently
+discards @code{NUL} in the input prior to doing any translation.  When
 using @command{tr} to process a binary file that may contain @code{NUL}
 bytes, it is necessary to use @command{/usr/xpg4/bin/tr} instead, or
 @command{/usr/xpg6/bin/tr} if that is available.
 
 @example
-$ @kbd{printf 'a\0b\n' | /usr/ucb/tr '\0' '~' | wc -c}
-3
-$ @kbd{printf 'a\0b\n' | /usr/xpg4/bin/tr '\0' '~' | wc -c}
-4
-$ @kbd{printf 'a\0b\n' | /usr/ucb/tr x x | wc -c}
-3
-$ @kbd{printf 'a\0b\n' | /usr/xpg4/bin/tr x x | wc -c}
-4
+$ @kbd{printf 'ab\0c' | /usr/ucb/tr 'a\0' '\0d' | od -An -tx1}
+ 61 62 63
+$ @kbd{printf 'ab\0c' | /usr/bin/tr 'a\0' '\0d' | od -An -tx1}
+ 00 62 63
+$ @kbd{printf 'ab\0c' | /usr/xpg4/bin/tr 'a\0' '\0d' | od -An -tx1}
+ 00 62 64 63
 @end example
 
 @end table
