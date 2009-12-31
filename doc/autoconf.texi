@@ -18347,20 +18347,31 @@ add
 @end example
 
 Posix requires @command{tr} to operate on binary files.  But at least
-Solaris @command{/usr/ucb/tr} fails to handle @samp{\0} as the octal
-escape for @code{NUL}, and Solaris @command{/usr/bin/tr} silently
-discards @code{NUL} in the input prior to doing any translation.  When
-using @command{tr} to process a binary file that may contain @code{NUL}
-bytes, it is necessary to use @command{/usr/xpg4/bin/tr} instead, or
+Solaris @command{/usr/ucb/tr} and @command{/usr/bin/tr} silently discard
+@code{NUL} in the input prior to doing any translation.  When using
+@command{tr} to process a binary file that may contain @code{NUL} bytes,
+it is necessary to use @command{/usr/xpg4/bin/tr} instead, or
 @command{/usr/xpg6/bin/tr} if that is available.
 
 @example
-$ @kbd{printf 'ab\0c' | /usr/ucb/tr 'a\0' '\0d' | od -An -tx1}
+$ @kbd{printf 'a\0b' | /usr/ucb/tr x x | od -An -tx1}
+ 61 62
+$ @kbd{printf 'a\0b' | /usr/bin/tr x x | od -An -tx1}
+ 61 62
+$ @kbd{printf 'a\0b' | /usr/xpg4/bin/tr x x | od -An -tx1}
+ 61 00 62
+@end example
+
+Solaris @command{/usr/ucb/tr} additionally fails to handle @samp{\0} as the
+octal escape for @code{NUL}.
+
+@example
+$ @kbd{printf 'abc' | /usr/ucb/tr 'bc' '\0d' | od -An -tx1}
  61 62 63
-$ @kbd{printf 'ab\0c' | /usr/bin/tr 'a\0' '\0d' | od -An -tx1}
- 00 62 63
-$ @kbd{printf 'ab\0c' | /usr/xpg4/bin/tr 'a\0' '\0d' | od -An -tx1}
- 00 62 64 63
+$ @kbd{printf 'abc' | /usr/bin/tr 'bc' '\0d' | od -An -tx1}
+ 61 00 64
+$ @kbd{printf 'abc' | /usr/xpg4/bin/tr 'bc' '\0d' | od -An -tx1}
+ 61 00 64
 @end example
 
 @end table

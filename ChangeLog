@@ -1,3 +1,9 @@
+2009-12-31  Bruno Haible  <bruno@clisp.org>
+
+	Improve documentation on Solaris tr bugs.
+	* doc/autoconf.texi (Limitations of Usual Tools) <tr>: Refine
+	description of NUL handling by Solaris tr.
+
 2009-12-31  Eric Blake  <ebb9@byu.net>
 
 	Another tr tweak.
