@@ -18342,7 +18342,7 @@ long as the first.
 @example
 $ @kbd{echo abc | /usr/xpg4/bin/tr bc d}
 adc
-$ @kbd{echo abc | tr bc d}
+$ @kbd{echo abc | coreutils/tr bc d}
 add
 @end example
 
