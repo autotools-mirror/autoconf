@@ -1,3 +1,8 @@
+2010-01-05  Eric Blake  <ebb9@byu.net>
+
+	Update copyright year.
+	All files changed to add 2010, via 'make update-copyright'.
+
 2009-12-31  Bruno Haible  <bruno@clisp.org>
 
 	Improve documentation on Solaris tr bugs.
@@ -20741,7 +20746,7 @@
 	End:
 
 	Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008,
-	2009 Free Software Foundation, Inc.
+	2009, 2010 Free Software Foundation, Inc.
 
 	This program is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as
