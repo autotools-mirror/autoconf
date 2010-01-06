@@ -974,7 +974,7 @@ m4_define([_AC_OUTPUT_LINK],
     rm -f "$ac_file"
 
     # Try a relative symlink, then a hard link, then a copy.
-    case $srcdir in
+    case $ac_source in
     [[\\/$]]* | ?:[[\\/]]* ) ac_rel_source=$ac_source ;;
 	*) ac_rel_source=$ac_top_build_prefix$ac_source ;;
     esac

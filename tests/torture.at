@@ -1160,6 +1160,61 @@ AT_CHECK_CONFIGURE([], 1, ignore, ignore)
 AT_CLEANUP
 
 
+## ----------------- ##
+## AC_CONFIG_LINKS.  ##
+## ----------------- ##
+
+AT_SETUP([AC_CONFIG_LINKS])
+
+AT_DATA([configure.ac],
+[[AC_INIT([config links to config files test], [1.0])
+AC_CONFIG_SRCDIR([sub1/file1.in])
+AC_CONFIG_FILES([sub1/file1 file2])
+AC_CONFIG_LINKS([file1:sub1/file1 sub2/file2:file2])
+AC_OUTPUT
+]])
+
+mkdir sub1
+
+AT_DATA([sub1/file1.in],
+[[/* @configure_input@ */
+#define PACKAGE_STRING "@PACKAGE_STRING@"
+]])
+
+AT_DATA([file2.in],
+[[/* @configure_input@ */
+#define PACKAGE_STRING "@PACKAGE_STRING@"
+]])
+
+mkdir build
+AT_CHECK_AUTOCONF
+cd build
+AT_CHECK([../configure && ../configure], 0, [ignore])
+AT_CHECK([cat sub1/file1 sub2/file2 | grep -c "config links"], 0, [2
+])
+AT_CHECK([../configure && ../configure], 0, [ignore])
+AT_CHECK([cat sub1/file1 sub2/file2 | grep -c "config links"], 0, [2
+])
+cd ..
+rm -rf build
+mkdir build
+cd build
+cwd=`pwd`
+AT_CHECK(["$cwd"/../configure && "$cwd"/../configure], 0, [ignore])
+AT_CHECK([cat sub1/file1 sub2/file2 | grep -c "config links"], 0, [2
+])
+cd ..
+AT_CHECK([./configure && ./configure], 0, [ignore], [stderr])
+AT_CHECK([cat sub1/file1 sub2/file2 | grep -c "config links"], 0, [2
+])
+cwd=`pwd`
+AT_CHECK(["$cwd"/configure && "$cwd"/configure], 0, [ignore], [ignore])
+AT_CHECK([cat sub1/file1 sub2/file2 | grep -c "config links"], 0, [2
+])
+
+AT_CLEANUP
+
+
 ## ------------------------------------- ##
 ## AC_CONFIG_LINKS and identical files.  ##
 ## ------------------------------------- ##
@@ -1182,6 +1237,20 @@ AT_CHECK([../configure $configure_options && ../configure $configure_options],
 AT_CHECK([cat src/s src/t], 0, [file1
 file2
 ])
+
+cd ..
+rm -rf build
+mkdir build
+cd build
+cwd=`pwd`
+AT_CHECK(["$cwd"/../configure], 0, [ignore])
+AT_CHECK([cat src/s src/t], 0, [file1
+file2
+])
+AT_CHECK(["$cwd"/../configure], 0, [ignore])
+AT_CHECK([cat src/s src/t], 0, [file1
+file2
+])
 cd ..
 AT_CHECK([./configure $configure_options && ./configure $configure_options],
 	 0, [ignore], [stderr])
@@ -1189,8 +1258,8 @@ AT_CHECK([grep src/t stderr], 1)
 AT_CHECK([cat src/s src/t], 0, [file1
 file2
 ])
-AT_CHECK(["`pwd`"/configure $configure_options && "`pwd`"/configure $configure_options],
-	 0, [ignore], [ignore])
+cwd=`pwd`
+AT_CHECK(["$cwd"/configure && "$cwd"/configure], 0, [ignore], [ignore])
 AT_CHECK([cat src/s src/t], 0, [file1
 file2
 ])

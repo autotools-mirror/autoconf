@@ -1,3 +1,14 @@
+2010-01-06  Peter Breitenlohner  <peb@mppmu.mpg.de>
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix AC_CONFIG_LINKS to generated files when srcdir is absolute.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_LINK): Check $ac_source,
+	not $srcdir, for being relative or absolute.
+	* tests/torture.at (AC_CONFIG_LINKS): New test.
+	(AC_CONFIG_LINKS and identical files): Extend test, avoid some
+	forks.
+	Report, patch and testcase example by Peter Breitenlohner.
+
 2010-01-05  Eric Blake  <ebb9@byu.net>
 
 	Improve release automation.
