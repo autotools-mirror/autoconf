@@ -23,18 +23,15 @@ export PATH = $(shell echo "`pwd`/tests:$$PATH")
 # Remove the autoreconf-provided INSTALL, so that we regenerate it.
 _autoreconf = autoreconf -i -v && rm -f INSTALL
 
-# Version management.
-announce_gen   = $(srcdir)/build-aux/announce-gen
-
 # Used in maint.mk's web-manual rule
 manual_title = Creating Automatic Configuration Scripts
 
-# The GnuPG ID of the key used to sign the tarballs.
-gpg_key_ID = F4850180
-
 # The local directory containing the checked-out copy of gnulib used in this
-# release.
+# release (override the default).
 gnulib_dir = '$(abs_srcdir)'/../gnulib
+
+# The bootstrap tools (override the default).
+bootstrap-tools = automake
 
 # Update files from gnulib.
 .PHONY: fetch gnulib-update autom4te-update

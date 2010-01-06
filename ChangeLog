@@ -1,5 +1,11 @@
 2010-01-05  Eric Blake  <ebb9@byu.net>
 
+	Improve release automation.
+	* maint.mk (gnulib_dir, gnulib-version, bootstrap-tools)
+	(announcement): Copy from latest gnulib maint.mk.
+	* cfg.mk (announce_gen, gpg_key_ID): Delete.
+	(bootstrap-tools): Override the default.
+
 	Update upstream files.
 	* GNUmakefile: Update via 'make fetch'.
 	* build-aux/announce-gen: Likewise.
