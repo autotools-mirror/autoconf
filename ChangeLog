@@ -1,3 +1,13 @@
+2010-01-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Don't fail autom4te preselection test due to different Automake.
+	* tests/tools.at (autom4te preselections): If the cache test
+	fails, extract the Automake version from the toplevel
+	Makefile.in file of the source tree; skip, rather than fail
+	the test group if the automake program has a different version.
+	* THANKS: Update.
+	Report by Dieter Jurzitza, fix suggested by Eric Blake.
+
 2010-01-06  Peter Breitenlohner  <peb@mppmu.mpg.de>
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

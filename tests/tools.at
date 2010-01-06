@@ -1197,8 +1197,13 @@ AT_CHECK([aclocal], [], [], [ignore])
 AT_CHECK([automake --no-force --add-missing], [], [], [ignore])
 AT_CHECK([autoconf])
 AT_CHECK([test "`find configure -newer newer`" = "" ||
-	  { diff old-requests autom4te.cache/requests; exit 1; }])
-
+	  { diff old-requests autom4te.cache/requests; exit 1; }],
+	 [], [], [],
+	 [extract_version=['s/^[^0-9]*\([0-9][^ ]*\).*/\1/;q']
+	  automake_version=`automake --version | sed "$extract_version"`
+	  used_automake_version=`sed "$extract_version" "$abs_top_srcdir/Makefile.in"`
+	  AT_CHECK([if test "$automake_version" = "$used_automake_version"; ]dnl
+		    [then exit 1; else exit 77; fi])])
 AT_CLEANUP
 
 
