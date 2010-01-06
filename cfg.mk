@@ -97,4 +97,6 @@ local-checks-to-skip ?= \
   changelog-check sc_unmarked_diagnostics
 
 # Always use longhand copyrights.
-update-copyright-env = UPDATE_COPYRIGHT_USE_INTERVALS=0
+update-copyright-env = \
+  UPDATE_COPYRIGHT_USE_INTERVALS=0 \
+  UPDATE_COPYRIGHT_MAX_LINE_LENGTH=72

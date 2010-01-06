@@ -1,5 +1,18 @@
 2010-01-05  Eric Blake  <ebb9@byu.net>
 
+	Update upstream files.
+	* GNUmakefile: Update via 'make fetch'.
+	* build-aux/announce-gen: Likewise.
+	* build-aux/config.guess: Likewise.
+	* build-aux/config.sub: Likewise.
+	* build-aux/gendocs.sh: Likewise.
+	* build-aux/gnupload: Likewise.
+	* build-aux/move-if-change: Likewise.
+	* build-aux/update-copyright: Likewise.
+	* build-aux/vc-list-files: Likewise.
+	* doc/standards.texi: Likewise.
+	* cfg.mk (update-copyright-env): Enforce wrap column.
+
 	Update copyright year.
 	All files changed to add 2010, via 'make update-copyright'.
 
