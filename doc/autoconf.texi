@@ -23752,17 +23752,17 @@ $(srcdir)/package.m4: $(top_srcdir)/configure.ac
         :;@{ \
           echo '# Signature of the current package.' && \
           echo 'm4_define([AT_PACKAGE_NAME],' && \
-          echo '  [@@PACKAGE_NAME@@])' && \
+          echo '  [$(PACKAGE_NAME)])' && \
           echo 'm4_define([AT_PACKAGE_TARNAME],' && \
-          echo '  [@@PACKAGE_TARNAME@@])' && \
+          echo '  [$(PACKAGE_TARNAME)])' && \
           echo 'm4_define([AT_PACKAGE_VERSION],' && \
-          echo '  [@@PACKAGE_VERSION@@])' && \
+          echo '  [$(PACKAGE_VERSION)])' && \
           echo 'm4_define([AT_PACKAGE_STRING],' && \
-          echo '  [@@PACKAGE_STRING@@])' && \
+          echo '  [$(PACKAGE_STRING)])' && \
           echo 'm4_define([AT_PACKAGE_BUGREPORT],' && \
-          echo '  [@@PACKAGE_BUGREPORT@@])'; \
+          echo '  [$(PACKAGE_BUGREPORT)])'; \
           echo 'm4_define([AT_PACKAGE_URL],' && \
-          echo '  [@@PACKAGE_URL@@])'; \
+          echo '  [$(PACKAGE_URL)])'; \
         @} >'$(srcdir)/package.m4'
 
 EXTRA_DIST = testsuite.at $(srcdir)/package.m4 $(TESTSUITE) atlocal.in
@@ -23801,6 +23801,12 @@ the following:
 
 @example
 subdir = tests
+PACKAGE_NAME = @@PACKAGE_NAME@@
+PACKAGE_TARNAME = @@PACKAGE_TARNAME@@
+PACKAGE_VERSION = @@PACKAGE_VERSION@@
+PACKAGE_STRING = @@PACKAGE_STRING@@
+PACKAGE_BUGREPORT = @@PACKAGE_BUGREPORT@@
+PACKAGE_URL = @@PACKAGE_URL@@
 
 atconfig: $(top_builddir)/config.status
         cd $(top_builddir) && \

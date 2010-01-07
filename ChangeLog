@@ -1,5 +1,9 @@
 2010-01-08  Eric Blake  <ebb9@byu.net>
 
+	Make autotest example act better with automake.
+	* doc/autoconf.texi (Making testsuite Scripts): Rely on automake
+	feature for recommended autotest snippet, following our own use.
+
 	Clarify language on handling of opening parenthesis.
 	* doc/autoconf.texi (Autoconf Language): Give an example of
 	improper argument passing.
