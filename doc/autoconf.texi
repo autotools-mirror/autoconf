@@ -1132,7 +1132,14 @@ need a means to distinguish literal strings from text to be expanded:
 quotation.
 
 When calling macros that take arguments, there must not be any white
-space between the macro name and the open parenthesis.  Arguments should
+space between the macro name and the open parenthesis.
+
+@example
+AC_INIT ([oops], [1.0]) # incorrect
+AC_INIT([hello], [1,0]) # good
+@end example
+
+Arguments should
 be enclosed within the quote characters @samp{[} and @samp{]}, and be
 separated by commas.  Any leading blanks or newlines in arguments are ignored,
 unless they are quoted.  You should always quote an argument that
