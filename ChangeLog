@@ -1,3 +1,8 @@
+2010-01-12  Eric Blake  <ebb9@byu.net>
+
+	Typo fix in earlier commit.
+	* doc/autoconf.texi (Autoconf Language): Fix typo.
+
 2010-01-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Allow AC_FUNC_MKTIME to work with C++.
