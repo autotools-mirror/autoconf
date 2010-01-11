@@ -41,3 +41,8 @@ if test "$ac_cv_dir_trailing_space" = yes; then
 else
   func_sanitize_dir_name () { echo "$@" | sed 's/  *$//'; }
 fi
+
+# AUTOM4TE might be set in the environment.  Override it here so that
+# direct aclocal invocations also use it.
+AUTOM4TE=autom4te
+export AUTOM4TE
