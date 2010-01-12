@@ -1,3 +1,10 @@
+2010-01-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Allow AC_FUNC_MKTIME to work with C++.
+	* lib/autoconf/functions.m4 (AC_FUNC_MKTIME): ANSIfy KnR function
+	definitions.  Use `const char*' for character literals; cast them
+	to `char*' for putenv.
+
 2010-01-11  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Export AUTOM4TE in tests/atlocal.in, for aclocal.

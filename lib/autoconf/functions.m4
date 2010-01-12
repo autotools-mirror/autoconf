@@ -1004,8 +1004,8 @@ static time_t time_t_max;
 static time_t time_t_min;
 
 /* Values we'll use to set the TZ environment variable.  */
-static char *tz_strings[] = {
-  (char *) 0, "TZ=GMT0", "TZ=JST-9",
+static const char *tz_strings[] = {
+  (const char *) 0, "TZ=GMT0", "TZ=JST-9",
   "TZ=EST+3EDT+2,M10.1.0/00:00:00,M2.3.0/00:00:00"
 };
 #define N_STRINGS (sizeof (tz_strings) / sizeof (tz_strings[0]))
@@ -1022,7 +1022,7 @@ spring_forward_gap ()
      instead of "TZ=America/Vancouver" in order to detect the bug even
      on systems that don't support the Olson extension, or don't have the
      full zoneinfo tables installed.  */
-  putenv ("TZ=PST8PDT,M4.1.0,M10.5.0");
+  putenv ((char*) "TZ=PST8PDT,M4.1.0,M10.5.0");
 
   tm.tm_year = 98;
   tm.tm_mon = 3;
@@ -1035,16 +1035,14 @@ spring_forward_gap ()
 }
 
 static int
-mktime_test1 (now)
-     time_t now;
+mktime_test1 (time_t now)
 {
   struct tm *lt;
   return ! (lt = localtime (&now)) || mktime (lt) == now;
 }
 
 static int
-mktime_test (now)
-     time_t now;
+mktime_test (time_t now)
 {
   return (mktime_test1 (now)
 	  && mktime_test1 ((time_t) (time_t_max - now))
@@ -1068,8 +1066,7 @@ irix_6_4_bug ()
 }
 
 static int
-bigtime_test (j)
-     int j;
+bigtime_test (int j)
 {
   struct tm tm;
   time_t now;
@@ -1113,7 +1110,7 @@ year_2050_test ()
      instead of "TZ=America/Vancouver" in order to detect the bug even
      on systems that don't support the Olson extension, or don't have the
      full zoneinfo tables installed.  */
-  putenv ("TZ=PST8PDT,M4.1.0,M10.5.0");
+  putenv ((char*) "TZ=PST8PDT,M4.1.0,M10.5.0");
 
   t = mktime (&tm);
 
@@ -1148,7 +1145,7 @@ main ()
   for (i = 0; i < N_STRINGS; i++)
     {
       if (tz_strings[i])
-	putenv (tz_strings[i]);
+	putenv ((char*) tz_strings[i]);
 
       for (t = 0; t <= time_t_max - delta; t += delta)
 	if (! mktime_test (t))
