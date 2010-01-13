@@ -1,5 +1,9 @@
 2010-01-13  Eric Blake  <ebb9@byu.net>
 
+	Fix previous example.
+	* doc/autoconf.texi (Here-Documents): Touch up the example to
+	match output to sample command line.
+
 	Document here-doc pitfall.
 	* doc/autoconf.texi (Here-Documents): Mention problem with <<-
 	operator.

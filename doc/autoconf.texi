@@ -14698,13 +14698,15 @@ spaces (not all shells are nice enough to warn about unterminated
 here-documents).
 
 @example
-$ @kbd{printf 'cat <<-x\n\t1\n\t 2\n\tx\n' | bash && echo oops}
+$ @kbd{printf 'cat <<-x\n\t1\n\t 2\n\tx\n' | bash && echo done}
 1
  2
-$ @kbd{printf 'cat <<-x\n 1\n  2\n x\n' | bash-3.2 && echo oops}
+done
+$ @kbd{printf 'cat <<-x\n 1\n  2\n x\n' | bash-3.2 && echo done}
  1
   2
  x
+done
 @end example
 
 @node File Descriptors
