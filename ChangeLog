@@ -1,3 +1,10 @@
+2010-01-13  Eric Blake  <ebb9@byu.net>
+
+	Document here-doc pitfall.
+	* doc/autoconf.texi (Here-Documents): Mention problem with <<-
+	operator.
+	Reported by Jim Meyering.
+
 2010-01-12  Eric Blake  <ebb9@byu.net>
 
 	Typo fix in earlier commit.

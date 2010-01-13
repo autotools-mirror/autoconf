@@ -14691,6 +14691,22 @@ macro when it was expanded before in a conditional path, and the
 condition turned out to be false at runtime, and we end up not
 executing the macro at all.
 
+Be careful with the use of @samp{<<-} to unindent here-documents.  The
+behavior is only portable for stripping leading @key{TAB}s, and things
+can silently break if an overzealous editor converts to using leading
+spaces (not all shells are nice enough to warn about unterminated
+here-documents).
+
+@example
+$ @kbd{printf 'cat <<-x\n\t1\n\t 2\n\tx\n' | bash && echo oops}
+1
+ 2
+$ @kbd{printf 'cat <<-x\n 1\n  2\n x\n' | bash-3.2 && echo oops}
+ 1
+  2
+ x
+@end example
+
 @node File Descriptors
 @section File Descriptors
 @cindex Descriptors
