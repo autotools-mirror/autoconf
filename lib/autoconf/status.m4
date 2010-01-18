@@ -1294,7 +1294,7 @@ if test "$no_create" != yes; then
   exec AS_MESSAGE_LOG_FD>>config.log
   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
   # would make configure fail if this is the last instruction.
-  $ac_cs_success || AS_EXIT
+  $ac_cs_success || AS_EXIT([1])
 fi
 dnl config.status should not do recursion.
 AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
@@ -1666,7 +1666,7 @@ do
 	   [[\\/$]]*) false;;
 	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
 	   esac ||
-	   AC_MSG_ERROR([cannot find input file: `$ac_f']);;
+	   AC_MSG_ERROR([cannot find input file: `$ac_f'], [1]);;
       esac
       case $ac_f in *\'*) ac_f=`AS_ECHO(["$ac_f"]) | sed "s/'/'\\\\\\\\''/g"`;; esac
       AS_VAR_APPEND([ac_file_inputs], [" '$ac_f'"])

@@ -1,3 +1,14 @@
+2010-01-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	config.status: consistent exit status with nonexistent config file input.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_MAIN_LOOP): Ensure we
+	exit with status 1 rather than with that of 'false', for
+	reproducibility.
+	(AC_OUTPUT): Ensure to exit 1 in case of config.status failure.
+	* tests/torture.at (Missing templates): Also test code path
+	for $srcdir != '.'.
+	Report by Tim Rice.
+
 2010-01-13  Eric Blake  <ebb9@byu.net>
 
 	Fix previous example.

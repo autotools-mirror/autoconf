@@ -370,6 +370,15 @@ AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
+mkdir build
+AT_CAPTURE_FILE([build/config.log])[]dnl
+cd build
+AT_CHECK([../configure], [1], [ignore],
+[[config.status: error: cannot find input file: `nonexistent.in'
+]])
+# Make sure that the output file doesn't exist
+AT_CHECK([test -f nonexistent], 1)
+cd ..
 AT_CHECK_CONFIGURE([], [1], [],
 [[config.status: error: cannot find input file: `nonexistent.in'
 ]])
