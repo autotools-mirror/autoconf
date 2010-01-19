@@ -1,3 +1,9 @@
+2010-01-21  Dmitry V. Levin <ldv@altlinux.org>
+
+	Fix test failure when a shell uses $TMPDIR for here-documents.
+	* tests/tools.at (autotools and whitespace in file names): Create
+	$TMPDIR before potential use like in other whitespace tests.
+
 2010-01-20  Paolo Bonzini  <bonzini@gnu.org>
 
 	Add recommendation on (not) unsetting IFS.

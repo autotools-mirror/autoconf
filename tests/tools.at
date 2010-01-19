@@ -1283,13 +1283,16 @@ export x
 rm -f a b
 for funny in \
   'with  funny '\'' $x & #! name ' \
-  'with  funny \ '\'' \'\'' " <a >b * ? name '
+  'with  funny \ '\'' \'\'' " <a >b * ? name ' #"
 do
   funny=`func_sanitize_file_name "$funny"`
   file=" file $funny"
   dir=`func_sanitize_dir_name " dir $funny"`
   TMPDIR=" tmp$dir"
   export TMPDIR
+
+  # skip if we cannot create such a file or directory
+  AT_CHECK([mkdir "$dir" "$TMPDIR" && touch "$file.in" || exit 77])
 
   cat >"$file.in" <<'END'
 [AC_INIT(x,0)
@@ -1298,8 +1301,6 @@ AC_CONFIG_HEADERS([config.h:config.hin])
 AC_MACRO
 AC_OUTPUT]
 END
-  # skip if we cannot create such a file or directory
-  AT_CHECK([mkdir "$dir" "$TMPDIR" && test -f "$file.in" || exit 77])
   cat >"$dir"/foo.m4 <<'END'
 [AC_DEFUN([AC_MACRO], [echo hi])]
 END
