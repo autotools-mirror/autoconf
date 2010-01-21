@@ -1,3 +1,9 @@
+2010-01-20  Paolo Bonzini  <bonzini@gnu.org>
+
+	Add recommendation on (not) unsetting IFS.
+	* doc/autoconf.texi (Special shell variables): Explain why it's
+	better not to unset IFS.
+
 2010-01-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	config.status: consistent exit status with nonexistent config file input.

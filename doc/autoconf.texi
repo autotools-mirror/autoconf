@@ -15750,6 +15750,22 @@ environment variables be set to @samp{C} if the C locale is desired;
 @file{configure} scripts and M4sh do that for you.
 Export these variables after setting them.
 
+Unsetting @code{IFS} instead of resetting it to the default sequence
+is not suggested, since code that tries to save and restore the
+variable's value will incorrectly reset it to an empty value, thus
+disabling field splitting:
+
+@example
+unset IFS
+# default separators used for field splitting
+
+save_IFS=$IFS
+IFS=:
+# ...
+IFS=$save_IFS
+# no field splitting performed
+@end example
+
 @c  However, some older, nonstandard
 @c  systems (notably @acronym{SCO}) break if locale environment variables
 @c  are set to @samp{C}, so when running on these systems
