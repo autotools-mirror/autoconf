@@ -364,7 +364,7 @@ if test "x$ac_cr" = x; then
 fi
 ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
 if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
-  ac_cs_awk_cr='\r'
+  ac_cs_awk_cr='\\r'
 else
   ac_cs_awk_cr=$ac_cr
 fi

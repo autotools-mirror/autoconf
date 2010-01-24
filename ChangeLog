@@ -1,3 +1,12 @@
+2010-01-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix substitution of carriage return on Darwin.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Set
+	ac_cs_awk_cr to '\\r', so that sed portably expands this to '\r'
+	rather than a literal carriage return, to fix substitution on
+	Darwin.  Regression introduced in 2.63b.
+	Report by Peter O'Gorman.
+
 2010-01-21  Dmitry V. Levin <ldv@altlinux.org>
 
 	Fix test failure when a shell uses $TMPDIR for here-documents.
