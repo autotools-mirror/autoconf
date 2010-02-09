@@ -2919,6 +2919,8 @@ AC_DEFUN([AC_LIBOBJ],
 AC_DEFUN([_AC_LIBOBJS_NORMALIZE],
 [ac_libobjs=
 ac_ltlibobjs=
+m4_ifndef([AM_C_PROTOTYPES], [U=
+])dnl
 for ac_i in : $LIB@&t@OBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_script='s/\$U\././;s/\.o$//;s/\.obj$//'
