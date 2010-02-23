@@ -1,3 +1,8 @@
+2010-02-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix testsuite failures due to setting of $U.
+	* tests/local.at (_AT_CHECK_ENV): Ignore setting of $U.
+
 2010-02-10  Eric Blake  <ebb9@byu.net>
 
 	Avoid $U if it is not initialized.
