@@ -1,4 +1,4 @@
-# m4.m4 serial 10
+# m4.m4 serial 11
 
 # Copyright (C) 2000, 2006, 2007, 2008, 2009, 2010 Free Software
 # Foundation, Inc.
@@ -34,7 +34,7 @@ AC_PATH_PROGS_FEATURE_CHECK([M4], [m4 gm4 gnum4],
       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
       rm -f conftest.m4f],
       [AC_MSG_ERROR([no acceptable m4 could be found in \$PATH.
-GNU M4 1.4.6 or later is required; 1.4.13 is recommended])])])
+GNU M4 1.4.6 or later is required; 1.4.14 is recommended])])])
   M4=$ac_cv_path_M4
   AC_CACHE_CHECK([whether $ac_cv_path_M4 accepts --gnu],
     [ac_cv_prog_gnu_m4_gnu],

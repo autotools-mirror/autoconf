@@ -1,3 +1,11 @@
+2010-02-26  Eric Blake  <eblake@redhat.com>
+
+	Recommend latest m4 release.
+	* README: Bump recommendation to m4 1.4.14 (minimum remains
+	1.4.6).
+	* doc/autoconf.texi (Introduction): Likewise.
+	* m4/m4.m4 (AC_PROG_GNU_M4): Likewise.
+
 2010-02-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix testsuite failures due to setting of $U.
