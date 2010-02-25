@@ -1,3 +1,11 @@
+2010-03-01  Eric Blake  <eblake@redhat.com>
+
+	Update file flow diagram to mention Automake.
+	* doc/autoconf.texi (Making configure Scripts): Avoid confusion
+	with listing Makefile.in twice on one line.  Add a diagram showing
+	how automake fits into the picture.
+	Reported by santilín.
+
 2010-02-26  Eric Blake  <eblake@redhat.com>
 
 	Optimize AC_REPLACE_FUNCS.

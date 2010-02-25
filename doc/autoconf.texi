@@ -1009,7 +1009,8 @@ configuration are produced.  Programs that are executed are suffixed by
 macro files (by reading @file{autoconf.m4}).
 
 @noindent
-Files used in preparing a software package for distribution:
+Files used in preparing a software package for distribution, when using
+just Autoconf:
 @example
 your source files --> [autoscan*] --> [configure.scan] --> configure.ac
 
@@ -1021,7 +1022,27 @@ configure.ac --.
 [acsite.m4] ---'
 @end group
 
-Makefile.in -------------------------------> Makefile.in
+Makefile.in
+@end example
+
+@noindent
+Additionally, if you use Automake, the following additional productions
+come into play:
+
+@example
+@group
+[acinclude.m4] --.
+                 |
+[local macros] --+--> aclocal* --> aclocal.m4
+                 |
+configure.ac ----'
+@end group
+
+@group
+configure.ac --.
+               +--> automake* --> Makefile.in
+Makefile.am ---'
+@end group
 @end example
 
 @noindent
