@@ -1,5 +1,11 @@
 2010-02-26  Eric Blake  <eblake@redhat.com>
 
+	Document how to safely override CFLAGS default.
+	* doc/autoconf.texi (C Compiler) <AC_PROG_CC>: Document a way to
+	change the default CFLAGS.
+	(C++ Compiler) <AC_PROG_CXX>: Likewise, for CXXFLAGS.
+	Reported by Monty Taylor; wording suggested by Paolo Bonzini.
+
 	Document that Autoconf relies on IFS.
 	* doc/autoconf.texi (Special Shell Variables) <IFS>: Add details
 	about use of IFS within configure script.

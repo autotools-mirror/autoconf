@@ -7128,7 +7128,9 @@ If using the @acronym{GNU} C compiler, set shell variable @code{GCC} to
 @samp{yes}.  If output variable @code{CFLAGS} was not already set, set
 it to @option{-g -O2} for the @acronym{GNU} C compiler (@option{-O2} on systems
 where @acronym{GCC} does not accept @option{-g}), or @option{-g} for
-other compilers.
+other compilers.  If your package does not like this default, then it is
+acceptable to insert the line @samp{: $@{CFLAGS=""@}} after @code{AC_INIT}
+and before @code{AC_PROG_CC} to select an empty default instead.
 
 Many Autoconf macros use a compiler, and thus call
 @samp{AC_REQUIRE([AC_PROG_CC])} to ensure that the compiler has been
@@ -7529,7 +7531,10 @@ If using the @acronym{GNU} C++ compiler, set shell variable @code{GXX} to
 @samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
 it to @option{-g -O2} for the @acronym{GNU} C++ compiler (@option{-O2} on
 systems where G++ does not accept @option{-g}), or @option{-g} for other
-compilers.
+compilers.  If your package does not like this default, then it is
+acceptable to insert the line @samp{: $@{CXXFLAGS=""@}} after @code{AC_INIT}
+and before @code{AC_PROG_CXX} to select an empty default instead.
+
 @end defmac
 
 @defmac AC_PROG_CXXCPP
