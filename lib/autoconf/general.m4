@@ -298,7 +298,7 @@ m4_define([AC_REVISION],
 # Autoconf, which is certainly not what the user intended.
 AU_DEFUN([AC_PREREQ],
 [m4_version_prereq([$1])[]dnl
-[AC_PREREQ(]]m4_defn([m4_PACKAGE_VERSION])[[)]])
+[AC_PREREQ(]]m4_dquote(m4_dquote(m4_defn([m4_PACKAGE_VERSION])))[[)]])
 
 
 # AC_PREREQ(VERSION)

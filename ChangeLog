@@ -1,3 +1,12 @@
+2010-06-07  Eric Blake  <eblake@redhat.com>
+
+	Properly quote AC_PREREQ during autoupdate.
+	* lib/autoconf/general.m4 (AC_PREREQ): Follow consistent quoting
+	style for AC_PREREQ.
+	* tests/tools.at (autoupdating AC_PREREQ): Update expected
+	results.
+	Reported by NightStrike.
+
 2010-06-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Documentation and tests for the AC_CHECK_DECL change.
