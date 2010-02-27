@@ -1,5 +1,11 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Use new AS_LITERAL_IF argument when appropriate.
+	* lib/m4sugar/m4sh.m4 (AS_VAR_SET): Reduce m4 overhead.
+	(AS_VAR_IF, AS_VAR_TEST_SET): Provide shorter variant for simple
+	references.
+	Suggested by Bruno Haible.
+
 	Add tests for AS_BOX.
 	* tests/m4sugar.at (m4@&t@_text_box): New test.
 	* tests/m4sh.at (AS@&t@_BOX): Likewise.

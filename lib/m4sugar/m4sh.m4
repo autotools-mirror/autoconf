@@ -1964,7 +1964,9 @@ m4_define([AS_VAR_IF],
 [AS_LITERAL_WORD_IF([$1],
   [AS_IF([test "x$$1" = x""$2]],
   [AS_VAR_COPY([as_val], [$1])
-   AS_IF([test "x$as_val" = x""$2]]), [$3], [$4])])
+   AS_IF([test "x$as_val" = x""$2]],
+  [AS_IF([eval test \"x\$"$1"\" = x"_AS_ESCAPE([$2], [`], [\"$])"]]),
+[$3], [$4])])
 
 
 # AS_VAR_PUSHDEF and AS_VAR_POPDEF
@@ -2029,7 +2031,7 @@ m4_pushdef([$1], [$as_[$1]])],
 m4_define([AS_VAR_SET],
 [AS_LITERAL_WORD_IF([$1],
 	       [$1=$2],
-	       [eval "$1=AS_ESCAPE([$2])"])])
+	       [eval "$1=_AS_ESCAPE([$2], [`], [\"$])"])])
 
 
 # AS_VAR_SET_IF(VARIABLE, IF-TRUE, IF-FALSE)
@@ -2047,7 +2049,8 @@ m4_define([AS_VAR_SET_IF],
 m4_define([AS_VAR_TEST_SET],
 [AS_LITERAL_WORD_IF([$1],
 	       [test "${$1+set}" = set],
-	       [{ as_var=$1; eval "test \"\${$as_var+set}\" = set"; }])])
+	       [{ as_var=$1; eval "test \"\${$as_var+set}\" = set"; }],
+	       [eval "test \"\${$1+set}\"" = set])])
 
 
 ## -------------------- ##
