@@ -1,3 +1,13 @@
+2010-03-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix Autotest tracing of shell pipelines for FreeBSD sh.
+	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): Do not trace
+	commands that contain [^|]|[^|], a likely shell pipeline.
+	* tests/local.at (_AT_CHECK_ENV): Turn off tracing for egrep |
+	grep pipeline.
+	* doc/autoconf.texi (File Descriptors): Document limitation.
+	* tests/autotest.at (Trace output): New test.
+
 2010-03-01  Eric Blake  <eblake@redhat.com>
 
 	Update file flow diagram to mention Automake.

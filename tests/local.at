@@ -243,6 +243,9 @@ m4_define([AT_CHECK_CONFIGURE],
 # In this case just don't pay attention to the env.  It would be great
 # to keep the error message but we can't: that would break AT_CHECK.
 #
+# FreeBSD sh may intermingle the trace output from the egrep and grep
+# commands in the pipe, so turn off tracing for these.
+#
 # Some tests might exit prematurely when they find a problem, in
 # which case `env-after' is probably missing.  Don't check it then.
 #
@@ -287,6 +290,7 @@ test -f state-ls.after \
   && { $at_diff state-ls.before state-ls.after || return 1; }
 # Compare variable space dumps.
 if test -f state-env.before && test -f state-env.after; then
+  set +x
   for act_file in state-env.before state-env.after
   do
     $EGREP -v '^(m4_join([|],
@@ -316,6 +320,7 @@ if test -f state-env.before && test -f state-env.after; then
       # There may be variables spread on several lines; remove latter lines.
       $GREP '^m4_defn([m4_re_word])=' >clean-$act_file
   done
+  $at_traceon
   $at_diff clean-state-env.before clean-state-env.after
 fi
 } [#]at_check_env])

@@ -14785,6 +14785,9 @@ must be done @emph{inside} the command substitution.  When running
 @samp{: `cd /zorglub` 2>/dev/null} expect the error message to
 escape, while @samp{: `cd /zorglub 2>/dev/null`} works properly.
 
+FreeBSD 6.2 sh may mix the trace output lines from the statements in a
+shell pipeline.
+
 It is worth noting that Zsh (but not Ash nor Bash) makes it possible
 in assignments though: @samp{foo=`cd /zorglub` 2>/dev/null}.
 

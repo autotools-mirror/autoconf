@@ -349,6 +349,12 @@ AT_CHECK_AT_TEST([unquoted output],
      [${a}"`echo 'b  '`\`\backtick]m4_newline)],
   [], [], [], [], [AT_KEYWORDS([AT@&t@_CHECK_UNQUOTED])])
 
+AT_CHECK_AT_TEST([Trace output],
+  [AT_CHECK([echo some longer longer longer command piped | ]dnl
+	    [sed 's,into some other longer longer longer command,,'],
+	    [], [some longer longer longer command piped
+])])
+
 AT_CHECK_AT([Logging],
   [[AT_INIT([artificial test suite])
     dnl intentionally write failing tests, to see what gets logged

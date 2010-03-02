@@ -2034,6 +2034,8 @@ m4_cond([m4_eval(m4_index([$1], [`]) >= 0)], [1],
 		[[a ${...} parameter expansion]],
 	[m4_eval(m4_index([$1], m4_newline) >= 0)], [1],
 		[[an embedded newline]],
+	[m4_eval(m4_bregexp([$1], [[^|]|[^|]]) >= 0)], [1],
+		[[a shell pipeline]],
 	[]))]dnl No reason.
 [m4_if(m4_index(_m4_defn([at_reason]), [a]), [0],]dnl
 dnl We know at build time that tracing COMMANDS is never safe.
