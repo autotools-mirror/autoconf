@@ -13206,12 +13206,15 @@ echo "[#]define AS_TR_CPP([HAVE_$type]) 1"
 
 @defmac AS_TR_SH (@var{expression})
 @asindex{TR_SH}
-Transform @var{expression} into a valid shell variable name.  For example:
+Transform @var{expression} into shell code that generates a valid shell
+variable name.  The result is literal when possible at m4 time, but must
+be used with @code{eval} if @var{expression} causes shell indirections.
+For example:
 
 @example
 # This outputs "Have it!".
 header="sys/some file.h"
-AS_TR_SH([HAVE_$header])=yes
+eval AS_TR_SH([HAVE_$header])=yes
 if test "x$HAVE_sys_some_file_h" = xyes; then echo "Have it!"; fi
 @end example
 @end defmac

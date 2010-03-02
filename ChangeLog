@@ -1,5 +1,10 @@
 2010-03-02  Eric Blake  <eblake@redhat.com>
 
+	Fix shell code in AS_TR_SH documentation.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_TR_SH>: Fix
+	example to expand to valid shell code.
+	Reported by Ralf Wildenhues.
+
 	Improve documentation on AC_{COMPILE,LINK}_IFELSE.
 	* doc/autoconf.texi (Running the Compiler): Mention that the
 	object file is available after a successful compile.
