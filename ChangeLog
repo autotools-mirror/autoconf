@@ -1,3 +1,9 @@
+2010-03-02  Eric Blake  <eblake@redhat.com>
+
+	Fix typo in docs.
+	* doc/autoconf.texi (Conditional constructs) <m4_ifblank>: Fix
+	typo.
+
 2010-03-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix AS_ERROR for FreeBSD sh.

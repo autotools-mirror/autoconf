@@ -11682,7 +11682,7 @@ variants exist, in order to make it easier to select the correct logical
 sense when using only two parameters.  Note that this is more efficient
 than the equivalent behavior of:
 @example
-m4_ifval(m4_normalize([@var{cond}]), @var{if-text}, @var{if-cond})
+m4_ifval(m4_normalize([@var{cond}]), @var{if-text}, @var{if-blank})
 @end example
 @end defmac
 
