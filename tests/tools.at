@@ -1230,7 +1230,8 @@ end-language: "Autoconf-without-aclocal-m4"
 ]])
 
 # Do not try this when we are root or on systems without permissions.
-AT_CHECK([: > sub/some-file && exit 77], 1, [ignore], [ignore])
+# A failed redirection may cause a status of 2 with FreeBSD sh.
+AT_CHECK([(: > sub/some-file) || exit 1 && exit 77], 1, [ignore], [ignore])
 
 # Failure to create cache directory.
 AT_CHECK_AUTOCONF([], [1], [ignore], [stderr])

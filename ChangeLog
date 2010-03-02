@@ -1,5 +1,11 @@
 2010-03-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix `autom4te cache creation' testsuite failure on FreeBSD.
+	* tests/tools.at (autom4te cache creation): Normalize exit
+	status of failed redirection to 1, may be 2 with FreeBSD sh.
+	* THANKS: Update.
+	Report by Václav Haisman.
+
 	Fix Autotest tracing of shell pipelines for FreeBSD sh.
 	* lib/autotest/general.m4 (_AT_DECIDE_TRACEABLE): Do not trace
 	commands that contain [^|]|[^|], a likely shell pipeline.
