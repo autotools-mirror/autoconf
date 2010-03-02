@@ -1,5 +1,13 @@
 2010-03-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix AS_ERROR for FreeBSD sh.
+	* lib/m4sugar/m4sh.m4 (_AS_ERROR_PREPARE): Rewrite as_fn_error
+	to take additional first argument STATUS instead of transporting
+	$? across shell function entry, which does not work with FreeBSD
+	sh.  Shift all other arguments by one, adjust.
+	(AS_ERROR): Pass EXIT-STATUS, defaulting to $?, to as_fn_error.
+	Report by Václav Haisman.
+
 	Fix `autom4te cache creation' testsuite failure on FreeBSD.
 	* tests/tools.at (autom4te cache creation): Normalize exit
 	status of failed redirection to 1, may be 2 with FreeBSD sh.

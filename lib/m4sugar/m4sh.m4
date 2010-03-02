@@ -816,22 +816,22 @@ m4_define([AS_WARN],
 # otherwise, assume the entire script does not do logging.
 m4_define([_AS_ERROR_PREPARE],
 [AS_REQUIRE_SHELL_FN([as_fn_error],
-  [AS_FUNCTION_DESCRIBE([as_fn_error], [ERROR]m4_ifval(AS_MESSAGE_LOG_FD,
+  [AS_FUNCTION_DESCRIBE([as_fn_error], [STATUS ERROR]m4_ifval(AS_MESSAGE_LOG_FD,
       [[ [[LINENO LOG_FD]]]]),
     [Output "`basename @S|@0`: error: ERROR" to stderr.]
 m4_ifval(AS_MESSAGE_LOG_FD,
     [[If LINENO and LOG_FD are provided, also output the error to LOG_FD,
       referencing LINENO.]])
-    [Then exit the script with status $?, using 1 if that was 0.])],
-[  as_status=$?; test $as_status -eq 0 && as_status=1
+    [Then exit the script with STATUS, using 1 if that was 0.])],
+[  as_status=$[1]; test $as_status -eq 0 && as_status=1
 m4_ifval(AS_MESSAGE_LOG_FD,
-[m4_pushdef([AS_MESSAGE_LOG_FD], [$[3]])dnl
-  if test "$[3]"; then
-    AS_LINENO_PUSH([$[2]])
-    _AS_ECHO_LOG([error: $[1]])
+[m4_pushdef([AS_MESSAGE_LOG_FD], [$[4]])dnl
+  if test "$[4]"; then
+    AS_LINENO_PUSH([$[3]])
+    _AS_ECHO_LOG([error: $[2]])
   fi
 m4_define([AS_MESSAGE_LOG_FD])], [m4_pushdef([AS_MESSAGE_LOG_FD])])dnl
-  AS_MESSAGE([error: $[1]], [2])
+  AS_MESSAGE([error: $[2]], [2])
 _m4_popdef([AS_MESSAGE_LOG_FD])dnl
   AS_EXIT([$as_status])])])
 
@@ -842,9 +842,8 @@ _m4_popdef([AS_MESSAGE_LOG_FD])dnl
 m4_defun_init([AS_ERROR],
 [m4_append_uniq([_AS_CLEANUP],
   [m4_divert_text([M4SH-INIT-FN], [_AS_ERROR_PREPARE[]])])],
-[m4_ifvaln([$2], [{ AS_SET_STATUS([$2])])]dnl
-[as_fn_error "_AS_QUOTE([$1])"m4_ifval(AS_MESSAGE_LOG_FD,
-  [ "$LINENO" AS_MESSAGE_LOG_FD])[]m4_ifval([$2], [; }])])
+[as_fn_error m4_default([$2], [$?]) "_AS_QUOTE([$1])"m4_ifval(AS_MESSAGE_LOG_FD,
+  [ "$LINENO" AS_MESSAGE_LOG_FD])])
 
 
 # AS_LINENO_PUSH([LINENO])
