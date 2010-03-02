@@ -1377,17 +1377,17 @@ as_executable_p=$as_test_x
 # Output MESSAGE, a single line text, framed with FRAME-CHARACTER (which
 # must not be `/').
 m4_define([AS_BOX],
-[AS_LITERAL_IF([$1],
-	       [_AS_BOX_LITERAL($@)],
-	       [_AS_BOX_INDIR($@)])])
+[_$0(m4_expand([$1]), [$2])])
+
+m4_define([_AS_BOX],
+[m4_if(m4_index(m4_translit([[$1]], [`\"], [$$$]), [$]),
+  [-1], [$0_LITERAL], [$0_INDIR])($@)])
 
 
 # _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = `-'])
 # -------------------------------------------------
 m4_define([_AS_BOX_LITERAL],
-[cat <<\_ASBOX
-m4_text_box($@)
-_ASBOX])
+[AS_ECHO(["_AS_ESCAPE(m4_expand([m4_text_box($@)]), [`], [\"$])"])])
 
 
 # _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = `-'])

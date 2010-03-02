@@ -1,5 +1,12 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Optimize AS_BOX.
+	* lib/m4sugar/m4sh.m4 (AS_BOX): Use less m4 time.
+	(_AS_BOX_LITERAL): Use fewer forks in the common case.
+	* doc/autoconf.texi (Common Shell Constructs) <AS_BOX>: Document
+	the macro.
+	* NEWS: Mention it.
+
 	Use new AS_LITERAL_IF argument when appropriate.
 	* lib/m4sugar/m4sh.m4 (AS_VAR_SET): Reduce m4 overhead.
 	(AS_VAR_IF, AS_VAR_TEST_SET): Provide shorter variant for simple

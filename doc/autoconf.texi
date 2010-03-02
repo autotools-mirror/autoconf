@@ -13086,6 +13086,17 @@ if @code{$file} is @samp{/one/two/three}, the command
 @end defmac
 @end ignore
 
+@defmac AS_BOX (@var{text}, @dvar{char, -})
+@asindex{BOX}
+Expand into shell code that will output @var{text} surrounded by a box
+with @var{char} in the top and bottom border.  @var{text} should not
+contain a newline, but may contain shell expansions valid for unquoted
+here-documents.  @var{char} defaults to @samp{-}, but can be any
+character except @samp{/}, @samp{'}, @samp{"}, @samp{\},
+@samp{&}, or @samp{`}.  This is useful for outputting a comment box into
+log files to separate distinct phases of script operation.
+@end defmac
+
 @defmac AS_CASE (@var{word}, @ovar{pattern1}, @ovar{if-matched1}, @
   @dots{}, @ovar{default})
 @asindex{CASE}

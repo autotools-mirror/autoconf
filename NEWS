@@ -43,6 +43,10 @@ GNU Autoconf NEWS - User visible changes.
    Furthermore, a new macro, AS_LITERAL_WORD_IF, adds an additional
    level of checking that no whitespace occurs in literals.
 
+** The following macros are now documented:
+   AS_BOX
+
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 
