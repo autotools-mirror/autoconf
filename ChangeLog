@@ -1,5 +1,11 @@
 2010-03-02  Eric Blake  <eblake@redhat.com>
 
+	Improve documentation on AC_{COMPILE,LINK}_IFELSE.
+	* doc/autoconf.texi (Running the Compiler): Mention that the
+	object file is available after a successful compile.
+	(Running the Linker): Likewise for the linker output.
+	Suggested by Paolo Bonzini.
+
 	Fix typo in docs.
 	* doc/autoconf.texi (Conditional constructs) <m4_ifblank>: Fix
 	typo.
