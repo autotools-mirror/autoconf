@@ -1,3 +1,12 @@
+2010-03-04  Eric Blake  <eblake@redhat.com>
+
+	Document AC_LANG_CONFTEST semantic change.
+	* doc/autoconf.texi (Generating Sources) <AC_LANG_CONFTEST>:
+	Enhance documentation, to show that semantic change in 2.63b was
+	intentional.
+	* THANKS: Update.
+	Reported by Brian J. Murrell, analyzed by Ralf Wildenhues.
+
 2010-03-04  Peter Johansson  <trojkan@gmail.com>  (tiny change)
 
 	Autoconf Macro Archive URL has changed.

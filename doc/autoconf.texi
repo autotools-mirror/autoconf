@@ -8651,7 +8651,8 @@ actually depend on the current language (@pxref{Language Choice}) to
 @acindex{LANG_CONFTEST}
 Save the @var{source} text in the current test source file:
 @file{conftest.@var{extension}} where the @var{extension} depends on the
-current language.
+current language.  As of Autoconf 2.63b, the source file also contains
+the results of all of the @code{AC_DEFINE} performed so far.
 
 Note that the @var{source} is evaluated exactly once, like regular
 Autoconf macro arguments, and therefore (i) you may pass a macro
