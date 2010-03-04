@@ -793,7 +793,7 @@ Because of its mission, the Autoconf package itself
 includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
-@uref{http://@/autoconf-archive.cryp.to/, Autoconf Macro
+@uref{http://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
 Archive}, which is kindly run by @email{simons@@cryp.to,
 Peter Simons}.
 
@@ -14191,8 +14191,8 @@ with the same parameters.  This happens for example if the macro was renamed.
 The Autoconf macros follow a strict coding style.  You are encouraged to
 follow this style, especially if you intend to distribute your macro,
 either by contributing it to Autoconf itself or the
-@uref{http://@/www.nongnu.org/@/autoconf-archive, Autoconf
-archive}, or by other means.
+@uref{http://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
+Archive}, or by other means.
 
 The first requirement is to pay great attention to the quotation.  For
 more details, see @ref{Autoconf Language}, and @ref{M4 Quotation}.
@@ -24160,7 +24160,7 @@ myprog-paths.h: Makefile
 Use @code{AC_DEFINE} but have @command{configure} compute the literal
 value of @code{datadir} and others.  Many people have wrapped macros to
 automate this task; for an example, see the macro @code{AC_DEFINE_DIR} from
-the @uref{http://@/autoconf-archive@/.cryp.to/, Autoconf Macro
+the @uref{http://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
 Archive}.
 
 This solution does not conform to the @acronym{GNU} Coding Standards.

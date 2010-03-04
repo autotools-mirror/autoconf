@@ -1,3 +1,10 @@
+2010-03-04  Peter Johansson  <trojkan@gmail.com>  (tiny change)
+
+	Autoconf Macro Archive URL has changed.
+	* doc/autoconf.texi (Introduction, Coding Style, Defining
+	Directories): The Autoconf Macro Archive is officially `GNU'.
+	Update URL.
+
 2010-03-02  Eric Blake  <eblake@redhat.com>
 
 	Fix shell code in AS_TR_SH documentation.
