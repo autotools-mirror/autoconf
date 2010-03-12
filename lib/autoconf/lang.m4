@@ -237,7 +237,7 @@ m4_define([_AC_LANG_NULL_PROGRAM()],
 
 
 # _AC_LANG_NULL_PROGRAM
-# ----------------------
+# ---------------------
 # Produce valid source for the current language that does
 # nothing.
 AC_DEFUN([_AC_LANG_NULL_PROGRAM],
@@ -245,7 +245,7 @@ AC_DEFUN([_AC_LANG_NULL_PROGRAM],
 
 
 # _AC_LANG_IO_PROGRAM
-# -----------------------------------
+# -------------------
 # Produce valid source for the current language that creates
 # a file.  (This is used when detecting whether executables
 # work, e.g. to detect cross-compiling.)
@@ -700,7 +700,7 @@ ac_objext=$OBJEXT
 ## ------------------------------- ##
 
 # AC_LANG_WERROR
-# ------------------
+# --------------
 # Treat warnings from the current language's preprocessor, compiler, and
 # linker as fatal errors.
 AC_DEFUN([AC_LANG_WERROR],

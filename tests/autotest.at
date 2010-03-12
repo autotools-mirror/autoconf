@@ -84,7 +84,7 @@ AT_CLEANUP
 ])# AT_CHECK_AT
 
 # AT_CHECK_AT_TEST(TITLE, SUITE-SNIPPET, ...)
-# -----------------------------------------------------------------------
+# -------------------------------------------
 # Wrapper for AT_CHECK_AT that surrounds SUITE-SNIPPET with a boilerplate
 # AT_INIT, AT_SETUP, and AT_CLEANUP and passes other arguments verbatim.
 m4_define([AT_CHECK_AT_TEST],
@@ -638,7 +638,7 @@ AT_CLEANUP
 ## Funny characters in test names. ##
 ## ------------------------------- ##
 
-# AT_CHECK_AT_TITLE(TITLE, TITLE-TO-TEST, EXPANDED-TITLE-TO-TEST
+# AT_CHECK_AT_TITLE(TITLE, TITLE-TO-TEST, EXPANDED-TITLE-TO-TEST,
 #                   [XFAIL-CONDITION], [COLUMN = 53])
 # ---------------------------------------------------------------
 # Create a new test named TITLE that runs an Autotest test suite

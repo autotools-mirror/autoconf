@@ -105,7 +105,7 @@ m4_define([_AC_SYS_LARGEFILE_TEST_INCLUDES],
 #				CACHE-VAR,
 #				DESCRIPTION,
 #				PROLOGUE, [FUNCTION-BODY])
-# ----------------------------------------------------------
+# --------------------------------------------------------
 m4_define([_AC_SYS_LARGEFILE_MACRO_VALUE],
 [AC_CACHE_CHECK([for $1 value needed for large files], [$3],
 [while :; do
@@ -306,7 +306,7 @@ AC_DEFUN([AC_SYS_POSIX_TERMIOS],
 
 
 # AC_GNU_SOURCE
-# --------------
+# -------------
 AU_DEFUN([AC_GNU_SOURCE], [AC_USE_SYSTEM_EXTENSIONS])
 
 

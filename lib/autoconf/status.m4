@@ -160,7 +160,7 @@ m4_define([_AC_FILE_DEPENDENCY_TRACE_COLON],
 
 
 # _AC_CONFIG_DEPENDENCY(MODE, DEST[:SOURCE1...])
-# ---------------------------------------------
+# ----------------------------------------------
 # MODE is `FILES', `HEADERS', or `LINKS'.
 #
 # Be sure that a missing dependency is expressed as a dependency upon

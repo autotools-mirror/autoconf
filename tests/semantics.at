@@ -254,7 +254,7 @@ AT_CLEANUP
 
 
 # AC_CHECK_MEMBER
-# ----------------
+# ---------------
 # Check that it performs the correct actions.
 # Must define HAVE_STRUCT_YES_S_YES, but not HAVE_STRUCT_YES_S_NO.
 AT_CHECK_MACRO([AC_CHECK_MEMBER],

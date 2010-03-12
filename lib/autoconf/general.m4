@@ -1485,7 +1485,7 @@ AU_DEFUN([AC_WITH],
 [AC_ARG_WITH([$1], [  --with-$1], [$2], [$3])])
 
 # AC_DISABLE_OPTION_CHECKING
-# --------------------------------------------------------------------
+# --------------------------
 AC_DEFUN([AC_DISABLE_OPTION_CHECKING],
 [m4_divert_once([DEFAULTS], [enable_option_checking=no])
 ])# AC_DISABLE_OPTION_CHECKING
@@ -2033,7 +2033,7 @@ AS_LITERAL_IF([$2],
 
 # _AC_CACHE_CHECK_INT(MESSAGE, CACHE-ID, EXPRESSION,
 #                     [PROLOGUE = DEFAULT-INCLUDES], [IF-FAILS])
-# -------------------------------------------------------------
+# --------------------------------------------------------------
 AC_DEFUN([_AC_CACHE_CHECK_INT],
 [AC_CACHE_CHECK([$1], [$2],
    [AC_COMPUTE_INT([$2], [$3], [$4], [$5])])
@@ -2733,7 +2733,7 @@ AS_IF([test "$cross_compiling" = yes],
 # AC_TRY_RUN(PROGRAM,
 #            [ACTION-IF-TRUE], [ACTION-IF-FALSE],
 #            [ACTION-IF-CROSS-COMPILING = RUNTIME-ERROR])
-# --------------------------------------------------------
+# -------------------------------------------------------
 AU_DEFUN([AC_TRY_RUN],
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[$1]])], [$2], [$3], [$4])])
 
@@ -2881,7 +2881,7 @@ m4_define([AC_LIBSOURCE], [])
 
 
 # AC_LIBSOURCES([FILE-NAME1, ...])
-# -------------------------------
+# --------------------------------
 # Announce we might need these files.
 AC_DEFUN([AC_LIBSOURCES],
 [m4_map_args([AC_LIBSOURCE], $1)])
@@ -2902,7 +2902,7 @@ esac
 
 
 # AC_LIBOBJ(FILE-NAME-NOEXT)
-# -------------------------
+# --------------------------
 # We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
 AC_DEFUN([AC_LIBOBJ],
 [_AC_LIBOBJ([$1],

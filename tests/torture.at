@@ -221,7 +221,7 @@ AT_CHECK([grep OK var-$1], [], [OK
 
 
 # AT_CHECK_CONFIG_CREATION_NOWRITE(THING = (header | link | file | command))
-# ------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # Check that THING and var-THING (which uses variables in AC_CONFIG_THING)
 # are properly created, with the right content.
 # Use `grep OK' instead of a simple `cat' to avoid banners such as in

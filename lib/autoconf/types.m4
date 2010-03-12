@@ -305,7 +305,7 @@ AU_DEFUN([AM_TYPE_PTRDIFF_T],
 
 
 # AC_TYPE_INTMAX_T
-# -----------------
+# ----------------
 AC_DEFUN([AC_TYPE_INTMAX_T],
 [
   AC_REQUIRE([AC_TYPE_LONG_LONG_INT])
@@ -339,7 +339,7 @@ AC_DEFUN([AC_TYPE_UINTMAX_T],
 
 
 # AC_TYPE_INTPTR_T
-# -----------------
+# ----------------
 AC_DEFUN([AC_TYPE_INTPTR_T],
 [
   AC_CHECK_TYPE([intptr_t],
@@ -898,9 +898,9 @@ m4_define([_AC_CHECK_MEMBERS],
     [^\([^.]*\)\.\(.*\)], [[\2' is a member of `\1]])['.])]])
 
 # AC_CHECK_MEMBERS([AGGREGATE.MEMBER, ...],
-#		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND]
+#		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #		   [INCLUDES = DEFAULT-INCLUDES])
-# ---------------------------------------------------------
+# ----------------------------------------------------------
 # The first argument is an m4 list.
 AC_DEFUN([AC_CHECK_MEMBERS],
 [m4_map_args_sep([AC_CHECK_MEMBER(_$0(], [)[
@@ -944,11 +944,11 @@ AC_DEFUN([_AC_STRUCT_DIRENT],
 ])
 
 # AC_STRUCT_DIRENT_D_INO
-# -----------------------------------
+# ----------------------
 AC_DEFUN([AC_STRUCT_DIRENT_D_INO], [_AC_STRUCT_DIRENT([d_ino])])
 
 # AC_STRUCT_DIRENT_D_TYPE
-# ------------------------------------
+# -----------------------
 AC_DEFUN([AC_STRUCT_DIRENT_D_TYPE], [_AC_STRUCT_DIRENT([d_type])])
 
 

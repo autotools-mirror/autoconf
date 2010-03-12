@@ -1,3 +1,17 @@
+2010-03-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Formatting cleanups in macro comments.
+	* lib/autoconf/c.m4, lib/autoconf/erlang.m4,
+	lib/autoconf/fortran.m4, lib/autoconf/functions.m4,
+	lib/autoconf/general.m4, lib/autoconf/lang.m4,
+	lib/autoconf/programs.m4, lib/autoconf/specific.m4,
+	lib/autoconf/status.m4, lib/autoconf/types.m4,
+	lib/autotest/general.m4, lib/autotest/specific.m4,
+	lib/m4sugar/m4sh.m4, lib/m4sugar/m4sugar.m4,
+	tests/autotest.at, tests/local.at, tests/m4sh.at,
+	tests/semantics.at, tests/tools.at, tests/torture.at: Fix macro
+	comment format.
+
 2010-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	manual: index strings containing colon in non-info outputs.

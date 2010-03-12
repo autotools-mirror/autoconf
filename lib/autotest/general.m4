@@ -177,7 +177,7 @@ m4_define([_AT_DEFINE_INIT],
 m4_append([_AT_DEFINE_INIT_LIST], [[$1]], [,])])
 
 # _AT_DEFINE_SETUP(NAME, [DEFINITION])
-# -----------------------------------
+# ------------------------------------
 # Define macro NAME to die if invoked outside AT_SETUP/AT_CLEANUP, and
 # to DEFINITION otherwise.
 m4_define([_AT_DEFINE_SETUP],
@@ -1697,7 +1697,7 @@ m4_defun([AT_ARG_OPTION],[_AT_ARG_OPTION([$1],[$2],,[$3],[$4])])
 
 
 # AT_ARG_OPTION_ARG(OPTIONS,HELP-TEXT,[ACTION-IF-GIVEN],[ACTION-IF-NOT-GIVEN])
-# ---------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Accept a set of OPTIONS with arguments, seperated by commas.  Add HELP-TEXT
 # to the HELP_OTHER diversion.
 #
@@ -1768,7 +1768,7 @@ m4_divert_push([TEST_SCRIPT])dnl
 
 
 # AT_FAIL_IF(SHELL-EXPRESSION)
-# -----------------------------
+# ----------------------------
 # Make the test die with hard failure if SHELL-EXPRESSION evaluates to
 # true (exitcode = 0).
 _AT_DEFINE_SETUP([AT_FAIL_IF],
@@ -1783,7 +1783,7 @@ m4_case([$1],
 
 
 # AT_SKIP_IF(SHELL-EXPRESSION)
-# -----------------------------
+# ----------------------------
 # Skip the rest of the group if SHELL-EXPRESSION evaluates to true
 # (exitcode = 0).
 _AT_DEFINE_SETUP([AT_SKIP_IF],

@@ -1770,7 +1770,7 @@ AU_ALIAS([AC_UTIME_NULL], [AC_FUNC_UTIME_NULL])
 
 
 # AC_FUNC_FORK
-# -------------
+# ------------
 AN_FUNCTION([fork],  [AC_FUNC_FORK])
 AN_FUNCTION([vfork], [AC_FUNC_FORK])
 AC_DEFUN([AC_FUNC_FORK],
@@ -1831,7 +1831,7 @@ AC_DEFUN([_AC_FUNC_FORK],
 
 
 # _AC_FUNC_VFORK
-# -------------
+# --------------
 AC_DEFUN([_AC_FUNC_VFORK],
 [AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[/* Thanks to Paul Eggert for this test.  */
@@ -1930,7 +1930,7 @@ main ()
 
 
 # AU::AC_FUNC_VFORK
-# ------------
+# -----------------
 AU_ALIAS([AC_FUNC_VFORK], [AC_FUNC_FORK])
 
 # AU::AC_VFORK

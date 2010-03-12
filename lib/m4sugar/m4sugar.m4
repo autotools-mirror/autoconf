@@ -736,7 +736,7 @@ m4_define([_m4_shiftn],
 
 # m4_shift2(...)
 # m4_shift3(...)
-# -----------------
+# --------------
 # Returns ... shifted twice, and three times.  Faster than m4_shiftn.
 m4_define([m4_shift2], [m4_shift(m4_shift($@))])
 m4_define([m4_shift3], [m4_shift(m4_shift(m4_shift($@)))])
@@ -1396,7 +1396,7 @@ m4_define([_m4_divert()],                0)
 
 
 # m4_divert_stack
-# ------------------
+# ---------------
 # Print the diversion stack, if it's nonempty.  The caller is
 # responsible for any leading or trailing newline.
 m4_define([m4_divert_stack],
@@ -1922,7 +1922,7 @@ m4_define([_m4_divert_dump])
 
 
 # m4_divert_require(DIVERSION, NAME-TO-CHECK, [BODY-TO-EXPAND])
-# --------------------------------------------------------------
+# -------------------------------------------------------------
 # Same as m4_require, but BODY-TO-EXPAND goes into the named DIVERSION;
 # requirements still go in the current diversion though.
 #
@@ -2171,7 +2171,7 @@ m4_defn([m4_cr_digits])dnl
 
 # m4_cr_symbols1
 # m4_cr_symbols2
-# -------------------------------
+# --------------
 m4_define([m4_cr_symbols1],
 m4_defn([m4_cr_Letters])dnl
 _)

@@ -241,7 +241,7 @@ AC_DEFUN([AC_LANG_PREPROC(Fortran 77)],
 	 [$0: No preprocessor defined for ]_AC_LANG)])
 
 # AC_LANG_PREPROC(Fortran)
-# ---------------------------
+# ------------------------
 # Find the Fortran preprocessor.  Must be AC_DEFUN'd to be AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_PREPROC(Fortran)],
 [m4_warn([syntax],
@@ -256,7 +256,7 @@ AC_DEFUN([AC_LANG_COMPILER(Fortran 77)],
 [AC_REQUIRE([AC_PROG_F77])])
 
 # AC_LANG_COMPILER(Fortran)
-# ----------------------------
+# -------------------------
 # Find the Fortran compiler.  Must be AC_DEFUN'd to be
 # AC_REQUIRE'able.
 AC_DEFUN([AC_LANG_COMPILER(Fortran)],
@@ -466,7 +466,7 @@ AC_LANG_POP(Fortran 77)dnl
 
 
 # AC_PROG_FC_C_O
-# ---------------
+# --------------
 AC_DEFUN([AC_PROG_FC_C_O],
 [AC_REQUIRE([AC_PROG_FC])dnl
 AC_LANG_PUSH(Fortran)dnl
@@ -482,7 +482,7 @@ AC_LANG_POP(Fortran)dnl
 
 
 # _AC_PROG_FC_V_OUTPUT([FLAG = $ac_cv_prog_{f77/fc}_v])
-# -------------------------------------------------
+# -----------------------------------------------------
 # Link a trivial Fortran program, compiling with a verbose output FLAG
 # (whose default value, $ac_cv_prog_{f77/fc}_v, is computed by
 # _AC_PROG_FC_V), and return the output in $ac_{f77/fc}_v_output.  This
@@ -549,7 +549,7 @@ esac
 
 
 # _AC_PROG_FC_V
-# --------------
+# -------------
 #
 # Determine the flag that causes the Fortran compiler to print
 # information of library and object files (normally -v)
@@ -705,7 +705,7 @@ AC_LANG_POP(Fortran 77)dnl
 
 
 # AC_FC_LIBRARY_LDFLAGS
-# ----------------------
+# ---------------------
 AC_DEFUN([AC_FC_LIBRARY_LDFLAGS],
 [AC_REQUIRE([AC_PROG_FC])dnl
 AC_LANG_PUSH(Fortran)dnl
@@ -801,7 +801,7 @@ fi])],
 
 
 # AC_F77_DUMMY_MAIN
-# ----------------------
+# -----------------
 AC_DEFUN([AC_F77_DUMMY_MAIN],
 [AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 AC_LANG_PUSH(Fortran 77)dnl
@@ -811,7 +811,7 @@ AC_LANG_POP(Fortran 77)dnl
 
 
 # AC_FC_DUMMY_MAIN
-# ----------------------
+# ----------------
 AC_DEFUN([AC_FC_DUMMY_MAIN],
 [AC_REQUIRE([AC_FC_LIBRARY_LDFLAGS])dnl
 AC_LANG_PUSH(Fortran)dnl
@@ -972,7 +972,7 @@ AU_DEFUN([AC_F77_NAME_MANGLING], [])
 
 
 # _AC_F77_NAME_MANGLING
-# ----------------------
+# ---------------------
 AC_DEFUN([_AC_F77_NAME_MANGLING],
 [AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])dnl
 AC_REQUIRE([AC_F77_DUMMY_MAIN])dnl
@@ -983,7 +983,7 @@ AC_LANG_POP(Fortran 77)dnl
 
 
 # _AC_FC_NAME_MANGLING
-# ----------------------
+# --------------------
 AC_DEFUN([_AC_FC_NAME_MANGLING],
 [AC_REQUIRE([AC_FC_LIBRARY_LDFLAGS])dnl
 AC_REQUIRE([AC_FC_DUMMY_MAIN])dnl

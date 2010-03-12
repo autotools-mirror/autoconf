@@ -518,7 +518,7 @@ AT_CLEANUP
 
 
 # autoconf: AC_AUTOCONF_VERSION
-# --------------------------------------
+# -----------------------------
 AT_SETUP([autoconf: AC_AUTOCONF_VERSION])
 
 AT_DATA([configure.ac],
@@ -1272,7 +1272,7 @@ AT_CLEANUP
 
 
 # autotools and file names containing whitespace
-# ---------------------------------------------
+# ----------------------------------------------
 
 AT_SETUP([autotools and whitespace in file names])
 

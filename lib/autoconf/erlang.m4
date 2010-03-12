@@ -108,7 +108,7 @@ ac_link='$ERLC $ERLCFLAGS -b beam conftest.$ac_ext >&AS_MESSAGE_LOG_FD && echo "
 
 
 # AC_LANG_ERLANG
-# -----------------
+# --------------
 AU_DEFUN([AC_LANG_ERLANG], [AC_LANG(Erlang)])
 
 

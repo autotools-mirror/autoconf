@@ -445,7 +445,7 @@ fi
 # AC_PATH_PROGS_FEATURE_CHECK(VARIABLE, PROGNAME-LIST,
 #                             FEATURE-TEST, [ACTION-IF-NOT-FOUND=:],
 #                             [PATH=$PATH])
-# ----------------------------------------------------------------
+# ------------------------------------------------------------------
 # Designed to be used inside AC_CACHE_VAL.  It is recommended,
 # but not required, that the user also use AC_ARG_VAR([VARIABLE]).
 # If VARIABLE is not empty, set the cache variable

@@ -855,7 +855,7 @@ m4_defun([AS_LINENO_PUSH],
 
 
 # AS_LINENO_POP([LINENO])
-# ------------------------
+# -----------------------
 # If this is call balances the outermost call to AS_LINENO_PUSH,
 # AS_MESSAGE will restart printing $LINENO as the line number.
 m4_defun([AS_LINENO_POP],
@@ -964,7 +964,7 @@ _AS_DIRNAME_SED([$1])])
 
 
 # _AS_DIRNAME_PREPARE
-# --------------------
+# -------------------
 m4_defun([_AS_DIRNAME_PREPARE],
 [AS_REQUIRE([_AS_EXPR_PREPARE])]dnl
 [if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
@@ -986,7 +986,7 @@ m4_defun_init([AS_ECHO],
 
 
 # AS_ECHO_N(WORD)
-# -------------
+# ---------------
 # Like AS_ECHO(WORD), except do not output the trailing newline.
 m4_defun_init([AS_ECHO_N],
 [AS_REQUIRE([_AS_ECHO_PREPARE])],
@@ -994,7 +994,7 @@ m4_defun_init([AS_ECHO_N],
 
 
 # _AS_ECHO_PREPARE
-# -----------------
+# ----------------
 # Arrange for $as_echo 'FOO' to echo FOO without escape-interpretation;
 # and similarly for $as_echo_n, which omits the trailing newline.
 # 'FOO' is an optional single argument; a missing FOO is treated as empty.
@@ -1080,7 +1080,7 @@ m4_defun([_AS_ME_PREPARE],
 ])
 
 # _AS_LINENO_WORKS
-# ---------------
+# ----------------
 # Succeed if the currently executing shell supports LINENO.
 # This macro does not expand to a single shell command, so be careful
 # when using it.  Surrounding the body of this macro with {} would
@@ -1669,7 +1669,7 @@ m4_defun([_AS_VERSION_COMPARE_PREPARE],
 
 # AS_VERSION_COMPARE(VERSION-1, VERSION-2,
 #                    [ACTION-IF-LESS], [ACTION-IF-EQUAL], [ACTION-IF-GREATER])
-# -----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 # Compare two strings possibly containing shell variables as version strings.
 #
 # This usage is portable even to ancient awk,

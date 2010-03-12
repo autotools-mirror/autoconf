@@ -25,7 +25,7 @@ m4_define([_AT_COPYRIGHT_YEARS],
 
 
 ## ------------------------ ##
-## Erlang EUnit unit tests.  ##
+## Erlang EUnit unit tests. ##
 ## ------------------------ ##
 
 # AT_CHECK_EUNIT(MODULE, SPEC, [ERLFLAGS], [RUN-IF-FAIL], [RUN-IF-PASS])

@@ -552,7 +552,7 @@ AT_CLEANUP
 
 
 ## --------------------------- ##
-## Nested AS_REQUIRE_SHELL_FN ##
+## Nested AS_REQUIRE_SHELL_FN. ##
 ## --------------------------- ##
 
 # Hypothesis: M4sh expands nested AS_REQUIRE_SHELL_FN
