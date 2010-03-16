@@ -1077,20 +1077,31 @@ AT_CLEANUP
 ## --------------- ##
 
 AT_SETUP([AS@&t@_LITERAL_IF])
-AT_KEYWORDS([m4sh])
+AT_KEYWORDS([m4sh AS@&t@_LITERAL_WORD_IF])
 
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
 echo AS_LITERAL_IF([lit], [ok], [ERR]) 1
-echo AS_LITERAL_IF([l$it], [ERR], [ok]) 2
-echo AS_LITERAL_IF([l`case a in b) ;; esac`it], [ERR], [ok]) 3
-m4_define([mac], [lit])
-echo AS_LITERAL_IF([mac], [ok], [ERR]) 4
-echo AS_LITERAL_IF([mac($, ``)], [ok], [ERR]) 5
+echo AS_LITERAL_IF([l-/.it], [ok], [ERR]) 2
+echo AS_LITERAL_IF([l''it], [ERR], [ok]) 3
+echo AS_LITERAL_IF([l$it], [ERR], [ok]) 4
+echo AS_LITERAL_IF([l$it], [ERR1], [ok], [fixme]) 5
+echo AS_LITERAL_IF([l${it}], [ERR1], [ok], [fixme]) 6
+echo AS_LITERAL_IF([l`case a in b) ;; esac`it], [ERR], [ok]) 7
+echo AS_LITERAL_IF([l`case a in b) ;; esac`it], [ERR1], [ok], [ERR2]) 8
+m4_define([mac], [l-/.it])
+echo AS_LITERAL_IF([mac], [ok], [ERR]) 9
+echo AS_LITERAL_IF([mac($, ``)], [ok], [ERR]) 10
 m4_define([mac], [l$it])
-echo AS_LITERAL_IF([mac], [ERR], [ok]) 6
+echo AS_LITERAL_IF([mac], [ERR], [ok]) 11
+echo AS_LITERAL_IF([mac], [ERR1], [ok], [fixme]) 12
 m4_define([mac], [l``it])
-echo AS_LITERAL_IF([mac], [ERR], [ok]) 7
+echo AS_LITERAL_IF([mac], [ERR], [ok]) 13
+echo AS_LITERAL_IF([mac], [ERR1], [ok], [ERR2]) 14
+echo AS_LITERAL_IF([	a ][
+b], [ok], [ok]) 15
+echo AS_LITERAL_WORD_IF([	a ][
+b], [ERR], [ok]) 16
 ]])
 
 AT_CHECK_M4SH
@@ -1102,6 +1113,15 @@ ok 4
 ok 5
 ok 6
 ok 7
+ok 8
+ok 9
+ok 10
+ok 11
+ok 12
+ok 13
+ok 14
+ok 15
+ok 16
 ]])
 
 AT_CLEANUP

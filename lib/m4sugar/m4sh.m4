@@ -1519,15 +1519,24 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 
 # AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
 # -----------------------------------------------------
-# If EXPRESSION has shell indirections ($var or `expr`), expand
+# If EXPRESSION has no shell indirections ($var or `expr`), expand
 # IF-LITERAL, else IF-NOT-LITERAL.
-# This is an *approximation*: for instance EXPRESSION = `\$' is
-# definitely a literal, but will not be recognized as such.
+#
+# EXPRESSION is treated as a literal if it results in the same
+# interpretation whether it is unquoted or contained within double
+# quotes, with the exception that whitespace is ignored (on the
+# assumption that it will be flattened to _).  Therefore, neither `\$'
+# nor `a''b' is a literal, since both backslash and single quotes have
+# different quoting behavior in the two contexts; and `a*' is not a
+# literal, because it has different globbing.
+# This macro is an *approximation*: it is possible that
+# there are some EXPRESSIONs which the shell would treat as literals,
+# but which this macro does not recognize.
 #
 # Why do we reject EXPRESSION expanding with `[' or `]' as a literal?
 # Because AS_TR_SH is MUCH faster if it can use m4_translit on literals
 # instead of m4_bpatsubst; but m4_translit is much tougher to do safely
-# if `[' is translated.
+# if `[' is translated.  That, and file globbing matters.
 #
 # Note that the quadrigraph @S|@ can result in non-literals, but outright
 # rejecting all @ would make AC_INIT complain on its bug report address.
@@ -1535,10 +1544,14 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 # We used to use m4_bmatch(m4_quote($1), [[`$]], [$3], [$2]), but
 # profiling shows that it is faster to use m4_translit.
 #
-# Because the translit is stripping quotes, it must also neutralize anything
-# that might be in a macro name, as well as comments, commas, or unbalanced
-# parentheses.  All the problem characters are unified so that a single
-# m4_index can scan the result.
+# Because the translit is stripping quotes, it must also neutralize
+# anything that might be in a macro name, as well as comments, commas,
+# or unbalanced parentheses.  Valid shell variable characters and
+# unambiguous literal characters are deleted (`a.b'), and remaining
+# characters are normalized into `$' if they are special to the
+# shell or to m4 parsing, and left alone otherwise.
+# _AS_LITERAL_IF_ only has to check for an empty string after removing
+# the normalized characters.
 #
 # Rather than expand m4_defn every time AS_LITERAL_IF is expanded, we
 # inline its expansion up front.
@@ -1547,9 +1560,18 @@ m4_define([AS_LITERAL_IF],
 
 m4_define([_AS_LITERAL_IF],
 [m4_if(m4_cond([m4_eval(m4_index([$1], [@S|@]) == -1)], [0], [],
-  [m4_index(m4_translit([$1], [[]`,#()]]]dnl
-m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[, [$$$]), [$])],
+  [m4_index(m4_translit([$1], [[]`'\"$4,#()]]]dnl
+m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[, [$$$$$$$5]), [$])],
   [-1], [-]), [-], [$2], [$3])])
+
+# AS_LITERAL_WORD_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
+# ----------------------------------------------------------
+# Like AS_LITERAL_IF, except that spaces and tabs in EXPRESSION
+# are treated as non-literal.
+m4_define([AS_LITERAL_WORD_IF],
+[_AS_LITERAL_IF(m4_expand([$1]), [$2], [$3], [	 ][
+], [$$$])])
+
 
 
 # AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])

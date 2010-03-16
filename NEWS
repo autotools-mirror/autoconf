@@ -38,6 +38,11 @@ GNU Autoconf NEWS - User visible changes.
    AT_ARG_OPTION has been changed in that the negative of a long option
    --OPTION is now --no-OPTION rather than --noOPTION.
 
+** The macro AS_LITERAL_IF is slightly more conservative; text
+   containing shell quotes are no longer treated as literals.
+   Furthermore, a new macro, AS_LITERAL_WORD_IF, adds an additional
+   level of checking that no whitespace occurs in literals.
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 

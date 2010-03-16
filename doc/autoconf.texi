@@ -13299,23 +13299,47 @@ undefined if expansion of an indirect variable does not result in a
 literal variable name.
 
 @defmac AS_LITERAL_IF (@var{expression}, @ovar{if-literal}, @ovar{if-not})
+@defmacx AS_LITERAL_WORD_IF (@var{expression}, @ovar{if-literal})
 @asindex{LITERAL_IF}
+@asindex{LITERAL_WORD_IF}
 If the expansion of @var{expression} is definitely a shell literal,
 expand @var{if-literal}.  If the expansion of @var{expression} looks
 like it might contain shell indirections (such as @code{$var} or
-@code{`expr`}), then @var{if-not} is expanded.  In order to reduce the
-time spent deciding whether an expression is literal, the implementation
-is somewhat conservative (for example, @samp{'[$]'} is a single-quoted
-shell literal, but causes @var{if-not} to be expanded).  While this
-macro is often used for recognizing shell variable names, it can also be
-used in other contexts.
+@code{`expr`}), then @var{if-not} is expanded.
+@code{AS_LITERAL_WORD_IF} only expands
+@var{if-literal} if @var{expression} looks like a single shell word,
+containing no whitespace; while @code{AS_LITERAL_IF} allows whitespace
+in @var{expression}.
+
+In order to reduce the time spent recognizing whether an
+@var{expression} qualifies as a literal or a simple indirection, the
+implementation is somewhat conservative: @var{expression} must be a
+single shell word (possibly after stripping whitespace), consisting only
+of bytes that would have the same meaning whether unquoted or enclosed
+in double quotes (for example, @samp{a.b} results in @var{if-literal},
+even though it is not a valid shell variable name; while both @samp{'a'}
+and @samp{[$]} result in @var{if-not}, because they behave differently
+than @samp{"'a'"} and @samp{"[$]"}).  This macro can be used in contexts
+for recognizing portable file names (such as in the implementation of
+@code{AC_LIBSOURCE}), or coupled with some transliterations for forming
+valid variable names (such as in the implementation of @code{AS_TR_SH},
+which uses an additional @code{m4_translit} to convert @samp{.} to
+@samp{_}).
+
+This example shows how to read the contents of the shell variable
+@code{bar}, exercising both arguments to @code{AS_LITERAL_IF}.  It
+results in a script that will output the line @samp{hello} three times.
 
 @example
 AC_DEFUN([MY_ACTION],
 [AS_LITERAL_IF([$1],
-[echo "$1"],
-[AS_VAR_COPY([tmp], [$1])
-echo "$tmp"])])
+  [echo "$$1"],
+  [AS_VAR_COPY([tmp], [$1])
+   echo "$tmp"])])
+foo=bar bar=hello
+MY_ACTION([bar])
+MY_ACTION([`echo bar`])
+MY_ACTION([$foo])
 @end example
 @end defmac
 

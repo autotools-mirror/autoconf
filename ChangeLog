@@ -1,5 +1,14 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Add AS_LITERAL_WORD_IF.
+	* lib/m4sugar/m4sh.m4 (_AS_LITERAL_IF): Also reject shell quoting
+	characters as non-literal, and provide way to reject space.
+	(AS_LITERAL_WORD_IF): New macro.
+	* doc/autoconf.texi (Polymorphic Variables) <AS_LITERAL_IF>:
+	Document new macro.  Fix example to match reality.
+	* NEWS: Document change and new macro.
+	* tests/m4sh.at (AS@&t@_LITERAL_IF): Update test.
+
 	Optimize AC_DEFINE.
 	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Avoid overhead of
 	AS_LITERAL_IF.
