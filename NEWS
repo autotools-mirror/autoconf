@@ -24,6 +24,10 @@ GNU Autoconf NEWS - User visible changes.
 ** Autotest testsuites accept an option --recheck to rerun tests that
    failed or passed unexpectedly during the last non-debug testsuite run.
 
+** AC_ARG_ENABLE and AC_ARG_WITH now also accept `+' signs in `--enable-*'
+   and `--with-*' arguments, converting them to underscores for the variable
+   names.
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 

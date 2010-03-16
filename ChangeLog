@@ -1,3 +1,14 @@
+2010-03-13  Bruno Haible  <bruno@clisp.org>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Allow plus signs in AC_ARG_ENABLE and AC_ARG_WITH.
+	* doc/autoconf.texi (External Software): Mention that AC_ARG_WITH
+	accepts packages with a + sign in it.
+	(Package Options): Likewise for AC_ARG_ENABLE.
+	* lib/autoconf/general.m4 (_AC_ENABLE_IF): Also replace '+' with '_'.
+	* tests/base.at (AC_ARG_ENABLE and AC_ARG_WITH): New test.
+	* NEWS: Update.
+
 2010-06-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Autotest: simplify logic to compute test group result.

@@ -532,6 +532,58 @@ AT_CHECK_CONFIGURE([1=2], [1], [], [ignore], [ignore])
 AT_CLEANUP
 
 
+## ------------------------------ ##
+## AC_ARG_ENABLE and AC_ARG_WITH. ##
+## ------------------------------ ##
+
+AT_SETUP([AC_ARG_ENABLE and AC_ARG_WITH])
+
+AT_DATA_M4SH([configure.ac],
+[[AC_INIT
+# Taken from autoconf.texi:Pretty Help Strings.
+AC_ARG_WITH([foo],
+  [AS_HELP_STRING([--with-foo],
+     [use foo (default is no)])],
+  [use_foo=$withval],
+  [use_foo=no])
+AC_ARG_WITH([c++],
+  [AS_HELP_STRING([--with-c++],
+     [with c++])],
+  [choice_with=$withval])
+AC_ARG_ENABLE([c++],
+  [AS_HELP_STRING([--enable-c++],
+     [enable c++])],
+  [choice_enable=$enableval])
+echo "use_foo: $use_foo"
+echo "with_c++: $with_c__, $choice_with"
+echo "enable_c++: $enable_c__, $choice_enable"
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([--help | grep foo], [0],
+[[  --with-foo              use foo (default is no)
+]], [ignore])
+AT_CHECK_CONFIGURE([--with-foo=yes --with-c++ --disable-c++],
+  [], [stdout], [ignore])
+AT_CHECK([grep 'use_foo: yes' stdout], [], [ignore])
+AT_CHECK([grep 'with_c++: yes, yes' stdout], [], [ignore])
+AT_CHECK([grep 'enable_c++: no, no' stdout], [], [ignore])
+AT_CHECK([grep 'unrecognized option' stdout], [1])
+AT_CHECK_CONFIGURE([--without-foo --with-c++=no --enable-c++=maybe],
+  [], [stdout], [ignore])
+AT_CHECK([grep 'use_foo: no' stdout], [], [ignore])
+AT_CHECK([grep 'with_c++: no, no' stdout], [], [ignore])
+AT_CHECK([grep 'enable_c++: maybe, maybe' stdout], [], [ignore])
+AT_CHECK([grep 'unrecognized option' stdout], [1])
+AT_CHECK_CONFIGURE([], [], [stdout], [ignore])
+AT_CHECK([grep 'use_foo: no' stdout], [], [ignore])
+AT_CHECK([grep 'with_c++: , $' stdout], [], [ignore])
+AT_CHECK([grep 'enable_c++: , $' stdout], [], [ignore])
+AT_CHECK([grep 'unrecognized option' stdout], [1])
+
+AT_CLEANUP
+
+
 ## --------------------- ##
 ## configure directories ##
 ## --------------------- ##
