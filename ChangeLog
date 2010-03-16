@@ -1,5 +1,14 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Use AS_LITERAL_WORD_IF as appropriate.
+	* lib/autoconf/autoheader.m4 (AH_VERBATIM): Use new macro.
+	* lib/autoconf/general.m4 (AC_REQUIRE_AUX_FILE, AC_CACHE_VAL)
+	(AS_CACHE_CHECK, AC_DEFINE_TRACE, _AC_LIBOBJ): Likewise.
+	* lib/autoconf/libs.m4 (AC_CHECK_LIB): Likewise.
+	* lib/autoconf/status.m4 (AC_CONFIG_SUBDIRS): Likewise.
+	* lib/m4sugar/m4sh.m4 (AS_UNSET, AS_VAR_COPY, AS_VAR_GET)
+	(AS_VAR_IF, AS_VAR_SET, AS_VAR_TEST_SET): Likewise.
+
 	Add AS_LITERAL_WORD_IF.
 	* lib/m4sugar/m4sh.m4 (_AS_LITERAL_IF): Also reject shell quoting
 	characters as non-literal, and provide way to reject space.

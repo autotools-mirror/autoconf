@@ -628,7 +628,7 @@ as_unset=as_fn_unset])
 # a variable that is not already set.  You should not unset MAIL and
 # MAILCHECK, as that triggers a bug in Bash 2.01.
 m4_defun([AS_UNSET],
-[{ AS_LITERAL_IF([$1], [], [eval ])$1=; unset $1;}])
+[{ AS_LITERAL_WORD_IF([$1], [], [eval ])$1=; unset $1;}])
 
 
 
@@ -1919,7 +1919,7 @@ m4_defun_init([AS_VAR_ARITH],
 # Set the polymorphic shell variable DEST to the contents of the polymorphic
 # shell variable SOURCE.
 m4_define([AS_VAR_COPY],
-[AS_LITERAL_IF([$1[]$2], [$1=$$2], [eval $1=\$$2])])
+[AS_LITERAL_WORD_IF([$1[]$2], [$1=$$2], [eval $1=\$$2])])
 
 
 # AS_VAR_GET(VARIABLE)
@@ -1930,7 +1930,7 @@ m4_define([AS_VAR_COPY],
 # This macro is deprecated because it sometimes mishandles trailing newlines;
 # use AS_VAR_COPY instead.
 m4_define([AS_VAR_GET],
-[AS_LITERAL_IF([$1],
+[AS_LITERAL_WORD_IF([$1],
 	       [$$1],
   [`eval 'as_val=${'_AS_ESCAPE([[$1]], [`], [\])'};AS_ECHO(["$as_val"])'`])])
 
@@ -1940,7 +1940,7 @@ m4_define([AS_VAR_GET],
 # Implement a shell `if test $VARIABLE = VALUE; then-else'.
 # Polymorphic, and avoids sh expansion error upon interrupt or term signal.
 m4_define([AS_VAR_IF],
-[AS_LITERAL_IF([$1],
+[AS_LITERAL_WORD_IF([$1],
   [AS_IF([test "x$$1" = x""$2]],
   [AS_VAR_COPY([as_val], [$1])
    AS_IF([test "x$as_val" = x""$2]]), [$3], [$4])])
@@ -2006,7 +2006,7 @@ m4_pushdef([$1], [$as_[$1]])])])
 # expansion of VALUE.  VALUE is immune to field splitting and file
 # name expansion.
 m4_define([AS_VAR_SET],
-[AS_LITERAL_IF([$1],
+[AS_LITERAL_WORD_IF([$1],
 	       [$1=$2],
 	       [eval "$1=AS_ESCAPE([$2])"])])
 
@@ -2024,7 +2024,7 @@ m4_define([AS_VAR_SET_IF],
 # Expands into the `test' expression which is true if VARIABLE
 # is set.  Polymorphic.
 m4_define([AS_VAR_TEST_SET],
-[AS_LITERAL_IF([$1],
+[AS_LITERAL_WORD_IF([$1],
 	       [test "${$1+set}" = set],
 	       [{ as_var=$1; eval "test \"\${$as_var+set}\" = set"; }])])
 

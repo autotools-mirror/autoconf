@@ -1102,7 +1102,7 @@ AC_DEFUN([AC_CONFIG_SUBDIRS],
   _AC_CONFIG_COMPUTE_DEST(], [))])]dnl
 [m4_append([_AC_LIST_SUBDIRS], [$1], [
 ])]dnl
-[AS_LITERAL_IF([$1], [],
+[AS_LITERAL_WORD_IF([$1], [],
 	       [AC_DIAGNOSE([syntax], [$0: you should use literals])])]dnl
 [AC_SUBST([subdirs], ["$subdirs m4_normalize([$1])"])])
 

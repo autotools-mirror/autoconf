@@ -99,7 +99,7 @@ AS_VAR_POPDEF([ac_Search])dnl
 # freedom.
 AC_DEFUN([AC_CHECK_LIB],
 [m4_ifval([$3], , [AH_CHECK_LIB([$1])])dnl
-AS_LITERAL_IF([$1],
+AS_LITERAL_WORD_IF([$1],
 	      [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1_$2])],
 	      [AS_VAR_PUSHDEF([ac_Lib], [ac_cv_lib_$1''_$2])])dnl
 AC_CACHE_CHECK([for $2 in -l$1], [ac_Lib],

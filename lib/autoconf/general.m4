@@ -1733,7 +1733,7 @@ AC_DEFUN([AC_CONFIG_MACRO_DIR], [])
 # This macro does nothing, it's a hook to be read with `autoconf --trace'.
 # It announces FILE is required in the auxdir.
 m4_define([AC_REQUIRE_AUX_FILE],
-[AS_LITERAL_IF([$1], [],
+[AS_LITERAL_WORD_IF([$1], [],
 	       [m4_fatal([$0: requires a literal argument])])])
 
 
@@ -2008,7 +2008,7 @@ rm -f confcache[]dnl
 # The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
 m4_defun([AC_CACHE_VAL],
-[AS_LITERAL_IF([$1], [m4_if(m4_index(m4_quote($1), [_cv_]), [-1],
+[AS_LITERAL_WORD_IF([$1], [m4_if(m4_index(m4_quote($1), [_cv_]), [-1],
 			    [AC_DIAGNOSE([syntax],
 [$0($1, ...): suspicious cache-id, must contain _cv_ to be cached])])])dnl
 m4_if(m4_index([$2], [AC_DEFINE]), [-1], [],
@@ -2031,7 +2031,7 @@ AS_VAR_SET_IF([$1],
 m4_defun([AC_CACHE_CHECK],
 [AC_MSG_CHECKING([$1])
 AC_CACHE_VAL([$2], [$3])dnl
-AS_LITERAL_IF([$2],
+AS_LITERAL_WORD_IF([$2],
 	      [AC_MSG_RESULT([$$2])],
 	      [AS_VAR_COPY([ac_res], [$2])
 	       AC_MSG_RESULT([$ac_res])])dnl
@@ -2067,7 +2067,7 @@ AS_IDENTIFIER_IF([$1], [],
 # This macro is a wrapper around AC_DEFINE_TRACE_LITERAL which filters
 # out non literal symbols.  CPP-SYMBOL must not include any parameters.
 m4_define([AC_DEFINE_TRACE],
-[AS_LITERAL_IF([$1], [AC_DEFINE_TRACE_LITERAL(_m4_expand([$1]))])])
+[AS_LITERAL_WORD_IF([$1], [AC_DEFINE_TRACE_LITERAL(_m4_expand([$1]))])])
 
 
 # AC_DEFINE(VARIABLE, [VALUE], [DESCRIPTION])
@@ -2904,7 +2904,7 @@ AC_DEFUN([AC_LIBSOURCES],
 # --------------------------------------------
 # We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
 m4_define([_AC_LIBOBJ],
-[AS_LITERAL_IF([$1],
+[AS_LITERAL_WORD_IF([$1],
 	       [AC_LIBSOURCE([$1.c])],
 	       [$2])dnl
 case " $LIB@&t@OBJS " in

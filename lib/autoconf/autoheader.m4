@@ -45,7 +45,7 @@ m4_define([AH_OUTPUT], [])
 #
 # Quote for Perl '' strings, which are those used by Autoheader.
 m4_define([AH_VERBATIM],
-[AS_LITERAL_IF([$1],
+[AS_LITERAL_WORD_IF([$1],
 	       [AH_OUTPUT(_m4_expand([$1]), AS_ESCAPE([[$2]], [\']))])])
 
 
