@@ -2123,8 +2123,8 @@ m4_define([_AC_DEFINE_Q],
 [AC_DEFINE_TRACE(AC_name)]dnl
 [m4_cond([m4_index([$3], [
 ])], [-1], [],
-	[AS_LITERAL_IF([$3], [m4_bregexp([[$3]], [[^\\]
-], [-])])], [], [],
+	[m4_bregexp([[$3]], [[^\\]
+], [-])], [], [],
 	[m4_warn([syntax], [AC_DEFINE]m4_if([$1], [_AC_DEFINE], [],
   [[_UNQUOTED]])[: `$3' is not a valid preprocessor define value])])]dnl
 [m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])

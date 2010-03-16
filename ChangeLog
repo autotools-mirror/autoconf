@@ -1,3 +1,9 @@
+2010-07-02  Eric Blake  <eblake@redhat.com>
+
+	Optimize AC_DEFINE.
+	* lib/autoconf/general.m4 (_AC_DEFINE_Q): Avoid overhead of
+	AS_LITERAL_IF.
+
 2010-07-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
 	and Eric Blake  <eblake@redhat.com>
 
