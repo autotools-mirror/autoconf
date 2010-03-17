@@ -13298,15 +13298,20 @@ names and output shell code appropriate for both use cases.  Behavior is
 undefined if expansion of an indirect variable does not result in a
 literal variable name.
 
-@defmac AS_LITERAL_IF (@var{expression}, @ovar{if-literal}, @ovar{if-not})
-@defmacx AS_LITERAL_WORD_IF (@var{expression}, @ovar{if-literal})
+@defmac AS_LITERAL_IF (@var{expression}, @ovar{if-literal}, @ovar{if-not}, @
+  @dvar{if-simple-ref, @var{if-not}})
+@defmacx AS_LITERAL_WORD_IF (@var{expression}, @ovar{if-literal}, @
+  @ovar{if-not}, @dvar{if-simple-ref, @var{if-not}})
 @asindex{LITERAL_IF}
 @asindex{LITERAL_WORD_IF}
 If the expansion of @var{expression} is definitely a shell literal,
 expand @var{if-literal}.  If the expansion of @var{expression} looks
 like it might contain shell indirections (such as @code{$var} or
-@code{`expr`}), then @var{if-not} is expanded.
-@code{AS_LITERAL_WORD_IF} only expands
+@code{`expr`}), then @var{if-not} is expanded.  Sometimes, it is
+possible to output optimized code if @var{expression} consists only of
+shell variable expansions (such as @code{$@{var@}}), in which case
+@var{if-simple-ref} can be provided; but defaulting to @var{if-not}
+should always be safe.  @code{AS_LITERAL_WORD_IF} only expands
 @var{if-literal} if @var{expression} looks like a single shell word,
 containing no whitespace; while @code{AS_LITERAL_IF} allows whitespace
 in @var{expression}.
@@ -13327,7 +13332,7 @@ which uses an additional @code{m4_translit} to convert @samp{.} to
 @samp{_}).
 
 This example shows how to read the contents of the shell variable
-@code{bar}, exercising both arguments to @code{AS_LITERAL_IF}.  It
+@code{bar}, exercising all three arguments to @code{AS_LITERAL_IF}.  It
 results in a script that will output the line @samp{hello} three times.
 
 @example
@@ -13335,7 +13340,8 @@ AC_DEFUN([MY_ACTION],
 [AS_LITERAL_IF([$1],
   [echo "$$1"],
   [AS_VAR_COPY([tmp], [$1])
-   echo "$tmp"])])
+   echo "$tmp"],
+  [eval 'echo "$'"$1"\"])])
 foo=bar bar=hello
 MY_ACTION([bar])
 MY_ACTION([`echo bar`])

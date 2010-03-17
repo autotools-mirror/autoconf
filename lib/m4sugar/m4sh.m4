@@ -1517,10 +1517,14 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[)) > 0)], [1], [],
 m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 
 
-# AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
+# AS_LITERAL_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL,
+#               [IF-SIMPLE-REF = IF-NOT-LITERAL])
 # -----------------------------------------------------
 # If EXPRESSION has no shell indirections ($var or `expr`), expand
-# IF-LITERAL, else IF-NOT-LITERAL.
+# IF-LITERAL, else IF-NOT-LITERAL.  In some cases, IF-NOT-LITERAL
+# must be complex to safely deal with ``, while a simpler
+# expression IF-SIMPLE-REF can be used if the indirection
+# involves only shell variable expansion (as in ${varname}).
 #
 # EXPRESSION is treated as a literal if it results in the same
 # interpretation whether it is unquoted or contained within double
@@ -1528,8 +1532,9 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 # assumption that it will be flattened to _).  Therefore, neither `\$'
 # nor `a''b' is a literal, since both backslash and single quotes have
 # different quoting behavior in the two contexts; and `a*' is not a
-# literal, because it has different globbing.
-# This macro is an *approximation*: it is possible that
+# literal, because it has different globbing.  Note, however, that
+# while `${a+b}' is neither a literal nor a simple ref, `a+b' is a
+# literal.  This macro is an *approximation*: it is possible that
 # there are some EXPRESSIONs which the shell would treat as literals,
 # but which this macro does not recognize.
 #
@@ -1548,30 +1553,44 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 # anything that might be in a macro name, as well as comments, commas,
 # or unbalanced parentheses.  Valid shell variable characters and
 # unambiguous literal characters are deleted (`a.b'), and remaining
-# characters are normalized into `$' if they are special to the
-# shell or to m4 parsing, and left alone otherwise.
+# characters are normalized into `$' if they can form simple refs
+# (${a}), `+' if they can potentially form literals (a+b), ``' if they
+# can interfere with m4 parsing, or left alone otherwise.  If both `$'
+# and `+' are left, it is treated as a complex reference (${a+b}),
+# even though it could technically be a simple reference (${a}+b).
 # _AS_LITERAL_IF_ only has to check for an empty string after removing
-# the normalized characters.
+# one of the two normalized characters.
 #
 # Rather than expand m4_defn every time AS_LITERAL_IF is expanded, we
-# inline its expansion up front.
+# inline its expansion up front.  _AS_LITERAL_IF expands to the name
+# of a macro that takes three arguments: IF-SIMPLE-REF,
+# IF-NOT-LITERAL, IF-LITERAL.  It also takes an optional argument of
+# any additional characters to allow as literals (useful for AS_TR_SH
+# and AS_TR_CPP to perform inline conversion of whitespace to _).  The
+# order of the arguments allows reuse of m4_default.
 m4_define([AS_LITERAL_IF],
-[_$0(m4_expand([$1]), [$2], [$3])])
+[_$0(m4_expand([$1]), [	 ][
+])([$4], [$3], [$2])])
 
 m4_define([_AS_LITERAL_IF],
-[m4_if(m4_cond([m4_eval(m4_index([$1], [@S|@]) == -1)], [0], [],
-  [m4_index(m4_translit([$1], [[]`'\"$4,#()]]]dnl
-m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[, [$$$$$$$5]), [$])],
-  [-1], [-]), [-], [$2], [$3])])
+[m4_if(m4_index([$1], [@S|@]), [-1], [$0_(m4_translit([$1],
+  [-:%/@{}[]#(),.$2]]]m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[,
+  [+++++$$`````]))], [$0_NO])])
 
-# AS_LITERAL_WORD_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
+m4_define([_AS_LITERAL_IF_],
+[m4_if(m4_translit([$1], [+]), [], [$0YES],
+       m4_translit([$1], [$]), [], [m4_default], [$0NO])])
+
+m4_define([_AS_LITERAL_IF_YES], [$3])
+m4_define([_AS_LITERAL_IF_NO], [$2])
+
+# AS_LITERAL_WORD_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL,
+#                    [IF-SIMPLE-REF = IF-NOT-LITERAL])
 # ----------------------------------------------------------
 # Like AS_LITERAL_IF, except that spaces and tabs in EXPRESSION
 # are treated as non-literal.
 m4_define([AS_LITERAL_WORD_IF],
-[_AS_LITERAL_IF(m4_expand([$1]), [$2], [$3], [	 ][
-], [$$$])])
-
+[_AS_LITERAL_IF(m4_expand([$1]))([$4], [$3], [$2])])
 
 
 # AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])
@@ -1760,7 +1779,8 @@ m4_defun_init([AS_TR_SH],
 [_$0(m4_expand([$1]))])
 
 m4_define([_AS_TR_SH],
-[_AS_LITERAL_IF([$1], [$0_LITERAL], [$0_INDIR])([$1])])
+[_AS_LITERAL_IF([$1], [	 ][
+])([], [$0_INDIR], [$0_LITERAL])([$1])])
 
 m4_define([_AS_TR_SH_LITERAL],
 [m4_translit([[$1]],
@@ -1792,7 +1812,8 @@ m4_defun_init([AS_TR_CPP],
 [_$0(m4_expand([$1]))])
 
 m4_define([_AS_TR_CPP],
-[_AS_LITERAL_IF([$1], [$0_LITERAL], [$0_INDIR])([$1])])
+[_AS_LITERAL_IF([$1], [	 ][
+])([], [$0_INDIR], [$0_LITERAL])([$1])])
 
 m4_define([_AS_TR_CPP_LITERAL],
 [m4_translit([$1],
@@ -1994,10 +2015,10 @@ m4_defun_init([AS_VAR_PUSHDEF],
 [_$0([$1], m4_expand([$2]))])
 
 m4_define([_AS_VAR_PUSHDEF],
-[_AS_LITERAL_IF([$2],
-		[m4_pushdef([$1], [_AS_TR_SH_LITERAL([$2])])],
-		[as_$1=_AS_TR_SH_INDIR([$2])
-m4_pushdef([$1], [$as_[$1]])])])
+[_AS_LITERAL_IF([$2], [	 ][
+])([], [as_$1=_AS_TR_SH_INDIR([$2])
+m4_pushdef([$1], [$as_[$1]])],
+[m4_pushdef([$1], [_AS_TR_SH_LITERAL([$2])])])])
 
 
 # AS_VAR_SET(VARIABLE, VALUE)

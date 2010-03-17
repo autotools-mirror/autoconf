@@ -1,5 +1,19 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Add optional argument to AS_LITERAL_IF.
+	* lib/m4sugar/m4sh.m4 (_AS_LITERAL_IF): Rewrite to generate macro
+	name, without using m4_cond.
+	(_AS_LITERAL_IF_, _AS_LITERAL_IF_YES, _AS_LITERAL_IF_NO): New
+	helpers.
+	(AS_LITERAL_IF, AS_LITERAL_WORD_IF, _AS_TR_SH, _AS_TR_CPP)
+	(_AS_VAR_PUSHDEF): Adjust callers.
+	* lib/autoconf/types.m4 (AC_CHECK_ALIGNOF): Relax restrictions on
+	invalid bytes, since this allows inline struct layouts.
+	(_AC_CHECK_ALIGNOF): New helper macro.
+	* tests/m4sh.at (AS@&t@_LITERAL_IF): Update test.
+	* doc/autoconf.texi (Polymorphic Variables) <AS_LITERAL_IF>:
+	Update documentation.
+
 	Use AS_LITERAL_WORD_IF as appropriate.
 	* lib/autoconf/autoheader.m4 (AH_VERBATIM): Use new macro.
 	* lib/autoconf/general.m4 (AC_REQUIRE_AUX_FILE, AC_CACHE_VAL)

@@ -1085,8 +1085,8 @@ echo AS_LITERAL_IF([lit], [ok], [ERR]) 1
 echo AS_LITERAL_IF([l-/.it], [ok], [ERR]) 2
 echo AS_LITERAL_IF([l''it], [ERR], [ok]) 3
 echo AS_LITERAL_IF([l$it], [ERR], [ok]) 4
-echo AS_LITERAL_IF([l$it], [ERR1], [ok], [fixme]) 5
-echo AS_LITERAL_IF([l${it}], [ERR1], [ok], [fixme]) 6
+echo AS_LITERAL_IF([l$it], [ERR1], [ERR2], [ok]) 5
+echo AS_LITERAL_IF([l${it}], [ERR1], [ERR2], [ok]) 6
 echo AS_LITERAL_IF([l`case a in b) ;; esac`it], [ERR], [ok]) 7
 echo AS_LITERAL_IF([l`case a in b) ;; esac`it], [ERR1], [ok], [ERR2]) 8
 m4_define([mac], [l-/.it])
@@ -1094,7 +1094,7 @@ echo AS_LITERAL_IF([mac], [ok], [ERR]) 9
 echo AS_LITERAL_IF([mac($, ``)], [ok], [ERR]) 10
 m4_define([mac], [l$it])
 echo AS_LITERAL_IF([mac], [ERR], [ok]) 11
-echo AS_LITERAL_IF([mac], [ERR1], [ok], [fixme]) 12
+echo AS_LITERAL_IF([mac], [ERR1], [ERR2], [ok]) 12
 m4_define([mac], [l``it])
 echo AS_LITERAL_IF([mac], [ERR], [ok]) 13
 echo AS_LITERAL_IF([mac], [ERR1], [ok], [ERR2]) 14

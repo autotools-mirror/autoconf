@@ -785,25 +785,32 @@ AC_DEFINE_UNQUOTED(AS_TR_CPP(sizeof_$1), $AS_TR_SH([ac_cv_sizeof_$1]),
 
 # AC_CHECK_ALIGNOF(TYPE, [INCLUDES = DEFAULT-INCLUDES])
 # -----------------------------------------------------
+# TYPE can include braces and semicolon, which AS_TR_CPP and AS_TR_SH
+# (correctly) recognize as potential shell metacharacters.  So we
+# have to flatten problematic characters ourselves to guarantee that
+# AC_DEFINE_UNQUOTED will see a literal.
 AC_DEFUN([AC_CHECK_ALIGNOF],
-[AS_LITERAL_IF([$1], [],
-	       [m4_fatal([$0: requires literal arguments])])]dnl
+[m4_if(m4_index(m4_translit([[$1]], [`\"], [$]), [$]), [-1], [],
+       [m4_fatal([$0: requires literal arguments])])]dnl
+[_$0([$1], [$2], m4_translit([[$1]], [{;}], [___]))])
+
+m4_define([_AC_CHECK_ALIGNOF],
 [# The cast to long int works around a bug in the HP C Compiler,
 # see AC_CHECK_SIZEOF for more information.
-_AC_CACHE_CHECK_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$1])],
+_AC_CACHE_CHECK_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$3])],
   [(long int) offsetof (ac__type_alignof_, y)],
   [AC_INCLUDES_DEFAULT([$2])
 #ifndef offsetof
 # define offsetof(type, member) ((char *) &((type *) 0)->member - (char *) 0)
 #endif
 typedef struct { char x; $1 y; } ac__type_alignof_;],
-  [if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
+  [if test "$AS_TR_SH([ac_cv_type_$3])" = yes; then
      AC_MSG_FAILURE([cannot compute alignment of $1], 77)
    else
-     AS_TR_SH([ac_cv_alignof_$1])=0
+     AS_TR_SH([ac_cv_alignof_$3])=0
    fi])
 
-AC_DEFINE_UNQUOTED(AS_TR_CPP(alignof_$1), $AS_TR_SH([ac_cv_alignof_$1]),
+AC_DEFINE_UNQUOTED(AS_TR_CPP(alignof_$3), $AS_TR_SH([ac_cv_alignof_$3]),
 		   [The normal alignment of `$1', in bytes.])
 ])# AC_CHECK_ALIGNOF
 
@@ -878,7 +885,8 @@ AC_DEFUN([AC_CHECK_MEMBER],
      INCLUDES, setting cache variable VAR accordingly.])],
     [_$0_BODY])]dnl
 [AS_LITERAL_IF([$1], [], [m4_fatal([$0: requires literal arguments])])]dnl
-[m4_if(m4_index([$1], [.]), -1, [m4_fatal([$0: Did not see any dot in `$1'])])]dnl
+[m4_if(m4_index([$1], [.]), [-1],
+  [m4_fatal([$0: Did not see any dot in `$1'])])]dnl
 [AS_VAR_PUSHDEF([ac_Member], [ac_cv_member_$1])]dnl
 [ac_fn_[]_AC_LANG_ABBREV[]_check_member "$LINENO" ]dnl
 [m4_bpatsubst([$1], [^\([^.]*\)\.\(.*\)], ["\1" "\2"]) "ac_Member" ]dnl
