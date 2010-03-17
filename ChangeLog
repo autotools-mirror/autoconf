@@ -1,5 +1,12 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Add tests for AS_BOX.
+	* tests/m4sugar.at (m4@&t@_text_box): New test.
+	* tests/m4sh.at (AS@&t@_BOX): Likewise.
+	* lib/m4sugar/m4sugar.m4 (m4_text_box): Support comma.
+	* doc/autoconf.texi (Text processing Macros) <m4_text_box>:
+	Document further limitations.
+
 	Add optional argument to AS_LITERAL_IF.
 	* lib/m4sugar/m4sh.m4 (_AS_LITERAL_IF): Rewrite to generate macro
 	name, without using m4_cond.

@@ -124,9 +124,51 @@ AT_CHECK([$CONFIG_SHELL ./script])
 AT_CLEANUP
 
 
-## ------------- ##
-## AS_BASENAME.  ##
-## ------------- ##
+## -------- ##
+## AS_BOX.  ##
+## -------- ##
+
+# Output a framed one-line message.
+AT_SETUP([AS@&t@_BOX])
+AT_KEYWORDS([m4sh])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+echo
+AS_BOX([Send a simple message, to foobar@example.com])
+AS_BOX([Send a simple message, to foobar@example.com], [$])
+m4_define([msg], [$complex])
+complex='Not quite as simple |$[1]'
+AS_BOX([msg])
+AS_BOX([msg], [,])
+AS_EXIT(0)
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([sed -n '/ -\{44\} /,/ -\{44\} /p' script ]dnl
+[| sed '1 s/.*## -/## -/; 3 s/- ##.*/- ##/'], [],
+[[## -------------------------------------------- ##
+## Send a simple message, to foobar@example.com ##
+## -------------------------------------------- ##
+]])
+
+AT_CHECK([$CONFIG_SHELL ./script], [], [[
+## -------------------------------------------- ##
+## Send a simple message, to foobar@example.com ##
+## -------------------------------------------- ##
+## $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ ##
+## Send a simple message, to foobar@example.com ##
+## $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ ##
+## ----------------------- ##
+## Not quite as simple |$1 ##
+## ----------------------- ##
+## ,,,,,,,,,,,,,,,,,,,,,,, ##
+## Not quite as simple |$1 ##
+## ,,,,,,,,,,,,,,,,,,,,,,, ##
+]])
+
+AT_CLEANUP
+
 
 # Strip path from file.
 AT_SETUP([AS@&t@_BASENAME])

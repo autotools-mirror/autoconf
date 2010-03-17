@@ -2675,11 +2675,11 @@ m4_define([_m4_text_wrap_word],
 # will post-process.
 m4_define([m4_text_box],
 [m4_pushdef([m4_Border],
-	    m4_translit(m4_format([%*s], m4_decr(m4_qlen(_m4_expand([$1
+	    m4_translit(m4_format([[[%*s]]], m4_decr(m4_qlen(_m4_expand([$1
 ]))), []), [ ], m4_default_quoted([$2], [-])))]dnl
-[[##] m4_Border [##]
+[[##] _m4_defn([m4_Border]) [##]
 [##] $1 [##]
-[##] m4_Border [##]_m4_popdef([m4_Border])])
+[##] _m4_defn([m4_Border]) [##]_m4_popdef([m4_Border])])
 
 
 # m4_qlen(STRING)

@@ -12523,7 +12523,9 @@ quickly test if @var{string} has only whitespace, use @code{m4_ifblank}.
 @defmac m4_text_box (@var{message}, @dvar{frame, -})
 @msindex{text_box}
 Add a text box around @var{message}, using @var{frame} as the border
-character above and below the message.  The frame correctly accounts for
+character above and below the message.  The @var{frame} argument must be
+a single byte, and does not support quadrigraphs.
+The frame correctly accounts for
 the subsequent expansion of @var{message}.  For example:
 @example
 m4_define([macro], [abc])dnl
