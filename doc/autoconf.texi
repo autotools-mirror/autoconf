@@ -4640,7 +4640,7 @@ The C99 standard says that if the output array isn't big enough
 and if no other errors occur, @code{snprintf} and @code{vsnprintf}
 truncate the output and return the number of bytes that ought to have
 been produced.  Some older systems return the truncated length (e.g.,
-@acronym{GNU} C Library 2.0.x or @sc{irix} 6.5), some a negative value
+@acronym{GNU} C Library 2.0.x or IRIX 6.5), some a negative value
 (e.g., earlier @acronym{GNU} C Library versions), and some the buffer
 length without truncation (e.g., 32-bit Solaris 7).  Also, some buggy
 older systems ignore the length and overrun the buffer (e.g., 64-bit
@@ -5044,8 +5044,8 @@ use Gnulib's @code{getloadavg} module.  @xref{Gnulib}.
 @prindex @code{getmntent}
 @caindex search_getmntent
 Check for @code{getmntent} in the standard C library, and then in the
-@file{sun}, @file{seq}, and @file{gen} libraries, for @sc{unicos},
-@sc{irix} 4, @sc{ptx}, and UnixWare, respectively.  Then, if
+@file{sun}, @file{seq}, and @file{gen} libraries, for UNICOS,
+IRIX 4, PTX, and UnixWare, respectively.  Then, if
 @code{getmntent} is available, define @code{HAVE_GETMNTENT} and set
 @code{ac_cv_func_getmntent} to @code{yes}.  Otherwise set
 @code{ac_cv_func_getmntent} to @code{no}.
@@ -7095,12 +7095,12 @@ detect failures.  Invoking @samp{cc -c a.c && cc -c b.c && cc -o c a.o
 b.o} solves the issue.
 
 @item Don't rely on @code{#error} failing
-The @sc{irix} C compiler does not fail when #error is preprocessed; it
+The IRIX C compiler does not fail when #error is preprocessed; it
 simply emits a diagnostic and continues, exiting successfully.  So,
 instead of an error directive like @code{#error "Unsupported word size"}
 it is more portable to use an invalid directive like @code{#Unsupported
 word size} in Autoconf tests.  In ordinary source code, @code{#error} is
-OK, since installers with inadequate compilers like @sc{irix} can simply
+OK, since installers with inadequate compilers like IRIX can simply
 examine these compilers' diagnostic output.
 
 @item Don't rely on correct @code{#line} support
@@ -9143,7 +9143,7 @@ formats.
 @item Unix version 7
 @cindex Unix version 7
 @cindex V7
-Officially this was called the ``Seventh Edition'' of ``the @sc{unix}
+Officially this was called the ``Seventh Edition'' of ``the UNIX
 time-sharing system'' but we use the more-common name ``Unix version 7''.
 Documentation is available in the
 @uref{http://@/plan9.bell-labs.com/@/7thEdMan/, Unix Seventh Edition Manual}.
@@ -10366,7 +10366,7 @@ The name @samp{@@&t@@} was suggested by Paul Eggert:
 @quotation
 I should give some credit to the @samp{@@&t@@} pun.  The @samp{&} is my
 own invention, but the @samp{t} came from the source code of the
-@sc{algol68c} compiler, written by Steve Bourne (of Bourne shell fame),
+ALGOL68C compiler, written by Steve Bourne (of Bourne shell fame),
 and which used @samp{mt} to denote the empty string.  In C, it would
 have looked like something like:
 
@@ -14912,7 +14912,7 @@ other file descriptors.
 
 Autoconf uses shell-script processing extensively, so the file names
 that it processes should not contain characters that are special to the
-shell.  Special characters include space, tab, newline, @sc{nul}, and
+shell.  Special characters include space, tab, newline, NUL, and
 the following:
 
 @example
@@ -14991,14 +14991,14 @@ can be easily detected by the
 @uref{ftp://@/ftp.gnu.org/@/gnu/@/non-gnu/@/doschk/@/doschk-1.1.tar.gz, doschk}
 package.
 
-A short overview follows; problems are marked with @sc{sfn}/@sc{lfn} to
-indicate where they apply: @sc{sfn} means the issues are only relevant to
+A short overview follows; problems are marked with SFN/LFN to
+indicate where they apply: SFN means the issues are only relevant to
 plain @acronym{DOS}, not to @acronym{DOS} under Microsoft Windows
-variants, while @sc{lfn} identifies problems that exist even under
+variants, while LFN identifies problems that exist even under
 Microsoft Windows variants.
 
 @table @asis
-@item No multiple dots (@sc{sfn})
+@item No multiple dots (SFN)
 @acronym{DOS} cannot handle multiple dots in file names.  This is an especially
 important thing to remember when building a portable configure script,
 as @command{autoconf} uses a .in suffix for template files.
@@ -15022,18 +15022,18 @@ AC_CONFIG_FILES([source.c:source.cin foo.bar:foobar.in])
 AC_OUTPUT
 @end example
 
-@item No leading dot (@sc{sfn})
+@item No leading dot (SFN)
 @acronym{DOS} cannot handle file names that start with a dot.  This is usually
 not important for @command{autoconf}.
 
-@item Case insensitivity (@sc{lfn})
+@item Case insensitivity (LFN)
 @acronym{DOS} is case insensitive, so you cannot, for example, have both a
 file called @samp{INSTALL} and a directory called @samp{install}.  This
 also affects @command{make}; if there's a file called @samp{INSTALL} in
 the directory, @samp{make install} does nothing (unless the
 @samp{install} target is marked as PHONY).
 
-@item The 8+3 limit (@sc{sfn})
+@item The 8+3 limit (SFN)
 Because the @acronym{DOS} file system only stores the first 8 characters of
 the file name and the first 3 of the extension, those must be unique.
 That means that @file{foobar-part1.c}, @file{foobar-part2.c} and
@@ -15045,18 +15045,18 @@ The 8+3 limit is not usually a problem under Microsoft Windows, as it
 uses numeric
 tails in the short version of file names to make them unique.  However, a
 registry setting can turn this behavior off.  While this makes it
-possible to share file trees containing long file names between @sc{sfn}
-and @sc{lfn} environments, it also means the above problem applies there
+possible to share file trees containing long file names between SFN
+and LFN environments, it also means the above problem applies there
 as well.
 
-@item Invalid characters (@sc{lfn})
+@item Invalid characters (LFN)
 Some characters are invalid in @acronym{DOS} file names, and should therefore
-be avoided.  In a @sc{lfn} environment, these are @samp{/}, @samp{\},
+be avoided.  In a LFN environment, these are @samp{/}, @samp{\},
 @samp{?}, @samp{*}, @samp{:}, @samp{<}, @samp{>}, @samp{|} and @samp{"}.
-In a @sc{sfn} environment, other characters are also invalid.  These
+In a SFN environment, other characters are also invalid.  These
 include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
 
-@item Invalid names (@sc{lfn})
+@item Invalid names (LFN)
 Some @acronym{DOS} file names are reserved, and cause problems if you
 try to use files with those names.  These names include @file{CON},
 @file{AUX}, @file{COM1}, @file{COM2}, @file{COM3}, @file{COM4},
@@ -15393,7 +15393,7 @@ syntax error: `(' unexpected
 @end example
 
 @noindent
-nor does @sc{irix} 6.5's Bourne shell:
+nor does IRIX 6.5's Bourne shell:
 @example
 $ @kbd{uname -a}
 IRIX firebird-image 6.5 07151432 IP22
@@ -15715,7 +15715,7 @@ Autoconf-generated scripts export this variable when they start up.
 @evindex PS4
 These variables should not matter for shell scripts, since they are
 supposed to affect only interactive shells.  However, at least one
-shell (the pre-3.0 @sc{uwin} Korn shell) gets confused about
+shell (the pre-3.0 UWIN Korn shell) gets confused about
 whether it is interactive, which means that (for example) a @env{PS1}
 with a side effect can unexpectedly modify @samp{$?}.  To work around
 this bug, M4sh scripts (including @file{configure} scripts) do something
@@ -16013,7 +16013,7 @@ points to the wrong directory.  Use @samp{`pwd`} rather than
 @evindex RANDOM
 Many shells provide @code{RANDOM}, a variable that returns a different
 integer each time it is used.  Most of the time, its value does not
-change when it is not used, but on @sc{irix} 6.5 the value changes all
+change when it is not used, but on IRIX 6.5 the value changes all
 the time.  This can be observed by using @command{set}.  It is common
 practice to use @code{$RANDOM} as part of a file name, but code
 shouldn't rely on @code{$RANDOM} expanding to a nonempty string.
@@ -16305,7 +16305,7 @@ bash-2.02$
 
 @noindent
 This is extremely unfortunate, since you are likely to use this code to
-handle Posix or @sc{ms-dos} absolute file names.  To work around this
+handle Posix or MS-DOS absolute file names.  To work around this
 bug, always put the backslash first:
 
 @example
@@ -16573,7 +16573,7 @@ received by the shell when it is launched should be imported as a shell
 variable marked as exported.
 
 Alas, many shells, such as Solaris @command{/bin/sh},
-@sc{irix} 6.3, @sc{irix} 5.2,
+IRIX 6.3, IRIX 5.2,
 @acronym{AIX} 4.1.5, and Digital Unix 4.0, forget to
 @command{export} the environment variables they receive.  As a result,
 two variables coexist: the environment variable and the shell
@@ -17028,7 +17028,7 @@ Solaris 10 @command{/bin/sh}, which mishandle strings like @samp{!} and
 Posix also says that @samp{test ! "@var{string}"},
 @samp{test -n "@var{string}"} and
 @samp{test -z "@var{string}"} work with any string, but many
-shells (such as Solaris, @acronym{AIX} 3.2, @sc{unicos} 10.0.0.6,
+shells (such as Solaris, @acronym{AIX} 3.2, UNICOS 10.0.0.6,
 Digital Unix 4, etc.)@: get confused if
 @var{string} looks like an operator:
 
@@ -17430,7 +17430,7 @@ lack support for it.  @xref{C Compiler}, for how @acronym{GNU} Make
 tests for this feature with @code{AC_PROG_CC_C_O}.
 
 When a compilation such as @samp{cc -o foo foo.c} fails, some compilers
-(such as @sc{cds} on Reliant Unix) leave a @file{foo.o}.
+(such as CDS on Reliant Unix) leave a @file{foo.o}.
 
 @acronym{HP-UX} @command{cc} doesn't accept @file{.S} files to preprocess and
 assemble.  @samp{cc -c foo.S} appears to succeed, but in fact does
@@ -18278,7 +18278,7 @@ b
 @prindex @command{sed} (@samp{t})
 Some old systems have @command{sed} that ``forget'' to reset their
 @samp{t} flag when starting a new cycle.  For instance on @acronym{MIPS
-RISC/OS}, and on @sc{irix} 5.3, if you run the following @command{sed}
+RISC/OS}, and on IRIX 5.3, if you run the following @command{sed}
 script (the line numbers are not actual part of the texts):
 
 @example
@@ -21821,7 +21821,7 @@ Use @samp{AC_CHECK_SIZEOF(int)} instead (@pxref{AC_CHECK_SIZEOF}).
 
 @defmac AC_IRIX_SUN
 @acindex{IRIX_SUN}
-If on @sc{irix} (Silicon Graphics Unix), add @option{-lsun} to output
+If on IRIX (Silicon Graphics Unix), add @option{-lsun} to output
 @code{LIBS}.  If you were using it to get @code{getmntent}, use
 @code{AC_FUNC_GETMNTENT} instead.  If you used it for the NIS versions
 of the password and group functions, use @samp{AC_CHECK_LIB(sun,
@@ -21848,7 +21848,7 @@ See @ref{AC_FUNC_GETMNTENT} and @ref{AC_CHECK_LIB}.
 @ovindex LIBS
 This macro adds @option{-lcposix} to output variable @code{LIBS} if
 necessary for Posix facilities.  Sun dropped support for the obsolete
-@sc{interactive} Systems Corporation Unix on 2006-07-23.  New programs
+INTERACTIVE Systems Corporation Unix on 2006-07-23.  New programs
 need not use this macro.  It is implemented as
 @code{AC_SEARCH_LIBS([strerror], [cposix])} (@pxref{AC_SEARCH_LIBS}).
 @end defmac
@@ -22490,7 +22490,7 @@ This macro used to add @option{-lx} to output variable @code{LIBS} if on
 Xenix.  Also, if @file{dirent.h} is being checked for, added
 @option{-ldir} to @code{LIBS}.  Now it is merely an alias of
 @code{AC_HEADER_DIRENT} instead, plus some code to detect whether
-running @sc{xenix} on which you should not depend:
+running XENIX on which you should not depend:
 
 @example
 AC_MSG_CHECKING([for Xenix])

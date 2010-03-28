@@ -1,3 +1,9 @@
+2010-03-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Do not use @sc in the manual.
+	* doc/autoconf.texi: Remove all usage of @sc in the manual.
+	Suggested by Karl Berry.
+
 2010-03-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix wrong comment in testsuite.
