@@ -1,5 +1,9 @@
 2010-03-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Do not use @acronym in the manual.
+	* doc/autoconf.texi: Remove all usage of @acronym.
+	Suggested by Karl Berry.
+
 	Do not use @sc in the manual.
 	* doc/autoconf.texi: Remove all usage of @sc in the manual.
 	Suggested by Karl Berry.

@@ -193,7 +193,7 @@
 
 @copying
 
-This manual (@value{UPDATED}) is for @acronym{GNU} Autoconf
+This manual (@value{UPDATED}) is for GNU Autoconf
 (version @value{VERSION}),
 a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
@@ -204,16 +204,16 @@ Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
-under the terms of the @acronym{GNU} Free Documentation License,
+under the terms of the GNU Free Documentation License,
 Version 1.3 or any later version published by the Free Software
 Foundation; with no Invariant Sections, with the Front-Cover texts
-being ``A @acronym{GNU} Manual,'' and with the Back-Cover Texts as in
+being ``A GNU Manual,'' and with the Back-Cover Texts as in
 (a) below.  A copy of the license is included in the section entitled
-``@acronym{GNU} Free Documentation License.''
+``GNU Free Documentation License.''
 
 (a) The FSF's Back-Cover Text is: ``You have the freedom to copy and
-modify this @acronym{GNU} manual.  Buying copies from the @acronym{FSF}
-supports it in developing @acronym{GNU} and promoting software
+modify this GNU manual.  Buying copies from the FSF
+supports it in developing GNU and promoting software
 freedom.''
 @end quotation
 @end copying
@@ -296,12 +296,12 @@ freedom.''
 @detailmenu
  --- The Detailed Node Listing ---
 
-The @acronym{GNU} Build System
+The GNU Build System
 
 * Automake::                    Escaping makefile hell
-* Gnulib::                      The @acronym{GNU} portability library
+* Gnulib::                      The GNU portability library
 * Libtool::                     Building libraries portably
-* Pointers::                    More info on the @acronym{GNU} build system
+* Pointers::                    More info on the GNU build system
 
 Making @command{configure} Scripts
 
@@ -469,7 +469,7 @@ M4 Quotation
 
 Using @command{autom4te}
 
-* autom4te Invocation::         A @acronym{GNU} M4 wrapper
+* autom4te Invocation::         A GNU M4 wrapper
 * Customizing autom4te::        Customizing the Autoconf package
 
 Programming in M4sugar
@@ -632,8 +632,8 @@ Frequent Autoconf Questions, with answers
 
 * Distributing::                Distributing @command{configure} scripts
 * Why GNU M4::                  Why not use the standard M4?
-* Bootstrapping::               Autoconf and @acronym{GNU} M4 require each other?
-* Why Not Imake::               Why @acronym{GNU} uses @command{configure} instead of Imake
+* Bootstrapping::               Autoconf and GNU M4 require each other?
+* Why Not Imake::               Why GNU uses @command{configure} instead of Imake
 * Defining Directories::        Passing @code{datadir} to program
 * Autom4te Cache::              What is it?  Can I remove it?
 * Present But Cannot Be Compiled::  Compiler and Preprocessor Disagree
@@ -727,7 +727,7 @@ about difficulties in writing Autoconf input, and not in the behavior of
 the resulting @file{configure}.  Even packages that don't use Autoconf
 will generally provide a @file{configure} script, and the most common
 complaint about these alternative home-grown scripts is that they fail
-to meet one or more of the @acronym{GNU} Coding Standards that users
+to meet one or more of the GNU Coding Standards that users
 have come to expect from Autoconf-generated @file{configure} scripts.
 
 The Metaconfig package is similar in purpose to Autoconf, but the
@@ -738,7 +738,7 @@ taken in writing them.
 
 Autoconf does not solve all problems related to making portable
 software packages---for a more complete solution, it should be used in
-concert with other @acronym{GNU} build tools like Automake and
+concert with other GNU build tools like Automake and
 Libtool.  These other tools take on jobs like the creation of a
 portable, recursive makefile with all of the standard targets,
 linking of shared libraries, and so on.  @xref{The GNU Build System},
@@ -747,10 +747,10 @@ for more information.
 Autoconf imposes some restrictions on the names of macros used with
 @code{#if} in C programs (@pxref{Preprocessor Symbol Index}).
 
-Autoconf requires @acronym{GNU} M4 version 1.4.6 or later in order to
+Autoconf requires GNU M4 version 1.4.6 or later in order to
 generate the scripts.  It uses features that some versions of M4,
-including @acronym{GNU} M4 1.3, do not have.  Autoconf works better
-with @acronym{GNU} M4 version 1.4.14 or later, though this is not
+including GNU M4 1.3, do not have.  Autoconf works better
+with GNU M4 version 1.4.14 or later, though this is not
 required.
 
 @xref{Autoconf 1}, for information about upgrading from version 1.
@@ -778,7 +778,7 @@ Autoconf's development tree is accessible via @command{git}; see the
 @uref{http://@/savannah.gnu.org/@/projects/@/autoconf/, Autoconf
 Summary} for details, or view
 @uref{http://@/git.sv.gnu.org/@/gitweb/@/?p=autoconf.git, the actual
-repository}.  Anonymous @acronym{CVS} access is also available, see
+repository}.  Anonymous CVS access is also available, see
 @file{README} for more details.  Patches relative to the
 current @command{git} version can be sent for review to the
 @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}, with
@@ -801,24 +801,24 @@ Peter Simons}.
 @c ================================================= The GNU Build System
 
 @node The GNU Build System
-@chapter The @acronym{GNU} Build System
-@cindex @acronym{GNU} build system
+@chapter The GNU Build System
+@cindex GNU build system
 
 Autoconf solves an important problem---reliable discovery of
 system-specific build and runtime information---but this is only one
 piece of the puzzle for the development of portable software.  To this
-end, the @acronym{GNU} project has developed a suite of integrated
-utilities to finish the job Autoconf started: the @acronym{GNU} build
+end, the GNU project has developed a suite of integrated
+utilities to finish the job Autoconf started: the GNU build
 system, whose most important components are Autoconf, Automake, and
 Libtool.  In this chapter, we introduce you to those tools, point you
 to sources of more information, and try to convince you to use the
-entire @acronym{GNU} build system for your software.
+entire GNU build system for your software.
 
 @menu
 * Automake::                    Escaping makefile hell
-* Gnulib::                      The @acronym{GNU} portability library
+* Gnulib::                      The GNU portability library
 * Libtool::                     Building libraries portably
-* Pointers::                    More info on the @acronym{GNU} build system
+* Pointers::                    More info on the GNU build system
 @end menu
 
 @node Automake
@@ -866,20 +866,20 @@ and portability can be substantial.  And that's not all@enddots{}
 @node Gnulib
 @section Gnulib
 
-@acronym{GNU} software has a well-deserved reputation for running on
+GNU software has a well-deserved reputation for running on
 many different types of systems.  While our primary goal is to write
-software for the @acronym{GNU} system, many users and developers have
+software for the GNU system, many users and developers have
 been introduced to us through the systems that they were already using.
 
 @cindex Gnulib
-Gnulib is a central location for common @acronym{GNU} code, intended to
+Gnulib is a central location for common GNU code, intended to
 be shared among free software packages.  Its components are typically
 shared at the source level, rather than being a library that gets built,
 installed, and linked against.  The idea is to copy files from Gnulib
 into your own source tree.  There is no distribution tarball; developers
 should just grab source modules from the repository.  The source files
-are available online, under various licenses, mostly @acronym{GNU}
-@acronym{GPL} or @acronym{GNU} @acronym{LGPL}.
+are available online, under various licenses, mostly GNU
+GPL or GNU LGPL.
 
 Gnulib modules typically contain C source code along with Autoconf
 macros used to configure the source code.  For example, the Gnulib
@@ -899,7 +899,7 @@ which can be used by multiple programs without duplication on disk or in
 memory and can be updated independently of the linked programs.
 Producing shared libraries portably, however, is the stuff of
 nightmares---each system has its own incompatible tools, compiler flags,
-and magic incantations.  Fortunately, @acronym{GNU} provides a solution:
+and magic incantations.  Fortunately, GNU provides a solution:
 @dfn{Libtool}.
 @cindex Libtool
 
@@ -923,12 +923,12 @@ projects on a single system might be daunted at the prospect of
 learning to use Automake and Autoconf.  As your software is
 distributed to more and more users, however, you otherwise
 quickly find yourself putting lots of effort into reinventing the
-services that the @acronym{GNU} build tools provide, and making the
+services that the GNU build tools provide, and making the
 same mistakes that they once made and overcame.  (Besides, since
 you're already learning Autoconf, Automake is a piece of cake.)
 
 There are a number of places that you can go to for more information on
-the @acronym{GNU} build tools.
+the GNU build tools.
 
 @itemize @minus
 
@@ -942,15 +942,15 @@ The project home pages for
 
 @item Automake Manual
 
-@xref{Top, , Automake, automake, @acronym{GNU} Automake}, for more
+@xref{Top, , Automake, automake, GNU Automake}, for more
 information on Automake.
 
 @item Books
 
-The book @cite{@acronym{GNU} Autoconf, Automake and
-Libtool}@footnote{@cite{@acronym{GNU} Autoconf, Automake and Libtool},
+The book @cite{GNU Autoconf, Automake and
+Libtool}@footnote{@cite{GNU Autoconf, Automake and Libtool},
 by G. V. Vaughan, B. Elliston, T. Tromey, and I. L. Taylor.  SAMS (originally
-New Riders), 2000, ISBN 1578701902.} describes the complete @acronym{GNU}
+New Riders), 2000, ISBN 1578701902.} describes the complete GNU
 build environment.  You can also find
 @uref{http://@/sources.redhat.com/@/autobook/, the entire book on-line}.
 
@@ -1642,18 +1642,18 @@ AUTOMAKE|:::::|automake|:::::|$missing_dir
 @section Using @command{autoreconf} to Update @command{configure} Scripts
 @cindex @command{autoreconf}
 
-Installing the various components of the @acronym{GNU} Build System can be
+Installing the various components of the GNU Build System can be
 tedious: running @command{autopoint} for Gettext, @command{automake} for
 @file{Makefile.in} etc.@: in each directory.  It may be needed either
 because some tools such as @command{automake} have been updated on your
 system, or because some of the sources such as @file{configure.ac} have
-been updated, or finally, simply in order to install the @acronym{GNU} Build
+been updated, or finally, simply in order to install the GNU Build
 System in a fresh tree.
 
 @command{autoreconf} runs @command{autoconf}, @command{autoheader},
 @command{aclocal}, @command{automake}, @command{libtoolize}, and
 @command{autopoint} (when appropriate) repeatedly to update the
-@acronym{GNU} Build System in the specified directories and their
+GNU Build System in the specified directories and their
 subdirectories (@pxref{Subdirectories}).  By default, it only remakes
 those files that are older than their sources.  The environment variables
 @env{AUTOCONF}, @env{AUTOHEADER}, @env{AUTOMAKE}, @env{ACLOCAL},
@@ -1677,7 +1677,7 @@ infrastructure to a source package.  If you use @command{autopoint},
 your @file{configure.ac} should invoke both @code{AM_GNU_GETTEXT} and
 @code{AM_GNU_GETTEXT_VERSION(@var{gettext-version})}.  @xref{autopoint
 Invocation, , Invoking the @code{autopoint} Program, gettext,
-@acronym{GNU} @code{gettext} utilities}, for further details.
+GNU @code{gettext} utilities}, for further details.
 
 @noindent
 @command{autoreconf} accepts the following options:
@@ -1973,7 +1973,7 @@ The @var{copyright-notice} shows up in both the head of
 Copy revision stamp @var{revision-info} into the @command{configure}
 script, with any dollar signs or double-quotes removed.  This macro lets
 you put a revision stamp from @file{configure.ac} into @command{configure}
-without @acronym{RCS} or @acronym{CVS} changing it when you check in
+without RCS or CVS changing it when you check in
 @command{configure}.  That way, you can determine easily which revision of
 @file{configure.ac} a particular @command{configure} corresponds to.
 
@@ -2054,7 +2054,7 @@ name is obsolete because some @command{make} have a rule that creates
 @file{install} from it if there is no makefile.
 
 The auxiliary directory is commonly named @file{build-aux}.
-If you need portability to @acronym{DOS} variants, do not name the
+If you need portability to DOS variants, do not name the
 auxiliary directory @file{aux}.  @xref{File System Conventions}.
 @end defmac
 
@@ -2351,7 +2351,7 @@ AC_CONFIG_FILES([Makefile:boiler/top.mk:boiler/bot.mk]
 
 @noindent
 Doing this allows you to keep your file names acceptable to
-@acronym{DOS} variants, or
+DOS variants, or
 to prepend and/or append boilerplate to the file.
 @end defmac
 
@@ -2383,7 +2383,7 @@ way, the user has to properly configure the package for the local system
 before compiling it.
 
 @xref{Makefile Conventions, , Makefile Conventions, standards, The
-@acronym{GNU} Coding Standards}, for more information on what to put in
+GNU Coding Standards}, for more information on what to put in
 makefiles.
 
 @menu
@@ -2441,7 +2441,7 @@ matters get tricky.  One approach to put such options directly into
 @code{CPPFLAGS} and @code{LDFLAGS}, but not into @code{CFLAGS}.
 
 However, remember that some @file{Makefile} variables are reserved by
-the @acronym{GNU} Coding Standards for the use of the ``user''---the person
+the GNU Coding Standards for the use of the ``user''---the person
 building the package.  For instance, @code{CFLAGS} is one such variable.
 
 Sometimes package developers are tempted to set user variables such as
@@ -2454,7 +2454,7 @@ these variables at build time.  If the package developer needs to add
 switches without interfering with the user, the proper way to do that is
 to introduce an additional variable.  Automake makes this easy by
 introducing @code{AM_CFLAGS} (@pxref{Flag Variables Ordering, , ,
-automake, @acronym{GNU} Automake}), but the concept is the same even if
+automake, GNU Automake}), but the concept is the same even if
 Automake is not used.
 @end defvar
 
@@ -2495,7 +2495,7 @@ can do if an option affects other phases of the compiler as well.
 Currently, @command{configure} always links as part of a single
 invocation of the compiler that also preprocesses and compiles, so it
 uses this variable also when linking programs.  However, it is unwise to
-depend on this behavior because the @acronym{GNU} Coding Standards do
+depend on this behavior because the GNU Coding Standards do
 not require it and many packages do not use @code{CPPFLAGS} when linking
 programs.
 
@@ -2672,7 +2672,7 @@ Absolute name of @code{top_srcdir}.
 
 The following variables specify the directories for
 package installation, see @ref{Directory Variables, , Variables for
-Installation Directories, standards, The @acronym{GNU} Coding
+Installation Directories, standards, The GNU Coding
 Standards}, for more information.  Each variable corresponds to an
 argument of @command{configure}; trailing slashes are stripped so that
 expressions such as @samp{$@{prefix@}/lib} expand with only one slash
@@ -2760,7 +2760,7 @@ The top-level directory for installing documentation in man format.
 
 @defvar oldincludedir
 @ovindex oldincludedir
-The directory for installing C header files for non-@acronym{GCC} compilers.
+The directory for installing C header files for non-GCC compilers.
 @end defvar
 
 @defvar pdfdir
@@ -2803,7 +2803,7 @@ variables keep them unexpanded: typically @samp{@@datarootdir@@} is
 replaced by @samp{$@{prefix@}/share}, not @samp{/usr/local/share}, and
 @samp{@@datadir@@} is replaced by @samp{$@{datarootdir@}}.
 
-This behavior is mandated by the @acronym{GNU} Coding Standards, so that when
+This behavior is mandated by the GNU Coding Standards, so that when
 the user runs:
 
 @table @samp
@@ -2955,7 +2955,7 @@ macro in @file{configure.ac}.
 In Autoconf 2.60, the set of directory variables has changed, and the
 defaults of some variables have been adjusted
 (@pxref{Installation Directory Variables}) to changes in the
-@acronym{GNU} Coding Standards.  Notably, @file{datadir}, @file{infodir}, and
+GNU Coding Standards.  Notably, @file{datadir}, @file{infodir}, and
 @file{mandir} are now expressed in terms of @file{datarootdir}.  If you are
 upgrading from an earlier Autoconf version, you may need to adjust your files
 to ensure that the directory variables are substituted correctly
@@ -3039,14 +3039,14 @@ simultaneously from the same copy of the source code.  The object files
 for each architecture are kept in their own directory.
 
 To support doing this, @command{make} uses the @code{VPATH} variable to
-find the files that are in the source directory.  @acronym{GNU} Make
+find the files that are in the source directory.  GNU Make
 can do this.  Most other recent @command{make} programs can do this as
 well, though they may have difficulties and it is often simpler to
-recommend @acronym{GNU} @command{make} (@pxref{VPATH and Make}).  Older
+recommend GNU @command{make} (@pxref{VPATH and Make}).  Older
 @command{make} programs do not support @code{VPATH}; when using them, the
 source code must be in the same directory as the object files.
 
-If you are using @acronym{GNU} Automake, the remaining details in this
+If you are using GNU Automake, the remaining details in this
 section are already covered for you, based on the contents of your
 @file{Makefile.am}.  But if you are using Autoconf in isolation, then
 supporting @code{VPATH} requires the following in your
@@ -3101,7 +3101,7 @@ package's distribution, so that @command{make} considers
 @file{config.h.in} up to date.  Don't use @command{touch}
 (@pxref{touch, , Limitations of Usual Tools}); instead, use
 @command{echo} (using
-@command{date} would cause needless differences, hence @acronym{CVS}
+@command{date} would cause needless differences, hence CVS
 conflicts, etc.).
 
 @example
@@ -3195,7 +3195,7 @@ object files that depend on the header file to be recompiled.
 Usually the input file is named @file{@var{header}.in}; however, you can
 override the input file name by appending to @var{header} a
 colon-separated list of input files.  For example, you might need to make
-the input file name acceptable to @acronym{DOS} variants:
+the input file name acceptable to DOS variants:
 
 @example
 AC_CONFIG_HEADERS([config.h:config.hin])
@@ -3948,7 +3948,7 @@ can be overridden by setting the @code{FGREP} variable and is cached in the
 @ovindex INSTALL_DATA
 @ovindex INSTALL_SCRIPT
 @caindex path_install
-Set output variable @code{INSTALL} to the name of a @acronym{BSD}-compatible
+Set output variable @code{INSTALL} to the name of a BSD-compatible
 @command{install} program, if one is found in the current @env{PATH}.
 Otherwise, set @code{INSTALL} to @samp{@var{dir}/install-sh -c},
 checking the directories specified to @code{AC_CONFIG_AUX_DIR} (or its
@@ -3974,7 +3974,7 @@ you use @code{AC_PROG_INSTALL}, you must include either
 them---even if the system you're on has a good @command{install} program.
 This check is a safety measure to prevent you from accidentally leaving
 that file out, which would prevent your package from installing on
-systems that don't have a @acronym{BSD}-compatible @command{install} program.
+systems that don't have a BSD-compatible @command{install} program.
 
 If you need to use your own installation program because it has features
 not found in standard @command{install} programs, there is no reason to use
@@ -4217,7 +4217,7 @@ target is rarely specified, because most of the time it is the same
 as the host: it is the type of system for which any compiler tool in
 the package produces code.  What this macro looks for is,
 for example, @emph{a tool @r{(assembler, linker, etc.)}@: that the
-compiler driver @r{(@command{gcc} for the @acronym{GNU} C Compiler)}
+compiler driver @r{(@command{gcc} for the GNU C Compiler)}
 uses to produce objects, archives or executables}.
 @end defmac
 
@@ -4528,7 +4528,7 @@ some old systems don't support this (e.g., NextStep).
 @prindex @code{isnan}
 The C99 standard says that @code{isinf} and @code{isnan} are
 macros.  On some systems just macros are available
-(e.g., @acronym{HP-UX} and Solaris 10), on
+(e.g., HP-UX and Solaris 10), on
 some systems both macros and functions (e.g., glibc 2.3.2), and on some
 systems only functions (e.g., IRIX 6 and Solaris 9).  In some cases
 these functions are declared in nonstandard headers like
@@ -4583,7 +4583,7 @@ anyway, so it's probably not worth worrying about.
 @prindex @code{malloc}
 The C standard says a call @code{malloc (0)} is implementation
 dependent.  It can return either @code{NULL} or a new non-null pointer.
-The latter is more common (e.g., the @acronym{GNU} C Library) but is by
+The latter is more common (e.g., the GNU C Library) but is by
 no means universal.  @code{AC_FUNC_MALLOC}
 can be used to insist on non-@code{NULL} (@pxref{Particular Functions}).
 
@@ -4596,8 +4596,8 @@ Posix prefers @code{setenv} to @code{putenv}; among other things,
 
 Posix specifies that @code{putenv} puts the given string directly in
 @code{environ}, but some systems make a copy of it instead (e.g.,
-glibc 2.0, or @acronym{BSD}).  And when a copy is made, @code{unsetenv} might
-not free it, causing a memory leak (e.g., Free@acronym{BSD} 4).
+glibc 2.0, or BSD).  And when a copy is made, @code{unsetenv} might
+not free it, causing a memory leak (e.g., FreeBSD 4).
 
 On some systems @code{putenv ("FOO")} removes @samp{FOO} from the
 environment, but this is not standard usage and it dumps core
@@ -4640,8 +4640,8 @@ The C99 standard says that if the output array isn't big enough
 and if no other errors occur, @code{snprintf} and @code{vsnprintf}
 truncate the output and return the number of bytes that ought to have
 been produced.  Some older systems return the truncated length (e.g.,
-@acronym{GNU} C Library 2.0.x or IRIX 6.5), some a negative value
-(e.g., earlier @acronym{GNU} C Library versions), and some the buffer
+GNU C Library 2.0.x or IRIX 6.5), some a negative value
+(e.g., earlier GNU C Library versions), and some the buffer
 length without truncation (e.g., 32-bit Solaris 7).  Also, some buggy
 older systems ignore the length and overrun the buffer (e.g., 64-bit
 Solaris 7).
@@ -4659,27 +4659,27 @@ longer need to be worried about.
 @item @code{sscanf}
 @c @fuindex sscanf
 @prindex @code{sscanf}
-On various old systems, e.g., @acronym{HP-UX} 9, @code{sscanf} requires
+On various old systems, e.g., HP-UX 9, @code{sscanf} requires
 that its
 input string be writable (though it doesn't actually change it).  This
 can be a problem when using @command{gcc} since it normally puts
 constant strings in read-only memory (@pxref{Incompatibilities,
-Incompatibilities of @acronym{GCC}, , gcc, Using and
-Porting the @acronym{GNU} Compiler Collection}).  Apparently in some cases even
+Incompatibilities of GCC, , gcc, Using and
+Porting the GNU Compiler Collection}).  Apparently in some cases even
 having format strings read-only can be a problem.
 
 @item @code{strerror_r}
 @c @fuindex strerror_r
 @prindex @code{strerror_r}
 Posix specifies that @code{strerror_r} returns an @code{int}, but many
-systems (e.g., @acronym{GNU} C Library version 2.2.4) provide a
+systems (e.g., GNU C Library version 2.2.4) provide a
 different version returning a @code{char *}.  @code{AC_FUNC_STRERROR_R}
 can detect which is in use (@pxref{Particular Functions}).
 
 @item @code{strnlen}
 @c @fuindex strnlen
 @prindex @code{strnlen}
-@acronym{AIX} 4.3 provides a broken version which produces the
+AIX 4.3 provides a broken version which produces the
 following results:
 
 @example
@@ -4698,7 +4698,7 @@ strnlen ("foobar", 9) = 6
 @item @code{sysconf}
 @c @fuindex sysconf
 @prindex @code{sysconf}
-@code{_SC_PAGESIZE} is standard, but some older systems (e.g., @acronym{HP-UX}
+@code{_SC_PAGESIZE} is standard, but some older systems (e.g., HP-UX
 9) have @code{_SC_PAGE_SIZE} instead.  This can be tested with
 @code{#ifdef}.
 
@@ -4708,7 +4708,7 @@ strnlen ("foobar", 9) = 6
 The Posix spec says that @code{unlink} causes the given file to be
 removed only after there are no more open file handles for it.  Some
 non-Posix hosts have trouble with this requirement, though,
-and some @acronym{DOS} variants even corrupt the file system.
+and some DOS variants even corrupt the file system.
 
 @item @code{unsetenv}
 @c @fuindex unsetenv
@@ -4735,7 +4735,7 @@ portability.
 not portable.  Or it can be an array (e.g., @command{gcc} in some
 PowerPC configurations), which means as a function parameter it can be
 effectively call-by-reference and library routines might modify the
-value back in the caller (e.g., @code{vsnprintf} in the @acronym{GNU} C Library
+value back in the caller (e.g., @code{vsnprintf} in the GNU C Library
 2.1).
 
 @item Signed @code{>>}
@@ -4894,8 +4894,8 @@ This macro is obsolescent.  New programs should use Gnulib's
 @prindex @code{fnmatch}
 @caindex func_fnmatch_gnu
 Behave like @code{AC_REPLACE_FNMATCH} (@emph{replace}) but also test
-whether @code{fnmatch} supports @acronym{GNU} extensions.  Detect common
-implementation bugs, for example, the bugs in the @acronym{GNU} C
+whether @code{fnmatch} supports GNU extensions.  Detect common
+implementation bugs, for example, the bugs in the GNU C
 Library 2.1.
 
 The result of this macro is cached in the @code{ac_cv_func_fnmatch_gnu}
@@ -5063,7 +5063,7 @@ The result of this macro can be overridden by setting the cache variable
 @prindex @code{getpgrp}
 @caindex func_getpgrp_void
 Define @code{GETPGRP_VOID} if it is an error to pass 0 to
-@code{getpgrp}; this is the Posix behavior.  On older @acronym{BSD}
+@code{getpgrp}; this is the Posix behavior.  On older BSD
 systems, you must pass 0 to @code{getpgrp}, as it takes an argument and
 behaves like Posix's @code{getpgid}.
 
@@ -5115,7 +5115,7 @@ The result of this macro is cached in the
 @c @fuindex malloc
 @prindex @code{malloc}
 @caindex func_malloc_0_nonnull
-If the @code{malloc} function is compatible with the @acronym{GNU} C
+If the @code{malloc} function is compatible with the GNU C
 library @code{malloc} (i.e., @samp{malloc (0)} returns a valid
 pointer), define @code{HAVE_MALLOC} to 1.  Otherwise define
 @code{HAVE_MALLOC} to 0, ask for an @code{AC_LIBOBJ} replacement for
@@ -5231,7 +5231,7 @@ variable.
 @c @fuindex realloc
 @prindex @code{realloc}
 @caindex func_realloc_0_nonnull
-If the @code{realloc} function is compatible with the @acronym{GNU} C
+If the @code{realloc} function is compatible with the GNU C
 library @code{realloc} (i.e., @samp{realloc (NULL, 0)} returns a
 valid pointer), define @code{HAVE_REALLOC} to 1.  Otherwise define
 @code{HAVE_REALLOC} to 0, ask for an @code{AC_LIBOBJ} replacement for
@@ -5269,7 +5269,7 @@ signature conforms to Posix.  New programs need not use this macro.
 @prindex @code{setpgrp}
 @caindex func_setpgrp_void
 If @code{setpgrp} takes no argument (the Posix version), define
-@code{SETPGRP_VOID}.  Otherwise, it is the @acronym{BSD} version, which takes
+@code{SETPGRP_VOID}.  Otherwise, it is the BSD version, which takes
 two process IDs as arguments.  This macro does not check whether
 @code{setpgrp} exists at all; if you need to work in that situation,
 first call @code{AC_CHECK_FUNC} for @code{setpgrp}.
@@ -5339,7 +5339,7 @@ it is declared, define @code{HAVE_DECL_STRERROR_R}.  If it returns a
 @code{char *} message, define @code{STRERROR_R_CHAR_P}; otherwise it
 returns an @code{int} error number.  The Thread-Safe Functions option of
 Posix requires @code{strerror_r} to return @code{int}, but
-many systems (including, for example, version 2.2.4 of the @acronym{GNU} C
+many systems (including, for example, version 2.2.4 of the GNU C
 Library) return a @code{char *} value that is not necessarily equal to
 the buffer argument.
 
@@ -5394,7 +5394,7 @@ This macro caches its result in the @code{ac_cv_func_strtold} variable.
 @prindex @code{strnlen}
 @caindex func_strnlen_working
 If the @code{strnlen} function is not available, or is buggy (like the one
-from @acronym{AIX} 4.3), require an @code{AC_LIBOBJ} replacement for it.
+from AIX 4.3), require an @code{AC_LIBOBJ} replacement for it.
 
 This macro caches its result in the @code{ac_cv_func_strnlen_working}
 variable.
@@ -5446,7 +5446,7 @@ If the @code{fnmatch} function does not conform to Posix (see
 
 The files @file{fnmatch.c}, @file{fnmatch_loop.c}, and @file{fnmatch_.h}
 in the @code{AC_LIBOBJ} replacement directory are assumed to contain a
-copy of the source code of @acronym{GNU} @code{fnmatch}.  If necessary,
+copy of the source code of GNU @code{fnmatch}.  If necessary,
 this source code is compiled as an @code{AC_LIBOBJ} replacement, and the
 @file{fnmatch_.h} file is linked to @file{fnmatch.h} so that it can be
 included in place of the system @code{<fnmatch.h>}.
@@ -5642,7 +5642,7 @@ additions.  Please help us keeping it as complete as possible.
 @item @file{limits.h}
 C99 says that @file{limits.h} defines @code{LLONG_MIN},
 @code{LLONG_MAX}, and @code{ULLONG_MAX}, but many almost-C99
-environments (e.g., default @acronym{GCC} 4.0.2 + glibc 2.4) do not
+environments (e.g., default GCC 4.0.2 + glibc 2.4) do not
 define them.
 
 @item @file{inttypes.h} vs.@: @file{stdint.h}
@@ -5718,7 +5718,7 @@ On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
 
 @item @file{sys/mount.h}
 @hdrindex{sys/mount.h}
-On Free@acronym{BSD} 4.8 on ia32 and using gcc version 2.95.4,
+On FreeBSD 4.8 on ia32 and using gcc version 2.95.4,
 @file{sys/params.h} is a prerequisite.
 
 @item @file{sys/ptem.h}
@@ -5922,7 +5922,7 @@ variable.
 @hdrindex{ctype.h}
 @caindex header_stdc
 Define @code{STDC_HEADERS} if the system has C header files
-conforming to @acronym{ANSI} C89 (@acronym{ISO} C90).
+conforming to ANSI C89 (ISO C90).
 Specifically, this macro checks for @file{stdlib.h}, @file{stdarg.h},
 @file{string.h}, and @file{float.h}; if the system has those, it
 probably has the rest of the C89 header files.  This macro also
@@ -5945,16 +5945,16 @@ files.  New programs need not use this macro.
 @hdrindex{strings.h}
 Nowadays @file{string.h} is part of the C standard and declares functions like
 @code{strcpy}, and @file{strings.h} is standardized by Posix and declares
-@acronym{BSD} functions like @code{bcopy}; but
+BSD functions like @code{bcopy}; but
 historically, string functions were a major sticking point in this area.
 If you still want to worry about portability to ancient systems without
 standard headers, there is so much variation
 that it is probably easier to declare the functions you use than to
 figure out exactly what the system header files declare.  Some ancient systems
-contained a mix of functions from the C standard and from @acronym{BSD};
+contained a mix of functions from the C standard and from BSD;
 some were mostly standard but lacked @samp{memmove}; some defined the
-@acronym{BSD} functions as macros in @file{string.h} or
-@file{strings.h}; some had only the @acronym{BSD} functions but
+BSD functions as macros in @file{string.h} or
+@file{strings.h}; some had only the BSD functions but
 @file{string.h}; some declared the memory functions in @file{memory.h},
 some in @file{string.h}; etc.  It is probably sufficient to check for
 one string function and one memory function; if the library had the
@@ -5993,7 +5993,7 @@ char *strchr (), *strrchr ();
 
 @noindent
 If you use a function like @code{memchr}, @code{memset}, @code{strtok},
-or @code{strspn}, which have no @acronym{BSD} equivalent, then macros don't
+or @code{strspn}, which have no BSD equivalent, then macros don't
 suffice to port to ancient hosts; you must provide an implementation of
 each function.  An easy
 way to incorporate your implementations only when needed (since the ones
@@ -6009,7 +6009,7 @@ for example, put it in @file{memchr.c} and use
 @caindex header_sys_wait_h
 If @file{sys/wait.h} exists and is compatible with Posix, define
 @code{HAVE_SYS_WAIT_H}.  Incompatibility can occur if @file{sys/wait.h}
-does not exist, or if it uses the old @acronym{BSD} @code{union wait} instead
+does not exist, or if it uses the old BSD @code{union wait} instead
 of @code{int} to store a status value.  If @file{sys/wait.h} is not
 Posix compatible, then instead of including it, define the
 Posix macros with their usual interpretations.  Here is an
@@ -6872,12 +6872,12 @@ implemented.  In case of doubt, read the documentation of the former
 All the tests for compilers (@code{AC_PROG_CC}, @code{AC_PROG_CXX},
 @code{AC_PROG_F77}) define the output variable @code{EXEEXT} based on
 the output of the compiler, typically to the empty string if
-Posix and @samp{.exe} if a @acronym{DOS} variant.
+Posix and @samp{.exe} if a DOS variant.
 
 @ovindex OBJEXT
 They also define the output variable @code{OBJEXT} based on the
 output of the compiler, after @file{.c} files have been excluded, typically
-to @samp{o} if Posix, @samp{obj} if a @acronym{DOS} variant.
+to @samp{o} if Posix, @samp{obj} if a DOS variant.
 
 If the compiler being used does not produce executables, the tests fail.  If
 the executables can't be run, and cross-compilation is not enabled, they
@@ -6913,11 +6913,11 @@ static int test_array[sizeof (int) == 4 ? 1 : -1];
 
 @noindent
 To our knowledge, there is a single compiler that does not support this
-trick: the @acronym{HP} C compilers (the real ones, not only the
-``bundled'') on @acronym{HP-UX} 11.00.
+trick: the HP C compilers (the real ones, not only the
+``bundled'') on HP-UX 11.00.
 They incorrectly reject the above program with the diagnostic
 ``Variable-length arrays cannot have static storage.''
-This bug comes from @acronym{HP} compilers' mishandling of @code{sizeof (int)},
+This bug comes from HP compilers' mishandling of @code{sizeof (int)},
 not from the @code{? 1 : -1}, and
 Autoconf works around this problem by casting @code{sizeof (int)} to
 @code{long int} before comparing it.
@@ -6992,7 +6992,7 @@ Normally Autoconf ignores warnings generated by the compiler, linker, and
 preprocessor.  If this macro is used, warnings count as fatal
 errors for the current language.  This macro is useful when the
 results of configuration are used where warnings are unacceptable; for
-instance, if parts of a program are built with the @acronym{GCC}
+instance, if parts of a program are built with the GCC
 @option{-Werror}
 option.  If the whole program is built using @option{-Werror} it is
 often simpler to put @option{-Werror} in the compiler flags (@code{CFLAGS},
@@ -7054,8 +7054,8 @@ being checked for, since they can easily be worked around.
 
 @table @asis
 @item Don't use lines containing solitary backslashes
-They tickle a bug in the @acronym{HP-UX} C compiler (checked on
-@acronym{HP-UX} 10.20,
+They tickle a bug in the HP-UX C compiler (checked on
+HP-UX 10.20,
 11.00, and 11i).  When given the following source:
 
 @example
@@ -7080,7 +7080,7 @@ comment at end of file'' and ``Missing @samp{#endif} at end of file.''
 Removing the lines with solitary backslashes solves the problem.
 
 @item Don't compile several files at once if output matters to you
-Some compilers, such as @acronym{HP}'s, report names of files being
+Some compilers, such as HP's, report names of files being
 compiled when given more than one file operand.  For instance:
 
 @example
@@ -7140,15 +7140,15 @@ so.  This macro tries various options that select standard-conformance
 modes on various systems.
 
 After calling this macro you can check whether the C compiler has been
-set to accept @acronym{ANSI} C89 (@acronym{ISO} C90); if not, the shell
+set to accept ANSI C89 (ISO C90); if not, the shell
 variable
 @code{ac_cv_prog_cc_c89} is set to @samp{no}.  See also
 @code{AC_C_PROTOTYPES} below.
 
-If using the @acronym{GNU} C compiler, set shell variable @code{GCC} to
+If using the GNU C compiler, set shell variable @code{GCC} to
 @samp{yes}.  If output variable @code{CFLAGS} was not already set, set
-it to @option{-g -O2} for the @acronym{GNU} C compiler (@option{-O2} on systems
-where @acronym{GCC} does not accept @option{-g}), or @option{-g} for
+it to @option{-g -O2} for the GNU C compiler (@option{-O2} on systems
+where GCC does not accept @option{-g}), or @option{-g} for
 other compilers.  If your package does not like this default, then it is
 acceptable to insert the line @samp{: $@{CFLAGS=""@}} after @code{AC_INIT}
 and before @code{AC_PROG_CC} to select an empty default instead.
@@ -7172,7 +7172,7 @@ If the C compiler does not accept the @option{-c} and @option{-o} options
 simultaneously, define @code{NO_MINUS_C_MINUS_O}.  This macro actually
 tests both the compiler found by @code{AC_PROG_CC}, and, if different,
 the first @code{cc} in the path.  The test fails if one fails.  This
-macro was created for @acronym{GNU} Make to choose the default C compilation
+macro was created for GNU Make to choose the default C compilation
 rule.
 
 For the compiler @var{compiler}, this macro caches its result in the
@@ -7215,10 +7215,10 @@ features.  To check for characteristics not listed here, use
 @defmac AC_PROG_CC_STDC
 @acindex{PROG_CC_STDC}
 @caindex prog_cc_stdc
-If the C compiler cannot compile @acronym{ISO} Standard C (currently
+If the C compiler cannot compile ISO Standard C (currently
 C99), try to add an option to output variable @code{CC} to make it work.
 If the compiler does not support C99, fall back to supporting
-@acronym{ANSI} C89 (@acronym{ISO} C90).
+ANSI C89 (ISO C90).
 
 After calling this macro you can check whether the C compiler has been
 set to accept Standard C; if not, the shell variable
@@ -7228,15 +7228,15 @@ set to accept Standard C; if not, the shell variable
 @defmac AC_PROG_CC_C89
 @acindex{PROG_CC_C89}
 @caindex prog_cc_c89
-If the C compiler is not in @acronym{ANSI} C89 (@acronym{ISO} C90) mode by
+If the C compiler is not in ANSI C89 (ISO C90) mode by
 default, try to add an option to output variable @code{CC} to make it
-so.  This macro tries various options that select @acronym{ANSI} C89 on
+so.  This macro tries various options that select ANSI C89 on
 some system or another, preferring extended functionality modes over
 strict conformance modes.  It considers the compiler to be in
-@acronym{ANSI} C89 mode if it handles function prototypes correctly.
+ANSI C89 mode if it handles function prototypes correctly.
 
 After calling this macro you can check whether the C compiler has been
-set to accept @acronym{ANSI} C89; if not, the shell variable
+set to accept ANSI C89; if not, the shell variable
 @code{ac_cv_prog_cc_c89} is set to @samp{no}.
 
 This macro is called automatically by @code{AC_PROG_CC}.
@@ -7339,7 +7339,7 @@ If @command{autoconf} detects this situation, it leaves @code{const} alone,
 as this generally yields better results in practice.  However, using a
 C++ compiler to compile C code is not recommended or supported, and
 installers who run into trouble in this area should get a C compiler
-like @acronym{GCC} to compile their C code.
+like GCC to compile their C code.
 
 This macro caches its result in the @code{ac_cv_c_const} variable.
 
@@ -7483,7 +7483,7 @@ is declared.
 @acindex{C_TYPEOF}
 @cvindex HAVE_TYPEOF
 @cvindex typeof
-If the C compiler supports @acronym{GCC}'s @code{typeof} syntax either
+If the C compiler supports GCC's @code{typeof} syntax either
 directly or
 through a different spelling of the keyword (e.g., @code{__typeof__}),
 define @code{HAVE_TYPEOF}.  If the support is available only through a
@@ -7509,11 +7509,11 @@ New programs need not use this macro.
 @acindex{PROG_GCC_TRADITIONAL}
 @ovindex CC
 Add @option{-traditional} to output variable @code{CC} if using the
-@acronym{GNU} C compiler and @code{ioctl} does not work properly without
+GNU C compiler and @code{ioctl} does not work properly without
 @option{-traditional}.  That usually happens when the fixed header files
 have not been installed on an old system.
 
-This macro is obsolescent, since current versions of the @acronym{GNU} C
+This macro is obsolescent, since current versions of the GNU C
 compiler fix the header files automatically when installed.
 @end defmac
 
@@ -7548,9 +7548,9 @@ like this:
 AC_PROG_CXX([gcc cl KCC CC cxx cc++ xlC aCC c++ g++])
 @end example
 
-If using the @acronym{GNU} C++ compiler, set shell variable @code{GXX} to
+If using the GNU C++ compiler, set shell variable @code{GXX} to
 @samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
-it to @option{-g -O2} for the @acronym{GNU} C++ compiler (@option{-O2} on
+it to @option{-g -O2} for the GNU C++ compiler (@option{-O2} on
 systems where G++ does not accept @option{-g}), or @option{-g} for other
 compilers.  If your package does not like this default, then it is
 acceptable to insert the line @samp{: $@{CXXFLAGS=""@}} after @code{AC_INIT}
@@ -7608,9 +7608,9 @@ like this:
 AC_PROG_OBJC([gcc objcc objc])
 @end example
 
-If using the @acronym{GNU} Objective C compiler, set shell variable
+If using the GNU Objective C compiler, set shell variable
 @code{GOBJC} to @samp{yes}.  If output variable @code{OBJCFLAGS} was not
-already set, set it to @option{-g -O2} for the @acronym{GNU} Objective C
+already set, set it to @option{-g -O2} for the GNU Objective C
 compiler (@option{-O2} on systems where @command{gcc} does not accept
 @option{-g}), or @option{-g} for other compilers.
 @end defmac
@@ -7649,9 +7649,9 @@ like this:
 AC_PROG_OBJCXX([gcc g++ objcc++ objcxx])
 @end example
 
-If using the @acronym{GNU} Objective C++ compiler, set shell variable
+If using the GNU Objective C++ compiler, set shell variable
 @code{GOBJCXX} to @samp{yes}.  If output variable @code{OBJCXXFLAGS} was not
-already set, set it to @option{-g -O2} for the @acronym{GNU} Objective C++
+already set, set it to @option{-g -O2} for the GNU Objective C++
 compiler (@option{-O2} on systems where @command{gcc} does not accept
 @option{-g}), or @option{-g} for other compilers.
 @end defmac
@@ -7768,7 +7768,7 @@ example, if you didn't like the default order, then you could invoke
 AC_PROG_F77([fl32 f77 fort77 xlf g77 f90 xlf90])
 @end example
 
-If using @code{g77} (the @acronym{GNU} Fortran 77 compiler), then
+If using @code{g77} (the GNU Fortran 77 compiler), then
 set the shell variable @code{G77} to @samp{yes}.
 If the output variable @code{FFLAGS} was not already set in the
 environment, then set it to @option{-g -02} for @code{g77} (or @option{-O2}
@@ -7803,7 +7803,7 @@ which, if specified, must be a blank-separated list of Fortran
 compilers to search for, just as in @code{AC_PROG_F77}.
 
 If the output variable @code{FCFLAGS} was not already set in the
-environment, then set it to @option{-g -02} for @acronym{GNU} @code{g77} (or
+environment, then set it to @option{-g -02} for GNU @code{g77} (or
 @option{-O2} where @code{g77} does not accept @option{-g}).  Otherwise,
 set @code{FCFLAGS} to @option{-g} for all other Fortran compilers.
 @end defmac
@@ -7842,7 +7842,7 @@ should be included after @code{LIBS} when linking).
 This macro is intended to be used in those situations when it is
 necessary to mix, e.g., C++ and Fortran source code in a single
 program or shared library (@pxref{Mixing Fortran 77 With C and C++, , ,
-automake, @acronym{GNU} Automake}).
+automake, GNU Automake}).
 
 For example, if object files from a C++ and Fortran compiler must be
 linked together, then the C++ compiler/linker must be used for linking
@@ -7981,7 +7981,7 @@ void FOOBAR_F77(double *x, double *y);
 Note that we pass both the lowercase and uppercase versions of the
 function name to @code{F77_FUNC} so that it can select the right one.
 Note also that all parameters to Fortran 77 routines are passed as
-pointers (@pxref{Mixing Fortran 77 With C and C++, , , automake, @acronym{GNU}
+pointers (@pxref{Mixing Fortran 77 With C and C++, , , automake, GNU
 Automake}).
 
 (Replace @code{F77} with @code{FC} for Fortran instead of Fortran 77.)
@@ -8228,15 +8228,15 @@ preprocessor macros are defined where appropriate:
 
 @table @code
 @item _GNU_SOURCE
-Enable extensions on @acronym{GNU}/Linux.
+Enable extensions on GNU/Linux.
 @item __EXTENSIONS__
 Enable general extensions on Solaris.
 @item _POSIX_PTHREAD_SEMANTICS
 Enable threading extensions on Solaris.
 @item _TANDEM_SOURCE
-Enable extensions for the @acronym{HP} NonStop platform.
+Enable extensions for the HP NonStop platform.
 @item _ALL_SOURCE
-Enable extensions for @acronym{AIX} 3, and for Interix.
+Enable extensions for AIX 3, and for Interix.
 @item _POSIX_SOURCE
 Enable Posix functions for Minix.
 @item _POSIX_1_SOURCE
@@ -8595,7 +8595,7 @@ example, if you call @code{AC_HEADER_STDBOOL}, then later on in
 Both @code{#if HAVE_STDBOOL_H} and @code{#ifdef HAVE_STDBOOL_H} will
 work with any standard C compiler.  Some developers prefer @code{#if}
 because it is easier to read, while others prefer @code{#ifdef} because
-it avoids diagnostics with picky compilers like @acronym{GCC} with the
+it avoids diagnostics with picky compilers like GCC with the
 @option{-Wundef} option.
 
 If a test program needs to use or create a data file, give it a name
@@ -8624,13 +8624,13 @@ If a test program calls a function with invalid parameters (just to see
 whether it exists), organize the program to ensure that it never invokes
 that function.  You can do this by calling it in another function that is
 never invoked.  You can't do it by putting it after a call to
-@code{exit}, because @acronym{GCC} version 2 knows that @code{exit}
+@code{exit}, because GCC version 2 knows that @code{exit}
 never returns
 and optimizes out any code that follows it in the same block.
 
 If you include any header files, be sure to call the functions
 relevant to them with the correct number of arguments, even if they are
-just 0, to avoid compilation errors due to prototypes.  @acronym{GCC}
+just 0, to avoid compilation errors due to prototypes.  GCC
 version 2
 has internal prototypes for several functions that it automatically
 inlines; for example, @code{memcpy}.  To avoid errors when checking for
@@ -9123,16 +9123,16 @@ software which really need to be built on UFS@.  We may want to rebuild
 Darwin to have both UFS and HFS+ available (and put the /local/build
 tree on the UFS).
 
-@item @acronym{QNX} 4.25
-@cindex @acronym{QNX} 4.25
+@item QNX 4.25
+@cindex QNX 4.25
 @c FIXME: Please, if you feel like writing something more precise,
 @c it'd be great.  In particular, I can't understand the difference with
 @c QNX Neutrino.
-@acronym{QNX} is a realtime operating system running on Intel architecture
+QNX is a realtime operating system running on Intel architecture
 meant to be scalable from the small embedded systems to the hundred
 processor super-computer.  It claims to be Posix certified.  More
 information is available on the
-@uref{http://@/www.qnx.com/, @acronym{QNX} home page}.
+@uref{http://@/www.qnx.com/, QNX home page}.
 
 @item Tru64
 @cindex Tru64
@@ -9255,7 +9255,7 @@ define a C preprocessor macro with arguments.  The macro argument list,
 if present, should be a comma-separated list of C identifiers, possibly
 terminated by an ellipsis @samp{...} if C99 syntax is employed.
 @var{variable} should not contain comments, white space, trigraphs,
-backslash-newlines, universal character names, or non-@acronym{ASCII}
+backslash-newlines, universal character names, or non-ASCII
 characters.
 
 @var{value} may contain backslash-escaped newlines, which will be
@@ -10079,7 +10079,7 @@ double
 Posix states that M4 implementations are free to provide implementation
 extensions when @samp{$@{} is encountered in a macro definition.
 Autoconf reserves the longer sequence @samp{$@{@{} for use with planned
-extensions that will be available in the future @acronym{GNU} M4 2.0,
+extensions that will be available in the future GNU M4 2.0,
 but guarantees that all other instances of @samp{$@{} will be output
 literally.  Therefore, this idiom can also be used to output shell code
 parameter references:
@@ -10091,7 +10091,7 @@ define([first], [$@{1@}])first
 
 Posix also states that @samp{$11} should expand to the first parameter
 concatenated with a literal @samp{1}, although some versions of
-@acronym{GNU} M4 expand the eleventh parameter instead.  For
+GNU M4 expand the eleventh parameter instead.  For
 portability, you should only use single-digit M4 parameter expansion.
 
 With this in mind, we can explore the cases where macros invoke
@@ -10614,7 +10614,7 @@ Yet another great name from Lars J. Aas.
 It supports M4 extensions designed for use in tools like Autoconf.
 
 @menu
-* autom4te Invocation::         A @acronym{GNU} M4 wrapper
+* autom4te Invocation::         A GNU M4 wrapper
 * Customizing autom4te::        Customizing the Autoconf package
 @end menu
 
@@ -10630,7 +10630,7 @@ autom4te @var{options} @var{files}
 @noindent
 @evindex M4
 where the @var{files} are directly passed to @command{m4}.  By default,
-@acronym{GNU} M4 is found during configuration, but the environment
+GNU M4 is found during configuration, but the environment
 variable
 @env{M4} can be set to tell @command{autom4te} where to look.  In addition
 to the regular expansion, it handles the replacement of the quadrigraphs
@@ -10787,11 +10787,11 @@ Set the mode of the non-traces output to @var{octal-mode}; by default
 
 @cindex @file{autom4te.cache}
 As another additional feature over @command{m4}, @command{autom4te}
-caches its results.  @acronym{GNU} M4 is able to produce a regular
+caches its results.  GNU M4 is able to produce a regular
 output and traces at the same time.  Traces are heavily used in the
-@acronym{GNU} Build System: @command{autoheader} uses them to build
+GNU Build System: @command{autoheader} uses them to build
 @file{config.h.in}, @command{autoreconf} to determine what
-@acronym{GNU} Build System components are used, @command{automake} to
+GNU Build System components are used, @command{automake} to
 ``parse'' @file{configure.ac} etc.  To avoid recomputation,
 traces are cached while performing regular expansion,
 and conversely.  This cache is (actually, the caches are) stored in
@@ -10816,7 +10816,7 @@ If a cache is used, consider it obsolete (but update it anyway).
 
 @sp 1
 
-Because traces are so important to the @acronym{GNU} Build System,
+Because traces are so important to the GNU Build System,
 @command{autom4te} provides high level tracing features as compared to
 M4, and helps exploiting the cache:
 
@@ -11099,14 +11099,14 @@ This macro kept its original name: no @code{m4_dnl} is defined.
 @defmac m4_bpatsubst (@var{string}, @var{regexp}, @ovar{replacement})
 @msindex{bpatsubst}
 This macro corresponds to @code{patsubst}.  The name @code{m4_patsubst}
-is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
+is kept for future versions of M4sugar, once GNU M4 2.0 is
 released and supports extended regular expression syntax.
 @end defmac
 
 @defmac m4_bregexp (@var{string}, @var{regexp}, @ovar{replacement})
 @msindex{bregexp}
 This macro corresponds to @code{regexp}.  The name @code{m4_regexp}
-is kept for future versions of M4sugar, once @acronym{GNU} M4 2.0 is
+is kept for future versions of M4sugar, once GNU M4 2.0 is
 released and supports extended regular expression syntax.
 @end defmac
 
@@ -11224,7 +11224,7 @@ characters in @var{template} with the process id, without regards to the
 existence of a file by that name, but this a security hole.  When this
 was pointed out to the Posix folks, they agreed to invent a new macro
 @code{mkstemp} that always creates a uniquely named file, but not all
-versions of @acronym{GNU} M4 support the new macro.  In M4sugar,
+versions of GNU M4 support the new macro.  In M4sugar,
 @code{m4_maketemp} and @code{m4_mkstemp} are synonyms for each other,
 and both have the secure semantics regardless of which macro the
 underlying M4 provides.
@@ -11265,14 +11265,14 @@ to syntactically invalid scripts.
 @msindex{wrap}
 @msindex{wrap_lifo}
 These macros correspond to @code{m4wrap}.  Posix requires arguments of
-multiple wrap calls to be reprocessed at @acronym{EOF} in the same order
-as the original calls (first-in, first-out).  @acronym{GNU} M4 versions
+multiple wrap calls to be reprocessed at EOF in the same order
+as the original calls (first-in, first-out).  GNU M4 versions
 through 1.4.10, however, reprocess them in reverse order (last-in,
 first-out).  Both orders are useful, therefore, you can rely on
 @code{m4_wrap} to provide FIFO semantics and @code{m4_wrap_lifo} for
-LIFO semantics, regardless of the underlying @acronym{GNU} M4 version.
+LIFO semantics, regardless of the underlying GNU M4 version.
 
-Unlike the @acronym{GNU} M4 builtin, these macros only recognize one
+Unlike the GNU M4 builtin, these macros only recognize one
 argument, and avoid token pasting between consecutive invocations.  On
 the other hand, nested calls to @code{m4_wrap} from within wrapped text
 work just as in the builtin.
@@ -13191,7 +13191,7 @@ efficiently as possible.  However, this is not guaranteed to abort a
 shell running with @code{set -e} (@pxref{set, , Limitations of Shell
 Builtins}).  This should also be used at the end of a complex shell
 function instead of @samp{return} (@pxref{Shell Functions}) to avoid
-a @acronym{DJGPP} shell bug.
+a DJGPP shell bug.
 @end defmac
 
 @defmac AS_TR_CPP (@var{expression})
@@ -13245,7 +13245,7 @@ containing shell variables, as version strings, and expand
 depending upon the result.
 The algorithm to compare is similar to the one used by strverscmp in
 glibc (@pxref{String/Array Comparison, , String/Array Comparison, libc,
-The @acronym{GNU} C Library}).
+The GNU C Library}).
 @end defmac
 
 @node Polymorphic Variables
@@ -13657,7 +13657,7 @@ AC_DEFUN(@var{macro-name}, @var{macro-body})
 
 You can refer to any arguments passed to the macro as @samp{$1},
 @samp{$2}, etc.  @xref{Definitions, , How to define new macros, m4.info,
-@acronym{GNU} M4}, for more complete information on writing M4 macros.
+GNU M4}, for more complete information on writing M4 macros.
 
 Most macros fall in one of two general categories.  The first category
 includes macros which take arguments, in order to generate output
@@ -13702,7 +13702,7 @@ that produce no output, such as @code{AC_REQUIRE}.
 
 Public third-party macros need to use @code{AC_DEFUN}, and not
 @code{m4_define}, in order to be found by @command{aclocal}
-(@pxref{Extending aclocal,,, automake, @acronym{GNU} Automake}).
+(@pxref{Extending aclocal,,, automake, GNU Automake}).
 Additionally, if it is ever determined that a macro should be made
 obsolete, it is easy to convert from @code{AC_DEFUN} to @code{AU_DEFUN}
 in order to have @command{autoupdate} assist the user in choosing a
@@ -13795,7 +13795,7 @@ C variables in libraries.
 After the category comes the name of the particular feature being
 tested.  Any further words in the macro name indicate particular aspects
 of the feature.  For example, @code{AC_PROG_CC_STDC} checks whether the
-C compiler supports @acronym{ISO} Standard C.
+C compiler supports ISO Standard C.
 
 An internal macro should have a name that starts with an underscore;
 Autoconf internals should therefore start with @samp{_AC_}.
@@ -14331,7 +14331,7 @@ inside arguments do not need to be expanded before this macro, then
 use @code{m4_define}.  In case of doubt, use @code{AC_DEFUN}.
 Also take into account that public third-party macros need to use
 @code{AC_DEFUN} in order to be found by @command{aclocal}
-(@pxref{Extending aclocal,,, automake, @acronym{GNU} Automake}).
+(@pxref{Extending aclocal,,, automake, GNU Automake}).
 All the @code{AC_REQUIRE} statements should be at the beginning of the
 macro, and each statement should be followed by @code{dnl}.
 
@@ -14428,7 +14428,7 @@ is worth reading:
 Russ Allbery:
 
 @quotation
-The @acronym{GNU} assumption that @command{/bin/sh} is the one and only shell
+The GNU assumption that @command{/bin/sh} is the one and only shell
 leads to a permanent deadlock.  Vendors don't want to break users'
 existing shell scripts, and there are some corner cases in the Bourne
 shell that are not completely compatible with a Posix shell.  Thus,
@@ -14474,7 +14474,7 @@ However, these ancient systems are no longer of practical concern.
 
 The set of external programs you should run in a @command{configure} script
 is fairly small.  @xref{Utilities in Makefiles, , Utilities in
-Makefiles, standards, @acronym{GNU} Coding Standards}, for the list.  This
+Makefiles, standards, GNU Coding Standards}, for the list.  This
 restriction allows users to start out with a fairly small set of
 programs and build the rest, avoiding too many interdependencies between
 packages.
@@ -14521,11 +14521,11 @@ Below we describe some of the members of the Bourne shell family.
 @table @asis
 @item Ash
 @cindex Ash
-Ash is often used on @acronym{GNU}/Linux and @acronym{BSD}
+Ash is often used on GNU/Linux and BSD
 systems as a light-weight Bourne-compatible shell.  Ash 0.2 has some
 bugs that are fixed in the 0.3.x series, but portable shell scripts
 should work around them, since version 0.2 is still shipped with many
-@acronym{GNU}/Linux distributions.
+GNU/Linux distributions.
 
 To be compatible with Ash 0.2:
 
@@ -14561,7 +14561,7 @@ Substitutions}, item ``Command Substitution''.
 To detect whether you are running Bash, test whether
 @code{BASH_VERSION} is set.  To require
 Posix compatibility, run @samp{set -o posix}.  @xref{Bash POSIX
-Mode, , Bash Posix Mode, bash, The @acronym{GNU} Bash Reference
+Mode, , Bash Posix Mode, bash, The GNU Bash Reference
 Manual}, for details.
 
 @item Bash 2.05 and later
@@ -14609,7 +14609,7 @@ the standard shell conform to Posix.
 A public-domain clone of the Korn shell called @command{pdksh} is widely
 available: it has most of the @samp{ksh88} features along with a few of
 its own.  It usually sets @code{KSH_VERSION}, except if invoked as
-@command{/bin/sh} on Open@acronym{BSD}, and similarly to Bash you can require
+@command{/bin/sh} on OpenBSD, and similarly to Bash you can require
 Posix compatibility by running @samp{set -o posix}.  Unfortunately, with
 @command{pdksh} 5.2.14 (the latest stable version as of January 2007)
 Posix mode is buggy and causes @command{pdksh} to depart from Posix in
@@ -14648,11 +14648,11 @@ Bash in Mac OS X 10.2.
 
 Don't rely on @samp{\} being preserved just because it has no special
 meaning together with the next symbol.  In the native @command{sh}
-on Open@acronym{BSD} 2.7 @samp{\"} expands to @samp{"} in here-documents with
+on OpenBSD 2.7 @samp{\"} expands to @samp{"} in here-documents with
 unquoted delimiter.  As a general rule, if @samp{\\} expands to @samp{\}
 use @samp{\\} to get @samp{\}.
 
-With Open@acronym{BSD} 2.7's @command{sh}
+With OpenBSD 2.7's @command{sh}
 
 @example
 @group
@@ -14777,7 +14777,7 @@ One workaround is to grep out uninteresting lines, hoping not to remove
 good ones.
 
 If you intend to redirect both standard error and standard output,
-redirect standard output first.  This works better with @acronym{HP-UX},
+redirect standard output first.  This works better with HP-UX,
 since its shell mishandles tracing if standard error is redirected
 first:
 
@@ -14846,7 +14846,7 @@ Don't rely on file descriptors 0, 1, and 2 remaining closed in a
 subsidiary program.  If any of these descriptors is closed, the
 operating system may open an unspecified file for the descriptor in the
 new process image.  Posix says this may be done only if the subsidiary
-program is set-user-ID or set-group-ID, but @acronym{HP-UX} 11.23 does
+program is set-user-ID or set-group-ID, but HP-UX 11.23 does
 it even for ordinary programs.
 
 Don't rely on open file descriptors being open in child processes.  In
@@ -14894,7 +14894,7 @@ hi
 0
 @end example
 
-@acronym{DOS} variants cannot rename or remove open files, such as in
+DOS variants cannot rename or remove open files, such as in
 @samp{mv foo bar >foo} or @samp{rm foo >foo}, even though this is
 perfectly portable among Posix hosts.
 
@@ -14941,7 +14941,7 @@ with Apollo Domain/OS, which died out long ago, but unfortunately Cygwin
 has revived it.
 
 While @command{autoconf} and friends are usually run on some Posix
-variety, they can be used on other systems, most notably @acronym{DOS}
+variety, they can be used on other systems, most notably DOS
 variants.  This impacts several assumptions regarding file names.
 
 @noindent
@@ -14959,7 +14959,7 @@ esac
 @noindent
 fails to properly detect absolute file names on those systems, because
 they can use a drivespec, and usually use a backslash as directory
-separator.  If you want to be portable to @acronym{DOS} variants (at the
+separator.  If you want to be portable to DOS variants (at the
 price of rejecting valid but oddball Posix file names like @file{a:\b}),
 you can check for absolute file names like this:
 
@@ -14983,8 +14983,8 @@ use it as path separator.  When creating or accessing paths, you can use the
 to the appropriate value for the build system (@samp{:} or @samp{;}) when it
 starts up.
 
-File names need extra care as well.  While @acronym{DOS} variants
-that are Posixy enough to run @command{autoconf} (such as @acronym{DJGPP})
+File names need extra care as well.  While DOS variants
+that are Posixy enough to run @command{autoconf} (such as DJGPP)
 are usually able to handle long file names properly, there are still
 limitations that can seriously break packages.  Several of these issues
 can be easily detected by the
@@ -14993,13 +14993,13 @@ package.
 
 A short overview follows; problems are marked with SFN/LFN to
 indicate where they apply: SFN means the issues are only relevant to
-plain @acronym{DOS}, not to @acronym{DOS} under Microsoft Windows
+plain DOS, not to DOS under Microsoft Windows
 variants, while LFN identifies problems that exist even under
 Microsoft Windows variants.
 
 @table @asis
 @item No multiple dots (SFN)
-@acronym{DOS} cannot handle multiple dots in file names.  This is an especially
+DOS cannot handle multiple dots in file names.  This is an especially
 important thing to remember when building a portable configure script,
 as @command{autoconf} uses a .in suffix for template files.
 
@@ -15012,9 +15012,9 @@ AC_OUTPUT
 @end example
 
 @noindent
-but it causes problems on @acronym{DOS}, as it requires @samp{config.h.in},
+but it causes problems on DOS, as it requires @samp{config.h.in},
 @samp{source.c.in} and @samp{foo.bar.in}.  To make your package more portable
-to @acronym{DOS}-based environments, you should use this instead:
+to DOS-based environments, you should use this instead:
 
 @example
 AC_CONFIG_HEADERS([config.h:config.hin])
@@ -15023,18 +15023,18 @@ AC_OUTPUT
 @end example
 
 @item No leading dot (SFN)
-@acronym{DOS} cannot handle file names that start with a dot.  This is usually
+DOS cannot handle file names that start with a dot.  This is usually
 not important for @command{autoconf}.
 
 @item Case insensitivity (LFN)
-@acronym{DOS} is case insensitive, so you cannot, for example, have both a
+DOS is case insensitive, so you cannot, for example, have both a
 file called @samp{INSTALL} and a directory called @samp{install}.  This
 also affects @command{make}; if there's a file called @samp{INSTALL} in
 the directory, @samp{make install} does nothing (unless the
 @samp{install} target is marked as PHONY).
 
 @item The 8+3 limit (SFN)
-Because the @acronym{DOS} file system only stores the first 8 characters of
+Because the DOS file system only stores the first 8 characters of
 the file name and the first 3 of the extension, those must be unique.
 That means that @file{foobar-part1.c}, @file{foobar-part2.c} and
 @file{foobar-prettybird.c} all resolve to the same file name
@@ -15050,14 +15050,14 @@ and LFN environments, it also means the above problem applies there
 as well.
 
 @item Invalid characters (LFN)
-Some characters are invalid in @acronym{DOS} file names, and should therefore
+Some characters are invalid in DOS file names, and should therefore
 be avoided.  In a LFN environment, these are @samp{/}, @samp{\},
 @samp{?}, @samp{*}, @samp{:}, @samp{<}, @samp{>}, @samp{|} and @samp{"}.
 In a SFN environment, other characters are also invalid.  These
 include @samp{+}, @samp{,}, @samp{[} and @samp{]}.
 
 @item Invalid names (LFN)
-Some @acronym{DOS} file names are reserved, and cause problems if you
+Some DOS file names are reserved, and cause problems if you
 try to use files with those names.  These names include @file{CON},
 @file{AUX}, @file{COM1}, @file{COM2}, @file{COM3}, @file{COM4},
 @file{LPT1}, @file{LPT2}, @file{LPT3}, @file{NUL}, and @file{PRN}.
@@ -15193,7 +15193,7 @@ bad substitution
 @ifnotinfo
 @cindex $@{@var{var}:-@var{value}@}
 @end ifnotinfo
-Old @acronym{BSD} shells, including the Ultrix @code{sh}, don't accept the
+Old BSD shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 Similarly for $@{@var{var}:=@var{value}@}, $@{@var{var}:?@var{value}@}, etc.
 
@@ -15281,7 +15281,7 @@ bit set, hence no IFS splitting is performed!!!
 
 One piece of good news is that Ultrix works fine with @samp{:
 $@{list=$default@}}; i.e., if you @emph{don't} quote.  The bad news is
-then that @acronym{QNX} 4.25 then sets @var{list} to the @emph{last} item of
+then that QNX 4.25 then sets @var{list} to the @emph{last} item of
 @var{default}!
 
 The portable way out consists in using a double assignment, to switch
@@ -15505,7 +15505,7 @@ $ @kbd{false || foo=`:`; echo $?}
 @end example
 
 @noindent
-and to make things even worse, @acronym{QNX} 4.25 just sets the exit status
+and to make things even worse, QNX 4.25 just sets the exit status
 to 0 in any case:
 
 @example
@@ -15812,14 +15812,14 @@ IFS=$save_IFS
 @end example
 
 @c  However, some older, nonstandard
-@c  systems (notably @acronym{SCO}) break if locale environment variables
+@c  systems (notably SCO) break if locale environment variables
 @c  are set to @samp{C}, so when running on these systems
 @c  Autoconf-generated scripts unset the variables instead.
 
 @item LANGUAGE
 @evindex LANGUAGE
 
-@env{LANGUAGE} is not specified by Posix, but it is a @acronym{GNU}
+@env{LANGUAGE} is not specified by Posix, but it is a GNU
 extension that overrides @env{LC_ALL} in some cases, so you (or M4sh)
 should set it too.
 
@@ -15836,7 +15836,7 @@ should set it too.
 @evindex LC_PAPER
 @evindex LC_TELEPHONE
 
-These locale environment variables are @acronym{GNU} extensions.  They
+These locale environment variables are GNU extensions.  They
 are treated like their Posix brethren (@env{LC_COLLATE},
 etc.)@: as described above.
 
@@ -15990,7 +15990,7 @@ your script might be suspended waiting for data on its standard input.
 
 @item PATH_SEPARATOR
 @evindex PATH_SEPARATOR
-On @acronym{DJGPP} systems, the @env{PATH_SEPARATOR} environment
+On DJGPP systems, the @env{PATH_SEPARATOR} environment
 variable can be set to either @samp{:} or @samp{;} to control the path
 separator Bash uses to set up certain environment variables (such as
 @env{PATH}).  You can set this variable to @samp{;} if you want
@@ -16050,7 +16050,7 @@ $ @kbd{ash -c 'foo()@{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
 2
 @end example
 
-@acronym{DJGPP} bash 2.04 has a bug in that @command{return} from a
+DJGPP bash 2.04 has a bug in that @command{return} from a
 shell function which also used a command substitution causes a
 segmentation fault.  To work around the issue, you can use
 @command{return} from a subshell, or @samp{AS_SET_STATUS} as last command
@@ -16080,7 +16080,7 @@ uses the prefix @samp{as_fn_} for its functions.
 Handling of positional parameters and shell options varies among shells.
 For example, Korn shells reset and restore trace output (@samp{set -x})
 and other options upon function entry and exit.  Inside a function,
-@acronym{IRIX} sh sets @samp{$0} to the function name.
+IRIX sh sets @samp{$0} to the function name.
 
 It is not portable to pass temporary environment variables to shell
 functions.  Solaris @command{/bin/sh} does not see the variable.
@@ -16104,7 +16104,7 @@ Some ancient Bourne shell variants with function support did not reset
 arguments of the script were lost after the first function invocation.
 It is probably not worth worrying about these shells any more.
 
-With @acronym{AIX} sh, a @command{trap} on 0 installed in a shell function
+With AIX sh, a @command{trap} on 0 installed in a shell function
 triggers at function exit rather than at script exit, see @xref{trap, ,
 Limitations of Shell Builtins}.
 
@@ -16443,7 +16443,7 @@ value=table_$key} to simulate a hash table when the key is known to be
 alphanumeric.
 
 You should also be wary of common bugs in @command{eval} implementations.
-In some shell implementations (e.g., older @command{ash}, Open@acronym{BSD} 3.8
+In some shell implementations (e.g., older @command{ash}, OpenBSD 3.8
 @command{sh}, @command{pdksh} v5.2.14 99/07/13.2, and @command{zsh}
 4.2.5), the arguments of @samp{eval} are evaluated in a context where
 @samp{$?} is 0, so they exhibit behavior like this:
@@ -16536,7 +16536,7 @@ true (GNU coreutils) 6.10
 @c -----------------
 @prindex @command{exit}
 The default value of @command{exit} is supposed to be @code{$?};
-unfortunately, some shells, such as the @acronym{DJGPP} port of Bash 2.04, just
+unfortunately, some shells, such as the DJGPP port of Bash 2.04, just
 perform @samp{exit 0}.
 
 @example
@@ -16574,7 +16574,7 @@ variable marked as exported.
 
 Alas, many shells, such as Solaris @command{/bin/sh},
 IRIX 6.3, IRIX 5.2,
-@acronym{AIX} 4.1.5, and Digital Unix 4.0, forget to
+AIX 4.1.5, and Digital Unix 4.0, forget to
 @command{export} the environment variables they receive.  As a result,
 two variables coexist: the environment variable and the shell
 variable.  The following code demonstrates this failure:
@@ -16712,7 +16712,7 @@ fi
 A format string starting with a @samp{-} can cause problems.
 Bash interprets it as an option and
 gives an error.  And @samp{--} to mark the end of options is not good
-in the Net@acronym{BSD} Almquist shell (e.g., 0.4.6) which takes that
+in the NetBSD Almquist shell (e.g., 0.4.6) which takes that
 literally as the format string.  Putting the @samp{-} in a @samp{%c}
 or @samp{%s} is probably easiest:
 
@@ -16791,7 +16791,7 @@ No options are portable, not even support @option{-r} (Solaris
 @item @command{set}
 @c ----------------
 @prindex @command{set}
-With the Free@acronym{BSD} 6.0 shell, the @command{set} command (without
+With the FreeBSD 6.0 shell, the @command{set} command (without
 any options) does not sort its output.
 
 The @command{set} builtin faces the usual problem with arguments
@@ -16849,8 +16849,8 @@ Likewise, @samp{two} should never be printed, since the failure of
 @command{rm} does not abort the function, such that the status of
 @samp{doit} is 0.
 
-The @acronym{BSD} shell has had several problems with the @option{-e}
-option.  Older versions of the @acronym{BSD}
+The BSD shell has had several problems with the @option{-e}
+option.  Older versions of the BSD
 shell (circa 1990) mishandled @samp{&&}, @samp{||}, @samp{if}, and
 @samp{case} when @option{-e} was in effect, causing the shell to exit
 unexpectedly in some cases.  This was particularly a problem with
@@ -16858,8 +16858,8 @@ makefiles, and led to circumlocutions like @samp{sh -c 'test -f file ||
 touch file'}, where the seemingly-unnecessary @samp{sh -c '@dots{}'}
 wrapper works around the bug (@pxref{Failure in Make Rules}).
 
-Even relatively-recent versions of the @acronym{BSD} shell (e.g.,
-Open@acronym{BSD} 3.4) wrongly exit with @option{-e} if a command within
+Even relatively-recent versions of the BSD shell (e.g.,
+OpenBSD 3.4) wrongly exit with @option{-e} if a command within
 @samp{&&} fails inside a compound statement.  For example:
 
 @example
@@ -16877,7 +16877,7 @@ echo two
 @noindent
 does not print @samp{two}.  One workaround is to use @samp{if test -n
 "$foo"; then exit 1; fi} rather than @samp{test -n "$foo" && exit 1}.
-Another possibility is to warn @acronym{BSD} users not to use @samp{sh -e}.
+Another possibility is to warn BSD users not to use @samp{sh -e}.
 
 When @samp{set -e} is in effect, a failed command substitution in
 Solaris @command{/bin/sh} cannot be ignored, even with @samp{||}.
@@ -16950,8 +16950,8 @@ c
 @c ------------------
 @prindex @command{shift}
 Not only is @command{shift}ing a bad idea when there is nothing left to
-shift, but in addition it is not portable: the shell of @acronym{MIPS
-RISC/OS} 4.52 refuses to do it.
+shift, but in addition it is not portable: the shell of MIPS
+RISC/OS 4.52 refuses to do it.
 
 Don't use @samp{shift 2} etc.; while it in the SVR1 shell (1983),
 it is also absent in many pre-Posix shells.
@@ -17011,7 +17011,7 @@ To enable @command{configure} scripts to support cross-compilation, they
 shouldn't do anything that tests features of the build system instead of
 the host system.  But occasionally you may find it necessary to check
 whether some arbitrary file exists.  To do so, use @samp{test -f} or
-@samp{test -r}.  Do not use @samp{test -x}, because 4.3@acronym{BSD} does not
+@samp{test -r}.  Do not use @samp{test -x}, because 4.3BSD does not
 have it.  Do not use @samp{test -e} either, because Solaris @command{/bin/sh}
 lacks it.  To test for symbolic links on systems that have them, use
 @samp{test -h} rather than @samp{test -L}; either form conforms to
@@ -17028,7 +17028,7 @@ Solaris 10 @command{/bin/sh}, which mishandle strings like @samp{!} and
 Posix also says that @samp{test ! "@var{string}"},
 @samp{test -n "@var{string}"} and
 @samp{test -z "@var{string}"} work with any string, but many
-shells (such as Solaris, @acronym{AIX} 3.2, UNICOS 10.0.0.6,
+shells (such as Solaris, AIX 3.2, UNICOS 10.0.0.6,
 Digital Unix 4, etc.)@: get confused if
 @var{string} looks like an operator:
 
@@ -17085,7 +17085,7 @@ expr "X$ac_feature" : 'X.*[^-a-zA-Z0-9_]' >/dev/null &&
 It is safe to trap at least the signals 1, 2, 13, and 15.  You can also
 trap 0, i.e., have the @command{trap} run when the script ends (either via an
 explicit @command{exit}, or the end of the script).  The trap for 0 should be
-installed outside of a shell function, or @acronym{AIX} 5.3 @command{/bin/sh}
+installed outside of a shell function, or AIX 5.3 @command{/bin/sh}
 will invoke the trap at the end of this function.
 
 Posix says that @samp{trap - 1 2 13 15} resets the traps for the
@@ -17127,7 +17127,7 @@ set the exit status to 42 for Zsh, and the second to trigger the trap
 and pass 42 as exit status for Bash.  In M4sh, this is covered by using
 @code{AS_EXIT}.
 
-The shell in Free@acronym{BSD} 4.0 has the following bug: @samp{$?} is
+The shell in FreeBSD 4.0 has the following bug: @samp{$?} is
 reset to 0 by empty lines if the code is inside @command{trap}.
 
 @example
@@ -17243,7 +17243,7 @@ include some limitations you should be aware of.
 @c ----------------
 @prindex @command{awk}
 Don't leave white space before the opening parenthesis in a user function call.
-Posix does not allow this and @acronym{GNU} Awk rejects it:
+Posix does not allow this and GNU Awk rejects it:
 
 @example
 $ @kbd{gawk 'function die () @{ print "Aaaaarg!"  @}
@@ -17302,7 +17302,7 @@ bar
 foo
 @end example
 
-Some Awk implementations, such as @acronym{HP-UX} 11.0's native one,
+Some Awk implementations, such as HP-UX 11.0's native one,
 mishandle anchors:
 
 @example
@@ -17327,7 +17327,7 @@ $ @kbd{awk 'BEGIN @{ printf "%u %d\n", 0, -1 @}'}
 0 0
 @end example
 
-@acronym{AIX} version 5.2 has an arbitrary limit of 399 on the
+AIX version 5.2 has an arbitrary limit of 399 on the
 length of regular expressions and literal strings in an Awk program.
 
 Traditional Awk implementations derived from Unix version 7, such as
@@ -17426,13 +17426,13 @@ The command @samp{cc -c foo.c} traditionally produces an object file
 named @file{foo.o}.  Most compilers allow @option{-c} to be combined
 with @option{-o} to specify a different object file name, but
 Posix does not require this combination and a few compilers
-lack support for it.  @xref{C Compiler}, for how @acronym{GNU} Make
+lack support for it.  @xref{C Compiler}, for how GNU Make
 tests for this feature with @code{AC_PROG_CC_C_O}.
 
 When a compilation such as @samp{cc -o foo foo.c} fails, some compilers
 (such as CDS on Reliant Unix) leave a @file{foo.o}.
 
-@acronym{HP-UX} @command{cc} doesn't accept @file{.S} files to preprocess and
+HP-UX @command{cc} doesn't accept @file{.S} files to preprocess and
 assemble.  @samp{cc -c foo.S} appears to succeed, but in fact does
 nothing.
 
@@ -17441,7 +17441,7 @@ The default executable, produced by @samp{cc foo.c}, can be
 @itemize
 @item @file{a.out} --- usual Posix convention.
 @item @file{b.out} --- i960 compilers (including @command{gcc}).
-@item @file{a.exe} --- @acronym{DJGPP} port of @command{gcc}.
+@item @file{a.exe} --- DJGPP port of @command{gcc}.
 @item @file{a_out.exe} --- GNV @command{cc} wrapper for DEC C on OpenVMS.
 @item @file{foo.exe} --- various MS-DOS compilers.
 @end itemize
@@ -17490,11 +17490,11 @@ newline encoding.
 @prindex @command{cp}
 Avoid the @option{-r} option, since Posix 1003.1-2004 marks it as
 obsolescent and its behavior on special files is implementation-defined.
-Use @option{-R} instead.  On @acronym{GNU} hosts the two options
+Use @option{-R} instead.  On GNU hosts the two options
 are equivalent, but on Solaris hosts (for example) @code{cp -r}
 reads from pipes instead of replicating them.
 
-Some @command{cp} implementations (e.g., @acronym{BSD/OS} 4.2) do not allow
+Some @command{cp} implementations (e.g., BSD/OS 4.2) do not allow
 trailing slashes at the end of nonexistent destination directories.  To
 avoid this problem, omit the trailing slashes.  For example, use
 @samp{cp -R source /tmp/newdir} rather than @samp{cp -R source
@@ -17514,7 +17514,7 @@ source.  The exact amount of truncation depends on the resolution of
 the system calls that @command{cp} uses; traditionally this was
 @code{utime}, which has 1-second resolution, but some newer
 @command{cp} implementations use @code{utimes}, which has
-1-microsecond resolution.  These newer implementations include @acronym{GNU}
+1-microsecond resolution.  These newer implementations include GNU
 Core Utilities 5.0.91 or later, and Solaris 8 (sparc) patch 109933-02 or
 later.  Unfortunately as of January 2006 there is still no system
 call to set timestamps to the full nanosecond resolution.
@@ -17529,14 +17529,14 @@ over.
 In Unix System V any user can chown files to any other user, and System
 V also has a non-sticky @file{/tmp}.  That probably derives from the
 heritage of System V in a business environment without hostile users.
-@acronym{BSD} changed this
+BSD changed this
 to be a more secure model where only root can @command{chown} files and
 a sticky @file{/tmp} is used.  That undoubtedly derives from the heritage
-of @acronym{BSD} in a campus environment.
+of BSD in a campus environment.
 
-@acronym{GNU}/Linux and Solaris by default follow @acronym{BSD}, but
+GNU/Linux and Solaris by default follow BSD, but
 can be configured to allow a System V style @command{chown}.  On the
-other hand, @acronym{HP-UX} follows System V, but can
+other hand, HP-UX follows System V, but can
 be configured to use the modern security model and disallow
 @command{chown}.  Since it is an administrator-configurable parameter
 you can't use the name of the kernel as an indicator of the behavior.
@@ -17667,7 +17667,7 @@ not needed anyway.
 
 On the other hand, the behavior of the @samp{$} anchor is not portable
 on multi-line strings.  Posix is ambiguous whether the anchor applies to
-each line, as was done in older versions of @acronym{GNU} Coreutils, or
+each line, as was done in older versions of GNU Coreutils, or
 whether it applies only to the end of the overall string, as in
 Coreutils 6.0 and most other implementations.
 
@@ -17683,7 +17683,7 @@ foo
 The Posix standard is ambiguous as to whether
 @samp{expr 'a' : '\(b\)'} outputs @samp{0} or the empty string.
 In practice, it outputs the empty string on most platforms, but portable
-scripts should not assume this.  For instance, the @acronym{QNX} 4.25 native
+scripts should not assume this.  For instance, the QNX 4.25 native
 @command{expr} returns @samp{0}.
 
 One might think that a way to get a uniform behavior would be to use
@@ -17718,7 +17718,7 @@ for @samp{[^-]}.
 
 Don't leave, there is some more!
 
-The @acronym{QNX} 4.25 @command{expr}, in addition of preferring @samp{0} to
+The QNX 4.25 @command{expr}, in addition of preferring @samp{0} to
 the empty string, has a funny behavior in its exit status: it's always 1
 when parentheses are used!
 
@@ -17744,7 +17744,7 @@ $ @kbd{expr 'a' : '\(a\)' || echo 'a' | sed 's/^\(a\)$/\1/'}
 @end example
 
 @noindent
-outputs @samp{a} on most hosts, but @samp{aa} on @acronym{QNX} 4.25.  A
+outputs @samp{a} on most hosts, but @samp{aa} on QNX 4.25.  A
 simple workaround consists of testing @command{expr} and using a variable
 set to @command{expr} or to @command{false} according to the result.
 
@@ -17756,7 +17756,7 @@ $ @kbd{expr 00001 : '.*\(...\)'}
 1
 @end example
 
-On @acronym{HP-UX} 11, @command{expr} only supports a single
+On HP-UX 11, @command{expr} only supports a single
 sub-expression.
 
 @example
@@ -17778,13 +17778,13 @@ not work on long input lines.  To work around these problems, invoke
 @item @command{find}
 @c -----------------
 @prindex @command{find}
-The option @option{-maxdepth} seems to be @acronym{GNU} specific.
-Tru64 v5.1, Net@acronym{BSD} 1.5 and Solaris @command{find}
+The option @option{-maxdepth} seems to be GNU specific.
+Tru64 v5.1, NetBSD 1.5 and Solaris @command{find}
 commands do not understand it.
 
 The replacement of @samp{@{@}} is guaranteed only if the argument is
 exactly @emph{@{@}}, not if it's only a part of an argument.  For
-instance on DU, and @acronym{HP-UX} 10.20 and @acronym{HP-UX} 11:
+instance on DU, and HP-UX 10.20 and HP-UX 11:
 
 @example
 $ @kbd{touch foo}
@@ -17793,7 +17793,7 @@ $ @kbd{find . -name foo -exec echo "@{@}-@{@}" \;}
 @end example
 
 @noindent
-while @acronym{GNU} @command{find} reports @samp{./foo-./foo}.
+while GNU @command{find} reports @samp{./foo-./foo}.
 
 
 @anchor{grep}
@@ -17824,7 +17824,7 @@ lines on the input before matching.
 
 Also, many implementations do not support multiple regexps
 with @option{-e}: they either reject @option{-e} entirely (e.g., Solaris)
-or honor only the last pattern (e.g., @acronym{IRIX} 6.5 and NeXT).  To
+or honor only the last pattern (e.g., IRIX 6.5 and NeXT).  To
 work around these problems, invoke @code{AC_PROG_GREP} and then use
 @code{$GREP}.
 
@@ -17838,7 +17838,7 @@ bar' in.txt
 
 @noindent
 except that this fails with traditional @command{grep}
-implementations and with Open@acronym{BSD} 3.8 @command{grep}.
+implementations and with OpenBSD 3.8 @command{grep}.
 
 Traditional @command{grep} implementations (e.g., Solaris) do not
 support the @option{-E} or @option{-F} options.  To work around these
@@ -17858,8 +17858,8 @@ Similarly, the following escape sequences should also be avoided:
 @samp{\B}, @samp{\b}, @samp{\S}, @samp{\s}, @samp{\W}, and @samp{\w}.
 
 Posix does not specify the behavior of @command{grep} on binary files.
-An example where this matters is using @acronym{BSD} @command{grep} to
-search text that includes embedded @acronym{ANSI} escape sequences for
+An example where this matters is using BSD @command{grep} to
+search text that includes embedded ANSI escape sequences for
 colored output to terminals (@samp{\033[m} is the sequence to restore
 normal output); the behavior depends on whether input is seekable:
 
@@ -17897,14 +17897,14 @@ Use @samp{join - file} instead.
 Don't rely on @command{ln} having a @option{-f} option.  Symbolic links
 are not available on old systems; use @samp{$(LN_S)} as a portable substitute.
 
-For versions of the @acronym{DJGPP} before 2.04,
+For versions of the DJGPP before 2.04,
 @command{ln} emulates symbolic links
 to executables by generating a stub that in turn calls the real
 program.  This feature also works with nonexistent files like in the
 Posix spec.  So @samp{ln -s file link} generates @file{link.exe},
 which attempts to call @file{file.exe} if run.  But this feature only
 works for executables, so @samp{cp -p} is used instead for these
-systems.  @acronym{DJGPP} versions 2.04 and later have full support
+systems.  DJGPP versions 2.04 and later have full support
 for symbolic links.
 
 
@@ -17944,24 +17944,24 @@ No @command{mkdir} option is portable to older systems.  Instead of
 or @code{AC_PROG_MKDIR_P} (@pxref{Particular Programs}).
 
 Combining the @option{-m} and @option{-p} options, as in @samp{mkdir -m
-go-w -p @var{dir}}, often leads to trouble.  Free@acronym{BSD}
+go-w -p @var{dir}}, often leads to trouble.  FreeBSD
 @command{mkdir} incorrectly attempts to change the permissions of
-@var{dir} even if it already exists.  @acronym{HP-UX} 11.23 and
-@acronym{IRIX} 6.5 @command{mkdir} often assign the wrong permissions to
+@var{dir} even if it already exists.  HP-UX 11.23 and
+IRIX 6.5 @command{mkdir} often assign the wrong permissions to
 any newly-created parents of @var{dir}.
 
 Posix does not clearly specify whether @samp{mkdir -p foo}
 should succeed when @file{foo} is a symbolic link to an already-existing
-directory.  The @acronym{GNU} Core Utilities 5.1.0 @command{mkdir}
+directory.  The GNU Core Utilities 5.1.0 @command{mkdir}
 succeeds, but Solaris @command{mkdir} fails.
 
 Traditional @code{mkdir -p} implementations suffer from race conditions.
 For example, if you invoke @code{mkdir -p a/b} and @code{mkdir -p a/c}
 at the same time, both processes might detect that @file{a} is missing,
 one might create @file{a}, then the other might try to create @file{a}
-and fail with a @code{File exists} diagnostic.  The @acronym{GNU} Core
-Utilities (@samp{fileutils} version 4.1), Free@acronym{BSD} 5.0,
-Net@acronym{BSD} 2.0.2, and Open@acronym{BSD} 2.4 are known to be
+and fail with a @code{File exists} diagnostic.  The GNU Core
+Utilities (@samp{fileutils} version 4.1), FreeBSD 5.0,
+NetBSD 2.0.2, and OpenBSD 2.4 are known to be
 race-free when two processes invoke @code{mkdir -p} simultaneously, but
 earlier versions are vulnerable.  Solaris @command{mkdir} is still
 vulnerable as of Solaris 10, and other traditional Unix systems are
@@ -17978,7 +17978,7 @@ OK, but copies from older versions are vulnerable.
 @c -------------------
 @prindex @command{mkfifo}
 @prindex @command{mknod}
-The @acronym{GNU} Coding Standards state that @command{mknod} is safe to use on
+The GNU Coding Standards state that @command{mknod} is safe to use on
 platforms where it has been tested to exist; but it is generally portable
 only for creating named FIFOs, since device numbers are
 platform-specific.  Autotest uses @command{mkfifo} to implement parallel
@@ -18052,7 +18052,7 @@ This annoying behavior conforms to Posix, unfortunately.
 Moving directories across mount points is not portable, use @command{cp}
 and @command{rm}.
 
-@acronym{DOS} variants cannot rename or remove open files, and do not
+DOS variants cannot rename or remove open files, and do not
 support commands like @samp{mv foo bar >foo}, even though this is
 perfectly portable among Posix hosts.
 
@@ -18063,9 +18063,9 @@ perfectly portable among Posix hosts.
 
 In Mac OS X 10.3, @command{od} does not support the
 standard Posix options @option{-A}, @option{-j}, @option{-N}, or
-@option{-t}, or the @acronym{XSI} option @option{-s}.  The only
+@option{-t}, or the XSI option @option{-s}.  The only
 supported Posix option is @option{-v}, and the only supported
-@acronym{XSI} options are those in @option{-bcdox}.  The @acronym{BSD}
+XSI options are those in @option{-bcdox}.  The BSD
 @command{hexdump} program can be used instead.
 
 This problem no longer exists in Mac OS X 10.4.3.
@@ -18079,14 +18079,14 @@ The @option{-f} and @option{-r} options are portable.
 It is not portable to invoke @command{rm} without operands.  For
 example, on many systems @samp{rm -f -r} (with no other arguments)
 silently succeeds without doing anything, but it fails with a diagnostic
-on Net@acronym{BSD} 2.0.2.
+on NetBSD 2.0.2.
 
 A file might not be removed even if its parent directory is writable
 and searchable.  Many Posix hosts cannot remove a mount point, a named
 stream, a working directory, or a last link to a file that is being
 executed.
 
-@acronym{DOS} variants cannot rename or remove open files, and do not
+DOS variants cannot rename or remove open files, and do not
 support commands like @samp{rm foo >foo}, even though this is
 perfectly portable among Posix hosts.
 
@@ -18115,7 +18115,7 @@ them.
 Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
 
 Sed scripts should not use branch labels longer than 7 characters and
-should not contain comments.  @acronym{HP-UX} sed has a limit of 99 commands
+should not contain comments.  HP-UX sed has a limit of 99 commands
 (not counting @samp{:} commands) and
 48 labels, which can not be circumvented by using more than one script
 file.  It can execute up to 19 reads with the @samp{r} command per cycle.
@@ -18123,7 +18123,7 @@ Solaris @command{/usr/ucb/sed} rejects usages that exceed a limit of
 about 6000 bytes for the internal representation of commands.
 
 Avoid redundant @samp{;}, as some @command{sed} implementations, such as
-Net@acronym{BSD} 1.4.2's, incorrectly try to interpret the second
+NetBSD 1.4.2's, incorrectly try to interpret the second
 @samp{;} as a command:
 
 @example
@@ -18167,7 +18167,7 @@ The @option{-e} option is mostly portable.
 However, its argument
 cannot start with @samp{a}, @samp{c}, or @samp{i},
 as this runs afoul of a Tru64 5.1 bug.
-Also, its argument cannot be empty, as this fails on @acronym{AIX} 5.3.
+Also, its argument cannot be empty, as this fails on AIX 5.3.
 Some people prefer to use @samp{-e}:
 
 @example
@@ -18236,11 +18236,11 @@ subsequent label name.
 If a sed script is specified on the command line and ends in an
 @samp{a}, @samp{c}, or @samp{i} command, the last line of inserted text
 should be followed by a newline.  Otherwise some @command{sed}
-implementations (e.g., Open@acronym{BSD} 3.9) do not append a newline to the
+implementations (e.g., OpenBSD 3.9) do not append a newline to the
 inserted text.
 
 Many @command{sed} implementations (e.g., MacOS X 10.4,
-Open@acronym{BSD} 3.9, Solaris 10
+OpenBSD 3.9, Solaris 10
 @command{/usr/ucb/sed}) strip leading white space from the text of
 @samp{a}, @samp{c}, and @samp{i} commands.  Prepend a backslash to
 work around this incompatibility with Posix:
@@ -18277,8 +18277,8 @@ b
 @c ---------------------------
 @prindex @command{sed} (@samp{t})
 Some old systems have @command{sed} that ``forget'' to reset their
-@samp{t} flag when starting a new cycle.  For instance on @acronym{MIPS
-RISC/OS}, and on IRIX 5.3, if you run the following @command{sed}
+@samp{t} flag when starting a new cycle.  For instance on MIPS
+RISC/OS, and on IRIX 5.3, if you run the following @command{sed}
 script (the line numbers are not actual part of the texts):
 
 @example
@@ -18380,13 +18380,13 @@ option), @command{touch} typically uses the @code{utime} or
 @code{utimes} system call, which can result in the same kind of
 timestamp truncation problems that @samp{cp -p} has.
 
-On ancient @acronym{BSD} systems, @command{touch} or any command that
+On ancient BSD systems, @command{touch} or any command that
 results in an empty file does not update the timestamps, so use a
 command like @command{echo} as a workaround.
 Also,
-@acronym{GNU} @command{touch} 3.16r (and presumably all before that)
+GNU @command{touch} 3.16r (and presumably all before that)
 fails to work on SunOS 4.1.3 when the empty file is on an
-@acronym{NFS}-mounted 4.2 volume.
+NFS-mounted 4.2 volume.
 However, these problems are no longer of practical concern.
 
 @item @command{tr}
@@ -18398,7 +18398,7 @@ Not all versions of @command{tr} handle all backslash character escapes.
 For example, Solaris 10 @command{/usr/ucb/tr} falls over, even though
 Solaris contains more modern @command{tr} in other locations.
 Therefore, it is more portable to use octal escapes, even though this
-ties the result to @acronym{ASCII}, when using @command{tr} to delete
+ties the result to ASCII, when using @command{tr} to delete
 newlines or carriage returns.
 
 @example
@@ -18498,7 +18498,7 @@ itself.
 Posix says that the @samp{$<} construct in makefiles can be
 used only in inference rules and in the @samp{.DEFAULT} rule; its
 meaning in ordinary rules is unspecified.  Solaris @command{make}
-for instance replaces it with the empty string.  Open@acronym{BSD} (3.0 and
+for instance replaces it with the empty string.  OpenBSD (3.0 and
 later) @command{make} diagnoses these uses and errors out.
 
 @node Failure in Make Rules
@@ -18514,24 +18514,24 @@ remove @file{U} even if the @command{touch} fails, although this is not
 permitted with Posix make.  One way to work around failures in simple
 commands is to reword them so that they always succeed, e.g., @samp{touch
 T || :; rm -f U}.
-However, even this approach can run into common bugs in @acronym{BSD}
+However, even this approach can run into common bugs in BSD
 implementations of the @option{-e} option of @command{sh} and
 @command{set} (@pxref{set, , Limitations of Shell Builtins}), so if you
 are worried
-about porting to buggy @acronym{BSD} shells it may be simpler to migrate
+about porting to buggy BSD shells it may be simpler to migrate
 complicated @command{make} actions into separate scripts.
 
 @node Special Chars in Names
 @section Special Characters in Make Macro Names
 
 Posix limits macro names to nonempty strings containing only
-@acronym{ASCII} letters and digits, @samp{.}, and @samp{_}.  Many
+ASCII letters and digits, @samp{.}, and @samp{_}.  Many
 @command{make} implementations allow a wider variety of characters, but
 portable makefiles should avoid them.  It is portable to start a name
 with a special character, e.g., @samp{$(.FOO)}.
 
 Some ancient @command{make} implementations don't support leading
-underscores in macro names.  An example is @acronym{NEWS-OS} 4.2R.
+underscores in macro names.  An example is NEWS-OS 4.2R.
 
 @example
 $ @kbd{cat Makefile}
@@ -18557,7 +18557,7 @@ However, this problem is no longer of practical concern.
 @c  This has been seen on ia64 hpux 11.20, and on one hppa hpux 10.20,
 @c  but another hppa hpux 10.20 didn't have it.  Bob Proulx
 @c  <bob@proulx.com> thinks it was in hpux 8.0 too.
-On some versions of @acronym{HP-UX}, @command{make} reads multiple newlines
+On some versions of HP-UX, @command{make} reads multiple newlines
 following a backslash, continuing to the next non-empty line.  For
 example,
 
@@ -18627,7 +18627,7 @@ reported to exit with @code{Line too long} diagnostics.
 
 A command-line variable definition such as @code{foo=bar} overrides any
 definition of @code{foo} in a makefile.  Some @command{make}
-implementations (such as @acronym{GNU} @command{make}) propagate this
+implementations (such as GNU @command{make}) propagate this
 override to subsidiary invocations of @command{make}.  Some other
 implementations do not pass the substitution along to submakes.
 
@@ -18668,7 +18668,7 @@ submakes as expected.
 
 This syntax (@code{foo=bar make -e}) is portable only when used
 outside of a makefile, for instance from a script or from the
-command line.  When run inside a @command{make} rule, @acronym{GNU}
+command line.  When run inside a @command{make} rule, GNU
 @command{make} 3.80 and prior versions forget to propagate the
 @option{-e} option to submakes.
 
@@ -18694,7 +18694,7 @@ you do that.
 
 Makefiles generated by @command{automake} expand @code{$(AM_MAKEFLAGS)}
 on the command line of submakes, which can be used for propagated overrides
-(@pxref{Subdirectories, , Automake, automake, @acronym{GNU} Automake}).
+(@pxref{Subdirectories, , Automake, automake, GNU Automake}).
 
 @node The Make Macro MAKEFLAGS
 @section The Make Macro MAKEFLAGS
@@ -18708,7 +18708,7 @@ several formats for the variable.  It is tricky to parse
 or @option{-k} for continued execution are in effect.  For example, you
 cannot assume that the first space-separated word in @code{$MAKEFLAGS}
 contains single-letter options, since in the Cygwin version of
-@acronym{GNU} @command{make} it is either @option{--unix} or
+GNU @command{make} it is either @option{--unix} or
 @option{--win32} with the second word containing single-letter options.
 
 @example
@@ -18747,8 +18747,8 @@ If you use Automake, this is done for you.
 Do not force @code{SHELL = /bin/sh} because that is not correct
 everywhere.  Remember, @file{/bin/sh} is not Posix compliant on many
 systems, such as FreeBSD 4, NetBSD 3, AIX 3, Solaris 10, or Tru64.
-Additionally, @acronym{DJGPP} lacks @code{/bin/sh}, and when its
-@acronym{GNU} @command{make} port sees such a setting it enters a
+Additionally, DJGPP lacks @code{/bin/sh}, and when its
+GNU @command{make} port sees such a setting it enters a
 special emulation mode where features like pipes and redirections are
 emulated on top of DOS's @command{command.com}.  Unfortunately this
 emulation is incomplete; for instance it does not handle command
@@ -18804,10 +18804,10 @@ sh
 @cindex Parallel @command{make}
 
 Support for parallel execution in @command{make} implementation varies.
-Generally, using @acronym{GNU} make is your best bet.  When NetBSD
+Generally, using GNU make is your best bet.  When NetBSD
 @command{make} is invoked with @option{-j@var{N}}, it will reuse the
 same shell for multiple commands within one recipe.  This can have
-unexpected consequences.@footnote{Note that @acronym{GNU} make has
+unexpected consequences.@footnote{Note that GNU make has
 heuristics to avoid spawning a shell at all if the command is deemed
 safe to be executed directly.} For example, change of directories or
 variables persist between commands:
@@ -18879,12 +18879,12 @@ all:
 @node obj/ and Make
 @section The @file{obj/} Subdirectory and Make
 @cindex @file{obj/}, subdirectory
-@cindex @acronym{BSD} @command{make} and @file{obj/}
+@cindex BSD @command{make} and @file{obj/}
 
 Never name one of your subdirectories @file{obj/} if you don't like
 surprises.
 
-If an @file{obj/} directory exists, @acronym{BSD} @command{make} enters it
+If an @file{obj/} directory exists, BSD @command{make} enters it
 before reading the makefile.  Hence the makefile in the
 current directory is not read.
 
@@ -18940,7 +18940,7 @@ prototypes must take the following issues into account.  These issues
 are complicated and are often poorly understood, and installers who use
 @code{VPATH} should expect to find many bugs in this area.  If you use
 @code{VPATH}, the simplest way to avoid these portability bugs is to
-stick with @acronym{GNU} @command{make}, since it is the most
+stick with GNU @command{make}, since it is the most
 commonly-used @command{make} among Autoconf users.
 
 Here are some known issues with some @code{VPATH}
@@ -18971,7 +18971,7 @@ VPATH = @@srcdir@@
 @end example
 
 @noindent
-rather than @samp{VPATH = $(srcdir)}.  Note that with @acronym{GNU}
+rather than @samp{VPATH = $(srcdir)}.  Note that with GNU
 Automake, there is no need to set this yourself.
 
 @node VPATH and Double-colon
@@ -19025,7 +19025,7 @@ portable makefiles should never mention a source file whose name is that
 of a shell keyword like @file{until} or a shell command like
 @command{cat} or @command{gcc} or @command{test}.
 
-Because of these problems @acronym{GNU} @command{make} and many other
+Because of these problems GNU @command{make} and many other
 @command{make} implementations do not rewrite commands, so portable
 makefiles should
 search @code{VPATH} manually.  It is tempting to write this:
@@ -19253,33 +19253,33 @@ directory that was created in the current directory.
 @subsection Make Target Lookup
 @cindex @code{VPATH}, resolving target pathnames
 
-@acronym{GNU} @command{make} uses a complex algorithm to decide when it
+GNU @command{make} uses a complex algorithm to decide when it
 should use files found via a @code{VPATH} search.  @xref{Search
-Algorithm, , How Directory Searches are Performed, make, The @acronym{GNU} Make
+Algorithm, , How Directory Searches are Performed, make, The GNU Make
 Manual}.
 
-If a target needs to be rebuilt, @acronym{GNU} @command{make} discards the
+If a target needs to be rebuilt, GNU @command{make} discards the
 file name found during the @code{VPATH} search for this target, and
 builds the file locally using the file name given in the makefile.
-If a target does not need to be rebuilt, @acronym{GNU} @command{make} uses the
+If a target does not need to be rebuilt, GNU @command{make} uses the
 file name found during the @code{VPATH} search.
 
-Other @command{make} implementations, like Net@acronym{BSD} @command{make}, are
+Other @command{make} implementations, like NetBSD @command{make}, are
 easier to describe: the file name found during the @code{VPATH} search
 is used whether the target needs to be rebuilt or not.  Therefore
 new files are created locally, but existing files are updated at their
 @code{VPATH} location.
 
-Open@acronym{BSD} and Free@acronym{BSD} @command{make}, however,
+OpenBSD and FreeBSD @command{make}, however,
 never perform a
 @code{VPATH} search for a dependency that has an explicit rule.
 This is extremely annoying.
 
 When attempting a @code{VPATH} build for an autoconfiscated package
 (e.g., @code{mkdir build && cd build && ../configure}), this means
-@acronym{GNU}
+GNU
 @command{make} builds everything locally in the @file{build}
-directory, while @acronym{BSD} @command{make} builds new files locally and
+directory, while BSD @command{make} builds new files locally and
 updates existing files in the source directory.
 
 @example
@@ -19315,17 +19315,17 @@ Building foo.x
 Building bar.x
 @end example
 
-Note how Net@acronym{BSD} @command{make} updates @file{../bar.x} in its
-VPATH location, and how Free@acronym{BSD}, Open@acronym{BSD}, and Tru64
+Note how NetBSD @command{make} updates @file{../bar.x} in its
+VPATH location, and how FreeBSD, OpenBSD, and Tru64
 @command{make} always
 update @file{bar.x}, even when @file{../bar.x} is up to date.
 
-Another point worth mentioning is that once @acronym{GNU} @command{make} has
+Another point worth mentioning is that once GNU @command{make} has
 decided to ignore a @code{VPATH} file name (e.g., it ignored
 @file{../bar.x} in the above example) it continues to ignore it when
 the target occurs as a prerequisite of another rule.
 
-The following example shows that @acronym{GNU} @command{make} does not look up
+The following example shows that GNU @command{make} does not look up
 @file{bar.x} in @code{VPATH} before performing the @code{.x.y} rule,
 because it ignored the @code{VPATH} result of @file{bar.x} while running
 the @code{bar.x: newer.x} rule.
@@ -19362,10 +19362,10 @@ cp: bar.x: No such file or directory
 @end example
 
 Note that if you drop away the command from the @code{bar.x: newer.x}
-rule, @acronym{GNU} @command{make} magically starts to work: it
+rule, GNU @command{make} magically starts to work: it
 knows that @code{bar.x} hasn't been updated, therefore it doesn't
 discard the result from @code{VPATH} (@file{../bar.x}) in succeeding
-uses.  Tru64 also works, but Free@acronym{BSD} and Open@acronym{BSD}
+uses.  Tru64 also works, but FreeBSD and OpenBSD
 still don't.
 
 @example
@@ -19426,7 +19426,7 @@ Makefile  foo.in
 @end example
 
 @noindent
-while @acronym{GNU} Make does:
+while GNU Make does:
 
 @example
 $ @kbd{gmake}
@@ -19512,12 +19512,12 @@ have greater confidence that your programs work on a wide variety
 of systems.
 @ifhtml
 @uref{http://@/gcc.gnu.org/@/onlinedocs/@/gcc/@/Standards.html, Language
-Standards Supported by @acronym{GCC}}
+Standards Supported by GCC}
 @end ifhtml
 @ifnothtml
 @xref{Standards, , Language Standards Supported by
-@acronym{GCC}, gcc, Using the @acronym{GNU} Compiler Collection
-(@acronym{GCC})},
+GCC, gcc, Using the GNU Compiler Collection
+(GCC)},
 @end ifnothtml
 for a list of C-related standards.  Many programs also assume the
 @uref{http://@/www.opengroup.org/@/susv3, Posix standard}.
@@ -19528,7 +19528,7 @@ and the rest of section assumes at least C89, the first C standard.
 
 Program portability is a huge topic, and this section can only briefly
 introduce common pitfalls.  @xref{System Portability, , Portability
-between System Types, standards, @acronym{GNU} Coding Standards}, for
+between System Types, standards, GNU Coding Standards}, for
 more information.
 
 @menu
@@ -19719,7 +19719,7 @@ randx = randx * 1103515245 + 12345;
 return (randx >> 16) & 077777;
 @end example
 
-In the following example, derived from the @acronym{GNU} C Library 2.5
+In the following example, derived from the GNU C Library 2.5
 implementation of @code{mktime} (2006-09-09), the code assumes
 wraparound arithmetic in @code{+} to detect signed overflow:
 
@@ -19818,10 +19818,10 @@ Here, the loop attempts to iterate through all powers of 2 that
 optimize away the comparison and generate an infinite loop,
 under the argument that behavior is undefined on overflow.  As of this
 writing this optimization is not done by any production version of
-@acronym{GCC} with @option{-O2}, but it might be performed by other
-compilers, or by more aggressive @acronym{GCC} optimization options,
-and the @acronym{GCC} developers have not decided whether it will
-continue to work with @acronym{GCC} and @option{-O2}.
+GCC with @option{-O2}, but it might be performed by other
+compilers, or by more aggressive GCC optimization options,
+and the GCC developers have not decided whether it will
+continue to work with GCC and @option{-O2}.
 
 @node Signed Overflow Advice
 @subsection Practical Advice for Signed Overflow Issues
@@ -19877,15 +19877,15 @@ unsigned arithmetic
 to do it, e.g., @code{((int) (i * 2000u)) / 1000}.
 
 If your code assumes wraparound behavior and you want to insulate it
-against any @acronym{GCC} optimizations that would fail to support that
-behavior, you should use @acronym{GCC}'s @option{-fwrapv} option, which
+against any GCC optimizations that would fail to support that
+behavior, you should use GCC's @option{-fwrapv} option, which
 causes signed overflow to wrap around reliably (except for division and
 remainder, as discussed in the next section).
 
 If you need to port to platforms where signed integer overflow does not
 reliably wrap around (e.g., due to hardware overflow checking, or to
 highly aggressive optimizations), you should consider debugging with
-@acronym{GCC}'s @option{-ftrapv} option, which causes signed overflow to
+GCC's @option{-ftrapv} option, which causes signed overflow to
 raise an exception.
 
 @node Signed Integer Division
@@ -19951,7 +19951,7 @@ potential portability problem, e.g., by allocating an extra unused array
 element at the start or end.
 
 @uref{http://@/valgrind.org/, Valgrind} can catch many overruns.
-@acronym{GCC}
+GCC
 users might also consider using the @option{-fmudflap} option to catch
 overruns.
 
@@ -19979,7 +19979,7 @@ portable code should not use them unless the inputs are known to be
 within certain limits.  The time-related functions can overflow their
 buffers if given timestamps out of range (e.g., a year less than -999
 or greater than 9999).  Time-related buffer overflows cannot happen with
-recent-enough versions of the @acronym{GNU} C library, but are possible
+recent-enough versions of the GNU C library, but are possible
 with other
 implementations.  The @code{gets} function is the worst, since it almost
 invariably overflows its buffer when presented with an input line larger
@@ -20064,10 +20064,10 @@ explicit specification of @code{volatile} storage, as well as other
 implementation-defined restrictions.''  But unfortunately even for this
 special case these other restrictions are often not documented well.
 @xref{Volatiles, , When is a Volatile Object Accessed?, gcc, Using the
-@acronym{GNU} Compiler Collection (@acronym{GCC})}, for some
-restrictions imposed by @acronym{GCC}.  @xref{Defining Handlers, ,
-Defining Signal Handlers, libc, The @acronym{GNU} C Library}, for some
-restrictions imposed by the @acronym{GNU} C library.  Restrictions
+GNU Compiler Collection (GCC)}, for some
+restrictions imposed by GCC.  @xref{Defining Handlers, ,
+Defining Signal Handlers, libc, The GNU C Library}, for some
+restrictions imposed by the GNU C library.  Restrictions
 differ on other platforms.
 
 If possible, it is best to use a signal handler that fits within the
@@ -20458,7 +20458,7 @@ The options have one of these forms:
 --without-@var{package}
 @end example
 
-For example, @option{--with-gnu-ld} means work with the @acronym{GNU} linker
+For example, @option{--with-gnu-ld} means work with the GNU linker
 instead of some other linker.  @option{--with-x} means work with The X
 Window System.
 
@@ -20756,7 +20756,7 @@ Source trees often contain multiple packages with a top-level
 @command{configure} script that uses the @code{AC_CONFIG_SUBDIRS} macro
 (@pxref{Subdirectories}).  Because the packages generally support
 different @option{--with-@var{package}} and
-@option{--enable-@var{feature}} options, the @acronym{GNU} Coding
+@option{--enable-@var{feature}} options, the GNU Coding
 Standards say they must accept unrecognized options without halting.
 Even a warning message is undesirable here, so @code{AC_CONFIG_SUBDIRS}
 automatically disables the warnings.
@@ -20800,7 +20800,7 @@ by an environment variable.  The programs should examine that file at
 runtime, rather than at compile time.  Runtime configuration is more
 convenient for users and makes the configuration process simpler than
 getting the information while configuring.  @xref{Directory Variables, ,
-Variables for Installation Directories, standards, @acronym{GNU} Coding
+Variables for Installation Directories, standards, GNU Coding
 Standards}, for more information on where to put data files.
 
 @node Transforming Names
@@ -20859,8 +20859,8 @@ cross-assembler running on a Sun 4 configured with
 with a native Sun 4 assembler.
 
 You can force a program name to begin with @file{g}, if you don't want
-@acronym{GNU} programs installed on your system to shadow other programs with
-the same name.  For example, if you configure @acronym{GNU} @code{diff} with
+GNU programs installed on your system to shadow other programs with
+the same name.  For example, if you configure GNU @code{diff} with
 @option{--program-prefix=g}, then when you run @samp{make install} it is
 installed as @file{/usr/local/bin/gdiff}.
 
@@ -20873,7 +20873,7 @@ As a more sophisticated example, you could use
 
 to prepend @samp{g} to most of the program names in a source tree,
 excepting those like @code{gdb} that already have one and those like
-@code{less} and @code{lesskey} that aren't @acronym{GNU} programs.  (That is
+@code{less} and @code{lesskey} that aren't GNU programs.  (That is
 assuming that you have a source tree containing those programs that is
 set up to use this feature.)
 
@@ -21017,10 +21017,10 @@ fi
 
 Another use of @file{config.site} is for priming the directory variables
 in a manner consistent with the Filesystem Hierarchy Standard
-(@acronym{FHS}).  Once the following file is installed at
+(FHS).  Once the following file is installed at
 @file{/usr/share/config.site}, a user can execute simply
 @code{./configure --prefix=/usr} to get all the directories chosen in
-the locations recommended by @acronym{FHS}.
+the locations recommended by FHS.
 
 @example
 # /usr/share/config.site for FHS defaults when installing below /usr,
@@ -21662,7 +21662,7 @@ now it is just @code{AC_FUNC_GETMNTENT} (@pxref{AC_FUNC_GETMNTENT}).
 @ovindex EXEEXT
 Defined the output variable @code{EXEEXT} based on the output of the
 compiler, which is now done automatically.  Typically set to empty
-string if Posix and @samp{.exe} if a @acronym{DOS} variant.
+string if Posix and @samp{.exe} if a DOS variant.
 @end defmac
 
 @defmac AC_EMXOS2
@@ -21725,7 +21725,7 @@ is no longer needed.
 @c @fuindex wait3
 @prindex @code{wait3}
 If @code{wait3} is found and fills in the contents of its third argument
-(a @samp{struct rusage *}), which @acronym{HP-UX} does not do, define
+(a @samp{struct rusage *}), which HP-UX does not do, define
 @code{HAVE_WAIT3}.
 
 These days portable programs should use @code{waitpid}, not
@@ -21988,7 +21988,7 @@ Replaced by @code{AC_TYPE_MODE_T} (@pxref{AC_TYPE_MODE_T}).
 @ovindex OBJEXT
 Defined the output variable @code{OBJEXT} based on the output of the
 compiler, after .c files have been excluded.  Typically set to @samp{o}
-if Posix, @samp{obj} if a @acronym{DOS} variant.
+if Posix, @samp{obj} if a DOS variant.
 Now the compiler checking macros handle
 this automatically.
 @end defmac
@@ -22427,7 +22427,7 @@ Same as @samp{AC_CHECK_HEADERS([unistd.h])} (@pxref{AC_CHECK_HEADERS}).
 @defmac AC_USG
 @acindex{USG}
 @cvindex USG
-Define @code{USG} if the @acronym{BSD} string functions are defined in
+Define @code{USG} if the BSD string functions are defined in
 @file{strings.h}.  You should no longer depend upon @code{USG}, but on
 @code{HAVE_STRING_H}; see @ref{Standard Symbols}.
 @end defmac
@@ -22903,7 +22903,7 @@ For backward compatibility, @command{configure} accepts a system
 type as an option by itself.  Such an option overrides the
 defaults for build, host, and target system types.  The following
 configure statement configures a cross toolchain that runs on
-Net@acronym{BSD}/alpha but generates code for @acronym{GNU} Hurd/sparc,
+NetBSD/alpha but generates code for GNU Hurd/sparc,
 which is also the build platform.
 
 @example
@@ -22977,7 +22977,7 @@ variable @code{LIBOBJS}.  Since Autoconf 2.50, the macro
 @code{AC_LIBOBJ} should be used instead (@pxref{Generic Functions}).
 Starting at Autoconf 2.53, the use of @code{LIBOBJS} is an error.
 
-This change is mandated by the unification of the @acronym{GNU} Build System
+This change is mandated by the unification of the GNU Build System
 components.  In particular, the various fragile techniques used to parse
 a @file{configure.ac} are all replaced with the use of traces.  As a
 consequence, any action must be traceable, which obsoletes critical
@@ -23104,7 +23104,7 @@ lists.}
 It is paradoxical that portable projects depend on nonportable tools
 to run their test suite.  Autoconf by itself is the paragon of this
 problem: although it aims at perfectly portability, up to 2.13 its
-test suite was using Deja@acronym{GNU}, a rich and complex testing
+test suite was using DejaGNU, a rich and complex testing
 framework, but which is far from being standard on Posix systems.
 Worse yet, it was likely to be missing on the most fragile platforms,
 the very platforms that are most likely to torture Autoconf and
@@ -23125,11 +23125,11 @@ diminish the interaction with bug reporters, and simple timing reports.
 Autoconf itself has been using Autotest for years, and we do attest that
 it has considerably improved the strength of the test suite and the
 quality of bug reports.  Other projects are known to use some generation
-of Autotest, such as Bison, Free Recode, Free Wdiff, @acronym{GNU} Tar, each of
+of Autotest, such as Bison, Free Recode, Free Wdiff, GNU Tar, each of
 them with different needs, and this usage has validated Autotest as a general
 testing framework.
 
-Nonetheless, compared to Deja@acronym{GNU}, Autotest is inadequate for
+Nonetheless, compared to DejaGNU, Autotest is inadequate for
 interactive tool testing, which is probably its main limitation.
 
 @menu
@@ -23154,9 +23154,9 @@ interactive tool testing, which is probably its main limitation.
 
 Generating testing or validation suites using Autotest is rather easy.
 The whole validation suite is held in a file to be processed through
-@command{autom4te}, itself using @acronym{GNU} M4 under the scene, to
+@command{autom4te}, itself using GNU M4 under the scene, to
 produce a stand-alone Bourne shell script which then gets distributed.
-Neither @command{autom4te} nor @acronym{GNU} M4 are needed at
+Neither @command{autom4te} nor GNU M4 are needed at
 the installer's end.
 
 @cindex test group
@@ -23922,8 +23922,8 @@ are addressed.
 @menu
 * Distributing::                Distributing @command{configure} scripts
 * Why GNU M4::                  Why not use the standard M4?
-* Bootstrapping::               Autoconf and @acronym{GNU} M4 require each other?
-* Why Not Imake::               Why @acronym{GNU} uses @command{configure} instead of Imake
+* Bootstrapping::               Autoconf and GNU M4 require each other?
+* Why Not Imake::               Why GNU uses @command{configure} instead of Imake
 * Defining Directories::        Passing @code{datadir} to program
 * Autom4te Cache::              What is it?  Can I remove it?
 * Present But Cannot Be Compiled::  Compiler and Preprocessor Disagree
@@ -23943,23 +23943,23 @@ programs that use them?
 
 There are no restrictions on how the configuration scripts that Autoconf
 produces may be distributed or used.  In Autoconf version 1, they were
-covered by the @acronym{GNU} General Public License.  We still encourage
+covered by the GNU General Public License.  We still encourage
 software authors to distribute their work under terms like those of the
-@acronym{GPL}, but doing so is not required to use Autoconf.
+GPL, but doing so is not required to use Autoconf.
 
 Of the other files that might be used with @command{configure},
 @file{config.h.in} is under whatever copyright you use for your
 @file{configure.ac}.  @file{config.sub} and @file{config.guess} have an
-exception to the @acronym{GPL} when they are used with an Autoconf-generated
+exception to the GPL when they are used with an Autoconf-generated
 @command{configure} script, which permits you to distribute them under the
 same terms as the rest of your package.  @file{install-sh} is from the X
 Consortium and is not copyrighted.
 
 @node Why GNU M4
-@section Why Require @acronym{GNU} M4?
+@section Why Require GNU M4?
 
 @display
-Why does Autoconf require @acronym{GNU} M4?
+Why does Autoconf require GNU M4?
 @end display
 
 Many M4 implementations have hard-coded limitations on the size and
@@ -23975,12 +23975,12 @@ __file__
 __line__
 @end example
 
-Autoconf requires version 1.4.6 or later of @acronym{GNU} M4.
+Autoconf requires version 1.4.6 or later of GNU M4.
 
-Since only software maintainers need to use Autoconf, and since @acronym{GNU}
+Since only software maintainers need to use Autoconf, and since GNU
 M4 is simple to configure and install, it seems reasonable to require
-@acronym{GNU} M4 to be installed also.  Many maintainers of @acronym{GNU} and
-other free software already have most of the @acronym{GNU} utilities
+GNU M4 to be installed also.  Many maintainers of GNU and
+other free software already have most of the GNU utilities
 installed, since they prefer them.
 
 @node Bootstrapping
@@ -23988,14 +23988,14 @@ installed, since they prefer them.
 @cindex Bootstrap
 
 @display
-If Autoconf requires @acronym{GNU} M4 and @acronym{GNU} M4 has an Autoconf
+If Autoconf requires GNU M4 and GNU M4 has an Autoconf
 @command{configure} script, how do I bootstrap?  It seems like a chicken
 and egg problem!
 @end display
 
-This is a misunderstanding.  Although @acronym{GNU} M4 does come with a
+This is a misunderstanding.  Although GNU M4 does come with a
 @command{configure} script produced by Autoconf, Autoconf is not required
-in order to run the script and install @acronym{GNU} M4.  Autoconf is only
+in order to run the script and install GNU M4.  Autoconf is only
 required if you want to change the M4 @command{configure} script, which few
 people have to do (mainly its maintainer).
 
@@ -24021,20 +24021,20 @@ Imake uses a common database of host specific data.  For X11, this makes
 sense because the distribution is made as a collection of tools, by one
 central authority who has control over the database.
 
-@acronym{GNU} tools are not released this way.  Each @acronym{GNU} tool has a
+GNU tools are not released this way.  Each GNU tool has a
 maintainer; these maintainers are scattered across the world.  Using a
 common database would be a maintenance nightmare.  Autoconf may appear
 to be this kind of database, but in fact it is not.  Instead of listing
 host dependencies, it lists program requirements.
 
-If you view the @acronym{GNU} suite as a collection of native tools, then the
-problems are similar.  But the @acronym{GNU} development tools can be
+If you view the GNU suite as a collection of native tools, then the
+problems are similar.  But the GNU development tools can be
 configured as cross tools in almost any host+target permutation.  All of
 these configurations can be installed concurrently.  They can even be
 configured to share host independent files across hosts.  Imake doesn't
 address these issues.
 
-Imake templates are a form of standardization.  The @acronym{GNU} coding
+Imake templates are a form of standardization.  The GNU coding
 standards address the same issues without necessarily imposing the same
 restrictions.
 @end quotation
@@ -24128,7 +24128,7 @@ I get
 @end display
 
 As already explained, this behavior is on purpose, mandated by the
-@acronym{GNU} Coding Standards, see @ref{Installation Directory
+GNU Coding Standards, see @ref{Installation Directory
 Variables}.  There are several means to achieve a similar goal:
 
 @itemize @minus
@@ -24168,7 +24168,7 @@ automate this task; for an example, see the macro @code{AC_DEFINE_DIR} from
 the @uref{http://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
 Archive}.
 
-This solution does not conform to the @acronym{GNU} Coding Standards.
+This solution does not conform to the GNU Coding Standards.
 
 @item
 Note that all the previous solutions hard wire the absolute name of
@@ -24185,12 +24185,12 @@ find @code{prefix} at runtime, this way your package is relocatable.
 What is this directory @file{autom4te.cache}?  Can I safely remove it?
 @end display
 
-In the @acronym{GNU} Build System, @file{configure.ac} plays a central
+In the GNU Build System, @file{configure.ac} plays a central
 role and is read by many tools: @command{autoconf} to create
 @file{configure}, @command{autoheader} to create @file{config.h.in},
 @command{automake} to create @file{Makefile.in}, @command{autoscan} to
 check the completeness of @file{configure.ac}, @command{autoreconf} to
-check the @acronym{GNU} Build System components that are used.  To
+check the GNU Build System components that are used.  To
 ``read @file{configure.ac}'' actually means to compile it with M4,
 which can be a long process for complex @file{configure.ac}.
 
@@ -24215,7 +24215,7 @@ Can I permanently get rid of it?
 The creation of this cache can be disabled from
 @file{~/.autom4te.cfg}, see @ref{Customizing autom4te}, for more
 details.  You should be aware that disabling the cache slows down the
-Autoconf test suite by 40%.  The more @acronym{GNU} Build System
+Autoconf test suite by 40%.  The more GNU Build System
 components are used, the more the cache is useful; for instance
 running @samp{autoreconf -f} on the Core Utilities is twice slower without
 the cache @emph{although @option{--force} implies that the cache is
@@ -24554,7 +24554,7 @@ by using @command{make} variables to factorize and allow
 override of settings at @command{make} run time,
 
 @item
-by honoring the @acronym{GNU} Coding Standards and not overriding flags
+by honoring the GNU Coding Standards and not overriding flags
 reserved for the user except temporarily during @command{configure}
 tests,
 
@@ -24589,7 +24589,7 @@ then let there be light@enddots{}
 @node Genesis
 @section Genesis
 
-In June 1991 I was maintaining many of the @acronym{GNU} utilities for the
+In June 1991 I was maintaining many of the GNU utilities for the
 Free Software Foundation.  As they were ported to more platforms and
 more programs were added, the number of @option{-D} options that users
 had to select in the makefile (around 20) became burdensome.
@@ -24598,11 +24598,11 @@ different systems.  So I wrote a little shell script to guess some of
 the correct settings for the fileutils package, and released it as part
 of fileutils 2.0.  That @command{configure} script worked well enough that
 the next month I adapted it (by hand) to create similar @command{configure}
-scripts for several other @acronym{GNU} utilities packages.  Brian Berliner
-also adapted one of my scripts for his @acronym{CVS} revision control system.
+scripts for several other GNU utilities packages.  Brian Berliner
+also adapted one of my scripts for his CVS revision control system.
 
 Later that summer, I learned that Richard Stallman and Richard Pixley
-were developing similar scripts to use in the @acronym{GNU} compiler tools;
+were developing similar scripts to use in the GNU compiler tools;
 so I adapted my @command{configure} scripts to support their evolving
 interface: using the file name @file{Makefile.in} as the templates;
 adding @samp{+srcdir}, the first option (of many); and creating
@@ -24613,9 +24613,9 @@ adding @samp{+srcdir}, the first option (of many); and creating
 
 As I got feedback from users, I incorporated many improvements, using
 Emacs to search and replace, cut and paste, similar changes in each of
-the scripts.  As I adapted more @acronym{GNU} utilities packages to use
+the scripts.  As I adapted more GNU utilities packages to use
 @command{configure} scripts, updating them all by hand became impractical.
-Rich Murphey, the maintainer of the @acronym{GNU} graphics utilities, sent me
+Rich Murphey, the maintainer of the GNU graphics utilities, sent me
 mail saying that the @command{configure} scripts were great, and asking if
 I had a tool for generating them that I could send him.  No, I thought,
 but I should!  So I started to work out how to generate them.  And the
@@ -24657,7 +24657,7 @@ I considered using Perl to generate my style of @command{configure}
 scripts, but decided that M4 was better suited to the job of simple
 textual substitutions: it gets in the way less, because output is
 implicit.  Plus, everyone already has it.  (Initially I didn't rely on
-the @acronym{GNU} extensions to M4.)  Also, some of my friends at the
+the GNU extensions to M4.)  Also, some of my friends at the
 University of Maryland had recently been putting M4 front ends on
 several programs, including @code{tvtwm}, and I was interested in trying
 out a new language.
@@ -24683,7 +24683,7 @@ include files and symbols, for more accurate results; Karl Berry, who
 got Autoconf to configure @TeX{} and added the macro index to the
 documentation; and Ian Lance Taylor, who added support for creating a C
 header file as an alternative to putting @option{-D} options in a
-makefile, so he could use Autoconf for his @acronym{UUCP} package.
+makefile, so he could use Autoconf for his UUCP package.
 The alpha testers cheerfully adjusted their files again and again as the
 names and calling conventions of the Autoconf macros changed from
 release to release.  They all contributed many specific checks, great
@@ -24693,18 +24693,18 @@ ideas, and bug fixes.
 @section Numbers
 
 In July 1992, after months of alpha testing, I released Autoconf 1.0,
-and converted many @acronym{GNU} packages to use it.  I was surprised by how
+and converted many GNU packages to use it.  I was surprised by how
 positive the reaction to it was.  More people started using it than I
 could keep track of, including people working on software that wasn't
-part of the @acronym{GNU} Project (such as TCL, FSP, and Kerberos V5).
+part of the GNU Project (such as TCL, FSP, and Kerberos V5).
 Autoconf continued to improve rapidly, as many people using the
 @command{configure} scripts reported problems they encountered.
 
 Autoconf turned out to be a good torture test for M4 implementations.
 Unix M4 started to dump core because of the length of the
-macros that Autoconf defined, and several bugs showed up in @acronym{GNU}
+macros that Autoconf defined, and several bugs showed up in GNU
 M4 as well.  Eventually, we realized that we needed to use some
-features that only @acronym{GNU} M4 has.  4.3@acronym{BSD} M4, in
+features that only GNU M4 has.  4.3BSD M4, in
 particular, has an impoverished set of builtin macros; the System V
 version is better, but still doesn't provide everything we need.
 
@@ -24712,8 +24712,8 @@ More development occurred as people put Autoconf under more stresses
 (and to uses I hadn't anticipated).  Karl Berry added checks for X11.
 david zuhn contributed C++ support.  Fran@,{c}ois Pinard made it diagnose
 invalid arguments.  Jim Blandy bravely coerced it into configuring
-@acronym{GNU} Emacs, laying the groundwork for several later improvements.
-Roland McGrath got it to configure the @acronym{GNU} C Library, wrote the
+GNU Emacs, laying the groundwork for several later improvements.
+Roland McGrath got it to configure the GNU C Library, wrote the
 @command{autoheader} script to automate the creation of C header file
 templates, and added a @option{--verbose} option to @command{configure}.
 Noah Friedman added the @option{--autoconf-dir} option and
@@ -24736,7 +24736,7 @@ and Ken Raeburn.  These features include support for using
 @file{config.sub}, @file{config.guess}, @option{--host}, and
 @option{--target}; making links to files; and running @command{configure}
 scripts in subdirectories.  Adding these features enabled Ken to convert
-@acronym{GNU} @code{as}, and Rob Savoye to convert Deja@acronym{GNU}, to using
+GNU @code{as}, and Rob Savoye to convert DejaGNU, to using
 Autoconf.
 
 I added more features in response to other peoples' requests.  Many
@@ -24760,7 +24760,7 @@ macros and cleaned up coding style inconsistencies.  I added some
 auxiliary utilities that I had developed to help convert source code
 packages to use Autoconf.  With the help of Fran@,{c}ois Pinard, I made
 the macros not interrupt each others' messages.  (That feature revealed
-some performance bottlenecks in @acronym{GNU} M4, which he hastily
+some performance bottlenecks in GNU M4, which he hastily
 corrected!)  I reorganized the documentation around problems people want
 to solve.  And I began a test suite, because experience had shown that
 Autoconf has a pronounced tendency to regress when we change it.
