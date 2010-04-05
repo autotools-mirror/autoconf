@@ -2192,13 +2192,16 @@ m4_defn([m4_cr_digits])dnl
 # characters via m4_translit must deal with the fact that m4_translit does
 # not add quotes to the output.
 #
+# In EBCDIC, $ is immediately followed by *, which leads to problems
+# if m4_cr_all is inlined into a macro definition; so swap them.
+#
 # It is mainly useful in generating inverted character range maps, for use
 # in places where m4_translit is faster than an equivalent m4_bpatsubst;
 # the regex `[^a-z]' is equivalent to:
 #  m4_translit(m4_dquote(m4_defn([m4_cr_all])), [a-z])
 m4_define([m4_cr_all],
 m4_translit(m4_dquote(m4_format(m4_dquote(m4_for(
-  ,1,255,,[[%c]]))m4_for([i],1,255,,[,i]))), [-])-)
+  ,1,255,,[[%c]]))m4_for([i],1,255,,[,i]))), [$*-], [*$])-)
 
 
 # _m4_define_cr_not(CATEGORY)

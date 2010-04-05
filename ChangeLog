@@ -1,3 +1,12 @@
+2010-04-05  Eric Blake  <eblake@redhat.com>
+
+	Fix m4_cr_all for EBCDIC.
+	* lib/m4sugar/m4sugar.m4 (m4_cr_all): Swap * and $, so that we
+	don't end up with $* in EBCDIC.
+	* NEWS: Document the fix.
+	* THANKS: Update.
+	Reported by Steve Goetze.
+
 2010-03-28  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Do not use @acronym in the manual.

@@ -14,6 +14,8 @@ GNU Autoconf NEWS - User visible changes.
 ** AC_PROG_INSTALL correctly uses `shtool' again.  Regression introduced
    in 2.64.
 
+** Autoconf should work on EBCDIC hosts.
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 
