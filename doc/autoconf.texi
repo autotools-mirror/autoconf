@@ -3616,7 +3616,7 @@ be a literal, i.e., please do not use:
 
 @example
 if test "x$package_foo_enabled" = xyes; then
-  $my_subdirs="$my_subdirs foo"
+  my_subdirs="$my_subdirs foo"
 fi
 AC_CONFIG_SUBDIRS([$my_subdirs])
 @end example
