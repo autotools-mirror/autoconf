@@ -1,3 +1,9 @@
+2010-04-22  Joel James Adamson  <joel@chondestes.bio.unc.edu>  (tiny change)
+
+	Add a paragraph to FAQ on Debugging configure scripts.
+	* doc/autoconf.texi (Debugging): Mention inspecting config.log.
+	* THANKS: Update.
+
 2010-04-05  Eric Blake  <eblake@redhat.com>
 
 	Fix m4_cr_all for EBCDIC.

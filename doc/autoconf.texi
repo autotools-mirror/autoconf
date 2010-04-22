@@ -24539,6 +24539,14 @@ cache variable is documented with a test macro or may be inferred from
 @ref{Cache Variable Names}; the precise semantics of undocumented
 variables are often internal details, subject to change.
 @end itemize
+
+@item
+Alternatively, @command{configure} may produce invalid results because
+of uncaught programming errors, in your package or in an upstream
+library package.  For example, when @code{AC_CHECK_LIB} fails to find a
+library with a specified function, always check @file{config.log}.  This
+will reveal the exact error that produced the failing result: the
+library linked by @code{AC_CHECK_LIB} probably has a fatal bug.
 @end itemize
 
 Conversely, as macro author, you can make it easier for users of your
