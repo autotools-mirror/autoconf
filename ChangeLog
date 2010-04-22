@@ -4,6 +4,11 @@
 	* doc/autoconf.texi (Debugging): Mention inspecting config.log.
 	* THANKS: Update.
 
+2010-04-21  Mike Frysinger  <vapier@gentoo.org>  (tiny change)
+
+	Fix typo in doc example.
+	* doc/autoconf.texi (Subdirectories): Fix typo.
+
 2010-04-05  Eric Blake  <eblake@redhat.com>
 
 	Fix m4_cr_all for EBCDIC.
