@@ -125,7 +125,7 @@ esac
 #
 # This is not based on _AC_CHECK_HEADER_COMPILE and _AC_CHECK_HEADER_PREPROC
 # because it obfuscate the code to try to factor everything, in particular
-# because of the cache variables, and the `checking...' messages.
+# because of the cache variables, and the `checking ...' messages.
 AC_DEFUN([_AC_CHECK_HEADER_MONGREL],
 [AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_header_mongrel],
   [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_header_mongrel],

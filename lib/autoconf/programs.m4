@@ -825,7 +825,7 @@ SHELL = /bin/sh
 all:
 	@echo '@@@%%%=$(MAKE)=@@@%%%'
 _ACEOF
-# GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+# GNU make sometimes prints "make[1]: Entering ...", which would confuse us.
 case `${MAKE-make} -f conftest.make 2>/dev/null` in
   *@@@%%%=?*=@@@%%%*)
     eval ac_cv_prog_make_${ac_make}_set=yes;;

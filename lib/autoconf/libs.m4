@@ -177,7 +177,7 @@ libdir:
 	@echo libdir='${LIBDIR}'
 _ACEOF
   if (export CC; ${XMKMF-xmkmf}) >/dev/null 2>/dev/null && test -f Makefile; then
-    # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+    # GNU make sometimes prints "make[1]: Entering ...", which would confuse us.
     for ac_var in incroot usrlibdir libdir; do
       eval "ac_im_$ac_var=\`\${MAKE-make} $ac_var 2>/dev/null | sed -n 's/^$ac_var=//p'\`"
     done

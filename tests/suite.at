@@ -38,7 +38,7 @@ m4_include([base.at])
 # Testing config.status
 # ---------------------
 # Actually should be named config.status.at but I fear problems with
-# the name.  Does no `checking...' at all, but exercises only code
+# the name.  Does no `checking ...' at all, but exercises only code
 # which following section use too.  Hence, run it first.
 m4_include([torture.at])
 

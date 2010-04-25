@@ -1,5 +1,15 @@
 2010-04-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix placing of ellipses in English text.
+	* lib/autoconf/general.m4 (_AC_INIT_HELP): Be sure to add a
+	space before `...' in natural language text.
+	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_MONGREL_BODY):
+	Likewise.
+	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): Likewise.
+	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): Likewise.
+	* tests/suite.at: Likewise.
+	* tests/torture.at (@%:@define header templates): Likewise.
+
 	Ensure autotest tests have an atconfig file, for testsuite -v.
 	* tests/autotest.at (AT_CHECK_AT_PREP): Create a default
 	atconfig file in the directory of the testsuite.
