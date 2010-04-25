@@ -673,7 +673,7 @@ m4_ifndef([AC_DATAROOTDIR_CHECKED],
   { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
   { ac_out=`sed -n '/^[[	 ]]*datarootdir[[	 ]]*:*=/p' "$tmp/out"`; test -z "$ac_out"; } &&
   AC_MSG_WARN([$ac_file contains a reference to the variable `datarootdir'
-which seems to be undefined.  Please make sure it is defined.])
+which seems to be undefined.  Please make sure it is defined])
 ])dnl
 
   rm -f "$tmp/stdin"

@@ -1094,7 +1094,7 @@ AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [], [],
   [config.status: WARNING:  'Foo.in' seems to ignore the --datarootdir setting
 config.status: WARNING: Bar contains a reference to the variable `datarootdir'
-which seems to be undefined.  Please make sure it is defined.
+which seems to be undefined.  Please make sure it is defined
 ])
 AT_CHECK([grep datarootdir Foo], 1, [])
 

@@ -631,7 +631,7 @@ m4_divert_push([PARSE_ARGS_END])dnl
 done
 
 # Verify our last option didn't require an argument
-AS_IF([test -n "$at_prev"], [AS_ERROR([`$at_prev' requires an argument.])])
+AS_IF([test -n "$at_prev"], [AS_ERROR([`$at_prev' requires an argument])])
 
 # Selected test groups.
 if test -z "$at_groups"; then
@@ -1096,7 +1096,7 @@ at_fn_group_prepare ()
   at_group_dir=$at_suite_dir/$at_group_normalized
   at_group_log=$at_group_dir/$as_me.log
   _AS_CLEAN_DIR("$at_group_dir") ||
-    AS_WARN([test directory for $at_group_normalized could not be cleaned.])
+    AS_WARN([test directory for $at_group_normalized could not be cleaned])
   # Be tolerant if the above `rm' was not able to remove the directory.
   AS_MKDIR_P(["$at_group_dir"])
 

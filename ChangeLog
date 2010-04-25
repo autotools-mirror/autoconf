@@ -1,5 +1,19 @@
 2010-04-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Error and warning message formatting cleanups.
+	* doc/autoconf.texi (Autoconf Language, Generic Structures):
+	Do not capitalize the first word in error messages, do not end
+	them with a period.
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS, AC_MSG_FAILURE):
+	Likewise.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILE): Likewise.
+	* lib/autotest/general.m4 (AT_INIT, at_fn_group_prepare):
+	Likewise.
+	* m4/m4.m4 (AC_PROG_GNU_M4): Likewise.
+	* tests/base.at (AC_TRY_COMMAND): Likewise.
+	* tests/torture.at (datarootdir workaround): Adjust expected
+	message.
+
 	Fix placing of ellipses in English text.
 	* lib/autoconf/general.m4 (_AC_INIT_HELP): Be sure to add a
 	space before `...' in natural language text.

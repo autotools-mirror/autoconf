@@ -873,7 +873,7 @@ do
     x_libraries=$ac_optarg ;;
 
   -*) AC_MSG_ERROR([unrecognized option: `$ac_option'
-Try `$[0] --help' for more information.])
+Try `$[0] --help' for more information])
     ;;
 
   *=*)
@@ -942,8 +942,8 @@ target=$target_alias
 if test "x$host_alias" != x; then
   if test "x$build_alias" = x; then
     cross_compiling=maybe
-    AC_MSG_WARN([If you wanted to set the --build type, don't use --host.
-    If a cross compiler is detected then cross compile mode will be used.])
+    AC_MSG_WARN([if you wanted to set the --build type, don't use --host.
+    If a cross compiler is detected then cross compile mode will be used])
   elif test "x$build_alias" != "x$host_alias"; then
     cross_compiling=yes
   fi
@@ -2223,7 +2223,7 @@ m4_copy([AS_ERROR],   [AC_MSG_ERROR])
 m4_define([AC_MSG_FAILURE],
 [{ AS_MESSAGE([error: in `$ac_pwd':], 2)
 AC_MSG_ERROR([$1
-See `config.log' for more details.], [$2]); }])
+See `config.log' for more details], [$2]); }])
 
 
 # _AC_MSG_LOG_CONFTEST

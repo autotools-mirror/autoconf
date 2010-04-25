@@ -51,8 +51,8 @@ GNU M4 1.4.6 or later is required; 1.4.14 is recommended])])])
   if test x$ac_had_posixly_correct = xyes; then
     POSIXLY_CORRECT=:
     if test $ac_cv_prog_gnu_m4_gnu = no; then
-      AC_MSG_WARN([The version of M4 that was found does not support -g.])
-      AC_MSG_WARN([Using it with POSIXLY_CORRECT set may cause problems.])
+      AC_MSG_WARN([the version of M4 that was found does not support -g])
+      AC_MSG_WARN([using it with POSIXLY_CORRECT set may cause problems])
     fi
   fi
   AC_CACHE_CHECK([how m4 supports trace files], [ac_cv_prog_gnu_m4_debugfile],
