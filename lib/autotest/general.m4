@@ -1846,7 +1846,7 @@ m4_divert_pop([TEST_SCRIPT])dnl Back to TEST_GROUPS
 AT_xfail
 echo "#                             -*- compilation -*-" >> "$at_group_log"
 (
-  AS_ECHO(["AT_ordinal. m4_defn([AT_line]): testing $1..."])
+  AS_ECHO(["AT_ordinal. m4_defn([AT_line]): testing $at_desc ..."])
   $at_traceon
 m4_undivert([TEST_SCRIPT])dnl Insert the code here
   set +x

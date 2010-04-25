@@ -1,3 +1,12 @@
+2010-04-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix autotest testsuite -v output to print test group title.
+	* lib/autotest/general.m4 (AT_CLEANUP): Actually print test
+	title in verbose output.  Fixes AUTOCONF-2.57-101-gc102ed8
+	regression.
+	* tests/autotest.at (AT_CHECK_AT_TITLE): Amend macro to check
+	for test title in -v output.
+
 2010-04-26  Eric Blake  <eblake@redhat.com>
 
 	Clarify octal escapes with tr.

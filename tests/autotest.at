@@ -674,6 +674,10 @@ s/^.\{]]]m4_default($5, 53)[[[\}ok.*/ok/p
 [[$3
 ok
 ]])
+AT_CHECK([[$CONFIG_SHELL ./micro-suite -v |
+	    sed -n 's/.*testing \(.*\) \.\.\./\1/p']],,
+[[$3
+]])
 AT_CHECK([[$CONFIG_SHELL ./micro-suite -l |
 	   sed -n 's/.*[0-9]: [^	 ][^	 ]*[	 ][	 ]*\(.*[^	 ]\)[	 ]*/\1/p']],,
 [[$3
