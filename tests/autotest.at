@@ -53,6 +53,16 @@ m4_define([AT_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
 ]])
 dnl
 AT_DATA_AUTOTEST(AT_dir[/$1.at], [$2])
+AT_CHECK([cat >m4_default([$6], [.])/atconfig <<EOF
+at_testdir=m4_default([$6], [.])
+abs_builddir='`pwd`'
+at_srcdir=.
+abs_srcdir='`pwd`'
+at_top_srcdir=.
+abs_top_srcdir='`pwd`'
+at_top_build_prefix=
+abs_top_builddir='`pwd`'
+EOF])
 m4_ifval([$6], [(cd AT_dir])
 AT_CHECK_AUTOM4TE([--language=autotest -o $1 $1.at], [$3], [$4], [$5])
 m4_ifval([$6], [)])
@@ -674,8 +684,11 @@ s/^.\{]]]m4_default($5, 53)[[[\}ok.*/ok/p
 [[$3
 ok
 ]])
+dnl This sed script checks for two things - that -v output doesn't have
+dnl an empty $at_srcdir expansion, and that the 'testing ...' line
+dnl contains the test group title.
 AT_CHECK([[$CONFIG_SHELL ./micro-suite -v |
-	    sed -n 's/.*testing \(.*\) \.\.\./\1/p']],,
+	    sed -n 's/.*testing \(.*\) \.\.\./\1/p; /^\/micro-suite\.at:/p']],,
 [[$3
 ]])
 AT_CHECK([[$CONFIG_SHELL ./micro-suite -l |
@@ -1347,11 +1360,15 @@ AT_CHECK([test -f "$top_srcdir"/a && test -f "$srcdir"/b])
 AT_CLEANUP
 ]], [], [], [], [pkg/t])
 
+rm -f pkg/t/atconfig
+
 # Build directory totally outside source directory.
 cd vpath-outside
 AT_CHECK([../pkg/configure $configure_options], [0], [ignore])
 cd t
 AT_CHECK([../../pkg/t/suite], [0], [ignore])
+AT_CHECK([../../pkg/t/suite -v], [0], [stdout])
+AT_CHECK([grep '^\.\./\.\./pkg/t/suite.at' stdout], [0], [ignore])
 cd ../..
 
 # Build directory totally outside source directory (absolute).
@@ -1360,6 +1377,8 @@ cd vpath-abs
 AT_CHECK(["$my_srcdir"/configure $configure_options], [0], [ignore])
 cd t
 AT_CHECK(["$my_srcdir"/t/suite], [0], [ignore])
+AT_CHECK(["$my_srcdir"/t/suite -v], [0], [stdout])
+AT_CHECK([grep '..*/t/suite.at' stdout], [0], [ignore])
 cd ../..
 
 # Build directory as subdirectory of source directory.
@@ -1367,12 +1386,16 @@ cd pkg/vpath-inside
 AT_CHECK([../configure $configure_options], [0], [ignore])
 cd t
 AT_CHECK([../../t/suite], [0], [ignore])
+AT_CHECK([../../t/suite -v], [0], [stdout])
+AT_CHECK([grep '^\.\./\.\./t/suite.at' stdout], [0], [ignore])
 cd ../../..
 
 # Build directory as parent of source directory.
 AT_CHECK([pkg/configure $configure_options], [0], [ignore])
 cd t
 AT_CHECK([../pkg/t/suite], [0], [ignore])
+AT_CHECK([../pkg/t/suite -v], [0], [stdout])
+AT_CHECK([grep '^\.\./pkg/t/suite.at' stdout], [0], [ignore])
 cd ..
 
 # Build directory as source directory.
@@ -1380,6 +1403,8 @@ cd pkg
 AT_CHECK_CONFIGURE
 cd t
 AT_CHECK([./suite], [0], [ignore])
+AT_CHECK([./suite -v], [0], [stdout])
+AT_CHECK([grep '^\./suite.at' stdout], [0], [ignore])
 cd ../..
 
 AT_CLEANUP
