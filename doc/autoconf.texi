@@ -18393,13 +18393,16 @@ However, these problems are no longer of practical concern.
 @c ---------------
 @prindex @command{tr}
 @cindex carriage return, deleting
+@cindex newline, deleting
 @cindex deleting carriage return
 Not all versions of @command{tr} handle all backslash character escapes.
 For example, Solaris 10 @command{/usr/ucb/tr} falls over, even though
 Solaris contains more modern @command{tr} in other locations.
-Therefore, it is more portable to use octal escapes, even though this
-ties the result to ASCII, when using @command{tr} to delete
-newlines or carriage returns.
+Using octal escapes is more portable for carriage returns, since
+@samp{\015} is the same for both ASCII and EBCDIC, and since use of
+literal carriage returns in scripts causes a number of other problems.
+But for other characters, like newline, using octal escapes ties the
+operation to ASCII, so it is better to use literal characters.
 
 @example
 $ @kbd{@{ echo moon; echo light; @} | /usr/ucb/tr -d '\n' ; echo}
@@ -18408,6 +18411,9 @@ light
 $ @kbd{@{ echo moon; echo light; @} | /usr/bin/tr -d '\n' ; echo}
 moonlight
 $ @kbd{@{ echo moon; echo light; @} | /usr/ucb/tr -d '\012' ; echo}
+moonlight
+$ @kbd{nl='}
+@kbd{'; @{ echo moon; echo light; @} | /usr/ucb/tr -d "$nl" ; echo}
 moonlight
 @end example
 

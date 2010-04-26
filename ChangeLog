@@ -1,3 +1,9 @@
+2010-04-26  Eric Blake  <eblake@redhat.com>
+
+	Clarify octal escapes with tr.
+	* doc/autoconf.texi (Limitations of Usual Tools): Carriage return
+	is portable in octal, but not newline.
+
 2010-04-22  Joel James Adamson  <joel@chondestes.bio.unc.edu>  (tiny change)
 
 	Add a paragraph to FAQ on Debugging configure scripts.
