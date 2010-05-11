@@ -1,3 +1,9 @@
+2010-05-11  Eric Blake  <eblake@redhat.com>
+
+	Mention how to silence program probes.
+	* doc/autoconf.texi (File Descriptors): Document how to silence a
+	program probe.
+
 2010-04-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Error and warning message formatting cleanups.

@@ -14793,6 +14793,18 @@ must be done @emph{inside} the command substitution.  When running
 @samp{: `cd /zorglub` 2>/dev/null} expect the error message to
 escape, while @samp{: `cd /zorglub 2>/dev/null`} works properly.
 
+On the other hand, some shells, such as Solaris or FreeBSD
+@command{/bin/sh}, warn about missing programs before performing
+redirections.  Therefore, to silently check whether a program exists, it
+is necessary to perform redirections on a subshell:
+
+@example
+$ @kbd{/bin/sh -c 'nosuch 2>/dev/null}
+nosuch: not found
+$ @kbd{/bin/sh -c '(nosuch) 2>/dev/null}
+$ @kbd{bash -c 'nosuch 2>/dev/null'}
+@end example
+
 FreeBSD 6.2 sh may mix the trace output lines from the statements in a
 shell pipeline.
 
