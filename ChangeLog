@@ -1,5 +1,9 @@
 2010-05-11  Eric Blake  <eblake@redhat.com>
 
+	Fix typo in previous patch.
+	* doc/autoconf.texi (File Descriptors): Add end '.
+	Reported by Ralf Wildenhues.
+
 	Mention how to silence program probes.
 	* doc/autoconf.texi (File Descriptors): Document how to silence a
 	program probe.

@@ -14799,9 +14799,9 @@ redirections.  Therefore, to silently check whether a program exists, it
 is necessary to perform redirections on a subshell:
 
 @example
-$ @kbd{/bin/sh -c 'nosuch 2>/dev/null}
+$ @kbd{/bin/sh -c 'nosuch 2>/dev/null'}
 nosuch: not found
-$ @kbd{/bin/sh -c '(nosuch) 2>/dev/null}
+$ @kbd{/bin/sh -c '(nosuch) 2>/dev/null'}
 $ @kbd{bash -c 'nosuch 2>/dev/null'}
 @end example
 
