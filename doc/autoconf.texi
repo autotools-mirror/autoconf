@@ -8360,8 +8360,7 @@ Set the @code{ERLANG_INSTALL_LIB_DIR} output variable to the directory into
 which every built Erlang library should be installed in a separate
 subdirectory.
 If this variable is not set in the environment when @command{configure} runs,
-its default value is @code{$ERLANG_LIB_DIR}, which value is set by the
-@code{AC_ERLANG_SUBST_LIB_DIR} macro.
+its default value is @code{$@{libdir@}/erlang/lib}.
 @end defmac
 
 @defmac AC_ERLANG_SUBST_INSTALL_LIB_SUBDIR (@var{library}, @var{version})

@@ -1,3 +1,10 @@
+2010-05-11  David Reiss  <dreiss@facebook.com>  (tiny change)
+
+	Improve Erlang documentation.
+	* doc/autoconf.texi (Erlang Libraries): Document actual default
+	values.
+	* THANKS: Update.
+
 2010-05-11  Eric Blake  <eblake@redhat.com>
 
 	Fix typo in previous patch.
