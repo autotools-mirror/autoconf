@@ -1,3 +1,10 @@
+2010-05-12  Mark Hessling  <mark@rexx.org>  (tiny change)
+
+	Work around QNX4 grep bug.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Count ^
+	rather than $ to avoid QNX4 grep bug.
+	* THANKS: Update.
+
 2010-05-11  David Reiss  <dreiss@facebook.com>  (tiny change)
 
 	Improve Erlang documentation.

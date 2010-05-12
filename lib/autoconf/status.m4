@@ -403,7 +403,7 @@ rm -f conf$$files.sh
   echo "_ACEOF"
 } >conf$$subs.sh ||
   AC_MSG_ERROR([could not make $CONFIG_STATUS])
-ac_delim_num=`echo "$ac_subst_vars" | grep -c '$'`
+ac_delim_num=`echo "$ac_subst_vars" | grep -c '^'`
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   . ./conf$$subs.sh ||
