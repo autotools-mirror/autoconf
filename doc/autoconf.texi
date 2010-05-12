@@ -17829,6 +17829,10 @@ redirect the standard output and standard error (in case the file
 doesn't exist) of @code{grep} to @file{/dev/null}.  Check the exit
 status of @code{grep} to determine whether it found a match.
 
+The QNX4 implementation fails to count lines with @code{grep -c '$'},
+but works with @code{grep -c '^'}.  Another alternative for counting
+lines is to use @code{wc -l}.
+
 Some traditional @command{grep} implementations do not work on long
 input lines.  On AIX the default @code{grep} silently truncates long
 lines on the input before matching.

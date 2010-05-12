@@ -1,3 +1,9 @@
+2010-05-12  Eric Blake  <eblake@redhat.com>
+
+	Document the grep workaround.
+	* doc/autoconf.texi (Limitations of Usual Tools) <grep>: Document
+	the bug.
+
 2010-05-12  Mark Hessling  <mark@rexx.org>  (tiny change)
 
 	Work around QNX4 grep bug.
