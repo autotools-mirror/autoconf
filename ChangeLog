@@ -1,3 +1,10 @@
+2010-05-20  Eric Blake  <eblake@redhat.com>
+
+	Mention another line-counting alternative.
+	* doc/autoconf.texi (Limitations of Usual Tools) <grep>: Mention
+	how to use sed to count lines.
+	Suggested by Paolo Bonzini.
+
 2010-05-12  Eric Blake  <eblake@redhat.com>
 
 	Document the grep workaround.
