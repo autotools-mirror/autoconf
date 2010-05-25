@@ -8915,7 +8915,7 @@ It is customary to report unexpected failures with
 @code{AC_MSG_FAILURE}.  This macro does not try to link; use
 @code{AC_LINK_IFELSE} if you need to do that (@pxref{Running the
 Linker}).  If needed, @var{action-if-true} can further access the
-just-linked object file @file{conftest.$ac_object}.
+just-compiled object file @file{conftest.$OBJEXT}.
 
 This macro uses @code{AC_REQUIRE} for the compiler associated with the
 current language, which means that if the compiler has not yet been
@@ -8961,7 +8961,7 @@ language (@pxref{Language Choice}) on the @var{input}, run the shell
 commands @var{action-if-true} on success, @var{action-if-false}
 otherwise.  The @var{input} can be made by @code{AC_LANG_PROGRAM} and
 friends.  If needed, @var{action-if-true} can further access the
-just-linked program file @file{conftest$ac_exeext}.
+just-linked program file @file{conftest$EXEEXT}.
 
 @code{LDFLAGS} and @code{LIBS} are used for linking, in addition to the
 current compilation flags.

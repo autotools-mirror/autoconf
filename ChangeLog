@@ -1,3 +1,15 @@
+2010-05-25  Stefano Lattarini  <stefano.lattarini@gmail.com>
+	    Eric Blake  <eblake@redhat.com>
+
+	Don't expose AC_{COMPILE,LINK}_IFELSE internals in documentation.
+	* doc/autoconf.texi (Runtime) <AC_LINK_IFELSE>: Suggest to use
+	`conftest$EXEEXT' rather than `conftest$ac_exeext' to acces the
+	just-linked program file.
+	(Runtime) <AC_COMPILE_IFELSE>: Suggest to use `conftest.$OBJEXT'
+	rather than `conftest.$ac_object' to access the just-compiled
+	object file.  Also, refer to the object file as "just-compiled"
+	rather than "just-linked".
+
 2010-05-20  Eric Blake  <eblake@redhat.com>
 
 	Mention another line-counting alternative.
