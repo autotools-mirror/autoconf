@@ -1,3 +1,11 @@
+2010-06-01  Joern Rennecke  <joern.rennecke@embecosm.com>  (tiny change)
+
+	Generalize AC_CHECK_DECL for C++: allow optional arguments.
+	* general.m4 (_AC_CHECK_DECL_BODY): Process trailing function
+	argument types as arguments to use for C++.
+	(_AC_CHECK_DECLS): Filter out trailing function argument types
+	when generating the HAVE_DECL_* macro.
+
 2010-05-25  Stefano Lattarini  <stefano.lattarini@gmail.com>
 	    Eric Blake  <eblake@redhat.com>
 
