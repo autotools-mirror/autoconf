@@ -6275,8 +6275,14 @@ prior to the declaration under test.
 
 This macro actually tests whether @var{symbol} is defined as a macro or
 can be used as an r-value, not whether it is really declared, because it
-is much safer to avoid
-introducing extra declarations when they are not needed.
+is much safer to avoid introducing extra declarations when they are not
+needed.  In order to facilitate use of C++ and overloaded function
+declarations, it is possible to specify function argument types in
+parentheses for types which can be zero-initialized:
+
+@example
+AC_CHECK_DECL([basename(char *)])
+@end example
 
 This macro caches its result in the @code{ac_cv_have_decl_@var{symbol}}
 variable, with characters not suitable for a variable name mapped to
@@ -6289,7 +6295,8 @@ underscores.
 @acindex{CHECK_DECLS}
 @cvindex HAVE_DECL_@var{symbol}
 @caindex have_decl_@var{symbol}
-For each of the @var{symbols} (@emph{comma}-separated list), define
+For each of the @var{symbols} (@emph{comma}-separated list with optional
+function argument types for C++ overloads), define
 @code{HAVE_DECL_@var{symbol}} (in all capitals) to @samp{1} if
 @var{symbol} is declared, otherwise to @samp{0}.  If
 @var{action-if-not-found} is given, it is additional shell code to
@@ -6306,6 +6313,7 @@ AC_CHECK_DECLS([strdup])
 AC_CHECK_DECLS([strlen])
 AC_CHECK_DECLS([malloc, realloc, calloc, free])
 AC_CHECK_DECLS([j0], [], [], [[#include <math.h>]])
+AC_CHECK_DECLS([[basename(char *)], [dirname(char *)]])
 @end example
 
 Unlike the other @samp{AC_CHECK_*S} macros, when a @var{symbol} is not

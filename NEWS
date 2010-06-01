@@ -16,6 +16,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Autoconf should work on EBCDIC hosts.
 
+** AC_CHECK_DECL and AC_CHECK_DECLS accept optional function argument types
+   for overloaded C++ functions.
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 

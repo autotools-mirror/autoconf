@@ -2792,7 +2792,7 @@ AC_DEFUN([AC_CHECK_FILES],
 # Shell function body for AC_CHECK_DECL.
 m4_define([_AC_CHECK_DECL_BODY],
 [  AS_LINENO_PUSH([$[]1])
-  [as_decl_name=`echo $][2|sed 's/(.*//'`]
+  [as_decl_name=`echo $][2|sed 's/ *(.*//'`]
   [as_decl_use=`echo $][2|sed -e 's/(/((/' -e 's/)/) 0&/' -e 's/,/) 0& (/g'`]
   AC_CACHE_CHECK([whether $as_decl_name is declared], [$[]3],
   [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$[]4],
@@ -2837,7 +2837,7 @@ AS_VAR_POPDEF([ac_Symbol])dnl
 # ACTION-IF-FOUND or ACTION-IF-NOT-FOUND.
 m4_define([_AC_CHECK_DECLS],
 [AC_CHECK_DECL([$1], [ac_have_decl=1], [ac_have_decl=0], [$4])]dnl
-[AC_DEFINE_UNQUOTED(AS_TR_CPP(m4_bpatsubst(HAVE_DECL_[$1],[(.*])),
+[AC_DEFINE_UNQUOTED(AS_TR_CPP(m4_bpatsubst(HAVE_DECL_[$1],[ *(.*])),
   [$ac_have_decl],
   [Define to 1 if you have the declaration of `$1',
    and to 0 if you don't.])]dnl

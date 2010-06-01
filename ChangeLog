@@ -1,3 +1,13 @@
+2010-06-01  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Documentation and tests for the AC_CHECK_DECL change.
+	* lib/autoconf/general.m4 (_AC_CHECK_DECL_BODY): Squash trailing
+	spaces in as_decl_name.
+	(_AC_CHECK_DECLS): Likewise for the define.
+	* tests/semantics.at (AC_CHECK_DECLS): Extend test.
+	* doc/autoconf.texi (Generic Declarations): Update.
+	* NEWS: Update.
+
 2010-06-01  Joern Rennecke  <joern.rennecke@embecosm.com>  (tiny change)
 
 	Generalize AC_CHECK_DECL for C++: allow optional arguments.

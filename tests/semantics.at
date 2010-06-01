@@ -109,9 +109,40 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 		   struct { int x[20]; } mystruct;
 		   extern int myfunc();
 		   #define mymacro1(arg) arg
-		   #define mymacro2]])]],
+		   #define mymacro2]])
+  # The difference in space-before-open-paren is intentional.
+  AC_CHECK_DECLS([basenam (char *), dirnam(char *),
+		  [moreargs (char, short, int, long, void *, char [], float, double)]],,,
+		 [[#ifdef __cplusplus
+		   extern "C++" char *basenam (char *);
+		   extern "C++" const char *basenam (const char *);
+		   #else
+		   extern char *basenam (const char *);
+		   #endif
+		   #ifdef __cplusplus
+		   extern "C" {
+		   #endif
+		   extern int moreargs (char, short, int, long, void *,
+					char [], float, double);
+		   #ifdef __cplusplus
+		   }
+		   #endif
+		   ]])
+  AC_CHECK_DECL([declared (char *)],, [AS_EXIT([1])],
+		[[#ifdef __cplusplus
+		  extern "C++" char *declared (char *);
+		  extern "C++" const char *declared (const char *);
+		  #else
+		  extern char *declared (const char *);
+		  #endif
+		]])
+  AC_CHECK_DECL([undeclared (char *)], [AS_EXIT([1])],, [[]])
+]],
 [AT_CHECK_DEFINES(
-[#define HAVE_DECL_MYENUM 1
+[#define HAVE_DECL_BASENAM 1
+#define HAVE_DECL_DIRNAM 0
+#define HAVE_DECL_MOREARGS 1
+#define HAVE_DECL_MYENUM 1
 #define HAVE_DECL_MYFUNC 1
 #define HAVE_DECL_MYMACRO1 1
 #define HAVE_DECL_MYMACRO2 1
