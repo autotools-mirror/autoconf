@@ -16877,9 +16877,9 @@ makefiles, and led to circumlocutions like @samp{sh -c 'test -f file ||
 touch file'}, where the seemingly-unnecessary @samp{sh -c '@dots{}'}
 wrapper works around the bug (@pxref{Failure in Make Rules}).
 
-Even relatively-recent versions of the BSD shell (e.g.,
-OpenBSD 3.4) wrongly exit with @option{-e} if a command within
-@samp{&&} fails inside a compound statement.  For example:
+Even relatively-recent versions of the BSD shell (e.g., OpenBSD 3.4)
+wrongly exit with @option{-e} if the last command within a compound
+statement fails and is guarded by an @samp{&&} only.  For example:
 
 @example
 #! /bin/sh
@@ -16889,14 +16889,17 @@ test -n "$foo" && exit 1
 echo one
 if :; then
   test -n "$foo" && exit 1
+  echo two
+  test -n "$foo" && exit 1
 fi
-echo two
+echo three
 @end example
 
 @noindent
-does not print @samp{two}.  One workaround is to use @samp{if test -n
-"$foo"; then exit 1; fi} rather than @samp{test -n "$foo" && exit 1}.
-Another possibility is to warn BSD users not to use @samp{sh -e}.
+does not print @samp{three}.  One workaround is to change the last
+instance of @samp{test -n "$foo" && exit 1} to be @samp{if test -n
+"$foo"; then exit 1; fi} instead.  Another possibility is to warn BSD
+users not to use @samp{sh -e}.
 
 When @samp{set -e} is in effect, a failed command substitution in
 Solaris @command{/bin/sh} cannot be ignored, even with @samp{||}.

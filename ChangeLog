@@ -1,3 +1,10 @@
+2010-06-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Clarify OpenBSD sh errexit issue with compound commands.
+	* doc/autoconf.texi (Limitations of Builtins): Only the last
+	command in a compound list is problematic.
+	Tested on OpenBSD 4.4.
+
 2010-06-07  Eric Blake  <eblake@redhat.com>
 
 	Properly quote AC_PREREQ during autoupdate.
