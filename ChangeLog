@@ -1,3 +1,9 @@
+2010-06-08  Eric Blake  <eblake@redhat.com>
+
+	Run libtool test with modern libtool.
+	* tests/foreign.at (Libtool): Request that libtoolize install
+	auxiliary files.  Assume libtool 2.x is modern.
+
 2010-06-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Coverage and doc fixes for AC_LANG_SOURCE and AC_LANG_PROGRAM.
