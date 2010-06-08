@@ -9577,6 +9577,7 @@ It is common to find buggy macros using @code{AC_CACHE_VAL} or
 instance, the following macro is broken:
 
 @example
+@c If you change this example, adjust tests/base.at:AC_CACHE_CHECK.
 @group
 AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [my_cv_shell_true_works],
@@ -9596,6 +9597,7 @@ This fails if the cache is enabled: the second time this macro is run,
 is:
 
 @example
+@c If you change this example, adjust tests/base.at:AC_CACHE_CHECK.
 @group
 AC_DEFUN([AC_SHELL_TRUE],
 [AC_CACHE_CHECK([whether true(1) works], [my_cv_shell_true_works],
@@ -9675,7 +9677,8 @@ documented semantics.
 A cache file is a shell script that caches the results of configure
 tests run on one system so they can be shared between configure scripts
 and configure runs.  It is not useful on other systems.  If its contents
-are invalid for some reason, the user may delete or edit it.
+are invalid for some reason, the user may delete or edit it, or override
+documented cache variables on the @command{configure} command line.
 
 By default, @command{configure} uses no cache file,
 to avoid problems caused by accidental

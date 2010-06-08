@@ -1410,6 +1410,11 @@ AT_CHECK([cd builddir && ../configure $configure_options --silent], 0, [])
 AT_CHECK([cd builddir && ./config.status --recheck], 0, [stdout])
 AT_CHECK([grep 'creating \./config.status' stdout], 0, [ignore])
 
+# --cache-file is adjusted for subdirectories, so the cache is shared.
+AT_CHECK([cd builddir && ../configure $configure_options --config-cache],
+	 [], [stdout])
+AT_CHECK([grep 'loading .*\.\./config.cache' stdout], [], [ignore])
+
 # Make sure we can run autoreconf on a subdirectory
 rm -f configure configure.in
 AT_CHECK([autoreconf inner], [], [], [ignore])

@@ -228,19 +228,39 @@ AT_CLEANUP
 
 AT_SETUP([AC_CACHE_CHECK])
 
+# Don't let a config.site file affect this test.
+AS_UNSET([CONFIG_SITE])
+
 AT_DATA([configure.ac],
 [[AC_INIT
 # m4_define([ac_nothing], [ac_cv_absolutely_nothing])
 AC_CACHE_CHECK([for nothing],
 	       [ac_nothing],
 	       [ac_nothing=found])
+
+AC_MSG_CHECKING([for some other variable])
+commands_to_set_it_was_run=false
+AC_CACHE_VAL([my_cv_variable], [
+# FOO
+commands_to_set_it_was_run=true
+my_cv_variable=true
+])
+AC_MSG_RESULT([$my_cv_variable])
+
+# Ensure that the result is available at this point.
+if test ${my_cv_variable+set} != set; then
+  AC_MSG_ERROR([AC@&@&t@t@_CACHE_VAL did not ensure that the cache variable was set])
+fi
+
+# AC_CACHE_SAVE should be enough here, no need for AC_OUTPUT.
+AC_CACHE_SAVE
 ]])
 
 AT_CHECK_AUTOCONF([], [], [], [stderr])
 AT_CHECK([grep 'must contain _cv_ to be cached' stderr], [], [ignore])
 
 # Do not warn about defines:
-sed 's/^# //' configure.ac > t
+sed 's/^# m4_define/m4_define/' configure.ac > t
 mv -f t configure.ac
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([-q])
@@ -249,6 +269,140 @@ sed '/m4_define/d; s/ac_nothing/ac_cv_nothing/' configure.ac > t
 mv -f t configure.ac
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([-q])
+
+# Print a message saying that the result was cached, iff it was cached.
+AT_CHECK_CONFIGURE([], [], [stdout])
+AT_CHECK([grep 'cached' stdout], [1])
+AT_CHECK_CONFIGURE([my_cv_variable='yes it is set'], [], [stdout])
+AT_CHECK([grep 'cached.*yes it is set' stdout], [], [ignore])
+
+# --cache-file is honored and has caching semantics.
+AT_CHECK_CONFIGURE([--cache-file=foobar.cache], [], [stdout])
+AT_CHECK([grep 'cached' stdout], [1])
+AT_CHECK([test ! -f config.cache])
+AT_CHECK([grep 'my_cv_variable.*true' foobar.cache], [], [ignore])
+AT_CHECK_CONFIGURE([--cache-file=foobar.cache], [], [stdout])
+AT_CHECK([grep 'some other variable.*cached.*true' stdout], [], [ignore])
+
+# A setting on the command line overrides the cache.
+AT_CHECK_CONFIGURE([--cache-file=foobar.cache my_cv_variable='override'], [], [stdout])
+AT_CHECK([grep 'cached.*override' stdout], [], [ignore])
+AT_CHECK([grep 'my_cv_variable.*override' foobar.cache], [], [ignore])
+
+# Values containing braces need special internal treatment.
+AT_CHECK_CONFIGURE([-C ac_cv_nothing='{' my_cv_variable='contains } brace'],
+		   [], [stdout])
+AT_CHECK([grep 'ac_cv_nothing.*{' config.cache], [], [ignore])
+AT_CHECK([grep 'my_cv_variable.*contains } brace' config.cache], [], [ignore])
+AT_CHECK_CONFIGURE([-C], [], [stdout])
+AT_CHECK([grep 'nothing.*{' stdout], [], [ignore])
+AT_CHECK([grep 'some other variable.*contains } brace' stdout], [], [ignore])
+rm -f config.cache
+
+# Diagnose common side-effects that are errors in COMMANDS-TO-SET-IT:
+sed 's/^# FOO/AC_DEFINE([some-define], [1], [oooh.])/' configure.ac > t
+mv -f t configure.ac
+AT_CHECK_AUTOCONF([], [], [], [stderr])
+AT_CHECK([grep 'suspicious.*AC_DEFINE' stderr], [], [ignore])
+
+sed 's/^AC_DEFINE.*/AC_SUBST([some_substitution], [oooh.])/' configure.ac > t
+mv -f t configure.ac
+AT_CHECK_AUTOCONF([], [], [], [stderr])
+AT_CHECK([grep 'suspicious.*AC_SUBST' stderr], [], [ignore])
+
+# Ensure the examples from the manual work as intended.
+# Taken from autoconf.texi:Caching Results
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_DEFUN([AC_SHELL_TRUE],
+[AC_CACHE_CHECK([whether true(1) works], [my_cv_shell_true_works],
+                [my_cv_shell_true_works=no
+                 (true) 2>/dev/null && my_cv_shell_true_works=yes
+                 if test "x$my_cv_shell_true_works" = xyes; then
+                   AC_DEFINE([TRUE_WORKS], [1],
+                             [Define if `true(1)' works properly.])
+                 fi])
+])
+AC_SHELL_TRUE
+]])
+AT_CHECK_AUTOCONF([-Werror], [1], [], [stderr])
+AT_CHECK([grep 'suspicious.*AC_DEFINE' stderr], [], [ignore])
+
+# Taken from autoconf.texi:Caching Results
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_DEFUN([AC_SHELL_TRUE],
+[AC_CACHE_CHECK([whether true(1) works], [my_cv_shell_true_works],
+                [my_cv_shell_true_works=no
+                 (true) 2>/dev/null && my_cv_shell_true_works=yes])
+ if test "x$my_cv_shell_true_works" = xyes; then
+   AC_DEFINE([TRUE_WORKS], [1],
+             [Define if `true(1)' works properly.])
+ fi
+])
+AC_SHELL_TRUE
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF([-Werror])
+AT_CHECK_CONFIGURE([-C], [], [stdout])
+AT_CHECK([grep my_cv_shell_true_works config.cache], [], [ignore])
+AT_CHECK([grep 'true.*works.*yes' stdout], [], [ignore])
+
+AT_CHECK_CONFIGURE([--config-cache], [], [stdout])
+AT_CHECK([grep 'true.*works.*cached.*yes' stdout], [], [ignore])
+
+# config.status only pays attention to the cache file with --recheck.
+AT_CHECK([./config.status], [], [stdout])
+AT_CHECK([grep cache stdout], [1])
+AT_CHECK([./config.status --recheck], [], [stdout])
+AT_CHECK([grep cache stdout], [0], [ignore])
+
+# By default, configure uses no cache file, neither loading nor updating it.
+: > a-stamp-file
+AT_CHECK_CONFIGURE([], [], [stdout])
+AT_CHECK([grep cache stdout], [1])
+AT_CHECK([LC_ALL=C ls -t config.cache a-stamp-file | sed 1q | grep config.cache], [1])
+
+# config.site can specify a site-wide cache, accumulating information.
+AT_DATA([config.site],
+[[cache_file=sitecache
+]])
+AT_DATA([sitecache],
+[[my_cv_some_preset_cache_var=yes
+]])
+CONFIG_SITE=config.site
+export CONFIG_SITE
+AT_CHECK_CONFIGURE
+AT_CHECK([grep my_cv_some_preset_cache_var sitecache], [], [ignore])
+AT_CHECK([grep my_cv_shell_true_works sitecache], [], [ignore])
+AT_CHECK_CONFIGURE([], [], [stdout])
+AT_CHECK([grep 'whether true.*works.*cached' stdout], [], [ignore])
+
+AT_CLEANUP
+
+
+## --------------- ##
+## AC_CACHE_LOAD.  ##
+## --------------- ##
+
+# Test AC_CACHE_LOAD.
+
+AT_SETUP([AC_CACHE_LOAD])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+$some_test_code
+AC_CACHE_LOAD
+AC_MSG_NOTICE([some_cv_variable is $some_cv_variable])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+AS_UNSET([some_test_code])
+AT_DATA([new-cache],
+[[some_cv_variable=value-from-new-cache
+]])
+AT_CHECK_CONFIGURE([some_test_code='eval cache_file=new-cache'], [], [stdout])
+AT_CHECK([grep 'some_cv_variable.*value-from-new-cache' stdout], [], [ignore])
 
 AT_CLEANUP
 

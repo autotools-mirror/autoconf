@@ -1,5 +1,16 @@
 2010-06-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Testsuite coverage for AC_CACHE_VAL and caching semantics.
+	* tests/base.at (AC_CACHE_CHECK): Extend test.
+	(AC_CACHE_LOAD): New test.
+	* tests/torture.at (Configuring subdirectories): Also test
+	--config-cache with AC_CONFIG_SUBDIRS.
+	* doc/autoconf.texi (Caching Results): Annotate code snippets
+	which are tested in the test suite.
+	(Cache Files): Documented cache variables may be used on the
+	configure command line to override individual entries in the
+	cache file.
+
 	Clarify OpenBSD sh errexit issue with compound commands.
 	* doc/autoconf.texi (Limitations of Builtins): Only the last
 	command in a compound list is problematic.
