@@ -19,6 +19,8 @@ GNU Autoconf NEWS - User visible changes.
 ** AC_CHECK_DECL and AC_CHECK_DECLS accept optional function argument types
    for overloaded C++ functions.
 
+** AS_SET_CATFILE accepts nonliterals in its variable name argument now.
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 

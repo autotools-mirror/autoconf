@@ -1313,12 +1313,12 @@ IFS=$as_save_IFS
 # Optimize the common case where $2 or $3 is '.'.
 m4_define([AS_SET_CATFILE],
 [case $2 in @%:@((
-.) $1=$3;;
+.) AS_VAR_SET([$1], [$3]);;
 *)
   case $3 in @%:@(((
-  .) $1=$2;;
-  [[\\/]]* | ?:[[\\/]]* ) $1=$3;;
-  *) $1=$2/$3;;
+  .) AS_VAR_SET([$1], [$2]);;
+  [[\\/]]* | ?:[[\\/]]* ) AS_VAR_SET([$1], [$3]);;
+  *) AS_VAR_SET([$1], [$2/$3]);;
   esac;;
 esac[]])# AS_SET_CATFILE
 

@@ -13234,8 +13234,8 @@ if test "x$HAVE_sys_some_file_h" = xyes; then echo "Have it!"; fi
 
 @defmac AS_SET_CATFILE (@var{var}, @var{dir}, @var{file})
 @asindex{SET_CATFILE}
-Set the shell variable @var{var} to @var{dir}/@var{file}, but
-optimizing the common cases (@var{dir} or @var{file} is @samp{.},
+Set the polymorphic shell variable @var{var} to @var{dir}/@var{file},
+but optimizing the common cases (@var{dir} or @var{file} is @samp{.},
 @var{file} is absolute, etc.).
 @end defmac
 

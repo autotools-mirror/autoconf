@@ -1,5 +1,13 @@
 2010-06-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Make AS_SET_CATFILE polymorphic, and add testsuite coverage.
+	* lib/m4sugar/m4sh.m4 (AS_SET_CATFILE): Use AS_VAR_SET to set
+	the variable.
+	* tests/m4sh.at (AS@&t@_SET_CATFILE): New test.
+	* doc/autoconf.texi (Common Shell Constructs): Document that
+	AS_SET_CATFILE is polymorphic in its VAR argument now.
+	* NEWS: Update.
+
 	Testsuite coverage for AC_COPYRIGHT and AT_COPYRIGHT.
 	* tests/autotest.at (AT@&t@_COPYRIGHT): New test.
 	* tests/base.at (AC@&t@_COPYRIGHT): Likewise.
