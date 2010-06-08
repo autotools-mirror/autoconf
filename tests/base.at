@@ -219,6 +219,37 @@ AT_CHECK([grep "^PACKAGE_TARNAME='fu'\$" configure], [], [ignore])
 AT_CLEANUP
 
 
+## -------------- ##
+## AC_COPYRIGHT.  ##
+## -------------- ##
+
+# Ensure the FSF notice as well as the user-provided one are present
+# in the head of the testsuite as well as the --version output.
+
+AT_SETUP([AC@&t@_COPYRIGHT])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU fu], [1.0])
+AC_COPYRIGHT([[This is just a test notice, not a real one, so let's avoid
+words that may be matched by scanners for legal things,
+causing extra work for distributors.
+Multi-line values should be supported.
+]])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([--version], [], [stdout])
+AT_CHECK([grep 'Copyright.*Free Software Foundation' stdout], [], [ignore])
+AT_CHECK([grep 'This is just a test notice' stdout], [], [ignore])
+AT_CHECK([sed -ne 50q -e '/Copyright/{' -e N -e N -e N -e N -e 's/#//g' ]dnl
+	 [    -e 's/\n//g' -e p -e '}' configure ]dnl
+         [  | grep 'Copyright.*Free Software Foundation'],
+	 [], [ignore])
+AT_CHECK([sed 50q configure | grep 'This is just a test notice'], [], [ignore])
+
+AT_CLEANUP
+
+
 ## ---------------- ##
 ## AC_CACHE_CHECK.  ##
 ## ---------------- ##

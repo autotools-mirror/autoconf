@@ -135,6 +135,30 @@ m4_define([AT_CHECK_EGREP],
 ])
 
 
+## -------------- ##
+## AT_COPYRIGHT.  ##
+## -------------- ##
+
+# Ensure the FSF notice as well as the user-provided one are present
+# in the head of the testsuite as well as the --version output.
+
+AT_CHECK_AT([AT@&t@_COPYRIGHT],
+[[AT_INIT([Testing AT@&t@_COPYRIGHT])
+AT_COPYRIGHT([[This is just a test notice, not a real one, so let's avoid
+words that may be matched by scanners for legal things,
+causing extra work for distributors.
+Multi-line values should be supported.
+]])
+]], [], [], [stdout], [], [], [
+AT_CHECK([grep 'Copyright.*Free Software Foundation' stdout], [], [ignore])
+AT_CHECK([grep 'This is just a test notice' stdout], [], [ignore])
+AT_CHECK([sed 50q micro-suite | grep 'Copyright.*Free Software Foundation'],
+	 [], [ignore])
+AT_CHECK([sed 50q micro-suite | grep 'This is just a test notice'],
+	 [], [ignore])],
+[--version])
+
+
 ## ------------------ ##
 ## Empty test suite.  ##
 ## ------------------ ##

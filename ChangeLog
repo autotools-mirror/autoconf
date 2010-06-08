@@ -1,5 +1,9 @@
 2010-06-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Testsuite coverage for AC_COPYRIGHT and AT_COPYRIGHT.
+	* tests/autotest.at (AT@&t@_COPYRIGHT): New test.
+	* tests/base.at (AC@&t@_COPYRIGHT): Likewise.
+
 	Testsuite coverage for __file__ and __line__.
 	* tests/m4sugar.at (__file__ and __line__): New test.
 
