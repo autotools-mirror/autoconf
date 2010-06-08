@@ -1870,7 +1870,12 @@ m4_define([AC_SITE_LOAD],
 ac_site_file1=NONE
 ac_site_file2=NONE
 if test -n "$CONFIG_SITE"; then
-  ac_site_file1=$CONFIG_SITE
+  # We do not want a PATH search for config.site.
+  case $CONFIG_SITE in @%:@((
+    -*)  ac_site_file1=./$CONFIG_SITE;;
+    */*) ac_site_file1=$CONFIG_SITE;;
+    *)   ac_site_file1=./$CONFIG_SITE;;
+  esac
 elif test "x$prefix" != xNONE; then
   ac_site_file1=$prefix/share/config.site
   ac_site_file2=$prefix/etc/config.site
@@ -1884,7 +1889,8 @@ do
   if test /dev/null != "$ac_site_file" && test -r "$ac_site_file"; then
     AC_MSG_NOTICE([loading site script $ac_site_file])
     sed 's/^/| /' "$ac_site_file" >&AS_MESSAGE_LOG_FD
-    . "$ac_site_file"
+    . "$ac_site_file" \
+      || AC_MSG_FAILURE([failed to load site script $ac_site_file])
   fi
 done
 ])

@@ -1,3 +1,13 @@
+2010-06-14  Eric Blake  <eblake@redhat.com>
+
+	Make CONFIG_SITE handling more robust.
+	* lib/autoconf/general.m4 (AC_SITE_LOAD): Avoid leading - and path
+	search, and check for failure to load.
+	* tests/base.at (AC_CACHE_CHECK): Enhance test.
+	* doc/autoconf.texi (Site Defaults): Mention that CONFIG_SITE
+	works best as an absolute path.
+	* NEWS: Document the semantic change.
+
 2010-03-13  Bruno Haible  <bruno@clisp.org>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

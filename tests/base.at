@@ -258,6 +258,7 @@ AT_CLEANUP
 # Also make sure we warn about cache id's not named with `_cv_'.
 
 AT_SETUP([AC_CACHE_CHECK])
+AT_KEYWORDS([CONFIG_SITE])
 
 # Don't let a config.site file affect this test.
 AS_UNSET([CONFIG_SITE])
@@ -395,19 +396,32 @@ AT_CHECK([grep cache stdout], [1])
 AT_CHECK([LC_ALL=C ls -t config.cache a-stamp-file | sed 1q | grep config.cache], [1])
 
 # config.site can specify a site-wide cache, accumulating information.
-AT_DATA([config.site],
+# Also test that we don't run afoul of sourcing a file with leading -.
+AT_DATA([-config.site],
 [[cache_file=sitecache
 ]])
 AT_DATA([sitecache],
 [[my_cv_some_preset_cache_var=yes
 ]])
-CONFIG_SITE=config.site
+CONFIG_SITE=-config.site
 export CONFIG_SITE
 AT_CHECK_CONFIGURE
 AT_CHECK([grep my_cv_some_preset_cache_var sitecache], [], [ignore])
 AT_CHECK([grep my_cv_shell_true_works sitecache], [], [ignore])
 AT_CHECK_CONFIGURE([], [], [stdout])
 AT_CHECK([grep 'whether true.*works.*cached' stdout], [], [ignore])
+
+# Check that config cache scripts must be well-formed.
+AT_DATA([bad.site],
+[[fi
+]])
+CONFIG_SITE=$PWD/bad.site
+AT_CHECK_CONFIGURE([], [1], [ignore], [stderr])
+AT_CHECK([grep 'failed to load site script' stderr], [], [ignore])
+
+# However, a missing file is ignored.
+CONFIG_SITE=./no-such-file
+AT_CHECK_CONFIGURE
 
 AT_CLEANUP
 

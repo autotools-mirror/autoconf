@@ -28,6 +28,9 @@ GNU Autoconf NEWS - User visible changes.
    and `--with-*' arguments, converting them to underscores for the variable
    names.
 
+** In configure scripts, loading CONFIG_SITE no longer searches PATH,
+   and problems in loading the configuration site files are diagnosed.
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 
