@@ -8675,19 +8675,22 @@ all the @code{AC_DEFINE} performed so far.
 For instance executing (observe the double quotation!):
 
 @example
-AC_INIT([Hello], [1.0], [bug-hello@@example.org])
+@c If you change this example, adjust tests/compile.at:AC_LANG_SOURCE example.
+AC_INIT([Hello], [1.0], [bug-hello@@example.org], [],
+        [http://www.example.org/])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
-AC_LANG(C)
+AC_LANG([C])
 AC_LANG_CONFTEST(
    [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
 gcc -E -dD -o - conftest.c
 @end example
 
 @noindent
-results in:
+on a system with @command{gcc} installed, results in:
 
 @example
+@c If you change this example, adjust tests/compile.at:AC_LANG_SOURCE example.
 @dots{}
 # 1 "conftest.c"
 
@@ -8696,6 +8699,7 @@ results in:
 #define PACKAGE_VERSION "1.0"
 #define PACKAGE_STRING "Hello 1.0"
 #define PACKAGE_BUGREPORT "bug-hello@@example.org"
+#define PACKAGE_URL "http://www.example.org/"
 #define HELLO_WORLD "Hello, World\n"
 
 const char hw[] = "Hello, World\n";
@@ -8716,7 +8720,9 @@ available.
 For instance:
 
 @example
-AC_INIT([Hello], [1.0], [bug-hello@@example.org])
+@c If you change this example, adjust tests/compile.at:AC_LANG_PROGRAM example.
+AC_INIT([Hello], [1.0], [bug-hello@@example.org], [],
+        [http://www.example.org/])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
 AC_LANG_CONFTEST(
@@ -8726,9 +8732,10 @@ gcc -E -dD -o - conftest.c
 @end example
 
 @noindent
-results in:
+on a system with @command{gcc} installed, results in:
 
 @example
+@c If you change this example, adjust tests/compile.at:AC_LANG_PROGRAM example.
 @dots{}
 # 1 "conftest.c"
 
@@ -8737,6 +8744,7 @@ results in:
 #define PACKAGE_VERSION "1.0"
 #define PACKAGE_STRING "Hello 1.0"
 #define PACKAGE_BUGREPORT "bug-hello@@example.org"
+#define PACKAGE_URL "http://www.example.org/"
 #define HELLO_WORLD "Hello, World\n"
 
 const char hw[] = "Hello, World\n";

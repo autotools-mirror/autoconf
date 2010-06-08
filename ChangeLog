@@ -1,5 +1,13 @@
 2010-06-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Coverage and doc fixes for AC_LANG_SOURCE and AC_LANG_PROGRAM.
+	* tests/compile.at (AC_LANG_SOURCE, AC_LANG_SOURCE(C++))
+	(AC_LANG_SOURCE example, AC_LANG_PROGRAM example): New tests.
+	* doc/autoconf.texi (Generating Sources): Add markers for tested
+	examples; update quoting, and update AC_INIT usage to also set
+	optional URL arguments.  Mention that the examples require gcc.
+	Prompted by report from Brian J. Murrell.
+
 	Make AS_SET_CATFILE polymorphic, and add testsuite coverage.
 	* lib/m4sugar/m4sh.m4 (AS_SET_CATFILE): Use AS_VAR_SET to set
 	the variable.

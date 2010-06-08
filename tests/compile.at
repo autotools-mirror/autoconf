@@ -112,6 +112,146 @@ AT_CHECK_CONFIGURE
 AT_CLEANUP
 
 
+## ---------------- ##
+## AC_LANG_SOURCE.  ##
+## ---------------- ##
+
+AT_SETUP([AC_LANG_SOURCE])
+
+AT_DATA([configure.ac],
+[[AC_INIT([pkg], [1.0])
+AC_PROG_CC
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#ifndef PACKAGE_NAME
+choke me
+#endif
+int main ()
+{
+  return 0;
+}
+]], [], [AC_MSG_FAILURE([confdefs not included])])])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
+## --------------------- ##
+## AC_LANG_SOURCE(C++).  ##
+## --------------------- ##
+
+AT_SETUP([AC_LANG_SOURCE(C++)])
+
+AT_DATA([configure.ac],
+[[AC_INIT([pkg], [1.0])
+AC_PROG_CXX
+AC_LANG([C++])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#ifndef PACKAGE_NAME
+choke me
+#endif
+int main ()
+{
+  return 0;
+}
+]], [], [AC_MSG_FAILURE([confdefs not included])])])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
+## ------------------------ ##
+## AC_LANG_SOURCE example.  ##
+## ------------------------ ##
+
+AT_SETUP([AC_LANG_SOURCE example])
+
+AT_DATA([configure.ac],
+[[# Taken from autoconf.texi:Generating Sources.
+# The only change is to not fail if gcc doesn't work.
+AC_INIT([Hello], [1.0], [bug-hello@example.org], [],
+        [http://www.example.org/])
+AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
+  [Greetings string.])
+AC_LANG([C])
+AC_LANG_CONFTEST(
+   [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
+gcc -E -dD -o - conftest.c || AS_EXIT([77])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [stdout])
+# Taken from autoconf.texi:Generating Sources.
+# Note that the output may contain more than one line matching
+#   # 1 "conftest.c"
+# so delete everything until the last one.
+AT_CHECK([sed  '1,/# 1 "conftest\.c"/d' stdout], [],
+[[
+#define PACKAGE_NAME "Hello"
+#define PACKAGE_TARNAME "hello"
+#define PACKAGE_VERSION "1.0"
+#define PACKAGE_STRING "Hello 1.0"
+#define PACKAGE_BUGREPORT "bug-hello@example.org"
+#define PACKAGE_URL "http://www.example.org/"
+#define HELLO_WORLD "Hello, World\n"
+
+const char hw[] = "Hello, World\n";
+]])
+
+AT_CLEANUP
+
+
+## ------------------------- ##
+## AC_LANG_PROGRAM example.  ##
+## ------------------------- ##
+
+AT_SETUP([AC_LANG_PROGRAM example])
+
+AT_DATA([configure.ac],
+[[# Taken from autoconf.texi:Generating Sources.
+# The only change is to not fail if gcc doesn't work.
+AC_INIT([Hello], [1.0], [bug-hello@example.org], [],
+        [http://www.example.org/])
+AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
+  [Greetings string.])
+AC_LANG_CONFTEST(
+[AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
+                 [[fputs (hw, stdout);]])])
+gcc -E -dD -o - conftest.c || AS_EXIT([77])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [], [stdout])
+# Taken from autoconf.texi:Generating Sources.
+# Note that the output may contain more than one line matching
+#   # 1 "conftest.c"
+# so delete everything until the last one.
+AT_CHECK([sed  '1,/# 1 "conftest\.c"/d' stdout], [],
+[[
+#define PACKAGE_NAME "Hello"
+#define PACKAGE_TARNAME "hello"
+#define PACKAGE_VERSION "1.0"
+#define PACKAGE_STRING "Hello 1.0"
+#define PACKAGE_BUGREPORT "bug-hello@example.org"
+#define PACKAGE_URL "http://www.example.org/"
+#define HELLO_WORLD "Hello, World\n"
+
+const char hw[] = "Hello, World\n";
+int
+main ()
+{
+fputs (hw, stdout);
+  ;
+  return 0;
+}
+]])
+
+AT_CLEANUP
+
+
 ## --------------- ##
 ## AC_RUN_IFELSE.  ##
 ## --------------- ##
