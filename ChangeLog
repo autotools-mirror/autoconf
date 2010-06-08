@@ -1,5 +1,8 @@
 2010-06-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Testsuite coverage for __file__ and __line__.
+	* tests/m4sugar.at (__file__ and __line__): New test.
+
 	Testsuite coverage for AC_CACHE_VAL and caching semantics.
 	* tests/base.at (AC_CACHE_CHECK): Extend test.
 	(AC_CACHE_LOAD): New test.

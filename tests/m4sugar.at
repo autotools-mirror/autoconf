@@ -2075,3 +2075,30 @@ m4_count(m4_shift(m4_set_intersection([a], [b])))
 ]])
 
 AT_CLEANUP
+
+
+## ---------------------- ##
+## __file__ and __line__. ##
+## ---------------------- ##
+
+AT_SETUP([[__file__ and __line__]])
+
+# Check that __file__ and __line__ work.
+# Check that m4__file__ and m4__line__ are not defined
+# (and get them to pass by the undefined-macro check).
+# Try to not assume too much about AT_CHECK_M4SUGAR_TEXT.
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_pattern_allow([m4__file__])dnl
+m4_pattern_allow([m4__line__])dnl
+m4__file__
+m4__line__
+__file__
+m4_define([first], __line__)dnl
+m4_define([second], __line__)dnl
+m4_assert(first + 1 == second)dnl
+]], [[m4@&t@__@&t@file__
+m4@&t@__@&t@line__
+script.4s
+]])
+
+AT_CLEANUP
