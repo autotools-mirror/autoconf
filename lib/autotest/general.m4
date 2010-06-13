@@ -1152,11 +1152,6 @@ _ATEOF
   $at_verbose AS_ECHO_N(["$at_group. $at_setup_line: "])
   AS_ECHO_N(["$at_group. $at_setup_line: "]) >> "$at_group_log"
   case $at_xfail:$at_status in
-    *:99)
-	at_msg='FAILED ('`cat "$at_check_line_file"`')'
-	at_res=fail
-	at_errexit=$at_errexit_p
-	;;
     yes:0)
 	at_msg="UNEXPECTED PASS"
 	at_res=xpass
@@ -1172,15 +1167,15 @@ _ATEOF
 	at_res=skip
 	at_errexit=false
 	;;
+    no:* | *:99)
+	at_msg='FAILED ('`cat "$at_check_line_file"`')'
+	at_res=fail
+	at_errexit=$at_errexit_p
+	;;
     yes:*)
 	at_msg='expected failure ('`cat "$at_check_line_file"`')'
 	at_res=xfail
 	at_errexit=false
-	;;
-    no:*)
-	at_msg='FAILED ('`cat "$at_check_line_file"`')'
-	at_res=fail
-	at_errexit=$at_errexit_p
 	;;
   esac
   echo "$at_res" > "$at_job_dir/$at_res"

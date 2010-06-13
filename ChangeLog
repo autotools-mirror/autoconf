@@ -1,5 +1,9 @@
 2010-06-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Autotest: simplify logic to compute test group result.
+	* lib/autotest/general.m4 (AT_INIT): Compactify result
+	computation logic.
+
 	New Autotest testsuite option --recheck.
 	* lib/autotest/general.m4 (AT_INIT): New variable $at_recheck.
 	Escape hyphen in $at_dir early.  Accept command line switch
