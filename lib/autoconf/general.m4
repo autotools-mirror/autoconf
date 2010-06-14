@@ -389,7 +389,7 @@ test -n "$DJDIR" || exec AS_ORIGINAL_STDIN_FD<&0 </dev/null
 exec AS_MESSAGE_FD>&1
 
 # Name of the host.
-# hostname on some systems (SVR3.2, Linux) returns a bogus exit status,
+# hostname on some systems (SVR3.2, old GNU/Linux) returns a bogus exit status,
 # so uname gets run too.
 ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
 

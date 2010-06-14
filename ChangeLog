@@ -1,3 +1,9 @@
+2010-06-14  Karl Berry  <karl@freefriends.org>  (tiny change)
+
+	Clarify comment about old system.
+	* lib/autoconf/general.m4 (_AC_INIT_DEFAULTS): Prefer GNU/Linux,
+	and note that bug has long since been fixed.
+
 2010-06-08  Eric Blake  <eblake@redhat.com>
 
 	Run libtool test with modern libtool.
