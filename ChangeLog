@@ -1,3 +1,16 @@
+2010-06-14  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New Autotest testsuite option --recheck.
+	* lib/autotest/general.m4 (AT_INIT): New variable $at_recheck.
+	Escape hyphen in $at_dir early.  Accept command line switch
+	--recheck.  Set $at_suite_log early, based on --directory
+	switch; with --recheck, include the list of FAILed and XPASSed
+	tests from old testsuite.log file in $at_groups.  Document
+	--recheck in --help output.
+	* tests/autotest.at (recheck): New test.
+	* doc/autoconf.texi (testsuite Invocation): Document --recheck.
+	* NEWS: Update.
+
 2010-06-14  Karl Berry  <karl@freefriends.org>  (tiny change)
 
 	Clarify comment about old system.

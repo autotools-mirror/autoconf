@@ -403,6 +403,8 @@ at_list_p=false
 at_clean=false
 # Test groups to run
 at_groups=
+# Whether to rerun failed tests.
+at_recheck=
 # Whether a write failure occurred
 at_write_fail=0
 
@@ -558,6 +560,9 @@ do
     --directory=* )
 	at_change_dir=:
 	at_dir=$at_optarg
+	if test x- = "x$at_dir" ; then
+	  at_dir=./-
+	fi
 	;;
 
     # Parallel execution.
@@ -606,6 +611,9 @@ do
 	`
 	AS_VAR_APPEND([at_groups], ["$at_groups_selected "])
 	;;
+    --recheck)
+	at_recheck=:
+	;;
 m4_divert_pop([PARSE_ARGS])dnl
 dnl Process *=* last to allow for user specified --option=* type arguments.
 m4_divert_push([PARSE_ARGS_END])dnl
@@ -633,10 +641,25 @@ done
 # Verify our last option didn't require an argument
 AS_IF([test -n "$at_prev"], [AS_ERROR([`$at_prev' requires an argument])])
 
+# The file containing the suite.
+at_suite_log=$at_dir/$as_me.log
+
 # Selected test groups.
-if test -z "$at_groups"; then
+if test -z "$at_groups$at_recheck"; then
   at_groups=$at_groups_all
 else
+  if test -n "$at_recheck" && test -r "$at_suite_log"; then
+    at_oldfails=`sed -n ['
+      /^Failed tests:$/,/^Skipped tests:$/{
+	s/^[ ]*\([1-9][0-9]*\):.*/\1/p
+      }
+      /^Unexpected passes:$/,/^## Detailed failed tests/{
+	s/^[ ]*\([1-9][0-9]*\):.*/\1/p
+      }
+      /^## Detailed failed tests/q
+      '] "$at_suite_log" | tr "$as_nl" ' '`
+    AS_VAR_APPEND([at_groups], ["$at_oldfails"])
+  fi
   # Sort the tests, removing duplicates.
   at_groups=`AS_ECHO(["$at_groups"]) | tr ' ' "$as_nl" | sort -nu`
 fi
@@ -686,6 +709,7 @@ Execution tuning:
   -k, --keywords=KEYWORDS
 [                 select the tests matching all the comma-separated KEYWORDS]
 [                 multiple \`-k' accumulate; prefixed \`!' negates a KEYWORD]
+      --recheck  select all tests that failed or passed unexpectedly last time
   -e, --errexit  abort as soon as a test fails; implies --debug
   -v, --verbose  force more detailed output
 [                 default for debugging scripts]
@@ -773,9 +797,6 @@ m4_divert_push([TESTS_BEGIN])dnl
 
 # Take any -C into account.
 if $at_change_dir ; then
-  if test x- = "x$at_dir" ; then
-    at_dir=./-
-  fi
   test x != "x$at_dir" && cd "$at_dir" \
     || AS_ERROR([unable to change directory])
   at_dir=`pwd`
@@ -840,7 +861,7 @@ m4_text_box([Directory structure.])
 # The directory the whole suite works in.
 # Should be absolute to let the user `cd' at will.
 at_suite_dir=$at_dir/$as_me.dir
-# The file containing the suite.
+# The file containing the suite ($at_dir might have changed since earlier).
 at_suite_log=$at_dir/$as_me.log
 # The directory containing helper files per test group.
 at_helper_dir=$at_suite_dir/at-groups

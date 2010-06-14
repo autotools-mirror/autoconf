@@ -890,6 +890,52 @@ AT_CHECK([$CONFIG_SHELL ./micro-suite -C nonesuch --help], [0], [ignore], [])
 ])
 
 
+# --recheck.
+AT_CHECK_AT_TEST([recheck],
+  [AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([failing test])
+   AT_CHECK([exit 1])
+   AT_CLEANUP
+   AT_SETUP([xpassing test])
+   AT_XFAIL_IF([:])
+   AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([xfailing test])
+   AT_XFAIL_IF([:])
+   AT_CHECK([exit 1])
+], [], [], [], [], [], [
+AT_CHECK([$CONFIG_SHELL ./micro-suite --recheck], [0], [stdout])
+AT_CHECK([grep "0 tests were successful" stdout], [0], [ignore])
+
+AT_CHECK([$CONFIG_SHELL ./micro-suite], [1], [ignore], [ignore])
+AT_CHECK([grep 'only test' micro-suite.log], [0], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --recheck], [1], [ignore], [ignore])
+AT_CHECK([grep 'only test' micro-suite.log], [1])
+AT_CHECK([grep 'xfailing' micro-suite.log], [1])
+AT_CHECK([grep 'failing test' micro-suite.log], [0], [ignore])
+AT_CHECK([grep 'xpassing test' micro-suite.log], [0], [ignore])
+
+AT_CHECK([$CONFIG_SHELL ./micro-suite --clean], [0])
+AT_CHECK([test -f micro-suite.log], [1])
+
+dnl check specifying a different relative path to run in.
+AT_CHECK([mkdir sub1])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C sub1], [1], [ignore], [ignore])
+AT_CHECK([test -f micro-suite.log], [1])
+AT_CHECK([test -f sub1/micro-suite.log], [0])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C sub1 --recheck --list], [0], [stdout])
+AT_CHECK([grep 'only test' stdout], [1])
+AT_CHECK([grep 'xfailing test' stdout], [1])
+AT_CHECK([grep 'failing test' stdout], [0], [ignore])
+AT_CHECK([grep 'xpassing test' stdout], [0], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -C sub1 --recheck], [1], [ignore],
+	 [ignore])
+AT_CHECK([grep 'failing test' sub1/micro-suite.log], [0], [ignore])
+AT_CHECK([grep 'xpassing test' sub1/micro-suite.log], [0], [ignore])
+], [1 4])
+
+
 ## -------- ##
 ## Banners. ##
 ## -------- ##

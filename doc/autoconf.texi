@@ -23805,6 +23805,10 @@ log (in order to preserve supposedly existing full log file).  This is
 the default for debugging scripts, but it can also be useful to debug
 the testsuite itself.
 
+@item --recheck
+Add to the selection all test groups that failed or passed unexpectedly
+during the last non-debugging test run.
+
 @item --trace
 @itemx -x
 Trigger shell tracing of the test groups.
