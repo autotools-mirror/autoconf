@@ -1,3 +1,9 @@
+2010-06-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Avoid texinfo bug with backslashes in macro arguments.
+	* doc/autoconf.texi (Text processing Macros)
+	(Common Shell Constructs): Do not use @dvar with backslashes.
+
 2010-06-14  Eric Blake  <eblake@redhat.com>
 
 	Make CONFIG_SITE handling more robust.

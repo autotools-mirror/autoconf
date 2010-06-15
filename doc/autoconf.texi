@@ -12488,7 +12488,8 @@ Backslash-escape all characters in @var{string} that are active in
 regexps.
 @end defmac
 
-@defmac m4_split (@var{string}, @dvar{regexp, [\t ]+})
+@c We cannot use @dvar because the macro expansion mistreats backslashes.
+@defmac m4_split (@var{string}, @r{[}@var{regexp} = @samp{[\t ]+}@r{]})
 @msindex{split}
 Split @var{string} into an M4 list of elements quoted by @samp{[} and
 @samp{]}, while keeping white space at the beginning and at the end.
@@ -13110,7 +13111,8 @@ for portability, should not include more than one newline.  The bytes of
 Redirections can be placed outside the macro invocation.
 @end defmac
 
-@defmac AS_ESCAPE (@var{string}, @dvar{chars, `\"$})
+@c We cannot use @dvar because the macro expansion mistreats backslashes.
+@defmac AS_ESCAPE (@var{string}, @r{[}@var{chars} = @samp{`\"$}@r{]})
 @asindex{ESCAPE}
 Expands to @var{string}, with any characters in @var{chars} escaped with
 a backslash (@samp{\}).  @var{chars} should be at most four bytes long,
