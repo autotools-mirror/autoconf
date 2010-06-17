@@ -23408,6 +23408,12 @@ The @var{copyright-notice} shows up in both the head of
 @command{testsuite} and in @samp{testsuite --version}.
 @end defmac
 
+@defmac AT_COLOR_TESTS
+@atindex{COLOR_TESTS}
+Enable colored test results by default when the output is connected to
+a terminal.
+@end defmac
+
 @defmac AT_TESTED (@var{executables})
 @atindex{TESTED}
 Log the file name and answer to @option{--version} of each program in
@@ -23797,6 +23803,14 @@ then concurrently running tests will finish before exiting.
 @itemx -v
 Force more verbosity in the detailed output of what is being done.  This
 is the default for debugging scripts.
+
+@item --color
+@itemx --color@r{[}=never@r{|}auto@r{|}always@r{]}
+Enable colored test results.  Without an argument, or with @samp{always},
+test results will be colored.  With @samp{never}, color mode is turned
+off.  Otherwise, if either the macro @code{AT_COLOR_TESTS} is used by
+the testsuite author, or the argument @samp{auto} is given, then test
+results are colored if standard output is connected to a terminal.
 
 @item --debug
 @itemx -d

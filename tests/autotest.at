@@ -1402,6 +1402,93 @@ AT_CHECK([test -s sigpipe-stamp || test ! -f micro-suite.dir/7/micro-suite.log],
 
 AT_CLEANUP
 
+
+# --color
+AT_CHECK_AT_TEST([colored test results],
+  [AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([fail])
+   AT_CHECK([exit 1])
+   AT_CLEANUP
+   AT_SETUP([xpass])
+   AT_XFAIL_IF([:])
+   AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([xfail])
+   AT_XFAIL_IF([:])
+   AT_CHECK([exit 1])
+   AT_CLEANUP
+   AT_SETUP([skip])
+   AT_CHECK([exit 77])
+   AT_CLEANUP
+   AT_SETUP([hardfail])
+   AT_XFAIL_IF([:])
+   AT_CHECK([exit 99])
+], [], [], [], [], [], [
+
+TERM=ansi
+export TERM
+
+red=`printf '\033@<:@0;31m'`
+grn=`printf '\033@<:@0;32m'`
+lgn=`printf '\033@<:@1;32m'`
+blu=`printf '\033@<:@1;34m'`
+std=`printf '\033@<:@m'`
+
+# Check that grep can parse nonprinting characters.
+# BSD 'grep' works from a pipe, but not a seekable file.
+# GNU or BSD 'grep -a' works on files, but is not portable.
+AT_CHECK([case `echo "$std" | grep .` in #'' restore font-lock
+	    $std) :;;
+	    *) Exit 77;;
+	  esac], [], [ignore], [],
+	 [echo "grep can't parse nonprinting characters" >&2])
+
+if echo 'ab*c' | grep -F 'ab*c' >/dev/null 2>&1; then
+  FGREP="grep -F"
+else
+  FGREP=fgrep
+fi
+
+# No color.
+AT_CHECK([$CONFIG_SHELL ./micro-suite], [1], [stdout], [stderr])
+for color in "$red" "$grn" "$lgn" "$blu"; do
+  AT_CHECK([cat stdout stderr | $FGREP "$color"], [1])
+done
+
+# Color of test group results.
+AT_CHECK([$CONFIG_SHELL ./micro-suite --color=always], [1], [stdout], [stderr])
+AT_CHECK([cat stdout | grep " only " | $FGREP "$grn"], [], [ignore])
+AT_CHECK([cat stdout | grep " fail " | $FGREP "$red"], [], [ignore])
+AT_CHECK([cat stdout | grep " xfail " | $FGREP "$lgn"], [], [ignore])
+AT_CHECK([cat stdout | grep " xpass " | $FGREP "$red"], [], [ignore])
+AT_CHECK([cat stdout | grep " skip " | $FGREP "$blu"], [], [ignore])
+AT_CHECK([cat stdout | grep " hardfail " | $FGREP "$red"], [], [ignore])
+AT_CHECK([cat stderr | grep ERROR | $FGREP "$red"], [], [ignore])
+
+# The summary is green if all tests were successful, light green if all
+# behaved as expected, and red otherwise.
+AT_CHECK([$CONFIG_SHELL ./micro-suite --color=always 1 -k skip],
+	 [0], [stdout])
+AT_CHECK([cat stdout | grep 'test.*successful' | $FGREP "$grn"],
+	 [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --color=always 1 -k xfail -k skip],
+	 [0], [stdout])
+AT_CHECK([cat stdout | grep 'as expected' | $FGREP "$lgn"], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --color=always -k fail],
+	 [1], [ignore], [stderr])
+AT_CHECK([cat stderr | grep ERROR | $FGREP "$red"], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --color=always -k xpass],
+	 [1], [ignore], [stderr])
+AT_CHECK([cat stderr | grep ERROR | $FGREP "$red"], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite --color=always -k hardfail],
+	 [1], [ignore], [stderr])
+AT_CHECK([cat stderr | grep ERROR | $FGREP "$red"], [], [ignore])
+# Reset color on verbose output.
+printf %s\\n "$std"
+], [1])
+
+
 ## ------------------- ##
 ## srcdir propagation. ##
 ## ------------------- ##

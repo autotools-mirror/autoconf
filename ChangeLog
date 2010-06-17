@@ -1,3 +1,22 @@
+2010-06-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Autotest: enable colored test results.
+	* lib/autotest/general.m4 (HELP_TUNING_BEGIN): New diversion.
+	(HELP_TUNING, HELP_OTHER, HELP_END): Bump diversion numbers.
+	(AT_INIT): Accept
+	--color and --color=never|auto|always.  If desired, colorize
+	test results and testsuite summary on standard output.
+	[HELP_TUNING]: Divert content instead to ...
+	[HELP_TUNING_BEGIN]: ... this diversion, m4_wrapped until the
+	end, when we know whether AT_COLOR_TESTS has been specified.
+	(AT_COLOR_TESTS): New macro, set the default for color to auto.
+	* doc/autoconf.texi (Writing Testsuites): Document it.
+	(testsuite Invocation): Document --color* options.
+	* tests/local.at: Call AT_COLOR_TESTS for Autoconf's testsuite.
+	* tests/autotest.at (color test results): New test, mirroring
+	color.test from Automake.
+	* NEWS: Update.
+
 2010-06-15  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Avoid texinfo bug with backslashes in macro arguments.
