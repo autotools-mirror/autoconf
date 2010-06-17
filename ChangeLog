@@ -1,5 +1,21 @@
 2010-06-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Document, test, and fix AT_ARG_OPTION, AT_ARG_OPTION_ARG.
+	* lib/autotest/general.m4 (_AT_ARG_OPTION): Fix translation of
+	hyphens to underscores when turning option names to variables.
+	Avoid macro name concatenation garbage with trailing `dnl'.
+	(AT_ARG_OPTION, AT_ARG_OPTION_ARG): Overhaul macro description.
+	The OPTIONS are space-separated, not comma-separated.  The
+	negative form of AT_ARG_OPTION is prefixed with `--no-'.
+	* tests/autotest.at (AT@&t@_ARG_OPTION, AT@&t@_ARG_OPTION_ARG):
+	New tests.
+	* NEWS: Update.
+	* doc/autoconf.texi (Writing Testsuites): Document AT_ARG_OPTION
+	and AT_ARG_OPTION_ARG.
+	(testsuite Invocation): Call the thingies passed to the
+	testsuite options, not arguments.  Note that the testsuite
+	author may add further package-specific options.
+
 	Autotest: enable colored test results.
 	* lib/autotest/general.m4 (HELP_TUNING_BEGIN): New diversion.
 	(HELP_TUNING, HELP_OTHER, HELP_END): Bump diversion numbers.

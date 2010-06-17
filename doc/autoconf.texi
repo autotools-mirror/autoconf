@@ -23408,6 +23408,66 @@ The @var{copyright-notice} shows up in both the head of
 @command{testsuite} and in @samp{testsuite --version}.
 @end defmac
 
+@defmac AT_ARG_OPTION (@var{options}, @var{help-text}, @
+  @ovar{action-if-given}, @ovar{action-if-not-given})
+@atindex{ARG_OPTION}
+Accept options from the space-separated list @var{options}, a list that
+has leading dashes removed from the options.  Long options will be
+prefixed with @samp{--}, single-character options with @samp{-}.  The
+first word in this list is the primary @var{option}, any others are
+assumed to be short-hand aliases.  The variable associated with it
+is @code{at_arg_@var{option}}, with any dashes in @var{option} replaced
+with underscores.
+
+If the user passes @option{--@var{option}} to the @command{testsuite},
+the variable will be set to @samp{:}.  If the user does not pass the
+option, or passes @option{--no-@var{option}}, then the variable will be
+set to @samp{false}.
+
+@var{action-if-given} is run each time the option is encountered; here,
+the variable @code{at_optarg} will be set to @samp{:} or @samp{false} as
+appropriate.  @code{at_optarg} is actually just a copy of
+@code{at_arg_@var{option}}.
+
+@var{action-if-not-given} will be run once after option parsing is
+complete and if no option from @var{options} was used.
+
+@var{help-text} is added to the end of the list of options shown in
+@command{testsuite --help} (@pxref{AS_HELP_STRING}).
+
+It it recommended that you use a package-specific prefix to @var{options}
+names in order to avoid clashes with future Autotest built-in options.
+@end defmac
+
+@defmac AT_ARG_OPTION_ARG (@var{options}, @var{help-text}, @
+  @ovar{action-if-given}, @ovar{action-if-not-given})
+@atindex{ARG_OPTION_ARG}
+Accept options with arguments from the space-separated list
+@var{options}, a list that has leading dashes removed from the options.
+Long options will be prefixed with @samp{--}, single-character options
+with @samp{-}.  The first word in this list is the primary @var{option},
+any others are assumed to be short-hand aliases.  The variable associated
+with it is @code{at_arg_@var{option}}, with any dashes in @var{option}
+replaced with underscores.
+
+If the user passes @option{--@var{option}=@var{arg}} or
+@option{--@var{option} @var{arg}} to the @command{testsuite}, the
+variable will be set to @samp{@var{arg}}.
+
+@var{action-if-given} is run each time the option is encountered; here,
+the variable @code{at_optarg} will be set to @samp{@var{arg}}.
+@code{at_optarg} is actually just a copy of @code{at_arg_@var{option}}.
+
+@var{action-if-not-given} will be run once after option parsing is
+complete and if no option from @var{options} was used.
+
+@var{help-text} is added to the end of the list of options shown in
+@command{testsuite --help} (@pxref{AS_HELP_STRING}).
+
+It it recommended that you use a package-specific prefix to @var{options}
+names in order to avoid clashes with future Autotest built-in options.
+@end defmac
+
 @defmac AT_COLOR_TESTS
 @atindex{COLOR_TESTS}
 Enable colored test results by default when the output is connected to
@@ -23685,7 +23745,7 @@ individual unit tests.
 @section Running @command{testsuite} Scripts
 @cindex @command{testsuite}
 
-Autotest test suites support the following arguments:
+Autotest test suites support the following options:
 
 @table @option
 @item --help
@@ -23830,6 +23890,12 @@ during the last non-debugging test run.
 @itemx -x
 Trigger shell tracing of the test groups.
 @end table
+
+Besides these options accepted by every Autotest testsuite, the
+testsuite author might have added package-specific options
+via the @code{AT_ARG_OPTION} and @code{AT_ARG_OPTION_ARG} macros
+(@pxref{Writing Testsuites}); refer to @command{testsuite --help} and
+the package documentation for details.
 
 
 @node Making testsuite Scripts

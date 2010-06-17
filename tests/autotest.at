@@ -1127,6 +1127,109 @@ AT_CHECK_KEYS([-l], [.{80}], [1], [.{87}], [0])
 
 AT_CLEANUP
 
+
+## ------------- ##
+## AT_ARG_OPTION ##
+## ------------- ##
+
+AT_CHECK_AT([AT@&t@_ARG_OPTION],
+[[
+AT_INIT([artificial test suite])
+AT_ARG_OPTION([frob fro fr f],
+              [AS_HELP_STRING([-f, --frob], [frobnicate the test run])],
+	      [frob=$at_optarg], [frob=default])
+AT_ARG_OPTION([opt-with-hyphen],
+              [AS_HELP_STRING([--opt-with-hyphen], [option name with hypen])])
+AT_ARG_OPTION([ping],
+	      [AS_HELP_STRING([--ping], [ping on every encounter])],
+	      [echo ping])
+AT_SETUP([test argument handling])
+AT_CHECK([test "$frob" = "$FROB"])
+AT_CHECK([test "$at_arg_frob" = "$FROB_ARG"])
+AT_CLEANUP
+AT_SETUP([test hyphen normalization])
+AT_CHECK([test "$at_arg_opt_with_hyphen" = "$expected"])
+AT_CLEANUP
+]],
+[], [], [stdout], [], [],
+[# We already invoked --help.
+AT_CHECK([grep '  -f, --frob.*frobnicate' stdout], [], [ignore])
+for args in \
+  '1 FROB=default FROB_ARG=false' \
+  '1 -f FROB=: FROB_ARG=:' \
+  '1 --fr FROB=: FROB_ARG=:' \
+  '1 --fro FROB=: FROB_ARG=:' \
+  '1 --frob FROB=: FROB_ARG=:' \
+  '1 --no-f FROB=false FROB_ARG=false' \
+  '1 --no-fr FROB=false FROB_ARG=false' \
+  '1 --no-fro FROB=false FROB_ARG=false' \
+  '1 --no-frob FROB=false FROB_ARG=false' \
+  '2 expected=false' \
+  '2 --opt-with-hyphen expected=:' \
+  '2 --no-opt-with-hyphen expected=false'
+do
+  AT_CHECK([$CONFIG_SHELL ./micro-suite -x $args], [], [ignore])
+done
+AT_CHECK([$CONFIG_SHELL ./micro-suite 2 --ping --no-ping --ping expected=false],
+	 [], [stdout])
+AT_CHECK([grep -c ping stdout], [], [[3
+]])
+], [--help])
+
+
+## ----------------- ##
+## AT_ARG_OPTION_ARG ##
+## ----------------- ##
+
+AT_CHECK_AT([AT@&t@_ARG_OPTION_ARG],
+[[
+AT_INIT([artificial test suite])
+AT_ARG_OPTION_ARG([frob fro fr f],
+		  [AS_HELP_STRING([-f, --frob=FOO], [frobnicate FOO])],
+		  [frob=$at_optarg], [frob=default])
+AT_ARG_OPTION_ARG([opt-with-hyphen],
+		  [AS_HELP_STRING([--opt-with-hyphen=ARG],
+				  [option name with hypen])])
+AT_ARG_OPTION_ARG([ping],
+		  [AS_HELP_STRING([--ping], [ping on every encounter])],
+		  [echo ping])
+AT_SETUP([test argument handling])
+AT_CHECK([test "$frob" = "$FROB"])
+AT_CHECK([test "$at_arg_frob" = "$FROB_ARG"])
+AT_CLEANUP
+AT_SETUP([test hyphen normalization])
+AT_CHECK([test "$at_arg_opt_with_hyphen" = "$expected"])
+AT_CLEANUP
+]],
+[], [], [stdout], [], [],
+[# We already invoked --help.
+AT_CHECK([grep '  -f, --frob.*frobnicate' stdout], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -x --frob], [1], [ignore], [stderr])
+AT_CHECK([grep 'requires an argument' stderr], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -x --no-frob], [1], [ignore], [stderr])
+AT_CHECK([grep 'invalid option' stderr], [], [ignore])
+for args in \
+  '1 FROB=default FROB_ARG=' \
+  '1 -f bar FROB=bar FROB_ARG=bar' \
+  '1 --fr bar FROB=bar FROB_ARG=bar' \
+  '1 --fro bar FROB=bar FROB_ARG=bar' \
+  '1 --frob bar FROB=bar FROB_ARG=bar' \
+  '1 -f=bar FROB=bar FROB_ARG=bar' \
+  '1 --fr=bar FROB=bar FROB_ARG=bar' \
+  '1 --fro=bar FROB=bar FROB_ARG=bar' \
+  '1 --frob=bar FROB=bar FROB_ARG=bar' \
+  '2 expected=' \
+  '2 --opt-with-hyphen=baz expected=baz'
+do
+  AT_CHECK([$CONFIG_SHELL ./micro-suite -x $args], [], [ignore])
+done
+AT_CHECK([$CONFIG_SHELL ./micro-suite 2 --ping=1 --ping=2 expected=],
+	 [], [stdout])
+AT_CHECK([grep -c ping stdout], [], [[2
+]])
+], [--help])
+
+
 m4_define([AT_SKIP_PARALLEL_TESTS],
 [# Per BUGS, we have not yet figured out how to run parallel tests cleanly
 # under dash and some ksh variants.  For now, only run this test under

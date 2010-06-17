@@ -1677,8 +1677,10 @@ m4_ifdef([AT_case_no],[m4_undefine([AT_case_no])])dnl
 m4_ifdef([AT_case_arg],[m4_undefine([AT_case_arg])])dnl
 m4_foreach([AT_option], m4_split(m4_normalize([$1]),[[ \|]+]),
 [m4_define_default([AT_first_option],AT_option)dnl
+m4_define_default([AT_first_option_tr],
+		  [m4_bpatsubst(m4_defn([AT_first_option]), -, [_])])dnl
 m4_append([AT_case],m4_if(m4_len(AT_option),1,[],[-])[-]AT_option, [ | ])dnl
-m4_append([AT_case_no],[--no]AT_option, [ | ])dnl
+m4_append([AT_case_no],[--no-]AT_option, [ | ])dnl
 m4_append([AT_case_arg],
 	  m4_if(m4_len(AT_option),1,[],[-])[-]AT_option[=*], [ | ])dnl
 ])dnl m4_foreach AT_option
@@ -1691,31 +1693,31 @@ m4_divert_once([PARSE_ARGS_BEGIN],
 ])dnl
 m4_divert_text([PARSE_ARGS_BEGIN],
 [dnl Provide a default value for options without arguments.
-m4_ifvaln([$3],,[at_arg_[]m4_bpatsubst([AT_first_option], -, _)=false])dnl
-at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)=false
+m4_ifvaln([$3],,[at_arg_[]AT_first_option_tr=false])dnl
+at_arg_given_[]AT_first_option_tr=false
 ])dnl m4_divert_text DEFAULTS
 m4_divert_text([PARSE_ARGS],
 [dnl Parse the options and args when necessary.
 m4_ifvaln([$3],
 [    AT_case )
-	at_prev=--m4_bpatsubst([AT_first_option], -, _)
+	at_prev=--AT_first_option_tr
 	;;
     AT_case_arg )
-	at_arg_[]m4_bpatsubst([AT_first_option], -, _)=$at_optarg
-	at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)=:
+	at_arg_[]AT_first_option_tr=$at_optarg
+	at_arg_given_[]AT_first_option_tr=:
 	$4
 	;;],
 [    AT_case )
 	at_optarg=:
-	at_arg_[]m4_bpatsubst([AT_first_option], -, _)=:
-	at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)=:
-	m4_ifval([$4],[$4])dnl
+	at_arg_[]AT_first_option_tr=:
+	at_arg_given_[]AT_first_option_tr=:
+	m4_ifval([$4],[$4])[]dnl
 	;;
     AT_case_no )
 	at_optarg=false
-	at_arg_[]m4_bpatsubst([AT_first_option], -, _)=false
-	at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)=:
-	m4_ifval([$4],[$4])dnl
+	at_arg_[]AT_first_option_tr=false
+	at_arg_given_[]AT_first_option_tr=:
+	m4_ifval([$4],[$4])[]dnl
 	;;])dnl m4_ifvaln $3
 ])dnl m4_divert_text PARSE_ARGS
 m4_ifvaln([$5],
@@ -1726,7 +1728,7 @@ m4_ifvaln([$5],
 ##])dnl m4_divert_once PARSE_ARGS_END
 m4_divert_text([PARSE_ARGS_END],
 [
-AS_IF([$at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)],,[$5])dnl
+AS_IF([$at_arg_given_[]AT_first_option_tr],,[$5])dnl
 ])dnl m4_divert_text PARSE_ARGS_END
 ])dnl m4_ifvaln $5
 ])dnl _AT_ARG_OPTION
@@ -1734,41 +1736,42 @@ AS_IF([$at_arg_given_[]m4_bpatsubst([AT_first_option], -, _)],,[$5])dnl
 
 # AT_ARG_OPTION(OPTIONS,HELP-TEXT,[ACTION-IF-GIVEN],[ACTION-IF-NOT-GIVEN])
 # ------------------------------------------------------------------------
-# Accept a set of OPTIONS with arguments.  Add HELP-TEXT to the HELP_OTHER
-# diversion.
+# Accept a list of space-separated OPTIONS, all aliases of the first one.
+# Add HELP-TEXT to the HELP_OTHER diversion.
 #
-# Preceding dashes should not be passed into OPTIONS.  Users will be required
+# Leading dashes should not be passed in OPTIONS.  Users will be required
 # to pass `--' before long options and `-' before single character options.
 #
 # $at_arg_OPTION will be set to `:' if this option is received, `false' if
-# if --noOPTION is received, and `false' by default.
+# if --no-OPTION is received, and `false' by default.
 #
-# Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered with
-# $at_optarg set to `:' or `false' as appropriate.  $at_optarg is actually
-# just a copy of $at_arg_OPTION.
+# Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered; here,
+# $at_optarg will be set to `:' or `false' as appropriate.  $at_optarg is
+# actually just a copy of $at_arg_OPTION.
 #
-# ACTION-IF-NOT-GIVEN will be run once after option parsing is complete
-# if no option from OPTIONS was found.
+# ACTION-IF-NOT-GIVEN will be run once after option parsing is complete and
+# if no option from OPTIONS was used.
 m4_defun([AT_ARG_OPTION],[_AT_ARG_OPTION([$1],[$2],,[$3],[$4])])
 
 
 # AT_ARG_OPTION_ARG(OPTIONS,HELP-TEXT,[ACTION-IF-GIVEN],[ACTION-IF-NOT-GIVEN])
 # ----------------------------------------------------------------------------
-# Accept a set of OPTIONS with arguments, seperated by commas.  Add HELP-TEXT
-# to the HELP_OTHER diversion.
+# Accept a set of space-separated OPTIONS with arguments, all aliases of the
+# first one.  Add HELP-TEXT to the HELP_OTHER diversion.
 #
-# Preceding dashes should not be passed into OPTIONS.  Users will be required
+# Leading dashes should not be passed in OPTIONS.  Users will be required
 # to pass `--' before long options and `-' before single character options.
 #
 # By default, any argument to these options will be assigned to the shell
 # variable $at_arg_OPTION, where OPTION is the first option in OPTIONS with
 # any `-' characters replaced with `_'.
 #
-# Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered with
-# $at_optarg set.  $at_optarg is actually just a copy of $at_arg_OPTION.
+# Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered; here,
+# $at_optarg will be set to the option argument.  $at_optarg is actually just
+# a copy of $at_arg_OPTION.
 #
 # ACTION-IF-NOT-GIVEN will be run once after option parsing is complete
-# if no option from OPTIONS was found.
+# and if no option from OPTIONS was used.
 m4_defun([AT_ARG_OPTION_ARG],[_AT_ARG_OPTION([$1],[$2],1,[$3],[$4])])
 
 

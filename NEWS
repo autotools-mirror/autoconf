@@ -33,6 +33,11 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Autotest testsuites may optionally provide colored test results.
 
+** The previously undocumented Autotest macros AT_ARG_OPTION and
+   AT_ARG_OPTION_ARG have seen bug fixes and are documented now.
+   AT_ARG_OPTION has been changed in that the negative of a long option
+   --OPTION is now --no-OPTION rather than --noOPTION.
+
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
 
