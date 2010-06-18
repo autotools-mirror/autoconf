@@ -529,6 +529,7 @@ Portable Make Programming
 * The Make Macro SHELL::        @code{$(SHELL)} portability issues
 * Parallel Make::               Parallel @command{make} quirks
 * Comments in Make Rules::      Other problems with Make comments
+* Newlines in Make Rules::      Using literal newlines in rules
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
 * VPATH and Make::              @code{VPATH} woes
@@ -18561,6 +18562,7 @@ itself.
 * The Make Macro SHELL::        @code{$(SHELL)} portability issues
 * Parallel Make::               Parallel @command{make} quirks
 * Comments in Make Rules::      Other problems with Make comments
+* Newlines in Make Rules::      Using literal newlines in rules
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
 * VPATH and Make::              @code{VPATH} woes
@@ -18971,6 +18973,34 @@ argument that gets ignored:
 @example
 all:
         : "foo"
+@end example
+
+@node Newlines in Make Rules
+@section Newlines in Make Rules
+@cindex Newlines in @file{Makefile} rules
+@cindex @file{Makefile} rules and newlines
+
+In shell scripts, newlines can be used inside string literals.  But in
+the shell statements of @file{Makefile} rules, this is not possible:
+A newline not preceded by a backslash is a separator between shell
+statements.  Whereas a newline that is preceded by a backslash becomes
+part of the shell statement according to POSIX, but gets replaced,
+together with the backslash that precedes it, by a space in GNU
+@command{make} 3.80 and older.  So, how can a newline be used in a string
+literal?
+
+The trick is to set up a shell variable that contains a newline:
+
+@example
+nlinit=`echo 'nl="'; echo '"'`; eval "$$nlinit"
+@end example
+
+For example, in order to create a multiline @samp{sed} expression that
+inserts a blank line after every line of a file, this code can be used:
+
+@example
+nlinit=`echo 'nl="'; echo '"'`; eval "$$nlinit"; \
+sed -e "s/\$$/\\$$@{nl@}/" < input > output
 @end example
 
 @node obj/ and Make
