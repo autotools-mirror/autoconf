@@ -18237,6 +18237,22 @@ but Posix says that this use of a semicolon has undefined effect if
 should use semicolon only with simple scripts that do not use these
 verbs.
 
+The argument of the @option{-e} option must be a syntactically complete
+script.  GNU @command{sed} allows to pass multiple script fragments,
+each as argument of a separate @option{-e} option, that are then combined,
+with newlines between the fragments.  A future Posix revision may allow
+this as well.  But in Posix:2008, this is not allowed, and the
+@command{sed} programs on Solaris 10, HP-UX 11, and AIX don't allow it
+either:
+
+@example
+$ @kbd{echo a | sed -n -e 'i\}
+@kbd{0'}
+0
+$ @kbd{echo a | sed -n -e 'i\' -e 0}
+Unrecognized command: 0
+@end example
+
 Commands inside @{ @} brackets are further restricted.  Posix says that
 they cannot be preceded by addresses, @samp{!}, or @samp{;}, and that
 each command must be followed immediately by a newline, without any
