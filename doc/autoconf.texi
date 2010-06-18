@@ -18965,6 +18965,14 @@ all:
         # foo
 @end example
 
+As a workaround, you can use the @command{:} no-op command with a string
+argument that gets ignored:
+
+@example
+all:
+        : "foo"
+@end example
+
 @node obj/ and Make
 @section The @file{obj/} Subdirectory and Make
 @cindex @file{obj/}, subdirectory

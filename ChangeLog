@@ -1,3 +1,9 @@
+2010-06-22  Bruno Haible  <bruno@clisp.org>
+
+	Document how to write comments in makefile rules.
+	* doc/autoconf.texi (Comments in Make Rules): Mention a workaround
+	syntax.
+
 2010-06-22  Ben Pfaff  <blp@cs.stanford.edu>
 
 	Document how to propogate variables to submakes.
