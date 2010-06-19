@@ -1,5 +1,10 @@
 2010-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Accept any nonzero exit status upon config.status write failure.
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Normalize nonzero status to 1 for writing to /dev/full, for HP-UX
+	11.31 cat which exits 2.
+
 	Fix testsuite failure with Tru64 preprocessor.
 	* tests/compile.at (Order of user actions and cleanup): Add
 	incomplete comment to provoke failure with Tru64/OSF 5.1 cc

@@ -272,7 +272,7 @@ AT_CHECK([grep from-stdin file], [], [from-stdin
 ])
 # Force write error creating a file on stdout
 if test -w /dev/full && test -c /dev/full; then
-  AT_CHECK([./config.status --file=-:input </dev/null >/dev/full],
+  AT_CHECK([./config.status --file=-:input </dev/null >/dev/full || exit 1],
 	   [1], [ignore], [ignore])
 fi
 
@@ -285,7 +285,7 @@ AT_CHECK([grep OK stdout], [], [OK
 ])
 # Force write error creating a header on stdout
 if test -w /dev/full && test -c /dev/full; then
-  AT_CHECK([./config.status --header=-:input </dev/null >/dev/full],
+  AT_CHECK([./config.status --header=-:input </dev/null >/dev/full || exit 1],
 	   [1], [ignore], [ignore])
 fi
 
