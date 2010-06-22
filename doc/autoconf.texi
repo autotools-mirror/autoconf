@@ -14626,6 +14626,7 @@ the standard shell conform to Posix.
 
 @item Pdksh
 @prindex @samp{pdksh}
+@anchor{pdksh}
 A public-domain clone of the Korn shell called @command{pdksh} is widely
 available: it has most of the @samp{ksh88} features along with a few of
 its own.  It usually sets @code{KSH_VERSION}, except if invoked as
@@ -15139,9 +15140,18 @@ esac
 @noindent
 and in fact it is even @emph{more} portable: in the first case of the
 first attempt, the computation of @code{top_srcdir} is not portable,
-since not all shells properly understand @code{"`@dots{}"@dots{}"@dots{}`"}.
+since not all shells properly understand @code{"`@dots{}"@dots{}"@dots{}`"},
+for example Solaris 10 ksh:
+
+@example
+$ @kbd{foo="`echo " bar" | sed 's, ,,'`"}
+ksh: : cannot execute
+ksh: bar | sed 's, ,,': cannot execute
+@end example
+
+@noindent
 Worse yet, not all shells understand @code{"`@dots{}\"@dots{}\"@dots{}`"}
-the same way.  There is just no portable way to use double-quoted
+the same way (@pxref{pdksh}).  There is just no portable way to use double-quoted
 strings inside double-quoted back-quoted expressions (pfew!).
 
 @table @code

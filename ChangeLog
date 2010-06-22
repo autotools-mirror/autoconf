@@ -1,5 +1,11 @@
 2010-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Clarify nested double-quotes and backquotes shell issues.
+	* doc/autoconf.texi (Shellology): New anchor for pdksh.
+	(Shell Substitutions): Link to it for escaped double-quotes
+	within double-quoted backquotes; add ksh example for unescaped
+	inner double-quotes problem.
+
 	Mention Tru64 5.1 fgrep limitation with emtpy patterns.
 	* doc/autoconf.texi (Limitations of Usual Tools): Update.
 
