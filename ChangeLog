@@ -1,5 +1,8 @@
 2010-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Mention Tru64 5.1 fgrep limitation with emtpy patterns.
+	* doc/autoconf.texi (Limitations of Usual Tools): Update.
+
 	Overhaul the manual, esp. the Autotest chapter.
 	* doc/autoconf.texi (Installation Directory Variables):
 	Replace some uses of @var with @code.

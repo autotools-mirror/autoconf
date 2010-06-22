@@ -17809,6 +17809,8 @@ replacement @code{grep -F}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_FGREP} and then use @code{$FGREP}.
 
+Tru64/OSF 5.1 @command{fgrep} does not match an empty pattern.
+
 
 @item @command{find}
 @c -----------------
