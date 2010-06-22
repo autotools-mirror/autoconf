@@ -1,3 +1,16 @@
+2010-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Overhaul the manual, esp. the Autotest chapter.
+	* doc/autoconf.texi (Installation Directory Variables):
+	Replace some uses of @var with @code.
+	(Special Shell Variables): Fix misordered paragraph about IFS.
+	(Writing Testsuites): Include paragraph following AT_TESTED in
+	the macro definition.
+	(testsuite Invocation): Failed tests are not rerun.
+	(testsuite Scripts, Autotest Logs, testsuite Invocation)
+	(Making testsuite Scripts): Minor edits for consistency and
+	language.
+
 2010-06-18  Bruno Haible  <bruno@clisp.org>
 
 	Document sed -e limitation.

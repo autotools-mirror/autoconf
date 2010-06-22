@@ -2710,10 +2710,10 @@ The directory for installing documentation files in DVI format.
 @defvar exec_prefix
 @ovindex exec_prefix
 The installation prefix for architecture-dependent files.  By default
-it's the same as @var{prefix}.  You should avoid installing anything
-directly to @var{exec_prefix}.  However, the default value for
+it's the same as @code{prefix}.  You should avoid installing anything
+directly to @code{exec_prefix}.  However, the default value for
 directories containing architecture-dependent files should be relative
-to @var{exec_prefix}.
+to @code{exec_prefix}.
 @end defvar
 
 @defvar htmldir
@@ -2770,8 +2770,8 @@ The directory for installing PDF documentation.
 
 @defvar prefix
 @ovindex prefix
-The common installation prefix for all files.  If @var{exec_prefix}
-is defined to a different value, @var{prefix} is used only for
+The common installation prefix for all files.  If @code{exec_prefix}
+is defined to a different value, @code{prefix} is used only for
 architecture-independent files.
 @end defvar
 
@@ -15804,6 +15804,22 @@ setting.  It is okay to use blocks of shell code that temporarily change
 the value of @env{IFS} in order to split on another character, but
 remember to restore it before expanding further macros.
 
+Unsetting @code{IFS} instead of resetting it to the default sequence
+is not suggested, since code that tries to save and restore the
+variable's value will incorrectly reset it to an empty value, thus
+disabling field splitting:
+
+@example
+unset IFS
+# default separators used for field splitting
+
+save_IFS=$IFS
+IFS=:
+# ...
+IFS=$save_IFS
+# no field splitting performed
+@end example
+
 @item LANG
 @itemx LC_ALL
 @itemx LC_COLLATE
@@ -15826,22 +15842,6 @@ configuration code assumes the C locale and Posix requires that locale
 environment variables be set to @samp{C} if the C locale is desired;
 @file{configure} scripts and M4sh do that for you.
 Export these variables after setting them.
-
-Unsetting @code{IFS} instead of resetting it to the default sequence
-is not suggested, since code that tries to save and restore the
-variable's value will incorrectly reset it to an empty value, thus
-disabling field splitting:
-
-@example
-unset IFS
-# default separators used for field splitting
-
-save_IFS=$IFS
-IFS=:
-# ...
-IFS=$save_IFS
-# no field splitting performed
-@end example
 
 @c  However, some older, nonstandard
 @c  systems (notably SCO) break if locale environment variables
@@ -23216,7 +23216,7 @@ interactive tool testing, which is probably its main limitation.
 
 Generating testing or validation suites using Autotest is rather easy.
 The whole validation suite is held in a file to be processed through
-@command{autom4te}, itself using GNU M4 under the scene, to
+@command{autom4te}, itself using GNU M4 under the hood, to
 produce a stand-alone Bourne shell script which then gets distributed.
 Neither @command{autom4te} nor GNU M4 are needed at
 the installer's end.
@@ -23310,7 +23310,7 @@ Files used in configuring a software package:
 @end example
 
 @noindent
-Files created during the test suite execution:
+Files created during test suite execution:
 
 @example
 atconfig -->.                    .--> testsuite.log
@@ -23331,7 +23331,6 @@ need, but therefore most of the time it contains all that is needed:
 
 @table @asis
 @item command line arguments
-@c akim s/to consist in/to consist of/
 A bad but unfortunately widespread habit consists of
 setting environment variables before the command, such as in
 @samp{CC=my-home-grown-cc ./testsuite}.  The test suite does not
@@ -23357,7 +23356,7 @@ while running programs on a machine @var{host}.  It is much simpler to
 run both the test suite and the programs on @var{host}, but then, from
 the point of view of the test suite, there remains a single environment,
 @var{host} = @var{build}.  The log contains relevant information on the
-state of the build machine, including some important environment
+state of the @var{build} machine, including some important environment
 variables.
 @c FIXME: How about having an M4sh macro to say `hey, log the value
 @c of `@dots{}'?  This would help both Autoconf and Autotest.
@@ -23496,7 +23495,6 @@ Log the file name and answer to @option{--version} of each program in
 space-separated list @var{executables}.  Several invocations register
 new executables, in other words, don't fear registering one program
 several times.
-@end defmac
 
 Autotest test suites rely on @env{PATH} to find the tested program.
 This avoids the need to generate absolute names of the various tools, and
@@ -23505,6 +23503,7 @@ programs are being exercised is crucial to understanding problems in
 the test suite itself, or its occasional misuses.  It is a good idea to
 also subscribe foreign programs you depend upon, to avoid incompatible
 diagnostics.
+@end defmac
 
 @sp 1
 
@@ -23536,7 +23535,7 @@ test group.  This makes it possible to run ``slices'' of the test suite.
 For instance, if some of your test groups exercise some @samp{foo}
 feature, then using @samp{AT_KEYWORDS(foo)} lets you run
 @samp{./testsuite -k foo} to run exclusively these test groups.  The
-@var{title} of the test group is automatically recorded to
+@var{test-group-name} of the test group is automatically recorded to
 @code{AT_KEYWORDS}.
 
 Several invocations within a test group accumulate new keywords.  In
@@ -23645,7 +23644,7 @@ If the value of the @var{stdout} or @var{stderr} parameter is one of the
 literals in the following table, then the test treats the output
 according to the rules of that literal.  Otherwise, the value of the
 parameter is treated as text that must exactly match the output given by
-@var{commands} on standard out and standard error (including an empty
+@var{commands} on standard output and standard error (including an empty
 parameter for no output); any differences are captured in the testsuite
 log and the test is failed (unless an unexpected exit status of 77
 skipped the test instead).  The difference between @code{AT_CHECK} and
@@ -23808,10 +23807,9 @@ keywords.
 
 @sp 1
 
-By default all tests are performed (or described with
-@option{--list}) in the default environment first silently, then
-verbosely, but the environment, set of tests, and verbosity level can be
-tuned:
+By default all tests are performed (or described with @option{--list})
+silently in the default environment, but the environment, set of tests,
+and verbosity level can be tuned:
 
 @table @samp
 @item @var{variable}=@var{value}
@@ -23868,7 +23866,7 @@ containing @samp{FUNC}.
 
 @item --errexit
 @itemx -e
-If any test fails, immediately abort testing.  It implies
+If any test fails, immediately abort testing.  This implies
 @option{--debug}: post test group clean up, and top-level logging
 are inhibited.  This option is meant for the full test
 suite, it is not really useful for generated debugging scripts.
@@ -23890,11 +23888,11 @@ results are colored if standard output is connected to a terminal.
 
 @item --debug
 @itemx -d
-Do not remove the files after a test group was performed ---but they are
+Do not remove the files after a test group was performed---but they are
 still removed @emph{before}, therefore using this option is sane when
 running several test groups.  Create debugging scripts.  Do not
 overwrite the top-level
-log (in order to preserve supposedly existing full log file).  This is
+log (in order to preserve a supposedly existing full log file).  This is
 the default for debugging scripts, but it can also be useful to debug
 the testsuite itself.
 
@@ -24045,7 +24043,7 @@ atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
 @noindent
 and manage to have @code{$(EXTRA_DIST)} distributed.  You will also want
 to distribute the file @file{build-aux/@/missing} from the Automake
-project; a copy of this file resides in the Autoconf source.
+project; a copy of this file resides in the Autoconf source tree.
 
 With all this in place, and if you have not initialized @samp{TESTSUITEFLAGS}
 within your makefile, you can fine-tune test suite execution with this
