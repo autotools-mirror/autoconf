@@ -2176,7 +2176,7 @@ have this prototype:
 @c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
 @c awful.
 @example
-AC_CONFIG_@var{ITEMS}(@var{tag}@dots{}, [@var{commands}], [@var{init-cmds}])
+AC_CONFIG_@var{ITEMS}(@var{tag}@dots{}, @r{[}@var{commands}@r{]}, @r{[}@var{init-cmds}@r{]})
 @end example
 
 @noindent
@@ -20527,7 +20527,7 @@ The options have one of these forms:
 @c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
 @c awful.
 @example
---with-@var{package}[=@var{arg}]
+--with-@var{package}@r{[}=@var{arg}@r{]}
 --without-@var{package}
 @end example
 
@@ -20680,7 +20680,7 @@ compile them.  The options have one of these forms:
 @c FIXME: Can't use @ovar here, Texinfo 4.0 goes lunatic and emits something
 @c awful.
 @example
---enable-@var{feature}[=@var{arg}]
+--enable-@var{feature}@r{[}=@var{arg}@r{]}
 --disable-@var{feature}
 @end example
 

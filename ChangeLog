@@ -1,5 +1,10 @@
 2010-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Formatting cleanups for optional arguments.
+	* doc/autoconf.texi (Configuration Actions, Help Formatting)
+	(External Software): Use @r{} for brackets denoting optional
+	arguments, where @ovar is not safe to use.
+
 	Clarify nested double-quotes and backquotes shell issues.
 	* doc/autoconf.texi (Shellology): New anchor for pdksh.
 	(Shell Substitutions): Link to it for escaped double-quotes
