@@ -1,3 +1,10 @@
+2010-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Eric Blake  <eblake@redhat.com>
+
+	Further clarification on sed -e portability.
+	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: Clarify
+	more about sed -e and Posix limitations.
+
 2010-06-22  Bruno Haible  <bruno@clisp.org>
 
 	Document how to use literal newlines in makefile rules.
