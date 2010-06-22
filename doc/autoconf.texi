@@ -2855,6 +2855,7 @@ autoheader autom4te: Makefile
         srcdir=''; \
           test -f ./$@@.in || srcdir=$(srcdir)/; \
           $(edit) $$@{srcdir@}$@@.in >$@@.tmp
+@c $$ restore font-lock
         chmod +x $@@.tmp
         chmod a-w $@@.tmp
         mv $@@.tmp $@@
@@ -10853,6 +10854,7 @@ use the following special escapes:
 
 @table @samp
 @item $$
+@c $$ restore font-lock
 The character @samp{$}.
 
 @item $f
@@ -18063,6 +18065,7 @@ Here is sample code to create a new temporary directory safely:
   test -n "$tmp" && test -d "$tmp"
 @} || @{
   tmp=$TMPDIR/foo$$-$RANDOM
+@c $$ restore font-lock
   (umask 077 && mkdir "$tmp")
 @} || exit $?
 @end example
@@ -19165,6 +19168,7 @@ install-HEADERS: $(HEADERS)
           $(INSTALL) -m 644 \
             `test -f $$i || echo $(VPATH)/`$$i \
             $(DESTDIR)$(includedir)/$$i; \
+@c $$ restore font-lock
         done
 @end example
 
@@ -19243,6 +19247,7 @@ install-HEADERS: $(HEADERS)
           $(INSTALL) -m 644 \
             `test -f $$i || echo $(VPATH)/`$$i \
             $(DESTDIR)$(includedir)/$$i; \
+@c $$ restore font-lock
         done
 @end example
 
@@ -20977,6 +20982,7 @@ install:
 uninstall:
         for p in $(PROGRAMS); do \
           rm -f $(DESTDIR)$(bindir)/`echo $$p | sed '$(transform)'`; \
+@c $$ restore font-lock
         done
 @end example
 

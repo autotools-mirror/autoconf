@@ -1,5 +1,9 @@
 2010-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Add comments for vim syntax highlighting.
+	* doc/autoconf.texi: Restore font-lock in some examples using
+	$$, for vim.
+
 	Formatting cleanups for optional arguments.
 	* doc/autoconf.texi (Configuration Actions, Help Formatting)
 	(External Software): Use @r{} for brackets denoting optional
