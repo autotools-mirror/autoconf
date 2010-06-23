@@ -1,5 +1,12 @@
 2010-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Improve VPATH handling in config.status for non-Automake projects.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES_PREPARE): Be sure not
+	to remove references to a subdir of srcdir.  Fix treatment of
+	multiple colon-separated VPATH entries.
+	* tests/torture.at (VPATH): New test.
+	Report by Keith Marshall.
+
 	Further improve docs about nested double-quotes and backquotes.
 	* doc/autoconf.texi (Shellology): Remove anchor for pdksh.
 	Move quoting bug example to ...

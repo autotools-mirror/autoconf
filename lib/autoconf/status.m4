@@ -552,17 +552,25 @@ fi < "$tmp/subs1.awk" > "$tmp/subs.awk" \
   || AC_MSG_ERROR([could not setup config files machinery])
 _ACEOF
 
-# VPATH may cause trouble with some makes, so we remove $(srcdir),
-# ${srcdir} and @srcdir@ from VPATH if srcdir is ".", strip leading and
+# VPATH may cause trouble with some makes, so we remove sole $(srcdir),
+# ${srcdir} and @srcdir@ entries from VPATH if srcdir is ".", strip leading and
 # trailing colons and then remove the whole line if VPATH becomes empty
 # (actually we leave an empty line to preserve line numbers).
 if test "x$srcdir" = x.; then
-  ac_vpsub=['/^[	 ]*VPATH[	 ]*=/{
-s/:*\$(srcdir):*/:/
-s/:*\${srcdir}:*/:/
-s/:*@srcdir@:*/:/
-s/^\([^=]*=[	 ]*\):*/\1/
+  ac_vpsub=['/^[	 ]*VPATH[	 ]*=[	 ]*/{
+h
+s///
+s/^/:/
+s/[	 ]*$/:/
+s/:\$(srcdir):/:/g
+s/:\${srcdir}:/:/g
+s/:@srcdir@:/:/g
+s/^:*//
 s/:*$//
+x
+s/\(=[	 ]*\).*/\1/
+G
+s/\n//
 s/^[^=]*=[	 ]*$//
 }']
 fi

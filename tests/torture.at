@@ -1151,6 +1151,92 @@ AT_CHECK([cd at-dir && "$at_here/configure" $configure_options], [], [ignore])
 AT_CLEANUP
 
 
+## ------- ##
+## VPATH.  ##
+## ------- ##
+
+AT_SETUP([VPATH])
+
+dirs='at paren brace space'
+for dir in $dirs; do
+  mkdir $dir $dir/s1 $dir/s2
+  touch $dir/f $dir/s1/f1 $dir/s2/f2
+done
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_FILES([at/Makefile paren/Makefile brace/Makefile space/Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([at/Makefile.in],
+[[# This is what you should use in order to be portable to old makes.
+srcdir = @srcdir@
+VPATH = @srcdir@/s1:@srcdir@:@srcdir@/s2
+all: f f1 f2
+	@echo ok
+]])
+
+AT_DATA([paren/Makefile.in],
+[[# This works with some makes but not with old ones.
+srcdir = @srcdir@
+VPATH = $(srcdir)/s1:$(srcdir):$(srcdir)/s2
+all: f f1 f2
+	@echo ok
+]])
+
+AT_DATA([brace/Makefile.in],
+[[# This works with some makes but not with old ones.
+srcdir = @srcdir@
+VPATH = ${srcdir}/s1:${srcdir}:${srcdir}/s2
+all: f f1 f2
+	@echo ok
+]])
+
+AT_DATA([space/Makefile.in],
+[[# This fails with FreeBSD make, for example.
+srcdir = @srcdir@
+VPATH = @srcdir@/s1 @srcdir@ @srcdir@/s2
+all: f f1 f2
+	@echo ok
+]])
+
+AT_CHECK_AUTOCONF
+
+: ${MAKE=make}
+
+# In place.
+AT_CHECK([./configure $configure_options], [], [ignore])
+# Treat BSD make separately, afterwards, for maximal coverage.
+dirs='at paren brace'
+for dir in $dirs; do
+  AT_CHECK([cd $dir && $MAKE], [], [ignore], [ignore])
+done
+
+rm -f config.status
+mkdir build absbuild
+
+# Relative name.
+AT_CHECK([cd build && ../configure $configure_options], [], [ignore])
+for dir in $dirs; do
+  AT_CHECK([cd build/$dir && $MAKE], [], [ignore], [ignore])
+done
+
+# Absolute name.
+at_here=`pwd`
+AT_CHECK([cd absbuild && "$at_here/configure" $configure_options], [], [ignore])
+for dir in $dirs; do
+  AT_CHECK([cd absbuild/$dir && $MAKE], [], [ignore], [ignore])
+done
+
+# These will not pass with BSD make.
+AT_CHECK([cd space && { $MAKE || exit 77; }], [], [ignore], [ignore])
+AT_CHECK([cd build/space && $MAKE], [], [ignore], [ignore])
+AT_CHECK([cd absbuild/space && $MAKE], [], [ignore], [ignore])
+
+AT_CLEANUP
+
+
 ## ----------------- ##
 ## Signal handling.  ##
 ## ----------------- ##
