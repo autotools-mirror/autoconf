@@ -14639,7 +14639,6 @@ the standard shell conform to Posix.
 
 @item Pdksh
 @prindex @samp{pdksh}
-@anchor{pdksh}
 A public-domain clone of the Korn shell called @command{pdksh} is widely
 available: it has most of the @samp{ksh88} features along with a few of
 its own.  It usually sets @code{KSH_VERSION}, except if invoked as
@@ -14647,20 +14646,7 @@ its own.  It usually sets @code{KSH_VERSION}, except if invoked as
 Posix compatibility by running @samp{set -o posix}.  Unfortunately, with
 @command{pdksh} 5.2.14 (the latest stable version as of January 2007)
 Posix mode is buggy and causes @command{pdksh} to depart from Posix in
-at least one respect:
-
-@example
-$ @kbd{echo "`echo \"hello\"`"}
-hello
-$ @kbd{set -o posix}
-$ @kbd{echo "`echo \"hello\"`"}
-"hello"
-@end example
-
-The last line of output contains spurious quotes.  This is yet another
-reason why portable shell code should not contain
-@code{"`@dots{}\"@dots{}\"@dots{}`"} constructs (@pxref{Shell
-Substitutions}).
+at least one respect, see @ref{Shell Substitutions}.
 
 @item Zsh
 @cindex Zsh
@@ -15163,9 +15149,22 @@ ksh: bar | sed 's, ,,': cannot execute
 @end example
 
 @noindent
-Worse yet, not all shells understand @code{"`@dots{}\"@dots{}\"@dots{}`"}
-the same way (@pxref{pdksh}).  There is just no portable way to use double-quoted
-strings inside double-quoted back-quoted expressions (pfew!).
+Posix does not specify behavior for this sequence.  On the other hand,
+behavior for @code{"`@dots{}\"@dots{}\"@dots{}`"} is specified by Posix,
+but in practice, not all shells understand it the same way: pdksh 5.2.14
+prints spurious quotes when in Posix mode:
+
+@example
+$ @kbd{echo "`echo \"hello\"`"}
+hello
+$ @kbd{set -o posix}
+$ @kbd{echo "`echo \"hello\"`"}
+"hello"
+@end example
+
+@noindent
+There is just no portable way to use double-quoted strings inside
+double-quoted back-quoted expressions (pfew!).
 
 @table @code
 @item $@@

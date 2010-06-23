@@ -1,5 +1,11 @@
 2010-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Further improve docs about nested double-quotes and backquotes.
+	* doc/autoconf.texi (Shellology): Remove anchor for pdksh.
+	Move quoting bug example to ...
+	(Shell Substitutions): ... here.  Document which behavior is
+	specified by Posix.
+
 	Coverage for Fortran compiler macros.
 	* tests/fortran.at (AC_OPENMP and Fortran 77)
 	(AC_OPENMP and Fortran): Simplify, using AT_CHECK_CONFIGURE.
