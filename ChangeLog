@@ -1,3 +1,9 @@
+2010-06-22  Peter Johansson  <trojkan@gmail.com>  (tiny change)
+
+	Be consistent in doc example.
+	* doc/autoconf.texi: (Polymorphic Variables) be consistent in code
+	example and output
+
 2010-06-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Add comments for vim syntax highlighting.

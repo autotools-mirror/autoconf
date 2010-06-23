@@ -13415,7 +13415,7 @@ can handle composed shell variable names:
 @example
 m4_define([MY_CHECK_HEADER],
 [AS_VAR_PUSHDEF([my_Header], [ac_cv_header_$1])dnl
-AS_VAR_IF([my_Header], [yes], [echo "header $1 available"])dnl
+AS_VAR_IF([my_Header], [yes], [echo "header $1 detected"])dnl
 AS_VAR_POPDEF([my_Header])dnl
 ])
 MY_CHECK_HEADER([stdint.h])
