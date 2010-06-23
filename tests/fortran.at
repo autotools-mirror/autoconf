@@ -109,7 +109,7 @@ AT_DATA([foo.f],
 
 : ${MAKE=make}
 AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
-AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
+AT_CHECK_CONFIGURE
 AT_CHECK([$MAKE], [], [ignore], [ignore])
 
 AT_CLEANUP
@@ -149,7 +149,611 @@ AT_DATA([foo.f],
 
 : ${MAKE=make}
 AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
-AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
+AT_CHECK_CONFIGURE
 AT_CHECK([$MAKE], [], [ignore], [ignore])
+
+AT_CLEANUP
+
+
+# We don't test the AC_F77_LIBRARY_LDFLAGS macro on its own because of
+# (autoconf.info)Fortran Compiler:
+#      The macros `AC_F77_DUMMY_MAIN' and `AC_FC_DUMMY_MAIN' or
+#    `AC_F77_MAIN' and `AC_FC_MAIN' are probably also necessary to link
+#    C/C++ with Fortran; see below.
+#
+# and we would need libtool to create shared libraries.
+
+# Further, for any sensible test of the AC_F{77,C}(_DUMMY)?_MAIN macros
+# we also need to use AC_F{77,C}_WRAPPERS, in order to be able to actually
+# call the functions.
+
+## ------------------------ ##
+## AC_F77_DUMMY_MAIN usage. ##
+## ------------------------ ##
+
+AT_SETUP([AC_F77_DUMMY_MAIN usage])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_F77
+AC_F77_DUMMY_MAIN([], [AC_MSG_FAILURE([failed to determine F77 dummy main], [77])])
+AC_F77_WRAPPERS
+AC_PROG_CC
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[
+all: cprogram@EXEEXT@
+
+cprogram@EXEEXT@: cprogram.@OBJEXT@ foobar.@OBJEXT@
+	@CC@ @CFLAGS@ @LDFLAGS@ -o $@ cprogram.@OBJEXT@ foobar.@OBJEXT@ @LIBS@ @FLIBS@
+
+.SUFFIXES: .c .f .@OBJEXT@
+.f.@OBJEXT@:
+	@F77@ @FFLAGS@ -c $<
+.c.@OBJEXT@:
+	@CC@ @DEFS@ -I. @CPPFLAGS@ @CFLAGS@ -c $<
+]])
+
+AT_DATA([foobar.f],
+[[C     This is just a purely numeric routine, no I/O needed.
+C     Taken from autoconf.texi:Fortran Compiler.
+      subroutine foobar (x, y)
+      double precision x, y
+      y = 3.14159 * x
+      return
+      end
+]])
+
+AT_DATA([cprogram.c],
+[[#include <config.h>
+#include <math.h>
+
+/* Taken from autoconf.texi:Fortran Compiler. */
+#define FOOBAR_F77 F77_FUNC (foobar, FOOBAR)
+#ifdef __cplusplus
+extern "C"  /* prevent C++ name mangling */
+#endif
+void FOOBAR_F77 (double *x, double *y);
+
+/* Taken from autoconf.texi:Fortran Compiler.  */
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN () { return 1; }
+#endif
+
+int main(int argc, char *argv[])
+{
+  double x = 2.7183, y;
+  FOOBAR_F77 (&x, &y);
+  if (fabs (8.539784097 - y) > 1.e-6)
+    return 1;
+  return 0;
+}
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./cprogram])
+
+AT_CLEANUP
+
+
+## ----------------------- ##
+## AC_FC_DUMMY_MAIN usage. ##
+## ----------------------- ##
+
+AT_SETUP([AC_FC_DUMMY_MAIN usage])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_FC
+AC_FC_DUMMY_MAIN([], [AC_MSG_FAILURE([failed to determine FC dummy main], [77])])
+AC_FC_WRAPPERS
+AC_PROG_CC
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[
+all: cprogram@EXEEXT@
+
+cprogram@EXEEXT@: cprogram.@OBJEXT@ foobar.@OBJEXT@
+	@CC@ @CFLAGS@ @LDFLAGS@ -o $@ cprogram.@OBJEXT@ foobar.@OBJEXT@ @LIBS@ @FCLIBS@
+
+.SUFFIXES: .c .f .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c $<
+.c.@OBJEXT@:
+	@CC@ @DEFS@ -I. @CPPFLAGS@ @CFLAGS@ -c $<
+]])
+
+AT_DATA([foobar.f],
+[[C     This is just a purely numeric routine, no I/O needed.
+C     Taken from autoconf.texi:Fortran Compiler.
+      subroutine foobar (x, y)
+      double precision x, y
+      y = 3.14159 * x
+      return
+      end
+]])
+
+AT_DATA([cprogram.c],
+[[#include <config.h>
+#include <math.h>
+
+/* Taken from autoconf.texi:Fortran Compiler. */
+#define FOOBAR_FC FC_FUNC (foobar, FOOBAR)
+#ifdef __cplusplus
+extern "C"  /* prevent C++ name mangling */
+#endif
+void FOOBAR_FC(double *x, double *y);
+
+/* Taken from autoconf.texi:Fortran Compiler.  */
+#ifdef FC_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int FC_DUMMY_MAIN () { return 1; }
+#endif
+
+int main (int argc, char *argv[])
+{
+  double x = 2.7183, y;
+  FOOBAR_FC (&x, &y);
+  if (fabs (8.539784097 - y) > 1.e-6)
+    return 1;
+  return 0;
+}
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./cprogram])
+
+AT_CLEANUP
+
+
+## ------------------ ##
+## AC_F77_MAIN usage. ##
+## ------------------ ##
+
+AT_SETUP([AC_F77_MAIN usage])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_F77
+AC_F77_MAIN
+AC_F77_WRAPPERS
+AC_PROG_CC
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[
+all: cprogram@EXEEXT@
+
+cprogram@EXEEXT@: cprogram.@OBJEXT@ foobar.@OBJEXT@
+	@CC@ @CFLAGS@ @LDFLAGS@ -o $@ cprogram.@OBJEXT@ foobar.@OBJEXT@ @LIBS@ @FLIBS@
+
+.SUFFIXES: .c .f .@OBJEXT@
+.f.@OBJEXT@:
+	@F77@ @FFLAGS@ -c $<
+.c.@OBJEXT@:
+	@CC@ @DEFS@ -I. @CPPFLAGS@ @CFLAGS@ -c $<
+]])
+
+AT_DATA([foobar.f],
+[[C     This uses Fortran I/O, so is likely to require Fortran startup.
+      subroutine foobar (x)
+      integer x
+      if (x == 42) then
+        write(*,*) 'some output from Fortran sources'
+      end if
+      end
+]])
+
+AT_DATA([cprogram.c],
+[[#include <config.h>
+#include <stdio.h>
+
+/* Taken from autoconf.texi:Fortran Compiler. */
+#define FOOBAR_F77 F77_FUNC (foobar, FOOBAR)
+#ifdef __cplusplus
+extern "C"  /* prevent C++ name mangling */
+#endif
+void FOOBAR_F77 (int *x);
+
+/* Taken from autoconf.texi:Fortran Compiler.  */
+#ifdef __cplusplus
+  extern "C"
+#endif
+int F77_MAIN (int argc, char *argv[]);
+
+int F77_MAIN (int argc, char *argv[])
+{
+  int x = 42;
+  puts ("output from C main");
+  fflush (stdout);
+  FOOBAR_F77 (&x);
+  puts ("more output from C main");
+  return 0;
+}
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./cprogram], [], [output from C main
+dnl  some output from Fortran sources
+dnl more output from C main
+dnl ])
+
+AT_CLEANUP
+
+
+## ----------------- ##
+## AC_FC_MAIN usage. ##
+## ----------------- ##
+
+AT_SETUP([AC_FC_MAIN usage])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_PROG_FC
+AC_FC_MAIN
+AC_FC_WRAPPERS
+AC_PROG_CC
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[all: cprogram@EXEEXT@
+
+cprogram@EXEEXT@: cprogram.@OBJEXT@ foobar.@OBJEXT@
+	@CC@ @CFLAGS@ @LDFLAGS@ -o $@ cprogram.@OBJEXT@ foobar.@OBJEXT@ @LIBS@ @FCLIBS@
+
+.SUFFIXES: .c .f .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c $<
+.c.@OBJEXT@:
+	@CC@ @DEFS@ -I. @CPPFLAGS@ @CFLAGS@ -c $<
+]])
+
+AT_DATA([foobar.f],
+[[C     This uses Fortran I/O, so is likely to require Fortran startup.
+      subroutine foobar (x)
+      integer x
+      if (x == 42) then
+        write (*,*) 'some output from Fortran sources'
+      end if
+      end
+]])
+
+AT_DATA([cprogram.c],
+[[#include <config.h>
+#include <stdio.h>
+
+/* Taken from autoconf.texi:Fortran Compiler. */
+#define FOOBAR_FC FC_FUNC (foobar, FOOBAR)
+#ifdef __cplusplus
+extern "C"  /* prevent C++ name mangling */
+#endif
+void FOOBAR_FC (int *x);
+
+/* Taken from autoconf.texi:Fortran Compiler.  */
+#ifdef __cplusplus
+  extern "C"
+#endif
+int FC_MAIN (int argc, char *argv[]);
+
+int FC_MAIN (int argc, char *argv[])
+{
+  int x = 42;
+  puts ("output from C main");
+  fflush (stdout);
+  FOOBAR_FC (&x);
+  puts ("more output from C main");
+  return 0;
+}
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./cprogram], [], [output from C main
+dnl  some output from Fortran sources
+dnl more output from C main
+dnl ])
+
+AT_CLEANUP
+
+
+## ------------------ ##
+## AC_F77_FUNC usage. ##
+## ------------------ ##
+
+AT_SETUP([AC_F77_FUNC usage])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_F77
+AC_F77_FUNC([foobar])
+AC_SUBST([foobar])
+AC_PROG_CC
+AC_CONFIG_FILES([cprogram.c:cprogram.in])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[
+all: cprogram@EXEEXT@
+
+cprogram@EXEEXT@: cprogram.@OBJEXT@ foobar.@OBJEXT@
+	@CC@ @CFLAGS@ @LDFLAGS@ -o $@ cprogram.@OBJEXT@ foobar.@OBJEXT@ @LIBS@ @FLIBS@
+
+.SUFFIXES: .c .f .@OBJEXT@
+.f.@OBJEXT@:
+	@F77@ @FFLAGS@ -c $<
+.c.@OBJEXT@:
+	@CC@ @DEFS@ @CPPFLAGS@ @CFLAGS@ -c $<
+]])
+
+AT_DATA([foobar.f],
+[[      subroutine foobar (x)
+      integer x
+      x = 42
+      return
+      end
+]])
+
+AT_DATA([cprogram.in],
+[[#include <math.h>
+
+#ifdef __cplusplus
+extern "C"  /* prevent C++ name mangling */
+#endif
+void @foobar@ (int *x);
+
+/* Taken from autoconf.texi:Fortran Compiler.  */
+#ifdef F77_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int F77_DUMMY_MAIN () { return 1; }
+#endif
+
+int main(int argc, char *argv[])
+{
+  int x;
+  @foobar@ (&x);
+  if (x != 42)
+    return 1;
+  return 0;
+}
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./cprogram])
+
+AT_CLEANUP
+
+
+## ----------------- ##
+## AC_FC_FUNC usage. ##
+## ----------------- ##
+
+AT_SETUP([AC_FC_FUNC usage])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_FC
+AC_FC_FUNC([foobar])
+AC_SUBST([foobar])
+AC_PROG_CC
+AC_CONFIG_FILES([cprogram.c:cprogram.in])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[
+all: cprogram@EXEEXT@
+
+cprogram@EXEEXT@: cprogram.@OBJEXT@ foobar.@OBJEXT@
+	@CC@ @CFLAGS@ @LDFLAGS@ -o $@ cprogram.@OBJEXT@ foobar.@OBJEXT@ @LIBS@ @FCLIBS@
+
+.SUFFIXES: .c .f .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c $<
+.c.@OBJEXT@:
+	@CC@ @DEFS@ @CPPFLAGS@ @CFLAGS@ -c $<
+]])
+
+AT_DATA([foobar.f],
+[[      subroutine foobar (x)
+      integer x
+      x = 42
+      return
+      end
+]])
+
+AT_DATA([cprogram.in],
+[[#include <math.h>
+
+#ifdef __cplusplus
+extern "C"  /* prevent C++ name mangling */
+#endif
+void @foobar@ (int *x);
+
+/* Taken from autoconf.texi:Fortran Compiler.  */
+#ifdef FC_DUMMY_MAIN
+#  ifdef __cplusplus
+     extern "C"
+#  endif
+   int FC_DUMMY_MAIN () { return 1; }
+#endif
+
+int main(int argc, char *argv[])
+{
+  int x;
+  @foobar@ (&x);
+  if (x != 42)
+    return 1;
+  return 0;
+}
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./cprogram])
+AT_CLEANUP
+
+
+## ------------------- ##
+## AC_FC_SRCEXT usage. ##
+## ------------------- ##
+
+AT_SETUP([AC_FC_SRCEXT usage])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_FC
+FCFLAGS_NOFREE=$FCFLAGS
+AC_SUBST([FCFLAGS_NOFREE])
+AC_FC_FREEFORM
+# Unconditionally require .f to work.
+AC_FC_SRCEXT([f])
+# For each other extension, fail gracefully if it does not work:
+# Not all compilers support all extensions/language versions.
+m4@&t@_foreach([ext], [f77, f90, f95, f03, f08],
+  [AC_FC_SRCEXT(ext, ext[_object='foo]ext[.$(OBJEXT)'], ext[_object=])
+   AC_SUBST(ext[_object])])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[OBJEXT = @OBJEXT@
+
+all: prog@EXEEXT@
+prog@EXEEXT@: foof.@OBJEXT@ @f77_object@ @f90_object@ \
+	      @f95_object@ @f03_object@ @f08_object@
+	@FC@ @FCFLAGS@ -o $@ foof.@OBJEXT@ @f77_object@ @f90_object@ \
+			     @f95_object@ @f03_object@ @f08_object@
+
+.SUFFIXES: .f .f77 .f90 .f95 .f03 .f08 .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ -c @FCFLAGS_NOFREE@ @FCFLAGS_f@ $<
+.f77.@OBJEXT@:
+	@FC@ -c @FCFLAGS_NOFREE@ @FCFLAGS_f77@ $<
+.f90.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f90@ $<
+.f95.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f95@ $<
+.f03.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f03@ $<
+.f08.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f08@ $<
+]])
+
+AT_DATA([foof.f],
+[[      program main
+      end
+]])
+
+AT_DATA([foof77.f77],
+[[      subroutine foof77
+      end
+]])
+
+AT_DATA([foof90.f90],
+[[subroutine foof90
+end
+]])
+
+AT_DATA([foof95.f95],
+[[subroutine foof95
+end
+]])
+
+AT_DATA([foof03.f03],
+[[subroutine foof03
+end
+]])
+
+AT_DATA([foof08.f08],
+[[subroutine foof08
+end
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+
+AT_CLEANUP
+
+
+## --------------- ##
+## AC_FC_FREEFORM. ##
+## --------------- ##
+
+AT_SETUP([AC_FC_FREEFORM])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_FC
+AC_FC_FREEFORM
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[prog: prog.@OBJEXT@
+	@FC@ @FCFLAGS@ -o $@ prog.@OBJEXT@ @LIBS@
+
+.SUFFIXES: .f .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c $<
+]])
+
+AT_DATA([prog.f],
+[[program main
+end
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./prog])
 
 AT_CLEANUP

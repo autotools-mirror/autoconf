@@ -7867,7 +7867,10 @@ these Fortran libraries.
 
 The macros @code{AC_F77_DUMMY_MAIN} and @code{AC_FC_DUMMY_MAIN} or
 @code{AC_F77_MAIN} and @code{AC_FC_MAIN} are probably also necessary to
-link C/C++ with Fortran; see below.
+link C/C++ with Fortran; see below.  Further, it is highly recommended
+that you use @code{AC_CONFIG_HEADERS} (@pxref{Configuration Headers})
+because the complex defines that the function wrapper macros create
+may not work with C/C++ compiler drivers.
 @end defmac
 
 @defmac AC_F77_DUMMY_MAIN (@ovar{action-if-found}, @ovar{action-if-not-found})
@@ -7903,11 +7906,12 @@ then include the following code to define the dummy main if it is
 needed:
 
 @example
+@c If you change this example, adjust tests/fortran.at:AC_F77_DUMMY_MAIN usage.
 #ifdef F77_DUMMY_MAIN
 #  ifdef __cplusplus
      extern "C"
 #  endif
-   int F77_DUMMY_MAIN() @{ return 1; @}
+   int F77_DUMMY_MAIN () @{ return 1; @}
 #endif
 @end example
 
@@ -7938,10 +7942,11 @@ Thus, when calling Fortran routines from C that perform things like I/O,
 one should use this macro and declare the "main" function like so:
 
 @example
+@c If you change this example, adjust tests/fortran.at:AC_F77_DUMMY_MAIN usage.
 #ifdef __cplusplus
   extern "C"
 #endif
-int F77_MAIN(int argc, char *argv[]);
+int F77_MAIN (int argc, char *argv[]);
 @end example
 
 (Again, replace @code{F77} with @code{FC} for Fortran instead of Fortran 77.)
@@ -7971,6 +7976,7 @@ simply wraps all C identifiers in one of the macros provided by
 you have the following Fortran 77 subroutine:
 
 @example
+@c If you change this example, adjust tests/fortran.at:AC_F77_DUMMY_MAIN usage.
       subroutine foobar (x, y)
       double precision x, y
       y = 3.14159 * x
@@ -7981,11 +7987,12 @@ you have the following Fortran 77 subroutine:
 You would then declare its prototype in C or C++ as:
 
 @example
+@c If you change this example, adjust tests/fortran.at:AC_F77_DUMMY_MAIN usage.
 #define FOOBAR_F77 F77_FUNC (foobar, FOOBAR)
 #ifdef __cplusplus
 extern "C"  /* prevent C++ name mangling */
 #endif
-void FOOBAR_F77(double *x, double *y);
+void FOOBAR_F77 (double *x, double *y);
 @end example
 
 Note that we pass both the lowercase and uppercase versions of the
@@ -8006,6 +8013,7 @@ whether @code{F77_FUNC} or @code{FC_FUNC} is defined.
 Now, to call that routine from a C program, we would do something like:
 
 @example
+@c If you change this example, adjust tests/fortran.at:AC_F77_DUMMY_MAIN usage.
 @{
     double x = 2.7183, y;
     FOOBAR_F77 (&x, &y);
@@ -8090,8 +8098,10 @@ This macro is most important if you are using the default @file{.f}
 extension, since many compilers interpret this extension as indicating
 fixed-format source unless an additional flag is supplied.  If you
 specify a different extension with @code{AC_FC_SRCEXT}, such as
-@file{.f90} or @file{.f95}, then @code{AC_FC_FREEFORM} ordinarily
-succeeds without modifying @code{FCFLAGS}.
+@file{.f90}, then @code{AC_FC_FREEFORM} ordinarily succeeds without
+modifying @code{FCFLAGS}.  For extensions which the compiler does not
+know about, the flag set by the @code{AC_FC_SRCEXT} macro might let
+the compiler assume Fortran 77 by default, however.
 
 If @code{AC_FC_FREEFORM} succeeds in compiling free-form source, it
 calls @var{action-if-success} (defaults to nothing).  If it fails, it

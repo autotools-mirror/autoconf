@@ -1,5 +1,19 @@
 2010-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Coverage for Fortran compiler macros.
+	* tests/fortran.at (AC_OPENMP and Fortran 77)
+	(AC_OPENMP and Fortran): Simplify, using AT_CHECK_CONFIGURE.
+	(AC_F77_DUMMY_MAIN usage, AC_FC_DUMMY_MAIN usage)
+	(AC_F77_MAIN usage, AC_FC_MAIN usage, AC_F77_FUNC usage)
+	(AC_FC_FUNC usage, AC_FC_SRCEXT usage, AC_FC_FREEFORM): New
+	tests.
+	* doc/autoconf.texi (Fortran Compiler): Use GNU coding style
+	on C code snippets.  Add markers for tested examples.
+	Suggest AC_FC_FREEFORM for source file extensions which the
+	compiler might not natively support but which are accepted
+	with help from AC_FC_SRCEXT.  Suggest AC_CONFIG_HEADERS for
+	setups using one of the AC_*MAIN macros.
+
 	Accept any nonzero exit status upon config.status write failure.
 	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
 	Normalize nonzero status to 1 for writing to /dev/full, for HP-UX
