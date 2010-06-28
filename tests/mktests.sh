@@ -104,9 +104,6 @@ ac_exclude_list='
 	/^AC_FC_SRCEXT$/ {next}
 	/^AC_PATH_((TARGET_)?TOOL|PROG)S?$/ {next}
 
-	# Requires the current language to be Fortran, not C.
-	/^AC_FC_FREEFORM$/ {next}
-
 	# Is a number.
 	/^AC_FD_CC$/ {next}
 

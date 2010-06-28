@@ -7750,8 +7750,8 @@ are for newer programs that can (or must) compile under the newer
 Fortran standards, and have output variables like @code{FC},
 @code{FCFLAGS}, and @code{FCLIBS}.
 
-Except for two new macros @code{AC_FC_SRCEXT} and
-@code{AC_FC_FREEFORM} (see below), the @code{FC} and @code{F77} macros
+Except for the macros @code{AC_FC_SRCEXT}, @code{AC_FC_FREEFORM}, and
+@code{AC_FC_FIXEDFORM} (see below), the @code{FC} and @code{F77} macros
 behave almost identically, and so they are documented together in this
 section.
 
@@ -8104,6 +8104,28 @@ know about, the flag set by the @code{AC_FC_SRCEXT} macro might let
 the compiler assume Fortran 77 by default, however.
 
 If @code{AC_FC_FREEFORM} succeeds in compiling free-form source, it
+calls @var{action-if-success} (defaults to nothing).  If it fails, it
+calls @var{action-if-failure} (defaults to exiting with an error
+message).
+@end defmac
+
+@defmac AC_FC_FIXEDFORM (@ovar{action-if-success}, @ovar{action-if-failure})
+@acindex{FC_FIXEDFORM}
+
+The @code{AC_FC_FIXEDFORM} tries to ensure that the Fortran compiler
+(@code{$FC}) allows the old fixed-format source code (as opposed to
+free-format style).  If necessary, it may add some additional flags to
+@code{FCFLAGS}.
+
+This macro is needed for some compilers alias names like @command{xlf95}
+which assume free-form source code by default, and in case you want to
+use fixed-form source with an extension like @file{.f90} which many
+compilers interpret as free-form by default.  If you specify a different
+extension with @code{AC_FC_SRCEXT}, such as @file{.f}, then
+@code{AC_FC_FIXEDFORM} ordinarily succeeds without modifying
+@code{FCFLAGS}.
+
+If @code{AC_FC_FIXEDFORM} succeeds in compiling fixed-form source, it
 calls @var{action-if-success} (defaults to nothing).  If it fails, it
 calls @var{action-if-failure} (defaults to exiting with an error
 message).

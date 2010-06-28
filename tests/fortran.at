@@ -257,6 +257,7 @@ AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_HEADERS([config.h:config.hin])
 AC_PROG_FC
+AC_FC_FIXEDFORM
 AC_FC_DUMMY_MAIN([], [AC_MSG_FAILURE([failed to determine FC dummy main], [77])])
 AC_FC_WRAPPERS
 AC_PROG_CC
@@ -419,6 +420,7 @@ AT_DATA([configure.ac],
 [[AC_INIT
 AC_CONFIG_HEADERS([config.h:config.hin])
 AC_PROG_FC
+AC_FC_FIXEDFORM
 AC_FC_MAIN
 AC_FC_WRAPPERS
 AC_PROG_CC
@@ -748,6 +750,121 @@ AT_DATA([Makefile.in],
 AT_DATA([prog.f],
 [[program main
 end
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./prog])
+
+AT_CLEANUP
+
+
+## --------------------------------- ##
+## AC_FC_FREEFORM with AC_FC_SRCEXT. ##
+## --------------------------------- ##
+
+AT_SETUP([AC_FC_FREEFORM with AC_FC_SRCEXT])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_FC_SRCEXT([f90])
+AC_PROG_FC
+AC_FC_FREEFORM
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[prog: prog.@OBJEXT@
+	@FC@ @FCFLAGS@ -o $@ prog.@OBJEXT@ @LIBS@
+
+.SUFFIXES: .f90 .@OBJEXT@
+.f90.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c @FCFLAGS_f90@ $<
+]])
+
+AT_DATA([prog.f90],
+[[program main
+end
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./prog])
+
+AT_CLEANUP
+
+
+## ---------------- ##
+## AC_FC_FIXEDFORM. ##
+## ---------------- ##
+
+AT_SETUP([AC_FC_FIXEDFORM])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_FC
+AC_FC_FIXEDFORM
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[prog: prog.@OBJEXT@
+	@FC@ @FCFLAGS@ -o $@ prog.@OBJEXT@ @LIBS@
+
+.SUFFIXES: .f .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c $<
+]])
+
+AT_DATA([prog.f],
+[[      program main
+C      fixed-form style comment
+       end
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: ${MAKE=make}
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+dnl AT_CHECK([./prog])
+
+AT_CLEANUP
+
+
+## ---------------------------------- ##
+## AC_FC_FIXEDFORM with AC_FC_SRCEXT. ##
+## ---------------------------------- ##
+
+AT_SETUP([AC_FC_FIXEDFORM with AC_FC_SRCEXT])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_FC
+AC_FC_SRCEXT([f90])
+AC_FC_FIXEDFORM
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[prog: prog.@OBJEXT@
+	@FC@ @FCFLAGS@ -o $@ prog.@OBJEXT@ @LIBS@
+
+.SUFFIXES: .f90 .@OBJEXT@
+.f90.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c @FCFLAGS_f90@ $<
+]])
+
+AT_DATA([prog.f90],
+[[      program main
+C      fixed-form style comment
+       end
 ]])
 
 AT_CHECK_AUTOCONF

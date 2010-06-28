@@ -1,3 +1,20 @@
+2010-07-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New macro AC_FC_FIXEDFORM, improved AC_FC_FREEFORM, coverage.
+	* lib/autoconf/fortran.m4 (_AC_FC_DIALECT_YEAR): Fix typo in
+	comment.
+	(AC_FC_FREEFORM): Update list of known options for Sun, HP,
+	Lahey/Fujitsu Fortran compilers.  Use M4 quoting consistently.
+	(AC_FC_FIXEDFORM): New macro.
+	* tests/fortran.at (AC_FC_DUMMY_MAIN usage, AC_FC_MAIN usage):
+	Use AC_FC_FIXEDFORM, to avoid testsuite failure with FC=xlf95.
+	(AC_FC_FREEFORM with AC_FC_SRCEXT, AC_FC_FIXEDFORM)
+	(AC_FC_FIXEDFORM with AC_FC_SRCEXT): New tests.
+	* tests/mktests.sh: No need to exclude AC_FC_FREEFORM, it uses
+	AC_LANG_PUSH/AC_LANG_POP.
+	* doc/autoconf.texi (Fortran Compiler): Document it.
+	* NEWS: Update.
+
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
 	Optimize AS_BOX.

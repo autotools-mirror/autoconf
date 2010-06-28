@@ -46,6 +46,8 @@ GNU Autoconf NEWS - User visible changes.
 ** The following macros are now documented:
    AS_BOX
 
+** New macro AC_FC_FIXEDFORM to accept fixed-form Fortran.
+
 
 * Major changes in Autoconf 2.65 (2009-11-21) [stable]
   Released by Eric Blake, based on git versions 2.64.*.
