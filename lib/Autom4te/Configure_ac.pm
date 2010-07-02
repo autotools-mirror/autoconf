@@ -1,4 +1,5 @@
-# Copyright (C) 2003, 2005, 2006, 2009  Free Software Foundation, Inc.
+# Copyright (C) 2003, 2005, 2006, 2009, 2010 Free Software Foundation,
+# Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -80,7 +81,7 @@ sub find_configure_ac (;@)
 	{
 	  msg ('unsupported',
 	       "`$configure_ac' and `$configure_in' both present.\n"
-	       . "proceeding with `$configure_ac'.");
+	       . "proceeding with `$configure_ac'");
 	}
       return $configure_ac
     }

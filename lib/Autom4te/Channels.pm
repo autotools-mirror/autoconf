@@ -1,4 +1,5 @@
-# Copyright (C) 2002, 2004, 2006, 2008 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004, 2006, 2008, 2010 Free Software Foundation,
+# Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -163,14 +164,14 @@ functions.  The possible keys, with their default value are:
 The type of the channel.  One of C<'debug'>, C<'warning'>, C<'error'>, or
 C<'fatal'>.  Fatal messages abort the program when they are output.
 Error messages update the exit status.  Debug and warning messages are
-harmless, except that warnings can be treated as errors of
+harmless, except that warnings are treated as errors if
 C<$warnings_are_errors> is set.
 
 =item C<exit_code =E<gt> 1>
 
 The value to update C<$exit_code> with when a fatal or error message
 is emitted.  C<$exit_code> is also updated for warnings output
-when @<$warnings_are_errors> is set.
+when C<$warnings_are_errors> is set.
 
 =item C<file =E<gt> \*STDERR>
 
@@ -203,10 +204,14 @@ C<US_LOCAL>, and C<US_GLOBAL> constants above.
 =item C<header =E<gt> ''>
 
 A string to prepend to each message emitted through this channel.
+With partial messages, only the first part will have C<header>
+prepended.
 
 =item C<footer =E<gt> ''>
 
 A string to append to each message emitted through this channel.
+With partial messages, only the final part will have C<footer>
+appended.
 
 =item C<backtrace =E<gt> 0>
 
@@ -398,20 +403,24 @@ sub _format_sub_message ($$)
   return $leader . join ("\n" . $leader, split ("\n", $message)) . "\n";
 }
 
+# Store partial messages here. (See the 'partial' option.)
+use vars qw ($partial);
+$partial = '';
+
 # _format_message ($LOCATION, $MESSAGE, %OPTIONS)
 # -----------------------------------------------
 # Format the message.  Return a string ready to print.
 sub _format_message ($$%)
 {
   my ($location, $message, %opts) = @_;
-  my $msg = '';
+  my $msg = ($partial eq '' ? $opts{'header'} : '') . $message
+	    . ($opts{'partial'} ? '' : $opts{'footer'});
   if (ref $location)
     {
       # If $LOCATION is a reference, assume it's an instance of the
       # Autom4te::Location class and display contexts.
       my $loc = $location->get || $me;
-      $msg = _format_sub_message ("$loc: ", $opts{'header'}
-				  . $message . $opts{'footer'});
+      $msg = _format_sub_message ("$loc: ", $msg);
       for my $pair ($location->get_contexts)
 	{
 	  $msg .= _format_sub_message ($pair->[0] . ":   ", $pair->[1]);
@@ -420,14 +429,13 @@ sub _format_message ($$%)
   else
     {
       $location ||= $me;
-      $msg = _format_sub_message ("$location: ", $opts{'header'}
-				  . $message . $opts{'footer'});
+      $msg = _format_sub_message ("$location: ", $msg);
     }
   return $msg;
 }
 
 # _enqueue ($QUEUE, $KEY, $UNIQ_SCOPE, $TO_FILTER, $MSG, $FILE)
-# ------------------------------------------------------------
+# -------------------------------------------------------------
 # Push message on a queue, to be processed by another thread.
 sub _enqueue ($$$$$$)
 {
@@ -483,10 +491,6 @@ sub _dequeue ($)
 }
 
 
-# Store partial messages here. (See the 'partial' option.)
-use vars qw ($partial);
-$partial = '';
-
 # _print_message ($LOCATION, $MESSAGE, %OPTIONS)
 # ----------------------------------------------
 # Format the message, check duplicates, and print it.
@@ -509,6 +513,9 @@ sub _print_message ($$%)
       $msg = $partial . $msg;
       $partial = '';
     }
+
+  msg ('note', '', 'warnings are treated as errors', uniq_scope => US_GLOBAL)
+    if ($opts{'type'} eq 'warning' && $warnings_are_errors);
 
   # Check for duplicate message if requested.
   my $to_filter;
@@ -673,7 +680,7 @@ Override the options of C<$channel> with those specified by C<%options>.
 sub setup_channel ($%)
 {
   my ($name, %opts) = @_;
-  confess "channel $name doesn't exist" unless exists $channels{$name};
+  confess "unknown channel $name" unless exists $channels{$name};
   _merge_options %{$channels{$name}}, %opts;
 }
 
@@ -709,8 +716,9 @@ entry, while C<drop_channel_setup ()> just deletes it.
 
 =cut
 
-use vars qw (@_saved_channels);
+use vars qw (@_saved_channels @_saved_werrors);
 @_saved_channels = ();
+@_saved_werrors = ();
 
 sub dup_channel_setup ()
 {
@@ -720,12 +728,14 @@ sub dup_channel_setup ()
       $channels_copy{$k1} = {%{$channels{$k1}}};
     }
   push @_saved_channels, \%channels_copy;
+  push @_saved_werrors, $warnings_are_errors;
 }
 
 sub drop_channel_setup ()
 {
   my $saved = pop @_saved_channels;
   %channels = %$saved;
+  $warnings_are_errors = pop @_saved_werrors;
 }
 
 =item C<buffer_messages (@types)>, C<flush_messages ()>

@@ -1,8 +1,8 @@
 #!/bin/sh
 # Print a version string.
-scriptversion=2009-09-09.22
+scriptversion=2010-06-14.19; # UTC
 
-# Copyright (C) 2007-2009 Free Software Foundation
+# Copyright (C) 2007-2010 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -67,13 +67,19 @@ scriptversion=2009-09-09.22
 #	echo $(VERSION) > $(distdir)/.tarball-version
 
 case $# in
-    1) ;;
-    *) echo 1>&2 "Usage: $0 \$srcdir/.tarball-version"; exit 1;;
+    1|2) ;;
+    *) echo 1>&2 "Usage: $0 \$srcdir/.tarball-version" \
+         '[TAG-NORMALIZATION-SED-SCRIPT]'
+       exit 1;;
 esac
 
 tarball_version_file=$1
+tag_sed_script="${2:-s/x/x/}"
 nl='
 '
+
+# Avoid meddling by environment variable of the same name.
+v=
 
 # First see if there is a tarball-only version file.
 # then try "git describe", then default.
@@ -95,6 +101,7 @@ then
 elif test -d .git \
     && v=`git describe --abbrev=4 --match='v*' HEAD 2>/dev/null \
 	  || git describe --abbrev=4 HEAD 2>/dev/null` \
+    && v=`printf '%s\n' "$v" | sed "$tag_sed_script"` \
     && case $v in
 	 v[0-9]*) ;;
 	 *) (exit 1) ;;
@@ -127,7 +134,7 @@ fi
 v=`echo "$v" |sed 's/^v//'`
 
 # Don't declare a version "dirty" merely because a time stamp has changed.
-git status > /dev/null 2>&1
+git update-index --refresh > /dev/null 2>&1
 
 dirty=`sh -c 'git diff-index --name-only HEAD' 2>/dev/null` || dirty=
 case "$dirty" in
@@ -140,11 +147,12 @@ case "$dirty" in
 esac
 
 # Omit the trailing newline, so that m4_esyscmd can use the result directly.
-echo "$v" | tr -d '\012'
+echo "$v" | tr -d "$nl"
 
 # Local variables:
 # eval: (add-hook 'write-file-hooks 'time-stamp)
 # time-stamp-start: "scriptversion="
 # time-stamp-format: "%:y-%02m-%02d.%02H"
-# time-stamp-end: "$"
+# time-stamp-time-zone: "UTC"
+# time-stamp-end: "; # UTC"
 # End:

@@ -1,5 +1,24 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Resync upstream files.
+	* GNUmakefile: Run 'make fetch'.
+	* build-aux/announce-gen: Likewise.
+	* build-aux/config.guess: Likewise.
+	* build-aux/config.sub: Likewise.
+	* build-aux/gendocs.sh: Likewise.
+	* build-aux/git-version-gen: Likewise.
+	* build-aux/gnupload: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+	* build-aux/vc-list-files: Likewise.
+	* doc/gendocs_template: Likewise.
+	* doc/gnu-oids.texi: Likewise.
+	* doc/make-stds.texi: Likewise.
+	* doc/standards.texi: Likewise.
+	* lib/Autom4te/Channels.pm: Likewise.
+	* lib/Autom4te/Configure_ac.pm: Likewise.
+	* lib/Autom4te/FileUtils.pm: Likewise.
+	* lib/Autom4te/XFile.pm: Likewise.
+
 	Make AS_TR_SH and AS_TR_CPP similar.
 	* lib/m4sugar/m4sh.m4 (_AS_TR_CPP_LITERAL): Avoid underquoting.
 	(_AS_TR_CPP_INDIR): Handle all polymorphic variables.

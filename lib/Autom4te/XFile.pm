@@ -1,5 +1,5 @@
-# Copyright (C) 2001, 2003, 2004, 2006, 2008, 2009 Free Software Foundation,
-# Inc.
+# Copyright (C) 2001, 2003, 2004, 2006, 2008, 2009, 2010 Free Software
+# Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -97,9 +97,6 @@ eval {
   Fcntl->import (@O);  # first we import what we want to export
   push (@EXPORT, @O);
 };
-
-# Used in croak error messages.
-my $me = basename ($0);
 
 =head2 Methods
 
@@ -267,7 +264,7 @@ sub seek
   if (!seek ($fh, $_[0], $_[1]))
     {
       my $file = $fh->name;
-      fatal "$me: cannot rewind $file with @_: $!";
+      fatal "cannot rewind $file with @_: $!";
     }
 }
 
