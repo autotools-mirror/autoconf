@@ -1,3 +1,10 @@
+2010-07-02  Eric Blake  <eblake@redhat.com>
+
+	Reduce startup cost of autotest.
+	* lib/autotest/general.m4 (_AT_FINISH) <banners>: Rather than
+	doing a recursive find, limit ourselves to top ChangeLog only.
+	Reported by Ralf Wildenhues.
+
 2010-07-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	New macro AC_FC_FIXEDFORM, improved AC_FC_FREEFORM, coverage.

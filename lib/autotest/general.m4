@@ -978,23 +978,13 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
   AS_ECHO(["  \$ $[0] $at_cli_args"])
   echo
 
-  # Try to find a few ChangeLogs in case it might help determining the
-  # exact version.  Use the relative dir: if the top dir is a symlink,
-  # find will not follow it (and options to follow the links are not
-  # portable), which would result in no output here.  Prune directories
-  # matching the package tarname, since they tend to be leftovers from
-  # `make dist' or `make distcheck' and contain redundant or stale logs.
-  if test -n "$at_top_srcdir"; then
-    AS_BOX([ChangeLogs.])
+  # If ChangeLog exists, list a few lines in case it might help determining
+  # the exact version.
+  if test -n "$at_top_srcdir" && test -f "$at_top_srcdir/ChangeLog"; then
+    AS_BOX([ChangeLog.])
     echo
-    for at_file in `find "$at_top_srcdir" m4_ifdef([AT_PACKAGE_TARNAME],
-[-name "AT_PACKAGE_TARNAME-*" -prune -o ])-name ChangeLog -print`
-    do
-      AS_ECHO(["$as_me: $at_file:"])
-      sed 's/^/| /;10q' $at_file
-      echo
-    done
-
+    sed 's/^/| /;10q' "$at_top_srcdir/ChangeLog"
+    echo
   fi
 
   AS_UNAME
