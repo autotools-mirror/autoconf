@@ -1,12 +1,10 @@
 2010-07-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
-	    Eric Blake  <eblake@redhat.com>
+	and Eric Blake  <eblake@redhat.com>
 
 	Describe a Solaris /bin/sh bug w.r.t. for loops.
 	* doc/autoconf.texi (Limitations of Shell Builtins) <for>:
 	Document a bug of the 'for' builtin in Solaris /bin/sh, w.r.t.
-	tokens seeming variable	assignment in the list of arguments.
-	Report and final patch by Stefano Lattarini, useful suggestions
-	by Eric Blake.
+	tokens seeming variable assignment in the list of arguments.
 
 2010-06-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

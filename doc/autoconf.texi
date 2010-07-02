@@ -16705,42 +16705,27 @@ item @samp{$@@}, for more.
 
 In Solaris @command{/bin/sh}, when the list of arguments of a
 @command{for} loop starts with @emph{unquoted} tokens looking like
-variable assignments, the loop is not executed on that tokens:
+variable assignments, the loop is not executed on those tokens:
 
 @example
-$ @kbd{/bin/sh -c 'for v in a=b; do echo "$v"; done'}
-$ @kbd{/bin/sh -c 'for v in a=b d=c; do echo "$v"; done'}
-$ @kbd{/bin/sh -c 'for v in a=b x; do echo "$v"; done'}
+$ @kbd{/bin/sh -c 'for v in a=b c=d x e=f; do echo $v; done'}
 x
+e=f
 @end example
 
 @noindent
-Quoting the "assignment-like" tokens, or preceding them with "normal"
-tokens, solves the problem:
+Thankfully, quoting the assignment-like tokens, or starting the list
+with other tokens (including unquoted variable expansion that results in
+an assignment-like result), avoids the problem, so it is easy to work
+around:
 
 @example
-$ @kbd{/bin/sh -c 'for v in "a=b"; do echo "$v"; done'}
+$ @kbd{/bin/sh -c 'for v in "a=b"; do echo $v; done'}
 a=b
-$ @kbd{/bin/sh -c 'for v in x a=b; do echo "$v"; done'}
-x
-a=b
-$ @kbd{/bin/sh -c 'for v in x a=b d=c; do echo "$v"; done'}
-x
+$ @kbd{/bin/sh -c 'x=a=b; for v in $x c=d; do echo $v; done'}
 a=b
 c=d
 @end example
-
-@noindent
-Luckily enough, the bug is not triggered if the "assignment-like"
-tokens are the results of a variable expansion (even unquoted):
-
-@example
-$ @kbd{/bin/sh -c 'x="a=b"; for v in $x; do echo "$v"; done'}
-a=b
-@end example
-
-@noindent
-So, at least, the bug should be easy to grep for and to avoid.
 
 @anchor{if}
 @item @command{if}
