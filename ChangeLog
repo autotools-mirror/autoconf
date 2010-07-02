@@ -1,5 +1,10 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Release Version 2.66.
+	* NEWS: Mention the release.
+
+2010-07-02  Eric Blake  <eblake@redhat.com>
+
 	Pick up some maint.mk improvements from gnulib.
 	* configure.ac (AM_INIT_AUTOMAKE): Require 1.11, and build xz
 	archives by default now.

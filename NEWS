@@ -1,7 +1,7 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Major changes in Autoconf 2.65a (????-??-??) [experimental]
-  Released by ???? ????
+* Major changes in Autoconf 2.66 (2010-07-02) [stable]
+  Released by Eric Blake, based on git versions 2.65.*.
 
 ** AC_FUNC_MMAP works in C++ mode again.  Regression introduced in 2.65.
 
