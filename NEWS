@@ -43,6 +43,8 @@ GNU Autoconf NEWS - User visible changes.
    Furthermore, a new macro, AS_LITERAL_WORD_IF, adds an additional
    level of checking that no whitespace occurs in literals.
 
+** The macros AS_TR_SH and AS_TR_CPP no longer expand their results.
+
 ** The following macros are now documented:
    AS_BOX
 

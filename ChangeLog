@@ -1,5 +1,12 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Make AS_TR_SH and AS_TR_CPP similar.
+	* lib/m4sugar/m4sh.m4 (_AS_TR_CPP_LITERAL): Avoid underquoting.
+	(_AS_TR_CPP_INDIR): Handle all polymorphic variables.
+	* tests/m4sh.at (AS@&t@_TR_SH and AS@&t@_TR_CPP): New test.
+	* NEWS: Document the fix.
+	Reported by Bruno Haible.
+
 	Reduce startup cost of autotest.
 	* lib/autotest/general.m4 (_AT_FINISH) <banners>: Rather than
 	doing a recursive find, limit ourselves to top ChangeLog only.

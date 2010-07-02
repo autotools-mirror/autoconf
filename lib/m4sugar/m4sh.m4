@@ -1816,12 +1816,12 @@ m4_define([_AS_TR_CPP],
 ])([], [$0_INDIR], [$0_LITERAL])([$1])])
 
 m4_define([_AS_TR_CPP_LITERAL],
-[m4_translit([$1],
+[m4_translit([[$1]],
   [*[]]]m4_dquote(m4_defn([m4_cr_letters])m4_defn([m4_cr_not_symbols2]))[,
   [P[]]]m4_dquote(m4_defn([m4_cr_LETTERS])m4_for(,1,255,,[[_]]))[)])
 
 m4_define([_AS_TR_CPP_INDIR],
-[`AS_ECHO(["$1"]) | $as_tr_cpp`])
+[`AS_ECHO(["_AS_ESCAPE([[$1]], [`], [\])"]) | $as_tr_cpp`])
 
 
 # _AS_TR_PREPARE

@@ -1169,6 +1169,83 @@ ok 16
 AT_CLEANUP
 
 
+## --------------------- ##
+## AS_TR_SH, AS_TR_CPP.  ##
+## --------------------- ##
+
+AT_SETUP([AS@&t@_TR_SH and AS@&t@_TR_CPP])
+
+AT_DATA_M4SH([script.as], [[dnl
+AS_INIT
+m4_define([abc], [hI])m4_define([ABC], [Hi])
+m4_define([hi], [oops])m4_define([HI], [OOPS])
+echo AS_TR_SH(abc) AS_TR_SH(aBc) AS_TR_SH(ABC)
+echo AS_TR_SH([abc]) AS_TR_SH([aBc]) AS_TR_SH([ABC])
+echo AS_TR_SH([[abc]]) AS_TR_SH([[aBc]]) AS_TR_SH([[ABC]])
+echo AS_TR_CPP(abc) AS_TR_CPP(aBc) AS_TR_CPP(ABC)
+echo AS_TR_CPP([abc]) AS_TR_CPP([aBc]) AS_TR_CPP([ABC])
+echo AS_TR_CPP([[abc]]) AS_TR_CPP([[aBc]]) AS_TR_CPP([[ABC]])
+echo ===
+[var=abc vAr=aBc VAR=ABC]
+echo AS_TR_SH($var) AS_TR_SH($vAr) AS_TR_SH($VAR)
+echo AS_TR_SH([$var]) AS_TR_SH([$vAr]) AS_TR_SH([$VAR])
+echo AS_TR_SH([[$var]]) AS_TR_SH([[$vAr]]) AS_TR_SH([[$VAR]])
+echo AS_TR_CPP($var) AS_TR_CPP($vAr) AS_TR_CPP($VAR)
+echo AS_TR_CPP([$var]) AS_TR_CPP([$vAr]) AS_TR_CPP([$VAR])
+echo AS_TR_CPP([[$var]]) AS_TR_CPP([[$vAr]]) AS_TR_CPP([[$VAR]])
+echo ===
+var=abc vAr=aBc VAR=ABC
+echo AS_TR_SH(`echo abc`) AS_TR_SH(`echo aBc`) AS_TR_SH(`echo ABC`)
+echo AS_TR_SH([`echo abc`]) AS_TR_SH([`echo aBc`]) AS_TR_SH([`echo ABC`])
+echo AS_TR_SH([[`echo abc`]]) AS_TR_SH([[`echo aBc`]]) AS_TR_SH([[`echo ABC`]])
+echo AS_TR_CPP(`echo abc`) AS_TR_CPP(`echo aBc`) AS_TR_CPP(`echo ABC`)
+echo AS_TR_CPP([`echo abc`]) AS_TR_CPP([`echo aBc`]) AS_TR_CPP([`echo ABC`])
+echo AS_TR_CPP([[`echo abc`]]) AS_TR_CPP([[`echo aBc`]]) AS_TR_CPP([[`echo ABC`]])
+echo ===
+echo AS_TR_SH([a.b/c+*-])
+echo AS_TR_CPP([a.b/c+*-])
+var=a.b/c+*-
+echo AS_TR_SH([$var])
+echo AS_TR_CPP([$var])
+m4_define([macro], [a.b/c+*-])
+echo AS_TR_SH([macro])
+echo AS_TR_CPP([macro])
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([$CONFIG_SHELL ./script], [],
+[[hI aBc Hi
+hI aBc Hi
+abc aBc ABC
+HI ABC HI
+HI ABC HI
+ABC ABC ABC
+===
+abc aBc ABC
+abc aBc ABC
+abc aBc ABC
+ABC ABC ABC
+ABC ABC ABC
+ABC ABC ABC
+===
+hI aBc Hi
+hI aBc Hi
+abc aBc ABC
+HI ABC HI
+HI ABC HI
+ABC ABC ABC
+===
+a_b_cpp_
+A_B_C_P_
+a_b_cpp_
+A_B_C_P_
+a_b_cpp_
+A_B_C_P_
+]])
+
+AT_CLEANUP
+
+
 ## ---------- ##
 ## AS_VAR_*.  ##
 ## ---------- ##
