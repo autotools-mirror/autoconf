@@ -93,13 +93,11 @@ necessary, but helps.
 
 ** Preparation for release
 Make sure you have GNU make installed.  Make sure your PATH includes a
-released version of Automake (and not a development snapshot);
-preferably 1.10.1 or later so you can build an LZMA tarball.  Make
+Automake 1.11 or later (preferably not a development snapshot).  Make
 sure your locale is sane, e.g. by exporting LC_ALL=C.  Bootstrap the
 checkout, and make sure the testsuite passes.  See above for more
-hints on the testsuite.  Update cfg.mk with details specific to your
-environment, such as your GPG key and the location of a gnulib
-checkout.
+hints on the testsuite.  If needed, update cfg.mk with details
+specific to your environment, such as the location of a gnulib checkout.
 
 ** Update the foreign files
 Running `make fetch' in the top level should grab it all for you; you
@@ -119,18 +117,10 @@ As much as possible, make sure to release an Autoconf that uses
 itself.  That's easy: just be in the top level, and run
 `tests/autoconf'.  Or install this autoconf and run `autoreconf -f'.
 
-** XZ tarball creation
-Using the `dist-xz' option of Automake requires Automake 1.11, and
-fails for everyone who does not have xz installed, but for now
-Autoconf only requires Automake 1.10.  However, as maintainer, you
-should build an xz tarball.  By using Automake 1.11 or newer, you
-can run `make dist-xz'; run this prior to the release target so that
-the release announcement will include the .tar.xz file.
-
 ** Make the release
 Run `make {alpha,beta,stable}' depending on which type of release this
 is.  This runs the various checks, creates delta files, creates a
-preliminary announcement in /tmp/announce-autoconf-<version>, prints
+preliminary announcement in ~/announce-autoconf-<version>, prints
 out the command to upload the files, and updates the previous version
 file.
 

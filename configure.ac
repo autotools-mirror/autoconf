@@ -28,7 +28,8 @@ AC_CONFIG_SRCDIR([ChangeLog])
 
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.10 dist-bzip2 readme-alpha no-texinfo.tex std-options])
+AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-xz
+readme-alpha no-texinfo.tex std-options])
 
 # We use `/bin/sh -n script' to check that there are no syntax errors
 # in the scripts.  Although incredible, there are /bin/sh that go into

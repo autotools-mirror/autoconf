@@ -28,12 +28,13 @@ build_aux ?= $(srcdir)/build-aux
 # Do not save the original name or timestamp in the .tar.gz file.
 # Use --rsyncable if available.
 gzip_rsyncable := \
-  $(shell gzip --help 2>/dev/null|grep rsyncable >/dev/null && echo --rsyncable)
+  $(shell gzip --help 2>/dev/null|grep rsyncable >/dev/null \
+    && printf %s --rsyncable)
 GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
 
 GIT = git
 VC = $(GIT)
-VC-tag = git tag -s -m '$(VERSION)'
+VC-tag = git tag -s -m '$(VERSION)' -u '$(gpg_key_ID)'
 
 VC_LIST = $(build_aux)/vc-list-files -C $(srcdir)
 
@@ -48,7 +49,7 @@ ifeq ($(origin prev_version_file), undefined)
   prev_version_file = $(srcdir)/.prev-version
 endif
 
-PREV_VERSION := $(shell cat $(prev_version_file))
+PREV_VERSION := $(shell cat $(prev_version_file) 2>/dev/null)
 VERSION_REGEXP = $(subst .,\.,$(VERSION))
 
 this-vc-tag = v$(VERSION)
@@ -382,6 +383,19 @@ strftime-check:
 check-AUTHORS:
 	test ! -d src || $(MAKE) -C src $@
 
+# Ensure that we don't accidentally insert an entry into an old NEWS block.
+sc_immutable_NEWS:
+	@if test -f $(srcdir)/NEWS; then				\
+	  test "$(NEWS_hash)" = '$(old_NEWS_hash)' && : ||		\
+	    { echo '$(ME): you have modified old NEWS' 1>&2; exit 1; };	\
+	fi
+
+# Update the hash stored above.  Do this after each release and
+# for any corrections to old entries.
+update-NEWS-hash: NEWS
+	perl -pi -e 's/^(old_NEWS_hash[ \t]+:?=[ \t]+).*/$${1}'"$(NEWS_hash)/" \
+	  $(srcdir)/cfg.mk
+
 # Ensure that we use only the standard $(VAR) notation,
 # not @...@ in Makefile.am, now that we can rely on automake
 # to emit a definition for each substituted variable.
@@ -465,9 +479,8 @@ writable-files:
 	if test -d $(release_archive_dir); then :; else			\
 	  mkdir $(release_archive_dir);					\
 	fi
-	for file in $(distdir).tar.gz $(xd-delta)			\
-		    $(release_archive_dir)/$(distdir).tar.gz		\
-		    $(release_archive_dir)/$(xd-delta); do		\
+	for file in $(distdir).tar.gz					\
+		    $(release_archive_dir)/$(distdir).tar.gz; do	\
 	  test -e $$file || continue;					\
 	  test -w $$file						\
 	    || { echo ERROR: $$file is not writable; fail=1; };		\
@@ -558,8 +571,16 @@ gpg_key_ID ?= \
      && gpgv .ann-sig - < /dev/null 2>&1 \
 	  | sed -n '/.*key ID \([0-9A-F]*\)/s//\1/p'; rm -f .ann-sig)
 
+translation_project_ ?= coordinator@translationproject.org
+announcement_Cc_ ?= $(translation_project_), $(PACKAGE_BUGREPORT)
+announcement_mail_headers_ ?=						\
+To: info-gnu@gnu.org							\
+Cc: $(announcement_Cc_)							\
+Mail-Followup-To: $(PACKAGE_BUGREPORT)
+
 announcement: NEWS ChangeLog $(rel-files)
-	@$(build_aux)/announce_gen					\
+	@$(build_aux)/announce-gen					\
+	    --mail-headers='$(announcement_mail_headers_)'		\
 	    --release-type=$(RELEASE_TYPE)				\
 	    --package=$(PACKAGE)					\
 	    --prev=$(PREV_VERSION)					\
@@ -567,7 +588,6 @@ announcement: NEWS ChangeLog $(rel-files)
 	    --gpg-key-id=$(gpg_key_ID)					\
 	    --news=$(srcdir)/NEWS					\
 	    --bootstrap-tools=$(bootstrap-tools)			\
-	    --gnulib-version=$(gnulib-version)				\
 	    --no-print-checksums					\
 	    $(addprefix --url-dir=, $(url_dir_list))
 
@@ -581,40 +601,69 @@ www-gnu = http://www.gnu.org
 # Use mv, if you don't have/want move-if-change.
 move_if_change ?= move-if-change
 
+upload_dest_dir_ ?= $(PACKAGE)
+
 emit_upload_commands:
 	@echo =====================================
 	@echo =====================================
 	@echo "$(build_aux)/gnupload $(GNUPLOADFLAGS) \\"
-	@echo "    --to $(gnu_rel_host):$(PACKAGE) \\"
+	@echo "    --to $(gnu_rel_host):$(upload_dest_dir_) \\"
 	@echo "  $(rel-files)"
-	@echo '# send the /tmp/announcement e-mail'
+	@echo '# send the ~/announce-$(my_distdir) e-mail'
 	@echo =====================================
 	@echo =====================================
 
+noteworthy = * Noteworthy changes in release ?.? (????-??-??) [?]
+define emit-commit-log
+  printf '%s\n' 'post-release administrivia' '' \
+    '* NEWS: Add header line for next release.' \
+    '* .prev-version: Record previous version.' \
+    '* cfg.mk (old_NEWS_hash): Auto-update.'
+endef
+
 .PHONY: alpha beta stable
+ALL_RECURSIVE_TARGETS += alpha beta stable
 alpha beta stable: news-date-check changelog-check $(local-check)
 	test $@ = stable						\
-	  && { echo $(VERSION) | grep -E '^[0-9]+(\.[0-9]+)+$$'	\
+	  && { echo $(VERSION) | grep -E '^[0-9]+(\.[0-9]+)+$$'		\
 	       || { echo "invalid version string: $(VERSION)" 1>&2; exit 1;};}\
 	  || :
 	$(MAKE) vc-dist
-	$(MAKE) $(xd-delta)
-	$(MAKE) -s announcement RELEASE_TYPE=$@ > /tmp/announce-$(my_distdir)
-	ln $(rel-files) $(release_archive_dir)
-	chmod a-w $(rel-files)
+	$(MAKE) dist XZ_OPT=-9ev
+	$(MAKE) $(release-prep-hook) RELEASE_TYPE=$@
 	$(MAKE) -s emit_upload_commands RELEASE_TYPE=$@
-	echo $(VERSION) > $(prev_version_file)
-	$(VC) commit -m \
-	  '$(prev_version_file): Record previous version: $(VERSION).' \
-	  $(prev_version_file)
 
+# Override this in cfg.mk if you follow different procedures.
+release-prep-hook ?= release-prep
+
+.PHONY: release-prep
+release-prep:
+	case $$RELEASE_TYPE in alpha|beta|stable) ;; \
+	  *) echo "invalid RELEASE_TYPE: $$RELEASE_TYPE" 1>&2; exit 1;; esac
+	$(MAKE) -s announcement > ~/announce-$(my_distdir)
+	if test -d $(release_archive_dir); then			\
+	  ln $(rel-files) $(release_archive_dir);		\
+	  chmod a-w $(rel-files);				\
+	fi
+	echo $(VERSION) > $(prev_version_file)
+	$(MAKE) update-NEWS-hash
+	perl -pi -e '$$. == 3 and print "$(noteworthy)\n\n\n"' NEWS
+	$(emit-commit-log) > .ci-msg
+	$(VC) commit -F .ci-msg -a
+	rm .ci-msg
+
+
+# Override this with e.g., -s $(srcdir)/some_other_name.texi
+# if the default $(PACKAGE)-derived name doesn't apply.
+gendocs_options_ ?=
 
 .PHONY: web-manual
 web-manual:
 	@test -z "$(manual_title)" \
 	  && { echo define manual_title in cfg.mk 1>&2; exit 1; } || :
 	@cd '$(srcdir)/doc'; \
-	  $(SHELL) ../build-aux/gendocs.sh -o '$(abs_builddir)/doc/manual' \
+	  $(SHELL) ../build-aux/gendocs.sh $(gendocs_options_) \
+	     -o '$(abs_builddir)/doc/manual' \
 	     --email $(PACKAGE_BUGREPORT) $(PACKAGE) \
 	    "$(PACKAGE_NAME) - $(manual_title)"
 	@echo " *** Upload the doc/manual directory to web-cvs."

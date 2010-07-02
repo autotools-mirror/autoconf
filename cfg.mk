@@ -33,6 +33,17 @@ gnulib_dir = '$(abs_srcdir)'/../gnulib
 # The bootstrap tools (override the default).
 bootstrap-tools = automake
 
+# Set preferred lists for announcements.
+
+announcement_Cc_ = $(PACKAGE_BUGREPORT), autotools-announce@gnu.org
+announcement_mail-alpha = autoconf@gnu.org
+announcement_mail-beta = autoconf@gnu.org
+announcement_mail-stable = info-gnu@gnu.org, autoconf@gnu.org
+announcement_mail_headers_ =						\
+To: $(announcement_mail-$(RELEASE_TYPE))				\
+CC: $(announcement_Cc_)							\
+Mail-Followup-To: autoconf@gnu.org
+
 # Update files from gnulib.
 .PHONY: fetch gnulib-update autom4te-update
 fetch: gnulib-update autom4te-update

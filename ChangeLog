@@ -1,5 +1,18 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Pick up some maint.mk improvements from gnulib.
+	* configure.ac (AM_INIT_AUTOMAKE): Require 1.11, and build xz
+	archives by default now.
+	* maint.mk (gzip_rsyncable): Avoid non-portable echo.
+	(VC-tag): Depend on gpg_key_ID.
+	(PREV_VERSION): Don't parse error as version.
+	(announcement): Populate email addresses with defaults.
+	(emit_upload_commands, web-manual): Reflect changes in scripts.
+	(update-NEWS-hash, emit-commit-log, release-prep): New macros.
+	* cfg.mk (announcement_Cc_, announcement_mail_headers_): Override
+	defaults.
+	* HACKING: Modernize a bit.
+
 	Resync upstream files.
 	* GNUmakefile: Run 'make fetch'.
 	* build-aux/announce-gen: Likewise.
