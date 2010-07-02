@@ -1,5 +1,11 @@
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
+	Post-release administrivia.
+	* maint.mk (NEWS_hash): Define.
+	* NEWS: Add header line for next release.
+	* .prev-version: Record previous version.
+	* cfg.mk (old_NEWS_hash): Auto-update.
+
 	Release Version 2.66.
 	* NEWS: Mention the release.
 

@@ -383,6 +383,14 @@ strftime-check:
 check-AUTHORS:
 	test ! -d src || $(MAKE) -C src $@
 
+NEWS_hash =								\
+  $$(sed -n '/^\*.* $(PREV_VERSION_REGEXP) ([0-9-]*)/,$$p'		\
+       $(srcdir)/NEWS							\
+     | perl -0777 -pe							\
+	's/^Copyright.+?Free\sSoftware\sFoundation,\sInc\.\n//ms'	\
+     | md5sum -								\
+     | sed 's/ .*//')
+
 # Ensure that we don't accidentally insert an entry into an old NEWS block.
 sc_immutable_NEWS:
 	@if test -f $(srcdir)/NEWS; then				\
