@@ -1,3 +1,9 @@
+2010-07-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Fix minor copy&paste leftover in m4sh tests.
+	* tests/m4sh.at (AS@&t@_TR_SH and AS@&t@_TR_CPP): Remove
+	useless variables assignements ($var, $vAr, $VAR).
+
 2010-07-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix testsuite to not trigger Solaris sh for bug.

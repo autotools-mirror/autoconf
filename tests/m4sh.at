@@ -1194,7 +1194,6 @@ echo AS_TR_CPP($var) AS_TR_CPP($vAr) AS_TR_CPP($VAR)
 echo AS_TR_CPP([$var]) AS_TR_CPP([$vAr]) AS_TR_CPP([$VAR])
 echo AS_TR_CPP([[$var]]) AS_TR_CPP([[$vAr]]) AS_TR_CPP([[$VAR]])
 echo ===
-var=abc vAr=aBc VAR=ABC
 echo AS_TR_SH(`echo abc`) AS_TR_SH(`echo aBc`) AS_TR_SH(`echo ABC`)
 echo AS_TR_SH([`echo abc`]) AS_TR_SH([`echo aBc`]) AS_TR_SH([`echo ABC`])
 echo AS_TR_SH([[`echo abc`]]) AS_TR_SH([[`echo aBc`]]) AS_TR_SH([[`echo ABC`]])
