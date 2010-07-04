@@ -684,8 +684,9 @@ AC_OUTPUT
 
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER
-# Check both awk and the result of AC_PROG_AWK
-for awk_arg in FOO= AWK=awk; do
+# Check both awk and the result of AC_PROG_AWK.
+# Quote the first word in the for list for Solaris sh.
+for awk_arg in "FOO=" AWK=awk; do
   AT_CHECK_CONFIGURE([$awk_arg])
 
   # Checking that AC_DEFINE worked properly.
@@ -800,7 +801,8 @@ EOF
 
 AT_CHECK_AUTOCONF
 # Check both awk and the result of AC_PROG_AWK
-for awk_arg in Foo= AWK=awk; do
+# Quote the first word in the for list for Solaris sh.
+for awk_arg in "Foo=" AWK=awk; do
   AT_CHECK_CONFIGURE([$awk_arg])
   AT_CHECK([cat Foo], 0, m4_for([n], 1, 100,, ....................)
 )
@@ -910,7 +912,8 @@ AC_CONFIG_FILES([Foo Zardoz])]])
 AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER
 # Check both awk and the result of AC_PROG_AWK
-for awk_arg in FOO= AWK=awk; do
+# Quote the first word in the for list for Solaris sh.
+for awk_arg in "FOO=" AWK=awk; do
   AT_CHECK_CONFIGURE([$awk_arg])
   AT_CHECK([cat Foo], 0, [[X*'[]+ ", & &`\($foo \& \\& \\\& \\\\& \ \\ \\\ !
 @foo@ @baz@@notsubsted@bla stray @ and more@@bla
@@ -975,7 +978,8 @@ x' >expout
 
 AT_CHECK_AUTOCONF
 # Check both awk and the result of AC_PROG_AWK
-for awk_arg in FOO= AWK=awk; do
+# Quote the first word in the for list for Solaris sh.
+for awk_arg in "FOO=" AWK=awk; do
   AT_CHECK_CONFIGURE([$awk_arg])
   AT_CHECK([cat Foo], 0, [expout])
 done

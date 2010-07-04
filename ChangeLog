@@ -1,3 +1,12 @@
+2010-07-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix testsuite to not trigger Solaris sh for bug.
+	* tests/torture.at (Torturing config.status)
+	(Substitute a 2000-byte string)
+	(Substitute and define special characters)
+	(Substitute a newline): Quote first argument in for list so
+	that it does not look like an assignment.
+
 2010-07-02  Eric Blake  <eblake@redhat.com>
 
 	Post-release administrivia.
