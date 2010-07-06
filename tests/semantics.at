@@ -350,7 +350,7 @@ AT_CHECK_MACRO_CROSS([AC_CHECK_ALIGNOF struct],
 [[AC_CHECK_ALIGNOF([struct { char c; }])
 AC_CHECK_ALIGNOF([struct nosuchstruct])
 ]],
-[AT_CHECK([[grep "#define ALIGNOF_STRUCT___CHAR_C___ [^0]" config.h]],
+[AT_CHECK([[grep "#define ALIGNOF_STRUCT___CHAR_C___ [1-9]" config.h]],
 	 0, ignore)
 AT_CHECK([[grep "#define ALIGNOF_STRUCT_NOSUCHSTRUCT 0" config.h]],
 	 0, ignore)
@@ -379,12 +379,16 @@ AT_CHECK_MACRO_CROSS([AC_CHECK_SIZEOF struct],
 AC_CHECK_SIZEOF([struct x], [], [struct x { char c; int x; };])
 AC_CHECK_SIZEOF([const struct x], [], [struct x { const char *p; int x; };])
 AC_CHECK_SIZEOF([struct nosuchstruct])
+# Taken from autoconf.texi:Generic Compiler Characteristics.
+AC_CHECK_SIZEOF([int *])
 ]],
-[AT_CHECK([[grep "#define SIZEOF_STRUCT_X [^0]" config.h]],
+[AT_CHECK([[grep "#define SIZEOF_STRUCT_X [1-9]" config.h]],
 	 0, ignore)
-AT_CHECK([[grep "#define SIZEOF_CONST_STRUCT_X [^0]" config.h]],
+AT_CHECK([[grep "#define SIZEOF_CONST_STRUCT_X [1-9]" config.h]],
 	 0, ignore)
 AT_CHECK([[grep "#define SIZEOF_STRUCT_NOSUCHSTRUCT 0" config.h]],
+	 0, ignore)
+AT_CHECK([[grep "#define SIZEOF_INT_P [1-9]" config.h]],
 	 0, ignore)
 ])
 

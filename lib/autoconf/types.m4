@@ -763,7 +763,7 @@ Remove this warning and the `AC_CACHE_CHECK' when you adjust the code.])
 # AC_CHECK_SIZEOF(TYPE, [IGNORED], [INCLUDES = DEFAULT-INCLUDES])
 # ---------------------------------------------------------------
 AC_DEFUN([AC_CHECK_SIZEOF],
-[AS_LITERAL_IF([$1], [],
+[AS_LITERAL_IF(m4_translit([[$1]], [*], [p]), [],
 	       [m4_fatal([$0: requires literal arguments])])]dnl
 [# The cast to long int works around a bug in the HP C Compiler
 # version HP92453-01 B.11.11.23709.GP, which incorrectly rejects

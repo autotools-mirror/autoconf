@@ -1,3 +1,20 @@
+2010-07-10  Eric Blake  <eblake@redhat.com>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix regression of AC_CHECK_SIZEOF on pointer types.
+	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF): Translate `*' to `p'
+	when checking literal-ness of the type, for pointer types.
+	* lib/m4sugar/m4sh.m4 (_AS_TR_SH): Also consider `*' as literal.
+	(_AS_TR_CPP): Likewise.
+	* tests/semantics.at (AC_CHECK_ALIGNOF struct): When checking
+	for numeric answer, be sure to not allow variable references.
+	(AC_CHECK_SIZEOF struct): Likewise.  Also, test the
+	`AC_CHECK_SIZEOF([int *])' example from the manual.
+	* doc/autoconf.texi (Generic Compiler Characteristics): Add
+	example marker.
+	* NEWS: Update.
+	Reports by Nishio Futoshi and Roberto Bagnara.
+
 2010-07-08  Eric Blake  <eblake@redhat.com>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

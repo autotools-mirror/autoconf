@@ -1779,7 +1779,7 @@ m4_defun_init([AS_TR_SH],
 [_$0(m4_expand([$1]))])
 
 m4_define([_AS_TR_SH],
-[_AS_LITERAL_IF([$1], [	 ][
+[_AS_LITERAL_IF([$1], [*][	 ][
 ])([], [$0_INDIR], [$0_LITERAL])([$1])])
 
 m4_define([_AS_TR_SH_LITERAL],
@@ -1812,7 +1812,7 @@ m4_defun_init([AS_TR_CPP],
 [_$0(m4_expand([$1]))])
 
 m4_define([_AS_TR_CPP],
-[_AS_LITERAL_IF([$1], [	 ][
+[_AS_LITERAL_IF([$1], [*][	 ][
 ])([], [$0_INDIR], [$0_LITERAL])([$1])])
 
 m4_define([_AS_TR_CPP_LITERAL],

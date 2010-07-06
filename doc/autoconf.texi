@@ -6957,6 +6957,7 @@ argument was used when cross-compiling.
 For example, the call
 
 @example
+@c If you change this example, adjust tests/semantics.at:AC_F77_DUMMY_MAIN usage.
 AC_CHECK_SIZEOF([int *])
 @end example
 
