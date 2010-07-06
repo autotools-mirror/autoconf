@@ -3617,6 +3617,7 @@ Make @code{AC_OUTPUT} run @command{configure} in each subdirectory
 be a literal, i.e., please do not use:
 
 @example
+@c If you change this example, adjust tests/torture.at:Non-literal AC_CONFIG_SUBDIRS.
 if test "x$package_foo_enabled" = xyes; then
   my_subdirs="$my_subdirs foo"
 fi

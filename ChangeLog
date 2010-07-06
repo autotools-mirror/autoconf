@@ -1,3 +1,15 @@
+2010-07-08  Eric Blake  <eblake@redhat.com>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix regression of AC_CONFIG_SUBDIRS with multiple arguments.
+	* lib/autoconf/status.m4 (AC_CONFIG_SUBDIRS): Do not assume the
+	argument is a single word.
+	* tests/torture.at (Deep Package): Extend test to cover this.
+	(Non-literal AC_CONFIG_SUBDIRS): New test.
+	* doc/autoconf.texi (Subdirectories): Add example marker.
+	* NEWS: Update.
+	Report by Bruno Haible.
+
 2010-07-04  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	Fix minor copy&paste leftover in m4sh tests.
