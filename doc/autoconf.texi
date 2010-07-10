@@ -3635,8 +3635,8 @@ if test "x$package_foo_enabled" = xyes; then
 fi
 @end example
 
-If a given @var{dir} is not found, an error is reported: if the
-subdirectory is optional, write:
+If a given @var{dir} is not found at @command{configure} run time, a
+warning is reported; if the subdirectory is optional, write:
 
 @example
 if test -d "$srcdir/foo"; then

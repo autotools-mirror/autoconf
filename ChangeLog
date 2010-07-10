@@ -1,3 +1,9 @@
+2010-07-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix wording about AC_CONFIG_SUBDIRS warning.
+	* doc/autoconf.texi (Subdirectories): We warn, not error, about
+	nonexistent config subdirs, but only at configure run time.
+
 2010-07-10  Eric Blake  <eblake@redhat.com>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
