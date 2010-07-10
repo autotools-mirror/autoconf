@@ -1,5 +1,12 @@
 2010-07-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix comment typo in the manual.
+	* doc/autoconf.texi (Generic Compiler Characteristics): Refer
+	to the right test in the example marker comment.
+	Spotted by Eric Blake.
+
+2010-07-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
 	New Fortran macro AC_FC_LINE_LENGTH.
 	* lib/autoconf/fortran.m4 (AC_FC_LINE_LENGTH): New macro.
 	* doc/autoconf.texi (Fortran Compiler): Document it.
