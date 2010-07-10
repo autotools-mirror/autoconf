@@ -7752,10 +7752,10 @@ are for newer programs that can (or must) compile under the newer
 Fortran standards, and have output variables like @code{FC},
 @code{FCFLAGS}, and @code{FCLIBS}.
 
-Except for the macros @code{AC_FC_SRCEXT}, @code{AC_FC_FREEFORM}, and
-@code{AC_FC_FIXEDFORM} (see below), the @code{FC} and @code{F77} macros
-behave almost identically, and so they are documented together in this
-section.
+Except for the macros @code{AC_FC_SRCEXT}, @code{AC_FC_FREEFORM},
+@code{AC_FC_FIXEDFORM}, and @code{AC_FC_LINE_LENGTH} (see below), the
+@code{FC} and @code{F77} macros behave almost identically, and so they
+are documented together in this section.
 
 
 @defmac AC_PROG_F77 (@ovar{compiler-search-list})
@@ -8132,6 +8132,24 @@ calls @var{action-if-success} (defaults to nothing).  If it fails, it
 calls @var{action-if-failure} (defaults to exiting with an error
 message).
 @end defmac
+
+@defmac AC_FC_LINE_LENGTH (@ovar{length}, @ovar{action-if-success}, @
+  @ovar{action-if-failure})
+@acindex{FC_LINE_LENGTH}
+
+The @code{AC_FC_LINE_LENGTH} macro tries to ensure that the Fortran compiler
+(@code{$FC}) accepts long source code lines.  The @var{length} argument
+may be given as 80, 132, or unlimited, and defaults to 132.  Note that
+line lengths above 254 columns are not portable, and some compilers
+do not accept more than 132 columns at least for fixed format source.
+If necessary, it may add some additional flags to @code{FCFLAGS}.
+
+If @code{AC_FC_LINE_LENGTH} succeeds in compiling fixed-form source, it
+calls @var{action-if-success} (defaults to nothing).  If it fails, it
+calls @var{action-if-failure} (defaults to exiting with an error
+message).
+@end defmac
+
 
 @node System Services
 @section System Services

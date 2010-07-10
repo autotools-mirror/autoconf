@@ -1,5 +1,11 @@
 2010-07-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	New Fortran macro AC_FC_LINE_LENGTH.
+	* lib/autoconf/fortran.m4 (AC_FC_LINE_LENGTH): New macro.
+	* doc/autoconf.texi (Fortran Compiler): Document it.
+	* tests/fortran.at (AC_FC_LINE_LENGTH): New test.
+	* NEWS: Update.
+
 	Fix wording about AC_CONFIG_SUBDIRS warning.
 	* doc/autoconf.texi (Subdirectories): We warn, not error, about
 	nonexistent config subdirs, but only at configure run time.

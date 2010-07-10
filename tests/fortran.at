@@ -874,3 +874,71 @@ AT_CHECK([$MAKE], [], [ignore], [ignore])
 dnl AT_CHECK([./prog])
 
 AT_CLEANUP
+
+
+## ------------------ ##
+## AC_FC_LINE_LENGTH. ##
+## ------------------ ##
+
+AT_SETUP([AC_FC_LINE_LENGTH])
+
+AT_DATA([Makefile.in],
+[[prog@EXEEXT@: prog.@OBJEXT@
+	@FC@ @FCFLAGS@ -o $@ prog.@OBJEXT@ @LIBS@
+
+.SUFFIXES: .f .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c @FCFLAGS_f@ $<
+
+clean:
+	rm -f *.@OBJEXT@ prog@EEXEXT@
+]])
+
+line_80=\
+'subroutine foo(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11)'
+line_132=\
+'subroutine foo(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,'\
+'arg12,arg13,arg14,arg15,arg16,arg17,arg18,arg19)'
+line_254=\
+'subroutine foo(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,'\
+'arg12,arg13,arg14,arg15,arg16,arg17,arg18,arg19,arg20,arg21,arg22,arg23,'\
+'arg24,arg25,arg26,arg27,arg28,arg29,arg30,arg31,arg32,arg33,arg34,arg35,'\
+'arg36,arg37,arg38,arg39,arg40)'
+
+for len in 80 132 254
+do
+  if test $len -eq 254; then arg=unlimited; else arg=$len; fi
+  eval long_line=\$line_$len
+
+  # Try free-form first, it has a bigger chance of succeeding.
+  for fixed_or_free in FREEFORM FIXEDFORM
+  do
+
+    cat >configure.ac <<EOF
+AC_INIT
+AC_PROG_FC
+AC_FC_SRCEXT([f])
+AC_FC_$fixed_or_free
+AC_FC_LINE_LENGTH([$arg])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+EOF
+
+    cat >prog.f <<EOF
+       $long_line
+       end subroutine
+       program main
+       end program
+EOF
+
+    AT_CHECK_AUTOCONF
+    AT_CHECK_CONFIGURE
+    : ${MAKE=make}
+    AT_CHECK([$MAKE], [], [ignore], [ignore])
+    dnl AT_CHECK([./prog])
+    AT_CHECK([$MAKE clean], [], [ignore], [ignore])
+
+  done
+done
+
+AT_CLEANUP
