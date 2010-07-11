@@ -1,3 +1,11 @@
+2010-07-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	manual: compiler flags -D and -L should not be followed by space
+	* doc/autoconf.texi (Preset Output Variables): Remove space
+	between -D and -L flags and their arguments, traditional cpp
+	implementations like Solaris 10, IRIX 6.5, OSF Tru64 5.1D,
+	AIX 5.3 do not accept it.
+
 2010-07-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix comment typo in the manual.

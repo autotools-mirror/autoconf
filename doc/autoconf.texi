@@ -2432,9 +2432,9 @@ when you call @code{AC_PROG_CC} (or empty if you don't).  @command{configure}
 uses this variable when compiling or linking programs to test for C features.
 
 If a compiler option affects only the behavior of the preprocessor
-(e.g., @option{-D @var{name}}), it should be put into @code{CPPFLAGS}
-instead.  If it affects only the linker (e.g., @option{-L
-@var{directory}}), it should be put into @code{LDFLAGS} instead.  If it
+(e.g., @option{-D@var{name}}), it should be put into @code{CPPFLAGS}
+instead.  If it affects only the linker (e.g., @option{-L@var{directory}}),
+it should be put into @code{LDFLAGS} instead.  If it
 affects only the compiler proper, @code{CFLAGS} is the natural home for
 it.  If an option affects multiple phases of the compiler, though,
 matters get tricky.  One approach to put such options directly into
