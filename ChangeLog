@@ -1,4 +1,17 @@
 2010-07-19  Eric Blake  <eblake@redhat.com>
+	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Relax AC_INIT requirements for PACKAGE and VERSION strings again.
+	* lib/m4sugar/m4sh.m4 (AS_LITERAL_HEREDOC_IF): New macro.
+	(_AS_LITERAL_HEREDOC_IF, _AS_LITERAL_HEREDOC_IF_YES)
+	(_AS_LITERAL_HEREDOC_IF_NO): New helper macros.
+	* lib/autoconf/general.m4 (_AC_INIT_PACKAGE): Use
+	AS_LITERAL_HEREDOC_IF for PACKAGE and VERSION strings.
+	* tests/base.at (AC_INIT with unusual version strings): New test.
+	* tests/m4sh.at (AS@&t@_LITERAL_IF): Extend test.
+	* NEWS: Update.
+
+2010-07-19  Eric Blake  <eblake@redhat.com>
 
 	Fix testsuite failures from previous patch.
 	* lib/autoconf/c.m4 (_AC_PROG_PREPROC_WORKS_IFELSE): Also remove

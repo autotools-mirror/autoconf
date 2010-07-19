@@ -1592,6 +1592,23 @@ m4_define([_AS_LITERAL_IF_NO], [$2])
 m4_define([AS_LITERAL_WORD_IF],
 [_AS_LITERAL_IF(m4_expand([$1]))([$4], [$3], [$2])])
 
+# AS_LITERAL_HEREDOC_IF(EXPRESSION, IF-LITERAL, IF-NOT-LITERAL)
+# -------------------------------------------------------------
+# Like AS_LITERAL_IF, except that a string is considered literal
+# if it results in the same output in both quoted and unquoted
+# here-documents.
+m4_define([AS_LITERAL_HEREDOC_IF],
+[_$0(m4_expand([$1]))([$2], [$3])])
+
+m4_define([_AS_LITERAL_HEREDOC_IF],
+[m4_if(m4_index([$1], [@S|@]), [-1],
+  [m4_if(m4_index(m4_translit([[$1]], [\`], [$]), [$]), [-1],
+    [$0_YES], [$0_NO])],
+  [$0_NO])])
+
+m4_define([_AS_LITERAL_HEREDOC_IF_YES], [$1])
+m4_define([_AS_LITERAL_HEREDOC_IF_NO], [$2])
+
 
 # AS_TMPDIR(PREFIX, [DIRECTORY = $TMPDIR [= /tmp]])
 # -------------------------------------------------

@@ -229,8 +229,10 @@ AU_ALIAS([AC_HELP_STRING], [AS_HELP_STRING])
 # _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION, BUG-REPORT, [TARNAME], [URL])
 # ---------------------------------------------------------------------
 m4_define([_AC_INIT_PACKAGE],
-[AS_LITERAL_IF([$1], [], [m4_warn([syntax], [AC_INIT: not a literal: $1])])
-AS_LITERAL_IF([$2], [],  [m4_warn([syntax], [AC_INIT: not a literal: $2])])
+[AS_LITERAL_HEREDOC_IF([$1], [],
+		       [m4_warn([syntax], [AC_INIT: not a literal: $1])])
+AS_LITERAL_HEREDOC_IF([$2], [],
+		      [m4_warn([syntax], [AC_INIT: not a literal: $2])])
 AS_LITERAL_IF([$3], [],  [m4_warn([syntax], [AC_INIT: not a literal: $3])])
 m4_ifndef([AC_PACKAGE_NAME],
 	  [m4_define([AC_PACKAGE_NAME],     [$1])])

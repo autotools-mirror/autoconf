@@ -219,6 +219,27 @@ AT_CHECK([grep "^PACKAGE_TARNAME='fu'\$" configure], [], [ignore])
 AT_CLEANUP
 
 
+## ------------------------------------- ##
+## AC_INIT with unusual version strings. ##
+## ------------------------------------- ##
+
+AT_SETUP([AC_INIT with unusual version strings])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++ with spaces (foo)],
+	  [2.48++ (2010-07-03)], [http://clisp.cons.org/], [clisp])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror])
+AT_CHECK_CONFIGURE([-q])
+AT_CHECK_CONFIGURE([--help])
+AT_CHECK_CONFIGURE([--version])
+AT_CHECK([./config.status --version], [], [ignore])
+
+AT_CLEANUP
+
+
 ## -------------- ##
 ## AC_COPYRIGHT.  ##
 ## -------------- ##

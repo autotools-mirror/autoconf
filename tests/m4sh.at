@@ -1119,7 +1119,7 @@ AT_CLEANUP
 ## --------------- ##
 
 AT_SETUP([AS@&t@_LITERAL_IF])
-AT_KEYWORDS([m4sh AS@&t@_LITERAL_WORD_IF])
+AT_KEYWORDS([m4sh AS@&t@_LITERAL_WORD_IF AS@&t@_LITERAL_HEREDOC_IF])
 
 AT_DATA_M4SH([script.as], [[dnl
 AS_INIT
@@ -1141,9 +1141,17 @@ m4_define([mac], [l``it])
 echo AS_LITERAL_IF([mac], [ERR], [ok]) 13
 echo AS_LITERAL_IF([mac], [ERR1], [ok], [ERR2]) 14
 echo AS_LITERAL_IF([	a ][
-b], [ok], [ok]) 15
+b], [ok], [ERR]) 15
 echo AS_LITERAL_WORD_IF([	a ][
 b], [ERR], [ok]) 16
+echo AS_LITERAL_HEREDOC_IF([	a ][
+b], [ok], [ERR]) 17
+echo AS_LITERAL_IF([(a)], [ERR], [ok]) 18
+echo AS_LITERAL_WORD_IF([(a)], [ERR], [ok]) 19
+echo AS_LITERAL_HEREDOC_IF([(a)], [ok], [ERR]) 20
+echo AS_LITERAL_IF([@S|@a], [ERR], [ok]) 21
+echo AS_LITERAL_WORD_IF([@S|@a], [ERR], [ok]) 22
+echo AS_LITERAL_HEREDOC_IF([@S|@a], [ERR], [ok]) 23
 ]])
 
 AT_CHECK_M4SH
@@ -1164,6 +1172,13 @@ ok 13
 ok 14
 ok 15
 ok 16
+ok 17
+ok 18
+ok 19
+ok 20
+ok 21
+ok 22
+ok 23
 ]])
 
 AT_CLEANUP
