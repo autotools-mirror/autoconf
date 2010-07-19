@@ -1,5 +1,10 @@
 2010-07-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix AC_FC_LIBRARY_LDFLAGS detection for BlueGene xlf -qipa.
+	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Ignore
+	'-link', added spuriously when -qipa is used with the XL
+	Fortran compilers on BlueGene.
+
 	manual: compiler flags -D and -L should not be followed by space
 	* doc/autoconf.texi (Preset Output Variables): Remove space
 	between -D and -L flags and their arguments, traditional cpp
