@@ -1,4 +1,16 @@
 2010-07-19  Eric Blake  <eblake@redhat.com>
+
+	Fix up AC_INIT vs. " issues, and document it.
+	* doc/autoconf.texi (Initializing configure): Improve
+	documentation on argument restrictions.
+	* NEWS: Tweak information.
+	* lib/autoconf/general.m4 (_AC_INIT_GENERAL): New macro, that also
+	rejects literal ".
+	(_AC_INIT_PACKAGE): Use it to plug hole in last patch.
+	* tests/base.at (AC_INIT with unusual version strings): Enhance
+	test.
+
+2010-07-19  Eric Blake  <eblake@redhat.com>
 	and Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Relax AC_INIT requirements for PACKAGE and VERSION strings again.

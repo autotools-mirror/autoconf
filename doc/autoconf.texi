@@ -1844,9 +1844,12 @@ distribution tar ball names (e.g., @samp{autoconf}).  It defaults to
 other than alphanumerics and underscores are changed to @samp{-}.  If
 provided, @var{url} should be the home page for the package.
 
-It is preferable that the arguments of @code{AC_INIT} be static, i.e.,
-there should not be any shell computation, but they can be computed by
-M4.
+The arguments of @code{AC_INIT} must be static, i.e., there should not
+be any shell computation, but they can be computed by M4 (the use of
+@code{m4_esyscmd} is permissible).  This is because the package
+information strings are expanded at M4 time into several contexts, and
+must give the same text at shell time whether used in double-quoted
+strings, quoted here-documents, or unquoted here-documents.
 
 The following M4 macros (e.g., @code{AC_PACKAGE_NAME}), output variables
 (e.g., @code{PACKAGE_NAME}), and preprocessor symbols (e.g.,

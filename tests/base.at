@@ -226,16 +226,45 @@ AT_CLEANUP
 AT_SETUP([AC_INIT with unusual version strings])
 
 AT_DATA([configure.ac],
-[[AC_INIT([GNU String++ with spaces (foo)],
-	  [2.48++ (2010-07-03)], [http://clisp.cons.org/], [clisp])
+[[AC_INIT([GNU String++ with  spaces (foo)],
+	  [2.48++  (2010-07-03)], [http://clisp.cons.org/], [clisp])
 AC_OUTPUT
 ]])
+
+if echo 'ab*c' | grep -F 'ab*c' >/dev/null 2>&1; then
+  FGREP="grep -F"
+else
+  FGREP=fgrep
+fi
 
 AT_CHECK_AUTOCONF([-Werror])
 AT_CHECK_CONFIGURE([-q])
 AT_CHECK_CONFIGURE([--help])
-AT_CHECK_CONFIGURE([--version])
-AT_CHECK([./config.status --version], [], [ignore])
+AT_CHECK_CONFIGURE([--version], [], [stdout])
+AT_CHECK([$FGREP 'GNU String++ with  spaces (foo)' stdout], [], [ignore])
+AT_CHECK([$FGREP '2.48++  (2010-07-03)' stdout], [], [ignore])
+
+AT_CHECK([./config.status --version], [], [stdout])
+AT_CHECK([$FGREP 'GNU String++ with  spaces (foo)' stdout], [], [ignore])
+AT_CHECK([$FGREP '2.48++  (2010-07-03)' stdout], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU "String++"],
+	  [2.48], [http://clisp.cons.org/], [clisp])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++],
+	  ["codename" 2.48], [http://clisp.cons.org/], [clisp])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
 
 AT_CLEANUP
 

@@ -14,11 +14,11 @@ GNU Autoconf NEWS - User visible changes.
    file for inspection by the commands in the ACTION-IF-TRUE argument.
 
 ** AC_INIT again allows parentheses and other characters that are literal
-   in both quoted and unquoted here-documents in its PACKAGE and
-   VERSION arguments.  This is relevant for packages not using these
-   strings nor products like PACKAGE_STRING in other contexts, e.g.,
-   for Automake, and may be subject to further restrictions in the
-   future.  Regression introduced in 2.66.
+   in quoted and unquoted here-documents and in double-quoted strings
+   in its PACKAGE and VERSION arguments.  This is relevant for
+   packages not using these strings nor products like PACKAGE_STRING
+   in other contexts, e.g., for Automake, and may be subject to
+   further restrictions in the future.  Regression introduced in 2.66.
 
 
 * Major changes in Autoconf 2.66 (2010-07-02) [stable]

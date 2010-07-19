@@ -224,15 +224,20 @@ AU_ALIAS([AC_HELP_STRING], [AS_HELP_STRING])
 # The solution is to require AC_INIT in each of these macros.  AC_INIT
 # has the needed magic so that it can't be expanded twice.
 
-
+# _AC_INIT_LITERAL(STRING)
+# ------------------------
+# Reject STRING if it cannot be used as-is in double-quoted strings,
+# as well as quoted and unquoted here-docs.
+m4_define([_AC_INIT_LITERAL],
+[m4_if(m4_index([$1], dnl font-lock"
+["])AS_LITERAL_HEREDOC_IF([$1], [-]), [-1-], [],
+  [m4_warn([syntax], [AC_INIT: not a literal: $1])])])
 
 # _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION, BUG-REPORT, [TARNAME], [URL])
 # ---------------------------------------------------------------------
 m4_define([_AC_INIT_PACKAGE],
-[AS_LITERAL_HEREDOC_IF([$1], [],
-		       [m4_warn([syntax], [AC_INIT: not a literal: $1])])
-AS_LITERAL_HEREDOC_IF([$2], [],
-		      [m4_warn([syntax], [AC_INIT: not a literal: $2])])
+[_AC_INIT_LITERAL([$1])
+_AC_INIT_LITERAL([$2])
 AS_LITERAL_IF([$3], [],  [m4_warn([syntax], [AC_INIT: not a literal: $3])])
 m4_ifndef([AC_PACKAGE_NAME],
 	  [m4_define([AC_PACKAGE_NAME],     [$1])])
