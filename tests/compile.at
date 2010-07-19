@@ -294,8 +294,8 @@ AT_DATA([configure.ac],
 [[AC_INIT
 AC_PROG_CC
 
-AC_PREPROC_IFELSE([AC_LANG_PROGRAM([int ok;], [])],
-		  [test -f conftest.err || AS_EXIT([1])],
+AC_PREPROC_IFELSE([AC_LANG_PROGRAM([int grepme;], [])],
+		  [{ test -f conftest.err && grep grepme conftest.i; } || AS_EXIT([1])],
 		  [AS_EXIT([1])])
 AC_PREPROC_IFELSE([AC_LANG_PROGRAM([#define 12 34 /*], [])],
 		  [AS_EXIT([1])],

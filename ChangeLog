@@ -1,5 +1,15 @@
 2010-07-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Allow inspecting AC_PREPROC_IFELSE output in true branch.
+	* lib/autoconf/general.m4 (_AC_PREPROC_IFELSE_BODY): Redirect
+	preprocessor output to conftest.i rather than /dev/null.
+	(_AC_PREPROC_IFELSE): Remove conftest.i in the postprocessing.
+	* tests/compile.at (Order of user actions and cleanup): Extend
+	test in the ACTION-IF-TRUE branch.
+	* doc/autoconf.texi (Running the Preprocessor): Document new
+	feature.
+	* NEWS: Update.
+
 	Fix AC_FC_LIBRARY_LDFLAGS detection for BlueGene xlf -qipa.
 	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Ignore
 	'-link', added spuriously when -qipa is used with the XL

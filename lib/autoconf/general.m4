@@ -2461,7 +2461,7 @@ AC_DEFUN([AC_RUN_LOG],
 # Shell function body for _AC_PREPROC_IFELSE.
 m4_define([_AC_PREPROC_IFELSE_BODY],
 [  AS_LINENO_PUSH([$[]1])
-  AS_IF([_AC_DO_STDERR([$ac_cpp conftest.$ac_ext]) >/dev/null && {
+  AS_IF([_AC_DO_STDERR([$ac_cpp conftest.$ac_ext]) > conftest.i && {
 	 test -z "$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
 	 test ! -s conftest.err
        }],
@@ -2486,7 +2486,7 @@ AC_DEFUN([_AC_PREPROC_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_cpp "$LINENO"], [$2], [$3])
-rm -f conftest.err[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
+rm -f conftest.err conftest.i[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_PREPROC_IFELSE
 
 # AC_PREPROC_IFELSE(PROGRAM, [ACTION-IF-TRUE], [ACTION-IF-FALSE])

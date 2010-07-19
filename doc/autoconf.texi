@@ -8900,7 +8900,8 @@ This macro uses @code{CPPFLAGS}, but not @code{CFLAGS}, because
 preprocessors.
 
 It is customary to report unexpected failures with
-@code{AC_MSG_FAILURE}.
+@code{AC_MSG_FAILURE}.  If needed, @var{action-if-true} can further access
+the preprocessed output in the file @file{conftest.i}.
 @end defmac
 
 For instance:

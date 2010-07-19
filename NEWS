@@ -10,6 +10,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** New macro AC_FC_LINE_LENGTH to accept long Fortran source code lines.
 
+** AC_PREPROC_IFELSE now keeps the preprocessed output in the conftest.i
+   file for inspection by the commands in the ACTION-IF-TRUE argument.
+
 * Major changes in Autoconf 2.66 (2010-07-02) [stable]
   Released by Eric Blake, based on git versions 2.65.*.
 
