@@ -373,7 +373,7 @@ break])
 
 done
 # Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
-rm -f conftest.err conftest.$ac_ext
+rm -f conftest.i conftest.err conftest.$ac_ext
 AS_IF([$ac_preproc_ok], [$1], [$2])
 ])# _AC_PROG_PREPROC_WORKS_IFELSE
 

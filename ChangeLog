@@ -1,3 +1,9 @@
+2010-07-19  Eric Blake  <eblake@redhat.com>
+
+	Fix testsuite failures from previous patch.
+	* lib/autoconf/c.m4 (_AC_PROG_PREPROC_WORKS_IFELSE): Also remove
+	conftest.i when preprocessor tests break out of a loop.
+
 2010-07-19  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Allow inspecting AC_PREPROC_IFELSE output in true branch.
