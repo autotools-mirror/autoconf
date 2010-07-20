@@ -1,3 +1,15 @@
+2010-07-20  Eric Blake  <eblake@redhat.com>
+
+	Also reject ' and newline from AC_INIT strings.
+	* lib/autoconf/general.m4 (_AC_INIT_LITERAL): Reject a couple more
+	problematic characters.
+	* tests/base.at (AC_INIT with unusual version strings): Enhance
+	test.
+	* doc/autoconf.texi (Initializing configure) <AC_INIT>: Further
+	clarifications, and clean up wording about use of m4_esyscmd.
+	* NEWS: Update previous news entry.
+	Suggested by Paolo Bonzini.
+
 2010-07-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Let autoreconf pass warning flags to new-enough aclocal.

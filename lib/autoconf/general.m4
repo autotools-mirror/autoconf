@@ -226,11 +226,12 @@ AU_ALIAS([AC_HELP_STRING], [AS_HELP_STRING])
 
 # _AC_INIT_LITERAL(STRING)
 # ------------------------
-# Reject STRING if it cannot be used as-is in double-quoted strings,
-# as well as quoted and unquoted here-docs.
+# Reject STRING if it contains newline, or if it cannot be used as-is
+# in single-quoted strings, double-quoted strings, and quoted and
+# unquoted here-docs.
 m4_define([_AC_INIT_LITERAL],
-[m4_if(m4_index([$1], dnl font-lock"
-["])AS_LITERAL_HEREDOC_IF([$1], [-]), [-1-], [],
+[m4_if(m4_index(m4_translit([[$1]], [
+""], ['']), ['])AS_LITERAL_HEREDOC_IF([$1], [-]), [-1-], [],
   [m4_warn([syntax], [AC_INIT: not a literal: $1])])])
 
 # _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION, BUG-REPORT, [TARNAME], [URL])

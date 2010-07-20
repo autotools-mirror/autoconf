@@ -14,11 +14,9 @@ GNU Autoconf NEWS - User visible changes.
    file for inspection by the commands in the ACTION-IF-TRUE argument.
 
 ** AC_INIT again allows parentheses and other characters that are literal
-   in quoted and unquoted here-documents and in double-quoted strings
-   in its PACKAGE and VERSION arguments.  This is relevant for
-   packages not using these strings nor products like PACKAGE_STRING
-   in other contexts, e.g., for Automake, and may be subject to
-   further restrictions in the future.  Regression introduced in 2.66.
+   in single- or double-quoted strings, and in quoted and unquoted
+   here-documents, for its PACKAGE and VERSION arguments.  Regression
+   introduced in 2.66.
 
 ** autoreconf passes warning flags to new enough versions of aclocal.
 

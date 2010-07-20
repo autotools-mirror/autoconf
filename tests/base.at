@@ -259,7 +259,16 @@ AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU String++],
-	  ["codename" 2.48], [http://clisp.cons.org/], [clisp])
+	  ['codename' 2.48], [http://clisp.cons.org/], [clisp])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU
+String++], [2.48], [http://clisp.cons.org/], [clisp])
 AC_OUTPUT
 ]])
 
