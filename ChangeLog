@@ -1,5 +1,10 @@
 2010-07-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix parsing of empty variable settings on the command line.
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Work around
+	expr bug returning 0 instead of the empty string.
+	* lib/autotest/general.m4 (AT_INIT): Likewise.
+
 	Fix typo in the manual.
 	* doc/autoconf.texi (AC_ACT_IFELSE vs AC_TRY_ACT): Fix typo.
 

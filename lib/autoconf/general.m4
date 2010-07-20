@@ -613,8 +613,9 @@ do
   fi
 
   case $ac_option in
-  *=*)	ac_optarg=`expr "X$ac_option" : '[[^=]]*=\(.*\)'` ;;
-  *)	ac_optarg=yes ;;
+  *=?*) ac_optarg=`expr "X$ac_option" : '[[^=]]*=\(.*\)'` ;;
+  *=)   ac_optarg= ;;
+  *)    ac_optarg=yes ;;
   esac
 
   # Accept the important Cygnus configure options, so we can diagnose typos.

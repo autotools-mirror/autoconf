@@ -474,8 +474,8 @@ do
   fi
 
   case $at_option in
-  *=*) at_optarg=`expr "x$at_option" : 'x[[^=]]*=\(.*\)'` ;;
-  *)   at_optarg= ;;
+  *=?*) at_optarg=`expr "X$at_option" : '[[^=]]*=\(.*\)'` ;;
+  *)    at_optarg= ;;
   esac
 
   # Accept the important Cygnus configure options, so we can diagnose typos.
