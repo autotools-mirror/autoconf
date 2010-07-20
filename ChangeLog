@@ -1,5 +1,8 @@
 2010-07-21  Eric Blake  <eblake@redhat.com>
 
+	Release Version 2.67.
+	* NEWS: Mention the release.
+
 	Prepare for release.
 	* maint.mk (PREV_VERSION_REGEXP): New macro, missed when
 	backporting update-NEWS_hash from gnulib.
