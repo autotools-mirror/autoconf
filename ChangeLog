@@ -1,5 +1,13 @@
 2010-07-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Let autoreconf pass warning flags to new-enough aclocal.
+	* bin/autoreconf.in ($aclocal_supports_warnings)
+	($automake_supports_warnings): New globals.
+	(parse_args): Set and use them.  Be sure to invoke `aclocal
+	--help' and `automake --help' just once each.
+	* NEWS: Update.
+	Prompted by report from Bruno Haible.
+
 	Fix parsing of empty variable settings on the command line.
 	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Work around
 	expr bug returning 0 instead of the empty string.

@@ -122,8 +122,12 @@ my $install = 0;
 my $symlink = 0;
 # Does aclocal support --force?
 my $aclocal_supports_force = 0;
+# Does aclocal support -Wfoo?
+my $aclocal_supports_warnings = 0;
 # Does automake support --force-missing?
 my $automake_supports_force_missing = 0;
+# Does automake support -Wfoo?
+my $automake_supports_warnings = 0;
 
 my @prepend_include;
 my @include;
@@ -182,8 +186,12 @@ sub parse_args ()
 	}
     }
 
-  $aclocal_supports_force = `$aclocal --help 2>/dev/null` =~ /--force/;
-  $automake_supports_force_missing = `$automake --help 2>/dev/null` =~ /--force-missing/;
+  my $aclocal_help = `$aclocal --help 2>/dev/null`;
+  my $automake_help = `$automake --help 2>/dev/null`;
+  $aclocal_supports_force = $aclocal_help =~ /--force/;
+  $aclocal_supports_warnings = $aclocal_help =~ /--warnings/;
+  $automake_supports_force_missing = $automake_help =~ /--force-missing/;
+  $automake_supports_warnings = $automake_help =~ /--warnings/;
 
   # Dispatch autoreconf's option to the tools.
   # --include;
@@ -242,7 +250,9 @@ sub parse_args ()
       $autoconf   .= $warn;
       $autoheader .= $warn;
       $automake   .= $warn
-	if `$automake --help` =~ /--warnings/;
+	if $automake_supports_warnings;
+      $aclocal    .= $warn
+        if $aclocal_supports_warnings;
     }
 }
 
