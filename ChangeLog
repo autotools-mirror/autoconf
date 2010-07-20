@@ -1,5 +1,11 @@
 2010-07-20  Eric Blake  <eblake@redhat.com>
 
+	Another empty argument through expr workaround.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Detect empty
+	arguments.  Reject empty file argument.
+	* tests/torture.at (AC_CONFIG_FILES, HEADERS, LINKS and COMMANDS):
+	Check for missing argument.
+
 	Also reject ' and newline from AC_INIT strings.
 	* lib/autoconf/general.m4 (_AC_INIT_LITERAL): Reject a couple more
 	problematic characters.

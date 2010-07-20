@@ -276,6 +276,12 @@ if test -w /dev/full && test -c /dev/full; then
 	   [1], [ignore], [ignore])
 fi
 
+# Validate that --file requires an argument
+AT_CHECK([./config.status --file], [1], [ignore], [stderr])
+AT_CHECK([grep 'missing file argument' stderr], [0], [ignore])
+AT_CHECK([./config.status --file=], [1], [ignore], [stderr])
+AT_CHECK([grep 'missing file argument' stderr], [0], [ignore])
+
 # Create a header
 AT_CHECK_CONFIG_CREATION_NOWRITE(header)
 # Create a header on stdout

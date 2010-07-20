@@ -1464,9 +1464,14 @@ ac_need_defaults=:
 while test $[#] != 0
 do
   case $[1] in
-  --*=*)
+  --*=?*)
     ac_option=`expr "X$[1]" : 'X\([[^=]]*\)='`
     ac_optarg=`expr "X$[1]" : 'X[[^=]]*=\(.*\)'`
+    ac_shift=:
+    ;;
+  --*=)
+    ac_option=`expr "X$[1]" : 'X\([[^=]]*\)='`
+    ac_optarg=
     ac_shift=:
     ;;
   *)
@@ -1491,6 +1496,7 @@ m4_ifdef([_AC_SEEN_CONFIG(FILES)], [dnl
     $ac_shift
     case $ac_optarg in
     *\'*) ac_optarg=`AS_ECHO(["$ac_optarg"]) | sed "s/'/'\\\\\\\\''/g"` ;;
+    '') AC_MSG_ERROR([missing file argument]) ;;
     esac
     AS_VAR_APPEND([CONFIG_FILES], [" '$ac_optarg'"])
     ac_need_defaults=false;;
