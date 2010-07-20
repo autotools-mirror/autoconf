@@ -1,3 +1,8 @@
+2010-07-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix typo in the manual.
+	* doc/autoconf.texi (AC_ACT_IFELSE vs AC_TRY_ACT): Fix typo.
+
 2010-07-19  Eric Blake  <eblake@redhat.com>
 
 	Fix up AC_INIT vs. " issues, and document it.
