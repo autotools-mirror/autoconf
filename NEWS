@@ -20,6 +20,11 @@ GNU Autoconf NEWS - User visible changes.
 
 ** autoreconf passes warning flags to new enough versions of aclocal.
 
+** Running an Autotest testsuite in parallel mode no longer triggers a
+   race condition that could cause the testsuite run to end early,
+   fixing a sporadic failure in autoconf's own testsuite.  Bug present
+   since introduction of parallel tests in 2.63b.
+
 
 * Major changes in Autoconf 2.66 (2010-07-02) [stable]
   Released by Eric Blake, based on git versions 2.65.*.

@@ -959,7 +959,10 @@ export PATH
 
 # Setting up the FDs.
 m4_define([AS_MESSAGE_LOG_FD], [5])
-m4_define([AT_JOB_FIFO_FD], [6])
+dnl The parent needs two fds to the same fifo, otherwise, there is a race
+dnl where the parent can read the fifo before a child opens it for writing
+m4_define([AT_JOB_FIFO_IN_FD], [6])
+m4_define([AT_JOB_FIFO_OUT_FD], [7])
 [#] AS_MESSAGE_LOG_FD is the log file.  Not to be overwritten if `-d'.
 if $at_debug_p; then
   at_suite_log=/dev/null
@@ -1376,7 +1379,14 @@ dnl avoid all the status output by the shell.
     (
       # Start one test group.
       $at_job_control_off
-      exec AT_JOB_FIFO_FD>"$at_job_fifo"
+dnl First child must open the fifo to avoid blocking parent; all other
+dnl children inherit it already opened from the parent.
+      if $at_first; then
+	exec AT_JOB_FIFO_OUT_FD>"$at_job_fifo"
+      else
+dnl Children do not need parent's copy of fifo.
+	exec AT_JOB_FIFO_IN_FD<&-
+      fi
 dnl When a child receives PIPE, be sure to write back the token,
 dnl so the master does not hang waiting for it.
 dnl errexit and xtrace should not be set in this shell instance,
@@ -1386,7 +1396,7 @@ dnl optimize away the _AT_CHECK subshell, so normalize here.
 dnl Ignore PIPE signals that stem from writing back the token.
 	    trap "" PIPE
 	    echo stop > "$at_stop_file"
-	    echo token >&AT_JOB_FIFO_FD
+	    echo >&AT_JOB_FIFO_OUT_FD
 dnl Do not reraise the default PIPE handler.
 dnl It wreaks havoc with ksh, see above.
 dnl	    trap - 13
@@ -1395,26 +1405,27 @@ dnl	    kill -13 $$
       at_fn_group_prepare
       if cd "$at_group_dir" &&
 	 at_fn_test $at_group &&
-	 . "$at_test_source" # AT_JOB_FIFO_FD>&-
+	 . "$at_test_source" [#] AT_JOB_FIFO_OUT_FD>&-
       then :; else
 	AS_WARN([unable to parse test group: $at_group])
 	at_failed=:
       fi
       at_fn_group_postprocess
-      echo token >&AT_JOB_FIFO_FD
+      echo >&AT_JOB_FIFO_OUT_FD
     ) &
     $at_job_control_off
     if $at_first; then
       at_first=false
-      exec AT_JOB_FIFO_FD<"$at_job_fifo"
+      exec AT_JOB_FIFO_IN_FD<"$at_job_fifo" AT_JOB_FIFO_OUT_FD>"$at_job_fifo"
     fi
     shift # Consume one token.
     if test $[@%:@] -gt 0; then :; else
-      read at_token <&AT_JOB_FIFO_FD || break
+      read at_token <&AT_JOB_FIFO_IN_FD || break
       set x $[*]
     fi
     test -f "$at_stop_file" && break
   done
+  exec AT_JOB_FIFO_OUT_FD>&-
   # Read back the remaining ($at_jobs - 1) tokens.
   set X $at_joblist
   shift
@@ -1423,9 +1434,9 @@ dnl	    kill -13 $$
     for at_job
     do
       read at_token
-    done <&AT_JOB_FIFO_FD
+    done <&AT_JOB_FIFO_IN_FD
   fi
-  exec AT_JOB_FIFO_FD<&-
+  exec AT_JOB_FIFO_IN_FD<&-
   wait
 else
   # Run serially, avoid forks and other potential surprises.

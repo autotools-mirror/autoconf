@@ -1,3 +1,13 @@
+2010-07-20 Paul Eggert  <eggert@cs.ucla.edu>
+	and Eric Blake  <eblake@redhat.com>
+
+	Plug race in parallel autotest.
+	* lib/autotest/general.m4 (AT_INIT) <Fifo job dispatcher>: Track
+	two fds to fifo in parent, to avoid race where parent can see EOF
+	before child opens fifo.  Avoid any atomicity problems with tokens
+	larger than one byte.
+	* NEWS: Document the bug fix.
+
 2010-07-20  Eric Blake  <eblake@redhat.com>
 
 	Another empty argument through expr workaround.
