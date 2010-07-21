@@ -51,6 +51,7 @@ endif
 
 PREV_VERSION := $(shell cat $(prev_version_file) 2>/dev/null)
 VERSION_REGEXP = $(subst .,\.,$(VERSION))
+PREV_VERSION_REGEXP = $(subst .,\.,$(PREV_VERSION))
 
 this-vc-tag = v$(VERSION)
 this-vc-tag-regexp = v$(VERSION_REGEXP)

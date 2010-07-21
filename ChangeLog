@@ -1,5 +1,12 @@
 2010-07-21  Eric Blake  <eblake@redhat.com>
 
+	Prepare for release.
+	* maint.mk (PREV_VERSION_REGEXP): New macro, missed when
+	backporting update-NEWS_hash from gnulib.
+	* cfg.mk (old_NEWS_hash): Correctly generate.
+	* build-aux/gendocs.sh: Temporarily break sync from upstream, to
+	avoid including spurious directories in info source tarball.
+
 	Avoid spurious testsuite failures.
 	* doc/autoconf.texi (Generating Sources): Don't mix gcc '-E' and
 	'-o -', since the former already implies stdout, while the latter

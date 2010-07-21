@@ -2,7 +2,7 @@
 # gendocs.sh -- generate a GNU manual in many formats.  This script is
 #   mentioned in maintain.texi.  See the help message below for usage details.
 
-scriptversion=2010-05-04.09
+scriptversion=2010-07-21.10
 
 # Copyright 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
 # Free Software Foundation, Inc.
@@ -282,8 +282,11 @@ fi
 
 echo Making .tar.gz for sources...
 d=`dirname $srcfile`
-srcfiles=`ls $d/*.texinfo $d/*.texi $d/*.txi $d/*.eps 2>/dev/null` || true
+(
+cd "$d"
+srcfiles=`ls *.texinfo *.texi *.txi *.eps 2>/dev/null` || true
 tar cvzfh $outdir/$PACKAGE.texi.tar.gz $srcfiles
+)
 texi_tgz_size=`calcsize $outdir/$PACKAGE.texi.tar.gz`
 
 if test -n "$docbook"; then
