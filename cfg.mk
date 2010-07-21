@@ -110,4 +110,4 @@ update-copyright-env = \
   UPDATE_COPYRIGHT_MAX_LINE_LENGTH=72
 
 # Prevent incorrect NEWS edits.
-old_NEWS_hash = 8cc9e3fa54a0b12094a7ecfdbd539f82
+old_NEWS_hash = 2ddcbbdee88e191370a07c8d73d8680c
