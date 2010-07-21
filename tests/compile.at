@@ -169,6 +169,11 @@ AT_CLEANUP
 
 AT_SETUP([AC_LANG_SOURCE example])
 
+# Set CONFIG_SITE to a nonexistent file, so that there are
+# no worries about configure output caused by sourcing a config.site.
+CONFIG_SITE=no-such-file
+export CONFIG_SITE
+
 AT_DATA([configure.ac],
 [[# Taken from autoconf.texi:Generating Sources.
 # The only change is to not fail if gcc doesn't work.
@@ -179,7 +184,7 @@ AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
 AC_LANG([C])
 AC_LANG_CONFTEST(
    [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
-gcc -E -dD -o - conftest.c || AS_EXIT([77])
+gcc -E -dD conftest.c || AS_EXIT([77])
 ]])
 
 AT_CHECK_AUTOCONF
@@ -210,6 +215,11 @@ AT_CLEANUP
 
 AT_SETUP([AC_LANG_PROGRAM example])
 
+# Set CONFIG_SITE to a nonexistent file, so that there are
+# no worries about configure output caused by sourcing a config.site.
+CONFIG_SITE=no-such-file
+export CONFIG_SITE
+
 AT_DATA([configure.ac],
 [[# Taken from autoconf.texi:Generating Sources.
 # The only change is to not fail if gcc doesn't work.
@@ -220,7 +230,7 @@ AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
 AC_LANG_CONFTEST(
 [AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
                  [[fputs (hw, stdout);]])])
-gcc -E -dD -o - conftest.c || AS_EXIT([77])
+gcc -E -dD conftest.c || AS_EXIT([77])
 ]])
 
 AT_CHECK_AUTOCONF

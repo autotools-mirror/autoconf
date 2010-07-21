@@ -8744,7 +8744,7 @@ AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
 AC_LANG([C])
 AC_LANG_CONFTEST(
    [AC_LANG_SOURCE([[const char hw[] = "Hello, World\n";]])])
-gcc -E -dD -o - conftest.c
+gcc -E -dD conftest.c
 @end example
 
 @noindent
@@ -8789,7 +8789,7 @@ AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
 AC_LANG_CONFTEST(
 [AC_LANG_PROGRAM([[const char hw[] = "Hello, World\n";]],
                  [[fputs (hw, stdout);]])])
-gcc -E -dD -o - conftest.c
+gcc -E -dD conftest.c
 @end example
 
 @noindent

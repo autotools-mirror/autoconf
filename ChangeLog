@@ -1,5 +1,13 @@
 2010-07-21  Eric Blake  <eblake@redhat.com>
 
+	Avoid spurious testsuite failures.
+	* doc/autoconf.texi (Generating Sources): Don't mix gcc '-E' and
+	'-o -', since the former already implies stdout, while the latter
+	creates -.exe on cygwin.
+	* tests/compile.at (AC_LANG_SOURCE example)
+	(AC_LANG_PROGRAM example): Likewise.  Also prevent any config.site
+	interference.
+
 	Partially revert previous patch.
 	* lib/autotest/general.m4 (AT_INIT) <serial testing>: Changing
 	at_jobs here breaks output if -j2 was requested but shell is
