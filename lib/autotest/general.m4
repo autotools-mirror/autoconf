@@ -1405,7 +1405,7 @@ dnl	    kill -13 $$
       at_fn_group_prepare
       if cd "$at_group_dir" &&
 	 at_fn_test $at_group &&
-	 . "$at_test_source" [#] AT_JOB_FIFO_OUT_FD>&-
+	 . "$at_test_source"
       then :; else
 	AS_WARN([unable to parse test group: $at_group])
 	at_failed=:
@@ -1917,7 +1917,7 @@ echo "#                             -*- compilation -*-" >> "$at_group_log"
 m4_undivert([TEST_SCRIPT])dnl Insert the code here
   set +x
   $at_times_p && times >"$at_times_file"
-) AS_MESSAGE_LOG_FD>&1 2>&1 | eval $at_tee_pipe
+) AS_MESSAGE_LOG_FD>&1 2>&1 AT_JOB_FIFO_OUT_FD>&- | eval $at_tee_pipe
 read at_status <"$at_status_file"
 [#AT_STOP_]AT_ordinal
 m4_divert_pop([TEST_GROUPS])dnl Back to KILL.

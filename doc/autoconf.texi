@@ -15006,7 +15006,7 @@ $
 Within the process which runs the @samp{descrips} script, file
 descriptor 5 is closed.
 
-Don't rely on redirection to a closed file descriptor to cause an
+Don't rely on duplicating a closed file descriptor to cause an
 error.  With Solaris @command{/bin/sh}, when the redirection fails, the
 output goes to the original file descriptor.
 
@@ -15018,6 +15018,12 @@ $ @kbd{/bin/sh -c 'echo hi >&3' 3>&-; echo $?}
 hi
 0
 @end example
+
+Fortunately, an attempt to close an already closed file descriptor will
+portably succeed.  Likewise, it is safe to use either style of
+@samp{@var{n}<&-} or @samp{@var{n}>&-} for closing a file descriptor,
+even if it doesn't match the read/write mode that the file descriptor
+was opened with.
 
 DOS variants cannot rename or remove open files, such as in
 @samp{mv foo bar >foo} or @samp{rm foo >foo}, even though this is
