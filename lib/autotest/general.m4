@@ -1458,7 +1458,6 @@ dnl	    kill -13 $$
   wait
 else
   # Run serially, avoid forks and other potential surprises.
-  at_jobs=1
   for at_group in $at_groups; do
     at_fn_group_prepare
     if cd "$at_group_dir" &&

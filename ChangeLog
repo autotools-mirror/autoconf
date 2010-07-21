@@ -1,5 +1,11 @@
 2010-07-21  Eric Blake  <eblake@redhat.com>
 
+	Partially revert previous patch.
+	* lib/autotest/general.m4 (AT_INIT) <serial testing>: Changing
+	at_jobs here breaks output if -j2 was requested but shell is
+	insufficient to support parallel testing.
+	Reported by Ralf Wildenhues.
+
 	Minor testsuite size reduction.
 	* lib/autotest/general.m4 (AT_INIT) <serial testing>: Ensure
 	at_jobs is 1.
