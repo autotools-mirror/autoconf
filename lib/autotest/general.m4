@@ -1108,7 +1108,7 @@ AS_ERROR([testsuite directory setup failed])
 # to avoid hitting zsh 4.x exit status bugs.
 
 AS_FUNCTION_DESCRIBE([at_fn_group_prepare], [],
-[Prepare running a test group.])
+[Prepare for running a test group.])
 at_fn_group_prepare ()
 {
   # The directory for additional per-group helper files.
@@ -1156,6 +1156,24 @@ at_fn_group_prepare ()
   else
     at_tee_pipe='cat >> "$at_group_log"'
   fi
+}
+
+AS_FUNCTION_DESCRIBE([at_fn_group_banner], [[ORDINAL LINE DESC PAD [BANNER]]],
+[Declare the test group ORDINAL, located at LINE with group description
+DESC, and residing under BANNER.  Use PAD to align the status column.])
+at_fn_group_banner ()
+{
+  at_setup_line="$[2]"
+  test -n "$[5]" && at_fn_banner $[5]
+  at_desc="$[3]"
+  case $[1] in
+    [[0-9]])      at_desc_line="  $[1]: ";;
+    [[0-9][0-9]]) at_desc_line=" $[1]: " ;;
+    [*])          at_desc_line="$[1]: "  ;;
+  esac
+  AS_VAR_APPEND([at_desc_line], ["$[3]$[4]"])
+  $at_quiet AS_ECHO_N(["$at_desc_line"])
+  echo "#                             -*- compilation -*-" >> "$at_group_log"
 }
 
 AS_FUNCTION_DESCRIBE([at_fn_group_postprocess], [],
@@ -1440,6 +1458,7 @@ dnl	    kill -13 $$
   wait
 else
   # Run serially, avoid forks and other potential surprises.
+  at_jobs=1
   for at_group in $at_groups; do
     at_fn_group_prepare
     if cd "$at_group_dir" &&
@@ -1821,14 +1840,10 @@ m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TEST_GROUPS])dnl
 [#AT_START_]AT_ordinal
-@%:@ AT_ordinal. m4_defn([AT_line]): m4_defn([AT_description])
-at_setup_line='m4_defn([AT_line])'
-m4_if(AT_banner_ordinal, [0], [], [at_fn_banner AT_banner_ordinal
-])dnl
-at_desc="AS_ESCAPE(m4_dquote(m4_defn([AT_description])))"
-at_desc_line=m4_format(["%3d: $at_desc%*s"], AT_ordinal,
-  m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])
-$at_quiet AS_ECHO_N(["$at_desc_line"])
+at_fn_group_banner AT_ordinal 'm4_defn([AT_line])' \
+  "AS_ESCAPE(m4_dquote(m4_defn([AT_description])))" m4_format(["%*s"],
+  m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])m4_if(
+  AT_banner_ordinal, [0], [], [ AT_banner_ordinal])
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 
@@ -1910,9 +1925,8 @@ m4_ifdef([AT_keywords], [m4_defn([AT_keywords])]);
 )dnl
 m4_divert_pop([TEST_SCRIPT])dnl Back to TEST_GROUPS
 AT_xfail
-echo "#                             -*- compilation -*-" >> "$at_group_log"
 (
-  AS_ECHO(["AT_ordinal. m4_defn([AT_line]): testing $at_desc ..."])
+  AS_ECHO(["AT_ordinal. $at_setup_line: testing $at_desc ..."])
   $at_traceon
 m4_undivert([TEST_SCRIPT])dnl Insert the code here
   set +x

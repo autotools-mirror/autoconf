@@ -1,3 +1,12 @@
+2010-07-21  Eric Blake  <eblake@redhat.com>
+
+	Minor testsuite size reduction.
+	* lib/autotest/general.m4 (AT_INIT) <serial testing>: Ensure
+	at_jobs is 1.
+	(AT_SETUP, AT_CLEANUP): Factor initialization code...
+	(AT_INIT) <at_fn_group_banner>: ...into new function.
+	Based in part on suggestion by Ralf Wildenhues.
+
 2010-07-20  Eric Blake  <eblake@redhat.com>
 
 	Close job control fd before running tests.
