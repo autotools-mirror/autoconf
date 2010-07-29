@@ -1,3 +1,9 @@
+2010-07-29  Eric Blake  <eblake@redhat.com>
+
+	docs: mention cd limitation
+	* doc/autoconf.texi (Limitations of Builtins) <cd>: Document
+	issues with empty argument.
+
 2010-07-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Add missing index entries to manual.

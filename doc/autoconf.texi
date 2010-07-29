@@ -16543,6 +16543,16 @@ Also, Autoconf-generated scripts check for this problem when computing
 variables like @code{ac_top_srcdir} (@pxref{Configuration Actions}),
 so it is safe to @command{cd} to these variables.
 
+Posix states that behavior is undefined if @command{cd} is given an
+explicit empty argument.  Some shells do nothing, some change to the
+first entry in @env{CDPATH}, some change to @env{HOME}, and some exit
+the shell rather than returning an error.  Unfortunately, this means
+that if @samp{$var} is empty, then @samp{cd "$var"} is less predictable
+than @samp{cd $var} (at least the latter is well-behaved in all shells
+at changing to @env{HOME}, although this is probably not what you wanted
+in a script).  You should check that a directory name was supplied
+before trying to change locations.
+
 See @xref{Special Shell Variables}, for portability problems involving
 @command{cd} and the @env{CDPATH} environment variable.
 Also please see the discussion of the @command{pwd} command.
