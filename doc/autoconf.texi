@@ -15041,6 +15041,20 @@ descriptor 4 had a special use on the Stardent/Kubota Titan (circa
 obsolete, so it's now safe to treat file descriptors 3 and 4 like any
 other file descriptors.
 
+On the other hand, you can't portably use multi-digit file descriptors.
+Solaris @command{ksh} doesn't understand any file descriptor larger than
+@samp{9}:
+
+@example
+$ @kbd{bash -c 'exec 10>&-'; echo $?}
+0
+$ @kbd{ksh -c 'exec 9>&-'; echo $?}
+0
+$ @kbd{ksh -c 'exec 10>&-'; echo $?}
+ksh[1]: exec: 10: not found
+127
+@end example
+
 @node File System Conventions
 @section File System Conventions
 @cindex File system conventions

@@ -1,5 +1,10 @@
 2010-07-29  Eric Blake  <eblake@redhat.com>
 
+	docs: mention ksh file descriptor limitation
+	* doc/autoconf.texi (File Descriptors): Document issue with fd 10
+	and above.
+	Reported by Ralf Wildenhues.
+
 	docs: mention cd limitation
 	* doc/autoconf.texi (Limitations of Builtins) <cd>: Document
 	issues with empty argument.
