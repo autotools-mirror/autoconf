@@ -7886,6 +7886,8 @@ may not work with C/C++ compiler drivers.
 @defmacx AC_FC_DUMMY_MAIN (@ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{F77_DUMMY_MAIN}
 @cvindex F77_DUMMY_MAIN
+@acindex{FC_DUMMY_MAIN}
+@cvindex FC_DUMMY_MAIN
 With many compilers, the Fortran libraries detected by
 @code{AC_F77_LIBRARY_LDFLAGS} or @code{AC_FC_LIBRARY_LDFLAGS} provide
 their own @code{main} entry function that initializes things like
@@ -8503,6 +8505,7 @@ which programming language is used in the subsequent tests in
 
 @anchor{AC_LANG}
 @defmac AC_LANG (@var{language})
+@acindex{LANG}
 Do compilation tests using the compiler, preprocessor, and file
 extensions for the specified @var{language}.
 
@@ -8576,8 +8579,9 @@ AC_LANG_POP([Fortran 77])
 @end defmac
 
 @defmac AC_LANG_ASSERT (@var{language})
-@acindex{LANG_ASSERT} Check statically that the current language is
-@var{language}.  You should use this in your language specific macros
+@acindex{LANG_ASSERT}
+Check statically that the current language is @var{language}.
+You should use this in your language specific macros
 to avoid that they be called with an inappropriate language.
 
 This macro runs only at @command{autoconf} time, and incurs no cost at

@@ -1,3 +1,10 @@
+2010-07-29  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Add missing index entries to manual.
+	* doc/autoconf.texi (Fortran Compiler, Language Choice): Add
+	index entries for AC_FC_DUMMY_MAIN, AC_LANG; reformat entry for
+	AC_LANG_ASSERT.
+
 2010-07-21  Eric Blake  <eblake@redhat.com>
 
 	Release Version 2.67.
