@@ -1,3 +1,10 @@
+2010-07-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix typos in perlpod docs.
+	* lib/Autom4te/ChannelDefs.pm, lib/Autom4te/Channels.pm,
+	lib/Autom4te/General.pm: Fix typos and spacing in perlpod
+	documentation and in comments.
+
 2010-07-29  Eric Blake  <eblake@redhat.com>
 
 	docs: mention ksh file descriptor limitation

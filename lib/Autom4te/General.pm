@@ -95,7 +95,7 @@ $force = undef;
 
 =item C<$help>
 
-Set to the help message associated to the option C<--help>.
+Set to the help message associated with the option C<--help>.
 
 =cut
 
@@ -104,7 +104,7 @@ $help = undef;
 
 =item C<$me>
 
-The name of this application, as should be used in diagostic messages.
+The name of this application, for diagnostic messages.
 
 =cut
 

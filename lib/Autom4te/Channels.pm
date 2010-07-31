@@ -503,7 +503,7 @@ sub _print_message ($$%)
   my $msg = _format_message ($location, $message, %opts);
   if ($opts{'partial'})
     {
-      # Incomplete message.   Store, don't print.
+      # Incomplete message.  Store, don't print.
       $partial .= $msg;
       return;
     }
