@@ -1,5 +1,9 @@
 2010-08-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Add testsuite exposure for last-minute fix in 2.67.
+	* tests/autotest.at (parallel args but non-working mkfifo):
+	New test, to expose the failure v2.66-23-g991183c avoided.
+
 	Ensure unnamed test group categories are separated from previous.
 	* doc/autoconf.texi (Writing Testsuites) <AT_BANNER>: Update
 	description.

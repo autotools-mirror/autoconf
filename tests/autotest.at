@@ -1512,6 +1512,28 @@ AT_CHECK([test -s sigpipe-stamp || test ! -f micro-suite.dir/7/micro-suite.log],
 AT_CLEANUP
 
 
+# Avoid running into a regression when mkfifo does not work.
+AT_CHECK_AT_TEST([parallel args but non-working mkfifo],
+[AT_CHECK([:])
+AT_CLEANUP
+AT_SETUP([second test])
+AT_CHECK([:])
+],
+[], [], [stdout], [stderr],
+[AT_SKIP_PARALLEL_TESTS
+mkdir bin
+cat >bin/mkfifo <<\EOF
+#! /bin/sh
+exit 1
+EOF
+chmod +x bin/mkfifo
+PATH=`pwd`/bin:$PATH
+export PATH
+],
+[AT_CHECK([grep 'second test' stdout], [], [ignore])
+], [--jobs])
+
+
 # --color
 AT_CHECK_AT_TEST([colored test results],
   [AT_CHECK([:])
