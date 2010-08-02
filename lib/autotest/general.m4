@@ -233,7 +233,7 @@ case $at_groups in
       at_print_banners=: ;;
   * ) at_print_banners=false ;;
 esac
-# Text for banner N, set to empty once printed.
+# Text for banner N, set to a single space once printed.
 m4_divert_pop([BANNERS])dnl back to DEFAULTS
 m4_divert_push([PREPARE_TESTS])dnl
 
@@ -246,9 +246,13 @@ at_fn_banner ()
 {
   $at_print_banners || return 0
   eval at_banner_text=\$at_banner_text_$[1]
-  test "x$at_banner_text" = x && return 0
-  eval at_banner_text_$[1]=
-  AS_ECHO(["$as_nl$at_banner_text$as_nl"])
+  test "x$at_banner_text" = "x " && return 0
+  eval "at_banner_text_$[1]=\" \""
+  if test -z "$at_banner_text"; then
+    $at_first || echo
+  else
+    AS_ECHO(["$as_nl$at_banner_text$as_nl"])
+  fi
 } # at_fn_banner
 
 AS_FUNCTION_DESCRIBE([at_fn_check_prepare_notrace], [REASON LINE],

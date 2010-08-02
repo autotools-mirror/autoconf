@@ -956,15 +956,18 @@ AT_CHECK(:)
 AT_CLEANUP
 
 AT_BANNER()
-AT_SETUP(two)# 4
+AT_SETUP(two a)# 4
+AT_CHECK(:)
+AT_CLEANUP
+AT_SETUP(two b)# 5
 AT_CHECK(:)
 AT_CLEANUP
 
 AT_BANNER([second])
-AT_SETUP(three a)# 5
+AT_SETUP(three a)# 6
 AT_CHECK(:)
 AT_CLEANUP
-AT_SETUP(three b)# 6
+AT_SETUP(three b)# 7
 AT_CHECK(:)
 AT_CLEANUP
 ]])
@@ -983,8 +986,11 @@ AT_CHECK_BANNERS([-2],		[first], [1], [second], [0])
 AT_CHECK_BANNERS([-3],		[first], [1], [second], [0])
 AT_CHECK_BANNERS([-k one],	[first], [1], [second], [0])
 AT_CHECK_BANNERS([3-4],		[first], [1], [second], [0])
-AT_CHECK_BANNERS([3-5],		[first], [1], [second], [1])
-AT_CHECK_BANNERS([4-5],		[first], [0], [second], [1])
+dnl There should be an empty line separating the first category from the
+dnl unnamed one.
+AT_CHECK([sed -n '/one b/,/two a/p' stdout | grep '^$'], [0], [ignore])
+AT_CHECK_BANNERS([3-6],		[first], [1], [second], [1])
+AT_CHECK_BANNERS([4-6],		[first], [0], [second], [1])
 AT_CHECK_BANNERS([3-],		[first], [1], [second], [1])
 AT_CHECK_BANNERS([-k a],	[first], [1], [second], [1])
 AT_CHECK_BANNERS([4],		[first], [0], [second], [0])

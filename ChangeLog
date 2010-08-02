@@ -1,3 +1,16 @@
+2010-08-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Ensure unnamed test group categories are separated from previous.
+	* doc/autoconf.texi (Writing Testsuites) <AT_BANNER>: Update
+	description.
+	* lib/autotest/general.m4 (AT_INIT) <at_fn_banner>: Set banner
+	to single space, not empty line, once printed.  For empty
+	banners, print a single empty line to separate them from a
+	previous test group category.
+	* tests/autotest.at (Banners): Insert another test group; adjust
+	tests accordingly.  Extend test to cover semantic change.
+	* NEWS: Update.
+
 2010-07-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix typos in perlpod docs.

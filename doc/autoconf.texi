@@ -23755,9 +23755,8 @@ When the resulting @file{testsuite} is invoked with more than one test
 group to run, its output will include a banner containing
 @var{test-category-name} prior to any tests run from that category.  The
 banner should be no more than about 40 or 50 characters.  A blank banner
-will not print, effectively ending a category and letting subsequent
-test groups behave as though they are uncategorized when run in
-isolation.
+indicates uncategorized tests; an empty line will be inserted after
+tests from an earlier category, effectively ending that category.
 @end defmac
 
 @defmac AT_SETUP (@var{test-group-name})
