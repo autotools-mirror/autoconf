@@ -1,3 +1,8 @@
+2010-08-02  Eric Blake  <eblake@redhat.com>
+
+	docs: track recent copyright assignment
+	* AUTHORS: Add Peter Rosin.
+
 2010-08-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Add testsuite exposure for last-minute fix in 2.67.
