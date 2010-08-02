@@ -1,5 +1,13 @@
 2010-08-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Avoid long lines in testsuite script.
+	* lib/autotest/general.m4 (AT_INIT): Remove definition of
+	AT_groups_all.  Initialize at_groups from at_help_all, with
+	newlines instead of spaces separating test groups numbers.
+	Adjust all code to newlines.
+	* NEWS: Update.
+	* tests/autotest.at (Huge testsuite): New test.
+
 	Try to update config.cache atomically; respect symlinks.
 	* lib/autoconf/general.m4 (AC_CACHE_SAVE): Use `mv -f' to update
 	the cache file if it is a regular file and not a symlink.  Move

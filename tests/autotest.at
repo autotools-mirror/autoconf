@@ -811,6 +811,20 @@ AT_CHECK([:])
 ])
 
 
+## ---------------- ##
+## Huge testsuite.  ##
+## ---------------- ##
+
+# Ensure we don't hit line length limits with large test suites.
+
+AT_CHECK_AT_TEST([Huge testsuite],
+[m4_for([nnn], [1], [1999], [],
+[AT_CLEANUP
+AT_SETUP([test ]nnn)
+])
+], [], [], [], [ignore], [], [], [1999])
+
+
 ## ----------------- ##
 ## Debugging a test. ##
 ## ----------------- ##

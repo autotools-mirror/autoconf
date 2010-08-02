@@ -22,6 +22,9 @@ GNU Autoconf NEWS - User visible changes.
    runs do not leave behind broken cache files.  It is still unspecified
    which subset or union of results is cached though.
 
+** Autotest testsuites should not contain long text lines any more, and be
+   portable even when very many test groups are used.
+
 
 * Major changes in Autoconf 2.67 (2010-07-21) [stable]
   Released by Eric Blake, based on git versions 2.66.*.

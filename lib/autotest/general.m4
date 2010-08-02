@@ -202,7 +202,6 @@ m4_define([AT_INIT],
    [m4_expand([: $1])]))]
 [m4_define([AT_ordinal], 0)]
 [m4_define([AT_banner_ordinal], 0)]
-[m4_define([AT_groups_all], [])]
 [m4_define([AT_help_all], [])]
 [m4_map_args([_m4_popdef], _AT_DEFINE_INIT_LIST)]
 [m4_wrap([_AT_FINISH])]
@@ -226,11 +225,10 @@ at_cli_args="$[@]"
 
 m4_divert_push([BANNERS])dnl
 
-# Should we print banners?  at_groups is space-separated for entire test,
-# newline-separated if only a subset of the testsuite is run.
-case $at_groups in
-  *' '*' '* | *"$as_nl"*"$as_nl"* )
-      at_print_banners=: ;;
+# Should we print banners?  Yes if more than one test is run.
+case $at_groups in #(
+  *$as_nl* )
+      at_print_banners=: ;; #(
   * ) at_print_banners=false ;;
 esac
 # Text for banner N, set to a single space once printed.
@@ -435,14 +433,14 @@ at_color=m4_ifdef([AT_color], [AT_color], [no])
 # List of the tested programs.
 at_tested='m4_ifdef([AT_tested],
   [m4_translit(m4_dquote(m4_defn([AT_tested])), [ ], m4_newline)])'
-# List of the all the test groups.
-at_groups_all='AT_groups_all'
 # As many question marks as there are digits in the last test group number.
 # Used to normalize the test group numbers so that `ls' lists them in
 # numerical order.
 at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [?])'
 # Description of all the test groups.
 at_help_all="AS_ESCAPE(m4_dquote(m4_defn([AT_help_all])))"
+# List of the all the test groups.
+at_groups_all=`AS_ECHO(["$at_help_all"]) | sed 's/;.*//'`
 
 AS_FUNCTION_DESCRIBE([at_fn_validate_ranges], [NAME...],
 [Validate and normalize the test group number contained in each
@@ -535,24 +533,24 @@ do
 
     [[0-9] | [0-9][0-9] | [0-9][0-9][0-9] | [0-9][0-9][0-9][0-9]])
 	at_fn_validate_ranges at_option
-	AS_VAR_APPEND([at_groups], ["$at_option "])
+	AS_VAR_APPEND([at_groups], ["$at_option$as_nl"])
 	;;
 
     # Ranges
     [[0-9]- | [0-9][0-9]- | [0-9][0-9][0-9]- | [0-9][0-9][0-9][0-9]-])
 	at_range_start=`echo $at_option |tr -d X-`
 	at_fn_validate_ranges at_range_start
-	at_range=`AS_ECHO([" $at_groups_all "]) | \
-	  sed -e 's/^.* \('$at_range_start' \)/\1/'`
-	AS_VAR_APPEND([at_groups], ["$at_range "])
+	at_range=`AS_ECHO(["$at_groups_all"]) | \
+	  sed -ne '/^'$at_range_start'$/,$p'`
+	AS_VAR_APPEND([at_groups], ["$at_range$as_nl"])
 	;;
 
     [-[0-9] | -[0-9][0-9] | -[0-9][0-9][0-9] | -[0-9][0-9][0-9][0-9]])
 	at_range_end=`echo $at_option |tr -d X-`
 	at_fn_validate_ranges at_range_end
-	at_range=`AS_ECHO([" $at_groups_all "]) | \
-	  sed -e 's/\( '$at_range_end'\) .*$/\1/'`
-	AS_VAR_APPEND([at_groups], ["$at_range "])
+	at_range=`AS_ECHO(["$at_groups_all"]) | \
+	  sed -ne '1,/^'$at_range_end'$/p'`
+	AS_VAR_APPEND([at_groups], ["$at_range$as_nl"])
 	;;
 
     [[0-9]-[0-9] | [0-9]-[0-9][0-9] | [0-9]-[0-9][0-9][0-9]] | \
@@ -569,10 +567,9 @@ do
 	  at_range_start=$at_tmp
 	fi
 	at_fn_validate_ranges at_range_start at_range_end
-	at_range=`AS_ECHO([" $at_groups_all "]) | \
-	  sed -e 's/^.*\( '$at_range_start' \)/\1/' \
-	      -e 's/\( '$at_range_end'\) .*$/\1/'`
-	AS_VAR_APPEND([at_groups], ["$at_range "])
+	at_range=`AS_ECHO(["$at_groups_all"]) | \
+	  sed -ne '/^'$at_range_start'$/,/^'$at_range_end'$/p'`
+	AS_VAR_APPEND([at_groups], ["$at_range$as_nl"])
 	;;
 
     # Directory selection.
@@ -627,11 +624,9 @@ do
 	  at_groups_selected=`AS_ECHO(["$at_groups_selected"]) |
 	      grep -i $at_invert ["^[1-9][^;]*;.*[; ]$at_keyword[ ;]"]`
 	done
-	# Smash the newlines.
-	at_groups_selected=`AS_ECHO(["$at_groups_selected"]) | sed 's/;.*//' |
-	  tr "$as_nl" ' '
-	`
-	AS_VAR_APPEND([at_groups], ["$at_groups_selected "])
+	# Smash the keywords.
+	at_groups_selected=`AS_ECHO(["$at_groups_selected"]) | sed 's/;.*//'`
+	AS_VAR_APPEND([at_groups], ["$at_groups_selected$as_nl"])
 	;;
     --recheck)
 	at_recheck=:
@@ -679,11 +674,11 @@ else
 	s/^[ ]*\([1-9][0-9]*\):.*/\1/p
       }
       /^## Detailed failed tests/q
-      '] "$at_suite_log" | tr "$as_nl" ' '`
-    AS_VAR_APPEND([at_groups], ["$at_oldfails"])
+      '] "$at_suite_log"`
+    AS_VAR_APPEND([at_groups], ["$at_oldfails$as_nl"])
   fi
   # Sort the tests, removing duplicates.
-  at_groups=`AS_ECHO(["$at_groups"]) | tr ' ' "$as_nl" | sort -nu`
+  at_groups=`AS_ECHO(["$at_groups"]) | sort -nu | sed '/^$/d'`
 fi
 
 if test x"$at_color" = xalways \
@@ -777,21 +772,13 @@ AT_TESTSUITE_NAME test groups:
       KEYWORDS
 
 _ATEOF
-  # Passing at_groups is tricky.  We cannot use it to form a literal string
-  # or regexp because of the limitation of AIX awk.  And Solaris' awk
-  # doesn't grok more than 99 fields in a record, so we have to use `split'.
-  # at_groups needs to be space-separated for this script to work.
-  case $at_groups in
-    *"$as_nl"* )
-      at_groups=`AS_ECHO(["$at_groups"]) | tr "$as_nl" ' '` ;;
-  esac
-  AS_ECHO(["$at_groups$as_nl$at_help_all"]) |
-    awk 'BEGIN { FS = ";" }
-	 NR == 1 {
-	   for (n = split ($ 0, a, " "); n; n--)
-	     selected[[a[n]]] = 1
+  # Pass an empty line as separator between selected groups and help.
+  AS_ECHO(["$at_groups$as_nl$as_nl$at_help_all"]) |
+    awk 'NF == 1 && FS != ";" {
+	   selected[[$ 1]] = 1
 	   next
 	 }
+	 /^$/ { FS = ";" }
 	 NF > 0 {
 	   if (selected[[$ 1]]) {
 	     printf " %3d: %-18s %s\n", $ 1, $ 2, $ 3
@@ -1392,8 +1379,7 @@ dnl cause changed test semantics; e.g., a sleep will be interrupted.
 
   echo
   # Turn jobs into a list of numbers, starting from 1.
-  at_joblist=`AS_ECHO([" $at_groups_all "]) | \
-    sed 's/\( '$at_jobs'\) .*/\1/'`
+  at_joblist=`AS_ECHO(["$at_groups"]) | sed -n 1,${at_jobs}p`
 
   set X $at_joblist
   shift
@@ -1844,7 +1830,6 @@ m4_define([AT_line], AT_LINE)
 m4_define([AT_xfail], [at_xfail=no])
 m4_define([AT_description], m4_expand([$1]))
 m4_define([AT_ordinal], m4_incr(AT_ordinal))
-m4_append([AT_groups_all], [ ]m4_defn([AT_ordinal]))
 m4_divert_push([TEST_GROUPS])dnl
 [#AT_START_]AT_ordinal
 at_fn_group_banner AT_ordinal 'm4_defn([AT_line])' \
