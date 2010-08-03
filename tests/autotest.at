@@ -1571,7 +1571,7 @@ std=`printf '\033@<:@m'`
 # GNU or BSD 'grep -a' works on files, but is not portable.
 AT_CHECK([case `echo "$std" | grep .` in #'' restore font-lock
 	    $std) :;;
-	    *) Exit 77;;
+	    *) exit 77;;
 	  esac], [], [ignore], [],
 	 [echo "grep can't parse nonprinting characters" >&2])
 
