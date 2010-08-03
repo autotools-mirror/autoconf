@@ -16202,6 +16202,20 @@ hence read-only.  Do not use it.
 Nowadays, it is difficult to find a shell that does not support
 shell functions at all.  However, some differences should be expected.
 
+When declaring a shell function, you must include whitespace between the
+@samp{)} after the function name and the start of the compound
+expression, to avoid upsetting @command{ksh}.  While it is possible to
+use any compound command, most scripts use @samp{@{@dots{}@}}.
+
+@example
+$ @kbd{/bin/sh -c 'a()@{ echo hi;@}; a'}
+hi
+$ @kbd{ksh -c 'a()@{ echo hi;@}; a'}
+ksh: syntax error at line 1: `@}' unexpected
+$ @kbd{ksh -c 'a() @{ echo hi;@}; a'}
+hi
+@end example
+
 Inside a shell function, you should not rely on the error status of a
 subshell if the last command of that subshell was @code{exit} or
 @code{trap}, as this triggers bugs in zsh 4.x; while Autoconf tries to
@@ -16213,10 +16227,10 @@ function.  This has the effect that using a function as the first
 command in a @command{trap} handler can cause problems.
 
 @example
-$ @kbd{bash -c 'foo()@{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
+$ @kbd{bash -c 'foo() @{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
 2
 2
-$ @kbd{ash -c 'foo()@{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
+$ @kbd{ash -c 'foo() @{ echo $?; @}; trap foo 0; (exit 2); exit 2'; echo $?}
 0
 2
 @end example
@@ -16231,8 +16245,8 @@ Not all shells treat shell functions as simple commands impacted by
 @samp{set -e}, for example with Solaris 10 @command{bin/sh}:
 
 @example
-$ @kbd{bash -c 'f()@{ return 1; @}; set -e; f; echo oops}
-$ @kbd{/bin/sh -c 'f()@{ return 1; @}; set -e; f; echo oops}
+$ @kbd{bash -c 'f() @{ return 1; @}; set -e; f; echo oops}
+$ @kbd{/bin/sh -c 'f() @{ return 1; @}; set -e; f; echo oops}
 oops
 @end example
 
@@ -16259,13 +16273,13 @@ Meanwhile, not all shells follow the Posix rule that the assignment must
 affect the current environment in the same manner as special built-ins.
 
 @example
-$ @kbd{/bin/sh -c 'func()@{ echo $a;@}; a=1 func; echo $a'}
+$ @kbd{/bin/sh -c 'func() @{ echo $a;@}; a=1 func; echo $a'}
 @result{}
 @result{}
-$ @kbd{ash -c 'func()@{ echo $a;@}; a=1 func; echo $a'}
+$ @kbd{ash -c 'func() @{ echo $a;@}; a=1 func; echo $a'}
 @result{}1
 @result{}
-$ @kbd{bash -c 'set -o posix; func()@{ echo $a;@}; a=1 func; echo $a'}
+$ @kbd{bash -c 'set -o posix; func() @{ echo $a;@}; a=1 func; echo $a'}
 @result{}1
 @result{}1
 @end example

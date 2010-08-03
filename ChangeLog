@@ -1,3 +1,8 @@
+2010-08-03  Eric Blake  <eblake@redhat.com>
+
+	docs: mention ksh bug with function syntax
+	* doc/autoconf.texi (Shell Functions): Document ksh93 limitation.
+
 2010-08-03  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix typo in Autotest color test, for dash testsuite failure.
