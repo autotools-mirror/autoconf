@@ -15283,6 +15283,32 @@ $ @kbd{echo "`echo \"hello\"`"}
 There is just no portable way to use double-quoted strings inside
 double-quoted back-quoted expressions (pfew!).
 
+Bash 4.1 has a bug where quoted empty strings adjacent to unquoted
+parameter expansions are elided during word splitting.  Meanwhile, zsh
+does not perform word splitting except when in Bourne compatibility
+mode.  In the example below, the correct behavior is to have five
+arguments to the function, and exactly two spaces on either side of the
+middle @samp{-}, since word splitting collapses multiple spaces in
+@samp{$f} but leaves empty arguments intact.
+
+@example
+$ @kbd{bash -c 'n() @{ echo "$#$@@"; @}; f="  -  "; n - ""$f"" -'}
+3- - -
+$ @kbd{ksh -c 'n() @{ echo "$#$@@"; @}; f="  -  "; n - ""$f"" -'}
+5-  -  -
+$ @kbd{zsh -c 'n() @{ echo "$#$@@"; @}; f="  -  "; n - ""$f"" -'}
+3-   -   -
+$ @kbd{zsh -c 'emulate sh;}
+> @kbd{n() @{ echo "$#$@@"; @}; f="  -  "; n - ""$f"" -'}
+5-  -  -
+@end example
+
+@noindent
+You can work around this by doing manual word splitting, such as using
+@samp{"$str" $list} rather than @samp{"$str"$list}.
+
+There are also portability pitfalls with particular expansions:
+
 @table @code
 @item $@@
 @cindex @samp{"$@@"}

@@ -1,5 +1,10 @@
 2010-08-03  Eric Blake  <eblake@redhat.com>
 
+	docs: mention bash bug with word splitting
+	* doc/autoconf.texi (Shell Substitutions): Document bash bug, and
+	zsh default behavior difference.
+	Reported by Ralf Wildenhues.
+
 	docs: mention ksh bug with function syntax
 	* doc/autoconf.texi (Shell Functions): Document ksh93 limitation.
 
