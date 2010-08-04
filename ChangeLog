@@ -1,3 +1,13 @@
+2010-08-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix AC_LANG_SOURCE and AC_LANG_PROGRAM tests.
+	* tests/compile.at (AC_LANG_SOURCE example)
+	(AC_LANG_PROGRAM example): Fix broken sed script for
+	extracting the interesting part of the conftest.c file.
+	Fixes test failure on Haiku.
+	* THANKS: Update.
+	Report by Scott McCreary.
+
 2010-08-03  Eric Blake  <eblake@redhat.com>
 
 	docs: mention bash bug with word splitting

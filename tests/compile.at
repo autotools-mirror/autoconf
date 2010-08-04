@@ -190,12 +190,11 @@ gcc -E -dD conftest.c || AS_EXIT([77])
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [], [stdout])
 # Taken from autoconf.texi:Generating Sources.
-# Note that the output may contain more than one line matching
+# Note that the output may contain more defines and lines matching
 #   # 1 "conftest.c"
-# so delete everything until the last one.
-AT_CHECK([sed  '1,/# 1 "conftest\.c"/d' stdout], [],
-[[
-#define PACKAGE_NAME "Hello"
+# so delete everything before the interesting output.
+AT_CHECK([sed -n '/#define PACKAGE/,$p' stdout], [],
+[[#define PACKAGE_NAME "Hello"
 #define PACKAGE_TARNAME "hello"
 #define PACKAGE_VERSION "1.0"
 #define PACKAGE_STRING "Hello 1.0"
@@ -236,12 +235,11 @@ gcc -E -dD conftest.c || AS_EXIT([77])
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [], [stdout])
 # Taken from autoconf.texi:Generating Sources.
-# Note that the output may contain more than one line matching
+# Note that the output may contain more defines and lines matching
 #   # 1 "conftest.c"
-# so delete everything until the last one.
-AT_CHECK([sed  '1,/# 1 "conftest\.c"/d' stdout], [],
-[[
-#define PACKAGE_NAME "Hello"
+# so delete everything before the interesting output.
+AT_CHECK([sed -n '/#define PACKAGE/,$p' stdout], [],
+[[#define PACKAGE_NAME "Hello"
 #define PACKAGE_TARNAME "hello"
 #define PACKAGE_VERSION "1.0"
 #define PACKAGE_STRING "Hello 1.0"
