@@ -1,5 +1,12 @@
 2010-08-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix testsuite failure due to bugs in third-party aclocal macros.
+	* tests/torture.at (Non-literal AC_CONFIG_SUBDIRS): Create a
+	hand-written aclocal.m4 file, so the -Werror test doesn't fail
+	over aclocal warnings about errors in third-party macro files.
+	Simplify test accordingly, calling autoreconf throughout.
+	Report by Bob Friesenhahn.
+
 	Fix AC_LANG_SOURCE and AC_LANG_PROGRAM tests.
 	* tests/compile.at (AC_LANG_SOURCE example)
 	(AC_LANG_PROGRAM example): Fix broken sed script for

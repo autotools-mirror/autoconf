@@ -1708,9 +1708,6 @@ AT_CLEANUP
 AT_SETUP([Non-literal AC_CONFIG_SUBDIRS])
 AT_KEYWORDS([autoreconf])
 
-# We use aclocal (via autoreconf).
-AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
-
 AT_DATA([install-sh], [])
 AT_DATA([configure.in],
 [[AC_INIT(GNU Outer, 1.0)
@@ -1723,6 +1720,11 @@ fi
 AC_CONFIG_SUBDIRS([$my_subdirs])
 AC_OUTPUT
 ]])
+
+# Hand-written aclocal.m4, so we don't invoke `aclocal -Werror' which
+# could barf over warnings in third-party macro files, or fail over
+# warnings with older aclocal which didn't yet understand -W*.
+AT_DATA([aclocal.m4])
 
 AS_MKDIR_P([foo])
 
@@ -1738,9 +1740,7 @@ AT_CHECK([autoreconf -Werror -v], [1], [ignore], [stderr])
 AT_CHECK([grep 'AC_CONFIG_SUBDIRS:.*literals' stderr], [0], [ignore])
 AT_CHECK([autoreconf -v], [0], [ignore], [stderr])
 AT_CHECK([grep 'AC_CONFIG_SUBDIRS:.*literals' stderr], [0], [ignore])
-# We cannot assume aclocal won't warn (aclocal-1.9 does not understand -W*
-# options), so check autoconf only.
-AT_CHECK([autoconf --force -Wno-syntax], 0, [ignore], [stderr])
+AT_CHECK([autoreconf -v --force -Wno-syntax], 0, [ignore], [stderr])
 AT_CHECK([grep 'AC_CONFIG_SUBDIRS:.*literals' stderr], [1])
 
 AT_CHECK([./configure $configure_options], [0], [ignore])
