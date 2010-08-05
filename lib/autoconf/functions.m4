@@ -357,6 +357,7 @@ AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 AN_FUNCTION([alloca], [AC_FUNC_ALLOCA])
 AN_HEADER([alloca.h], [AC_FUNC_ALLOCA])
 AC_DEFUN([AC_FUNC_ALLOCA],
+[AC_REQUIRE([AC_TYPE_SIZE_T])]dnl
 [# The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
@@ -388,7 +389,7 @@ AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
  #pragma alloca
 #   else
 #    ifndef alloca /* predefined by HP cc +Olibcalls */
-char *alloca ();
+void *alloca (size_t);
 #    endif
 #   endif
 #  endif

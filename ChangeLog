@@ -1,3 +1,11 @@
+2010-08-05  Bruno Haible  <bruno@clisp.org>
+	and Eric Blake  <eblake@redhat.com>
+
+	AC_FUNC_ALLOCA: modernize
+	* lib/autoconf/functions.m4 (AC_FUNC_ALLOCA): Assume that alloca's
+	return type is 'void *', not 'char *'.  Supply C89 prototype.
+	Reported by Thomas Klausner.
+
 2010-08-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix testsuite failure due to bugs in third-party aclocal macros.
