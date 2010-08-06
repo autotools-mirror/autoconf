@@ -1,3 +1,9 @@
+2010-08-06  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix description of AC_CONFIG_TESTDIR to not mention atconfig.in.
+	* doc/autoconf.texi (Making testsuite Scripts): atconfig is not
+	created from an input template.
+
 2010-08-05  Bruno Haible  <bruno@clisp.org>
 	and Eric Blake  <eblake@redhat.com>
 

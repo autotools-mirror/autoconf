@@ -24229,9 +24229,9 @@ Invoke @code{AC_CONFIG_TESTDIR}.
 @defmac AC_CONFIG_TESTDIR (@var{directory}, @dvar{test-path, directory})
 @acindex{CONFIG_TESTDIR}
 An Autotest test suite is to be configured in @var{directory}.  This
-macro requires the instantiation of @file{@var{directory}/atconfig} from
-@file{@var{directory}/atconfig.in}, and sets the default
-@code{AUTOTEST_PATH} to @var{test-path} (@pxref{testsuite Invocation}).
+macro causes @file{@var{directory}/atconfig} to be created by
+@command{config.status} and sets the default @code{AUTOTEST_PATH} to
+@var{test-path} (@pxref{testsuite Invocation}).
 @end defmac
 
 @item
