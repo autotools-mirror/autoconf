@@ -80,6 +80,11 @@ m4_define([AT_CHECK_PERL_SYNTAX],
 #  script.4s:1: /usr/local/bin/gm4: Cannot open foo: No such file or directory
 #  autom4te: /usr/local/bin/gm4 failed with exit status: 1
 #
+# or this (GNU M4 1.4.13 installed as m4-1.4.13):
+#
+#  /usr/bin/m4-1.4.13:script.4s:1: include: cannot open `foo': No such file or directory
+#  autom4te: /usr/bin/m4-1.4.13 failed with exit status: 1
+#
 # becomes
 #
 #  m4:script.4s:1: cannot open `foo': No such file or directory
@@ -108,8 +113,8 @@ m4_define([AT_CHECK_M4],
 [AT_CHECK([$1], [$2], [$3],
           m4_case([$4], [], [], [ignore], [ignore], [stderr]))
 m4_case([$4], [], [], [ignore], [],
-[AT_CHECK([[sed 's/^[^:]*m4[.ex]*: *\([^:]*:\) *\([0-9][0-9]*: \)/m4:\1\2/
-	s/^\([^:]*:\) *\([0-9][0-9]*:\)[^:]*m4[.ex]*: /m4:\1\2 /
+[AT_CHECK([[sed 's/^[^:]*m4[-.ex0-9]*: *\([^:]*:\) *\([0-9][0-9]*: \)/m4:\1\2/
+	s/^\([^:]*:\) *\([0-9][0-9]*:\)[^:]*m4[-.ex0-9]*: /m4:\1\2 /
 	s/: C\(annot open \)\([^`:]*\):/: c\1`\2'\'':/
 	s/: include:\( cannot open\)/:\1/
 	s/^autom4te: [^ ]*m4[.ex]* /autom4te: m4 /
