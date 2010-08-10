@@ -1,5 +1,11 @@
 2010-08-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Skip AC_FC_SRCEXT([f90]) tests with a Fortran 77 compiler in $FC.
+	* tests/fortran.at (AC_FC_FREEFORM with AC_FC_SRCEXT)
+	(AC_FC_FIXEDFORM with AC_FC_SRCEXT): Skip if the compiler cannot
+	handle files with .f90 extension.
+	Report by Luke Dalessandro.
+
 	Fix testsuite failures with typical m4-x.y.z program suffix.
 	* tests/local.at (AT_CHECK_M4): Normalize hyphens and digits
 	after the `m4' program name.
