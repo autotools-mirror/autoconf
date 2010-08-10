@@ -1,3 +1,11 @@
+2010-08-10  Peter Rosin  <peda@lysator.liu.se>
+
+	Keep testsuite files on unexpected pass.
+	* lib/autotest/general.m4 (AT_INIT) <at_fn_group_postprocess>:
+	Don't cleanup the group directory when a test unexpectedly passes.
+	* tests/autotest.at (Cleanup): Check that an unexpected pass leaves
+	the test group directory intact.
+
 2010-08-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Skip AC_FC_SRCEXT([f90]) tests with a Fortran 77 compiler in $FC.

@@ -1253,8 +1253,9 @@ _ATEOF
       AS_ECHO(["$at_log_msg"]) >> "$at_group_log"
       AS_ECHO(["$at_log_msg"]) >&AS_MESSAGE_LOG_FD
 
-      # Cleanup the group directory, unless the user wants the files.
-      if $at_debug_p; then
+      # Cleanup the group directory, unless the user wants the files
+      # or the success was unexpected.
+      if $at_debug_p || test $at_res = xpass; then
 	at_fn_create_debugging_script
       else
 	if test -d "$at_group_dir"; then

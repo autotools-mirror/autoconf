@@ -478,6 +478,7 @@ AT_CHECK_AT([Binary output],
 
 AT_CHECK_AT_TEST([Cleanup],
   [AT_CHECK([test ! -f cleanup.success && test ! -f cleanup.failure])
+   AT_XFAIL_IF([$xfail])
    AT_CHECK_UNQUOTED([exit $value], [ignore], [$output],
      [], [touch cleanup.failure], [touch cleanup.success])],
   [], [], [], [],
@@ -487,23 +488,29 @@ AT_CHECK_AT_TEST([Cleanup],
    AT_CHECK([test -f micro-suite.dir/1/cleanup.success])
    AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
 
-   AT_CHECK([$CONFIG_SHELL ./micro-suite -d value=1], [], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -d xfail=false value=1], [], [ignore])
    AT_CHECK([test -f micro-suite.dir/1/cleanup.success])
    AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
 
-   AT_CHECK([$CONFIG_SHELL ./micro-suite -d value=1 output=mismatch],
+   AT_CHECK([$CONFIG_SHELL ./micro-suite xfail=: value=0],
+     [1], [ignore], [ignore])
+   AT_CHECK([test -f micro-suite.dir/1/cleanup.success])
+   AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
+
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -d xfail=false value=1 output=mismatch],
      [1], [ignore], [ignore])
    AT_CHECK([test ! -f micro-suite.dir/1/cleanup.success])
    AT_CHECK([test -f micro-suite.dir/1/cleanup.failure])
 
-   AT_CHECK([$CONFIG_SHELL ./micro-suite -d value=77], [], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -d xfail=false value=77], [], [ignore])
    AT_CHECK([test ! -f micro-suite.dir/1/cleanup.success])
    AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
 
-   AT_CHECK([$CONFIG_SHELL ./micro-suite -d value=99], [1], [ignore], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite -d xfail=false value=99],
+     [1], [ignore], [ignore])
    AT_CHECK([test ! -f micro-suite.dir/1/cleanup.success])
    AT_CHECK([test ! -f micro-suite.dir/1/cleanup.failure])
-  ], [-d value=0])
+  ], [-d xfail=false value=0])
 
 ## ----------------------------------------------------- ##
 ## Newlines and command substitutions in test commands.  ##
