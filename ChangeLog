@@ -1,3 +1,14 @@
+2010-08-14  Eric Blake  <eblake@redhat.com>
+
+	AC_INIT: allow bugreport to contain '?'
+	* lib/autoconf/general.m4 (_AC_INIT_PACKAGE): Relax check.
+	* tests/base.at (AC_INIT with unusual version strings): Enhance
+	test.
+	* doc/autoconf.texi (Initializing configure): Document this.
+	* NEWS: Likewise.
+	* THANKS: Update.
+	Reported by Yavor Doganov and others.
+
 2010-08-10  Peter Rosin  <peda@lysator.liu.se>
 
 	Keep testsuite files on unexpected pass.

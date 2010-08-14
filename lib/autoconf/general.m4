@@ -239,7 +239,7 @@ m4_define([_AC_INIT_LITERAL],
 m4_define([_AC_INIT_PACKAGE],
 [_AC_INIT_LITERAL([$1])
 _AC_INIT_LITERAL([$2])
-AS_LITERAL_IF([$3], [],  [m4_warn([syntax], [AC_INIT: not a literal: $3])])
+_AC_INIT_LITERAL([$3])
 m4_ifndef([AC_PACKAGE_NAME],
 	  [m4_define([AC_PACKAGE_NAME],     [$1])])
 m4_ifndef([AC_PACKAGE_TARNAME],

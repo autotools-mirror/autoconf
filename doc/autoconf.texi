@@ -1888,7 +1888,8 @@ Exactly @samp{@var{package} @var{version}}.
 @acindex{PACKAGE_BUGREPORT}
 @ovindex PACKAGE_BUGREPORT
 @cvindex PACKAGE_BUGREPORT
-Exactly @var{bug-report}, if one was provided.
+Exactly @var{bug-report}, if one was provided.  Typically an email
+address, or URL to a bug management web page.
 
 @item @code{AC_PACKAGE_URL}, @code{PACKAGE_URL}
 @acindex{PACKAGE_URL}

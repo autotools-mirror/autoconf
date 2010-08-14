@@ -5,6 +5,9 @@ GNU Autoconf NEWS - User visible changes.
 ** AT_BANNER() with empty argument will cause visual separation from previous
    test category.
 
+** AC_INIT again allows URLs with '?' for its BUG-REPORT argument.
+   Regression introduced in 2.66.
+
 
 * Major changes in Autoconf 2.67 (2010-07-21) [stable]
   Released by Eric Blake, based on git versions 2.66.*.
