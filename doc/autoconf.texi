@@ -9809,6 +9809,12 @@ results with the existing cache file.)  This may cause problems,
 however, if the system configuration (e.g., the installed libraries or
 compilers) changes and the stale cache file is not deleted.
 
+If @command{configure} is interrupted at the right time when it updates
+a cache file outside of the build directory where the @command{configure}
+script is run, it may leave behind a temporary file named after the
+cache file with digits following it.  You may safely delete such a file.
+
+
 @node Cache Checkpointing
 @subsection Cache Checkpointing
 

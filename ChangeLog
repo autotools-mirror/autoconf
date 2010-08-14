@@ -1,3 +1,15 @@
+2010-08-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Try to update config.cache atomically; respect symlinks.
+	* lib/autoconf/general.m4 (AC_CACHE_SAVE): Use `mv -f' to update
+	the cache file if it is a regular file and not a symlink.  Move
+	first to temporary name in the target directory if not in the
+	current directory for atomicity across mount points.
+	* tests/base.at (AC_CACHE_CHECK): Try symlinked cache file.
+	* doc/autoconf.texi (Cache Files): Leftover temporary cache
+	files may be deleted by the user.
+	* NEWS: Update.
+
 2010-08-27  Eric Blake  <eblake@redhat.com>
 
 	m4sh: protect LINENO against stray macro

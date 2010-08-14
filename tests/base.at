@@ -457,6 +457,15 @@ AT_CHECK_CONFIGURE([], [], [stdout])
 AT_CHECK([grep cache stdout], [1])
 AT_CHECK([LC_ALL=C ls -t config.cache a-stamp-file | sed 1q | grep config.cache], [1])
 
+# Using a symlinked cache file works.
+: > cache
+rm -f config.cache
+AS_LN_S([cache], [config.cache])
+AT_CHECK_CONFIGURE([-C])
+# Either the system does not support symlinks, or the symlinked-to file
+# should be updated.
+AT_CHECK([test -s cache || test ! -h config.cache])
+
 # config.site can specify a site-wide cache, accumulating information.
 # Also test that we don't run afoul of sourcing a file with leading -.
 AT_DATA([-config.site],
