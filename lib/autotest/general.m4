@@ -1257,6 +1257,9 @@ _ATEOF
       # or the success was unexpected.
       if $at_debug_p || test $at_res = xpass; then
 	at_fn_create_debugging_script
+	if test $at_res = xpass && $at_errexit; then
+	  echo stop > "$at_stop_file"
+	fi
       else
 	if test -d "$at_group_dir"; then
 	  find "$at_group_dir" -type d ! -perm -700 -exec chmod u+rwx \{\} \;

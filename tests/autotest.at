@@ -368,12 +368,41 @@ AT_CHECK_AT_TEST([errexit],
   [AT_CHECK([false])
    AT_CLEANUP
    AT_SETUP([test that should not be run])
-   AT_CHECK([:])],
+   AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([xpassing test])
+   AT_XFAIL_IF([:])
+   AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([another test that should not be run])
+   AT_CHECK([:])
+   AT_CLEANUP
+   AT_SETUP([skipping test])
+   AT_CHECK([exit 77])
+   AT_CLEANUP
+   AT_SETUP([xfailing test])
+   AT_XFAIL_IF([:])
+   AT_CHECK([false])
+   AT_CLEANUP
+   AT_SETUP([a test that should be run])
+   AT_CLEANUP
+   AT_SETUP([hard failure])
+   AT_XFAIL_IF([:])
+   AT_CHECK([exit 99])
+   AT_CLEANUP
+   AT_SETUP([yet another test that should not be run])],
   [], [1], [stdout], [stderr], [],
   [AT_CHECK([test -f micro-suite.log], [1])
    touch micro-suite.log # shut up AT_CAPTURE_FILE.
    AT_CHECK([grep "should not be run" stdout], [1])
-   AT_CHECK([grep "1 .* inhibited subsequent" stderr], [], [ignore])],
+   AT_CHECK([grep "1 .* inhibited subsequent" stderr], [], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite --errexit 3-], [1], [stdout], [stderr])
+   AT_CHECK([grep "should not be run" stdout], [1])
+   AT_CHECK([grep "1 .* inhibited subsequent" stderr], [], [ignore])
+   AT_CHECK([$CONFIG_SHELL ./micro-suite --errexit 5-], [1], [stdout], [stderr])
+   AT_CHECK([grep "should be run" stdout], [0], [ignore])
+   AT_CHECK([grep "should not be run" stdout], [1])
+   AT_CHECK([grep "inhibited subsequent" stderr], [], [ignore])],
   [--errexit])
 
 AT_CHECK_AT_TEST([unquoted output],

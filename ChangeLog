@@ -1,3 +1,11 @@
+2010-08-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix Autotest --errexit to exit after XPASSing tests.
+	* lib/autotest/general.m4 (AT_INIT) <at_fn_group_postprocess>:
+	Exit after an unexpected passing test if $at_errexit.
+	* tests/autotest.at (errexit): Also try tests that xpass, skip,
+	xfail, or fail hard.
+
 2010-08-14  Eric Blake  <eblake@redhat.com>
 
 	AC_INIT: allow bugreport to contain '?'
