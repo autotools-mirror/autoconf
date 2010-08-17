@@ -13491,12 +13491,13 @@ done
 @comment AS_VAR_GET is intentionally undocumented; it can't handle
 @comment trailing newlines uniformly, and forks too much.
 
-@defmac AS_VAR_IF (@var{var}, @ovar{value}, @ovar{if-equal}, @
+@defmac AS_VAR_IF (@var{var}, @ovar{word}, @ovar{if-equal}, @
   @ovar{if-not-equal})
 @asindex{VAR_IF}
 Output a shell conditional statement.  If the contents of the
-polymorphic shell variable @var{var} match the string @var{value},
-execute @var{if-equal}; otherwise execute @var{if-not-equal}.  Avoids
+polymorphic shell variable @var{var} match the string @var{word},
+execute @var{if-equal}; otherwise execute @var{if-not-equal}.  @var{word}
+must be a single shell word (typically a quoted string).  Avoids
 shell bugs if an interrupt signal arrives while a command substitution
 in @var{var} is being expanded.
 @end defmac

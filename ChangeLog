@@ -1,3 +1,11 @@
+2010-08-17  Eric Blake  <eblake@redhat.com>
+
+	doc: improve AS_VAR_IF details
+	* doc/autoconf.texi (Polymorphic Variables) <AS_VAR_IF>: Make it
+	clear that user must supply quotes as needed.
+	* THANKS: Update.
+	Suggested by Randall Cotton.
+
 2010-08-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix Autotest --errexit to exit after XPASSing tests.
