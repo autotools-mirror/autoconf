@@ -86,8 +86,8 @@ Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
   -I, --include=DIR          append directory DIR to search path
 
-The environment variables AUTOCONF, AUTOHEADER, AUTOMAKE, ACLOCAL,
-AUTOPOINT, LIBTOOLIZE, M4, and MAKE are honored.
+The environment variables AUTOM4TE, AUTOCONF, AUTOHEADER, AUTOMAKE,
+ACLOCAL, AUTOPOINT, LIBTOOLIZE, M4, and MAKE are honored.
 
 Report bugs to <bug-autoconf\@gnu.org>.
 GNU Autoconf home page: <http://www.gnu.org/software/autoconf/>.
