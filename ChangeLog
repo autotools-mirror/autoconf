@@ -1,3 +1,12 @@
+2010-08-23  Eric Blake  <eblake@redhat.com>
+
+	AC_HEADER_STDBOOL: avoid spurious clang failure
+	* lib/autoconf/headers.m4 (AC_HEADER_STDBOOL): Drop gcc (and by
+	extension clang) check in favor of a gnulib test.  Force failure,
+	rather than merely testing for a compiler extension.
+	* THANKS: Update.
+	Reported by Anders Kaseorg.
+
 2010-08-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	doc: AIX sed dislikes indented comments.
