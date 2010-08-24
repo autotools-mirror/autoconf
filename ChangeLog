@@ -1,3 +1,16 @@
+2010-08-24  Paul Eggert  <eggert@cs.ucla.edu>
+
+	AC_HEADER_STDBOOL: avoid spurious failure with modern xlc
+	* lib/autoconf/headers.m4 (AC_HEADER_STDBOOL): Move the "bool e =
+	&s;" test into the main program, as C99 might plausibly be
+	interpreted as not requiring support for this construction in
+	static initializers.  Remove the "#if defined __xlc__" stuff, as
+	the bug is not present in recent xlc implementations, and they
+	reject the test for other (valid) reasons.  People using ancient
+	xlc versions, if any, are suggested to update to fixed versions.
+	Reported by Ralf Wildenhues in the thread starting at:
+	http://lists.gnu.org/archive/html/bug-autoconf/2010-08/msg00103.html
+
 2010-08-24  Eric Blake  <eblake@redhat.com>
 
 	AC_FUNC_GETLOADAVG: don't define SVR4 on cygwin
