@@ -473,6 +473,12 @@ AT_CHECK([grep my_cv_shell_true_works sitecache], [], [ignore])
 AT_CHECK_CONFIGURE([], [], [stdout])
 AT_CHECK([grep 'whether true.*works.*cached' stdout], [], [ignore])
 
+dnl Until we can find a way to avoid catastrophic failure,
+dnl skip the rest of this test on such shells.
+echo 'if' > syntax
+AT_CHECK([${CONFIG_SHELL-$SHELL} -c 'case `. ./syntax; echo $?` in
+            0|"") exit 77;; esac'], [0], [ignore], [ignore])
+
 # Check that config cache scripts must be well-formed.
 AT_DATA([bad.site],
 [[fi

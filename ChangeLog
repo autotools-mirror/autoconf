@@ -1,3 +1,11 @@
+2010-08-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	tests: fix AC_CACHE_CHECK to skip with bad shells.
+	* tests/base.at (AC_CACHE_CHECK): Skip test with malformed
+	config.site file if the shell does not report syntax errors
+	from a sourced file.  Fixes test failure on AIX and FreeBSD.
+	Report from Rainer Tammer.
+
 2010-08-24  Paul Eggert  <eggert@cs.ucla.edu>
 
 	AC_HEADER_STDBOOL: avoid spurious failure with modern xlc
