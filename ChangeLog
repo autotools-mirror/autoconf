@@ -1,5 +1,10 @@
 2010-08-25  Eric Blake  <eblake@redhat.com>
 
+	tests: improve some shell assumption testing
+	* tests/m4sh.at (Functions Support, Functions and return Support)
+	(Negated classes in globbing): Update comments.
+	(AS@&t@_VAR basics): Test comparison to empty string.
+
 	docs: mention cost of globbing during variable expansion
 	* doc/autoconf.texi (Shell Substitutions) <${var=literal}>:
 	Recommend quoting substitutions that might trigger globbing.

@@ -528,8 +528,8 @@ AT_CLEANUP
 ## Negated classes in globbing.  ##
 ## ----------------------------- ##
 
-# It is known that `[^...]' is not universally supported, but it is
-# unknown for `[!...]'.
+# According to http://www.in-ulm.de/~mascheck/bourne/, all shells with
+# functions also support `[!...]'.  But `[^...]' is not universally supported.
 
 AT_SETUP([Negated classes in globbing])
 AT_KEYWORDS([m4sh])
@@ -559,8 +559,7 @@ AT_CLEANUP
 ## Functions Support.  ##
 ## ------------------- ##
 
-# Hypothesis: the shell we are running, after having checked for
-# $LINENO support, supports functions.
+# All m4sh scripts require function support.
 
 AT_SETUP([Functions Support])
 AT_KEYWORDS([m4sh])
@@ -602,8 +601,7 @@ AT_CLEANUP
 ## Functions and return Support.  ##
 ## ------------------------------ ##
 
-# Hypothesis: the shell we are running, after having checked for
-# $LINENO support, supports functions, and the `return' keyword.
+# All m4sh scripts require working return within functions.
 
 AT_SETUP([Functions and return Support])
 AT_KEYWORDS([m4sh])
@@ -1275,6 +1273,9 @@ AS_INIT
 # Literals.
 dnl AS_VAR_SET_IF also covers AS_VAR_TEST_SET
 AS_VAR_SET_IF([foo], [echo oops]) && echo ok
+AS_VAR_IF([foo], [], [echo ok], [echo oops])
+foo=
+AS_VAR_SET_IF([foo], [echo ok])
 AS_VAR_SET([foo], ['\a  "weird" `value` with; $fun '\''characters
 ']) # 'font-lock
 AS_VAR_COPY([bar], [foo])
@@ -1292,6 +1293,9 @@ m4_ifdef([tmp], [echo oops])
 echo '===='
 num=1
 AS_VAR_SET_IF([foo$num], [echo oops]) && echo ok
+AS_VAR_IF([foo$num], [], [echo ok], [echo oops])
+foo1=
+AS_VAR_SET_IF([foo$num], [echo ok])
 AS_VAR_SET([foo$num], ['\a  "weird" `value` with; $fun '\''characters
 ']) # 'font-lock
 AS_VAR_COPY([bar], [foo$num])
@@ -1310,6 +1314,9 @@ m4_ifdef([tmp], [echo oops])
 # Indirects via command substitution.
 echo '===='
 AS_VAR_SET_IF([`echo foo3`], [echo oops]) && echo ok
+AS_VAR_IF([`echo foo3`], [], [echo ok], [echo oops])
+foo3=
+AS_VAR_SET_IF([`echo foo3`], [echo ok])
 AS_VAR_SET([`echo foo3`], ['\a  "weird" `value` with; $fun '\''characters
 ']) # 'font-lock
 AS_VAR_COPY([bar], [`echo foo3`])
@@ -1329,6 +1336,8 @@ m4_ifdef([tmp], [echo oops])
 
 AT_CHECK_M4SH
 AT_CHECK([$CONFIG_SHELL ./script], [], [[ok
+ok
+ok
 \a  "weird" `value` WITH; $fun 'characters
 -
 \a  "weird" `value` WITH; $fun 'characters
@@ -1337,6 +1346,8 @@ ok
 ok
 ok
 ====
+ok
+ok
 ok
 \a  "weird" `value` WITH; $fun 'characters
 -
@@ -1345,6 +1356,8 @@ ok
 ok
 ok
 ====
+ok
+ok
 ok
 \a  "weird" `value` WITH; $fun 'characters
 -
