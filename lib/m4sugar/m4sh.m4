@@ -2063,13 +2063,13 @@ m4_define([AS_VAR_SET_IF],
 
 # AS_VAR_TEST_SET(VARIABLE)
 # -------------------------
-# Expands into the `test' expression which is true if VARIABLE
+# Expands into an expression which is true if VARIABLE
 # is set.  Polymorphic.
 m4_define([AS_VAR_TEST_SET],
 [AS_LITERAL_WORD_IF([$1],
-	       [test "${$1+set}" = set],
-	       [{ as_var=$1; eval "test \"\${$as_var+set}\" = set"; }],
-	       [eval "test \"\${$1+set}\"" = set])])
+  [${$1+:} false],
+  [{ as_var=$1; eval \${$as_var+:} false; }],
+  [eval \${$1+:} false])])
 
 
 ## -------------------- ##

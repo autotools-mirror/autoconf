@@ -1,5 +1,8 @@
 2010-08-25  Eric Blake  <eblake@redhat.com>
 
+	m4sh: reduce size of AS_VAR_TEST_SET
+	* lib/m4sugar/m4sh.m4 (AS_VAR_TEST_SET): Make more compact.
+
 	tests: improve some shell assumption testing
 	* tests/m4sh.at (Functions Support, Functions and return Support)
 	(Negated classes in globbing): Update comments.
