@@ -552,7 +552,71 @@ AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
+## ---------------------------- ##
+## Null variable substitution.  ##
+## ---------------------------- ##
 
+# According to http://www.in-ulm.de/~mascheck/bourne/, all shells with
+# functions also support `${a:-b}'.
+
+AT_SETUP([Null variable substitution])
+AT_KEYWORDS([m4sh])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+
+AS_UNSET([a])
+b=
+c=.
+case ${a:-x}${b:-y}${c:-z} in
+  xy.) ;;
+  *) exit 1 ;;
+esac
+case ${a-x}${b-y}${c-z} in
+  x.) ;;
+  *) exit 2 ;;
+esac
+
+case ${a+x}${b+y}${c+z} in
+  yz) ;;
+  *) exit 3 ;;
+esac
+case ${a:+x}${b:+y}${c:+z} in
+  z) ;;
+  *) exit 4 ;;
+esac
+
+case ${a=x}${b=y}${c=z} in
+  x.) ;;
+  *) exit 5 ;;
+esac
+AS_UNSET([a])
+case ${a:=x}${b:=y}${c:=z} in
+  xy.) ;;
+  *) exit 6 ;;
+esac
+case $a$b$c in
+  xy.) ;;
+  *) exit 7 ;;
+esac
+AS_UNSET([a])
+b=
+
+(: ${a?oops}; echo fail) 2>err && exit 8
+grep oops err >/dev/null || exit 9
+test "${b?oops}" = '' || exit 10
+test "${c?oops}" = . || exit 11
+(: ${a:?oops}; echo fail) 2>err && exit 12
+grep oops err >/dev/null || exit 13
+(: ${b:?oops}; echo fail) 2>err && exit 14
+grep oops err >/dev/null || exit 15
+test "${c:?oops}" = . || exit 16
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([$CONFIG_SHELL ./script])
+
+AT_CLEANUP
 
 
 ## ------------------- ##

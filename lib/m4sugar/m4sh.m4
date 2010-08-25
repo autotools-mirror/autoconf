@@ -859,8 +859,10 @@ m4_defun([AS_LINENO_PUSH],
 # -----------------------
 # If this is call balances the outermost call to AS_LINENO_PUSH,
 # AS_MESSAGE will restart printing $LINENO as the line number.
+#
+# No need to use AS_UNSET, since as_lineno is necessarily set.
 m4_defun([AS_LINENO_POP],
-[eval $as_lineno_stack; test "x$as_lineno_stack" = x && AS_UNSET([as_lineno])])
+[eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno])
 
 
 
@@ -1620,7 +1622,7 @@ m4_define([_AS_LITERAL_HEREDOC_IF_NO], [$2])
 # it is a documented part of the public API and must not be changed.
 m4_define([AS_TMPDIR],
 [# Create a (secure) tmp directory for tmp files.
-m4_if([$2], [], [: "${TMPDIR=/tmp}"])
+m4_if([$2], [], [: "${TMPDIR:=/tmp}"])
 {
   tmp=`(umask 077 && mktemp -d "m4_default([$2],
     [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
@@ -1984,10 +1986,12 @@ m4_define([AS_VAR_GET],
 # Polymorphic, and avoids sh expansion error upon interrupt or term signal.
 m4_define([AS_VAR_IF],
 [AS_LITERAL_WORD_IF([$1],
-  [AS_IF([test "x$$1" = x""$2]],
+  [AS_IF(m4_ifval([$2], [[test "x$$1" = x[]$2]], [[${$1:+false} :]])],
   [AS_VAR_COPY([as_val], [$1])
-   AS_IF([test "x$as_val" = x""$2]],
-  [AS_IF([eval test \"x\$"$1"\" = x"_AS_ESCAPE([$2], [`], [\"$])"]]),
+   AS_IF(m4_ifval([$2], [[test "x$as_val" = x[]$2]], [[${as_val:+false} :]])],
+  [AS_IF(m4_ifval([$2],
+    [[eval test \"x\$"$1"\" = x"_AS_ESCAPE([$2], [`], [\"$])"]],
+    [[eval \${$1:+false} :]])]),
 [$3], [$4])])
 
 

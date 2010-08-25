@@ -15425,6 +15425,9 @@ bad substitution
 Old BSD shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 Similarly for $@{@var{var}:=@var{value}@}, $@{@var{var}:?@var{value}@}, etc.
+However, all shells that support functions allow the use of colon in
+shell substitution, and since m4sh requires functions, you can portably
+use null variable substitution patterns in configure scripts.
 
 @item $@{@var{var}+@var{value}@}
 @cindex $@{@var{var}+@var{value}@}
@@ -18425,7 +18428,7 @@ Here is sample code to create a new temporary directory safely:
 # Create a temporary directory $tmp in $TMPDIR (default /tmp).
 # Use mktemp if possible; otherwise fall back on mkdir,
 # with $RANDOM to make collisions less likely.
-: "$@{TMPDIR=/tmp@}"
+: "$@{TMPDIR:=/tmp@}"
 @{
   tmp=`
     (umask 077 && mktemp -d "$TMPDIR/fooXXXXXX") 2>/dev/null

@@ -1,3 +1,13 @@
+2010-08-27  Eric Blake  <eblake@redhat.com>
+
+	m4sh: assume ${a:-b} support
+	* tests/m4sh.at (Null variable substitution): New test.
+	* doc/autoconf.texi (Shell Substitutions) <${var:-value}>: Mention
+	that m4sh guarantees support.
+	(Limitations of Usual Tools) <mktemp>: Use it.
+	* lib/m4sugar/m4sh.m4 (AS_LINENO_POP, AS_VAR_IF, AS_TMPDIR):
+	Exploit use of colon for smaller files.
+
 2010-08-26  Eric Blake  <eblake@redhat.com>
 
 	docs: document m4_define_default
