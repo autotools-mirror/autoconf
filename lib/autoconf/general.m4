@@ -900,7 +900,7 @@ Try `$[0] --help' for more information])
     AC_MSG_WARN([you should use --build, --host, --target])
     expr "x$ac_option" : "[.*[^-._$as_cr_alnum]]" >/dev/null &&
       AC_MSG_WARN([invalid host type: $ac_option])
-    : ${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}
+    : "${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}"
     ;;
 
   esac

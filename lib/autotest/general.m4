@@ -847,7 +847,7 @@ do
 done
 
 # Autoconf <=2.59b set at_top_builddir instead of at_top_build_prefix:
-: ${at_top_build_prefix=$at_top_builddir}
+: "${at_top_build_prefix=$at_top_builddir}"
 
 # Perform any assignments requested during argument parsing.
 eval "$at_debug_args"

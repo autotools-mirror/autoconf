@@ -1617,7 +1617,7 @@ m4_define([_AS_LITERAL_HEREDOC_IF_NO], [$2])
 # which name is inspired by PREFIX (should be 2-4 chars max).
 m4_define([AS_TMPDIR],
 [# Create a (secure) tmp directory for tmp files.
-m4_if([$2], [], [: ${TMPDIR=/tmp}])
+m4_if([$2], [], [: "${TMPDIR=/tmp}"])
 {
   as_tmp=`(umask 077 && mktemp -d "m4_default([$2],
     [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&

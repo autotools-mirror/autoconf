@@ -1271,7 +1271,7 @@ m4_ifdef([_AC_SEEN_CONFIG(HEADERS)], [DEFS=-DHAVE_CONFIG_H], [AC_OUTPUT_MAKE_DEF
 dnl Commands to run before creating config.status.
 AC_OUTPUT_COMMANDS_PRE()dnl
 
-: ${CONFIG_STATUS=./config.status}
+: "${CONFIG_STATUS=./config.status}"
 ac_write_fail=0
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"

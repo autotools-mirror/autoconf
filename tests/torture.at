@@ -1213,7 +1213,7 @@ all: f f1 f2
 
 AT_CHECK_AUTOCONF
 
-: ${MAKE=make}
+: "${MAKE=make}"
 
 # In place.
 AT_CHECK([./configure $configure_options], [], [ignore])

@@ -15398,10 +15398,36 @@ Similarly for $@{@var{var}:=@var{value}@}, $@{@var{var}:?@var{value}@}, etc.
 
 @item $@{@var{var}=@var{literal}@}
 @cindex $@{@var{var}=@var{literal}@}
-Be sure to quote:
+When using @samp{$@{@var{var}=@var{value}@}} to assign a default value
+to @var{var}, remember that even though the assignment to @var{var} does
+not undergo file name expansion, the result of the variable expansion
+does.  In particular, when using @command{:} followed by unquoted
+variable expansion for the side effect of setting a default value, if
+either @samp{value} or the prior contents of @samp{$var} contains
+globbing characters, the shell has to spend time performing file name
+expansion and field splitting even though those results will not be
+used.  Therefore, it is a good idea to use double quotes when performing
+default initialization.
 
 @example
-: $@{var='Some words'@}
+$ time bash -c ': "$@{a=/usr/bin/*@}"; echo "$a"'
+/usr/bin/*
+
+real	0m0.005s
+user	0m0.002s
+sys	0m0.003s
+$ time bash -c ': $@{a=/usr/bin/*@}; echo "$a"'
+/usr/bin/*
+
+real	0m0.039s
+user	0m0.026s
+sys	0m0.009s
+@end example
+
+Use quotes if @var{literal} contains more than one shell word:
+
+@example
+: "$@{var='Some words'@}"
 @end example
 
 @noindent
@@ -15441,7 +15467,7 @@ running
 
 @example
 default="yu,yaa"
-: $@{var="$default"@}
+: "$@{var="$default"@}"
 @end example
 
 @noindent
@@ -15467,7 +15493,7 @@ One classic incarnation of this bug is:
 
 @example
 default="a b c"
-: $@{list="$default"@}
+: "$@{list="$default"@}"
 for c in $list; do
   echo $c
 done
@@ -15720,7 +15746,7 @@ If the default value is a literal and does not contain any closing
 brace, use:
 
 @example
-: $@{var='my literal'@}
+: "$@{var='my literal'@}"
 @end example
 
 @item
@@ -15729,7 +15755,7 @@ the variable being initialized is not intended to be IFS-split
 (i.e., it's not a list), then use:
 
 @example
-: $@{var="$default"@}
+: "$@{var="$default"@}"
 @end example
 
 @item
@@ -17432,6 +17458,11 @@ exit status of failure, which is correct for @command{false}, but not
 for @command{true}.
 @end quotation
 
+Remember that even though @samp{:} ignores its arguments, it still takes
+time to compute those arguments.  It is a good idea to use double quotes
+around any arguments to @samp{:} to avoid time spent in field splitting
+and file name expansion.
+
 
 @anchor{unset}
 @item @command{unset}
@@ -18259,7 +18290,7 @@ Here is sample code to create a new temporary directory safely:
 # Create a temporary directory $tmp in $TMPDIR (default /tmp).
 # Use mktemp if possible; otherwise fall back on mkdir,
 # with $RANDOM to make collisions less likely.
-: $@{TMPDIR=/tmp@}
+: "$@{TMPDIR=/tmp@}"
 @{
   tmp=`
     (umask 077 && mktemp -d "$TMPDIR/fooXXXXXX") 2>/dev/null

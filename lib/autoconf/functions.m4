@@ -1453,7 +1453,7 @@ AC_CACHE_CHECK([types of arguments for select],
  done
 done
 # Provide a safe default value.
-: ${ac_cv_func_select_args='int,int *,struct timeval *'}
+: "${ac_cv_func_select_args='int,int *,struct timeval *'}"
 ])
 ac_save_IFS=$IFS; IFS=','
 set dummy `echo "$ac_cv_func_select_args" | sed 's/\*/\*/g'`

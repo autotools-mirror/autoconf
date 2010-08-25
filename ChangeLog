@@ -1,5 +1,23 @@
 2010-08-25  Eric Blake  <eblake@redhat.com>
 
+	docs: mention cost of globbing during variable expansion
+	* doc/autoconf.texi (Shell Substitutions) <${var=literal}>:
+	Recommend quoting substitutions that might trigger globbing.
+	(Limitations of Builtins) <:>: Likewise.
+	* bin/autoconf.as: Follow our own advice.
+	* lib/autoconf/functions.m4 (AC_FUNC_SELECT_ARGTYPES): Likewise.
+	* lib/autoconf/general.m4 (_AC_INIT_PARSE_ARGS): Likewise.
+	* lib/autoconf/status.m4 (AC_OUTPUT): Likewise.
+	* lib/autotest/general.m4 (_AT_FINISH): Likewise.
+	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): Likewise.
+	* tests/autotest.at (parallel autotest and signal handling):
+	Likewise.
+	* tests/c.at (AC_OPENMP and C, AC_OPENMP and C++): Likewise.
+	* tests/foreign.at (shtool): Likewise.
+	* tests/fortran.at: Likewise.
+	* tests/tools.at (autom4te preselections): Likewise.
+	* tests/torture.at (VPATH): Likewise.
+
 	m4sh: fix some namespace safety issues
 	* lib/m4sugar/m4sh.m4 (_AS_SHELL_SANITIZE): Avoid problems if
 	as_myself is inherited from environment.

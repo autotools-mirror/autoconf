@@ -122,7 +122,7 @@ copy-shtool:
 : >file1
 : >file2
 chmod +x file1
-: ${MAKE=make}
+: "${MAKE=make}"
 mkdir build-aux inst
 instdir=`pwd`/inst
 AT_CHECK_AUTOCONF

@@ -1502,7 +1502,7 @@ for signal in 2 15; do
   # AT_CHECK([[grep '[iI]nterrupt[	 ]' stderr]], [1])
 
   # Ditto with `make' in the loop.
-  : ${MAKE=make}
+  : "${MAKE=make}"
   unset MAKEFLAGS
   # Need to eliminate outer TESTSUITEFLAGS here.
   # Need to normalize exit status here: some make implementations
