@@ -425,6 +425,7 @@ _AS_PATH_SEPARATOR_PREPARE
 IFS=" ""	$as_nl"
 
 # Find who we are.  Look in the path if we contain no directory separator.
+as_myself=
 case $[0] in @%:@((
   *[[\\/]]* ) as_myself=$[0] ;;
   *) _AS_PATH_WALK([],
@@ -1618,12 +1619,13 @@ m4_define([AS_TMPDIR],
 [# Create a (secure) tmp directory for tmp files.
 m4_if([$2], [], [: ${TMPDIR=/tmp}])
 {
-  tmp=`(umask 077 && mktemp -d "m4_default([$2], [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
-  test -n "$tmp" && test -d "$tmp"
+  as_tmp=`(umask 077 && mktemp -d "m4_default([$2],
+    [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
+  test -d "$as_tmp"
 }  ||
 {
-  tmp=m4_default([$2], [$TMPDIR])/$1$$-$RANDOM
-  (umask 077 && mkdir "$tmp")
+  as_tmp=m4_default([$2], [$TMPDIR])/$1$$-$RANDOM
+  (umask 077 && mkdir "$as_tmp")
 } || AS_ERROR([cannot create a temporary directory in m4_default([$2],
 	      [$TMPDIR])])])# AS_TMPDIR
 
