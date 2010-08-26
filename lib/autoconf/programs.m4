@@ -756,7 +756,8 @@ if test -z "${LEXLIB+set}"; then
     ac_cv_lib_lex='none needed'
     for ac_lib in '' -lfl -ll; do
       LIBS="$ac_lib $ac_save_LIBS"
-      AC_LINK_IFELSE([`cat $LEX_OUTPUT_ROOT.c`], [ac_cv_lib_lex=$ac_lib])
+      AC_LINK_IFELSE([AC_LANG_DEFINES_PROVIDED[`cat $LEX_OUTPUT_ROOT.c`]],
+	[ac_cv_lib_lex=$ac_lib])
       test "$ac_cv_lib_lex" != 'none needed' && break
     done
     LIBS=$ac_save_LIBS
@@ -772,9 +773,9 @@ AC_CACHE_CHECK(whether yytext is a pointer, ac_cv_prog_lex_yytext_pointer,
 ac_cv_prog_lex_yytext_pointer=no
 ac_save_LIBS=$LIBS
 LIBS="$LEXLIB $ac_save_LIBS"
-AC_LINK_IFELSE(
+AC_LINK_IFELSE([AC_LANG_DEFINES_PROVIDED
   [#define YYTEXT_POINTER 1
-`cat $LEX_OUTPUT_ROOT.c`],
+`cat $LEX_OUTPUT_ROOT.c`]],
   [ac_cv_prog_lex_yytext_pointer=yes])
 LIBS=$ac_save_LIBS
 ])

@@ -260,11 +260,55 @@ fputs (hw, stdout);
 AT_CLEANUP
 
 
+## ------------------- ##
+## AC_COMPILE_IFELSE.  ##
+## ------------------- ##
+
+AT_SETUP([AC_COMPILE_IFELSE])
+AT_KEYWORDS([AC_LANG_DEFINES_PROVIDED])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_COMPILE_IFELSE([int main () { return 0; }], [],
+  [AC_MSG_ERROR([compiling trivial program failed])])
+]])
+
+AT_CHECK_AUTOCONF([], [], [], [stderr])
+AT_CHECK([grep 'no AC_LANG_SOURCE call detected in body' stderr], [], [ignore])
+AT_CHECK_AUTOCONF([-W no-syntax])
+AT_CHECK_CONFIGURE([-q])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED()int main () { return 0; }], [],
+  [AC_MSG_ERROR([compiling trivial program failed])])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([-q])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return 0])],
+	      [],
+	      [AC_MSG_ERROR([compiling `return 0' failed])])
+
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [return 2])],
+	      [],
+	      [AC_MSG_ERROR([compiling `return 2' failed])])
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([-q])
+
+AT_CLEANUP
+
 ## --------------- ##
 ## AC_RUN_IFELSE.  ##
 ## --------------- ##
 
 AT_SETUP([AC_RUN_IFELSE])
+AT_KEYWORDS([AC_TRY_RUN])
 
 AT_DATA([configure.ac],
 [[AC_INIT

@@ -1,5 +1,22 @@
 2010-08-26  Eric Blake  <eblake@redhat.com>
 
+	autoconf: warn if AC_*_IFELSE lacks complete program
+	* lib/autoconf/lang.m4 (AC_LANG_DEFINES_PROVIDED): New macro.
+	(AC_LANG_SOURCE): Call it.
+	(AC_LANG_CONFTEST): Add warning if new macro is not called.
+	* lib/autoconf/c.m4 (_AC_LANG_OPENMP): Add missing AC_LANG_SOURCE.
+	* lib/autoconf/fortran.m4 (AC_FC_FREEFORM, AC_FC_FIXEDFORM)
+	(AC_FC_LINE_LENGTH, __AC_FC_NAME_MANGLING): Intentionally bypass
+	AC_LANG_SOURCE.
+	* lib/autoconf/programs.m4 (_AC_PROG_LEX_YYTEXT_DECL): Likewise.
+	* tests/compile.at (AC_COMPILE_IFELSE): New test.
+	* doc/autoconf.texi (Generating Sources) <AC_LANG_CONFTEST>:
+	Document new warning.
+	<AC_LANG_DEFINES_PROVIDED>: Document new macro.
+	<AC_LANG_SOURCE>: Document use of new macro.
+	* NEWS: Document the improvement.
+	Suggested by Bruno Haible.
+
 	autoconf: fix regression in AC_FUNC_SELECT_ARGTYPES
 	* lib/autoconf/functions.m4 (AC_FUNC_SELECT_ARGTYPES): Fix
 	quoting; regression from yesteray leaked '' into default value.

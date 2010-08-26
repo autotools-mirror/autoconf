@@ -192,7 +192,10 @@ m4_define([AC_LANG_DEFINE],
 # ----------------------
 # Save the BODY in `conftest.$ac_ext'.  Add a trailing new line.
 AC_DEFUN([AC_LANG_CONFTEST],
-[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+[m4_pushdef([_AC_LANG_DEFINES_PROVIDED],
+  [m4_warn([syntax], [$0: no AC_LANG_SOURCE call detected in body])])]dnl
+[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)]dnl
+[[]_AC_LANG_DEFINES_PROVIDED[]m4_popdef([_AC_LANG_DEFINES_PROVIDED])])
 
 
 # AC_LANG_CONFTEST()(BODY)
@@ -203,13 +206,20 @@ m4_define([AC_LANG_CONFTEST()],
 $1
 _ACEOF])
 
+# AC_LANG_DEFINES_PROVIDED
+# ------------------------
+# Witness macro that all prior AC_DEFINE results have been output
+# into the current expansion, to silence warning from AC_LANG_CONFTEST.
+m4_define([AC_LANG_DEFINES_PROVIDED],
+[m4_define([_$0])])
+
 
 # AC_LANG_SOURCE(BODY)
 # --------------------
 # Produce a valid source for the current language, which includes the
 # BODY, and as much as possible `confdefs.h'.
 AC_DEFUN([AC_LANG_SOURCE],
-[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+[AC_LANG_DEFINES_PROVIDED[]_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
 
 # AC_LANG_SOURCE()(BODY)

@@ -1930,7 +1930,7 @@ AC_DEFUN([AC_C_TYPEOF],
 # Expands to some language dependent source code for testing the presence of
 # OpenMP.
 AC_DEFUN([_AC_LANG_OPENMP],
-[_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
+[AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
 
 # _AC_LANG_OPENMP(C)
 # ------------------

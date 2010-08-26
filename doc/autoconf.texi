@@ -8730,15 +8730,38 @@ the results of all of the @code{AC_DEFINE} performed so far.
 Note that the @var{source} is evaluated exactly once, like regular
 Autoconf macro arguments, and therefore (i) you may pass a macro
 invocation, (ii) if not, be sure to double quote if needed.
+
+This macro issues a warning during @command{autoconf} processing if
+@var{source} does not include an expansion of the macro
+@code{AC_LANG_DEFINES_PROVIDED} (note that both @code{AC_LANG_SOURCE} and
+@code{AC_LANG_PROGRAM} call this macro, and thus avoid the warning).
+
+This macro is seldom called directly, but is used under the hood by more
+common macros such as @code{AC_COMPILE_IFELSE} and @code{AC_RUN_IFELSE}.
+@end defmac
+
+@defmac AC_LANG_DEFINES_PROVIDED
+@acindex{LANG_DEFINES_PROVIDED}
+This macro is called as a witness that the file
+@file{conftest.@var{extension}} appropriate for the current language is
+complete, including all previously determined results from
+@code{AC_DEFINE}.  This macro is seldom called directly, but exists if
+you have a compelling reason to write a conftest file without using
+@code{AC_LANG_SOURCE}, yet still want to avoid a syntax warning from
+@code{AC_LANG_CONFTEST}.
 @end defmac
 
 @defmac AC_LANG_SOURCE (@var{source})
 @acindex{LANG_SOURCE}
 Expands into the @var{source}, with the definition of
-all the @code{AC_DEFINE} performed so far.
+all the @code{AC_DEFINE} performed so far.  This macro includes an
+expansion of @code{AC_LANG_DEFINES_PROVIDED}.
+
+In many cases, you may find it more convenient to use the wrapper
+@code{AC_LANG_PROGRAM}.
 @end defmac
 
-For instance executing (observe the double quotation!):
+For instance, executing (observe the double quotation!):
 
 @example
 @c If you change this example, adjust tests/compile.at:AC_LANG_SOURCE example.

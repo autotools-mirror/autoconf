@@ -8,6 +8,13 @@ GNU Autoconf NEWS - User visible changes.
 ** AC_INIT again allows URLs with '?' for its BUG-REPORT argument.
    Regression introduced in 2.66.
 
+** The macros AC_PREPROC_IFELSE, AC_COMPILE_IFELSE, AC_LINK_IFELSE, and
+   AC_RUN_IFELSE now warn if the first argument failed to use
+   AC_LANG_SOURCE or AC_LANG_PROGRAM to generate the conftest file
+   contents.  A new macro AC_LANG_DEFINES_PROVIDED exists if you have
+   a compelling reason why you cannot use AC_LANG_SOURCE but must
+   avoid the warning.
+
 
 * Major changes in Autoconf 2.67 (2010-07-21) [stable]
   Released by Eric Blake, based on git versions 2.66.*.
