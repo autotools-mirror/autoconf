@@ -1,5 +1,9 @@
 2010-08-25  Eric Blake  <eblake@redhat.com>
 
+	m4sh: revert regression in AS_TMPDIR
+	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): The previous patch trying to
+	rename $tmp to $as_tmp was wrong; config.status relies on it.
+
 	m4sh: reduce size of AS_VAR_TEST_SET
 	* lib/m4sugar/m4sh.m4 (AS_VAR_TEST_SET): Make more compact.
 

@@ -1615,17 +1615,20 @@ m4_define([_AS_LITERAL_HEREDOC_IF_NO], [$2])
 # -------------------------------------------------
 # Create as safely as possible a temporary directory in DIRECTORY
 # which name is inspired by PREFIX (should be 2-4 chars max).
+#
+# Even though $tmp does not fit our normal naming scheme of $as_*,
+# it is a documented part of the public API and must not be changed.
 m4_define([AS_TMPDIR],
 [# Create a (secure) tmp directory for tmp files.
 m4_if([$2], [], [: "${TMPDIR=/tmp}"])
 {
-  as_tmp=`(umask 077 && mktemp -d "m4_default([$2],
+  tmp=`(umask 077 && mktemp -d "m4_default([$2],
     [$TMPDIR])/$1XXXXXX") 2>/dev/null` &&
-  test -d "$as_tmp"
+  test -d "$tmp"
 }  ||
 {
-  as_tmp=m4_default([$2], [$TMPDIR])/$1$$-$RANDOM
-  (umask 077 && mkdir "$as_tmp")
+  tmp=m4_default([$2], [$TMPDIR])/$1$$-$RANDOM
+  (umask 077 && mkdir "$tmp")
 } || AS_ERROR([cannot create a temporary directory in m4_default([$2],
 	      [$TMPDIR])])])# AS_TMPDIR
 
