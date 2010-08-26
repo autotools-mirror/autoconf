@@ -1160,7 +1160,7 @@ AT_CLEANUP
 # -----------------------------
 
 AT_SETUP([autom4te preselections])
-: "${sleep='sleep 1'}"	# Command to force different time stamps.
+: ${sleep='sleep 1'}	# Command to force different time stamps.
 # If this test should run on FAT file systems and older w32,
 # then setting $sleep correctly needs to be revisited.
 

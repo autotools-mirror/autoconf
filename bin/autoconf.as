@@ -85,7 +85,7 @@ exit_missing_arg='
 # restore font-lock: '
 
 # Variables.
-: "${AUTOM4TE='@bindir@/@autom4te-name@'}"
+: ${AUTOM4TE='@bindir@/@autom4te-name@'}
 autom4te_options=
 outfile=
 verbose=false

@@ -1,5 +1,9 @@
 2010-08-25  Eric Blake  <eblake@redhat.com>
 
+	m4sh: revert incorrect mix of "${a='b'}"
+	* bin/autoconf.as: Revert leak of literal '' into assignment.
+	* tests/tools.at (autom4te preselections): Likewise.
+
 	m4sh: revert regression in AS_TMPDIR
 	* lib/m4sugar/m4sh.m4 (AS_TMPDIR): The previous patch trying to
 	rename $tmp to $as_tmp was wrong; config.status relies on it.
