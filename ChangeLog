@@ -1,5 +1,10 @@
 2010-08-26  Eric Blake  <eblake@redhat.com>
 
+	autoconf: fix regression in AC_FUNC_SELECT_ARGTYPES
+	* lib/autoconf/functions.m4 (AC_FUNC_SELECT_ARGTYPES): Fix
+	quoting; regression from yesteray leaked '' into default value.
+	Reported by Ralf Wildenhues.
+
 	docs: mention another issue with variable expansion
 	In particular, see http://austingroupbugs.net/view.php?id=221
 	and http://austingroupbugs.net/view.php?id=255.
