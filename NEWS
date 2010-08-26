@@ -15,6 +15,8 @@ GNU Autoconf NEWS - User visible changes.
    a compelling reason why you cannot use AC_LANG_SOURCE but must
    avoid the warning.
 
+** The macro m4_define_default is now documented.
+
 
 * Major changes in Autoconf 2.67 (2010-07-21) [stable]
   Released by Eric Blake, based on git versions 2.66.*.

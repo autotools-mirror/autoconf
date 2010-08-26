@@ -11786,6 +11786,12 @@ demo4([empty], [text])
 @end example
 @end defmac
 
+@defmac m4_define_default (@var{macro}, @ovar{default-definition})
+@msindex{define_default}
+If @var{macro} does not already have a definition, then define it to
+@var{default-definition}.
+@end defmac
+
 @defmac m4_ifblank (@var{cond}, @ovar{if-blank}, @ovar{if-text})
 @defmacx m4_ifnblank (@var{cond}, @ovar{if-text}, @ovar{if-blank})
 @msindex{ifblank}

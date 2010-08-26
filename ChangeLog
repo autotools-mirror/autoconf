@@ -1,5 +1,10 @@
 2010-08-26  Eric Blake  <eblake@redhat.com>
 
+	docs: document m4_define_default
+	* doc/autoconf.texi (Conditional constructs) <m4_define_default>:
+	Document it, since gnulib wants to use it.
+	* NEWS: Mention this.
+
 	autoconf: warn if AC_*_IFELSE lacks complete program
 	* lib/autoconf/lang.m4 (AC_LANG_DEFINES_PROVIDED): New macro.
 	(AC_LANG_SOURCE): Call it.
