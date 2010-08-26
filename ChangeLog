@@ -1,3 +1,16 @@
+2010-08-26  Eric Blake  <eblake@redhat.com>
+
+	docs: mention another issue with variable expansion
+	In particular, see http://austingroupbugs.net/view.php?id=221
+	and http://austingroupbugs.net/view.php?id=255.
+	* doc/autoconf.texi (Shell Substitutions) <${var+value}>: New
+	subsection.
+	<${var=literal}>: Tweak wording.  Add mention of an ambiguity
+	allowed by POSIX.
+	* tests/torture.at (Substitute and define special characters):
+	Make test more robust; here, the outer "" is in a here-doc, and
+	does not violate the quoting rules of thumb just documented.
+
 2010-08-25  Eric Blake  <eblake@redhat.com>
 
 	m4sh: revert incorrect mix of "${a='b'}"

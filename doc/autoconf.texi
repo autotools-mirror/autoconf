@@ -15392,52 +15392,157 @@ bad substitution
 @ifnotinfo
 @cindex $@{@var{var}:-@var{value}@}
 @end ifnotinfo
+@cindex $@{@var{var}-@var{value}@}
 Old BSD shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 Similarly for $@{@var{var}:=@var{value}@}, $@{@var{var}:?@var{value}@}, etc.
 
-@item $@{@var{var}=@var{literal}@}
-@cindex $@{@var{var}=@var{literal}@}
+@item $@{@var{var}+@var{value}@}
+@cindex $@{@var{var}+@var{value}@}
+When using @samp{$@{@var{var}-@var{value}@}} or
+@samp{$@{@var{var}-@var{value}@}} for providing alternate substitutions,
+@var{value} must either be a single shell word or be quoted.  Solaris
+@command{/bin/sh} complains otherwise.
+
+@example
+$ @kbd{/bin/sh -c 'echo $@{a-b c@}'}
+/bin/sh: bad substitution
+$ @kbd{/bin/sh -c 'echo $@{a-'\''b c'\''@}'}
+b c
+$ @kbd{/bin/sh -c 'echo "$@{a-b c@}"'}
+b c
+@end example
+
+According to Posix, if an expansion occurs inside double quotes, then
+the use of unquoted double quotes within @var{value} is unspecified, and
+any single quotes become literal characters; in that case, escaping must
+be done with backslash.
+
+@example
+$ @kbd{/bin/sh -c 'echo "$@{a-"b  c"@}"'}
+/bin/sh: bad substitution
+$ @kbd{ksh -c 'echo "$@{a-"b  c"@}"'}
+b c
+$ @kbd{bash -c 'echo "$@{a-"b  c"@}"'}
+b  c
+$ @kbd{/bin/sh -c 'a=; echo $@{a+'\''b  c'\''@}'}
+b  c
+$ @kbd{/bin/sh -c 'a=; echo "$@{a+'\''b  c'\''@}"'}
+'b  c'
+$ @kbd{/bin/sh -c 'a=; echo "$@{a+\"b  c\"@}"'}
+"b  c"
+$ @kbd{/bin/sh -c 'a=; echo "$@{a+b  c@}"'}
+b  c
+@end example
+
+Perhaps the easiest way to work around quoting issues in a manner
+portable to all shells is to place the results in a temporary variable,
+then use @samp{$tmp} as the @var{value}, rather than trying to inline
+the expression needing quoting.
+
+@example
+$ @kbd{/bin/sh -c 'tmp="a  b\"'\''@}\\"; echo "$@{a-$tmp@}"'}
+b  c"'@}\
+$ @kbd{ksh -c 'tmp="a  b\"'\''@}\\"; echo "$@{a-$tmp@}"'}
+b  c"'@}\
+$ @kbd{bash -c 'tmp="a  b\"'\''@}\\"; echo "$@{a-$tmp@}"'}
+b  c"'@}\
+@end example
+
+@item $@{@var{var}=@var{value}@}
+@cindex $@{@var{var}=@var{value}@}
 When using @samp{$@{@var{var}=@var{value}@}} to assign a default value
 to @var{var}, remember that even though the assignment to @var{var} does
 not undergo file name expansion, the result of the variable expansion
-does.  In particular, when using @command{:} followed by unquoted
-variable expansion for the side effect of setting a default value, if
-either @samp{value} or the prior contents of @samp{$var} contains
-globbing characters, the shell has to spend time performing file name
+does unless the expansion occurred within double quotes.  In particular,
+when using @command{:} followed by unquoted variable expansion for the
+side effect of setting a default value, if the final value of
+@samp{$var} contains any globbing characters (either from @var{value} or
+from prior contents), the shell has to spend time performing file name
 expansion and field splitting even though those results will not be
-used.  Therefore, it is a good idea to use double quotes when performing
-default initialization.
+used.  Therefore, it is a good idea to consider double quotes when performing
+default initialization; while remembering how this impacts any quoting
+characters appearing in @var{value}.
 
 @example
-$ time bash -c ': "$@{a=/usr/bin/*@}"; echo "$a"'
+$ @kbd{time bash -c ': "$@{a=/usr/bin/*@}"; echo "$a"'}
 /usr/bin/*
 
 real	0m0.005s
 user	0m0.002s
 sys	0m0.003s
-$ time bash -c ': $@{a=/usr/bin/*@}; echo "$a"'
+$ @kbd{time bash -c ': $@{a=/usr/bin/*@}; echo "$a"'}
 /usr/bin/*
 
 real	0m0.039s
 user	0m0.026s
 sys	0m0.009s
+$ @kbd{time bash -c 'a=/usr/bin/*; : $@{a=noglob@}; echo "$a"'}
+/usr/bin/*
+
+real	0m0.031s
+user	0m0.020s
+sys	0m0.010s
+
+$ @kbd{time bash -c 'a=/usr/bin/*; : "$@{a=noglob@}"; echo "$a"'}
+/usr/bin/*
+
+real	0m0.006s
+user	0m0.002s
+sys	0m0.003s
 @end example
 
-Use quotes if @var{literal} contains more than one shell word:
+As with @samp{+} and @samp{-}, you must use quotes when using @samp{=}
+if the @var{value} contains more than one shell word; either single
+quotes for just the @var{value}, or double quotes around the entire
+expansion:
 
 @example
-: "$@{var='Some words'@}"
+$ @kbd{: $@{var1='Some words'@}}
+$ @kbd{: "$@{var2=like this@}"}
+$ @kbd{echo $var1 $var2}
+Some words like this
 @end example
 
 @noindent
-otherwise some shells, such as on Digital Unix V 5.0, die because
-of a ``bad substitution''.
+otherwise some shells, such as Solaris @command{/bin/sh} or on Digital
+Unix V 5.0, die because of a ``bad substitution''.  Meanwhile, Posix
+requires that with @samp{=}, quote removal happens prior to the
+assignment, and the expansion be the final contents of @var{var} without
+quoting (and thus subject to field splitting), in contrast to the
+behavior with @samp{-} passing the quoting through to the final
+expansion.  However, @command{bash} 4.1 does not obey this rule.
 
-@sp 1
+@example
+$ @kbd{ksh -c 'echo $@{var-a\ \ b@}'}
+a  b
+$ @kbd{ksh -c 'echo $@{var=a\ \ b@}'}
+a b
+$ @kbd{bash -c 'echo $@{var=a\ \ b@}'}
+a  b
+@end example
 
-Solaris @command{/bin/sh} has a frightening bug in its interpretation
-of this.  Imagine you need set a variable to a string containing
+Finally, Posix states that when mixing @samp{$@{a=b@}} with regular
+commands, it is unspecified whether the assignments affect the parent
+shell environment.  It is best to perform assignments independently from
+commands, to avoid the problems demonstrated in this example:
+
+@example
+$ @kbd{bash -c 'x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";echo -$x-'}
++b+b+
+-b-
+$ @kbd{/bin/sh -c 'x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";echo -$x-'}
+++b+
+--
+$ @kbd{ksh -c 'x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";echo -$x-'}
++b+b+
+--
+@end example
+
+@item $@{@var{var}=@var{value}@}
+@cindex $@{@var{var}=@var{literal}@}
+Solaris @command{/bin/sh} has a frightening bug in its handling of
+literal assignments.  Imagine you need set a variable to a string containing
 @samp{@}}.  This @samp{@}} character confuses Solaris @command{/bin/sh}
 when the affected variable was already set.  This bug can be exercised
 by running:
@@ -15458,7 +15563,8 @@ $ @kbd{echo $foo}
 
 It seems that @samp{@}} is interpreted as matching @samp{$@{}, even
 though it is enclosed in single quotes.  The problem doesn't happen
-using double quotes.
+using double quotes, or when using a temporary variable holding the
+problematic string.
 
 @item $@{@var{var}=@var{expanded-value}@}
 @cindex $@{@var{var}=@var{expanded-value}@}
@@ -15467,7 +15573,7 @@ running
 
 @example
 default="yu,yaa"
-: "$@{var="$default"@}"
+: $@{var="$default"@}
 @end example
 
 @noindent
@@ -15493,7 +15599,7 @@ One classic incarnation of this bug is:
 
 @example
 default="a b c"
-: "$@{list="$default"@}"
+: $@{list="$default"@}
 for c in $list; do
   echo $c
 done
@@ -15755,7 +15861,7 @@ the variable being initialized is not intended to be IFS-split
 (i.e., it's not a list), then use:
 
 @example
-: "$@{var="$default"@}"
+: $@{var="$default"@}
 @end example
 
 @item
