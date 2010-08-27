@@ -1,5 +1,13 @@
 2010-08-30  Eric Blake  <eblake@redhat.com>
 
+	config.status: minimize use of $tmp
+	* lib/autoconf/status.m4 (_AC_OUTPUT_MAIN_LOOP)
+	(_AC_OUTPUT_FILES_PREPARE, _AC_OUTPUT_FILE)
+	(_AC_OUTPUT_HEADERS_PREPARE, _AC_OUTPUT_HEADER): Use $ac_tmp
+	internally, while preserving $tmp for existing users.
+	* tests/torture.at (AC_CONFIG_COMMANDS with temporary directory):
+	New test, that $tmp is available but not essential.
+
 	docs: avoid use of $tmp outside of config.status use
 	* doc/autoconf.texi (Polymorphic Variables, Shell Substitutions):
 	Use $var or $t instead.
