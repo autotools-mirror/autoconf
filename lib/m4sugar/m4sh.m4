@@ -1138,23 +1138,23 @@ dnl trailing '-' during substitution so that $LINENO is not a special
 dnl case at line end.  (Raja R Harinath suggested sed '=', and Paul
 dnl Eggert wrote the scripts with optimization help from Paolo Bonzini).
 [_AS_LINENO_WORKS || {
-  # Blame Lee E. McMahon (1931-1989) for sed's syntax.  :-)
+[  # Blame Lee E. McMahon (1931-1989) for sed's syntax.  :-)
   sed -n '
     p
-    /[[$]]LINENO/=
+    /[$]LINENO/=
   ' <$as_myself |
     sed '
-      s/[[$]]LINENO.*/&-/
+      s/[$]LINENO.*/&-/
       t lineno
       b
       :lineno
       N
       :loop
-      s/[[$]]LINENO\([[^'$as_cr_alnum'_]].*\n\)\(.*\)/\2\1\2/
+      s/[$]LINENO\([^'$as_cr_alnum'_].*\n\)\(.*\)/\2\1\2/
       t loop
       s/-\n.*//
     ' >$as_me.lineno &&
-  chmod +x "$as_me.lineno" ||
+  chmod +x "$as_me.lineno"] ||
     AS_ERROR([cannot create $as_me.lineno; rerun with a POSIX shell])
 
   # Don't try to exec as it changes $[0], causing all sort of problems

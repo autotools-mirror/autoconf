@@ -1,5 +1,11 @@
 2010-08-27  Eric Blake  <eblake@redhat.com>
 
+	m4sh: protect LINENO against stray macro
+	* lib/m4sugar/m4sh.m4 (_AS_LINENO_PREPARE): Double quote entire
+	sed script, to avoid issue uncovered by automake testsuite where
+	'b' was an m4 macro that broke execution on dash.
+	Reported by Stefano Lattarini.
+
 	m4sh: assume ${a:-b} support
 	* tests/m4sh.at (Null variable substitution): New test.
 	* doc/autoconf.texi (Shell Substitutions) <${var:-value}>: Mention
