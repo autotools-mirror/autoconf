@@ -1,3 +1,13 @@
+2010-08-30  Eric Blake  <eblake@redhat.com>
+
+	docs: avoid use of $tmp outside of config.status use
+	* doc/autoconf.texi (Polymorphic Variables, Shell Substitutions):
+	Use $var or $t instead.
+	(Limitations of Usual Tools): Use $dir instead.
+	(Initialization Macros) <AS_TMPDIR>: Make good on the NEWS
+	regarding AS_TMPDIR being documented as consuming $tmp.
+	Suggested by Ralf Wildenhues.
+
 2010-08-29  Paul Eggert  <eggert@cs.ucla.edu>
 
 	AC_PROG_YACC: fix comment re what "yacc" stands for

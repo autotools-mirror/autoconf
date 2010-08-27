@@ -13442,8 +13442,8 @@ results in a script that will output the line @samp{hello} three times.
 AC_DEFUN([MY_ACTION],
 [AS_LITERAL_IF([$1],
   [echo "$$1"],
-  [AS_VAR_COPY([tmp], [$1])
-   echo "$tmp"],
+  [AS_VAR_COPY([var], [$1])
+   echo "$var"],
   [eval 'echo "$'"$1"\"])])
 foo=bar bar=hello
 MY_ACTION([bar])
@@ -13462,8 +13462,8 @@ efficient scaling.
 For situations where the final contents of @var{var} are relatively
 short (less than 256 bytes), it is more efficient to use the simpler
 code sequence of @code{@var{var}=$@{@var{var}@}@var{text}} (or its
-polymorphic equivalent of @code{AS_VAR_COPY([tmp], [@var{var}])} and
-@code{AS_VAR_SET([@var{var}], ["$tmp"@var{text}])}).  But in the case
+polymorphic equivalent of @code{AS_VAR_COPY([t], [@var{var}])} and
+@code{AS_VAR_SET([@var{var}], ["$t"@var{text}])}).  But in the case
 when the script will be repeatedly appending text into @code{var},
 issues of scaling start to become apparent.  A naive implementation
 requires execution time linear to the length of the current contents of
@@ -13700,6 +13700,33 @@ automatically invoked by @code{AC_INIT} in configure scripts.
 Set up variable @env{as_me} to be the basename of the currently executing
 script.  This macro is automatically invoked by @code{AC_INIT} in
 configure scripts.
+@end defmac
+
+@defmac AS_TMPDIR (@var{prefix}, @dvar{dir, $@{TMPDIR:=/tmp@}})
+@asindex{TMPDIR}
+@evindex TMPDIR
+@ovindex tmp
+Create, as safely as possible, a temporary sub-directory within
+@var{dir} with a name starting with @var{prefix}.  @var{prefix} should
+be 2-4 characters, to make it slightly easier to identify the owner of
+the directory.  If @var{dir} is omitted, then the value of @env{TMPDIR}
+will be used (defaulting to @samp{/tmp}).  On success, the name of the
+newly created directory is stored in the shell variable @code{tmp}.  On
+error, the script is aborted.
+
+Typically, this macro is coupled with some exit traps to delete the created
+directory and its contents on exit or interrupt.  However, there is a
+slight window between when the directory is created and when the name is
+actually known to the shell, so an interrupt at the right moment might
+leave the temporary directory behind.  Hence it is important to use a
+@var{prefix} that makes it easier to determine if a leftover temporary
+directory from an interrupted script is safe to delete.
+
+The use of the output variable @samp{$tmp} rather than something in the
+@samp{as_} namespace is historical; it has the unfortunate consequence
+that reusing this otherwise common name for any other purpose inside
+your script has the potential to break any cleanup traps designed to
+remove the temporary directory.
 @end defmac
 
 @defmac AS_SHELL_SANITIZE
@@ -15475,15 +15502,15 @@ b  c
 
 Perhaps the easiest way to work around quoting issues in a manner
 portable to all shells is to place the results in a temporary variable,
-then use @samp{$tmp} as the @var{value}, rather than trying to inline
+then use @samp{$t} as the @var{value}, rather than trying to inline
 the expression needing quoting.
 
 @example
-$ @kbd{/bin/sh -c 'tmp="a  b\"'\''@}\\"; echo "$@{a-$tmp@}"'}
+$ @kbd{/bin/sh -c 't="a  b\"'\''@}\\"; echo "$@{a-$t@}"'}
 b  c"'@}\
-$ @kbd{ksh -c 'tmp="a  b\"'\''@}\\"; echo "$@{a-$tmp@}"'}
+$ @kbd{ksh -c 't="a  b\"'\''@}\\"; echo "$@{a-$t@}"'}
 b  c"'@}\
-$ @kbd{bash -c 'tmp="a  b\"'\''@}\\"; echo "$@{a-$tmp@}"'}
+$ @kbd{bash -c 't="a  b\"'\''@}\\"; echo "$@{a-$t@}"'}
 b  c"'@}\
 @end example
 
@@ -18428,22 +18455,22 @@ use a file inside this directory.  Both methods prevent attackers from
 gaining control, though @command{mktemp} is far less likely to fail
 gratuitously under attack.
 
-Here is sample code to create a new temporary directory safely:
+Here is sample code to create a new temporary directory @samp{$dir} safely:
 
 @example
-# Create a temporary directory $tmp in $TMPDIR (default /tmp).
+# Create a temporary directory $dir in $TMPDIR (default /tmp).
 # Use mktemp if possible; otherwise fall back on mkdir,
 # with $RANDOM to make collisions less likely.
 : "$@{TMPDIR:=/tmp@}"
 @{
-  tmp=`
+  dir=`
     (umask 077 && mktemp -d "$TMPDIR/fooXXXXXX") 2>/dev/null
   ` &&
-  test -n "$tmp" && test -d "$tmp"
+  test -d "$dir"
 @} || @{
-  tmp=$TMPDIR/foo$$-$RANDOM
+  dir=$TMPDIR/foo$$-$RANDOM
 @c $$ restore font-lock
-  (umask 077 && mkdir "$tmp")
+  (umask 077 && mkdir "$dir")
 @} || exit $?
 @end example
 
