@@ -1,5 +1,10 @@
 2010-08-30  Eric Blake  <eblake@redhat.com>
 
+	tests: avoid trashing /
+	* tests/torture.at (AC_CONFIG_COMMANDS with temporary directory):
+	Use a relative path, rather than risking issues with /.
+	Reported by Ralf Wildenhues.
+
 	docs: mention Solaris here-docs vs. ${a-"b c"}
 	* doc/autoconf.texi (Shell Substitutions) <${var:=value}>:
 	Document problem of "" within here-docs.

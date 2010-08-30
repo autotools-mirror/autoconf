@@ -43,7 +43,7 @@ case $ACTION in
     ;;
   corrupt)
     echo "$tmp" > tmpdir
-    tmp=/nosuch
+    tmp=./nosuch
     ;;
   *) ;;
 esac
