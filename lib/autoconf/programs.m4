@@ -895,8 +895,8 @@ AN_PROGRAM([bison], [AC_PROG_YACC])
 AC_DEFUN([AC_PROG_YACC],
 [AC_CHECK_PROGS(YACC, 'bison -y' byacc, yacc)dnl
 AC_ARG_VAR(YACC,
-[The `Yet Another C Compiler' implementation to use.  Defaults to the first
-program found out of: `bison -y', `byacc', `yacc'.])dnl
+[The `Yet Another Compiler Compiler' implementation to use.  Defaults to
+the first program found out of: `bison -y', `byacc', `yacc'.])dnl
 AC_ARG_VAR(YFLAGS,
 [The list of arguments that will be passed by default to $YACC.  This script
 will default YFLAGS to the empty string to avoid a default value of `-d' given

@@ -1,3 +1,11 @@
+2010-08-29  Paul Eggert  <eggert@cs.ucla.edu>
+
+	AC_PROG_YACC: fix comment re what "yacc" stands for
+	* lib/autoconf/programs.m4 (AC_PROG_YACC): YACC stands for
+	"Yet Another Compiler Compiler", not "Yet Another C Compiler".
+	Problem reported by Chris Long in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2010-08/msg00134.html>.
+
 2010-08-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Avoid long lines in testsuite script.
