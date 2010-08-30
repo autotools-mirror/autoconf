@@ -1,5 +1,10 @@
 2010-08-30  Eric Blake  <eblake@redhat.com>
 
+	docs: mention Solaris here-docs vs. ${a-"b c"}
+	* doc/autoconf.texi (Shell Substitutions) <${var:=value}>:
+	Document problem of "" within here-docs.
+	Reported by Ralf Wildenhues.
+
 	fortran: always avoid AC_LANG_CONFTEST warning
 	* lib/autoconf/lang.m4 (AC_LANG_CONFTEST()): Make the default
 	match the fact that the default AC_LANG_SOURCE does not inline

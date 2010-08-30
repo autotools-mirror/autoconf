@@ -15466,7 +15466,8 @@ use null variable substitution patterns in configure scripts.
 @cindex $@{@var{var}+@var{value}@}
 When using @samp{$@{@var{var}-@var{value}@}} or
 @samp{$@{@var{var}-@var{value}@}} for providing alternate substitutions,
-@var{value} must either be a single shell word or be quoted.  Solaris
+@var{value} must either be a single shell word, quoted, or in the
+context of an unquoted here-document.  Solaris
 @command{/bin/sh} complains otherwise.
 
 @example
@@ -15476,12 +15477,17 @@ $ @kbd{/bin/sh -c 'echo $@{a-'\''b c'\''@}'}
 b c
 $ @kbd{/bin/sh -c 'echo "$@{a-b c@}"'}
 b c
+$ @kbd{/bin/sh -c 'cat <<EOF
+$@{a-b c@}
+EOF}
+b c
 @end example
 
 According to Posix, if an expansion occurs inside double quotes, then
 the use of unquoted double quotes within @var{value} is unspecified, and
 any single quotes become literal characters; in that case, escaping must
-be done with backslash.
+be done with backslash.  Likewise, the use of unquoted here-documents is
+a case where double quotes have unspecified results:
 
 @example
 $ @kbd{/bin/sh -c 'echo "$@{a-"b  c"@}"'}
@@ -15498,6 +15504,22 @@ $ @kbd{/bin/sh -c 'a=; echo "$@{a+\"b  c\"@}"'}
 "b  c"
 $ @kbd{/bin/sh -c 'a=; echo "$@{a+b  c@}"'}
 b  c
+$ @kbd{/bin/sh -c 'cat <<EOF
+$@{a-"b  c"@}
+EOF'}
+"b  c"
+$ @kbd{/bin/sh -c 'cat <<EOF
+$@{a-'b  c'@}
+EOF'}
+'b  c'
+$ @kbd{bash -c 'cat <<EOF
+$@{a-"b  c"@}
+EOF'}
+b  c
+$ @kbd{bash -c 'cat <<EOF
+$@{a-'b  c'@}
+EOF'}
+'b  c'
 @end example
 
 Perhaps the easiest way to work around quoting issues in a manner
