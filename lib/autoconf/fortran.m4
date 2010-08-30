@@ -897,8 +897,8 @@ AC_DEFUN([__AC_FC_NAME_MANGLING],
 [_AC_FORTRAN_ASSERT()dnl
 AC_CACHE_CHECK([for _AC_LANG name-mangling scheme],
 	       ac_cv_[]_AC_LANG_ABBREV[]_mangling,
-[AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED
-[      subroutine foobar()
+[AC_COMPILE_IFELSE(
+[[      subroutine foobar()
       return
       end
       subroutine foo_bar()
@@ -1186,7 +1186,7 @@ for ac_flag in none -ffree-form -FR -free -qfree -Mfree -Mfreeform \
 do
   test "x$ac_flag" != xnone && FCFLAGS="$ac_fc_freeform_FCFLAGS_save $ac_flag"
 dnl Use @&t@ below to ensure that editors don't turn 8+ spaces into tab.
-  AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED[
+  AC_COMPILE_IFELSE([[
   program freeform
        ! FIXME: how to best confuse non-freeform compilers?
        print *, 'Hello ', &
@@ -1241,7 +1241,7 @@ for ac_flag in none -ffixed-form -fixed -qfixed -Mfixed -fixedform "-f fixed" \
 	       +source=fixed -fix
 do
   test "x$ac_flag" != xnone && FCFLAGS="$ac_fc_fixedform_FCFLAGS_save $ac_flag"
-  AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED[
+  AC_COMPILE_IFELSE([[
 C     This comment should confuse free-form compilers.
       program main
       end]],
@@ -1324,7 +1324,7 @@ for ac_flag in none \
 	       "-W $ac_fc_line_len" +extend_source -wide -e
 do
   test "x$ac_flag" != xnone && FCFLAGS="$ac_fc_line_length_FCFLAGS_save $ac_flag"
-  AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED[$ac_fc_line_length_test
+  AC_COMPILE_IFELSE([[$ac_fc_line_length_test
       end subroutine]],
 		    [ac_cv_fc_line_length=$ac_flag; break])
 done

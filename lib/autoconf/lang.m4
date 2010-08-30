@@ -201,9 +201,13 @@ AC_DEFUN([AC_LANG_CONFTEST],
 # AC_LANG_CONFTEST()(BODY)
 # ------------------------
 # Default implementation of AC_LANG_CONFTEST.
+# This version assumes that you can't inline confdefs.h into your
+# language, and as such, it is safe to blindly call
+# AC_LANG_DEFINES_PROVIDED.  Language-specific overrides should
+# remove this call if AC_LANG_SOURCE does inline confdefs.h.
 m4_define([AC_LANG_CONFTEST()],
 [cat > conftest.$ac_ext <<_ACEOF
-$1
+AC_LANG_DEFINES_PROVIDED[]$1
 _ACEOF])
 
 # AC_LANG_DEFINES_PROVIDED

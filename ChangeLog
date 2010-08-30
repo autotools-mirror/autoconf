@@ -1,5 +1,14 @@
 2010-08-30  Eric Blake  <eblake@redhat.com>
 
+	fortran: always avoid AC_LANG_CONFTEST warning
+	* lib/autoconf/lang.m4 (AC_LANG_CONFTEST()): Make the default
+	match the fact that the default AC_LANG_SOURCE does not inline
+	confdefs.h in the first place.
+	* lib/autoconf/fortran.m4 (AC_FC_FREEFORM, AC_FC_FIXEDFORM)
+	(AC_FC_LINE_LENGTH, __AC_FC_NAME_MANGLING): Revert previous use of
+	AC_LANG_DEFINES_PROVIDED.
+	Suggested by Ralf Wildenhues.
+
 	config.status: minimize use of $tmp
 	* lib/autoconf/status.m4 (_AC_OUTPUT_MAIN_LOOP)
 	(_AC_OUTPUT_FILES_PREPARE, _AC_OUTPUT_FILE)
