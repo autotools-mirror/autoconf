@@ -1,3 +1,11 @@
+2010-09-08  Eric Blake  <eblake@redhat.com>
+
+	docs: mention traditional awk limitation
+	* doc/autoconf.texi (Limitations of Usual Tools) <awk>: Mention
+	that traditional awk lacks ENVIRON.  Add reference to awk manual.
+	(Particular Programs) <AC_PROG_AWK>: Add reference to awk section.
+	Reported by Ralf Wildenhues.
+
 2010-09-07  Eric Blake  <eblake@redhat.com>
 
 	docs: mention bash vs. POSIXLY_CORRECT

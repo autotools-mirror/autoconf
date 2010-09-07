@@ -3915,6 +3915,9 @@ order, and set output variable @code{AWK} to the first one that is found.
 It tries @code{gawk} first because that is reported to be the
 best implementation.  The result can be overridden by setting the
 variable @code{AWK} or the cache variable @code{ac_cv_prog_AWK}.
+
+Using this macro is sufficient to avoid the pitfalls of traditional
+@command{awk} (@pxref{awk, , Limitations of Usual Tools}).
 @end defmac
 
 @defmac AC_PROG_GREP
@@ -17732,6 +17735,7 @@ include some limitations you should be aware of.
 @c This table includes things like `@command{expr} (|)', so we can't
 @c use @table @command.
 @table @asis
+@anchor{awk}
 @item @command{awk}
 @c ----------------
 @prindex @command{awk}
@@ -17828,7 +17832,8 @@ Solaris @command{/bin/awk}, have many limitations and do not
 conform to Posix.  Nowadays @code{AC_PROG_AWK} (@pxref{Particular
 Programs}) finds you an Awk that doesn't have these problems, but if
 for some reason you prefer not to use @code{AC_PROG_AWK} you may need to
-address them.
+address them.  For more detailed descriptions, see @ref{Language
+History, , @command{awk} language history, gawk, GNU Awk User's Guide}.
 
 Traditional Awk does not support multidimensional arrays or user-defined
 functions.
@@ -17845,7 +17850,8 @@ Traditional Awk does not support the expressions
 @code{@var{a}?@var{b}:@var{c}}, @code{!@var{a}}, @code{@var{a}^@var{b}},
 or @code{@var{a}^=@var{b}}.
 
-Traditional Awk does not support the predefined @code{CONVFMT} variable.
+Traditional Awk does not support the predefined @code{CONVFMT} or
+@code{ENVIRON} variables.
 
 Traditional Awk supports only the predefined functions @code{exp}, @code{index},
 @code{int}, @code{length}, @code{log}, @code{split}, @code{sprintf},
