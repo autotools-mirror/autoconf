@@ -16416,6 +16416,24 @@ separator Bash uses to set up certain environment variables (such as
 if you plan to use non-Posix shells to execute files.  @xref{File System
 Conventions}, for more information about @code{PATH_SEPARATOR}.
 
+@item POSIXLY_CORRECT
+@evindex POSIXLY_CORRECT
+In the GNU environment, exporting @env{POSIXLY_CORRECT} with any value
+(even empty) causes programs to try harder to conform to Posix.
+Autoconf does not directly manipulate this variable, but @command{bash}
+ties the shell variable @env{POSIXLY_CORRECT} to whether the script is
+running in Posix mode.  Therefore, take care when exporting or unsetting
+this variable, so as not to change whether @command{bash} is in Posix
+mode.
+
+@example
+$ @kbd{bash --posix -c 'set -o | grep posix}
+> @kbd{unset POSIXLY_CORRECT}
+> @kbd{set -o | grep posix'}
+posix           on
+posix           off
+@end example
+
 @item PWD
 @evindex PWD
 Posix 1003.1-2001 requires that @command{cd} and

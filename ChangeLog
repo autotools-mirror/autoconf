@@ -1,5 +1,11 @@
 2010-09-07  Eric Blake  <eblake@redhat.com>
 
+	docs: mention bash vs. POSIXLY_CORRECT
+	* doc/autoconf.texi (Special Shell Variables) <POSIXLY_CORRECT>:
+	Document bash behavior.
+	* THANKS: Update.
+	Reported by Dustin J. Mitchell, via bug-gnulib list.
+
 	docs: enhance recommendations on test usage
 	* doc/autoconf.texi (Limitations of Builtins) <test (strings)>:
 	Mention yet another Solaris issue.
