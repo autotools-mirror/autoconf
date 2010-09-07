@@ -17505,6 +17505,8 @@ $ @kbd{test -n =}
 test: argument expected
 $ @kbd{test ! -n}
 test: argument expected
+$ @kbd{test -z ")"; echo $?}
+0
 @end example
 
 Similarly, Posix says that both @samp{test "@var{string1}" = "@var{string2"}}

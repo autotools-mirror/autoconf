@@ -1,3 +1,10 @@
+2010-09-07  Eric Blake  <eblake@redhat.com>
+
+	docs: enhance recommendations on test usage
+	* doc/autoconf.texi (Limitations of Builtins) <test (strings)>:
+	Mention yet another Solaris issue.
+	Reported by Stefano Lattarini.
+
 2010-08-30  Eric Blake  <eblake@redhat.com>
 
 	tests: avoid trashing /
