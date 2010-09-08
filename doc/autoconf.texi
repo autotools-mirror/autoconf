@@ -728,7 +728,8 @@ about difficulties in writing Autoconf input, and not in the behavior of
 the resulting @file{configure}.  Even packages that don't use Autoconf
 will generally provide a @file{configure} script, and the most common
 complaint about these alternative home-grown scripts is that they fail
-to meet one or more of the GNU Coding Standards that users
+to meet one or more of the GNU Coding Standars (@pxref{Configuration, , ,
+standards, The GNU Coding Standards}) that users
 have come to expect from Autoconf-generated @file{configure} scripts.
 
 The Metaconfig package is similar in purpose to Autoconf, but the
@@ -14671,7 +14672,7 @@ However, these ancient systems are no longer of practical concern.
 
 The set of external programs you should run in a @command{configure} script
 is fairly small.  @xref{Utilities in Makefiles, , Utilities in
-Makefiles, standards, GNU Coding Standards}, for the list.  This
+Makefiles, standards, The GNU Coding Standards}, for the list.  This
 restriction allows users to start out with a fairly small set of
 programs and build the rest, avoiding too many interdependencies between
 packages.
@@ -20121,7 +20122,7 @@ and the rest of section assumes at least C89, the first C standard.
 
 Program portability is a huge topic, and this section can only briefly
 introduce common pitfalls.  @xref{System Portability, , Portability
-between System Types, standards, GNU Coding Standards}, for
+between System Types, standards, The GNU Coding Standards}, for
 more information.
 
 @menu
@@ -21393,7 +21394,7 @@ by an environment variable.  The programs should examine that file at
 runtime, rather than at compile time.  Runtime configuration is more
 convenient for users and makes the configuration process simpler than
 getting the information while configuring.  @xref{Directory Variables, ,
-Variables for Installation Directories, standards, GNU Coding
+Variables for Installation Directories, standards, The GNU Coding
 Standards}, for more information on where to put data files.
 
 @node Transforming Names

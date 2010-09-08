@@ -1,5 +1,9 @@
 2010-09-08  Eric Blake  <eblake@redhat.com>
 
+	docs: link to GNU Coding Standards in intro
+	* doc/autoconf.texi (Introduction): Actually link to the
+	standards.  Make other references consistent.
+
 	docs: mention traditional awk limitation
 	* doc/autoconf.texi (Limitations of Usual Tools) <awk>: Mention
 	that traditional awk lacks ENVIRON.  Add reference to awk manual.
