@@ -1,5 +1,10 @@
 2010-09-08  Eric Blake  <eblake@redhat.com>
 
+	m4sh: preserve set -vx over re-exec
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Trace through
+	re-exec, to make it easier to debug script startup issues.
+	Idea from recent bug-gnulib change to init.sh.
+
 	docs: update alloca recommendations
 	* doc/autoconf.texi (Particular Functions): Don't redeclare alloca
 	on FreeBSD.

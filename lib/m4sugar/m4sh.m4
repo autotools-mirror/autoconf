@@ -227,11 +227,18 @@ dnl Remove any tests from suggested that are also required
 	[# We cannot yet assume a decent shell, so we have to provide a
 	# neutralization value for shells without unset; and this also
 	# works around shells that cannot unset nonexistent variables.
+	# Preserve -v and -x to the replacement shell.
 	BASH_ENV=/dev/null
 	ENV=/dev/null
 	(unset BASH_ENV) >/dev/null 2>&1 && unset BASH_ENV ENV
 	export CONFIG_SHELL
-	exec "$CONFIG_SHELL" "$as_myself" ${1+"$[@]"}])
+	case $- in @%:@ ((((
+	  *v*x* | *x*v* ) as_opts=-vx ;;
+	  *v* ) as_opts=-v ;;
+	  *x* ) as_opts=-x ;;
+	  * ) as_opts= ;;
+	esac
+	exec "$CONFIG_SHELL" $as_opts "$as_myself" ${1+"$[@]"}])
 
 dnl Unfortunately, $as_me isn't available here.
     AS_IF([test x$as_have_required = xno],
