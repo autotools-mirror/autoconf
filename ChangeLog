@@ -1,5 +1,11 @@
 2010-09-08  Eric Blake  <eblake@redhat.com>
 
+	docs: update alloca recommendations
+	* doc/autoconf.texi (Particular Functions): Don't redeclare alloca
+	on FreeBSD.
+	* THANKS: Update.
+	Reported by Giorgos Keramidas.
+
 	docs: link to GNU Coding Standards in intro
 	* doc/autoconf.texi (Introduction): Actually link to the
 	standards.  Make other references consistent.
