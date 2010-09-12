@@ -16432,6 +16432,11 @@ than 3.1.6-dev-18.  If you are using an older @command{zsh}
 and forget to set @env{NULLCMD},
 your script might be suspended waiting for data on its standard input.
 
+@item options
+@evindex options
+For @command{zsh} 4.3.10, @env{options} is treated as an associative
+array even after @code{emulate sh}, so it should not be used.
+
 @item PATH_SEPARATOR
 @evindex PATH_SEPARATOR
 On DJGPP systems, the @env{PATH_SEPARATOR} environment

@@ -1,5 +1,9 @@
 2010-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	docs: document zsh special array $options.
+	* doc/autoconf.texi (Special Shell Variables): Add entry for
+	`options'.
+
 	doc: minor updates.
 	* doc/autoconf.texi (Generic Compiler Characteristics): Use
 	second argument of @uref consistently, for nicer OpenMP link.
