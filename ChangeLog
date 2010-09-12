@@ -1,4 +1,11 @@
 2010-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	    Gary V. Vaughan <gary@gnu.org>
+
+	docs: document zsh specialty with empty here-documents.
+	* doc/autoconf.texi (Here-Documents): zsh 4.3.10 adds a newline
+	to empty here-docs.
+
+2010-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	docs: document zsh special array $options.
 	* doc/autoconf.texi (Special Shell Variables): Add entry for

@@ -14897,6 +14897,15 @@ fixed in
 @samp{ksh93g} (1998-04-30) but as of 2006 many operating systems were
 still shipping older versions with the bug.
 
+Empty here-documents are not portable either; with the following code,
+@command{zsh} up to at least version 4.3.10 creates a file with a single
+newline, whereas other shells create an empty file:
+
+@example
+cat >file <<EOF
+EOF
+@end example
+
 Many shells (including the Bourne shell) implement here-documents
 inefficiently.  In particular, some shells can be extremely inefficient when
 a single statement contains many here-documents.  For instance if your
