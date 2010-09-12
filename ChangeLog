@@ -1,5 +1,11 @@
 2010-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	doc: minor updates.
+	* doc/autoconf.texi (Generic Compiler Characteristics): Use
+	second argument of @uref consistently, for nicer OpenMP link.
+	(Polymorphic Variables): Restore font-lock.
+	(Debugging): Add item for bashdb.
+
 	Document and test AT_CHECK args shell execution environment.
 	* doc/autoconf.texi (Writing Testsuites): Document that COMMANDS
 	is run in a subshell, but RUN-IF-FAIL and RUN-IF-PASS are not.

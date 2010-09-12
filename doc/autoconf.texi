@@ -7051,7 +7051,7 @@ etc.).
 @ovindex OPENMP_CXXFLAGS
 @ovindex OPENMP_FFLAGS
 @ovindex OPENMP_FCFLAGS
-OpenMP (@url{http://@/www.openmp.org/}) specifies extensions of C, C++,
+@uref{http://@/www.openmp.org/, OpenMP} specifies extensions of C, C++,
 and Fortran that simplify optimization of shared memory parallelism,
 which is a common problem on multicore CPUs.
 
@@ -13467,6 +13467,7 @@ results in a script that will output the line @samp{hello} three times.
 AC_DEFUN([MY_ACTION],
 [AS_LITERAL_IF([$1],
   [echo "$$1"],
+@c $$
   [AS_VAR_COPY([var], [$1])
    echo "$var"],
   [eval 'echo "$'"$1"\"])])
@@ -25215,6 +25216,10 @@ and after the region that contains a bug.  Running the whole script with
 @var{shell} may work, but produces lots of output.  Here, it can help to
 search for markers like @samp{checking for} a particular test in the
 @var{log-file}.
+
+@item
+Alternatively, you might use a shell with debugging capabilities like
+@uref{http://bashdb.sourceforge.net/, bashdb}.
 
 @item
 When @command{configure} tests produce invalid results for your system,
