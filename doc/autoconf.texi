@@ -24180,17 +24180,17 @@ be a single shell word that expands into a single file name.
 @atindex{CHECK}
 @atindex{CHECK_UNQUOTED}
 @vrindex at_status
-Execute a test by performing given shell @var{commands}.  @var{commands}
-is output as-is, so shell expansions are honored.  These commands
-should normally exit with @var{status}, while producing expected
+Execute a test by performing given shell @var{commands} in a subshell.
+@var{commands} is output as-is, so shell expansions are honored.  These
+commands should normally exit with @var{status}, while producing expected
 @var{stdout} and @var{stderr} contents.  If @var{commands} exit with
 unexpected status 77, then the rest of the test group is skipped.  If
 @var{commands} exit with unexpected status 99, then the test group is
-immediately failed.  Otherwise, if this test
-fails, run shell commands @var{run-if-fail} or, if this test passes, run shell
-commands @var{run-if-pass}.  At the beginning of @var{run-if-fail} and
-@var{run-if-pass}, the status of @var{commands} is available in the
-@code{at_status} shell variable.
+immediately failed.  Otherwise, if this test fails, run shell commands
+@var{run-if-fail} or, if this test passes, run shell commands
+@var{run-if-pass}, both inside the current shell execution environment.
+At the beginning of @var{run-if-fail} and @var{run-if-pass}, the status of
+@var{commands} is available in the @code{at_status} shell variable.
 
 This macro must be invoked in between @code{AT_SETUP} and @code{AT_CLEANUP}.
 

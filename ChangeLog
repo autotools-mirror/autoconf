@@ -1,5 +1,12 @@
 2010-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Document and test AT_CHECK args shell execution environment.
+	* doc/autoconf.texi (Writing Testsuites): Document that COMMANDS
+	is run in a subshell, but RUN-IF-FAIL and RUN-IF-PASS are not.
+	* tests/autotest.at (AT@&t@_CHECK execution environment): New
+	test.
+	* NEWS: Update.
+
 	autotest: document and test at_status semantics.
 	* doc/autoconf.texi (Writing Testsuites): Document $at_status.
 	* tests/autotest.at (at_status): New test.

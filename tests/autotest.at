@@ -432,6 +432,25 @@ AT_CHECK([grep 'run-if-pass: 42' stdout], [], [ignore])
 ])
 
 
+AT_CHECK_AT_TEST([AT@&t@_CHECK execution environment],
+  [dnl The first test should fail, so we enter RUN-IF-FAIL.
+   AT_CHECK([test "$state" != before], [], [], [],
+	    [state=run-if-fail
+	     AT_CHECK([:]) dnl need this so we do not bail out at this point.
+            ])
+   dnl This should pass, so we enter RUN-IF-PASS.
+   AT_CHECK([test "$state" = run-if-fail], [], [], [], [],
+	    [state=run-if-pass])
+   AT_CHECK([test "$state" = run-if-pass])
+   dnl However, COMMANDS are run inside a subshell, so do not change state.
+   AT_CHECK([state=broken; false], [], [], [],
+	    [AT_CHECK([test "$state" = run-if-pass])])
+   AT_CHECK([state=broken], [], [], [], [],
+	    [AT_CHECK([test "$state" = run-if-pass])])
+  ],
+  [], [], [], [], [], [], [state=before])
+
+
 AT_CHECK_AT_TEST([unquoted output],
   [m4_define([backtick], [`])
    a=a

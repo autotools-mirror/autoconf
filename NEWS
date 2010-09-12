@@ -25,7 +25,8 @@ GNU Autoconf NEWS - User visible changes.
 ** Autotest testsuites should not contain long text lines any more, and be
    portable even when very many test groups are used.
 
-** The Autotest variable $at_status is documented now.
+** AT_CHECK semantics with respect to the Autotest variable $at_status and
+   shell execution environment of the arguments are documented now.
 
 
 * Major changes in Autoconf 2.67 (2010-07-21) [stable]
