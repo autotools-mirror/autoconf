@@ -1,3 +1,11 @@
+2010-09-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	doc: minor indexing update.
+	(Shell Substitutions, Site Defaults): Fix markup for indexed
+	entried, using @code and @file as appropriate.
+	(M4 Macro Index): Clarify which of the indexed macros have m4_
+	and which have AS_ prefix.
+
 2010-09-08  Eric Blake  <eblake@redhat.com>
 
 	m4sh: preserve set -vx over re-exec

@@ -15388,7 +15388,7 @@ There are also portability pitfalls with particular expansions:
 
 @table @code
 @item $@@
-@cindex @samp{"$@@"}
+@cindex @code{"$@@"}
 One of the most famous shell-portability issues is related to
 @samp{"$@@"}.  When there are no positional arguments, Posix says
 that @samp{"$@@"} is supposed to be equivalent to nothing, but the
@@ -15465,9 +15465,9 @@ bad substitution
 @item $@{@var{var}:-@var{value}@}
 @c Info cannot handle `:' in index entries.
 @ifnotinfo
-@cindex $@{@var{var}:-@var{value}@}
+@cindex @code{$@{@var{var}:-@var{value}@}}
 @end ifnotinfo
-@cindex $@{@var{var}-@var{value}@}
+@cindex @code{$@{@var{var}-@var{value}@}}
 Old BSD shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 Similarly for $@{@var{var}:=@var{value}@}, $@{@var{var}:?@var{value}@}, etc.
@@ -15476,7 +15476,7 @@ shell substitution, and since m4sh requires functions, you can portably
 use null variable substitution patterns in configure scripts.
 
 @item $@{@var{var}+@var{value}@}
-@cindex $@{@var{var}+@var{value}@}
+@cindex @code{$@{@var{var}+@var{value}@}}
 When using @samp{$@{@var{var}-@var{value}@}} or
 @samp{$@{@var{var}-@var{value}@}} for providing alternate substitutions,
 @var{value} must either be a single shell word, quoted, or in the
@@ -15550,7 +15550,7 @@ b  c"'@}\
 @end example
 
 @item $@{@var{var}=@var{value}@}
-@cindex $@{@var{var}=@var{value}@}
+@cindex @code{$@{@var{var}=@var{value}@}}
 When using @samp{$@{@var{var}=@var{value}@}} to assign a default value
 to @var{var}, remember that even though the assignment to @var{var} does
 not undergo file name expansion, the result of the variable expansion
@@ -15640,7 +15640,7 @@ $ @kbd{ksh -c 'x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";echo -$x-'}
 @end example
 
 @item $@{@var{var}=@var{value}@}
-@cindex $@{@var{var}=@var{literal}@}
+@cindex @code{$@{@var{var}=@var{literal}@}}
 Solaris @command{/bin/sh} has a frightening bug in its handling of
 literal assignments.  Imagine you need set a variable to a string containing
 @samp{@}}.  This @samp{@}} character confuses Solaris @command{/bin/sh}
@@ -15667,7 +15667,7 @@ using double quotes, or when using a temporary variable holding the
 problematic string.
 
 @item $@{@var{var}=@var{expanded-value}@}
-@cindex $@{@var{var}=@var{expanded-value}@}
+@cindex @code{$@{@var{var}=@var{expanded-value}@}}
 On Ultrix,
 running
 
@@ -15735,11 +15735,11 @@ test "$@{var+set@}" = set || var=@var{@{value@}}
 @itemx $@{@var{var}%%@var{word}@}
 @itemx $@{@var{var}#@var{word}@}
 @itemx $@{@var{var}##@var{word}@}
-@cindex $@{#@var{var}@}
-@cindex $@{@var{var}%@var{word}@}
-@cindex $@{@var{var}%%@var{word}@}
-@cindex $@{@var{var}#@var{word}@}
-@cindex $@{@var{var}##@var{word}@}
+@cindex @code{$@{#@var{var}@}}
+@cindex @code{$@{@var{var}%@var{word}@}}
+@cindex @code{$@{@var{var}%%@var{word}@}}
+@cindex @code{$@{@var{var}#@var{word}@}}
+@cindex @code{$@{@var{var}##@var{word}@}}
 Posix requires support for these usages, but they do not work with many
 traditional shells, e.g., Solaris 10 @command{/bin/sh}.
 
@@ -15750,7 +15750,7 @@ yields the empty string.
 
 
 @item `@var{commands}`
-@cindex `@var{commands}`
+@cindex @code{`@var{commands}`}
 @cindex Command Substitution
 Posix requires shells to trim all trailing newlines from command
 output before substituting it, so assignments like
@@ -15807,7 +15807,7 @@ $ @kbd{^C}
 @end example
 
 @item $(@var{commands})
-@cindex $(@var{commands})
+@cindex @code{$(@var{commands})}
 This construct is meant to replace @samp{`@var{commands}`},
 and it has most of the problems listed under @code{`@var{commands}`}.
 
@@ -15849,7 +15849,7 @@ echo $(case x in x) echo hello;; esac)
 
 
 @item $((@var{expression}))
-@cindex $((@var{expression}))
+@cindex @code{$((@var{expression}))}
 Arithmetic expansion is not portable as some shells (most
 notably Solaris 10 @command{/bin/sh}) don't support it.
 
@@ -15894,7 +15894,7 @@ foo=$func_arith_result
 
 
 @item ^
-@cindex ^ quoting
+@cindex @code{^} quoting
 Always quote @samp{^}, otherwise traditional shells such as
 @command{/bin/sh} on Solaris 10 treat this like @samp{|}.
 
@@ -21637,7 +21637,7 @@ if test "$prefix" = /usr; then
 fi
 @end example
 
-@cindex lib64
+@cindex @file{lib64}
 @cindex 64-bit libraries
 Likewise, on platforms where 64-bit libraries are built by default, then
 installed in @file{/usr/local/@/lib64} instead of @file{/usr/local/@/lib},
@@ -25547,7 +25547,9 @@ preceding @samp{AC_}.
 This is an alphabetical list of the M4, M4sugar, and M4sh macros.
 @ifset shortindexflag
 To make the list easier to use, the macros are listed without their
-preceding @samp{m4_} or @samp{AS_}.
+preceding @samp{m4_} or @samp{AS_}.  The prefix is @samp{m4_} for
+all-lowercase macro names and @samp{AS_} for all-uppercase macro
+names.
 @end ifset
 
 @printindex MS
