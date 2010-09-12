@@ -1,5 +1,10 @@
 2010-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	autotest: document and test at_status semantics.
+	* doc/autoconf.texi (Writing Testsuites): Document $at_status.
+	* tests/autotest.at (at_status): New test.
+	* NEWS: Update.
+
 	doc: index entries for non-environment, non-output variables.
 	* doc/autoconf.texi: Clarify the meaning of the various variable
 	indices.  Merge variable index `vr' into concept index using

@@ -25,6 +25,8 @@ GNU Autoconf NEWS - User visible changes.
 ** Autotest testsuites should not contain long text lines any more, and be
    portable even when very many test groups are used.
 
+** The Autotest variable $at_status is documented now.
+
 
 * Major changes in Autoconf 2.67 (2010-07-21) [stable]
   Released by Eric Blake, based on git versions 2.66.*.

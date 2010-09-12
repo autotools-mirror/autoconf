@@ -405,6 +405,33 @@ AT_CHECK_AT_TEST([errexit],
    AT_CHECK([grep "inhibited subsequent" stderr], [], [ignore])],
   [--errexit])
 
+
+AT_CHECK_AT_TEST([at_status],
+  [AT_CHECK([exit $mystatus], [$expected], [], [],
+	    [AT_CHECK([echo run-if-fail: $at_status], [], [ignore])],
+	    [AT_CHECK([echo run-if-pass: $at_status], [], [ignore])])
+   AT_CLEANUP
+   AT_SETUP([test with nested checks])
+   AT_CHECK([exit $mystatus], [$expected], [], [],
+	    [AT_CHECK([exit $mystatus], [$expected], [], [],
+		      [AT_CHECK([echo inner run-if-fail: $at_status], [],
+				[ignore])])])],
+  [], [], [stdout], [],
+[], [
+AT_CHECK([grep 'inner run-if-fail: 42' stdout], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -x -v 1 mystatus=0 expected=0], [], [stdout])
+AT_CHECK([grep 'run-if-pass: 0' stdout], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -x -v 1 mystatus=42 expected=0], [], [stdout])
+AT_CHECK([grep 'run-if-fail: 42' stdout], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -x -v 1 mystatus=0 expected=42], [], [stdout])
+AT_CHECK([grep 'run-if-fail: 0' stdout], [], [ignore])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -x -v 1 mystatus=42 expected=42], [], [stdout])
+AT_CHECK([grep 'run-if-pass: 42' stdout], [], [ignore])
+],
+[-v mystatus=42 expected=1
+])
+
+
 AT_CHECK_AT_TEST([unquoted output],
   [m4_define([backtick], [`])
    a=a
