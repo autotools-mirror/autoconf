@@ -16568,7 +16568,7 @@ arguments of the script were lost after the first function invocation.
 It is probably not worth worrying about these shells any more.
 
 With AIX sh, a @command{trap} on 0 installed in a shell function
-triggers at function exit rather than at script exit, see @xref{trap, ,
+triggers at function exit rather than at script exit.  @xref{trap, ,
 Limitations of Shell Builtins}.
 
 @node Limitations of Builtins
@@ -16859,7 +16859,7 @@ at changing to @env{HOME}, although this is probably not what you wanted
 in a script).  You should check that a directory name was supplied
 before trying to change locations.
 
-See @xref{Special Shell Variables}, for portability problems involving
+@xref{Special Shell Variables}, for portability problems involving
 @command{cd} and the @env{CDPATH} environment variable.
 Also please see the discussion of the @command{pwd} command.
 
@@ -20563,7 +20563,7 @@ more subtle ways to get them.
 
 Using @code{int} values to index into an array or compute array sizes
 causes problems on typical 64-bit hosts where an array index might
-be @math{2^31} or larger.  Index values of type @code{size_t} avoid this
+be @math{2^{31}} or larger.  Index values of type @code{size_t} avoid this
 problem, but cannot be negative.  Index values of type @code{ptrdiff_t}
 are signed, and are wide enough in practice.
 
@@ -20914,7 +20914,7 @@ otherwise it defaults to @code{host}.
 @end defmac
 
 Note that there can be artifacts due to the backward compatibility
-code.  See @xref{Hosts and Cross-Compilation}, for more.
+code.  @xref{Hosts and Cross-Compilation}, for more.
 
 @node Using System Type
 @section Using the System Type

@@ -1,3 +1,13 @@
+2010-09-12  Fernando Carrijo  <fcarrijo@freedesktop.org>  (tiny change)
+
+	docs: fix minor typo and 'See See foo' instances
+	* doc/autoconf.texi (Buffer Overruns and Subscript Errors): Fix
+	usage of TeX superscript notation to correctly represent number
+	exponent.
+	(Shell Functions): s/[Ss]ee @xref/@xref/
+	(Limitations of Shell Builtins, Canonicalizing): Likewise.
+	* THANKS: Update.
+
 2010-09-13  Eric Blake  <eblake@redhat.com>
 
 	tests: skip broken automake wrapper on MirBSD
