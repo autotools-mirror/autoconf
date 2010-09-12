@@ -46,14 +46,18 @@
 @c with texi2dvi.  But then you wake up an old problem: we use macros
 @c in @defmac etc. where TeX does perform the expansion, but not makeinfo.
 
-@c Define an environment variable index.
+@c Define an environment variable index, for variables users may set
+@c in their environment or on the configure command line.
 @defcodeindex ev
-@c Define an output variable index.
+@c Define an output variable index, for commonly AC_SUBST'ed variables.
 @defcodeindex ov
-@c Define a CPP variable index.
-@defcodeindex cv
-@c Define a cache variable index.
+@c Define a cache variable index, for variables matching *_cv_*.
 @defcodeindex CA
+@c Other shell variables not fitting the above categories should be
+@c listed in the predefined vrindex, which we merge in the concept index.
+@syncodeindex vr cp
+@c Define a CPP preprocessor macro index, for #define'd strings.
+@defcodeindex cv
 @c Define an Autoconf macro index that @defmac doesn't write to.
 @defcodeindex AC
 @c Define an Autotest macro index that @defmac doesn't write to.
@@ -2250,25 +2254,30 @@ The variables set during the execution of @command{configure} are
 
 @table @code
 @item srcdir
+@vrindex srcdir
 The name of the top source directory, assuming that the working
 directory is the top build directory.  This
 is what the @command{configure} option @option{--srcdir} sets.
 
 @item ac_top_srcdir
+@vrindex ac_top_srcdir
 The name of the top source directory, assuming that the working
 directory is the current build directory.
 
 @item ac_top_build_prefix
+@vrindex ac_top_build_prefix
 The name of the top build directory, assuming that the working
 directory is the current build directory.
 It can be empty, or else ends with a slash, so that you may concatenate
 it.
 
 @item ac_srcdir
+@vrindex ac_srcdir
 The name of the corresponding source directory, assuming that the
 working directory is the current build directory.
 
 @item tmp
+@vrindex tmp
 The name of a temporary directory within the build tree, which you
 can use if you need to create additional temporary files.  The
 directory is cleaned up when @command{config.status} is done or
@@ -4320,6 +4329,8 @@ the @code{ac_cv_path_@var{variable}} variable.
   @ovar{action-if-not-found}, @dvar{path, $PATH})
 @acindex{PATH_PROGS_FEATURE_CHECK}
 @caindex path_@var{variable}
+@vrindex ac_path_@var{variable}
+@vrindex ac_path_@var{variable}_found
 This macro was introduced in Autoconf 2.62.  If @var{variable} is not
 empty, then set the cache variable @code{ac_cv_path_@var{variable}} to
 its value.  Otherwise, check for each program in the blank-separated
@@ -5556,6 +5567,7 @@ Gnulib (@pxref{Gnulib}).
 Specify that @samp{@var{function}.c} must be included in the executables
 to replace a missing or broken implementation of @var{function}.
 
+@vrindex ac_objext
 Technically, it adds @samp{@var{function}.$ac_objext} to the output
 variable @code{LIBOBJS} if it is not already in, and calls
 @code{AC_LIBSOURCE} for @samp{@var{function}.c}.  You should not
@@ -23969,6 +23981,7 @@ The @var{copyright-notice} shows up in both the head of
 @defmac AT_ARG_OPTION (@var{options}, @var{help-text}, @
   @ovar{action-if-given}, @ovar{action-if-not-given})
 @atindex{ARG_OPTION}
+@vrindex at_arg_@var{option}
 Accept options from the space-separated list @var{options}, a list that
 has leading dashes removed from the options.  Long options will be
 prefixed with @samp{--}, single-character options with @samp{-}.  The
@@ -23982,6 +23995,8 @@ the variable will be set to @samp{:}.  If the user does not pass the
 option, or passes @option{--no-@var{option}}, then the variable will be
 set to @samp{false}.
 
+@vrindex at_optarg
+@vrindex at_optarg_@var{option}
 @var{action-if-given} is run each time the option is encountered; here,
 the variable @code{at_optarg} will be set to @samp{:} or @samp{false} as
 appropriate.  @code{at_optarg} is actually just a copy of
@@ -24000,6 +24015,7 @@ names in order to avoid clashes with future Autotest built-in options.
 @defmac AT_ARG_OPTION_ARG (@var{options}, @var{help-text}, @
   @ovar{action-if-given}, @ovar{action-if-not-given})
 @atindex{ARG_OPTION_ARG}
+@vrindex at_arg_@var{option}
 Accept options with arguments from the space-separated list
 @var{options}, a list that has leading dashes removed from the options.
 Long options will be prefixed with @samp{--}, single-character options
@@ -24012,6 +24028,7 @@ If the user passes @option{--@var{option}=@var{arg}} or
 @option{--@var{option} @var{arg}} to the @command{testsuite}, the
 variable will be set to @samp{@var{arg}}.
 
+@vrindex at_optarg
 @var{action-if-given} is run each time the option is encountered; here,
 the variable @code{at_optarg} will be set to @samp{@var{arg}}.
 @code{at_optarg} is actually just a copy of @code{at_arg_@var{option}}.

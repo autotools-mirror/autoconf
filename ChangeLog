@@ -1,3 +1,13 @@
+2010-09-13  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	doc: index entries for non-environment, non-output variables.
+	* doc/autoconf.texi: Clarify the meaning of the various variable
+	indices.  Merge variable index `vr' into concept index using
+	syncodeindex.
+	(Configuration Actions, Generic Programs, Generic Functions)
+	(Writing Testsuites): Add index entries for documented shell
+	variables used during in configure and testsuite scripts.
+
 2010-09-12  Fernando Carrijo  <fcarrijo@freedesktop.org>  (tiny change)
 
 	docs: fix minor typo and 'See See foo' instances
