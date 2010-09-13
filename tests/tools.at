@@ -1164,8 +1164,9 @@ AT_SETUP([autom4te preselections])
 # If this test should run on FAT file systems and older w32,
 # then setting $sleep correctly needs to be revisited.
 
-# We use aclocal and automake.
-AT_CHECK([automake --version || exit 77], [], [ignore], [ignore])
+# We use aclocal and automake.  Skip broken automake wrappers.
+AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
+AT_CHECK([[grep '[1-9]\.[0-9][0-9]*' stdout || exit 77]], [], [ignore])
 AT_CHECK([test ! -f $HOME/.autom4te.cfg || exit 77], [], [ignore], [ignore])
 
 AT_DATA([configure.in],

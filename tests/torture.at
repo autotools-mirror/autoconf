@@ -1429,8 +1429,10 @@ AT_KEYWORDS(autoreconf)
 
 # We use aclocal (via autoreconf).
 AT_CHECK([aclocal --version || exit 77], [], [stdout], [ignore])
+AT_CHECK([[grep '[1-9]\.[0-9][0-9]*' stdout || exit 77]], [], [ignore])
+
 # It should understand configure.ac.
-AT_CHECK([[grep '[^0-9]1.[01234][^0-9]' stdout && exit 77]], [1], [ignore])
+AT_CHECK([[grep '[^0-9]1\.[01234][^0-9]' stdout && exit 77]], [1], [ignore])
 
 # Set CONFIG_SITE to a nonexistent file, so that there are
 # no worries about nonstandard values for 'prefix'.
@@ -1809,7 +1811,8 @@ AT_SETUP([Unusual Automake input files])
 AT_KEYWORDS([autoreconf])
 
 # We use aclocal and automake via autoreconf.
-AT_CHECK([automake --version || exit 77], [], [ignore], [ignore])
+AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
+AT_CHECK([[grep '[1-9]\.[0-9][0-9]*' stdout || exit 77]], [], [ignore])
 
 AT_DATA([configure.in],
 [[AC_INIT(GNU foo, 1.0)
