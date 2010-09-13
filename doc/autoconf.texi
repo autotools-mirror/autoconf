@@ -24193,7 +24193,8 @@ End the current test group.
 Initialize an input data @var{file} with given @var{contents}.  Of
 course, the @var{contents} have to be properly quoted between square
 brackets to protect against included commas or spurious M4
-expansion.  The contents must end with an end of line.  @var{file} must
+expansion.  @var{contents} must be empty or end with a newline.
+@var{file} must
 be a single shell word that expands into a single file name.
 @end defmac
 

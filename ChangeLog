@@ -1,5 +1,13 @@
 2010-09-13  Eric Blake  <eblake@redhat.com>
 
+	autotest: work around zsh bug
+	* lib/autotest/general.m4 (AT_DATA): Special case an empty data
+	file, since zsh botches empty here-docs.
+	* doc/autoconf.texi (Writing Testsuites) <AT_DATA>: Document that
+	this allows empty contents.
+	* tests/autotest.at (AT_DATA): New test.
+	Reported by Ralf Wildenhues.
+
 	docs: mention gnulib portability docs
 	* doc/autoconf.texi (Function Portability, Header Portability):
 	Add external links to gnulib.

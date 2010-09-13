@@ -159,6 +159,25 @@ AT_CHECK([sed 50q micro-suite | grep 'This is just a test notice'],
 [--version])
 
 
+## --------- ##
+## AT_DATA.  ##
+## --------- ##
+
+AT_CHECK_AT_TEST([AT@&t@_DATA], [
+AT_CHECK([test -f file1], [1])
+AT_DATA([file1])
+AT_CHECK([test -f file1 && test ! -s file1])
+AT_CHECK([echo hi > file1])
+AT_DATA([file1], [[]])
+AT_CHECK([test -f file1 && test ! -s file1])
+file=file2
+AT_DATA([$file], [[$file
+]])
+AT_CHECK([echo '$file' > file3])
+AT_CHECK([cmp file2 file3])
+])
+
+
 ## ------------------ ##
 ## Empty test suite.  ##
 ## ------------------ ##
