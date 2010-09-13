@@ -1166,7 +1166,7 @@ AT_SETUP([autom4te preselections])
 
 # We use aclocal and automake.  Skip broken automake wrappers.
 AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
-AT_CHECK([[grep '[1-9]\.[0-9][0-9]*' stdout || exit 77]], [], [ignore])
+AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
 AT_CHECK([test ! -f $HOME/.autom4te.cfg || exit 77], [], [ignore], [ignore])
 
 AT_DATA([configure.in],
