@@ -4525,7 +4525,12 @@ it, then you can use one of the general function-check macros.
 Most usual functions can either be missing, or be buggy, or be limited
 on some architectures.  This section tries to make an inventory of these
 portability issues.  By definition, this list always requires
-additions.  Please help us keeping it as complete as possible.
+additions.  A much more complete list is maintained by the Gnulib
+project (@pxref{Gnulib}), covering @ref{Function Substitutes, ,
+Current Posix Functions, gnulib, GNU gnulib}, @ref{Legacy Function
+Substitutes, , Legacy Functions, gnulib, GNU gnulib}, and @ref{Glibc
+Function Substitutes, , Glibc Functions, gnulib, GNU gnulib}.  Please
+help us keep the gnulib list as complete as possible.
 
 @table @asis
 @item @code{exit}
@@ -5669,9 +5674,13 @@ it, then you can use one of the general header-file check macros.
 @cindex Portability of headers
 @cindex Header portability
 
-This section tries to collect knowledge about common headers, and the
-problems they cause.  By definition, this list always requires
-additions.  Please help us keeping it as complete as possible.
+This section documents some collected knowledge about common headers,
+and the problems they cause.  By definition, this list always requires
+additions.  A much more complete list is maintained by the Gnulib
+project (@pxref{Gnulib}), covering @ref{Header File Substitutes, ,
+Posix Headers, gnulib, GNU gnulib} and @ref{Glibc Header File
+Substitutes, , Glibc Headers, gnulib, GNU gnulib}.  Please help us keep
+the gnulib list as complete as possible.
 
 @table @asis
 
