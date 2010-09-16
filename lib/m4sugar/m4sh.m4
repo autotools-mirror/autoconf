@@ -1397,7 +1397,7 @@ m4_define([_AS_BOX],
 # _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = `-'])
 # -------------------------------------------------
 m4_define([_AS_BOX_LITERAL],
-[AS_ECHO(["_AS_ESCAPE(m4_expand([m4_text_box($@)]), [`], [\"$])"])])
+[AS_ECHO(["_AS_ESCAPE(m4_dquote(m4_expand([m4_text_box($@)])), [`], [\"$])"])])
 
 
 # _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = `-'])
