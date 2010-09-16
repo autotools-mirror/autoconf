@@ -31,6 +31,8 @@ GNU Autoconf NEWS - User visible changes.
 ** AT_CHECK semantics with respect to the Autotest variable $at_status and
    shell execution environment of the arguments are documented now.
 
+** AC_FC_LIBRARY_LDFLAGS now tolerates output from newer gfortran.
+
 
 * Major changes in Autoconf 2.67 (2010-07-21) [stable]
   Released by Eric Blake, based on git versions 2.66.*.

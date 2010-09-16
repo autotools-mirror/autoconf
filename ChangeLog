@@ -1,3 +1,11 @@
+2010-09-16  Eric Blake  <eblake@redhat.com>
+
+	fortran: avoid misparsed FCLIBS from Fortran compiler
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Also skip
+	'Configured by:' lines from gfortran.
+	* NEWS: Mention it.
+	Reported by Stefano Lattarini.
+
 2010-09-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Add autom4te trace for AM_PROG_AR.

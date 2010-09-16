@@ -505,7 +505,8 @@ _AS_ECHO_LOG([$[*]])
 # gfortran 4.3 outputs lines setting COLLECT_GCC_OPTIONS, COMPILER_PATH,
 # LIBRARY_PATH; skip all such settings.
 ac_[]_AC_LANG_ABBREV[]_v_output=`eval $ac_link AS_MESSAGE_LOG_FD>&1 2>&1 |
-  grep -v 'Driving:' | grep -v "^[[_$as_cr_Letters]][[_$as_cr_alnum]]*="`
+  sed '/^Driving:/d; /^Configured with:/d;
+      '"/^[[_$as_cr_Letters]][[_$as_cr_alnum]]*=/d"`
 AS_ECHO(["$ac_[]_AC_LANG_ABBREV[]_v_output"]) >&AS_MESSAGE_LOG_FD
 _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
 
