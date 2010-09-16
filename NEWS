@@ -2,6 +2,9 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** AC_MSG_ERROR (and AS_ERROR) can once again be followed immediately by
+   `dnl'.  Regression introduced in 2.66.
+
 ** AT_BANNER() with empty argument will cause visual separation from previous
    test category.
 

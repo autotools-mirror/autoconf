@@ -1973,7 +1973,7 @@ m4_define([m4_defun],
 # m4_defun'd, we can add a parameter, similar to the third parameter
 # to m4_defun.
 m4_define([m4_defun_init],
-[m4_define([$1], [$3])m4_defun([$1],
+[m4_define([$1], [$3[]])m4_defun([$1],
    [$2[]_m4_popdef(]m4_dquote($[0])[)m4_indir(]m4_dquote($[0])dnl
 [m4_if(]m4_dquote($[#])[, [0], [], ]m4_dquote([,$]@)[))], [m4_pushdef])])
 

@@ -1,3 +1,15 @@
+2010-09-16  Eric Blake  <eblake@redhat.com>
+
+	m4sugar: fix regression in AC_MSG_ERROR expansion
+	* lib/m4sugar/m4sugar.m4 (m4_defun_init): Avoid macro
+	concatenation on subsequent expansions
+	* tests/m4sh.at (AS_WARN and AS_ERROR): New test.
+	* tests/m4sugar.at (m4@&t@_require: one-shot initialization):
+	Enhance test.
+	* NEWS: Document the fix.
+	* THANKS: Update.
+	Reported by Adrian Bunk and and Nishio Futoshi.
+
 2010-09-13  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	tests: simplify grepping of 'automake --version'.

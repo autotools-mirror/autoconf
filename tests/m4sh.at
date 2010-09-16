@@ -18,6 +18,71 @@ AT_BANNER([M4sh.])
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+## ------------------- ##
+## AS_WARN, AS_ERROR.  ##
+## ------------------- ##
+
+AT_SETUP([AS@&t@_WARN and AS@&t@_ERROR])
+AT_KEYWORDS([m4sh])
+
+dnl without logging
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+AS_WARN([*watch out*])dnl
+
+if test x"$die" != x; then
+  AS_ERROR([you're dead])dnl
+
+  AS_ERROR([really])dnl
+
+fi
+echo got here
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([$CONFIG_SHELL ./script], [],
+[[got here
+]], [[script: WARNING: *watch out*
+]])
+AT_CHECK([die=: $CONFIG_SHELL ./script], [1],
+[], [[script: WARNING: *watch out*
+script: error: you're dead
+]])
+
+dnl with logging
+rm script
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+m4_define([gone], [AS_ERROR([really])])
+m4_define([AS_MESSAGE_LOG_FD], [5])
+exec AS_MESSAGE_LOG_FD>log.txt
+AS_WARN([*watch out*])dnl
+
+if test x"$die" != x; then
+  AS_ERROR([you're dead])dnl
+
+  AS_ERROR([really])dnl
+
+fi
+echo got here
+exec AS_MESSAGE_LOG_FD>&-
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([$CONFIG_SHELL ./script], [],
+[[got here
+]], [[script: WARNING: *watch out*
+]])
+AT_CHECK([[grep 'script:[0-9]*: WARNING: \*watch out\*' log.txt]], [], [ignore])
+AT_CHECK([die=: $CONFIG_SHELL ./script], [1],
+[], [[script: WARNING: *watch out*
+script: error: you're dead
+]])
+AT_CHECK([[grep 'script:[0-9]*: WARNING: \*watch out\*' log.txt]], [], [ignore])
+AT_CHECK([[grep 'script:[0-9]*: error: you'\''re dead' log.txt]], [], [ignore])
+
+AT_CLEANUP
+
 ## ---------------- ##
 ## LINENO support.  ##
 ## ---------------- ##
@@ -93,7 +158,6 @@ AT_CHECK([(PATH=test$PATH_SEPARATOR$PATH; export PATH; exec test-2)],
 AT_CHECK([sh ./test/test-2],                       0, [expout])
 
 AT_CLEANUP
-
 
 
 ## ---------------------- ##
