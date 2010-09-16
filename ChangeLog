@@ -1,3 +1,9 @@
+2010-09-16  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Add autom4te trace for AM_PROG_AR.
+	* lib/autom4te.in (Automake-preselections): Trace
+	AM_PROG_AR.
+
 2010-09-16  Eric Blake  <eblake@redhat.com>
 
 	m4sugar: fix regression in AC_MSG_ERROR expansion

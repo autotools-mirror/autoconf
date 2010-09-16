@@ -58,6 +58,7 @@ args: --preselect AM_GNU_GETTEXT
 args: --preselect AM_GNU_GETTEXT_INTL_SUBDIR
 args: --preselect AM_INIT_AUTOMAKE
 args: --preselect AM_MAINTAINER_MODE
+args: --preselect AM_PROG_AR
 args: --preselect AM_PROG_CC_C_O
 args: --preselect AM_PROG_CXX_C_O
 args: --preselect AM_PROG_F77_C_O
