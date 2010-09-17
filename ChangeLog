@@ -1,5 +1,8 @@
 2010-09-21  Eric Blake  <eblake@redhat.com>
 
+	maint: resync upstream files
+	* build-aux/gendocs.sh: Resync via 'make fetch'.
+
 	tests: XFAIL in the face of a MacOS X bug
 	* doc/autoconf.texi (Limitations of Usual Tools) <sed>: Mention
 	the issue.
