@@ -749,8 +749,8 @@ _ACEOF
 # handling of long lines.
 ac_delim='%!_!# '
 for ac_last_try in false false :; do
-  ac_t=`sed -n "/$ac_delim/p" confdefs.h`
-  if test -z "$ac_t"; then
+  ac_tt=`sed -n "/$ac_delim/p" confdefs.h`
+  if test -z "$ac_tt"; then
     break
   elif $ac_last_try; then
     AC_MSG_ERROR([could not make $CONFIG_HEADERS])
