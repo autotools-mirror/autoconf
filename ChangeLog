@@ -1,5 +1,11 @@
 2010-09-17  Bruno Haible  <bruno@clisp.org>
 
+	docs: mark several macros obsolete
+	* doc/autoconf.texi (Particular Functions): Mark AC_FUNC_ERROR_AT_LINE,
+	AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK, AC_FUNC_MKTIME, AC_FUNC_STRTOD
+	as obsolete and refer to Gnulib.
+	* NEWS: Mention the change.
+
 	AC_FUNC_STRNLEN: more realistic cross-compilation guess
 	* lib/autoconf/functions.m4 (AC_FUNC_STRNLEN): Require
 	AC_CANONICAL_HOST. When cross-compiling, guess it works everywhere

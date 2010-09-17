@@ -4905,6 +4905,9 @@ If the @code{error_at_line} function is not found, require an
 
 The result of this macro is cached in the @code{ac_cv_lib_error_at_line}
 variable.
+
+The @code{AC_FUNC_ERROR_AT_LINE} macro is obsolescent.  New programs
+should use Gnulib's @code{error} module.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_FNMATCH
@@ -5146,6 +5149,9 @@ If @code{lstat} behaves properly, define
 
 The result of this macro is cached in the
 @code{ac_cv_func_lstat_dereferences_slashed_symlink} variable.
+
+The @code{AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK} macro is obsolescent.
+New programs should use Gnulib's @code{lstat} module.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_MALLOC
@@ -5235,6 +5241,9 @@ Posix standard and should be the inverse of
 
 The result of this macro is cached in the
 @code{ac_cv_func_working_mktime} variable.
+
+The @code{AC_FUNC_MKTIME} macro is obsolescent.  New programs should
+use Gnulib's @code{mktime} module.  @xref{Gnulib}.
 @end defmac
 
 @anchor{AC_FUNC_MMAP}
@@ -5414,6 +5423,9 @@ variable @code{POW_LIB} to the extra library needed.
 
 This macro caches its result in the @code{ac_cv_func_strtod} variable
 and depends upon the result in the @code{ac_cv_func_pow} variable.
+
+The @code{AC_FUNC_STRTOD} macro is obsolescent.  New programs should
+use Gnulib's @code{strtod} module.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_STRTOLD

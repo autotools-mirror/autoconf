@@ -33,6 +33,15 @@ GNU Autoconf NEWS - User visible changes.
 
 ** AC_FC_LIBRARY_LDFLAGS now tolerates output from newer gfortran.
 
+** Newly obsolete macros
+   The following macros have been marked obsolete.  New programs
+   should use the corresponding Gnulib modules.  Gnulib not only
+   detects a larger set of portability problems with these functions,
+   but also provides complete workarounds.
+
+     AC_FUNC_ERROR_AT_LINE  AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
+     AC_FUNC_MKTIME  AC_FUNC_STRTOD
+
 
 * Major changes in Autoconf 2.67 (2010-07-21) [stable]
   Released by Eric Blake, based on git versions 2.66.*.
