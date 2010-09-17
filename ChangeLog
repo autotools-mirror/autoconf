@@ -1,3 +1,10 @@
+2010-09-17  Bruno Haible  <bruno@clisp.org>
+
+	AC_FUNC_STRNLEN: more realistic cross-compilation guess
+	* lib/autoconf/functions.m4 (AC_FUNC_STRNLEN): Require
+	AC_CANONICAL_HOST. When cross-compiling, guess it works everywhere
+	except on AIX.
+
 2010-09-16  Eric Blake  <eblake@redhat.com>
 
 	m4sh: fix today's AS_BOX regression
