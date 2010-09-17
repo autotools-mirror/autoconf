@@ -1,5 +1,18 @@
 2010-09-17  Eric Blake  <eblake@redhat.com>
 
+	build: support autobuild
+	* cfg.mk (gnulib-update): Add autobuild.m4.
+	* configure.ac (AB_INIT): Output autobuild header.
+	* m4/autobuild.m4: New file, from gnulib.
+	* build-aux/config.guess: Resync from upstream.
+	* build-aux/config.sub: Likewise.
+	* build-aux/texinfo.tex: Likewise.
+	* doc/fdl.texi: Likewise.
+	* doc/gnu-oids.texi: Likewise.
+	* doc/make-stds.texi: Likewise.
+	* doc/standards.texi: Likewise.
+	* build-aux/gendocs.sh: Likewise.
+
 	config.status: avoid corrupting $ac_t
 	* lib/autoconf/status.m4 (_AC_OUTPUT_HEADERS_PREPARE): Use a
 	different name, so as not to clash with pre-2.50 usage of "$ac_t"

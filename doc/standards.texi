@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate April 12, 2010
+@set lastupdate September 9, 2010
 @c %**end of header
 
 @dircategory GNU organization
@@ -543,6 +543,7 @@ command line interface, and how libraries should behave.
 * User Interfaces::             Standards about interfaces generally.
 * Graphical Interfaces::        Standards for graphical interfaces.
 * Command-Line Interfaces::     Standards for command line interfaces.
+* Dynamic Plug-In Interfaces::  Standards for dynamic plug-in interfaces.
 * Option Table::                Table of long options.
 * OID Allocations::             Table of OID slots for GNU.
 * Memory Usage::                When and how to care about memory needs.
@@ -1120,6 +1121,44 @@ General help using GNU software: <http://www.gnu.org/gethelp/>
 @end example
 
 It is ok to mention other appropriate mailing lists and web pages.
+
+
+@node Dynamic Plug-In Interfaces
+@section Standards for Dynamic Plug-in Interfaces
+@cindex plug-ins
+@cindex dynamic plug-ins
+
+Another aspect of keeping free programs free is encouraging
+development of free plug-ins, and discouraging development of
+proprietary plug-ins.  Many GNU programs will not have anything like
+plug-ins at all, but those that do should follow these
+practices.
+
+First, the general plug-in architecture design should closely tie the
+plug-in to the original code, such that the plug-in and the base
+program are parts of one extended program.  For GCC, for example,
+plug-ins receive and modify GCC's internal data structures, and so
+clearly form an extended program with the base GCC.
+
+@vindex plugin_is_GPL_compatible
+Second, you should require plug-in developers to affirm that their
+plug-ins are released under an appropriate license.  This should be
+enforced with a simple programmatic check.  For GCC, again for
+example, a plug-in must define the global symbol
+@code{plugin_is_GPL_compatible}, thus asserting that the plug-in is
+released under a GPL-compatible license (@pxref{Plugins,, Plugins,
+gccint, GCC Internals}).
+
+By adding this check to your program you are not creating a new legal
+requirement.  The GPL itself requires plug-ins to be free software,
+licensed compatibly.  As long as you have followed the first rule above
+to keep plug-ins closely tied to your original program, the GPL and AGPL
+already require those plug-ins to be released under a compatible
+license.  The symbol definition in the plug-in---or whatever equivalent
+works best in your program---makes it harder for anyone who might
+distribute proprietary plug-ins to legally defend themselves.  If a case
+about this got to court, we can point to that symbol as evidence that
+the plug-in developer understood that the license had this requirement.
 
 
 @node Option Table
@@ -2283,6 +2322,13 @@ files that are bigger than will fit in memory all at once.
 If your program creates complicated data structures, just make them in
 memory and give a fatal error if @code{malloc} returns zero.
 
+@pindex valgrind
+@cindex memory leak
+Memory leak detectors such as @command{valgrind} can be useful, but
+don't complicate a program merely to avoid their false alarms.  For
+example, if memory is used until just before a process exits, don't
+free it simply to silence a leak detector.
+
 @node File Usage
 @section File Usage
 @cindex file usage
@@ -2591,6 +2637,17 @@ warnings for valid and legitimate code which they do not want to change.
 If you want to do this, then do.  The compiler should be your servant,
 not your master.
 
+@pindex clang
+@pindex lint
+Don't make the program ugly just to placate static analysis tools such
+as @command{lint}, @command{clang}, and GCC with extra warnings
+options such as @option{-Wconversion} and @option{-Wundef}.  These
+tools can help find bugs and unclear code, but they can also generate
+so many false alarms that that it hurts readability to silence them
+with unnecessary casts, wrappers, and other complications.  For
+example, please don't insert casts to @code{void} or calls to
+do-nothing functions merely to pacify a lint checker.
+
 Declarations of external functions and functions to appear later in the
 source file should all go in one place near the beginning of the file
 (somewhere before the first function definition in the file), or else
@@ -2608,6 +2665,7 @@ declaration of each local variable into the smallest scope that includes
 all its uses.  This makes the program even cleaner.
 
 Don't use local variables or parameters that shadow global identifiers.
+GCC's @samp{-Wshadow} option can detect this problem.
 
 @cindex multiple variables in a line
 Don't declare multiple variables in one declaration that spans lines.
@@ -2711,10 +2769,9 @@ if (foo == 0)
   fatal ("virtual memory exhausted");
 @end example
 
-@pindex lint
-Don't make the program ugly to placate @code{lint}.  Please don't insert any
-casts to @code{void}.  Zero without a cast is perfectly fine as a null
-pointer constant, except when calling a varargs function.
+This example uses zero without a cast as a null pointer constant.
+This is perfectly fine, except that a cast is needed when calling a
+varargs function or when using @code{sizeof}.
 
 @node Names
 @section Naming Variables, Functions, and Files
@@ -4191,7 +4248,7 @@ documentation.
 By contrast, it is ok to refer to journal articles and textbooks in
 the comments of a program for explanation of how it functions, even
 though they are non-free.  This is because we don't include such
-things in the GNU system even they are free---they are outside the
+things in the GNU system even if they are free---they are outside the
 scope of what a software distribution needs to include.
 
 Referring to a web site that describes or recommends a non-free

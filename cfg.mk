@@ -68,6 +68,7 @@ gnulib-update:
 	cp $(gnulib_dir)/doc/gnu-oids.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/make-stds.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/standards.texi $(srcdir)/doc
+	cp $(gnulib_dir)/m4/autobuild.m4 $(srcdir)/m4
 	cp $(gnulib_dir)/top/GNUmakefile $(srcdir)
 
 WGET = wget

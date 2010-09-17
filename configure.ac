@@ -31,6 +31,8 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-xz
 readme-alpha no-texinfo.tex std-options])
 
+AB_INIT
+
 # We use `/bin/sh -n script' to check that there are no syntax errors
 # in the scripts.  Although incredible, there are /bin/sh that go into
 # endless loops with `-n', e.g., SunOS's:
