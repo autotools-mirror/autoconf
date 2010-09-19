@@ -1,3 +1,10 @@
+2010-09-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	autom4te: add traces for likely future Automake macros
+	* lib/autom4te.in (Automake-preselections): Trace
+	AM_MAKEFILE_INCLUDE, AM_NLS, AM_POT_TOOLS, AM_PATH_GUILE,
+	AM_PROG_MOC, AM_XGETTEXT_OPTION, _AM_MAKEFILE_INCLUDE.
+
 2010-09-22  Eric Blake  <eblake@redhat.com>
 
 	AC_REPLACE_FUNCS: allow split lines again
