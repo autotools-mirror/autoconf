@@ -1,3 +1,12 @@
+2010-09-20  Eric Blake  <eblake@redhat.com>
+
+	autom4te: don't filter out portions of location traces
+	* bin/autom4te.in (_m4_warn): Pass warnings through the channels
+	machinery as a single chunk, to avoid partial filtering.
+	* lib/m4sugar/m4sugar.m4 (_m4_warn): Document the conventions.
+	* tests/m4sugar.at (m4@&t@_warn): Enhance test to catch this.
+	Reported by Bruno Haible.
+
 2010-09-17  Eric Blake  <eblake@redhat.com>
 
 	build: support autobuild

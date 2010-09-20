@@ -231,11 +231,12 @@ m4_define([m4_assert],
 ## ------------- ##
 
 
-# _m4_warn(CATEGORY, MESSAGE, STACK-TRACE)
-# ----------------------------------------
+# _m4_warn(CATEGORY, MESSAGE, [STACK-TRACE])
+# ------------------------------------------
 # Report a MESSAGE to the user if the CATEGORY of warnings is enabled.
 # This is for traces only.
-# The STACK-TRACE is a \n-separated list of "LOCATION: MESSAGE".
+# If present, STACK-TRACE is a \n-separated list of "LOCATION: MESSAGE",
+# where the last line (and no other) ends with "the top level".
 #
 # Within m4, the macro is a no-op.  This macro really matters
 # when autom4te post-processes the trace output.

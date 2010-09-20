@@ -245,15 +245,14 @@ AT_CLEANUP
 
 AT_SETUP([m4@&t@_warn])
 
-# FIXME: For the time being we use -f to make sure we do issue the
-# warnings.  But maybe autom4te should handle that by itself?
-
 AT_DATA_M4SUGAR([script.4s],
 [[m4_init
-m4_defun([cross_warning], [m4_warn([cross],  [cross])])
+m4_defun([cross_warning], [m4_warn([cross], [cross])])
 
 m4_divert([0])dnl
-m4_warn([obsolete],  [obsolete])dnl
+m4_warn([obsolete], [obsolete])dnl
+cross_warning[]dnl
+m4_warn([syntax], [syntax])dnl
 cross_warning[]dnl
 m4_warn([syntax], [syntax])dnl
 ]])
@@ -261,27 +260,38 @@ m4_warn([syntax], [syntax])dnl
 AT_CHECK_M4SUGAR([-o-], 0, [],
 [script.4s:4: warning: prefer named diversions
 script.4s:7: warning: syntax
+script.4s:9: warning: syntax
 ])
 
-AT_CHECK_M4SUGAR([-o- -Wall -f], 0, [],
+AT_CHECK_M4SUGAR([-o- -Wall], 0, [],
 [script.4s:4: warning: prefer named diversions
 script.4s:5: warning: obsolete
 script.4s:6: warning: cross
 script.4s:2: cross_warning is expanded from...
 script.4s:6: the top level
 script.4s:7: warning: syntax
+script.4s:8: warning: cross
+script.4s:2: cross_warning is expanded from...
+script.4s:8: the top level
+script.4s:9: warning: syntax
 ])
 
-AT_CHECK_M4SUGAR([-o- -Wnone,cross -f], 0, [],
+AT_CHECK_M4SUGAR([-o- -Wnone,cross], 0, [],
 [script.4s:6: warning: cross
 script.4s:2: cross_warning is expanded from...
 script.4s:6: the top level
+script.4s:8: warning: cross
+script.4s:2: cross_warning is expanded from...
+script.4s:8: the top level
 ])
 
-AT_CHECK_M4SUGAR([-o- -Wnone,cross,error -f], 1, [],
+AT_CHECK_M4SUGAR([-o- -Wnone,cross,error], 1, [],
 [[script.4s:6: warning: cross
 script.4s:2: cross_warning is expanded from...
 script.4s:6: the top level
+script.4s:8: warning: cross
+script.4s:2: cross_warning is expanded from...
+script.4s:8: the top level
 ]])
 
 AT_CLEANUP

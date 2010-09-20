@@ -1021,12 +1021,15 @@ for (split (/\n*$separator\n*/o, contents ("$tmp/warnings")))
   # | input.as:2: bar is expanded from...
   # | input.as:3: foo is expanded from...
   # | input.as:5: the top level
+  # In particular, m4_warn guarantees that either $stackdump is empty, or
+  # it consists of lines where only the last line ends in "top level".
   my ($cat, $loc, $msg, $stacktrace) = split ('::', $_, 4);
-  msg $cat, $loc, "warning: $msg";
+  msg $cat, $loc, "warning: $msg",
+    partial => ($stacktrace =~ /top level$/) + 0;
   for (split /\n/, $stacktrace)
     {
       my ($loc, $trace) = split (': ', $_, 2);
-      msg $cat, $loc, $trace;
+      msg $cat, $loc, $trace, partial => ($trace !~ /top level$/) + 0;
     }
 }
 
