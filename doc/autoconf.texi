@@ -18700,6 +18700,28 @@ implementations have an input buffer limited to 4000 bytes.  Likewise,
 not all @command{sed} implementations can handle embedded @code{NUL} or
 a missing trailing newline.
 
+Remember that ranges within a bracket expression of a regular expression
+are only well-defined in the @samp{C} (or @samp{POSIX}) locale.
+Meanwhile, support for character classes like @samp{[[:upper:]]} is not
+yet universal, so if you cannot guarantee the setting of @env{LC_ALL},
+it is better to spell out a range @samp{[ABCDEFGHIJKLMNOPQRSTUVWXYZ]}
+than to rely on @samp{[A-Z]}.
+
+Additionally, Posix states that regular expressions are only
+well-defined on characters.  Unfortunately, there exist platforms such
+as MacOS X 10.5 where not all 8-bit byte values are valid characters,
+even though that platform has a single-byte @samp{C} locale.  And Posix
+allows the existence of a multi-byte @samp{C} locale, although that does
+not yet appear to be a common implementation.  At any rate, it means
+that not all bytes will be matched by the regular expression @samp{.}:
+
+@example
+$ @kbd{printf '\200\n' | LC_ALL=C sed -n /./p | wc -l}
+0
+$ @kbd{printf '\200\n' | LC_ALL=en_US.ISO8859-1 sed -n /./p | wc -l}
+1
+@end example
+
 Portable @command{sed} regular expressions should use @samp{\} only to escape
 characters in the string @samp{$()*.0123456789[\^n@{@}}.  For example,
 alternation, @samp{\|}, is common but Posix does not require its

@@ -882,6 +882,9 @@ AT_CLEANUP
 AT_SETUP([Substitute and define special characters])
 AT_KEYWORDS([AC@&t@_DEFINE AC@&t@_DEFINE_UNQUOTED])
 
+AT_XFAIL_IF([byte=\\200s; dnl
+test `{ printf $byte; echo; } | sed -n '/^./p' | wc -l` = 0])
+
 AT_DATA([Foo.in], [@foo@
 @bar@@notsubsted@@baz@ stray @ and more@@@baz@
 abc@bar@baz@baz
