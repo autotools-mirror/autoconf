@@ -1,5 +1,11 @@
 2010-09-21  Eric Blake  <eblake@redhat.com>
 
+	AC_LIBOBJ: optimize internal use
+	* lib/autoconf/general.m4 (_AC_LIBOBJ): Move literal check...
+	(AC_LIBOBJ): ...into callers.
+	* lib/autoconf/functions.m4 (_AC_REPLACE_FUNC): Likewise, thus
+	avoiding a second call to AS_LITERAL_IF.
+
 	AC_REPLACE_FUNCS: restore shell loop for non-literal
 	* lib/autoconf/functions.m4 (AC_REPLACE_FUNCS): Handle
 	non-literals, which was lost in 2010-02-26 optimization.

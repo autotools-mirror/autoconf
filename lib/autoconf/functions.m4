@@ -123,7 +123,7 @@ m4_define([_AC_FUNCS_EXPANSION],
 m4_define([_AC_REPLACE_FUNC],
 [AC_CHECK_FUNC([$1],
   [_AH_CHECK_FUNC([$1])AC_DEFINE(AS_TR_CPP([HAVE_$1]))],
-  [AC_LIBOBJ([$1])])])
+  [_AC_LIBOBJ([$1])AC_LIBSOURCE([$1.c])])])
 
 # AC_REPLACE_FUNCS(FUNCTION...)
 # -----------------------------

@@ -2926,10 +2926,7 @@ AC_DEFUN([AC_LIBSOURCES],
 # --------------------------------------------
 # We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
 m4_define([_AC_LIBOBJ],
-[AS_LITERAL_WORD_IF([$1],
-	       [AC_LIBSOURCE([$1.c])],
-	       [$2])dnl
-case " $LIB@&t@OBJS " in
+[case " $LIB@&t@OBJS " in
   *" $1.$ac_objext "* ) ;;
   *) AC_SUBST([LIB@&t@OBJS], ["$LIB@&t@OBJS $1.$ac_objext"]) ;;
 esac
@@ -2940,10 +2937,9 @@ esac
 # --------------------------
 # We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
 AC_DEFUN([AC_LIBOBJ],
-[_AC_LIBOBJ([$1],
-	    [AC_DIAGNOSE(syntax,
-			 [$0($1): you should use literals])])dnl
-])
+[_AC_LIBOBJ([$1])]dnl
+[AS_LITERAL_WORD_IF([$1], [AC_LIBSOURCE([$1.c])],
+  [AC_DIAGNOSE([syntax], [$0($1): you should use literals])])])
 
 
 # _AC_LIBOBJS_NORMALIZE
