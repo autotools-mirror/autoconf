@@ -131,8 +131,12 @@ m4_define([_AC_REPLACE_FUNC],
 # equivalent of AC_CHECK_FUNC, then call AC_LIBOBJ if the function
 # was not found.
 AC_DEFUN([AC_REPLACE_FUNCS],
+[AS_LITERAL_IF([$1],
 [m4_map_args_w([$1], [_AC_REPLACE_FUNC(], [)
-])])
+])],
+[AC_CHECK_FUNCS([$1],
+  [_AH_CHECK_FUNC([$ac_func])AC_DEFINE(AS_TR_CPP([HAVE_$ac_func]))],
+  [_AC_LIBOBJ([$ac_func])])])])
 
 
 # AC_TRY_LINK_FUNC(FUNC, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)

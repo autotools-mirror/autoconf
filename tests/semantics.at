@@ -176,8 +176,13 @@ AT_DATA([config.in],
 ])
 
 AT_CONFIGURE_AC(
-[AC_CONFIG_FILES(config.libobjs:config.in)
-AC_REPLACE_FUNCS(printf autoconf_ftnirp)])
+[AC_CONFIG_FILES([config.libobjs:config.in])
+AC_REPLACE_FUNCS([printf autoconf_ftnirp])
+funcs='fprintf autoconf_ftnirpf'
+AH_TEMPLATE([HAVE_FPRINTF], [])
+AH_TEMPLATE([HAVE_AUTOCONF_FTNIRPF], [])
+AC_REPLACE_FUNCS([$funcs])
+AS_UNSET([funcs])])
 
 AT_CHECK_AUTOCONF([-W obsolete])
 AT_CHECK_AUTOHEADER
@@ -185,11 +190,13 @@ AT_CHECK_CONFIGURE
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_FTNIRP */
+/* #undef HAVE_AUTOCONF_FTNIRPF */
+#define HAVE_FPRINTF 1
 #define HAVE_PRINTF 1
 ])
 
 AT_CHECK([sed 's/  */ /g;s/^ //;s/ $//' config.libobjs], [],
-	 [${LIBOBJDIR}autoconf_ftnirp$U.o
+	 [${LIBOBJDIR}autoconf_ftnirp$U.o ${LIBOBJDIR}autoconf_ftnirpf$U.o
 ])
 
 AT_CLEANUP

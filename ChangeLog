@@ -1,5 +1,13 @@
 2010-09-21  Eric Blake  <eblake@redhat.com>
 
+	AC_REPLACE_FUNCS: restore shell loop for non-literal
+	* lib/autoconf/functions.m4 (AC_REPLACE_FUNCS): Handle
+	non-literals, which was lost in 2010-02-26 optimization.
+	* tests/semantics.at (AC_REPLACE_FUNCS): Enhance test.
+	* NEWS: Document the fix.
+	* THANKS: Update.
+	Reported by Wiseman Jun.
+
 	maint: resync upstream files
 	* build-aux/gendocs.sh: Resync via 'make fetch'.
 
