@@ -1,3 +1,12 @@
+2010-09-22  Eric Blake  <eblake@redhat.com>
+
+	AC_REPLACE_FUNCS: allow split lines again
+	* lib/autoconf/functions.m4 (AC_REPLACE_FUNCS): Flatten newlines
+	and move guts...
+	(_AC_REPLACE_FUNCS): ...to new helper.
+	* tests/semantics.at (AC_REPLACE_FUNCS): Enhance test.
+	Reported by Ralf Wildenhues.
+
 2010-09-21  Eric Blake  <eblake@redhat.com>
 
 	AC_LIBOBJ: optimize internal use

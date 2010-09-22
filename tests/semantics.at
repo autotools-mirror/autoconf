@@ -177,11 +177,13 @@ AT_DATA([config.in],
 
 AT_CONFIGURE_AC(
 [AC_CONFIG_FILES([config.libobjs:config.in])
-AC_REPLACE_FUNCS([printf autoconf_ftnirp])
+AC_REPLACE_FUNCS([printf \
+autoconf_ftnirp])
 funcs='fprintf autoconf_ftnirpf'
 AH_TEMPLATE([HAVE_FPRINTF], [])
 AH_TEMPLATE([HAVE_AUTOCONF_FTNIRPF], [])
-AC_REPLACE_FUNCS([$funcs])
+AC_REPLACE_FUNCS([\
+$funcs])
 AS_UNSET([funcs])])
 
 AT_CHECK_AUTOCONF([-W obsolete])
