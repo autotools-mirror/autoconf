@@ -1,3 +1,8 @@
+2010-09-22  Eric Blake  <eblake@redhat.com>
+
+	Release Version 2.68.
+	* NEWS: Mention the release.
+
 2010-09-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	autom4te: add traces for likely future Automake macros
