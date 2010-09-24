@@ -1,3 +1,12 @@
+2010-09-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	tests: normalize trailing spaces in gcc -E -dD output.
+	* tests/compile.at (AC_LANG_SOURCE example)
+	(AC_LANG_PROGRAM example): Remove trailing spaces before
+	comparing with expected output.  Fixes testsuite failure
+	with GCC 2.95.3 on Haiku.
+	Report by Scott McCreary.
+
 2010-09-22  Eric Blake  <eblake@redhat.com>
 
 	Release Version 2.68.
