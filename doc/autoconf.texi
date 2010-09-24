@@ -2223,7 +2223,7 @@ special @var{tag} values: they may have the form @samp{@var{output}} or
 @samp{@var{output}:@var{inputs}}.  The file @var{output} is instantiated
 from its templates, @var{inputs} (defaulting to @samp{@var{output}.in}).
 
-@samp{AC_CONFIG_FILES([Makefile:boiler/top.mk:boiler/bot.mk)]},
+@samp{AC_CONFIG_FILES([Makefile:boiler/top.mk:boiler/bot.mk])},
 for example, asks for
 the creation of the file @file{Makefile} that contains the expansion of the
 output variables in the concatenation of @file{boiler/top.mk} and

@@ -1,3 +1,9 @@
+2010-09-24  Joshua G. Hale  <jgh.emc@gmail.com>  (tiny change)
+
+	docs: fix typo in AC_CONFIG_FILES example code.
+	* doc/autoconf.texi (Configuration Actions): Fix typo.
+	* THANKS: Update.
+
 2010-09-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	tests: normalize trailing spaces in gcc -E -dD output.
