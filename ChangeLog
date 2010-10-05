@@ -4,6 +4,16 @@
 	* doc/autoconf.texi (Configuration Actions): Fix typo.
 	* THANKS: Update.
 
+2010-10-05  Eric Blake  <eblake@redhat.com>
+
+	doc: suggest a few more workarounds
+	* doc/autoconf.texi (Limitations of Usual Tools) <tr>: Mention
+	that 'redundant' brackets can work around Solaris bug.
+	(File Descriptors): Mention that {} works as well as () for
+	silencing file-not-found warnings.
+	* THANKS: Update.
+	Suggested by Pádraig Brady.
+
 2010-09-24  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	tests: normalize trailing spaces in gcc -E -dD output.

@@ -15033,12 +15033,12 @@ escape, while @samp{: `cd /zorglub 2>/dev/null`} works properly.
 On the other hand, some shells, such as Solaris or FreeBSD
 @command{/bin/sh}, warn about missing programs before performing
 redirections.  Therefore, to silently check whether a program exists, it
-is necessary to perform redirections on a subshell:
-
+is necessary to perform redirections on a subshell or brace group:
 @example
 $ @kbd{/bin/sh -c 'nosuch 2>/dev/null'}
 nosuch: not found
 $ @kbd{/bin/sh -c '(nosuch) 2>/dev/null'}
+$ @kbd{/bin/sh -c '@{ nosuch; @} 2>/dev/null'}
 $ @kbd{bash -c 'nosuch 2>/dev/null'}
 @end example
 
@@ -19032,13 +19032,16 @@ $ @kbd{nl='}
 moonlight
 @end example
 
-Not all versions of @command{tr} recognize ranges of characters: at
+Not all versions of @command{tr} recognize direct ranges of characters: at
 least Solaris @command{/usr/bin/tr} still fails to do so.  But you can
-use @command{/usr/xpg4/bin/tr} instead.
+use @command{/usr/xpg4/bin/tr} instead, or add brackets (which in Posix
+transliterate to themselves).
 
 @example
 $ @kbd{echo "Hazy Fantazy" | LC_ALL=C /usr/bin/tr a-z A-Z}
 HAZy FAntAZy
+$ @kbd{echo "Hazy Fantazy" | LC_ALL=C /usr/bin/tr '[a-z]' '[A-Z]'}
+HAZY FANTAZY
 $ @kbd{echo "Hazy Fantazy" | LC_ALL=C /usr/xpg4/bin/tr a-z A-Z}
 HAZY FANTAZY
 @end example
