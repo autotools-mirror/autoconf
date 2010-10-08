@@ -1,3 +1,12 @@
+2010-10-08  Eric Blake  <eblake@redhat.com>
+
+	AS_LITERAL_IF: Treat raw = as literal again.
+	* lib/m4sugar/m4sh.m4 (_AS_LITERAL_IF): Treat = like +.
+	* tests/m4sh.at (AS@&t@_TR_SH and AS@&t@_TR_CPP)
+	(AS@&t@_LITERAL_IF): Expand tests.
+	* NEWS: Document the fix.
+	Reported via Ben Pfaff; originally http://bugs.debian.org/593838
+
 2010-09-24  Joshua G. Hale  <jgh.emc@gmail.com>  (tiny change)
 
 	docs: fix typo in AC_CONFIG_FILES example code.

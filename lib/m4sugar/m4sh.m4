@@ -1584,8 +1584,8 @@ m4_define([AS_LITERAL_IF],
 
 m4_define([_AS_LITERAL_IF],
 [m4_if(m4_index([$1], [@S|@]), [-1], [$0_(m4_translit([$1],
-  [-:%/@{}[]#(),.$2]]]m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[,
-  [+++++$$`````]))], [$0_NO])])
+  [-:=%/@{}[]#(),.$2]]]m4_dquote(m4_dquote(m4_defn([m4_cr_symbols2])))[[,
+  [++++++$$`````]))], [$0_NO])])
 
 m4_define([_AS_LITERAL_IF_],
 [m4_if(m4_translit([$1], [+]), [], [$0YES],

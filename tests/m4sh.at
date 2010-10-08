@@ -1278,6 +1278,10 @@ echo AS_LITERAL_HEREDOC_IF([(a)], [ok], [ERR]) 20
 echo AS_LITERAL_IF([@S|@a], [ERR], [ok]) 21
 echo AS_LITERAL_WORD_IF([@S|@a], [ERR], [ok]) 22
 echo AS_LITERAL_HEREDOC_IF([@S|@a], [ERR], [ok]) 23
+echo AS_LITERAL_IF([${a+b}], [ERR1], [ok], [ERR2]) 24
+echo AS_LITERAL_IF([${a=b}], [ERR1], [ok], [ERR2]) 25
+echo AS_LITERAL_IF([a+b], [ok], [ERR1], [ERR2]) 26
+echo AS_LITERAL_IF([a=b], [ok], [ERR1], [ERR2]) 27
 ]])
 
 AT_CHECK_M4SH
@@ -1305,6 +1309,10 @@ ok 20
 ok 21
 ok 22
 ok 23
+ok 24
+ok 25
+ok 26
+ok 27
 ]])
 
 AT_CLEANUP
@@ -1342,12 +1350,13 @@ echo AS_TR_CPP(`echo abc`) AS_TR_CPP(`echo aBc`) AS_TR_CPP(`echo ABC`)
 echo AS_TR_CPP([`echo abc`]) AS_TR_CPP([`echo aBc`]) AS_TR_CPP([`echo ABC`])
 echo AS_TR_CPP([[`echo abc`]]) AS_TR_CPP([[`echo aBc`]]) AS_TR_CPP([[`echo ABC`]])
 echo ===
-echo AS_TR_SH([a.b/c+*-])
-echo AS_TR_CPP([a.b/c+*-])
-var=a.b/c+*-
+# start here
+echo AS_TR_SH([a.b/c+*-=])
+echo AS_TR_CPP([a.b/c+*-=])
+var=a.b/c+*-=
 echo AS_TR_SH([$var])
 echo AS_TR_CPP([$var])
-m4_define([macro], [a.b/c+*-])
+m4_define([macro], [a.b/c+*-=])
 echo AS_TR_SH([macro])
 echo AS_TR_CPP([macro])
 ]])
@@ -1375,12 +1384,19 @@ HI ABC HI
 HI ABC HI
 ABC ABC ABC
 ===
-a_b_cpp_
-A_B_C_P_
-a_b_cpp_
-A_B_C_P_
-a_b_cpp_
-A_B_C_P_
+a_b_cpp__
+A_B_C_P__
+a_b_cpp__
+A_B_C_P__
+a_b_cpp__
+A_B_C_P__
+]])
+
+dnl Check that of the last 6 macros, only 2 needed command substitution.
+dnl This test abuses our knowledge of m4sh internals a bit; oh well.
+AT_CHECK([sed -n '/start here/,$ {
+/`.*`/p
+}' script | wc -l], [], [[2
 ]])
 
 AT_CLEANUP
