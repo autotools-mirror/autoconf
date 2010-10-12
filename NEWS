@@ -2,6 +2,9 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** Support for the Go programming language has been added.  The new macro
+   AC_LANG_GO sets variables GOC and GOFLAGS.
+
 ** AS_LITERAL_IF again treats '=' as a literal.  Regression introduced in
    2.66.
 

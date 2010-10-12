@@ -1,3 +1,26 @@
+2011-02-21  Ian Lance Taylor  <iant@google.com>
+
+	* lib/autoconf/go.m4: New file.
+	* lib/autoconf/autoconf.m4: Include autoconf/go.m4.
+	* lib/autoconf/Makefile.am (dist_autoconflib_DATA): Add go.m4.
+	* lib/freeze.mk (autoconf_m4f_dependencies): Add
+	$(src_libdir)/autoconf/go.m4.
+	* doc/autoconf.texi: Rebuild menus.
+	(Preset Output Variables): Mention Go.  Document GOFLAGS.
+	(Libraries): Mention Go.
+	(Go Compiler): New subsection.
+	(Language Choice): Mention Go.
+	(Generating Sources): Likewise.
+	(Running the Preprocessor): Likewise.
+	* tests/go.at: New file.
+	* tests/suite.at: Include go.at and acgo.at.
+	* tests/local.at (_AT_CHECK_ENV): Add GOC and GOFLAGS.
+	* tests/Makefile.am (TESTSUITE_GENERATED_AT): Add
+	$(srcdir)/acgo.at.
+	(TESTSUITE_HAND_AT): Add go.at.
+	(AUTOCONF_FILES): Add $(autoconfdir)/go.m4.
+	* NEWS: Update.
+
 2011-02-20  Christian Rössel  <christian.roessel@gmx.de>  (tiny change)
 	    Markus Geimer  <m.geimer@fz-juelich.de>  (tiny change)
 

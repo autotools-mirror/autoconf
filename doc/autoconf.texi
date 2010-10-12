@@ -413,6 +413,7 @@ Compilers and Preprocessors
 * Objective C++ Compiler::      Likewise
 * Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
+* Go Compiler::                 Likewise
 
 Writing Tests
 
@@ -2605,7 +2606,7 @@ programs to test for Fortran 77 features.
 Options for the linker.  If it is not set
 in the environment when @command{configure} runs, the default value is empty.
 @command{configure} uses this variable when linking programs to test for
-C, C++, Objective C, Objective C++, and Fortran features.
+C, C++, Objective C, Objective C++, Fortran, and Go features.
 
 This variable's contents should contain options like @option{-s} and
 @option{-L} that affect only the behavior of the linker.  Please see the
@@ -2623,7 +2624,7 @@ Don't use this variable to pass library names
 but some Autoconf macros may prepend extra libraries to this variable if
 those libraries are found and provide necessary functions, see
 @ref{Libraries}.  @command{configure} uses this variable when linking
-programs to test for C, C++, Objective C, Objective C++, and Fortran
+programs to test for C, C++, Objective C, Objective C++, Fortran, and Go
 features.
 @end defvar
 
@@ -2639,6 +2640,13 @@ acts like @code{CFLAGS}, but for Objective C instead of C.
 @ovindex OBJCXXFLAGS
 Debugging and optimization options for the Objective C++ compiler.  It
 acts like @code{CXXFLAGS}, but for Objective C++ instead of C++.
+@end defvar
+
+@defvar GOFLAGS
+@evindex GOFLAGS
+@ovindex GOFLAGS
+Debugging and optimization options for the Go compiler.  It acts like
+@code{CFLAGS}, but for Go instead of C.
 @end defvar
 
 @defvar builddir
@@ -4435,8 +4443,8 @@ a variable name mapped to underscores.
 @section Library Files
 @cindex Library, checking
 
-The following macros check for the presence of certain C, C++, or Fortran
-library archive files.
+The following macros check for the presence of certain C, C++, Fortran,
+or Go library archive files.
 
 @anchor{AC_CHECK_LIB}
 @defmac AC_CHECK_LIB (@var{library}, @var{function}, @
@@ -6989,6 +6997,7 @@ compiling.
 * Objective C++ Compiler::      Likewise
 * Erlang Compiler and Interpreter::  Likewise
 * Fortran Compiler::            Likewise
+* Go Compiler::                 Likewise
 @end menu
 
 @node Specific Compiler Characteristics
@@ -8238,6 +8247,32 @@ message).
 @end defmac
 
 
+@node Go Compiler
+@subsection Go Compiler Characteristics
+@cindex Go
+
+Autoconf provides basic support for the Go programming language when
+using the @code{gccgo} compiler (there is currently no support for the
+@code{6g} and @code{8g} compilers).
+
+@defmac AC_PROG_GO (@ovar{compiler-search-list})
+Find the Go compiler to use.  Check whether the environment variable
+@code{GOC} is set; if so, then set output variable @code{GOC} to its
+value.
+
+Otherwise, if the macro is invoked without an argument, then search for
+a Go compiler named @code{gccgo}.  If it is not found, then as a last
+resort set @code{GOC} to @code{gccgo}.
+
+This macro may be invoked with an optional first argument which, if
+specified, must be a blank-separated list of Go compilers to search for.
+
+If output variable @code{GOFLAGS} was not already set, set it to
+@option{-g -O2}.  If your package does not like this default,
+@code{GOFLAGS} may be set before @code{AC_PROG_GO}.
+@end defmac
+
+
 @node System Services
 @section System Services
 
@@ -8628,6 +8663,10 @@ Do compilation tests using @code{OBJCXX} and @code{OBJCXXCPP} and use
 extension @file{.mm} for test programs.  Use compilation flags:
 @code{CPPFLAGS} with @code{OBJCXXCPP}, and both @code{CPPFLAGS} and
 @code{OBJCXXFLAGS} with @code{OBJCXX}.
+
+@item Go
+Do compilation tests using @code{GOC} and use extension @file{.go} for
+test programs.  Use compilation flags @code{GOFLAGS}.
 @end table
 @end defmac
 
@@ -8871,9 +8910,9 @@ on a system with @command{gcc} installed, results in:
 const char hw[] = "Hello, World\n";
 @end example
 
-When the test language is Fortran or Erlang, the @code{AC_DEFINE} definitions
-are not automatically translated into constants in the source code by this
-macro.
+When the test language is Fortran, Erlang, or Go, the @code{AC_DEFINE}
+definitions are not automatically translated into constants in the
+source code by this macro.
 
 @defmac AC_LANG_PROGRAM (@var{prologue}, @var{body})
 @acindex{LANG_PROGRAM}
@@ -8995,8 +9034,8 @@ temptation of following the easiest path.
 Nevertheless, if you need to run the preprocessor, then use
 @code{AC_PREPROC_IFELSE}.
 
-The macros described in this section cannot be used for tests in Erlang or
-Fortran, since those languages require no preprocessor.
+The macros described in this section cannot be used for tests in Erlang,
+Fortran, or Go, since those languages require no preprocessor.
 
 @anchor{AC_PREPROC_IFELSE}
 @defmac AC_PREPROC_IFELSE (@var{input}, @ovar{action-if-true}, @

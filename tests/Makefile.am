@@ -84,6 +84,7 @@ TESTSUITE_GENERATED_AT = \
 	$(srcdir)/aclang.at \
 	$(srcdir)/acc.at \
 	$(srcdir)/acfortran.at \
+	$(srcdir)/acgo.at \
 	$(srcdir)/acgeneral.at \
 	$(srcdir)/acstatus.at \
 	$(srcdir)/acautoheader.at \
@@ -99,7 +100,7 @@ TESTSUITE_HAND_AT = \
 	suite.at \
 	m4sugar.at m4sh.at autotest.at \
 	base.at tools.at torture.at \
-	compile.at c.at erlang.at fortran.at \
+	compile.at c.at erlang.at fortran.at go.at \
 	semantics.at \
 	autoscan.at \
 	foreign.at
@@ -169,6 +170,7 @@ AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/c.m4 \
 		 $(autoconfdir)/erlang.m4 \
 		 $(autoconfdir)/fortran.m4 \
+		 $(autoconfdir)/go.m4 \
 		 $(autoconfdir)/headers.m4 \
 		 $(autoconfdir)/libs.m4 \
 		 $(autoconfdir)/types.m4 \

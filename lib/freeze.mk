@@ -88,6 +88,7 @@ autoconf_m4f_dependencies =			\
 	$(src_libdir)/autoconf/c.m4		\
 	$(src_libdir)/autoconf/fortran.m4	\
 	$(src_libdir)/autoconf/erlang.m4	\
+	$(src_libdir)/autoconf/go.m4		\
 	$(src_libdir)/autoconf/functions.m4	\
 	$(src_libdir)/autoconf/headers.m4	\
 	$(src_libdir)/autoconf/types.m4		\
