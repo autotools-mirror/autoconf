@@ -493,8 +493,9 @@ AT_DATA([bad.site],
 [[fi
 ]])
 CONFIG_SITE=$PWD/bad.site
-AT_CHECK_CONFIGURE([], [1], [ignore], [stderr])
-AT_CHECK([grep 'failed to load site script' stderr], [], [ignore])
+AT_CHECK_CONFIGURE([ || exit 1], [1], [stdout], [stderr])
+AT_CHECK([grep 'failed to load site script' stderr], [], [ignore], [ignore],
+	 [AT_CHECK([grep 'whether true' stdout], [1])])
 
 # However, a missing file is ignored.
 CONFIG_SITE=./no-such-file

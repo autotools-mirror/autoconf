@@ -1,3 +1,11 @@
+2010-10-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	tests: avoid AC_CACHE_CHECK test failure with dash.
+	* tests/base.at (AC_CACHE_CHECK): Normalize configure exit
+	status in presence of syntax error in sourced site file.
+	Do not error out if configure is aborted at this point.
+	Fixes testsuite failure with dash 0.5.5.1.
+
 2010-10-08  Eric Blake  <eblake@redhat.com>
 
 	AS_LITERAL_IF: Treat raw = as literal again.
