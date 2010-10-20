@@ -1,3 +1,9 @@
+2010-10-20  Eric Blake  <eblake@redhat.com>
+
+	docs: document dash bug in <>
+	* doc/autoconf.texi (File Descriptors): Dash 0.5.5 truncates on
+	<>; at least this was fixed in dash 0.5.6.
+
 2010-10-12  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	tests: avoid AC_CACHE_CHECK test failure with dash.

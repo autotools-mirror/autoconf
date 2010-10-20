@@ -15060,6 +15060,18 @@ $ @kbd{echo hi >&5}
 bash: echo: write error: Communication error on send
 @end example
 
+@noindent
+Furthermore, versions of @command{dash} before 0.5.6 mistakenly truncate
+regular files when using @samp{<>}:
+
+@example
+$ @kbd{echo a > file}
+$ @kbd{bash -c ': 1<>file'; cat file}
+a
+$ @kbd{dash -c ': 1<>file'; cat file}
+$ rm a
+@end example
+
 When catering to old systems, don't redirect the same file descriptor
 several times, as you are doomed to failure under Ultrix.
 
