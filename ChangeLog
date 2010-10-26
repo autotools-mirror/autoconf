@@ -1,3 +1,9 @@
+2010-10-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	docs: Posix now says "((cat))" isn't portable
+	* doc/autoconf.texi (Parenthesis): Update documentation to reflect
+	what Posix 1003.1-2008 says about "((".
+
 2010-10-20  Eric Blake  <eblake@redhat.com>
 
 	docs: document dash bug in <>
