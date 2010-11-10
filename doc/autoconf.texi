@@ -24790,8 +24790,8 @@ people have to do (mainly its maintainer).
 Why not use Imake instead of @command{configure} scripts?
 @end display
 
-Several people have written addressing this question, so I include
-adaptations of their explanations here.
+Several people have written addressing this question, so
+adaptations of their explanations are included here.
 
 The following answer is based on one written by Richard Pixley:
 
@@ -25366,6 +25366,8 @@ then provide it through documented shell variables.
 @node History
 @chapter History of Autoconf
 @cindex History of autoconf
+
+@emph{This chapter was written by the original author, David MacKenzie.}
 
 You may be wondering, Why was Autoconf originally written?  How did it
 get into its present form?  (Why does it look like gorilla spit?)  If
