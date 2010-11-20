@@ -1,3 +1,12 @@
+2010-11-20  Paul Eggert  <eggert@cs.ucla.edu>
+
+	autoconf: don't assume sys/stat.h and sys/types.h when testing C89
+	Problem reported by Patrick Pelissier in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2010-11/msg00019.html>.
+	* lib/autoconf/c.m4 (_AC_PROG_CC_C89): Don't include sys/types.h
+	and sys/stat.h.  Instead, define a dummy struct stat.  C89 doesn't
+	guarantee sys/types.h and sys/stat.h.
+
 2010-11-10  Reuben Thomas  <rrt@sc3d.org>  (tiny change)
 
 	docs: avoid first person, and credit history to David MacKenzie

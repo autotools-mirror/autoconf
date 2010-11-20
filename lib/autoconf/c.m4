@@ -1102,8 +1102,7 @@ AC_DEFUN([_AC_PROG_CC_C89],
 [_AC_C_STD_TRY([c89],
 [[#include <stdarg.h>
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+struct stat;
 /* Most of the following tests are stolen from RCS 5.7's src/conf.sh.  */
 struct buf { int x; };
 FILE * (*rcsopen) (struct buf *, struct stat *, int);
