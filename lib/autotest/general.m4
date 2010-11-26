@@ -2190,7 +2190,7 @@ m4_define([_AT_CHECK],
 AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([[$1]])"])
 _AT_DECIDE_TRACEABLE([$1]) _AT_LINE_ESCAPED
 ( $at_check_trace; [$1]
-) >>"$at_stdout" 2>>"$at_stderr"
+) >>"$at_stdout" 2>>"$at_stderr" AS_MESSAGE_LOG_FD>&-
 at_status=$? at_failed=false
 $at_check_filter
 m4_ifdef([AT_DIFF_STDERR($4)], [m4_indir([AT_DIFF_STDERR($4)])],

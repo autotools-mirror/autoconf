@@ -1,3 +1,10 @@
+2010-11-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	autotest: fix file descriptor leak
+	* lib/autotest/general.m4 (_AT_CHECK): Close AS_MESSAGE_LOG_FD
+	when running the test.	Problem reported by Luke Mewburn in
+	<http://lists.gnu.org/archive/html/autoconf/2010-11/msg00036.html>.
+
 2010-11-20  Paul Eggert  <eggert@cs.ucla.edu>
 
 	autoconf: don't assume sys/stat.h and sys/types.h when testing C89
