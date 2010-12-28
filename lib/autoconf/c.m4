@@ -1340,11 +1340,20 @@ dnl AIX		-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
 dnl HP cc	-AC99
 dnl Intel ICC	-std=c99, -c99 (deprecated)
 dnl IRIX	-c99
-dnl Solaris	-xc99=all (Forte Developer 7 C mishandles -xc99 on Solaris 9,
-dnl		as it incorrectly assumes C99 semantics for library functions)
+dnl Solaris	-D_STDC_C99=
+dnl		cc's -xc99 option uses linker magic to define the external
+dnl		symbol __xpg4 as if by "int __xpg4 = 1;", which enables C99
+dnl		behavior for C library functions.  This is not wanted here,
+dnl		because it means that a single module compiled with -xc99
+dnl		alters C runtime behavior for the entire program, not for
+dnl		just the module.  Instead, define the (private) symbol
+dnl		_STDC_C99, which suppresses a bogus failure in <stdbool.h>.
+dnl		The resulting compiler passes the test case here, and that's
+dnl		good enough.  For more, please see the thread starting at:
+dnl            http://lists.gnu.org/archive/html/autoconf/2010-12/msg00059.html
 dnl Tru64	-c99
 dnl with extended modes being tried first.
-[[-std=gnu99 -std=c99 -c99 -AC99 -xc99=all -qlanglvl=extc99]], [$1], [$2])[]dnl
+[[-std=gnu99 -std=c99 -c99 -AC99 -D_STDC_C99= -qlanglvl=extc99]], [$1], [$2])[]dnl
 ])# _AC_PROG_CC_C99
 
 

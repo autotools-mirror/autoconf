@@ -1,3 +1,9 @@
+2010-12-27  Paul Eggert  <eggert@cs.ucla.edu>
+
+	autoconf: Use -D_STDC_C99=, not -xc99=all, with Solaris cc
+	* lib/autoconf/c.m4 (_AC_PROG_CC_C99): Use -D_STDC_C99= rather than
+	-xc99=all to convince Solaris Studio cc to compile c99 programs.
+
 2010-11-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	autotest: fix file descriptor leak
