@@ -1,5 +1,5 @@
 # Customize maint.mk for Autoconf.            -*- Makefile -*-
-# Copyright (C) 2003, 2004, 2006, 2008, 2009, 2010 Free Software
+# Copyright (C) 2003, 2004, 2006, 2008, 2009, 2010, 2011 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
@@ -105,9 +105,9 @@ autom4te-update:
 local-checks-to-skip ?= \
   changelog-check sc_unmarked_diagnostics
 
-# Always use longhand copyrights.
+# Always use shorthand copyrights.
 update-copyright-env = \
-  UPDATE_COPYRIGHT_USE_INTERVALS=0 \
+  UPDATE_COPYRIGHT_USE_INTERVALS=1 \
   UPDATE_COPYRIGHT_MAX_LINE_LENGTH=72
 
 # Prevent incorrect NEWS edits.

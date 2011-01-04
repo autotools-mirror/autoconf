@@ -14,3 +14,4 @@ doc/gendocs_template
 doc/gnu-oids.texi
 doc/make-stds.texi
 doc/standards.texi
+m4/autobuild.m4
