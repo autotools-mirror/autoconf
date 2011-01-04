@@ -41,8 +41,11 @@ pkgdata_DATA = $(srcdir)/INSTALL
 
 MAINTAINERCLEANFILES = $(srcdir)/INSTALL
 $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
-	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) --plaintext -o $@ \
-	  $(top_srcdir)/doc/install.texi
+	echo @firstparagraphindent insert			\
+	  | cat - $(top_srcdir)/doc/install.texi > tmp.texi
+	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS)	\
+	  --plaintext -o $@ tmp.texi
+	rm -f tmp.texi
 endif
 
 
