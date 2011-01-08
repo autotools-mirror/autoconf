@@ -1,3 +1,10 @@
+2011-01-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	docs: mention configmake module for defining directories.
+	* doc/autoconf.texi (Defining Directories): Mention configmake
+	gnulib module.
+	Suggestion by Karl Berry and Eric Blake.
+
 2011-01-04  Eric Blake  <eblake@redhat.com>
 
 	doc: improve install.texi texinfo markup

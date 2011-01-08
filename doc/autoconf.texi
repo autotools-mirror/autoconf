@@ -24943,6 +24943,10 @@ myprog-paths.h: Makefile
         echo '#define DATADIR "$(datadir)"' >$@@
 @end example
 
+@noindent
+The gnulib module @samp{configmake} provides such a header with all the
+standard directory variables defined, @pxref{Gnulib}.
+
 @item
 Use @code{AC_DEFINE} but have @command{configure} compute the literal
 value of @code{datadir} and others.  Many people have wrapped macros to
