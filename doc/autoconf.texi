@@ -17382,11 +17382,11 @@ set -ex
 @cindex @command{set -e}
 The option @option{-e} has historically been underspecified, with enough
 ambiguities to cause numerous differences across various shell
-implementations.  Perhaps the best reference is
-@uref{http://www.opengroup.org/@/austin/@/mailarchives/@/ag-review/@/msg03507.html,
-this link}, recommending a change to Posix 2008 to match @command{ksh88}
-behavior.  Note that mixing @code{set -e} and shell functions is asking
-for surprises:
+implementations; see for example
+@uref{http://www.in-ulm.de/@/~mascheck/@/various/@/set-e/, this overview},
+or @uref{http://www.austingroupbugs.net/@/view.php?id=52, this link},
+documenting a change to Posix 2008 to match @command{ksh88} behavior.
+Note that mixing @code{set -e} and shell functions is asking for surprises:
 
 @example
 set -e

@@ -1,5 +1,10 @@
 2011-01-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	docs: link to 'set -e' shell behavior overview.
+	* doc/autoconf.texi (Limitations of Builtins): Add link to
+	Sven Mascheck's 'set -e' page.  Replace broken Opengroup link.
+	Suggestion by Eric Blake.
+
 	docs: mention configmake module for defining directories.
 	* doc/autoconf.texi (Defining Directories): Mention configmake
 	gnulib module.
