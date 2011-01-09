@@ -173,15 +173,12 @@ AT_CLEANUP
 
 AT_SETUP([AC_F77_DUMMY_MAIN usage])
 
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_CONFIG_HEADERS([config.h:config.hin])
+AT_CONFIGURE_AC([[
 AC_PROG_F77
 AC_F77_DUMMY_MAIN([], [AC_MSG_FAILURE([failed to determine F77 dummy main], [77])])
 AC_F77_WRAPPERS
 AC_PROG_CC
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
 ]])
 
 AT_DATA([Makefile.in],
@@ -253,16 +250,13 @@ AT_CLEANUP
 
 AT_SETUP([AC_FC_DUMMY_MAIN usage])
 
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_CONFIG_HEADERS([config.h:config.hin])
+AT_CONFIGURE_AC([[
 AC_PROG_FC
 AC_FC_FIXEDFORM
 AC_FC_DUMMY_MAIN([], [AC_MSG_FAILURE([failed to determine FC dummy main], [77])])
 AC_FC_WRAPPERS
 AC_PROG_CC
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
 ]])
 
 AT_DATA([Makefile.in],
@@ -334,15 +328,12 @@ AT_CLEANUP
 
 AT_SETUP([AC_F77_MAIN usage])
 
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_CONFIG_HEADERS([config.h:config.hin])
+AT_CONFIGURE_AC([[
 AC_PROG_F77
 AC_F77_MAIN
 AC_F77_WRAPPERS
 AC_PROG_CC
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
 ]])
 
 AT_DATA([Makefile.in],
@@ -416,16 +407,13 @@ AT_CLEANUP
 
 AT_SETUP([AC_FC_MAIN usage])
 
-AT_DATA([configure.ac],
-[[AC_INIT
-AC_CONFIG_HEADERS([config.h:config.hin])
+AT_CONFIGURE_AC([[
 AC_PROG_FC
 AC_FC_FIXEDFORM
 AC_FC_MAIN
 AC_FC_WRAPPERS
 AC_PROG_CC
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
 ]])
 
 AT_DATA([Makefile.in],
@@ -498,15 +486,13 @@ AT_CLEANUP
 
 AT_SETUP([AC_F77_FUNC usage])
 
-AT_DATA([configure.ac],
-[[AC_INIT
+AT_CONFIGURE_AC([[
 AC_PROG_F77
 AC_F77_FUNC([foobar])
 AC_SUBST([foobar])
 AC_PROG_CC
 AC_CONFIG_FILES([cprogram.c:cprogram.in])
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
 ]])
 
 AT_DATA([Makefile.in],
@@ -520,7 +506,7 @@ cprogram@EXEEXT@: cprogram.@OBJEXT@ foobar.@OBJEXT@
 .f.@OBJEXT@:
 	@F77@ @FFLAGS@ -c $<
 .c.@OBJEXT@:
-	@CC@ @DEFS@ @CPPFLAGS@ @CFLAGS@ -c $<
+	@CC@ @DEFS@ -I. @CPPFLAGS@ @CFLAGS@ -c $<
 ]])
 
 AT_DATA([foobar.f],
@@ -532,7 +518,8 @@ AT_DATA([foobar.f],
 ]])
 
 AT_DATA([cprogram.in],
-[[#include <math.h>
+[[#include <config.h>
+#include <math.h>
 
 #ifdef __cplusplus
 extern "C"  /* prevent C++ name mangling */
@@ -558,6 +545,7 @@ int main(int argc, char *argv[])
 ]])
 
 AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
 AT_CHECK_CONFIGURE
 : "${MAKE=make}"
 AT_CHECK([$MAKE], [], [ignore], [ignore])
@@ -572,15 +560,13 @@ AT_CLEANUP
 
 AT_SETUP([AC_FC_FUNC usage])
 
-AT_DATA([configure.ac],
-[[AC_INIT
+AT_CONFIGURE_AC([[
 AC_PROG_FC
 AC_FC_FUNC([foobar])
 AC_SUBST([foobar])
 AC_PROG_CC
 AC_CONFIG_FILES([cprogram.c:cprogram.in])
 AC_CONFIG_FILES([Makefile])
-AC_OUTPUT
 ]])
 
 AT_DATA([Makefile.in],
@@ -594,7 +580,7 @@ cprogram@EXEEXT@: cprogram.@OBJEXT@ foobar.@OBJEXT@
 .f.@OBJEXT@:
 	@FC@ @FCFLAGS@ -c $<
 .c.@OBJEXT@:
-	@CC@ @DEFS@ @CPPFLAGS@ @CFLAGS@ -c $<
+	@CC@ @DEFS@ -I. @CPPFLAGS@ @CFLAGS@ -c $<
 ]])
 
 AT_DATA([foobar.f],
@@ -606,7 +592,8 @@ AT_DATA([foobar.f],
 ]])
 
 AT_DATA([cprogram.in],
-[[#include <math.h>
+[[#include <config.h>
+#include <math.h>
 
 #ifdef __cplusplus
 extern "C"  /* prevent C++ name mangling */
@@ -632,6 +619,7 @@ int main(int argc, char *argv[])
 ]])
 
 AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
 AT_CHECK_CONFIGURE
 : "${MAKE=make}"
 AT_CHECK([$MAKE], [], [ignore], [ignore])

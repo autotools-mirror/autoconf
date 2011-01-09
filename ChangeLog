@@ -1,5 +1,15 @@
 2011-01-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Avoid reference to $CYGWIN in Fortran macros.
+	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Require
+	AC_CANONICAL_HOST.  Replace test for $CYGWIN with $host_s test.
+	* tests/fortran.at (AC_F77_DUMMY_MAIN usage)
+	(AC_FC_DUMMY_MAIN usage, AC_F77_MAIN usage, AC_FC_MAIN usage):
+	Use AT_CONFIGURE_AC and simplify accordingly, so auxiliary
+	scripts are copied into the test directories.
+	(AC_F77_FUNC usage, AC_FC_FUNC usage): Likewise.  Adjust to
+	autoheader being used now.
+
 	docs: link to Gnulib configmake documentation.
 	* doc/autoconf.texi (Defining Directories): Use proper crossref,
 	now that the Gnulib manual has a configmake section.

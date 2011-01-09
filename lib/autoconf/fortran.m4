@@ -609,7 +609,8 @@ fi],
 # in "octave-2.0.13/aclocal.m4", and full credit should go to John
 # W. Eaton for writing this extremely useful macro.  Thank you John.
 AC_DEFUN([_AC_FC_LIBRARY_LDFLAGS],
-[_AC_FORTRAN_ASSERT()dnl
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl
+_AC_FORTRAN_ASSERT()dnl
 _AC_PROG_FC_V
 AC_CACHE_CHECK([for _AC_LANG libraries of $[]_AC_FC[]], ac_cv_[]_AC_LANG_ABBREV[]_libs,
 [if test "x$[]_AC_LANG_PREFIX[]LIBS" != "x"; then
@@ -641,7 +642,11 @@ while test $[@%:@] != 1; do
 	  |-LANG:=* | -LIST:* | -LNO:* | -link)
 	  ;;
 	-lkernel32)
-	  test x"$CYGWIN" != xyes && ac_cv_[]_AC_LANG_ABBREV[]_libs="$ac_cv_[]_AC_LANG_ABBREV[]_libs $ac_arg"
+	  case $host_os in
+	  *cygwin*) ;;
+	  *) ac_cv_[]_AC_LANG_ABBREV[]_libs="$ac_cv_[]_AC_LANG_ABBREV[]_libs $ac_arg"
+	    ;;
+	  esac
 	  ;;
 	-[[LRuYz]])
 	  # These flags, when seen by themselves, take an argument.
