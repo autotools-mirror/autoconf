@@ -1,3 +1,10 @@
+2011-01-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	docs: link to Gnulib configmake documentation.
+	* doc/autoconf.texi (Defining Directories): Use proper crossref,
+	now that the Gnulib manual has a configmake section.
+	Thanks to Karl Berry.
+
 2011-01-09  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	docs: link to 'set -e' shell behavior overview.
