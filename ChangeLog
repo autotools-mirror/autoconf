@@ -1,3 +1,11 @@
+2011-01-12  Eric Blake  <eblake@redhat.com>
+
+	docs: fix description of m4_ifval
+	* doc/autoconf.texi (Conditional constructs) <m4_ifval>: Use
+	correct argument order.
+	* THANKS: Update.
+	Reported by Mostafa.
+
 2011-01-10  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Avoid reference to $CYGWIN in Fortran macros.

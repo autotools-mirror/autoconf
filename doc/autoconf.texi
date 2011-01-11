@@ -11881,7 +11881,7 @@ except that it is not an error if @var{macro} is undefined.
 Expands to @var{if-true} if @var{cond} is not empty, otherwise to
 @var{if-false}.  This is shorthand for:
 @example
-m4_if([@var{cond}], [], [@var{if-true}], [@var{if-false}])
+m4_if([@var{cond}], [], [@var{if-false}], [@var{if-true}])
 @end example
 @end defmac
 
