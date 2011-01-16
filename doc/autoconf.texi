@@ -17342,7 +17342,9 @@ Also please see the discussion of the @command{cd} command.
 @c -----------------
 @prindex @command{read}
 No options are portable, not even support @option{-r} (Solaris
-@command{/bin/sh} for example).
+@command{/bin/sh} for example).  Tru64/OSF 5.1 @command{sh} treats
+@command{read} as a special built-in, so it may exit if input is
+redirected from a non-existent or unreadable file.
 
 
 @anchor{set}

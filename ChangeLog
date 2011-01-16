@@ -1,3 +1,9 @@
+2011-01-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	docs: Tru64/OSF sh treats read as special builtin
+	* doc/autoconf.texi (Limitations of Builtins): read may exit
+	upon unreadable or non-existent file with Tru64/OSF 5.1 sh.
+
 2011-01-12  Eric Blake  <eblake@redhat.com>
 
 	docs: fix description of m4_ifval
