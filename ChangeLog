@@ -1,3 +1,12 @@
+2011-01-21  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix LEXLIB and YYTEXT_POINTER with IRIX 6.5 flex 2.5.4.
+	* lib/autoconf/programs.m4 (_AC_PROG_LEX_YYTEXT_DECL):
+	Overquote nontrivial yyless argument, to compensate for
+	underquoted macro definition in IRIX 6.5 flex 2.5.4
+	leading to compile failure due to incompatible operands.
+	Fixes Automake silent-lex-generic.test failure.
+
 2011-01-17  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	docs: Tru64/OSF sh treats read as special builtin
