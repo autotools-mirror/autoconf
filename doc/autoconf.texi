@@ -17758,13 +17758,15 @@ and file name expansion.
 @item @command{unset}
 @c ------------------
 @prindex @command{unset}
-In some nonconforming shells (e.g., Bash 2.05a), @code{unset FOO} fails
-when @code{FOO} is not set.  You can use
+In some nonconforming shells (e.g., NetBSD 5.99.43 sh or Bash 2.05a),
+@code{unset FOO} fails when @code{FOO} is not set.  This can interfere
+with @code{set -e} operation.  You can use
 
 @smallexample
 FOO=; unset FOO
 @end smallexample
 
+@noindent
 if you are not sure that @code{FOO} is set.
 
 A few ancient shells lack @command{unset} entirely.  For some variables
@@ -17777,8 +17779,8 @@ PS1='$ '
 Usually, shells that do not support @command{unset} need less effort to
 make the environment sane, so for example is not a problem if you cannot
 unset @command{CDPATH} on those shells.  However, Bash 2.01 mishandles
-@code{unset MAIL} in some cases and dumps core.  So, you should do
-something like
+@code{unset MAIL} and @code{unset MAILPATH} in some cases and dumps core.
+So, you should do something like
 
 @smallexample
 ( (unset MAIL) || exit 1) >/dev/null 2>&1 && unset MAIL || :
