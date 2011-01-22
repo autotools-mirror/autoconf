@@ -1,5 +1,11 @@
 2011-01-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	docs: document how to use comment characters in rules.
+	* doc/autoconf.texi (Comments in Make Rules): Explain how to
+	produce a `#' in a rule.
+	(Comments in Make Macros): Add cross reference.
+	Suggestion from Eric Blake.
+
 	docs: new sections about comments and whitespace in make macros.
 	* doc/autoconf.texi (Top, Portable Make): Adjust menus.
 	(Comments in Make Macros, Trailing whitespace in Make Macros):

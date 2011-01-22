@@ -19553,6 +19553,21 @@ all:
         : "foo"
 @end example
 
+Conversely, if you want to use the @samp{#} character in some command,
+you can only do so by expanding it inside a rule (@pxref{Comments in
+Make Macros}).  So for example, if @samp{COMMENT_CHAR} is substituted by
+@command{config.status} as @samp{#}, then the following substitutes
+@samp{@@COMMENT_CHAR@@} in a generated header:
+
+@example
+foo.h: foo.h.in
+        sed -e 's|@@''COMMENT_CHAR''@@|@@COMMENT_CHAR@@|g' \
+            $(srcdir)/foo.h.in > $@@
+@end example
+
+The funny shell quoting avoids a substitution at @command{config.status}
+run time of the left-hand side of the @command{sed} @samp{s} command.
+
 @node Newlines in Make Rules
 @section Newlines in Make Rules
 @cindex Newlines in @file{Makefile} rules
@@ -19599,7 +19614,8 @@ CPPFLAGS = "-DCOMMENT_CHAR='#'"
 @noindent
 as @samp{CPPFLAGS} may be expanded to @samp{"-DCOMMENT_CHAR='}.
 Luckily, most @command{make} implementations disregard this and treat
-single and double quotes specially here.
+single and double quotes specially here; @pxref{Comments in Make Rules},
+for a more portable alternative.
 
 Even without quoting involved, comments can have surprising effects,
 because the whitespace before them is part of the variable value:
