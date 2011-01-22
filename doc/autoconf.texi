@@ -533,6 +533,8 @@ Portable Make Programming
 * Parallel Make::               Parallel @command{make} quirks
 * Comments in Make Rules::      Other problems with Make comments
 * Newlines in Make Rules::      Using literal newlines in rules
+* Comments in Make Macros::     Other problems with Make comments in macros
+* Trailing whitespace in Make Macros::  Macro substitution problems
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
 * VPATH and Make::              @code{VPATH} woes
@@ -19137,6 +19139,8 @@ itself.
 * Parallel Make::               Parallel @command{make} quirks
 * Comments in Make Rules::      Other problems with Make comments
 * Newlines in Make Rules::      Using literal newlines in rules
+* Comments in Make Macros::     Other problems with Make comments in macros
+* Trailing whitespace in Make Macros::  Macro substitution problems
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
 * VPATH and Make::              @code{VPATH} woes
@@ -19576,6 +19580,55 @@ inserts a blank line after every line of a file, this code can be used:
 nlinit=`echo 'nl="'; echo '"'`; eval "$$nlinit"; \
 sed -e "s/\$$/\\$$@{nl@}/" < input > output
 @end example
+
+@node Comments in Make Macros
+@section Comments in Make Macros
+@cindex Comments in @file{Makefile} macros
+@cindex @file{Makefile} macros and comments
+
+Avoid putting comments in macro values as far as possible.  Posix
+specifies that the text starting from the @samp{#} sign until the end of
+the line is to be ignored, which has the unfortunate effect of
+disallowing them even within quotes.  Thus, the following might lead to
+a syntax error at compile time:
+
+@example
+CPPFLAGS = "-DCOMMENT_CHAR='#'"
+@end example
+
+@noindent
+as @samp{CPPFLAGS} may be expanded to @samp{"-DCOMMENT_CHAR='}.
+Luckily, most @command{make} implementations disregard this and treat
+single and double quotes specially here.
+
+Even without quoting involved, comments can have surprising effects,
+because the whitespace before them is part of the variable value:
+
+@example
+foo = bar # trailing comment
+print: ; @@echo "$(foo)."
+@end example
+
+@noindent
+prints @samp{bar .}, which is usually not intended, and can expose
+@command{make} bugs as described below.
+
+@node Trailing whitespace in Make Macros
+@section Trailing whitespace in Make Macros
+@cindex whitespace in @file{Makefile} macros
+@cindex @file{Makefile} macros and whitespace
+
+GNU @command{make} 3.80 mistreats trailing whitespace in macro
+substitutions and appends another spurious suffix:
+
+@example
+empty =
+foo = bar $(empty)
+print: ; @@echo $(foo:=.test)
+@end example
+
+@noindent
+prints @samp{bar.test .test}.
 
 @node obj/ and Make
 @section The @file{obj/} Subdirectory and Make
