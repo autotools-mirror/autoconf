@@ -1,5 +1,10 @@
 2011-01-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	docs: do not use AIX 5.3 cp -R.
+	* doc/autoconf.texi (Limitations of Usual Tools): Document one
+	instance of the cp -R bug on AIX 5.3.  This seems to have been
+	fixed in 6.1 and newer releases.
+
 	docs: update entry about unset.
 	* doc/autoconf.texi (Limitations of Builtins): NetBSD sh unset
 	also fails upon `unset' of a variable that is not set.  Bash 2.01
