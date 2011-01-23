@@ -535,6 +535,7 @@ Portable Make Programming
 * Newlines in Make Rules::      Using literal newlines in rules
 * Comments in Make Macros::     Other problems with Make comments in macros
 * Trailing whitespace in Make Macros::  Macro substitution problems
+* Command-line Macros and whitespace::  Whitespace trimming of values
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
 * VPATH and Make::              @code{VPATH} woes
@@ -19141,6 +19142,7 @@ itself.
 * Newlines in Make Rules::      Using literal newlines in rules
 * Comments in Make Macros::     Other problems with Make comments in macros
 * Trailing whitespace in Make Macros::  Macro substitution problems
+* Command-line Macros and whitespace::  Whitespace trimming of values
 * obj/ and Make::               Don't name a subdirectory @file{obj}
 * make -k Status::              Exit status of @samp{make -k}
 * VPATH and Make::              @code{VPATH} woes
@@ -19645,6 +19647,26 @@ print: ; @@echo $(foo:=.test)
 
 @noindent
 prints @samp{bar.test .test}.
+
+@node Command-line Macros and whitespace
+@section Command-line Macros and whitespace
+@cindex whitespace in command-line macros
+@cindex command-line, macros set on
+@cindex environment, macros set from
+
+Some @command{make} implementations may strip trailing whitespace off
+of macros set on the command line in addition to leading whitespace.
+Further, some may strip leading whitespace off of macros set from
+environment variables:
+
+@example
+$ @kbd{echo 'print: ; @@echo "x$(foo)x$(bar)x"' |
+  foo=' f f ' make -f - bar=' b b '}
+x f f xb b x  # AIX, BSD, GNU make
+xf f xb b x   # HP-UX, IRIX, Tru64/OSF make
+x f f xb bx   # Solaris make
+@end example
+
 
 @node obj/ and Make
 @section The @file{obj/} Subdirectory and Make

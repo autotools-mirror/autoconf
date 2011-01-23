@@ -1,3 +1,10 @@
+2011-01-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	docs: new section about whitespace trimmmed from make command-lines.
+	* doc/autoconf.texi (Command-line Macros and whitespace): New
+	section, document trimming of whitespace from macros set on the
+	command line and from the environment.
+
 2011-01-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	docs: document how to use comment characters in rules.
