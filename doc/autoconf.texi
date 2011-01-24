@@ -19475,12 +19475,46 @@ sh
 @cindex Parallel @command{make}
 
 Support for parallel execution in @command{make} implementation varies.
-Generally, using GNU make is your best bet.  When NetBSD
-@command{make} is invoked with @option{-j@var{N}}, it will reuse the
-same shell for multiple commands within one recipe.  This can have
-unexpected consequences.@footnote{Note that GNU make has
-heuristics to avoid spawning a shell at all if the command is deemed
-safe to be executed directly.} For example, change of directories or
+Generally, using GNU make is your best bet.
+
+Some make implementations (among them, FreeBSD @command{make}, NetBSD
+@command{make}, and Solaris @command{dmake}), when invoked with a
+@option{-j@var{N}} option, connect the standard output and standard
+error of all their child processes to pipes or temporary regular
+files.  This can lead to subtly different semantics in the behaviour
+of the spawned processes.  For example, even if the @command{make}
+standard output is connected to a tty, the recipe command will not be:
+
+@example
+$ @kbd{cat Makefile}
+all:
+        @@test -t 1 && echo "Is a tty" || echo "Is not a tty"
+$ @kbd{make -j 2} # FreeBSD make
+Is not a tty
+$ @kbd{make -j 2} # NetBSD make
+--- all ---
+Is not a tty
+$ @kbd{dmake -j 2} # Solaris dmake
+@var{hostname} --> 1 job
+@var{hostname} --> Job output
+Is not a tty
+@end example
+
+@noindent
+On the other hand:
+
+@example
+$ @kbd{make -j 2} # GNU make, Heirloom make
+Is a tty
+@end example
+
+Furthermore, parallel runs of those @command{make} implementations will
+route standard error from commands that they spawn into their own
+standard output, and may remove leading whitespace from output lines.
+
+When NetBSD or FreeBSD @command{make} are run in parallel mode, they will
+reuse the same shell for multiple commands within one recipe.  This can
+have unexpected consequences. For example, change of directories or
 variables persist between commands:
 
 @example
@@ -19518,12 +19552,9 @@ Another consequence of this is that, if one command in a recipe uses
 @code{exit 0} to indicate a successful exit, the shell will be gone
 and the remaining commands of this recipe will not be executed.
 
-The above example also shows additional status output NetBSD
-@command{make} produces in parallel mode for targets being updated.
-
-Furthermore, parallel NetBSD @command{make} will route standard error
-from commands that it spawns into its own standard output, and may
-remove leading whitespace from output lines.
+The above example also shows additional status output produced by NetBSD
+@command{make} (but @emph{not} by FreeBSD @command{make}) in parallel
+mode for targets being updated.
 
 You can avoid these issues by using the @option{-B} option to enable
 compatibility semantics.  However, that will effectively also disable

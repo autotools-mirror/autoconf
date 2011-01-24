@@ -1,3 +1,13 @@
+2011-01-27  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	docs: another parallel make issue
+	* doc/autoconf.texi (Parallel Make): Document that some make
+	implementations, when run in parallel mode, connect stdout and
+	stderr of child processes to pipes or temporary files, and might
+	re-route stderr of spawned processes to stout.  Also document
+	that FreeBSD make in parallel mode reuses the same shell for
+	multiple commands within one recipe (like NetBSD make does).
+
 2011-01-25  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 	    Eric Blake  <eblake@redhat.com>
 
