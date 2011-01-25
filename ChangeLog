@@ -1,3 +1,13 @@
+2011-01-25  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	    Eric Blake  <eblake@redhat.com>
+
+	docs: advise against HP-UX make due to time stamp semantics.
+	* doc/autoconf.texi (Timestamps and Make): Document HP-UX 11.31
+	make issue with targets having the same time stamps as their
+	prerequisites.
+	* doc/install.texi (Particular Systems): Warn against using
+	HP-UX make.
+
 2011-01-25  Eric Blake  <eblake@redhat.com>
 
 	maint: reflect recent copyright assignments

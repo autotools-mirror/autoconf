@@ -20287,6 +20287,14 @@ dest-stamp: src
         date >dest-stamp
 @end example
 
+Apart from timestamp resolution, there are also differences in handling
+equal timestamps.  HP-UX @command{make} updates targets if it has the
+same time stamp as one of its prerequisites, in violation of Posix rules.
+
+This can cause spurious rebuilds for repeated runs of @command{make}.
+This in turn can cause @command{make} to fail if it tries to rebuild
+generated files in a possibly read-only source tree with tools not
+present on the end-user machine.  Use GNU @command{make} instead.
 
 
 
