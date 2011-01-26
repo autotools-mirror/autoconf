@@ -1,3 +1,8 @@
+2011-01-25  Eric Blake  <eblake@redhat.com>
+
+	maint: reflect recent copyright assignments
+	* AUTHORS: Update.
+
 2011-01-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	docs: new section about whitespace trimmmed from make command-lines.
