@@ -734,7 +734,7 @@ about difficulties in writing Autoconf input, and not in the behavior of
 the resulting @file{configure}.  Even packages that don't use Autoconf
 will generally provide a @file{configure} script, and the most common
 complaint about these alternative home-grown scripts is that they fail
-to meet one or more of the GNU Coding Standars (@pxref{Configuration, , ,
+to meet one or more of the GNU Coding Standards (@pxref{Configuration, , ,
 standards, The GNU Coding Standards}) that users
 have come to expect from Autoconf-generated @file{configure} scripts.
 

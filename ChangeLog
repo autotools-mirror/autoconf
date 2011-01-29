@@ -1,3 +1,8 @@
+2011-01-29  Jim Warhol  <jrw@jwarhol.com>  (tiny change)
+
+	* doc/autoconf.texi (Introduction): Fix typo.
+	* THANKS: Update.
+
 2011-01-27  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: another parallel make issue
