@@ -5,6 +5,9 @@ GNU Autoconf NEWS - User visible changes.
 ** AS_LITERAL_IF again treats '=' as a literal.  Regression introduced in
    2.66.
 
+** Macros
+
+- New macro AC_HEADER_CHECK_STDBOOL.
 
 * Noteworthy changes in release 2.68 (2010-09-22) [stable]
   Released by Eric Blake, based on git versions 2.67.*.

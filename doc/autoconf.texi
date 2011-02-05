@@ -5811,6 +5811,21 @@ AC_CHECK_HEADERS([X11/extensions/scrnsaver.h], [], [],
 These macros check for particular system header files---whether they
 exist, and in some cases whether they declare certain symbols.
 
+@defmac AC_CHECK_HEADER_STDBOOL
+@acindex{CHECK_HEADER_STDBOOL}
+@cvindex HAVE__BOOL
+@hdrindex{stdbool.h}
+@caindex header_stdbool_h
+Check whether @file{stdbool.h} exists and conforms to C99, and cache the
+result in the @code{ac_cv_header_stdbool_h} variable.  If the type
+@code{_Bool} is defined, define @code{HAVE__BOOL} to 1.
+
+This macro is intended for use by Gnulib (@pxref{Gnulib}) and other
+packages that supply a substitute @file{stdbool.h} on platforms lacking
+a conforming one.  The @code{AC_HEADER_STDBOOL} macro is better for code
+that explicitly checks for @file{stdbool.h}.
+@end defmac
+
 @defmac AC_HEADER_ASSERT
 @acindex{HEADER_ASSERT}
 @cvindex NDEBUG
@@ -5937,14 +5952,14 @@ New programs need not use this macro.
 @cvindex HAVE_STDBOOL_H
 @cvindex HAVE__BOOL
 @hdrindex{stdbool.h}
-@hdrindex{system.h}
 @caindex header_stdbool_h
 If @file{stdbool.h} exists and conforms to C99, define
 @code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
 @code{HAVE__BOOL} to 1.  To fulfill the C99 requirements, your
-@file{system.h} could contain the following code:
+program could contain the following code:
 
-@verbatim
+@example
+@group
 #ifdef HAVE_STDBOOL_H
 # include <stdbool.h>
 #else
@@ -5960,14 +5975,20 @@ typedef bool _Bool;
 # define true 1
 # define __bool_true_false_are_defined 1
 #endif
-@end verbatim
+@end group
+@end example
 
 Alternatively you can use the @samp{stdbool} package of Gnulib
-(@pxref{Gnulib}); it packages the above code into a replacement header
-and contains a few other bells and whistles.
+(@pxref{Gnulib}).  It simplifies your code so that it can say just
+@code{#include <stdbool.h>}, and it adds support for less-common
+platforms.
 
 This macro caches its result in the @code{ac_cv_header_stdbool_h}
 variable.
+
+This macro differs from @code{AC_CHECK_HEADER_STDBOOL} only in that it
+defines @code{HAVE_STDBOOL_H} whereas @code{AC_CHECK_HEADER_STDBOOL}
+does not.
 @end defmac
 
 @anchor{AC_HEADER_STDC}
