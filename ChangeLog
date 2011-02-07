@@ -1,3 +1,7 @@
+2011-02-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	* doc/autoconf.texi: Rebuild menus using emacs ^C ^U ^A.
+
 2011-02-04  Paul Eggert  <eggert@cs.ucla.edu>
 
 	autoconf: new macro AC_HEADER_CHECK_STDBOOL

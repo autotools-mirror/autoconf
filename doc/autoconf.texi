@@ -340,7 +340,7 @@ Substitutions in Makefiles
 
 * Preset Output Variables::     Output variables that are always set
 * Installation Directory Variables::  Other preset output variables
-* Changed Directory Variables:: Warnings about @file{datarootdir}
+* Changed Directory Variables::  Warnings about @file{datarootdir}
 * Build Directories::           Supporting multiple concurrent compiles
 * Automatic Remaking::          Makefile rules for configuring
 
@@ -452,13 +452,6 @@ Programming in M4
 * Programming in M4sugar::      Convenient pure M4 macros
 * Debugging via autom4te::      Figuring out what M4 was doing
 
-Programming in M4sh
-
-* Common Shell Constructs::     Portability layer for common shell constructs
-* Polymorphic Variables::       Support for indirect variable names
-* Initialization Macros::       Macros to establish a sane shell environment
-* File Descriptor Macros::      File descriptor macros for input and output
-
 M4 Quotation
 
 * Active Characters::           Characters that change the behavior of M4
@@ -487,6 +480,13 @@ Programming in M4sugar
 * Number processing Macros::    Arithmetic computation in M4
 * Set manipulation Macros::     Set manipulation in M4
 * Forbidden Patterns::          Catching unexpanded macros
+
+Programming in M4sh
+
+* Common Shell Constructs::     Portability layer for common shell constructs
+* Polymorphic Variables::       Support for indirect variable names
+* Initialization Macros::       Macros to establish a sane shell environment
+* File Descriptor Macros::      File descriptor macros for input and output
 
 Writing Autoconf Macros
 
@@ -561,6 +561,14 @@ Portable C and C++ Programming
 * Volatile Objects::            @code{volatile} and signals
 * Floating Point Portability::  Portable floating-point arithmetic
 * Exiting Portably::            Exiting and the exit status
+
+Integer Overflow
+
+* Integer Overflow Basics::     Why integer overflow is a problem
+* Signed Overflow Examples::    Examples of code assuming wraparound
+* Optimization and Wraparound::  Optimizations that break uses of wraparound
+* Signed Overflow Advice::      Practical advice for signed overflow issues
+* Signed Integer Division::     @code{INT_MIN / -1} and @code{INT_MIN % -1}
 
 Manual Configuration
 
@@ -2410,7 +2418,7 @@ makefiles.
 @menu
 * Preset Output Variables::     Output variables that are always set
 * Installation Directory Variables::  Other preset output variables
-* Changed Directory Variables:: Warnings about @file{datarootdir}
+* Changed Directory Variables::  Warnings about @file{datarootdir}
 * Build Directories::           Supporting multiple concurrent compiles
 * Automatic Remaking::          Makefile rules for configuring
 @end menu
@@ -20451,11 +20459,11 @@ signed integer remainder, the C standard requires overflow
 behavior that is commonly not implemented.
 
 @menu
-* Integer Overflow Basics::      Why integer overflow is a problem
-* Signed Overflow Examples::     Examples of code assuming wraparound
+* Integer Overflow Basics::     Why integer overflow is a problem
+* Signed Overflow Examples::    Examples of code assuming wraparound
 * Optimization and Wraparound::  Optimizations that break uses of wraparound
-* Signed Overflow Advice::       Practical advice for signed overflow issues
-* Signed Integer Division::      @code{INT_MIN / -1} and @code{INT_MIN % -1}
+* Signed Overflow Advice::      Practical advice for signed overflow issues
+* Signed Integer Division::     @code{INT_MIN / -1} and @code{INT_MIN % -1}
 @end menu
 
 @node Integer Overflow Basics
