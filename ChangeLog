@@ -1,3 +1,12 @@
+2011-02-12  Giulio Paci  <giuliopaci@interfree.it>  (tiny change)
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Fix detection of link flags for fort77 on GNU/Linux.
+	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT): Properly detect
+	the fort77 (f2c wrapper) compiler verbose linking output flag.
+	Fixes also AC_F77_LIBRARY_LDFLAGS and AC_F77_DUMMY_MAIN.
+	* THANKS: Update.
+
 2011-02-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* doc/autoconf.texi: Rebuild menus using emacs ^C ^U ^A.
