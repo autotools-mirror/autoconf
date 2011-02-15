@@ -25464,7 +25464,7 @@ failed.
 Debugging @command{configure} script execution may be done by sprinkling
 pairs of @code{set -x} and @code{set +x} into the shell script before
 and after the region that contains a bug.  Running the whole script with
-@samp{@var{shell} ./configure -vx 2>&1 | tee @var{log-file}} with a decent
+@samp{@var{shell} -vx ./configure 2>&1 | tee @var{log-file}} with a decent
 @var{shell} may work, but produces lots of output.  Here, it can help to
 search for markers like @samp{checking for} a particular test in the
 @var{log-file}.

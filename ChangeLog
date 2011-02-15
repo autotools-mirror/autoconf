@@ -1,3 +1,9 @@
+2011-02-15  Eric Blake  <eblake@redhat.com>
+
+	doc: fix debug advice typo
+	* doc/autoconf.texi (Debugging): Put shell option in right place.
+	Reported by Reuben Thomas.
+
 2011-02-12  Giulio Paci  <giuliopaci@interfree.it>  (tiny change)
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
