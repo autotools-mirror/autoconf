@@ -24027,7 +24027,7 @@ the installer's end.
 Each test of the validation suite should be part of some test group.  A
 @dfn{test group} is a sequence of interwoven tests that ought to be
 executed together, usually because one test in the group creates data
-files than a later test in the same group needs to read.  Complex test
+files that a later test in the same group needs to read.  Complex test
 groups make later debugging more tedious.  It is much better to
 keep only a few tests per test group.  Ideally there is only one test
 per test group.
@@ -24045,7 +24045,7 @@ identification of the package, is automatically included if found.
 A convenient alternative consists in moving all the global issues
 (local Autotest macros, elementary health checking, and @code{AT_INIT}
 invocation) into the file @code{local.at}, and making
-@file{testsuite.at} be a simple list of @code{m4_include} of sub test
+@file{testsuite.at} be a simple list of @code{m4_include}s of sub test
 suites.  In such case, generating the whole test suite or pieces of it
 is only a matter of choosing the @command{autom4te} command line
 arguments.
@@ -24078,7 +24078,7 @@ It often happens in practice that individual tests in the validation
 suite need to get information coming out of the configuration process.
 Some of this information, common for all validation suites, is provided
 through the file @file{atconfig}, automatically created by
-@code{AC_CONFIG_TESTDIR}.  For configuration informations which your
+@code{AC_CONFIG_TESTDIR}.  For configuration information which your
 testing environment specifically needs, you might prepare an optional
 file named @file{atlocal.in}, instantiated by @code{AC_CONFIG_FILES}.
 The configuration process produces @file{atconfig} and @file{atlocal}
