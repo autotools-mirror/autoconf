@@ -6572,7 +6572,7 @@ AC_CHECK_MEMBER(struct top.middle.bot)
 @end example
 
 This macro caches its result in the
-@code{av_cv_member_@var{aggregate}_@var{member}} variable, with
+@code{ac_cv_member_@var{aggregate}_@var{member}} variable, with
 characters not suitable for a variable name mapped to underscores.
 @end defmac
 

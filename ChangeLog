@@ -1,3 +1,8 @@
+2011-02-16  Patrick Welche  <prlw1@cam.ac.uk>  (tiny change)
+
+	docs: fix a typo
+	* doc/autoconf.texi (Generic Structures): Fix typo.
+
 2011-02-16  Matt Kraai  <kraai@ftbfs.org>  (tiny change)
 
 	docs: fix some typos
