@@ -529,7 +529,8 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
 		   }
 		 return 0;]])],
 	    [],
-	    [ac_cv_type_long_long_int=no])
+	    [ac_cv_type_long_long_int=no],
+	    [:])
 	fi
       fi])
   if test $ac_cv_type_long_long_int = yes; then

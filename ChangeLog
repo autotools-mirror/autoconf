@@ -1,3 +1,9 @@
+2011-02-18  Eric Blake  <eblake@redhat.com>
+
+	long long: don't abort configure when cross-compiling
+	* lib/autoconf/types.m4 (AC_TYPE_LONG_LONG_INT): Provide no-op
+	cross-compiling fallback; fixing regression from 2011-02-16.
+
 2011-02-16  Patrick Welche  <prlw1@cam.ac.uk>  (tiny change)
 
 	docs: fix a typo
