@@ -9176,7 +9176,7 @@ cross-compiling.
 
 @anchor{AC_RUN_IFELSE}
 @defmac AC_RUN_IFELSE (@var{input}, @ovar{action-if-true}, @
-  @ovar{action-if-false}, @ovar{action-if-cross-compiling})
+  @ovar{action-if-false}, @dvar{action-if-cross-compiling, AC_MSG_FAILURE})
 @acindex{RUN_IFELSE}
 If @var{program} compiles and links successfully and returns an exit
 status of 0 when executed, run shell commands @var{action-if-true}.
@@ -9188,30 +9188,37 @@ compilation flags of the current language (@pxref{Language Choice}).
 Additionally, @var{action-if-true} can run @command{./conftest$EXEEXT}
 for further testing.
 
-If the compiler being used does not produce executables that run on the
-system where @command{configure} is being run, then the test program is
-not run.  If the optional shell commands @var{action-if-cross-compiling}
-are given, they are run instead.  Otherwise, @command{configure} prints
-an error message and exits.
-
 In the @var{action-if-false} section, the failing exit status is
 available in the shell variable @samp{$?}.  This exit status might be
 that of a failed compilation, or it might be that of a failed program
 execution.
 
+If the compiler being used does not produce executables that run on the
+system where @command{configure} is being run, then the test program is
+not run.  If the optional shell commands @var{action-if-cross-compiling}
+are given, those commands are run instead; typically these commands
+provide pessimistic defaults that allow cross-compilation to work even
+if the guess was wrong.  If the fourth argument is empty or omitted, but
+cross-compilation is detected, then @command{configure} prints an error
+message and exits.  If you want your package to be useful in a
+cross-compilation scenario, you @emph{should} provide a non-empty
+@var{action-if-cross-compiling} clause, as well as wrap the
+@code{AC_RUN_IFELSE} compilation inside an @code{AC_CACHE_CHECK}
+(@pxref{Caching Results}) which allows the user to override the
+pessimistic default if needed.
+
 It is customary to report unexpected failures with
 @code{AC_MSG_FAILURE}.
 @end defmac
 
-Try to provide a pessimistic default value to use when cross-compiling
-makes runtime tests impossible.  You do this by passing the optional
-last argument to @code{AC_RUN_IFELSE}.  @command{autoconf} prints a
-warning message when creating @command{configure} each time it
-encounters a call to @code{AC_RUN_IFELSE} with no
-@var{action-if-cross-compiling} argument given.  You may ignore the
-warning, though users cannot configure your package for
-cross-compiling.  A few of the macros distributed with Autoconf produce
-this warning message.
+@command{autoconf} prints a warning message when creating
+@command{configure} each time it encounters a call to
+@code{AC_RUN_IFELSE} with no @var{action-if-cross-compiling} argument
+given.  If you are not concerned about users configuring your package
+for cross-compilation, you may ignore the warning.  A few of the macros
+distributed with Autoconf produce this warning message; but if this is a
+problem for you, please report it as a bug, along with an appropriate
+pessimistic guess to use instead.
 
 To configure for cross-compiling you can also choose a value for those
 parameters based on the canonical system name (@pxref{Manual
