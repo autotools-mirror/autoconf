@@ -1,3 +1,13 @@
+2011-02-20  Christian Rössel  <christian.roessel@gmx.de>  (tiny change)
+	    Markus Geimer  <m.geimer@fz-juelich.de>  (tiny change)
+
+	Fix OpenMP flag detection for various Fortran compilers.
+	* lib/autoconf/c.m4 (_AC_LANG_OPENMP(Fortran 77)): Use '!$'
+	OpenMP-conditional compilation construct, to force compile
+	failure with missing OpenMP flag.
+	(AC_OPENMP): Add flags for Cray CCE and NEC SX compilers.
+	* THANKS: Update.
+
 2011-02-18  Eric Blake  <eblake@redhat.com>
 
 	docs: document fourth argument of AC_RUN_IFELSE better

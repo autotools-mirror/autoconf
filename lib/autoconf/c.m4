@@ -1957,7 +1957,14 @@ m4_copy([_AC_LANG_OPENMP(C)], [_AC_LANG_OPENMP(C++)])
 # _AC_LANG_OPENMP(Fortran 77)
 # ---------------------------
 m4_define([_AC_LANG_OPENMP(Fortran 77)],
-[AC_LANG_FUNC_LINK_TRY([omp_get_num_threads])])
+[
+      program main
+      implicit none
+!$    integer tid
+      tid = 42
+      call omp_set_num_threads(2)
+      end
+])
 
 # _AC_LANG_OPENMP(Fortran)
 # ------------------------
@@ -1992,12 +1999,14 @@ AC_DEFUN([AC_OPENMP],
 	  dnl   SGI C, PGI C         -mp
 	  dnl   Tru64 Compaq C       -omp
 	  dnl   IBM C (AIX, Linux)   -qsmp=omp
+          dnl   Cray CCE             -homp
+          dnl   NEC SX               -Popenmp
 	  dnl If in this loop a compiler is passed an option that it doesn't
 	  dnl understand or that it misinterprets, the AC_LINK_IFELSE test
 	  dnl will fail (since we know that it failed without the option),
 	  dnl therefore the loop will continue searching for an option, and
 	  dnl no output file called 'penmp' or 'mp' is created.
-	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp; do
+	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp -Popenmp; do
 	    ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
 	    _AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_option"
 	    AC_LINK_IFELSE([_AC_LANG_OPENMP],
