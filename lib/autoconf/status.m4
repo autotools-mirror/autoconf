@@ -1542,7 +1542,7 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 dnl Check this before opening the log, to avoid a bug on MinGW,
 dnl which prohibits the recursive instance from truncating an open log.
 if \$ac_cs_recheck; then
-  set X '$SHELL' '$[0]' $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
+  set X $SHELL '$[0]' $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
   shift
   \AS_ECHO(["running CONFIG_SHELL=$SHELL \$[*]"]) >&AS_MESSAGE_FD
   CONFIG_SHELL='$SHELL'

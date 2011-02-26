@@ -1,3 +1,10 @@
+2011-02-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	config.status: do not quote $SHELL when rerunning configure.
+	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS): Allow
+	$SHELL to contain more than one word, when rerunning configure,
+	for debugging purposes like CONFIG_SHELL='/bin/sh -x'.
+
 2011-02-21  Ian Lance Taylor  <iant@google.com>
 
 	* lib/autoconf/go.m4: New file.
