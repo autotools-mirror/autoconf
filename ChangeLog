@@ -1,5 +1,14 @@
 2011-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Update known compiler switches for Fortran and OpenMP macros.
+	* lib/autoconf/c.m4 (AC_OPENMP): Update for Lahey on GNU/Linux.
+	* lib/autoconf/fortran.m4 (_AC_F95_FC): Also try nagfor.
+	(_AC_PROG_FC_V): Update documentation for Lahey switches.
+	(AC_FC_FREEFORM, AC_FC_FIXEDFORM): Add flags for Absoft, Lahey
+	on GNU/Linux, document NAGWare, g95, and f2c switches.
+	(AC_FC_LINE_LENGTH): Document NAGware switch.  Update Absoft,
+	Lahey, NAGWare, Open Watcom, g95, and f2c switches.
+
 	tests: accept f2c/fort77 as GNU Fortran 77.
 	* tests/fortran.at (GNU Fortran 77): Try to detect f2c wrapper
 	fort77 as GNU as well: it defines __GNUC__ too.  Fixes testsuite
