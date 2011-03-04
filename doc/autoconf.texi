@@ -7969,8 +7969,10 @@ because the complex defines that the function wrapper macros create
 may not work with C/C++ compiler drivers.
 @end defmac
 
-@defmac AC_F77_DUMMY_MAIN (@ovar{action-if-found}, @ovar{action-if-not-found})
-@defmacx AC_FC_DUMMY_MAIN (@ovar{action-if-found}, @ovar{action-if-not-found})
+@defmac AC_F77_DUMMY_MAIN (@ovar{action-if-found}, @dvar{action-if-not-found, @
+  AC_MSG_FAILURE})
+@defmacx AC_FC_DUMMY_MAIN (@ovar{action-if-found}, @dvar{action-if-not-found, @
+  AC_MSG_FAILURE})
 @acindex{F77_DUMMY_MAIN}
 @cvindex F77_DUMMY_MAIN
 @acindex{FC_DUMMY_MAIN}
@@ -8140,7 +8142,7 @@ to call Fortran routines from some language other than C/C++.
 @end defmac
 
 @defmac AC_FC_SRCEXT (@var{ext}, @ovar{action-if-success}, @
-  @ovar{action-if-failure})
+  @dvar{action-if-failure, AC_MSG_FAILURE})
 @acindex{FC_SRCEXT}
 By default, the @code{FC} macros perform their tests using a @file{.f}
 extension for source-code files.  Some compilers, however, only enable
@@ -8184,7 +8186,8 @@ error message).
 
 @end defmac
 
-@defmac AC_FC_FREEFORM (@ovar{action-if-success}, @ovar{action-if-failure})
+@defmac AC_FC_FREEFORM (@ovar{action-if-success}, @dvar{action-if-failure, @
+  AC_MSG_FAILURE})
 @acindex{FC_FREEFORM}
 
 Try to ensure that the Fortran compiler (@code{$FC}) allows free-format
@@ -8206,7 +8209,8 @@ calls @var{action-if-failure} (defaults to exiting with an error
 message).
 @end defmac
 
-@defmac AC_FC_FIXEDFORM (@ovar{action-if-success}, @ovar{action-if-failure})
+@defmac AC_FC_FIXEDFORM (@ovar{action-if-success}, @dvar{action-if-failure, @
+  AC_MSG_FAILURE})
 @acindex{FC_FIXEDFORM}
 
 Try to ensure that the Fortran compiler (@code{$FC}) allows the old
@@ -8228,7 +8232,7 @@ message).
 @end defmac
 
 @defmac AC_FC_LINE_LENGTH (@ovar{length}, @ovar{action-if-success}, @
-  @ovar{action-if-failure})
+  @dvar{action-if-failure, AC_MSG_FAILURE})
 @acindex{FC_LINE_LENGTH}
 
 Try to ensure that the Fortran compiler (@code{$FC}) accepts long source
@@ -23281,7 +23285,7 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])],
 @end defmac
 
 @defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @
-  @ovar{action-if-false}, @ovar{action-if-cross-compiling})
+  @ovar{action-if-false}, @dvar{action-if-cross-compiling, AC_MSG_FAILURE})
 @acindex{TRY_RUN}
 Same as:
 

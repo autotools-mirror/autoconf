@@ -1,5 +1,11 @@
 2011-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	docs: macro synopses document default failure cases.
+	* doc/autoconf.texi (Fortran Compiler, Obsolete Macros):
+	Document failure case for AC_F77_DUMMY_MAIN, AC_FC_DUMMY_MAIN,
+	AC_FC_SRCEXT, AC_FC_FREEFORM, AC_FC_FIXEDFORM,
+	AC_FC_LINE_LENGTH, and AC_TRY_RUN macros.
+
 	Reword Fortran macro documentation.
 	* doc/autoconf.texi (Fortran Compiler): Improve wording for
 	AC_FC_FREEFORM, AC_FC_FIXEDFORM, and AC_FC_LINE_LENGTH macros.
