@@ -1,5 +1,11 @@
 2011-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	tests: accept f2c/fort77 as GNU Fortran 77.
+	* tests/fortran.at (GNU Fortran 77): Try to detect f2c wrapper
+	fort77 as GNU as well: it defines __GNUC__ too.  Fixes testsuite
+	failure when f77 is fort77.
+	Report from Giulio Paci.
+
 	docs: macro synopses document default failure cases.
 	* doc/autoconf.texi (Fortran Compiler, Obsolete Macros):
 	Document failure case for AC_F77_DUMMY_MAIN, AC_FC_DUMMY_MAIN,
