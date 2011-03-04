@@ -5004,6 +5004,11 @@ yourself in new code:
 #endif
 @end group
 @end example
+
+The results of this macro are cached in the @code{ac_cv_func_fork_works}
+and @code{ac_cv_func_vfork_works} variables.  In order to override the
+test, you also need to set the @code{ac_cv_func_fork} and
+@code{ac_cv_func_vfork} variables.
 @end defmac
 
 @defmac AC_FUNC_FSEEKO
