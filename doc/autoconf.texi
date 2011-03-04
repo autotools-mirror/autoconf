@@ -8187,10 +8187,9 @@ error message).
 @defmac AC_FC_FREEFORM (@ovar{action-if-success}, @ovar{action-if-failure})
 @acindex{FC_FREEFORM}
 
-The @code{AC_FC_FREEFORM} tries to ensure that the Fortran compiler
-(@code{$FC}) allows free-format source code (as opposed to the older
-fixed-format style from Fortran 77).  If necessary, it may add some
-additional flags to @code{FCFLAGS}.
+Try to ensure that the Fortran compiler (@code{$FC}) allows free-format
+source code (as opposed to the older fixed-format style from Fortran
+77).  If necessary, it may add some additional flags to @code{FCFLAGS}.
 
 This macro is most important if you are using the default @file{.f}
 extension, since many compilers interpret this extension as indicating
@@ -8210,10 +8209,9 @@ message).
 @defmac AC_FC_FIXEDFORM (@ovar{action-if-success}, @ovar{action-if-failure})
 @acindex{FC_FIXEDFORM}
 
-The @code{AC_FC_FIXEDFORM} tries to ensure that the Fortran compiler
-(@code{$FC}) allows the old fixed-format source code (as opposed to
-free-format style).  If necessary, it may add some additional flags to
-@code{FCFLAGS}.
+Try to ensure that the Fortran compiler (@code{$FC}) allows the old
+fixed-format source code (as opposed to free-format style).  If
+necessary, it may add some additional flags to @code{FCFLAGS}.
 
 This macro is needed for some compilers alias names like @command{xlf95}
 which assume free-form source code by default, and in case you want to
@@ -8233,12 +8231,12 @@ message).
   @ovar{action-if-failure})
 @acindex{FC_LINE_LENGTH}
 
-The @code{AC_FC_LINE_LENGTH} macro tries to ensure that the Fortran compiler
-(@code{$FC}) accepts long source code lines.  The @var{length} argument
-may be given as 80, 132, or unlimited, and defaults to 132.  Note that
-line lengths above 254 columns are not portable, and some compilers
-do not accept more than 132 columns at least for fixed format source.
-If necessary, it may add some additional flags to @code{FCFLAGS}.
+Try to ensure that the Fortran compiler (@code{$FC}) accepts long source
+code lines.  The @var{length} argument may be given as 80, 132, or
+unlimited, and defaults to 132.  Note that line lengths above 254
+columns are not portable, and some compilers do not accept more than 132
+columns at least for fixed format source.  If necessary, it may add some
+additional flags to @code{FCFLAGS}.
 
 If @code{AC_FC_LINE_LENGTH} succeeds in compiling fixed-form source, it
 calls @var{action-if-success} (defaults to nothing).  If it fails, it

@@ -1,3 +1,9 @@
+2011-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	Reword Fortran macro documentation.
+	* doc/autoconf.texi (Fortran Compiler): Improve wording for
+	AC_FC_FREEFORM, AC_FC_FIXEDFORM, and AC_FC_LINE_LENGTH macros.
+
 2011-02-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	config.status: do not quote $SHELL when rerunning configure.
