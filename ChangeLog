@@ -1,5 +1,12 @@
 2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	New macros AC_{F77,FC}_IMPLICIT_NONE to disable Fortran implicit int.
+	* lib/autoconf/fortran.m4 (_AC_FC_IMPLICIT_NONE): New internal
+	macro.
+	(AC_F77_IMPLICIT_NONE, AC_FC_IMPLICIT_NONE): New macros.
+	* doc/autoconf.texi (Fortran Compiler): Document them.
+	* NEWS: Update.
+
 	New macro AC_FC_CHECK_BOUNDS to enable Fortran array bounds checking.
 	* lib/autoconf/fortran.m4 (AC_FC_CHECK_BOUNDS): New macro.
 	* doc/autoconf.texi (Fortran Compiler): Document it.

@@ -8262,6 +8262,23 @@ The result of the macro is cached in the @code{ac_cv_fc_check_bounds}
 variable.
 @end defmac
 
+@defmac AC_F77_IMPLICIT_NONE (@ovar{action-if-success}, @
+  @dvar{action-if-failure, AC_MSG_FAILURE})
+@defmacx AC_FC_IMPLICIT_NONE (@ovar{action-if-success}, @
+  @dvar{action-if-failure, AC_MSG_FAILURE})
+@acindex{F77_IMPLICIT_NONE}
+@acindex{FC_IMPLICIT_NONE}
+
+Try to disallow implicit declarations in the Fortran compiler.  If
+successful, the @var{action-if-success} is called and any needed flags
+are added to @code{FCFLAGS}.  Otherwise, @var{action-if-failure} is
+called, which defaults to failing with an error message.
+
+The result of these macros are cached in the
+@code{ac_cv_f77_implicit_none} and @code{ac_cv_fc_implicit_none}
+variables, respectively.
+@end defmac
+
 
 @node Go Compiler
 @subsection Go Compiler Characteristics

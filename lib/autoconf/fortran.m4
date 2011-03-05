@@ -1446,3 +1446,75 @@ else
 fi
 AC_LANG_POP([Fortran])dnl
 ])# AC_FC_CHECK_BOUNDS
+
+
+# _AC_FC_IMPLICIT_NONE([ACTION-IF-SUCCESS], [ACTION-IF-FAILURE = FAILURE])
+# ------------------------------------------------------------------------
+# Look for a flag to disallow implicit declarations, and add it to FCFLAGS.
+# Call ACTION-IF-SUCCESS (defaults to nothing) if successful and
+# ACTION-IF-FAILURE (defaults to failing with an error message) if not.
+#
+# Known flags:
+# GNU gfortran, g95: -fimplicit-none, g77: -Wimplicit
+# Intel: -u, -implicitnone; might also need '-warn errors' to turn into error.
+# Sun/Oracle: -u
+# HP: +implicit_none
+# IBM: -u, -qundef
+# SGI: -u
+# Compaq: -u, -warn declarations
+# NAGWare: -u
+# Lahey: -in, --in, -AT
+# Cray: -Mdclchk -d i
+# PGI: -Mcdlchk
+# f2c: -u
+AC_DEFUN([_AC_FC_IMPLICIT_NONE],
+[_AC_FORTRAN_ASSERT()dnl
+AC_CACHE_CHECK([for flag to disallow _AC_LANG implicit declarations],
+               [ac_cv_[]_AC_LANG_ABBREV[]_implicit_none],
+[ac_cv_[]_AC_LANG_ABBREV[]_implicit_none=unknown
+ac_fc_implicit_none_[]_AC_LANG_PREFIX[]FLAGS_save=$[]_AC_LANG_PREFIX[]FLAGS
+for ac_flag in none -fimplicit-none -u -Wimplicit -implicitnone +implicit_none \
+               -qundef "-warn declarations" -in --in -AT "-d i" -Mdclchk \
+               "-u -warn errors"
+do
+  if test "x$ac_flag" != xnone; then
+    _AC_LANG_PREFIX[]FLAGS="$ac_fc_implicit_none_[]_AC_LANG_PREFIX[]FLAGS_save $ac_flag"
+  fi
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [])],
+    [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+      i = 0
+      print *, i]])],
+       [],
+       [ac_cv_[]_AC_LANG_ABBREV[]_implicit_none=$ac_flag; break])])
+done
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+_AC_LANG_PREFIX[]FLAGS=$ac_fc_implicit_none_[]_AC_LANG_PREFIX[]FLAGS_save
+])
+if test "x$ac_cv_[]_AC_LANG_ABBREV[]_implicit_none" = xunknown; then
+  m4_default([$3],
+    [AC_MSG_ERROR([no Fortran flag to disallow implicit declarations found], 77)])
+else
+  if test "x$ac_cv_[]_AC_LANG_ABBREV[]_implicit_none" != xnone; then
+    _AC_LANG_PREFIX[]FLAGS="$_AC_LANG_PREFIX[]FLAGS $ac_cv_[]_AC_LANG_ABBREV[]_implicit_none"
+  fi
+  $2
+fi
+])# _AC_FC_IMPLICIT_NONE
+
+
+# AC_F77_IMPLICIT_NONE([ACTION-IF-SUCCESS], [ACTION-IF-FAILURE = FAILURE])
+# ------------------------------------------------------------------------
+AC_DEFUN([AC_F77_IMPLICIT_NONE],
+[AC_LANG_PUSH([Fortran 77])dnl
+_AC_FC_IMPLICIT_NONE($@)
+AC_LANG_POP([Fortran 77])dnl
+])# AC_F77_IMPLICIT_NONE
+
+
+# AC_FC_IMPLICIT_NONE([ACTION-IF-SUCCESS], [ACTION-IF-FAILURE = FAILURE])
+# -----------------------------------------------------------------------
+AC_DEFUN([AC_FC_IMPLICIT_NONE],
+[AC_LANG_PUSH([Fortran])dnl
+_AC_FC_IMPLICIT_NONE($@)
+AC_LANG_POP([Fortran])dnl
+])# AC_FC_IMPLICIT_NONE
