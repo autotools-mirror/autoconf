@@ -8270,9 +8270,10 @@ variable.
 @acindex{FC_IMPLICIT_NONE}
 
 Try to disallow implicit declarations in the Fortran compiler.  If
-successful, the @var{action-if-success} is called and any needed flags
-are added to @code{FCFLAGS}.  Otherwise, @var{action-if-failure} is
-called, which defaults to failing with an error message.
+successful, @var{action-if-success} is called and any needed flags
+are added to @code{FFLAGS} or @code{FCFLAGS}, respectively.  Otherwise,
+@var{action-if-failure} is called, which defaults to failing with an error
+message.
 
 The result of these macros are cached in the
 @code{ac_cv_f77_implicit_none} and @code{ac_cv_fc_implicit_none}

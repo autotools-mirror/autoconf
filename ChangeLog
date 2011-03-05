@@ -1,5 +1,9 @@
 2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	docs: fix description of AC_F77_IMPLICIT_NONE.
+	* doc/autoconf.texi (Fortran Compiler) [AC_F77_IMPLICIT_NONE]:
+	This macro modifies FFLAGS, not FCFLAGS.
+
 	AC_FC_SRCEXT: allow gfortran to compile .f77 files.
 	* lib/autoconf/fortran.m4 (AC_FC_SRCEXT): Try '-x f77' for .f77
 	files, '-x f95' for others, for gfortran.
