@@ -7112,6 +7112,10 @@ etc.).
 @ovindex OPENMP_CXXFLAGS
 @ovindex OPENMP_FFLAGS
 @ovindex OPENMP_FCFLAGS
+@caindex prog_c_openmp
+@caindex prog_cxx_openmp
+@caindex prog_f77_openmp
+@caindex prog_fc_openmp
 @uref{http://@/www.openmp.org/, OpenMP} specifies extensions of C, C++,
 and Fortran that simplify optimization of shared memory parallelism,
 which is a common problem on multicore CPUs.
@@ -7149,6 +7153,10 @@ For portability, it is best to avoid spaces between @samp{#} and
 @samp{pragma omp}.  That is, write @samp{#pragma omp}, not
 @samp{# pragma omp}.  The Sun WorkShop 6.2 C compiler chokes on the
 latter.
+
+This macro caches its result in the @code{ac_cv_prog_c_openmp},
+@code{ac_cv_prog_cxx_openmp}, @code{ac_cv_prog_f77_openmp}, or
+@code{ac_cv_prog_fc_openmp} variable, depending on the current language.
 @end defmac
 
 @node C Compiler
@@ -7858,6 +7866,8 @@ are documented together in this section.
 @evindex FFLAGS
 @ovindex F77
 @ovindex FFLAGS
+@caindex f77_compiler_gnu
+@caindex prog_f77_g
 Determine a Fortran 77 compiler to use.  If @code{F77} is not already
 set in the environment, then check for @code{g77} and @code{f77}, and
 then some other names.  Set the output variable @code{F77} to the name
@@ -7880,6 +7890,10 @@ If the output variable @code{FFLAGS} was not already set in the
 environment, then set it to @option{-g -02} for @code{g77} (or @option{-O2}
 where @code{g77} does not accept @option{-g}).  Otherwise, set
 @code{FFLAGS} to @option{-g} for all other Fortran 77 compilers.
+
+The result of the GNU test is cached in the
+@code{ac_cv_f77_compiler_gnu} variable, acceptance of @option{-g} in the
+@code{ac_cv_prog_f77_g} variable.
 @end defmac
 
 @defmac AC_PROG_FC (@ovar{compiler-search-list}, @ovar{dialect})
@@ -7888,6 +7902,8 @@ where @code{g77} does not accept @option{-g}).  Otherwise, set
 @evindex FCFLAGS
 @ovindex FC
 @ovindex FCFLAGS
+@caindex fc_compiler_gnu
+@caindex prog_fc_g
 Determine a Fortran compiler to use.  If @code{FC} is not already set in
 the environment, then @code{dialect} is a hint to indicate what Fortran
 dialect to search for; the default is to search for the newest available
@@ -7912,6 +7928,10 @@ If the output variable @code{FCFLAGS} was not already set in the
 environment, then set it to @option{-g -02} for GNU @code{g77} (or
 @option{-O2} where @code{g77} does not accept @option{-g}).  Otherwise,
 set @code{FCFLAGS} to @option{-g} for all other Fortran compilers.
+
+The result of the GNU test is cached in the @code{ac_cv_fc_compiler_gnu}
+variable, acceptance of @option{-g} in the @code{ac_cv_prog_fc_g}
+variable.
 @end defmac
 
 @defmac AC_PROG_F77_C_O
@@ -7920,9 +7940,14 @@ set @code{FCFLAGS} to @option{-g} for all other Fortran compilers.
 @acindex{PROG_FC_C_O}
 @cvindex F77_NO_MINUS_C_MINUS_O
 @cvindex FC_NO_MINUS_C_MINUS_O
+@caindex prog_f77_c_o
+@caindex prog_fc_c_o
 Test whether the Fortran compiler accepts the options @option{-c} and
 @option{-o} simultaneously, and define @code{F77_NO_MINUS_C_MINUS_O} or
 @code{FC_NO_MINUS_C_MINUS_O}, respectively, if it does not.
+
+The result of the test is cached in the @code{ac_cv_prog_f77_c_o} or
+@code{ac_cv_prog_fc_c_o} variable, respectively.
 @end defmac
 
 The following macros check for Fortran compiler characteristics.
@@ -7939,6 +7964,10 @@ or @code{AC_LANG(Fortran)} (@pxref{Language Choice}).
 @ovindex FLIBS
 @acindex{FC_LIBRARY_LDFLAGS}
 @ovindex FCLIBS
+@caindex prog_f77_v
+@caindex prog_fc_v
+@caindex f77_libs
+@caindex fc_libs
 Determine the linker flags (e.g., @option{-L} and @option{-l}) for the
 @dfn{Fortran intrinsic and runtime libraries} that are required to
 successfully link a Fortran program or shared library.  The output
@@ -7967,6 +7996,11 @@ link C/C++ with Fortran; see below.  Further, it is highly recommended
 that you use @code{AC_CONFIG_HEADERS} (@pxref{Configuration Headers})
 because the complex defines that the function wrapper macros create
 may not work with C/C++ compiler drivers.
+
+These macros internally compute the flag needed to verbose linking
+output and cache it in @code{ac_cv_prog_f77_v} or @code{ac_cv_prog_fc_v}
+variables, respectively.  The computed linker flags are cached in
+@code{ac_cv_f77_libs} or @code{ac_cv_fc_libs}, respectively.
 @end defmac
 
 @defmac AC_F77_DUMMY_MAIN (@ovar{action-if-found}, @dvar{action-if-not-found, @
@@ -7977,6 +8011,8 @@ may not work with C/C++ compiler drivers.
 @cvindex F77_DUMMY_MAIN
 @acindex{FC_DUMMY_MAIN}
 @cvindex FC_DUMMY_MAIN
+@caindex f77_dummy_main
+@caindex fc_dummy_main
 With many compilers, the Fortran libraries detected by
 @code{AC_F77_LIBRARY_LDFLAGS} or @code{AC_FC_LIBRARY_LDFLAGS} provide
 their own @code{main} entry function that initializes things like
@@ -8020,6 +8056,9 @@ needed:
 Note that this macro is called automatically from @code{AC_F77_WRAPPERS}
 or @code{AC_FC_WRAPPERS}; there is generally no need to call it
 explicitly unless one wants to change the default actions.
+
+The result of this macro is cached in the @code{ac_cv_f77_dummy_main} or
+@code{ac_cv_fc_dummy_main} variable, respectively.
 @end defmac
 
 @defmac AC_F77_MAIN
@@ -8028,6 +8067,8 @@ explicitly unless one wants to change the default actions.
 @cvindex F77_MAIN
 @acindex{FC_MAIN}
 @cvindex FC_MAIN
+@caindex f77_main
+@caindex fc_main
 As discussed above, many Fortran libraries allow you to provide an entry
 point called (say) @code{MAIN__} instead of the usual @code{main}, which
 is then called by a @code{main} function in the Fortran libraries that
@@ -8050,6 +8091,9 @@ int F77_MAIN (int argc, char *argv[]);
 @end example
 
 (Again, replace @code{F77} with @code{FC} for Fortran instead of Fortran 77.)
+
+The result of this macro is cached in the @code{ac_cv_f77_main} or
+@code{ac_cv_fc_main} variable, respectively.
 @end defmac
 
 @defmac AC_F77_WRAPPERS
@@ -8060,6 +8104,8 @@ int F77_MAIN (int argc, char *argv[]);
 @acindex{FC_WRAPPERS}
 @cvindex FC_FUNC
 @cvindex FC_FUNC_
+@caindex f77_mangling
+@caindex fc_mangling
 Defines C macros @code{F77_FUNC (name, NAME)}, @code{FC_FUNC (name, NAME)},
 @code{F77_FUNC_(name, NAME)}, and @code{FC_FUNC_(name, NAME)} to properly
 mangle the names of C/C++ identifiers, and identifiers with underscores,
@@ -8125,6 +8171,10 @@ you should use @code{F77_FUNC_} or @code{FC_FUNC_} instead of
 @code{F77_FUNC} or @code{FC_FUNC} (with the same arguments).  This is
 because some Fortran compilers mangle names differently if they contain
 an underscore.
+
+The name mangling scheme is encoded in the @code{ac_cv_f77_mangling} or
+@code{ac_cv_fc_mangling} cache variable, respectively, and also used for
+the @code{AC_F77_FUNC} and @code{AC_FC_FUNC} macros described below.
 @end defmac
 
 @defmac AC_F77_FUNC (@var{name}, @ovar{shellvar})
@@ -8189,6 +8239,7 @@ error message).
 @defmac AC_FC_FREEFORM (@ovar{action-if-success}, @dvar{action-if-failure, @
   AC_MSG_FAILURE})
 @acindex{FC_FREEFORM}
+@caindex fc_freeform
 
 Try to ensure that the Fortran compiler (@code{$FC}) allows free-format
 source code (as opposed to the older fixed-format style from Fortran
@@ -8207,11 +8258,15 @@ If @code{AC_FC_FREEFORM} succeeds in compiling free-form source, it
 calls @var{action-if-success} (defaults to nothing).  If it fails, it
 calls @var{action-if-failure} (defaults to exiting with an error
 message).
+
+The result of this test, or @samp{none} or @samp{unknown}, is cached in
+the @code{ac_cv_fc_freeform} variable.
 @end defmac
 
 @defmac AC_FC_FIXEDFORM (@ovar{action-if-success}, @dvar{action-if-failure, @
   AC_MSG_FAILURE})
 @acindex{FC_FIXEDFORM}
+@caindex fc_fixedform
 
 Try to ensure that the Fortran compiler (@code{$FC}) allows the old
 fixed-format source code (as opposed to free-format style).  If
@@ -8229,11 +8284,15 @@ If @code{AC_FC_FIXEDFORM} succeeds in compiling fixed-form source, it
 calls @var{action-if-success} (defaults to nothing).  If it fails, it
 calls @var{action-if-failure} (defaults to exiting with an error
 message).
+
+The result of this test, or @samp{none} or @samp{unknown}, is cached in
+the @code{ac_cv_fc_fixedform} variable.
 @end defmac
 
 @defmac AC_FC_LINE_LENGTH (@ovar{length}, @ovar{action-if-success}, @
   @dvar{action-if-failure, AC_MSG_FAILURE})
 @acindex{FC_LINE_LENGTH}
+@caindex fc_line_length
 
 Try to ensure that the Fortran compiler (@code{$FC}) accepts long source
 code lines.  The @var{length} argument may be given as 80, 132, or
@@ -8246,11 +8305,15 @@ If @code{AC_FC_LINE_LENGTH} succeeds in compiling fixed-form source, it
 calls @var{action-if-success} (defaults to nothing).  If it fails, it
 calls @var{action-if-failure} (defaults to exiting with an error
 message).
+
+The result of this test, or @samp{none} or @samp{unknown}, is cached in
+the @code{ac_cv_fc_line_length} variable.
 @end defmac
 
 @defmac AC_FC_CHECK_BOUNDS (@ovar{action-if-success}, @
   @dvar{action-if-failure, AC_MSG_FAILURE})
 @acindex{FC_CHECK_BOUNDS}
+@caindex fc_check_bounds
 
 The @code{AC_FC_CHECK_BOUNDS} macro tries to enable array bounds checking
 in the Fortran compiler.  If successful, the @var{action-if-success}
@@ -8268,6 +8331,8 @@ variable.
   @dvar{action-if-failure, AC_MSG_FAILURE})
 @acindex{F77_IMPLICIT_NONE}
 @acindex{FC_IMPLICIT_NONE}
+@caindex f77_implicit_none
+@caindex fc_implicit_none
 
 Try to disallow implicit declarations in the Fortran compiler.  If
 successful, @var{action-if-success} is called and any needed flags

@@ -1,4 +1,17 @@
 2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	docs: document several Fortran and OpenMP cache variables.
+	* doc/autoconf.texi (Generic Compiler Characteristics)
+	[AC_OPENMP]: Document associated cache variables.
+	(Fortran Compiler) [AC_PROG_F77, AC_PROG_FC, AC_PROG_F77_C_O]
+	[AC_PROG_FC_C_O, AC_F77_LIBRARY_LDFLAGS, AC_FC_LIBRARY_LDFLAGS]
+	[AC_F77_DUMMY_MAIN, AC_FC_DUMMY_MAIN, AC_F77_MAIN, AC_FC_MAIN]
+	[AC_F77_WRAPPERS, AC_FC_WRAPPERS, AC_FC_FREEFORM]
+	[AC_FC_FIXEDFORM, AC_FC_LINE_LENGTH, AC_FC_CHECK_BOUNDS]
+	[AC_F77_IMPLICIT_NONE, AC_FC_IMPLICIT_NONE]: Document and/or
+	index the cache variables used by these macros.
+
+2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 	and Eric Blake  <eblake@redhat.com>
 
 	build: exclude M4 with buggy strstr
