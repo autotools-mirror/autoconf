@@ -1,4 +1,12 @@
 2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+	and Eric Blake  <eblake@redhat.com>
+
+	build: exclude M4 with buggy strstr
+	* m4/m4.m4 (AC_PROG_GNU_M4): When searching PATH, do not accept
+	an m4 that has either the gnulib strstr bug, or the glibc/gnulib
+	strstr bug.
+
+2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	docs: fix description of AC_F77_IMPLICIT_NONE.
 	* doc/autoconf.texi (Fortran Compiler) [AC_F77_IMPLICIT_NONE]:
