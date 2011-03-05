@@ -1137,6 +1137,8 @@ AC_LANG_POP(Fortran)dnl
 # Also, for Intel's ifc compiler (which does not accept .f95 by default in
 # some versions), the $FCFLAGS_<EXT> variable *must* go immediately before
 # the source file on the command line, unlike other $FCFLAGS.  Ugh.
+#
+# gfortran requires '-x f77' in order to recognize .f77 files.
 AC_DEFUN([AC_FC_SRCEXT],
 [AC_LANG_PUSH(Fortran)dnl
 AC_CACHE_CHECK([for Fortran flag to compile .$1 files],
@@ -1145,7 +1147,11 @@ AC_CACHE_CHECK([for Fortran flag to compile .$1 files],
 ac_fcflags_srcext_save=$ac_fcflags_srcext
 ac_fcflags_srcext=
 ac_cv_fc_srcext_$1=unknown
-for ac_flag in none -qsuffix=f=$1 -Tf; do
+case $ac_ext in #(
+  [[fF]]77) ac_try=f77;; #(
+  *) ac_try=f95;;
+esac
+for ac_flag in none -qsuffix=f=$1 -Tf "-x $ac_try"; do
   test "x$ac_flag" != xnone && ac_fcflags_srcext="$ac_flag"
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM()], [ac_cv_fc_srcext_$1=$ac_flag; break])
 done

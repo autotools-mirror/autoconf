@@ -1,5 +1,9 @@
 2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	AC_FC_SRCEXT: allow gfortran to compile .f77 files.
+	* lib/autoconf/fortran.m4 (AC_FC_SRCEXT): Try '-x f77' for .f77
+	files, '-x f95' for others, for gfortran.
+
 	New macros AC_{F77,FC}_IMPLICIT_NONE to disable Fortran implicit int.
 	* lib/autoconf/fortran.m4 (_AC_FC_IMPLICIT_NONE): New internal
 	macro.
