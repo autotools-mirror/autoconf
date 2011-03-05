@@ -1,5 +1,11 @@
 2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	Fix Cray Fortran flag for AC_FC_IMPLICIT_NONE.
+	* lib/autoconf/fortran.m4 (_AC_FC_IMPLICIT_NONE): Use -e I
+	not -d i, for Cray ftn.
+	* THANKS: Update.
+	Thanks to Tobias Burnus for feedback and testing.
+
 	docs: document several Fortran and OpenMP cache variables.
 	* doc/autoconf.texi (Generic Compiler Characteristics)
 	[AC_OPENMP]: Document associated cache variables.

@@ -1470,7 +1470,7 @@ AC_LANG_POP([Fortran])dnl
 # Compaq: -u, -warn declarations
 # NAGWare: -u
 # Lahey: -in, --in, -AT
-# Cray: -Mdclchk -d i
+# Cray: -Mdclchk -e I
 # PGI: -Mcdlchk
 # f2c: -u
 AC_DEFUN([_AC_FC_IMPLICIT_NONE],
@@ -1480,7 +1480,7 @@ AC_CACHE_CHECK([for flag to disallow _AC_LANG implicit declarations],
 [ac_cv_[]_AC_LANG_ABBREV[]_implicit_none=unknown
 ac_fc_implicit_none_[]_AC_LANG_PREFIX[]FLAGS_save=$[]_AC_LANG_PREFIX[]FLAGS
 for ac_flag in none -fimplicit-none -u -Wimplicit -implicitnone +implicit_none \
-               -qundef "-warn declarations" -in --in -AT "-d i" -Mdclchk \
+               -qundef "-warn declarations" -in --in -AT "-e I" -Mdclchk \
                "-u -warn errors"
 do
   if test "x$ac_flag" != xnone; then
