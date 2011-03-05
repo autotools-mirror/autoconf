@@ -1,3 +1,12 @@
+2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New macro AC_FC_CHECK_BOUNDS to enable Fortran array bounds checking.
+	* lib/autoconf/fortran.m4 (AC_FC_CHECK_BOUNDS): New macro.
+	* doc/autoconf.texi (Fortran Compiler): Document it.
+	* tests/fortran.at (AC_FC_CHECK_BOUNDS): New test.
+	* NEWS: Update.
+	Prompted by report from Eve-Marie Devaliere.
+
 2011-03-04  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Update known compiler switches for Fortran and OpenMP macros.

@@ -8248,6 +8248,20 @@ calls @var{action-if-failure} (defaults to exiting with an error
 message).
 @end defmac
 
+@defmac AC_FC_CHECK_BOUNDS (@ovar{action-if-success}, @
+  @dvar{action-if-failure, AC_MSG_FAILURE})
+@acindex{FC_CHECK_BOUNDS}
+
+The @code{AC_FC_CHECK_BOUNDS} macro tries to enable array bounds checking
+in the Fortran compiler.  If successful, the @var{action-if-success}
+is called and any needed flags are added to @code{FCFLAGS}.  Otherwise,
+@var{action-if-failure} is called, which defaults to failing with an error
+message.  The macro currently requires Fortran 90 or a newer dialect.
+
+The result of the macro is cached in the @code{ac_cv_fc_check_bounds}
+variable.
+@end defmac
+
 
 @node Go Compiler
 @subsection Go Compiler Characteristics

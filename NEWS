@@ -12,6 +12,10 @@ GNU Autoconf NEWS - User visible changes.
 
 - New macro AC_HEADER_CHECK_STDBOOL.
 
+- New and updated macros for Fortran support:
+
+    AC_FC_CHECK_BOUNDS to enable array bounds checking
+
 * Noteworthy changes in release 2.68 (2010-09-22) [stable]
   Released by Eric Blake, based on git versions 2.67.*.
 

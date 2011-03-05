@@ -932,3 +932,62 @@ EOF
 done
 
 AT_CLEANUP
+
+
+## ------------------- ##
+## AC_FC_CHECK_BOUNDS. ##
+## ------------------- ##
+
+AT_SETUP([AC_FC_CHECK_BOUNDS])
+
+AT_DATA([Makefile.in],
+[[prog@EXEEXT@: prog.@OBJEXT@
+	@FC@ @FCFLAGS@ -o $@ prog.@OBJEXT@ @LIBS@
+
+.SUFFIXES: .f .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ @FCFLAGS@ -c @FCFLAGS_f@ $<
+
+clean:
+	rm -f *.@OBJEXT@ prog@EEXEXT@
+]])
+
+cat >configure.ac <<EOF
+AC_INIT
+AC_PROG_FC
+AC_FC_SRCEXT([f])
+AC_FC_CHECK_BOUNDS
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+EOF
+
+AT_DATA([prog.f],
+[[
+      subroutine copy(a,b,n)
+      integer a(:), b(:), n, i
+      do i = 1, n
+         a(i) = b(i)
+      end do
+      end subroutine
+
+      program main
+      integer, parameter :: n = 20
+      integer a(1:n), b(1:n-1), i
+      interface
+         subroutine copy(a,b,n)
+         integer a(:), b(:), i
+         end subroutine
+      end interface
+
+      call copy(a,b,n)
+      end program
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: "${MAKE=make}"
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+AT_CHECK([./prog || exit 1], [1], [ignore], [ignore])
+AT_CHECK([$MAKE clean], [], [ignore], [ignore])
+
+AT_CLEANUP
