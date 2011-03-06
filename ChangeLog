@@ -1,3 +1,9 @@
+2011-03-08  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	docs: BSD and Solaris make trailing space macro issue.
+	* doc/autoconf.texi (Trailing whitespace in Make Macros):
+	Document issue with trailing whitespace in macro settings.
+
 2011-03-05  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	Fix Cray Fortran flag for AC_FC_IMPLICIT_NONE.

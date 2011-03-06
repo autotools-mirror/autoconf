@@ -19853,6 +19853,19 @@ print: ; @@echo $(foo:=.test)
 @noindent
 prints @samp{bar.test .test}.
 
+BSD and Solaris @command{make} implementations do not honor trailing
+whitespace in macro definitions as Posix requires:
+
+@example
+foo = bar # Note the space after "bar".
+print: ; @@echo $(foo)t
+@end example
+
+@noindent
+prints @samp{bart} instead of @samp{bar t}.  To work around this, you
+can use a helper macro as in the previous example.
+
+
 @node Command-line Macros and whitespace
 @section Command-line Macros and whitespace
 @cindex whitespace in command-line macros
