@@ -1,3 +1,8 @@
+2011-03-26  Jim Meyering  <meyering@redhat.com>
+
+	README-hacking: fix typo
+	* README-hacking: s/just build/just built/.
+
 2011-03-08  Colin Watson  <cjwatson@debian.org>  (tiny change)
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 

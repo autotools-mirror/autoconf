@@ -75,7 +75,7 @@ The next step is to generate files like configure and Makefile.in:
 
 Since we're building autoconf itself, and its tests are picky, the
 following procedure includes an extra step to ensure that some
-generated files are regenerated using the tools just build by "make"
+generated files are regenerated using the tools just built by "make"
 (if you use GNU make, the file GNUmakefile sets PATH for you):
 
   $ ./configure
