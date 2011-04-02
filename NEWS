@@ -20,6 +20,7 @@ GNU Autoconf NEWS - User visible changes.
     AC_FC_MODULE_FLAG for the Fortran 90 module search path flag
     AC_FC_MODULE_OUTPUT_FLAG for the Fortran 90 module output directory flag
     AC_FC_PP_SRCEXT for preprocessed Fortran source files extensions
+    AC_FC_PP_DEFINE for the Fortran preprocessor define flag
 
 * Noteworthy changes in release 2.68 (2010-09-22) [stable]
   Released by Eric Blake, based on git versions 2.67.*.
