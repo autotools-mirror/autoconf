@@ -8383,6 +8383,51 @@ The extension, or @samp{unknown}, is cached in the
 @code{ac_cv_fc_module_ext} variable.
 @end defmac
 
+@defmac AC_FC_MODULE_FLAG (@ovar{action-if-sucess}, @
+  @dvar{action-if-failure, AC_MSG_FAILURE})
+@acindex{FC_MODULE_FLAG}
+@caindex fc_module_flag
+@ovindex FC_MODINC
+@ovindex ac_empty
+
+Find the compiler flag to include Fortran 90 module information from
+another directory, and store that in the @code{FC_MODINC} variable.
+Call @var{action-if-success} (defaults to nothing) if successful, and
+set @code{FC_MODINC} to empty and call @var{action-if-failure} (defaults
+to exiting with an error message) if not.
+
+Most Fortran 90 compilers provide a way to specify module directories.
+Some have separate flags for the directory to write module files to,
+and directories to search them in, whereas others only allow writing to
+the current directory or to the first directory specified in the include
+path.  Further, with some compilers, the module search path and the
+preprocessor search path can only be modified with the same flag.  Thus,
+for portability, write module files to the current directory only and
+list that as first directory in the search path.
+
+There may be no whitespace between @code{FC_MODINC} and the following
+directory name, but @code{FC_MODINC} may contain trailing white space.
+For example, if you use Automake and would like to search @file{../lib}
+for module files, you can use the following:
+
+@example
+AM_FCFLAGS = $(FC_MODINC). $(FC_MODINC)../lib
+@end example
+
+Inside @command{configure} tests, you can use:
+
+@example
+if test -n "$FC_MODINC"; then
+  FCFLAGS="$FCFLAGS $FC_MODINC. $FC_MODINC../lib"
+fi
+@end example
+
+The flag is cached in the @code{ac_cv_fc_module_flag} variable.
+The substituted value of @code{FC_MODINC} may refer to the
+@code{ac_empty} dummy placeholder empty variable, to avoid losing
+the significant trailing whitespace in a @file{Makefile}.
+@end defmac
+
 
 @node Go Compiler
 @subsection Go Compiler Characteristics

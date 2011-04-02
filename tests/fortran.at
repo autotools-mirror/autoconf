@@ -991,3 +991,74 @@ AT_CHECK([./prog || exit 1], [1], [ignore], [ignore])
 AT_CHECK([$MAKE clean], [], [ignore], [ignore])
 
 AT_CLEANUP
+
+
+## ------------------ ##
+## AC_FC_MODULE_FLAG. ##
+## ------------------ ##
+
+AT_SETUP([AC_FC_MODULE_FLAG])
+
+AT_DATA([Makefile.in],
+[[OBJEXT = @OBJEXT@
+EXEEXT = @EXEEXT@
+LIBS = @LIBS@
+ac_empty = @ac_empty@
+FC = @FC@
+FC_MODEXT = @FC_MODEXT@
+FC_MODINC = @FC_MODINC@
+FCFLAGS = @FCFLAGS@
+FCFLAGS_f = @FCFLAGS_f@
+
+prog$(EXEEXT): sub/mod.$(OBJEXT) prog.$(OBJEXT)
+	$(FC) $(FCFLAGS) -o $@ prog.$(OBJEXT) sub/mod.$(OBJEXT) $(LIBS)
+
+sub/mod.$(OBJEXT): sub/mod.f
+	cd sub && $(FC) $(FCFLAGS) -c $(FCFLAGS_f) mod.f
+
+# Depend on the object, for the module dependency.
+prog.$(OBJEXT): prog.f sub/mod.$(OBJEXT)
+	$(FC) $(FCFLAGS) $(FC_MODINC). $(FC_MODINC)sub -c $(FCFLAGS_f) $<
+
+clean:
+	-test -z "$(FC_MODEXT)" || rm -f *.$(FC_MODEXT) sub/*.$(FC_MODEXT)
+	-rm -f *.$(OBJEXT) sub/*.$(OBJEXT) prog$(EXEEXT)
+]])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_FC
+AC_FC_SRCEXT([f])
+AC_FC_MODULE_FLAG
+if test -n "$FC_MODINC"; then
+  FCFLAGS="$FCFLAGS $FC_MODINC. ${FC_MODINC}sub"
+fi
+AC_FC_MODULE_EXTENSION
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+mkdir sub
+
+AT_DATA([sub/mod.f],
+[[      module foobar
+      end module foobar
+]])
+
+AT_DATA([prog.f],
+[[      program main
+      use foobar
+      end program
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: "${MAKE=make}"
+AT_CHECK([$MAKE], [], [stdout], [stderr])
+# Both the FCFLAGS setting from configure.ac, and the Makefile rule
+# should add to the module search path.
+AT_CHECK([grep 'sub .*sub ' stdout stderr], [], [ignore])
+AT_CHECK([./prog], [], [ignore], [ignore])
+AT_CHECK([$MAKE clean], [], [ignore], [ignore])
+
+AT_CLEANUP

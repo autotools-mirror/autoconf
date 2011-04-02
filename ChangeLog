@@ -1,4 +1,20 @@
 2011-04-02  Luc Maisonobe  <luc@spaceroots.org>
+	    Julian C. Cummings  <cummings@cacr.caltech.edu>
+	    Alexander Pletzer  <pletzer@txcorp.com>
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New macro AC_FC_MODULE_FLAG: Fortran 90 module include path.
+	* lib/autoconf/fortran.m4 (AC_FC_MODULE_FLAG): New macro,
+	adjusted and rewritten from the AX_F90_MODULE_FLAG macro from
+	the Autoconf Macro Archive by Luc Maisonobe, Julian C. Cummings,
+	and Alexander Pletzer.
+	* doc/autoconf.texi (Fortran Compiler): Document it.
+	* tests/fortran.at (AC_FC_MODULE_FLAG): New test.
+	* tests/local.at (AT_CHECK_ENV): Do not complain about FC_MODINC
+	setting.
+	* NEWS, THANKS: Update.
+
+2011-04-02  Luc Maisonobe  <luc@spaceroots.org>
 	    Alexander Pletzer  <pletzer@txcorp.com>
 	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
