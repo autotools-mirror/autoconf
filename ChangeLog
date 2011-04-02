@@ -1,3 +1,12 @@
+2011-04-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New macro AC_FC_MODULE_OUTPUT_FLAG: module output directory.
+	* lib/autoconf/fortran.m4 (AC_FC_MODULE_OUTPUT_FLAG): New macro.
+	* doc/autoconf.texi (Fortran Compiler): Document it.
+	* tests/local.at (_AT_CHECK_ENV): Do not complain about
+	FC_MODOUT.
+	* NEWS: Update.
+
 2011-04-02  Luc Maisonobe  <luc@spaceroots.org>
 	    Julian C. Cummings  <cummings@cacr.caltech.edu>
 	    Alexander Pletzer  <pletzer@txcorp.com>

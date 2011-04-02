@@ -8428,6 +8428,36 @@ The substituted value of @code{FC_MODINC} may refer to the
 the significant trailing whitespace in a @file{Makefile}.
 @end defmac
 
+@defmac AC_FC_MODULE_OUTPUT_FLAG (@ovar{action-if-sucess}, @
+  @dvar{action-if-failure, AC_MSG_FAILURE})
+@acindex{FC_MODULE_OUTPUT_FLAG}
+@caindex fc_module_output_flag
+@ovindex FC_MODOUT
+
+Find the compiler flag to write Fortran 90 module information to
+another directory, and store that in the @code{FC_MODOUT} variable.
+Call @var{action-if-success} (defaults to nothing) if successful, and
+set @code{FC_MODOUT} to empty and call @var{action-if-failure} (defaults
+to exiting with an error message) if not.
+
+Not all Fortran 90 compilers write module files, and of those that do,
+not all allow writing to a directory other than the current one, nor
+do all have separate flags for writing and reading; see the description
+of @code{AC_FC_MODULE_FLAG} above.  If you need to be able to write to
+another directory, for maximum portability use @code{FC_MODOUT} before
+any @code{FC_MODINC} and include both the current directory and the one
+you write to in the search path:
+
+@example
+AM_FCFLAGS = $(FC_MODOUT)../mod $(FC_MODINC)../mod $(FC_MODINC). @dots{}
+@end example
+
+The flag is cached in the @code{ac_cv_fc_module_output_flag} variable.
+The substituted value of @code{FC_MODOUT} may refer to the
+@code{ac_empty} dummy placeholder empty variable, to avoid losing
+the significant trailing whitespace in a @file{Makefile}.
+@end defmac
+
 
 @node Go Compiler
 @subsection Go Compiler Characteristics

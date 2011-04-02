@@ -1636,3 +1636,65 @@ AC_CONFIG_COMMANDS_PRE([case $FC_MODINC in #(
   *\ ) FC_MODINC=$FC_MODINC'${ac_empty}' ;;
 esac])dnl
 ])
+
+
+# AC_FC_MODULE_OUTPUT_FLAG([ACTION-IF-SUCCESS], [ACTION-IF-FAILURE = FAILURE])
+# ----------------------------------------------------------------------------
+# Find a flag to write Fortran 90 module information to another directory.
+# If successful, run ACTION-IF-SUCCESS (defaults to nothing), otherwise
+# run ACTION-IF-FAILURE (defaults to failing with an error message).
+# The module flag is cached in the ac_cv_fc_module_output_flag variable.
+# It may contain significant trailing whitespace.
+#
+# For known flags, see the documentation of AC_FC_MODULE_FLAG above.
+AC_DEFUN([AC_FC_MODULE_OUTPUT_FLAG],[
+AC_CACHE_CHECK([Fortran 90 module output flag], [ac_cv_fc_module_output_flag],
+[AC_LANG_PUSH([Fortran])
+mkdir conftest.dir conftest.dir/sub
+cd conftest.dir
+ac_cv_fc_module_output_flag=unknown
+ac_fc_module_output_flag_FCFLAGS_save=$FCFLAGS
+# Flag ordering is significant: put flags late which some compilers use
+# for the search path.
+for ac_flag in -J '-J ' -fmod= -moddir= +moddir= -qmoddir= '-mod ' \
+	      '-module ' -M '-Am -M' '-e m -J '; do
+  FCFLAGS="$ac_fc_module_output_flag_FCFLAGS_save ${ac_flag}sub"
+  AC_COMPILE_IFELSE([[
+      module conftest_module
+      contains
+      subroutine conftest_routine
+      write(*,'(a)') 'gotcha!'
+      end subroutine
+      end module]],
+    [cd sub
+     AC_COMPILE_IFELSE([[
+      program main
+      use conftest_module
+      call conftest_routine
+      end program]],
+       [ac_cv_fc_module_output_flag="$ac_flag"])
+     cd ..
+     if test "$ac_cv_fc_module_output_flag" != unknown; then
+       break
+     fi])
+done
+FCFLAGS=$ac_fc_module_output_flag_FCFLAGS_save
+cd ..
+rm -rf conftest.dir
+AC_LANG_POP([Fortran])
+])
+if test "$ac_cv_fc_module_output_flag" != unknown; then
+  FC_MODOUT=$ac_cv_fc_module_output_flag
+  $1
+else
+  FC_MODOUT=
+  m4_default([$2],
+    [AC_MSG_ERROR([unable to find compiler flag to write module information to])])
+fi
+AC_SUBST([FC_MODOUT])
+# Ensure trailing whitespace is preserved in a Makefile.
+AC_SUBST([ac_empty], [""])
+AC_CONFIG_COMMANDS_PRE([case $FC_MODOUT in #(
+  *\ ) FC_MODOUT=$FC_MODOUT'${ac_empty}' ;;
+esac])dnl
+])
