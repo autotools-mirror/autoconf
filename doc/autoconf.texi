@@ -8198,47 +8198,68 @@ to call Fortran routines from some language other than C/C++.
 
 @defmac AC_FC_SRCEXT (@var{ext}, @ovar{action-if-success}, @
   @dvar{action-if-failure, AC_MSG_FAILURE})
+@defmacx AC_FC_PP_SRCEXT (@var{ext}, @ovar{action-if-success}, @
+  @dvar{action-if-failure, AC_MSG_FAILURE})
 @acindex{FC_SRCEXT}
+@acindex{FC_PP_SRCEXT}
+@caindex fc_srcext_@var{ext}
+@caindex fc_pp_srcext_@var{ext}
 By default, the @code{FC} macros perform their tests using a @file{.f}
 extension for source-code files.  Some compilers, however, only enable
 newer language features for appropriately named files, e.g., Fortran 90
-features only for @file{.f90} files.  On the other hand, some other
-compilers expect all source files to end in @file{.f} and require
-special flags to support other file name extensions.  The
-@code{AC_FC_SRCEXT} macro deals with both of these issues.
+features only for @file{.f90} files, or preprocessing only with
+@file{.F} files or maybe other upper-case extensions.  On the other
+hand, some other compilers expect all source files to end in @file{.f}
+and require special flags to support other file name extensions.  The
+@code{AC_FC_SRCEXT} and @code{AC_FC_PP_SRCEXT} macros deal with these
+issues.
 
-The @code{AC_FC_SRCEXT} tries to get the @code{FC} compiler to accept files
-ending with the extension .@var{ext} (i.e., @var{ext} does @emph{not}
-contain the dot).  If any special compiler flags are needed for this, it
-stores them in the output variable @code{FCFLAGS_}@var{ext}.  This
-extension and these flags are then used for all subsequent @code{FC} tests
-(until @code{AC_FC_SRCEXT} is called again).
+The @code{AC_FC_SRCEXT} macro tries to get the @code{FC} compiler to
+accept files ending with the extension @file{.@var{ext}} (i.e.,
+@var{ext} does @emph{not} contain the dot).  If any special compiler
+flags are needed for this, it stores them in the output variable
+@code{FCFLAGS_@var{ext}}.  This extension and these flags are then used
+for all subsequent @code{FC} tests (until @code{AC_FC_SRCEXT} or
+@code{AC_FC_PP_SRCEXT} is called another time).
 
 For example, you would use @code{AC_FC_SRCEXT(f90)} to employ the
 @file{.f90} extension in future tests, and it would set the
 @code{FCFLAGS_f90} output variable with any extra flags that are needed
 to compile such files.
 
-The @code{FCFLAGS_}@var{ext} can @emph{not} be simply absorbed into
-@code{FCFLAGS}, for two reasons based on the limitations of some
-compilers.  First, only one @code{FCFLAGS_}@var{ext} can be used at a
+Similarly, the @code{AC_FC_PP_SRCEXT} macro tries to get the @code{FC}
+compiler to preprocess and compile files with the extension
+@file{.@var{ext}}.  When both @command{fpp} and @command{cpp} style
+preprocessing are provided, the former is preferred, as the latter may
+treat continuation lines, @code{//} tokens, and white space differently
+from what some Fortran dialects expect.  Conversely, if you do not want
+files to be preprocessed, use only lower-case characters in the file
+name extension.  Like with @code{AC_FC_SRCEXT(f90)}, any needed flags
+are stored in the @code{FCFLAGS_@var{ext}} variable.
+
+The @code{FCFLAGS_@var{ext}} flags can @emph{not} be simply absorbed
+into @code{FCFLAGS}, for two reasons based on the limitations of some
+compilers.  First, only one @code{FCFLAGS_@var{ext}} can be used at a
 time, so files with different extensions must be compiled separately.
-Second, @code{FCFLAGS_}@var{ext} must appear @emph{immediately} before
+Second, @code{FCFLAGS_@var{ext}} must appear @emph{immediately} before
 the source-code file name when compiling.  So, continuing the example
 above, you might compile a @file{foo.f90} file in your makefile with the
 command:
 
 @example
 foo.o: foo.f90
-     $(FC) -c $(FCFLAGS) $(FCFLAGS_f90) '$(srcdir)/foo.f90'
+       $(FC) -c $(FCFLAGS) $(FCFLAGS_f90) '$(srcdir)/foo.f90'
 @end example
 
-If @code{AC_FC_SRCEXT} succeeds in compiling files with the @var{ext}
-extension, it calls @var{action-if-success} (defaults to nothing).  If
-it fails, and cannot find a way to make the @code{FC} compiler accept such
-files, it calls @var{action-if-failure} (defaults to exiting with an
-error message).
+If @code{AC_FC_SRCEXT} or @code{AC_FC_PP_SRCEXT} succeeds in compiling
+files with the @var{ext} extension, it calls @var{action-if-success}
+(defaults to nothing).  If it fails, and cannot find a way to make the
+@code{FC} compiler accept such files, it calls @var{action-if-failure}
+(defaults to exiting with an error message).
 
+The @code{AC_FC_SRCEXT} and @code{AC_FC_PP_SRCEXT} macros cache their
+results in @code{ac_cv_fc_srcext_@var{ext}} and
+@code{ac_cv_fc_pp_srcext_@var{ext}} variables, respectively.
 @end defmac
 
 @defmac AC_FC_FREEFORM (@ovar{action-if-success}, @dvar{action-if-failure, @

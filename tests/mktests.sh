@@ -100,7 +100,7 @@ ac_exclude_list='
 	# Produce "= val" because $1, the variable used to store the result,
 	# is empty.
 	/^AC_(F77|FC)_FUNC$/ {next}
-	/^AC_FC_SRCEXT$/ {next}
+	/^AC_FC_(PP_)?SRCEXT$/ {next}
 	/^AC_PATH_((TARGET_)?TOOL|PROG)S?$/ {next}
 
 	# Is a number.

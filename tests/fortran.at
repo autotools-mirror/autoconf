@@ -714,6 +714,106 @@ AT_CHECK([$MAKE], [], [ignore], [ignore])
 AT_CLEANUP
 
 
+## ---------------------- ##
+## AC_FC_PP_SRCEXT usage. ##
+## ---------------------- ##
+
+AT_SETUP([AC_FC_PP_SRCEXT usage])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_FC
+# Unconditionally require .f and .F to work.
+AC_FC_PP_SRCEXT([f])
+AC_FC_PP_SRCEXT([F])
+# For each other extension, fail gracefully if it does not work:
+# Not all compilers support all extensions/language versions.
+m4@&t@_foreach([ext], [f77, f90, f95, f03, f08],
+  [AC_FC_PP_SRCEXT(ext, ext[_object='foo]ext[.$(OBJEXT)'], ext[_object=])
+   AC_SUBST(ext[_object])])
+m4@&t@_foreach([ext], [F77, F90, F95, F03, F08],
+  [AC_FC_PP_SRCEXT(ext, ext[_object='bar]ext[.$(OBJEXT)'], ext[_object=])
+   AC_SUBST(ext[_object])])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[OBJEXT = @OBJEXT@
+
+all: prog@EXEEXT@
+prog@EXEEXT@: foof.@OBJEXT@ @f77_object@ @f90_object@ \
+	      @f95_object@ @f03_object@ @f08_object@ \
+	      barF.@OBJEXT@ @F77_object@ @F90_object@ \
+	      @F95_object@ @F03_object@ @F08_object@
+	@FC@ @FCFLAGS@ -o $@ foof.@OBJEXT@ @f77_object@ @f90_object@ \
+			     @f95_object@ @f03_object@ @f08_object@ \
+			     barF.@OBJEXT@ @F77_object@ @F90_object@ \
+			     @F95_object@ @F03_object@ @F08_object@
+
+.SUFFIXES: .f .f77 .f90 .f95 .f03 .f08 .F .F77 .F90 .F95 .F03 .F08 .@OBJEXT@
+.f.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f@ $<
+.f77.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f77@ $<
+.f90.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f90@ $<
+.f95.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f95@ $<
+.f03.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f03@ $<
+.f08.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_f08@ $<
+.F.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_F@ $<
+.F77.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_F77@ $<
+.F90.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_F90@ $<
+.F95.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_F95@ $<
+.F03.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_F03@ $<
+.F08.@OBJEXT@:
+	@FC@ -c @FCFLAGS@ @FCFLAGS_F08@ $<
+]])
+
+for ext in f77 f90 f95 f03 f08; do
+  cat > foo$ext.$ext <<EOF
+      subroutine foo$ext
+#if 0
+this is not correct fortran
+#endif
+      end
+EOF
+done
+
+for ext in F F77 F90 F95 F03 F08; do
+  cat > bar$ext.$ext <<EOF
+      subroutine bar$ext
+#if 0
+this is not correct fortran
+#endif
+      end
+EOF
+done
+
+AT_DATA([foof.f],
+[[      program main
+#if 0
+this is not correct fortran
+#endif
+      end
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+: "${MAKE=make}"
+AT_CHECK([$MAKE], [], [ignore], [ignore])
+
+AT_CLEANUP
+
+
 ## --------------- ##
 ## AC_FC_FREEFORM. ##
 ## --------------- ##

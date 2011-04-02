@@ -1,5 +1,14 @@
 2011-04-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
+	New macro AC_FC_PP_SRCEXT for preprocessed file extensions.
+	* lib/autoconf/fortran.m4 (AC_FC_PP_SRCEXT): New macro.
+	* lib/autom4te.in (Automake-preselections): Preselect it.
+	* doc/autoconf.texi (Fortran Compiler): Document it, rewriting
+	the documentation for AC_FC_SRCEXT along the way.
+	* tests/fortran.at (AC_FC_PP_SRCEXT usage): New test.
+	* tests/mktests.sh: Exclude the macro from default testing.
+	* NEWS: Update.
+
 	New macro AC_FC_MODULE_OUTPUT_FLAG: module output directory.
 	* lib/autoconf/fortran.m4 (AC_FC_MODULE_OUTPUT_FLAG): New macro.
 	* doc/autoconf.texi (Fortran Compiler): Document it.
