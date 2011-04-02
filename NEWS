@@ -16,6 +16,7 @@ GNU Autoconf NEWS - User visible changes.
 
     AC_FC_CHECK_BOUNDS to enable array bounds checking
     AC_F77_IMPLICIT_NONE and AC_FC_IMPLICIT_NONE to disable implicit integer
+    AC_FC_MODULE_EXTENSION to compute the Fortran 90 module name extension
 
 * Noteworthy changes in release 2.68 (2010-09-22) [stable]
   Released by Eric Blake, based on git versions 2.67.*.

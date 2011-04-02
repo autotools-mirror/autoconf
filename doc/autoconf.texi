@@ -8350,6 +8350,39 @@ The result of these macros are cached in the
 variables, respectively.
 @end defmac
 
+@defmac AC_FC_MODULE_EXTENSION
+@acindex{FC_MODULE_EXTENSION}
+@caindex fc_module_ext
+@ovindex FC_MODEXT
+
+Find the Fortran 90 module file name extension.  Most Fortran 90
+compilers store module information in files separate from the object
+files.  The module files are usually named after the name of the module
+rather than the source file name, with characters possibly turned to
+upper case, plus an extension, often @file{.mod}.
+
+Not all compilers use module files at all, or by default.  The Cray
+Fortran compiler requires @option{-e m} in order to store and search
+module information in @file{.mod} files rather than in object files.
+Likewise, the Fujitsu Fortran compilers uses the @option{-Am} option to
+indicate how module information is stored.
+
+The @code{AC_FC_MODULE_EXTENSION} macro computes the module extension
+without the leading dot, and stores that in the @code{FC_MODEXT}
+variable.  If the compiler does not produce module files, or the
+extension cannot be determined, @code{FC_MODEXT} is empty.  Typically,
+the result of this macro may be used in cleanup @command{make} rules as
+follows:
+
+@example
+clean-modules:
+        -test -z "$(FC_MODEXT)" || rm -f *.$(FC_MODEXT)
+@end example
+
+The extension, or @samp{unknown}, is cached in the
+@code{ac_cv_fc_module_ext} variable.
+@end defmac
+
 
 @node Go Compiler
 @subsection Go Compiler Characteristics

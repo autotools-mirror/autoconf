@@ -1,3 +1,16 @@
+2011-04-02  Luc Maisonobe  <luc@spaceroots.org>
+	    Alexander Pletzer  <pletzer@txcorp.com>
+	    Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
+
+	New macro AC_FC_MODULE_EXTENSION: Fortran 90 module extension.
+	* lib/autoconf/fortran.m4 (AC_FC_MODULE_EXTENSION): New macro,
+	rewritten from the AX_F90_MODULE_EXTENSION macro from the
+	Autoconf Macro Archive by Luc Maisonobe and Alexander Pletzer.
+	* doc/autoconf.texi (Fortran Compiler): Document it.
+	* tests/local.at (_AT_CHECK_ENV): Do not complain about
+	FC_MODEXT setting.
+	* NEWS, THANKS: Update.
+
 2011-03-26  Jim Meyering  <meyering@redhat.com>
 
 	README-hacking: fix typo
