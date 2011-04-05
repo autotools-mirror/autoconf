@@ -1,3 +1,8 @@
+2011-04-05  Eric Blake  <eblake@redhat.com>
+
+	maint: reflect recent copyright assignments
+	* AUTHORS: Update.
+
 2011-04-02  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	New macro AC_FC_PP_DEFINE for the preprocessor define flag.
