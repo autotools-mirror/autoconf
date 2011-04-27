@@ -18809,6 +18809,9 @@ cat file | join file -
 
 Use @samp{join - file} instead.
 
+On NetBSD, @command{join -a 1 file1 file2} mistakenly behaves like
+@command{join -a 1 -a 2 1 file1 file2}, resulting in a usage warning;
+the workaround is to use @command{join -a1 file1 file2} instead.
 
 @item @command{ln}
 @c ---------------
