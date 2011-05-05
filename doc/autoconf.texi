@@ -15846,6 +15846,18 @@ $ @kbd{echo $@{10@}}
 bad substitution
 @end example
 
+Conversely, not all shells obey the Posix rule that when braces are
+omitted, multiple digits beyond a @samp{$} imply the single-digit
+positional parameter expansion concatenated with the remaining literal
+digits.  To work around the issue, you must use braces.
+
+@example
+$ @kbd{bash -c 'set a b c d e f g h i j; echo $10 $@{1@}0'}
+a0 a0
+$ @kbd{dash -c 'set a b c d e f g h i j; echo $10 $@{1@}0'}
+j a0
+@end example
+
 @item $@{@var{var}:-@var{value}@}
 @c Info cannot handle `:' in index entries.
 @ifnotinfo

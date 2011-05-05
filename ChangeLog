@@ -1,3 +1,9 @@
+2011-05-05  Eric Blake  <eblake@redhat.com>
+
+	doc: document dash bug with positional parameters
+	* doc/autoconf.texi (Shell Substitutions) <${10}>: Document
+	a pitfall with $10.
+
 2011-04-27  Eric Blake  <eblake@redhat.com>
 
 	docs: document NetBSD join bug
