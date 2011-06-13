@@ -15442,45 +15442,39 @@ As a workaround, @command{echo} or @command{eval} can be used.
 Don't rely on file descriptors 0, 1, and 2 remaining closed in a
 subsidiary program.  If any of these descriptors is closed, the
 operating system may open an unspecified file for the descriptor in the
-new process image.  Posix says this may be done only if the subsidiary
-program is set-user-ID or set-group-ID, but HP-UX 11.23 does
-it even for ordinary programs.
+new process image.  Posix 2008 says this may be done only if the
+subsidiary program is set-user-ID or set-group-ID, but HP-UX 11.23 does
+it even for ordinary programs, and the next version of Posix will allow
+HP-UX behavior.
 
-Don't rely on open file descriptors being open in child processes.  In
-@command{ksh}, file descriptors above 2 which are opened using
+If you want a file descriptor above 2 to be inherited into a child
+process, then you must use redirections specific to that command or a
+containing subshell or command group, rather than relying on
+@command{exec} in the shell. In @command{ksh} as well as HP-UX
+@command{sh}, file descriptors above 2 which are opened using
 @samp{exec @var{n}>file} are closed by a subsequent @samp{exec} (such as
-that involved in the fork-and-exec which runs a program or script).
-Thus, using @command{sh}, we have:
+that involved in the fork-and-exec which runs a program or script):
 
 @example
-$ @kbd{cat ./descrips}
-#!/bin/sh -
-echo hello >&5
-$ @kbd{exec 5>t}
-$ @kbd{./descrips}
-$ @kbd{cat t}
+$ @kbd{echo 'echo hello >&5' >k
+$ @kbd{/bin/sh -c 'exec 5>t; ksh ./k; exec 5>&-; cat t}
 hello
-$
-@end example
-
-@noindent
-But using ksh:
-
-@example
-$ @kbd{exec 5>t}
-$ @kbd{./descrips}
+$ @kbd{bash -c 'exec 5>t; ksh ./k; exec 5>&-; cat t}
 hello
-$ @kbd{cat t}
-$
+$ @kbd{ksh -c 'exec 5>t; ksh ./k; exec 5>&-; cat t}
+./k[1]: 5: cannot open [Bad file number]
+$ @kbd{ksh -c '(ksh ./k) 5>t; cat t'}
+hello
+$ @kbd{ksh -c '@{ ksh ./k; @} 5>t; cat t'}
+hello
+$ @kbd{ksh -c '5>t ksh ./k; cat t}
+hello
 @end example
-
-@noindent
-Within the process which runs the @samp{descrips} script, file
-descriptor 5 is closed.
 
 Don't rely on duplicating a closed file descriptor to cause an
-error.  With Solaris @command{/bin/sh}, when the redirection fails, the
-output goes to the original file descriptor.
+error.  With Solaris @command{/bin/sh}, failed duplication is silently
+ignored, which can cause unintended leaks to the original file
+descriptor.  In this example, observe the leak to standard output:
 
 @example
 $ @kbd{bash -c 'echo hi >&3' 3>&-; echo $?}

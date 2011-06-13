@@ -1,5 +1,9 @@
 2011-06-14  Eric Blake  <eblake@redhat.com>
 
+	doc: mention more about ksh cloexec behavior
+	* doc/autoconf.texi (File Descriptors): Clarify that only the exec
+	builtin suffers from cloexec issues.
+
 	doc: update quoting example
 	* doc/autoconf.texi (Autoconf Language): Add AC_LANG_SOURCE use.
 	* THANKS: Update.
