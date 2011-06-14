@@ -1,3 +1,10 @@
+2011-06-14  Eric Blake  <eblake@redhat.com>
+
+	doc: update quoting example
+	* doc/autoconf.texi (Autoconf Language): Add AC_LANG_SOURCE use.
+	* THANKS: Update.
+	Reported by Křištof Želechovski.
+
 2011-05-05  Eric Blake  <eblake@redhat.com>
 
 	doc: document dash bug with positional parameters

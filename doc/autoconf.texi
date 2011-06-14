@@ -1288,19 +1288,26 @@ has been continually misunderstood@enddots{}  The rule of thumb is that
 i.e., expect one level of quotes to be lost.  For instance:
 
 @example
-AC_COMPILE_IFELSE([char b[10];], [], [AC_MSG_ERROR([you lose])])
+AC_COMPILE_IFELSE(AC_LANG_SOURCE([char b[10];]), [],
+ [AC_MSG_ERROR([you lose])])
 @end example
 
 @noindent
-is incorrect: here, the first argument of @code{AC_COMPILE_IFELSE} is
+is incorrect: here, the first argument of @code{AC_LANG_SOURCE} is
 @samp{char b[10];} and is expanded once, which results in
-@samp{char b10;}.  (There was an idiom common in Autoconf's past to
+@samp{char b10;}; and the @code{AC_LANG_SOURCE} is also expanded prior
+to being passed to @code{AC_COMPILE_IFELSE}.  (There was an idiom common
+in Autoconf's past to
 address this issue via the M4 @code{changequote} primitive, but do not
 use it!)  Let's take a closer look: the author meant the first argument
-to be understood as a literal, and therefore it must be quoted twice:
+to be understood as a literal, and therefore it must be quoted twice;
+likewise, the intermediate @code{AC_LANG_SOURCE} macro should be quoted
+once so that it is only expanded after the rest of the body of
+@code{AC_COMPILE_IFELSE} is in place:
 
 @example
-AC_COMPILE_IFELSE([[char b[10];]], [], [AC_MSG_ERROR([you lose])])
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([[char b[10];]])], [],
+  [AC_MSG_ERROR([you lose])])
 @end example
 
 @noindent
