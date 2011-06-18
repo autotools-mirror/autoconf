@@ -15456,7 +15456,7 @@ containing subshell or command group, rather than relying on
 that involved in the fork-and-exec which runs a program or script):
 
 @example
-$ @kbd{echo 'echo hello >&5' >k
+$ @kbd{echo 'echo hello >&5' >k}
 $ @kbd{/bin/sh -c 'exec 5>t; ksh ./k; exec 5>&-; cat t}
 hello
 $ @kbd{bash -c 'exec 5>t; ksh ./k; exec 5>&-; cat t}

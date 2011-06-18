@@ -1,3 +1,7 @@
+2011-06-18  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* doc/autoconf.texi (File Descriptors): Fix texinfo typo.
+
 2011-06-14  Eric Blake  <eblake@redhat.com>
 
 	doc: mention more about ksh cloexec behavior
