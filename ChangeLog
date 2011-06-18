@@ -1,5 +1,10 @@
 2011-06-18  Paul Eggert  <eggert@cs.ucla.edu>
 
+	* lib/autoconf/functions.m4 (_AC_LIBOBJ_ALLOCA): Try to outsmart GCC.
+	Problem with stack-detection code reported by Andy Wingo in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2011-06/msg00032.html>.
+	This fix is imported from gnulib's c-stack module.
+
 	* doc/autoconf.texi (File Descriptors): Fix texinfo typo.
 
 2011-06-14  Eric Blake  <eblake@redhat.com>

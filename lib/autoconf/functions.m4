@@ -325,23 +325,17 @@ AC_CACHE_CHECK([stack direction for C alloca],
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
 [AC_INCLUDES_DEFAULT
 int
-find_stack_direction ()
+find_stack_direction (char *addr)
 {
-  static char *addr = 0;
-  auto char dummy;
-  if (addr == 0)
-    {
-      addr = &dummy;
-      return find_stack_direction ();
-    }
-  else
-    return (&dummy > addr) ? 1 : -1;
+  char dummy;
+  return (! addr ? find_stack_direction (&dummy)
+          : addr < &dummy ? 1 : -1);
 }
 
 int
-main ()
+main (void)
 {
-  return find_stack_direction () < 0;
+  return find_stack_direction (0) < 0;
 }])],
 	       [ac_cv_c_stack_direction=1],
 	       [ac_cv_c_stack_direction=-1],
