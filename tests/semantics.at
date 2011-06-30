@@ -179,7 +179,8 @@ AT_CONFIGURE_AC(
 [AC_CONFIG_FILES([config.libobjs:config.in])
 AC_REPLACE_FUNCS([printf \
 autoconf_ftnirp])
-funcs='fprintf autoconf_ftnirpf'
+funcs='fprintf fopen autoconf_ftnirpf'
+AH_TEMPLATE([HAVE_FOPEN], [])
 AH_TEMPLATE([HAVE_FPRINTF], [])
 AH_TEMPLATE([HAVE_AUTOCONF_FTNIRPF], [])
 AC_REPLACE_FUNCS([\
@@ -193,6 +194,7 @@ AT_CHECK_ENV
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_FTNIRP */
 /* #undef HAVE_AUTOCONF_FTNIRPF */
+#define HAVE_FOPEN 1
 #define HAVE_FPRINTF 1
 #define HAVE_PRINTF 1
 ])
