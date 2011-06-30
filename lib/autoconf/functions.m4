@@ -137,7 +137,7 @@ m4_define([_AC_REPLACE_FUNCS],
 [m4_map_args_w([$1], [_AC_REPLACE_FUNC(], [)
 ])],
 [AC_CHECK_FUNCS([$1],
-  [_AH_CHECK_FUNC([$ac_func])AC_DEFINE(AS_TR_CPP([HAVE_$ac_func]))],
+  [_AH_CHECK_FUNC([$ac_func])],
   [_AC_LIBOBJ([$ac_func])])])])
 
 
