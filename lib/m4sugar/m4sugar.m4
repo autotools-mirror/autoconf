@@ -2100,7 +2100,8 @@ m4_provide_if([$1], [m4_set_remove([_m4_provide], [$1])],
 m4_define([_m4_require_check],
 [m4_if(_m4_defn([_m4_diverting]), [$2], [m4_ignore],
        m4_ifdef([_m4_diverting([$2])], [-]), [-], [m4_warn([syntax],
-   [$3: `$1' was expanded before it was required])_m4_require_call],
+   [$3: `$1' was expanded before it was required
+http://www.gnu.org/software/autoconf/manual/autoconf.html#Expanded-Before-Required])_m4_require_call],
        [m4_ignore])])
 
 
