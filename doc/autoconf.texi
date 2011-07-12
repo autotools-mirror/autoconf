@@ -7810,7 +7810,7 @@ complete path of the compiler command found.  In addition, if @code{ERLCFLAGS}
 is not set in the environment, set it to an empty value.
 
 The two optional arguments have the same meaning as the two last arguments of
-macro @code{AC_PROG_PATH} for looking for the @command{erlc} program.  For
+macro @code{AC_PATH_PROG} for looking for the @command{erlc} program.  For
 example, to look for @command{erlc} only in the @file{/usr/lib/erlang/bin}
 directory:
 
@@ -7836,7 +7836,7 @@ environment, check for @command{erl}.  Set output variable @code{ERL} to the
 complete path of the interpreter command found.
 
 The two optional arguments have the same meaning as the two last arguments of
-macro @code{AC_PROG_PATH} for looking for the @command{erl} program.  For
+macro @code{AC_PATH_PROG} for looking for the @command{erl} program.  For
 example, to look for @command{erl} only in the @file{/usr/lib/erlang/bin}
 directory:
 
