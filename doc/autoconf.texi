@@ -1716,7 +1716,7 @@ Print a summary of the command line options and exit.
 Print the version number of Autoconf and exit.
 
 @item --verbose
-@itemx -V
+@itemx -v
 Print the name of each directory @command{autoreconf} examines and the
 commands it runs.  If given two or more times, pass @option{--verbose}
 to subordinate tools that support it.
@@ -25324,7 +25324,7 @@ restrictions.
 Here is some further explanation, written by Per Bothner:
 
 @quotation
-One of the advantages of Imake is that it easy to generate large
+One of the advantages of Imake is that it is easy to generate large
 makefiles using the @samp{#include} and macro mechanisms of @command{cpp}.
 However, @code{cpp} is not programmable: it has limited conditional
 facilities, and no looping.  And @code{cpp} cannot inspect its

@@ -1,3 +1,11 @@
+2011-07-22  Eric Blake  <eblake@redhat.com>
+
+	docs: fix minor doc problems
+	* doc/autoconf.texi (Why Not Imake): Fix grammar.
+	(autoreconf Invocation): Fix short option for --version.
+	* THANKS: Update.
+	Reported by Christophe Jarry and Russ Allbery.
+
 2011-07-12  Benoit Sigoure  <tsunanet@gmail.com>  (tiny change)
 
 	docs: fix typo in AC_PATH_PROG
