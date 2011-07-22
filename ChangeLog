@@ -1,3 +1,9 @@
+2011-07-22  Paul Eggert  <eggert@cs.ucla.edu>
+
+	* lib/autoconf/specific.m4 (AC_USE_SYSTEM_EXTENSIONS): Quote cleanly.
+	This is imported from gnulib.  gnulib also has an HP-UX 11.11 fix, but
+	let's see if we can do that another way, as it's pretty heaviweight.
+
 2011-07-22  Eric Blake  <eblake@redhat.com>
 
 	docs: fix minor doc problems
