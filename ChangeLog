@@ -1,3 +1,8 @@
+2011-07-24  Jim Meyering  <meyering@redhat.com>
+
+	docs: improve the prose describing _AC_CHECK_TYPE_NEW_BODY
+	* lib/autoconf/types.m4 (_AC_CHECK_TYPE_NEW_BODY): Improve prose.
+
 2011-08-31  Paul Eggert  <eggert@cs.ucla.edu>
 
 	AC_C_CONST: don't reject gcc -Werror -Wall

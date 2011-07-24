@@ -80,15 +80,15 @@
 #	  int foo (TYPE param);
 #
 # but of course you soon realize this does not make it with K&R
-# compilers.  And by no ways you want to
+# compilers.  And by no means do you want to use this:
 #
 #	  int foo (param)
 #	    TYPE param
 #	  { ; }
 #
-# since this time it's C++ who is not happy.
+# since C++ would complain loudly.
 #
-# Don't even think of the return type of a function, since K&R cries
+# Don't even think of using a function return type, since K&R cries
 # there too.  So you start thinking of declaring a *pointer* to this TYPE:
 #
 #	  TYPE *p;
@@ -101,14 +101,16 @@
 #
 #	  sizeof (TYPE);
 #
-# But this succeeds if TYPE is a variable: you get the size of the
-# variable's type!!!
+# That is great, but has one drawback: it succeeds when TYPE happens
+# to be a variable: you'd get the size of the variable's type.
+# Obviously, we must not accept a variable in place of a type name.
 #
-# So, to filter out the last possibility, you try this too:
+# So, to filter out the last possibility, we will require that this fail:
 #
 #	  sizeof ((TYPE));
 #
-# This fails if TYPE is a type, but succeeds if TYPE is actually a variable.
+# This evokes a syntax error when TYPE is a type, but succeeds if TYPE
+# is actually a variable.
 #
 # Also note that we use
 #
