@@ -18434,17 +18434,19 @@ its @command{mv} does.
 @cindex timestamp resolution
 Traditionally, file timestamps had 1-second resolution, and @samp{cp
 -p} copied the timestamps exactly.  However, many modern file systems
-have timestamps with 1-nanosecond resolution.  Unfortunately, @samp{cp
--p} implementations truncate timestamps when copying files, so this
-can result in the destination file appearing to be older than the
+have timestamps with 1-nanosecond resolution.  Unfortunately, some older
+@samp{cp -p} implementations truncate timestamps when copying files,
+which can cause the destination file to appear to be older than the
 source.  The exact amount of truncation depends on the resolution of
-the system calls that @command{cp} uses; traditionally this was
-@code{utime}, which has 1-second resolution, but some newer
-@command{cp} implementations use @code{utimes}, which has
-1-microsecond resolution.  These newer implementations include GNU
-Core Utilities 5.0.91 or later, and Solaris 8 (sparc) patch 109933-02 or
-later.  Unfortunately as of January 2006 there is still no system
-call to set timestamps to the full nanosecond resolution.
+the system calls that @command{cp} uses.  Traditionally this was
+@code{utime}, which has 1-second resolution.  Less-ancient @command{cp}
+implementations such as GNU Core Utilities 5.0.91 (2003) use
+@code{utimes}, which has 1-microsecond resolution.  Modern
+implementations such as GNU Core Utilities 6.12 (2008) can set timestamps to
+the full nanosecond resolution, using the modern system calls
+@code{futimens} and @code{utimensat} when they are available.  As of
+2011, though, many platforms do not yet fully support these new system
+calls.
 
 Bob Proulx notes that @samp{cp -p} always @emph{tries} to copy
 ownerships.  But whether it actually does copy ownerships or not is a
@@ -18594,7 +18596,7 @@ not needed anyway.
 
 On the other hand, the behavior of the @samp{$} anchor is not portable
 on multi-line strings.  Posix is ambiguous whether the anchor applies to
-each line, as was done in older versions of GNU Coreutils, or
+each line, as was done in older versions of the GNU Core Utilities, or
 whether it applies only to the end of the overall string, as in
 Coreutils 6.0 and most other implementations.
 
@@ -19364,7 +19366,7 @@ level of portability to use.
 @prindex @command{touch}
 @cindex timestamp resolution
 If you specify the desired timestamp (e.g., with the @option{-r}
-option), @command{touch} typically uses the @code{utime} or
+option), older @command{touch} implementations use the @code{utime} or
 @code{utimes} system call, which can result in the same kind of
 timestamp truncation problems that @samp{cp -p} has.
 
