@@ -15428,12 +15428,16 @@ In each case the expected result is of course @file{fullness} containing
 probably not of practical concern to modern platforms.
 
 Solaris 10 @command{sh} will try to optimize away a @command{:} command
-in a loop after the first iteration, even if it is redirected:
+(even if it is redirected) in a loop after the first iteration, or in a
+shell function after the first call:
 
 @example
 $ @kbd{for i in 1 2 3 ; do : >x$i; done}
-$ @kbd{ls}
+$ @kbd{ls x*}
 x1
+$ @kbd{f () @{ : >$1; @}; f y1; f y2; f y3;}
+$ @kbd{ls y*}
+y1
 @end example
 
 @noindent
