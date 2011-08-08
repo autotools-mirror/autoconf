@@ -16929,11 +16929,11 @@ segmentation fault.  To work around the issue, you can use
 in the execution flow of the function (@pxref{Common Shell Constructs}).
 
 Not all shells treat shell functions as simple commands impacted by
-@samp{set -e}, for example with Solaris 10 @command{bin/sh}:
+@samp{set -e}, for example with Solaris 10 @command{/bin/sh}:
 
 @example
-$ @kbd{bash -c 'f() @{ return 1; @}; set -e; f; echo oops}
-$ @kbd{/bin/sh -c 'f() @{ return 1; @}; set -e; f; echo oops}
+$ @kbd{bash -c 'f() @{ return 1; @}; set -e; f; echo oops'}
+$ @kbd{/bin/sh -c 'f() @{ return 1; @}; set -e; f; echo oops'}
 oops
 @end example
 
