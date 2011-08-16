@@ -20256,14 +20256,37 @@ However, this rule leads to real problems in practice.  For example, if
 the source directory contains an ordinary file named @file{test} that is
 used in a dependency, Solaris @command{make} rewrites commands like
 @samp{if test -r foo; @dots{}} to @samp{if ../pkg/src/test -r foo;
-@dots{}}, which is typically undesirable.  To avoid this problem,
-portable makefiles should never mention a source file whose name is that
-of a shell keyword like @file{until} or a shell command like
-@command{cat} or @command{gcc} or @command{test}.
+@dots{}}, which is typically undesirable.  In fact, @command{make} is
+completely unaware of shell syntax used in the rules, so the VPATH
+rewrite can potentially apply to @emph{any} whitespace-separated word
+in a rule, including shell variables, functions, and keywords.
 
-Because of these problems GNU @command{make} and many other
-@command{make} implementations do not rewrite commands, so portable
-makefiles should
+@example
+$ @kbd{mkdir build}
+$ @kbd{cd build}
+$ @kbd{cat > Makefile <<'END'}
+VPATH = ..
+all: arg func for echo
+        func () @{ for arg in "$$@@"; do echo $$arg; done; @}; \
+        func "hello world"
+END
+$ @kbd{touch ../arg ../func ../for ../echo}
+$ @kbd{make}
+../func () @{ ../for ../arg in "$@@"; do ../echo $arg; done; @}; \
+../func "hello world"
+sh: syntax error at line 1: `do' unexpected
+*** Error code 2
+@end example
+
+@noindent
+To avoid this problem, portable makefiles should never mention a source
+file or dependency whose name is that of a shell keyword like @file{for}
+or @file{until}, a shell command like @command{cat} or @command{gcc} or
+@command{test}, or a shell function or variable used in the corresponding
+@command{Makefile} recipe.
+
+Because of these problems GNU @command{make} and many other @command{make}
+implementations do not rewrite commands, so portable makefiles should
 search @code{VPATH} manually.  It is tempting to write this:
 
 @smallexample

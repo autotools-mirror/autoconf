@@ -1,3 +1,13 @@
+2011-09-14  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	docs: more details about make VPATH rewriting woes
+	* doc/autoconf.texi (Automatic Rule Rewriting): Solaris make
+	VPATH rewriting applies to any whitespace-separated word in a
+	rule, so it might apply also to shell variables, functions
+	and keywords (and automake has already tripped on this once);
+	document this, with an example.  Since we are at it, do some
+	minor reformatting of existing text.
+
 2011-09-13  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: document Solaris 10 /bin/ksh and XPG4 sh 'unset' bug
