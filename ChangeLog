@@ -1,3 +1,14 @@
+2011-08-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	docs: other issues with parallel BSD make
+	Motivated by automake bug#9245:
+	 <http://debbugs.gnu.org/cgi/bugreport.cgi?bug=9245>
+	and FreeBSD PR bin/159730:
+	 <http://www.freebsd.org/cgi/query-pr.cgi?pr=159730>
+	* doc/autoconf.texi (Parallel Make): Document other BSD make
+	incompatibilities.  Reorganize the existing related documentation
+	accordingly.
+
 2011-08-08  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: fix minor typos

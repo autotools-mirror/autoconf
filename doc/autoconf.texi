@@ -19826,6 +19826,99 @@ sh
 Support for parallel execution in @command{make} implementation varies.
 Generally, using GNU make is your best bet.
 
+When NetBSD or FreeBSD @command{make} are run in parallel mode, they will
+reuse the same shell for multiple commands within one recipe.  This can
+have various unexpected consequences.  For example, changes of directories
+or variables persist between recipes, so that:
+
+@example
+all:
+        @@var=value; cd /; pwd; echo $$var; echo $$$$
+        @@pwd; echo $$var; echo $$$$
+@end example
+
+@noindent
+may output the following with @code{make -j1}, at least on NetBSD up to
+5.1 and FreeBSD up to 8.2:
+
+@example
+/
+value
+32235
+/
+value
+32235
+@end example
+
+@noindent
+while without @option{-j1}, or with @option{-B}, the output looks less
+surprising:
+
+@example
+/
+value
+32238
+/tmp
+
+32239
+@end example
+
+@noindent
+Another consequence is that, if one command in a recipe uses @code{exit 0}
+to indicate a successful exit, the shell will be gone and the remaining
+commands of this recipe will not be executed.
+
+The BSD @command{make} implementations, when run in parallel mode,
+will also pass the @command{Makefile} recipes to the shell through
+its standard input, thus making it unusable from the recipes:
+
+@example
+$ @kbd{cat Makefile}
+read:
+        @@read line; echo LINE: $$line
+@c $$ @c restore font-lock
+$ @kbd{echo foo | make read}
+LINE: foo
+$ @kbd{echo foo | make -j1 read} # NetBSD 5.1 and FreeBSD 8.2
+LINE:
+@end example
+
+@noindent
+Moreover, when FreeBSD @command{make} (up at least to 8.2) is run in
+parallel mode, it implements the @code{@@} and @code{-} ``recipe
+modifiers'' by dynamically modifying the active shell flags.  This
+behaviour has the effects of potentially clobbering the exit status
+of recipes silenced with the @code{@@} modifier if they also unset
+the @option{errexit} shell flag, and of mangling the output in
+unexpected ways:
+
+@example
+$ @kbd{cat Makefile}
+a:
+        @@echo $$-; set +e; false
+b:
+        -echo $$-; false; echo set -
+$ @kbd{make a; echo status: $?}
+ehBc
+*** Error code 1
+status: 1
+$ @kbd{make -j1 a; echo status: $?}
+ehB
+status: 0
+$ @kbd{make b}
+echo $-; echo set -
+hBc
+set -
+$ @kbd{make -j1 b}
+echo $-; echo hvB
+@end example
+
+@noindent
+You can avoid all these issues by using the @option{-B} option to enable
+compatibility semantics.  However, that will effectively also disable
+all parallelism as that will cause prerequisites to be updated in the
+order they are listed in a rule.
+
 Some make implementations (among them, FreeBSD @command{make}, NetBSD
 @command{make}, and Solaris @command{dmake}), when invoked with a
 @option{-j@var{N}} option, connect the standard output and standard
@@ -19838,12 +19931,12 @@ standard output is connected to a tty, the recipe command will not be:
 $ @kbd{cat Makefile}
 all:
         @@test -t 1 && echo "Is a tty" || echo "Is not a tty"
-$ @kbd{make -j 2} # FreeBSD make
+$ @kbd{make -j 2} # FreeBSD 8.2 make
 Is not a tty
-$ @kbd{make -j 2} # NetBSD make
+$ @kbd{make -j 2} # NetBSD 5.1 make
 --- all ---
 Is not a tty
-$ @kbd{dmake -j 2} # Solaris dmake
+$ @kbd{dmake -j 2} # Solaris 10 dmake
 @var{hostname} --> 1 job
 @var{hostname} --> Job output
 Is not a tty
@@ -19857,58 +19950,15 @@ $ @kbd{make -j 2} # GNU make, Heirloom make
 Is a tty
 @end example
 
+@noindent
+The above examples also show additional status output produced in parallel
+mode for targets being updated by Solaris @command{dmake} and NetBSD
+@command{make} (but @emph{not} by FreeBSD @command{make}).
+
 Furthermore, parallel runs of those @command{make} implementations will
 route standard error from commands that they spawn into their own
 standard output, and may remove leading whitespace from output lines.
 
-When NetBSD or FreeBSD @command{make} are run in parallel mode, they will
-reuse the same shell for multiple commands within one recipe.  This can
-have unexpected consequences. For example, change of directories or
-variables persist between commands:
-
-@example
-all:
-        @@var=value; cd /; pwd; echo $$var; echo $$$$
-        @@pwd; echo $$var; echo $$$$
-@end example
-
-@noindent
-may output the following with @code{make -j1}:
-
-@example
---- all ---
-/
-value
-32235
-/
-value
-32235
-@end example
-
-while without @option{-j1}, or with @option{-B}, the output looks less
-surprising:
-
-@example
-/
-value
-32238
-/tmp
-
-32239
-@end example
-
-Another consequence of this is that, if one command in a recipe uses
-@code{exit 0} to indicate a successful exit, the shell will be gone
-and the remaining commands of this recipe will not be executed.
-
-The above example also shows additional status output produced by NetBSD
-@command{make} (but @emph{not} by FreeBSD @command{make}) in parallel
-mode for targets being updated.
-
-You can avoid these issues by using the @option{-B} option to enable
-compatibility semantics.  However, that will effectively also disable
-all parallelism as that will cause prerequisites to be updated in the
-order they are listed in a rule.
 
 @node Comments in Make Rules
 @section Comments in Make Rules
