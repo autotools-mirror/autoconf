@@ -1,3 +1,17 @@
+2011-08-31  Paul Eggert  <eggert@cs.ucla.edu>
+
+	AC_C_CONST: don't reject gcc -Werror -Wall
+	* lib/autoconf/c.m4 (AC_C_CONST): Don't reject gcc when it is used
+	with -Werror -Wall during configuring.  It's unwise to use GCC
+	that way, but apparently enough people do it nowadays that it's an
+	issue.  These days nobody uses the old compilers that the old
+	tests reject, so we can't test this fix against them, but it's
+	more important to work with modern GCC (even when misused) than to
+	work with no-longer-used compilers.  Problem reported by Shevek in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2008-11/msg00007.html>
+	and raised again by Dan Kegel in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2011-08/msg00020.html>.
+
 2011-08-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: other issues with parallel BSD make
