@@ -1,3 +1,10 @@
+2011-09-13  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	docs: document Solaris 10 /bin/ksh and XPG4 sh 'unset' bug
+	* doc/autoconf.texi (Limitations of Builtins): Solaris 10 ksh
+	and XPG4 sh also fails upon `unset' of a variable that is not
+	set.
+
 2011-07-24  Jim Meyering  <meyering@redhat.com>
 
 	docs: improve the prose describing _AC_CHECK_TYPE_NEW_BODY

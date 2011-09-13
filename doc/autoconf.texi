@@ -18105,7 +18105,8 @@ and file name expansion.
 @item @command{unset}
 @c ------------------
 @prindex @command{unset}
-In some nonconforming shells (e.g., NetBSD 5.99.43 sh or Bash 2.05a),
+In some nonconforming shells (e.g., Solaris 10 @command{/bin/ksh} and
+@command{/usr/xpg4/bin/sh}, NetBSD 5.99.43 sh, or Bash 2.05a),
 @code{unset FOO} fails when @code{FOO} is not set.  This can interfere
 with @code{set -e} operation.  You can use
 
