@@ -509,6 +509,7 @@ Portable Shell Programming
 * Shellology::                  A zoology of shells
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
+* Signal handling::             Shells, signals, and headaches
 * File System Conventions::     File names
 * Shell Pattern Matching::      Pattern matching
 * Shell Substitutions::         Variable and command expansions
@@ -15072,6 +15073,7 @@ subset described above, is fairly portable nowadays.  Also please see
 * Shellology::                  A zoology of shells
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
+* Signal handling::             Shells, signals, and headaches
 * File System Conventions::     File names
 * Shell Pattern Matching::      Pattern matching
 * Shell Substitutions::         Variable and command expansions
@@ -15522,6 +15524,97 @@ $ @kbd{ksh -c 'exec 10>&-'; echo $?}
 ksh[1]: exec: 10: not found
 127
 @end example
+
+@c <http://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00004.html>
+@node Signal handling
+@section Signal handling
+@cindex Signal handling in the shell
+@cindex Signals, shells and
+
+Portable handling of signals within the shell is another major source of
+headaches.  This is worsened by the fact that various different, mutually
+incompatible approaches are possible in this area, each with its
+distinctive merits and demerits.  A detailed description of these possible
+approaches, as well as of their the pros and cons, can be found in
+@uref{http://www.cons.org/cracauer/sigint.html, this article}.
+
+Solaris 10 @command{/bin/sh} automatically traps most signals by default;
+@c See: <http://dbaspot.com/shell/396118-bourne-shell-exit-code-term.html>
+the shell still exits with error upon termination by one of those signals,
+but in such a case the exit status might be somewhat unexpected (even if
+allowed by POSIX, strictly speaking):
+
+@example
+$ @kbd{bash -c 'kill -1 $$'; echo $?} # Will exit 128 + (signal number).
+Hangup
+129
+$ @kbd{/bin/ksh -c 'kill -15 $$'; echo $?} # Likewise.
+Terminated
+143
+$ @kbd{for sig in 1 2 3 15; do}
+> @kbd{  echo $sig:}
+> @kbd{  /bin/sh -c "kill -$s \$\$"; echo $?}
+> @kbd{done}
+signal 1:
+Hangup
+129
+signal 2:
+208
+signal 3:
+208
+signal 15:
+208
+@end example
+
+This gets even worse if one is using the POSIX `wait' interface to get
+details about the shell process terminations: it will result in the shell
+exiting normally, rather than by receiving a signal.
+
+@example
+$ @kbd{cat > foo.c <<'END'}
+#include <stdio.h>    /* for printf */
+#include <stdlib.h>   /* for system */
+#include <sys/wait.h> /* for WIF* macros */
+int main(void)
+@{
+  int status = system ("kill -15 $$");
+  printf ("Terminated by signal: %s\n",
+          WIFSIGNALED (status) ? "yes" : "no");
+  printf ("Exited normally: %s\n",
+          WIFEXITED (status) ? "yes" : "no");
+  return 0;
+@}
+END
+@c $$ font-lock
+$ @kbd{cc -o foo foo.c}
+$ @kbd{./a.out} # On GNU/Linux
+Terminated by signal: no
+Exited normally: yes
+$ @kbd{./a.out} # On Solaris 10
+Terminated by signal: yes
+Exited normally: no
+@end example
+
+Some shells seem to handle @code{SIGQUIT} specially: they ignore it even
+if it is not blocked, and even if the shell is not running interactively
+(in fact, even if the shell has no attached tty); among these shells
+are at least Bash (from version 2 onwards), Zsh 4.3.12, Solaris 10
+@code{/bin/ksh} and @code{/usr/xpg4/bin/sh}, and AT&T @code{ksh93} (2011).
+Still, @code{SIGQUIT} seems to be trappable quite portably within all
+these shells.  OTOH, some other shells doesn't special-case the handling
+of @code{SIGQUIT}; among these shells are at least @code{pdksh} 5.2.14,
+Solaris 10 and NetBSD 5.1 @code{/bin/sh}, and the Almquist Shell 0.5.5.1.
+
+Some shells (especially Korn shells and derivatives) might try to
+propagate to themselves a signal that has killed a child process; this is
+not a bug, but a conscious design choice (although its overall value might
+be debatable).  The exact details of how this is attained vary from shell
+to shell.  For example, upon running @code{perl -e 'kill 2, $$'}, after
+the perl process has been interrupted AT&T @code{ksh93} (2011) will
+proceed to send itself a @code{SIGINT}, while Solaris 10 @code{/bin/ksh}
+and @code{/usr/xpg4/bin/sh} will proceed to exit with status 130 (i.e.,
+128 + 2). In any case, if there is an active trap associated with
+@code{SIGINT}, those shells will correctly execute it.
 
 @node File System Conventions
 @section File System Conventions

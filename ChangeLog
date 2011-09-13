@@ -1,3 +1,14 @@
+2011-09-13  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	docs: signal-related bugs and incompatibilities for the shells
+	Motivated by recent discussion on the bug-autoconf list, as well
+	as work in the automake testsuite:
+	 <https://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00003.html>
+	 <https://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00004.html>
+	 <http://lists.gnu.org/archive/html/automake-patches/2011-09/msg00066.html>
+	* doc/autoconf.texi (Signal handling): New paragraph.
+	(@menu at "Portable Shell", @detailmenu): Update.
+
 2011-09-19  Eric Blake  <eblake@redhat.com>
 
 	docs: refer to correct AC_RUN_IFELSE parameter name
