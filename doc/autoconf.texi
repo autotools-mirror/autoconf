@@ -15942,11 +15942,11 @@ then use @samp{$t} as the @var{value}, rather than trying to inline
 the expression needing quoting.
 
 @example
-$ @kbd{/bin/sh -c 't="a  b\"'\''@}\\"; echo "$@{a-$t@}"'}
+$ @kbd{/bin/sh -c 't="b  c\"'\''@}\\"; echo "$@{a-$t@}"'}
 b  c"'@}\
-$ @kbd{ksh -c 't="a  b\"'\''@}\\"; echo "$@{a-$t@}"'}
+$ @kbd{ksh -c 't="b  c\"'\''@}\\"; echo "$@{a-$t@}"'}
 b  c"'@}\
-$ @kbd{bash -c 't="a  b\"'\''@}\\"; echo "$@{a-$t@}"'}
+$ @kbd{bash -c 't="b  c\"'\''@}\\"; echo "$@{a-$t@}"'}
 b  c"'@}\
 @end example
 

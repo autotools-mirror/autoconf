@@ -1,3 +1,10 @@
+2011-09-16  Eric Blake  <eblake@redhat.com>
+
+	docs: fix typo in shell example
+	* doc/autoconf.texi (Shell Substitutions): Fix typo.
+	* THANKS: Update.
+	Reported by Nick Bowler.
+
 2011-09-14  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: more details about make VPATH rewriting woes
