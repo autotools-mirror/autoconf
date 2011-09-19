@@ -9476,7 +9476,9 @@ cross-compiling.
 @defmac AC_RUN_IFELSE (@var{input}, @ovar{action-if-true}, @
   @ovar{action-if-false}, @dvar{action-if-cross-compiling, AC_MSG_FAILURE})
 @acindex{RUN_IFELSE}
-If @var{program} compiles and links successfully and returns an exit
+Run the compiler (and compilation flags) and the linker of the current
+language (@pxref{Language Choice}) on the @var{input}, then execute the
+resulting program.  If the program returns an exit
 status of 0 when executed, run shell commands @var{action-if-true}.
 Otherwise, run shell commands @var{action-if-false}.
 
