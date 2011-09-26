@@ -2,6 +2,10 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** The texinfo documentation no longer specifies "front-cover" or
+   "back-cover" texts, so that it may now be included in Debian's
+   "main" section.
+
 ** Support for the Go programming language has been added.  The new macro
    AC_LANG_GO sets variables GOC and GOFLAGS.
 
