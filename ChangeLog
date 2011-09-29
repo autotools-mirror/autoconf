@@ -1,3 +1,14 @@
+2011-10-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	docs: korn shells can have $? > 256 for signal-terminated children
+	Some Korn shells, when a child process dies due to signal number
+	n, can leave in $? an exit status of 256+n, instead of the more
+	common 128+n.  See also Austin Group issue 0000051:
+	  <http://www.austingroupbugs.net/view.php?id=51>
+	* doc/autoconf.texi (Signal handling): Document the described Korn
+	Shell behaviour, and some of its possible shortcomings.
+	Suggestion by Eric Blake.
+
 2011-09-26  Eric Blake  <eblake@redhat.com>
 
 	docs: relax documentation license by dropping cover text

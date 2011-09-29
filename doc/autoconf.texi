@@ -15610,6 +15610,67 @@ and @code{/usr/xpg4/bin/sh} will proceed to exit with status 130 (i.e.,
 128 + 2). In any case, if there is an active trap associated with
 @code{SIGINT}, those shells will correctly execute it.
 
+Some Korn shells, when a child process die due receiving a signal with
+signal number @var{n}, can leave in @samp{$?} an exit status of
+256+@var{n} instead of the more common 128+@var{n}.  Observe the
+difference between AT&T @code{ksh93} (2011) and @code{bash} 4.1.5 on
+Debian:
+
+@example
+$ @kbd{/bin/ksh -c 'sh -c "kill -1 \$\$"; echo $?'}
+/bin/ksh: line 1: 7837: Hangup
+257
+$ @kbd{/bin/bash -c 'sh -c "kill -1 \$\$"; echo $?'}
+/bin/bash: line 1:  7861 Hangup        (sh -c "kill -1 \$\$")
+129
+@end example
+
+@noindent
+This @command{ksh} behavior is allowed by POSIX, if implemented with
+due care; see this @uref{http://www.austingroupbugs.net/view.php?id=51,
+Austin Group discussion} for more background.  However, if it is not
+implemented with proper care, such a behavior might cause problems
+in some corner cases.  To see why, assume we have a ``wrapper'' script
+like this:
+
+@example
+#!/bin/sh
+# Ignore some signals in the shell only, not in its child processes.
+trap : 1 2 13 15
+wrapped_command "$@@"
+ret=$?
+other_command
+exit $ret
+@end example
+
+@noindent
+If @command{wrapped_command} is interrupted by a @code{SIGHUP} (which
+has signal number 1), @code{ret} will be set to 257.  Unless the
+@command{exit} shell builtin is smart enough to understand that such
+a value can only have originated from a signal, and adjust the final
+wait status of the shell appropriately, the value 257 will just get
+truncated to 1 by the closing @code{exit} call, so that a caller of
+the script will have no way to determine that termination by a signal
+was involved.  Observe the different behavior of AT&T @code{ksh93}
+(2011) and @code{bash} 4.1.5 on Debian:
+
+@example
+$ @kbd{cat foo.sh}
+#!/bin/sh
+sh -c 'kill -1 $$'
+ret=$?
+echo $ret
+exit $ret
+$ @kbd{/bin/ksh foo.sh; echo $?}
+foo.sh: line 2: 12479: Hangup
+257
+1
+$ @kbd{/bin/bash foo.sh; echo $?}
+foo.sh: line 2: 12487 Hangup        (sh -c 'kill -1 $$')
+129
+129
+@end example
+
 @node File System Conventions
 @section File System Conventions
 @cindex File system conventions
