@@ -1,5 +1,13 @@
 2011-10-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
+	docs: some fixlets in section about shell signal handling
+	* doc/autoconf.texi (Signal handling): Rename ...
+	(Signal Handling): ... to this, for consistency with other node
+	names.  Fix some typos and grammaros.  Add more URL references
+	in comments.
+
+2011-10-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
 	docs: korn shells can have $? > 256 for signal-terminated children
 	Some Korn shells, when a child process dies due to signal number
 	n, can leave in $? an exit status of 256+n, instead of the more

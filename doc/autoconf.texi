@@ -503,7 +503,7 @@ Portable Shell Programming
 * Shellology::                  A zoology of shells
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
-* Signal handling::             Shells, signals, and headaches
+* Signal Handling::             Shells, signals, and headaches
 * File System Conventions::     File names
 * Shell Pattern Matching::      Pattern matching
 * Shell Substitutions::         Variable and command expansions
@@ -15067,7 +15067,7 @@ subset described above, is fairly portable nowadays.  Also please see
 * Shellology::                  A zoology of shells
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
-* Signal handling::             Shells, signals, and headaches
+* Signal Handling::             Shells, signals, and headaches
 * File System Conventions::     File names
 * Shell Pattern Matching::      Pattern matching
 * Shell Substitutions::         Variable and command expansions
@@ -15520,8 +15520,8 @@ ksh[1]: exec: 10: not found
 @end example
 
 @c <http://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00004.html>
-@node Signal handling
-@section Signal handling
+@node Signal Handling
+@section Signal Handling
 @cindex Signal handling in the shell
 @cindex Signals, shells and
 
@@ -15529,7 +15529,7 @@ Portable handling of signals within the shell is another major source of
 headaches.  This is worsened by the fact that various different, mutually
 incompatible approaches are possible in this area, each with its
 distinctive merits and demerits.  A detailed description of these possible
-approaches, as well as of their the pros and cons, can be found in
+approaches, as well as of their pros and cons, can be found in
 @uref{http://www.cons.org/cracauer/sigint.html, this article}.
 
 Solaris 10 @command{/bin/sh} automatically traps most signals by default;
@@ -15562,7 +15562,7 @@ signal 15:
 
 This gets even worse if one is using the POSIX `wait' interface to get
 details about the shell process terminations: it will result in the shell
-exiting normally, rather than by receiving a signal.
+having exited normally, rather than by receiving a signal.
 
 @example
 $ @kbd{cat > foo.c <<'END'}
@@ -15589,7 +15589,7 @@ Terminated by signal: yes
 Exited normally: no
 @end example
 
-Some shells seem to handle @code{SIGQUIT} specially: they ignore it even
+Various shells seem to handle @code{SIGQUIT} specially: they ignore it even
 if it is not blocked, and even if the shell is not running interactively
 (in fact, even if the shell has no attached tty); among these shells
 are at least Bash (from version 2 onwards), Zsh 4.3.12, Solaris 10
@@ -15599,6 +15599,7 @@ these shells.  OTOH, some other shells doesn't special-case the handling
 of @code{SIGQUIT}; among these shells are at least @code{pdksh} 5.2.14,
 Solaris 10 and NetBSD 5.1 @code{/bin/sh}, and the Almquist Shell 0.5.5.1.
 
+@c See: <http://mail.opensolaris.org/pipermail/ksh93-integration-discuss/2009-February/004121.html>
 Some shells (especially Korn shells and derivatives) might try to
 propagate to themselves a signal that has killed a child process; this is
 not a bug, but a conscious design choice (although its overall value might
@@ -15610,6 +15611,7 @@ and @code{/usr/xpg4/bin/sh} will proceed to exit with status 130 (i.e.,
 128 + 2). In any case, if there is an active trap associated with
 @code{SIGINT}, those shells will correctly execute it.
 
+@c See: <http://www.austingroupbugs.net/view.php?id=51>
 Some Korn shells, when a child process die due receiving a signal with
 signal number @var{n}, can leave in @samp{$?} an exit status of
 256+@var{n} instead of the more common 128+@var{n}.  Observe the
