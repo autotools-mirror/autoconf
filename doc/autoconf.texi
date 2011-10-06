@@ -20040,7 +20040,7 @@ LINE:
 Moreover, when FreeBSD @command{make} (up at least to 8.2) is run in
 parallel mode, it implements the @code{@@} and @code{-} ``recipe
 modifiers'' by dynamically modifying the active shell flags.  This
-behaviour has the effects of potentially clobbering the exit status
+behavior has the effects of potentially clobbering the exit status
 of recipes silenced with the @code{@@} modifier if they also unset
 the @option{errexit} shell flag, and of mangling the output in
 unexpected ways:
@@ -20076,7 +20076,7 @@ Some make implementations (among them, FreeBSD @command{make}, NetBSD
 @command{make}, and Solaris @command{dmake}), when invoked with a
 @option{-j@var{N}} option, connect the standard output and standard
 error of all their child processes to pipes or temporary regular
-files.  This can lead to subtly different semantics in the behaviour
+files.  This can lead to subtly different semantics in the behavior
 of the spawned processes.  For example, even if the @command{make}
 standard output is connected to a tty, the recipe command will not be:
 

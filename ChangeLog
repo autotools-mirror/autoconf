@@ -1,5 +1,11 @@
 2011-10-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
+	docs: we prefer US English spelling over British one
+	* doc/autoconf.texi (Parallel Make): Prefer `behavior' over
+	`behaviour' in a couple of places.
+
+2011-10-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
 	docs: some fixlets in section about shell signal handling
 	* doc/autoconf.texi (Signal handling): Rename ...
 	(Signal Handling): ... to this, for consistency with other node
