@@ -1,3 +1,8 @@
+2011-10-13  Eric Blake  <eblake@redhat.com>
+
+	admin: mention recent copyright assignments
+	* AUTHORS: Update list.
+
 2011-10-06  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: we prefer US English spelling over British one
