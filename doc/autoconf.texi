@@ -7931,6 +7931,8 @@ This macro may, alternatively, be invoked with an optional first argument
 which, if specified, must be a blank-separated list of Fortran
 compilers to search for, just as in @code{AC_PROG_F77}.
 
+If using @code{gfortran} or @code{g77} (the GNU Fortran compilers), then
+set the shell variable @code{GFC} to @samp{yes}.
 If the output variable @code{FCFLAGS} was not already set in the
 environment, then set it to @option{-g -02} for GNU @code{g77} (or
 @option{-O2} where @code{g77} does not accept @option{-g}).  Otherwise,

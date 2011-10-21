@@ -382,6 +382,11 @@ AC_ARG_VAR([FCFLAGS], [Fortran compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
 _AC_ARG_VAR_LIBS()dnl
 _AC_PROG_FC([$2], [$1])
+if test $ac_compiler_gnu = yes; then
+  GFC=yes
+else
+  GFC=
+fi
 AC_LANG_POP(Fortran)dnl
 ])# AC_PROG_FC
 

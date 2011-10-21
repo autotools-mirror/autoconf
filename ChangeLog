@@ -1,3 +1,13 @@
+2011-10-21  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	fortran: define $GFC to "yes" if $FC is a GNU compiler
+	* lib/autoconf/fortran.m4 (AC_PROG_FC): Define `$GFC' to "yes" if
+	the detected fortran compiler is a GNU compiler, define it to the
+	empty string otherwise.
+	This is mostly for consistency for what is done for the C, C++
+	and Fortran 77 compilers.
+	* doc/automake.texi: Update.
+
 2011-10-13  Eric Blake  <eblake@redhat.com>
 
 	admin: mention recent copyright assignments
