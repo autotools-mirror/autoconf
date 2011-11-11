@@ -1,5 +1,10 @@
 2011-11-11  Eric Blake  <eblake@redhat.com>
 
+	doc: tweak previous commit
+	* doc/autoconf.texi (Limitations of Builtins) <export>: Give
+	concrete example of offender, and drop redundant text.
+	Reported by Stefano Lattarini.
+
 	doc: mention export portability hint
 	* doc/autoconf.texi (Limitations of Builtins) <export>: Document
 	export limitation.

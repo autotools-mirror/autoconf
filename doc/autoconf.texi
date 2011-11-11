@@ -17643,9 +17643,9 @@ foo=
 @end example
 
 Posix requires @command{export} to honor assignments made as arguments,
-but older shells did not support this.  Portable scripts should separate
-assignments and exports into different statements (it does not matter if
-the export comes before or after the assignment).
+but older shells do not support this, including @command{/bin/sh} in
+Solaris 10.  Portable scripts should separate assignments and exports
+into different statements.
 
 @example
 $ @kbd{bash -c 'export foo=bar; echo $foo'}
