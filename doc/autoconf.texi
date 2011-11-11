@@ -17642,6 +17642,20 @@ $ @kbd{ash -c 'export foo; env | grep foo'}
 foo=
 @end example
 
+Posix requires @command{export} to honor assignments made as arguments,
+but older shells did not support this.  Portable scripts should separate
+assignments and exports into different statements (it does not matter if
+the export comes before or after the assignment).
+
+@example
+$ @kbd{bash -c 'export foo=bar; echo $foo'}
+bar
+$ @kbd{/bin/sh -c 'export foo=bar; echo $foo'}
+/bin/sh: foo=bar: is not an identifier
+$ @kbd{/bin/sh -c 'export foo; foo=bar; echo $foo'}
+bar
+@end example
+
 @item @command{false}
 @c ------------------
 @prindex @command{false}

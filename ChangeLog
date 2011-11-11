@@ -1,3 +1,10 @@
+2011-11-11  Eric Blake  <eblake@redhat.com>
+
+	doc: mention export portability hint
+	* doc/autoconf.texi (Limitations of Builtins) <export>: Document
+	export limitation.
+	Suggested by Bruno Haible.
+
 2011-10-21  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	fortran: define $GFC to "yes" if $FC is a GNU compiler
