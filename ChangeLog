@@ -1,3 +1,9 @@
+2011-12-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	doc: document GNU make's \#
+	* doc/autoconf.texi (Comments in Make Macros): Also mention \#
+	in the right hand side of a macro, as an unportable usage.
+
 2011-11-11  Eric Blake  <eblake@redhat.com>
 
 	doc: tweak previous commit

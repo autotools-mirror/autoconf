@@ -20214,9 +20214,12 @@ CPPFLAGS = "-DCOMMENT_CHAR='#'"
 
 @noindent
 as @samp{CPPFLAGS} may be expanded to @samp{"-DCOMMENT_CHAR='}.
-Luckily, most @command{make} implementations disregard this and treat
-single and double quotes specially here; @pxref{Comments in Make Rules},
-for a more portable alternative.
+
+Most @command{make} implementations disregard this and treat single and
+double quotes specially here.  Also, GNU @command{make} lets you put
+@samp{#} into a macro value by escaping it with a backslash, i.e.,
+@samp{\#}.  However, neither of these usages are portable.
+@xref{Comments in Make Rules}, for a portable alternative.
 
 Even without quoting involved, comments can have surprising effects,
 because the whitespace before them is part of the variable value:
