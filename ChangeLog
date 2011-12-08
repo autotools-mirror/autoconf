@@ -1,3 +1,11 @@
+2011-12-07  Paul Eggert  <eggert@cs.ucla.edu>
+
+	AC_LANG_BOOL_COMPILE_TRY(C): port to g++ with warnings
+	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C)): Use the
+	array as well as setting it, to pacify g++.  Reported by
+	Werner Lemberg in
+	<http://lists.gnu.org/archive/html/autoconf/2011-12/msg00005.html>.
+
 2011-12-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	doc: document GNU make's \#

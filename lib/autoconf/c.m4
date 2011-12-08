@@ -190,7 +190,8 @@ choke me
 # errors with `-W error'.
 m4_define([AC_LANG_BOOL_COMPILE_TRY(C)],
 [AC_LANG_PROGRAM([$1], [static int test_array @<:@1 - 2 * !($2)@:>@;
-test_array @<:@0@:>@ = 0
+test_array @<:@0@:>@ = 0;
+return test_array @<:@0@:>@;
 ])])
 
 
