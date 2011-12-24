@@ -1,3 +1,11 @@
+2011-12-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	docs: issue with shell functions and here-documents on Solaris
+	* doc/autoconf.texi (Here-Documents): Using a command substitution
+	in a here-documents being fed to a shell function is unportable.
+	Problem revealed by the automake testsuite:
+	<http://lists.gnu.org/archive/html/automake-patches/2011-12/msg00149.html>
+
 2011-12-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	AS_LN_S: fall back on 'cp -pR' (not 'cp -p') if 'ln -s' fails

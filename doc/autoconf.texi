@@ -15239,6 +15239,19 @@ bash-2.04$ @kbd{cat <<EOF
 @end group
 @end example
 
+Using command substitutions in a here-document that is fed to a shell
+function is not portable.  For example, with Solaris 10 @command{/bin/sh}:
+
+@example
+$ @kbd{kitty () @{ cat; @}}
+$ @kbd{kitty <<EOF
+> `echo ok`
+> EOF}
+/tmp/sh199886: cannot open
+$ @kbd{echo $?}
+1
+@end example
+
 Some shells mishandle large here-documents: for example,
 Solaris 10 @command{dtksh} and the UnixWare 7.1.1 Posix shell, which are
 derived from Korn shell version M-12/28/93d, mishandle braced variable
