@@ -1,3 +1,10 @@
+2011-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	m4sh: refactor _AS_DETECT_BETTER_SHELL, for future changes
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Move code to
+	handle the re-execution of the shell ...
+	(_AS_REEXEC_WITH_SHELL): ... in this new macro.
+
 2011-12-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: issue with shell functions and here-documents on Solaris

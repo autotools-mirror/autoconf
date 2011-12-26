@@ -223,21 +223,8 @@ dnl Remove any tests from suggested that are also required
 	     [CONFIG_SHELL=$SHELL as_have_required=yes])])
 
       AS_IF([test "x$CONFIG_SHELL" != x],
-	[# We cannot yet assume a decent shell, so we have to provide a
-	# neutralization value for shells without unset; and this also
-	# works around shells that cannot unset nonexistent variables.
-	# Preserve -v and -x to the replacement shell.
-	BASH_ENV=/dev/null
-	ENV=/dev/null
-	(unset BASH_ENV) >/dev/null 2>&1 && unset BASH_ENV ENV
-	export CONFIG_SHELL
-	case $- in @%:@ ((((
-	  *v*x* | *x*v* ) as_opts=-vx ;;
-	  *v* ) as_opts=-v ;;
-	  *x* ) as_opts=-x ;;
-	  * ) as_opts= ;;
-	esac
-	exec "$CONFIG_SHELL" $as_opts "$as_myself" ${1+"$[@]"}])
+            [export CONFIG_SHELL
+             _AS_REEXEC_WITH_SHELL([$CONFIG_SHELL])])
 
 dnl Unfortunately, $as_me isn't available here.
     AS_IF([test x$as_have_required = xno],
@@ -262,6 +249,30 @@ export SHELL
 CLICOLOR_FORCE= GREP_OPTIONS=
 unset CLICOLOR_FORCE GREP_OPTIONS
 _m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL
+
+# _AS_REEXEC_WITH_SHELL(SHELL)
+# ----------------------------
+# Re-execute the current script with the given shell, trying to preserve
+# portable settings (e.g., the `xtrace' and `verbose' shell flag).
+m4_defun([_AS_REEXEC_WITH_SHELL], [dnl
+# We cannot yet assume a decent shell, so we have to provide a
+# neutralization value for shells without unset; and this also
+# works around shells that cannot unset nonexistent variables.
+# Preserve -v and -x to the replacement shell.
+BASH_ENV=/dev/null
+ENV=/dev/null
+(unset BASH_ENV) >/dev/null 2>&1 && unset BASH_ENV ENV
+case $- in @%:@ ((((
+  *v*x* | *x*v* ) as_opts=-vx ;;
+  *v* ) as_opts=-v ;;
+  *x* ) as_opts=-x ;;
+  * ) as_opts= ;;
+esac
+exec $1 $as_opts "$as_myself" ${1+"$[@]"}
+# Admittedly, this is quite paranoid, since all the known shells bail
+# out after a failed `exec'.
+AS_ECHO(["$[]0: could not re-execute with $1"]) >&2
+AS_EXIT([255])])# _AS_REEXEC_WITH_SHELL
 
 
 # _AS_PREPARE
