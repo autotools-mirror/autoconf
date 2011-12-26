@@ -2,6 +2,9 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** Autoconf-generated configure scripts now unconditionally re-execute
+   themselves with $CONFIG_SHELL, if that's set in the environment.
+
 ** The texinfo documentation no longer specifies "front-cover" or
    "back-cover" texts, so that it may now be included in Debian's
    "main" section.

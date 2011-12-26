@@ -1386,6 +1386,9 @@ m4_pattern_forbid([^LIBOBJS$],
 		  [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs LIBOBJS'])
 # Actually reserved by M4sh.
 m4_pattern_allow([^AS_FLAGS$])
+# So that the autoconf-generated scripts will always re-execute
+# themselves with $CONFIG_SHELL, if that's set in the environment.
+m4_define([_AS_FORCE_REEXEC_WITH_CONFIG_SHELL], [yes])
 AS_INIT[]dnl
 AS_PREPARE[]dnl
 m4_divert_push([KILL])

@@ -1,5 +1,20 @@
 2011-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
+	configure: will re-execute with $CONFIG_SHELL, if it's set
+	* lib/m4sugar/general.m4 (_AS_DETECT_BETTER_SHELL): Define the macro
+	`_AS_FORCE_REEXEC_WITH_CONFIG_SHELL' to `yes', so that the code in
+	`_AS_DETECT_BETTER_SHELL' will cause autoconf-generated configure
+	scripts to always re-execute themselves with $CONFIG_SHELL, if it's
+	set in the environment.
+	* doc/autoconf.texi (config.status Invocation): Update.
+	* doc/install.texi (Defining Variables): Likewise.
+	* NEWS: Likewise.
+	* tests/m4sh.at: Add tests for the new semantics in ...
+	(Configure re-execs self with CONFIG_SHELL): ... this new
+	test group.
+
+2011-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
 	m4sh: allow forced re-execution with $CONFIG_SHELL, if it's set
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): If the m4sh client
 	has defined the macro `_AS_FORCE_REEXEC_WITH_CONFIG_SHELL' to

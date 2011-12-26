@@ -22646,13 +22646,10 @@ can alter its behavior:
 @anchor{CONFIG_SHELL}
 @defvar CONFIG_SHELL
 @evindex CONFIG_SHELL
-The shell with which to run @command{configure} for the @option{--recheck}
-option.  It must be Bourne-compatible.  The default is a shell that
-supports @code{LINENO} if available, and @file{/bin/sh} otherwise.
-Invoking @command{configure} by hand bypasses this setting, so you may
-need to use a command like @samp{CONFIG_SHELL=/bin/bash /bin/bash ./configure}
-to insure that the same shell is used everywhere.  The absolute name of the
-shell should be passed.
+The shell with which to run @command{configure}.  It must be
+Bourne-compatible, and the absolute name of the shell should be passed.
+The default is a shell that supports @code{LINENO} if available, and
+@file{/bin/sh} otherwise.
 @end defvar
 
 @defvar CONFIG_STATUS

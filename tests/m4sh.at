@@ -103,6 +103,33 @@ test ! -f sentinel || rm -f sentinel # Cleanup for next test.
 
 AT_CLEANUP
 
+AT_SETUP([Configure re-execs self with CONFIG_SHELL])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+echo foobar >> quux
+]])
+
+AT_CHECK_AUTOCONF
+
+AT_DATA([cfg-sh],
+[[#!/bin/sh
+: > cfg-sh-has-run
+exec sh "@S|@@"
+]])
+chmod a+x cfg-sh
+
+AT_CAPTURE_FILE([config.log])
+AT_CHECK([env CONFIG_SHELL=./cfg-sh ./configure], [0], [], [])
+# ./configure re-executed itself.
+AT_CHECK([test -f cfg-sh-has-run], [0])
+# And did that not to cause extra execution of later commands.
+AT_CHECK([cat quux], [0], [foobar
+], [])
+
+rm -f quux cfg-sh*
+AT_CLEANUP
+
 
 ## ------------------- ##
 ## AS_WARN, AS_ERROR.  ##
