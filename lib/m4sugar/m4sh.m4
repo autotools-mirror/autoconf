@@ -192,6 +192,28 @@ m4_define([_AS_DETECT_SUGGESTED_PRUNE],
 #
 # This code is run outside any trap 0 context, hence we can simplify AS_EXIT.
 m4_defun([_AS_DETECT_BETTER_SHELL],
+dnl
+dnl By default, do not force re-execution of the script just because
+dnl the user has pre-set $CONFIG_SHELL; do so only if the m4sh client has
+dnl defined the internal variable `_AS_FORCE_REEXEC_WITH_CONFIG_SHELL' to
+dnl "yes".
+dnl FIXME: This interface is acceptable for the moment, as a private,
+dnl FIXME: internal one; but if we want to make the "always re-execute"
+dnl FIXME: feature public, we should find a better interface!
+[m4_if(_AS_FORCE_REEXEC_WITH_CONFIG_SHELL, [yes],
+  [# Use a proper internal environment variable to ensure we don't fall
+  # into an infinite loop, continuously re-executing ourselves.
+  if test x"${_as_can_reexec}" != xno && test "x$CONFIG_SHELL" != x; then
+    _as_can_reexec=no; export _as_can_reexec;
+    _AS_REEXEC_WITH_SHELL([$CONFIG_SHELL])
+  fi
+  # We don't want this to propagate to other subprocesses.
+  dnl This might be especially important in case an m4sh-generated script
+  dnl is used to later execute other m4sh-generated scripts.  This happens
+  dnl for example in autoconf's own testsuite (and happens *a lot* there,
+  dnl in fact).
+  AS_UNSET([_as_can_reexec])
+])]dnl
 dnl Remove any tests from suggested that are also required
 [m4_set_map([_AS_DETECT_SUGGESTED_BODY], [_AS_DETECT_SUGGESTED_PRUNE])]dnl
 [m4_pushdef([AS_EXIT], [exit m4_default(]m4_dquote([$][1])[, 1)])]dnl

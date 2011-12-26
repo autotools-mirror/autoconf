@@ -1,5 +1,16 @@
 2011-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
+	m4sh: allow forced re-execution with $CONFIG_SHELL, if it's set
+	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): If the m4sh client
+	has defined the macro `_AS_FORCE_REEXEC_WITH_CONFIG_SHELL' to
+	"yes", emit code to always re-execute the current script with
+	$CONFIG_SHELL, if that's set.
+	* tests/m4sh.at: Add tests for the new and old semantics, in ...
+	(Re-exec with CONFIG_SHELL, Forced re-exec with CONFIG_SHELL): ...
+	these new test groups.
+
+2011-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
 	m4sh: refactor _AS_DETECT_BETTER_SHELL, for future changes
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Move code to
 	handle the re-execution of the shell ...

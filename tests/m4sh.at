@@ -17,6 +17,93 @@ AT_BANNER([M4sh.])
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+## --------------------------- ##
+## Re-exec with CONFIG_SHELL.  ##
+## --------------------------- ##
+
+AT_SETUP([No extra re-exec with CONFIG_SHELL])
+AT_KEYWORDS([CONFIG_SHELL])
+AT_DATA_M4SH([script.as],
+[[
+dnl We have to muck with internal details to goad the script into
+dnl thinking that the default shell is always good enough.
+m4_define([_AS_DETECT_REQUIRED_BODY], [])dnl
+m4_define([_AS_DETECT_SUGGESTED_BODY], [])dnl
+AS_INIT
+echo foo > ok
+]])
+AT_CHECK_M4SH
+AT_CHECK([CONFIG_SHELL=/bin/false ./script], [0], [], [])
+AT_CHECK([test -f ok], [0])
+rm -f ok
+
+AT_CLEANUP
+
+AT_SETUP([Forced re-exec with CONFIG_SHELL])
+AT_KEYWORDS([CONFIG_SHELL])
+
+AT_DATA_M4SH([script.as],
+[[m4_define([_AS_FORCE_REEXEC_WITH_CONFIG_SHELL], [yes])
+AS_INIT
+echo foo > sentinel
+]])
+AT_CHECK_M4SH
+
+AT_DATA([fake-shell],
+[[#!/bin/sh
+echo 'Fake shell executed.'
+shift # fake shell
+echo "nargs = @S|@#"
+for i
+do
+  printf ' :%s:\n' "$i"
+done
+]])
+chmod a+x fake-shell
+
+AT_CHECK([CONFIG_SHELL=./fake-shell ./script 1 2 4 8], [0],
+[Fake shell executed.
+nargs = 4
+ :1:
+ :2:
+ :4:
+ :8:
+], [])
+AT_CHECK([test ! -f sentinel], [0])
+test ! -f sentinel || rm -f sentinel # Cleanup for next test.
+
+AT_CHECK(
+[CONFIG_SHELL=`pwd`/fake-shell sh script a 'b  c' '  d   	e '],
+[0],
+[Fake shell executed.
+nargs = 3
+ :a:
+ :b  c:
+ :  d   	e :
+], [])
+AT_CHECK([test ! -f sentinel], [0])
+test ! -f sentinel || rm -f sentinel # Cleanup for next test.
+
+AT_CHECK([(PATH=`pwd`:$PATH; export PATH;
+CONFIG_SHELL=fake-shell script '' '&' '!;*' '<($[]@%:@)>,' 'x
+y  z
+1 2 3')], [0],
+[Fake shell executed.
+nargs = 5
+ ::
+ :&:
+ :!;*:
+ :<($[]@%:@)>,:
+ :x
+y  z
+1 2 3:
+], [])
+AT_CHECK([test ! -f sentinel], [0])
+test ! -f sentinel || rm -f sentinel # Cleanup for next test.
+
+AT_CLEANUP
+
+
 ## ------------------- ##
 ## AS_WARN, AS_ERROR.  ##
 ## ------------------- ##
