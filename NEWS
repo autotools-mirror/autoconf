@@ -14,6 +14,9 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Macros
 
+- AC_PROG_LN_S and AS_LN_S now fall back on 'cp -pR' (not 'cp -p') if 'ln -s'
+  does not work.  This works better for symlinks to directories.
+
 - New macro AC_HEADER_CHECK_STDBOOL.
 
 - New and updated macros for Fortran support:

@@ -1,3 +1,13 @@
+2011-12-26  Paul Eggert  <eggert@cs.ucla.edu>
+
+	AS_LN_S: fall back on 'cp -pR' (not 'cp -p') if 'ln -s' fails
+	This works better for symlinks to directories.
+	Problem reported by Eli Zaretskii via Werner Lemberg in
+	<http://lists.gnu.org/archive/html/bug-autoconf/2011-12/msg00006.html>.
+	* NEWS:
+	* doc/autoconf.texi (Particular Programs): Document this.
+	* lib/m4sugar/m4sh.m4 (_AS_LN_S_PREPARE): Implement this.
+
 2011-12-07  Paul Eggert  <eggert@cs.ucla.edu>
 
 	AC_LANG_BOOL_COMPILE_TRY(C): port to g++ with warnings

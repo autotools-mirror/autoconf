@@ -4137,7 +4137,7 @@ The result of this test can be influenced by setting the variable
 If @samp{ln -s} works on the current file system (the operating system
 and file system support symbolic links), set the output variable
 @code{LN_S} to @samp{ln -s}; otherwise, if @samp{ln} works, set
-@code{LN_S} to @samp{ln}, and otherwise set it to @samp{cp -p}.
+@code{LN_S} to @samp{ln}, and otherwise set it to @samp{cp -pR}.
 
 If you make a link in a directory other than the current directory, its
 meaning depends on whether @samp{ln} or @samp{ln -s} is used.  To safely
