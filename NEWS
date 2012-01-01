@@ -1687,12 +1687,12 @@ Major changes in Autoconf 2.13:
 
   Released 1999-05-01 by Ben Elliston.
 
-* Support for building on Win32 systems where the only available C or
+* Support for building on 32-bit Windows systems where the only available C or
   C++ compiler is the Microsoft Visual C++ command line compiler
-  (`cl').  Additional support for building on Win32 systems which are
+  (`cl').  Additional support for building on 32-bit Windows systems which are
   using the Cygwin or Mingw32 environments.
 * Support for alternative object file and executable file extensions.
-  On Win32, for example, these are .obj and .exe. These are discovered
+  On 32-bit Windows, for example, these are .obj and .exe. These are discovered
   using AC_OBJEXT and AC_EXEEXT, which substitute @OBJEXT@ and
   @EXEEXT@ in the output, respectively.
 * New macros: AC_CACHE_LOAD, AC_CACHE_SAVE, AC_FUNC_SELECT_ARGTYPES,
@@ -2094,7 +2094,7 @@ Various bug fixes.
 
 -----
 
-Copyright (C) 1993-1996, 1998-2011 Free Software Foundation, Inc.
+Copyright (C) 1993-1996, 1998-2012 Free Software Foundation, Inc.
 
 Copying and distribution of this file, with or without modification,
 are permitted in any medium without royalty provided the copyright

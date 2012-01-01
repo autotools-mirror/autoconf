@@ -1,4 +1,4 @@
-# Copyright (C) 2001, 2003, 2004, 2006, 2008, 2009, 2010 Free Software
+# Copyright (C) 2001, 2003, 2004, 2006, 2008, 2009, 2010, 2012 Free Software
 # Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
@@ -176,7 +176,7 @@ C<\n> on input files.
 
 =cut
 
-# Some Win32/perl installations fail to translate \r\n to \n on input
+# Some 32-bit Windows/Perl installations fail to translate \r\n to \n on input
 # so we do that here.
 sub getline
 {
