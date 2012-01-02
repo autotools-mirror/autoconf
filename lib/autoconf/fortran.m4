@@ -528,9 +528,16 @@ ac_[]_AC_LANG_ABBREV[]_v_output="`echo $ac_[]_AC_LANG_ABBREV[]_v_output |
 #        that detects unbalanced quotes in FLIBS should be implemented
 #        and (ugh) tested at some point.
 case $ac_[]_AC_LANG_ABBREV[]_v_output in
-  # If we are using xlf then replace all the commas with spaces.
+  # With xlf replace commas with spaces,
+  # and remove "-link" and closing parenthesis.
   *xlfentry*)
-    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output | sed 's/,/ /g'` ;;
+    ac_[]_AC_LANG_ABBREV[]_v_output=`echo $ac_[]_AC_LANG_ABBREV[]_v_output |
+      sed '
+        s/,/ /g
+        s/ -link / /g
+        s/) *$//
+      '
+    ` ;;
 
   # With Intel ifc, ignore the quoted -mGLOB_options_string stuff (quoted
   # $LIBS confuse us, and the libraries appear later in the output anyway).
