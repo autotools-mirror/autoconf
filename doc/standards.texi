@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate September 9, 2010
+@set lastupdate December 22, 2011
 @c %**end of header
 
 @dircategory GNU organization
@@ -27,8 +27,8 @@
 The GNU coding standards, last updated @value{lastupdate}.
 
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free Software
-Foundation, Inc.
+2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011
+Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
@@ -50,8 +50,8 @@ Texts.  A copy of the license is included in the section entitled
 @contents
 
 @ifnottex
-@node Top, Preface, (dir), (dir)
-@top Version
+@node Top
+@top GNU Coding Standards
 
 @insertcopying
 @end ifnottex
@@ -181,6 +181,7 @@ Or turn some parts of the program into independently usable libraries.
 Or use a simple garbage collector instead of tracking precisely when
 to free memory, or use a new GNU facility such as obstacks.
 
+
 @node Contributions
 @section Accepting Contributions
 @cindex legal papers
@@ -223,10 +224,11 @@ The very worst thing is if you forget to tell us about the other
 contributor.  We could be very embarrassed in court some day as a
 result.
 
-We have more detailed advice for maintainers of programs; if you have
-reached the stage of actually maintaining a program for GNU (whether
-released or not), please ask us for a copy.  It is also available
-online for your perusal: @uref{http://www.gnu.org/prep/maintain/}.
+We have more detailed advice for maintainers of GNU packages.  If you
+have reached the stage of maintaining a GNU program (whether released
+or not), please take a look: @pxref{Legal Matters,,, maintain,
+Information for GNU Maintainers}.
+
 
 @node Trademarks
 @section Trademarks
@@ -576,7 +578,7 @@ prohibited.  How silly!  GCC implements many extensions, some of which
 were later adopted as part of the standard.  If you want these
 constructs to give an error message as ``required'' by the standard,
 you must specify @samp{--pedantic}, which was implemented only so that
-we can say ``GCC is a 100% implementation of the standard,'' not
+we can say ``GCC is a 100% implementation of the standard'', not
 because there is any reason to actually use it.
 
 POSIX.2 specifies that @samp{df} and @samp{du} must output sizes by
@@ -592,7 +594,8 @@ options with ordinary arguments.  This minor incompatibility with
 POSIX is never a problem in practice, and it is very useful.
 
 In particular, don't reject a new feature, or remove an old one,
-merely because a standard says it is ``forbidden'' or ``deprecated.''
+merely because a standard says it is ``forbidden'' or ``deprecated''.
+
 
 @node Semantics
 @section Writing Robust Programs
@@ -604,22 +607,22 @@ all data structures dynamically.  In most Unix utilities, ``long lines
 are silently truncated''.  This is not acceptable in a GNU utility.
 
 @cindex @code{NUL} characters
+@findex libiconv
 Utilities reading files should not drop NUL characters, or any other
 nonprinting characters @emph{including those with codes above 0177}.
 The only sensible exceptions would be utilities specifically intended
-for interface to certain types of terminals or printers
-that can't handle those characters.
-Whenever possible, try to make programs work properly with
-sequences of bytes that represent multibyte characters, using encodings
-such as UTF-8 and others.
+for interface to certain types of terminals or printers that can't
+handle those characters.  Whenever possible, try to make programs work
+properly with sequences of bytes that represent multibyte characters;
+UTF-8 is the most important.
 
 @cindex error messages
-Check every system call for an error return, unless you know you wish to
-ignore errors.  Include the system error text (from @code{perror} or
-equivalent) in @emph{every} error message resulting from a failing
-system call, as well as the name of the file if any and the name of the
-utility.  Just ``cannot open foo.c'' or ``stat failed'' is not
-sufficient.
+Check every system call for an error return, unless you know you wish
+to ignore errors.  Include the system error text (from @code{perror},
+@code{strerror}, or equivalent) in @emph{every} error message
+resulting from a failing system call, as well as the name of the file
+if any and the name of the utility.  Just ``cannot open foo.c'' or
+``stat failed'' is not sufficient.
 
 @cindex @code{malloc} return value
 @cindex memory allocation failure
@@ -701,9 +704,14 @@ fd = open (filename, O_WRONLY | O_CREAT | O_EXCL, 0600);
 @end example
 
 @noindent
-or by using the @code{mkstemps} function from libiberty.
+or by using the @code{mkstemps} function from Gnulib
+(@pxref{mkstemps,,, gnulib, Gnulib}).
 
-In bash, use @code{set -C} to avoid this problem.
+In bash, use @code{set -C} (long name @code{noclobber}) to avoid this
+problem.  In addition, the @code{mktemp} utility is a more general
+solution for creating temporary files from shell scripts
+(@pxref{mktemp invocation,,, coreutils, GNU Coreutils}).
+
 
 @node Libraries
 @section Library Behavior
@@ -757,10 +765,13 @@ If you want to mention the column number, use one of these formats:
 
 @noindent
 Line numbers should start from 1 at the beginning of the file, and
-column numbers should start from 1 at the beginning of the line.  (Both
-of these conventions are chosen for compatibility.)  Calculate column
-numbers assuming that space and all ASCII printing characters have
-equal width, and assuming tab stops every 8 columns.
+column numbers should start from 1 at the beginning of the line.
+(Both of these conventions are chosen for compatibility.)  Calculate
+column numbers assuming that space and all ASCII printing characters
+have equal width, and assuming tab stops every 8 columns.  For
+non-ASCII characters, Unicode character widths should be used when in
+a UTF-8 locale; GNU libc and GNU gnulib provide suitable
+@code{wcwidth} functions.
 
 The error message can also give both the starting and ending positions
 of the erroneous text.  There are several formats so that you can
@@ -2324,10 +2335,11 @@ memory and give a fatal error if @code{malloc} returns zero.
 
 @pindex valgrind
 @cindex memory leak
-Memory leak detectors such as @command{valgrind} can be useful, but
+Memory analysis tools such as @command{valgrind} can be useful, but
 don't complicate a program merely to avoid their false alarms.  For
 example, if memory is used until just before a process exits, don't
-free it simply to silence a leak detector.
+free it simply to silence such a tool.
+
 
 @node File Usage
 @section File Usage
@@ -2827,6 +2839,7 @@ GNU programs that have it, but there is no need to do this in new GNU
 programs.  @code{doschk} also reports file names longer than 14
 characters.
 
+
 @node System Portability
 @section Portability between System Types
 @cindex portability, between system types
@@ -2908,9 +2921,9 @@ printf ("diff = %ld\n", (long) (pointer2 - pointer1));
 @end example
 
 1989 Standard C requires this to work, and we know of only one
-counterexample: 64-bit programs on Microsoft Windows.  We will
-leave it to those who want to port GNU programs to that environment
-to figure out how to do it.
+counterexample: 64-bit programs on Microsoft Windows.  We will leave
+it to those who want to port GNU programs to that environment to
+figure out how to do it.
 
 Predefined file-size types like @code{off_t} are an exception: they are
 longer than @code{long} on many platforms, so code like the above won't
@@ -2941,51 +2954,6 @@ while ((c = getchar ()) != EOF)
   @}
 @end example
 
-It used to be ok to not worry about the difference between pointers
-and integers when passing arguments to functions.  However, on most
-modern 64-bit machines pointers are wider than @code{int}.
-Conversely, integer types like @code{long long int} and @code{off_t}
-are wider than pointers on most modern 32-bit machines.  Hence it's
-often better nowadays to use prototypes to define functions whose
-argument types are not trivial.
-
-In particular, if functions accept varying argument counts or types
-they should be declared using prototypes containing @samp{...} and
-defined using @file{stdarg.h}.  For an example of this, please see the
-@uref{http://www.gnu.org/software/gnulib/, Gnulib} error module, which
-declares and defines the following function:
-
-@example
-/* Print a message with `fprintf (stderr, FORMAT, ...)';
-   if ERRNUM is nonzero, follow it with ": " and strerror (ERRNUM).
-   If STATUS is nonzero, terminate the program with `exit (STATUS)'.  */
-
-void error (int status, int errnum, const char *format, ...);
-@end example
-
-A simple way to use the Gnulib error module is to obtain the two
-source files @file{error.c} and @file{error.h} from the Gnulib library
-source code repository at
-@uref{http://git.savannah.gnu.org/@/gitweb/@/?p=gnulib.git}.
-Here's a sample use:
-
-@example
-#include "error.h"
-#include <errno.h>
-#include <stdio.h>
-
-char *program_name = "myprogram";
-
-FILE *
-xfopen (char const *name)
-@{
-  FILE *fp = fopen (name, "r");
-  if (! fp)
-    error (1, errno, "cannot read %s", name);
-  return fp;
-@}
-@end example
-
 @cindex casting pointers to integers
 Avoid casting pointers to integers if you can.  Such casts greatly
 reduce portability, and in most programs they are easy to avoid.  In the
@@ -2996,133 +2964,75 @@ sizes.  You will also need to make provision for systems in which the
 normal range of addresses you can get from @code{malloc} starts far away
 from zero.
 
+
 @node System Functions
 @section Calling System Functions
+
+@cindex C library functions, and portability
+@cindex POSIX functions, and portability
 @cindex library functions, and portability
 @cindex portability, and library functions
 
-C implementations differ substantially.  Standard C reduces but does
-not eliminate the incompatibilities; meanwhile, many GNU packages still
-support pre-standard compilers because this is not hard to do.  This
-chapter gives recommendations for how to use the more-or-less standard C
-library functions to avoid unnecessary loss of portability.
+Historically, C implementations differed substantially, and many
+systems lacked a full implementation of ANSI/ISO C89.  Nowadays,
+however, very few systems lack a C89 compiler and GNU C supports
+almost all of C99.  Similarly, most systems implement POSIX.1-1993
+libraries and tools, and many have POSIX.1-2001.
 
-@itemize @bullet
-@item
-Don't use the return value of @code{sprintf}.  It returns the number of
-characters written on some systems, but not on all systems.
+Hence, there is little reason to support old C or non-POSIX systems,
+and you may want to take advantage of C99 and POSIX-1.2001 to write
+clearer, more portable, or faster code.  You should use standard
+interfaces where possible; but if GNU extensions make your program
+more maintainable, powerful, or otherwise better, don't hesitate to
+use them.  In any case, don't make your own declaration of system
+functions; that's a recipe for conflict.
 
-@item
-Be aware that @code{vfprintf} is not always available.
+Despite the standards, nearly every library function has some sort of
+portability issue on some system or another.  Here are some examples:
 
-@item
-@code{main} should be declared to return type @code{int}.  It should
-terminate either by calling @code{exit} or by returning the integer
-status code; make sure it cannot ever return an undefined value.
+@table @code
+@item open
+Names with trailing @code{/}'s are mishandled on many platforms.
 
-@cindex declaration for system functions
-@item
-Don't declare system functions explicitly.
+@item printf
+@code{long double} may be unimplemented; floating values Infinity and
+NaN are often mishandled; output for large precisions may be
+incorrect.
 
-Almost any declaration for a system function is wrong on some system.
-To minimize conflicts, leave it to the system header files to declare
-system functions.  If the headers don't declare a function, let it
-remain undeclared.
+@item readlink
+May return @code{int} instead of @code{ssize_t}.
 
-While it may seem unclean to use a function without declaring it, in
-practice this works fine for most system library functions on the
-systems where this really happens; thus, the disadvantage is only
-theoretical.  By contrast, actual declarations have frequently caused
-actual conflicts.
+@item scanf
+On Windows, @code{errno} is not set on failure.
+@end table
 
-@item
-If you must declare a system function, don't specify the argument types.
-Use an old-style declaration, not a Standard C prototype.  The more you
-specify about the function, the more likely a conflict.
+@cindex Gnulib
+@uref{http://www.gnu.org/software/gnulib/, Gnulib} is a big help in
+this regard.  Gnulib provides implementations of standard interfaces
+on many of the systems that lack them, including portable
+implementations of enhanced GNU interfaces, thereby making their use
+portable, and of POSIX-1.2008 interfaces, some of which are missing
+even on up-to-date GNU systems.
 
-@item
-In particular, don't unconditionally declare @code{malloc} or
-@code{realloc}.
+@findex xmalloc, in Gnulib
+@findex error messages, in Gnulib
+@findex data structures, in Gnulib
+Gnulib also provides many useful non-standard interfaces; for example,
+C implementations of standard data structures (hash tables, binary
+trees), error-checking type-safe wrappers for memory allocation
+functions (@code{xmalloc}, @code{xrealloc}), and output of error
+messages.
 
-Most GNU programs use those functions just once, in functions
-conventionally named @code{xmalloc} and @code{xrealloc}.  These
-functions call @code{malloc} and @code{realloc}, respectively, and
-check the results.
+Gnulib integrates with GNU Autoconf and Automake to remove much of the
+burden of writing portable code from the programmer: Gnulib makes your
+configure script automatically determine what features are missing and
+use the Gnulib code to supply the missing pieces.
 
-Because @code{xmalloc} and @code{xrealloc} are defined in your program,
-you can declare them in other files without any risk of type conflict.
+The Gnulib and Autoconf manuals have extensive sections on
+portability: @ref{Top,, Introduction, gnulib, Gnulib} and
+@pxref{Portable C and C++,,, autoconf, Autoconf}.  Please consult them
+for many more details.
 
-On most systems, @code{int} is the same length as a pointer; thus, the
-calls to @code{malloc} and @code{realloc} work fine.  For the few
-exceptional systems (mostly 64-bit machines), you can use
-@strong{conditionalized} declarations of @code{malloc} and
-@code{realloc}---or put these declarations in configuration files
-specific to those systems.
-
-@cindex string library functions
-@item
-The string functions require special treatment.  Some Unix systems have
-a header file @file{string.h}; others have @file{strings.h}.  Neither
-file name is portable.  There are two things you can do: use Autoconf to
-figure out which file to include, or don't include either file.
-
-@item
-If you don't include either strings file, you can't get declarations for
-the string functions from the header file in the usual way.
-
-That causes less of a problem than you might think.  The newer standard
-string functions should be avoided anyway because many systems still
-don't support them.  The string functions you can use are these:
-
-@example
-strcpy   strncpy   strcat   strncat
-strlen   strcmp    strncmp
-strchr   strrchr
-@end example
-
-The copy and concatenate functions work fine without a declaration as
-long as you don't use their values.  Using their values without a
-declaration fails on systems where the width of a pointer differs from
-the width of @code{int}, and perhaps in other cases.  It is trivial to
-avoid using their values, so do that.
-
-The compare functions and @code{strlen} work fine without a declaration
-on most systems, possibly all the ones that GNU software runs on.
-You may find it necessary to declare them @strong{conditionally} on a
-few systems.
-
-The search functions must be declared to return @code{char *}.  Luckily,
-there is no variation in the data type they return.  But there is
-variation in their names.  Some systems give these functions the names
-@code{index} and @code{rindex}; other systems use the names
-@code{strchr} and @code{strrchr}.  Some systems support both pairs of
-names, but neither pair works on all systems.
-
-You should pick a single pair of names and use it throughout your
-program.  (Nowadays, it is better to choose @code{strchr} and
-@code{strrchr} for new programs, since those are the standard
-names.)  Declare both of those names as functions returning @code{char
-*}.  On systems which don't support those names, define them as macros
-in terms of the other pair.  For example, here is what to put at the
-beginning of your file (or in a header) if you want to use the names
-@code{strchr} and @code{strrchr} throughout:
-
-@example
-#ifndef HAVE_STRCHR
-#define strchr index
-#endif
-#ifndef HAVE_STRRCHR
-#define strrchr rindex
-#endif
-
-char *strchr ();
-char *strrchr ();
-@end example
-@end itemize
-
-Here we assume that @code{HAVE_STRCHR} and @code{HAVE_STRRCHR} are
-macros defined in systems where the corresponding functions exist.
-One way to get them properly defined is to use Autoconf.
 
 @node Internationalization
 @section Internationalization
@@ -3262,11 +3172,12 @@ contexts, unless there is good reason to do something else because of
 the application domain.  For example, if source code deals with the
 French Revolutionary calendar, it is OK if its literal strings contain
 accented characters in month names like ``Flor@'eal''.  Also, it is OK
-to use non-ASCII characters to represent proper names of contributors in
-change logs (@pxref{Change Logs}).
+(but not required) to use non-ASCII characters to represent proper
+names of contributors in change logs (@pxref{Change Logs}).
 
-If you need to use non-ASCII characters, you should normally stick with
-one encoding, as one cannot in general mix encodings reliably.
+If you need to use non-ASCII characters, you should normally stick
+with one encoding, certainly within a single file.  UTF-8 is likely to
+be the best choice.
 
 
 @node Quote Characters
@@ -3297,8 +3208,7 @@ this time: there are no true left or right quote characters in Latin1;
 the @samp{`} character we use was standardized there as a grave
 accent.  Moreover, Latin1 is still not universally usable.
 
-Unicode contains the unambiguous quote characters required, and its
-common encoding UTF-8 is upward compatible with Latin1.  However,
+Unicode contains the unambiguous quote characters required.  However,
 Unicode and UTF-8 are not universally well-supported, either.
 
 This may change over the next few years, and then we will revisit
@@ -3318,9 +3228,10 @@ doing the job in another way using @code{read} and @code{write}.
 
 The reason this precaution is needed is that the GNU kernel (the HURD)
 provides a user-extensible file system, in which there can be many
-different kinds of ``ordinary files.''  Many of them support
+different kinds of ``ordinary files''.  Many of them support
 @code{mmap}, but some do not.  It is important to make programs handle
 all these kinds of files.
+
 
 @node Documentation
 @chapter Documenting Programs
@@ -3736,38 +3647,58 @@ make the records of authorship more accurate.
 @cindex conditional changes, and change logs
 @cindex change logs, conditional changes
 
-C programs often contain compile-time @code{#if} conditionals.  Many
-changes are conditional; sometimes you add a new definition which is
-entirely contained in a conditional.  It is very useful to indicate in
-the change log the conditions for which the change applies.
+Source files can often contain code that is conditional to build-time
+or static conditions.  For example, C programs can contain
+compile-time @code{#if} conditionals; programs implemented in
+interpreted languages can contain module imports of function
+definitions that are only performed for certain versions of the
+interpreter; and Automake @file{Makefile.am} files can contain
+variable definitions or target declarations that are only to be
+considered if a configure-time Automake conditional is true.
 
-Our convention for indicating conditional changes is to use square
-brackets around the name of the condition.
+Many changes are conditional as well: sometimes you add a new variable,
+or function, or even a new program or library, which is entirely
+dependent on a build-time condition.  It is useful to indicate
+in the change log the conditions for which a change applies.
 
-Here is a simple example, describing a change which is conditional but
-does not have a function or entity name associated with it:
+Our convention for indicating conditional changes is to use
+@emph{square brackets around the name of the condition}.
+
+Conditional changes can happen in numerous scenarios and with many
+variations, so here are some examples to help clarify.  This first
+example describes changes in C, Perl, and Python files which are
+conditional but do not have an associated function or entity name:
 
 @example
-* xterm.c [SOLARIS2]: Include string.h.
+* xterm.c [SOLARIS2]: Include <string.h>.
+* FilePath.pm [$^O eq 'VMS']: Import the VMS::Feature module.
+* framework.py [sys.version_info < (2, 6)]: Make "with" statement
+  available by importing it from __future__,
+  to support also python 2.5.
 @end example
 
-Here is an entry describing a new definition which is entirely
-conditional.  This new definition for the macro @code{FRAME_WINDOW_P} is
-used only when @code{HAVE_X_WINDOWS} is defined:
+Our other examples will for simplicity be limited to C, as the minor
+changes necessary to adapt them to other languages should be
+self-evident.
+
+Next, here is an entry describing a new definition which is entirely
+conditional: the C macro @code{FRAME_WINDOW_P} is defined (and used)
+only when the macro @code{HAVE_X_WINDOWS} is defined:
 
 @example
 * frame.h [HAVE_X_WINDOWS] (FRAME_WINDOW_P): Macro defined.
 @end example
 
-Here is an entry for a change within the function @code{init_display},
-whose definition as a whole is unconditional, but the changes themselves
-are contained in a @samp{#ifdef HAVE_LIBNCURSES} conditional:
+Next, an entry for a change within the function @code{init_display},
+whose definition as a whole is unconditional, but the changes
+themselves are contained in a @samp{#ifdef HAVE_LIBNCURSES}
+conditional:
 
 @example
 * dispnew.c (init_display) [HAVE_LIBNCURSES]: If X, call tgetent.
 @end example
 
-Here is an entry for a change that takes affect only when
+Finally, here is an entry for a change that takes effect only when
 a certain macro is @emph{not} defined:
 
 @example
@@ -4116,11 +4047,13 @@ copying conditions.  The GNU GPL, if used, should be in a file called
 @file{COPYING}.  If the GNU LGPL is used, it should be in a file called
 @file{COPYING.LESSER}.
 
-Naturally, all the source files must be in the distribution.  It is okay
-to include non-source files in the distribution, provided they are
-up-to-date and machine-independent, so that building the distribution
-normally will never modify them.  We commonly include non-source files
-produced by Bison, @code{lex}, @TeX{}, and @code{makeinfo}; this helps avoid
+Naturally, all the source files must be in the distribution.  It is
+okay to include non-source files in the distribution along with the
+source files they are generated from, provided they are up-to-date
+with the source they are made from, and machine-independent, so that
+normal building of the distribution will never modify them.  We
+commonly include non-source files produced by Autoconf, Automake,
+Bison, @code{lex}, @TeX{}, and @code{makeinfo}; this helps avoid
 unnecessary dependencies between our distributions, so that users can
 install whichever packages they want to install.
 
@@ -4252,7 +4185,7 @@ things in the GNU system even if they are free---they are outside the
 scope of what a software distribution needs to include.
 
 Referring to a web site that describes or recommends a non-free
-program is promoting that program, so please do not make links (or
+program is promoting that program, so please do not make links to (or
 mention by name) web sites that contain such material.  This policy is
 relevant particularly for the web pages for a GNU package.
 
