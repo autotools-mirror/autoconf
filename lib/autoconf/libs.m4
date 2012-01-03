@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Checking for libraries.
-# Copyright (C) 1992-1996, 1998-2006, 2008-2011 Free Software
+# Copyright (C) 1992-1996, 1998-2006, 2008-2012 Free Software
 # Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free

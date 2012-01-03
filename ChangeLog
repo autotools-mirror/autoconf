@@ -1,5 +1,8 @@
 2012-01-03  Paul Eggert  <eggert@cs.ucla.edu>
 
+	maint: update copyright year
+	All files changed to add 2012, via 'make update-copyright'.
+
 	maint: resync upstream files
 	* ChangeLog, GNUmakefile, build-aux/announce-gen:
 	* build-aux/config.guess, build-aux/config.sub, build-aux/gendocs.sh:
@@ -23134,7 +23137,7 @@
 	coding: utf-8
 	End:
 
-	Copyright (C) 2001-2011 Free Software Foundation, Inc.
+	Copyright (C) 2001-2012 Free Software Foundation, Inc.
 
 	This program is free software: you can redistribute it and/or
 	modify it under the terms of the GNU General Public License as
