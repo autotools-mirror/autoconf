@@ -1,5 +1,10 @@
 2012-01-05  Paul Eggert  <eggert@cs.ucla.edu>
 
+	doc: mention Bash 2.03 bug with backslash-newline
+	* doc/autoconf.texi (Invoking the Shell): New section.
+	(Backslash-Newline-Empty): Rename from Backslash-Newline-Newline.
+	Mention problem with Bash 2.03.
+
 	doc: clarify sed buffer limit
 	* doc/autoconf.texi (Limitations of Usual Tools):
 	That 4000-byte limit applies to output and internal buffers, too.

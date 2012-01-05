@@ -501,6 +501,7 @@ Dependencies Between Macros
 Portable Shell Programming
 
 * Shellology::                  A zoology of shells
+* Invoking the Shell::          Invoking the shell as a command
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
 * Signal Handling::             Shells, signals, and headaches
@@ -520,7 +521,7 @@ Portable Make Programming
 * $< in Ordinary Make Rules::   $< in ordinary rules
 * Failure in Make Rules::       Failing portably in rules
 * Special Chars in Names::      Special Characters in Macro Names
-* Backslash-Newline-Newline::   Empty last lines in macro definitions
+* Backslash-Newline-Empty::     Empty lines after backslash-newline
 * Backslash-Newline Comments::  Spanning comments across line boundaries
 * Long Lines in Makefiles::     Line length limitations
 * Macros and Submakes::         @code{make macro=value} and submakes
@@ -15067,6 +15068,7 @@ subset described above, is fairly portable nowadays.  Also please see
 
 @menu
 * Shellology::                  A zoology of shells
+* Invoking the Shell::          Invoking the shell as a command
 * Here-Documents::              Quirks and tricks
 * File Descriptors::            FDs and redirections
 * Signal Handling::             Shells, signals, and headaches
@@ -15204,6 +15206,28 @@ zsh, The Z Shell Manual}, for details.
 The default Mac OS X @command{sh} was originally Zsh; it was changed to
 Bash in Mac OS X 10.2.
 @end table
+
+@node Invoking the Shell
+@section Invoking the Shell
+@cindex invoking the shell
+@cindex shell invocation
+
+Bash 2.03 has a bug when invoked with the @option{-c} option: if the
+option-argument ends in backslash-newline, Bash incorrectly reports a
+syntax error.  The problem does not occur if a character follows the
+backslash:
+
+@example
+$ @kbd{$ bash -c 'echo foo \}
+> @kbd{'}
+bash: -c: line 2: syntax error: unexpected end of file
+$ @kbd{bash -c 'echo foo \}
+> @kbd{ '}
+foo
+@end example
+
+@noindent
+@xref{Backslash-Newline-Empty}, for how this can cause problems in makefiles.
 
 @node Here-Documents
 @section Here-Documents
@@ -19663,7 +19687,7 @@ itself.
 * $< in Ordinary Make Rules::   $< in ordinary rules
 * Failure in Make Rules::       Failing portably in rules
 * Special Chars in Names::      Special Characters in Macro Names
-* Backslash-Newline-Newline::   Empty last lines in macro definitions
+* Backslash-Newline-Empty::     Empty lines after backslash-newline
 * Backslash-Newline Comments::  Spanning comments across line boundaries
 * Long Lines in Makefiles::     Line length limitations
 * Macros and Submakes::         @code{make macro=value} and submakes
@@ -19741,8 +19765,32 @@ this is test
 @noindent
 However, this problem is no longer of practical concern.
 
-@node Backslash-Newline-Newline
-@section Backslash-Newline-Newline in Make Macro Values
+@node Backslash-Newline-Empty
+@section Backslash-Newline Before Empty Lines
+
+A bug in Bash 2.03 can cause problems if a Make rule contains a
+backslash-newline followed by line that expands to nothing.
+For example, on Solaris 8:
+
+@example
+SHELL = /bin/bash
+EMPTY =
+foo:
+	touch foo \
+	$(EMPTY)
+@end example
+
+@noindent
+executes
+
+@example
+/bin/bash -c 'touch foo \
+'
+@end example
+
+@noindent
+which fails with a syntax error, due to the Bash bug.  To avoid this
+problem, avoid nullable macros in the last line of a multiline command.
 
 @c  This has been seen on ia64 hpux 11.20, and on one hppa hpux 10.20,
 @c  but another hppa hpux 10.20 didn't have it.  Bob Proulx
