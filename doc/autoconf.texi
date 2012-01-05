@@ -19256,8 +19256,9 @@ $ @kbd{echo a | sed 's/x/x/;;s/x/x/'}
 sed: 1: "s/x/x/;;s/x/x/": invalid command code ;
 @end example
 
-Input should not have unreasonably long lines, since some @command{sed}
-implementations have an input buffer limited to 4000 bytes.  Likewise,
+Some @command{sed} implementations have a buffer limited to 4000 bytes,
+and this limits the size of input lines, output lines, and internal
+buffers that can be processed portably.  Likewise,
 not all @command{sed} implementations can handle embedded @code{NUL} or
 a missing trailing newline.
 

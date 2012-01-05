@@ -1,3 +1,9 @@
+2012-01-05  Paul Eggert  <eggert@cs.ucla.edu>
+
+	doc: clarify sed buffer limit
+	* doc/autoconf.texi (Limitations of Usual Tools):
+	That 4000-byte limit applies to output and internal buffers, too.
+
 2012-01-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	maint: update copyright year
