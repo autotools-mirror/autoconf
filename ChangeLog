@@ -1,3 +1,17 @@
+2011-01-14  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	getopt: fix diagnostic for missing mandatory option argument
+	Before this change, an incorrect command line usage:
+	  "autom4te --output"
+	triggered broken diagnostic like:
+	  "autom4te: unrecognized option `--output'"
+	instead of the expected and correct:
+	  "autom4te: option `--output' requires an argument"
+	* lib/Autom4te/General.pm (getopt): Give correct diagnostic in
+	case of usage errors due to missing arguments for options for
+	which they are mandatory.  Code basically copied from automake's
+	'parse_arguments' private subroutine.
+
 2012-01-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	doc: mention Bash 2.03 bug with backslash-newline

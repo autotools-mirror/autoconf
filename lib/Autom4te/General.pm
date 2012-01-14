@@ -267,11 +267,34 @@ sub getopt (%)
   GetOptions (%option)
     or exit 1;
 
-  foreach (grep { /^-./ } @ARGV)
+  # FIXME: Lot of code duplication with automake here.  It would probably
+  # be best to generalize our getopt() func and rip it out in a new module
+  # from which automake can sync.
+  if ($ARGV[0] =~ /^-./)
     {
-      print STDERR "$0: unrecognized option `$_'\n";
-      print STDERR "Try `$0 --help' for more information.\n";
-      exit (1);
+      my %argopts;
+      for my $k (keys %option)
+	{
+	  if ($k =~ /(.*)=s$/)
+	    {
+	      map { $argopts{(length ($_) == 1)
+			     ? "-$_" : "--$_" } = 1; } (split (/\|/, $1));
+	    }
+	}
+      if ($ARGV[0] eq '--')
+	{
+	  shift @ARGV;
+	}
+      elsif (exists $argopts{$ARGV[0]})
+	{
+	  fatal ("option `$ARGV[0]' requires an argument\n"
+		 . "Try `$0 --help' for more information.");
+	}
+      else
+	{
+	  fatal ("unrecognized option `$ARGV[0]'.\n"
+		 . "Try `$0 --help' for more information.");
+	}
     }
 
   push @ARGV, '-'
