@@ -22,12 +22,13 @@ SUBDIRS = bin . lib doc tests man
 
 ACLOCAL_AMFLAGS = -I m4
 
-EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 \
+EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 ChangeLog.3 \
 	     BUGS COPYINGv3 COPYING.EXCEPTION \
 	     GNUmakefile maint.mk cfg.mk \
 	     build-aux/gendocs.sh \
 	     build-aux/git-version-gen \
 	     build-aux/announce-gen build-aux/gnupload \
+	     build-aux/gitlog-to-changelog \
 	     .prev-version .version
 
 ## --------- ##
@@ -48,6 +49,23 @@ $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 	rm -f tmp.texi
 endif
 
+# Generate the ChangeLog from git history.
+gen_start_date = 2012-01-15 18:00:00 UTC
+.PHONY: gen-ChangeLog
+gen-ChangeLog:
+	if test -d $(top_srcdir)/.git; then \
+	  $(top_srcdir)/build-aux/gitlog-to-changelog \
+	    --since='$(gen_start_date)' > $(distdir)/cl-t \
+	    && rm -f $(distdir)/ChangeLog \
+	    && mv $(distdir)/cl-t $(distdir)/ChangeLog; \
+	fi
+
+# Dummy rule, to pacify automake "gnu" strictness and allow a clean
+# bootstrap.  Creates a dummy ChangeLog (unless one is already present,
+# as might be the case for users of vc-dwim) that will be overridden
+# with a proper one at distribution time.
+$(srcdir)/ChangeLog:
+	@echo dummy > $@
 
 # Version string management.  There are two files to be aware of:
 # .tarball-version - present only in a distribution tarball, and not in
@@ -69,7 +87,7 @@ $(top_srcdir)/.version:
 
 # Arrange so that .tarball-version appears only in distribution tarballs,
 # never in a checked-out repository.
-dist-hook:
+dist-hook: gen-ChangeLog
 	echo $(VERSION) > $(distdir)/.tarball-version
 
 # Arrange to remove the symlink to GNUmakefile in VPATH builds.
