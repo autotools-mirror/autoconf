@@ -1,3 +1,36 @@
+2011-01-15  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	getopt: remove hack for special handling of "-" argument
+
+	Older versions of Getopt::Long acted bogusly and died when they
+	where configured with the 'bundling' flag and an argument '-' was
+	seen on the command line they were parsing.  That is no longer
+	the case though, and has not been for quite a long time: the bug
+	is no longer present in the 5.6.2 version of perl and the 2.25
+	version of Getopt::Long (and today, the latest versions of perl
+	and Getopt::Long are respectively 5.14.2 and 2.38).  The obsolete
+	workaround for that Getopt::Long bug can thus be removed from our
+	'getopt' function.
+
+	It is also worth noting that such a workaround was quite buggy
+	and brittle itself; for example, a command like this:
+	  "autom4te --output -"
+	would have caused the incorrect diagnostic:
+	  "autom4te: option `--output' requires an argument"
+	Much worse, a command like this:
+	  "autom4te --language=autoconf --output - configure.ac"
+	would have caused the standard input of autom4te to be processed
+	and copied into the 'configure.ac' file, deleting its pre-existing
+	content!  Surely not what a user would have expected.
+
+	After this change, a command like this:
+	  autom4te --language=autoconf --output - - <configure.ac >out
+	works as expected, processing the input from 'configure.ac' and
+	writing it to the 'out' file.
+
+	* lib/Autom4te/General.pm (use): Require perl version 5.6.2.
+	(getopt): Remove the old workaround.
+
 2012-01-15  Jim Meyering  <meyering@redhat.com>
 
 	avoid new warning about undefined $ARGV[0]

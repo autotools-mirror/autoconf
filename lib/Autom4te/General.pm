@@ -32,7 +32,7 @@ used in several executables of the Autoconf and Automake packages.
 
 =cut
 
-use 5.005_03;
+use 5.006_002;
 use Exporter;
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
@@ -244,16 +244,11 @@ rejecting it as a broken option.
 # getopt (%OPTION)
 # ----------------
 # Handle the %OPTION, plus all the common options.
-# Work around Getopt bugs wrt `-'.
 sub getopt (%)
 {
   my (%option) = @_;
   use Getopt::Long;
 
-  # F*k.  Getopt seems bogus and dies when given `-' with `bundling'.
-  # If fixed some day, use this: '' => sub { push @ARGV, "-" }
-  my $stdin = grep /^-$/, @ARGV;
-  @ARGV = grep !/^-$/, @ARGV;
   %option = ("h|help"     => sub { print $help; exit 0 },
 	     "V|version"  => sub { print $version; exit 0 },
 
@@ -296,9 +291,6 @@ sub getopt (%)
 		 . "Try `$0 --help' for more information.");
 	}
     }
-
-  push @ARGV, '-'
-    if $stdin;
 
   setup_channel 'note', silent => !$verbose;
   setup_channel 'verb', silent => !$verbose;
