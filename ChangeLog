@@ -1,3 +1,8 @@
+2012-01-15  Jim Meyering  <meyering@redhat.com>
+
+	getopt: refine syntax of previous change
+	* lib/Autom4te/General.pm (getopt): Use a more concise test.
+
 2011-01-15  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	getopt: remove hack for special handling of "-" argument
