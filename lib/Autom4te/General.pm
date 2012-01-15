@@ -270,7 +270,7 @@ sub getopt (%)
   # FIXME: Lot of code duplication with automake here.  It would probably
   # be best to generalize our getopt() func and rip it out in a new module
   # from which automake can sync.
-  if ($ARGV[0] =~ /^-./)
+  if (defined $ARGV[0] && $ARGV[0] =~ /^-./)
     {
       my %argopts;
       for my $k (keys %option)

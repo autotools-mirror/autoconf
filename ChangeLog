@@ -1,3 +1,10 @@
+2012-01-15  Jim Meyering  <meyering@redhat.com>
+
+	avoid new warning about undefined $ARGV[0]
+	* lib/Autom4te/General.pm (getopt): Avoid warning induced by
+	yesterday's change: $ARGV[0] may not be defined, e.g., when
+	invoked via autoreconf.
+
 2011-01-14  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	getopt: fix diagnostic for missing mandatory option argument
