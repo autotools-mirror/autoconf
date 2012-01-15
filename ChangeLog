@@ -312,7 +312,7 @@
 
 	* lib/autoconf/specific.m4 (AC_USE_SYSTEM_EXTENSIONS): Quote cleanly.
 	This is imported from gnulib.  gnulib also has an HP-UX 11.11 fix, but
-	let's see if we can do that another way, as it's pretty heaviweight.
+	let's see if we can do that another way, as it's pretty heavyweight.
 
 2011-07-22  Eric Blake  <eblake@redhat.com>
 
@@ -678,7 +678,7 @@
 
 2011-01-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
-	docs: new section about whitespace trimmmed from make command-lines.
+	docs: new section about whitespace trimmed from make command-lines.
 	* doc/autoconf.texi (Command-line Macros and whitespace): New
 	section, document trimming of whitespace from macros set on the
 	command line and from the environment.
@@ -1233,7 +1233,7 @@
 
 	autoconf: fix regression in AC_FUNC_SELECT_ARGTYPES
 	* lib/autoconf/functions.m4 (AC_FUNC_SELECT_ARGTYPES): Fix
-	quoting; regression from yesteray leaked '' into default value.
+	quoting; regression from yesterday leaked '' into default value.
 	Reported by Ralf Wildenhues.
 
 	docs: mention another issue with variable expansion
@@ -1884,7 +1884,7 @@
 
 2010-06-22  Ben Pfaff  <blp@cs.stanford.edu>
 
-	Document how to propogate variables to submakes.
+	Document how to propagate variables to submakes.
 	* doc/autoconf.texi: Describe technique used by Automake to
 	propagate variables to submakes in more detail.
 
@@ -1911,7 +1911,7 @@
 	within double-quoted backquotes; add ksh example for unescaped
 	inner double-quotes problem.
 
-	Mention Tru64 5.1 fgrep limitation with emtpy patterns.
+	Mention Tru64 5.1 fgrep limitation with empty patterns.
 	* doc/autoconf.texi (Limitations of Usual Tools): Update.
 
 	Overhaul the manual, esp. the Autotest chapter.
@@ -2651,7 +2651,7 @@
 
 	Redocument AS_DIRNAME, even with its flaws.
 	* doc/autoconf.texi (Common Shell Constructs) <AS_DIRNAME>:
-	Restore documenatation, since dirname mentions it.
+	Restore documentation, since dirname mentions it.
 	Reported by Peter Johansson.
 
 	Update upstream files.
@@ -2833,7 +2833,7 @@
 	Fix typos in INSTALL.
 	* doc/install.texi (Basic Installation, Installation Names): Fix
 	typos in last patch.
-	Repored by Ralf Wildenhues.
+	Reported by Ralf Wildenhues.
 
 	Improve INSTALL wording.
 	* doc/install.texi (Basic Installation): Clarify installcheck
@@ -4937,7 +4937,7 @@
 
 	Speed up _AS_QUOTE.
 	* lib/m4sugar/m4sh.m4 (_AS_QUOTE_IFELSE): Inline into...
-	(_AS_QUOTE): ...here, delete unused second paramenter, and factor
+	(_AS_QUOTE): ...here, delete unused second parameter, and factor
 	choice into...
 	(_AS_QUOTE_MODERN, _AS_QUOTE_OLD): ...new helpers.
 
@@ -14165,11 +14165,11 @@
 	Rewrite substantial part of lib/autoconf/status.m4.
 	The main change is that CONFIG_FILES, CONFIG_HEADERS, CONFIG_LINKS,
 	and CONFIG_COMMANDS are not processed in four separate loops.
-	Instead, there is one main loop.  This alows that the common code
+	Instead, there is one main loop.  This allows that the common code
 	is expanded only once, thus config.status (and configure) is smaller.
 
-	The registration mechnism in AC_CONFIG_FILES and cousins also changed;
-	the AC_LIST_FILES and cousins macros are no longer used.
+	The registration mechanism in AC_CONFIG_FILES and cousins also
+	changed; the AC_LIST_FILES and cousins macros are no longer used.
 
 	* lib/autoconf/status.m4 (_AC_OUTPUT_FILES, _AC_OUTPUT_HEADERS,
 	_AC_OUTPUT_LINKS, _AC_OUTPUT_COMMANDS): Renamed to ...
@@ -14264,7 +14264,7 @@
 	Keep a list of all precious variables and process them with one simple
 	for loop, instead of expanding all commands, or, OTOH, complicated
 	processing of output of "set".
-	* lib/autoconf/general.m4 (_AC_ARG_VAR_PRECIOUS): Acumulate the
+	* lib/autoconf/general.m4 (_AC_ARG_VAR_PRECIOUS): Accumulate the
 	variable names in new macro...
 	(_AC_PRECIOUS_VARS): ... which will be assigned to ac_precious_vars.
 	(_AC_ARG_VAR_STORE): New macro which writes to diversion PARSE_ARGS
