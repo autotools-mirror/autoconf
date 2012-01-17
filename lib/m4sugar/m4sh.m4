@@ -623,7 +623,7 @@ done[]_m4_popdef([$1])])
 # | else
 # |   IF-FALSE
 # | fi
-# with simplifications if IF-TRUE1 and/or IF-FALSE is empty.
+# with simplifications when IF-TRUE1 and/or IF-FALSE are empty.
 #
 m4_define([_AS_IF],
 [elif $1; then :

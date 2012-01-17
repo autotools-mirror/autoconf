@@ -8279,7 +8279,7 @@ successful, and @var{action-if-failure} (defaults to failing with an
 error message) if not.
 
 This macro calls @code{AC_FC_PP_SRCEXT([F])} in order to learn how to
-to preprocess a @file{conftest.F} file, but restores a previously used
+preprocess a @file{conftest.F} file, but restores a previously used
 Fortran source file extension afterwards again.
 
 The result of this test is cached in the @code{ac_cv_fc_pp_define}
@@ -19266,7 +19266,7 @@ Unicos 9 @command{sed} loops endlessly on patterns like @samp{.*\n.*}.
 Sed scripts should not use branch labels longer than 7 characters and
 should not contain comments; AIX 5.3 @command{sed} rejects indented comments.
 HP-UX sed has a limit of 99 commands (not counting @samp{:} commands) and
-48 labels, which can not be circumvented by using more than one script
+48 labels, which cannot be circumvented by using more than one script
 file.  It can execute up to 19 reads with the @samp{r} command per cycle.
 Solaris @command{/usr/ucb/sed} rejects usages that exceed a limit of
 about 6000 bytes for the internal representation of commands.
@@ -24892,7 +24892,7 @@ complete and if no option from @var{options} was used.
 @var{help-text} is added to the end of the list of options shown in
 @command{testsuite --help} (@pxref{AS_HELP_STRING}).
 
-It it recommended that you use a package-specific prefix to @var{options}
+It is recommended that you use a package-specific prefix to @var{options}
 names in order to avoid clashes with future Autotest built-in options.
 @end defmac
 
@@ -24923,7 +24923,7 @@ complete and if no option from @var{options} was used.
 @var{help-text} is added to the end of the list of options shown in
 @command{testsuite --help} (@pxref{AS_HELP_STRING}).
 
-It it recommended that you use a package-specific prefix to @var{options}
+It is recommended that you use a package-specific prefix to @var{options}
 names in order to avoid clashes with future Autotest built-in options.
 @end defmac
 
