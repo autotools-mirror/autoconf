@@ -73,13 +73,13 @@ AT_CHECK([test ! -f sentinel], [0])
 test ! -f sentinel || rm -f sentinel # Cleanup for next test.
 
 AT_CHECK(
-[CONFIG_SHELL=`pwd`/fake-shell sh script a 'b  c' '  d   	e '],
+[CONFIG_SHELL=`pwd`/fake-shell sh script a 'b  c' '  d	   e '],
 [0],
 [Fake shell executed.
 nargs = 3
  :a:
  :b  c:
- :  d   	e :
+ :  d	   e :
 ], [])
 AT_CHECK([test ! -f sentinel], [0])
 test ! -f sentinel || rm -f sentinel # Cleanup for next test.
