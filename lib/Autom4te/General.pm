@@ -36,6 +36,7 @@ use 5.006_002;
 use Exporter;
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
+use Autom4te::Getopt ();
 use File::Basename;
 use File::Path ();
 use File::stat;
@@ -232,12 +233,10 @@ sub debug (@)
 
 =item C<getopt (%option)>
 
-Wrapper around C<Getopt::Long>.  In addition to the user C<option>s,
-support C<-h>/C<--help>, C<-V>/C<--version>, C<-v>/C<--verbose>,
-C<-d>/C<--debug>, C<-f>/C<--force>.  Conform to the GNU Coding
-Standards for error messages.  Try to work around a weird behavior
-from C<Getopt::Long> to preserve C<-> as an C<@ARGV> instead of
-rejecting it as a broken option.
+Wrapper around C<Autom4te::Getopt::parse_options>.  In addition to
+the user C<option>s, support C<-h>/C<--help>, C<-V>/C<--version>,
+C<-v>/C<--verbose>, C<-d>/C<--debug>, C<-f>/C<--force>.  Conform to
+the GNU Coding Standards for error messages.
 
 =cut
 
@@ -247,8 +246,6 @@ rejecting it as a broken option.
 sub getopt (%)
 {
   my (%option) = @_;
-  use Getopt::Long;
-
   %option = ("h|help"     => sub { print $help; exit 0 },
 	     "V|version"  => sub { print $version; exit 0 },
 
@@ -258,39 +255,7 @@ sub getopt (%)
 
 	     # User options last, so that they have precedence.
 	     %option);
-  Getopt::Long::Configure ("bundling", "pass_through");
-  GetOptions (%option)
-    or exit 1;
-
-  # FIXME: Lot of code duplication with automake here.  It would probably
-  # be best to generalize our getopt() func and rip it out in a new module
-  # from which automake can sync.
-  if (@ARGV && $ARGV[0] =~ /^-./)
-    {
-      my %argopts;
-      for my $k (keys %option)
-	{
-	  if ($k =~ /(.*)=s$/)
-	    {
-	      map { $argopts{(length ($_) == 1)
-			     ? "-$_" : "--$_" } = 1; } (split (/\|/, $1));
-	    }
-	}
-      if ($ARGV[0] eq '--')
-	{
-	  shift @ARGV;
-	}
-      elsif (exists $argopts{$ARGV[0]})
-	{
-	  fatal ("option `$ARGV[0]' requires an argument\n"
-		 . "Try `$0 --help' for more information.");
-	}
-      else
-	{
-	  fatal ("unrecognized option `$ARGV[0]'.\n"
-		 . "Try `$0 --help' for more information.");
-	}
-    }
+  Autom4te::Getopt::parse_options (%option);
 
   setup_channel 'note', silent => !$verbose;
   setup_channel 'verb', silent => !$verbose;

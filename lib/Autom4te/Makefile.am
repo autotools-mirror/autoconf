@@ -23,6 +23,7 @@ dist_perllib_DATA = \
   Configure_ac.pm \
   FileUtils.pm \
   General.pm \
+  Getopt.pm \
   Request.pm \
   Struct.pm \
   XFile.pm
