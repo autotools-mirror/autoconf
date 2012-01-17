@@ -65,6 +65,7 @@ gnulib-update:
 	cp $(gnulib_dir)/build-aux/move-if-change $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/texinfo.tex $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/update-copyright $(srcdir)/build-aux
+	cp $(gnulib_dir)/build-aux/useless-if-before-free $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/vc-list-files $(srcdir)/build-aux
 	cp $(gnulib_dir)/doc/fdl.texi $(srcdir)/doc
 	cp $(gnulib_dir)/doc/gendocs_template $(srcdir)/doc
@@ -73,6 +74,7 @@ gnulib-update:
 	cp $(gnulib_dir)/doc/standards.texi $(srcdir)/doc
 	cp $(gnulib_dir)/m4/autobuild.m4 $(srcdir)/m4
 	cp $(gnulib_dir)/top/GNUmakefile $(srcdir)
+	cp $(gnulib_dir)/top/maint.mk $(srcdir)
 
 WGET = wget
 WGETFLAGS = -C off
