@@ -116,3 +116,7 @@ update-copyright-env = \
 
 # Prevent incorrect NEWS edits.
 old_NEWS_hash = 6a8aa950938fba063f3dc2b0e11e67e8
+
+exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = ^maint\.mk$$
+exclude_file_name_regexp--sc_prohibit_test_minus_ao = \
+  ^(maint\.mk|doc/autoconf\.texi)$$
