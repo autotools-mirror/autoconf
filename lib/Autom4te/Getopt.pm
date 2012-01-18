@@ -26,7 +26,7 @@ Autom4te::Getopt - GCS conforming parser for command line options
 =head1 DESCRIPTION
 
 Export a function C<parse_options>, performing parsing of command
-line options in conformance to the GNU Conding standards.
+line options in conformance to the GNU Coding standards.
 
 =cut
 
@@ -85,7 +85,6 @@ sub parse_options (%)
 		 . "Try `$0 --help' for more information.");
 	}
     }
-
 }
 
 =back

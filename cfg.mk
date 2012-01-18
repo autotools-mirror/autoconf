@@ -82,6 +82,7 @@ autom4te_files = \
   Autom4te/Configure_ac.pm \
   Autom4te/Channels.pm \
   Autom4te/FileUtils.pm \
+  Autom4te/Getopt.pm \
   Autom4te/Struct.pm \
   Autom4te/XFile.pm
 
