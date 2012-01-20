@@ -64,7 +64,7 @@ gen-ChangeLog:
 # bootstrap.  Creates a dummy ChangeLog (unless one is already present,
 # as might be the case for users of vc-dwim) that will be overridden
 # with a proper one at distribution time.
-$(srcdir)/ChangeLog:
+ChangeLog:
 	@echo dummy > $@
 
 # Version string management.  There are two files to be aware of:
