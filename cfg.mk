@@ -133,3 +133,9 @@ old_NEWS_hash = 33207c359dd7db17cc0cd151da6b9567
 exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = ^maint\.mk$$
 exclude_file_name_regexp--sc_prohibit_test_minus_ao = \
   ^(maint\.mk|doc/autoconf\.texi)$$
+
+exclude_file_name_regexp--sc_prohibit_atoi_atof = ^doc/autoconf\.texi$$
+exclude_file_name_regexp--sc_useless_cpp_parens = ^build-aux/config\.guess$$
+exclude_file_name_regexp--sc_trailing_blank = ^build-aux/texinfo\.tex$$
+exclude_file_name_regexp--sc_two_space_separator_in_usage = \
+  ^build-aux/gnupload$$

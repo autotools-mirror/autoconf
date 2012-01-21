@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate January 8, 2012
+@set lastupdate January 21, 2012
 @c %**end of header
 
 @dircategory GNU organization
@@ -472,7 +472,7 @@ prototypes, you may want to use a preprocessor macro like this:
 
 @example
 /* Declare the prototype for a general external function.  */
-#if defined (__STDC__) || defined (WINDOWSNT)
+#if defined __STDC__ || defined WINDOWSNT
 #define P_(proto) proto
 #else
 #define P_(proto) ()
