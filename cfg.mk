@@ -109,7 +109,18 @@ autom4te-update:
 
 # Tests not to run.
 local-checks-to-skip ?= \
-  changelog-check sc_unmarked_diagnostics
+  changelog-check			\
+  sc_GPL_version			\
+  sc_cast_of_alloca_return_value	\
+  sc_m4_quote_check			\
+  sc_makefile_at_at_check		\
+  sc_prohibit_HAVE_MBRTOWC		\
+  sc_prohibit_always-defined_macros	\
+  sc_prohibit_always_true_header_tests	\
+  sc_prohibit_magic_number_exit		\
+  sc_prohibit_stat_st_blocks		\
+  sc_unmarked_diagnostics
+
 
 # Always use shorthand copyrights.
 update-copyright-env = \
@@ -117,7 +128,7 @@ update-copyright-env = \
   UPDATE_COPYRIGHT_MAX_LINE_LENGTH=72
 
 # Prevent incorrect NEWS edits.
-old_NEWS_hash = 6a8aa950938fba063f3dc2b0e11e67e8
+old_NEWS_hash = 33207c359dd7db17cc0cd151da6b9567
 
 exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = ^maint\.mk$$
 exclude_file_name_regexp--sc_prohibit_test_minus_ao = \
