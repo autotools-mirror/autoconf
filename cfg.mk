@@ -26,9 +26,11 @@ _autoreconf = autoreconf -i -v && rm -f INSTALL
 # Used in maint.mk's web-manual rule
 manual_title = Creating Automatic Configuration Scripts
 
-# The local directory containing the checked-out copy of gnulib used in this
-# release (override the default).
-gnulib_dir = '$(abs_srcdir)'/../gnulib
+# The local directory containing the checked-out copy of gnulib used
+# in this release (override the default).  The $GNULIB_SRCDIR variable
+# is also honored by the gnulib-provided bootstrap script, so using it
+# here is consistent.
+gnulib_dir = $${GNULIB_SRCDIR-'$(abs_srcdir)'/../gnulib}
 
 # The bootstrap tools (override the default).
 bootstrap-tools = automake
