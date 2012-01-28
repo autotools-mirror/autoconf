@@ -50,7 +50,7 @@ $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 	echo @firstparagraphindent insert				\
 	  | cat - $(top_srcdir)/doc/install.texi > tmp.texi
 	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS)		\
-	     --plaintext tmp.texi			 		\
+	     --plaintext tmp.texi					\
 	  | sed -e $(CONVERT_QUOTES) -e $(OMIT_TRAILING_EMPTY_LINES)	\
 	     > $@-t && mv $@-t $@
 	rm -f tmp.texi
