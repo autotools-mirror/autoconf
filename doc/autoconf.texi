@@ -19225,10 +19225,12 @@ This problem no longer exists in Mac OS X 10.4.3.
 @prindex @command{rm}
 The @option{-f} and @option{-r} options are portable.
 
-It is not portable to invoke @command{rm} without operands.  For
-example, on many systems @samp{rm -f -r} (with no other arguments)
-silently succeeds without doing anything, but it fails with a diagnostic
-on NetBSD 2.0.2.
+It is not portable to invoke @command{rm} without options or operands.
+On the other hand, Posix now requires @command{rm -f} to silently
+succeed when there are no operands (useful for constructs like
+@command{rm -rf $filelist} without first checking if @samp{$filelist}
+was empty).  But this was not always portable; at least NetBSD
+@command{rm} built before 2008 would fail with a diagnostic.
 
 A file might not be removed even if its parent directory is writable
 and searchable.  Many Posix hosts cannot remove a mount point, a named
