@@ -1097,7 +1097,7 @@ m4_defun_init([AS_TEST_X],
 # Check whether a file is a regular file that has executable permissions.
 m4_defun_init([AS_EXECUTABLE_P],
 [AS_REQUIRE([_AS_TEST_PREPARE])],
-[{ test -f $1 && test -x $1; }])# AS_EXECUTABLE_P
+[as_fn_executable_p $1])# AS_EXECUTABLE_P
 
 
 # _AS_EXPR_PREPARE
@@ -1378,8 +1378,12 @@ m4_define([_AS_TEST_X_WORKS], [test -x /])
 # Provide back-compat to people that hooked into our undocumented
 # internals (here's looking at you, libtool).
 m4_defun([_AS_TEST_PREPARE],
+[AS_REQUIRE_SHELL_FN([as_fn_executable_p],
+  [AS_FUNCTION_DESCRIBE([as_fn_executable_p], [FILE],
+    [Test if FILE is an executable regular file.])],
+  [  test -f "$[]1" && test -x "$[]1"])]dnl
 [as_test_x='test -x'
-as_executable_p=$as_test_x
+as_executable_p=as_fn_executable_p
 ])# _AS_TEST_PREPARE
 
 

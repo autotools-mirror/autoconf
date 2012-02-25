@@ -13658,6 +13658,13 @@ m4_bpatsubst([[@var{string}]], ['], ['\\''])
 @end example
 @end defmac
 
+@defmac AS_EXECUTABLE_P (@var{file})
+@asindex{EXECUTABLE_P}
+Emit code to probe whether @var{file} is a regular file with executable
+permissions (and not a directory with search permissions).  The caller
+is responsible for quoting @var{file}.
+@end defmac
+
 @defmac AS_EXIT (@dvar{status, $?})
 @asindex{EXIT}
 Emit code to exit the shell with @var{status}, defaulting to @samp{$?}.

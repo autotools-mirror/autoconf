@@ -15,6 +15,8 @@ GNU Autoconf NEWS - User visible changes.
 ** AS_LITERAL_IF again treats '=' as a literal.  Regression introduced in
    2.66.
 
+** The macro AS_EXECUTABLE_P, present since 2.50, is now documented.
+
 ** Macros
 
 - AC_PROG_LN_S and AS_LN_S now fall back on 'cp -pR' (not 'cp -p') if 'ln -s'
