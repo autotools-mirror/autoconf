@@ -513,6 +513,7 @@ m4_define([AS_SHELL_SANITIZE],
 m4_provide_if([AS_INIT], [],
 [m4_provide([AS_INIT])
 _AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])
+_AS_DETECT_REQUIRED([_AS_TEST_X_WORKS])
 _AS_DETECT_BETTER_SHELL
 _AS_UNSET_PREPARE
 ])])
@@ -1084,9 +1085,11 @@ fi
 # AS_TEST_X
 # ---------
 # Check whether a file has executable or search permissions.
+# FIXME: This macro is no longer useful; consider deleting it in 2014
+# after we ensure m4sh scripts can always find a shell with test -x.
 m4_defun_init([AS_TEST_X],
 [AS_REQUIRE([_AS_TEST_PREPARE])],
-[$as_test_x $1[]])# AS_TEST_X
+[test -x $1[]])# AS_TEST_X
 
 
 # AS_EXECUTABLE_P
@@ -1094,7 +1097,7 @@ m4_defun_init([AS_TEST_X],
 # Check whether a file is a regular file that has executable permissions.
 m4_defun_init([AS_EXECUTABLE_P],
 [AS_REQUIRE([_AS_TEST_PREPARE])],
-[{ test -f $1 && AS_TEST_X([$1]); }])# AS_EXECUTABLE_P
+[{ test -f $1 && test -x $1; }])# AS_EXECUTABLE_P
 
 
 # _AS_EXPR_PREPARE
@@ -1365,42 +1368,17 @@ m4_define([AS_SET_CATFILE],
 esac[]])# AS_SET_CATFILE
 
 
+# _AS_TEST_X_WORKS
+# ----------------
+# These days, we require that `test -x' works.
+m4_define([_AS_TEST_X_WORKS], [test -x /])
+
 # _AS_TEST_PREPARE
 # ----------------
-# Find out whether `test -x' works.  If not, prepare a substitute
-# that should work well enough for most scripts.
-#
-# Here are some of the problems with the substitute.
-# The 'ls' tests whether the owner, not the current user, can execute/search.
-# The eval means '*', '?', and '[' cause inadvertent file name globbing
-# after the 'eval', so jam together as many tokens as we can to minimize
-# the likelihood that the inadvertent globbing will actually do anything.
-# Luckily, this gorp is needed only on really ancient hosts.
-#
+# Provide back-compat to people that hooked into our undocumented
+# internals (here's looking at you, libtool).
 m4_defun([_AS_TEST_PREPARE],
-[if test -x / >/dev/null 2>&1; then
-  as_test_x='test -x'
-else
-  if ls -dL / >/dev/null 2>&1; then
-    as_ls_L_option=L
-  else
-    as_ls_L_option=
-  fi
-  as_test_x='
-    eval sh -c '\''
-      if test -d "$[]1"; then
-	test -d "$[]1/.";
-      else
-	case $[]1 in @%:@(
-	-*)set "./$[]1";;
-	esac;
-	case `ls -ld'$as_ls_L_option' "$[]1" 2>/dev/null` in @%:@((
-	???[[sx]]*):;;*)false;;esac;fi
-    '\'' sh
-  '
-fi
-dnl as_executable_p is present for backward compatibility with Libtool
-dnl 1.5.22, but it should go away at some point.
+[as_test_x='test -x'
 as_executable_p=$as_test_x
 ])# _AS_TEST_PREPARE
 
@@ -2177,5 +2155,6 @@ m4_divert_text([M4SH-INIT-FN], [m4_text_box([M4sh Shell Functions.])])
 m4_divert([BODY])dnl
 m4_text_box([Main body of script.])
 _AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
+_AS_DETECT_REQUIRED([_AS_TEST_X_WORKS])dnl
 AS_REQUIRE([_AS_UNSET_PREPARE], [], [M4SH-INIT-FN])dnl
 ])
