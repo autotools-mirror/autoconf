@@ -552,6 +552,58 @@ AT_CLEANUP
 
 
 
+## ----------------- ##
+## AS_EXECUTABLE_P.  ##
+## ----------------- ##
+
+# Check for executable regular files.
+AT_SETUP([AS@&t@_EXECUTABLE_P])
+AT_KEYWORDS([m4sh])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+
+if AS_EXECUTABLE_P([/]); then
+  echo fail
+else
+  echo 1
+fi
+cat > foo.sh <<\EOF || AS_EXIT([1])
+#/bin/sh
+exit 0
+EOF
+# File systems like FAT tend to fake executable permissions on all files.
+# At this point, foo.sh should be executable iff permissions are faked.
+AS_EXECUTABLE_P([foo.sh])
+st1=$?
+(./foo.sh) >/dev/null 2>&1
+st2=$?
+case $st1:$st2 in
+  1:126 | 0:0 ) echo 2 ;;
+  *) echo "fail ($st1:$st2)" ;;
+esac
+# Now things better be executable
+chmod a+x foo.sh || AS_EXIT([2])
+mkdir 'two  spaces' || AS_EXIT([3])
+'two  spaces'/../foo.sh || AS_EXIT([4])
+if AS_EXECUTABLE_P(["two  spaces/../foo.sh"]); then
+  echo 3
+else
+  echo fail
+fi
+]])
+
+AT_CHECK_M4SH
+AT_CHECK([$CONFIG_SHELL ./script], [],
+[[1
+2
+3
+]])
+
+AT_CLEANUP
+
+
+
 ## --------- ##
 ## AS_EXIT.  ##
 ## --------- ##
