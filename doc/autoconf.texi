@@ -18125,13 +18125,29 @@ It is safe to use @samp{!} as a @command{test} operator.  For example,
 To enable @command{configure} scripts to support cross-compilation, they
 shouldn't do anything that tests features of the build system instead of
 the host system.  But occasionally you may find it necessary to check
-whether some arbitrary file exists.  To do so, use @samp{test -f} or
-@samp{test -r}.  Do not use @samp{test -x}, because 4.3BSD does not
-have it.  Do not use @samp{test -e} either, because Solaris @command{/bin/sh}
+whether some arbitrary file exists.  To do so, use @samp{test -f},
+@samp{test -r}, or @samp{test -x}.  Do not use @samp{test -e}, because
+Solaris 10 @command{/bin/sh}
 lacks it.  To test for symbolic links on systems that have them, use
 @samp{test -h} rather than @samp{test -L}; either form conforms to
 Posix 1003.1-2001, but older shells like Solaris 8
 @code{/bin/sh} support only @option{-h}.
+
+For historical reasons, Posix reluctantly allows implementations of
+@samp{test -x} that will succeed for the root user, even if no execute
+permissions are present.  Furthermore, shells do not all agree on
+whether Access Control Lists should affect @samp{test -r}, @samp{test
+-w}, and @samp{test -x}; some shells base test results strictly on the
+current user id compared to file owner and mode, as if by
+@code{stat(2)}; while other shells base test results on whether the
+current user has the given right, even if that right is only granted by
+an ACL, as if by @code{faccessat(2)}.  Furthermore, there is a classic
+time of check to time of use race between any use of @command{test}
+followed by operating on the just-checked file.  Therefore, it is a good
+idea to write scripts that actually attempt an operation, and are
+prepared for the resulting failure if permission is denied, rather than
+trying to avoid an operation based solely on whether @command{test}
+guessed that it might not be permitted.
 
 @item @command{test} (strings)
 @c ---------------------------
