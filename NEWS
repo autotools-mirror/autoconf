@@ -1,6 +1,7 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Noteworthy changes in release ?.? (????-??-??) [?]
+* Noteworthy changes in release 2.68b (2012-03-01) [beta]
+  Released by Eric Blake, based on git versions 2.68.*.
 
 ** Autoconf-generated configure scripts now unconditionally re-execute
    themselves with $CONFIG_SHELL, if that's set in the environment.

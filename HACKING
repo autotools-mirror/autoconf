@@ -50,14 +50,13 @@ release:
 
 - Run `make syntax-check'
   This makes sure that the source files follow some consistent rules.
-  The checks live in maint.mk, which is intended to be shared across
-  several projects.  (Help in merging this to use gnulib's maint.mk
-  would be appreciated).
+  The checks live in maint.mk, shared from gnulib, and customized in
+  cfg.mk.
 
-- Run `make maintainer-distcheck'
-  This is quite long.  It basically runs the test suite using a C++
-  compiler instead of a C compiler, and within a severe environment
-  (POSIXLY_CORRECT).
+- Run `make distcheck'
+
+- Test some unusual environments, such as building and running the
+  testsuite with POSIXLY_CORRECT=1 CC=g++.
 
 - Try some real world packages
   A good example is the coreutils package.
@@ -108,9 +107,7 @@ Update the version number in NEWS (with version, date, and release
 type) and ChangeLog, and mention in README whether the release is
 stable.  Make sure all changes are committed, then run `git tag -s -m
 <version> -u <gpg_key> v<version>'.  Do not push anything upstream at
-this point.  At this point, running `make _version', followed by `make
-news-date-check changelog-check' will validate that the information is
-formatted correctly.
+this point.
 
 ** Update configure
 As much as possible, make sure to release an Autoconf that uses
@@ -139,7 +136,8 @@ Run `git push origin refs/tags/v<version>' to push the release tag.
 ** Announce
 Complete/fix the announcement file, and email it at least to
 autoconf@gnu.org and autotools-announce@gnu.org.  If this is a stable
-release, also mail to info-gnu@gnu.org.
+release, also mail to info-gnu@gnu.org; if it is a beta release,
+also mail to platform-testers@gnu.org.
 
 ** Other web updates
 For alpha and beta releases, the process is complete.  For stable
