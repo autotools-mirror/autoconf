@@ -1,5 +1,4 @@
-# Copyright (C) 2001, 2003, 2004, 2006, 2008, 2009, 2010 Free Software
-# Foundation, Inc.
+# Copyright (C) 2001-2012 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -134,7 +133,7 @@ sub open
   my ($file) = @_;
 
   # WARNING: Gross hack: $FH is a typeglob: use its hash slot to store
-  # the `name' of the file we are opening.  See the example with
+  # the 'name' of the file we are opening.  See the example with
   # io_socket_timeout in IO::Socket for more, and read Graham's
   # comment in IO::Handle.
   ${*$fh}{'autom4te_xfile_file'} = "$file";
@@ -176,8 +175,8 @@ C<\n> on input files.
 
 =cut
 
-# Some Win32/perl installations fail to translate \r\n to \n on input
-# so we do that here.
+# Some native Windows/perl installations fail to translate \r\n to \n on
+# input so we do that here.
 sub getline
 {
   local $_ = $_[0]->SUPER::getline;
@@ -226,14 +225,14 @@ sub lock
   my ($fh, $mode) = @_;
   # Cannot use @_ here.
 
-  # Unless explicitly configured otherwise, Perl implements its `flock' with the
+  # Unless explicitly configured otherwise, Perl implements its 'flock' with the
   # first of flock(2), fcntl(2), or lockf(3) that works.  These can fail on
   # NFS-backed files, with ENOLCK (GNU/Linux) or EOPNOTSUPP (FreeBSD); we
   # usually ignore these errors.  If $ENV{MAKEFLAGS} suggests that a parallel
-  # invocation of `make' has invoked the tool we serve, report all locking
+  # invocation of 'make' has invoked the tool we serve, report all locking
   # failures and abort.
   #
-  # On Unicos, flock(2) and fcntl(2) over NFS hang indefinitely when `lockd' is
+  # On Unicos, flock(2) and fcntl(2) over NFS hang indefinitely when 'lockd' is
   # not running.  NetBSD NFS clients silently grant all locks.  We do not
   # attempt to defend against these dangers.
   #
@@ -242,7 +241,7 @@ sub lock
     {
       my $make_j = (exists $ENV{'MAKEFLAGS'}
 		    && " -$ENV{'MAKEFLAGS'}" =~ / (-[BdeikrRsSw]*[jP]|--[jP]|---?jobs)/);
-      my $note = "\nforgo `make -j' or use a file system that supports locks";
+      my $note = "\nforgo \"make -j\" or use a file system that supports locks";
       my $file = $fh->name;
 
       msg ($make_j ? 'fatal' : 'unsupported',

@@ -1,5 +1,4 @@
-# Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2010 Free Software
-# Foundation, Inc.
+# Copyright (C) 2003-2012 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -63,8 +62,8 @@ Quote C<$file_name> for open.
 # open_quote ($FILE_NAME)
 # -----------------------
 # If the string $S is a well-behaved file name, simply return it.
-# If it starts with white space, prepend `./', if it ends with
-# white space, add `\0'.  Return the new string.
+# If it starts with white space, prepend './', if it ends with
+# white space, add '\0'.  Return the new string.
 sub open_quote($)
 {
   my ($s) = @_;
@@ -125,7 +124,7 @@ sub find_file ($@)
 =item C<mtime ($file)>
 
 Return the mtime of C<$file>.  Missing files, or C<-> standing for
-C<STDIN> or C<STDOUT> are ``obsolete'', i.e., as old as possible.
+C<STDIN> or C<STDOUT> are "obsolete", i.e., as old as possible.
 
 =cut
 
@@ -182,7 +181,7 @@ sub update_file ($$;$)
   if (!$force && -f "$to" && compare ("$from", "$to") == 0)
     {
       # File didn't change, so don't update its mod time.
-      msg 'note', "`$to' is unchanged";
+      msg 'note', "'$to' is unchanged";
       unlink ($from)
         or fatal "cannot remove $from: $!";
       return
@@ -195,13 +194,13 @@ sub update_file ($$;$)
 	or fatal "cannot backup $to: $!";
       move ("$from", "$to")
 	or fatal "cannot rename $from as $to: $!";
-      msg 'note', "`$to' is updated";
+      msg 'note', "'$to' is updated";
     }
   else
     {
       move ("$from", "$to")
 	or fatal "cannot rename $from as $to: $!";
-      msg 'note', "`$to' is created";
+      msg 'note', "'$to' is created";
     }
 }
 
@@ -400,7 +399,7 @@ sub dir_has_case_matching_file ($$)
   # again and again.
   if (!exists $_directory_cache{$dirname})
     {
-      error "failed to open directory `$dirname'"
+      error "failed to open directory '$dirname'"
 	unless opendir (DIR, $dirname);
       $_directory_cache{$dirname} = { map { $_ => 1 } readdir (DIR) };
       closedir (DIR);

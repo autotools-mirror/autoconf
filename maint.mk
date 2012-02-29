@@ -178,6 +178,13 @@ syntax-check: $(local-check)
 #     Regular expression (ERE) denoting either a forbidden construct
 #     or a required construct.  Those arguments are exclusive.
 #
+#  exclude
+#
+#     Regular expression (ERE) denoting lines to ignore that matched
+#     a prohibit construct.  For example, this can be used to exclude
+#     comments that mention why the nearby code uses an alternative
+#     construct instead of the simpler prohibited construct.
+#
 #  in_vc_files | in_files
 #
 #     grep-E-style regexp denoting the files to check.  If no files
@@ -212,6 +219,17 @@ syntax-check: $(local-check)
 # when filtering by name via in_files, we explicitly filter out matching
 # names here as well.
 
+# Initialize each, so that envvar settings cannot interfere.
+export require =
+export prohibit =
+export exclude =
+export in_vc_files =
+export in_files =
+export containing =
+export non_containing =
+export halt =
+export with_grep_options =
+
 # By default, _sc_search_regexp does not ignore case.
 export ignore_case =
 _ignore_case = $$(test -n "$$ignore_case" && printf %s -i || :)
@@ -230,6 +248,9 @@ define _sc_search_regexp
           $(_sc_say_and_exit) } || :;					\
    test -z "$$prohibit" && test -z "$$require"				\
      && { msg='Should specify either prohibit or require'		\
+          $(_sc_say_and_exit) } || :;					\
+   test -z "$$prohibit" && test -n "$$exclude"				\
+     && { msg='Use of exclude requires a prohibit pattern'		\
           $(_sc_say_and_exit) } || :;					\
    test -n "$$in_vc_files" && test -n "$$in_files"			\
      && { msg='Cannot specify both in_vc_files and in_files'		\
@@ -258,6 +279,7 @@ define _sc_search_regexp
    if test -n "$$files"; then						\
      if test -n "$$prohibit"; then					\
        grep $$with_grep_options $(_ignore_case) -nE "$$prohibit" $$files \
+         | grep -vE "$${exclude-^$$}"					\
          && { msg="$$halt" $(_sc_say_and_exit) } || :;			\
      else								\
        grep $$with_grep_options $(_ignore_case) -LE "$$require" $$files \
@@ -276,17 +298,17 @@ sc_avoid_if_before_free:
 	    exit 1; } || :
 
 sc_cast_of_argument_to_free:
-	@prohibit='\<free *\( *\(' halt='don'\''t cast free argument'	\
+	@prohibit='\<free *\( *\(' halt="don't cast free argument"	\
 	  $(_sc_search_regexp)
 
 sc_cast_of_x_alloc_return_value:
 	@prohibit='\*\) *x(m|c|re)alloc\>'				\
-	halt='don'\''t cast x*alloc return value'			\
+	halt="don't cast x*alloc return value"				\
 	  $(_sc_search_regexp)
 
 sc_cast_of_alloca_return_value:
 	@prohibit='\*\) *alloca\>'					\
-	halt='don'\''t cast alloca return value'			\
+	halt="don't cast alloca return value"				\
 	  $(_sc_search_regexp)
 
 sc_space_tab:
@@ -303,12 +325,12 @@ sc_prohibit_atoi_atof:
 	  $(_sc_search_regexp)
 
 # Use STREQ rather than comparing strcmp == 0, or != 0.
+sp_ = strcmp *\(.+\)
 sc_prohibit_strcmp:
-	@grep -nE '! *str''cmp *\(|\<str''cmp *\(.+\) *[!=]='	\
-	    $$($(VC_LIST_EXCEPT))					\
-	  | grep -vE ':# *define STRN?EQ\(' &&				\
-	  { echo '$(ME): replace str''cmp calls above with STREQ/STRNEQ' \
-		1>&2; exit 1; } || :
+	@prohibit='! *strcmp *\(|\<$(sp_) *[!=]=|[!=]= *$(sp_)'		\
+	exclude=':# *define STRN?EQ\('					\
+	halt='$(ME): replace strcmp calls above with STREQ/STRNEQ'	\
+	  $(_sc_search_regexp)
 
 # Pass EXIT_*, not number, to usage, exit, and error (when exiting)
 # Convert all uses automatically, via these two commands:
@@ -516,7 +538,7 @@ sc_prohibit_argmatch_without_use:
 
 sc_prohibit_canonicalize_without_use:
 	@h='canonicalize.h' \
-	re='CAN_(EXISTING|ALL_BUT_LAST|MISSING)|canonicalize_(mode_t|filename_mode)' \
+	re='CAN_(EXISTING|ALL_BUT_LAST|MISSING)|canonicalize_(mode_t|filename_mode|file_name)' \
 	  $(_sc_header_without_use)
 
 sc_prohibit_root_dev_ino_without_use:
@@ -708,12 +730,10 @@ _gl_translatable_diag_func_re ?= error
 # Look for diagnostics that aren't marked for translation.
 # This won't find any for which error's format string is on a separate line.
 sc_unmarked_diagnostics:
-	@grep -nE							\
-	    '\<$(_gl_translatable_diag_func_re) *\([^"]*"[^"]*[a-z]{3}' \
-		$$($(VC_LIST_EXCEPT))					\
-	  | grep -Ev '(_|ngettext ?)\(' &&				\
-	  { echo '$(ME): found unmarked diagnostic(s)' 1>&2;		\
-	    exit 1; } || :
+	@prohibit='\<$(_gl_translatable_diag_func_re) *\([^"]*"[^"]*[a-z]{3}' \
+	exclude='(_|ngettext ?)\('					\
+	halt='$(ME): found unmarked diagnostic(s)'			\
+	  $(_sc_search_regexp)
 
 # Avoid useless parentheses like those in this example:
 # #if defined (SYMBOL) || defined (SYM2)
@@ -974,10 +994,10 @@ sc_redundant_const:
 	  $(_sc_search_regexp)
 
 sc_const_long_option:
-	@grep '^ *static.*struct option ' $$($(VC_LIST_EXCEPT))		\
-	  | grep -Ev 'const struct option|struct option const' && {	\
-	      echo 1>&2 '$(ME): add "const" to the above declarations'; \
-	      exit 1; } || :
+	@prohibit='^ *static.*struct option '				\
+	exclude='const struct option|struct option const'		\
+	halt='$(ME): add "const" to the above declarations'		\
+	  $(_sc_search_regexp)
 
 NEWS_hash =								\
   $$(sed -n '/^\*.* $(PREV_VERSION_REGEXP) ([0-9-]*)/,$$p'		\
@@ -1015,8 +1035,8 @@ update-NEWS-hash: NEWS
 # setting this to ' && !/PRAGMA_SYSTEM_HEADER/'.
 _makefile_at_at_check_exceptions ?=
 sc_makefile_at_at_check:
-	@perl -ne '/\@[A-Z_0-9]+\@/'					\
-          -e ' && !/([A-Z_0-9]+)\s+=.*\@\1\@$$/'			\
+	@perl -ne '/\@\w+\@/'						\
+          -e ' && !/(\w+)\s+=.*\@\1\@$$/'				\
           -e ''$(_makefile_at_at_check_exceptions)			\
 	  -e 'and (print "$$ARGV:$$.: $$_"), $$m=1; END {exit !$$m}'	\
 	    $$($(VC_LIST_EXCEPT) | grep -E '(^|/)(Makefile\.am|[^/]+\.mk)$$') \
@@ -1079,7 +1099,7 @@ sc_po_check:
 # Sometimes it is useful to change the PATH environment variable
 # in Makefiles.  When doing so, it's better not to use the Unix-centric
 # path separator of ':', but rather the automake-provided '$(PATH_SEPARATOR)'.
-msg = '$(ME): Do not use '\'':'\'' above; use $$(PATH_SEPARATOR) instead'
+msg = '$(ME): Do not use ":" above; use $$(PATH_SEPARATOR) instead'
 sc_makefile_path_separator_check:
 	@prohibit='PATH[=].*:'						\
 	in_vc_files='akefile|\.mk$$'					\
@@ -1234,7 +1254,8 @@ announcement: NEWS ChangeLog $(rel-files)
 	    --gpg-key-id=$(gpg_key_ID)					\
 	    --news=$(srcdir)/NEWS					\
 	    --bootstrap-tools=$(bootstrap-tools)			\
-	    --gnulib-version=$(gnulib-version)				\
+	    $$(case ,$(bootstrap-tools), in (*,gnulib,*)		\
+	       echo --gnulib-version=$(gnulib-version);; esac)		\
 	    --no-print-checksums					\
 	    $(addprefix --url-dir=, $(url_dir_list))
 

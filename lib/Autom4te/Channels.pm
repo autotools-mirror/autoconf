@@ -1,5 +1,4 @@
-# Copyright (C) 2002, 2004, 2006, 2008, 2010 Free Software Foundation,
-# Inc.
+# Copyright (C) 2002-2012 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +35,7 @@ Autom4te::Channels - support functions for error and warning management
   register_channel 'system', type => 'error', exit_code => 4;
 
   # Output a message on channel 'unused'.
-  msg 'unused', "$file:$line", "unused variable `$var'";
+  msg 'unused', "$file:$line", "unused variable '$var'";
 
   # Make the 'unused' channel silent.
   setup_channel 'unused', silent => 1;
@@ -341,7 +340,7 @@ sub _merge_options (\%%)
 	}
       else
 	{
-	  confess "unknown option `$_'";
+	  confess "unknown option '$_'";
 	}
     }
   if ($hash->{'ordered'})
@@ -586,12 +585,12 @@ associated to the message.
 For instance to complain about some unused variable C<mumble>
 declared at line 10 in F<foo.c>, one could do:
 
-  msg 'unused', 'foo.c:10', "unused variable `mumble'";
+  msg 'unused', 'foo.c:10', "unused variable 'mumble'";
 
 If channel C<unused> is not silent (and if this message is not a duplicate),
 the following would be output:
 
-  foo.c:10: unused variable `mumble'
+  foo.c:10: unused variable 'mumble'
 
 C<$location> can also be an instance of C<Autom4te::Location>.  In this
 case, the stack of contexts will be displayed in addition.
