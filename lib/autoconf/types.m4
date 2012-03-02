@@ -199,7 +199,7 @@ m4_define([_AC_CHECK_TYPE_OLD],
 # `long', `short', `signed', or `unsigned' followed by characters
 # that are defining types.
 # Because many people have used `off_t' and `size_t' too, they are added
-# for better common-useward backward compatibility.
+# for better common-use backward compatibility.
 m4_define([_AC_CHECK_TYPE_REPLACEMENT_TYPE_P],
 [m4_bmatch([$1],
 	  [^\(_Bool\|bool\|char\|double\|float\|int\|long\|short\|\(un\)?signed\|[_a-zA-Z][_a-zA-Z0-9]*_t\)[][_a-zA-Z0-9() *]*$],

@@ -96,7 +96,7 @@ $2])])
 #
 # Moreover, we have to take care that calls without parameters are
 # expanded to calls without parameters, not with one empty parameter.
-# This is not only an aesthetical improvement of autoupdate, it also
+# This is not only an aesthetic improvement of autoupdate, it also
 # matters with poorly written macros which test for $# = 0.
 #
 m4_define([AU_ALIAS],

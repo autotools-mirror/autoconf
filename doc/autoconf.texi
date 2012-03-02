@@ -1849,8 +1849,8 @@ required macro is @code{AC_OUTPUT} (@pxref{Output}).
 @defmac AC_INIT (@var{package}, @var{version}, @ovar{bug-report}, @
   @ovar{tarname}, @ovar{url})
 @acindex{INIT}
-Process any command-line arguments and perform various initializations
-and verifications.
+Process any command-line arguments and perform initialization
+and verification.
 
 Set the name of the @var{package} and its @var{version}.  These are
 typically used in @option{--version} support, including that of
@@ -2671,7 +2671,7 @@ top-level directory, this is the same as @code{builddir}.
 @defvar top_build_prefix
 @ovindex top_build_prefix
 The relative name of the top level of the current build tree with final
-slash if nonemtpy.  This is the same as @code{top_builddir}, except that
+slash if nonempty.  This is the same as @code{top_builddir}, except that
 it contains zero or more runs of @code{../}, so it should not be
 appended with a slash for concatenation.  This helps for @command{make}
 implementations that otherwise do not treat @file{./file} and @file{file}
@@ -4084,7 +4084,7 @@ place.  Otherwise set @code{LEX} to @samp{lex} and @code{LEXLIB} to
 to @samp{:}; for packages that ship the generated @file{file.yy.c}
 alongside the source @file{file.l}, this default allows users without a
 lexer generator to still build the package even if the timestamp for
-@file{file.l} is inadvertantly changed.
+@file{file.l} is inadvertently changed.
 
 Define @code{YYTEXT_POINTER} if @code{yytext} defaults to @samp{char *} instead
 of to @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to
@@ -4363,7 +4363,7 @@ set to the absolute name of the candidate program.  If no invocation of
 executed.  @var{feature-test} will be run even when
 @code{ac_cv_path_@var{variable}} is set, to provide the ability to
 choose a better candidate found later in @var{path}; to accept the
-current setting and bypass all futher checks, @var{feature-test} can
+current setting and bypass all further checks, @var{feature-test} can
 execute @code{ac_path_@var{variable}_found=:}.
 
 Note that this macro has some subtle differences from
@@ -8428,7 +8428,7 @@ The extension, or @samp{unknown}, is cached in the
 @code{ac_cv_fc_module_ext} variable.
 @end defmac
 
-@defmac AC_FC_MODULE_FLAG (@ovar{action-if-sucess}, @
+@defmac AC_FC_MODULE_FLAG (@ovar{action-if-success}, @
   @dvar{action-if-failure, AC_MSG_FAILURE})
 @acindex{FC_MODULE_FLAG}
 @caindex fc_module_flag
@@ -8473,7 +8473,7 @@ The substituted value of @code{FC_MODINC} may refer to the
 the significant trailing whitespace in a @file{Makefile}.
 @end defmac
 
-@defmac AC_FC_MODULE_OUTPUT_FLAG (@ovar{action-if-sucess}, @
+@defmac AC_FC_MODULE_OUTPUT_FLAG (@ovar{action-if-success}, @
   @dvar{action-if-failure, AC_MSG_FAILURE})
 @acindex{FC_MODULE_OUTPUT_FLAG}
 @caindex fc_module_output_flag
@@ -9399,7 +9399,7 @@ just-compiled object file @file{conftest.$OBJEXT}.
 This macro uses @code{AC_REQUIRE} for the compiler associated with the
 current language, which means that if the compiler has not yet been
 determined, the compiler determination will be made prior to the body of
-the outermust @code{AC_DEFUN} macro that triggered this macro to
+the outermost @code{AC_DEFUN} macro that triggered this macro to
 expand (@pxref{Expanded Before Required}).
 @end defmac
 
@@ -23787,7 +23787,7 @@ issue.
 @defmac AC_SYS_SIGLIST_DECLARED
 @acindex{SYS_SIGLIST_DECLARED}
 This macro was renamed @code{AC_DECL_SYS_SIGLIST}.  However, even that
-name is obsolete, as the same functionality is now acheived via
+name is obsolete, as the same functionality is now achieved via
 @code{AC_CHECK_DECLS} (@pxref{AC_CHECK_DECLS}).
 @end defmac
 
@@ -23929,7 +23929,7 @@ function returning @code{void}, define @code{RETSIGTYPE} to be
 portable to assume C89, and that signal handlers return @code{void},
 without needing to use this macro or @code{RETSIGTYPE}.
 
-When targetting older K&R C, it is possible to define signal handlers as
+When targeting older K&R C, it is possible to define signal handlers as
 returning type @code{RETSIGTYPE}, and omit a return statement:
 
 @example
@@ -25445,7 +25445,7 @@ With Automake, here is a minimal example for inclusion in
 validation suite.
 
 @example
-# The `:;' works around a Bash 3.2 bug when the output is not writeable.
+# The `:;' works around a Bash 3.2 bug when the output is not writable.
 $(srcdir)/package.m4: $(top_srcdir)/configure.ac
         :;@{ \
           echo '# Signature of the current package.' && \
@@ -26024,7 +26024,7 @@ is happening, remember that the use of @code{AC_COMPILE_IFELSE} includes
 a call to @code{AC_REQUIRE([AC_PROG_CC])} under the hood.  According to
 the documented semantics of @code{AC_REQUIRE}, this means that
 @code{AC_PROG_CC} @emph{must} occur before the body of the outermost
-@code{AC_DEFUN}, which in this case is @code{BAR}, thus preceeding the
+@code{AC_DEFUN}, which in this case is @code{BAR}, thus preceding the
 use of @samp{foobar=}.  The older versions of Autoconf were broken with
 regards to the rules of @code{AC_REQUIRE}, which explains why the code
 changed from one over to two copies of @code{AC_PROG_CC} when upgrading
@@ -26572,7 +26572,7 @@ introduced in this document.
 @c  LocalWords:  linux netinet ia Tru XFree DIRENT NDIR dirent ndir multitable
 @c  LocalWords:  NAMLEN strlen namlen MKDEV SYSMACROS makedev RESOLV resolv DNS
 @c  LocalWords:  inet structs NAMESER arpa NETDB netdb UTekV UTS GCC's kB
-@c  LocalWords:  STDBOOL BOOL stdbool conformant cplusplus bool Bool stdarg tm
+@c  LocalWords:  STDBOOL BOOL stdbool cplusplus bool Bool stdarg tm
 @c  LocalWords:  ctype strchr strrchr rindex bcopy memmove memchr WEXITSTATUS
 @c  LocalWords:  WIFEXITED TIOCGWINSZ GWINSZ termios preprocess preprocessable
 @c  LocalWords:  DECLS strdup calloc BLKSIZE blksize RDEV rdev TZNAME tzname pw
@@ -26617,7 +26617,7 @@ introduced in this document.
 @c  LocalWords:  GOBJC OTP ERLC erl valloc decr dumpdef errprint incr
 @c  LocalWords:  esyscmd len maketemp pushdef substr syscmd sysval translit txt
 @c  LocalWords:  sinclude foreach myvar tolower toupper uniq BASENAME STDIN
-@c  LocalWords:  Dynix descrips basename aname cname macroexpands xno xcheck
+@c  LocalWords:  Dynix basename aname cname macroexpands xno xcheck
 @c  LocalWords:  LIBREADLINE lreadline lncurses libreadline
 
 @c Local Variables:

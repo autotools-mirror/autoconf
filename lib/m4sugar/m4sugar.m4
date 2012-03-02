@@ -950,7 +950,7 @@ m4_define([m4_make_list], [m4_join([,
 # m4_noquote(STRING)
 # ------------------
 # Return the result of ignoring all quotes in STRING and invoking the
-# macros it contains.  Amongst other things, this is useful for enabling
+# macros it contains.  Among other things, this is useful for enabling
 # macro invocations inside strings with [] blocks (for instance regexps
 # and help-strings).  On the other hand, since all quotes are disabled,
 # any macro expanded during this time that relies on nested [] quoting
@@ -2647,7 +2647,7 @@ dnl prefix1 shorter: pad to length of prefix, and reset cursor
 [$2]m4_define([m4_Cursor], m4_Indent)],
 	      [m4_format([%*s], m4_max([0],
   m4_eval(m4_Indent - m4_Cursor)), [])m4_define([m4_Cursor], m4_Indent)])]],
-dnl now, for each word, compute the curser after the word is output, then
+dnl now, for each word, compute the cursor after the word is output, then
 dnl check if the cursor would exceed the wrap column
 dnl if so, reset cursor, and insert newline and prefix
 dnl if not, insert the separator (usually a space)

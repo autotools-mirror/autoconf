@@ -838,7 +838,7 @@ EOF
 
   # This is dubious: should we really transform the quadrigraphs in
   # traces?  It might break balanced [ ] etc. in the output.  The
-  # consensus seeems to be that traces are more useful this way.
+  # consensus seems to be that traces are more useful this way.
   while ($_ = $in->getline)
     {
       # It makes no sense to try to transform __oline__.

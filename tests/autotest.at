@@ -109,7 +109,7 @@ AT_CLEANUP
 # -----------------------------------------
 # Create a test named TITLE that tries compiling SUITE with syntax
 # errors with autotest.  Expect a failed compilation, and grep for
-# MESSAGE occuring within the error output.
+# MESSAGE occurring within the error output.
 m4_define([AT_CHECK_AT_SYNTAX],
 [AT_SETUP([$1])
 AT_CHECK_AT_PREP([micro-suite], [$2], [1], [], [stderr])

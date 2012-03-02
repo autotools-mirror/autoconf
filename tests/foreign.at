@@ -103,7 +103,7 @@ AC_OUTPUT
 
 AT_DATA([Makefile.in],
 [[SHTOOL = @SHTOOL@
-# fake these, so that we use shtool whereever possible.
+# fake these, so that we use shtool wherever possible.
 INSTALL_PROGRAM = $(ac_install_sh)
 INSTALL_DATA = $(ac_install_sh) -m 644
 prefix = @prefix@

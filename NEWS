@@ -1261,7 +1261,7 @@ Release tips:
 ** Misc.
 
 - config.log
-  Now contains the list of ouput variables and files (AC_SUBST,
+  Now contains the list of output variables and files (AC_SUBST,
   AC_SUBST_FILES).
 
 * Major changes in Autoconf 2.53
@@ -1350,7 +1350,7 @@ Release tips:
 
 - AC_C_BIGENDIAN supports the cross-compiling case.
 - AC_C_BIGENDIAN accepts ACTION-IF-TRUE, ACTION-IF-FALSE, and
-  ACTION-IF-UNKNOWN arguments.  All are facultative, and the default
+  ACTION-IF-UNKNOWN arguments.  All are optional, and the default
   for ACTION-IF-TRUE is to define WORDS_BIGENDIAN like AC_C_BIGENDIAN
   always did.
 - AC_C_LONG_DOUBLE now succeeds only if `long double' has more range or

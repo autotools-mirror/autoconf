@@ -703,7 +703,7 @@ AC_DEFINE([ANT], [@], [The Ant in a h@t.])
 # Yes, that's right: the `middle' part of `acconfig.h' is still before
 # the AH_TOP part.  But so what, you're not supposed to use the two
 # together.
-# Ignore STDERR which is the longuish complaint against autoheader junk
+# Ignore STDERR which is the longish complaint against autoheader junk
 # files.
 AT_CHECK_AUTOHEADER([--force], [], [], [ignore])
 AT_CHECK([cat config.hin], 0,

@@ -1968,7 +1968,7 @@ m4_define([_AS_VAR_ARITH_WORKS],
 # Perform the arithmetic evaluation of the arguments in EXPR, and set
 # contents of the polymorphic shell variable VAR to the result, taking
 # advantage of any shell optimizations that perform arithmetic without
-# forks.  Note that numbers occuring within EXPR must be written in
+# forks.  Note that numbers occurring within EXPR must be written in
 # decimal, and without leading zeroes; variables containing numbers
 # must be expanded prior to arithmetic evaluation; the first argument
 # must not be a negative number; there is no portable equality

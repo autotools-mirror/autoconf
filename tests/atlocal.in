@@ -34,7 +34,7 @@ else
   func_sanitize_file_name () { echo "$@" | tr -d '@ac_cv_unsupported_fs_chars@'; }
 fi
 
-# Can we create directories with trailing whitespaces in their name?
+# Can we create directories with trailing whitespace in their names?
 ac_cv_dir_trailing_space='@ac_cv_dir_trailing_space@'
 if test "$ac_cv_dir_trailing_space" = yes; then
   func_sanitize_dir_name () { echo "$@"; }

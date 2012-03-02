@@ -76,7 +76,7 @@ my @export_forward_subs =
 =item C<$debug>
 
 Set this variable to 1 if debug messages should be enabled.  Debug
-messages are meant for developpers only, or when tracking down an
+messages are meant for developers only, or when tracking down an
 incorrect execution.
 
 =cut

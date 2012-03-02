@@ -253,7 +253,7 @@ sub scan_c_file ($)
 	{
 	  $in_comment = 0;
 	}
-      # The whole line is inside a commment.
+      # The whole line is inside a comment.
       next if $in_comment;
       # All on one line.
       s,/\*.*?\*/,,g;

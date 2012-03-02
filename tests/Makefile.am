@@ -130,7 +130,7 @@ atconfig: $(top_builddir)/config.status
 # includes $(TESTSUITE).  This is the Automake rule, plus our
 # dependency, and we silence the warning from 'automake -Wall' by
 # hiding the dependency behind a variable.
-# TODO - fix this if newer automake accomodates the dependency.
+# TODO - fix this if newer automake accommodates the dependency.
 distclean_generic = distclean-generic
 $(distclean_generic): clean-local
 
