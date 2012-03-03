@@ -1199,6 +1199,10 @@ dnl Eggert wrote the scripts with optimization help from Paolo Bonzini).
   chmod +x "$as_me.lineno"] ||
     AS_ERROR([cannot create $as_me.lineno; rerun with a POSIX shell])
 
+  # If we had to re-execute with $CONFIG_SHELL, we're ensured to have
+  # already done that, so ensure we don't try to do so again and fall
+  # in an infinite loop.  This has already happened in practice.
+  _as_can_reexec=no; export _as_can_reexec
   # Don't try to exec as it changes $[0], causing all sort of problems
   # (the dirname of $[0] is not the place where we might find the
   # original and so on.  Autoconf is especially sensitive to this).
