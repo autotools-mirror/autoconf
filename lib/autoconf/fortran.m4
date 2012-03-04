@@ -1599,7 +1599,8 @@ do
 	     [],
 	     [ac_cv_fc_check_bounds=$ac_flag; break])])])])
 done
-rm -f conftest$ac_exeext conftest.err conftest.$ac_objext conftest.$ac_ext
+rm -f conftest$ac_exeext conftest.err conftest.$ac_objext conftest.$ac_ext \
+  core *.core core.conftest.*
 FCFLAGS=$ac_fc_check_bounds_FCFLAGS_save
 ])
 if test "x$ac_cv_fc_check_bounds" = xunknown; then
