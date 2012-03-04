@@ -15219,6 +15219,22 @@ Bash in Mac OS X 10.2.
 @cindex invoking the shell
 @cindex shell invocation
 
+The Korn shell (up to at least version M-12/28/93d) has a bug when
+invoked on a file whose name does not contain a slash.  It first
+searches for the file's name in @env{PATH}, and if found it executes
+that rather than the original file.  For example, assuming there is a
+binary executable @file{/usr/bin/script} in your @env{PATH}, the last
+command in the following example fails because the Korn shell finds
+@file{/usr/bin/script} and refuses to execute it as a shell script:
+
+@example
+$ @kbd{touch xxyzzyz script}
+$ @kbd{ksh xxyzzyz}
+$ @kbd{ksh ./script}
+$ @kbd{ksh script}
+ksh: script: cannot execute
+@end example
+
 Bash 2.03 has a bug when invoked with the @option{-c} option: if the
 option-argument ends in backslash-newline, Bash incorrectly reports a
 syntax error.  The problem does not occur if a character follows the
