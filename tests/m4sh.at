@@ -1559,9 +1559,10 @@ A_B_C_P__
 
 dnl Check that of the last 6 macros, only 2 needed command substitution.
 dnl This test abuses our knowledge of m4sh internals a bit; oh well.
-AT_CHECK([sed -n '/start here/,$ {
+AT_CHECK([tab='	' # a single ASCII tab character
+sed -n '/start here/,$ {
 /`.*`/p
-}' script | wc -l], [], [[2
+}' script | wc -l | sed "s/[[ $tab]]//g" ], [], [[2
 ]])
 
 AT_CLEANUP
