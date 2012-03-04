@@ -120,7 +120,10 @@ exec sh "@S|@@"
 chmod a+x cfg-sh
 
 AT_CAPTURE_FILE([config.log])
-AT_CHECK([env CONFIG_SHELL=./cfg-sh ./configure], [0], [], [])
+# Export CONFIG_SITE to /dev/null to avoid spurious diffs in expected
+# stdout/stderr.
+AT_CHECK([env CONFIG_SITE=/dev/null CONFIG_SHELL=./cfg-sh ./configure],
+         [0], [], [])
 # ./configure re-executed itself.
 AT_CHECK([test -f cfg-sh-has-run], [0])
 # And did that not to cause extra execution of later commands.
