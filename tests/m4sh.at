@@ -49,6 +49,10 @@ echo foo > sentinel
 ]])
 AT_CHECK_M4SH
 
+# Calling the script simply 'script' could cause problems with
+# Solaris /usr/xpg4/bin/sh in the invocation 'sh script' below.
+mv -f script script2
+
 AT_DATA([fake-shell],
 [[#!/bin/sh
 echo 'Fake shell executed.'
@@ -61,7 +65,7 @@ done
 ]])
 chmod a+x fake-shell
 
-AT_CHECK([CONFIG_SHELL=./fake-shell ./script 1 2 4 8], [0],
+AT_CHECK([CONFIG_SHELL=./fake-shell ./script2 1 2 4 8], [0],
 [Fake shell executed.
 nargs = 4
  :1:
@@ -73,7 +77,7 @@ AT_CHECK([test ! -f sentinel], [0])
 test ! -f sentinel || rm -f sentinel # Cleanup for next test.
 
 AT_CHECK(
-[CONFIG_SHELL=`pwd`/fake-shell sh script a 'b  c' '  d	   e '],
+[CONFIG_SHELL=`pwd`/fake-shell sh script2 a 'b  c' '  d	   e '],
 [0],
 [Fake shell executed.
 nargs = 3
@@ -85,7 +89,7 @@ AT_CHECK([test ! -f sentinel], [0])
 test ! -f sentinel || rm -f sentinel # Cleanup for next test.
 
 AT_CHECK([(PATH=`pwd`:$PATH; export PATH;
-CONFIG_SHELL=fake-shell script '' '&' '!;*' '<($[]@%:@)>,' 'x
+CONFIG_SHELL=fake-shell script2 '' '&' '!;*' '<($[]@%:@)>,' 'x
 y  z
 1 2 3')], [0],
 [Fake shell executed.
