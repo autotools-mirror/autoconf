@@ -579,7 +579,7 @@ st1=$?
 (./foo.sh) >/dev/null 2>&1
 st2=$?
 case $st1:$st2 in
-  1:126 | 0:0 ) echo 2 ;;
+  *[[1-9]]*:*[[1-9]]* | 0:0 ) echo 2 ;;
   *) echo "fail ($st1:$st2)" ;;
 esac
 # Now things better be executable
