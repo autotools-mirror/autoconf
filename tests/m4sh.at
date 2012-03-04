@@ -569,7 +569,7 @@ else
   echo 1
 fi
 cat > foo.sh <<\EOF || AS_EXIT([1])
-#/bin/sh
+#!/bin/sh
 exit 0
 EOF
 # File systems like FAT tend to fake executable permissions on all files.
