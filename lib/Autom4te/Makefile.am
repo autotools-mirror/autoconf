@@ -25,7 +25,6 @@ dist_perllib_DATA = \
   General.pm \
   Getopt.pm \
   Request.pm \
-  Struct.pm \
   XFile.pm
 
 

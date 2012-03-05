@@ -32,7 +32,7 @@ used in several executables of the Autoconf and Automake packages.
 =cut
 
 use strict;
-use Autom4te::Struct;
+use Class::Struct;
 use Carp;
 use Data::Dumper;
 

@@ -87,7 +87,6 @@ autom4te_files = \
   Autom4te/Channels.pm \
   Autom4te/FileUtils.pm \
   Autom4te/Getopt.pm \
-  Autom4te/Struct.pm \
   Autom4te/XFile.pm
 
 move_if_change = '$(abs_srcdir)'/build-aux/move-if-change
