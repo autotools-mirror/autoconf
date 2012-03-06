@@ -30,7 +30,7 @@ line options in conformance to the GNU Coding standards.
 
 =cut
 
-use 5.006_002;
+use 5.006;
 use strict;
 use warnings FATAL => 'all';
 use Exporter ();

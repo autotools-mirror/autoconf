@@ -34,6 +34,7 @@ This perl module provides various general purpose file handling functions.
 
 =cut
 
+use 5.006;
 use strict;
 use Exporter;
 use File::stat;

@@ -69,7 +69,7 @@ and C<getlines> methods to translate C<\r\n> to C<\n>.
 
 =cut
 
-require 5.000;
+use 5.006;
 use strict;
 use vars qw($VERSION @EXPORT @EXPORT_OK $AUTOLOAD @ISA);
 use Carp;
