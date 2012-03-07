@@ -32,7 +32,7 @@ used in several executables of the Autoconf and Automake packages.
 
 =cut
 
-use 5.006_002;
+use 5.006;
 use Exporter;
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
