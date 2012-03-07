@@ -331,10 +331,7 @@ if test -f state-env.before && test -f state-env.after; then
       # There may be variables spread on several lines; remove latter lines.
       $GREP '^m4_defn([m4_re_word])=' >clean-$act_file ||
         test $? -eq 1 || grep_failed=:
-    if test -s stderr-$act_file; then
-      cat stderr-$act_file >&2
-      grep_failed=:
-    fi
+    test -s stderr-$act_file && grep_failed=:
   done
   $at_traceon
   $grep_failed || $at_diff clean-state-env.before clean-state-env.after
