@@ -19,7 +19,7 @@ package Autom4te::General;
 
 =head1 NAME
 
-Autom4te::General - general support functions for Autoconf and Automake
+Autom4te::General - general support functions for Autoconf
 
 =head1 SYNOPSIS
 
@@ -28,7 +28,7 @@ Autom4te::General - general support functions for Autoconf and Automake
 =head1 DESCRIPTION
 
 This perl module provides various general purpose support functions
-used in several executables of the Autoconf and Automake packages.
+used in several executables of the Autoconf package.
 
 =cut
 
