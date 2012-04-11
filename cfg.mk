@@ -127,7 +127,7 @@ update-copyright-env = \
   UPDATE_COPYRIGHT_MAX_LINE_LENGTH=72
 
 # Prevent incorrect NEWS edits.
-old_NEWS_hash = d10ae7f49f642a6dc120c135ff4844ff
+old_NEWS_hash = 54ad39275441a2a3fcbe6182da4f84fb
 
 exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = ^maint\.mk$$
 exclude_file_name_regexp--sc_prohibit_test_minus_ao = \
