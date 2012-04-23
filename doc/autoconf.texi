@@ -21747,10 +21747,12 @@ system types are involved.  The options to specify them are:
 @item --build=@var{build-type}
 the type of system on which the package is being configured and
 compiled.  It defaults to the result of running @command{config.guess}.
+Specifying a @var{build-type} that differs from @var{host-type} enables
+cross-compilation mode.
 
 @item --host=@var{host-type}
 the type of system on which the package runs.  By default it is the
-same as the build machine.  Specifying it enables the cross-compilation
+same as the build machine.  Specifying it enables cross-compilation
 mode.
 
 @item --target=@var{target-type}
