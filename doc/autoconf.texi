@@ -9491,8 +9491,11 @@ available in the shell variable @samp{$?}.  This exit status might be
 that of a failed compilation, or it might be that of a failed program
 execution.
 
-If the compiler being used does not produce executables that run on the
-system where @command{configure} is being run, then the test program is
+If cross-compilation mode is enabled (this is the case if either the
+compiler being used does not produce executables that run on the system
+where @command{configure} is being run, or if the options @code{--build}
+and @code{--host} were both specified and their values are different),
+then the test program is
 not run.  If the optional shell commands @var{action-if-cross-compiling}
 are given, those commands are run instead; typically these commands
 provide pessimistic defaults that allow cross-compilation to work even
@@ -21752,8 +21755,9 @@ cross-compilation mode.
 
 @item --host=@var{host-type}
 the type of system on which the package runs.  By default it is the
-same as the build machine.  Specifying it enables cross-compilation
-mode.
+same as the build machine.  Specifying a @var{host-type} that differs
+from @var{build-type}, when @var{build-type} was also explicitly
+specified, enables cross-compilation mode.
 
 @item --target=@var{target-type}
 the type of system for which any compiler tools in the package
@@ -24459,10 +24463,7 @@ and they're different, @command{configure} enters cross compilation
 mode, so it doesn't run any tests that require execution.
 
 Hint: if you mean to override the result of @command{config.guess},
-prefer @option{--build} over @option{--host}.  In the future,
-@option{--host} will not override the name of the build system type.
-Whenever you specify @option{--host}, be sure to specify @option{--build}
-too.
+prefer @option{--build} over @option{--host}.
 
 @sp 1
 
