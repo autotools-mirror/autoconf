@@ -279,7 +279,7 @@ define _sc_search_regexp
    if test -n "$$files"; then						\
      if test -n "$$prohibit"; then					\
        grep $$with_grep_options $(_ignore_case) -nE "$$prohibit" $$files \
-         | grep -vE "$${exclude-^$$}"					\
+         | grep -vE "$${exclude:-^$$}"					\
          && { msg="$$halt" $(_sc_say_and_exit) } || :;			\
      else								\
        grep $$with_grep_options $(_ignore_case) -LE "$$require" $$files \
@@ -455,7 +455,8 @@ sc_prohibit_quotearg_without_use:
 
 # Don't include quote.h unless you use one of its functions.
 sc_prohibit_quote_without_use:
-	@h='quote.h' re='\<quote(_n)? *\(' $(_sc_header_without_use)
+	@h='quote.h' re='\<quote((_n)? *\(|_quoting_options\>)' \
+	  $(_sc_header_without_use)
 
 # Don't include this header unless you use one of its functions.
 sc_prohibit_long_options_without_use:
@@ -931,8 +932,15 @@ sc_prohibit_doubled_word:
 # A regular expression matching undesirable combinations of words like
 # "can not"; this matches them even when the two words appear on different
 # lines, but not when there is an intervening delimiter like "#" or "*".
+# Similarly undesirable, "See @xref{...}", since an @xref should start
+# a sentence.  Explicitly prohibit any prefix of "see" or "also".
+# Also prohibit a prefix matching "\w+ +".
+# @pxref gets the same see/also treatment and should be parenthesized;
+# presume it must *not* start a sentence.
+bad_xref_re_ ?= (?:[\w,:;] +|(?:see|also)\s+)\@xref\{
+bad_pxref_re_ ?= (?:[.!?]|(?:see|also))\s+\@pxref\{
 prohibit_undesirable_word_seq_RE_ ?=					\
-  /\bcan\s+not\b/gims
+  /(?:\bcan\s+not\b|$(bad_xref_re_)|$(bad_pxref_re_))/gims
 prohibit_undesirable_word_seq_ =					\
     -e 'while ($(prohibit_undesirable_word_seq_RE_))'			\
     $(perl_filename_lineno_text_)
