@@ -1,5 +1,8 @@
 GNU Autoconf NEWS - User visible changes.
 
+* Noteworthy changes in release ?.? (????-??-??) [?]
+
+
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
 ** Autoconf now requires perl 5.6 or better (but generated configure

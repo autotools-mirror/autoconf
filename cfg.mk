@@ -127,7 +127,7 @@ update-copyright-env = \
   UPDATE_COPYRIGHT_MAX_LINE_LENGTH=72
 
 # Prevent incorrect NEWS edits.
-old_NEWS_hash = 54ad39275441a2a3fcbe6182da4f84fb
+old_NEWS_hash = 8532b4ed4fb456eb71071a5cf8c258d4
 
 exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = \
   ^(maint\.mk|build-aux/texinfo\.tex)$$
