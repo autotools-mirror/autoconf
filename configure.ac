@@ -26,8 +26,7 @@ AC_CONFIG_SRCDIR([lib/autoconf/autoconf.m4])
 
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.11 dist-bzip2 dist-xz
-readme-alpha no-texinfo.tex std-options])
+AM_INIT_AUTOMAKE([1.11 dist-xz readme-alpha no-texinfo.tex std-options])
 
 AB_INIT
 
