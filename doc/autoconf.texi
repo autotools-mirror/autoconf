@@ -4211,7 +4211,7 @@ AC_PATH_PROG([INETD], [inetd], [/usr/libexec/inetd],
 @end example
 
 You are strongly encouraged to declare the @var{variable} passed to
-@code{AC_CHECK_PROG} etc.@: as precious, @xref{Setting Output Variables},
+@code{AC_CHECK_PROG} etc.@: as precious.  @xref{Setting Output Variables},
 @code{AC_ARG_VAR}, for more details.
 
 @anchor{AC_CHECK_PROG}
@@ -16782,7 +16782,7 @@ PS4='+ '
 
 @noindent
 (actually, there is some complication due to bugs in @command{unset};
-see @pxref{unset, , Limitations of Shell Builtins}).
+@pxref{unset, , Limitations of Shell Builtins}).
 
 @item FPATH
 @evindex FPATH
@@ -17874,8 +17874,8 @@ for an @command{echo} that does not interpret @samp{\} or leading
 @samp{-}. With Solaris @command{ksh}, it is possible to use @code{print
 -r --} for this role instead.
 
-For a discussion of portable alternatives to both @command{printf}
-and @command{echo}, @xref{echo, , Limitations of Shell Builtins}.
+@xref{echo, , Limitations of Shell Builtins} for a discussion of
+portable alternatives to both @command{printf} and @command{echo}.
 
 
 @item @command{pwd}

@@ -129,12 +129,13 @@ update-copyright-env = \
 # Prevent incorrect NEWS edits.
 old_NEWS_hash = 54ad39275441a2a3fcbe6182da4f84fb
 
-exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = ^maint\.mk$$
+exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = \
+  ^(maint\.mk|build-aux/texinfo\.tex)$$
 exclude_file_name_regexp--sc_prohibit_test_minus_ao = \
   ^(maint\.mk|doc/autoconf\.texi)$$
-
 exclude_file_name_regexp--sc_prohibit_atoi_atof = ^doc/autoconf\.texi$$
-exclude_file_name_regexp--sc_useless_cpp_parens = ^build-aux/config\.guess$$
+exclude_file_name_regexp--sc_useless_cpp_parens = \
+  ^(build-aux/config\.guess|doc/standards\.texi)$$
 exclude_file_name_regexp--sc_trailing_blank = ^build-aux/texinfo\.tex$$
 exclude_file_name_regexp--sc_two_space_separator_in_usage = \
   ^build-aux/gnupload$$
