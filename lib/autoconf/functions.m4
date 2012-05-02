@@ -423,6 +423,7 @@ AU_ALIAS([AC_ALLOCA], [AC_FUNC_ALLOCA])
 AN_FUNCTION([chown], [AC_FUNC_CHOWN])
 AC_DEFUN([AC_FUNC_CHOWN],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
+AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
 [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
@@ -443,7 +444,12 @@ AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
 ]])],
 	       [ac_cv_func_chown_works=yes],
 	       [ac_cv_func_chown_works=no],
-	       [ac_cv_func_chown_works=no])
+	       [case "$host_os" in # ((
+			  # Guess yes on glibc systems.
+		  *-gnu*) ac_cv_func_chown_works=yes ;;
+			  # If we don't know, assume the worst.
+		  *)      ac_cv_func_chown_works=no ;;
+		esac])
 rm -f conftest.chown
 ])
 if test $ac_cv_func_chown_works = yes; then
@@ -625,6 +631,7 @@ AN_FUNCTION([getgroups], [AC_FUNC_GETGROUPS])
 AC_DEFUN([AC_FUNC_GETGROUPS],
 [AC_REQUIRE([AC_TYPE_GETGROUPS])dnl
 AC_REQUIRE([AC_TYPE_SIZE_T])dnl
+AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CHECK_FUNC(getgroups)
 
 # If we don't yet have getgroups, see if it's in -lbsd.
@@ -643,15 +650,22 @@ if test $ac_cv_func_getgroups = yes; then
        return getgroups (0, 0) == -1;]])],
 		  [ac_cv_func_getgroups_works=yes],
 		  [ac_cv_func_getgroups_works=no],
-		  [ac_cv_func_getgroups_works=no])
+		  [case "$host_os" in # ((
+			     # Guess yes on glibc systems.
+		     *-gnu*) ac_cv_func_getgroups_works="guessing yes" ;;
+			     # If we don't know, assume the worst.
+		     *)      ac_cv_func_getgroups_works="guessing no" ;;
+		   esac])
    ])
 else
   ac_cv_func_getgroups_works=no
 fi
-if test $ac_cv_func_getgroups_works = yes; then
-  AC_DEFINE(HAVE_GETGROUPS, 1,
-	    [Define to 1 if your system has a working `getgroups' function.])
-fi
+case "$ac_cv_func_getgroups_works" in
+  *yes)
+    AC_DEFINE(HAVE_GETGROUPS, 1,
+	      [Define to 1 if your system has a working `getgroups' function.])
+    ;;
+esac
 LIBS=$ac_save_LIBS
 ])# AC_FUNC_GETGROUPS
 
@@ -847,7 +861,8 @@ fi
 # calls lstat a second time when necessary.
 AN_FUNCTION([lstat], [AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK])
 AC_DEFUN([AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK],
-[AC_CACHE_CHECK(
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
+AC_CACHE_CHECK(
        [whether lstat correctly handles trailing slash],
        [ac_cv_func_lstat_dereferences_slashed_symlink],
 [rm -f conftest.sym conftest.file
@@ -861,7 +876,12 @@ if test "$as_ln_s" = "ln -s" && ln -s conftest.file conftest.sym; then
      return lstat ("conftest.sym/", &sbuf) == 0;])],
 		[ac_cv_func_lstat_dereferences_slashed_symlink=yes],
 		[ac_cv_func_lstat_dereferences_slashed_symlink=no],
-		[ac_cv_func_lstat_dereferences_slashed_symlink=no])
+		[case "$host_os" in # ((
+			   # Guess yes on glibc systems.
+		   *-gnu*) ac_cv_func_lstat_dereferences_slashed_symlink=yes ;;
+			   # If we don't know, assume the worst.
+		   *)      ac_cv_func_lstat_dereferences_slashed_symlink=no ;;
+		 esac])
 else
   # If the `ln -s' command failed, then we probably don't even
   # have an lstat function.
@@ -886,6 +906,7 @@ fi
 # If `malloc (0)' properly handled, run IF-WORKS, otherwise, IF-NOT.
 AC_DEFUN([_AC_FUNC_MALLOC_IF],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
+AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CHECK_HEADERS(stdlib.h)
 AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 [AC_RUN_IFELSE(
@@ -899,7 +920,14 @@ char *malloc ();
 		 [return ! malloc (0);])],
 	       [ac_cv_func_malloc_0_nonnull=yes],
 	       [ac_cv_func_malloc_0_nonnull=no],
-	       [ac_cv_func_malloc_0_nonnull=no])])
+	       [case "$host_os" in # ((
+		  # Guess yes on platforms where we know the result.
+		  *-gnu* | freebsd* | netbsd* | openbsd* \
+		  | hpux* | solaris* | cygwin* | mingw*)
+		    ac_cv_func_malloc_0_nonnull=yes ;;
+		  # If we don't know, assume the worst.
+		  *) ac_cv_func_malloc_0_nonnull=no ;;
+		esac])])
 AS_IF([test $ac_cv_func_malloc_0_nonnull = yes], [$1], [$2])
 ])# _AC_FUNC_MALLOC_IF
 
@@ -1199,7 +1227,8 @@ AU_ALIAS([AM_FUNC_MKTIME], [AC_FUNC_MKTIME])
 # ------------
 AN_FUNCTION([mmap], [AC_FUNC_MMAP])
 AC_DEFUN([AC_FUNC_MMAP],
-[AC_CHECK_HEADERS_ONCE([stdlib.h unistd.h sys/param.h])
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
+AC_CHECK_HEADERS_ONCE([stdlib.h unistd.h sys/param.h])
 AC_CHECK_FUNCS([getpagesize])
 AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
 [AC_RUN_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
@@ -1340,7 +1369,12 @@ main ()
 }]])],
 	       [ac_cv_func_mmap_fixed_mapped=yes],
 	       [ac_cv_func_mmap_fixed_mapped=no],
-	       [ac_cv_func_mmap_fixed_mapped=no])])
+	       [case "$host_os" in # ((
+			  # Guess yes on platforms where we know the result.
+		  linux*) ac_cv_func_mmap_fixed_mapped=yes ;;
+			  # If we don't know, assume the worst.
+		  *)      ac_cv_func_mmap_fixed_mapped=no ;;
+		esac])])
 if test $ac_cv_func_mmap_fixed_mapped = yes; then
   AC_DEFINE([HAVE_MMAP], [1],
 	    [Define to 1 if you have a working `mmap' system call.])
@@ -1391,6 +1425,7 @@ AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
 # If `realloc (0, 0)' is properly handled, run IF-WORKS, otherwise, IF-NOT.
 AC_DEFUN([_AC_FUNC_REALLOC_IF],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
+AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CHECK_HEADERS(stdlib.h)
 AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
 [AC_RUN_IFELSE(
@@ -1404,7 +1439,14 @@ char *realloc ();
 		 [return ! realloc (0, 0);])],
 	       [ac_cv_func_realloc_0_nonnull=yes],
 	       [ac_cv_func_realloc_0_nonnull=no],
-	       [ac_cv_func_realloc_0_nonnull=no])])
+	       [case "$host_os" in # ((
+		  # Guess yes on platforms where we know the result.
+		  *-gnu* | freebsd* | netbsd* | openbsd* \
+		  | hpux* | solaris* | cygwin* | mingw*)
+		    ac_cv_func_realloc_0_nonnull=yes ;;
+		  # If we don't know, assume the worst.
+		  *) ac_cv_func_realloc_0_nonnull=no ;;
+		esac])])
 AS_IF([test $ac_cv_func_realloc_0_nonnull = yes], [$1], [$2])
 ])# AC_FUNC_REALLOC
 
@@ -1723,14 +1765,20 @@ AU_ALIAS([AC_SETVBUF_REVERSED], [AC_FUNC_SETVBUF_REVERSED])
 # ---------------
 AN_FUNCTION([strcoll], [AC_FUNC_STRCOLL])
 AC_DEFUN([AC_FUNC_STRCOLL],
-[AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
+AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
 [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
   [[return (strcoll ("abc", "def") >= 0 ||
 	 strcoll ("ABC", "DEF") >= 0 ||
 	 strcoll ("123", "456") >= 0)]])],
 	       ac_cv_func_strcoll_works=yes,
 	       ac_cv_func_strcoll_works=no,
-	       ac_cv_func_strcoll_works=no)])
+	       [case "$host_os" in # ((
+			  # Guess yes on glibc systems.
+		  *-gnu*) ac_cv_func_strcoll_works=yes ;;
+			  # If we don't know, assume the worst.
+		  *)      ac_cv_func_strcoll_works=no ;;
+		esac])])
 if test $ac_cv_func_strcoll_works = yes; then
   AC_DEFINE(HAVE_STRCOLL, 1,
 	    [Define to 1 if you have the `strcoll' function and it is properly
