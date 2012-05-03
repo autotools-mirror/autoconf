@@ -17874,7 +17874,7 @@ for an @command{echo} that does not interpret @samp{\} or leading
 @samp{-}. With Solaris @command{ksh}, it is possible to use @code{print
 -r --} for this role instead.
 
-@xref{echo, , Limitations of Shell Builtins} for a discussion of
+@xref{echo, , Limitations of Shell Builtins}, for a discussion of
 portable alternatives to both @command{printf} and @command{echo}.
 
 
