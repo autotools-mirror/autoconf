@@ -75,19 +75,21 @@ sub find_configure_ac (;@)
   my $configure_in =
     File::Spec->canonpath (File::Spec->catfile ($directory, 'configure.in'));
 
-  if (-f $configure_ac)
+  if (-f $configure_in)
     {
-      if (-f $configure_in)
+      msg ('obsolete', "autoconf input should be named 'configure.ac'," .
+                       " not 'configure.in'");
+      if (-f $configure_ac)
 	{
 	  msg ('unsupported',
 	       "'$configure_ac' and '$configure_in' both present.\n"
 	       . "proceeding with '$configure_ac'");
+          return $configure_ac
 	}
-      return $configure_ac
-    }
-  elsif (-f $configure_in)
-    {
-      return $configure_in;
+      else
+        {
+          return $configure_in;
+        }
     }
   return $configure_ac;
 }
@@ -102,8 +104,7 @@ Like C<find_configure_ac>, but fail if neither is present.
 sub require_configure_ac (;$)
 {
   my $res = find_configure_ac (@_);
-  fatal "'configure.ac' or 'configure.in' is required"
-    unless -f $res;
+  fatal "'configure.ac' is required" unless -f $res;
   return $res
 }
 

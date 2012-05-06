@@ -1004,10 +1004,9 @@ a file called @file{config.log} containing any messages produced by
 compilers, to help debugging if @command{configure} makes a mistake.
 @end itemize
 
-@cindex @file{configure.in}
 @cindex @file{configure.ac}
-To create a @command{configure} script with Autoconf, you need to write an
-Autoconf input file @file{configure.ac} (or @file{configure.in}) and run
+To create a @command{configure} script with Autoconf, you need
+to write an Autoconf input file @file{configure.ac} and run
 @command{autoconf} on it.  If you write your own feature tests to
 supplement those that come with Autoconf, you might also write files
 called @file{aclocal.m4} and @file{acsite.m4}.  If you use a C header
@@ -1095,12 +1094,14 @@ Programming}.  The @command{autoscan} program can give you a good start
 in writing @file{configure.ac} (@pxref{autoscan Invocation}, for more
 information).
 
+@cindex @file{configure.in}
 Previous versions of Autoconf promoted the name @file{configure.in},
 which is somewhat ambiguous (the tool needed to process this file is not
 described by its extension), and introduces a slight confusion with
 @file{config.h.in} and so on (for which @samp{.in} means ``to be
 processed by @command{configure}'').  Using @file{configure.ac} is now
-preferred.
+preferred, while the use of @file{configure.in} will cause warnings
+from @command{autoconf}.
 
 @menu
 * Shell Script Compiler::       Autoconf as solution of a problem

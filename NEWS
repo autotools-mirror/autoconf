@@ -2,6 +2,8 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** The use of the long-deprecated name 'configure.in' for the autoconf
+   input file now elicits a warning in the 'obsolete' category.
 
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 

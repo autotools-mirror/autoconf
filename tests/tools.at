@@ -1135,7 +1135,7 @@ AT_SETUP([autoupdating with aclocal and m4@&t@_include])
 AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
 
 mkdir m4 aclocal
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT(x,0)
 AC_UNCHANGED_MACRO
 AC_OLD_MACRO
@@ -1169,7 +1169,7 @@ AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
 AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
 AT_CHECK([test ! -f $HOME/.autom4te.cfg || exit 77], [], [ignore], [ignore])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT(GNU foo, 1.0)
 AM_INIT_AUTOMAKE
 AC_CONFIG_FILES([Makefile])
@@ -1294,9 +1294,9 @@ do
   export TMPDIR
 
   # skip if we cannot create such a file or directory
-  AT_CHECK([mkdir "$dir" "$TMPDIR" && touch "$file.in" || exit 77])
+  AT_CHECK([mkdir "$dir" "$TMPDIR" && touch "$file.ac" || exit 77])
 
-  cat >"$file.in" <<'END'
+  cat >"$file.ac" <<'END'
 [AC_INIT(x,0)
 m4@&t@_include([foo.m4])
 AC_CONFIG_HEADERS([config.h:config.hin])
@@ -1307,20 +1307,20 @@ END
 [AC_DEFUN([AC_MACRO], [echo hi])]
 END
 
-  AT_CHECK_AUTOHEADER([-B "$dir" "$file.in"])
-  AT_CHECK_AUTOHEADER([--force -I "$dir" "$file.in"])
-  AT_CHECK_AUTOUPDATE([-B "$dir" "$file.in"])
-  AT_CHECK_AUTOUPDATE([--force -I "$dir" "$file.in"])
-  AT_CHECK_AUTOUPDATE([-B "$dir" - < "$file.in"], [], [ignore])
-  AT_CHECK_AUTOCONF([-B "$dir" -o "$file" "$file.in"])
-  AT_CHECK_AUTOCONF([-I "$dir" -o "$file" "$file.in"])
+  AT_CHECK_AUTOHEADER([-B "$dir" "$file.ac"])
+  AT_CHECK_AUTOHEADER([--force -I "$dir" "$file.ac"])
+  AT_CHECK_AUTOUPDATE([-B "$dir" "$file.ac"])
+  AT_CHECK_AUTOUPDATE([--force -I "$dir" "$file.ac"])
+  AT_CHECK_AUTOUPDATE([-B "$dir" - < "$file.ac"], [], [ignore])
+  AT_CHECK_AUTOCONF([-B "$dir" -o "$file" "$file.ac"])
+  AT_CHECK_AUTOCONF([-I "$dir" -o "$file" "$file.ac"])
   # In autoconf, these exercise a slightly different code path:
-  AT_CHECK_AUTOCONF([--prepend-include="$dir" -o "$file" "$file.in"])
-  AT_CHECK_AUTOCONF([--include="$dir" -o "$file" "$file.in"])
+  AT_CHECK_AUTOCONF([--prepend-include="$dir" -o "$file" "$file.ac"])
+  AT_CHECK_AUTOCONF([--include="$dir" -o "$file" "$file.ac"])
   AT_CHECK([autoscan -B "$dir"], [], [], [ignore])
   AT_CHECK([autoscan --force -I "$dir"], [], [], [ignore])
   # autoreconf requires a sane input file name.  Also, disable aclocal.
-  mv -f "$file.in" configure.in
+  mv -f "$file.ac" configure.ac
   AT_DATA([aclocal.m4])
   AT_CHECK([autoreconf -B "$dir"])
   AT_CHECK([autoreconf --force -I "$dir"])
