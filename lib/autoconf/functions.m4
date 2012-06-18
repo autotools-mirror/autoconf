@@ -922,7 +922,7 @@ char *malloc ();
 	       [ac_cv_func_malloc_0_nonnull=no],
 	       [case "$host_os" in # ((
 		  # Guess yes on platforms where we know the result.
-		  *-gnu* | freebsd* | netbsd* | openbsd* \
+		  *-gnu* | freebsd* | netbsd* | openbsd* | bitrig* \
 		  | hpux* | solaris* | cygwin* | mingw*)
 		    ac_cv_func_malloc_0_nonnull=yes ;;
 		  # If we don't know, assume the worst.
@@ -1441,7 +1441,7 @@ char *realloc ();
 	       [ac_cv_func_realloc_0_nonnull=no],
 	       [case "$host_os" in # ((
 		  # Guess yes on platforms where we know the result.
-		  *-gnu* | freebsd* | netbsd* | openbsd* \
+		  *-gnu* | freebsd* | netbsd* | openbsd* | bitrig* \
 		  | hpux* | solaris* | cygwin* | mingw*)
 		    ac_cv_func_realloc_0_nonnull=yes ;;
 		  # If we don't know, assume the worst.
