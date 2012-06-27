@@ -5,10 +5,6 @@ ChangeLog	merge=merge-changelog
 # Exempt upstream files from whitespace rules.
 config.guess	-whitespace
 config.sub	-whitespace
-elisp-comp	-whitespace
-install-sh	-whitespace
-mdate-sh	-whitespace
-missing		-whitespace
 move-if-change	-whitespace
 texinfo.tex	-whitespace
 fdl.texi	-whitespace

@@ -54,14 +54,12 @@ gnulib-update:
 	cp $(gnulib_dir)/build-aux/announce-gen $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/config.guess $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/config.sub $(srcdir)/build-aux
-	cp $(gnulib_dir)/build-aux/elisp-comp $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/gendocs.sh $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/git-version-gen $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/gitlog-to-changelog $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/gnupload $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/install-sh $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/mdate-sh $(srcdir)/build-aux
-	cp $(gnulib_dir)/build-aux/missing $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/move-if-change $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/texinfo.tex $(srcdir)/build-aux
 	cp $(gnulib_dir)/build-aux/update-copyright $(srcdir)/build-aux
