@@ -25434,7 +25434,8 @@ For putting Autotest into movement, you need some configuration and
 makefile machinery.  We recommend, at least if your package uses deep or
 shallow hierarchies, that you use @file{tests/} as the name of the
 directory holding all your tests and their makefile.  Here is a
-check list of things to do.
+check list of things to do, followed by an example, taking into
+consideration whether you are also using Automake.
 
 @itemize @minus
 
@@ -25455,11 +25456,10 @@ we suggest that you also define @code{AT_PACKAGE_NAME},
 @code{AT_PACKAGE_URL}.
 @xref{Initializing configure}, for a description of these variables.
 Be sure to distribute @file{package.m4} and to put it into the source
-hierarchy: the test suite ought to be shipped!  See below for an example
-@file{Makefile} excerpt.
+hierarchy: the test suite ought to be shipped!  See below for an example.
 
 @item
-Invoke @code{AC_CONFIG_TESTDIR}.
+Invoke @code{AC_CONFIG_TESTDIR} in your @file{configure.ac}.
 
 @defmac AC_CONFIG_TESTDIR (@var{directory}, @dvar{test-path, directory})
 @acindex{CONFIG_TESTDIR}
@@ -25475,14 +25475,28 @@ Still within @file{configure.ac}, as appropriate, ensure that some
 @file{tests/atlocal}.
 
 @item
+Also within your @file{configure.ac}, arrange for the @code{AUTOM4TE}
+variable to be set.
+
+@item
 The appropriate @file{Makefile} should be modified so the validation in
-your package is triggered by @samp{make check}.  An example is provided
-below.
+your package is triggered by @samp{make check}.
 @end itemize
 
-With Automake, here is a minimal example for inclusion in
-@file{tests/Makefile.am}, in order to link @samp{make check} with a
-validation suite.
+The following example demonstrates the above checklist, first by
+assuming that you are using Automake (see below for tweaks to make to
+get the same results without Automake).  Begin by adding the following
+lines to your @file{configure.ac}:
+
+@example
+# Initialize the test suite.
+AC_CONFIG_TESTDIR([tests])
+AC_CONFIG_FILES([tests/Makefile tests/atlocal])
+AM_MISSING_PROG([AUTOM4TE], [autom4te])
+@end example
+
+Next, add the following lines to your @file{tests/Makefile.am}, in order
+to link @samp{make check} with a validation suite.
 
 @example
 # The `:;' works around a Bash 3.2 bug when the output is not writable.
@@ -25517,7 +25531,6 @@ clean-local:
         test ! -f '$(TESTSUITE)' || \
          $(SHELL) '$(TESTSUITE)' --clean
 
-AUTOM4TE = $(SHELL) $(srcdir)/build-aux/missing --run autom4te
 AUTOTEST = $(AUTOM4TE) --language=autotest
 $(TESTSUITE): $(srcdir)/testsuite.at $(srcdir)/package.m4
         $(AUTOTEST) -I '$(srcdir)' -o $@@.tmp $@@.at
@@ -25526,16 +25539,27 @@ $(TESTSUITE): $(srcdir)/testsuite.at $(srcdir)/package.m4
 
 Note that the built testsuite is distributed; this is necessary because
 users might not have Autoconf installed, and thus would not be able to
-rebuild it.  Likewise, the use of @file{missing} provides the user with
+rebuild it.  Likewise, the use of Automake's @code{AM_MISSING_PROG} will
+arrange for the definition of @code{$AUTOM4TE} within the Makefile to
+provide the user with
 a nicer error message if they modify a source file to the testsuite, and
 accidentally trigger the rebuild rules.
 
 You might want to list explicitly the dependencies, i.e., the list of
 the files @file{testsuite.at} includes.
 
-If you don't use Automake, you should include the above example in
-@file{tests/@/Makefile.in}, along with additional lines inspired from
-the following:
+If you don't use Automake, you should make the following tweaks.  In
+your @file{configure.ac}, replace the @code{AM_MISSING_PROG} line above
+with @code{AC_PATH_PROG([AUTOM4TE], [autom4te], [false])}.  You are
+welcome to also try using the @command{missing} script from the Automake
+project instead of @command{false}, to try to get a nicer error message
+when the user modifies prerequisites but did not have Autoconf
+installed, but at that point you may be better off using Automake.
+Then, take the code suggested above for @file{tests/@/Makefile.am} and
+place it in your @file{tests/@/Makefile.in} instead.  Add code to your
+@file{tests/@/Makefile.in} to ensure that @code{$(EXTRA_DIST)} files are
+distributed, as well as adding the following additional lines to prepare
+the set of needed Makefile variables:
 
 @example
 subdir = tests
@@ -25545,6 +25569,7 @@ PACKAGE_VERSION = @@PACKAGE_VERSION@@
 PACKAGE_STRING = @@PACKAGE_STRING@@
 PACKAGE_BUGREPORT = @@PACKAGE_BUGREPORT@@
 PACKAGE_URL = @@PACKAGE_URL@@
+AUTOM4TE = @@AUTOM4TE@@
 
 atconfig: $(top_builddir)/config.status
         cd $(top_builddir) && \
@@ -25555,14 +25580,10 @@ atlocal: $(srcdir)/atlocal.in $(top_builddir)/config.status
            $(SHELL) ./config.status $(subdir)/$@@
 @end example
 
-@noindent
-and manage to have @code{$(EXTRA_DIST)} distributed.  You will also want
-to distribute the file @file{build-aux/@/missing} from the Automake
-project; a copy of this file resides in the Autoconf source tree.
-
-With all this in place, and if you have not initialized @samp{TESTSUITEFLAGS}
-within your makefile, you can fine-tune test suite execution with this
-variable, for example:
+Using the above example (with or without Automake), and assuming you
+were careful to not initialize @samp{TESTSUITEFLAGS} within your
+makefile, you can now fine-tune test suite execution at runtime by
+altering this variable, for example:
 
 @example
 make check TESTSUITEFLAGS='-v -d -x 75 -k AC_PROG_CC CFLAGS=-g'
