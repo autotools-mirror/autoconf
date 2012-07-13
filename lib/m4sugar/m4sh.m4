@@ -231,7 +231,7 @@ dnl Remove any tests from suggested that are also required
 	 /*)
 	   for as_base in sh bash ksh sh5; do
 	     # Try only shells that exist, to save several forks.
-	     as_shell=$as_dir/$as_base
+	     as_shell=$as_dir$as_base
 	     AS_IF([{ test -f "$as_shell" || test -f "$as_shell.exe"; } &&
 		    _AS_RUN(["$as_required"], ["$as_shell"])],
 		   [CONFIG_SHELL=$as_shell as_have_required=yes
@@ -468,7 +468,7 @@ as_myself=
 case $[0] in @%:@((
   *[[\\/]]* ) as_myself=$[0] ;;
   *) _AS_PATH_WALK([],
-		   [test -r "$as_dir/$[0]" && as_myself=$as_dir/$[0] && break])
+		   [test -r "$as_dir$[0]" && as_myself=$as_dir$[0] && break])
      ;;
 esac
 # We did not find ourselves, most probably we were run as `sh COMMAND'
@@ -1326,8 +1326,8 @@ fi
 
 # _AS_PATH_WALK([PATH = $PATH], BODY, [IF-NOT-FOUND])
 # ---------------------------------------------------
-# Walk through PATH running BODY for each `as_dir'.  If BODY never does a
-# `break', evaluate IF-NOT-FOUND.
+# Walk through PATH running BODY for each `as_dir', with a trailing slash
+# already present.  If BODY never does a `break', evaluate IF-NOT-FOUND.
 #
 # Still very private as its interface looks quite bad.
 #
@@ -1340,19 +1340,23 @@ m4_defun_init([_AS_PATH_WALK],
 [AS_REQUIRE([_AS_PATH_SEPARATOR_PREPARE])],
 [as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 m4_ifvaln([$3], [as_found=false])dnl
-m4_bmatch([$1], [[:;]],
+m4_if([$1], m4_translit([[$1]], [:;]),
+[for as_dir in m4_default([$1], [$PATH])],
 [as_dummy="$1"
-for as_dir in $as_dummy],
-[for as_dir in m4_default([$1], [$PATH])])
+for as_dir in $as_dummy])
 do
   IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
   m4_ifvaln([$3], [as_found=:])dnl
   $2
   m4_ifvaln([$3], [as_found=false])dnl
 done
-m4_ifvaln([$3], [$as_found || { $3; }])dnl
 IFS=$as_save_IFS
+m4_ifvaln([$3], [$as_found || { $3; }])dnl
 ])
 
 

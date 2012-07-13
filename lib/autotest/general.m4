@@ -1007,8 +1007,8 @@ do
   case $at_program in
     [[\\/]* | ?:[\\/]* ) $at_program_=$at_program ;;]
     * )
-    _AS_PATH_WALK([$PATH], [test -f "$as_dir/$at_program" && break])
-    at_program_=$as_dir/$at_program ;;
+    _AS_PATH_WALK([$PATH], [test -f "$as_dir$at_program" && break])
+    at_program_=$as_dir$at_program ;;
   esac
   if test -f "$at_program_"; then
     {

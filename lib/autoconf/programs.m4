@@ -49,14 +49,14 @@ m4_ifvaln([$6],
 [  ac_prog_rejected=no])dnl
 _AS_PATH_WALK([$5],
 [for ac_exec_ext in '' $ac_executable_extensions; do
-  if AS_EXECUTABLE_P(["$as_dir/$ac_word$ac_exec_ext"]); then
+  if AS_EXECUTABLE_P(["$as_dir$ac_word$ac_exec_ext"]); then
 m4_ifvaln([$6],
-[    if test "$as_dir/$ac_word$ac_exec_ext" = "$6"; then
+[    if test "$as_dir$ac_word$ac_exec_ext" = "$6"; then
        ac_prog_rejected=yes
        continue
      fi])dnl
     ac_cv_prog_$1="$3"
-    _AS_ECHO_LOG([found $as_dir/$ac_word$ac_exec_ext])
+    _AS_ECHO_LOG([found $as_dir$ac_word$ac_exec_ext])
     break 2
   fi
 done])
@@ -70,7 +70,7 @@ m4_ifvaln([$6],
     # However, it has the same basename, so the bogon will be chosen
     # first if we set $1 to just the basename; use the full file name.
     shift
-    ac_cv_prog_$1="$as_dir/$ac_word${1+' '}$[@]"
+    ac_cv_prog_$1="$as_dir$ac_word${1+' '}$[@]"
 m4_if([$2], [$4],
 [  else
     # Default is a loser.
@@ -129,9 +129,9 @@ AC_CACHE_VAL([ac_cv_path_$1],
   *)
   _AS_PATH_WALK([$4],
 [for ac_exec_ext in '' $ac_executable_extensions; do
-  if AS_EXECUTABLE_P(["$as_dir/$ac_word$ac_exec_ext"]); then
-    ac_cv_path_$1="$as_dir/$ac_word$ac_exec_ext"
-    _AS_ECHO_LOG([found $as_dir/$ac_word$ac_exec_ext])
+  if AS_EXECUTABLE_P(["$as_dir$ac_word$ac_exec_ext"]); then
+    ac_cv_path_$1="$as_dir$ac_word$ac_exec_ext"
+    _AS_ECHO_LOG([found $as_dir$ac_word$ac_exec_ext])
     break 2
   fi
 done])
@@ -423,7 +423,7 @@ m4_define([_AC_PATH_PROGS_FEATURE_CHECK],
   _AS_PATH_WALK([$5],
   [for ac_prog in $2; do
     for ac_exec_ext in '' $ac_executable_extensions; do
-      ac_path_$1="$as_dir/$ac_prog$ac_exec_ext"
+      ac_path_$1="$as_dir$ac_prog$ac_exec_ext"
       AS_EXECUTABLE_P(["$ac_path_$1"]) || continue
 $3
       $ac_path_$1_found && break 3
@@ -542,9 +542,9 @@ AC_MSG_CHECKING([for a BSD-compatible install])
 if test -z "$INSTALL"; then
 AC_CACHE_VAL(ac_cv_path_install,
 [_AS_PATH_WALK([$PATH],
-[[# Account for people who put trailing slashes in PATH elements.
-case $as_dir/ in @%:@((
-  ./ | .// | /[cC]/* | \
+[[# Account for fact that we put trailing slashes in our PATH walk.
+case $as_dir in @%:@((
+  ./ | /[cC]/* | \
   /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
   ?:[\\/]os2[\\/]install[\\/]* | ?:[\\/]OS2[\\/]INSTALL[\\/]* | \
   /usr/ucb/* ) ;;
@@ -554,13 +554,13 @@ case $as_dir/ in @%:@((
     # by default.
     for ac_prog in ginstall scoinst install; do
       for ac_exec_ext in '' $ac_executable_extensions; do
-	if AS_EXECUTABLE_P(["$as_dir/$ac_prog$ac_exec_ext"]); then
+	if AS_EXECUTABLE_P(["$as_dir$ac_prog$ac_exec_ext"]); then
 	  if test $ac_prog = install &&
-	    grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+	    grep dspmsg "$as_dir$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
 	    # AIX install.  It has an incompatible calling convention.
 	    :
 	  elif test $ac_prog = install &&
-	    grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+	    grep pwplus "$as_dir$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
 	    # program-specific install script used by HP pwplus--don't use.
 	    :
 	  else
@@ -568,12 +568,12 @@ case $as_dir/ in @%:@((
 	    echo one > conftest.one
 	    echo two > conftest.two
 	    mkdir conftest.dir
-	    if "$as_dir/$ac_prog$ac_exec_ext" -c conftest.one conftest.two "`pwd`/conftest.dir" &&
+	    if "$as_dir$ac_prog$ac_exec_ext" -c conftest.one conftest.two "`pwd`/conftest.dir" &&
 	      test -s conftest.one && test -s conftest.two &&
 	      test -s conftest.dir/conftest.one &&
 	      test -s conftest.dir/conftest.two
 	    then
-	      ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
+	      ac_cv_path_install="$as_dir$ac_prog$ac_exec_ext -c"
 	      break 3
 	    fi
 	  fi
@@ -668,12 +668,12 @@ if test -z "$MKDIR_P"; then
     [_AS_PATH_WALK([$PATH$PATH_SEPARATOR/opt/sfw/bin],
       [for ac_prog in mkdir gmkdir; do
 	 for ac_exec_ext in '' $ac_executable_extensions; do
-	   AS_EXECUTABLE_P(["$as_dir/$ac_prog$ac_exec_ext"]) || continue
-	   case `"$as_dir/$ac_prog$ac_exec_ext" --version 2>&1` in #(
+	   AS_EXECUTABLE_P(["$as_dir$ac_prog$ac_exec_ext"]) || continue
+	   case `"$as_dir$ac_prog$ac_exec_ext" --version 2>&1` in #(
 	     'mkdir (GNU coreutils) '* | \
 	     'mkdir (coreutils) '* | \
 	     'mkdir (fileutils) '4.1*)
-	       ac_cv_path_mkdir=$as_dir/$ac_prog$ac_exec_ext
+	       ac_cv_path_mkdir=$as_dir$ac_prog$ac_exec_ext
 	       break 3;;
 	   esac
 	 done
