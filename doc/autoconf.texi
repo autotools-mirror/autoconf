@@ -9155,7 +9155,7 @@ on a system with @command{gcc} installed, results in:
 @example
 @c If you change this example, adjust tests/compile.at:AC_LANG_SOURCE example.
 @dots{}
-# 1 "conftest.c"
+@asis{#} 1 "conftest.c"
 
 #define PACKAGE_NAME "Hello"
 #define PACKAGE_TARNAME "hello"
@@ -9200,7 +9200,7 @@ on a system with @command{gcc} installed, results in:
 @example
 @c If you change this example, adjust tests/compile.at:AC_LANG_PROGRAM example.
 @dots{}
-# 1 "conftest.c"
+@asis{#} 1 "conftest.c"
 
 #define PACKAGE_NAME "Hello"
 #define PACKAGE_TARNAME "hello"
