@@ -18346,6 +18346,18 @@ $ @kbd{bash-2.05b -c 'trap ":; /bin/true" 0; exit 2'; echo $?}
 2
 @end example
 
+Be aware that a trap can be called from any number of places in your
+script, and therefore the trap handler should not make assumptions about
+shell state.  For some examples, if your script temporarily modifies
+@env{IFS}, then the trap should include an initialization back to its
+typical value of space-tab-newline (autoconf does this for generated
+@file{configure} files).  Likewise, if your script changes the current
+working directory at some point after the trap is installed, then your
+trap cannot assume which directory it is in, and should begin by
+changing directories to an absolute path if that is important to the
+cleanup efforts (autotest does this for generated @file{testsuite}
+files).
+
 @item @command{true}
 @c -----------------
 @prindex @command{true}
