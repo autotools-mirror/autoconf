@@ -1444,10 +1444,7 @@ export CONFIG_SITE
 # The contents of `inner/', and `inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
 
-# We have to use configure.in, not configure.ac, if we still want to
-# be compatible with Automake 1.4: aclocal (run by autoreconf) would
-# die because it can't find configure.in.
-AT_DATA([inner/configure.in],
+AT_DATA([inner/configure.ac],
 [[AC_INIT(GNU Inner, 1.0)
 AC_CONFIG_SRCDIR([innermost/config.in])
 AC_ARG_VAR([INNER], [an inner variable])
@@ -1470,7 +1467,7 @@ prefix=@prefix@
 AT_DATA([install-sh], [])
 
 # nonexistent is allowed not to exist.
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT(GNU Outer, 1.0)
 AC_ARG_VAR([OUTER], [an outer variable])
 if false; then
@@ -1544,12 +1541,12 @@ AT_CHECK([cd builddir && ../configure $configure_options --config-cache],
 AT_CHECK([grep 'loading .*\.\./config.cache' stdout], [], [ignore])
 
 # Make sure we can run autoreconf on a subdirectory
-rm -f configure configure.in
+rm -f configure configure.ac
 AT_CHECK([autoreconf inner], [], [], [ignore])
 
 # Make sure we can pass a configure.ac name
-AT_CHECK([cd inner && autoreconf configure.in], [], [], [ignore])
-AT_CHECK([autoreconf inner/configure.in], [], [], [ignore])
+AT_CHECK([cd inner && autoreconf configure.ac], [], [], [ignore])
+AT_CHECK([autoreconf inner/configure.ac], [], [], [ignore])
 
 AT_CLEANUP
 
@@ -1567,7 +1564,7 @@ AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
 
 # The contents of `.'
 AT_DATA([install-sh], [])
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT(GNU Outer, 1.0)
 AC_ARG_VAR([OUTER], [an outer variable])
 AC_CONFIG_SUBDIRS([
@@ -1581,14 +1578,14 @@ AC_OUTPUT
 AS_MKDIR_P([inner/innermost])
 AS_MKDIR_P([inner2])
 
-AT_DATA([inner/configure.in],
+AT_DATA([inner/configure.ac],
 [[AC_INIT(GNU Inner, 1.0)
 AC_ARG_VAR([INNER], [an inner variable])
 AC_CONFIG_SUBDIRS(innermost)
 AC_OUTPUT
 ]])
 
-AT_DATA([inner/innermost/configure.in],
+AT_DATA([inner/innermost/configure.ac],
 [[AC_INIT(GNU Innermost, 1.0)
 AC_ARG_VAR([INNERMOST], [an innermost variable])
 AC_CONFIG_HEADERS(config.h:config.hin)
@@ -1599,7 +1596,7 @@ fi
 AC_OUTPUT
 ]])
 
-AT_DATA([inner2/configure.in],
+AT_DATA([inner2/configure.ac],
 [[AC_INIT(GNU Inner 2, 1.0)
 AC_ARG_VAR([INNER2], [an inner2 variable])
 AC_OUTPUT
@@ -1702,7 +1699,7 @@ AT_KEYWORDS([autoreconf])
 AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
 
 AT_DATA([install-sh], [])
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT(GNU Outer, 1.0)
 AC_CONFIG_SUBDIRS([inner])
 AC_OUTPUT
@@ -1741,7 +1738,7 @@ AT_SETUP([Non-literal AC_CONFIG_SUBDIRS])
 AT_KEYWORDS([autoreconf])
 
 AT_DATA([install-sh], [])
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT(GNU Outer, 1.0)
 
 my_subdirs=
@@ -1816,7 +1813,7 @@ AT_KEYWORDS([autoreconf])
 AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
 AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
 
-AT_DATA([configure.in],
+AT_DATA([configure.ac],
 [[AC_INIT(GNU foo, 1.0)
 AM_INIT_AUTOMAKE
 AC_CONFIG_FILES([HeeHee])
