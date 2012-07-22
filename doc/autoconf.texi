@@ -26,6 +26,14 @@
 @r{[}@var{\varname\} = @samp{\default\}@r{]}
 @end macro
 
+@c @dvarv(ARG, DEFAULT-VAR)
+@c ------------------------
+@c Same as @dvar{ARG, DEFAULT-VAR}, but with @var instead of @samp
+@c around DEFAULT-VAR.
+@macro dvarv{varname, default}
+@r{[}@var{\varname\} = @var{\default\}@r{]}@c
+@end macro
+
 @c Handling the indexes with Texinfo yields several different problems.
 @c
 @c Because we want to drop out the AC_ part of the macro names in the
@@ -12436,7 +12444,7 @@ list_add_x([1], list)
 @end example
 @end defmac
 
-@defmac m4_map_args_pair (@var{macro}, @dvar{macro-end, macro}, @
+@defmac m4_map_args_pair (@var{macro}, @dvarv{macro-end, macro}, @
   @var{arg}@dots{})
 @msindex{map_args_pair}
 For every pair of arguments @var{arg}, invoke @var{macro} with two
@@ -13016,7 +13024,7 @@ quadrigraphs can be used to work around this.
 @end defmac
 
 @defmac m4_text_wrap (@var{string}, @ovar{prefix}, @
-  @dvar{prefix1, @var{prefix}}, @dvar{width, 79})
+  @dvarv{prefix1, prefix}, @dvar{width, 79})
 @msindex{text_wrap}
 Break @var{string} into a series of whitespace-separated words, then
 output those words separated by spaces, and wrapping lines any time the
@@ -13795,9 +13803,9 @@ undefined if expansion of an indirect variable does not result in a
 literal variable name.
 
 @defmac AS_LITERAL_IF (@var{expression}, @ovar{if-literal}, @ovar{if-not}, @
-  @dvar{if-simple-ref, @var{if-not}})
+  @dvarv{if-simple-ref, if-not})
 @defmacx AS_LITERAL_WORD_IF (@var{expression}, @ovar{if-literal}, @
-  @ovar{if-not}, @dvar{if-simple-ref, @var{if-not}})
+  @ovar{if-not}, @dvarv{if-simple-ref, if-not})
 @asindex{LITERAL_IF}
 @asindex{LITERAL_WORD_IF}
 If the expansion of @var{expression} is definitely a shell literal,
@@ -25473,7 +25481,7 @@ hierarchy: the test suite ought to be shipped!  See below for an example.
 @item
 Invoke @code{AC_CONFIG_TESTDIR} in your @file{configure.ac}.
 
-@defmac AC_CONFIG_TESTDIR (@var{directory}, @dvar{test-path, directory})
+@defmac AC_CONFIG_TESTDIR (@var{directory}, @dvarv{test-path, directory})
 @acindex{CONFIG_TESTDIR}
 An Autotest test suite is to be configured in @var{directory}.  This
 macro causes @file{@var{directory}/atconfig} to be created by
