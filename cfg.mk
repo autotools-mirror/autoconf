@@ -137,3 +137,5 @@ exclude_file_name_regexp--sc_useless_cpp_parens = \
 exclude_file_name_regexp--sc_trailing_blank = ^build-aux/texinfo\.tex$$
 exclude_file_name_regexp--sc_two_space_separator_in_usage = \
   ^build-aux/gnupload$$
+exclude_file_name_regexp--sc_prohibit_defined_have_decl_tests = \
+  ^doc/autoconf\.texi$$
