@@ -708,3 +708,62 @@ libdir=${exec_prefix}/lib
 ]])
 
 AT_CLEANUP
+
+## ---------- ##
+## AC_SUBST.  ##
+## ---------- ##
+
+AT_SETUP([AC_SUBST])
+AT_KEYWORDS([AS@&t@_IDENTIFIER_IF])
+
+# Check that a valid variable name is used.
+AT_DATA([configure.ac],
+[[AC_INIT([test], [1])
+AC_SUBST([1], [bar])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF([], [1], [], [stderr])
+AT_CHECK([grep 'not a valid shell variable' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([test], [1])
+AC_SUBST([], [bar])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF([], [1], [], [stderr])
+AT_CHECK([grep 'not a valid shell variable' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([test], [1])
+AC_SUBST([*], [bar])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF([], [1], [], [stderr])
+AT_CHECK([grep 'not a valid shell variable' stderr], [], [ignore])
+
+# Make sure AC_SUBST handles variables as expected.
+AT_DATA([file.in],
+[[@FOO@
+@BAR@
+FOO
+]])
+AT_DATA([configure.ac],
+[[AC_INIT([test], [0])
+m4_define([FOO], [baz])
+AC_SUBST([FOO], [bar])
+BAR=one
+AC_SUBST([B@&t@AR])
+BAR=two
+AC_CONFIG_FILES([file])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([], [], [], [stderr])
+AT_CHECK_CONFIGURE
+AT_CHECK([cat file], [],
+[[bar
+two
+FOO
+]])
+
+AT_CLEANUP

@@ -9876,7 +9876,8 @@ output file may contain @code{|#_!!_#|}.)
 If @var{value} is given, in addition assign it to @var{variable}.
 
 The string @var{variable} is passed to @code{m4_pattern_allow}
-(@pxref{Forbidden Patterns}).
+(@pxref{Forbidden Patterns}).  @var{variable} is not further expanded,
+even if there is another macro by the same name.
 @end defmac
 
 @defmac AC_SUBST_FILE (@var{variable})
