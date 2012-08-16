@@ -2180,7 +2180,7 @@ m4_define([AC_SUBST],
   [m4_fatal([$0: `$1' is not a valid shell variable name])])]dnl
 [AC_SUBST_TRACE([$1])]dnl
 [m4_pattern_allow([^$1$])]dnl
-[m4_ifvaln([$2], [$1=$2])[]]dnl
+[m4_ifvaln([$2], [[$1]=$2])[]]dnl
 [m4_set_add([_AC_SUBST_VARS], [$1])])# AC_SUBST
 
 
