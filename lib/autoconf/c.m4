@@ -1191,19 +1191,10 @@ esac
 AS_IF([test "x$ac_cv_prog_cc_$1" != xno], [$5], [$6])
 ])# _AC_C_STD_TRY
 
-
-# _AC_PROG_CC_C99 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
-# ----------------------------------------------------------------
-# If the C compiler is not in ISO C99 mode by default, try to add an
-# option to output variable CC to make it so.  This macro tries
-# various options that select ISO C99 on some system or another.  It
-# considers the compiler to be in ISO C99 mode if it handles _Bool,
-# // comments, flexible array members, inline, long long int, mixed
-# code and declarations, named initialization of structs, restrict,
-# va_copy, varargs macros, variable declarations in for loops and
-# variable length arrays.
-AC_DEFUN([_AC_PROG_CC_C99],
-[_AC_C_STD_TRY([c99],
+# _AC_C_C99_TEST_HEADER
+# ---------------------
+# A C header suitable for testing for C99.
+AC_DEFUN([_AC_C_C99_TEST_HEADER],
 [[#include <stdarg.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -1296,8 +1287,12 @@ test_varargs (const char *format, ...)
     }
   va_end (args_copy);
   va_end (args);
-}
-]],
+}]])# _AC_C_C99_TEST_HEADER
+
+# _AC_C_C99_TEST_BODY
+# -------------------
+# A C body suitable for testing for C99, assuming the corresponding header.
+AC_DEFUN([_AC_C_C99_TEST_BODY],
 [[
   // Check bool.
   _Bool success = false;
@@ -1333,7 +1328,22 @@ test_varargs (const char *format, ...)
   // work around unused variable warnings
   return (!success || bignum == 0LL || ubignum == 0uLL || newvar[0] == 'x'
 	  || dynamic_array[ni.number - 1] != 543);
-]],
+]])
+
+# _AC_PROG_CC_C99 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
+# ----------------------------------------------------------------
+# If the C compiler is not in ISO C99 mode by default, try to add an
+# option to output variable CC to make it so.  This macro tries
+# various options that select ISO C99 on some system or another.  It
+# considers the compiler to be in ISO C99 mode if it handles _Bool,
+# // comments, flexible array members, inline, long long int, mixed
+# code and declarations, named initialization of structs, restrict,
+# va_copy, varargs macros, variable declarations in for loops and
+# variable length arrays.
+AC_DEFUN([_AC_PROG_CC_C99],
+[_AC_C_STD_TRY([c99],
+[_AC_C_C99_TEST_HEADER],
+[_AC_C_C99_TEST_BODY],
 dnl Try
 dnl GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
 dnl AIX		-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
@@ -1357,6 +1367,75 @@ dnl with extended modes being tried first.
 ])# _AC_PROG_CC_C99
 
 
+# _AC_PROG_CC_C11 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
+# ----------------------------------------------------------------
+# If the C compiler is not in ISO C11 mode by default, try to add an
+# option to output variable CC to make it so.  This macro tries
+# various options that select ISO C11 on some system or another.  It
+# considers the compiler to be in ISO C11 mode if it handles _Alignas,
+# _Alignof, _Noreturn, _Static_assert, UTF-8 string literals,
+# duplicate typedefs, and anonymous structures and unions.
+AC_DEFUN([_AC_PROG_CC_C11],
+[_AC_C_STD_TRY([c11],
+[_AC_C_C99_TEST_HEADER[
+// Check _Alignas.
+char _Alignas (double) aligned_as_double;
+char _Alignas (0) no_special_alignment;
+extern char aligned_as_int;
+char _Alignas (0) _Alignas (int) aligned_as_int;
+
+// Check _Alignof.
+enum
+{
+  int_alignment = _Alignof (int),
+  int_array_alignment = _Alignof (int[100]),
+  char_alignment = _Alignof (char)
+};
+_Static_assert (0 < -_Alignof (int), "_Alignof is signed");
+
+// Check _Noreturn.
+int _Noreturn does_not_return (void) { for (;;) continue; }
+
+// Check _Static_assert.
+struct test_static_assert
+{
+  int x;
+  _Static_assert (sizeof (int) <= sizeof (long int),
+                  "_Static_assert does not work in struct");
+  long int y;
+};
+
+// Check UTF-8 literals.
+#define u8 syntax error!
+char const utf8_literal[] = u8"happens to be ASCII" "another string";
+
+// Check duplicate typedefs.
+typedef long *long_ptr;
+typedef long int *long_ptr;
+typedef long_ptr long_ptr;
+
+// Anonymous structures and unions -- taken from C11 6.7.2.1 Example 1.
+struct anonymous
+{
+  union {
+    struct { int i; int j; };
+    struct { int k; long int l; } w;
+  };
+  int m;
+} v1;
+]],
+[_AC_C_C99_TEST_BODY[
+  v1.i = 2;
+  v1.w.k = 5;
+  _Static_assert (&v1.i == &v1.w.k, "Anonymous union alignment botch");
+]],
+dnl Try
+dnl GCC		-std=gnu11 (unused restrictive mode: -std=c11)
+dnl with extended modes being tried first.
+[[-std=gnu11]], [$1], [$2])[]dnl
+])# _AC_PROG_CC_C11
+
+
 # AC_PROG_CC_C89
 # --------------
 AC_DEFUN([AC_PROG_CC_C89],
@@ -1373,15 +1452,24 @@ AC_DEFUN([AC_PROG_CC_C99],
 ])
 
 
+# AC_PROG_CC_C11
+# --------------
+AC_DEFUN([AC_PROG_CC_C11],
+[ AC_REQUIRE([AC_PROG_CC])dnl
+  _AC_PROG_CC_C11
+])
+
+
 # AC_PROG_CC_STDC
 # ---------------
 AC_DEFUN([AC_PROG_CC_STDC],
 [ AC_REQUIRE([AC_PROG_CC])dnl
   AS_CASE([$ac_cv_prog_cc_stdc],
-    [no], [ac_cv_prog_cc_c99=no; ac_cv_prog_cc_c89=no],
-	  [_AC_PROG_CC_C99([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c99],
-	     [_AC_PROG_CC_C89([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89],
-			      [ac_cv_prog_cc_stdc=no])])])
+    [no], [ac_cv_prog_cc_c11=no; ac_cv_prog_cc_c99=no; ac_cv_prog_cc_c89=no],
+	  [_AC_PROG_CC_C11([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c11],
+	     [_AC_PROG_CC_C99([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c99],
+		[_AC_PROG_CC_C89([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89],
+				 [ac_cv_prog_cc_stdc=no])])])])
   AC_MSG_CHECKING([for $CC option to accept ISO Standard C])
   AC_CACHE_VAL([ac_cv_prog_cc_stdc], [])
   AS_CASE([$ac_cv_prog_cc_stdc],

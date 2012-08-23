@@ -5,6 +5,13 @@ GNU Autoconf NEWS - User visible changes.
 ** The use of the long-deprecated name 'configure.in' for the autoconf
    input file now elicits a warning in the 'obsolete' category.
 
+** MACROS
+
+- New macro AC_PROG_CC_C11.
+
+- AC_PROG_CC_STDC now prefers C11 if available, falling back on C99
+  and then on C89 as before.
+
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
 ** Autoconf now requires perl 5.6 or better (but generated configure

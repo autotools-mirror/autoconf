@@ -904,8 +904,8 @@ GPL or GNU LGPL.
 
 Gnulib modules typically contain C source code along with Autoconf
 macros used to configure the source code.  For example, the Gnulib
-@code{stdbool} module implements a @file{stdbool.h} header that nearly
-conforms to C99, even on old-fashioned hosts that lack @file{stdbool.h}.
+@code{stdalign} module implements a @file{stdalign.h} header that nearly
+conforms to C11, even on old-fashioned hosts that lack @file{stdalign.h}.
 This module contains a source file for the replacement header, along
 with an Autoconf macro that arranges to use the replacement header on
 old-fashioned systems.
@@ -4587,7 +4587,7 @@ some old systems don't support this (e.g., NextStep).
 @c @fuindex isnan
 @prindex @code{isinf}
 @prindex @code{isnan}
-The C99 standard says that @code{isinf} and @code{isnan} are
+In C99 and later, @code{isinf} and @code{isnan} are
 macros.  On some systems just macros are available
 (e.g., HP-UX and Solaris 10), on
 some systems both macros and functions (e.g., glibc 2.3.2), and on some
@@ -4596,7 +4596,7 @@ these functions are declared in nonstandard headers like
 @code{<sunmath.h>} and defined in non-default libraries like
 @option{-lm} or @option{-lsunmath}.
 
-The C99 @code{isinf} and @code{isnan} macros work correctly with
+In C99 and later, @code{isinf} and @code{isnan} macros work correctly with
 @code{long double} arguments, but pre-C99 systems that use functions
 typically assume @code{double} arguments.  On such a system,
 @code{isinf} incorrectly returns true for a finite @code{long double}
@@ -4697,7 +4697,7 @@ available, rather than @code{signal}.
 @prindex @code{snprintf}
 @c @fuindex vsnprintf
 @prindex @code{vsnprintf}
-The C99 standard says that if the output array isn't big enough
+In C99 and later, if the output array isn't big enough
 and if no other errors occur, @code{snprintf} and @code{vsnprintf}
 truncate the output and return the number of bytes that ought to have
 been produced.  Some older systems return the truncated length (e.g.,
@@ -4781,7 +4781,7 @@ can be removed with a call @code{putenv ("FOO=")}, as described under
 @item @code{va_copy}
 @c @fuindex va_copy
 @prindex @code{va_copy}
-The C99 standard provides @code{va_copy} for copying
+C99 and later provide @code{va_copy} for copying
 @code{va_list} variables.  It may be available in older environments
 too, though possibly as @code{__va_copy} (e.g., @command{gcc} in strict
 pre-C99 mode).  These can be tested with @code{#ifdef}.  A fallback to
@@ -5468,7 +5468,7 @@ use Gnulib's @code{strtod} module.  @xref{Gnulib}.
 @cvindex HAVE_STRTOLD
 @prindex @code{strtold}
 @caindex func_strtold
-If the @code{strtold} function exists and conforms to C99, define
+If the @code{strtold} function exists and conforms to C99 or later, define
 @code{HAVE_STRTOLD}.
 
 This macro caches its result in the @code{ac_cv_func_strtold} variable.
@@ -5732,7 +5732,7 @@ the gnulib list as complete as possible.
 @table @asis
 
 @item @file{limits.h}
-C99 says that @file{limits.h} defines @code{LLONG_MIN},
+In C99 and later, @file{limits.h} defines @code{LLONG_MIN},
 @code{LLONG_MAX}, and @code{ULLONG_MAX}, but many almost-C99
 environments (e.g., default GCC 4.0.2 + glibc 2.4) do not
 define them.
@@ -5740,7 +5740,7 @@ define them.
 @item @file{inttypes.h} vs.@: @file{stdint.h}
 @hdrindex{inttypes.h}
 @hdrindex{stdint.h}
-The C99 standard says that @file{inttypes.h} includes
+In C99 and later, @file{inttypes.h} includes
 @file{stdint.h}, so there's no need to include @file{stdint.h}
 separately in a standard environment.  Some implementations have
 @file{inttypes.h} but not @file{stdint.h} (e.g., Solaris 7), but we don't
@@ -5849,9 +5849,9 @@ exist, and in some cases whether they declare certain symbols.
 @cvindex HAVE__BOOL
 @hdrindex{stdbool.h}
 @caindex header_stdbool_h
-Check whether @file{stdbool.h} exists and conforms to C99, and cache the
-result in the @code{ac_cv_header_stdbool_h} variable.  If the type
-@code{_Bool} is defined, define @code{HAVE__BOOL} to 1.
+Check whether @file{stdbool.h} exists and conforms to C99 or later,
+and cache the result in the @code{ac_cv_header_stdbool_h} variable.
+If the type @code{_Bool} is defined, define @code{HAVE__BOOL} to 1.
 
 This macro is intended for use by Gnulib (@pxref{Gnulib}) and other
 packages that supply a substitute @file{stdbool.h} on platforms lacking
@@ -5986,9 +5986,9 @@ New programs need not use this macro.
 @cvindex HAVE__BOOL
 @hdrindex{stdbool.h}
 @caindex header_stdbool_h
-If @file{stdbool.h} exists and conforms to C99, define
+If @file{stdbool.h} exists and conforms to C99 or later, define
 @code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
-@code{HAVE__BOOL} to 1.  To fulfill the C99 requirements, your
+@code{HAVE__BOOL} to 1.  To fulfill the standard's requirements, your
 program could contain the following code:
 
 @example
@@ -7347,9 +7347,9 @@ features.  To check for characteristics not listed here, use
 @acindex{PROG_CC_STDC}
 @caindex prog_cc_stdc
 If the C compiler cannot compile ISO Standard C (currently
-C99), try to add an option to output variable @code{CC} to make it work.
-If the compiler does not support C99, fall back to supporting
-ANSI C89 (ISO C90).
+C11), try to add an option to output variable @code{CC} to make it work.
+If the compiler does not support C11, fall back to supporting
+ISO C99; if C99 does not work, fall back to ANSI C89 (ISO C90).
 
 After calling this macro you can check whether the C compiler has been
 set to accept Standard C; if not, the shell variable
@@ -7390,6 +7390,23 @@ in @code{for} loops, and variable length arrays.
 After calling this macro you can check whether the C compiler has been
 set to accept C99; if not, the shell variable
 @code{ac_cv_prog_cc_c99} is set to @samp{no}.
+@end defmac
+
+@defmac AC_PROG_CC_C11
+@acindex{PROG_CC_C11}
+@caindex prog_cc_c11
+If the C compiler is not in C11 mode by default, try to add an
+option to output variable @code{CC} to make it so.  This macro tries
+various options that select C11 on some system or another, preferring
+extended functionality modes over strict conformance modes.  Currently it
+considers the compiler to be in C11 mode if it handles @code{_Alignas},
+@code{_Alignof}, @code{_Noreturn}, @code{_Static_assert}, UTF-8 string
+literals, duplicate @code{typedef}s, and anonymous structures and
+unions.
+
+After calling this macro you can check whether the C compiler has been
+set to accept C11; if not, the shell variable
+@code{ac_cv_prog_cc_c11} is set to @samp{no}.
 @end defmac
 
 @defmac AC_C_BACKSLASH_A
@@ -9752,7 +9769,7 @@ preprocessor macro for @var{variable}.  @var{variable} should be a C
 identifier, optionally suffixed by a parenthesized argument list to
 define a C preprocessor macro with arguments.  The macro argument list,
 if present, should be a comma-separated list of C identifiers, possibly
-terminated by an ellipsis @samp{...} if C99 syntax is employed.
+terminated by an ellipsis @samp{...} if C99-or-later syntax is employed.
 @var{variable} should not contain comments, white space, trigraphs,
 backslash-newlines, universal character names, or non-ASCII
 characters.
@@ -10291,7 +10308,7 @@ and ends with @samp{...} and no newline.  It must be followed by a call
 to @code{AC_MSG_RESULT} to print the result of the check and the
 newline.  The @var{feature-description} should be something like
 @samp{whether the Fortran compiler accepts C++ comments} or @samp{for
-c89}.
+_Alignof}.
 
 This macro prints nothing if @command{configure} is run with the
 @option{--quiet} or @option{--silent} option.
@@ -18659,7 +18676,7 @@ The default executable, produced by @samp{cc foo.c}, can be
 @end itemize
 
 The C compiler's traditional name is @command{cc}, but other names like
-@command{gcc} are common.  Posix 1003.1-2001 specifies the
+@command{gcc} are common.  Posix 1003.1-2001 and 1003.1-2008 specify the
 name @command{c99}, but older Posix editions specified
 @command{c89} and anyway these standard names are rarely used in
 practice.  Typically the C compiler is invoked from makefiles that use
@@ -21492,7 +21509,8 @@ because the expression does not overflow.
 @section Preprocessor Arithmetic
 @cindex preprocessor arithmetic
 
-In C99, preprocessor arithmetic, used for @code{#if} expressions, must
+In C99 and later, preprocessor arithmetic, used for @code{#if}
+expressions, must
 be evaluated as if all signed values are of type @code{intmax_t} and all
 unsigned values of type @code{uintmax_t}.  Many compilers are buggy in
 this area, though.  For example, as of 2007, Sun C mishandles @code{#if
@@ -21632,7 +21650,7 @@ the C standard allows only
 extremely limited signal handlers: the behavior is undefined if a signal
 handler reads any nonlocal object, or writes to any nonlocal object
 whose type is not @code{sig_atomic_t volatile}, or calls any standard
-library function other than @code{abort}, @code{signal}, and (if C99)
+library function other than @code{abort}, @code{signal}, and (if C99 or later)
 @code{_Exit}.  Hence C compilers need not worry about a signal handler
 disturbing ordinary computation, unless the computation accesses a
 @code{sig_atomic_t volatile} lvalue that is not a local variable.
@@ -21713,7 +21731,7 @@ A program can also exit with status @var{N} by passing @var{N} to the
 @code{exit} function, and a program can fail by calling the @code{abort}
 function.  If a program is specialized to just some platforms, it can fail
 by calling functions specific to those platforms, e.g., @code{_exit}
-(Posix) and @code{_Exit} (C99).  However, like other functions, an exit
+(Posix).  However, like other functions, an exit
 function should be declared, typically by including a header.  For
 example, if a C program calls @code{exit}, it should include @file{stdlib.h}
 either directly or via the default includes (@pxref{Default Includes}).
