@@ -306,14 +306,10 @@ ac_includes_default="\
 #ifdef HAVE_SYS_STAT_H
 # include <sys/stat.h>
 #endif
-#ifdef STDC_HEADERS
+#if defined STDC_HEADERS || defined HAVE_STDLIB_H
 # include <stdlib.h>
-# include <stddef.h>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
 #endif
+#include <stddef.h>
 #ifdef HAVE_STRING_H
 # if !defined STDC_HEADERS && defined HAVE_MEMORY_H
 #  include <memory.h>

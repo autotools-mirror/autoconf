@@ -154,16 +154,9 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 #define $1 innocuous_$1
 
 /* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $1 (); below.
-    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-    <limits.h> exists even on freestanding compilers.  */
+   which can conflict with char $1 (); below.  */
 
-#ifdef __STDC__
-# include <limits.h>
-#else
-# include <assert.h>
-#endif
-
+#include <limits.h>
 #undef $1
 
 /* Override any GCC internal prototype to avoid an error.
@@ -348,15 +341,9 @@ for ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag in '' yes
 do
   # Use a header file that comes with gcc, so configuring glibc
   # with a fresh cross-compiler works.
-  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
-  # <limits.h> exists even on freestanding compilers.
   # On the NeXT, cc -E runs the code through the compiler's parser,
   # not just through cpp. "Syntax error" is here to catch this case.
-  _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@ifdef __STDC__
-@%:@ include <limits.h>
-@%:@else
-@%:@ include <assert.h>
-@%:@endif
+  _AC_PREPROC_IFELSE([AC_LANG_SOURCE([[@%:@include <limits.h>
 		     Syntax error]])],
 		     [],
 		     [# Broken: fails on valid input.

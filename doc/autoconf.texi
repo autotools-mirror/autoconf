@@ -3885,14 +3885,10 @@ Expand to @var{include-directives} if defined, otherwise to:
 #ifdef HAVE_SYS_STAT_H
 # include <sys/stat.h>
 #endif
-#ifdef STDC_HEADERS
+#if defined STDC_HEADERS || defined HAVE_STDLIB_H
 # include <stdlib.h>
-# include <stddef.h>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
 #endif
+#include <stddef.h>
 #ifdef HAVE_STRING_H
 # if !defined STDC_HEADERS && defined HAVE_MEMORY_H
 #  include <memory.h>
@@ -4862,14 +4858,10 @@ like the following, to declare it properly.
 
 @example
 @group
-#ifdef STDC_HEADERS
+#if defined STDC_HEADERS || defined HAVE_STDLIB_H
 # include <stdlib.h>
-# include <stddef.h>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
 #endif
+#include <stddef.h>
 #ifdef HAVE_ALLOCA_H
 # include <alloca.h>
 #elif !defined alloca
@@ -5764,14 +5756,10 @@ beforehand.  One should run:
 AC_CHECK_HEADERS([sys/socket.h])
 AC_CHECK_HEADERS([net/if.h], [], [],
 [#include <stdio.h>
-#ifdef STDC_HEADERS
+#if defined STDC_HEADERS || defined HAVE_STDLIB_H
 # include <stdlib.h>
-# include <stddef.h>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
 #endif
+#include <stddef.h>
 #ifdef HAVE_SYS_SOCKET_H
 # include <sys/socket.h>
 #endif
@@ -5787,14 +5775,10 @@ On Darwin, this file requires that @file{stdio.h} and
 AC_CHECK_HEADERS([sys/socket.h])
 AC_CHECK_HEADERS([netinet/if_ether.h], [], [],
 [#include <stdio.h>
-#ifdef STDC_HEADERS
+#if defined STDC_HEADERS || defined HAVE_STDLIB_H
 # include <stdlib.h>
-# include <stddef.h>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
 #endif
+#include <stddef.h>
 #ifdef HAVE_SYS_SOCKET_H
 # include <sys/socket.h>
 #endif

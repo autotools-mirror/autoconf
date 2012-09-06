@@ -808,9 +808,6 @@ m4_define([_AC_CHECK_ALIGNOF],
 _AC_CACHE_CHECK_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$3])],
   [(long int) offsetof (ac__type_alignof_, y)],
   [AC_INCLUDES_DEFAULT([$2])
-#ifndef offsetof
-# define offsetof(type, member) ((char *) &((type *) 0)->member - (char *) 0)
-#endif
 typedef struct { char x; $1 y; } ac__type_alignof_;],
   [if test "$AS_TR_SH([ac_cv_type_$3])" = yes; then
      AC_MSG_FAILURE([cannot compute alignment of $1], 77)

@@ -2038,10 +2038,10 @@ m4_define([m4_before],
 # - NAME-TO-CHECK == BODY-TO-EXPAND
 #   Which you can use for regular macros with or without arguments, e.g.,
 #     m4_require([AC_PROG_CC], [AC_PROG_CC])
-#     m4_require([AC_CHECK_HEADERS(limits.h)], [AC_CHECK_HEADERS(limits.h)])
+#     m4_require([AC_CHECK_HEADERS(threads.h)], [AC_CHECK_HEADERS(threads.h)])
 #   which is just the same as
 #     m4_require([AC_PROG_CC])
-#     m4_require([AC_CHECK_HEADERS(limits.h)])
+#     m4_require([AC_CHECK_HEADERS(threads.h)])
 #
 # - BODY-TO-EXPAND == m4_indir([NAME-TO-CHECK])
 #   In the case of macros with irregular names.  For instance:
