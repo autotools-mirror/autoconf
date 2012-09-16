@@ -1894,10 +1894,18 @@ AC_DEFUN([_AC_FUNC_VFORK],
 [AC_CACHE_CHECK(for working vfork, ac_cv_func_vfork_works,
 [AC_RUN_IFELSE([AC_LANG_SOURCE([[/* Thanks to Paul Eggert for this test.  */
 ]AC_INCLUDES_DEFAULT[
+#include <signal.h>
 #include <sys/wait.h>
 #ifdef HAVE_VFORK_H
 # include <vfork.h>
 #endif
+
+static void
+do_nothing (int sig)
+{
+  (void) sig;
+}
+
 /* On some sparc systems, changes by the child to local and incoming
    argument registers are propagated back to the parent.  The compiler
    is told about this with #include <vfork.h>, but some compilers
@@ -1905,11 +1913,7 @@ AC_DEFUN([_AC_FUNC_VFORK],
    static variable whose address is put into a register that is
    clobbered by the vfork.  */
 static void
-#ifdef __cplusplus
 sparc_address_test (int arg)
-# else
-sparc_address_test (arg) int arg;
-#endif
 {
   static pid_t child;
   if (!child) {
@@ -1934,6 +1938,11 @@ main ()
 
   sparc_address_test (0);
 
+  /* On Solaris 2.4, changes by the child to the signal handler
+     also munge signal handlers in the parent.  To detect this,
+     start by putting the parent's handler in a known state.  */
+  signal (SIGTERM, SIG_DFL);
+
   child = vfork ();
 
   if (child == 0) {
@@ -1955,6 +1964,10 @@ main ()
 	|| p != p5 || p != p6 || p != p7)
       _exit(1);
 
+    /* Alter the child's signal handler.  */
+    if (signal (SIGTERM, do_nothing) != SIG_DFL)
+      _exit(1);
+
     /* On some systems (e.g. IRIX 3.3), vfork doesn't separate parent
        from child file descriptors.  If the child closes a descriptor
        before it execs or exits, this munges the parent's descriptor
@@ -1969,6 +1982,9 @@ main ()
     return (
 	 /* Was there some problem with vforking?  */
 	 child < 0
+
+	 /* Did the child munge the parent's signal handler?  */
+	 || signal (SIGTERM, SIG_DFL) != SIG_DFL
 
 	 /* Did the child fail?  (This shouldn't happen.)  */
 	 || status

@@ -5,12 +5,17 @@ GNU Autoconf NEWS - User visible changes.
 ** The use of the long-deprecated name 'configure.in' for the autoconf
    input file now elicits a warning in the 'obsolete' category.
 
-** MACROS
+** Macros
 
 - New macro AC_PROG_CC_C11.
 
 - AC_PROG_CC_STDC now prefers C11 if available, falling back on C99
   and then on C89 as before.
+
+- AC_FUNC_VFORK now checks for the signal-handling bug in Solaris 2.4 'vfork'.
+  Formerly, it ignored this bug, so that Emacs could use some tricky
+  code on that platform.  Solaris 2.4 has not been supported since
+  2003 and nowadays it's better to omit that old trick.
 
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 

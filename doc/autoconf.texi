@@ -4993,10 +4993,7 @@ If @file{vfork.h} is found, define @code{HAVE_VFORK_H}.  If a working
 define @code{vfork} to be @code{fork} for backward compatibility with
 previous versions of @command{autoconf}.  This macro checks for several known
 errors in implementations of @code{vfork} and considers the system to not
-have a working @code{vfork} if it detects any of them.  It is not considered
-to be an implementation error if a child's invocation of @code{signal}
-modifies the parent's signal handler, since child processes rarely change
-their signal handlers.
+have a working @code{vfork} if it detects any of them.
 
 Since this macro defines @code{vfork} only for backward compatibility with
 previous versions of @command{autoconf} you're encouraged to define it
