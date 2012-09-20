@@ -34,14 +34,6 @@ be performed in another file than confdefs.h, say confh.h, which is
 used for config.h generation, but not used in configure's own tests.
 
 ** AC_PROG_CC
-Currently it tries to put the C compiler in ANSI C mode by default.
-We should change this spec so that AC_PROG_CC tries to change the
-compiler to be the "nicest" mode, i.e. support for the latest standard
-features (currently ISO C99) plus support for all vendor extensions,
-even if they are slightly incompatible with C99.  The basic idea here
-is that AC_PROG_CC should disable pedanticisms and should enable
-extensions.
-
 Have a way to specify different default flags to try; see this thread
 for more information:
 <http://lists.gnu.org/archive/html/bug-autoconf/2008-08/msg00009.html>.
@@ -143,7 +135,9 @@ We also need to check the srcext which are supported by the compiler.
 In fact, this macro is also probably the right place to check for
 objext and exeext.
 
-** AC_PROG_CC_STDC
+** AC_PROG_CC
+How should the desired ISO version be specified?  AC_PROG_CC_C89
+do not play well with each other, or with AC_PROG_CC.
 Should be: AC_PROG_CC_ISO?  Or even more specific for the ISO version?
 Should include more tests (e.g., AC_C_CONST etc.)?  See Peter for very
 useful comments on the technology.  Should we make this a new

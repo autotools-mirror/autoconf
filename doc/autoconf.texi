@@ -7223,13 +7223,14 @@ makes this invalid.  That is why Autoconf stopped issuing
 @code{#line} directives.
 @end table
 
+@anchor{AC_PROG_CC}
 @defmac AC_PROG_CC (@ovar{compiler-search-list})
 @acindex{PROG_CC}
 @evindex CC
 @evindex CFLAGS
 @ovindex CC
 @ovindex CFLAGS
-@caindex prog_cc_c89
+@caindex prog_cc_stdc
 Determine a C compiler to use.  If @code{CC} is not already set in the
 environment, check for @code{gcc} and @code{cc}, then for other C
 compilers.  Set output variable @code{CC} to the name of the compiler
@@ -7246,16 +7247,14 @@ this:
 AC_PROG_CC([gcc cl cc])
 @end example
 
-If the C compiler does not handle function prototypes correctly by
-default, try to add an option to output variable @code{CC} to make it
-so.  This macro tries various options that select standard-conformance
-modes on various systems.
-
+If the C compiler cannot compile ISO Standard C (currently
+C11), try to add an option to output variable @code{CC} to make it work.
+If the compiler does not support C11, fall back to supporting
+ISO C99; if C99 does not work, fall back to ANSI C89 (ISO C90).
+When testing for ISO C versions, use GNU extensions if available.
 After calling this macro you can check whether the C compiler has been
-set to accept ANSI C89 (ISO C90); if not, the shell
-variable
-@code{ac_cv_prog_cc_c89} is set to @samp{no}.  See also
-@code{AC_C_PROTOTYPES} below.
+set to accept Standard C; if not, the shell variable
+@code{ac_cv_prog_cc_stdc} is set to @samp{no}.
 
 If using the GNU C compiler, set shell variable @code{GCC} to
 @samp{yes}.  If output variable @code{CFLAGS} was not already set, set
@@ -7324,19 +7323,6 @@ features.  To check for characteristics not listed here, use
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
 @code{AC_RUN_IFELSE} (@pxref{Runtime}).
 
-@defmac AC_PROG_CC_STDC
-@acindex{PROG_CC_STDC}
-@caindex prog_cc_stdc
-If the C compiler cannot compile ISO Standard C (currently
-C11), try to add an option to output variable @code{CC} to make it work.
-If the compiler does not support C11, fall back to supporting
-ISO C99; if C99 does not work, fall back to ANSI C89 (ISO C90).
-
-After calling this macro you can check whether the C compiler has been
-set to accept Standard C; if not, the shell variable
-@code{ac_cv_prog_cc_stdc} is set to @samp{no}.
-@end defmac
-
 @defmac AC_PROG_CC_C89
 @acindex{PROG_CC_C89}
 @caindex prog_cc_c89
@@ -7351,7 +7337,9 @@ After calling this macro you can check whether the C compiler has been
 set to accept ANSI C89; if not, the shell variable
 @code{ac_cv_prog_cc_c89} is set to @samp{no}.
 
-This macro is called automatically by @code{AC_PROG_CC}.
+This macro is rarely needed.  It should be used only if your application
+requires C89 and will not work in later C versions.  Typical applications
+should use @code{AC_PROG_CC} instead.
 @end defmac
 
 @defmac AC_PROG_CC_C99
@@ -7371,23 +7359,13 @@ in @code{for} loops, and variable length arrays.
 After calling this macro you can check whether the C compiler has been
 set to accept C99; if not, the shell variable
 @code{ac_cv_prog_cc_c99} is set to @samp{no}.
-@end defmac
 
-@defmac AC_PROG_CC_C11
-@acindex{PROG_CC_C11}
-@caindex prog_cc_c11
-If the C compiler is not in C11 mode by default, try to add an
-option to output variable @code{CC} to make it so.  This macro tries
-various options that select C11 on some system or another, preferring
-extended functionality modes over strict conformance modes.  Currently it
-considers the compiler to be in C11 mode if it handles @code{_Alignas},
-@code{_Alignof}, @code{_Noreturn}, @code{_Static_assert}, UTF-8 string
-literals, duplicate @code{typedef}s, and anonymous structures and
-unions.
+This macro is rarely needed.  It should be used only if your application
+requires C99 and will not work in later C versions.  Typical applications
+should use @code{AC_PROG_CC} instead.
 
-After calling this macro you can check whether the C compiler has been
-set to accept C11; if not, the shell variable
-@code{ac_cv_prog_cc_c11} is set to @samp{no}.
+There is no @code{AC_PROG_CC_C11} macro, as no need for one has been
+identified.
 @end defmac
 
 @defmac AC_C_BACKSLASH_A
@@ -14389,8 +14367,8 @@ C variables in libraries.
 
 After the category comes the name of the particular feature being
 tested.  Any further words in the macro name indicate particular aspects
-of the feature.  For example, @code{AC_PROG_CC_STDC} checks whether the
-C compiler supports ISO Standard C.
+of the feature.  For example, @code{AC_PROG_MAKE_SET} checks whether
+@command{make} sets a variable to its own name.
 
 An internal macro should have a name that starts with an underscore;
 Autoconf internals should therefore start with @samp{_AC_}.
@@ -23676,6 +23654,11 @@ Replaced by @code{AC_TYPE_PID_T} (@pxref{AC_TYPE_PID_T}).
 @defmac AC_PREFIX
 @acindex{PREFIX}
 Replaced by @code{AC_PREFIX_PROGRAM} (@pxref{AC_PREFIX_PROGRAM}).
+@end defmac
+
+@defmac AC_PROG_CC_STDC
+@acindex{PROG_CC_STDC}
+Now done by @code{AC_PROG_CC} (@pxref{AC_PROG_CC}).
 @end defmac
 
 @defmac AC_PROGRAMS_CHECK

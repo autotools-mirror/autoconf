@@ -478,7 +478,19 @@ else
   GCC=
 fi
 _AC_PROG_CC_G
-_AC_PROG_CC_C89
+dnl
+dnl Set ac_prog_cc_stdc to the supported C version.
+dnl Also set the documented variable ac_cv_prog_cc_stdc;
+dnl its name was chosen when it was cached, but it is no longer cached.
+_AC_PROG_CC_C11([ac_prog_cc_stdc=c11
+		 ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c11],
+  [_AC_PROG_CC_C99([ac_prog_cc_stdc=c99
+		    ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c99],
+     [_AC_PROG_CC_C89([ac_prog_cc_stdc=c89
+		       ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89],
+		      [ac_prog_cc_stdc=no
+		       ac_cv_prog_cc_stdc=no])])])
+dnl
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CC
 
@@ -1166,13 +1178,15 @@ done
 rm -f conftest.$ac_ext
 CC=$ac_save_CC
 ])# AC_CACHE_VAL
+ac_prog_cc_stdc_options=
 case "x$ac_cv_prog_cc_$1" in
   x)
     AC_MSG_RESULT([none needed]) ;;
   xno)
     AC_MSG_RESULT([unsupported]) ;;
   *)
-    CC="$CC $ac_cv_prog_cc_$1"
+    ac_prog_cc_stdc_options=" $ac_cv_prog_cc_$1"
+    CC=$CC$ac_prog_cc_stdc_options
     AC_MSG_RESULT([$ac_cv_prog_cc_$1]) ;;
 esac
 AS_IF([test "x$ac_cv_prog_cc_$1" != xno], [$5], [$6])
@@ -1423,47 +1437,43 @@ dnl with extended modes being tried first.
 ])# _AC_PROG_CC_C11
 
 
-# AC_PROG_CC_C89
-# --------------
-AC_DEFUN([AC_PROG_CC_C89],
+# _AC_PROG_CC_FORCE_VERSION(LOWER-VERSION, UPPER-VERSION)
+# -------------------------------------------------------
+# Require a compiler for a particular version of C, either C89 or C99.
+# LOWER-VERSION uses lower-case c, UPPER-VERSION uses upper-case.
+AC_DEFUN([_AC_PROG_CC_FORCE_VERSION],
 [ AC_REQUIRE([AC_PROG_CC])dnl
-  _AC_PROG_CC_C89
+  if test $ac_prog_cc_stdc != $1; then
+    ac_save_std_CC=$CC
+    if test -n "$ac_prog_cc_stdc_options"; then
+      CC=`expr "X$CC" : 'X\(.*\)'"$ac_prog_cc_stdc_options"
+	``expr "X$CC" : ".*$ac_prog_cc_stdc_options"'\(.*\)'
+	`
+    fi
+    _AC_PROG_CC_$2(
+       [ac_prog_cc_stdc=$1
+        ac_cv_prog_cc_stdc=$ac_cv_prog_cc_$1],
+       [CC=$ac_save_std_CC
+        AC_MSG_WARN([$2 compiler not available; falling back on $CC])])
+  fi
 ])
 
+# AC_PROG_CC_C89
+# --------------
+AC_DEFUN([AC_PROG_CC_C89], [_AC_PROG_CC_FORCE_VERSION([c89], [C89])])
 
 # AC_PROG_CC_C99
 # --------------
-AC_DEFUN([AC_PROG_CC_C99],
-[ AC_REQUIRE([AC_PROG_CC])dnl
-  _AC_PROG_CC_C99
-])
+AC_DEFUN([AC_PROG_CC_C99], [_AC_PROG_CC_FORCE_VERSION([c99], [C99])])
 
-
-# AC_PROG_CC_C11
-# --------------
-AC_DEFUN([AC_PROG_CC_C11],
-[ AC_REQUIRE([AC_PROG_CC])dnl
-  _AC_PROG_CC_C11
-])
+# There is no AC_PROG_CC_C11, as we have not identified a need for it.
+# Applications should use AC_PROG_CC instead.
 
 
 # AC_PROG_CC_STDC
 # ---------------
-AC_DEFUN([AC_PROG_CC_STDC],
-[ AC_REQUIRE([AC_PROG_CC])dnl
-  AS_CASE([$ac_cv_prog_cc_stdc],
-    [no], [ac_cv_prog_cc_c11=no; ac_cv_prog_cc_c99=no; ac_cv_prog_cc_c89=no],
-	  [_AC_PROG_CC_C11([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c11],
-	     [_AC_PROG_CC_C99([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c99],
-		[_AC_PROG_CC_C89([ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89],
-				 [ac_cv_prog_cc_stdc=no])])])])
-  AC_MSG_CHECKING([for $CC option to accept ISO Standard C])
-  AC_CACHE_VAL([ac_cv_prog_cc_stdc], [])
-  AS_CASE([$ac_cv_prog_cc_stdc],
-    [no], [AC_MSG_RESULT([unsupported])],
-    [''], [AC_MSG_RESULT([none needed])],
-	  [AC_MSG_RESULT([$ac_cv_prog_cc_stdc])])
-])
+# This has been folded into AC_PROG_CC.
+AU_ALIAS([AC_PROG_CC_STDC], [AC_PROG_CC])
 
 
 # AC_C_BACKSLASH_A
@@ -1902,15 +1912,11 @@ fi
 # options.
 AC_DEFUN([AC_C_PROTOTYPES],
 [AC_REQUIRE([AC_PROG_CC])dnl
-AC_MSG_CHECKING([for function prototypes])
-if test "$ac_cv_prog_cc_c89" != no; then
-  AC_MSG_RESULT([yes])
+if test "$ac_prog_cc_stdc" != no; then
   AC_DEFINE(PROTOTYPES, 1,
 	    [Define to 1 if the C compiler supports function prototypes.])
   AC_DEFINE(__PROTOTYPES, 1,
 	    [Define like PROTOTYPES; this can be used by system headers.])
-else
-  AC_MSG_RESULT([no])
 fi
 ])# AC_C_PROTOTYPES
 
