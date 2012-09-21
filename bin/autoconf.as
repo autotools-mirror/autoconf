@@ -1,7 +1,7 @@
 AS_INIT[]dnl                                            -*- shell-script -*-
 m4_divert_push([HEADER-COPYRIGHT])dnl
 # @configure_input@
-# autoconf -- create `configure' using m4 macros
+# autoconf -- create 'configure' using m4 macros.
 
 # Copyright (C) 1992-1994, 1996, 1999-2012 Free Software Foundation,
 # Inc.
@@ -26,9 +26,9 @@ usage=["\
 Usage: $0 [OPTION]... [TEMPLATE-FILE]
 
 Generate a configuration script from a TEMPLATE-FILE if given, or
-\`configure.ac' if present, or else \`configure.in'.  Output is sent
+'configure.ac' if present, or else 'configure.in'.  Output is sent
 to the standard output if TEMPLATE-FILE is given, else into
-\`configure'.
+'configure'.
 
 Operation modes:
   -h, --help                print this help, then exit
@@ -40,15 +40,15 @@ Operation modes:
   -W, --warnings=CATEGORY   report the warnings falling in CATEGORY [syntax]
 
 Warning categories include:
-  \`cross'         cross compilation issues
-  \`obsolete'      obsolete constructs
-  \`syntax'        dubious syntactic constructs
-  \`all'           all the warnings
-  \`no-CATEGORY'   turn off the warnings on CATEGORY
-  \`none'          turn off all the warnings
-  \`error'         warnings are error
+  'cross'         cross compilation issues
+  'obsolete'      obsolete constructs
+  'syntax'        dubious syntactic constructs
+  'all'           all the warnings
+  'no-CATEGORY'   turn off the warnings on CATEGORY
+  'none'          turn off all the warnings
+  'error'         warnings are error
 
-The environment variables \`M4' and \`WARNINGS' are honored.
+The environment variables 'M4' and 'WARNINGS' are honored.
 
 Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
@@ -59,7 +59,7 @@ Tracing:
   -i, --initialization        also trace Autoconf's initialization process
 
 In tracing mode, no configuration script is created.  FORMAT defaults
-to \`\$f:\$l:\$n:\$%'; see \`autom4te --help' for information about FORMAT.
+to '\$f:\$l:\$n:\$%'; see 'autom4te --help' for information about FORMAT.
 
 Report bugs to <bug-autoconf@gnu.org>.
 GNU Autoconf home page: <http://www.gnu.org/software/autoconf/>.
@@ -76,10 +76,10 @@ There is NO WARRANTY, to the extent permitted by law.
 Written by David J. MacKenzie and Akim Demaille."]
 
 help="\
-Try \`$as_me --help' for more information."
+Try '$as_me --help' for more information."
 
 exit_missing_arg='
-  m4_bpatsubst([AS_ERROR([option `$[1]' requires an argument$as_nl$help])],
+  m4_bpatsubst([AS_ERROR([option '$[1]' requires an argument$as_nl$help])],
     ['], ['\\''])'
 # restore font-lock: '
 
@@ -153,7 +153,7 @@ while test $# -gt 0 ; do
        break ;;
     -* )
        exec >&2
-       AS_ERROR([invalid option `$[1]'$as_nl$help]) ;; #`
+       AS_ERROR([invalid option '$[1]'$as_nl$help]) ;;
     * )
        break ;;
   esac
@@ -164,8 +164,8 @@ case $# in
   0)
     if test -f configure.ac; then
       if test -f configure.in; then
-	AS_ECHO(["$as_me: warning: both \`configure.ac' and \`configure.in' are present."]) >&2
-	AS_ECHO(["$as_me: warning: proceeding with \`configure.ac'."]) >&2
+	AS_ECHO(["$as_me: warning: both 'configure.ac' and 'configure.in' are present."]) >&2
+	AS_ECHO(["$as_me: warning: proceeding with 'configure.ac'."]) >&2
       fi
       infile=configure.ac
     elif test -f configure.in; then

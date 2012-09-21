@@ -68,10 +68,10 @@ my %kind_comment =
    'program'    => 'Checks for programs.',
   );
 
-# $USED{KIND}{ITEM} is the list of locations where the ITEM (of KIND) was used
-# in the user package.
-# For instance $USED{function}{alloca} is the list of `file:line' where
-# `alloca (...)' appears.
+# $USED{KIND}{ITEM} is the list of locations where the ITEM (of KIND) was
+# used in the user package.
+# For instance $USED{function}{alloca} is the list of 'file:line' where
+# 'alloca (...)' appears.
 my %used = ();
 
 # $MACRO{KIND}{ITEM} is the list of macros to use to test ITEM.
@@ -80,8 +80,8 @@ my %used = ();
 my %macro = ();
 
 # $NEEDED_MACROS{MACRO} is an array of locations requiring MACRO.
-# E.g., $NEEDED_MACROS{AC_FUNC_ALLOC} the list of `file:line' containing
-# `alloca (...)'.
+# E.g., $NEEDED_MACROS{AC_FUNC_ALLOC} the list of 'file:line' containing
+# 'alloca (...)'.
 my %needed_macros =
   (
    'AC_PREREQ' => [$me],
@@ -103,8 +103,8 @@ $help = "Usage: $0 [OPTION]... [SRCDIR]
 Examine source files in the directory tree rooted at SRCDIR, or the
 current directory if none is given.  Search the source files for
 common portability problems, check for incompleteness of
-`configure.ac', and create a file `$configure_scan' which is a
-preliminary `configure.ac' for that package.
+'configure.ac', and create a file '$configure_scan' which is a
+preliminary 'configure.ac' for that package.
 
   -h, --help          print this help, then exit
   -V, --version       print version number, then exit
@@ -148,7 +148,7 @@ sub parse_args ()
 	  'B|prepend-include=s' => \@prepend_include);
 
   die "$me: too many arguments
-Try `$me --help' for more information.\n"
+Try '$me --help' for more information.\n"
     if @ARGV > 1;
 
   my $srcdir = $ARGV[0] || ".";
@@ -215,8 +215,8 @@ sub used ($$;$)
   my ($kind, $word, $where) = @_;
   $where ||= "$File::Find::name:$.";
   if (
-      # Check for all the libraries.  But `-links' is certainly a
-      # `find' argument, and `-le', a `test' argument.
+      # Check for all the libraries.  But '-links' is certainly a
+      # 'find' argument, and '-le', a 'test' argument.
       ($kind eq 'library' && $word !~ /^(e|inks)$/)
       # Other than libraries are to be checked only if listed in
       # the Autoscan library files.
@@ -322,8 +322,8 @@ sub scan_makefile ($)
 	{
 	  used ('makevar', $1);
 	}
-      # Be sure to catch a whole word.  For instance `lex$U.$(OBJEXT)'
-      # is a single token.  Otherwise we might believe `lex' is needed.
+      # Be sure to catch a whole word.  For instance 'lex$U.$(OBJEXT)'
+      # is a single token.  Otherwise we might believe 'lex' is needed.
       foreach my $word (split (/\s+/))
 	{
 	  # Libraries.
@@ -332,8 +332,8 @@ sub scan_makefile ($)
 	      used ('library', $1);
 	    }
 	  # Tokens in the code.
-	  # We allow some additional characters, e.g., `+', since
-	  # autoscan/programs includes `c++'.
+	  # We allow some additional characters, e.g., '+', since
+	  # autoscan/programs includes 'c++'.
 	  if ($word =~ /^[a-zA-Z_][\w+]*$/)
 	    {
 	      used ('program', $word);
@@ -385,7 +385,7 @@ sub scan_file ()
   # Save $_ as Find::File requires it to be preserved.
   local $_ = $_;
 
-  # Strip a useless leading `./'.
+  # Strip a useless leading './'.
   $File::Find::name =~ s,^\./,,;
 
   if ($_ ne '.' and -d $_ and
@@ -507,7 +507,7 @@ sub output_libraries ($)
   print $file "\n# Checks for libraries.\n";
   foreach my $word (sort keys %{$used{'library'}})
     {
-      print $file "# FIXME: Replace `main' with a function in `-l$word':\n";
+      print $file "# FIXME: Replace 'main' with a function in '-l$word':\n";
       print $file "AC_CHECK_LIB([$word], [main])\n";
     }
 }
@@ -583,7 +583,7 @@ sub check_configure_ac ($)
 
   # Find what needed macros are invoked in CONFIGURE_AC.
   # I'd be very happy if someone could explain to me why sort (uniq ...)
-  # doesn't work properly: I need `uniq (sort ...)'.  --akim
+  # doesn't work properly: I need 'uniq (sort ...)'.  --akim
   my $trace_option =
     join (' --trace=', '',
 	  uniq (sort (map { s/\(.*//; $_ } keys %needed_macros)));
@@ -602,7 +602,7 @@ sub check_configure_ac ($)
 	  # separated macros.  But there is no point.
 	  foreach my $word (split (/\s|,/, $args[0]))
 	    {
-	      # AC_CHECK_MEMBERS wants `struct' or `union'.
+	      # AC_CHECK_MEMBERS wants 'struct' or 'union'.
 	      if ($macro eq "AC_CHECK_MEMBERS"
 		  && $word =~ /^stat.st_/)
 		{

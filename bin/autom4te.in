@@ -72,10 +72,10 @@ my $flock_implemented = '@PERL_FLOCK@';
 my %trace;
 
 # The macros the user will want to trace in the future.
-# We need `include' to get the included file, `m4_pattern_forbid' and
-# `m4_pattern_allow' to check the output.
+# We need 'include' to get the included file, 'm4_pattern_forbid' and
+# 'm4_pattern_allow' to check the output.
 #
-# FIXME: What about `sinclude'?
+# FIXME: What about 'sinclude'?
 my @preselect = ('include',
 		 'm4_pattern_allow', 'm4_pattern_forbid',
 		 '_m4_warn');
@@ -105,20 +105,20 @@ map { s/:.*//;s/\W// } @m4_builtin;
 
 # %M4_BUILTIN_ALTERNATE_NAME
 # --------------------------
-# The builtins are renamed, e.g., `define' is renamed `m4_define'.
-# So map `define' to `m4_define' and conversely.
+# The builtins are renamed, e.g., 'define' is renamed 'm4_define'.
+# So map 'define' to 'm4_define' and conversely.
 # Some macros don't follow this scheme: be sure to properly map to their
 # alternate name too.
 #
 # FIXME: Trace status of renamed builtins was fixed in M4 1.4.5, which
 # we now depend on; do we still need to do this mapping?
 #
-# So we will merge them, i.e., tracing `BUILTIN' or tracing
-# `m4_BUILTIN' will be the same: tracing both, but honoring the
+# So we will merge them, i.e., tracing 'BUILTIN' or tracing
+# 'm4_BUILTIN' will be the same: tracing both, but honoring the
 # *last* trace specification.
 #
-# FIXME: This is not enough: in the output `$0' will be `BUILTIN'
-# sometimes and `m4_BUILTIN' at others.  We should return a unique name,
+# FIXME: This is not enough: in the output '$0' will be 'BUILTIN'
+# sometimes and 'm4_BUILTIN' at others.  We should return a unique name,
 # the one specified by the user.
 #
 # FIXME: To be absolutely rigorous, I would say that given that we
@@ -139,38 +139,38 @@ $help = "Usage: $0 [OPTION]... [FILES]
 Run GNU M4 on the FILES, avoiding useless runs.  Output the traces if tracing,
 the frozen file if freezing, otherwise the expansion of the FILES.
 
-If some of the FILES are named \`FILE.m4f\' they are considered to be M4
+If some of the FILES are named 'FILE.m4f' they are considered to be M4
 frozen files of all the previous files (which are therefore not loaded).
-If \`FILE.m4f\' is not found, then \`FILE.m4\' will be used, together with
+If 'FILE.m4f' is not found, then 'FILE.m4' will be used, together with
 all the previous files.
 
 Some files may be optional, i.e., will only be processed if found in the
-include path, but then must end in \`.m4?\';  the question mark is not part of
-the actual file name.
+include path, but then must end in '.m4?';  the question mark is not part
+of the actual file name.
 
 Operation modes:
   -h, --help               print this help, then exit
   -V, --version            print version number, then exit
   -v, --verbose            verbosely report processing
-  -d, --debug              don\'t remove temporary files
-  -o, --output=FILE        save output in FILE (defaults to \`-\', stdout)
-  -f, --force              don\'t rely on cached values
+  -d, --debug              don't remove temporary files
+  -o, --output=FILE        save output in FILE (defaults to '-', stdout)
+  -f, --force              don't rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
   -l, --language=LANG      specify the set of M4 macros to use
   -C, --cache=DIRECTORY    preserve results for future runs in DIRECTORY
       --no-cache           disable the cache
   -m, --mode=OCTAL         change the non trace output file mode (0666)
-  -M, --melt               don\'t use M4 frozen files
+  -M, --melt               don't use M4 frozen files
 
 Languages include:
-  \`Autoconf\'   create Autoconf configure scripts
-  \`Autotest\'   create Autotest test suites
-  \`M4sh\'       create M4sh shell scripts
-  \`M4sugar\'    create M4sugar output
+  'Autoconf'   create Autoconf configure scripts
+  'Autotest'   create Autotest test suites
+  'M4sh'       create M4sh shell scripts
+  'M4sugar'    create M4sugar output
 
 " . Autom4te::ChannelDefs::usage . "
 
-The environment variables \`M4\' and \`WARNINGS\' are honored.
+The environment variables 'M4' and 'WARNINGS' are honored.
 
 Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
@@ -183,7 +183,7 @@ Tracing:
 Freezing:
   -F, --freeze   produce an M4 frozen state file for FILES
 
-FORMAT defaults to \`\$f:\$l:\$n:\$%\', and can use the following escapes:
+FORMAT defaults to '\$f:\$l:\$n:\$%', and can use the following escapes:
   \$\$     literal \$
   \$f     file where macro was called
   \$l     line where macro was called
@@ -347,9 +347,9 @@ sub parse_args ()
      "I|include=s"         => \@include,
 
      # Tracing:
-     # Using a hash for traces is seducing.  Unfortunately, upon `-t FOO',
-     # instead of mapping `FOO' to undef, Getopt maps it to `1', preventing
-     # us from distinguishing `-t FOO' from `-t FOO=1'.  So let's do it
+     # Using a hash for traces is seducing.  Unfortunately, upon '-t FOO',
+     # instead of mapping 'FOO' to undef, Getopt maps it to '1', preventing
+     # us from distinguishing '-t FOO' from '-t FOO=1'.  So let's do it
      # by hand.
      "t|trace=s"     => \@trace,
      "p|preselect=s" => \@preselect,
@@ -363,7 +363,7 @@ sub parse_args ()
     );
 
   fatal "too few arguments
-Try `$me --help' for more information."
+Try '$me --help' for more information."
     unless @ARGV;
 
   # Freezing:
@@ -388,13 +388,13 @@ Try `$me --help' for more information."
 
   # Normalize the includes: the first occurrence is enough, several is
   # a pain since it introduces a useless difference in the path which
-  # invalidates the cache.  And strip `.' which is implicit and always
+  # invalidates the cache.  And strip '.' which is implicit and always
   # first.
   @include = grep { !/^\.$/ } uniq (reverse(@prepend_include), @include);
 
   # Convert @trace to %trace, and work around the M4 builtins tracing
   # problem.
-  # The default format is `$f:$l:$n:$%'.
+  # The default format is '$f:$l:$n:$%'.
   foreach (@trace)
     {
       /^([^:]+)(?::(.*))?$/ms;
@@ -413,9 +413,9 @@ Try `$me --help' for more information."
   # discarded: the frozen file is supposed to include them all.
   #
   # We don't want to depend upon m4's --include to find the top level
-  # files, so we use `find_file' here.  Try to get a canonical name,
+  # files, so we use 'find_file' here.  Try to get a canonical name,
   # as it's part of the key for caching.  And some files are optional
-  # (also handled by `find_file').
+  # (also handled by 'find_file').
   my @argv;
   foreach (@ARGV)
     {
@@ -425,7 +425,7 @@ Try `$me --help' for more information."
 	}
       elsif (/\.m4f$/)
 	{
-	  # Frozen files are optional => pass a `?' to `find_file'.
+	  # Frozen files are optional => pass a '?' to 'find_file'.
 	  my $file = find_file ("$_?", @include);
 	  if (!$melt && $file)
 	    {
@@ -484,7 +484,7 @@ sub handle_m4 ($@)
 # warn_forbidden ($WHERE, $WORD, %FORBIDDEN)
 # ------------------------------------------
 # $WORD is forbidden.  Warn with a dedicated error message if in
-# %FORBIDDEN, otherwise a simple `error: possibly undefined macro'
+# %FORBIDDEN, otherwise a simple 'error: possibly undefined macro'
 # will do.
 my $first_warn_forbidden = 1;
 sub warn_forbidden ($$%)
@@ -572,7 +572,7 @@ sub handle_output ($$)
       $res = $_;
 
       # Don't complain in comments.  Well, until we have something
-      # better, don't consider `#include' etc. are comments.
+      # better, don't consider '#include' etc. are comments.
       s/\#.*//
 	unless /^\#\s*(if|include|endif|ifdef|ifndef|define)\b/;
       foreach (split (/\W+/))
@@ -604,7 +604,7 @@ sub handle_output ($$)
       while ($_ = $file->getline)
 	{
 	  # Don't complain in comments.  Well, until we have something
-	  # better, don't consider `#include' etc. to be comments.
+	  # better, don't consider '#include' etc. to be comments.
 	  s/\#.*//
 	    unless /^\#(if|include|endif|ifdef|ifndef|define)\b/;
 
@@ -703,10 +703,10 @@ sub trace_format_to_m4 ($)
 # handle_traces($REQ, $OUTPUT, %TRACE)
 # ------------------------------------
 # We use M4 itself to process the traces.  But to avoid name clashes when
-# processing the traces, the builtins are disabled, and moved into `at_'.
-# Actually, all the low level processing macros are in `at_' (and `_at_').
-# To avoid clashes between user macros and `at_' macros, the macros which
-# implement tracing are in `AT_'.
+# processing the traces, the builtins are disabled, and moved into 'at_'.
+# Actually, all the low level processing macros are in 'at_' (and '_at_').
+# To avoid clashes between user macros and 'at_' macros, the macros which
+# implement tracing are in 'AT_'.
 #
 # Having $REQ is needed to neutralize the macros which have been traced,
 # but are not wanted now.
@@ -714,7 +714,7 @@ sub handle_traces ($$%)
 {
   my ($req, $output, %trace) = @_;
 
-  verb "formatting traces for `$output': " . join (', ', sort keys %trace);
+  verb "formatting traces for '$output': " . join (', ', sort keys %trace);
 
   # Processing the traces.
   my $trace_m4 = new Autom4te::XFile ("> " . open_quote ("$tmp/traces.m4"));
@@ -726,9 +726,9 @@ sub handle_traces ($$%)
   # ----------------------------------
   # List the elements, separating then with SEPARATOR.
   # MODE can be:
-  #  `at'       -- the elements are enclosed in brackets.
-  #  `star'     -- the elements are listed as are.
-  #  `percent'  -- the elements are `flattened': spaces are singled out,
+  #  'at'       -- the elements are enclosed in brackets.
+  #  'star'     -- the elements are listed as are.
+  #  'percent'  -- the elements are 'flattened': spaces are singled out,
   #                and no new line remains.
   define([_at_at],
   [at_ifelse([$#], [1], [],
@@ -746,7 +746,7 @@ sub handle_traces ($$%)
 	     [[$2][$1]$0([$1], at_shift(at_shift($@)))])])
 
   # FLATTEN quotes its result.
-  # Note that the second pattern is `newline, tab or space'.  Don't lose
+  # Note that the second pattern is 'newline, tab or space'.  Don't lose
   # the tab!
   define([at_flatten],
   [at_patsubst(at_patsubst([[[$1]]], [\\\n]), [[\n\t ]+], [ ])])
@@ -760,14 +760,14 @@ EOF
   s/^  //mg;s/\\t/\t/mg;s/\\n/\n/mg;
   print $trace_m4 $_;
 
-  # If you trace `define', then on `define([m4_exit], defn([m4exit])' you
+  # If you trace 'define', then on 'define([m4_exit], defn([m4exit])' you
   # will produce
   #
   #    AT_define([m4sugar.m4], [115], [1], [define], [m4_exit], <m4exit>)
   #
-  # Since `<m4exit>' is not quoted, the outer m4, when processing
-  # `trace.m4' will exit prematurely.  Hence, move all the builtins to
-  # the `at_' name space.
+  # Since '<m4exit>' is not quoted, the outer m4, when processing
+  # 'trace.m4' will exit prematurely.  Hence, move all the builtins to
+  # the 'at_' name space.
 
   print $trace_m4 "# Copy the builtins.\n";
   map { print $trace_m4 "define([at_$_], defn([$_]))\n" } @m4_builtin;
@@ -817,7 +817,7 @@ EOF
   # | AT_AC_SUBST([configure.ac], [3], [1], [AC_SUBST], [exec_prefix], [NONE])
   #
   # Pay attention that the file name might include colons, if under DOS
-  # for instance, so we don't use `[^:]+'.
+  # for instance, so we don't use '[^:]+'.
   my $traces = new Autom4te::XFile ("< " . open_quote ($tcache . $req->id));
   while ($_ = $traces->getline)
     {
@@ -858,7 +858,7 @@ EOF
 # up_to_date ($REQ)
 # -----------------
 # Are the cache files of $REQ up to date?
-# $REQ is `valid' if it corresponds to the request and exists, which
+# $REQ is 'valid' if it corresponds to the request and exists, which
 # does not mean it is up to date.  It is up to date if, in addition,
 # its files are younger than its dependencies.
 sub up_to_date ($)
@@ -939,7 +939,7 @@ sub freeze ($)
   fatal "freezing produced output:\n$result"
     if $result;
 
-  # If freezing produces output, something went wrong: a bad `divert',
+  # If freezing produces output, something went wrong: a bad 'divert',
   # or an improper paren etc.
   xsystem ("$m4"
 	   . ' --fatal-warning'
@@ -1037,7 +1037,7 @@ if (%trace)
   {
     # Always produce traces, since even if the output is young enough,
     # there is no guarantee that the traces use the same *format*
-    # (e.g., `-t FOO:foo' and `-t FOO:bar' are both using the same M4
+    # (e.g., '-t FOO:foo' and '-t FOO:bar' are both using the same M4
     # traces, hence the M4 traces cache is usable, but its formatting
     # will yield different results).
     handle_traces ($req, $output, %trace);

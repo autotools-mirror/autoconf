@@ -51,8 +51,8 @@ $help = "Usage: $0 [OPTION]... [FILE]...
 
 Scan all of the C source FILES (or the standard input, if none are
 given) and write to the standard output a sorted list of all the
-identifiers that appear in those files in `#if', `#elif', `#ifdef', or
-`#ifndef' directives.  Print each identifier on a line, followed by a
+identifiers that appear in those files in '#if', '#elif', '#ifdef', or
+'#ifndef' directives.  Print each identifier on a line, followed by a
 space-separated list of the files in which that identifier occurs.
 
   -h, --help      print this help, then exit

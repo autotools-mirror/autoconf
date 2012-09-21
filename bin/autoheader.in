@@ -5,7 +5,7 @@
 eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
-# autoheader -- create `config.h.in' from `configure.ac'
+# autoheader -- create 'config.h.in' from 'configure.ac'.
 
 # Copyright (C) 1992-1994, 1996, 1998-2012 Free Software Foundation,
 # Inc.
@@ -46,7 +46,7 @@ use Autom4te::General;
 use Autom4te::XFile;
 use strict;
 
-# Using `do FILE', we need `local' vars.
+# Using 'do FILE', we need 'local' vars.
 use vars qw ($config_h %verbatim %symbol);
 
 # Lib files.
@@ -61,9 +61,9 @@ my @include;
 # -----
 $help = "Usage: $0 [OPTION]... [TEMPLATE-FILE]
 
-Create a template file of C \`\#define\' statements for \`configure\' to
-use.  To this end, scan TEMPLATE-FILE, or \`configure.ac\' if present,
-or else \`configure.in\'.
+Create a template file of C '\#define' statements for 'configure' to
+use.  To this end, scan TEMPLATE-FILE, or 'configure.ac' if present,
+or else 'configure.in'.
 
   -h, --help               print this help, then exit
   -V, --version            print version number, then exit
@@ -140,16 +140,16 @@ my $acconfig_h = find_file ("acconfig.h?",
 if ($config_h_top || $config_h_bot || $acconfig_h)
   {
     my $msg = << "END";
-    Using auxiliary files such as \`acconfig.h\', \`config.h.bot\'
-    and \`config.h.top\', to define templates for \`config.h.in\'
+    Using auxiliary files such as 'acconfig.h', 'config.h.bot'
+    and 'config.h.top', to define templates for 'config.h.in'
     is deprecated and discouraged.
 
-    Using the third argument of \`AC_DEFINE\' and
-    \`AC_DEFINE_UNQUOTED\' allows one to define a template without
-    \`acconfig.h\':
+    Using the third argument of 'AC_DEFINE_UNQUOTED' and
+    'AC_DEFINE' allows one to define a template without
+    'acconfig.h':
 
       AC_DEFINE([NEED_FUNC_MAIN], 1,
-		[Define if a function \`main\' is needed.])
+		[Define if a function 'main' is needed.])
 
     More sophisticated templates can also be produced, see the
     documentation.
@@ -175,14 +175,14 @@ verb "$me: running $autoconf to trace from $ARGV[0]";
 my $quoted_tmp = shell_quote ($tmp);
 xsystem ("$autoconf"
 	 # If you change this list, update the
-	 # `Autoheader-preselections' section of autom4te.in.
+	 # 'Autoheader-preselections' section of autom4te.in.
 	 . ' --trace AC_CONFIG_HEADERS:\'$$config_h ||= \'"\'"\'$1\'"\'"\';\''
 	 . ' --trace AH_OUTPUT:\'$$verbatim{\'"\'"\'$1\'"\'"\'} = \'"\'"\'$2\'"\'"\';\''
 	 . ' --trace AC_DEFINE_TRACE_LITERAL:\'$$symbol{\'"\'"\'$1\'"\'"\'} = 1;\''
 	 . " " . shell_quote ($ARGV[0]) . " >$quoted_tmp/traces.pl");
 
 local (%verbatim, %symbol);
-debug "$me: \`do'ing $tmp/traces.pl:\n" . `sed 's/^/| /' $quoted_tmp/traces.pl`;
+debug "$me: 'do'ing $tmp/traces.pl:\n" . `sed 's/^/| /' $quoted_tmp/traces.pl`;
 do "$tmp/traces.pl";
 warn "couldn't parse $tmp/traces.pl: $@" if $@;
 unless ($config_h)
@@ -197,7 +197,7 @@ $config_h =~ s/ .*//;
 ($config_h, $config_h_in) = split (':', $config_h, 2);
 $config_h_in ||= "$config_h.in";
 
-# %SYMBOL might contain things like `F77_FUNC(name,NAME)', but we keep
+# %SYMBOL might contain things like 'F77_FUNC(name,NAME)', but we keep
 # only the name of the macro.
 %symbol = map { s/\(.*//; $_ => 1 } keys %symbol;
 
@@ -217,7 +217,7 @@ if ($config_h_top)
       }
   }
 
-# Dump `acconfig.h', except for its bottom portion.
+# Dump 'acconfig.h', except for its bottom portion.
 if ($acconfig_h)
   {
     my $in = new Autom4te::XFile ("< " . open_quote ($acconfig_h));
@@ -229,13 +229,13 @@ if ($acconfig_h)
       }
   }
 
-# Dump the templates from `configure.ac'.
+# Dump the templates from 'configure.ac'.
 foreach (sort keys %verbatim)
   {
     print $out "\n$verbatim{$_}\n";
   }
 
-# Dump bottom portion of `acconfig.h'.
+# Dump bottom portion of 'acconfig.h'.
 if ($acconfig_h)
   {
     my $in = new Autom4te::XFile ("< " . open_quote ($acconfig_h));

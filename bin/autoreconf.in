@@ -54,15 +54,15 @@ use strict;
 # -----
 $help = "Usage: $0 [OPTION]... [DIRECTORY]...
 
-Run `autoconf' (and `autoheader', `aclocal', `automake', `autopoint'
-(formerly `gettextize'), and `libtoolize' where appropriate)
+Run 'autoconf' (and 'autoheader', 'aclocal', 'automake', 'autopoint'
+(formerly 'gettextize'), and 'libtoolize' where appropriate)
 repeatedly to remake the GNU Build System files in specified
-DIRECTORIES and their subdirectories (defaulting to `.').
+DIRECTORIES and their subdirectories (defaulting to '.').
 
 By default, it only remakes those files that are older than their
 sources.  If you install new versions of the GNU Build System,
-you can make `autoreconf' remake all of the files by giving it the
-`--force' option.
+you can make 'autoreconf' remake all of the files by giving it the
+'--force' option.
 
 Operation modes:
   -h, --help               print this help, then exit
@@ -78,8 +78,8 @@ Operation modes:
 
 " . Autom4te::ChannelDefs::usage . "
 
-The environment variable \`WARNINGS\' is honored.  Some subtools might
-support other warning types, using \`all' is encouraged.
+The environment variable 'WARNINGS' is honored.  Some subtools might
+support other warning types, using 'all' is encouraged.
 
 Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
@@ -134,7 +134,7 @@ my @include;
 # List of command line warning requests.
 my @warning;
 
-# Rerun `./configure && make'?
+# Rerun './configure && make'?
 my $run_make = 0;
 
 # Recurse into subpackages
@@ -354,7 +354,7 @@ sub autoreconf_current_directory ()
 
   # Gettext is a bit of a problem: its macros are not necessarily
   # visible to aclocal, so if we start with a completely striped down
-  # package (think of a fresh CVS checkout), running `aclocal' first
+  # package (think of a fresh CVS checkout), running 'aclocal' first
   # will fail: the Gettext macros are missing.
   #
   # Therefore, we can't use the traces to decide if we use Gettext or
@@ -366,7 +366,7 @@ sub autoreconf_current_directory ()
   # prevents one to embed AM_GNU_GETTEXT_VERSION in another *.m4, but
   # anyway we don't limit the generality, since... that's what
   # autopoint does.  Actually, it is even more restrictive, as it
-  # greps for `^AM_GNU_GETTEXT_VERSION('.  We did this above, while
+  # greps for '^AM_GNU_GETTEXT_VERSION('.  We did this above, while
   # scanning configure.ac.
   if (!$uses_gettext)
     {
@@ -466,7 +466,7 @@ sub autoreconf_current_directory ()
      . join (' ',
 	     map { ' --trace=' . $_ . ':\$n::\${::}%' }
 	     # If you change this list, update the
-	     # `Autoreconf-preselections' section of autom4te.in.
+	     # 'Autoreconf-preselections' section of autom4te.in.
 	     'AC_CONFIG_AUX_DIR',
 	     'AC_CONFIG_HEADERS',
 	     'AC_CONFIG_SUBDIRS',
@@ -580,7 +580,7 @@ sub autoreconf_current_directory ()
   # Running autoconf.  #
   # ------------------ #
 
-  # Don't try to be smarter than `autoconf', which does its own up to
+  # Don't try to be smarter than 'autoconf', which does its own up to
   # date checks.
   #
   # We prefer running autoconf before autoheader, because (i) the
@@ -623,8 +623,8 @@ sub autoreconf_current_directory ()
   else
     {
       # We should always run automake, and let it decide whether it shall
-      # update the file or not.  In fact, the effect of `$force' is already
-      # included in `$automake' via `--no-force'.
+      # update the file or not.  In fact, the effect of '$force' is already
+      # included in '$automake' via '--no-force'.
       xsystem ($automake);
     }
 
@@ -666,7 +666,7 @@ sub autoreconf ($)
 
   # The format for this message is not free: taken from Emacs, itself
   # using GNU Make's format.
-  verb "Entering directory `$directory'";
+  verb "Entering directory '$directory'";
   chdir $directory
     or error "cannot chdir to $directory: $!";
 
@@ -674,7 +674,7 @@ sub autoreconf ($)
 
   # The format is not free: taken from Emacs, itself using GNU Make's
   # format.
-  verb "Leaving directory `$directory'";
+  verb "Leaving directory '$directory'";
   chdir $cwd
     or error "cannot chdir to $cwd: $!";
 }
@@ -690,7 +690,7 @@ mktmpdir ('ar');
 $ENV{'TMPDIR'} = $tmp;
 parse_args;
 
-# Autoreconf all the given configure.ac.  Unless `--no-recursive' is passed,
+# Autoreconf all the given configure.ac.  Unless '--no-recursive' is passed,
 # AC_CONFIG_SUBDIRS will be traversed in &autoreconf_current_directory.
 $ENV{'AUTOM4TE'} = $autom4te;
 for my $directory (@ARGV)
