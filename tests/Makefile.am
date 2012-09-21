@@ -22,7 +22,7 @@
 EXTRA_DIST = $(TESTSUITE_AT) local.at mktests.sh \
 	     atlocal.in wrapper.as statesave.m4
 
-# Running the uninstalled scripts.  Build them upon `all', for the manpages.
+# Running the uninstalled scripts.  Build them upon 'all', for the manpages.
 noinst_SCRIPTS = $(wrappers)
 DISTCLEANFILES = atconfig atlocal $(TESTSUITE)
 MAINTAINERCLEANFILES = Makefile.in
@@ -35,7 +35,7 @@ include ../lib/freeze.mk
 ## package.m4.  ##
 ## ------------ ##
 
-# The `:;' works around a redirected compound command bash exit status bug.
+# The ':;' works around a redirected compound command bash exit status bug.
 package.m4: Makefile
 	:;{ \
 	  echo '# Signature of the current package.' && \
@@ -109,7 +109,7 @@ TESTSUITE_AT = $(TESTSUITE_GENERATED_AT) $(TESTSUITE_HAND_AT)
 TESTSUITE = ./testsuite
 
 # Run the non installed autom4te.
-# Don't use AUTOM4TE since `make alpha' makes it unavailable although
+# Don't use AUTOM4TE since 'make alpha' makes it unavailable although
 # we are allowed to use it (since we ship it).
 AUTOTEST = $(MY_AUTOM4TE) --language=autotest
 $(TESTSUITE): package.m4 \
@@ -158,7 +158,7 @@ MAINTAINERCLEANFILES += $(TESTSUITE_GENERATED_AT)
 
 # The files which contain macros we check for syntax.  Use $(top_srcdir)
 # for the benefit of non-GNU make.  Fix the names in the rule below
-# where we `cd' to $srcdir.
+# where we 'cd' to $srcdir.
 autoconfdir = $(top_srcdir)/lib/autoconf
 AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/status.m4 \

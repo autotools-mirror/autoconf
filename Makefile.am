@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # bin/ must be run first, as it builds executables needed for tests.
-# autom4te uses autotest.m4f to generate `testsuite', so build tests last.
+# autom4te uses autotest.m4f to generate 'testsuite', so build tests last.
 # Rules in man/ use scripts from both bin/ and tests/, so *it* goes last.
 SUBDIRS = bin . lib doc tests man
 
@@ -114,8 +114,8 @@ check-coverage-run: all
 
 check-coverage-report:
 	@if test ! -d $(PERL_COVERAGE_DB); then \
-	  echo "No coverage database found in \`$(PERL_COVERAGE_DB)'." >&2; \
-	  echo "Please run \`make check-coverage' first" >&2; \
+	  echo "No coverage database found in '$(PERL_COVERAGE_DB)'." >&2; \
+	  echo "Please run 'make check-coverage' first" >&2; \
 	  exit 1; \
 	fi
 	$(PERL_COVER) $(PERL_COVERAGE_DB) $(PERL_COVER_FLAGS)

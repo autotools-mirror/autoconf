@@ -30,9 +30,9 @@ AM_INIT_AUTOMAKE([1.11 dist-xz readme-alpha no-texinfo.tex std-options])
 
 AB_INIT
 
-# We use `/bin/sh -n script' to check that there are no syntax errors
+# We use '/bin/sh -n script' to check that there are no syntax errors
 # in the scripts.  Although incredible, there are /bin/sh that go into
-# endless loops with `-n', e.g., SunOS's:
+# endless loops with '-n', e.g., SunOS's:
 #
 #   $ uname -a
 #   SunOS ondine 4.1.3 2 sun4m unknown
@@ -50,8 +50,8 @@ AB_INIT
 # Also, some implementations of /bin/sh (e.g., Solaris 8) are soooo slow
 # that they are unusable on large scripts like our testsuite.
 
-# So before using `/bin/sh -n' to check our scripts, we first check
-# that `/bin/sh -n' is known to not have these problems.
+# So before using '/bin/sh -n' to check our scripts, we first check
+# that '/bin/sh -n' is known to not have these problems.
 
 AC_CACHE_CHECK([whether /bin/sh -n is known to work], [ac_cv_sh_n_works],
 [if (

@@ -18,7 +18,7 @@
 # Also avoid versions of m4 that trigger strstr bugs.
 AC_DEFUN([AC_PROG_GNU_M4],
   [AC_ARG_VAR([M4], [Location of GNU M4 1.4.6 or later.  Defaults to the first
-    program of `m4', `gm4', or `gnum4' on PATH that meets Autoconf needs.])
+    program of 'm4', 'gm4', or 'gnum4' on PATH that meets Autoconf needs.])
   AC_CACHE_CHECK([for GNU M4 that supports accurate traces], [ac_cv_path_M4],
     [rm -f conftest.m4f
 ac_had_posixly_correct=${POSIXLY_CORRECT:+yes}

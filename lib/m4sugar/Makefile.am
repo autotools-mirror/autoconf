@@ -28,7 +28,7 @@ RELEASE_YEAR = \
 ## version.m4.  ##
 ## ------------ ##
 
-# The `:;' works around a redirected compound command bash exit status bug.
+# The ':;' works around a redirected compound command bash exit status bug.
 version.m4: Makefile
 	:;{ \
 	  echo '# This file is part of -*- Autoconf -*-.' && \
