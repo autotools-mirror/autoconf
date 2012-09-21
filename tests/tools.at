@@ -1190,7 +1190,7 @@ AT_CHECK([autoconf])
 
 # If this test fails due to missing entries in lib/autom4te.in, then
 # comparing the old and new requests is a good place to start debugging:
-cp autom4te.cache/requests old-requests
+sort autom4te.cache/requests >old-requests
 echo newer >newer
 $sleep # if `configure' is regenerated, we want it to be strictly newer,
        # to catch the error consistently.
@@ -1198,7 +1198,7 @@ AT_CHECK([aclocal], [], [], [ignore])
 AT_CHECK([automake --no-force --add-missing], [], [], [ignore])
 AT_CHECK([autoconf])
 AT_CHECK([test "`find configure -newer newer`" = "" ||
-	  { diff old-requests autom4te.cache/requests; exit 1; }],
+	  { sort autom4te.cache/requests | diff old-requests -; exit 1; }],
 	 [], [], [],
 	 [extract_version=['s/^[^0-9]*\([0-9][^ ]*\).*/\1/;q']
 	  automake_version=`automake --version | sed "$extract_version"`
