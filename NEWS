@@ -5,7 +5,8 @@ GNU Autoconf NEWS - User visible changes.
 ** The use of the long-deprecated name 'configure.in' for the autoconf
    input file now elicits a warning in the 'obsolete' category.
 
-** Older versions of aclocal (< 1.8) are no longer supported by autoreconf.
+** Older version of automake and aclocal (< 1.8) are no longer supported
+   by autoreconf.
 
 ** Macros
 
