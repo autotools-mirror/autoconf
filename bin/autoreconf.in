@@ -247,16 +247,6 @@ sub parse_args ()
 }
 
 
-# &run_aclocal ($ACLOCAL, $FLAGS)
-# -------------------------------
-# Update aclocal.m4 as lazily as possible.
-sub run_aclocal ($$)
-{
-  my ($aclocal, $flags) = @_;
-
-  xsystem ("$aclocal $flags");
-}
-
 # &autoreconf_current_directory
 # -----------------------------
 sub autoreconf_current_directory ()
@@ -377,7 +367,7 @@ sub autoreconf_current_directory ()
       # fall.
       sleep 1;
 
-      run_aclocal ($aclocal, $aclocal_flags);
+      xsystem ("$aclocal $aclocal_flags");
     }
 
   # We might have to rerun aclocal if Libtool (or others) imports new
@@ -511,7 +501,7 @@ sub autoreconf_current_directory ()
 	}
       else
 	{
-	  run_aclocal ($aclocal, $aclocal_flags);
+	  xsystem ("$aclocal $aclocal_flags");
 	}
     }
 
