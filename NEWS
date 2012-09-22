@@ -11,12 +11,10 @@ GNU Autoconf NEWS - User visible changes.
 ** Macros
 
 - AC_PROG_CC now prefers C11 if available, falling back on C99 and
-  then on C89 as before.  (There is no AC_PROG_CC_C11 macro, as no
-  need for one has been identified.)
+  then on C89 as before.
 
-- It is now documented that AC_PROG_CC_C89 and AC_PROG_CC_C99
-  interfere with each other and with AC_PROG_CC.  Applications should
-  normally use AC_PROG_CC.
+- AC_PROG_CC_STDC, AC_PROG_CC_C89, AC_PROG_CC_C99 have been marked as obsolete.
+  Applications should use AC_PROG_CC.
 
 - AC_FUNC_VFORK now checks for the signal-handling bug in Solaris 2.4 'vfork'.
   Formerly, it ignored this bug, so that Emacs could use some tricky

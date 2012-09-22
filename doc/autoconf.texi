@@ -7256,6 +7256,18 @@ After calling this macro you can check whether the C compiler has been
 set to accept Standard C; if not, the shell variable
 @code{ac_cv_prog_cc_stdc} is set to @samp{no}.
 
+When attempting to add compiler options, prefer extended functionality
+modes over strict conformance modes.  Test for C11 support by checking
+for @code{_Alignas}, @code{_Alignof}, @code{_Noreturn},
+@code{_Static_assert}, UTF-8 string literals, duplicate @code{typedef}s,
+and anonymous structures and unions.  Test for C99 support by checking
+for @code{_Bool}, @code{//} comments, flexible array members,
+@code{inline}, signed and unsigned @code{long long int}, mixed code and
+declarations, named initialization of structs, @code{restrict},
+@code{va_copy}, varargs macros, variable declarations in @code{for}
+loops, and variable length arrays.  Test for C89 support by checking for
+function prototypes.
+
 If using the GNU C compiler, set shell variable @code{GCC} to
 @samp{yes}.  If output variable @code{CFLAGS} was not already set, set
 it to @option{-g -O2} for the GNU C compiler (@option{-O2} on systems
@@ -7322,51 +7334,6 @@ The following macros check for C compiler or machine architecture
 features.  To check for characteristics not listed here, use
 @code{AC_COMPILE_IFELSE} (@pxref{Running the Compiler}) or
 @code{AC_RUN_IFELSE} (@pxref{Runtime}).
-
-@defmac AC_PROG_CC_C89
-@acindex{PROG_CC_C89}
-@caindex prog_cc_c89
-If the C compiler is not in ANSI C89 (ISO C90) mode by
-default, try to add an option to output variable @code{CC} to make it
-so.  This macro tries various options that select ANSI C89 on
-some system or another, preferring extended functionality modes over
-strict conformance modes.  It considers the compiler to be in
-ANSI C89 mode if it handles function prototypes correctly.
-
-After calling this macro you can check whether the C compiler has been
-set to accept ANSI C89; if not, the shell variable
-@code{ac_cv_prog_cc_c89} is set to @samp{no}.
-
-This macro is rarely needed.  It should be used only if your application
-requires C89 and will not work in later C versions.  Typical applications
-should use @code{AC_PROG_CC} instead.
-@end defmac
-
-@defmac AC_PROG_CC_C99
-@acindex{PROG_CC_C99}
-@caindex prog_cc_c99
-If the C compiler is not in C99 mode by default, try to add an
-option to output variable @code{CC} to make it so.  This macro tries
-various options that select C99 on some system or another, preferring
-extended functionality modes over strict conformance modes.  It
-considers the compiler to be in C99 mode if it handles @code{_Bool},
-@code{//} comments, flexible array members, @code{inline}, signed and
-unsigned @code{long long int}, mixed code and declarations, named
-initialization of structs,
-@code{restrict}, @code{va_copy}, varargs macros, variable declarations
-in @code{for} loops, and variable length arrays.
-
-After calling this macro you can check whether the C compiler has been
-set to accept C99; if not, the shell variable
-@code{ac_cv_prog_cc_c99} is set to @samp{no}.
-
-This macro is rarely needed.  It should be used only if your application
-requires C99 and will not work in later C versions.  Typical applications
-should use @code{AC_PROG_CC} instead.
-
-There is no @code{AC_PROG_CC_C11} macro, as no need for one has been
-identified.
-@end defmac
 
 @defmac AC_C_BACKSLASH_A
 @acindex{C_BACKSLASH_A}
@@ -9311,19 +9278,19 @@ AC_PREPROC_IFELSE(
 @end example
 
 @noindent
-results in:
+might result in:
 
 @example
 checking for gcc... gcc
-checking for C compiler default output file name... a.out
 checking whether the C compiler works... yes
-checking whether we are cross compiling... no
+checking for C compiler default output file name... a.out
 checking for suffix of executables...
+checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to accept ISO C89... none needed
-checking how to run the C preprocessor... gcc -E
+checking for gcc option to accept ISO C11... -std=gnu11
+checking how to run the C preprocessor... gcc -std=gnu11 -E
 OK
 @end example
 
@@ -18637,7 +18604,8 @@ The default executable, produced by @samp{cc foo.c}, can be
 The C compiler's traditional name is @command{cc}, but other names like
 @command{gcc} are common.  Posix 1003.1-2001 and 1003.1-2008 specify the
 name @command{c99}, but older Posix editions specified
-@command{c89} and anyway these standard names are rarely used in
+@command{c89}, future POSIX standards will likely specify
+@command{c11}, and anyway these standard names are rarely used in
 practice.  Typically the C compiler is invoked from makefiles that use
 @samp{$(CC)}, so the value of the @samp{CC} make variable selects the
 compiler name.
@@ -21606,28 +21574,25 @@ objects are ordinary.
 
 Even when accessing objects defined with a volatile type,
 the C standard allows only
-extremely limited signal handlers: the behavior is undefined if a signal
+extremely limited signal handlers: in C99 the behavior is undefined if a signal
 handler reads any nonlocal object, or writes to any nonlocal object
 whose type is not @code{sig_atomic_t volatile}, or calls any standard
-library function other than @code{abort}, @code{signal}, and (if C99 or later)
+library function other than @code{abort}, @code{signal}, and
 @code{_Exit}.  Hence C compilers need not worry about a signal handler
-disturbing ordinary computation, unless the computation accesses a
-@code{sig_atomic_t volatile} lvalue that is not a local variable.
-(There is an obscure exception for accesses via a pointer to a volatile
-character, since it may point into part of a @code{sig_atomic_t
-volatile} object.)  Posix
-adds to the list of library functions callable from a portable signal
-handler, but otherwise is like the C standard in this area.
+disturbing ordinary computation.  C11 and Posix allow some additional
+behavior in a portable signal handler, but are still quite restrictive.
 
 Some C implementations allow memory-access optimizations within each
 translation unit, such that actual behavior agrees with the behavior
 required by the standard only when calling a function in some other
 translation unit, and a signal handler acts like it was called from a
-different translation unit.  The C standard hints that in these
+different translation unit.  The C99 standard hints that in these
 implementations, objects referred to by signal handlers ``would require
 explicit specification of @code{volatile} storage, as well as other
 implementation-defined restrictions.''  But unfortunately even for this
 special case these other restrictions are often not documented well.
+This area was significantly changed in C11, and eventually implementations
+will probably head in the C11 direction, but this will take some time.
 @xref{Volatiles, , When is a Volatile Object Accessed?, gcc, Using the
 GNU Compiler Collection (GCC)}, for some
 restrictions imposed by GCC.  @xref{Defining Handlers, ,
@@ -23654,6 +23619,16 @@ Replaced by @code{AC_TYPE_PID_T} (@pxref{AC_TYPE_PID_T}).
 @defmac AC_PREFIX
 @acindex{PREFIX}
 Replaced by @code{AC_PREFIX_PROGRAM} (@pxref{AC_PREFIX_PROGRAM}).
+@end defmac
+
+@defmac AC_PROG_CC_C89
+@acindex{PROG_CC_C89}
+Now done by @code{AC_PROG_CC} (@pxref{AC_PROG_CC}).
+@end defmac
+
+@defmac AC_PROG_CC_C99
+@acindex{PROG_CC_C99}
+Now done by @code{AC_PROG_CC} (@pxref{AC_PROG_CC}).
 @end defmac
 
 @defmac AC_PROG_CC_STDC
@@ -25939,19 +25914,19 @@ $ @kbd{cat configure.ac}
 AC_INIT([Example], [1.0], [bug-example@@example.org])
 AC_CHECK_HEADERS([pi.h])
 $ @kbd{autoconf -Wall}
-$ @kbd{./configure}
+$ @kbd{./configure CPPFLAGS='-I.'}
 checking for gcc... gcc
-checking for C compiler default output file name... a.out
 checking whether the C compiler works... yes
-checking whether we are cross compiling... no
+checking for C compiler default output file name... a.out
 checking for suffix of executables...
+checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to accept ISO C89... none needed
-checking how to run the C preprocessor... gcc -E
-checking for grep that handles long lines and -e... grep
-checking for egrep... grep -E
+checking for gcc option to accept ISO C11... -std=gnu11
+checking how to run the C preprocessor... gcc -std=gnu11 -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
 checking for ANSI C header files... yes
 checking for sys/types.h... yes
 checking for sys/stat.h... yes
@@ -25969,10 +25944,10 @@ configure: WARNING: pi.h:     check for missing prerequisite headers?
 configure: WARNING: pi.h: see the Autoconf documentation
 configure: WARNING: pi.h:     section "Present But Cannot Be Compiled"
 configure: WARNING: pi.h: proceeding with the compiler's result
-configure: WARNING:     ## -------------------------------------- ##
+configure: WARNING:     ## --------------------------------------- ##
 configure: WARNING:     ## Report this to bug-example@@example.org ##
-configure: WARNING:     ## -------------------------------------- ##
-checking for pi.h... yes
+configure: WARNING:     ## --------------------------------------- ##
+checking for pi.h... no
 @end smallexample
 
 @noindent
@@ -25988,16 +25963,16 @@ AC_CHECK_HEADERS([number.h pi.h], [], [],
 #endif
 ]])
 $ @kbd{autoconf -Wall}
-$ @kbd{./configure}
+$ @kbd{./configure CPPFLAGS='-I.'}
 checking for gcc... gcc
-checking for C compiler default output... a.out
 checking whether the C compiler works... yes
-checking whether we are cross compiling... no
+checking for C compiler default output file name... a.out
 checking for suffix of executables...
+checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to accept ANSI C... none needed
+checking for gcc option to accept ISO C11... -std=gnu11
 checking for number.h... yes
 checking for pi.h... yes
 @end example

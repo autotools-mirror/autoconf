@@ -1437,43 +1437,26 @@ dnl with extended modes being tried first.
 ])# _AC_PROG_CC_C11
 
 
-# _AC_PROG_CC_FORCE_VERSION(LOWER-VERSION, UPPER-VERSION)
-# -------------------------------------------------------
-# Require a compiler for a particular version of C, either C89 or C99.
-# LOWER-VERSION uses lower-case c, UPPER-VERSION uses upper-case.
-AC_DEFUN([_AC_PROG_CC_FORCE_VERSION],
-[ AC_REQUIRE([AC_PROG_CC])dnl
-  if test $ac_prog_cc_stdc != $1; then
-    ac_save_std_CC=$CC
-    if test -n "$ac_prog_cc_stdc_options"; then
-      CC=`expr "X$CC" : 'X\(.*\)'"$ac_prog_cc_stdc_options"
-	``expr "X$CC" : ".*$ac_prog_cc_stdc_options"'\(.*\)'
-	`
-    fi
-    _AC_PROG_CC_$2(
-       [ac_prog_cc_stdc=$1
-        ac_cv_prog_cc_stdc=$ac_cv_prog_cc_$1],
-       [CC=$ac_save_std_CC
-        AC_MSG_WARN([$2 compiler not available; falling back on $CC])])
-  fi
-])
-
 # AC_PROG_CC_C89
 # --------------
-AC_DEFUN([AC_PROG_CC_C89], [_AC_PROG_CC_FORCE_VERSION([c89], [C89])])
+AC_DEFUN([AC_PROG_CC_C89],
+[ AC_REQUIRE([AC_PROG_CC])dnl
+  m4_warn([obsolete], [$0 is obsolete; use AC_PROG_CC])
+])
 
 # AC_PROG_CC_C99
 # --------------
-AC_DEFUN([AC_PROG_CC_C99], [_AC_PROG_CC_FORCE_VERSION([c99], [C99])])
-
-# There is no AC_PROG_CC_C11, as we have not identified a need for it.
-# Applications should use AC_PROG_CC instead.
-
+AC_DEFUN([AC_PROG_CC_C99],
+[ AC_REQUIRE([AC_PROG_CC])dnl
+  m4_warn([obsolete], [$0 is obsolete; use AC_PROG_CC])
+])
 
 # AC_PROG_CC_STDC
 # ---------------
-# This has been folded into AC_PROG_CC.
-AU_ALIAS([AC_PROG_CC_STDC], [AC_PROG_CC])
+AC_DEFUN([AC_PROG_CC_STDC],
+[ AC_REQUIRE([AC_PROG_CC])dnl
+  m4_warn([obsolete], [$0 is obsolete; use AC_PROG_CC])
+])
 
 
 # AC_C_BACKSLASH_A
