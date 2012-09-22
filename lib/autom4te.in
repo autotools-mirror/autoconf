@@ -70,7 +70,7 @@ args: --preselect AM_PROG_CXX_C_O
 args: --preselect AM_PROG_F77_C_O
 args: --preselect AM_PROG_FC_C_O
 args: --preselect AM_PROG_MOC
-# Will be removed in Automake 1.14.
+# AM_PROG_MKDIR_P will be removed in Automake 1.14.
 args: --preselect AM_PROG_MKDIR_P
 args: --preselect AM_SILENT_RULES
 args: --preselect AM_XGETTEXT_OPTION
