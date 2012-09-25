@@ -1448,7 +1448,7 @@ char *realloc ();
 		  *) ac_cv_func_realloc_0_nonnull=no ;;
 		esac])])
 AS_IF([test $ac_cv_func_realloc_0_nonnull = yes], [$1], [$2])
-])# AC_FUNC_REALLOC
+])# _AC_FUNC_REALLOC_IF
 
 
 # AC_FUNC_REALLOC
