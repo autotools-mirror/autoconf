@@ -1347,7 +1347,7 @@ AC_DEFUN([_AC_PROG_CC_C99],
 [_AC_C_C99_TEST_BODY],
 dnl Try
 dnl GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
-dnl AIX		-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
+dnl IBM XL C	-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
 dnl HP cc	-AC99
 dnl Intel ICC	-std=c99, -c99 (deprecated)
 dnl IRIX	-c99
@@ -1432,8 +1432,9 @@ struct anonymous
 ]],
 dnl Try
 dnl GCC		-std=gnu11 (unused restrictive mode: -std=c11)
+dnl IBM XL C	-qlanglvl=extc1x (no extc11 or (unused) stdc11 in V12.1)
 dnl with extended modes being tried first.
-[[-std=gnu11]], [$1], [$2])[]dnl
+[[-std=gnu11 -qlanglvl=extc1x]], [$1], [$2])[]dnl
 ])# _AC_PROG_CC_C11
 
 
@@ -1740,7 +1741,7 @@ AC_DEFUN([AC_C_CONST],
   /* NEC SVR4.0.2 mips cc rejects this.  */
   struct point {int x, y;};
   static struct point const zero = {0,0};
-  /* AIX XL C 1.02.0.0 rejects this.
+  /* IBM XL C 1.02.0.0 rejects this.
      It does not let you subtract one const X* pointer from another in
      an arm of an if-expression whose if-part is not a constant
      expression */
@@ -1768,7 +1769,7 @@ AC_DEFUN([AC_C_CONST],
     iptr p = 0;
     ++p;
   }
-  { /* AIX XL C 1.02.0.0 rejects this sort of thing, saying
+  { /* IBM XL C 1.02.0.0 rejects this sort of thing, saying
        "k.c", line 2.27: 1506-025 (S) Operand must be a modifiable lvalue. */
     struct s { int j; const int *ap[3]; } bx;
     struct s *b = &bx; b->j = 5;
@@ -2064,7 +2065,7 @@ AC_DEFUN([AC_OPENMP],
 	  dnl   Intel C              -openmp
 	  dnl   SGI C, PGI C         -mp
 	  dnl   Tru64 Compaq C       -omp
-	  dnl   IBM C (AIX, Linux)   -qsmp=omp
+	  dnl   IBM XL C (AIX, Linux) -qsmp=omp
           dnl   Cray CCE             -homp
           dnl   NEC SX               -Popenmp
           dnl   Lahey Fortran (Linux)  --openmp
