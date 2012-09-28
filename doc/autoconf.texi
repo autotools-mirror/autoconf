@@ -7247,17 +7247,18 @@ this:
 AC_PROG_CC([gcc cl cc])
 @end example
 
-If the C compiler cannot compile ISO Standard C (currently
-C11), try to add an option to output variable @code{CC} to make it work.
-If the compiler does not support C11, fall back to supporting
-ISO C99; if C99 does not work, fall back to ANSI C89 (ISO C90).
-When testing for ISO C versions, use GNU extensions if available.
+If necessary, add an option to output variable @code{CC} to enable
+support for ISO Standard C features with extensions.  Prefer the newest
+C standard that is supported.  Currently the newest standard is ISO C11,
+with ISO C99 and ANSI C89 (ISO C90) being the older versions.
 After calling this macro you can check whether the C compiler has been
 set to accept Standard C; if not, the shell variable
 @code{ac_cv_prog_cc_stdc} is set to @samp{no}.
 
 When attempting to add compiler options, prefer extended functionality
-modes over strict conformance modes.  Test for C11 support by checking
+to strict conformance: the goal is to enable whatever standard features
+that are available, not to check for full conformance to the standard or
+to prohibit incompatible extensions.  Test for C11 support by checking
 for @code{_Alignas}, @code{_Alignof}, @code{_Noreturn},
 @code{_Static_assert}, UTF-8 string literals, duplicate @code{typedef}s,
 and anonymous structures and unions.  Test for C99 support by checking
@@ -9289,7 +9290,7 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to accept ISO C11... -std=gnu11
+checking for gcc option to enable C11 features... -std=gnu11
 checking how to run the C preprocessor... gcc -std=gnu11 -E
 OK
 @end example
@@ -25923,7 +25924,7 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to accept ISO C11... -std=gnu11
+checking for gcc option to enable C11 features... -std=gnu11
 checking how to run the C preprocessor... gcc -std=gnu11 -E
 checking for grep that handles long lines and -e... /usr/bin/grep
 checking for egrep... /usr/bin/grep -E
@@ -25972,7 +25973,7 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether we are using the GNU C compiler... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to accept ISO C11... -std=gnu11
+checking for gcc option to enable C11 features... -std=gnu11
 checking for number.h... yes
 checking for pi.h... yes
 @end example

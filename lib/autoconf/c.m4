@@ -1164,7 +1164,7 @@ dnl SVR4			-Xc -D__EXTENSIONS__
 # helps, append it to CC.  If eventually successful, run ACTION-IF-AVAILABLE,
 # else ACTION-IF-UNAVAILABLE.
 AC_DEFUN([_AC_C_STD_TRY],
-[AC_MSG_CHECKING([for $CC option to accept ISO ]m4_translit($1, [c], [C]))
+[AC_MSG_CHECKING([for $CC option to enable ]m4_translit($1, [c], [C])[ features])
 AC_CACHE_VAL(ac_cv_prog_cc_$1,
 [ac_cv_prog_cc_$1=no
 ac_save_CC=$CC
@@ -1347,7 +1347,9 @@ AC_DEFUN([_AC_PROG_CC_C99],
 [_AC_C_C99_TEST_BODY],
 dnl Try
 dnl GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
-dnl IBM XL C	-qlanglvl=extc99 (unused restrictive mode: -qlanglvl=stdc99)
+dnl IBM XL C	-qlanglvl=extc1x (V12.1; does not pass C11 test)
+dnl IBM XL C	-qlanglvl=extc99
+dnl 	   	(pre-V12.1; unused restrictive mode: -qlanglvl=stdc99)
 dnl HP cc	-AC99
 dnl Intel ICC	-std=c99, -c99 (deprecated)
 dnl IRIX	-c99
@@ -1364,7 +1366,7 @@ dnl		good enough.  For more, please see the thread starting at:
 dnl            http://lists.gnu.org/archive/html/autoconf/2010-12/msg00059.html
 dnl Tru64	-c99
 dnl with extended modes being tried first.
-[[-std=gnu99 -std=c99 -c99 -AC99 -D_STDC_C99= -qlanglvl=extc99]], [$1], [$2])[]dnl
+[[-std=gnu99 -std=c99 -c99 -AC99 -D_STDC_C99= -qlanglvl=extc1x -qlanglvl=extc99]], [$1], [$2])[]dnl
 ])# _AC_PROG_CC_C99
 
 
@@ -1432,9 +1434,15 @@ struct anonymous
 ]],
 dnl Try
 dnl GCC		-std=gnu11 (unused restrictive mode: -std=c11)
-dnl IBM XL C	-qlanglvl=extc1x (no extc11 or (unused) stdc11 in V12.1)
 dnl with extended modes being tried first.
-[[-std=gnu11 -qlanglvl=extc1x]], [$1], [$2])[]dnl
+dnl
+dnl Do not try -qlanglvl=extc1x, because IBM XL C V12.1 (the latest version as
+dnl of September 2012) does not pass the C11 test.  For now, try extc1x when
+dnl compiling the C99 test instead, since it enables _Static_assert and
+dnl _Noreturn, which is a win.  If -qlanglvl=extc11 or -qlanglvl=extc1x passes
+dnl the C11 test in some future version of IBM XL C, we'll add it here,
+dnl preferably extc11.
+[[-std=gnu11]], [$1], [$2])[]dnl
 ])# _AC_PROG_CC_C11
 
 
