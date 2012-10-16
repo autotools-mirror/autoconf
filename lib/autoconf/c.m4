@@ -1448,24 +1448,15 @@ dnl preferably extc11.
 
 # AC_PROG_CC_C89
 # --------------
-AC_DEFUN([AC_PROG_CC_C89],
-[ AC_REQUIRE([AC_PROG_CC])dnl
-  m4_warn([obsolete], [$0 is obsolete; use AC_PROG_CC])
-])
+AU_ALIAS([AC_PROG_CC_C89], [AC_PROG_CC])
 
 # AC_PROG_CC_C99
 # --------------
-AC_DEFUN([AC_PROG_CC_C99],
-[ AC_REQUIRE([AC_PROG_CC])dnl
-  m4_warn([obsolete], [$0 is obsolete; use AC_PROG_CC])
-])
+AU_ALIAS([AC_PROG_CC_C99], [AC_PROG_CC])
 
 # AC_PROG_CC_STDC
 # ---------------
-AC_DEFUN([AC_PROG_CC_STDC],
-[ AC_REQUIRE([AC_PROG_CC])dnl
-  m4_warn([obsolete], [$0 is obsolete; use AC_PROG_CC])
-])
+AU_ALIAS([AC_PROG_CC_STDC], [AC_PROG_CC])
 
 
 # AC_C_BACKSLASH_A
