@@ -432,7 +432,7 @@ AU_DEFUN([ac_cv_prog_gcc],
 AN_MAKEVAR([CC],  [AC_PROG_CC])
 AN_PROGRAM([cc],  [AC_PROG_CC])
 AN_PROGRAM([gcc], [AC_PROG_CC])
-AC_DEFUN([AC_PROG_CC],
+AC_DEFUN_ONCE([AC_PROG_CC],
 [AC_LANG_PUSH(C)dnl
 AC_ARG_VAR([CC],     [C compiler command])dnl
 AC_ARG_VAR([CFLAGS], [C compiler flags])dnl

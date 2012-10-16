@@ -13,6 +13,8 @@ GNU Autoconf NEWS - User visible changes.
 - AC_PROG_CC now prefers C11 if available, falling back on C99 and
   then on C89 as before.
 
+- AC_PROG_CC is now defined via AC_DEFUN_ONCE, to avoid bloat in 'configure'.
+
 - AC_PROG_CC_STDC, AC_PROG_CC_C89, AC_PROG_CC_C99 have been marked as obsolete.
   Applications should use AC_PROG_CC.
 
