@@ -2106,19 +2106,40 @@ files.  For instance it is called by macros like @code{AC_PROG_INSTALL}
 @end defmac
 
 Similarly, packages that use @command{aclocal} should declare where
-local macros can be found using @code{AC_CONFIG_MACRO_DIR}.
+local macros can be found using @code{AC_CONFIG_MACRO_DIRS}.
 
-@defmac AC_CONFIG_MACRO_DIR (@var{dir})
+@defmac AC_CONFIG_MACRO_DIRS (@var{dir1} [@var{dir2} ... @var{dirN}])
+@defmacx AC_CONFIG_MACRO_DIR (@var{dir})
+@acindex{CONFIG_MACRO_DIRS}
 @acindex{CONFIG_MACRO_DIR}
-Specify @var{dir} as the location of additional local Autoconf macros.
-This macro is intended for use by future versions of commands like
-@command{autoreconf} that trace macro calls.  It should be called
-directly from @file{configure.ac} so that tools that install macros for
-@command{aclocal} can find the macros' declarations.
+Specify the given directories as the location of additional local Autoconf
+macros.  These macros are intended for use by commands like
+@command{autoreconf} or @command{aclocal} that trace macro calls; they should
+be called directly from @file{configure.ac} so that tools that install
+macros for @command{aclocal} can find the macros' declarations.
+
+AC_CONFIG_MACRO_DIRS is the preferred form, and can be called multiple
+times and with multiple arguments; in such cases, directories in earlier
+calls are expected to be searched before directories in later calls, and
+directories appearing in the same call are expected to be searched in
+the order in which they appear in the call.  For historical reasons, the
+macro AC_CONFIG_MACRO_DIR can also be used once, if it appears first,
+for tools such as older @command{libtool} that weren't prepared to
+handle multiple directories.  For example, a usage like
+
+@smallexample
+AC_CONFIG_MACRO_DIR([dir1])
+AC_CONFIG_MACRO_DIRS([dir2])
+AC_CONFIG_MACRO_DIRS([dir3 dir4])
+@end smallexample
+
+should cause the directories to be searched in this order:
+@samp{dir1 dir2 dir3 dir4}.
 
 Note that if you use @command{aclocal} from Automake to generate
-@file{aclocal.m4}, you must also set @code{ACLOCAL_AMFLAGS = -I
-@var{dir}} in your top-level @file{Makefile.am}.  Due to a limitation in
+@file{aclocal.m4}, you must also set
+@code{ACLOCAL_AMFLAGS = -I @var{dir1} [-I @var{dir2} ... -I @var{dirN}]}
+in your top-level @file{Makefile.am}.  Due to a limitation in
 the Autoconf implementation of @command{autoreconf}, these include
 directives currently must be set on a single line in @file{Makefile.am},
 without any backslash-newlines.

@@ -1727,11 +1727,18 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ## ------------------------ ##
 
 
+# AC_CONFIG_MACRO_DIRS(DIR-1 [DIR-2 ... DIR-n])
+# --------------------------------------------
+# Declare directories containing additional macros for aclocal.
+# This macro can be called multiple times, and with multiple arguments.
+AC_DEFUN([AC_CONFIG_MACRO_DIRS], [])
+
 # AC_CONFIG_MACRO_DIR(DIR)
 # ------------------------
 # Declare directory containing additional macros for aclocal.
+# This is obsoleted by AC_CONFIG_MACRO_DIRS, and kept only for
+# backward compatibility.
 AC_DEFUN([AC_CONFIG_MACRO_DIR], [])
-
 
 
 ## --------------------- ##
