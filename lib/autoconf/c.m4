@@ -1448,15 +1448,27 @@ dnl preferably extc11.
 
 # AC_PROG_CC_C89
 # --------------
-AU_ALIAS([AC_PROG_CC_C89], [AC_PROG_CC])
+# Do not use AU_ALIAS here and in AC_PROG_CC_C99 and AC_PROG_CC_STDC,
+# as that'd be incompatible with how Automake redefines AC_PROG_CC.  See
+# <http://lists.gnu.org/archive/html/autoconf/2012-10/msg00048.html>.
+AU_DEFUN([AC_PROG_CC_C89],
+  [AC_REQUIRE([AC_PROG_CC])],
+  [$0 is obsolete; use AC_PROG_CC]
+)
 
 # AC_PROG_CC_C99
 # --------------
-AU_ALIAS([AC_PROG_CC_C99], [AC_PROG_CC])
+AU_DEFUN([AC_PROG_CC_C99],
+  [AC_REQUIRE([AC_PROG_CC])],
+  [$0 is obsolete; use AC_PROG_CC]
+)
 
 # AC_PROG_CC_STDC
 # ---------------
-AU_ALIAS([AC_PROG_CC_STDC], [AC_PROG_CC])
+AU_DEFUN([AC_PROG_CC_STDC],
+  [AC_REQUIRE([AC_PROG_CC])],
+  [$0 is obsolete; use AC_PROG_CC]
+)
 
 
 # AC_C_BACKSLASH_A
