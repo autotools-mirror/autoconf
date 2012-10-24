@@ -151,7 +151,7 @@ ac_exclude_script="$exclude_list $ac_exclude_list {print}"
 # Check all AU_DEFUN'ed macros with AT_CHECK_AU_MACRO, except these.
 au_exclude_list='
 	# Empty.
-	/^AC_(C_CROSS|PROG_CC_STDC)$/ {next}
+	/^AC_(C_CROSS|PROG_CC_(C[89]9|STDC))$/ {next}
 
 	# Use AC_REQUIRE.
 	/^AC_(CYGWIN|MINGW32|EMXOS2)$/ {next}
