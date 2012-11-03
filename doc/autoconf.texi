@@ -14636,6 +14636,13 @@ put all @code{AC_REQUIRE} calls
 at the beginning of a macro.  You can use @code{dnl} to avoid the empty
 lines they leave.
 
+Autoconf will normally warn if an @code{AC_REQUIRE} call refers to a
+macro that has not been defined.  However, the @command{aclocal} tool
+relies on parsing an incomplete set of input files to trace which macros
+have been required, in order to then pull in additional files that
+provide those macros; for this particular use case, pre-defining the
+macro @code{m4_require_silent_probe} will avoid the warnings.
+
 @node Suggested Ordering
 @subsection Suggested Ordering
 @cindex Macros, ordering
