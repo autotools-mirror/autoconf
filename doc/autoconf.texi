@@ -1816,7 +1816,9 @@ If you want @command{autoreconf} to pass flags that are not listed here
 on to @command{aclocal}, set @code{ACLOCAL_AMFLAGS} in your @file{Makefile.am}.
 Due to a limitation in the Autoconf implementation these flags currently
 must be set on a single line in @file{Makefile.am}, without any
-backslash-newlines.
+backslash-newlines.  Also, be aware that future Automake releases might
+start flagging @code{ACLOCAL_AMFLAGS} as obsolescent, or even remove
+support for it.
 
 @c ========================================= Initialization and Output Files.
 
@@ -2136,8 +2138,8 @@ AC_CONFIG_MACRO_DIRS([dir3 dir4])
 should cause the directories to be searched in this order:
 @samp{dir1 dir2 dir3 dir4}.
 
-Note that if you use @command{aclocal} from Automake to generate
-@file{aclocal.m4}, you must also set
+Note that if you use @command{aclocal} from an Automake release prior to
+1.13 to generate @file{aclocal.m4}, you must also set
 @code{ACLOCAL_AMFLAGS = -I @var{dir1} [-I @var{dir2} ... -I @var{dirN}]}
 in your top-level @file{Makefile.am}.  Due to a limitation in
 the Autoconf implementation of @command{autoreconf}, these include
