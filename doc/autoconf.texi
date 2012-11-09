@@ -2114,11 +2114,14 @@ local macros can be found using @code{AC_CONFIG_MACRO_DIRS}.
 @defmacx AC_CONFIG_MACRO_DIR (@var{dir})
 @acindex{CONFIG_MACRO_DIRS}
 @acindex{CONFIG_MACRO_DIR}
+@acindex{CONFIG_MACRO_DIR_TRACE}
 Specify the given directories as the location of additional local Autoconf
 macros.  These macros are intended for use by commands like
 @command{autoreconf} or @command{aclocal} that trace macro calls; they should
 be called directly from @file{configure.ac} so that tools that install
-macros for @command{aclocal} can find the macros' declarations.
+macros for @command{aclocal} can find the macros' declarations.  Tools
+that want to learn which directories have been selected should trace
+@code{AC_CONFIG_MACRO_DIR_TRACE}, which will be called once per directory.
 
 AC_CONFIG_MACRO_DIRS is the preferred form, and can be called multiple
 times and with multiple arguments; in such cases, directories in earlier
@@ -2135,7 +2138,8 @@ AC_CONFIG_MACRO_DIRS([dir2])
 AC_CONFIG_MACRO_DIRS([dir3 dir4])
 @end smallexample
 
-should cause the directories to be searched in this order:
+will cause the trace of AC_CONFIG_MACRO_DIR_TRACE to appear four times,
+and should cause the directories to be searched in this order:
 @samp{dir1 dir2 dir3 dir4}.
 
 Note that if you use @command{aclocal} from an Automake release prior to

@@ -42,6 +42,7 @@ args: --preselect AC_CONFIG_FILES
 args: --preselect AC_CONFIG_HEADERS
 args: --preselect AC_CONFIG_LIBOBJ_DIR
 args: --preselect AC_CONFIG_LINKS
+args: --preselect AC_CONFIG_MACRO_DIR_TRACE
 args: --preselect AC_FC_FREEFORM
 args: --preselect AC_FC_SRCEXT
 args: --preselect AC_FC_PP_DEFINE
@@ -93,6 +94,7 @@ end-language: "Automake-preselections"
 begin-language: "Autoreconf-preselections"
 args: --preselect AC_CONFIG_AUX_DIR
 args: --preselect AC_CONFIG_HEADERS
+args: --preselect AC_CONFIG_MACRO_DIR_TRACE
 args: --preselect AC_CONFIG_SUBDIRS
 args: --preselect AC_INIT
 args: --preselect AC_PROG_LIBTOOL

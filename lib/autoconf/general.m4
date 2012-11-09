@@ -1727,18 +1727,47 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 ## ------------------------ ##
 
 
+# AC_CONFIG_MACRO_DIR_TRACE(DIR)
+# ------------------------------
+# This macro exists solely for tracing - never invoke it directly.
+# It will be called once per directory listed in either form of
+# AC_CONFIG_MACRO_DIR[S].
+m4_define([AC_CONFIG_MACRO_DIR_TRACE],
+[m4_fatal([Do not invoke $0 directly])])
+
+# _AC_CONFIG_MACRO_DIRS_USED
+# --------------------------
+# Internal witness macro, redefined to empty after first directory is traced.
+m4_define([_AC_CONFIG_MACRO_DIRS_USED], [-])
+
+# _AC_CONFIG_MACRO_DIRS(CALLER, DIR)
+# ----------------------------------
+# Internal workhorse macro to ensure a sane calling pattern of CALLER, and
+# eventually trace DIR through the documented public trace point.
+m4_define([_AC_CONFIG_MACRO_DIRS],
+[m4_if([$1], [-AC_CONFIG_MACRO_DIRS], [AC_CONFIG_MACRO_DIR([$2])],
+       [$1], [AC_CONFIG_MACRO_DIR], [m4_fatal([$1 can only be used once])],
+  [m4_define([$0_USED])m4_pushdef([AC_CONFIG_MACRO_DIR_TRACE])]]dnl
+[[AC_CONFIG_MACRO_DIR_TRACE([$2])m4_popdef([AC_CONFIG_MACRO_DIR_TRACE])])])
+
 # AC_CONFIG_MACRO_DIRS(DIR-1 [DIR-2 ... DIR-n])
 # --------------------------------------------
 # Declare directories containing additional macros for aclocal.
 # This macro can be called multiple times, and with multiple arguments.
-AC_DEFUN([AC_CONFIG_MACRO_DIRS], [])
+# Do not trace this macro; instead trace AC_CONFIG_MACRO_DIR_TRACE.
+# If no directory has been traced yet, then this macro also triggers
+# a trace of AC_CONFIG_MACRO_DIR on the first directory.
+AC_DEFUN([AC_CONFIG_MACRO_DIRS],
+[m4_map_args_w([$1], [_$0(_$0_USED()[$0], ], [)])])
 
 # AC_CONFIG_MACRO_DIR(DIR)
 # ------------------------
 # Declare directory containing additional macros for aclocal.
-# This is obsoleted by AC_CONFIG_MACRO_DIRS, and kept only for
-# backward compatibility.
-AC_DEFUN([AC_CONFIG_MACRO_DIR], [])
+# This macro exists for backward compatibility; while tools can trace this,
+# we recommend tracing AC_CONFIG_MACRO_DIR_TRACE instead.  This macro can
+# only be used once, and must not be used after AC_CONFIG_MACRO_DIRS.
+AC_DEFUN([AC_CONFIG_MACRO_DIR],
+[_$0S(_$0S_USED()[$0], [$1])])
 
 
 ## --------------------- ##

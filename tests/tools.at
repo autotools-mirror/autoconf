@@ -358,6 +358,77 @@ AT_CHECK_AUTOCONF([[-t define:'$1' -i| sed -n '$p']],
 AT_CLEANUP
 
 
+# autoconf --trace: AC_CONFIG_MACRO_DIRS
+# --------------------------------------
+AT_SETUP([autoconf --trace: AC_CONFIG_MACRO_DIRS])
+AT_KEYWORDS([AC_CONFIG_MACRO_DIR AC_CONFIG_MACRO_DIR_TRACE])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_MACRO_DIR([dir1])
+AC_CONFIG_MACRO_DIRS([dir2 dir3 \
+dir4])
+AC_CONFIG_MACRO_DIRS([dir5])
+]])
+
+# Legacy tracing
+AT_CHECK_AUTOCONF([-t AC_CONFIG_MACRO_DIR], 0,
+[[configure.ac:2:AC_CONFIG_MACRO_DIR:dir1
+]])
+
+# Preferred tracing
+AT_CHECK_AUTOCONF([-t AC_CONFIG_MACRO_DIR_TRACE], 0,
+[[configure.ac:2:AC_CONFIG_MACRO_DIR_TRACE:dir1
+configure.ac:3:AC_CONFIG_MACRO_DIR_TRACE:dir2
+configure.ac:3:AC_CONFIG_MACRO_DIR_TRACE:dir3
+configure.ac:3:AC_CONFIG_MACRO_DIR_TRACE:dir4
+configure.ac:5:AC_CONFIG_MACRO_DIR_TRACE:dir5
+]])
+
+# Legacy macro can only be used once
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_MACRO_DIR([dir1])
+AC_CONFIG_MACRO_DIR([dir2])
+]])
+AT_CHECK_AUTOCONF([], [1], [], [stderr])
+AT_CHECK([grep 'error: AC_CONFIG_MACRO_DIR can only be used once' stderr],
+[], [ignore])
+
+# Legacy macro must be used first, if present
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_MACRO_DIRS([dir1])
+AC_CONFIG_MACRO_DIR([dir2])
+]])
+AT_CHECK_AUTOCONF([], [1], [], [stderr])
+AT_CHECK([grep 'error: AC_CONFIG_MACRO_DIR can only be used once' stderr],
+[], [ignore])
+
+# Only use the public macros
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_MACRO_DIR_TRACE([dir1])
+]])
+AT_CHECK_AUTOCONF([], [1], [],
+[[configure.ac:2: error: Do not invoke AC_CONFIG_MACRO_DIR_TRACE directly
+configure.ac:2: the top level
+autom4te: m4 failed with exit status: 1
+]])
+
+# Legacy macro use is not required, but still gets traced
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_MACRO_DIRS([dir1])
+AC_CONFIG_MACRO_DIRS([dir2])
+]])
+AT_CHECK_AUTOCONF([], [0], [], [])
+AT_CHECK_AUTOCONF([-t AC_CONFIG_MACRO_DIR], [0],
+[[configure.ac:2:AC_CONFIG_MACRO_DIR:dir1
+]])
+
+AT_CLEANUP
+
 
 ## ---------------------------- ##
 ## autoconf: forbidden tokens.  ##
