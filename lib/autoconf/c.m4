@@ -1349,7 +1349,7 @@ dnl Try
 dnl GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
 dnl IBM XL C	-qlanglvl=extc1x (V12.1; does not pass C11 test)
 dnl IBM XL C	-qlanglvl=extc99
-dnl 	   	(pre-V12.1; unused restrictive mode: -qlanglvl=stdc99)
+dnl		(pre-V12.1; unused restrictive mode: -qlanglvl=stdc99)
 dnl HP cc	-AC99
 dnl Intel ICC	-std=c99, -c99 (deprecated)
 dnl IRIX	-c99
