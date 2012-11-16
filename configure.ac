@@ -205,13 +205,7 @@ AC_PROG_MAKE_CASE_SENSITIVE
 ## ------------ ##
 
 dnl Allow maintainer rules under GNU make even in VPATH builds.
-dnl Meanwhile, we must use a shell variable so that we bypass automake's
-dnl attempts to remove the sole copy of GNUmakefile in a non-VPATH build
-dnl during 'make distclean'.
-dnl TODO avoid the shell variable once automake is fixed.
-GNUmakefile=GNUmakefile
-AC_CONFIG_LINKS([$GNUmakefile:$GNUmakefile], [],
-                [GNUmakefile=$GNUmakefile])
+AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
 AC_CONFIG_FILES([Makefile doc/Makefile
 		 lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
