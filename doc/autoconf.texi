@@ -4457,7 +4457,7 @@ of the host machine, and therefore, they die when cross-compiling.
 @caindex file_@var{file}
 Check whether file @var{file} exists on the native system.  If it is
 found, execute @var{action-if-found}, otherwise do
-@var{action-if-not-found}, if given.  The result of this test is cached
+@var{action-if-not-found}, if given.  Cache the result of this test
 in the @code{ac_cv_file_@var{file}} variable, with characters not
 suitable for a variable name mapped to underscores.
 @end defmac
@@ -4466,11 +4466,12 @@ suitable for a variable name mapped to underscores.
   @ovar{action-if-not-found})
 @acindex{CHECK_FILES}
 @caindex file_@var{file}
-Executes @code{AC_CHECK_FILE} once for each file listed in @var{files}.
-Additionally, defines @samp{HAVE_@var{file}} (@pxref{Standard Symbols})
-for each file found.  The results of each test are cached in the
-@code{ac_cv_file_@var{file}} variable, with characters not suitable for
-a variable name mapped to underscores.
+For each file listed in @var{files}, execute @code{AC_CHECK_FILE}
+and perform either @var{action-if-found} or @var{action-if-not-found}.
+Like @code{AC_CHECK_FILE}, this defines @samp{HAVE_@var{file}}
+(@pxref{Standard Symbols}) for each file found and caches the results of
+each test in the @code{ac_cv_file_@var{file}} variable, with characters
+not suitable for a variable name mapped to underscores.
 @end defmac
 
 
