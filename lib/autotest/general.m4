@@ -1001,7 +1001,7 @@ m4_divert_push([PREPARE_TESTS])dnl
 } >&AS_MESSAGE_LOG_FD
 
 # Report what programs are being tested.
-for at_program in : $at_tested
+for at_program in : `eval echo $at_tested`
 do
   test "$at_program" = : && continue
   case $at_program in
@@ -1794,7 +1794,7 @@ m4_defun([AT_ARG_OPTION_ARG],[_AT_ARG_OPTION([$1],[$2],1,[$3],[$4])])
 # must correspond to the version of the package.  PATH should be
 # already preset so the proper executable will be selected.
 m4_define([AT_TESTED],
-[m4_append_uniq_w([AT_tested], [$1])])
+[m4_append_uniq_w([AT_tested], ["$1"])])
 
 
 # AT_COPYRIGHT(TEXT, [FILTER = m4_newline])

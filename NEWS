@@ -38,6 +38,8 @@ GNU Autoconf NEWS - User visible changes.
 - AC_CONFIG_TESTDIR will automatically pass EXEEXT to a testsuite (via
   the atconfig file).
 
+- AT_TESTED arguments can use variable or command substitutions, including
+  in particular $EXEEXT
 
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 

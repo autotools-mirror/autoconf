@@ -1892,6 +1892,7 @@ AT_CLEANUP
 
 AT_SETUP([C unit tests])
 AT_KEYWORDS([AC_@&t@CONFIG_TESTDIR])
+AT_KEYWORDS([AT_@&t@TESTED])
 
 mkdir t
 AT_DATA([configure.ac], [[AC_INIT
@@ -1923,6 +1924,7 @@ testprog.o: testprog.c
 
 AT_CHECK_AT_PREP([suite],
 [[AT_INIT([suite to check C programs])
+AT_TESTED([testprog$EXEEXT])
 AT_SETUP([my only test])
 AT_CHECK([testprog$EXEEXT foo], [0])
 AT_CHECK([testprog$EXEEXT], [1])
@@ -1945,6 +1947,7 @@ AT_CLEANUP
 
 AT_SETUP([C unit tests (EXEEXT)])
 AT_KEYWORDS([AC_@&t@CONFIG_TESTDIR])
+AT_KEYWORDS([AT_@&t@TESTED])
 
 mkdir t
 AT_DATA([configure.ac], [[AC_INIT
@@ -1982,6 +1985,7 @@ testprog.o: testprog.c
 
 AT_CHECK_AT_PREP([suite],
 [[AT_INIT([suite to check C programs])
+AT_TESTED([testprog$EXEEXT])
 AT_SETUP([my only test])
 AT_CHECK([testprog$EXEEXT foo], [0])
 AT_CHECK([testprog$EXEEXT], [1])

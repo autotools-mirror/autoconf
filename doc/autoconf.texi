@@ -25013,6 +25013,12 @@ programs are being exercised is crucial to understanding problems in
 the test suite itself, or its occasional misuses.  It is a good idea to
 also subscribe foreign programs you depend upon, to avoid incompatible
 diagnostics.
+
+@var{executables} is implicitly wrapped in shell double quotes, but it
+will still use shell variable expansion (@samp{$}), command substitution
+(@samp{`}), and backslash escaping (@samp{\}).  In particular, the
+@env{EXEEXT} variable is available if it is passed to the testsuite
+via @file{atlocal} or @file{atconfig}.
 @end defmac
 
 @sp 1
