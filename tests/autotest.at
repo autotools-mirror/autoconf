@@ -1758,6 +1758,7 @@ printf %s\\n "$std"
 ## ------------------- ##
 
 AT_SETUP([srcdir propagation])
+AT_KEYWORDS([AC_@&t@CONFIG_TESTDIR])
 
 mkdir pkg vpath-outside vpath-abs
 mkdir pkg/t pkg/vpath-inside
@@ -1891,6 +1892,7 @@ AT_CLEANUP
 
 AT_SETUP([Erlang Eunit unit tests])
 AT_KEYWORDS([Erlang])
+AT_KEYWORDS([AC_@&t@CONFIG_TESTDIR])
 
 mkdir s t
 AT_DATA([configure.ac], [[AC_INIT
