@@ -35,6 +35,9 @@ GNU Autoconf NEWS - User visible changes.
   but processing variable substitutions, command substitutions and
   backslashes in the contents argument.
 
+- AC_CONFIG_TESTDIR will automatically pass EXEEXT to a testsuite (via
+  the atconfig file).
+
 
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 

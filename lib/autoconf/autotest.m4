@@ -59,6 +59,9 @@ abs_top_builddir='$ac_abs_top_builddir'
 # Backward compatibility with Autotest <= 2.59b:
 at_top_builddir=\$at_top_build_prefix
 
+m4_provide_if([_AC_COMPILER_EXEEXT], [
+EXEEXT='$ac_cv_exeext'
+])dnl
 AUTOTEST_PATH='m4_default([$2], [$1])'
 
 SHELL=\${CONFIG_SHELL-'$SHELL'}
@@ -71,7 +74,8 @@ ERLCFLAGS='$ERLCFLAGS'
 ])dnl
 ATEOF
 ],
-[m4_provide_if([AC_ERLANG_PATH_ERL], [ERL="$ERL"
+[m4_provide_if([_AC_COMPILER_EXEEXT], [ac_cv_exeext="$ac_cv_exeext"
+])m4_provide_if([AC_ERLANG_PATH_ERL], [ERL="$ERL"
 ])m4_provide_if([AC_ERLANG_PATH_ERLC], [ERLC="$ERLC"
 ERLCFLAGS="$ERLCFLAGS"
 ])])])# AC_CONFIG_TESTDIR

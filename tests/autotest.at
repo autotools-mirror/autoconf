@@ -1886,6 +1886,118 @@ AT_CHECK([grep 'two spaces' suite.log], [1])
 AT_CLEANUP
 
 
+## --------------- ##
+## C executables.  ##
+## --------------- ##
+
+AT_SETUP([C unit tests])
+AT_KEYWORDS([AC_@&t@CONFIG_TESTDIR])
+
+mkdir t
+AT_DATA([configure.ac], [[AC_INIT
+AC_PROG_CC
+AC_CONFIG_TESTDIR([t], [.])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+# Test file
+AT_DATA([testprog.c],
+[[int main(int argc) { return argc == 2 ? 0 : 1; }
+]])
+
+# Testsuite
+AT_DATA([Makefile.in],
+[[CC=@CC@
+CFLAGS=@CFLAGS@
+
+testprog@EXEEXT@: testprog.o
+testprog.o: testprog.c
+.SUFFIXES: .c .o @EXEEXT@
+
+.c.o:
+	$(CC) -c $<
+.o@EXEEXT@:
+	$(CC) -o $@ $^
+]])
+
+AT_CHECK_AT_PREP([suite],
+[[AT_INIT([suite to check C programs])
+AT_SETUP([my only test])
+AT_CHECK([testprog$EXEEXT foo], [0])
+AT_CHECK([testprog$EXEEXT], [1])
+AT_CLEANUP
+]], [], [], [], [t])
+
+rm t/atconfig
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+AT_CHECK([grep '^EXEEXT='\''.*'\' t/atconfig], [], [ignore])
+AT_CHECK([make], [], [ignore])
+AT_CHECK([cd t && $CONFIG_SHELL ./suite], [], [ignore])
+AT_CHECK([grep 1.*successful t/suite.log], [], [ignore])
+AT_CLEANUP
+
+
+## -------------------------------------- ##
+## C executables (force .exe extension).  ##
+## -------------------------------------- ##
+
+AT_SETUP([C unit tests (EXEEXT)])
+AT_KEYWORDS([AC_@&t@CONFIG_TESTDIR])
+
+mkdir t
+AT_DATA([configure.ac], [[AC_INIT
+AC_PROG_CC
+case $ac_cv_exeext in
+  '' | .exe) ;;
+  *) exit 77 ;;
+esac
+ac_cv_exeext=.exe
+AC_SUBST([EXEEXT], [$ac_cv_exeext])
+AC_CONFIG_TESTDIR([t], [.])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+# Test file
+AT_DATA([testprog.c],
+[[int main(int argc) { return argc == 2 ? 0 : 1; }
+]])
+
+# Testsuite
+AT_DATA([Makefile.in],
+[[CC=@CC@
+CFLAGS=@CFLAGS@
+
+testprog@EXEEXT@: testprog.o
+testprog.o: testprog.c
+.SUFFIXES: .c .o @EXEEXT@
+
+.c.o:
+	$(CC) -c $<
+.o@EXEEXT@:
+	$(CC) -o $@ $^
+]])
+
+AT_CHECK_AT_PREP([suite],
+[[AT_INIT([suite to check C programs])
+AT_SETUP([my only test])
+AT_CHECK([testprog$EXEEXT foo], [0])
+AT_CHECK([testprog$EXEEXT], [1])
+AT_CLEANUP
+]], [], [], [], [t])
+
+rm t/atconfig
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+AT_CHECK([grep '^EXEEXT='\''.*'\' t/atconfig], [], [ignore])
+AT_CHECK([make], [], [ignore])
+AT_CHECK([cd t && $CONFIG_SHELL ./suite], [], [ignore])
+AT_CHECK([grep 1.*successful t/suite.log], [], [ignore])
+AT_CLEANUP
+
+
 ## ------------------------- ##
 ## Erlang EUnit unit tests.  ##
 ## ------------------------- ##

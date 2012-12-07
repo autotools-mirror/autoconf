@@ -656,7 +656,7 @@ AC_MSG_RESULT([$ac_cv_exeext])
 # by checking whether `_AC_COMPILER_EXEEXT' has been expanded.
 #
 # See _AC_COMPILER_EXEEXT_CROSS for why we need _AC_LANG_IO_PROGRAM.
-m4_define([_AC_COMPILER_EXEEXT],
+AC_DEFUN([_AC_COMPILER_EXEEXT],
 [AC_LANG_CONFTEST([_AC_LANG_NULL_PROGRAM])
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
