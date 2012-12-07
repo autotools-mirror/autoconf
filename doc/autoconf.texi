@@ -25128,6 +25128,7 @@ End the current test group.
 @sp 1
 
 @defmac AT_DATA (@var{file}, @var{contents})
+@defmacx AT_DATA_UNQUOTED (@var{file}, @var{contents})
 @atindex{DATA}
 Initialize an input data @var{file} with given @var{contents}.  Of
 course, the @var{contents} have to be properly quoted between square
@@ -25135,6 +25136,11 @@ brackets to protect against included commas or spurious M4
 expansion.  @var{contents} must be empty or end with a newline.
 @var{file} must
 be a single shell word that expands into a single file name.
+
+The difference between @code{AT_DATA} and @code{AT_DATA_UNQUOTED} is
+that only the latter performs shell variable expansion (@samp{$}),
+command substitution (@samp{`}), and backslash escaping (@samp{\})
+on @var{contents}.
 @end defmac
 
 @defmac AT_CHECK (@var{commands}, @dvar{status, 0}, @ovar{stdout}, @

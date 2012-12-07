@@ -31,6 +31,11 @@ GNU Autoconf NEWS - User visible changes.
   code on that platform.  Solaris 2.4 has not been supported since
   2003 and nowadays it's better to omit that old trick.
 
+- Autotest provides a new macro AT_DATA_UNQUOTED, similar to AT_DATA
+  but processing variable substitutions, command substitutions and
+  backslashes in the contents argument.
+
+
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
 ** Autoconf now requires perl 5.6 or better (but generated configure

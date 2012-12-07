@@ -178,6 +178,25 @@ AT_CHECK([cmp file2 file3])
 
 
 ## ------------------ ##
+## AT_DATA_UNQUOTED.  ##
+## ------------------ ##
+
+AT_CHECK_AT_TEST([AT@&t@_DATA_UNQUOTED], [
+AT_CHECK([test -f file1], [1])
+AT_DATA([file1])
+AT_CHECK([test -f file1 && test ! -s file1])
+AT_CHECK([echo hi > file1])
+AT_DATA([file1], [[]])
+AT_CHECK([test -f file1 && test ! -s file1])
+file=file2
+AT_DATA_UNQUOTED([$file], [[$file
+]])
+AT_CHECK([echo file2 > file3])
+AT_CHECK([cmp file2 file3])
+])
+
+
+## ------------------ ##
 ## Empty test suite.  ##
 ## ------------------ ##
 

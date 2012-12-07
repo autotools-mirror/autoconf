@@ -1944,6 +1944,22 @@ at_banner_text_[]AT_banner_ordinal="AS_ESCAPE([$1])"])dnl
 ])# AT_BANNER
 
 
+# AT_DATA_UNQUOTED(FILE, CONTENTS)
+# -----------------------
+# Initialize an input data FILE with given CONTENTS, which should be
+# empty or end with a newline.
+# This macro is not robust to active symbols in CONTENTS *on purpose*.
+# If you don't want CONTENTS to be evaluated, quote it twice.
+# In addition, it does not quote shell variables.  For example, it
+# can be used to generate data files containing a carriage return.
+_AT_DEFINE_SETUP([AT_DATA_UNQUOTED],
+[m4_if([$2], [], [: >$1],
+       [$2], [[]], [: >$1],
+[cat >$1 <<_ATEOF
+$2[]_ATEOF
+])])
+
+
 # AT_DATA(FILE, CONTENTS)
 # -----------------------
 # Initialize an input data FILE with given CONTENTS, which should be
