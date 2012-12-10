@@ -1257,7 +1257,7 @@ test_restrict (ccp restrict text)
 }
 
 // Check varargs and va_copy.
-static void
+static bool
 test_varargs (const char *format, ...)
 {
   va_list args;
@@ -1265,9 +1265,9 @@ test_varargs (const char *format, ...)
   va_list args_copy;
   va_copy (args_copy, args);
 
-  const char *str;
-  int number;
-  float fnumber;
+  const char *str = "";
+  int number = 0;
+  float fnumber = 0;
 
   while (*format)
     {
@@ -1288,6 +1288,8 @@ test_varargs (const char *format, ...)
     }
   va_end (args_copy);
   va_end (args);
+
+  return *str && number && fnumber;
 }]])# _AC_C_C99_TEST_HEADER
 
 # _AC_C_C99_TEST_BODY
@@ -1304,7 +1306,7 @@ AC_DEFUN([_AC_C_C99_TEST_BODY],
   char *restrict newvar = "Another string";
 
   // Check varargs.
-  test_varargs ("s, d' f .", "string", 65, 34.234);
+  success &= test_varargs ("s, d' f .", "string", 65, 34.234);
   test_varargs_macros ();
 
   // Check flexible array members.
