@@ -372,36 +372,36 @@ AC_CACHE_CHECK([for working alloca.h], ac_cv_working_alloca_h,
 		[ac_cv_working_alloca_h=no])])
 if test $ac_cv_working_alloca_h = yes; then
   AC_DEFINE(HAVE_ALLOCA_H, 1,
-	    [Define to 1 if you have <alloca.h> and it should be used
-	     (not on Ultrix).])
+	    [Define to 1 if <alloca.h> works.])
 fi
 
 AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
-[AC_LINK_IFELSE([AC_LANG_PROGRAM(
-[[#ifdef __GNUC__
-# define alloca __builtin_alloca
-#else
-# ifdef _MSC_VER
+[if test $ac_cv_working_alloca_h = yes; then
+  ac_cv_func_alloca_works=yes
+else
+  AC_LINK_IFELSE([AC_LANG_PROGRAM(
+[[#if defined STDC_HEADERS || defined HAVE_STDLIB_H
+# include <stdlib.h>
+#endif
+#include <stddef.h>
+#ifndef alloca
+# ifdef __GNUC__
+#  define alloca __builtin_alloca
+# elif defined _MSC_VER
 #  include <malloc.h>
 #  define alloca _alloca
 # else
-#  ifdef HAVE_ALLOCA_H
-#   include <alloca.h>
-#  else
-#   ifdef _AIX
- #pragma alloca
-#   else
-#    ifndef alloca /* predefined by HP cc +Olibcalls */
-void *alloca (size_t);
-#    endif
-#   endif
+#  ifdef  __cplusplus
+extern "C"
 #  endif
+void *alloca (size_t);
 # endif
 #endif
 ]],                               [[char *p = (char *) alloca (1);
 				    if (p) return 0;]])],
 		[ac_cv_func_alloca_works=yes],
 		[ac_cv_func_alloca_works=no])])
+fi
 
 if test $ac_cv_func_alloca_works = yes; then
   AC_DEFINE(HAVE_ALLOCA, 1,

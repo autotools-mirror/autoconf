@@ -4858,28 +4858,17 @@ in some cases how they respond when given certain arguments.
 @prindex @code{alloca}
 @hdrindex{alloca.h}
 @c @caindex working_alloca_h
-Check how to get @code{alloca}.  Tries to get a builtin version by
-checking for @file{alloca.h} or the predefined C preprocessor macros
-@code{__GNUC__} and @code{_AIX}.  If this macro finds @file{alloca.h},
-it defines @code{HAVE_ALLOCA_H}.
-
-If those attempts fail, it looks for the function in the standard C
-library.  If any of those methods succeed, it defines
-@code{HAVE_ALLOCA}.  Otherwise, it sets the output variable
-@code{ALLOCA} to @samp{$@{LIBOBJDIR@}alloca.o} and defines
+Check for the @code{alloca} function.  Define @code{HAVE_ALLOCA_H} if
+@file{alloca.h} defines a working @code{alloca}.  If not, look for a
+builtin alternative.  If either method succeeds, define
+@code{HAVE_ALLOCA}.  Otherwise, set the output variable @code{ALLOCA} to
+@samp{$@{LIBOBJDIR@}alloca.o} and define
 @code{C_ALLOCA} (so programs can periodically call @samp{alloca (0)} to
 garbage collect).  This variable is separate from @code{LIBOBJS} so
 multiple programs can share the value of @code{ALLOCA} without needing
 to create an actual library, in case only some of them use the code in
 @code{LIBOBJS}.  The @samp{$@{LIBOBJDIR@}} prefix serves the same
 purpose as in @code{LIBOBJS} (@pxref{AC_LIBOBJ vs LIBOBJS}).
-
-This macro does not try to get @code{alloca} from the System V R3
-@file{libPW} or the System V R4 @file{libucb} because those libraries
-contain some incompatible functions that cause trouble.  Some versions
-do not even contain @code{alloca} or contain a buggy version.  If you
-still want to use their @code{alloca}, use @code{ar} to extract
-@file{alloca.o} from them instead of compiling @file{alloca.c}.
 
 Source files that use @code{alloca} should start with a piece of code
 like the following, to declare it properly.
@@ -4895,8 +4884,6 @@ like the following, to declare it properly.
 #elif !defined alloca
 # ifdef __GNUC__
 #  define alloca __builtin_alloca
-# elif defined _AIX
-#  define alloca __alloca
 # elif defined _MSC_VER
 #  include <malloc.h>
 #  define alloca _alloca
