@@ -10,6 +10,8 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Macros
 
+- New macro AC_C__GENERIC.
+
 - AC_CONFIG_MACRO_DIRS
   New macro, used to declare multiple directories when looking for
   local M4 macros.  This macro overcomes some of the shortfalls in the

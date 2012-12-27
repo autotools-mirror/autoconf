@@ -7434,6 +7434,13 @@ This macro is obsolescent, as current C compilers support @code{const}.
 New programs need not use this macro.
 @end defmac
 
+@defmac AC_C__GENERIC
+@acindex{C__GENERIC}
+@cvindex _Generic
+If the C compiler supports C11-style generic selection using the
+@code{_Generic} keyword, define @code{HAVE_C__GENERIC}.
+@end defmac
+
 @defmac AC_C_RESTRICT
 @acindex{C_RESTRICT}
 @cvindex restrict
