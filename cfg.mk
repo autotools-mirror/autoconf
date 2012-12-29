@@ -81,7 +81,6 @@ WGETFLAGS = -C off
 automake_gitweb = \
   http://git.savannah.gnu.org/gitweb/?p=automake.git;a=blob_plain;hb=HEAD;
 autom4te_files = \
-  Autom4te/Configure_ac.pm \
   Autom4te/Channels.pm \
   Autom4te/FileUtils.pm \
   Autom4te/Getopt.pm \
