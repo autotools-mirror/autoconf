@@ -61,7 +61,7 @@ $2
 # Produce source that performs I/O.
 m4_define([_AC_LANG_IO_PROGRAM(Go)],
 [AC_LANG_PROGRAM([import ( "fmt"; "os" )],
-[f, err := os.Open("conftest.out", os.O_CREATE|os.O_WRONLY, 0777)
+[f, err := os.OpenFile("conftest.out", os.O_CREATE|os.O_WRONLY, 0777)
  if err != nil {
 	fmt.Println(err)
 	os.Exit(1)
@@ -107,7 +107,7 @@ import (
 	"os"
 )
 ],
-[f, err := os.Open("conftest.val", os.O_CREATE|os.O_WRONLY, 0777)
+[f, err := os.OpenFile("conftest.val", os.O_CREATE|os.O_WRONLY, 0777)
  if err != nil {
 	os.Exit(1)
  }
