@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterized macros.
 m4_define([_AC_COPYRIGHT_YEARS], [
-Copyright (C) 1992-1996, 1998-2013 Free Software Foundation, Inc.
+Copyright (C) 1992-1996, 1998-2014 Free Software Foundation, Inc.
 ])
 
 # This file is part of Autoconf.  This program is free
