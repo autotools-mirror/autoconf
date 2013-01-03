@@ -1,6 +1,6 @@
 # m4.m4 serial 12
 
-# Copyright (C) 2000, 2006-2012 Free Software Foundation, Inc.
+# Copyright (C) 2000, 2006-2013 Free Software Foundation, Inc.
 
 # Copying and distribution of this file, with or without modification,
 # are permitted in any medium without royalty provided the copyright
