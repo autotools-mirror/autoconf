@@ -1794,7 +1794,8 @@ m4_defun([AT_ARG_OPTION_ARG],[_AT_ARG_OPTION([$1],[$2],1,[$3],[$4])])
 # must correspond to the version of the package.  PATH should be
 # already preset so the proper executable will be selected.
 m4_define([AT_TESTED],
-[m4_append_uniq_w([AT_tested], ["$1"])])
+[m4_foreach_w([AT_test], [$1],
+  [m4_append_uniq([AT_tested], "m4_defn([AT_test])", [ ])])])
 
 
 # AT_COPYRIGHT(TEXT, [FILTER = m4_newline])
