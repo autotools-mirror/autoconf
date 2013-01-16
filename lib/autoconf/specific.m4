@@ -168,11 +168,8 @@ if test "$enable_largefile" != no; then
       [_AC_SYS_LARGEFILE_TEST_INCLUDES])
   fi
 
-  AH_VERBATIM([_DARWIN_USE_64_BIT_INODE],
-[/* Enable large inode numbers on Mac OS X 10.5.  */
-#ifndef _DARWIN_USE_64_BIT_INODE
-# define _DARWIN_USE_64_BIT_INODE 1
-#endif])
+  AC_DEFINE([_DARWIN_USE_64_BIT_INODE], [1],
+    [Enable large inode numbers on Mac OS X 10.5.])
 fi
 ])# AC_SYS_LARGEFILE
 
