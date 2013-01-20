@@ -7642,6 +7642,35 @@ like this:
 AC_PROG_CXX([gcc cl KCC CC cxx cc++ xlC aCC c++ g++])
 @end example
 
+If necessary, add an option to output variable @code{CXX} to enable
+support for ISO Standard C++ features with extensions.  Prefer the
+newest C++ standard that is supported.  Currently the newest standard is
+ISO C++11, with ISO C++98 being the previous standard.  After calling
+this macro you can check whether the C++ compiler has been set to accept
+Standard C++; if not, the shell variable @code{ac_cv_prog_cxx_stdcxx} is
+set to @samp{no}.  If the C++ compiler will not accept C++11, the shell
+variable @code{ac_cv_prog_cxx_cxx11} is set to @samp{no}, and if it will
+not accept C++98, the shell variable @code{ac_cv_prog_cxx_cxx98} is set
+to @samp{no}.
+
+When attempting to add compiler options, prefer extended functionality
+to strict conformance: the goal is to enable whatever standard features
+that are available, not to check for full conformance to the standard or
+to prohibit incompatible extensions.  Test for C++11 support by checking
+for the language features @code{auto}, @code{constexpr},
+@code{decltype}, @code{default}ed and @code{delete}ed constructors,
+delegate constructors, @code{final}, initializer lists, lambda
+functions, @code{nullptr}, @code{override}, range-based for loops,
+template brackets without spaces and unicode literals, and library
+features @code{std::array}, @code{std::shared_ptr},
+@code{std::weak_ptr}, @code{std::regex} and @code{std::tuple}.  Test for
+C++98 support using basic features of the @code{std} namespace including
+@code{std::string}, containers (@code{std::list}, @code{std::map},
+@code{std::set}, @code{std::vector}), streams (fstreams, iostreams,
+stringstreams, iomanip), @code{std::pair}, exceptions (@code{try},
+@code{catch} and @code{std::runtime_error}) and algorithms.  Tests for
+more recent standards include all the tests for older standards.
+
 If using the GNU C++ compiler, set shell variable @code{GXX} to
 @samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
 it to @option{-g -O2} for the GNU C++ compiler (@option{-O2} on
@@ -7649,7 +7678,6 @@ systems where G++ does not accept @option{-g}), or @option{-g} for other
 compilers.  If your package does not like this default, then it is
 acceptable to insert the line @samp{: $@{CXXFLAGS=""@}} after @code{AC_INIT}
 and before @code{AC_PROG_CXX} to select an empty default instead.
-
 @end defmac
 
 @defmac AC_PROG_CXXCPP
