@@ -453,7 +453,6 @@ m4_defun([_AS_SHELL_SANITIZE],
 [m4_text_box([M4sh Initialization.])
 
 AS_BOURNE_COMPATIBLE
-_AS_ECHO_PREPARE
 _AS_PATH_SEPARATOR_PREPARE
 
 # IFS
@@ -461,6 +460,9 @@ _AS_PATH_SEPARATOR_PREPARE
 # there to prevent editors from complaining about space-tab.
 # (If _AS_PATH_WALK were called with IFS unset, it would disable word
 # splitting by setting IFS to empty value.)
+as_nl='
+'
+export as_nl
 IFS=" ""	$as_nl"
 
 # Find who we are.  Look in the path if we contain no directory separator.
@@ -1023,63 +1025,15 @@ fi
 # Output WORD followed by a newline.  WORD must be a single shell word
 # (typically a quoted string).  The bytes of WORD are output as-is, even
 # if it starts with "-" or contains "\".
-m4_defun_init([AS_ECHO],
-[AS_REQUIRE([_$0_PREPARE])],
-[$as_echo $1])
+m4_defun([AS_ECHO],
+[printf '%s\n' $1])
 
 
 # AS_ECHO_N(WORD)
 # ---------------
 # Like AS_ECHO(WORD), except do not output the trailing newline.
-m4_defun_init([AS_ECHO_N],
-[AS_REQUIRE([_AS_ECHO_PREPARE])],
-[$as_echo_n $1])
-
-
-# _AS_ECHO_PREPARE
-# ----------------
-# Arrange for $as_echo 'FOO' to echo FOO without escape-interpretation;
-# and similarly for $as_echo_n, which omits the trailing newline.
-# 'FOO' is an optional single argument; a missing FOO is treated as empty.
-m4_defun([_AS_ECHO_PREPARE],
-[[as_nl='
-'
-export as_nl
-# Printing a long string crashes Solaris 7 /usr/bin/printf.
-as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
-as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
-as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo$as_echo
-# Prefer a ksh shell builtin over an external printf program on Solaris,
-# but without wasting forks for bash or zsh.
-if test -z "$BASH_VERSION$ZSH_VERSION" \
-    && (test "X`print -r -- $as_echo`" = "X$as_echo") 2>/dev/null; then
-  as_echo='print -r --'
-  as_echo_n='print -rn --'
-elif (test "X`printf %s $as_echo`" = "X$as_echo") 2>/dev/null; then
-  as_echo='printf %s\n'
-  as_echo_n='printf %s'
-else
-  if test "X`(/usr/ucb/echo -n -n $as_echo) 2>/dev/null`" = "X-n $as_echo"; then
-    as_echo_body='eval /usr/ucb/echo -n "$][1$as_nl"'
-    as_echo_n='/usr/ucb/echo -n'
-  else
-    as_echo_body='eval expr "X$][1" : "X\\(.*\\)"'
-    as_echo_n_body='eval
-      arg=$][1;
-      case $arg in @%:@(
-      *"$as_nl"*)
-	expr "X$arg" : "X\\(.*\\)$as_nl";
-	arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
-      esac;
-      expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
-    '
-    export as_echo_n_body
-    as_echo_n='sh -c $as_echo_n_body as_echo'
-  fi
-  export as_echo_body
-  as_echo='sh -c $as_echo_body as_echo'
-fi
-]])# _AS_ECHO_PREPARE
+m4_defun([AS_ECHO_N],
+[printf %s $1])
 
 
 # AS_TEST_X

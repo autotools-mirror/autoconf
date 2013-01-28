@@ -8,6 +8,10 @@ GNU Autoconf NEWS - User visible changes.
 ** Older version of automake and aclocal (< 1.8) are no longer supported
    by autoreconf.
 
+** Use of printf is now recommended instead of working around bugs in
+   echo.  Macros AS_ECHO and AS_ECHO_N now expand unconditionally to
+   "printf '%s\n'" and "printf %s".
+
 ** Macros
 
 - New macro AC_C__GENERIC.
