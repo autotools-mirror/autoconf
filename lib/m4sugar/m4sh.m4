@@ -1026,7 +1026,7 @@ fi
 # (typically a quoted string).  The bytes of WORD are output as-is, even
 # if it starts with "-" or contains "\".
 m4_defun([AS_ECHO],
-[printf '%s\n' $1])
+[printf "%s\n" $1])
 
 
 # AS_ECHO_N(WORD)

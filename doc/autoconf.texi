@@ -17523,7 +17523,7 @@ only if you know that @var{foo}'s value cannot contain backslashes and
 cannot start with @samp{-}.
 
 Normally, @command{printf} is safer and easier to use than @command{echo}
-and @command{echo -n}.  Thus, you should use @command{printf '%s\n'}
+and @command{echo -n}.  Thus, you should use @command{printf "%s\n"}
 instead of @command{echo}, and similarly use @command{printf %s} instead
 of @command{echo -n}.
 
