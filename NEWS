@@ -21,7 +21,8 @@ GNU Autoconf NEWS - User visible changes.
   eliminate the need to specify ACLOCAL_AMFLAGS in Makefile.am.
 
 - AC_PROG_CC now prefers C11 if available, falling back on C99 and
-  then on C89 as before.
+  then on C89 as before.  Similarly, AC_PROG_CXX now prefers C++11
+  if available, falling back on C++98.
 
 - AC_PROG_CC is now defined via AC_DEFUN_ONCE, to avoid bloat in 'configure'.
 
