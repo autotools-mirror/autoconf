@@ -369,13 +369,15 @@ AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
   AC_CHECK_HEADER([minix/config.h], [MINIX=yes], [MINIX=])
   if test "$MINIX" = yes; then
     AC_DEFINE([_POSIX_SOURCE], [1],
-      [Define to 1 if you need to in order for `stat' and other
+      [Define to 1 if you need to in order for 'stat' and other
        things to work.])
     AC_DEFINE([_POSIX_1_SOURCE], [2],
       [Define to 2 if the system does not provide POSIX.1 features
        except with this defined.])
     AC_DEFINE([_MINIX], [1],
       [Define to 1 if on MINIX.])
+    AC_DEFINE([_NETBSD_SOURCE], [1],
+      [Define to 1 to make NetBSD features available.  MINIX 3 needs this.])
   fi
 
 dnl Use a different key than __EXTENSIONS__, as that name broke existing
@@ -385,9 +387,18 @@ dnl configure.ac when using autoheader 2.62.
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE
 #endif
+/* Enable general extensions on OS X.  */
+#ifndef _DARWIN_C_SOURCE
+# undef _DARWIN_C_SOURCE
+#endif
 /* Enable GNU extensions on systems that have them.  */
 #ifndef _GNU_SOURCE
 # undef _GNU_SOURCE
+#endif
+/* HP-UX 11.11 defines mbstate_t only if _XOPEN_SOURCE is defined to 500,
+   regardless of whether compiling with -Ae or -D_HPUX_SOURCE=1.  */
+#ifdef __hpux
+# define _XOPEN_SOURCE 500
 #endif
 /* Enable threading extensions on Solaris.  */
 #ifndef _POSIX_PTHREAD_SEMANTICS
@@ -413,6 +424,7 @@ dnl configure.ac when using autoheader 2.62.
   test $ac_cv_safe_to_define___extensions__ = yes &&
     AC_DEFINE([__EXTENSIONS__])
   AC_DEFINE([_ALL_SOURCE])
+  AC_DEFINE([_DARWIN_C_SOURCE])
   AC_DEFINE([_GNU_SOURCE])
   AC_DEFINE([_POSIX_PTHREAD_SEMANTICS])
   AC_DEFINE([_TANDEM_SOURCE])

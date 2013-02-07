@@ -33,6 +33,9 @@ GNU Autoconf NEWS - User visible changes.
 - AC_PROG_CC_STDC, AC_PROG_CC_C89, AC_PROG_CC_C99 have been marked as obsolete.
   Applications should use AC_PROG_CC.
 
+- AC_USE_SYSTEM_EXTENSIONS now enables more system extensions on HP-UX,
+  MINIX 3, and OS X.
+
 - AC_FUNC_VFORK now checks for the signal-handling bug in Solaris 2.4 'vfork'.
   Formerly, it ignored this bug, so that Emacs could use some tricky
   code on that platform.  Solaris 2.4 has not been supported since
