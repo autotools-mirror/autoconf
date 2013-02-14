@@ -1518,15 +1518,13 @@ rm -f conftest*
 # ---------------
 AC_DEFUN([AC_FUNC_SETPGRP],
 [AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
-[AC_RUN_IFELSE(
-[AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-[/* If this system has a BSD-style setpgrp which takes arguments,
-  setpgrp(1, 1) will fail with ESRCH and return -1, in that case
-  exit successfully. */
-  return setpgrp (1,1) != -1;])],
-	       [ac_cv_func_setpgrp_void=no],
-	       [ac_cv_func_setpgrp_void=yes],
-	       [AC_MSG_ERROR([cannot check setpgrp when cross compiling])])])
+   [AC_COMPILE_IFELSE(
+      [AC_LANG_PROGRAM(
+	 [[#include <unistd.h>
+	   static int (*p) (void) = setpgrp;]],
+	 [[return setpgrp ();]])],
+      [ac_cv_func_setpgrp_void=yes],
+      [ac_cv_func_setpgrp_void=no])])
 if test $ac_cv_func_setpgrp_void = yes; then
   AC_DEFINE(SETPGRP_VOID, 1,
 	    [Define to 1 if the `setpgrp' function takes no argument.])
