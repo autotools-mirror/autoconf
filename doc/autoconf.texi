@@ -5084,9 +5084,8 @@ If the system has the @code{getloadavg} function, define
 @code{HAVE_GETLOADAVG}, and set @code{GETLOADAVG_LIBS} to any libraries
 necessary to get that function.  Also add @code{GETLOADAVG_LIBS} to
 @code{LIBS}.  Otherwise, require an @code{AC_LIBOBJ} replacement for
-@samp{getloadavg} with source code in @file{@var{dir}/getloadavg.c}, and
-possibly define several other C preprocessor macros and output
-variables:
+@samp{getloadavg} and possibly define several other C preprocessor
+macros and output variables:
 
 @enumerate
 @item
