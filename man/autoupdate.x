@@ -1,2 +1,2 @@
 [name]
-autoupdate \- Update a configure.in to a newer Autoconf
+autoupdate \- Update a configure.ac to a newer Autoconf
