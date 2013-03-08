@@ -3148,7 +3148,10 @@ versions of @command{make} do not set @code{$<} in explicit rules; they
 expand it to an empty value.
 
 Instead, Make command lines should always refer to source
-files by prefixing them with @samp{$(srcdir)/}.  For example:
+files by prefixing them with @samp{$(srcdir)/}.  It's safer
+to quote the source directory name, in case it contains characters that
+are special to the shell.  Because @samp{$(srcdir)} is expanded by Make,
+single-quoting works and is safer than double-quoting.  For example:
 
 @example
 time.info: time.texinfo
