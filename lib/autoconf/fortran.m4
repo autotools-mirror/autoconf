@@ -451,7 +451,7 @@ if _AC_DO_VAR(ac_try) &&
 else
   ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o=no
 fi
-rm -f conftest*])
+rm -rf conftest*])
 if test $ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o = no; then
   AC_DEFINE([]_AC_FC[]_NO_MINUS_C_MINUS_O, 1,
 	    [Define to 1 if your Fortran compiler doesn't accept

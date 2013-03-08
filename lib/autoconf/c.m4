@@ -513,7 +513,7 @@ else
   AC_MSG_RESULT([no])
   eval ac_cv_prog_cc_${ac_cc}_c_o=no
 fi
-rm -f core conftest*
+rm -rf core conftest*
 ])])dnl
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CC
@@ -626,7 +626,7 @@ then
 else
   eval ac_cv_prog_cc_${ac_cc}_c_o=no
 fi
-rm -f core conftest*
+rm -rf core conftest*
 ])dnl
 if eval test \$ac_cv_prog_cc_${ac_cc}_c_o = yes; then
   AC_MSG_RESULT([yes])
@@ -823,7 +823,7 @@ if _AC_DO_VAR(ac_try) &&
 else
   ac_cv_prog_cxx_c_o=no
 fi
-rm -f conftest*])
+rm -rf conftest*])
 if test $ac_cv_prog_cxx_c_o = no; then
   AC_DEFINE(CXX_NO_MINUS_C_MINUS_O, 1,
 	    [Define to 1 if your C++ compiler doesn't accept
