@@ -2584,7 +2584,7 @@ dnl Quote $1 to prevent m4 from eating character classes
   $EGREP "[$1]" >/dev/null 2>&1],
   [$3],
   [$4])
-rm -f conftest*
+rm -rf conftest*
 ])# AC_EGREP_CPP
 
 
