@@ -4222,7 +4222,7 @@ and is cached in the @code{ac_cv_path_SED} variable.
 @ovindex YACC
 @caindex prog_YACC
 If @code{bison} is found, set output variable @code{YACC} to @samp{bison
--y}.  Otherwise, if @code{byacc} is found, set @code{YACC} to
+-o y.tab.c}.  Otherwise, if @code{byacc} is found, set @code{YACC} to
 @samp{byacc}.  Otherwise set @code{YACC} to @samp{yacc}.
 The result of this test can be influenced by setting the variable
 @code{YACC} or the cache variable @code{ac_cv_prog_YACC}.
