@@ -106,7 +106,7 @@ AC_SUBST([ac_cv_dir_trailing_space])
 
 # Initialize the test suite.
 AC_CONFIG_TESTDIR([tests])
-AC_CONFIG_FILES([tests/Makefile tests/atlocal])
+AC_CONFIG_FILES([tests/atlocal])
 AC_PATH_PROG([EXPR], [expr])
 
 

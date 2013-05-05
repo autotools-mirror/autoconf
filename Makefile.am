@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# autom4te uses autotest.m4f to generate 'testsuite', so build tests last.
 # Rules in man/ use scripts from both bin/ and tests/, so *it* goes last.
-SUBDIRS = . tests man
+SUBDIRS = . man
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -26,6 +25,8 @@ ACLOCAL_AMFLAGS = -I m4
 ETAGS_ARGS =
 MOSTLYCLEANFILES =
 CLEANFILES =
+DISTCLEANFILES =
+MAINTAINERCLEANFILES =
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 ChangeLog.3 \
 	     BUGS COPYINGv3 COPYING.EXCEPTION \
@@ -65,7 +66,7 @@ custom_MAKEINFOFLAGS = --no-headers --no-validate --no-split
 
 if MAKE_CASE_SENSITIVE
 pkgdata_DATA = $(srcdir)/INSTALL
-MAINTAINERCLEANFILES = $(srcdir)/INSTALL
+MAINTAINERCLEANFILES += $(srcdir)/INSTALL
 
 # Don't leave blank line at end of file.
 OMIT_TRAILING_EMPTY_LINES = '/^$$/H; /^$$/d; x; s/\n//p; s/\n*//; x'
@@ -131,6 +132,7 @@ distclean-local:
 include $(srcdir)/bin/local.mk
 include $(srcdir)/doc/local.mk
 include $(srcdir)/lib/local.mk
+include $(srcdir)/tests/local.mk
 
 # Perl coverage statistics.
 PERL_COVERAGE_DB = `pwd`/cover_db

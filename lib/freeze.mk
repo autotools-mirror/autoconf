@@ -22,9 +22,7 @@
 
 SUFFIXES = .m4 .m4f
 
-AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
-$(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
-	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) lib/autom4te.cfg
+AUTOM4TE_CFG = lib/autom4te.cfg
 
 # Do not use AUTOM4TE here, since maint.mk (my-distcheck)
 # checks if we are independent of Autoconf by defining AUTOM4TE (and
@@ -59,10 +57,6 @@ src_libdir   = $(top_srcdir)/lib
 build_libdir = $(top_builddir)/lib
 
 m4f_dependencies = $(top_builddir)/bin/autom4te $(AUTOM4TE_CFG)
-
-# For parallel builds.
-$(build_libdir)/m4sugar/version.m4:
-	cd $(build_libdir) && $(MAKE) $(AM_MAKEFLAGS) m4sugar/version.m4
 
 m4sugar_m4f_dependencies =			\
 	$(m4f_dependencies)			\

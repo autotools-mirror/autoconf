@@ -22,8 +22,13 @@
 
 as_me=`echo "$0" | sed 's|.*[\\/]||'`
 
+outdir=tests
+acdefuns=$outdir/acdefuns.tmp
+audefuns=$outdir/audefuns.tmp
+requires=$outdir/requires.tmp
+
 trap 'echo "'"$as_me"': failed." >&2
-      rm -f acdefuns audefuns requires *.tat
+      rm -f $acdefuns $audefuns $requires $outdir/*.tat
       trap "" 0
       exit 1' \
      0 1 2 15
@@ -48,7 +53,7 @@ LC_ALL=C export LC_ALL
 # Get the list of macros that are required: there is little interest
 # in testing them since they will be run by the guy who requires them.
 sed -n 's/dnl.*//;s/.*AC_REQUIRE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $src |
-  sort -u >requires
+  sort -u >$requires
 
 
 # exclude_list
@@ -180,17 +185,18 @@ au_exclude_script="$exclude_list $au_exclude_list {print}"
 for file in $src
 do
   base=`echo "$file" | sed 's|.*[\\/]||;s|\..*||'`
+  acbase=$outdir/ac$base
   # Get the list of macros which are defined in Autoconf level.
   # Get rid of the macros we are not interested in.
   sed -n -e 's/^AC_DEFUN(\[*\([a-zA-Z0-9_]*\).*$/\1/p' \
 	 -e 's/^AC_DEFUN_ONCE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $file |
     awk "$ac_exclude_script" |
-    sort -u >acdefuns
+    sort -u >$acdefuns
 
   # Get the list of macros which are defined in Autoupdate level.
   sed -n 's/^AU_DEFUN(\[*\([a-zA-Z][a-zA-Z0-9_]*\).*$/\1/p' $file |
     awk "$au_exclude_script" |
-    sort -u >audefuns
+    sort -u >$audefuns
 
   # Filter out required macros.
   {
@@ -209,26 +215,26 @@ do
 MK_EOF
 
     echo "# Modern macros."
-    comm -23 acdefuns requires | sed 's/.*/AT_CHECK_MACRO([&])/'
+    comm -23 $acdefuns $requires | sed 's/.*/AT_CHECK_MACRO([&])/'
     echo
     echo "# Obsolete macros."
-    comm -23 audefuns requires | sed 's/.*/AT_CHECK_AU_MACRO([&])/'
-  } >ac$base.tat
+    comm -23 $audefuns $requires | sed 's/.*/AT_CHECK_AU_MACRO([&])/'
+  } >$acbase.tat
 
   # In one atomic step so that if something above fails, the trap
   # preserves the old version of the file.  If there is nothing to
   # check, output /rien du tout/[1].
-  if grep AT_CHECK ac$base.tat >/dev/null 2>&1; then
-    mv -f ac$base.tat ac$base.at
+  if grep AT_CHECK $acbase.tat >/dev/null 2>&1; then
+    mv -f $acbase.tat $acbase.at
   else
-    rm -f ac$base.tat ac$base.at
-    touch ac$base.at
+    rm -f $acbase.tat $acbase.at
+    touch $acbase.at
   fi
   # Help people not to update these files by hand.
-  chmod a-w ac$base.at
+  chmod a-w $acbase.at
 done
 
-rm -f acdefuns audefuns requires
+rm -f $acdefuns $audefuns $requires
 
 trap '' 0
 exit 0
