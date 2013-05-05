@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Rules in man/ use scripts from both bin/ and tests/, so *it* goes last.
-SUBDIRS = . man
-
 ACLOCAL_AMFLAGS = -I m4
 
 ## All of these will be incrementally updated later, here or in included
@@ -27,6 +24,7 @@ MOSTLYCLEANFILES =
 CLEANFILES =
 DISTCLEANFILES =
 MAINTAINERCLEANFILES =
+SUFFIXES =
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 ChangeLog.3 \
 	     BUGS COPYINGv3 COPYING.EXCEPTION \
@@ -132,6 +130,7 @@ distclean-local:
 include $(srcdir)/bin/local.mk
 include $(srcdir)/doc/local.mk
 include $(srcdir)/lib/local.mk
+include $(srcdir)/man/local.mk
 include $(srcdir)/tests/local.mk
 
 # Perl coverage statistics.

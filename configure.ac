@@ -124,7 +124,6 @@ AC_PROG_GNU_M4
 ## Man pages.  ##
 ## ----------- ##
 
-AC_CONFIG_FILES([man/Makefile])
 AM_MISSING_PROG([HELP2MAN], [help2man])
 
 

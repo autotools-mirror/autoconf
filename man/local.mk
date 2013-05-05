@@ -15,48 +15,50 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-dist_man_MANS = \
-	$(srcdir)/autoconf.1 \
-	$(srcdir)/autoheader.1 \
-	$(srcdir)/autom4te.1 \
-	$(srcdir)/autoreconf.1 \
-	$(srcdir)/autoscan.1 \
-	$(srcdir)/autoupdate.1 \
-	$(srcdir)/ifnames.1 \
-	$(srcdir)/config.guess.1 \
-	$(srcdir)/config.sub.1
+binsrcdir = $(srcdir)/bin
+mansrcdir = $(srcdir)/man
 
-EXTRA_DIST = $(dist_man_MANS:.1=.x) common.x
-MAINTAINERCLEANFILES = $(dist_man_MANS)
+dist_man_MANS = \
+  $(mansrcdir)/autoconf.1 \
+  $(mansrcdir)/autoheader.1 \
+  $(mansrcdir)/autom4te.1 \
+  $(mansrcdir)/autoreconf.1 \
+  $(mansrcdir)/autoscan.1 \
+  $(mansrcdir)/autoupdate.1 \
+  $(mansrcdir)/ifnames.1 \
+  $(mansrcdir)/config.guess.1 \
+  $(mansrcdir)/config.sub.1
+
+EXTRA_DIST += $(dist_man_MANS:.1=.x) man/common.x
+MAINTAINERCLEANFILES += $(dist_man_MANS)
 
 # Depend on .version to get version number changes.
-common_dep = $(top_srcdir)/.version $(srcdir)/common.x
-binsrcdir = $(top_srcdir)/bin
-$(srcdir)/autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
-$(srcdir)/autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
-$(srcdir)/autom4te.1:   $(common_dep) $(binsrcdir)/autom4te.in
-$(srcdir)/autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
-$(srcdir)/autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
-$(srcdir)/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
-$(srcdir)/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
+common_dep = $(srcdir)/.version $(srcdir)/man/common.x
+$(mansrcdir)/autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
+$(mansrcdir)/autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
+$(mansrcdir)/autom4te.1:   $(common_dep) $(binsrcdir)/autom4te.in
+$(mansrcdir)/autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
+$(mansrcdir)/autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
+$(mansrcdir)/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
+$(mansrcdir)/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
 
 # Independent from this package.
-$(srcdir)/config.guess.1: $(top_srcdir)/build-aux/config.guess
-$(srcdir)/config.sub.1:   $(top_srcdir)/build-aux/config.sub
+$(mansrcdir)/config.guess.1: $(srcdir)/build-aux/config.guess
+$(mansrcdir)/config.sub.1:   $(srcdir)/build-aux/config.sub
 
 remove_time_stamp = 's/^\(\.TH[^"]*"[^"]*"[^"]*\)"[^"]*"/\1/'
 
-MOSTLYCLEANFILES = $(srcdir)/*.t
+MOSTLYCLEANFILES += $(srcdir)/man/*.t
 
-SUFFIXES = .x .1
+SUFFIXES += .x .1
 
 .x.1:
 	@echo "Updating man page $@"
-	PATH="$(top_builddir)/tests$(PATH_SEPARATOR)$(top_srcdir)/build-aux$(PATH_SEPARATOR)$$PATH"; \
+	PATH="./tests$(PATH_SEPARATOR)$(top_srcdir)/build-aux$(PATH_SEPARATOR)$$PATH"; \
 	export PATH; \
 	$(HELP2MAN) \
 	    --include=$*.x \
-	    --include=$(srcdir)/common.x \
+	    --include=$(srcdir)/man/common.x \
 	    --source='$(PACKAGE_STRING)' \
 	    --output=$@.t `echo '$*' | sed 's,.*/,,'`
 	if sed $(remove_time_stamp) $@ >$@a.t 2>/dev/null && \

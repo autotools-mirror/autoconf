@@ -20,7 +20,7 @@
 ## Freeze M4 files.  ##
 ## ----------------- ##
 
-SUFFIXES = .m4 .m4f
+SUFFIXES += .m4 .m4f
 
 AUTOM4TE_CFG = lib/autom4te.cfg
 
