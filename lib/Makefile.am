@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-SUBDIRS = Autom4te m4sugar autoconf autotest autoscan emacs
+SUBDIRS = Autom4te m4sugar autoconf autotest autoscan
 nodist_pkgdata_DATA = autom4te.cfg
 EXTRA_DIST = autom4te.in
 
@@ -42,3 +42,11 @@ autom4te.cfg: $(srcdir)/autom4te.in Makefile
 	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
 	chmod a-w autom4te.tmp
 	mv autom4te.tmp autom4te.cfg
+
+# Make Autoconf Emacs library.
+dist_lisp_LISP = emacs/autoconf-mode.el emacs/autotest-mode.el
+
+# TODO: This is required to work around a limitation in older
+#	Automake.  Remove once we can assume Automake 1.13 or later.
+CLEANFILES += autoconf-mode.elc autotest-mode.elc
+

@@ -158,7 +158,6 @@ AC_SUBST([PERL_FLOCK], [$ac_cv_perl_flock_implemented])
 ## Emacs.  ##
 ## ------- ##
 
-AC_CONFIG_FILES([lib/emacs/Makefile])
 TEST_EMACS=$EMACS
 test x"$TEST_EMACS" = xt && TEST_EMACS=
 AC_CHECK_PROGS([TEST_EMACS], [emacs xemacs], [no])
