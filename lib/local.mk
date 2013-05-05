@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+ETAGS_ARGS = $(ETAGS_FOR_AUTOCONF)
 TAGS_FILES = # Incrementally updated later.
-ETAGS_ARGS = # Likewise.
 
 # Additional checks.
 check-local: check-forbidden-patterns
@@ -102,7 +102,6 @@ nodist_autoconflib_DATA = lib/autoconf/autoconf.m4f
 CLEANFILES += $(nodist_autoconflib_DATA)
 
 TAGS_FILES += $(dist_autoconflib_DATA)
-ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
 
 forbidden_patterns_files += $(dist_autoconflib_DATA)
 
@@ -169,7 +168,6 @@ lib/m4sugar/version.m4: Makefile
 	mv $@-t $@
 
 TAGS_FILES += $(dist_m4sugarlib_DATA)
-ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
 
 forbidden_patterns_files += $(dist_m4sugarlib_DATA)
 
@@ -191,7 +189,6 @@ nodist_autotestlib_DATA = lib/autotest/autotest.m4f
 CLEANFILES += $(nodist_autotestlib_DATA)
 
 TAGS_FILES += $(dist_autotestlib_DATA)
-ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
 
 forbidden_patterns_files += $(dist_autotestlib_DATA)
 
