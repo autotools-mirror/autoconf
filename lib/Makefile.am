@@ -17,7 +17,7 @@
 
 SUBDIRS = Autom4te m4sugar autoconf autotest autoscan emacs
 nodist_pkgdata_DATA = autom4te.cfg
-EXTRA_DIST = autom4te.in freeze.mk
+EXTRA_DIST = autom4te.in
 
 edit = sed \
 	-e 's|@SHELL[@]|$(SHELL)|g' \
