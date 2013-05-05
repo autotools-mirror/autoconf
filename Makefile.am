@@ -21,6 +21,9 @@ SUBDIRS = . tests man
 
 ACLOCAL_AMFLAGS = -I m4
 
+## All of these will be incrementally updated later, here or in included
+## makefile fragments.
+ETAGS_ARGS =
 MOSTLYCLEANFILES =
 CLEANFILES =
 

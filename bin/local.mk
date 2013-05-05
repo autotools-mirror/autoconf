@@ -91,4 +91,4 @@ ETAGS_PERL = --lang=perl \
 ETAGS_SH = --lang=none --regex='/\($(WORD_REGEXP)\)=/\1/' \
   bin/autoconf.in
 
-ETAGS_ARGS = $(ETAGS_PERL) $(ETAGS_SH)
+ETAGS_ARGS += $(ETAGS_PERL) $(ETAGS_SH)

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ETAGS_ARGS = $(ETAGS_FOR_AUTOCONF)
+ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
 TAGS_FILES = # Incrementally updated later.
 
 # Additional checks.
@@ -41,7 +41,7 @@ dist_perllib_DATA = \
   lib/Autom4te/XFile.pm
 
 TAGS_FILES += $(dist_perllib_DATA)
-ETAGS_ARGS += --lang=perl
+# Note: ETAGS_ARGS should have already been extended to handle perl files.
 
 ## ------------------------------------------ ##
 ## Make Autom4te default configuration file.  ##
