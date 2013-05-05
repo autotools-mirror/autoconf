@@ -211,7 +211,7 @@ AC_CONFIG_FILES([Makefile
 		 lib/Makefile lib/Autom4te/Makefile lib/autoscan/Makefile
 		 lib/m4sugar/Makefile
 		 lib/autoconf/Makefile lib/autotest/Makefile
-		 bin/Makefile])
+		 ])
 
 AC_OUTPUT
 # Report the state of this version of Autoconf if this is a beta.

@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# bin/ must be run first, as it builds executables needed for tests.
 # autom4te uses autotest.m4f to generate 'testsuite', so build tests last.
 # Rules in man/ use scripts from both bin/ and tests/, so *it* goes last.
-SUBDIRS = bin . lib tests man
+SUBDIRS = . lib tests man
 
 ACLOCAL_AMFLAGS = -I m4
+
+MOSTLYCLEANFILES =
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 ChangeLog.3 \
 	     BUGS COPYINGv3 COPYING.EXCEPTION \
@@ -102,6 +103,7 @@ dist-hook: gen-ChangeLog
 distclean-local:
 	if test x"$(VPATH)" != x ; then rm -f GNUmakefile ; fi
 
+include $(srcdir)/bin/local.mk
 include $(srcdir)/doc/local.mk
 
 # Perl coverage statistics.
