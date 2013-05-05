@@ -42,8 +42,9 @@ MY_AUTOM4TE =									\
 # It may happen that the output does not end with an end of line, hence
 # force an end of line when reporting errors.
 .m4.m4f:
+	$(MKDIR_P) $(@D)
 	$(MY_AUTOM4TE)				\
-		--language=$*			\
+		--language=$(*F)		\
 		--freeze			\
 		--output=$@
 
