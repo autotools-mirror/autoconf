@@ -18,7 +18,7 @@
 # bin/ must be run first, as it builds executables needed for tests.
 # autom4te uses autotest.m4f to generate 'testsuite', so build tests last.
 # Rules in man/ use scripts from both bin/ and tests/, so *it* goes last.
-SUBDIRS = bin . lib doc tests man
+SUBDIRS = bin . lib tests man
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -35,7 +35,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 ChangeLog.3 \
 ## INSTALL.  ##
 ## --------- ##
 
-AM_MAKEINFOFLAGS = --no-headers --no-validate --no-split
+custom_MAKEINFOFLAGS = --no-headers --no-validate --no-split
 
 if MAKE_CASE_SENSITIVE
 pkgdata_DATA = $(srcdir)/INSTALL
@@ -49,7 +49,7 @@ CONVERT_QUOTES = "s/\`\([^']*\)'/'\1'/g"
 $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 	echo @firstparagraphindent insert				\
 	  | cat - $(top_srcdir)/doc/install.texi > tmp.texi
-	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS)		\
+	$(MAKEINFO) $(custom_MAKEINFOFLAGS) $(MAKEINFOFLAGS)		\
 	     --plaintext tmp.texi					\
 	  | sed -e $(CONVERT_QUOTES) -e $(OMIT_TRAILING_EMPTY_LINES)	\
 	     > $@-t && mv $@-t $@
@@ -101,6 +101,8 @@ dist-hook: gen-ChangeLog
 # TODO remove this once automake vs. AC_CONFIG_LINKS issue is fixed.
 distclean-local:
 	if test x"$(VPATH)" != x ; then rm -f GNUmakefile ; fi
+
+include $(srcdir)/doc/local.mk
 
 # Perl coverage statistics.
 PERL_COVERAGE_DB = `pwd`/cover_db
