@@ -27,6 +27,11 @@ AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([1.11 dist-xz readme-alpha no-texinfo.tex std-options])
 
+# Keep this on a line of its own, since it must be found and processed
+# by the 'update-release-year' rule in our Makefile.
+RELEASE_YEAR=2013
+AC_SUBST([RELEASE_YEAR])
+
 AB_INIT
 
 # We use '/bin/sh -n script' to check that there are no syntax errors

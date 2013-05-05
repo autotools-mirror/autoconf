@@ -162,10 +162,6 @@ nodist_m4sugarlib_DATA = \
 
 CLEANFILES += $(nodist_m4sugarlib_DATA)
 
-# Get the release year from ../ChangeLog.
-RELEASE_YEAR = \
-  `sed 's/^\([0-9][0-9][0-9][0-9]\).*/\1/;q' $(top_srcdir)/ChangeLog`
-
 # The ':;' in the second line of the recipe works around a redirected
 # compound command bash exit status bug.
 m4sugar/version.m4: Makefile
@@ -182,7 +178,7 @@ m4sugar/version.m4: Makefile
 	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])' && \
 	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])' && \
 	  echo 'm4_define([m4_PACKAGE_URL],       [$(PACKAGE_URL)])' && \
-	  echo 'm4_define([m4_PACKAGE_YEAR],      ['$(RELEASE_YEAR)'])'; \
+	  echo 'm4_define([m4_PACKAGE_YEAR],      [$(RELEASE_YEAR)])'; \
 	} > $@-t
 	mv $@-t $@
 

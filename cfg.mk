@@ -123,6 +123,18 @@ update-copyright-env = \
   UPDATE_COPYRIGHT_USE_INTERVALS=1 \
   UPDATE_COPYRIGHT_MAX_LINE_LENGTH=72
 
+update-copyright: update-release-year
+update-release-year:
+	$(AM_V_GEN):; \
+	if test -n "$$UPDATE_COPYRIGHT_YEAR"; then \
+	   current_year=$$UPDATE_COPYRIGHT_YEAR; \
+	else \
+	  current_year=`date +%Y` && test -n "$$current_year" \
+	    || { echo "$@: cannot get current year" >&2; exit 1; }; \
+	fi; \
+	sed -i "/^RELEASE_YEAR=/s/=.*$$/=$$current_year/" configure.ac
+.PHONY: update-release-year
+
 # Prevent incorrect NEWS edits.
 old_NEWS_hash = 8532b4ed4fb456eb71071a5cf8c258d4
 

@@ -38,10 +38,6 @@ EXTRA_DIST += \
 # Files that should be removed, but which Automake does not know.
 MOSTLYCLEANFILES += $(bin_SCRIPTS) bin/autoconf.in bin/*.tmp
 
-# Get the release year from ChangeLog.
-RELEASE_YEAR = \
-  `sed 's/^\([0-9][0-9][0-9][0-9]\).*/\1/;q' $(top_srcdir)/ChangeLog`
-
 ## ------------- ##
 ## The scripts.  ##
 ## ------------- ##
@@ -60,7 +56,7 @@ edit = sed \
 	-e 's|@M4_DEBUGFILE[@]|$(M4_DEBUGFILE)|g' \
 	-e 's|@M4_GNU[@]|$(M4_GNU)|g' \
 	-e 's|@AWK[@]|$(AWK)|g' \
-	-e 's|@RELEASE_YEAR[@]|'$(RELEASE_YEAR)'|g' \
+	-e 's|@RELEASE_YEAR[@]|$(RELEASE_YEAR)|g' \
 	-e 's|@VERSION[@]|$(VERSION)|g' \
 	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \
 	-e 's|@configure_input[@]|Generated from $@.in; do not edit by hand.|g'
