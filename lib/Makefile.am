@@ -15,12 +15,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-## Required by rules to build autoscan and autotest libraries.
+TAGS_FILES = # Incrementally updated later.
+ETAGS_ARGS = # Likewise.
+EXTRA_DIST = # Likewise.
+
+## Required by rules to build several m4 libraries.
 include $(srcdir)/freeze.mk
 
-SUBDIRS = Autom4te m4sugar autoconf
+## Checks.
+check-local: check-forbidden-patterns
+forbidden_patterns = -e '^_*EOF' -e ' cmp '
+forbidden_patterns_files = # Incrementally updated later.
+
+SUBDIRS = Autom4te autoconf
+
+## ------------------------------------------ ##
+## Make Autom4te default configuration file.  ##
+## ------------------------------------------ ##
+
 nodist_pkgdata_DATA = autom4te.cfg
-EXTRA_DIST = autom4te.in
+EXTRA_DIST += autom4te.in
 
 edit = sed \
 	-e 's|@SHELL[@]|$(SHELL)|g' \
@@ -75,6 +89,56 @@ autoscan/autoscan.list: $(srcdir)/autoscan/autoscan.pre $(autoconf_m4f_dependenc
 	  $(MY_AUTOM4TE) --cache '' -M -l autoconf -t'AN_OUTPUT:$$1: $$2		$$3' \
 	) | LC_ALL=C sort >>$@
 
+## ----------------------------------- ##
+## Make Autoconf library for M4sugar.  ##
+## ----------------------------------- ##
+
+m4sugarlibdir = $(pkgdatadir)/m4sugar
+
+dist_m4sugarlib_DATA = \
+  m4sugar/m4sugar.m4 \
+  m4sugar/foreach.m4 \
+  m4sugar/m4sh.m4
+
+nodist_m4sugarlib_DATA = \
+  m4sugar/version.m4 \
+  m4sugar/m4sugar.m4f \
+  m4sugar/m4sh.m4f
+
+CLEANFILES += $(nodist_m4sugarlib_DATA)
+
+# Get the release year from ../ChangeLog.
+RELEASE_YEAR = \
+  `sed 's/^\([0-9][0-9][0-9][0-9]\).*/\1/;q' $(top_srcdir)/ChangeLog`
+
+# The ':;' in the second line of the recipe works around a redirected
+# compound command bash exit status bug.
+m4sugar/version.m4: Makefile
+	$(MKDIR_P) $(@D)
+	:;{ \
+	  echo '# This file is part of -*- Autoconf -*-.' && \
+	  echo '# Version of Autoconf.' && \
+	  echo '# Copyright (C) 1999, 2000, 2001, 2002, 2006, 2007, 2009' && \
+	  echo '# Free Software Foundation, Inc.' && \
+	  echo  &&\
+	  echo 'm4_define([m4_PACKAGE_NAME],      [$(PACKAGE_NAME)])' && \
+	  echo 'm4_define([m4_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])' && \
+	  echo 'm4_define([m4_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])' && \
+	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])' && \
+	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])' && \
+	  echo 'm4_define([m4_PACKAGE_URL],       [$(PACKAGE_URL)])' && \
+	  echo 'm4_define([m4_PACKAGE_YEAR],      ['$(RELEASE_YEAR)'])'; \
+	} > $@-t
+	mv $@-t $@
+
+TAGS_FILES += $(dist_m4sugarlib_DATA)
+ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
+
+forbidden_patterns_files += $(dist_m4sugarlib_DATA)
+
+m4sugar/m4sugar.m4f: $(m4sugar_m4f_dependencies)
+m4sugar/m4sh.m4f: $(m4sh_m4f_dependencies)
+
 ## ----------------------- ##
 ## Make Autotest library.  ##
 ## ----------------------- ##
@@ -89,14 +153,9 @@ dist_autotestlib_DATA = \
 nodist_autotestlib_DATA = autotest/autotest.m4f
 CLEANFILES += $(nodist_autotestlib_DATA)
 
-## Building TAGS.
-TAGS_FILES = $(dist_autotestlib_DATA)
-ETAGS_ARGS = $(ETAGS_FOR_AUTOCONF)
+TAGS_FILES += $(dist_autotestlib_DATA)
+ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
 
-## Checks.
-check-local: check-forbidden-patterns
-forbidden_patterns = -e '^_*EOF' -e ' cmp '
-forbidden_patterns_files = $(dist_autotestlib_DATA)
+forbidden_patterns_files += $(dist_autotestlib_DATA)
 
-## The frozen files.
 autotest/autotest.m4f: $(autotest_m4f_dependencies)

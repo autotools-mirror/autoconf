@@ -58,7 +58,7 @@ m4f_dependencies = $(top_builddir)/bin/autom4te $(AUTOM4TE_CFG)
 
 # For parallel builds.
 $(build_libdir)/m4sugar/version.m4:
-	cd $(build_libdir)/m4sugar && $(MAKE) $(AM_MAKEFLAGS) version.m4
+	cd $(build_libdir) && $(MAKE) $(AM_MAKEFLAGS) m4sugar/version.m4
 
 m4sugar_m4f_dependencies =			\
 	$(m4f_dependencies)			\
