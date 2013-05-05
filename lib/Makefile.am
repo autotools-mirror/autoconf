@@ -27,7 +27,7 @@ check-local: check-forbidden-patterns
 forbidden_patterns = -e '^_*EOF' -e ' cmp '
 forbidden_patterns_files = # Incrementally updated later.
 
-SUBDIRS = Autom4te autoconf
+SUBDIRS = Autom4te
 
 ## ------------------------------------------ ##
 ## Make Autom4te default configuration file.  ##
@@ -71,8 +71,45 @@ dist_lisp_LISP = emacs/autoconf-mode.el emacs/autotest-mode.el
 CLEANFILES += autoconf-mode.elc autotest-mode.elc
 
 ## ----------------------- ##
-## Make Autoscan library.  ##
+## Make Autoconf library.  ##
 ## ----------------------- ##
+
+autoconflibdir = $(pkgdatadir)/autoconf
+
+dist_autoconflib_DATA = \
+  autoconf/autoconf.m4 \
+  autoconf/general.m4 \
+  autoconf/status.m4 \
+  autoconf/oldnames.m4 \
+  autoconf/specific.m4 \
+  autoconf/autoheader.m4 \
+  autoconf/autoupdate.m4 \
+  autoconf/autotest.m4 \
+  autoconf/autoscan.m4 \
+  autoconf/lang.m4 \
+  autoconf/c.m4 \
+  autoconf/erlang.m4 \
+  autoconf/fortran.m4 \
+  autoconf/functions.m4 \
+  autoconf/go.m4 \
+  autoconf/headers.m4 \
+  autoconf/types.m4 \
+  autoconf/libs.m4 \
+  autoconf/programs.m4
+
+nodist_autoconflib_DATA = autoconf/autoconf.m4f
+CLEANFILES += $(nodist_autoconflib_DATA)
+
+TAGS_FILES += $(dist_autoconflib_DATA)
+ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
+
+forbidden_patterns_files += $(dist_autoconflib_DATA)
+
+autoconf/autoconf.m4f: $(autoconf_m4f_dependencies)
+
+## ------------------------ ##
+##  Make Autoscan library.  ##
+## ------------------------ ##
 
 autoscanlibdir = $(pkgdatadir)/autoscan
 

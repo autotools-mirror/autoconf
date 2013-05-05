@@ -208,7 +208,6 @@ AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
 AC_CONFIG_FILES([Makefile
 		 lib/Makefile lib/Autom4te/Makefile
-		 lib/autoconf/Makefile
 		 ])
 
 AC_OUTPUT
