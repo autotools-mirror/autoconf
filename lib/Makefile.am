@@ -27,7 +27,25 @@ check-local: check-forbidden-patterns
 forbidden_patterns = -e '^_*EOF' -e ' cmp '
 forbidden_patterns_files = # Incrementally updated later.
 
-SUBDIRS = Autom4te
+## ---------------------------------------------------------------- ##
+## Auxiliary perl modules used by autom4te and other perl scripts.  ##
+## ---------------------------------------------------------------- ##
+
+perllibdir = $(pkgdatadir)/Autom4te
+
+dist_perllib_DATA = \
+  Autom4te/C4che.pm \
+  Autom4te/ChannelDefs.pm \
+  Autom4te/Channels.pm \
+  Autom4te/Configure_ac.pm \
+  Autom4te/FileUtils.pm \
+  Autom4te/General.pm \
+  Autom4te/Getopt.pm \
+  Autom4te/Request.pm \
+  Autom4te/XFile.pm
+
+TAGS_FILES += $(dist_perllib_DATA)
+ETAGS_ARGS += --lang=perl
 
 ## ------------------------------------------ ##
 ## Make Autom4te default configuration file.  ##
