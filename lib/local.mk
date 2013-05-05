@@ -17,12 +17,8 @@
 
 TAGS_FILES = # Incrementally updated later.
 ETAGS_ARGS = # Likewise.
-EXTRA_DIST = # Likewise.
 
-## Required by rules to build several m4 libraries.
-include $(srcdir)/freeze.mk
-
-## Checks.
+# Additional checks.
 check-local: check-forbidden-patterns
 forbidden_patterns = -e '^_*EOF' -e ' cmp '
 forbidden_patterns_files = # Incrementally updated later.
@@ -34,15 +30,15 @@ forbidden_patterns_files = # Incrementally updated later.
 perllibdir = $(pkgdatadir)/Autom4te
 
 dist_perllib_DATA = \
-  Autom4te/C4che.pm \
-  Autom4te/ChannelDefs.pm \
-  Autom4te/Channels.pm \
-  Autom4te/Configure_ac.pm \
-  Autom4te/FileUtils.pm \
-  Autom4te/General.pm \
-  Autom4te/Getopt.pm \
-  Autom4te/Request.pm \
-  Autom4te/XFile.pm
+  lib/Autom4te/C4che.pm \
+  lib/Autom4te/ChannelDefs.pm \
+  lib/Autom4te/Channels.pm \
+  lib/Autom4te/Configure_ac.pm \
+  lib/Autom4te/FileUtils.pm \
+  lib/Autom4te/General.pm \
+  lib/Autom4te/Getopt.pm \
+  lib/Autom4te/Request.pm \
+  lib/Autom4te/XFile.pm
 
 TAGS_FILES += $(dist_perllib_DATA)
 ETAGS_ARGS += --lang=perl
@@ -51,38 +47,25 @@ ETAGS_ARGS += --lang=perl
 ## Make Autom4te default configuration file.  ##
 ## ------------------------------------------ ##
 
-nodist_pkgdata_DATA = autom4te.cfg
-EXTRA_DIST += autom4te.in
-
-edit = sed \
-	-e 's|@SHELL[@]|$(SHELL)|g' \
-	-e 's|@PERL[@]|$(PERL)|g' \
-	-e 's|@bindir[@]|$(bindir)|g' \
-	-e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
-	-e 's|@prefix[@]|$(prefix)|g' \
-	-e 's|@autoconf-name[@]|'`echo autoconf | sed '$(transform)'`'|g' \
-	-e 's|@autoheader-name[@]|'`echo autoheader | sed '$(transform)'`'|g' \
-	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
-	-e 's|@M4[@]|$(M4)|g' \
-	-e 's|@AWK[@]|$(AWK)|g' \
-	-e 's|@VERSION[@]|$(VERSION)|g' \
-	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g'
+nodist_pkgdata_DATA = lib/autom4te.cfg
+EXTRA_DIST += lib/autom4te.in
 
 # All the files below depend on Makefile so that they are rebuilt
 # when the prefix, etc. changes. Unfortunately, suffix rules
 # cannot have additional dependencies, so we have to use explicit rules.
-CLEANFILES = autom4te.cfg
-autom4te.cfg: $(srcdir)/autom4te.in Makefile
-	rm -f autom4te.cfg autom4te.tmp
-	$(edit) $(srcdir)/autom4te.in >autom4te.tmp
-	chmod a-w autom4te.tmp
-	mv autom4te.tmp autom4te.cfg
+CLEANFILES += lib/autom4te.cfg
+lib/autom4te.cfg: $(srcdir)/lib/autom4te.in Makefile
+	rm -f $@ $@-t
+	$(MKDIR_P) $(@D)
+	$(edit) $(srcdir)/lib/autom4te.in >$@-t
+	chmod a-w $@-t
+	mv -f $@-t $@
 
 ## ----------------------------- ##
 ## Make Autoconf Emacs library.  ##
 ## ----------------------------- ##
 
-dist_lisp_LISP = emacs/autoconf-mode.el emacs/autotest-mode.el
+dist_lisp_LISP = lib/emacs/autoconf-mode.el lib/emacs/autotest-mode.el
 
 # TODO: This is required to work around a limitation in older
 #	Automake.  Remove once we can assume Automake 1.13 or later.
@@ -95,27 +78,27 @@ CLEANFILES += autoconf-mode.elc autotest-mode.elc
 autoconflibdir = $(pkgdatadir)/autoconf
 
 dist_autoconflib_DATA = \
-  autoconf/autoconf.m4 \
-  autoconf/general.m4 \
-  autoconf/status.m4 \
-  autoconf/oldnames.m4 \
-  autoconf/specific.m4 \
-  autoconf/autoheader.m4 \
-  autoconf/autoupdate.m4 \
-  autoconf/autotest.m4 \
-  autoconf/autoscan.m4 \
-  autoconf/lang.m4 \
-  autoconf/c.m4 \
-  autoconf/erlang.m4 \
-  autoconf/fortran.m4 \
-  autoconf/functions.m4 \
-  autoconf/go.m4 \
-  autoconf/headers.m4 \
-  autoconf/types.m4 \
-  autoconf/libs.m4 \
-  autoconf/programs.m4
+  lib/autoconf/autoconf.m4 \
+  lib/autoconf/general.m4 \
+  lib/autoconf/status.m4 \
+  lib/autoconf/oldnames.m4 \
+  lib/autoconf/specific.m4 \
+  lib/autoconf/autoheader.m4 \
+  lib/autoconf/autoupdate.m4 \
+  lib/autoconf/autotest.m4 \
+  lib/autoconf/autoscan.m4 \
+  lib/autoconf/lang.m4 \
+  lib/autoconf/c.m4 \
+  lib/autoconf/erlang.m4 \
+  lib/autoconf/fortran.m4 \
+  lib/autoconf/functions.m4 \
+  lib/autoconf/go.m4 \
+  lib/autoconf/headers.m4 \
+  lib/autoconf/types.m4 \
+  lib/autoconf/libs.m4 \
+  lib/autoconf/programs.m4
 
-nodist_autoconflib_DATA = autoconf/autoconf.m4f
+nodist_autoconflib_DATA = lib/autoconf/autoconf.m4f
 CLEANFILES += $(nodist_autoconflib_DATA)
 
 TAGS_FILES += $(dist_autoconflib_DATA)
@@ -123,7 +106,7 @@ ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
 
 forbidden_patterns_files += $(dist_autoconflib_DATA)
 
-autoconf/autoconf.m4f: $(autoconf_m4f_dependencies)
+lib/autoconf/autoconf.m4f: $(autoconf_m4f_dependencies)
 
 ## ------------------------ ##
 ##  Make Autoscan library.  ##
@@ -131,18 +114,21 @@ autoconf/autoconf.m4f: $(autoconf_m4f_dependencies)
 
 autoscanlibdir = $(pkgdatadir)/autoscan
 
-EXTRA_DIST += autoscan/autoscan.pre
-nodist_autoscanlib_DATA = autoscan/autoscan.list
-CLEANFILES += autoscan/autoscan.list
+EXTRA_DIST += lib/autoscan/autoscan.pre
+nodist_autoscanlib_DATA = lib/autoscan/autoscan.list
+CLEANFILES += lib/autoscan/autoscan.list
 
-autoscan/autoscan.list: $(srcdir)/autoscan/autoscan.pre $(autoconf_m4f_dependencies) Makefile.am
+lib/autoscan/autoscan.list: $(srcdir)/lib/autoscan/autoscan.pre
 	$(MKDIR_P) $(@D)
 	echo '# Automatically Generated: do not edit this file' >$@
-	sed '/^[#]/!q' $(srcdir)/autoscan/autoscan.pre >>$@
+	sed '/^[#]/!q' $(srcdir)/lib/autoscan/autoscan.pre >>$@
 	( \
-	  sed -n '/^[^#]/p' $(srcdir)/autoscan/autoscan.pre; \
-	  $(MY_AUTOM4TE) --cache '' -M -l autoconf -t'AN_OUTPUT:$$1: $$2		$$3' \
+	  sed -n '/^[^#]/p' $(srcdir)/lib/autoscan/autoscan.pre; \
+	  $(MY_AUTOM4TE) --cache '' -M -l autoconf-without-aclocal-m4 \
+	                 -t'AN_OUTPUT:$$1: $$2		$$3' \
 	) | LC_ALL=C sort >>$@
+
+lib/autoscan/autoscan.list: $(autoconf_m4f_dependencies) Makefile
 
 ## ----------------------------------- ##
 ## Make Autoconf library for M4sugar.  ##
@@ -151,20 +137,20 @@ autoscan/autoscan.list: $(srcdir)/autoscan/autoscan.pre $(autoconf_m4f_dependenc
 m4sugarlibdir = $(pkgdatadir)/m4sugar
 
 dist_m4sugarlib_DATA = \
-  m4sugar/m4sugar.m4 \
-  m4sugar/foreach.m4 \
-  m4sugar/m4sh.m4
+  lib/m4sugar/m4sugar.m4 \
+  lib/m4sugar/foreach.m4 \
+  lib/m4sugar/m4sh.m4
 
 nodist_m4sugarlib_DATA = \
-  m4sugar/version.m4 \
-  m4sugar/m4sugar.m4f \
-  m4sugar/m4sh.m4f
+  lib/m4sugar/version.m4 \
+  lib/m4sugar/m4sugar.m4f \
+  lib/m4sugar/m4sh.m4f
 
 CLEANFILES += $(nodist_m4sugarlib_DATA)
 
 # The ':;' in the second line of the recipe works around a redirected
 # compound command bash exit status bug.
-m4sugar/version.m4: Makefile
+lib/m4sugar/version.m4: Makefile
 	$(MKDIR_P) $(@D)
 	:;{ \
 	  echo '# This file is part of -*- Autoconf -*-.' && \
@@ -187,8 +173,8 @@ ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
 
 forbidden_patterns_files += $(dist_m4sugarlib_DATA)
 
-m4sugar/m4sugar.m4f: $(m4sugar_m4f_dependencies)
-m4sugar/m4sh.m4f: $(m4sh_m4f_dependencies)
+lib/m4sugar/m4sugar.m4f: $(m4sugar_m4f_dependencies)
+lib/m4sugar/m4sh.m4f: $(m4sh_m4f_dependencies)
 
 ## ----------------------- ##
 ## Make Autotest library.  ##
@@ -197,11 +183,11 @@ m4sugar/m4sh.m4f: $(m4sh_m4f_dependencies)
 autotestlibdir = $(pkgdatadir)/autotest
 
 dist_autotestlib_DATA = \
-  autotest/autotest.m4 \
-  autotest/general.m4 \
-  autotest/specific.m4
+  lib/autotest/autotest.m4 \
+  lib/autotest/general.m4 \
+  lib/autotest/specific.m4
 
-nodist_autotestlib_DATA = autotest/autotest.m4f
+nodist_autotestlib_DATA = lib/autotest/autotest.m4f
 CLEANFILES += $(nodist_autotestlib_DATA)
 
 TAGS_FILES += $(dist_autotestlib_DATA)
@@ -209,4 +195,4 @@ ETAGS_ARGS += $(ETAGS_FOR_AUTOCONF)
 
 forbidden_patterns_files += $(dist_autotestlib_DATA)
 
-autotest/autotest.m4f: $(autotest_m4f_dependencies)
+lib/autotest/autotest.m4f: $(autotest_m4f_dependencies)

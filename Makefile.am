@@ -17,11 +17,12 @@
 
 # autom4te uses autotest.m4f to generate 'testsuite', so build tests last.
 # Rules in man/ use scripts from both bin/ and tests/, so *it* goes last.
-SUBDIRS = . lib tests man
+SUBDIRS = . tests man
 
 ACLOCAL_AMFLAGS = -I m4
 
 MOSTLYCLEANFILES =
+CLEANFILES =
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 ChangeLog.3 \
 	     BUGS COPYINGv3 COPYING.EXCEPTION \
@@ -31,6 +32,27 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 ChangeLog.3 \
 	     build-aux/announce-gen build-aux/gnupload \
 	     build-aux/gitlog-to-changelog \
 	     .prev-version .version
+
+edit = sed \
+	-e 's|@SHELL[@]|$(SHELL)|g' \
+	-e 's|@PERL[@]|$(PERL)|g' \
+	-e 's|@PERL_FLOCK[@]|$(PERL_FLOCK)|g' \
+	-e 's|@bindir[@]|$(bindir)|g' \
+	-e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
+	-e 's|@prefix[@]|$(prefix)|g' \
+	-e 's|@autoconf-name[@]|'`echo autoconf | sed '$(transform)'`'|g' \
+	-e 's|@autoheader-name[@]|'`echo autoheader | sed '$(transform)'`'|g' \
+	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
+	-e 's|@M4[@]|$(M4)|g' \
+	-e 's|@M4_DEBUGFILE[@]|$(M4_DEBUGFILE)|g' \
+	-e 's|@M4_GNU[@]|$(M4_GNU)|g' \
+	-e 's|@AWK[@]|$(AWK)|g' \
+	-e 's|@RELEASE_YEAR[@]|$(RELEASE_YEAR)|g' \
+	-e 's|@VERSION[@]|$(VERSION)|g' \
+	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \
+	-e 's|@configure_input[@]|Generated from $@.in; do not edit by hand.|g'
+
+include $(srcdir)/lib/freeze.mk
 
 ## --------- ##
 ## INSTALL.  ##
@@ -105,6 +127,7 @@ distclean-local:
 
 include $(srcdir)/bin/local.mk
 include $(srcdir)/doc/local.mk
+include $(srcdir)/lib/local.mk
 
 # Perl coverage statistics.
 PERL_COVERAGE_DB = `pwd`/cover_db

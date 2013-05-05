@@ -24,7 +24,7 @@ SUFFIXES = .m4 .m4f
 
 AUTOM4TE_CFG = $(top_builddir)/lib/autom4te.cfg
 $(AUTOM4TE_CFG): $(top_srcdir)/lib/autom4te.in
-	cd $(top_builddir)/lib && $(MAKE) $(AM_MAKEFLAGS) autom4te.cfg
+	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) lib/autom4te.cfg
 
 # Do not use AUTOM4TE here, since maint.mk (my-distcheck)
 # checks if we are independent of Autoconf by defining AUTOM4TE (and
@@ -43,9 +43,13 @@ MY_AUTOM4TE =									\
 # force an end of line when reporting errors.
 .m4.m4f:
 	$(MKDIR_P) $(@D)
-	$(MY_AUTOM4TE)				\
-		--language=$(*F)		\
-		--freeze			\
+	lang=`echo '$*' | sed 's,.*/,,'` \
+	  && if test $$lang = autoconf; then \
+	       lang=autoconf-without-aclocal-m4; \
+	     else :; fi \
+	  && $(MY_AUTOM4TE) \
+		--language=$$lang \
+		--freeze \
 		--output=$@
 
 # Factor the dependencies between all the frozen files.

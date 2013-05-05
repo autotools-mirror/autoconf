@@ -27,7 +27,7 @@ EXTRA_DIST += doc/gendocs_template
 
 # Files from texi2dvi that should be removed, but which Automake does
 # not know.
-CLEANFILES = \
+CLEANFILES += \
   autoconf.ACs \
   autoconf.cvs \
   autoconf.MSs \

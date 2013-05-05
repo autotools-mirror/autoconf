@@ -211,7 +211,7 @@ AC_PROG_MAKE_CASE_SENSITIVE
 dnl Allow maintainer rules under GNU make even in VPATH builds.
 AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
-AC_CONFIG_FILES([Makefile lib/Makefile])
+AC_CONFIG_FILES([Makefile])
 
 AC_OUTPUT
 # Report the state of this version of Autoconf if this is a beta.

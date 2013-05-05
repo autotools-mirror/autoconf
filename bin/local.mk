@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-include $(srcdir)/lib/freeze.mk
-
 bin_SCRIPTS = \
   bin/autoconf \
   bin/autoheader \
@@ -41,25 +39,6 @@ MOSTLYCLEANFILES += $(bin_SCRIPTS) bin/autoconf.in bin/*.tmp
 ## ------------- ##
 ## The scripts.  ##
 ## ------------- ##
-
-edit = sed \
-	-e 's|@SHELL[@]|$(SHELL)|g' \
-	-e 's|@PERL[@]|$(PERL)|g' \
-	-e 's|@PERL_FLOCK[@]|$(PERL_FLOCK)|g' \
-	-e 's|@bindir[@]|$(bindir)|g' \
-	-e 's|@pkgdatadir[@]|$(pkgdatadir)|g' \
-	-e 's|@prefix[@]|$(prefix)|g' \
-	-e 's|@autoconf-name[@]|'`echo autoconf | sed '$(transform)'`'|g' \
-	-e 's|@autoheader-name[@]|'`echo autoheader | sed '$(transform)'`'|g' \
-	-e 's|@autom4te-name[@]|'`echo autom4te | sed '$(transform)'`'|g' \
-	-e 's|@M4[@]|$(M4)|g' \
-	-e 's|@M4_DEBUGFILE[@]|$(M4_DEBUGFILE)|g' \
-	-e 's|@M4_GNU[@]|$(M4_GNU)|g' \
-	-e 's|@AWK[@]|$(AWK)|g' \
-	-e 's|@RELEASE_YEAR[@]|$(RELEASE_YEAR)|g' \
-	-e 's|@VERSION[@]|$(VERSION)|g' \
-	-e 's|@PACKAGE_NAME[@]|$(PACKAGE_NAME)|g' \
-	-e 's|@configure_input[@]|Generated from $@.in; do not edit by hand.|g'
 
 # autoconf is written in M4sh.
 # FIXME: this target should depend on the frozen files below lib/m4sugar,
