@@ -139,7 +139,7 @@ PERL_COVERAGE_FLAGS = -MDevel::Cover=-db,$(PERL_COVERAGE_DB),-silent,on,-summary
 PERL_COVER = cover
 
 check-coverage-run: all
-	$(mkinstalldirs) $(PERL_COVERAGE_DB)
+	$(MKDIR_P) $(PERL_COVERAGE_DB)
 	PERL5OPT="$(PERL_COVERAGE_FLAGS)"; export PERL5OPT; \
 	$(MAKE) $(AM_MAKEFLAGS) check
 
