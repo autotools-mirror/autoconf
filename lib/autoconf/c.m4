@@ -490,31 +490,7 @@ _AC_PROG_CC_C11([ac_prog_cc_stdc=c11
 		       ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89],
 		      [ac_prog_cc_stdc=no
 		       ac_cv_prog_cc_stdc=no])])])
-dnl This is a hook for Automake and its 'subdir-objects' mode, which
-dnl needs to know whether $CC supports "-c -o" together or not.  See
-dnl automake bug#13378, in particular <http://debbugs.gnu.org/13378#73>.
-dnl FIXME: there is some code duplication with AC_PROG_CC_C_O here.
-m4_ifdef([_AM_PROG_CC_C_O_HELPME],
-[set dummy $CC; ac_cc=`AS_ECHO(["$[2]"]) | \
-                       sed 's/[[^a-zA-Z0-9_]]/_/g;s/^[[0-9]]/_/'`
-AC_MSG_CHECKING([whether $CC understands -c and -o together])
-AC_CACHE_VAL([ac_cv_prog_cc_${ac_cc}_c_o],
-[AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
-# Make sure it works both with $CC and with simple cc.
-# We do the test twice because some compilers refuse to overwrite an
-# existing .o file with -o, though they will create one.
-ac_try='$CC -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
-rm -f conftest2.*
-if _AC_DO_VAR(ac_try) && test -f conftest2.$ac_objext
-then
-  AC_MSG_RESULT([yes])
-  eval ac_cv_prog_cc_${ac_cc}_c_o=yes
-else
-  AC_MSG_RESULT([no])
-  eval ac_cv_prog_cc_${ac_cc}_c_o=no
-fi
-rm -rf core conftest*
-])])dnl
+dnl
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CC
 
