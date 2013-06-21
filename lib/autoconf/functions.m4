@@ -2015,7 +2015,7 @@ AU_ALIAS([AC_VFORK], [AC_FUNC_FORK])
 # Why the heck is that _doprnt does not define HAVE__DOPRNT???
 # That the logical name!
 AC_DEFUN([AC_FUNC_VPRINTF],
-[AC_CHECK_FUNCS(vprintf, []
+[AC_CHECK_FUNCS(vprintf, [],
 [AC_CHECK_FUNC(_doprnt,
 	       [AC_DEFINE(HAVE_DOPRNT, 1,
 			  [Define to 1 if you don't have `vprintf' but do have
