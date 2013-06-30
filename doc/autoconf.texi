@@ -4641,9 +4641,9 @@ solution involves code like the following.
     (sizeof (x) == sizeof (long double) ? isnan_ld (x) \
      : sizeof (x) == sizeof (double) ? isnan_d (x) \
      : isnan_f (x))
-static inline int isnan_f  (float       x) @{ return x != x; @}
-static inline int isnan_d  (double      x) @{ return x != x; @}
-static inline int isnan_ld (long double x) @{ return x != x; @}
+static int isnan_f  (float       x) @{ return x != x; @}
+static int isnan_d  (double      x) @{ return x != x; @}
+static int isnan_ld (long double x) @{ return x != x; @}
 #endif
 
 #ifndef isinf
@@ -4651,18 +4651,16 @@ static inline int isnan_ld (long double x) @{ return x != x; @}
     (sizeof (x) == sizeof (long double) ? isinf_ld (x) \
      : sizeof (x) == sizeof (double) ? isinf_d (x) \
      : isinf_f (x))
-static inline int isinf_f  (float       x)
+static int isinf_f  (float       x)
 @{ return !isnan (x) && isnan (x - x); @}
-static inline int isinf_d  (double      x)
+static int isinf_d  (double      x)
 @{ return !isnan (x) && isnan (x - x); @}
-static inline int isinf_ld (long double x)
+static int isinf_ld (long double x)
 @{ return !isnan (x) && isnan (x - x); @}
 #endif
 @end smallexample
 
-Use @code{AC_C_INLINE} (@pxref{C Compiler}) so that this code works on
-compilers that lack the @code{inline} keyword.  Some optimizing
-compilers mishandle these definitions, but systems with that bug
+Some optimizing compilers mishandle these definitions, but systems with that bug
 typically have many other floating point corner-case compliance problems
 anyway, so it's probably not worth worrying about.
 
