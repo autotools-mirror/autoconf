@@ -11997,6 +11997,7 @@ stack, and issues an error if there is not a matching pop for every
 push.
 @end defmac
 
+@anchor{m4_divert_text}
 @defmac m4_divert_text (@var{diversion}, @ovar{content})
 @msindex{divert_text}
 Output @var{content} and a newline into @var{diversion}, without
@@ -22085,6 +22086,14 @@ actually just the value of the shell variable named
 @var{package} changed into @samp{_}.  You may use that variable instead,
 if you wish.
 
+Note that @var{action-if-not-given} is not expanded until the point that
+@code{AC_ARG_WITH} was expanded.  If you need the value of
+@code{with_@var{package}} set to a default value by the time argument
+parsing is completed, use @code{m4_divert_text} to the @code{DEFAULTS}
+diversion (@pxref{m4_divert_text}) (if done as an argument to
+@code{AC_ARG_WITH}, also provide non-diverted text to avoid a shell
+syntax error).
+
 The argument @var{help-string} is a description of the option that
 looks like this:
 @example
@@ -22111,7 +22120,7 @@ AC_ARG_WITH([readline],
   [AS_HELP_STRING([--with-readline],
     [support fancy command line editing @@<:@@default=check@@:>@@])],
   [],
-  [with_readline=check])
+  [: m4_divert_text([DEFAULTS], [with_readline=check])])
 
 LIBREADLINE=
 AS_IF([test "x$with_readline" != xno],
@@ -22237,6 +22246,14 @@ actually just the value of the shell variable named
 @var{feature} changed into @samp{_}.  You may use that variable instead,
 if you wish.  The @var{help-string} argument is like that of
 @code{AC_ARG_WITH} (@pxref{External Software}).
+
+Note that @var{action-if-not-given} is not expanded until the point that
+@code{AC_ARG_ENABLE} was expanded.  If you need the value of
+@code{enable_@var{feature}} set to a default value by the time argument
+parsing is completed, use @code{m4_divert_text} to the @code{DEFAULTS}
+diversion (@pxref{m4_divert_text}) (if done as an argument to
+@code{AC_ARG_ENABLE}, also provide non-diverted text to avoid a shell
+syntax error).
 
 You should format your @var{help-string} with the macro
 @code{AS_HELP_STRING} (@pxref{Pretty Help Strings}).
