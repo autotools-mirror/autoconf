@@ -465,7 +465,7 @@ test -z "$CC" && AC_MSG_FAILURE([no acceptable C compiler found in \$PATH])
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
 set X $ac_compile
 ac_compiler=$[2]
-for ac_option in --version -v -V -qversion; do
+for ac_option in --version -v -V -qversion -version; do
   _AC_DO_LIMIT([$ac_compiler $ac_option >&AS_MESSAGE_LOG_FD])
 done
 
