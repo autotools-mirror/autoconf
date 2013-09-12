@@ -2,6 +2,11 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** Configure scripts now support a '--runstatedir' option, which
+   defaults to '${localstatedir}/run', and which can be used to place
+   per-process temporary runtime files (such as pid files) into '/run'
+   instead of '/var/run'.
+
 ** The use of the long-deprecated name 'configure.in' for the autoconf
    input file now elicits a warning in the 'obsolete' category.
 

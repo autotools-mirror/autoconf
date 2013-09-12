@@ -2826,7 +2826,18 @@ usually has a subdirectory per locale.
 
 @defvar localstatedir
 @ovindex localstatedir
-The directory for installing modifiable single-machine data.
+The directory for installing modifiable single-machine data.  Content in
+this directory typically survives a reboot.
+@end defvar
+
+@defvar runstatedir
+@ovindex runstatedir
+The directory for installing temporary modifiable single-machine data.
+Content in this directory survives as long as the process is running
+(such as pid files), as contrasted with @file{/tmp} that may be
+periodically cleaned.  Conversely, this directory is typically cleaned
+on a reboot.  By default, this is a subdirectory of
+@code{localstatedir}.
 @end defvar
 
 @defvar mandir
@@ -22606,6 +22617,7 @@ test "$prefix" = NONE && prefix=/usr/share/local/gnu
 test "$exec_prefix" = NONE && exec_prefix=/usr/local/gnu
 test "$sharedstatedir" = '$@{prefix@}/com' && sharedstatedir=/var
 test "$localstatedir" = '$@{prefix@}/var' && localstatedir=/var
+test "$runstatedir" = '$@{localstatedir@}/run' && runstatedir=/run
 
 # Give Autoconf 2.x generated configure scripts a shared default
 # cache file for feature test results, architecture-specific.
