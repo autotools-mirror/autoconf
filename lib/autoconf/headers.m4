@@ -204,15 +204,19 @@ _AC_HEADERS_EXPANSION])AC_REQUIRE([_AC_Header_]m4_translit([[$1]],
 # -------------------------------------
 # Add each whitespace-separated name in HEADER-FILE to the list of
 # headers to check once.
+# Note: has intimate knowledge of how AC_INCLUDES_DEFAULT works,
+# and vice versa.
 AC_DEFUN([AC_CHECK_HEADERS_ONCE],
-[m4_map_args_w([$1], [_AC_CHECK_HEADER_ONCE(], [)])])
+  [AC_REQUIRE([_AC_INCLUDES_DEFAULT_REQUIREMENTS])]dnl
+  [_AC_CHECK_HEADERS_ONCE([$1])])
+
+AC_DEFUN([_AC_CHECK_HEADERS_ONCE],
+  [m4_map_args_w([$1], [_AC_CHECK_HEADER_ONCE(], [)])])
 
 m4_define([_AC_HEADERS_EXPANSION],
-[
-  m4_divert_text([DEFAULTS], [ac_header_list=])
-  AC_CHECK_HEADERS([$ac_header_list], [], [], [AC_INCLUDES_DEFAULT])
-  m4_define([_AC_HEADERS_EXPANSION], [])
-])
+  [m4_divert_text([DEFAULTS], [ac_header_list=])]dnl
+  [AC_CHECK_HEADERS([$ac_header_list], [], [], [$ac_includes_default])]dnl
+  [m4_define([_AC_HEADERS_EXPANSION], [])])
 
 
 
@@ -256,7 +260,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 ])]dnl
-[AC_CHECK_HEADERS(
+[_AC_CHECK_HEADERS_ONCE(
   [sys/types.h sys/stat.h strings.h inttypes.h stdint.h unistd.h],
   [], [], [$ac_includes_default])]dnl
 dnl For backward compatibility, provide unconditional AC_DEFINEs of
