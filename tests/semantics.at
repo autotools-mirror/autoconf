@@ -219,13 +219,7 @@ AT_DATA([autoconf_io.h],
 AT_CONFIGURE_AC([AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
 AT_CHECK_AUTOCONF([-W obsolete])
 AT_CHECK_AUTOHEADER
-AT_CHECK_CONFIGURE([CPPFLAGS=-I.], [0], [ignore],
-[configure: WARNING: autoconf_io.h: present but cannot be compiled
-configure: WARNING: autoconf_io.h:     check for missing prerequisite headers?
-configure: WARNING: autoconf_io.h: see the Autoconf documentation
-configure: WARNING: autoconf_io.h:     section "Present But Cannot Be Compiled"
-configure: WARNING: autoconf_io.h: proceeding with the compiler's result
-])
+AT_CHECK_CONFIGURE([CPPFLAGS=-I.])
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
@@ -251,7 +245,16 @@ AT_DATA([header2.h],
 
 AT_CONFIGURE_AC([AC_CHECK_HEADERS(header2.h, [], [], -)])
 
-AT_CHECK_AUTOCONF([-W obsolete])
+AT_CHECK_AUTOCONF([-W obsolete], [], [], [stderr])
+AT_CHECK([[grep '^configure\.ac' stderr]], [0],
+[configure.ac:4: warning: Checking for headers with the preprocessor is
+configure.ac:4: deprecated. Specify prerequisite code to AC_CHECK_HEADER
+configure.ac:4: instead of using fourth argument `-'. (Many headers need
+configure.ac:4: no prerequisites. If you truly need to test whether
+configure.ac:4: something passes the preprocessor but not the compiler,
+configure.ac:4: use AC_PREPROC_IFELSE.)
+configure.ac:4: the top level
+])
 AT_CHECK_AUTOHEADER
 AT_CHECK_CONFIGURE([CPPFLAGS=-I.])
 AT_CHECK_ENV

@@ -46,99 +46,17 @@
 #		  [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #		  [INCLUDES])
 # ---------------------------------------------------------
-# We are slowly moving to checking headers with the compiler instead
-# of the preproc, so that we actually learn about the usability of a
-# header instead of its mere presence.  But since users are used to
-# the old semantics, they check for headers in random order and
-# without providing prerequisite headers.  This macro implements the
-# transition phase, and should be cleaned up latter to use compilation
-# only.
-#
-# If INCLUDES is empty, then check both via the compiler and preproc.
-# If the results are different, issue a warning, but keep the preproc
-# result.
-#
-# If INCLUDES is `-', keep only the old semantics.
-#
-# If INCLUDES is specified and different from `-', then use the new
-# semantics only.
+# This used to check for headers using the preprocessor only, but we
+# have now switched to running a full compilation, so that we learn
+# about the usability of a header instead of its mere presence.
+# The old behavior is still available by specifying `-' as the
+# INCLUDES, but this triggers a deprecation warning.
 #
 # The m4_indir allows for fewer expansions of $@.
 AC_DEFUN([AC_CHECK_HEADER],
-[m4_indir(m4_case([$4],
-		  [],  [[_AC_CHECK_HEADER_MONGREL]],
-		  [-], [[_AC_CHECK_HEADER_PREPROC]],
-		       [[_AC_CHECK_HEADER_COMPILE]]), $@)
-])# AC_CHECK_HEADER
-
-
-# _AC_CHECK_HEADER_MONGREL_BODY
-# -----------------------------
-# Shell function body for _AC_CHECK_HEADER_MONGREL
-m4_define([_AC_CHECK_HEADER_MONGREL_BODY],
-[  AS_LINENO_PUSH([$[]1])
-  AS_VAR_SET_IF([$[]3],
-		[AC_CACHE_CHECK([for $[]2], [$[]3], [])],
-		[# Is the header compilable?
-AC_MSG_CHECKING([$[]2 usability])
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([$[]4
-@%:@include <$[]2>])],
-		  [ac_header_compiler=yes],
-		  [ac_header_compiler=no])
-AC_MSG_RESULT([$ac_header_compiler])
-
-# Is the header present?
-AC_MSG_CHECKING([$[]2 presence])
-AC_PREPROC_IFELSE([AC_LANG_SOURCE([@%:@include <$[]2>])],
-		  [ac_header_preproc=yes],
-		  [ac_header_preproc=no])
-AC_MSG_RESULT([$ac_header_preproc])
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_[]_AC_LANG_ABBREV[]_preproc_warn_flag in #((
-  yes:no: )
-    AC_MSG_WARN([$[]2: accepted by the compiler, rejected by the preprocessor!])
-    AC_MSG_WARN([$[]2: proceeding with the compiler's result])
-    ;;
-  no:yes:* )
-    AC_MSG_WARN([$[]2: present but cannot be compiled])
-    AC_MSG_WARN([$[]2:     check for missing prerequisite headers?])
-    AC_MSG_WARN([$[]2: see the Autoconf documentation])
-    AC_MSG_WARN([$[]2:     section "Present But Cannot Be Compiled"])
-    AC_MSG_WARN([$[]2: proceeding with the compiler's result])
-m4_ifset([AC_PACKAGE_BUGREPORT],
-[m4_n([( AS_BOX([Report this to ]AC_PACKAGE_BUGREPORT)
-     ) | sed "s/^/$as_me: WARNING:     /" >&2])])dnl
-    ;;
-esac
-  AC_CACHE_CHECK([for $[]2], [$[]3],
-		 [AS_VAR_SET([$[]3], [$ac_header_compiler])])])
-  AS_LINENO_POP
-])#_AC_CHECK_HEADER_MONGREL_BODY
-
-# _AC_CHECK_HEADER_MONGREL(HEADER-FILE,
-#			   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
-#			   [INCLUDES = DEFAULT-INCLUDES])
-# ------------------------------------------------------------------
-# Check using both the compiler and the preprocessor.  If they disagree,
-# warn, and the preproc wins.
-#
-# This is not based on _AC_CHECK_HEADER_COMPILE and _AC_CHECK_HEADER_PREPROC
-# because it obfuscate the code to try to factor everything, in particular
-# because of the cache variables, and the `checking ...' messages.
-AC_DEFUN([_AC_CHECK_HEADER_MONGREL],
-[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_header_mongrel],
-  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_header_mongrel],
-    [LINENO HEADER VAR INCLUDES],
-    [Tests whether HEADER exists, giving a warning if it cannot be compiled
-     using the include files in INCLUDES and setting the cache variable VAR
-     accordingly.])],
-  [$0_BODY])]dnl
-[AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])]dnl
-[ac_fn_[]_AC_LANG_ABBREV[]_check_header_mongrel ]dnl
-["$LINENO" "$1" "ac_Header" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
-AS_VAR_IF([ac_Header], [yes], [$2], [$3])
-AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_MONGREL
+[m4_indir(m4_if([$4], [-],
+                [[_AC_CHECK_HEADER_PREPROC]],
+                [[_AC_CHECK_HEADER_COMPILE]]), $@)])
 
 
 # _AC_CHECK_HEADER_COMPILE_BODY
@@ -153,6 +71,7 @@ m4_define([_AC_CHECK_HEADER_COMPILE_BODY],
 				    [AS_VAR_SET([$[]3], [no])])])
   AS_LINENO_POP
 ])# _AC_CHECK_HEADER_COMPILE_BODY
+
 
 # _AC_CHECK_HEADER_COMPILE(HEADER-FILE,
 #		       [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
@@ -172,6 +91,7 @@ AC_DEFUN([_AC_CHECK_HEADER_COMPILE],
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
 AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_COMPILE
 
+
 # _AC_CHECK_HEADER_PREPROC_BODY
 # -----------------------------
 # Shell function body for _AC_CHECK_HEADER_PREPROC.
@@ -185,22 +105,28 @@ m4_define([_AC_CHECK_HEADER_PREPROC_BODY],
 ])# _AC_CHECK_HEADER_PREPROC_BODY
 
 
-
 # _AC_CHECK_HEADER_PREPROC(HEADER-FILE,
 #		       [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------------
 # Check the preprocessor accepts HEADER-FILE.
 AC_DEFUN([_AC_CHECK_HEADER_PREPROC],
+[AC_DIAGNOSE([obsolete], [Checking for headers with the preprocessor is
+deprecated. Specify prerequisite code to AC_CHECK_HEADER
+instead of using fourth argument `-'. (Many headers need
+no prerequisites. If you truly need to test whether
+something passes the preprocessor but not the compiler,
+use AC_PREPROC_IFELSE.)])]dnl
 [AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_header_preproc],
   [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_header_preproc],
     [LINENO HEADER VAR],
-    [Tests whether HEADER is present, setting the cache variable VAR accordingly.])],
+    [Tests whether HEADER exists and can be preprocessed (in isolation),
+     setting the cache variable VAR accordingly.])],
   [$0_BODY])]dnl
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])]dnl
 [ac_fn_[]_AC_LANG_ABBREV[]_check_header_preproc "$LINENO" "$1" "ac_Header"
 AS_VAR_IF([ac_Header], [yes], [$2], [$3])
-AS_VAR_POPDEF([ac_Header])dnl
-])# _AC_CHECK_HEADER_PREPROC
+AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_PREPROC
+
 
 # _AC_CHECK_HEADER_OLD(HEADER-FILE, [ACTION-IF-FOUND],
 #                      [ACTION-IF-NOT-FOUND])
@@ -221,6 +147,14 @@ AC_DEFUN([_AC_CHECK_HEADER_NEW],
 [AC_DIAGNOSE([obsolete], [The macro `$0' is obsolete.
 You should use AC_CHECK_HEADER with a fourth argument.])]dnl
 [_AC_CHECK_HEADER_COMPILE($@)])
+
+# _AC_CHECK_HEADER_MONGREL(HEADER-FILE,
+#			   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# ------------------------------------------------------------------
+# In case anyone used this undocumented macro.  Map to the _PREPROC
+# semantics to minimize the chance of breaking anything.
+AU_DEFUN([_AC_CHECK_HEADER_MONGREL],
+  [AC_CHECK_HEADER([$1], [$2], [$3], [-])])
 
 
 # _AH_CHECK_HEADER(HEADER-FILE)

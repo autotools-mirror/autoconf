@@ -17,6 +17,16 @@ GNU Autoconf NEWS - User visible changes.
    echo.  Macros AS_ECHO and AS_ECHO_N now expand unconditionally to
    'printf "%s\n"' and 'printf %s'.
 
+** AC_CHECK_HEADER and AC_CHECK_HEADERS now default to doing only a
+   compilation test.  This completes the transition from preprocessor-
+   based header tests begun in Autoconf 2.56.
+
+   The double test that was the default since Autoconf 2.64 is no
+   longer available.  You can still request a preprocessor-only test
+   by specifying '-' as the fourth argument to either macro, but this
+   is now deprecated.  If you really need that behavior use
+   AC_PREPROC_IFELSE.
+
 ** Macros
 
 - New macro AC_C__GENERIC.
