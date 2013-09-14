@@ -380,9 +380,7 @@ AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
   ac_cv_func_alloca_works=yes
 else
   AC_LINK_IFELSE([AC_LANG_PROGRAM(
-[[#if defined STDC_HEADERS || defined HAVE_STDLIB_H
-# include <stdlib.h>
-#endif
+[[#include <stdlib.h>
 #include <stddef.h>
 #ifndef alloca
 # ifdef __GNUC__
@@ -566,7 +564,6 @@ AC_REQUIRE([AC_FUNC_ALLOCA])dnl
 AC_REQUIRE([AC_TYPE_MBSTATE_T])dnl
 AC_CHECK_DECLS([getenv])
 AC_CHECK_FUNCS([btowc mbsrtowcs mempcpy wmempcpy])
-AC_CHECK_HEADERS([wchar.h wctype.h])
 AC_LIBOBJ([fnmatch])
 AC_CONFIG_LINKS([$ac_config_libobj_dir/fnmatch.h:$ac_config_libobj_dir/fnmatch_.h])
 AC_DEFINE(fnmatch, rpl_fnmatch,
@@ -683,7 +680,6 @@ AC_CHECK_HEADER(sys/dg_sys_info.h,
  AC_DEFINE(DGUX, 1, [Define to 1 for DGUX with <sys/dg_sys_info.h>.])
  AC_CHECK_LIB(dgc, dg_sys_info)])
 
-AC_CHECK_HEADER(locale.h)
 AC_CHECK_FUNCS(setlocale)
 
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
@@ -905,17 +901,11 @@ fi
 # ------------------------------------
 # If `malloc (0)' properly handled, run IF-WORKS, otherwise, IF-NOT.
 AC_DEFUN([_AC_FUNC_MALLOC_IF],
-[AC_REQUIRE([AC_HEADER_STDC])dnl
-AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
-AC_CHECK_HEADERS(stdlib.h)
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 [AC_RUN_IFELSE(
 [AC_LANG_PROGRAM(
-[[#if defined STDC_HEADERS || defined HAVE_STDLIB_H
-# include <stdlib.h>
-#else
-char *malloc ();
-#endif
+[[#include <stdlib.h>
 ]],
 		 [return ! malloc (0);])],
 	       [ac_cv_func_malloc_0_nonnull=yes],
@@ -1013,21 +1003,14 @@ test $ac_cv_func_memcmp_working = no && AC_LIBOBJ([memcmp])
 # --------------
 AN_FUNCTION([mktime], [AC_FUNC_MKTIME])
 AC_DEFUN([AC_FUNC_MKTIME],
-[AC_REQUIRE([AC_HEADER_TIME])dnl
-AC_CHECK_HEADERS_ONCE(sys/time.h unistd.h)
-AC_CHECK_FUNCS_ONCE(alarm)
+[AC_CHECK_HEADERS_ONCE([sys/time.h unistd.h])
+AC_CHECK_FUNCS_ONCE([alarm])
 AC_CACHE_CHECK([for working mktime], ac_cv_func_working_mktime,
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
 [[/* Test program from Paul Eggert and Tony Leneis.  */
-#ifdef TIME_WITH_SYS_TIME
+#include <time.h>
+#ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
-# include <time.h>
-#else
-# ifdef HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
 #endif
 
 #include <limits.h>
@@ -1228,7 +1211,7 @@ AU_ALIAS([AM_FUNC_MKTIME], [AC_FUNC_MKTIME])
 AN_FUNCTION([mmap], [AC_FUNC_MMAP])
 AC_DEFUN([AC_FUNC_MMAP],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
-AC_CHECK_HEADERS_ONCE([stdlib.h unistd.h sys/param.h])
+AC_CHECK_HEADERS_ONCE([unistd.h sys/param.h])
 AC_CHECK_FUNCS([getpagesize])
 AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
 [AC_RUN_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
@@ -1259,10 +1242,6 @@ AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
 
 #include <fcntl.h>
 #include <sys/mman.h>
-
-#if !defined STDC_HEADERS && !defined HAVE_STDLIB_H
-char *malloc ();
-#endif
 
 /* This mess was copied from the GNU getpagesize.h.  */
 #ifndef HAVE_GETPAGESIZE
@@ -1424,17 +1403,11 @@ AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
 # -------------------------------------
 # If `realloc (0, 0)' is properly handled, run IF-WORKS, otherwise, IF-NOT.
 AC_DEFUN([_AC_FUNC_REALLOC_IF],
-[AC_REQUIRE([AC_HEADER_STDC])dnl
-AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
-AC_CHECK_HEADERS(stdlib.h)
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
 [AC_RUN_IFELSE(
 [AC_LANG_PROGRAM(
-[[#if defined STDC_HEADERS || defined HAVE_STDLIB_H
-# include <stdlib.h>
-#else
-char *realloc ();
-#endif
+[[#include <stdlib.h>
 ]],
 		 [return ! realloc (0, 0);])],
 	       [ac_cv_func_realloc_0_nonnull=yes],

@@ -3885,56 +3885,77 @@ succeeds.
 @subsection Default Includes
 @cindex Default includes
 @cindex Includes, default
+@hdrindex{assert.h}
+@hdrindex{ctype.h}
+@hdrindex{errno.h}
+@hdrindex{float.h}
+@hdrindex{iso646.h}
+@hdrindex{limits.h}
+@hdrindex{locale.h}
+@hdrindex{math.h}
+@hdrindex{setjmp.h}
+@hdrindex{signal.h}
+@hdrindex{stdarg.h}
+@hdrindex{stddef.h}
+@hdrindex{stdio.h}
+@hdrindex{stdlib.h}
+@hdrindex{string.h}
+@hdrindex{time.h}
+@hdrindex{wchar.h}
+@hdrindex{wctype.h}
 
-Several tests depend upon a set of header files.  Since these headers
-are not universally available, tests actually have to provide a set of
-protected includes, such as:
+Test programs frequently need to include headers that may or may not be
+available on the system whose features are being tested.  Each test can
+use all the preprocessor macros that have been @code{AC_DEFINE}d by
+previous tests, so for example one may write
 
 @example
 @group
-#ifdef TIME_WITH_SYS_TIME
+#include <time.h>
+#ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
-# include <time.h>
-#else
-# ifdef HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
 #endif
 @end group
 @end example
 
 @noindent
-Unless you know exactly what you are doing, you should avoid using
-unconditional includes, and check the existence of the headers you
-include beforehand (@pxref{Header Files}).
+if @file{sys/time.h} has already been tested for.
 
-Most generic macros use the following macro to provide the default set
+All hosted environments that are still of interest for portable code
+provide all of the headers specified in ISO C90 (as amended in 1995):
+@file{assert.h}, @file{ctype.h}, @file{errno.h}, @file{float.h},
+@file{iso646.h}, @file{limits.h}, @file{locale.h}, @file{math.h},
+@file{setjmp.h}, @file{signal.h}, @file{stdarg.h}, @file{stddef.h},
+@file{stdio.h}, @file{stdlib.h}, @file{string.h}, @file{time.h},
+@file{wchar.h}, and @file{wctype.h}.  Most programs can safely include
+these headers unconditionally.  All other headers, including all headers
+from later revisions of the C standard, need to be tested for
+(@pxref{Header Files}).
+
+If your program needs to be portable to a @emph{freestanding}
+environment, such as an embedded OS that doesn't provide all of the
+facilities of the C90 standard library, you may need to test for some of
+the above headers as well.  Note that many Autoconf macros internally
+assume that the complete set of C90 headers are available.
+
+Most generic macros use the following macro to provide a default set
 of includes:
 
 @defmac AC_INCLUDES_DEFAULT (@ovar{include-directives})
 @acindex{INCLUDES_DEFAULT}
-Expand to @var{include-directives} if defined, otherwise to:
+Expand to @var{include-directives} if present and nonempty, otherwise to:
 
 @example
 @group
+#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
 #ifdef HAVE_SYS_STAT_H
 # include <sys/stat.h>
-#endif
-#if defined STDC_HEADERS || defined HAVE_STDLIB_H
-# include <stdlib.h>
-#endif
-#include <stddef.h>
-#ifdef HAVE_STRING_H
-# if !defined STDC_HEADERS && defined HAVE_MEMORY_H
-#  include <memory.h>
-# endif
-# include <string.h>
 #endif
 #ifdef HAVE_STRINGS_H
 # include <strings.h>
@@ -3951,14 +3972,13 @@ Expand to @var{include-directives} if defined, otherwise to:
 @end group
 @end example
 
-If the default includes are used, then check for the presence of these
-headers and their compatibility, i.e., you don't need to run
-@code{AC_HEADER_STDC}, nor check for @file{stdlib.h} etc.
-
-These headers are checked for in the same order as they are included.
-For instance, on some systems @file{string.h} and @file{strings.h} both
-exist, but conflict.  Then @code{HAVE_STRING_H} is defined, not
-@code{HAVE_STRINGS_H}.
+Using this macro without @var{include-directives} has the side effect of
+checking for @file{sys/types.h}, @file{sys/stat.h}, @file{strings.h},
+@file{inttypes.h}, @file{stdint.h}, and @file{unistd.h}, as if by
+@code{AC_CHECK_HEADERS}.  For backward compatibility's sake, it also
+unconditionally defines @code{HAVE_STRING_H}, @code{HAVE_STDLIB_H}, and
+@code{STDC_HEADERS}.  New code should not make use of these preprocessor
+macros.
 @end defmac
 
 @node Alternative Programs
@@ -4887,9 +4907,7 @@ like the following, to declare it properly.
 
 @example
 @group
-#if defined STDC_HEADERS || defined HAVE_STDLIB_H
-# include <stdlib.h>
-#endif
+#include <stdlib.h>
 #include <stddef.h>
 #ifdef HAVE_ALLOCA_H
 # include <alloca.h>
@@ -5744,6 +5762,34 @@ Posix Headers, gnulib, GNU gnulib} and @ref{Glibc Header File
 Substitutes, , Glibc Headers, gnulib, GNU gnulib}.  Please help us keep
 the gnulib list as complete as possible.
 
+When we say that a header ``may require'' some set of other headers, we
+mean that it may be necessary for you to manually include those other
+headers first, or the contents of the header under test will fail to
+compile.  When checking for these headers, you must provide the
+potentially-required headers in the @var{includes} argument to
+@code{AC_CHECK_HEADER} or @code{AC_CHECK_HEADERS}, or the check will
+fail spuriously.  @code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes})
+arranges to include a number of common requirements and should normally
+come first in your @var{includes}.  For example, @file{net/if.h} may
+require @file{sys/types.h}, @file{sys/socket.h}, or both, and
+@code{AC_INCLUDES_DEFAULT} handles @file{sys/types.h} but not
+@file{sys/socket.h}, so you should check for it like this:
+
+@example
+AC_CHECK_HEADERS([sys/socket.h])
+AC_CHECK_HEADERS([net/if.h], [], [],
+[AC_INCLUDES_DEFAULT[
+#ifdef HAVE_SYS_SOCKET_H
+# include <sys/socket.h>
+#endif
+]])
+@end example
+
+Note that the example mixes single quoting (for@code{AC_INCLUDES_DEFAULT},
+so that it gets expanded) and double quoting (to ensure that each
+preprocessor @code{#} gets treated as a literal string rather than a
+comment).
+
 @table @asis
 
 @item @file{limits.h}
@@ -5752,96 +5798,67 @@ In C99 and later, @file{limits.h} defines @code{LLONG_MIN},
 environments (e.g., default GCC 4.0.2 + glibc 2.4) do not
 define them.
 
+@item @file{memory.h}
+@hdrindex{memory.h}
+This header file is obsolete; use @file{string.h} instead.
+
+@item @file{strings.h}
+@hdrindex{strings.h}
+On some systems, this is the only header that declares
+@code{strcasecmp}, @code{strncasecmp}, and @code{ffs}.
+
+This header may or may not include @file{string.h} for you.  However, on
+all recent systems it is safe to include both @file{string.h} and
+@file{strings.h}, in either order, in the same source file.
+
 @item @file{inttypes.h} vs.@: @file{stdint.h}
 @hdrindex{inttypes.h}
 @hdrindex{stdint.h}
-In C99 and later, @file{inttypes.h} includes
-@file{stdint.h}, so there's no need to include @file{stdint.h}
-separately in a standard environment.  Some implementations have
-@file{inttypes.h} but not @file{stdint.h} (e.g., Solaris 7), but we don't
-know of any implementation that has @file{stdint.h} but not
-@file{inttypes.h}.
+C99 specifies that @file{inttypes.h} includes @file{stdint.h}, so there's
+no need to include @file{stdint.h} separately in a standard environment.
+However, some implementations have @file{inttypes.h} but not @file{stdint.h}
+(e.g., Solaris 7), and some have @file{stdint.h} but not @file{inttypes.h}
+(e.g. MSVC 2012).  Therefore, it is necessary to check for each and include
+each only if available.
 
 @item @file{linux/irda.h}
 @hdrindex{linux/irda.h}
-It requires @file{linux/types.h} and @file{sys/socket.h}.
+This header may require @file{linux/types.h} and/or @file{sys/socket.h}.
 
 @item @file{linux/random.h}
 @hdrindex{linux/random.h}
-It requires @file{linux/types.h}.
+This header may require @file{linux/types.h}.
 
 @item @file{net/if.h}
 @hdrindex{net/if.h}
-On Darwin, this file requires that @file{sys/socket.h} be included
-beforehand.  One should run:
-
-@example
-AC_CHECK_HEADERS([sys/socket.h])
-AC_CHECK_HEADERS([net/if.h], [], [],
-[#include <stdio.h>
-#if defined STDC_HEADERS || defined HAVE_STDLIB_H
-# include <stdlib.h>
-#endif
-#include <stddef.h>
-#ifdef HAVE_SYS_SOCKET_H
-# include <sys/socket.h>
-#endif
-])
-@end example
+This header may require @file{sys/types.h} and/or @file{sys/socket.h}.
 
 @item @file{netinet/if_ether.h}
 @hdrindex{netinet/if_ether.h}
-On Darwin, this file requires that @file{stdio.h} and
-@file{sys/socket.h} be included beforehand.  One should run:
-
-@example
-AC_CHECK_HEADERS([sys/socket.h])
-AC_CHECK_HEADERS([netinet/if_ether.h], [], [],
-[#include <stdio.h>
-#if defined STDC_HEADERS || defined HAVE_STDLIB_H
-# include <stdlib.h>
-#endif
-#include <stddef.h>
-#ifdef HAVE_SYS_SOCKET_H
-# include <sys/socket.h>
-#endif
-])
-@end example
-
-@item @file{stdint.h}
-See above, item @file{inttypes.h} vs.@: @file{stdint.h}.
-
-@item @file{stdlib.h}
-@hdrindex{stdlib.h}
-On many systems (e.g., Darwin), @file{stdio.h} is a prerequisite.
+This header may require some combination of @file{sys/types.h},
+@file{sys/socket.h}, @file{netinet/in.h}, and @file{net/if.h}.
 
 @item @file{sys/mount.h}
 @hdrindex{sys/mount.h}
-On FreeBSD 4.8 on ia32 and using gcc version 2.95.4,
-@file{sys/params.h} is a prerequisite.
+This header may require @file{sys/params.h}.
 
 @item @file{sys/ptem.h}
 @hdrindex{sys/ptem.h}
-On Solaris 8, @file{sys/stream.h} is a prerequisite.
+This header may require @file{sys/stream.h}.
 
 @item @file{sys/socket.h}
 @hdrindex{sys/socket.h}
-On Darwin, @file{stdlib.h} is a prerequisite.
+This header may require @file{sys/types.h}.
 
 @item @file{sys/ucred.h}
 @hdrindex{sys/ucred.h}
-On Tru64 5.1, @file{sys/types.h} is a prerequisite.
+This header may require @file{sys/types.h}.
 
 @item @file{X11/extensions/scrnsaver.h}
 @hdrindex{X11/extensions/scrnsaver.h}
 Using XFree86, this header requires @file{X11/Xlib.h}, which is probably
 so required that you might not even consider looking for it.
 
-@example
-AC_CHECK_HEADERS([X11/extensions/scrnsaver.h], [], [],
-[[#include <X11/Xlib.h>
-]])
-@end example
 @end table
 
 
@@ -6035,91 +6052,14 @@ does not.
 @defmac AC_HEADER_STDC
 @acindex{HEADER_STDC}
 @cvindex STDC_HEADERS
-@hdrindex{stdlib.h}
-@hdrindex{stdarg.h}
-@hdrindex{string.h}
-@hdrindex{float.h}
-@hdrindex{ctype.h}
 @caindex header_stdc
-Define @code{STDC_HEADERS} if the system has C header files
-conforming to ANSI C89 (ISO C90).
-Specifically, this macro checks for @file{stdlib.h}, @file{stdarg.h},
-@file{string.h}, and @file{float.h}; if the system has those, it
-probably has the rest of the C89 header files.  This macro also
-checks whether @file{string.h} declares @code{memchr} (and thus
-presumably the other @code{mem} functions), whether @file{stdlib.h}
-declare @code{free} (and thus presumably @code{malloc} and other related
-functions), and whether the @file{ctype.h} macros work on characters
-with the high bit set, as the C standard requires.
 
-If you use this macro, your code can refer to @code{STDC_HEADERS} to
-determine whether the system has conforming header files (and probably C
-library functions).
+This macro is obsolescent.  Its sole effect is to make sure that all the
+headers that are included by @code{AC_INCLUDES_DEFAULT} (@pxref{Default
+Includes}), but not part of ISO C90, have been checked for.
 
-This macro caches its result in the @code{ac_cv_header_stdc} variable.
-
-This macro is obsolescent, as current systems have conforming header
-files.  New programs need not use this macro.
-
-@hdrindex{string.h}
-@hdrindex{strings.h}
-Nowadays @file{string.h} is part of the C standard and declares functions like
-@code{strcpy}, and @file{strings.h} is standardized by Posix and declares
-BSD functions like @code{bcopy}; but
-historically, string functions were a major sticking point in this area.
-If you still want to worry about portability to ancient systems without
-standard headers, there is so much variation
-that it is probably easier to declare the functions you use than to
-figure out exactly what the system header files declare.  Some ancient systems
-contained a mix of functions from the C standard and from BSD;
-some were mostly standard but lacked @samp{memmove}; some defined the
-BSD functions as macros in @file{string.h} or
-@file{strings.h}; some had only the BSD functions but
-@file{string.h}; some declared the memory functions in @file{memory.h},
-some in @file{string.h}; etc.  It is probably sufficient to check for
-one string function and one memory function; if the library had the
-standard versions of those then it probably had most of the others.
-If you put the following in @file{configure.ac}:
-
-@example
-# This example is obsolescent.
-# Nowadays you can omit these macro calls.
-AC_HEADER_STDC
-AC_CHECK_FUNCS([strchr memcpy])
-@end example
-
-@noindent
-then, in your code, you can use declarations like this:
-
-@example
-@group
-/* This example is obsolescent.
-   Nowadays you can just #include <string.h>.  */
-#ifdef STDC_HEADERS
-# include <string.h>
-#else
-# ifndef HAVE_STRCHR
-#  define strchr index
-#  define strrchr rindex
-# endif
-char *strchr (), *strrchr ();
-# ifndef HAVE_MEMCPY
-#  define memcpy(d, s, n) bcopy ((s), (d), (n))
-#  define memmove(d, s, n) bcopy ((s), (d), (n))
-# endif
-#endif
-@end group
-@end example
-
-@noindent
-If you use a function like @code{memchr}, @code{memset}, @code{strtok},
-or @code{strspn}, which have no BSD equivalent, then macros don't
-suffice to port to ancient hosts; you must provide an implementation of
-each function.  An easy
-way to incorporate your implementations only when needed (since the ones
-in system C libraries may be hand optimized) is to, taking @code{memchr}
-for example, put it in @file{memchr.c} and use
-@samp{AC_REPLACE_FUNCS([memchr])}.
+All hosted environments that are still of interest for portable code
+provide all of the headers specified in ISO C90 (as amended in 1995).
 @end defmac
 
 @defmac AC_HEADER_SYS_WAIT
@@ -6179,46 +6119,6 @@ The way to check whether the system supports Posix is:
 #endif
 @end group
 @end example
-
-@anchor{AC_HEADER_TIME}
-@defmac AC_HEADER_TIME
-@acindex{HEADER_TIME}
-@cvindex TIME_WITH_SYS_TIME
-@hdrindex{time.h}
-@hdrindex{sys/time.h}
-@caindex header_time
-If a program may include both @file{time.h} and @file{sys/time.h},
-define @code{TIME_WITH_SYS_TIME}.  On some ancient systems,
-@file{sys/time.h} included @file{time.h}, but @file{time.h} was not
-protected against multiple inclusion, so programs could not explicitly
-include both files.  This macro is useful in programs that use, for
-example, @code{struct timeval} as well as
-@code{struct tm}.  It is best used in conjunction with
-@code{HAVE_SYS_TIME_H}, which can be checked for using
-@code{AC_CHECK_HEADERS([sys/time.h])}.
-
-@example
-@group
-#ifdef TIME_WITH_SYS_TIME
-# include <sys/time.h>
-# include <time.h>
-#else
-# ifdef HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
-#endif
-@end group
-@end example
-
-@noindent
-This macro caches its result in the @code{ac_cv_header_time} variable.
-
-This macro is obsolescent, as current systems can include both files
-when they exist.  New programs need not use this macro.
-@end defmac
-
 
 @defmac AC_HEADER_TIOCGWINSZ
 @acindex{HEADER_TIOCGWINSZ}
@@ -23403,6 +23303,24 @@ Replaced by @code{AC_CHECK_HEADER} (@pxref{AC_CHECK_HEADER}).
 Replaced by @code{AC_EGREP_HEADER} (@pxref{AC_EGREP_HEADER}).
 @end defmac
 
+@anchor{AC_HEADER_TIME}
+@defmac AC_HEADER_TIME
+@acindex{HEADER_TIME}
+@cvindex TIME_WITH_SYS_TIME
+@hdrindex{time.h}
+@hdrindex{sys/time.h}
+@caindex header_time
+This macro used to check whether it was possible to include
+@file{time.h} and @file{sys/time.h} in the same source file,
+defining @code{TIME_WITH_SYS_TIME} if so.
+
+Nowadays, it is equivalent to @samp{AC_CHECK_HEADERS([sys/time.h])},
+although it does still define @code{TIME_WITH_SYS_TIME} for
+compatibility's sake.  @file{time.h} is universally present, and the
+systems on which @file{sys/time.h} conflicted with @file{time.h} are
+obsolete.
+@end defmac
+
 @defmac AC_HELP_STRING
 @acindex{HELP_STRING}
 Replaced by @code{AS_HELP_STRING} (@pxref{AS_HELP_STRING}).
@@ -23559,9 +23477,7 @@ Replaced by @code{AC_HEADER_MAJOR} (@pxref{AC_HEADER_MAJOR}).
 Used to define @code{NEED_MEMORY_H} if the @code{mem} functions were
 defined in @file{memory.h}.  Today it is equivalent to
 @samp{AC_CHECK_HEADERS([memory.h])} (@pxref{AC_CHECK_HEADERS}).  Adjust
-your code to depend upon
-@code{HAVE_MEMORY_H}, not @code{NEED_MEMORY_H}; see @ref{Standard
-Symbols}.
+your code to get the @code{mem} functions from @file{string.h} instead.
 @end defmac
 
 @defmac AC_MINGW32
@@ -23811,7 +23727,9 @@ Replaced by @code{AC_HEADER_STAT} (@pxref{AC_HEADER_STAT}).
 
 @defmac AC_STDC_HEADERS
 @acindex{STDC_HEADERS}
-Replaced by @code{AC_HEADER_STDC} (@pxref{AC_HEADER_STDC}).
+Replaced by @code{AC_HEADER_STDC} (@pxref{AC_HEADER_STDC}), which
+is itself obsolete.  Nowadays it is safe to assume the facilities of C90
+exist.
 @end defmac
 
 @defmac AC_STRCOLL
@@ -23909,7 +23827,9 @@ Replaced by @code{AC_STRUCT_TIMEZONE} (@pxref{AC_STRUCT_TIMEZONE}).
 
 @defmac AC_TIME_WITH_SYS_TIME
 @acindex{TIME_WITH_SYS_TIME}
-Replaced by @code{AC_HEADER_TIME} (@pxref{AC_HEADER_TIME}).
+Replaced by @code{AC_HEADER_TIME} (@pxref{AC_HEADER_TIME}), which is
+itself obsolete; nowadays one need only do
+@samp{AC_CHECK_HEADERS([sys/time.h])}.
 @end defmac
 
 @defmac AC_TRY_COMPILE (@var{includes}, @var{function-body}, @
@@ -24049,15 +23969,24 @@ Replaced by @code{AC_TYPE_UID_T} (@pxref{AC_TYPE_UID_T}).
 
 @defmac AC_UNISTD_H
 @acindex{UNISTD_H}
-Same as @samp{AC_CHECK_HEADERS([unistd.h])} (@pxref{AC_CHECK_HEADERS}).
+Same as @samp{AC_CHECK_HEADERS([unistd.h])} (@pxref{AC_CHECK_HEADERS}),
+which is one of the tests done as a side effect by
+@code{AC_INCLUDES_DEFAULT} (@pxref{Default Includes}), so usually
+unnecessary to write explicitly.
 @end defmac
 
 @defmac AC_USG
 @acindex{USG}
 @cvindex USG
-Define @code{USG} if the BSD string functions are defined in
-@file{strings.h}.  You should no longer depend upon @code{USG}, but on
-@code{HAVE_STRING_H}; see @ref{Standard Symbols}.
+Define @code{USG} if the BSD string functions (@code{bcopy},
+@code{bzero}, @code{index}, @code{rindex}, etc) are @emph{not} defined
+in @file{strings.h}.  Modern code should assume @file{string.h} exists
+and should use the ISO C string functions (@code{memmove}, @code{memset},
+@code{strchr}, @code{strrchr}, etc) unconditionally.
+
+@file{strings.h} may be the only header that declares @code{strcasecmp},
+@code{strncasecmp}, and @code{ffs}.  @code{AC_INCLUDES_DEFAULT} checks
+for it (@pxref{Default Includes}); test @code{HAVE_STRINGS_H}.
 @end defmac
 
 @defmac AC_UTIME_NULL

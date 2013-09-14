@@ -228,27 +228,20 @@ m4_define([_AC_HEADERS_EXPANSION],
 # _AC_INCLUDES_DEFAULT_REQUIREMENTS
 # ---------------------------------
 # Required when AC_INCLUDES_DEFAULT uses its default branch.
-AC_DEFUN([_AC_INCLUDES_DEFAULT_REQUIREMENTS],
+AC_DEFUN_ONCE([_AC_INCLUDES_DEFAULT_REQUIREMENTS],
+dnl If ever you change this variable, please keep autoconf.texi in sync.
 [m4_divert_text([DEFAULTS],
 [# Factoring default headers for most tests.
-dnl If ever you change this variable, please keep autoconf.texi in sync.
 ac_includes_default="\
+#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
 #endif
 #ifdef HAVE_SYS_STAT_H
 # include <sys/stat.h>
-#endif
-#if defined STDC_HEADERS || defined HAVE_STDLIB_H
-# include <stdlib.h>
-#endif
-#include <stddef.h>
-#ifdef HAVE_STRING_H
-# if !defined STDC_HEADERS && defined HAVE_MEMORY_H
-#  include <memory.h>
-# endif
-# include <string.h>
 #endif
 #ifdef HAVE_STRINGS_H
 # include <strings.h>
@@ -262,13 +255,22 @@ ac_includes_default="\
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif"
-])dnl
-AC_REQUIRE([AC_HEADER_STDC])dnl
-# On IRIX 5.3, sys/types and inttypes.h are conflicting.
-AC_CHECK_HEADERS([sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
-		  inttypes.h stdint.h unistd.h],
-		 [], [], $ac_includes_default)
-])# _AC_INCLUDES_DEFAULT_REQUIREMENTS
+])]dnl
+[AC_CHECK_HEADERS(
+  [sys/types.h sys/stat.h strings.h inttypes.h stdint.h unistd.h],
+  [], [], [$ac_includes_default])]dnl
+dnl For backward compatibility, provide unconditional AC_DEFINEs of
+dnl HAVE_STDLIB_H, HAVE_STRING_H, and STDC_HEADERS.
+[AC_DEFINE([HAVE_STDLIB_H], [1],
+  [Always define to 1, for backward compatibility.
+   You can assume <stdlib.h> exists.])]dnl
+[AC_DEFINE([HAVE_STRING_H], [1],
+  [Always define to 1, for backward compatibility.
+   You can assume <string.h> exists.])]dnl
+[AC_DEFINE([STDC_HEADERS], [1],
+  [Always define to 1, for backward compatibility.
+   You can assume the C90 standard headers exist.])])
+# _AC_INCLUDES_DEFAULT_REQUIREMENTS
 
 
 # AC_INCLUDES_DEFAULT([INCLUDES])
@@ -294,23 +296,22 @@ $ac_includes_default])])
 ## 3. Headers to check with AC_CHECK_HEADERS.  ##
 ## ------------------------------------------- ##
 
-# errno.h is portable.
+# There is no longer any need to check for headers that are part of
+# ISO C90 (as amended): assert.h, ctype.h, errno.h, float.h, iso646.h,
+# limits.h, locale.h, math.h, setjmp.h, signal.h, stdarg.h, stddef.h,
+# stdio.h, stdlib.h, string.h, time.h, wchar.h, wctype.h.
 
 AN_HEADER([OS.h],               [AC_CHECK_HEADERS])
 AN_HEADER([argz.h],             [AC_CHECK_HEADERS])
 AN_HEADER([arpa/inet.h],        [AC_CHECK_HEADERS])
 AN_HEADER([fcntl.h],            [AC_CHECK_HEADERS])
 AN_HEADER([fenv.h],             [AC_CHECK_HEADERS])
-AN_HEADER([float.h],            [AC_CHECK_HEADERS])
 AN_HEADER([fs_info.h],          [AC_CHECK_HEADERS])
 AN_HEADER([inttypes.h],         [AC_CHECK_HEADERS])
 AN_HEADER([langinfo.h],         [AC_CHECK_HEADERS])
 AN_HEADER([libintl.h],          [AC_CHECK_HEADERS])
-AN_HEADER([limits.h],           [AC_CHECK_HEADERS])
-AN_HEADER([locale.h],           [AC_CHECK_HEADERS])
 AN_HEADER([mach/mach.h],        [AC_CHECK_HEADERS])
 AN_HEADER([malloc.h],           [AC_CHECK_HEADERS])
-AN_HEADER([memory.h],           [AC_CHECK_HEADERS])
 AN_HEADER([mntent.h],           [AC_CHECK_HEADERS])
 AN_HEADER([mnttab.h],           [AC_CHECK_HEADERS])
 AN_HEADER([netdb.h],            [AC_CHECK_HEADERS])
@@ -320,11 +321,8 @@ AN_HEADER([nlist.h],            [AC_CHECK_HEADERS])
 AN_HEADER([paths.h],            [AC_CHECK_HEADERS])
 AN_HEADER([sgtty.h],            [AC_CHECK_HEADERS])
 AN_HEADER([shadow.h],           [AC_CHECK_HEADERS])
-AN_HEADER([stddef.h],           [AC_CHECK_HEADERS])
 AN_HEADER([stdint.h],           [AC_CHECK_HEADERS])
 AN_HEADER([stdio_ext.h],        [AC_CHECK_HEADERS])
-AN_HEADER([stdlib.h],           [AC_CHECK_HEADERS])
-AN_HEADER([string.h],           [AC_CHECK_HEADERS])
 AN_HEADER([strings.h],          [AC_CHECK_HEADERS])
 AN_HEADER([sys/acl.h],          [AC_CHECK_HEADERS])
 AN_HEADER([sys/file.h],         [AC_CHECK_HEADERS])
@@ -352,10 +350,6 @@ AN_HEADER([utime.h],            [AC_CHECK_HEADERS])
 AN_HEADER([utmp.h],             [AC_CHECK_HEADERS])
 AN_HEADER([utmpx.h],            [AC_CHECK_HEADERS])
 AN_HEADER([values.h],           [AC_CHECK_HEADERS])
-AN_HEADER([wchar.h],            [AC_CHECK_HEADERS])
-AN_HEADER([wctype.h],           [AC_CHECK_HEADERS])
-
-
 
 ## ------------------------------- ##
 ## 4. Tests for specific headers.  ##
@@ -593,7 +587,7 @@ AC_DEFUN([AC_CHECK_HEADER_STDBOOL],
 
 # AC_HEADER_STDBOOL
 # -----------------
-# Define HAVE_STDBOOL_H if tdbool.h that conforms to C99.
+# Define HAVE_STDBOOL_H if the system provides stdbool.h that conforms to C99.
 AC_DEFUN([AC_HEADER_STDBOOL],
 [AC_CHECK_HEADER_STDBOOL
 if test $ac_cv_header_stdbool_h = yes; then
@@ -602,62 +596,16 @@ fi
 ])# AC_HEADER_STDBOOL
 
 
-# AC_HEADER_STDC
-# --------------
-AC_DEFUN([AC_HEADER_STDC],
-[AC_CACHE_CHECK(for ANSI C header files, ac_cv_header_stdc,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#include <float.h>
-]])],
-		    [ac_cv_header_stdc=yes],
-		    [ac_cv_header_stdc=no])
-
-if test $ac_cv_header_stdc = yes; then
-  # SunOS 4.x string.h does not declare mem*, contrary to ANSI.
-  AC_EGREP_HEADER(memchr, string.h, , ac_cv_header_stdc=no)
-fi
-
-if test $ac_cv_header_stdc = yes; then
-  # ISC 2.0.2 stdlib.h does not declare free, contrary to ANSI.
-  AC_EGREP_HEADER(free, stdlib.h, , ac_cv_header_stdc=no)
-fi
-
-if test $ac_cv_header_stdc = yes; then
-  # /bin/cc in Irix-4.0.5 gets non-ANSI ctype macros unless using -ansi.
-  AC_RUN_IFELSE([AC_LANG_SOURCE(
-[[#include <ctype.h>
-#include <stdlib.h>
-#if ((' ' & 0x0FF) == 0x020)
-# define ISLOWER(c) ('a' <= (c) && (c) <= 'z')
-# define TOUPPER(c) (ISLOWER(c) ? 'A' + ((c) - 'a') : (c))
-#else
-# define ISLOWER(c) \
-		   (('a' <= (c) && (c) <= 'i') \
-		     || ('j' <= (c) && (c) <= 'r') \
-		     || ('s' <= (c) && (c) <= 'z'))
-# define TOUPPER(c) (ISLOWER(c) ? ((c) | 0x40) : (c))
-#endif
-
-#define XOR(e, f) (((e) && !(f)) || (!(e) && (f)))
-int
-main ()
-{
-  int i;
-  for (i = 0; i < 256; i++)
-    if (XOR (islower (i), ISLOWER (i))
-	|| toupper (i) != TOUPPER (i))
-      return 2;
-  return 0;
-}]])], , ac_cv_header_stdc=no, :)
-fi])
-if test $ac_cv_header_stdc = yes; then
-  AC_DEFINE(STDC_HEADERS, 1,
-	    [Define to 1 if you have the ANSI C header files.])
-fi
-])# AC_HEADER_STDC
-
+# AU::AC_HEADER_STDC
+# ------------------
+AU_DEFUN([AC_HEADER_STDC],
+[# Autoupdate added the following line to ensure that your configure
+# script's behavior did not change.  It is probably safe to remove.
+AS_IF([:], [], [ac_dummy="AC_INCLUDES_DEFAULT"])
+],
+ [The preprocessor macro `STDC_HEADERS' is obsolete.
+  Except in unusual embedded environments, you can safely include all
+  ISO C90 headers unconditionally.])
 
 # AC_HEADER_SYS_WAIT
 # ------------------
@@ -686,25 +634,23 @@ fi
 ])# AC_HEADER_SYS_WAIT
 
 
-# AC_HEADER_TIME
-# --------------
-AC_DEFUN([AC_HEADER_TIME],
-[AC_CACHE_CHECK([whether time.h and sys/time.h may both be included],
-  ac_cv_header_time,
-[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <sys/types.h>
-#include <sys/time.h>
-#include <time.h>
-],
-[if ((struct tm *) 0)
-return 0;])],
-		   [ac_cv_header_time=yes],
-		   [ac_cv_header_time=no])])
-if test $ac_cv_header_time = yes; then
+# AU::AC_HEADER_TIME
+# ------------------
+AU_DEFUN([AC_HEADER_TIME],
+[AC_CHECK_HEADERS([sys/time.h])
+# Obsolete code to be removed.
+if test $ac_cv_header_sys_time_h = yes; then
   AC_DEFINE(TIME_WITH_SYS_TIME, 1,
 	    [Define to 1 if you can safely include both <sys/time.h>
-	     and <time.h>.])
+	     and <time.h>.  This macro is obsolete.])
 fi
-])# AC_HEADER_TIME
+# End of obsolete code.
+], [Update your code to rely only on HAVE_SYS_TIME_H,
+then remove this warning and the obsolete code below it.
+All current systems provide time.h; it need not be checked for.
+Not all systems provide sys/time.h, but those that do, all allow
+you to include it and time.h simultaneously.])
+# AC_HEADER_TIME
 
 
 # _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
@@ -761,14 +707,17 @@ fi
 # AU::AC_UNISTD_H
 # ---------------
 AU_DEFUN([AC_UNISTD_H],
-[AC_CHECK_HEADERS(unistd.h)])
+[# Autoupdate added the following line to ensure that your configure
+# script's behavior did not change.  It is probably safe to remove.
+AS_IF([:], [], [ac_dummy="AC_INCLUDES_DEFAULT"])])
 
 
 # AU::AC_USG
 # ----------
-# Define `USG' if string functions are in strings.h.
+# Define `USG' if string functions are *not* in strings.h.
 AU_DEFUN([AC_USG],
-[AC_MSG_CHECKING([for BSD string and memory functions])
+[# Obsolete code to be removed.
+AC_MSG_CHECKING([for BSD string and memory functions])
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <strings.h>]],
 				[[rindex(0, 0); bzero(0, 0);]])],
 	       [AC_MSG_RESULT(yes)],
@@ -777,9 +726,11 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <strings.h>]],
 			  [Define to 1 if you do not have <strings.h>, index,
 			   bzero, etc... This symbol is obsolete, you should
 			   not depend upon it.])])
-AC_CHECK_HEADERS(string.h)],
-[Remove `AC_MSG_CHECKING', `AC_LINK_IFELSE' and this warning
-when you adjust your code to use HAVE_STRING_H.])
+# End of obsolete code.
+],
+[Update your code to use string.h, then remove this
+warning and the code below it. It is not necessary
+to check for string.h.])
 
 
 # AU::AC_MEMORY_H
@@ -796,13 +747,17 @@ when you adjust your code to use HAVE_STRING_H.])
 # But it is better to check for both headers, and alias NEED_MEMORY_H to
 # HAVE_MEMORY_H.
 AU_DEFUN([AC_MEMORY_H],
-[AC_CHECK_HEADER(memory.h,
-		[AC_DEFINE([NEED_MEMORY_H], 1,
-			   [Same as `HAVE_MEMORY_H', don't depend on me.])])
-AC_CHECK_HEADERS(string.h memory.h)],
-[Remove this warning and
-`AC_CHECK_HEADER(memory.h, AC_DEFINE(...))' when you adjust your code to
-use HAVE_STRING_H and HAVE_MEMORY_H, not NEED_MEMORY_H.])
+[# Obsolete code to be removed.
+AC_CHECK_HEADERS([memory.h])
+if test $ac_cv_header_memory_h = yes; then
+   AC_DEFINE([NEED_MEMORY_H], [1],
+             [Same as `HAVE_MEMORY_H', don't depend on me.])
+fi
+# End of obsolete code.
+],
+[Update your code to use string.h, then remove this
+warning and the code below it.  It is not necessary
+to check for string.h.])
 
 
 # AU::AC_DIR_HEADER
