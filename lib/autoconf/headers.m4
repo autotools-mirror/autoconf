@@ -641,7 +641,7 @@ fi
 # AU::AC_HEADER_TIME
 # ------------------
 AU_DEFUN([AC_HEADER_TIME],
-[AC_CHECK_HEADERS([sys/time.h])
+[AC_CHECK_HEADERS_ONCE([sys/time.h])
 # Obsolete code to be removed.
 if test $ac_cv_header_sys_time_h = yes; then
   AC_DEFINE(TIME_WITH_SYS_TIME, 1,
@@ -752,7 +752,7 @@ to check for string.h.])
 # HAVE_MEMORY_H.
 AU_DEFUN([AC_MEMORY_H],
 [# Obsolete code to be removed.
-AC_CHECK_HEADERS([memory.h])
+AC_CHECK_HEADERS_ONCE([memory.h])
 if test $ac_cv_header_memory_h = yes; then
    AC_DEFINE([NEED_MEMORY_H], [1],
              [Same as `HAVE_MEMORY_H', don't depend on me.])

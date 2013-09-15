@@ -422,7 +422,6 @@ AN_FUNCTION([chown], [AC_FUNC_CHOWN])
 AC_DEFUN([AC_FUNC_CHOWN],
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
-AC_CHECK_HEADERS(unistd.h)
 AC_CACHE_CHECK([for working chown], ac_cv_func_chown_works,
 [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
 #include <fcntl.h>
@@ -562,8 +561,8 @@ AC_DEFUN([_AC_LIBOBJ_FNMATCH],
 [AC_REQUIRE([AC_C_CONST])dnl
 AC_REQUIRE([AC_FUNC_ALLOCA])dnl
 AC_REQUIRE([AC_TYPE_MBSTATE_T])dnl
-AC_CHECK_DECLS([getenv])
-AC_CHECK_FUNCS([btowc mbsrtowcs mempcpy wmempcpy])
+AC_CHECK_DECLS_ONCE([getenv])
+AC_CHECK_FUNCS_ONCE([btowc mbsrtowcs mempcpy wmempcpy])
 AC_LIBOBJ([fnmatch])
 AC_CONFIG_LINKS([$ac_config_libobj_dir/fnmatch.h:$ac_config_libobj_dir/fnmatch_.h])
 AC_DEFINE(fnmatch, rpl_fnmatch,
@@ -674,13 +673,12 @@ m4_define([_AC_LIBOBJ_GETLOADAVG],
 [AC_LIBOBJ(getloadavg)
 AC_DEFINE(C_GETLOADAVG, 1, [Define to 1 if using `getloadavg.c'.])
 # Figure out what our getloadavg.c needs.
+AC_CHECK_FUNCS_ONCE([setlocale])
 ac_have_func=no
 AC_CHECK_HEADER(sys/dg_sys_info.h,
 [ac_have_func=yes
  AC_DEFINE(DGUX, 1, [Define to 1 for DGUX with <sys/dg_sys_info.h>.])
  AC_CHECK_LIB(dgc, dg_sys_info)])
-
-AC_CHECK_FUNCS(setlocale)
 
 # We cannot check for <dwarf.h>, because Solaris 2 does not use dwarf (it
 # uses stabs), but it is still SVR4.  We cannot check for <elf.h> because
@@ -1212,7 +1210,7 @@ AN_FUNCTION([mmap], [AC_FUNC_MMAP])
 AC_DEFUN([AC_FUNC_MMAP],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CHECK_HEADERS_ONCE([unistd.h sys/param.h])
-AC_CHECK_FUNCS([getpagesize])
+AC_CHECK_FUNCS_ONCE([getpagesize])
 AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
 [AC_RUN_IFELSE([AC_LANG_SOURCE([AC_INCLUDES_DEFAULT]
 [[/* malloc might have been renamed as rpl_malloc. */
@@ -1447,7 +1445,7 @@ AC_DEFUN([AC_FUNC_REALLOC],
 # function's arguments, and define those types in `SELECT_TYPE_ARG1',
 # `SELECT_TYPE_ARG234', and `SELECT_TYPE_ARG5'.
 AC_DEFUN([AC_FUNC_SELECT_ARGTYPES],
-[AC_CHECK_HEADERS(sys/select.h sys/socket.h)
+[AC_CHECK_HEADERS_ONCE([sys/select.h sys/socket.h])
 AC_CACHE_CHECK([types of arguments for select],
 [ac_cv_func_select_args],
 [for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
@@ -1636,8 +1634,8 @@ AU_ALIAS([AM_FUNC_STRTOD], [AC_FUNC_STRTOD])
 # ------------------
 AN_FUNCTION([strerror_r], [AC_FUNC_STRERROR_R])
 AC_DEFUN([AC_FUNC_STRERROR_R],
-[AC_CHECK_DECLS([strerror_r])
-AC_CHECK_FUNCS([strerror_r])
+[AC_CHECK_DECLS_ONCE([strerror_r])
+AC_CHECK_FUNCS_ONCE([strerror_r])
 AC_CACHE_CHECK([whether strerror_r returns char *],
 	       ac_cv_func_strerror_r_char_p,
    [
@@ -1766,7 +1764,7 @@ AU_ALIAS([AC_STRCOLL], [AC_FUNC_STRCOLL])
 # AC_FUNC_UTIME_NULL
 # ------------------
 AC_DEFUN([AC_FUNC_UTIME_NULL],
-[AC_CHECK_HEADERS_ONCE(utime.h)
+[AC_CHECK_HEADERS_ONCE([utime.h])
 AC_CACHE_CHECK(whether utime accepts a null argument, ac_cv_func_utime_null,
 [rm -f conftest.data; >conftest.data
 # Sequent interprets utime(file, 0) to mean use start of epoch.  Wrong.
@@ -1804,8 +1802,8 @@ AN_FUNCTION([fork],  [AC_FUNC_FORK])
 AN_FUNCTION([vfork], [AC_FUNC_FORK])
 AC_DEFUN([AC_FUNC_FORK],
 [AC_REQUIRE([AC_TYPE_PID_T])dnl
-AC_CHECK_HEADERS(vfork.h)
-AC_CHECK_FUNCS(fork vfork)
+AC_CHECK_HEADERS_ONCE([vfork.h])
+AC_CHECK_FUNCS_ONCE([fork vfork])
 if test "x$ac_cv_func_fork" = xyes; then
   _AC_FUNC_FORK
 else
@@ -1988,12 +1986,12 @@ AU_ALIAS([AC_VFORK], [AC_FUNC_FORK])
 # Why the heck is that _doprnt does not define HAVE__DOPRNT???
 # That the logical name!
 AC_DEFUN([AC_FUNC_VPRINTF],
-[AC_CHECK_FUNCS(vprintf, [],
-[AC_CHECK_FUNC(_doprnt,
-	       [AC_DEFINE(HAVE_DOPRNT, 1,
+[AC_CHECK_FUNCS_ONCE([vprintf])
+AS_IF([test "x$ac_cv_func_vprintf" = xno],
+[AC_CHECK_FUNC([_doprnt],
+	       [AC_DEFINE([HAVE_DOPRNT], [1],
 			  [Define to 1 if you don't have `vprintf' but do have
-			  `_doprnt.'])])])
-])
+			  `_doprnt.'])])])])
 
 
 # AU::AC_VPRINTF
