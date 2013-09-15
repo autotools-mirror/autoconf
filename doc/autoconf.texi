@@ -3981,6 +3981,19 @@ unconditionally defines @code{HAVE_STRING_H}, @code{HAVE_STDLIB_H}, and
 macros.
 @end defmac
 
+@defmac AC_CHECK_INCLUDES_DEFAULT
+@acindex{CHECK_INCLUDES_DEFAULT}
+Check for all the headers that @code{AC_INCLUDES_DEFAULT} would check
+for as a side-effect, if this has not already happened.
+
+This macro mainly exists so that @code{autoupdate} can replace certain
+obsolete constructs with it. You should not need to use it yourself; in
+fact, it is likely to be safe to delete it from any script in which it
+appears.  (@code{autoupdate} does not know whether preprocessor macros
+such as @code{HAVE_STDINT_H} are used in the program, nor whether they
+would get defined as a side-effect of other checks.)
+@end defmac
+
 @node Alternative Programs
 @section Alternative Programs
 @cindex Programs, checking

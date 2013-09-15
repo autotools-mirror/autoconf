@@ -207,7 +207,7 @@ _AC_HEADERS_EXPANSION])AC_REQUIRE([_AC_Header_]m4_translit([[$1]],
 # Note: has intimate knowledge of how AC_INCLUDES_DEFAULT works,
 # and vice versa.
 AC_DEFUN([AC_CHECK_HEADERS_ONCE],
-  [AC_REQUIRE([_AC_INCLUDES_DEFAULT_REQUIREMENTS])]dnl
+  [AC_REQUIRE([AC_CHECK_INCLUDES_DEFAULT])]dnl
   [_AC_CHECK_HEADERS_ONCE([$1])])
 
 AC_DEFUN([_AC_CHECK_HEADERS_ONCE],
@@ -229,10 +229,10 @@ m4_define([_AC_HEADERS_EXPANSION],
 # macros.  It is easier to document, to extend, and to understand than
 # having specific defaults for each macro.
 
-# _AC_INCLUDES_DEFAULT_REQUIREMENTS
-# ---------------------------------
+# AC_CHECK_INCLUDES_DEFAULT
+# -------------------------
 # Required when AC_INCLUDES_DEFAULT uses its default branch.
-AC_DEFUN_ONCE([_AC_INCLUDES_DEFAULT_REQUIREMENTS],
+AC_DEFUN_ONCE([AC_CHECK_INCLUDES_DEFAULT],
 dnl If ever you change this variable, please keep autoconf.texi in sync.
 [m4_divert_text([DEFAULTS],
 [# Factoring default headers for most tests.
@@ -274,7 +274,7 @@ dnl HAVE_STDLIB_H, HAVE_STRING_H, and STDC_HEADERS.
 [AC_DEFINE([STDC_HEADERS], [1],
   [Always define to 1, for backward compatibility.
    You can assume the C90 standard headers exist.])])
-# _AC_INCLUDES_DEFAULT_REQUIREMENTS
+# AC_CHECK_INCLUDES_DEFAULT
 
 
 # AC_INCLUDES_DEFAULT([INCLUDES])
@@ -289,11 +289,8 @@ dnl HAVE_STDLIB_H, HAVE_STRING_H, and STDC_HEADERS.
 AC_DEFUN([AC_INCLUDES_DEFAULT],
 [m4_ifval([$1], [$1
 ],
-	  [AC_REQUIRE([_AC_INCLUDES_DEFAULT_REQUIREMENTS])dnl
-$ac_includes_default])])
-
-
-
+[AC_REQUIRE([AC_CHECK_INCLUDES_DEFAULT])]dnl
+[$ac_includes_default])])
 
 
 ## ------------------------------------------- ##
@@ -605,8 +602,7 @@ fi
 AU_DEFUN([AC_HEADER_STDC],
 [# Autoupdate added the following line to ensure that your configure
 # script's behavior did not change.  It is probably safe to remove.
-AS_IF([:], [], [ac_dummy="AC_INCLUDES_DEFAULT"])
-],
+AC_CHECK_INCLUDES_DEFAULT],
  [The preprocessor macro `STDC_HEADERS' is obsolete.
   Except in unusual embedded environments, you can safely include all
   ISO C90 headers unconditionally.])
@@ -713,7 +709,7 @@ fi
 AU_DEFUN([AC_UNISTD_H],
 [# Autoupdate added the following line to ensure that your configure
 # script's behavior did not change.  It is probably safe to remove.
-AS_IF([:], [], [ac_dummy="AC_INCLUDES_DEFAULT"])])
+AC_CHECK_INCLUDES_DEFAULT])
 
 
 # AU::AC_USG

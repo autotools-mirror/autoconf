@@ -94,6 +94,13 @@ GNU Autoconf NEWS - User visible changes.
 
   These macros were already labeled obsolescent in the manual.
 
+- New macro, AC_CHECK_INCLUDES_DEFAULT.  It causes the checks normally
+  performed as a side-effect by AC_INCLUDES_DEFAULT to happen at that
+  point in 'configure', if they haven't already been done.  Autoupdate
+  will replace certain obsolete constructs, whose only remaining
+  useful effect is to trigger those checks, with this macro.  It is
+  unlikely to be useful otherwise.
+
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
 ** Autoconf now requires perl 5.6 or better (but generated configure
