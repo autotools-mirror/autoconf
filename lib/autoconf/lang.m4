@@ -592,11 +592,21 @@ ac_exeext=$ac_cv_exeext
 # detect cross-compiling on Blue Gene.  Note also that AC_COMPUTE_INT
 # requires programs that create files when not cross-compiling, so it
 # is safe and not a bad idea to check for this capability in general.
+#
+# Another false negative would occur on many modern linux distributions,
+# which would have Wine run automatically for Windows binaries. This is
+# a default configuration on several Debian-derivated distributions for
+# instance (see `update-binfmts`).
+# As a consequence the simple test program would run without errors,
+# even though we are on an obvious cross-compilation case and further
+# more complicated tests would fail.
 m4_define([_AC_COMPILER_EXEEXT_CROSS],
 [# Check that the compiler produces executables we can run.  If not, either
 # the compiler is broken, or we cross compile.
 AC_MSG_CHECKING([whether we are cross compiling])
-if test "$cross_compiling" != yes; then
+if test "$cross_compiling" = maybe && test "x$build" != "x$host"; then
+  cross_compiling=yes
+elif test "$cross_compiling" != yes; then
   _AC_DO_VAR(ac_link)
   if _AC_DO_TOKENS([./conftest$ac_cv_exeext]); then
     cross_compiling=no
