@@ -682,6 +682,9 @@ AT_CLEANUP
 
 AT_SETUP([configure directories])
 
+CONFIG_SITE=/dev/null
+export CONFIG_SITE
+
 AT_DATA([foo.in],
 [[prefix=@prefix@
 exec_prefix=@exec_prefix@
