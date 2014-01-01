@@ -2235,7 +2235,7 @@ try {
   testvec.push_back("foo");
   testvec.push_back("bar");
   if (testvec.size() != 3) {
-    throw std::runtime_error("Vector size is not 1");
+    throw std::runtime_error("vector size is not 1");
   }
 
   // Dump vector into stringstream and obtain string.

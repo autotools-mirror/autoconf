@@ -46,7 +46,7 @@ MOSTLYCLEANFILES += $(bin_SCRIPTS) bin/autoconf.in bin/*.tmp
 # installation below the same $(prefix); work around this with --melt.
 bin/autoconf.in: $(srcdir)/bin/autoconf.as $(m4sh_m4f_dependencies)
 	$(MY_AUTOM4TE) --language M4sh --cache '' \
-	               --melt $(srcdir)/bin/autoconf.as -o $@
+	  --melt $(srcdir)/bin/autoconf.as -o $@
 
 ## All the scripts depend on Makefile so that they are rebuilt when the
 ## prefix etc. changes.  It took quite a while to have the rule correct,

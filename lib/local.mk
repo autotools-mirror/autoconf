@@ -124,7 +124,7 @@ lib/autoscan/autoscan.list: $(srcdir)/lib/autoscan/autoscan.pre
 	( \
 	  sed -n '/^[^#]/p' $(srcdir)/lib/autoscan/autoscan.pre; \
 	  $(MY_AUTOM4TE) --cache '' -M -l autoconf-without-aclocal-m4 \
-	                 -t'AN_OUTPUT:$$1: $$2		$$3' \
+	    -t'AN_OUTPUT:$$1: $$2		$$3' \
 	) | LC_ALL=C sort >>$@
 
 lib/autoscan/autoscan.list: $(autoconf_m4f_dependencies) Makefile
