@@ -366,7 +366,7 @@ AT_DATA([foo.c],
 #endif
 #include <stdio.h>
 
-int main ()
+int main (void)
 {
 #ifdef _OPENMP
 #pragma omp parallel
@@ -416,7 +416,7 @@ foo.@OBJEXT@: foo.cpp
 ]])
 
 AT_DATA([foo.cpp],
-[[int main ()
+[[int main (void)
 {
   return 0;
 }

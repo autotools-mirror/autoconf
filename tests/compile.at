@@ -124,7 +124,7 @@ AC_PROG_CC
 AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#ifndef PACKAGE_NAME
 choke me
 #endif
-int main ()
+int main (void)
 {
   return 0;
 }
@@ -150,7 +150,7 @@ AC_LANG([C++])
 AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#ifndef PACKAGE_NAME
 choke me
 #endif
-int main ()
+int main (void)
 {
   return 0;
 }
@@ -249,7 +249,7 @@ AT_CHECK([sed -n 's/ *$//; /#define PACKAGE/,$p' stdout], [],
 
 const char hw[] = "Hello, World\n";
 int
-main ()
+main (void)
 {
 fputs (hw, stdout);
   ;
@@ -269,7 +269,7 @@ AT_KEYWORDS([AC_LANG_DEFINES_PROVIDED])
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_COMPILE_IFELSE([int main () { return 0; }], [],
+AC_COMPILE_IFELSE([int main (void) { return 0; }], [],
   [AC_MSG_ERROR([compiling trivial program failed])])
 ]])
 
@@ -280,7 +280,7 @@ AT_CHECK_CONFIGURE([-q])
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED()int main () { return 0; }], [],
+AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED()int main (void) { return 0; }], [],
   [AC_MSG_ERROR([compiling trivial program failed])])
 ]])
 
@@ -324,7 +324,7 @@ test $estatus != 2 &&
   AC_MSG_ERROR([did not get as 2 exit status: $estatus])])
 
 # The old stinky one.
-AC_TRY_RUN([int main () { return 3; }],
+AC_TRY_RUN([int main (void) { return 3; }],
 	   [AC_MSG_ERROR([saw `return 3' as a success])],
 	   [estatus=$?
 test $estatus != 3 &&

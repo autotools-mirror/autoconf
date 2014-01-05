@@ -1147,7 +1147,7 @@ year_2050_test ()
 }
 
 int
-main ()
+main (void)
 {
   time_t t, delta;
   int i, j;
@@ -1274,7 +1274,7 @@ AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
 #endif /* no HAVE_GETPAGESIZE */
 
 int
-main ()
+main (void)
 {
   char *data, *data2, *data3;
   const char *cdata2;
@@ -1562,7 +1562,7 @@ AC_CACHE_CHECK(for working strtod, ac_cv_func_strtod,
 double strtod ();
 #endif
 int
-main()
+main (void)
 {
   {
     /* Some versions of Linux strtod mis-parse strings with leading '+'.  */
@@ -1900,7 +1900,7 @@ sparc_address_test (int arg)
 }
 
 int
-main ()
+main (void)
 {
   pid_t parent = getpid ();
   pid_t child;
@@ -2018,7 +2018,7 @@ AC_CACHE_CHECK([for wait3 that fills in rusage],
 #include <sys/wait.h>
 /* HP-UX has wait3 but does not fill in rusage at all.  */
 int
-main ()
+main (void)
 {
   struct rusage r;
   int i;

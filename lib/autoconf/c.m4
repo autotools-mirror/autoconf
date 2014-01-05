@@ -97,7 +97,7 @@ m4_define([AC_LANG_PROGRAM(C)],
 m4_ifdef([_AC_LANG_PROGRAM_C_F77_HOOKS], [_AC_LANG_PROGRAM_C_F77_HOOKS])[]dnl
 m4_ifdef([_AC_LANG_PROGRAM_C_FC_HOOKS], [_AC_LANG_PROGRAM_C_FC_HOOKS])[]dnl
 int
-main ()
+main (void)
 {
 dnl Do *not* indent the following line: there may be CPP directives.
 dnl Don't move the `;' right after for the same reason.
@@ -2061,7 +2061,7 @@ m4_define([_AC_LANG_OPENMP(C)],
  choke me
 #endif
 #include <omp.h>
-int main () { return omp_get_num_threads (); }
+int main (void) { return omp_get_num_threads (); }
 ])
 
 # _AC_LANG_OPENMP(C++)

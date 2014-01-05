@@ -254,7 +254,7 @@ void ucatch (dummy) int dummy; { }
 #endif
 
 int
-main ()
+main (void)
 {
   int i = fork (), status;
 

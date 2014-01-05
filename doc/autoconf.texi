@@ -9132,7 +9132,7 @@ on a system with @command{gcc} installed, results in:
 
 const char hw[] = "Hello, World\n";
 int
-main ()
+main (void)
 @{
 fputs (hw, stdout);
   ;
