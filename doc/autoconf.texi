@@ -13373,6 +13373,18 @@ should be valid to name macros in comments (which doesn't make sense to
 the authors of this documentation: input, such as macros, should be
 documented by @samp{dnl} comments; reserving @samp{#}-comments to
 document the output).
+
+As an example of a common use of this macro, consider what happens in
+packages that want to use the @command{pkg-config} script via the
+third-party @code{PKG_CHECK_MODULES} macro.  By default, if a developer
+checks out the development tree but has not yet installed the pkg-config
+macros locally, they can manage to successfully run @command{autoconf}
+on the package, but the resulting @file{configure} file will likely
+result in a confusing shell message about a syntax error on the line
+mentioning the unexpanded PKG_CHECK_MODULES macro.  On the other hand,
+if @file{configure.ac} includes @code{m4_pattern_forbid([^PKG_])}, the
+missing pkg-config macros will be detected immediately without allowing
+@command{autoconf} to succeed.
 @end defmac
 
 Of course, you might encounter exceptions to these generic rules, for
@@ -13382,6 +13394,11 @@ instance you might have to refer to @samp{$m4_flags}.
 @msindex{pattern_allow}
 Any token matching @var{pattern} is allowed, including if it matches an
 @code{m4_pattern_forbid} pattern.
+
+For example, gnulib uses @code{m4_pattern_forbid([^gl_])} to reserve the
+@code{gl_} namespace for itself, but also uses
+@code{m4_pattern_allow([^gl_ES$])} to avoid a false negative on the
+valid locale name.
 @end defmac
 
 @node Debugging via autom4te
