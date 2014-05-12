@@ -2778,7 +2778,7 @@ m4_define([_AC_RUN_IFELSE_BODY],
 AC_DEFUN([_AC_RUN_IFELSE],
 [AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_try_run],
   [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_try_run], [LINENO],
-    [Try to link conftest.$ac_ext, and return whether this succeeded.
+    [Try to run conftest.$ac_ext, and return whether this succeeded.
      Assumes that executables *can* be run.])],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
