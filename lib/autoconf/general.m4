@@ -998,8 +998,8 @@ m4_define([_AC_INIT_PARSE_ENABLE2],
     ac_useropt=`expr "x$ac_option" : 'x-*$1-\(m4_if([$1], [$2], [[[^=]]], [.])*\)'`
     # Reject names that are not valid shell variable names.
     expr "x$ac_useropt" : "[.*[^-+._$as_cr_alnum]]" >/dev/null &&
-      AC_MSG_ERROR(
-	[invalid ]m4_if([$2], [with], [package], [feature])[ name: $ac_useropt])
+      AC_MSG_ERROR([invalid ]m4_if([$2], [with],
+        [package], [feature])[ name: `$ac_useropt'])
     ac_useropt_orig=$ac_useropt
     ac_useropt=`AS_ECHO(["$ac_useropt"]) | sed 's/[[-+.]]/_/g'`
     case $ac_user_opts in
