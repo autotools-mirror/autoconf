@@ -618,9 +618,11 @@ done[]_m4_popdef([$1])])
 # AS_IF(TEST1, [IF-TRUE1 = :]...[IF-FALSE = :])
 # ---------------------------------------------
 # Expand into
-# | if TEST1; then
+# | if TEST1
+# | then
 # |   IF-TRUE1
-# | elif TEST2; then
+# | elif TEST2
+# | then
 # |   IF-TRUE2
 # [...]
 # | else
@@ -629,7 +631,8 @@ done[]_m4_popdef([$1])])
 # with simplifications when IF-TRUE1 and/or IF-FALSE are empty.
 #
 m4_define([_AS_IF],
-[elif $1; then :
+[elif $1
+then :
   $2
 ])
 m4_define([_AS_IF_ELSE],
@@ -639,7 +642,8 @@ m4_define([_AS_IF_ELSE],
 ])])
 
 m4_defun([AS_IF],
-[if $1; then :
+[if $1
+then :
   $2
 m4_map_args_pair([_$0], [_$0_ELSE], m4_shift2($@))]dnl
 [fi[]])# AS_IF
@@ -1389,7 +1393,8 @@ _ASBOX])
 # Remove all contents from within DIR, including any unwritable
 # subdirectories, but leave DIR itself untouched.
 m4_define([_AS_CLEAN_DIR],
-[if test -d $1; then
+[if test -d $1
+then
   find $1 -type d ! -perm -700 -exec chmod u+rwx {} \;
   rm -fr $1/* $1/.[[!.]] $1/.??*
 fi])

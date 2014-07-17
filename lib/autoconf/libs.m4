@@ -49,7 +49,8 @@ AC_DEFUN([AC_SEARCH_LIBS],
 AC_CACHE_CHECK([for library containing $1], [ac_Search],
 [ac_func_search_save_LIBS=$LIBS
 AC_LANG_CONFTEST([AC_LANG_CALL([], [$1])])
-for ac_lib in '' $2; do
+for ac_lib in '' $2
+do
   if test -z "$ac_lib"; then
     ac_res="none required"
   else

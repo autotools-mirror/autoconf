@@ -421,7 +421,8 @@ m4_define([_AC_PATH_PROGS_FEATURE_CHECK],
   ac_path_$1_found=false
   # Loop through the user's path and test for each of PROGNAME-LIST
   _AS_PATH_WALK([$5],
-  [for ac_prog in $2; do
+  [for ac_prog in $2
+   do
     for ac_exec_ext in '' $ac_executable_extensions; do
       ac_path_$1="$as_dir$ac_prog$ac_exec_ext"
       AS_EXECUTABLE_P(["$ac_path_$1"]) || continue

@@ -1244,6 +1244,9 @@ AS_IF([false], [:], [ ]) && AS_CASE([foo], [foo], []
 ) && echo seventeen
 m4_define([empty])AS_IF([:], [empty]
 ) && AS_CASE([foo], [foo], [empty]) && echo eighteen
+dnl Allow for users that don't know to avoid trailing whitespace
+AS_IF([:
+], [echo nineteen])
 dnl We can't handle AS_IF([false], [:], [empty]) unless m4_expand is
 dnl taught how to handle m4_require.  The user is responsible for
 dnl avoiding the syntax error in that case.
@@ -1301,6 +1304,7 @@ fifteen
 sixteen
 seventeen
 eighteen
+nineteen
 foo1=1 bar1=1
 foo2=2 bar2=
 foo3=3 bar3=

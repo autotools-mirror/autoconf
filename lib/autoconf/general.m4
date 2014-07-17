@@ -1700,7 +1700,8 @@ AC_DEFUN([AC_CONFIG_AUX_DIR_DEFAULT],
 # do not automatically need to distribute the other auxiliary files.
 AC_DEFUN([AC_CONFIG_AUX_DIRS],
 [ac_aux_dir=
-for ac_dir in $1; do
+for ac_dir in $1
+do
   if test -f "$ac_dir/install-sh"; then
     ac_aux_dir=$ac_dir
     ac_install_sh="$ac_aux_dir/install-sh -c"
