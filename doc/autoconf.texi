@@ -4,6 +4,7 @@
 @setfilename autoconf.info
 @include version.texi
 @settitle Autoconf
+@documentencoding UTF-8
 @setchapternewpage odd
 @ifnothtml
 @setcontentsaftertitlepage
@@ -39,16 +40,16 @@
 @c Because we want to drop out the AC_ part of the macro names in the
 @c printed manual, but not in the other outputs, we need a layer above
 @c the usual @acindex{} etc.  That's why we first define indexes such as
-@c acx meant to become the macro @acindex.  First of all, using ``ac_''
-@c does not work with makeinfo, and using ``ac1'' doesn't work with TeX.
-@c So use something more regular ``acx''.  Then you finish with a printed
-@c index saying ``index is not existent''.  Of course: you ought to use
+@c acx meant to become the macro @acindex.  First of all, using 'ac_'
+@c does not work with makeinfo, and using 'ac1' doesn't work with TeX.
+@c So use something more regular 'acx'.  Then you finish with a printed
+@c index saying 'index is not existent'.  Of course: you ought to use
 @c two letters :(  So you use capitals.
 @c
 @c Second, when defining a macro in the TeX world, following spaces are
 @c eaten.  But then, since we embed @acxindex commands that use the end
 @c of line as an end marker, the whole things wrecks itself.  So make
-@c sure you do *force* an additional end of line, add a ``@c''.
+@c sure you do *force* an additional end of line, add a '@c'.
 @c
 @c Finally, you might want to get rid of TeX expansion, using --expand
 @c with texi2dvi.  But then you wake up an old problem: we use macros
@@ -72,7 +73,7 @@
 @defcodeindex AT
 @c Define an M4sugar macro index that @defmac doesn't write to.
 @defcodeindex MS
-@c Define an index for *foreign* programs: `mv' etc.  Used for the
+@c Define an index for *foreign* programs: 'mv' etc.  Used for the
 @c portability sections and so on.
 @defindex pr
 
@@ -210,7 +211,7 @@ This manual (@value{UPDATED}) is for GNU Autoconf
 a package for creating scripts to configure source code packages using
 templates and an M4 macro package.
 
-Copyright @copyright{} 1992-1996, 1998-2014 Free Software Foundation,
+Copyright @copyright{} 1992--1996, 1998--2014 Free Software Foundation,
 Inc.
 
 @quotation
@@ -742,7 +743,7 @@ along that front are welcome, since package maintainers form the user
 base of Autoconf); rather, the goal is to make @file{configure}
 painless, portable, and predictable for the end user of each
 @dfn{autoconfiscated} package.  And to this degree, Autoconf is highly
-successful at its goal --- most complaints to the Autoconf list are
+successful at its goal---most complaints to the Autoconf list are
 about difficulties in writing Autoconf input, and not in the behavior of
 the resulting @file{configure}.  Even packages that don't use Autoconf
 will generally provide a @file{configure} script, and the most common
@@ -6503,7 +6504,7 @@ If no @var{includes} are specified, the default includes are used
 
 @example
 AC_CHECK_MEMBER([struct passwd.pw_gecos], [],
-                [AC_MSG_ERROR([we need `passwd.pw_gecos'])],
+                [AC_MSG_ERROR([we need 'passwd.pw_gecos'])],
                 [[#include <pwd.h>]])
 @end example
 
@@ -9875,11 +9876,11 @@ different things.
 @example
 $ @kbd{./configure --silent --config-cache}
 $ @kbd{CC=cc ./configure --silent --config-cache}
-configure: error: `CC' was not set in the previous run
+configure: error: 'CC' was not set in the previous run
 configure: error: changes in the environment can compromise \
 the build
-configure: error: run `make distclean' and/or \
-`rm config.cache' and start over
+configure: error: run 'make distclean' and/or \
+'rm config.cache' and start over
 @end example
 
 @noindent
@@ -9990,7 +9991,7 @@ AC_DEFUN([AC_SHELL_TRUE],
                  (true) 2>/dev/null && my_cv_shell_true_works=yes
                  if test "x$my_cv_shell_true_works" = xyes; then
                    AC_DEFINE([TRUE_WORKS], [1],
-                             [Define if `true(1)' works properly.])
+                             [Define if 'true(1)' works properly.])
                  fi])
 ])
 @end group
@@ -10010,7 +10011,7 @@ AC_DEFUN([AC_SHELL_TRUE],
                  (true) 2>/dev/null && my_cv_shell_true_works=yes])
  if test "x$my_cv_shell_true_works" = xyes; then
    AC_DEFINE([TRUE_WORKS], [1],
-             [Define if `true(1)' works properly.])
+             [Define if 'true(1)' works properly.])
  fi
 ])
 @end group
@@ -10708,7 +10709,7 @@ the one they were implemented with.
 @cindex quadrigraphs
 @cindex @samp{@@S|@@}
 @cindex @samp{@@&t@@}
-@c Info cannot handle `:' in index entries.
+@c Info cannot handle ':' in index entries.
 @ifnotinfo
 @cindex @samp{@@<:@@}
 @cindex @samp{@@:>@@}
@@ -14041,7 +14042,7 @@ configure scripts.
 @ovindex tmp
 Create, as safely as possible, a temporary sub-directory within
 @var{dir} with a name starting with @var{prefix}.  @var{prefix} should
-be 2-4 characters, to make it slightly easier to identify the owner of
+be 2--4 characters, to make it slightly easier to identify the owner of
 the directory.  If @var{dir} is omitted, then the value of @env{TMPDIR}
 will be used (defaulting to @samp{/tmp}).  On success, the name of the
 newly created directory is stored in the shell variable @code{tmp}.  On
@@ -15572,7 +15573,7 @@ signal 15:
 208
 @end example
 
-This gets even worse if one is using the POSIX `wait' interface to get
+This gets even worse if one is using the POSIX ``wait'' interface to get
 details about the shell process terminations: it will result in the shell
 having exited normally, rather than by receiving a signal.
 
@@ -16028,7 +16029,7 @@ j a0
 @end example
 
 @item $@{@var{var}:-@var{value}@}
-@c Info cannot handle `:' in index entries.
+@c Info cannot handle ':' in index entries.
 @ifnotinfo
 @cindex @code{$@{@var{var}:-@var{value}@}}
 @end ifnotinfo
@@ -18585,11 +18586,11 @@ nothing.
 The default executable, produced by @samp{cc foo.c}, can be
 
 @itemize
-@item @file{a.out} --- usual Posix convention.
-@item @file{b.out} --- i960 compilers (including @command{gcc}).
-@item @file{a.exe} --- DJGPP port of @command{gcc}.
-@item @file{a_out.exe} --- GNV @command{cc} wrapper for DEC C on OpenVMS.
-@item @file{foo.exe} --- various MS-DOS compilers.
+@item @file{a.out} -- usual Posix convention.
+@item @file{b.out} -- i960 compilers (including @command{gcc}).
+@item @file{a.exe} -- DJGPP port of @command{gcc}.
+@item @file{a_out.exe} -- GNV @command{cc} wrapper for DEC C on OpenVMS.
+@item @file{foo.exe} -- various MS-DOS compilers.
 @end itemize
 
 The C compiler's traditional name is @command{cc}, but other names like
@@ -22555,13 +22556,13 @@ if test "$cache_file" = /dev/null; then
 fi
 @end example
 
-@c Leave this use of ``File system'' rendered as one word, but
+@c Leave this use of "File system" rendered as one word, but
 @c slightly obfuscated so as not to trigger the syntax-check prohibition.
 @cindex File@/system Hierarchy Standard
 @cindex FHS
 
 Another use of @file{config.site} is for priming the directory variables
-@c ``File system'', but slightly obfuscated, as above.
+@c "File system", but slightly obfuscated, as above.
 in a manner consistent with the File@/system Hierarchy Standard
 (FHS).  Once the following file is installed at
 @file{/usr/share/config.site}, a user can execute simply
