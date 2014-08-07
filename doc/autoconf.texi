@@ -16379,12 +16379,12 @@ and it has most of the problems listed under @code{`@var{commands}`}.
 
 This construct can be
 nested while this is impossible to do portably with back quotes.
-Unfortunately it is not yet universally supported.  Most notably, even recent
-releases of Solaris don't support it:
+Although it is almost universally supported, unfortunately Solaris 10
+and earlier releases lack it:
 
 @example
 $ @kbd{showrev -c /bin/sh | grep version}
-Command version: SunOS 5.10 Generic 121005-03 Oct 2006
+Command version: SunOS 5.10 Generic 142251-02 Sep 2010
 $ @kbd{echo $(echo blah)}
 syntax error: `(' unexpected
 @end example
