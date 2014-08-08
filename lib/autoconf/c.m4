@@ -1995,14 +1995,54 @@ AC_DEFUN([AC_C_VARARRAYS],
 [
   AC_CACHE_CHECK([for variable-length arrays],
     ac_cv_c_vararrays,
-    [AC_COMPILE_IFELSE(
-       [AC_LANG_PROGRAM([],
-	  [[static int x; char a[++x]; a[sizeof a - 1] = 0; return a[0];]])],
-       [ac_cv_c_vararrays=yes],
-       [ac_cv_c_vararrays=no])])
-  if test $ac_cv_c_vararrays = yes; then
+    [AC_EGREP_CPP([defined],
+       [#ifdef __STDC_NO_VLA__
+	defined
+	#endif
+       ],
+       [ac_cv_c_vararrays='no: __STDC_NO_VLA__ is defined'],
+       [AC_COMPILE_IFELSE(
+	  [AC_LANG_PROGRAM(
+	     [[/* Test for VLA support.  This test is partly inspired
+		  from examples in the C standard.  Use at least two VLA
+		  functions to detect the GCC 3.4.3 bug described in:
+		  http://lists.gnu.org/archive/html/bug-gnulib/2014-08/msg00014.html
+		  */
+	       #ifdef __STDC_NO_VLA__
+		syntax error;
+	       #else
+		 extern int n;
+		 int B[100];
+		 int fvla (int m, int C[m][m]);
+
+		 int
+		 simple (int count, int all[static count])
+		 {
+		   return all[count - 1];
+		 }
+
+		 int
+		 fvla (int m, int C[m][m])
+		 {
+		   typedef int VLA[m][m];
+		   VLA x;
+		   int D[m];
+		   static int (*q)[m] = &B;
+		   int (*s)[n] = q;
+		   return C && &x[0][0] == &D[0] && &D[0] == s[0];
+		 }
+	       #endif
+	       ]])],
+	  [ac_cv_c_vararrays=yes],
+	  [ac_cv_c_vararrays=no])])])
+  if test "$ac_cv_c_vararrays" = yes; then
+    dnl This is for compatibility with Autoconf 2.61-2.69.
     AC_DEFINE([HAVE_C_VARARRAYS], 1,
       [Define to 1 if C supports variable-length arrays.])
+  elif test "$ac_cv_c_vararrays" = no; then
+    AC_DEFINE([__STDC_NO_VLA__], 1,
+      [Define to 1 if C does not support variable-length arrays, and
+       if the compiler does not already define this.])
   fi
 ])
 

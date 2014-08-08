@@ -31,6 +31,12 @@ GNU Autoconf NEWS - User visible changes.
 
 - New macro AC_C__GENERIC.
 
+- AC_C_VARARRAYS now defines __STDC_NO_VLA__ if variable-length
+  arrays are not supported and if the compiler does not already
+  define __STDC_NO_VLA__.  This is for compatibility with C11.
+  For backward compatibility with Autoconf 2.61-2.69 AC_C_VARARRAYS
+  still defines HAVE_C_VARARRAYS, but this usage is obsolescent.
+
 - AC_CONFIG_MACRO_DIRS
   New macro, used to declare multiple directories when looking for
   local M4 macros.  This macro overcomes some of the shortfalls in the

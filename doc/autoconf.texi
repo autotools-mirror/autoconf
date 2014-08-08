@@ -7488,11 +7488,15 @@ for (i = 0; i < n; i++)
 
 @defmac AC_C_VARARRAYS
 @acindex{C_VARARRAYS}
+@cvindex __STDC_NO_VLA__
 @cvindex HAVE_C_VARARRAYS
-If the C compiler supports variable-length arrays, define
-@code{HAVE_C_VARARRAYS}.  A variable-length array is an array of automatic
-storage duration whose length is determined at run time, when the array
-is declared.
+If the C compiler does not support variable-length arrays, define the
+macro @code{__STDC_NO_VLA__} to be 1 if it is not already defined.  A
+variable-length array is an array of automatic storage duration whose
+length is determined at run time, when the array is declared.  For
+backward compatibility this macro also defines @code{HAVE_C_VARARRAYS}
+if the C compiler supports variable-length arrays, but this usage is
+obsolescent and new programs should use @code{__STDC_NO_VLA__}.
 @end defmac
 
 @defmac AC_C_TYPEOF
