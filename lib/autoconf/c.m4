@@ -1853,19 +1853,22 @@ fi
 # Otherwise, define "restrict" to be empty.
 AN_IDENTIFIER([restrict], [AC_C_RESTRICT])
 AC_DEFUN([AC_C_RESTRICT],
-[AC_CACHE_CHECK([for C/C++ restrict keyword], ac_cv_c_restrict,
+[AC_CACHE_CHECK([for C/C++ restrict keyword], [ac_cv_c_restrict],
   [ac_cv_c_restrict=no
    # The order here caters to the fact that C++ does not require restrict.
    for ac_kw in __restrict __restrict__ _Restrict restrict; do
-     AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-      [[typedef int * int_ptr;
-	int foo (int_ptr $ac_kw ip) {
-	return ip[0];
-       }]],
-      [[int s[1];
-	int * $ac_kw t = s;
-	t[0] = 0;
-	return foo(t)]])],
+     AC_COMPILE_IFELSE(
+      [AC_LANG_PROGRAM(
+	 [[typedef int *int_ptr;
+	   int foo (int_ptr $ac_kw ip) { return ip[0]; }
+	   int bar (int [$ac_kw]); /* Catch GCC bug 14050.  */
+	   int bar (int [$ac_kw ip]) { return ip[0]; }
+	 ]],
+	 [[int s[1];
+	   int *$ac_kw t = s;
+	   t[0] = 0;
+	   return foo (t) + bar (t);
+	 ]])],
       [ac_cv_c_restrict=$ac_kw])
      test "$ac_cv_c_restrict" != no && break
    done
