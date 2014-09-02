@@ -1862,7 +1862,7 @@ AC_DEFUN([AC_C_RESTRICT],
 	 [[typedef int *int_ptr;
 	   int foo (int_ptr $ac_kw ip) { return ip[0]; }
 	   int bar (int [$ac_kw]); /* Catch GCC bug 14050.  */
-	   int bar (int [$ac_kw ip]) { return ip[0]; }
+	   int bar (int ip[$ac_kw]) { return ip[0]; }
 	 ]],
 	 [[int s[1];
 	   int *$ac_kw t = s;
