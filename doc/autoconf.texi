@@ -7206,10 +7206,10 @@ declarations, named initialization of structs, @code{restrict},
 loops, and variable length arrays.  Test for C89 support by checking for
 function prototypes.
 
-If using the GNU C compiler, set shell variable @code{GCC} to
+If using a compiler that supports GNU C, set shell variable @code{GCC} to
 @samp{yes}.  If output variable @code{CFLAGS} was not already set, set
-it to @option{-g -O2} for the GNU C compiler (@option{-O2} on systems
-where GCC does not accept @option{-g}), or @option{-g} for
+it to @option{-g -O2} for a GNU C compiler (@option{-O2} on systems
+where the compiler does not accept @option{-g}), or @option{-g} for
 other compilers.  If your package does not like this default, then it is
 acceptable to insert the line @samp{: $@{CFLAGS=""@}} after @code{AC_INIT}
 and before @code{AC_PROG_CC} to select an empty default instead.
@@ -7503,7 +7503,7 @@ obsolescent and new programs should use @code{__STDC_NO_VLA__}.
 @acindex{C_TYPEOF}
 @cvindex HAVE_TYPEOF
 @cvindex typeof
-If the C compiler supports GCC's @code{typeof} syntax either
+If the C compiler supports GNU C's @code{typeof} syntax either
 directly or
 through a different spelling of the keyword (e.g., @code{__typeof__}),
 define @code{HAVE_TYPEOF}.  If the support is available only through a
@@ -7528,7 +7528,7 @@ New programs need not use this macro.
 @defmac AC_PROG_GCC_TRADITIONAL
 @acindex{PROG_GCC_TRADITIONAL}
 @ovindex CC
-Add @option{-traditional} to output variable @code{CC} if using the
+Add @option{-traditional} to output variable @code{CC} if using a
 GNU C compiler and @code{ioctl} does not work properly without
 @option{-traditional}.  That usually happens when the fixed header files
 have not been installed on an old system.
@@ -7656,10 +7656,10 @@ like this:
 AC_PROG_OBJC([gcc objcc objc])
 @end example
 
-If using the GNU Objective C compiler, set shell variable
+If using a compiler that supports GNU Objective C, set shell variable
 @code{GOBJC} to @samp{yes}.  If output variable @code{OBJCFLAGS} was not
-already set, set it to @option{-g -O2} for the GNU Objective C
-compiler (@option{-O2} on systems where @command{gcc} does not accept
+already set, set it to @option{-g -O2} for a GNU Objective C
+compiler (@option{-O2} on systems where the compiler does not accept
 @option{-g}), or @option{-g} for other compilers.
 @end defmac
 
@@ -7697,10 +7697,10 @@ like this:
 AC_PROG_OBJCXX([gcc g++ objcc++ objcxx])
 @end example
 
-If using the GNU Objective C++ compiler, set shell variable
+If using a compiler that supports GNU Objective C++, set shell variable
 @code{GOBJCXX} to @samp{yes}.  If output variable @code{OBJCXXFLAGS} was not
-already set, set it to @option{-g -O2} for the GNU Objective C++
-compiler (@option{-O2} on systems where @command{gcc} does not accept
+already set, set it to @option{-g -O2} for a GNU Objective C++
+compiler (@option{-O2} on systems where the compiler does not accept
 @option{-g}), or @option{-g} for other compilers.
 @end defmac
 
@@ -7818,12 +7818,12 @@ example, if you didn't like the default order, then you could invoke
 AC_PROG_F77([fl32 f77 fort77 xlf g77 f90 xlf90])
 @end example
 
-If using @code{g77} (the GNU Fortran 77 compiler), then
+If using a compiler that supports GNU Fortran 77,
 set the shell variable @code{G77} to @samp{yes}.
 If the output variable @code{FFLAGS} was not already set in the
-environment, then set it to @option{-g -02} for @code{g77} (or @option{-O2}
-where @code{g77} does not accept @option{-g}).  Otherwise, set
-@code{FFLAGS} to @option{-g} for all other Fortran 77 compilers.
+environment, set it to @option{-g -02} for @code{g77} (or @option{-O2}
+where the GNU Fortran 77 compiler does not accept @option{-g}), or
+@option{-g} for other compilers.
 
 The result of the GNU test is cached in the
 @code{ac_cv_f77_compiler_gnu} variable, acceptance of @option{-g} in the
@@ -7858,12 +7858,12 @@ This macro may, alternatively, be invoked with an optional first argument
 which, if specified, must be a blank-separated list of Fortran
 compilers to search for, just as in @code{AC_PROG_F77}.
 
-If using @code{gfortran} or @code{g77} (the GNU Fortran compilers), then
+If using a compiler that supports GNU Fortran,
 set the shell variable @code{GFC} to @samp{yes}.
 If the output variable @code{FCFLAGS} was not already set in the
-environment, then set it to @option{-g -02} for GNU @code{g77} (or
-@option{-O2} where @code{g77} does not accept @option{-g}).  Otherwise,
-set @code{FCFLAGS} to @option{-g} for all other Fortran compilers.
+environment, then set it to @option{-g -02} for a GNU Fortran compiler (or
+@option{-O2} where the compiler does not accept @option{-g}), or
+@option{-g} for other compilers.
 
 The result of the GNU test is cached in the @code{ac_cv_fc_compiler_gnu}
 variable, acceptance of @option{-g} in the @code{ac_cv_prog_fc_g}
