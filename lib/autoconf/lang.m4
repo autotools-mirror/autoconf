@@ -343,7 +343,7 @@ AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
 # some Fortran compilers (e.g., SGI) might consider it's a
 # continuation line, and warn instead of reporting an error.
 m4_define([_AC_LANG_COMPILER_GNU],
-[AC_CACHE_CHECK([whether we are using the GNU _AC_LANG compiler],
+[AC_CACHE_CHECK([whether the compiler supports GNU _AC_LANG],
 		[ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu],
 [_AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[#ifndef __GNUC__
        choke me
