@@ -17668,6 +17668,29 @@ $ @kbd{/bin/sh -c 'export foo; foo=bar; echo $foo'}
 bar
 @end example
 
+Posix requires @command{export} to work with any arbitrary value for the
+contents of the variable being exported, as long as the total size of
+the environment combined with arguments doesn't exceed @code{ARG_MAX}
+when executing a child process.  However, some shells have extensions
+that involve interpreting some environment values specially, regardless
+of the variable name.  We currently know of one case: all versions of
+Bash released prior to 27 September 2014 intepret an environment
+variable with an initial content substring of @code{() @{} as an
+exported function definition (this is the ``Shellshock'' remote
+execution bug, CVE-2014-6271 and friends, where it was possible to
+eploit the function parser to cause remote code execution on child bash
+startup; newer versions of Bash use special environment variable
+@emph{names} instead of values to implement the same feature).
+
+There may be entries inherited into the environment that are not valid
+as shell variable names; Posix states that processes should be tolerant
+of these names.  Some shells such as @command{dash} do this by removing
+those names from the environment at startup, while others such as
+@command{bash} hide the entry from shell access but still pass it on to
+child processes.  While you can set such names using @command{env} for a
+direct child process, you cannot rely on them being preserved through an
+intermediate pass through the shell.
+
 @item @command{false}
 @c ------------------
 @prindex @command{false}
