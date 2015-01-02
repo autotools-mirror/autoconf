@@ -18684,9 +18684,7 @@ avoid this problem, omit the trailing slashes.  For example, use
 @samp{cp -R source /tmp/newdir} rather than @samp{cp -R source
 /tmp/newdir/} if @file{/tmp/newdir} does not exist.
 
-@c This is thanks to Ian.
-The ancient SunOS 4 @command{cp} does not support @option{-f}, although
-its @command{mv} does.
+The @option{-f} option is portable nowadays.
 
 @cindex timestamp resolution
 Traditionally, file timestamps had 1-second resolution, and @samp{cp
@@ -19088,9 +19086,11 @@ the workaround is to use @command{join -a1 file1 file2} instead.
 @item @command{ln}
 @c ---------------
 @prindex @command{ln}
+The @option{-f} option is portable nowadays.
+
 @cindex Symbolic links
-Don't rely on @command{ln} having a @option{-f} option.  Symbolic links
-are not available on old systems; use @samp{$(LN_S)} as a portable substitute.
+Symbolic links are not available on some systems; use @samp{$(LN_S)} as
+a portable substitute.
 
 For versions of the DJGPP before 2.04,
 @command{ln} emulates symbolic links
