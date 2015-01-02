@@ -1,7 +1,7 @@
 #                                                       -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# Copyright (C) 1992-1995, 1999-2014 Free Software Foundation, Inc.
+# Copyright (C) 1992-1995, 1999-2015 Free Software Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ AM_INIT_AUTOMAKE([1.11 dist-xz readme-alpha no-texinfo.tex std-options])
 
 # Keep this on a line of its own, since it must be found and processed
 # by the 'update-release-year' rule in our Makefile.
-RELEASE_YEAR=2014
+RELEASE_YEAR=2015
 AC_SUBST([RELEASE_YEAR])
 
 AB_INIT

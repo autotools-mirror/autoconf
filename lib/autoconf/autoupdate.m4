@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Interface with autoupdate.
 
-# Copyright (C) 1992-1996, 1998-2001, 2003-2004, 2006, 2009-2014 Free
+# Copyright (C) 1992-1996, 1998-2001, 2003-2004, 2006, 2009-2015 Free
 # Software Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free

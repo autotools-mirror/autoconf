@@ -7,7 +7,7 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 
 # ifnames - print the identifiers used in C preprocessor conditionals
 
-# Copyright (C) 1994-1995, 1999-2003, 2005-2014 Free Software
+# Copyright (C) 1994-1995, 1999-2003, 2005-2015 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
