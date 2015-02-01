@@ -155,11 +155,11 @@ clean-local:
 	rm -f -r autom4te.cache
 
 check-local: tests/atconfig tests/atlocal $(TESTSUITE)
-	$(run_testsuite) $(TESTSUITEFLAGS)
+	+$(run_testsuite) $(TESTSUITEFLAGS)
 
 # Run the test suite on the *installed* tree.
 installcheck-local: tests/atconfig tests/atlocal $(TESTSUITE)
-	$(run_testsuite) AUTOTEST_PATH="$(bindir)" $(TESTSUITEFLAGS)
+	+$(run_testsuite) AUTOTEST_PATH="$(bindir)" $(TESTSUITEFLAGS)
 
 
 
