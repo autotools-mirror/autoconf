@@ -672,6 +672,7 @@ if test -z "$MKDIR_P"; then
 	   AS_EXECUTABLE_P(["$as_dir$ac_prog$ac_exec_ext"]) || continue
 	   case `"$as_dir$ac_prog$ac_exec_ext" --version 2>&1` in #(
 	     'mkdir (GNU coreutils) '* | \
+	     'BusyBox '* | \
 	     'mkdir (coreutils) '* | \
 	     'mkdir (fileutils) '4.1*)
 	       ac_cv_path_mkdir=$as_dir$ac_prog$ac_exec_ext
