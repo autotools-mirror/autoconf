@@ -342,7 +342,7 @@ my_cv_variable=true
 AC_MSG_RESULT([$my_cv_variable])
 
 # Ensure that the result is available at this point.
-if test ${my_cv_variable+set} != set; then
+if ${my_cv_variable+false} :; then
   AC_MSG_ERROR([AC@&@&t@t@_CACHE_VAL did not ensure that the cache variable was set])
 fi
 

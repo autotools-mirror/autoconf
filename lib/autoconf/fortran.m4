@@ -398,7 +398,7 @@ AC_LANG_POP(Fortran)dnl
 # versions of a library), tasteless as that idea is.
 m4_define([_AC_PROG_FC_G],
 [_AC_FORTRAN_ASSERT()dnl
-ac_test_[]_AC_LANG_PREFIX[]FLAGS=${[]_AC_LANG_PREFIX[]FLAGS+set}
+ac_test_[]_AC_LANG_PREFIX[]FLAGS=${[]_AC_LANG_PREFIX[]FLAGS+y}
 ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
 _AC_LANG_PREFIX[]FLAGS=
 AC_CACHE_CHECK(whether $[]_AC_FC[] accepts -g, ac_cv_prog_[]_AC_LANG_ABBREV[]_g,
@@ -407,7 +407,7 @@ _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 [ac_cv_prog_[]_AC_LANG_ABBREV[]_g=yes],
 [ac_cv_prog_[]_AC_LANG_ABBREV[]_g=no])
 ])
-if test "$ac_test_[]_AC_LANG_PREFIX[]FLAGS" = set; then
+if test $ac_test_[]_AC_LANG_PREFIX[]FLAGS; then
   _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
 elif test $ac_cv_prog_[]_AC_LANG_ABBREV[]_g = yes; then
   if test "x$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu" = xyes; then

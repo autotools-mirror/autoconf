@@ -61,9 +61,9 @@ AC_CACHE_CHECK([whether /bin/sh -n is known to work], [ac_cv_sh_n_works],
 [if (
     unset BASH_VERSION ZSH_VERSION
     /bin/sh -c '
-      test -n "${BASH_VERSION+set}" || # Bash
-      test -n "${KSH_VERSION+set}" || # pdksh
-      test -n "${ZSH_VERSION+set}" || # zsh
+      test ${BASH_VERSION+y} || # Bash
+      test ${KSH_VERSION+y} || # pdksh
+      test ${ZSH_VERSION+y} || # zsh
       test -n "${.sh.version}" # ksh93; put this last since its syntax is dodgy
     '
   ) 2>/dev/null

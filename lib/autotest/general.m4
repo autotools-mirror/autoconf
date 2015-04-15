@@ -363,7 +363,7 @@ at_fn_create_debugging_script ()
 {
   {
     echo "#! /bin/sh" &&
-    echo 'test "${ZSH_VERSION+set}" = set dnl
+    echo 'test ${ZSH_VERSION+y} dnl
 && alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\''' &&
     AS_ECHO(["cd '$at_dir'"]) &&
     AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} \"$at_myself\" -v -d ]dnl
@@ -1367,7 +1367,7 @@ dnl Unfortunately, ksh93 fork-bombs when we send TSTP, so send STOP
 dnl if this might be ksh (STOP prevents possible TSTP handlers inside
 dnl AT_CHECKs from running).  Then stop ourselves.
 	  at_sig=TSTP
-	  test "${TMOUT+set}" = set && at_sig=STOP
+	  test ${TMOUT+y} && at_sig=STOP
 	  kill -$at_sig $at_pids 2>/dev/null
 	fi
 	kill -STOP $$

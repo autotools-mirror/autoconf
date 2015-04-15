@@ -502,7 +502,7 @@ AC_LANG_POP(C)dnl
 # versions of a library), tasteless as that idea is.
 # Don't consider -g to work if it generates warnings when plain compiles don't.
 m4_define([_AC_PROG_CC_G],
-[ac_test_CFLAGS=${CFLAGS+set}
+[ac_test_CFLAGS=${CFLAGS+y}
 ac_save_CFLAGS=$CFLAGS
 AC_CACHE_CHECK(whether $CC accepts -g, ac_cv_prog_cc_g,
   [ac_save_c_werror_flag=$ac_c_werror_flag
@@ -519,7 +519,7 @@ AC_CACHE_CHECK(whether $CC accepts -g, ac_cv_prog_cc_g,
 	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 	   [ac_cv_prog_cc_g=yes])])])
    ac_c_werror_flag=$ac_save_c_werror_flag])
-if test "$ac_test_CFLAGS" = set; then
+if test $ac_test_CFLAGS; then
   CFLAGS=$ac_save_CFLAGS
 elif test $ac_cv_prog_cc_g = yes; then
   if test "$GCC" = yes; then
@@ -743,7 +743,7 @@ AC_LANG_POP(C++)dnl
 # normal versions of a library), tasteless as that idea is.
 # Don't consider -g to work if it generates warnings when plain compiles don't.
 m4_define([_AC_PROG_CXX_G],
-[ac_test_CXXFLAGS=${CXXFLAGS+set}
+[ac_test_CXXFLAGS=${CXXFLAGS+y}
 ac_save_CXXFLAGS=$CXXFLAGS
 AC_CACHE_CHECK(whether $CXX accepts -g, ac_cv_prog_cxx_g,
   [ac_save_cxx_werror_flag=$ac_cxx_werror_flag
@@ -760,7 +760,7 @@ AC_CACHE_CHECK(whether $CXX accepts -g, ac_cv_prog_cxx_g,
 	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 	   [ac_cv_prog_cxx_g=yes])])])
    ac_cxx_werror_flag=$ac_save_cxx_werror_flag])
-if test "$ac_test_CXXFLAGS" = set; then
+if test $ac_test_CXXFLAGS; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
@@ -913,7 +913,7 @@ AC_LANG_POP(Objective C)dnl
 # normal versions of a library), tasteless as that idea is.
 # Don't consider -g to work if it generates warnings when plain compiles don't.
 m4_define([_AC_PROG_OBJC_G],
-[ac_test_OBJCFLAGS=${OBJCFLAGS+set}
+[ac_test_OBJCFLAGS=${OBJCFLAGS+y}
 ac_save_OBJCFLAGS=$OBJCFLAGS
 AC_CACHE_CHECK(whether $OBJC accepts -g, ac_cv_prog_objc_g,
   [ac_save_objc_werror_flag=$ac_objc_werror_flag
@@ -930,7 +930,7 @@ AC_CACHE_CHECK(whether $OBJC accepts -g, ac_cv_prog_objc_g,
 	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 	   [ac_cv_prog_objc_g=yes])])])
    ac_objc_werror_flag=$ac_save_objc_werror_flag])
-if test "$ac_test_OBJCFLAGS" = set; then
+if test $ac_test_OBJCFLAGS; then
   OBJCFLAGS=$ac_save_OBJCFLAGS
 elif test $ac_cv_prog_objc_g = yes; then
   if test "$GOBJC" = yes; then
@@ -1052,7 +1052,7 @@ AC_LANG_POP(Objective C++)dnl
 # normal versions of a library), tasteless as that idea is.
 # Don't consider -g to work if it generates warnings when plain compiles don't.
 m4_define([_AC_PROG_OBJCXX_G],
-[ac_test_OBJCXXFLAGS=${OBJCXXFLAGS+set}
+[ac_test_OBJCXXFLAGS=${OBJCXXFLAGS+y}
 ac_save_OBJCXXFLAGS=$OBJCXXFLAGS
 AC_CACHE_CHECK(whether $OBJCXX accepts -g, ac_cv_prog_objcxx_g,
   [ac_save_objcxx_werror_flag=$ac_objcxx_werror_flag
@@ -1069,7 +1069,7 @@ AC_CACHE_CHECK(whether $OBJCXX accepts -g, ac_cv_prog_objcxx_g,
 	 _AC_COMPILE_IFELSE([AC_LANG_PROGRAM()],
 	   [ac_cv_prog_objcxx_g=yes])])])
    ac_objcxx_werror_flag=$ac_save_objcx_werror_flag])
-if test "$ac_test_OBJCXXFLAGS" = set; then
+if test $ac_test_OBJCXXFLAGS; then
   OBJCXXFLAGS=$ac_save_OBJCXXFLAGS
 elif test $ac_cv_prog_objcxx_g = yes; then
   if test "$GOBJCXX" = yes; then

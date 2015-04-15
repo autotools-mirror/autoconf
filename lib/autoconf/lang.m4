@@ -553,7 +553,7 @@ do
 	# certainly right.
 	break;;
     *.* )
-	if test "${ac_cv_exeext+set}" = set && test "$ac_cv_exeext" != no;
+	if test ${ac_cv_exeext+y} && test "$ac_cv_exeext" != no;
 	then :; else
 	   ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
 	fi

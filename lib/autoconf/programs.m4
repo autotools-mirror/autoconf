@@ -586,7 +586,7 @@ esac
 ])
 rm -rf conftest.one conftest.two conftest.dir
 ])dnl
-  if test "${ac_cv_path_install+set}" = set; then
+  if test ${ac_cv_path_install+y}; then
     INSTALL=$ac_cv_path_install
   else
     # As a last resort, use the slow shell script.  Don't cache a
@@ -680,7 +680,7 @@ if test -z "$MKDIR_P"; then
 	 done
        done])])
   test -d ./--version && rmdir ./--version
-  if test "${ac_cv_path_mkdir+set}" = set; then
+  if test ${ac_cv_path_mkdir+y}; then
     MKDIR_P="$ac_cv_path_mkdir -p"
   else
     # As a last resort, use the slow shell script.  Don't cache a
@@ -750,7 +750,7 @@ else
 fi])
 AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])dnl
 
-if test -z "${LEXLIB+set}"; then
+if ${LEXLIB+false} :; then
   AC_CACHE_CHECK([lex library], [ac_cv_lib_lex], [
     ac_save_LIBS=$LIBS
     ac_cv_lib_lex='none needed'

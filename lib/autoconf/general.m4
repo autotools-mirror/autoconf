@@ -1467,7 +1467,7 @@ _AC_ENABLE_IF_ACTION([$1], m4_translit([$2], [-+.], [___]), [$3], [$4])
 m4_define([_AC_ENABLE_IF_ACTION],
 [m4_append_uniq([_AC_USER_OPTS], [$1_$2], [
 ])dnl
-AS_IF([test "${$1_$2+set}" = set], [$1val=$$1_$2; $3], [$4])dnl
+AS_IF([test ${$1_$2+y}], [$1val=$$1_$2; $3], [$4])dnl
 ])
 
 # AC_ARG_ENABLE(FEATURE, HELP-STRING, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
@@ -2044,7 +2044,7 @@ _AC_CACHE_DUMP() |
      /^ac_cv_env_/b end
      t clear
      :clear
-     s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
+     s/^\([^=]*\)=\(.*[{}].*\)$/test ${\1+y} || &/
      t end
      s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
      :end'] >>confcache

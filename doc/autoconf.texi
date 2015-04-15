@@ -15977,7 +15977,7 @@ One workaround relies on Zsh's ``global aliases'' to convert
 @samp{$@{1+"$@@"@}} into @samp{"$@@"} by itself:
 
 @example
-test "$@{ZSH_VERSION+set@}" = set && alias -g '$@{1+"$@@"@}'='"$@@"'
+test $@{ZSH_VERSION+y@} && alias -g '$@{1+"$@@"@}'='"$@@"'
 @end example
 
 Zsh only recognizes this alias when a shell word matches it exactly;
@@ -16297,7 +16297,7 @@ list=$@{list="$default"@}
 use:
 
 @example
-test "$@{var+set@}" = set || var=@var{@{value@}}
+test $@{var+y@} || var=@var{@{value@}}
 @end example
 
 @item $@{#@var{var}@}
@@ -16547,7 +16547,7 @@ var=$@{var="$default"@}
 If the default value contains a closing brace, then use:
 
 @example
-test "$@{var+set@}" = set || var="has a '@}'"
+test $@{var+y@} || var="has a '@}'"
 @end example
 @end enumerate
 
@@ -18076,7 +18076,7 @@ into an infinite loop; even with that bug fixed, Solaris 8
 @command{/bin/sh} takes extremely long to parse large scripts.  Autoconf
 itself uses @command{sh -n} within its testsuite to check that correct
 scripts were generated, but only after first probing for other shell
-features (such as @code{test -n "$@{BASH_VERSION+set@}"}) that indicate
+features (such as @code{test $@{BASH_VERSION+y@}}) that indicate
 a reasonably fast and working implementation.
 
 @item @command{shift}
@@ -18172,7 +18172,10 @@ guessed that it might not be permitted.
 Posix says that @samp{test "@var{string}"} succeeds if @var{string} is
 not null, but this usage is not portable to traditional platforms like
 Solaris 10 @command{/bin/sh}, which mishandle strings like @samp{!} and
-@samp{-n}.
+@samp{-n}.  However, it @emph{is} portable to test if a variable is set
+to a non-empty value, by using @samp{test $@{var+y@}}, since all known
+implementations properly distinguish between no arguments and a
+known-safe string of @samp{y}.
 
 Posix also says that @samp{test ! "@var{string}"},
 @samp{test -n "@var{string}"} and

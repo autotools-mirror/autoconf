@@ -1604,16 +1604,16 @@ AC_DEFUN([_AC_OUTPUT_MAIN_LOOP],
 # bizarre bug on SunOS 4.1.3.
 if $ac_need_defaults; then
 m4_ifdef([_AC_SEEN_CONFIG(FILES)],
-[  test "${CONFIG_FILES+set}" = set || CONFIG_FILES=$config_files
+[  test ${CONFIG_FILES+y} || CONFIG_FILES=$config_files
 ])dnl
 m4_ifdef([_AC_SEEN_CONFIG(HEADERS)],
-[  test "${CONFIG_HEADERS+set}" = set || CONFIG_HEADERS=$config_headers
+[  test ${CONFIG_HEADERS+y} || CONFIG_HEADERS=$config_headers
 ])dnl
 m4_ifdef([_AC_SEEN_CONFIG(LINKS)],
-[  test "${CONFIG_LINKS+set}" = set || CONFIG_LINKS=$config_links
+[  test ${CONFIG_LINKS+y} || CONFIG_LINKS=$config_links
 ])dnl
 m4_ifdef([_AC_SEEN_CONFIG(COMMANDS)],
-[  test "${CONFIG_COMMANDS+set}" = set || CONFIG_COMMANDS=$config_commands
+[  test ${CONFIG_COMMANDS+y} || CONFIG_COMMANDS=$config_commands
 ])dnl
 fi
 

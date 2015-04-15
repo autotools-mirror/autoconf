@@ -100,7 +100,7 @@ _$0
 # This is the part of AS_BOURNE_COMPATIBLE which has to be repeated inside
 # each instance.
 m4_define([_AS_BOURNE_COMPATIBLE],
-[AS_IF([test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1],
+[AS_IF([test ${ZSH_VERSION+y} && (emulate sh) >/dev/null 2>&1],
  [emulate sh
   NULLCMD=:
   [#] Pre-4.2 versions of Zsh do word splitting on ${1+"$[@]"}, which
@@ -252,7 +252,7 @@ dnl Unfortunately, $as_me isn't available here.
     AS_IF([test x$as_have_required = xno],
       [AS_ECHO(["$[]0: This script requires a shell more modern than all"])
   AS_ECHO(["$[]0: the shells that I found on your system."])
-  if test x${ZSH_VERSION+set} = xset ; then
+  if test ${ZSH_VERSION+y} ; then
     AS_ECHO(["$[]0: In particular, zsh $ZSH_VERSION has bugs and should"])
     AS_ECHO(["$[]0: be upgraded to zsh 4.3.4 or later."])
   else
@@ -488,7 +488,7 @@ fi
 # suppresses any "Segmentation fault" message there.  '((' could
 # trigger a bug in pdksh 5.2.14.
 for as_var in BASH_ENV ENV MAIL MAILPATH
-do eval test x\${$as_var+set} = xset \
+do eval test \${$as_var+y} \
   && ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
 done
 PS1='$ '
@@ -1272,7 +1272,7 @@ fi
 # Compute the path separator.
 m4_defun([_AS_PATH_SEPARATOR_PREPARE],
 [# The user is always right.
-if test "${PATH_SEPARATOR+set}" != set; then
+if ${PATH_SEPARATOR+false} :; then
   PATH_SEPARATOR=:
   (PATH='/bin;/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 && {
     (PATH='/bin:/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 ||
@@ -2062,9 +2062,9 @@ m4_define([AS_VAR_SET_IF],
 # is set.  Polymorphic.
 m4_define([AS_VAR_TEST_SET],
 [AS_LITERAL_WORD_IF([$1],
-  [${$1+:} false],
-  [{ as_var=$1; eval \${$as_var+:} false; }],
-  [eval \${$1+:} false])])
+  [test ${$1+y}],
+  [{ as_var=$1; eval test \${$as_var+y}; }],
+  [eval test \${$1+y}])])
 
 
 ## -------------------- ##
