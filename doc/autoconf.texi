@@ -13370,7 +13370,13 @@ patterns to the list.
 
 @defmac m4_pattern_forbid (@var{pattern})
 @msindex{pattern_forbid}
-Declare that no token matching @var{pattern} must be found in the output.
+Declare that no token matching @var{pattern} must be found in the
+output.  The output file is (temporarily) split into one word per line
+as part of the @command{autom4te} post-processing, with each line (and
+therefore word) then being checked against the Perl regular expression
+@var{pattern}.  If the regular expression matches, and
+@code{m4_pattern_allow} does not also match, then an error is raised.
+
 Comments are not checked; this can be a problem if, for instance, you
 have some macro left unexpanded after an @samp{#include}.  No consensus
 is currently found in the Autoconf community, as some people consider it
@@ -13379,6 +13385,11 @@ the authors of this documentation: input, such as macros, should be
 documented by @samp{dnl} comments; reserving @samp{#}-comments to
 document the output).
 
+As an example, if you define your own macros that begin with @samp{M_}
+and are composed from capital letters and underscores, the specification
+of @code{m4_pattern_forbid([^M_[A-Z_]+])} will ensure all your macros
+are expanded when not used in comments.
+
 As an example of a common use of this macro, consider what happens in
 packages that want to use the @command{pkg-config} script via the
 third-party @code{PKG_CHECK_MODULES} macro.  By default, if a developer
@@ -13386,7 +13397,7 @@ checks out the development tree but has not yet installed the pkg-config
 macros locally, they can manage to successfully run @command{autoconf}
 on the package, but the resulting @file{configure} file will likely
 result in a confusing shell message about a syntax error on the line
-mentioning the unexpanded PKG_CHECK_MODULES macro.  On the other hand,
+mentioning the unexpanded @code{PKG_CHECK_MODULES} macro.  On the other hand,
 if @file{configure.ac} includes @code{m4_pattern_forbid([^PKG_])}, the
 missing pkg-config macros will be detected immediately without allowing
 @command{autoconf} to succeed.

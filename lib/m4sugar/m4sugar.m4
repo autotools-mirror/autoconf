@@ -2000,7 +2000,7 @@ m4_define([_m4_defun_once],
 
 # m4_pattern_forbid(ERE, [WHY])
 # -----------------------------
-# Declare that no token matching the forbidden extended regular
+# Declare that no token matching the forbidden perl extended regular
 # expression ERE should be seen in the output unless...
 m4_define([m4_pattern_forbid], [])
 
@@ -2008,7 +2008,7 @@ m4_define([m4_pattern_forbid], [])
 # m4_pattern_allow(ERE)
 # ---------------------
 # ... that token also matches the allowed extended regular expression ERE.
-# Both used via traces.
+# Both used via traces, by autom4te post-processing.
 m4_define([m4_pattern_allow], [])
 
 
