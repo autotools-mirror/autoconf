@@ -3126,7 +3126,8 @@ m4_define([m4_set_empty],
 # guaranteed.  This is faster than the corresponding m4_foreach([VAR],
 #   m4_indir([m4_dquote]m4_set_listc([SET])), [ACTION])
 m4_define([m4_set_foreach],
-[m4_pushdef([$2])m4_set_map_sep([$1], [m4_define([$2],], [)$3])])
+[m4_pushdef([$2])m4_set_map_sep([$1], [m4_define([$2],], [)$3])dnl
+m4_popdef([$2])])
 
 # m4_set_intersection(SET1, SET2)
 # -------------------------------
