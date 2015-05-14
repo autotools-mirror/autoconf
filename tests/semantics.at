@@ -101,15 +101,18 @@ esac
 
 # AC_CHECK_DECLS
 # --------------
-# Check that it performs the correct actions:
+# For the benefit of _AC_UNDECLARED_WARNING compilers, these INCLUDES sections
+# should not elicit warnings.
 AT_CHECK_MACRO([AC_CHECK_DECLS],
 [[AC_CHECK_DECLS([yes, no, myenum, mystruct, myfunc, mymacro1, mymacro2],,,
-		 [[int yes = 1;
+		 [[extern int yes;
 		   enum { myenum };
-		   struct { int x[20]; } mystruct;
+		   extern struct { int x[20]; } mystruct;
 		   extern int myfunc();
 		   #define mymacro1(arg) arg
 		   #define mymacro2]])
+  # Clang reports a warning for an undeclared builtin.
+  AC_CHECK_DECLS([strerror],,, [[]])
   # The difference in space-before-open-paren is intentional.
   AC_CHECK_DECLS([basenam (char *), dirnam(char *),
 		  [moreargs (char, short, int, long, void *, char [], float, double)]],,,
@@ -148,6 +151,7 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 #define HAVE_DECL_MYMACRO2 1
 #define HAVE_DECL_MYSTRUCT 1
 #define HAVE_DECL_NO 0
+#define HAVE_DECL_STRERROR 0
 #define HAVE_DECL_YES 1
 ])])
 

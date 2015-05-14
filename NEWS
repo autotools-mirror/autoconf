@@ -61,6 +61,9 @@ GNU Autoconf NEWS - User visible changes.
 - AC_USE_SYSTEM_EXTENSIONS now enables more system extensions on HP-UX,
   MINIX 3, and OS X.
 
+- AC_CHECK_DECL and AC_CHECK_DECLS can now report missing declarations for
+  functions that are also Clang compiler builtins.
+
 - AC_FUNC_VFORK now checks for the signal-handling bug in Solaris 2.4 'vfork'.
   Formerly, it ignored this bug, so that Emacs could use some tricky
   code on that platform.  Solaris 2.4 has not been supported since
