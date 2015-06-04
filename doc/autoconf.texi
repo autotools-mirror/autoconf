@@ -17757,6 +17757,42 @@ But keep in mind that Zsh, even in Bourne shell emulation mode, performs
 word splitting on @samp{$@{1+"$@@"@}}; see @ref{Shell Substitutions},
 item @samp{$@@}, for more.
 
+Posix requires support for a @command{for} loop with no list after
+@code{in}.  However, Solaris @command{/bin/sh} treats that as a syntax
+error.  It is possible to work around this by providing any shell word
+that expands to nothing, or by ignoring an obvious sentinel.
+
+@example
+$ @kbd{/bin/sh -c 'for a in $empty; do echo hi; done'}
+$ @kbd{/bin/sh -c 'for a in ; do echo hi; done'}
+/bin/sh: syntax error at line 1: `;' unexpected
+@end example
+
+This syntax problem is most frequently encountered in code that goes
+through several layers of expansion, such as an m4 macro or makefile
+variable used as a list body, where the first layer of expansion (m4 or
+make) can end up expanding to nothing in the version handed to the
+shell.  In the makefile context, one common workaround is to use a shell
+variable rather than a make variable as the source of the list.
+
+@example
+$ @kbd{cat Makefile}
+list =
+bad:
+	@@for arg in $(list); do echo $$arg; done
+good:
+	@@list='$(list)'; for arg in $$list; do echo $$arg; done
+$ @kbd{make bad 2&>1 | head -n1}
+sh: syntax error at line 1: `;' unexpected
+$ @kbd{make bad list='a b'}
+a
+b
+$ @kbd{make good}
+$ @kbd{make good list='a b'}
+a
+b
+@end example
+
 In Solaris @command{/bin/sh}, when the list of arguments of a
 @command{for} loop starts with @emph{unquoted} tokens looking like
 variable assignments, the loop is not executed on those tokens:
