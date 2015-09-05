@@ -49,10 +49,10 @@ AT_DATA([configure.ac],
 AC_CONFIG_AUX_DIR([.])
 AC_PROG_LIBTOOL
 ]])
-AT_CHECK([libtoolize -i], [0], [stdout], [ignore])
+AT_CHECK([LC_ALL=C libtoolize -i], [0], [stdout], [ignore])
 
 # Some broken libtoolize fail to install a functional config.guess.
-AT_CHECK([./config.guess || exit 77], [], [ignore], [ignore])
+AT_CHECK([LC_ALL=C ./config.guess || exit 77], [], [ignore], [ignore])
 
 # Make sure at-path contains something valid, and let the test suite
 # display it when verbose.  And fail, skipping would too easily hide
