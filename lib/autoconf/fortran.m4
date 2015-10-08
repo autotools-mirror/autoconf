@@ -1818,7 +1818,7 @@ ac_cv_fc_module_output_flag=unknown
 ac_fc_module_output_flag_FCFLAGS_save=$FCFLAGS
 # Flag ordering is significant: put flags late which some compilers use
 # for the search path.
-for ac_flag in -J '-J ' -fmod= -moddir= +moddir= -qmoddir= '-mod ' \
+for ac_flag in -J '-J ' -fmod= -moddir= +moddir= -qmoddir= '-mdir ' '-mod ' \
 	      '-module ' -M '-Am -M' '-e m -J '; do
   FCFLAGS="$ac_fc_module_output_flag_FCFLAGS_save ${ac_flag}sub"
   AC_COMPILE_IFELSE([[
@@ -1834,25 +1834,21 @@ for ac_flag in -J '-J ' -fmod= -moddir= +moddir= -qmoddir= '-mod ' \
       use conftest_module
       call conftest_routine
       end program]],
-       [ac_cv_fc_module_output_flag="$ac_flag"])
+       [ac_cv_fc_module_output_flag=$ac_flag])
      cd ..
-     if test "$ac_cv_fc_module_output_flag" != unknown; then
-       break
-     fi])
+     AS_IF([test x"$ac_cv_fc_module_output_flag" != xunknown],[break])])
 done
 FCFLAGS=$ac_fc_module_output_flag_FCFLAGS_save
 cd ..
 rm -rf conftest.dir
 AC_LANG_POP([Fortran])
 ])
-if test "$ac_cv_fc_module_output_flag" != unknown; then
-  FC_MODOUT=$ac_cv_fc_module_output_flag
-  $1
-else
-  FC_MODOUT=
-  m4_default([$2],
-    [AC_MSG_ERROR([unable to find compiler flag to write module information to])])
-fi
+AS_IF([test x"$ac_cv_fc_module_output_flag" != xunknown],
+  [FC_MODOUT=$ac_cv_fc_module_output_flag
+   $1],
+  [FC_MODOUT=
+   m4_default([$2],
+    [AC_MSG_ERROR([unable to find compiler flag to write module information to])])])
 AC_SUBST([FC_MODOUT])
 # Ensure trailing whitespace is preserved in a Makefile.
 AC_SUBST([ac_empty], [""])
