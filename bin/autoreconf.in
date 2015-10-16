@@ -414,7 +414,7 @@ sub autoreconf_current_directory ($)
 	  s/dnl.*//;
 	  $uses_autoconf = 1 if /AC_INIT/;
 	  # See below for why we look for gettext here.
-	  $uses_gettext = 1  if /^AM_GNU_GETTEXT_VERSION/;
+	  $uses_gettext = 1  if /^AM_GNU_GETTEXT_(?:REQUIRE_)?VERSION/;
 	}
       if (!$uses_autoconf)
         {
@@ -442,12 +442,12 @@ sub autoreconf_current_directory ($)
   # not.  I guess that once Gettext move to 2.5x we will be able to,
   # but in the meanwhile forget it.
   #
-  # We can only grep for AM_GNU_GETTEXT_VERSION in configure.ac.  You
-  # might think this approach is naive, and indeed it is, as it
-  # prevents one to embed AM_GNU_GETTEXT_VERSION in another *.m4, but
-  # anyway we don't limit the generality, since... that's what
-  # autopoint does.  Actually, it is even more restrictive, as it
-  # greps for '^AM_GNU_GETTEXT_VERSION('.  We did this above, while
+  # We can only grep for AM_GNU_GETTEXT_(REQUIRE_)?VERSION in configure.ac.
+  # You might think this approach is naive, and indeed it is, as it prevents
+  # one to embed AM_GNU_GETTEXT_(REQUIRE_)?VERSION in another *.m4, but
+  # anyway we don't limit the generality, since... that's what autopoint does.
+  # Actually, it is even more restrictive, as it greps for
+  # '^AM_GNU_GETTEXT_(REQUIRE_)?VERSION('.  We did this above, while
   # scanning configure.ac.
   if (!$uses_gettext)
     {
@@ -611,9 +611,13 @@ sub autoreconf_current_directory ($)
     }
 
   # Gettext consistency checks...
-  error $configure_ac, "AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION"
+  error($configure_ac,
+        "AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION"
+        . " or AM_GNU_GETTEXT_REQUIRE_VERSION")
     if $uses_gettext_via_traces && ! $uses_gettext;
-  error $configure_ac, "AM_GNU_GETTEXT_VERSION is used, but not AM_GNU_GETTEXT"
+  error($configure_ac,
+        "AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION is used,"
+        . " but not AM_GNU_GETTEXT")
     if $uses_gettext && ! $uses_gettext_via_traces;
 
 

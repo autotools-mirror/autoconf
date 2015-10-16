@@ -1706,10 +1706,11 @@ properly, but does not pass @option{--autoconf-dir=@var{dir}} or
 @cindex @command{autopoint}
 Gettext supplies the @command{autopoint} command to add translation
 infrastructure to a source package.  If you use @command{autopoint},
-your @file{configure.ac} should invoke both @code{AM_GNU_GETTEXT} and
-@code{AM_GNU_GETTEXT_VERSION(@var{gettext-version})}.  @xref{autopoint
-Invocation, , Invoking the @code{autopoint} Program, gettext,
-GNU @code{gettext} utilities}, for further details.
+your @file{configure.ac} should invoke @code{AM_GNU_GETTEXT} and
+one of @code{AM_GNU_GETTEXT_VERSION(@var{gettext-version})} or
+@code{AM_GNU_GETTEXT_REQUIRE_VERSION(@var{min-gettext-version})}.
+@xref{autopoint Invocation, , Invoking the @code{autopoint} Program,
+gettext, GNU @code{gettext} utilities}, for further details.
 
 @noindent
 @command{autoreconf} accepts the following options:
