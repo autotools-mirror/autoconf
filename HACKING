@@ -18,8 +18,8 @@ If a change fixes a test, mention the test in the ChangeLog entry.
 To this end, the Autotest-mode is handy.
 
 ** Bug reports
-If somebody reports a new bug, mention his name in the ChangeLog entry
-and in the test case you write.  Put him into THANKS.
+If somebody reports a new bug, mention their name in the ChangeLog
+entry and in the test case you write.  Put them into THANKS.
 
 The correct response to most actual bugs is to write a new test case
 which demonstrates the bug.  Then fix the bug, re-run the test suite,
