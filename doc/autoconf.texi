@@ -16063,7 +16063,8 @@ j a0
 @cindex @code{$@{@var{var}-@var{value}@}}
 Old BSD shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
-Similarly for $@{@var{var}:=@var{value}@}, $@{@var{var}:?@var{value}@}, etc.
+Similarly for @code{$@{@var{var}:=@var{value}@}},
+@code{$@{@var{var}:?@var{value}@}}, etc.
 However, all shells that support functions allow the use of colon in
 shell substitution, and since m4sh requires functions, you can portably
 use null variable substitution patterns in configure scripts.
@@ -16087,6 +16088,18 @@ $ @kbd{/bin/sh -c 'cat <<EOF
 $@{a-b c@}
 EOF}
 b c
+@end example
+
+Most shells treat the special parameters @code{*} and @code{@@} as being
+unset if there are no positional parameters.  However, some shells treat
+them as being set to the empty string.  Posix does not clearly specify
+either behavior.
+
+@example
+$ @kbd{bash -c 'echo "* is $@{*-unset@}."'}
+* is unset.
+$ @kbd{dash -c 'echo "* is $@{*-unset@}."'}
+* is .
 @end example
 
 According to Posix, if an expansion occurs inside double quotes, then
