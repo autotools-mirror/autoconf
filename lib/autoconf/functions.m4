@@ -905,7 +905,10 @@ AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 [AC_LANG_PROGRAM(
 [[#include <stdlib.h>
 ]],
-		 [return ! malloc (0);])],
+		 [char *p = malloc (0);
+		  int result = !p;
+		  free (p);
+		  return result;])],
 	       [ac_cv_func_malloc_0_nonnull=yes],
 	       [ac_cv_func_malloc_0_nonnull=no],
 	       [case "$host_os" in # ((
@@ -1409,7 +1412,10 @@ AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
 [AC_LANG_PROGRAM(
 [[#include <stdlib.h>
 ]],
-		 [return ! realloc (0, 0);])],
+		 [char *p = realloc (0, 0);
+		  int result = !p;
+		  free (p);
+		  return result;])],
 	       [ac_cv_func_realloc_0_nonnull=yes],
 	       [ac_cv_func_realloc_0_nonnull=no],
 	       [case "$host_os" in # ((
