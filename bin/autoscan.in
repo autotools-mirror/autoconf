@@ -169,7 +169,7 @@ sub init_tables ()
   # instead of duplicating the code in lots of configure.ac files.
   my $file = find_file ("autoscan/autoscan.list",
 			reverse (@prepend_include), @include);
-  my $table = new Autom4te::XFile "< " . open_quote ($file);
+  my $table = new Autom4te::XFile ($file, "<");
   my $tables_are_consistent = 1;
 
   while ($_ = $table->getline)
@@ -244,7 +244,7 @@ sub scan_c_file ($)
   # Nonzero if in a multiline comment.
   my $in_comment = 0;
 
-  my $file = new Autom4te::XFile "< " . open_quote ($file_name);
+  my $file = new Autom4te::XFile ($file_name, "<");
 
   while ($_ = $file->getline)
     {
@@ -310,7 +310,7 @@ sub scan_makefile ($)
   my ($file_name) = @_;
   push @makefiles, $File::Find::name;
 
-  my $file = new Autom4te::XFile "< " . open_quote ($file_name);
+  my $file = new Autom4te::XFile ($file_name, "<");
 
   while ($_ = $file->getline)
     {
@@ -352,7 +352,7 @@ sub scan_sh_file ($)
   my ($file_name) = @_;
   push @shfiles, $File::Find::name;
 
-  my $file = new Autom4te::XFile "< " . open_quote ($file_name);
+  my $file = new Autom4te::XFile ($file_name, "<");
 
   while ($_ = $file->getline)
     {
@@ -521,7 +521,7 @@ sub output ($)
   my $configure_scan = shift;
   my %unique_makefiles;
 
-  my $file = new Autom4te::XFile "> " . open_quote ($configure_scan);
+  my $file = new Autom4te::XFile ($configure_scan, ">");
 
   print $file
     ("#                                               -*- Autoconf -*-\n" .
@@ -639,7 +639,7 @@ sub check_configure_ac ($)
 ## -------------- ##
 
 parse_args;
-$log = new Autom4te::XFile "> " . open_quote ("$me.log");
+$log = new Autom4te::XFile ("$me.log", ">");
 
 $autoconf .= " --debug" if $debug;
 $autoconf .= " --verbose" if $verbose;

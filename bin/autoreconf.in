@@ -257,7 +257,7 @@ sub autoreconf_current_directory ()
   my $uses_gettext;
   if (-f $configure_ac)
     {
-      my $configure_ac_file = new Autom4te::XFile "< $configure_ac";
+      my $configure_ac_file = new Autom4te::XFile ("$configure_ac", "<");
       while ($_ = $configure_ac_file->getline)
 	{
 	  s/#.*//;

@@ -258,7 +258,7 @@ sub load_configuration ($)
   my ($file) = @_;
   use Text::ParseWords;
 
-  my $cfg = new Autom4te::XFile ("< " . open_quote ($file));
+  my $cfg = new Autom4te::XFile ($file, "<");
   my $lang;
   while ($_ = $cfg->getline)
     {
@@ -527,7 +527,7 @@ sub handle_output ($$)
   handle_traces ($req, "$tmp/patterns",
 		 ('m4_pattern_forbid' => 'forbid:$1:$2',
 		  'm4_pattern_allow'  => 'allow:$1'));
-  my @patterns = new Autom4te::XFile ("< " . open_quote ("$tmp/patterns"))->getlines;
+  my @patterns = new Autom4te::XFile ("$tmp/patterns", "<")->getlines;
   chomp @patterns;
   my %forbidden =
     map { /^forbid:([^:]+):.+$/ => /^forbid:[^:]+:(.+)$/ } @patterns;
@@ -554,7 +554,7 @@ sub handle_output ($$)
     }
   fatal "cannot create $output: $!"
     unless $out;
-  my $in = new Autom4te::XFile ("< " . open_quote ($ocache . $req->id));
+  my $in = new Autom4te::XFile ($ocache . $req->id, "<");
 
   my %prohibited;
   my $res;
@@ -599,7 +599,7 @@ sub handle_output ($$)
   if ($ARGV[$#ARGV] ne '-')
     {
       my $prohibited = '\b(' . join ('|', keys %prohibited) . ')\b';
-      my $file = new Autom4te::XFile ("< " . open_quote ($ARGV[$#ARGV]));
+      my $file = new Autom4te::XFile ($ARGV[$#ARGV], "<");
 
       while ($_ = $file->getline)
 	{
@@ -717,7 +717,7 @@ sub handle_traces ($$%)
   verb "formatting traces for '$output': " . join (', ', sort keys %trace);
 
   # Processing the traces.
-  my $trace_m4 = new Autom4te::XFile ("> " . open_quote ("$tmp/traces.m4"));
+  my $trace_m4 = new Autom4te::XFile ("$tmp/traces.m4", ">");
 
   $_ = <<'EOF';
   divert(-1)
@@ -818,7 +818,7 @@ EOF
   #
   # Pay attention that the file name might include colons, if under DOS
   # for instance, so we don't use '[^:]+'.
-  my $traces = new Autom4te::XFile ("< " . open_quote ($tcache . $req->id));
+  my $traces = new Autom4te::XFile ($tcache . $req->id, "<");
   while ($_ = $traces->getline)
     {
       # Trace with arguments, as the example above.  We don't try
@@ -834,7 +834,7 @@ EOF
   $trace_m4->close;
 
   my $in = new Autom4te::XFile ("$m4 " . shell_quote ("$tmp/traces.m4") . " |");
-  my $out = new Autom4te::XFile ("> " . open_quote ($output));
+  my $out = new Autom4te::XFile ($output, ">");
 
   # This is dubious: should we really transform the quadrigraphs in
   # traces?  It might break balanced [ ] etc. in the output.  The
@@ -896,7 +896,7 @@ sub up_to_date ($)
   handle_traces ($req, "$tmp/dependencies",
 		 ('include'    => '$1',
 		  'm4_include' => '$1'));
-  my $deps = new Autom4te::XFile ("< " . open_quote ("$tmp/dependencies"));
+  my $deps = new Autom4te::XFile ("$tmp/dependencies", "<");
   while ($_ = $deps->getline)
     {
       chomp;

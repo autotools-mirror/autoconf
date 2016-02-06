@@ -96,7 +96,7 @@ my %occurrence;
 sub scan_file ($)
 {
   my ($file_name) = @_;
-  my $file = new Autom4te::XFile ("< " . open_quote ($file_name));
+  my $file = new Autom4te::XFile ($file_name, "<");
   while ($_ = $file->getline)
     {
       # Continuation lines.
