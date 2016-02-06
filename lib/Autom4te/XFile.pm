@@ -1,4 +1,4 @@
-# Copyright (C) 2001-2012 Free Software Foundation, Inc.
+# Copyright (C) 2001-2015 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,13 +31,13 @@ Autom4te::XFile - supply object methods for filehandles with error handling
     use Autom4te::XFile;
 
     $fh = new Autom4te::XFile;
-    $fh->open ("< file");
+    $fh->open ("file", "<");
     # No need to check $FH: we died if open failed.
     print <$fh>;
     $fh->close;
     # No need to check the return value of close: we died if it failed.
 
-    $fh = new Autom4te::XFile "> file";
+    $fh = new Autom4te::XFile "file", ">";
     # No need to check $FH: we died if new failed.
     print $fh "bar\n";
     $fh->close;
@@ -130,7 +130,7 @@ Die if opening fails.  Store the name of the file.  Use binmode for writing.
 sub open
 {
   my $fh = shift;
-  my ($file) = @_;
+  my ($file, $mode) = @_;
 
   # WARNING: Gross hack: $FH is a typeglob: use its hash slot to store
   # the 'name' of the file we are opening.  See the example with
@@ -147,7 +147,12 @@ sub open
   # (This circumvents a bug in at least Cygwin bash where the shell
   # parsing fails on lines ending with the continuation character '\'
   # and CRLF).
-  binmode $fh if $file =~ /^\s*>/;
+  # Correctly recognize usages like:
+  #  - open ($file, "w")
+  #  - open ($file, "+<")
+  #  - open (" >$file")
+  binmode $fh
+    if (defined $mode && $mode =~ /^[+>wa]/ or $file =~ /^\s*>/);
 }
 
 =item C<$fh-E<gt>close>

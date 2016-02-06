@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c This date is automagically updated when you save this file:
-@set lastupdate April 27, 2013
+@set lastupdate December 23, 2015
 @c %**end of header
 
 @dircategory GNU organization
@@ -28,12 +28,12 @@ The GNU coding standards, last updated @value{lastupdate}.
 
 Copyright @copyright{} 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-2011, 2012, 2013 Free Software Foundation, Inc.
+2011, 2012, 2013, 2014, 2015 Free Software Foundation, Inc.
 
 Permission is granted to copy, distribute and/or modify this document
 under the terms of the GNU Free Documentation License, Version 1.3 or
 any later version published by the Free Software Foundation; with no
-Invariant Sections, with no Front-Cover Texts, and with no Back-Cover
+Invariant Sections, no Front-Cover Texts, and no Back-Cover
 Texts.  A copy of the license is included in the section entitled
 ``GNU Free Documentation License''.
 @end copying
@@ -291,34 +291,17 @@ account when designing your program.
 @cindex programming languages
 
 When you want to use a language that gets compiled and runs at high
-speed, the best language to use is C.  Using another language is like
-using a non-standard feature: it will cause trouble for users.  Even if
-GCC supports the other language, users may find it inconvenient to have
-to install the compiler for that other language in order to build your
-program.  For example, if you write your program in C++, people will
-have to install the GNU C++ compiler in order to compile your program.
+speed, the best language to use is C.  C++ is ok too, but please don't
+make heavy use of templates.  So is Java, if you compile it.
 
-C has one other advantage over C++ and other compiled languages: more
-people know C, so more people will find it easy to read and modify the
-program if it is written in C.
-
-So in general it is much better to use C, rather than the
-comparable alternatives.
-
-But there are two exceptions to that conclusion:
-
-@itemize @bullet
-@item
-It is no problem to use another language to write a tool specifically
-intended for use with that language.  That is because the only people
-who want to build the tool will be those who have installed the other
-language anyway.
-
-@item
-If an application is of interest only to a narrow part of the community,
-then the question of which language it is written in has less effect on
-other people, so you may as well please yourself.
-@end itemize
+When highest efficiency is not required, other languages commonly used
+in the free software community, such as Lisp, Scheme, Python, Ruby, and
+Java, are OK too.  Scheme, as implemented by GNU@tie{}Guile, plays a
+particular role in the GNU System: it is the preferred language to
+extend programs written in C/C++, and also a fine language for a wide
+range of applications.  The more GNU components use Guile and Scheme,
+the more users are able to extend and combine them (@pxref{The Emacs
+Thesis,,, guile, GNU Guile Reference Manual}).
 
 Many programs are designed to be extensible: they include an interpreter
 for a language that is higher level than C.  Often much of the program
@@ -333,8 +316,8 @@ language Scheme (an especially clean and simple dialect of Lisp).
 Guile also includes bindings for GTK+/GNOME, making it practical to
 write modern GUI functionality within Guile.  We don't reject programs
 written in other ``scripting languages'' such as Perl and Python, but
-using Guile is very important for the overall consistency of the GNU
-system.
+using Guile is the path that will lead to overall consistency of the
+GNU system.
 
 
 @node Compatibility
@@ -845,22 +828,32 @@ Please don't make the behavior of a utility depend on the name used
 to invoke it.  It is useful sometimes to make a link to a utility
 with a different name, and that should not change what it does.
 
-Instead, use a run time option or a compilation switch or both
-to select among the alternate behaviors.
+Instead, use a run time option or a compilation switch or both to
+select among the alternate behaviors.  You can also build two versions
+of the program, with different names and different default behaviors.
 
 @cindex output device and program's behavior
-Likewise, please don't make the behavior of the program depend on the
-type of output device it is used with.  Device independence is an
-important principle of the system's design; do not compromise it merely
-to save someone from typing an option now and then.  (Variation in error
-message syntax when using a terminal is ok, because that is a side issue
-that people do not depend on.)
+Likewise, please don't make the behavior of a command-line program
+depend on the type of output device it gets as standard output or
+standard input.  Device independence is an important principle of the
+system's design; do not compromise it merely to save someone from
+typing an option now and then.  (Variation in error message syntax
+when using a terminal is ok, because that is a side issue that people
+do not depend on.)
 
 If you think one behavior is most useful when the output is to a
 terminal, and another is most useful when the output is a file or a
-pipe, then it is usually best to make the default behavior the one that
-is useful with output to a terminal, and have an option for the other
-behavior.
+pipe, then it is usually best to make the default behavior the one
+that is useful with output to a terminal, and have an option for the
+other behavior.  You can also build two different versions of the
+program with different names.
+
+There is an exception for programs whose output in certain cases is
+binary data.  Sending such output to a terminal is useless and can
+cause trouble.  If such a program normally sends its output to stdout,
+it should detect, in these cases, when the output is a terminal and
+give an error message instead.  The @code{-f} option should override
+this exception, thus permitting the output to go to the terminal.
 
 Compatibility requires certain programs to depend on the type of output
 device.  It would be disastrous if @code{ls} or @code{sh} did not do so
@@ -870,7 +863,6 @@ output device type.  For example, we provide a @code{dir} program much
 like @code{ls} except that its default output format is always
 multi-column format.
 
-
 @node Graphical Interfaces
 @section Standards for Graphical Interfaces
 @cindex graphical user interface
@@ -878,10 +870,12 @@ multi-column format.
 @cindex user interface styles
 
 @cindex GTK+
+@cindex GNUstep
 When you write a program that provides a graphical user interface,
-please make it work with the X Window System and the GTK+ toolkit
-unless the functionality specifically requires some alternative (for
-example, ``displaying jpeg images while in console mode'').
+please make it work with the X Window System, using the GTK+ toolkit
+or the GNUstep toolkit, unless the functionality specifically requires
+some alternative (for example, ``displaying jpeg images while in
+console mode'').
 
 In addition, please provide a command-line interface to control the
 functionality.  (In many cases, the graphical user interface can be a
@@ -900,6 +894,11 @@ providing a library interface (for use from C), and perhaps a
 keyboard-driven console interface (for use by users from console
 mode).  Once you are doing the work to provide the functionality and
 the graphical interface, these won't be much extra work.
+
+Please make your program interoperate with access technology such as
+screen readers (see
+@url{http://www.gnu.org/accessibility/accessibility.html}).  This should
+be automatic if you use GTK+.
 
 @node Command-Line Interfaces
 @section Standards for Command Line Interfaces
@@ -940,7 +939,7 @@ among GNU utilities, and fewer idiosyncrasies for users to remember.
 All programs should support two standard options: @samp{--version}
 and @samp{--help}.  CGI programs should accept these as command-line
 options, and also if given as the @env{PATH_INFO}; for instance,
-visiting @url{http://example.org/p.cgi/--help} in a browser should
+visiting @indicateurl{http://example.org/p.cgi/--help} in a browser should
 output the same information as invoking @samp{p.cgi --help} from the
 command line.
 
@@ -1095,7 +1094,8 @@ The non-license that is being in the public domain,
 @url{http://www.gnu.org/@/licenses/@/license-list.html#PublicDomain}.
 
 @item Python
-The license for Python, @url{http://www.python.org/@/2.0.1/@/license.html}.
+The license for Python,
+@url{http://directory.fsf.org/wiki?title=License:Python2.0.1}.
 
 @item RBSD
 The revised (3-clause) BSD, compatible with the GNU GPL,@*
@@ -2306,8 +2306,8 @@ Print the version number.
 @cindex X.509
 
 The OID (object identifier) 1.3.6.1.4.1.11591 has been assigned to the
-GNU Project (thanks to Werner Koch).  These are used for SNMP, LDAP,
-X.509 certificates, and so on.  The web site
+GNU Project (thanks to Sergey Poznyakoff).  These are used for SNMP,
+LDAP, X.509 certificates, and so on.  The web site
 @url{http://www.alvestrand.no/objectid} has a (voluntary) listing of
 many OID assignments.
 
@@ -2388,6 +2388,11 @@ when writing GNU software.
 @node Formatting
 @section Formatting Your Source Code
 @cindex formatting source code
+
+@cindex line length
+@cindex length of source lines
+Please keep the length of source lines to 79 characters or less, for
+maximum readability in the widest range of environments.
 
 @cindex open brace
 @cindex braces, in C source
@@ -3257,8 +3262,9 @@ the option @option{--quoting-style} of GNU @code{ls}.
 @section Mmap
 @findex mmap
 
-Don't assume that @code{mmap} either works on all files or fails
-for all files.  It may work on some files and fail on others.
+If you use @code{mmap} to read or write files, don't assume it either
+works on all files or fails for all files.  It may work on some files
+and fail on others.
 
 The proper way to use @code{mmap} is to try it on the specific file for
 which you want to use it---and if @code{mmap} doesn't work, fall back on
@@ -3402,6 +3408,18 @@ term ``illegal'' for activities prohibited by law.
 Please do not write @samp{()} after a function name just to indicate
 it is a function.  @code{foo ()} is not a function, it is a function
 call with no arguments.
+
+Whenever possible, please stick to the active voice, avoiding the
+passive, and use the present tense, not the future teste.  For
+instance, write ``The function @code{foo} returns a list containing
+@var{a} and @var{b}'' rather than ``A list containing @var{a} and
+@var{b} will be returned.''  One advantage of the active voice is it
+requires you to state the subject of the sentence; with the passive
+voice, you might omit the subject, which leads to vagueness.
+
+It is proper to use the future tense when grammar demands it, as in,
+``If you type @kbd{x}, the computer will self-destruct in 10
+seconds.''
 
 @node Doc Strings and Manuals
 @section Doc Strings and Manuals
@@ -3576,7 +3594,7 @@ it---but please put the full explanation in comments in the code,
 where people will see it whenever they see the code.  For example,
 ``New function'' is enough for the change log when you add a function,
 because there should be a comment before the function definition to
-explain what it does.
+explain what it does, how to call it, and so on.
 
 For changes to files that do not support a comment syntax (e.g., media
 files), it is ok to include the full explanation in the change log file,
@@ -3924,7 +3942,8 @@ corresponding to most of the standard directory variables
 
 @example
 --prefix --exec-prefix --bindir --sbindir --libexecdir --sysconfdir
---sharedstatedir --localstatedir --libdir --includedir --oldincludedir
+--sharedstatedir --localstatedir --runstatedir
+--libdir --includedir --oldincludedir
 --datarootdir --datadir --infodir --localedir --mandir --docdir
 --htmldir --dvidir --pdfdir --psdir
 @end example
@@ -4262,11 +4281,22 @@ reasons.
 
 Thus, for example, you should not refer to AT&T's web site if that
 recommends AT&T's non-free software packages; you should not refer to
-a site that links to AT&T's site presenting it as a place to get some
-non-free program, because that link recommends and legitimizes the
-non-free program.  However, that a site contains a link to AT&T's web
-site for some other purpose (such as long-distance telephone service)
-is not an objection against it.
+a page P that links to AT&T's site presenting it as a place to get
+some non-free program, because that part of the page P itself
+recommends and legitimizes the non-free program.  However, that P
+contains a link to AT&T's web site for some other purpose (such as
+long-distance telephone service) is not an objection against it.
+
+There are web sites which depend on nonfree Javascript code even to
+<em>see</em> the contents of the pages.  Any site hosted on wix.com
+has this problem, and so do some other sites.  Referring people to
+such pages to read their contents is, in effect, urging them to run
+those nonfree programs---so please don't refer to those pages.  (Such
+pages also break the Web, so they deserve condemnation for two
+reasons.)
+
+Instead, please quote excerpts from the page to make your point,
+or find another place to refer to that information.
 
 @node GNU Free Documentation License
 @appendix GNU Free Documentation License

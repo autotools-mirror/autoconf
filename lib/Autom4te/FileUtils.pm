@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2012 Free Software Foundation, Inc.
+# Copyright (C) 2003-2015 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,39 +45,12 @@ use Autom4te::ChannelDefs;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);
-@EXPORT = qw (&open_quote &contents
+@EXPORT = qw (&contents
 	      &find_file &mtime
 	      &update_file &up_to_date_p
 	      &xsystem &xsystem_hint &xqx
 	      &dir_has_case_matching_file &reset_dir_cache
 	      &set_dir_cache_file);
-
-
-=item C<open_quote ($file_name)>
-
-Quote C<$file_name> for open.
-
-=cut
-
-# $FILE_NAME
-# open_quote ($FILE_NAME)
-# -----------------------
-# If the string $S is a well-behaved file name, simply return it.
-# If it starts with white space, prepend './', if it ends with
-# white space, add '\0'.  Return the new string.
-sub open_quote($)
-{
-  my ($s) = @_;
-  if ($s =~ m/^\s/)
-    {
-      $s = "./$s";
-    }
-  if ($s =~ m/\s$/)
-    {
-      $s = "$s\0";
-    }
-  return $s;
-}
 
 =item C<find_file ($file_name, @include)>
 
@@ -168,7 +141,7 @@ sub update_file ($$;$)
 
   if ($to eq '-')
     {
-      my $in = new IO::File ("< " . open_quote ($from));
+      my $in = new IO::File $from, "<";
       my $out = new IO::File (">-");
       while ($_ = $in->getline)
 	{
@@ -360,7 +333,7 @@ sub contents ($)
   my ($file) = @_;
   verb "reading $file";
   local $/;			# Turn on slurp-mode.
-  my $f = new Autom4te::XFile "< " . open_quote ($file);
+  my $f = new Autom4te::XFile $file, "<";
   my $contents = $f->getline;
   $f->close;
   return $contents;
