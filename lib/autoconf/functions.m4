@@ -1342,6 +1342,8 @@ main (void)
     if (*(data + i) != *(data3 + i))
       return 14;
   close (fd);
+  free (data);
+  free (data3);
   return 0;
 }]])],
 	       [ac_cv_func_mmap_fixed_mapped=yes],
