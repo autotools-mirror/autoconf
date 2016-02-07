@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Parameterizing and creating config.status.
-# Copyright (C) 1992-1996, 1998-2015 Free Software Foundation, Inc.
+# Copyright (C) 1992-1996, 1998-2016 Free Software Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free
 # software; you can redistribute it and/or modify it under the
