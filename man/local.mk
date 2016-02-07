@@ -25,9 +25,7 @@ dist_man_MANS = \
   $(mansrcdir)/autoreconf.1 \
   $(mansrcdir)/autoscan.1 \
   $(mansrcdir)/autoupdate.1 \
-  $(mansrcdir)/ifnames.1 \
-  $(mansrcdir)/config.guess.1 \
-  $(mansrcdir)/config.sub.1
+  $(mansrcdir)/ifnames.1
 
 EXTRA_DIST += $(dist_man_MANS:.1=.x) man/common.x
 MAINTAINERCLEANFILES += $(dist_man_MANS)
@@ -41,10 +39,6 @@ $(mansrcdir)/autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
 $(mansrcdir)/autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
 $(mansrcdir)/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
 $(mansrcdir)/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
-
-# Independent from this package.
-$(mansrcdir)/config.guess.1: $(srcdir)/build-aux/config.guess
-$(mansrcdir)/config.sub.1:   $(srcdir)/build-aux/config.sub
 
 remove_time_stamp = 's/^\(\.TH[^"]*"[^"]*"[^"]*\)"[^"]*"/\1/'
 

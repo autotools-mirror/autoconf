@@ -110,6 +110,9 @@ GNU Autoconf NEWS - User visible changes.
   useful effect is to trigger those checks, with this macro.  It is
   unlikely to be useful otherwise.
 
+** Man pages for config.guess and config.sub are no longer provided.
+They were moved to the master source tree for config.guess and config.sub.
+
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
 ** Autoconf now requires perl 5.6 or better (but generated configure
