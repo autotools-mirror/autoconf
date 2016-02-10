@@ -22,6 +22,7 @@ package Autom4te::Configure_ac;
 
 use 5.006;
 use strict;
+use warnings;
 use Exporter;
 use Autom4te::Channels;
 use Autom4te::ChannelDefs;

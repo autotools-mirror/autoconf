@@ -1,4 +1,4 @@
-#! @PERL@ -w
+#! @PERL@
 # -*- perl -*-
 # @configure_input@
 
@@ -45,6 +45,7 @@ use Autom4te::XFile;
 # Do not use Cwd::chdir, since it might hang.
 use Cwd 'cwd';
 use strict;
+use warnings;
 
 ## ----------- ##
 ## Variables.  ##

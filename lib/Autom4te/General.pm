@@ -43,7 +43,7 @@ use File::stat;
 use IO::File;
 use Carp;
 use strict;
-
+use warnings;
 use vars qw (@ISA @EXPORT);
 
 @ISA = qw (Exporter);

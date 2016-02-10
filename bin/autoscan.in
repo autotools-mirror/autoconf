@@ -1,4 +1,4 @@
-#! @PERL@ -w
+#! @PERL@
 # -*- perl -*-
 # @configure_input@
 
@@ -43,6 +43,7 @@ use Autom4te::XFile;
 use File::Basename;
 use File::Find;
 use strict;
+use warnings;
 
 use vars qw(@cfiles @makefiles @shfiles @subdirs %printed);
 

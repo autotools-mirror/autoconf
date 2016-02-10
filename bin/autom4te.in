@@ -1,4 +1,4 @@
-#! @PERL@ -w
+#! @PERL@
 # -*- perl -*-
 # @configure_input@
 
@@ -43,6 +43,7 @@ use Autom4te::General;
 use Autom4te::XFile;
 use File::Basename;
 use strict;
+use warnings;
 
 # Data directory.
 my $pkgdatadir = $ENV{'AC_MACRODIR'} || '@pkgdatadir@';

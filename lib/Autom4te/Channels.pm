@@ -68,6 +68,7 @@ etc.) that can also be overridden on a per-message basis.
 
 use 5.006;
 use strict;
+use warnings;
 use Exporter;
 use Carp;
 use File::Basename;

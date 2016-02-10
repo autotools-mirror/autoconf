@@ -35,6 +35,7 @@ use Data::Dumper;
 use Autom4te::Request;
 use Carp;
 use strict;
+use warnings;
 
 =over 4
 

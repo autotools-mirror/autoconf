@@ -49,6 +49,7 @@ shorthand function to output on specific channels.
 
 use 5.006;
 use strict;
+use warnings;
 use Exporter;
 
 use vars qw (@ISA @EXPORT);

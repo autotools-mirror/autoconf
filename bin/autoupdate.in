@@ -1,4 +1,4 @@
-#! @PERL@ -w
+#! @PERL@
 # -*- perl -*-
 # @configure_input@
 
@@ -44,6 +44,7 @@ use Autom4te::General;
 use Autom4te::XFile;
 use File::Basename;
 use strict;
+use warnings;
 
 # Lib files.
 my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';

@@ -36,6 +36,7 @@ This perl module provides various general purpose file handling functions.
 
 use 5.006;
 use strict;
+use warnings;
 use Exporter;
 use File::stat;
 use IO::File;
