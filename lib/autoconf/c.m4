@@ -1855,8 +1855,10 @@ AN_IDENTIFIER([restrict], [AC_C_RESTRICT])
 AC_DEFUN([AC_C_RESTRICT],
 [AC_CACHE_CHECK([for C/C++ restrict keyword], [ac_cv_c_restrict],
   [ac_cv_c_restrict=no
-   # The order here caters to the fact that C++ does not require restrict.
-   for ac_kw in __restrict __restrict__ _Restrict restrict; do
+   # Put '__restrict__' first, to avoid problems with glibc and non-GCC; see:
+   # http://lists.gnu.org/archive/html/bug-autoconf/2016-02/msg00006.html
+   # Put 'restrict' last, because C++ lacks it.
+   for ac_kw in __restrict__ __restrict _Restrict restrict; do
      AC_COMPILE_IFELSE(
       [AC_LANG_PROGRAM(
 	 [[typedef int *int_ptr;
@@ -1876,13 +1878,13 @@ AC_DEFUN([AC_C_RESTRICT],
  AH_VERBATIM([restrict],
 [/* Define to the equivalent of the C99 'restrict' keyword, or to
    nothing if this is not supported.  Do not define if restrict is
-   supported directly.  */
+   supported only directly.  */
 #undef restrict
-/* Work around a bug in Sun C++: it does not support _Restrict or
+/* Work around a bug in Sun C++ 5.13: it does not support _Restrict or
    __restrict__, even though the corresponding Sun C compiler ends up with
-   "#define restrict _Restrict" or "#define restrict __restrict__" in the
-   previous line.  Perhaps some future version of Sun C++ will work with
-   restrict; if so, hopefully it defines __RESTRICT like Sun C does.  */
+   "#define restrict _Restrict" or "#define restrict __restrict__".
+   Perhaps some future version of Sun C++ will work with restrict;
+   if so, hopefully it defines __RESTRICT like Sun C does.  */
 #if defined __SUNPRO_CC && !defined __RESTRICT
 # define _Restrict
 # define __restrict__
