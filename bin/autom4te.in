@@ -550,7 +550,7 @@ sub handle_output ($$)
     }
   else
     {
-      $out->open($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
+      $out->open ($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
     }
   fatal "cannot create $output: $!"
     unless $out;
@@ -834,7 +834,15 @@ EOF
   $trace_m4->close;
 
   my $in = new Autom4te::XFile ("$m4 " . shell_quote ("$tmp/traces.m4") . " |");
-  my $out = new Autom4te::XFile ($output, ">");
+  my $out = new Autom4te::XFile;
+  if ($output eq '-')
+    {
+      $out->open (">$output");
+    }
+  else
+    {
+      $out->open ($output, ">");
+    }
 
   # This is dubious: should we really transform the quadrigraphs in
   # traces?  It might break balanced [ ] etc. in the output.  The
