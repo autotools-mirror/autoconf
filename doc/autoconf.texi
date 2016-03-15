@@ -9523,7 +9523,8 @@ documentation.  It may help you addressing particular problems reported
 by users.
 
 @uref{http://@/www.opengroup.org/@/susv3, Posix-conforming systems} are
-derived from the @uref{http://@/www.bell-labs.com/@/history/@/unix/, Unix
+derived from the
+@uref{http://@/www.bell-labs.com/@/usr/@/dmr/@/www/@/hist.html, Unix
 operating system}.
 
 The @uref{http://@/bhami.com/@/rosetta.html, Rosetta Stone for Unix}
