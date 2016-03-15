@@ -1205,6 +1205,7 @@ AS_IF([test "x$ac_cv_prog_cc_$1" != xno], [$5], [$6])
 AC_DEFUN([_AC_C_C99_TEST_HEADER],
 [[#include <stdarg.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <wchar.h>
 #include <stdio.h>
@@ -1439,7 +1440,9 @@ struct anonymous
 [_AC_C_C99_TEST_BODY[
   v1.i = 2;
   v1.w.k = 5;
-  _Static_assert (&v1.i == &v1.w.k, "Anonymous union alignment botch");
+  _Static_assert ((offsetof (struct anonymous, i)
+		   == offsetof (struct anonymous, w.k)),
+		  "Anonymous union alignment botch");
 ]],
 dnl Try
 dnl GCC		-std=gnu11 (unused restrictive mode: -std=c11)
@@ -2453,9 +2456,9 @@ AC_DEFUN([_AC_CXX_CXX11_TEST_BODY],
 }
 {
   // Unicode literals
-  char *utf8 = u8"UTF-8 string \u2500";
-  char16_t *utf16 = u"UTF-8 string \u2500";
-  char32_t *utf32 = U"UTF-32 string \u2500";
+  char const *utf8 = u8"UTF-8 string \u2500";
+  char16_t const *utf16 = u"UTF-8 string \u2500";
+  char32_t const *utf32 = U"UTF-32 string \u2500";
 }
 ]])
 
