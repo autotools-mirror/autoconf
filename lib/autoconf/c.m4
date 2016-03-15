@@ -457,6 +457,9 @@ fi
 if test -z "$CC"; then
   AC_CHECK_TOOLS(CC, cl.exe)
 fi
+if test -z "$CC"; then
+  AC_CHECK_TOOL(CC, clang)
+fi
 ])
 
 test -z "$CC" && AC_MSG_FAILURE([no acceptable C compiler found in \$PATH])
@@ -704,7 +707,7 @@ if test -z "$CXX"; then
   else
     AC_CHECK_TOOLS(CXX,
 		   [m4_default([$1],
-			       [g++ c++ gpp aCC CC cxx cc++ cl.exe FCC KCC RCC xlC_r xlC])],
+			       [g++ c++ gpp aCC CC cxx cc++ cl.exe FCC KCC RCC xlC_r xlC clang++])],
 		   g++)
   fi
 fi
@@ -883,7 +886,7 @@ _AC_ARG_VAR_LIBS()dnl
 _AC_ARG_VAR_CPPFLAGS()dnl
 _AC_ARG_VAR_PRECIOUS([OBJC])dnl
 AC_CHECK_TOOLS(OBJC,
-	       [m4_default([$1], [gcc objcc objc cc CC])],
+	       [m4_default([$1], [gcc objcc objc cc CC clang])],
 	       gcc)
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
