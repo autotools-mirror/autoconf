@@ -2406,7 +2406,7 @@ AC_DEFUN([_AC_CXX_CXX11_TEST_BODY],
   short sa[cxx11test::get_val()] = { 0 };
 }
 {
-  // Test initialiser lists
+  // Test initializer lists
   cxx11test::testinit il = { 4323, 435234.23544 };
 }
 {
@@ -2500,7 +2500,7 @@ dnl with extended modes being tried first.
 # considers the compiler to be in ISO C++11 mode if it handles all the
 # tests from the C++98 checks, plus the following: Language features
 # (auto, constexpr, decltype, default/deleted constructors, delegate
-# constructors, final, initialiser lists, lambda functions, nullptr,
+# constructors, final, initializer lists, lambda functions, nullptr,
 # override, range-based for loops, template brackets without spaces,
 # unicode literals) and library features (array, memory (shared_ptr,
 # weak_ptr), regex and tuple types).
