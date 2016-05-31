@@ -529,21 +529,25 @@ AC_DEFUN([AC_CHECK_HEADER_STDBOOL],
         [AC_LANG_PROGRAM(
            [[
              #include <stdbool.h>
-             #ifndef bool
-              "error: bool is not defined"
+
+             #if __cplusplus < 201103
+              #ifndef bool
+               "error: bool is not defined"
+              #endif
+              #ifndef false
+               "error: false is not defined"
+              #endif
+              #if false
+               "error: false is not 0"
+              #endif
+              #ifndef true
+               "error: true is not defined"
+              #endif
+              #if true != 1
+               "error: true is not 1"
+              #endif
              #endif
-             #ifndef false
-              "error: false is not defined"
-             #endif
-             #if false
-              "error: false is not 0"
-             #endif
-             #ifndef true
-              "error: true is not defined"
-             #endif
-             #if true != 1
-              "error: true is not 1"
-             #endif
+
              #ifndef __bool_true_false_are_defined
               "error: __bool_true_false_are_defined is not defined"
              #endif
