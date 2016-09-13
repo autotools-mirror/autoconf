@@ -14212,7 +14212,7 @@ AC_DEFUN(@var{macro-name}, @var{macro-body})
 @end example
 
 You can refer to any arguments passed to the macro as @samp{$1},
-@samp{$2}, etc.  @xref{Definitions, , How to define new macros, m4.info,
+@samp{$2}, etc.  @xref{Definitions, , How to define new macros, m4,
 GNU M4}, for more complete information on writing M4 macros.
 
 Most macros fall in one of two general categories.  The first category
