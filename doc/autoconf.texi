@@ -8588,15 +8588,21 @@ extensions to C, as well as platform extensions not defined by Posix.
 @anchor{AC_USE_SYSTEM_EXTENSIONS}
 @defmac AC_USE_SYSTEM_EXTENSIONS
 @acindex{USE_SYSTEM_EXTENSIONS}
-@cvindex _ALL_SOURCE
 @cvindex _GNU_SOURCE
+@cvindex _ALL_SOURCE
+@cvindex _DARWIN_C_SOURCE
 @cvindex _MINIX
+@cvindex _NETBSD_SOURCE
 @cvindex _POSIX_1_SOURCE
 @cvindex _POSIX_PTHREAD_SEMANTICS
 @cvindex _POSIX_SOURCE
 @cvindex _TANDEM_SOURCE
+@cvindex _XOPEN_SOURCE
 @cvindex __EXTENSIONS__
-This macro was introduced in Autoconf 2.60.  If possible, enable
+@cvindex __STDC_WANT_IEC_60559_BFP_EXT__
+@cvindex __STDC_WANT_IEC_60559_FUNCS_EXT__
+@cvindex __STDC_WANT_LIB_EXT2__
+If possible, enable
 extensions to C or Posix on hosts that normally disable the extensions,
 typically due to standards-conformance namespace issues.  This should be
 called before any macros that run the C compiler.  The following
@@ -8605,22 +8611,41 @@ preprocessor macros are defined where appropriate:
 @table @code
 @item _GNU_SOURCE
 Enable extensions on GNU/Linux.
-@item __EXTENSIONS__
-Enable general extensions on Solaris.
-@item _POSIX_PTHREAD_SEMANTICS
-Enable threading extensions on Solaris.
-@item _TANDEM_SOURCE
-Enable extensions for the HP NonStop platform.
 @item _ALL_SOURCE
 Enable extensions for AIX 3, and for Interix.
-@item _POSIX_SOURCE
-Enable Posix functions for Minix.
-@item _POSIX_1_SOURCE
-Enable additional Posix functions for Minix.
+@item _DARWIN_C_SOURCE
+Enable extensions for macOS.
 @item _MINIX
 Identify Minix platform.  This particular preprocessor macro is
 obsolescent, and may be removed in a future release of Autoconf.
+@item _NETBSD_SOURCE
+Enable NetBSD-related extensions for Minix.
+@item _POSIX_1_SOURCE
+Enable additional Posix functions for Minix.
+@item _POSIX_PTHREAD_SEMANTICS
+Enable threading extensions on Solaris.
+@item _POSIX_SOURCE
+Enable Posix functions for Minix.
+@item _TANDEM_SOURCE
+Enable extensions for the HP NonStop platform.
+@item _XOPEN_SOURCE
+Enable X/Open extensions for HP-UX.
+@item __EXTENSIONS__
+Enable general extensions on Solaris.
+@item __STDC_WANT_IEC_60559_BFP_EXT__
+Enable extensions specified by ISO/IEC TS 18661-1:2014.
+@item __STDC_WANT_IEC_60559_FUNCS_EXT__
+Enable extensions specified by ISO/IEC TS 18661-4:2015.
+@item __STDC_WANT_LIB_EXT2__
+Enable extensions specified by ISO/IEC TR 24731-2:2010.
 @end table
+
+The macro @code{__STDC_WANT_LIB_EXT1__} is not defined, as C11 Annex K
+is problematic.  See: O'Donell C, Sebor M.
+@uref{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1967.htm, Field
+Experience With Annex K---Bounds Checking Interfaces}.
+
+This macro was introduced in Autoconf 2.60.
 @end defmac
 
 
