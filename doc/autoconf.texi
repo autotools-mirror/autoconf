@@ -5970,10 +5970,37 @@ Also see @code{AC_STRUCT_DIRENT_D_INO} and
 @cvindex MAJOR_IN_SYSMACROS
 @hdrindex{sys/mkdev.h}
 @hdrindex{sys/sysmacros.h}
-If @file{sys/types.h} does not define @code{major}, @code{minor}, and
-@code{makedev}, but @file{sys/mkdev.h} does, define
-@code{MAJOR_IN_MKDEV}; otherwise, if @file{sys/sysmacros.h} does, define
-@code{MAJOR_IN_SYSMACROS}.
+Detect the headers required to use @code{makedev}, @code{major}, and
+@code{minor}.  These functions may be defined by @file{sys/mkdev.h},
+@code{sys/sysmacros.h}, or @file{sys/types.h}.
+
+@code{AC_HEADER_MAJOR} defines @code{MAJOR_IN_MKDEV} if they are in
+@file{sys/mkdev.h}, or @code{MAJOR_IN_SYSMACROS} if they are in
+@file{sys/sysmacros.h}.  If neither macro is defined, they are either in
+@file{sys/types.h} or unavailable.
+
+To properly use these functions, your code should contain something
+like:
+
+@verbatim
+#include <sys/types.h>
+#ifdef MAJOR_IN_MKDEV
+# include <sys/mkdev.h>
+#elif defined MAJOR_IN_SYSMACROS
+# include <sys/sysmacros.h>
+#endif
+@end verbatim
+
+Note: Configure scripts built with Autoconf 2.69 or earlier will not
+detect a problem if @file{sys/types.h} contains definitions of
+@code{major}, @code{minor}, and/or @code{makedev} that trigger compiler
+warnings upon use.  This is known to occur with GNU libc 2.25, where
+those definitions are being deprecated to reduce namespace pollution.
+If it is not practical to use Autoconf 2.70 to regenerate the configure
+script of affected software, you can work around the problem by setting
+@samp{ac_cv_header_sys_types_h_makedev=no}, as an argument to
+@command{configure} or as part of a @file{config.site} site default file
+(@pxref{Site Defaults}).
 @end defmac
 
 @defmac AC_HEADER_RESOLV

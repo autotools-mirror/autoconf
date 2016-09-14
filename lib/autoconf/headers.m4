@@ -427,31 +427,29 @@ fi
 
 # AC_HEADER_MAJOR
 # ---------------
+# Thanks to glibc 2.25 deprecating macros in sys/types.h, coupled with
+# back-compat to autoconf 2.69, we need the following logic:
+# Check whether <sys/types.h> compiles.
+# If <sys/mkdev.h> compiles, assume it provides major/minor/makedev.
+# Otherwise, if <sys/sysmacros.h> compiles, assume it provides the macros.
+# Otherwise, either the macros were provided by <sys/types.h>, or do
+# not exist on the platform.  Code trying to use these three macros is
+# assumed to not care about platforms that lack the macros.
 AN_FUNCTION([major],     [AC_HEADER_MAJOR])
 AN_FUNCTION([makedev],   [AC_HEADER_MAJOR])
 AN_FUNCTION([minor],     [AC_HEADER_MAJOR])
 AN_HEADER([sys/mkdev.h], [AC_HEADER_MAJOR])
 AC_DEFUN([AC_HEADER_MAJOR],
-[AC_CACHE_CHECK(whether sys/types.h defines makedev,
-		ac_cv_header_sys_types_h_makedev,
-[AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <sys/types.h>]],
-				 [[return makedev(0, 0);]])],
-		[ac_cv_header_sys_types_h_makedev=yes],
-		[ac_cv_header_sys_types_h_makedev=no])
-])
-
-if test $ac_cv_header_sys_types_h_makedev = no; then
+[AC_CHECK_HEADERS_ONCE([sys/types.h])
 AC_CHECK_HEADER(sys/mkdev.h,
 		[AC_DEFINE(MAJOR_IN_MKDEV, 1,
 			   [Define to 1 if `major', `minor', and `makedev' are
 			    declared in <mkdev.h>.])])
-
-  if test $ac_cv_header_sys_mkdev_h = no; then
-    AC_CHECK_HEADER(sys/sysmacros.h,
-		    [AC_DEFINE(MAJOR_IN_SYSMACROS, 1,
-			       [Define to 1 if `major', `minor', and `makedev'
-				are declared in <sysmacros.h>.])])
-  fi
+if test $ac_cv_header_sys_mkdev_h = no; then
+  AC_CHECK_HEADER(sys/sysmacros.h,
+		  [AC_DEFINE(MAJOR_IN_SYSMACROS, 1,
+			     [Define to 1 if `major', `minor', and `makedev'
+			      are declared in <sysmacros.h>.])])
 fi
 ])# AC_HEADER_MAJOR
 
