@@ -6,9 +6,6 @@
 @settitle Autoconf
 @documentencoding UTF-8
 @setchapternewpage odd
-@ifnothtml
-@setcontentsaftertitlepage
-@end ifnothtml
 @finalout
 
 @c @ovar(ARG)
