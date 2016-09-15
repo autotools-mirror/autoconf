@@ -363,7 +363,7 @@ Existing Tests
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
-* Posix Variants::              Special kludges for specific Posix variants
+* C and Posix Variants::        Kludges for C and Posix variants
 * Erlang Libraries::            Checking for the existence of Erlang libraries
 
 Common Behavior
@@ -3838,7 +3838,7 @@ Symbols}, for how to get those symbol definitions into your program.
 * Types::                       Types that might be missing
 * Compilers and Preprocessors::  Checking for compiling programs
 * System Services::             Operating system services
-* Posix Variants::              Special kludges for specific Posix variants
+* C and Posix Variants::        Kludges for C and Posix variants
 * Erlang Libraries::            Checking for the existence of Erlang libraries
 @end menu
 
@@ -8606,29 +8606,16 @@ system.  If so, set the shell variable @code{ac_cv_sys_posix_termios} to
 @samp{yes}.  If not, set the variable to @samp{no}.
 @end defmac
 
-@node Posix Variants
-@section Posix Variants
+@node C and Posix Variants
+@section C and Posix Variants
 
-The following macro makes it possible to use features of Posix that are
-extensions to C, as well as platform extensions not defined by Posix.
+The following macro makes it possible to use C language and library
+extensions defined by the C standards committee, features of Posix that
+are extensions to C, and platform extensions not defined by Posix.
 
 @anchor{AC_USE_SYSTEM_EXTENSIONS}
 @defmac AC_USE_SYSTEM_EXTENSIONS
 @acindex{USE_SYSTEM_EXTENSIONS}
-@cvindex _GNU_SOURCE
-@cvindex _ALL_SOURCE
-@cvindex _DARWIN_C_SOURCE
-@cvindex _MINIX
-@cvindex _NETBSD_SOURCE
-@cvindex _POSIX_1_SOURCE
-@cvindex _POSIX_PTHREAD_SEMANTICS
-@cvindex _POSIX_SOURCE
-@cvindex _TANDEM_SOURCE
-@cvindex _XOPEN_SOURCE
-@cvindex __EXTENSIONS__
-@cvindex __STDC_WANT_IEC_60559_BFP_EXT__
-@cvindex __STDC_WANT_IEC_60559_FUNCS_EXT__
-@cvindex __STDC_WANT_LIB_EXT2__
 If possible, enable
 extensions to C or Posix on hosts that normally disable the extensions,
 typically due to standards-conformance namespace issues.  This should be
@@ -8637,42 +8624,74 @@ preprocessor macros are defined where appropriate:
 
 @table @code
 @item _GNU_SOURCE
+@cvindex _GNU_SOURCE
 Enable extensions on GNU/Linux.
 @item _ALL_SOURCE
+@cvindex _ALL_SOURCE
 Enable extensions for AIX 3, and for Interix.
 @item _DARWIN_C_SOURCE
+@cvindex _DARWIN_C_SOURCE
 Enable extensions for macOS.
 @item _MINIX
+@cvindex _MINIX
 Identify Minix platform.  This particular preprocessor macro is
 obsolescent, and may be removed in a future release of Autoconf.
 @item _NETBSD_SOURCE
+@cvindex _NETBSD_SOURCE
 Enable NetBSD-related extensions for Minix.
 @item _POSIX_1_SOURCE
+@cvindex _POSIX_1_SOURCE
 Enable additional Posix functions for Minix.
 @item _POSIX_PTHREAD_SEMANTICS
+@cvindex _POSIX_PTHREAD_SEMANTICS
 Enable threading extensions on Solaris.
 @item _POSIX_SOURCE
+@cvindex _POSIX_SOURCE
 Enable Posix functions for Minix.
 @item _TANDEM_SOURCE
+@cvindex _TANDEM_SOURCE
 Enable extensions for the HP NonStop platform.
 @item _XOPEN_SOURCE
+@cvindex _XOPEN_SOURCE
 Enable X/Open extensions for HP-UX.
 @item __EXTENSIONS__
+@cvindex __EXTENSIONS__
 Enable general extensions on Solaris.
+@item __STDC_WANT_IEC_60559_ATTRIBS_EXT__
+@cvindex __STDC_WANT_IEC_60559_ATTRIBS_EXT__
+Enable extensions specified by ISO/IEC TS 18661-5:2014.
 @item __STDC_WANT_IEC_60559_BFP_EXT__
+@cvindex __STDC_WANT_IEC_60559_BFP_EXT__
 Enable extensions specified by ISO/IEC TS 18661-1:2014.
+@item __STDC_WANT_IEC_60559_DFP_EXT__
+@cvindex __STDC_WANT_IEC_60559_DFP_EXT__
+Enable extensions specified by ISO/IEC TS 18661-2:2015.
 @item __STDC_WANT_IEC_60559_FUNCS_EXT__
+@cvindex __STDC_WANT_IEC_60559_FUNCS_EXT__
 Enable extensions specified by ISO/IEC TS 18661-4:2015.
+@item __STDC_WANT_IEC_60559_TYPES_EXT__
+@cvindex __STDC_WANT_IEC_60559_TYPES_EXT__
+Enable extensions specified by ISO/IEC TS 18661-3:2015.
 @item __STDC_WANT_LIB_EXT2__
+@cvindex __STDC_WANT_LIB_EXT2__
 Enable extensions specified by ISO/IEC TR 24731-2:2010.
+@item __STDC_WANT_MATH_SPEC_FUNCS__
+@cvindex __STDC_WANT_MATH_SPEC_FUNCS__
+Enable extensions specified by ISO/IEC TR 24747:2009.
 @end table
 
-The macro @code{__STDC_WANT_LIB_EXT1__} is not defined, as C11 Annex K
-is problematic.  See: O'Donell C, Sebor M.
+@cvindex __STDC_WANT_DEC_FP__
+The C preprocessor macro @code{__STDC_WANT_DEC_FP__} is not defined.
+ISO/IEC TR 24732:2009 was superseded by ISO/IEC TS 18661-2:2015.
+
+@cvindex __STDC_WANT_LIB_EXT1__
+The C preprocessor macro @code{__STDC_WANT_LIB_EXT1__} is not defined,
+as C11 Annex K is problematic.  See: O'Donell C, Sebor M.
 @uref{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1967.htm, Field
 Experience With Annex K---Bounds Checking Interfaces}.
 
-This macro was introduced in Autoconf 2.60.
+The Autoconf macro @code{AC_USE_SYSTEM_EXTENSIONS} was introduced in
+Autoconf 2.60.
 @end defmac
 
 

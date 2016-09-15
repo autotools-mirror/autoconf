@@ -59,8 +59,8 @@ GNU Autoconf NEWS - User visible changes.
   YFLAGS to enable these warnings.
 
 - AC_USE_SYSTEM_EXTENSIONS now enables more extensions on HP-UX,
-  macOS, and MINIX, as well as on systems conforming to ISO/IEC TR
-  24731-2:2010, ISO/IEC TS 18661-1:2014, and ISO/IEC TS 18661-4:2015.
+  macOS, and MINIX, as well as on systems conforming to recent
+  ISO/IEC C technical reports and specifications.
 
 - AC_CHECK_DECL and AC_CHECK_DECLS can now report missing declarations for
   functions that are also Clang compiler builtins.
