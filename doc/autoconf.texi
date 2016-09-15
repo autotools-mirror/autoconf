@@ -8677,7 +8677,7 @@ Enable extensions specified by ISO/IEC TS 18661-3:2015.
 Enable extensions specified by ISO/IEC TR 24731-2:2010.
 @item __STDC_WANT_MATH_SPEC_FUNCS__
 @cvindex __STDC_WANT_MATH_SPEC_FUNCS__
-Enable extensions specified by ISO/IEC TR 24747:2009.
+Enable extensions specified by ISO/IEC 24747:2009.
 @end table
 
 @cvindex __STDC_WANT_DEC_FP__
