@@ -19666,6 +19666,18 @@ $ @kbd{echo abc | busybox sed '/a\(b\)c/ s/a\(b\)c/\1/'}
 b
 @end example
 
+Portable scripts should be aware of the inconsistencies and options for
+handling word boundaries, as these are not specified by POSIX.
+
+@example
+                \<      \b      [[:<:]]
+Solaris 10      yes     no      no
+Solaris XPG4    yes     no      error
+NetBSD 5.1      no      no      yes
+FreeBSD 9.1     no      no      yes
+GNU             yes     yes     error
+busybox         yes     yes     error
+@end example
 
 @item @command{sed} (@samp{t})
 @c ---------------------------
