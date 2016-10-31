@@ -185,11 +185,16 @@ m4_define([AH_CHECK_HEADERS],
 # header.  Either ACTION may include `break' to stop the search.
 AC_DEFUN([AC_CHECK_HEADERS],
 [m4_map_args_w([$1], [_AH_CHECK_HEADER(], [)])]dnl
-[AS_FOR([AC_header], [ac_header], [$1],
-[AC_CHECK_HEADER(AC_header,
-		 [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]AC_header)) $2],
-		 [$3], [$4])dnl])
+[m4_if([$2$3]AS_LITERAL_IF([$1], [[yes]], [[no]]), [yes],
+       [m4_map_args_w([$1], [_$0(], [, [], [], [$4])])],
+       [AS_FOR([AC_header], [ac_header], [$1], [_$0(AC_header, [$2], [$3], [$4])])])dnl
 ])# AC_CHECK_HEADERS
+
+m4_define([_AC_CHECK_HEADERS],
+[AC_CHECK_HEADER([$1],
+		 [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]$1)) $2],
+		 [$3], [$4])dnl
+])
 
 
 # _AC_CHECK_HEADER_ONCE(HEADER-FILE)
@@ -285,8 +290,7 @@ ac_includes_default="\
 #endif"
 ])]dnl
 [_AC_CHECK_HEADERS_ONCE(
-  [sys/types.h sys/stat.h strings.h inttypes.h stdint.h unistd.h],
-  [], [], [$ac_includes_default])]dnl
+  [sys/types.h sys/stat.h strings.h inttypes.h stdint.h unistd.h])]dnl
 dnl For backward compatibility, provide unconditional AC_DEFINEs of
 dnl HAVE_STDLIB_H, HAVE_STRING_H, and STDC_HEADERS.
 [AC_DEFINE([HAVE_STDLIB_H], [1],
