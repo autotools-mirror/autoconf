@@ -2167,9 +2167,11 @@ m4_define([AC_DEFINE_UNQUOTED], [_AC_DEFINE_Q([_$0], $@)])
 # Append the pre-expanded STRING and a newline to confdefs.h, as if
 # with an unquoted here-doc, but avoiding a fork in the common case of
 # no backslash, no command substitution, no complex variable
-# substitution, and no quadrigraphs.
+# substitution (taking into account quadrigraphs as well).  Also
+# avoid AS_ECHO if "#" is present to avoid confusing m4 with comments,
+# but quadrigraphs are fine in that case.
 m4_define([_AC_DEFINE_UNQUOTED],
-[m4_if(m4_bregexp([$1], [\\\|`\|\$(\|\${\|@]), [-1],
+[m4_if(m4_bregexp([$1], [#\|\\\|`\|\(\$\|@S|@\)\((|{|@{:@\)]), [-1],
        [AS_ECHO(["AS_ESCAPE([$1], [""])"]) >>confdefs.h],
        [cat >>confdefs.h <<_ACEOF
 [$1]
