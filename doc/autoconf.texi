@@ -10573,13 +10573,13 @@ quoting; if the usage is already inside a double-quoted string, then
 split it into concatenated strings.
 
 @example
-define([single], [a single-quoted $[]1 definition])
+define([foo], [a single-quoted $[]1 definition])
 @result{}
-define([double], [[a double-quoted $][1 definition]])
+define([bar], [[a double-quoted $][1 definition]])
 @result{}
-single
+foo
 @result{}a single-quoted $1 definition
-double
+bar
 @result{}a double-quoted $1 definition
 @end example
 
