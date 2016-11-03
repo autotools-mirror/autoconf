@@ -96,9 +96,9 @@ AC_DEFUN([AC_CHECK_FUNCS],
 # -----------------------------
 # Check for a single FUNCTION once.
 m4_define([_AC_CHECK_FUNC_ONCE],
-[_AH_CHECK_FUNC([$1])AC_DEFUN([_AC_Func_$1],
-  [m4_divert_text([INIT_PREPARE], [AS_VAR_APPEND([ac_func_list], [" $1"])])
-_AC_FUNCS_EXPANSION])AC_REQUIRE([_AC_Func_$1])])
+[_AH_CHECK_FUNC([$1])AC_DEFUN([_AC_Func_$1], [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_func_]]_AC_LANG_ABBREV[[_list], [" $1"])])
+_AC_FUNCS_EXPANSION(_AC_LANG_ABBREV)])AC_REQUIRE([_AC_Func_$1])])
 
 # AC_CHECK_FUNCS_ONCE(FUNCTION...)
 # --------------------------------
@@ -107,12 +107,13 @@ _AC_FUNCS_EXPANSION])AC_REQUIRE([_AC_Func_$1])])
 AC_DEFUN([AC_CHECK_FUNCS_ONCE],
 [m4_map_args_w([$1], [_AC_CHECK_FUNC_ONCE(], [)])])
 
+# _AC_FUNCS_EXPANSION(LANG)
+# -------------------------
+# One-shot code per language LANG for checking all functions registered by
+# AC_CHECK_FUNCS_ONCE while that language was active.
 m4_define([_AC_FUNCS_EXPANSION],
-[
-  m4_divert_text([DEFAULTS], [ac_func_list=])
-  AC_CHECK_FUNCS([$ac_func_list])
-  m4_define([_AC_FUNCS_EXPANSION], [])
-])
+[m4_ifndef([$0($1)], [m4_define([$0($1)])m4_divert_text([DEFAULTS],
+[ac_func_$1_list=])AC_CHECK_FUNCS([$ac_func_$1_list])])])
 
 
 # _AC_REPLACE_FUNC(FUNCTION)

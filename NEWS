@@ -111,6 +111,10 @@ GNU Autoconf NEWS - User visible changes.
   useful effect is to trigger those checks, with this macro.  It is
   unlikely to be useful otherwise.
 
+- The AC_CHECK_FUNCS_ONCE macro now supports use with multiple
+  languages, rather than forcing all checks in the language used by
+  the first encounter of the macro.
+
 ** Man pages for config.guess and config.sub are no longer provided.
 They were moved to the master source tree for config.guess and config.sub.
 
