@@ -51,17 +51,20 @@ m4_define([_AC_CHECK_FUNC_BODY],
 ])# _AC_CHECK_FUNC_BODY
 
 
+m4_define([_AC_CHECK_FUNC_FN],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_func],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_func],
+    [LINENO FUNC VAR],
+    [Tests whether FUNC exists, setting the cache variable VAR accordingly])],
+  [_AC_CHECK_FUNC_BODY])])
+
 # AC_CHECK_FUNC(FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # -----------------------------------------------------------------
 # Check whether FUNCTION links in the current language.  Set the cache
 # variable ac_cv_func_FUNCTION accordingly, then execute
 # ACTION-IF-FOUND or ACTION-IF-NOT-FOUND.
 AC_DEFUN([AC_CHECK_FUNC],
-[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_func],
-  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_func],
-    [LINENO FUNC VAR],
-    [Tests whether FUNC exists, setting the cache variable VAR accordingly])],
-  [_$0_BODY])]dnl
+[_AC_CHECK_FUNC_FN()]dnl
 [AS_VAR_PUSHDEF([ac_var], [ac_cv_func_$1])]dnl
 [ac_fn_[]_AC_LANG_ABBREV[]_check_func "$LINENO" "$1" "ac_var"
 AS_VAR_IF([ac_var], [yes], [$2], [$3])
@@ -111,14 +114,21 @@ AC_DEFUN([AC_CHECK_FUNCS_ONCE],
 # _AC_FUNCS_EXPANSION(LANG)
 # -------------------------
 # One-shot code per language LANG for checking all functions registered by
-# AC_CHECK_FUNCS_ONCE while that language was active.
+# AC_CHECK_FUNCS_ONCE while that language was active.  We have to inline
+# portions of AC_CHECK_FUNC, because although we operate on shell
+# variables, we know they represent literals at that point in time,
+# where we don't want to trigger normal AS_VAR_PUSHDEF shell code.
 m4_define([_AC_FUNCS_EXPANSION],
 [m4_ifndef([$0($1)], [m4_define([$0($1)])m4_divert_text([DEFAULTS],
 [ac_func_$1_list=])ac_func=
 for ac_item in $ac_func_$1_list
 do
   if test $ac_func; then
-    AC_CHECK_FUNC([$ac_func], [AC_DEFINE_UNQUOTED([$ac_item])])
+    _AC_CHECK_FUNC_FN()ac_fn_$1_check_func "$LINENO" ]dnl
+[$ac_func ac_cv_func_$ac_func
+    if eval test \"x\$ac_cv_func_$ac_func\" = xyes; then
+      echo "[#]define $ac_item 1" >> confdefs.h
+    fi
     ac_func=
   else
     ac_func=$ac_item
