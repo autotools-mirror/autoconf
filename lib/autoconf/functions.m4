@@ -88,11 +88,16 @@ m4_define([_AH_CHECK_FUNC],
 # `break' to stop the search.
 AC_DEFUN([AC_CHECK_FUNCS],
 [m4_map_args_w([$1], [_AH_CHECK_FUNC(], [)])]dnl
-[AS_FOR([AC_func], [ac_func], [$1],
-[AC_CHECK_FUNC(AC_func,
-	       [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]AC_func)) $2],
-	       [$3])dnl])
+[m4_if([$2$3]AS_LITERAL_IF([$1], [[yes]], [[no]]), [yes],
+       [m4_map_args_w([$1], [_$0(], [)])],
+       [AS_FOR([AC_func], [ac_func], [$1], [_$0(AC_func, [$2], [$3])])])dnl
 ])# AC_CHECK_FUNCS
+
+m4_define([_AC_CHECK_FUNCS],
+[AC_CHECK_FUNC([$1],
+	       [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]$1)) $2],
+	       [$3])dnl
+])
 
 
 # _AC_CHECK_FUNC_ONCE(FUNCTION)
