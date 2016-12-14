@@ -24893,7 +24893,7 @@ diminish the interaction with bug reporters, and simple timing reports.
 Autoconf itself has been using Autotest for years, and we do attest that
 it has considerably improved the strength of the test suite and the
 quality of bug reports.  Other projects are known to use some generation
-of Autotest, such as Bison, Free Recode, Free Wdiff, GNU Tar, each of
+of Autotest, such as Bison, GNU Wdiff, GNU Tar, each of
 them with different needs, and this usage has validated Autotest as a general
 testing framework.
 
