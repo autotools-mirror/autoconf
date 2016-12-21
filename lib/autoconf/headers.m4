@@ -195,8 +195,9 @@ AC_DEFUN([AC_CHECK_HEADERS],
 m4_define([_AC_CHECK_HEADER_ONCE],
 [_AH_CHECK_HEADER([$1])AC_DEFUN([_AC_Header_]m4_translit([[$1]],
     [./-], [___]), [m4_divert_text([INIT_PREPARE],
-  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list], [" $1"])])
-_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])AC_REQUIRE(
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list],
+  [" $1 ]AS_TR_SH([$1]) AS_TR_CPP([HAVE_$1])["])])]dnl
+[_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])AC_REQUIRE(
   [_AC_Header_]m4_translit([[$1]], [./-], [___]))])
 
 
@@ -219,8 +220,19 @@ AC_DEFUN([_AC_CHECK_HEADERS_ONCE],
 # AC_CHECK_HEADERS_ONCE while that language was active.
 m4_define([_AC_HEADERS_EXPANSION],
 [m4_ifndef([$0($1)], [m4_define([$0($1)])m4_divert_text([DEFAULTS],
-[ac_header_$1_list=])AC_CHECK_HEADERS([$ac_header_$1_list], [], [],
- [$ac_includes_default])])])
+[ac_header_$1_list=])ac_header= ac_cache=
+for ac_item in $ac_header_$1_list
+do
+  if test $ac_cache; then
+    AC_CHECK_HEADER([$ac_header], [AC_DEFINE_UNQUOTED([$ac_item])],
+      [], [$ac_includes_default])
+    ac_header= ac_cache=
+  elif test $ac_header; then
+    ac_cache=$ac_item
+  else
+    ac_header=$ac_item
+  fi
+done])])
 
 
 
