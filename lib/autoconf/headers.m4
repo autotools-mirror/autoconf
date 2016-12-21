@@ -194,10 +194,10 @@ AC_DEFUN([AC_CHECK_HEADERS],
 # Check for a single HEADER-FILE once.
 m4_define([_AC_CHECK_HEADER_ONCE],
 [_AH_CHECK_HEADER([$1])AC_DEFUN([_AC_Header_]m4_translit([[$1]],
-    [./-], [___]),
-  [m4_divert_text([INIT_PREPARE], [AS_VAR_APPEND([ac_header_list], [" $1"])])
-_AC_HEADERS_EXPANSION])AC_REQUIRE([_AC_Header_]m4_translit([[$1]],
-    [./-], [___]))])
+    [./-], [___]), [m4_divert_text([INIT_PREPARE],
+  [AS_VAR_APPEND([ac_header_]]_AC_LANG_ABBREV[[_list], [" $1"])])
+_AC_HEADERS_EXPANSION(_AC_LANG_ABBREV)])AC_REQUIRE(
+  [_AC_Header_]m4_translit([[$1]], [./-], [___]))])
 
 
 # AC_CHECK_HEADERS_ONCE(HEADER-FILE...)
@@ -213,11 +213,14 @@ AC_DEFUN([AC_CHECK_HEADERS_ONCE],
 AC_DEFUN([_AC_CHECK_HEADERS_ONCE],
   [m4_map_args_w([$1], [_AC_CHECK_HEADER_ONCE(], [)])])
 
+# _AC_HEADERS_EXPANSION(LANG)
+# ---------------------------
+# One-shot code per language LANG for checking all headers registered by
+# AC_CHECK_HEADERS_ONCE while that language was active.
 m4_define([_AC_HEADERS_EXPANSION],
-  [m4_divert_text([DEFAULTS], [ac_header_list=])]dnl
-  [AC_CHECK_HEADERS([$ac_header_list], [], [], [$ac_includes_default])]dnl
-  [m4_define([_AC_HEADERS_EXPANSION], [])])
-
+[m4_ifndef([$0($1)], [m4_define([$0($1)])m4_divert_text([DEFAULTS],
+[ac_header_$1_list=])AC_CHECK_HEADERS([$ac_header_$1_list], [], [],
+ [$ac_includes_default])])])
 
 
 
