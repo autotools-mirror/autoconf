@@ -73,18 +73,21 @@ m4_define([_AC_CHECK_HEADER_COMPILE_BODY],
 ])# _AC_CHECK_HEADER_COMPILE_BODY
 
 
+m4_define([_AC_CHECK_HEADER_COMPILE_FN],
+[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_header_compile],
+  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_header_compile],
+    [LINENO HEADER VAR INCLUDES],
+    [Tests whether HEADER exists and can be compiled using the include files
+     in INCLUDES, setting the cache variable VAR accordingly.])],
+  [_AC_CHECK_HEADER_COMPILE_BODY])])
+
 # _AC_CHECK_HEADER_COMPILE(HEADER-FILE,
 #		       [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
 #		       [INCLUDES = DEFAULT-INCLUDES])
 # --------------------------------------------------------------
 # Check the compiler accepts HEADER-FILE.  The INCLUDES are defaulted.
 AC_DEFUN([_AC_CHECK_HEADER_COMPILE],
-[AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_check_header_compile],
-  [AS_FUNCTION_DESCRIBE([ac_fn_]_AC_LANG_ABBREV[_check_header_compile],
-    [LINENO HEADER VAR INCLUDES],
-    [Tests whether HEADER exists and can be compiled using the include files
-     in INCLUDES, setting the cache variable VAR accordingly.])],
-  [$0_BODY])]dnl
+[_AC_CHECK_HEADER_COMPILE_FN()]dnl
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_$1])]dnl
 [ac_fn_[]_AC_LANG_ABBREV[]_check_header_compile ]dnl
 ["$LINENO" "$1" "ac_Header" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])"
@@ -217,15 +220,21 @@ AC_DEFUN([_AC_CHECK_HEADERS_ONCE],
 # _AC_HEADERS_EXPANSION(LANG)
 # ---------------------------
 # One-shot code per language LANG for checking all headers registered by
-# AC_CHECK_HEADERS_ONCE while that language was active.
+# AC_CHECK_HEADERS_ONCE while that language was active.  We have to inline
+# portions of AC_CHECK_HEADER_COMPILE, because although we operate on shell
+# variables, we know they represent literals at that point in time,
+# where we don't want to trigger normal AS_VAR_PUSHDEF shell code.
 m4_define([_AC_HEADERS_EXPANSION],
 [m4_ifndef([$0($1)], [m4_define([$0($1)])m4_divert_text([DEFAULTS],
 [ac_header_$1_list=])ac_header= ac_cache=
 for ac_item in $ac_header_$1_list
 do
   if test $ac_cache; then
-    AC_CHECK_HEADER([$ac_header], [AC_DEFINE_UNQUOTED([$ac_item])],
-      [], [$ac_includes_default])
+    _AC_CHECK_HEADER_COMPILE_FN()ac_fn_$1_check_header_compile "$LINENO" ]dnl
+[$ac_header ac_cv_header_$ac_cache "$ac_includes_default"
+    if eval test \"x\$ac_cv_header_$ac_cache\" = xyes; then
+      printf "%s\n" "[#]define $ac_item 1" >> confdefs.h
+    fi
     ac_header= ac_cache=
   elif test $ac_header; then
     ac_cache=$ac_item
