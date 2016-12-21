@@ -27,6 +27,11 @@ GNU Autoconf NEWS - User visible changes.
    is now deprecated.  If you really need that behavior use
    AC_PREPROC_IFELSE.
 
+** When checking for missing templates, autoheader now takes any
+   templates defined in the inputs of secondary config headers into
+   account.  This makes it possible to use AC_DEFINE for secondary
+   headers without duplicating the template in the main config header.
+
 ** Macros
 
 - New macro AC_C__GENERIC.

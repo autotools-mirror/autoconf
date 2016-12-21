@@ -860,6 +860,31 @@ config.h.in:0
 AT_CLEANUP
 
 
+# autoheader should take all config header inputs into account when
+# checking for missing templates.
+AT_SETUP([autoheader with multiple headers])
+
+AT_DATA([config-extra.h.in],
+[[/* Define this to whatever you want. */
+#undef HANNA
+]])
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_CONFIG_HEADERS([config.h config-extra.h])
+AC_DEFINE([HANNA], ["Hanna"])
+AC_DEFINE([SEAN], ["Sean"], [Sean's name])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK([grep HANNA configure], [0], [ignore], [ignore])
+AT_CHECK([grep HANNA config.h.in], [1], [ignore], [ignore])
+AT_CHECK([grep SEAN configure], [0], [ignore], [ignore])
+AT_CHECK([grep SEAN config.h.in], [0], [ignore], [ignore])
+
+AT_CLEANUP
+
 
 
 ## ------------ ##

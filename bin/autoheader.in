@@ -191,11 +191,21 @@ unless ($config_h)
     exit 1;
   }
 
-# We template only the first CONFIG_HEADER.
-$config_h =~ s/ .*//;
 # Support "outfile[:infile]", defaulting infile="outfile.in".
-($config_h, $config_h_in) = split (':', $config_h, 2);
-$config_h_in ||= "$config_h.in";
+sub templates_for_header
+{
+  my ($spec) = @_;
+  my ($header, @templates) = split(':', $spec);
+
+  return @templates if @templates;
+  return $header . '.in';
+}
+
+my @config_templates = map(templates_for_header($_), split(' ', $config_h));
+
+# We template only the first CONFIG_HEADER.
+$config_h_in = shift(@config_templates);
+$config_h =~ s/[ :].*//;
 
 # %SYMBOL might contain things like 'F77_FUNC(name,NAME)', but we keep
 # only the name of the macro.
@@ -261,14 +271,20 @@ $out->close;
 
 # Check that all the symbols have a template.
 {
-  my $in = new Autom4te::XFile ("$tmp/config.hin", "<");
-  my $suggest_ac_define = 1;
-  while ($_ = $in->getline)
+  foreach my $template ("$tmp/config.hin", @config_templates)
     {
-      my ($symbol) = /^\#\s*\w+\s+(\w+)/
-	or next;
-      delete $symbol{$symbol};
+      my $in = new Autom4te::XFile ($template, "<");
+
+      while ($_ = $in->getline)
+	{
+	  my ($sym) = /^\#\s*\w+\s+(\w+)/
+	    or next;
+	  delete $symbol{$sym};
+	}
     }
+
+  my $suggest_ac_define = 1;
+
   foreach (sort keys %symbol)
     {
       msg 'syntax', "warning: missing template: $_";
@@ -277,7 +293,6 @@ $out->close;
 	  msg 'syntax',  "Use AC_DEFINE([$_], [], [Description])";
 	  $suggest_ac_define = 0;
 	}
-
     }
   exit 1
     if keys %symbol;
