@@ -1243,13 +1243,21 @@ AC_CHECK_HEADER(stdio.h,
                 AC_MSG_ERROR([sorry, can't do anything for you]))
 @end example
 
-In other cases, you may have to use text that also resembles a macro
-call.  You must quote that text even when it is not passed as a macro
-argument.  For example, these two approaches in @file{configure.ac}
-(quoting just the potential problems, or quoting the entire line) will
-protect your script in case autoconf ever adds a macro @code{AC_DC}:
+In other cases, you may want to use text that also resembles a macro
+call.  You must quote that text (whether just the potential problem, or
+the entire line) even when it is not passed as a macro argument; and you
+may also have to use @code{m4_pattern_allow} (@pxref{Forbidden
+Patterns}), to declare your intention that the resulting configure file
+will have a literal that resembles what would otherwise be reserved for
+a macro name.  For example:
 
 @example
+dnl Simulate a possible future autoconf macro
+m4_define([AC_DC], [oops])
+dnl Underquoted:
+echo "Hard rock was here!  --AC_DC"
+dnl Correctly quoted:
+m4_pattern_allow([AC_DC])
 echo "Hard rock was here!  --[AC_DC]"
 [echo "Hard rock was here!  --AC_DC"]
 @end example
@@ -1258,6 +1266,7 @@ echo "Hard rock was here!  --[AC_DC]"
 which results in this text in @file{configure}:
 
 @example
+echo "Hard rock was here!  --oops"
 echo "Hard rock was here!  --AC_DC"
 echo "Hard rock was here!  --AC_DC"
 @end example
@@ -1270,15 +1279,15 @@ quoting for all literal string arguments}, either around just the
 problematic portions, or over the entire argument:
 
 @example
+m4_pattern_allow([AC_DC])
 AC_MSG_WARN([[AC_DC] stinks  --Iron Maiden])
 AC_MSG_WARN([[AC_DC stinks  --Iron Maiden]])
 @end example
 
-However, the above example triggers a warning about a possibly
-unexpanded macro when running @command{autoconf}, because it collides
-with the namespace of macros reserved for the Autoconf language.  To be
-really safe, you can use additional escaping (either a quadrigraph, or
-creative shell constructs) to silence that particular warning:
+It is also possible to avoid the problematic patterns in the first
+place, by the use of additional escaping (either a quadrigraph, or
+creative shell constructs), in which case it is no longer necessary to
+use @code{m4_pattern_allow}:
 
 @example
 echo "Hard rock was here!  --AC""_DC"
