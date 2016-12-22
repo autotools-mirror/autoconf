@@ -1739,14 +1739,21 @@ Don't remove the temporary files.
 
 @item --force
 @itemx -f
-Remake even @file{configure} scripts and configuration headers that are
-newer than their input files (@file{configure.ac} and, if present,
-@file{aclocal.m4}).
+Consider all generated and standard auxiliary files to be obsolete.
+This remakes even @file{configure} scripts and configuration headers
+that are newer than their input files (@file{configure.ac} and, if
+present, @file{aclocal.m4}).
+
+If deemed appropriate, this option triggers calls to @samp{automake
+--force-missing}.  Passing both @option{--force} and @option{--install}
+to @command{autoreconf} will in turn undo any customizations to standard
+files.  Note that the macro @code{AM_INIT_AUTOMAKE} has some options
+which change the set of files considered to be standard.
 
 @item --install
 @itemx -i
-Install the missing auxiliary files in the package.  By default, files
-are copied; this can be changed with @option{--symlink}.
+Install any missing standard auxiliary files in the package.  By
+default, files are copied; this can be changed with @option{--symlink}.
 
 If deemed appropriate, this option triggers calls to
 @samp{automake --add-missing},
