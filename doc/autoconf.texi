@@ -3268,7 +3268,12 @@ it right after @code{AC_INIT}.
 
 The package should @samp{#include} the configuration header file before
 any other header files, to prevent inconsistencies in declarations (for
-example, if it redefines @code{const}).
+example, if it redefines @code{const}, or if it defines a macro like
+@code{_FILE_OFFSET_BITS} that affects the behavior of system
+headers). Note that it is okay to only include @file{config.h} from
+@file{.c} files; the project's @file{.h} files can rely on
+@file{config.h} already being included first by the corresponding
+@file{.c} file.
 
 To provide for VPATH builds, remember to pass the C compiler a @option{-I.}
 option (or @option{-I..}; whichever directory contains @file{config.h}).
@@ -8595,7 +8600,9 @@ If you use this macro, check that your program works even when
 @code{off_t} is wider than @code{long int}, since this is common when
 large-file support is enabled.  For example, it is not correct to print
 an arbitrary @code{off_t} value @code{X} with @code{printf ("%ld",
-(long int) X)}.
+(long int) X)}.  Also, when using this macro in concert with
+@code{AC_CONFIG_HEADERS}, be sure that @file{config.h} is included
+before any system header.
 
 The LFS introduced the @code{fseeko} and @code{ftello} functions to
 replace their C counterparts @code{fseek} and @code{ftell} that do not
@@ -8632,11 +8639,13 @@ are extensions to C, and platform extensions not defined by Posix.
 @anchor{AC_USE_SYSTEM_EXTENSIONS}
 @defmac AC_USE_SYSTEM_EXTENSIONS
 @acindex{USE_SYSTEM_EXTENSIONS}
-If possible, enable
-extensions to C or Posix on hosts that normally disable the extensions,
-typically due to standards-conformance namespace issues.  This should be
-called before any macros that run the C compiler.  The following
-preprocessor macros are defined where appropriate:
+If possible, enable extensions to C or Posix on hosts that normally
+disable the extensions, typically due to standards-conformance namespace
+issues.  This should be called before any macros that run the C
+compiler.  Also, when using this macro in concert with
+@code{AC_CONFIG_HEADERS}, be sure that @file{config.h} is included
+before any system header.  The following preprocessor macros are defined
+where appropriate:
 
 @table @code
 @item _GNU_SOURCE
