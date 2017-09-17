@@ -15,7 +15,7 @@ AT_BANNER([M4sugar.])
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # AT_CHECK_M4SUGAR_TEXT(CODE, STDOUT, STDERR)
@@ -669,7 +669,7 @@ c
 post
 ]],
 [[script.4s:15: warning: m4@&t@_require: `a' was expanded before it was required
-script.4s:15: http://www.gnu.org/software/autoconf/manual/autoconf.html#Expanded-Before-Required
+script.4s:15: https://www.gnu.org/software/autoconf/manual/autoconf.html#Expanded-Before-Required
 script.4s:5: b is expanded from...
 script.4s:6: c is expanded from...
 script.4s:14: outer is expanded from...

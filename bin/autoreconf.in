@@ -19,7 +19,7 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Written by David J. MacKenzie.
 # Extended and rewritten in Perl by Akim Demaille.
@@ -89,8 +89,8 @@ The environment variables AUTOM4TE, AUTOCONF, AUTOHEADER, AUTOMAKE,
 ACLOCAL, AUTOPOINT, LIBTOOLIZE, M4, and MAKE are honored.
 
 Report bugs to <bug-autoconf\@gnu.org>.
-GNU Autoconf home page: <http://www.gnu.org/software/autoconf/>.
-General help using GNU software: <http://www.gnu.org/gethelp/>.
+GNU Autoconf home page: <https://www.gnu.org/software/autoconf/>.
+General help using GNU software: <https://www.gnu.org/gethelp/>.
 ";
 
 # $VERSION
@@ -98,7 +98,7 @@ General help using GNU software: <http://www.gnu.org/gethelp/>.
 $version = "autoreconf (@PACKAGE_NAME@) @VERSION@
 Copyright (C) @RELEASE_YEAR@ Free Software Foundation, Inc.
 License GPLv3+/Autoconf: GNU GPL version 3 or later
-<http://gnu.org/licenses/gpl.html>, <http://gnu.org/licenses/exceptions.html>
+<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 

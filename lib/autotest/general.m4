@@ -22,7 +22,7 @@ Copyright (C) 2000-2017 Free Software Foundation, Inc.
 # You should have received a copy of the GNU General Public License
 # and a copy of the Autoconf Configure Script Exception along with
 # this program; see the files COPYINGv3 and COPYING.EXCEPTION
-# respectively.  If not, see <http://www.gnu.org/licenses/>.
+# respectively.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # _m4_divert(DIVERSION-NAME)
@@ -757,7 +757,7 @@ m4_ifdef([AT_PACKAGE_NAME],
 [m4_ifset([AT_PACKAGE_URL], [
 m4_defn([AT_PACKAGE_NAME]) home page: <AT_PACKAGE_URL>.])dnl
 m4_if(m4_index(m4_defn([AT_PACKAGE_NAME]), [GNU ]), [0], [
-General help using GNU software: <http://www.gnu.org/gethelp/>.])])
+General help using GNU software: <https://www.gnu.org/gethelp/>.])])
 _ATEOF
   exit $at_write_fail
 fi

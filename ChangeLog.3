@@ -88,7 +88,7 @@
 	* lib/autoconf/fortran.m4 (_AC_PROG_FC_V_OUTPUT):
 	Also remove " -link" and trailing ")" from xlf output.
 	Problem and fix reported by Thomas Jahns in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2012-01/msg00000.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2012-01/msg00000.html>.
 
 2011-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
@@ -129,14 +129,14 @@
 	* doc/autoconf.texi (Here-Documents): Using a command substitution
 	in a here-documents being fed to a shell function is unportable.
 	Problem revealed by the automake testsuite:
-	<http://lists.gnu.org/archive/html/automake-patches/2011-12/msg00149.html>
+	<https://lists.gnu.org/archive/html/automake-patches/2011-12/msg00149.html>
 
 2011-12-26  Paul Eggert  <eggert@cs.ucla.edu>
 
 	AS_LN_S: fall back on 'cp -pR' (not 'cp -p') if 'ln -s' fails
 	This works better for symlinks to directories.
 	Problem reported by Eli Zaretskii via Werner Lemberg in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2011-12/msg00006.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2011-12/msg00006.html>.
 	* NEWS:
 	* doc/autoconf.texi (Particular Programs): Document this.
 	* lib/m4sugar/m4sh.m4 (_AS_LN_S_PREPARE): Implement this.
@@ -147,7 +147,7 @@
 	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C)): Use the
 	array as well as setting it, to pacify g++.  Reported by
 	Werner Lemberg in
-	<http://lists.gnu.org/archive/html/autoconf/2011-12/msg00005.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2011-12/msg00005.html>.
 
 2011-12-05  Paul Eggert  <eggert@cs.ucla.edu>
 
@@ -221,7 +221,7 @@
 	as work in the automake testsuite:
 	 <https://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00003.html>
 	 <https://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00004.html>
-	 <http://lists.gnu.org/archive/html/automake-patches/2011-09/msg00066.html>
+	 <https://lists.gnu.org/archive/html/automake-patches/2011-09/msg00066.html>
 	* doc/autoconf.texi (Signal handling): New paragraph.
 	(@menu at "Portable Shell", @detailmenu): Update.
 
@@ -270,15 +270,15 @@
 	tests reject, so we can't test this fix against them, but it's
 	more important to work with modern GCC (even when misused) than to
 	work with no-longer-used compilers.  Problem reported by Shevek in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2008-11/msg00007.html>
+	<https://lists.gnu.org/archive/html/bug-autoconf/2008-11/msg00007.html>
 	and raised again by Dan Kegel in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2011-08/msg00020.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2011-08/msg00020.html>.
 
 2011-08-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
 
 	docs: other issues with parallel BSD make
 	Motivated by automake bug#9245:
-	 <http://debbugs.gnu.org/cgi/bugreport.cgi?bug=9245>
+	 <https://debbugs.gnu.org/cgi/bugreport.cgi?bug=9245>
 	and FreeBSD PR bin/159730:
 	 <http://www.freebsd.org/cgi/query-pr.cgi?pr=159730>
 	* doc/autoconf.texi (Parallel Make): Document other BSD make
@@ -336,19 +336,19 @@
 2011-06-30  Timo Kamph  <timo.kamph@tu-harburg.de>  (trivial change)
 
 	* lib/autoconf/functions.m4 (_AC_REPLACE_FUNCS): Fix tr-cpp problem.
-	See http://lists.gnu.org/archive/html/bug-autoconf/2011-06/msg00058.html
+	See https://lists.gnu.org/archive/html/bug-autoconf/2011-06/msg00058.html
 
 2011-06-19  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/functions.m4 (_AC_LIBOBJ_ALLOCA): Be even smarter.
 	GCC was too smart for the previous patch.  See
-	<http://lists.gnu.org/archive/html/bug-autoconf/2011-06/msg00035.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2011-06/msg00035.html>.
 
 2011-06-18  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/functions.m4 (_AC_LIBOBJ_ALLOCA): Try to outsmart GCC.
 	Problem with stack-detection code reported by Andy Wingo in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2011-06/msg00032.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2011-06/msg00032.html>.
 	This fix is imported from gnulib's c-stack module.
 
 	* doc/autoconf.texi (File Descriptors): Fix texinfo typo.
@@ -810,13 +810,13 @@
 	autotest: fix file descriptor leak
 	* lib/autotest/general.m4 (_AT_CHECK): Close AS_MESSAGE_LOG_FD
 	when running the test.	Problem reported by Luke Mewburn in
-	<http://lists.gnu.org/archive/html/autoconf/2010-11/msg00036.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2010-11/msg00036.html>.
 
 2010-11-20  Paul Eggert  <eggert@cs.ucla.edu>
 
 	autoconf: don't assume sys/stat.h and sys/types.h when testing C89
 	Problem reported by Patrick Pelissier in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2010-11/msg00019.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2010-11/msg00019.html>.
 	* lib/autoconf/c.m4 (_AC_PROG_CC_C89): Don't include sys/types.h
 	and sys/stat.h.  Instead, define a dummy struct stat.  C89 doesn't
 	guarantee sys/types.h and sys/stat.h.
@@ -1169,7 +1169,7 @@
 	* lib/autoconf/programs.m4 (AC_PROG_YACC): YACC stands for
 	"Yet Another Compiler Compiler", not "Yet Another C Compiler".
 	Problem reported by Chris Long in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2010-08/msg00134.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2010-08/msg00134.html>.
 
 2010-08-27  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -1307,7 +1307,7 @@
 	reject the test for other (valid) reasons.  People using ancient
 	xlc versions, if any, are suggested to update to fixed versions.
 	Reported by Ralf Wildenhues in the thread starting at:
-	http://lists.gnu.org/archive/html/bug-autoconf/2010-08/msg00103.html
+	https://lists.gnu.org/archive/html/bug-autoconf/2010-08/msg00103.html
 
 2010-08-24  Eric Blake  <eblake@redhat.com>
 
@@ -6753,7 +6753,7 @@
 	* doc/autoconf.texi (The Make Macro SHELL): Stronger wording on
 	the importance of proper SHELL settings.
 	Reported by Bruno Haible, in
-	http://lists.gnu.org/archive/html/bug-libtool/2008-04/msg00029.html.
+	https://lists.gnu.org/archive/html/bug-libtool/2008-04/msg00029.html.
 
 2008-08-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -7356,7 +7356,7 @@
 	Flush buffered output before exit.
 	* bin/autom4te.in (handle_output): Explicitly close file.
 	* THANKS: Update.
-	See http://lists.gnu.org/archive/html/autoconf/2008-04/msg00026.html.
+	See https://lists.gnu.org/archive/html/autoconf/2008-04/msg00026.html.
 
 2008-04-08  Eric Blake  <ebb9@byu.net>
 
@@ -8172,7 +8172,7 @@
 	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Don't comment out the
 	#undef as this runs afoul of our new way of creating config.h.
 	Problem reported by Jim Meyering in
-	<http://lists.gnu.org/archive/html/autoconf-patches/2007-11/msg00164.html>.
+	<https://lists.gnu.org/archive/html/autoconf-patches/2007-11/msg00164.html>.
 
 2007-11-26  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -8276,7 +8276,7 @@
 	Revert 2007-10-17 change.
 	* TODO: Multiline args in config files and headers mean something
 	different and are not fixed, see
-	<http://lists.gnu.org/archive/html/autoconf-patches/2007-05/msg00017.html>
+	<https://lists.gnu.org/archive/html/autoconf-patches/2007-05/msg00017.html>
 	Report by Stepan Kasal.
 
 	* doc/autoconf.texi (Generic Programs): Fix typo.
@@ -8345,7 +8345,7 @@
 2007-11-13  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Don't worry about preprocessor when testing long long.
-	See: http://lists.gnu.org/archive/html/bug-gnulib/2007-11/msg00075.html
+	See: https://lists.gnu.org/archive/html/bug-gnulib/2007-11/msg00075.html
 	* doc/autoconf.texi (Preprocessor Arithmetic): New section.
 	(AC_TYPE_LONG_LONG_INT, AC_TYPE_UNSIGNED_LONG_LONG_INT):
 	These no longer check for preprocessor flaws.
@@ -8573,7 +8573,7 @@
 	extracted from AC_TYPE_LONG_LONG_INT and AC_TYPE_UNSIGNED_LONG_LONG_INT.
 	(AC_TYPE_LONG_LONG_INT, AC_TYPE_UNSIGNED_LONG_LONG_INT): Use it.
 	Fixes problem with Sun C 5.[0-8] in 32-bit mode, reported in
-	<http://lists.gnu.org/archive/html/autoconf-patches/2007-10/msg00210.html>
+	<https://lists.gnu.org/archive/html/autoconf-patches/2007-10/msg00210.html>
 	Suggested by Paul Eggert.
 
 2007-10-28  Jim Meyering  <meyering@redhat.com>
@@ -8642,7 +8642,7 @@
 
 	* lib/autoconf/c.m4 (AC_C_RESTRICT): Work around Sun C++ compatibility
 	problem reported by Bruno Haible in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2007-10/msg00027.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2007-10/msg00027.html>.
 
 2007-10-22  Eric Blake  <ebb9@byu.net>
 
@@ -8654,7 +8654,7 @@
 	Don't check for bug in HP-UX 11.00 cpp.
 	* lib/autoconf/types.m4 (AC_TYPE_UNSIGNED_LONG_LONG_INT):
 	Use -1ull rather than -1u, since that causes problems with gnulib; see
-	<http://lists.gnu.org/archive/html/bug-gnulib/2007-10/msg00329.html>.
+	<https://lists.gnu.org/archive/html/bug-gnulib/2007-10/msg00329.html>.
 
 2007-10-22  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -8841,7 +8841,7 @@
 
 	Check for 64-bit int errors in HP-UX 10.20 preprocessor.
 	Problem reported by H.Merijn Brand in
-	<http://lists.gnu.org/archive/html/bug-tar/2007-10/msg00018.html>.
+	<https://lists.gnu.org/archive/html/bug-tar/2007-10/msg00018.html>.
 	* lib/autoconf/types.m4 (AC_TYPE_LONG_LONG_INT):
 	(AC_TYPE_UNSIGNED_LONG_LONG_INT):
 	Check that preprocessor handles 64-bit ints, too.
@@ -9708,7 +9708,7 @@
 
 	* lib/m4sugar/m4sh.m4 (_AS_PATH_SEPARATOR_PREPARE): Set FPATH too.
 	Problem reported by Fred Kreek in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2007-06/msg00009.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2007-06/msg00009.html>.
 	* doc/autoconf.texi (Special Shell Variables): Warn about FPATH.
 	(Macro Names, Defining Directories): Don't mention PATH as a name
 	for a fully qualified file name, as this usage violates the GNU
@@ -9750,7 +9750,7 @@
 	* doc/autoconf.texi (Particular Types): AC_TYPE_INT8_T does not
 	define HAVE_INT8_T, and likewise for similar macros.
 	Problem reported by Patrick Welche in
-	<http://lists.gnu.org/archive/html/autoconf/2007-05/msg00062.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2007-05/msg00062.html>.
 
 2007-05-25  Noah Misch  <noah@cs.caltech.edu>
 
@@ -9866,7 +9866,7 @@
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Don't look
 	for a.* when searching for executables, as this prevents users
 	from having files like a.c.  Problem reported by Ralf Wildenhues in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2007-04/msg00029.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2007-04/msg00029.html
 	This fixes a problem introduced on 2000-12-19.
 
 2007-04-26  Paul Eggert  <eggert@cs.ucla.edu>
@@ -9990,7 +9990,7 @@
 
 	* lib/autoconf/c.m4 (AC_C_BIGENDIAN): Fix typo "__LITLE_ENDIAN__".
 	Problem reported by Paolo Bonzini in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2007-02/msg00024.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2007-02/msg00024.html
 	* tests/semantics.at (AC_C_BIGENDIAN): Don't reject hosts that have
 	universal binaries.  Problem reported by Elias Pipping.
 
@@ -10065,7 +10065,7 @@
 	* NEWS: Note that M4 1.4.5 or later is now a hard dependency.
 	Reported by Gary Vaughan and Jim Meyering, and problem analyzed
 	by Stepan Kasal:
-	http://lists.gnu.org/archive/html/bug-autoconf/2006-11/msg00025.html
+	https://lists.gnu.org/archive/html/bug-autoconf/2006-11/msg00025.html
 
 2007-01-31  Eric Blake  <ebb9@byu.net>
 
@@ -10078,7 +10078,7 @@
 	(Shell Substitutions): Note problems with @{var:=value} etc.
 	Add a new section for problems with @{#var} etc.  Problem noted
 	by Ralf Wildenhues.  See:
-	http://lists.gnu.org/archive/html/libtool-patches/2005-01/msg00157.html
+	https://lists.gnu.org/archive/html/libtool-patches/2005-01/msg00157.html
 
 2007-01-23  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -10128,7 +10128,7 @@
 2007-01-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix some wording problems noted by Paolo Bonzini in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2007-01/msg00077.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2007-01/msg00077.html
 	* doc/autoconf.texi (Signed Overflow Examples): Give more
 	discussion about the allow_superuser_privileges example,
 	and change it a bit to make things clearer.
@@ -10161,7 +10161,7 @@
 	* doc/autoconf.texi (Integer Overflow): Greatly expand and
 	rewrite, taking notions from the recent discussion on the gcc and
 	autoconf mailing lists; please see
-	http://lists.gnu.org/archive/html/autoconf-patches/2006-12/msg00091.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2006-12/msg00091.html
 	and follow the many links.
 	(Integer Overflow Basics, Signed Overflow Examples):
 	(Optimization and Wraparound, Signed Overflow Advice):
@@ -10193,7 +10193,7 @@
 	Include <limits.h>, and use its INT_MAX to rewrite the
 	j loop so that it does not overflow 'int'.  Problem reported by
 	Ralf Wildenhues in
-	<http://lists.gnu.org/archive/html/bug-gnulib/2006-12/msg00084.html>.
+	<https://lists.gnu.org/archive/html/bug-gnulib/2006-12/msg00084.html>.
 	Play it safe by shifting left by 1 rather than multiplying by 2,
 	as GCC is less likely to optimize this away when the value
 	is signed (when it assumes overflow leads to undefined behavior).
@@ -10263,7 +10263,7 @@
 	<http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=403243>.
 
 	This change prompted by a problem report by Andrey Simonenko in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-12/msg00026.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-12/msg00026.html>.
 	* doc/autoconf.texi (Defining Symbols): AC_DEFINE works for
 	object-like macros only, in the traditional portable character
 	set.
@@ -10426,7 +10426,7 @@
 	Turn AC_FUNC_SETVBUF_REVERSED into a noop.  It's been obsolete for
 	years and is too hard to maintain now.  The last straw was
 	reported by Jerker Baeck in
-	<http://lists.gnu.org/archive/html/autoconf/2006-11/msg00102.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2006-11/msg00102.html>.
 	* NEWS: AC_FUNC_SETVBUF_REVERSED is now obsolete.
 	* doc/autoconf.texi (Particular Functions): Move
 	AC_FUNC_SETVBUF_REVERSED from here...
@@ -10887,7 +10887,7 @@
 	equivalent of "chmod 777 /" or "chmod 0 /" on a buggy FreeBSD
 	system.  We hope this is rare in practice, but it's clearly worth
 	fixing.  Problem reported by Alex Unleashed in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00012.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00012.html>.
 	Also, don't bother to check for -m bugs unless we're using -m;
 	suggested by Stepan Kasal.
 
@@ -10976,7 +10976,7 @@
 
 	* NEWS: Autoconf-generated shell scripts no longer export BIN_SH,
 	due to configuration hassles with this.  See Tonya Underwood's report
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00003.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00003.html>.
 	* doc/autoconf.texi (Special Shell Variables): Likewise.
 
 2006-10-11  Paul Eggert  <eggert@cs.ucla.edu>
@@ -11021,7 +11021,7 @@
 	efficiency.
 	(_AC_LINK_IFELSE): Test that resulting file is executable.
 	Problem reported by mwoehlke in
-	<http://lists.gnu.org/archive/html/bug-coreutils/2006-10/msg00048.html>.
+	<https://lists.gnu.org/archive/html/bug-coreutils/2006-10/msg00048.html>.
 
 	* lib/m4sugar/m4sh.m4 (_AS_TEST_PREPARE): Use "test -x /" rather
 	than creating a file to use with test -x; this is much faster.
@@ -11164,7 +11164,7 @@
 
 	* lib/m4sugar/m4sh.m4 (_AS_TEST_PREPARE): Avoid bug in UnixWare
 	7.1.4 /usr/bin/posix/sh described by Tim Rice in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-09/msg00017.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-09/msg00017.html>.
 
 2006-09-11  Stepan Kasal  <kasal@ucw.cz>
 
@@ -11400,7 +11400,7 @@
 	* lib/autoconf/fortran.m4 (_AC_FC_LIBRARY_LDFLAGS): Also ignore
 	-lgcc?* and -lSystem, for Darwin/MacOS X.  Problem reported by
 	Bill Northcott in
-	<http://lists.gnu.org/archive/html/autoconf/2006-08/msg00083.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2006-08/msg00083.html>.
 
 2006-08-22  Paul Eggert  <eggert@cs.ucla.edu>
 
@@ -11415,7 +11415,7 @@
 	* NEWS: Autoconf now uses constructs like "#ifdef HAVE_STDLIB_H"
 	rather than "#if HAVE_STDLIB_H", so that it now works with "gcc
 	-Wundef -Werror".  Problem reported by David Fang in
-	<http://lists.gnu.org/archive/html/autoconf/2006-08/msg00045.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2006-08/msg00045.html>.
 	* doc/autoconf.texi (Header Templates, Default Includes):
 	(Particular Functions, Generic Functions, Header Portability):
 	(Particular Headers, Generic Headers, Generic Declarations, Guidelines):
@@ -11460,7 +11460,7 @@
 2006-08-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix test suite failures reported by Pierre in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-08/msg00005.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-08/msg00005.html>.
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Don't claim
 	the compiler created a file "b.out" when it didn't create anything
 	at all.
@@ -11508,7 +11508,7 @@
 	under AC_C_VOLATILE.
 	(Volatile Objects): Be a little less skeptical about what
 	"volatile" means.  Derived from thoughts by Ben Pfaff in
-	<http://lists.gnu.org/archive/html/bug-gnulib/2006-07/msg00092.html>.
+	<https://lists.gnu.org/archive/html/bug-gnulib/2006-07/msg00092.html>.
 
 2006-07-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -11546,7 +11546,7 @@
 	Require that long long int be at least 64 bits wide.  C99 requires
 	this and enough programs depend on it so we should check for it.
 	Bruno Haible reports in
-	<http://lists.gnu.org/archive/html/bug-gnulib/2006-06/msg00286.html>
+	<https://lists.gnu.org/archive/html/bug-gnulib/2006-06/msg00286.html>
 	that long long int is 32 bits wide with some nonstandard compilers.
 	(AC_TYPE_UNSIGNED_LONG_LONG_INT): Likewise.
 
@@ -11556,7 +11556,7 @@
 	to a nonexistent file, so that we don't have to worry about
 	a local site configuration that doesn't use /usr/local.
 	Problem reported by Keith Marshall in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00133.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00133.html>.
 
 2006-06-28  Paul Eggert  <eggert@cs.ucla.edu>
 
@@ -11571,7 +11571,7 @@
 	(File Descriptors): Reorder to make the text flow better.
 	Remove joke about "appreciate the various levels"; I didn't get it.
 	Add remark about HP-UX sh -x bug with stderr noted by Bob Proulx in
-	<http://lists.gnu.org/archive/html/bug-coreutils/2006-06/msg00225.html>.
+	<https://lists.gnu.org/archive/html/bug-coreutils/2006-06/msg00225.html>.
 	(File Descriptors, Limitations of Usual Tools):
 	Tone down the advice against renaming or removing open files.
 	(Limitations of Usual Tools): Add a new section, on 'rm'.
@@ -11710,7 +11710,7 @@
 	$(srcdir) too.
 	(Assignments): Clarify default-value example as suggested by
 	Ralf Wildenhues in
-	<http://lists.gnu.org/archive/html/autoconf-patches/2006-06/msg00072.html>.
+	<https://lists.gnu.org/archive/html/autoconf-patches/2006-06/msg00072.html>.
 	(Special Shell Variables): Note leading ./ or ../, as suggested
 	by Eric Blake.
 	(Limitations of Builtins): Under cd, warn about CDPATH.
@@ -11814,21 +11814,21 @@
 
 	* lib/m4sugar/m4sh.m4 (_AS_DETECT_BETTER_SHELL): Look for
 	$as_shell.exe too.  Problem reported by Andreas Buening in
-	<http://lists.gnu.org/archive/html/autoconf/2006-06/msg00038.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2006-06/msg00038.html>.
 
 2006-06-07  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
 	* lib/autoconf/functions.m4 (AC_FUNC_ALLOCA): Work around
 	`unused variable' compiler warning, for `-Wall -Werror'.
 	Reported by Jaap Haitsma in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00012.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00012.html>.
 
 2006-06-06  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* lib/autoconf/c.m4 (AC_PROG_CC_C_O): Remove core file, in
 	case the compiler dumps core.  Problem reported for
 	OpenServer 5.0.7 by Tim Rice in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00019.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00019.html>.
 	* lib/autoconf/general.m4 (_AC_COMPILE_IFELSE, _AC_LINK_IFELSE):
 	Likewise.
 
@@ -11994,11 +11994,11 @@
 	This means we don't have to worry about ${ or sed any more.
 	Also, double-quote the case statement, to work around misuses via
 	underquoting as reported by Ralf Wildenhues in
-	<http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00169.html>.
+	<https://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00169.html>.
 	(_AC_EVAL_STDERR): Revert, since evidently some packages rely on this
 	undocumented and dangerous macro.
 	Problem reported by Ralf Wildenhues in
-	<http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00168.html>.
+	<https://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00168.html>.
 
 2006-05-31  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
 
@@ -12011,7 +12011,7 @@
 	* lib/autoconf/general.m4: Revert AC_TRY_EVAL and AC_TRY_COMMAND,
 	since evidently some packages rely on the old, broken behavior.
 	Problem reported by Ralf Wildenhues in
-	<http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00160.html>.
+	<https://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00160.html>.
 	(AC_TRY_EVAL, AC_TRY_COMMAND, _AC_EVAL): Go back to the
 	pre-2006-05-26 definitions, but leave in the comments that
 	these macros are dangerous and should not be used.
@@ -12063,7 +12063,7 @@
 	* lib/autoconf/status.m4 (_AC_OUTPUT_CONFIG_STATUS):
 	Fix typo that prevented an unnecessary space from being removed.
 	Problems reported by Ralf Wildenhues in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00143.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00143.html
 
 2006-05-26  Paul Eggert  <eggert@cs.ucla.edu>
 
@@ -12072,7 +12072,7 @@
 	Don't use the term "thread-safe" to talk about mkdir race
 	conditions, since the problem is more a process than a thread
 	issue.  Problem reported by Stepan Kasal in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00088.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00088.html
 	* lib/autoconf/programs.m4 (AC_PROG_MKDIR_P): Use code that mimics
 	the test for 'install' more closely.  Look at MKDIR_P first.
 	Look in the PATH, and at /opt/sfw/bin.
@@ -12086,7 +12086,7 @@
 	* doc/autoconf.texi (autoheader Invocation): Mention that the
 	first arg of AC_DEFINE_UNQUOTED must be a literal.
 	Problem reported by Ben Pfaff in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-05/msg00090.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-05/msg00090.html>.
 
 	* NEWS: Mention that AC_TRY_COMMAND and AC_TRY_EVAL may be removed.
 	* doc/autoconf.texi (Special Chars in Variables): New section.
@@ -12199,7 +12199,7 @@
 	runs afoul of the Korn shell version M-12/28/93d bug described in
 	the Autoconf manual, and this in turn causes a Coreutils 5.95 build to
 	fail as described by Tim Rice and diagnosed by Ralf Wildenhues in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2006-05/msg00082.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2006-05/msg00082.html>.
 
 2006-05-23  Jim Meyering  <jim@meyering.net>
 
@@ -12289,7 +12289,7 @@
 	some other programs unwisely rely on these undocumented vars.
 	But put in warning comments about them.
 	Problem reported by Ralf Wildenhues in
-	<http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00068.html>.
+	<https://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00068.html>.
 	* NEWS: Document that these variables are intended to go away.
 
 2006-05-20  Ralf Wildenhues  <Ralf.Wildenhues@gmx.de>
@@ -12321,7 +12321,7 @@
 	$ac_top_build_prefix to $MKDIR_P if it's just 'mkdir -p'.
 	* tests/tools.at (autoconf: subdirectories): New test, taken from
 	the corresponding problem report by Ralf Wildenhues in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00053.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2006-05/msg00053.html
 
 	* lib/autoconf/functions.m4 (AC_REPLACE_FNMATCH, AC_FUNC_FNMATCH_GNU):
 	Quote some uses of shell variables if they might suffer unexpected
@@ -14483,7 +14483,7 @@
 
 	* doc/autoconf.texi (Limitations of Usual Tools): Mention expr bug
 	on Mac OS X 10.4 reported by Peter O'Gorman in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2005-06/msg00041.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2005-06/msg00041.html
 	* lib/autoconf/general.m4 (_AC_CANONICAL_SPLIT):
 	Use shell builtins rather than 'expr', to work around expr bug.
 
@@ -15577,7 +15577,7 @@
 
 	* lib/mdate-sh: Don't use "set - x`$ls_command /`", as zsh mishandles
 	the spaces inside $ls_command.  Problem reported by Loulou Pouchet in
-	<http://lists.gnu.org/archive/html/autoconf/2004-12/msg00074.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2004-12/msg00074.html>.
 	Don't use "set - x"; plain "set x" is enough, and simplifies debugging.
 
 2004-12-07  Stepan Kasal  <kasal@ucw.cz>
@@ -15615,7 +15615,7 @@
 	(Using Autotest, testsuite Scripts, Writing testsuite.at):
 	Reword slightly to avoid some English-language problems noted
 	by Ralf Wildenhues in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2004-11/msg00027.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2004-11/msg00027.html
 
 2004-11-29  Stepan Kasal  <kasal@ucw.cz>
 
@@ -15624,7 +15624,7 @@
 2004-11-28  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix documentation problems reported by Russ Boylan in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2004-11/msg00056.html>,
+	<https://lists.gnu.org/archive/html/bug-autoconf/2004-11/msg00056.html>,
 	along with some nearby cruft.
 	* doc/autoconf.texi (Libtool): Libtool can be used without
 	Automake (not without Autoconf).
@@ -15712,7 +15712,7 @@
 2004-09-05  Paul Eggert  <eggert@cs.ucla.edu>
 
 	Fix problems reported by Andreas Buening in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2004-04/msg00004.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2004-04/msg00004.html
 	* lib/autoconf/programs.m4 (AC_PROG_MAKE_SET): Set SHELL=/bin/sh
 	in test makefile.
 	* lib/autotest/general.m4 (AT_INIT): Don't assume /dev/null is
@@ -15723,13 +15723,13 @@
 	* lib/autoconf/libs.m4 (_AC_PATH_X_XMKMF): If xmkmf returns
 	"/usr/include", clear ac_x_includes instead of leaving it as "no"
 	(trivial change).  Problem and patch reported by Andrew Church in:
-	http://lists.gnu.org/archive/html/bug-autoconf/2004-04/msg00016.html
+	https://lists.gnu.org/archive/html/bug-autoconf/2004-04/msg00016.html
 
 2004-09-03  Paul Eggert  <eggert@cs.ucla.edu>
 
 	* doc/autoconf.texi: Give AC_DEFINE and AC_DEFINE_UNQUOTED
 	three args in examples.  Problem reported by Frederik Fouvry in:
-	http://lists.gnu.org/archive/html/bug-autoconf/2004-09/msg00017.html
+	https://lists.gnu.org/archive/html/bug-autoconf/2004-09/msg00017.html
 	Also, fix some minor spacing and punctuation bugs.
 
 2004-09-02  Akim Demaille  <akim@epita.fr>
@@ -15786,7 +15786,7 @@
 	* lib/autoconf/c.m4 (AC_LANG_BOOL_COMPILE_TRY(C),
 	AC_C_LONG_DOUBLE): Undo 2004-06-04 change, as it didn't work with
 	HP-UX 11.23 cc/aCC or Tru64 4.0 cc.  Problem reported by Noah Misch in
-	<http://lists.gnu.org/archive/html/autoconf/2004-07/msg00004.html>.
+	<https://lists.gnu.org/archive/html/autoconf/2004-07/msg00004.html>.
 
 	More fixes to support spaces in the name of the build directory.
 	This isn't a complete fix but it's an improvement.
@@ -15804,7 +15804,7 @@
 
 	* lib/autoconf/general.m4 (_AC_INIT_HELP): Quote $ac_popdir uses.
 	From Ralf Corsepius in:
-	http://lists.gnu.org/archive/html/autoconf-patches/2004-08/msg00014.html
+	https://lists.gnu.org/archive/html/autoconf-patches/2004-08/msg00014.html
 
 2004-08-12  Paul Eggert  <eggert@cs.ucla.edu>
 
@@ -15818,7 +15818,7 @@
 
 	* tests/torture.at (Deep Package): Use configure.in, not configure.ac,
 	for compatibility with Automake 1.4.  Reported by J C Fitzgerald in
-	<http://lists.gnu.org/archive/html/bug-autoconf/2003-08/msg00051.html>.
+	<https://lists.gnu.org/archive/html/bug-autoconf/2003-08/msg00051.html>.
 
 2004-08-04  Alexandre Duret-Lutz  <adl@gnu.org>
 
@@ -15917,7 +15917,7 @@
 
 	* tests/Makefile.am (autoconfdir): Fix to match comment (trivial
 	change).  Patch reported by Ralf Wildenhues in
-	<http://mail.gnu.org/archive/html/bug-autoconf/2004-05/msg00092.html>.
+	<https://mail.gnu.org/archive/html/bug-autoconf/2004-05/msg00092.html>.
 
 	* lib/autoconf/functions.m4 (AC_FUNC_MBRTOWC): Don't assume that a
 	function F exists if the compiler and linker let you compile an
@@ -15925,7 +15925,7 @@
 	the reference to F in that case, since every function address must
 	be nonzero, so the link succeeds even if F does not exist.
 	Problem reported by Manu in
-	<http://mail.gnu.org/archive/html/bug-gnu-utils/2004-05/msg00060.html>.
+	<https://mail.gnu.org/archive/html/bug-gnu-utils/2004-05/msg00060.html>.
 
 	* doc/autoconf.texi (Systemology): Standardize on the spelling of
 	"Unix".  Many uses changed.
@@ -16003,7 +16003,7 @@
 	versions of Autoconf, and should help to avoid triggering latent
 	problems in other packages, such as the one in Automake where zsh
 	is not handled robustly:
-	http://mail.gnu.org/archive/html/automake/2004-04/msg00095.html
+	https://mail.gnu.org/archive/html/automake/2004-04/msg00095.html
 	Although it is not Autoconf's responsibility to work around
 	problems in Automake, it nevertheless makes sense to avoid
 	introducing unnecessary incompatibilites.
@@ -16036,21 +16036,21 @@
 	"restrict" and "inline", as sufficiently-old GCC versions do not
 	(also, GCC configured to be in pedantic C89 mode does not).
 	Problem reported by Sumit Pandya in:
-	http://mail.gnu.org/archive/html/autoconf/2004-04/msg00092.html
+	https://mail.gnu.org/archive/html/autoconf/2004-04/msg00092.html
 
 	* lib/autoconf/c.m4 (_AC_PROG_CC_G, _AC_PROG_CXX_G): Don't
 	consider -g to work if it generates warnings when plain compiles
 	don't.  Problem reported by Braden McDaniel in:
-	http://mail.gnu.org/archive/html/autoconf-patches/2003-07/msg00014.html
+	https://mail.gnu.org/archive/html/autoconf-patches/2003-07/msg00014.html
 
 	* doc/autoconf.texi (Slashes): New section, to document a problem
 	reported by Jim Meyering in:
-	http://mail.gnu.org/archive/html/bug-coreutils/2004-02/msg00060.html
+	https://mail.gnu.org/archive/html/bug-coreutils/2004-02/msg00060.html
 
 	* lib/autoconf/lang.m4 (_AC_COMPILER_EXEEXT_DEFAULT): Remove potential
 	linker output files before linking, to work around IRIX 6 linker bug.
 	Problem reported by Rainer Orth in:
-	http://mail.gnu.org/archive/html/autoconf-patches/2004-02/msg00007.html
+	https://mail.gnu.org/archive/html/autoconf-patches/2004-02/msg00007.html
 
 2004-04-20  Gary V. Vaughan  <gary@gnu.org>
 
@@ -16168,7 +16168,7 @@
 	* bin/Makefile.am (edit): Don't use $< in a context where
 	POSIX doesn't require support for it.  Use $@.in instead.
 	Problem reported by Anthony N. Frasso in
-	<http://mail.gnu.org/archive/html/autoconf/2004-03/msg00008.html>.
+	<https://mail.gnu.org/archive/html/autoconf/2004-03/msg00008.html>.
 	* bin/autoscan.in, bin/autoupdate.in: Add @configure_input@ comment.
 
 2004-02-23  Gary V. Vaughan  <gary@gnu.org>
@@ -16186,7 +16186,7 @@
 
 	Fix a dependencies problem, stemming from a Autoconf 2.59 build
 	problem on QNX reported by Stephen Rasku in
-	<http://mail.gnu.org/archive/html/bug-autoconf/2004-02/msg00066.html>.
+	<https://mail.gnu.org/archive/html/bug-autoconf/2004-02/msg00066.html>.
 
 	* bin/Makefile.am ($(srcdir)/autoconf.in): Depend on
 	$(m4sh_m4f_dependencies); this removes a FIXME.
@@ -16203,9 +16203,9 @@
 	flags of the form -lcrt*.o, not just -lcrt[01].o and -lcrtbegin.o.
 	Darwin uses -lcrt2.o and there's little point to cataloging all
 	the system variants.  Partial fix reported by Andreas Waechter in:
-	http://mail.gnu.org/archive/html/autoconf-patches/2004-02/msg00006.html
+	https://mail.gnu.org/archive/html/autoconf-patches/2004-02/msg00006.html
 	for bug reported by Nelson H. F. Beebe in:
-	http://mail.gnu.org/archive/html/bug-autoconf/2003-12/msg00090.html
+	https://mail.gnu.org/archive/html/bug-autoconf/2003-12/msg00090.html
 
 2004-02-04  Paolo Bonzini  <bonzini@gnu.org>
 
@@ -16331,7 +16331,7 @@
 	HAVE_INTTYPES_H is defined.  This is needed on Tru64 5.1b with
 	Compac C V6.5-207 (dtk), which defines uintmax_t in <stdint.h> but
 	not <inttypes.h>.  Problem reported by Tim Mooney in
-	<http://mail.gnu.org/archive/html/bug-coreutils/2004-01/msg00147.html>.
+	<https://mail.gnu.org/archive/html/bug-coreutils/2004-01/msg00147.html>.
 	* lib/autoconf/headers.m4 (_AC_INCLUDES_DEFAULT_REQUIREMENTS):
 	Likewise.
 
@@ -16355,7 +16355,7 @@
 	* lib/autoconf/c.m4 (_AC_PROG_CC_STDC): Try -std, not -std1, since
 	-std1 disables some useful extensions on Tru64.  Problem reported
 	by N. Lichtmaier in
-	<http://mail.gnu.org/archive/html/autoconf/2004-01/msg00100.html>.
+	<https://mail.gnu.org/archive/html/autoconf/2004-01/msg00100.html>.
 
 2004-01-14  Paul Eggert  <eggert@twinsun.com>
 
@@ -16385,7 +16385,7 @@
 
 	* lib/autoconf/general.m4: Fix bug: AC_CHECK_SIZEOF evokes a warning
 	with `autoconf -Wall,error'.  Bug reported by Eric Blake in:
-	http://mail.gnu.org/archive/html/autoconf-patches/2004-01/msg00000.html
+	https://mail.gnu.org/archive/html/autoconf-patches/2004-01/msg00000.html
 	(_AC_COMPUTE_INT_COMPILE): Invoke _AC_COMPILE_IFELSE, not
 	AC_COMPILE_IFELSE, since we now assume our caller invokes
 	AC_LANG_COMPILER_REQUIRE, for symmetry with _AC_COMPUTE_INT_RUN.
@@ -16434,7 +16434,7 @@
 	* lib/autoconf/general.m4 (AC_ARG_PROGRAM):
 	Use "rm -f" to remove conftest.sed, not plain "rm".
 	Bug reported by David Relson in
-	<http://mail.gnu.org/archive/html/autoconf/2004-01/msg00011.html>.
+	<https://mail.gnu.org/archive/html/autoconf/2004-01/msg00011.html>.
 
 	* Makefile.am (autom4te-update):
 	Replace "rm -rf" and "rm -fr" with "rm -f -r", as POSIX requires.
@@ -16633,7 +16633,7 @@
 	computing the absolute path to d1 in the source hierarchy: it may
 	not exist at all.  So don't cd into it.
 	From Alexandre Duret-Lutz.
-	http://mail.gnu.org/archive/html/bug-autoconf/2003-10/msg00205.html
+	https://mail.gnu.org/archive/html/bug-autoconf/2003-10/msg00205.html
 
 	* lib/m4sugar/m4sh.m4 (AS_SET_CATFILE): New.
 	From Paul Eggert, but named after Perl's IO::Spec->catfile.
@@ -16840,7 +16840,7 @@
 
 	* lib/Autom4te/XFile.pm: Use Errno.
 	(lock): Ignore ENOLCK errors.  Problem reported Andreas Schwab in
-	<http://mail.gnu.org/archive/html/bug-autoconf/2003-09/msg00141.html>.
+	<https://mail.gnu.org/archive/html/bug-autoconf/2003-09/msg00141.html>.
 
 2003-09-30  Akim Demaille  <akim@epita.fr>
 
@@ -16865,10 +16865,10 @@
 
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Set DUALCASE=1, for MKS sh.
 	Problem reported by Lars J. Aas in
-	<http://mail.gnu.org/archive/html/autoconf/2003-07/msg00042.html>.
+	<https://mail.gnu.org/archive/html/autoconf/2003-07/msg00042.html>.
 	(_AS_MKDIR_P_PREPARE): Change "rm -fr ./-p" to the more-conservative
 	"test -d ./-p && rmdir ./-p".  Suggested by Andreas Schwab in:
-	http://mail.gnu.org/archive/html/autoconf-patches/2003-09/msg00039.html
+	https://mail.gnu.org/archive/html/autoconf-patches/2003-09/msg00039.html
 
 2003-09-26  Akim Demaille  <akim@epita.fr>
 
@@ -16895,7 +16895,7 @@
 	* lib/m4sugar/m4sh.m4 (_AS_MKDIR_P_PREPARE): If mkdir -p . fails,
 	rm -fr ./-p to remove junk left behind on NextStep and OpenStep.
 	Problem reported by Eric Sunshine in:
-	http://mail.gnu.org/archive/html/autoconf-patches/2002-12/msg00014.html
+	https://mail.gnu.org/archive/html/autoconf-patches/2002-12/msg00014.html
 
 2003-09-26  Akim Demaille  <akim@epita.fr>
 
@@ -17002,7 +17002,7 @@
 	* lib/autoconf/specific.m4 (AC_SYS_RESTARTABLE_SYSCALLS):
 	Improve the accuracy of the wording about obsolescence.
 	From a suggestion by Ian Lance Taylor in
-	<http://mail.gnu.org/archive/html/autoconf/2003-09/msg00044.html>.
+	<https://mail.gnu.org/archive/html/autoconf/2003-09/msg00044.html>.
 
 2003-09-05  Paul Eggert  <eggert@twinsun.com>
 
@@ -17313,7 +17313,7 @@
 
 	* lib/m4sugar/m4sh.m4 (_AS_UNSET_PREPARE): Work around a bug
 	in Bash 2.01.  Problem reported by Brian Gough in
-	<http://mail.gnu.org/archive/html/bug-autoconf/2003-07/msg00106.html>.
+	<https://mail.gnu.org/archive/html/bug-autoconf/2003-07/msg00106.html>.
 
 2003-07-25  John W. Eaton  <jwe@bevo.che.wisc.edu>
 
@@ -17331,7 +17331,7 @@
 	* lib/autoconf/functions.m4 (AC_FUNC_MMAP): Cast pointer to
 	'long', not 'int', for benefit of Sun's recent C++ compilers
 	(trivial change).  See:
-	http://mail.gnu.org/archive/html/autoconf-patches/2003-07/msg00007.html
+	https://mail.gnu.org/archive/html/autoconf-patches/2003-07/msg00007.html
 	(This really should be 'intptr_t', not 'long', but that would
 	take more work.)
 
@@ -17483,7 +17483,7 @@
 	aCC would fail due to such an #include.  Problems reported by
 	Matthew Mueller in <http://bugs.debian.org/120704> and by
 	Keith Bostic in
-	<http://mail.gnu.org/archive/html/autoconf/2003-05/msg00063.html>.
+	<https://mail.gnu.org/archive/html/autoconf/2003-05/msg00063.html>.
 	In the test, use the test declaration before including <stdlib.h>,
 	as that's closer to how it'll be used.
 
@@ -17857,7 +17857,7 @@
 	* lib/m4sugar/m4sh.m4 (AS_SHELL_SANITIZE): Fix typo in
 	2002-09-01 patch by replacing "test -n" with "test -z".
 	This fixes a bug found by Jeff Painter and reported by Tom Epperly in
-	<http://mail.gnu.org/archive/html/autoconf/2003-02/msg00139.html>.
+	<https://mail.gnu.org/archive/html/autoconf/2003-02/msg00139.html>.
 
 	* doc/autoconf.texi (Shell Substitutions): test -n -> test -z,
 	to fix a mismatch between example and discussion.
@@ -17910,19 +17910,19 @@
 	nontrivially in main's body, so that f's external declaration is
 	not optimized away in AIX.  This should fix the bug reported by
 	Martin Frydl in
-	<http://mail.gnu.org/pipermail/autoconf/2002-November/014508.html>.
+	<https://mail.gnu.org/pipermail/autoconf/2002-November/014508.html>.
 
 	* lib/autoconf/c.m4 (AC_LANG_FUNC_LINK_TRY(C),
 	_AC_PROG_PREPROC_WORKS_IFELSE): Use <limits.h> if __STDC__ is
 	defined, to support freestanding compilers.  This should fix the
 	bug reported by Momchil Velkov in
-	<http://mail.gnu.org/pipermail/autoconf/2002-November/014490.html>.
+	<https://mail.gnu.org/pipermail/autoconf/2002-November/014490.html>.
 
 	* doc/autoconf.texi (Obsolete Macros): Fix typos (insert empty
 	arg, AC_DEFINE -> AC_DEFINE_UNQUOTED) in documentation for
 	obsolete AC_CHECK_TYPE.  The missing empty arg was reported
 	by Simon Josefsson in
-	<http://mail.gnu.org/pipermail/autoconf-patches/2002-December/008830.html>.
+	<https://mail.gnu.org/pipermail/autoconf-patches/2002-December/008830.html>.
 
 	* Makefile.maint (www-gnu): New macro.
 	(standards.texi-url_prefix, make-stds.texi-url_prefix): Use it, as
@@ -17932,7 +17932,7 @@
 
 	* bin/autom4te.in (at_flatten): rewritten to avoid M4 problem when
 	\(.*\) match is too long and there is something more to be checked.
-	<http://mail.gnu.org/pipermail/autoconf/2002-November/014524.html>
+	<https://mail.gnu.org/pipermail/autoconf/2002-November/014524.html>
 
 2002-11-15  Akim Demaille  <akim@epita.fr>
 
@@ -17958,7 +17958,7 @@
 	(po-check): Scan .l and .y files instead of the
 	.c and the .h files that they generate.  This fixes the bug
 	reported by Tim Van Holder in:
-	<http://mail.gnu.org/pipermail/bison-patches/2002-November/001352.html>
+	<https://mail.gnu.org/pipermail/bison-patches/2002-November/001352.html>
 	Look for N_ as well as for _.  Try to avoid matching #define for
 	N_ and _.
 	From Paul Eggert.
@@ -22006,7 +22006,7 @@
 	Add an appendix "Copying This Manual" for the FDL.
 
 	* doc/fdl.texi: New file, from
-	<http://www.gnu.org/licenses/fdl.texi>.
+	<https://www.gnu.org/licenses/fdl.texi>.
 
 	* doc/Makefile.am (autoconf_TEXINFOS): Add fdl.texi.
 
@@ -23221,4 +23221,4 @@
 
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see
-	<http://www.gnu.org/licenses/>.
+	<https://www.gnu.org/licenses/>.

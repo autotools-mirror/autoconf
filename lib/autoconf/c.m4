@@ -20,7 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # and a copy of the Autoconf Configure Script Exception along with
 # this program; see the files COPYINGv3 and COPYING.EXCEPTION
-# respectively.  If not, see <http://www.gnu.org/licenses/>.
+# respectively.  If not, see <https://www.gnu.org/licenses/>.
 
 # Written by David MacKenzie, with help from
 # Akim Demaille, Paul Eggert,
@@ -1376,7 +1376,7 @@ dnl		just the module.  Instead, define the (private) symbol
 dnl		_STDC_C99, which suppresses a bogus failure in <stdbool.h>.
 dnl		The resulting compiler passes the test case here, and that's
 dnl		good enough.  For more, please see the thread starting at:
-dnl            http://lists.gnu.org/archive/html/autoconf/2010-12/msg00059.html
+dnl           https://lists.gnu.org/archive/html/autoconf/2010-12/msg00059.html
 dnl Tru64	-c99
 dnl with extended modes being tried first.
 [[-std=gnu99 -std=c99 -c99 -AC99 -D_STDC_C99= -qlanglvl=extc1x -qlanglvl=extc99]], [$1], [$2])[]dnl
@@ -1465,7 +1465,7 @@ dnl preferably extc11.
 # --------------
 # Do not use AU_ALIAS here and in AC_PROG_CC_C99 and AC_PROG_CC_STDC,
 # as that'd be incompatible with how Automake redefines AC_PROG_CC.  See
-# <http://lists.gnu.org/archive/html/autoconf/2012-10/msg00048.html>.
+# <https://lists.gnu.org/archive/html/autoconf/2012-10/msg00048.html>.
 AU_DEFUN([AC_PROG_CC_C89],
   [AC_REQUIRE([AC_PROG_CC])],
   [$0 is obsolete; use AC_PROG_CC]
@@ -1862,7 +1862,7 @@ AC_DEFUN([AC_C_RESTRICT],
 [AC_CACHE_CHECK([for C/C++ restrict keyword], [ac_cv_c_restrict],
   [ac_cv_c_restrict=no
    # Put '__restrict__' first, to avoid problems with glibc and non-GCC; see:
-   # http://lists.gnu.org/archive/html/bug-autoconf/2016-02/msg00006.html
+   # https://lists.gnu.org/archive/html/bug-autoconf/2016-02/msg00006.html
    # Put 'restrict' last, because C++ lacks it.
    for ac_kw in __restrict__ __restrict _Restrict restrict; do
      AC_COMPILE_IFELSE(
@@ -2017,7 +2017,7 @@ AC_DEFUN([AC_C_VARARRAYS],
 	     [[/* Test for VLA support.  This test is partly inspired
 		  from examples in the C standard.  Use at least two VLA
 		  functions to detect the GCC 3.4.3 bug described in:
-		  http://lists.gnu.org/archive/html/bug-gnulib/2014-08/msg00014.html
+		  https://lists.gnu.org/archive/html/bug-gnulib/2014-08/msg00014.html
 		  */
 	       #ifdef __STDC_NO_VLA__
 		syntax error;

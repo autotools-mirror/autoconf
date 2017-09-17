@@ -20,7 +20,7 @@ M4, Perl, etc.).
 
 You can get GNU M4 here:
 
-ftp://ftp.gnu.org/gnu/m4/
+https://ftp.gnu.org/gnu/m4/
 
 The file INSTALL should be distributed with packages that use
 Autoconf-generated configure scripts and Makefiles that conform to the
@@ -36,7 +36,7 @@ bug-autoconf@gnu.org, and submit patches to autoconf-patches@gnu.org.
 All changes can be tracked at the read-only autoconf-commit@gnu.org.
 Always include the Autoconf version number, which you can get by
 running `autoconf --version'.  Archives of bug-autoconf@gnu.org can be
-found in <http://lists.gnu.org/archive/html/bug-autoconf/>, and
+found in <https://lists.gnu.org/archive/html/bug-autoconf/>, and
 similarly for the other mailing lists.
 
 Licensing
@@ -49,8 +49,8 @@ COPYING.EXCEPTION file for the exception in terms of the Additional
 Permissions as described in section 7 of GPLv3.
 
 For more licensing information, see
-<http://www.gnu.org/licenses/gpl-faq.html> and
-<http://www.gnu.org/licenses/exceptions.html>.
+<https://www.gnu.org/licenses/gpl-faq.html> and
+<https://www.gnu.org/licenses/exceptions.html>.
 
 For any copyright year range specified as YYYY-ZZZZ in this package
 note that the range specifies every single year in that closed interval.

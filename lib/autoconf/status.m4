@@ -20,7 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # and a copy of the Autoconf Configure Script Exception along with
 # this program; see the files COPYINGv3 and COPYING.EXCEPTION
-# respectively.  If not, see <http://www.gnu.org/licenses/>.
+# respectively.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # Written by David MacKenzie, with help from
@@ -441,7 +441,7 @@ dnl
 dnl Notes to the main part of the awk script:
 dnl - the unusual FS value helps prevent running into the limit of 99 fields,
 dnl - we avoid sub/gsub because of the \& quoting issues, see
-dnl   http://www.gnu.org/software/gawk/manual/html_node/Gory-Details.html
+dnl   https://www.gnu.org/software/gawk/manual/html_node/Gory-Details.html
 dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
@@ -1428,7 +1428,7 @@ Report bugs to m4_ifset([AC_PACKAGE_BUGREPORT], [<AC_PACKAGE_BUGREPORT>],
 m4_ifdef([AC_PACKAGE_NAME], [m4_ifset([AC_PACKAGE_URL], [
 AC_PACKAGE_NAME home page: <AC_PACKAGE_URL>.])dnl
 m4_if(m4_index(m4_defn([AC_PACKAGE_NAME]), [GNU ]), [0], [
-General help using GNU software: <http://www.gnu.org/gethelp/>.])])"
+General help using GNU software: <https://www.gnu.org/gethelp/>.])])"
 
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1

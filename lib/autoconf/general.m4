@@ -22,7 +22,7 @@ Copyright (C) 1992-1996, 1998-2017 Free Software Foundation, Inc.
 # You should have received a copy of the GNU General Public License
 # and a copy of the Autoconf Configure Script Exception along with
 # this program; see the files COPYINGv3 and COPYING.EXCEPTION
-# respectively.  If not, see <http://www.gnu.org/licenses/>.
+# respectively.  If not, see <https://www.gnu.org/licenses/>.
 
 # Written by David MacKenzie, with help from
 # Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
@@ -256,7 +256,7 @@ m4_ifndef([AC_PACKAGE_BUGREPORT],
 m4_ifndef([AC_PACKAGE_URL],
 	  [m4_define([AC_PACKAGE_URL],
   m4_if([$5], [], [m4_if(m4_index([$1], [GNU ]), [0],
-	  [[http://www.gnu.org/software/]m4_defn([AC_PACKAGE_TARNAME])[/]])],
+	  [[https://www.gnu.org/software/]m4_defn([AC_PACKAGE_TARNAME])[/]])],
 	[[$5]]))])
 ])
 
@@ -1128,7 +1128,7 @@ Report bugs to m4_ifset([AC_PACKAGE_BUGREPORT], [<AC_PACKAGE_BUGREPORT>],
 m4_ifdef([AC_PACKAGE_NAME], [m4_ifset([AC_PACKAGE_URL], [
 AC_PACKAGE_NAME home page: <AC_PACKAGE_URL>.])dnl
 m4_if(m4_index(m4_defn([AC_PACKAGE_NAME]), [GNU ]), [0], [
-General help using GNU software: <http://www.gnu.org/gethelp/>.])])
+General help using GNU software: <https://www.gnu.org/gethelp/>.])])
 _ACEOF
 ac_status=$?
 fi
@@ -1384,7 +1384,7 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 # If BUG-REPORT is omitted, do without (unless the user previously
 # defined the m4 macro AC_PACKAGE_BUGREPORT).  If TARNAME is omitted,
 # use PACKAGE to seed it.  If URL is omitted, use
-# `http://www.gnu.org/software/TARNAME/' if PACKAGE begins with `GNU',
+# `https://www.gnu.org/software/TARNAME/' if PACKAGE begins with `GNU',
 # otherwise, do without.
 #
 # Note that the order is important: first initialize, then set the
@@ -2705,10 +2705,10 @@ m4_define([_AC_LINK_IFELSE_BODY],
 # This macro can be used during the selection of a compiler.
 #
 # Test that resulting file is executable; see the problem reported by mwoehlke
-# in <http://lists.gnu.org/archive/html/bug-coreutils/2006-10/msg00048.html>.
+# in <https://lists.gnu.org/archive/html/bug-coreutils/2006-10/msg00048.html>.
 # But skip the test when cross-compiling, to prevent problems like the one
 # reported by Chris Johns in
-# <http://lists.gnu.org/archive/html/autoconf/2007-03/msg00085.html>.
+# <https://lists.gnu.org/archive/html/autoconf/2007-03/msg00085.html>.
 #
 AC_DEFUN([_AC_LINK_IFELSE],
 [AC_REQUIRE_SHELL_FN([ac_fn_]_AC_LANG_ABBREV[_try_link],

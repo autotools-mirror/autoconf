@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # This file is '-include'd into GNUmakefile.
 
@@ -79,7 +79,7 @@ WGETFLAGS = -C off
 
 ## Fetch the latest versions of files we care about.
 automake_gitweb = \
-  http://git.savannah.gnu.org/gitweb/?p=automake.git;a=blob_plain;hb=HEAD;
+  https://git.savannah.gnu.org/gitweb/?p=automake.git;a=blob_plain;hb=HEAD;
 autom4te_files = \
   Autom4te/Channels.pm \
   Autom4te/FileUtils.pm \

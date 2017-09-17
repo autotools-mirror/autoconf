@@ -13,7 +13,7 @@
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # We don't actually distribute the built testsuite or package.m4, since one
 # only needs m4 to build them, and m4 is required to install Autoconf.

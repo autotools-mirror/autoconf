@@ -36,7 +36,7 @@ used for config.h generation, but not used in configure's own tests.
 ** AC_PROG_CC
 Have a way to specify different default flags to try; see this thread
 for more information:
-<http://lists.gnu.org/archive/html/bug-autoconf/2008-08/msg00009.html>.
+<https://lists.gnu.org/archive/html/bug-autoconf/2008-08/msg00009.html>.
 
 
 * Later
@@ -229,7 +229,7 @@ reassigning the iterator, allowing a break-like functionality (or even
 infloops).  Does this need a new (but maybe slower) macro?  Should we
 also provide something like m4_while([TEST], [EXPR])?  Maybe an
 m4_break() that works inside a looping construct?
-http://lists.gnu.org/archive/html/autoconf-patches/2008-08/msg00121.html
+https://lists.gnu.org/archive/html/autoconf-patches/2008-08/msg00121.html
 
 * Autoconf 3
 

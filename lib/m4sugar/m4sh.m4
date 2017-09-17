@@ -22,7 +22,7 @@
 # You should have received a copy of the GNU General Public License
 # and a copy of the Autoconf Configure Script Exception along with
 # this program; see the files COPYINGv3 and COPYING.EXCEPTION
-# respectively.  If not, see <http://www.gnu.org/licenses/>.
+# respectively.  If not, see <https://www.gnu.org/licenses/>.
 
 # Written by Akim Demaille, Pavel Roskin, Alexandre Oliva, Lars J. Aas
 # and many other people.
@@ -85,10 +85,10 @@ m4_copy([_m4_divert(M4SH-INIT)], [_m4_divert(NOTICE)])
 # Try to be as Bourne and/or POSIX as possible.
 #
 # This does not set BIN_SH, due to the problems described in
-# <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
+# <https://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
 # People who need BIN_SH should set it in their environment before invoking
 # configure; apparently this would include UnixWare, as described in
-# <http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00025.html>.
+# <https://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00025.html>.
 m4_define([AS_BOURNE_COMPATIBLE],
 [# Be more Bourne compatible
 DUALCASE=1; export DUALCASE # for MKS sh
@@ -183,12 +183,12 @@ m4_define([_AS_DETECT_SUGGESTED_PRUNE],
 #
 # In previous versions, we prepended /usr/posix/bin to the path, but that
 # caused a regression on OpenServer 6.0.0
-# <http://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00017.html>
+# <https://lists.gnu.org/archive/html/bug-autoconf/2006-06/msg00017.html>
 # and on HP-UX 11.11, see the failure of test 120 in
-# <http://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00003.html>
+# <https://lists.gnu.org/archive/html/bug-autoconf/2006-10/msg00003.html>
 #
 # FIXME: The code should test for the OSF bug described in
-# <http://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
+# <https://lists.gnu.org/archive/html/autoconf-patches/2006-03/msg00081.html>.
 #
 # This code is run outside any trap 0 context, hence we can simplify AS_EXIT.
 m4_defun([_AS_DETECT_BETTER_SHELL],

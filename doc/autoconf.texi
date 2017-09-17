@@ -776,17 +776,17 @@ required.
 @xref{History}, for the story of Autoconf's development.  @xref{FAQ},
 for answers to some common questions about Autoconf.
 
-See the @uref{http://@/www.gnu.org/@/software/@/autoconf/,
+See the @uref{https://@/www.gnu.org/@/software/@/autoconf/,
 Autoconf web page} for up-to-date information, details on the mailing
 lists, pointers to a list of known bugs, etc.
 
 Mail suggestions to @email{autoconf@@gnu.org, the Autoconf mailing
 list}.  Past suggestions are
-@uref{http://@/lists.gnu.org/@/archive/@/html/@/autoconf/, archived}.
+@uref{https://@/lists.gnu.org/@/archive/@/html/@/autoconf/, archived}.
 
 Mail bug reports to @email{bug-autoconf@@gnu.org, the
 Autoconf Bugs mailing list}.  Past bug reports are
-@uref{http://@/lists.gnu.org/@/archive/@/html/@/bug-autoconf/, archived}.
+@uref{https://@/lists.gnu.org/@/archive/@/html/@/bug-autoconf/, archived}.
 
 If possible, first check that your bug is
 not already solved in current development versions, and that it has not
@@ -794,25 +794,25 @@ been reported yet.  Be sure to include all the needed information and a
 short @file{configure.ac} that demonstrates the problem.
 
 Autoconf's development tree is accessible via @command{git}; see the
-@uref{http://@/savannah.gnu.org/@/projects/@/autoconf/, Autoconf
+@uref{https://@/savannah.gnu.org/@/projects/@/autoconf/, Autoconf
 Summary} for details, or view
-@uref{http://@/git.sv.gnu.org/@/gitweb/@/?p=autoconf.git, the actual
+@uref{https://@/git.sv.gnu.org/@/gitweb/@/?p=autoconf.git, the actual
 repository}.  Anonymous CVS access is also available, see
 @file{README} for more details.  Patches relative to the
 current @command{git} version can be sent for review to the
 @email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}, with
 discussion on prior patches
-@uref{http://@/lists.gnu.org/@/archive/@/html/@/autoconf-@/patches/,
+@uref{https://@/lists.gnu.org/@/archive/@/html/@/autoconf-@/patches/,
 archived}; and all commits are posted in the read-only
 @email{autoconf-commit@@gnu.org, Autoconf Commit mailing list}, which is
-also @uref{http://@/lists.gnu.org/@/archive/@/html/@/autoconf-commit/,
+also @uref{https://@/lists.gnu.org/@/archive/@/html/@/autoconf-commit/,
 archived}.
 
 Because of its mission, the Autoconf package itself
 includes only a set of often-used
 macros that have already demonstrated their usefulness.  Nevertheless,
 if you wish to share your macros, or find existing ones, see the
-@uref{http://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
+@uref{https://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
 Archive}, which is kindly run by @email{simons@@cryp.to,
 Peter Simons}.
 
@@ -1941,7 +1941,7 @@ address, or URL to a bug management web page.
 @cvindex PACKAGE_URL
 Exactly @var{url}, if one was provided.  If @var{url} was empty, but
 @var{package} begins with @samp{GNU }, then this defaults to
-@samp{http://@/www.gnu.org/@/software/@/@var{tarname}/}, otherwise, no URL is
+@samp{https://@/www.gnu.org/@/software/@/@var{tarname}/}, otherwise, no URL is
 assumed.
 @end table
 @end defmac
@@ -14850,7 +14850,7 @@ with the same parameters.  This happens for example if the macro was renamed.
 The Autoconf macros follow a strict coding style.  You are encouraged to
 follow this style, especially if you intend to distribute your macro,
 either by contributing it to Autoconf itself or the
-@uref{http://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
+@uref{https://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
 Archive}, or by other means.
 
 The first requirement is to pay great attention to the quotation.  For
@@ -15653,7 +15653,7 @@ ksh[1]: exec: 10: not found
 127
 @end example
 
-@c <http://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00004.html>
+@c <https://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00004.html>
 @node Signal Handling
 @section Signal Handling
 @cindex Signal handling in the shell
@@ -15889,7 +15889,7 @@ that are Posixy enough to run @command{autoconf} (such as DJGPP)
 are usually able to handle long file names properly, there are still
 limitations that can seriously break packages.  Several of these issues
 can be easily detected by the
-@uref{ftp://@/ftp.gnu.org/@/gnu/@/non-gnu/@/doschk/@/doschk-1.1.tar.gz, doschk}
+@uref{https://@/ftp.gnu.org/@/gnu/@/non-gnu/@/doschk/@/doschk-1.1.tar.gz, doschk}
 package.
 
 A short overview follows; problems are marked with SFN/LFN to
@@ -21243,7 +21243,7 @@ portable.  If you write programs with these standards in mind, you can
 have greater confidence that your programs work on a wide variety
 of systems.
 @ifhtml
-@uref{http://@/gcc.gnu.org/@/onlinedocs/@/gcc/@/Standards.html, Language
+@uref{https://@/gcc.gnu.org/@/onlinedocs/@/gcc/@/Standards.html, Language
 Standards Supported by GCC}
 @end ifhtml
 @ifnothtml
@@ -21395,7 +21395,7 @@ behavior is undefined, and the undefined behavior can even precede the
 overflow.  To take an extreme example:
 
 @c Inspired by Robert Dewar's example in
-@c <http://gcc.gnu.org/ml/gcc/2007-01/msg00038.html> (2007-01-01).
+@c <https://gcc.gnu.org/ml/gcc/2007-01/msg00038.html> (2007-01-01).
 @example
 if (password == expected_password)
   allow_superuser_privileges ();
@@ -26086,7 +26086,7 @@ Gnulib}.
 Use @code{AC_DEFINE} but have @command{configure} compute the literal
 value of @code{datadir} and others.  Many people have wrapped macros to
 automate this task; for an example, see the macro @code{AC_DEFINE_DIR} from
-the @uref{http://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
+the @uref{https://@/www.gnu.org/@/software/@/autoconf-archive/, Autoconf Macro
 Archive}.
 
 This solution does not conform to the GNU Coding Standards.

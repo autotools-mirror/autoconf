@@ -17,7 +17,7 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 m4_divert_pop([HEADER-COPYRIGHT])dnl back to BODY
 AS_ME_PREPARE[]dnl
@@ -62,14 +62,14 @@ In tracing mode, no configuration script is created.  FORMAT defaults
 to '\$f:\$l:\$n:\$%'; see 'autom4te --help' for information about FORMAT.
 
 Report bugs to <bug-autoconf@gnu.org>.
-GNU Autoconf home page: <http://www.gnu.org/software/autoconf/>.
-General help using GNU software: <http://www.gnu.org/gethelp/>."]
+GNU Autoconf home page: <https://www.gnu.org/software/autoconf/>.
+General help using GNU software: <https://www.gnu.org/gethelp/>."]
 
 version=["\
 autoconf (@PACKAGE_NAME@) @VERSION@
 Copyright (C) @RELEASE_YEAR@ Free Software Foundation, Inc.
 License GPLv3+/Autoconf: GNU GPL version 3 or later
-<http://gnu.org/licenses/gpl.html>, <http://gnu.org/licenses/exceptions.html>
+<https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 

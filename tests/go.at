@@ -15,7 +15,7 @@ AT_BANNER([Go low level compiling and utility macros.])
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 # Since the macros which compile are required by most tests, check
