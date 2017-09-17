@@ -912,7 +912,7 @@ sub up_to_date ($)
       # If a file which used to be included is no longer there, then
       # don't say it's missing (it might no longer be included).  But
       # of course, that causes the output to be outdated (as if the
-      # time stamp of that missing file was newer).
+      # timestamp of that missing file was newer).
       return 0
 	if ! $file;
       push @dep, $file;

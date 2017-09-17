@@ -21219,7 +21219,7 @@ dest-stamp: src
 
 Apart from timestamp resolution, there are also differences in handling
 equal timestamps.  HP-UX @command{make} updates targets if it has the
-same time stamp as one of its prerequisites, in violation of Posix rules.
+same timestamp as one of its prerequisites, in violation of Posix rules.
 
 This can cause spurious rebuilds for repeated runs of @command{make}.
 This in turn can cause @command{make} to fail if it tries to rebuild

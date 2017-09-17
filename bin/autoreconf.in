@@ -318,7 +318,7 @@ sub autoreconf_current_directory ()
   #
   # Always run it.  Tracking its sources for up-to-dateness is too
   # complex and too error prone.  The best we can do is avoiding
-  # nuking the time stamp.
+  # nuking the timestamp.
   my $uses_aclocal = 1;
 
   # Nevertheless, if aclocal.m4 exists and is not made by aclocal,
@@ -353,13 +353,13 @@ sub autoreconf_current_directory ()
     }
   else
     {
-      # Some file systems have sub-second time stamps, and if so we may
+      # Some file systems have sub-second timestamps, and if so we may
       # run into trouble later, after we rerun autoconf and set the
-      # time stamps of input files to be no greater than aclocal.m4,
+      # timestamps of input files to be no greater than aclocal.m4,
       # because the time-stamp-setting operation (utime) has a
       # resolution of only 1 second.  Work around the problem by
       # ensuring that there is at least a one-second window before the
-      # time stamp of aclocal.m4t in which no file time stamps can
+      # timestamp of aclocal.m4t in which no file timestamps can
       # fall.
       sleep 1;
 
