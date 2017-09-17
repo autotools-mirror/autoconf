@@ -52,7 +52,7 @@
     (%%TEXI_TGZ_SIZE%%K bytes gzipped tar file).</a></li>
 </ul>
 
-<p>You can <a href="http://shop.fsf.org/">buy printed copies of
+<p>You can <a href="https://shop.fsf.org/">buy printed copies of
 some manuals</a> (among other items) from the Free Software Foundation;
 this helps support FSF activities.</p>
 
@@ -77,10 +77,10 @@ the FSF.  Broken links and other corrections or suggestions can be sent
 to <a href="mailto:%%EMAIL%%">&lt;%%EMAIL%%&gt;</a>.</p>
 </div>
 
-<p>Copyright &copy; 2016 Free Software Foundation, Inc.</p>
+<p>Copyright &copy; 2017 Free Software Foundation, Inc.</p>
 
 <p>This page is licensed under a <a rel="license"
-href="http://creativecommons.org/licenses/by-nd/3.0/us/">Creative
+href="https://creativecommons.org/licenses/by-nd/3.0/us/">Creative
 Commons Attribution-NoDerivs 3.0 United States License</a>.</p>
 
 <!--#include virtual="/server/bottom-notes.html" -->
