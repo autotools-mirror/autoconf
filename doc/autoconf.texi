@@ -730,7 +730,7 @@ configuration scripts can be regenerated automatically to take advantage
 of the updated code.
 
 @c "Those who do not understand Unix are condemned to reinvent it, poorly."
-@c --Henry Spencer, 1987 (see http://en.wikipedia.org/wiki/Unix_philosophy)
+@c --Henry Spencer, 1987 (see https://en.wikipedia.org/wiki/Unix_philosophy)
 Those who do not understand Autoconf are condemned to reinvent it, poorly.
 The primary goal of Autoconf is making the @emph{user's} life easier;
 making the @emph{maintainer's} life easier is only a secondary goal.
@@ -954,10 +954,10 @@ the GNU build tools.
 @item Web
 
 The project home pages for
-@uref{http://@/www@/.gnu@/.org/@/software/@/autoconf/, Autoconf},
-@uref{http://@/www@/.gnu@/.org/@/software/@/automake/, Automake},
-@uref{http://@/www@/.gnu@/.org/@/software/@/gnulib/, Gnulib}, and
-@uref{http://@/www@/.gnu@/.org/@/software/@/libtool/, Libtool}.
+@uref{https://@/www@/.gnu@/.org/@/software/@/autoconf/, Autoconf},
+@uref{https://@/www@/.gnu@/.org/@/software/@/automake/, Automake},
+@uref{https://@/www@/.gnu@/.org/@/software/@/gnulib/, Gnulib}, and
+@uref{https://@/www@/.gnu@/.org/@/software/@/libtool/, Libtool}.
 
 @item Automake Manual
 
@@ -971,7 +971,7 @@ Libtool}@footnote{@cite{GNU Autoconf, Automake and Libtool},
 by G. V. Vaughan, B. Elliston, T. Tromey, and I. L. Taylor.  SAMS (originally
 New Riders), 2000, ISBN 1578701902.} describes the complete GNU
 build environment.  You can also find
-@uref{http://@/sources.redhat.com/@/autobook/, the entire book on-line}.
+@uref{https://@/www.sourceware.org/@/autobook/, the entire book on-line}.
 
 @end itemize
 
@@ -8587,7 +8587,7 @@ if the system supports @samp{#!}, @samp{no} if not.
 @cindex Large file support
 @cindex LFS
 Arrange for 64-bit file offsets, known as
-@uref{http://@/www.unix-systems@/.org/@/version2/@/whatsnew/@/lfs20mar.html,
+@uref{http://@/www.unix.org/@/version2/@/whatsnew/@/lfs20mar.html,
 large-file support}.  On some hosts, one must use special compiler
 options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
@@ -9170,7 +9170,7 @@ For instance, executing (observe the double quotation!):
 @example
 @c If you change this example, adjust tests/compile.at:AC_LANG_SOURCE example.
 AC_INIT([Hello], [1.0], [bug-hello@@example.org], [],
-        [http://www.example.org/])
+        [https://www.example.org/])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
 AC_LANG([C])
@@ -9192,7 +9192,7 @@ on a system with @command{gcc} installed, results in:
 #define PACKAGE_VERSION "1.0"
 #define PACKAGE_STRING "Hello 1.0"
 #define PACKAGE_BUGREPORT "bug-hello@@example.org"
-#define PACKAGE_URL "http://www.example.org/"
+#define PACKAGE_URL "https://www.example.org/"
 #define HELLO_WORLD "Hello, World\n"
 
 const char hw[] = "Hello, World\n";
@@ -9215,7 +9215,7 @@ For instance:
 @example
 @c If you change this example, adjust tests/compile.at:AC_LANG_PROGRAM example.
 AC_INIT([Hello], [1.0], [bug-hello@@example.org], [],
-        [http://www.example.org/])
+        [https://www.example.org/])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
 AC_LANG_CONFTEST(
@@ -9237,7 +9237,7 @@ on a system with @command{gcc} installed, results in:
 #define PACKAGE_VERSION "1.0"
 #define PACKAGE_STRING "Hello 1.0"
 #define PACKAGE_BUGREPORT "bug-hello@@example.org"
-#define PACKAGE_URL "http://www.example.org/"
+#define PACKAGE_URL "https://www.example.org/"
 #define HELLO_WORLD "Hello, World\n"
 
 const char hw[] = "Hello, World\n";
@@ -9615,14 +9615,13 @@ This section aims at presenting some systems and pointers to
 documentation.  It may help you addressing particular problems reported
 by users.
 
-@uref{http://@/www.opengroup.org/@/susv3, Posix-conforming systems} are
-derived from the
-@uref{http://@/www.bell-labs.com/@/usr/@/dmr/@/www/@/hist.html, Unix
-operating system}.
+@uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, Posix-conforming
+systems} are derived from the
+@uref{https://@/en.wikipedia.org/@/wiki/@/Unix, Unix operating system}.
 
 The @uref{http://@/bhami.com/@/rosetta.html, Rosetta Stone for Unix}
 contains a table correlating the features of various Posix-conforming
-systems.  @uref{http://@/www.levenez.com/@/unix/, Unix History} is a
+systems.  @uref{https://@/www.levenez.com/@/unix/, Unix History} is a
 simplified diagram of how many Unix systems were derived from each
 other.
 
@@ -9654,13 +9653,7 @@ QNX is a realtime operating system running on Intel architecture
 meant to be scalable from the small embedded systems to the hundred
 processor super-computer.  It claims to be Posix certified.  More
 information is available on the
-@uref{http://@/www.qnx.com/, QNX home page}.
-
-@item Tru64
-@cindex Tru64
-@uref{http://@/h30097.www3.hp.com/@/docs/,
-Documentation of several versions of Tru64} is available in different
-formats.
+@uref{https://@/blackberry.qnx.com/@/en, QNX home page}.
 
 @item Unix version 7
 @cindex Unix version 7
@@ -9668,7 +9661,8 @@ formats.
 Officially this was called the ``Seventh Edition'' of ``the UNIX
 time-sharing system'' but we use the more-common name ``Unix version 7''.
 Documentation is available in the
-@uref{http://@/plan9.bell-labs.com/@/7thEdMan/, Unix Seventh Edition Manual}.
+@uref{https://@/s3.amazonaws.com/@/plan9-bell-labs/@/7thEdMan/@/index.html,
+Unix Seventh Edition Manual}.
 Previous versions of Unix are called ``Unix version 6'', etc., but
 they were not as widely used.
 @end table
@@ -15117,7 +15111,7 @@ On the other hand, if you're using M4sh you can assume that the shell
 has the features that were added in SVR2 (circa 1984), including shell
 functions,
 @command{return}, @command{unset}, and I/O redirection for builtins.  For
-more information, refer to @uref{http://@/www.in-ulm.de/@/~mascheck/@/bourne/}.
+more information, refer to @uref{https://@/www.in-ulm.de/@/~mascheck/@/bourne/}.
 However, some pitfalls have to be avoided for portable use of these
 constructs; these will be documented in the rest of this chapter.
 See in particular @ref{Shell Functions} and @ref{Limitations of
@@ -15140,8 +15134,8 @@ Some of these external utilities have a portable subset of features; see
 
 There are other sources of documentation about shells.  The
 specification for the Posix
-@uref{http://@/www.opengroup.org/@/susv3/@/utilities/@/xcu_chap02@/.html, Shell
-Command Language}, though more generous than the restrictive shell
+@uref{http://@/pubs.opengroup.org/@/onlinepubs/@/9699919799/@/utilities/@/V3_chap02.html,
+Shell Command Language}, though more generous than the restrictive shell
 subset described above, is fairly portable nowadays.  Also please see
 @uref{http://@/www.faqs.org/@/faqs/@/unix-faq/@/shell/, the Shell FAQs}.
 
@@ -15664,7 +15658,7 @@ headaches.  This is worsened by the fact that various different, mutually
 incompatible approaches are possible in this area, each with its
 distinctive merits and demerits.  A detailed description of these possible
 approaches, as well as of their pros and cons, can be found in
-@uref{http://www.cons.org/cracauer/sigint.html, this article}.
+@uref{https://www.cons.org/cracauer/sigint.html, this article}.
 
 Solaris 10 @command{/bin/sh} automatically traps most signals by default;
 @c See: <http://dbaspot.com/shell/396118-bourne-shell-exit-code-term.html>
@@ -15733,7 +15727,6 @@ these shells.  OTOH, some other shells doesn't special-case the handling
 of @code{SIGQUIT}; among these shells are at least @code{pdksh} 5.2.14,
 Solaris 10 and NetBSD 5.1 @code{/bin/sh}, and the Almquist Shell 0.5.5.1.
 
-@c See: <http://mail.opensolaris.org/pipermail/ksh93-integration-discuss/2009-February/004121.html>
 Some shells (especially Korn shells and derivatives) might try to
 propagate to themselves a signal that has killed a child process; this is
 not a bug, but a conscious design choice (although its overall value might
@@ -18101,7 +18094,7 @@ set -ex
 The option @option{-e} has historically been underspecified, with enough
 ambiguities to cause numerous differences across various shell
 implementations; see for example
-@uref{http://www.in-ulm.de/@/~mascheck/@/various/@/set-e/, this overview},
+@uref{https://www.in-ulm.de/@/~mascheck/@/various/@/set-e/, this overview},
 or @uref{http://www.austingroupbugs.net/@/view.php?id=52, this link},
 documenting a change to Posix 2008 to match @command{ksh88} behavior.
 Note that mixing @code{set -e} and shell functions is asking for surprises:
@@ -21252,7 +21245,7 @@ GCC, gcc, Using the GNU Compiler Collection
 (GCC)},
 @end ifnothtml
 for a list of C-related standards.  Many programs also assume the
-@uref{http://@/www.opengroup.org/@/susv3, Posix standard}.
+@uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, Posix standard}.
 
 Some old code is written to be portable to K&R C, which predates any C
 standard.  K&R C compilers are no longer of practical interest, though,

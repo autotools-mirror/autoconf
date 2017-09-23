@@ -280,7 +280,7 @@
 	Motivated by automake bug#9245:
 	 <https://debbugs.gnu.org/cgi/bugreport.cgi?bug=9245>
 	and FreeBSD PR bin/159730:
-	 <http://www.freebsd.org/cgi/query-pr.cgi?pr=159730>
+	 <https://www.freebsd.org/cgi/query-pr.cgi?pr=159730>
 	* doc/autoconf.texi (Parallel Make): Document other BSD make
 	incompatibilities.  Reorganize the existing related documentation
 	accordingly.
@@ -853,7 +853,7 @@
 	* tests/m4sh.at (AS@&t@_TR_SH and AS@&t@_TR_CPP)
 	(AS@&t@_LITERAL_IF): Expand tests.
 	* NEWS: Document the fix.
-	Reported via Ben Pfaff; originally http://bugs.debian.org/593838
+	Reported via Ben Pfaff; originally https://bugs.debian.org/593838
 
 2010-09-24  Joshua G. Hale  <jgh.emc@gmail.com>  (tiny change)
 
@@ -4198,7 +4198,7 @@
 	* doc/autoconf.texi (Limitations of Usual Tools) <expr (:)>:
 	Mention HP-UX limitation, and $ ambiguity.
 	* THANKS: Update.
-	Reported by Jens Schmidt, in http://bugs.debian.org/466990.
+	Reported by Jens Schmidt, in https://bugs.debian.org/466990.
 
 2009-03-17  Jim Meyering  <meyering@redhat.com>
 
@@ -4221,7 +4221,7 @@
 	(Generic Programs): Adjust references.
 	* doc/install.texi (System Type): Touch up formatting.
 	* THANKS: Update.
-	Reported by Tim Freeman, in http://bugs.debian.org/312873.
+	Reported by Tim Freeman, in https://bugs.debian.org/312873.
 
 	Remove historical inaccuracy.
 	* doc/autoconf.texi (Portable Shell): Don't perpetuate myth about
@@ -9679,7 +9679,7 @@
 
 	* doc/autoconf.texi (autoreconf Invocation): Document ACLOCAL_AMFLAGS
 	limitation reported by Leo Moisio in
-	<http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=432941>.
+	<https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=432941>.
 
 2007-07-03  Paul Eggert  <eggert@cs.ucla.edu>
 
@@ -10260,7 +10260,7 @@
 	* lib/autoconf/functions.m4 (AC_FUNC_GETMNTENT):
 	Define HAVE_GETMNTENT to 1, not to the empty string.
 	Problem originally reported by Jochen Friedrich in
-	<http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=403243>.
+	<https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=403243>.
 
 	This change prompted by a problem report by Andrey Simonenko in
 	<https://lists.gnu.org/archive/html/bug-autoconf/2006-12/msg00026.html>.
@@ -10388,7 +10388,7 @@
 
 	* lib/autoconf/functions.m4 (AC_FUNC_FSEEKO): Check that fseeko
 	can be assigned to a function pointer.  Problem reported by
-	Peter Palfrader in <http://bugs.debian.org/401377>.  Based on
+	Peter Palfrader in <https://bugs.debian.org/401377>.  Based on
 	part of a patch by Ralf Wildenhues in that same bug report.
 
 2006-12-01  Paul Eggert  <eggert@cs.ucla.edu>
@@ -11177,7 +11177,7 @@
 
 	* lib/autoconf/functions.m4 (AC_FUNC_MKTIME):  Add year_2050_test
 	to catch glibc bug 2821
-	<http://sourceware.org/bugzilla/show_bug.cgi?id=2821>.
+	<https://sourceware.org/bugzilla/show_bug.cgi?id=2821>.
 
 	Merge from gnulib as follows: Use AC_CHECK_HEADERS_ONCE instead of
 	AC_CHECK_HEADERS, and likewise for AC_CHECK_FUNCS_ONCE and
@@ -11284,7 +11284,7 @@
 	(_AC_PROG_LEX_YYTEXT_DECL): Handle caching correctly; the old code
 	didn't work if some values were cached but not others.  Test for
 	broken lex libraries like native ia64-hp-hpux11.22; see
-	<http://sources.redhat.com/ml/binutils/2003-12/msg00337.html>, and
+	<https://www.sourceware.org/ml/binutils/2003-12/msg00337.html>, and
 	work around the problem by preferring an empty LEXLIB to -lfl or
 	-ll.  Let the user set LEXLIB='' to indicate no library needed.
 
@@ -11738,7 +11738,7 @@
 
 	* doc/autoconf.texi (Initializing configure, Shell Substitutions):
 	Warn about $@ not persisting.  Problem reported by Julien Danjou in
-	<http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=372179>.
+	<https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=372179>.
 	(Special Chars in Names): Renamed from Leading _ in Macro Names.
 	Mention other special chars, too.
 
@@ -17481,7 +17481,7 @@
 	resulting namespace pollution would cause other tests to fail.
 	Configure scripts run with some older versions of g++ and HP's
 	aCC would fail due to such an #include.  Problems reported by
-	Matthew Mueller in <http://bugs.debian.org/120704> and by
+	Matthew Mueller in <https://bugs.debian.org/120704> and by
 	Keith Bostic in
 	<https://mail.gnu.org/archive/html/autoconf/2003-05/msg00063.html>.
 	In the test, use the test declaration before including <stdlib.h>,

@@ -764,7 +764,7 @@ AT_CLEANUP
 ## Negated classes in globbing.  ##
 ## ----------------------------- ##
 
-# According to http://www.in-ulm.de/~mascheck/bourne/, all shells with
+# According to https://www.in-ulm.de/~mascheck/bourne/, all shells with
 # functions also support `[!...]'.  But `[^...]' is not universally supported.
 
 AT_SETUP([Negated classes in globbing])
@@ -792,7 +792,7 @@ AT_CLEANUP
 ## Null variable substitution.  ##
 ## ---------------------------- ##
 
-# According to http://www.in-ulm.de/~mascheck/bourne/, all shells with
+# According to https://www.in-ulm.de/~mascheck/bourne/, all shells with
 # functions also support `${a:-b}'.
 
 AT_SETUP([Null variable substitution])

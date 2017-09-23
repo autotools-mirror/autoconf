@@ -484,8 +484,6 @@ fi
 
 # AC_HEADER_RESOLV
 # ----------------
-# According to http://www.mcsr.olemiss.edu/cgi-bin/man-cgi?resolver+3
-# (or http://www.chemie.fu-berlin.de/cgi-bin/man/sgi_irix?resolver+3),
 # sys/types.h, netinet/in.h and arpa/nameser.h are required on IRIX.
 # netinet/in.h is needed on Cygwin, too.
 # With Solaris 9, netdb.h is required, to get symbols like HOST_NOT_FOUND.

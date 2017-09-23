@@ -227,7 +227,7 @@ AT_SETUP([AC_INIT with unusual version strings])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU String++ with  spaces (foo)],
-	  [2.48++  (2010-07-03)], [[http://example.com/?a=b&c=d#e]], [clisp])
+	  [2.48++  (2010-07-03)], [[https://example.com/?a=b&c=d#e]], [clisp])
 AC_OUTPUT
 ]])
 
@@ -253,7 +253,7 @@ AT_CHECK([$FGREP '2.48++  (2010-07-03)' stdout], [], [ignore])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU "String++"],
-	  [2.48], [http://example.com/], [clisp])
+	  [2.48], [https://example.com/], [clisp])
 AC_OUTPUT
 ]])
 
@@ -262,7 +262,7 @@ AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU String++],
-	  ['codename' 2.48], [http://example.com/], [clisp])
+	  ['codename' 2.48], [https://example.com/], [clisp])
 AC_OUTPUT
 ]])
 
@@ -271,7 +271,7 @@ AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU
-String++], [2.48], [http://example.com/], [clisp])
+String++], [2.48], [https://example.com/], [clisp])
 AC_OUTPUT
 ]])
 

@@ -18,7 +18,7 @@ tools we depend upon, including:
 - Automake 1.10+ <https://www.gnu.org/software/automake/>
 - Help2man 1.29+ <https://www.gnu.org/software/help2man/>
 - M4 1.4.6+ <https://www.gnu.org/software/m4/>
-- Perl 5.006+ <http://www.cpan.org/>
+- Perl 5.006+ <https://www.cpan.org/>
 - Texinfo 4.8+ <https://www.gnu.org/software/texinfo/>
 
 The following are useful as well, if you want to be able to run commands
@@ -26,13 +26,13 @@ like "make dist-lzma" or "make distcheck":
 
 - Gzip <https://www.gnu.org/software/gzip/>
 - Tar <https://www.gnu.org/software/tar/>
-- LZMA Utils 4.32+ <http://tukaani.org/lzma/>
+- LZMA Utils 4.32+ <https://tukaani.org/lzma/>
 
 Although we try to keep the CVS mirror of the git repository usable,
 some of the tests in the testsuite will fail if git was not used to
 generate the version string.  Therefore, we recommend:
 
-- Git 1.4.4+ <http://git.or.cz/>
+- Git 1.4.4+ <https://git-scm.com/>
 
 You may find it useful to install the git-merge-changelog merge driver:
 https://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/git-merge-changelog.c

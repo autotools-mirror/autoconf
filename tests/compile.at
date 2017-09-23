@@ -178,7 +178,7 @@ AT_DATA([configure.ac],
 [[# Taken from autoconf.texi:Generating Sources.
 # The only change is to not fail if gcc doesn't work.
 AC_INIT([Hello], [1.0], [bug-hello@example.org], [],
-        [http://www.example.org/])
+        [https://www.example.org/])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
 AC_LANG([C])
@@ -199,7 +199,7 @@ AT_CHECK([sed -n 's/ *$//; /#define PACKAGE/,$p' stdout], [],
 #define PACKAGE_VERSION "1.0"
 #define PACKAGE_STRING "Hello 1.0"
 #define PACKAGE_BUGREPORT "bug-hello@example.org"
-#define PACKAGE_URL "http://www.example.org/"
+#define PACKAGE_URL "https://www.example.org/"
 #define HELLO_WORLD "Hello, World\n"
 
 const char hw[] = "Hello, World\n";
@@ -223,7 +223,7 @@ AT_DATA([configure.ac],
 [[# Taken from autoconf.texi:Generating Sources.
 # The only change is to not fail if gcc doesn't work.
 AC_INIT([Hello], [1.0], [bug-hello@example.org], [],
-        [http://www.example.org/])
+        [https://www.example.org/])
 AC_DEFINE([HELLO_WORLD], ["Hello, World\n"],
   [Greetings string.])
 AC_LANG_CONFTEST(
@@ -244,7 +244,7 @@ AT_CHECK([sed -n 's/ *$//; /#define PACKAGE/,$p' stdout], [],
 #define PACKAGE_VERSION "1.0"
 #define PACKAGE_STRING "Hello 1.0"
 #define PACKAGE_BUGREPORT "bug-hello@example.org"
-#define PACKAGE_URL "http://www.example.org/"
+#define PACKAGE_URL "https://www.example.org/"
 #define HELLO_WORLD "Hello, World\n"
 
 const char hw[] = "Hello, World\n";

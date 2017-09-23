@@ -189,12 +189,10 @@ it.
 > Maybe it should really be called X_CPPFLAGS?
 
 Well, perhaps.  If you feel strongly about this, feel free to submit a
-change-request.  There is a hyperlink to the bug tracking database from
-http://sourceware.cygnus.com/autoconf/.  With the way it reads in the
-manual right now, it's designed to allow the user to set additional flags
-in the environment prior to running configure--and these don't need to be
-limited to just -I flags.  Nevertheless, I can see a few clean ways to
-improve this.
+change-request.  With the way it reads in the manual right now, it's
+designed to allow the user to set additional flags in the environment
+prior to running configure--and these don't need to be limited to just
+-I flags.  Nevertheless, I can see a few clean ways to improve this.
 
 ** AC_SYS_INTERPRETER
 Defines $interpval.  This is not a standard name.  Do we want to keep
