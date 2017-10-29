@@ -161,21 +161,20 @@ sub update_file ($$;$)
       return
     }
 
-  if (-f "$to")
+  my $exists = (-f "$to");
+  if ($exists)
     {
-      # Back up and install the new one.
+      # Back up any existing destination.
       move ("$to",  "$to$SIMPLE_BACKUP_SUFFIX")
 	or fatal "cannot backup $to: $!";
-      move ("$from", "$to")
-	or fatal "cannot rename $from as $to: $!";
-      msg 'note', "'$to' is updated";
     }
-  else
-    {
-      move ("$from", "$to")
-	or fatal "cannot rename $from as $to: $!";
-      msg 'note', "'$to' is created";
-    }
+
+  # Do not use move ("$from", "$to"), as it truncates file timestamps.
+  rename ("$from", "$to")
+    or system ("mv", "$from", "$to") == 0
+    or fatal "cannot rename $from as $to: $!";
+
+  msg 'note', ($exists ? "'$to' is updated" : "'$to is created")
 }
 
 
