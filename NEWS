@@ -2,6 +2,9 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** config.log properly escapes arguments in the header comment;
+   config.status --config output is now quoted in a more readable fashion
+
 ** Configure scripts now support a '--runstatedir' option, which
    defaults to '${localstatedir}/run', and which can be used to place
    per-process temporary runtime files (such as pid files) into '/run'
