@@ -1386,7 +1386,7 @@ do
   funny=`func_sanitize_file_name "$funny"`
   file=" file $funny"
   dir=`func_sanitize_dir_name " dir $funny"`
-  TMPDIR=" tmp$dir"
+  TMPDIR="./ tmp$dir"
   export TMPDIR
 
   # skip if we cannot create such a file or directory
