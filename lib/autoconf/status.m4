@@ -1431,9 +1431,7 @@ m4_if(m4_index(m4_defn([AC_PACKAGE_NAME]), [GNU ]), [0], [
 General help using GNU software: <https://www.gnu.org/gethelp/>.])])"
 
 _ACEOF
-ac_cs_config=`dnl
-AS_ECHO(["${ac_configure_args} "]) |dnl
-sed --posix "s/'\($ac_safe_unquote$ac_safe_unquote*\)' /\1 /g; s/ $//"`
+ac_cs_config=`AS_ECHO(["$ac_configure_args"]) | sed "$ac_safe_unquote"`
 ac_cs_config_escaped=`AS_ECHO(["$ac_cs_config"]) | sed "s/^ //; s/'/'\\\\\\\\''/g"`
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 ac_cs_config='$ac_cs_config_escaped'

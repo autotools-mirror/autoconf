@@ -1192,10 +1192,18 @@ do
   esac
   AS_VAR_APPEND([ac_configure_args_raw], [" '$ac_arg'"])
 done
-ac_safe_unquote="[[a-zA-Z0-9_=\/,-]]"
-ac_configure_args_raw=`dnl
-AS_ECHO(["${ac_configure_args_raw} "]) |dnl
-sed "s/'\($ac_safe_unquote$ac_safe_unquote*\)' /\1 /g; s/ $//"`
+
+case $ac_configure_args_raw in
+  *$as_nl*)
+    ac_safe_unquote= ;;
+  *)
+    ac_unsafe_z='|&;<>()$`\\"*?@<:@ ''	' # This string ends in space, tab.
+    ac_unsafe_a="$ac_unsafe_z#~"
+    ac_safe_unquote="s/ '\\([[^$ac_unsafe_a]][[^$ac_unsafe_z]]*\\)'/ \\1/g"
+    ac_configure_args_raw=`dnl
+      AS_ECHO(["$ac_configure_args_raw"]) | sed "$ac_safe_unquote"`;;
+esac
+
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
