@@ -139,7 +139,11 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 		  extern char *declared (const char *);
 		  #endif
 		]])
+  AC_LANG_WERROR
   AC_CHECK_DECL([undeclared (char *)], [AS_EXIT([1])],, [[]])
+  if test -z "$ac_c_werror_flag"; then
+    AC_MSG_ERROR([ac_c_werror_flag overwritten])
+  fi
 ]],
 [AT_CHECK_DEFINES(
 [#define HAVE_DECL_BASENAM 1

@@ -2962,8 +2962,8 @@ m4_define([_AC_CHECK_DECL_BODY],
 @%:@endif
 ])],
 		   [AS_VAR_SET([$[]3], [yes])],
-		   [AS_VAR_SET([$[]3], [no])])])
-  ac_[]_AC_LANG_ABBREV[]_werror_flag=$ac_save_werror_flag
+		   [AS_VAR_SET([$[]3], [no])])
+  ac_[]_AC_LANG_ABBREV[]_werror_flag=$ac_save_werror_flag])
   AS_LINENO_POP
 ])# _AC_CHECK_DECL_BODY
 
