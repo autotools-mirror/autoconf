@@ -16,7 +16,7 @@ GNU Autoconf NEWS - User visible changes.
 ** autoconf will now issue warnings (in the ‘syntax’ category) if the
    input file is missing a call to AC_INIT and/or AC_OUTPUT.
 
-** autoreconf will now run gtkdocize when appropriate.
+** autoreconf will now run gtkdocize and intltoolize when appropriate.
 
 ** Older version of automake and aclocal (< 1.8) are no longer supported
    by autoreconf.

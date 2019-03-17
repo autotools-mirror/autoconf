@@ -106,15 +106,16 @@ Written by David J. MacKenzie and Akim Demaille.
 ";
 
 # Lib files.
-my $autoconf   = $ENV{'AUTOCONF'}   || '@bindir@/@autoconf-name@';
-my $autoheader = $ENV{'AUTOHEADER'} || '@bindir@/@autoheader-name@';
-my $autom4te   = $ENV{'AUTOM4TE'}   || '@bindir@/@autom4te-name@';
-my $automake   = $ENV{'AUTOMAKE'}   || 'automake';
-my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
-my $libtoolize = $ENV{'LIBTOOLIZE'} || 'libtoolize';
-my $gtkdocize  = $ENV{'GTKDOCIZE'}  || 'gtkdocize';
-my $autopoint  = $ENV{'AUTOPOINT'}  || 'autopoint';
-my $make       = $ENV{'MAKE'}       || 'make';
+my $autoconf    = $ENV{'AUTOCONF'}    || '@bindir@/@autoconf-name@';
+my $autoheader  = $ENV{'AUTOHEADER'}  || '@bindir@/@autoheader-name@';
+my $autom4te    = $ENV{'AUTOM4TE'}    || '@bindir@/@autom4te-name@';
+my $automake    = $ENV{'AUTOMAKE'}    || 'automake';
+my $aclocal     = $ENV{'ACLOCAL'}     || 'aclocal';
+my $libtoolize  = $ENV{'LIBTOOLIZE'}  || 'libtoolize';
+my $intltoolize = $ENV{'INTLTOOLIZE'} || 'intltoolize';
+my $gtkdocize   = $ENV{'GTKDOCIZE'}   || 'gtkdocize';
+my $autopoint   = $ENV{'AUTOPOINT'}   || 'autopoint';
+my $make        = $ENV{'MAKE'}        || 'make';
 
 # --install -- as --add-missing in other tools.
 my $install = 0;
@@ -176,6 +177,7 @@ sub parse_args ()
 		    $automake, $aclocal,
 		    $autopoint,
 		    $libtoolize,
+		    $intltoolize,
 		    $gtkdocize)
 	{
 	  xsystem ("$prog --version | sed 1q >&2");
@@ -199,20 +201,22 @@ sub parse_args ()
   # --install and --symlink;
   if ($install)
     {
-      $automake   .= ' --add-missing';
-      $automake   .= ' --copy' unless $symlink;
-      $libtoolize .= ' --copy' unless $symlink;
-      $gtkdocize  .= ' --copy' unless $symlink;
+      $automake    .= ' --add-missing';
+      $automake    .= ' --copy' unless $symlink;
+      $libtoolize  .= ' --copy' unless $symlink;
+      $intltoolize .= ' --copy' unless $symlink;
+      $gtkdocize   .= ' --copy' unless $symlink;
     }
   # --force;
   if ($force)
     {
-      $aclocal    .= ' --force';
-      $autoconf   .= ' --force';
-      $autoheader .= ' --force';
-      $automake   .= ' --force-missing';
-      $autopoint  .= ' --force';
-      $libtoolize .= ' --force';
+      $aclocal     .= ' --force';
+      $autoconf    .= ' --force';
+      $autoheader  .= ' --force';
+      $automake    .= ' --force-missing';
+      $autopoint   .= ' --force';
+      $libtoolize  .= ' --force';
+      $intltoolize .= ' --force';
     }
   else
     {
@@ -391,6 +395,7 @@ sub autoreconf_current_directory ($)
   my $aux_dir;
   my $uses_gettext_via_traces;
   my $uses_libtool;
+  my $uses_intltool;
   my $uses_gtkdoc;
   my $uses_libltdl;
   my $uses_autoheader;
@@ -413,6 +418,7 @@ sub autoreconf_current_directory ($)
 	     'LT_CONFIG_LTDL_DIR',
 	     'AM_GNU_GETTEXT',
 	     'AM_INIT_AUTOMAKE',
+	     'IT_PROG_INTLTOOL',
 	     'GTK_DOC_CHECK',
 	    )
      . ' |');
@@ -429,6 +435,7 @@ sub autoreconf_current_directory ($)
       $uses_libltdl = 1             if $macro eq "LT_CONFIG_LTDL_DIR";
       $uses_autoheader = 1          if $macro eq "AC_CONFIG_HEADERS";
       $uses_automake = 1            if $macro eq "AM_INIT_AUTOMAKE";
+      $uses_intltool = 1            if $macro eq "IT_PROG_INTLTOOL";
       $uses_gtkdoc = 1              if $macro eq "GTK_DOC_CHECK";
       push @subdir, split (' ', $args[0])
                                     if $macro eq "AC_CONFIG_SUBDIRS" && $recursive;
@@ -494,6 +501,25 @@ sub autoreconf_current_directory ($)
   else
     {
       verb "$configure_ac: not running libtoolize: --install not given";
+    }
+
+
+  # --------------------- #
+  # Running intltoolize.  #
+  # --------------------- #
+
+  if (!$uses_intltool)
+    {
+      verb "$configure_ac: not using Intltool";
+    }
+  elsif ($install)
+    {
+      xsystem_hint ("intltoolize is needed because this package uses Intltool", $intltoolize);
+      xsystem ($intltoolize)
+    }
+  else
+    {
+      verb "$configure_ac: not running intltool: --install not given";
     }
 
 
