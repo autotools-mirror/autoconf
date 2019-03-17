@@ -112,6 +112,7 @@ my $autom4te   = $ENV{'AUTOM4TE'}   || '@bindir@/@autom4te-name@';
 my $automake   = $ENV{'AUTOMAKE'}   || 'automake';
 my $aclocal    = $ENV{'ACLOCAL'}    || 'aclocal';
 my $libtoolize = $ENV{'LIBTOOLIZE'} || 'libtoolize';
+my $gtkdocize  = $ENV{'GTKDOCIZE'}  || 'gtkdocize';
 my $autopoint  = $ENV{'AUTOPOINT'}  || 'autopoint';
 my $make       = $ENV{'MAKE'}       || 'make';
 
@@ -174,7 +175,8 @@ sub parse_args ()
       for my $prog ($autoconf, $autoheader,
 		    $automake, $aclocal,
 		    $autopoint,
-		    $libtoolize)
+		    $libtoolize,
+		    $gtkdocize)
 	{
 	  xsystem ("$prog --version | sed 1q >&2");
 	  print STDERR "\n";
@@ -200,6 +202,7 @@ sub parse_args ()
       $automake   .= ' --add-missing';
       $automake   .= ' --copy' unless $symlink;
       $libtoolize .= ' --copy' unless $symlink;
+      $gtkdocize  .= ' --copy' unless $symlink;
     }
   # --force;
   if ($force)
@@ -388,6 +391,7 @@ sub autoreconf_current_directory ($)
   my $aux_dir;
   my $uses_gettext_via_traces;
   my $uses_libtool;
+  my $uses_gtkdoc;
   my $uses_libltdl;
   my $uses_autoheader;
   my $uses_automake;
@@ -409,6 +413,7 @@ sub autoreconf_current_directory ($)
 	     'LT_CONFIG_LTDL_DIR',
 	     'AM_GNU_GETTEXT',
 	     'AM_INIT_AUTOMAKE',
+	     'GTK_DOC_CHECK',
 	    )
      . ' |');
   while ($_ = $traces->getline)
@@ -424,6 +429,7 @@ sub autoreconf_current_directory ($)
       $uses_libltdl = 1             if $macro eq "LT_CONFIG_LTDL_DIR";
       $uses_autoheader = 1          if $macro eq "AC_CONFIG_HEADERS";
       $uses_automake = 1            if $macro eq "AM_INIT_AUTOMAKE";
+      $uses_gtkdoc = 1              if $macro eq "GTK_DOC_CHECK";
       push @subdir, split (' ', $args[0])
                                     if $macro eq "AC_CONFIG_SUBDIRS" && $recursive;
     }
@@ -481,7 +487,8 @@ sub autoreconf_current_directory ($)
 	{
 	  $libtoolize .= " --ltdl";
 	}
-      xsystem_hint ("libtoolize is needed because this package uses Libtool", $libtoolize);
+      xsystem_hint ("libtoolize is needed because this package uses Libtool",
+		    $libtoolize);
       $rerun_aclocal = 1;
     }
   else
@@ -489,6 +496,25 @@ sub autoreconf_current_directory ($)
       verb "$configure_ac: not running libtoolize: --install not given";
     }
 
+
+  # ------------------- #
+  # Running gtkdocize.  #
+  # ------------------- #
+
+  if (!$uses_gtkdoc)
+    {
+      verb "$configure_ac: not using Gtkdoc";
+    }
+  elsif ($install)
+    {
+      xsystem_hint ("gtkdocize is needed because this package uses Gtkdoc",
+		    $gtkdocize);
+      xsystem ($gtkdocize)
+    }
+  else
+    {
+      verb "$configure_ac: not running gtkdocize: --install not given";
+    }
 
 
   # ------------------- #

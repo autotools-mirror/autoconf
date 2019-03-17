@@ -1689,14 +1689,14 @@ been updated, or finally, simply in order to install the GNU Build
 System in a fresh tree.
 
 @command{autoreconf} runs @command{autoconf}, @command{autoheader},
-@command{aclocal}, @command{automake}, @command{libtoolize}, and
-@command{autopoint} (when appropriate) repeatedly to update the
-GNU Build System in the specified directories and their
+@command{aclocal}, @command{automake}, @command{libtoolize},
+@command{gtkdocize}, and @command{autopoint} (when appropriate) repeatedly
+to update the GNU Build System in the specified directories and their
 subdirectories (@pxref{Subdirectories}).  By default, it only remakes
 those files that are older than their sources.  The environment variables
 @env{AUTOM4TE}, @env{AUTOCONF}, @env{AUTOHEADER}, @env{AUTOMAKE},
-@env{ACLOCAL}, @env{AUTOPOINT}, @env{LIBTOOLIZE}, @env{M4}, and @env{MAKE}
-may be used to override the invocation of the respective tools.
+@env{ACLOCAL}, @env{AUTOPOINT}, @env{LIBTOOLIZE}, @env{GTKDOCIZE}, @env{M4},
+and @env{MAKE} may be used to override the invocation of the respective tools.
 
 If you install a new version of some tool, you can make
 @command{autoreconf} remake @emph{all} of the files by giving it the
