@@ -325,7 +325,7 @@ if test -f state-env.before && test -f state-env.after; then
       [AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|MKDIR_P|RANLIB|SET_MAKE|YACC],
       [GREP|[EF]GREP|SED],
       [[_@]|.[*#?$].],
-      [argv|ARGC|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS]))=' \
+      [argv|ARGC|LINENO|BASH_ARGC|BASH_ARGV|OLDPWD|PIPESTATUS|RANDOM|SECONDS]))=' \
      $act_file ||
        test $? -eq 1 || echo failed >&2
     ) 2>stderr-$act_file |
@@ -382,6 +382,9 @@ do
 	/'\'\\\$\''=/ d
 	/^argv=/ d
 	/^ARGC=/ d
+	/^BASH_ARGC=/ d
+	/^BASH_ARGV=/ d
+	/^LINENO=/ d
 	' $act_file >at_config_vars-$act_file
 done
 AT_CMP([at_config_vars-$1], [at_config_vars-$2])[]dnl
