@@ -615,7 +615,7 @@ AC_SUBST(INSTALL_DATA)dnl
 
 # AC_PROG_MKDIR_P
 # ---------------
-# Check whether `mkdir -p' is known to be thread-safe, and fall back to
+# Check whether `mkdir -p' is known to be race-free, and fall back to
 # install-sh -d otherwise.
 #
 # Automake 1.8 used `mkdir -m 0755 -p --' to ensure that directories
@@ -663,7 +663,7 @@ AN_MAKEVAR([MKDIR_P], [AC_PROG_MKDIR_P])
 AC_DEFUN_ONCE([AC_PROG_MKDIR_P],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_REQUIRE_AUX_FILE([install-sh])dnl
-AC_MSG_CHECKING([for a thread-safe mkdir -p])
+AC_MSG_CHECKING([for a race-free mkdir -p])
 if test -z "$MKDIR_P"; then
   AC_CACHE_VAL([ac_cv_path_mkdir],
     [_AS_PATH_WALK([$PATH$PATH_SEPARATOR/opt/sfw/bin],
