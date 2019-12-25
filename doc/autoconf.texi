@@ -17987,6 +17987,12 @@ or @samp{%s} is probably easiest:
 printf %s -foo
 @end example
 
+AIX 7.2 @command{sh} mishandles octal escapes in multi-byte locales by
+treating them as characters instead of bytes.  For example, in a locale
+using the UTF-8 encoding, @samp{printf '\351'} outputs the two bytes C3,
+A9 (the UTF-8 encoding for U+00E9) instead of the desired single byte E9.
+To work around the bug, use the C locale.
+
 Bash 2.03 mishandles an escape sequence that happens to evaluate to @samp{%}:
 
 @example
