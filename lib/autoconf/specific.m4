@@ -132,6 +132,9 @@ rm -rf conftest*[]dnl
 # one must use special compiler options to get large-file access to work.
 # For more details about this brain damage please see:
 # http://www.unix.org/version2/whatsnew/lfs20mar.html
+# Additionally, on Linux file systems with 64-bit inodes a file that happens
+# to have a 64-bit inode number cannot be accessed by 32-bit applications on
+# Linux x86/x86_64.  This can occur with file systems such as XFS and NFS.
 AC_DEFUN([AC_SYS_LARGEFILE],
 [AC_ARG_ENABLE(largefile,
 	       [  --disable-largefile     omit support for large files])
