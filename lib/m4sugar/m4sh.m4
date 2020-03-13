@@ -294,7 +294,10 @@ exec $1 $as_opts "$as_myself" ${1+"$[@]"}
 # Admittedly, this is quite paranoid, since all the known shells bail
 # out after a failed `exec'.
 AS_ECHO(["$[]0: could not re-execute with $1"]) >&2
-AS_EXIT([255])])# _AS_REEXEC_WITH_SHELL
+dnl AS_EXIT cannot be used here because as_fn_exit is not yet defined;
+dnl code inserted by AS_REQUIRE_SHELL_FN will appear _after_ this point.
+dnl We shouldn't have to worry about any traps being active at this point.
+exit 255])# _AS_REEXEC_WITH_SHELL
 
 
 # _AS_PREPARE
