@@ -418,7 +418,7 @@ m4_default_quoted([$4], [M4SH-INIT-FN]))])])
 # or under the given SHELL, protecting it from syntax errors.
 # Set as_run in order to assist _AS_LINENO_WORKS.
 m4_define([_AS_RUN],
-[m4_ifval([$2], [{ $as_echo "$as_bourne_compatible"$1 | as_run=a $2; }],
+[m4_ifval([$2], [as_run=a $2 -c "$as_bourne_compatible"$1],
 		[(eval $1)]) 2>/dev/null])
 
 
