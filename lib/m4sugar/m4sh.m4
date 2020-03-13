@@ -813,8 +813,11 @@ m4_defun_init([_AS_ECHO_LOG],
 # in a command substitution prints only the first character of the output
 # with ksh version M-11/16/88f on AIX 6.1; it needs to be reset by another
 # backquoted echo.
-m4_defun([_AS_ECHO_N_PREPARE],
-[ECHO_C= ECHO_N= ECHO_T=
+m4_defun([_AS_ECHO_N_PREPARE], [
+# Determine whether it's possible to make 'echo' print without a newline.
+# These variables are no longer used directly by Autoconf, but are AC_SUBSTed
+# for compatibility with existing Makefiles.
+ECHO_C= ECHO_N= ECHO_T=
 case `echo -n x` in @%:@(((((
 -n*)
   case `echo 'xy\c'` in
@@ -826,6 +829,13 @@ case `echo -n x` in @%:@(((((
 *)
   ECHO_N='-n';;
 esac
+
+# For backward compatibility with old third-party macros, we provide
+# the shell variables $as_echo and $as_echo_n.  New code should use
+# AS_ECHO(["message"]) and AS_ECHO_N(["message"]), respectively.
+dnl The @&t@ prevents a spurious deprecation diagnostic.
+as_@&t@echo='printf %s\n'
+as_@&t@echo_n='printf %s'
 ])# _AS_ECHO_N_PREPARE
 
 
@@ -1032,15 +1042,25 @@ fi
 # Output WORD followed by a newline.  WORD must be a single shell word
 # (typically a quoted string).  The bytes of WORD are output as-is, even
 # if it starts with "-" or contains "\".
-m4_defun([AS_ECHO],
+m4_define([AS_ECHO],
 [printf "%s\n" $1])
+
+# Deprecation warning for the former internal shell variable $as_echo.
+m4_define([as_echo],
+[m4_warn([obsolete],
+   [$as_echo is obsolete; use AS_ECHO(["message"]) instead])as_@&t@echo])
 
 
 # AS_ECHO_N(WORD)
 # ---------------
 # Like AS_ECHO(WORD), except do not output the trailing newline.
-m4_defun([AS_ECHO_N],
+m4_define([AS_ECHO_N],
 [printf %s $1])
+
+# Deprecation warning for the former internal shell variable $as_echo_n.
+m4_define([as_echo_n],
+[m4_warn([obsolete],
+   [$as_echo_n is obsolete; use AS_ECHO_N(["message"]) instead])as_@&t@echo_n])
 
 
 # AS_TEST_X

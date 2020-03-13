@@ -557,6 +557,80 @@ AT_CHECK([$CONFIG_SHELL ./script])
 
 AT_CLEANUP
 
+# Obsolete shell variables with the same functionality as above.
+AT_SETUP([obsolete $as@&t@_echo and $as@&t@_echo_n])
+AT_KEYWORDS([m4sh])
+
+AT_DATA_M4SH([script.as],
+[[AS_INIT
+AS_REQUIRE([_AS_ECHO_N_PREPARE])
+
+m4_define([ECHO_TEST],
+[echo=`$as_echo '$1'`
+test "X$echo" = 'X$1' ||
+  echo "\$as@&t@_echo '$1' outputs '$echo'" >&2
+
+echo=`$as_echo_n '$1'`
+test "X$echo" = 'X$1' ||
+  echo "\$as@&t@_echo_n '$1' outputs '$echo'" >&2])
+
+ECHO_TEST([-])
+ECHO_TEST([--])
+ECHO_TEST([---...---])
+ECHO_TEST([	 ])
+ECHO_TEST([-e])
+ECHO_TEST([-E])
+ECHO_TEST([-n])
+ECHO_TEST([-n -n])
+ECHO_TEST([-e -n])
+ECHO_TEST([ab\ncd])
+ECHO_TEST([abcd\c])
+ECHO_TEST([\a\b\c\f\n\r\t\v\"\])
+ECHO_TEST([ab
+cd
+e])
+ECHO_TEST([
+ ])
+ECHO_TEST([
+\c])
+AS_EXIT(0)
+]])
+
+AT_CHECK_M4SH([-Wobsolete], 0, [],
+[[script.as:13: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:13: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:14: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:14: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:15: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:15: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:16: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:16: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:17: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:17: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:18: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:18: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:19: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:19: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:20: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:20: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:21: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:21: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:22: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:22: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:23: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:23: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:24: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:24: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:25: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:25: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:28: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:28: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+script.as:30: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+script.as:30: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+]])
+AT_CHECK([$CONFIG_SHELL ./script])
+
+AT_CLEANUP
 
 
 ## ----------------- ##

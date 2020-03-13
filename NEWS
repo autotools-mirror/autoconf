@@ -17,8 +17,12 @@ GNU Autoconf NEWS - User visible changes.
    by autoreconf.
 
 ** Use of printf is now recommended instead of working around bugs in
-   echo.  Macros AS_ECHO and AS_ECHO_N now expand unconditionally to
+   echo.  The macros AS_ECHO and AS_ECHO_N now expand unconditionally to
    'printf "%s\n"' and 'printf %s'.
+
+** Use of the undocumented internal shell variables $as_echo and
+   $as_echo_n now elicits a warning in the 'obsolete' category.
+   The macros AS_ECHO and AS_ECHO_N should be used instead.
 
 ** AC_CHECK_HEADER and AC_CHECK_HEADERS now default to doing only a
    compilation test.  This completes the transition from preprocessor-
