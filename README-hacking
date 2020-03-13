@@ -81,6 +81,8 @@ generated files are regenerated using the tools just built by "make"
   $ ./configure
   $ make
   $ ( PATH=`pwd`/tests:$PATH; autoreconf -vi )
+  $ make distclean
+  $ ./configure
   $ make check
 
 At this point, there should be no difference between your local copy,
