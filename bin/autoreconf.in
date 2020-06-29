@@ -398,6 +398,7 @@ sub autoreconf_current_directory ()
 	     'AC_CONFIG_SUBDIRS',
 	     'AC_INIT',
 	     'AC_PROG_LIBTOOL',
+	     'AM_PROG_LIBTOOL',
 	     'LT_INIT',
 	     'LT_CONFIG_LTDL_DIR',
 	     'AM_GNU_GETTEXT',
@@ -412,6 +413,7 @@ sub autoreconf_current_directory ()
       $uses_autoconf = 1            if $macro eq "AC_INIT";
       $uses_gettext_via_traces = 1  if $macro eq "AM_GNU_GETTEXT";
       $uses_libtool = 1             if $macro eq "AC_PROG_LIBTOOL"
+                                       || $macro eq "AM_PROG_LIBTOOL"
                                        || $macro eq "LT_INIT";
       $uses_libltdl = 1             if $macro eq "LT_CONFIG_LTDL_DIR";
       $uses_autoheader = 1          if $macro eq "AC_CONFIG_HEADERS";
