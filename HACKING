@@ -104,8 +104,7 @@ should check the results before committing them in git.
 
 ** Set the version number
 Update the version number in NEWS (with version, date, and release
-type) and ChangeLog, and mention in README whether the release is
-stable.  Make sure all changes are committed, then run `git tag -s -m
+type).  Make sure all changes are committed, then run `git tag -s -m
 <version> -u <gpg_key> v<version>'.  Do not push anything upstream at
 this point.
 
