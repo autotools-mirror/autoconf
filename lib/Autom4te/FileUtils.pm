@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2017 Free Software Foundation, Inc.
+# Copyright (C) 2003-2020 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,10 +47,12 @@ use vars qw (@ISA @EXPORT);
 @ISA = qw (Exporter);
 @EXPORT = qw (&contents
 	      &find_file &mtime
-	      &update_file &up_to_date_p
+	      &update_file
 	      &xsystem &xsystem_hint &xqx
 	      &dir_has_case_matching_file &reset_dir_cache
 	      &set_dir_cache_file);
+
+=over 4
 
 =item C<find_file ($file_name, @include)>
 
@@ -161,48 +163,21 @@ sub update_file ($$;$)
       return
     }
 
-  my $exists = (-f "$to");
-  if ($exists)
+  if (-f "$to")
     {
-      # Back up any existing destination.
+      # Back up and install the new one.
       move ("$to",  "$to$SIMPLE_BACKUP_SUFFIX")
 	or fatal "cannot backup $to: $!";
+      move ("$from", "$to")
+	or fatal "cannot rename $from as $to: $!";
+      msg 'note', "'$to' is updated";
     }
-
-  # Do not use move ("$from", "$to"), as it truncates file timestamps.
-  rename ("$from", "$to")
-    or system ("mv", "$from", "$to") == 0
-    or fatal "cannot rename $from as $to: $!";
-
-  msg 'note', ($exists ? "'$to' is updated" : "'$to is created")
-}
-
-
-=item C<up_to_date_p ($file, @dep)>
-
-Is C<$file> more recent than C<@dep>?
-
-=cut
-
-# $BOOLEAN
-# &up_to_date_p ($FILE, @DEP)
-# ---------------------------
-sub up_to_date_p ($@)
-{
-  my ($file, @dep) = @_;
-  my $mtime = mtime ($file);
-
-  foreach my $dep (@dep)
+  else
     {
-      if ($mtime < mtime ($dep))
-	{
-	  verb "up_to_date ($file): outdated: $dep";
-	  return 0;
-	}
+      move ("$from", "$to")
+	or fatal "cannot rename $from as $to: $!";
+      msg 'note', "'$to' is created";
     }
-
-  verb "up_to_date ($file): up to date";
-  return 1;
 }
 
 
@@ -403,5 +378,7 @@ sub set_dir_cache_file ($$)
   $_directory_cache{$dirname}{$file_name} = 1
     if exists $_directory_cache{$dirname};
 }
+
+=back
 
 1; # for require
