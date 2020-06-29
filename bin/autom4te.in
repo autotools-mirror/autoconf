@@ -888,17 +888,26 @@ sub up_to_date ($)
 
   # The youngest of the cache files must be older than the oldest of
   # the dependencies.
+  # FIXME: These timestamps have only 1-second resolution.
+  # Time::HiRes fixes this, but assumes Perl 5.8 or later.
   my $tmtime = mtime ($tfile);
   my $omtime = mtime ($ofile);
   my ($file, $mtime) = ($tmtime < $omtime
 			? ($ofile, $omtime) : ($tfile, $tmtime));
 
-  # We depend at least upon the arguments.
-  my @dep = @ARGV;
-
   # stdin is always out of date.
-  if (grep { $_ eq '-' } @dep)
+  if (grep { $_ eq '-' } @ARGV)
     { return 0 }
+
+  # We depend at least upon the arguments.
+  foreach my $dep (@ARGV)
+    {
+      if ($mtime < mtime ($dep))
+	{
+	  verb "up_to_date ($file): outdated: $dep";
+	  return 0;
+	}
+    }
 
   # Files may include others.  We can use traces since we just checked
   # if they are available.
@@ -909,18 +918,22 @@ sub up_to_date ($)
   while ($_ = $deps->getline)
     {
       chomp;
-      my $file = find_file ("$_?", @include);
+      my $dep = find_file ("$_?", @include);
       # If a file which used to be included is no longer there, then
       # don't say it's missing (it might no longer be included).  But
       # of course, that causes the output to be outdated (as if the
       # timestamp of that missing file was newer).
       return 0
-	if ! $file;
-      push @dep, $file;
+	if ! $dep;
+      if ($mtime < mtime ($dep))
+	{
+	  verb "up_to_date ($file): outdated: $dep";
+	  return 0;
+	}
     }
 
-  # If $FILE is younger than one of its dependencies, it is outdated.
-  return up_to_date_p ($file, @dep);
+  verb "up_to_date ($file): up to date";
+  return 1;
 }
 
 
