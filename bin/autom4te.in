@@ -996,7 +996,8 @@ $icache_file->lock (LOCK_EX)
 # If autom4te is younger, then some structures such as C4che might
 # have changed, which would corrupt its processing.
 Autom4te::C4che->load ($icache_file)
-  if -f $icache && mtime ($icache) > mtime ($0);
+  if (-f $icache && mtime ($icache) > mtime ($0)
+      && Autom4te::C4che->good_version ($icache_file, '@VERSION@'));
 
 # Add the new trace requests.
 my $req = Autom4te::C4che->request ('input' => \@ARGV,
@@ -1061,7 +1062,7 @@ else
 
 # If we ran up to here, the cache is valid.
 $req->valid (1);
-Autom4te::C4che->save ($icache_file);
+Autom4te::C4che->save ($icache_file, '@VERSION@');
 
 exit $exit_code;
 
