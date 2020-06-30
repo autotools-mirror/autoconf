@@ -39,6 +39,22 @@ GNU Autoconf NEWS - User visible changes.
    account.  This makes it possible to use AC_DEFINE for secondary
    headers without duplicating the template in the main config header.
 
+** Macros that take whitespace-separated lists as arguments
+   now always expand macros within those arguments.  (Formerly, these
+   macros would *usually* expand those arguments, but the behavior was
+   not reliable nor was it consistent between autoconf and autoheader.)
+
+   Macro expansion within these arguments is deprecated; if expansion
+   changes the list, a warning in the 'obsolete' category will be
+   emitted.  Note that 'dnl' is a macro.  Putting 'dnl' comments
+   inside any argument to an Autoconf macro is, in general, only
+   supported when that argument takes more Autoconf code (e.g. the
+   ACTION-IF-TRUE argument to AC_COMPILE_IFELSE).
+
+   The affected macros are AC_CHECK_FILES, AC_CHECK_FUNCS,
+   AC_CHECK_FUNCS_ONCE, AC_CHECK_HEADERS, AC_CHECK_HEADERS_ONCE,
+   AC_CONFIG_MACRO_DIRS, AC_CONFIG_SUBDIRS, and AC_REPLACE_FUNCS.
+
 ** Macros
 
 - New macro AC_C__GENERIC.

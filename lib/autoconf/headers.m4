@@ -173,6 +173,37 @@ m4_define([_AH_CHECK_HEADER],
 m4_define([AH_CHECK_HEADERS],
 [m4_foreach_w([AC_Header], [$1], [_AH_CHECK_HEADER(m4_defn([AC_Header]))])])
 
+# _AC_CHECK_HEADERS_ONE_U(HEADER-FILE)
+# -------------------------------
+# Perform the actions that need to be performed unconditionally
+# for every HEADER-FILE that *could* be checked for by AC_CHECK_HEADERS.
+m4_define([_AC_CHECK_HEADERS_ONE_U],
+[AS_LITERAL_WORD_IF([$1],
+  [_AH_CHECK_HEADER([$1])],
+  [AC_DIAGNOSE([syntax], [AC_CHECK_HEADERS($1): you should use literals])])])
+
+# _AC_CHECK_HEADERS_ONE_S(HEADER-FILE, [INCLUDES])
+# -------------------------------
+# If HEADER-FILE exists, define HAVE_HEADER_FILE.  HEADER-FILE must be literal.
+# Used by AC_CHECK_HEADERS for its simplest case, when its HEADER-FILE list
+# is fully literal and no optional actions were supplied.
+# INCLUDES is as for AC_CHECK_HEADER.
+m4_define([_AC_CHECK_HEADERS_ONE_S],
+[_AH_CHECK_HEADER([$1])]dnl
+[AC_CHECK_HEADER([$1],
+  [AC_DEFINE(AS_TR_CPP([HAVE_$1]))], [], [$2])])
+
+# _AC_CHECK_HEADERS_ONE_C(HEADER-FILE, [ACTION-IF-FOUND],
+#    [ACTION-IF-NOT-FOUND], [INCLUDES])
+# -------------------------------------------------------------------------
+# If HEADER-FILE exists, define HAVE_HEADER-FILE and execute ACTION-IF-FOUND.
+# Otherwise execute ACTION-IF-NOT-FOUND.  HEADER-FILE can be a shell variable.
+# Used by AC_CHECK_HEADERS for complex cases.
+# INCLUDES is as for AC_CHECK_HEADER.
+m4_define([_AC_CHECK_HEADERS_ONE_C],
+[AC_CHECK_HEADER([$1],
+  [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]$1)) $2],
+  [$3], [$4])])
 
 # AC_CHECK_HEADERS(HEADER-FILE...,
 #		   [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND],
@@ -184,17 +215,14 @@ m4_define([AH_CHECK_HEADERS],
 # preprocessor definition HAVE_HEADER_FILE available for each found
 # header.  Either ACTION may include `break' to stop the search.
 AC_DEFUN([AC_CHECK_HEADERS],
-[m4_map_args_w([$1], [_AH_CHECK_HEADER(], [)])]dnl
-[m4_if([$2$3]AS_LITERAL_IF([$1], [[yes]], [[no]]), [yes],
-       [m4_map_args_w([$1], [_$0(], [, [], [], [$4])])],
-       [AS_FOR([AC_header], [ac_header], [$1], [_$0(AC_header, [$2], [$3], [$4])])])dnl
-])# AC_CHECK_HEADERS
+[_$0(m4_validate_w([$1]), [$2], [$3], [$4])])
 
 m4_define([_AC_CHECK_HEADERS],
-[AC_CHECK_HEADER([$1],
-		 [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]$1)) $2],
-		 [$3], [$4])dnl
-])
+[m4_if([$2$3]AS_LITERAL_IF([$1], [[yes]], [[no]]), [yes],
+       [m4_map_args_w([$1], [_AC_CHECK_HEADERS_ONE_S(], [, [$4])])],
+       [m4_map_args_w([$1], [_AC_CHECK_HEADERS_ONE_U(], [)])]dnl
+       [AS_FOR([AC_header], [ac_header], [$1],
+               [_AC_CHECK_HEADERS_ONE_C(AC_header, [$2], [$3], [$4])])])])
 
 
 # _AC_CHECK_HEADER_ONCE(HEADER-FILE)
@@ -217,10 +245,8 @@ m4_define([_AC_CHECK_HEADER_ONCE],
 # and vice versa.
 AC_DEFUN([AC_CHECK_HEADERS_ONCE],
   [AC_REQUIRE([AC_CHECK_INCLUDES_DEFAULT])]dnl
-  [_AC_CHECK_HEADERS_ONCE([$1])])
+  [m4_map_args_w(m4_validate_w([$1]), [_AC_CHECK_HEADER_ONCE(], [)])])
 
-AC_DEFUN([_AC_CHECK_HEADERS_ONCE],
-  [m4_map_args_w([$1], [_AC_CHECK_HEADER_ONCE(], [)])])
 
 # _AC_HEADERS_EXPANSION(LANG)
 # ---------------------------
@@ -289,8 +315,9 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 ])]dnl
-[_AC_CHECK_HEADERS_ONCE(
-  [sys/types.h sys/stat.h strings.h inttypes.h stdint.h unistd.h])]dnl
+[m4_map_args([_AC_CHECK_HEADER_ONCE],
+  [sys/types.h], [sys/stat.h], [strings.h],
+  [inttypes.h], [stdint.h], [unistd.h])]dnl
 dnl For backward compatibility, provide unconditional AC_DEFINEs of
 dnl HAVE_STDLIB_H, HAVE_STRING_H, and STDC_HEADERS.
 [AC_DEFINE([HAVE_STDLIB_H], [1],

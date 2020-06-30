@@ -1791,7 +1791,8 @@ m4_define([_AC_CONFIG_MACRO_DIRS],
 # If no directory has been traced yet, then this macro also triggers
 # a trace of AC_CONFIG_MACRO_DIR on the first directory.
 AC_DEFUN([AC_CONFIG_MACRO_DIRS],
-[m4_map_args_w([$1], [_$0(_$0_USED()[$0], ], [)])])
+[m4_map_args_w(m4_validate_w([$1]),
+  [_$0(_$0_USED()[$0], ], [)])])
 
 # AC_CONFIG_MACRO_DIR(DIR)
 # ------------------------
@@ -2879,7 +2880,8 @@ m4_define([_AC_CHECK_FILES],
 # ACTION-IF-FOUND or ACTION-IF-NOT-FOUND.  For files that exist, also
 # provide the preprocessor variable HAVE_FILE.
 AC_DEFUN([AC_CHECK_FILES],
-[m4_map_args_w([$1], [AC_CHECK_FILE(_$0(], [)[$2], [$3])])])
+[m4_map_args_w(m4_validate_w([$1]),
+  [AC_CHECK_FILE(_$0(], [)[$2], [$3])])])
 
 
 ## ------------------------------- ##

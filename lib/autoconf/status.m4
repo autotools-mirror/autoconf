@@ -1096,15 +1096,18 @@ m4_define([AC_OUTPUT_COMMANDS_POST])
 #   included, if for instance the user refused a part of the tree.
 #   This is used in _AC_OUTPUT_SUBDIRS.
 AC_DEFUN([AC_CONFIG_SUBDIRS],
+[_$0(m4_validate_w([$1]))])
+
+m4_define([_AC_CONFIG_SUBDIRS],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])]dnl
 [AC_REQUIRE([AC_DISABLE_OPTION_CHECKING])]dnl
+[AS_LITERAL_IF([$1], [],
+	       [AC_DIAGNOSE([syntax], [$0: you should use literals])])]dnl
 [m4_map_args_w([$1], [_AC_CONFIG_UNIQUE([SUBDIRS],
   _AC_CONFIG_COMPUTE_DEST(], [))])]dnl
 [m4_append([_AC_LIST_SUBDIRS], [$1], [
 ])]dnl
-[AS_LITERAL_IF([$1], [],
-	       [AC_DIAGNOSE([syntax], [$0: you should use literals])])]dnl
-[AC_SUBST([subdirs], ["$subdirs m4_normalize([$1])"])])
+[AC_SUBST([subdirs], ["$subdirs $1"])])
 
 
 # _AC_OUTPUT_SUBDIRS

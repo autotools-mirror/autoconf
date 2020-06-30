@@ -78,6 +78,34 @@ m4_define([_AH_CHECK_FUNC],
 [AH_TEMPLATE(AS_TR_CPP([HAVE_$1]),
   [Define to 1 if you have the `$1' function.])])
 
+# _AC_CHECK_FUNCS_ONE_U(FUNCTION)
+# -------------------------------
+# Perform the actions that need to be performed unconditionally
+# for every FUNCTION that *could* be checked for by AC_CHECK_FUNCS.
+m4_define([_AC_CHECK_FUNCS_ONE_U],
+[AS_LITERAL_WORD_IF([$1],
+  [_AH_CHECK_FUNC([$1])],
+  [AC_DIAGNOSE([syntax], [AC_CHECK_FUNCS($1): you should use literals])])])
+
+# _AC_CHECK_FUNCS_ONE_S(FUNCTION)
+# -------------------------------
+# If FUNCTION exists, define HAVE_FUNCTION.  FUNCTION must be literal.
+# Used by AC_CHECK_FUNCS for its simplest case, when its FUNCTION list
+# is fully literal and no optional actions were supplied.
+m4_define([_AC_CHECK_FUNCS_ONE_S],
+[_AH_CHECK_FUNC([$1])]dnl
+[AC_CHECK_FUNC([$1],
+  [AC_DEFINE(AS_TR_CPP([HAVE_$1]))])])
+
+# _AC_CHECK_FUNCS_ONE_C(FUNCTION, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+# -------------------------------------------------------------------------
+# If FUNCTION exists, define HAVE_FUNCTION and execute ACTION-IF-FOUND.
+# Otherwise execute ACTION-IF-NOT-FOUND.  FUNCTION can be a shell variable.
+# Used by AC_CHECK_FUNCS for complex cases.
+m4_define([_AC_CHECK_FUNCS_ONE_C],
+[AC_CHECK_FUNC([$1],
+  [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]$1)) $2],
+  [$3])])
 
 # AC_CHECK_FUNCS(FUNCTION..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ---------------------------------------------------------------------
@@ -87,17 +115,14 @@ m4_define([_AH_CHECK_FUNC],
 # available for each found function.  Either ACTION may include
 # `break' to stop the search.
 AC_DEFUN([AC_CHECK_FUNCS],
-[m4_map_args_w([$1], [_AH_CHECK_FUNC(], [)])]dnl
-[m4_if([$2$3]AS_LITERAL_IF([$1], [[yes]], [[no]]), [yes],
-       [m4_map_args_w([$1], [_$0(], [)])],
-       [AS_FOR([AC_func], [ac_func], [$1], [_$0(AC_func, [$2], [$3])])])dnl
-])# AC_CHECK_FUNCS
+[_$0(m4_validate_w([$1]), [$2], [$3])])
 
 m4_define([_AC_CHECK_FUNCS],
-[AC_CHECK_FUNC([$1],
-	       [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]$1)) $2],
-	       [$3])dnl
-])
+[m4_if([$2$3]AS_LITERAL_IF([$1], [[yes]], [[no]]), [yes],
+  [m4_map_args_w([$1], [_AC_CHECK_FUNCS_ONE_S(], [)])],
+  [m4_map_args_w([$1], [_AC_CHECK_FUNCS_ONE_U(], [)])]
+  [AS_FOR([AC_func], [ac_func], [$1],
+    [_AC_CHECK_FUNCS_ONE_C(AC_func, [$2], [$3])])])])
 
 
 # _AC_CHECK_FUNC_ONCE(FUNCTION)
@@ -114,7 +139,7 @@ m4_define([_AC_CHECK_FUNC_ONCE],
 # Add each whitespace-separated name in FUNCTION to the list of functions
 # to check once.
 AC_DEFUN([AC_CHECK_FUNCS_ONCE],
-[m4_map_args_w([$1], [_AC_CHECK_FUNC_ONCE(], [)])])
+[m4_map_args_w(m4_validate_w([$1]), [_AC_CHECK_FUNC_ONCE(], [)])])
 
 # _AC_FUNCS_EXPANSION(LANG)
 # -------------------------
@@ -177,7 +202,7 @@ m4_define([_AC_REPLACE_FUNC_NL],
 # equivalent of AC_CHECK_FUNC, then call AC_LIBOBJ if the function
 # was not found.
 AC_DEFUN([AC_REPLACE_FUNCS],
-[_$0(m4_flatten([$1]))])
+[_$0(m4_validate_w([$1]))])
 
 m4_define([_AC_REPLACE_FUNCS],
 [AS_LITERAL_IF([$1],
