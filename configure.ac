@@ -35,9 +35,9 @@ AC_SUBST([RELEASE_YEAR])
 
 AB_INIT
 
-# We use '/bin/sh -n script' to check that there are no syntax errors
-# in the scripts.  Although incredible, there are /bin/sh that go into
-# endless loops with '-n', e.g., SunOS's:
+# We use 'sh -n script' to check that there are no syntax errors
+# in the scripts.  Although incredible, there are sh implementations
+# that go into endless loops with '-n', e.g., SunOS's:
 #
 #   $ uname -a
 #   SunOS ondine 4.1.3 2 sun4m unknown
@@ -52,27 +52,38 @@ AB_INIT
 #   $ time sh -nx endless.sh
 #   ^Csh -nx endless.sh  3,67s user 0,03s system 63% cpu 5,868 total
 #
-# Also, some implementations of /bin/sh (e.g., Solaris 8) are soooo slow
+# Also, some implementations (e.g., Solaris 8) are soooo slow
 # that they are unusable on large scripts like our testsuite.
+#
+# So we must identify a shell whose -n can safely be used.
 
-# So before using '/bin/sh -n' to check our scripts, we first check
-# that '/bin/sh -n' is known to not have these problems.
-
-AC_CACHE_CHECK([whether /bin/sh -n is known to work], [ac_cv_sh_n_works],
-[if (
+AC_CACHE_CHECK([for a shell whose -n mode is known to work],
+               [ac_cv_sh_working_n],
+[ac_cv_sh_working_n=none
+# Start by trying the shell that autoconf decided to use for this script,
+# follow with a hardwired list of shells that are known to work and can
+# be identified as such, starting with the ones with the fewest
+# syntactic extensions.  Unfortunately, several shells that are also
+# known to work can't be easily identified (e.g. BSD sh, dash).
+# Try ksh93, which is often buggy, and plain ksh and sh last.
+for cand_sh in "$SHELL" pdksh bash zsh ksh93 ksh sh
+do
+  if (
     unset BASH_VERSION ZSH_VERSION
-    /bin/sh -c '
+    "$cand_sh" -c '
       test ${BASH_VERSION+y} || # Bash
       test ${KSH_VERSION+y} || # pdksh
       test ${ZSH_VERSION+y} || # zsh
       test -n "${.sh.version}" # ksh93; put this last since its syntax is dodgy
     '
   ) 2>/dev/null
-then ac_cv_sh_n_works=yes
-else ac_cv_sh_n_works=no
-fi
+  then
+    ac_cv_sh_working_n="$cand_sh"
+    break
+  fi
+done
 ])
-AC_SUBST([ac_cv_sh_n_works])
+AC_SUBST([SHELL_N], [$ac_cv_sh_working_n])
 
 AC_MSG_CHECKING([for characters that cannot appear in file names])
 AC_CACHE_VAL([ac_cv_unsupported_fs_chars],

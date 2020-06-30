@@ -50,8 +50,8 @@ AT_CHECK([$at_diff "$1" "$2"])
 # otherwise, do nothing.  ksh93 -n also spits outs loads of warnings
 # about older constructs, but we don't care about the warnings.
 m4_define([AT_CHECK_SHELL_SYNTAX],
-[AT_SKIP_IF([test "$ac_cv_sh_n_works" != yes])
-AT_CHECK([/bin/sh -n $1], [], [], [ignore])])
+[AT_SKIP_IF([test "$SHELL_N" = none])
+AT_CHECK(["$SHELL_N" -n $1], [], [], [ignore])])
 
 m4_define([AT_CHECK_PERL_SYNTAX],
 [AT_CHECK([autom4te_perllibdir=$abs_top_srcdir/lib $PERL -c "$abs_top_builddir"/bin/$1],
@@ -216,7 +216,7 @@ cp "$abs_top_srcdir/tests/statesave.m4" aclocal.m4
 # were running too fast.
 m4_define([AT_CHECK_AUTOCONF],
 [AT_CHECK_M4([autoconf --force $1], [$2], [$3], [$4])
-if test -s configure && test "$ac_cv_sh_n_works" = yes; then
+if test -s configure && test "$SHELL_N" != none; then
   AT_CHECK_SHELL_SYNTAX([configure])
 fi
 ])

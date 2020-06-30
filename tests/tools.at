@@ -45,7 +45,7 @@ AT_BANNER([Executables (autoheader, autoupdate...).])
 
 AT_SETUP([Syntax of the shell scripts])
 
-AT_CHECK([test "$ac_cv_sh_n_works" = yes || exit 77])
+AT_CHECK([test "$SHELL_N" != none || exit 77])
 
 # Specify the absolute name of the tool, as some shells don't honor PATH when
 # running `sh PROG'.
