@@ -271,7 +271,7 @@ AT_DATA([expout.in],[m4_set_dump([ah_expected_tmpls],[
 ])
 ])
 AT_CHECK([sort -o expout expout.in])
-AT_CHECK([[sed -ne 's/^[ 	]*#[ 	]*undef[ 	][ 	]*//p' \
+AT_CHECK([[sed -ne 's/^[	 ]*#[	 ]*undef[	 ][	 ]*//p' \
            $config_h_in | sort]],
   [0], [expout], [])
 AS_UNSET([config_h_in])
