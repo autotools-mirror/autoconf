@@ -141,14 +141,35 @@ do
 done])])
 
 
-# _AC_REPLACE_FUNC(FUNCTION)
-# --------------------------
+# _AC_REPLACE_FUNC_U(FUNCTION)
+# ----------------------------
+# Perform the actions that need to be performed unconditionally
+# for every FUNCTION that *could* be replaced by AC_REPLACE_FUNCS.
+m4_define([_AC_REPLACE_FUNC_U],
+[AS_LITERAL_WORD_IF([$1],
+  [_AH_CHECK_FUNC([$1])AC_LIBSOURCE([$1.c])],
+  [AC_DIAGNOSE([syntax], [AC_REPLACE_FUNCS($1): you should use literals])])])
+
+# _AC_REPLACE_FUNC_L(FUNCTION)
+# ----------------------------
 # If FUNCTION exists, define HAVE_FUNCTION; else add FUNCTION.c
 # to the list of library objects.  FUNCTION must be literal.
-m4_define([_AC_REPLACE_FUNC],
+m4_define([_AC_REPLACE_FUNC_L],
+[_AC_REPLACE_FUNC_U([$1])]dnl
 [AC_CHECK_FUNC([$1],
-  [_AH_CHECK_FUNC([$1])AC_DEFINE(AS_TR_CPP([HAVE_$1]))],
-  [_AC_LIBOBJ([$1])AC_LIBSOURCE([$1.c])])])
+  [AC_DEFINE(AS_TR_CPP([HAVE_$1]))],
+  [_AC_LIBOBJ([$1])])])
+
+# _AC_REPLACE_FUNC_NL(FUNCTION)
+# -----------------------------
+# If FUNCTION exists, define HAVE_FUNCTION; else add FUNCTION.c
+# to the list of library objects.  FUNCTION can be a shell variable.
+# (Because of this, neither _AH_CHECK_FUNC nor AC_LIBSOURCE is invoked
+# for FUNCTION.)
+m4_define([_AC_REPLACE_FUNC_NL],
+[AC_CHECK_FUNC([$1],
+               [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_]$1))],
+               [_AC_LIBOBJ([$1])])])
 
 # AC_REPLACE_FUNCS(FUNCTION...)
 # -----------------------------
@@ -160,11 +181,9 @@ AC_DEFUN([AC_REPLACE_FUNCS],
 
 m4_define([_AC_REPLACE_FUNCS],
 [AS_LITERAL_IF([$1],
-[m4_map_args_w([$1], [_AC_REPLACE_FUNC(], [)
-])],
-[AC_CHECK_FUNCS([$1],
-  [_AH_CHECK_FUNC([$ac_func])],
-  [_AC_LIBOBJ([$ac_func])])])])
+  [m4_map_args_w([$1], [_AC_REPLACE_FUNC_L(], [)])],
+  [m4_map_args_w([$1], [_AC_REPLACE_FUNC_U(], [)])]dnl
+  [AS_FOR([AC_func], [ac_func], [$1], [_AC_REPLACE_FUNC_NL(AC_func)])])])
 
 
 # AC_TRY_LINK_FUNC(FUNC, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)

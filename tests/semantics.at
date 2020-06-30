@@ -183,32 +183,54 @@ AT_DATA([config.in],
 [@LIBOBJS@
 ])
 
+# AC_REPLACE_FUNCS has an AS_LITERAL_IF optimization; test both paths.
+# Manual invocation of AH_TEMPLATE should only be necessary for functions
+# whose names are hidden inside a shell variable at m4 expansion time.
 AT_CONFIGURE_AC(
-[AC_CONFIG_FILES([config.libobjs:config.in])
-AC_REPLACE_FUNCS([printf \
-autoconf_ftnirp])
-funcs='fprintf fopen autoconf_ftnirpf'
-AH_TEMPLATE([HAVE_FOPEN], [])
+[[AC_CONFIG_FILES([config.libobjs:config.in])
+AC_REPLACE_FUNCS([printf autoconf_ftnirp])
+funcs='fprintf autoconf_ftnirpf'
 AH_TEMPLATE([HAVE_FPRINTF], [])
 AH_TEMPLATE([HAVE_AUTOCONF_FTNIRPF], [])
 AC_REPLACE_FUNCS([\
-$funcs])
-AS_UNSET([funcs])])
+$funcs \
+fopen \
+autoconf_nepof])
+AS@&t@_UNSET([funcs])]])
 
-AT_CHECK_AUTOCONF([-W obsolete])
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOCONF([], [], [],
+[[configure.ac:9: warning: AC_REPLACE_FUNCS($funcs): you should use literals
+functions.m4: AC_REPLACE_FUNCS is expanded from...
+configure.ac:9: the top level
+]])
+AT_CHECK_AUTOHEADER([], [
+  HAVE_AUTOCONF_FTNIRP
+  HAVE_AUTOCONF_FTNIRPF
+  HAVE_AUTOCONF_NEPOF
+  HAVE_FOPEN
+  HAVE_FPRINTF
+  HAVE_PRINTF
+], [], [],
+[[configure.ac:9: warning: AC_REPLACE_FUNCS($funcs): you should use literals
+functions.m4: AC_REPLACE_FUNCS is expanded from...
+configure.ac:9: the top level
+]])
 AT_CHECK_CONFIGURE
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_FTNIRP */
 /* #undef HAVE_AUTOCONF_FTNIRPF */
+/* #undef HAVE_AUTOCONF_NEPOF */
 #define HAVE_FOPEN 1
 #define HAVE_FPRINTF 1
 #define HAVE_PRINTF 1
 ])
 
-AT_CHECK([sed 's/  */ /g;s/^ //;s/ $//' config.libobjs], [],
-	 [${LIBOBJDIR}autoconf_ftnirp$U.o ${LIBOBJDIR}autoconf_ftnirpf$U.o
+AT_CHECK([sed 's/  */ /g;s/^ //;s/ $//' config.libobjs | tr ' ' '
+' | sort], [],
+[${LIBOBJDIR}autoconf_ftnirp$U.o
+${LIBOBJDIR}autoconf_ftnirpf$U.o
+${LIBOBJDIR}autoconf_nepof$U.o
 ])
 
 AT_CLEANUP
@@ -226,7 +248,19 @@ AT_DATA([autoconf_io.h],
 
 AT_CONFIGURE_AC([AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
 AT_CHECK_AUTOCONF([-W obsolete])
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [
+  HAVE_AUTOCONF_IO_H
+  HAVE_INTTYPES_H
+  HAVE_STDINT_H
+  HAVE_STDIO_H
+  HAVE_STDLIB_H
+  HAVE_STRINGS_H
+  HAVE_STRING_H
+  HAVE_SYS_STAT_H
+  HAVE_SYS_TYPES_H
+  HAVE_UNISTD_H
+  STDC_HEADERS
+])
 AT_CHECK_CONFIGURE([CPPFLAGS=-I.])
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
@@ -263,7 +297,7 @@ configure.ac:4: something passes the preprocessor but not the compiler,
 configure.ac:4: use AC_PREPROC_IFELSE.)
 configure.ac:4: the top level
 ])
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [HAVE_HEADER2_H])
 AT_CHECK_CONFIGURE([CPPFLAGS=-I.])
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
@@ -295,7 +329,10 @@ AT_CONFIGURE_AC(
 [AC_CHECK_HEADERS(header2.h header3.h, [], [], [[@%:@include "header1.h"]])])
 
 AT_CHECK_AUTOCONF([-W obsolete])
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [
+  HAVE_HEADER2_H
+  HAVE_HEADER3_H
+])
 AT_CHECK_CONFIGURE([CPPFLAGS=-I.])
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
@@ -602,7 +639,19 @@ _AT_CHECK_AC_MACRO(
 # containing "WORDS_BIGENDIAN".
 AT_CONFIGURE_AC([[AC_C_BIGENDIAN]])
 # --force is necessary, the computer might be too fast.
-AT_CHECK_AUTOHEADER([--force])
+AT_CHECK_AUTOHEADER([--force], [
+  AC_APPLE_UNIVERSAL_BUILD
+  HAVE_INTTYPES_H
+  HAVE_STDINT_H
+  HAVE_STDLIB_H
+  HAVE_STRINGS_H
+  HAVE_STRING_H
+  HAVE_SYS_STAT_H
+  HAVE_SYS_TYPES_H
+  HAVE_UNISTD_H
+  STDC_HEADERS
+  WORDS_BIGENDIAN
+])
 AT_CHECK([grep WORDS_BIGENDIAN config.hin], [], [ignore])
 
 AT_CLEANUP

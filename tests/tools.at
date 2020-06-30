@@ -708,7 +708,7 @@ AC_CONFIG_HEADERS(config.h:config.hin)
 AC_DEFINE(this, "whatever you want.")
 ]])
 
-AT_CHECK_AUTOHEADER([], [], [], [ignore])
+AT_CHECK_AUTOHEADER([], [this], [0], [], [ignore])
 AT_CHECK([cat config.hin], 0,
 [[/* config.hin.  Generated from configure.ac by autoheader.  */
 /* Define this to whatever you want. */
@@ -743,7 +743,7 @@ AC_DEFINE(that, "whatever you want.")
 
 # The test suite goes too fast for the cache timestamps...
 # Pass --force.
-AT_CHECK_AUTOHEADER([--force], [1], [], [ignore])
+AT_CHECK_AUTOHEADER([--force], [], [1], [], [ignore])
 
 
 # 3. Check TOP and BOTTOM.
@@ -776,7 +776,7 @@ AC_DEFINE([ANT], [@], [The Ant in a h@t.])
 # together.
 # Ignore STDERR which is the longish complaint against autoheader junk
 # files.
-AT_CHECK_AUTOHEADER([--force], [], [], [ignore])
+AT_CHECK_AUTOHEADER([--force], [ANT], [], [], [ignore])
 AT_CHECK([cat config.hin], 0,
 [[/* config.hin.  Generated from configure.ac by autoheader.  */
 /* Top from acconfig.h. */
@@ -839,7 +839,7 @@ AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [OPENSESAME SIMSALABIM])
 AT_CHECK([grep -c SIMSALABIM configure config.h.in], [0],
 [[configure:1
 config.h.in:1
@@ -877,7 +877,7 @@ AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [SEAN])
 AT_CHECK([grep HANNA configure], [0], [ignore], [ignore])
 AT_CHECK([grep HANNA config.h.in], [1], [ignore], [ignore])
 AT_CHECK([grep SEAN configure], [0], [ignore], [ignore])

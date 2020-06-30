@@ -237,7 +237,12 @@ int main(int argc, char *argv[])
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [
+  F77_DUMMY_MAIN
+  F77_FUNC
+  F77_FUNC_
+  FC_DUMMY_MAIN_EQ_F77
+])
 AT_CHECK_CONFIGURE
 : "${MAKE=make}"
 AT_CHECK([$MAKE], [], [ignore], [ignore])
@@ -315,7 +320,12 @@ int main (int argc, char *argv[])
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [
+  FC_DUMMY_MAIN
+  FC_DUMMY_MAIN_EQ_F77
+  FC_FUNC
+  FC_FUNC_
+])
 AT_CHECK_CONFIGURE
 : "${MAKE=make}"
 AT_CHECK([$MAKE], [], [ignore], [ignore])
@@ -391,7 +401,13 @@ int F77_MAIN (int argc, char *argv[])
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [
+  F77_DUMMY_MAIN
+  F77_FUNC
+  F77_FUNC_
+  F77_MAIN
+  FC_DUMMY_MAIN_EQ_F77
+])
 AT_CHECK_CONFIGURE
 : "${MAKE=make}"
 AT_CHECK([$MAKE], [], [ignore], [ignore])
@@ -470,7 +486,13 @@ int FC_MAIN (int argc, char *argv[])
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [
+  FC_DUMMY_MAIN
+  FC_DUMMY_MAIN_EQ_F77
+  FC_FUNC
+  FC_FUNC_
+  FC_MAIN
+])
 AT_CHECK_CONFIGURE
 : "${MAKE=make}"
 AT_CHECK([$MAKE], [], [ignore], [ignore])
@@ -547,7 +569,10 @@ int main(int argc, char *argv[])
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [
+  F77_DUMMY_MAIN
+  FC_DUMMY_MAIN_EQ_F77
+])
 AT_CHECK_CONFIGURE
 : "${MAKE=make}"
 AT_CHECK([$MAKE], [], [ignore], [ignore])
@@ -621,7 +646,10 @@ int main(int argc, char *argv[])
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [
+  FC_DUMMY_MAIN
+  FC_DUMMY_MAIN_EQ_F77
+])
 AT_CHECK_CONFIGURE
 : "${MAKE=make}"
 AT_CHECK([$MAKE], [], [ignore], [ignore])

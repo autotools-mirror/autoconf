@@ -716,7 +716,9 @@ AC_OUTPUT
 ]])# configure.ac
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([],
+  m4_for(AT_Count, 1, 100, 1, [ AT_DUMMY_VAR(AT_Count)]))
+
 # Check both awk and the result of AC_PROG_AWK.
 # Quote the first word in the for list for Solaris sh.
 for awk_arg in "FOO=" AWK=awk; do
@@ -864,7 +866,7 @@ AC_DEFINE([fooq], ]m4_for([n], 1, 100,, ....................)[, [desc])
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([], [foo fooq])
 AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([@%:@define foo m4_for([n], 1, 100,, ....................)
 @%:@define fooq m4_for([n], 1, 100,, ....................)
@@ -946,7 +948,8 @@ AC_PROG_AWK
 AC_CONFIG_FILES([Foo Zardoz])]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([],
+   [foo fooq bar barq unq1 unq2 unq2 unq3 unq4 unq5 unq6 unq7])
 # Check both awk and the result of AC_PROG_AWK
 # Quote the first word in the for list for Solaris sh.
 for awk_arg in "FOO=" AWK=awk; do
@@ -1038,7 +1041,7 @@ AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE: `one
 two' is not a valid preprocessor define value
 ]])
-AT_CHECK_AUTOHEADER([], [], [], [stderr])
+AT_CHECK_AUTOHEADER([], [foo], [], [], [stderr])
 AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE: `one
 two' is not a valid preprocessor define value
@@ -1055,7 +1058,7 @@ AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE_UNQUOTED: `one
 two' is not a valid preprocessor define value
 ]])
-AT_CHECK_AUTOHEADER([], [], [], [stderr])
+AT_CHECK_AUTOHEADER([], [foo], [], [], [stderr])
 AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE_UNQUOTED: `one
 two' is not a valid preprocessor define value
