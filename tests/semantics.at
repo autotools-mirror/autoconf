@@ -42,9 +42,13 @@ ac_sin=sin
 AC_CHECK_LIB(m, $ac_sin,,
       [AC_MSG_ERROR([cannot find `\$ac_sin' (= `$ac_sin') in `libm'])])
 
+AS_UNSET([ac_cv_lib_m_acos])
 ac_m=m
 AC_CHECK_LIB($ac_m, acos,,
       [AC_MSG_ERROR([cannot find `acos' in `\$ac_m' (= `$ac_m')])])
+if test "${ac_cv_lib_m_acos+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_m_acos not set])
+fi
 
 ac_asin=asin
 AC_CHECK_LIB($ac_m, $ac_asin,,
