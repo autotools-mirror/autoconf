@@ -2139,9 +2139,11 @@ m4_provide([AS_INIT])
 m4_pattern_forbid([^_?AS_])
 
 # Bangshe and minimal initialization.
+# Put only the basename of __file__ into HEADER-COMMENT, so that the
+# path to the source directory is not embedded in the output file.
 m4_divert_text([BINSH], [@%:@! /bin/sh])
 m4_divert_text([HEADER-COMMENT],
-	       [@%:@ Generated from __file__ by m4_PACKAGE_STRING.])
+	       [@%:@ Generated from m4_bpatsubst(__file__,[^.*/\([^/]*\)$],[[\1]]) by m4_PACKAGE_STRING.])
 m4_divert_text([M4SH-SANITIZE], [_AS_SHELL_SANITIZE])
 m4_divert_text([M4SH-INIT-FN], [m4_text_box([M4sh Shell Functions.])])
 

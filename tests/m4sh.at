@@ -1868,6 +1868,25 @@ cleanup 1
 AT_CLEANUP
 
 
+## -------------------------- ##
+## AS_INIT basename __file__. ##
+## -------------------------- ##
+
+AT_SETUP([AS@&t@_INIT basename __@&t@file__])
+AT_KEYWORDS([m4sh])
+
+AT_CHECK([mkdir sub || exit 77])
+AT_DATA_M4SH([sub/script.as], [[dnl
+AS_INIT
+]])
+AT_CHECK_AUTOM4TE([--language=m4sh sub/script.as -o script])
+AT_CHECK([grep '^# Generated from' script], [0], [dnl
+# Generated from script.as by ]m4_PACKAGE_STRING[.
+])
+
+AT_CLEANUP
+
+
 ## ------------------- ##
 ## AS_INIT_GENERATED.  ##
 ## ------------------- ##
