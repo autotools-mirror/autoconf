@@ -24,16 +24,6 @@ GNU Autoconf NEWS - User visible changes.
    $as_echo_n now elicits a warning in the 'obsolete' category.
    The macros AS_ECHO and AS_ECHO_N should be used instead.
 
-** AC_CHECK_HEADER and AC_CHECK_HEADERS now default to doing only a
-   compilation test.  This completes the transition from preprocessor-
-   based header tests begun in Autoconf 2.56.
-
-   The double test that was the default since Autoconf 2.64 is no
-   longer available.  You can still request a preprocessor-only test
-   by specifying '-' as the fourth argument to either macro, but this
-   is now deprecated.  If you really need that behavior use
-   AC_PREPROC_IFELSE.
-
 ** When checking for missing templates, autoheader now takes any
    templates defined in the inputs of secondary config headers into
    account.  This makes it possible to use AC_DEFINE for secondary
@@ -54,6 +44,9 @@ GNU Autoconf NEWS - User visible changes.
    The affected macros are AC_CHECK_FILES, AC_CHECK_FUNCS,
    AC_CHECK_FUNCS_ONCE, AC_CHECK_HEADERS, AC_CHECK_HEADERS_ONCE,
    AC_CONFIG_MACRO_DIRS, AC_CONFIG_SUBDIRS, and AC_REPLACE_FUNCS.
+
+** Man pages for config.guess and config.sub are no longer provided.
+   They were moved to the master source tree for config.guess and config.sub.
 
 ** Macros
 
@@ -108,6 +101,16 @@ GNU Autoconf NEWS - User visible changes.
 - AT_TESTED arguments can use variable or command substitutions, including
   in particular $EXEEXT
 
+- AC_CHECK_HEADER and AC_CHECK_HEADERS now default to doing only a
+  compilation test.  This completes the transition from preprocessor-
+  based header tests begun in Autoconf 2.56.
+
+  The double test that was the default since Autoconf 2.64 is no
+  longer available.  You can still request a preprocessor-only test
+  by specifying '-' as the fourth argument to either macro, but this
+  is now deprecated.  If you really need that behavior use
+  AC_PREPROC_IFELSE.
+
 - AC_INCLUDES_DEFAULT has been streamlined.  It now assumes that the
   ISO C90 headers 'stdlib.h' and 'string.h' are unconditionally
   available, and does not include the pre-standard header 'memory.h'
@@ -143,8 +146,14 @@ GNU Autoconf NEWS - User visible changes.
   use with multiple languages, rather than forcing all checks in the
   language used by the first encounter of the macro.
 
-** Man pages for config.guess and config.sub are no longer provided.
-They were moved to the master source tree for config.guess and config.sub.
+- AS_INIT now writes only the base filename of the primary input file
+  into the generated script.  This avoids embedding (part of) the path
+  to the source directory in generated files, which hinders build
+  reproducibility.
+
+  We believe this was the only case where generated file contents could
+  change depending on the build environment.  If you find any other cases
+  please report them as bugs.
 
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
