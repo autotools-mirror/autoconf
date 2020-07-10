@@ -22,11 +22,11 @@ tools we depend upon, including:
 - Texinfo 4.8+ <https://www.gnu.org/software/texinfo/>
 
 The following are useful as well, if you want to be able to run commands
-like "make dist-lzma" or "make distcheck":
+like "make dist-xz" or "make distcheck":
 
 - Gzip <https://www.gnu.org/software/gzip/>
 - Tar <https://www.gnu.org/software/tar/>
-- LZMA Utils 4.32+ <https://tukaani.org/lzma/>
+- XZ Utils <https://tukaani.org/xz/>
 
 Although we try to keep the CVS mirror of the git repository usable,
 some of the tests in the testsuite will fail if git was not used to

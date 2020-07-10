@@ -15141,7 +15141,7 @@ Some of these external utilities have a portable subset of features; see
 
 There are other sources of documentation about shells.  The
 specification for the Posix
-@uref{http://@/pubs.opengroup.org/@/onlinepubs/@/9699919799/@/utilities/@/V3_chap02.html,
+@uref{https://@/pubs.opengroup.org/@/onlinepubs/@/9699919799/@/utilities/@/V3_chap02.html,
 Shell Command Language}, though more generous than the restrictive shell
 subset described above, is fairly portable nowadays.  Also please see
 @uref{http://@/www.faqs.org/@/faqs/@/unix-faq/@/shell/, the Shell FAQs}.
@@ -15668,10 +15668,11 @@ approaches, as well as of their pros and cons, can be found in
 @uref{https://www.cons.org/cracauer/sigint.html, this article}.
 
 Solaris 10 @command{/bin/sh} automatically traps most signals by default;
-@c See: <http://dbaspot.com/shell/396118-bourne-shell-exit-code-term.html>
 the shell still exits with error upon termination by one of those signals,
 but in such a case the exit status might be somewhat unexpected (even if
 allowed by POSIX, strictly speaking):
+@c FIXME: We had a reference for this behavior but the website no longer
+@c exists and the page is not in the Internet Archive. --zw 2020-07-10.
 
 @example
 $ @kbd{bash -c 'kill -1 $$'; echo $?} # Will exit 128 + (signal number).
@@ -15745,7 +15746,7 @@ and @code{/usr/xpg4/bin/sh} will proceed to exit with status 130 (i.e.,
 128 + 2). In any case, if there is an active trap associated with
 @code{SIGINT}, those shells will correctly execute it.
 
-@c See: <http://www.austingroupbugs.net/view.php?id=51>
+@c See: <https://www.austingroupbugs.net/view.php?id=51>
 Some Korn shells, when a child process die due receiving a signal with
 signal number @var{n}, can leave in @samp{$?} an exit status of
 256+@var{n} instead of the more common 128+@var{n}.  Observe the
@@ -15763,7 +15764,7 @@ $ @kbd{/bin/bash -c 'sh -c "kill -1 \$\$"; echo $?'}
 
 @noindent
 This @command{ksh} behavior is allowed by POSIX, if implemented with
-due care; see this @uref{http://www.austingroupbugs.net/view.php?id=51,
+due care; see this @uref{https://www.austingroupbugs.net/view.php?id=51,
 Austin Group discussion} for more background.  However, if it is not
 implemented with proper care, such a behavior might cause problems
 in some corner cases.  To see why, assume we have a ``wrapper'' script
@@ -18108,7 +18109,7 @@ The @option{-e} option has historically been under-specified, with enough
 ambiguities to cause numerous differences across various shell
 implementations; see for example
 @uref{https://www.in-ulm.de/@/~mascheck/@/various/@/set-e/, this overview},
-or @uref{http://www.austingroupbugs.net/@/view.php?id=52, this link},
+or @uref{https://www.austingroupbugs.net/@/view.php?id=52, this link},
 documenting a change to Posix 2008 to match @command{ksh88} behavior.
 Note that mixing @code{set -e} and shell functions is asking for surprises:
 
@@ -21689,10 +21690,11 @@ reliable in general, and it is usually easy enough to avoid the
 potential portability problem, e.g., by allocating an extra unused array
 element at the start or end.
 
-@uref{http://@/valgrind.org/, Valgrind} can catch many overruns.
-GCC
-users might also consider using the @option{-fmudflap} option to catch
-overruns.
+@uref{https://@/www.valgrind.org/, Valgrind} can catch many overruns.
+GCC users might also consider using the @option{-fsanitize=} options
+to catch overruns.
+@xref{Instrumentation Options, , Program Instrumentation Options,
+      gcc, Using the GNU Compiler Collection (GCC)}.
 
 Buffer overruns are usually caused by off-by-one errors, but there are
 more subtle ways to get them.
@@ -25468,7 +25470,7 @@ parameter, and the standard error contents are compared with
 Initialize and execute an Erlang module named @var{module} that performs
 tests following the @var{test-spec} EUnit test specification.
 @var{test-spec} must be a valid EUnit test specification, as defined in
-the @uref{http://@/erlang.org/@/doc/@/apps/@/eunit/@/index.html, EUnit
+the @uref{https://@/erlang.org/@/doc/@/apps/@/eunit/@/index.html, EUnit
 Reference Manual}.  @var{erlflags} are optional command-line options
 passed to the Erlang interpreter to execute the test Erlang module.
 Typically, @var{erlflags} defines at least the paths to directories
