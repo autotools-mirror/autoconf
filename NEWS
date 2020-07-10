@@ -29,6 +29,27 @@ GNU Autoconf NEWS - User visible changes.
    account.  This makes it possible to use AC_DEFINE for secondary
    headers without duplicating the template in the main config header.
 
+** Many macros have been improved to expand their arguments
+   once and only once.  This makes ‘autoconf’ run faster.  However, it
+   may break configure scripts that did not quote all macro arguments
+   properly.  The ‘M4 Quotation’ section of the manual explains how to
+   quote macro arguments properly.
+
+** Several macros that are commonly used early in a configure
+   script, such as AC_PROG_CC, have been optimized and no longer
+   invoke as many subroutine macros as they used to.  This can expose
+   several classes of bugs: these are the ones we know about:
+
+   - Make sure to explicitly invoke all of the macros that set result
+     variables used later in the configure script, or in generated
+     Makefiles.
+
+   - AC_REQUIRE must not appear inside hand-written shell conditional
+     constructs.  Use AS_IF, AS_FOR, etc. instead.
+
+   - AC_REQUIRE cannot be applied to macros that need to be used with
+     arguments.  Instead, invoke the macro normally, with its arguments.
+
 ** Macros that take whitespace-separated lists as arguments
    now always expand macros within those arguments.  (Formerly, these
    macros would *usually* expand those arguments, but the behavior was
