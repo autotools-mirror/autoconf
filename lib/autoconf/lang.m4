@@ -353,7 +353,9 @@ m4_define([_AC_LANG_COMPILER_GNU],
 		   [ac_compiler_gnu=yes],
 		   [ac_compiler_gnu=no])
 ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu=$ac_compiler_gnu
-])])# _AC_LANG_COMPILER_GNU
+])
+ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
+])# _AC_LANG_COMPILER_GNU
 
 
 # AC_LANG_PREPROC
