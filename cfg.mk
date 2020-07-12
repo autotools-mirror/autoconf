@@ -136,7 +136,7 @@ update-release-year:
 .PHONY: update-release-year
 
 # Prevent incorrect NEWS edits.
-old_NEWS_hash = c10c99f23488565809ea61c7db6ce0d8
+old_NEWS_hash = b6af714b06666cbc66cd26169a56bd9d
 
 exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = \
   ^(maint\.mk|build-aux/texinfo\.tex)$$

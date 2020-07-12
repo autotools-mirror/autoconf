@@ -830,7 +830,7 @@ AT_SETUP([autoheader and macros])
 
 AT_DATA([configure.ac],
 [[AC_INIT
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 m4_define([PETER], [SIMSALABIM])
 m4_define([PAUL], [OPENSESAME])
 AC_DEFINE([PETER], [10], [Peter's public info])

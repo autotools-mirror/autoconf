@@ -175,9 +175,9 @@ Hi Robert,
 > It doesn't seem to add -DX_DISPLAY_MISSING to X_CFLAGS.  X_DISPLAY_MISSING
 > ends up defined in config.h, instead.
 
-That's only because you're no doubt using AC_CONFIG_HEADER(..) to send
+That's only because you're no doubt using AC_CONFIG_HEADERS([..]) to send
 your defines to a config.h-style file.  If you were to not use
-AC_CONFIG_HEADER and X was not available, then you would see
+AC_CONFIG_HEADERS and X was not available, then you would see
 -DX_DISPLAY_MISSING being added to @DEFS@ as your output files were being
 generated.
 
