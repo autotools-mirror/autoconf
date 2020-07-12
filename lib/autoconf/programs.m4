@@ -741,7 +741,7 @@ main (void)
 }
 ]_ACEOF
 _AC_DO_VAR(LEX conftest.l)
-AC_CACHE_CHECK([lex output file root], [ac_cv_prog_lex_root], [
+AC_CACHE_CHECK([for lex output file root], [ac_cv_prog_lex_root], [
 if test -f lex.yy.c; then
   ac_cv_prog_lex_root=lex.yy
 elif test -f lexyy.c; then
@@ -751,20 +751,25 @@ else
 fi])
 AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])dnl
 
-if ${LEXLIB+false} :; then
-  AC_CACHE_CHECK([lex library], [ac_cv_lib_lex], [
+AS_VAR_SET_IF([LEXLIB], [], [
+  AC_CACHE_CHECK([for lex library], [ac_cv_lib_lex], [
+    ac_cv_lib_lex='not found'
     ac_save_LIBS=$LIBS
-    ac_cv_lib_lex='none needed'
     for ac_lib in '' -lfl -ll; do
       LIBS="$ac_lib $ac_save_LIBS"
       AC_LINK_IFELSE([AC_LANG_DEFINES_PROVIDED[`cat $LEX_OUTPUT_ROOT.c`]],
-	[ac_cv_lib_lex=$ac_lib])
-      test "$ac_cv_lib_lex" != 'none needed' && break
+	[ac_cv_lib_lex="${ac_lib:-none needed}"
+         break])
     done
     LIBS=$ac_save_LIBS
   ])
-  test "$ac_cv_lib_lex" != 'none needed' && LEXLIB=$ac_cv_lib_lex
-fi
+  AS_IF(
+     [test "$ac_cv_lib_lex" = 'not found'],
+	[AC_MSG_ERROR([required lex library not found])],
+     [test "$ac_cv_lib_lex" = 'none needed'],
+        [LEXLIB=''],
+	[LEXLIB=$ac_cv_lib_lex])
+])
 AC_SUBST(LEXLIB)
 
 AC_CACHE_CHECK(whether yytext is a pointer, ac_cv_prog_lex_yytext_pointer,
