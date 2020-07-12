@@ -655,9 +655,11 @@ fi
 # AU::AC_HEADER_STDC
 # ------------------
 AU_DEFUN([AC_HEADER_STDC],
-[# Autoupdate added the following line to ensure that your configure
-# script's behavior did not change.  It is probably safe to remove.
-AC_CHECK_INCLUDES_DEFAULT],
+[# Autoupdate added the next two lines to ensure that your configure
+# script's behavior did not change.  They are probably safe to remove.
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_EGREP
+],
  [The preprocessor macro `STDC_HEADERS' is obsolete.
   Except in unusual embedded environments, you can safely include all
   ISO C90 headers unconditionally.])

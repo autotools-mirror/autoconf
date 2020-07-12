@@ -44,8 +44,16 @@ GNU Autoconf NEWS - User visible changes.
      variables used later in the configure script, or in generated
      Makefiles.
 
-   - AC_REQUIRE must not appear inside hand-written shell conditional
-     constructs.  Use AS_IF, AS_FOR, etc. instead.
+   - Autoconf macros that use AC_REQUIRE internally, are not safe to
+     use inside of hand-written shell conditional or looping
+     constructs.  Use AS_IF, AS_CASE, AS_FOR, etc. instead.
+     (See the “Prerequisite Macros” section of the manual for
+     further explanation.)
+
+     The set of macros that use AC_REQUIRE internally may change from
+     release to release.  The only macros that are guaranteed *not* to
+     use AC_REQUIRE are the macros for acting on the results of a
+     test: AC_DEFINE, AC_SUBST, AC_MSG_*, AC_CACHE_CHECK, etc.
 
    - AC_REQUIRE cannot be applied to macros that need to be used with
      arguments.  Instead, invoke the macro normally, with its arguments.
