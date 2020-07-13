@@ -5,6 +5,8 @@
 @include version.texi
 @settitle Autoconf
 @documentencoding UTF-8
+@set txicodequoteundirected
+@set txicodequotebacktick
 @setchapternewpage odd
 @finalout
 
@@ -25743,7 +25745,7 @@ Next, add the following lines to your @file{tests/Makefile.am}, in order
 to link @samp{make check} with a validation suite.
 
 @example
-# The `:;' works around a Bash 3.2 bug when the output is not writable.
+# The ':;' works around a Bash 3.2 bug when the output is not writable.
 $(srcdir)/package.m4: $(top_srcdir)/configure.ac
         :;@{ \
           echo '# Signature of the current package.' && \
