@@ -92,8 +92,8 @@ GNU Autoconf NEWS - User visible changes.
   local M4 macros.  This macro overcomes some of the shortfalls in the
   older AC_CONFIG_MACRO_DIR, which could only be used once; although
   the older macro remains for compatibility with older tools.  The
-  newer macro will be used by the upcoming Automake 1.13 release to
-  eliminate the need to specify ACLOCAL_AMFLAGS in Makefile.am.
+  newer macro is used by Automake 1.13 and later to eliminate the
+  need to specify ACLOCAL_AMFLAGS in Makefile.am.
 
 - AC_PROG_CC now prefers C11 if available, falling back on C99 and
   then on C89 as before.  Similarly, AC_PROG_CXX now prefers C++11
