@@ -9392,6 +9392,8 @@ If the output of running the preprocessor on the system header file
 @var{header-file} matches the extended regular expression
 @var{pattern}, execute shell commands @var{action-if-found}, otherwise
 execute @var{action-if-not-found}.
+
+See below for some problems involving this macro.
 @end defmac
 
 @anchor{AC_EGREP_CPP}
@@ -9403,8 +9405,36 @@ variable, back quote, and backslash substitutions are performed.  If the
 output of running the preprocessor on @var{program} matches the
 extended regular expression @var{pattern}, execute shell commands
 @var{action-if-found}, otherwise execute @var{action-if-not-found}.
+
+See below for some problems involving this macro.
 @end defmac
 
+@code{AC_EGREP_CPP} and @code{AC_EGREP_HEADER} should be used with care,
+as preprocessors can insert line breaks between output tokens.  For
+example, the preprocessor might transform this:
+
+@example
+#define MAJOR 2
+#define MINOR 23
+Version MAJOR . MINOR
+@end example
+
+@noindent
+into this:
+
+@example
+Version
+       2
+                 .
+                   23
+@end example
+
+@noindent
+Because preprocessors are allowed to insert white space, change escapes
+in string contants, insert backlash-newline pairs, or do any of a number
+of things that do not change the meaning of the preprocessed program, it
+is better to rely on @code{AC_PREPROC_IFELSE} than to resort to
+@code{AC_EGREP_CPP} or @code{AC_EGREP_HEADER}.
 
 
 @node Running the Compiler
