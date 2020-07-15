@@ -21929,21 +21929,36 @@ cross-compilation mode.
 
 @item --host=@var{host-type}
 the type of system on which the package runs.  By default it is the
-same as the build machine.  Specifying a @var{host-type} that differs
+same as the build machine.  The tools that get used to build and
+manipulate binaries will, by default, all be prefixed with
+@code{@var{host-type}-}, such as @code{@var{host-type}-gcc},
+@code{@var{host-type}-g++}, @code{@var{host-type}-ar}, and
+@code{@var{host-type}-nm}.  If the binaries produced by these tools can
+be executed by the build system, the configure script will make use of
+it in @code{AC_RUN_IFELSE} invocations; otherwise, cross-compilation
+mode is enabled.  Specifying a @var{host-type} that differs
 from @var{build-type}, when @var{build-type} was also explicitly
-specified, enables cross-compilation mode.
+specified, equally enables cross-compilation mode.
 
 @item --target=@var{target-type}
 the type of system for which any compiler tools in the package
 produce code (rarely needed).  By default, it is the same as host.
 @end table
 
-If you mean to override the result of @command{config.guess}, use
-@option{--build}, not @option{--host}, since the latter enables
-cross-compilation.  For historical reasons,
-whenever you specify @option{--host},
-be sure to specify @option{--build} too; this glitch should be fixed in the
-future.  So, to enter cross-compilation mode, use a command like this
+If you mean to override the result of @command{config.guess} but
+still produce binaries for the build machine, use @option{--build},
+not @option{--host}.
+
+So, for example, to produce binaries for 64-bit MinGW, use a command
+like this:
+
+@example
+./configure --host=x86_64-w64-mingw64
+@end example
+
+If your system has the ability to execute MinGW binaries but you don't
+want to make use of this feature and instead prefer cross-compilation
+guesses, use a command like this:
 
 @example
 ./configure --build=x86_64-pc-linux-gnu --host=x86_64-w64-mingw64
