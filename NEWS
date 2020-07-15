@@ -104,10 +104,6 @@ GNU Autoconf NEWS - User visible changes.
 - AC_PROG_CC_STDC, AC_PROG_CC_C89, AC_PROG_CC_C99 have been marked as obsolete.
   Applications should use AC_PROG_CC.
 
-- AC_PROG_YACC now uses 'bison -o y.tab.c' instead of 'bison -y', so that
-  by default it no longer warns about Bison extensions.  Add -Wyacc to
-  YFLAGS to enable these warnings.
-
 - AC_USE_SYSTEM_EXTENSIONS now enables more extensions on HP-UX,
   macOS, and MINIX, as well as on systems conforming to recent
   ISO/IEC C technical reports and specifications.
