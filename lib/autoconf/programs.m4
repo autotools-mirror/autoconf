@@ -740,15 +740,17 @@ main (void)
   return ! yylex () + ! yywrap ();
 }
 ]_ACEOF
-_AC_DO_VAR(LEX conftest.l)
 AC_CACHE_CHECK([for lex output file root], [ac_cv_prog_lex_root], [
+ac_cv_prog_lex_root=unknown
+_AC_DO_VAR(LEX conftest.l) &&
 if test -f lex.yy.c; then
   ac_cv_prog_lex_root=lex.yy
 elif test -f lexyy.c; then
   ac_cv_prog_lex_root=lexyy
-else
-  AC_MSG_ERROR([cannot find output from $LEX; giving up])
 fi])
+AS_IF([test "$ac_cv_prog_lex_root" = unknown],
+  [AC_MSG_WARN([cannot find output from $LEX; giving up on $LEX])
+   LEX=: LEXLIB=])
 AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])dnl
 
 AS_VAR_SET_IF([LEXLIB], [], [
@@ -765,13 +767,15 @@ AS_VAR_SET_IF([LEXLIB], [], [
   ])
   AS_IF(
      [test "$ac_cv_lib_lex" = 'not found'],
-	[AC_MSG_ERROR([required lex library not found])],
+	[AC_MSG_WARN([required lex library not found; giving up on $LEX])
+	 LEX=: LEXLIB=],
      [test "$ac_cv_lib_lex" = 'none needed'],
         [LEXLIB=''],
 	[LEXLIB=$ac_cv_lib_lex])
 ])
 AC_SUBST(LEXLIB)
 
+AS_IF([test "$LEX" != :], [
 AC_CACHE_CHECK(whether yytext is a pointer, ac_cv_prog_lex_yytext_pointer,
 [# POSIX says lex can declare yytext either as a pointer or an array; the
 # default is implementation-dependent.  Figure out which it is, since
@@ -791,6 +795,7 @@ if test $ac_cv_prog_lex_yytext_pointer = yes; then
 	    [Define to 1 if `lex' declares `yytext' as a `char *' by default,
 	     not a `char[]'.])
 fi
+])
 rm -f conftest.l $LEX_OUTPUT_ROOT.c
 ])# _AC_PROG_LEX_YYTEXT_DECL
 
