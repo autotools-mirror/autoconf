@@ -742,7 +742,7 @@ yywrap (void)
 int
 main (void)
 {
-  return ! yylex () + ! yywrap ();
+  return ! yylex ();
 }
 ]_ACEOF
 AC_CACHE_CHECK([for lex output file root], [ac_cv_prog_lex_root], [
