@@ -1913,13 +1913,13 @@ AT_DATA([Makefile.in],
 CFLAGS=@CFLAGS@
 
 testprog@EXEEXT@: testprog.o
+	$(CC) -o testprog@EXEEXT@ testprog.o
+
 testprog.o: testprog.c
-.SUFFIXES: .c .o @EXEEXT@
+.SUFFIXES: .c .o
 
 .c.o:
 	$(CC) -c $<
-.o@EXEEXT@:
-	$(CC) -o $@ $^
 ]])
 
 AT_CHECK_AT_PREP([suite],
@@ -1974,13 +1974,13 @@ AT_DATA([Makefile.in],
 CFLAGS=@CFLAGS@
 
 testprog@EXEEXT@: testprog.o
+	$(CC) -o testprog@EXEEXT@ testprog.o
+
 testprog.o: testprog.c
-.SUFFIXES: .c .o @EXEEXT@
+.SUFFIXES: .c .o
 
 .c.o:
 	$(CC) -c $<
-.o@EXEEXT@:
-	$(CC) -o $@ $^
 ]])
 
 AT_CHECK_AT_PREP([suite],
