@@ -104,6 +104,10 @@ GNU Autoconf NEWS - User visible changes.
 - AC_PROG_CC_STDC, AC_PROG_CC_C89, AC_PROG_CC_C99 have been marked as obsolete.
   Applications should use AC_PROG_CC.
 
+- AC_PROG_LEX no longer sets LEXLIB to be nonempty merely to define
+  the yywrap function.  Packages should define yywrap themselves, or
+  use %noyywrap.
+
 - AC_USE_SYSTEM_EXTENSIONS now enables more extensions on HP-UX,
   macOS, and MINIX, as well as on systems conforming to recent
   ISO/IEC C technical reports and specifications.

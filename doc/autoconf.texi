@@ -4177,14 +4177,19 @@ The result of the test can be overridden by setting the variable
 @cvindex YYTEXT_POINTER
 @ovindex LEX_OUTPUT_ROOT
 @caindex prog_LEX
-If @code{flex} is found, set output variable @code{LEX} to @samp{flex}
-and @code{LEXLIB} to @option{-lfl}, if that library is in a standard
-place.  Otherwise set @code{LEX} to @samp{lex} and @code{LEXLIB} to
-@option{-ll}, if found.  If neither variant is available, set @code{LEX}
+If @code{flex} is found, set output variable @code{LEX} to @samp{flex}.
+Otherwise set @code{LEX} to @samp{lex}, if found.
+If neither variant is available, set @code{LEX}
 to @samp{:}; for packages that ship the generated @file{file.yy.c}
 alongside the source @file{file.l}, this default allows users without a
 lexer generator to still build the package even if the timestamp for
 @file{file.l} is inadvertently changed.
+
+If generated lexers need a library to work, set output variable
+@code{LEXLIB} to an option for that library (e.g., @option{-ll});
+otherwise define @code{LEXLIB} to empty.  A library that merely defines
+@code{main} and @code{yywrap} placeholder functions is not considered
+to be needed.
 
 Define @code{YYTEXT_POINTER} if @code{yytext} defaults to @samp{char *} instead
 of to @samp{char []}.  Also set output variable @code{LEX_OUTPUT_ROOT} to

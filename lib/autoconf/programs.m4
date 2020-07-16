@@ -735,6 +735,11 @@ f { unput (yytext[0]); }
 extern char *yytext;
 #endif
 int
+yywrap (void)
+{
+  return 1;
+}
+int
 main (void)
 {
   return ! yylex () + ! yywrap ();
