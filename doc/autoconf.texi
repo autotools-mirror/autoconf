@@ -8341,7 +8341,7 @@ the @code{ac_cv_fc_fixedform} variable.
 
 Try to ensure that the Fortran compiler (@code{$FC}) accepts long source
 code lines.  The @var{length} argument may be given as 80, 132, or
-unlimited, and defaults to 132.  Note that line lengths above 254
+unlimited, and defaults to 132.  Note that line lengths above 250
 columns are not portable, and some compilers do not accept more than 132
 columns at least for fixed format source.  If necessary, it may add some
 additional flags to @code{FCFLAGS}.

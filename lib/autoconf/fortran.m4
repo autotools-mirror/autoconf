@@ -1455,7 +1455,7 @@ AC_LANG_POP([Fortran])dnl
 # Look for a compiler flag to make the Fortran (FC) compiler accept long lines
 # in the current (free- or fixed-format) source code, and adds it to FCFLAGS.
 # The optional LENGTH may be 80, 132 (default), or `unlimited' for longer
-# lines.  Note that line lengths above 254 columns are not portable, and some
+# lines.  Note that line lengths above 250 columns are not portable, and some
 # compilers (hello ifort) do not accept more than 132 columns at least for
 # fixed format.  Call ACTION-IF-SUCCESS (defaults to nothing) if successful
 # (i.e. can compile code using new extension) and ACTION-IF-FAILURE (defaults

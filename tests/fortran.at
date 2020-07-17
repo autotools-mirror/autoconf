@@ -1012,20 +1012,25 @@ clean:
 	rm -f *.@OBJEXT@ prog@EEXEXT@
 ]])
 
+# When preceded by 7 spaces and followed by newline, line_80 generates
+# a line of exactly 79 columns, line_132 generates a line of exactly 131
+# coluns, and line_250 generates a line of exactly 250 columns.
+# FIXME: Shouldn't line_80 and line_132 generate lines that are one column
+# longer, so that their contents match the variable names?
 line_80=\
 'subroutine foo(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11)'
 line_132=\
 'subroutine foo(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,'\
 'arg12,arg13,arg14,arg15,arg16,arg17,arg18,arg19)'
-line_254=\
-'subroutine foo(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,'\
+line_250=\
+'subroutine foofoo(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,'\
 'arg12,arg13,arg14,arg15,arg16,arg17,arg18,arg19,arg20,arg21,arg22,arg23,'\
 'arg24,arg25,arg26,arg27,arg28,arg29,arg30,arg31,arg32,arg33,arg34,arg35,'\
-'arg36,arg37,arg38,arg39,arg40)'
+'arg36,arg37,arg38,arg39)'
 
-for len in 80 132 254
+for len in 80 132 250
 do
-  if test $len -eq 254; then arg=unlimited; else arg=$len; fi
+  if test $len -eq 250; then arg=unlimited; else arg=$len; fi
   eval long_line=\$line_$len
 
   # Try free-form first, it has a bigger chance of succeeding.

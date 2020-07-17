@@ -191,6 +191,9 @@ GNU Autoconf NEWS - User visible changes.
   diagnosed as obsolete, and replaced with AC_CONFIG_HEADERS by
   autoupdate.
 
+- AC_FC_LINE_LENGTH now documents the maximum portable length of
+  "unlimited" Fortran source code lines to be 250 columns, not 254.
+
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
 ** Autoconf now requires perl 5.6 or better (but generated configure
