@@ -16193,11 +16193,16 @@ j a0
 @end example
 
 @item $@{@var{var}:-@var{value}@}
+@itemx $@{@var{var}:=@var{value}@}
+@itemx $@{@var{var}:?@var{value}@}
+@itemx $@{@var{var}:+@var{value}@}
 @c Info cannot handle ':' in index entries.
 @ifnotinfo
 @cindex @code{$@{@var{var}:-@var{value}@}}
+@cindex @code{$@{@var{var}:=@var{value}@}}
+@cindex @code{$@{@var{var}:?@var{value}@}}
+@cindex @code{$@{@var{var}:+@var{value}@}}
 @end ifnotinfo
-@cindex @code{$@{@var{var}-@var{value}@}}
 Old BSD shells, including the Ultrix @code{sh}, don't accept the
 colon for any shell substitution, and complain and die.
 Similarly for @code{$@{@var{var}:=@var{value}@}},
@@ -16206,13 +16211,31 @@ However, all shells that support functions allow the use of colon in
 shell substitution, and since m4sh requires functions, you can portably
 use null variable substitution patterns in configure scripts.
 
-@item $@{@var{var}+@var{value}@}
+@item $@{@var{var}-@var{value}@}
+@itemx $@{@var{var}:-@var{value}@}
+@itemx $@{@var{var}=@var{value}@}
+@itemx $@{@var{var}:=@var{value}@}
+@itemx $@{@var{var}?@var{value}@}
+@itemx $@{@var{var}:?@var{value}@}
+@itemx $@{@var{var}+@var{value}@}
+@itemx $@{@var{var}:+@var{value}@}
+@cindex @code{$@{@var{var}-@var{value}@}}
+@cindex @code{$@{@var{var}=@var{value}@}}
+@cindex @code{$@{@var{var}?@var{value}@}}
 @cindex @code{$@{@var{var}+@var{value}@}}
+@c Info cannot handle ':' in index entries.
+@ifnotinfo
+@cindex @code{$@{@var{var}:-@var{value}@}}
+@cindex @code{$@{@var{var}:=@var{value}@}}
+@cindex @code{$@{@var{var}:?@var{value}@}}
+@cindex @code{$@{@var{var}:+@var{value}@}}
+@end ifnotinfo
 When using @samp{$@{@var{var}-@var{value}@}} or
-@samp{$@{@var{var}-@var{value}@}} for providing alternate substitutions,
-@var{value} must either be a single shell word, quoted, or in the
-context of an unquoted here-document.  Solaris
-@command{/bin/sh} complains otherwise.
+similar notations that modify a parameter expansion,
+Posix requires that @var{value} must be a single shell word,
+which can contain quoted strings but cannot contain unquoted spaces.
+If this requirement is not met Solaris 10 @command{/bin/sh}
+sometimes complains, and anyway the behavior is not portable.
 
 @example
 $ @kbd{/bin/sh -c 'echo $@{a-b c@}'}
@@ -16335,19 +16358,7 @@ user	0m0.002s
 sys	0m0.003s
 @end example
 
-As with @samp{+} and @samp{-}, you must use quotes when using @samp{=}
-if the @var{value} contains more than one shell word; either single
-quotes for just the @var{value}, or double quotes around the entire
-expansion:
-
-@example
-$ @kbd{: $@{var1='Some words'@}}
-$ @kbd{: "$@{var2=like this@}"}
-$ @kbd{echo $var1 $var2}
-Some words like this
-@end example
-
-@noindent
+As with @samp{+} and @samp{-}, @var{value} must be a single shell word,
 otherwise some shells, such as Solaris @command{/bin/sh} or on Digital
 Unix V 5.0, die because of a ``bad substitution''.  Meanwhile, Posix
 requires that with @samp{=}, quote removal happens prior to the
