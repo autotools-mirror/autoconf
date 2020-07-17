@@ -1642,12 +1642,15 @@ else
   else
     at_msg="\`${at_testdir+${at_testdir}/}$as_me.log'"
   fi
+  at_msg1a=${at_xpass_list:+', '}
+  at_msg1=$at_fail_list${at_fail_list:+" failed$at_msg1a"}
+  at_msg2=$at_xpass_list${at_xpass_list:+" passed unexpectedly"}
+
   AS_ECHO(["Please send $at_msg and all information you think might help:
 
    To: <AT_PACKAGE_BUGREPORT>
    Subject: @<:@AT_PACKAGE_STRING@:>@ $as_me: dnl
-$at_fail_list${at_fail_list:+ failed${at_xpass_list:+, }}dnl
-$at_xpass_list${at_xpass_list:+ passed unexpectedly}
+$at_msg1$at_msg2
 
 You may investigate any problem if you feel able to do so, in which
 case the test suite provides a good starting point.  Its output may

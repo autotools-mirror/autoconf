@@ -760,13 +760,15 @@ AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])dnl
 
 AS_VAR_SET_IF([LEXLIB], [], [
   AC_CACHE_CHECK([for lex library], [ac_cv_lib_lex], [
-    ac_cv_lib_lex='not found'
     ac_save_LIBS=$LIBS
-    for ac_lib in '' -lfl -ll; do
-      LIBS="$ac_lib $ac_save_LIBS"
+    for ac_cv_lib_lex in 'none needed' -lfl -ll 'not found'; do
+      case $ac_cv_lib_lex in
+	'none needed') ;;
+	'not found') break;;
+	*) LIBS="$ac_cv_lib_lex $ac_save_LIBS";;
+      esac
       AC_LINK_IFELSE([AC_LANG_DEFINES_PROVIDED[`cat $LEX_OUTPUT_ROOT.c`]],
-	[ac_cv_lib_lex="${ac_lib:-none needed}"
-         break])
+	[break])
     done
     LIBS=$ac_save_LIBS
   ])

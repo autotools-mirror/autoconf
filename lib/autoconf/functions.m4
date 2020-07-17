@@ -1526,7 +1526,8 @@ AC_DEFUN([AC_FUNC_SELECT_ARGTYPES],
 [AC_CHECK_HEADERS_ONCE([sys/select.h sys/socket.h])
 AC_CACHE_CHECK([types of arguments for select],
 [ac_cv_func_select_args],
-[for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
+[ac_cv_func_select_args='int,int *,struct timeval *'
+for ac_arg234 in 'fd_set *' 'int *' 'void *'; do
  for ac_arg1 in 'int' 'size_t' 'unsigned long int' 'unsigned int'; do
   for ac_arg5 in 'struct timeval *' 'const struct timeval *'; do
    AC_COMPILE_IFELSE(
@@ -1546,8 +1547,6 @@ AC_CACHE_CHECK([types of arguments for select],
   done
  done
 done
-# Provide a safe default value.
-: "${ac_cv_func_select_args=int,int *,struct timeval *}"
 ])
 ac_save_IFS=$IFS; IFS=','
 set dummy `echo "$ac_cv_func_select_args" | sed 's/\*/\*/g'`
