@@ -31,8 +31,8 @@ AUTOM4TE_CFG = lib/autom4te.cfg
 # apply to us.
 MY_AUTOM4TE =									\
 	autom4te_perllibdir='$(top_srcdir)'/lib					\
-	AUTOM4TE_CFG='$(AUTOM4TE_CFG)'         $(top_builddir)/bin/autom4te	\
-		-B '$(top_builddir)'/lib -B '$(top_srcdir)'/lib        # keep ` '
+	AUTOM4TE_CFG='$(AUTOM4TE_CFG)'         $(top_build_prefix)bin/autom4te	\
+		-B '$(top_build_prefix)'lib -B '$(top_srcdir)'/lib        # keep ` '
 
 # When processing the file with diversion disabled, there must be no
 # output but comments and empty lines.
@@ -55,9 +55,9 @@ MY_AUTOM4TE =									\
 # Some day we should explain to Automake how to use autom4te to compute
 # the dependencies...
 src_libdir   = $(top_srcdir)/lib
-build_libdir = $(top_builddir)/lib
+build_libdir = $(top_build_prefix)lib
 
-m4f_dependencies = $(top_builddir)/bin/autom4te $(AUTOM4TE_CFG)
+m4f_dependencies = $(top_build_prefix)bin/autom4te $(AUTOM4TE_CFG)
 
 m4sugar_m4f_dependencies =			\
 	$(m4f_dependencies)			\
