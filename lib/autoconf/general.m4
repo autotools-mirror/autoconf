@@ -1650,7 +1650,8 @@ done
 if $ac_cache_corrupted; then
   AS_MESSAGE([error: in `$ac_pwd':], 2)
   AS_MESSAGE([error: changes in the environment can compromise the build], 2)
-  AS_ERROR([run `make distclean' and/or `rm $cache_file' and start over])
+  AS_ERROR([run `${MAKE-make} distclean' and/or `rm $cache_file'
+	    and start over])
 fi])dnl
 ])# _AC_ARG_VAR_VALIDATE
 
