@@ -147,7 +147,7 @@ check-coverage-run: all
 check-coverage-report:
 	@if test ! -d $(PERL_COVERAGE_DB); then \
 	  echo "No coverage database found in '$(PERL_COVERAGE_DB)'." >&2; \
-	  echo "Please run 'make check-coverage' first" >&2; \
+	  echo "Please run '$(MAKE) check-coverage' first" >&2; \
 	  exit 1; \
 	fi
 	$(PERL_COVER) $(PERL_COVERAGE_DB) $(PERL_COVER_FLAGS)
