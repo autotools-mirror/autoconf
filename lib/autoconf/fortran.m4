@@ -698,6 +698,7 @@ while test $[@%:@] != 1; do
 	-zallextract*| -zdefaultextract)
 	  ac_cv_[]_AC_LANG_ABBREV[]_libs="$ac_cv_[]_AC_LANG_ABBREV[]_libs $ac_arg"
 	  ;;
+	-mllvm) ${2+shift};; # Defend against 'clang -mllvm -loopopt=0'.
 	  # Ignore everything else.
   esac
 done
