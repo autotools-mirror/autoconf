@@ -326,6 +326,7 @@ m4_define([AT_CHECK_CONFIGURE],
 # - AC_SUBST'ed variables
 #   (FIXME: Generate a list of these automatically.)
 # - _|@|.[*#?$].|argv|ARGC|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
+#   |_AST_FEATURES
 #   Some variables some shells use and change.
 #   `.[*#?$].' catches `$#' etc. which are displayed like this:
 #      | '!'=18186
@@ -375,7 +376,8 @@ if test -f state-env.before && test -f state-env.after; then
       [AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|MKDIR_P|RANLIB|SET_MAKE|YACC],
       [GREP|[EF]GREP|SED],
       [[_@]|.[*#?$].],
-      [argv|ARGC|LINENO|BASH_ARGC|BASH_ARGV|OLDPWD|PIPESTATUS|RANDOM|SECONDS]))=' \
+      [argv|ARGC|LINENO|BASH_ARGC|BASH_ARGV|OLDPWD|PIPESTATUS|RANDOM],
+      [SECONDS|_AST_FEATURES]))=' \
      $act_file ||
        test $? -eq 1 || echo failed >&2
     ) 2>stderr-$act_file |
@@ -401,12 +403,18 @@ fi
 #   M4sh's shell name space.
 # - ^ac_, excluding ^ac_cv_
 #   Autoconf's private shell name space.
-# - PPID [bash, zsh]
-# - RANDOM [zsh]
-# - SECONDS [zsh]
-# - '$' [zsh]
-# - argv [zsh]
-# - ARGC [zsh]
+# - Variables with unstable values in at least some shells:
+#   - OLDPWD [bash, zsh]
+#   - PPID [bash, zsh]
+#   - RANDOM [bash, zsh]
+#   - SECONDS [bash, zsh]
+#   - '$' [zsh]
+#   - argv [zsh]
+#   - ARGC [zsh]
+#   - BASH_ARGC [bash]
+#   - BASH_ARGV [bash]
+#   - LINENO [Posix]
+#   - _AST_FEATURES [ksh93]
 #
 # Furthermore, it is okay for a non-cache variable initialized to empty in one
 # run to be unset in another run.  This happens when, for example, cache update
@@ -435,6 +443,7 @@ do
 	/^BASH_ARGC=/ d
 	/^BASH_ARGV=/ d
 	/^LINENO=/ d
+	/^_AST_FEATURES=/ d
 	' $act_file >at_config_vars-$act_file
 done
 AT_CMP([at_config_vars-$1], [at_config_vars-$2])[]dnl
