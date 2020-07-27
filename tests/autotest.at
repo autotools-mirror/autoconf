@@ -1909,17 +1909,8 @@ AT_DATA([testprog.c],
 
 # Testsuite
 AT_DATA([Makefile.in],
-[[CC=@CC@
-CFLAGS=@CFLAGS@
-
-testprog@EXEEXT@: testprog.o
-	$(CC) -o testprog@EXEEXT@ testprog.o
-
-testprog.o: testprog.c
-.SUFFIXES: .c .o
-
-.c.o:
-	$(CC) -c $<
+[[testprog@EXEEXT@: testprog.c
+	@CC@ @CPPFLAGS@ @CFLAGS@ @LDFLAGS@ -o testprog@EXEEXT@ testprog.c
 ]])
 
 AT_CHECK_AT_PREP([suite],
@@ -1970,17 +1961,8 @@ AT_DATA([testprog.c],
 
 # Testsuite
 AT_DATA([Makefile.in],
-[[CC=@CC@
-CFLAGS=@CFLAGS@
-
-testprog@EXEEXT@: testprog.o
-	$(CC) -o testprog@EXEEXT@ testprog.o
-
-testprog.o: testprog.c
-.SUFFIXES: .c .o
-
-.c.o:
-	$(CC) -c $<
+[[testprog@EXEEXT@: testprog.c
+	@CC@ @CPPFLAGS@ @CFLAGS@ @LDFLAGS@ -o testprog@EXEEXT@ testprog.c
 ]])
 
 AT_CHECK_AT_PREP([suite],
