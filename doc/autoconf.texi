@@ -7671,62 +7671,65 @@ compiler fix the header files automatically when installed.
 @evindex CXXFLAGS
 @ovindex CXX
 @ovindex CXXFLAGS
-Determine a C++ compiler to use.  Check whether the environment variable
-@code{CXX} or @code{CCC} (in that order) is set; if so, then set output
-variable @code{CXX} to its value.
+Determine a C++ compiler to use.
 
-Otherwise, if the macro is invoked without an argument, then search for
-a C++ compiler under the likely names (first @code{g++} and @code{c++}
-then other names).  If none of those checks succeed, then as a last
-resort set @code{CXX} to @code{g++}.
+If either the environment variable @code{CXX} or the environment
+variable @code{CCC} is set, its value will be taken as the name of a
+C++ compiler.  If both are set, @code{CXX} is preferred.  If neither
+are set, search for a C++ compiler under a series of likely names,
+trying @code{g++} and @code{c++} first.  Regardless, the output
+variable @code{CXX} is set to the chosen compiler.
 
-This macro may, however, be invoked with an optional first argument
-which, if specified, must be a blank-separated list of C++ compilers to
-search for.  This just gives the user an opportunity to specify an
-alternative search list for the C++ compiler.  For example, if you
-didn't like the default order, then you could invoke @code{AC_PROG_CXX}
-like this:
+If the optional first argument to the macro is used, it must be a
+whitespace-separated list of potential names for a C++ compiler,
+which overrides the built-in list.
+
+If no C++ compiler can be found, as a last resort @code{CXX} is set to
+@code{g++} (and subsequent tests will probably fail).
+
+If the selected C++ compiler is found to be GNU C++ (regardless of
+its name), the shell variable @code{GXX} will be set to @samp{yes}.
+If the shell variable @code{CXXFLAGS} was not already set, it is set
+to @option{-g -O2} for the GNU C++ compiler (@option{-O2} on systems
+where G++ does not accept @option{-g}), or @option{-g} for other
+compilers.  @code{CXXFLAGS} is then made an output variable.
+You can override the default for @code{CXXFLAGS} by inserting a shell
+default assignment between @code{AC_INIT} and @code{AC_PROG_CXX}:
 
 @example
-AC_PROG_CXX([gcc cl KCC CC cxx cc++ xlC aCC c++ g++])
+: $@{CXXFLAGS="@var{options}"@}
 @end example
 
-If necessary, add an option to output variable @code{CXX} to enable
-support for ISO Standard C++ features with extensions.  Prefer the
-newest C++ standard that is supported.  Currently the newest standard is
-ISO C++11, with ISO C++98 being the previous standard.  After calling
-this macro you can check whether the C++ compiler has been set to accept
-Standard C++; if not, the shell variable @code{ac_cv_prog_cxx_stdcxx} is
-set to @samp{no}.  If the C++ compiler will not accept C++11, the shell
-variable @code{ac_cv_prog_cxx_cxx11} is set to @samp{no}, and if it will
-not accept C++98, the shell variable @code{ac_cv_prog_cxx_cxx98} is set
-to @samp{no}.
+where @var{options} are the appropriate set of options to use by
+default.  (It is important to use this construct rather than a normal
+assignment, so that @code{CXXFLAGS} can still be overridden by the
+person building the package.  @xref{Preset Output Variables}.)
 
-When attempting to add compiler options, prefer extended functionality
-to strict conformance: the goal is to enable whatever standard features
-that are available, not to check for full conformance to the standard or
-to prohibit incompatible extensions.  Test for C++11 support by checking
-for the language features @code{auto}, @code{constexpr},
-@code{decltype}, @code{default}ed and @code{delete}ed constructors,
-delegate constructors, @code{final}, initializer lists, lambda
-functions, @code{nullptr}, @code{override}, range-based for loops,
-template brackets without spaces and unicode literals, and library
-features @code{std::array}, @code{std::shared_ptr},
-@code{std::weak_ptr}, @code{std::regex} and @code{std::tuple}.  Test for
-C++98 support using basic features of the @code{std} namespace including
-@code{std::string}, containers (@code{std::list}, @code{std::map},
-@code{std::set}, @code{std::vector}), streams (fstreams, iostreams,
-stringstreams, iomanip), @code{std::pair}, exceptions (@code{try},
-@code{catch} and @code{std::runtime_error}) and algorithms.  Tests for
-more recent standards include all the tests for older standards.
+If necessary, options are added to @code{CXX} to enable support for
+ISO Standard C++ features with extensions.  ISO C++ 2011 is preferred
+if the compiler supports it.  After calling this macro, you can check
+whether the C++ compiler has been set to accept standard C++ by
+inspecting cache variables.  If @code{ac_cv_prog_cxx_cxx11} is set to
+any value other than @samp{no} (including the empty string), then
+@code{CXX} can compile code as standard C++ 2011, and this mode has
+been enabled.  Otherwise, if @code{ac_cv_prog_cxx_cxx98} is set to
+any value other than @samp{no} (including the empty string), then
+@code{CXX} can compile code as standard C++ 1998, and this mode has
+been enabled.  Finally, if both variables are set to @samp{no}, then
+@code{CXX} cannot compile standard C++ at all.
 
-If using the GNU C++ compiler, set shell variable @code{GXX} to
-@samp{yes}.  If output variable @code{CXXFLAGS} was not already set, set
-it to @option{-g -O2} for the GNU C++ compiler (@option{-O2} on
-systems where G++ does not accept @option{-g}), or @option{-g} for other
-compilers.  If your package does not like this default, then it is
-acceptable to insert the line @samp{: $@{CXXFLAGS=""@}} after @code{AC_INIT}
-and before @code{AC_PROG_CXX} to select an empty default instead.
+The tests for standard conformance are not comprehensive.  They test
+the value of @code{__cplusplus} and a representative sample of the
+language features added in each version of the C++ standard.  They do
+not exercise the C++ standard library, because this can be extremely
+slow.  If you need to know whether a particular C++ standard header
+exists, use @code{AC_CHECK_HEADER}.
+
+None of the options that may be added to @code{CXX} by this macro
+enable @emph{strict} conformance to the C++ standard.  In particular,
+system-specific extensions are not disabled.  (For example, for GNU
+C++, the @option{-std=gnu++@var{nn}} options may be used, but not the
+@option{-std=c++@var{nn}} options.)
 @end defmac
 
 @defmac AC_PROG_CXXCPP

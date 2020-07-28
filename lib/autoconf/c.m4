@@ -2235,37 +2235,44 @@ AS_IF([test "x$ac_cv_prog_cxx_$1" != xno], [$5], [$6])
 # _AC_CXX_CXX98_TEST_HEADER
 # -------------------------
 # A C++ header suitable for testing for CXX98.
+# We only test *language* features that were new in the 1998 C++ standard,
+# because testing for library features is too slow.
 AC_DEFUN([_AC_CXX_CXX98_TEST_HEADER],
-[[
-#include <algorithm>
-#include <cstdlib>
-#include <fstream>
-#include <iomanip>
+[[// Does the compiler advertise C++98 conformance?
+#if !defined __cplusplus || __cplusplus < 199711L
+# error "Compiler does not advertise C++98 conformance"
+#endif
+
+// These inclusions are cheap compared to including any STL header, but will
+// reliably reject old compilers that lack the unsuffixed header files.
+#undef NDEBUG
+#include <cassert>
+#include <cstring>
 #include <iostream>
-#include <list>
-#include <map>
-#include <set>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <utility>
-#include <vector>
 
-namespace test {
-  typedef std::vector<std::string> string_vec;
-  typedef std::pair<int,bool> map_value;
-  typedef std::map<std::string,map_value> map_type;
-  typedef std::set<int> set_type;
+// Namespaces, exceptions, and templates were all added after "C++ 2.0".
+using std::cout;
+using std::strcmp;
 
-  template<typename T>
-  class printer {
-  public:
-    printer(std::ostringstream& os): os(os) {}
-    void operator() (T elem) { os << elem << std::endl; }
-  private:
-    std::ostringstream& os;
-  };
+namespace {
+
+void test_exception_syntax()
+{
+  try {
+    throw "test";
+  } catch (const char *s) {
+    assert (!strcmp (s, "test"));
+  }
 }
+
+template <typename T> struct test_template
+{
+  T const val;
+  explicit test_template(T t) : val(t) {}
+  template <typename U> T add(U u) { return static_cast<T>(u) + val; }
+};
+
+} // anonymous namespace
 ]])# _AC_CXX_CXX98_TEST_HEADER
 
 # _AC_CXX_CXX98_TEST_BODY
@@ -2273,76 +2280,29 @@ namespace test {
 # A C++ body suitable for testing for CXX98, assuming the corresponding header.
 AC_DEFUN([_AC_CXX_CXX98_TEST_BODY],
 [[
-
-try {
-  // Basic string.
-  std::string teststr("ASCII text");
-  teststr += " string";
-
-  // Simple vector.
-  test::string_vec testvec;
-  testvec.push_back(teststr);
-  testvec.push_back("foo");
-  testvec.push_back("bar");
-  if (testvec.size() != 3) {
-    throw std::runtime_error("vector size is not 1");
-  }
-
-  // Dump vector into stringstream and obtain string.
-  std::ostringstream os;
-  for (test::string_vec::const_iterator i = testvec.begin();
-       i != testvec.end(); ++i) {
-    if (i + 1 != testvec.end()) {
-      os << teststr << '\n';
-    }
-  }
-  // Check algorithms work.
-  std::for_each(testvec.begin(), testvec.end(), test::printer<std::string>(os));
-  std::string os_out = os.str();
-
-  // Test pair and map.
-  test::map_type testmap;
-  testmap.insert(std::make_pair(std::string("key"),
-                                std::make_pair(53,false)));
-
-  // Test set.
-  int values[] = {9, 7, 13, 15, 4, 18, 12, 10, 5, 3, 14, 19, 17, 8, 6, 20, 16, 2, 11, 1};
-  test::set_type testset(values, values + sizeof(values)/sizeof(values[0]));
-  std::list<int> testlist(testset.begin(), testset.end());
-  std::copy(testset.begin(), testset.end(), std::back_inserter(testlist));
-} catch (const std::exception& e) {
-  std::cerr << "Caught exception: " << e.what() << std::endl;
-
-  // Test fstream
-  std::ofstream of("test.txt");
-  of << "Test ASCII text\n" << std::flush;
-  of << "N= " << std::hex << std::setw(8) << std::left << 534 << std::endl;
-  of.close();
+{
+  test_exception_syntax ();
+  test_template<double> tt (2.0);
+  assert (tt.add (4) == 6.0);
+  assert (true && !false);
+  cout << "ok\n";
 }
-std::exit(0);
 ]])
 
 # _AC_CXX_CXX11_TEST_HEADER
 # -------------------------
 # A C++ header suitable for testing for CXX11.
+# As above, we test only new *language* features, not new STL features,
+# for speed's sake.
 AC_DEFUN([_AC_CXX_CXX11_TEST_HEADER],
 [[
-#include <deque>
-#include <functional>
-#include <memory>
-#include <tuple>
-#include <array>
-#include <regex>
-#include <iostream>
+// Does the compiler advertise C++ 2011 conformance?
+#if !defined __cplusplus || __cplusplus < 201103L
+# error "Compiler does not advertise C++11 conformance"
+#endif
 
 namespace cxx11test
 {
-  typedef std::shared_ptr<std::string> sptr;
-  typedef std::weak_ptr<std::string> wptr;
-
-  typedef std::tuple<std::string,int,double> tp;
-  typedef std::array<int, 20> int_array;
-
   constexpr int get_val() { return 20; }
 
   struct testinit
@@ -2351,7 +2311,8 @@ namespace cxx11test
     double d;
   };
 
-  class delegate  {
+  class delegate
+  {
   public:
     delegate(int n) : n(n) {}
     delegate(): delegate(2354) {}
@@ -2361,13 +2322,15 @@ namespace cxx11test
     int n;
   };
 
-  class overridden : public delegate {
+  class overridden : public delegate
+  {
   public:
     overridden(int n): delegate(n) {}
     virtual int getval() override final { return this->n * 2; }
   };
 
-  class nocopy {
+  class nocopy
+  {
   public:
     nocopy(int i): i(i) {}
     nocopy() = default;
@@ -2376,6 +2339,22 @@ namespace cxx11test
   private:
     int i;
   };
+
+  // for testing lambda expressions
+  template <typename Ret, typename Fn> Ret eval(Fn f, Ret v)
+  {
+    return f(v);
+  }
+
+  // for testing variadic templates and trailing return types
+  template <typename V> auto sum(V first) -> V
+  {
+    return first;
+  }
+  template <typename V, typename... Args> auto sum(V first, Args... rest) -> V
+  {
+    return first + sum(rest...);
+  }
 }
 ]])# _AC_CXX_CXX11_TEST_HEADER
 
@@ -2386,17 +2365,12 @@ AC_DEFUN([_AC_CXX_CXX11_TEST_BODY],
 [[
 {
   // Test auto and decltype
-  std::deque<int> d;
-  d.push_front(43);
-  d.push_front(484);
-  d.push_front(3);
-  d.push_front(844);
-  int total = 0;
-  for (auto i = d.begin(); i != d.end(); ++i) { total += *i; }
-
   auto a1 = 6538;
   auto a2 = 48573953.4;
   auto a3 = "String literal";
+
+  int total = 0;
+  for (auto i = a3; *i; ++i) { total += *i; }
 
   decltype(a2) a4 = 34895.034;
 }
@@ -2409,34 +2383,27 @@ AC_DEFUN([_AC_CXX_CXX11_TEST_BODY],
   cxx11test::testinit il = { 4323, 435234.23544 };
 }
 {
-  // Test range-based for and lambda
-  cxx11test::int_array array = {9, 7, 13, 15, 4, 18, 12, 10, 5, 3, 14, 19, 17, 8, 6, 20, 16, 2, 11, 1};
-  for (int &x : array) { x += 23; }
-  std::for_each(array.begin(), array.end(), [](int v1){ std::cout << v1; });
+  // Test range-based for
+  int array[] = {9, 7, 13, 15, 4, 18, 12, 10, 5, 3,
+                 14, 19, 17, 8, 6, 20, 16, 2, 11, 1};
+  for (auto &x : array) { x += 23; }
 }
 {
-  using cxx11test::sptr;
-  using cxx11test::wptr;
-
-  sptr sp(new std::string("ASCII string"));
-  wptr wp(sp);
-  sptr sp2(wp);
+  // Test lambda expressions
+  using cxx11test::eval;
+  assert (eval ([](int x) { return x*2; }, 21) == 42);
+  double d = 2.0;
+  assert (eval ([&](double x) { return d += x; }, 3.0) == 5.0);
+  assert (d == 5.0);
+  assert (eval ([=](double x) mutable { return d += x; }, 4.0) == 9.0);
+  assert (d == 5.0);
 }
 {
-  cxx11test::tp tuple("test", 54, 45.53434);
-  double d = std::get<2>(tuple);
-  std::string s;
-  int i;
-  std::tie(s,i,d) = tuple;
-}
-{
-  static std::regex filename_regex("^_?([a-z0-9_.]+-)+[a-z0-9]+$");
-  std::string testmatch("Test if this string matches");
-  bool match = std::regex_search(testmatch, filename_regex);
-}
-{
-  cxx11test::int_array array = {9, 7, 13, 15, 4, 18, 12, 10, 5, 3, 14, 19, 17, 8, 6, 20, 16, 2, 11, 1};
-  cxx11test::int_array::size_type size = array.size();
+  // Test use of variadic templates
+  using cxx11test::sum;
+  auto a = sum(1);
+  auto b = sum(1, 2);
+  auto c = sum(1.0, 2.0, 3.0);
 }
 {
   // Test constructor delegation
@@ -2454,7 +2421,7 @@ AC_DEFUN([_AC_CXX_CXX11_TEST_BODY],
 }
 {
   // Test template brackets
-  std::vector<std::pair<int,char*>> v1;
+  test_template<::test_template<int>> v(test_template<int>(12));
 }
 {
   // Unicode literals
@@ -2466,16 +2433,15 @@ AC_DEFUN([_AC_CXX_CXX11_TEST_BODY],
 
 # _AC_PROG_CXX_CXX98 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
 # -------------------------------------------------------------------
-
 # If the C++ compiler is not in ISO C++98 mode by default, try to add
 # an option to output variable CXX to make it so.  This macro tries
-# various options that select ISO C++98 on some system or another.  It
-# considers the compiler to be in ISO C++98 mode if it handles basic
-# features of the std namespace including: string, containers (list,
-# map, set, vector), streams (fstreams, iostreams, stringstreams,
-# iomanip), pair, exceptions and algorithms.
-
-
+# various options that select ISO C++98 on some system or another.
+# It considers the compiler to be in ISO C++98 mode if it defines
+# the __cplusplus macro appropriately and it supports language
+# features that were added since "C++ 2.0" (namespaces, exceptions,
+# and templates).  It does not check for the presence of any STL
+# headers, as this was found to make AC_PROG_CXX unacceptably slow.
+# Use AC_CHECK_HEADER if you need that.
 AC_DEFUN([_AC_PROG_CXX_CXX98],
 [_AC_CXX_STD_TRY([cxx98],
 [_AC_CXX_CXX98_TEST_HEADER],
@@ -2495,14 +2461,17 @@ dnl with extended modes being tried first.
 # -------------------------------------------------------------------
 # If the C++ compiler is not in ISO CXX11 mode by default, try to add
 # an option to output variable CXX to make it so.  This macro tries
-# various options that select ISO C++11 on some system or another.  It
-# considers the compiler to be in ISO C++11 mode if it handles all the
-# tests from the C++98 checks, plus the following: Language features
-# (auto, constexpr, decltype, default/deleted constructors, delegate
-# constructors, final, initializer lists, lambda functions, nullptr,
-# override, range-based for loops, template brackets without spaces,
-# unicode literals) and library features (array, memory (shared_ptr,
-# weak_ptr), regex and tuple types).
+# various options that select ISO C++11 on some system or another.
+# It considers the compiler to be in ISO C++11 mode if it defines the
+# __cplusplus macro appropriately, can compile all of the code from
+# the C++98 test, and can also handle many of the new language
+# features in C++11 (auto, constexpr, decltype, default/deleted
+# constructors, delegate constructors, final, initializer lists,
+# lambda functions, nullptr, override, range-based for loops, template
+# brackets without spaces, variadic templates, trailing return types,
+# unicode literals).  It does not check for the presence of the new
+# library headers; again, this was found to make AC_PROG_CXX
+# unacceptably slow.  Use AC_CHECK_HEADER if you need that.
 AC_DEFUN([_AC_PROG_CXX_CXX11],
 [_AC_CXX_STD_TRY([cxx11],
 [_AC_CXX_CXX11_TEST_HEADER
