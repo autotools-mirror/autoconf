@@ -4966,6 +4966,10 @@ void *alloca (size_t);
 #endif
 @end group
 @end example
+
+If you don't want to maintain this piece of code in your package manually,
+you can instead use the Gnulib module @code{alloca-opt} or @code{alloca}.
+@xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_CHOWN
@@ -5301,6 +5305,9 @@ rpl_malloc (size_t n)
 
 The result of this macro is cached in the
 @code{ac_cv_func_malloc_0_nonnull} variable.
+
+If you don't want to maintain a @code{malloc.c} file in your package
+manually, you can instead use the Gnulib module @code{malloc-gnu}.
 @end defmac
 
 @defmac AC_FUNC_MBRTOWC
@@ -5379,6 +5386,9 @@ If the obstacks are found, define @code{HAVE_OBSTACK}, else require an
 
 The result of this macro is cached in the @code{ac_cv_func_obstack}
 variable.
+
+The @code{AC_FUNC_OBSTACK} macro is obsolescent.  New programs should use
+Gnulib's @code{obstack} module.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_REALLOC
@@ -5398,6 +5408,9 @@ the native @code{realloc} is not used in the main project.  See
 
 The result of this macro is cached in the
 @code{ac_cv_func_realloc_0_nonnull} variable.
+
+If you don't want to maintain a @code{realloc.c} file in your package
+manually, you can instead use the Gnulib module @code{realloc-gnu}.
 @end defmac
 
 @defmac AC_FUNC_SELECT_ARGTYPES
@@ -5558,6 +5571,9 @@ from AIX 4.3), require an @code{AC_LIBOBJ} replacement for it.
 
 This macro caches its result in the @code{ac_cv_func_strnlen_working}
 variable.
+
+The @code{AC_FUNC_STRNLEN} macro is obsolescent.  New programs should
+use Gnulib's @code{strnlen} module.  @xref{Gnulib}.
 @end defmac
 
 @anchor{AC_FUNC_UTIME_NULL}
