@@ -4655,10 +4655,10 @@ on some architectures.  This section tries to make an inventory of these
 portability issues.  By definition, this list always requires
 additions.  A much more complete list is maintained by the Gnulib
 project (@pxref{Gnulib}), covering @ref{Function Substitutes, ,
-Current Posix Functions, gnulib, GNU gnulib}, @ref{Legacy Function
-Substitutes, , Legacy Functions, gnulib, GNU gnulib}, and @ref{Glibc
-Function Substitutes, , Glibc Functions, gnulib, GNU gnulib}.  Please
-help us keep the gnulib list as complete as possible.
+Current Posix Functions, gnulib, Gnulib}, @ref{Legacy Function
+Substitutes, , Legacy Functions, gnulib, Gnulib}, and @ref{Glibc
+Function Substitutes, , Glibc Functions, gnulib, Gnulib}.  Please
+help us keep the Gnulib list as complete as possible.
 
 @table @asis
 @item @code{exit}
@@ -4700,7 +4700,7 @@ typically assume @code{double} arguments.  On such a system,
 @code{isinf} incorrectly returns true for a finite @code{long double}
 argument that is outside the range of @code{double}.
 
-The best workaround for these issues is to use gnulib modules
+The best workaround for these issues is to use Gnulib modules
 @code{isinf} and @code{isnan} (@pxref{Gnulib}).  But a lighter weight
 solution involves code like the following.
 
@@ -4983,7 +4983,7 @@ should accept @option{-1} for @code{uid} and @code{gid}), define
 @code{HAVE_CHOWN}.  The result of this macro is cached in the
 @code{ac_cv_func_chown_works} variable.
 
-If you actually want a workaround, that is, a @code{chown} function is
+If you want a workaround, that is, a @code{chown} function that is
 available and works, you can use the Gnulib module @code{chown}.
 @xref{Gnulib}.
 @end defmac
@@ -5121,7 +5121,7 @@ may occur when compiling with @code{AC_SYS_LARGEFILE} on
 largefile-sensitive systems where @code{off_t} does not default to a
 64bit entity.  All systems with @code{fseeko} also supply @code{ftello}.
 
-Gnulib contains a module @code{fseeko}, that invokes @code{AC_FUNC_FSEEKO}
+The Gnulib module @code{fseeko} invokes @code{AC_FUNC_FSEEKO}
 and also contains workarounds for other portability problems of
 @code{fseeko}.  @xref{Gnulib}.
 @end defmac
@@ -5139,7 +5139,7 @@ define @code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
 needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 
 This macro is obsolescent. New programs need not use this macro.  But
-they may want to use the Gnulib module @code{getgroups}, that provides
+they may want to use the Gnulib module @code{getgroups}, which provides
 workarounds to other portability problems of this function.
 @end defmac
 
@@ -5337,8 +5337,8 @@ type @code{mbstate_t} are properly declared.
 The result of this macro is cached in the @code{ac_cv_func_mbrtowc}
 variable.
 
-Gnulib contains a module @code{mbrtowc} that not only ensures that the
-function is declared, but also works around a number of other portability
+The Gnulib module @code{mbrtowc} not only ensures that the
+function is declared, but also works around other portability
 problems of this function.
 @end defmac
 
@@ -5540,9 +5540,9 @@ the buffer argument.
 The result of this macro is cached in the
 @code{ac_cv_func_strerror_r_char_p} variable.
 
-Gnulib contains a module @code{strerror_r} that not only ensures that the
-function has the return type specified by Posix, but also works around a
-dozen of other portability problems of this function.
+The Gnulib module @code{strerror_r} not only ensures that the function
+has the return type specified by Posix, but also works around other
+portability problems of this function.
 @end defmac
 
 @anchor{AC_FUNC_STRFTIME}
@@ -5587,8 +5587,8 @@ If the @code{strtold} function exists and conforms to C99 or later, define
 
 This macro caches its result in the @code{ac_cv_func_strtold} variable.
 
-Gnulib contains a module @code{strtold} that not only ensures that the
-function exists, but also works around a dozen of other portability
+The Gnulib module @code{strtold} not only ensures that the
+function exists, but also works around other portability
 problems of this function.
 @end defmac
 
@@ -5846,9 +5846,9 @@ This section documents some collected knowledge about common headers,
 and the problems they cause.  By definition, this list always requires
 additions.  A much more complete list is maintained by the Gnulib
 project (@pxref{Gnulib}), covering @ref{Header File Substitutes, ,
-Posix Headers, gnulib, GNU gnulib} and @ref{Glibc Header File
-Substitutes, , Glibc Headers, gnulib, GNU gnulib}.  Please help us keep
-the gnulib list as complete as possible.
+Posix Headers, gnulib, Gnulib} and @ref{Glibc Header File
+Substitutes, , Glibc Headers, gnulib, Gnulib}.  Please help us keep
+the Gnulib list as complete as possible.
 
 When we say that a header ``may require'' some set of other headers, we
 mean that it may be necessary for you to manually include those other
@@ -13597,7 +13597,7 @@ instance you might have to refer to @samp{$m4_flags}.
 Any token matching @var{pattern} is allowed, including if it matches an
 @code{m4_pattern_forbid} pattern.
 
-For example, gnulib uses @code{m4_pattern_forbid([^gl_])} to reserve the
+For example, Gnulib uses @code{m4_pattern_forbid([^gl_])} to reserve the
 @code{gl_} namespace for itself, but also uses
 @code{m4_pattern_allow([^gl_ES$])} to avoid a false negative on the
 valid locale name.
@@ -26199,7 +26199,7 @@ myprog-paths.h: Makefile
 @end example
 
 @noindent
-The gnulib module @samp{configmake} provides such a header with all the
+The Gnulib module @samp{configmake} provides such a header with all the
 standard directory variables defined, @pxref{configmake,,, gnulib, GNU
 Gnulib}.
 
