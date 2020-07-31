@@ -370,26 +370,6 @@ AC_LIBSOURCES(alloca.c)
 AC_SUBST([ALLOCA], [\${LIBOBJDIR}alloca.$ac_objext])dnl
 AC_DEFINE(C_ALLOCA, 1, [Define to 1 if using `alloca.c'.])
 
-AC_CACHE_CHECK(whether `alloca.c' needs Cray hooks, ac_cv_os_cray,
-[AC_EGREP_CPP(webecray,
-[#if defined CRAY && ! defined CRAY2
-webecray
-#else
-wenotbecray
-#endif
-], ac_cv_os_cray=yes, ac_cv_os_cray=no)])
-if test $ac_cv_os_cray = yes; then
-  for ac_func in _getb67 GETB67 getb67; do
-    AC_CHECK_FUNC($ac_func,
-		  [AC_DEFINE_UNQUOTED(CRAY_STACKSEG_END, $ac_func,
-				      [Define to one of `_getb67', `GETB67',
-				       `getb67' for Cray-2 and Cray-YMP
-				       systems. This function is required for
-				       `alloca.c' support on those systems.])
-    break])
-  done
-fi
-
 AC_CACHE_CHECK([stack direction for C alloca],
 	       [ac_cv_c_stack_direction],
 [AC_RUN_IFELSE([AC_LANG_SOURCE(

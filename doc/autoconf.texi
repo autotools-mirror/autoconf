@@ -3551,11 +3551,9 @@ generates standard templates just like @code{AC_DEFINE} when a
 For example:
 
 @example
-AH_TEMPLATE([CRAY_STACKSEG_END],
-            [Define to one of _getb67, GETB67, getb67
-             for Cray-2 and Cray-YMP systems.  This
-             function is required for alloca.c support
-             on those systems.])
+AH_TEMPLATE([NULL_DEVICE],
+  [Name of the file to open to get
+   a null file, or a data sink.])
 @end example
 
 @noindent
@@ -3563,10 +3561,8 @@ generates the following template, with the description properly
 justified.
 
 @example
-/* Define to one of _getb67, GETB67, getb67 for Cray-2 and
-   Cray-YMP systems.  This function is required for alloca.c
-   support on those systems.  */
-#undef CRAY_STACKSEG_END
+/* Name of the file to open to get a null file, or a data sink. */
+#undef NULL_DEVICE
 @end example
 @end defmac
 
