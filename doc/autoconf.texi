@@ -4982,6 +4982,10 @@ If the @code{chown} function is available and works (in particular, it
 should accept @option{-1} for @code{uid} and @code{gid}), define
 @code{HAVE_CHOWN}.  The result of this macro is cached in the
 @code{ac_cv_func_chown_works} variable.
+
+If you actually want a workaround, that is, a @code{chown} function is
+available and works, you can use the Gnulib module @code{chown}.
+@xref{Gnulib}.
 @end defmac
 
 @anchor{AC_FUNC_CLOSEDIR_VOID}
@@ -5116,6 +5120,10 @@ visible on some systems (e.g., glibc 2.2).  Otherwise linkage problems
 may occur when compiling with @code{AC_SYS_LARGEFILE} on
 largefile-sensitive systems where @code{off_t} does not default to a
 64bit entity.  All systems with @code{fseeko} also supply @code{ftello}.
+
+Gnulib contains a module @code{fseeko}, that invokes @code{AC_FUNC_FSEEKO}
+and also contains workarounds for other portability problems of
+@code{fseeko}.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_GETGROUPS
@@ -5126,9 +5134,13 @@ largefile-sensitive systems where @code{off_t} does not default to a
 @prindex @code{getgroups}
 @caindex func_getgroups_works
 If the @code{getgroups} function is available and works (unlike on
-Ultrix 4.3, where @samp{getgroups (0, 0)} always fails), define
-@code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
+Ultrix 4.3 and NeXTstep 3.2, where @samp{getgroups (0, 0)} always fails),
+define @code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
 needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
+
+This macro is obsolescent. New programs need not use this macro.  But
+they may want to use the Gnulib module @code{getgroups}, that provides
+workarounds to other portability problems of this function.
 @end defmac
 
 @anchor{AC_FUNC_GETLOADAVG}
@@ -5207,6 +5219,9 @@ IRIX 4, PTX, and UnixWare, respectively.  Then, if
 
 The result of this macro can be overridden by setting the cache variable
 @code{ac_cv_search_getmntent}.
+
+The @code{AC_FUNC_GETMNTENT} macro is obsolescent.  New programs should
+use Gnulib's @code{mountlist} module.  @xref{Gnulib}.
 @end defmac
 
 @defmac AC_FUNC_GETPGRP
@@ -5321,6 +5336,10 @@ type @code{mbstate_t} are properly declared.
 
 The result of this macro is cached in the @code{ac_cv_func_mbrtowc}
 variable.
+
+Gnulib contains a module @code{mbrtowc} that not only ensures that the
+function is declared, but also works around a number of other portability
+problems of this function.
 @end defmac
 
 @defmac AC_FUNC_MEMCMP
@@ -5515,6 +5534,10 @@ the buffer argument.
 
 The result of this macro is cached in the
 @code{ac_cv_func_strerror_r_char_p} variable.
+
+Gnulib contains a module @code{strerror_r} that not only ensures that the
+function has the return type specified by Posix, but also works around a
+dozen of other portability problems of this function.
 @end defmac
 
 @anchor{AC_FUNC_STRFTIME}
@@ -5558,6 +5581,10 @@ If the @code{strtold} function exists and conforms to C99 or later, define
 @code{HAVE_STRTOLD}.
 
 This macro caches its result in the @code{ac_cv_func_strtold} variable.
+
+Gnulib contains a module @code{strtold} that not only ensures that the
+function exists, but also works around a dozen of other portability
+problems of this function.
 @end defmac
 
 @defmac AC_FUNC_STRNLEN
