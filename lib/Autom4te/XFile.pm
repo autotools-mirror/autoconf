@@ -232,7 +232,8 @@ sub lock
 
   # Unless explicitly configured otherwise, Perl implements its 'flock' with the
   # first of flock(2), fcntl(2), or lockf(3) that works.  These can fail on
-  # NFS-backed files, with ENOLCK (GNU/Linux) or EOPNOTSUPP (FreeBSD); we
+  # NFS-backed files, with ENOLCK (GNU/Linux) or EOPNOTSUPP (FreeBSD) or
+  # EINVAL (OpenIndiana, as per POSIX 1003.1-2017 fcntl spec); we
   # usually ignore these errors.  If $ENV{MAKEFLAGS} suggests that a parallel
   # invocation of 'make' has invoked the tool we serve, report all locking
   # failures and abort.
@@ -251,7 +252,7 @@ sub lock
 
       msg ($make_j ? 'fatal' : 'unsupported',
 	   "cannot lock $file with mode $mode: $!" . ($make_j ? $note : ""))
-	if $make_j || !($!{ENOLCK} || $!{EOPNOTSUPP});
+	if $make_j || !($!{EINVAL} || $!{ENOLCK} || $!{EOPNOTSUPP});
     }
 }
 
