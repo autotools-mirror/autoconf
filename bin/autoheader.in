@@ -273,13 +273,24 @@ $out->close;
 {
   foreach my $template ("$tmp/config.hin", @config_templates)
     {
-      my $in = new Autom4te::XFile ($template, "<");
-
-      while ($_ = $in->getline)
+      if ($template =~ /["#\$&'()*;<>?[\\\^`|]/)
 	{
-	  my ($sym) = /^\#\s*\w+\s+(\w+)/
-	    or next;
-	  delete $symbol{$sym};
+	  msg 'syntax', "warning: header template has shell metacharacters: $template";
+	}
+      elsif (! -r $template)
+	{
+	  msg 'syntax', "warning: cannot read $template: $!";
+	}
+      else
+	{
+	  my $in = new Autom4te::XFile ($template, "<");
+
+	  while ($_ = $in->getline)
+	    {
+	      my ($sym) = /^\#\s*\w+\s+(\w+)/
+		or next;
+	      delete $symbol{$sym};
+	    }
 	}
     }
 

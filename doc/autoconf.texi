@@ -2438,6 +2438,9 @@ AC_CONFIG_FILES([Makefile:boiler/top.mk:boiler/bot.mk]
 Doing this allows you to keep your file names acceptable to
 DOS variants, or
 to prepend and/or append boilerplate to the file.
+
+The @var{file} names should not contain shell metacharacters.
+@xref{Special Chars in Variables}.
 @end defmac
 
 
@@ -3297,7 +3300,9 @@ Actions}.  Make @code{AC_OUTPUT} create the file(s) in the
 blank-or-newline-separated list @var{header} containing C preprocessor
 @code{#define} statements, and replace @samp{@@DEFS@@} in generated
 files with @option{-DHAVE_CONFIG_H} instead of the value of @code{DEFS}.
-The usual name for @var{header} is @file{config.h}.
+The usual name for @var{header} is @file{config.h};
+@var{header} should not contain shell metacharacters.
+@xref{Special Chars in Variables}.
 
 If @var{header} already exists and its contents are identical to what
 @code{AC_OUTPUT} would put in it, it is left alone.  Doing this allows
@@ -3617,7 +3622,9 @@ Specify additional shell commands to run at the end of
 from @command{configure}.  Associate the commands with @var{tag}.
 Since typically the @var{cmds} create a file, @var{tag} should
 naturally be the name of that file.  If needed, the directory hosting
-@var{tag} is created.  This macro is one of the instantiating macros;
+@var{tag} is created.  The @var{tag} should not contain shell
+metacharacters.  @xref{Special Chars in Variables}.
+This macro is one of the instantiating macros;
 see @ref{Configuration Actions}.
 
 Here is an unrealistic example:
@@ -3676,7 +3683,10 @@ Make @code{AC_OUTPUT} link each of the existing files @var{source} to
 the corresponding link name @var{dest}.  Makes a symbolic link if
 possible, otherwise a hard link if possible, otherwise a copy.  The
 @var{dest} and @var{source} names should be relative to the top level
-source or build directory.  This macro is one of the instantiating
+source or build directory, and should not contain shell metacharacters.
+@xref{Special Chars in Variables}.
+
+This macro is one of the instantiating
 macros; see @ref{Configuration Actions}.
 
 For example, this call:
