@@ -273,11 +273,7 @@ $out->close;
 {
   foreach my $template ("$tmp/config.hin", @config_templates)
     {
-      if ($template =~ /["#\$&'()*;<>?[\\\^`|]/)
-	{
-	  msg 'syntax', "warning: header template has shell metacharacters: $template";
-	}
-      elsif (! -r $template)
+      if (! -r $template)
 	{
 	  msg 'syntax', "warning: cannot read $template: $!";
 	}
