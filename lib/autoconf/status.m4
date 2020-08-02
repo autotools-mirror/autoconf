@@ -880,7 +880,7 @@ m4_define([_AC_OUTPUT_HEADER],
   #
   if test x"$ac_file" != x-; then
     {
-      AS_ECHO(["/* $configure_input  */"]) \
+      AS_ECHO(["/* $configure_input  */"]) >&1 \
       && eval '$AWK -f "$ac_tmp/defines.awk"' "$ac_file_inputs"
     } >"$ac_tmp/config.h" \
       || AC_MSG_ERROR([could not create $ac_file])
@@ -892,7 +892,7 @@ m4_define([_AC_OUTPUT_HEADER],
 	|| AC_MSG_ERROR([could not create $ac_file])
     fi
   else
-    AS_ECHO(["/* $configure_input  */"]) \
+    AS_ECHO(["/* $configure_input  */"]) >&1 \
       && eval '$AWK -f "$ac_tmp/defines.awk"' "$ac_file_inputs" \
       || AC_MSG_ERROR([could not create -])
   fi
