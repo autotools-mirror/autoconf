@@ -1353,6 +1353,13 @@ AT_CLEANUP
 
 AT_SETUP([autom4te cache locking])
 
+# Expect this test to fail if Perl file locking does not work.
+AT_XFAIL_IF([$PERL -I "$top_srcdir/lib" -e '
+		 use Autom4te::XFile;
+		 my $fh = new Autom4te::XFile "lockfile", O_RDWR|O_CREAT;
+		 flock ($fh, LOCK_EX) && exit 1;
+	       '])
+
 # Cannot use AT_CHECK here, autotest internals could be messed up.
 
 (echo AC_INIT; sleep 2; echo) \
