@@ -518,6 +518,8 @@ do
     AT_CHECK_CONFIGURE([-C])
     cp -f state-env.after state-env.$at_run
     cp -f config.h config-h.$at_run
+    cp -f config.log config-log.$at_run
+    cp -f config.status config-status.$at_run
     AT_CHECK_ENV
 done
 
