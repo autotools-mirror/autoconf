@@ -687,8 +687,8 @@ AU_DEFUN([ac_cv_prog_gxx],
 # FCC   Fujitsu C++ compiler
 # KCC	KAI C++ compiler
 # RCC	Rational C++
-# xlC_r	AIX C Set++ (with support for reentrant code)
-# xlC	AIX C Set++
+# xlC_r	IBM XL C++ for AIX (with support for reentrant code)
+# xlC	IBM XL C++ for AIX
 AN_MAKEVAR([CXX],  [AC_PROG_CXX])
 AN_PROGRAM([CC],   [AC_PROG_CXX])
 AN_PROGRAM([c++],  [AC_PROG_CXX])
@@ -1451,12 +1451,12 @@ dnl Try
 dnl GCC		-std=gnu11 (unused restrictive mode: -std=c11)
 dnl with extended modes being tried first.
 dnl
-dnl Do not try -qlanglvl=extc1x, because IBM XL C V12.1 (the latest version as
-dnl of September 2012) does not pass the C11 test.  For now, try extc1x when
+dnl For IBM XL C for AIX V16.1 or later, '-std=gnu11' should work if
+dnl the user configured with CC='xlclang'.  Otherwise, do not try
+dnl -qlanglvl=extc1x as xlc with IBM XL C V16.1 (the latest version as
+dnl of August 2020) does not pass the C11 test.  Instead, try extc1x when
 dnl compiling the C99 test instead, since it enables _Static_assert and
-dnl _Noreturn, which is a win.  If -qlanglvl=extc11 or -qlanglvl=extc1x passes
-dnl the C11 test in some future version of IBM XL C, we'll add it here,
-dnl preferably extc11.
+dnl _Noreturn, which is a win.
 [[-std=gnu11]], [$1], [$2])[]dnl
 ])# _AC_PROG_CC_C11
 
