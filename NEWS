@@ -194,6 +194,17 @@ GNU Autoconf NEWS - User visible changes.
 - AC_FC_LINE_LENGTH now documents the maximum portable length of
   "unlimited" Fortran source code lines to be 250 columns, not 254.
 
+- AC_INIT now trims extra white space from its arguments.  For instance,
+
+    AC_INIT([  GNU  Hello  ], [1.0])
+
+  will set PACKAGE_NAME to “GNU Hello”.
+
+- AC_INIT will now issue warnings (in the “syntax” category) for a
+  non-literal URL argument, and for a TARNAME argument which is either
+  non-literal or contains characters that should not be used in file
+  names (e.g. ‘*’).
+
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
 ** Autoconf now requires perl 5.6 or better (but generated configure

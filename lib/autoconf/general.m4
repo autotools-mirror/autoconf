@@ -224,40 +224,66 @@ AU_ALIAS([AC_HELP_STRING], [AS_HELP_STRING])
 
 # _AC_INIT_LITERAL(STRING)
 # ------------------------
-# Reject STRING if it contains newline, or if it cannot be used as-is
-# in single-quoted strings, double-quoted strings, and quoted and
-# unquoted here-docs.
+# Reject STRING if it cannot be used as-is in single-quoted strings,
+# double-quoted strings, and quoted and unquoted here-docs.
 m4_define([_AC_INIT_LITERAL],
-[m4_if(m4_index(m4_translit([[$1]], [
-""], ['']), ['])AS_LITERAL_HEREDOC_IF([$1], [-]), [-1-], [],
-  [m4_warn([syntax], [AC_INIT: not a literal: $1])])])
+[m4_if(m4_index(m4_translit([[$1]], [""], ['']),
+                ['])AS_LITERAL_HEREDOC_IF([$1], [-]),
+       [-1-], [],
+  [m4_warn([syntax], [AC_INIT: not a literal: "$1"])])])
 
 # _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION, BUG-REPORT, [TARNAME], [URL])
 # ---------------------------------------------------------------------
 m4_define([_AC_INIT_PACKAGE],
-[_AC_INIT_LITERAL([$1])
-_AC_INIT_LITERAL([$2])
-_AC_INIT_LITERAL([$3])
+[m4_pushdef([_ac_init_NAME],     m4_normalize([$1]))
+m4_pushdef([_ac_init_VERSION],   m4_normalize([$2]))
+m4_pushdef([_ac_init_BUGREPORT], m4_normalize([$3]))
+m4_pushdef([_ac_init_TARNAME],   m4_normalize([$4]))
+m4_pushdef([_ac_init_URL],       m4_normalize([$5]))
+# NAME, VERSION, BUGREPORT, and URL should all be safe for use in shell
+# strings of all kinds.
+_AC_INIT_LITERAL(m4_defn([_ac_init_NAME]))
+_AC_INIT_LITERAL(m4_defn([_ac_init_VERSION]))
+_AC_INIT_LITERAL(m4_defn([_ac_init_BUGREPORT]))
+_AC_INIT_LITERAL(m4_defn([_ac_init_URL]))
+# TARNAME is even more constrained: it should not contain any shell
+# metacharacters or whitespace, because it is used to construct
+# filenames.
+AS_LITERAL_WORD_IF(m4_defn([_ac_init_TARNAME]), [],
+  [m4_warn([syntax],
+	   [AC_INIT: unsafe as a filename: "]m4_defn([_ac_init_TARNAME])["])])
+#
+# These do not use m4_copy because we don't want to copy the pushdef stack.
 m4_ifndef([AC_PACKAGE_NAME],
-	  [m4_define([AC_PACKAGE_NAME],     [$1])])
+	  [m4_define([AC_PACKAGE_NAME],
+		     m4_defn([_ac_init_NAME]))])
+m4_ifndef([AC_PACKAGE_VERSION],
+	  [m4_define([AC_PACKAGE_VERSION],
+		     m4_defn([_ac_init_VERSION]))])
+m4_ifndef([AC_PACKAGE_STRING],
+	  [m4_define([AC_PACKAGE_STRING],
+		     m4_defn([_ac_init_NAME])[ ]m4_defn([_ac_init_VERSION]))])
+m4_ifndef([AC_PACKAGE_BUGREPORT],
+	  [m4_define([AC_PACKAGE_BUGREPORT], _ac_init_BUGREPORT)])
 m4_ifndef([AC_PACKAGE_TARNAME],
 	  [m4_define([AC_PACKAGE_TARNAME],
-		     m4_default([$4],
-				[m4_bpatsubst(m4_tolower(m4_bpatsubst([[$1]],
-								     [GNU ])),
+		     m4_default(m4_defn([_ac_init_TARNAME]),
+				[m4_bpatsubst(m4_tolower(
+				 m4_bpatsubst(m4_defn([_ac_init_NAME]),
+					      [GNU ])),
 				 [[^_abcdefghijklmnopqrstuvwxyz0123456789]],
 				 [-])]))])
-m4_ifndef([AC_PACKAGE_VERSION],
-	  [m4_define([AC_PACKAGE_VERSION],   [$2])])
-m4_ifndef([AC_PACKAGE_STRING],
-	  [m4_define([AC_PACKAGE_STRING],    [$1 $2])])
-m4_ifndef([AC_PACKAGE_BUGREPORT],
-	  [m4_define([AC_PACKAGE_BUGREPORT], [$3])])
 m4_ifndef([AC_PACKAGE_URL],
 	  [m4_define([AC_PACKAGE_URL],
-  m4_if([$5], [], [m4_if(m4_index([$1], [GNU ]), [0],
-	  [[https://www.gnu.org/software/]m4_defn([AC_PACKAGE_TARNAME])[/]])],
-	[[$5]]))])
+		     m4_default(m4_defn([_ac_init_URL]),
+				[m4_if(m4_index(m4_defn([_ac_init_NAME]),
+						[GNU ]), [0],
+    [[https://www.gnu.org/software/]m4_defn([AC_PACKAGE_TARNAME])[/]])]))])
+m4_popdef([_ac_init_NAME])
+m4_popdef([_ac_init_VERSION])
+m4_popdef([_ac_init_BUGREPORT])
+m4_popdef([_ac_init_TARNAME])
+m4_popdef([_ac_init_URL])
 ])
 
 
