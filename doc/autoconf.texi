@@ -1890,7 +1890,7 @@ distribution tar ball names (e.g., @samp{autoconf}).  It defaults to
 other than alphanumerics and underscores are changed to @samp{-}.  If
 provided, @var{url} should be the home page for the package.
 
-The arguments of @code{AC_INIT} must be static, i.e., there should not
+All the arguments of @code{AC_INIT} must be static, i.e., there should not
 be any shell computation, quotes, or newlines, but they can be computed
 by M4.  This is because the package information strings are expanded at
 M4 time into several contexts, and must give the same text at shell time
@@ -1900,6 +1900,11 @@ here-documents, or unquoted here-documents.  It is permissible to use
 that changes with every commit to a version control system (in fact,
 Autoconf does just that, for all builds of the development tree made
 between releases).
+
+The @var{tarname} argument is used to construct filenames.
+In addition to being static, it should not contain wildcard
+characters, white space, or anything else that could be troublesome
+as part of a file or directory name.
 
 The following M4 macros (e.g., @code{AC_PACKAGE_NAME}), output variables
 (e.g., @code{PACKAGE_NAME}), and preprocessor symbols (e.g.,

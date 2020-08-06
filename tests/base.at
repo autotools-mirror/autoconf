@@ -227,7 +227,10 @@ AT_SETUP([AC_INIT with unusual version strings])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU String++ with  spaces (foo)],
-	  [2.48++  (2010-07-03)], [[https://example.com/?a=b&c=d#e]], [clisp])
+	  [2.48++  (2010-07-03)],
+          [[https://example.com/?a=b&c=d#e]],
+          [string++],
+          [[https://example.com/?f=g&h=i%2fj#42]])
 AC_OUTPUT
 ]])
 
@@ -241,19 +244,20 @@ AT_CHECK_AUTOCONF([-Werror])
 AT_CHECK_CONFIGURE([-q])
 AT_CHECK_CONFIGURE([--help], [], [stdout])
 AT_CHECK([[$FGREP 'com/?a=b&c=d#e' stdout]], [], [ignore])
+AT_CHECK([[$FGREP 'com/?f=g&h=i%2fj#42' stdout]], [], [ignore])
 AT_CHECK_CONFIGURE([--version], [], [stdout])
-AT_CHECK([$FGREP 'GNU String++ with  spaces (foo)' stdout], [], [ignore])
-AT_CHECK([$FGREP '2.48++  (2010-07-03)' stdout], [], [ignore])
+AT_CHECK([$FGREP 'GNU String++ with spaces (foo)' stdout], [], [ignore])
+AT_CHECK([$FGREP '2.48++ (2010-07-03)' stdout], [], [ignore])
 
 AT_CHECK([./config.status --help], [], [stdout])
 AT_CHECK([[$FGREP 'com/?a=b&c=d#e' stdout]], [], [ignore])
 AT_CHECK([./config.status --version], [], [stdout])
-AT_CHECK([$FGREP 'GNU String++ with  spaces (foo)' stdout], [], [ignore])
-AT_CHECK([$FGREP '2.48++  (2010-07-03)' stdout], [], [ignore])
+AT_CHECK([$FGREP 'GNU String++ with spaces (foo)' stdout], [], [ignore])
+AT_CHECK([$FGREP '2.48++ (2010-07-03)' stdout], [], [ignore])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU "String++"],
-	  [2.48], [https://example.com/], [clisp])
+	  [2.48], [https://example.com/], [string++])
 AC_OUTPUT
 ]])
 
@@ -262,7 +266,7 @@ AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU String++],
-	  ['codename' 2.48], [https://example.com/], [clisp])
+	  ['codename' 2.48], [https://example.com/], [string++])
 AC_OUTPUT
 ]])
 
@@ -271,12 +275,65 @@ AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU
-String++], [2.48], [https://example.com/], [clisp])
+String++], [2.48], [https://example.com/], [string++])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++], ['2.48'], [https://example.com], [string++])
 AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
 AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++], [2.48], ['https://example.com'], [string++])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++], [2.48], [https://example.com], [string++],
+          ['https://example.com'])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: not a literal: ' stderr], [], [ignore])
+
+
+# The TARNAME argument is used to construct filenames, so it's even
+# more constrained.
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++], [2.48], [https://example.com], ['string++'])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: unsafe as a filename: ' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++], [2.48], [https://example.com], [string ++])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: unsafe as a filename: ' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++], [2.48], [https://example.com], [string*])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: unsafe as a filename: ' stderr], [], [ignore])
+
 
 AT_CLEANUP
 
