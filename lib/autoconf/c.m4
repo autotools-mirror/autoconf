@@ -194,8 +194,8 @@ return test_array @<:@0@:>@;
 # But we include them only after the EXPRESSION has been evaluated.
 m4_define([AC_LANG_INT_SAVE(C)],
 [AC_LANG_PROGRAM([$1
-static long int longval () { return $2; }
-static unsigned long int ulongval () { return $2; }
+static long int longval (void) { return $2; }
+static unsigned long int ulongval (void) { return $2; }
 @%:@include <stdio.h>
 @%:@include <stdlib.h>],
 [
@@ -1747,8 +1747,8 @@ for ac_kw in inline __inline__ __inline; do
   AC_COMPILE_IFELSE([AC_LANG_SOURCE(
 [#ifndef __cplusplus
 typedef int foo_t;
-static $ac_kw foo_t static_foo () {return 0; }
-$ac_kw foo_t foo () {return 0; }
+static $ac_kw foo_t static_foo (void) {return 0; }
+$ac_kw foo_t foo (void) {return 0; }
 #endif
 ])],
 		    [ac_cv_c_inline=$ac_kw])
