@@ -1904,7 +1904,7 @@ AC_OUTPUT
 
 # Test file
 AT_DATA([testprog.c],
-[[int main(int argc) { return argc == 2 ? 0 : 1; }
+[[int main (int argc, char **argv) { return argc == 2 ? 0 : 1; }
 ]])
 
 # Testsuite
@@ -1956,7 +1956,7 @@ AC_OUTPUT
 
 # Test file
 AT_DATA([testprog.c],
-[[int main(int argc) { return argc == 2 ? 0 : 1; }
+[[int main (int argc, char **argv) { return argc == 2 ? 0 : 1; }
 ]])
 
 # Testsuite
