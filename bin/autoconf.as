@@ -85,6 +85,7 @@ exit_missing_arg='
 
 # Variables.
 : ${AUTOM4TE='@bindir@/@autom4te-name@'}
+: ${trailer_m4='@pkgdatadir@/autoconf/trailer.m4'}
 autom4te_options=
 outfile=
 verbose=false
@@ -183,9 +184,20 @@ esac
 # Unless specified, the output is stdout.
 test -z "$outfile" && outfile=-
 
+# Don't read trailer.m4 if we are tracing.
+if test -n "$traces"; then
+    trailer_m4=""
+else
+    # The extra quotes will be stripped by eval.
+    trailer_m4=\""$trailer_m4"\"
+fi
+
 # Run autom4te with expansion.
+# trailer.m4 is read _before_ $infile, despite the name,
+# because putting it afterward screws up autom4te's location tracing.
 eval set x "$autom4te_options" \
-  --language=autoconf --output=\"\$outfile\" "$traces" \"\$infile\"
+  --language=autoconf --output=\"\$outfile\" "$traces" \
+  $trailer_m4 \"\$infile\"
 shift
 $verbose && AS_ECHO(["$as_me: running $AUTOM4TE $*"]) >&2
 exec "$AUTOM4TE" "$@"

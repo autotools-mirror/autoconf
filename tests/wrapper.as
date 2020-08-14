@@ -24,7 +24,8 @@ AUTOHEADER=autoheader
 AUTOM4TE=autom4te
 AUTOM4TE_CFG='@abs_top_builddir@/lib/autom4te.cfg'
 autom4te_perllibdir='@abs_top_srcdir@/lib'
-export AUTOCONF AUTOHEADER AUTOM4TE AUTOM4TE_CFG autom4te_perllibdir
+trailer_m4='@abs_top_srcdir@/lib/autoconf/trailer.m4'
+export AUTOCONF AUTOHEADER AUTOM4TE AUTOM4TE_CFG autom4te_perllibdir trailer_m4
 
 case '@wrap_program@' in
   ifnames)

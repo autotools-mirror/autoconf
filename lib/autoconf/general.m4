@@ -1477,9 +1477,32 @@ _AC_ARG_VAR_PRECIOUS([host_alias])AC_SUBST([host_alias])dnl
 _AC_ARG_VAR_PRECIOUS([target_alias])AC_SUBST([target_alias])dnl
 dnl
 AC_LANG_PUSH(C)
+dnl
+dnl Record that AC_INIT has been called.  It doesn't make sense to
+dnl AC_REQUIRE AC_INIT, but it _does_ make sense for macros to say
+dnl AC_BEFORE([self], [AC_INIT]) sometimes.  Also, _AC_FINALIZE checks
+dnl for AC_INIT having been called.
+m4_provide([AC_INIT])dnl
 ])
 
 
+# _AC_FINALIZE
+# ------------
+# Code to be run after the entire configure.ac is processed, but only
+# when generating configure.  This macro should only be called from
+# trailer.m4, which is fed to m4 after configure.ac by autoconf (the
+# program).  We don't just call m4_wrap([_AC_FINALIZE]), because then
+# it would run at freeze time and when tracing configure.ac for
+# autoheader etc.
+#
+# Currently this doesn't emit anything; it just checks that AC_INIT
+# and AC_OUTPUT were expanded at some point.  Leaving either of these
+# out of a configure script is likely to be a bug.
+m4_define([_AC_FINALIZE],
+  [m4_provide_if([AC_INIT], [],
+    [m4_warn([syntax], [AC_INIT was never used])])dnl
+   m4_provide_if([AC_OUTPUT], [],
+    [m4_warn([syntax], [AC_OUTPUT was never used])])])
 
 
 ## ------------------------------------------------------------- ##

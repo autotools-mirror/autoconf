@@ -1310,6 +1310,12 @@ AC_PROVIDE_IFELSE([AC_CONFIG_SUBDIRS], [_AC_OUTPUT_SUBDIRS()])dnl
 if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   AC_MSG_WARN([unrecognized options: $ac_unrecognized_opts])
 fi
+dnl
+dnl Record that AC_OUTPUT has been called.  It doesn't make sense to
+dnl AC_REQUIRE AC_OUTPUT, but it _does_ make sense for macros to say
+dnl AC_BEFORE([self], [AC_OUTPUT]).  Also, _AC_FINALIZE checks
+dnl for AC_OUTPUT having been called.
+m4_provide([AC_OUTPUT])dnl
 ])# AC_OUTPUT
 
 

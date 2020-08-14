@@ -60,6 +60,7 @@ AT_DATA([configure.ac],
 [[AC_INIT
 CC=no-such-compiler
 AC_PROG_CC
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF

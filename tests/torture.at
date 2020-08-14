@@ -1037,12 +1037,12 @@ two], [This spans two lines.])
 AT_CHECK_AUTOCONF([], [], [], [stderr])
 dnl Older versions of m4 report error at line 5 (end of macro);
 dnl newer versions report it at line 4 (start of macro).
-AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
+AT_CHECK([[sed '/trailer\.m4:/d; s/^configure\.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE: `one
 two' is not a valid preprocessor define value
 ]])
 AT_CHECK_AUTOHEADER([], [foo], [], [], [stderr])
-AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
+AT_CHECK([[sed 's/^configure\.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE: `one
 two' is not a valid preprocessor define value
 ]])
@@ -1050,16 +1050,18 @@ AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([[#define foo one
 ]])
 
+rm -rf autom4te.cache
+
 AT_CONFIGURE_AC([[AC_DEFINE_UNQUOTED([foo], [one
 two], [This spans two lines.])
 ]])
 AT_CHECK_AUTOCONF([], [], [], [stderr])
-AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
+AT_CHECK([[sed '/trailer.m4:/d; s/^configure\.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE_UNQUOTED: `one
 two' is not a valid preprocessor define value
 ]])
 AT_CHECK_AUTOHEADER([], [foo], [], [], [stderr])
-AT_CHECK([[sed 's/^configure.ac:[45]: //' stderr]], [],
+AT_CHECK([[sed 's/^configure\.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE_UNQUOTED: `one
 two' is not a valid preprocessor define value
 ]])
@@ -1290,10 +1292,11 @@ AT_DATA([configure.ac],
 [[AC_INIT
 kill -2 $$
 exit 77
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([], 1, ignore, ignore)
+AT_CHECK_CONFIGURE([], [1], [ignore], [ignore])
 
 AT_CLEANUP
 
