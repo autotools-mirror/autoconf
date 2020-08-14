@@ -97,7 +97,8 @@ dist_autoconflib_DATA = \
   lib/autoconf/headers.m4 \
   lib/autoconf/types.m4 \
   lib/autoconf/libs.m4 \
-  lib/autoconf/programs.m4
+  lib/autoconf/programs.m4 \
+  lib/autoconf/trailer.m4
 
 nodist_autoconflib_DATA = lib/autoconf/autoconf.m4f
 CLEANFILES += $(nodist_autoconflib_DATA)

@@ -589,10 +589,10 @@ test -z "$TOOL5" || fail=:
 AC_CHECK_PROGS(TOOL6, missing tool better,, $path)
 test "$TOOL6" = tool || fail=:
 
-# No AC-OUTPUT, we don't need config.status.
 $fail &&
   AC_MSG_ERROR([[CHECK_PROG failed]])
-AS_EXIT(0)
+
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
@@ -692,10 +692,10 @@ test -z "$TOOL3" || fail=:
 AC_PATH_PROGS(TOOL4, missing tool better,, $path)
 test "$TOOL4" = "$pwd/path/1/tool" || fail=:
 
-# No AC-OUTPUT, we don't need config.status.
 $fail &&
   AC_MSG_ERROR([[PATH_PROG failed]])
-AS_EXIT(0)
+
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
@@ -770,10 +770,10 @@ AC_PATH_PROGS_FEATURE_CHECK(TOOL7, [tool better],
 test -z "$TOOL7" || fail=:
 test "$ac_cv_path_TOOL7" = "$pwd/path/1/tool" || fail=:
 
-# No AC-OUTPUT, we don't need config.status.
 $fail &&
   AC_MSG_ERROR([[PATH_PROG failed]])
-AS_EXIT(0)
+
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF

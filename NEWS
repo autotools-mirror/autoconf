@@ -13,6 +13,9 @@ GNU Autoconf NEWS - User visible changes.
 ** The use of the long-deprecated name 'configure.in' for the autoconf
    input file now elicits a warning in the 'obsolete' category.
 
+** autoconf will now issue warnings (in the ‘syntax’ category) if the
+   input file is missing a call to AC_INIT and/or AC_OUTPUT.
+
 ** Older version of automake and aclocal (< 1.8) are no longer supported
    by autoreconf.
 

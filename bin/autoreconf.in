@@ -245,8 +245,9 @@ sub parse_args ()
 
 # &autoreconf_current_directory
 # -----------------------------
-sub autoreconf_current_directory ()
+sub autoreconf_current_directory ($)
 {
+  my ($directory) = @_;
   my $configure_ac = find_configure_ac;
 
   # ---------------------- #
@@ -266,10 +267,15 @@ sub autoreconf_current_directory ()
 	  # See below for why we look for gettext here.
 	  $uses_gettext = 1  if /^AM_GNU_GETTEXT_VERSION/;
 	}
+      if (!$uses_autoconf)
+        {
+          error "$configure_ac: AC_INIT not found; not an autoconf script?";
+          return;
+        }
     }
-  if (!$uses_autoconf)
+  else
     {
-      verb "$configure_ac: not using Autoconf";
+      verb "neither configure.ac nor configure.in present in $directory";
       return;
     }
 
@@ -598,7 +604,7 @@ sub autoreconf ($)
   chdir $directory
     or error "cannot chdir to $directory: $!";
 
-  autoreconf_current_directory;
+  autoreconf_current_directory ($directory);
 
   # The format is not free: taken from Emacs, itself using GNU Make's
   # format.

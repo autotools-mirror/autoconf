@@ -112,6 +112,7 @@ AT_SETUP([Configure re-execs self with CONFIG_SHELL])
 AT_DATA([configure.ac],
 [[AC_INIT
 echo foobar >> quux
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
@@ -127,7 +128,9 @@ AT_CAPTURE_FILE([config.log])
 # Export CONFIG_SITE to /dev/null to avoid spurious diffs in expected
 # stdout/stderr.
 AT_CHECK([env CONFIG_SITE=/dev/null CONFIG_SHELL=./cfg-sh ./configure],
-         [0], [], [])
+         [0],
+[[configure: creating ./config.status
+]], [])
 # ./configure re-executed itself.
 AT_CHECK([test -f cfg-sh-has-run], [0])
 # And did that not to cause extra execution of later commands.

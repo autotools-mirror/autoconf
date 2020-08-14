@@ -57,7 +57,10 @@ test -z "$test1" &&
 AS_EXIT(0)
 ]])
 
-AT_CHECK_AUTOCONF
+AT_CHECK_AUTOCONF([], [0], [],
+[[trailer.m4: warning: AC_INIT was never used
+trailer.m4: warning: AC_OUTPUT was never used
+]])
 AT_CHECK_CONFIGURE
 
 AT_CLEANUP
@@ -117,7 +120,10 @@ case $multi_test:$single_test in
 esac
 ]])
 
-AT_CHECK_AUTOCONF([], 0, [])
+AT_CHECK_AUTOCONF([], 0, [],
+[[trailer.m4: warning: AC_INIT was never used
+trailer.m4: warning: AC_OUTPUT was never used
+]])
 
 AT_CHECK_CONFIGURE
 
@@ -160,7 +166,10 @@ case $multi_test:$single_test in
 esac
 ]])
 
-AT_CHECK_AUTOCONF([], 0, [])
+AT_CHECK_AUTOCONF([], 0, [],
+[[trailer.m4: warning: AC_INIT was never used
+trailer.m4: warning: AC_OUTPUT was never used
+]])
 AT_CHECK_CONFIGURE
 
 AT_CLEANUP
@@ -192,7 +201,10 @@ case $inner_test in
 esac
 ]])
 
-AT_CHECK_AUTOCONF
+AT_CHECK_AUTOCONF([], 0, [],
+[[trailer.m4: warning: AC_INIT was never used
+trailer.m4: warning: AC_OUTPUT was never used
+]])
 AT_CHECK_CONFIGURE
 
 AT_CLEANUP
@@ -208,6 +220,7 @@ AT_SETUP([AC_INIT])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU fu], [1.0], [bug-fu@gnu.org])
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
@@ -354,6 +367,7 @@ words that may be matched by scanners for legal things,
 causing extra work for distributors.
 Multi-line values should be supported.
 ]])
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
@@ -403,8 +417,7 @@ if ${my_cv_variable+false} :; then
   AC_MSG_ERROR([AC@&@&t@t@_CACHE_VAL did not ensure that the cache variable was set])
 fi
 
-# AC_CACHE_SAVE should be enough here, no need for AC_OUTPUT.
-AC_CACHE_SAVE
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF([], [], [], [stderr])
@@ -603,6 +616,7 @@ AC_COMPUTE_INT([invalid_expression],
 	       [invalid_expression=failed])
 test "$invalid_expression" = failed ||
   AC_MSG_ERROR([**0** evaluated to $invalid_expression instead of failing])
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
@@ -633,6 +647,8 @@ if AC_TRY_COMMAND([(echo "The Cat in the Hat";
 		   grep \^The\ Hat\ in\ the\ Cat\$ >/dev/null]); then
   AC_MSG_ERROR([saw the Hat in the Cat])
 fi
+
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
@@ -650,9 +666,10 @@ AT_SETUP([Input/Output])
 AT_DATA([configure.ac],
 [[AC_INIT
 cat <&AS@&t@_ORIGINAL_STDIN_FD >&AS@&t@_MESSAGE_FD
+AC_OUTPUT
 ]])
 AT_CHECK_AUTOCONF
-AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure $configure_options | grep -v 'configure: loading site script '],, [Hello
+AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure $configure_options | grep -v '^configure: '],, [Hello
 ])
 AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure $configure_options --silent])
 
@@ -668,6 +685,7 @@ AT_SETUP([configure arguments])
 AT_DATA([configure.ac],
 [[AC_INIT
 echo "$@"
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
@@ -706,6 +724,7 @@ AC_ARG_ENABLE([c++],
 echo "use_foo: $use_foo"
 echo "with_c++: $with_c__, $choice_with"
 echo "enable_c++: $enable_c__, $choice_enable"
+AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
