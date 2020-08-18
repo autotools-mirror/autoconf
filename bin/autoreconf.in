@@ -54,9 +54,9 @@ use strict;
 # -----
 $help = "Usage: $0 [OPTION]... [DIRECTORY]...
 
-Run 'autoconf' (and 'autoheader', 'aclocal', 'automake', 'autopoint'
-(formerly 'gettextize'), and 'libtoolize' where appropriate)
-repeatedly to remake the GNU Build System files in specified
+Run 'autoconf' and, when needed, 'aclocal', 'autoheader', 'automake',
+'autopoint' (formerly 'gettextize'), 'libtoolize', 'intltoolize', and
+'gtkdocize' to regenerate the GNU Build System files in specified
 DIRECTORIES and their subdirectories (defaulting to '.').
 
 By default, it only remakes those files that are older than their
@@ -85,8 +85,9 @@ Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
   -I, --include=DIR          append directory DIR to search path
 
-The environment variables AUTOM4TE, AUTOCONF, AUTOHEADER, AUTOMAKE,
-ACLOCAL, AUTOPOINT, LIBTOOLIZE, M4, and MAKE are honored.
+The environment variables AUTOCONF, ACLOCAL, AUTOHEADER, AUTOM4TE,
+AUTOMAKE, AUTOPOINT, GTKDOCIZE, INTLTOOLIZE, LIBTOOLIZE, M4, and MAKE
+are honored.
 
 Report bugs to <bug-autoconf\@gnu.org>.
 GNU Autoconf home page: <https://www.gnu.org/software/autoconf/>.
