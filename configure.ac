@@ -201,12 +201,15 @@ AC_SUBST([EMACS], [$TEST_EMACS])
 AM_PATH_LISPDIR
 
 
-## ------------ ##
-## Grep & sed.  ##
-## ------------ ##
+## ---------------- ##
+## Grep, sed, awk.  ##
+## ---------------- ##
 AC_PROG_GREP
 AC_PROG_EGREP
 AC_PROG_SED
+# AC_PROG_AWK should have already been performed by AM_INIT_AUTOMAKE.
+# AC_REQUIRE([AC_PROG_AWK]) doesn't work outside of an AC_DEFUN.
+m4_provide_if([AC_PROG_AWK], [], [AC_PROG_AWK])
 
 
 ## ----- ##

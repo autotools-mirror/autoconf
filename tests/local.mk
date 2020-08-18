@@ -20,7 +20,6 @@
 # But if you are borrowing from this file for setting up autotest in your
 # project, remember to distribute both testsuite and package.m4.
 EXTRA_DIST += \
-  $(TESTSUITE_AT) \
   tests/local.at \
   tests/mktests.sh \
   tests/atlocal.in \
@@ -88,20 +87,21 @@ $(wrappers): tests/wrapper.in
 ## ------------ ##
 
 TESTSUITE_GENERATED_AT = \
-  $(srcdir)/tests/aclang.at \
-  $(srcdir)/tests/acc.at \
-  $(srcdir)/tests/acfortran.at \
-  $(srcdir)/tests/acgo.at \
-  $(srcdir)/tests/acgeneral.at \
-  $(srcdir)/tests/acstatus.at \
-  $(srcdir)/tests/acautoheader.at \
-  $(srcdir)/tests/acautoupdate.at \
-  $(srcdir)/tests/acspecific.at \
-  $(srcdir)/tests/acfunctions.at \
-  $(srcdir)/tests/acheaders.at \
-  $(srcdir)/tests/actypes.at \
-  $(srcdir)/tests/aclibs.at \
-  $(srcdir)/tests/acprograms.at
+  tests/aclang.at \
+  tests/acc.at \
+  tests/acerlang.at \
+  tests/acfortran.at \
+  tests/acgo.at \
+  tests/acgeneral.at \
+  tests/acstatus.at \
+  tests/acautoheader.at \
+  tests/acautoupdate.at \
+  tests/acspecific.at \
+  tests/acfunctions.at \
+  tests/acheaders.at \
+  tests/actypes.at \
+  tests/aclibs.at \
+  tests/acprograms.at
 
 TESTSUITE_HAND_AT = \
   tests/suite.at \
@@ -119,6 +119,9 @@ TESTSUITE_HAND_AT = \
   tests/semantics.at \
   tests/autoscan.at \
   tests/foreign.at
+
+CLEANFILES += $(TESTSUITE_GENERATED_AT)
+EXTRA_DIST += $(TESTSUITE_HAND_AT)
 
 TESTSUITE_AT = $(TESTSUITE_GENERATED_AT) $(TESTSUITE_HAND_AT)
 TESTSUITE = tests/testsuite
@@ -172,8 +175,7 @@ MAINTAINERCLEANFILES += $(TESTSUITE_GENERATED_AT)
 ## Producing the test files.
 
 # The files which contain macros we check for syntax.  Use $(srcdir)
-# for the benefit of non-GNU make.  Fix the names in the rule below
-# where we 'cd' to $srcdir.
+# for the benefit of non-GNU make.
 autoconfdir = $(srcdir)/lib/autoconf
 AUTOCONF_FILES = $(autoconfdir)/general.m4 \
 		 $(autoconfdir)/status.m4 \
@@ -201,14 +203,10 @@ $(TESTSUITE_GENERATED_AT): tests/mktests.stamp
 tests/mktests.stamp : tests/mktests.sh $(AUTOCONF_FILES)
 	@rm -f tests/mktests.tmp
 	@touch tests/mktests.tmp
-	cd $(srcdir) && $(SHELL) tests/mktests.sh \
-	  `echo " "$(AUTOCONF_FILES) | sed 's, [^ ]*/, lib/autoconf/,g'`
+	$(SHELL) $(srcdir)/tests/mktests.sh $(AUTOCONF_FILES)
 	@mv -f tests/mktests.tmp $@
 
-## Distribute the stamp file, since we distribute the generated files.
-EXTRA_DIST += tests/mktests.stamp
-CLEANFILES += tests/mktests.tmp
-MAINTAINERCLEANFILES += tests/mktests.stamp
+CLEANFILES += tests/mktests.tmp tests/mktests.stamp
 
 ## maintainer-check ##
 

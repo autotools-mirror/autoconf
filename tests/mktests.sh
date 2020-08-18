@@ -17,6 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+# Set locale to C so that `sort' behaves in a uniform way.
+LANGUAGE=C; export LANGUAGE
+LANG=C; export LANG
+LC_ALL=C; export LC_ALL
+
+# Default AWK.
+: ${AWK=awk}
+
 # If we fail, clean up, but touch the output files.  We probably failed
 # because we used some non-portable tool.
 
@@ -36,23 +44,14 @@ trap 'echo "'"$as_me"': failed." >&2
 # If ever something goes wrong, fail, so that the trap is launched.
 set -e
 
-# We need arguments.
-test $# != 0
-
-# We need these arguments.
-src="$@"
-
-# Set locale to C so that `sort' behaves in a uniform way.
-LANGUAGE=C; export LANGUAGE
-LANG=C; export LANG
-LC_ALL=C export LC_ALL
-
+# We expect a list of autoconf source files as arguments.
+test $# -gt 0
 
 # requires
 # --------
 # Get the list of macros that are required: there is little interest
 # in testing them since they will be run by the guy who requires them.
-sed -n 's/dnl.*//;s/.*AC_REQUIRE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $src |
+sed -n 's/dnl.*//;s/.*AC_REQUIRE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' "$@" |
   sort -u >$requires
 
 
@@ -182,7 +181,7 @@ au_exclude_script="$exclude_list $au_exclude_list {print}"
 ## Creating the test files.  ##
 ## ------------------------- ##
 
-for file in $src
+for file in "$@"
 do
   base=`echo "$file" | sed 's|.*[\\/]||;s|\..*||'`
   acbase=$outdir/ac$base
@@ -190,12 +189,12 @@ do
   # Get rid of the macros we are not interested in.
   sed -n -e 's/^AC_DEFUN(\[*\([a-zA-Z0-9_]*\).*$/\1/p' \
 	 -e 's/^AC_DEFUN_ONCE(\[*\([a-zA-Z0-9_]*\).*$/\1/p' $file |
-    awk "$ac_exclude_script" |
+    $AWK "$ac_exclude_script" |
     sort -u >$acdefuns
 
   # Get the list of macros which are defined in Autoupdate level.
   sed -n 's/^AU_DEFUN(\[*\([a-zA-Z][a-zA-Z0-9_]*\).*$/\1/p' $file |
-    awk "$au_exclude_script" |
+    $AWK "$au_exclude_script" |
     sort -u >$audefuns
 
   # Filter out required macros.
