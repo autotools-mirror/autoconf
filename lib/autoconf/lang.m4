@@ -608,7 +608,7 @@ if test "$cross_compiling" != yes; then
 	cross_compiling=yes
     else
 	AC_MSG_FAILURE([cannot run _AC_LANG compiled programs.
-If you meant to cross compile, use `--host'.])
+If you meant to cross compile, use `--host'.], 77)
     fi
   fi
 fi
