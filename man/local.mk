@@ -16,29 +16,34 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 binsrcdir = $(srcdir)/bin
-mansrcdir = $(srcdir)/man
 
 dist_man_MANS = \
-  $(mansrcdir)/autoconf.1 \
-  $(mansrcdir)/autoheader.1 \
-  $(mansrcdir)/autom4te.1 \
-  $(mansrcdir)/autoreconf.1 \
-  $(mansrcdir)/autoscan.1 \
-  $(mansrcdir)/autoupdate.1 \
-  $(mansrcdir)/ifnames.1
+  man/autoconf.1 \
+  man/autoheader.1 \
+  man/autom4te.1 \
+  man/autoreconf.1 \
+  man/autoscan.1 \
+  man/autoupdate.1 \
+  man/ifnames.1
 
 EXTRA_DIST += $(dist_man_MANS:.1=.x) man/common.x
 MAINTAINERCLEANFILES += $(dist_man_MANS)
 
 # Depend on .version to get version number changes.
+# Don't depend on the generated scripts, because then we would try to
+# regenerate the manpages after building the scripts, which would
+# defeat the purpose of shipping the manpages in the tarball.
+# (Instead we have recursive makes in the .x.1 rule below, which is
+# not ideal, but at least it prevents us from generating a manpage
+# from the *installed* utility.)
 common_dep = $(srcdir)/.version $(srcdir)/man/common.x
-$(mansrcdir)/autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
-$(mansrcdir)/autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
-$(mansrcdir)/autom4te.1:   $(common_dep) $(binsrcdir)/autom4te.in
-$(mansrcdir)/autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
-$(mansrcdir)/autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
-$(mansrcdir)/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
-$(mansrcdir)/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
+man/autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
+man/autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
+man/autom4te.1:   $(common_dep) $(binsrcdir)/autom4te.in
+man/autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
+man/autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
+man/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
+man/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
 
 remove_time_stamp = 's/^\(\.TH[^"]*"[^"]*"[^"]*\)"[^"]*"/\1/'
 
@@ -47,11 +52,15 @@ MOSTLYCLEANFILES += $(srcdir)/man/*.t
 SUFFIXES += .x .1
 
 .x.1:
+	@set -e; cmd=`basename $*`; \
+	test -x bin/$$cmd || $(MAKE) bin/$$cmd; \
+	test -x tests/$$cmd || $(MAKE) tests/$$cmd;
 	@echo "Updating man page $@"
+	@test -d $(@D) || mkdir $(@D)
 	PATH="./tests$(PATH_SEPARATOR)$(top_srcdir)/build-aux$(PATH_SEPARATOR)$$PATH"; \
 	export PATH; \
 	$(HELP2MAN) \
-	    --include=$*.x \
+	    --include=$(srcdir)/$*.x \
 	    --include=$(srcdir)/man/common.x \
 	    --source='$(PACKAGE_STRING)' \
 	    --output=$@.t `echo '$*' | sed 's,.*/,,'`
