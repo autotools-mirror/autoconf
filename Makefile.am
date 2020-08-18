@@ -125,8 +125,14 @@ dist-hook: gen-ChangeLog
 
 # Arrange to remove the symlink to GNUmakefile in VPATH builds.
 # TODO remove this once automake vs. AC_CONFIG_LINKS issue is fixed.
+# Delete ChangeLog if it is the dummy created by the rule above.
+# The sed construct below distinguishes between a file whose sole
+# contents are "dummy", and a file whose first line is "dummy" but then
+# has other stuff, without reading the whole thing.
 distclean-local:
 	if test x"$(VPATH)" != x ; then rm -f GNUmakefile ; fi
+	if test "x`sed -ne 'l;2q' ChangeLog 2> /dev/null`" = 'xdummy$$'; \
+	then rm -f ChangeLog; fi
 
 include $(srcdir)/bin/local.mk
 include $(srcdir)/doc/local.mk
