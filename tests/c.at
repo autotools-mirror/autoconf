@@ -326,11 +326,11 @@ class foo { int x; };
 class foo foobar;
 ]])
 
-AT_CHECK([autoconf])
-AT_CHECK([autoheader])
-AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
-AT_CHECK([${MAKE-make} cpp-works || exit 77], [], [ignore], [ignore])
-AT_CHECK([${MAKE-make}], [], [ignore], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER([], [restrict])
+AT_CHECK_CONFIGURE
+AT_CHECK_MAKE([cpp-works || exit 77])
+AT_CHECK_MAKE
 
 AT_CLEANUP
 
@@ -381,10 +381,9 @@ int main (void)
 }
 ]])
 
-: "${MAKE=make}"
-AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
-AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
-AT_CHECK([$MAKE], [], [ignore], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+AT_CHECK_MAKE
 
 AT_CLEANUP
 
@@ -424,9 +423,8 @@ AT_DATA([foo.cpp],
 }
 ]])
 
-: "${MAKE=make}"
-AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
-AT_CHECK([./configure $configure_options], [], [ignore], [ignore])
-AT_CHECK([$MAKE], [], [ignore], [ignore])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+AT_CHECK_MAKE
 
 AT_CLEANUP

@@ -1248,14 +1248,12 @@ all: f f1 f2
 
 AT_CHECK_AUTOCONF
 
-: "${MAKE=make}"
-
 # In place.
 AT_CHECK([./configure $configure_options], [], [ignore])
 # Treat BSD make separately, afterwards, for maximal coverage.
 dirs='at paren brace'
 for dir in $dirs; do
-  AT_CHECK([cd $dir && $MAKE], [], [ignore], [ignore])
+  AT_CHECK_MAKE([], [$dir])
 done
 
 rm -f config.status
@@ -1264,20 +1262,21 @@ mkdir build absbuild
 # Relative name.
 AT_CHECK([cd build && ../configure $configure_options], [], [ignore])
 for dir in $dirs; do
-  AT_CHECK([cd build/$dir && $MAKE], [], [ignore], [ignore])
+  AT_CHECK_MAKE([], [build/$dir])
 done
 
 # Absolute name.
 at_here=`pwd`
 AT_CHECK([cd absbuild && "$at_here/configure" $configure_options], [], [ignore])
 for dir in $dirs; do
-  AT_CHECK([cd absbuild/$dir && $MAKE], [], [ignore], [ignore])
+  AT_CHECK_MAKE([], [absbuild/$dir])
 done
 
 # These will not pass with BSD make.
-AT_CHECK([cd space && { $MAKE || exit 77; }], [], [ignore], [ignore])
-AT_CHECK([cd build/space && $MAKE], [], [ignore], [ignore])
-AT_CHECK([cd absbuild/space && $MAKE], [], [ignore], [ignore])
+AT_CHECK_MAKE([|| exit 77], [space])
+AT_CHECK_MAKE([], [build/space])
+AT_CHECK_MAKE([], [absbuild/space])
+
 
 AT_CLEANUP
 

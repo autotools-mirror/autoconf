@@ -479,6 +479,31 @@ m4_define([AT_CHECK_AUTOUPDATE],
 ])
 
 
+# AT_CHECK_MAKE(MAKEARGS, DIRECTORY, EXIT-STATUS,
+#               [STDOUT = IGNORE], [STDERR = IGNORE])
+# ---------------------------------------------------------------
+# Run make in DIRECTORY (default `.'), passing MAKEARGS on the command
+# line.  EXIT-STATUS, STDOUT, and STDERR are as for AT_CHECK.
+# The environment variable MAKE is honored if present.
+# The environment variable MAKEFLAGS is *cleared*.
+# If EXIT-STATUS is 1, an exit status of either 1 or 2 is considered
+# an acceptable result, because there are situations where BSD make will
+# exit with status 1 but GNU make will instead exit with status 2.
+m4_define([AT_CHECK_MAKE],
+[: "${MAKE=make}"
+export MAKE
+unset MAKEFLAGS
+AT_CHECK(
+  m4_if(m4_default([$2], [.]), [.], [],
+        [cd "$2" && ])[$][MAKE]m4_ifnblank([$1],[ $1])[]m4_if([$3], [1], [[
+dnl pacify editors that don't understand sh case: ((
+  case $? in 1|2) exit 1;; *) exit $?;; esac]]),
+  [$3],
+  m4_default([$4], [ignore]),
+  m4_default([$5], [ignore]))
+])
+
+
 # _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS)
 # --------------------------------------
 # Create a minimalist configure.ac running the macro named

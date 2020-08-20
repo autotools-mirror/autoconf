@@ -122,20 +122,22 @@ copy-shtool:
 : >file1
 : >file2
 chmod +x file1
-: "${MAKE=make}"
 mkdir build-aux inst
 instdir=`pwd`/inst
 AT_CHECK_AUTOCONF
 cp "$abs_top_srcdir/build-aux/install-sh" build-aux
 AT_CHECK_CONFIGURE
-AT_CHECK([$MAKE copy-shtool], [], [ignore], [ignore],
-	 [AT_CHECK([: >build-aux/shtool])])
+AT_SKIP_IF([grep 'SHTOOL = false' Makefile > /dev/null 2>&1])
+
+AT_CHECK_MAKE([copy-shtool])
+AT_CHECK([test -s build-aux/shtool])
+
+# AC_PROG_INSTALL should pick up shtool from build-aux, even though
+# we're forcing AC_PATH_PROG not to find it on the host system.
 rm -f build-aux/install-sh
 AT_CHECK_CONFIGURE([--prefix="$instdir" ac_cv_path_SHTOOL=false])
 AT_CHECK([grep '^ac_install_sh = .*shtool install -c' Makefile], [], [ignore])
-if test -s build-aux/shtool; then
-  AT_CHECK([$MAKE install], [], [ignore], [ignore])
-  AT_CHECK([test -f inst/file1 && test -f inst/file2 && test -x inst/file1])
-fi
+AT_CHECK_MAKE([install])
+AT_CHECK([test -f inst/file1 && test -f inst/file2 && test -x inst/file1])
 
 AT_CLEANUP

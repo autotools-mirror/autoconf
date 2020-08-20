@@ -1599,20 +1599,13 @@ for signal in 2 15; do
   # AT_CHECK([[grep '[iI]nterrupt[	 ]' stderr]], [1])
 
   # Ditto with `make' in the loop.
-  : "${MAKE=make}"
-  unset MAKEFLAGS
-  # Need to eliminate outer TESTSUITEFLAGS here.
-  # Need to normalize exit status here: some make implementations
-  # exit 1 (BSD make), some exit 2 (GNU make).
-  AT_CHECK([$MAKE check TESTSUITEFLAGS=; ]dnl
-	   [case $? in 1|2) exit 1;; *) exit $?;; esac],
-	   [1], [ignore], [stderr])
+  # Explicitly setting TESTSUITEFLAGS to empty...
+  AT_CHECK_MAKE([TESTSUITEFLAGS=], [], [1], [ignore], [stderr])
   AT_CHECK([grep 'bailing out' stderr], [], [ignore])
   AT_CHECK([grep 'bailing out' micro-suite.log], [], [ignore])
-  # Ditto, parallel case.
-  AT_CHECK([$MAKE check TESTSUITEFLAGS=--jobs=3; ]dnl
-	   [case $? in 1|2) exit 1;; *) exit $?;; esac],
-	   [1], [ignore], [stderr])
+
+  # ... and explicitly requesting 3-fold parallelism.
+  AT_CHECK_MAKE([TESTSUITEFLAGS=--jobs=3], [], [1], [ignore], [stderr])
   AT_CHECK([grep 'bailing out' stderr], [], [ignore])
   AT_CHECK([grep 'bailing out' micro-suite.log], [], [ignore])
 done
@@ -1926,7 +1919,7 @@ rm t/atconfig
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 AT_CHECK([grep '^EXEEXT='\''.*'\' t/atconfig], [], [ignore])
-AT_CHECK([${MAKE-make}], [], [ignore])
+AT_CHECK_MAKE
 AT_CHECK([cd t && $CONFIG_SHELL ./suite], [], [ignore])
 AT_CHECK([grep 1.*successful t/suite.log], [], [ignore])
 AT_CLEANUP
@@ -1978,7 +1971,7 @@ rm t/atconfig
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
 AT_CHECK([grep '^EXEEXT='\''.*'\' t/atconfig], [], [ignore])
-AT_CHECK([${MAKE-make}], [], [ignore])
+AT_CHECK_MAKE
 AT_CHECK([cd t && $CONFIG_SHELL ./suite], [], [ignore])
 AT_CHECK([grep 1.*successful t/suite.log], [], [ignore])
 AT_CLEANUP

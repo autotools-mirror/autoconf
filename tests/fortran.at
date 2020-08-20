@@ -109,10 +109,9 @@ AT_DATA([foo.f],
       end
 ]])
 
-: "${MAKE=make}"
 AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
 AT_CHECK_CONFIGURE
-AT_CHECK([$MAKE], [], [ignore], [ignore])
+AT_CHECK_MAKE
 
 AT_CLEANUP
 
@@ -149,10 +148,9 @@ AT_DATA([foo.f],
       end
 ]])
 
-: "${MAKE=make}"
 AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
 AT_CHECK_CONFIGURE
-AT_CHECK([$MAKE], [], [ignore], [ignore])
+AT_CHECK_MAKE
 
 AT_CLEANUP
 
@@ -244,9 +242,8 @@ AT_CHECK_AUTOHEADER([], [
   FC_DUMMY_MAIN_EQ_F77
 ])
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./cprogram])
+AT_CHECK_MAKE
+AT_CHECK([./cprogram])
 
 AT_CLEANUP
 
@@ -327,9 +324,8 @@ AT_CHECK_AUTOHEADER([], [
   FC_FUNC_
 ])
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./cprogram])
+AT_CHECK_MAKE
+AT_CHECK([./cprogram])
 
 AT_CLEANUP
 
@@ -409,12 +405,11 @@ AT_CHECK_AUTOHEADER([], [
   FC_DUMMY_MAIN_EQ_F77
 ])
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./cprogram], [], [output from C main
-dnl  some output from Fortran sources
-dnl more output from C main
-dnl ])
+AT_CHECK_MAKE
+AT_CHECK([./cprogram], [], [output from C main
+ some output from Fortran sources
+more output from C main
+])
 
 AT_CLEANUP
 
@@ -494,12 +489,11 @@ AT_CHECK_AUTOHEADER([], [
   FC_MAIN
 ])
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./cprogram], [], [output from C main
-dnl  some output from Fortran sources
-dnl more output from C main
-dnl ])
+AT_CHECK_MAKE
+AT_CHECK([./cprogram], [], [output from C main
+ some output from Fortran sources
+more output from C main
+])
 
 AT_CLEANUP
 
@@ -574,9 +568,8 @@ AT_CHECK_AUTOHEADER([], [
   FC_DUMMY_MAIN_EQ_F77
 ])
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./cprogram])
+AT_CHECK_MAKE
+AT_CHECK([./cprogram])
 
 AT_CLEANUP
 
@@ -651,9 +644,9 @@ AT_CHECK_AUTOHEADER([], [
   FC_DUMMY_MAIN_EQ_F77
 ])
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./cprogram])
+AT_CHECK_MAKE
+AT_CHECK([./cprogram])
+
 AT_CLEANUP
 
 
@@ -736,8 +729,7 @@ end
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
+AT_CHECK_MAKE
 
 AT_CLEANUP
 
@@ -836,8 +828,8 @@ this is not correct fortran
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
+AT_CHECK_MAKE
+AT_CHECK([./prog])
 
 AT_CLEANUP
 
@@ -872,9 +864,8 @@ end
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./prog])
+AT_CHECK_MAKE
+AT_CHECK([./prog])
 
 AT_CLEANUP
 
@@ -910,9 +901,8 @@ end
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./prog])
+AT_CHECK_MAKE
+AT_CHECK([./prog])
 
 AT_CLEANUP
 
@@ -948,9 +938,8 @@ C      fixed-form style comment
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./prog])
+AT_CHECK_MAKE
+AT_CHECK([./prog])
 
 AT_CLEANUP
 
@@ -987,9 +976,8 @@ C      fixed-form style comment
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
-dnl AT_CHECK([./prog])
+AT_CHECK_MAKE
+AT_CHECK([./prog])
 
 AT_CLEANUP
 
@@ -1056,10 +1044,9 @@ EOF
 
     AT_CHECK_AUTOCONF
     AT_CHECK_CONFIGURE
-    : "${MAKE=make}"
-    AT_CHECK([$MAKE], [], [ignore], [ignore])
-    dnl AT_CHECK([./prog])
-    AT_CHECK([$MAKE clean], [], [ignore], [ignore])
+    AT_CHECK_MAKE
+    AT_CHECK([./prog])
+    AT_CHECK_MAKE([clean])
 
   done
 done
@@ -1118,10 +1105,9 @@ AT_DATA([prog.f],
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [ignore], [ignore])
+AT_CHECK_MAKE
 AT_CHECK([./prog || exit 1], [1], [ignore], [ignore])
-AT_CHECK([$MAKE clean], [], [ignore], [ignore])
+AT_CHECK_MAKE([clean])
 
 AT_CLEANUP
 
@@ -1186,12 +1172,11 @@ AT_DATA([prog.f],
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE
-: "${MAKE=make}"
-AT_CHECK([$MAKE], [], [stdout], [stderr])
+AT_CHECK_MAKE([], [], [], [stdout], [stderr])
 # Both the FCFLAGS setting from configure.ac, and the Makefile rule
 # should add to the module search path.
 AT_CHECK([grep 'sub .*sub ' stdout stderr], [], [ignore])
 AT_CHECK([./prog], [], [ignore], [ignore])
-AT_CHECK([$MAKE clean], [], [ignore], [ignore])
+AT_CHECK_MAKE([clean])
 
 AT_CLEANUP
