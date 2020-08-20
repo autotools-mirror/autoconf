@@ -63,7 +63,7 @@ AC_ARG_VAR([ERLCFLAGS], [Erlang/OTP compiler flags [none]])dnl
 AC_DEFUN([AC_ERLANG_NEED_ERLC],
 [AC_ERLANG_PATH_ERLC([not found], [$1])
 if test "$ERLC" = "not found"; then
-    AC_MSG_ERROR([Erlang/OTP compiler (erlc) not found but required])
+    AC_MSG_ERROR([Erlang/OTP compiler (erlc) not found but required], 77)
 fi
 ])
 
@@ -86,7 +86,7 @@ fi
 AC_DEFUN([AC_ERLANG_NEED_ERL],
 [AC_ERLANG_PATH_ERL([not found], [$1])
 if test "$ERL" = "not found"; then
-    AC_MSG_ERROR([Erlang/OTP interpreter (erl) not found but required])
+    AC_MSG_ERROR([Erlang/OTP interpreter (erl) not found but required], 77)
 fi
 ])
 
@@ -173,8 +173,8 @@ AC_DEFUN([AC_LANG_COMPILER(Erlang)],
 # Macro for checking if an Erlang library is installed, and to
 # determine its version.
 AC_DEFUN([AC_ERLANG_CHECK_LIB],
-[AC_REQUIRE([AC_ERLANG_PATH_ERLC])[]dnl
-AC_REQUIRE([AC_ERLANG_PATH_ERL])[]dnl
+[AC_REQUIRE([AC_ERLANG_NEED_ERLC])[]dnl
+AC_REQUIRE([AC_ERLANG_NEED_ERL])[]dnl
 AC_CACHE_CHECK([for Erlang/OTP '$1' library subdirectory],
     [ac_cv_erlang_lib_dir_$1],
     [AC_LANG_PUSH(Erlang)[]dnl
