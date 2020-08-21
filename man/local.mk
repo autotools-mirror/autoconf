@@ -27,7 +27,6 @@ dist_man_MANS = \
   man/ifnames.1
 
 EXTRA_DIST += $(dist_man_MANS:.1=.x) man/common.x
-MAINTAINERCLEANFILES += $(dist_man_MANS)
 
 # Depend on .version to get version number changes.
 # Don't depend on the generated scripts, because then we would try to
@@ -47,7 +46,17 @@ man/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
 
 remove_time_stamp = 's/^\(\.TH[^"]*"[^"]*"[^"]*\)"[^"]*"/\1/'
 
-MOSTLYCLEANFILES += $(srcdir)/man/*.t
+MOSTLYCLEANFILES     += $(dist_man_MANS:=.t) $(dist_man_MANS:=a.t) \
+			$(dist_man_MANS:=.tmp)
+MAINTAINERCLEANFILES += $(dist_man_MANS)
+
+# To satisfy 'distcleancheck', we need to delete built manpages in
+# 'distclean' when the build and source directories are not the same.
+# We know we are in this case when 'man/common.x' doesn't exist.
+distclean-local: distclean-local-man
+distclean-local-man:
+	test -f man/common.x || rm -f $(dist_man_MANS)
+
 
 SUFFIXES += .x .1
 
@@ -70,4 +79,4 @@ SUFFIXES += .x .1
 	else \
 		mv $@.t $@; \
 	fi
-	rm -f $@*.t
+	rm -f $@.t $@a.t
