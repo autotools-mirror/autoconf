@@ -72,7 +72,7 @@ or else 'configure.in'.
   -f, --force              consider all files obsolete
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
 
-" . Autom4te::ChannelDefs::usage () . "
+" . Autom4te::ChannelDefs::usage . "
 
 Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path

@@ -204,8 +204,7 @@ General help using GNU software: <https://www.gnu.org/gethelp/>.
 
 # $VERSION
 # --------
-$version =  <<"EOF";
-autom4te (@PACKAGE_NAME@) @VERSION@
+$version = "autom4te (@PACKAGE_NAME@) @VERSION@
 Copyright (C) @RELEASE_YEAR@ Free Software Foundation, Inc.
 License GPLv3+/Autoconf: GNU GPL version 3 or later
 <https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>
@@ -213,7 +212,7 @@ This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
 Written by Akim Demaille.
-EOF
+";
 
 
 ## ---------- ##

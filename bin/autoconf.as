@@ -22,7 +22,7 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 m4_divert_pop([HEADER-COPYRIGHT])dnl back to BODY
 AS_ME_PREPARE[]dnl
 
-usage=["\
+help=["\
 Usage: $0 [OPTION]... [TEMPLATE-FILE]
 
 Generate a configuration script from a TEMPLATE-FILE if given, or
@@ -75,11 +75,11 @@ There is NO WARRANTY, to the extent permitted by law.
 
 Written by David J. MacKenzie and Akim Demaille."]
 
-help="\
+usage_err="\
 Try '$as_me --help' for more information."
 
 exit_missing_arg='
-  m4_bpatsubst([AS_ERROR([option '$[1]' requires an argument$as_nl$help])],
+  m4_bpatsubst([AS_ERROR([option '$[1]' requires an argument$as_nl$usage_err])],
     ['], ['\\''])'
 # restore font-lock: '
 
@@ -100,7 +100,7 @@ while test $# -gt 0 ; do
     --version | -V )
        echo "$version" ; exit ;;
     --help | -h )
-       AS_ECHO(["$usage"]); exit ;;
+       AS_ECHO(["$usage_err"]); exit ;;
 
     --verbose | -v )
        verbose=:
@@ -154,7 +154,7 @@ while test $# -gt 0 ; do
        break ;;
     -* )
        exec >&2
-       AS_ERROR([invalid option '$[1]'$as_nl$help]) ;;
+       AS_ERROR([invalid option '$[1]'$as_nl$usage_err]) ;;
     * )
        break ;;
   esac
@@ -178,7 +178,7 @@ case $# in
   1)
     infile=$1 ;;
   *) exec >&2
-     AS_ERROR([invalid number of arguments$as_nl$help]) ;;
+     AS_ERROR([invalid number of arguments$as_nl$usage_err]) ;;
 esac
 
 # Unless specified, the output is stdout.

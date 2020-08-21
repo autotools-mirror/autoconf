@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-binsrcdir = $(srcdir)/bin
-
 dist_man_MANS = \
   man/autoconf.1 \
   man/autoheader.1 \
@@ -26,28 +24,81 @@ dist_man_MANS = \
   man/autoupdate.1 \
   man/ifnames.1
 
-EXTRA_DIST += $(dist_man_MANS:.1=.x) man/common.x
+EXTRA_DIST += $(dist_man_MANS:.1=.w) $(dist_man_MANS:.1=.x) man/common.x
 
-# Depend on .version to get version number changes.
-# Don't depend on the generated scripts, because then we would try to
-# regenerate the manpages after building the scripts, which would
-# defeat the purpose of shipping the manpages in the tarball.
-# (Instead we have recursive makes in the .x.1 rule below, which is
-# not ideal, but at least it prevents us from generating a manpage
-# from the *installed* utility.)
-common_dep = $(srcdir)/.version $(srcdir)/man/common.x
-man/autoconf.1:   $(common_dep) $(binsrcdir)/autoconf.as
-man/autoheader.1: $(common_dep) $(binsrcdir)/autoheader.in
-man/autom4te.1:   $(common_dep) $(binsrcdir)/autom4te.in
-man/autoreconf.1: $(common_dep) $(binsrcdir)/autoreconf.in
-man/autoscan.1:   $(common_dep) $(binsrcdir)/autoscan.in
-man/autoupdate.1: $(common_dep) $(binsrcdir)/autoupdate.in
-man/ifnames.1:    $(common_dep) $(binsrcdir)/ifnames.in
+# Each manpage depends on:
+# - its .w and .x files and its source script in bin/
+# - common.x for the SEE ALSO list
+# - lib/Autom4te/ChannelDefs.pm which contains additional --help text
+#   (not included in _all_ the manpages, but it's easier to have them
+#   all depend on it)
+# - .version and configure.ac for version information
+#
+# We ship the manpages in tarball releases so people can build from
+# them without having help2man installed.  For this to work correctly,
+# the manpages cannot have declared dependencies on any file that is
+# not also shipped in the tarball.  To avoid concurrency bugs, those
+# files plus the Makefile must in fact be sufficient to generate the
+# manpages.  See the automake manual, section 'Errors with distclean',
+# for further discussion.
+
+binsrcdir      = $(top_srcdir)/bin
+channeldefs_pm = lib/Autom4te/ChannelDefs.pm
+man_common_dep = $(top_srcdir)/man/common.x \
+		 $(top_srcdir)/$(channeldefs_pm) \
+		 $(top_srcdir)/.version \
+		 $(top_srcdir)/configure.ac
+
+man/autoconf.1:   $(common_dep) man/autoconf.w   man/autoconf.x   $(binsrcdir)/autoconf.as
+man/autoheader.1: $(common_dep) man/autoheader.w man/autoheader.x $(binsrcdir)/autoheader.in
+man/autom4te.1:   $(common_dep) man/autom4te.w   man/autom4te.x   $(binsrcdir)/autom4te.in
+man/autoreconf.1: $(common_dep) man/autoreconf.w man/autoreconf.x $(binsrcdir)/autoreconf.in
+man/autoscan.1:   $(common_dep) man/autoscan.w   man/autoscan.x   $(binsrcdir)/autoscan.in
+man/autoupdate.1: $(common_dep) man/autoupdate.w man/autoupdate.x $(binsrcdir)/autoupdate.in
+man/ifnames.1:    $(common_dep) man/ifnames.w    man/ifnames.x    $(binsrcdir)/ifnames.in
+
+# To generate the manpages, we use help2man, but we don't have it run
+# the built script that corresponds to the manpage.  Instead it runs
+# the .w file listed above, which is a wrapper around
+# build-aux/help-extract.pl, which parses the *source* of the script
+# and extracts the help and version text.  This means that the built
+# script doesn't need to exist to create the manpage.  If it did,
+# we would have a concurrency bug, since we can't declare a dependency
+# on the built script, as discussed above.
+# We use a suffix rule describing the manpage as built from its .w file
+# so that we can use $(<F) to name the executable to be run, which avoids
+# an extra subshell and sed invocation.
 
 remove_time_stamp = 's/^\(\.TH[^"]*"[^"]*"[^"]*\)"[^"]*"/\1/'
+SUFFIXES += .w .1
 
-MOSTLYCLEANFILES     += $(dist_man_MANS:=.t) $(dist_man_MANS:=a.t) \
-			$(dist_man_MANS:=.tmp)
+.w.1:
+	@echo "Updating man page $@"
+	$(MKDIR_P) $(@D)
+	PATH="$(top_srcdir)/man$(PATH_SEPARATOR)$$PATH"; \
+	PERL="$(PERL)"; \
+	PACKAGE_NAME="$(PACKAGE_NAME)"; \
+	VERSION="$(VERSION)"; \
+	RELEASE_YEAR="$(RELEASE_YEAR)"; \
+	top_srcdir="$(top_srcdir)"; \
+	channeldefs_pm="$(channeldefs_pm)"; \
+	export PATH PERL PACKAGE_NAME VERSION RELEASE_YEAR; \
+	export top_srcdir channeldefs_pm; \
+	$(HELP2MAN) \
+	    --include=$(srcdir)/$*.x \
+	    --include=$(srcdir)/man/common.x \
+	    --source='$(PACKAGE_STRING)' \
+	    --output=$@.t $(<F)
+	if $(SED) $(remove_time_stamp) $@ >$@a.t 2>/dev/null && \
+	   $(SED) $(remove_time_stamp) $@.t | cmp $@a.t - >/dev/null 2>&1; then \
+		touch $@; \
+	else \
+		mv $@.t $@; \
+	fi
+	rm -f $@.t $@a.t
+
+
+MOSTLYCLEANFILES     += $(dist_man_MANS:=.t) $(dist_man_MANS:=a.t)
 MAINTAINERCLEANFILES += $(dist_man_MANS)
 
 # To satisfy 'distcleancheck', we need to delete built manpages in
@@ -56,27 +107,3 @@ MAINTAINERCLEANFILES += $(dist_man_MANS)
 distclean-local: distclean-local-man
 distclean-local-man:
 	test -f man/common.x || rm -f $(dist_man_MANS)
-
-
-SUFFIXES += .x .1
-
-.x.1:
-	@set -e; cmd=`basename $*`; \
-	test -x bin/$$cmd || $(MAKE) bin/$$cmd; \
-	test -x tests/$$cmd || $(MAKE) tests/$$cmd;
-	@echo "Updating man page $@"
-	@test -d $(@D) || mkdir $(@D)
-	PATH="./tests$(PATH_SEPARATOR)$(top_srcdir)/build-aux$(PATH_SEPARATOR)$$PATH"; \
-	export PATH; \
-	$(HELP2MAN) \
-	    --include=$(srcdir)/$*.x \
-	    --include=$(srcdir)/man/common.x \
-	    --source='$(PACKAGE_STRING)' \
-	    --output=$@.t `echo '$*' | sed 's,.*/,,'`
-	if sed $(remove_time_stamp) $@ >$@a.t 2>/dev/null && \
-	   sed $(remove_time_stamp) $@.t | cmp $@a.t - >/dev/null 2>&1; then \
-		touch $@; \
-	else \
-		mv $@.t $@; \
-	fi
-	rm -f $@.t $@a.t

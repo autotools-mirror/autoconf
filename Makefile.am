@@ -34,6 +34,7 @@ EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 ChangeLog.3 \
 	     build-aux/git-version-gen \
 	     build-aux/announce-gen build-aux/gnupload \
 	     build-aux/gitlog-to-changelog \
+	     build-aux/help-extract.pl \
 	     .prev-version .version
 
 edit = sed \
