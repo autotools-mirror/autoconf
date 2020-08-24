@@ -614,14 +614,14 @@ AC_DEFUN([AC_TYPE_PID_T],
 [
   AC_CHECK_TYPE([pid_t],
     [],
-    [dnl On 64-bit native Windows, define it to the equivalent of 'intptr_t'
-     dnl (= 'long long' = '__int64'), because that is the return type
+    [dnl On 64-bit native Microsoft Windows, define it to the equivalent of
+     dnl 'intptr_t' (= 'long long' = '__int64'), because that is the return type
      dnl of the _spawnv* functions
      dnl <https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/spawnvp-wspawnvp>
      dnl and the argument type of the _cwait function
      dnl <https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/cwait>.
-     dnl Otherwise (on 32-bit Windows and on old Unix platforms), define it
-     dnl to 'int'.
+     dnl Otherwise (on 32-bit Microsoft Windows and on old Unix platforms),
+     dnl define it to 'int'.
      AC_COMPILE_IFELSE(
        [AC_LANG_PROGRAM([[
           #if defined _WIN64 && !defined __CYGWIN__
