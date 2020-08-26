@@ -64,7 +64,7 @@ AC_CACHE_CHECK([for a shell whose -n mode is known to work],
 # follow with a hardwired list of shells that are known to work and can
 # be identified as such, starting with the ones with the fewest
 # syntactic extensions.  Unfortunately, several shells that are also
-# known to work can't be easily identified (e.g. BSD sh, dash).
+# known to work can't be easily identified (e.g. some BSD shells and dash).
 # Try ksh93, which is often buggy, and plain ksh and sh last.
 for cand_sh in "$SHELL" pdksh bash zsh ksh93 ksh sh
 do
@@ -72,8 +72,9 @@ do
     unset BASH_VERSION ZSH_VERSION
     "$cand_sh" -c '
       test ${BASH_VERSION+y} || # Bash
-      test ${KSH_VERSION+y} || # pdksh
-      test ${ZSH_VERSION+y} || # zsh
+      test ${KSH_VERSION+y}  || # pdksh
+      test ${ZSH_VERSION+y}  || # zsh
+      test ${NETBSD_SHELL+y} || # NetBSD sh
       test -n "${.sh.version}" # ksh93; put this last since its syntax is dodgy
     '
   ) 2>/dev/null
