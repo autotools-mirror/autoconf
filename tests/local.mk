@@ -139,7 +139,7 @@ $(TESTSUITE): tests/package.m4 \
 	mv $@.tmp $@
 
 # Factor out invocation of the testsuite script.
-run_testsuite = $(SHELL) $(TESTSUITE) -C tests
+run_testsuite = $(SHELL) $(TESTSUITE) -C tests MAKE=$(MAKE)
 
 # Avoid a race condition that would make parallel "distclean" fail.
 # The rule in clean-local tests for existence of $(TESTSUITE), and
