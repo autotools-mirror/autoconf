@@ -326,7 +326,7 @@ m4_define([AT_CHECK_CONFIGURE],
 # - AC_SUBST'ed variables
 #   (FIXME: Generate a list of these automatically.)
 # - _|@|.[*#?$].|argv|ARGC|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
-#   |_AST_FEATURES
+#   |START_TIME|ToD|_AST_FEATURES
 #   Some variables some shells use and change.
 #   `.[*#?$].' catches `$#' etc. which are displayed like this:
 #      | '!'=18186
@@ -377,7 +377,7 @@ if test -f state-env.before && test -f state-env.after; then
       [GREP|[EF]GREP|SED],
       [[_@]|.[*#?$].],
       [argv|ARGC|LINENO|BASH_ARGC|BASH_ARGV|OLDPWD|PIPESTATUS|RANDOM],
-      [SECONDS|_AST_FEATURES]))=' \
+      [SECONDS|START_TIME|ToD|_AST_FEATURES]))=' \
      $act_file ||
        test $? -eq 1 || echo failed >&2
     ) 2>stderr-$act_file |
@@ -408,6 +408,8 @@ fi
 #   - PPID [bash, zsh]
 #   - RANDOM [bash, zsh]
 #   - SECONDS [bash, zsh]
+#   - START_TIME [NetBSD sh]
+#   - ToD [NetBSD sh]
 #   - '$' [zsh]
 #   - argv [zsh]
 #   - ARGC [zsh]
@@ -437,6 +439,8 @@ do
 	/^PPID=/ d
 	/^RANDOM=/ d
 	/^SECONDS=/ d
+	/^START_TIME=/ d
+	/^ToD=/ d
 	/'\'\\\$\''=/ d
 	/^argv=/ d
 	/^ARGC=/ d
