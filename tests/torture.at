@@ -493,6 +493,33 @@ AT_CLEANUP
 
 
 
+## ---------------------- ##
+## --help and --version.  ##
+## ---------------------- ##
+
+AT_SETUP([--help and --version in unwritable directory])
+
+AS_MKDIR_P([inner])
+AT_DATA([inner/configure.ac],
+[[AC_INIT
+AC_OUTPUT
+]])
+
+AT_CHECK_M4([(cd inner && autoconf --force)])
+AT_CHECK([test -s inner/configure])
+if test "$SHELL_N" != none; then
+  AT_CHECK_SHELL_SYNTAX([inner/configure])
+fi
+
+chmod a-w inner
+AT_CHECK([(cd inner && ./configure --help)], 0, [ignore], [ignore])
+AT_CHECK([(cd inner && ./configure --version)], 0, [ignore], [ignore])
+chmod u+w inner
+
+AT_CLEANUP
+
+
+
 ## -------------------------------------------- ##
 ## Check that `#define' templates are honored.  ##
 ## -------------------------------------------- ##

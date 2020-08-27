@@ -846,3 +846,76 @@ FOO
 ]])
 
 AT_CLEANUP
+
+## ----------------------------------- ##
+## configure with closed standard fds  ##
+## ----------------------------------- ##
+
+AT_SETUP([configure with closed standard fds])
+AT_KEYWORDS([AS@&t@_INIT])
+
+# Create a configure script that runs a relatively complicated but
+# self-contained test.  Run it.
+AT_CONFIGURE_AC([[AC_PROG_CC]])
+AT_CHECK_AUTOCONF
+AT_CHECK_AUTOHEADER
+AT_CHECK_CONFIGURE([], [], [stdout], [stderr])
+AT_CHECK_ENV
+
+mv stdout stdout-expected
+mv stderr stderr-expected
+mv state-env.after state-env-expected
+mv config.status config-status-expected
+mv config.h config-h-expected
+
+# Run it again with stdin (fd 0) closed.
+# There should be no change to the stdout or stderr output and thoe
+# result of configuration should be the same.
+
+AT_CHECK_CONFIGURE([ 0<&- ], [], [stdout], [stderr])
+AT_CHECK_ENV
+AT_CMP([stdout-expected], [stdout])
+AT_CMP([stderr-expected], [stderr])
+AT_CONFIG_CMP([state-env-expected], [state-env.after])
+
+mv stdout stdout-closed-0
+mv stderr stderr-closed-0
+mv state-env.after state-env-closed-0
+mv config.status config-status-closed-0
+mv config.h config-h-closed-0
+
+# Run it again with stdout (fd 1) closed.
+# There should be no change to the stderr output and the
+# result of configuration should be the same.  (Any output
+# that would have gone to stdout, of course, is lost.)
+
+AT_CHECK_CONFIGURE([ 1>&- ], [], [stdout], [stderr])
+AT_CHECK_ENV
+AT_CHECK([test -f stdout && test ! -s stdout])
+AT_CMP([stderr-expected], [stderr])
+AT_CONFIG_CMP([state-env-expected], [state-env.after])
+
+mv stdout stdout-closed-1
+mv stderr stderr-closed-1
+mv state-env.after state-env-closed-1
+mv config.status config-status-closed-1
+mv config.h config-h-closed-1
+
+# Run it again with stderr (fd 2) closed.
+# There should be no change to the stdout output and the
+# result of configuration should be the same.  (Any output
+# that would have gone to stderr, of course, is lost.)
+
+AT_CHECK_CONFIGURE([ 2>&- ], [], [stdout], [stderr])
+AT_CHECK_ENV
+AT_CMP([stdout-expected], [stdout])
+AT_CHECK([test -f stderr && test ! -s stderr])
+AT_CONFIG_CMP([state-env-expected], [state-env.after])
+
+mv stdout stdout-closed-2
+mv stderr stderr-closed-2
+mv state-env.after state-env-closed-2
+mv config.status config-status-closed-2
+mv config.h config-h-closed-2
+
+AT_CLEANUP

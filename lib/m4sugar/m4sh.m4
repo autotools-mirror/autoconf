@@ -300,6 +300,28 @@ dnl We shouldn't have to worry about any traps being active at this point.
 exit 255])# _AS_REEXEC_WITH_SHELL
 
 
+# _AS_ENSURE_STANDARD_FDS
+# -----------------------
+# Ensure that file descriptors 0, 1, and 2 are open, as a defensive
+# measure against weird environments that run configure scripts
+# with these descriptors closed.
+# `exec m>&n` fails in POSIX sh when fd N is closed, but succeeds
+# regardless of whether fd N is open in some old shells, e.g. Solaris
+# /bin/sh.  This is OK because those shells will be rejected by
+# _AS_DETECT_BETTER_SHELL anyway.
+# TODO post-2.70: use "backward" redirections when opening these fds,
+# so we preserve their unusable state.  Needs downstream logic to
+# stop on the first failed attempt to write to fd 1 or 2, so we don't
+# run through an entire configure script spewing "write error"
+# messages when fd 1 is closed.
+m4_defun([_AS_ENSURE_STANDARD_FDS], [dnl
+# Ensure that fds 0, 1, and 2 are open.
+if (exec 3>&0) 2>/dev/null; then :; else exec 0</dev/null; fi
+if (exec 3>&1) 2>/dev/null; then :; else exec 1>/dev/null; fi
+if (exec 3>&2)            ; then :; else exec 2>/dev/null; fi
+])
+
+
 # _AS_PREPARE
 # -----------
 # This macro has a very special status.  Normal use of M4sh relies
@@ -456,17 +478,41 @@ m4_defun([_AS_SHELL_SANITIZE],
 [m4_text_box([M4sh Initialization.])
 
 AS_BOURNE_COMPATIBLE
-_AS_PATH_SEPARATOR_PREPARE
 
-# IFS
-# We need space, tab and new line, in precisely that order.  Quoting is
-# there to prevent editors from complaining about space-tab.
-# (If _AS_PATH_WALK were called with IFS unset, it would disable word
-# splitting by setting IFS to empty value.)
+# Reset variables that may have inherited troublesome values from
+# the environment.
+
+# IFS needs to be set, to space, tab, and newline, in precisely that order.
+# (If _AS_PATH_WALK were called with IFS unset, it would have the
+# side effect of setting IFS to empty, thus disabling word splitting.)
+# Quoting is to prevent editors from complaining about space-tab.
 as_nl='
 '
 export as_nl
 IFS=" ""	$as_nl"
+
+PS1='$ '
+PS2='> '
+PS4='+ '
+
+# Ensure predictable behavior from utilities with locale-dependent output.
+LC_ALL=C
+export LC_ALL
+LANGUAGE=C
+export LANGUAGE
+
+# We cannot yet rely on "unset" to work, but we need these variables
+# to be unset--not just set to an empty or harmless value--now, to
+# avoid bugs in old shells (e.g. pre-3.0 UWIN ksh).  This construct
+# also avoids known problems related to "unset" and subshell syntax
+# in other old shells (e.g. bash 2.01 and pdksh 5.2.14).
+for as_var in BASH_ENV ENV MAIL MAILPATH CDPATH
+do eval test \${$as_var+y} \
+  && ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
+done
+
+_AS_ENSURE_STANDARD_FDS
+_AS_PATH_SEPARATOR_PREPARE
 
 # Find who we are.  Look in the path if we contain no directory separator.
 as_myself=
@@ -486,26 +532,6 @@ if test ! -f "$as_myself"; then
   AS_EXIT
 fi
 
-# Unset variables that we do not need and which cause bugs (e.g. in
-# pre-3.0 UWIN ksh).  But do not cause bugs in bash 2.01; the "|| exit 1"
-# suppresses any "Segmentation fault" message there.  '((' could
-# trigger a bug in pdksh 5.2.14.
-for as_var in BASH_ENV ENV MAIL MAILPATH
-do eval test \${$as_var+y} \
-  && ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
-done
-PS1='$ '
-PS2='> '
-PS4='+ '
-
-# NLS nuisances.
-LC_ALL=C
-export LC_ALL
-LANGUAGE=C
-export LANGUAGE
-
-# CDPATH.
-(unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 _m4_popdef([AS_EXIT])])# _AS_SHELL_SANITIZE
 
 
