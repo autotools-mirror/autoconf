@@ -111,7 +111,7 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 [[AC_CHECK_DECLS([yes, no, myenum, mystruct, myfunc, mymacro1, mymacro2],,,
 		 [[extern int yes;
 		   enum { myenum };
-		   extern struct { int x[20]; } mystruct;
+		   extern struct mystruct_s { int x[20]; } mystruct;
 		   extern int myfunc();
 		   #define mymacro1(arg) arg
 		   #define mymacro2]])
@@ -119,7 +119,7 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
   AC_CHECK_DECLS([strerror],,, [[]])
   # The difference in space-before-open-paren is intentional.
   AC_CHECK_DECLS([basenam (char *), dirnam(char *),
-		  [moreargs (char, short, int, long, void *, char [], float, double)]],,,
+		  moreargs (char, short, int, long, void *, char *, float, double)],,,
 		 [[#ifdef __cplusplus
 		   extern "C++" char *basenam (char *);
 		   extern "C++" const char *basenam (const char *);

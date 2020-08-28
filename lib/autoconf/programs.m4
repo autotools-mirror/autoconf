@@ -727,7 +727,12 @@ b { REJECT; }
 c { yymore (); }
 d { yyless (1); }
 e { /* IRIX 6.5 flex 2.5.4 underquotes its yyless argument.  */
-    yyless ((input () != 0)); }
+#ifdef __cplusplus
+    yyless ((yyinput () != 0));
+#else
+    yyless ((input () != 0));
+#endif
+  }
 f { unput (yytext[0]); }
 . { BEGIN INITIAL; }
 %%
