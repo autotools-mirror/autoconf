@@ -2261,7 +2261,9 @@ void test_exception_syntax()
   try {
     throw "test";
   } catch (const char *s) {
-    assert (!strcmp (s, "test"));
+    // Extra parentheses suppress a warning when building autoconf itself,
+    // due to lint rules shared with more typical C programs.
+    assert (!(strcmp) (s, "test"));
   }
 }
 
