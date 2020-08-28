@@ -20,10 +20,6 @@ and use with caution an Autoconf with ``Important bugs''.
                  | New features need further testing.  |
                  `------------------------------------*/
 
-* Now that configure depends on shell functions, it is possible that
-  configure scripts may fail to run on old platforms that lack a shell
-  with proper function support.
-
 * Autotest parallel testsuite support is still a work in progress.
   There are known issues in job handling under dash and some ksh
   variants, where a parallel testsuite can hang or cause a 100%
