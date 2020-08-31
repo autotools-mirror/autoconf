@@ -33,19 +33,21 @@ used in several executables of the Autoconf package.
 =cut
 
 use 5.006;
+use strict;
+use warnings;
+
+use Carp;
 use Exporter;
-use Autom4te::ChannelDefs;
-use Autom4te::Channels;
-use Autom4te::Getopt ();
 use File::Basename;
 use File::Path ();
 use File::stat;
 use IO::File;
-use Carp;
-use strict;
-use warnings;
-use vars qw (@ISA @EXPORT);
 
+use Autom4te::ChannelDefs;
+use Autom4te::Channels;
+use Autom4te::Getopt ();
+
+use vars qw (@EXPORT @ISA);
 @ISA = qw (Exporter);
 
 # Variables we define and export.

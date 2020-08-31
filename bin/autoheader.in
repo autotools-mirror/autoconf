@@ -26,6 +26,10 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 # Written by Roland McGrath.
 # Rewritten in Perl by Akim Demaille.
 
+use 5.006;
+use strict;
+use warnings;
+
 BEGIN
 {
   my $pkgdatadir = $ENV{'autom4te_perllibdir'} || '@pkgdatadir@';
@@ -44,10 +48,9 @@ use Autom4te::Configure_ac;
 use Autom4te::FileUtils;
 use Autom4te::General;
 use Autom4te::XFile;
-use strict;
 
 # Using 'do FILE', we need 'local' vars.
-use vars qw ($config_h %verbatim %symbol);
+use vars qw ($config_h %symbol %verbatim);
 
 # Lib files.
 my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';

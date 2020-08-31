@@ -31,11 +31,14 @@ This Perl module handles the cache of M4 runs used by autom4te.
 
 =cut
 
-use Data::Dumper;
-use Autom4te::Request;
-use Carp;
+use 5.006;
 use strict;
 use warnings;
+
+use Carp;
+use Data::Dumper;
+
+use Autom4te::Request;
 
 =over 4
 
@@ -50,7 +53,7 @@ work with "my" vars, and I do not know whether the current behavior
 
 =cut
 
-use vars qw(@request);
+use vars qw (@request);
 
 =item C<$req = Autom4te::C4che-E<gt>retrieve (%attr)>
 

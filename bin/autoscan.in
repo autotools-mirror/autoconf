@@ -23,6 +23,10 @@
 eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
     if 0;
 
+use 5.006;
+use strict;
+use warnings;
+
 BEGIN
 {
   my $pkgdatadir = $ENV{'autom4te_perllibdir'} || '@pkgdatadir@';
@@ -35,15 +39,14 @@ BEGIN
   $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
-use Autom4te::ChannelDefs;
-use Autom4te::Configure_ac;
-use Autom4te::General;
-use Autom4te::FileUtils;
-use Autom4te::XFile;
 use File::Basename;
 use File::Find;
-use strict;
-use warnings;
+
+use Autom4te::ChannelDefs;
+use Autom4te::Configure_ac;
+use Autom4te::FileUtils;
+use Autom4te::General;
+use Autom4te::XFile;
 
 use vars qw(@cfiles @makefiles @shfiles @subdirs %printed);
 

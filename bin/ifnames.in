@@ -29,6 +29,10 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 # Written by David MacKenzie <djm@gnu.ai.mit.edu>
 # and Paul Eggert <eggert@twinsun.com>.
 
+use 5.006;
+use strict;
+use warnings;
+
 BEGIN
 {
   my $pkgdatadir = $ENV{'autom4te_perllibdir'} || '@pkgdatadir@';
@@ -44,7 +48,6 @@ BEGIN
 use Autom4te::General;
 use Autom4te::XFile;
 use Autom4te::FileUtils;
-use warnings;
 
 # $HELP
 # -----

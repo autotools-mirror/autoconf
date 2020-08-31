@@ -33,14 +33,16 @@ line options in conformance to the GNU Coding standards.
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
+
+use Carp qw (confess croak);
 use Exporter ();
 use Getopt::Long ();
-use Autom4te::ChannelDefs qw/fatal/;
-use Carp qw/croak confess/;
 
-use vars qw (@ISA @EXPORT);
+use Autom4te::ChannelDefs qw (fatal);
+
+use vars qw (@EXPORT @ISA);
 @ISA = qw (Exporter);
-@EXPORT= qw/getopt/;
+@EXPORT = qw (getopt);
 
 =item C<parse_options (%option)>
 

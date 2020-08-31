@@ -24,6 +24,10 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 # Written by David J. MacKenzie.
 # Extended and rewritten in Perl by Akim Demaille.
 
+use 5.006;
+use strict;
+use warnings;
+
 BEGIN
 {
   my $pkgdatadir = $ENV{'autom4te_perllibdir'} || '@pkgdatadir@';
@@ -36,16 +40,15 @@ BEGIN
   $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
+# Do not use Cwd::chdir, since it might hang.
+use Cwd qw (cwd);
+
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
 use Autom4te::Configure_ac;
 use Autom4te::FileUtils;
 use Autom4te::General;
 use Autom4te::XFile;
-# Do not use Cwd::chdir, since it might hang.
-use Cwd 'cwd';
-use strict;
-use warnings;
 
 ## ----------- ##
 ## Variables.  ##

@@ -32,10 +32,12 @@ used in several executables of the Autoconf and Automake packages.
 
 =cut
 
+use 5.006;
 use strict;
 use warnings;
-use Class::Struct;
+
 use Carp;
+use Class::Struct;
 use Data::Dumper;
 
 struct

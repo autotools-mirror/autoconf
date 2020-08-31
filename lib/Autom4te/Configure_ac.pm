@@ -23,12 +23,13 @@ package Autom4te::Configure_ac;
 use 5.006;
 use strict;
 use warnings;
+
 use Exporter;
-use Autom4te::Channels;
+
 use Autom4te::ChannelDefs;
+use Autom4te::Channels;
 
-use vars qw (@ISA @EXPORT);
-
+use vars qw (@EXPORT @ISA);
 @ISA = qw (Exporter);
 @EXPORT = qw (&find_configure_ac &require_configure_ac);
 

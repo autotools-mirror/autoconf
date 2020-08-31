@@ -22,6 +22,9 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use 5.006;
+use strict;
+use warnings;
 
 BEGIN
 {
@@ -35,15 +38,14 @@ BEGIN
   $ENV{'SHELL'} = '@SHELL@' if ($^O eq 'dos');
 }
 
+use File::Basename;
+
 use Autom4te::C4che;
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
 use Autom4te::FileUtils;
 use Autom4te::General;
 use Autom4te::XFile;
-use File::Basename;
-use strict;
-use warnings;
 
 # Data directory.
 my $pkgdatadir = $ENV{'AC_MACRODIR'} || '@pkgdatadir@';

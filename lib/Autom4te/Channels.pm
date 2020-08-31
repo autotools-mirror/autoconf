@@ -69,11 +69,12 @@ etc.) that can also be overridden on a per-message basis.
 use 5.006;
 use strict;
 use warnings;
-use Exporter;
+
 use Carp;
+use Exporter;
 use File::Basename;
 
-use vars qw (@ISA @EXPORT %channels $me);
+use vars qw (@EXPORT @ISA %channels $me);
 
 @ISA = qw (Exporter);
 @EXPORT = qw ($exit_code $warnings_are_errors
