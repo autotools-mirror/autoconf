@@ -49,7 +49,7 @@ shorthand function to output on specific channels.
 
 use 5.006;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 use Exporter;
 

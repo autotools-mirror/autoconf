@@ -34,7 +34,7 @@ used in several executables of the Autoconf package.
 
 use 5.006;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 use Carp;
 use Exporter;

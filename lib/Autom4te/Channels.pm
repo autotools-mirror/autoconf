@@ -68,7 +68,7 @@ etc.) that can also be overridden on a per-message basis.
 
 use 5.006;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 use Carp;
 use Exporter;

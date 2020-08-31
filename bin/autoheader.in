@@ -28,7 +28,7 @@ eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
 
 use 5.006;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 BEGIN
 {

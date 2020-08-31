@@ -71,7 +71,7 @@ and C<getlines> methods to translate C<\r\n> to C<\n>.
 
 use 5.006;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 use Errno;
 use Exporter;

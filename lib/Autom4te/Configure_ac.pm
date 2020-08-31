@@ -22,7 +22,7 @@ package Autom4te::Configure_ac;
 
 use 5.006;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 use Exporter;
 

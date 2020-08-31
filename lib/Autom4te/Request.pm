@@ -34,7 +34,7 @@ used in several executables of the Autoconf and Automake packages.
 
 use 5.006;
 use strict;
-use warnings;
+use warnings FATAL => 'all';
 
 use Carp;
 use Class::Struct;
