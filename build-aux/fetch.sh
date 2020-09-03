@@ -38,6 +38,7 @@ gnulib_files="
 
 automake_files="
         lib/Automake/Channels.pm
+        lib/Automake/Configure_ac.pm
         lib/Automake/FileUtils.pm
         lib/Automake/Getopt.pm
         lib/Automake/XFile.pm
