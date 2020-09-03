@@ -42,8 +42,8 @@ use Exporter;
 use File::stat;
 use IO::File;
 
-use Autom4te::ChannelDefs;
 use Autom4te::Channels;
+use Autom4te::ChannelDefs;
 
 use vars qw (@EXPORT @ISA);
 @ISA = qw (Exporter);
