@@ -385,8 +385,8 @@ fi
 if test -z "$CPP"; then
   AC_CACHE_VAL([ac_cv_prog_CPP],
   [dnl
-    # Double quotes because CPP needs to be expanded
-    for CPP in "$CC -E" "$CC -E -traditional-cpp" "/lib/cpp"
+    # Double quotes because $CC needs to be expanded
+    for CPP in "$CC -E" "$CC -E -traditional-cpp" cpp /lib/cpp
     do
       _AC_PROG_PREPROC_WORKS_IFELSE([break])
     done
@@ -644,8 +644,8 @@ AC_MSG_CHECKING([how to run the C++ preprocessor])
 if test -z "$CXXCPP"; then
   AC_CACHE_VAL(ac_cv_prog_CXXCPP,
   [dnl
-    # Double quotes because CXXCPP needs to be expanded
-    for CXXCPP in "$CXX -E" "/lib/cpp"
+    # Double quotes because $CXX needs to be expanded
+    for CXXCPP in "$CXX -E" cpp /lib/cpp
     do
       _AC_PROG_PREPROC_WORKS_IFELSE([break])
     done
@@ -837,8 +837,8 @@ AC_MSG_CHECKING([how to run the Objective C preprocessor])
 if test -z "$OBJCPP"; then
   AC_CACHE_VAL(ac_cv_prog_OBJCPP,
   [dnl
-    # Double quotes because OBJCPP needs to be expanded
-    for OBJCPP in "$OBJC -E" "/lib/cpp"
+    # Double quotes because $OBJC needs to be expanded
+    for OBJCPP in "$OBJC -E" cpp /lib/cpp
     do
       _AC_PROG_PREPROC_WORKS_IFELSE([break])
     done
@@ -976,8 +976,8 @@ AC_MSG_CHECKING([how to run the Objective C++ preprocessor])
 if test -z "$OBJCXXCPP"; then
   AC_CACHE_VAL(ac_cv_prog_OBJCXXCPP,
   [dnl
-    # Double quotes because OBJCXXCPP needs to be expanded
-    for OBJCXXCPP in "$OBJCXX -E" "/lib/cpp"
+    # Double quotes because $OBJCXX needs to be expanded
+    for OBJCXXCPP in "$OBJCXX -E" cpp /lib/cpp
     do
       _AC_PROG_PREPROC_WORKS_IFELSE([break])
     done

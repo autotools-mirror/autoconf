@@ -7371,7 +7371,9 @@ For the compiler @var{compiler}, this macro caches its result in the
 @evindex CPP
 @ovindex CPP
 Set output variable @code{CPP} to a command that runs the
-C preprocessor.  If @samp{$CC -E} doesn't work, @file{/lib/cpp} is used.
+C preprocessor.  If @samp{$CC -E} doesn't work, tries @code{cpp} and
+@file{/lib/cpp}, in that order.
+
 It is only portable to run @code{CPP} on files with a @file{.c}
 extension.
 
@@ -7742,7 +7744,10 @@ C++, the @option{-std=gnu++@var{nn}} options may be used, but not the
 @evindex CXXCPP
 @ovindex CXXCPP
 Set output variable @code{CXXCPP} to a command that runs the C++
-preprocessor.  If @samp{$CXX -E} doesn't work, @file{/lib/cpp} is used.
+preprocessor.  If @samp{$CXX -E} doesn't work, tries @code{cpp} and
+@file{/lib/cpp}, in that order.  Because of this fallback, @code{CXXCPP}
+may or may not set C++-specific predefined macros (such as @code{__cplusplus}).
+
 It is portable to run @code{CXXCPP} only on files with a @file{.c},
 @file{.C}, @file{.cc}, or @file{.cpp} extension.
 
@@ -7799,7 +7804,10 @@ compiler (@option{-O2} on systems where the compiler does not accept
 @evindex OBJCPP
 @ovindex OBJCPP
 Set output variable @code{OBJCPP} to a command that runs the Objective C
-preprocessor.  If @samp{$OBJC -E} doesn't work, @file{/lib/cpp} is used.
+preprocessor.  If @samp{$OBJC -E} doesn't work, tries @code{cpp} and
+@file{/lib/cpp}, in that order.  Because of this fallback, @code{CXXCPP}
+may or may not set Objective-C-specific predefined macros (such as
+@code{__OBJC__}).
 @end defmac
 
 
@@ -7840,7 +7848,10 @@ compiler (@option{-O2} on systems where the compiler does not accept
 @evindex OBJCXXCPP
 @ovindex OBJCXXCPP
 Set output variable @code{OBJCXXCPP} to a command that runs the Objective C++
-preprocessor.  If @samp{$OBJCXX -E} doesn't work, @file{/lib/cpp} is used.
+preprocessor.  If @samp{$OBJCXX -E} doesn't work, tries @code{cpp} and
+@file{/lib/cpp}, in that order.  Because of this fallback, @code{CXXCPP}
+may or may not set Objective-C++-specific predefined macros (such as
+@code{__cplusplus} and @code{__OBJC__}).
 @end defmac
 
 
