@@ -48,12 +48,8 @@ Mail-Followup-To: autoconf@gnu.org
 
 # Update files maintained in gnulib and autom4te.
 .PHONY: fetch
-
-WGET = wget
-
 fetch:
-	WGET="$(WGET)" PERL="$(PERL)" \
-	    $(SHELL) $(srcdir)/build-aux/fetch.sh "$(abs_top_srcdir)"
+	$(PERL) $(srcdir)/build-aux/fetch.pl "$(abs_top_srcdir)"
 
 # Tests not to run.
 local-checks-to-skip ?= \
