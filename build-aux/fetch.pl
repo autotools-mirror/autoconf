@@ -27,45 +27,76 @@ use File::Temp qw (tempfile);
 use Getopt::Long;
 use HTTP::Tiny;
 
-our @gnulib_files = qw(
-  build-aux/announce-gen
-  build-aux/config.guess
-  build-aux/config.sub
-  build-aux/gendocs.sh
-  build-aux/git-version-gen
-  build-aux/gitlog-to-changelog
-  build-aux/gnupload
-  build-aux/install-sh
-  build-aux/mdate-sh
-  build-aux/move-if-change
-  build-aux/texinfo.tex
-  build-aux/update-copyright
-  build-aux/useless-if-before-free
-  build-aux/vc-list-files
-  doc/fdl.texi
-  doc/gendocs_template
-  doc/gnu-oids.texi
-  doc/make-stds.texi
-  doc/standards.texi
-  m4/autobuild.m4
-  top/GNUmakefile
-  top/maint.mk
+# From outside to inside: locations in our source tree where to put
+# files retrieved from other projects; the savannah.gnu.org project
+# name of each project to retrieve files from; and the set of files
+# to retrieve from that project into that location.
+# Files put into a directory named 'Autom4te' are subject to "editing"
+# (see the $edit parameter to sub fetch).
+our %to_fetch = (
+  '.' => {
+    gnulib => [
+      'top/GNUmakefile',
+      'top/maint.mk',
+    ],
+  },
+  'build-aux' => {
+    automake => [
+      'lib/install-sh',
+      'lib/mdate-sh',
+    ],
+    config => [
+      'config.guess',
+      'config.sub',
+    ],
+    gnulib => [
+      'build-aux/announce-gen',
+      'build-aux/gendocs.sh',
+      'build-aux/git-version-gen',
+      'build-aux/gitlog-to-changelog',
+      'build-aux/gnupload',
+      'build-aux/move-if-change',
+      'build-aux/update-copyright',
+      'build-aux/useless-if-before-free',
+      'build-aux/vc-list-files',
+    ],
+    texinfo => [
+      'doc/texinfo.tex',
+    ],
+  },
+  'doc' => {
+    gnulib => [
+      'doc/gendocs_template',
+    ],
+    gnustandards => [
+      'gnustandards/fdl.texi',
+      'gnustandards/gnu-oids.texi',
+      'gnustandards/make-stds.texi',
+      'gnustandards/standards.texi',
+    ],
+  },
+  'lib/Autom4te' => {
+    automake => [
+      'lib/Automake/Channels.pm',
+      'lib/Automake/Configure_ac.pm',
+      'lib/Automake/FileUtils.pm',
+      'lib/Automake/Getopt.pm',
+      'lib/Automake/XFile.pm',
+    ],
+  },
+  'm4' => {
+    gnulib => [
+      'm4/autobuild.m4',
+    ],
+  },
 );
 
-our @automake_files = qw(
-  lib/Automake/Channels.pm
-  lib/Automake/Configure_ac.pm
-  lib/Automake/FileUtils.pm
-  lib/Automake/Getopt.pm
-  lib/Automake/XFile.pm
-);
 
-
-# Shorthands for catpath and splitpath.
+# Shorthands for catfile and splitpath.
 # File::Spec::Functions was only added in 5.30, which is much too new.
-sub catpath
+sub catfile
 {
-  return File::Spec->catpath (@_);
+  return File::Spec->catfile (@_);
 }
 
 sub splitpath
@@ -101,10 +132,22 @@ sub savannah_url($$)
 {
   my ($repo, $filename) = @_;
 
-  my $gitweb_base = 'https://git.savannah.gnu.org/gitweb/?p=';
-  my $gitweb_op   = '.git;a=blob_plain;hb=HEAD;f=';
+  $repo = urlquote ($repo);
+  $filename = urlquote ($filename);
 
-  return $gitweb_base . urlquote ($repo) . $gitweb_op . urlquote ($filename);
+  # The GNU Coding Standards are still maintained in CVS.
+  if ($repo eq 'gnustandards')
+    {
+      my $cvsweb_base = 'https://cvs.savannah.gnu.org/viewvc/*checkout*/';
+      return $cvsweb_base . $repo . '/' . $filename;
+    }
+  else
+    {
+      my $gitweb_base = 'https://git.savannah.gnu.org/gitweb/?p=';
+      my $gitweb_op   = '.git;a=blob_plain;hb=HEAD;f=';
+
+      return $gitweb_base . $repo . $gitweb_op . $filename;
+  }
 }
 
 
@@ -136,8 +179,8 @@ sub replace_if_change ($$$)
       return;
     }
 
-  my ($vol, $subdir, $base) = splitpath $file;
-  my ($tmp_fh, $tmp_name) = tempfile (DIR => catpath ($vol, $subdir));
+  my (undef, $subdir, undef) = splitpath $file;
+  my ($tmp_fh, $tmp_name) = tempfile (DIR => $subdir);
 
   {
     local $\;
@@ -155,30 +198,25 @@ sub replace_if_change ($$$)
   rename $tmp_name, $file
     or die "$0: rename($tmp_name, $file): $!\n";
 
-  print STDERR "$file updated\n" unless $quiet;
+  print STDERR "$file updated\n";
 }
 
 
-# fetch ($path, $repo, $topdestdir, $edit, $quiet, $client)
-# Retrieve $path from repository $repo, writing it to $topdestdir/$path.
-# As a special case, if the dirname of $path is "top/", then write it
-# to $topdestdir/$(basename $file) instead.
+# fetch ($path, $repo, $destdir, $edit, $quiet, $client)
+# Retrieve $path from repository $repo,
+# writing it to $destdir/$(basename $path).
 # If $edit is true, perform s/\bAutomake::/Autom4te::/g on the file's
 # contents.
 # If $quiet is true, don't print progress reports.
 # $client must be a HTTP::Tiny instance.
 sub fetch ($$$$$$)
 {
-  my ($path, $repo, $topdestdir, $edit, $quiet, $client) = @_;
-  my ($vol, $subdir, $file) = splitpath ($path);
-  my $destpath = ($subdir eq 'top/')
-    ? catpath($topdestdir, $file)
-    : catpath($topdestdir, $path);
-
-  $destpath =~ s!/Automake/!/Autom4te/!g if $edit;
+  my ($path, $repo, $destdir, $edit, $quiet, $client) = @_;
+  my (undef, undef, $file) = splitpath ($path);
+  my $destpath = catfile ($destdir, $file);
 
   my $uri = savannah_url ($repo, $path);
-  print STDERR "fetch $path <- $uri ...\n" unless $quiet;
+  print STDERR "fetch $destpath <- $uri ...\n" unless $quiet;
 
   my $resp = $client->get ($uri);
 
@@ -186,6 +224,8 @@ sub fetch ($$$$$$)
     unless $resp->{success};
 
   my $content = $resp->{content};
+  # don't use \s here or it will eat blank lines
+  $content =~ s/[ \t]+$//gm;
   $content =~ s/\bAutomake::/Autom4te::/g if $edit;
 
   replace_if_change ($destpath, $content, $quiet);
@@ -216,11 +256,16 @@ sub main
     . $whynot . "\n"
     unless $can_ssl;
 
-  fetch $_, 'gnulib', $topdestdir, 0, $quiet, $client
-    foreach @gnulib_files;
-
-  fetch $_, 'automake', $topdestdir, 1, $quiet, $client
-    foreach @automake_files;
+  while (my ($subdir, $groups) = each %to_fetch)
+    {
+      my $edit = $subdir =~ m!/Autom4te$!;
+      my $destdir = catfile ($topdestdir, $subdir);
+      while (my ($project, $files) = each %$groups)
+        {
+          fetch $_, $project, $destdir, $edit, $quiet, $client
+            foreach @$files;
+        }
+      }
 }
 
 main ();
