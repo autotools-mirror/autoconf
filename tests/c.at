@@ -262,7 +262,7 @@ AT_SETUP([AC_USE_SYSTEM_EXTENSIONS])
 _AT_CHECK_AC_MACRO(
 [[AC_AIX
 AC_DEFINE([__EXTENSIONS__], [1], [Manually defined for Solaris])
-]])
+]], [], [-Wno-obsolete])
 
 _AT_CHECK_AC_MACRO(
 [[AC_USE_SYSTEM_EXTENSIONS

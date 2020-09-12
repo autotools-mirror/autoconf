@@ -344,7 +344,12 @@ test $estatus != 3 &&
 AC_OUTPUT
 ]])
 
-AT_CHECK_AUTOCONF
+AT_CHECK_AUTOCONF([], 0, [],
+[[configure.ac:14: warning: The macro `AC_TRY_RUN' is obsolete.
+configure.ac:14: You should run autoupdate.
+general.m4: AC_TRY_RUN is expanded from...
+configure.ac:14: the top level
+]])
 AT_CHECK_CONFIGURE([-q])
 
 AT_CLEANUP

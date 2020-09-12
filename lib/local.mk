@@ -34,6 +34,7 @@ dist_perllib_DATA = \
   lib/Autom4te/C4che.pm \
   lib/Autom4te/ChannelDefs.pm \
   lib/Autom4te/Channels.pm \
+  lib/Autom4te/Config.pm \
   lib/Autom4te/Configure_ac.pm \
   lib/Autom4te/FileUtils.pm \
   lib/Autom4te/General.pm \

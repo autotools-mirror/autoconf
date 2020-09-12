@@ -81,7 +81,7 @@ AT_DATA([configure.ac],
 AT_CHECK_AUTOCONF([], [1], [],
 [[configure.ac:1: error: AC_REQUIRE(AC_PROG_CC): cannot be used outside of an AC_DEFUN'd macro
 configure.ac:1: the top level
-autom4te: m4 failed with exit status: 1
+autom4te: error: m4 failed with exit status: 1
 ]])
 AT_CLEANUP
 

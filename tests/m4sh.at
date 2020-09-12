@@ -599,7 +599,7 @@ ECHO_TEST([
 AS_EXIT(0)
 ]])
 
-AT_CHECK_M4SH([-Wobsolete], 0, [],
+AT_CHECK_M4SH([], 0, [],
 [[script.as:13: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
 script.as:13: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
 script.as:14: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead

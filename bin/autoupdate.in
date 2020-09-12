@@ -229,6 +229,11 @@ $autoconf .= " --verbose" if $verbose;
 $autoconf .= join (' --include=', '', map { shell_quote ($_) } @include);
 $autoconf .= join (' --prepend-include=', '', map { shell_quote ($_) } @prepend_include);
 
+# Disable all warnings from autoconf invocations.
+# In particular we do not want warnings about obsolete constructs,
+# which are on by default as of autoconf 2.70.
+$ENV{'WARNINGS'} = 'none';
+
 mktmpdir ('au');
 handle_autoconf_macros;
 

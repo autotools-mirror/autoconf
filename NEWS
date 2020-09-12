@@ -10,6 +10,9 @@ GNU Autoconf NEWS - User visible changes.
    per-process temporary runtime files (such as pid files) into '/run'
    instead of '/var/run'.
 
+** Warnings about obsolete constructs are now on by default.
+   They can be turned off with '-Wno-obsolete'.
+
 ** The use of the long-deprecated name 'configure.in' for the autoconf
    input file now elicits a warning in the 'obsolete' category.
 

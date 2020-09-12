@@ -251,7 +251,7 @@ AT_DATA([autoconf_io.h],
 ])
 
 AT_CONFIGURE_AC([AC_CHECK_HEADERS(stdio.h autoconf_io.h)])
-AT_CHECK_AUTOCONF([-W obsolete])
+AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER([], [
   HAVE_AUTOCONF_IO_H
   HAVE_INTTYPES_H
@@ -291,7 +291,7 @@ AT_DATA([header2.h],
 
 AT_CONFIGURE_AC([[AC_CHECK_HEADERS([header2.h], [], [], [-])]])
 
-AT_CHECK_AUTOCONF([-W obsolete], [], [],
+AT_CHECK_AUTOCONF([], 0, [],
 [[configure.ac:4: warning: Checking for headers with the preprocessor is
 configure.ac:4: deprecated. Specify prerequisite code to AC_CHECK_HEADER
 configure.ac:4: instead of using fourth argument `-'. (Many headers need
@@ -303,7 +303,7 @@ headers.m4: AC_CHECK_HEADER is expanded from...
 headers.m4: AC_CHECK_HEADERS is expanded from...
 configure.ac:4: the top level
 ]])
-AT_CHECK_AUTOHEADER([], [HAVE_HEADER2_H])
+AT_CHECK_AUTOHEADER([-W no-obsolete], [HAVE_HEADER2_H])
 AT_CHECK_CONFIGURE([CPPFLAGS=-I.])
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
@@ -334,7 +334,7 @@ AT_DATA([header3.h],
 AT_CONFIGURE_AC(
 [AC_CHECK_HEADERS(header2.h header3.h, [], [], [[@%:@include "header1.h"]])])
 
-AT_CHECK_AUTOCONF([-W obsolete])
+AT_CHECK_AUTOCONF
 AT_CHECK_AUTOHEADER([], [
   HAVE_HEADER2_H
   HAVE_HEADER3_H
@@ -829,14 +829,14 @@ $1([dn@&t@l
     fn_blurf dn@&t@l Apos'trophed comment
 ])
 ]])
-AT_CHECK_AUTOCONF([-W obsolete], [0], [],
+AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
 configure.ac:6: note: `dn@&t@l' is a macro
 functions.m4: $1 is expanded from...
 configure.ac:6: the top level
 ])
-AT_CHECK_AUTOHEADER([], [
+AT_CHECK_AUTOHEADER([-W no-obsolete], [
   HAVE_FN_BLURF
   HAVE_FN_FOO
   HAVE_FN_NOCOMMENT
@@ -858,7 +858,7 @@ $1([dn@&t@l
     fn_blurf dn@&t@l Apos'trophed comment
 ])
 ]])
-AT_CHECK_AUTOCONF([-W obsolete], [0], [],
+AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:8: warning: whitespace-separated list contains macros;
 configure.ac:8: in a future version of Autoconf they will not be expanded
 configure.ac:8: note: `dn@&t@l' is a macro
@@ -868,7 +868,7 @@ configure.ac:8: warning: $1($fns): you should use literals
 functions.m4: $1 is expanded from...
 configure.ac:8: the top level
 ])
-AT_CHECK_AUTOHEADER([], [
+AT_CHECK_AUTOHEADER([-W no-obsolete], [
   HAVE_FN_BLURF
   HAVE_FN_FOO
   HAVE_FN_NOCOMMENT
@@ -894,14 +894,14 @@ $1([dn@&t@l
     blurf.h dn@&t@l Apos'trophed comment
 ])
 ]])
-AT_CHECK_AUTOCONF([-W obsolete], [0], [],
+AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
 configure.ac:6: note: `dn@&t@l' is a macro
 headers.m4: $1 is expanded from...
 configure.ac:6: the top level
 ])
-AT_CHECK_AUTOHEADER([], [
+AT_CHECK_AUTOHEADER([-W no-obsolete], [
   HAVE_BLURF_H
   HAVE_FOO_H
   HAVE_INTTYPES_H
@@ -932,7 +932,7 @@ $1([dn@&t@l
     blurf.h dn@&t@l Apos'trophed comment
 ])
 ]])
-AT_CHECK_AUTOCONF([-W obsolete], [0], [],
+AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:8: warning: whitespace-separated list contains macros;
 configure.ac:8: in a future version of Autoconf they will not be expanded
 configure.ac:8: note: `dn@&t@l' is a macro
@@ -942,7 +942,7 @@ configure.ac:8: warning: $1($hs): you should use literals
 headers.m4: $1 is expanded from...
 configure.ac:8: the top level
 ])
-AT_CHECK_AUTOHEADER([], [
+AT_CHECK_AUTOHEADER([-W no-obsolete], [
   HAVE_BLURF_H
   HAVE_FOO_H
   HAVE_INTTYPES_H
@@ -982,14 +982,14 @@ AC_CHECK_FILES([dn@&t@l
   /nonex/f_blurf dn@&t@l Apos'trophed comment
 ])
 ]])
-AT_CHECK_AUTOCONF([-W obsolete], [0], [],
+AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
 configure.ac:6: note: `dn@&t@l' is a macro
 general.m4: AC_CHECK_FILES is expanded from...
 configure.ac:6: the top level
 ])
-AT_CHECK_AUTOHEADER([], [
+AT_CHECK_AUTOHEADER([-W no-obsolete], [
   HAVE__NONEX_F_BLURF
   HAVE__NONEX_F_FOO
   HAVE__NONEX_F_QUUX
@@ -1008,7 +1008,7 @@ AC_CONFIG_MACRO_DIRS([dn@&t@l
   d_blurf dn@&t@l Apos'trophed comment
 ])
 ]])
-AT_CHECK_AUTOCONF([-W obsolete -t AC_CONFIG_MACRO_DIR_TRACE], [0],
+AT_CHECK_AUTOCONF([-t AC_CONFIG_MACRO_DIR_TRACE], [0],
 [configure.ac:6:AC_CONFIG_MACRO_DIR_TRACE:d_foo
 configure.ac:6:AC_CONFIG_MACRO_DIR_TRACE:d_quux
 configure.ac:6:AC_CONFIG_MACRO_DIR_TRACE:d_blurf
@@ -1040,14 +1040,14 @@ AC_CONFIG_SUBDIRS([dn@&t@l
   d_blurf dn@&t@l Apos'trophed comment
 ])
 ]])
-AT_CHECK_AUTOCONF([-W obsolete], [0], [],
+AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
 configure.ac:6: note: `dn@&t@l' is a macro
 status.m4: AC_CONFIG_SUBDIRS is expanded from...
 configure.ac:6: the top level
 ])
-AT_CHECK_AUTOHEADER
+AT_CHECK_AUTOHEADER([-W no-obsolete])
 AT_CHECK_CONFIGURE([], [0], [stdout])
 AT_CHECK([grep '^entered' stdout], [0],
 [[entered d_foo/configure

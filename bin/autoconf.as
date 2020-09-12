@@ -37,16 +37,21 @@ Operation modes:
   -d, --debug               don't remove temporary files
   -f, --force               consider all files obsolete
   -o, --output=FILE         save output in FILE (stdout is the default)
-  -W, --warnings=CATEGORY   report the warnings falling in CATEGORY [syntax]
+  -W, --warnings=CATEGORY   report the warnings falling in CATEGORY
 
 Warning categories include:
-  'cross'         cross compilation issues
-  'obsolete'      obsolete constructs
-  'syntax'        dubious syntactic constructs
-  'all'           all the warnings
-  'no-CATEGORY'   turn off the warnings on CATEGORY
-  'none'          turn off all the warnings
-  'error'         warnings are error
+  cross                  cross compilation issues
+  gnu                    GNU coding standards (default in gnu and gnits modes)
+  obsolete               obsolete features or constructions (default)
+  override               user redefinitions of Automake rules or variables
+  portability            portability issues (default in gnu and gnits modes)
+  portability-recursive  nested Make variables (default with -Wportability)
+  extra-portability      extra portability issues related to obscure tools
+  syntax                 dubious syntactic constructs (default)
+  unsupported            unsupported or incomplete features (default)
+  all                    all the warnings
+  no-CATEGORY            turn off warnings in CATEGORY
+  none                   turn off all the warnings
 
 The environment variables 'M4' and 'WARNINGS' are honored.
 

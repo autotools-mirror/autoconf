@@ -58,7 +58,7 @@ my $autom4te = $ENV{'AUTOM4TE'} || '@bindir@/@autom4te-name@';
 my $config_h_in;
 my @prepend_include;
 my @include;
-
+my @warnings;
 
 # $HELP
 # -----
@@ -112,10 +112,12 @@ sub parse_args ()
 {
   my $srcdir;
 
-  parse_WARNINGS;
   getopt ('I|include=s'         => \@include,
 	  'B|prepend-include=s' => \@prepend_include,
-	  'W|warnings=s'        => \&parse_warnings);
+	  'W|warnings=s'        => \@warnings);
+
+  parse_WARNINGS;
+  parse_warnings @warnings;
 
   if (! @ARGV)
     {
@@ -130,7 +132,6 @@ sub parse_args ()
 ## -------------- ##
 
 mktmpdir ('ah');
-switch_warning 'obsolete';
 parse_args;
 
 # Preach.
@@ -165,6 +166,7 @@ END
 my $autoconf = "'$autom4te' --language=autoconf ";
 $autoconf .= join (' --include=', '', map { shell_quote ($_) } @include);
 $autoconf .= join (' --prepend-include=', '', map { shell_quote ($_) } @prepend_include);
+$autoconf .= join (' --warnings=', '', map { shell_quote ($_) } @warnings);
 $autoconf .= ' --debug' if $debug;
 $autoconf .= ' --force' if $force;
 $autoconf .= ' --verbose' if $verbose;
@@ -278,7 +280,7 @@ $out->close;
     {
       if (! -r $template)
 	{
-	  msg 'syntax', "warning: cannot read $template: $!";
+	  msg 'syntax', "cannot read $template: $!";
 	}
       else
 	{
@@ -297,7 +299,7 @@ $out->close;
 
   foreach (sort keys %symbol)
     {
-      msg 'syntax', "warning: missing template: $_";
+      msg 'syntax', "missing template: $_";
       if ($suggest_ac_define)
 	{
 	  msg 'syntax',  "Use AC_DEFINE([$_], [], [Description])";

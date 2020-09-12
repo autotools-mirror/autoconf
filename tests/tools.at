@@ -100,7 +100,7 @@ mkdir sub
 mv foo sub
 AT_CHECK_M4SUGAR([], [1], [],
 [m4:script.4s:1: cannot open `foo': No such file or directory
-autom4te: m4 failed with exit status: 1
+autom4te: error: m4 failed with exit status: 1
 ])
 
 # But if we change the main file, then we should no longer complain of
@@ -414,7 +414,7 @@ AC_CONFIG_MACRO_DIR_TRACE([dir1])
 AT_CHECK_AUTOCONF([], [1], [],
 [[configure.ac:2: error: Do not invoke AC_CONFIG_MACRO_DIR_TRACE directly
 configure.ac:2: the top level
-autom4te: m4 failed with exit status: 1
+autom4te: error: m4 failed with exit status: 1
 ]])
 
 # Legacy macro use is not required, but still gets traced
@@ -952,7 +952,17 @@ AT_DATA([dst2], dst2
 
 # Checking `autoupdate'.
 AT_CHECK_AUTOUPDATE([], 0, [], ignore)
-AT_CHECK_AUTOCONF
+
+# The replacement for AC_LINK_FILES includes a forced -Wobsolete
+# warning, becuause it needs to be manually adjusted afterward.
+# Look for it in the autoconf output.
+AT_CHECK_AUTOCONF([], 0, [], stderr)
+AT_CHECK([grep 'AC_LINK_FILES' stderr], 0, ignore, ignore)
+AT_CHECK([grep 'AC_CONFIG_LINKS' stderr], 0, ignore, ignore)
+AT_CHECK([grep 'warning: It is technically impossible' stderr],
+         0, ignore, ignore)
+AT_CHECK([grep 'tune the result yourself' stderr], 0, ignore, ignore)
+
 AT_CHECK_CONFIGURE
 AT_CHECK([cat src1], 0, [dst1
 ])
@@ -994,12 +1004,37 @@ AU_ALIAS([BAZ],[FOO])
 test "FOO:FOO():FOO(x) BAZ:BAZ():BAZ(x)" = "0:1:1 0:1:1" || exit 1
 AC_PROG_CC
 AC_WORDS_BIGENDIAN
+AC_CONFIG_HEADERS([config.h])
 AC_OUTPUT
 ]])
 
 # Checking `autoupdate'.
 AT_CHECK_AUTOUPDATE
-AT_CHECK_AUTOCONF
+
+# autoupdate does not replace AU_DEFUNs/AU_ALIASes defined by
+# configure.ac itself, nor by aclocal.m4, so BAZ will still be present
+# in the updated configure.ac.  This is actually desirable for this
+# test: the point of that part of the above configure.ac is to to
+# verify that the expansion of an AU_ALIAS definition handles $#
+# correctly.  If BAZ got turned into FOO by the above call to
+# autoupdate, we would need to run autoconf and configure twice in
+# this test.  However, it does also mean that by default we get a
+# -Wobsolete warning because of BAZ, so turn that off so it doesn't
+# cause a spurious failure.
+AT_CHECK_AUTOCONF([-Wno-obsolete])
+AT_CHECK_AUTOHEADER([-Wno-obsolete], [
+  AC_APPLE_UNIVERSAL_BUILD
+  HAVE_INTTYPES_H
+  HAVE_STDINT_H
+  HAVE_STDLIB_H
+  HAVE_STRINGS_H
+  HAVE_STRING_H
+  HAVE_SYS_STAT_H
+  HAVE_SYS_TYPES_H
+  HAVE_UNISTD_H
+  STDC_HEADERS
+  WORDS_BIGENDIAN
+])
 AT_CHECK_CONFIGURE
 AT_CHECK([grep 'AC_C_BIGENDIAN[(]' configure.ac], 1, [ignore], [ignore])
 AT_CHECK([grep 'AC_C_BIGENDIAN' configure.ac], 0, [ignore], [ignore])
@@ -1208,9 +1243,16 @@ AC_OUTPUT
 ]])
 
 # Checking `autoupdate'.
+
+# Both the autoupdate and autoconf invocations will complain about
+# AC_LANG_SAVE being obsolete, because autoupdate cannot replace
+# two-macro sequences (e.g. AC_LANG_SAVE \n AC_LANG([C]) ideally would
+# become AC_LANG_PUSH([C]) but we can't do that) so an AC_DIAGNOSE
+# is left in place to remind people they need to do some hand edits.
+# Ignore these diagnostics.
 AT_CHECK_AUTOUPDATE([], [], [], [ignore])
-AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([], [], [], [ignore])
+AT_CHECK_AUTOCONF([], [], [], [ignore])
+AT_CHECK_CONFIGURE
 
 AT_CLEANUP
 

@@ -167,7 +167,7 @@ sub parse_args ()
   # lists.
   @warning = map { split /,/ } @warning;
   parse_WARNINGS;
-  parse_warnings '--warnings', @warning;
+  parse_warnings @warning;
 
   # Even if the user specified a configure.ac, trim to get the
   # directory, and look for configure.ac again.  Because (i) the code

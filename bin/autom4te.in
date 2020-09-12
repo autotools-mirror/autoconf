@@ -336,12 +336,13 @@ sub parse_args ()
   # Process the arguments for real this time.
   my @trace;
   my @prepend_include;
-  parse_WARNINGS;
+  my @warnings;
+
   getopt
     (
      # Operation modes:
      "o|output=s"   => \$output,
-     "W|warnings=s" => \&parse_warnings,
+     "W|warnings=s" => \@warnings,
      "m|mode=s"     => \$mode,
      "M|melt"       => \$melt,
 
@@ -364,6 +365,9 @@ sub parse_args ()
      "C|cache=s" => \$cache,
      "no-cache"  => sub { $cache = undef; },
     );
+
+  parse_WARNINGS;
+  parse_warnings @warnings;
 
   fatal "too few arguments
 Try '$me --help' for more information."
@@ -1048,7 +1052,7 @@ for (split (/\n*$separator\n*/o, contents ("$tmp/warnings")))
   # In particular, m4_warn guarantees that either $stackdump is empty, or
   # it consists of lines where only the last line ends in "top level".
   my ($cat, $loc, $msg, $stacktrace) = split ('::', $_, 4);
-  msg $cat, $loc, "warning: $msg",
+  msg $cat, $loc, $msg,
     partial => ($stacktrace =~ /top level$/) + 0;
   for (split /\n/, $stacktrace)
     {
