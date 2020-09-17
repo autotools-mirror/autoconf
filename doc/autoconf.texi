@@ -15656,6 +15656,18 @@ $ @kbd{dash -c ': 1<>file'; cat file}
 $ rm a
 @end example
 
+Solaris 10 @code{/bin/sh} executes redirected compound commands
+in a subshell, while other shells don't:
+
+@example
+$ @kbd{/bin/sh -c 'foo=0; @{ foo=1; @} 2>/dev/null; echo $foo'}
+0
+$ @kbd{ksh -c 'foo=0; @{ foo=1; @} 2>/dev/null; echo $foo'}
+1
+$ @kbd{bash -c 'foo=0; @{ foo=1; @} 2>/dev/null; echo $foo'}
+1
+@end example
+
 When catering to old systems, don't redirect the same file descriptor
 several times, as you are doomed to failure under Ultrix.
 
@@ -15756,8 +15768,8 @@ obsolete, so it's now safe to treat file descriptors 3 and 4 like any
 other file descriptors.
 
 On the other hand, you can't portably use multi-digit file descriptors.
-Solaris @command{ksh} doesn't understand any file descriptor larger than
-@samp{9}:
+@command{dash} and Solaris @command{ksh} don't understand any file
+descriptor larger than @samp{9}:
 
 @example
 $ @kbd{bash -c 'exec 10>&-'; echo $?}
@@ -15767,6 +15779,11 @@ $ @kbd{ksh -c 'exec 9>&-'; echo $?}
 $ @kbd{ksh -c 'exec 10>&-'; echo $?}
 ksh[1]: exec: 10: not found
 127
+$ @kbd{dash -c 'exec 9>&-'; echo $?}
+0
+$ @kbd{dash -c 'exec 10>&-'; echo $?}
+exec: 1: 10: not found
+2
 @end example
 
 @c <https://lists.gnu.org/archive/html/bug-autoconf/2011-09/msg00004.html>
