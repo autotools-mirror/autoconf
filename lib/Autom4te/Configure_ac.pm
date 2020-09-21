@@ -29,9 +29,8 @@ use Exporter;
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
 
-use vars qw (@EXPORT @ISA);
-@ISA = qw (Exporter);
-@EXPORT = qw (&find_configure_ac &require_configure_ac);
+our @ISA = qw (Exporter);
+our @EXPORT = qw (&find_configure_ac &require_configure_ac);
 
 =head1 NAME
 

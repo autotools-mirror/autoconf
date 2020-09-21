@@ -81,10 +81,9 @@ use Autom4te::ChannelDefs;
 use Autom4te::Channels qw (msg);
 use Autom4te::FileUtils;
 
-use vars qw ($AUTOLOAD @EXPORT @EXPORT_OK @ISA $VERSION);
-@ISA = qw(Exporter IO::File);
-@EXPORT = @IO::File::EXPORT;
-$VERSION = "1.2";
+our @ISA = qw(Exporter IO::File);
+our @EXPORT = @IO::File::EXPORT;
+our $VERSION = "1.2";
 
 eval {
   # Make all Fcntl O_XXX and LOCK_XXX constants available for importing

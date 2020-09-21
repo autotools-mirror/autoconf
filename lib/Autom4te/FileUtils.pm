@@ -45,14 +45,13 @@ use IO::File;
 use Autom4te::Channels;
 use Autom4te::ChannelDefs;
 
-use vars qw (@EXPORT @ISA);
-@ISA = qw (Exporter);
-@EXPORT = qw (&contents
-	      &find_file &mtime
-	      &update_file
-	      &xsystem &xsystem_hint &xqx
-	      &dir_has_case_matching_file &reset_dir_cache
-	      &set_dir_cache_file);
+our @ISA = qw (Exporter);
+our @EXPORT = qw (&contents
+		  &find_file &mtime
+		  &update_file
+		  &xsystem &xsystem_hint &xqx
+		  &dir_has_case_matching_file &reset_dir_cache
+		  &set_dir_cache_file);
 
 =over 4
 
@@ -332,7 +331,7 @@ same file).
 
 =cut
 
-use vars '%_directory_cache';
+our %_directory_cache;
 sub dir_has_case_matching_file ($$)
 {
   # Note that print File::Spec->case_tolerant returns 0 even on MacOS
@@ -382,5 +381,7 @@ sub set_dir_cache_file ($$)
 }
 
 =back
+
+=cut
 
 1; # for require
