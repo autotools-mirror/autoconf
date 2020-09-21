@@ -126,16 +126,9 @@ my $make        = $ENV{'MAKE'}        || 'make';
 my $install = 0;
 # symlink -- when --install, use symlinks instead.
 my $symlink = 0;
-# Does aclocal support -Wfoo?
-my $aclocal_supports_warnings = 0;
-# Does automake support -Wfoo?
-my $automake_supports_warnings = 0;
 
 my @prepend_include;
 my @include;
-
-# List of command line warning requests.
-my @warning;
 
 # Rerun './configure && make'?
 my $run_make = 0;
@@ -154,6 +147,9 @@ my $recursive = 1;
 sub parse_args ()
 {
   my $srcdir;
+
+  # List of command line warning requests.
+  my @warning;
 
   getopt ("W|warnings=s"         => \@warning,
 	  'I|include=s'          => \@include,
@@ -189,11 +185,6 @@ sub parse_args ()
 	  print STDERR "\n";
 	}
     }
-
-  my $aclocal_help = `$aclocal --help 2>/dev/null`;
-  my $automake_help = `$automake --help 2>/dev/null`;
-  $aclocal_supports_warnings = $aclocal_help =~ /--warnings/;
-  $automake_supports_warnings = $automake_help =~ /--warnings/;
 
   # Dispatch autoreconf's option to the tools.
   # --include;
@@ -241,17 +232,15 @@ sub parse_args ()
       $autoheader .= ' --debug';
       $libtoolize .= ' --debug';
     }
-  # --warnings;
-  if (@warning)
-    {
-      my $warn = ' --warnings=' . join (',', @warning);
-      $autoconf   .= $warn;
-      $autoheader .= $warn;
-      $automake   .= $warn
-	if $automake_supports_warnings;
-      $aclocal    .= $warn
-        if $aclocal_supports_warnings;
-    }
+
+  # Pass down warnings via the WARNINGS environment variable, instead
+  # of via --warnings, so that unrecognized warning categories are
+  # silently ignored.  We already issued diagnostics about warning
+  # categories *we* don't recognize; older subsidiary tools may not
+  # know all of them, and may treat unrecognized warning categories on
+  # the command line as a fatal error when -Werror is in effect.
+  $ENV{WARNINGS} = merge_WARNINGS @warning;
+  verb "export WARNINGS=$ENV{WARNINGS}";
 }
 
 
@@ -297,7 +286,7 @@ sub autoreconf_current_directory ($)
   # ------------------- #
 
   # Gettext is a bit of a problem: its macros are not necessarily
-  # visible to aclocal, so if we start with a completely striped down
+  # visible to aclocal, so if we start with a completely stripped down
   # package (think of a fresh CVS checkout), running 'aclocal' first
   # will fail: the Gettext macros are missing.
   #
@@ -397,6 +386,9 @@ sub autoreconf_current_directory ($)
   # Perform a single trace reading to avoid --force forcing a rerun
   # between two --trace, that's useless.  If there is no AC_INIT, then
   # we are not interested: it looks like a Cygnus thingy.
+  # Suppress all warnings from this invocation; they may be spurious
+  # due to out-of-date files, and in any case they'll duplicate warnings
+  # from the final autoconf invocation.
   my $aux_dir;
   my $uses_gettext_via_traces;
   my $uses_libtool;
@@ -406,27 +398,31 @@ sub autoreconf_current_directory ($)
   my $uses_autoheader;
   my $uses_automake;
   my @subdir;
+  my $traces;
   verb "$configure_ac: tracing";
-  my $traces = new Autom4te::XFile
-    ("$autoconf"
-     . join (' ',
-	     map { ' --trace=' . $_ . ':\$n::\${::}%' }
-	     # If you change this list, update the
-	     # 'Autoreconf-preselections' section of autom4te.in.
-	     'AC_CONFIG_AUX_DIR',
-	     'AC_CONFIG_HEADERS',
-	     'AC_CONFIG_SUBDIRS',
-	     'AC_INIT',
-	     'AC_PROG_LIBTOOL',
-	     'AM_PROG_LIBTOOL',
-	     'LT_INIT',
-	     'LT_CONFIG_LTDL_DIR',
-	     'AM_GNU_GETTEXT',
-	     'AM_INIT_AUTOMAKE',
-	     'IT_PROG_INTLTOOL',
-	     'GTK_DOC_CHECK',
-	    )
-     . ' |');
+  {
+    local $ENV{WARNINGS} = 'none';
+    $traces = new Autom4te::XFile
+      ("$autoconf"
+       . join (' ',
+               map { ' --trace=' . $_ . ':\$n::\${::}%' }
+               # If you change this list, update the
+               # 'Autoreconf-preselections' section of autom4te.in.
+               'AC_CONFIG_AUX_DIR',
+               'AC_CONFIG_HEADERS',
+               'AC_CONFIG_SUBDIRS',
+               'AC_INIT',
+               'AC_PROG_LIBTOOL',
+               'AM_PROG_LIBTOOL',
+               'LT_INIT',
+               'LT_CONFIG_LTDL_DIR',
+               'AM_GNU_GETTEXT',
+               'AM_INIT_AUTOMAKE',
+               'IT_PROG_INTLTOOL',
+               'GTK_DOC_CHECK',
+       )
+       . ' |');
+  }
   while ($_ = $traces->getline)
     {
       chomp;
@@ -445,6 +441,7 @@ sub autoreconf_current_directory ($)
       push @subdir, split (' ', $args[0])
                                     if $macro eq "AC_CONFIG_SUBDIRS" && $recursive;
     }
+  $traces->close;
 
   # The subdirs are *optional*, they may not exist.
   foreach (@subdir)

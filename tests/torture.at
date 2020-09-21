@@ -1857,3 +1857,50 @@ AT_CHECK([autoreconf -Wall -v -i], 0, [ignore], [stderr],
 AT_CHECK([test -f HeeHee.in])
 
 AT_CLEANUP
+
+## ------------------------------ ##
+## Specific warnings options.     ##
+## ------------------------------ ##
+
+AT_SETUP([Specific warnings options for autoreconf])
+AT_KEYWORDS([autoreconf])
+
+# If autoreconf is given a -W option that's mentioned in its own
+# --help output, that option should not cause errors, even if some
+# of the subsidiary programs don't support it.
+
+# We use aclocal and automake via autoreconf.
+AT_CHECK([automake --version || exit 77], [], [ignore], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT(GNU foo, 1.0)
+AM_INIT_AUTOMAKE
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.am],
+[[AUTOMAKE_OPTIONS = foreign
+]])
+
+# To silence complaints about required helper scripts from automake.
+# We aren't going to run the generated Makefile so we don't need the
+# real helper scripts.
+AT_DATA([install-sh], [])
+AT_DATA([missing], [])
+
+# In order to cut down the time this test takes, we do not test all
+# of the supported warning categories, just the most common case
+# (-Wall) and some specific categories that are known to have been a
+# problem in the past.
+AT_CHECK([autoreconf -Werror -Wall], 0, [], [])
+rm -rf configure config.h.in Makefile.in aclocal.m4 autom4te.cache
+
+AT_CHECK([autoreconf -Werror -Wcross], 0, [], [])
+rm -rf configure config.h.in Makefile.in aclocal.m4 autom4te.cache
+
+AT_CHECK([autoreconf -Werror -Wportability-recursive], 0, [], [])
+rm -rf configure config.h.in Makefile.in aclocal.m4 autom4te.cache
+
+AT_CLEANUP
