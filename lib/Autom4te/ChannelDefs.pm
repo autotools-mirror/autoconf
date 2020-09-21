@@ -63,7 +63,8 @@ BEGIN
 
 our @ISA = qw (Exporter);
 our @EXPORT = qw (&prog_error &error &fatal &verb
-		  &switch_warning &parse_WARNINGS &parse_warnings);
+		  &switch_warning &parse_WARNINGS &parse_warnings
+		  &merge_WARNINGS);
 
 =head2 CHANNELS
 
@@ -407,6 +408,68 @@ sub parse_warnings (@)
     }
 
   switch_warning ($_werror ? 'error' : 'no-error');
+}
+
+=item C<merge_WARNINGS (@CATEGORIES)>
+
+Merge the warnings categories in the environment variable C<WARNINGS>
+with the warnings categories in C<@CATEGORIES>, and return a new
+value for C<WARNINGS>.  Values in C<@CATEGORIES> take precedence.
+Use like this:
+
+    local $ENV{WARNINGS} = merge_WARNINGS @additional_warnings;
+
+=cut
+
+sub merge_WARNINGS (@)
+{
+  my $werror = '';
+  my $all_or_none = '';
+  my %warnings;
+
+  my @categories = split /,/, $ENV{WARNINGS} || '';
+  push @categories, @_;
+
+  foreach (@categories)
+    {
+      if (/^(?:no-)?error$/)
+        {
+          $werror = $_;
+        }
+      elsif (/^(?:all|none)$/)
+        {
+          $all_or_none = $_;
+        }
+      else
+        {
+          # The character class in the second match group is ASCII \S minus
+          # comma.  We are generous with this because category values may come
+          # from WARNINGS and we don't want to assume what other programs'
+          # syntaxes for warnings categories are.
+          /^(no-|)([\w\[\]\/\\!"#$%&'()*+-.:;<=>?@^`{|}~]+)$/
+            or die "Invalid warnings category: $_";
+          $warnings{$2} = $1;
+        }
+    }
+
+  my @final_warnings;
+  if ($all_or_none)
+    {
+      push @final_warnings, $all_or_none;
+    }
+  else
+    {
+      foreach (sort keys %warnings)
+        {
+          push @final_warnings, $warnings{$_} . $_;
+        }
+    }
+  if ($werror)
+    {
+      push @final_warnings, $werror;
+    }
+
+  return join (',', @final_warnings);
 }
 
 =item C<set_strictness ($STRICTNESS_NAME)>
