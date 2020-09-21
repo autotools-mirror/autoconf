@@ -214,11 +214,7 @@ AT_CHECK_AUTOHEADER([], [
   HAVE_FOPEN
   HAVE_FPRINTF
   HAVE_PRINTF
-], [], [],
-[[configure.ac:9: warning: AC_REPLACE_FUNCS($funcs): you should use literals
-functions.m4: AC_REPLACE_FUNCS is expanded from...
-configure.ac:9: the top level
-]])
+])
 AT_CHECK_CONFIGURE
 AT_CHECK_ENV
 AT_CHECK_DEFINES(
@@ -873,10 +869,6 @@ AT_CHECK_AUTOHEADER([-W no-obsolete], [
   HAVE_FN_FOO
   HAVE_FN_NOCOMMENT
   HAVE_FN_QUUX
-], [], [],
-[configure.ac:8: warning: $1($fns): you should use literals
-functions.m4: $1 is expanded from...
-configure.ac:8: the top level
 ])
 AT_CHECK_CONFIGURE
 AT_CLEANUP
@@ -956,10 +948,6 @@ AT_CHECK_AUTOHEADER([-W no-obsolete], [
   HAVE_SYS_TYPES_H
   HAVE_UNISTD_H
   STDC_HEADERS
-], [], [],
-[configure.ac:8: warning: $1($hs): you should use literals
-headers.m4: $1 is expanded from...
-configure.ac:8: the top level
 ])
 AT_CHECK_CONFIGURE
 AT_CLEANUP

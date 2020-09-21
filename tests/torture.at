@@ -1071,11 +1071,7 @@ AT_CHECK([[sed '/trailer\.m4:/d; s/^configure\.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE: `one
 two' is not a valid preprocessor define value
 ]])
-AT_CHECK_AUTOHEADER([], [foo], [], [], [stderr])
-AT_CHECK([[sed 's/^configure\.ac:[45]: //' stderr]], [],
-[[warning: AC_DEFINE: `one
-two' is not a valid preprocessor define value
-]])
+AT_CHECK_AUTOHEADER([], [foo])
 AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([[#define foo one
 ]])
@@ -1090,11 +1086,7 @@ AT_CHECK([[sed '/trailer.m4:/d; s/^configure\.ac:[45]: //' stderr]], [],
 [[warning: AC_DEFINE_UNQUOTED: `one
 two' is not a valid preprocessor define value
 ]])
-AT_CHECK_AUTOHEADER([], [foo], [], [], [stderr])
-AT_CHECK([[sed 's/^configure\.ac:[45]: //' stderr]], [],
-[[warning: AC_DEFINE_UNQUOTED: `one
-two' is not a valid preprocessor define value
-]])
+AT_CHECK_AUTOHEADER([], [foo])
 AT_CHECK_CONFIGURE
 AT_CHECK_DEFINES([[#define foo one
 ]])

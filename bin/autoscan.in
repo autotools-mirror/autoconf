@@ -591,7 +591,10 @@ sub check_configure_ac ($)
     join (' --trace=', '',
 	  uniq (sort (map { s/\(.*//; $_ } keys %needed_macros)));
 
-  verb "running: $autoconf $trace_option $configure_ac";
+  # Suppress all warnings from the subsidiary autoconf invocation.
+  local $ENV{WARNINGS} = 'none';
+
+  verb "running: WARNINGS=none $autoconf $trace_option $configure_ac";
   my $traces =
     new Autom4te::XFile "$autoconf $trace_option $configure_ac |";
 

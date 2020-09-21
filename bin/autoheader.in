@@ -166,7 +166,6 @@ END
 my $autoconf = "'$autom4te' --language=autoconf ";
 $autoconf .= join (' --include=', '', map { shell_quote ($_) } @include);
 $autoconf .= join (' --prepend-include=', '', map { shell_quote ($_) } @prepend_include);
-$autoconf .= join (' --warnings=', '', map { shell_quote ($_) } @warnings);
 $autoconf .= ' --debug' if $debug;
 $autoconf .= ' --force' if $force;
 $autoconf .= ' --verbose' if $verbose;
@@ -178,13 +177,17 @@ $autoconf .= ' --verbose' if $verbose;
 # Source what the traces are trying to tell us.
 verb "$me: running $autoconf to trace from $ARGV[0]";
 my $quoted_tmp = shell_quote ($tmp);
-xsystem ("$autoconf"
-	 # If you change this list, update the
-	 # 'Autoheader-preselections' section of autom4te.in.
-	 . ' --trace AC_CONFIG_HEADERS:\'$$config_h ||= \'"\'"\'$1\'"\'"\';\''
-	 . ' --trace AH_OUTPUT:\'$$verbatim{\'"\'"\'$1\'"\'"\'} = \'"\'"\'$2\'"\'"\';\''
-	 . ' --trace AC_DEFINE_TRACE_LITERAL:\'$$symbol{\'"\'"\'$1\'"\'"\'} = 1;\''
-	 . " " . shell_quote ($ARGV[0]) . " >$quoted_tmp/traces.pl");
+{
+  # Suppress all warnings from the subsidiary autoconf invocation.
+  local $ENV{WARNINGS} = 'none';
+  xsystem ("$autoconf"
+           # If you change this list, update the
+           # 'Autoheader-preselections' section of autom4te.in.
+           . ' --trace AC_CONFIG_HEADERS:\'$$config_h ||= \'"\'"\'$1\'"\'"\';\''
+           . ' --trace AH_OUTPUT:\'$$verbatim{\'"\'"\'$1\'"\'"\'} = \'"\'"\'$2\'"\'"\';\''
+           . ' --trace AC_DEFINE_TRACE_LITERAL:\'$$symbol{\'"\'"\'$1\'"\'"\'} = 1;\''
+           . " " . shell_quote ($ARGV[0]) . " >$quoted_tmp/traces.pl");
+}
 
 local (%verbatim, %symbol);
 debug "$me: 'do'ing $tmp/traces.pl:\n" . `sed 's/^/| /' $quoted_tmp/traces.pl`;
