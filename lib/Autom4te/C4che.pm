@@ -46,14 +46,12 @@ use Autom4te::Request;
 
 List of requests.
 
-We cannot declare it "my" as the loading, performed via "do", would
-refer to another scope, and @request would not be updated.  It used to
-work with "my" vars, and I do not know whether the current behavior
-(5.6) is wanted or not.
+Must be a package global so it can be accessed by code evaluated via
+'eval', below.
 
 =cut
 
-use vars qw (@request);
+our @request;
 
 =item C<$req = Autom4te::C4che-E<gt>retrieve (%attr)>
 

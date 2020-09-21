@@ -47,8 +47,7 @@ use Autom4te::ChannelDefs;
 use Autom4te::Channels;
 use Autom4te::Getopt ();
 
-use vars qw (@EXPORT @ISA);
-@ISA = qw (Exporter);
+our @ISA = qw (Exporter);
 
 # Variables we define and export.
 my @export_vars =
@@ -64,7 +63,7 @@ my @export_subs =
 my @export_forward_subs =
   qw (&basename &dirname &fileparse);
 
-@EXPORT = (@export_vars, @export_subs, @export_forward_subs);
+our @EXPORT = (@export_vars, @export_subs, @export_forward_subs);
 
 
 # Variable we share with the main package.  Be sure to have a single
@@ -83,8 +82,7 @@ incorrect execution.
 
 =cut
 
-use vars qw ($debug);
-$debug = 0;
+our $debug = 0;
 
 =item C<$force>
 
@@ -93,8 +91,7 @@ the output files are obsolete.
 
 =cut
 
-use vars qw ($force);
-$force = undef;
+our $force = undef;
 
 =item C<$help>
 
@@ -102,8 +99,7 @@ Set to the help message associated with the option C<--help>.
 
 =cut
 
-use vars qw ($help);
-$help = undef;
+our $help = undef;
 
 =item C<$me>
 
@@ -111,8 +107,7 @@ The name of this application, for diagnostic messages.
 
 =cut
 
-use vars qw ($me);
-$me = basename ($0);
+our $me = basename ($0);
 
 =item C<$tmp>
 
@@ -122,8 +117,7 @@ C<undef> otherwise.
 =cut
 
 # Our tmp dir.
-use vars qw ($tmp);
-$tmp = undef;
+our $tmp = undef;
 
 =item C<$verbose>
 
@@ -132,8 +126,7 @@ users, and typically make explicit the steps being performed.
 
 =cut
 
-use vars qw ($verbose);
-$verbose = 0;
+our $verbose = 0;
 
 =item C<$version>
 
@@ -141,8 +134,7 @@ Set to the version message associated to the option C<--version>.
 
 =cut
 
-use vars qw ($version);
-$version = undef;
+our $version = undef;
 
 =back
 

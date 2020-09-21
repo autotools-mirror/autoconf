@@ -48,7 +48,7 @@ use Autom4te::FileUtils;
 use Autom4te::General;
 use Autom4te::XFile;
 
-use vars qw(@cfiles @makefiles @shfiles @subdirs %printed);
+my (@cfiles, @makefiles, @shfiles, @subdirs, %printed);
 
 # The kind of the words we are looking for.
 my @kinds = qw (function header identifier program

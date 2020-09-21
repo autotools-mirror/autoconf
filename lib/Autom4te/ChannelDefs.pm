@@ -53,10 +53,9 @@ use warnings FATAL => 'all';
 
 use Exporter;
 
-use vars qw (@EXPORT @ISA);
-@ISA = qw (Exporter);
-@EXPORT = qw (&prog_error &error &fatal &verb
-	      &switch_warning &parse_WARNINGS &parse_warnings);
+our @ISA = qw (Exporter);
+our @EXPORT = qw (&prog_error &error &fatal &verb
+		  &switch_warning &parse_WARNINGS &parse_warnings);
 
 =head2 CHANNELS
 
