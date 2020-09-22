@@ -495,7 +495,6 @@ Writing Autoconf Macros
 
 * Macro Definitions::           Basic format of an Autoconf macro
 * Macro Names::                 What to call your new macros
-* Reporting Messages::          Notifying @command{autoconf} users
 * Dependencies Between Macros::  What to do when macros depend on other macros
 * Obsoleting Macros::           Warning about old ways of doing things
 * Coding Style::                Writing Autoconf macros @`a la Autoconf
@@ -1555,42 +1554,37 @@ Prepend @var{dir} to the include path.  Multiple invocations accumulate.
 Save output (script or trace) to @var{file}.  The file @option{-} stands
 for the standard output.
 
-@item --warnings=@var{category}
-@itemx -W @var{category}
+@item --warnings=@var{category}[,@var{category}...]
+@itemx -W@var{category}[,@var{category}...]
 @evindex WARNINGS
-Report the warnings related to @var{category} (which can actually be a
-comma separated list).  @xref{Reporting Messages}, macro
-@code{AC_DIAGNOSE}, for a comprehensive list of categories.  Special
-values include:
+Enable or disable warnings related to each @var{category}.
+@xref{m4_warn}, for a comprehensive list of categories.
+Special values include:
 
 @table @samp
 @item all
-report all the warnings
+Enable all categories of warnings.
 
 @item none
-report none
+Disable all categories of warnings.
 
 @item error
-treats warnings as errors
+Treat all warnings as errors.
 
 @item no-@var{category}
-disable warnings falling into @var{category}
+Disable warnings falling into @var{category}.
 @end table
 
-Warnings about @samp{syntax} are enabled by default, and the environment
-variable @env{WARNINGS}, a comma separated list of categories, is
-honored as well.  Passing @option{-W @var{category}} actually behaves as if
-you had passed @option{--warnings syntax,$WARNINGS,@var{category}}.  To
-disable the defaults and @env{WARNINGS}, and then
-enable warnings about obsolete constructs, use @option{-W
-none,obsolete}.
+The enviroment variable @env{WARNINGS} may also be set to a
+comma-separated list of warning categories to enable or disable.
+It is interpreted exactly the same way as the argument of
+@option{--warnings}, but unknown categories are silently ignored.
+The command line takes precedence; for instance, if @env{WARNINGS}
+is set to @code{obsolete}, but @option{-Wnone} is given on the
+command line, no warnings will be issued.
 
-@cindex Back trace
-@cindex Macro invocation stack
-Because @command{autoconf} uses @command{autom4te} behind the scenes, it
-displays a back trace for errors, but not for warnings; if you want
-them, just pass @option{-W error}.  @xref{autom4te Invocation}, for some
-examples.
+Some categories of warnings are on by default.
+Again, for details see @ref{m4_warn}.
 
 @item --trace=@var{macro}[:@var{format}]
 @itemx -t @var{macro}[:@var{format}]
@@ -1787,45 +1781,37 @@ Passed on to @command{aclocal}, @command{autoconf} and
 Prepend @var{dir} to the include path.  Multiple invocations accumulate.
 Passed on to @command{autoconf} and @command{autoheader} internally.
 
-@item --warnings=@var{category}
-@itemx -W @var{category}
+@item --warnings=@var{category}[,@var{category}...]
+@itemx -W@var{category}[,@var{category}...]
 @evindex WARNINGS
-Report the warnings related to @var{category} (which can actually be a
-comma separated list).
+Enable or disable warnings related to each @var{category}.
+@xref{m4_warn}, for a comprehensive list of categories.
+Special values include:
 
 @table @samp
-@item cross
-related to cross compilation issues.
-
-@item obsolete
-report the uses of obsolete constructs.
-
-@item portability
-portability issues
-
-@item syntax
-dubious syntactic constructs.
-
 @item all
-report all the warnings
+Enable all categories of warnings.
 
 @item none
-report none
+Disable all categories of warnings.
 
 @item error
-treats warnings as errors
+Treat all warnings as errors.
 
 @item no-@var{category}
-disable warnings falling into @var{category}
+Disable warnings falling into @var{category}.
 @end table
 
-Warnings about @samp{syntax} are enabled by default, and the environment
-variable @env{WARNINGS}, a comma separated list of categories, is
-honored as well.  Passing @option{-W @var{category}} actually behaves as if
-you had passed @option{--warnings syntax,$WARNINGS,@var{category}}.  To
-disable the defaults and @env{WARNINGS}, and then
-enable warnings about obsolete constructs, use @option{-W
-none,obsolete}.
+The enviroment variable @env{WARNINGS} may also be set to a
+comma-separated list of warning categories to enable or disable.
+It is interpreted exactly the same way as the argument of
+@option{--warnings}, but unknown categories are silently ignored.
+The command line takes precedence; for instance, if @env{WARNINGS}
+is set to @code{obsolete}, but @option{-Wnone} is given on the
+command line, no warnings will be issued.
+
+Some categories of warnings are on by default.
+Again, for details see @ref{m4_warn}.
 @end table
 
 If you want @command{autoreconf} to pass flags that are not listed here
@@ -3506,29 +3492,37 @@ Append @var{dir} to the include path.  Multiple invocations accumulate.
 @itemx -B @var{dir}
 Prepend @var{dir} to the include path.  Multiple invocations accumulate.
 
-@item --warnings=@var{category}
-@itemx -W @var{category}
+@item --warnings=@var{category}[,@var{category}...]
+@itemx -W@var{category}[,@var{category}...]
 @evindex WARNINGS
-Report the warnings related to @var{category} (which can actually be a
-comma separated list).  Current categories include:
+Enable or disable warnings related to each @var{category}.
+@xref{m4_warn}, for a comprehensive list of categories.
+Special values include:
 
 @table @samp
-@item obsolete
-report the uses of obsolete constructs
-
 @item all
-report all the warnings
+Enable all categories of warnings.
 
 @item none
-report none
+Disable all categories of warnings.
 
 @item error
-treats warnings as errors
+Treat all warnings as errors.
 
 @item no-@var{category}
-disable warnings falling into @var{category}
+Disable warnings falling into @var{category}.
 @end table
 
+The enviroment variable @env{WARNINGS} may also be set to a
+comma-separated list of warning categories to enable or disable.
+It is interpreted exactly the same way as the argument of
+@option{--warnings}, but unknown categories are silently ignored.
+The command line takes precedence; for instance, if @env{WARNINGS}
+is set to @code{obsolete}, but @option{-Wnone} is given on the
+command line, no warnings will be issued.
+
+Some categories of warnings are on by default.
+Again, for details see @ref{m4_warn}.
 @end table
 
 
@@ -11325,47 +11319,38 @@ for the standard output.
 As an extension of @command{m4}, it includes the following options:
 
 @table @option
-@item --warnings=@var{category}
-@itemx -W @var{category}
+
+@item --warnings=@var{category}[,@var{category}...]
+@itemx -W@var{category}[,@var{category}...]
 @evindex WARNINGS
-@c FIXME: Point to the M4sugar macros, not Autoconf's.
-Report the warnings related to @var{category} (which can actually be a
-comma separated list).  @xref{Reporting Messages}, macro
-@code{AC_DIAGNOSE}, for a comprehensive list of categories.  Special
-values include:
+Enable or disable warnings related to each @var{category}.
+@xref{m4_warn}, for a comprehensive list of categories.
+Special values include:
 
 @table @samp
 @item all
-report all the warnings
+Enable all categories of warnings.
 
 @item none
-report none
+Disable all categories of warnings.
 
 @item error
-treats warnings as errors
+Treat all warnings as errors.
 
 @item no-@var{category}
-disable warnings falling into @var{category}
+Disable warnings falling into @var{category}.
 @end table
 
-Warnings about @samp{syntax} are enabled by default, and the environment
-variable @env{WARNINGS}, a comma separated list of categories, is
-honored.  @samp{autom4te -W @var{category}} actually
-behaves as if you had run:
+The enviroment variable @env{WARNINGS} may also be set to a
+comma-separated list of warning categories to enable or disable.
+It is interpreted exactly the same way as the argument of
+@option{--warnings}, but unknown categories are silently ignored.
+The command line takes precedence; for instance, if @env{WARNINGS}
+is set to @code{obsolete}, but @option{-Wnone} is given on the
+command line, no warnings will be issued.
 
-@example
-autom4te --warnings=syntax,$WARNINGS,@var{category}
-@end example
-
-@noindent
-For example, if you want to disable defaults and @env{WARNINGS}
-of @command{autom4te}, but enable the warnings about obsolete
-constructs, you would use @option{-W none,obsolete}.
-
-@cindex Back trace
-@cindex Macro invocation stack
-@command{autom4te} displays a back trace for errors, but not for
-warnings; if you want them, just pass @option{-W error}.
+Some categories of warnings are on by default.
+Again, for details see @ref{m4_warn}.
 
 @item --melt
 @itemx -M
@@ -11576,7 +11561,7 @@ strictly equivalent to the command:
 
 @example
 autom4te --prepend-include /usr/local/share/autoconf \
-  m4sugar/m4sugar.m4f --warnings syntax foo.m4
+  m4sugar/m4sugar.m4f foo.m4
 @end example
 
 @noindent
@@ -11964,25 +11949,49 @@ Report @var{message} as a warning (or as an error if requested by the
 user) if warnings of the @var{category} are turned on.  If the message
 is emitted, it is prefixed with the current location, and followed by a
 call trace of all macros defined via @code{AC_DEFUN} used to get to the
-current expansion.  You are encouraged to use standard categories, which
-currently include:
+current expansion.
+
+The @var{category} must be one of:
 
 @table @samp
-@item all
-messages that don't fall into one of the following categories.  Use of an
-empty @var{category} is equivalent.
-
 @item cross
-related to cross compilation issues.
+Warnings about constructs that may interfere with cross-compilation,
+such as using @code{AC_RUN_IFELSE} without a default.
+
+@item gnu
+Warnings related to the GNU Coding Standards
+(@pxref{Top,,, standards, The GNU Coding Standards}).
+On by default.
 
 @item obsolete
-use of an obsolete construct.
+Warnings about obsolete features.  On by default.
+
+@item override
+Warnings about redefinitions of Autoconf internals.
+
+@item portability
+Warnings about non-portable constructs.
+
+@item portability-recursive
+Warnings about recursive Make variable expansions (@code{$(foo$(x))}).
+
+@item extra-portability
+Extra warnings about non-portable constructs, covering rarely-used
+tools.
 
 @item syntax
-dubious syntactic constructs, incorrectly ordered macro calls.
-@end table
-@end defmac
+Warnings about questionable syntactic constructs, incorrectly ordered
+macro calls, typos, etc.  On by default.
 
+@item unsupported
+Warnings about unsupported features.  On by default.
+@end table
+
+@strong{Hacking Note:} The set of categories is defined by code in
+@command{autom4te}, not by M4sugar itself.  Additions should be
+coordinated with Automake, so that both sets of tools accept the same
+options.
+@end defmac
 
 @node Diversion support
 @subsection Diversion support
@@ -14391,11 +14400,12 @@ explicitly from @code{AS_ORIGINAL_STDIN_FD}.
 When you write a feature test that could be applicable to more than one
 software package, the best thing to do is encapsulate it in a new macro.
 Here are some instructions and guidelines for writing Autoconf macros.
+You should also familiarize yourself with M4sugar (@pxref{Programming in M4})
+and M4sh (@pxref{Programming in M4sh}).
 
 @menu
 * Macro Definitions::           Basic format of an Autoconf macro
 * Macro Names::                 What to call your new macros
-* Reporting Messages::          Notifying @command{autoconf} users
 * Dependencies Between Macros::  What to do when macros depend on other macros
 * Obsoleting Macros::           Warning about old ways of doing things
 * Coding Style::                Writing Autoconf macros @`a la Autoconf
@@ -14569,62 +14579,6 @@ should have a name that starts with an underscore and the name of that
 other macro, followed by one or more words saying what the internal
 macro does.  For example, @code{AC_PATH_X} has internal macros
 @code{_AC_PATH_X_XMKMF} and @code{_AC_PATH_X_DIRECT}.
-
-@node Reporting Messages
-@section Reporting Messages
-@cindex Messages, from @command{autoconf}
-
-When macros statically diagnose abnormal situations, benign or fatal, it
-is possible to make @command{autoconf} detect the problem, and refuse to
-create @file{configure} in the case of an error.  The macros in this
-section are considered obsolescent, and new code should use M4sugar
-macros for this purpose, see @ref{Diagnostic Macros}.
-
-On the other hand, it is possible to want to detect errors when
-@command{configure} is run, which are dependent on the environment of
-the user rather than the maintainer.  For dynamic diagnostics, see
-@ref{Printing Messages}.
-
-@defmac AC_DIAGNOSE (@var{category}, @var{message})
-@acindex{DIAGNOSE}
-Report @var{message} as a warning (or as an error if requested by the
-user) if warnings of the @var{category} are turned on.  This macro is
-obsolescent; you are encouraged to use:
-@example
-m4_warn([@var{category}], [@var{message}])
-@end example
-@noindent
-instead.  @xref{m4_warn}, for more details, including valid
-@var{category} names.
-@end defmac
-
-@defmac AC_WARNING (@var{message})
-@acindex{WARNING}
-Report @var{message} as a syntax warning.  This macro is obsolescent;
-you are encouraged to use:
-@example
-m4_warn([syntax], [@var{message}])
-@end example
-@noindent
-instead.  @xref{m4_warn}, for more details, as well as better
-finer-grained categories of warnings (not all problems have to do with
-syntax).
-@end defmac
-
-@defmac AC_FATAL (@var{message})
-@acindex{FATAL}
-Report a severe error @var{message}, and have @command{autoconf} die.
-This macro is obsolescent; you are encouraged to use:
-@example
-m4_fatal([@var{message}])
-@end example
-@noindent
-instead.  @xref{m4_fatal}, for more details.
-@end defmac
-
-When the user runs @samp{autoconf -W error}, warnings from
-@code{m4_warn} (including those issued through @code{AC_DIAGNOSE} and
-@code{AC_WARNING}) are reported as errors, see @ref{autoconf Invocation}.
 
 @node Dependencies Between Macros
 @section Dependencies Between Macros
@@ -23542,6 +23496,11 @@ AC_CHECK_DECLS([sys_siglist], [], [],
 Does nothing, now integrated in @code{AC_PROG_LEX} (@pxref{AC_PROG_LEX}).
 @end defmac
 
+@defmac AC_DIAGNOSE (@var{category}, @var{message})
+@acindex{DIAGNOSE}
+Replaced by @code{m4_warn} (@pxref{m4_warn}).
+@end defmac
+
 @defmac AC_DIR_HEADER
 @acindex{DIR_HEADER}
 @cvindex DIRENT
@@ -23602,6 +23561,11 @@ support providing a help string (@pxref{AC_ARG_ENABLE}).
 @defmac AC_ERROR
 @acindex{ERROR}
 Replaced by @code{AC_MSG_ERROR} (@pxref{AC_MSG_ERROR}).
+@end defmac
+
+@defmac AC_FATAL (@var{message})
+@acindex{FATAL}
+Replaced by @code{m4_fatal} (@pxref{m4_fatal}).
 @end defmac
 
 @defmac AC_FIND_X
@@ -24432,6 +24396,11 @@ portable programs should use @code{waitpid}, not @code{wait3}, as
 @defmac AC_WARN
 @acindex{WARN}
 Replaced by @code{AC_MSG_WARN} (@pxref{AC_MSG_WARN}).
+@end defmac
+
+@defmac AC_WARNING (@var{message})
+@acindex{WARNING}
+Replaced by @code{m4_warn} (@pxref{m4_warn}).
 @end defmac
 
 @defmac AC_WITH (@var{package}, @var{action-if-given}, @
