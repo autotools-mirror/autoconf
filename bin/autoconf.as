@@ -98,9 +98,9 @@ while test $# -gt 0 ; do
 	       "x$1" : 'x-.\(.*\)'`]
   case $1 in
     --version | -V )
-       echo "$version" ; exit ;;
+       AS_ECHO(["$version"]); exit ;;
     --help | -h )
-       AS_ECHO(["$usage_err"]); exit ;;
+       AS_ECHO(["$help"]); exit ;;
 
     --verbose | -v )
        verbose=:
