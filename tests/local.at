@@ -592,7 +592,7 @@ AT_CHECK_MACRO([$1 (cross compile)],
 # NAME-OF-THE-MACRO.  On the second pass, *don't* check for the
 # absence of -Wobsolete warnings, because many of autoupdate's edits
 # leave the configure.ac author with some manual work to do, and
-# indicate this by inserting an AC_DIAGNOSE message to be removed
+# indicate this by inserting an m4_warn message to be removed
 # after the manual work is complete.
 m4_define([AT_CHECK_AU_MACRO],
 [AT_SETUP([$1])

@@ -1014,7 +1014,7 @@ AT_CHECK_AUTOUPDATE
 # autoupdate does not replace AU_DEFUNs/AU_ALIASes defined by
 # configure.ac itself, nor by aclocal.m4, so BAZ will still be present
 # in the updated configure.ac.  This is actually desirable for this
-# test: the point of that part of the above configure.ac is to to
+# test: the point of that part of the above configure.ac is to
 # verify that the expansion of an AU_ALIAS definition handles $#
 # correctly.  If BAZ got turned into FOO by the above call to
 # autoupdate, we would need to run autoconf and configure twice in
@@ -1247,7 +1247,7 @@ AC_OUTPUT
 # Both the autoupdate and autoconf invocations will complain about
 # AC_LANG_SAVE being obsolete, because autoupdate cannot replace
 # two-macro sequences (e.g. AC_LANG_SAVE \n AC_LANG([C]) ideally would
-# become AC_LANG_PUSH([C]) but we can't do that) so an AC_DIAGNOSE
+# become AC_LANG_PUSH([C]) but we can't do that) so an m4_warn
 # is left in place to remind people they need to do some hand edits.
 # Ignore these diagnostics.
 AT_CHECK_AUTOUPDATE([], [], [], [ignore])
@@ -1272,12 +1272,135 @@ AC_OUTPUT
 ]])
 
 # Checking `autoupdate'.
+# AC_FOREACH is replaced with an m4sugar macro, so we must make sure
+# the m4sugar macro wasn't expanded.
 AT_CHECK_AUTOUPDATE
-AT_CHECK([[grep 'echo 1 2 3 4 5 6' configure.ac]], 1, [ignore], [ignore])
 AT_CHECK([[grep 'm4@&t@_foreach_w' configure.ac]], 0, [ignore], [ignore])
+AT_CHECK([[grep 'echo 1 2 3 4 5 6' configure.ac]], 1, [ignore], [ignore])
+AT_CHECK([[grep "echo ' 1'' 2'' 3'' 4'' 5'' 6'" configure.ac]], 1,
+         [ignore], [ignore])
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [0], [stdout])
 AT_CHECK([[grep ' 1 2 3 4 5 6' stdout]], 0, [ignore], [ignore])
+
+AT_CLEANUP
+
+# autoupdating AC_OBSOLETE
+# ------------------------
+AT_SETUP([autoupdating AC_OBSOLETE])
+
+AT_DATA([aclocal.m4],
+[[AC_DEFUN([OLD],
+[AC_OBSOLETE([$0], [; convert to NEW])
+NEW([$2], [$1])])
+AC_DEFUN([NEW],
+[AS@&t@_ECHO(["dst=$1 src=$2"])])
+]])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+OLD([src], [dst])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror], 1, [],
+[[configure.ac:2: warning: OLD is obsolete; convert to NEW
+general.m4: AC_OBSOLETE is expanded from...
+aclocal.m4:1: OLD is expanded from...
+configure.ac:2: the top level
+configure.ac:2: warning: The macro `AC_OBSOLETE' is obsolete.
+configure.ac:2: You should run autoupdate.
+general.m4: AC_OBSOLETE is expanded from...
+aclocal.m4:1: OLD is expanded from...
+configure.ac:2: the top level
+]])
+
+# autoupdate does not know how to replace OLD with NEW
+AT_CHECK_AUTOUPDATE
+AT_CHECK([[grep OLD configure.ac]], 0, [ignore], [ignore])
+
+# autoupdate _does_ know how to remove AC_OBSOLETE from aclocal.m4
+AT_CHECK_AUTOUPDATE([aclocal.m4], 0, [],
+[[aclocal.m4:2: warning: if possible, define this macro using AU_DEFUN.
+]])
+
+# AC_OBSOLETE is replaced with an m4sugar macro, so we must make sure
+# the m4sugar macro wasn't expanded.
+AT_CHECK([[grep 'm4@&t@_warn' aclocal.m4]], 0, [ignore], [ignore])
+AT_CHECK([[grep 'if possible, define this' aclocal.m4]], 0, [ignore], [ignore])
+AT_CHECK([[grep 'AC_OBSOLETE(' aclocal.m4]], 1, [ignore], [ignore])
+
+AT_CHECK_AUTOCONF([-Wobsolete -Wno-error], 0, [],
+[[configure.ac:2: warning: if possible, define this macro using AU_DEFUN.
+aclocal.m4:1: OLD is expanded from...
+configure.ac:2: the top level
+configure.ac:2: warning: OLD is obsolete; convert to NEW
+aclocal.m4:1: OLD is expanded from...
+configure.ac:2: the top level
+]])
+
+AT_CHECK_CONFIGURE([], 0,
+[[dst=dst src=src
+configure: creating ./config.status
+]])
+
+AT_CLEANUP
+
+
+# autoupdating AC_DIAGNOSE and AC_WARNING
+-----------------------------------------
+AT_SETUP([autoupdating AC_DIAGNOSE and AC_WARNING])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_DIAGNOSE([gnu], [The gnu has escaped])
+AC_WARNING([funny punctu&tion])
+AC_OUTPUT
+]])
+
+# Checking `autoupdate'.
+# AC_DIAGNOSE and AC_WARNING are replaced with m4sugar macros, so we
+# must make sure the m4sugar macros weren't expanded.
+AT_CHECK_AUTOUPDATE
+AT_CHECK([[grep 'm4@&t@_warn' configure.ac]], 0, [ignore], [ignore])
+AT_CHECK([[grep 'The gnu has escaped' configure.ac]], 0, [ignore], [ignore])
+AT_CHECK([[grep 'funny punctu&tion' configure.ac]], 0, [ignore], [ignore])
+
+# The diagnostics should appear when autoconf is run.
+AT_CHECK_AUTOCONF([-Wall], [0], [],
+[[configure.ac:2: warning: The gnu has escaped
+configure.ac:3: warning: funny punctu&tion
+]])
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
+# autoupdating AC_FATAL
+-----------------------
+AT_SETUP([autoupdating AC_FATAL])
+
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_FATAL([what did you do this time])
+AC_OUTPUT
+]])
+
+# Checking `autoupdate'.
+# AC_FATAL is replaced with a m4sugar macro, so we
+# must make sure the m4sugar macro wasn't expanded.
+AT_CHECK_AUTOUPDATE
+AT_CHECK([[grep 'm4@&t@_fatal' configure.ac]], 0, [ignore], [ignore])
+AT_CHECK([[grep 'what did you do this time' configure.ac]],
+         0, [ignore], [ignore])
+
+# The diagnostic should appear when autoconf is run.
+AT_CHECK_AUTOCONF([-Wall], [1], [],
+[[configure.ac:2: error: what did you do this time
+configure.ac:2: the top level
+autom4te: error: m4 failed with exit status: 1
+]])
+AT_CHECK([[test \! -f configure]])
 
 AT_CLEANUP
 

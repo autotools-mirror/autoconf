@@ -85,7 +85,7 @@ m4_define([_AH_CHECK_FUNC],
 m4_define([_AC_CHECK_FUNCS_ONE_U],
 [AS_LITERAL_WORD_IF([$1],
   [_AH_CHECK_FUNC([$1])],
-  [AC_DIAGNOSE([syntax], [AC_CHECK_FUNCS($1): you should use literals])])])
+  [m4_warn([syntax], [AC_CHECK_FUNCS($1): you should use literals])])])
 
 # _AC_CHECK_FUNCS_ONE_S(FUNCTION)
 # -------------------------------
@@ -173,7 +173,7 @@ done])])
 m4_define([_AC_REPLACE_FUNC_U],
 [AS_LITERAL_WORD_IF([$1],
   [_AH_CHECK_FUNC([$1])AC_LIBSOURCE([$1.c])],
-  [AC_DIAGNOSE([syntax], [AC_REPLACE_FUNCS($1): you should use literals])])])
+  [m4_warn([syntax], [AC_REPLACE_FUNCS($1): you should use literals])])])
 
 # _AC_REPLACE_FUNC_L(FUNCTION)
 # ----------------------------
@@ -1776,7 +1776,7 @@ test $ac_cv_func_strnlen_working = no && AC_LIBOBJ([strnlen])
 # AC_FUNC_SETVBUF_REVERSED
 # ------------------------
 AC_DEFUN([AC_FUNC_SETVBUF_REVERSED],
-[AC_DIAGNOSE([obsolete],
+[m4_warn([obsolete],
 [The macro `$0' is obsolete.  Remove it and all references to SETVBUF_REVERSED.])dnl
 AC_CACHE_VAL([ac_cv_func_setvbuf_reversed], [ac_cv_func_setvbuf_reversed=no])
 ])# AC_FUNC_SETVBUF_REVERSED
@@ -2063,7 +2063,7 @@ AU_ALIAS([AC_VPRINTF], [AC_FUNC_VPRINTF])
 # any invocation should be removed, and the code adjusted.
 AN_FUNCTION([wait3], [AC_FUNC_WAIT3])
 AC_DEFUN([AC_FUNC_WAIT3],
-[AC_DIAGNOSE([obsolete],
+[m4_warn([obsolete],
 [$0: `wait3' has been removed from POSIX.
 Remove this `AC_FUNC_WAIT3' and adjust your code to use `waitpid' instead.])dnl
 AC_CACHE_CHECK([for wait3 that fills in rusage],

@@ -125,7 +125,7 @@ AU_DEFUN([AC_LANG_SAVE],
 you should use `AC_LANG_PUSH' and `AC_LANG_POP'.])
 AC_DEFUN([AC_LANG_SAVE],
 [m4_pushdef([_AC_LANG], _AC_LANG)dnl
-AC_DIAGNOSE([obsolete], [The macro `AC_LANG_SAVE' is obsolete.
+m4_warn([obsolete], [The macro `AC_LANG_SAVE' is obsolete.
 You should run autoupdate.])])
 
 

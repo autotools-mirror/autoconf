@@ -1690,7 +1690,7 @@ dnl the user did not specify a config header but is relying on the
 dnl default behavior for universal builds.
      m4_default([$4],
        [AC_CONFIG_COMMANDS_PRE([m4_ifset([AH_HEADER], [],
-	 [AC_DIAGNOSE([obsolete],
+	 [m4_warn([obsolete],
 	   [AC_C_BIGENDIAN should be used with AC_CONFIG_HEADERS])])])dnl
 	AC_DEFINE([AC_APPLE_UNIVERSAL_BUILD],1,
 	  [Define if building universal (internal helper macro)])])

@@ -228,7 +228,7 @@ fi
 # If the system automatically restarts a system call that is
 # interrupted by a signal, define `HAVE_RESTARTABLE_SYSCALLS'.
 AC_DEFUN([AC_SYS_RESTARTABLE_SYSCALLS],
-[AC_DIAGNOSE([obsolete],
+[m4_warn([obsolete],
 [$0: AC_SYS_RESTARTABLE_SYSCALLS is useful only when supporting very
 old systems that lack `sigaction' and `SA_RESTART'.  Don't bother with
 this macro unless you need to support very old systems like 4.2BSD and

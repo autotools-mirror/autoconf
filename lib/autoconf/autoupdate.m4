@@ -55,12 +55,14 @@ m4_define([AU_DEFINE], [])
 # and to update a configure.ac.
 # See the end of `autoupdate.in' for a longer description.
 m4_define([AU_DEFUN],
-[# This is what autoupdate's m4 run will expand.  It fires
-# the warning (with _au_warn_XXX), outputs it into the
-# updated configure.ac (with AC_DIAGNOSE), and then outputs
-# the replacement expansion.
+[# This is what autoupdate's m4 run will expand.  It fires the warning
+# (with _au_warn_XXX), outputs it into the updated configure.ac (with
+# m4_warn), and then outputs the replacement expansion.  We need extra
+# quotation around the m4_warn and dnl so they will be written
+# unexpanded into the updated configure.ac.
 AU_DEFINE([$1],
-[m4_ifval([$3], [_au_warn_$1([$3])AC_DIAGNOSE([obsolete], [$3])d[]nl
+[m4_ifval([$3], [_au_warn_$1([$3])[m4_warn([obsolete],
+[$3])dnl]
 ])dnl
 $2])
 
@@ -79,7 +81,7 @@ m4_define([_au_warn_$1], [])])
 # about autoupdate's warning because that contains
 # information on what to do *after* running autoupdate.
 AC_DEFUN([$1],
-	 [AC_DIAGNOSE([obsolete], [The macro `$1' is obsolete.
+	 [m4_warn([obsolete], [The macro `$1' is obsolete.
 You should run autoupdate.])dnl
 $2])])
 

@@ -110,8 +110,9 @@ ac_exclude_list='
 	# Is a number.
 	/^AC_FD_CC$/ {next}
 
-	# Obsolete, but needs to be AC_DEFUNed.
-	/^AC_FOREACH$/ {next}
+	# Obsolete, but needs to be AC_DEFUNed and cannot safely be called
+        # without arguments.  Tested in tools.at.
+	/^AC_(DIAGNOSE|FATAL|FOREACH|OBSOLETE|WARNING)$/ {next}
 
 	# Require a file that is not shipped with Autoconf.  But it should.
 	/^AC_FUNC_(GETLOADAVG|FNMATCH_GNU)$/ {next}
@@ -167,8 +168,9 @@ au_exclude_list='
 	# AC_LANG_RESTORE cannot be used alone.
 	/^AC_LANG_(SAVE|RESTORE)$/ {next}
 
-	# Need arguments and are tested elsewhere.
-	/^AC_(LINK_FILES|PREREQ)$/ {next}
+	# Need arguments.  Tested in tools.at.
+	/^AC_(DIAGNOSE|FATAL|FOREACH|OBSOLETE|LINK_FILES|PREREQ|WARNING)$/
+	    {next}
 '
 
 # au_exclude_script

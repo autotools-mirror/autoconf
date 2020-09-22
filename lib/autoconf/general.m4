@@ -162,13 +162,6 @@ m4_copy([m4_provide],     [AC_PROVIDE])
 m4_copy([m4_provide_if],  [AC_PROVIDE_IFELSE])
 
 
-# AC_OBSOLETE(THIS-MACRO-NAME, [SUGGESTION])
-# ------------------------------------------
-m4_define([AC_OBSOLETE],
-[AC_DIAGNOSE([obsolete], [$1 is obsolete$2])])
-
-
-
 ## ----------------------------- ##
 ## Implementing shell functions. ##
 ## ----------------------------- ##
@@ -190,9 +183,12 @@ AC_DEFUN([AC_REQUIRE_SHELL_FN],
 
 # AU::AC_FOREACH(VARIABLE, LIST, EXPRESSION)
 # ------------------------------------------
+# The double definition is necessary because autoupdate expands m4_
+# macros, so we have to double-quote the replacement, but then it
+# won't work in a normal autoconf run.
 AU_DEFUN([AC_FOREACH], [[m4_foreach_w($@)]])
 AC_DEFUN([AC_FOREACH], [m4_foreach_w($@)dnl
-AC_DIAGNOSE([obsolete], [The macro `AC_FOREACH' is obsolete.
+m4_warn([obsolete], [The macro `AC_FOREACH' is obsolete.
 You should run autoupdate.])])
 
 
@@ -2152,14 +2148,14 @@ rm -f confcache[]dnl
 # Should be dnl'ed.  Try to catch common mistakes.
 m4_defun([AC_CACHE_VAL],
 [AS_LITERAL_WORD_IF([$1], [m4_if(m4_index(m4_quote($1), [_cv_]), [-1],
-			    [AC_DIAGNOSE([syntax],
+			    [m4_warn([syntax],
 [$0($1, ...): suspicious cache-id, must contain _cv_ to be cached])])])dnl
 m4_if(m4_index([$2], [AC_DEFINE]), [-1], [],
-      [AC_DIAGNOSE([syntax],
+      [m4_warn([syntax],
 [$0($1, ...): suspicious presence of an AC_DEFINE in the second argument, ]dnl
 [where no actions should be taken])])dnl
 m4_if(m4_index([$2], [AC_SUBST]), [-1], [],
-      [AC_DIAGNOSE([syntax],
+      [m4_warn([syntax],
 [$0($1, ...): suspicious presence of an AC_SUBST in the second argument, ]dnl
 [where no actions should be taken])])dnl
 AS_VAR_SET_IF([$1],
@@ -2320,25 +2316,34 @@ m4_append_uniq([_AC_SUBST_FILES], [$1], [
 ## Printing messages at autoconf runtime.  ##
 ## --------------------------------------- ##
 
-# In fact, I think we should promote the use of m4_warn and m4_fatal
-# directly.  This will also avoid to some people to get it wrong
-# between AC_FATAL and AC_MSG_ERROR.
-
-
-# AC_DIAGNOSE(CATEGORY, MESSAGE)
-# AC_FATAL(MESSAGE, [EXIT-STATUS])
+# AU::AC_DIAGNOSE(CATEGORY, MESSAGE)
+# AU::AC_FATAL(MESSAGE, [EXIT-STATUS])
+# AU::AC_WARNING(MESSAGE)
+# AU::AC_OBSOLETE(THIS-MACRO, [SUGGESTION])
 # --------------------------------
-m4_define([AC_DIAGNOSE], [m4_warn($@)])
-m4_define([AC_FATAL],    [m4_fatal($@)])
+# The double definitions are necessary because autoupdate expands m4_
+# macros, so we have to double-quote the replacements, but then they
+# won't work in a normal autoconf run.
+AU_DEFUN([AC_DIAGNOSE], [[m4_warn($@)]])
+AC_DEFUN([AC_DIAGNOSE], [m4_warn($@)dnl
+m4_warn([obsolete], [The macro `$0' is obsolete.
+You should run autoupdate.])])
 
+AU_DEFUN([AC_FATAL], [[m4_fatal($@)]])
+AC_DEFUN([AC_FATAL], [m4_fatal($@)dnl
+m4_warn([obsolete], [The macro `$0' is obsolete.
+You should run autoupdate.])])
 
-# AC_WARNING(MESSAGE)
-# -------------------
-# Report a MESSAGE to the user of autoconf if `-W' or `-W all' was
-# specified.
-m4_define([AC_WARNING],
-[AC_DIAGNOSE([syntax], [$1])])
+AU_DEFUN([AC_WARNING],  [[m4_warn([syntax], [$1])]])
+AC_DEFUN([AC_WARNING], [m4_warn([syntax], [$1])dnl
+m4_warn([obsolete], [The macro `$0' is obsolete.
+You should run autoupdate.])])
 
+AU_DEFUN([AC_OBSOLETE], [[m4_warn([obsolete], [$1 is obsolete$2])]],
+[if possible, define this macro using AU_DEFUN.])
+AC_DEFUN([AC_OBSOLETE], [m4_warn([obsolete], [$1 is obsolete$2])dnl
+m4_warn([obsolete], [The macro `$0' is obsolete.
+You should run autoupdate.])])
 
 
 
@@ -2872,8 +2877,8 @@ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
 AC_DEFUN([AC_RUN_IFELSE],
 [AC_LANG_COMPILER_REQUIRE()dnl
 m4_ifval([$4], [],
-	 [AC_DIAGNOSE([cross],
-		     [$0 called without default to allow cross compiling])])dnl
+	 [m4_warn([cross],
+		  [$0 called without default to allow cross compiling])])dnl
 AS_IF([test "$cross_compiling" = yes],
   [m4_default([$4],
 	   [AC_MSG_FAILURE([cannot run test program while cross compiling])])],
@@ -2899,8 +2904,8 @@ AU_DEFUN([AC_TRY_RUN],
 #
 # Check for the existence of FILE.
 AC_DEFUN([AC_CHECK_FILE],
-[AC_DIAGNOSE([cross],
-	     [cannot check for file existence when cross compiling])dnl
+[m4_warn([cross],
+	 [cannot check for file existence when cross compiling])dnl
 AS_VAR_PUSHDEF([ac_File], [ac_cv_file_$1])dnl
 AC_CACHE_CHECK([for $1], [ac_File],
 [test "$cross_compiling" = yes &&
@@ -3121,7 +3126,7 @@ esac
 AC_DEFUN([AC_LIBOBJ],
 [_AC_LIBOBJ([$1])]dnl
 [AS_LITERAL_WORD_IF([$1], [AC_LIBSOURCE([$1.c])],
-  [AC_DIAGNOSE([syntax], [$0($1): you should use literals])])])
+  [m4_warn([syntax], [$0($1): you should use literals])])])
 
 
 # _AC_LIBOBJS_NORMALIZE
@@ -3250,15 +3255,8 @@ AC_DEFUN([AC_COMPUTE_INT],
        [], [$4])
 ])# AC_COMPUTE_INT
 
-# _AC_COMPUTE_INT(EXPRESSION, VARIABLE, PROLOGUE, [IF-FAILS])
+# AU::_AC_COMPUTE_INT(EXPRESSION, VARIABLE, PROLOGUE, [IF-FAILS])
 # -----------------------------------------------------------
 # FIXME: this private interface was used by several packages.
 # Give them time to transition to AC_COMPUTE_INT and then delete this one.
-AC_DEFUN([_AC_COMPUTE_INT],
-[AC_COMPUTE_INT([$2], [$1], [$3], [$4])
-AC_DIAGNOSE([obsolete],
-[The macro `_AC_COMPUTE_INT' is obsolete and will be deleted in a
-future version or Autoconf.  Hence, it is suggested that you use
-instead the public AC_COMPUTE_INT macro.  Note that the arguments are
-slightly different between the two.])dnl
-])# _AC_COMPUTE_INT
+AU_DEFUN([_AC_COMPUTE_INT], [AC_COMPUTE_INT([$2], [$1], [$3], [$4])])

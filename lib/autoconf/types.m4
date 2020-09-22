@@ -238,8 +238,8 @@ AC_DEFUN([AC_CHECK_TYPE],
 	 [_AC_CHECK_TYPE_REPLACEMENT_TYPE_P([$2])], [1],
   [_AC_CHECK_TYPE_OLD],
 	 [_AC_CHECK_TYPE_MAYBE_TYPE_P([$2])], [1],
-  [AC_DIAGNOSE([syntax],
-	       [$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW],
+  [m4_warn([syntax],
+	   [$0: assuming `$2' is not a type])_AC_CHECK_TYPE_NEW],
   [_AC_CHECK_TYPE_NEW])($@)])# AC_CHECK_TYPE
 
 

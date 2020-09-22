@@ -1100,7 +1100,7 @@ m4_define([_AC_CONFIG_SUBDIRS],
 [AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])]dnl
 [AC_REQUIRE([AC_DISABLE_OPTION_CHECKING])]dnl
 [AS_LITERAL_IF([$1], [],
-	       [AC_DIAGNOSE([syntax], [$0: you should use literals])])]dnl
+	       [m4_warn([syntax], [$0: you should use literals])])]dnl
 [m4_map_args_w([$1], [_AC_CONFIG_UNIQUE([SUBDIRS],
   _AC_CONFIG_COMPUTE_DEST(], [))])]dnl
 [m4_append([_AC_LIST_SUBDIRS], [$1], [
@@ -1258,8 +1258,8 @@ m4_ifvaln([$1],
 m4_ifvaln([$2$3],
 	  [AC_CONFIG_COMMANDS(default, [$2], [$3])])dnl
 m4_ifval([$1$2$3],
-	 [AC_DIAGNOSE([obsolete],
-		      [$0 should be used without arguments.
+	 [m4_warn([obsolete],
+		  [$0 should be used without arguments.
 You should run autoupdate.])])dnl
 AC_CACHE_SAVE
 

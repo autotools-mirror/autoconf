@@ -113,7 +113,7 @@ m4_define([_AC_CHECK_HEADER_PREPROC_BODY],
 # --------------------------------------------------------------
 # Check the preprocessor accepts HEADER-FILE.
 AC_DEFUN([_AC_CHECK_HEADER_PREPROC],
-[AC_DIAGNOSE([obsolete], [Checking for headers with the preprocessor is
+[m4_warn([obsolete], [Checking for headers with the preprocessor is
 deprecated. Specify prerequisite code to AC_CHECK_HEADER
 instead of using fourth argument `-'. (Many headers need
 no prerequisites. If you truly need to test whether
@@ -142,12 +142,12 @@ AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_PREPROC
 #   AU_DEFUN([_AC_CHECK_HEADER_OLD],
 #     [AC_CHECK_HEADER([$1], [$2], [$3], [-])])
 AC_DEFUN([_AC_CHECK_HEADER_OLD],
-[AC_DIAGNOSE([obsolete], [The macro `$0' is obsolete.
+[m4_warn([obsolete], [The macro `$0' is obsolete.
 You should use AC_CHECK_HEADER with a fourth argument.])]dnl
 [_AC_CHECK_HEADER_PREPROC($@)])
 
 AC_DEFUN([_AC_CHECK_HEADER_NEW],
-[AC_DIAGNOSE([obsolete], [The macro `$0' is obsolete.
+[m4_warn([obsolete], [The macro `$0' is obsolete.
 You should use AC_CHECK_HEADER with a fourth argument.])]dnl
 [_AC_CHECK_HEADER_COMPILE($@)])
 
@@ -180,7 +180,7 @@ m4_define([AH_CHECK_HEADERS],
 m4_define([_AC_CHECK_HEADERS_ONE_U],
 [AS_LITERAL_WORD_IF([$1],
   [_AH_CHECK_HEADER([$1])],
-  [AC_DIAGNOSE([syntax], [AC_CHECK_HEADERS($1): you should use literals])])])
+  [m4_warn([syntax], [AC_CHECK_HEADERS($1): you should use literals])])])
 
 # _AC_CHECK_HEADERS_ONE_S(HEADER-FILE, [INCLUDES])
 # -------------------------------

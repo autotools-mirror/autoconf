@@ -199,6 +199,16 @@ GNU Autoconf NEWS - User visible changes.
   diagnosed as obsolete, and replaced with AC_CONFIG_HEADERS by
   autoupdate.
 
+- The obsolete macros AC_DIAGNOSE, AC_FATAL, AC_WARNING, and
+  _AC_COMPUTE_INT are now replaced with modern equivalents by
+  autoupdate.
+
+- The macro AC_OBSOLETE is obsolete.  Autoupdate will replace it with
+  m4_warn([obsolete], [explanation]).  If possible, macros using
+  AC_OBSOLETE should be converted to use AU_DEFUN or AU_ALIAS instead,
+  which enables autoupdate to replace them, but this has to be done by
+  hand and is not always possible.
+
 - AC_FC_LINE_LENGTH now documents the maximum portable length of
   "unlimited" Fortran source code lines to be 250 columns, not 254.
 
