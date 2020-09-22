@@ -24294,7 +24294,7 @@ AC_LINK_IFELSE(
 @end example
 
 @noindent
-@xref{Running the Compiler}.
+@xref{Running the Linker}.
 
 This macro double quotes both @var{includes} and @var{function-body}.
 
@@ -24323,7 +24323,7 @@ AC_LINK_IFELSE([AC_LANG_CALL([], [@var{function}])],
   [@var{action-if-found}], [@var{action-if-not-found}])
 @end example
 @noindent
-@xref{AC_LINK_IFELSE}.
+@xref{Running the Linker}.
 @end defmac
 
 @defmac AC_TRY_RUN (@var{program}, @ovar{action-if-true}, @
