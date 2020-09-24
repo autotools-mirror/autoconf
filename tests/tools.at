@@ -1621,3 +1621,35 @@ END
 done
 
 AT_CLEANUP
+
+# autotools and file names containing whitespace
+# ----------------------------------------------
+
+AT_SETUP([autotools and relative TMPDIR])
+
+# We use aclocal.
+AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
+
+mkdir _tmp
+TMPDIR=_tmp
+export TMPDIR
+
+AT_DATA([configure.ac],
+[[AC_INIT(x,0)
+AC_CONFIG_HEADERS([config.h:config.hin])
+AC_MACRO
+AC_OUTPUT
+]])
+
+mkdir m4
+AT_DATA([m4/foo.m4],
+[[AC_DEFUN([AC_MACRO],
+[AC_DEFINE([HAVE_MACROS], 1, [Define if you have macros.])])
+]])
+
+AT_CHECK([aclocal -I m4])
+AT_CHECK_AUTOHEADER([], [HAVE_MACROS])
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP

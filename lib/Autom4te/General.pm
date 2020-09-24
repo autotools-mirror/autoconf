@@ -39,8 +39,9 @@ use warnings FATAL => 'all';
 use Carp;
 use Exporter;
 use File::Basename;
-use File::Path ();
+use File::Spec ();
 use File::stat;
+use File::Temp ();
 use IO::File;
 
 use Autom4te::ChannelDefs;
@@ -152,8 +153,7 @@ our $version = undef;
 
 =item C<END>
 
-Filter Perl's exit codes, delete any temporary directory (unless
-C<$debug>), and exit nonzero whenever closing C<STDOUT> fails.
+Filter Perl's exit codes and exit nonzero whenever closing C<STDOUT> fails.
 
 =cut
 
@@ -183,12 +183,6 @@ sub END
   # (Note that we cannot safely distinguish calls to `exit (n)'
   # from calls to die when `$! = n'.  It's not big deal because
   # we only call `exit (0)' or `exit (1)'.)
-
-  if (!$debug && defined $tmp && -d $tmp)
-    {
-      local $SIG{__WARN__} = sub { $status = 1; warn $_[0] };
-      File::Path::rmtree $tmp;
-    }
 
   # This is required if the code might send any output to stdout
   # E.g., even --version or --help.  So it's best to do it unconditionally.
@@ -284,8 +278,8 @@ sub shell_quote($)
 =item C<mktmpdir ($signature)>
 
 Create a temporary directory which name is based on C<$signature>.
-Store its name in C<$tmp>.  C<END> is in charge of removing it, unless
-C<$debug>.
+Store its name in C<$tmp>.  It will be removed at program exit,
+unless C<$debug> is true.
 
 =cut
 
@@ -294,23 +288,22 @@ C<$debug>.
 sub mktmpdir ($)
 {
   my ($signature) = @_;
-  my $TMPDIR = $ENV{'TMPDIR'} || '/tmp';
-  my $quoted_tmpdir = shell_quote ($TMPDIR);
 
-  # If mktemp supports dirs, use it.
-  $tmp = `(umask 077 &&
-	   mktemp -d $quoted_tmpdir/"${signature}XXXXXX") 2>/dev/null`;
-  chomp $tmp;
-
-  if (!$tmp || ! -d $tmp)
-    {
-      $tmp = "$TMPDIR/$signature" . int (rand 10000) . ".$$";
-      mkdir $tmp, 0700
-	or croak "$me: cannot create $tmp: $!\n";
-    }
+  # Ensure that we refer to the temporary directory by absolute
+  # pathname; most importantly, this ensures that C<do FILE> will
+  # work whenever FILE is in $tmp, even when '.' is not in @INC
+  # (perl 5.26 and later).
+  my $TMPDIR = File::Spec->rel2abs (File::Spec->tmpdir ());
+  $tmp = File::Temp::tempdir (
+    $signature . "XXXXXX",
+    DIR => $TMPDIR,
+    CLEANUP => !$debug
+  );
 
   print STDERR "$me:$$: working in $tmp\n"
     if $debug;
+
+  return $tmp;
 }
 
 
