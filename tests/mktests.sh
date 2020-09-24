@@ -169,8 +169,8 @@ au_exclude_list='
 	/^AC_LANG_(SAVE|RESTORE)$/ {next}
 
 	# Need arguments.  Tested in tools.at.
-	/^AC_(DIAGNOSE|FATAL|FOREACH|OBSOLETE|LINK_FILES|PREREQ|WARNING)$/
-	    {next}
+        /^AC_(DIAGNOSE|FATAL|OBSOLETE|WARNING)$/ {next}
+	/^AC_(FOREACH|LINK_FILES|PREREQ)$/ {next}
 '
 
 # au_exclude_script
