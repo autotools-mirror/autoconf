@@ -77,6 +77,7 @@ our %to_fetch = (
   },
   'lib/Autom4te' => {
     automake => [
+      'lib/Automake/ChannelDefs.pm',
       'lib/Automake/Channels.pm',
       'lib/Automake/Configure_ac.pm',
       'lib/Automake/FileUtils.pm',
