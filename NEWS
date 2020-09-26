@@ -2,61 +2,32 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
-** config.log properly escapes arguments in the header comment;
-   config.status --config output is now quoted in a more readable fashion
+** Backward incompatibilities:
 
-** Configure scripts now support a '--runstatedir' option, which
-   defaults to '${localstatedir}/run', and which can be used to place
-   per-process temporary runtime files (such as pid files) into '/run'
-   instead of '/var/run'.
+*** Many macros have become pickier about argument quotation.
 
-** Warnings about obsolete constructs are now on by default.
-   They can be turned off with '-Wno-obsolete'.
+  If you get a shell syntax error from your generated configure
+  script, or seemingly impossible misbehavior (e.g. entire blocks of
+  the configure script not getting executed), check first that all
+  macro arguments are properly quoted. The “M4 Quotation” section of
+  the manual explains how to quote macro arguments properly.
 
-** The use of the long-deprecated name 'configure.in' for the autoconf
-   input file now elicits a warning in the 'obsolete' category.
+  It is unfortunately not possible for autoupdate to correct
+  quotation errors.
 
-** autoconf will now issue warnings (in the ‘syntax’ category) if the
-   input file is missing a call to AC_INIT and/or AC_OUTPUT.
+*** Many macros no longer AC_REQUIRE as many other macros as they used to.
 
-** autoreconf will now run gtkdocize and intltoolize when appropriate.
-
-** Older version of automake and aclocal (< 1.8) are no longer supported
-   by autoreconf.
-
-** Use of printf is now recommended instead of working around bugs in
-   echo.  The macros AS_ECHO and AS_ECHO_N now expand unconditionally to
-   'printf "%s\n"' and 'printf %s'.
-
-** Use of the undocumented internal shell variables $as_echo and
-   $as_echo_n now elicits a warning in the 'obsolete' category.
-   The macros AS_ECHO and AS_ECHO_N should be used instead.
-
-** When checking for missing templates, autoheader now takes any
-   templates defined in the inputs of secondary config headers into
-   account.  This makes it possible to use AC_DEFINE for secondary
-   headers without duplicating the template in the main config header.
-
-** Many macros have been improved to expand their arguments
-   once and only once.  This makes ‘autoconf’ run faster.  However, it
-   may break configure scripts that did not quote all macro arguments
-   properly.  The ‘M4 Quotation’ section of the manual explains how to
-   quote macro arguments properly.
-
-** Several macros that are commonly used early in a configure
-   script, such as AC_PROG_CC, have been optimized and no longer
-   invoke as many subroutine macros as they used to.  This can expose
-   several classes of bugs: these are the ones we know about:
+  This can expose several classes of latent bugs.  These are the ones
+  we know about:
 
    - Make sure to explicitly invoke all of the macros that set result
      variables used later in the configure script, or in generated
      Makefiles.
 
    - Autoconf macros that use AC_REQUIRE internally, are not safe to
-     use inside of hand-written shell conditional or looping
-     constructs.  Use AS_IF, AS_CASE, AS_FOR, etc. instead.
-     (See the “Prerequisite Macros” section of the manual for
-     further explanation.)
+     use inside of hand-written shell control-flow constructs.  Use
+     AS_IF, AS_CASE, AS_FOR, etc. instead.  (See the “Prerequisite
+     Macros” section of the manual for further explanation.)
 
      The set of macros that use AC_REQUIRE internally may change from
      release to release.  The only macros that are guaranteed *not* to
@@ -66,162 +37,235 @@ GNU Autoconf NEWS - User visible changes.
    - AC_REQUIRE cannot be applied to macros that need to be used with
      arguments.  Instead, invoke the macro normally, with its arguments.
 
-** Macros that take whitespace-separated lists as arguments
-   now always expand macros within those arguments.  (Formerly, these
-   macros would *usually* expand those arguments, but the behavior was
-   not reliable nor was it consistent between autoconf and autoheader.)
+*** Older versions of automake and aclocal (< 1.8) are no longer supported.
 
-   Macro expansion within these arguments is deprecated; if expansion
-   changes the list, a warning in the 'obsolete' category will be
-   emitted.  Note that 'dnl' is a macro.  Putting 'dnl' comments
-   inside any argument to an Autoconf macro is, in general, only
-   supported when that argument takes more Autoconf code (e.g. the
-   ACTION-IF-TRUE argument to AC_COMPILE_IFELSE).
+*** AC_CHECK_HEADER and AC_CHECK_HEADERS only do a compilation test.
 
-   The affected macros are AC_CHECK_FILES, AC_CHECK_FUNCS,
-   AC_CHECK_FUNCS_ONCE, AC_CHECK_HEADERS, AC_CHECK_HEADERS_ONCE,
-   AC_CONFIG_MACRO_DIRS, AC_CONFIG_SUBDIRS, and AC_REPLACE_FUNCS.
-
-** Man pages for config.guess and config.sub are no longer provided.
-   They were moved to the master source tree for config.guess and config.sub.
-
-** Macros
-
-- New macro AC_C__GENERIC.
-
-- AC_C_VARARRAYS now defines __STDC_NO_VLA__ if variable-length
-  arrays are not supported and if the compiler does not already
-  define __STDC_NO_VLA__.  This is for compatibility with C11.
-  For backward compatibility with Autoconf 2.61-2.69 AC_C_VARARRAYS
-  still defines HAVE_C_VARARRAYS, but this usage is obsolescent.
-
-- AC_CONFIG_MACRO_DIRS
-  New macro, used to declare multiple directories when looking for
-  local M4 macros.  This macro overcomes some of the shortfalls in the
-  older AC_CONFIG_MACRO_DIR, which could only be used once; although
-  the older macro remains for compatibility with older tools.  The
-  newer macro is used by Automake 1.13 and later to eliminate the
-  need to specify ACLOCAL_AMFLAGS in Makefile.am.
-
-- AC_PROG_CC now prefers C11 if available, falling back on C99 and
-  then on C89 as before.  Similarly, AC_PROG_CXX now prefers C++11
-  if available, falling back on C++98.
-
-- AC_PROG_CC is now defined via AC_DEFUN_ONCE, to avoid bloat in 'configure'.
-
-- AC_PROG_CC_STDC, AC_PROG_CC_C89, AC_PROG_CC_C99 have been marked as obsolete.
-  Applications should use AC_PROG_CC.
-
-- AC_PROG_LEX no longer looks for a library providing the function
-  ‘yywrap’.  LEXLIB will only be set to ‘-lfl’ or ‘-ll’ if a
-  scanner that defines both ‘main’ and ‘yywrap’ itself still needs
-  something else from that library.
-
-  Packages should define yywrap themselves, or use %noyywrap.
-
-- AC_USE_SYSTEM_EXTENSIONS now enables more extensions on HP-UX,
-  macOS, and MINIX, as well as on systems conforming to recent
-  ISO/IEC C technical reports and specifications.
-
-- AC_CHECK_DECL and AC_CHECK_DECLS can now report missing declarations for
-  functions that are also Clang compiler builtins.
-
-- AC_FUNC_VFORK now checks for the signal-handling bug in Solaris 2.4 'vfork'.
-  Formerly, it ignored this bug, so that Emacs could use some tricky
-  code on that platform.  Solaris 2.4 has not been supported since
-  2003 and nowadays it's better to omit that old trick.
-
-- Autotest provides a new macro AT_DATA_UNQUOTED, similar to AT_DATA
-  but processing variable substitutions, command substitutions and
-  backslashes in the contents argument.
-
-- AC_CONFIG_TESTDIR will automatically pass EXEEXT to a testsuite (via
-  the atconfig file).
-
-- AT_TESTED arguments can use variable or command substitutions, including
-  in particular $EXEEXT
-
-- AC_CHECK_HEADER and AC_CHECK_HEADERS now default to doing only a
-  compilation test.  This completes the transition from preprocessor-
-  based header tests begun in Autoconf 2.56.
+  This completes the transition from preprocessor-based header tests
+  begun in Autoconf 2.56.
 
   The double test that was the default since Autoconf 2.64 is no
   longer available.  You can still request a preprocessor-only test
-  by specifying '-' as the fourth argument to either macro, but this
+  by specifying [-] as the fourth argument to either macro, but this
   is now deprecated.  If you really need that behavior use
   AC_PREPROC_IFELSE.
 
-- AC_INCLUDES_DEFAULT has been streamlined.  It now assumes that the
-  ISO C90 headers 'stdlib.h' and 'string.h' are unconditionally
-  available, and does not include the pre-standard header 'memory.h'
-  at all.  If the POSIX header 'strings.h' exists, it will be
-  included; it is assumed to be safe to include both 'string.h' and
-  'strings.h' in the same source file.  We are not aware of any
-  current system that violates any of the above assumptions.
+*** AC_INCLUDES_DEFAULT assumes an ISO C90 compliant C implementation.
 
-  For compatibility's sake, the C preprocessor macros STDC_HEADERS,
+  Specifically, it assumes that the ISO C90 headers <stdlib.h> and
+  <string.h> are available, without checking for them, and does not
+  include the pre-standard header <memory.h> at all.  If the POSIX
+  header <strings.h> exists, it will be included, without testing
+  whether it is safe to include both <string.h> and <strings.h> in the
+  same source file.
+
+  For compatibility’s sake, the C preprocessor macros STDC_HEADERS,
   HAVE_STDLIB_H, and HAVE_STRING_H are defined unconditionally.
   These preprocessor macros should be considered obsolescent.
 
   Future releases of Autoconf may reduce the set of headers checked
   for by AC_INCLUDES_DEFAULT.
 
-- AC_HEADER_STDC and AC_HEADER_TIME are now stubs which will be
-  removed from 'configure.ac' by 'autoupdate'.  For compatibility's
-  sake, the stubs (and their 'autoupdate' replacements) continue to
-  define the C preprocessor macros STDC_HEADERS and TIME_WITH_SYS_TIME,
-  respectively, but without actually checking for the ancient systems
-  where formerly those macros would not be defined.
+*** AS_ECHO and AS_ECHO_N unconditionally use ‘printf’.
 
-  These macros were already labeled obsolescent in the manual.
+  This is substantially simpler, more reliable, and, in most cases,
+  faster than attempting to use ‘echo’ at all.  However, if ‘printf’
+  is not a shell builtin, configure scripts will run noticeably
+  slower, and if ‘printf’ is not available at all, they will crash.
+  The only systems where this is known to be a problem are extremely
+  old, and unlikely to be able to handle modern C programs for other
+  reasons (e.g. not having a C90-compliant compiler at all).
 
-- New macro, AC_CHECK_INCLUDES_DEFAULT.  It causes the checks normally
-  performed as a side-effect by AC_INCLUDES_DEFAULT to happen at that
-  point in 'configure', if they haven't already been done.  Autoupdate
+*** AC_INIT now trims extra white space from its arguments.
+
+  For instance, AC_INIT([  GNU  Hello  ], [1.0]) will set PACKAGE_NAME
+  to “GNU Hello”.
+
+*** Macros that take whitespace-separated lists as arguments
+    now always expand macros within those arguments.
+
+  Formerly, these macros would *usually* expand those arguments, but
+  the behavior was not reliable nor was it consistent between autoconf
+  and autoheader.
+
+  Macro expansion within these arguments is deprecated; if expansion
+  changes the list, a warning in the “obsolete” category will be
+  emitted.  Note that ‘dnl’ is a macro.  Putting ‘dnl’ comments inside
+  any argument to an Autoconf macro is, in general, only supported
+  when that argument takes more Autoconf code (e.g. the ACTION-IF-TRUE
+  argument to AC_COMPILE_IFELSE).
+
+  The affected macros are AC_CHECK_FILES, AC_CHECK_FUNCS,
+  AC_CHECK_FUNCS_ONCE, AC_CHECK_HEADERS, AC_CHECK_HEADERS_ONCE,
+  AC_CONFIG_MACRO_DIRS, AC_CONFIG_SUBDIRS, and AC_REPLACE_FUNCS.
+
+*** AC_PROG_LEX no longer looks for ‘yywrap’.
+
+  LEXLIB will only be set to ‘-lfl’ or ‘-ll’ if a scanner that defines
+  both ‘main’ and ‘yywrap’ itself still needs something else from that
+  library.
+
+  We recommend scanners define yywrap themselves, or use %noyywrap.
+
+*** AC_FUNC_VFORK no longer ignores a signal-handling bug in Solaris 2.4.
+
+  This bug was being ignored because Emacs wanted to use ‘vfork’ on
+  Solaris 2.4 anyway, but current versions of Emacs have dropped
+  support for Solaris 2.4.  Most programs will want to avoid ‘vfork’
+  on this OS because of this bug.
+
+** New features
+
+*** Configure scripts now support a ‘--runstatedir’ option.
+
+  This defaults to ‘${localstatedir}/run’.  It can be used, for
+  instance, to place per-process temporary runtime files (such as pid
+  files) into ‘/run’ instead of ‘/var/run’.
+
+*** autoreconf will now run gtkdocize and intltoolize when appropriate.
+
+*** autoheader handles secondary config headers better.
+
+  It is no longer necessary to duplicate AC_DEFINE templates in the
+  main configuration header for autoheader to notice them.
+
+*** AC_PROG_CC now enables C2011 mode if the compiler supports it.
+
+  If not, it will fall back to C99 and C89, as before.  Similarly,
+  AC_PROG_CXX now enables C++2011 if available, falling back on C++98.
+
+*** New macro AC_C__GENERIC tests for C2011 _Generic support.
+
+*** AC_C_VARARRAYS has been aligned with C2011.
+
+  It now defines __STDC_NO_VLA__ if variable-length arrays are not
+  supported but the compiler does not define __STDC_NO_VLA__.
+
+  For backward compatibility with Autoconf 2.61-2.69 AC_C_VARARRAYS
+  still defines HAVE_C_VARARRAYS, but this result macro is obsolescent.
+
+*** New macro AC_CONFIG_MACRO_DIRS.
+
+  This macro can be used more than once and accepts a list of
+  directories to search for local M4 macros.  With Automake 1.13 and
+  later, use of this macro eliminates a reason to use ACLOCAL_AMFLAGS
+  in Makefile.am.
+
+  The older AC_CONFIG_MACRO_DIR, which could only be used once, is
+  still supported but considered deprecated.
+
+*** AC_USE_SYSTEM_EXTENSIONS knows about more extensions to enable.
+
+  System extensions will now be enabled on HP-UX, macOS, and MINIX.
+  Optional ISO C library components (e.g. decimal floating point) will
+  also be enabled.
+
+*** New compatibility macro AC_CHECK_INCLUDES_DEFAULT.
+
+  This macro runs the checks normally performed as a side-effect by
+  AC_INCLUDES_DEFAULT, if they haven’t already been done.  Autoupdate
   will replace certain obsolete constructs, whose only remaining
   useful effect is to trigger those checks, with this macro.  It is
   unlikely to be useful otherwise.
 
-- The AC_CHECK_FUNCS_ONCE and AC_CHECK_HEADERS_ONCE macros now support
-  use with multiple languages, rather than forcing all checks in the
-  language used by the first encounter of the macro.
+** Obsolete features and new warnings
 
-- AS_INIT now writes only the base filename of the primary input file
-  into the generated script.  This avoids embedding (part of) the path
-  to the source directory in generated files, which hinders build
-  reproducibility.
+*** Warnings about obsolete constructs are now on by default.
+    They can be turned off with ‘-Wno-obsolete’.
 
-  We believe this was the only case where generated file contents could
-  change depending on the build environment.  If you find any other cases
-  please report them as bugs.
+*** Use of the long-deprecated name ‘configure.in’ for the autoconf
+    input file now elicits a warning in the “obsolete” category.
 
-- The obsolete and undocumented macro AC_CONFIG_HEADER is now
-  diagnosed as obsolete, and replaced with AC_CONFIG_HEADERS by
-  autoupdate.
+*** Use of the undocumented internal shell variables $as_echo and
+    $as_echo_n now elicits a warning in the “obsolete” category.
+    The macros AS_ECHO and AS_ECHO_N should be used instead.
 
-- The obsolete macros AC_DIAGNOSE, AC_FATAL, AC_WARNING, and
-  _AC_COMPUTE_INT are now replaced with modern equivalents by
-  autoupdate.
+*** autoconf will now issue warnings (in the “syntax” category)
+    if the input file is missing a call to AC_INIT and/or AC_OUTPUT.
 
-- The macro AC_OBSOLETE is obsolete.  Autoupdate will replace it with
-  m4_warn([obsolete], [explanation]).  If possible, macros using
-  AC_OBSOLETE should be converted to use AU_DEFUN or AU_ALIAS instead,
-  which enables autoupdate to replace them, but this has to be done by
-  hand and is not always possible.
+*** autoconf will now issue warnings (in the “syntax” category)
+    for a non-literal URL argument to AC_INIT, and for a TARNAME
+    argument to AC_INIT which is either non-literal or contains
+    characters that should not be used in file names (e.g. ‘*’).
 
-- AC_FC_LINE_LENGTH now documents the maximum portable length of
-  "unlimited" Fortran source code lines to be 250 columns, not 254.
+*** AC_PROG_CC_STDC, AC_PROG_CC_C89, AC_PROG_CC_C99 are now obsolete.
 
-- AC_INIT now trims extra white space from its arguments.  For instance,
+  Applications should use AC_PROG_CC.
 
-    AC_INIT([  GNU  Hello  ], [1.0])
+*** AC_HEADER_STDC and AC_HEADER_TIME are now stubs.
 
-  will set PACKAGE_NAME to “GNU Hello”.
+  They still define the C preprocessor macros STDC_HEADERS and
+  TIME_WITH_SYS_TIME, respectively, but they no longer check for the
+  ancient, non-ISO-C90 compliant systems where formerly those macros
+  would not be defined.  Autoupdate will remove them.
 
-- AC_INIT will now issue warnings (in the “syntax” category) for a
-  non-literal URL argument, and for a TARNAME argument which is either
-  non-literal or contains characters that should not be used in file
-  names (e.g. ‘*’).
+  These macros were already labeled obsolete in the manual.
+
+*** AC_DIAGNOSE, AC_FATAL, AC_WARNING, and _AC_COMPUTE_INT are now
+    replaced with modern equivalents by autoupdate.
+
+  These macros were already labeled obsolete in the manual.
+
+*** AC_CONFIG_HEADER is now diagnosed as obsolete, and replaced with
+    AC_CONFIG_HEADERS by autoupdate.
+
+  This macro has been considered obsolete for many years and was not
+  documented at all.
+
+*** The macro AC_OBSOLETE is obsolete.
+
+  Autoupdate will replace it with m4_warn([obsolete], [explanation]).
+  If possible, macros using AC_OBSOLETE should be converted to use
+  AU_DEFUN or AU_ALIAS instead, which enables autoupdate to replace
+  them, but this has to be done by hand and is not always possible.
+
+  This macro has been considered obsolete for many years, but was not
+  officially declared as such.
+
+*** Man pages for config.guess and config.sub are no longer provided.
+
+  They were moved to the master source tree for config.guess and
+  config.sub.
+
+** Notable bug fixes
+
+*** config.log properly escapes arguments in the header comment.
+
+*** config.status --config output is now quoted in a more readable fashion.
+
+*** AC_PROG_CC is now defined via AC_DEFUN_ONCE.
+
+  This means configure scripts will no longer check repeatedly for the
+  C compiler under some combinations of macro use.
+
+*** AC_CHECK_DECL and AC_CHECK_DECLS will now detect missing declarations for
+    library functions that are also Clang compiler builtins.
+
+*** AC_CHECK_FUNCS_ONCE and AC_CHECK_HEADERS_ONCE now support multiple
+    programming languages.  They no longer perform all checks in the
+    language active upon the first use of the macro.
+
+*** AS_INIT no longer embeds (part of) the path to the source
+    directory in generated files.
+
+  We believe this was the only case where generated file contents
+  could change depending on the environment outside the source tree
+  itself.  If you find any other cases please report them as bugs.
+
+*** AC_FC_LINE_LENGTH now documents the maximum portable length of
+    “unlimited” Fortran source code lines to be 250 columns, not 254.
+
+** Autotest enhancements
+
+*** Autotest provides a new macro AT_DATA_UNQUOTED, similar to AT_DATA
+    but processing variable substitutions, command substitutions and
+    backslashes in the contents argument.
+
+*** AC_CONFIG_TESTDIR will automatically pass EXEEXT to a testsuite (via
+    the atconfig file).
+
+*** AT_TESTED arguments can use variable or command substitutions, including
+    in particular $EXEEXT
 
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
