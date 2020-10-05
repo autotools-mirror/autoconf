@@ -4,6 +4,16 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Backward incompatibilities:
 
+*** Warnings about obsolete constructs are now on by default.
+
+  These warnings can be turned off with ‘-Wno-obsolete’.
+
+  Many of these warnings advise maintainers to run autoupdate.
+  Be aware that autoupdate cannot solve all backward compatibility
+  problems, and cannot completely solve all of the problems it does
+  address.  A configure script edited by autoupdate is likely to
+  need further manual fix-ups.
+
 *** Many macros have become pickier about argument quotation.
 
   If you get a shell syntax error from your generated configure
@@ -170,9 +180,6 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Obsolete features and new warnings
 
-*** Warnings about obsolete constructs are now on by default.
-    They can be turned off with ‘-Wno-obsolete’.
-
 *** Use of the long-deprecated name ‘configure.in’ for the autoconf
     input file now elicits a warning in the “obsolete” category.
 
@@ -229,31 +236,66 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Notable bug fixes
 
-*** config.log properly escapes arguments in the header comment.
+*** Compatible with current Automake, Libtool, Perl, Texinfo, and shells.
 
-*** config.status --config output is now quoted in a more readable fashion.
+  All of autoconf’s tools and generated scripts, and the build process
+  and testsuite for autoconf itself, have been tested to work
+  correctly with current versions of Automake, Libtool, Perl, Texinfo,
+  bash, ksh93, zsh, and FreeBSD and NetBSD /bin/sh.
+
+  Generated configure scripts are expected to work reliably with an
+  even wider variety of shells, including BusyBox sh and various
+  proprietary Unixes’ /bin/sh, as long as they are minimally compliant
+  with the Unix95 shell specification.  Notably, support for
+  shell-script functions and the ‘printf’ builtin are required.
+
+*** Checks compatible with current language standards and compilers.
+
+  Many individual macros have been improved to accommodate changes in
+  recent versions of the C and C++ language standards, and new
+  features and quirks of commonly used compilers (both free and
+  proprietary).
+
+*** Improved support for cross compilation.
+
+  Many individual macros have been improved to produce more accurate
+  results when cross-compiling.
+
+*** Improved robustness against unusual build environments.
+
+  Many bugs have been fixed where generated configure scripts would
+  fail catastrophically under unusual conditions, such as stdout being
+  closed, or $TMPDIR not being an absolute path, or the root directory
+  being mentioned in $PATH.
+
+*** AC_CHECK_FUNCS_ONCE and AC_CHECK_HEADERS_ONCE now support multiple
+    programming languages.  They no longer perform all checks in the
+    language active upon the first use of the macro.
+
+*** AC_CHECK_DECL and AC_CHECK_DECLS will now detect missing declarations for
+    library functions that are also Clang compiler builtins.
 
 *** AC_PROG_CC is now defined via AC_DEFUN_ONCE.
 
   This means configure scripts will no longer check repeatedly for the
   C compiler under some combinations of macro use.
 
-*** AC_CHECK_DECL and AC_CHECK_DECLS will now detect missing declarations for
-    library functions that are also Clang compiler builtins.
+*** AC_HEADER_MAJOR detects the location of the major, minor, and
+    makedev macros correctly under glibc 2.25 and later.
 
-*** AC_CHECK_FUNCS_ONCE and AC_CHECK_HEADERS_ONCE now support multiple
-    programming languages.  They no longer perform all checks in the
-    language active upon the first use of the macro.
+*** AC_FC_LINE_LENGTH now documents the maximum portable length of
+    “unlimited” Fortran source code lines to be 250 columns, not 254.
 
-*** AS_INIT no longer embeds (part of) the path to the source
-    directory in generated files.
+*** AC_INIT and AS_INIT no longer embed (part of) the path to the
+    source directory in generated files.
 
   We believe this was the only case where generated file contents
   could change depending on the environment outside the source tree
   itself.  If you find any other cases please report them as bugs.
 
-*** AC_FC_LINE_LENGTH now documents the maximum portable length of
-    “unlimited” Fortran source code lines to be 250 columns, not 254.
+*** config.log properly escapes arguments in the header comment.
+
+*** config.status --config output is now quoted in a more readable fashion.
 
 ** Autotest enhancements
 
