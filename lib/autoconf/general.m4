@@ -2324,10 +2324,14 @@ m4_append_uniq([_AC_SUBST_FILES], [$1], [
 # The double definitions are necessary because autoupdate expands m4_
 # macros, so we have to double-quote the replacements, but then they
 # won't work in a normal autoconf run.
-AU_DEFUN([AC_DIAGNOSE], [[m4_warn($@)]])
-AC_DEFUN([AC_DIAGNOSE], [m4_warn($@)dnl
-m4_warn([obsolete], [The macro `$0' is obsolete.
-You should run autoupdate.])])
+
+# 2020-10-06 / autoconf 2.70: Widely used third-party macros
+# (among others, from automake, libtool, and gettext) use AC_DIAGNOSE,
+# so we temporarily don't issue an obsoletion warning for it.
+# Revisit after third parties have had a chance to update their macros
+# and make releases.
+AU_DEFUN([AC_DIAGNOSE], [[m4_warn($@)]], [], [silent])
+AC_DEFUN([AC_DIAGNOSE], [m4_warn($@)])
 
 AU_DEFUN([AC_FATAL], [[m4_fatal($@)]])
 AC_DEFUN([AC_FATAL], [m4_fatal($@)dnl

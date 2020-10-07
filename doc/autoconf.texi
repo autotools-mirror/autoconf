@@ -14888,29 +14888,53 @@ with their modern implementation.
 Autoconf provides a simple means to obsolete a macro.
 
 @anchor{AU_DEFUN}
-@defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message})
+@defmac AU_DEFUN (@var{old-macro}, @var{implementation}, @ovar{message}, @ovar{silent})
 @auindex{DEFUN}
-Define @var{old-macro} as @var{implementation}.  The only difference
-with @code{AC_DEFUN} is that the user is warned that
-@var{old-macro} is now obsolete.
+Define @var{old-macro} as @var{implementation}, just like
+@code{AC_DEFUN}, but also declare @var{old-macro} to be obsolete.
+When @command{autoupdate} is run, occurrences of @var{old-macro} will
+be replaced by the text of @var{implementation} in the updated
+@file{configure.ac} file.
 
-If she then uses @command{autoupdate}, the call to @var{old-macro} is
-replaced by the modern @var{implementation}.  @var{message} should
-include information on what to do after running @command{autoupdate};
-@command{autoupdate} prints it as a warning, and includes it
-in the updated @file{configure.ac} file.
+If a simple textual replacement is not enough to finish the job of
+updating a @file{configure.ac} to modern style, provide instructions for
+whatever additional manual work is required as @var{message}.  These
+instructions will be printed by @command{autoupdate}, and embedded in the
+updated @file{configure.ac} file, next to the text of @var{implementation}.
 
-The details of this macro are hairy: if @command{autoconf} encounters an
-@code{AU_DEFUN}ed macro, all macros inside its second argument are expanded
-as usual.  However, when @command{autoupdate} is run, only M4 and M4sugar
-macros are expanded here, while all other macros are disabled and
-appear literally in the updated @file{configure.ac}.
+Normally, @command{autoconf} will also issue a warning (in the
+``obsolete'' category) when it expands @var{old-macro}.  This warning
+does not include @var{message}; it only advises the maintainer to run
+@command{autoupdate}.  If it is inappropriate to issue this warning, set
+the @var{silent} argument to the word @code{silent}.  One might want to
+use a silent @code{AU_DEFUN} when @var{old-macro} is used in a
+widely-distributed third-party macro.  If that macro's maintainers are
+aware of the need to update their code, it's unnecessary to nag all
+of the transitive users of @var{old-macro} as well.  This capability
+was added to @code{AU_DEFUN} in Autoconf 2.70; older versions of
+autoconf will ignore the @var{silent} argument and issue the warning
+anyway.
+
+@strong{Caution:} If @var{implementation} contains M4 or M4sugar macros,
+they will be evaluated when @command{autoupdate} is run, not emitted
+verbatim like the rest of @var{implementation}.  This cannot be avoided
+with extra quotation, because then @var{old-macro} will not work when
+it is called normally.  See the definition of @code{AC_FOREACH} in
+@file{general.m4} for a workaround.
 @end defmac
 
-@defmac AU_ALIAS (@var{old-name}, @var{new-name})
+@defmac AU_ALIAS (@var{old-name}, @var{new-name}, @ovar{silent})
 @auindex{ALIAS}
-Used if the @var{old-name} is to be replaced by a call to @var{new-macro}
-with the same parameters.  This happens for example if the macro was renamed.
+A shorthand version of @code{AU_DEFUN}, to be used when a macro has
+simply been renamed.  @command{autoupdate} will replace calls to
+@var{old-name} with calls to @var{new-name}, keeping any arguments
+intact.  No instructions for additional manual work will be printed.
+
+The @var{silent} argument works the same as the @var{silent} argument
+to @code{AU_DEFUN}.  It was added to @code{AU_ALIAS} in Autoconf 2.70.
+
+@strong{Caution:} @code{AU_ALIAS} cannot be used when @var{new-name} is
+an M4 or M4sugar macro.  See above.
 @end defmac
 
 @node Coding Style
