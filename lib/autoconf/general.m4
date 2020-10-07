@@ -2802,7 +2802,7 @@ AC_DEFUN([AC_EGREP_HEADER],
 # Shell function body for _AC_COMPILE_IFELSE.
 m4_define([_AC_COMPILE_IFELSE_BODY],
 [  AS_LINENO_PUSH([$[]1])
-  rm -f conftest.$ac_objext
+  rm -f conftest.$ac_objext conftest.beam
   AS_IF([_AC_DO_STDERR($ac_compile) && {
 	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
 	 test ! -s conftest.err
@@ -2826,7 +2826,7 @@ AC_DEFUN([_AC_COMPILE_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_compile "$LINENO"], [$2], [$3])
-rm -f core conftest.err conftest.$ac_objext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
+rm -f core conftest.err conftest.$ac_objext conftest.beam[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_COMPILE_IFELSE
 
 
@@ -2858,7 +2858,7 @@ AU_DEFUN([AC_TRY_COMPILE],
 # Shell function body for _AC_LINK_IFELSE.
 m4_define([_AC_LINK_IFELSE_BODY],
 [  AS_LINENO_PUSH([$[]1])
-  rm -f conftest.$ac_objext conftest$ac_exeext
+  rm -f conftest.$ac_objext conftest.beam conftest$ac_exeext
   AS_IF([_AC_DO_STDERR($ac_link) && {
 	 test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag" ||
 	 test ! -s conftest.err
@@ -2897,7 +2897,7 @@ AC_DEFUN([_AC_LINK_IFELSE],
   [$0_BODY])]dnl
 [m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])]dnl
 [AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_try_link "$LINENO"], [$2], [$3])
-rm -f core conftest.err conftest.$ac_objext \
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
     conftest$ac_exeext[]m4_ifval([$1], [ conftest.$ac_ext])[]dnl
 ])# _AC_LINK_IFELSE
 

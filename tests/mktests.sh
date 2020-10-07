@@ -146,6 +146,10 @@ ac_exclude_list='
 
 	# Tested alongside m4_divert_text.
 	/^AC_PRESERVE_HELP_ORDER$/ {next}
+
+	# Tested in erlang.at.
+	/^AC_ERLANG_SUBST_(INSTALL_LIB_SUBDIR|ROOT_DIR)$/ {next}
+	/^AC_ERLANG_CHECK_LIB$/ {next}
 '
 
 
