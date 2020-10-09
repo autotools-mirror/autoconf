@@ -127,9 +127,6 @@ m4_if([$2], [main], ,
 [/* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
    builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
 char $2 ();])], [return $2 ();])])
 
 
@@ -238,6 +235,21 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&AS_MESSAGE_LOG_FD'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&AS_MESSAGE_LOG_FD'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 ])
+
+
+# AC_LANG_CALL(C++)(PROLOGUE, FUNCTION)
+# -------------------------------------
+m4_define([AC_LANG_CALL(C++)],
+[AC_LANG_PROGRAM([[$1
+// We do not know the function signature of the real $2.
+// Declare it in a namespace so the compiler doesn't recognize it
+// (with, most likely, a clashing prototype); the 'extern "C"' will
+// hide the namespace from the linker, so it will still look for the
+// real (global) $2.
+namespace conftest {
+  extern "C" void $2 ();
+}]],
+[[conftest::$2 (); return 0;]])])
 
 
 # AC_LANG_CPLUSPLUS

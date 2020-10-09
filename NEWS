@@ -124,6 +124,16 @@ GNU Autoconf NEWS - User visible changes.
   support for Solaris 2.4.  Most programs will want to avoid ‘vfork’
   on this OS because of this bug.
 
+*** AC_FUNC_STRERROR_R assumes strerror_r is unavailable if it’s not declared.
+
+  The fallback technique it used to probe strerror_r’s return type
+  when the function was present in the C library, but not declared by
+  <string.h>, was fragile and did not work at all when cross-compiling.
+  The systems where this fallback was necessary were all obsolete.
+
+  Programs that use AC_FUNC_STRERROR_R should make sure to test the
+  preprocessor macro HAVE_DECL_STRERROR_R before using strerror_r at all.
+
 ** New features
 
 *** Configure scripts now support a ‘--runstatedir’ option.

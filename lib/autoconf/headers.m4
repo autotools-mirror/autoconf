@@ -776,7 +776,7 @@ AU_DEFUN([AC_USG],
 [# Obsolete code to be removed.
 AC_MSG_CHECKING([for BSD string and memory functions])
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[@%:@include <strings.h>]],
-				[[rindex(0, 0); bzero(0, 0);]])],
+				[[rindex("", 0); bzero(0, 0);]])],
 	       [AC_MSG_RESULT(yes)],
 	       [AC_MSG_RESULT(no)
 		AC_DEFINE(USG, 1,

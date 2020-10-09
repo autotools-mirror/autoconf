@@ -509,25 +509,23 @@ fi
 # AC_FUNC_CLOSEDIR_VOID
 # ---------------------
 # Check whether closedir returns void, and #define CLOSEDIR_VOID in
-# that case.
+# that case.  Note: the test program *fails* to compile when closedir
+# returns void.
 AC_DEFUN([AC_FUNC_CLOSEDIR_VOID],
 [AC_REQUIRE([AC_HEADER_DIRENT])dnl
 AC_CACHE_CHECK([whether closedir returns void],
 	       [ac_cv_func_closedir_void],
-[AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
+[AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <$ac_header_dirent>
-#ifndef __cplusplus
-int closedir ();
-#endif
-],
-				[[return closedir (opendir (".")) != 0;]])],
+]], [[
+  return closedir(0);
+]])],
 	       [ac_cv_func_closedir_void=no],
-	       [ac_cv_func_closedir_void=yes],
 	       [ac_cv_func_closedir_void=yes])])
 if test $ac_cv_func_closedir_void = yes; then
   AC_DEFINE(CLOSEDIR_VOID, 1,
 	    [Define to 1 if the `closedir' function returns void instead
-	     of `int'.])
+	     of int.])
 fi
 ])
 
@@ -952,13 +950,12 @@ AC_DEFUN([_AC_FUNC_MALLOC_IF],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 [AC_RUN_IFELSE(
-[AC_LANG_PROGRAM(
-[[#include <stdlib.h>
-]],
-		 [char *p = malloc (0);
-		  int result = !p;
-		  free (p);
-		  return result;])],
+[AC_LANG_PROGRAM([[#include <stdlib.h>
+                 ]],
+		 [[void *p = malloc (0);
+		   int result = !p;
+		   free (p);
+		   return result;]])],
 	       [ac_cv_func_malloc_0_nonnull=yes],
 	       [ac_cv_func_malloc_0_nonnull=no],
 	       [case "$host_os" in # ((
@@ -1459,13 +1456,12 @@ AC_DEFUN([_AC_FUNC_REALLOC_IF],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
 [AC_RUN_IFELSE(
-[AC_LANG_PROGRAM(
-[[#include <stdlib.h>
-]],
-		 [char *p = realloc (0, 0);
-		  int result = !p;
-		  free (p);
-		  return result;])],
+[AC_LANG_PROGRAM([[#include <stdlib.h>
+                 ]],
+		 [[void *p = realloc (0, 0);
+		   int result = !p;
+		   free (p);
+		   return result;]])],
 	       [ac_cv_func_realloc_0_nonnull=yes],
 	       [ac_cv_func_realloc_0_nonnull=no],
 	       [case "$host_os" in # ((
@@ -1692,33 +1688,26 @@ AU_ALIAS([AM_FUNC_STRTOD], [AC_FUNC_STRTOD])
 AN_FUNCTION([strerror_r], [AC_FUNC_STRERROR_R])
 AC_DEFUN([AC_FUNC_STRERROR_R],
 [AC_CHECK_DECLS_ONCE([strerror_r])
-AC_CHECK_FUNCS_ONCE([strerror_r])
+if test $ac_cv_have_decl_strerror_r = yes; then
+  # For backward compatibility's sake, define HAVE_STRERROR_R.
+  # (We used to run AC_CHECK_FUNCS_ONCE for strerror_r, as well
+  # as AC_CHECK_DECLS_ONCE.)
+  AC_DEFINE([HAVE_STRERROR_R], [1], [Define if you have `strerror_r'.])
+fi
+
 AC_CACHE_CHECK([whether strerror_r returns char *],
-	       ac_cv_func_strerror_r_char_p,
-   [
+	       [ac_cv_func_strerror_r_char_p], [
     ac_cv_func_strerror_r_char_p=no
     if test $ac_cv_have_decl_strerror_r = yes; then
-      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
 	[[
 	  char buf[100];
 	  char x = *strerror_r (0, buf, sizeof buf);
 	  char *p = strerror_r (0, buf, sizeof buf);
 	  return !p || x;
 	]])],
-			ac_cv_func_strerror_r_char_p=yes)
-    else
-      # strerror_r is not declared.  Choose between
-      # systems that have relatively inaccessible declarations for the
-      # function.  BeOS and DEC UNIX 4.0 fall in this category, but the
-      # former has a strerror_r that returns char*, while the latter
-      # has a strerror_r that returns `int'.
-      # This test should segfault on the DEC system.
-      AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
-	extern char *strerror_r ();],
-	[[char buf[100];
-	  char x = *strerror_r (0, buf, sizeof buf);
-	  return ! isalpha (x);]])],
-		    ac_cv_func_strerror_r_char_p=yes, , :)
+			[ac_cv_func_strerror_r_char_p=yes])
+
     fi
   ])
 if test $ac_cv_func_strerror_r_char_p = yes; then
