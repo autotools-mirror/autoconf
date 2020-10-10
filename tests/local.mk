@@ -21,7 +21,7 @@
 # project, remember to distribute both testsuite and package.m4.
 EXTRA_DIST += \
   tests/local.at \
-  tests/mktests.sh \
+  tests/mktests.pl \
   tests/atlocal.in \
   tests/wrapper.as \
   tests/statesave.m4
@@ -200,10 +200,10 @@ $(TESTSUITE_GENERATED_AT): tests/mktests.stamp
 	  $(MAKE) $(AM_MAKEFLAGS) tests/mktests.stamp; \
 	fi
 
-tests/mktests.stamp : tests/mktests.sh $(AUTOCONF_FILES)
+tests/mktests.stamp : tests/mktests.pl $(AUTOCONF_FILES)
 	@rm -f tests/mktests.tmp
 	@touch tests/mktests.tmp
-	$(SHELL) $(srcdir)/tests/mktests.sh $(AUTOCONF_FILES)
+	$(PERL) $(srcdir)/tests/mktests.pl tests $(AUTOCONF_FILES)
 	@mv -f tests/mktests.tmp $@
 
 CLEANFILES += tests/mktests.tmp tests/mktests.stamp
