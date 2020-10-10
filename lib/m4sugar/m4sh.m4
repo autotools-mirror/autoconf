@@ -1363,7 +1363,7 @@ do
   m4_ifvaln([$3], [as_found=false])dnl
 done
 IFS=$as_save_IFS
-m4_ifvaln([$3], [$as_found || { $3; }])dnl
+m4_ifvaln([$3], [AS_IF([$as_found], [], [$3])])dnl
 ])
 
 
