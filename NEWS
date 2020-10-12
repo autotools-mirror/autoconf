@@ -34,10 +34,10 @@ GNU Autoconf NEWS - User visible changes.
      variables used later in the configure script, or in generated
      Makefiles.
 
-   - Autoconf macros that use AC_REQUIRE internally, are not safe to
-     use inside of hand-written shell control-flow constructs.  Use
-     AS_IF, AS_CASE, AS_FOR, etc. instead.  (See the “Prerequisite
-     Macros” section of the manual for further explanation.)
+   - Autoconf macros that use AC_REQUIRE are not safe to use in shell
+     control-flow constructs that appear outside of macros defined by
+     AC_DEFUN.  Use AS_IF, AS_CASE, etc. instead.  (See the
+     “Prerequisite Macros” section of the manual for details.)
 
      The set of macros that use AC_REQUIRE internally may change from
      release to release.  The only macros that are guaranteed *not* to

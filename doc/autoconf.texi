@@ -11024,9 +11024,11 @@ Cambridge University computer lab at the time.
 @cindex parentheses, balancing
 @cindex unbalanced parentheses, managing
 
-One of the pitfalls of portable shell programming is that @command{case}
-statements require unbalanced parentheses (@pxref{case, , Limitations of
-Shell Builtins}).  With syntax highlighting
+One of the pitfalls of portable shell programming is that
+if you intend your script to run with obsolescent shells,
+@command{case} statements require unbalanced parentheses.
+@xref{case, , Limitations of Shell Builtins}.
+With syntax highlighting
 editors, the presence of unbalanced @samp{)} can interfere with editors
 that perform syntax highlighting of macro contents based on finding the
 matching @samp{(}.  Another concern is how much editing must be done
@@ -11066,6 +11068,19 @@ variations for defining @code{my_case} to be more robust, even when used
 without proper quoting, each with some benefits and some drawbacks.
 
 @itemize @w{}
+@item Use left parenthesis before pattern
+@example
+AC_DEFUN([my_case],
+[case $file_name in
+  (*.c) echo "C source code";;
+esac])
+@end example
+@noindent
+This is simple and provides balanced parentheses.  Although this is not
+portable to obsolescent shells (notably Solaris 10 @command{/bin/sh}),
+platforms with these shells invariably have a more-modern shell
+available somewhere so this approach typically suffices nowadays.
+
 @item Creative literal shell comment
 @example
 AC_DEFUN([my_case],
@@ -13758,8 +13773,15 @@ log files to separate distinct phases of script operation.
 Expand into a shell @samp{case} statement, where @var{word} is matched
 against one or more patterns.  @var{if-matched} is run if the
 corresponding pattern matched @var{word}, else @var{default} is run.
-Avoids several portability issues (@pxref{case, , Limitations of Shell
-Builtins}).
+@xref{Prerequisite Macros} for why
+this macro should be used instead of plain @samp{case} in code
+outside of an @code{AC_DEFUN} macro, when the contents of the
+@samp{case} use @code{AC_REQUIRE} directly or indirectly.
+@xref{case, , Limitations of Shell Builtins},
+for how this macro avoids some portability issues.
+@xref{Balancing Parentheses}
+for how this macro lets you write code with balanced parentheses
+even if your code must run on obsolescent shells.
 @end defmac
 
 @c Deprecated, to be replaced by a better API
@@ -13881,6 +13903,10 @@ blanks, or expand to a nonempty shell command.  For example,
 argument contains the nonblank characters @code{[]} which expand to
 nothing.  This restriction on @var{run-if-false} also applies to other
 macros with ``if-false'' arguments denoting shell commands.
+
+This macro should be used instead of plain @samp{if} in code
+outside of an @code{AC_DEFUN} macro, when the contents of the @samp{if}
+use @code{AC_REQUIRE} directly or indirectly (@pxref{Prerequisite Macros}).
 @end defmac
 
 @defmac AS_MKDIR_P (@var{file-name})
@@ -14635,7 +14661,7 @@ In particular, @samp{AC_REQUIRE([FOO])} is not replaced with the body of
 @example
 @group
 AC_DEFUN([TRAVOLTA],
-[test "$body_temperature_in_celsius" -gt "38" &&
+[test "$body_temperature_in_celsius" -gt 38 &&
   dance_floor=occupied])
 AC_DEFUN([NEWTON_JOHN],
 [test "x$hair_style" = xcurly &&
@@ -14644,7 +14670,7 @@ AC_DEFUN([NEWTON_JOHN],
 
 @group
 AC_DEFUN([RESERVE_DANCE_FLOOR],
-[if date | grep '^Sat.*pm' >/dev/null 2>&1; then
+[if test "x`date +%A`" = xSaturday; then
   AC_REQUIRE([TRAVOLTA])
   AC_REQUIRE([NEWTON_JOHN])
 fi])
@@ -14663,17 +14689,18 @@ fi
 @end example
 
 @noindent
-does not leave you with a better chance to meet a kindred soul at
-other times than Saturday night since it expands into:
+does not leave you with a better chance to meet a kindred soul on
+days other than Saturday, since the call to @code{RESERVE_DANCE_FLOOR}
+expands to:
 
 @example
 @group
-test "$body_temperature_in_Celsius" -gt "38" &&
+test "$body_temperature_in_Celsius" -gt 38 &&
   dance_floor=occupied
 test "x$hair_style" = xcurly &&
   dance_floor=occupied
 fi
-if date | grep '^Sat.*pm' >/dev/null 2>&1; then
+if test "x`date +%A`" = xSaturday; then
 
 
 fi
@@ -14787,9 +14814,11 @@ in A
 in C
 @end example
 
-The helper macros @code{AS_IF} and @code{AS_CASE} may be used to
-enforce expansion of required macros outside of shell conditional
-constructs.  You are furthermore encouraged, although not required, to
+You can use the helper macros @code{AS_IF} and @code{AS_CASE} in
+top-level code to enforce expansion of required macros outside of shell
+conditional constructs; these helpers are not needed in the bodies of
+macros defined by @code{AC_DEFUN}.
+You are furthermore encouraged, although not required, to
 put all @code{AC_REQUIRE} calls
 at the beginning of a macro.  You can use @code{dnl} to avoid the empty
 lines they leave.
@@ -15337,15 +15366,16 @@ called @samp{ksh88} and @samp{ksh93}, named after the years of initial
 release.  It is usually called @command{ksh}, but is called @command{sh}
 on some hosts if you set your path appropriately.
 
-Solaris systems have three variants:
+On Solaris 11, @command{/bin/sh} and @command{/usr/bin/ksh} are both
+@samp{ksh93}.  On Solaris 10 and earlier, @command{/bin/sh} is a
+pre-Posix Bourne shell and the Korn shell is found elsewhere:
 @prindex @command{/usr/bin/ksh} on Solaris
-@command{/usr/bin/ksh} is @samp{ksh88}; it is
-standard on Solaris 2.0 and later.
+@command{/usr/bin/ksh} is @samp{ksh88} on Solaris 2.0 through 10,
 @prindex @command{/usr/xpg4/bin/sh} on Solaris
 @command{/usr/xpg4/bin/sh} is a Posix-compliant variant of
-@samp{ksh88}; it is standard on Solaris 9 and later.
+@samp{ksh88} on Solaris 9 and later,
 @prindex @command{/usr/dt/bin/dtksh} on Solaris
-@command{/usr/dt/bin/dtksh} is @samp{ksh93}.
+and @command{/usr/dt/bin/dtksh} is @samp{ksh93}.
 Variants that are not standard may be parts of optional
 packages.  There is no extra charge for these packages, but they are
 not part of a minimal OS install and therefore some installations may
@@ -15714,7 +15744,7 @@ hello
 @end example
 
 Don't rely on duplicating a closed file descriptor to cause an
-error.  With Solaris @command{/bin/sh}, failed duplication is silently
+error.  With Solaris 10 @command{/bin/sh}, failed duplication is silently
 ignored, which can cause unintended leaks to the original file
 descriptor.  In this example, observe the leak to standard output:
 
@@ -15987,7 +16017,7 @@ esac
 
 @noindent
 Make sure you quote the brackets if appropriate and keep the backslash as
-first character (@pxref{case, , Limitations of Shell Builtins}).
+first character.  @xref{case, , Limitations of Shell Builtins}.
 
 Also, because the colon is used as part of a drivespec, these systems don't
 use it as path separator.  When creating or accessing paths, you can use the
@@ -16120,7 +16150,7 @@ esac
 and in fact it is even @emph{more} portable: in the first case of the
 first attempt, the computation of @code{top_srcdir} is not portable,
 since not all shells properly understand @code{"`@dots{}"@dots{}"@dots{}`"},
-for example Solaris 10 ksh:
+for example Solaris 10 @command{ksh}:
 
 @example
 $ @kbd{foo="`echo " bar" | sed 's, ,,'`"}
@@ -16427,7 +16457,7 @@ sys	0m0.003s
 @end example
 
 As with @samp{+} and @samp{-}, @var{value} must be a single shell word,
-otherwise some shells, such as Solaris @command{/bin/sh} or on Digital
+otherwise some shells, such as Solaris 10 @command{/bin/sh} or on Digital
 Unix V 5.0, die because of a ``bad substitution''.  Meanwhile, Posix
 requires that with @samp{=}, quote removal happens prior to the
 assignment, and the expansion be the final contents of @var{var} without
@@ -16463,9 +16493,9 @@ $ @kbd{ksh -c 'x= y=$@{x:=b@} sh -c "echo +\$x+\$y+";echo -$x-'}
 
 @item $@{@var{var}=@var{value}@}
 @cindex @code{$@{@var{var}=@var{literal}@}}
-Solaris @command{/bin/sh} has a frightening bug in its handling of
+Solaris 10 @command{/bin/sh} has a frightening bug in its handling of
 literal assignments.  Imagine you need set a variable to a string containing
-@samp{@}}.  This @samp{@}} character confuses Solaris @command{/bin/sh}
+@samp{@}}.  This @samp{@}} character confuses Solaris 10 @command{/bin/sh}
 when the affected variable was already set.  This bug can be exercised
 by running:
 
@@ -16545,8 +16575,8 @@ list=$@{list="$default"@}
 @end example
 
 @noindent
-@dots{}but beware of the @samp{@}} bug from Solaris (see above).  For safety,
-use:
+@dots{}but beware of the @samp{@}} bug from Solaris 10 (see above).
+For safety, use:
 
 @example
 test $@{var+y@} || var=@var{@{value@}}
@@ -16729,7 +16759,7 @@ Always quote @samp{^}, otherwise traditional shells such as
 
 When setting several variables in a row, be aware that the order of the
 evaluation is undefined.  For instance @samp{foo=1 foo=2; echo $foo}
-gives @samp{1} with Solaris @command{/bin/sh}, but @samp{2} with Bash.
+gives @samp{1} with Solaris 10 @command{/bin/sh}, but @samp{2} with Bash.
 You must use
 @samp{;} to enforce the order: @samp{foo=1; foo=2; echo $foo}.
 
@@ -17376,7 +17406,7 @@ and other options upon function entry and exit.  Inside a function,
 IRIX sh sets @samp{$0} to the function name.
 
 It is not portable to pass temporary environment variables to shell
-functions.  Solaris @command{/bin/sh} does not see the variable.
+functions.  Solaris 10 @command{/bin/sh} does not see the variable.
 Meanwhile, not all shells follow the Posix rule that the assignment must
 affect the current environment in the same manner as special built-ins.
 
@@ -17453,7 +17483,7 @@ $ @kbd{zsh -c '. ./syntax; echo $?'}
 @prindex @command{!}
 The Unix version 7 shell did not support
 negating the exit status of commands with @command{!}, and this feature
-is still absent from some shells (e.g., Solaris @command{/bin/sh}).
+is still absent from some shells (e.g., Solaris 10 @command{/bin/sh}).
 Other shells, such as FreeBSD @command{/bin/sh} or @command{ash}, have
 bugs when using @command{!}:
 
@@ -17559,9 +17589,9 @@ esac
 @end example
 
 @noindent
-but the @code{(} in this example is not portable to many Bourne
+but the @code{(} in this example is not portable to a few obsolescent Bourne
 shell implementations, which is a pity for those of us using tools that
-rely on balanced parentheses.  For instance, with Solaris
+rely on balanced parentheses.  For instance, with Solaris 10
 @command{/bin/sh}:
 
 @example
@@ -17705,7 +17735,8 @@ option.
 
 Do not use backslashes in the arguments, as there is no consensus on
 their handling.  For @samp{echo '\n' | wc -l}, the @command{sh} of
-Solaris outputs 2, but Bash and Zsh (in @command{sh} emulation mode) output 1.
+Solaris 10 outputs 2,
+but Bash and Zsh (in @command{sh} emulation mode) output 1.
 The problem is truly @command{echo}: all the shells
 understand @samp{'\n'} as the string composed of a backslash and an
 @samp{n}.  Within a command substitution, @samp{echo 'string\c'} will
@@ -17855,7 +17886,7 @@ trap to clean up before exiting.  If the last shell command exited with
 nonzero status, the trap also exits with nonzero status so that the
 invoker can tell that an error occurred.
 
-Unfortunately, in some shells, such as Solaris @command{/bin/sh}, an exit
+Unfortunately, in some shells, such as Solaris 10 @command{/bin/sh}, an exit
 trap ignores the @code{exit} command's argument.  In these shells, a trap
 cannot determine whether it was invoked by plain @code{exit} or by
 @code{exit 1}.  Instead of calling @code{exit} directly, use the
@@ -17872,7 +17903,7 @@ of the environment variables.  Conversely, each environment variable
 received by the shell when it is launched should be imported as a shell
 variable marked as exported.
 
-Alas, many shells, such as Solaris @command{/bin/sh},
+Alas, many shells, such as Solaris 10 @command{/bin/sh},
 IRIX 6.3, IRIX 5.2,
 AIX 4.1.5, and Digital Unix 4.0, forget to
 @command{export} the environment variables they receive.  As a result,
@@ -17987,7 +18018,7 @@ word splitting on @samp{$@{1+"$@@"@}}; see @ref{Shell Substitutions},
 item @samp{$@@}, for more.
 
 Posix requires support for a @command{for} loop with no list after
-@code{in}.  However, Solaris @command{/bin/sh} treats that as a syntax
+@code{in}.  However, Solaris 10 @command{/bin/sh} treats that as a syntax
 error.  It is possible to work around this by providing any shell word
 that expands to nothing, or by ignoring an obvious sentinel.
 
@@ -18022,7 +18053,7 @@ a
 b
 @end example
 
-In Solaris @command{/bin/sh}, when the list of arguments of a
+In Solaris 10 @command{/bin/sh}, when the list of arguments of a
 @command{for} loop starts with @emph{unquoted} tokens looking like
 variable assignments, the loop is not executed on those tokens:
 
@@ -18185,7 +18216,7 @@ Also please see the discussion of the @command{cd} command.
 @item @command{read}
 @c -----------------
 @prindex @command{read}
-No options are portable, not even support @option{-r} (Solaris
+No options are portable, not even support @option{-r} (Solaris 10
 @command{/bin/sh} for example).  Tru64/OSF 5.1 @command{sh} treats
 @command{read} as a special built-in, so it may exit if input is
 redirected from a non-existent or unreadable file.
@@ -18287,7 +18318,7 @@ instance of @samp{test -n "$foo" && exit 1} to be @samp{if test -n
 users not to use @samp{sh -e}.
 
 When @samp{set -e} is in effect, a failed command substitution in
-Solaris @command{/bin/sh} cannot be ignored, even with @samp{||}.
+Solaris 10 @command{/bin/sh} cannot be ignored, even with @samp{||}.
 
 @example
 $ @kbd{/bin/sh -c 'set -e; foo=`false` || echo foo; echo bar'}
@@ -18474,7 +18505,7 @@ known-safe string of @samp{y}.
 Posix also says that @samp{test ! "@var{string}"},
 @samp{test -n "@var{string}"} and
 @samp{test -z "@var{string}"} work with any string, but many
-shells (such as Solaris, AIX 3.2, UNICOS 10.0.0.6,
+shells (such as Solaris 10, AIX 3.2, UNICOS 10.0.0.6,
 Digital Unix 4, etc.)@: get confused if
 @var{string} looks like an operator:
 
@@ -18538,7 +18569,7 @@ will invoke the trap at the end of this function.
 
 Posix says that @samp{trap - 1 2 13 15} resets the traps for the
 specified signals to their default values, but many common shells (e.g.,
-Solaris @command{/bin/sh}) misinterpret this and attempt to execute a
+Solaris 10 @command{/bin/sh}) misinterpret this and attempt to execute a
 ``command'' named @command{-} when the specified conditions arise.
 Posix 2008 also added a requirement to support @samp{trap 1 2 13 15} to
 reset traps, as this is supported by a larger set of shells, but there
@@ -18555,7 +18586,7 @@ the @emph{last} command run: that before @command{exit}, or
 @command{exit} itself?''
 
 Bash considers @command{exit} to be the last command, while Zsh and
-Solaris @command{/bin/sh} consider that when the trap is run it is
+Solaris 10 @command{/bin/sh} consider that when the trap is run it is
 @emph{still} in the @command{exit}, hence it is the previous exit status
 that the trap receives:
 
