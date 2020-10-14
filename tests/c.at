@@ -28,22 +28,24 @@ AT_BANNER([C low level compiling/preprocessing macros.])
 ## Extensions.  ##
 ## ------------ ##
 
+AT_CHECK_CONFIGURE_AC([Object file extensions],
+[[AC_PROG_CC
+
 # As far as we know only `foo', `foo.exe' are possible executable,
 # and `foo.o', `foo.obj' are possible object files.  Autoconf must not
 # know that, but it is OK for the test suite to take this into account.
-AT_CHECK_MACRO([Extensions],
-[[AC_PROG_CC
-case $ac_exeext in
-  '' | '.exe' ) ;;
-  * ) AC_MSG_ERROR([suspicious executable suffix: $ac_exeext]);;
-esac
+AS@&t@_CASE([$ac_exeext],
+  ['' | '.exe'],
+    [],
+    [AC_MSG_ERROR([suspicious executable suffix: $ac_exeext])])
 
-case $ac_objext in
-  'o' | 'obj' ) ;;
-  * ) AC_MSG_ERROR([suspicious object suffix: $ac_objext]);;
-esac
+AS@&t@_CASE([$ac_objext],
+  ['o' | 'obj'],
+    [],
+    [AC_MSG_ERROR([suspicious object suffix: $ac_objext])])
+
+AC_OUTPUT
 ]])
-
 
 
 ## -------------------------- ##
@@ -58,13 +60,12 @@ AT_SETUP([Broken/missing compilers])
 
 AT_DATA([configure.ac],
 [[AC_INIT
-CC=no-such-compiler
 AC_PROG_CC
 AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
-AT_CHECK_CONFIGURE([], 77, ignore, ignore)
+AT_CHECK_CONFIGURE([CC=no-such-compiler], 77, ignore, ignore)
 
 AT_CLEANUP
 
@@ -73,12 +74,15 @@ AT_CLEANUP
 ## C keywords.  ##
 ## ------------ ##
 
-# GCC supports `const', `typeof', and `volatile'.
-AT_CHECK_MACRO([C keywords],
+AT_CHECK_CONFIGURE_AC([C keywords],
 [[AC_PROG_CC
+
 AC_C_CONST
 AC_C_TYPEOF
 AC_C_VOLATILE
+
+# If the C compiler is GCC, AC_C_{CONST,TYPEOF,VOLATILE} ought to all
+# detect support for their respective keyword.
 case $GCC,$ac_cv_c_const,$ac_cv_c_typeof,$ac_cv_c_volatile in
  yes,*no*)
    AC_MSG_ERROR([failed to detect `const', `typeof', or `volatile' support]);;
@@ -86,18 +90,18 @@ esac
 ]])
 
 
-
 ## --------------------------------- ##
 ## AC_PROG_CPP requires AC_PROG_CC.  ##
 ## --------------------------------- ##
 
-# Must invoke AC_PROG_CC.
-AT_CHECK_MACRO([AC_PROG_CPP requires AC_PROG_CC],
+AT_CHECK_CONFIGURE_AC([AC_PROG_CPP requires AC_PROG_CC],
 [[AC_PROG_CPP
-test -z "$CC" &&
-   AC_MSG_ERROR([looked for a C preprocessor without looking for a compiler])
-]])
 
+# AC_PROG_CPP should have AC_REQUIREd AC_PROG_CC.
+if test -z "$CC"; then
+   AC_MSG_ERROR([looked for a C preprocessor without looking for a compiler])
+fi
+]])
 
 
 ## --------------------------- ##
@@ -232,21 +236,21 @@ AT_CLEANUP
 ## AC_NO_EXECUTABLES (working linker).  ##
 ## ------------------------------------ ##
 
-AT_CHECK_MACRO([AC_NO_EXECUTABLES (working linker)],
-[AC_NO_EXECUTABLES
+AT_CHECK_CONFIGURE_AC([AC_NO_EXECUTABLES (working linker)],
+[[AC_NO_EXECUTABLES
 AC_PROG_CC
-])
+]])
 
 
 ## ----------------------------------- ##
 ## AC_NO_EXECUTABLES (broken linker).  ##
 ## ----------------------------------- ##
 
-AT_CHECK_MACRO([AC_NO_EXECUTABLES (broken linker)],
-[LDFLAGS=-lnosuchlibrary
+AT_CHECK_CONFIGURE_AC([AC_NO_EXECUTABLES (broken linker)],
+[[LDFLAGS=-lnosuchlibrary
 AC_NO_EXECUTABLES
 AC_PROG_CC
-])
+]])
 
 
 ## -------------------------- ##

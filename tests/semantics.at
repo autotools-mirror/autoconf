@@ -26,81 +26,177 @@ AT_BANNER([Semantics.])
 
 # AC_CHECK_LIB
 # ------------
-# Well, I can't imagine a system where `cos' is neither in libc, nor
-# in libm.  Nor can I imagine a lib more likely to exists than libm.
-# But there are systems without libm, on which we don't want to have
-# this test fail, so exit successfully if `cos' is in libc.
-AT_CHECK_MACRO([AC_CHECK_LIB],
-[AC_TRY_LINK_FUNC(cos,
-		  [AC_MSG_ERROR([`cos' is in `libc'], 77)])
+# Test for symbols in a library that is very likely to be available
+# and can be used from both C and C++: zlib, which we assume is
+# available unless <zlib.h> doesn't exist.
+# We used to use math library symbols for this, but that no longer
+# works, because some C++ compilers pull in libm by default when the
+# matching C compiler doesn't, breaking AT_CHECK_MACRO's expectations.
+AT_CHECK_MACRO([AC_CHECK_LIB], [[
+AC_CHECK_HEADER([zlib.h], [], [
+  AC_MSG_NOTICE([zlib not available, skipping test])
+  AS_EXIT(77)
+])
 
-AC_CHECK_LIB(m, cos,,
-	     [AC_MSG_ERROR([cannot find `cos' in `libm'])])
+# Using : for the ACTION-IF-FOUND in each call to AC_CHECK_LIB
+# prevents LIBS from accumulating copies of "-lz".
 
-# No kidding, using variables was broken in 2.50 :(
-ac_sin=sin
-AC_CHECK_LIB(m, $ac_sin,,
-      [AC_MSG_ERROR([cannot find `\$ac_sin' (= `$ac_sin') in `libm'])])
-
-AS_UNSET([ac_cv_lib_m_acos])
-ac_m=m
-AC_CHECK_LIB($ac_m, acos,,
-      [AC_MSG_ERROR([cannot find `acos' in `\$ac_m' (= `$ac_m')])])
-if test "${ac_cv_lib_m_acos+set}" != set; then
-  AC_MSG_ERROR([ac_cv_lib_m_acos not set])
+AC_CHECK_LIB([z], [zlibVersion], [:], [
+  AC_MSG_ERROR([cannot find zlibVersion in libz])
+])
+if test "${ac_cv_lib_z_zlibVersion+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_z_zlibVersion not set])
 fi
 
-ac_asin=asin
-AC_CHECK_LIB($ac_m, $ac_asin,,
-      [AC_MSG_ERROR([cannot find `\$ac_asin' (= `$ac_asin') in `\$ac_m' (= `$ac_m')])])
-
-# But if the bug is in the caching mechanism, then be sure we
-# correctly detect failures.
-
-AC_CHECK_LIB(m, cossack,
-	     [AC_MSG_ERROR([found `cossack' in `libm'])])
 
 # No kidding, using variables was broken in 2.50 :(
-ac_sinner=sinner
-AC_CHECK_LIB(m, $ac_sinner,
-      [AC_MSG_ERROR([found `\$ac_sinner' (= `$ac_sinner') in `libm'])])
-
-ac_m=m
-AC_CHECK_LIB($ac_m, acossack,
-      [AC_MSG_ERROR([found `acossack' in `\$ac_m' (= `$ac_m')])])
-
-ac_asinner=asinner
-AC_CHECK_LIB($ac_m, $ac_asinner,
-      [AC_MSG_ERROR([found `\$ac_asinner' (= `$ac_asinner') in `\$ac_m' (= `$ac_m')])])
-
+ac_deflate=deflate
+AC_CHECK_LIB([z], [$ac_deflate], [:], [
+  AC_MSG_ERROR([cannot find \$ac_deflate (= $ac_deflate) in libz])
 ])
+if test "${ac_cv_lib_z_deflate+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_z_deflate not set])
+fi
+
+ac_z=z
+AC_CHECK_LIB([$ac_z], [deflateEnd], [:], [
+  AC_MSG_ERROR([cannot find deflateEnd in lib\$ac_z (= lib$ac_z)])
+])
+if test "${ac_cv_lib_z_deflateEnd+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_z_deflateEnd not set])
+fi
+
+ac_inflate=inflate
+AC_CHECK_LIB([$ac_z], [$ac_inflate], [:], [
+  AC_MSG_ERROR(
+    [cannot find \$ac_inflate (= $ac_inflate) in lib\$ac_z (= lib$ac_z)])
+])
+if test "${ac_cv_lib_z_inflate+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_z_inflate not set])
+fi
+
+# Also test for symbols that don't (well, shouldn't) exist.
+# These should still set their cache variables!
+AC_CHECK_LIB([z], [deflagrate], [
+  AC_MSG_ERROR([found deflagrate in libz])
+], [:])
+if test "${ac_cv_lib_z_deflagrate+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_z_zlibVersion not set])
+fi
+
+ac_defenestrate=defenestrate
+AC_CHECK_LIB([z], [$ac_defenestrate], [
+  AC_MSG_ERROR([found \$ac_defenestrate (= $ac_defenestrate) in libz])
+], [:])
+if test "${ac_cv_lib_z_defenestrate+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_z_defenestrate not set])
+fi
+
+AC_CHECK_LIB([$ac_z], [defoliate], [
+  AC_MSG_ERROR([found defoliate in lib\$ac_z (= lib$ac_z)])
+], [:])
+if test "${ac_cv_lib_z_defoliate+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_z_defoliate not set])
+fi
+
+ac_infiltrate=infiltrate
+AC_CHECK_LIB([$ac_z], [$ac_infiltrate], [
+  AC_MSG_ERROR(
+    [found \$ac_infiltrate (= $ac_infiltrate) in lib\$ac_z (= lib$ac_z)])
+], [:])
+if test "${ac_cv_lib_z_infiltrate+set}" != set; then
+  AC_MSG_ERROR([ac_cv_lib_z_infiltrate not set])
+fi
+]])
 
 
 # AC_SEARCH_LIBS
 # --------------
-AT_CHECK_MACRO([AC_SEARCH_LIBS],
-[
-AC_SEARCH_LIBS(cos, oser m ust,,
-	     [AC_MSG_ERROR([cannot find `cos'])])
-
-case "$ac_cv_search_cos" in
-  -loser|-lust) AC_MSG_ERROR([jeez, $ac_cv_search_cos must be a cool library!]) ;;
-esac
+# Like AC_CHECK_LIBS, we use zlib here because we need the behavior to
+# be consistent between the C and C++ compilers.
+AT_CHECK_MACRO([AC_SEARCH_LIBS (needed)], [[
+AC_CHECK_HEADER([zlib.h], [], [
+  AC_MSG_NOTICE([zlib not available, skipping test])
+  AS_EXIT(77)
 ])
+
+# Unlike AC_CHECK_LIBS, AC_SEARCH_LIBS sets $LIBS *even if*
+# ACTION-IF-FOUND is given, so we need to reset it after each test.
+ac_at_save_LIBS="$LIBS"
+
+AC_SEARCH_LIBS([zlibVersion], [z], [:], [:])
+if test x"$ac_cv_search_zlibVersion" != x-lz; then
+  AC_MSG_ERROR([wrong zlibVersion search result: $ac_cv_search_zlibVersion])
+fi
+LIBS="$ac_at_save_LIBS"
+
+# No kidding, using variables was broken in 2.50 :(
+ac_deflate=deflate
+AC_SEARCH_LIBS([$ac_deflate], [z], [:], [:])
+if test x"$ac_cv_search_deflate" != x-lz; then
+  AC_MSG_ERROR([wrong deflate search result: $ac_cv_search_deflate])
+fi
+LIBS="$ac_at_save_LIBS"
+
+ac_z=z
+AC_SEARCH_LIBS([deflateEnd], [$ac_z], [:], [:])
+if test x"$ac_cv_search_deflateEnd" != x-lz; then
+  AC_MSG_ERROR([wrong deflateEnd search result: $ac_cv_search_deflateEnd])
+fi
+LIBS="$ac_at_save_LIBS"
+
+ac_inflate=inflate
+AC_SEARCH_LIBS([$ac_inflate], [$ac_z], [:], [:])
+if test x"$ac_cv_search_inflate" != x-lz; then
+  AC_MSG_ERROR([wrong inflate search result: $ac_cv_search_inflate])
+fi
+LIBS="$ac_at_save_LIBS"
+
+# Also test for symbols that don't (well, shouldn't) exist.
+# These should still set their cache variables!
+AC_SEARCH_LIBS([deflagrate], [z], [:], [:])
+if test x"$ac_cv_search_deflagrate" != xno; then
+  AC_MSG_ERROR([wrong deflagrate search result: $ac_cv_search_deflagrate])
+fi
+LIBS="$ac_at_save_LIBS"
+
+ac_defenestrate=defenestrate
+AC_SEARCH_LIBS([$ac_defenestrate], [z], [:], [:])
+if test x"$ac_cv_search_defenestrate" != xno; then
+  AC_MSG_ERROR([wrong defenestrate search result: $ac_cv_search_defenestrate])
+fi
+LIBS="$ac_at_save_LIBS"
+
+AC_SEARCH_LIBS([defoliate], [$ac_z], [:], [:])
+if test x"$ac_cv_search_defoliate" != xno; then
+  AC_MSG_ERROR([wrong defoliate search result: $ac_cv_search_defoliate])
+fi
+LIBS="$ac_at_save_LIBS"
+
+ac_infiltrate=infiltrate
+AC_SEARCH_LIBS([$ac_infiltrate], [$ac_z], [:], [:])
+if test x"$ac_cv_search_infiltrate" != xno; then
+  AC_MSG_ERROR([wrong infiltrate search result: $ac_cv_search_infiltrate])
+fi
+LIBS="$ac_at_save_LIBS"
+]])
 
 
 # AC_SEARCH_LIBS (none needed)
 # ----------------------------
-AT_CHECK_MACRO([AC_SEARCH_LIBS (none needed)],
-[
-AC_SEARCH_LIBS(printf, oser c ust,,
-	     [AC_MSG_ERROR([cannot find `printf'])])
+# This test doesn't need to be nearly as thorough as the above; its
+# purpose is simply to ensure that when no library is needed,
+# AC_SEARCH_LIBS really does produce "none needed" as its result.
+AT_CHECK_MACRO([AC_SEARCH_LIBS (none needed)], [[
+# No library should be required to link with printf, but we throw
+# -lc in the search list so that it includes both libraries that
+# don't exist and libraries that probably do.
+AC_SEARCH_LIBS([printf], [oser c ust], [:], [:])
 
-case "$ac_cv_search_printf" in
-  -loser|-lust) AC_MSG_ERROR([jeez, $ac_cv_search_printf must be a cool library!]) ;;
-  -lc) AC_MSG_ERROR([huh, you need to give -lc?])
-esac
-])
+if test x"$ac_cv_search_printf" != "xnone required"; then
+  AC_MSG_ERROR([wrong printf search result: $ac_cv_search_printf])
+fi
+]])
 
 
 # AC_CHECK_DECLS
@@ -145,8 +241,8 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 		]])
   AC_LANG_WERROR
   AC_CHECK_DECL([undeclared (char *)], [AS_EXIT([1])],, [[]])
-  if test -z "$ac_c_werror_flag"; then
-    AC_MSG_ERROR([ac_c_werror_flag overwritten])
+  if test -z "$ac_[]_AC_LANG_ABBREV[]_werror_flag"; then
+    AC_MSG_ERROR([ac_]_AC_LANG_ABBREV[_werror_flag overwritten])
   fi
 ]],
 [AT_CHECK_DEFINES(
@@ -390,7 +486,7 @@ AT_CHECK([grep 'yes.*member of.*yes_s' config.h], [], [ignore])
 
 # AC_CHECK_ALIGNOF
 # ----------------
-AT_CHECK_MACRO_CROSS([AC_CHECK_ALIGNOF],
+AT_CHECK_MACRO([AC_CHECK_ALIGNOF],
 [[AC_CHECK_ALIGNOF(char)
 AC_CHECK_ALIGNOF(charchar,
 [[#include <stddef.h>
@@ -407,7 +503,7 @@ AC_CHECK_ALIGNOF(charcharchar)
 
 # AC_CHECK_ALIGNOF struct
 # -----------------------
-AT_CHECK_MACRO_CROSS([AC_CHECK_ALIGNOF struct],
+AT_CHECK_MACRO([AC_CHECK_ALIGNOF struct],
 [[AC_CHECK_ALIGNOF([struct { char c; }])
 AC_CHECK_ALIGNOF([struct nosuchstruct])
 ]],
@@ -419,7 +515,7 @@ AT_CHECK([[grep "#define ALIGNOF_STRUCT_NOSUCHSTRUCT 0" config.h]],
 
 # AC_CHECK_SIZEOF
 # ---------------
-AT_CHECK_MACRO_CROSS([AC_CHECK_SIZEOF],
+AT_CHECK_MACRO([AC_CHECK_SIZEOF],
 [[AC_CHECK_SIZEOF(char)
 AC_CHECK_SIZEOF(charchar,,
 [[#include <stdio.h>
@@ -435,7 +531,7 @@ AC_CHECK_SIZEOF(charcharchar)
 
 # AC_CHECK_SIZEOF struct
 # ----------------------
-AT_CHECK_MACRO_CROSS([AC_CHECK_SIZEOF struct],
+AT_CHECK_MACRO([AC_CHECK_SIZEOF struct],
 [[AC_C_CONST
 AC_CHECK_SIZEOF([struct x], [], [struct x { char c; int x; };])
 AC_CHECK_SIZEOF([const struct x], [], [struct x { const char *p; int x; };])
@@ -510,12 +606,16 @@ AT_CLEANUP
 # --------------
 # FIXME: To really test HAVE_AC_EXISTS2 and HAVE_AC_MISSING2 we need to
 # open AH_TEMPLATE to `configure.ac', which is not yet the case.
-AT_CHECK_MACRO([AC_CHECK_FILES],
-[touch at-exists1 at-exists2
+# Don't use AT_CHECK_MACRO for this one because AC_CHECK_FILES can't be
+# used when cross compiling.
+
+AT_CHECK_CONFIGURE_AC([AC_CHECK_FILES],
+[[touch at-exists1 at-exists2
 ac_exists2=at-exists2
 ac_missing2=at-missing2
 AC_CHECK_FILES(at-exists1 at-missing1 $ac_exists2 $ac_missing2)
-rm at-exists1 at-exists2],
+rm at-exists1 at-exists2]],
+[], [],
 [AT_CHECK_DEFINES(
 [#define HAVE_AT_EXISTS1 1
 /* #undef HAVE_AT_MISSING1 */
@@ -803,9 +903,100 @@ AT_CLEANUP
 ## ------------------------------- ##
 
 
-AT_CHECK_MACRO([AC_SYS_RESTARTABLE_SYSCALLS], , ,[-W no-obsolete])
+AT_CHECK_MACRO([AC_SYS_RESTARTABLE_SYSCALLS], , ,[-W no-obsolete], [no-cross])
 AT_CHECK_MACRO([AC_FUNC_SETVBUF_REVERSED], , ,[-W no-obsolete])
-AT_CHECK_MACRO([AC_FUNC_WAIT3], , ,[-W no-obsolete])
+AT_CHECK_MACRO([AC_FUNC_WAIT3], , ,[-W no-obsolete], [no-cross])
+
+
+## ------------------------------------- ##
+## Obsolete macros requiring arguments.  ##
+## ------------------------------------- ##
+
+# These all wrap the macro under test in an AC_CACHE_CHECK and an
+# AC_DEFINE so the full verification machinery of AT_CHECK_MACRO is
+# effective.  Caution: AT_CHECK_AU_MACRO expects that after an
+# autoupdate run, a naive grep will not find the old macro name
+# anywhere in the updated configure.ac, not even as part of a
+# longer identifier.  (But it's case sensitive.)
+
+AT_CHECK_AU_MACRO([AC_TRY_CPP],
+[[AC_CACHE_CHECK([working ac_try_cpp], [ac_cv_ac_try_cpp_works], [
+  AC_TRY_CPP([
+    @%:@if 2 + 2 != 4
+    @%:@error "SEVEN!"  /* in memory of Stanislaw Lem */
+    @%:@endif
+  ], [ac_cv_ac_try_cpp_works=yes],
+     [ac_cv_ac_try_cpp_works=no])
+])
+if test $ac_cv_ac_try_cpp_works = yes; then
+  AC_DEFINE([ac_try_cpp_works], [1], [label])
+fi
+]])
+
+
+AT_CHECK_AU_MACRO([AC_TRY_COMPILE],
+[[AC_CACHE_CHECK([working ac_try_compile], [ac_cv_ac_try_compile_works], [
+  AC_TRY_COMPILE([int variable;], [return variable;],
+    [ac_cv_ac_try_compile_works=yes],
+    [ac_cv_ac_try_compile_works=no])
+])
+if test $ac_cv_ac_try_compile_works = yes; then
+  AC_DEFINE([ac_try_compile_works], [1], [label])
+fi
+]])
+
+
+AT_CHECK_AU_MACRO([AC_TRY_LINK],
+[[AC_CACHE_CHECK([working ac_try_link], [ac_cv_ac_try_link_works], [
+  AC_TRY_LINK([@%:@include <stdio.h>], [return !feof(stdin);],
+    [ac_cv_ac_try_link_works=yes],
+    [ac_cv_ac_try_link_works=no])
+])
+if test $ac_cv_ac_try_link_works = yes; then
+  AC_DEFINE([ac_try_link_works], [1], [label])
+fi
+]])
+
+
+# Oddly enough, AC_COMPILE_CHECK was shorthand for AC_MSG_CHECKING +
+# AC_TRY_LINK, not AC_TRY_COMPILE.  When not cached, this will print
+#   checking for working ac_compile_check... checking for feof ... yes
+# but whatever.
+AT_CHECK_AU_MACRO([AC_COMPILE_CHECK],
+[[AC_CACHE_CHECK([working ac_compile_check], [ac_cv_ac_compile_check_works], [
+  AC_COMPILE_CHECK([feof], [@%:@include <stdio.h>], [return !feof(stdin);],
+    [ac_cv_ac_compile_check_works=yes],
+    [ac_cv_ac_compile_check_works=no])
+])
+if test $ac_cv_ac_compile_check_works = yes; then
+  AC_DEFINE([ac_compile_check_works], [1], [label])
+fi
+]])
+
+
+AT_CHECK_AU_MACRO([AC_TRY_RUN],
+[[AC_CACHE_CHECK([working ac_try_run], [ac_cv_ac_try_run_works], [
+  AC_TRY_RUN([int main(void) { return 0; }],
+    [ac_cv_ac_try_run_works=yes],
+    [ac_cv_ac_try_run_works=no],
+    [ac_cv_ac_try_run_works=yes]) # cross compile, assume it works
+])
+if test $ac_cv_ac_try_run_works = yes; then
+  AC_DEFINE([ac_try_run_works], [1], [label])
+fi
+]])
+
+
+# For purpose of this test, we don't care whether these libraries
+# exist (as long as the result is consistent between C and C++)
+# but we _do_ need to make sure that autoupdate correctly handles
+# AC_HAVE_LIBRARY's acceptance of "-lfoo" and "libfoo.a" as the
+# LIBRARY argument, where AC_CHECK_LIB only takes "foo".
+AT_CHECK_AU_MACRO([AC_HAVE_LIBRARY],
+[[AC_HAVE_LIBRARY([alice])
+AC_HAVE_LIBRARY([-lbob])
+AC_HAVE_LIBRARY([libmallory.a])
+]])
 
 
 ## ----------------------------------------- ##

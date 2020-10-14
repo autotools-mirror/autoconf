@@ -27,7 +27,7 @@ use warnings FATAL => 'all';
 # Not every macro can be run without arguments, and some are already
 # tested elsewhere.
 my @ac_exclude_list = (
-  # Internal macros are used elsewhere.
+  # Internal macros should not be invoked directly from a configure.ac.
   qr/^_?_AC_/,
 
   # Used in many places.
@@ -128,10 +128,87 @@ my @au_exclude_list = (
   qr/^AC_(DIAGNOSE|FATAL|OBSOLETE|WARNING)$/,
   qr/^AC_(FOREACH|LINK_FILES|PREREQ)$/,
 
+  # Need arguments.  Tested in semantics.at.
+  qr/^AC_HAVE_LIBRARY$/,
+  qr/^AC_COMPILE_CHECK$/,
+  qr/^AC_TRY_(COMPILE|CPP|LINK|RUN)$/,
+
   # Not macros, just mapping from old variable name to a new one.
   qr/^ac_cv_prog_(gcc|gxx|g77)$/,
 );
 
+
+# test_parameters
+# ---------------
+# Extra arguments to pass to the test macro for particular macros.
+# Keys are macro names, values are records containing one or more
+# of the possible optional arguments to AT_CHECK_(AU_)MACRO:
+# macro_use, additional_commands, autoconf_flags, test_parameters => '...'.
+# Entries in this hash are grouped by common situations, and sorted
+# alphabetically within each group.
+# Note that you must provide M4 quotation; emit_test will not quote
+# the arguments for you.  (This is so you can _not_ quote the arguments
+# when that's useful.)
+
+my %test_parameters = (
+  # Uses AC_RUN_IFELSE, cross-compilation test fails.
+  AC_FC_CHECK_BOUNDS      => { test_parameters => '[no-cross]' },
+  AC_FUNC_CHOWN           => { test_parameters => '[no-cross]' },
+  AC_FUNC_FNMATCH         => { test_parameters => '[no-cross]' },
+  AC_FUNC_FORK            => { test_parameters => '[no-cross]' },
+  AC_FUNC_GETGROUPS       => { test_parameters => '[no-cross]' },
+  AC_FUNC_LSTAT           => { test_parameters => '[no-cross]' },
+  AC_FUNC_MALLOC          => { test_parameters => '[no-cross]' },
+  AC_FUNC_MEMCMP          => { test_parameters => '[no-cross]' },
+  AC_FUNC_MKTIME          => { test_parameters => '[no-cross]' },
+  AC_FUNC_MMAP            => { test_parameters => '[no-cross]' },
+  AC_FUNC_REALLOC         => { test_parameters => '[no-cross]' },
+  AC_FUNC_STAT            => { test_parameters => '[no-cross]' },
+  AC_FUNC_STRCOLL         => { test_parameters => '[no-cross]' },
+  AC_FUNC_STRNLEN         => { test_parameters => '[no-cross]' },
+  AC_FUNC_STRTOD          => { test_parameters => '[no-cross]' },
+
+  # Different result with a C++ compiler than a C compiler:
+  # C++ compilers may or may not support these features from C1999 and later.
+  AC_C_RESTRICT => {
+    test_parameters => ('[cxx_define_varies:restrict' .
+                        ' cxx_cv_varies:cxx_restrict]')
+  },
+  AC_C_TYPEOF => {
+    test_parameters => ('[cxx_define_varies:typeof' .
+                        ' cxx_define_varies:HAVE_TYPEOF' .
+                        ' cxx_cv_varies:cxx_typeof]')
+  },
+  AC_C__GENERIC => {
+    test_parameters => ('[cxx_define_varies:HAVE_C__GENERIC' .
+                        ' cxx_cv_varies:cxx__Generic]')
+  },
+  AC_C_VARARRAYS => {
+    test_parameters => ('[cxx_define_varies:HAVE_C_VARARRAYS' .
+                        ' cxx_define_varies:__STDC_NO_VLA__' .
+                        ' cxx_cv_varies:cxx_vararrays]')
+  },
+
+  # stdbool.h is supposed to be includeable from C++, per C++2011
+  # [support.runtime], but the type _Bool was not added to the C++
+  # standard, so it may or may not be present depending on how much
+  # the C++ compiler cares about C source compatibility.
+  AC_CHECK_HEADER_STDBOOL => {
+    test_parameters => ('[cxx_define_varies:HAVE__BOOL' .
+                        ' cxx_cv_varies:type__Bool]')
+  },
+  AC_HEADER_STDBOOL => {
+    test_parameters => ('[cxx_define_varies:HAVE__BOOL' .
+                        ' cxx_cv_varies:type__Bool]')
+  },
+
+  # G++ forces -D_GNU_SOURCE which, with some versions of GNU libc,
+  # changes the declaration of strerror_r.  Blech.
+  AC_FUNC_STRERROR_R => {
+    test_parameters => ('[cxx_define_varies:STRERROR_R_CHAR_P' .
+                        ' cxx_cv_varies:func_strerror_r_char_p]')
+  },
+);
 
 # skip_macro MACRO, EXCLUDE-LIST
 # ------------------------------
@@ -146,6 +223,35 @@ sub skip_macro
   return 0;
 }
 
+
+# emit_test FH, TEST-MACRO, MACRO
+# --------------------------------
+# Emit code to FH to test MACRO using TEST-MACRO.
+# TEST-MACRO is expected to be either AT_CHECK_MACRO or AT_CHECK_AU_MACRO;
+# see local.at.
+sub emit_test
+{
+  my ($fh, $test_macro, $macro) = @_;
+  my $params = $test_parameters{$macro} || {};
+  my $macro_use           = ${$params}{macro_use}           || '';
+  my $additional_commands = ${$params}{additional_commands} || '';
+  my $autoconf_flags      = ${$params}{autoconf_flags}      || '';
+  my $test_parameters     = ${$params}{test_parameters}     || '';
+
+  $autoconf_flags = '[]'
+    if $autoconf_flags eq '' && $test_parameters ne '';
+  $additional_commands = '[]'
+    if $additional_commands eq '' && $autoconf_flags ne '';
+  $macro_use = '[]'
+    if $macro_use eq '' && $additional_commands ne '';
+
+  print $fh "$test_macro([$macro]";
+  print $fh ", $autoconf_flags" if $autoconf_flags ne '';
+  print $fh ", $additional_commands" if $additional_commands ne '';
+  print $fh ", $autoconf_flags" if $autoconf_flags ne '';
+  print $fh ", $test_parameters" if $test_parameters ne '';
+  print $fh ")\n";
+}
 
 # scan_m4_files
 # -------------
@@ -267,12 +373,14 @@ EOF
           if (@$ac_macros)
             {
               print $fh "\n# Modern macros.\n";
-              print $fh "AT_CHECK_MACRO([$_])\n" for sort @$ac_macros;
+              emit_test ($fh, 'AT_CHECK_MACRO', $_)
+                for sort @$ac_macros;
             }
           if (@$au_macros)
             {
               print $fh "\n# Obsolete macros.\n";
-              print $fh "AT_CHECK_AU_MACRO([$_])\n" for sort @$au_macros;
+              emit_test ($fh, 'AT_CHECK_AU_MACRO', $_)
+                for sort @$au_macros;
             }
         }
       else

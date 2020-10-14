@@ -69,6 +69,18 @@ GNU Autoconf NEWS - User visible changes.
   See the “Input” section of the manual for more detail, including
   where to get the auxiliary scripts that may be needed by autoconf macros.
 
+*** Setting CC to a C++ compiler is no longer supported.
+
+  The C and C++ languages have diverged enough that we can no longer
+  guarantee that test C programs will be processed as intended by a
+  C++ compiler.  In this release, configure will proceed anyway, but
+  many test results will be incorrect.  In a future release, we may
+  make AC_PROG_CC error out if it detects that CC is a C++ compiler.
+
+  See the “Language Choice” section of the manual for instructions on
+  how to write configure scripts for C++ programs, and for programs
+  with code in more than one language.
+
 *** Older versions of automake and aclocal (< 1.8) are no longer supported.
 
 *** AC_CONFIG_SUBDIRS no longer directly supports Cygnus configure.

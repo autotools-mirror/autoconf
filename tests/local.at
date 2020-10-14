@@ -363,7 +363,7 @@ if test -f state-env.before && test -f state-env.after; then
       [ERLANG_INSTALL_LIB_DIR_.*|ERLANG_ERTS_VER|OBJC|OBJCPP|OBJCFLAGS],
       [OBJCXX|OBJCXXCPP|OBJCXXFLAGS],
       [GOC|GOFLAGS],
-      [OPENMP_CFLAGS],
+      [OPENMP_(C|CXX)FLAGS],
       [LIBS|LIB@&t@OBJS|LTLIBOBJS|LDFLAGS],
       [INSTALL(_(DATA|PROGRAM|SCRIPT))?],
       [EXEEXT|OBJEXT],
@@ -394,8 +394,8 @@ fi
 } [#]at_check_env])
 
 
-# AT_CONFIG_CMP(VAR-FILE-A, VAR-FILE-B)
-# -------------------------------------
+# AT_CONFIG_CMP(VAR-FILE-A, VAR-FILE-B, [EXTRA-VARIANCE])
+# -------------------------------------------------------
 # Check the outcomes of two configure runs for equality by comparing dumps of
 # their shell variables.  VAR-FILE-A and VAR-FILE-B are two `set'-style shell
 # variable space dumps.
@@ -419,6 +419,22 @@ fi
 #   - BASH_ARGV [bash]
 #   - LINENO [Posix]
 #   - _AST_FEATURES [ksh93]
+# - Optionally, variables that are expected to vary in a particular test.
+#   This is controlled by the EXTRA-VARIANCE argument, which is a
+#   whitespace-separated sequence of tokens.  Each token means to ignore
+#   one or more additional variables and/or rename some variables, as follows:
+#
+#   cross: ignore cross_compiling
+#   cxx: ignore all of:
+#     - CC, CPP, CCC, CXX, CXXCPP, CFLAGS, CXXFLAGS, GCC, GXX
+#     - ac_cv_env_(any of the above)_(set|value)
+#     - ac_cv_c_compiler_gnu, ac_cv_cxx_compiler_gnu
+#     - ac_cv_c_decl_report, ac_cv_cxx_decl_report
+#     - ac_cv_prog_c_*, ac_cv_prog_cxx_*, ac_cv_prog_ac_ct_(CC|CXX)
+#     - ac_cv_prog_CPP, ac_cv_prog_CXXCPP
+#     + other ac_cv_c_* are renamed to ac_cv_cxx_*
+#     + OPENMP_CFLAGS is renamed to OPENMP_CXXFLAGS
+#   vary:NAME (where NAME is any identifier): ignore ac_cv_NAME
 #
 # Furthermore, it is okay for a non-cache variable initialized to empty in one
 # run to be unset in another run.  This happens when, for example, cache update
@@ -429,14 +445,14 @@ fi
 #
 # Lines that do not look like `foo=bar' are probably latter lines of
 # multiline values; trim them.
-#
 m4_define([AT_CONFIG_CMP],
 [for act_file in $1 $2
 do
-  $SED '/^ac_cv_/ b
+  $SED '/^ac_cv_/ b skip
 	/^m4_defn([m4_re_word])=./ !d
 	/^[[^=]]*='\'''\''$/ d
 	/^a[[cs]]_/ d
+	: skip
 	/^OLDPWD=/ d
 	/^PPID=/ d
 	/^RANDOM=/ d
@@ -450,10 +466,123 @@ do
 	/^BASH_ARGV=/ d
 	/^LINENO=/ d
 	/^_AST_FEATURES=/ d
-	' $act_file >at_config_vars-$act_file
+m4_map_args_w([$3], [_AT_CONFIG_CMP_PRUNE(], [)])dnl
+' < $act_file > at_config_vars-$act_file
 done
 AT_CMP([at_config_vars-$1], [at_config_vars-$2])[]dnl
 ])# AT_CONFIG_CMP
+
+# _AT_CONFIG_CMP_PRUNE(TOKEN)
+# ---------------------------
+# Subroutine of AT_CONFIG_CMP which implements the extra-variance rules
+# described above.  Expands to additional sed commands to be inserted in
+# the program above.
+# Note for future readers: not all sed implementations allow alternations
+# in regexes (e.g. /^ac_cv_env_CC_\(set\|value\)=/ would not be portable).
+m4_define([_AT_CONFIG_CMP_PRUNE],
+[m4_bmatch([$1],
+  [^cross$],
+[	/^cross_compiling=/ d
+],
+  [^cxx$],
+[	/^CC=/ d
+	/^CPP=/ d
+	/^CCC=/ d
+	/^CXX=/ d
+	/^CXXCPP=/ d
+	/^CFLAGS=/ d
+	/^CXXFLAGS=/ d
+	/^GCC=/ d
+	/^GXX=/ d
+	/^ac_cv_env_CC_set=/ d
+	/^ac_cv_env_CC_value=/ d
+	/^ac_cv_env_CPP_set=/ d
+	/^ac_cv_env_CPP_value=/ d
+	/^ac_cv_env_CFLAGS_set=/ d
+	/^ac_cv_env_CFLAGS_value=/ d
+	/^ac_cv_env_GCC_set=/ d
+	/^ac_cv_env_GCC_value=/ d
+	/^ac_cv_env_CCC_set=/ d
+	/^ac_cv_env_CCC_value=/ d
+	/^ac_cv_env_CXX_set=/ d
+	/^ac_cv_env_CXX_value=/ d
+	/^ac_cv_env_CXXCPP_set=/ d
+	/^ac_cv_env_CXXCPP_value=/ d
+	/^ac_cv_env_CXXFLAGS_set=/ d
+	/^ac_cv_env_CXXFLAGS_value=/ d
+	/^ac_cv_env_GXX_set=/ d
+	/^ac_cv_env_GXX_value=/ d
+	/^ac_cv_prog_ac_ct_CC=/ d
+	/^ac_cv_prog_ac_ct_CXX=/ d
+	/^ac_cv_prog_CPP=/ d
+	/^ac_cv_prog_CXXCPP=/ d
+	/^ac_cv_c_compiler_gnu=/ d
+	/^ac_cv_cxx_compiler_gnu=/ d
+	/^ac_cv_c_decl_report=/ d
+	/^ac_cv_cxx_decl_report=/ d
+	/^ac_cv_prog_c_@<:@^=@:>@*=/ d
+	/^ac_cv_prog_cc_@<:@^=@:>@*=/ d
+	/^ac_cv_prog_cxx_@<:@^=@:>@*=/ d
+	s/^ac_cv_c_/ac_cv_cxx_/
+	s/^OPENMP_CFLAGS=/OPENMP_CXXFLAGS=/
+],
+  [^vary:],
+[	/^ac_cv_]m4_bpatsubsts([$1], [\<vary:], [])[=/ d
+],
+  [m4_fatal([unrecognized AT_CONFIG_CMP variance token: "$1"])])])
+
+
+# AT_DEFINES_CMP(CONFIG-H-A, CONFIG-H-B, [EXTRA-VARIANCE])
+# --------------------------------------------------------
+# Check the outcomes of two configure runs for equality by comparing the
+# config.h headers they produced.  Optionally, ignore changes to particular
+# defines, under the control of the EXTRA-VARIANCE argument, which is a
+# whitespace-separated sequence of tokens. Each token means to ignore
+# one or more additional defines, as follows:
+#   vary:NAME (where NAME is any identifier): ignore #define/#undef NAME
+m4_define([AT_DEFINES_CMP],
+[m4_ifblank([$3], [AT_CMP([$1], [$2])],
+[for act_file in $1 $2
+do
+  $SED '
+m4_map_args_w([$3], [_AT_DEFINES_CMP_PRUNE(], [)])
+' < $act_file > at_defines-$act_file
+done
+AT_CMP([at_defines-$1], [at_defines-$2])[]dnl
+])])# AT_DEFINES_CMP
+
+
+# _AT_DEFINES_CMP_PRUNE(TOKEN)
+# ---------------------------
+# Subroutine of AT_DEFINES_CMP which implements the extra-variance rules
+# described above.  Expands to one or more sed commands.
+# After quadrigraph replacement, each sed command group will be
+#   /#define macro_name[ (]/ d ;#)
+#   /#undef macro_name[ (]/ d ;#)
+# AC_DEFINE never emits tabs or puts whitespace between '#' and
+# 'define' or 'undef', so this is sufficient.
+m4_define([_AT_DEFINES_CMP_PRUNE],
+[m4_bmatch([$1],
+  [^vary:],
+[	/@%:@define ]m4_bpatsubsts([$1], [\<vary:], [])dnl
+[@<:@ @{:@@:>@/ d ;@%:@@:}@
+	/@%:@undef ]m4_bpatsubsts([$1], [\<vary:], [])dnl
+[@<:@ @{:@@:>@/ d ;@%:@@:}@
+],
+  [m4_fatal([unrecognized AT_DEFINES_CMP variance token: "$1"])])])
+
+
+# AT_PRESERVE_CONFIG_STATUS(SUFFIX)
+# ---------------------------------
+# Copy the files 'state-env.after', 'config.h', 'config.log', and
+# 'config.status' to names ending with SUFFIX, so they are not
+# clobbered by a subsequent run of configure.
+m4_define([AT_PRESERVE_CONFIG_STATUS],
+[cp -f state-env.after state-env.$1
+cp -f config.h config-h.$1
+cp -f config.log config-log.$1
+cp -f config.status config-status.$1
+])
 
 
 # AT_CHECK_DEFINES(CONTENT)
@@ -510,8 +639,8 @@ dnl pacify editors that don't understand sh case: ((
 ])
 
 
-# _AT_CHECK_AC_MACRO(AC-BODY, PRE-TESTS, [AUTOCONF-FLAGS])
-# --------------------------------------
+# _AT_CHECK_AC_MACRO(AC-BODY, [PRE-TESTS], [AUTOCONF-FLAGS])
+# ----------------------------------------------------------
 # Create a minimalist configure.ac running the macro named
 # NAME-OF-THE-MACRO, check that autoconf runs on that script,
 # and that the generated configure script runs without error.
@@ -524,97 +653,267 @@ AT_CHECK_CONFIGURE
 AT_CHECK_ENV
 ])# _AT_CHECK_AC_MACRO
 
+# AT_CHECK_CONFIGURE_AC(NAME, AC-BODY, [AUTOCONF-FLAGS],
+#                       [PRE-TESTS], [POST-TESTS])
+# -----------------------------------------------------
+# Shorthand for a complete test "group" consisting of a single
+# invocation of _AT_CHECK_AC_MACRO, possibly with some additional
+# tests executed before and after.
+m4_define([AT_CHECK_CONFIGURE_AC],
+[AT_SETUP([$1])
+_AT_CHECK_AC_MACRO([$2], [$4], [$3])
+$5
+AT_CLEANUP
+])
 
 # AT_CHECK_MACRO(MACRO, [MACRO-USE], [ADDITIONAL-CMDS],
-#                [AUTOCONF-FLAGS])
+#                [AUTOCONF-FLAGS], [TEST-PARAMETERS])
 # -----------------------------------------------------
-# Create a minimalist configure.ac running the macro named
-# NAME-OF-THE-MACRO, check that autoconf runs on that script,
+# Create a minimalist configure.ac running the macro named MACRO
+# (using the code in MACRO-USE if that argument is not empty,
+# otherwise a bare invocation of MACRO with no arguments),
+# check that autoconf runs on that script,
 # and that the generated configure script runs without error.
+# AUTOCONF-FLAGS are passed to all invocations of autoconf.
 #
-# We run `configure' twice, both times with a cache, and compare
-# the environment after each run to detect inconsistencies.
+# We always generate two variants of the minimalist configure.ac,
+# with and without forcing the script into cross-compilation mode
+# before executing MACRO-USE.  If a C++ compiler is available, we
+# generate two more variants in which MACRO-USE is invoked while
+# AC_LANG([C++]) is in effect; as before, one forces the script into
+# cross-compilation mode and the other doesn't.  All variants of the
+# generated configure script are run twice, once with an empty cache,
+# and once with a cache primed by the previous run.
+#
+# All four (or eight, if C++ is available) runs are expected to
+# produce the same results, except for the value of 'cross_compiling'
+# and differences due to running AC_PROG_CXX instead of AC_PROG_CC.
+# (See AT_CONFIG_CMP for details.)
+#
+# If ADDITIONAL-CMDS are present, they are executed after the first
+# pair of tests (with the C compiler, in native mode).
+#
+# If TEST-PARAMETERS are present, they should be a space-separated
+# list of modifiers to how the test is carried out.  Currently
+# the following modifiers are defined:
+#
+#   - `no-cross': Don't test this macro in cross-compilation mode.
+#     This is for macros that use AC_RUN_IFELSE, and therefore, when
+#     cross-compiling, they either crash or give a `best guess' answer
+#     that may be wrong.
+#
+#   - `cxx_cv_varies:NAME': The value of the cache variable ac_cv_NAME
+#     may legitimately vary between the C tests and the C++ tests.
+#
+#   - `cxx_define_varies:NAME' The value of the AC_DEFINEd macro NAME
+#     may legitimately vary between the C tests and the C++ tests.
 m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
 
+# C compiler, native mode.
 AT_CONFIGURE_AC([m4_default([$2], [$1])])
-
 AT_CHECK_AUTOCONF([$4])
 AT_CHECK_AUTOHEADER([$4], [ignore])
 
-for at_run in r1 r2
-do
-    AT_CHECK_CONFIGURE([-C])
-    cp -f state-env.after state-env.$at_run
-    cp -f config.h config-h.$at_run
-    cp -f config.log config-log.$at_run
-    cp -f config.status config-status.$at_run
-    AT_CHECK_ENV
-done
+cp -f configure.ac configure-ac.c-native
+cp -f configure configure.c-native
+cp -f config.hin config-hin.c-native
 
-AT_CMP([config-h.r1], [config-h.r2])
-AT_CONFIG_CMP([state-env.r1], [state-env.r2])
+AT_CHECK_CONFIGURE([-C])
+AT_PRESERVE_CONFIG_STATUS([c-native-r1])
+AT_CHECK_ENV
+AT_CHECK_CONFIGURE([-C])
+AT_PRESERVE_CONFIG_STATUS([c-native-r2])
+AT_CHECK_ENV
 
-$3
+AT_DEFINES_CMP([config-h.c-native-r1], [config-h.c-native-r2])
+AT_CONFIG_CMP([state-env.c-native-r1], [state-env.c-native-r2])
 
-AT_CLEANUP[]dnl
+m4_n([$3])dnl
+m4_bmatch([$5], [\<no-cross\>], [], [dnl
+
+# C compiler, cross-compilation mode.
+rm -rf config.cache autom4te.cache
+AT_CONFIGURE_AC(
+[cross_compiling=yes
+ac_tool_warned=yes
+m4_default([$2], [$1])])
+AT_CHECK_AUTOCONF([$4])
+AT_CHECK_AUTOHEADER([$4], [ignore])
+
+cp -f configure.ac configure-ac.c-cross
+cp -f configure configure.c-cross
+cp -f config.hin config-hin.c-cross
+
+AT_CHECK_CONFIGURE([-C])
+AT_PRESERVE_CONFIG_STATUS([c-cross-r1])
+AT_CHECK_ENV
+AT_DEFINES_CMP([config-h.c-native-r1], [config-h.c-cross-r1])
+AT_CONFIG_CMP([state-env.c-native-r1], [state-env.c-cross-r1], [cross])
+
+AT_CHECK_CONFIGURE([-C])
+AT_PRESERVE_CONFIG_STATUS([c-cross-r2])
+AT_CHECK_ENV
+AT_DEFINES_CMP([config-h.c-native-r1], [config-h.c-cross-r2])
+AT_CONFIG_CMP([state-env.c-native-r1], [state-env.c-cross-r2], [cross])
+])dnl
+
+# To save time, skip the C++-mode tests for any macro that did not
+# transitively require AC_PROG_CC; it won't make any difference.
+if grep '^CC=' state-env.c-native-r1 > /dev/null 2>&1; then
+
+  # C++ compiler, native mode.
+  rm -rf config.cache autom4te.cache
+  AT_CONFIGURE_AC(
+  [AC_LANG([C++])
+  m4_default([$2], [$1])])
+
+  # Autoconf may fail here because of an AC_LANG_ASSERT([C]); this
+  # means the macro is specific to C and should not be tested with the
+  # C++ compiler.
+  AT_CHECK_AUTOCONF([$4], [ignore], [ignore], [stderr])
+  if test -s stderr; then
+    AT_CHECK([grep 'error: AC_LANG_ASSERT: current language is not C' stderr],
+             [0], [ignore], [ignore])
+  else
+    AT_CHECK_AUTOHEADER([$4], [ignore])
+
+    cp -f configure.ac configure-ac.cxx-native
+    cp -f configure configure.cxx-native
+    cp -f config.hin config-hin.cxx-native
+
+    # If this configure pass fails with code 77, that means there is no
+    # C++ compiler available; don't mark the entire test group skipped,
+    # just skip the rest of the C++ testing.
+    AT_CHECK_CONFIGURE([-C;
+      status=$?
+      if test $status -eq 77; then
+        touch at-no-cxx
+        exit 0
+      else
+        exit $status
+      fi
+    ])
+    if test ! -f at-no-cxx; then
+      AT_PRESERVE_CONFIG_STATUS([cxx-native-r1])
+      AT_CHECK_ENV
+      AT_DEFINES_CMP([config-h.c-native-r1], [config-h.cxx-native-r1],
+                     _AT_FILTER_CXX_DEFINE_VARIES([$5]))
+      AT_CONFIG_CMP([state-env.c-native-r1], [state-env.cxx-native-r1],
+                    [cxx ]_AT_FILTER_CXX_CV_VARIES([$5]))
+
+      AT_CHECK_CONFIGURE([-C])
+      AT_PRESERVE_CONFIG_STATUS([cxx-native-r2])
+      AT_CHECK_ENV
+      AT_DEFINES_CMP([config-h.cxx-native-r1], [config-h.cxx-native-r2])
+      AT_CONFIG_CMP([state-env.cxx-native-r1], [state-env.cxx-native-r2])
+m4_bmatch([$5], [\<no-cross\>], [], [dnl
+
+      # Fourth run: C++ compiler, cross-compilation mode.
+
+      rm -rf config.cache autom4te.cache
+      AT_CONFIGURE_AC(
+      [cross_compiling=yes
+      ac_tool_warned=yes
+      AC_LANG([C++])
+      m4_default([$2], [$1])])
+      AT_CHECK_AUTOCONF([$4])
+      AT_CHECK_AUTOHEADER([$4], [ignore])
+
+      cp -f configure.ac configure-ac.cxx-cross
+      cp -f configure configure.cxx-cross
+      cp -f config.hin config-hin.cxx-cross
+
+      AT_CHECK_CONFIGURE([-C])
+      AT_PRESERVE_CONFIG_STATUS([cxx-cross-r1])
+      AT_CHECK_ENV
+      AT_DEFINES_CMP([config-h.cxx-native-r1], [config-h.cxx-cross-r1])
+      AT_CONFIG_CMP([state-env.cxx-native-r1], [state-env.cxx-cross-r1],
+                    [cross])
+
+      AT_CHECK_CONFIGURE([-C])
+      AT_PRESERVE_CONFIG_STATUS([cxx-cross-r2])
+      AT_CHECK_ENV
+      AT_DEFINES_CMP([config-h.cxx-cross-r1], [config-h.cxx-cross-r2])
+      AT_CONFIG_CMP([state-env.cxx-cross-r1], [state-env.cxx-cross-r2])
+])dnl
+    fi # C++ compiler available
+  fi # macro can be used with C++
+fi # C++ makes a difference
+
+AT_CLEANUP
 ])# AT_CHECK_MACRO
 
 
-# AT_CHECK_MACRO_CROSS(MACRO, [MACRO-USE], [ADDITIONAL-CMDS],
-#                      [AUTOCONF-FLAGS])
-# -----------------------------------------------------------
-# Like the previous one, but creates two checks: for native
-# compile and for cross-compile.
-m4_define([AT_CHECK_MACRO_CROSS],
-[AT_CHECK_MACRO($@)
-AT_CHECK_MACRO([$1 (cross compile)],
-  [AT_KEYWORDS([cross])
-  # Exercise the code used when cross-compiling.
-  cross_compiling=yes
-  ac_tool_warned=yes
-  m4_default([$2], [$1])],
-  [$3], [$4])
-])
+# _AT_FILTER_CXX_CV_VARIES(TEST-PARAMETERS)
+# ---------------------------------------------
+# Subroutine of AT_CHECK_MACRO that expands to a sequence of
+# zero or more `vary:NAME' tokens, one for each occurrence of
+# `cxx_cv_varies:NAME' in TEST-PARAMETERS.
+m4_define([_AT_FILTER_CXX_CV_VARIES],
+[m4_map_args_w([$1], [_AT_FILTER_CXX_CV_VARY(], [)], [ ])])
+
+m4_define([_AT_FILTER_CXX_CV_VARY],
+[m4_bmatch([$1], [^cxx_cv_varies:],
+  [m4_bpatsubsts([$1], [\<cxx_cv_varies:], [vary:])])])
 
 
-# AT_CHECK_AU_MACRO(MACRO)
+# _AT_FILTER_CXX_DEFINE_VARIES(TEST-PARAMETERS)
+# ---------------------------------------------
+# Subroutine of AT_CHECK_MACRO that expands to a sequence of
+# zero or more `vary:NAME' tokens, one for each occurrence of
+# `cxx_define_varies:NAME' in TEST-PARAMETERS.
+m4_define([_AT_FILTER_CXX_DEFINE_VARIES],
+[m4_map_args_w([$1], [_AT_FILTER_CXX_DEFINE_VARY(], [)], [ ])])
+
+m4_define([_AT_FILTER_CXX_DEFINE_VARY],
+[m4_bmatch([$1], [^cxx_define_varies:],
+  [m4_bpatsubsts([$1], [\<cxx_define_varies:], [vary:])])])
+
+
+# AT_CHECK_AU_MACRO(MACRO, [MACRO-USE], [ADDITIONAL-CMDS],
+#                   [AUTOCONF-FLAGS], [TEST-PARAMETERS])
 # ------------------------
-# Create a minimalist configure.ac running the macro named
-# NAME-OF-THE-MACRO, check that autoconf runs on that script,
-# and that the generated configure script runs without error.
+# Do all the tests that AT_CHECK_MACRO(...) would do.
 #
-# Then run autoupdate on that script, and check that NAME-OF-THE-MACRO
-# no longer appears in configure.ac, autoconf runs on the updated
-# script, the configure script still runs without error, and the
-# result is unchanged.
+# In addition, run autoupdate on configure.ac; afterward, verify that
+# MACRO no longer appears in configure.ac, autoconf runs on the
+# updated script, the configure script still runs without error, and
+# the result of configuration is unchanged.
 #
-# On the first pass, check for a -Wobsolete warning naming
-# NAME-OF-THE-MACRO.  On the second pass, *don't* check for the
-# absence of -Wobsolete warnings, because many of autoupdate's edits
-# leave the configure.ac author with some manual work to do, and
-# indicate this by inserting an m4_warn message to be removed
-# after the manual work is complete.
+# Before running autoupdate, check for a -Wobsolete warning naming
+# MACRO from configure.  After running autoupdate, *don't* check for
+# the absence of -Wobsolete warnings, because many of autoupdate's
+# edits leave the configure.ac author with some manual work to do, and
+# indicate this by inserting an m4_warn message to be removed after
+# the manual work is complete.
 m4_define([AT_CHECK_AU_MACRO],
-[AT_SETUP([$1])
+[AT_CHECK_MACRO([$1], [$2], [$3], [-Wno-obsolete $4], [$5])
+
+AT_SETUP([autoupdating $1])
 AT_KEYWORDS([autoupdate])
 
-AT_CONFIGURE_AC([$1])
+AT_CONFIGURE_AC([m4_default([$2], [$1])])
 
-AT_CHECK_AUTOCONF([], 0, [], [stderr])
+AT_CHECK_AUTOCONF([$4], 0, [], [stderr])
 AT_CHECK([grep 'macro .$1. is obsolete' stderr], 0, [ignore], [ignore])
-AT_CHECK_AUTOHEADER([-Wno-obsolete], [ignore])
+AT_CHECK_AUTOHEADER([-Wno-obsolete $4], [ignore])
 AT_CHECK_CONFIGURE
 AT_CHECK_ENV
+AT_PRESERVE_CONFIG_STATUS([before-au])
 
 rm config.hin
 AT_CHECK_AUTOUPDATE([], 0, [], ignore)
 AT_CHECK([grep '^$1$' configure.ac], 1)
 
-AT_CHECK_AUTOCONF([-Wno-obsolete])
-AT_CHECK_AUTOHEADER([-Wno-obsolete], [ignore])
+AT_CHECK_AUTOCONF([-Wno-obsolete $4])
+AT_CHECK_AUTOHEADER([-Wno-obsolete $4], [ignore])
 AT_CHECK_CONFIGURE
 AT_CHECK_ENV
+AT_PRESERVE_CONFIG_STATUS([after-au])
+
+AT_CMP([config-h.before-au], [config-h.after-au])
+AT_CONFIG_CMP([state-env.before-au], [state-env.after-au])
 
 AT_CLEANUP[]dnl
 ])# AT_CHECK_AU_MACRO
