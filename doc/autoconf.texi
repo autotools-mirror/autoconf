@@ -909,6 +909,9 @@ This module contains a source file for the replacement header, along
 with an Autoconf macro that arranges to use the replacement header on
 old-fashioned systems.
 
+For more information, consult the Gnulib website,
+@uref{https://@/www.gnu.org/@/software/@/gnulib/}.
+
 @node Libtool
 @section Libtool
 
@@ -1877,21 +1880,88 @@ distribution tar ball names (e.g., @samp{autoconf}).  It defaults to
 other than alphanumerics and underscores are changed to @samp{-}.  If
 provided, @var{url} should be the home page for the package.
 
-All the arguments of @code{AC_INIT} must be static, i.e., there should not
-be any shell computation, quotes, or newlines, but they can be computed
-by M4.  This is because the package information strings are expanded at
-M4 time into several contexts, and must give the same text at shell time
-whether used in single-quoted strings, double-quoted strings, quoted
-here-documents, or unquoted here-documents.  It is permissible to use
-@code{m4_esyscmd} or @code{m4_esyscmd_s} for computing a version string
-that changes with every commit to a version control system (in fact,
-Autoconf does just that, for all builds of the development tree made
-between releases).
+Leading and trailing whitespace is stripped from all the arguments to
+@code{AC_INIT}, and interior whitespace is collapsed to a single space.
+This means that, for instance, if you want to put several email
+addresses in @var{bug-report}, you can put each one on its own line:
 
-The @var{tarname} argument is used to construct filenames.
-In addition to being static, it should not contain wildcard
-characters, white space, or anything else that could be troublesome
-as part of a file or directory name.
+@smallexample
+@group
+# We keep having problems with the mail hosting for
+# gnomovision.example, so give people an alternative.
+AC_INIT([Gnomovision], [17.0.1], [
+    bugs@@gnomovision.example
+    or gnomo-bugs@@reliable-email.example
+])
+@end group
+@end smallexample
+
+The arguments to @code{AC_INIT} may be computed by M4, when
+@command{autoconf} is run.  For instance, if you want to include the
+package's version number in the @var{tarname}, but you don't want to
+repeat it, you can use a helper macro:
+
+@smallexample
+@group
+m4_define([gnomo_VERSION], [17.0.1])
+AC_INIT([Gnomovision],
+        m4_defn([gnomo_VERSION]),
+        [bugs@@gnomovision.example],
+        [gnomo-]m4_defn([gnomo_VERSION]))
+@end group
+@end smallexample
+
+This uses @code{m4_defn} to produce the expansion of
+@code{gnomo_VERSION} @emph{as a quoted string}, so that if there happen
+to be any more M4 macro names in @code{gnomo_VERSION}, they will not be
+expanded. @xref{Defn,,Renaming Macros,m4,GNU m4 macro processor}.
+
+Continuing this example, if you don't want to embed the version number
+in @file{configure.ac} at all, you can use @code{m4_esyscmd} to look it
+up somewhere else when @command{autoconf} is run:
+
+@smallexample
+@group
+m4_define([gnomo_VERSION],
+  m4_esyscmd([build-aux/git-version-gen .tarball-version]))
+AC_INIT([Gnomovision],
+        m4_defn([gnomo_VERSION]),
+        [bugs@@gnomovision.example],
+        [gnomo-]m4_defn([gnomo_VERSION]))
+@end group
+@end smallexample
+
+This uses the utility script @command{git-version-gen} to look up
+the package's version in its version control metadata.  This script
+is part of Gnulib (@pxref{Gnulib}).
+
+The arguments to @code{AC_INIT} are written into @file{configure} in
+several different places.  Therefore, we strongly recommend that you
+write any M4 logic in @code{AC_INIT} arguments to be evaluated
+@emph{before} @code{AC_INIT} itself is evaluated.  For instance, in the
+above example, the second argument to @code{m4_define} is @emph{not}
+quoted, so the @code{m4_esyscmd} is evaluated only once, and
+@code{gnomo_VERSION} is defined to the output of the command.  If the
+second argument to @code{m4_define} were quoted, @code{m4_esyscmd} would
+be evaluated each time the @var{version} or @var{tarname} arguments were
+written to @file{configure}, and the command would be run repeatedly.
+
+In some of the places where the arguments to @code{AC_INIT} are used,
+within @file{configure}, shell evaluation cannot happen.  Therefore, the
+arguments to @code{AC_INIT} may @emph{not} be computed when
+@command{configure} is run.  If they contain any construct that isn't
+always treated as literal by the shell (e.g.@: variable expansions),
+@command{autoconf} will issue an error.
+
+The @var{tarname} argument is used to construct filenames.  It should
+not contain wildcard characters, white space, or anything else that
+could be troublesome as part of a file or directory name.
+
+Some of M4's active characters (notably parentheses, square brackets,
+@samp{,} and @samp{#}) commonly appear in URLs and lists of email
+addresses.  If any of these characters appear in an argument to AC_INIT,
+that argument will probably need to be double-quoted to avoid errors
+and mistranscriptions.  @xref{M4 Quotation}.
 
 The following M4 macros (e.g., @code{AC_PACKAGE_NAME}), output variables
 (e.g., @code{PACKAGE_NAME}), and preprocessor symbols (e.g.,

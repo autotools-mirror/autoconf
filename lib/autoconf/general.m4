@@ -230,56 +230,49 @@ m4_define([_AC_INIT_LITERAL],
 
 # _AC_INIT_PACKAGE(PACKAGE-NAME, VERSION, BUG-REPORT, [TARNAME], [URL])
 # ---------------------------------------------------------------------
+# Set the values of AC_PACKAGE_{NAME,VERSION,STRING,BUGREPORT,TARNAME,URL}
+# from the arguments.
 m4_define([_AC_INIT_PACKAGE],
-[m4_pushdef([_ac_init_NAME],     m4_normalize([$1]))
-m4_pushdef([_ac_init_VERSION],   m4_normalize([$2]))
-m4_pushdef([_ac_init_BUGREPORT], m4_normalize([$3]))
-m4_pushdef([_ac_init_TARNAME],   m4_normalize([$4]))
-m4_pushdef([_ac_init_URL],       m4_normalize([$5]))
-# NAME, VERSION, BUGREPORT, and URL should all be safe for use in shell
-# strings of all kinds.
-_AC_INIT_LITERAL(m4_defn([_ac_init_NAME]))
-_AC_INIT_LITERAL(m4_defn([_ac_init_VERSION]))
-_AC_INIT_LITERAL(m4_defn([_ac_init_BUGREPORT]))
-_AC_INIT_LITERAL(m4_defn([_ac_init_URL]))
+[_AC_INIT_PACKAGE_N(m4_normalize([$1]), m4_normalize([$2]), m4_normalize([$3]),
+                    m4_normalize([$4]), m4_normalize([$5]))])
+
+# _AC_INIT_PACKAGE_N(PACKAGE-NAME, VERSION, BUG-REPORT, [TARNAME], [URL])
+# -----------------------------------------------------------------------
+# Subroutine of _AC_INIT_PACKAGE.
+m4_define([_AC_INIT_PACKAGE_N],
+[# PACKAGE-NAME, VERSION, BUGREPORT, and URL should all be safe for use
+# in shell strings of all kinds.
+_AC_INIT_LITERAL([$1])
+_AC_INIT_LITERAL([$2])
+_AC_INIT_LITERAL([$3])
+_AC_INIT_LITERAL([$5])
+
 # TARNAME is even more constrained: it should not contain any shell
 # metacharacters or whitespace, because it is used to construct
 # filenames.
-AS_LITERAL_WORD_IF(m4_defn([_ac_init_TARNAME]), [],
+AS_LITERAL_WORD_IF([$4], [],
   [m4_warn([syntax],
-	   [AC_INIT: unsafe as a filename: "]m4_defn([_ac_init_TARNAME])["])])
-#
-# These do not use m4_copy because we don't want to copy the pushdef stack.
-m4_ifndef([AC_PACKAGE_NAME],
-	  [m4_define([AC_PACKAGE_NAME],
-		     m4_defn([_ac_init_NAME]))])
-m4_ifndef([AC_PACKAGE_VERSION],
-	  [m4_define([AC_PACKAGE_VERSION],
-		     m4_defn([_ac_init_VERSION]))])
-m4_ifndef([AC_PACKAGE_STRING],
-	  [m4_define([AC_PACKAGE_STRING],
-		     m4_defn([_ac_init_NAME])[ ]m4_defn([_ac_init_VERSION]))])
-m4_ifndef([AC_PACKAGE_BUGREPORT],
-	  [m4_define([AC_PACKAGE_BUGREPORT], _ac_init_BUGREPORT)])
-m4_ifndef([AC_PACKAGE_TARNAME],
-	  [m4_define([AC_PACKAGE_TARNAME],
-		     m4_default(m4_defn([_ac_init_TARNAME]),
-				[m4_bpatsubst(m4_tolower(
-				 m4_bpatsubst(m4_defn([_ac_init_NAME]),
-					      [GNU ])),
-				 [[^_abcdefghijklmnopqrstuvwxyz0123456789]],
-				 [-])]))])
-m4_ifndef([AC_PACKAGE_URL],
-	  [m4_define([AC_PACKAGE_URL],
-		     m4_default(m4_defn([_ac_init_URL]),
-				[m4_if(m4_index(m4_defn([_ac_init_NAME]),
-						[GNU ]), [0],
-    [[https://www.gnu.org/software/]m4_defn([AC_PACKAGE_TARNAME])[/]])]))])
-m4_popdef([_ac_init_NAME])
-m4_popdef([_ac_init_VERSION])
-m4_popdef([_ac_init_BUGREPORT])
-m4_popdef([_ac_init_TARNAME])
-m4_popdef([_ac_init_URL])
+	   [AC_INIT: unsafe as a filename: "$4"])])
+
+m4_define_default([AC_PACKAGE_NAME],      [$1])
+m4_define_default([AC_PACKAGE_VERSION],   [$2])
+
+# The m4_strip makes AC_PACKAGE_STRING be [], not [ ], when
+# both $1 and $2 are empty.
+m4_define_default([AC_PACKAGE_STRING],    m4_strip([$1 $2]))
+m4_define_default([AC_PACKAGE_BUGREPORT], [$3])
+
+# N.B. m4_ifnblank strips one layer of quotation from whichever of its
+# second and third argument it evaluates to.
+m4_define_default([AC_PACKAGE_TARNAME],
+  m4_ifnblank([$4], [[$4]],
+    [m4_quote(m4_bpatsubst(m4_tolower(m4_bpatsubst([$1], [^GNU ], [])),
+      [[^_abcdefghijklmnopqrstuvwxyz0123456789]], [-]))]))
+m4_define_default([AC_PACKAGE_URL],
+  m4_ifnblank([$5], [[$5]],
+    [m4_if(m4_index([$1], [GNU ]), [0],
+      [[https://www.gnu.org/software/]m4_defn([AC_PACKAGE_TARNAME])[/]],
+      [])]))
 ])
 
 
@@ -1445,7 +1438,7 @@ m4_define([_AS_FORCE_REEXEC_WITH_CONFIG_SHELL], [yes])
 AS_INIT[]dnl
 AS_PREPARE[]dnl
 m4_divert_push([KILL])
-m4_ifval([$2], [_AC_INIT_PACKAGE($@)])
+m4_ifval([$2], [_AC_INIT_PACKAGE($@)], [_AC_INIT_PACKAGE()])
 _AC_INIT_DEFAULTS
 _AC_INIT_PARSE_ARGS
 _AC_INIT_DIRCHECK

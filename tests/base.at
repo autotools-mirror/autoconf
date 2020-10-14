@@ -231,6 +231,38 @@ AT_CHECK([grep "^PACKAGE_TARNAME='fu'\$" configure], [], [ignore])
 
 AT_CLEANUP
 
+## ------------------------------- ##
+## AC_INIT (obsolete invocation).  ##
+## ------------------------------- ##
+
+# When AC_INIT is called with only one argument, it is equivalent to
+# passing that argument to AC_CONFIG_SRCDIR and then calling AC_INIT
+# with _no_ arguments.  In particular, PACKAGE should _not_ be set
+# to whatever the first argument is.
+
+AT_SETUP([AC_INIT (obsolete invocation)])
+
+AT_DATA([configure.ac],
+[[AC_INIT([program.c])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+
+# Ensure we get the expected definition:
+AT_CHECK([grep "^PACKAGE_NAME=''\$" configure], [], [ignore])
+
+# Running autoconf right now should fail because program.c doesn't exist.
+AT_CHECK_CONFIGURE([], [1], [],
+[[configure: error: cannot find sources (program.c) in . or ..
+]])
+
+# Create program.c and then it should be fine.
+AT_DATA([program.c])
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
 
 ## ------------------------------------- ##
 ## AC_INIT with unusual version strings. ##
@@ -238,36 +270,136 @@ AT_CLEANUP
 
 AT_SETUP([AC_INIT with unusual version strings])
 
-AT_DATA([configure.ac],
-[[AC_INIT([GNU String++ with  spaces (foo)],
-	  [2.48++  (2010-07-03)],
-          [[https://example.com/?a=b&c=d#e]],
-          [string++],
-          [[https://example.com/?f=g&h=i%2fj#42]])
-AC_OUTPUT
-]])
-
 if echo 'ab*c' | grep -F 'ab*c' >/dev/null 2>&1; then
   FGREP="grep -F"
 else
   FGREP=fgrep
 fi
 
+# In both of the arguments that might contain URLs, make sure we test
+# all of the unusual ASCII characters that commonly appear in URLs.
+#
+# The RFC 3986 "unreserved" characters are ASCII letters and digits, plus
+#    - . _ ~
+# The RFC 3986 "gen-delims" and "sub-delims" are
+#    / : ? # [ ] @ ! $ & ' ( ) * + , ; =
+# The URL escape character is
+#    %
+#
+# Any argument that contains characters significant to M4,
+#    [ ] ( ) ,
+# may need to be double-quoted depending on exactly how they are used
+# (as would an argument that contains a macro name, but we don't test
+# that here).
+#
+# Characters that are still significant for Bourne shell within a
+# single-quoted string, double-quoted string, quoted here-doc, or
+# unquoted here-doc are explicitly not allowed:
+#    ' " ` \ $
+#
+# We don't test unbalanced parentheses or brackets here.
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++ with  spaces
+           (foo)],
+	  [2.48++  (2010-07-03)],
+          [[https://example/~bug/cdfijknoqrvw/-._:@!()[]*+,;/?y=z#1234567890]],
+          [string++],
+          [[HTTPS://EXAMPLE/~PKG/BCDFIJNOQRUVW/-._:@!()[]*+,;/?y=z#1234567890]])
+AC_OUTPUT
+]])
+
 AT_CHECK_AUTOCONF([-Werror])
 AT_CHECK_CONFIGURE([-q])
+
 AT_CHECK_CONFIGURE([--help], [], [stdout])
-AT_CHECK([[$FGREP 'com/?a=b&c=d#e' stdout]], [], [ignore])
-AT_CHECK([[$FGREP 'com/?f=g&h=i%2fj#42' stdout]], [], [ignore])
+AT_CHECK([[$FGREP \
+  'https://example/~bug/cdfijknoqrvw/-._:@!()[]*+,;/?y=z#1234567890' \
+  stdout]], [], [ignore])
+AT_CHECK([[$FGREP \
+  'HTTPS://EXAMPLE/~PKG/BCDFIJNOQRUVW/-._:@!()[]*+,;/?y=z#1234567890' \
+  stdout]], [], [ignore])
+
 AT_CHECK_CONFIGURE([--version], [], [stdout])
 AT_CHECK([$FGREP 'GNU String++ with spaces (foo)' stdout], [], [ignore])
 AT_CHECK([$FGREP '2.48++ (2010-07-03)' stdout], [], [ignore])
 
 AT_CHECK([./config.status --help], [], [stdout])
-AT_CHECK([[$FGREP 'com/?a=b&c=d#e' stdout]], [], [ignore])
+AT_CHECK([[$FGREP \
+  'https://example/~bug/cdfijknoqrvw/-._:@!()[]*+,;/?y=z#1234567890' \
+  stdout]], [], [ignore])
+AT_CHECK([[$FGREP \
+  'HTTPS://EXAMPLE/~PKG/BCDFIJNOQRUVW/-._:@!()[]*+,;/?y=z#1234567890' \
+  stdout]], [], [ignore])
+
 AT_CHECK([./config.status --version], [], [stdout])
 AT_CHECK([$FGREP 'GNU String++ with spaces (foo)' stdout], [], [ignore])
 AT_CHECK([$FGREP '2.48++ (2010-07-03)' stdout], [], [ignore])
 
+# Repeat the above test using all the unusual characters that might appear
+# in a list of email addresses in both BUG-REPORT and URL.  (URL isn't
+# supposed to contain email addresses, but there's no good reason to
+# restrict its syntax.)
+# The RFC 5822 "atext" characters are ASCII letters and digits, plus
+#    ! # $ % & ' * + - / = ? ^ _ ` { | } ~
+# The RFC 5822 "special" characters, all of which might appear somewhere
+# in an address list, are
+#    ( ) < > [ ] : ; @ \ , . "
+# As above, characters that are significant for Bourne shell within
+# strings and heredocs are explicitly not allowed:
+#    ' " ` \ $
+# As above, any argument that contains characters significant to M4,
+#    [ ] ( ) ,
+# may need to be double-quoted depending on exactly how they are used
+# (as would an argument that contains a macro name, but we don't test
+# that here).
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String++ with  spaces
+           (foo)],
+	  [2.48++  (2010-07-03)],
+          [[bugs: fred <A=B?C^D_E@F>,
+                  G!H!I#J@K.L (wilma),
+                  M%N&O@[156.247.38.49],
+                  P*Q+R-S/T@U,
+                  {jon|chyp~}@kqtvxz.VWXYZ;]],
+          [string++],
+          [[contact: jem <A=B?C^D_E@bd>,
+                     F!G!H#I@fv.J (lugh),
+                     K%L&M@[156.247.38.49],
+                     N*O+P-Q/R@STU,
+                     {qik|~prys}@wxz.VWXYZ;]])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF([-Werror])
+AT_CHECK_CONFIGURE([-q])
+
+AT_CHECK_CONFIGURE([--help], [], [stdout])
+AT_CHECK([[$FGREP \
+  'bugs: fred <A=B?C^D_E@F>, G!H!I#J@K.L (wilma), M%N&O@[156.247.38.49], P*Q+R-S/T@U, {jon|chyp~}@kqtvxz.VWXYZ;' \
+  stdout]], [], [ignore])
+AT_CHECK([[$FGREP \
+  'contact: jem <A=B?C^D_E@bd>, F!G!H#I@fv.J (lugh), K%L&M@[156.247.38.49], N*O+P-Q/R@STU, {qik|~prys}@wxz.VWXYZ;' \
+  stdout]], [], [ignore])
+
+AT_CHECK_CONFIGURE([--version], [], [stdout])
+AT_CHECK([$FGREP 'GNU String++ with spaces (foo)' stdout], [], [ignore])
+AT_CHECK([$FGREP '2.48++ (2010-07-03)' stdout], [], [ignore])
+
+AT_CHECK([./config.status --help], [], [stdout])
+AT_CHECK([[$FGREP \
+  'bugs: fred <A=B?C^D_E@F>, G!H!I#J@K.L (wilma), M%N&O@[156.247.38.49], P*Q+R-S/T@U, {jon|chyp~}@kqtvxz.VWXYZ;' \
+  stdout]], [], [ignore])
+AT_CHECK([[$FGREP \
+  'contact: jem <A=B?C^D_E@bd>, F!G!H#I@fv.J (lugh), K%L&M@[156.247.38.49], N*O+P-Q/R@STU, {qik|~prys}@wxz.VWXYZ;' \
+  stdout]], [], [ignore])
+
+AT_CHECK([./config.status --version], [], [stdout])
+AT_CHECK([$FGREP 'GNU String++ with spaces (foo)' stdout], [], [ignore])
+AT_CHECK([$FGREP '2.48++ (2010-07-03)' stdout], [], [ignore])
+
+# Check for invalid characters in each argument.
 AT_DATA([configure.ac],
 [[AC_INIT([GNU "String++"],
 	  [2.48], [https://example.com/], [string++])
@@ -347,6 +479,81 @@ AC_OUTPUT
 AT_CHECK_AUTOCONF([-Werror], [1], [ignore], [stderr])
 AT_CHECK([grep 'AC_INIT: unsafe as a filename: ' stderr], [], [ignore])
 
+# Commas and unbalanced close parentheses are especially troublesome for M4.
+# They are only expected to work when double-quoted, but even then they can
+# cause malfunctions if not handled carefully within Autoconf.
+
+AT_DATA([configure.ac],
+[[AC_INIT([[GNU, String]], [2.48], [bugs@gstring.example],
+          [string], [https://gstring.example/])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+
+AT_DATA([configure.ac],
+[[AC_INIT([[GNU String)]], [2.48], [bugs@gstring.example],
+          [string], [https://gstring.example/])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String], [[2,48]], [bugs@gstring.example],
+          [string], [https://gstring.example/])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String], [[2.48)]], [bugs@gstring.example],
+          [string], [https://gstring.example/])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String], [2.48], [[bugs@gstring.example,
+                                 gstring-bugs@example.com]],
+          [string], [https://gstring.example/])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String], [2.48], [[bugs)@gstring.example]],
+          [string], [https://gstring.example/])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String], [2.48], [bugs@gstring.example],
+          [[string,]], [https://gstring.example/])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String], [2.48], [bugs@gstring.example],
+          [[string)]], [https://gstring.example/])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF([], [0], [ignore], [stderr])
+AT_CHECK([grep 'AC_INIT: unsafe as a filename: ' stderr], [], [ignore])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String], [2.48], [bugs@gstring.example],
+          [string], [[https://gstring.example/docs,html]])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU String], [2.48], [bugs@gstring.example],
+          [string], [[https://gstring.example/weird)/path]])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
 
 AT_CLEANUP
 
