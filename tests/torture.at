@@ -1807,6 +1807,28 @@ AT_CHECK([test -f foo/innerfile])
 
 AT_CLEANUP
 
+## ------------------------- ##
+## Empty AC_CONFIG_SUBDIRS.  ##
+## ------------------------- ##
+
+AT_SETUP([Empty AC_CONFIG_SUBDIRS])
+AT_KEYWORDS([autoreconf])
+
+AT_DATA([install-sh], [])
+AT_DATA([configure.ac],
+[[AC_INIT(GNU Outer, 1.0)
+
+AC_CONFIG_SUBDIRS()
+AC_OUTPUT
+]])
+
+# autoreconf should have no complaints, and the generated configure
+# script should run fine with or without --no-recursion.
+AT_CHECK([autoreconf -Werror], [0], [ignore])
+AT_CHECK_CONFIGURE()
+AT_CHECK_CONFIGURE([--no-recursion])
+
+AT_CLEANUP
 
 ## ----------------- ##
 ## Empty directory.  ##

@@ -438,8 +438,9 @@ sub autoreconf_current_directory ($)
       $uses_automake = 1            if $macro eq "AM_INIT_AUTOMAKE";
       $uses_intltool = 1            if $macro eq "IT_PROG_INTLTOOL";
       $uses_gtkdoc = 1              if $macro eq "GTK_DOC_CHECK";
-      push @subdir, split (' ', $args[0])
-                                    if $macro eq "AC_CONFIG_SUBDIRS" && $recursive;
+      push @subdir, split (' ', $args[0] || '')
+                                    if $macro eq "AC_CONFIG_SUBDIRS"
+                                       && $recursive;
     }
   $traces->close;
 
