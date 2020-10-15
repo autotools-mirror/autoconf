@@ -311,7 +311,8 @@ sub autoreconf_current_directory ($)
     }
   else
     {
-      xsystem_hint ("autopoint is needed because this package uses Gettext", "$autopoint");
+      xsystem_hint ("autopoint is needed because this package uses Gettext",
+                    $autopoint);
     }
 
 
@@ -517,8 +518,8 @@ sub autoreconf_current_directory ($)
     }
   elsif ($install)
     {
-      xsystem_hint ("intltoolize is needed because this package uses Intltool", $intltoolize);
-      xsystem ($intltoolize)
+      xsystem_hint ("intltoolize is needed because this package uses Intltool",
+                    $intltoolize);
     }
   else
     {
@@ -538,7 +539,6 @@ sub autoreconf_current_directory ($)
     {
       xsystem_hint ("gtkdocize is needed because this package uses Gtkdoc",
 		    $gtkdocize);
-      xsystem ($gtkdocize)
     }
   else
     {
