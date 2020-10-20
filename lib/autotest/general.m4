@@ -479,8 +479,6 @@ do
   *)    at_optarg= ;;
   esac
 
-  # Accept the important Cygnus configure options, so we can diagnose typos.
-
   case $at_option in
     --help | -h )
 	at_help_p=:

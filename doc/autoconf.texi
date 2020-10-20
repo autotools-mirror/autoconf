@@ -2041,81 +2041,27 @@ produces this in @command{configure}:
 
 
 @node Input
-@section Finding @command{configure} Input
+@section Configure Input: Source Code, Macros, and Auxiliary Files
+
+The following macros help you manage the contents of your source tree.
 
 @anchor{AC_CONFIG_SRCDIR}
 @defmac AC_CONFIG_SRCDIR (@var{unique-file-in-source-dir})
 @acindex{CONFIG_SRCDIR}
-@var{unique-file-in-source-dir} is some file that is in the package's
-source directory; @command{configure} checks for this file's existence to
-make sure that the directory that it is told contains the source code in
-fact does.  Occasionally people accidentally specify the wrong directory
-with @option{--srcdir}; this is a safety check.  @xref{configure
-Invocation}, for more information.
+Distinguish this package's source directory from other source
+directories that might happen to exist in the filesystem.
+@var{unique-file-in-source-dir} should name a file that is unique to
+this package.  @command{configure} will verify that this file exists in
+@file{@var{srcdir}}, before it runs any other checks.
+
+Use of this macro is strongly recommended.  It protects against people
+accidentally specifying the wrong directory with @option{--srcdir}.
+@xref{configure Invocation}, for more information.
 @end defmac
 
-
-@c FIXME: Remove definitively once --install explained.
-@c
-@c Small packages may store all their macros in @code{aclocal.m4}.  As the
-@c set of macros grows, or for maintenance reasons, a maintainer may prefer
-@c to split the macros in several files.  In this case, Autoconf must be
-@c told which files to load, and in which order.
-@c
-@c @defmac AC_INCLUDE (@var{file}@dots{})
-@c @acindex{INCLUDE}
-@c @c FIXME: There is no longer shell globbing.
-@c Read the macro definitions that appear in the listed files.  A list of
-@c space-separated file names or shell globbing patterns is expected.  The
-@c files are read in the order they're listed.
-@c
-@c Because the order of definition of macros is important (only the last
-@c definition of a macro is used), beware that it is @code{AC_INIT} that
-@c loads @file{acsite.m4} and @file{aclocal.m4}.  Note that
-@c @code{AC_INCLUDE}ing a file before @code{AC_INIT} or within
-@c @file{aclocal.m4} is different from doing so after @code{AC_INIT}: in
-@c the latter case, non-macro lines from included files may end up in the
-@c @file{configure} script, whereas in the former case, they'd be discarded
-@c just like any text that appear before @code{AC_INIT}.
-@c @end defmac
-
-Packages that do manual configuration or use the @command{install} program
-might need to tell @command{configure} where to find some other shell
-scripts by calling @code{AC_CONFIG_AUX_DIR}, though the default places
-it looks are correct for most cases.
-
-@defmac AC_CONFIG_AUX_DIR (@var{dir})
-@acindex{CONFIG_AUX_DIR}
-Use the auxiliary build tools (e.g., @file{install-sh},
-@file{config.sub}, @file{config.guess}, Cygnus @command{configure},
-Automake and Libtool scripts, etc.)@: that are in directory @var{dir}.
-These are auxiliary files used in configuration.  @var{dir} can be
-either absolute or relative to @file{@var{srcdir}}.  The default is
-@file{@var{srcdir}} or @file{@var{srcdir}/..} or
-@file{@var{srcdir}/../..}, whichever is the first that contains
-@file{install-sh}.  The other files are not checked for, so that using
-@code{AC_PROG_INSTALL} does not automatically require distributing the
-other auxiliary files.  It checks for @file{install.sh} also, but that
-name is obsolete because some @command{make} have a rule that creates
-@file{install} from it if there is no makefile.
-
-The auxiliary directory is commonly named @file{build-aux}.
-If you need portability to DOS variants, do not name the
-auxiliary directory @file{aux}.  @xref{File System Conventions}.
-@end defmac
-
-@defmac AC_REQUIRE_AUX_FILE (@var{file})
-@acindex{REQUIRE_AUX_FILE}
-Declares that @var{file} is expected in the directory defined above.  In
-Autoconf proper, this macro does nothing: its sole purpose is to be
-traced by third-party tools to produce a list of expected auxiliary
-files.  For instance it is called by macros like @code{AC_PROG_INSTALL}
-(@pxref{Particular Programs}) or @code{AC_CANONICAL_BUILD}
-(@pxref{Canonicalizing}) to register the auxiliary files they need.
-@end defmac
-
-Similarly, packages that use @command{aclocal} should declare where
-local macros can be found using @code{AC_CONFIG_MACRO_DIRS}.
+Packages that use @command{aclocal} to generate @file{aclocal.m4}
+should declare where local macros can be found using
+@code{AC_CONFIG_MACRO_DIRS}.
 
 @defmac AC_CONFIG_MACRO_DIRS (@var{dir1} [@var{dir2} ... @var{dirN}])
 @defmacx AC_CONFIG_MACRO_DIR (@var{dir})
@@ -2158,6 +2104,68 @@ directives currently must be set on a single line in @file{Makefile.am},
 without any backslash-newlines.
 @end defmac
 
+@prindex @command{config.guess}
+@prindex @command{config.sub}
+@prindex @command{install-sh}
+
+Some Autoconf macros require auxiliary scripts.  @code{AC_PROG_INSTALL}
+and @code{AC_PROG_@w{MKDIR_P}} (@pxref{Particular Programs}) require a
+fallback implementation of @command{install} called @file{install-sh},
+and the @code{AC_CANONICAL} macros (@pxref{Manual Configuration})
+require the system-identification scripts @file{config.sub} and
+@file{config.guess}.  Third-party tools, such as Automake and Libtool,
+may require additional auxiliary scripts.
+
+By default, @command{configure} looks for these scripts next to itself,
+in @file{@var{srcdir}}.  For convenience when working with subdirectories
+with their own configure scripts (@pxref{Subdirectories}), if the
+scripts are not in @file{@var{srcdir}} it will also look in
+@file{@var{srcdir}/..} and @file{@var{srcdir}/../..}.  All of the
+scripts must be found in the same directory.
+
+If these default locations are not adequate, or simply to reduce clutter
+at the top level of the source tree, packages can use
+@code{AC_CONFIG_AUX_DIR} to declare where to look for auxiliary scripts.
+
+@defmac AC_CONFIG_AUX_DIR (@var{dir})
+@acindex{CONFIG_AUX_DIR}
+Look for auxiliary scripts in @var{dir}.  Normally, @var{dir} should be a
+relative path, which is taken as relative to @file{@var{srcdir}}.
+If @var{dir} is an absolute path or contains shell variables, however,
+it is used as-is.
+
+When the goal of using @code{AC_CONFIG_AUX_DIR} is to reduce clutter at
+the top level of the source tree, the conventional name for @var{dir} is
+@file{build-aux}.  If you need portability to DOS variants, do not name
+the auxiliary directory @file{aux}.  @xref{File System Conventions}.
+@end defmac
+
+@defmac AC_REQUIRE_AUX_FILE (@var{file})
+@acindex{REQUIRE_AUX_FILE}
+@vrindex ac_aux_dir
+Declare that @var{file} is an auxiliary script needed by this configure
+script, and set the shell variable @code{ac_aux_dir} to the directory
+where it can be found.  The value of @code{ac_aux_dir} is guaranteed to
+end with a @samp{/}.
+
+Macros that need auxiliary scripts must use this macro to register each
+script they need.
+@end defmac
+
+Some third-party tools can install and update auxiliary scripts in your
+source tree for you; for instance, Automake's @option{--add-missing}
+mode does this for many commonly-needed scripts, including
+@file{install-sh}, @file{config.sub}, and @file{config.guess}.
+If you are only using Autoconf, however, you will need to add auxiliary
+scripts to your source tree yourself, and arrange for them to be
+included in release tarballs.
+@command{configure} will report any missing scripts when run.
+
+The scripts needed by Autoconf core macros are included with the
+Autoconf source tree.  @file{install-sh} can be downloaded from
+@url{https://git.savannah.gnu.org/cgit/automake.git/plain/lib/install-sh}.
+@file{config.sub} and @file{config.guess} can be downloaded from
+@url{https://git.savannah.gnu.org/cgit/config.git/tree/}.
 
 @node Output
 @section Outputting Files
@@ -3759,14 +3767,11 @@ if test -d "$srcdir/foo"; then
 fi
 @end example
 
-@c NB: Yes, below we mean configure.in, not configure.ac.
 If a given @var{dir} contains @command{configure.gnu}, it is run instead
 of @command{configure}.  This is for packages that might use a
 non-Autoconf script @command{Configure}, which can't be called through a
 wrapper @command{configure} since it would be the same file on
-case-insensitive file systems.  Likewise, if a @var{dir} contains
-@file{configure.in} but no @command{configure}, the Cygnus
-@command{configure} script found by @code{AC_CONFIG_AUX_DIR} is used.
+case-insensitive file systems.
 
 The subdirectory @command{configure} scripts are given the same command
 line options that were given to this @command{configure} script, with minor
@@ -4098,6 +4103,7 @@ can be overridden by setting the @code{FGREP} variable and is cached in the
 @ovindex INSTALL_DATA
 @ovindex INSTALL_SCRIPT
 @caindex path_install
+@prindex @command{install-sh}
 Set output variable @code{INSTALL} to the name of a BSD-compatible
 @command{install} program, if one is found in the current @env{PATH}.
 Otherwise, set @code{INSTALL} to @samp{@var{dir}/install-sh -c},
@@ -4117,14 +4123,14 @@ that creates @file{install} from it if there is no makefile.  Further, this
 macro requires @command{install} to be able to install multiple files into a
 target directory in a single invocation.
 
-Autoconf comes with a copy of @file{install-sh} that you can use.  If
-you use @code{AC_PROG_INSTALL}, you must include either
-@file{install-sh} or @file{install.sh} in your distribution; otherwise
-@command{configure} produces an error message saying it can't find
-them---even if the system you're on has a good @command{install} program.
-This check is a safety measure to prevent you from accidentally leaving
-that file out, which would prevent your package from installing on
-systems that don't have a BSD-compatible @command{install} program.
+Autoconf comes with a copy of @file{install-sh} that you can use.
+If you use @code{AC_PROG_INSTALL}, you must include @file{install-sh}
+in your distribution; otherwise @command{configure} produces an error
+message saying it can't find it---even if the system you're on has a
+good @command{install} program.  This check is a safety measure to
+prevent you from accidentally leaving that file out, which would prevent
+your package from installing on systems that don't have a BSD-compatible
+@command{install} program.
 
 If you need to use your own installation program because it has features
 not found in standard @command{install} programs, there is no reason to use
@@ -4139,6 +4145,7 @@ The result of the test can be overridden by setting the variable
 @acindex{PROG_MKDIR_P}
 @ovindex MKDIR_P
 @caindex path_mkdir
+@prindex @command{install-sh}
 Set output variable @code{MKDIR_P} to a program that ensures that for
 each argument, a directory named by this argument exists, creating it
 and its parent directories if needed, and without race conditions when
@@ -22033,11 +22040,22 @@ successfully.
 
 A few kinds of features can't be guessed automatically by running test
 programs.  For example, the details of the object-file format, or
-special options that need to be passed to the compiler or linker.  You
-can check for such features using ad-hoc means, such as having
-@command{configure} check the output of the @code{uname} program, or
-looking for libraries that are unique to particular systems.  However,
-Autoconf provides a uniform method for handling unguessable features.
+special options that need to be passed to the compiler or linker.
+Autoconf provides a uniform method for handling unguessable features,
+by giving each operating system a @dfn{canonical system type}, also
+known as a @dfn{canonical name} or @dfn{target triplet}.
+
+@prindex @command{config.guess}
+@prindex @command{config.sub}
+
+If you use any of the macros described in this chapter, you must
+distribute the helper scripts @command{config.guess} and
+@command{config.sub} along with your source code.  Some Autoconf macros
+use these macros internally, so you may need to distribute these scripts
+even if you do not use any of these macros yourself.  @xref{Input}, for
+information about the @code{AC_CONFIG_AUX_DIR} macro which you can use
+to control in which directory @command{configure} looks for helper
+scripts, and where to get the scripts from.
 
 @menu
 * Specifying Target Triplets::  Specifying target triplets
@@ -22167,12 +22185,6 @@ interaction with the user.
 If you need to recognize some special environments based on their system
 type, run the following macros to get canonical system names.  These
 variables are not set before the macro call.
-
-If you use these macros, you must distribute @command{config.guess} and
-@command{config.sub} along with your source code.  @xref{Output}, for
-information about the @code{AC_CONFIG_AUX_DIR} macro which you can use
-to control in which directory @command{configure} looks for those scripts.
-
 
 @defmac AC_CANONICAL_BUILD
 @acindex{CANONICAL_BUILD}

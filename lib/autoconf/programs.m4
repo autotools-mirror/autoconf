@@ -524,8 +524,7 @@ m4_ifval([$3],
 AN_MAKEVAR([INSTALL], [AC_PROG_INSTALL])
 AN_PROGRAM([install], [AC_PROG_INSTALL])
 AC_DEFUN_ONCE([AC_PROG_INSTALL],
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-AC_REQUIRE_AUX_FILE([install-sh])dnl
+[AC_REQUIRE_AUX_FILE([install-sh])dnl
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
 # incompatible versions:
@@ -662,8 +661,7 @@ AC_SUBST(INSTALL_DATA)dnl
 # directories to create.
 AN_MAKEVAR([MKDIR_P], [AC_PROG_MKDIR_P])
 AC_DEFUN_ONCE([AC_PROG_MKDIR_P],
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-AC_REQUIRE_AUX_FILE([install-sh])dnl
+[AC_REQUIRE_AUX_FILE([install-sh])dnl
 AC_MSG_CHECKING([for a race-free mkdir -p])
 if test -z "$MKDIR_P"; then
   AC_CACHE_VAL([ac_cv_path_mkdir],

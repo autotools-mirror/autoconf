@@ -47,7 +47,30 @@ GNU Autoconf NEWS - User visible changes.
    - AC_REQUIRE cannot be applied to macros that need to be used with
      arguments.  Instead, invoke the macro normally, with its arguments.
 
+*** More macros use config.sub and config.guess internally.
+
+  As a consequence of improved support for cross compilation (see below),
+  more macros now use the auxiliary scripts ‘config.sub’ and ‘config.guess’.
+  If you use any of the affected macros, these scripts must be available
+  when your configure script is run, even if you have no intention of
+  ever cross-compiling your program.
+
+  If you are using Automake, the auxiliary scripts your configure script
+  needs will be added to your source tree by ‘autoreconf --install’ or
+  ‘automake --add-missing’, and will be automatically included in your
+  distribution tarball.  If you are not using Automake, you will need
+  to add them yourself.  See the “Input” section of the manual for
+  where to get the auxiliary scripts that may be needed by autoconf macros.
+
 *** Older versions of automake and aclocal (< 1.8) are no longer supported.
+
+*** AC_CONFIG_SUBDIRS no longer directly supports Cygnus configure.
+
+  If you are still using an Autoconf script to drive configuration of
+  a multi-package build tree where some subdirectories use Cygnus
+  configure, copy or link $ac_aux_dir/configure into each subdirectory
+  where it is needed.  Please also contact us; we were under the
+  impression nobody used this very old tool anymore.
 
 *** AC_CHECK_HEADER and AC_CHECK_HEADERS only do a compilation test.
 
@@ -187,6 +210,20 @@ GNU Autoconf NEWS - User visible changes.
   will replace certain obsolete constructs, whose only remaining
   useful effect is to trigger those checks, with this macro.  It is
   unlikely to be useful otherwise.
+
+*** AC_REQUIRE_AUX_FILE has been improved.
+
+  Configure scripts now check, on startup, for the availability of all
+  the aux files that were mentioned in an AC_REQUIRE_AUX_FILE
+  invocation.  This should help prevent certain classes of packaging
+  errors.
+
+  Also, it is no longer necessary for third-party macros that use
+  AC_REQUIRE_AUX_FILE to mention AC_CONFIG_AUX_DIR_DEFAULT.  However,
+  if you are using AC_CONFIG_AUX_DIR_DEFAULT *without* also using
+  AC_REQUIRE_AUX_FILE, please start using AC_REQUIRE_AUX_FILE to
+  specify the aux files you actually need, so that the check can be
+  effective.
 
 ** Obsolete features and new warnings
 

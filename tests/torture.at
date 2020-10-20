@@ -1926,3 +1926,41 @@ AT_CHECK([autoreconf -Werror -Wportability-recursive], 0, [], [])
 rm -rf configure config.h.in Makefile.in aclocal.m4 autom4te.cache
 
 AT_CLEANUP
+
+## ------------------------- ##
+## Missing auxiliary files.  ##
+## ------------------------- ##
+
+AT_SETUP([Missing auxiliary files])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU foo], [1.0])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CANONICAL_HOST
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [1], [ignore],
+[configure: error: cannot find required auxiliary files: config.guess config.sub
+])
+
+: > build-aux/config.guess
+
+AT_CHECK_CONFIGURE([], [1], [ignore],
+[configure: error: cannot find required auxiliary files: config.sub
+])
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU foo], [1.0])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_INSTALL
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [1], [ignore],
+[configure: error: cannot find required auxiliary files: install-sh
+])
+
+AT_CLEANUP

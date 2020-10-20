@@ -1097,7 +1097,6 @@ AC_DEFUN([AC_CONFIG_SUBDIRS],
 [_$0(m4_validate_w([$1]))])
 
 m4_define([_AC_CONFIG_SUBDIRS],
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])]dnl
 [AC_REQUIRE([AC_DISABLE_OPTION_CHECKING])]dnl
 [AS_LITERAL_IF([$1], [],
 	       [m4_warn([syntax], [$0: you should use literals])])]dnl
@@ -1191,14 +1190,12 @@ if test "$no_recursion" != yes; then
 
     cd "$ac_dir"
 
-    # Check for guested configure; otherwise get Cygnus style configure.
+    # Check for configure.gnu first; this name is used for a wrapper for
+    # Metaconfig's "Configure" on case-insensitive filesystems.
     if test -f "$ac_srcdir/configure.gnu"; then
       ac_sub_configure=$ac_srcdir/configure.gnu
     elif test -f "$ac_srcdir/configure"; then
       ac_sub_configure=$ac_srcdir/configure
-    elif test -f "$ac_srcdir/configure.in"; then
-      # This should be Cygnus configure.
-      ac_sub_configure=$ac_aux_dir/configure
     else
       AC_MSG_WARN([no configuration information is in $ac_dir])
       ac_sub_configure=

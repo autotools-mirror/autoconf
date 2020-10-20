@@ -640,8 +640,6 @@ do
   *)    ac_optarg=yes ;;
   esac
 
-  # Accept the important Cygnus configure options, so we can diagnose typos.
-
   case $ac_dashdash$ac_option in
   --)
     ac_dashdash=yes ;;
@@ -1163,7 +1161,8 @@ if test "$ac_init_help" = "recursive"; then
       continue
     _AC_SRCDIRS(["$ac_dir"])
     cd "$ac_dir" || { ac_status=$?; continue; }
-    # Check for guested configure.
+    # Check for configure.gnu first; this name is used for a wrapper for
+    # Metaconfig's "Configure" on case-insensitive filesystems.
     if test -f "$ac_srcdir/configure.gnu"; then
       echo &&
       $SHELL "$ac_srcdir/configure.gnu" --help=recursive
@@ -1744,60 +1743,188 @@ program_transform_name=`AS_ECHO(["$program_transform_name"]) | sed "$ac_script"`
 
 # AC_CONFIG_AUX_DIR(DIR)
 # ----------------------
-# Find install-sh, config.sub, config.guess, and Cygnus configure
-# in directory DIR.  These are auxiliary files used in configuration.
-# DIR can be either absolute or relative to $srcdir.
+# Find auxiliary scripts (e.g. install-sh, config.sub, config.guess)
+# in DIR.  If DIR is a literal shell word and not an absolute path,
+# it is interpreted relative to $srcdir; otherwise it is assumed to be
+# usable as-is.  If this macro is used more than once, it builds up a
+# list of directories to search, first to last.  If this macro is not
+# used at all, the default is to look in $srcdir and two levels of
+# parent directories above $srcdir; see _AC_INIT_SRCDIR.
+#
+# This macro may be used as a trace hook by tools that wish to know
+# where the auxiliary files should be.
+#
+# Note: paths starting with a DOS drive letter count as absolute, but
+# we do *not* check for backslash as a directory separator, because
+# anything with a backslash in it will be considered non-literal by
+# AS_LITERAL_WORD_IF and won't reach the m4_bmatch.  This is correct
+# behavior, because DIR will wind up inside a double-quoted shell string.
 AC_DEFUN([AC_CONFIG_AUX_DIR],
-[AC_CONFIG_AUX_DIRS($1 "$srcdir"/$1)])
+  [m4_append_uniq([_AC_AUX_DIR_CANDIDATES],
+    AS_LITERAL_WORD_IF([$1],
+      [m4_bmatch([$1],
+                 [^/],       [$1],
+                 [^[a-z]:/], [$1],
+                            [${srcdir}/$1])],
+      [$1]),
+    [${PATH_SEPARATOR}])])
+
+
+# AC_CONFIG_AUX_DIRS(DIRS)
+# ------------------------
+# Find auxiliary scripts (e.g. install-sh, config.sub, config.guess)
+# in any of the whitespace-separated directories named DIRS.
+# This macro is not documented; it used to be an internal subroutine,
+# but its name didn't begin with an underscore, so we're preserving it
+# for the small number of configure scripts that used it themselves.
+# It might be promoted to an official interface in the future.
+AC_DEFUN([AC_CONFIG_AUX_DIRS],
+[m4_map_args_w(m4_validate_w([$1]), [AC_CONFIG_AUX_DIR(], [)])])
+
+
+# AC_REQUIRE_AUX_FILE(FILE)
+# -------------------------
+# Declare that FILE is a required auxiliary file.  FILE must be literal.
+# At configure time, if we cannot locate a directory containing all of the
+# required auxiliary files, the script will bomb out.  This macro may also
+# be used as a trace hook by tools that wish to identify all of the required
+# auxiliary files.
+m4_define([AC_REQUIRE_AUX_FILE],
+[AS_LITERAL_WORD_IF([$1],
+  [m4_do(
+    [AC_REQUIRE([_AC_INIT_AUX_DIR])],
+    [m4_set_add([_AC_AUX_FILES], [$1])]
+  )],
+  [m4_fatal([$0: requires a literal argument])])])
 
 
 # AC_CONFIG_AUX_DIR_DEFAULT
 # -------------------------
-# The default is `$srcdir' or `$srcdir/..' or `$srcdir/../..'.
-# There's no need to call this macro explicitly; just AC_REQUIRE it.
+# No longer needed (AC_REQUIRE_AUX_FILE now does the whole job) but
+# preserved for backward compatibility with third-party macros.
+# Not yet being removed by autoupdate, because we don't know if any
+# third-party macros used this without also using AC_REQUIRE_AUX_FILE.
+# That usage is now considered incorrect, but removing it would break
+# those macros.
 AC_DEFUN([AC_CONFIG_AUX_DIR_DEFAULT],
-[AC_CONFIG_AUX_DIRS("$srcdir" "$srcdir/.." "$srcdir/../..")])
+[AC_REQUIRE([_AC_INIT_AUX_DIR])])
 
 
-# AC_CONFIG_AUX_DIRS(DIR ...)
-# ---------------------------
-# Internal subroutine.
-# Search for the configuration auxiliary files in directory list $1.
-# We look only for install-sh, so users of AC_PROG_INSTALL
-# do not automatically need to distribute the other auxiliary files.
-AC_DEFUN([AC_CONFIG_AUX_DIRS],
-[ac_aux_dir=
-for ac_dir in $1
-do
-  if test -f "$ac_dir/install-sh"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install-sh -c"
-    break
-  elif test -f "$ac_dir/install.sh"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install.sh -c"
-    break
-  elif test -f "$ac_dir/shtool"; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/shtool install -c"
+# _AC_INIT_AUX_DIR
+# ----------------
+# Internal subroutine: AC_REQUIREd by AC_REQUIRE_AUX_FILE and
+# AC_CONFIG_AUX_DIR_DEFAULT.  Emits the shell code that actually
+# searches for the aux directory.  If AC_REQUIRE_AUX_FILE has
+# been used at least once, the aux directory must contain all
+# of the files that were AC_REQUIRE_AUX_FILE'd.  If it was never
+# used, fall back to the old behavior of looking only for install-sh.
+# (This fallback can be removed once we drop AC_CONFIG_AUX_DIR_DEFAULT.)
+AC_DEFUN([_AC_INIT_AUX_DIR],
+[m4_wrap_lifo(
+  [m4_do(
+    [m4_set_empty([_AC_AUX_FILES],
+      [m4_do(
+        [m4_warn([syntax],
+          [AC_CONFIG_AUX_DIR_DEFAULT used without AC_REQUIRE_AUX_FILE])],
+        [m4_set_add([_AC_AUX_FILES], [install-sh])])])],
+  [m4_divert_text([INIT_PREPARE],
+[
+# Auxiliary files required by this configure script.
+ac_aux_files="m4_set_dump([_AC_AUX_FILES], [ ])"
+
+# Locations in which to look for auxiliary files.
+ac_aux_dir_candidates="m4_ifset([_AC_AUX_DIR_CANDIDATES],
+  [m4_defn([_AC_AUX_DIR_CANDIDATES])],
+  [${srcdir}${PATH_SEPARATOR}${srcdir}/..${PATH_SEPARATOR}${srcdir}/../..])"
+
+# Search for a directory containing all of the required auxiliary files,
+# $ac_aux_files, from the $PATH-style list $ac_aux_dir_candidates.
+# If we don't find one directory that contains all the files we need,
+# we report the set of missing files from the *first* directory in
+# $ac_aux_dir_candidates and give up.
+ac_missing_aux_files=""
+ac_first_candidate=:
+_AS_ECHO_LOG([looking for aux files: $ac_aux_files])
+_AS_PATH_WALK([$ac_aux_dir_candidates], [
+  _AS_ECHO_LOG([ trying $as_dir])
+  ac_aux_dir_found=yes
+  ac_install_sh=
+  for ac_aux in $ac_aux_files
+  do
+    # As a special case, if "install-sh" is required, that requirement
+    # can be satisfied by any of "install-sh", "install.sh", or "shtool",
+    # and $ac_install_sh is set appropriately for whichever one is found.
+    if test x"$ac_aux" = x"install-sh"
+    then
+      if test -f "${as_dir}install-sh"; then
+        _AS_ECHO_LOG([  ${as_dir}install-sh found])
+        ac_install_sh="${as_dir}install-sh -c"
+      elif test -f "${as_dir}install.sh"; then
+        _AS_ECHO_LOG([  ${as_dir}install.sh found])
+        ac_install_sh="${as_dir}install.sh -c"
+      elif test -f "${as_dir}shtool"; then
+        _AS_ECHO_LOG([  ${as_dir}shtool found])
+        ac_install_sh="${as_dir}shtool install -c"
+      else
+        ac_aux_dir_found=no
+        if $ac_first_candidate; then
+          ac_missing_aux_files="${ac_missing_aux_files} install-sh"
+        else
+          break
+        fi
+      fi
+    else
+      if test -f "${as_dir}${ac_aux}"; then
+        _AS_ECHO_LOG([  ${as_dir}${ac_aux} found])
+      else
+        ac_aux_dir_found=no
+        if $ac_first_candidate; then
+          ac_missing_aux_files="${ac_missing_aux_files} ${ac_aux}"
+        else
+          break
+        fi
+      fi
+    fi
+  done
+  if test "$ac_aux_dir_found" = yes; then
+    ac_aux_dir="$as_dir"
     break
   fi
-done
-if test -z "$ac_aux_dir"; then
-  AC_MSG_ERROR([cannot find install-sh, install.sh, or shtool in $1])
-fi
+  ac_first_candidate=false
+],
+  [AC_MSG_ERROR([cannot find required auxiliary files:$ac_missing_aux_files])])
 
 # These three variables are undocumented and unsupported,
 # and are intended to be withdrawn in a future Autoconf release.
 # They can cause serious problems if a builder's source tree is in a directory
 # whose full name contains unusual characters.
-ac_config_guess="$SHELL $ac_aux_dir/config.guess"  # Please don't use this var.
-ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
-ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
+dnl The quadrigraphs prevent spurious deprecation warnings.
+if test -f "${ac_aux_dir}config.guess"; then
+  ac_@&t@config_guess="$SHELL ${ac_aux_dir}config.guess"
+fi
+if test -f "${ac_aux_dir}config.sub"; then
+  ac_@&t@config_sub="$SHELL ${ac_aux_dir}config.sub"
+fi
+if test -f "$ac_aux_dir/configure"; then
+  ac_@&t@configure="$SHELL ${ac_aux_dir}configure"
+fi
+])])])])
 
-AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-])# AC_CONFIG_AUX_DIRS
+# Deprecation warnings for the unsupported variables above.
+m4_define([ac_config_guess],
+[m4_warn([obsolete],
+ [$ac_config_guess is obsolete and unsafe.  Please stop using it.
+Contact autoconf@gnu.org if you really need it.])ac_@&t@config_guess])
 
+m4_define([ac_config_sub],
+[m4_warn([obsolete],
+ [$ac_config_sub is obsolete and unsafe.  Please stop using it.
+Contact autoconf@gnu.org if you really need it.])ac_@&t@config_sub])
+
+m4_define([ac_configure],
+[m4_warn([obsolete],
+ [$ac_configure is obsolete and unsafe.  Please stop using it.
+Contact autoconf@gnu.org if you really need it.])ac_@&t@config_sub])
 
 
 
@@ -1850,20 +1977,6 @@ AC_DEFUN([AC_CONFIG_MACRO_DIR],
 [_$0S(_$0S_USED()[$0], [$1])])
 
 
-## --------------------- ##
-## Requiring aux files.  ##
-## --------------------- ##
-
-# AC_REQUIRE_AUX_FILE(FILE)
-# -------------------------
-# This macro does nothing, it's a hook to be read with `autoconf --trace'.
-# It announces FILE is required in the auxdir.
-m4_define([AC_REQUIRE_AUX_FILE],
-[AS_LITERAL_WORD_IF([$1], [],
-	       [m4_fatal([$0: requires a literal argument])])])
-
-
-
 ## ----------------------------------- ##
 ## Getting the canonical system type.  ##
 ## ----------------------------------- ##
@@ -1904,25 +2017,24 @@ AC_SUBST([$1_os])dnl
 # AC_CANONICAL_BUILD
 # ------------------
 AC_DEFUN_ONCE([AC_CANONICAL_BUILD],
-[AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
-AC_REQUIRE_AUX_FILE([config.sub])dnl
+[AC_REQUIRE_AUX_FILE([config.sub])dnl
 AC_REQUIRE_AUX_FILE([config.guess])dnl
 m4_divert_once([HELP_CANON],
 [[
 System types:
   --build=BUILD     configure for building on BUILD [guessed]]])dnl
 # Make sure we can run config.sub.
-$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
-  AC_MSG_ERROR([cannot run $SHELL $ac_aux_dir/config.sub])
+$SHELL "${ac_aux_dir}config.sub" sun4 >/dev/null 2>&1 ||
+  AC_MSG_ERROR([cannot run $SHELL ${ac_aux_dir}config.sub])
 
 AC_CACHE_CHECK([build system type], [ac_cv_build],
 [ac_build_alias=$build_alias
 test "x$ac_build_alias" = x &&
-  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+  ac_build_alias=`$SHELL "${ac_aux_dir}config.guess"`
 test "x$ac_build_alias" = x &&
   AC_MSG_ERROR([cannot guess build type; you must specify one])
-ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
-  AC_MSG_ERROR([$SHELL $ac_aux_dir/config.sub $ac_build_alias failed])
+ac_cv_build=`$SHELL "${ac_aux_dir}config.sub" $ac_build_alias` ||
+  AC_MSG_ERROR([$SHELL ${ac_aux_dir}config.sub $ac_build_alias failed])
 ])
 _AC_CANONICAL_SPLIT(build)
 ])# AC_CANONICAL_BUILD
@@ -1938,8 +2050,8 @@ AC_CACHE_CHECK([host system type], [ac_cv_host],
 [if test "x$host_alias" = x; then
   ac_cv_host=$ac_cv_build
 else
-  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
-    AC_MSG_ERROR([$SHELL $ac_aux_dir/config.sub $host_alias failed])
+  ac_cv_host=`$SHELL "${ac_aux_dir}config.sub" $host_alias` ||
+    AC_MSG_ERROR([$SHELL ${ac_aux_dir}config.sub $host_alias failed])
 fi
 ])
 _AC_CANONICAL_SPLIT([host])
@@ -1957,8 +2069,8 @@ AC_CACHE_CHECK([target system type], [ac_cv_target],
 [if test "x$target_alias" = x; then
   ac_cv_target=$ac_cv_host
 else
-  ac_cv_target=`$SHELL "$ac_aux_dir/config.sub" $target_alias` ||
-    AC_MSG_ERROR([$SHELL $ac_aux_dir/config.sub $target_alias failed])
+  ac_cv_target=`$SHELL "${ac_aux_dir}config.sub" $target_alias` ||
+    AC_MSG_ERROR([$SHELL ${ac_aux_dir}config.sub $target_alias failed])
 fi
 ])
 _AC_CANONICAL_SPLIT([target])
