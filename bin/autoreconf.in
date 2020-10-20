@@ -28,10 +28,13 @@ use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
+my $buildauxdir;
 BEGIN
 {
   my $pkgdatadir = $ENV{'autom4te_perllibdir'} || '@pkgdatadir@';
   unshift @INC, $pkgdatadir;
+
+  $buildauxdir = $ENV{'autom4te_buildauxdir'} || $pkgdatadir . '/build-aux';
 
   # Override SHELL.  On DJGPP SHELL may not be set to a shell
   # that can handle redirection and quote arguments correctly,
@@ -42,6 +45,8 @@ BEGIN
 
 # Do not use Cwd::chdir, since it might hang.
 use Cwd qw (cwd);
+use File::Copy qw (copy);
+use File::Temp ();
 
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
@@ -244,6 +249,146 @@ sub parse_args ()
 }
 
 
+## ----------------------- ##
+## Handling of aux files.  ##
+## ----------------------- ##
+
+# find_missing_aux_files
+# ----------------------
+# Look in $aux_dir (or, if that is empty, ., .., and ../..) for all of the
+# files in @$aux_files; return a list of those that do not exist.
+sub find_missing_aux_files
+{
+  my ($aux_files, $aux_dir) = @_;
+  my @aux_dirs;
+  if ($aux_dir)
+    {
+      push @aux_dirs, $aux_dir;
+    }
+  else
+    {
+      @aux_dirs = qw(. .. ../..);
+    }
+
+  # If we find all the aux files in _some_ directory in @aux_dirs, we're
+  # good.  But if we don't find all of them in any directory in @aux_dirs,
+  # return the set of missing files from the _first_ directory in @aux_dirs;
+  # this will be less confusing in the common case where AC_CONFIG_AUX_DIR
+  # wasn't used and the parent directories don't provide any aux files.
+  my @missing_aux_files;
+  my @first_missing_aux_files;
+
+  for my $dir (@aux_dirs)
+    {
+      @missing_aux_files = ();
+      for my $file (@{$aux_files})
+        {
+          push @missing_aux_files, $file
+            unless -e "${dir}/${file}";
+        }
+
+      return () if !@missing_aux_files;
+
+      @first_missing_aux_files = @missing_aux_files
+        unless @first_missing_aux_files;
+    }
+
+  return @first_missing_aux_files;
+}
+
+# can_install_aux_files
+# ---------------------
+# Report whether all of the files listed in @_ exist in $buildauxdir,
+# which means we could install them.
+sub can_install_aux_files
+{
+  local $_;
+  for (@_)
+    {
+      return 0 unless -f "${buildauxdir}/$_";
+    }
+  return 1;
+}
+
+# try_install_aux_files
+# ---------------------
+# Install each of the aux files listed in @$auxfiles, that we are able
+# to install, into $destdir.
+# Remove the files we were able to install from @$auxfiles.
+sub try_install_aux_files
+{
+  my ($auxfiles, $destdir) = @_;
+  my @unable;
+  for my $f (@$auxfiles)
+    {
+      my $src = "${buildauxdir}/$f";
+      if (-f $src)
+        {
+          install_aux_file ($destdir, $f, $src);
+        }
+      else
+        {
+          push @unable, $f;
+        }
+    }
+  @$auxfiles = @unable;
+}
+
+# install_aux_file
+# ----------------
+# Install the file $src as $destdir/$f, honoring --symlink and --force.
+sub install_aux_file
+{
+  my ($destdir, $f, $src) = @_;
+  my $dest = "${destdir}/$f";
+  if ($symlink)
+    {
+      if ($force || ! -l $dest || readlink $dest != $src)
+        {
+          if (-e $dest)
+            {
+              unlink $dest
+                or fatal "rm -f $dest: $!\n";
+            }
+          verb "linking $dest to $src";
+          symlink $src, $dest
+            or fatal "ln -s $src $dest: $!\n";
+        }
+    }
+  else
+    {
+      if (-e $dest && ! -f $dest)
+        {
+          unlink $dest
+            or fatal "rm -f $dest: $!\n";
+        }
+      my $temp = new File::Temp (UNLINK => 0, DIR => $destdir);
+      copy ($src, $temp)
+        or fatal "copying $src to $temp: $!\n";
+      make_executable ($temp) if -x $src;
+      update_file ($temp, $dest, $force);
+    }
+}
+
+# make_executable
+# ---------------
+# Make the file $f be executable by all users it is currently readable by.
+sub make_executable
+{
+  my $f = shift;
+  my $perm = (stat $f)[2] & 07777;
+  $perm |= 0100 if ($perm & 0400);
+  $perm |= 0010 if ($perm & 0040);
+  $perm |= 0001 if ($perm & 0004);
+  chmod $perm, $f
+    or fatal "chmod $f: $!\n";
+}
+
+
+## -------------------------- ##
+## Per-directory operations.  ##
+## -------------------------- ##
+
 # &autoreconf_current_directory
 # -----------------------------
 sub autoreconf_current_directory ($)
@@ -386,11 +531,12 @@ sub autoreconf_current_directory ($)
 
   # Perform a single trace reading to avoid --force forcing a rerun
   # between two --trace, that's useless.  If there is no AC_INIT, then
-  # we are not interested: it looks like a Cygnus thingy.
+  # it's not an Autoconf script; ignore it.
   # Suppress all warnings from this invocation; they may be spurious
   # due to out-of-date files, and in any case they'll duplicate warnings
   # from the final autoconf invocation.
   my $aux_dir;
+  my @aux_files;
   my $uses_gettext_via_traces;
   my $uses_libtool;
   my $uses_intltool;
@@ -413,14 +559,15 @@ sub autoreconf_current_directory ($)
                'AC_CONFIG_HEADERS',
                'AC_CONFIG_SUBDIRS',
                'AC_INIT',
+               'AC_REQUIRE_AUX_FILE',
                'AC_PROG_LIBTOOL',
                'AM_PROG_LIBTOOL',
                'LT_INIT',
                'LT_CONFIG_LTDL_DIR',
                'AM_GNU_GETTEXT',
                'AM_INIT_AUTOMAKE',
-               'IT_PROG_INTLTOOL',
                'GTK_DOC_CHECK',
+               'IT_PROG_INTLTOOL',
        )
        . ' |');
   }
@@ -429,6 +576,7 @@ sub autoreconf_current_directory ($)
       chomp;
       my ($macro, @args) = split (/::/);
       $aux_dir = $args[0]           if $macro eq "AC_CONFIG_AUX_DIR";
+      push @aux_files, $args[0]     if $macro eq "AC_REQUIRE_AUX_FILE";
       $uses_autoconf = 1            if $macro eq "AC_INIT";
       $uses_gettext_via_traces = 1  if $macro eq "AM_GNU_GETTEXT";
       $uses_libtool = 1             if $macro eq "AC_PROG_LIBTOOL"
@@ -460,9 +608,9 @@ sub autoreconf_current_directory ($)
     }
 
   # Gettext consistency checks...
-  error "$configure_ac: AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION"
+  error $configure_ac, "AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION"
     if $uses_gettext_via_traces && ! $uses_gettext;
-  error "$configure_ac: AM_GNU_GETTEXT_VERSION is used, but not AM_GNU_GETTEXT"
+  error $configure_ac, "AM_GNU_GETTEXT_VERSION is used, but not AM_GNU_GETTEXT"
     if $uses_gettext && ! $uses_gettext_via_traces;
 
 
@@ -476,7 +624,7 @@ sub autoreconf_current_directory ($)
   # repository with hand written code only (there is not even a need
   # for a Makefile.am!).
 
-  if (defined $aux_dir && ! -d $aux_dir)
+  if ($install && defined $aux_dir && ! -d $aux_dir)
     {
       verb "$configure_ac: creating directory $aux_dir";
       mkdir $aux_dir, 0755
@@ -617,6 +765,38 @@ sub autoreconf_current_directory ($)
       xsystem ($automake);
     }
 
+  # ---------------------------------------------------- #
+  # Installing aux files and checking for missing ones.  #
+  # ---------------------------------------------------- #
+  my @missing_aux_files = find_missing_aux_files (\@aux_files, $aux_dir);
+  if (@missing_aux_files)
+    {
+      try_install_aux_files (\@missing_aux_files, $aux_dir || '.') if $install;
+
+      for (0 .. $#missing_aux_files)
+        {
+          my $f = $missing_aux_files[$_];
+          if ($_ == $#missing_aux_files)
+            {
+              # Offer some advice if --install wasn't given and has a
+              # chance of helping.
+              my $trailer = "";
+              $trailer = "\n  try running autoreconf --install"
+                if (!$install
+                    && ($uses_automake
+                        || $uses_libtool
+                        || $uses_intltool
+                        || $uses_gtkdoc
+                        || can_install_aux_files @missing_aux_files));
+
+              error $configure_ac, "required file '$f' not found$trailer";
+            }
+          else
+            {
+              error $configure_ac, "required file '$f' not found";
+            }
+        }
+    }
 
   # -------------- #
   # Running make.  #
@@ -687,6 +867,8 @@ for my $directory (@ARGV)
     require_configure_ac ($directory);
     autoreconf ($directory);
   }
+
+exit $exit_code;
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:

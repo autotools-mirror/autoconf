@@ -2152,17 +2152,30 @@ Macros that need auxiliary scripts must use this macro to register each
 script they need.
 @end defmac
 
-Some third-party tools can install and update auxiliary scripts in your
-source tree for you; for instance, Automake's @option{--add-missing}
-mode does this for many commonly-needed scripts, including
-@file{install-sh}, @file{config.sub}, and @file{config.guess}.
-If you are only using Autoconf, however, you will need to add auxiliary
-scripts to your source tree yourself, and arrange for them to be
-included in release tarballs.
-@command{configure} will report any missing scripts when run.
+@command{configure} checks for all the auxiliary scripts it needs on
+startup, and exits with an error if any are missing.
 
-The scripts needed by Autoconf core macros are included with the
-Autoconf source tree.  @file{install-sh} can be downloaded from
+@command{autoreconf} also detects missing auxiliary scripts.  When used
+with the @option{--install} option, @command{autoreconf} will try to add
+missing scripts to the directory specified by @code{AC_CONFIG_AUX_DIR},
+or to the top level of the source tree if @code{AC_CONFIG_AUX_DIR} was
+not used.  It can always do this for the scripts needed by Autoconf core
+macros: @file{install-sh}, @file{config.sub}, and @file{config.guess}.
+Many other commonly-needed scripts are installed by the third-party
+tools that @command{autoreconf} knows how to run, such as @file{missing}
+for Automake and @file{ltmain.sh} for Libtool.
+
+If you are using Automake, auxiliary scripts will automatically be
+included in the tarball created by @command{make dist}.  If you are
+not using Automake you will need to arrange for auxiliary scripts to
+be included in tarballs yourself.  Auxiliary scripts should normally
+@emph{not} be checked into a version control system, for the same
+reasons that @command{configure} shouldn't be.
+
+The scripts needed by Autoconf core macros can be found in
+@file{$(datadir)/autoconf/build-aux} of the Autoconf installation
+(@pxref{Installation Directory Variables}).
+@file{install-sh} can be downloaded from
 @url{https://git.savannah.gnu.org/cgit/automake.git/plain/lib/install-sh}.
 @file{config.sub} and @file{config.guess} can be downloaded from
 @url{https://git.savannah.gnu.org/cgit/config.git/tree/}.
@@ -4124,13 +4137,13 @@ macro requires @command{install} to be able to install multiple files into a
 target directory in a single invocation.
 
 Autoconf comes with a copy of @file{install-sh} that you can use.
-If you use @code{AC_PROG_INSTALL}, you must include @file{install-sh}
-in your distribution; otherwise @command{configure} produces an error
-message saying it can't find it---even if the system you're on has a
-good @command{install} program.  This check is a safety measure to
-prevent you from accidentally leaving that file out, which would prevent
-your package from installing on systems that don't have a BSD-compatible
-@command{install} program.
+If you use @code{AC_PROG_INSTALL}, you must include @file{install-sh} in
+your distribution; otherwise @command{autoreconf} and @command{configure}
+will produce an error message saying they can't find it---even if the
+system you're on has a good @command{install} program.  This check is a
+safety measure to prevent you from accidentally leaving that file out,
+which would prevent your package from installing on systems that don't
+have a BSD-compatible @command{install} program.
 
 If you need to use your own installation program because it has features
 not found in standard @command{install} programs, there is no reason to use

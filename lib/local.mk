@@ -196,3 +196,13 @@ TAGS_FILES += $(dist_autotestlib_DATA)
 forbidden_patterns_files += $(dist_autotestlib_DATA)
 
 lib/autotest/autotest.m4f: $(autotest_m4f_dependencies)
+
+## --------------------------- ##
+## Install auxiliary scripts.  ##
+## --------------------------- ##
+
+buildauxdir = $(pkgdatadir)/build-aux
+dist_buildaux_SCRIPTS = \
+  build-aux/config.guess \
+  build-aux/config.sub \
+  build-aux/install-sh

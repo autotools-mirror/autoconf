@@ -55,11 +55,18 @@ GNU Autoconf NEWS - User visible changes.
   when your configure script is run, even if you have no intention of
   ever cross-compiling your program.
 
-  If you are using Automake, the auxiliary scripts your configure script
-  needs will be added to your source tree by ‘autoreconf --install’ or
-  ‘automake --add-missing’, and will be automatically included in your
-  distribution tarball.  If you are not using Automake, you will need
-  to add them yourself.  See the “Input” section of the manual for
+  autoreconf will issue an error if any auxiliary scripts are needed but
+  cannot be found.  (It is not currently possible to make autoconf
+  itself issue this error.)
+
+  ‘autoreconf --install’ will add ‘config.sub’, ‘config.guess’, and
+  ‘install-sh’ to your source tree if they are needed.  If you are
+  using Automake, scripts added to your tree by ‘autoreconf --install’
+  will automatically be included in the tarball produced by ‘make dist’;
+  otherwise, you will need to arrange for them to be distributed
+  yourself.
+
+  See the “Input” section of the manual for more detail, including
   where to get the auxiliary scripts that may be needed by autoconf macros.
 
 *** Older versions of automake and aclocal (< 1.8) are no longer supported.

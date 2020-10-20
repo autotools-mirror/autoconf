@@ -1932,6 +1932,7 @@ AT_CLEANUP
 ## ------------------------- ##
 
 AT_SETUP([Missing auxiliary files])
+AT_KEYWORDS([autoreconf])
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU foo], [1.0])
@@ -1941,15 +1942,54 @@ AC_OUTPUT
 ]])
 
 AT_CHECK_AUTOCONF
+
+# Both configure and autoreconf should detect the missing files.
 AT_CHECK_CONFIGURE([], [1], [ignore],
 [configure: error: cannot find required auxiliary files: config.guess config.sub
 ])
 
+AT_CHECK([autoreconf], 1, [],
+[configure.ac: error: required file 'config.sub' not found
+configure.ac: error: required file 'config.guess' not found
+configure.ac:   try running autoreconf --install
+])
+
+# If only one file is missing, the error messages should only report
+# that one.  Also, the above invocation of autoreconf should _not_
+# have created build-aux, because it wasn't called with --install.
+AT_CHECK([test ! -e build-aux])
+mkdir build-aux
 : > build-aux/config.guess
 
 AT_CHECK_CONFIGURE([], [1], [ignore],
 [configure: error: cannot find required auxiliary files: config.sub
 ])
+
+AT_CHECK([autoreconf], 1, [],
+[configure.ac: error: required file 'config.sub' not found
+configure.ac:   try running autoreconf --install
+])
+
+# Missing aux files should not interfere with --help and --version.
+AT_CHECK_CONFIGURE([--help], [0], [ignore], [ignore])
+AT_CHECK_CONFIGURE([--version], [0], [ignore], [ignore])
+
+# autoreconf --install should be able to install config.sub and config.guess.
+rm build-aux/config.guess
+AT_CHECK([autoreconf --install])
+
+AT_CHECK([test -x build-aux/config.guess])
+AT_CHECK([test -x build-aux/config.sub])
+AT_CHECK([test ! -e build-aux/install-sh])
+
+AT_CHECK_CONFIGURE
+
+# Repeat all the above tests with a configure script that _doesn't_
+# need config.{sub,guess} but does need install-sh.
+
+rm build-aux/config.guess
+rm build-aux/config.sub
+rmdir build-aux
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU foo], [1.0])
@@ -1958,9 +1998,27 @@ AC_PROG_INSTALL
 AC_OUTPUT
 ]])
 
+
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [1], [ignore],
 [configure: error: cannot find required auxiliary files: install-sh
 ])
+
+AT_CHECK([autoreconf], 1, [],
+[configure.ac: error: required file 'install-sh' not found
+configure.ac:   try running autoreconf --install
+])
+AT_CHECK([test ! -e build-aux])
+
+AT_CHECK_CONFIGURE([--help], [0], [ignore], [ignore])
+AT_CHECK_CONFIGURE([--version], [0], [ignore], [ignore])
+
+AT_CHECK([autoreconf --install])
+
+AT_CHECK([test ! -e build-aux/config.guess])
+AT_CHECK([test ! -e build-aux/config.sub])
+AT_CHECK([test -x build-aux/install-sh])
+
+AT_CHECK_CONFIGURE
 
 AT_CLEANUP

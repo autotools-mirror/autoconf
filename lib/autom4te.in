@@ -97,13 +97,14 @@ args: --preselect AC_CONFIG_HEADERS
 args: --preselect AC_CONFIG_MACRO_DIR_TRACE
 args: --preselect AC_CONFIG_SUBDIRS
 args: --preselect AC_INIT
+args: --preselect AC_REQUIRE_AUX_FILE
 args: --preselect AC_PROG_LIBTOOL
 args: --preselect AM_PROG_LIBTOOL
-args: --preselect GTK_DOC_CHECK
-args: --preselect IT_PROG_INTLTOOL
 args: --preselect LT_INIT
 args: --preselect LT_CONFIG_LTDL_DIR
 args: --preselect AM_GNU_GETTEXT
+args: --preselect GTK_DOC_CHECK
+args: --preselect IT_PROG_INTLTOOL
 end-language: "Autoreconf-preselections"
 
 
