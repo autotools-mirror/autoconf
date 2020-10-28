@@ -961,7 +961,7 @@ AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 	       [case "$host_os" in # ((
 		  # Guess yes on platforms where we know the result.
 		  *-gnu* | freebsd* | netbsd* | openbsd* | bitrig* \
-		  | hpux* | solaris* | cygwin* | mingw*)
+		  | hpux* | solaris* | cygwin* | mingw* | msys* )
 		    ac_cv_func_malloc_0_nonnull=yes ;;
 		  # If we don't know, assume the worst.
 		  *) ac_cv_func_malloc_0_nonnull=no ;;
@@ -1467,7 +1467,7 @@ AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
 	       [case "$host_os" in # ((
 		  # Guess yes on platforms where we know the result.
 		  *-gnu* | freebsd* | netbsd* | openbsd* | bitrig* \
-		  | hpux* | solaris* | cygwin* | mingw*)
+		  | hpux* | solaris* | cygwin* | mingw* | msys* )
 		    ac_cv_func_realloc_0_nonnull=yes ;;
 		  # If we don't know, assume the worst.
 		  *) ac_cv_func_realloc_0_nonnull=no ;;
