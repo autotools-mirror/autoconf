@@ -125,9 +125,7 @@ exec sh "@S|@@"
 chmod a+x cfg-sh
 
 AT_CAPTURE_FILE([config.log])
-# Export CONFIG_SITE to /dev/null to avoid spurious diffs in expected
-# stdout/stderr.
-AT_CHECK([env CONFIG_SITE=/dev/null CONFIG_SHELL=./cfg-sh ./configure],
+AT_CHECK([env CONFIG_SHELL=./cfg-sh ./configure],
          [0],
 [[configure: creating ./config.status
 ]], [])

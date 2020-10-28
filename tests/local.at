@@ -27,6 +27,22 @@ AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 # Enable colored test output.
 AT_COLOR_TESTS
 
+# Sanitize the environment used for tests.
+AT_PREPARE_TESTS(
+[# These variables should not be inherited from the
+# parent environment.
+AS_UNSET([CONFIG_SITE])
+AS_UNSET([MAKEFLAGS])
+
+# Ensure MAKE is set to a useful value.  Unlike the above, we *do*
+# want to inherit this variable from the parent environment and/or
+# our command line.
+: "${MAKE=make}"
+export MAKE
+])
+
+
+
 ## ---------------- ##
 ## Utility macros.  ##
 ## ---------------- ##
@@ -334,16 +350,15 @@ m4_define([AT_CHECK_CONFIGURE],
 #      | '#'=0
 #      | '$'=6908
 #
-m4_define([AT_CHECK_ENV],
-[m4_divert_once([PREPARE_TESTS], [_AT_CHECK_ENV])dnl
-AT_CHECK([at_check_env])])
-m4_define([_AT_CHECK_ENV],
-[AS_FUNCTION_DESCRIBE([at_check_env], [],
+m4_defun([AT_CHECK_ENV],
+[m4_require([_AT_CHECK_ENV])]dnl
+[AT_CHECK([ath_fn_check_env])])
+
+m4_defun([_AT_CHECK_ENV],
+[AT_TEST_HELPER_FN([check_env], [],
 [Compare the directory and environment state both before and after a run,
-and return non-zero status if they differ inappropriately.])
-at_check_env ()
-{
-# Compare directory listings.
+and return non-zero status if they differ inappropriately.],
+[# Compare directory listings.
 test -f state-ls.before ||
   AS_ERROR([state-ls.before not present])
 test -f state-ls.after \
@@ -377,7 +392,7 @@ if test -f state-env.before && test -f state-env.after; then
       [ALLOCA|GETLOADAVG_LIBS|KMEM_GROUP|NEED_SETGID|POW_LIB],
       [AWK|LEX|LEXLIB|LEX_OUTPUT_ROOT|LN_S|M4|MKDIR_P|RANLIB|SET_MAKE|YACC],
       [GREP|[EF]GREP|SED],
-      [[_@]|.[*#?$].],
+      [[_@]|.[*@%:@?$].],
       [argv|ARGC|LINENO|BASH_ARGC|BASH_ARGV|OLDPWD|PIPESTATUS|RANDOM],
       [SECONDS|START_TIME|ToD|_AST_FEATURES]))=' \
      $act_file ||
@@ -391,7 +406,7 @@ if test -f state-env.before && test -f state-env.after; then
   $at_traceon
   $grep_failed || $at_diff clean-state-env.before clean-state-env.after
 fi
-} [#]at_check_env])
+])])
 
 
 # AT_CONFIG_CMP(VAR-FILE-A, VAR-FILE-B, [EXTRA-VARIANCE])
@@ -625,10 +640,7 @@ m4_define([AT_CHECK_AUTOUPDATE],
 # an acceptable result, because there are situations where BSD make will
 # exit with status 1 but GNU make will instead exit with status 2.
 m4_define([AT_CHECK_MAKE],
-[: "${MAKE=make}"
-export MAKE
-unset MAKEFLAGS
-AT_CHECK(
+[AT_CHECK(
   m4_if(m4_default([$2], [.]), [.], [],
         [cd "$2" && ])[$][MAKE]m4_ifnblank([$1],[ $1])[]m4_if([$3], [1], [[
 dnl pacify editors that don't understand sh case: ((

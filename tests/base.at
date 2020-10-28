@@ -600,9 +600,6 @@ AT_CLEANUP
 AT_SETUP([AC_CACHE_CHECK])
 AT_KEYWORDS([CONFIG_SITE])
 
-# Don't let a config.site file affect this test.
-AS_UNSET([CONFIG_SITE])
-
 AT_DATA([configure.ac],
 [[AC_INIT
 # m4_define([ac_nothing], [ac_cv_absolutely_nothing])
@@ -887,9 +884,12 @@ cat <&AS@&t@_ORIGINAL_STDIN_FD >&AS@&t@_MESSAGE_FD
 AC_OUTPUT
 ]])
 AT_CHECK_AUTOCONF
-AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure $configure_options | grep -v '^configure: '],, [Hello
+AT_CHECK([echo Hello |
+  ./configure $configure_options |
+  grep -v '^configure: '],,
+[Hello
 ])
-AT_CHECK([echo Hello | CONFIG_SITE=/dev/null ./configure $configure_options --silent])
+AT_CHECK([echo Hello | ./configure $configure_options --silent])
 
 AT_CLEANUP
 
@@ -975,9 +975,6 @@ AT_CLEANUP
 ## --------------------- ##
 
 AT_SETUP([configure directories])
-
-CONFIG_SITE=/dev/null
-export CONFIG_SITE
 
 AT_DATA([foo.in],
 [[prefix=@prefix@

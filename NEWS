@@ -469,6 +469,11 @@ GNU Autoconf NEWS - User visible changes.
 *** AT_TESTED arguments can use variable or command substitutions, including
     in particular $EXEEXT
 
+*** New macros AT_PREPARE_TESTS, AT_PREPARE_EACH_TEST, and AT_TEST_HELPER_FN.
+
+   These provide an official way to define testsuite-specific
+   initialization code and shell functions.
+
 * Noteworthy changes in release 2.69 (2012-04-24) [stable]
 
 ** Autoconf now requires perl 5.6 or better (but generated configure

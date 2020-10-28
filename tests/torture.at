@@ -1463,11 +1463,6 @@ AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
 # It should understand configure.ac.
 AT_CHECK([[grep '[^0-9]1\.[01234][^0-9]' stdout && exit 77]], [1], [ignore])
 
-# Set CONFIG_SITE to a nonexistent file, so that there are
-# no worries about nonstandard values for 'prefix'.
-CONFIG_SITE=no-such-file
-export CONFIG_SITE
-
 # Prevent aclocal from reading third-party macros, in case they are buggy.
 mkdir empty
 ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"

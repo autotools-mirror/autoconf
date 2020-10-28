@@ -429,9 +429,6 @@ m4_divert_text([DEFAULTS],
 [
 # Whether to enable colored test results.
 at_color=m4_ifdef([AT_color], [AT_color], [no])
-# List of the tested programs.
-at_tested='m4_ifdef([AT_tested],
-  [m4_translit(m4_dquote(m4_defn([AT_tested])), [ ], m4_newline)])'
 # As many question marks as there are digits in the last test group number.
 # Used to normalize the test group numbers so that `ls' lists them in
 # numerical order.
@@ -992,33 +989,7 @@ AS_BOX(m4_defn([AT_TESTSUITE_NAME])[.])
 } >&AS_MESSAGE_LOG_FD
 
 m4_divert_pop([TESTS_BEGIN])dnl
-m4_divert_push([PREPARE_TESTS])dnl
-{
-  AS_BOX([Tested programs.])
-  echo
-} >&AS_MESSAGE_LOG_FD
-
-# Report what programs are being tested.
-for at_program in : `eval echo $at_tested`
-do
-  test "$at_program" = : && continue
-  case $at_program in
-    [[\\/]* | ?:[\\/]* ) $at_program_=$at_program ;;]
-    * )
-    _AS_PATH_WALK([$PATH], [test -f "$as_dir$at_program" && break])
-    at_program_=$as_dir$at_program ;;
-  esac
-  if test -f "$at_program_"; then
-    {
-      AS_ECHO(["$at_srcdir/AT_LINE: $at_program_ --version"])
-      "$at_program_" --version </dev/null
-      echo
-    } >&AS_MESSAGE_LOG_FD 2>&1
-  else
-    AS_ERROR([cannot find $at_program])
-  fi
-done
-
+m4_divert_push([TESTS])dnl
 {
   AS_BOX([Running the tests.])
 } >&AS_MESSAGE_LOG_FD
@@ -1026,8 +997,6 @@ done
 at_start_date=`date`
 at_start_time=`date +%s 2>/dev/null`
 AS_ECHO(["$as_me: starting at: $at_start_date"]) >&AS_MESSAGE_LOG_FD
-m4_divert_pop([PREPARE_TESTS])dnl
-m4_divert_push([TESTS])dnl
 
 # Create the master directory if it doesn't already exist.
 AS_MKDIR_P(["$at_suite_dir"]) ||
@@ -1794,9 +1763,87 @@ m4_defun([AT_ARG_OPTION_ARG],[_AT_ARG_OPTION([$1],[$2],1,[$3],[$4])])
 # versions are logged, and in the case of embedded test suite, they
 # must correspond to the version of the package.  PATH should be
 # already preset so the proper executable will be selected.
-m4_define([AT_TESTED],
+m4_defun([AT_TESTED],
+[m4_require([_AT_TESTED])]dnl
 [m4_foreach_w([AT_test], [$1],
   [m4_append_uniq([AT_tested], "m4_defn([AT_test])", [ ])])])
+
+m4_defun([_AT_TESTED],
+[m4_wrap([m4_divert_text([DEFAULTS],
+[# List of the tested programs.
+at_tested='m4_translit(m4_dquote(m4_defn([AT_tested])), [ ], m4_newline)'
+])]dnl
+[m4_divert_text([PREPARE_TESTS],
+[{
+  AS_BOX([Tested programs.])
+  echo
+} >&AS_MESSAGE_LOG_FD
+
+# Report what programs are being tested.
+for at_program in : `eval echo $at_tested`
+do
+  AS_CASE([$at_program],
+    [:], [continue],
+    [[[\\/]* | ?:[\\/]*]], [$at_program_=$at_program],
+    [_AS_PATH_WALK([$PATH], [test -f "$as_dir$at_program" && break])
+    at_program_=$as_dir$at_program])
+
+  if test -f "$at_program_"; then
+    {
+      AS_ECHO(["$at_srcdir/AT_LINE: $at_program_ --version"])
+      "$at_program_" --version </dev/null
+      echo
+    } >&AS_MESSAGE_LOG_FD 2>&1
+  else
+    AS_ERROR([cannot find $at_program])
+  fi
+done
+])])])
+
+
+# AT_PREPARE_TESTS(SHELL-CODE)
+# ----------------------------
+# Execute @var{shell-code} in the main testsuite process,
+# after initializing the test suite and processing command-line options,
+# but before running any tests.
+m4_define([AT_PREPARE_TESTS],
+[m4_divert_once([PREPARE_TESTS],
+[m4_text_box([Prepare for this testsuite.])
+])]dnl
+[m4_divert_text([PREPARE_TESTS], [$1])])
+
+
+# AT_PREPARE_EACH_TEST([SHELL-CODE])
+# ----------------------------------
+# Execute @var{shell-code} in each test group's subshell,
+# at the point of the AT_SETUP that starts each test group.
+m4_define([AT_PREPARE_EACH_TEST],
+[m4_append([AT_prepare_each_test], [$1], [
+])])
+
+
+# AT_TEST_HELPER_FN(NAME, ARGS, DESCRIPTION, CODE)
+# ------------------------------------------------
+# Define a shell function that will be available to the code for each test
+# group.  Its name will be ath_fn_NAME, and its body will be CODE.
+#
+# Implementation note: you might think this would use AT_PREPARE_EACH_TEST,
+# but shell functions defined in AT_PREPARE_TESTS *are* (currently) available
+# to test group subshells, and this way the code is only emitted once, not
+# once for each test group.
+m4_define([AT_TEST_HELPER_FN],
+[AS_LITERAL_WORD_IF([$1], [],
+  [m4_fatal([invalid shell function name "$1"])])]dnl
+[m4_ifdef([ATH_fn_$1_defined],
+  [m4_fatal([helper function "$1" defined twice])])]dnl
+[m4_define([ATH_fn_$1_defined])]dnl
+[AT_PREPARE_TESTS([
+AS_FUNCTION_DESCRIBE([ath_fn_$1], [$2], [$3])
+ath_fn_$1 ()
+{
+  $4
+}
+])])
 
 
 # AT_COPYRIGHT(TEXT, [FILTER = m4_newline])
@@ -1837,6 +1884,8 @@ at_fn_group_banner AT_ordinal 'm4_defn([AT_line])' \
   "AS_ESCAPE(m4_dquote(m4_defn([AT_description])))" m4_format(["%*s"],
   m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])m4_if(
   AT_banner_ordinal, [0], [], [ AT_banner_ordinal])
+m4_ifset([AT_prepare_each_test], [AT_prepare_each_test
+])dnl
 m4_divert_push([TEST_SCRIPT])dnl
 ])
 

@@ -175,11 +175,6 @@ AT_CLEANUP
 
 AT_SETUP([AC_LANG_SOURCE example])
 
-# Set CONFIG_SITE to a nonexistent file, so that there are
-# no worries about configure output caused by sourcing a config.site.
-CONFIG_SITE=no-such-file
-export CONFIG_SITE
-
 AT_DATA([configure.ac],
 [[# Taken from autoconf.texi:Generating Sources.
 # The only change is to not fail if gcc doesn't work.
@@ -220,11 +215,6 @@ AT_CLEANUP
 ## ------------------------- ##
 
 AT_SETUP([AC_LANG_PROGRAM example])
-
-# Set CONFIG_SITE to a nonexistent file, so that there are
-# no worries about configure output caused by sourcing a config.site.
-CONFIG_SITE=no-such-file
-export CONFIG_SITE
 
 AT_DATA([configure.ac],
 [[# Taken from autoconf.texi:Generating Sources.

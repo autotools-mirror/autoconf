@@ -195,6 +195,46 @@ AT_CHECK([echo file2 > file3])
 AT_CHECK([cmp file2 file3])
 ])
 
+## ----------------------------------------------------------- ##
+## AT_PREPARE_TESTS, AT_PREPARE_EACH_TEST, AT_TEST_HELPER_FN.  ##
+## ----------------------------------------------------------- ##
+
+AT_CHECK_AT([AT@&t@_PREPARE_TESTS],
+[[
+AT_INIT([artificial test suite])
+AT_PREPARE_TESTS([FOO=foo; export FOO])
+AT_SETUP([my only test])
+AT_CHECK([test x"$FOO" = xfoo])
+AT_CLEANUP
+]])
+
+AT_CHECK_AT([AT@&t@_PREPARE_EACH_TEST],
+[[
+AT_INIT([artificial test suite])
+AT_PREPARE_EACH_TEST([
+if test -z "$at_test_counter"
+then at_test_counter=1
+else at_test_counter=`expr $at_test_counter + 1`
+fi
+])
+AT_SETUP([test one])
+AT_CHECK([test "$at_test_counter" -eq 1])
+AT_CLEANUP
+AT_SETUP([test two])
+AT_CHECK([test "$at_test_counter" -eq 2])
+AT_CLEANUP
+]])
+
+AT_CHECK_AT([AT@&t@_TEST_HELPER_FN],
+[[
+AT_INIT([artificial test suite])
+AT_TEST_HELPER_FN([helper], [], [], [test x"$][1" = x"$][2"])
+AT_SETUP([my only test])
+AT_CHECK([ath_fn_helper same same])
+AT_CHECK([ath_fn_helper same other], [1])
+AT_CLEANUP
+]])
+
 
 ## ------------------ ##
 ## Empty test suite.  ##
@@ -295,6 +335,32 @@ AT_CHECK_AT_SYNTAX([Multiple AT@&t@_INIT],
 [[AT_INIT([[suite, take one]])
 AT_INIT([repeat])
 ]], [AT@&t@_INIT: invoked multiple times])
+
+AT_CHECK_AT_SYNTAX([Invalid AT@&t@_TEST_HELPER_FN (spaces)],
+[[AT_INIT([buggy test suite])
+AT_TEST_HELPER_FN([bad name], [], [], [:])
+AT_SETUP([only test])
+AT_CHECK([:])
+AT_CLEANUP
+]], [invalid shell function name "bad name"])
+
+AT_CHECK_AT_SYNTAX([Invalid AT@&t@_TEST_HELPER_FN (substitutions)],
+[[AT_INIT([buggy test suite])
+AT_TEST_HELPER_FN([variable_${name}], [], [], [:])
+AT_SETUP([only test])
+AT_CHECK([:])
+AT_CLEANUP
+]], [invalid shell function name "variable_${name}"])
+
+AT_CHECK_AT_SYNTAX([Multiple AT@&t@_TEST_HELPER_FN],
+[[AT_INIT([buggy test suite])
+AT_TEST_HELPER_FN([repeated], [], [], [AS_ECHO([repeated 1])])
+# The duplicate check only cares about the name.
+AT_TEST_HELPER_FN([repeated], [args], [desc], [AS_ECHO([repeated 2])])
+AT_SETUP([only test])
+AT_CHECK([:])
+AT_CLEANUP
+]], [helper function "repeated" defined twice])
 
 # Check for tested programs.  autoconf should only appear once.
 AT_CHECK_AT([Tested programs],

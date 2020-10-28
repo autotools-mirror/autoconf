@@ -25592,6 +25592,41 @@ will still use shell variable expansion (@samp{$}), command substitution
 via @file{atlocal} or @file{atconfig}.
 @end defmac
 
+@defmac AT_PREPARE_TESTS (@var{shell-code})
+@atindex{PREPARE_TESTS}
+Execute @var{shell-code} in the main testsuite process,
+after initializing the test suite and processing command-line options,
+but before running any tests.  If this macro is used several times,
+all of the @var{shell-code}s will be executed,
+in the order they appeared in @file{testsuite.at}.
+
+One reason to use @code{AT_PREPARE_TESTS} is when the programs under
+test are sensitive to environment variables: you can unset all these
+variables or reset them to safe values in @var{shell-code}.
+
+@var{shell-code} is only executed if at least one test is going to be
+run.  In particular, it will not be executed if any of the @option{--help},
+@option{--version}, @option{--list}, or @option{--clean} options are
+given to @command{testsuite} (@pxref{testsuite Invocation}).
+@end defmac
+
+@defmac AT_PREPARE_EACH_TEST (@var{shell-code})
+@atindex{AT_PREPARE_EACH_TEST}
+Execute @var{shell-code} in each test group's subshell, at the point of
+the @code{AT_SETUP} that starts the test group.
+@end defmac
+
+@defmac AT_TEST_HELPER_FN (@var{name}, @var{args}, @var{description}, @var{code})
+Define a shell function that will be available to the code for each test
+group.  Its name will be @code{ath_fn_@var{name}}, and its body will be
+@var{code}.  (The prefix prevents name conflicts with shell functions
+defined by M4sh and Autotest.)
+
+@var{args} should describe the function's arguments and @var{description}
+what it does; these are used only for documentation comments in the
+generated testsuite script.
+@end defmac
+
 @sp 1
 
 @defmac AT_BANNER (@var{test-category-name})
