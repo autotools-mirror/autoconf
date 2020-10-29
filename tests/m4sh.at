@@ -229,7 +229,7 @@ AT_CHECK([test ${ZSH_VERSION+y} && exit 77], ignore)
 # Use COUNTER, COUNTER-RE = [__LINENO__], [LINENO]
 #  or                     = [__OLINE__],  [_oline__]
 #
-# instead of the obvious $LINENO and __oline__, because they would
+# instead of the obvious $LINENO and __oline@&t@__, because they would
 # be replaced in the test suite itself, even before creating these
 # scripts.  For the same reason, grep for LINENO and _oline__ (sic).
 #
