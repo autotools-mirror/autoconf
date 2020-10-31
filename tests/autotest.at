@@ -1447,16 +1447,23 @@ AT_CHECK([grep 'non-numeric argument' stderr], [], [ignore])
 
 AT_SKIP_PARALLEL_TESTS
 
+# The parallel test driver makes some shells generate internal
+# debugging messages on stderr (notably bash 5.x in compile-time
+# development mode, see
+# https://lists.gnu.org/archive/html/bug-autoconf/2020-10/msg00047.html)
+# so ignore stderr in all invocations below.
+
 # Ensure that all tests run, and lines are not split.
-AT_CHECK([$CONFIG_SHELL ./micro-suite -j[]AT_PARALLEL_NJOBS], [], [stdout])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j[]AT_PARALLEL_NJOBS],
+         [], [stdout], [ignore])
 AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [AT_PARALLEL_NTESTS
 ])
 # Running one test with -j should produce correctly formatted output:
-AT_CHECK([$CONFIG_SHELL ./micro-suite -j 3], [], [stdout])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j 3], [], [stdout], [ignore])
 AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [1
 ])
 # Specifying more jobs than tests should not hang:
-AT_CHECK([$CONFIG_SHELL ./micro-suite -j3 3], [], [stdout])
+AT_CHECK([$CONFIG_SHELL ./micro-suite -j3 3], [], [stdout], [ignore])
 AT_CHECK([grep -c '^.\{53\}ok' stdout], [], [1
 ])
 # Not even with zero tests:
@@ -1477,9 +1484,13 @@ AT_CHECK([grep 'AT_PARALLEL_NTESTS tests' stdout], [], [ignore])
 
 AT_CLEANUP
 
+# stderr is ignored in the next several tests because the parallel
+# driver makes some shells emit internal debugging messages, see
+# https://lists.gnu.org/archive/html/bug-autoconf/2020-10/msg00047.html
+
 AT_CHECK_AT_TEST([parallel truth],
   [AT_CHECK([:], 0, [], [])],
-  [], [], [], [], [AT_SKIP_PARALLEL_TESTS],
+  [], [], [], [ignore], [AT_SKIP_PARALLEL_TESTS],
   [], [-j])
 
 AT_CHECK_AT_TEST([parallel fallacy],
@@ -1489,7 +1500,7 @@ AT_CHECK_AT_TEST([parallel fallacy],
 
 AT_CHECK_AT_TEST([parallel skip],
   [AT_CHECK([echo output; echo irrelevant >&2; exit 77], 0, [mismatch], [])],
-  [], [], [], [], [AT_SKIP_PARALLEL_TESTS],
+  [], [], [], [ignore], [AT_SKIP_PARALLEL_TESTS],
   [AT_CHECK([grep skipped micro-suite.log], [], [ignore])], [-j])
 
 AT_CHECK_AT_TEST([parallel syntax error],
@@ -1500,7 +1511,7 @@ AT_CHECK_AT_TEST([parallel syntax error],
    AT_CLEANUP
    AT_SETUP([another test])
    AT_CHECK([:])],
-  [], [0], [], [], [AT_SKIP_PARALLEL_TESTS],
+  [], [0], [], [ignore], [AT_SKIP_PARALLEL_TESTS],
   [dnl Until we can find a way to avoid catastrophic failure (ash) or
    dnl lack of failure (zsh), skip the rest of this test on such shells.
    echo 'if' > syntax
