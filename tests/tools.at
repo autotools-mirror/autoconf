@@ -1412,6 +1412,11 @@ AT_SETUP([autoupdating with aclocal and m4@&t@_include])
 # We use aclocal.
 AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
 
+# Prevent aclocal from reading third-party macros, in case they are buggy.
+mkdir empty
+ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
+export ACLOCAL
+
 mkdir m4 aclocal
 AT_DATA([configure.ac],
 [[AC_INIT(x,0)
@@ -1425,10 +1430,10 @@ AC_DEFUN([AC_NEW_MACRO], [echo hi])
 AC_DEFUN([AC_UNCHANGED_MACRO], [echo one])
 ]])
 cp m4/stuff.m4 aclocal/stuff.m4
-AT_CHECK([aclocal -I aclocal], [0], [ignore], [ignore])
+AT_CHECK([$ACLOCAL -I aclocal], [0], [ignore], [ignore])
 # Checking `autoupdate'.
 AT_CHECK_AUTOUPDATE
-AT_CHECK([aclocal -I m4], [0], [ignore], [ignore])
+AT_CHECK([$ACLOCAL -I m4], [0], [ignore], [ignore])
 AT_CHECK_AUTOUPDATE
 
 AT_CLEANUP
@@ -1447,6 +1452,12 @@ AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
 AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
 AT_CHECK([test ! -f $HOME/.autom4te.cfg || exit 77], [], [ignore], [ignore])
 
+# Prevent aclocal from reading third-party macros, in case they are buggy.
+# (AM_INIT_AUTOMAKE will still be available via the default --automake-acdir.)
+mkdir empty
+ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
+export ACLOCAL
+
 AT_DATA([configure.ac],
 [[AC_INIT(GNU foo, 1.0)
 AM_INIT_AUTOMAKE
@@ -1461,7 +1472,7 @@ AT_DATA([Makefile.am],
 $sleep # `aclocal.m4' should be strictly younger than its inputs
 
 # If Autoconf is too old, or the user has turned caching off, skip:
-AT_CHECK([aclocal || { ret=$?; test $ret -eq 63 && ret=77; exit $ret; }],
+AT_CHECK([$ACLOCAL || { ret=$?; test $ret -eq 63 && ret=77; exit $ret; }],
          [], [], [ignore])
 AT_CHECK([test -d autom4te.cache || exit 77])
 AT_CHECK([autoconf])
@@ -1472,7 +1483,7 @@ sort autom4te.cache/requests >old-requests
 echo newer >newer
 $sleep # if `configure' is regenerated, we want it to be strictly newer,
        # to catch the error consistently.
-AT_CHECK([aclocal], [], [], [ignore])
+AT_CHECK([$ACLOCAL], [],[], [ignore])
 AT_CHECK([automake --no-force --add-missing], [], [], [ignore])
 AT_CHECK([autoconf])
 AT_CHECK([test "`find configure -newer newer`" = "" ||
@@ -1563,8 +1574,10 @@ AT_CLEANUP
 
 AT_SETUP([autotools and whitespace in file names])
 
-# We use aclocal.
-AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
+# Prevent autoreconf from running aclocal, which might not exist,
+# or could barf over warnings in third-party macro files.
+ACLOCAL=true
+export ACLOCAL
 
 x=
 export x
@@ -1605,8 +1618,9 @@ END
   AT_CHECK_AUTOCONF([--include="$dir" -o "$file" "$file.ac"])
   AT_CHECK([autoscan -B "$dir"], [], [], [ignore])
   AT_CHECK([autoscan --force -I "$dir"], [], [], [ignore])
-  # autoreconf requires a sane input file name.  Also, disable aclocal.
+  # autoreconf requires a sane input file name.
   mv -f "$file.ac" configure.ac
+  # Since aclocal is disabled, provide a stub aclocal.m4.
   AT_DATA([aclocal.m4])
   AT_CHECK([autoreconf -B "$dir"])
   AT_CHECK([autoreconf --force -I "$dir"])
@@ -1630,6 +1644,11 @@ AT_SETUP([autotools and relative TMPDIR])
 # We use aclocal.
 AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
 
+# Prevent aclocal from reading third-party macros, in case they are buggy.
+mkdir empty
+ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
+export ACLOCAL
+
 mkdir _tmp
 TMPDIR=_tmp
 export TMPDIR
@@ -1647,7 +1666,7 @@ AT_DATA([m4/foo.m4],
 [AC_DEFINE([HAVE_MACROS], 1, [Define if you have macros.])])
 ]])
 
-AT_CHECK([aclocal -I m4])
+AT_CHECK([$ACLOCAL -I m4])
 AT_CHECK_AUTOHEADER([], [HAVE_MACROS])
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE

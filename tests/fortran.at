@@ -109,7 +109,13 @@ AT_DATA([foo.f],
       end
 ]])
 
-AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
+# Prevent autoreconf from running aclocal, which might not exist,
+# or could barf over warnings in third-party macro files.
+AT_DATA([aclocal.m4])
+ACLOCAL=true
+export ACLOCAL
+
+AT_CHECK([autoreconf -vi], [], [ignore], [ignore])
 AT_CHECK_CONFIGURE
 AT_CHECK_MAKE
 
@@ -148,7 +154,13 @@ AT_DATA([foo.f],
       end
 ]])
 
-AT_CHECK([env ACLOCAL=true autoreconf -vi], [], [ignore], [ignore])
+# Prevent autoreconf from running aclocal, which might not exist,
+# or could barf over warnings in third-party macro files.
+AT_DATA([aclocal.m4])
+ACLOCAL=true
+export ACLOCAL
+
+AT_CHECK([autoreconf -vi], [], [ignore], [ignore])
 AT_CHECK_CONFIGURE
 AT_CHECK_MAKE
 

@@ -1468,6 +1468,11 @@ AT_CHECK([[grep '[^0-9]1\.[01234][^0-9]' stdout && exit 77]], [1], [ignore])
 CONFIG_SITE=no-such-file
 export CONFIG_SITE
 
+# Prevent aclocal from reading third-party macros, in case they are buggy.
+mkdir empty
+ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
+export ACLOCAL
+
 # The contents of `inner/', and `inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
 
@@ -1504,9 +1509,7 @@ AC_CONFIG_SUBDIRS([inner])
 AC_OUTPUT
 ]])
 
-# If there are improperly quoted AC_DEFUN installed in share/aclocal,
-# they trigger warnings from aclocal 1.8, so ignore stderr.
-AT_CHECK([autoreconf], [], [], [ignore])
+AT_CHECK([autoreconf])
 AT_CHECK([test -f inner/configure])
 
 # Running the outer configure recursively should provide the innermost
@@ -1589,6 +1592,11 @@ AT_KEYWORDS(autoreconf)
 # We use aclocal (via autoreconf).
 AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
 
+# Prevent aclocal from reading third-party macros, in case they are buggy.
+mkdir empty
+ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
+export ACLOCAL
+
 # The contents of `.'
 AT_DATA([install-sh], [])
 AT_DATA([configure.ac],
@@ -1629,9 +1637,7 @@ AC_ARG_VAR([INNER2], [an inner2 variable])
 AC_OUTPUT
 ]])
 
-AT_CHECK([autoreconf -Wall -v], [0], [ignore], [stderr])
-# We should not warn about nonliteral argument to AC_CONFIG_SUBDIRS here.
-AT_CHECK([grep 'AC_CONFIG_SUBDIRS:.*literals' stderr], [1])
+AT_CHECK([autoreconf -Wall], [0], [ignore])
 AT_CHECK([test -f inner/configure])
 AT_CHECK([test -f inner/innermost/configure])
 AT_CHECK([test -f inner/innermost/config.hin])
@@ -1725,6 +1731,11 @@ AT_KEYWORDS([autoreconf])
 # We use aclocal (via autoreconf).
 AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
 
+# Prevent aclocal from reading third-party macros, in case they are buggy.
+mkdir empty
+ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
+export ACLOCAL
+
 AT_DATA([install-sh], [])
 AT_DATA([configure.ac],
 [[AC_INIT(GNU Outer, 1.0)
@@ -1744,11 +1755,12 @@ exit 0
 ]])
 chmod +x inner/configure
 
-AT_CHECK([autoreconf -Wall -v], 0, [ignore], [ignore])
+AT_CHECK([autoreconf -Wall], 0, [ignore])
 
 # Running the outer configure recursively should provide the innermost
 # help strings.
-AT_CHECK([./configure $configure_options --help=recursive | grep "folks"], 0, [ignore])
+AT_CHECK([./configure $configure_options --help=recursive | grep "folks"],
+         [0], [ignore])
 
 # Running the outer configure should trigger the inner.
 AT_CHECK([./configure $configure_options], 0, [ignore])
@@ -1777,10 +1789,11 @@ AC_CONFIG_SUBDIRS([$my_subdirs])
 AC_OUTPUT
 ]])
 
-# Hand-written aclocal.m4, so we don't invoke `aclocal -Werror' which
-# could barf over warnings in third-party macro files, or fail over
-# warnings with older aclocal which didn't yet understand -W*.
+# Prevent autoreconf from running aclocal, which might not exist,
+# or could barf over warnings in third-party macro files.
 AT_DATA([aclocal.m4])
+ACLOCAL=true
+export ACLOCAL
 
 AS_MKDIR_P([foo])
 
@@ -1822,6 +1835,12 @@ AC_CONFIG_SUBDIRS()
 AC_OUTPUT
 ]])
 
+# Prevent autoreconf from running aclocal, which might not exist,
+# or could barf over warnings in third-party macro files.
+AT_DATA([aclocal.m4])
+ACLOCAL=true
+export ACLOCAL
+
 # autoreconf should have no complaints, and the generated configure
 # script should run fine with or without --no-recursion.
 AT_CHECK([autoreconf -Werror], [0], [ignore])
@@ -1837,8 +1856,10 @@ AT_CLEANUP
 AT_SETUP([Empty directory])
 AT_KEYWORDS([autoreconf])
 
-# We use aclocal (via autoreconf).
-AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
+# Prevent autoreconf from running aclocal, which might not exist,
+# or could barf over warnings in third-party macro files.
+ACLOCAL=true
+export ACLOCAL
 
 # The test group directory is not necessarily _empty_, but it does not contain
 # files meaningful to `autoreconf'.
@@ -1861,6 +1882,12 @@ AT_KEYWORDS([autoreconf])
 # We use aclocal and automake via autoreconf.
 AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
 AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
+
+# Prevent aclocal from reading third-party macros, in case they are buggy.
+# (AM_INIT_AUTOMAKE will still be available via the default --automake-acdir.)
+mkdir empty
+ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
+export ACLOCAL
 
 AT_DATA([configure.ac],
 [[AC_INIT(GNU foo, 1.0)
@@ -1893,6 +1920,12 @@ AT_KEYWORDS([autoreconf])
 
 # We use aclocal and automake via autoreconf.
 AT_CHECK([automake --version || exit 77], [], [ignore], [ignore])
+
+# Prevent aclocal from reading third-party macros, in case they are buggy.
+# (AM_INIT_AUTOMAKE will still be available via the default --automake-acdir.)
+mkdir empty
+ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
+export ACLOCAL
 
 AT_DATA([configure.ac],
 [[AC_INIT(GNU foo, 1.0)
@@ -1933,6 +1966,12 @@ AT_CLEANUP
 
 AT_SETUP([Missing auxiliary files])
 AT_KEYWORDS([autoreconf])
+
+# Prevent autoreconf from running aclocal, which might not exist,
+# or could barf over warnings in third-party macro files.
+AT_DATA([aclocal.m4])
+ACLOCAL=true
+export ACLOCAL
 
 AT_DATA([configure.ac],
 [[AC_INIT([GNU foo], [1.0])
