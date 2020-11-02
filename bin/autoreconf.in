@@ -363,10 +363,13 @@ sub install_aux_file
             or fatal "rm -f $dest: $!\n";
         }
       my $temp = new File::Temp (UNLINK => 0, DIR => $destdir);
-      copy ($src, $temp)
-        or fatal "copying $src to $temp: $!\n";
-      make_executable ($temp) if -x $src;
-      update_file ($temp, $dest, $force);
+      # Older Perls don't convert $temp to its filename
+      # in all the places we need it to.
+      my $tempname = $temp->filename;
+      copy ($src, $tempname)
+        or fatal "copying $src to $tempname: $!\n";
+      make_executable ($tempname) if -x $src;
+      update_file ($tempname, $dest, $force);
     }
 }
 
