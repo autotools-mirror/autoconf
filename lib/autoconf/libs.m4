@@ -298,22 +298,34 @@ fi # $ac_x_libraries = no
 # ----------
 # Compute ac_cv_have_x.
 AC_DEFUN([_AC_PATH_X],
+[AC_REQUIRE([AC_PROG_CC])]dnl To ensure that $cross_compiling is finalized.
 [AC_CACHE_VAL(ac_cv_have_x,
 [# One or both of the vars are not set, and there is no cached value.
-ac_x_includes=no ac_x_libraries=no
-_AC_PATH_X_XMKMF
-_AC_PATH_X_DIRECT
-case $ac_x_includes,$ac_x_libraries in #(
-  no,* | *,no | *\'*)
-    # Didn't find X, or a directory has "'" in its name.
-    ac_cv_have_x="have_x=no";; #(
-  *)
-    # Record where we found X for the cache.
+ac_x_includes=no
+ac_x_libraries=no
+# Do we need to do anything special at all?
+ac_save_LIBS=$LIBS
+LIBS="-lX11 $LIBS"
+AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <X11/Xlib.h>],
+				[XrmInitialize ()])],
+  [# We can compile and link X programs with no special options.
+  ac_x_includes=
+  ac_x_libraries=])
+LIBS="$ac_save_LIBS"
+# If that didn't work, only try xmkmf and filesystem searches
+# for native compilation.
+AS_IF([test x"$ac_x_includes" = xno && test "$cross_compiling" = no],
+  [_AC_PATH_X_XMKMF
+  _AC_PATH_X_DIRECT])
+# Record the results.
+AS_CASE([$ac_x_includes,$ac_x_libraries],
+  [no,* | *,no | *\'*],
+    [# Didn't find X, or a directory has "'" in its name.
+    ac_cv_have_x="have_x=no"],
+    [# Record where we found X for the cache.
     ac_cv_have_x="have_x=yes\
 	ac_x_includes='$ac_x_includes'\
-	ac_x_libraries='$ac_x_libraries'"
-esac])dnl
-])
+	ac_x_libraries='$ac_x_libraries'"])])])
 
 
 # AC_PATH_X

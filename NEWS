@@ -329,6 +329,17 @@ GNU Autoconf NEWS - User visible changes.
 *** AC_CHECK_DECL and AC_CHECK_DECLS will now detect missing declarations for
     library functions that are also Clang compiler builtins.
 
+*** AC_PATH_X and AC_PATH_XTRA don’t search for X11 when cross-compiling.
+
+  Libraries and headers found by running xmkmf or searching /usr/X11,
+  /usr/X11R7, etc. are likely to belong to a native X11 installation
+  for the build machine and to be inappropriate for cross compilation.
+
+  To cross-compile programs that require X11, we recommend putting the
+  headers and libraries for the host system in your cross-compiler’s
+  default search paths.  Alternatively, use configure’s --x-includes
+  and --x-libraries command line options to tell it where they are.
+
 *** AC_PROG_CC is now defined via AC_DEFUN_ONCE.
 
   This means configure scripts will no longer check repeatedly for the
