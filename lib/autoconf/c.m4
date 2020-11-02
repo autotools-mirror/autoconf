@@ -240,16 +240,21 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 # AC_LANG_CALL(C++)(PROLOGUE, FUNCTION)
 # -------------------------------------
 m4_define([AC_LANG_CALL(C++)],
+dnl We do not know the function signature of the real $2.
+dnl Declare it in a namespace so the compiler doesn't recognize it
+dnl (with, most likely, a clashing prototype); the 'extern "C"' hides
+dnl the namespace from the linker.
+dnl Use 'int' for the return type, because some C++ compilers consider
+dnl 'namespace conftest { extern "C" void main (); }' to be an
+dnl erroneous redeclaration of ::main, namespace notwithstanding.
+dnl The logic they're applying could be extended in the future to
+dnl other built-in extern "C" functions, but let's worry about that
+dnl when it actually happens.
 [AC_LANG_PROGRAM([[$1
-// We do not know the function signature of the real $2.
-// Declare it in a namespace so the compiler doesn't recognize it
-// (with, most likely, a clashing prototype); the 'extern "C"' will
-// hide the namespace from the linker, so it will still look for the
-// real (global) $2.
 namespace conftest {
-  extern "C" void $2 ();
+  extern "C" int $2 ();
 }]],
-[[conftest::$2 (); return 0;]])])
+[[return conftest::$2 ();]])])
 
 
 # AC_LANG_CPLUSPLUS
