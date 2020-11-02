@@ -139,14 +139,6 @@ GNU Autoconf NEWS - User visible changes.
   AC_CHECK_FUNCS_ONCE, AC_CHECK_HEADERS, AC_CHECK_HEADERS_ONCE,
   AC_CONFIG_MACRO_DIRS, AC_CONFIG_SUBDIRS, and AC_REPLACE_FUNCS.
 
-*** AC_PROG_LEX no longer looks for ‘yywrap’.
-
-  LEXLIB will only be set to ‘-lfl’ or ‘-ll’ if a scanner that defines
-  both ‘main’ and ‘yywrap’ itself still needs something else from that
-  library.
-
-  We recommend scanners define yywrap themselves, or use %noyywrap.
-
 *** AC_FUNC_VFORK no longer ignores a signal-handling bug in Solaris 2.4.
 
   This bug was being ignored because Emacs wanted to use ‘vfork’ on
@@ -244,6 +236,24 @@ GNU Autoconf NEWS - User visible changes.
   AC_REQUIRE_AUX_FILE, please start using AC_REQUIRE_AUX_FILE to
   specify the aux files you actually need, so that the check can be
   effective.
+
+*** AC_PROG_LEX has an option to not look for yywrap.
+
+  AC_PROG_LEX now takes one argument, which may be either ‘yywrap’ or
+  ‘noyywrap’.  If it is ‘noyywrap’, AC_PROG_LEX will only set LEXLIB
+  to ‘-lfl’ or ‘-ll’ if a scanner that defines both main and yywrap
+  itself still needs something else from that library.  On the other
+  hand, if it is ‘yywrap’, AC_PROG_LEX will fail (setting LEX to ‘:’
+  and LEXLIB to nothing) if it can’t find a library that defines yywrap.
+
+  In the absence of arguments, AC_PROG_LEX’s behavior is bug-compatible
+  with 2.69, which did neither of the above things (see the manual for
+  details).  This mode is deprecated.
+
+  We encourage all programs that use AC_PROG_LEX to use the new
+  ‘noyywrap’ mode, and to define yywrap themselves, or use %noyywrap.
+  The yywrap function in lib(f)l is trivial, and self-contained
+  scanners are easier to work with.
 
 ** Obsolete features and new warnings
 

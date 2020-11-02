@@ -134,6 +134,10 @@ ac_exclude_list='
 	/^AC_(PROG_CC|C_CONST|C_VOLATILE)$/ {next}
 	/^AC_PATH_XTRA$/ {next}
 
+        # Use without an argument is obsolete.
+        # Checked in semantics.
+        /^AC_PROG_LEX$/ {next}
+
 	# Requires a working C++ compiler, which is not a given.
 	/^AC_PROG_CXX_C_O$/ {next}
 

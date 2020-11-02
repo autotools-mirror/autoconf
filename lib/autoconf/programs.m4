@@ -706,18 +706,45 @@ AC_MSG_RESULT([$MKDIR_P])
 AN_MAKEVAR([LEX],  [AC_PROG_LEX])
 AN_PROGRAM([lex],  [AC_PROG_LEX])
 AN_PROGRAM([flex], [AC_PROG_LEX])
-AC_DEFUN_ONCE([AC_PROG_LEX],
-[AC_CHECK_PROGS(LEX, flex lex, :)
-if test "x$LEX" != "x:"; then
-  _AC_PROG_LEX_YYTEXT_DECL
-fi])
+AC_DEFUN([AC_PROG_LEX],
+[m4_case($#,
+  [0], [],
+  [1], [],
+  [m4_fatal([too many arguments to $0])])]dnl
+[_$0(m4_normalize([$1]))])
+
+AC_DEFUN([_AC_PROG_LEX],
+[m4_case([$1],
+  [yywrap], [],
+  [noyywrap], [],
+  [yywrap noyywrap],
+    [m4_fatal([AC_PROG_LEX: yywrap and noyywrap are mutually exclusive])],
+  [noyywrap yywrap],
+    [m4_fatal([AC_PROG_LEX: yywrap and noyywrap are mutually exclusive])],
+  [],
+    [m4_warn([obsolete],
+      [AC_PROG_LEX without either yywrap or noyywrap is obsolete])],
+  [m4_fatal([AC_PROG_LEX: unrecognized argument: $1])])]dnl
+dnl We can't use AC_DEFUN_ONCE because this macro takes arguments.
+dnl Silently skip a second invocation if the options match;
+dnl warn if they don't.
+[m4_ifdef([_AC_PROG_LEX_options],
+  [m4_if([$1], m4_defn([_AC_PROG_LEX_options]), [],
+    [m4_warn([syntax], [AC_PROG_LEX used twice with mismatched options])])],
+[dnl
+dnl _AC_PROG_LEX_options not defined: first use
+m4_define([_AC_PROG_LEX_options], [$1])dnl
+AC_CHECK_PROGS(LEX, flex lex, :)
+  if test "x$LEX" != "x:"; then
+    _AC_PROG_LEX_YYTEXT_DECL([$1])
+fi])])
 
 
 # _AC_PROG_LEX_YYTEXT_DECL
 # ------------------------
 # Check for the Lex output root, the Lex library, and whether Lex
 # declares yytext as a char * by default.
-m4_define([_AC_PROG_LEX_YYTEXT_DECL],
+AC_DEFUN([_AC_PROG_LEX_YYTEXT_DECL],
 [cat >conftest.l <<_ACEOF[
 %%
 a { ECHO; }
@@ -763,17 +790,21 @@ AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])dnl
 
 AS_VAR_SET_IF([LEXLIB], [], [
   AC_CACHE_CHECK([for lex library], [ac_cv_lib_lex], [
-    ac_save_LIBS=$LIBS
+    ac_save_LIBS="$LIBS"
+    ac_found=false
     for ac_cv_lib_lex in 'none needed' -lfl -ll 'not found'; do
-      case $ac_cv_lib_lex in
-	'none needed') ;;
-	'not found') break;;
-	*) LIBS="$ac_cv_lib_lex $ac_save_LIBS";;
-      esac
+      AS_CASE([$ac_cv_lib_lex],
+        ['none needed'], [],
+        ['not found'],   [break],
+        [*],             [LIBS="$ac_cv_lib_lex $ac_save_LIBS"])
+
       AC_LINK_IFELSE([AC_LANG_DEFINES_PROVIDED[`cat $LEX_OUTPUT_ROOT.c`]],
-	[break])
+	[ac_found=:])
+      if $ac_found; then
+        break
+      fi
     done
-    LIBS=$ac_save_LIBS
+    LIBS="$ac_save_LIBS"
   ])
   AS_IF(
      [test "$ac_cv_lib_lex" = 'not found'],
@@ -782,22 +813,49 @@ AS_VAR_SET_IF([LEXLIB], [], [
      [test "$ac_cv_lib_lex" = 'none needed'],
         [LEXLIB=''],
 	[LEXLIB=$ac_cv_lib_lex])
+dnl
+dnl For compatibility with autoconf 2.69 and prior, if $1 is not `noyywrap',
+dnl and we didn't already set LEXLIB to -ll or -lfl, see if one of those
+dnl libraries provides yywrap and set LEXLIB to it if so.  If $1 is `yywrap',
+dnl and we don't find a library that provides yywrap, we fail.
+  m4_case([$1],
+    [noyywrap],
+      [],
+    [yywrap],
+      [ac_save_LIBS="$LIBS"
+      AS_IF([test -n "$LEXLIB"],
+        [LIBS="$LEXLIB"
+        AC_CHECK_FUNC([yywrap],
+          [:],
+          [AC_MSG_WARN([$LEXLIB does not contain yywrap; giving up on $LEX])
+          LEX=: LEXLIB=])
+        ],
+        [LIBS=
+        AC_SEARCH_LIBS([yywrap], [fl l], [LEXLIB="$LIBS"])
+        AS_IF([test x"$ac_cv_search_yywrap" = xno],
+          [AC_MSG_WARN([yywrap not found; giving up on $LEX])
+          LEX=: LEXLIB=])])
+      LIBS="$ac_save_LIBS"],
+    [],
+      [ac_save_LIBS="$LIBS"
+      LIBS=
+      AC_SEARCH_LIBS([yywrap], [fl l], [LEXLIB="$LIBS"])
+      LIBS="$ac_save_LIBS"])dnl
 ])
 AC_SUBST(LEXLIB)
 
+dnl This test is done last so that we don't define YYTEXT_POINTER if
+dnl any of the above tests gave up on lex.
 AS_IF([test "$LEX" != :], [
 AC_CACHE_CHECK(whether yytext is a pointer, ac_cv_prog_lex_yytext_pointer,
 [# POSIX says lex can declare yytext either as a pointer or an array; the
 # default is implementation-dependent.  Figure out which it is, since
 # not all implementations provide the %pointer and %array declarations.
 ac_cv_prog_lex_yytext_pointer=no
-ac_save_LIBS=$LIBS
-LIBS="$LEXLIB $ac_save_LIBS"
-AC_LINK_IFELSE([AC_LANG_DEFINES_PROVIDED
+AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED
   [#define YYTEXT_POINTER 1
 `cat $LEX_OUTPUT_ROOT.c`]],
   [ac_cv_prog_lex_yytext_pointer=yes])
-LIBS=$ac_save_LIBS
 ])
 dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then

@@ -4195,37 +4195,73 @@ The result of the test can be overridden by setting the variable
 @end defmac
 
 @anchor{AC_PROG_LEX}
-@defmac AC_PROG_LEX
+@defmac AC_PROG_LEX (@var{options})
 @acindex{PROG_LEX}
 @ovindex LEX
 @ovindex LEXLIB
 @cvindex YYTEXT_POINTER
 @ovindex LEX_OUTPUT_ROOT
 @caindex prog_LEX
-If @code{flex} is found, set output variable @code{LEX} to @samp{flex}.
-Otherwise set @code{LEX} to @samp{lex}, if found.
-If neither variant is available, set @code{LEX} to @samp{:};
+Search for a lexical analyzer generator, preferring @code{flex}
+to plain @code{lex}.  Output variable @code{LEX} is set to whichever
+program is available.  If neither program is available, @code{LEX}
+is set to @samp{:};
 for packages that ship the generated @file{file.yy.c}
 alongside the source @file{file.l}, this default allows users without a
 lexer generator to still build the package even if the timestamp for
 @file{file.l} is inadvertently changed.
 
-The result of this test can be influenced by setting the variable
-@code{LEX} or the cache variable @code{ac_cv_prog_LEX}.
+The name of the program to use can be overridden by setting the
+output variable @code{LEX} or the cache variable @code{ac_cv_prog_LEX}
+when running @command{configure}.
 
-If either @code{flex} or @code{lex} is found, this macro performs
-additional checks for common portability pitfalls.  If these additional
-checks fail, @code{LEX} is also set to @samp{:}.
+If a lexical analyzer generator is found, this macro performs additional
+checks for common portability pitfalls.  If these additional checks
+fail, @code{LEX} is reset to @samp{:}; otherwise the following
+additional macros and variables are provided.
+
+Preprocessor macro @code{YYTEXT_POINTER} is defined if the lexer
+skeleton, by default, declares @code{yytext} as a @samp{@w{char *}}
+rather than a @samp{@w{char []}}.
 
 Output variable @code{LEX_OUTPUT_ROOT} is set to the base of the file
 name that the lexer generates; this is usually either @file{lex.yy} or
-@file{lexyy}.  Preprocessor macro @code{YYTEXT_POINTER} is defined if
-the lexer skeleton, by default, declares @code{yytext} as a @samp{char
-*} rather than a @samp{char []}.  Finally, if generated lexers need a
-library to work, set output variable @code{LEXLIB} to an option for that
-library (e.g., @option{-ll}); otherwise define @code{LEXLIB} to empty.
-A library that merely defines @code{main} and @code{yywrap} placeholder
-functions is not considered to be needed.
+@file{lexyy}.
+
+If generated lexers need a library to work, output variable
+@code{LEXLIB} is set to a link option for that library (e.g.,
+@option{-ll}), otherwise it is set to empty.
+
+The @var{options} argument modifies the behavior of @code{AC_PROG_LEX}.
+It should be a whitespace-separated list of options.  Currently there
+are only two options, and they are mutually exclusive:
+
+@table @code
+@item yywrap
+Indicate that the library in @code{LEXLIB} needs to define the function
+@code{yywrap}.  If a library that defines this function cannot be found,
+@code{LEX} will be reset to @samp{:}.
+
+@item noyywrap
+Indicate that the library in @code{LEXLIB} does not need to define the
+function @code{yywrap}.  @command{configure} will not search for it at
+all.
+@end table
+
+Prior to Autoconf 2.70, @code{AC_PROG_LEX} did not take any arguments,
+and its behavior was different from either of the above possibilities:
+it would search for a library that defines @code{yywrap}, and would set
+@code{LEXLIB} to that library if it finds one.  However, if a library
+that defines this function could not be found, @code{LEXLIB} would be
+left empty and @code{LEX} would @emph{not} be reset.  This behavior was
+due to a bug, but several packages came to depend on it, so
+@code{AC_PROG_LEX} still does this if neither the @code{yywrap} nor the
+@code{noyywrap} option is given.
+
+Usage of @code{AC_PROG_LEX} without choosing one of the @code{yywrap}
+or @code{noyywrap} options is deprecated.  It is usually better to
+use @code{noyywrap} and define the @code{yywrap} function yourself,
+as this almost always renders the @code{LEXLIB} unnecessary.
 
 @strong{Caution:} As a side-effect of the test, this macro may delete
 any file in the configure script's current working directory named
