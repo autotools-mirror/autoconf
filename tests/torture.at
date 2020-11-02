@@ -2061,3 +2061,54 @@ AT_CHECK([test -x build-aux/install-sh])
 AT_CHECK_CONFIGURE
 
 AT_CLEANUP
+
+## ------------------------------ ##
+## Files clobbered by AC_OPENMP.  ##
+## ------------------------------ ##
+
+AT_SETUP([Files clobbered by AC_OPENMP])
+
+AT_CONFIGURE_AC(
+[[AC_PROG_CC
+AC_OPENMP
+]])
+
+AT_CHECK_AUTOHEADER
+
+# autoconf should bomb out if either 'mp' or 'openmp' exists in the
+# srcdir.
+AT_DATA([mp])
+AT_CHECK_AUTOCONF([], [1], [], [stderr])
+AT_CHECK([grep "clobbers files named 'mp' and 'penmp'" stderr],
+         [0], [ignore], [ignore])
+rm -f mp
+
+AT_DATA([penmp])
+AT_CHECK_AUTOCONF([], [1], [], [stderr])
+AT_CHECK([grep "clobbers files named 'mp' and 'penmp'" stderr],
+         [0], [ignore], [ignore])
+rm -f penmp
+
+# If neither of these files exist, autoconf should go through...
+AT_CHECK_AUTOCONF
+
+# ... but configure should bomb out, and *not* delete the files,
+# if they are added after autoconf is run.
+AT_DATA([mp])
+AT_CHECK_CONFIGURE([], [1], [], [stderr])
+AT_CHECK([test -e mp])
+AT_CHECK([grep "clobbers files named 'mp' and 'penmp'" stderr],
+         [0], [ignore], [ignore])
+rm -f mp
+
+AT_DATA([penmp])
+AT_CHECK_CONFIGURE([], [1], [], [stderr])
+AT_CHECK([test -e penmp])
+AT_CHECK([grep "clobbers files named 'mp' and 'penmp'" stderr],
+         [0], [ignore], [ignore])
+rm -f penmp
+
+AT_CHECK_CONFIGURE
+AT_CHECK_ENV
+
+AT_CLEANUP

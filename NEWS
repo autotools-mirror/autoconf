@@ -164,6 +164,19 @@ GNU Autoconf NEWS - User visible changes.
   Programs that use AC_FUNC_STRERROR_R should make sure to test the
   preprocessor macro HAVE_DECL_STRERROR_R before using strerror_r at all.
 
+*** AC_OPENMP can’t be used if you have files named ‘mp’ or ‘penmp’.
+
+  Autoconf will now issue an error if AC_OPENMP is used in a configure
+  script that’s in the same directory as a file named ‘mp’ or ‘penmp’.
+  Configure scripts that use AC_OPENMP will now error out upon
+  encountering files with these names in their working directory
+  (e.g. when the build directory is separate from the source directory).
+
+  If you have files with these names at the top level of your source
+  tree, we recommend either renaming them or moving them into a
+  subdirectory.  See the documentation of AC_OPENMP for further
+  explanation.
+
 ** New features
 
 *** Configure scripts now support a ‘--runstatedir’ option.

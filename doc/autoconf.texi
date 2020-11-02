@@ -7234,6 +7234,24 @@ latter.
 This macro caches its result in the @code{ac_cv_prog_c_openmp},
 @code{ac_cv_prog_cxx_openmp}, @code{ac_cv_prog_f77_openmp}, or
 @code{ac_cv_prog_fc_openmp} variable, depending on the current language.
+
+@strong{Caution:} Some of the compiler options that @code{AC_OPENMP}
+tests, mean ``enable OpenMP'' to one compiler, but ``write output to a
+file named @file{mp} or @file{penmp}'' to other compilers.  We cannot
+guarantee that the implementation of @code{AC_OPENMP} will not overwrite
+an existing file with either of these names.
+
+Therefore, as a defensive measure, a @command{configure} script that
+uses @code{AC_OPENMP} will issue an error and stop (before doing any of
+the operations that might overwrite these files) upon encountering
+either of these files in its working directory.
+@command{autoconf} will also issue an error if it finds either of
+these files in the same directory as a @file{configure.ac} that
+uses @code{AC_OPENMP}.
+
+If you have files with either of these names at the top level of your
+source tree, and you need to use @code{AC_OPENMP}, we recommend you
+either change their names or move them into a subdirectory.
 @end defmac
 
 @node C Compiler
