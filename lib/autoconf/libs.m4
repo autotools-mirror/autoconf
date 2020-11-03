@@ -312,7 +312,7 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([@%:@include <X11/Xlib.h>],
   ac_x_includes=
   ac_x_libraries=])
 LIBS="$ac_save_LIBS"
-# If that didn't work, only try xmkmf and filesystem searches
+# If that didn't work, only try xmkmf and file system searches
 # for native compilation.
 AS_IF([test x"$ac_x_includes" = xno && test "$cross_compiling" = no],
   [_AC_PATH_X_XMKMF

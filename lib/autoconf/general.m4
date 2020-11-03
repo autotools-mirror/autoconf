@@ -1162,7 +1162,7 @@ if test "$ac_init_help" = "recursive"; then
     _AC_SRCDIRS(["$ac_dir"])
     cd "$ac_dir" || { ac_status=$?; continue; }
     # Check for configure.gnu first; this name is used for a wrapper for
-    # Metaconfig's "Configure" on case-insensitive filesystems.
+    # Metaconfig's "Configure" on case-insensitive file systems.
     if test -f "$ac_srcdir/configure.gnu"; then
       echo &&
       $SHELL "$ac_srcdir/configure.gnu" --help=recursive

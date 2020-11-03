@@ -1191,7 +1191,7 @@ if test "$no_recursion" != yes; then
     cd "$ac_dir"
 
     # Check for configure.gnu first; this name is used for a wrapper for
-    # Metaconfig's "Configure" on case-insensitive filesystems.
+    # Metaconfig's "Configure" on case-insensitive file systems.
     if test -f "$ac_srcdir/configure.gnu"; then
       ac_sub_configure=$ac_srcdir/configure.gnu
     elif test -f "$ac_srcdir/configure"; then

@@ -2049,7 +2049,7 @@ The following macros help you manage the contents of your source tree.
 @defmac AC_CONFIG_SRCDIR (@var{unique-file-in-source-dir})
 @acindex{CONFIG_SRCDIR}
 Distinguish this package's source directory from other source
-directories that might happen to exist in the filesystem.
+directories that might happen to exist in the file system.
 @var{unique-file-in-source-dir} should name a file that is unique to
 this package.  @command{configure} will verify that this file exists in
 @file{@var{srcdir}}, before it runs any other checks.
