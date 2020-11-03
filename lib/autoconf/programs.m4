@@ -746,6 +746,9 @@ fi])])
 # declares yytext as a char * by default.
 AC_DEFUN([_AC_PROG_LEX_YYTEXT_DECL],
 [cat >conftest.l <<_ACEOF[
+%{
+int yywrap(void);
+%}
 %%
 a { ECHO; }
 b { REJECT; }
