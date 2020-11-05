@@ -1699,7 +1699,7 @@ AC_CACHE_CHECK([whether strerror_r returns char *],
 	       [ac_cv_func_strerror_r_char_p], [
     ac_cv_func_strerror_r_char_p=no
     if test $ac_cv_have_decl_strerror_r = yes; then
-      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([@%:@include <string.h>],
 	[[
 	  char buf[100];
 	  char x = *strerror_r (0, buf, sizeof buf);
