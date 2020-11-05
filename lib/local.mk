@@ -201,8 +201,27 @@ lib/autotest/autotest.m4f: $(autotest_m4f_dependencies)
 ## Install auxiliary scripts.  ##
 ## --------------------------- ##
 
-buildauxdir = $(pkgdatadir)/build-aux
-dist_buildaux_SCRIPTS = \
+# These are declared as _DATA so that they are not subject to
+# --program-transform-name; $(pkgdatadir) is sufficient to keep
+# multiple installations separate, and autoreconf looks for them by
+# their unadorned names.  However, autoreconf copies the executable
+# bit when it copies these files into a source tree, and _DATA items
+# are installed as not-executable, so we have to make them executable
+# in a hook rule.
+
+AUXSCRIPTS = \
   build-aux/config.guess \
   build-aux/config.sub \
   build-aux/install-sh
+
+buildauxdir = $(pkgdatadir)/build-aux
+dist_buildaux_DATA = \
+  $(AUXSCRIPTS)
+
+install-data-hook: install-data-hook-make-aux-scripts-executable
+install-data-hook-make-aux-scripts-executable:
+	for s in $(AUXSCRIPTS); do \
+	  chmod +x "$(DESTDIR)$(pkgdatadir)/$$s"; \
+	done
+
+.PHONY: install-data-hook install-data-hook-make-aux-scripts-executable
