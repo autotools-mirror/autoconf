@@ -1789,7 +1789,7 @@ AC_DEFUN([AC_CONFIG_AUX_DIRS],
 # required auxiliary files, the script will bomb out.  This macro may also
 # be used as a trace hook by tools that wish to identify all of the required
 # auxiliary files.
-m4_define([AC_REQUIRE_AUX_FILE],
+AC_DEFUN([AC_REQUIRE_AUX_FILE],
 [AS_LITERAL_WORD_IF([$1],
   [m4_do(
     [AC_REQUIRE([_AC_INIT_AUX_DIR])],

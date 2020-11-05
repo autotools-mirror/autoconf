@@ -1964,7 +1964,7 @@ AT_CLEANUP
 ## Missing auxiliary files.  ##
 ## ------------------------- ##
 
-AT_SETUP([Missing auxiliary files])
+AT_SETUP([Missing auxiliary files (config.*)])
 AT_KEYWORDS([autoreconf])
 
 # Prevent autoreconf from running aclocal, which might not exist,
@@ -2023,6 +2023,12 @@ AT_CHECK([test ! -e build-aux/install-sh])
 
 AT_CHECK_CONFIGURE
 
+AT_CLEANUP
+
+
+AT_SETUP([Missing auxiliary files (install-sh)])
+AT_KEYWORDS([autoreconf])
+
 # Repeat all the above tests with a configure script that _doesn't_
 # need config.{sub,guess} but does need install-sh.
 
@@ -2058,6 +2064,47 @@ AT_CHECK([test ! -e build-aux/config.guess])
 AT_CHECK([test ! -e build-aux/config.sub])
 AT_CHECK([test -x build-aux/install-sh])
 
+AT_CHECK_CONFIGURE
+
+AT_CLEANUP
+
+
+AT_SETUP([Missing auxiliary files (foreign)])
+AT_KEYWORDS([autoreconf])
+
+# If an aux file is required that autoreconf doesn't know how to install,
+# it shouldn't suggest autoreconf --install.
+# This also verifies that AC_REQUIRE_AUX_FILE can be used outside of a
+# macro definition, which was always the intent, and was recommended
+# usage in some automake recipes, but which was broken in autoconf
+# beta 2.69d (see https://savannah.gnu.org/support/?110363).
+
+AT_DATA([configure.ac],
+[[AC_INIT([GNU foo], [1.0])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_REQUIRE_AUX_FILE([tap-driver.sh])
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE([], [1], [ignore],
+[configure: error: cannot find required auxiliary files: tap-driver.sh
+])
+
+AT_CHECK([autoreconf], 1, [],
+[configure.ac: error: required file 'tap-driver.sh' not found
+])
+AT_CHECK([test ! -e build-aux])
+
+AT_CHECK([autoreconf --install], 1, [],
+[configure.ac: error: required file 'tap-driver.sh' not found
+])
+# autoreconf --install always creates the aux directory.
+AT_CHECK([test -e build-aux])
+
+touch build-aux/tap-driver.sh
+
+AT_CHECK([autoreconf])
 AT_CHECK_CONFIGURE
 
 AT_CLEANUP
