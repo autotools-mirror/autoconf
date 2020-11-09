@@ -179,6 +179,12 @@ GNU Autoconf NEWS - User visible changes.
 
 *** autoreconf will now run gtkdocize and intltoolize when appropriate.
 
+*** autoreconf now recognizes AM_GNU_GETTEXT_REQUIRE_VERSION.
+
+  This macro can be used with gettext 0.19.6 or later to specify
+  a *minimum* version requirement for gettext, instead of the *fixed*
+  version requirement specified by AM_GNU_GETTEXT_VERSION.
+
 *** autoheader handles secondary config headers better.
 
   It is no longer necessary to duplicate AC_DEFINE templates in the
