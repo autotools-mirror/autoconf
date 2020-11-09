@@ -747,6 +747,9 @@ fi])])
 AC_DEFUN([_AC_PROG_LEX_YYTEXT_DECL],
 [cat >conftest.l <<_ACEOF[
 %{
+#ifdef __cplusplus
+extern "C"
+#endif
 int yywrap(void);
 %}
 %%

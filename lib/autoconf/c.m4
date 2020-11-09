@@ -1993,8 +1993,8 @@ AC_DEFUN([AC_C_FLEXIBLE_ARRAY_MEMBER],
 	    #include <stddef.h>
 	    struct s { int n; double d[]; };]],
 	  [[int m = getchar ();
-	    struct s *p = malloc (offsetof (struct s, d)
-				  + m * sizeof (double));
+	    struct s *p = (struct s *) malloc (offsetof (struct s, d)
+					       + m * sizeof (double));
 	    p->d[0] = 0.0;
 	    return p->d != (double *) NULL;]])],
        [ac_cv_c_flexmember=yes],
