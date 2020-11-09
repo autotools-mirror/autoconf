@@ -116,6 +116,19 @@ GNU Autoconf NEWS - User visible changes.
   old, and unlikely to be able to handle modern C programs for other
   reasons (e.g. not having a C90-compliant compiler at all).
 
+*** Configure scripts require support for $( ... ) command substitution.
+
+  This POSIX shell feature is approximately the same age as
+  user-defined functions, but there do exist shells that support
+  functions and not $( ... ), such as Solaris 10 /bin/sh.
+
+  Configure scripts will automatically locate a shell that supports
+  this feature and re-execute themselves with it, if necessary, so
+  the new requirement should be transparent to most users.
+
+  In this release, most of Autoconf’s code still uses the older `...`
+  notation for command substitution.
+
 *** AC_INIT now trims extra white space from its arguments.
 
   For instance, AC_INIT([  GNU  Hello  ], [1.0]) will set PACKAGE_NAME

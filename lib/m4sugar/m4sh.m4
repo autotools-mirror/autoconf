@@ -468,6 +468,15 @@ AS_IF([( set x; as_fn_ret_success y && test x = "[$]1" )], [],
 test x$exitcode = x0[]])# _AS_SHELL_FN_WORK
 
 
+# _AS_MODERN_CMDSUBST_WORKS
+# -------------------------
+# This is a spy to detect "in the wild" shells that do not support
+# the newer $(...) form of command substitutions.
+m4_define([_AS_MODERN_CMDSUBST_WORKS],
+[blah=$(echo $(echo blah))
+test x"$blah" = xblah])
+
+
 # _AS_SHELL_SANITIZE
 # ------------------
 # This is the prolog that is emitted by AS_INIT and AS_INIT_GENERATED;
@@ -544,6 +553,7 @@ m4_define([AS_SHELL_SANITIZE],
 m4_provide_if([AS_INIT], [],
 [m4_provide([AS_INIT])
 _AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])
+_AS_DETECT_REQUIRED([_AS_MODERN_CMDSUBST_WORKS])
 _AS_DETECT_REQUIRED([_AS_TEST_X_WORKS])
 _AS_DETECT_BETTER_SHELL
 _AS_UNSET_PREPARE
@@ -2177,6 +2187,7 @@ m4_divert_text([M4SH-INIT-FN], [m4_text_box([M4sh Shell Functions.])])
 m4_divert([BODY])dnl
 m4_text_box([Main body of script.])
 _AS_DETECT_REQUIRED([_AS_SHELL_FN_WORK])dnl
+_AS_DETECT_REQUIRED([_AS_MODERN_CMDSUBST_WORKS])dnl
 _AS_DETECT_REQUIRED([_AS_TEST_X_WORKS])dnl
 AS_REQUIRE([_AS_UNSET_PREPARE], [], [M4SH-INIT-FN])dnl
 ])
