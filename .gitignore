@@ -50,7 +50,6 @@ Makefile.in
 /bin/autoupdate
 /bin/ifnames
 /build-aux/elisp-comp
-/build-aux/install-sh
 /build-aux/mdate-sh
 /build-aux/missing
 /config.cache
