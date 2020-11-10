@@ -546,21 +546,38 @@ sub handle_output ($$)
     foreach (sort keys %forbidden);
   verb "allowed   tokens: $allowed";
 
-  # Read the (cached) raw M4 output, produce the actual result.  We
-  # have to use the 2nd arg to have Autom4te::XFile honor the third, but then
-  # stdout is to be handled by hand :(.  Don't use fdopen as it means
-  # we will close STDOUT, which we already do in END.
-  my $out = new Autom4te::XFile;
+  # Read the (cached) raw M4 output, produce the actual result.
+  # If we are writing to a regular file, replace it atomically.
+  my $atomic_replace = 0;
+  my $out;
   if ($output eq '-')
     {
-      $out->open (">$output");
+      # Don't just make $out be STDOUT, because then we would close STDOUT,
+      # which we already do in END.
+      $out = new Autom4te::XFile ('>&STDOUT');
+    }
+  elsif (-e $output && ! -f $output)
+    {
+      $out = new Autom4te::XFile ($output, '>');
     }
   else
     {
-      $out->open ($output, O_CREAT | O_WRONLY | O_TRUNC, oct ($mode));
+      my (undef, $outdir, undef) = fileparse ($output);
+
+      use File::Temp ();
+      $out = new File::Temp (UNLINK => 0, DIR => $outdir);
+      fatal "cannot create a file in $outdir: $!"
+        unless $out;
+
+      # File::Temp doesn't give us access to 3-arg open(2), unfortunately.
+      # In older Perls, implicit conversion of a File::Temp to its filename
+      # cannot be relied upon.
+      chmod (oct ($mode) & ~(umask), $out->filename)
+        or fatal "setting mode of " . $out->filename . ": $!";
+
+      $atomic_replace = 1;
     }
-  fatal "cannot create $output: $!"
-    unless $out;
+
   my $in = new Autom4te::XFile ($ocache . $req->id, "<");
 
   my %prohibited;
@@ -585,7 +602,8 @@ sub handle_output ($$)
       foreach (split (/\W+/))
 	{
 	  $prohibited{$_} = $.
-	    if !/^$/ && /$forbidden/o && !/$allowed/o && ! exists $prohibited{$_};
+	    if !/^$/ && /$forbidden/o && !/$allowed/o
+               && ! exists $prohibited{$_};
 	}
 
       # Performed *last*: the empty quadrigraph.
@@ -595,6 +613,8 @@ sub handle_output ($$)
     }
 
   $out->close();
+  update_file ($out->filename, $output, $force)
+    if $atomic_replace;
 
   # If no forbidden words, we're done.
   return
