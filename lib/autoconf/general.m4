@@ -2105,26 +2105,20 @@ AU_DEFUN([AC_VALIDATE_CACHED_SYSTEM_TUPLE], [])
 # Look for site- or system-specific initialization scripts.
 m4_define([AC_SITE_LOAD],
 [# Prefer an explicitly selected file to automatically selected ones.
-ac_site_file1=NONE
-ac_site_file2=NONE
 if test -n "$CONFIG_SITE"; then
-  # We do not want a PATH search for config.site.
-  case $CONFIG_SITE in @%:@((
-    -*)  ac_site_file1=./$CONFIG_SITE;;
-    */*) ac_site_file1=$CONFIG_SITE;;
-    *)   ac_site_file1=./$CONFIG_SITE;;
-  esac
+  ac_site_files="$CONFIG_SITE"
 elif test "x$prefix" != xNONE; then
-  ac_site_file1=$prefix/share/config.site
-  ac_site_file2=$prefix/etc/config.site
+  ac_site_files="$prefix/share/config.site $prefix/etc/config.site"
 else
-  ac_site_file1=$ac_default_prefix/share/config.site
-  ac_site_file2=$ac_default_prefix/etc/config.site
+  ac_site_files="$ac_default_prefix/share/config.site $ac_default_prefix/etc/config.site"
 fi
-for ac_site_file in "$ac_site_file1" "$ac_site_file2"
+
+for ac_site_file in $ac_site_files
 do
-  test "x$ac_site_file" = xNONE && continue
-  if test /dev/null != "$ac_site_file" && test -r "$ac_site_file"; then
+  AS_CASE([$ac_site_file],
+    [*/*], [],
+    [ac_site_file=./$ac_site_file])
+  if test -f "$ac_site_file" && test -r "$ac_site_file"; then
     AC_MSG_NOTICE([loading site script $ac_site_file])
     sed 's/^/| /' "$ac_site_file" >&AS_MESSAGE_LOG_FD
     . "$ac_site_file" \

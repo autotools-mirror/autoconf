@@ -22943,8 +22943,8 @@ site- and system-wide initialization files.
 
 @evindex CONFIG_SITE
 If the environment variable @code{CONFIG_SITE} is set, @command{configure}
-uses its value as the name of a shell script to read; it is recommended
-that this be an absolute file name.  Otherwise, it
+uses its value as a space-separated list of shell scripts to read;
+it is recommended that these be absolute file names.  Otherwise, it
 reads the shell script @file{@var{prefix}/share/config.site} if it exists,
 then @file{@var{prefix}/etc/config.site} if it exists.  Thus,
 settings in machine-specific files override those in machine-independent

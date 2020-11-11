@@ -571,6 +571,17 @@ AT_CHECK([grep 'failed to load site script' stderr], [], [ignore], [ignore],
 CONFIG_SITE=./no-such-file
 AT_CHECK_CONFIGURE
 
+# Check that multiple files are loaded
+AT_DATA([first.site],
+[[my_cv_shell_true_works=no
+]])
+AT_DATA([second.site],
+[[my_cv_shell_true_works=maybe
+]])
+CONFIG_SITE="$PWD/first.site $PWD/second.site"
+AT_CHECK_CONFIGURE([], [], [stdout])
+AT_CHECK([grep 'whether true.*works.*cached.*maybe' stdout], [], [ignore])
+
 AT_CLEANUP
 
 
