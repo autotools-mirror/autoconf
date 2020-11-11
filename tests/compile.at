@@ -332,7 +332,7 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([], [return 2])],
 	      [AC_MSG_ERROR([saw `return 2' as a success])],
 	      [estatus=$?
 test $estatus != 2 &&
-  AC_MSG_ERROR([did not get as 2 exit status: $estatus])])
+  AC_MSG_ERROR([did not get 2 as exit status: $estatus])])
 
 # The old stinky one.
 AC_TRY_RUN([int main (void) { return 3; }],
