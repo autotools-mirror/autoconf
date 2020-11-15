@@ -387,6 +387,12 @@ GNU Autoconf NEWS - User visible changes.
   This means configure scripts will no longer check repeatedly for the
   C compiler under some combinations of macro use.
 
+*** AS_IF’s if-false argument may be empty after macro expansion.
+
+  This long-standing limitation broke configure scripts that used
+  macros in this position that emitted shell code in 2.69 but no
+  longer do, so we have lifted it.
+
 *** AC_HEADER_MAJOR detects the location of the major, minor, and
     makedev macros correctly under glibc 2.25 and later.
 

@@ -1320,13 +1320,11 @@ dnl Handle blank arguments.
 AS_IF([false], [:], [ ]) && AS_CASE([foo], [foo], []
 ) && echo seventeen
 m4_define([empty])AS_IF([:], [empty]
-) && AS_CASE([foo], [foo], [empty]) && echo eighteen
+) && AS_IF([false], [], [empty]
+) || AS_CASE([foo], [foo], [empty]) && echo eighteen
 dnl Allow for users that don't know to avoid trailing whitespace
 AS_IF([:
 ], [echo nineteen])
-dnl We can't handle AS_IF([false], [:], [empty]) unless m4_expand is
-dnl taught how to handle m4_require.  The user is responsible for
-dnl avoiding the syntax error in that case.
 
 # check that require works correctly
 m4_for([n], 1, 9, [],

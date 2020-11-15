@@ -13972,13 +13972,6 @@ AS_IF([test "x$foo" = xyes], [HANDLE_FOO([yes])],
 ensures any required macros of @code{HANDLE_FOO}
 are expanded before the first test.
 
-The @var{run-if-false} argument should either consist entirely of
-blanks, or expand to a nonempty shell command.  For example,
-@code{AS_IF([:], [:], [[]])} is invalid because its @var{run-if-false}
-argument contains the nonblank characters @code{[]} which expand to
-nothing.  This restriction on @var{run-if-false} also applies to other
-macros with ``if-false'' arguments denoting shell commands.
-
 This macro should be used instead of plain @samp{if} in code
 outside of an @code{AC_DEFUN} macro, when the contents of the @samp{if}
 use @code{AC_REQUIRE} directly or indirectly (@pxref{Prerequisite Macros}).
