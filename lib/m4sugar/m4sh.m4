@@ -897,8 +897,11 @@ esac
 # the shell variables $as_echo and $as_echo_n.  New code should use
 # AS_ECHO(["message"]) and AS_ECHO_N(["message"]), respectively.
 dnl The @&t@ prevents a spurious deprecation diagnostic.
-as_@&t@echo='printf %s\n'
-as_@&t@echo_n='printf %s'
+dnl Extra quoting in case `s' or `n' are user-defined macros when this
+dnl is expanded; they almost certainly aren't meant to be used here.
+dnl See bug 110377.
+as_@&t@echo='printf [%s\n]'
+as_@&t@echo_n='printf [%s]'
 ])# _AS_ECHO_N_PREPARE
 
 
@@ -1106,7 +1109,10 @@ fi
 # (typically a quoted string).  The bytes of WORD are output as-is, even
 # if it starts with "-" or contains "\".
 m4_define([AS_ECHO],
-[printf "%s\n" $1])
+dnl Extra quoting in case `s' or `n' are user-defined macros when this
+dnl is expanded; they almost certainly aren't meant to be used here.
+dnl See bug 110377.
+[printf "[%s\n]" $1])
 
 # Deprecation warning for the former internal shell variable $as_echo.
 m4_define([as_echo],
@@ -1118,7 +1124,10 @@ m4_define([as_echo],
 # ---------------
 # Like AS_ECHO(WORD), except do not output the trailing newline.
 m4_define([AS_ECHO_N],
-[printf %s $1])
+dnl Extra quoting in case `s' is a user-defined macro when this
+dnl is expanded; it almost certainly isn't meant to be used here.
+dnl See bug 110377.
+[printf [%s] $1])
 
 # Deprecation warning for the former internal shell variable $as_echo_n.
 m4_define([as_echo_n],
