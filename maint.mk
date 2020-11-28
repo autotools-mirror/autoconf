@@ -464,12 +464,15 @@ sc_error_message_warn_fatal:
 	       exit 1; }						\
 	  || :
 
-# Error messages should not start with a capital letter
+# Error messages should not start with a capital letter;
+# however, if they start with an entire fully uppercased word, that's
+# probably a proper noun and it should stay that way.  We also exempt
+# known instances of proper nouns that should stay mixed-case.
 sc_error_message_uppercase:
 	@$(VC_LIST_EXCEPT)						\
 	  | xargs $(GREP) -nEA2 '[^rp]error *\(' /dev/null		\
 	  | $(GREP) -E '"[A-Z]'						\
-	  | $(GREP) -vE '"FATAL|"WARNING|"Java|"C#|PRIuMAX'		\
+	  | $(GREP) -vE '"([A-Z0-9_]{2,}\>|Java|C#|(PRI|SCN)[dioux])'	\
 	  && { echo '$(ME): found capitalized error message' 1>&2;	\
 	       exit 1; }						\
 	  || :
