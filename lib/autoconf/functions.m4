@@ -1541,17 +1541,16 @@ rm -rf conftest*
 # AC_FUNC_SETPGRP
 # ---------------
 AC_DEFUN([AC_FUNC_SETPGRP],
-[AC_CACHE_CHECK(whether setpgrp takes no argument, ac_cv_func_setpgrp_void,
-   [AC_COMPILE_IFELSE(
-      [AC_LANG_PROGRAM(
-	 [[#include <unistd.h>
-	   static int (*p) (void) = setpgrp;]],
-	 [[return setpgrp ();]])],
-      [ac_cv_func_setpgrp_void=yes],
-      [ac_cv_func_setpgrp_void=no])])
+[AC_CACHE_CHECK(whether setpgrp requires zero arguments,
+ ac_cv_func_setpgrp_void,
+[# Call it with two arguments.
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [setpgrp(0, 0);])],
+                  [ac_cv_func_setpgrp_void=no],
+                  [ac_cv_func_setpgrp_void=yes])
+])
 if test $ac_cv_func_setpgrp_void = yes; then
   AC_DEFINE(SETPGRP_VOID, 1,
-	    [Define to 1 if the `setpgrp' function takes no argument.])
+	    [Define to 1 if the `setpgrp' function requires zero arguments.])
 fi
 ])# AC_FUNC_SETPGRP
 

@@ -5599,13 +5599,17 @@ If @code{setpgrp} takes no argument (the Posix version), define
 @code{SETPGRP_VOID}.  Otherwise, it is the BSD version, which takes
 two process IDs as arguments.  This macro does not check whether
 @code{setpgrp} exists at all; if you need to work in that situation,
-first call @code{AC_CHECK_FUNC} for @code{setpgrp}.
+first call @code{AC_CHECK_FUNC} for @code{setpgrp}.  This macro also
+does not check for the Solaris variant of @code{setpgrp}, which returns
+a @code{pid_t} instead of an @code{int}; portable code should only use
+the return value by comparing it against @code{-1} to check for errors.
 
 The result of this macro is cached in the @code{ac_cv_func_setpgrp_void}
 variable.
 
-This macro is obsolescent, as current systems have a @code{setpgrp}
-whose signature conforms to Posix.  New programs need not use this macro.
+This macro is obsolescent, as all forms of @code{setpgrp} are also
+obsolescent.  New programs should use the Posix function @code{setpgid},
+which takes two process IDs as arguments (like the BSD @code{setpgrp}).
 @end defmac
 
 @defmac AC_FUNC_STAT
