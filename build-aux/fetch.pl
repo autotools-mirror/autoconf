@@ -143,10 +143,10 @@ sub savannah_url($$)
     }
   else
     {
-      my $gitweb_base = 'https://git.savannah.gnu.org/gitweb/?p=';
-      my $gitweb_op   = '.git;a=blob_plain;hb=HEAD;f=';
+      my $cgit_base = 'https://git.savannah.gnu.org/cgit/';
+      my $cgit_op   = '.git/plain/';
 
-      return $gitweb_base . $repo . $gitweb_op . $filename;
+      return $cgit_base . $repo . $cgit_op . $filename;
   }
 }
 

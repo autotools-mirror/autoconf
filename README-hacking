@@ -35,7 +35,7 @@ generate the version string.  Therefore, we recommend:
 - Git 1.4.4+ <https://git-scm.com/>
 
 You may find it useful to install the git-merge-changelog merge driver:
-https://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/git-merge-changelog.c
+https://git.savannah.gnu.org/cgit/gnulib.git/plain/lib/git-merge-changelog.c
 
 then add the following to .git/config or ~/.gitconfig:
 [merge "merge-changelog"]
@@ -122,12 +122,12 @@ The forms to choose from are in gnulib's doc/Copyright/ directory.
 If you want to assign a single change, you should use the file,
 doc/Copyright/request-assign.changes:
 
-    https://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=doc/Copyright/request-assign.changes;hb=HEAD
+    https://git.sv.gnu.org/cgit/gnulib.git/tree/doc/Copyright/request-assign.changes
 
 If you would like to assign past and future autoconf work,
 you'd use doc/Copyright/request-assign.future:
 
-    https://git.sv.gnu.org/gitweb/?p=gnulib.git;a=blob;f=doc/Copyright/request-assign.future;hb=HEAD
+    https://git.sv.gnu.org/cgit/gnulib.git/tree/doc/Copyright/request-assign.future
 
 Enjoy!
 

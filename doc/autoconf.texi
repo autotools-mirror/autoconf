@@ -797,12 +797,10 @@ short @file{configure.ac} that demonstrates the problem.
 Autoconf's development tree is accessible via @command{git}; see the
 @uref{https://@/savannah.gnu.org/@/projects/@/autoconf/, Autoconf
 Summary} for details, or view
-@uref{https://@/git.sv.gnu.org/@/gitweb/@/?p=autoconf.git, the actual
-repository}.  Anonymous CVS access is also available, see
-@file{README} for more details.  Patches relative to the
-current @command{git} version can be sent for review to the
-@email{autoconf-patches@@gnu.org, Autoconf Patches mailing list}, with
-discussion on prior patches
+@uref{https://@/git.savannah.gnu.org/@/cgit/@/autoconf.git, the actual
+repository}.  Patches relative to the current @command{git} version can
+be sent for review to the @email{autoconf-patches@@gnu.org, Autoconf
+Patches mailing list}, with discussion on prior patches
 @uref{https://@/lists.gnu.org/@/archive/@/html/@/autoconf-@/patches/,
 archived}; and all commits are posted in the read-only
 @email{autoconf-commit@@gnu.org, Autoconf Commit mailing list}, which is
