@@ -46,7 +46,7 @@ BEGIN
 # Do not use Cwd::chdir, since it might hang.
 use Cwd qw (cwd);
 use File::Copy qw (copy);
-use File::Temp ();
+use File::Temp qw (tempfile);
 
 use Autom4te::ChannelDefs;
 use Autom4te::Channels;
@@ -362,10 +362,7 @@ sub install_aux_file
           unlink $dest
             or fatal "rm -f $dest: $!\n";
         }
-      my $temp = new File::Temp (UNLINK => 0, DIR => $destdir);
-      # Older Perls don't convert $temp to its filename
-      # in all the places we need it to.
-      my $tempname = $temp->filename;
+      my ($temp, $tempname) = tempfile (UNLINK => 0, DIR => $destdir);
       copy ($src, $tempname)
         or fatal "copying $src to $tempname: $!\n";
       make_executable ($tempname) if -x $src;

@@ -548,7 +548,7 @@ sub handle_output ($$)
 
   # Read the (cached) raw M4 output, produce the actual result.
   # If we are writing to a regular file, replace it atomically.
-  my $atomic_replace = 0;
+  my $scratchfile;
   my $out;
   if ($output eq '-')
     {
@@ -564,18 +564,14 @@ sub handle_output ($$)
     {
       my (undef, $outdir, undef) = fileparse ($output);
 
-      use File::Temp ();
-      $out = new File::Temp (UNLINK => 0, DIR => $outdir);
+      use File::Temp qw (tempfile);
+      ($out, $scratchfile) = tempfile (UNLINK => 0, DIR => $outdir);
       fatal "cannot create a file in $outdir: $!"
         unless $out;
 
       # File::Temp doesn't give us access to 3-arg open(2), unfortunately.
-      # In older Perls, implicit conversion of a File::Temp to its filename
-      # cannot be relied upon.
-      chmod (oct ($mode) & ~(umask), $out->filename)
-        or fatal "setting mode of " . $out->filename . ": $!";
-
-      $atomic_replace = 1;
+      chmod (oct ($mode) & ~(umask), $scratchfile)
+        or fatal "setting mode of " . $scratchfile . ": $!";
     }
 
   my $in = new Autom4te::XFile ($ocache . $req->id, "<");
@@ -613,8 +609,8 @@ sub handle_output ($$)
     }
 
   $out->close();
-  update_file ($out->filename, $output, $force)
-    if $atomic_replace;
+  update_file ($scratchfile, $output, $force)
+    if defined $scratchfile;
 
   # If no forbidden words, we're done.
   return
