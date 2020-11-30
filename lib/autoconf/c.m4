@@ -1536,7 +1536,8 @@ AU_DEFUN([AC_C_CROSS], [])
 # ------------------
 AC_DEFUN([AC_C_CHAR_UNSIGNED],
 [AH_VERBATIM([__CHAR_UNSIGNED__],
-[/* Define to 1 if type `char' is unsigned and you are not using gcc.  */
+[/* Define to 1 if type `char' is unsigned and your compiler does not
+   predefine this macro.  */
 #ifndef __CHAR_UNSIGNED__
 # undef __CHAR_UNSIGNED__
 #endif])dnl
@@ -1544,7 +1545,7 @@ AC_CACHE_CHECK(whether char is unsigned, ac_cv_c_char_unsigned,
 [AC_COMPILE_IFELSE([AC_LANG_BOOL_COMPILE_TRY([AC_INCLUDES_DEFAULT([])],
 					     [((char) -1) < 0])],
 		   ac_cv_c_char_unsigned=no, ac_cv_c_char_unsigned=yes)])
-if test $ac_cv_c_char_unsigned = yes && test "$GCC" != yes; then
+if test $ac_cv_c_char_unsigned = yes; then
   AC_DEFINE(__CHAR_UNSIGNED__)
 fi
 ])# AC_C_CHAR_UNSIGNED
