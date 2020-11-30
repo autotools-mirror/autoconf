@@ -310,6 +310,37 @@ sub can_install_aux_files
   return 1;
 }
 
+# extract_time_stamp ($fname)
+# ---------------------------
+# Extract a timestamp line from $fname.
+# This is hardwired to know what to look for in the files we currently install.
+sub extract_time_stamp
+{
+  my $fname = shift;
+  open my $fh, '<', $fname
+    or fatal "opening $fname: $!";
+  while (my $l = <$fh>)
+    {
+      if ($l =~ /^(?:scriptversion|timestamp)='?(\d\d\d\d-\d\d-\d\d(?:\.\d\d)?)/)
+        {
+          return $1;
+        }
+    }
+  fatal "no timestamp line found in $fname";
+}
+
+# our_aux_file_is_newer ($dest, $src)
+# -----------------------------------
+# True if our copy of an aux file ($src) has a newer 'timestamp' line
+# than the matching line in $dest.
+sub our_aux_file_is_newer
+{
+  my ($dest, $src) = @_;
+  my $dstamp = extract_time_stamp ($dest);
+  my $sstamp = extract_time_stamp ($src);
+  return $sstamp gt $dstamp;
+}
+
 # try_install_aux_files
 # ---------------------
 # Install each of the aux files listed in @$auxfiles, that we are able
@@ -341,6 +372,11 @@ sub install_aux_file
 {
   my ($destdir, $f, $src) = @_;
   my $dest = "${destdir}/$f";
+  if (-e $dest && ! our_aux_file_is_newer ($dest, $src))
+    {
+      return;
+    }
+
   if ($symlink)
     {
       if ($force || ! -l $dest || readlink $dest != $src)
@@ -348,11 +384,11 @@ sub install_aux_file
           if (-e $dest)
             {
               unlink $dest
-                or fatal "rm -f $dest: $!\n";
+                or fatal "rm -f $dest: $!";
             }
           verb "linking $dest to $src";
           symlink $src, $dest
-            or fatal "ln -s $src $dest: $!\n";
+            or fatal "ln -s $src $dest: $!";
         }
     }
   else
@@ -360,11 +396,11 @@ sub install_aux_file
       if (-e $dest && ! -f $dest)
         {
           unlink $dest
-            or fatal "rm -f $dest: $!\n";
+            or fatal "rm -f $dest: $!";
         }
       my ($temp, $tempname) = tempfile (UNLINK => 0, DIR => $destdir);
       copy ($src, $tempname)
-        or fatal "copying $src to $tempname: $!\n";
+        or fatal "copying $src to $tempname: $!";
       make_executable ($tempname) if -x $src;
       update_file ($tempname, $dest, $force);
     }
@@ -381,7 +417,7 @@ sub make_executable
   $perm |= 0010 if ($perm & 0040);
   $perm |= 0001 if ($perm & 0004);
   chmod $perm, $f
-    or fatal "chmod $f: $!\n";
+    or fatal "chmod $f: $!";
 }
 
 
@@ -772,10 +808,14 @@ sub autoreconf_current_directory ($)
   # ---------------------------------------------------- #
   # Installing aux files and checking for missing ones.  #
   # ---------------------------------------------------- #
+  try_install_aux_files (\@aux_files, $aux_dir || '.')
+    if $install && $force;
+
   my @missing_aux_files = find_missing_aux_files (\@aux_files, $aux_dir);
   if (@missing_aux_files)
     {
-      try_install_aux_files (\@missing_aux_files, $aux_dir || '.') if $install;
+      try_install_aux_files (\@missing_aux_files, $aux_dir || '.')
+        if $install && !$force;
 
       for (0 .. $#missing_aux_files)
         {
