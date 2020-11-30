@@ -706,7 +706,14 @@ rm config.h
 # the functioning of AS_ECHO.
 
 AT_CONFIGURE_AC(
-[[m4@&t@_pushdef([printf], [echo])
+[[# At this point in a configure script, defining shell functions is safe.
+fn_printf_override () {
+  for arg; do
+    printf '+ %s\n' "$arg"
+  done
+  AS@&t@_UNSET([arg])
+}
+m4@&t@_pushdef([printf], [fn_printf_override])
 AC_MSG_NOTICE([checking whether m4sugar echo works... yes])
 AC_MSG_CHECKING([whether m4sugar echo_n works])
 AC_MSG_RESULT([yes])
@@ -715,9 +722,12 @@ m4@&t@_popdef([printf])
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [],
-[[%s\n configure: checking whether m4sugar echo works... yes
-%s checking whether m4sugar echo_n works... @&t@
-%s\n yes
+[[+ %s\n
++ configure: checking whether m4sugar echo works... yes
++ %s
++ checking whether m4sugar echo_n works... @&t@
++ %s\n
++ yes
 configure: creating ./config.status
 config.status: creating config.h
 ]], [])
