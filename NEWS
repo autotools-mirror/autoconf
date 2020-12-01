@@ -146,6 +146,9 @@ GNU Autoconf NEWS - User visible changes.
   For compatibility’s sake, the C preprocessor macros STDC_HEADERS,
   HAVE_STDLIB_H, and HAVE_STRING_H are defined unconditionally.
   These preprocessor macros should be considered obsolescent.
+  However, cache variables like ac_cv_header_stdlib_h are not set;
+  this is intentional, so that AC_CHECK_HEADER([stdlib.h]) will still
+  do a test for the presence of stdlib.h, in case you genuinely need that.
 
   Future releases of Autoconf may reduce the set of headers checked
   for by AC_INCLUDES_DEFAULT.
