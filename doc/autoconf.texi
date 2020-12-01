@@ -2605,9 +2605,18 @@ instead.  If it affects only the linker (e.g., @option{-L@var{directory}}),
 it should be put into @code{LDFLAGS} instead.  If it
 affects only the compiler proper, @code{CFLAGS} is the natural home for
 it.  If an option affects multiple phases of the compiler, though,
-matters get tricky.  One approach to put such options directly into
-@code{CC}, e.g., @code{CC='gcc -m64'}.  Another is to put them into both
-@code{CPPFLAGS} and @code{LDFLAGS}, but not into @code{CFLAGS}.
+matters get tricky:
+
+@itemize @bullet
+@item
+If an option selects a 32-bit or 64-bit build on a bi-arch system, it
+must be put direcly into @code{CC}, e.g., @code{CC='gcc -m64'}.  This is
+necessary for @code{config.guess} to work right.
+@item
+Otherwise one approach is to put the option into @code{CC}.  Another is
+to put it into both @code{CPPFLAGS} and @code{LDFLAGS}, but not into
+@code{CFLAGS}.
+@end itemize
 
 However, remember that some @file{Makefile} variables are reserved by
 the GNU Coding Standards for the use of the ``user''---the person
