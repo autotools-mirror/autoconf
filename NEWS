@@ -429,11 +429,6 @@ GNU Autoconf NEWS - User visible changes.
   default search paths.  Alternatively, use configure’s --x-includes
   and --x-libraries command line options to tell it where they are.
 
-*** AC_PROG_CC is now defined via AC_DEFUN_ONCE.
-
-  This means configure scripts will no longer check repeatedly for the
-  C compiler under some combinations of macro use.
-
 *** AS_IF’s if-false argument may be empty after macro expansion.
 
   This long-standing limitation broke configure scripts that used

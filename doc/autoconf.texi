@@ -7495,8 +7495,11 @@ and before @code{AC_PROG_CC} to select an empty default instead.
 Many Autoconf macros use a compiler, and thus call
 @samp{AC_REQUIRE([AC_PROG_CC])} to ensure that the compiler has been
 determined before the body of the outermost @code{AC_DEFUN} macro.
-@code{AC_PROG_CC} is therefore defined via @code{AC_DEFUN_ONCE} to avoid
-needless reexpansion (@pxref{One-Shot Macros}).
+Although @code{AC_PROG_CC} is safe to directly expand multiple times, it
+performs certain checks (such as the proper value of @env{EXEEXT}) only
+on the first invocation.  Therefore, care must be used when invoking
+this macro from within another macro rather than at the top level
+(@pxref{Expanded Before Required}).
 @end defmac
 
 @anchor{AC_PROG_CC_C_O}

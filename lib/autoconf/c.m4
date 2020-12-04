@@ -449,7 +449,7 @@ AU_DEFUN([ac_cv_prog_gcc],
 AN_MAKEVAR([CC],  [AC_PROG_CC])
 AN_PROGRAM([cc],  [AC_PROG_CC])
 AN_PROGRAM([gcc], [AC_PROG_CC])
-AC_DEFUN_ONCE([AC_PROG_CC],
+AC_DEFUN([AC_PROG_CC],
 [AC_LANG_PUSH(C)dnl
 AC_ARG_VAR([CC],     [C compiler command])dnl
 AC_ARG_VAR([CFLAGS], [C compiler flags])dnl
@@ -1191,11 +1191,16 @@ dnl SVR4			-Xc -D__EXTENSIONS__
 # helps, append it to CC.  If eventually successful, run ACTION-IF-AVAILABLE,
 # else ACTION-IF-UNAVAILABLE.
 AC_DEFUN([_AC_C_STD_TRY],
+[m4_divert_once([INIT_PREPARE],
+[# Test code for whether the C compiler supports ]m4_translit($1, [c], [C])[.
+AS_VAR_SET([ac_c_conftest_$1],
+['m4_bpatsubsts(AC_LANG_PROGRAM([$2], [$3]), ['], ['\\''])'])
+])]dnl
 [AC_MSG_CHECKING([for $CC option to enable ]m4_translit($1, [c], [C])[ features])
 AC_CACHE_VAL(ac_cv_prog_cc_$1,
 [ac_cv_prog_cc_$1=no
 ac_save_CC=$CC
-AC_LANG_CONFTEST([AC_LANG_PROGRAM([$2], [$3])])
+AC_LANG_CONFTEST([AC_LANG_DEFINES_PROVIDED][$ac_c_conftest_$1])
 for ac_arg in '' $4
 do
   CC="$ac_save_CC $ac_arg"
@@ -2256,12 +2261,17 @@ fi])
 # If eventually successful, run ACTION-IF-AVAILABLE, else
 # ACTION-IF-UNAVAILABLE.
 AC_DEFUN([_AC_CXX_STD_TRY],
+[m4_divert_once([INIT_PREPARE],
+[# Test code for whether the C++ compiler supports ]m4_translit(m4_translit($1, [x], [+]), [a-z], [A-Z])[.
+AS_VAR_SET([ac_cxx_conftest_$1],
+['m4_bpatsubsts(AC_LANG_PROGRAM([$2], [$3]), ['], ['\\''])'])
+])]dnl
 [AC_MSG_CHECKING([for $CXX option to enable ]m4_translit(m4_translit($1, [x], [+]), [a-z], [A-Z])[ features])
 AC_LANG_PUSH(C++)dnl
 AC_CACHE_VAL(ac_cv_prog_cxx_$1,
 [ac_cv_prog_cxx_$1=no
 ac_save_CXX=$CXX
-AC_LANG_CONFTEST([AC_LANG_PROGRAM([$2], [$3])])
+AC_LANG_CONFTEST([AC_LANG_DEFINES_PROVIDED][$ac_cxx_conftest_$1])
 for ac_arg in '' $4
 do
   CXX="$ac_save_CXX $ac_arg"

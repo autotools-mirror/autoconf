@@ -1,6 +1,6 @@
 #							-*- Autotest -*-
 
-AT_BANNER([Compatibility with other tools.])
+AT_BANNER([Compatibility with external tools and macros.])
 
 # Copyright (C) 2000-2007, 2009-2017, 2020 Free Software Foundation,
 # Inc.
@@ -139,5 +139,255 @@ AT_CHECK_CONFIGURE([--prefix="$instdir" ac_cv_path_SHTOOL=false])
 AT_CHECK([grep '^ac_install_sh = .*shtool install -c' Makefile], [], [ignore])
 AT_CHECK_MAKE([install])
 AT_CHECK([test -f inst/file1 && test -f inst/file2 && test -x inst/file1])
+
+AT_CLEANUP
+
+AT_SETUP([AX_PROG_CC_FOR_BUILD])
+
+cp "$abs_top_srcdir/build-aux/install-sh" \
+   "$abs_top_srcdir/build-aux/config.guess" \
+   "$abs_top_srcdir/build-aux/config.sub" .
+
+# The Autoconf Macro Archive's AX_PROG_CC_FOR_BUILD invokes AC_PROG_CC
+# twice, with a whole bunch of shell variables renamed at the m4 level
+# the second time.  Git commit 18c140b50b0619454d4da50d58a318cc257d580a
+# broke this usage and the breakage went unnoticed for *eight years*.
+
+AT_DATA([aclocal.m4],
+[[# ax_prog_cc_for_build.m4
+# serial 18
+# Copyright (c) 2008 Paolo Bonzini <bonzini@gnu.org>
+
+AC_DEFUN([AX_PROG_CC_FOR_BUILD], [
+AC_REQUIRE([AC_PROG_CC])
+AC_REQUIRE([AC_PROG_CPP])
+AC_REQUIRE([AC_CANONICAL_BUILD])
+
+# Use the standard macros, but make them use other variable names
+m4@&t@_pushdef([ac_cv_prog_CPP], ac_cv_build_prog_CPP)
+m4@&t@_pushdef([ac_cv_prog_cc_c89], ac_cv_build_prog_cc_c89)
+m4@&t@_pushdef([ac_cv_prog_gcc], ac_cv_build_prog_gcc)
+m4@&t@_pushdef([ac_cv_prog_cc_works], ac_cv_build_prog_cc_works)
+m4@&t@_pushdef([ac_cv_prog_cc_cross], ac_cv_build_prog_cc_cross)
+m4@&t@_pushdef([ac_cv_prog_cc_g], ac_cv_build_prog_cc_g)
+m4@&t@_pushdef([ac_cv_c_compiler_gnu], ac_cv_build_c_compiler_gnu)
+m4@&t@_pushdef([ac_cv_exeext], ac_cv_build_exeext)
+m4@&t@_pushdef([ac_cv_objext], ac_cv_build_objext)
+m4@&t@_pushdef([ac_exeext], ac_build_exeext)
+m4@&t@_pushdef([ac_objext], ac_build_objext)
+m4@&t@_pushdef([CC], CC_FOR_BUILD)
+m4@&t@_pushdef([CPP], CPP_FOR_BUILD)
+m4@&t@_pushdef([GCC], GCC_FOR_BUILD)
+m4@&t@_pushdef([CFLAGS], CFLAGS_FOR_BUILD)
+m4@&t@_pushdef([CPPFLAGS], CPPFLAGS_FOR_BUILD)
+m4@&t@_pushdef([EXEEXT], BUILD_EXEEXT)
+m4@&t@_pushdef([LDFLAGS], LDFLAGS_FOR_BUILD)
+m4@&t@_pushdef([OBJEXT], BUILD_OBJEXT)
+m4@&t@_pushdef([host], build)
+m4@&t@_pushdef([host_alias], build_alias)
+m4@&t@_pushdef([host_cpu], build_cpu)
+m4@&t@_pushdef([host_vendor], build_vendor)
+m4@&t@_pushdef([host_os], build_os)
+m4@&t@_pushdef([ac_cv_host], ac_cv_build)
+m4@&t@_pushdef([ac_cv_host_alias], ac_cv_build_alias)
+m4@&t@_pushdef([ac_cv_host_cpu], ac_cv_build_cpu)
+m4@&t@_pushdef([ac_cv_host_vendor], ac_cv_build_vendor)
+m4@&t@_pushdef([ac_cv_host_os], ac_cv_build_os)
+m4@&t@_pushdef([ac_tool_prefix], ac_build_tool_prefix)
+m4@&t@_pushdef([am_cv_CC_dependencies_compiler_type], am_cv_build_CC_dependencies_compiler_type)
+m4@&t@_pushdef([am_cv_prog_cc_c_o], am_cv_build_prog_cc_c_o)
+m4@&t@_pushdef([cross_compiling], cross_compiling_build)
+
+cross_compiling_build=no
+
+ac_build_tool_prefix=
+AS@&t@_IF([test -n "$build"],      [ac_build_tool_prefix="$build-"],
+          [test -n "$build_alias"],[ac_build_tool_prefix="$build_alias-"])
+
+AC_LANG_PUSH([C])
+AC_PROG_CC
+_AC_COMPILER_EXEEXT
+_AC_COMPILER_OBJEXT
+AC_PROG_CPP
+
+# Restore the old definitions
+m4@&t@_popdef([cross_compiling])
+m4@&t@_popdef([am_cv_prog_cc_c_o])
+m4@&t@_popdef([am_cv_CC_dependencies_compiler_type])
+m4@&t@_popdef([ac_tool_prefix])
+m4@&t@_popdef([ac_cv_host_os])
+m4@&t@_popdef([ac_cv_host_vendor])
+m4@&t@_popdef([ac_cv_host_cpu])
+m4@&t@_popdef([ac_cv_host_alias])
+m4@&t@_popdef([ac_cv_host])
+m4@&t@_popdef([host_os])
+m4@&t@_popdef([host_vendor])
+m4@&t@_popdef([host_cpu])
+m4@&t@_popdef([host_alias])
+m4@&t@_popdef([host])
+m4@&t@_popdef([OBJEXT])
+m4@&t@_popdef([LDFLAGS])
+m4@&t@_popdef([EXEEXT])
+m4@&t@_popdef([CPPFLAGS])
+m4@&t@_popdef([CFLAGS])
+m4@&t@_popdef([GCC])
+m4@&t@_popdef([CPP])
+m4@&t@_popdef([CC])
+m4@&t@_popdef([ac_objext])
+m4@&t@_popdef([ac_exeext])
+m4@&t@_popdef([ac_cv_objext])
+m4@&t@_popdef([ac_cv_exeext])
+m4@&t@_popdef([ac_cv_c_compiler_gnu])
+m4@&t@_popdef([ac_cv_prog_cc_g])
+m4@&t@_popdef([ac_cv_prog_cc_cross])
+m4@&t@_popdef([ac_cv_prog_cc_works])
+m4@&t@_popdef([ac_cv_prog_cc_c89])
+m4@&t@_popdef([ac_cv_prog_gcc])
+m4@&t@_popdef([ac_cv_prog_CPP])
+
+# restore global variables ac_ext, ac_cpp, ac_compile,
+# ac_link, ac_compiler_gnu (dependant on the current
+# language after popping):
+AC_LANG_POP([C])
+
+# Finally, set Makefile variables
+AC_SUBST(BUILD_EXEEXT)
+AC_SUBST(BUILD_OBJEXT)
+AC_SUBST([CFLAGS_FOR_BUILD])
+AC_SUBST([CPPFLAGS_FOR_BUILD])
+AC_SUBST([LDFLAGS_FOR_BUILD])
+])
+]])
+
+AT_DATA([configure.ac],
+[[AC_INIT([foo], [1.0])
+AX_PROG_CC_FOR_BUILD
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[CC = @CC@
+CC_FOR_BUILD = @CC_FOR_BUILD@
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CHECK([grep '^CC = ..*$' Makefile > /dev/null 2>&1])
+AT_CHECK([grep '^CC_FOR_BUILD = ..*$' Makefile > /dev/null 2>&1])
+
+AT_CLEANUP
+
+AT_SETUP([AX_PROG_CXX_FOR_BUILD])
+
+cp "$abs_top_srcdir/build-aux/install-sh" \
+   "$abs_top_srcdir/build-aux/config.guess" \
+   "$abs_top_srcdir/build-aux/config.sub" .
+
+# The Autoconf Macro Archive's AX_PROG_CXX_FOR_BUILD invokes AC_PROG_CXX
+# twice, with a whole bunch of shell variables renamed at the m4 level
+# the second time.  This usage was never broken (unlike with AC_PROG_CC)
+# but it seems sensible to make sure it doesn't *get* broken.
+
+AT_DATA([aclocal.m4],
+[[# ax_prog_cxx_for_build.m4
+# serial 3
+# Copyright (c) 2008 Paolo Bonzini <bonzini@gnu.org>
+# Copyright (c) 2012 Avionic Design GmbH
+
+AC_DEFUN([AX_PROG_CXX_FOR_BUILD], [
+AC_LANG_PUSH([C++])
+
+AC_REQUIRE([AC_PROG_CXX])
+AC_REQUIRE([AC_PROG_CXXCPP])
+AC_REQUIRE([AC_CANONICAL_HOST])
+
+# Use the standard macros, but make them use other variable names
+m4@&t@_pushdef([ac_cv_prog_CXXCPP], ac_cv_build_prog_CXXCPP)
+m4@&t@_pushdef([ac_cv_prog_gxx], ac_cv_build_prog_gxx)
+m4@&t@_pushdef([ac_cv_prog_cxx_works], ac_cv_build_prog_cxx_works)
+m4@&t@_pushdef([ac_cv_prog_cxx_cross], ac_cv_build_prog_cxx_cross)
+m4@&t@_pushdef([ac_cv_prog_cxx_g], ac_cv_build_prog_cxx_g)
+m4@&t@_pushdef([CXX], CXX_FOR_BUILD)
+m4@&t@_pushdef([CXXCPP], CXXCPP_FOR_BUILD)
+m4@&t@_pushdef([CXXFLAGS], CXXFLAGS_FOR_BUILD)
+m4@&t@_pushdef([CPPFLAGS], CPPFLAGS_FOR_BUILD)
+m4@&t@_pushdef([CXXCPPFLAGS], CXXCPPFLAGS_FOR_BUILD)
+m4@&t@_pushdef([host], build)
+m4@&t@_pushdef([host_alias], build_alias)
+m4@&t@_pushdef([host_cpu], build_cpu)
+m4@&t@_pushdef([host_vendor], build_vendor)
+m4@&t@_pushdef([host_os], build_os)
+m4@&t@_pushdef([ac_cv_host], ac_cv_build)
+m4@&t@_pushdef([ac_cv_host_alias], ac_cv_build_alias)
+m4@&t@_pushdef([ac_cv_host_cpu], ac_cv_build_cpu)
+m4@&t@_pushdef([ac_cv_host_vendor], ac_cv_build_vendor)
+m4@&t@_pushdef([ac_cv_host_os], ac_cv_build_os)
+m4@&t@_pushdef([ac_cxxcpp], ac_build_cxxcpp)
+m4@&t@_pushdef([ac_compile], ac_build_compile)
+m4@&t@_pushdef([ac_link], ac_build_link)
+
+save_cross_compiling=$cross_compiling
+save_ac_tool_prefix=$ac_tool_prefix
+cross_compiling=no
+ac_tool_prefix=
+
+AC_PROG_CXX
+AC_PROG_CXXCPP
+
+ac_tool_prefix=$save_ac_tool_prefix
+cross_compiling=$save_cross_compiling
+
+# Restore the old definitions
+m4@&t@_popdef([ac_link])
+m4@&t@_popdef([ac_compile])
+m4@&t@_popdef([ac_cxxcpp])
+m4@&t@_popdef([ac_cv_host_os])
+m4@&t@_popdef([ac_cv_host_vendor])
+m4@&t@_popdef([ac_cv_host_cpu])
+m4@&t@_popdef([ac_cv_host_alias])
+m4@&t@_popdef([ac_cv_host])
+m4@&t@_popdef([host_os])
+m4@&t@_popdef([host_vendor])
+m4@&t@_popdef([host_cpu])
+m4@&t@_popdef([host_alias])
+m4@&t@_popdef([host])
+m4@&t@_popdef([CXXCPPFLAGS])
+m4@&t@_popdef([CPPFLAGS])
+m4@&t@_popdef([CXXFLAGS])
+m4@&t@_popdef([CXXCPP])
+m4@&t@_popdef([CXX])
+m4@&t@_popdef([ac_cv_prog_cxx_g])
+m4@&t@_popdef([ac_cv_prog_cxx_cross])
+m4@&t@_popdef([ac_cv_prog_cxx_works])
+m4@&t@_popdef([ac_cv_prog_gxx])
+m4@&t@_popdef([ac_cv_prog_CXXCPP])
+
+# Finally, set Makefile variables
+AC_SUBST([CXXFLAGS_FOR_BUILD])
+AC_SUBST([CXXCPPFLAGS_FOR_BUILD])
+
+AC_LANG_POP([C++])
+])
+]])
+
+AT_DATA([configure.ac],
+[[AC_INIT([foo], [1.0])
+AX_PROG_CXX_FOR_BUILD
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+]])
+
+AT_DATA([Makefile.in],
+[[CXX = @CXX@
+CXX_FOR_BUILD = @CXX_FOR_BUILD@
+]])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+
+AT_CHECK([grep '^CXX = ..*$' Makefile > /dev/null 2>&1])
+AT_CHECK([grep '^CXX_FOR_BUILD = ..*$' Makefile > /dev/null 2>&1])
 
 AT_CLEANUP
