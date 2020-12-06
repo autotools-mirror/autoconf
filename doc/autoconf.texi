@@ -4070,23 +4070,29 @@ Expand to @var{include-directives} if present and nonempty, otherwise to:
 @example
 @group
 #include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_SYS_TYPES_H
-# include <sys/types.h>
+#ifdef HAVE_STDIO_H
+# include <stdio.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
-# include <sys/stat.h>
+#ifdef HAVE_STDLIB_H
+# include <stdlib.h>
 #endif
-#ifdef HAVE_STRINGS_H
-# include <strings.h>
+#ifdef HAVE_STRING_H
+# include <string.h>
 #endif
 #ifdef HAVE_INTTYPES_H
 # include <inttypes.h>
 #endif
 #ifdef HAVE_STDINT_H
 # include <stdint.h>
+#endif
+#ifdef HAVE_STRINGS_H
+# include <strings.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+# include <sys/stat.h>
 #endif
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
@@ -4095,12 +4101,26 @@ Expand to @var{include-directives} if present and nonempty, otherwise to:
 @end example
 
 Using this macro without @var{include-directives} has the side effect of
-checking for @file{sys/types.h}, @file{sys/stat.h}, @file{strings.h},
-@file{inttypes.h}, @file{stdint.h}, and @file{unistd.h}, as if by
-@code{AC_CHECK_HEADERS}.  For backward compatibility's sake, it also
-unconditionally defines @code{HAVE_STRING_H}, @code{HAVE_STDLIB_H}, and
-@code{STDC_HEADERS}.  New code should not make use of these preprocessor
-macros.
+checking for @file{stdio.h}, @file{stdlib.h}, @file{string.h},
+@file{inttypes.h}, @file{stdint.h}, @file{strings.h},
+@file{sys/types.h}, @file{sys/stat.h}, and @file{unistd.h}, as if by
+@code{AC_CHECK_HEADERS_ONCE}.  For backward compatibility, the macro
+@code{STDC_HEADERS} will be defined when both @file{stdlib.h} and
+@file{string.h} are available.
+
+@strong{Portability Note:} It is safe for most programs to assume the
+presence of all of the headers required by the original 1990 C standard.
+@code{AC_INCLUDES_DEFAULT} checks for @file{stdio.h}, @file{stdlib.h},
+and @file{string.h}, even though they are in that list, because they
+might not be available when compiling for a ``freestanding environment''
+(in which most of the features of the C library are optional).  You
+probably do not need to write @samp{#ifdef HAVE_STDIO_H} in your own
+code.
+
+@file{inttypes.h} and @file{stdint.h} were added to C in the 1999
+revision of the standard, and @file{strings.h}, @file{sys/types.h},
+@file{sys/stat.h}, and @file{unistd.h} are POSIX extensions.  You
+@emph{should} guard uses of these headers with appropriate conditionals.
 @end defmac
 
 @defmac AC_CHECK_INCLUDES_DEFAULT

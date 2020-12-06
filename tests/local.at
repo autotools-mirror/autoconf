@@ -609,16 +609,18 @@ cp -f config.status config-status.$1
 # AT_CHECK_HEADER is a better name, but too close from AC_CHECK_HEADER.
 m4_define([AT_CHECK_DEFINES],
 [AT_CHECK([[sed '/#/!d
-/INTTYPES/d
-/MEMORY/d
+/INTTYPES_H/d
+/MEMORY_H/d
 /PACKAGE_/d
 /STDC_HEADERS/d
-/STDINT/d
-/STDLIB/d
-/STRING/d
-/SYS_STAT/d
-/SYS_TYPES/d
-/UNISTD/d' config.h]],,
+/STDINT_H/d
+/STDIO_H/d
+/STDLIB_H/d
+/STRING_H/d
+/STRINGS_H/d
+/SYS_STAT_H/d
+/SYS_TYPES_H/d
+/UNISTD_H/d' config.h]],,
 	  [$1])])
 
 

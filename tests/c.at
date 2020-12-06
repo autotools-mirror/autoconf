@@ -130,14 +130,14 @@ CPP="./mycpp $CPP"
 
 # Exercise CPP.
 
-AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <stdio.h>]])],
-  [AC_DEFINE([HAVE_STDIO_H], [1], [Define if you have stdio.h])])
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <float.h>]])],
+  [AC_DEFINE([HAVE_FLOAT_H], [1], [Define if you have float.h])])
 AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <autoconf_io.h>]])],
   [AC_DEFINE([HAVE_AUTOCONF_IO_H], [1], [Define if you have autoconf_io.h])])
 ]])
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
-#define HAVE_STDIO_H 1
+#define HAVE_FLOAT_H 1
 ])
 
 AT_CLEANUP
@@ -169,15 +169,15 @@ test "x$ac_c_preproc_warn_flag" != xyes &&
   AC_MSG_ERROR([failed to detect preprocessor warning option])
 
 # Exercise CPP.
-AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <stdio.h>]])],
-  [AC_DEFINE([HAVE_STDIO_H], [1], [Define if you have stdio.h])])
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <float.h>]])],
+  [AC_DEFINE([HAVE_FLOAT_H], [1], [Define if you have float.h])])
 AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <autoconf_io.h>]])],
   [AC_DEFINE([HAVE_AUTOCONF_IO_H], [1], [Define if you have autoconf_io.h])])
 ]])
 
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
-#define HAVE_STDIO_H 1
+#define HAVE_FLOAT_H 1
 ])
 
 AT_CLEANUP
@@ -218,15 +218,15 @@ test "$CPP" != "$CC -E" &&
   AC_MSG_ERROR([error messages on stderr cause the preprocessor selection to fail])
 
 # Exercise CPP.
-AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <stdio.h>]])],
-  [AC_DEFINE([HAVE_STDIO_H], [1], [Define if you have stdio.h])])
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <float.h>]])],
+  [AC_DEFINE([HAVE_FLOAT_H], [1], [Define if you have float.h])])
 AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <autoconf_io.h>]])],
   [AC_DEFINE([HAVE_AUTOCONF_IO_H], [1], [Define if you have autoconf_io.h])])
 ]])
 
 AT_CHECK_DEFINES(
 [/* #undef HAVE_AUTOCONF_IO_H */
-#define HAVE_STDIO_H 1
+#define HAVE_FLOAT_H 1
 ])
 
 AT_CLEANUP

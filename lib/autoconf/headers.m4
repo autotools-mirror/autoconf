@@ -293,17 +293,14 @@ dnl If ever you change this variable, please keep autoconf.texi in sync.
 [# Factoring default headers for most tests.
 ac_includes_default="\
 #include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_SYS_TYPES_H
-# include <sys/types.h>
+#ifdef HAVE_STDIO_H
+# include <stdio.h>
 #endif
-#ifdef HAVE_SYS_STAT_H
-# include <sys/stat.h>
+#ifdef HAVE_STDLIB_H
+# include <stdlib.h>
 #endif
-#ifdef HAVE_STRINGS_H
-# include <strings.h>
+#ifdef HAVE_STRING_H
+# include <string.h>
 #endif
 #ifdef HAVE_INTTYPES_H
 # include <inttypes.h>
@@ -311,24 +308,30 @@ ac_includes_default="\
 #ifdef HAVE_STDINT_H
 # include <stdint.h>
 #endif
+#ifdef HAVE_STRINGS_H
+# include <strings.h>
+#endif
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
+#endif
+#ifdef HAVE_SYS_STAT_H
+# include <sys/stat.h>
+#endif
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif"
 ])]dnl
-[m4_map_args([_AC_CHECK_HEADER_ONCE],
-  [sys/types.h], [sys/stat.h], [strings.h],
-  [inttypes.h], [stdint.h], [unistd.h])]dnl
-dnl For backward compatibility, provide unconditional AC_DEFINEs of
-dnl HAVE_STDLIB_H, HAVE_STRING_H, and STDC_HEADERS.
-[AC_DEFINE([HAVE_STDLIB_H], [1],
-  [Always define to 1, for backward compatibility.
-   You can assume <stdlib.h> exists.])]dnl
-[AC_DEFINE([HAVE_STRING_H], [1],
-  [Always define to 1, for backward compatibility.
-   You can assume <string.h> exists.])]dnl
+[dnl We have to check for all the headers that aren't part of the
+dnl C-1990 *freestanding* environment, which is all of them except stddef.h.
+m4_map_args([_AC_CHECK_HEADER_ONCE],
+  [stdio.h], [stdlib.h], [string.h], [inttypes.h], [stdint.h],
+  [strings.h], [sys/stat.h], [sys/types.h], [unistd.h])]dnl
+[AS_IF([test $ac_cv_header_stdlib_h = yes && test $ac_cv_header_string_h = yes],
 [AC_DEFINE([STDC_HEADERS], [1],
-  [Always define to 1, for backward compatibility.
-   You can assume the C90 standard headers exist.])])
+  [Define to 1 if all of the C90 standard headers exist
+   (not just the ones required in a freestanding environment).
+   This macro is provided for backward compatibility;
+   new code need not use it.])])])
 # AC_CHECK_INCLUDES_DEFAULT
 
 

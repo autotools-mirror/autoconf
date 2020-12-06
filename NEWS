@@ -136,19 +136,25 @@ GNU Autoconf NEWS - User visible changes.
 
 *** AC_INCLUDES_DEFAULT assumes an ISO C90 compliant C implementation.
 
-  Specifically, it assumes that the ISO C90 headers <stdlib.h> and
-  <string.h> are available, without checking for them, and does not
-  include the pre-standard header <memory.h> at all.  If the POSIX
-  header <strings.h> exists, it will be included, without testing
-  whether it is safe to include both <string.h> and <strings.h> in the
+  Specifically, it assumes that the ISO C90 header <stddef.h>
+  is available, without checking for it, and it does not include
+  the pre-standard header <memory.h> at all.  If the POSIX header
+  <strings.h> exists, it will be included, without first testing
+  whether both <string.h> and <strings.h> can be included in the
   same source file.
 
-  For compatibility’s sake, the C preprocessor macros STDC_HEADERS,
-  HAVE_STDLIB_H, and HAVE_STRING_H are defined unconditionally.
-  These preprocessor macros should be considered obsolescent.
-  However, cache variables like ac_cv_header_stdlib_h are not set;
-  this is intentional, so that AC_CHECK_HEADER([stdlib.h]) will still
-  do a test for the presence of stdlib.h, in case you genuinely need that.
+  AC_INCLUDES_DEFAULT still checks for the existence of <stdlib.h>,
+  <string.h>, and <stdio.h>, because these headers may not exist
+  in a “freestanding environment” (a compilation mode intended for OS
+  kernels and similar, where most of the features of the C library are
+  optional).  Most programs need not use ‘#ifdef HAVE_STDLIB_H’ etc in
+  their own code.
+
+  For compatibility’s sake, the C preprocessor macro STDC_HEADERS
+  will be defined when both <stdlib.h> and <string.h> are available;
+  however, <stdarg.h> and <float.h> are no longer checked for
+  (these, like <stddef.h>, are required to exist in a freestanding
+  environment).  New code should not refer to this macro.
 
   Future releases of Autoconf may reduce the set of headers checked
   for by AC_INCLUDES_DEFAULT.
