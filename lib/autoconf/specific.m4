@@ -383,6 +383,8 @@ AC_BEFORE([$0], [AC_RUN_IFELSE])dnl
 
 dnl Use a different key than __EXTENSIONS__, as that name broke existing
 dnl configure.ac when using autoheader 2.62.
+dnl The macros below are in alphabetical order ignoring leading _ or __
+dnl prefixes.
   AH_VERBATIM([USE_SYSTEM_EXTENSIONS],
 [/* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE
@@ -392,9 +394,24 @@ dnl configure.ac when using autoheader 2.62.
 #ifndef _DARWIN_C_SOURCE
 # undef _DARWIN_C_SOURCE
 #endif
+/* DragonflyBSD and FreeBSD's headers enable extensions by default;
+   extensions can be turned off by requesting a strict ISO C or POSIX
+   environment, but there is no way to explicitly turn them on. */
+/* Enable general extensions on Solaris.  */
+#ifndef __EXTENSIONS__
+# undef __EXTENSIONS__
+#endif
 /* Enable GNU extensions on systems that have them.  */
 #ifndef _GNU_SOURCE
 # undef _GNU_SOURCE
+#endif
+/* Enable NetBSD extensions on NetBSD.  */
+#ifndef _NETBSD_SOURCE
+# undef _NETBSD_SOURCE
+#endif
+/* Enable OpenBSD extensions on OpenBSD.  */
+#ifndef _OPENBSD_SOURCE
+# undef _OPENBSD_SOURCE
 #endif
 /* Enable threading extensions on Solaris.  */
 #ifndef _POSIX_PTHREAD_SEMANTICS
@@ -438,10 +455,6 @@ dnl configure.ac when using autoheader 2.62.
 #ifndef _XOPEN_SOURCE
 # undef _XOPEN_SOURCE
 #endif
-/* Enable general extensions on Solaris.  */
-#ifndef __EXTENSIONS__
-# undef __EXTENSIONS__
-#endif
 ])
   AC_CACHE_CHECK([whether it is safe to define __EXTENSIONS__],
     [ac_cv_safe_to_define___extensions__],
@@ -451,20 +464,6 @@ dnl configure.ac when using autoheader 2.62.
           ]AC_INCLUDES_DEFAULT])],
        [ac_cv_safe_to_define___extensions__=yes],
        [ac_cv_safe_to_define___extensions__=no])])
-  test $ac_cv_safe_to_define___extensions__ = yes &&
-    AC_DEFINE([__EXTENSIONS__])
-  AC_DEFINE([_ALL_SOURCE])
-  AC_DEFINE([_DARWIN_C_SOURCE])
-  AC_DEFINE([_GNU_SOURCE])
-  AC_DEFINE([_POSIX_PTHREAD_SEMANTICS])
-  AC_DEFINE([__STDC_WANT_IEC_60559_ATTRIBS_EXT__])
-  AC_DEFINE([__STDC_WANT_IEC_60559_BFP_EXT__])
-  AC_DEFINE([__STDC_WANT_IEC_60559_DFP_EXT__])
-  AC_DEFINE([__STDC_WANT_IEC_60559_FUNCS_EXT__])
-  AC_DEFINE([__STDC_WANT_IEC_60559_TYPES_EXT__])
-  AC_DEFINE([__STDC_WANT_LIB_EXT2__])
-  AC_DEFINE([__STDC_WANT_MATH_SPEC_FUNCS__])
-  AC_DEFINE([_TANDEM_SOURCE])
   AC_CACHE_CHECK([whether _XOPEN_SOURCE should be defined],
     [ac_cv_should_define__xopen_source],
     [ac_cv_should_define__xopen_source=no
@@ -479,6 +478,23 @@ dnl configure.ac when using autoheader 2.62.
              #include <wchar.h>
              mbstate_t x;]])],
           [ac_cv_should_define__xopen_source=yes])])])
+
+  AC_DEFINE([_ALL_SOURCE])
+  AC_DEFINE([_DARWIN_C_SOURCE])
+  test $ac_cv_safe_to_define___extensions__ = yes &&
+    AC_DEFINE([__EXTENSIONS__])
+  AC_DEFINE([_GNU_SOURCE])
+  AC_DEFINE([_NETBSD_SOURCE])
+  AC_DEFINE([_OPENBSD_SOURCE])
+  AC_DEFINE([_POSIX_PTHREAD_SEMANTICS])
+  AC_DEFINE([__STDC_WANT_IEC_60559_ATTRIBS_EXT__])
+  AC_DEFINE([__STDC_WANT_IEC_60559_BFP_EXT__])
+  AC_DEFINE([__STDC_WANT_IEC_60559_DFP_EXT__])
+  AC_DEFINE([__STDC_WANT_IEC_60559_FUNCS_EXT__])
+  AC_DEFINE([__STDC_WANT_IEC_60559_TYPES_EXT__])
+  AC_DEFINE([__STDC_WANT_LIB_EXT2__])
+  AC_DEFINE([__STDC_WANT_MATH_SPEC_FUNCS__])
+  AC_DEFINE([_TANDEM_SOURCE])
   test $ac_cv_should_define__xopen_source = yes &&
     AC_DEFINE([_XOPEN_SOURCE], [500])
 ])# AC_USE_SYSTEM_EXTENSIONS
