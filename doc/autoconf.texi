@@ -8920,44 +8920,31 @@ disable the extensions, typically due to standards-conformance namespace
 issues.  This should be called before any macros that run the C
 compiler.  Also, when using this macro in concert with
 @code{AC_CONFIG_HEADERS}, be sure that @file{config.h} is included
-before any system header.  The following preprocessor macros are defined
-where appropriate:
+before any system header.
+
+The following preprocessor macros are defined unconditionally:
 
 @table @code
-@item _GNU_SOURCE
-@cvindex _GNU_SOURCE
-Enable extensions on GNU/Linux.
 @item _ALL_SOURCE
 @cvindex _ALL_SOURCE
-Enable extensions for AIX 3, and for Interix.
+Enable extensions on AIX 3 and Interix.
 @item _DARWIN_C_SOURCE
 @cvindex _DARWIN_C_SOURCE
-Enable extensions for macOS.
-@item _MINIX
-@cvindex _MINIX
-Identify Minix platform.  This particular preprocessor macro is
-obsolescent, and may be removed in a future release of Autoconf.
+Enable extensions on macOS.
+@item _GNU_SOURCE
+@cvindex _GNU_SOURCE
+Enable extensions on GNU systems.
 @item _NETBSD_SOURCE
 @cvindex _NETBSD_SOURCE
-Enable NetBSD-related extensions for Minix.
-@item _POSIX_1_SOURCE
-@cvindex _POSIX_1_SOURCE
-Enable additional Posix functions for Minix.
+Enable general extensions on NetBSD.
+Enable NetBSD compatibility extensions on Minix.
+@item _OPENBSD_SOURCE
+@cvindex _OPENBSD_SOURCE
+Enable OpenBSD compatibility extensions on NetBSD.
+Oddly enough, this does nothing on OpenBSD.
 @item _POSIX_PTHREAD_SEMANTICS
 @cvindex _POSIX_PTHREAD_SEMANTICS
-Enable threading extensions on Solaris.
-@item _POSIX_SOURCE
-@cvindex _POSIX_SOURCE
-Enable Posix functions for Minix.
-@item _TANDEM_SOURCE
-@cvindex _TANDEM_SOURCE
-Enable extensions for the HP NonStop platform.
-@item _XOPEN_SOURCE
-@cvindex _XOPEN_SOURCE
-Enable X/Open extensions for HP-UX.
-@item __EXTENSIONS__
-@cvindex __EXTENSIONS__
-Enable general extensions on Solaris.
+Enable Posix-compatible threading on Solaris.
 @item __STDC_WANT_IEC_60559_ATTRIBS_EXT__
 @cvindex __STDC_WANT_IEC_60559_ATTRIBS_EXT__
 Enable extensions specified by ISO/IEC TS 18661-5:2014.
@@ -8979,6 +8966,38 @@ Enable extensions specified by ISO/IEC TR 24731-2:2010.
 @item __STDC_WANT_MATH_SPEC_FUNCS__
 @cvindex __STDC_WANT_MATH_SPEC_FUNCS__
 Enable extensions specified by ISO/IEC 24747:2009.
+@item _TANDEM_SOURCE
+@cvindex _TANDEM_SOURCE
+Enable extensions on HP NonStop systems.
+@end table
+
+The following preprocessor macros are defined only when necessary;
+they enable access to extensions on some operating systems but
+@emph{disable} extensions on other operating systems.
+
+@table @code
+@item __EXTENSIONS__
+@cvindex __EXTENSIONS__
+Enable general extensions on Solaris.  This macro is defined only if
+the headers included by @code{AC_INCLUDES_DEFAULT}
+(@pxref{Default Includes}) work correctly with it defined.
+
+@item _MINIX
+@itemx _POSIX_SOURCE
+@itemx _POSIX_1_SOURCE
+@cvindex _MINIX
+@cvindex _POSIX_SOURCE
+@cvindex _POSIX_1_SOURCE
+Defined only on MINIX.  @code{_POSIX_SOURCE} and @code{_POSIX_1_SOURCE}
+are needed to enable a number of POSIX features on this OS.
+@code{_MINIX} does not affect the system headers' behavior;
+future versions of Autoconf may stop defining it.
+Programs that need to recognize Minix should use @code{AC_CANONICAL_HOST}.
+
+@item _XOPEN_SOURCE
+@cvindex _XOPEN_SOURCE
+Defined (with value 500) only if needed to make @file{wchar.h} declare
+@code{mbstate_t}.  This is known to be necessary on some versions of HP/UX.
 @end table
 
 @cvindex __STDC_WANT_DEC_FP__
