@@ -1143,6 +1143,13 @@ AC_DEFUN([_AC_C_C89_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
 [[# Test code for whether the C compiler supports C89 (global declarations)
 ac_c_conftest_c89_globals='
+/* Does the compiler advertise C89 conformance?
+   Do not test the value of __STDC__, because some compilers set it to 0
+   while being otherwise adequately conformant. */
+#if !defined __STDC__
+# error "Compiler does not advertise C89 conformance"
+#endif
+
 #include <stddef.h>
 #include <stdarg.h>
 struct stat;
@@ -1198,6 +1205,11 @@ AC_DEFUN([_AC_C_C99_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
 [[# Test code for whether the C compiler supports C99 (global declarations)
 ac_c_conftest_c99_globals='
+// Does the compiler advertise C99 conformance?
+#if !defined __STDC_VERSION__ || __STDC_VERSION__ < 199901L
+# error "Compiler does not advertise C99 conformance"
+#endif
+
 #include <stdbool.h>
 extern int puts (const char *);
 extern int printf (const char *, ...);
@@ -1345,6 +1357,11 @@ AC_DEFUN([_AC_C_C11_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
 [[# Test code for whether the C compiler supports C11 (global declarations)
 ac_c_conftest_c11_globals='
+// Does the compiler advertise C11 conformance?
+#if !defined __STDC_VERSION__ || __STDC_VERSION__ < 201112L
+# error "Compiler does not advertise C11 conformance"
+#endif
+
 // Check _Alignas.
 char _Alignas (double) aligned_as_double;
 char _Alignas (0) no_special_alignment;
