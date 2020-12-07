@@ -25790,43 +25790,46 @@ on @var{contents}.
 @atindex{CHECK}
 @atindex{CHECK_UNQUOTED}
 @vrindex at_status
-Execute a test by performing given shell @var{commands} in a subshell.
-@var{commands} is output as-is, so shell expansions are honored.  These
-commands should normally exit with @var{status}, while producing expected
-@var{stdout} and @var{stderr} contents.  If @var{commands} exit with
-unexpected status 77, then the rest of the test group is skipped.  If
-@var{commands} exit with unexpected status 99, then the test group is
-immediately failed.  Otherwise, if this test fails, run shell commands
-@var{run-if-fail} or, if this test passes, run shell commands
-@var{run-if-pass}, both inside the current shell execution environment.
-At the beginning of @var{run-if-fail} and @var{run-if-pass}, the status of
-@var{commands} is available in the @code{at_status} shell variable.
+Perform a test, by running the shell @var{commands} in a subshell.
+@var{commands} is output as-is, so shell expansions are honored.
+These commands are expected to have a final exit status of @var{status},
+and to produce output as described by @var{stdout} and @var{stderr}
+(see below).
 
 This macro must be invoked in between @code{AT_SETUP} and @code{AT_CLEANUP}.
 
-If @var{status} is the literal @samp{ignore}, then the corresponding
-exit status is not checked, except for the special cases of 77 (skip)
+If @var{commands} exit with unexpected status 77, then the rest of the
+test group is skipped.  If @var{commands} exit with unexpected status
+99, then the test group is immediately failed; this is called a
+@emph{hard failure}.  Otherwise, the test is considered to have
+succeeeded if all of the status, stdout, and stderr expectations were
+met.
+
+If @var{run-if-fail} is nonempty, it provides extra shell commands to
+run when the test fails; if @var{run-if-pass} is nonempty, it provides
+extra shell commands to run when the test succeeds.  These commands are
+@emph{not} run in a subshell, and they are not run when the test group
+is skipped (exit code 77) or hard-failed (exit code 99).  They may
+change whether the test group is considered to have succeeded, by
+modifying the shell variable @code{at_failed}; set it to @code{:} to
+indicate that the test group has failed, or @code{false} to indicate
+that it has succeeded.
+
+The exit status of @var{commands} is available to @var{run-if-fail} and
+@var{run-if-pass} commands in the @code{at_status} shell variable.  The
+output from @var{commands} is also available, in the files named by the
+@code{at_stdout} and @code{at_stderr} variables.
+
+If @var{status} is the literal @samp{ignore}, then the exit status of
+@var{commands} is not checked, except for the special cases of 77 (skip)
 and 99 (hard failure).  The existence of hard failures allows one to
 mark a test as an expected failure with @code{AT_XFAIL_IF} because a
 feature has not yet been implemented, but to still distinguish between
-gracefully handling the missing feature and dumping core.  A hard
-failure also inhibits post-test actions in @var{run-if-fail}.
+gracefully handling the missing feature and dumping core.
 
 If the value of the @var{stdout} or @var{stderr} parameter is one of the
 literals in the following table, then the test treats the output
-according to the rules of that literal.  Otherwise, the value of the
-parameter is treated as text that must exactly match the output given by
-@var{commands} on standard output and standard error (including an empty
-parameter for no output); any differences are captured in the testsuite
-log and the test is failed (unless an unexpected exit status of 77
-skipped the test instead).  The difference between @code{AT_CHECK} and
-@code{AT_CHECK_UNQUOTED} is that only the latter performs shell variable
-expansion (@samp{$}), command substitution (@samp{`}), and backslash
-escaping (@samp{\}) on comparison text given in the @var{stdout} and
-@var{stderr} arguments; if the text includes a trailing newline, this
-would be the same as if it were specified via an unquoted
-here-document.  (However, there is no difference in the interpretation
-of @var{commands}).
+according to the rules of that literal.
 
 @table @samp
 @item ignore
@@ -25842,20 +25845,20 @@ files.  If @var{commands} are likely to produce binary output (including
 long lines) or large amounts of output, then logging the output can make
 it harder to locate details related to subsequent tests within the
 group, and could potentially corrupt terminal display of a user running
-@command{testsuite -v}.
+@command{testsuite -v}.  This action is valid for both @var{stdout} and
+@var{stderr}.
 
 @item stdout
-For the @var{stdout} parameter, capture the content of standard output
-to both the file @file{stdout} and the test group log.  Subsequent
-commands in the test group can then post-process the file.  This action
-is often used when it is desired to use @command{grep} to look for a
-substring in the output, or when the output must be post-processed to
-normalize error messages into a common form.
+Only valid as the @var{stdout} parameter.  Capture the content of
+standard output in both a file named @file{stdout} and the test group log.
+Subsequent commands in the test group can then post-process the file.
+This action is often used when it is desired to use @command{grep} to
+look for a substring in the output, or when the output must be
+post-processed to normalize error messages into a common form.
 
 @item stderr
-Like @samp{stdout}, except that it only works for the @var{stderr}
-parameter, and the standard error capture file will be named
-@file{stderr}.
+Only valid as the @var{stderr} parameter.  Capture the content of
+standard error in both a file named @file{stderr} and the test group log.
 
 @item stdout-nolog
 @itemx stderr-nolog
@@ -25866,15 +25869,28 @@ which will be followed by another check that filters down to the
 relevant data, as it makes it easier to locate details in the log.
 
 @item expout
-For the @var{stdout} parameter, compare standard output contents with
+Only valid as the @var{stdout} parameter.  Compare standard output with
 the previously created file @file{expout}, and list any differences in
 the testsuite log.
 
 @item experr
-Like @samp{expout}, except that it only works for the @var{stderr}
-parameter, and the standard error contents are compared with
-@file{experr}.
+Only valid as the @var{stderr} parameter.  Compare standard error with
+the previously created file @file{experr}, and list any differences in
+the testsuite log.
 @end table
+
+Otherwise, the values of the @var{stdout} and @var{stderr} parameters
+are treated as text that must exactly match the output given by
+@var{commands} on standard output and standard error (including an empty
+parameter for no output); any differences are captured in the testsuite
+log and the test is failed (unless an unexpected exit status of 77
+skipped the test instead).
+
+@code{AT_CHECK_UNQUOTED} performs shell variable expansion (@samp{$}),
+command substitution (@samp{`}), and backslash escaping (@samp{\}) on
+comparison text given in the @var{stdout} and @var{stderr} parameters;
+@code{AT_CHECK} does not.  There is no difference in the interpretation
+of @var{commands}.
 @end defmac
 
 @defmac AT_CHECK_EUNIT (@var{module}, @var{test-spec}, @ovar{erlflags}, @
