@@ -7466,51 +7466,67 @@ makes this invalid.  That is why Autoconf stopped issuing
 @ovindex CC
 @ovindex CFLAGS
 @caindex prog_cc_stdc
-Determine a C compiler to use.  If @code{CC} is not already set in the
-environment, check for @code{gcc} and @code{cc}, then for other C
-compilers.  Set output variable @code{CC} to the name of the compiler
-found.
+Determine a C compiler to use.
 
-This macro may, however, be invoked with an optional first argument
-which, if specified, must be a blank-separated list of C compilers to
-search for.  This just gives the user an opportunity to specify an
-alternative search list for the C compiler.  For example, if you didn't
-like the default order, then you could invoke @code{AC_PROG_CC} like
-this:
+If the environment variable @code{CC} is set, its value will be taken as
+the name of the C compiler to use.  Otherwise, search for a C compiler
+under a series of likely names, trying @code{gcc} and @code{cc} first.
+Regardless, the output variable @code{CC} is set to the chosen compiler.
+
+If the optional first argument to the macro is used, it must be a
+whitespace-separated list of potential names for a C compiler,
+which overrides the built-in list.
+
+If no C compiler can be found, @command{configure} will error out.
+
+If the selected C compiler is found to be GNU C (regardless of
+its name), the shell variable @code{GCC} will be set to @samp{yes}.
+If the shell variable @code{CFLAGS} was not already set, it is set
+to @option{-g -O2} for the GNU C compiler (@option{-O2} on systems
+where GCC does not accept @option{-g}), or @option{-g} for other
+compilers.  @code{CFLAGS} is then made an output variable.
+You can override the default for @code{CFLAGS} by inserting a shell
+default assignment between @code{AC_INIT} and @code{AC_PROG_CC}:
 
 @example
-AC_PROG_CC([gcc cl cc])
+: $@{CFLAGS="@var{options}"@}
 @end example
 
-If necessary, add an option to output variable @code{CC} to enable
-support for ISO Standard C features with extensions.  Prefer the newest
-C standard that is supported.  Currently the newest standard is ISO C11,
-with ISO C99 and ANSI C89 (ISO C90) being the older versions.
-After calling this macro you can check whether the C compiler has been
-set to accept Standard C; if not, the shell variable
-@code{ac_cv_prog_cc_stdc} is set to @samp{no}.
+where @var{options} are the appropriate set of options to use by
+default.  (It is important to use this construct rather than a normal
+assignment, so that @code{CFLAGS} can still be overridden by the
+person building the package.  @xref{Preset Output Variables}.)
 
-When attempting to add compiler options, prefer extended functionality
-to strict conformance: the goal is to enable whatever standard features
-that are available, not to check for full conformance to the standard or
-to prohibit incompatible extensions.  Test for C11 support by checking
-for @code{_Alignas}, @code{_Alignof}, @code{_Noreturn},
-@code{_Static_assert}, UTF-8 string literals, duplicate @code{typedef}s,
-and anonymous structures and unions.  Test for C99 support by checking
-for @code{_Bool}, @code{//} comments, flexible array members,
-@code{inline}, signed and unsigned @code{long long int}, mixed code and
-declarations, named initialization of structs, @code{restrict},
-@code{va_copy}, varargs macros, variable declarations in @code{for}
-loops, and variable length arrays.  Test for C89 support by checking for
-function prototypes.
+If necessary, options are added to @code{CC} to enable support for ISO
+Standard C features with extensions, preferring the newest C standard
+that is supported.  Currently the newest standard Autoconf knows how to
+detect support for is ISO C 2011.  After calling this macro you can
+check whether the C compiler has been set to accept Standard C by
+inspecting cache variables.  If @code{ac_cv_prog_cc_c11} is set to any
+value other than @samp{no} (including the empty string), then @code{CC}
+can compile code as standard C 2011, and this mode has been enabled.
+Otherwise, if @code{ac_cv_prog_cc_c99} is set to any value other than
+@samp{no} (including the empty string), then @code{CC} can compile code
+as standard C 1999, and this mode has been enabled.  Otherwise, if
+@code{ac_cv_prog_cc_c89} is set to any value other than @samp{no}
+(including the empty string), then @code{CC} can compile code as
+standard C 1989, and this mode has been enabled.  Finally, if all
+three variables are set to @samp{no}, then @code{CC} cannot compile
+standard C at all.
 
-If using a compiler that supports GNU C, set shell variable @code{GCC} to
-@samp{yes}.  If output variable @code{CFLAGS} was not already set, set
-it to @option{-g -O2} for a GNU C compiler (@option{-O2} on systems
-where the compiler does not accept @option{-g}), or @option{-g} for
-other compilers.  If your package does not like this default, then it is
-acceptable to insert the line @samp{: $@{CFLAGS=""@}} after @code{AC_INIT}
-and before @code{AC_PROG_CC} to select an empty default instead.
+The tests for standard conformance are not comprehensive.  They test the
+values of @code{__STDC__} and @code{__STDC_VERSION__}, and a
+representative sample of the language features added in each version of
+the C standard.  They do not test the C standard library, because the C
+compiler might be generating code for a ``freestanding environment''
+(in which most of the standard library is optional).  If you need to know
+whether a particular C standard header exists, use @code{AC_CHECK_HEADER}.
+
+None of the options that may be added to @code{CC} by this macro
+enable @emph{strict} conformance to the C standard.  In particular,
+system-specific extensions are not disabled.  (For example, for GNU C,
+the @option{-std=gnu@var{nn}} options may be used, but not the
+@option{-std=c@var{nn}} options.)
 
 Many Autoconf macros use a compiler, and thus call
 @samp{AC_REQUIRE([AC_PROG_CC])} to ensure that the compiler has been
@@ -7900,10 +7916,12 @@ been enabled.  Finally, if both variables are set to @samp{no}, then
 
 The tests for standard conformance are not comprehensive.  They test
 the value of @code{__cplusplus} and a representative sample of the
-language features added in each version of the C++ standard.  They do
-not exercise the C++ standard library, because this can be extremely
-slow.  If you need to know whether a particular C++ standard header
-exists, use @code{AC_CHECK_HEADER}.
+language features added in each version of the C++ standard.  They
+do not test the C++ standard library, because this can be extremely
+slow, and because the C++ compiler might be generating code for a
+``freestanding environment'' (in which most of the C++ standard library
+is optional).  If you need to know whether a particular C++ standard
+header exists, use @code{AC_CHECK_HEADER}.
 
 None of the options that may be added to @code{CXX} by this macro
 enable @emph{strict} conformance to the C++ standard.  In particular,

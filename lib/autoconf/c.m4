@@ -1123,13 +1123,6 @@ fi[]dnl
 # because putting single quotes into a single-quoted shell string is
 # awkward (you must write '\'' for each ' you want in the program).
 #
-# Warning: each test program may only use the headers required to
-# exist in the relevant standard's *freestanding* environment.
-# For instance, <stdio.h> may not be available.  However, these
-# programs are only compiled and not linked, so it is ok to declare
-# external functions and then call them without worrying about whether
-# they actually exist.
-#
 # Warning: to avoid incorrect answers due to unused-variable warnings
 # and/or overly aggressive optimizers, each variable (global or not)
 # in these programs should be used, and each function should be
@@ -1138,6 +1131,22 @@ fi[]dnl
 # convenient non-compile-time-constant values to pass around.  In main,
 # there is an int variable 'ok' which will eventually become the return
 # value; use `ok |= ...' to consume the results of operations.
+#
+# Warning: each test program may only use the headers required to
+# exist in the relevant standard's *freestanding* environment, in case
+# the C compiler targets such an environment.  (Therefore, almost no
+# features of the C89/C99/C11 standard *library* are probed.  Use
+# AC_CHECK_HEADER, AC_CHECK_FUNC, etc. for that.)  However, these
+# programs are only compiled and not linked, so it is ok to declare
+# external functions and then call them without worrying about whether
+# they actually exist.
+#
+# The C89 freestanding headers are:
+#     <float.h> <limits.h> <stdarg.h> <stddef.h>
+# C99 adds:
+#     <iso646.h> <stdbool.h> <stdint.h>
+# C11 adds:
+#     <stdalign.h> <stdnoreturn.h>
 
 AC_DEFUN([_AC_C_C89_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
@@ -1527,13 +1536,7 @@ AS_IF([test "x$ac_cv_prog_cc_$1" != xno], [$4], [$5])
 # _AC_PROG_CC_C89 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
 # ----------------------------------------------------------------
 # If the C compiler is not in ANSI C89 (ISO C90) mode by default, try
-# to add an option to output variable CC to make it so.  This macro
-# tries various options that select ANSI C89 on some system or
-# another.  It considers the compiler to be in ANSI C89 mode if it
-# handles function prototypes correctly.
-# Note: the test program may only depend on the headers required to
-# exist in C89 *freestanding* environments (e.g. stdio.h may not be
-# available).
+# to add an option to output variable CC to make it so.
 AC_DEFUN([_AC_PROG_CC_C89],
 [AC_REQUIRE([_AC_C_C89_TEST_PROGRAM])]dnl
 [_AC_C_STD_TRY([c89], [ac_c_conftest_c89_program],
@@ -1553,13 +1556,7 @@ dnl SVR4			-Xc -D__EXTENSIONS__
 # _AC_PROG_CC_C99 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
 # ----------------------------------------------------------------
 # If the C compiler is not in ISO C99 mode by default, try to add an
-# option to output variable CC to make it so.  This macro tries
-# various options that select ISO C99 on some system or another.  It
-# considers the compiler to be in ISO C99 mode if it handles _Bool,
-# // comments, flexible array members, inline, long long int, mixed
-# code and declarations, named initialization of structs, restrict,
-# va_copy, varargs macros, variable declarations in for loops and
-# variable length arrays.
+# option to output variable CC to make it so.
 AC_DEFUN([_AC_PROG_CC_C99],
 [AC_REQUIRE([_AC_C_C99_TEST_PROGRAM])]dnl
 [_AC_C_STD_TRY([c99], [ac_c_conftest_c89_program],
@@ -1591,16 +1588,7 @@ dnl with extended modes being tried first.
 # _AC_PROG_CC_C11 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
 # ----------------------------------------------------------------
 # If the C compiler is not in ISO C11 mode by default, try to add an
-# option to output variable CC to make it so.  This macro tries
-# various options that select ISO C11 on some system or another.  It
-# considers the compiler to be in ISO C11 mode if it handles _Alignas,
-# _Alignof, _Noreturn, _Static_assert, UTF-8 string literals,
-# duplicate typedefs, and anonymous structures and unions.
-# Note: the test program may only depend on the headers required to
-# exist in C11 *freestanding* environments (e.g. stdio.h may not be
-# available).  However, it may safely declare and refer to
-# hosted-environment functions itself, as the test program will only
-# be compiled, not linked.
+# option to output variable CC to make it so.
 AC_DEFUN([_AC_PROG_CC_C11],
 [AC_REQUIRE([_AC_C_C11_TEST_PROGRAM])]dnl
 [_AC_C_STD_TRY([c11], [ac_c_conftest_c11_program],
@@ -2393,7 +2381,16 @@ fi])
 # See the long comment at the beginning of section 4a for rationale
 # for these macros, and constraints on how the test programs should
 # be written.
-
+#
+# The C++98 freestanding headers are:
+#     <cstdarg> <cstddef> <cstdlib> <exception> <limits> <new> <typeinfo>
+# C++11 adds:
+#    <atomic> <cfloat> <ciso646> <climits> <cstdalign> <cstdbool>
+#    <cstdint> <initializer_list> <type_traits>
+#
+# No other headers can safely be included.  Therefore, almost no C++
+# standard library features are tested for.  Use AC_CHECK_HEADER, etc.
+# if you need that.
 
 AC_DEFUN([_AC_CXX_CXX98_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
@@ -2404,8 +2401,8 @@ ac_cxx_conftest_cxx98_globals='
 # error "Compiler does not advertise C++98 conformance"
 #endif
 
-// These inclusions are cheap compared to including any STL header, but will
-// reliably reject old compilers that lack the unsuffixed header files.
+// These inclusions are to reject old compilers that
+// lack the unsuffixed header files.
 #include <cstdlib>
 #include <exception>
 
@@ -2677,14 +2674,7 @@ AS_IF([test "x$ac_cv_prog_cxx_$1" != xno], [$4], [$5])
 # _AC_PROG_CXX_CXX98 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
 # -------------------------------------------------------------------
 # If the C++ compiler is not in ISO C++98 mode by default, try to add
-# an option to output variable CXX to make it so.  This macro tries
-# various options that select ISO C++98 on some system or another.
-# It considers the compiler to be in ISO C++98 mode if it defines
-# the __cplusplus macro appropriately and it supports language
-# features that were added since "C++ 2.0" (namespaces, exceptions,
-# and templates).  It does not check for the presence of any STL
-# headers, as this was found to make AC_PROG_CXX unacceptably slow.
-# Use AC_CHECK_HEADER if you need that.
+# an option to output variable CXX to make it so.
 AC_DEFUN([_AC_PROG_CXX_CXX98],
 [AC_REQUIRE([_AC_CXX_CXX98_TEST_PROGRAM])]dnl
 [_AC_CXX_STD_TRY([cxx98], [ac_cxx_conftest_cxx98_program],
@@ -2702,18 +2692,7 @@ dnl with extended modes being tried first.
 # _AC_PROG_CXX_CXX11 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
 # -------------------------------------------------------------------
 # If the C++ compiler is not in ISO CXX11 mode by default, try to add
-# an option to output variable CXX to make it so.  This macro tries
-# various options that select ISO C++11 on some system or another.
-# It considers the compiler to be in ISO C++11 mode if it defines the
-# __cplusplus macro appropriately, can compile all of the code from
-# the C++98 test, and can also handle many of the new language
-# features in C++11 (auto, constexpr, decltype, default/deleted
-# constructors, delegate constructors, final, initializer lists,
-# lambda functions, nullptr, override, range-based for loops, template
-# brackets without spaces, variadic templates, trailing return types,
-# unicode literals).  It does not check for the presence of the new
-# library headers; again, this was found to make AC_PROG_CXX
-# unacceptably slow.  Use AC_CHECK_HEADER if you need that.
+# an option to output variable CXX to make it so.
 AC_DEFUN([_AC_PROG_CXX_CXX11],
 [AC_REQUIRE([_AC_CXX_CXX11_TEST_PROGRAM])]dnl
 [_AC_CXX_STD_TRY([cxx11], [ac_cxx_conftest_cxx11_program],
