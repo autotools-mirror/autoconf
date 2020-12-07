@@ -160,6 +160,11 @@ clean-local:
 check-local: tests/atconfig tests/atlocal $(TESTSUITE)
 	+$(run_testsuite) $(TESTSUITEFLAGS)
 
+# Automake doesn't know how to regenerate this file because
+# it's created via AC_CONFIG_COMMANDS.
+tests/atconfig: $(top_builddir)/config.status
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+
 # Run the test suite on the *installed* tree.
 installcheck-local: tests/atconfig tests/atlocal $(TESTSUITE)
 	+$(run_testsuite) AUTOTEST_PATH="$(bindir)" $(TESTSUITEFLAGS)

@@ -18,9 +18,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-PERL='@PERL@'
-GREP='@GREP@'
+AWK='@AWK@'
 EGREP='@EGREP@'
+GREP='@GREP@'
+PERL='@PERL@'
 SED='@SED@'
 
 # We need to know if sh -n is ok.
