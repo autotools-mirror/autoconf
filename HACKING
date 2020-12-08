@@ -53,10 +53,7 @@ release:
   The checks live in maint.mk, shared from gnulib, and customized in
   cfg.mk.
 
-- Run `make distcheck'
-
-- Test some unusual environments, such as building and running the
-  testsuite with POSIXLY_CORRECT=1 CC=g++.
+- Run `make distcheck' and `make maintainer-check'.
 
 - Try some real world packages
   A good example is the coreutils package.
