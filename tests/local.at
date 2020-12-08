@@ -29,10 +29,16 @@ AT_COLOR_TESTS
 
 # Sanitize the environment used for tests.
 AT_PREPARE_TESTS(
-[# These variables should not be inherited from the
-# parent environment.
-AS_UNSET([CONFIG_SITE])
+[# MAKEFLAGS should not be inherited from the parent environment.
 AS_UNSET([MAKEFLAGS])
+
+# We do not want to read any external config.site file.
+# If CONFIG_SITE is not set, autoconf will look for config.site in
+# $prefix/share and $prefix/etc.
+AS_IF([test -e nonexistent],
+  [AS_ERROR([something named 'nonexistent' exists in the test directory])])
+CONFIG_SITE=`pwd`/nonexistent/config.site
+export CONFIG_SITE
 
 # Ensure MAKE is set to a useful value.  Unlike the above, we *do*
 # want to inherit this variable from the parent environment and/or
@@ -445,8 +451,8 @@ fi
 #     - ac_cv_env_(any of the above)_(set|value)
 #     - ac_cv_c_compiler_gnu, ac_cv_cxx_compiler_gnu
 #     - ac_cv_c_decl_report, ac_cv_cxx_decl_report
-#     - ac_cv_prog_c_*, ac_cv_prog_cxx_*, ac_cv_prog_ac_ct_(CC|CXX)
-#     - ac_cv_prog_CPP, ac_cv_prog_CXXCPP
+#     - ac_cv_prog_c_*, ac_cv_prog_cxx_*,
+#     - ac_cv_prog_(ac_ct_)?(CC|CXX|CPP|CXXCPP)
 #     + other ac_cv_c_* are renamed to ac_cv_cxx_*
 #     + OPENMP_CFLAGS is renamed to OPENMP_CXXFLAGS
 #   vary:NAME (where NAME is any identifier): ignore ac_cv_NAME
@@ -527,10 +533,14 @@ m4_define([_AT_CONFIG_CMP_PRUNE],
 	/^ac_cv_env_CXXFLAGS_value=/ d
 	/^ac_cv_env_GXX_set=/ d
 	/^ac_cv_env_GXX_value=/ d
-	/^ac_cv_prog_ac_ct_CC=/ d
-	/^ac_cv_prog_ac_ct_CXX=/ d
+	/^ac_cv_prog_CC=/ d
+	/^ac_cv_prog_CXX=/ d
 	/^ac_cv_prog_CPP=/ d
 	/^ac_cv_prog_CXXCPP=/ d
+	/^ac_cv_prog_ac_ct_CC=/ d
+	/^ac_cv_prog_ac_ct_CXX=/ d
+	/^ac_cv_prog_ac_ct_CPP=/ d
+	/^ac_cv_prog_ac_ct_CXXCPP=/ d
 	/^ac_cv_c_compiler_gnu=/ d
 	/^ac_cv_cxx_compiler_gnu=/ d
 	/^ac_cv_c_decl_report=/ d
@@ -681,7 +691,7 @@ AT_CLEANUP
 ])
 
 # AT_CHECK_MACRO(MACRO, [MACRO-USE], [ADDITIONAL-CMDS],
-#                [AUTOCONF-FLAGS], [TEST-PARAMETERS])
+#                [AUTOCONF-FLAGS], [TEST-PARAMETERS], [PRETEST-CMDS])
 # -----------------------------------------------------
 # Create a minimalist configure.ac running the macro named MACRO
 # (using the code in MACRO-USE if that argument is not empty,
@@ -707,6 +717,10 @@ AT_CLEANUP
 # If ADDITIONAL-CMDS are present, they are executed after the first
 # pair of tests (with the C compiler, in native mode).
 #
+# If PRETEST-CMDS are present, they are executed immediately after
+# AT_SETUP; use this if the test needs to be skipped conditionally,
+# for example.
+#
 # If TEST-PARAMETERS are present, they should be a space-separated
 # list of modifiers to how the test is carried out.  Currently
 # the following modifiers are defined:
@@ -723,6 +737,7 @@ AT_CLEANUP
 #     may legitimately vary between the C tests and the C++ tests.
 m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
+m4_n([$6])dnl
 
 # C compiler, native mode.
 AT_CONFIGURE_AC([m4_default([$2], [$1])])
