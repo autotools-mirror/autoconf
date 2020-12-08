@@ -1784,7 +1784,7 @@ for at_program in : `eval echo $at_tested`
 do
   AS_CASE([$at_program],
     [:], [continue],
-    [[[\\/]* | ?:[\\/]*]], [$at_program_=$at_program],
+    [[[\\/]* | ?:[\\/]*]], [at_program_=$at_program],
     [_AS_PATH_WALK([$PATH], [test -f "$as_dir$at_program" && break])
     at_program_=$as_dir$at_program])
 
