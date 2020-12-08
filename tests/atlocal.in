@@ -21,6 +21,7 @@
 AWK='@AWK@'
 EGREP='@EGREP@'
 GREP='@GREP@'
+M4='@M4@'
 PERL='@PERL@'
 SED='@SED@'
 

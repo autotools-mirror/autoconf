@@ -24,6 +24,9 @@ m4_pattern_allow([^m4_(define|shift)$])
 # Programs this package provides
 AT_TESTED([autom4te autoconf autoheader autoupdate autoreconf ifnames])
 
+# System-provided programs that this package relies on
+AT_TESTED([$PERL $M4])
+
 # Enable colored test output.
 AT_COLOR_TESTS
 
