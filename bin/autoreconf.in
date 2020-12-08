@@ -326,7 +326,8 @@ sub extract_time_stamp
           return $1;
         }
     }
-  fatal "no timestamp line found in $fname";
+  # Old versions of install-sh did not have a timestamp line.
+  return '1970-01-01';
 }
 
 # our_aux_file_is_newer ($dest, $src)

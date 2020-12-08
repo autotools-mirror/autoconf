@@ -2132,40 +2132,52 @@ export ACLOCAL
 AT_DATA([configure.ac],
 [[AC_INIT([GNU foo], [1.0])
 AC_CONFIG_AUX_DIR([build-aux])
+AC_PROG_INSTALL
 AC_CANONICAL_HOST
 AC_OUTPUT
 ]])
 
 mkdir build-aux
 
-AT_DATA([build-aux/config.guess.old],
+AT_DATA([build-aux/config-guess.old],
 [[#! /bin/sh
 timestamp='1970-01-01'
 printf '%s\n' 'frobozz-bogon-bogos1'
 ]])
 
-AT_DATA([build-aux/config.sub.new],
+AT_DATA([build-aux/config-sub.new],
 [[#! /bin/sh
-timestamp='9999-12-31'
+scriptversion='9999-12-31'
 printf '%s\n' "$*"
 ]])
 
-cp build-aux/config.guess.old build-aux/config.guess
-cp build-aux/config.sub.new build-aux/config.sub
-chmod +x build-aux/config.sub build-aux/config.guess
+AT_DATA([build-aux/install-sh.old],
+[[#! /bin/sh
+# Old versions of install-sh did not have a timestamp line.
+]])
 
-# This pass should not change either file.
+cp build-aux/config-guess.old build-aux/config.guess
+cp build-aux/config-sub.new build-aux/config.sub
+cp build-aux/install-sh.old build-aux/install-sh
+chmod +x build-aux/config.sub build-aux/config.guess build-aux/install-sh
+
+# This pass should not change any of the files.
 AT_CHECK([autoreconf --install])
-AT_CMP([build-aux/config.guess.old], [build-aux/config.guess])
-AT_CMP([build-aux/config.sub.new], [build-aux/config.sub])
+AT_CMP([build-aux/config-guess.old], [build-aux/config.guess])
+AT_CMP([build-aux/config-sub.new], [build-aux/config.sub])
+AT_CMP([build-aux/install-sh.old], [build-aux/install-sh])
 
-# This pass should change only config.guess, not config.sub.
+# This pass should change only config.guess and install-sh, not config.sub.
 AT_CHECK([autoreconf --install --force])
 AT_CHECK(
-  [if cmp build-aux/config.guess.old build-aux/config.guess > /dev/null 2>&1
+  [if cmp build-aux/config-guess.old build-aux/config.guess > /dev/null 2>&1
   then exit 1
   fi])
-AT_CMP([build-aux/config.sub.new], [build-aux/config.sub])
+AT_CMP([build-aux/config-sub.new], [build-aux/config.sub])
+AT_CHECK(
+  [if cmp build-aux/install-sh.old build-aux/install-sh > /dev/null 2>&1
+  then exit 1
+  fi])
 
 
 AT_CLEANUP
