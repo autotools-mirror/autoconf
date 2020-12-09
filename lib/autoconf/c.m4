@@ -1559,7 +1559,7 @@ dnl SVR4			-Xc -D__EXTENSIONS__
 # option to output variable CC to make it so.
 AC_DEFUN([_AC_PROG_CC_C99],
 [AC_REQUIRE([_AC_C_C99_TEST_PROGRAM])]dnl
-[_AC_C_STD_TRY([c99], [ac_c_conftest_c89_program],
+[_AC_C_STD_TRY([c99], [ac_c_conftest_c99_program],
 dnl Try
 dnl GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
 dnl IBM XL C	-qlanglvl=extc1x (V12.1; does not pass C11 test)
