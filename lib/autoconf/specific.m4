@@ -389,6 +389,11 @@ AH_VERBATIM([USE_SYSTEM_EXTENSIONS],
 #ifndef _GNU_SOURCE
 # undef _GNU_SOURCE
 #endif
+/* Enable X/Open compliant socket functions that do not require linking
+   with -lxnet on HP-UX 11.11.  */
+#ifndef _HPUX_ALT_XOPEN_SOCKET_API
+# undef _HPUX_ALT_XOPEN_SOCKET_API
+#endif
 /* Identify the host operating system as Minix.
    This macro does not affect the system headers' behavior.
    A future release of Autoconf may stop defining this macro.  */
@@ -496,6 +501,7 @@ dnl it should only be defined when necessary.
   AC_DEFINE([_ALL_SOURCE])
   AC_DEFINE([_DARWIN_C_SOURCE])
   AC_DEFINE([_GNU_SOURCE])
+  AC_DEFINE([_HPUX_ALT_XOPEN_SOCKET_API])
   AC_DEFINE([_NETBSD_SOURCE])
   AC_DEFINE([_OPENBSD_SOURCE])
   AC_DEFINE([_POSIX_PTHREAD_SEMANTICS])
