@@ -358,8 +358,8 @@ AN_FUNCTION([getwd],        [warn: getwd is deprecated, use getcwd instead])
 
 # _AC_LIBOBJ_ALLOCA
 # -----------------
-# Set up the LIBOBJ replacement of `alloca'.  Well, not exactly
-# AC_LIBOBJ since we actually set the output variable `ALLOCA'.
+# Set up the LIBOBJ replacement of 'alloca'.  Well, not exactly
+# AC_LIBOBJ since we actually set the output variable 'ALLOCA'.
 # Nevertheless, for Automake, AC_LIBSOURCES it.
 m4_define([_AC_LIBOBJ_ALLOCA],
 [# The SVR3 libPW and SVR4 libucb both contain incompatible functions
@@ -368,7 +368,7 @@ m4_define([_AC_LIBOBJ_ALLOCA],
 # use ar to extract alloca.o from them instead of compiling alloca.c.
 AC_LIBSOURCES(alloca.c)
 AC_SUBST([ALLOCA], [\${LIBOBJDIR}alloca.$ac_objext])dnl
-AC_DEFINE(C_ALLOCA, 1, [Define to 1 if using `alloca.c'.])
+AC_DEFINE(C_ALLOCA, 1, [Define to 1 if using 'alloca.c'.])
 
 AC_CACHE_CHECK([stack direction for C alloca],
 	       [ac_cv_c_stack_direction],
@@ -400,7 +400,7 @@ AH_VERBATIM([STACK_DIRECTION],
 	STACK_DIRECTION > 0 => grows toward higher addresses
 	STACK_DIRECTION < 0 => grows toward lower addresses
 	STACK_DIRECTION = 0 => direction of growth unknown */
-@%:@undef STACK_DIRECTION])dnl
+#undef STACK_DIRECTION])dnl
 AC_DEFINE_UNQUOTED(STACK_DIRECTION, $ac_cv_c_stack_direction)
 ])# _AC_LIBOBJ_ALLOCA
 
@@ -453,7 +453,7 @@ fi
 
 if test $ac_cv_func_alloca_works = yes; then
   AC_DEFINE(HAVE_ALLOCA, 1,
-	    [Define to 1 if you have `alloca', as a function or macro.])
+	    [Define to 1 if you have 'alloca', as a function or macro.])
 else
   _AC_LIBOBJ_ALLOCA
 fi
