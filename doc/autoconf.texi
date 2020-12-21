@@ -7453,7 +7453,6 @@ makes this invalid.  That is why Autoconf stopped issuing
 @evindex CFLAGS
 @ovindex CC
 @ovindex CFLAGS
-@caindex prog_cc_stdc
 Determine a C compiler to use.
 
 If the environment variable @code{CC} is set, its value will be taken as
@@ -7485,21 +7484,15 @@ default.  (It is important to use this construct rather than a normal
 assignment, so that @code{CFLAGS} can still be overridden by the
 person building the package.  @xref{Preset Output Variables}.)
 
-If necessary, options are added to @code{CC} to enable support for ISO
-Standard C features with extensions, preferring the newest C standard
-that is supported.  Currently the newest standard Autoconf knows how to
-detect support for is ISO C 2011.  After calling this macro you can
-check whether the C compiler has been set to accept Standard C by
-inspecting cache variables.  If @code{ac_cv_prog_cc_c11} is set to any
-value other than @samp{no} (including the empty string), then @code{CC}
-can compile code as standard C 2011, and this mode has been enabled.
-Otherwise, if @code{ac_cv_prog_cc_c99} is set to any value other than
-@samp{no} (including the empty string), then @code{CC} can compile code
-as standard C 1999, and this mode has been enabled.  Otherwise, if
-@code{ac_cv_prog_cc_c89} is set to any value other than @samp{no}
-(including the empty string), then @code{CC} can compile code as
-standard C 1989, and this mode has been enabled.  Finally, if all
-three variables are set to @samp{no}, then @code{CC} cannot compile
+If necessary, options are added to @code{CC} to enable support for
+ISO Standard C features with extensions, preferring the newest edition
+of the C standard that is supported.  Currently the newest edition
+Autoconf knows how to detect support for is ISO C 2011.  After calling
+this macro you can check whether the C compiler has been set to accept
+standard C by inspecting the shell variable @code{ac_prog_cc_stdc}.
+Its value will be @samp{c11}, @samp{c99}, or @samp{c89}, respectively,
+if the C compiler has been set to use the 2011, 1999, or 1990 edition of
+the C standard, and @samp{no} if the compiler does not support compiling
 standard C at all.
 
 The tests for standard conformance are not comprehensive.  They test the
@@ -7890,17 +7883,15 @@ assignment, so that @code{CXXFLAGS} can still be overridden by the
 person building the package.  @xref{Preset Output Variables}.)
 
 If necessary, options are added to @code{CXX} to enable support for
-ISO Standard C++ features with extensions.  ISO C++ 2011 is preferred
-if the compiler supports it.  After calling this macro, you can check
-whether the C++ compiler has been set to accept standard C++ by
-inspecting cache variables.  If @code{ac_cv_prog_cxx_cxx11} is set to
-any value other than @samp{no} (including the empty string), then
-@code{CXX} can compile code as standard C++ 2011, and this mode has
-been enabled.  Otherwise, if @code{ac_cv_prog_cxx_cxx98} is set to
-any value other than @samp{no} (including the empty string), then
-@code{CXX} can compile code as standard C++ 1998, and this mode has
-been enabled.  Finally, if both variables are set to @samp{no}, then
-@code{CXX} cannot compile standard C++ at all.
+ISO Standard C++ features with extensions, preferring the newest edition
+of the C++ standard that is supported.  Currently the newest edition
+Autoconf knows how to detect support for is ISO C++ 2011.  After calling
+this macro, you can check whether the C++ compiler has been set to
+accept standard C++ by inspecting the shell variable @code{ac_prog_cc_stdc}.
+Its value will be @samp{cxx11} or @samp{cxx98}, respectively,
+if the C++ compiler has been set to use the 2011 or 1990 edition of the
+C++ standard, and @samp{no} if the compiler does not support compiling
+standard C++ at all.
 
 The tests for standard conformance are not comprehensive.  They test
 the value of @code{__cplusplus} and a representative sample of the
