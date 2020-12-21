@@ -1534,20 +1534,36 @@ end-language: "Autoconf-without-aclocal-m4"
 # A failed redirection may cause a status of 2 with FreeBSD sh.
 AT_CHECK([(: > sub/some-file) || exit 1 && exit 77], 1, [ignore], [ignore])
 
-# Failure to create cache directory.
+# Failure to create cache directory due to access permissions.
 AT_CHECK_AUTOCONF([], [1], [ignore], [stderr])
 AT_CHECK([grep 'cannot create .*autom4te.cache' stderr], [0], [ignore])
+AT_CHECK([grep ': Permission denied' stderr], [0], [ignore])
 AT_CHECK([test -f configure], [1])
 
+# Failure to create cache directory due to something else in the way.
 chmod u+w sub
+: > sub/autom4te.cache
+AT_CHECK_AUTOCONF([], [1], [ignore], [stderr])
+AT_CHECK([grep 'cannot create .*autom4te.cache' stderr], [0], [ignore])
+AT_CHECK([grep ': File exists' stderr], [0], [ignore])
+AT_CHECK([test -f configure], [1])
+
+# This time, creation should succeed.
+rm -f sub/autom4te.cache
 AT_CHECK_AUTOCONF
+AT_CHECK([test -d sub/autom4te.cache])
 
 rm -f configure sub/autom4te.cache/*
 chmod a-w sub/autom4te.cache
 
 # Failure to create a file in the cache directory.
 AT_CHECK_AUTOCONF([], [1], [ignore], [stderr])
-AT_CHECK([grep 'cannot open.*autom4te.cache' stderr], [0], [ignore])
+AT_CHECK([grep 'cannot open .*autom4te.cache' stderr], [0], [ignore])
+AT_CHECK([test -f configure], [1])
+
+# If the directory already exists, that should be fine.
+chmod u+w sub/autom4te.cache
+AT_CHECK_AUTOCONF
 
 AT_CLEANUP
 

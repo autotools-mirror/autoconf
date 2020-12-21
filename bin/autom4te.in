@@ -1012,12 +1012,21 @@ if ($freeze)
     exit $exit_code;
   }
 
-# We need our cache directory.  Don't fail with parallel creation.
-if (! -d "$cache")
+# Ensure the cache directory exists.
+if (! mkdir ($cache, 0755))
   {
-    mkdir "$cache", 0755
-      or -d "$cache"
-      or fatal "cannot create $cache: $!";
+    # Snapshot $! immediately, the next few operations may clobber it.
+    my $eexist = $!{EEXIST};
+    my $errmsg = "$!";
+
+    # If mkdir failed with EEXIST, that means the *name* $cache
+    # already exists, but it might be the wrong kind of file.
+    if (! $eexist || ! -d $cache)
+      {
+        require Cwd;
+        my $cwd = Cwd::cwd();
+        fatal "cannot create $cache in $cwd: $errmsg";
+      }
   }
 
 # Open the index for update, and lock it.  autom4te handles several
