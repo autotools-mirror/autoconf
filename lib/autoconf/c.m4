@@ -498,19 +498,7 @@ else
   GCC=
 fi
 _AC_PROG_CC_G
-dnl
-dnl Set ac_prog_cc_stdc to the supported C version.
-dnl Also set the documented variable ac_cv_prog_cc_stdc;
-dnl its name was chosen when it was cached, but it is no longer cached.
-_AC_PROG_CC_C11([ac_prog_cc_stdc=c11
-		 ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c11],
-  [_AC_PROG_CC_C99([ac_prog_cc_stdc=c99
-		    ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c99],
-     [_AC_PROG_CC_C89([ac_prog_cc_stdc=c89
-		       ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c89],
-		      [ac_prog_cc_stdc=no
-		       ac_cv_prog_cc_stdc=no])])])
-dnl
+_AC_PROG_CC_STDC_EDITION
 AC_LANG_POP(C)dnl
 ])# AC_PROG_CC
 
@@ -745,13 +733,7 @@ else
   GXX=
 fi
 _AC_PROG_CXX_G
-_AC_PROG_CXX_CXX11([ac_prog_cxx_stdcxx=cxx11
-		    ac_cv_prog_cxx_stdcxx=$ac_cv_prog_cxx_cxx11
-		    ac_cv_prog_cxx_cxx98=$ac_cv_prog_cxx_cxx11],
-   [_AC_PROG_CXX_CXX98([ac_prog_cxx_stdcxx=cxx98
-		        ac_cv_prog_cxx_stdcxx=$ac_cv_prog_cxx_cxx98],
-		       [ac_prog_cxx_stdcxx=no
-		        ac_cv_prog_cxx_stdcxx=no])])
+_AC_PROG_CXX_STDCXX_EDITION
 AC_LANG_POP(C++)dnl
 ])# AC_PROG_CXX
 
@@ -1496,114 +1478,170 @@ main (int argc, char **argv)
 ]])])
 
 
-# _AC_C_STD_TRY(STANDARD, TEST-PROGRAM-HOLDER, OPTION-LIST,
-#		ACTION-IF-AVAILABLE, ACTION-IF-UNAVAILABLE)
-# --------------------------------------------------------------
-# Check whether the C compiler accepts features of STANDARD (e.g `c89', `c99')
-# by trying to compile the program in the shell variable TEST-PROGRAM-HOLDER.
-# Caller is responsible for making sure this variable has been initialized.
-# If compilation fails in the default mode, try again with each compiler
-# option in the space-separated OPTION-LIST; if one helps, append it to CC.
-# If eventually successful, run ACTION-IF-AVAILABLE, else ACTION-IF-UNAVAILABLE.
-AC_DEFUN([_AC_C_STD_TRY],
+# _AC_C_C89_OPTIONS
+# -----------------
+# Whitespace-separated list of options that might put the C compiler
+# into a mode conforming to ISO C1990 with extensions.  Do not try
+# "strictly conforming" modes (e.g. gcc's -std=c90); they break some
+# systems' header files.  If more than one option is needed, put
+# shell quotes around the group.
+#
+# AIX circa 2003         -qlanglvl=extc89
+# old AIX                -qlanglvl=ansi
+# Ultrix, OSF/1, Tru64   -std
+# HP-UX 10.20 and later  -Ae
+# HP-UX older versions   -Aa -D_HPUX_SOURCE
+# SVR4                   -Xc -D__EXTENSIONS__
+m4_define([_AC_C_C89_OPTIONS], [
+    -qlanglvl=extc89
+    -qlanglvl=ansi
+    -std
+    -Ae
+    "-Aa -D_HPUX_SOURCE"
+    "-Xc -D__EXTENSIONS__"
+])
+
+
+# _AC_C_C99_OPTIONS
+# -----------------
+# Whitespace-separated list of options that might put the C compiler
+# into a mode conforming to ISO C1999 with extensions.  Do not try
+# "strictly conforming" modes (e.g. gcc's -std=c99); they break some
+# systems' header files.  If more than one option is needed, put
+# shell quotes around the group.
+#
+# GCC, Clang    -std=gnu99
+# Intel ICC     -std=c99, -c99 (deprecated)
+#   Note: because -std=c99 puts GCC in strictly conforming mode,
+#   this option must be tested *after* -std=gnu99.
+# IRIX          -c99
+# Tru64         -c99
+# IBM XL C      -qlanglvl=extc1x (V12.1; does not pass C11 test)
+# IBM XL C      -qlanglvl=extc99 (pre-V12.1)
+# HP cc         -AC99
+# Solaris       -D_STDC_C99=
+#   Note: acc's -xc99 option uses linker magic to define the external
+#   symbol __xpg4 as if by "int __xpg4 = 1;", which enables C99
+#   behavior for C library functions.  This is not wanted here,
+#   because it means that a single module compiled with -xc99 alters
+#   C runtime behavior for the entire program, not for just the
+#   module.  Instead, define the (private) symbol _STDC_C99, which
+#   suppresses a bogus failure in <stdbool.h>.  The resulting compiler
+#   passes the test case here, and that's good enough.
+#   For more, please see the thread starting at:
+#   https://lists.gnu.org/archive/html/autoconf/2010-12/msg00059.html
+m4_define([_AC_C_C99_OPTIONS], [
+    -std=gnu99
+    -std=c99
+    -c99
+    -qlanglvl=extc1x
+    -qlanglvl=extc99
+    -AC99
+    -D_STDC_C99=
+])
+
+
+# _AC_C_C11_OPTIONS
+# -----------------
+# Whitespace-separated list of options that might put the C compiler
+# into a mode conforming to ISO C2011 with extensions.  Do not try
+# "strictly conforming" modes (e.g. gcc's -std=c11); they break some
+# systems' header files.  If more than one option is needed, put
+# shell quotes around the group.
+#
+# GCC, Clang    -std=gnu11
+#
+# For IBM XL C for AIX V16.1 or later, '-std=gnu11' should work if
+# the user configured with CC='xlclang'.  Otherwise, do not try
+# -qlanglvl=extc1x as xlc with IBM XL C V16.1 (the latest version as
+# of August 2020) does not pass the C11 test.  Instead, try extc1x when
+# compiling the C99 test instead, since it enables _Static_assert and
+# _Noreturn, which is a win.
+m4_define([_AC_C_C11_OPTIONS], [
+    -std=gnu11
+])
+
+
+# _AC_PROG_CC_STDC_EDITION_TRY(EDITION)
+# -------------------------------------
+# Subroutine of _AC_PROG_CC_STDC_EDITION.  Not to be called directly.
+#
+# Check whether the C compiler accepts features of EDITION of the
+# C standard.  EDITION should be a two-digit year (e.g. 89, 99, 11).
+# (FIXME: Switch to four-digit years for futureproofing.)
+# This is done by compiling the test program defined by
+# _AC_C_C{EDITION}_TEST_PROGRAM, first with no additional
+# command-line options, and then with each of the options
+# in the space-separated list defined by _AC_C_C{EDITION}_OPTIONS.
+#
+# If we find a way to make the test program compile, set cache variable
+# ac_cv_prog_cc_cEDITION to the options required (if any), and add those
+# options to $CC.  Set shell variable ac_prog_cc_stdc to `cEDITION',
+# and set shell variable ac_cv_prog_cc_stdc to the options required.
+# (Neither of these variables is AC_SUBSTed.  ac_cv_prog_cc_stdc used
+# to be a cache variable and is preserved with this name for backward
+# compatibility.)  Otherwise, ac_cv_prog_cc_cEDITION is set to `no'
+# and the other variables are not changed.
+#
+# If ac_prog_cc_stdc is already set to a value other than `no',
+# the shell code produced by this macro does nothing.  This is so
+# _AC_PROG_CC_STDC_EDITION can use m4_map to iterate through
+# all the editions.
+AC_DEFUN([_AC_PROG_CC_STDC_EDITION_TRY],
 [AC_LANG_ASSERT([C])]dnl
-[AC_MSG_CHECKING([for $CC option to enable ]dnl
-m4_translit($1, [c], [C])[ features])
-AC_CACHE_VAL([ac_cv_prog_cc_$1],
-[ac_cv_prog_cc_$1=no
+[AC_REQUIRE([_AC_C_C$1_TEST_PROGRAM])]dnl
+[AS_IF([test x$ac_prog_cc_stdc = xno],
+[AC_MSG_CHECKING([for $CC option to enable C$1 features])
+AC_CACHE_VAL([ac_cv_prog_cc_c$1],
+[ac_cv_prog_cc_c$1=no
 ac_save_CC=$CC
-AC_LANG_CONFTEST([AC_LANG_DEFINES_PROVIDED][$][$2])
-for ac_arg in '' $3
+AC_LANG_CONFTEST([AC_LANG_DEFINES_PROVIDED][$][ac_c_conftest_c$1_program])
+for ac_arg in '' m4_normalize(m4_defn([_AC_C_C$1_OPTIONS]))
 do
   CC="$ac_save_CC $ac_arg"
-  _AC_COMPILE_IFELSE([], [ac_cv_prog_cc_$1=$ac_arg])
-  test "x$ac_cv_prog_cc_$1" != "xno" && break
+  _AC_COMPILE_IFELSE([], [ac_cv_prog_cc_c$1=$ac_arg])
+  test "x$ac_cv_prog_cc_c$1" != "xno" && break
 done
 rm -f conftest.$ac_ext
-CC=$ac_save_CC
-])# AC_CACHE_VAL
-ac_prog_cc_stdc_options=
-AS_CASE(["x$ac_cv_prog_cc_$1"],
-  [x],   [AC_MSG_RESULT([none needed])],
-  [xno], [AC_MSG_RESULT([unsupported])],
-   [ac_prog_cc_stdc_options=" $ac_cv_prog_cc_$1"
-    CC="$CC$ac_prog_cc_stdc_options"
-    AC_MSG_RESULT([$ac_cv_prog_cc_$1])])
-AS_IF([test "x$ac_cv_prog_cc_$1" != xno], [$4], [$5])
-])# _AC_C_STD_TRY
+CC=$ac_save_CC])
+AS_IF([test "x$ac_cv_prog_cc_c$1" = xno],
+  [AC_MSG_RESULT([unsupported])],
+  [AS_IF([test "x$ac_cv_prog_cc_c$1" = x],
+    [AC_MSG_RESULT([none needed])],
+    [AC_MSG_RESULT([$ac_cv_prog_cc_c$1])
+     CC="$CC $ac_cv_prog_cc_c$1"])
+  ac_cv_prog_cc_stdc=$ac_cv_prog_cc_c$1
+  ac_prog_cc_stdc=c$1])])
+])
 
 
-# _AC_PROG_CC_C89 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
-# ----------------------------------------------------------------
-# If the C compiler is not in ANSI C89 (ISO C90) mode by default, try
-# to add an option to output variable CC to make it so.
+# _AC_PROG_CC_STDC_EDITION
+# ------------------------
+# Detect the most recent edition of the ISO C standard that is
+# supported by the C compiler.  Add command-line options to $CC, if
+# necessary, to enable support for this edition.  Set the shell
+# variable ac_prog_cc_stdc to indicate the edition.
+AC_DEFUN([_AC_PROG_CC_STDC_EDITION],
+[ac_prog_cc_stdc=no
+m4_map([_AC_PROG_CC_STDC_EDITION_TRY], [[11], [99], [89]])])
+
+
+# _AC_PROG_CC_C89(ACTION-IF-SUPPORTED, ACTION-IF-NOT-SUPPORTED)
+# -------------------------------------------------------------
+# Obsolete internal macro.  No longer used by Autoconf itself, but
+# preserved for backward compatibility with pre-December 2020 versions
+# of Gnulib's std-gnu11.m4, which replaced the entire definition of
+# AC_PROG_CC *except* for this macro.  Can be removed once everyone is
+# using Autoconf 2.70 and/or a current std-gnu11.m4.
 AC_DEFUN([_AC_PROG_CC_C89],
-[AC_REQUIRE([_AC_C_C89_TEST_PROGRAM])]dnl
-[_AC_C_STD_TRY([c89], [ac_c_conftest_c89_program],
-dnl Don't try gcc -ansi; that turns off useful extensions and
-dnl breaks some systems' header files.
-dnl AIX circa 2003	-qlanglvl=extc89
-dnl old AIX		-qlanglvl=ansi
-dnl Ultrix, OSF/1, Tru64	-std
-dnl HP-UX 10.20 and later	-Ae
-dnl HP-UX older versions	-Aa -D_HPUX_SOURCE
-dnl SVR4			-Xc -D__EXTENSIONS__
-[-qlanglvl=extc89 -qlanglvl=ansi -std \
-	-Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"], [$1], [$2])[]dnl
-])# _AC_PROG_CC_C89
+[AC_REQUIRE([_AC_C_C89_TEST_GLOBALS])]dnl
+[AC_REQUIRE([_AC_C_C89_TEST_MAIN])]dnl
+[_AC_C_STD_TRY([c89],
+  [$ac_c_conftest_c89_globals], [$ac_c_conftest_c89_main],
+  m4_quote(m4_normalize(m4_defn([_AC_C_C89_OPTIONS]))),
+  [$1],
+  [$2])])
 
-
-# _AC_PROG_CC_C99 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
-# ----------------------------------------------------------------
-# If the C compiler is not in ISO C99 mode by default, try to add an
-# option to output variable CC to make it so.
-AC_DEFUN([_AC_PROG_CC_C99],
-[AC_REQUIRE([_AC_C_C99_TEST_PROGRAM])]dnl
-[_AC_C_STD_TRY([c99], [ac_c_conftest_c99_program],
-dnl Try
-dnl GCC		-std=gnu99 (unused restrictive modes: -std=c99 -std=iso9899:1999)
-dnl IBM XL C	-qlanglvl=extc1x (V12.1; does not pass C11 test)
-dnl IBM XL C	-qlanglvl=extc99
-dnl		(pre-V12.1; unused restrictive mode: -qlanglvl=stdc99)
-dnl HP cc	-AC99
-dnl Intel ICC	-std=c99, -c99 (deprecated)
-dnl IRIX	-c99
-dnl Solaris	-D_STDC_C99=
-dnl		cc's -xc99 option uses linker magic to define the external
-dnl		symbol __xpg4 as if by "int __xpg4 = 1;", which enables C99
-dnl		behavior for C library functions.  This is not wanted here,
-dnl		because it means that a single module compiled with -xc99
-dnl		alters C runtime behavior for the entire program, not for
-dnl		just the module.  Instead, define the (private) symbol
-dnl		_STDC_C99, which suppresses a bogus failure in <stdbool.h>.
-dnl		The resulting compiler passes the test case here, and that's
-dnl		good enough.  For more, please see the thread starting at:
-dnl           https://lists.gnu.org/archive/html/autoconf/2010-12/msg00059.html
-dnl Tru64	-c99
-dnl with extended modes being tried first.
-[[-std=gnu99 -std=c99 -c99 -AC99 -D_STDC_C99= -qlanglvl=extc1x -qlanglvl=extc99]], [$1], [$2])[]dnl
-])# _AC_PROG_CC_C99
-
-
-# _AC_PROG_CC_C11 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
-# ----------------------------------------------------------------
-# If the C compiler is not in ISO C11 mode by default, try to add an
-# option to output variable CC to make it so.
-AC_DEFUN([_AC_PROG_CC_C11],
-[AC_REQUIRE([_AC_C_C11_TEST_PROGRAM])]dnl
-[_AC_C_STD_TRY([c11], [ac_c_conftest_c11_program],
-dnl Try
-dnl GCC		-std=gnu11 (unused restrictive mode: -std=c11)
-dnl with extended modes being tried first.
-dnl
-dnl For IBM XL C for AIX V16.1 or later, '-std=gnu11' should work if
-dnl the user configured with CC='xlclang'.  Otherwise, do not try
-dnl -qlanglvl=extc1x as xlc with IBM XL C V16.1 (the latest version as
-dnl of August 2020) does not pass the C11 test.  Instead, try extc1x when
-dnl compiling the C99 test instead, since it enables _Static_assert and
-dnl _Noreturn, which is a win.
-[[-std=gnu11]], [$1], [$2])[]dnl
-])# _AC_PROG_CC_C11
 
 
 # AC_PROG_CC_C89
@@ -2633,78 +2671,112 @@ main (int argc, char **argv)
 "
 ]])])
 
+# _AC_CXX_CXX98_OPTIONS
+# ---------------------
+# Whitespace-separated list of options that might put the C++ compiler
+# into a mode conforming to ISO C++ 1998 with extensions.  Do not try
+# "strictly conforming" modes (e.g. gcc's -std=c++98); they break some
+# systems' header files.  If more than one option is needed, put
+# shell quotes around the group.
+#
+# GCC           -std=gnu++98
+# Intel ICC     -std=c++98
+#   Note: because -std=c++98 puts GCC in strictly conforming mode,
+#   this option must be tested *after* -std=gnu++98.
+# IBM XL C      -qlanglvl=extended
+# HP aC++       -AA
+# Solaris       N/A (default)
+# Tru64         N/A (default, but -std gnu could be used)
+m4_define([_AC_CXX_CXX98_OPTIONS], [
+    -std=gnu++98
+    -std=c++98
+    -qlanglvl=extended
+    -AA
+])
 
-# _AC_CXX_STD_TRY(STANDARD, TEST-PROGRAM-HOLDER, OPTION-LIST,
-#		  ACTION-IF-AVAILABLE, ACTION-IF-UNAVAILABLE)
-# ----------------------------------------------------------------
-# Check whether the C++ compiler accepts features of STANDARD (e.g `cxx98',
-# `cxx11') by trying to compile the program in the shell variable
-# TEST-PROGRAM-HOLDER.  Caller is responsible for making sure this variable
-# has been initialized.  If compilation fails in the default mode, try again
-# with each compiler option in the space-separated OPTION-LIST; if one helps,
-# append it to CXX.  If eventually successful, run ACTION-IF-AVAILABLE, else
-# ACTION-IF-UNAVAILABLE.
+# _AC_CXX_CXX11_OPTIONS
+# ---------------------
+# Whitespace-separated list of options that might put the C++ compiler
+# into a mode conforming to ISO C++ 2011 with extensions.  Do not try
+# "strictly conforming" modes (e.g. gcc's -std=c++11); they break some
+# systems' header files.  If more than one option is needed, put
+# shell quotes around the group.
+#
+# GCC           -std=gnu++11, -std=gnu++0x
+# Intel ICC     -std=c++11, -std=c++0x
+#   Note: because -std=c++11 puts GCC in strictly conforming mode,
+#   these options must be tested *after* -std=gnu++11.
+# IBM XL C      -qlanglvl=extended0x (pre-V12.1)
+# HP aC++       -AA
+# Solaris       N/A (no support)
+# Tru64         N/A (no support)
+m4_define([_AC_CXX_CXX11_OPTIONS], [
+    -std=gnu++11
+    -std=gnu++0x
+    -std=c++11
+    -std=c++0x
+    -qlanglvl=extended0x
+    -AA
+])
 
-AC_DEFUN([_AC_CXX_STD_TRY],
+# _AC_PROG_CXX_STDCXX_EDITION_TRY(EDITION)
+# ----------------------------------------
+# Subroutine of _AC_PROG_CXX_STDCXX_EDITION.  Not to be called directly.
+#
+# Check whether the C++ compiler accepts features of EDITION of the
+# C++ standard.  EDITION should be a two-digit year (e.g. 98, 11).
+# (FIXME: Switch to four-digit years for futureproofing.)
+# This is done by compiling the test program defined by
+# _AC_C_CXX{EDITION}_TEST_PROGRAM, first with no additional
+# command-line options, and then with each of the options
+# in the space-separated list defined by _AC_C_CXX{EDITION}_OPTIONS.
+#
+# If we find a way to make the test program compile, set cache variable
+# ac_cv_prog_cxx_cxxEDITION to the options required (if any), and add those
+# options to $CXX.  Set shell variable ac_prog_cxx_stdcxx to `cxxEDITION',
+# and set shell variable ac_cv_prog_cxx_stdcxx to the options required.
+# (Neither of these variables is AC_SUBSTed.  ac_cv_prog_cxx_stdcxx used
+# to be a cache variable and is preserved with this name for backward
+# compatibility.)  Otherwise, ac_cv_prog_cxx_cxxEDITION is set to `no'
+# and the other variables are not changed.
+#
+# If ac_prog_cxx_stdcxx is already set to a value other than `no',
+# the shell code produced by this macro does nothing.  This is so
+# _AC_PROG_CXX_STDCXX_EDITION can use m4_map to iterate through
+# all the editions.
+AC_DEFUN([_AC_PROG_CXX_STDCXX_EDITION_TRY],
 [AC_LANG_ASSERT([C++])]dnl
-[AC_MSG_CHECKING([for $CXX option to enable ]dnl
-m4_translit([$1], [a-wxyz], [A-W+YZ])[ features])
+[AC_REQUIRE([_AC_CXX_CXX$1_TEST_PROGRAM])]dnl
+[AS_IF([test x$ac_prog_cxx_stdcxx = xno],
+[AC_MSG_CHECKING([for $CXX option to enable C++$1 features])
 AC_CACHE_VAL(ac_cv_prog_cxx_$1,
 [ac_cv_prog_cxx_$1=no
 ac_save_CXX=$CXX
-AC_LANG_CONFTEST([AC_LANG_DEFINES_PROVIDED][$][$2])
-for ac_arg in '' $3
+AC_LANG_CONFTEST([AC_LANG_DEFINES_PROVIDED][$][ac_cxx_conftest_cxx$1_program])
+for ac_arg in '' m4_normalize(m4_defn([_AC_CXX_CXX$1_OPTIONS]))
 do
   CXX="$ac_save_CXX $ac_arg"
-  _AC_COMPILE_IFELSE([], [ac_cv_prog_cxx_$1=$ac_arg])
-  test "x$ac_cv_prog_cxx_$1" != "xno" && break
+  _AC_COMPILE_IFELSE([], [ac_cv_prog_cxx_cxx$1=$ac_arg])
+  test "x$ac_cv_prog_cxx_cxx$1" != "xno" && break
 done
 rm -f conftest.$ac_ext
-CXX=$ac_save_CXX
-])# AC_CACHE_VAL
-ac_prog_cxx_stdcxx_options=
-AS_CASE(["x$ac_cv_prog_cxx_$1"],
-  [x],   [AC_MSG_RESULT([none needed])],
-  [xno], [AC_MSG_RESULT([unsupported])],
-   [ac_prog_cxx_stdcxx_options=" $ac_cv_prog_cxx_$1"
-    CXX=$CXX$ac_prog_cxx_stdcxx_options
-    AC_MSG_RESULT([$ac_cv_prog_cxx_$1])])
-AS_IF([test "x$ac_cv_prog_cxx_$1" != xno], [$4], [$5])
-])# _AC_CXX_STD_TRY
+CXX=$ac_save_CXX])
+AS_IF([test "x$ac_cv_prog_cxx_cxx$1" = xno],
+  [AC_MSG_RESULT([unsupported])],
+  [AS_IF([test "x$ac_cv_prog_cxx_cxx$1" = x],
+    [AC_MSG_RESULT([none needed])],
+    [AC_MSG_RESULT([$ac_cv_prog_cxx_cxx$1])
+     CXX="$CXX $ac_cv_prog_cxx_cxx$1"])
+  ac_cv_prog_cxx_stdcxx=$ac_cv_prog_cxx_cxx$1
+  ac_prog_cxx_stdcxx=cxx$1])])
+])
 
-# _AC_PROG_CXX_CXX98 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
-# -------------------------------------------------------------------
-# If the C++ compiler is not in ISO C++98 mode by default, try to add
-# an option to output variable CXX to make it so.
-AC_DEFUN([_AC_PROG_CXX_CXX98],
-[AC_REQUIRE([_AC_CXX_CXX98_TEST_PROGRAM])]dnl
-[_AC_CXX_STD_TRY([cxx98], [ac_cxx_conftest_cxx98_program],
-dnl Try
-dnl GCC		-std=gnu++98 (unused restrictive mode: -std=c++98)
-dnl IBM XL C	-qlanglvl=extended
-dnl HP aC++	-AA
-dnl Intel ICC	-std=gnu++98
-dnl Solaris	N/A (default)
-dnl Tru64	N/A (default, but -std gnu could be used)
-dnl with extended modes being tried first.
-[[-std=gnu++98 -std=c++98 -qlanglvl=extended -AA]], [$1], [$2])[]dnl
-])# _AC_PROG_CXX_CXX98
-
-# _AC_PROG_CXX_CXX11 ([ACTION-IF-AVAILABLE], [ACTION-IF-UNAVAILABLE])
-# -------------------------------------------------------------------
-# If the C++ compiler is not in ISO CXX11 mode by default, try to add
-# an option to output variable CXX to make it so.
-AC_DEFUN([_AC_PROG_CXX_CXX11],
-[AC_REQUIRE([_AC_CXX_CXX11_TEST_PROGRAM])]dnl
-[_AC_CXX_STD_TRY([cxx11], [ac_cxx_conftest_cxx11_program],
-dnl Try
-dnl GCC		-std=gnu++11 (unused restrictive mode: -std=c++11) [and 0x variants]
-dnl IBM XL C	-qlanglvl=extended0x
-dnl		(pre-V12.1; unused restrictive mode: -qlanglvl=stdcxx11)
-dnl HP aC++	-AA
-dnl Intel ICC	-std=c++11 -std=c++0x
-dnl Solaris	N/A (no support)
-dnl Tru64	N/A (no support)
-dnl with extended modes being tried first.
-[[-std=gnu++11 -std=c++11 -std=gnu++0x -std=c++0x -qlanglvl=extended0x -AA]], [$1], [$2])[]dnl
-])# _AC_PROG_CXX_CXX11
+# _AC_PROG_CXX_STDCXX_EDITION
+# ---------------------------
+# Detect the most recent edition of the ISO C++ standard that is
+# supported by the C++ compiler.  Add command-line options to $CXX,
+# if necessary, to enable support for this edition.  Set the shell
+# variable ac_prog_cxx_stdcxx to indicate the edition.
+AC_DEFUN([_AC_PROG_CXX_STDCXX_EDITION],
+[ac_prog_cxx_stdcxx=no
+m4_map([_AC_PROG_CXX_STDCXX_EDITION_TRY], [[11], [98]])])

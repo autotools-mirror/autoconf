@@ -120,8 +120,13 @@ TESTSUITE_HAND_AT = \
   tests/autoscan.at \
   tests/foreign.at
 
+TESTSUITE_EXTRA = \
+  tests/data/ax_prog_cc_for_build_v18.m4 \
+  tests/data/ax_prog_cxx_for_build_v3.m4 \
+  tests/data/gnulib_std_gnu11_2020_08_17.m4
+
 CLEANFILES += $(TESTSUITE_GENERATED_AT)
-EXTRA_DIST += $(TESTSUITE_HAND_AT)
+EXTRA_DIST += $(TESTSUITE_HAND_AT) $(TESTSUITE_EXTRA)
 
 TESTSUITE_AT = $(TESTSUITE_GENERATED_AT) $(TESTSUITE_HAND_AT)
 TESTSUITE = tests/testsuite
