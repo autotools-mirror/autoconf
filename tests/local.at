@@ -452,9 +452,9 @@ fi
 #   cxx: ignore all of:
 #     - CC, CPP, CCC, CXX, CXXCPP, CFLAGS, CXXFLAGS, GCC, GXX
 #     - ac_cv_env_(any of the above)_(set|value)
-#     - ac_cv_c_compiler_gnu, ac_cv_cxx_compiler_gnu
-#     - ac_cv_c_decl_report, ac_cv_cxx_decl_report
-#     - ac_cv_prog_c_*, ac_cv_prog_cxx_*,
+#     - ac_cv_(c|cxx)_compiler_gnu
+#     - ac_cv_(c|cxx)_undeclared_builtin_options
+#     - ac_cv_prog_c_*, ac_cv_prog_cxx_*
 #     - ac_cv_prog_(ac_ct_)?(CC|CXX|CPP|CXXCPP)
 #     + other ac_cv_c_* are renamed to ac_cv_cxx_*
 #     + OPENMP_CFLAGS is renamed to OPENMP_CXXFLAGS
@@ -546,8 +546,8 @@ m4_define([_AT_CONFIG_CMP_PRUNE],
 	/^ac_cv_prog_ac_ct_CXXCPP=/ d
 	/^ac_cv_c_compiler_gnu=/ d
 	/^ac_cv_cxx_compiler_gnu=/ d
-	/^ac_cv_c_decl_report=/ d
-	/^ac_cv_cxx_decl_report=/ d
+	/^ac_cv_c_undeclared_builtin_options=/ d
+	/^ac_cv_cxx_undeclared_builtin_options=/ d
 	/^ac_cv_prog_c_@<:@^=@:>@*=/ d
 	/^ac_cv_prog_cc_@<:@^=@:>@*=/ d
 	/^ac_cv_prog_cxx_@<:@^=@:>@*=/ d

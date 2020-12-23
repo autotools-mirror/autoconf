@@ -6583,12 +6583,6 @@ parentheses for types which can be zero-initialized:
 AC_CHECK_DECL([basename(char *)])
 @end example
 
-Some compilers don't indicate every missing declaration by the error
-status.  This macro checks the standard error from such compilers and
-considers a declaration missing if any warnings have been reported.  For
-most compilers, though, warnings do not affect this macro's outcome
-unless @code{AC_LANG_WERROR} is also specified.
-
 This macro caches its result in the @code{ac_cv_have_decl_@var{symbol}}
 variable, with characters not suitable for a variable name mapped to
 underscores.
@@ -6648,12 +6642,6 @@ void *malloc (size_t *s);
 You fall into the second category only in extreme situations: either
 your files may be used without being configured, or they are used during
 the configuration.  In most cases the traditional approach is enough.
-
-Some compilers don't indicate every missing declaration by the error
-status.  This macro checks the standard error from such compilers and
-considers a declaration missing if any warnings have been reported.  For
-most compilers, though, warnings do not affect this macro's outcome
-unless @code{AC_LANG_WERROR} is also specified.
 
 This macro caches its results in @code{ac_cv_have_decl_@var{symbol}}
 variables, with characters not suitable for a variable name mapped to

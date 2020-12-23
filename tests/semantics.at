@@ -201,8 +201,7 @@ fi
 
 # AC_CHECK_DECLS
 # --------------
-# For the benefit of _AC_UNDECLARED_WARNING compilers, these INCLUDES sections
-# should not elicit warnings.
+# Check that it performs the correct actions:
 AT_CHECK_MACRO([AC_CHECK_DECLS],
 [[AC_CHECK_DECLS([yes, no, myenum, mystruct, myfunc, mymacro1, mymacro2],,,
 		 [[extern int yes;
@@ -211,8 +210,9 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 		   extern int myfunc();
 		   #define mymacro1(arg) arg
 		   #define mymacro2]])
-  # Clang reports a warning for an undeclared builtin.
-  AC_CHECK_DECLS([strerror],,, [[]])
+  # Ensure we can detect missing declarations of functions whose
+  # signature may be built into the compiler.
+  AC_CHECK_DECLS([memcpy, strchr, strerror],,, [[]])
   # The difference in space-before-open-paren is intentional.
   AC_CHECK_DECLS([basenam (char *), dirnam(char *),
 		  moreargs (char, short, int, long, void *, char *, float, double)],,,
@@ -248,6 +248,7 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 [AT_CHECK_DEFINES(
 [#define HAVE_DECL_BASENAM 1
 #define HAVE_DECL_DIRNAM 0
+#define HAVE_DECL_MEMCPY 0
 #define HAVE_DECL_MOREARGS 1
 #define HAVE_DECL_MYENUM 1
 #define HAVE_DECL_MYFUNC 1
@@ -255,6 +256,7 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 #define HAVE_DECL_MYMACRO2 1
 #define HAVE_DECL_MYSTRUCT 1
 #define HAVE_DECL_NO 0
+#define HAVE_DECL_STRCHR 0
 #define HAVE_DECL_STRERROR 0
 #define HAVE_DECL_YES 1
 ])])
