@@ -662,6 +662,52 @@ arbitrary $text
 AT_CLEANUP
 
 
+# autoconf: timestamp changes
+# ---------------------------
+# Automake needs autoconf to update the timestamp on the configure script
+# whenever configure.ac or aclocal.m4 changes, even if the contents of the
+# configure script have not changed.
+AT_SETUP([autoconf: timestamp changes])
+
+AT_DATA([aclocal.m4],
+[[AC_DEFUN([local_KILROY], [# kilroy was here
+])
+]])
+
+AT_DATA_AUTOCONF([configure.ac],
+[[AC_INIT
+AC_PROG_CC
+local_KILROY
+AC_OUTPUT
+]])
+
+AT_CHECK_AUTOCONF
+
+cp configure configure.1
+sleep 1
+printf '%s\n' 'AC_LIBSOURCES([foo.c])dn@&t@l' >> configure.ac
+
+# This step must not use --force.
+# We don't need to check shell syntax, because if all goes well,
+# the script will be unchanged from what it was in the first autoconf
+# pass, and that was already checked.
+AT_CHECK_M4([autoconf])
+AT_CHECK([cmp configure configure.1])
+AT_CHECK([test configure -nt configure.1])
+
+cp configure configure.2
+sleep 1
+printf '%s\n' \
+  'AC_DEFUN([unused_MACRO], [# bob was there too' \
+  '])' >> aclocal.m4
+
+# Same as above.
+AT_CHECK_M4([autoconf])
+AT_CHECK([cmp configure configure.2])
+AT_CHECK([test configure -nt configure.2])
+
+AT_CLEANUP
+
 
 ## --------- ##
 ## ifnames.  ##

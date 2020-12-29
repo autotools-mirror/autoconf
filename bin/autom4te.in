@@ -609,7 +609,9 @@ sub handle_output ($$)
     }
 
   $out->close();
-  update_file ($scratchfile, $output, $force)
+  # Always update the file, even if it didn't change;
+  # Automake relies on this.
+  update_file ($scratchfile, $output, 1)
     if defined $scratchfile;
 
   # If no forbidden words, we're done.
