@@ -19291,8 +19291,8 @@ dir=`AS_DIRNAME(["$file"])` # This is more portable.
 @item @command{egrep}
 @c ------------------
 @prindex @command{egrep}
-Posix 1003.1-2001 no longer requires @command{egrep},
-but many hosts do not yet support the Posix
+Although Posix stopped requiring @command{egrep} in 2001,
+a few traditional hosts (notably Solaris) do not support the Posix
 replacement @code{grep -E}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_EGREP} and then use @code{$EGREP}.
@@ -19477,8 +19477,8 @@ expr: More than one '\(' was used.
 @item @command{fgrep}
 @c ------------------
 @prindex @command{fgrep}
-Posix 1003.1-2001 no longer requires @command{fgrep},
-but many hosts do not yet support the Posix
+Although Posix stopped requiring @command{fgrep} in 2001,
+a few traditional hosts (notably Solaris) do not support the Posix
 replacement @code{grep -F}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_FGREP} and then use @code{$FGREP}.
@@ -19519,7 +19519,7 @@ portable scripts should not combine @option{-c} with @option{-l},
 as Posix does not allow this.
 
 Some of the options required by Posix are not portable in practice.
-Don't use @samp{grep -q} to suppress output, because many @command{grep}
+Don't use @samp{grep -q} to suppress output, because traditional @command{grep}
 implementations (e.g., Solaris) do not support @option{-q}.
 Don't use @samp{grep -s} to suppress output either, because Posix
 says @option{-s} does not suppress output, only some error messages;
@@ -19537,7 +19537,7 @@ Some traditional @command{grep} implementations do not work on long
 input lines.  On AIX the default @code{grep} silently truncates long
 lines on the input before matching.
 
-Also, many implementations do not support multiple regexps
+Also, traditional implementations do not support multiple regexps
 with @option{-e}: they either reject @option{-e} entirely (e.g., Solaris)
 or honor only the last pattern (e.g., IRIX 6.5 and NeXT).  To
 work around these problems, invoke @code{AC_PROG_GREP} and then use
