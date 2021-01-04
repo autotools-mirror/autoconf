@@ -644,14 +644,18 @@ sub autoreconf_current_directory ($)
 	}
     }
 
-  # Gettext consistency checks...
-  error($configure_ac,
-        "AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION"
-        . " or AM_GNU_GETTEXT_REQUIRE_VERSION")
+  # Gettext consistency checks.
+  # Some projects intentionally don't call AM_GNU_GETTEXT_(REQUIRE_)VERSION
+  # because they have all of the gettext infrastructure checked into version
+  # control and they want us to _not_ run autopoint.  Therefore, these
+  # diagnostics are only warnings.
+  msg('syntax', $configure_ac,
+      "AM_GNU_GETTEXT is used, but not AM_GNU_GETTEXT_VERSION"
+      . " or AM_GNU_GETTEXT_REQUIRE_VERSION")
     if $uses_gettext_via_traces && ! $uses_gettext;
-  error($configure_ac,
-        "AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION is used,"
-        . " but not AM_GNU_GETTEXT")
+  msg('syntax', $configure_ac,
+      "AM_GNU_GETTEXT_VERSION or AM_GNU_GETTEXT_REQUIRE_VERSION is used,"
+      . " but not AM_GNU_GETTEXT")
     if $uses_gettext && ! $uses_gettext_via_traces;
 
 
