@@ -1,7 +1,7 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Interface with autoheader.
 
-# Copyright (C) 1992-1996, 1998-2002, 2008-2017, 2020 Free Software
+# Copyright (C) 1992-1996, 1998-2002, 2008-2017, 2020-2021 Free Software
 # Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free
