@@ -1,5 +1,5 @@
 # Customize maint.mk for Autoconf.            -*- Makefile -*-
-# Copyright (C) 2003-2004, 2006, 2008-2017, 2020 Free Software
+# Copyright (C) 2003-2004, 2006, 2008-2017, 2020-2021 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify

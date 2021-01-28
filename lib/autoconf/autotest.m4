@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Interface with Autotest.
-# Copyright (C) 1992-1996, 1998-2005, 2009-2017, 2020 Free Software
+# Copyright (C) 1992-1996, 1998-2005, 2009-2017, 2020-2021 Free Software
 # Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free

@@ -3,7 +3,7 @@ m4_divert_push([HEADER-COPYRIGHT])dnl
 # @configure_input@
 # autoconf -- create 'configure' using m4 macros.
 
-# Copyright (C) 1992-1994, 1996, 1999-2017, 2020 Free Software
+# Copyright (C) 1992-1994, 1996, 1999-2017, 2020-2021 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
