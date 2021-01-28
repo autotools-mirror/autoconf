@@ -1,8 +1,22 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Noteworthy changes in release 2.70.1 (????-??-??) [?]
+* Noteworthy changes in release 2.71 (2021-01-28) [stable]
 
-** Bug fixes.
+** Bug fixes, including:
+
+*** Compilers that support C99 but not C2011 are detected correctly.
+
+*** Compatibility improved with clang and Oracle C++.
+
+*** Compatibility restored with automake's rules for regenerating configure.
+
+*** Compatibility restored with old versions of std-gnu11.m4.
+
+  Packages that wish to maintain compatibility with Autoconf 2.69 or
+  older, should update their copy of std-gnu11.m4 from Gnulib as soon
+  as practical, as the compatibility code bulks up the configure script.
+
+  Packages that require Autoconf 2.70 can drop this file entirely.
 
 * Noteworthy changes in release 2.70 (2020-12-08) [stable]
 
