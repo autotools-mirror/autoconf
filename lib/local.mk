@@ -144,32 +144,13 @@ dist_m4sugarlib_DATA = \
   lib/m4sugar/m4sh.m4
 
 nodist_m4sugarlib_DATA = \
-  lib/m4sugar/version.m4 \
   lib/m4sugar/m4sugar.m4f \
   lib/m4sugar/m4sh.m4f
 
-CLEANFILES += $(nodist_m4sugarlib_DATA)
+nodist_pkgdata_DATA += \
+  lib/version.m4
 
-# The ':;' in the second line of the recipe works around a redirected
-# compound command bash exit status bug.
-lib/m4sugar/version.m4: Makefile
-	$(MKDIR_P) $(@D)
-	:;{ \
-	  echo '# This file is part of -*- Autoconf -*-.' && \
-	  echo '# Version of Autoconf.' && \
-	  echo '# Copyright (C) 1999, 2000, 2001, 2002, 2006, 2007, 2009' && \
-	  echo '# Free Software Foundation, Inc.' && \
-	  echo  &&\
-	  echo 'm4_define([m4_PACKAGE_NAME],      [$(PACKAGE_NAME)])' && \
-	  echo 'm4_define([m4_PACKAGE_TARNAME],   [$(PACKAGE_TARNAME)])' && \
-	  echo 'm4_define([m4_PACKAGE_VERSION],   [$(PACKAGE_VERSION)])' && \
-	  echo 'm4_define([m4_PACKAGE_STRING],    [$(PACKAGE_STRING)])' && \
-	  echo 'm4_define([m4_PACKAGE_BUGREPORT], [$(PACKAGE_BUGREPORT)])' && \
-	  echo 'm4_define([m4_PACKAGE_URL],       [$(PACKAGE_URL)])' && \
-	  echo 'm4_define([m4_PACKAGE_YEAR],      [$(RELEASE_YEAR)])'; \
-	} > $@-t
-	mv $@-t $@
-
+CLEANFILES += $(nodist_m4sugarlib_DATA) $(nodist_pkgdata_DATA)
 TAGS_FILES += $(dist_m4sugarlib_DATA)
 
 forbidden_patterns_files += $(dist_m4sugarlib_DATA)

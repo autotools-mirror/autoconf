@@ -225,6 +225,7 @@ dnl Allow maintainer rules under GNU make even in VPATH builds.
 AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
 AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([lib/version.m4:lib/version.in])
 
 AC_OUTPUT
 # Report the state of this version of Autoconf if this is a beta.
