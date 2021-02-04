@@ -1,0 +1,253 @@
+#! /bin/sh
+
+# This script helps bootstrap autoconf, when checked out from git.
+#
+# Copyright (C) 2021 Free Software Foundation, Inc.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Autoconf's own configure script is generated using Autoconf.  This
+# script does what running `autoreconf -i` in an Autoconf git checkout
+# would do, except that it uses autoconf from the source tree we are
+# preparing, not any version of autoconf that might or might not be
+# installed already.  Note that automake, Perl, and GNU M4 _are_
+# required to be installed already.
+
+# Don't ignore failures.
+set -e
+(set -o pipefail 2> /dev/null) && set -o pipefail
+
+# Avoid problems due to various shell wrinkles.
+# We assume we have a shell new enough to implement unset correctly.
+(set -o posix 2> /dev/null) && set -o posix
+
+PS1='$ '
+PS2='> '
+PS4='+ '
+unset BASH_ENV CDPATH ENV IFS MAIL MAILPATH POSIXLY_CORRECT
+unset LANG LANGUAGE LC_ADDRESS LC_COLLATE LC_CTYPE LC_IDENTIFICATION
+unset LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER
+unset LC_TELEPHONE LC_TIME
+
+LC_ALL=C
+export LC_ALL
+
+# Set program basename.
+me=${0##*/}
+usage="usage: $me [options]
+
+Prepare to build a git checkout of autoconf.
+Functionally equivalent to \`autoreconf -i\`, but uses autoconf code
+from the git checkout itself to create \`configure\`.
+
+Options:
+  -f, --force      consider all files to be obsolete
+  -v, --verbose    verbosely report processing (repeat for more detail)
+"
+
+# Options.
+verbose=
+subverbose=
+force=
+while [ $# -gt 0 ]; do
+    case "$1" in
+        (-v | --verbose)
+            if [ -n "$verbose" ]; then
+                subverbose=--verbose
+            else
+                verbose=--verbose
+            fi
+        ;;
+        (-f | --force)
+            force=--force
+        ;;
+        (-h | --help)
+            printf '%s' "$usage"
+            exit 0
+        ;;
+        (*)
+            printf '%s' "$usage" >&2
+            exit 1
+        ;;
+    esac
+    shift
+done
+
+
+# Let the user choose which version of aclocal, automake, m4, and perl to use.
+: ${ACLOCAL=aclocal}
+: ${AUTOMAKE=automake}
+: ${M4=m4}
+: ${PERL=perl}
+export ACLOCAL AUTOMAKE M4 PERL
+
+# $PERL needs to be an absolute path because we're going to substitute it
+# into #! lines.
+set fnord $PERL
+shift
+PERL=$(command -v $1)
+shift
+if [ $# -gt 0 ]; then
+    PERL="$PERL $*"
+fi
+
+# Override SHELL.  This is required on DJGPP so that Perl's system()
+# uses bash, not COMMAND.COM which doesn't quote arguments properly.
+# It's not used otherwise.
+if test -n "$DJDIR"; then
+  BOOTSTRAP_SHELL=/dev/env/DJDIR/bin/bash.exe
+else
+  BOOTSTRAP_SHELL=/bin/sh
+fi
+
+# Determine whether we have a usable version of M4.
+# This rule is pickier than the rule in autoconf's actual configure script.
+m4_version="$($M4 --version | head -1)"
+case "$m4_version" in
+  ( *\ 0.*                \
+  | *\ 1.[0123]           \
+  | *\ 1.[0123].*         \
+  | *\ 1.4.[0123456789]   \
+  | *\ 1.4.1[012345]      \
+  )
+    printf '%s\n' "$me: $M4 ($m4_version) is too old" >&2
+    exit 1
+    ;;
+esac
+
+# Substitutions related to the version of M4 available.
+M4_DEBUGFILE=
+M4_GNU=
+m4_help=$($M4 --help)
+case "$m4_help" in
+  (*--debugfile*)
+    M4_DEBUGFILE=--debugfile ;;
+  (*--error-output*)
+    M4_DEBUGFILE=--error-output ;;
+esac
+case "$m4_help" in
+  (*--gnu*)
+    M4_GNU=--gnu ;;
+esac
+
+# Autoconf's version number and identifiers.
+RELEASE_YEAR=$(sed -ne 's/^RELEASE_YEAR=\([0-9][0-9]*\)$/\1/p' configure.ac)
+VERSION=$(build-aux/git-version-gen .tarball-version)
+
+# PACKAGE_NAME and PACKAGE_BUGREPORT from the bootstrap autoconf can
+# get copied into the generated configure script, so we need to get them
+# right.  Caution: there is a hard tab in one of the regexes below.
+PACKAGE_NAME=$(sed -n < configure.ac \
+   -e 's/^m4_define(\[autoconf_PACKAGE_NAME\], \[\([^]]*\)\])$/\1/p')
+PACKAGE_BUGREPORT=$(sed -n < configure.ac \
+   -e 's/^m4_define(\[autoconf_PACKAGE_BUGREPORT\], \[\([^]]*\)\])$/\1/p')
+
+if [ -z "$RELEASE_YEAR" ]; then
+    echo "$me: error: could not extract RELEASE_YEAR from configure.ac" >&2
+    exit 1
+fi
+if [ -z "$VERSION" ]; then
+    echo "$me: error: could not compute VERSION" >&2
+    exit 1
+fi
+if [ -z "$PACKAGE_NAME" ]; then
+    echo "$me: error: could not extract PACKAGE_NAME from configure.ac" >&2
+    exit 1
+fi
+if [ -z "$PACKAGE_BUGREPORT" ]; then
+    echo "$me: error: could not extract PACKAGE_BUGREPORT from configure.ac" >&2
+    exit 1
+fi
+
+# PACKAGE_TARNAME and PACKAGE_URL from the bootstrap autoconf should not
+# get copied into the configure script.
+PACKAGE_URL='<<not available>>'
+PACKAGE_TARNAME='<<not available>>'
+
+# Root for temporary partial installation tree.
+ACBOOTDIR=$(mktemp -d acboot.XXXXXXXXXX)
+
+# dosubst options infile outfile -- performs the substitutions that
+# config.status would perform on INFILE, creating OUTFILE.  INFILE is
+# relative to the source directory, OUTFILE is relative to $ACBOOTDIR.
+# If OPTIONS is the letter 'x', OUTFILE is made executable after creation.
+dosubst ()
+{
+    in=${2##*/}
+    out="$ACBOOTDIR/$3"
+    if [ -n "$verbose" ]; then
+        printf '%s: creating %s\n' "$me" "$out"
+    fi
+    rm -f "$out"
+    sed -e "s%@configure_input@%Generated from $in; do not edit by hand.%g" \
+        -e "s%@M4@%$M4%g" \
+        -e "s%@M4_DEBUGFILE@%$M4_DEBUGFILE%g" \
+        -e "s%@M4_GNU@%$M4_GNU%g" \
+        -e "s%@PACKAGE_BUGREPORT@%$PACKAGE_BUGREPORT%g" \
+        -e "s%@PACKAGE_NAME@%$PACKAGE_NAME%g" \
+        -e "s%@PACKAGE_STRING@%$PACKAGE_NAME $VERSION%g" \
+        -e "s%@PACKAGE_TARNAME@%$PACKAGE_TARNAME%g" \
+        -e "s%@PACKAGE_URL@%$PACKAGE_URL%g" \
+        -e "s%@PACKAGE_VERSION@%$VERSION%g" \
+        -e "s%@PERL@%$PERL%g" \
+        -e "s%@PERL_FLOCK@%0%g" \
+        -e "s%@RELEASE_YEAR@%$RELEASE_YEAR%g" \
+        -e "s%@SHELL@%$BOOTSTRAP_SHELL%g" \
+        -e "s%@VERSION@%$VERSION%g" \
+        -e "s%@pkgdatadir@%$ACBOOTDIR/lib%g" \
+        "$2" > "$out"
+    if [ "$1" = "x" ]; then
+        chmod +x "$out"
+    fi
+}
+
+# Create the bootstrap installation.
+mkdir "$ACBOOTDIR"/bin "$ACBOOTDIR"/lib "$ACBOOTDIR"/tmp
+(
+    cd "$ACBOOTDIR"/lib
+    for sub in Autom4te autoconf m4sugar ; do
+        if [ -n "$verbose" ]; then
+            printf '%s: creating %s\n' "$me" "$ACBOOTDIR/lib/$sub"
+        fi
+        ln -s ../../lib/$sub .
+    done
+)
+
+# automake invokes autoconf, and autoconf and aclocal both invoke autom4te,
+# so we need to create both of them.
+dosubst x bin/autoconf.in bin/autoconf
+dosubst x bin/autom4te.in bin/autom4te
+dosubst . lib/autom4te.in lib/autom4te.cfg
+dosubst . lib/version.in  lib/version.m4
+
+AUTOCONF="$ACBOOTDIR"/bin/autoconf
+AUTOM4TE="$ACBOOTDIR/bin/autom4te -M -C $ACBOOTDIR/tmp/autom4te.cache"
+export AUTOCONF AUTOM4TE
+
+# We can now do what autoreconf would have done.
+# Order is critical -- first aclocal, then autoconf, then automake.
+run ()
+{
+    if [ -n "$verbose" ]; then
+        printf '%s: running %s\n' "$me" "$*"
+    fi
+    "$@"
+}
+
+run $ACLOCAL -I m4 -Wall -Werror $subverbose $force
+run $AUTOCONF -Wall -Werror $subverbose $force
+run $AUTOMAKE --add-missing --copy -Wall -Werror $subverbose $force
+
+# Clean up.
+rm -rf "$ACBOOTDIR"

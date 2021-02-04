@@ -19,7 +19,17 @@
 
 AC_PREREQ([2.69])
 
-AC_INIT([GNU Autoconf],[m4_esyscmd(build-aux/git-version-gen .tarball-version)],[bug-autoconf@gnu.org])
+# Keep both of these on a single line, and do not use quadrigraphs
+# or nested quotes in their values, since the bootstrap script needs
+# to be able to extract their values with sed.
+m4_define([autoconf_PACKAGE_NAME], [GNU Autoconf])
+m4_define([autoconf_PACKAGE_BUGREPORT], [bug-autoconf@gnu.org])
+
+AC_INIT(
+  m4_defn([autoconf_PACKAGE_NAME]),
+  [m4_esyscmd([build-aux/git-version-gen .tarball-version])],
+  m4_defn([autoconf_PACKAGE_BUGREPORT])
+)
 AC_CONFIG_SRCDIR([lib/autoconf/autoconf.m4])
 
 AC_CONFIG_AUX_DIR([build-aux])

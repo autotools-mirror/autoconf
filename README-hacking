@@ -14,7 +14,6 @@ requirements on anyone wishing to build from the just-checked-out sources.
 For example, you have to use recent stable versions of the maintainer
 tools we depend upon, including:
 
-- Autoconf 2.62+ <https://www.gnu.org/software/autoconf/>
 - Automake 1.11+ <https://www.gnu.org/software/automake/>
 - Help2man 1.29+ <https://www.gnu.org/software/help2man/>
 - M4 1.4.6+ <https://www.gnu.org/software/m4/>
@@ -71,18 +70,17 @@ project, you should use this instead:
 The next step is to generate files like configure and Makefile.in:
 
   $ cd autoconf
-  $ autoreconf -vi
+  $ ./bootstrap
 
-Since we're building autoconf itself, and its tests are picky, the
-following procedure includes an extra step to ensure that some
-generated files are regenerated using the tools just built by "make"
-(if you use GNU make, the file GNUmakefile sets PATH for you):
+The bootstrap script generates the same files ‘autoreconf -vi’ would,
+in a normal package, but it uses autoconf *from the git sources* to do
+it.  This means you do not need autoconf installed already, and you do
+not need to re-generate ‘configure’ after building Autoconf.
+
+You can now build and test the package:
 
   $ ./configure
   $ make
-  $ ( PATH=`pwd`/tests:$PATH; autoreconf -vi )
-  $ make distclean
-  $ ./configure
   $ make check
 
 At this point, there should be no difference between your local copy,
@@ -102,6 +100,12 @@ You can pass options to configure scripts invoked by the testsuite by
 setting the configure_options variable:
 
   $ make check TESTSUITEFLAGS='configure_options="CC=gcc-2.95"'
+
+The test suite is not automatically parallelized by ‘make -j’.  If you
+want to parallelize the testsuite, you need to use TESTSUITEFLAGS for
+that, too:
+
+  $ make check TESTSUITEFLAGS=-j8
 
 * Submitting patches
 
