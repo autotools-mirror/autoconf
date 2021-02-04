@@ -50,7 +50,6 @@ AT_CHECK([test "$SHELL_N" != none || exit 77])
 # Specify the absolute name of the tool, as some shells don't honor PATH when
 # running 'sh PROG'.
 
-AT_CHECK_SHELL_SYNTAX(["$abs_top_builddir/bin/autoconf"])
 AT_CHECK_SHELL_SYNTAX(["$abs_top_builddir/tests/autoconf"])
 AT_CHECK_SHELL_SYNTAX(["$abs_top_builddir/tests/testsuite"])
 
@@ -69,6 +68,7 @@ AT_CLEANUP
 
 AT_SETUP([Syntax of the Perl scripts])
 
+AT_CHECK_PERL_SYNTAX([autoconf])
 AT_CHECK_PERL_SYNTAX([autoheader])
 AT_CHECK_PERL_SYNTAX([autom4te])
 AT_CHECK_PERL_SYNTAX([autoreconf])

@@ -43,7 +43,6 @@ Makefile.in
 /autom4te.cache
 /bin/autoheader
 /bin/autoconf
-/bin/autoconf.in
 /bin/autom4te
 /bin/autoreconf
 /bin/autoscan

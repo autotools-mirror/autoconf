@@ -50,7 +50,7 @@ man_common_dep = $(top_srcdir)/man/common.x \
 		 $(top_srcdir)/.version \
 		 $(top_srcdir)/configure.ac
 
-man/autoconf.1:   $(common_dep) man/autoconf.w   man/autoconf.x   $(binsrcdir)/autoconf.as
+man/autoconf.1:   $(common_dep) man/autoconf.w   man/autoconf.x   $(binsrcdir)/autoconf.in
 man/autoheader.1: $(common_dep) man/autoheader.w man/autoheader.x $(binsrcdir)/autoheader.in
 man/autom4te.1:   $(common_dep) man/autom4te.w   man/autom4te.x   $(binsrcdir)/autom4te.in
 man/autoreconf.1: $(common_dep) man/autoreconf.w man/autoreconf.x $(binsrcdir)/autoreconf.in

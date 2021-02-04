@@ -26,7 +26,7 @@ bin_SCRIPTS = \
   bin/ifnames
 
 EXTRA_DIST += \
-  bin/autoconf.as \
+  bin/autoconf.in \
   bin/autoheader.in \
   bin/autom4te.in \
   bin/autoreconf.in \
@@ -35,19 +35,11 @@ EXTRA_DIST += \
   bin/ifnames.in
 
 # Files that should be removed, but which Automake does not know.
-MOSTLYCLEANFILES += $(bin_SCRIPTS) bin/autoconf.in bin/*.tmp
+MOSTLYCLEANFILES += $(bin_SCRIPTS) bin/*.tmp
 
 ## ------------- ##
 ## The scripts.  ##
 ## ------------- ##
-
-# autoconf is written in M4sh.
-# FIXME: this target should depend on the frozen files below lib/m4sugar,
-# otherwise autom4te may pick up a frozen m4sh.m4f from an earlier
-# installation below the same $(prefix); work around this with --melt.
-bin/autoconf.in: $(srcdir)/bin/autoconf.as $(m4sh_m4f_dependencies)
-	$(MY_AUTOM4TE) --language M4sh --cache '' \
-	  --melt $(srcdir)/bin/autoconf.as -o $@
 
 ## All the scripts depend on Makefile so that they are rebuilt when the
 ## prefix etc. changes.  It took quite a while to have the rule correct,
@@ -83,13 +75,12 @@ LETTERS = ABCDEFGHIJKLMNOPQRSTUVWXYZ
 DIGITS = 0123456789
 WORD_REGEXP = [$(LETTERS)$(letters)_][$(LETTERS)$(letters)$(DIGITS)_]*
 ETAGS_PERL = --lang=perl \
+  bin/autoconf.in \
   bin/autoheader.in \
-  bin/autoreconf.in \
-  bin/autoupdate.in \
-  bin/autoscan.in \
   bin/autom4te.in \
+  bin/autoreconf.in \
+  bin/autoscan.in \
+  bin/autoupdate.in \
   bin/ifnames.in
-ETAGS_SH = --lang=none --regex='/\($(WORD_REGEXP)\)=/\1/' \
-  bin/autoconf.in
 
-ETAGS_ARGS += $(ETAGS_PERL) $(ETAGS_SH)
+ETAGS_ARGS += $(ETAGS_PERL)

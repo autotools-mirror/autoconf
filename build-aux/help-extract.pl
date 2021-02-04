@@ -135,48 +135,9 @@ sub extract_perl_assignment (*$$$)
 }
 
 
-## ------------------------------ ##
-## Extraction from shell scripts. ##
-## ------------------------------ ##
-
-sub extract_shell_assignment (*$$)
-{
-  my ($fh, $source, $what) = @_;
-  my $value = "";
-  my $parse_state = 0;
-  local $_;
-
-  while (<$fh>)
-    {
-      if ($parse_state == 0)
-	{
-	  if (/^\Q${what}\E=\[\"\\$/)
-	    {
-	      $parse_state = 1;
-	    }
-	}
-      elsif ($parse_state == 1)
-	{
-	  my $done = s/"\]$//;
-	  $value .= $_;
-	  if ($done)
-	    {
-	      # This is not strictly correct but it works acceptably
-	      # for the escapes that actually occur in the strings
-	      # we're extracting.
-	      return eval_qq_no_interpolation ('"'.$value.'"');
-	    }
-	}
-    }
-
-  die "$source: unexpected EOF in state $parse_state\n";
-}
-
-
 ## -------------- ##
 ## Main program.  ##
 ## -------------- ##
-
 
 sub extract_assignment ($$$)
 {
@@ -188,12 +149,6 @@ sub extract_assignment ($$$)
   if ($firstline =~ /\@PERL\@/ || $firstline =~ /-\*-\s*perl\s*-\*-/i)
     {
       return extract_perl_assignment ($fh, $source, $channeldefs_pm, $what);
-    }
-  elsif ($firstline =~ /\bAS_INIT\b/
-	 || $firstline =~ /bin\/[a-z0-9]*sh\b/
-	 || $firstline =~ /-\*-\s*shell-script\s*-\*-/i)
-    {
-      return extract_shell_assignment ($fh, $source, $what);
     }
   else
     {
@@ -209,7 +164,7 @@ sub main ()
   # to not mess with the command line.
   my $usage = "Usage: $0 script-source (--help | --version)
 
-Extract help and version information from a perl or shell script.
+Extract help and version information from a perl script.
 Required environment variables:
 
   top_srcdir       relative path from cwd to the top of the source tree
@@ -242,7 +197,7 @@ The script-source argument should also be relative to top_srcdir.
       die $usage;
     }
 
-  my $cmd_name    = $source =~ s{^.*/([^./]+)\.(?:as|in)$}{$1}r;
+  my $cmd_name    = $source =~ s{^.*/([^./]+)\.in$}{$1}r;
   $source         = File::Spec->catfile($top_srcdir, $source);
   $channeldefs_pm = File::Spec->catfile($top_srcdir, $channeldefs_pm);
 
