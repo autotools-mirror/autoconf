@@ -4158,6 +4158,15 @@ general program-check macros.
 These macros check for particular programs---whether they exist, and
 in some cases whether they support certain features.
 
+@defmac AC_PROG_AR
+@acindex{PROG_AR}
+@ovindex AR
+@c @caindex prog_AR
+@c @caindex prog_ac_ct_AR
+Set output variable @code{AR} to @samp{ar} if @code{ar} is found, and
+otherwise to @samp{:} (do nothing).
+@end defmac
+
 @defmac AC_PROG_AWK
 @acindex{PROG_AWK}
 @ovindex AWK
