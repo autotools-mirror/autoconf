@@ -86,6 +86,9 @@ update-release-year:
 # Prevent incorrect NEWS edits.
 old_NEWS_hash = 981169afdd2c97642125938f80a26b7f
 
+# Update autoconf-latest.tar.* symlinks during 'make stable/beta'.
+GNUPLOADFLAGS = --symlink-regex
+
 exclude_file_name_regexp--sc_prohibit_undesirable_word_seq = \
   ^(maint\.mk|build-aux/texinfo\.tex)$$
 exclude_file_name_regexp--sc_prohibit_test_minus_ao = \
