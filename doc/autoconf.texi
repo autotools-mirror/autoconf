@@ -7887,7 +7887,7 @@ ISO Standard C++ features with extensions, preferring the newest edition
 of the C++ standard that is supported.  Currently the newest edition
 Autoconf knows how to detect support for is ISO C++ 2011.  After calling
 this macro, you can check whether the C++ compiler has been set to
-accept standard C++ by inspecting the shell variable @code{ac_prog_cc_stdc}.
+accept standard C++ by inspecting the shell variable @code{ac_prog_cxx_stdcxx}.
 Its value will be @samp{cxx11} or @samp{cxx98}, respectively,
 if the C++ compiler has been set to use the 2011 or 1990 edition of the
 C++ standard, and @samp{no} if the compiler does not support compiling
