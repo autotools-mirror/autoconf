@@ -2749,8 +2749,8 @@ AC_DEFUN([_AC_PROG_CXX_STDCXX_EDITION_TRY],
 [AC_REQUIRE([_AC_CXX_CXX$1_TEST_PROGRAM])]dnl
 [AS_IF([test x$ac_prog_cxx_stdcxx = xno],
 [AC_MSG_CHECKING([for $CXX option to enable C++$1 features])
-AC_CACHE_VAL(ac_cv_prog_cxx_$1,
-[ac_cv_prog_cxx_$1=no
+AC_CACHE_VAL(ac_cv_prog_cxx_cxx$1,
+[ac_cv_prog_cxx_cxx$1=no
 ac_save_CXX=$CXX
 AC_LANG_CONFTEST([AC_LANG_DEFINES_PROVIDED][$][ac_cxx_conftest_cxx$1_program])
 for ac_arg in '' m4_normalize(m4_defn([_AC_CXX_CXX$1_OPTIONS]))
