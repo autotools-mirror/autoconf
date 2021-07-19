@@ -518,7 +518,7 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
 	      [AC_LANG_PROGRAM(
 		 [[@%:@include <limits.h>
 		   @%:@ifndef LLONG_MAX
-		   @%:@ define HALF \
+		   @%:@ define HALF \\
 			    (1LL << (sizeof (long long int) * CHAR_BIT - 2))
 		   @%:@ define LLONG_MAX (HALF - 1 + HALF)
 		   @%:@endif]],

@@ -9409,6 +9409,10 @@ Note that the @var{source} is evaluated exactly once, like regular
 Autoconf macro arguments, and therefore (i) you may pass a macro
 invocation, (ii) if not, be sure to double quote if needed.
 
+The @var{source} text is expanded as an unquoted here-document, so
+@samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
+@xref{Here-Documents}.
+
 This macro issues a warning during @command{autoconf} processing if
 @var{source} does not include an expansion of the macro
 @code{AC_LANG_DEFINES_PROVIDED} (note that both @code{AC_LANG_SOURCE} and
@@ -9605,8 +9609,12 @@ Fortran, or Go, since those languages require no preprocessor.
 @acindex{PREPROC_IFELSE}
 Run the preprocessor of the current language (@pxref{Language Choice})
 on the @var{input}, run the shell commands @var{action-if-true} on
-success, @var{action-if-false} otherwise.  The @var{input} can be made
-by @code{AC_LANG_PROGRAM} and friends.
+success, @var{action-if-false} otherwise.
+
+The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
+The @var{input} text is expanded as an unquoted here-document, so
+@samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
+@xref{Here-Documents}.
 
 This macro uses @code{CPPFLAGS}, but not @code{CFLAGS}, because
 @option{-g}, @option{-O}, etc.@: are not valid options to many C
@@ -9672,8 +9680,8 @@ See below for some problems involving this macro.
 @defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @
   @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{EGREP_CPP}
-@var{program} is the text of a C or C++ program, on which shell
-variable, back quote, and backslash substitutions are performed.  If the
+@var{program} is the text of a C or C++ program, which is expanded as an
+unquoted here-document (@pxref{Here-Documents}).  If the
 output of running the preprocessor on @var{program} matches the
 extended regular expression @var{pattern}, execute shell commands
 @var{action-if-found}, otherwise execute @var{action-if-not-found}.
@@ -9722,8 +9730,12 @@ to compile a small program that uses that feature.
 @acindex{COMPILE_IFELSE}
 Run the compiler and compilation flags of the current language
 (@pxref{Language Choice}) on the @var{input}, run the shell commands
-@var{action-if-true} on success, @var{action-if-false} otherwise.  The
-@var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
+@var{action-if-true} on success, @var{action-if-false} otherwise.
+
+The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
+The @var{input} text is expanded as an unquoted here-document, so
+@samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
+@xref{Here-Documents}.
 
 It is customary to report unexpected failures with
 @code{AC_MSG_FAILURE}.  This macro does not try to link; use
@@ -9773,9 +9785,13 @@ program.
 Run the compiler (and compilation flags) and the linker of the current
 language (@pxref{Language Choice}) on the @var{input}, run the shell
 commands @var{action-if-true} on success, @var{action-if-false}
-otherwise.  The @var{input} can be made by @code{AC_LANG_PROGRAM} and
-friends.  If needed, @var{action-if-true} can further access the
+otherwise.  If needed, @var{action-if-true} can further access the
 just-linked program file @file{conftest$EXEEXT}.
+
+The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
+The @var{input} text is expanded as an unquoted here-document, so
+@samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
+@xref{Here-Documents}.
 
 @code{LDFLAGS} and @code{LIBS} are used for linking, in addition to the
 current compilation flags.
@@ -9816,6 +9832,10 @@ status of 0 when executed, run shell commands @var{action-if-true}.
 Otherwise, run shell commands @var{action-if-false}.
 
 The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
+The @var{input} text is expanded as an unquoted here-document, so
+@samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
+@xref{Here-Documents}.
+
 @code{LDFLAGS} and @code{LIBS} are used for linking, in addition to the
 compilation flags of the current language (@pxref{Language Choice}).
 Additionally, @var{action-if-true} can run @command{./conftest$EXEEXT}
@@ -15641,34 +15661,12 @@ foo
 @cindex Here-documents
 @cindex Shell here-documents
 
-Don't rely on @samp{\} being preserved just because it has no special
-meaning together with the next symbol.  In the native @command{sh}
-on OpenBSD 2.7 @samp{\"} expands to @samp{"} in here-documents with
-unquoted delimiter.  As a general rule, if @samp{\\} expands to @samp{\}
-use @samp{\\} to get @samp{\}.
-
-With OpenBSD 2.7's @command{sh}
-
-@example
-@group
-$ @kbd{cat <<EOF
-> \" \\
-> EOF}
-" \
-@end group
-@end example
-
-@noindent
-and with Bash:
-
-@example
-@group
-bash-2.04$ @kbd{cat <<EOF
-> \" \\
-> EOF}
-\" \
-@end group
-@end example
+Because unquoted here-documents are subject to parameter expansion and
+command substitution, the characters @samp{$} and @samp{`} are special
+in unquoted here-documents and should be escaped by @samp{\} if you want
+them as-is.  Also, @samp{\} is special if it precedes @samp{$},
+@samp{`}, newline or @samp{\} itself, so @samp{\} should be doubled if
+it appears before these characters and you want it as-is.
 
 Using command substitutions in a here-document that is fed to a shell
 function is not portable.  For example, with Solaris 10 @command{/bin/sh}:

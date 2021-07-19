@@ -1772,8 +1772,8 @@ AC_DEFUN([AC_C_BIGENDIAN],
 	   [[#include <sys/types.h>
 	     #include <sys/param.h>
 	   ]],
-	   [[#if ! (defined BYTE_ORDER && defined BIG_ENDIAN \
-		     && defined LITTLE_ENDIAN && BYTE_ORDER && BIG_ENDIAN \
+	   [[#if ! (defined BYTE_ORDER && defined BIG_ENDIAN \\
+		     && defined LITTLE_ENDIAN && BYTE_ORDER && BIG_ENDIAN \\
 		     && LITTLE_ENDIAN)
 	      bogus endian macros
 	     #endif
@@ -2309,7 +2309,7 @@ m4_define([_AC_LANG_OPENMP(Fortran 77)],
 [
       program main
       implicit none
-!$    integer tid
+!\$    integer tid
       tid = 42
       call omp_set_num_threads(2)
       end
