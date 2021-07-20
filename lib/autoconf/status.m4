@@ -30,25 +30,25 @@
 
 
 # This file handles about all the preparation aspects for
-# `config.status': registering the configuration files, the headers,
-# the links, and the commands `config.status' will run.  There is a
-# little mixture though of things actually handled by `configure',
-# such as running the `configure' in the sub directories.  Minor
+# 'config.status': registering the configuration files, the headers,
+# the links, and the commands 'config.status' will run.  There is a
+# little mixture though of things actually handled by 'configure',
+# such as running the 'configure' in the sub directories.  Minor
 # detail.
 #
 # There are two kinds of commands:
 #
 # COMMANDS:
 #
-#   They are output into `config.status' via a quoted here doc.  These
+#   They are output into 'config.status' via a quoted here doc.  These
 #   commands are always associated to a tag which the user can use to
-#   tell `config.status' what are the commands she wants to run.
+#   tell 'config.status' what are the commands she wants to run.
 #
 # INIT-CMDS:
 #
 #   They are output via an *unquoted* here-doc.  As a consequence $var
 #   will be output as the value of VAR.  This is typically used by
-#   `configure' to give `config.status' some variables it needs to run
+#   'configure' to give 'config.status' some variables it needs to run
 #   the COMMANDS.  At the difference of COMMANDS, the INIT-CMDS are
 #   always run.
 #
@@ -68,18 +68,18 @@
 # _AC_SRCDIRS(BUILD-DIR-NAME)
 # ---------------------------
 # Inputs:
-#   - BUILD-DIR-NAME is `top-build -> build' and `top-src -> src'
-#   - `$srcdir' is `top-build -> top-src'
+#   - BUILD-DIR-NAME is 'top-build -> build' and 'top-src -> src'
+#   - '$srcdir' is 'top-build -> top-src'
 #
 # Outputs:
-# - `ac_builddir' is `.', for symmetry only.
-# - `ac_top_builddir_sub' is `build -> top_build'.
+# - 'ac_builddir' is '.', for symmetry only.
+# - 'ac_top_builddir_sub' is 'build -> top_build'.
 #      This is used for @top_builddir@.
-# - `ac_top_build_prefix' is `build -> top_build'.
+# - 'ac_top_build_prefix' is 'build -> top_build'.
 #      If not empty, has a trailing slash.
-# - `ac_srcdir' is `build -> src'.
-# - `ac_top_srcdir' is `build -> top-src'.
-# and `ac_abs_builddir' etc., the absolute directory names.
+# - 'ac_srcdir' is 'build -> src'.
+# - 'ac_top_srcdir' is 'build -> top-src'.
+# and 'ac_abs_builddir' etc., the absolute directory names.
 m4_define([_AC_SRCDIRS],
 [ac_builddir=.
 
@@ -132,8 +132,8 @@ AC_DEFUN([_AC_HAVE_TOP_BUILD_PREFIX])
 # -----------------------------------------
 #
 # Register INIT-COMMANDS as command pasted *unquoted* in
-# `config.status'.  This is typically used to pass variables from
-# `configure' to `config.status'.  Note that $[1] is not over quoted as
+# 'config.status'.  This is typically used to pass variables from
+# 'configure' to 'config.status'.  Note that $[1] is not over quoted as
 # was the case in AC_OUTPUT_COMMANDS.
 m4_define([_AC_CONFIG_COMMANDS_INIT],
 [m4_ifval([$1],
@@ -144,7 +144,7 @@ m4_define([_AC_CONFIG_COMMANDS_INIT],
 
 # AC_FILE_DEPENDENCY_TRACE(DEST, SOURCE1, [SOURCE2...])
 # -----------------------------------------------------
-# This macro does nothing, it's a hook to be read with `autoconf --trace'.
+# This macro does nothing, it's a hook to be read with 'autoconf --trace'.
 #
 # It announces DEST depends upon the SOURCE1 etc.
 m4_define([AC_FILE_DEPENDENCY_TRACE], [])
@@ -160,10 +160,10 @@ m4_define([_AC_FILE_DEPENDENCY_TRACE_COLON],
 
 # _AC_CONFIG_DEPENDENCY(MODE, DEST[:SOURCE1...])
 # ----------------------------------------------
-# MODE is `FILES', `HEADERS', or `LINKS'.
+# MODE is 'FILES', 'HEADERS', or 'LINKS'.
 #
 # Be sure that a missing dependency is expressed as a dependency upon
-# `DEST.in' (except with config links).
+# 'DEST.in' (except with config links).
 #
 m4_define([_AC_CONFIG_DEPENDENCY],
 [_AC_FILE_DEPENDENCY_TRACE_COLON([$2]_AC_CONFIG_DEPENDENCY_DEFAULT($@))dnl
@@ -172,11 +172,11 @@ m4_define([_AC_CONFIG_DEPENDENCY],
 
 # _AC_CONFIG_DEPENDENCY_DEFAULT(MODE, DEST[:SOURCE1...])
 # ------------------------------------------------------
-# Expand to `:DEST.in' if appropriate, or to empty string otherwise.
+# Expand to ':DEST.in' if appropriate, or to empty string otherwise.
 #
 # More detailed description:
-# If the tag contains `:', expand to nothing.
-# Otherwise, for a config file or header, add `:DEST.in'.
+# If the tag contains ':', expand to nothing.
+# Otherwise, for a config file or header, add ':DEST.in'.
 # For a config link, DEST.in is not appropriate:
 #  - if the tag is literal, complain.
 #  - otherwise, just expand to nothing and proceed with fingers crossed.
@@ -186,19 +186,19 @@ m4_define([_AC_CONFIG_DEPENDENCY_DEFAULT],
 [m4_if(m4_index([$2], [:]), [-1],
 	   [m4_if([$1], [LINKS],
 		  [AS_LITERAL_IF([$2],
-		    [m4_fatal([Invalid AC_CONFIG_LINKS tag: `$2'])])],
+		    [m4_fatal([Invalid AC_CONFIG_LINKS tag: '$2'])])],
 		  [:$2.in])])])
 
 
 # _AC_CONFIG_UNIQUE(MODE, DEST)
 # -----------------------------
-# MODE is `FILES', `HEADERS', `LINKS', `COMMANDS', or `SUBDIRS'.
+# MODE is 'FILES', 'HEADERS', 'LINKS', 'COMMANDS', or 'SUBDIRS'.
 #
 # Verify that there is no double definition of an output file.
 #
 m4_define([_AC_CONFIG_UNIQUE],
 [m4_ifdef([_AC_SEEN_TAG($2)],
-   [m4_fatal([`$2' is already registered with AC_CONFIG_]m4_defn(
+   [m4_fatal(['$2' is already registered with AC_CONFIG_]m4_defn(
      [_AC_SEEN_TAG($2)]).)],
    [m4_define([_AC_SEEN_TAG($2)], [$1])])dnl
 ])
@@ -206,7 +206,7 @@ m4_define([_AC_CONFIG_UNIQUE],
 
 # _AC_CONFIG_FOOS(MODE, TAGS..., [COMMANDS], [INIT-CMDS])
 # -------------------------------------------------------
-# MODE is `FILES', `HEADERS', `LINKS', or `COMMANDS'.
+# MODE is 'FILES', 'HEADERS', 'LINKS', or 'COMMANDS'.
 #
 # Associate the COMMANDS to each TAG, i.e., when config.status creates TAG,
 # run COMMANDS afterwards.  (This is done in _AC_CONFIG_REGISTER_DEST.)
@@ -233,7 +233,7 @@ m4_define([_AC_CONFIG_COMPUTE_DEST],
 
 # _AC_CONFIG_REGISTER(MODE, TAG, [COMMANDS])
 # ------------------------------------------
-# MODE is `FILES', `HEADERS', `LINKS', or `COMMANDS'.
+# MODE is 'FILES', 'HEADERS', 'LINKS', or 'COMMANDS'.
 #
 m4_define([_AC_CONFIG_REGISTER],
 [m4_if([$1], [COMMANDS],
@@ -245,19 +245,19 @@ m4_define([_AC_CONFIG_REGISTER],
 
 # _AC_CONFIG_REGISTER_DEST(MODE, TAG, DEST, [COMMANDS])
 # -----------------------------------------------------
-# MODE is `FILES', `HEADERS', `LINKS', or `COMMANDS'.
+# MODE is 'FILES', 'HEADERS', 'LINKS', or 'COMMANDS'.
 # TAG is in the form DEST[:SOURCE...].
 # Thus parameter $3 is the first part of $2.
 #
 # With CONFIG_LINKS, reject DEST=., because it is makes it hard for ./config.status
-# to guess the links to establish (`./config.status .').
+# to guess the links to establish ('./config.status .').
 #
 # Save the name of the first config header to AH_HEADER.
 #
 m4_define([_AC_CONFIG_REGISTER_DEST],
 [_AC_CONFIG_UNIQUE([$1], [$3])]dnl
 [m4_if([$1 $3], [LINKS .],
-       [m4_fatal([invalid destination of a config link: `.'])],
+       [m4_fatal([invalid destination of a config link: '.'])],
        [$1], [HEADERS],
        [m4_define_default([AH_HEADER], [$3])])]dnl
 dnl
@@ -327,7 +327,7 @@ m4_define([_AC_AWK_LITERAL_LIMIT],
 m4_define([_AC_OUTPUT_FILES_PREPARE],
 [# Set up the scripts for CONFIG_FILES section.
 # No need to generate them if there are no CONFIG_FILES.
-# This happens for instance with `./config.status config.h'.
+# This happens for instance with './config.status config.h'.
 if test -n "$CONFIG_FILES"; then
 
 dnl For AC_SUBST_FILE, check for usable getline support in awk,
@@ -351,7 +351,7 @@ else
       print "|#_!!_#|"
       print "cat " F[key] " &&"
       '$ac_cs_awk_pipe_init
-  # The final `:' finishes the AND list.
+  # The final ':' finishes the AND list.
   ac_cs_awk_pipe_fini='END { print "|#_!!_#|"; print ":" }'
 fi]])
 ac_cr=`echo X | tr X '\015'`
@@ -422,8 +422,8 @@ rm -f conf$$subs.sh
 
 dnl Initialize an awk array of substitutions, keyed by variable name.
 dnl
-dnl The initial line contains the variable name VAR, then a `!'.
-dnl Construct `S["VAR"]=' from it.
+dnl The initial line contains the variable name VAR, then a '!'.
+dnl Construct 'S["VAR"]=' from it.
 dnl The rest of the line, and potentially further lines, contain the
 dnl substituted value; the last of those ends with $ac_delim.  We split
 dnl the output both along those substituted newlines and at intervals of
@@ -437,13 +437,13 @@ dnl splitting before the quoting of awk special characters (otherwise we
 dnl risk splitting an escape sequence).
 dnl
 dnl Output as separate string literals, joined with backslash-newline.
-dnl Eliminate the newline after `=' in a second script, for readability.
+dnl Eliminate the newline after '=' in a second script, for readability.
 dnl
 dnl Notes to the main part of the awk script:
 dnl - the unusual FS value helps prevent running into the limit of 99 fields,
 dnl - we avoid sub/gsub because of the \& quoting issues, see
 dnl   https://www.gnu.org/software/gawk/manual/html_node/Gory-Details.html
-dnl - Writing `$ 0' prevents expansion by both the shell and m4 here.
+dnl - Writing '$ 0' prevents expansion by both the shell and m4 here.
 dnl
 dnl m4-double-quote most of the scripting for readability.
 [cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
@@ -645,7 +645,7 @@ esac
 _ACEOF
 ])dnl
 
-# Neutralize VPATH when `$srcdir' = `.'.
+# Neutralize VPATH when '$srcdir' = '.'.
 # Shell code in configure.ac might set extrasub.
 # FIXME: do we really want to maintain this feature?
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
@@ -680,7 +680,7 @@ m4_ifndef([AC_DATAROOTDIR_CHECKED],
   { ac_out=`sed -n '/\${datarootdir}/p' "$ac_tmp/out"`; test -n "$ac_out"; } &&
   { ac_out=`sed -n '/^[[	 ]]*datarootdir[[	 ]]*:*=/p' \
       "$ac_tmp/out"`; test -z "$ac_out"; } &&
-  AC_MSG_WARN([$ac_file contains a reference to the variable `datarootdir'
+  AC_MSG_WARN([$ac_file contains a reference to the variable 'datarootdir'
 which seems to be undefined.  Please make sure it is defined])
 ])dnl
 
@@ -731,14 +731,14 @@ AU_ALIAS([AC_CONFIG_HEADER], [AC_CONFIG_HEADERS])
 m4_define([_AC_OUTPUT_HEADERS_PREPARE],
 [# Set up the scripts for CONFIG_HEADERS section.
 # No need to generate them if there are no CONFIG_HEADERS.
-# This happens for instance with `./config.status Makefile'.
+# This happens for instance with './config.status Makefile'.
 if test -n "$CONFIG_HEADERS"; then
-dnl This `||' list is finished at the end of _AC_OUTPUT_HEADERS_PREPARE.
+dnl This '||' list is finished at the end of _AC_OUTPUT_HEADERS_PREPARE.
 cat >"$ac_tmp/defines.awk" <<\_ACAWK ||
 BEGIN {
 _ACEOF
 
-# Transform confdefs.h into an awk script `defines.awk', embedded as
+# Transform confdefs.h into an awk script 'defines.awk', embedded as
 # here-document in config.status, that substitutes the proper values into
 # config.h.in to produce config.h.
 
@@ -761,9 +761,9 @@ done
 # newline sequences.
 dnl
 dnl Structure of the sed script that reads confdefs.h:
-dnl rset:  main loop, searches for `#define' lines
-dnl def:   deal with a `#define' line
-dnl bsnl:  deal with a `#define' line that ends with backslash-newline
+dnl rset:  main loop, searches for '#define' lines
+dnl def:   deal with a '#define' line
+dnl bsnl:  deal with a '#define' line that ends with backslash-newline
 dnl cont:  handle a continuation line
 dnl bsnlc: handle a continuation line that ends with backslash-newline
 dnl
@@ -774,7 +774,7 @@ dnl
 dnl Long values are split into several string literals with help of ac_delim.
 dnl Assume nobody uses macro names of nearly 150 bytes length.
 dnl
-dnl The initial replace for `#define' lines inserts a leading space
+dnl The initial replace for '#define' lines inserts a leading space
 dnl in order to ease later matching; otherwise, output lines may be
 dnl repeatedly matched.
 dnl
@@ -856,7 +856,7 @@ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
 _ACAWK
 _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
-dnl finish `||' list indicating write error:
+dnl finish '||' list indicating write error:
   AC_MSG_ERROR([could not setup config headers machinery])
 fi # test -n "$CONFIG_HEADERS"
 
@@ -866,8 +866,8 @@ fi # test -n "$CONFIG_HEADERS"
 # _AC_OUTPUT_HEADER
 # -----------------
 #
-# Output the code which instantiates the `config.h' files from their
-# `config.h.in'.
+# Output the code which instantiates the 'config.h' files from their
+# 'config.h.in'.
 #
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
@@ -915,7 +915,7 @@ m4_ifdef([_AC_AM_CONFIG_HEADER_HOOK],
 # Specify that config.status should establish a (symbolic if possible)
 # link from TOP_SRCDIR/SOURCE to TOP_SRCDIR/DEST.
 # Reject DEST=., because it is makes it hard for ./config.status
-# to guess the links to establish (`./config.status .').
+# to guess the links to establish ('./config.status .').
 #
 AC_DEFUN([AC_CONFIG_LINKS], [_AC_CONFIG_FOOS([LINKS], $@)])
 
@@ -926,9 +926,9 @@ AC_DEFUN([AC_CONFIG_LINKS], [_AC_CONFIG_FOOS([LINKS], $@)])
 # link name in DEST...
 #
 # Unfortunately we can't provide a very good autoupdate service here,
-# since in `AC_LINK_FILES($from, $to)' it is possible that `$from'
-# and `$to' are actually lists.  It would then be completely wrong to
-# replace it with `AC_CONFIG_LINKS($to:$from).  It is possible in the
+# since in 'AC_LINK_FILES($from, $to)' it is possible that '$from'
+# and '$to' are actually lists.  It would then be completely wrong to
+# replace it with 'AC_CONFIG_LINKS($to:$from).  It is possible in the
 # case of literal values though, but because I don't think there is any
 # interest in creating config links with literal values, no special
 # mechanism is implemented to handle them.
@@ -948,8 +948,8 @@ while test -n "$ac_sources"; do
 done
 AC_CONFIG_LINKS($[ac_config_links_]_AC_LINK_FILES_CNT)dnl
 ],
-[It is technically impossible to `autoupdate' cleanly from AC_LINK_FILES
-to AC_CONFIG_LINKS.  `autoupdate' provides a functional but inelegant
+[It is technically impossible to 'autoupdate' cleanly from AC_LINK_FILES
+to AC_CONFIG_LINKS.  'autoupdate' provides a functional but inelegant
 update, you should probably tune the result yourself.])# AC_LINK_FILES
 
 
@@ -1015,8 +1015,8 @@ AC_DEFUN([AC_CONFIG_COMMANDS], [_AC_CONFIG_FOOS([COMMANDS], $@)])
 #
 # This macro is an obsolete version of AC_CONFIG_COMMANDS.  The only
 # difficulty in mapping AC_OUTPUT_COMMANDS to AC_CONFIG_COMMANDS is
-# to give a unique key.  The scheme we have chosen is `default-1',
-# `default-2' etc. for each call.
+# to give a unique key.  The scheme we have chosen is 'default-1',
+# 'default-2' etc. for each call.
 #
 # Unfortunately this scheme is fragile: bad things might happen
 # if you update an included file and configure.ac: you might have
@@ -1087,7 +1087,7 @@ m4_define([AC_OUTPUT_COMMANDS_POST])
 # - _AC_LIST_SUBDIRS
 #   A statically built list, should contain *all* the arguments of
 #   AC_CONFIG_SUBDIRS.  The final value is assigned to ac_subdirs_all in
-#   the `default' section, and used for --help=recursive.
+#   the 'default' section, and used for --help=recursive.
 #   It makes no sense for arguments which are sh variables.
 # - subdirs
 #   Shell variable built at runtime, so some of these dirs might not be
@@ -1386,7 +1386,7 @@ _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 ac_cs_usage="\
-\`$as_me' instantiates files and other configuration actions
+'$as_me' instantiates files and other configuration actions
 from templates according to the current configuration.  Unless the files
 and actions are specified as TAGs, all are instantiated by default.
 
@@ -1517,8 +1517,8 @@ m4_ifdef([_AC_SEEN_CONFIG(HEADERS)], [dnl
     ac_need_defaults=false;;
   --he | --h)
     # Conflict between --help and --header
-    AC_MSG_ERROR([ambiguous option: `$[1]'
-Try `$[0] --help' for more information.]);;
+    AC_MSG_ERROR([ambiguous option: '$[1]'
+Try '$[0] --help' for more information.]);;
 ], [  --he | --h |])dnl
   --help | --hel | -h )
     AS_ECHO(["$ac_cs_usage"]); exit ;;
@@ -1527,8 +1527,8 @@ Try `$[0] --help' for more information.]);;
     ac_cs_silent=: ;;
 
   # This is an error.
-  -*) AC_MSG_ERROR([unrecognized option: `$[1]'
-Try `$[0] --help' for more information.]) ;;
+  -*) AC_MSG_ERROR([unrecognized option: '$[1]'
+Try '$[0] --help' for more information.]) ;;
 
   *) AS_VAR_APPEND([ac_config_targets], [" $[1]"])
      ac_need_defaults=false ;;
@@ -1585,7 +1585,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
 m4_ifdef([_AC_LIST_TAGS], [_AC_LIST_TAGS])
-  *) AC_MSG_ERROR([invalid argument: `$ac_config_target']);;
+  *) AC_MSG_ERROR([invalid argument: '$ac_config_target']);;
   esac
 done
 
@@ -1629,7 +1629,7 @@ fi
 # creating and moving files from /tmp can sometimes cause problems.
 # Hook for its removal unless debugging.
 # Note that there is a small window in which the directory will not be cleaned:
-# after its creation but before its name has been assigned to `$tmp'.
+# after its creation but before its name has been assigned to '$tmp'.
 dnl For historical reasons, AS_TMPDIR must continue to place the results
 dnl in $tmp; but we swap to the namespace-clean $ac_tmp to avoid issues
 dnl with any CONFIG_COMMANDS playing with the common variable name $tmp.
@@ -1663,7 +1663,7 @@ do
   esac
   case $ac_mode$ac_tag in
   :[[FHL]]*:*);;
-  :L* | :C*:*) AC_MSG_ERROR([invalid tag `$ac_tag']);;
+  :L* | :C*:*) AC_MSG_ERROR([invalid tag '$ac_tag']);;
   :[[FH]]-) ac_tag=-:-;;
   :[[FH]]*) ac_tag=$ac_tag:$ac_tag.in;;
   esac
@@ -1685,19 +1685,19 @@ do
       -) ac_f="$ac_tmp/stdin";;
       *) # Look for the file first in the build tree, then in the source tree
 	 # (if the path is not absolute).  The absolute path cannot be DOS-style,
-	 # because $ac_f cannot contain `:'.
+	 # because $ac_f cannot contain ':'.
 	 test -f "$ac_f" ||
 	   case $ac_f in
 	   [[\\/$]]*) false;;
 	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
 	   esac ||
-	   AC_MSG_ERROR([cannot find input file: `$ac_f'], [1]);;
+	   AC_MSG_ERROR([cannot find input file: '$ac_f'], [1]);;
       esac
       case $ac_f in *\'*) ac_f=`AS_ECHO(["$ac_f"]) | sed "s/'/'\\\\\\\\''/g"`;; esac
       AS_VAR_APPEND([ac_file_inputs], [" '$ac_f'"])
     done
 
-    # Let's still pretend it is `configure' which instantiates (i.e., don't
+    # Let's still pretend it is 'configure' which instantiates (i.e., don't
     # use $as_me), people would be surprised to read:
     #    /* config.h.  Generated by config.status.  */
     configure_input='Generated from '`

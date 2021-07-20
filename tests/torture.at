@@ -107,9 +107,9 @@ AT_CHECK_CONFIGURE([--config-cache -q])
 AT_CHECK([cat file], [], [`$1'
 ])
 
-# Testing --recheck: 1. have the environment `forget' about PRECIOUS.
+# Testing --recheck: 1. have the environment 'forget' about PRECIOUS.
 unset precious
-# 2. Rerun config.status to recreate `file'.
+# 2. Rerun config.status to recreate 'file'.
 AT_CHECK([./config.status --recheck], [], [ignore])
 AT_CHECK([./config.status], [], [ignore])
 # 3. Check that file contains the old value of PRECIOUS.
@@ -129,7 +129,7 @@ AT_CHECK_CONFIGURE([--config-cache], [m4_default([$3], [1])], [stdout], [stderr]
 AT_SETUP([AC_ARG_VAR])
 
 # We don't want to run this test if this shell doesn't support
-# `unset'.
+# 'unset'.
 AT_CHECK([
 if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
   exit 0
@@ -228,7 +228,7 @@ AT_CHECK_AUTOCONF
 # ------------------------------------------------------------------
 # Check that THING and var-THING (which uses variables in AC_CONFIG_THING)
 # are properly created, with the right content.
-# Use `grep OK' instead of a simple `cat' to avoid banners such as in
+# Use 'grep OK' instead of a simple 'cat' to avoid banners such as in
 # AC_CONFIG_HEADERS.
 m4_define([AT_CHECK_CONFIG_CREATION],
 [AT_CHECK_CONFIGURE([what_to_test=$1])
@@ -254,7 +254,7 @@ AT_CHECK([grep OK var-$1], [], [OK
 # --------------------------------------------------------------------------
 # Check that THING and var-THING (which uses variables in AC_CONFIG_THING)
 # are properly created, with the right content.
-# Use `grep OK' instead of a simple `cat' to avoid banners such as in
+# Use 'grep OK' instead of a simple 'cat' to avoid banners such as in
 # AC_CONFIG_HEADERS.
 m4_define([AT_CHECK_CONFIG_CREATION_NOWRITE],
 [AT_CHECK_CONFIGURE([what_to_test=$1])
@@ -331,7 +331,7 @@ AT_CHECK_CONFIG_CREATION_NOWRITE(command)
 # Create a link
 AT_CHECK_CONFIG_CREATION_NOWRITE(link)
 
-# Check that no use of `ac_write_fail' escaped into config.status
+# Check that no use of 'ac_write_fail' escaped into config.status
 AT_CHECK([grep ac_write_fail config.status], [1])
 
 # Check that --file and --header accept funny file names
@@ -410,13 +410,13 @@ mkdir build
 AT_CAPTURE_FILE([build/config.log])[]dnl
 cd build
 AT_CHECK([../configure], [1], [ignore],
-[[config.status: error: cannot find input file: `nonexistent.in'
+[[config.status: error: cannot find input file: 'nonexistent.in'
 ]])
 # Make sure that the output file doesn't exist
 AT_CHECK([test -f nonexistent], 1)
 cd ..
 AT_CHECK_CONFIGURE([], [1], [],
-[[config.status: error: cannot find input file: `nonexistent.in'
+[[config.status: error: cannot find input file: 'nonexistent.in'
 ]])
 # Make sure that the output file doesn't exist
 AT_CHECK([test -f nonexistent], 1)
@@ -430,14 +430,14 @@ AT_CLEANUP
 ## configure invocation.  ##
 ## ---------------------- ##
 
-# Check that `configure' and `config.status' honor their interface.
+# Check that 'configure' and 'config.status' honor their interface.
 #
-# We run `./configure one=val1 --enable-two=val2 --with-three=val3'
-# and verify that (i) `configure' correctly receives the arguments,
-# (ii) correctly passes them to `config.status', which we check by
-# running `config.status --recheck', (iii) correctly passes them
+# We run './configure one=val1 --enable-two=val2 --with-three=val3'
+# and verify that (i) 'configure' correctly receives the arguments,
+# (ii) correctly passes them to 'config.status', which we check by
+# running 'config.status --recheck', (iii) correctly passes them
 # to sub-configure scripts, and (iv) correctly reproduces them with
-# `config.status --config'.
+# 'config.status --config'.
 
 AT_SETUP([configure invocation])
 
@@ -524,10 +524,10 @@ AT_CLEANUP
 
 
 ## -------------------------------------------- ##
-## Check that `#define' templates are honored.  ##
+## Check that '#define' templates are honored.  ##
 ## -------------------------------------------- ##
 
-# Use various forms of `#define' templates, and make sure there are no
+# Use various forms of '#define' templates, and make sure there are no
 # problems when a symbol is prefix of another.
 
 AT_SETUP([@%:@define header templates])
@@ -644,7 +644,7 @@ AT_DATA([expout],
 [[-DPACKAGE_NAME=\"\" -DPACKAGE_TARNAME=\"\" -DPACKAGE_VERSION=\"\" -DPACKAGE_STRING=\"\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -Dfoo=toto -Dbar=tata -Dbaz=titi -Dfubar=tutu -Da=A -Daaa=AAA -Daa=AA -Dmultiline=line1line2line3\ line4 -Dmultiline_args\(ARG1,\ ARG2\)=ARG2\ ARG1 -Dpaste\(a,b\)=a\#\#b
 ]])
 
-# Because we strip trailing spaces in `testsuite' we can't leave one in
+# Because we strip trailing spaces in 'testsuite' we can't leave one in
 # expout, hence nuke the one left by AC_OUTPUT_MAKE_DEFS.
 AT_CHECK([sed -e 's/ $//' defs], 0, expout)
 
@@ -659,7 +659,7 @@ AT_CLEANUP
 ## Require 100 AC_DEFINE and AC_SUBST and AC_SUBST_FILE with a significantly
 ## big value.  This is mostly to check that Autoconf produces portable sed
 ## scripts in config.status.  sed is used to skip the first two lines
-## `Generated by ...'.
+## 'Generated by ...'.
 
 # We use m4_for many times.
 m4_pattern_allow([^m4_for$])
@@ -673,7 +673,7 @@ m4_define([AT_BIG_VALUE],
 [This value should be long enough to torture the various limits of sed and other tools used by Autoconf.])
 
 m4_define([AT_DESCRIPTION],
-[Define to a long string if your `Autoconf' works properly.])
+[Define to a long string if your 'Autoconf' works properly.])
 
 
 # AT_DUMMY_VAR(NUMBER)
@@ -1068,7 +1068,7 @@ AT_CHECK_AUTOCONF([], [], [], [stderr])
 dnl Older versions of m4 report error at line 5 (end of macro);
 dnl newer versions report it at line 4 (start of macro).
 AT_CHECK([[sed '/trailer\.m4:/d; s/^configure\.ac:[45]: //' stderr]], [],
-[[warning: AC_DEFINE: `one
+[[warning: AC_DEFINE: 'one
 two' is not a valid preprocessor define value
 ]])
 AT_CHECK_AUTOHEADER([], [foo])
@@ -1083,7 +1083,7 @@ two], [This spans two lines.])
 ]])
 AT_CHECK_AUTOCONF([], [], [], [stderr])
 AT_CHECK([[sed '/trailer.m4:/d; s/^configure\.ac:[45]: //' stderr]], [],
-[[warning: AC_DEFINE_UNQUOTED: `one
+[[warning: AC_DEFINE_UNQUOTED: 'one
 two' is not a valid preprocessor define value
 ]])
 AT_CHECK_AUTOHEADER([], [foo])
@@ -1148,7 +1148,7 @@ d@&t@nl The following line silences the warnings, if uncommented:
 d@&t@nl AC_DEFUN([AC_DATAROOTDIR_CHECKED])
 
 # This substitution is wrong and bogus!  Don't use it in your own code!
-# Read `info Autoconf "Defining Directories"'!
+# Read 'info Autoconf "Defining Directories"'!
 AC_SUBST([mydatadir], [${datadir}/my])
 
 AC_CONFIG_FILES([Foo Bar])
@@ -1160,7 +1160,7 @@ cp "$abs_top_srcdir/build-aux/install-sh" .
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [], [],
   [config.status: WARNING:  'Foo.in' seems to ignore the --datarootdir setting
-config.status: WARNING: Bar contains a reference to the variable `datarootdir'
+config.status: WARNING: Bar contains a reference to the variable 'datarootdir'
 which seems to be undefined.  Please make sure it is defined
 ])
 AT_CHECK([grep datarootdir Foo], 1, [])
@@ -1468,7 +1468,7 @@ mkdir empty
 ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
 export ACLOCAL
 
-# The contents of `inner/', and `inner/innermost/'.
+# The contents of 'inner/', and 'inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
 
 AT_DATA([inner/configure.ac],
@@ -1490,7 +1490,7 @@ top_srcdir=@top_srcdir@
 prefix=@prefix@
 ])
 
-# The contents of `.'
+# The contents of '.'
 AT_DATA([install-sh], [])
 
 # nonexistent is allowed not to exist.
@@ -1592,7 +1592,7 @@ mkdir empty
 ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
 export ACLOCAL
 
-# The contents of `.'
+# The contents of '.'
 AT_DATA([install-sh], [])
 AT_DATA([configure.ac],
 [[AC_INIT(GNU Outer, 1.0)
@@ -1604,7 +1604,7 @@ AC_CONFIG_SUBDIRS([
 AC_OUTPUT
 ]])
 
-# The contents of `inner/', and `inner/innermost/'.
+# The contents of 'inner/', and 'inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
 AS_MKDIR_P([inner2])
 
@@ -1857,7 +1857,7 @@ ACLOCAL=true
 export ACLOCAL
 
 # The test group directory is not necessarily _empty_, but it does not contain
-# files meaningful to `autoreconf'.
+# files meaningful to 'autoreconf'.
 
 AT_CHECK([autoreconf -Wall -v], 1, [ignore], [ignore])
 
@@ -1892,7 +1892,7 @@ AC_OUTPUT
 ]])
 
 AT_DATA([HeeHee.am],
-[[# Humans do no worse than `GNUmakefile.am'.
+[[# Humans do no worse than 'GNUmakefile.am'.
 AUTOMAKE_OPTIONS = foreign 1.8
 ]])
 

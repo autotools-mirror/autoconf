@@ -195,7 +195,7 @@ m4_define([AC_LANG_DEFINE],
 
 # AC_LANG_CONFTEST(BODY)
 # ----------------------
-# Save the BODY in `conftest.$ac_ext'.  Add a trailing new line.
+# Save the BODY in 'conftest.$ac_ext'.  Add a trailing new line.
 AC_DEFUN([AC_LANG_CONFTEST],
 [m4_pushdef([_AC_LANG_DEFINES_PROVIDED],
   [m4_warn([syntax], [$0: no AC_LANG_SOURCE call detected in body])])]dnl
@@ -226,7 +226,7 @@ m4_define([AC_LANG_DEFINES_PROVIDED],
 # AC_LANG_SOURCE(BODY)
 # --------------------
 # Produce a valid source for the current language, which includes the
-# BODY, and as much as possible `confdefs.h'.
+# BODY, and as much as possible 'confdefs.h'.
 AC_DEFUN([AC_LANG_SOURCE],
 [AC_LANG_DEFINES_PROVIDED[]_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
@@ -242,7 +242,7 @@ m4_define([AC_LANG_SOURCE()],
 # -----------------------------------
 # Produce a valid source for the current language.  Prepend the
 # PROLOGUE (typically CPP directives and/or declarations) to an
-# execution the BODY (typically glued inside the `main' function, or
+# execution the BODY (typically glued inside the 'main' function, or
 # equivalent).
 AC_DEFUN([AC_LANG_PROGRAM],
 [AC_LANG_SOURCE([_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])])
@@ -299,7 +299,7 @@ AC_DEFUN([AC_LANG_BOOL_COMPILE_TRY],
 # AC_LANG_INT_SAVE(PROLOGUE, EXPRESSION)
 # --------------------------------------
 # Produce a program that saves the runtime evaluation of the integer
-# EXPRESSION into `conftest.val'.
+# EXPRESSION into 'conftest.val'.
 AC_DEFUN([AC_LANG_INT_SAVE],
 [_AC_LANG_DISPATCH([$0], _AC_LANG, $@)])
 
@@ -321,7 +321,7 @@ m4_define([_AC_CC],
 # Find a compiler for the current LANG.  Be sure to be run before
 # AC_LANG_PREPROC.
 #
-# Note that because we might AC_REQUIRE `AC_LANG_COMPILER(C)' for
+# Note that because we might AC_REQUIRE 'AC_LANG_COMPILER(C)' for
 # instance, the latter must be AC_DEFUN'd, not just define'd.
 m4_define([AC_LANG_COMPILER],
 [AC_BEFORE([AC_LANG_COMPILER(]_AC_LANG[)],
@@ -345,7 +345,7 @@ AC_DEFUN([AC_LANG_COMPILER_REQUIRE],
 # It doesn't seem necessary right now to have a different source
 # according to the current language, since this works fine.  Some day
 # it might be needed.  Nevertheless, pay attention to the fact that
-# the position of `choke me' on the seventh column is meant: otherwise
+# the position of 'choke me' on the seventh column is meant: otherwise
 # some Fortran compilers (e.g., SGI) might consider it's a
 # continuation line, and warn instead of reporting an error.
 m4_define([_AC_LANG_COMPILER_GNU],
@@ -366,7 +366,7 @@ ac_compiler_gnu=$ac_cv_[]_AC_LANG_ABBREV[]_compiler_gnu
 # AC_LANG_PREPROC
 # ---------------
 # Find a preprocessor for the current language.  Note that because we
-# might AC_REQUIRE `AC_LANG_PREPROC(C)' for instance, the latter must
+# might AC_REQUIRE 'AC_LANG_PREPROC(C)' for instance, the latter must
 # be AC_DEFUN'd, not just define'd.  Since the preprocessor depends
 # upon the compiler, look for the compiler.
 m4_define([AC_LANG_PREPROC],
@@ -459,8 +459,8 @@ m4_divert_pop()dnl
 # a .pdb file
 #
 # When the w32 free Borland C++ command line compiler links a program
-# (conftest.exe), it also produces a file named `conftest.tds' in
-# addition to `conftest.obj'.
+# (conftest.exe), it also produces a file named 'conftest.tds' in
+# addition to 'conftest.obj'.
 #
 # - *.bb, *.bbg
 #   Created per object by GCC when given -ftest-coverage.
@@ -508,15 +508,15 @@ AC_DEFUN([AC_OBJEXT],   [])
 #
 # On OpenVMS 7.1 system, the DEC C 5.5 compiler when called through a
 # GNV (gnv.sourceforge.net) cc wrapper, produces the output file named
-# `a_out.exe'.
+# 'a_out.exe'.
 # b.out is created by i960 compilers.
 #
 # Start with the most likely output file names, but:
-# 1) Beware the clever `test -f' on Cygwin, try the DOS-like .exe names
+# 1) Beware the clever 'test -f' on Cygwin, try the DOS-like .exe names
 # before the counterparts without the extension.
-# 2) The algorithm is not robust to junk in `.', hence go to wildcards
+# 2) The algorithm is not robust to junk in '.', hence go to wildcards
 # (conftest.*) only as a last resort.
-# Beware of `expr' that may return `0' or `'.  Since this macro is
+# Beware of 'expr' that may return '0' or ''.  Since this macro is
 # the first one in touch with the compiler, it should also check that
 # it compiles properly.
 #
@@ -545,8 +545,8 @@ done
 rm -f $ac_rmfiles
 
 AS_IF([_AC_DO_VAR(ac_link_default)],
-[# Autoconf-2.13 could set the ac_cv_exeext variable to `no'.
-# So ignore a value of `no', otherwise this would lead to `EXEEXT = no'
+[# Autoconf-2.13 could set the ac_cv_exeext variable to 'no'.
+# So ignore a value of 'no', otherwise this would lead to 'EXEEXT = no'
 # in a Makefile.  We should not override ac_cv_exeext if it was cached,
 # so that the user can short-circuit this test for compilers unknown to
 # Autoconf.
@@ -566,7 +566,7 @@ do
 	   ac_cv_exeext=`expr "$ac_file" : ['[^.]*\(\..*\)']`
 	fi
 	# We set ac_cv_exeext here because the later test for it is not
-	# safe: cross compilers may not add the suffix if given an `-o'
+	# safe: cross compilers may not add the suffix if given an '-o'
 	# argument, so we may need to know it at that point already.
 	# Even if this section looks crufty: it has the advantage of
 	# actually working.
@@ -613,7 +613,7 @@ if test "$cross_compiling" != yes; then
 	cross_compiling=yes
     else
 	AC_MSG_FAILURE([cannot run _AC_LANG compiled programs.
-If you meant to cross compile, use `--host'.], 77)
+If you meant to cross compile, use '--host'.], 77)
     fi
   fi
 fi
@@ -623,15 +623,15 @@ AC_MSG_RESULT([$cross_compiling])
 
 # _AC_COMPILER_EXEEXT_O
 # ---------------------
-# Check for the extension used when `-o foo'.  Try to see if ac_cv_exeext,
+# Check for the extension used when '-o foo'.  Try to see if ac_cv_exeext,
 # as computed by _AC_COMPILER_EXEEXT_DEFAULT is OK.
 m4_define([_AC_COMPILER_EXEEXT_O],
 [AC_MSG_CHECKING([for suffix of executables])
 AS_IF([_AC_DO_VAR(ac_link)],
-[# If both `conftest.exe' and `conftest' are `present' (well, observable)
-# catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
-# work properly (i.e., refer to `conftest.exe'), while it won't with
-# `rm'.
+[# If both 'conftest.exe' and 'conftest' are 'present' (well, observable)
+# catch 'conftest.exe'.  For instance with Cygwin, 'ls conftest' will
+# work properly (i.e., refer to 'conftest.exe'), while it won't with
+# 'rm'.
 for ac_file in conftest.exe conftest conftest.*; do
   test -f "$ac_file" || continue
   case $ac_file in
@@ -653,15 +653,15 @@ AC_MSG_RESULT([$ac_cv_exeext])
 # executable.  If this is called, the executable extensions will be
 # automatically used by link commands run by the configure script.
 #
-# Note that some compilers (cross or not), strictly obey to `-o foo' while
-# the host requires `foo.exe', so we should not depend upon `-o' to
+# Note that some compilers (cross or not), strictly obey to '-o foo' while
+# the host requires 'foo.exe', so we should not depend upon '-o' to
 # test EXEEXT.  But then, be sure not to destroy user files.
 #
 # Must be run before _AC_COMPILER_OBJEXT because _AC_COMPILER_EXEEXT_DEFAULT
 # checks whether the compiler works.
 #
 # Do not rename this macro; Automake decides whether EXEEXT is used
-# by checking whether `_AC_COMPILER_EXEEXT' has been expanded.
+# by checking whether '_AC_COMPILER_EXEEXT' has been expanded.
 #
 # See _AC_COMPILER_EXEEXT_CROSS for why we need _AC_LANG_IO_PROGRAM.
 AC_DEFUN([_AC_COMPILER_EXEEXT],
@@ -685,13 +685,13 @@ ac_clean_files=$ac_clean_files_save
 
 # _AC_COMPILER_OBJEXT
 # -------------------
-# Check the object extension used by the compiler: typically `.o' or
-# `.obj'.  If this is called, some other behavior will change,
+# Check the object extension used by the compiler: typically '.o' or
+# '.obj'.  If this is called, some other behavior will change,
 # determined by ac_objext.
 #
 # This macro is called by AC_LANG_COMPILER, the latter being required
 # by the AC_COMPILE_IFELSE macros, so use _AC_COMPILE_IFELSE.  And in fact,
-# don't, since _AC_COMPILE_IFELSE needs to know ac_objext for the `test -s'
+# don't, since _AC_COMPILE_IFELSE needs to know ac_objext for the 'test -s'
 # it includes.  So do it by hand.
 m4_define([_AC_COMPILER_OBJEXT],
 [AC_CACHE_CHECK([for suffix of object files], ac_cv_objext,

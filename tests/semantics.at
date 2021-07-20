@@ -389,7 +389,7 @@ AT_CONFIGURE_AC([[AC_CHECK_HEADERS([header2.h], [], [], [-])]])
 AT_CHECK_AUTOCONF([], 0, [],
 [[configure.ac:4: warning: Checking for headers with the preprocessor is
 configure.ac:4: deprecated. Specify prerequisite code to AC_CHECK_HEADER
-configure.ac:4: instead of using fourth argument `-'. (Many headers need
+configure.ac:4: instead of using fourth argument '-'. (Many headers need
 configure.ac:4: no prerequisites. If you truly need to test whether
 configure.ac:4: something passes the preprocessor but not the compiler,
 configure.ac:4: use AC_PREPROC_IFELSE.)
@@ -451,17 +451,17 @@ AT_CLEANUP
 AT_CHECK_MACRO([AC_CHECK_MEMBER],
 [[AC_CHECK_MEMBER([struct yes_s.yes],
 		  [AC_DEFINE([HAVE_STRUCT_YES_S_YES], [1],
-			     [Define to 1 if `yes' is a member of `struct yes_s'.])],,
+			     [Define to 1 if 'yes' is a member of 'struct yes_s'.])],,
 		   [struct sub { int x; };
 		    struct yes_s { int yes; struct sub substruct; };])
   AC_CHECK_MEMBER([struct yes_s.no],
 		  [AC_DEFINE([HAVE_STRUCT_YES_S_NO], [1],
-			     [Define to 1 if `no' is a member of `struct yes_s'.])],,
+			     [Define to 1 if 'no' is a member of 'struct yes_s'.])],,
 		   [struct sub { int x; };
 		    struct yes_s { int yes; struct sub substruct; };])
   AC_CHECK_MEMBER([struct yes_s.substruct],
 		  [AC_DEFINE([HAVE_STRUCT_YES_S_SUBSTRUCT], [1],
-			     [Define to 1 if `substruct' is a member of `struct yes_s'.])],,
+			     [Define to 1 if 'substruct' is a member of 'struct yes_s'.])],,
 		   [struct sub { int x; };
 		    struct yes_s { int yes; struct sub substruct; };])]],
 [AT_CHECK_DEFINES(
@@ -557,7 +557,7 @@ AT_CHECK([[grep "#define SIZEOF_INT_P [1-9]" config.h]],
 # --------------
 # Check that it performs the correct actions.
 # Must define HAVE_STRUCT_YES_S, HAVE_INT, but not HAVE_STRUCT_NO_S.
-# `int' and `struct yes_s' are both checked to test both the compiler
+# 'int' and 'struct yes_s' are both checked to test both the compiler
 # builtin types, and defined types.
 AT_CHECK_MACRO([AC_CHECK_TYPES],
 [[AC_CHECK_TYPES([int, struct yes_s, struct no_s],,,
@@ -608,7 +608,7 @@ AT_CLEANUP
 # AC_CHECK_FILES
 # --------------
 # FIXME: To really test HAVE_AC_EXISTS2 and HAVE_AC_MISSING2 we need to
-# open AH_TEMPLATE to `configure.ac', which is not yet the case.
+# open AH_TEMPLATE to 'configure.ac', which is not yet the case.
 # Don't use AT_CHECK_MACRO for this one because AC_CHECK_FILES can't be
 # used when cross compiling.
 
@@ -633,8 +633,8 @@ rm at-exists1 at-exists2]],
 
 # AT_CHECK_PROGS_PREPARE
 # ----------------------
-# Create a sub directory `path' with 6 subdirs which all 7 contain
-# an executable `tool'. `6' contains a `better' tool.
+# Create a sub directory 'path' with 6 subdirs which all 7 contain
+# an executable 'tool'. '6' contains a 'better' tool.
 m4_define([AT_CHECK_PROGS_PREPARE],
 [mkdir path
 
@@ -1023,7 +1023,7 @@ $1([dn@&t@l
 AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
-configure.ac:6: note: `dn@&t@l' is a macro
+configure.ac:6: note: 'dn@&t@l' is a macro
 functions.m4: $1 is expanded from...
 configure.ac:6: the top level
 ])
@@ -1052,7 +1052,7 @@ $1([dn@&t@l
 AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:8: warning: whitespace-separated list contains macros;
 configure.ac:8: in a future version of Autoconf they will not be expanded
-configure.ac:8: note: `dn@&t@l' is a macro
+configure.ac:8: note: 'dn@&t@l' is a macro
 functions.m4: $1 is expanded from...
 configure.ac:8: the top level
 configure.ac:8: warning: $1($fns): you should use literals
@@ -1084,7 +1084,7 @@ $1([dn@&t@l
 AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
-configure.ac:6: note: `dn@&t@l' is a macro
+configure.ac:6: note: 'dn@&t@l' is a macro
 headers.m4: $1 is expanded from...
 configure.ac:6: the top level
 ])
@@ -1123,7 +1123,7 @@ $1([dn@&t@l
 AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:8: warning: whitespace-separated list contains macros;
 configure.ac:8: in a future version of Autoconf they will not be expanded
-configure.ac:8: note: `dn@&t@l' is a macro
+configure.ac:8: note: 'dn@&t@l' is a macro
 headers.m4: $1 is expanded from...
 configure.ac:8: the top level
 configure.ac:8: warning: $1($hs): you should use literals
@@ -1170,7 +1170,7 @@ AC_CHECK_FILES([dn@&t@l
 AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
-configure.ac:6: note: `dn@&t@l' is a macro
+configure.ac:6: note: 'dn@&t@l' is a macro
 general.m4: AC_CHECK_FILES is expanded from...
 configure.ac:6: the top level
 ])
@@ -1200,7 +1200,7 @@ configure.ac:6:AC_CONFIG_MACRO_DIR_TRACE:d_blurf
 ],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
-configure.ac:6: note: `dn@&t@l' is a macro
+configure.ac:6: note: 'dn@&t@l' is a macro
 general.m4: AC_CONFIG_MACRO_DIRS is expanded from...
 configure.ac:6: the top level
 ])
@@ -1228,7 +1228,7 @@ AC_CONFIG_SUBDIRS([dn@&t@l
 AT_CHECK_AUTOCONF([], [0], [],
 [configure.ac:6: warning: whitespace-separated list contains macros;
 configure.ac:6: in a future version of Autoconf they will not be expanded
-configure.ac:6: note: `dn@&t@l' is a macro
+configure.ac:6: note: 'dn@&t@l' is a macro
 status.m4: AC_CONFIG_SUBDIRS is expanded from...
 configure.ac:6: the top level
 ])

@@ -162,7 +162,7 @@ case $multi_test:$single_test in
   ..:. ) AS_EXIT(0);;
   ..:* ) AC_MSG_ERROR([DEFUN_ONCE is broken]);;
   *:.  ) AC_MSG_ERROR([DEFUN is broken (Wow, congrats!)]);;
-     * ) AC_MSG_ERROR([received `$multi_test:$single_test']);;
+     * ) AC_MSG_ERROR([received '$multi_test:$single_test']);;
 esac
 ]])
 
@@ -197,7 +197,7 @@ TEST
 
 case $inner_test in
   "" ) AS_EXIT(0);;
-  *  ) AC_MSG_ERROR([received `$inner_test']);;
+  *  ) AC_MSG_ERROR([received '$inner_test']);;
 esac
 ]])
 
@@ -595,7 +595,7 @@ AT_CLEANUP
 ## ---------------- ##
 
 # Make sure AC_CACHE_CHECK is silent with -q.
-# Also make sure we warn about cache id's not named with `_cv_'.
+# Also make sure we warn about cache id's not named with '_cv_'.
 
 AT_SETUP([AC_CACHE_CHECK])
 AT_KEYWORDS([CONFIG_SITE])
@@ -688,7 +688,7 @@ AC_DEFUN([AC_SHELL_TRUE],
                  (true) 2>/dev/null && my_cv_shell_true_works=yes
                  if test "x$my_cv_shell_true_works" = xyes; then
                    AC_DEFINE([TRUE_WORKS], [1],
-                             [Define if `true(1)' works properly.])
+                             [Define if 'true(1)' works properly.])
                  fi])
 ])
 AC_SHELL_TRUE
@@ -705,7 +705,7 @@ AC_DEFUN([AC_SHELL_TRUE],
                  (true) 2>/dev/null && my_cv_shell_true_works=yes])
  if test "x$my_cv_shell_true_works" = xyes; then
    AC_DEFINE([TRUE_WORKS], [1],
-             [Define if `true(1)' works properly.])
+             [Define if 'true(1)' works properly.])
  fi
 ])
 AC_SHELL_TRUE

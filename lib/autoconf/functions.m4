@@ -76,7 +76,7 @@ AS_VAR_POPDEF([ac_var])])# AC_CHECK_FUNC
 # Prepare the autoheader snippet for FUNCTION.
 m4_define([_AH_CHECK_FUNC],
 [AH_TEMPLATE(AS_TR_CPP([HAVE_$1]),
-  [Define to 1 if you have the `$1' function.])])
+  [Define to 1 if you have the '$1' function.])])
 
 # _AC_CHECK_FUNCS_ONE_U(FUNCTION)
 # -------------------------------
@@ -113,7 +113,7 @@ m4_define([_AC_CHECK_FUNCS_ONE_C],
 # ACTION-IF-FOUND or ACTION-IF-NOT-FOUND for each function.
 # Additionally, make the preprocessor definition HAVE_FUNCTION
 # available for each found function.  Either ACTION may include
-# `break' to stop the search.
+# 'break' to stop the search.
 AC_DEFUN([AC_CHECK_FUNCS],
 [_$0(m4_validate_w([$1]), [$2], [$3])])
 
@@ -501,7 +501,7 @@ rm -f conftest.chown
 ])
 if test $ac_cv_func_chown_works = yes; then
   AC_DEFINE(HAVE_CHOWN, 1,
-	    [Define to 1 if your system has a working `chown' function.])
+	    [Define to 1 if your system has a working 'chown' function.])
 fi
 ])# AC_FUNC_CHOWN
 
@@ -524,7 +524,7 @@ AC_CACHE_CHECK([whether closedir returns void],
 	       [ac_cv_func_closedir_void=yes])])
 if test $ac_cv_func_closedir_void = yes; then
   AC_DEFINE(CLOSEDIR_VOID, 1,
-	    [Define to 1 if the `closedir' function returns void instead
+	    [Define to 1 if the 'closedir' function returns void instead
 	     of int.])
 fi
 ])
@@ -597,7 +597,7 @@ AS_IF([test $$2 = yes], [$3], [$4])
 AC_DEFUN([AC_FUNC_FNMATCH],
 [_AC_FUNC_FNMATCH_IF([POSIX], [ac_cv_func_fnmatch_works],
 		     [AC_DEFINE([HAVE_FNMATCH], 1,
-		     [Define to 1 if your system has a working POSIX `fnmatch'
+		     [Define to 1 if your system has a working POSIX 'fnmatch'
 		      function.])])
 ])# AC_FUNC_FNMATCH
 
@@ -669,7 +669,7 @@ fi
 
 # AC_FUNC_GETGROUPS
 # -----------------
-# Try to find `getgroups', and check that it works.
+# Try to find 'getgroups', and check that it works.
 # When cross-compiling, assume getgroups is broken.
 AN_FUNCTION([getgroups], [AC_FUNC_GETGROUPS])
 AC_DEFUN([AC_FUNC_GETGROUPS],
@@ -707,7 +707,7 @@ fi
 case "$ac_cv_func_getgroups_works" in
   *yes)
     AC_DEFINE(HAVE_GETGROUPS, 1,
-	      [Define to 1 if your system has a working `getgroups' function.])
+	      [Define to 1 if your system has a working 'getgroups' function.])
     ;;
 esac
 LIBS=$ac_save_LIBS
@@ -716,10 +716,10 @@ LIBS=$ac_save_LIBS
 
 # _AC_LIBOBJ_GETLOADAVG
 # ---------------------
-# Set up the AC_LIBOBJ replacement of `getloadavg'.
+# Set up the AC_LIBOBJ replacement of 'getloadavg'.
 m4_define([_AC_LIBOBJ_GETLOADAVG],
 [AC_LIBOBJ(getloadavg)
-AC_DEFINE(C_GETLOADAVG, 1, [Define to 1 if using `getloadavg.c'.])
+AC_DEFINE(C_GETLOADAVG, 1, [Define to 1 if using 'getloadavg.c'.])
 # Figure out what our getloadavg.c needs.
 AC_CHECK_FUNCS_ONCE([setlocale])
 ac_have_func=no
@@ -758,9 +758,9 @@ fi
 AC_CHECK_HEADERS(nlist.h,
 [AC_CHECK_MEMBERS([struct nlist.n_un.n_name],
 		  [AC_DEFINE(NLIST_NAME_UNION, 1,
-			     [Define to 1 if your `struct nlist' has an
-			      `n_un' member.  Obsolete, depend on
-			      `HAVE_STRUCT_NLIST_N_UN_N_NAME])], [],
+			     [Define to 1 if your 'struct nlist' has an
+			      'n_un' member.  Obsolete, depend on
+			      'HAVE_STRUCT_NLIST_N_UN_N_NAME])], [],
 		  [@%:@include <nlist.h>])
 ])dnl
 ])# _AC_LIBOBJ_GETLOADAVG
@@ -828,7 +828,7 @@ Yowza Am I SETGID yet
 if test $ac_cv_func_getloadavg_setgid = yes; then
   NEED_SETGID=true
   AC_DEFINE(GETLOADAVG_PRIVILEGED, 1,
-	    [Define to 1 if the `getloadavg' function needs to be run setuid
+	    [Define to 1 if the 'getloadavg' function needs to be run setuid
 	     or setgid.])
 else
   NEED_SETGID=false
@@ -873,7 +873,7 @@ AC_DEFUN([AC_FUNC_GETMNTENT],
 AC_SEARCH_LIBS(getmntent, [sun seq gen],
 	       [ac_cv_func_getmntent=yes
 		AC_DEFINE([HAVE_GETMNTENT], 1,
-			  [Define to 1 if you have the `getmntent' function.])],
+			  [Define to 1 if you have the 'getmntent' function.])],
 	       [ac_cv_func_getmntent=no])
 ])
 
@@ -891,7 +891,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [getpgrp (0);])],
 ])
 if test $ac_cv_func_getpgrp_void = yes; then
   AC_DEFINE(GETPGRP_VOID, 1,
-	    [Define to 1 if the `getpgrp' function requires zero arguments.])
+	    [Define to 1 if the 'getpgrp' function requires zero arguments.])
 fi
 ])# AC_FUNC_GETPGRP
 
@@ -925,7 +925,7 @@ if test "$as_ln_s" = "ln -s" && ln -s conftest.file conftest.sym; then
 		   *)      ac_cv_func_lstat_dereferences_slashed_symlink=no ;;
 		 esac])
 else
-  # If the `ln -s' command failed, then we probably don't even
+  # If the 'ln -s' command failed, then we probably don't even
   # have an lstat function.
   ac_cv_func_lstat_dereferences_slashed_symlink=no
 fi
@@ -934,7 +934,7 @@ rm -f conftest.sym conftest.file
 
 test $ac_cv_func_lstat_dereferences_slashed_symlink = yes &&
   AC_DEFINE_UNQUOTED([LSTAT_FOLLOWS_SLASHED_SYMLINK], [1],
-		     [Define to 1 if `lstat' dereferences a symlink specified
+		     [Define to 1 if 'lstat' dereferences a symlink specified
 		      with a trailing slash.])
 
 if test "x$ac_cv_func_lstat_dereferences_slashed_symlink" = xno; then
@@ -945,7 +945,7 @@ fi
 
 # _AC_FUNC_MALLOC_IF(IF-WORKS, IF-NOT)
 # ------------------------------------
-# If `malloc (0)' properly handled, run IF-WORKS, otherwise, IF-NOT.
+# If 'malloc (0)' properly handled, run IF-WORKS, otherwise, IF-NOT.
 AC_DEFUN([_AC_FUNC_MALLOC_IF],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
@@ -972,13 +972,13 @@ AS_IF([test $ac_cv_func_malloc_0_nonnull = yes], [$1], [$2])
 
 # AC_FUNC_MALLOC
 # --------------
-# Report whether `malloc (0)' properly handled, and replace malloc if
+# Report whether 'malloc (0)' properly handled, and replace malloc if
 # needed.
 AN_FUNCTION([malloc], [AC_FUNC_MALLOC])
 AC_DEFUN([AC_FUNC_MALLOC],
 [_AC_FUNC_MALLOC_IF(
   [AC_DEFINE([HAVE_MALLOC], 1,
-	     [Define to 1 if your system has a GNU libc compatible `malloc'
+	     [Define to 1 if your system has a GNU libc compatible 'malloc'
 	      function, and to 0 otherwise.])],
   [AC_DEFINE([HAVE_MALLOC], 0)
    AC_LIBOBJ(malloc)
@@ -1406,7 +1406,7 @@ main (void)
 		esac])])
 if test $ac_cv_func_mmap_fixed_mapped = yes; then
   AC_DEFINE([HAVE_MMAP], [1],
-	    [Define to 1 if you have a working `mmap' system call.])
+	    [Define to 1 if you have a working 'mmap' system call.])
 fi
 rm -f conftest.mmap conftest.txt
 ])# AC_FUNC_MMAP
@@ -1419,7 +1419,7 @@ AU_ALIAS([AC_MMAP], [AC_FUNC_MMAP])
 
 # AC_FUNC_OBSTACK
 # ---------------
-# Ensure obstack support.  Yeah, this is not exactly a `FUNC' check.
+# Ensure obstack support.  Yeah, this is not exactly a 'FUNC' check.
 AN_FUNCTION([obstack_init], [AC_FUNC_OBSTACK])
 AN_IDENTIFIER([obstack],    [AC_FUNC_OBSTACK])
 AC_DEFUN([AC_FUNC_OBSTACK],
@@ -1451,7 +1451,7 @@ AU_ALIAS([AM_FUNC_OBSTACK], [AC_FUNC_OBSTACK])
 
 # _AC_FUNC_REALLOC_IF(IF-WORKS, IF-NOT)
 # -------------------------------------
-# If `realloc (0, 0)' is properly handled, run IF-WORKS, otherwise, IF-NOT.
+# If 'realloc (0, 0)' is properly handled, run IF-WORKS, otherwise, IF-NOT.
 AC_DEFUN([_AC_FUNC_REALLOC_IF],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
 AC_CACHE_CHECK([for GNU libc compatible realloc], ac_cv_func_realloc_0_nonnull,
@@ -1478,13 +1478,13 @@ AS_IF([test $ac_cv_func_realloc_0_nonnull = yes], [$1], [$2])
 
 # AC_FUNC_REALLOC
 # ---------------
-# Report whether `realloc (0, 0)' is properly handled, and replace realloc if
+# Report whether 'realloc (0, 0)' is properly handled, and replace realloc if
 # needed.
 AN_FUNCTION([realloc], [AC_FUNC_REALLOC])
 AC_DEFUN([AC_FUNC_REALLOC],
 [_AC_FUNC_REALLOC_IF(
   [AC_DEFINE([HAVE_REALLOC], 1,
-	     [Define to 1 if your system has a GNU libc compatible `realloc'
+	     [Define to 1 if your system has a GNU libc compatible 'realloc'
 	      function, and to 0 otherwise.])],
   [AC_DEFINE([HAVE_REALLOC], 0)
    AC_LIBOBJ([realloc])
@@ -1495,9 +1495,9 @@ AC_DEFUN([AC_FUNC_REALLOC],
 
 # AC_FUNC_SELECT_ARGTYPES
 # -----------------------
-# Determine the correct type to be passed to each of the `select'
-# function's arguments, and define those types in `SELECT_TYPE_ARG1',
-# `SELECT_TYPE_ARG234', and `SELECT_TYPE_ARG5'.
+# Determine the correct type to be passed to each of the 'select'
+# function's arguments, and define those types in 'SELECT_TYPE_ARG1',
+# 'SELECT_TYPE_ARG234', and 'SELECT_TYPE_ARG5'.
 AC_DEFUN([AC_FUNC_SELECT_ARGTYPES],
 [AC_CHECK_HEADERS_ONCE([sys/select.h sys/socket.h])
 AC_CACHE_CHECK([types of arguments for select],
@@ -1529,11 +1529,11 @@ set dummy `echo "$ac_cv_func_select_args" | sed 's/\*/\*/g'`
 IFS=$ac_save_IFS
 shift
 AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG1, $[1],
-		   [Define to the type of arg 1 for `select'.])
+		   [Define to the type of arg 1 for 'select'.])
 AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG234, ($[2]),
-		   [Define to the type of args 2, 3 and 4 for `select'.])
+		   [Define to the type of args 2, 3 and 4 for 'select'.])
 AC_DEFINE_UNQUOTED(SELECT_TYPE_ARG5, ($[3]),
-		   [Define to the type of arg 5 for `select'.])
+		   [Define to the type of arg 5 for 'select'.])
 rm -rf conftest*
 ])# AC_FUNC_SELECT_ARGTYPES
 
@@ -1550,7 +1550,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [setpgrp(0, 0);])],
 ])
 if test $ac_cv_func_setpgrp_void = yes; then
   AC_DEFINE(SETPGRP_VOID, 1,
-	    [Define to 1 if the `setpgrp' function requires zero arguments.])
+	    [Define to 1 if the 'setpgrp' function requires zero arguments.])
 fi
 ])# AC_FUNC_SETPGRP
 
@@ -1577,7 +1577,7 @@ AC_CACHE_CHECK([whether $1 accepts an empty string],
 if test $ac_cv_func_$1_empty_string_bug = yes; then
   AC_LIBOBJ([$1])
   AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$1_EMPTY_STRING_BUG]), 1,
-		     [Define to 1 if `$1' has the bug that it succeeds when
+		     [Define to 1 if '$1' has the bug that it succeeds when
 		      given the zero-length file name argument.])
 fi
 ])# _AC_FUNC_STAT
@@ -1691,7 +1691,7 @@ if test $ac_cv_have_decl_strerror_r = yes; then
   # For backward compatibility's sake, define HAVE_STRERROR_R.
   # (We used to run AC_CHECK_FUNCS_ONCE for strerror_r, as well
   # as AC_CHECK_DECLS_ONCE.)
-  AC_DEFINE([HAVE_STRERROR_R], [1], [Define if you have `strerror_r'.])
+  AC_DEFINE([HAVE_STRERROR_R], [1], [Define if you have 'strerror_r'.])
 fi
 
 AC_CACHE_CHECK([whether strerror_r returns char *],
@@ -1765,7 +1765,7 @@ test $ac_cv_func_strnlen_working = no && AC_LIBOBJ([strnlen])
 # ------------------------
 AC_DEFUN([AC_FUNC_SETVBUF_REVERSED],
 [m4_warn([obsolete],
-[The macro `$0' is obsolete.  Remove it and all references to SETVBUF_REVERSED.])dnl
+[The macro '$0' is obsolete.  Remove it and all references to SETVBUF_REVERSED.])dnl
 AC_CACHE_VAL([ac_cv_func_setvbuf_reversed], [ac_cv_func_setvbuf_reversed=no])
 ])# AC_FUNC_SETVBUF_REVERSED
 
@@ -1795,7 +1795,7 @@ AC_CACHE_CHECK(for working strcoll, ac_cv_func_strcoll_works,
 		esac])])
 if test $ac_cv_func_strcoll_works = yes; then
   AC_DEFINE(HAVE_STRCOLL, 1,
-	    [Define to 1 if you have the `strcoll' function and it is properly
+	    [Define to 1 if you have the 'strcoll' function and it is properly
 	     defined.])
 fi
 ])# AC_FUNC_STRCOLL
@@ -1829,7 +1829,7 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT
 if test "x$ac_cv_func_utime_null" != xno; then
   ac_cv_func_utime_null=yes
   AC_DEFINE(HAVE_UTIME_NULL, 1,
-	    [Define to 1 if `utime(file, NULL)' sets file's timestamp to the
+	    [Define to 1 if 'utime(file, NULL)' sets file's timestamp to the
 	     present.])
 fi
 rm -f conftest.data
@@ -1876,12 +1876,12 @@ if test "x$ac_cv_func_fork_works" = xcross; then
 fi
 
 if test "x$ac_cv_func_vfork_works" = xyes; then
-  AC_DEFINE(HAVE_WORKING_VFORK, 1, [Define to 1 if `vfork' works.])
+  AC_DEFINE(HAVE_WORKING_VFORK, 1, [Define to 1 if 'vfork' works.])
 else
-  AC_DEFINE(vfork, fork, [Define as `fork' if `vfork' does not work.])
+  AC_DEFINE(vfork, fork, [Define as 'fork' if 'vfork' does not work.])
 fi
 if test "x$ac_cv_func_fork_works" = xyes; then
-  AC_DEFINE(HAVE_WORKING_FORK, 1, [Define to 1 if `fork' works.])
+  AC_DEFINE(HAVE_WORKING_FORK, 1, [Define to 1 if 'fork' works.])
 fi
 ])# AC_FUNC_FORK
 
@@ -2035,8 +2035,8 @@ AC_DEFUN([AC_FUNC_VPRINTF],
 AS_IF([test "x$ac_cv_func_vprintf" = xno],
 [AC_CHECK_FUNC([_doprnt],
 	       [AC_DEFINE([HAVE_DOPRNT], [1],
-			  [Define to 1 if you don't have `vprintf' but do have
-			  `_doprnt.'])])])])
+			  [Define to 1 if you don't have 'vprintf' but do have
+			  '_doprnt.'])])])])
 
 
 # AU::AC_VPRINTF
@@ -2052,8 +2052,8 @@ AU_ALIAS([AC_VPRINTF], [AC_FUNC_VPRINTF])
 AN_FUNCTION([wait3], [AC_FUNC_WAIT3])
 AC_DEFUN([AC_FUNC_WAIT3],
 [m4_warn([obsolete],
-[$0: `wait3' has been removed from POSIX.
-Remove this `AC_FUNC_WAIT3' and adjust your code to use `waitpid' instead.])dnl
+[$0: 'wait3' has been removed from POSIX.
+Remove this 'AC_FUNC_WAIT3' and adjust your code to use 'waitpid' instead.])dnl
 AC_CACHE_CHECK([for wait3 that fills in rusage],
 	       [ac_cv_func_wait3_rusage],
 [AC_RUN_IFELSE([AC_LANG_SOURCE(
@@ -2097,8 +2097,8 @@ main (void)
 	       [ac_cv_func_wait3_rusage=no])])
 if test $ac_cv_func_wait3_rusage = yes; then
   AC_DEFINE(HAVE_WAIT3, 1,
-	    [Define to 1 if you have the `wait3' system call.
-	     Deprecated, you should no longer depend upon `wait3'.])
+	    [Define to 1 if you have the 'wait3' system call.
+	     Deprecated, you should no longer depend upon 'wait3'.])
 fi
 ])# AC_FUNC_WAIT3
 

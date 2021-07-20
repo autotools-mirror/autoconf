@@ -670,7 +670,7 @@ a
 c
 post
 ]],
-[[script.4s:15: warning: m4@&t@_require: `a' was expanded before it was required
+[[script.4s:15: warning: m4@&t@_require: 'a' was expanded before it was required
 script.4s:15: https://www.gnu.org/software/autoconf/manual/autoconf.html#Expanded-Before-Required
 script.4s:5: b is expanded from...
 script.4s:6: c is expanded from...
@@ -1082,7 +1082,7 @@ str
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 0, [[a a b
-]], [[script.4s:3: warning: m4@&t@_append_uniq: `a b' contains ` '
+]], [[script.4s:3: warning: m4@&t@_append_uniq: 'a b' contains ' '
 ]])
 
 AT_CLEANUP
@@ -1157,7 +1157,7 @@ esac
 case b in
   *[)] echo active, ;;
 esac])
-dnl unbalanced underquoted `)', but we manage anyway (gasp!)
+dnl unbalanced underquoted ')', but we manage anyway (gasp!)
 m4_expand([case c in #(
   *) echo active, ;;
 esac
@@ -1345,10 +1345,10 @@ AT_CLEANUP
 
 AT_SETUP([Standard regular expressions])
 
-# AT_CHECK_M4RE(RE-NAME, TEXT, INTENT = `ok' | `')
+# AT_CHECK_M4RE(RE-NAME, TEXT, INTENT = 'ok' | '')
 # ------------------------------------------------
 # Check whether RE-NAME (a macro whose definition is a regular expression)
-# matches TEXT.  INTENT = `ok' if the match should succeed or else empty.
+# matches TEXT.  INTENT = 'ok' if the match should succeed or else empty.
 m4_define([AT_CHECK_M4RE],
 [AT_CHECK_M4SUGAR_TEXT(
 [[m4_bregexp([$2], ^m4_defn([$1])$, [ok])

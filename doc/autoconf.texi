@@ -182,9 +182,9 @@
 @end macro
 @end ifclear
 
-@c Define an index for functions: `alloca' etc.  Used for the
-@c portability sections and so on.  We can't use `fn' (aka `fnindex),
-@c since `@defmac' goes into it => we'd get all the macros too.
+@c Define an index for functions: 'alloca' etc.  Used for the
+@c portability sections and so on.  We can't use 'fn' (aka 'fnindex'),
+@c since '@defmac' goes into it => we'd get all the macros too.
 
 @c   FIXME: Aaarg!  It seems there are too many indices for TeX :(
 @c
@@ -17107,7 +17107,7 @@ not exhaustive, but you should be safe if you avoid the name
 @code{status} and names containing only upper-case letters and
 underscores.
 
-@c Alphabetical order, case insensitive, `A' before `a'.
+@c Alphabetical order, case insensitive, 'A' before 'a'.
 @table @code
 @item ?
 Not all shells correctly reset @samp{$?} after conditionals (@pxref{if,
@@ -17632,7 +17632,7 @@ often possible to avoid this problem using @samp{echo "x$word"}, taking
 the @samp{x} into account later in the pipe.  Many of these limitations
 can be worked around using M4sh (@pxref{Programming in M4sh}).
 
-@c This table includes things like `@command{test} (files)', so we can't
+@c This table includes things like '@command{test} (files)', so we can't
 @c use @table @command.
 @table @asis
 @item @command{.}
@@ -17656,7 +17656,7 @@ $ @kbd{echo 'fi' > syntax}
 $ @kbd{bash -c '. ./syntax; echo $?'}
 ./syntax: line 1: syntax error near unexpected token `fi'
 ./syntax: line 1: `fi'
-1
+2
 $ @kbd{ash -c '. ./syntax; echo $?'}
 ./syntax: 1: Syntax error: "fi" unexpected
 $ @kbd{zsh -c '. ./syntax; echo $?'}
@@ -18846,7 +18846,7 @@ files).
 @item @command{true}
 @c -----------------
 @prindex @command{true}
-@c Info cannot handle `:' in index entries.
+@c Info cannot handle ':' in index entries.
 @c @prindex @command{:}
 Don't worry: as far as we know @command{true} is portable.
 Nevertheless, it's not always a builtin (e.g., Bash 1.x), and the
@@ -18921,7 +18921,7 @@ include some limitations you should be aware of.
 @comment mention all the tools in GNU Coding Standards ``Utilities in
 @comment Makefiles''.
 
-@c This table includes things like `@command{expr} (|)', so we can't
+@c This table includes things like '@command{expr} (|)', so we can't
 @c use @table @command.
 @table @asis
 @anchor{awk}
@@ -21432,7 +21432,7 @@ $ @kbd{touch ../newer.x}
 $ @kbd{make}        # GNU make
 Building bar.x
 cp bar.x bar.y
-cp: cannot stat `bar.x': No such file or directory
+cp: cannot stat 'bar.x': No such file or directory
 make: *** [bar.y] Error 1
 $ @kbd{pmake}       # NetBSD make
 Building ../bar.x
@@ -21441,7 +21441,7 @@ $ @kbd{rm bar.y}
 $ @kbd{fmake}       # FreeBSD make, OpenBSD make
 echo Building bar.x
 cp bar.x bar.y
-cp: cannot stat `bar.x': No such file or directory
+cp: cannot stat 'bar.x': No such file or directory
 *** Error code 1
 $ @kbd{tmake}       # Tru64 make
 Building bar.x
@@ -21474,7 +21474,7 @@ cp ../bar.x bar.y
 $ @kbd{rm bar.y}
 $ @kbd{fmake}       # FreeBSD make, OpenBSD make
 cp bar.x bar.y
-cp: cannot stat `bar.x': No such file or directory
+cp: cannot stat 'bar.x': No such file or directory
 *** Error code 1
 $ @kbd{tmake}       # Tru64 make
 cp ../bar.x bar.y
@@ -22647,7 +22647,7 @@ specified neither @option{--with-readline} nor @option{--without-readline},
 you want to enable support for readline only if the library is available
 on the system.
 
-@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
+@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within 'if' is solved.
 @example
 AC_ARG_WITH([readline],
   [AS_HELP_STRING([--with-readline],
@@ -22673,7 +22673,7 @@ The next example shows how to use @code{AC_ARG_WITH} to give the user the
 possibility to enable support for the readline library, in case it is still
 experimental and not well tested, and is therefore disabled by default.
 
-@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
+@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within 'if' is solved.
 @example
 AC_ARG_WITH([readline],
   [AS_HELP_STRING([--with-readline],
@@ -22697,7 +22697,7 @@ The last example shows how to use @code{AC_ARG_WITH} to give the user the
 possibility to disable support for the readline library, given that it is
 an important feature and that it should be enabled by default.
 
-@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within `if' is solved.
+@c FIXME: Remove AS_IF when the problem of AC_REQUIRE within 'if' is solved.
 @example
 AC_ARG_WITH([readline],
   [AS_HELP_STRING([--without-readline],
@@ -23643,7 +23643,7 @@ This macro is equivalent to:
 @example
 AC_CHECK_TYPE([@var{type}], [],
   [AC_DEFINE_UNQUOTED([@var{type}], [@var{default}],
-     [Define to `@var{default}'
+     [Define to '@var{default}'
       if <sys/types.h> does not define.])])
 @end example
 
@@ -25041,7 +25041,7 @@ AC_INIT([Example], [1.0], [bug-example@@example.org])
 AM_TYPE_PTRDIFF_T
 $ @kbd{rm aclocal.m4}
 $ @kbd{autoupdate}
-autoupdate: `configure.ac' is updated
+autoupdate: 'configure.ac' is updated
 $ @kbd{cat configure.ac}
 AC_INIT([Example], [1.0], [bug-example@@example.org])
 AC_CHECK_TYPES([ptrdiff_t])
@@ -25490,8 +25490,8 @@ the point of view of the test suite, there remains a single environment,
 @var{host} = @var{build}.  The log contains relevant information on the
 state of the @var{build} machine, including some important environment
 variables.
-@c FIXME: How about having an M4sh macro to say `hey, log the value
-@c of `@dots{}'?  This would help both Autoconf and Autotest.
+@c FIXME: How about having an M4sh macro to say "hey, log the value
+@c of '@dots{}'"?  This would help both Autoconf and Autotest.
 
 @item tested programs
 The absolute file name and answers to @option{--version} of the tested
@@ -26700,7 +26700,7 @@ $ @kbd{cat configure.ac}
 @result{}AC_OUTPUT
 $ @kbd{autoconf}
 @result{}configure.ac:11: warning: AC_REQUIRE:
-@result{} `TESTA' was expanded before it was required
+@result{} 'TESTA' was expanded before it was required
 @result{}configure.ac:4: TESTB is expanded from...
 @result{}configure.ac:6: TESTC is expanded from...
 @result{}configure.ac:7: OUTER is expanded from...

@@ -14,7 +14,7 @@ and the like, don't have a consistent way to handle multi-line
 arguments.  Fix, test, and document.
 
 ** --target & AC_ARG_PROGRAM
-Shouldn't *any* `program' be installed as `$target_alias-program' even
+Shouldn't *any* 'program' be installed as '$target_alias-program' even
 if AC_ARG_PROGRAM is not called?  That would be much more predictable.
 Ian?
 
@@ -161,8 +161,8 @@ autoupdate do its job on old configure.ac.
 * Even later
 
 ** Pentateuch
-Heck, there is nothing after `Deuteronomy'!  We're stuck, but we
-_must_ update the `history' section.  Can't go to `New testament', we
+Heck, there is nothing after 'Deuteronomy'!  We're stuck, but we
+_must_ update the 'history' section.  Can't go to 'New testament', we
 might hurt feelings?  In addition, it means that the Messiah has come,
 which might be slightly presumptuous :).  Still, someone fluent in
 English should write it.
@@ -176,8 +176,8 @@ Hi Robert,
 
 > The documentation says that AC_PATH_XTRA
 >	... adds the C compiler flags that X needs to output variable
->	`X_CFLAGS', and the X linker flags to `X_LIBS'.  If X is not
->	available, adds `-DX_DISPLAY_MISSING' to `X_CFLAGS'.
+>	'X_CFLAGS', and the X linker flags to 'X_LIBS'.  If X is not
+>	available, adds '-DX_DISPLAY_MISSING' to 'X_CFLAGS'.
 
 > It doesn't seem to add -DX_DISPLAY_MISSING to X_CFLAGS.  X_DISPLAY_MISSING
 > ends up defined in config.h, instead.
@@ -192,7 +192,7 @@ But you are right--the documentation is not clear about this.  I'll change
 it.
 
 > In fact it looks to me as if right now, X_CFLAGS is used only for
-> specifying directories where X include files are stored, via the `-I' option.
+> specifying directories where X include files are stored, via the '-I' option.
 > Maybe it should really be called X_CPPFLAGS?
 
 Well, perhaps.  If you feel strongly about this, feel free to submit a
@@ -223,7 +223,7 @@ the doc easier to update when people add/change macros.  The name
 The error messages for indir and dumpdef are uselessly different.  Fix
 this for translators.
 
-** Tracing `builtin'
+** Tracing 'builtin'
 F**k!  --trace FOO does not catch indir([FOO], $@)!
 Fixed in M4 1.6, but we can't rely on it yet.
 
@@ -287,7 +287,7 @@ should generate all the templates.
 ** Specializing loops.
 For instance, make AC_CHECK_FUNC[S] automatically use any particular
 macros for the listed functions.
-This requires to obsolete the feature `break' in ACTION-IF, since all
+This requires to obsolete the feature 'break' in ACTION-IF, since all
 the loops are to be handled by m4, not sh.
 
 ** Faces of a test
@@ -296,7 +296,7 @@ configure snippet (AC_foo), a config.h snippet (AH_foo), a system.h
 snippet (AS_foo), documentation (AD_foo) and, why not, the some C code
 for instance to replace a function.
 
-The motivation for the `faces' is to encapsulate.  It is abnormal that
+The motivation for the 'faces' is to encapsulate.  It is abnormal that
 once one has a configure macro, then she has to read somewhere to find
 the piece of system.h to use etc.  The macros should come in a
 self-contained way, or, said it another way, PnP.
@@ -453,7 +453,7 @@ It also occurs with a bunch more libposix4 functions that most people
 probably aren't worried about yet, e.g. shm_open.
 
 All these functions fail with errno set to ENOSYS (89)
-``Operation not applicable''.
+"Operation not applicable".
 
 Perhaps Autoconf should have a specific macro for fnmatch, another for
 glob+globfree, another for regcomp+regexec+regerror+regfree, and

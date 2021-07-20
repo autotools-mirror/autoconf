@@ -882,7 +882,7 @@ exit 0;
 #     NEW([0, 0],
 #	  0)
 #
-# And we just run m4 on it.  Et voila`, Monsieur !  Mais oui, mais oui.
+# And we just run m4 on it.  Et voilà, Monsieur !  Mais oui, mais oui.
 #
 # Well, there are a few additional technicalities.  For instance, we
 # rely on 'changequote', 'ifelse' and 'defn', but we don't want to

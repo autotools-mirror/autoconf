@@ -37,12 +37,12 @@ Inc.
 
 # We heavily use m4's diversions both for the initializations and for
 # required macros (see AC_REQUIRE), because in both cases we have to
-# issue high in `configure' something which is discovered late.
+# issue high in 'configure' something which is discovered late.
 #
 # KILL is only used to suppress output.
 #
-# The layers of `configure'.  We let m4 undivert them by itself, when
-# it reaches the end of `configure.ac'.
+# The layers of 'configure'.  We let m4 undivert them by itself, when
+# it reaches the end of 'configure.ac'.
 #
 # - BINSH
 #   #! /bin/sh
@@ -61,7 +61,7 @@ Inc.
 #   initialization code, option handling loop.
 #
 # - HELP_BEGIN
-#   Handling `configure --help'.
+#   Handling 'configure --help'.
 # - HELP_CANON
 #   Help msg for AC_CANONICAL_*
 # - HELP_ENABLE
@@ -100,7 +100,7 @@ Inc.
 # Convert a diversion name into its number.  Otherwise, return
 # DIVERSION-NAME which is supposed to be an actual diversion number.
 # Of course it would be nicer to use m4_case here, instead of zillions
-# of little macros, but it then takes twice longer to run `autoconf'!
+# of little macros, but it then takes twice longer to run 'autoconf'!
 #
 # From M4sugar:
 #    -1. KILL
@@ -189,7 +189,7 @@ AC_DEFUN([AC_REQUIRE_SHELL_FN],
 # won't work in a normal autoconf run.
 AU_DEFUN([AC_FOREACH], [[m4_foreach_w($@)]])
 AC_DEFUN([AC_FOREACH], [m4_foreach_w($@)dnl
-m4_warn([obsolete], [The macro `AC_FOREACH' is obsolete.
+m4_warn([obsolete], [The macro 'AC_FOREACH' is obsolete.
 You should run autoupdate.])])
 
 
@@ -211,7 +211,7 @@ AU_ALIAS([AC_HELP_STRING], [AS_HELP_STRING])
 
 
 # It is suggested that the macros in this section appear before
-# AC_INIT in `configure.ac'.  Nevertheless, this is just stylistic,
+# AC_INIT in 'configure.ac'.  Nevertheless, this is just stylistic,
 # and from the implementation point of view, AC_INIT *must* be expanded
 # beforehand: it puts data in diversions which must appear before the
 # data provided by the macros of this section.
@@ -280,7 +280,7 @@ m4_define_default([AC_PACKAGE_URL],
 # AC_COPYRIGHT(TEXT, [VERSION-DIVERSION = VERSION_USER],
 #              [FILTER = m4_newline])
 # ------------------------------------------------------
-# Emit TEXT, a copyright notice, in the top of `configure' and in
+# Emit TEXT, a copyright notice, in the top of 'configure' and in
 # --version output.  Macros in TEXT are evaluated once.  Process
 # the --version output through FILTER (m4_newline, m4_do, and
 # m4_copyright_condense are common filters).
@@ -309,13 +309,13 @@ m4_define([AC_REVISION],
 
 # AU::AC_PREREQ(VERSION)
 # ----------------------
-# Update this `AC_PREREQ' statement to require the current version of
+# Update this 'AC_PREREQ' statement to require the current version of
 # Autoconf.  But fail if ever this autoupdate is too old.
 #
-# Note that `m4_defn([m4_PACKAGE_VERSION])' below are expanded before
-# calling `AU_DEFUN', i.e., it is hard coded.  Otherwise it would be
+# Note that 'm4_defn([m4_PACKAGE_VERSION])' below are expanded before
+# calling 'AU_DEFUN', i.e., it is hard coded.  Otherwise it would be
 # quite complex for autoupdate to import the value of
-# `m4_PACKAGE_VERSION'.  We could `AU_DEFUN' `m4_PACKAGE_VERSION', but
+# 'm4_PACKAGE_VERSION'.  We could 'AU_DEFUN' 'm4_PACKAGE_VERSION', but
 # this would replace all its occurrences with the current version of
 # Autoconf, which is certainly not what the user intended.
 AU_DEFUN([AC_PREREQ],
@@ -381,7 +381,7 @@ gives unlimited permission to copy, distribute and modify it.],
 
 # File Descriptors
 # ----------------
-# Set up the file descriptors used by `configure'.
+# Set up the file descriptors used by 'configure'.
 # File descriptor usage:
 # 0 standard input (/dev/null)
 # 1 file creation
@@ -402,8 +402,8 @@ AU_ALIAS([AC_FD_MSG], [AS_MESSAGE_FD])
 
 # _AC_INIT_DEFAULTS
 # -----------------
-# Values which defaults can be set from `configure.ac'.
-# `/bin/machine' is used in `glibcbug'.  The others are used in config.*
+# Values which defaults can be set from 'configure.ac'.
+# '/bin/machine' is used in 'glibcbug'.  The others are used in config.*
 m4_define([_AC_INIT_DEFAULTS],
 [m4_divert_push([DEFAULTS])dnl
 
@@ -469,10 +469,10 @@ AC_DEFUN([AC_PREFIX_DEFAULT],
 
 # AC_PREFIX_PROGRAM(PROGRAM)
 # --------------------------
-# Guess the value for the `prefix' variable by looking for
+# Guess the value for the 'prefix' variable by looking for
 # the argument program along PATH and taking its parent.
-# Example: if the argument is `gcc' and we find /usr/local/gnu/bin/gcc,
-# set `prefix' to /usr/local/gnu.
+# Example: if the argument is 'gcc' and we find /usr/local/gnu/bin/gcc,
+# set 'prefix' to /usr/local/gnu.
 # This comes too late to find a site file based on the prefix,
 # and it might use a cached value for the path.
 # No big loss, I think, since most configures don't use this macro anyway.
@@ -519,7 +519,7 @@ m4_divert_pop([PARSE_ARGS])dnl
 
 # _AC_INIT_SRCDIR
 # ---------------
-# Compute `srcdir' based on `$ac_unique_file'.
+# Compute 'srcdir' based on '$ac_unique_file'.
 #
 # (We have to AC_DEFUN it, since we use AC_REQUIRE.)
 #
@@ -543,7 +543,7 @@ if test ! -r "$srcdir/$ac_unique_file"; then
   test "$ac_srcdir_defaulted" = yes && srcdir="$ac_confdir or .."
   AC_MSG_ERROR([cannot find sources ($ac_unique_file) in $srcdir])
 fi
-ac_msg="sources are in $srcdir, but \`cd $srcdir' does not work"
+ac_msg="sources are in $srcdir, but 'cd $srcdir' does not work"
 ac_abs_confdir=`(
 	cd "$srcdir" && test -r "./$ac_unique_file" || AC_MSG_ERROR([$ac_msg])
 	pwd)`
@@ -903,8 +903,8 @@ do
   | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
     x_libraries=$ac_optarg ;;
 
-  -*) AC_MSG_ERROR([unrecognized option: `$ac_option'
-Try `$[0] --help' for more information])
+  -*) AC_MSG_ERROR([unrecognized option: '$ac_option'
+Try '$[0] --help' for more information])
     ;;
 
   *=*)
@@ -912,7 +912,7 @@ Try `$[0] --help' for more information])
     # Reject names that are not valid shell variable names.
     case $ac_envvar in #(
       '' | [[0-9]]* | *[[!_$as_cr_alnum]]* )
-      AC_MSG_ERROR([invalid variable name: `$ac_envvar']) ;;
+      AC_MSG_ERROR([invalid variable name: '$ac_envvar']) ;;
     esac
     eval $ac_envvar=\$ac_optarg
     export $ac_envvar ;;
@@ -962,7 +962,7 @@ do
   AC_MSG_ERROR([expected an absolute directory name for --$ac_var: $ac_val])
 done
 
-# There might be people who depend on the old broken behavior: `$host'
+# There might be people who depend on the old broken behavior: '$host'
 # used to hold the argument of --host etc.
 # FIXME: To remove some day.
 build=$build_alias
@@ -999,10 +999,10 @@ m4_define([_AC_INIT_PARSE_ENABLE],
 
 # _AC_INIT_PARSE_ENABLE2(OPTION-NAME, POSITIVE-NAME)
 # --------------------------------------------------
-# Handle an `--enable' or a `--with' option.
+# Handle an '--enable' or a '--with' option.
 #
-# OPTION-NAME is `enable', `disable', `with', or `without'.
-# POSITIVE-NAME is the corresponding positive variant, i.e. `enable' or `with'.
+# OPTION-NAME is 'enable', 'disable', 'with', or 'without'.
+# POSITIVE-NAME is the corresponding positive variant, i.e. 'enable' or 'with'.
 #
 # Positive variant of the option is recognized by the condition
 #	OPTION-NAME == POSITIVE-NAME .
@@ -1013,7 +1013,7 @@ m4_define([_AC_INIT_PARSE_ENABLE2],
     # Reject names that are not valid shell variable names.
     expr "x$ac_useropt" : "[.*[^-+._$as_cr_alnum]]" >/dev/null &&
       AC_MSG_ERROR([invalid ]m4_if([$2], [with],
-        [package], [feature])[ name: `$ac_useropt'])
+        [package], [feature])[ name: '$ac_useropt'])
     ac_useropt_orig=$ac_useropt
     ac_useropt=`AS_ECHO(["$ac_useropt"]) | sed 's/[[-+.]]/_/g'`
     case $ac_user_opts in
@@ -1029,7 +1029,7 @@ m4_define([_AC_INIT_PARSE_ENABLE2],
 
 # _AC_INIT_HELP
 # -------------
-# Handle the `configure --help' message.
+# Handle the 'configure --help' message.
 m4_define([_AC_INIT_HELP],
 [m4_divert_push([HELP_BEGIN])dnl
 
@@ -1040,7 +1040,7 @@ if test "$ac_init_help" = "long"; then
   # Omit some internal or obsolete options to make the list less imposing.
   # This message is too long to be a string in the A/UX 3.1 sh.
   cat <<_ACEOF
-\`configure' configures m4_ifset([AC_PACKAGE_STRING],
+'configure' configures m4_ifset([AC_PACKAGE_STRING],
 			[AC_PACKAGE_STRING],
 			[this package]) to adapt to many kinds of systems.
 
@@ -1056,11 +1056,11 @@ Configuration:
       --help=short        display options specific to this package
       --help=recursive    display the short help of all the included packages
   -V, --version           display version information and exit
-  -q, --quiet, --silent   do not print \`checking ...' messages
+  -q, --quiet, --silent   do not print 'checking ...' messages
       --cache-file=FILE   cache test results in FILE [disabled]
-  -C, --config-cache      alias for \`--cache-file=config.cache'
+  -C, --config-cache      alias for '--cache-file=config.cache'
   -n, --no-create         do not create output files
-      --srcdir=DIR        find the sources in DIR [configure dir or \`..']
+      --srcdir=DIR        find the sources in DIR [configure dir or '..']
 
 Installation directories:
 ]AS_HELP_STRING([--prefix=PREFIX],
@@ -1068,10 +1068,10 @@ Installation directories:
 AS_HELP_STRING([--exec-prefix=EPREFIX],
   [install architecture-dependent files in EPREFIX [PREFIX]])[
 
-By default, \`make install' will install all the files in
-\`$ac_default_prefix/bin', \`$ac_default_prefix/lib' etc.  You can specify
-an installation prefix other than \`$ac_default_prefix' using \`--prefix',
-for instance \`--prefix=\$HOME'.
+By default, 'make install' will install all the files in
+'$ac_default_prefix/bin', '$ac_default_prefix/lib' etc.  You can specify
+an installation prefix other than '$ac_default_prefix' using '--prefix',
+for instance '--prefix=\$HOME'.
 
 For better control, use the options below.
 
@@ -1177,7 +1177,7 @@ m4_divert_pop([HELP_END])dnl
 
 # _AC_INIT_VERSION
 # ----------------
-# Handle the `configure --version' message.
+# Handle the 'configure --version' message.
 m4_define([_AC_INIT_VERSION],
 [m4_divert_text([VERSION_BEGIN],
 [if $ac_init_version; then
@@ -1244,10 +1244,10 @@ _ACEOF
 
 # _AC_INIT_PREPARE
 # ----------------
-# Called by AC_INIT to build the preamble of the `configure' scripts.
+# Called by AC_INIT to build the preamble of the 'configure' scripts.
 # 1. Trap and clean up various tmp files.
 # 2. Set up the fd and output files
-# 3. Remember the options given to `configure' for `config.status --recheck'.
+# 3. Remember the options given to 'configure' for 'config.status --recheck'.
 # 4. Initiates confdefs.h
 # 5. Loads site and cache files
 m4_define([_AC_INIT_PREPARE],
@@ -1415,12 +1415,12 @@ AC_CONFIG_SRCDIR([$1])], [[AC_INIT]])])[]dnl
 # AC_INIT([PACKAGE, VERSION, [BUG-REPORT], [TARNAME], [URL])
 # ----------------------------------------------------------
 # Include the user macro files, prepare the diversions, and output the
-# preamble of the `configure' script.
+# preamble of the 'configure' script.
 #
 # If BUG-REPORT is omitted, do without (unless the user previously
 # defined the m4 macro AC_PACKAGE_BUGREPORT).  If TARNAME is omitted,
 # use PACKAGE to seed it.  If URL is omitted, use
-# `https://www.gnu.org/software/TARNAME/' if PACKAGE begins with `GNU',
+# 'https://www.gnu.org/software/TARNAME/' if PACKAGE begins with 'GNU',
 # otherwise, do without.
 #
 # Note that the order is important: first initialize, then set the
@@ -1430,7 +1430,7 @@ m4_define([AC_INIT],
 m4_pattern_forbid([^_?A[CHUM]_])
 m4_pattern_forbid([_AC_])
 m4_pattern_forbid([^LIBOBJS$],
-		  [do not use LIBOBJS directly, use AC_LIBOBJ (see section `AC_LIBOBJ vs LIBOBJS'])
+		  [do not use LIBOBJS directly, use AC_LIBOBJ (see section 'AC_LIBOBJ vs LIBOBJS'])
 # Actually reserved by M4sh.
 m4_pattern_allow([^AS_FLAGS$])
 # So that the autoconf-generated scripts will always re-execute
@@ -1579,12 +1579,12 @@ AC_DEFUN([AC_DISABLE_OPTION_CHECKING],
 # AC_ARG_VAR(VARNAME, DOCUMENTATION)
 # ----------------------------------
 # Register VARNAME as a precious variable, and document it in
-# `configure --help' (but only once).
+# 'configure --help' (but only once).
 AC_DEFUN([AC_ARG_VAR],
 [m4_divert_once([HELP_VAR], [[
 Some influential environment variables:]])dnl
 m4_divert_once([HELP_VAR_END], [[
-Use these variables to override the choices made by `configure' or to help
+Use these variables to override the choices made by 'configure' or to help
 it to find libraries and programs with nonstandard names/locations.]])dnl
 m4_expand_once([m4_divert_text([HELP_VAR],
 			       [AS_HELP_STRING([$1], [$2], [              ])])],
@@ -1611,7 +1611,7 @@ m4_define([_AC_ARG_VAR_PRECIOUS],
 # which represents the current run, and a second (ac_cv_env_) which,
 # at the first run, will be saved in the cache.  As an exception to
 # the cache mechanism, its loading will override these variables (non
-# `ac_cv_env_' cache value are only set when unset).
+# 'ac_cv_env_' cache value are only set when unset).
 #
 # In subsequent runs, after having loaded the cache, compare
 # ac_cv_env_foo against ac_env_foo.  See _AC_ARG_VAR_VALIDATE.
@@ -1629,15 +1629,15 @@ done])dnl
 # _AC_ARG_VAR_VALIDATE
 # --------------------
 # The precious variables are saved twice at the beginning of
-# configure.  E.g., PRECIOUS is saved as `ac_env_PRECIOUS_set' and
-# `ac_env_PRECIOUS_value' on the one hand and `ac_cv_env_PRECIOUS_set'
-# and `ac_cv_env_PRECIOUS_value' on the other hand.
+# configure.  E.g., PRECIOUS is saved as 'ac_env_PRECIOUS_set' and
+# 'ac_env_PRECIOUS_value' on the one hand and 'ac_cv_env_PRECIOUS_set'
+# and 'ac_cv_env_PRECIOUS_value' on the other hand.
 #
-# Now the cache has just been loaded, so `ac_cv_env_' represents the
-# content of the cached values, while `ac_env_' represents that of the
+# Now the cache has just been loaded, so 'ac_cv_env_' represents the
+# content of the cached values, while 'ac_env_' represents that of the
 # current values.
 #
-# So we check that `ac_env_' and `ac_cv_env_' are consistent.  If
+# So we check that 'ac_env_' and 'ac_cv_env_' are consistent.  If
 # they aren't, die.
 m4_define([_AC_ARG_VAR_VALIDATE],
 [m4_divert_text([INIT_PREPARE],
@@ -1651,10 +1651,10 @@ for ac_var in $ac_precious_vars; do
   eval ac_new_val=\$ac_env_${ac_var}_value
   case $ac_old_set,$ac_new_set in
     set,)
-      AS_MESSAGE([error: `$ac_var' was set to `$ac_old_val' in the previous run], 2)
+      AS_MESSAGE([error: '$ac_var' was set to '$ac_old_val' in the previous run], 2)
       ac_cache_corrupted=: ;;
     ,set)
-      AS_MESSAGE([error: `$ac_var' was not set in the previous run], 2)
+      AS_MESSAGE([error: '$ac_var' was not set in the previous run], 2)
       ac_cache_corrupted=: ;;
     ,);;
     *)
@@ -1663,14 +1663,14 @@ for ac_var in $ac_precious_vars; do
 	ac_old_val_w=`echo x $ac_old_val`
 	ac_new_val_w=`echo x $ac_new_val`
 	if test "$ac_old_val_w" != "$ac_new_val_w"; then
-	  AS_MESSAGE([error: `$ac_var' has changed since the previous run:], 2)
+	  AS_MESSAGE([error: '$ac_var' has changed since the previous run:], 2)
 	  ac_cache_corrupted=:
 	else
-	  AS_MESSAGE([warning: ignoring whitespace changes in `$ac_var' since the previous run:], 2)
+	  AS_MESSAGE([warning: ignoring whitespace changes in '$ac_var' since the previous run:], 2)
 	  eval $ac_var=\$ac_old_val
 	fi
-	AS_MESSAGE([  former value:  `$ac_old_val'], 2)
-	AS_MESSAGE([  current value: `$ac_new_val'], 2)
+	AS_MESSAGE([  former value:  '$ac_old_val'], 2)
+	AS_MESSAGE([  current value: '$ac_new_val'], 2)
       fi;;
   esac
   # Pass precious variables to config.status.
@@ -1686,9 +1686,9 @@ for ac_var in $ac_precious_vars; do
   fi
 done
 if $ac_cache_corrupted; then
-  AS_MESSAGE([error: in `$ac_pwd':], 2)
+  AS_MESSAGE([error: in '$ac_pwd':], 2)
   AS_MESSAGE([error: changes in the environment can compromise the build], 2)
-  AS_ERROR([run `${MAKE-make} distclean' and/or `rm $cache_file'
+  AS_ERROR([run '${MAKE-make} distclean' and/or 'rm $cache_file'
 	    and start over])
 fi])dnl
 ])# _AC_ARG_VAR_VALIDATE
@@ -1704,8 +1704,8 @@ fi])dnl
 
 # AC_ARG_PROGRAM
 # --------------
-# This macro is expanded only once, to avoid that `foo' ends up being
-# installed as `ggfoo'.
+# This macro is expanded only once, to avoid that 'foo' ends up being
+# installed as 'ggfoo'.
 AC_DEFUN_ONCE([AC_ARG_PROGRAM],
 [dnl Document the options.
 m4_divert_push([HELP_BEGIN])dnl
@@ -1721,7 +1721,7 @@ test "$program_prefix" != NONE &&
 test "$program_suffix" != NONE &&
   program_transform_name="s&\$&$program_suffix&;$program_transform_name"
 # Double any \ or $.
-# By default was `s,x,x', remove it if useless.
+# By default was 's,x,x', remove it if useless.
 [ac_script='s/[\\$]/&&/g;s/;s,x,x,$//']
 program_transform_name=`AS_ECHO(["$program_transform_name"]) | sed "$ac_script"`
 ])# AC_ARG_PROGRAM
@@ -2170,14 +2170,14 @@ m4_define([_AC_CACHE_DUMP],
   (set) 2>&1 |
     case $as_nl`(ac_space=' '; set) 2>&1` in #(
     *${as_nl}ac_space=\ *)
-      # `set' does not quote correctly, so add quotes: double-quote
+      # 'set' does not quote correctly, so add quotes: double-quote
       # substitution turns \\\\ into \\, and sed turns \\ into \.
       sed -n \
 	["s/'/'\\\\''/g;
 	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"]
       ;; #(
     *)
-      # `set' quotes correctly as required by POSIX, so do not add quotes.
+      # 'set' quotes correctly as required by POSIX, so do not add quotes.
       sed -n ["/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"]
       ;;
     esac |
@@ -2201,8 +2201,8 @@ m4_define([AC_CACHE_SAVE],
 # config.status only pays attention to the cache file if you give it
 # the --recheck option to rerun configure.
 #
-# `ac_cv_env_foo' variables (set or unset) will be overridden when
-# loading this file, other *unset* `ac_cv_foo' will be assigned the
+# 'ac_cv_env_foo' variables (set or unset) will be overridden when
+# loading this file, other *unset* 'ac_cv_foo' will be assigned the
 # following values.
 
 _ACEOF
@@ -2244,7 +2244,7 @@ rm -f confcache[]dnl
 
 # AC_CACHE_VAL(CACHE-ID, COMMANDS-TO-SET-IT)
 # ------------------------------------------
-# The name of shell var CACHE-ID must contain `_cv_' in order to get saved.
+# The name of shell var CACHE-ID must contain '_cv_' in order to get saved.
 # Should be dnl'ed.  Try to catch common mistakes.
 m4_defun([AC_CACHE_VAL],
 [AS_LITERAL_WORD_IF([$1], [m4_if(m4_index(m4_quote($1), [_cv_]), [-1],
@@ -2367,7 +2367,7 @@ m4_define([_AC_DEFINE_Q],
 	[m4_bregexp([[$3]], [[^\\]
 ], [-])], [], [],
 	[m4_warn([syntax], [AC_DEFINE]m4_if([$1], [_AC_DEFINE], [],
-  [[_UNQUOTED]])[: `$3' is not a valid preprocessor define value])])]dnl
+  [[_UNQUOTED]])[: '$3' is not a valid preprocessor define value])])]dnl
 [m4_ifval([$4], [AH_TEMPLATE(AC_name, [$4])
 ])_m4_popdef([AC_name])]dnl
 [$1(m4_expand([[@%:@define] $2 ]m4_if([$#], 2, 1,
@@ -2390,12 +2390,12 @@ m4_define([AC_SUBST_TRACE])
 # AC_SUBST(VARIABLE, [VALUE])
 # ---------------------------
 # Create an output variable from a shell VARIABLE.  If VALUE is given
-# assign it to VARIABLE.  Use `""' if you want to set VARIABLE to an
+# assign it to VARIABLE.  Use '""' if you want to set VARIABLE to an
 # empty value, not an empty second argument.
 #
 m4_define([AC_SUBST],
 [AS_IDENTIFIER_IF([$1], [],
-  [m4_fatal([$0: `$1' is not a valid shell variable name])])]dnl
+  [m4_fatal([$0: '$1' is not a valid shell variable name])])]dnl
 [AC_SUBST_TRACE([$1])]dnl
 [m4_pattern_allow([^$1$])]dnl
 [m4_ifvaln([$2], [[$1]=$2])[]]dnl
@@ -2435,18 +2435,18 @@ AC_DEFUN([AC_DIAGNOSE], [m4_warn($@)])
 
 AU_DEFUN([AC_FATAL], [[m4_fatal($@)]])
 AC_DEFUN([AC_FATAL], [m4_fatal($@)dnl
-m4_warn([obsolete], [The macro `$0' is obsolete.
+m4_warn([obsolete], [The macro '$0' is obsolete.
 You should run autoupdate.])])
 
 AU_DEFUN([AC_WARNING],  [[m4_warn([syntax], [$1])]])
 AC_DEFUN([AC_WARNING], [m4_warn([syntax], [$1])dnl
-m4_warn([obsolete], [The macro `$0' is obsolete.
+m4_warn([obsolete], [The macro '$0' is obsolete.
 You should run autoupdate.])])
 
 AU_DEFUN([AC_OBSOLETE], [[m4_warn([obsolete], [$1 is obsolete$2])]],
 [if possible, define this macro using AU_DEFUN.])
 AC_DEFUN([AC_OBSOLETE], [m4_warn([obsolete], [$1 is obsolete$2])dnl
-m4_warn([obsolete], [The macro `$0' is obsolete.
+m4_warn([obsolete], [The macro '$0' is obsolete.
 You should run autoupdate.])])
 
 
@@ -2481,9 +2481,9 @@ m4_copy([AS_WARN],    [AC_MSG_WARN])
 m4_copy([AS_MESSAGE], [AC_MSG_NOTICE])
 m4_copy([AS_ERROR],   [AC_MSG_ERROR])
 m4_define([AC_MSG_FAILURE],
-[{ AS_MESSAGE([error: in `$ac_pwd':], 2)
+[{ AS_MESSAGE([error: in '$ac_pwd':], 2)
 AC_MSG_ERROR([$1
-See `config.log' for more details], [$2]); }])
+See 'config.log' for more details], [$2]); }])
 
 
 # _AC_MSG_LOG_CONFTEST
@@ -2588,11 +2588,11 @@ dnl than expanding it.  This is a hack, but it is safer, while also
 dnl typically expanding simple substrings like '$CC', which is what we want.
 dnl
 dnl Much of this macro body is quoted, to work around misuses like
-dnl `AC_CHECK_FUNC(sigblock, , AC_CHECK_LIB(bsd, sigblock))',
+dnl 'AC_CHECK_FUNC(sigblock, , AC_CHECK_LIB(bsd, sigblock))',
 dnl which underquotes the 3rd arg and would misbehave if we didn't quote here.
 dnl The "(($ac_try" instead of $ac_try avoids problems with even-worse
 dnl underquoting misuses, such as
-dnl `AC_CHECK_FUNC(foo, , AC_CHECK_LIB(a, foo, , AC_CHECK_LIB(b, foo)))'.
+dnl 'AC_CHECK_FUNC(foo, , AC_CHECK_LIB(a, foo, , AC_CHECK_LIB(b, foo)))'.
 dnl We normally wouldn't bother with this kind of workaround for invalid code
 dnl but this change was put in just before Autoconf 2.60 and we wanted to
 dnl minimize the integration hassle.
@@ -3030,7 +3030,7 @@ AS_VAR_POPDEF([ac_File])dnl
 # to AC_CHECK_FILE based on FILE.
 m4_define([_AC_CHECK_FILES],
 [[$1], [AC_DEFINE_UNQUOTED(AS_TR_CPP([HAVE_$1]), [1],
-  [Define to 1 if you have the file `$1'.])]])
+  [Define to 1 if you have the file '$1'.])]])
 
 
 # AC_CHECK_FILES(FILE..., [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
@@ -3104,7 +3104,7 @@ extern void ac_decl (int, char *);
 # Shell function body for AC_CHECK_DECL.
 # If we are compiling C, just refer to the name of the function, so we
 # don't implicitly declare it.  However, if we are compiling C++,
-# `(void) function_name;' won't work when function_name has more than one
+# '(void) function_name;' won't work when function_name has more than one
 # overload, we need to fabricate a function call.  Fortunately, there is
 # no such thing as an implicit function declaration in C++.
 # If the function is defined as a macro, we cannot verify its signature
@@ -3168,7 +3168,7 @@ m4_define([_AC_CHECK_DECLS],
 [AC_CHECK_DECL([$1], [ac_have_decl=1], [ac_have_decl=0], [$4])]dnl
 [AC_DEFINE_UNQUOTED(AS_TR_CPP(m4_bpatsubst(HAVE_DECL_[$1],[ *(.*])),
   [$ac_have_decl],
-  [Define to 1 if you have the declaration of `$1',
+  [Define to 1 if you have the declaration of '$1',
    and to 0 if you don't.])]dnl
 [m4_ifvaln([$2$3], [AS_IF([test $ac_have_decl = 1], [$2], [$3])])])
 
@@ -3212,7 +3212,7 @@ AC_DEFUN_ONCE([AC_CONFIG_LIBOBJ_DIR],
 
 # AC_LIBSOURCE(FILE-NAME)
 # -----------------------
-# Announce we might need the file `FILE-NAME'.
+# Announce we might need the file 'FILE-NAME'.
 m4_define([AC_LIBSOURCE], [])
 
 
@@ -3225,7 +3225,7 @@ AC_DEFUN([AC_LIBSOURCES],
 
 # _AC_LIBOBJ(FILE-NAME-NOEXT, ACTION-IF-INDIR)
 # --------------------------------------------
-# We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
+# We need 'FILE-NAME-NOEXT.o', save this into 'LIBOBJS'.
 m4_define([_AC_LIBOBJ],
 [case " $LIB@&t@OBJS " in
   *" $1.$ac_objext "* ) ;;
@@ -3236,7 +3236,7 @@ esac
 
 # AC_LIBOBJ(FILE-NAME-NOEXT)
 # --------------------------
-# We need `FILE-NAME-NOEXT.o', save this into `LIBOBJS'.
+# We need 'FILE-NAME-NOEXT.o', save this into 'LIBOBJS'.
 AC_DEFUN([AC_LIBOBJ],
 [_AC_LIBOBJ([$1])]dnl
 [AS_LITERAL_WORD_IF([$1], [AC_LIBSOURCE([$1.c])],
@@ -3352,7 +3352,7 @@ m4_define([_AC_COMPUTE_INT_BODY],
 # ----------------------------------------------------------
 # Store into the shell variable VARIABLE the value of the integer C expression
 # EXPRESSION.  The value should fit in an initializer in a C variable of type
-# `signed long'.  If no PROLOGUE are specified, the default includes are used.
+# 'signed long'.  If no PROLOGUE are specified, the default includes are used.
 # IF-FAILS is evaluated if the value cannot be found (which includes the
 # case of cross-compilation, if EXPRESSION is not computable at compile-time.
 AC_DEFUN([AC_COMPUTE_INT],

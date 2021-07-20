@@ -45,11 +45,11 @@ then add the following to .git/config or ~/.gitconfig:
 	funcname = ^@node[\t ][\t ]*\\([^,][^,]*\\)
 
 Only building the initial full source tree will be a bit painful.
-Later, a plain `git pull && make' should be sufficient.
+Later, a plain 'git pull && make' should be sufficient.
 
 If you want to test Autoconf on a machine without git, it may be
 easier to first bootstrap Autoconf on a different machine with git,
-run `make dist', and copy the tarball to the machine under test.  It
+run 'make dist', and copy the tarball to the machine under test.  It
 should always be possible to create a self-contained tarball which
 does not rely on the bootstrap-only tools.
 

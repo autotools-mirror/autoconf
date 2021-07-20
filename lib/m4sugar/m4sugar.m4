@@ -64,9 +64,9 @@ m4_undefine([undefine])
 # 2. m4_define([to], [from($@)])
 # Well, obviously 1 is more expensive in space.  Maybe 2 is more expensive
 # in time, but because of the space cost of 1, it's not that obvious.
-# Nevertheless, one huge difference is the handling of `$0'.  If `from'
-# uses `$0', then with 1, `to''s `$0' is `to', while it is `from' in 2.
-# The user would certainly prefer to see `to'.
+# Nevertheless, one huge difference is the handling of '$0'.  If 'from'
+# uses '$0', then with 1, 'to''s '$0' is 'to', while it is 'from' in 2.
+# The user would certainly prefer to see 'to'.
 #
 # This definition is in effect during m4sugar initialization, when
 # there are no pushdef stacks; later on, we redefine it to something
@@ -97,7 +97,7 @@ m4_define([m4_copy_unm4],
 
 
 # Some m4 internals have names colliding with tokens we might use.
-# Rename them a` la `m4 --prefix-builtins'.  Conditionals first, since
+# Rename them à la 'm4 --prefix-builtins'.  Conditionals first, since
 # some subsequent renames are conditional.
 m4_rename_m4([ifdef])
 m4_rename([ifelse], [m4_if])
@@ -194,7 +194,7 @@ m4_define([m4_location],
 
 # m4_errprintn(MSG)
 # -----------------
-# Same as `errprint', but with the missing end of line.
+# Same as 'errprint', but with the missing end of line.
 m4_define([m4_errprintn],
 [m4_errprint([$1
 ])])
@@ -273,7 +273,7 @@ m4_ifdef([_m4_expansion_stack], [m4_expansion_stack]))])
 # been included.
 m4_define([m4_include_unique],
 [m4_ifdef([m4_include($1)],
-	  [m4_warn([syntax], [file `$1' included several times])])dnl
+	  [m4_warn([syntax], [file '$1' included several times])])dnl
 m4_define([m4_include($1)])])
 
 
@@ -298,16 +298,16 @@ m4_builtin([sinclude], [$1])])
 ## 5. Additional branching constructs.  ##
 ## ------------------------------------ ##
 
-# Both `m4_ifval' and `m4_ifset' tests against the empty string.  The
-# difference is that `m4_ifset' is specialized on macros.
+# Both 'm4_ifval' and 'm4_ifset' tests against the empty string.  The
+# difference is that 'm4_ifset' is specialized on macros.
 #
 # In case of arguments of macros, eg. $1, it makes little difference.
-# In the case of a macro `FOO', you don't want to check `m4_ifval(FOO,
-# TRUE)', because if `FOO' expands with commas, there is a shifting of
-# the arguments.  So you want to run `m4_ifval([FOO])', but then you just
-# compare the *string* `FOO' against `', which, of course fails.
+# In the case of a macro 'FOO', you don't want to check 'm4_ifval(FOO,
+# TRUE)', because if 'FOO' expands with commas, there is a shifting of
+# the arguments.  So you want to run 'm4_ifval([FOO])', but then you just
+# compare the *string* 'FOO' against '', which, of course fails.
 #
-# So you want the variation `m4_ifset' that expects a macro name as $1.
+# So you want the variation 'm4_ifset' that expects a macro name as $1.
 # If this macro is both defined and defined to a non empty value, then
 # it runs TRUE, etc.
 
@@ -355,7 +355,7 @@ m4_define([m4_n],
 
 # m4_ifvaln(COND, [IF-TRUE], [IF-FALSE])
 # --------------------------------------
-# Same as `m4_ifval', but add an extra newline to IF-TRUE or IF-FALSE
+# Same as 'm4_ifval', but add an extra newline to IF-TRUE or IF-FALSE
 # unless that argument is empty.
 m4_define([m4_ifvaln],
 [m4_if([$1],
@@ -530,7 +530,7 @@ m4_define([_m4_cond],
 # All the values are optional, and the macro is robust to active symbols
 # properly quoted.
 #
-# I would have liked to name this macro `m4_bpatsubst', unfortunately,
+# I would have liked to name this macro 'm4_bpatsubst', unfortunately,
 # due to quotation problems, I need to double quote $1 below, therefore
 # the anchors are broken :(  I can't let users be trapped by that.
 #
@@ -675,7 +675,7 @@ m4_define([_m4_dumpdef],
 
 # m4_dumpdefs(NAME...)
 # --------------------
-# Similar to `m4_dumpdef(NAME)', but if NAME was m4_pushdef'ed, display its
+# Similar to 'm4_dumpdef(NAME)', but if NAME was m4_pushdef'ed, display its
 # value stack (most recent displayed first).  Also, this version silently
 # ignores undefined macros, rather than erroring out.
 #
@@ -723,7 +723,7 @@ m4_define([m4_popdef],
 # result is strictly equivalent to
 #   m4_if([$1], 1, [m4_shift(,m4_shift(m4_shift($@)))],
 #         [_m4_shiftn(m4_decr([$1]), m4_shift(m4_shift($@)))])
-# but with the final `m4_shift(m4_shift($@)))' shared between the two
+# but with the final 'm4_shift(m4_shift($@)))' shared between the two
 # paths.  The first leg uses a no-op m4_shift(,$@) to balance out the ().
 #
 # Please keep foreach.m4 in sync with any adjustments made here.
@@ -893,8 +893,8 @@ m4_define([m4_echo], [$@])
 # Unfortunately, due to limitations in m4, ARG must expand to
 # something with balanced quotes (use quadrigraphs to get around
 # this), and should not contain the unlikely delimiters -=<{( or
-# )}>=-.  It is possible to have unbalanced quoted `(' or `)', as well
-# as unbalanced unquoted `)'.  m4_expand can handle unterminated
+# )}>=-.  It is possible to have unbalanced quoted '(' or ')', as well
+# as unbalanced unquoted ')'.  m4_expand can handle unterminated
 # comments or dnl on the final line, at the expense of speed; it also
 # aids in detecting attempts to incorrectly change the current
 # diversion inside ARG.  Meanwhile, _m4_expand is faster but must be
@@ -908,10 +908,10 @@ m4_define([m4_echo], [$@])
 # the unquoted () that were added prior to the changequote.
 #
 # Thanks to shell case statements, too many people are prone to pass
-# underquoted `)', so we try to detect that by passing a marker as a
+# underquoted ')', so we try to detect that by passing a marker as a
 # fourth argument; if the marker is not present, then we assume that
-# we encountered an early `)', and re-expand the first argument, but
-# this time with one more `(' in the second argument and in the
+# we encountered an early ')', and re-expand the first argument, but
+# this time with one more '(' in the second argument and in the
 # open-quote delimiter.  We must also ignore the slop from the
 # previous try.  The final macro is thus half line-noise, half art.
 m4_define([m4_expand],
@@ -965,10 +965,10 @@ m4_define([m4_noquote],
 # Return ARGS as a single argument.  Any whitespace after unquoted commas
 # is stripped.  There is always output, even when there were no arguments.
 #
-# It is important to realize the difference between `m4_quote(exp)' and
-# `[exp]': in the first case you obtain the quoted *result* of the
+# It is important to realize the difference between 'm4_quote(exp)' and
+# '[exp]': in the first case you obtain the quoted *result* of the
 # expansion of EXP, while in the latter you just obtain the string
-# `exp'.
+# 'exp'.
 m4_define([m4_quote],  [[$*]])
 
 
@@ -1042,7 +1042,7 @@ m4_define([_m4_for],
 		 [$0(m4_eval([$1 + $3]), [$2], [$3], [$4], [$5])])])
 
 
-# Implementing `foreach' loops in m4 is much more tricky than it may
+# Implementing 'foreach' loops in m4 is much more tricky than it may
 # seem.  For example, the old M4 1.4.4 manual had an incorrect example,
 # which looked like this (when translated to m4sugar):
 #
@@ -1106,7 +1106,7 @@ m4_define([_m4_for],
 # |    [m4_define([$1], [_arg1($2)])$3[]_foreach([$1], [m4_shift($2)], [$3])])])
 #
 #
-# Now, just replace the `$2' with `m4_quote($2)' in the outer `m4_if'
+# Now, just replace the '$2' with 'm4_quote($2)' in the outer 'm4_if'
 # to improve robustness, and you come up with a nice implementation
 # that doesn't require extra parentheses in the user's LIST.
 #
@@ -1128,7 +1128,7 @@ m4_define([_m4_for],
 # --------------------------------------
 #
 # Expand EXPRESSION assigning each value of the LIST to VARIABLE.
-# LIST should have the form `item_1, item_2, ..., item_n', i.e. the
+# LIST should have the form 'item_1, item_2, ..., item_n', i.e. the
 # whole list must *quoted*.  Quote members too if you don't want them
 # to be expanded.
 #
@@ -1472,7 +1472,7 @@ m4_define([m4_divert_once],
 # DIVERSION-NAME is unsafe, because this macro is being expanded
 # during argument collection of m4_expand.
 m4_define([_m4_divert_unsafe],
-[m4_fatal([$0: cannot change diversion to `$1' inside m4_expand])])
+[m4_fatal([$0: cannot change diversion to '$1' inside m4_expand])])
 
 
 # m4_undivert(DIVERSION-NAME...)
@@ -1490,8 +1490,8 @@ m4_define([m4_undivert],
 ## 10. Defining macros with bells and whistles.  ##
 ## --------------------------------------------- ##
 
-# `m4_defun' is basically `m4_define' but it equips the macro with the
-# needed machinery for `m4_require'.  A macro must be m4_defun'd if
+# 'm4_defun' is basically 'm4_define' but it equips the macro with the
+# needed machinery for 'm4_require'.  A macro must be m4_defun'd if
 # either it is m4_require'd, or it m4_require's.
 #
 # Two things deserve attention and are detailed below:
@@ -1671,7 +1671,7 @@ m4_define([m4_undivert],
 #
 # We have not tried to simulate the old behavior (better yet, we
 # diagnose it), because it is too dangerous: a macro m4_require'd from
-# the top level is expanded before the body of `configure', i.e., before
+# the top level is expanded before the body of 'configure', i.e., before
 # any other test was run.  I let you imagine the result of requiring
 # AC_STDC_HEADERS for instance, before AC_PROG_CC was actually run....
 #
@@ -1763,7 +1763,7 @@ m4_define([m4_undivert],
 # which must be collected in a new diversion.  While expanding TEST2,
 # we encounter a requirement for TEST1, but since it has already been
 # expanded, the Axel Thimm algorithm states that we can treat it as a
-# no-op.  But that would lead to an end result of `2 3 1', meaning
+# no-op.  But that would lead to an end result of '2 3 1', meaning
 # that we have once again output a macro (TEST2) prior to its
 # requirements (TEST1).
 #
@@ -1809,7 +1809,7 @@ m4_define([m4_undivert],
 # set is checked.  If a macro is in the set, then it has been provided
 # before it was required, and we satisfy dependencies by expanding the
 # macro as if it had never been provided; in the example given above,
-# this means we now output `1 2 3 1'.  Meanwhile, a warning is issued
+# this means we now output '1 2 3 1'.  Meanwhile, a warning is issued
 # to inform the user that her macros trigger the bug in older autoconf
 # versions, and that her output file now contains redundant contents
 # (and possibly new problems, if the repeated macro was not
@@ -1822,7 +1822,7 @@ m4_define([m4_undivert],
 #
 # When M4 expansion goes wrong it is often extremely hard to find the
 # path amongst macros that drove to the failure.  What is needed is
-# the stack of macro `calls'. One could imagine that GNU M4 would
+# the stack of macro 'calls'. One could imagine that GNU M4 would
 # maintain a stack of macro expansions, unfortunately it doesn't, so
 # we do it by hand.  This is of course extremely costly, but the help
 # this stack provides is worth it.  Nevertheless to limit the
@@ -2046,18 +2046,18 @@ m4_define([m4_before],
 # - BODY-TO-EXPAND == m4_indir([NAME-TO-CHECK])
 #   In the case of macros with irregular names.  For instance:
 #     m4_require([AC_LANG_COMPILER(C)], [indir([AC_LANG_COMPILER(C)])])
-#   which means `if the macro named `AC_LANG_COMPILER(C)' (the parens are
+#   which means 'if the macro named 'AC_LANG_COMPILER(C)' (the parens are
 #   part of the name, it is not an argument) has not been run, then
 #   call it.'
 #   Had you used
 #     m4_require([AC_LANG_COMPILER(C)], [AC_LANG_COMPILER(C)])
-#   then m4_require would have tried to expand `AC_LANG_COMPILER(C)', i.e.,
-#   call the macro `AC_LANG_COMPILER' with `C' as argument.
+#   then m4_require would have tried to expand 'AC_LANG_COMPILER(C)', i.e.,
+#   call the macro 'AC_LANG_COMPILER' with 'C' as argument.
 #
-#   You could argue that `AC_LANG_COMPILER', when it receives an argument
-#   such as `C' should dispatch the call to `AC_LANG_COMPILER(C)'.  But this
-#   `extension' prevents `AC_LANG_COMPILER' from having actual arguments that
-#   it passes to `AC_LANG_COMPILER(C)'.
+#   You could argue that 'AC_LANG_COMPILER', when it receives an argument
+#   such as 'C' should dispatch the call to 'AC_LANG_COMPILER(C)'.  But this
+#   'extension' prevents 'AC_LANG_COMPILER' from having actual arguments that
+#   it passes to 'AC_LANG_COMPILER(C)'.
 #
 # This is called frequently, so minimize the number of macro invocations
 # by avoiding dnl and other overhead on the common path.
@@ -2106,7 +2106,7 @@ m4_provide_if([$1], [m4_set_remove([_m4_provide], [$1])],
 m4_define([_m4_require_check],
 [m4_if(_m4_defn([_m4_diverting]), [$2], [m4_ignore],
        m4_ifdef([_m4_diverting([$2])], [-]), [-], [m4_warn([syntax],
-   [$3: `$1' was expanded before it was required
+   [$3: '$1' was expanded before it was required
 https://www.gnu.org/software/autoconf/manual/autoconf.html#Expanded-Before-Required])_m4_require_call],
        [m4_ignore])])
 
@@ -2190,7 +2190,7 @@ m4_defn([m4_cr_digits])dnl
 
 # m4_cr_all
 # ---------
-# The character range representing everything, with `-' as the last
+# The character range representing everything, with '-' as the last
 # character, since it is special to m4_translit.  Use with care, because
 # it contains characters special to M4 (fortunately, both ASCII and EBCDIC
 # have [] in order, so m4_defn([m4_cr_all]) remains a valid string).  It
@@ -2204,7 +2204,7 @@ m4_defn([m4_cr_digits])dnl
 #
 # It is mainly useful in generating inverted character range maps, for use
 # in places where m4_translit is faster than an equivalent m4_bpatsubst;
-# the regex `[^a-z]' is equivalent to:
+# the regex '[^a-z]' is equivalent to:
 #  m4_translit(m4_dquote(m4_defn([m4_cr_all])), [a-z])
 m4_define([m4_cr_all],
 m4_translit(m4_dquote(m4_format(m4_dquote(m4_for(
@@ -2256,7 +2256,7 @@ m4_define([m4_re_escape],
 
 # m4_re_string
 # ------------
-# Regexp for `[a-zA-Z_0-9]*'
+# Regexp for '[a-zA-Z_0-9]*'
 # m4_dquote provides literal [] for the character class.
 m4_define([m4_re_string],
 m4_dquote(m4_defn([m4_cr_symbols2]))dnl
@@ -2266,7 +2266,7 @@ m4_dquote(m4_defn([m4_cr_symbols2]))dnl
 
 # m4_re_word
 # ----------
-# Regexp for `[a-zA-Z_][a-zA-Z_0-9]*'
+# Regexp for '[a-zA-Z_][a-zA-Z_0-9]*'
 m4_define([m4_re_word],
 m4_dquote(m4_defn([m4_cr_symbols1]))dnl
 m4_defn([m4_re_string])dnl
@@ -2311,7 +2311,7 @@ m4_define([m4_toupper],
 #   m4_split([active active ])end
 #   => [active], [active], []end
 #
-# Optimize on regex of ` ' (space), since m4_foreach_w already guarantees
+# Optimize on regex of ' ' (space), since m4_foreach_w already guarantees
 # that the list contains single space separators, and a common case is
 # splitting a single-element list.  This macro is called frequently,
 # so avoid unnecessary dnl inside the definition.
@@ -2381,12 +2381,12 @@ m4_define([m4_flatten],
 #    => active activeend
 #
 # First, notice that we guarantee trailing space.  Why?  Because regular
-# expressions are greedy, and `.* ?' would always group the space into the
-# .* portion.  The algorithm is simpler by avoiding `?' at the end.  The
-# algorithm correctly strips everything if STRING is just ` '.
+# expressions are greedy, and '.* ?' would always group the space into the
+# .* portion.  The algorithm is simpler by avoiding '?' at the end.  The
+# algorithm correctly strips everything if STRING is just ' '.
 #
 # Then notice the second pattern: it is in charge of removing the
-# leading/trailing spaces.  Why not just `[^ ]'?  Because they are
+# leading/trailing spaces.  Why not just '[^ ]'?  Because they are
 # applied to over-quoted strings, i.e. more or less [STRING], due
 # to the limitations of m4_bpatsubsts.  So the leading space in STRING
 # is the *second* character; equally for the trailing space.
@@ -2420,7 +2420,7 @@ m4_define([m4_normalize],
 # This is used in several Autoconf macros that take a
 # whitespace-separated list of symbols as an argument.  Ideally that
 # list would not be expanded before use, but several packages used
-# `dnl' to put comments inside those lists, so they must be expanded
+# 'dnl' to put comments inside those lists, so they must be expanded
 # for compatibility's sake.
 m4_define([m4_validate_w],
 [_m4_validate_w(m4_normalize([$1]), m4_normalize(m4_expand([$1])))])
@@ -2430,7 +2430,7 @@ m4_define([_m4_validate_w],
   [m4_warn([obsolete], [whitespace-separated list contains macros;
 in a future version of Autoconf they will not be expanded]dnl
 m4_if(m4_bregexp([$1], [\bdn[l]\b]), -1, [], [
-note: `dn@&t@l' is a macro]))])dnl
+note: 'dn@&t@l' is a macro]))])dnl
 [$2]])
 
 
@@ -2446,7 +2446,7 @@ note: `dn@&t@l' is a macro]))])dnl
 # and outputs just that element; while _m4_join looks for all non-empty
 # elements, and outputs them following a separator.  The final trick to
 # note is that we decide between recursing with $0 or _$0 based on the
-# nested m4_if ending with `_'.
+# nested m4_if ending with '_'.
 #
 # Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_join],
@@ -2490,10 +2490,10 @@ m4_define([m4_combine],
 
 # m4_append(MACRO-NAME, STRING, [SEPARATOR])
 # ------------------------------------------
-# Redefine MACRO-NAME to hold its former content plus `SEPARATOR`'STRING'
+# Redefine MACRO-NAME to hold its former content plus 'SEPARATOR''STRING'
 # at the end.  It is valid to use this macro with MACRO-NAME undefined,
 # in which case no SEPARATOR is added.  Be aware that the criterion is
-# `not being defined', and not `not being empty'.
+# 'not being defined', and not 'not being empty'.
 #
 # Note that neither STRING nor SEPARATOR are expanded here; rather, when
 # you expand MACRO-NAME, they will be expanded at that point in time.
@@ -2549,7 +2549,7 @@ m4_define([m4_append],
 
 # m4_append_uniq(MACRO-NAME, STRING, [SEPARATOR], [IF-UNIQ], [IF-DUP])
 # --------------------------------------------------------------------
-# Like `m4_append', but append only if not yet present.  Additionally,
+# Like 'm4_append', but append only if not yet present.  Additionally,
 # expand IF-UNIQ if STRING was appended, or IF-DUP if STRING was already
 # present.  Also, warn if SEPARATOR is not empty and occurs within STRING,
 # as the algorithm no longer guarantees uniqueness.
@@ -2560,7 +2560,7 @@ m4_define([m4_append],
 m4_define([m4_append_uniq],
 [m4_ifval([$3], [m4_if(m4_index([$2], [$3]), [-1], [],
 		       [m4_warn([syntax],
-				[$0: `$2' contains `$3'])])])_$0($@)])
+				[$0: '$2' contains '$3'])])])_$0($@)])
 m4_define([_m4_append_uniq],
 [m4_ifdef([$1],
 	  [m4_if(m4_index([$3]_m4_defn([$1])[$3], [$3$2$3]), [-1],
@@ -2648,7 +2648,7 @@ m4_define([_m4_escape],
 # This macro does not leave a trailing space behind the last word of a line,
 # which complicates it a bit.  The algorithm is otherwise stupid and simple:
 # all the words are preceded by m4_Separator which is defined to empty for
-# the first word, and then ` ' (single space) for all the others.
+# the first word, and then ' ' (single space) for all the others.
 #
 # The algorithm uses a helper that uses $2 through $4 directly, rather than
 # using local variables, to avoid m4_defn overhead, or expansion swallowing
@@ -2690,7 +2690,7 @@ m4_define([_m4_text_wrap_word],
 [$2]],
       [m4_Separator[]])[$1]])
 
-# m4_text_box(MESSAGE, [FRAME-CHARACTER = `-'])
+# m4_text_box(MESSAGE, [FRAME-CHARACTER = '-'])
 # ---------------------------------------------
 # Turn MESSAGE into:
 #  ## ------- ##
@@ -2722,7 +2722,7 @@ m4_define([m4_text_box],
 #
 # Avoid bpatsubsts for the common case of no quadrigraphs.  Cache
 # results, as configure scripts tend to ask about lengths of common
-# strings like `/*' and `*/' rather frequently.  Minimize the number
+# strings like '/*' and '*/' rather frequently.  Minimize the number
 # of times that $1 occurs in m4_qlen, so there is less text to parse
 # on a cache hit.
 m4_define([m4_qlen],
@@ -2866,7 +2866,7 @@ m4_define([m4_sign],
 #
 # This macro expects reasonable version numbers, but can handle double
 # letters and does not expand any macros.  Original version strings can
-# use both `.' and `-' separators.
+# use both '.' and '-' separators.
 #
 # Inline constant expansions, to avoid m4_defn overhead.
 # _m4_version_unletter is the real workhorse used by m4_version_compare,
@@ -3290,7 +3290,7 @@ m4_divert_push([KILL])
 # -------
 # Initialize the m4sugar language.
 m4_define([m4_init],
-[# All the M4sugar macros start with `m4_', except `dnl' kept as is
+[# All the M4sugar macros start with 'm4_', except 'dnl' kept as is
 # for sake of simplicity.
 m4_pattern_forbid([^_?m4_])
 m4_pattern_forbid([^dnl$])

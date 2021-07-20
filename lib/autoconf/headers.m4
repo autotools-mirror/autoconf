@@ -49,7 +49,7 @@
 # This used to check for headers using the preprocessor only, but we
 # have now switched to running a full compilation, so that we learn
 # about the usability of a header instead of its mere presence.
-# The old behavior is still available by specifying `-' as the
+# The old behavior is still available by specifying '-' as the
 # INCLUDES, but this triggers a deprecation warning.
 #
 # The m4_indir allows for fewer expansions of $@.
@@ -115,7 +115,7 @@ m4_define([_AC_CHECK_HEADER_PREPROC_BODY],
 AC_DEFUN([_AC_CHECK_HEADER_PREPROC],
 [m4_warn([obsolete], [Checking for headers with the preprocessor is
 deprecated. Specify prerequisite code to AC_CHECK_HEADER
-instead of using fourth argument `-'. (Many headers need
+instead of using fourth argument '-'. (Many headers need
 no prerequisites. If you truly need to test whether
 something passes the preprocessor but not the compiler,
 use AC_PREPROC_IFELSE.)])]dnl
@@ -142,12 +142,12 @@ AS_VAR_POPDEF([ac_Header])])# _AC_CHECK_HEADER_PREPROC
 #   AU_DEFUN([_AC_CHECK_HEADER_OLD],
 #     [AC_CHECK_HEADER([$1], [$2], [$3], [-])])
 AC_DEFUN([_AC_CHECK_HEADER_OLD],
-[m4_warn([obsolete], [The macro `$0' is obsolete.
+[m4_warn([obsolete], [The macro '$0' is obsolete.
 You should use AC_CHECK_HEADER with a fourth argument.])]dnl
 [_AC_CHECK_HEADER_PREPROC($@)])
 
 AC_DEFUN([_AC_CHECK_HEADER_NEW],
-[m4_warn([obsolete], [The macro `$0' is obsolete.
+[m4_warn([obsolete], [The macro '$0' is obsolete.
 You should use AC_CHECK_HEADER with a fourth argument.])]dnl
 [_AC_CHECK_HEADER_COMPILE($@)])
 
@@ -213,7 +213,7 @@ m4_define([_AC_CHECK_HEADERS_ONE_C],
 # ""), and perform ACTION-IF-FOUND or ACTION-IF-NOT-FOUND for each
 # header.  INCLUDES is as for AC_CHECK_HEADER.  Additionally, make the
 # preprocessor definition HAVE_HEADER_FILE available for each found
-# header.  Either ACTION may include `break' to stop the search.
+# header.  Either ACTION may include 'break' to stop the search.
 AC_DEFUN([AC_CHECK_HEADERS],
 [_$0(m4_validate_w([$1]), [$2], [$3], [$4])])
 
@@ -340,7 +340,7 @@ m4_map_args([_AC_CHECK_HEADER_ONCE],
 # If INCLUDES is empty, expand in default includes, otherwise in
 # INCLUDES.
 # In most cases INCLUDES is not double quoted as it should, and if
-# for instance INCLUDES = `#include <stdio.h>' then unless we force
+# for instance INCLUDES = '#include <stdio.h>' then unless we force
 # a newline, the hash will swallow the closing paren etc. etc.
 # The usual failure.
 # Take no risk: for the newline.
@@ -439,7 +439,7 @@ AC_DEFUN_ONCE([AC_HEADER_ASSERT],
 #			  [ACTION-IF-FOUND], [ACTION-IF-NOT_FOUND])
 # -----------------------------------------------------------------
 # Like AC_CHECK_HEADER, except also make sure that HEADER-FILE
-# defines the type `DIR'.  dirent.h on NextStep 3.2 doesn't.
+# defines the type 'DIR'.  dirent.h on NextStep 3.2 doesn't.
 m4_define([_AC_CHECK_HEADER_DIRENT],
 [AS_VAR_PUSHDEF([ac_Header], [ac_cv_header_dirent_$1])dnl
 AC_CACHE_CHECK([for $1 that defines DIR], [ac_Header],
@@ -460,7 +460,7 @@ AS_VAR_POPDEF([ac_Header])dnl
 # Like _AH_CHECK_HEADER, but tuned to a dirent provider.
 m4_define([_AH_CHECK_HEADER_DIRENT],
 [AH_TEMPLATE(AS_TR_CPP([HAVE_$1]),
-  [Define to 1 if you have the <$1> header file, and it defines `DIR'.])])
+  [Define to 1 if you have the <$1> header file, and it defines 'DIR'.])])
 
 
 # AC_HEADER_DIRENT
@@ -501,12 +501,12 @@ AC_DEFUN([AC_HEADER_MAJOR],
 [AC_CHECK_HEADERS_ONCE([sys/types.h])
 AC_CHECK_HEADER([sys/mkdev.h],
 		[AC_DEFINE([MAJOR_IN_MKDEV], [1],
-			   [Define to 1 if `major', `minor', and `makedev' are
+			   [Define to 1 if 'major', 'minor', and 'makedev' are
 			    declared in <mkdev.h>.])])
 if test $ac_cv_header_sys_mkdev_h = no; then
   AC_CHECK_HEADER([sys/sysmacros.h],
 		  [AC_DEFINE([MAJOR_IN_SYSMACROS], [1],
-			     [Define to 1 if `major', `minor', and `makedev'
+			     [Define to 1 if 'major', 'minor', and 'makedev'
 			      are declared in <sysmacros.h>.])])
 fi
 ])# AC_HEADER_MAJOR
@@ -564,7 +564,7 @@ extern char c4[S_ISSOCK (S_IFREG) ? -1 : 1];
 ]])], ac_cv_header_stat_broken=no, ac_cv_header_stat_broken=yes)])
 if test $ac_cv_header_stat_broken = yes; then
   AC_DEFINE(STAT_MACROS_BROKEN, 1,
-	    [Define to 1 if the `S_IS*' macros in <sys/stat.h> do not
+	    [Define to 1 if the 'S_IS*' macros in <sys/stat.h> do not
 	     work properly.])
 fi
 ])# AC_HEADER_STAT
@@ -707,7 +707,7 @@ AU_DEFUN([AC_HEADER_STDC],
 AC_CHECK_INCLUDES_DEFAULT
 AC_PROG_EGREP
 ],
- [The preprocessor macro `STDC_HEADERS' is obsolete.
+ [The preprocessor macro 'STDC_HEADERS' is obsolete.
   Except in unusual embedded environments, you can safely include all
   ISO C90 headers unconditionally.])
 
@@ -802,7 +802,7 @@ if test $ac_cv_sys_tiocgwinsz_in_termios_h != yes; then
   _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
   if test $ac_cv_sys_tiocgwinsz_in_sys_ioctl_h = yes; then
     AC_DEFINE(GWINSZ_IN_SYS_IOCTL,1,
-	      [Define to 1 if `TIOCGWINSZ' requires <sys/ioctl.h>.])
+	      [Define to 1 if 'TIOCGWINSZ' requires <sys/ioctl.h>.])
   fi
 fi
 ])# AC_HEADER_TIOCGWINSZ
@@ -818,7 +818,7 @@ AC_CHECK_INCLUDES_DEFAULT])
 
 # AU::AC_USG
 # ----------
-# Define `USG' if string functions are *not* in strings.h.
+# Define 'USG' if string functions are *not* in strings.h.
 AU_DEFUN([AC_USG],
 [# Obsolete code to be removed.
 AC_MSG_CHECKING([for BSD string and memory functions])
@@ -855,7 +855,7 @@ AU_DEFUN([AC_MEMORY_H],
 AC_CHECK_HEADERS_ONCE([memory.h])
 if test $ac_cv_header_memory_h = yes; then
    AC_DEFINE([NEED_MEMORY_H], [1],
-             [Same as `HAVE_MEMORY_H', don't depend on me.])
+             [Same as 'HAVE_MEMORY_H', don't depend on me.])
 fi
 # End of obsolete code.
 ],
@@ -866,19 +866,19 @@ to check for string.h.])
 
 # AU::AC_DIR_HEADER
 # -----------------
-# Like calling `AC_HEADER_DIRENT' and `AC_FUNC_CLOSEDIR_VOID', but
+# Like calling 'AC_HEADER_DIRENT' and 'AC_FUNC_CLOSEDIR_VOID', but
 # defines a different set of C preprocessor macros to indicate which
 # header file is found.
 AU_DEFUN([AC_DIR_HEADER],
 [AC_HEADER_DIRENT
 AC_FUNC_CLOSEDIR_VOID
 test ac_cv_header_dirent_dirent_h &&
-  AC_DEFINE([DIRENT], 1, [Same as `HAVE_DIRENT_H', don't depend on me.])
+  AC_DEFINE([DIRENT], 1, [Same as 'HAVE_DIRENT_H', don't depend on me.])
 test ac_cv_header_dirent_sys_ndir_h &&
-  AC_DEFINE([SYSNDIR], 1, [Same as `HAVE_SYS_NDIR_H', don't depend on me.])
+  AC_DEFINE([SYSNDIR], 1, [Same as 'HAVE_SYS_NDIR_H', don't depend on me.])
 test ac_cv_header_dirent_sys_dir_h &&
-  AC_DEFINE([SYSDIR], 1, [Same as `HAVE_SYS_DIR_H', don't depend on me.])
+  AC_DEFINE([SYSDIR], 1, [Same as 'HAVE_SYS_DIR_H', don't depend on me.])
 test ac_cv_header_dirent_ndir_h &&
-  AC_DEFINE([NDIR], 1, [Same as `HAVE_NDIR_H', don't depend on me.])],
-[Remove this warning and the four `AC_DEFINE' when you
-adjust your code to use `AC_HEADER_DIRENT'.])
+  AC_DEFINE([NDIR], 1, [Same as 'HAVE_NDIR_H', don't depend on me.])],
+[Remove this warning and the four 'AC_DEFINE' when you
+adjust your code to use 'AC_HEADER_DIRENT'.])

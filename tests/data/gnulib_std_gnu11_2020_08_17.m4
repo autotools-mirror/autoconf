@@ -106,7 +106,7 @@ AC_LANG_POP(C)dnl
 # for (if not specified, a default list is used).  This just gives the
 # user an opportunity to specify an alternative search list for the C++
 # compiler.
-# aCC	HP-UX C++ compiler much better than `CC', so test before.
+# aCC	HP-UX C++ compiler much better than 'CC', so test before.
 # FCC   Fujitsu C++ compiler
 # KCC	KAI C++ compiler
 # RCC	Rational C++
@@ -161,7 +161,7 @@ AC_LANG_POP(C++)dnl
 # _AC_C_STD_TRY(STANDARD, TEST-PROLOGUE, TEST-BODY, OPTION-LIST,
 #		ACTION-IF-AVAILABLE, ACTION-IF-UNAVAILABLE)
 # --------------------------------------------------------------
-# Check whether the C compiler accepts features of STANDARD (e.g `c89', `c99')
+# Check whether the C compiler accepts features of STANDARD (e.g 'c89', 'c99')
 # by trying to compile a program of TEST-PROLOGUE and TEST-BODY.  If this fails,
 # try again with each compiler option in the space-separated OPTION-LIST; if one
 # helps, append it to CC.  If eventually successful, run ACTION-IF-AVAILABLE,
@@ -498,7 +498,7 @@ fi
 #		  ACTION-IF-AVAILABLE, ACTION-IF-UNAVAILABLE)
 # ----------------------------------------------------------------
 # Check whether the C++ compiler accepts features of STANDARD (e.g
-# `cxx98', `cxx11') by trying to compile a program of TEST-PROLOGUE
+# 'cxx98', 'cxx11') by trying to compile a program of TEST-PROLOGUE
 # and TEST-BODY.  If this fails, try again with each compiler option
 # in the space-separated OPTION-LIST; if one helps, append it to CXX.
 # If eventually successful, run ACTION-IF-AVAILABLE, else

@@ -100,7 +100,7 @@ int
 main (void)
 {
 dnl Do *not* indent the following line: there may be CPP directives.
-dnl Don't move the `;' right after for the same reason.
+dnl Don't move the ';' right after for the same reason.
 $2
   ;
   return 0;
@@ -176,8 +176,8 @@ choke me
 # -------------------------------------------------
 # Return a program that is valid if EXPRESSION is nonzero.
 # EXPRESSION must be an integer constant expression.
-# Be sure to use this array to avoid `unused' warnings, which are even
-# errors with `-W error'.
+# Be sure to use this array to avoid 'unused' warnings, which are even
+# errors with '-W error'.
 m4_define([AC_LANG_BOOL_COMPILE_TRY(C)],
 [AC_LANG_PROGRAM([$1], [static int test_array @<:@1 - 2 * !($2)@:>@;
 test_array @<:@0@:>@ = 0;
@@ -187,7 +187,7 @@ return test_array @<:@0@:>@;
 
 # AC_LANG_INT_SAVE(C)(PROLOGUE, EXPRESSION)
 # -----------------------------------------
-# We need `stdio.h' to open a `FILE' and `stdlib.h' for `exit'.
+# We need 'stdio.h' to open a 'FILE' and 'stdlib.h' for 'exit'.
 # But we include them only after the EXPRESSION has been evaluated.
 m4_define([AC_LANG_INT_SAVE(C)],
 [AC_LANG_PROGRAM([$1
@@ -376,7 +376,7 @@ ac_preproc_ok=:
 break])
 
 done
-# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+# Because of 'break', _AC_PREPROC_IFELSE's cleaning code was skipped.
 rm -f conftest.i conftest.err conftest.$ac_ext
 AS_IF([$ac_preproc_ok], [$1], [$2])
 ])# _AC_PROG_PREPROC_WORKS_IFELSE
@@ -688,7 +688,7 @@ AU_DEFUN([ac_cv_prog_gxx],
 # for (if not specified, a default list is used).  This just gives the
 # user an opportunity to specify an alternative search list for the C++
 # compiler.
-# aCC	HP-UX C++ compiler much better than `CC', so test before.
+# aCC	HP-UX C++ compiler much better than 'CC', so test before.
 # FCC   Fujitsu C++ compiler
 # KCC	KAI C++ compiler
 # RCC	Rational C++
@@ -782,8 +782,8 @@ fi[]dnl
 
 # AC_PROG_CXX_C_O
 # ---------------
-# Test if the C++ compiler accepts the options `-c' and `-o'
-# simultaneously, and define `CXX_NO_MINUS_C_MINUS_O' if it does not.
+# Test if the C++ compiler accepts the options '-c' and '-o'
+# simultaneously, and define 'CXX_NO_MINUS_C_MINUS_O' if it does not.
 AC_DEFUN([AC_PROG_CXX_C_O],
 [AC_REQUIRE([AC_PROG_CXX])dnl
 AC_LANG_PUSH([C++])dnl
@@ -791,7 +791,7 @@ AC_CACHE_CHECK([whether $CXX understands -c and -o together],
 	       [ac_cv_prog_cxx_c_o],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # We test twice because some compilers refuse to overwrite an existing
-# `.o' file with `-o', although they will create one.
+# '.o' file with '-o', although they will create one.
 ac_try='$CXX $CXXFLAGS -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
 rm -f conftest2.*
 if _AC_DO_VAR(ac_try) &&
@@ -1112,7 +1112,7 @@ fi[]dnl
 # main with its usual two arguments, to give the test fragments some
 # convenient non-compile-time-constant values to pass around.  In main,
 # there is an int variable 'ok' which will eventually become the return
-# value; use `ok |= ...' to consume the results of operations.
+# value; use 'ok |= ...' to consume the results of operations.
 #
 # Warning: each test program may only use the headers required to
 # exist in the relevant standard's *freestanding* environment, in case
@@ -1576,14 +1576,14 @@ m4_define([_AC_C_C11_OPTIONS], [
 #
 # If we find a way to make the test program compile, set cache variable
 # ac_cv_prog_cc_cEDITION to the options required (if any), and add those
-# options to $CC.  Set shell variable ac_prog_cc_stdc to `cEDITION',
+# options to $CC.  Set shell variable ac_prog_cc_stdc to 'cEDITION',
 # and set shell variable ac_cv_prog_cc_stdc to the options required.
 # (Neither of these variables is AC_SUBSTed.  ac_cv_prog_cc_stdc used
 # to be a cache variable and is preserved with this name for backward
-# compatibility.)  Otherwise, ac_cv_prog_cc_cEDITION is set to `no'
+# compatibility.)  Otherwise, ac_cv_prog_cc_cEDITION is set to 'no'
 # and the other variables are not changed.
 #
-# If ac_prog_cc_stdc is already set to a value other than `no',
+# If ac_prog_cc_stdc is already set to a value other than 'no',
 # the shell code produced by this macro does nothing.  This is so
 # _AC_PROG_CC_STDC_EDITION can use m4_map to iterate through
 # all the editions.
@@ -1702,7 +1702,7 @@ AU_DEFUN([AC_C_CROSS], [])
 # ------------------
 AC_DEFUN([AC_C_CHAR_UNSIGNED],
 [AH_VERBATIM([__CHAR_UNSIGNED__],
-[/* Define to 1 if type `char' is unsigned and your compiler does not
+[/* Define to 1 if type 'char' is unsigned and your compiler does not
    predefine this macro.  */
 #ifndef __CHAR_UNSIGNED__
 # undef __CHAR_UNSIGNED__
@@ -1940,7 +1940,7 @@ $ac_kw foo_t foo (void) {return 0; }
 done
 ])
 AH_VERBATIM([inline],
-[/* Define to `__inline__' or `__inline' if that's what the C compiler
+[/* Define to '__inline__' or '__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
 #undef inline
@@ -2022,7 +2022,7 @@ AC_DEFUN([AC_C_CONST],
 		   [ac_cv_c_const=no])])
 if test $ac_cv_c_const = no; then
   AC_DEFINE(const,,
-	    [Define to empty if `const' does not conform to ANSI C.])
+	    [Define to empty if 'const' does not conform to ANSI C.])
 fi
 ])# AC_C_CONST
 
@@ -2105,8 +2105,8 @@ return !x && !y;])],
 		   [ac_cv_c_volatile=no])])
 if test $ac_cv_c_volatile = no; then
   AC_DEFINE(volatile,,
-	    [Define to empty if the keyword `volatile' does not work.
-	     Warning: valid code using `volatile' can become incorrect
+	    [Define to empty if the keyword 'volatile' does not work.
+	     Warning: valid code using 'volatile' can become incorrect
 	     without.  Disable with care.])
 fi
 ])# AC_C_VOLATILE
@@ -2114,7 +2114,7 @@ fi
 
 # AC_C_STRINGIZE
 # --------------
-# Checks if `#' can be used to glue strings together at the CPP level.
+# Checks if '#' can be used to glue strings together at the CPP level.
 # Defines HAVE_STRINGIZE if positive.
 AC_DEFUN([AC_C_STRINGIZE],
 [AC_CACHE_CHECK([for preprocessor stringizing operator],
@@ -2170,7 +2170,7 @@ AC_DEFUN([AC_C_FLEXIBLE_ARRAY_MEMBER],
   if test $ac_cv_c_flexmember = yes; then
     AC_DEFINE([FLEXIBLE_ARRAY_MEMBER], [],
       [Define to nothing if C supports flexible array members, and to
-       1 if it does not.  That way, with a declaration like `struct s
+       1 if it does not.  That way, with a declaration like 'struct s
        { int n; double d@<:@FLEXIBLE_ARRAY_MEMBER@:>@; };', the struct hack
        can be used with pre-C99 compilers.
        When computing the size of such an object, don't use 'sizeof (struct s)'
@@ -2733,14 +2733,14 @@ m4_define([_AC_CXX_CXX11_OPTIONS], [
 #
 # If we find a way to make the test program compile, set cache variable
 # ac_cv_prog_cxx_cxxEDITION to the options required (if any), and add those
-# options to $CXX.  Set shell variable ac_prog_cxx_stdcxx to `cxxEDITION',
+# options to $CXX.  Set shell variable ac_prog_cxx_stdcxx to 'cxxEDITION',
 # and set shell variable ac_cv_prog_cxx_stdcxx to the options required.
 # (Neither of these variables is AC_SUBSTed.  ac_cv_prog_cxx_stdcxx used
 # to be a cache variable and is preserved with this name for backward
-# compatibility.)  Otherwise, ac_cv_prog_cxx_cxxEDITION is set to `no'
+# compatibility.)  Otherwise, ac_cv_prog_cxx_cxxEDITION is set to 'no'
 # and the other variables are not changed.
 #
-# If ac_prog_cxx_stdcxx is already set to a value other than `no',
+# If ac_prog_cxx_stdcxx is already set to a value other than 'no',
 # the shell code produced by this macro does nothing.  This is so
 # _AC_PROG_CXX_STDCXX_EDITION can use m4_map to iterate through
 # all the editions.

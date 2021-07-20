@@ -70,15 +70,13 @@ MAINTAINERCLEANFILES += $(srcdir)/INSTALL
 
 # Don't leave blank line at end of file.
 OMIT_TRAILING_EMPTY_LINES = '/^$$/H; /^$$/d; x; s/\n//p; s/\n*//; x'
-# Prefer 'plain quotes' over `makeinfo quotes'.
-CONVERT_QUOTES = "s/\`\([^']*\)'/'\1'/g"
 
 $(srcdir)/INSTALL: $(top_srcdir)/doc/install.texi
 	echo @firstparagraphindent insert				\
 	  | cat - $(top_srcdir)/doc/install.texi > tmp.texi
 	$(MAKEINFO) $(custom_MAKEINFOFLAGS) $(MAKEINFOFLAGS)		\
 	     --plaintext tmp.texi					\
-	  | sed -e $(CONVERT_QUOTES) -e $(OMIT_TRAILING_EMPTY_LINES)	\
+	  | sed -e $(OMIT_TRAILING_EMPTY_LINES)				\
 	     > $@-t && mv $@-t $@
 	rm -f tmp.texi
 endif

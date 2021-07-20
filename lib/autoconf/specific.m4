@@ -180,12 +180,12 @@ fi
 # Security: use a temporary directory as the most portable way of
 # creating files in /tmp securely.  Removing them leaves a race
 # condition, set -C is not portably guaranteed to use O_EXCL, so still
-# leaves a race, and not all systems have the `mktemp' utility.  We
+# leaves a race, and not all systems have the 'mktemp' utility.  We
 # still test for existence first in case of broken systems where the
 # mkdir succeeds even when the directory exists.  Broken systems may
 # retain a race, but they probably have other security problems
 # anyway; this should be secure on well-behaved systems.  In any case,
-# use of `mktemp' is probably inappropriate here since it would fail in
+# use of 'mktemp' is probably inappropriate here since it would fail in
 # attempting to create different file names differing after the 14th
 # character on file systems without long file names.
 AC_DEFUN([AC_SYS_LONG_FILE_NAMES],
@@ -226,11 +226,11 @@ fi
 # AC_SYS_RESTARTABLE_SYSCALLS
 # ---------------------------
 # If the system automatically restarts a system call that is
-# interrupted by a signal, define `HAVE_RESTARTABLE_SYSCALLS'.
+# interrupted by a signal, define 'HAVE_RESTARTABLE_SYSCALLS'.
 AC_DEFUN([AC_SYS_RESTARTABLE_SYSCALLS],
 [m4_warn([obsolete],
 [$0: AC_SYS_RESTARTABLE_SYSCALLS is useful only when supporting very
-old systems that lack `sigaction' and `SA_RESTART'.  Don't bother with
+old systems that lack 'sigaction' and 'SA_RESTART'.  Don't bother with
 this macro unless you need to support very old systems like 4.2BSD and
 SVR3.])dnl
 AC_REQUIRE([AC_HEADER_SYS_WAIT])dnl
@@ -564,7 +564,7 @@ AC_EGREP_CPP([yes],
 AC_HEADER_DIRENT[]dnl
 ],
 [You shouldn't need to depend upon XENIX.  Remove the
-`AC_MSG_CHECKING', `AC_EGREP_CPP', and this warning if this part
+'AC_MSG_CHECKING', 'AC_EGREP_CPP', and this warning if this part
 of the test is useless.])
 
 

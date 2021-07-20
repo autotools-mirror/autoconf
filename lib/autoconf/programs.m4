@@ -615,33 +615,33 @@ AC_SUBST(INSTALL_DATA)dnl
 
 # AC_PROG_MKDIR_P
 # ---------------
-# Check whether `mkdir -p' is known to be race-free, and fall back to
+# Check whether 'mkdir -p' is known to be race-free, and fall back to
 # install-sh -d otherwise.
 #
-# Automake 1.8 used `mkdir -m 0755 -p --' to ensure that directories
-# created by `make install' are always world readable, even if the
+# Automake 1.8 used 'mkdir -m 0755 -p --' to ensure that directories
+# created by 'make install' are always world readable, even if the
 # installer happens to have an overly restrictive umask (e.g. 077).
 # This was a mistake.  There are at least two reasons why we must not
-# use `-m 0755':
+# use '-m 0755':
 #   - it causes special bits like SGID to be ignored,
 #   - it may be too restrictive (some setups expect 775 directories).
 #
 # Do not use -m 0755 and let people choose whatever they expect by
 # setting umask.
 #
-# We cannot accept any implementation of `mkdir' that recognizes `-p'.
+# We cannot accept any implementation of 'mkdir' that recognizes '-p'.
 # Some implementations (such as Solaris 8's) are vulnerable to race conditions:
-# if a parallel make tries to run `mkdir -p a/b' and `mkdir -p a/c'
+# if a parallel make tries to run 'mkdir -p a/b' and 'mkdir -p a/c'
 # concurrently, both version can detect that a/ is missing, but only
 # one can create it and the other will error out.  Consequently we
 # restrict ourselves to known race-free implementations.
 #
-# Automake used to define mkdir_p as `mkdir -p .', in order to
+# Automake used to define mkdir_p as 'mkdir -p .', in order to
 # allow $(mkdir_p) to be used without argument.  As in
 #   $(mkdir_p) $(somedir)
 # where $(somedir) is conditionally defined.  However we don't do
 # that for MKDIR_P.
-#  1. before we restricted the check to GNU mkdir, `mkdir -p .' was
+#  1. before we restricted the check to GNU mkdir, 'mkdir -p .' was
 #     reported to fail in read-only directories.  The system where this
 #     happened has been forgotten.
 #  2. in practice we call $(MKDIR_P) on directories such as
@@ -652,11 +652,11 @@ AC_SUBST(INSTALL_DATA)dnl
 #     so $(MKDIR_P) always has an argument.
 #     We will have better chances of detecting a missing test if
 #     $(MKDIR_P) complains about missing arguments.
-#  3. $(MKDIR_P) is named after `mkdir -p' and we don't expect this
+#  3. $(MKDIR_P) is named after 'mkdir -p' and we don't expect this
 #     to accept no argument.
-#  4. having something like `mkdir .' in the output is unsightly.
+#  4. having something like 'mkdir .' in the output is unsightly.
 #
-# On NextStep and OpenStep, the `mkdir' command does not
+# On NextStep and OpenStep, the 'mkdir' command does not
 # recognize any option.  It will interpret all options as
 # directories to create.
 AN_MAKEVAR([MKDIR_P], [AC_PROG_MKDIR_P])
@@ -820,9 +820,9 @@ AS_VAR_SET_IF([LEXLIB], [], [
         [LEXLIB=''],
 	[LEXLIB=$ac_cv_lib_lex])
 dnl
-dnl For compatibility with autoconf 2.69 and prior, if $1 is not `noyywrap',
+dnl For compatibility with autoconf 2.69 and prior, if $1 is not 'noyywrap',
 dnl and we didn't already set LEXLIB to -ll or -lfl, see if one of those
-dnl libraries provides yywrap and set LEXLIB to it if so.  If $1 is `yywrap',
+dnl libraries provides yywrap and set LEXLIB to it if so.  If $1 is 'yywrap',
 dnl and we don't find a library that provides yywrap, we fail.
   m4_case([$1],
     [noyywrap],
@@ -866,8 +866,8 @@ AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED
 dnl
 if test $ac_cv_prog_lex_yytext_pointer = yes; then
   AC_DEFINE(YYTEXT_POINTER, 1,
-	    [Define to 1 if `lex' declares `yytext' as a `char *' by default,
-	     not a `char[]'.])
+	    [Define to 1 if 'lex' declares 'yytext' as a 'char *' by default,
+	     not a 'char[]'.])
 fi
 ])
 rm -f conftest.l $LEX_OUTPUT_ROOT.c
@@ -897,8 +897,8 @@ fi
 # ----------------
 # Define SET_MAKE to set ${MAKE} if Make does not do so automatically.  If Make
 # does not run the test Makefile, we assume that the Make program the user will
-# invoke does set $(MAKE).  This is typical, and emitting `MAKE=foomake' is
-# always wrong if `foomake' is not available or does not work.
+# invoke does set $(MAKE).  This is typical, and emitting 'MAKE=foomake' is
+# always wrong if 'foomake' is not available or does not work.
 AN_MAKEVAR([MAKE], [AC_PROG_MAKE_SET])
 AN_PROGRAM([make], [AC_PROG_MAKE_SET])
 AC_DEFUN([AC_PROG_MAKE_SET],
@@ -980,9 +980,9 @@ AN_PROGRAM([bison], [AC_PROG_YACC])
 AC_DEFUN([AC_PROG_YACC],
 [AC_CHECK_PROGS(YACC, 'bison -y' byacc, yacc)dnl
 AC_ARG_VAR(YACC,
-[The `Yet Another Compiler Compiler' implementation to use.  Defaults to
-the first program found out of: `bison -y', `byacc', `yacc'.])dnl
+[The 'Yet Another Compiler Compiler' implementation to use.  Defaults to
+the first program found out of: 'bison -y', 'byacc', 'yacc'.])dnl
 AC_ARG_VAR(YFLAGS,
 [The list of arguments that will be passed by default to $YACC.  This script
-will default YFLAGS to the empty string to avoid a default value of `-d' given
+will default YFLAGS to the empty string to avoid a default value of '-d' given
 by some make applications.])])

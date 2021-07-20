@@ -19,7 +19,7 @@
 #   a compiler with an environment variable (like you do for standard CC).
 #
 #   It also sets BUILD_EXEEXT and BUILD_OBJEXT to the executable and object
-#   file extensions for the build platform, and GCC_FOR_BUILD to `yes' if
+#   file extensions for the build platform, and GCC_FOR_BUILD to 'yes' if
 #   the compiler we found is GCC. All these variables but GCC_FOR_BUILD are
 #   substituted in the Makefile.
 #

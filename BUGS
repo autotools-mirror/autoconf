@@ -11,8 +11,8 @@ file before using Autoconf, and especially git versions of Autoconf.
 	the copyright notice and this notice are preserved.  This file is
 	offered as-is, without warranty of any kind.
 
-Autoconf must not be used in production if there are ``Serious'' bugs,
-and use with caution an Autoconf with ``Important bugs''.
+Autoconf must not be used in production if there are "Serious" bugs,
+and use with caution an Autoconf with "Important bugs".
 
 * Status
 

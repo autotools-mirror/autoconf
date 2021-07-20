@@ -31,8 +31,8 @@ AT_BANNER([C low level compiling/preprocessing macros.])
 AT_CHECK_CONFIGURE_AC([Object file extensions],
 [[AC_PROG_CC
 
-# As far as we know only `foo', `foo.exe' are possible executable,
-# and `foo.o', `foo.obj' are possible object files.  Autoconf must not
+# As far as we know only 'foo', 'foo.exe' are possible executable,
+# and 'foo.o', 'foo.obj' are possible object files.  Autoconf must not
 # know that, but it is OK for the test suite to take this into account.
 AS@&t@_CASE([$ac_exeext],
   ['' | '.exe'],
@@ -85,7 +85,7 @@ AC_C_VOLATILE
 # detect support for their respective keyword.
 case $GCC,$ac_cv_c_const,$ac_cv_c_typeof,$ac_cv_c_volatile in
  yes,*no*)
-   AC_MSG_ERROR([failed to detect `const', `typeof', or `volatile' support]);;
+   AC_MSG_ERROR([failed to detect 'const', 'typeof', or 'volatile' support]);;
 esac
 ]])
 

@@ -169,8 +169,8 @@ AT_CLEANUP
 
 # We don't test the AC_F77_LIBRARY_LDFLAGS macro on its own because of
 # (autoconf.info)Fortran Compiler:
-#      The macros `AC_F77_DUMMY_MAIN' and `AC_FC_DUMMY_MAIN' or
-#    `AC_F77_MAIN' and `AC_FC_MAIN' are probably also necessary to link
+#      The macros 'AC_F77_DUMMY_MAIN' and 'AC_FC_DUMMY_MAIN' or
+#    'AC_F77_MAIN' and 'AC_FC_MAIN' are probably also necessary to link
 #    C/C++ with Fortran; see below.
 #
 # and we would need libtool to create shared libraries.

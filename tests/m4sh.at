@@ -252,9 +252,9 @@ sed 's/__LINENO__/$''LINENO/g;s/__OLINE__/__''oline__/g' $1.tas >$1.as
 AT_CHECK([autom4te -l m4sh $1.as -o $1])
 ])# AT_DATA_LINENO
 
-# `_oline_', once processed and ran, produces our reference.
+# '_oline_', once processed and ran, produces our reference.
 # We check that we find ourselves by looking at a string which is
-# available only in the original script: `_oline_'.
+# available only in the original script: '_oline_'.
 AT_DATA_LINENO([reference], [true], [__OLINE__], [_oline__])
 AT_CHECK([./reference], 0, [stdout])
 
@@ -419,8 +419,8 @@ AT_KEYWORDS([m4sh])
 AT_DATA_M4SH([script.as],
 [[AS_INIT
 
-# The EXPR variant is allowed to fail if `expr' was considered as too
-# weak for us, in which case `as_expr=false'.
+# The EXPR variant is allowed to fail if 'expr' was considered as too
+# weak for us, in which case 'as_expr=false'.
 m4_define([DIRNAME_TEST],
 [dir=`AS_DIRNAME([$1])`
 test "$dir" = "$2" || (test -n "$3" && test "$dir" = "$3") ||
@@ -645,7 +645,7 @@ AT_SETUP([Redefining AS@&t@_ECHO internals])
 # this file to exist anyway.
 AT_DATA([config.hin])
 
-# Defining a macro named `s' or `n' should not affect AS_ECHO or
+# Defining a macro named 's' or 'n' should not affect AS_ECHO or
 # macros that use it.
 
 AT_CONFIGURE_AC(
@@ -700,7 +700,7 @@ config.status: creating config.h
 AT_CHECK_ENV
 rm config.h
 
-# However, defining a macro named `printf' _is_ expected to affect
+# However, defining a macro named 'printf' _is_ expected to affect
 # the functioning of AS_ECHO.
 
 AT_CONFIGURE_AC(
@@ -940,7 +940,7 @@ AT_CLEANUP
 ## ----------------------------- ##
 
 # According to https://www.in-ulm.de/~mascheck/bourne/, all shells with
-# functions also support `[!...]'.  But `[^...]' is not universally supported.
+# functions also support '[!...]'.  But '[^...]' is not universally supported.
 
 AT_SETUP([Negated classes in globbing])
 AT_KEYWORDS([m4sh])
@@ -950,11 +950,11 @@ AT_DATA_M4SH([script.as],
 
 case 'with!two!bangs' in
   *[[!a-z]]*) ;;
-           *) AS_ERROR([[`*[!a-z]*' didn't match `with!two!bangs']]);;
+           *) AS_ERROR([['*[!a-z]*' didn't match 'with!two!bangs']]);;
 esac
 
 case without in
-  *[[!a-z]]*) AS_ERROR([[`*[!a-z]*' matched `without']]);;
+  *[[!a-z]]*) AS_ERROR([['*[!a-z]*' matched 'without']]);;
 esac
 ]])
 
@@ -968,7 +968,7 @@ AT_CLEANUP
 ## ---------------------------- ##
 
 # According to https://www.in-ulm.de/~mascheck/bourne/, all shells with
-# functions also support `${a:-b}'.
+# functions also support '${a:-b}'.
 
 AT_SETUP([Null variable substitution])
 AT_KEYWORDS([m4sh])
@@ -1501,7 +1501,7 @@ AS_CASE([$[1]]m4_for([i], [1], ]limit[, [], [, i, echo i]))
 AS_CASE([$[1]]m4_for([i], [1], ]limit[, [], [, i, echo i]), [echo default])
 ]])
 
-dnl Add --force so autom4te doesn't think `script' is still up to date.
+dnl Add --force so autom4te doesn't think 'script' is still up to date.
 AT_CHECK_M4SH([--force])
 AT_CHECK([$CONFIG_SHELL ./script 1], [0], [[1
 1

@@ -31,7 +31,7 @@ m4_define([AT_DATA_AUTOTEST],
 #                  [DIR = .])
 # --------------------------------------------------------------------
 # Create a new testsuite named NAME that runs a minimal Autotest test suite,
-# SUITE-CODE.  Do not use `testsuite' for NAME, or the log file it generates
+# SUITE-CODE.  Do not use 'testsuite' for NAME, or the log file it generates
 # will overwrite the log that the Autoconf test produces when managing
 # this test case.  STATUS, STDOUT, and STDERR pass directly to the AT_CHECK
 # that compiles the testsuite.  DIR can specify a particular subdirectory
@@ -802,7 +802,7 @@ AT_CHECK_AT_TEST([BS-BS-newline in command],
 conf
 ], [])])
 
-# A `^BS-BS-newline in command' test will run a command named `\'.  No, thanks.
+# A '^BS-BS-newline in command' test will run a command named '\'.  No, thanks.
 
 AT_CHECK_AT_TEST([BSx640-newline in command],
   [AT_CHECK([printf '%s\n' Auto"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -863,7 +863,7 @@ AT_CLEANUP
 # Create a new test named TITLE that runs an Autotest test suite
 # comprised of a trivial test named TITLE-TO-TEST, which expands
 # to EXPANDED-TITLE-TO-TEST.  XFAIL-CONDITION passes verbatim to
-# AT_CHECK_AT.  Verify that `ok' prints at COLUMN.
+# AT_CHECK_AT.  Verify that 'ok' prints at COLUMN.
 m4_define([AT_CHECK_AT_TITLE],
 [AT_CHECK_AT([$1],
 [[
@@ -1057,7 +1057,7 @@ AT_CHECK([$CONFIG_SHELL ./micro-suite 1=2], [1], [], [ignore], [ignore])
 # Controlling where the testsuite is run.
 AT_CHECK_AT_TEST([Choosing where testsuite is run],
   [AT_CHECK([:])], [], [], [], [], [], [
-dnl AT_CHECK_AT_TEST tests the default of running in `.'.
+dnl AT_CHECK_AT_TEST tests the default of running in '.'.
 AT_CHECK([$CONFIG_SHELL ./micro-suite --clean])
 AT_CHECK([test -f micro-suite.log], [1])
 AT_CHECK([test -d micro-suite.dir], [1])
@@ -1609,8 +1609,8 @@ AT_SETUP([parallel autotest and signal handling])
 AT_SKIP_PARALLEL_TESTS
 
 # Goals:
-# (1) interrupt `./testsuite -jN'
-# (2) interrupt `make check TESTSUITEFLAGS=-jN'
+# (1) interrupt './testsuite -jN'
+# (2) interrupt 'make check TESTSUITEFLAGS=-jN'
 # (3) no trailing verbose/trace output
 # (4) exit status should be 128+signal
 
@@ -1675,7 +1675,7 @@ for signal in 2 15; do
   # turn off job control.
   # AT_CHECK([[grep '[iI]nterrupt[	 ]' stderr]], [1])
 
-  # Ditto with `make' in the loop.
+  # Ditto with 'make' in the loop.
   # Explicitly setting TESTSUITEFLAGS to empty...
   AT_CHECK_MAKE([TESTSUITEFLAGS=], [], [1], [ignore], [stderr])
   AT_CHECK([grep 'bailing out' stderr], [], [ignore])

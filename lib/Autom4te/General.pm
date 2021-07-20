@@ -1,4 +1,4 @@
-# autoconf -- create `configure' using m4 macros
+# autoconf -- create 'configure' using m4 macros
 # Copyright (C) 2001-2004, 2006-2007, 2009-2017, 2020-2021 Free Software
 # Foundation, Inc.
 
@@ -68,7 +68,7 @@ our @EXPORT = (@export_vars, @export_subs, @export_forward_subs);
 
 
 # Variable we share with the main package.  Be sure to have a single
-# copy of them: using `my' together with multiple inclusion of this
+# copy of them: using 'my' together with multiple inclusion of this
 # package would introduce several copies.
 
 =head2 Global Variables
@@ -166,7 +166,7 @@ sub END
   #
   #  1) normal termination
   #     this sets $? = 0
-  #  2) calling `exit (n)'
+  #  2) calling 'exit (n)'
   #     this sets $? = n
   #  3) calling die or friends (croak, confess...):
   #     a) when $! is non-0
@@ -180,9 +180,9 @@ sub END
   # Cases 1), 2), and 3b) are fine, but we prefer $? = 1 for 3a) and 3c).
   my $status = $?;
   $status = 1 if ($! && $! == $?) || $? == 255;
-  # (Note that we cannot safely distinguish calls to `exit (n)'
-  # from calls to die when `$! = n'.  It's not big deal because
-  # we only call `exit (0)' or `exit (1)'.)
+  # (Note that we cannot safely distinguish calls to 'exit (n)'
+  # from calls to die when '$! = n'.  It's not big deal because
+  # we only call 'exit (0)' or 'exit (1)'.)
 
   # This is required if the code might send any output to stdout
   # E.g., even --version or --help.  So it's best to do it unconditionally.

@@ -37,7 +37,7 @@ to be written instead?).
 Make sure that a fresh checkout of Autoconf can be bootstrapped using
 the previous stable release of Autoconf.  In other words, do not use
 newly-added features in configure.ac if doing so would require an
-installed git checkout to rerun `autoreconf -i' successfully.
+installed git checkout to rerun 'autoreconf -i' successfully.
 
 * Test suite
 
@@ -48,12 +48,12 @@ Use liberally.
 Try to run the test suite with more severe conditions before a
 release:
 
-- Run `make syntax-check'
+- Run 'make syntax-check'
   This makes sure that the source files follow some consistent rules.
   The checks live in maint.mk, shared from gnulib, and customized in
   cfg.mk.
 
-- Run `make distcheck' and `make maintainer-check'.
+- Run 'make distcheck' and 'make maintainer-check'.
 
 - Try some real world packages
   A good example is the coreutils package.
@@ -96,28 +96,28 @@ hints on the testsuite.  If needed, update cfg.mk with details
 specific to your environment, such as the location of a gnulib checkout.
 
 ** Update the foreign files
-Running `make fetch' in the top level should grab it all for you; you
+Running 'make fetch' in the top level should grab it all for you; you
 should check the results before committing them in git.
 
 ** Set the version number
 Update the version number in NEWS (with version, date, and release
-type).  Make sure all changes are committed, then run `git tag -s -m
+type).  Make sure all changes are committed, then run 'git tag -s -m
 <version> -u <gpg_key> v<version>'.  Do not push anything upstream at
 this point.
 
 ** Update configure
 As much as possible, make sure to release an Autoconf that uses
 itself.  That's easy: just be in the top level, and run
-`tests/autoconf'.  Or install this autoconf and run `autoreconf -f'.
+'tests/autoconf'.  Or install this autoconf and run 'autoreconf -f'.
 
 ** Make the release
-Run `make {alpha,beta,stable}' depending on which type of release this
+Run 'make {alpha,beta,stable}' depending on which type of release this
 is.  This runs the various checks, creates delta files, creates a
 preliminary announcement in ~/announce-autoconf-<version>, prints
 out the command to upload the files, and updates the previous version
 file.
 
-If it fails, run `git tag -d v<version>', fix the problems, and go
+If it fails, run 'git tag -d v<version>', fix the problems, and go
 back to the step of setting the version.
 
 ** Upload
@@ -127,7 +127,7 @@ that the files are correctly uploaded before sending a release
 announcement.
 
 ** Push the updates
-Run `git push origin refs/tags/v<version>' to push the release tag.
+Run 'git push origin refs/tags/v<version>' to push the release tag.
 
 ** Announce
 Complete/fix the announcement file, and email it at least to
@@ -139,9 +139,9 @@ also mail to platform-testers@gnu.org.
 For alpha and beta releases, the process is complete.  For stable
 releases, there are several other web pages that need updates.
 
-Update the online manual: Run `make web-manual', then copy the
+Update the online manual: Run 'make web-manual', then copy the
 contents of doc/manual into a CVS checkout of the documentation
-repository.  Remember to use `cvs add -ko' so that RCS keywords in the
+repository.  Remember to use 'cvs add -ko' so that RCS keywords in the
 generated output do not get expanded improperly.
   $ export CVS_RSH=ssh
   $ cvs -z3 -d:ext:<user>@cvs.sv.gnu.org:/web/autoconf co autoconf

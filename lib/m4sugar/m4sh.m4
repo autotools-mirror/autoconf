@@ -58,7 +58,7 @@
 # Convert a diversion name into its number.  Otherwise, return
 # DIVERSION-NAME which is supposed to be an actual diversion number.
 # Of course it would be nicer to use m4_case here, instead of zillions
-# of little macros, but it then takes twice longer to run `autoconf'!
+# of little macros, but it then takes twice longer to run 'autoconf'!
 m4_define([_m4_divert(BINSH)],             0)
 m4_define([_m4_divert(HEADER-REVISION)],   1)
 m4_define([_m4_divert(HEADER-COMMENT)],    2)
@@ -124,7 +124,7 @@ m4_define([_AS_CLEANUP],
 # ------------------
 # Emit TEXT, a copyright notice, as a shell comment near the top of the
 # script.  TEXT is evaluated once; to accomplish that, we do not prepend
-# `# ' but `@%:@ '.
+# '# ' but '@%:@ '.
 m4_define([AS_COPYRIGHT],
 [m4_divert_text([HEADER-COPYRIGHT],
 [m4_bpatsubst([
@@ -196,7 +196,7 @@ m4_defun([_AS_DETECT_BETTER_SHELL],
 dnl
 dnl By default, do not force re-execution of the script just because
 dnl the user has pre-set $CONFIG_SHELL; do so only if the m4sh client has
-dnl defined the internal variable `_AS_FORCE_REEXEC_WITH_CONFIG_SHELL' to
+dnl defined the internal variable '_AS_FORCE_REEXEC_WITH_CONFIG_SHELL' to
 dnl "yes".
 dnl FIXME: This interface is acceptable for the moment, as a private,
 dnl FIXME: internal one; but if we want to make the "always re-execute"
@@ -276,7 +276,7 @@ _m4_popdef([AS_EXIT])])# _AS_DETECT_BETTER_SHELL
 # _AS_REEXEC_WITH_SHELL(SHELL)
 # ----------------------------
 # Re-execute the current script with the given shell, trying to preserve
-# portable settings (e.g., the `xtrace' and `verbose' shell flag).
+# portable settings (e.g., the 'xtrace' and 'verbose' shell flag).
 m4_defun([_AS_REEXEC_WITH_SHELL], [dnl
 # We cannot yet assume a decent shell, so we have to provide a
 # neutralization value for shells without unset; and this also
@@ -293,7 +293,7 @@ case $- in @%:@ ((((
 esac
 exec $1 $as_opts "$as_myself" ${1+"$[@]"}
 # Admittedly, this is quite paranoid, since all the known shells bail
-# out after a failed `exec'.
+# out after a failed 'exec'.
 AS_ECHO(["$[]0: could not re-execute with $1"]) >&2
 dnl AS_EXIT cannot be used here because as_fn_exit is not yet defined;
 dnl code inserted by AS_REQUIRE_SHELL_FN will appear _after_ this point.
@@ -306,7 +306,7 @@ exit 255])# _AS_REEXEC_WITH_SHELL
 # Ensure that file descriptors 0, 1, and 2 are open, as a defensive
 # measure against weird environments that run configure scripts
 # with these descriptors closed.
-# `exec m>&n` fails in POSIX sh when fd N is closed, but succeeds
+# 'exec m>&n' fails in POSIX sh when fd N is closed, but succeeds
 # regardless of whether fd N is open in some old shells, e.g. Solaris
 # /bin/sh.  This is OK because those shells will be rejected by
 # _AS_DETECT_BETTER_SHELL anyway.
@@ -534,7 +534,7 @@ case $[0] in @%:@((
 		   [test -r "$as_dir$[0]" && as_myself=$as_dir$[0] && break])
      ;;
 esac
-# We did not find ourselves, most probably we were run as `sh COMMAND'
+# We did not find ourselves, most probably we were run as 'sh COMMAND'
 # in which case we are not to be found in the path.
 if test "x$as_myself" = x; then
   as_myself=$[0]
@@ -607,7 +607,7 @@ esac])# AS_CASE
 # to set $? prior to the exit.
 # Then there are shells that don't inherit $? correctly into the start of
 # a shell function, so we must always be given an argument.
-# Other shells don't use `$?' as default for `exit', hence just repeating
+# Other shells don't use '$?' as default for 'exit', hence just repeating
 # the exit value can only help improving portability.
 m4_defun([_AS_EXIT_PREPARE],
 [AS_REQUIRE_SHELL_FN([as_fn_set_status],
@@ -675,12 +675,12 @@ done[]_m4_popdef([$1])])
 # Note: IF-TRUEn and IF_FALSE may be nonempty but, after further macro
 # expansion, leave no actual shell code.  We can't detect this, so we
 # include a no-op statement in each clause to prevent it becoming a shell
-# syntax error.  For the IF-TRUEn this can simply be `:' at the beginning of
+# syntax error.  For the IF-TRUEn this can simply be ':' at the beginning of
 # the clause.  IF-FALSE is harder because it must preserve the value of $?
 # from the conditional expression.  The most practical way to do this is
-# with a shell function whose body is `return $?' but AS_IF is used before
+# with a shell function whose body is 'return $?' but AS_IF is used before
 # it's safe to use shell functions.  To deal with *that*, there is a shell
-# variable $as_fn_nop that expands to `:' before the nop shell function is
+# variable $as_fn_nop that expands to ':' before the nop shell function is
 # defined, and invokes the nop shell function afterward.  Early uses of
 # AS_IF (which are all under our control) must not use the value of $? from
 # the conditional expression in an else clause.
@@ -814,8 +814,8 @@ m4_define([_AS_ESCAPE_], [$1])
 #
 # Compatibility glue between the old AS_MSG suite which did not
 # quote anything, and the modern suite which quotes the quotes.
-# If STRING contains `\\' or `\$', it's modern.
-# If STRING contains `\"' or `\`', it's old.
+# If STRING contains '\\' or '\$', it's modern.
+# If STRING contains '\"' or '\`', it's old.
 # Otherwise it's modern.
 #
 # Profiling shows that m4_index is 5 to 8x faster than m4_bregexp.  The
@@ -871,8 +871,8 @@ m4_defun_init([_AS_ECHO_LOG],
 # Don't try to cache, since the results of this macro are needed to
 # display the checking message.  In addition, caching something used once
 # has little interest.
-# Idea borrowed from dist 3.0.  Use `*c*,', not `*c,' because if `\c'
-# failed there is also a newline to match.  Use `xy' because `\c' echoed
+# Idea borrowed from dist 3.0.  Use '*c*,', not '*c,' because if '\c'
+# failed there is also a newline to match.  Use 'xy' because '\c' echoed
 # in a command substitution prints only the first character of the output
 # with ksh version M-11/16/88f on AIX 6.1; it needs to be reset by another
 # backquoted echo.
@@ -897,7 +897,7 @@ esac
 # the shell variables $as_echo and $as_echo_n.  New code should use
 # AS_ECHO(["message"]) and AS_ECHO_N(["message"]), respectively.
 dnl The @&t@ prevents a spurious deprecation diagnostic.
-dnl Extra quoting in case `s' or `n' are user-defined macros when this
+dnl Extra quoting in case 's' or 'n' are user-defined macros when this
 dnl is expanded; they almost certainly aren't meant to be used here.
 dnl See bug 110377.
 as_@&t@echo='printf [%s\n]'
@@ -1033,7 +1033,7 @@ _AS_BASENAME_SED([$1])])
 
 # _AS_BASENAME_PREPARE
 # --------------------
-# Avoid Solaris 9 /usr/ucb/basename, as `basename /' outputs an empty line.
+# Avoid Solaris 9 /usr/ucb/basename, as 'basename /' outputs an empty line.
 # Also, traditional basename mishandles --.  Require here _AS_EXPR_PREPARE,
 # to avoid problems when _AS_BASENAME is called from the M4SH-INIT diversion.
 m4_defun([_AS_BASENAME_PREPARE],
@@ -1109,7 +1109,7 @@ fi
 # (typically a quoted string).  The bytes of WORD are output as-is, even
 # if it starts with "-" or contains "\".
 m4_define([AS_ECHO],
-dnl Extra quoting in case `s' or `n' are user-defined macros when this
+dnl Extra quoting in case 's' or 'n' are user-defined macros when this
 dnl is expanded; they almost certainly aren't meant to be used here.
 dnl See bug 110377.
 [printf "[%s\n]" $1])
@@ -1124,7 +1124,7 @@ m4_define([as_echo],
 # ---------------
 # Like AS_ECHO(WORD), except do not output the trailing newline.
 m4_define([AS_ECHO_N],
-dnl Extra quoting in case `s' is a user-defined macro when this
+dnl Extra quoting in case 's' is a user-defined macro when this
 dnl is expanded; it almost certainly isn't meant to be used here.
 dnl See bug 110377.
 [printf [%s] $1])
@@ -1269,7 +1269,7 @@ _m4_popdef([AS_MESSAGE_LOG_FD], [AS_ERROR])])# _AS_LINENO_PREPARE
 # _AS_LN_S_PREPARE
 # ----------------
 # Don't use conftest.sym to avoid file name issues on DJGPP, where this
-# would yield conftest.sym.exe for DJGPP < 2.04.  And don't use `conftest'
+# would yield conftest.sym.exe for DJGPP < 2.04.  And don't use 'conftest'
 # as base name to avoid prohibiting concurrency (e.g., concurrent
 # config.statuses).  On read-only media, assume 'cp -pR' and hope we
 # are just running --help anyway.
@@ -1285,9 +1285,9 @@ if (echo >conf$$.file) 2>/dev/null; then
   if ln -s conf$$.file conf$$ 2>/dev/null; then
     as_ln_s='ln -s'
     # ... but there are two gotchas:
-    # 1) On MSYS, both `ln -s file dir' and `ln file dir' fail.
-    # 2) DJGPP < 2.04 has no symlinks; `ln -s' creates a wrapper executable.
-    # In both cases, we have to default to `cp -pR'.
+    # 1) On MSYS, both 'ln -s file dir' and 'ln file dir' fail.
+    # 2) DJGPP < 2.04 has no symlinks; 'ln -s' creates a wrapper executable.
+    # In both cases, we have to default to 'cp -pR'.
     ln -s conf$$.file conf$$.dir 2>/dev/null && test ! -f conf$$.exe ||
       as_ln_s='cp -pR'
   elif ln conf$$.file conf$$ 2>/dev/null; then
@@ -1306,7 +1306,7 @@ rmdir conf$$.dir 2>/dev/null
 # AS_LN_S(FILE, LINK)
 # -------------------
 # FIXME: Should we add the glue code to handle properly relative symlinks
-# simulated with `ln' or `cp'?
+# simulated with 'ln' or 'cp'?
 m4_defun_init([AS_LN_S],
 [AS_REQUIRE([_AS_LN_S_PREPARE])],
 [$as_ln_s $1 $2])
@@ -1314,7 +1314,7 @@ m4_defun_init([AS_LN_S],
 
 # _AS_MKDIR_P
 # -----------
-# Emit code that can be used to emulate `mkdir -p` with plain `mkdir';
+# Emit code that can be used to emulate 'mkdir -p' with plain 'mkdir';
 # the code assumes that "$as_dir" contains the directory to create.
 # $as_dir is normalized, so there is no need to worry about using --.
 m4_define([_AS_MKDIR_P],
@@ -1338,7 +1338,7 @@ m4_define([_AS_MKDIR_P],
 
 # AS_MKDIR_P(DIR)
 # ---------------
-# Emulate `mkdir -p' with plain `mkdir' if needed.
+# Emulate 'mkdir -p' with plain 'mkdir' if needed.
 m4_defun_init([AS_MKDIR_P],
 [AS_REQUIRE([_$0_PREPARE])],
 [as_dir=$1; as_fn_mkdir_p])# AS_MKDIR_P
@@ -1379,12 +1379,12 @@ fi
 
 # _AS_PATH_WALK([PATH = $PATH], BODY, [IF-NOT-FOUND])
 # ---------------------------------------------------
-# Walk through PATH running BODY for each `as_dir', with a trailing slash
-# already present.  If BODY never does a `break', evaluate IF-NOT-FOUND.
+# Walk through PATH running BODY for each 'as_dir', with a trailing slash
+# already present.  If BODY never does a 'break', evaluate IF-NOT-FOUND.
 #
 # Still very private as its interface looks quite bad.
 #
-# `$as_dummy' forces splitting on constant user-supplied paths.
+# '$as_dummy' forces splitting on constant user-supplied paths.
 # POSIX.2 field splitting is done only on the result of word
 # expansions, not on literal text.  This closes a longstanding sh security
 # hole.  Optimize it away when not needed, i.e., if there are no literal
@@ -1431,7 +1431,7 @@ esac[]])# AS_SET_CATFILE
 
 # _AS_TEST_X_WORKS
 # ----------------
-# These days, we require that `test -x' works.
+# These days, we require that 'test -x' works.
 m4_define([_AS_TEST_X_WORKS], [test -x /])
 
 # _AS_TEST_PREPARE
@@ -1457,10 +1457,10 @@ as_executable_p=as_fn_executable_p
 # This section is lexicographically sorted.
 
 
-# AS_BOX(MESSAGE, [FRAME-CHARACTER = `-'])
+# AS_BOX(MESSAGE, [FRAME-CHARACTER = '-'])
 # ----------------------------------------
 # Output MESSAGE, a single line text, framed with FRAME-CHARACTER (which
-# must not be `/').
+# must not be '/').
 m4_define([AS_BOX],
 [_$0(m4_expand([$1]), [$2])])
 
@@ -1469,13 +1469,13 @@ m4_define([_AS_BOX],
   [-1], [$0_LITERAL], [$0_INDIR])($@)])
 
 
-# _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = `-'])
+# _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = '-'])
 # -------------------------------------------------
 m4_define([_AS_BOX_LITERAL],
 [AS_ECHO(["_AS_ESCAPE(m4_dquote(m4_expand([m4_text_box($@)])), [`], [\"$])"])])
 
 
-# _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = `-'])
+# _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = '-'])
 # -----------------------------------------------
 m4_define([_AS_BOX_INDIR],
 [sed 'h;s/./m4_default([$2], [-])/g;s/^.../@%:@@%:@ /;s/...$/ @%:@@%:@/;p;x;p;x' <<_ASBOX
@@ -1577,7 +1577,7 @@ m4_define([AS_HELP_STRING],
 # AS_IDENTIFIER_IF(EXPRESSION, IF-IDENT, IF-NOT-IDENT)
 # ----------------------------------------------------
 # If EXPRESSION serves as an identifier (ie, after removal of @&t@, it
-# matches the regex `^[a-zA-Z_][a-zA-Z_0-9]*$'), execute IF-IDENT,
+# matches the regex '^[a-zA-Z_][a-zA-Z_0-9]*$'), execute IF-IDENT,
 # otherwise IF-NOT-IDENT.
 #
 # This is generally faster than the alternative:
@@ -1615,19 +1615,19 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 # EXPRESSION is treated as a literal if it results in the same
 # interpretation whether it is unquoted or contained within double
 # quotes, with the exception that whitespace is ignored (on the
-# assumption that it will be flattened to _).  Therefore, neither `\$'
-# nor `a''b' is a literal, since both backslash and single quotes have
-# different quoting behavior in the two contexts; and `a*' is not a
+# assumption that it will be flattened to _).  Therefore, neither '\$'
+# nor 'a''b' is a literal, since both backslash and single quotes have
+# different quoting behavior in the two contexts; and 'a*' is not a
 # literal, because it has different globbing.  Note, however, that
-# while `${a+b}' is neither a literal nor a simple ref, `a+b' is a
+# while '${a+b}' is neither a literal nor a simple ref, 'a+b' is a
 # literal.  This macro is an *approximation*: it is possible that
 # there are some EXPRESSIONs which the shell would treat as literals,
 # but which this macro does not recognize.
 #
-# Why do we reject EXPRESSION expanding with `[' or `]' as a literal?
+# Why do we reject EXPRESSION expanding with '[' or ']' as a literal?
 # Because AS_TR_SH is MUCH faster if it can use m4_translit on literals
 # instead of m4_bpatsubst; but m4_translit is much tougher to do safely
-# if `[' is translated.  That, and file globbing matters.
+# if '[' is translated.  That, and file globbing matters.
 #
 # Note that the quadrigraph @S|@ can result in non-literals, but outright
 # rejecting all @ would make AC_INIT complain on its bug report address.
@@ -1638,11 +1638,11 @@ m4_dquote(m4_dquote(m4_defn([m4_cr_symbols1])))[[))], [0], [-])])
 # Because the translit is stripping quotes, it must also neutralize
 # anything that might be in a macro name, as well as comments, commas,
 # or unbalanced parentheses.  Valid shell variable characters and
-# unambiguous literal characters are deleted (`a.b'), and remaining
-# characters are normalized into `$' if they can form simple refs
-# (${a}), `+' if they can potentially form literals (a+b), ``' if they
-# can interfere with m4 parsing, or left alone otherwise.  If both `$'
-# and `+' are left, it is treated as a complex reference (${a+b}),
+# unambiguous literal characters are deleted ('a.b'), and remaining
+# characters are normalized into '$' if they can form simple refs
+# (${a}), '+' if they can potentially form literals (a+b), '`' if they
+# can interfere with m4 parsing, or left alone otherwise.  If both '$'
+# and '+' are left, it is treated as a complex reference (${a+b}),
 # even though it could technically be a simple reference (${a}+b).
 # _AS_LITERAL_IF_ only has to check for an empty string after removing
 # one of the two normalized characters.
@@ -1839,7 +1839,7 @@ AS_CASE([$?],
 ## --------------------------------------- ##
 
 # The point of this section is to provide high level macros comparable
-# to m4's `translit' primitive, but m4/sh polymorphic.
+# to m4's 'translit' primitive, but m4/sh polymorphic.
 # Transliteration of literal strings should be handled by m4, while
 # shell variables' content will be translated at runtime (tr or sed).
 
@@ -1871,7 +1871,7 @@ as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
 # --------------------
 # Transform EXPRESSION into a valid shell variable name.
 # sh/m4 polymorphic.
-# Be sure to update the definition of `$as_tr_sh' if you change this.
+# Be sure to update the definition of '$as_tr_sh' if you change this.
 #
 # AS_LITERAL_IF guarantees that a literal does not have any nested quotes,
 # once $1 is expanded.  m4_translit silently uses only the first occurrence
@@ -1910,8 +1910,8 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g
 # AS_TR_CPP(EXPRESSION)
 # ---------------------
 # Map EXPRESSION to an upper case string which is valid as rhs for a
-# `#define'.  sh/m4 polymorphic.  Be sure to update the definition
-# of `$as_tr_cpp' if you change this.
+# '#define'.  sh/m4 polymorphic.  Be sure to update the definition
+# of '$as_tr_cpp' if you change this.
 #
 # See implementation comments in AS_TR_SH.
 m4_defun_init([AS_TR_CPP],
@@ -2054,7 +2054,7 @@ m4_define([AS_VAR_COPY],
 # --------------------
 # Get the value of the shell VARIABLE.
 # Evaluates to $VARIABLE if there is no indirection in VARIABLE,
-# else to the appropriate `eval' sequence.
+# else to the appropriate 'eval' sequence.
 # This macro is deprecated because it sometimes mishandles trailing newlines;
 # use AS_VAR_COPY instead.
 m4_define([AS_VAR_GET],
@@ -2065,7 +2065,7 @@ m4_define([AS_VAR_GET],
 
 # AS_VAR_IF(VARIABLE, VALUE, IF-TRUE, IF-FALSE)
 # ---------------------------------------------
-# Implement a shell `if test $VARIABLE = VALUE; then-else'.
+# Implement a shell 'if test $VARIABLE = VALUE; then-else'.
 # Polymorphic, and avoids sh expansion error upon interrupt or term signal.
 m4_define([AS_VAR_IF],
 [AS_LITERAL_WORD_IF([$1],
@@ -2082,20 +2082,20 @@ m4_define([AS_VAR_IF],
 # --------------------------------
 #
 
-# Sometimes we may have to handle literals (e.g. `stdlib.h'), while at
+# Sometimes we may have to handle literals (e.g. 'stdlib.h'), while at
 # other moments, the same code may have to get the value from a
-# variable (e.g., `ac_header').  To have a uniform handling of both
+# variable (e.g., 'ac_header').  To have a uniform handling of both
 # cases, when a new value is about to be processed, declare a local
 # variable, e.g.:
 #
 #   AS_VAR_PUSHDEF([header], [ac_cv_header_$1])
 #
-# and then in the body of the macro, use `header' as is.  It is of
-# first importance to use `AS_VAR_*' to access this variable.
+# and then in the body of the macro, use 'header' as is.  It is of
+# first importance to use 'AS_VAR_*' to access this variable.
 #
-# If the value `$1' was a literal (e.g. `stdlib.h'), then `header' is
-# in fact the value `ac_cv_header_stdlib_h'.  If `$1' was indirect,
-# then `header's value in m4 is in fact `$as_header', the shell
+# If the value '$1' was a literal (e.g. 'stdlib.h'), then 'header' is
+# in fact the value 'ac_cv_header_stdlib_h'.  If '$1' was indirect,
+# then the value of 'header' in m4 is in fact '$as_header', the shell
 # variable that holds all of the magic to get the expansion right.
 #
 # At the end of the block, free the variable with
@@ -2145,7 +2145,7 @@ m4_define([AS_VAR_SET],
 
 # AS_VAR_SET_IF(VARIABLE, IF-TRUE, IF-FALSE)
 # ------------------------------------------
-# Implement a shell `if-then-else' depending whether VARIABLE is set
+# Implement a shell 'if-then-else' depending whether VARIABLE is set
 # or not.  Polymorphic.
 m4_define([AS_VAR_SET_IF],
 [AS_IF([AS_VAR_TEST_SET([$1])], [$2], [$3])])
@@ -2172,7 +2172,7 @@ m4_define([AS_VAR_TEST_SET],
 # Generate a child script FILE with all initialization necessary to
 # reuse the environment learned by the parent script, and make the
 # file executable.  If COMMENT is supplied, it is inserted after the
-# `#!' sequence but before initialization text begins.  After this
+# '#!' sequence but before initialization text begins.  After this
 # macro, additional text can be appended to FILE to form the body of
 # the child script.  The macro ends with non-zero status if the
 # file could not be fully written (such as if the disk is full).

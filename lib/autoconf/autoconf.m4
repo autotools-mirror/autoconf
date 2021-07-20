@@ -51,7 +51,7 @@ m4_include([autoconf/specific.m4])
 m4_include([autoconf/oldnames.m4])
 
 # We discourage the use of the non prefixed macro names: M4sugar maps
-# all the builtins into `m4_'.  Autoconf has been converted to these
+# all the builtins into 'm4_'.  Autoconf has been converted to these
 # names too.  But users may still depend upon these, so reestablish
 # them.
 

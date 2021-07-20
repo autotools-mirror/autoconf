@@ -26,7 +26,7 @@
 
 # Written by Akim Demaille.
 
-# The prefix `AN' is chosen after `AutoscaN'.
+# The prefix 'AN' is chosen after 'AutoscaN'.
 
 # AN_OUTPUT(KIND, WORD, MACROS)
 # -----------------------------

@@ -30,7 +30,7 @@ Copyright (C) 2000-2017, 2020-2021 Free Software Foundation, Inc.
 # Convert a diversion name into its number.  Otherwise, return
 # DIVERSION-NAME which is supposed to be an actual diversion number.
 # Of course it would be nicer to use m4_case here, instead of zillions
-# of little macros, but it then takes twice longer to run `autoconf'!
+# of little macros, but it then takes twice longer to run 'autoconf'!
 #
 # From M4sugar:
 #    -1. KILL
@@ -91,7 +91,7 @@ Copyright (C) 2000-2017, 2020-2021 Free Software Foundation, Inc.
 #    The core of the test suite.
 #
 #  - TEST_SCRIPT
-#    The collector for code for each test, the ``normal'' diversion, but
+#    The collector for code for each test, the "normal" diversion, but
 #    undiverted into other locations before final output.
 #
 #  - TEST_GROUPS
@@ -124,7 +124,7 @@ m4_define([_m4_divert(TEST_GROUPS)],        500)
 # -------
 # Return the current file sans directory, a colon, and the current
 # line.  Be sure to return a _quoted_ file name, so if, for instance,
-# the user is lunatic enough to have a file named `dnl' (and I, for
+# the user is lunatic enough to have a file named 'dnl' (and I, for
 # one, love to be brainless and stubborn sometimes), then we return a
 # quoted name.
 #
@@ -132,10 +132,10 @@ m4_define([_m4_divert(TEST_GROUPS)],        500)
 #
 #  m4_bpatsubst(__file__, [^.*/\(.*\)], [[\1]])
 #
-# since then, since `dnl' doesn't match the pattern, it is returned
+# since then, since 'dnl' doesn't match the pattern, it is returned
 # with once quotation level less, so you lose!  And since GNU M4
 # is one of the biggest junk in the whole universe wrt regexp, don't
-# even think about using `?' or `\?'.  Bah, `*' will do.
+# even think about using '?' or '\?'.  Bah, '*' will do.
 # Pleeeeeeeease, Gary, provide us with dirname and ERE!
 #
 # M4 recompiles the regular expression for every m4_bpatsubst, but __file__
@@ -327,7 +327,7 @@ exit code; if it is anything else print an error message referring to LINE,
 and fail the test.])
 at_fn_check_status ()
 {
-dnl This order ensures that we don't `skip' if we are precisely checking
+dnl This order ensures that we don't 'skip' if we are precisely checking
 dnl $? = 77 or $? = 99.
   case $[2] in
     $[1] ) ;;
@@ -394,7 +394,7 @@ at_traceon=:
 at_trace_echo=:
 at_check_filter_trace=:
 
-# Shall we keep the debug scripts?  Must be `:' when the suite is
+# Shall we keep the debug scripts?  Must be ':' when the suite is
 # run by a debug script, so that the script doesn't remove itself.
 at_debug_p=false
 # Display help message?
@@ -430,7 +430,7 @@ m4_divert_text([DEFAULTS],
 # Whether to enable colored test results.
 at_color=m4_ifdef([AT_color], [AT_color], [no])
 # As many question marks as there are digits in the last test group number.
-# Used to normalize the test group numbers so that `ls' lists them in
+# Used to normalize the test group numbers so that 'ls' lists them in
 # numerical order.
 at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [?])'
 # Description of all the test groups.
@@ -634,7 +634,7 @@ m4_divert_push([PARSE_ARGS_END])dnl
 	# Reject names that are not valid shell variable names.
 	case $at_envvar in
 	  '' | [[0-9]]* | *[[!_$as_cr_alnum]]* )
-	    AS_ERROR([invalid variable name: `$at_envvar']) ;;
+	    AS_ERROR([invalid variable name: '$at_envvar']) ;;
 	esac
 	at_value=`AS_ECHO(["$at_optarg"]) | sed "s/'/'\\\\\\\\''/g"`
 	# Export now, but save eval for later and for debug scripts.
@@ -643,14 +643,14 @@ m4_divert_push([PARSE_ARGS_END])dnl
 	;;
 
      *) AS_ECHO(["$as_me: invalid option: $at_option"]) >&2
-	AS_ECHO(["Try \`$[0] --help' for more information."]) >&2
+	AS_ECHO(["Try '$[0] --help' for more information."]) >&2
 	exit 1
 	;;
   esac
 done
 
 # Verify our last option didn't require an argument
-AS_IF([test -n "$at_prev"], [AS_ERROR([`$at_prev' requires an argument])])
+AS_IF([test -n "$at_prev"], [AS_ERROR(['$at_prev' requires an argument])])
 
 # The file containing the suite.
 at_suite_log=$at_dir/$as_me.log
@@ -697,7 +697,7 @@ Run all the tests, or the selected TESTS, given by numeric ranges, and
 save a detailed log file.  Upon failure, create debugging scripts.
 
 Do not change environment variables directly.  Instead, set them via
-command line arguments.  Set \`AUTOTEST_PATH' to select the executables
+command line arguments.  Set 'AUTOTEST_PATH' to select the executables
 to exercise.  Each relative directory is expanded as build and source
 directories relative to the top level of this distribution.
 E.g., from within the build directory /tmp/foo-1.0, invoking this:
@@ -734,7 +734,7 @@ Execution tuning:
 [                 Allow N jobs at once; infinite jobs with no arg (default 1)]
   -k, --keywords=KEYWORDS
 [                 select the tests matching all the comma-separated KEYWORDS]
-[                 multiple \`-k' accumulate; prefixed \`!' negates a KEYWORD]
+[                 multiple '-k' accumulate; prefixed '!' negates a KEYWORD]
       --recheck  select all tests that failed or passed unexpectedly last time
   -e, --errexit  abort as soon as a test fails; implies --debug
   -v, --verbose  force more detailed output
@@ -877,7 +877,7 @@ m4_text_box([Directory structure.])
 # | + ...           - files created during the group
 
 # The directory the whole suite works in.
-# Should be absolute to let the user `cd' at will.
+# Should be absolute to let the user 'cd' at will.
 at_suite_dir=$at_dir/$as_me.dir
 # The file containing the suite ($at_dir might have changed since earlier).
 at_suite_log=$at_dir/$as_me.log
@@ -898,7 +898,7 @@ fi
 # Don't take risks: use only absolute directories in PATH.
 #
 # For stand-alone test suites (ie. atconfig was not found),
-# AUTOTEST_PATH is relative to `.'.
+# AUTOTEST_PATH is relative to '.'.
 #
 # For embedded test suites, AUTOTEST_PATH is relative to the top level
 # of the package.  Then expand it into build/src parts, since users
@@ -948,7 +948,7 @@ dnl The parent needs two fds to the same fifo, otherwise, there is a race
 dnl where the parent can read the fifo before a child opens it for writing
 m4_define([AT_JOB_FIFO_IN_FD], [6])
 m4_define([AT_JOB_FIFO_OUT_FD], [7])
-[#] AS_MESSAGE_LOG_FD is the log file.  Not to be overwritten if `-d'.
+[#] AS_MESSAGE_LOG_FD is the log file.  Not to be overwritten if '-d'.
 if $at_debug_p; then
   at_suite_log=/dev/null
 else
@@ -1000,9 +1000,9 @@ AS_ECHO(["$as_me: starting at: $at_start_date"]) >&AS_MESSAGE_LOG_FD
 
 # Create the master directory if it doesn't already exist.
 AS_MKDIR_P(["$at_suite_dir"]) ||
-  AS_ERROR([cannot create `$at_suite_dir'])
+  AS_ERROR([cannot create '$at_suite_dir'])
 
-# Can we diff with `/dev/null'?  DU 5.0 refuses.
+# Can we diff with '/dev/null'?  DU 5.0 refuses.
 if diff /dev/null /dev/null >/dev/null 2>&1; then
   at_devnull=/dev/null
 else
@@ -1010,7 +1010,7 @@ else
   >"$at_devnull"
 fi
 
-# Use `diff -u' when possible.
+# Use 'diff -u' when possible.
 if at_diff=`diff -u "$at_devnull" "$at_devnull" 2>&1` && test -z "$at_diff"
 then
   at_diff='diff -u'
@@ -1037,7 +1037,7 @@ BEGIN { FS="" }
   AS_ERROR([cannot create test line number cache])
 rm -f "$at_suite_dir/at-source-lines"
 
-# Set number of jobs for `-j'; avoid more jobs than test groups.
+# Set number of jobs for '-j'; avoid more jobs than test groups.
 set X $at_groups; shift; at_max_jobs=$[@%:@]
 if test $at_max_jobs -eq 0; then
   at_jobs=1
@@ -1101,7 +1101,7 @@ at_fn_group_prepare ()
   at_group_log=$at_group_dir/$as_me.log
   _AS_CLEAN_DIR("$at_group_dir") ||
     AS_WARN([test directory for $at_group_normalized could not be cleaned])
-  # Be tolerant if the above `rm' was not able to remove the directory.
+  # Be tolerant if the above 'rm' was not able to remove the directory.
   AS_MKDIR_P(["$at_group_dir"])
 
   echo 0 > "$at_status_file"
@@ -1138,7 +1138,7 @@ AS_FUNCTION_DESCRIBE([at_fn_group_postprocess], [],
 at_fn_group_postprocess ()
 {
   # Be sure to come back to the suite directory, in particular
-  # since below we might `rm' the group directory we are in currently.
+  # since below we might 'rm' the group directory we are in currently.
   cd "$at_suite_dir"
 
   if test ! -f "$at_check_line_file"; then
@@ -1284,7 +1284,7 @@ dnl Gather process group IDs of currently running jobs.
 	for at_pgid in `jobs -p 2>/dev/null`; do
 	  at_pgids="$at_pgids $at_job_group$at_pgid"
 	done
-dnl Ignore `kill' errors, as some jobs may have finished in the meantime.
+dnl Ignore 'kill' errors, as some jobs may have finished in the meantime.
 	test -z "$at_pgids" || kill -$at_signal $at_pgids 2>/dev/null
 dnl wait until all jobs have exited.
 	wait
@@ -1607,7 +1607,7 @@ else
   if $at_debug_p; then
     at_msg='per-test log files'
   else
-    at_msg="\`${at_testdir+${at_testdir}/}$as_me.log'"
+    at_msg="'${at_testdir+${at_testdir}/}$as_me.log'"
   fi
   at_msg1a=${at_xpass_list:+', '}
   at_msg1=$at_fail_list${at_fail_list:+" failed$at_msg1a"}
@@ -1621,7 +1621,7 @@ $at_msg1$at_msg2
 
 You may investigate any problem if you feel able to do so, in which
 case the test suite provides a good starting point.  Its output may
-be found below \`${at_testdir+${at_testdir}/}$as_me.dir'.
+be found below '${at_testdir+${at_testdir}/}$as_me.dir'.
 "])
   exit 1
 fi
@@ -1722,13 +1722,13 @@ AS_IF([$at_arg_given_[]AT_first_option_tr],,[$5])dnl
 # Add HELP-TEXT to the HELP_OTHER diversion.
 #
 # Leading dashes should not be passed in OPTIONS.  Users will be required
-# to pass `--' before long options and `-' before single character options.
+# to pass '--' before long options and '-' before single character options.
 #
-# $at_arg_OPTION will be set to `:' if this option is received, `false' if
-# if --no-OPTION is received, and `false' by default.
+# $at_arg_OPTION will be set to ':' if this option is received, 'false' if
+# if --no-OPTION is received, and 'false' by default.
 #
 # Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered; here,
-# $at_optarg will be set to `:' or `false' as appropriate.  $at_optarg is
+# $at_optarg will be set to ':' or 'false' as appropriate.  $at_optarg is
 # actually just a copy of $at_arg_OPTION.
 #
 # ACTION-IF-NOT-GIVEN will be run once after option parsing is complete and
@@ -1742,11 +1742,11 @@ m4_defun([AT_ARG_OPTION],[_AT_ARG_OPTION([$1],[$2],,[$3],[$4])])
 # first one.  Add HELP-TEXT to the HELP_OTHER diversion.
 #
 # Leading dashes should not be passed in OPTIONS.  Users will be required
-# to pass `--' before long options and `-' before single character options.
+# to pass '--' before long options and '-' before single character options.
 #
 # By default, any argument to these options will be assigned to the shell
 # variable $at_arg_OPTION, where OPTION is the first option in OPTIONS with
-# any `-' characters replaced with `_'.
+# any '-' characters replaced with '_'.
 #
 # Run ACTION-IF-GIVEN each time an option in OPTIONS is encountered; here,
 # $at_optarg will be set to the option argument.  $at_optarg is actually just
@@ -2033,37 +2033,37 @@ $2[]_ATEOF
 # STDERR contents.  Shell metacharacters in STDOUT and STDERR are
 # _not_ processed by the shell, but are treated as string literals.
 #
-# STATUS, STDOUT, and STDERR are not checked if equal to `ignore'.
+# STATUS, STDOUT, and STDERR are not checked if equal to 'ignore'.
 #
-# If STDOUT is `expout', then stdout is compared to the content of the file
-# `expout'.  Likewise for STDERR and `experr'.
+# If STDOUT is 'expout', then stdout is compared to the content of the file
+# 'expout'.  Likewise for STDERR and 'experr'.
 #
-# If STDOUT is `stdout', then the stdout is left in the file `stdout',
-# likewise for STDERR and `stderr'.  Don't do this:
+# If STDOUT is 'stdout', then the stdout is left in the file 'stdout',
+# likewise for STDERR and 'stderr'.  Don't do this:
 #
 #    AT_CHECK([command >out])
-#    # Some checks on `out'
+#    # Some checks on 'out'
 #
 # do this instead:
 #
 #    AT_CHECK([command], [], [stdout])
-#    # Some checks on `stdout'
+#    # Some checks on 'stdout'
 #
-# You might wonder why you can't just use `ignore', then directly use stdout
+# You might wonder why you can't just use 'ignore', then directly use stdout
 # and stderr left by the test suite:
 #
 #    AT_CHECK([command], [], [ignore])
 #    AT_CHECK([check stdout])
 #
-# If the test suite always captured data in the file `stdout', then the
+# If the test suite always captured data in the file 'stdout', then the
 # second command would be trying to read and write from the same file, with
 # undefined behavior.  Therefore, the test suite actually captures data in
-# an internal file of a different name, and only creates `stdout' when
+# an internal file of a different name, and only creates 'stdout' when
 # explicitly requested.
 #
-# Any line of stderr starting with leading blanks and a `+' are filtered
+# Any line of stderr starting with leading blanks and a '+' are filtered
 # out, since most shells when tracing include subshell traces in stderr.
-# This may cause spurious failures when the test suite is run with `-x'.
+# This may cause spurious failures when the test suite is run with '-x'.
 #
 _AT_DEFINE_SETUP([AT_CHECK],
 [_AT_CHECK(m4_expand([$1]), [$2], AS_ESCAPE(m4_dquote(m4_expand([$3]))),
@@ -2091,16 +2091,16 @@ m4_define([AT_CHECK_NOESCAPE],
 # _AT_DECIDE_TRACEABLE(COMMANDS)
 # ------------------------------
 # Worker for _AT_CHECK that expands to shell code.  If COMMANDS are safe to
-# trace with `set -x', the shell code will evaluate to true.  Otherwise,
+# trace with 'set -x', the shell code will evaluate to true.  Otherwise,
 # the shell code will print a message stating an aspect of COMMANDS that makes
 # tracing them unsafe, and evaluate to false.
 #
 # Tracing COMMANDS is not safe if they contain a command that spans multiple
-# lines.  When the test suite user passes `-x' or `--trace', the test suite
-# precedes every command with a `set -x'.  Since most tests expect a specific
+# lines.  When the test suite user passes '-x' or '--trace', the test suite
+# precedes every command with a 'set -x'.  Since most tests expect a specific
 # stderr, if only to confirm that it is empty, the test suite filters ^+ from
 # the captured stderr before comparing with the expected stderr.  If a command
-# spans multiple lines, so will its trace, but a `+' only prefixes the first
+# spans multiple lines, so will its trace, but a '+' only prefixes the first
 # line of that trace:
 #
 # $ echo 'foo
@@ -2143,18 +2143,18 @@ m4_define([AT_CHECK_NOESCAPE],
 #   echo "$var"
 # Parameter expansions appear in COMMANDS with much greater frequency than do
 # newlines and command substitutions, so disabling tracing for all such
-# COMMANDS would much more substantially devalue `testsuite -x'.  To determine
-# which parameter expansions yield multiple lines, we escape all ``', `"',
-# and `\' in a copy of COMMANDS and expand that string within double quotes
+# COMMANDS would much more substantially devalue 'testsuite -x'.  To determine
+# which parameter expansions yield multiple lines, we escape all '`', '"',
+# and '\' in a copy of COMMANDS and expand that string within double quotes
 # at runtime.  If the result of that expansion contains multiple lines, the
 # test suite disables tracing for the command in question.
 #
 # This method leads the test suite to expand some parameters that the shell
 # itself will never expand due to single-quotes or backslash escapes.  This is
-# not a problem for `$foo' expansions, which will simply yield the empty string
-# or some unrelated value.  A `${...}' expansion could actually form invalid
-# shell code, however; consider `${=foo}'.  Therefore, we disable tracing for
-# all COMMANDS containing `${...}'.  This affects few COMMANDS.
+# not a problem for '$foo' expansions, which will simply yield the empty string
+# or some unrelated value.  A '${...}' expansion could actually form invalid
+# shell code, however; consider '${=foo}'.  Therefore, we disable tracing for
+# all COMMANDS containing '${...}'.  This affects few COMMANDS.
 #
 # This macro falls in a very hot path; the Autoconf test suite expands it 1640
 # times as of this writing.  To give a sense of the impact of the heuristics I
@@ -2232,7 +2232,7 @@ m4_define([AT_DIFF_STDOUT()],
 # then the shells will save the traces in at-stderr. So we have to filter
 # them out when checking stderr, and we must send them into the test suite's
 # stderr to honor -x properly. Since only the first line of the trace of a
-# multiline command starts with a `+', and I know of no straightforward way to
+# multiline command starts with a '+', and I know of no straightforward way to
 # filter out the unadorned trace lines, we disable shell tracing entirely for
 # commands that could span multiple lines.
 #

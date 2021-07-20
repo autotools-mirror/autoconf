@@ -309,7 +309,7 @@ AC_DEFUN([_AC_FC_DIALECT_YEAR],
 #  pgf77/pgf90/pghpf/pgf95/pgfortran: Portland Group F77/F90/F95 compilers
 #  xlf/xlf90/xlf95: IBM (AIX) F77/F90/F95 compilers
 #    Prefer xlf9x to the generic names because they do not reject files
-#    with extension `.f'.
+#    with extension '.f'.
 #  lf95: Lahey-Fujitsu F95 compiler
 #  fl32: Microsoft Fortran 77 "PowerStation" compiler
 #  af77: Apogee F77 compiler for Intergraph hardware running CLIX
@@ -342,7 +342,7 @@ rm -f a.out
 
 m4_expand_once([_AC_COMPILER_EXEEXT])[]dnl
 m4_expand_once([_AC_COMPILER_OBJEXT])[]dnl
-# If we don't use `.F' as extension, the preprocessor is not run on the
+# If we don't use '.F' as extension, the preprocessor is not run on the
 # input file.  (Note that this only needs to work for GNU compilers.)
 ac_save_ext=$ac_ext
 ac_ext=F
@@ -428,8 +428,8 @@ fi[]dnl
 
 # _AC_PROG_FC_C_O
 # ---------------
-# Test if the Fortran compiler accepts the options `-c' and `-o'
-# simultaneously, and define `[F77/FC]_NO_MINUS_C_MINUS_O' if it does not.
+# Test if the Fortran compiler accepts the options '-c' and '-o'
+# simultaneously, and define '[F77/FC]_NO_MINUS_C_MINUS_O' if it does not.
 #
 # The usefulness of this macro is questionable, as I can't really see
 # why anyone would use it.  The only reason I include it is for
@@ -442,7 +442,7 @@ AC_CACHE_CHECK([whether $[]_AC_FC[] understands -c and -o together],
 	       [ac_cv_prog_[]_AC_LANG_ABBREV[]_c_o],
 [AC_LANG_CONFTEST([AC_LANG_PROGRAM([])])
 # We test twice because some compilers refuse to overwrite an existing
-# `.o' file with `-o', although they will create one.
+# '.o' file with '-o', although they will create one.
 ac_try='$[]_AC_FC[] $[]_AC_LANG_PREFIX[]FLAGS -c conftest.$ac_ext -o conftest2.$ac_objext >&AS_MESSAGE_LOG_FD'
 rm -f conftest2.*
 if _AC_DO_VAR(ac_try) &&
@@ -821,11 +821,11 @@ AS_IF([test "$[]_AC_FC[]_DUMMY_MAIN" != unknown],
       [m4_default([$1],
 [if test $[]_AC_FC[]_DUMMY_MAIN != none; then
   AC_DEFINE_UNQUOTED([]_AC_FC[]_DUMMY_MAIN, $[]_AC_FC[]_DUMMY_MAIN,
-		     [Define to dummy `main' function (if any) required to
+		     [Define to dummy 'main' function (if any) required to
 		      link to the Fortran libraries.])
   if test "x$ac_cv_fc_dummy_main" = "x$ac_cv_f77_dummy_main"; then
 	AC_DEFINE([FC_DUMMY_MAIN_EQ_F77], 1,
-		  [Define if F77 and FC dummy `main' functions are identical.])
+		  [Define if F77 and FC dummy 'main' functions are identical.])
   fi
 fi])],
       [m4_default([$2],
@@ -886,8 +886,8 @@ AC_CACHE_CHECK([for alternate main to link with _AC_LANG libraries],
  LIBS=$ac_[]_AC_LANG_ABBREV[]_m_save_LIBS
 ])
 AC_DEFINE_UNQUOTED([]_AC_FC[]_MAIN, $ac_cv_[]_AC_LANG_ABBREV[]_main,
-		   [Define to alternate name for `main' routine that is
-		    called from a `main' in the Fortran libraries.])
+		   [Define to alternate name for 'main' routine that is
+		    called from a 'main' in the Fortran libraries.])
 ])# _AC_FC_MAIN
 
 
@@ -1205,7 +1205,7 @@ AC_LANG_POP(Fortran)dnl
 #
 # Some compilers allow preprocessing with either a Fortran preprocessor or
 # with the C preprocessor (cpp).  Prefer the Fortran preprocessor, to deal
-# correctly with continuation lines, `//' (not a comment), and preserve white
+# correctly with continuation lines, '//' (not a comment), and preserve white
 # space (for fixed form).
 #
 # (The flags for the current source-code extension, if any, are stored in
@@ -1459,7 +1459,7 @@ AC_LANG_POP([Fortran])dnl
 # ------------------------------------------------
 # Look for a compiler flag to make the Fortran (FC) compiler accept long lines
 # in the current (free- or fixed-format) source code, and adds it to FCFLAGS.
-# The optional LENGTH may be 80, 132 (default), or `unlimited' for longer
+# The optional LENGTH may be 80, 132 (default), or 'unlimited' for longer
 # lines.  Note that line lengths above 250 columns are not portable, and some
 # compilers (hello ifort) do not accept more than 132 columns at least for
 # fixed format.  Call ACTION-IF-SUCCESS (defaults to nothing) if successful
@@ -1503,7 +1503,7 @@ m4_case(m4_default([$1], [132]),
   [80],             [ac_fc_line_len=80
 		       ac_fc_line_length_test='
       subroutine longer_than_72(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)'],
-  [m4_warning([Invalid length argument `$1'])])
+  [m4_warning([Invalid length argument '$1'])])
 : ${ac_fc_line_len_string=$ac_fc_line_len}
 AC_CACHE_CHECK(
 [for Fortran flag needed to accept $ac_fc_line_len_string column source lines],

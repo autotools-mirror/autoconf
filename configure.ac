@@ -17,11 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-AC_PREREQ([2.62])
+AC_PREREQ([2.69])
 
-AC_INIT([GNU Autoconf],
-	m4_esyscmd([build-aux/git-version-gen .tarball-version]),
-	[bug-autoconf@gnu.org])
+AC_INIT([GNU Autoconf],[m4_esyscmd(build-aux/git-version-gen .tarball-version)],[bug-autoconf@gnu.org])
 AC_CONFIG_SRCDIR([lib/autoconf/autoconf.m4])
 
 AC_CONFIG_AUX_DIR([build-aux])

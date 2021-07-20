@@ -58,7 +58,7 @@ export MAKE
 
 # AT_CMP(FILE-1, FILE-2)
 # ----------------------
-# Check FILE-1 and FILE-2 for equality, like `cmp FILE-1 FILE-2'.
+# Check FILE-1 and FILE-2 for equality, like 'cmp FILE-1 FILE-2'.
 m4_define([AT_CMP],
 [m4_ifval([$2],, [m4_fatal([AT_CMP takes two arguments.])])[]dnl
 AT_CHECK([$at_diff "$1" "$2"])
@@ -71,7 +71,7 @@ AT_CHECK([$at_diff "$1" "$2"])
 
 # AT_CHECK_SHELL_SYNTAX(PROGRAM)
 # ------------------------------
-# If the shell handles `-n' well, use it to check the syntax of PROGRAM;
+# If the shell handles '-n' well, use it to check the syntax of PROGRAM;
 # otherwise, do nothing.  ksh93 -n also spits outs loads of warnings
 # about older constructs, but we don't care about the warnings.
 m4_define([AT_CHECK_SHELL_SYNTAX],
@@ -112,19 +112,19 @@ m4_define([AT_CHECK_PERL_SYNTAX],
 #
 # becomes
 #
-#  m4:script.4s:1: cannot open `foo': No such file or directory
+#  m4:script.4s:1: cannot open 'foo': No such file or directory
 #  autom4te: m4 failed with exit status: 1
 #
 # Also, this
 #
-#  configure.ac:6: warning: The macro `AC_LANG_SAVE' is obsolete.
+#  configure.ac:6: warning: The macro 'AC_LANG_SAVE' is obsolete.
 #  configure.ac:6: You should run autoupdate.
 #  ../../lib/autoconf/lang.m4:125: AC_LANG_SAVE is expanded from...
 #  configure.ac:6: the top level
 #
 # becomes
 #
-#  configure.ac:6: warning: The macro `AC_LANG_SAVE' is obsolete.
+#  configure.ac:6: warning: The macro 'AC_LANG_SAVE' is obsolete.
 #  configure.ac:6: You should run autoupdate.
 #  lang.m4: AC_LANG_SAVE is expanded from...
 #  configure.ac:6: the top level
@@ -137,8 +137,8 @@ m4_define([AT_CHECK_PERL_SYNTAX],
 #
 # and
 #     m4:(file):(line): Cannot open foo:
-# or  m4:(file):(line): include: cannot open `foo':
-# to  m4:(file):(line): cannot open `foo':
+# or  m4:(file):(line): include: cannot open [`']foo':
+# to  m4:(file):(line): cannot open 'foo':
 #
 # and
 #     autom4te: [^ ]m4
@@ -159,7 +159,7 @@ m4_case([$4], [], [], [ignore], [],
 [AT_CHECK([[mv stderr stderr-raw &&
    sed 's/^[^:]*m4[-.ex0-9]*: *\([^:]*:\) *\([0-9][0-9]*: \)/m4:\1\2/
 	s/^\([^:]*:\) *\([0-9][0-9]*:\)[^:]*m4[-.ex0-9]*: /m4:\1\2 /
-	s/: C\(annot open \)\([^`:]*\):/: c\1`\2'\'':/
+	s/: C\(annot open \)\([^`'\'':]*\):/: c\1'\''\2'\'':/
 	s/: include:\( cannot open\)/:\1/
 	s/^autom4te: [^ ]*m4[.ex]* /autom4te: m4 /
 	s/^autom4te: error: [^ ]*m4[.ex]* /autom4te: error: m4 /
@@ -273,7 +273,7 @@ fi
 # EXPECTED_TMPLS is a whitespace-separated list of template
 # definitions that should appear in the generated config.hin.
 # The stock definitions made by AC_INIT are also checked for.
-# If EXPECTED_TMPLS is the single word `ignore', or if the
+# If EXPECTED_TMPLS is the single word 'ignore', or if the
 # expected exit status is not 0, this test is skipped.
 m4_define([AT_CHECK_AUTOHEADER],
 [AT_CHECK_M4([autoheader $1], [$3], [$4], [$5])
@@ -309,7 +309,7 @@ AS_UNSET([config_h_in])
 #                    [EXIT-STATUS = 0],
 #                    [STDOUT = IGNORE], STDERR)
 # ---------------------------------------------
-# `abs_top_srcdir' is needed so that `./configure' finds install-sh.
+# 'abs_top_srcdir' is needed so that './configure' finds install-sh.
 # Using --srcdir is more expensive.
 m4_define([AT_CHECK_CONFIGURE],
 [AT_CAPTURE_FILE([config.log])[]dnl
@@ -331,16 +331,16 @@ m4_define([AT_CHECK_CONFIGURE],
 # commands in the pipe, so turn off tracing for these.
 #
 # Some tests might exit prematurely when they find a problem, in
-# which case `env-after' is probably missing.  Don't check it then.
+# which case 'env-after' is probably missing.  Don't check it then.
 #
-# Here are the variables `configure' may modify during execution:
+# Here are the variables 'configure' may modify during execution:
 # - ^as_
 #   M4sh's shell name space.
 # - ^ac_
 #   Autoconf's shell name space.
 # - prefix and exec_prefix
 #   are kept undefined (NONE) until AC_OUTPUT which then sets them to
-#   `/usr/local' and `${prefix}' for make.
+#   '/usr/local' and '${prefix}' for make.
 # - (host|build|target)(_(alias|cpu|vendor|os))?
 #   Set by AC_CANONICAL_(HOST|BUILD|TARGET).
 # - cross_compiling
@@ -354,7 +354,7 @@ m4_define([AT_CHECK_CONFIGURE],
 # - _|@|.[*#?$].|argv|ARGC|LINENO|OLDPWD|PIPESTATUS|RANDOM|SECONDS
 #   |START_TIME|ToD|_AST_FEATURES
 #   Some variables some shells use and change.
-#   `.[*#?$].' catches `$#' etc. which are displayed like this:
+#   '.[*#?$].' catches '$#' etc. which are displayed like this:
 #      | '!'=18186
 #      | '#'=0
 #      | '$'=6908
@@ -421,7 +421,7 @@ fi
 # AT_CONFIG_CMP(VAR-FILE-A, VAR-FILE-B, [EXTRA-VARIANCE])
 # -------------------------------------------------------
 # Check the outcomes of two configure runs for equality by comparing dumps of
-# their shell variables.  VAR-FILE-A and VAR-FILE-B are two `set'-style shell
+# their shell variables.  VAR-FILE-A and VAR-FILE-B are two 'set'-style shell
 # variable space dumps.
 #
 # We permit variance between runs in the following shell variables:
@@ -467,7 +467,7 @@ fi
 # empty.  (OTOH, cache variables indicate the result of the test even if they
 # are empty, so we have to be strict about them.)
 #
-# Lines that do not look like `foo=bar' are probably latter lines of
+# Lines that do not look like 'foo=bar' are probably latter lines of
 # multiline values; trim them.
 m4_define([AT_CONFIG_CMP],
 [for act_file in $1 $2
@@ -647,7 +647,7 @@ m4_define([AT_CHECK_AUTOUPDATE],
 # AT_CHECK_MAKE(MAKEARGS, DIRECTORY, EXIT-STATUS,
 #               [STDOUT = IGNORE], [STDERR = IGNORE])
 # ---------------------------------------------------------------
-# Run make in DIRECTORY (default `.'), passing MAKEARGS on the command
+# Run make in DIRECTORY (default '.'), passing MAKEARGS on the command
 # line.  EXIT-STATUS, STDOUT, and STDERR are as for AT_CHECK.
 # The environment variable MAKE is honored if present.
 # The environment variable MAKEFLAGS is *cleared*.
@@ -728,15 +728,15 @@ AT_CLEANUP
 # list of modifiers to how the test is carried out.  Currently
 # the following modifiers are defined:
 #
-#   - `no-cross': Don't test this macro in cross-compilation mode.
+#   - 'no-cross': Don't test this macro in cross-compilation mode.
 #     This is for macros that use AC_RUN_IFELSE, and therefore, when
-#     cross-compiling, they either crash or give a `best guess' answer
+#     cross-compiling, they either crash or give a 'best guess' answer
 #     that may be wrong.
 #
-#   - `cxx_cv_varies:NAME': The value of the cache variable ac_cv_NAME
+#   - 'cxx_cv_varies:NAME': The value of the cache variable ac_cv_NAME
 #     may legitimately vary between the C tests and the C++ tests.
 #
-#   - `cxx_define_varies:NAME' The value of the AC_DEFINEd macro NAME
+#   - 'cxx_define_varies:NAME' The value of the AC_DEFINEd macro NAME
 #     may legitimately vary between the C tests and the C++ tests.
 m4_define([AT_CHECK_MACRO],
 [AT_SETUP([$1])
@@ -880,8 +880,8 @@ AT_CLEANUP
 # _AT_FILTER_CXX_CV_VARIES(TEST-PARAMETERS)
 # ---------------------------------------------
 # Subroutine of AT_CHECK_MACRO that expands to a sequence of
-# zero or more `vary:NAME' tokens, one for each occurrence of
-# `cxx_cv_varies:NAME' in TEST-PARAMETERS.
+# zero or more 'vary:NAME' tokens, one for each occurrence of
+# 'cxx_cv_varies:NAME' in TEST-PARAMETERS.
 m4_define([_AT_FILTER_CXX_CV_VARIES],
 [m4_map_args_w([$1], [_AT_FILTER_CXX_CV_VARY(], [)], [ ])])
 
@@ -893,8 +893,8 @@ m4_define([_AT_FILTER_CXX_CV_VARY],
 # _AT_FILTER_CXX_DEFINE_VARIES(TEST-PARAMETERS)
 # ---------------------------------------------
 # Subroutine of AT_CHECK_MACRO that expands to a sequence of
-# zero or more `vary:NAME' tokens, one for each occurrence of
-# `cxx_define_varies:NAME' in TEST-PARAMETERS.
+# zero or more 'vary:NAME' tokens, one for each occurrence of
+# 'cxx_define_varies:NAME' in TEST-PARAMETERS.
 m4_define([_AT_FILTER_CXX_DEFINE_VARIES],
 [m4_map_args_w([$1], [_AT_FILTER_CXX_DEFINE_VARY(], [)], [ ])])
 
