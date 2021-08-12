@@ -1084,7 +1084,7 @@ mv config.status config-status-expected
 mv config.h config-h-expected
 
 # Run it again with stdin (fd 0) closed.
-# There should be no change to the stdout or stderr output and thoe
+# There should be no change to the stdout or stderr output and the
 # result of configuration should be the same.
 
 AT_CHECK_CONFIGURE([ 0<&- ], [], [stdout], [stderr])
