@@ -8741,6 +8741,28 @@ The substituted value of @code{FC_MODOUT} may refer to the
 the significant trailing whitespace in a @file{Makefile}.
 @end defmac
 
+@defmac AC_F77_CRAY_POINTERS (@ovar{action-if-success}, @
+  @dvar{action-if-failure, AC_MSG_FAILURE})
+@defmacx AC_FC_CRAY_POINTERS (@ovar{action-if-success}, @
+  @dvar{action-if-failure, AC_MSG_FAILURE})
+@acindex{F77_CRAY_POINTERS}
+@acindex{FC_CRAY_POINTERS}
+@caindex fc_cray_pointer
+
+Try to ensure that the Fortran compiler (@code{$F77} or @code{$FC})
+accepts Cray pointers.  If successful, the @var{action-if-success} is
+called and any needed flags are added to @code{FFLAGS} or
+@code{FCFLAGS}.  Otherwise, @var{action-if-failure} is called, which
+defaults to failing with an error message.
+
+Cray pointers are a non-standard extension supported by many Fortran
+compilers which allow an integer to be declared as C-like pointer to
+a target variable.
+
+The result of this test, or @samp{none} or @samp{unknown}, is cached in
+the @code{ac_cv_f77_cray_ptr} or @code{ac_cv_fc_cray_ptr} variable.
+@end defmac
+
 
 @node Go Compiler
 @subsection Go Compiler Characteristics

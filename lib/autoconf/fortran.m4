@@ -1861,3 +1861,73 @@ AC_CONFIG_COMMANDS_PRE([case $FC_MODOUT in #(
   *\ ) FC_MODOUT=$FC_MODOUT'${ac_empty}' ;;
 esac])dnl
 ])
+
+
+# _AC_FC_CRAY_POINTERS([ACTION-IF-SUCCESS], [ACTION-IF-FAILURE = FAILURE])
+#-------------------------------------------------------------------------
+# Try to ensure that the Fortran compiler supports Cray pointers, a
+# non-standard extension that provides a C-like pointer in Fortran.
+#
+# If successful, ACTION-IF-SUCCESS is called.  If no argument is provided, then
+# any necessary flags are added to F[C]FLAGS.  Otherwise, ACTION-IF-FAILURE is
+# called, which defaults to failing with an error message.
+#
+# Most compilers provide an implementation of Cray pointers, and often no
+# additional flags are required to enable support.  A partial list of compilers
+# and flags which may be required are listed below.
+#
+# The known flags are:
+#   -fcray-pointer: gfortran
+#   -Mcray-pointer: PGI
+AC_DEFUN([_AC_FC_CRAY_POINTERS], [
+  AC_MSG_CHECKING([for $[]_AC_FC[] option to support Cray pointers])
+  AC_CACHE_VAL([ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr], [
+    ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr='unknown'
+    ac_save_[]_AC_LANG_PREFIX[]FLAGS=$[]_AC_LANG_PREFIX[]FLAGS
+    for ac_option in none -fcray-pointer -Mcray=pointer; do
+      test "$ac_option" != none && _AC_LANG_PREFIX[]FLAGS="$ac_save_[]_AC_LANG_PREFIX[]FLAGS $ac_option"
+      AC_COMPILE_IFELSE(
+        [AC_LANG_PROGRAM([], [
+      integer aptr(2)
+      pointer (iptr, aptr)
+        ])],
+        [ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr=$ac_option],
+      )
+      _AC_LANG_PREFIX[]FLAGS=$ac_save_[]_AC_LANG_PREFIX[]FLAGS
+      AS_IF([test "$ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr" != unknown], [break])
+    done
+  ])
+  AS_CASE([ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr],
+    [none], [AC_MSG_RESULT([none_needed])],
+    [unknown], [AC_MSG_RESULT([unsupported])],
+    [AC_MSG_RESULT([$ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr])]
+  )
+  AS_IF([test "$ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr" != unknown], [
+    m4_default([$1], [
+      AS_IF([test "$ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr" != none],
+        [_AC_LANG_PREFIX[]FLAGS="$[]_AC_LANG_PREFIX[]FLAGS $ac_cv_[]_AC_LANG_ABBREV[]_cray_ptr"]
+      )
+    ])],
+    [m4_default([$2], [AC_MSG_ERROR(["$[]_AC_FC[] does not support Cray pointers"])])]
+  )
+])
+
+
+# AC_F77_CRAY_POINTERS
+#---------------------
+AC_DEFUN([AC_F77_CRAY_POINTERS], [
+  AC_REQUIRE([AC_PROG_F77])
+  AC_LANG_PUSH([Fortran 77])
+  _AC_FC_CRAY_POINTERS($@)
+  AC_LANG_POP([Fortran 77])
+])
+
+
+# AC_FC_CRAY_POINTERS
+#--------------------
+AC_DEFUN([AC_FC_CRAY_POINTERS], [
+  AC_REQUIRE([AC_PROG_FC])
+  AC_LANG_PUSH([Fortran])
+  _AC_FC_CRAY_POINTERS($@)
+  AC_LANG_POP([Fortran])
+])
