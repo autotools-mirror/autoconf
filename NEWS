@@ -3,6 +3,10 @@ GNU Autoconf NEWS - User visible changes.
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
 ** Backward incompatibilities
+
+*** Autoconf now requires perl 5.8 (2002) or later.
+  Generated 'configure' scripts continue to run without perl.
+
 ** New features
 ** Obsolete features and new warnings
 
@@ -14,6 +18,12 @@ GNU Autoconf NEWS - User visible changes.
   with grave accent and apostrophe.
 
 ** Notable bug fixes
+
+*** Autoconf caches now use finer-grained timestamps.
+
+  Autoconf now uses floating-point numbers rather than integers to
+  represent cache file timestamps, thus avoiding some problems where
+  automake incorrectly decides not to regenerate stale caches.
 
 * Noteworthy changes in release 2.71 (2021-01-28) [stable]
 
