@@ -21709,7 +21709,7 @@ the programs work well enough in practice.
 Although some traditional C programs assume that signed integer overflow
 wraps around reliably using two's complement arithmetic, the C standard
 says that program behavior is undefined on overflow, and these C
-programs many not work on many modern implementations.
+programs may not work on many modern implementations.
 
 @menu
 * Integer Overflow Basics::     Why integer overflow is a problem
