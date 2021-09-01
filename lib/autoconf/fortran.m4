@@ -665,10 +665,10 @@ while test $[@%:@] != 1; do
 	-lang* | -lcrt*.o | -lc | -lgcc* | -lSystem | -libmil | -little \
 	  |-LANG:=* | -LIST:* | -LNO:* | -link)
 	  ;;
-	-lkernel32)
+	-lkernel32 | -lmingw* | -lmoldname)
 	  # Ignore this library only on Windows-like systems.
 	  case $host_os in
-	  cygwin* | msys* ) ;;
+	  cygwin* | msys* | *mingw*) ;;
 	  *)
 	  _AC_LIST_MEMBER_IF($ac_arg, $ac_cv_[]_AC_LANG_ABBREV[]_libs, ,
 			     ac_cv_[]_AC_LANG_ABBREV[]_libs="$ac_cv_[]_AC_LANG_ABBREV[]_libs $ac_arg")
