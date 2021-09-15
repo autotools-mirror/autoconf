@@ -1,0 +1,53 @@
+-*- text -*-
+
+Autoconf
+
+Autoconf is an extensible package of M4 macros that produce shell
+scripts to automatically configure software source code packages.
+These scripts can adapt the packages to many kinds of UNIX-like
+systems without manual user intervention.  Autoconf creates a
+configuration script for a package from a template file that lists the
+operating system features that the package can use, in the form of M4
+macro calls.
+
+This disconnected branch holds scripts for “continuous integration” of
+Autoconf, together with Automake and Libtool.  If you are _using_ Autoconf
+in the development of your own code, you do not need to use these scripts
+or even know they exist.  If you are doing development of Autoconf itself,
+you can use these scripts to help you test your changes.  We are working
+on setting up a server that will run these scripts automatically on every
+commit to the main branches.
+
+Licensing
+=========
+Autoconf is released under the General Public License version 3 (GPLv3+).
+Autoconf itself includes a licensing exception in some of its source files,
+but this exception does not apply to the scripts on this branch.
+
+GNU Project notice
+==================
+Autoconf is part of the GNU Operating System, developed by the GNU Project.
+
+If you are the author of an awesome program and want to join us in
+writing Free (libre) Software, please consider making it an official
+GNU program and become a GNU Maintainer.  Instructions on how to do
+this are here:
+  https://www.gnu.org/help/evaluation
+
+Don't have a program to contribute?  Look at all the other ways to help:
+  https://www.gnu.org/help/help.html
+
+And to learn more about Free (libre) Software in general, please read
+and share this page:
+  https://gnu.org/philosophy/free-sw.html
+
+We are looking forward to hacking with you!
+
+-----
+
+Copyright (C) 2021 Free Software Foundation, Inc.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without warranty of any kind.

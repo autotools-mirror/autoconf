@@ -1,0 +1,101 @@
+#! /usr/bin/perl
+
+# Log the environment in which this script is running.
+# Each entry in @ARGV is a program of interest, which is invoked with the
+# --version option.
+
+# Copyright (C) 2021 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+use v5.14;    # implicit use strict, use feature ':5.14'
+use warnings FATAL => 'all';
+use utf8;
+use open qw(:utf8);
+
+use Cwd qw(cwd);
+use FindBin ();
+use POSIX ();
+
+use lib $FindBin::Bin;
+use BuildCommon qw(
+    ensure_C_locale
+    error
+    run
+    sh_quote
+    which
+);
+
+sub report_machine {
+    print "## Machine information:\n\n";
+
+    my ($sysname, undef, $release, $version, $machine) = POSIX::uname();
+    print '$(uname -m) = ', sh_quote($machine || 'unknown'), "\n";
+    print '$(uname -r) = ', sh_quote($release || 'unknown'), "\n";
+    print '$(uname -s) = ', sh_quote($sysname || 'unknown'), "\n";
+    print '$(uname -v) = ', sh_quote($version || 'unknown'), "\n";
+    print "\n";
+
+    my $cwd = cwd();
+    my $qcwd = sh_quote($cwd);
+    print '$(pwd) = ', $qcwd, "\n";
+    print "WARNING: working directory requires quotation\n"
+        if $cwd ne $qcwd;
+    print "\n";
+
+    ## FIXME: Not all df implementations support -h or -T.
+    run(qw(df -h -T), $cwd);
+
+    print "\n";
+}
+
+sub report_ENV {
+    my $envp = $_[0];
+    print "## Environment variables:\n\n";
+    for my $key (sort keys %$envp) {
+        print '  ', sh_quote($key), '=', sh_quote($envp->{$key}), "\n";
+    }
+    print "\n";
+}
+
+sub report_programs {
+    print "## Programs used during build:\n\n";
+
+    for my $prog (@_) {
+        my ($absprog) = which($prog);
+        if ($absprog) {
+            print sh_quote($prog), ' is ', sh_quote($absprog), "\n";
+            run($absprog, '--version');
+        } else {
+            print "WARNING: $prog not found in \$PATH\n";
+        }
+        print "\n";
+    }
+}
+
+sub main {
+    my %orig_env = %ENV;
+    ensure_C_locale();
+
+    print "# CI environment report\n";
+    report_machine();
+    report_ENV(\%orig_env);
+    report_programs(@_) if scalar(@_);
+};
+
+eval {
+    main(@ARGV);
+    exit(0);
+};
+error("$@");
