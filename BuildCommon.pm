@@ -33,6 +33,7 @@ BEGIN {
     @EXPORT_OK = qw(
         ensure_C_locale
         error
+        get_status_and_output
         popen
         run
         sh_split
@@ -179,6 +180,53 @@ sub popen {
     open my $fh, $mode, @args
         or invocation_error($args[0]);
     return $fh;
+}
+
+# Run, and log execution of, a subprocess.  Capture all of its output,
+# including both stdout and stderr.
+# @_ should be an argument vector.
+# If the subprocess exits normally (successful or unsuccessful),
+# returns a list whose first element is the exit status, followed by
+# all the lines of output from the subprocess (stdout and stderr are
+# intermingled).
+# If the subprocess could not be started because there is no such command,
+# returns (-1,).
+# Otherwise invocation_error/subprocess_error are called as appropriate.
+sub get_status_and_output {
+    die 'get_status_and_output: no command to execute'
+        if scalar(@_) == 0;
+    log_execution(@_);
+
+    my $pid = open(my $fh, '-|')
+        // invocation_error($_[0]);
+
+    if ($pid == 0) {
+        # child
+        open(STDERR, ">&STDOUT") or do {
+            print {*STDERR} "Can't dup STDOUT: $!\n";
+            exit(127);
+        };
+        { exec {$_[0]} @_; };
+        exit(126) if $!{ENOENT};
+        print {*STDERR} "exec $_[0] failed: $!\n";
+        exit(127);
+    }
+
+    # parent
+    my @lines = <$fh>;
+    close $fh or do {
+        if ($! != 0 || ($? & 0x7F) != 0) {
+            subprocess_error(@_);
+        }
+    };
+    my $status = $? >> 8;
+    if ($status == 127) {
+        subprocess_error(@_);
+    }
+    if ($status == 126) {
+        $status = -1;
+    }
+    return ($status, @lines);
 }
 
 # Force use of the C locale for this process and all subprocesses.

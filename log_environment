@@ -24,7 +24,7 @@ use warnings FATAL => 'all';
 use utf8;
 use open qw(:utf8);
 
-use Cwd qw(cwd);
+use Cwd qw(getcwd);
 use FindBin ();
 use POSIX ();
 
@@ -32,10 +32,68 @@ use lib $FindBin::Bin;
 use BuildCommon qw(
     ensure_C_locale
     error
+    get_status_and_output
     run
     sh_quote
     which
 );
+
+# C library detection for Linux.  Algorithm from NPM package 'detect-libc',
+# <https://github.com/lovell/detect-libc>; currently only supports GNU and
+# musl libc.  If cross-compiling, the result is for the build environment,
+# not the host or target.  Does not use a C compiler.
+sub report_linux_libc {
+    # Try getconf.
+    my ($gcstat, @gcout) = get_status_and_output('getconf', 'GNU_LIBC_VERSION');
+    if ($gcstat == 0) {
+       my $gcver = $gcout[0];
+       chomp $gcver;
+       print "C library: $gcver\n\n";
+       return;
+    } elsif ($gcstat == -1) {
+       print "getconf: command not found\n";
+    }
+
+    # Try ldd --version.
+    my ($ldstat, @ldout) = get_status_and_output('ldd', '--version');
+    if ($ldstat == 0 || $ldstat == 1) {
+        my $ld1 = $ldout[0];
+        my $ld2 = $ldout[1];
+        if ($ld1 =~ /\bmusl\b/ia) {
+            $ld2 =~ s/^version\s+(\S+).*$/$1/i;
+            print "C library: musl $ld2\n\n";
+            return;
+        }
+        if ($ld2 =~ /^copyright.*free software foundation/i) {
+            $ld1 =~ s/^\S+\s+\([^\)]+\)\s+//;
+            $ld1 =~ s/\s+\z//;
+            print "C library: glibc $ld1\n\n";
+            return;
+        }
+
+        print "WARNING: ldd --version output not recognized:\n";
+        for my $line (@ldout) {
+            print '> ', $line;
+        }
+        print "\n";
+
+    } elsif ($ldstat == -1) {
+        print "ldd: command not found\n";
+    } else {
+        print "WARNING: ldd --version exit $ldstat\n";
+        for my $line (@ldout) {
+            print '> ', $line;
+        }
+        print "\n";
+    }
+
+    # detect-libc goes on to poke around in /lib, which I don't think is
+    # solid enough to base an actual detection on, but we may as well list
+    # contents that may be relevant.
+    print "C library: unknown\n\n";
+    run("ls", "-l", glob('/lib*/{libc[.-],ld[-.]*.so}*'));
+    print "\n";
+}
 
 sub report_machine {
     print "## Machine information:\n\n";
@@ -47,7 +105,25 @@ sub report_machine {
     print '$(uname -v) = ', sh_quote($version || 'unknown'), "\n";
     print "\n";
 
-    my $cwd = cwd();
+    if ($sysname eq 'Linux') {
+        report_linux_libc();
+    }
+
+    my ($npstat, @npout) = get_status_and_output('nproc');
+    if ($npstat == 0) {
+        chomp @npout;
+        print '$(nproc) = ', $npout[0], "\n";
+    } elsif ($npstat == -1) {
+        print "nproc: command not found\n";
+    } else {
+        print "nproc: exit $npstat\n";
+        for my $line (@npout) {
+            print '> ', $line;
+        }
+    }
+
+    print "\n";
+    my $cwd = getcwd();
     my $qcwd = sh_quote($cwd);
     print '$(pwd) = ', $qcwd, "\n";
     print "WARNING: working directory requires quotation\n"
