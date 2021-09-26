@@ -32,7 +32,9 @@ use Exporter qw(import);
 BEGIN {
     @EXPORT_OK = qw(
         ensure_C_locale
+        ensure_empty_stdin
         error
+        get_status
         get_status_and_output
         popen
         run
@@ -72,7 +74,7 @@ sub subprocess_error {    ## no critic (Subroutines::RequireArgUnpacking)
     my $status = $?;
     my $cmd    = join q{ }, @_;
     if ($syserr) {
-        error("system error with pipe to $cmd: $syserr");
+        error("system error with $cmd: $syserr");
 
     } elsif ($status == 0) {
         return;
@@ -157,11 +159,21 @@ sub run {    ## no critic (Subroutines::RequireArgUnpacking)
     die 'run: no command to execute'
         if scalar(@_) == 0;
     log_execution(@_);
-    my $status = system { $_[0] } @_;
 
-    return                  if $status == 0;
-    invocation_error($_[0]) if $status == -1;
-    subprocess_error(@_);
+    my $pid = fork
+        // invocation_error($_[0]);
+
+    if ($pid == 0) {
+        # child
+        { exec {$_[0]} @_; };
+        print {*STDERR} "exec $_[0] failed: $!\n";
+        exit(127);
+    }
+
+    # parent
+    waitpid $pid, 0;
+    undef $!;
+    subprocess_error(@_) if $?;
 }
 
 # Run, and log execution of, a subprocess.  @_ should be one of the
@@ -180,6 +192,39 @@ sub popen {
     open my $fh, $mode, @args
         or invocation_error($args[0]);
     return $fh;
+}
+
+# Run, and log execution of, a subprocess.  @_ should be an argument vector.
+# If the subprocess exits normally (successful or unsuccessful),
+# returns the exit status.
+# If the subprocess could not be started because there is no such command,
+# returns -1.
+# Otherwise invocation_error/subprocess_error are called as appropriate.
+sub get_status {
+    die 'run: no command to execute'
+        if scalar(@_) == 0;
+    log_execution(@_);
+
+    my $pid = fork
+        // invocation_error($_[0]);
+
+    if ($pid == 0) {
+        # child
+        { exec {$_[0]} @_; };
+        exit(126) if $!{ENOENT};
+        print {*STDERR} "exec $_[0] failed: $!\n";
+        exit(127);
+    }
+
+    # parent
+    waitpid $pid, 0;
+    undef $!;
+    if ($? == 0x7F00 || ($? & 0x7F) != 0) {
+        subprocess_error(@_);
+    }
+    my $status = $? >> 8;
+    return -1 if $status == 126;
+    return $status;
 }
 
 # Run, and log execution of, a subprocess.  Capture all of its output,
@@ -250,6 +295,16 @@ sub ensure_C_locale {
         error("could not set 'C' locale: $!");
     }
     return;
+}
+
+# Close standard input at the OS level and reopen it on /dev/null.
+# This ensures that no subprocesses will get stuck trying to read from
+# standard input.
+sub ensure_empty_stdin {
+    use POSIX qw(open close dup2 O_RDONLY);
+    my $fd = open('/dev/null', O_RDONLY) // die "open('/dev/null'): $!\n";
+    dup2($fd, 0) // die("dup2($fd, 0): $!\n");
+    close($fd);
 }
 
 # Clean up $ENV{PATH}, and return the cleaned path as a list.

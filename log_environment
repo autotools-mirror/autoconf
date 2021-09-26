@@ -31,7 +31,9 @@ use POSIX ();
 use lib $FindBin::Bin;
 use BuildCommon qw(
     ensure_C_locale
+    ensure_empty_stdin
     error
+    get_status
     get_status_and_output
     run
     sh_quote
@@ -152,7 +154,21 @@ sub report_programs {
         my ($absprog) = which($prog);
         if ($absprog) {
             print sh_quote($prog), ' is ', sh_quote($absprog), "\n";
-            run($absprog, '--version');
+
+            # Try various options that might get a program to print its
+            # version number, in order of likelihood.
+            # mawk only recognizes -Wversion
+            # -qversion is in AC_PROG_CC's list of things to try
+            for my $vopt (qw(--version -V -v -Wversion -qversion)) {
+                my $status = get_status($absprog, $vopt);
+                last if $status == 0;
+                if ($status == -1) {
+                    # 'no such file or directory' doesn't make sense here
+                    print "$absprog $vopt: exit 126\n";
+                } else {
+                    print "$absprog $vopt: exit $status\n";
+                }
+            }
         } else {
             print "WARNING: $prog not found in \$PATH\n";
         }
@@ -163,10 +179,11 @@ sub report_programs {
 sub main {
     my %orig_env = %ENV;
     ensure_C_locale();
+    ensure_empty_stdin();
 
     print "# CI environment report\n";
-    report_machine();
-    report_ENV(\%orig_env);
+    #report_machine();
+    #report_ENV(\%orig_env);
     report_programs(@_) if scalar(@_);
 };
 
