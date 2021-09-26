@@ -109,19 +109,17 @@ sub report_machine {
 
     if ($sysname eq 'Linux') {
         report_linux_libc();
-    }
 
-    my ($npstat, @npout) = get_status_and_output('nproc');
-    if ($npstat == 0) {
-        chomp @npout;
-        print '$(nproc) = ', $npout[0], "\n";
-    } elsif ($npstat == -1) {
-        print "nproc: command not found\n";
-    } else {
-        print "nproc: exit $npstat\n";
-        for my $line (@npout) {
-            print '> ', $line;
+        my $npstat = get_status('nproc');
+        if ($npstat != 0) {
+            print "nproc: exit $npstat\n";
         }
+
+    } elsif ($sysname eq 'FreeBSD') {
+        run('sysctl', 'kern.sched.topology_spec');
+
+    } else {
+        print "WARNING: don't know how to probe #CPUs on this OS\n";
     }
 
     print "\n";
