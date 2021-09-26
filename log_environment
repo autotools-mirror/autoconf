@@ -182,8 +182,8 @@ sub main {
     ensure_empty_stdin();
 
     print "# CI environment report\n";
-    #report_machine();
-    #report_ENV(\%orig_env);
+    report_machine();
+    report_ENV(\%orig_env);
     report_programs(@_) if scalar(@_);
 };
 
