@@ -69,7 +69,7 @@ Makefile.in
 /lib/autoscan/autoscan.list
 /lib/emacs/*.elc
 /lib/emacs/elc-stamp
-/lib/m4sugar/version.m4
+/lib/version.m4
 /log
 /man/*.[1-9]
 /man/autoscan.log
