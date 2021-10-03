@@ -1,0 +1,87 @@
+#! /usr/bin/perl
+
+# Check out the Autoconf sources and prepare them for building.
+# A copy of Automake must already be available in $PATH.
+# Takes one optional command line argument, which identifies the
+# commit to be checked out (this is passed directly to git clone's
+# --branch option: anything acceptable to that option may be used).
+
+# Copyright (C) 2021 Free Software Foundation, Inc.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+use v5.14;    # implicit use strict, use feature ':5.14'
+use warnings FATAL => 'all';
+use utf8;
+use open qw(:utf8);
+
+use Cwd qw(getcwd);
+use FindBin ();
+use lib $FindBin::Bin;
+use BuildCommon qw(
+    ensure_C_locale
+    ensure_empty_stdin
+    error
+    run
+);
+
+# FIXME these should be either specified on the command line
+# or in some kind of config file.
+use constant {
+    AUTOCONF_REPO => 'https://git.savannah.gnu.org/git/autoconf.git',
+    AUTOCONF_LAST_RELEASE => 'v2.71'
+};
+
+sub main {
+    my @branch;
+    if (@_ == 0) {
+        # If we are checking out the default branch, we can use
+        # --shallow-exclude <most recent release tag> to save some
+        # bandwidth (as of 2.72a.22-6027, roughly 1.5 MB with this,
+        # vs 11.5 MBwith just --single-branch).  We can't just use
+        # --depth 1 because then git-version-gen will fail.
+        @branch = ('--shallow-exclude', AUTOCONF_LAST_RELEASE);
+    } elsif (@_ == 1) {
+        # If we are not checking out the default branch, we don't
+        # know where to cut off the history without breaking
+        # git-version-gen.
+        @branch = ('--branch', shift);
+    } else {
+        error("usage: $FindBin::Script [commit]");
+    }
+
+    ensure_empty_stdin();
+    ensure_C_locale();
+
+    my $wd = getcwd();
+
+    run(qw(git clone --single-branch), @branch, AUTOCONF_REPO, 's-autoconf');
+
+    chdir('s-autoconf') or error("cd s-autoconf");
+    run('./bootstrap', '-v');
+
+    chdir('..') or error('cd ..');
+    mkdir('b-autoconf') or error('mkdir b-autoconf');
+    chdir('b-autoconf') or error('cd b-autoconf');
+    run('../s-autoconf/configure', '--prefix='.$wd.'/i-autoconf');
+    run(qw(make distcheck));
+    run(qw(make));
+    run(qw(make install));
+}
+
+eval {
+    main(@ARGV);
+    exit(0);
+};
+error("$@");

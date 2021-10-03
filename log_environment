@@ -130,9 +130,19 @@ sub report_machine {
         if $cwd ne $qcwd;
     print "\n";
 
-    ## FIXME: Not all df implementations support -h or -T.
-    run(qw(df -h -T), $cwd);
-
+    # -h = "human" scaled sizes (K, M, G, etc.)
+    # -T = print filesystem type
+    # These options are both nonstandard, so if this fails,
+    # fall back to df -k (print sizes in kilobytes).  In that
+    # case we won't get filesystem type information. Oh well.
+    my $dfstat = get_status(qw(df -h -T), $cwd);
+    if ($dfstat != 0) {
+        print "df -h -T: exit $dfstat\n";
+        $dfstat = get_status(qw(df -k), $cwd);
+        if ($dfstat != 0) {
+            print "df -k: exit $dfstat\n";
+        }
+    }
     print "\n";
 }
 
@@ -178,6 +188,8 @@ sub main {
     my %orig_env = %ENV;
     ensure_C_locale();
     ensure_empty_stdin();
+    STDOUT->autoflush(1);
+    STDERR->autoflush(1);
 
     print "# CI environment report\n";
     report_machine();
