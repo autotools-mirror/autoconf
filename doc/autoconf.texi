@@ -19500,13 +19500,17 @@ Tru64/OSF 5.1 @command{fgrep} does not match an empty pattern.
 @item @command{find}
 @c -----------------
 @prindex @command{find}
-The @option{-maxdepth} option seems to be GNU specific.
-Tru64 v5.1, NetBSD 1.5 and Solaris @command{find}
-commands do not understand it.
+Many operands of GNU @command{find} are not standardized by Posix and
+are missing on many platforms. These nonportable operands include
+@option{-follow}, @option{-maxdepth}, @option{-mindepth},
+@option{-printf}, and @option{,}.  See the
+@uref{https://@/pubs.opengroup.org/@/onlinepubs/@/9699919799/@/utilities/@/find.html,
+Posix spec for @command{find}} for @command{find} operands that
+should be portable nowadays.
 
 The replacement of @samp{@{@}} is guaranteed only if the argument is
 exactly @emph{@{@}}, not if it's only a part of an argument.  For
-instance on DU, and HP-UX 10.20 and HP-UX 11:
+instance, on HP-UX 11:
 
 @example
 $ @kbd{touch foo}
@@ -19516,6 +19520,7 @@ $ @kbd{find . -name foo -exec echo "@{@}-@{@}" \;}
 
 @noindent
 while GNU @command{find} reports @samp{./foo-./foo}.
+Posix allows either behavior.
 
 
 @anchor{grep}
