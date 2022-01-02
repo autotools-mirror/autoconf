@@ -20170,6 +20170,30 @@ s/.*/deleted/g
 :end
 @end example
 
+@item @command{sed} (@samp{w})
+@c ---------------------------
+@prindex @command{sed} (@samp{w})
+
+When a script contains multiple commands to write lines to the same
+output file, BusyBox @command{sed} mistakenly opens a separate output
+stream for each command.  This can cause one of the commands to ``win''
+and the others to ``lose'', in the sense that their output is discarded.
+For example:
+
+@example
+sed -n -e '
+  /a/w xxx
+  /b/w xxx
+' <<EOF
+a
+b
+EOF
+@end example
+
+This might output only @samp{a} to @file{xxx}; the @samp{b} is lost.
+To avoid the problem, a portable script should contain at most one
+@samp{w} or @samp{s/.../.../w} command per output file.
+
 @item @command{sleep}
 @c ------------------
 @prindex @command{sleep}
