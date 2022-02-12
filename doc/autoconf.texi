@@ -12974,8 +12974,7 @@ m4_apply([m4_join], [[|], [1], [2]])
 
 @defmac m4_count (@var{arg}, @dots{})
 @msindex{count}
-This macro returns the decimal count of the number of arguments it was
-passed.
+This macro returns the number of arguments it was passed.
 @end defmac
 
 @defmac m4_curry (@var{macro}, @var{arg}@dots{})
@@ -13474,8 +13473,19 @@ respectively.
 @subsection Arithmetic computation in M4
 
 The following macros facilitate integer arithmetic operations.
+
 Where a parameter is documented as taking an arithmetic expression, you
 can use anything that can be parsed by @code{m4_eval}.
+Any other numeric parameter should consist of an optional sign followed
+by one or more decimal digits; it is treated as a decimal integer.
+
+Macros that expand to a number do so as either @samp{0}, or an optional
+@samp{-} followed by a nonzero decimal digit followed by zero or more
+decimal digits.
+
+Due to @command{m4} limitations, arithmetic expressions and numeric
+parameters should use only numbers that fit into a 32-bit signed
+integer.
 
 @defmac m4_cmp (@var{expr-1}, @var{expr-2})
 @msindex{cmp}
@@ -13512,13 +13522,13 @@ m4_list_cmp([1],          [1, 2])
 
 @defmac m4_max (@var{arg}, @dots{})
 @msindex{max}
-This macro was introduced in Autoconf 2.62.  Expand to the decimal value
+This macro was introduced in Autoconf 2.62.  Expand to the value
 of the maximum arithmetic expression among all the arguments.
 @end defmac
 
 @defmac m4_min (@var{arg}, @dots{})
 @msindex{min}
-This macro was introduced in Autoconf 2.62.  Expand to the decimal value
+This macro was introduced in Autoconf 2.62.  Expand to the value
 of the minimum arithmetic expression among all the arguments.
 @end defmac
 
@@ -14329,11 +14339,15 @@ assigning the result as the contents of the polymorphic shell variable
 @var{var}.  The code takes advantage of shells that provide @samp{$(())}
 for fewer forks, but uses @command{expr} as a fallback.  Therefore, the
 syntax for a valid @var{expression} is rather limited: all operators
-must occur as separate shell arguments and with proper quoting, there is
-no portable equality operator, all variables containing numeric values
-must be expanded prior to the computation, all numeric values must be
-provided in decimal without leading zeroes, and the first shell argument
-should not be a negative number.  In the following example, this snippet
+must occur as separate shell arguments and with proper quoting;
+the only operators supported are @samp{*}, @samp{/}, @samp{%}, binary
+@samp{+}, binary @samp{-}, @samp{>}, @samp{>=}, @samp{<}, @samp{<=},
+@samp{!=}, @samp{&}, and @samp{|};
+all variables containing numbers must be expanded prior to the computation;
+the first shell argument must not start with @samp{-};
+and each number must be an optional @samp{-} followed by one or more
+decimal digits, where the first digit is nonzero if there is more than
+one digit.  In the following example, this snippet
 will print @samp{(2+3)*4 == 20}.
 
 @example
@@ -16942,7 +16956,7 @@ When it is available, using arithmetic expansion provides a noticeable
 speedup in script execution; but testing for support requires
 @command{eval} to avoid syntax errors.  The following construct is used
 by @code{AS_VAR_ARITH} to provide arithmetic computation when all
-arguments are provided in decimal and without a leading zero, and all
+arguments are decimal integers without leading zeros, and all
 operators are properly quoted and appear as distinct arguments:
 
 @example
@@ -19821,7 +19835,7 @@ XSI options are those in @option{-bcdox}.  The BSD
 @command{hexdump} program can be used instead.
 
 In some versions of some operating systems derived from Solaris 11,
-@command{od} prints decimal byte values padded with zeroes rather than
+@command{od} prints decimal byte values padded with zeros rather than
 with spaces:
 
 @smallexample

@@ -1498,8 +1498,8 @@ fi])
 # AS_FUNCTION_DESCRIBE(NAME, [ARGS], DESCRIPTION, [WRAP-COLUMN = 79])
 # -------------------------------------------------------------------
 # Output a shell comment describing NAME and its arguments ARGS, then
-# a separator line, then the DESCRIPTION wrapped at a decimal
-# WRAP-COLUMN.  The output resembles:
+# a separator line, then the DESCRIPTION wrapped at WRAP-COLUMN.
+# The output resembles:
 #  # NAME ARGS
 #  # ---------
 #  # Wrapped DESCRIPTION text
@@ -1518,9 +1518,9 @@ m4_text_wrap([$3], [@%:@ ], [], [$4])])
 #
 # Format a help string so that it looks pretty when the user executes
 # "script --help".  This macro takes up to four arguments, a
-# "left hand side" (LHS), a "right hand side" (RHS), a decimal
+# "left hand side" (LHS), a "right hand side" (RHS),
 # INDENT-COLUMN which is the column where wrapped lines should begin
-# (the default of 26 is recommended), and a decimal WRAP-COLUMN which is
+# (the default of 26 is recommended), and WRAP-COLUMN which is
 # the column where lines should wrap (the default of 79 is recommended).
 # LHS is expanded, RHS is not.
 #
@@ -2030,12 +2030,8 @@ m4_define([_AS_VAR_ARITH_WORKS],
 # Perform the arithmetic evaluation of the arguments in EXPR, and set
 # contents of the polymorphic shell variable VAR to the result, taking
 # advantage of any shell optimizations that perform arithmetic without
-# forks.  Note that numbers occurring within EXPR must be written in
-# decimal, and without leading zeroes; variables containing numbers
-# must be expanded prior to arithmetic evaluation; the first argument
-# must not be a negative number; there is no portable equality
-# operator; and operators must be given as separate arguments and
-# properly quoted.
+# forks.  Because EXPR might be evaluated via either $((...)) or the
+# 'expr' command, EXPR's syntax is limited; see the Autoconf manual.
 m4_defun_init([AS_VAR_ARITH],
 [_AS_DETECT_SUGGESTED([_AS_VAR_ARITH_WORKS])]dnl
 [AS_REQUIRE([_AS_VAR_ARITH_PREPARE], [], [M4SH-INIT-FN])],
