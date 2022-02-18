@@ -1863,7 +1863,8 @@ as_cr_alnum=$as_cr_Letters$as_cr_digits
 m4_defun([_AS_TR_SH_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])]dnl
 [# Sed expression to map a string onto a valid variable name.
-as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
+as_sed_sh="y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g"
+as_tr_sh="eval sed '$as_sed_sh'" # deprecated
 ])
 
 
@@ -1871,7 +1872,7 @@ as_tr_sh="eval sed 'y%*+%pp%;s%[[^_$as_cr_alnum]]%_%g'"
 # --------------------
 # Transform EXPRESSION into a valid shell variable name.
 # sh/m4 polymorphic.
-# Be sure to update the definition of '$as_tr_sh' if you change this.
+# Be sure to update the definition of '$as_sed_sh' if you change this.
 #
 # AS_LITERAL_IF guarantees that a literal does not have any nested quotes,
 # once $1 is expanded.  m4_translit silently uses only the first occurrence
@@ -1895,7 +1896,7 @@ m4_define([_AS_TR_SH_LITERAL],
   [pp[]]]m4_dquote(m4_for(,1,255,,[[_]]))[)])
 
 m4_define([_AS_TR_SH_INDIR],
-[`AS_ECHO(["_AS_ESCAPE([[$1]], [`], [\])"]) | $as_tr_sh`])
+[`AS_ECHO(["_AS_ESCAPE([[$1]], [`], [\])"]) | sed "$as_sed_sh"`])
 
 
 # _AS_TR_CPP_PREPARE
@@ -1903,7 +1904,8 @@ m4_define([_AS_TR_SH_INDIR],
 m4_defun([_AS_TR_CPP_PREPARE],
 [AS_REQUIRE([_AS_CR_PREPARE])]dnl
 [# Sed expression to map a string onto a valid CPP name.
-as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g'"
+as_sed_cpp="y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g"
+as_tr_cpp="eval sed '$as_sed_cpp'" # deprecated
 ])
 
 
@@ -1911,7 +1913,7 @@ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[[^_$as_cr_alnum]]%_%g
 # ---------------------
 # Map EXPRESSION to an upper case string which is valid as rhs for a
 # '#define'.  sh/m4 polymorphic.  Be sure to update the definition
-# of '$as_tr_cpp' if you change this.
+# of '$as_sed_cpp' if you change this.
 #
 # See implementation comments in AS_TR_SH.
 m4_defun_init([AS_TR_CPP],
@@ -1928,7 +1930,7 @@ m4_define([_AS_TR_CPP_LITERAL],
   [P[]]]m4_dquote(m4_defn([m4_cr_LETTERS])m4_for(,1,255,,[[_]]))[)])
 
 m4_define([_AS_TR_CPP_INDIR],
-[`AS_ECHO(["_AS_ESCAPE([[$1]], [`], [\])"]) | $as_tr_cpp`])
+[`AS_ECHO(["_AS_ESCAPE([[$1]], [`], [\])"]) | sed "$as_sed_cpp"`])
 
 
 # _AS_TR_PREPARE
