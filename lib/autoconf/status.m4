@@ -318,7 +318,7 @@ m4_define([_AC_AWK_LITERAL_LIMIT],
 # The intention is to have readable config.status and configure, even
 # though this m4 code might be scary.
 #
-# This code was written by Dan Manthey and rewritten by Ralf Wildenhues.
+# This code was written by Sarah Manthey and rewritten by Ralf Wildenhues.
 #
 # This macro is expanded inside a here document.  If the here document is
 # closed, it has to be reopened with
