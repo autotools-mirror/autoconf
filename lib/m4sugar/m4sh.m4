@@ -98,10 +98,9 @@ _$0
 # _AS_BOURNE_COMPATIBLE
 # ---------------------
 # This is the part of AS_BOURNE_COMPATIBLE which has to be repeated inside
-# each instance.  See _AS_EMPTY_ELSE_PREPARE for explanation of as_nop.
+# each instance.
 m4_define([_AS_BOURNE_COMPATIBLE],
-[as_nop=:
-AS_IF([test ${ZSH_VERSION+y} && (emulate sh) >/dev/null 2>&1],
+[AS_IF([test ${ZSH_VERSION+y} && (emulate sh) >/dev/null 2>&1],
  [emulate sh
   NULLCMD=:
   [#] Pre-4.2 versions of Zsh do word splitting on ${1+"$[@]"}, which
@@ -352,8 +351,7 @@ m4_defun([_AS_PREPARE],
 [m4_pushdef([AS_MESSAGE_LOG_FD], [-1])]dnl
 [_AS_ERROR_PREPARE
 _m4_popdef([AS_MESSAGE_LOG_FD])]dnl
-[_AS_EMPTY_ELSE_PREPARE
-_AS_EXIT_PREPARE
+[_AS_EXIT_PREPARE
 _AS_UNSET_PREPARE
 _AS_VAR_APPEND_PREPARE
 _AS_VAR_ARITH_PREPARE
@@ -389,7 +387,6 @@ AS_REQUIRE([_AS_CR_PREPARE])
 AS_REQUIRE([_AS_LINENO_PREPARE])
 AS_REQUIRE([_AS_ECHO_N_PREPARE])
 AS_REQUIRE([_AS_EXIT_PREPARE])
-AS_REQUIRE([_AS_EMPTY_ELSE_PREPARE])
 AS_REQUIRE([_AS_LN_S_PREPARE])
 AS_REQUIRE([_AS_MKDIR_P_PREPARE])
 AS_REQUIRE([_AS_TEST_PREPARE])
@@ -672,18 +669,13 @@ done[]_m4_popdef([$1])])
 # | fi
 # with simplifications when IF-TRUE1 and/or IF-FALSE are empty.
 #
-# Note: IF-TRUEn and IF_FALSE may be nonempty but, after further macro
-# expansion, leave no actual shell code.  We can't detect this, so we
-# include a no-op statement in each clause to prevent it becoming a shell
-# syntax error.  For the IF-TRUEn this can simply be ':' at the beginning of
-# the clause.  IF-FALSE is harder because it must preserve the value of $?
-# from the conditional expression.  The most practical way to do this is
-# with a shell function whose body is 'return $?' but AS_IF is used before
-# it's safe to use shell functions.  To deal with *that*, there is a shell
-# variable $as_fn_nop that expands to ':' before the nop shell function is
-# defined, and invokes the nop shell function afterward.  Early uses of
-# AS_IF (which are all under our control) must not use the value of $? from
-# the conditional expression in an else clause.
+# Note: IF-TRUEn and IF-FALSE may be nonempty but, after further macro
+# expansion, leave no actual shell code.  We can't detect this, so
+# surround each clause with appropriate shell syntax so that it is valid
+# even if it is empty.  For the IF-TRUEn this can simply be ':' before
+# the clause.  IF-FALSE is harder because it might use the value of $?
+# from the conditional expression.  One way to do this is to write
+# 'case e in e) IF-FALSE ;; esac' which is valid even if IF-FALSE is empty.
 m4_define([_AS_IF],
 [elif $1
 then :
@@ -691,9 +683,9 @@ then :
 ])
 m4_defun([_AS_IF_ELSE],
 [m4_ifnblank([$1],
-[m4_append_uniq([_AS_CLEANUP], [AS_REQUIRE([_AS_EMPTY_ELSE_PREPARE])])]dnl
-[else $as_nop
-  $1
+[else case e in @%:@(
+  e) $1 ;;
+esac
 ])])
 
 m4_defun([AS_IF],
@@ -702,16 +694,6 @@ then :
   $2
 m4_map_args_pair([_$0], [_$0_ELSE], m4_shift2($@))]dnl
 [fi[]])# AS_IF
-
-m4_defun([_AS_EMPTY_ELSE_PREPARE],
-[m4_divert_text([M4SH-INIT-FN],
-[AS_FUNCTION_DESCRIBE([as_fn_nop], [],
-  [Do nothing but, unlike ":", preserve the value of $][?.])
-as_fn_nop ()
-{
-  return $[]?
-}
-as_nop=as_fn_nop])])
 
 
 # AS_SET_STATUS(STATUS)

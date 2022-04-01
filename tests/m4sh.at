@@ -1423,6 +1423,9 @@ m4_define([empty])AS_IF([:], [empty]
 dnl Allow for users that don't know to avoid trailing whitespace
 AS_IF([:
 ], [echo nineteen])
+set -e
+AS_IF([false], [], [echo twenty])
+set +e
 
 # check that require works correctly
 m4_for([n], 1, 9, [],
@@ -1478,6 +1481,7 @@ sixteen
 seventeen
 eighteen
 nineteen
+twenty
 foo1=1 bar1=1
 foo2=2 bar2=
 foo3=3 bar3=
