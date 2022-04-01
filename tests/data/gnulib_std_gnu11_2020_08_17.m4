@@ -319,6 +319,8 @@ AC_DEFUN([_AC_C_C99_TEST_BODY],
   ia->datasize = 10;
   for (int i = 0; i < ia->datasize; ++i)
     ia->data[i] = i * 1.234;
+  // Work around memory leak warnings.
+  free (ia);
 
   // Check named initializers.
   struct named_init ni = {

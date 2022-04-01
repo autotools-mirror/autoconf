@@ -1330,6 +1330,8 @@ ac_c_conftest_c99_main='
   ia->datasize = 10;
   for (int i = 0; i < ia->datasize; ++i)
     ia->data[i] = i * 1.234;
+  // Work around memory leak warnings.
+  free (ia);
 
   // Check named initializers.
   struct named_init ni = {
@@ -2170,7 +2172,9 @@ AC_DEFUN([AC_C_FLEXIBLE_ARRAY_MEMBER],
 	    struct s *p = (struct s *) malloc (offsetof (struct s, d)
 					       + m * sizeof (double));
 	    p->d[0] = 0.0;
-	    return p->d != (double *) NULL;]])],
+	    m = p->d != (double *) NULL;
+	    free (p);
+	    return m;]])],
        [ac_cv_c_flexmember=yes],
        [ac_cv_c_flexmember=no])])
   if test $ac_cv_c_flexmember = yes; then
