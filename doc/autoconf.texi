@@ -9642,6 +9642,9 @@ Run the preprocessor of the current language (@pxref{Language Choice})
 on the @var{input}, run the shell commands @var{action-if-true} on
 success, @var{action-if-false} otherwise.
 
+If @var{input} is nonempty use the equivalent of
+@code{AC_LANG_CONFTEST(@var{input})} to generate the current test source
+file; otherwise reuse the already-existing test source file.
 The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
 The @var{input} text is expanded as an unquoted here-document, so
 @samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
@@ -9763,6 +9766,9 @@ Run the compiler and compilation flags of the current language
 (@pxref{Language Choice}) on the @var{input}, run the shell commands
 @var{action-if-true} on success, @var{action-if-false} otherwise.
 
+If @var{input} is nonempty use the equivalent of
+@code{AC_LANG_CONFTEST(@var{input})} to generate the current test source
+file; otherwise reuse the already-existing test source file.
 The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
 The @var{input} text is expanded as an unquoted here-document, so
 @samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
@@ -9819,6 +9825,9 @@ commands @var{action-if-true} on success, @var{action-if-false}
 otherwise.  If needed, @var{action-if-true} can further access the
 just-linked program file @file{conftest$EXEEXT}.
 
+If @var{input} is nonempty use the equivalent of
+@code{AC_LANG_CONFTEST(@var{input})} to generate the current test source
+file; otherwise reuse the already-existing test source file.
 The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
 The @var{input} text is expanded as an unquoted here-document, so
 @samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
@@ -9862,6 +9871,9 @@ resulting program.  If the program returns an exit
 status of 0 when executed, run shell commands @var{action-if-true}.
 Otherwise, run shell commands @var{action-if-false}.
 
+If @var{input} is nonempty use the equivalent of
+@code{AC_LANG_CONFTEST(@var{input})} to generate the current test source
+file; otherwise reuse the already-existing test source file.
 The @var{input} can be made by @code{AC_LANG_PROGRAM} and friends.
 The @var{input} text is expanded as an unquoted here-document, so
 @samp{$}, @samp{`} and some @samp{\}s should be backslash-escaped.
