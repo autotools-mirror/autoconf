@@ -1221,6 +1221,8 @@ dnl Eggert wrote the scripts with optimization help from Paolo Bonzini).
     /[$]LINENO/=
   ' <$as_myself |
     sed '
+      t clear
+      :clear
       s/[$]LINENO.*/&-/
       t lineno
       b
