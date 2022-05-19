@@ -1,7 +1,7 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Checking for headers.
 #
-# Copyright (C) 1988, 1999-2004, 2006, 2008-2017, 2020-2021 Free
+# Copyright (C) 1988, 1999-2004, 2006, 2008-2017, 2020-2022 Free
 # Software Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free

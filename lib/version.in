@@ -1,7 +1,7 @@
 # Version information for -*- Autoconf -*-.
 # @configure_input@
-# Copyright (C) 1999-2002, 2006-2007, 2009, 2021
-# Free Software Foundation, Inc.
+# Copyright (C) 1999-2002, 2006-2007, 2009, 2021-2022 Free Software
+# Foundation, Inc.
 
 m4_define([m4_PACKAGE_NAME],      [@PACKAGE_NAME@])
 m4_define([m4_PACKAGE_TARNAME],   [@PACKAGE_TARNAME@])

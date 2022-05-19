@@ -1,6 +1,6 @@
 # Make Autoconf man pages.
 
-# Copyright (C) 2001, 2004-2017, 2020-2021 Free Software Foundation,
+# Copyright (C) 2001, 2004-2017, 2020-2022 Free Software Foundation,
 # Inc.
 
 # This program is free software: you can redistribute it and/or modify
