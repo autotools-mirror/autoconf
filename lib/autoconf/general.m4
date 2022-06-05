@@ -2770,13 +2770,13 @@ AU_DEFUN([AC_TRY_CPP],
 # come early, it is not included in AC_BEFORE checks.
 AC_DEFUN([AC_EGREP_CPP],
 [AC_LANG_PREPROC_REQUIRE()dnl
-AC_REQUIRE([AC_PROG_EGREP])dnl
+AC_REQUIRE([_AC_PROG_EGREP_TRADITIONAL])dnl
 AC_LANG_CONFTEST([AC_LANG_SOURCE([[$2]])])
 AS_IF([dnl eval is necessary to expand ac_cpp.
 dnl Ultrix and Pyramid sh refuse to redirect output of eval, so use subshell.
 (eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD |
 dnl Quote $1 to prevent m4 from eating character classes
-  $EGREP "[$1]" >/dev/null 2>&1],
+  $EGREP_TRADITIONAL "m4_bregexp([$1],[^[$-]],[.?])[$1]" >/dev/null 2>&1],
   [$3],
   [$4])
 rm -rf conftest*

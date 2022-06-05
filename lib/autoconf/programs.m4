@@ -373,6 +373,21 @@ AC_CACHE_CHECK([for egrep], ac_cv_path_EGREP,
  AC_SUBST([EGREP])
 ])# AC_PROG_EGREP
 
+# _AC_PROG_EGREP_TRADITIONAL
+# --------------------------
+# Check for a grep -E program or equivalent.
+# Less stringent than AC_PROG_EGREP, as it succeeds even if there
+# is no working 'grep' or if the -e option does not work (e.g., AT&T UnixPC).
+AC_DEFUN([_AC_PROG_EGREP_TRADITIONAL],
+[AC_CACHE_CHECK([for egrep -e], [ac_cv_path_EGREP_TRADITIONAL],
+   [_AC_PROG_GREP([EGREP_TRADITIONAL], [grep ggrep],
+      [-E 'EGR(EP|AC)_TRADITIONAL$'], [:])
+    AS_IF([test "$ac_cv_path_EGREP_TRADITIONAL"],
+      [ac_cv_path_EGREP_TRADITIONAL="$ac_cv_path_EGREP_TRADITIONAL -E"],
+      [_AC_PROG_GREP([EGREP_TRADITIONAL], [egrep],
+	 ['EGR(EP|AC)_TRADITIONAL$'])])])
+ EGREP_TRADITIONAL=$ac_cv_path_EGREP_TRADITIONAL
+])
 
 # AC_PROG_FGREP
 # -------------
@@ -402,15 +417,16 @@ AC_DEFUN([AC_PROG_GREP],
 ])
 
 
-# _AC_PROG_GREP(VARIABLE, PROGNAME-LIST, PROG-ARGUMENTS)
-# ------------------------------------------------------
+# _AC_PROG_GREP(VARIABLE, PROGNAME-LIST, [PROG-ARGUMENTS],
+# 		[ACTION-IF-NOT-FOUND])
+# --------------------------------------------------------
 # Solaris 9 /usr/xpg4/bin/*grep is suitable, but /usr/bin/*grep lacks -e.
 # AIX silently truncates long lines before matching.
 # NeXT understands only one -e and truncates long lines.
 m4_define([_AC_PROG_GREP],
 [_AC_PATH_PROGS_FEATURE_CHECK([$1], [$2],
 	[_AC_FEATURE_CHECK_LENGTH([ac_path_$1], [ac_cv_path_$1],
-		["$ac_path_$1" $3], [$1])], [],
+		["$ac_path_$1" $3], [$1])], [$4],
 	[$PATH$PATH_SEPARATOR/usr/xpg4/bin])dnl
 ])
 
