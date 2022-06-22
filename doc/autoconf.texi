@@ -9702,8 +9702,10 @@ to run the @emph{preprocessor} and not the compiler?
 @defmac AC_EGREP_HEADER (@var{pattern}, @var{header-file}, @
   @var{action-if-found}, @ovar{action-if-not-found})
 @acindex{EGREP_HEADER}
+@var{pattern}, after being expanded as if in a double-quoted shell string,
+is an extended regular expression.
 If the output of running the preprocessor on the system header file
-@var{header-file} matches the extended regular expression
+@var{header-file} contains a line matching
 @var{pattern}, execute shell commands @var{action-if-found}, otherwise
 execute @var{action-if-not-found}.
 
@@ -9714,10 +9716,12 @@ See below for some problems involving this macro.
 @defmac AC_EGREP_CPP (@var{pattern}, @var{program}, @
   @ovar{action-if-found}, @ovar{action-if-not-found})
 @acindex{EGREP_CPP}
+@var{pattern}, after being expanded as if in a double-quoted shell string,
+is an extended regular expression.
 @var{program} is the text of a C or C++ program, which is expanded as an
 unquoted here-document (@pxref{Here-Documents}).  If the
-output of running the preprocessor on @var{program} matches the
-extended regular expression @var{pattern}, execute shell commands
+output of running the preprocessor on @var{program} contains a line
+matching @var{pattern}, execute shell commands
 @var{action-if-found}, otherwise execute @var{action-if-not-found}.
 
 See below for some problems involving this macro.
@@ -9750,6 +9754,8 @@ of things that do not change the meaning of the preprocessed program, it
 is better to rely on @code{AC_PREPROC_IFELSE} than to resort to
 @code{AC_EGREP_CPP} or @code{AC_EGREP_HEADER}.
 
+For more information about what can appear in portable extended regular
+expressions, @pxref{Problematic Expressions,,,grep, GNU Grep}.
 
 @node Running the Compiler
 @section Running the Compiler
@@ -19360,6 +19366,9 @@ foo
 |bar
 @end example
 
+For more information about what can appear in portable extended regular
+expressions, @pxref{Problematic Expressions,,,grep, GNU Grep}.
+
 @command{$EGREP} also suffers the limitations of @command{grep}
 (@pxref{grep, , Limitations of Usual Tools}).
 
@@ -19411,7 +19420,7 @@ Avoid this portability problem by avoiding the empty string.
 @c ----------------------------
 @prindex @command{expr}
 Portable @command{expr} regular expressions should use @samp{\} to
-escape only characters in the string @samp{$()*.0123456789[\^n@{@}}.
+escape only characters in the string @samp{$()*.123456789[\^@{@}}.
 For example, alternation, @samp{\|}, is common but Posix does not
 require its support, so it should be avoided in portable scripts.
 Similarly, @samp{\+} and @samp{\?} should be avoided.
@@ -19615,13 +19624,15 @@ not use both @option{-E} and @option{-F}, since Posix does not allow
 this combination.
 
 Portable @command{grep} regular expressions should use @samp{\} only to
-escape characters in the string @samp{$()*.0123456789[\^@{@}}.  For example,
+escape characters in the string @samp{$()*.123456789[\^@{@}}.  For example,
 alternation, @samp{\|}, is common but Posix does not require its
 support in basic regular expressions, so it should be avoided in
 portable scripts.  Solaris and HP-UX @command{grep} do not support it.
 Similarly, the following escape sequences should also be avoided:
 @samp{\<}, @samp{\>}, @samp{\+}, @samp{\?}, @samp{\`}, @samp{\'},
 @samp{\B}, @samp{\b}, @samp{\S}, @samp{\s}, @samp{\W}, and @samp{\w}.
+For more information about what can appear in portable regular expressions,
+@pxref{Problematic Expressions,,, grep, GNU Grep}.
 
 Posix does not specify the behavior of @command{grep} on binary files.
 An example where this matters is using BSD @command{grep} to
@@ -19959,7 +19970,7 @@ $ @kbd{printf '\200\n' | LC_ALL=en_US.ISO8859-1 sed -n /./p | wc -l}
 @end example
 
 Portable @command{sed} regular expressions should use @samp{\} only to escape
-characters in the string @samp{$()*.0123456789[\^n@{@}}.  For example,
+characters in the string @samp{$()*.123456789[\^n@{@}}.  For example,
 alternation, @samp{\|}, is common but Posix does not require its
 support, so it should be avoided in portable scripts.  Solaris
 @command{sed} does not support alternation; e.g., @samp{sed '/a\|b/d'}
