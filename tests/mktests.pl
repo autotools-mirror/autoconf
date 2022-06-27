@@ -290,6 +290,14 @@ sub scan_m4_files
       push @macros_to_test, [ $file, \@ac_macros, \@au_macros ];
     }
 
+  # Do **NOT** filter out AC_FUNC_ALLOCA. Filtering it out
+  # ended up eliding a direct test of AC_FUNC_ALLOCA which
+  # would have exposed a bug, while no required use does so.
+  # Clearing this hash entirely would currently enable direct tests
+  # of 38 macros, but would require designating each that must be
+  # skipped when cross-compiling.
+  delete $required_macros{AC_FUNC_ALLOCA};
+
   # Filter out macros that are AC_REQUIREd by some other macro;
   # it's not necessary to test them directly.
   my @pruned_macros_to_test;

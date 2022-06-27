@@ -448,8 +448,10 @@ void *alloca (size_t);
 ]],                               [[char *p = (char *) alloca (1);
 				    if (p) return 0;]])],
 		[ac_cv_func_alloca_works=yes],
-		[ac_cv_func_alloca_works=no])])
+		[ac_cv_func_alloca_works=no]
+		)
 fi
+])
 
 if test $ac_cv_func_alloca_works = yes; then
   AC_DEFINE(HAVE_ALLOCA, 1,
