@@ -426,10 +426,9 @@ if test $ac_cv_working_alloca_h = yes; then
 fi
 
 AC_CACHE_CHECK([for alloca], ac_cv_func_alloca_works,
-[if test $ac_cv_working_alloca_h = yes; then
-  ac_cv_func_alloca_works=yes
-else
-  AC_LINK_IFELSE([AC_LANG_PROGRAM(
+[ac_cv_func_alloca_works=$ac_cv_working_alloca_h
+AS_IF([test "$ac_cv_func_alloca_works" != yes],
+  [AC_LINK_IFELSE([AC_LANG_PROGRAM(
 [[#include <stdlib.h>
 #include <stddef.h>
 #ifndef alloca
@@ -447,11 +446,7 @@ void *alloca (size_t);
 #endif
 ]],                               [[char *p = (char *) alloca (1);
 				    if (p) return 0;]])],
-		[ac_cv_func_alloca_works=yes],
-		[ac_cv_func_alloca_works=no]
-		)
-fi
-])
+		[ac_cv_func_alloca_works=yes])])])
 
 if test $ac_cv_func_alloca_works = yes; then
   AC_DEFINE(HAVE_ALLOCA, 1,
