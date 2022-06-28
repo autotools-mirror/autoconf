@@ -149,9 +149,9 @@ VERSION=$(build-aux/git-version-gen .tarball-version)
 # get copied into the generated configure script, so we need to get them
 # right.  Caution: there is a hard tab in one of the regexes below.
 PACKAGE_NAME=$(sed -n < configure.ac \
-   -e 's/^m4_define(\[autoconf_PACKAGE_NAME\], \[\([^]]*\)\])$/\1/p')
+   -e 's/^m4_define(\[autoconf_PACKAGE_NAME], \[\([^]]*\)])$/\1/p')
 PACKAGE_BUGREPORT=$(sed -n < configure.ac \
-   -e 's/^m4_define(\[autoconf_PACKAGE_BUGREPORT\], \[\([^]]*\)\])$/\1/p')
+   -e 's/^m4_define(\[autoconf_PACKAGE_BUGREPORT], \[\([^]]*\)])$/\1/p')
 
 if [ -z "$RELEASE_YEAR" ]; then
     echo "$me: error: could not extract RELEASE_YEAR from configure.ac" >&2

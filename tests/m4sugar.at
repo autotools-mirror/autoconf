@@ -196,7 +196,7 @@ m4_dumpdef([good], [oops])
 ]])
 
 AT_CHECK_M4SUGAR([-o-], 1, [], [stderr])
-AT_CHECK([grep '^good:	\[[yep\]]$' stderr], [0], [ignore])
+AT_CHECK([grep '^good:	\[[yep]]$' stderr], [0], [ignore])
 AT_CHECK([grep 'm4@&t@_dumpdef: undefined.*oops' stderr], [0], [ignore])
 
 # Check that pushdef stacks can be dumped.

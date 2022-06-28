@@ -826,7 +826,7 @@ sc_trailing_blank:
 # Match lines like the following, but where there is only one space
 # between the options and the description:
 #   -D, --all-repeated[=delimit-method]  print all duplicate lines\n
-longopt_re = --[a-z][0-9A-Za-z-]*(\[?=[0-9A-Za-z-]*\]?)?
+longopt_re = --[a-z][0-9A-Za-z-]*(\[?=[0-9A-Za-z-]*]?)?
 sc_two_space_separator_in_usage:
 	@prohibit='^   *(-[A-Za-z],)? $(longopt_re) [^ ].*\\$$'		\
 	halt='help2man requires at least two spaces between an option and its description'\
@@ -1393,7 +1393,7 @@ gpg_key_ID ?=								\
   $$(cd $(srcdir)							\
      && git cat-file tag v$(VERSION)					\
         | $(gpgv) --status-fd 1 --keyring /dev/null - - 2>/dev/null	\
-        | $(AWK) '/^\[GNUPG:\] ERRSIG / {print $$3; exit}')
+        | $(AWK) '/^\[GNUPG:] ERRSIG / {print $$3; exit}')
 
 translation_project_ ?= coordinator@translationproject.org
 
