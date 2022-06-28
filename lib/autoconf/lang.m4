@@ -678,7 +678,8 @@ ac_exeext=$EXEEXT
 AC_LANG_CONFTEST([_AC_LANG_IO_PROGRAM])
 ac_clean_files="$ac_clean_files conftest.out"
 _AC_COMPILER_EXEEXT_CROSS
-rm -f conftest.$ac_ext conftest$ac_cv_exeext conftest.out
+rm -f conftest.$ac_ext conftest$ac_cv_exeext \
+  conftest.o conftest.obj conftest.out
 ac_clean_files=$ac_clean_files_save
 ])# _AC_COMPILER_EXEEXT
 
