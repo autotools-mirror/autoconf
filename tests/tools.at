@@ -98,20 +98,10 @@ AT_CHECK_M4SUGAR
 # We moved a file: it should fail
 mkdir sub
 mv foo sub
-case `$M4 no/such/file 2>&1` in
-  *\`no/such/file*)
-    AT_CHECK_M4SUGAR([], [1], [],
-[m4:script.4s:1: cannot open `foo': No such file or directory
-autom4te: error: m4 failed with exit status: 1
-])
-    ;;
-  *)
-    AT_CHECK_M4SUGAR([], [1], [],
+AT_CHECK_M4SUGAR([], [1], [],
 [m4:script.4s:1: cannot open 'foo': No such file or directory
 autom4te: error: m4 failed with exit status: 1
 ])
-    ;;
-esac
 
 # But if we change the main file, then we should no longer complain of
 # missing files.
