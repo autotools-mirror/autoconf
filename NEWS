@@ -7,6 +7,20 @@ GNU Autoconf NEWS - User visible changes.
 *** Autoconf now requires perl 5.8 (2002) or later.
   Generated 'configure' scripts continue to run without perl.
 
+*** Autoconf now requires GNU M4 1.4.8 (2006) or later.
+  Generated 'configure' scripts continue to run without M4.
+
+  Use of GNU M4 1.4.16 or later is recommended, as all earlier versions
+  are known to have had serious bugs in the text-processing builtins
+  on some, but not all, operating systems.  Autoconf’s own configure
+  script will attempt to find a version of M4 that is not affected by
+  these bugs.
+
+  Note: Autoconf 2.70 and 2.71 include code that malfunctions with
+  M4 1.4.6 or 1.4.7.  However, the only effect of the malfunction is
+  that you will get a confusing error message if you run autoconf on
+  a configure.ac that neglects to use AC_INIT or AC_OUTPUT.
+
 ** New features
 ** Obsolete features and new warnings
 
