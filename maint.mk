@@ -2,7 +2,7 @@
 # This Makefile fragment tries to be general-purpose enough to be
 # used by many projects via the gnulib maintainer-makefile module.
 
-## Copyright (C) 2001-2021 Free Software Foundation, Inc.
+## Copyright (C) 2001-2022 Free Software Foundation, Inc.
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ VC_LIST = $(srcdir)/$(_build-aux)/vc-list-files -C $(srcdir)
 
 # You can override this variable in cfg.mk if your gnulib submodule lives
 # in a different location.
-gnulib_dir ?= $(shell if test -d $(srcdir)/gnulib; then \
+gnulib_dir ?= $(shell if test -f $(srcdir)/gnulib/gnulib-tool; then \
 			echo $(srcdir)/gnulib; \
 		else \
 			echo ${GNULIB_SRCDIR}; \
@@ -625,9 +625,9 @@ sc_prohibit_xalloc_without_use:
 	  $(_sc_header_without_use)
 
 # Extract function names:
-# perl -lne '/^(?:extern )?(?:void|char) \*?(\w+) *\(/ and print $1' lib/hash.h
+# perl -lne '/^(?:extern )?(?:void|char|Hash_table) \*?(\w+) *\(/ and print $1' lib/hash.h
 _hash_re = \
-clear|delete|free|get_(first|next)|insert|lookup|print_statistics|reset_tuning
+hash_(re(set_tuning|move)|xin(itialize|sert)|in(itialize|sert)|get_(firs|nex)t|print_statistics|(delet|fre)e|lookup|clear)
 _hash_fn = \<($(_hash_re)) *\(
 _hash_struct = (struct )?\<[Hh]ash_(table|tuning)\>
 sc_prohibit_hash_without_use:
@@ -1034,7 +1034,7 @@ perl_filename_lineno_text_ =						\
     -e '  }'
 
 prohibit_doubled_words_ = \
-    the then in an on if is it but for or at and do to
+    the then in an on if is it but for or at and do to can
 # expand the regex before running the check to avoid using expensive captures
 prohibit_doubled_word_expanded_ = \
     $(join $(prohibit_doubled_words_),$(addprefix \s+,$(prohibit_doubled_words_)))
@@ -1394,6 +1394,11 @@ gpg_key_ID ?=								\
      && git cat-file tag v$(VERSION)					\
         | $(gpgv) --status-fd 1 --keyring /dev/null - - 2>/dev/null	\
         | $(AWK) '/^\[GNUPG:] ERRSIG / {print $$3; exit}')
+gpg_key_email ?=							\
+  $$(gpg --list-key --with-colons $(gpg_key_ID) 2>/dev/null		\
+	| $(AWK) -F: '/^uid/ {print $$10; exit}'			\
+	| $(SED) -n 's/.*<\(.*\)>/\1/p')
+gpg_keyring_url ?= https://savannah.gnu.org/project/release-gpgkeys.php?group=$(PACKAGE)&download=1
 
 translation_project_ ?= coordinator@translationproject.org
 
@@ -1412,7 +1417,7 @@ announcement_mail_headers_alpha =		\
 announcement_mail_Cc_beta = $(announcement_mail_Cc_alpha)
 announcement_mail_headers_beta = $(announcement_mail_headers_alpha)
 
-announcement_mail_Cc_ ?= $(announcement_mail_Cc_$(release-type))
+announcement_Cc_ ?= $(announcement_Cc_$(release-type))
 announcement_mail_headers_ ?= $(announcement_mail_headers_$(release-type))
 announcement: NEWS ChangeLog $(rel-files)
 # Not $(AM_V_GEN) since the output of this command serves as
@@ -1424,12 +1429,15 @@ announcement: NEWS ChangeLog $(rel-files)
 	    --prev=$(PREV_VERSION)					\
 	    --curr=$(VERSION)						\
 	    --gpg-key-id=$(gpg_key_ID)					\
+	    $$(test -n "$(gpg_key_email)" &&				\
+	       echo --gpg-key-email="$(gpg_key_email)")			\
+	    $$(test -n "$(gpg_keyring_url)" &&				\
+	       echo --gpg-keyring-url="$(gpg_keyring_url)")		\
 	    --srcdir=$(srcdir)						\
 	    --news=$(srcdir)/NEWS					\
 	    --bootstrap-tools=$(bootstrap-tools)			\
 	    $$(case ,$(bootstrap-tools), in (*,gnulib,*)		\
 	       echo --gnulib-version=$(gnulib-version);; esac)		\
-	    --no-print-checksums					\
 	    $(addprefix --url-dir=, $(url_dir_list))
 
 .PHONY: release-commit
@@ -1526,7 +1534,7 @@ alpha beta stable: $(local-check) writable-files $(submodule-checks)
 
 release:
 	$(AM_V_GEN)$(MAKE) _version
-	$(AM_V_GEN)$(MAKE) $(release-type)
+	$(AM_V_at)$(MAKE) $(release-type)
 
 # Override this in cfg.mk if you follow different procedures.
 release-prep-hook ?= release-prep
@@ -1635,12 +1643,32 @@ refresh-po:
 	ls $(PODIR)/*.po | $(SED) 's/\.po//;s,$(PODIR)/,,' | \
 	  sort >> $(PODIR)/LINGUAS
 
- # Running indent once is not idempotent, but running it twice is.
+# Indentation
+
+indent_args ?= -ppi 1
+C_SOURCES ?= $$($(VC_LIST_EXCEPT) | grep '\.[ch]\(.in\)\?$$')
 INDENT_SOURCES ?= $(C_SOURCES)
+exclude_file_name_regexp--indent ?= $(exclude_file_name_regexp--sc_indent)
+
 .PHONY: indent
-indent:
-	indent $(INDENT_SOURCES)
-	indent $(INDENT_SOURCES)
+indent: # Running indent once is not idempotent, but running it twice is.
+	$(AM_V_GEN)indent $(indent_args) $(INDENT_SOURCES) && \
+	indent $(indent_args) $(INDENT_SOURCES)
+
+sc_indent:
+	@if ! command -v indent > /dev/null; then			\
+	    echo 1>&2 '$(ME): sc_indent: indent is missing';		\
+	else								\
+	  fail=0; files="$(INDENT_SOURCES)";				\
+	  for f in $$files; do						\
+	    indent $(indent_args) -st $$f				\
+		| indent $(indent_args) -st -				\
+		| diff -u $$f - || fail=1;				\
+	  done;								\
+	  test $$fail = 1 &&						\
+	    { echo 1>&2 '$(ME): code format error, try "make indent"';	\
+	      exit 1; } || :;						\
+	fi
 
 # If you want to set UPDATE_COPYRIGHT_* environment variables,
 # put the assignments in this variable.
@@ -1686,9 +1714,8 @@ sc_tight_scope: tight-scope.mk
 	exit $$fail
 
 tight-scope.mk: $(ME)
-	@rm -f $@ $@-t
 	@perl -ne '/^# TS-start/.../^# TS-end/ and print' $(srcdir)/$(ME) > $@-t
-	@chmod a=r $@-t && mv $@-t $@
+	@mv $@-t $@
 
 ifeq (a,b)
 # TS-start
@@ -1719,8 +1746,8 @@ _gl_TS_unmarked_extern_vars ?=
 # a macro like this: GLOBAL(type, var_name, initializer), then you
 # can override this definition to automatically extract those names:
 # export _gl_TS_var_match = \
-#   /^(?:$(_gl_TS_extern)) .*?\**(\w+)(\[.*?\])?;/ || /\bGLOBAL\(.*?,\s*(.*?),/
-_gl_TS_var_match ?= /^(?:$(_gl_TS_extern)) .*?(\w+)(\[.*?\])?;/
+#   /^(?:$(_gl_TS_extern)) .*?\**(\w+)(\[.*?])?;/ || /\bGLOBAL\(.*?,\s*(.*?),/
+_gl_TS_var_match ?= /^(?:$(_gl_TS_extern)) .*?(\w+)(\[.*?])?;/
 
 # The names of object files in (or relative to) $(_gl_TS_dir).
 _gl_TS_obj_files ?= *.$(OBJEXT)
