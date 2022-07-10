@@ -31,7 +31,7 @@ This Perl module handles the cache of M4 runs used by autom4te.
 
 =cut
 
-use 5.006;
+use 5.010;
 use strict;
 use warnings FATAL => 'all';
 

@@ -66,7 +66,7 @@ etc.) that can also be overridden on a per-message basis.
 
 =cut
 
-use 5.006;
+use 5.010;
 use strict;
 use warnings FATAL => 'all';
 

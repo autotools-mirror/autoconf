@@ -4,7 +4,7 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Backward incompatibilities
 
-*** Autoconf now requires perl 5.8 (2002) or later.
+*** Autoconf now requires perl 5.10 (2007) or later.
   Generated 'configure' scripts continue to run without perl.
 
 *** Autoconf now requires GNU M4 1.4.8 (2006) or later.

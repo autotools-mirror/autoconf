@@ -69,7 +69,7 @@ and C<getlines> methods to translate C<\r\n> to C<\n>.
 
 =cut
 
-use 5.006;
+use 5.010;
 use strict;
 use warnings FATAL => 'all';
 
