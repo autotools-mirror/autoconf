@@ -593,9 +593,9 @@ AT_CMP([at_defines-$1], [at_defines-$2])[]dnl
 m4_define([_AT_DEFINES_CMP_PRUNE],
 [m4_bmatch([$1],
   [^vary:],
-[	/@%:@define ]m4_bpatsubsts([$1], [\<vary:], [])dnl
+[	/@%:@define ]m4_bpatsubsts([$1], [\<vary:], [])[]dnl
 [@<:@ @{:@@:>@/ d ;@%:@@:}@
-	/@%:@undef ]m4_bpatsubsts([$1], [\<vary:], [])dnl
+	/@%:@undef ]m4_bpatsubsts([$1], [\<vary:], [])[]dnl
 [@<:@ @{:@@:>@/ d ;@%:@@:}@
 ],
   [m4_fatal([unrecognized AT_DEFINES_CMP variance token: "$1"])])])

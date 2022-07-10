@@ -39,6 +39,19 @@ GNU Autoconf NEWS - User visible changes.
   represent cache file timestamps, thus avoiding some problems where
   automake incorrectly decides not to regenerate stale caches.
 
+*** AC_HEADER_STDBOOL and AC_CHECK_HEADER_STDBOOL are less picky.
+
+  When compiling C++, a ‘stdbool.h’ that exists, but does nothing, is
+  acceptable no matter what version of the C++ standard is in use.
+
+  (ISO C++ 2011 says that ‘stdbool.h’ should exist for compatibility
+  with C, but should *not* define ‘bool’, ‘true’, or ‘false’ as
+  macros.  ISO C++ 1998 doesn’t mention ‘stdbool.h’ at all.  Some C++
+  compilers implement the 2011 rule in their C++98 mode as well.
+  ‘bool’, ‘true’, and ‘false’ have been built into the C++ language
+  since the beginning, so a ‘stdbool.h’ that exists but does nothing
+  should be fine for all reasonable C++ programs.)
+
 * Noteworthy changes in release 2.71 (2021-01-28) [stable]
 
 ** Bug fixes, including:

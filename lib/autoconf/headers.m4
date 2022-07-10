@@ -633,8 +633,10 @@ AC_DEFUN([AC_CHECK_HEADER_STDBOOL],
              bool *pp = &p;
 
              /* C 1999 specifies that bool, true, and false are to be
-                macros, but C++ 2011 and later overrule this.  */
-             #if __cplusplus < 201103
+                macros, but C++ 2011 overrules this.  The C++ committee
+                was codifying existing practice, so we allow them to
+                not be macros whenever __cplusplus is defined.  */
+             #ifndef __cplusplus
               #ifndef bool
                #error "bool is not defined"
               #endif
