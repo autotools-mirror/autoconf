@@ -19,10 +19,7 @@
 use 5.010;
 use strict;
 use warnings;
-
-# File::Spec itself was added in 5.005.
-# File::Spec::Functions was added in 5.6.1 which is just barely too new.
-use File::Spec;
+use File::Spec::Functions qw(catfile);
 
 # This script is not intended to be used directly.  It's run by
 # help2man via wrappers in man/, e.g.  man/autoconf.w, as if it were
@@ -51,11 +48,17 @@ sub eval_qq_no_interpolation ($)
   # The argument is expected to be a "double quoted string" including the
   # leading and trailing delimiters.  Returns the text of this string after
   # processing backslash escapes but NOT interpolation.
-  # / (?<!\\) (?>\\\\)* blah /x means match blah preceded by an
-  # *even* number of backslashes.  It would be nice if we could use \K
-  # to exclude the backslashes from the matched text, but that was only
-  # added in Perl 5.10 and we still support back to 5.006.
-  return eval $_[0] =~ s/ (?<!\\) (?>\\\\)* [\$\@] /\\$&/xrg;
+  my $s = $_[0];
+
+  # Escape $ and @ inside the string, if they are not already escaped.
+  # The regex matches the empty string, but only if it is preceded by an
+  # even number of backslashes (including zero) and followed by either a
+  # literal $ or a literal @. Then we insert a backslash at the position
+  # of the match.
+  $s =~ s/ (?:\A|[^\\]) (?:\\\\)* \K (?=[\$\@]) /\\/xg;
+
+  # It is now safe to feed the string to 'eval'.
+  return eval $s;
 }
 
 sub extract_channeldefs_usage ($)
@@ -198,9 +201,10 @@ The script-source argument should also be relative to top_srcdir.
       die $usage;
     }
 
-  my $cmd_name    = $source =~ s{^.*/([^./]+)\.in$}{$1}r;
-  $source         = File::Spec->catfile($top_srcdir, $source);
-  $channeldefs_pm = File::Spec->catfile($top_srcdir, $channeldefs_pm);
+  my $cmd_name    = $source;
+  $cmd_name       =~ s{^.*/([^./]+)\.in$}{$1};
+  $source         = catfile($top_srcdir, $source);
+  $channeldefs_pm = catfile($top_srcdir, $channeldefs_pm);
 
   my $text = extract_assignment ($source, $channeldefs_pm, $what);
   $text =~ s/\$0\b/$cmd_name/g;
