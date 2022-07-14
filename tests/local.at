@@ -476,6 +476,7 @@ do
   $SED '/^ac_cv_/ b skip
 	/^m4_defn([m4_re_word])=./ !d
 	/^[[^=]]*='\'''\''$/ d
+	/^[[^=]]*=""$/ d
 	/^a[[cs]]_/ d
 	: skip
 	/^OLDPWD=/ d
