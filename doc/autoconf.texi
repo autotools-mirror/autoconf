@@ -14065,6 +14065,9 @@ Output the directory portion of @var{file-name}.  For example,
 if @code{$file} is @samp{/one/two/three}, the command
 @code{dir=`AS_DIRNAME(["$file"])`} sets @code{dir} to @samp{/one/two}.
 
+@code{AS_DIRNAME} was designed long ago when
+the @command{dirname} command was not universally supported.
+Nowadays one can safely use @code{dir=`dirname -- "$file"`} instead.
 This interface may be improved in the future to avoid forks and losing
 trailing newlines.
 @end defmac
@@ -19139,8 +19142,13 @@ of at most 3070 bytes.
 @item @command{basename}
 @c ---------------------
 @prindex @command{basename}
-Not all hosts have a working @command{basename}.
-You can use @command{expr} instead.
+Long ago some hosts lacked a working @command{basename},
+and portable scripts needed to use @command{expr} instead.
+Nowadays it is safe to use @command{basename}.  For example:
+
+@example
+base=`basename -- "$file"`
+@end example
 
 @c AS_BASENAME is to be replaced by a better API.
 @ignore
@@ -19331,12 +19339,13 @@ Some implementations, such as Tru64's, fail when comparing to
 @item @command{dirname}
 @c --------------------
 @prindex @command{dirname}
-Not all hosts have a working @command{dirname}, and you should instead
-use @code{AS_DIRNAME} (@pxref{Programming in M4sh}).  For example:
+Long ago some hosts lacked a working @command{dirname} and portable
+scripts needed to use use @code{AS_DIRNAME} (@pxref{Programming in M4sh}).
+Nowadays @command{dirname} suffices and the following are equivalent:
 
 @example
-dir=`dirname "$file"`       # This is not portable.
-dir=`AS_DIRNAME(["$file"])` # This is more portable.
+dir=`dirname -- "$file"`
+dir=`AS_DIRNAME(["$file"])`
 @end example
 
 
