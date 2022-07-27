@@ -1838,8 +1838,8 @@ AC_DEFUN([AC_C_BIGENDIAN],
 	[ac_cv_c_bigendian=no],
 	[ac_cv_c_bigendian=yes],
 	[# Try to guess by grepping values from an object file.
-	 AC_COMPILE_IFELSE(
-	   [AC_LANG_PROGRAM(
+	 AC_LINK_IFELSE(
+	   [AC_LANG_SOURCE(
 	      [[unsigned short int ascii_mm[] =
 		  { 0x4249, 0x4765, 0x6E44, 0x6961, 0x6E53, 0x7953, 0 };
 		unsigned short int ascii_ii[] =
@@ -1854,13 +1854,20 @@ AC_DEFUN([AC_C_BIGENDIAN],
 		int use_ebcdic (int i) {
 		  return ebcdic_mm[i] + ebcdic_ii[i];
 		}
-		extern int foo;
-	      ]],
-	      [[return use_ascii (foo) == use_ebcdic (foo);]])],
-	   [if grep BIGenDianSyS conftest.$ac_objext >/dev/null; then
+		int
+		main (int argc, char **argv)
+		{
+		  /* Intimidate the compiler so that it does not
+		     optimize the arrays away.  */
+		  char *p = argv[0];
+		  ascii_mm[1] = *p++; ebcdic_mm[1] = *p++;
+		  ascii_ii[1] = *p++; ebcdic_ii[1] = *p++;
+		  return use_ascii (argc) == use_ebcdic (*p);
+		}]])],
+	   [if grep BIGenDianSyS conftest$ac_exeext >/dev/null; then
 	      ac_cv_c_bigendian=yes
 	    fi
-	    if grep LiTTleEnDian conftest.$ac_objext >/dev/null ; then
+	    if grep LiTTleEnDian conftest$ac_exeext >/dev/null ; then
 	      if test "$ac_cv_c_bigendian" = unknown; then
 		ac_cv_c_bigendian=no
 	      else
