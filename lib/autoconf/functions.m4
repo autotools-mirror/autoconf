@@ -649,7 +649,13 @@ AC_DEFUN([AC_FUNC_FSEEKO],
 [_AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
    [ac_cv_sys_largefile_source],
    [Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2).],
-   [[#include <sys/types.h> /* for off_t */
+   [[#if defined __hpux && !defined _LARGEFILE_SOURCE
+      #include <limits.h>
+      #if LONG_MAX >> 31 == 0
+       #error "32-bit HP-UX 11/ia64 needs _LARGEFILE_SOURCE for fseeko in C++"
+      #endif
+     #endif
+     #include <sys/types.h> /* for off_t */
      #include <stdio.h>]],
    [[int (*fp) (FILE *, off_t, int) = fseeko;
      return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);]])
