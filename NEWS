@@ -21,7 +21,13 @@ GNU Autoconf NEWS - User visible changes.
   that you will get a confusing error message if you run autoconf on
   a configure.ac that neglects to use AC_INIT or AC_OUTPUT.
 
+*** AC_SYS_LARGEFILE now arranges for 64-bit time_t if possible.
+
+
 ** New features
+
+*** New macro AC_YEAR2038 for 64-bit time_t.
+
 ** Obsolete features and new warnings
 
 *** Autoconf now quotes 'like this' instead of `like this'.

@@ -8869,6 +8869,7 @@ if the system supports @samp{#!}, @samp{no} if not.
 @acindex{SYS_LARGEFILE}
 @cvindex _FILE_OFFSET_BITS
 @cvindex _LARGE_FILES
+@cvindex _TIME_BITS
 @ovindex CC
 @cindex Large file support
 @cindex LFS
@@ -8877,13 +8878,15 @@ Arrange for 64-bit file offsets, known as
 large-file support}.  On some hosts, one must use special compiler
 options to build programs that can access large files.  Append any such
 options to the output variable @code{CC}.  Define
-@code{_FILE_OFFSET_BITS} and @code{_LARGE_FILES} if necessary.
+@code{_FILE_OFFSET_BITS}, @code{_LARGE_FILES}, and @code{_TIME_BITS}
+if necessary.
 
 Large-file support can be disabled by configuring with the
 @option{--disable-largefile} option.
 
-If you use this macro, check that your program works even when
-@code{off_t} is wider than @code{long int}, since this is common when
+If you use this macro, check that your program works even when the types
+@code{blkcnt_t}, @code{dev_t}, @code{ino_t}, @code{off_t}, and @code{time_t}
+are wider than @code{long int}, since this is common when
 large-file support is enabled.  For example, it is not correct to print
 an arbitrary @code{off_t} value @code{X} with @code{printf ("%ld",
 (long int) X)}.  Also, when using this macro in concert with
@@ -8913,6 +8916,30 @@ If the system supports file names longer than 14 characters, define
 Check to see if the Posix termios headers and functions are available on the
 system.  If so, set the shell variable @code{ac_cv_sys_posix_termios} to
 @samp{yes}.  If not, set the variable to @samp{no}.
+@end defmac
+
+@defmac AC_SYS_YEAR2038
+@acindex{SYS_YEAR2038}
+@cvindex _TIME_BITS
+@ovindex CC
+@cindex Year 2038
+If the default @code{time_t} type is a signed 32-bit integer that stops
+working in the year 2038, then arrange to use a wider @code{time_t} if
+possible and report a fatal error otherwise.  Define @code{_TIME_BITS}
+if necessary.
+
+Wider-time support can be disabled by configuring with the
+@option{--disable-year2038} option.
+
+Regardless of whether you use this macro, portable programs should not
+assume that @code{time_t} fits into @code{long int}.  For example, it is
+not correct to print an arbitrary @code{time_t} value @code{X} with
+@code{printf ("%ld", (long int) X)}.  Also, when using this macro in
+concert with @code{AC_CONFIG_HEADERS}, be sure that @file{config.h} is
+included before any system header.
+
+Although @code{AC_SYS_LARGFILE} also widens @code{time_t} if possible,
+it merely warns if this cannot be done, rather than reporting a fatal error.
 @end defmac
 
 @node C and Posix Variants
