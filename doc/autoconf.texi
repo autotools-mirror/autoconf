@@ -6141,6 +6141,9 @@ Check whether @file{stdbool.h} exists and conforms to C99 or later,
 and cache the result in the @code{ac_cv_header_stdbool_h} variable.
 If the type @code{_Bool} is defined, define @code{HAVE__BOOL} to 1.
 
+This macro is obsolescent, as all current C compilers have @file{stdbool.h},
+a header that is itself obsolescent as of C 2023.
+
 This macro is intended for use by Gnulib (@pxref{Gnulib}) and other
 packages that supply a substitute @file{stdbool.h} on platforms lacking
 a conforming one.  The @code{AC_HEADER_STDBOOL} macro is better for code
@@ -6303,8 +6306,18 @@ New programs need not use this macro.
 @caindex header_stdbool_h
 If @file{stdbool.h} exists and conforms to C99 or later, define
 @code{HAVE_STDBOOL_H} to 1; if the type @code{_Bool} is defined, define
-@code{HAVE__BOOL} to 1.  To fulfill the standard's requirements, your
-program could contain the following code:
+@code{HAVE__BOOL} to 1.
+
+This macro is obsolescent, as all current C compilers have
+@file{stdbool.h}, a header that is itself obsolescent as of C 2023.
+Nowadays programs that need @code{bool}, @code{true} and @code{false}
+can include @file{stdbool.h} unconditionally, without using
+@code{AC_HEADER_STDBOOL}, and if such a program needs to be portable
+only to C 2023 or later it need not even include @file{stdbool.h}.
+
+This macro was originally intended for programs that needed to be
+portable to C89.  These obsolete programs could use the following code,
+so long as they assigned only 0 or 1 to @code{bool} variables:
 
 @example
 @group
@@ -6326,8 +6339,8 @@ typedef bool _Bool;
 @end group
 @end example
 
-Alternatively you can use the @samp{stdbool} package of Gnulib
-(@pxref{Gnulib}).  It simplifies your code so that it can say just
+Alternatively if you still need portability to C89 you can use the
+@samp{stdbool} package of Gnulib (@pxref{Gnulib}).  It lets code say just
 @code{#include <stdbool.h>}, and it adds support for less-common
 platforms.
 

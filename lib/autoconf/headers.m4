@@ -572,27 +572,27 @@ fi
 
 # AC_CHECK_HEADER_STDBOOL
 # -----------------
-# Check for stdbool.h that conforms to C99.
+# Check for stdbool.h that conforms to C99 or later.
 AN_IDENTIFIER([bool], [AC_CHECK_HEADER_STDBOOL])
 AN_IDENTIFIER([true], [AC_CHECK_HEADER_STDBOOL])
 AN_IDENTIFIER([false],[AC_CHECK_HEADER_STDBOOL])
 AC_DEFUN([AC_CHECK_HEADER_STDBOOL],
   [AC_CHECK_TYPES([_Bool])
-   AC_CACHE_CHECK([for stdbool.h that conforms to C99],
+   AC_CACHE_CHECK([for stdbool.h that conforms to C99 or later],
      [ac_cv_header_stdbool_h],
      [AC_COMPILE_IFELSE(
         [AC_LANG_PROGRAM(
            [[#include <stdbool.h>
 
-             #ifndef __bool_true_false_are_defined
-               #error "__bool_true_false_are_defined is not defined"
-             #endif
-             char a[__bool_true_false_are_defined == 1 ? 1 : -1];
+             /* "true" and "false" should be usable in #if expressions and
+                integer constant expressions, and "bool" should be a valid
+                type name.
 
-             /* Regardless of whether this is C++ or "_Bool" is a
-                valid type name, "true" and "false" should be usable
-                in #if expressions and integer constant expressions,
-                and "bool" should be a valid type name.  */
+                Although C 1999 requires bool, true, and false to be macros,
+                C 2023 and C++ 2011 overrule that, so do not test for that.
+                Although C 1999 requires __bool_true_false_are_defined and
+                _Bool, C 2023 says they are obsolescent, so do not require
+                them.  */
 
              #if !true
                #error "'true' is not true"
@@ -626,64 +626,21 @@ AC_DEFUN([AC_CHECK_HEADER_STDBOOL],
              char n[sizeof m == h * sizeof m[0] ? 1 : -1];
              char o[-1 - (bool) 0 < 0 ? 1 : -1];
              /* Catch a bug in an HP-UX C compiler.  See
-         https://gcc.gnu.org/ml/gcc-patches/2003-12/msg02303.html
-         https://lists.gnu.org/archive/html/bug-coreutils/2005-11/msg00161.html
+                https://gcc.gnu.org/ml/gcc-patches/2003-12/msg02303.html
+                https://lists.gnu.org/r/bug-coreutils/2005-11/msg00161.html
               */
              bool p = true;
              bool *pp = &p;
-
-             /* C 1999 specifies that bool, true, and false are to be
-                macros, but C++ 2011 overrules this.  The C++ committee
-                was codifying existing practice, so we allow them to
-                not be macros whenever __cplusplus is defined.  */
-             #ifndef __cplusplus
-              #ifndef bool
-               #error "bool is not defined"
-              #endif
-              #ifndef false
-               #error "false is not defined"
-              #endif
-              #ifndef true
-               #error "true is not defined"
-              #endif
-             #endif
-
-             /* If _Bool is available, repeat with it all the tests
-                above that used bool.  */
-             #ifdef HAVE__BOOL
-               struct sB { _Bool s: 1; _Bool t; } t;
-
-               char q[(_Bool) 0.5 == true ? 1 : -1];
-               char r[(_Bool) 0.0 == false ? 1 : -1];
-               char u[sizeof (_Bool) > 0 ? 1 : -1];
-               char v[sizeof t.t > 0 ? 1 : -1];
-
-               _Bool w[h];
-               char x[sizeof m == h * sizeof m[0] ? 1 : -1];
-               char y[-1 - (_Bool) 0 < 0 ? 1 : -1];
-               _Bool z = true;
-               _Bool *pz = &p;
-             #endif
            ]],
            [[
              bool ps = &s;
              *pp |= p;
              *pp |= ! p;
 
-             #ifdef HAVE__BOOL
-               _Bool pt = &t;
-               *pz |= z;
-               *pz |= ! z;
-             #endif
-
              /* Refer to every declared value, so they cannot be
                 discarded as unused.  */
              return (!a + !b + !c + !d + !e + !f + !g + !h + !i + !j + !k
-                     + !l + !m + !n + !o + !p + !pp + !ps
-             #ifdef HAVE__BOOL
-                     + !q + !r + !u + !v + !w + !x + !y + !z + !pt
-             #endif
-                    );
+                     + !l + !m + !n + !o + !p + !pp + !ps);
            ]])],
         [ac_cv_header_stdbool_h=yes],
         [ac_cv_header_stdbool_h=no])])
