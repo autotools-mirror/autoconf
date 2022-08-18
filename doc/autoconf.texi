@@ -8888,14 +8888,18 @@ if the system supports @samp{#!}, @samp{no} if not.
 @cindex LFS
 Arrange for 64-bit file offsets, known as
 @uref{http://@/www.unix.org/@/version2/@/whatsnew/@/lfs20mar.html,
-large-file support}.  On some hosts, one must use special compiler
-options to build programs that can access large files.  Append any such
+large-file support}, along with other large attributes.
+On some hosts, one must use special compiler options
+to build programs that can access files with large sizes inode
+numbers, timestamps, or other attributes.  Append any such
 options to the output variable @code{CC}.  Define
 @code{_FILE_OFFSET_BITS}, @code{_LARGE_FILES}, and @code{_TIME_BITS}
 if necessary.
 
 Large-file support can be disabled by configuring with the
-@option{--disable-largefile} option.
+@option{--disable-largefile} option.  If you disable large-file
+support, your program may have trouble accessing arbitrary files, such
+as files that might be found in an adversary's directory.
 
 If you use this macro, check that your program works even when the types
 @code{blkcnt_t}, @code{dev_t}, @code{ino_t}, @code{off_t}, and @code{time_t}
@@ -8951,8 +8955,12 @@ not correct to print an arbitrary @code{time_t} value @code{X} with
 concert with @code{AC_CONFIG_HEADERS}, be sure that @file{config.h} is
 included before any system header.
 
-Although @code{AC_SYS_LARGFILE} also widens @code{time_t} if possible,
-it merely warns if this cannot be done, rather than reporting a fatal error.
+@code{AC_SYS_LARGFILE} also widens @code{time_t} if possible,
+as this is needed for programs that access files with large timestamps,
+However, @code{AC_SYS_LARGEFILE} merely warns if @code{time_t} is too
+narrow and cannot be widened, rather than reporting a fatal error as
+@code{AC_SYS_YEAR2038} does.  This is for portability to older
+platforms that will become obsolete in the year 2038.
 @end defmac
 
 @node C and Posix Variants
