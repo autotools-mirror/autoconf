@@ -4861,7 +4861,7 @@ In C99 and later, @code{isinf} and @code{isnan} are
 macros.  On some systems just macros are available
 (e.g., HP-UX and Solaris 10), on
 some systems both macros and functions (e.g., glibc 2.3.2), and on some
-systems only functions (e.g., IRIX 6 and Solaris 9).  In some cases
+systems only functions (e.g., IRIX 6).  In some cases
 these functions are declared in nonstandard headers like
 @code{<sunmath.h>} and defined in non-default libraries like
 @option{-lm} or @option{-lsunmath}.
@@ -4969,21 +4969,8 @@ In C99 and later, if the output array isn't big enough
 and if no other errors occur, @code{snprintf} and @code{vsnprintf}
 truncate the output and return the number of bytes that ought to have
 been produced.  Some older systems return the truncated length (e.g.,
-GNU C Library 2.0.x or IRIX 6.5), some a negative value
-(e.g., earlier GNU C Library versions), and some the buffer
-length without truncation (e.g., 32-bit Solaris 7).  Also, some buggy
-older systems ignore the length and overrun the buffer (e.g., 64-bit
-Solaris 7).
-
-@item @code{sprintf}
-@c @fuindex sprintf
-@prindex @code{sprintf}
-@c @fuindex vsprintf
-@prindex @code{vsprintf}
-The C standard says @code{sprintf} and @code{vsprintf} return the
-number of bytes written.  On some ancient systems (SunOS 4 for
-instance) they return the buffer pointer instead, but these no
-longer need to be worried about.
+GNU C Library 2.0.x or IRIX 6.5), and some a negative value
+(e.g., earlier GNU C Library versions).
 
 @item @code{sscanf}
 @c @fuindex sscanf
@@ -5203,8 +5190,7 @@ should use Gnulib's @code{error} module.  @xref{Gnulib}.
 @prindex @code{fnmatch}
 @caindex func_fnmatch_works
 If the @code{fnmatch} function conforms to Posix, define
-@code{HAVE_FNMATCH}.  Detect common implementation bugs, for example,
-the bugs in Solaris 2.4.
+@code{HAVE_FNMATCH}.
 
 Unlike the other specific
 @code{AC_FUNC} macros, @code{AC_FUNC_FNMATCH} does not replace a
@@ -5520,10 +5506,7 @@ problems of this function.
 @c @fuindex memcmp
 @prindex @code{memcmp}
 @caindex func_memcmp_working
-If the @code{memcmp} function is not available, or does not work on
-8-bit data (like the one on SunOS 4.1.3), or fails when comparing 16
-bytes or more and with at least one buffer not starting on a 4-byte
-boundary (such as the one on NeXT x86 OpenStep), require an
+If the @code{memcmp} function is not available or does not work, require an
 @code{AC_LIBOBJ} replacement for @samp{memcmp}.
 
 The result of this macro is cached in the
@@ -5663,9 +5646,7 @@ which takes two process IDs as arguments (like the BSD @code{setpgrp}).
 @caindex func_stat_empty_string_bug
 @caindex func_lstat_empty_string_bug
 Determine whether @code{stat} or @code{lstat} have the bug that it
-succeeds when given the zero-length file name as argument.  The @code{stat}
-and @code{lstat} from SunOS 4.1.4 and the Hurd (as of 1998-11-01) do
-this.
+succeeds when given the zero-length file name as argument.
 
 If it does, then define @code{HAVE_STAT_EMPTY_STRING_BUG} (or
 @code{HAVE_LSTAT_EMPTY_STRING_BUG}) and ask for an @code{AC_LIBOBJ}
@@ -6080,8 +6061,7 @@ all recent systems it is safe to include both @file{string.h} and
 @hdrindex{stdint.h}
 C99 specifies that @file{inttypes.h} includes @file{stdint.h}, so there's
 no need to include @file{stdint.h} separately in a standard environment.
-However, some implementations have @file{inttypes.h} but not @file{stdint.h}
-(e.g., Solaris 7), and some have @file{stdint.h} but not @file{inttypes.h}
+However, some implementations have @file{stdint.h} but not @file{inttypes.h}
 (e.g. MSVC 2012).  Therefore, it is necessary to check for each and include
 each only if available.
 
@@ -7461,7 +7441,7 @@ OK, since installers with inadequate compilers like IRIX can simply
 examine these compilers' diagnostic output.
 
 @item Don't rely on correct @code{#line} support
-On Solaris, @command{c89} (at least Sun C 5.3 through 5.8)
+On Solaris, @command{c89} (at least through Oracle Developer Studio 12.6)
 diagnoses @code{#line} directives whose line
 numbers are greater than 32767.  Nothing in Posix
 makes this invalid.  That is why Autoconf stopped issuing
@@ -15568,11 +15548,6 @@ constructs; these will be documented in the rest of this chapter.
 See in particular @ref{Shell Functions} and @ref{Limitations of
 Builtins, , Limitations of Shell Builtins}.
 
-Some ancient systems have quite
-small limits on the length of the @samp{#!} line; for instance, 32
-bytes (not including the newline) on SunOS 4.
-However, these ancient systems are no longer of practical concern.
-
 The set of external programs you should run in a @command{configure} script
 is fairly small.  @xref{Utilities in Makefiles, , Utilities in
 Makefiles, standards, The GNU Coding Standards}, for the list.  This
@@ -15692,10 +15667,10 @@ On Solaris 11, @command{/bin/sh} and @command{/usr/bin/ksh} are both
 @samp{ksh93}.  On Solaris 10 and earlier, @command{/bin/sh} is a
 pre-Posix Bourne shell and the Korn shell is found elsewhere:
 @prindex @command{/usr/bin/ksh} on Solaris
-@command{/usr/bin/ksh} is @samp{ksh88} on Solaris 2.0 through 10,
+@command{/usr/bin/ksh} is @samp{ksh88} on Solaris 10,
 @prindex @command{/usr/xpg4/bin/sh} on Solaris
 @command{/usr/xpg4/bin/sh} is a Posix-compliant variant of
-@samp{ksh88} on Solaris 9 and later,
+@samp{ksh88} on Solaris 10 and later,
 @prindex @command{/usr/dt/bin/dtksh} on Solaris
 and @command{/usr/dt/bin/dtksh} is @samp{ksh93}.
 Variants that are not standard may be parts of optional
@@ -18460,7 +18435,7 @@ $ @kbd{printf '\045'}
 bash: printf: `%': missing format character
 @end example
 
-Large outputs may cause trouble.  On Solaris 2.5.1 through 10, for
+Large outputs may cause trouble.  On Solaris 10, for
 example, @file{/usr/bin/printf} is buggy, so when using
 @command{/bin/sh} the command @samp{printf %010000x 123} normally dumps
 core.
@@ -18696,9 +18671,7 @@ ksh: warning: line 1: `...` obsolete, use $(...)
 0
 @end example
 
-Furthermore, on ancient hosts, such as SunOS 4, @command{sh -n} could go
-into an infinite loop; even with that bug fixed, Solaris 8
-@command{/bin/sh} takes extremely long to parse large scripts.  Autoconf
+Autoconf
 itself uses @command{sh -n} within its testsuite to check that correct
 scripts were generated, but only after first probing for other shell
 features (such as @code{test $@{BASH_VERSION+y@}}) that indicate
@@ -18773,8 +18746,7 @@ whether some arbitrary file exists.  To do so, use @samp{test -f},
 Solaris 10 @command{/bin/sh}
 lacks it.  To test for symbolic links on systems that have them, use
 @samp{test -h} rather than @samp{test -L}; either form conforms to
-Posix 1003.1-2001, but older shells like Solaris 8
-@code{/bin/sh} support only @option{-h}.
+Posix 1003.1-2001, but @option{-h} has been around longer.
 
 For historical reasons, Posix reluctantly allows implementations of
 @samp{test -x} that will succeed for the root user, even if no execute
@@ -19401,7 +19373,7 @@ dir=`AS_DIRNAME(["$file"])`
 @c ------------------
 @prindex @command{egrep}
 Although Posix stopped requiring @command{egrep} in 2001,
-a few traditional hosts (notably Solaris) do not support the Posix
+a few traditional hosts (notably Solaris 10) do not support the Posix
 replacement @code{grep -E}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_EGREP} and then use @code{$EGREP}.
@@ -19518,13 +19490,13 @@ expr a : '\(b\)' \| ''
 Unfortunately this behaves exactly as the original expression; see the
 @command{expr} (@samp{|}) entry for more information.
 
-Some ancient @command{expr} implementations (e.g., SunOS 4 @command{expr} and
-Solaris 8 @command{/usr/ucb/expr}) have a silly length limit that causes
+Some ancient @command{expr} implementations (e.g.,
+Solaris 10 @command{/usr/ucb/expr}) have a silly length limit that causes
 @command{expr} to fail if the matched substring is longer than 120
 bytes.  In this case, you might want to fall back on @samp{echo|sed} if
 @command{expr} fails.  Nowadays this is of practical importance only for
 the rare installer who mistakenly puts @file{/usr/ucb} before
-@file{/usr/bin} in @env{PATH}.
+@file{/usr/bin} in @env{PATH} on Solaris 10.
 
 On Mac OS X 10.4, @command{expr} mishandles the pattern @samp{[^-]} in
 some cases.  For example, the command
@@ -19590,7 +19562,7 @@ expr: More than one '\(' was used.
 @c ------------------
 @prindex @command{fgrep}
 Although Posix stopped requiring @command{fgrep} in 2001,
-a few traditional hosts (notably Solaris) do not support the Posix
+a few traditional hosts (notably Solaris 10) do not support the Posix
 replacement @code{grep -F}.  Also, some traditional implementations do
 not work on long input lines.  To work around these problems, invoke
 @code{AC_PROG_FGREP} and then use @code{$FGREP}.
@@ -19637,7 +19609,7 @@ as Posix does not allow this.
 
 Some of the options required by Posix are not portable in practice.
 Don't use @samp{grep -q} to suppress output, because traditional @command{grep}
-implementations (e.g., Solaris) do not support @option{-q}.
+implementations (e.g., Solaris 10) do not support @option{-q}.
 Don't use @samp{grep -s} to suppress output either, because Posix
 says @option{-s} does not suppress output, only some error messages;
 also, the @option{-s} option of traditional @command{grep} behaved
@@ -19655,7 +19627,7 @@ input lines.  On AIX the default @code{grep} silently truncates long
 lines on the input before matching.
 
 Also, traditional implementations do not support multiple regexps
-with @option{-e}: they either reject @option{-e} entirely (e.g., Solaris)
+with @option{-e}: they either reject @option{-e} entirely (e.g., Solaris 10)
 or honor only the last pattern (e.g., IRIX 6.5 and NeXT).  To
 work around these problems, invoke @code{AC_PROG_GREP} and then use
 @code{$GREP}.
@@ -19672,7 +19644,7 @@ bar' in.txt
 except that this fails with traditional @command{grep}
 implementations and with OpenBSD 3.8 @command{grep}.
 
-Traditional @command{grep} implementations (e.g., Solaris) do not
+Traditional @command{grep} implementations (e.g., Solaris 10) do not
 support the @option{-E} or @option{-F} options.  To work around these
 problems, invoke @code{AC_PROG_EGREP} and then use @code{$EGREP}, and
 similarly for @code{AC_PROG_FGREP} and @code{$FGREP}.  Even if you are
@@ -19709,20 +19681,6 @@ escape
 @item @command{join}
 @c -----------------
 @prindex @command{join}
-Solaris 8 @command{join} has bugs when the second operand is standard
-input, and when standard input is a pipe.  For example, the following
-shell script causes Solaris 8 @command{join} to loop forever:
-
-@example
-cat >file <<'EOF'
-1 x
-2 y
-EOF
-cat file | join file -
-@end example
-
-Use @samp{join - file} instead.
-
 On NetBSD, @command{join -a 1 file1 file2} mistakenly behaves like
 @command{join -a 1 -a 2 1 file1 file2}, resulting in a usage warning;
 the workaround is to use @command{join -a1 file1 file2} instead.
@@ -20335,15 +20293,6 @@ option), older @command{touch} implementations use the @code{utime} or
 @code{utimes} system call, which can result in the same kind of
 timestamp truncation problems that @samp{cp -p} has.
 
-On ancient BSD systems, @command{touch} or any command that
-results in an empty file does not update the timestamps, so use a
-command like @command{echo} as a workaround.
-Also,
-GNU @command{touch} 3.16r (and presumably all before that)
-fails to work on SunOS 4.1.3 when the empty file is on an
-NFS-mounted 4.2 volume.
-However, these problems are no longer of practical concern.
-
 @item @command{tr}
 @c ---------------
 @prindex @command{tr}
@@ -20521,30 +20470,6 @@ However, this problem is no longer of practical concern.
 
 @node Backslash-Newline-Empty
 @section Backslash-Newline Before Empty Lines
-
-A bug in Bash 2.03 can cause problems if a Make rule contains a
-backslash-newline followed by line that expands to nothing.
-For example, on Solaris 8:
-
-@example
-SHELL = /bin/bash
-EMPTY =
-foo:
-	touch foo \
-	$(EMPTY)
-@end example
-
-@noindent
-executes
-
-@example
-/bin/bash -c 'touch foo \
-'
-@end example
-
-@noindent
-which fails with a syntax error, due to the Bash bug.  To avoid this
-problem, avoid nullable macros in the last line of a multi-line command.
 
 @c  This has been seen on ia64 hpux 11.20, and on one hppa hpux 10.20,
 @c  but another hppa hpux 10.20 didn't have it.  Bob Proulx
@@ -21451,18 +21376,6 @@ Dependency @file{../foo} was found in @file{sub/../foo}, but Tru64
 @command{make} simplified it as @file{foo}.  (Note that the @file{sub/}
 directory does not even exist, this just means that the simplification
 occurred before the file was checked for.)
-
-For the record here is how SunOS 4 @command{make} behaves on this
-example.
-
-@smallexample
-$ @kbd{make}
-make: Fatal error: Don't know how to make target `../foo'
-$ @kbd{mkdir sub}
-$ @kbd{make}
-echo sub/../foo
-sub/../foo
-@end smallexample
 
 
 @node Tru64 Directory Magic
@@ -22388,10 +22301,7 @@ A C or C++ program can exit with status @var{N} by returning
 to exit either with status 0 or @code{EXIT_SUCCESS} to succeed, or with
 status @code{EXIT_FAILURE} to fail, but in practice it is portable to
 fail by exiting with status 1, and test programs that assume Posix can
-fail by exiting with status values from 1 through 255.  Programs on
-SunOS 2.0 (1985) through 3.5.2 (1988) incorrectly exited with zero
-status when @code{main} returned nonzero, but ancient systems like these
-are no longer of practical concern.
+fail by exiting with status values from 1 through 255.
 
 A program can also exit with status @var{N} by passing @var{N} to the
 @code{exit} function, and a program can fail by calling the @code{abort}
