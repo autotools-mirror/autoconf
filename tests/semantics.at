@@ -207,7 +207,7 @@ AT_CHECK_MACRO([AC_CHECK_DECLS],
 		 [[extern int yes;
 		   enum { myenum };
 		   extern struct mystruct_s { int x[20]; } mystruct;
-		   extern int myfunc();
+		   extern int myfunc (int);
 		   #define mymacro1(arg) arg
 		   #define mymacro2]])
   # Ensure we can detect missing declarations of functions whose

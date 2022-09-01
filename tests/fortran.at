@@ -233,7 +233,7 @@ void FOOBAR_F77 (double *x, double *y);
 #  ifdef __cplusplus
      extern "C"
 #  endif
-   int F77_DUMMY_MAIN () { return 1; }
+   int F77_DUMMY_MAIN (void) { return 1; }
 #endif
 
 int main(int argc, char *argv[])
@@ -315,7 +315,7 @@ void FOOBAR_FC(double *x, double *y);
 #  ifdef __cplusplus
      extern "C"
 #  endif
-   int FC_DUMMY_MAIN () { return 1; }
+   int FC_DUMMY_MAIN (void) { return 1; }
 #endif
 
 int main (int argc, char *argv[])
@@ -561,7 +561,7 @@ void @foobar@ (int *x);
 #  ifdef __cplusplus
      extern "C"
 #  endif
-   int F77_DUMMY_MAIN () { return 1; }
+   int F77_DUMMY_MAIN (void) { return 1; }
 #endif
 
 int main(int argc, char *argv[])
@@ -637,7 +637,7 @@ void @foobar@ (int *x);
 #  ifdef __cplusplus
      extern "C"
 #  endif
-   int FC_DUMMY_MAIN () { return 1; }
+   int FC_DUMMY_MAIN (void) { return 1; }
 #endif
 
 int main(int argc, char *argv[])

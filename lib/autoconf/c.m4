@@ -133,7 +133,7 @@ m4_if([$2], [main], ,
 #ifdef __cplusplus
 extern "C"
 #endif
-char $2 ();])], [return $2 ();])])
+char $2 (void);])], [return $2 ();])])
 
 
 # AC_LANG_FUNC_LINK_TRY(C)(FUNCTION)
@@ -157,7 +157,7 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 #define $1 innocuous_$1
 
 /* System header to define __stub macros and hopefully few prototypes,
-   which can conflict with char $1 (); below.  */
+   which can conflict with char $1 (void); below.  */
 
 #include <limits.h>
 #undef $1
@@ -168,7 +168,7 @@ m4_define([AC_LANG_FUNC_LINK_TRY(C)],
 #ifdef __cplusplus
 extern "C"
 #endif
-char $1 ();
+char $1 (void);
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
