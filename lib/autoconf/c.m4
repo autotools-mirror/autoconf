@@ -1193,10 +1193,12 @@ AC_DEFUN([_AC_C_C99_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
 [[# Test code for whether the C compiler supports C99 (global declarations)
 ac_c_conftest_c99_globals='
-// Does the compiler advertise C99 conformance?
+/* Does the compiler advertise C99 conformance? */
 #if !defined __STDC_VERSION__ || __STDC_VERSION__ < 199901L
 # error "Compiler does not advertise C99 conformance"
 #endif
+
+// See if C++-style comments work.
 
 #include <stdbool.h>
 extern int puts (const char *);
@@ -1253,7 +1255,6 @@ typedef const char *ccp;
 static inline int
 test_restrict (ccp restrict text)
 {
-  // See if C++-style comments work.
   // Iterate through items via the restricted pointer.
   // Also check for declarations in for loops.
   for (unsigned int i = 0; *(text+i) != '\''\0'\''; ++i)
@@ -1348,7 +1349,7 @@ AC_DEFUN([_AC_C_C11_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
 [[# Test code for whether the C compiler supports C11 (global declarations)
 ac_c_conftest_c11_globals='
-// Does the compiler advertise C11 conformance?
+/* Does the compiler advertise C11 conformance? */
 #if !defined __STDC_VERSION__ || __STDC_VERSION__ < 201112L
 # error "Compiler does not advertise C11 conformance"
 #endif
