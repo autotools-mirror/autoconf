@@ -158,7 +158,7 @@ sub marshall ($)
   my $res = '';
 
   my $marshall = Data::Dumper->new ([\@request], [qw (*request)]);
-  $marshall->Indent(2)->Terse(0);
+  $marshall->Indent(2)->Terse(0)->Sortkeys(1);
   $res = $marshall->Dump . "\n";
 
   return $res;

@@ -63,7 +63,7 @@ sub marshall($)
 
   # CALLER is an object: instance method.
   my $marshall = Data::Dumper->new ([$caller]);
-  $marshall->Indent(2)->Terse(0);
+  $marshall->Indent(2)->Terse(0)->Sortkeys(1);
   $res = $marshall->Dump . "\n";
 
   return $res;
