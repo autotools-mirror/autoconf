@@ -59,6 +59,10 @@
 # DIVERSION-NAME which is supposed to be an actual diversion number.
 # Of course it would be nicer to use m4_case here, instead of zillions
 # of little macros, but it then takes twice longer to run 'autoconf'!
+# BINSH is 1, not 0, so that user code can m4_cleardivert([BINSH]) and
+# then generate its own BINSH; m4's special treatment of diversion 0
+# would not allow that if BINSH were 0.  Leave an undocumented gap
+# between BINSH and HEADER-REVISION for possible future extensions.
 m4_define([_m4_divert(BINSH)],             1)
 m4_define([_m4_divert(HEADER-REVISION)],   3)
 m4_define([_m4_divert(HEADER-COMMENT)],    4)
