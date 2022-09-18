@@ -23,6 +23,10 @@ GNU Autoconf NEWS - User visible changes.
 
 *** AC_SYS_LARGEFILE now arranges for 64-bit time_t if possible.
 
+*** m4sh diversions like BINSH have been renumbered.
+  This matters only for uses that, contrary to the documentation
+  and despite warnings, use m4_divert with numbered diversions.
+
 
 ** New features
 
