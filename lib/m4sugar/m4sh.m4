@@ -59,13 +59,13 @@
 # DIVERSION-NAME which is supposed to be an actual diversion number.
 # Of course it would be nicer to use m4_case here, instead of zillions
 # of little macros, but it then takes twice longer to run 'autoconf'!
-m4_define([_m4_divert(BINSH)],             0)
-m4_define([_m4_divert(HEADER-REVISION)],   1)
-m4_define([_m4_divert(HEADER-COMMENT)],    2)
-m4_define([_m4_divert(HEADER-COPYRIGHT)],  3)
-m4_define([_m4_divert(M4SH-SANITIZE)],     4)
-m4_define([_m4_divert(M4SH-INIT-FN)],      5)
-m4_define([_m4_divert(M4SH-INIT)],         6)
+m4_define([_m4_divert(BINSH)],             1)
+m4_define([_m4_divert(HEADER-REVISION)],   3)
+m4_define([_m4_divert(HEADER-COMMENT)],    4)
+m4_define([_m4_divert(HEADER-COPYRIGHT)],  5)
+m4_define([_m4_divert(M4SH-SANITIZE)],     6)
+m4_define([_m4_divert(M4SH-INIT-FN)],      7)
+m4_define([_m4_divert(M4SH-INIT)],         8)
 m4_define([_m4_divert(BODY)],           1000)
 
 # Aaarg.  Yet it starts with compatibility issues...  Libtool wants to
