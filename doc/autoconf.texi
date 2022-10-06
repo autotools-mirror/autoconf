@@ -767,10 +767,10 @@ for more information.
 Autoconf imposes some restrictions on the names of macros used with
 @code{#if} in C programs (@pxref{Preprocessor Symbol Index}).
 
-Autoconf requires GNU M4 version 1.4.6 or later in order to
+Autoconf requires GNU M4 version 1.4.8 or later in order to
 generate the scripts.  It uses features that some versions of M4,
 including GNU M4 1.3, do not have.  Autoconf works better
-with GNU M4 version 1.4.14 or later, though this is not
+with GNU M4 version 1.4.16 or later, though this is not
 required.
 
 @xref{Autoconf 1}, for information about upgrading from version 1.
@@ -26428,7 +26428,8 @@ __file__
 __line__
 @end example
 
-Autoconf requires version 1.4.6 or later of GNU M4.
+Autoconf requires version 1.4.8 or later of GNU M4.
+It works better with version 1.4.16 or later.
 
 Since only software maintainers need to use Autoconf, and since GNU
 M4 is simple to configure and install, it seems reasonable to require

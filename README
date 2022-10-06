@@ -11,8 +11,8 @@ operating system features that the package can use, in the form of M4
 macro calls.
 
 Producing configuration scripts using Autoconf requires GNU M4 and
-Perl.  You should install GNU M4 (version 1.4.6 or later is required;
-1.4.14 or later is recommended) and Perl (5.006 or later) before
+Perl.  You should install GNU M4 (version 1.4.8 or later is required;
+1.4.16 or later is recommended) and Perl (5.006 or later) before
 configuring Autoconf, so that Autoconf's configure script can find
 them.  The configuration scripts produced by Autoconf are
 self-contained, so their users do not need to have Autoconf (or GNU

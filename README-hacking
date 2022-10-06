@@ -16,7 +16,7 @@ tools we depend upon, including:
 
 - Automake 1.11+ <https://www.gnu.org/software/automake/>
 - Help2man 1.29+ <https://www.gnu.org/software/help2man/>
-- M4 1.4.6+ <https://www.gnu.org/software/m4/>
+- M4 1.4.16+ <https://www.gnu.org/software/m4/>
 - Perl 5.006+ <https://www.cpan.org/>
 - Texinfo 4.11+ <https://www.gnu.org/software/texinfo/>
 
