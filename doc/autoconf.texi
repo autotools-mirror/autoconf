@@ -2178,7 +2178,7 @@ without any backslash-newlines.
 @prindex @command{install-sh}
 
 Some Autoconf macros require auxiliary scripts.  @code{AC_PROG_INSTALL}
-and @code{AC_PROG_@w{MKDIR_P}} (@pxref{Particular Programs}) require a
+(@pxref{Particular Programs}) requires a
 fallback implementation of @command{install} called @file{install-sh},
 and the @code{AC_CANONICAL} macros (@pxref{Manual Configuration})
 require the system-identification scripts @file{config.sub} and
@@ -4272,16 +4272,10 @@ and its parent directories if needed, and without race conditions when
 two instances of the program attempt to make the same directory at
 nearly the same time.
 
-This macro uses the @samp{mkdir -p} command if possible.  Otherwise, it
-falls back on invoking @command{install-sh} with the @option{-d} option,
-so your package should
-contain @file{install-sh} as described under @code{AC_PROG_INSTALL}.
-An @file{install-sh} file that predates Autoconf 2.60 or Automake 1.10
-is vulnerable to race conditions, so if you want to support parallel
-installs from
-different packages into the same directory you need to make sure you
-have an up-to-date @file{install-sh}.  In particular, be careful about
-using @samp{autoreconf -if} if your Automake predates Automake 1.10.
+This macro uses the equivalent of the @samp{mkdir -p} command.  Ancient
+versions of @command{mkdir} are vulnerable to race conditions, so if you
+want to support parallel installs from different packages into the same
+directory you should use a non-ancient @command{mkdir}.
 
 This macro is related to the @code{AS_MKDIR_P} macro (@pxref{Programming
 in M4sh}), but it sets an output variable intended for use in other
@@ -4291,11 +4285,6 @@ but @code{MKDIR_P} supports the @option{-m} option, e.g., a makefile
 might invoke @code{$(MKDIR_P) -m 0 dir} to create an inaccessible
 directory, and conversely a makefile should use @code{$(MKDIR_P) --
 $(FOO)} if @var{FOO} might yield a value that begins with @samp{-}.
-Finally, @code{AS_MKDIR_P} does not check for race condition
-vulnerability, whereas @code{AC_PROG_MKDIR_P} does.
-
-@samp{@@MKDIR_P@@} is special, as its value may vary for different
-configuration files.
 
 The result of the test can be overridden by setting the variable
 @code{MKDIR_P} or the cache variable @code{ac_cv_path_mkdir}.
@@ -14208,15 +14197,8 @@ use @code{AC_REQUIRE} directly or indirectly (@pxref{Prerequisite Macros}).
 @defmac AS_MKDIR_P (@var{file-name})
 @asindex{MKDIR_P}
 Make the directory @var{file-name}, including intervening directories
-as necessary.  This is equivalent to @samp{mkdir -p -- @var{file-name}},
-except that it is portable to older versions of @command{mkdir} that
-lack support for the @option{-p} option or for the @option{--}
-delimiter (@pxref{mkdir, , Limitations of Usual Tools}).  Also,
-@code{AS_MKDIR_P}
-succeeds if @var{file-name} is a symbolic link to an existing directory,
-even though Posix is unclear whether @samp{mkdir -p} should
-succeed in that case.  If creation of @var{file-name} fails, exit the
-script.
+as necessary.  This is equivalent to @samp{mkdir -p -- @var{file-name}}.
+If creation of @var{file-name} fails, exit the script.
 
 Also see the @code{AC_PROG_MKDIR_P} macro (@pxref{Particular Programs}).
 @end defmac
@@ -19739,11 +19721,6 @@ through @code{uniq}.
 @c ------------------
 @prindex @command{mkdir}
 @cindex Making directories
-No @command{mkdir} option is portable to older systems.  Instead of
-@samp{mkdir -p @var{file-name}}, you should use
-@code{AS_MKDIR_P(@var{file-name})} (@pxref{Programming in M4sh})
-or @code{AC_PROG_MKDIR_P} (@pxref{Particular Programs}).
-
 Combining the @option{-m} and @option{-p} options, as in @samp{mkdir -m
 go-w -p @var{dir}}, often leads to trouble.  FreeBSD
 @command{mkdir} incorrectly attempts to change the permissions of
@@ -19753,26 +19730,21 @@ any newly-created parents of @var{dir}.
 
 Posix does not clearly specify whether @samp{mkdir -p foo}
 should succeed when @file{foo} is a symbolic link to an already-existing
-directory.  The GNU Core Utilities 5.1.0 @command{mkdir}
-succeeds, but Solaris @command{mkdir} fails.
+directory.  The GNU @command{mkdir}
+succeeds, but Solaris 10 @command{mkdir} fails.
 
 Traditional @code{mkdir -p} implementations suffer from race conditions.
 For example, if you invoke @code{mkdir -p a/b} and @code{mkdir -p a/c}
 at the same time, both processes might detect that @file{a} is missing,
 one might create @file{a}, then the other might try to create @file{a}
-and fail with a @code{File exists} diagnostic.  The GNU Core
-Utilities (@samp{fileutils} version 4.1), FreeBSD 5.0,
-NetBSD 2.0.2, and OpenBSD 2.4 are known to be
-race-free when two processes invoke @code{mkdir -p} simultaneously, but
-earlier versions are vulnerable.  Solaris @command{mkdir} is still
-vulnerable as of Solaris 10, and other traditional Unix systems are
+and fail with a @code{File exists} diagnostic.  Solaris 10 @command{mkdir}
+is vulnerable, and other traditional Unix systems are
 probably vulnerable too.  This possible race is harmful in parallel
 builds when several Make rules call @code{mkdir -p} to
 construct directories.  You may use
-@code{install-sh -d} as a safe replacement, provided this script is
-recent enough; the copy shipped with Autoconf 2.60 and Automake 1.10 is
-OK, but copies from older versions are vulnerable.
-
+@code{install-sh -d} as a safe replacement, for example by setting
+@samp{MKDIR_P='/path/to/install-sh -d'} in the environment of
+@command{configure}, assuming the package distributes @file{install-sh}.
 
 @item @command{mkfifo}
 @itemx @command{mknod}

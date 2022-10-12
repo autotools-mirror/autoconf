@@ -27,7 +27,6 @@ GNU Autoconf NEWS - User visible changes.
   This matters only for uses that, contrary to the documentation
   and despite warnings, use m4_divert with numbered diversions.
 
-
 ** New features
 
 *** New macro AC_YEAR2038 for 64-bit time_t.
@@ -56,6 +55,18 @@ GNU Autoconf NEWS - User visible changes.
   a stdbool.h that exists but does nothing, so long as ‘bool’, ‘true’,
   and ‘false’ work anyway.  This is for compatibility with C 2023 and
   with C++.
+
+*** AC_PROG_MKDIR_P now falls back on plain 'mkdir -p'.
+
+  When AC_PROG_MKDIR_P cannot find a mkdir implementation that is
+  known to lack race condition bugs, it now falls back on 'mkdir -p'
+  instead of falling back on a relative path to install-sh, as the
+  relative paths now seem to be a more important problem than the
+  problems of ancient mkdir implementations with race condition bugs.
+  See <https://savannah.gnu.org/support/?110740>.  The only ancient
+  mkdir still in common use is Solaris 10 /usr/bin/mkdir, and for that
+  platform AC_PROG_MKDIR_P falls back on /opt/sfw/bin/mkdir which
+  should work.
 
 * Noteworthy changes in release 2.71 (2021-01-28) [stable]
 

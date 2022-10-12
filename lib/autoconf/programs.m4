@@ -653,22 +653,19 @@ AC_SUBST(INSTALL_DATA)dnl
 # Do not use -m 0755 and let people choose whatever they expect by
 # setting umask.
 #
-# We cannot accept any implementation of 'mkdir' that recognizes '-p'.
-# Some implementations (such as Solaris 8's) are vulnerable to race conditions:
+# Some implementations (such as Solaris 10's) are vulnerable to race conditions:
 # if a parallel make tries to run 'mkdir -p a/b' and 'mkdir -p a/c'
 # concurrently, both version can detect that a/ is missing, but only
-# one can create it and the other will error out.  Consequently we
-# restrict ourselves to known race-free implementations.
+# one can create it and the other will error out.  Users of these
+# implementations should install and use GNU mkdir instead;
+# on Solaris 10, this is /opt/sfw/bin/mkdir.
 #
 # Automake used to define mkdir_p as 'mkdir -p .', in order to
 # allow $(mkdir_p) to be used without argument.  As in
 #   $(mkdir_p) $(somedir)
 # where $(somedir) is conditionally defined.  However we don't do
 # that for MKDIR_P.
-#  1. before we restricted the check to GNU mkdir, 'mkdir -p .' was
-#     reported to fail in read-only directories.  The system where this
-#     happened has been forgotten.
-#  2. in practice we call $(MKDIR_P) on directories such as
+#  * in practice we call $(MKDIR_P) on directories such as
 #       $(MKDIR_P) "$(DESTDIR)$(somedir)"
 #     and we don't want to create $(DESTDIR) if $(somedir) is empty.
 #     To support the latter case, we have to write
@@ -676,13 +673,10 @@ AC_SUBST(INSTALL_DATA)dnl
 #     so $(MKDIR_P) always has an argument.
 #     We will have better chances of detecting a missing test if
 #     $(MKDIR_P) complains about missing arguments.
-#  3. $(MKDIR_P) is named after 'mkdir -p' and we don't expect this
+#   * $(MKDIR_P) is named after 'mkdir -p' and we don't expect this
 #     to accept no argument.
-#  4. having something like 'mkdir .' in the output is unsightly.
+#   * having something like 'mkdir .' in the output is unsightly.
 #
-# On NextStep and OpenStep, the 'mkdir' command does not
-# recognize any option.  It will interpret all options as
-# directories to create.
 AN_MAKEVAR([MKDIR_P], [AC_PROG_MKDIR_P])
 AC_DEFUN_ONCE([AC_PROG_MKDIR_P],
 [AC_REQUIRE_AUX_FILE([install-sh])dnl
@@ -706,11 +700,9 @@ if test -z "$MKDIR_P"; then
   if test ${ac_cv_path_mkdir+y}; then
     MKDIR_P="$ac_cv_path_mkdir -p"
   else
-    # As a last resort, use the slow shell script.  Don't cache a
-    # value for MKDIR_P within a source directory, because that will
-    # break other packages using the cache if that directory is
-    # removed, or if the value is a relative name.
-    MKDIR_P="$ac_install_sh -d"
+    # As a last resort, use plain mkdir -p,
+    # in the hope it doesn't have the bugs of ancient mkdir.
+    MKDIR_P='mkdir -p'
   fi
 fi
 dnl status.m4 does special magic for MKDIR_P instead of AC_SUBST,
