@@ -14610,6 +14610,10 @@ leave the temporary directory behind.  Hence it is important to use a
 @var{prefix} that makes it easier to determine if a leftover temporary
 directory from an interrupted script is safe to delete.
 
+If you set @code{TMPDIR=$tmp} after invoking this macro, you should
+reset @code{TMPDIR} before deleting the created directory, to avoid
+breaking commands that rely on @code{$TMPDIR}.
+
 The use of the output variable @samp{$tmp} rather than something in the
 @samp{as_} namespace is historical; it has the unfortunate consequence
 that reusing this otherwise common name for any other purpose inside
