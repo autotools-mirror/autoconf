@@ -328,7 +328,7 @@ m4_map_args([_AC_CHECK_HEADER_ONCE],
   [strings.h], [sys/stat.h], [sys/types.h], [unistd.h])]dnl
 [AS_IF([test $ac_cv_header_stdlib_h = yes && test $ac_cv_header_string_h = yes],
 [AC_DEFINE([STDC_HEADERS], [1],
-  [Define to 1 if all of the C90 standard headers exist
+  [Define to 1 if all of the C89 standard headers exist
    (not just the ones required in a freestanding environment).
    This macro is provided for backward compatibility;
    new code need not use it.])])])
@@ -356,7 +356,7 @@ AC_DEFUN([AC_INCLUDES_DEFAULT],
 ## ------------------------------------------- ##
 
 # There is no longer any need to check for headers that are part of
-# ISO C90 (as amended): assert.h, ctype.h, errno.h, float.h, iso646.h,
+# C89 (as amended): assert.h, ctype.h, errno.h, float.h, iso646.h,
 # limits.h, locale.h, math.h, setjmp.h, signal.h, stdarg.h, stddef.h,
 # stdio.h, stdlib.h, string.h, time.h, wchar.h, wctype.h.
 
@@ -588,10 +588,10 @@ AC_DEFUN([AC_CHECK_HEADER_STDBOOL],
                 integer constant expressions, and "bool" should be a valid
                 type name.
 
-                Although C 1999 requires bool, true, and false to be macros,
-                C 2023 and C++ 2011 overrule that, so do not test for that.
-                Although C 1999 requires __bool_true_false_are_defined and
-                _Bool, C 2023 says they are obsolescent, so do not require
+                Although C99 requires bool, true, and false to be macros,
+                C23 and C++11 overrule that, so do not test for that.
+                Although C99 requires __bool_true_false_are_defined and
+                _Bool, C23 says they are obsolescent, so do not require
                 them.  */
 
              #if !true
@@ -668,7 +668,7 @@ AC_PROG_EGREP
 ],
  [The preprocessor macro 'STDC_HEADERS' is obsolete.
   Except in unusual embedded environments, you can safely include all
-  ISO C90 headers unconditionally.])
+  C89 headers unconditionally.])
 
 # AC_HEADER_SYS_WAIT
 # ------------------

@@ -4044,7 +4044,7 @@ previous tests, so for example one may write
 if @file{sys/time.h} has already been tested for.
 
 All hosted environments that are still of interest for portable code
-provide all of the headers specified in ISO C90 (as amended in 1995):
+provide all of the headers specified in C89 (as amended in 1995):
 @file{assert.h}, @file{ctype.h}, @file{errno.h}, @file{float.h},
 @file{iso646.h}, @file{limits.h}, @file{locale.h}, @file{math.h},
 @file{setjmp.h}, @file{signal.h}, @file{stdarg.h}, @file{stddef.h},
@@ -4052,13 +4052,14 @@ provide all of the headers specified in ISO C90 (as amended in 1995):
 @file{wchar.h}, and @file{wctype.h}.  Most programs can safely include
 these headers unconditionally.  All other headers, including all headers
 from later revisions of the C standard, need to be tested for
+if your program is intended to be portable to C89
 (@pxref{Header Files}).
 
 If your program needs to be portable to a @emph{freestanding}
 environment, such as an embedded OS that doesn't provide all of the
-facilities of the C90 standard library, you may need to test for some of
+facilities of the C89 standard library, you may need to test for some of
 the above headers as well.  Note that many Autoconf macros internally
-assume that the complete set of C90 headers are available.
+assume that the complete set of C89 headers are available.
 
 Most generic macros use the following macro to provide a default set
 of includes:
@@ -4834,12 +4835,6 @@ declared, due to C++ problems of some sort or another.  For this reason
 we suggest that test programs not invoke @code{exit}, but return from
 @code{main} instead.
 
-@item @code{free}
-@c @fuindex free
-@prindex @code{free}
-The C standard says a call @code{free (NULL)} does nothing, but
-some old systems don't support this (e.g., NextStep).
-
 @item @code{isinf}
 @itemx @code{isnan}
 @c @fuindex isinf
@@ -4899,7 +4894,7 @@ anyway, so it's probably not worth worrying about.
 @item @code{malloc}
 @c @fuindex malloc
 @prindex @code{malloc}
-The C standard says a call @code{malloc (0)} is implementation
+The C standard says a successful call @code{malloc (0)} is implementation
 dependent.  It can return either @code{NULL} or a new non-null pointer.
 The latter is more common (e.g., the GNU C Library) but is by
 no means universal.  @code{AC_FUNC_MALLOC}
@@ -4927,25 +4922,20 @@ environment, rather than inserting it with an empty value.
 @item @code{realloc}
 @c @fuindex realloc
 @prindex @code{realloc}
-The C standard says a call @code{realloc (NULL, size)} is equivalent
-to @code{malloc (size)}, but some old systems don't support this (e.g.,
-NextStep).
+It is problematic to call @code{realloc} with a zero size.
+The C standard says @code{realloc (NULL, 0)} is equivalent to
+@code{malloc (0)}, which means one cannot portably tell whether the call
+has succeeded if it returns a null pointer.  If @code{ptr} is non-null,
+the C standard says @code{realloc (ptr, 0)} has undefined behavior.
+
+The @code{AC_FUNC_REALLOC} macro avoids some of these portability issues,
+and the Gnulib module @code{realloc-gnu} avoids more of them.
+@xref{Particular Functions}.
 
 @item @code{signal} handler
 @c @fuindex signal
 @prindex @code{signal}
 @prindex @code{sigaction}
-Normally @code{signal} takes a handler function with a return type of
-@code{void}, but some old systems required @code{int} instead.  Any
-actual @code{int} value returned is not used; this is only a
-difference in the function prototype demanded.
-
-All systems we know of in current use return @code{void}.  The
-@code{int} was to support K&R C, where of course @code{void} is not
-available.  The obsolete macro @code{AC_TYPE_SIGNAL}
-(@pxref{AC_TYPE_SIGNAL}) can be used to establish the correct type in
-all cases.
-
 In most cases, it is more robust to use @code{sigaction} when it is
 available, rather than @code{signal}.
 
@@ -4957,34 +4947,22 @@ available, rather than @code{signal}.
 In C99 and later, if the output array isn't big enough
 and if no other errors occur, @code{snprintf} and @code{vsnprintf}
 truncate the output and return the number of bytes that ought to have
-been produced.  Some older systems return the truncated length (e.g.,
+been produced.  Some ancient systems returned the truncated length (e.g.,
 GNU C Library 2.0.x or IRIX 6.5), and some a negative value
 (e.g., earlier GNU C Library versions).
-
-@item @code{sscanf}
-@c @fuindex sscanf
-@prindex @code{sscanf}
-On various old systems, e.g., HP-UX 9, @code{sscanf} requires
-that its
-input string be writable (though it doesn't actually change it).  This
-can be a problem when using @command{gcc} since it normally puts
-constant strings in read-only memory (@pxref{Incompatibilities,
-Incompatibilities of GCC, , gcc, Using and
-Porting the GNU Compiler Collection}).  Apparently in some cases even
-having format strings read-only can be a problem.
 
 @item @code{strerror_r}
 @c @fuindex strerror_r
 @prindex @code{strerror_r}
 Posix specifies that @code{strerror_r} returns an @code{int}, but many
-systems (e.g., GNU C Library version 2.2.4) provide a
+systems (e.g., GNU C Library version 2.36) provide a
 different version returning a @code{char *}.  @code{AC_FUNC_STRERROR_R}
 can detect which is in use (@pxref{Particular Functions}).
 
 @item @code{strnlen}
 @c @fuindex strnlen
 @prindex @code{strnlen}
-AIX 4.3 provides a broken version which produces the
+AIX 4.3 provided a broken version which produces the
 following results:
 
 @example
@@ -5046,9 +5024,8 @@ value back in the caller (e.g., @code{vsnprintf} in the GNU C Library
 @item Signed @code{>>}
 Normally the C @code{>>} right shift of a signed type replicates the
 high bit, giving a so-called ``arithmetic'' shift.  But care should be
-taken since Standard C doesn't require that behavior.  On those
-few processors without a native arithmetic shift (for instance Cray
-vector systems) zero bits may be shifted in, the same as a shift of an
+taken since Standard C doesn't require that behavior.  On a few platforms
+(e.g., Cray C by default) zero bits are shifted in, the same as a shift of an
 unsigned type.
 
 @item Integer @code{/}
@@ -5280,8 +5257,7 @@ and also contains workarounds for other portability problems of
 @c @fuindex getgroups
 @prindex @code{getgroups}
 @caindex func_getgroups_works
-If the @code{getgroups} function is available and works (unlike on
-Ultrix 4.3 and NeXTstep 3.2, where @samp{getgroups (0, 0)} always fails),
+If the @code{getgroups} function is available and works,
 define @code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
 needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
 
@@ -6109,7 +6085,7 @@ and cache the result in the @code{ac_cv_header_stdbool_h} variable.
 If the type @code{_Bool} is defined, define @code{HAVE__BOOL} to 1.
 
 This macro is obsolescent, as all current C compilers have @file{stdbool.h},
-a header that is itself obsolescent as of C 2023.
+a header that is itself obsolescent as of C23.
 
 This macro is intended for use by Gnulib (@pxref{Gnulib}) and other
 packages that supply a substitute @file{stdbool.h} on platforms lacking
@@ -6276,40 +6252,11 @@ If @file{stdbool.h} exists and conforms to C99 or later, define
 @code{HAVE__BOOL} to 1.
 
 This macro is obsolescent, as all current C compilers have
-@file{stdbool.h}, a header that is itself obsolescent as of C 2023.
+@file{stdbool.h}, a header that is itself obsolescent as of C23.
 Nowadays programs that need @code{bool}, @code{true} and @code{false}
 can include @file{stdbool.h} unconditionally, without using
 @code{AC_HEADER_STDBOOL}, and if such a program needs to be portable
-only to C 2023 or later it need not even include @file{stdbool.h}.
-
-This macro was originally intended for programs that needed to be
-portable to C89.  These obsolete programs could use the following code,
-so long as they assigned only 0 or 1 to @code{bool} variables:
-
-@example
-@group
-#ifdef HAVE_STDBOOL_H
-# include <stdbool.h>
-#else
-# ifndef HAVE__BOOL
-#  ifdef __cplusplus
-typedef bool _Bool;
-#  else
-#   define _Bool signed char
-#  endif
-# endif
-# define bool _Bool
-# define false 0
-# define true 1
-# define __bool_true_false_are_defined 1
-#endif
-@end group
-@end example
-
-Alternatively if you still need portability to C89 you can use the
-@samp{stdbool} package of Gnulib (@pxref{Gnulib}).  It lets code say just
-@code{#include <stdbool.h>}, and it adds support for less-common
-platforms.
+only to C23 or later it need not even include @file{stdbool.h}.
 
 This macro caches its result in the @code{ac_cv_header_stdbool_h}
 variable.
@@ -6327,10 +6274,10 @@ does not.
 
 This macro is obsolescent.  Its sole effect is to make sure that all the
 headers that are included by @code{AC_INCLUDES_DEFAULT} (@pxref{Default
-Includes}), but not part of ISO C90, have been checked for.
+Includes}), but not part of C89, have been checked for.
 
 All hosted environments that are still of interest for portable code
-provide all of the headers specified in ISO C90 (as amended in 1995).
+provide all of the headers specified in C89 (as amended in 1995).
 @end defmac
 
 @defmac AC_HEADER_SYS_WAIT
@@ -6852,7 +6799,7 @@ If @file{stdint.h} or @file{inttypes.h} does not define the type
 integer type that is exactly 8 bits wide and that uses two's complement
 representation, if such a type exists.
 If you are worried about porting to hosts that lack such a type, you can
-use the results of this macro in C89-or-later code as follows:
+use the results of this macro as follows:
 
 @example
 #if HAVE_STDINT_H
@@ -7276,8 +7223,7 @@ suitable for a variable name mapped to underscores.
 Store into the shell variable @var{var} the value of the integer
 @var{expression}.  The
 value should fit in an initializer in a C variable of type @code{signed
-long}.  To support cross compilation (in which case, the macro only works on
-hosts that use twos-complement arithmetic), it should be possible to evaluate
+long}.  To support cross compilation, it should be possible to evaluate
 the expression at compile-time.  If no @var{includes} are specified, the
 default includes are used (@pxref{Default Includes}).
 
@@ -7475,8 +7421,9 @@ person building the package.  @xref{Preset Output Variables}.)
 
 If necessary, options are added to @code{CC} to enable support for
 ISO Standard C features with extensions, preferring the newest edition
-of the C standard that is supported.  Currently the newest edition
-Autoconf knows how to detect support for is ISO C 2011.  After calling
+of the C standard for which detection is supported.  Currently the
+newest edition Autoconf knows how to detect support for is C11, as there is
+little reason to prefer C17 to C11, and C23 is still too new.  After calling
 this macro you can check whether the C compiler has been set to accept
 standard C by inspecting the shell variable @code{ac_prog_cc_stdc}.
 Its value will be @samp{c11}, @samp{c99}, or @samp{c89}, respectively,
@@ -7874,7 +7821,7 @@ person building the package.  @xref{Preset Output Variables}.)
 If necessary, options are added to @code{CXX} to enable support for
 ISO Standard C++ features with extensions, preferring the newest edition
 of the C++ standard that is supported.  Currently the newest edition
-Autoconf knows how to detect support for is ISO C++ 2011.  After calling
+Autoconf knows how to detect support for is C++11.  After calling
 this macro, you can check whether the C++ compiler has been set to
 accept standard C++ by inspecting the shell variable @code{ac_prog_cxx_stdcxx}.
 Its value will be @samp{cxx11} or @samp{cxx98}, respectively,
@@ -9403,8 +9350,8 @@ after running test programs and if the script is interrupted.
 @node Test Functions
 @subsection Test Functions
 
-These days it's safe to assume support for function prototypes
-(introduced in C89).
+Functions in test code should use function prototypes, introduced in C89
+and required in C23.
 
 Functions that test programs declare should also be conditionalized for
 C++, which requires @samp{extern "C"} prototypes.  Make sure to not
@@ -19210,10 +19157,10 @@ The default executable, produced by @samp{cc foo.c}, can be
 @end itemize
 
 The C compiler's traditional name is @command{cc}, but other names like
-@command{gcc} are common.  Posix 1003.1-2001 and 1003.1-2008 specify the
+@command{gcc} are common.  Posix 1003.1-2001 through 1003.1-2017 specify the
 name @command{c99}, but older Posix editions specified
 @command{c89}, future POSIX standards will likely specify
-@command{c11}, and anyway these standard names are rarely used in
+other commands, and anyway these standard names are rarely used in
 practice.  Typically the C compiler is invoked from makefiles that use
 @samp{$(CC)}, so the value of the @samp{CC} make variable selects the
 compiler name.
@@ -21665,9 +21612,14 @@ GCC, gcc, Using the GNU Compiler Collection
 for a list of C-related standards.  Many programs also assume the
 @uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, Posix standard}.
 
-Some old code is written to be portable to K&R C, which predates any C
+@cindex K&R C
+@cindex C89, C99, C11, C17, and C23
+The first widely used C variant was K&R C, which predates any C
 standard.  K&R C compilers are no longer of practical interest, though,
-and the rest of section assumes at least C89, the first C standard.
+and Autoconf assumes at least C89, the first C standard,
+which is sometimes called ``C90'' due to a delay in standardization.
+C has since gone through the standards C99, C11, C17, and C23, and
+Autoconf is compatible with all these standards.
 
 Program portability is a huge topic, and this section can only briefly
 introduce common pitfalls.  @xref{System Portability, , Portability
@@ -21776,9 +21728,9 @@ especially when optimization is enabled.  If you assume a GCC-like
 compiler, you can work around the problems by compiling with GCC's
 @code{-fwrapv} option; however, this is not portable.
 
-For historical reasons the C standard also allows implementations with
-ones' complement or signed magnitude arithmetic, but it is safe to
-assume two's complement nowadays.
+For historical reasons C17 and earlier also allowed implementations with
+ones' complement or signed magnitude arithmetic, but C23 requires
+two's complement and it is safe to assume two's complement nowadays.
 
 Also, overflow can occur when converting an out-of-range value to a
 signed integer type.  Here a standard implementation must define what
@@ -24369,7 +24321,7 @@ issue.
 @defmac AC_RETSIGTYPE
 @acindex{RETSIGTYPE}
 Replaced by @code{AC_TYPE_SIGNAL} (@pxref{AC_TYPE_SIGNAL}), which itself
-is obsolete when assuming C89 or better.
+is obsolete.
 @end defmac
 
 @defmac AC_RSH
@@ -24424,7 +24376,7 @@ Replaced by @code{AC_HEADER_STAT} (@pxref{AC_HEADER_STAT}).
 @defmac AC_STDC_HEADERS
 @acindex{STDC_HEADERS}
 Replaced by @code{AC_HEADER_STDC} (@pxref{AC_HEADER_STDC}), which
-is itself obsolete.  Nowadays it is safe to assume the facilities of C90
+is itself obsolete.  Nowadays it is safe to assume the facilities of C89
 exist.
 @end defmac
 
@@ -24643,19 +24595,6 @@ function returning @code{void}, define @code{RETSIGTYPE} to be
 @code{void}; otherwise, define it to be @code{int}.  These days, it is
 portable to assume C89, and that signal handlers return @code{void},
 without needing to use this macro or @code{RETSIGTYPE}.
-
-When targeting older K&R C, it is possible to define signal handlers as
-returning type @code{RETSIGTYPE}, and omit a return statement:
-
-@example
-@group
-RETSIGTYPE
-hup_handler ()
-@{
-@dots{}
-@}
-@end group
-@end example
 @end defmac
 
 @defmac AC_UID_T
@@ -24677,7 +24616,7 @@ unnecessary to write explicitly.
 Define @code{USG} if the BSD string functions (@code{bcopy},
 @code{bzero}, @code{index}, @code{rindex}, etc) are @emph{not} defined
 in @file{strings.h}.  Modern code should assume @file{string.h} exists
-and should use the ISO C string functions (@code{memmove}, @code{memset},
+and should use the standard C string functions (@code{memmove}, @code{memset},
 @code{strchr}, @code{strrchr}, etc) unconditionally.
 
 @file{strings.h} may be the only header that declares @code{strcasecmp},
@@ -27350,7 +27289,7 @@ introduced in this document.
 @c  LocalWords:  inttypes STDINT stdint AWK AIX Solaris NeXT env EGREP FGREP yy
 @c  LocalWords:  LEXLIB YYTEXT lfl nonportable Automake's LN RANLIB byacc INETD
 @c  LocalWords:  inetd prog PROGS progs ranlib lmp lXt lX nsl gethostbyname UX
-@c  LocalWords:  NextStep isinf isnan glibc IRIX sunmath lm lsunmath pre sizeof
+@c  LocalWords:  isinf isnan glibc IRIX sunmath lm lsunmath pre sizeof
 @c  LocalWords:  ld inline malloc putenv setenv FreeBSD realloc SunOS MinGW
 @c  LocalWords:  snprintf vsnprintf sprintf vsprintf sscanf gcc strerror ifdef
 @c  LocalWords:  strnlen sysconf PAGESIZE unsetenv va fallback memcpy dst FUNC

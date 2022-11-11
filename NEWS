@@ -53,7 +53,7 @@ GNU Autoconf NEWS - User visible changes.
   These macros are now obsolescent, as programs can simply include
   stdbool.h unconditionally.  If you use these macros, they now accept
   a stdbool.h that exists but does nothing, so long as ‘bool’, ‘true’,
-  and ‘false’ work anyway.  This is for compatibility with C 2023 and
+  and ‘false’ work anyway.  This is for compatibility with C23 and
   with C++.
 
 *** AC_PROG_MKDIR_P now falls back on plain 'mkdir -p'.
