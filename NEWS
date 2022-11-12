@@ -29,7 +29,7 @@ GNU Autoconf NEWS - User visible changes.
 
 ** New features
 
-*** New macro AC_YEAR2038 for 64-bit time_t.
+*** New macro AC_SYS_YEAR2038 for 64-bit time_t.
 
 ** Obsolete features and new warnings
 
