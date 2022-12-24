@@ -1507,7 +1507,7 @@ m4_define([m4_undivert],
 # m4_require'd.
 #
 # The implementation is based on three ideas, (i) using diversions to
-# prepare the expansion of the macro and its dependencies (by Franc,ois
+# prepare the expansion of the macro and its dependencies (by François
 # Pinard), (ii) expand the most recently m4_require'd macros _after_
 # the previous macros (by Axel Thimm), and (iii) track instances of
 # provide before require (by Eric Blake).

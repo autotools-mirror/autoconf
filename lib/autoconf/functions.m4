@@ -23,7 +23,7 @@
 # respectively.  If not, see <https://www.gnu.org/licenses/>.
 
 # Written by David MacKenzie, with help from
-# Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
+# François Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
@@ -560,7 +560,7 @@ AC_DEFUN([_AC_FUNC_FNMATCH_IF],
   [# Some versions of Solaris, SCO, and the GNU C Library
    # have a broken or incompatible fnmatch.
    # So we run a test program.  If we are cross-compiling, take no chance.
-   # Thanks to John Oleynick, Franc,ois Pinard, and Paul Eggert for this test.
+   # Thanks to John Oleynick, François Pinard, and Paul Eggert for this test.
    AC_RUN_IFELSE(
       [AC_LANG_PROGRAM(
 	 [#include <fnmatch.h>

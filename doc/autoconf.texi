@@ -497,7 +497,7 @@ Writing Autoconf Macros
 * Macro Names::                 What to call your new macros
 * Dependencies Between Macros::  What to do when macros depend on other macros
 * Obsoleting Macros::           Warning about old ways of doing things
-* Coding Style::                Writing Autoconf macros @`a la Autoconf
+* Coding Style::                Writing Autoconf macros à la Autoconf
 
 Dependencies Between Macros
 
@@ -701,7 +701,7 @@ shouted: ``And the Chaos, where do you think it was coming from, hmm?''
 
 ---Anonymous
 @end flushright
-@c (via Franc,ois Pinard)
+@c (via François Pinard)
 
 Autoconf is a tool for producing shell scripts that automatically
 configure software source code packages to adapt to many kinds of
@@ -1325,7 +1325,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[char b[10];]])], [],
 @end example
 
 @noindent
-Voil@`a, you actually produce @samp{char b[10];} this time!
+Voilà, you actually produce @samp{char b[10];} this time!
 
 On the other hand, descriptions (e.g., the last parameter of
 @code{AC_DEFINE} or @code{AS_HELP_STRING}) are not literals---they
@@ -14670,7 +14670,7 @@ and M4sh (@pxref{Programming in M4sh}).
 * Macro Names::                 What to call your new macros
 * Dependencies Between Macros::  What to do when macros depend on other macros
 * Obsoleting Macros::           Warning about old ways of doing things
-* Coding Style::                Writing Autoconf macros @`a la Autoconf
+* Coding Style::                Writing Autoconf macros à la Autoconf
 @end menu
 
 @node Macro Definitions
@@ -26738,7 +26738,7 @@ FOO
 @noindent
 but that was getting complex, so the author wanted to offload some of
 the text into a new macro in another file included via
-@file{aclocal.m4}.  The na@"ive approach merely wraps the text in a new
+@file{aclocal.m4}.  The naïve approach merely wraps the text in a new
 macro:
 
 @example
@@ -27050,7 +27050,7 @@ In the fall of 1991 I called together a group of fellow questers after
 the Holy Grail of portability (er, that is, alpha testers) to give me
 feedback as I encapsulated pieces of my handwritten scripts in M4 macros
 and continued to add features and improve the techniques used in the
-checks.  Prominent among the testers were Fran@,{c}ois Pinard, who came up
+checks.  Prominent among the testers were François Pinard, who came up
 with the idea of making an Autoconf shell script to run M4
 and check for unresolved macro calls; Richard Pixley, who suggested
 running the compiler instead of searching the file system to find
@@ -27085,7 +27085,7 @@ version is better, but still doesn't provide everything we need.
 
 More development occurred as people put Autoconf under more stresses
 (and to uses I hadn't anticipated).  Karl Berry added checks for X11.
-david zuhn contributed C++ support.  Fran@,{c}ois Pinard made it diagnose
+david zuhn contributed C++ support.  François Pinard made it diagnose
 invalid arguments.  Jim Blandy bravely coerced it into configuring
 GNU Emacs, laying the groundwork for several later improvements.
 Roland McGrath got it to configure the GNU C Library, wrote the
@@ -27133,7 +27133,7 @@ of the program.  I made the messages showing results of the checks less
 ambiguous, always printing a result.  I regularized the names of the
 macros and cleaned up coding style inconsistencies.  I added some
 auxiliary utilities that I had developed to help convert source code
-packages to use Autoconf.  With the help of Fran@,{c}ois Pinard, I made
+packages to use Autoconf.  With the help of François Pinard, I made
 the macros not interrupt each others' messages.  (That feature revealed
 some performance bottlenecks in GNU M4, which he hastily
 corrected!)  I reorganized the documentation around problems people want
@@ -27141,7 +27141,7 @@ to solve.  And I began a test suite, because experience had shown that
 Autoconf has a pronounced tendency to regress when we change it.
 
 Again, several alpha testers gave invaluable feedback, especially
-Fran@,{c}ois Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn,
+François Pinard, Jim Meyering, Karl Berry, Rob Savoye, Ken Raeburn,
 and Mark Eichin.
 
 Finally, version 2.0 was ready.  And there was much rejoicing.  (And I
@@ -27403,6 +27403,7 @@ introduced in this document.
 @c  LocalWords:  configmake vx bashdb tvtwm questers UUCP McGrath
 @c  LocalWords:  ispell
 @c Local Variables:
+@c coding: utf-8
 @c fill-column: 72
 @c ispell-local-dictionary: "american"
 @c indent-tabs-mode: nil

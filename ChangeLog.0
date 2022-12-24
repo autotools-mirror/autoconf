@@ -11,7 +11,7 @@ Sat Jul 18 13:40:46 1992  David J. MacKenzie  (djm@nutrimat.gnu.ai.mit.edu)
 Fri Jul 17 00:00:07 1992  David J. MacKenzie  (djm@nutrimat.gnu.ai.mit.edu)
 
 	* autoconf.sh: Print the lines of the input file where
-	unresolved macros occur.  From Francois Pinard.
+	unresolved macros occur.  From François Pinard.
 
 	* acspecific.m4 (AC_PROG_INSTALL), acgeneral.m4
 	(AC_PROGRAM_CHECK): Use test -f instead of -s.
@@ -107,7 +107,7 @@ Fri Jun 19 13:18:12 1992  David J. MacKenzie  (djm@wookumz.gnu.ai.mit.edu)
 Thu Jun 18 12:10:27 1992  David J. MacKenzie  (djm@wookumz.gnu.ai.mit.edu)
 
 	* acgeneral.m4 (AC_BEFORE): Print message in next-error format.
-	From Franc,ois Pinard.
+	From François Pinard.
 
 	* acgeneral.m4 (AC_PROGRAM_CHECK): If args-for-use is empty,
 	don't put a space after the program name.
@@ -129,7 +129,7 @@ Tue Jun 16 14:46:29 1992  David J. MacKenzie  (djm@wookumz.gnu.ai.mit.edu)
 	* autoconf.sh: Remove incomplete output file if interrupted.
 
 	* acgeneral.m4 (AC_INIT): Avoid running an extra subshell for pwd.
-	From Franc,ois Pinard.
+	From François Pinard.
 
 Mon Jun 15 21:27:49 1992  David J. MacKenzie  (djm@wookumz.gnu.ai.mit.edu)
 

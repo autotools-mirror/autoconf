@@ -25,7 +25,7 @@
 # respectively.  If not, see <https://www.gnu.org/licenses/>.
 
 # Written by David MacKenzie, with help from
-# Franc,ois Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
+# François Pinard, Karl Berry, Richard Pixley, Ian Lance Taylor,
 # Roland McGrath, Noah Friedman, david d zuhn, and many others.
 
 
