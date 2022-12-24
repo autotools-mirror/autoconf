@@ -545,11 +545,15 @@ AH_VERBATIM([USE_SYSTEM_EXTENSIONS],
 #ifndef __STDC_WANT_IEC_60559_DFP_EXT__
 # undef __STDC_WANT_IEC_60559_DFP_EXT__
 #endif
+/* Enable extensions specified by C23 Annex F.  */
+#ifndef __STDC_WANT_IEC_60559_EXT__
+# undef __STDC_WANT_IEC_60559_EXT__
+#endif
 /* Enable extensions specified by ISO/IEC TS 18661-4:2015.  */
 #ifndef __STDC_WANT_IEC_60559_FUNCS_EXT__
 # undef __STDC_WANT_IEC_60559_FUNCS_EXT__
 #endif
-/* Enable extensions specified by ISO/IEC TS 18661-3:2015.  */
+/* Enable extensions specified by C23 Annex H and ISO/IEC TS 18661-3:2015.  */
 #ifndef __STDC_WANT_IEC_60559_TYPES_EXT__
 # undef __STDC_WANT_IEC_60559_TYPES_EXT__
 #endif
@@ -619,6 +623,7 @@ dnl it should only be defined when necessary.
   AC_DEFINE([__STDC_WANT_IEC_60559_ATTRIBS_EXT__])
   AC_DEFINE([__STDC_WANT_IEC_60559_BFP_EXT__])
   AC_DEFINE([__STDC_WANT_IEC_60559_DFP_EXT__])
+  AC_DEFINE([__STDC_WANT_IEC_60559_EXT__])
   AC_DEFINE([__STDC_WANT_IEC_60559_FUNCS_EXT__])
   AC_DEFINE([__STDC_WANT_IEC_60559_TYPES_EXT__])
   AC_DEFINE([__STDC_WANT_LIB_EXT2__])

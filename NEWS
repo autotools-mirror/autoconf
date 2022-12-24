@@ -21,6 +21,9 @@ GNU Autoconf NEWS - User visible changes.
   that you will get a confusing error message if you run autoconf on
   a configure.ac that neglects to use AC_INIT or AC_OUTPUT.
 
+*** AC_USE_SYSTEM_EXTENSIONS now enables C23 Annex F extensions
+  by defining __STDC_WANT_IEC_60559_EXT__.
+
 *** AC_SYS_LARGEFILE now arranges for 64-bit time_t if possible.
 
 *** m4sh diversions like BINSH have been renumbered.

@@ -8926,12 +8926,15 @@ Enable extensions specified by ISO/IEC TS 18661-1:2014.
 @item __STDC_WANT_IEC_60559_DFP_EXT__
 @cvindex __STDC_WANT_IEC_60559_DFP_EXT__
 Enable extensions specified by ISO/IEC TS 18661-2:2015.
+@item __STDC_WANT_IEC_60559_EXT__
+@cvindex __STDC_WANT_IEC_60559_EXT__
+Enable extensions specified by C23 Annex F.
 @item __STDC_WANT_IEC_60559_FUNCS_EXT__
 @cvindex __STDC_WANT_IEC_60559_FUNCS_EXT__
 Enable extensions specified by ISO/IEC TS 18661-4:2015.
 @item __STDC_WANT_IEC_60559_TYPES_EXT__
 @cvindex __STDC_WANT_IEC_60559_TYPES_EXT__
-Enable extensions specified by ISO/IEC TS 18661-3:2015.
+Enable extensions specified by C23 Annex H and by ISO/IEC TS 18661-3:2015.
 @item __STDC_WANT_LIB_EXT2__
 @cvindex __STDC_WANT_LIB_EXT2__
 Enable extensions specified by ISO/IEC TR 24731-2:2010.
