@@ -21937,38 +21937,24 @@ wraparound on overflow, instead of rewriting the code.  The rest of this
 section attempts to give practical advice for this situation.
 
 To detect integer overflow portably when attempting operations like
-@code{sum = a + b}, you can use the @code{intprops} module of Gnulib.
-@xref{Gnulib}.  For example:
+@code{sum = a + b}, you can use the C23 @code{<stdckdint.h>} macros
+@code{ckd_add}, @code{ckd_sub}, and @code{ckd_mul}.
+The following code adds two integers with overflow wrapping around
+reliably in the sum:
 
 @example
-#include <intprops.h>
-...
-/* Set sum = a + b, diagnosing overflow.  */
-if (!INT_ADD_OK (a, b, &sum))
-  return "integer overflow detected";
-/* Now the code can use 'sum'.  */
-@end example
-
-To add two integers with overflow wrapping around reliably in the sum,
-you can use @code{INT_ADD_WRAPV (a, b, &sum)} instead:
-
-@example
-#include <intprops.h>
+#include <stdckdint.h>
 ...
 /* Set sum = a + b, with wraparound.  */
-if (INT_ADD_WRAPV (a, b, &sum))
+if (ckd_add (&sum, a, b))
   /* 'sum' has just the low order bits.  */;
 else
   /* 'sum' is the correct answer.  */;
 @end example
 
-The @code{intprops} module supports similar macros for other arithmetic
-operations, e.g., @code{INT_SUBTRACT_OK} and @code{INT_MULTIPLY_WRAPV}.
-If your code is intended to run only on GCC 7 or later, you can instead
-use the GNU C primitives @code{__builtin_add_overflow},
-@code{__builtin_sub_overflow}, and @code{__builtin_mul_overflow}.
-The @code{intprops} module uses these GCC 7 primitives if available,
-so that the cost of invoking these macros is typically just one machine
+To be portable to pre-C23 platforms you can use Gnulib's
+@code{stdckdint} module, which emulates this part of C23 (@pxref{Gnulib}).
+Invoking the @code{stdckdint} macros typically costs just one machine
 instruction for the arithmetic and another instruction for the rare
 branch on overflow.
 
