@@ -347,6 +347,8 @@ m4_define([AT_CHECK_CONFIGURE],
 #   Set by AC_INIT.
 # - interpval
 #   Set by AC_SYS_INTERPRETER.
+# - enableval, withval, enable_*, with_*
+#   Set by AC_ARG_ENABLE and AC_ARG_WITH.
 # - CONFIG_STATUS and DEFS
 #   Set by AC_OUTPUT.
 # - AC_SUBST'ed variables
@@ -381,7 +383,7 @@ if test -f state-env.before && test -f state-env.after; then
     ($EGREP -v '^(m4_join([|],
       [a[cs]_.*],
       [(exec_)?prefix|DEFS|CONFIG_STATUS],
-      [CC|CFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77],
+      [CC|CFLAGS|CPPFLAGS|CPP|GCC|CXX|CXXFLAGS|CXXCPP|GXX|F77|FFLAGS|FLIBS|G77],
       [ERL|ERLC|ERLCFLAGS|ERLANG_PATH_ERL|ERLANG_ROOT_DIR|ERLANG_LIB_DIR],
       [ERLANG_LIB_DIR_.*|ERLANG_LIB_VER_.*|ERLANG_INSTALL_LIB_DIR],
       [ERLANG_INSTALL_LIB_DIR_.*|ERLANG_ERTS_VER|OBJC|OBJCPP|OBJCFLAGS],
@@ -395,6 +397,7 @@ if test -f state-env.before && test -f state-env.after; then
       [X_(CFLAGS|(EXTRA_|PRE_)?LIBS)|x_(includes|libraries)|(have|no)_x],
       [(host|build|target)(_(alias|cpu|vendor|os))?],
       [cross_compiling|U],
+      [enableval|enable_.*|withval|with_.*],
       [interpval|PATH_SEPARATOR],
       [GFC|F77_DUMMY_MAIN|f77_(case|underscore)],
       [FC(_DUMMY_MAIN|FLAGS|LIBS|FLAGS_[fF]|_MODEXT|_MODINC|_MODOUT|_DEFINE)?],

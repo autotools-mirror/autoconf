@@ -641,34 +641,56 @@ AU_ALIAS([AM_FUNC_FNMATCH], [AC_FUNC_FNMATCH])
 AU_ALIAS([fp_FUNC_FNMATCH], [AC_FUNC_FNMATCH])
 
 
+# _AC_FUNC_FSEEKO_TEST_PROGRAM
+# ----------------------------
+# Test code used by AC_FUNC_FSEEKO.
+m4_define([_AC_FUNC_FSEEKO_TEST_PROGRAM],
+[AC_LANG_PROGRAM([[
+#if defined __hpux && !defined _LARGEFILE_SOURCE
+# include <limits.h>
+# if LONG_MAX >> 31 == 0
+#  error "32-bit HP-UX 11/ia64 needs _LARGEFILE_SOURCE for fseeko in C++"
+# endif
+#endif
+#include <sys/types.h> /* for off_t */
+#include <stdio.h>
+]], [[
+  int (*fp1) (FILE *, off_t, int) = fseeko;
+  off_t (*fp2) (FILE *) = ftello;
+  return fseeko (stdin, 0, 0)
+      && fp1 (stdin, 0, 0)
+      && ftello (stdin) >= 0
+      && fp2 (stdin) >= 0;
+]])])
+
 # AC_FUNC_FSEEKO
 # --------------
+# Check for correctly prototyped declarations of fseeko and ftello;
+# define HAVE_FSEEKO if they are available.  If it is necessary to
+# define _LARGEFILE_SOURCE=1 to make these declarations available,
+# do that (this is needed on 32-bit HP/UX).  We used to try defining
+# _XOPEN_SOURCE=500 too, to work around a bug in glibc 2.1.3, but that
+# breaks too many other things.  If you want fseeko and ftello with
+# glibc, upgrade to a fixed glibc.
 AN_FUNCTION([ftello], [AC_FUNC_FSEEKO])
 AN_FUNCTION([fseeko], [AC_FUNC_FSEEKO])
 AC_DEFUN([AC_FUNC_FSEEKO],
-[_AC_SYS_LARGEFILE_MACRO_VALUE(_LARGEFILE_SOURCE, 1,
-   [ac_cv_sys_largefile_source],
-   [Define to 1 to make fseeko visible on some hosts (e.g. glibc 2.2).],
-   [[#if defined __hpux && !defined _LARGEFILE_SOURCE
-      #include <limits.h>
-      #if LONG_MAX >> 31 == 0
-       #error "32-bit HP-UX 11/ia64 needs _LARGEFILE_SOURCE for fseeko in C++"
-      #endif
-     #endif
-     #include <sys/types.h> /* for off_t */
-     #include <stdio.h>]],
-   [[int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);]])
-
-# We used to try defining _XOPEN_SOURCE=500 too, to work around a bug
-# in glibc 2.1.3, but that breaks too many other things.
-# If you want fseeko and ftello with glibc, upgrade to a fixed glibc.
-if test $ac_cv_sys_largefile_source != unknown; then
-  AC_DEFINE(HAVE_FSEEKO, 1,
-    [Define to 1 if fseeko (and presumably ftello) exists and is declared.])
-fi
+[AC_CACHE_CHECK([for declarations of fseeko and ftello],
+  [ac_cv_func_fseeko_ftello],
+  [AC_COMPILE_IFELSE([_AC_FUNC_FSEEKO_TEST_PROGRAM],
+    [ac_cv_func_fseeko_ftello=yes],
+    [ac_save_CPPFLAGS="$CPPFLAGS"
+    CPPFLAGS="$CPPFLAGS -D_LARGEFILE_SOURCE=1"
+    AC_COMPILE_IFELSE([_AC_FUNC_FSEEKO_TEST_PROGRAM],
+      [ac_cv_func_fseeko_ftello="need _LARGEFILE_SOURCE"],
+      [ac_cv_func_fseeko_ftello=no])])])
+AS_IF([test "$ac_cv_func_fseeko_ftello" != no],
+  [AC_DEFINE([HAVE_FSEEKO], [1],
+    [Define to 1 if fseeko (and ftello) are declared in stdio.h.])])
+AS_IF([test "$ac_cv_func_fseeko_ftello" = "need _LARGEFILE_SOURCE"],
+  [AC_DEFINE([_LARGEFILE_SOURCE], [1],
+    [Define to 1 if necessary to make fseeko visible.])])
 ])# AC_FUNC_FSEEKO
-
 
 # AC_FUNC_GETGROUPS
 # -----------------
