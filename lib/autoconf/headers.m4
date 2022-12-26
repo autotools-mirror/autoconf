@@ -639,7 +639,7 @@ AC_DEFUN([AC_CHECK_HEADER_STDBOOL],
 
              /* Refer to every declared value, so they cannot be
                 discarded as unused.  */
-             return (!a + !b + !c + !d + !e + !f + !g + !h + !i + !j + !k
+             return (!b + !c + !d + !e + !f + !g + !h + !i + !j + !k
                      + !l + !m + !n + !o + !p + !pp + !ps);
            ]])],
         [ac_cv_header_stdbool_h=yes],
