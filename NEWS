@@ -27,18 +27,36 @@ GNU Autoconf NEWS - User visible changes.
 
 ** New features
 
-*** AC_SYS_LARGEFILE now optionally arranges to widen time_t.
-  It now causes 'configure' to gain an --enable-year2038 option which
-  widens time_t if possible on systems where time_t by default cannot
-  represent file timestamps and other timestamps after January 2038.
-  As with off_t, ino_t, etc., if library ABIs depend on time_t width,
-  applications should be configured consistently with libraries.
+*** New macros AC_SYS_YEAR2038 and AC_SYS_YEAR2038_REQUIRED.
+  These macros attempt to enlarge time_t to 64 bits, on systems where
+  it has historically been only 32 bits wide, and therefore (assuming
+  the usual Unix epoch) cannot represent dates after mid-January of
+  2038 (hence the names).  The difference between the two is that
+  AC_SYS_YEAR2038_REQUIRED unconditionally causes 'configure' to error
+  out if 64-bit time_t is not available.
 
-*** New macro AC_SYS_YEAR2038.
-  This acts like AC_SYS_LARGEFILE, except that it causes 'configure'
-  to default to --enable-year2038.  In a future Autoconf version,
-  AC_SYS_LARGEFILE is planned to do this too, so the two macros will
-  become equivalent.
+  Enlarging time_t to 64 bits is likely to have the side effect of
+  enlarging off_t and related types to 64 bits as well, as if you
+  had used AC_SYS_LARGEFILE.  See the manual for details.
+
+  Library authors should be cautious about adding these macros to
+  their configure scripts; they can break binary backward compatibility.
+
+*** New macro AC_SYS_LARGEFILE_REQUIRED.
+  This macro is the same as the existing AC_SYS_LARGEFILE except that
+  it will cause 'configure' to error out if 64-bit off_t is not available,
+  and it does not provide a --disable-largefile option.
+
+*** AC_SYS_LARGEFILE now optionally arranges to enlarge time_t.
+  As an experimental measure to make it easier to rebuild old programs
+  with support for dates after Jan 2038, if you regenerate any configure
+  script that uses AC_SYS_LARGEFILE (but not AC_SYS_YEAR2038) using
+  Autoconf 2.72, it will gain an --enable-year2038 option.  When the
+  program is configured with this option, time_t will be enlarged if
+  possible, as if AC_SYS_YEAR2038 had been used.
+
+  Using this option in a library build also potentially breaks binary
+  backward compatibility.
 
 *** AC_USE_SYSTEM_EXTENSIONS now enables C23 Annex F extensions
   by defining __STDC_WANT_IEC_60559_EXT__.

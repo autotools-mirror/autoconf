@@ -8798,94 +8798,71 @@ if the system supports @samp{#!}, @samp{no} if not.
 @defmac AC_SYS_LARGEFILE
 @acindex{SYS_LARGEFILE}
 @cvindex _FILE_OFFSET_BITS
-@cvindex _TIME_BITS
 @ovindex CC
 @cindex Large file support
 @cindex LFS
-If the default @code{off_t} type is a 32-bit integer so
-applications can deal only with files containing less than 2 GiB,
-make a wider @code{off_t} available if the system supports this.
-This may also widen several other types related to files and file
-systems, including @code{blkcnt_t}, @code{dev_t}, @code{ino_t},
-@code{fsblkcnt_t}, and @code{fsfilcnt_t}.
+If the default @code{off_t} type is a 32-bit integer, and therefore
+cannot be used to work with files larger than 4 gigabytes, arrange to
+make a larger @code{off_t} available, if the system supports this.
+Several other types related to the sizes of files and file systems will
+also be enlarged: @code{ino_t}, @code{blkcnt_t}, @code{fsblkcnt_t},
+@code{fsfilcnt_t}, and possibly @code{dev_t}.
 
-Also, arrange for a @command{configure} option to request widening the
-type @code{time_t} as needed to represent file timestamps and other
-timestamps after January 2038.  If year-2038 support is requested but
-@command{configure} fails to find a way to enable a wide @code{time_t}
-and inspection of the system suggests that this feature is available
-somehow, @command{configure} will error out.
+If a large @code{off_t} is available (whether or not any arrangements
+were necessary), the shell variable @code{ac_have_largefile} will be set
+to @samp{yes}; if not, it will be set to @samp{no}.
 
-In this version of Autoconf, the year-2038 @command{configure} option
-currently defaults to @code{--disable-year2038}.  If you want the
-default to be @code{--enable-year2038}, you can use
-@code{AC_SYS_YEAR2038} instead of @code{AC_SYS_LARGEFILE}.  In other
-words, packages that use @code{AC_SYS_LARGEFILE} can be made ready for
-the year 2038 either by switching to @code{AC_SYS_YEAR2038}, or by
-configuring with @option{--enable-year2038}.  A future version of
-Autoconf is planned to change the @code{AC_SYS_LARGEFILE} default to
-@code{--enable-year2038}; when that happens, @code{AC_SYS_LARGEFILE} and
-@code{AC_SYS_YEAR2038} will be equivalent.  @xref{AC_SYS_YEAR2038}.
+Preprocessor macros will be defined if necessary to make a larger
+@code{off_t} available.  (For example, on many systems the macro
+@code{_FILE_OFFSET_BITS} will be defined.)  Some of these macros only
+work if they are defined before the first system header is included;
+therefore, when using this macro in concert with
+@code{AC_CONFIG_HEADERS}, make sure that @file{config.h} is included
+before any system headers.
 
-Set the shell variable @code{ac_have_largefile} to to @samp{yes} or
-@code{no} depending on whether a wide @code{off_t} is available,
-regardless of whether arrangements were necessary.  Similarly, set the
-shell variable @code{ac_have_year2038} to @code{yes} or @code{no}
-depending on whether a wide-enough @code{time_t} is available.  If your
-package requires large-file or year-2038 support, you can use code like this:
-
-@example
-AS_IF([test $ac_have_year2038 = no],
-  [AC_MSG_FAILURE([year-2038 support missing])])
-@end example
-
-Define preprocessor macros if necessary to make types wider; For
-example, on many systems the macros @code{_FILE_OFFSET_BITS} and
-@code{_TIME_BITS} can be defined.  Some of these macros work only if
-they are defined before the first system header is included; therefore,
-when using this macro in concert with @code{AC_CONFIG_HEADERS}, make
-sure that @file{config.h} is included before any system headers.
-
-On a few older systems, also change the output variable @code{CC} to add
-special compiler options that are needed to enable large @code{off_t}.
+On a few older systems, the output variable @code{CC} will also be
+changed to add special compiler options that are needed to enable large
+@code{off_t}.
 
 Large-file support can be disabled by configuring with the
-@option{--disable-largefile} option, and year-2038 support can
-be enabled and disabled via the @option{--enable-year2038} and
-@option{--disable-year2038} options.  These options have no effect on
-systems where types are wide enough by default.
-Large-file support is required for year-2038 support: if you configure
-with @option{--disable-largefile} on a platform with 32-bit
-@code{time_t}, then year-2038 support is not available.
-
-Disabling large-file or year-2038 support can have surprising effects,
-such as causing functions like @code{readdir} and @code{stat} to fail
-even on small files because their inode numbers are unrepresentable, or
-causing functions like @code{stat} to fail because a file's timestamp is
-out of range.
+@option{--disable-largefile} option.  Note that this has no effect on
+systems where @code{off_t} is 64 bits or larger by default.  Disabling
+large-file support can have surprising effects, such as causing
+functions like @code{readdir} and @code{stat} to fail on small files
+(because their @emph{inode numbers} are unrepresentable).
 
 Regardless of whether you use this macro, portable programs should not
 assume that any of the types listed above fit into a @code{long int}.
-For example, it is not portable to print an arbitrary @code{off_t} or
-@code{time_t} value @code{X} with @code{printf ("%ld", (long int) X)}.
+For example, it is not correct to print an arbitrary @code{off_t} value
+@code{X} with @code{printf ("%ld", (long int) X)}.
 
-The standard C library functions @code{fseek} and @code{ftell} do not
-use @code{off_t}.  If you need to use either of these functions, you
-should use @code{AC_FUNC_FSEEKO} as well as @code{AC_SYS_LARGEFILE}, and
-then use their Posix replacements @code{fseeko} and @code{ftello}.
-@xref{AC_FUNC_FSEEKO}.
+Note that the standard C library functions @code{fseek} and @code{ftell}
+do not use @code{off_t}.  If you need to use either of these functions,
+you should use @code{AC_FUNC_FSEEKO} as well as @code{AC_SYS_LARGEFILE},
+and then use their Posix replacements @code{fseeko} and @code{ftello},
+which @emph{do} use @code{off_t}, when available.  @xref{AC_FUNC_FSEEKO}.
 
-When using @code{AC_SYS_LARGEFILE} in different packages that are linked
-together and that have ABIs that depend on the width of @code{off_t},
-@code{time_t} or related types, the simplest thing is to configure all
-components the same way.  For example, if an application uses
-@code{AC_SYS_LARGEFILE} and is configured with
-@option{--enable-year2038}, libraries it links to with an @code{off_t}-
-or @code{time_t}-dependent ABI should be configured equivalently.
-Alternatively, you can modify libraries to support both 32- and 64-bit
-ABIs though this is more work and typically few libraries other than the
-C library itself are modified in this way.
+As of Autoconf 2.72, @code{AC_SYS_LARGEFILE} also @emph{optionally}
+arranges to enlarge @code{time_t}.  This is to make it easier to build
+programs that support timestamps after 2038; many configure scripts will
+not need to be modified, only regenerated with newer Autoconf.  When
+@code{AC_SYS_LARGEFILE} is used, and @code{AC_SYS_YEAR2038} is
+@emph{not} used, @code{time_t} will normally be left at the system's
+default size, but you can request it be enlarged by configuring with the
+@option{--enable-year2038} option.  (When @code{AC_SYS_YEAR2038} is also
+used, @code{time_t} is enlarged if possible.  @xref{AC_SYS_YEAR2038}.)
 @end defmac
+
+@defmac AC_SYS_LARGEFILE_REQUIRED
+@acindex{SYS_LARGEFILE_REQUIRED}
+This macro has the same effect as @code{AC_SYS_LARGEFILE},
+but also declares that the program being configured
+@emph{requires} support for large files.
+If a large @code{off_t} is unavailable,
+@command{configure} will error out.
+The @option{--disable-largefile} option will not be available.
+@end defmac
+
 
 @anchor{AC_SYS_LONG_FILE_NAMES}
 @defmac AC_SYS_LONG_FILE_NAMES
@@ -8908,9 +8885,55 @@ system.  If so, set the shell variable @code{ac_cv_sys_posix_termios} to
 @anchor{AC_SYS_YEAR2038}
 @defmac AC_SYS_YEAR2038
 @acindex{SYS_YEAR2038}
+@cvindex _TIME_BITS
 @cindex Year 2038
-This is like @code{AC_SYS_LARGEFILE} except it defaults to enabling
-instead of disabling year-2038 support.  @xref{AC_SYS_LARGEFILE}.
+If the default @code{time_t} type is a signed 32-bit integer,
+and therefore (assuming the usual Unix epoch) cannot represent
+timestamps after mid-January of 2038, arrange to make a larger
+@code{time_t} available, if the system supports this.
+
+If a large @code{time_t} is available (whether or not any arrangements
+were necessary), the shell variable @code{ac_have_year2038} will be set
+to @samp{yes}; if not, it will be set to @samp{no}.
+
+Preprocessor macros will be defined if necessary to make a larger
+@code{time_t} available.  (For example, on some systems the macro
+@code{_TIME_BITS} will be defined.)  Some of these macros only work if
+they are defined before the first system header is included; therefore,
+when using this macro in concert with @code{AC_CONFIG_HEADERS}, make
+sure that @file{config.h} is included before any system headers.
+
+Support for timestamps after 2038 can be disabled by configuring with
+the @option{--disable-year2038} option.  Note that this has no effect on
+systems where @code{time_t} is 64 bits or larger by default.
+If this option is @emph{not} given, and @command{configure} fails to
+find a way to enable a large @code{time_t}, but inspection of the
+system suggests that this feature is available @emph{somehow}, it will
+error out.
+
+Regardless of whether you use this macro, portable programs should not
+assume that @code{time_t} fits into @code{long int}.  For example, it is
+not correct to print an arbitrary @code{time_t} value @code{X} with
+@code{printf ("%ld", (long int) X)}.
+
+@strong{Caution:} If you are developing a shared library, and
+@code{time_t} appears anywhere in your library's public interface, use
+of this macro may break binary compatibility with older executables.
+@end defmac
+
+@defmac AC_SYS_YEAR2038_REQUIRED
+@acindex{SYS_YEAR2038_REQUIRED}
+This macro has the same effect as @code{AC_SYS_YEAR2038},
+but also declares that the program being configured
+@emph{requires} support for timestamps after mid-January of 2038.
+If a large @code{time_t} is unavailable,
+@command{configure} will @emph{unconditionally} error out
+(unlike the behavior of @code{AC_SYS_YEAR2038}).
+The @option{--disable-year2038} option will not be available.
+
+@strong{Caution:} If you are developing a shared library, and
+@code{time_t} appears anywhere in your library's public interface, use
+of this macro may break binary compatibility with older executables.
 @end defmac
 
 @node C and Posix Variants

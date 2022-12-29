@@ -156,6 +156,8 @@ AS_CASE([$ac_cv_sys_year2038_opts],
   ["support not detected"],
     [ac_have_year2038=no
      AS_CASE([$enable_year2038],
+      [required],
+        [AC_MSG_FAILURE([support for timestamps after Jan 2038 is required])],
       [yes],
         [# If we're not cross compiling and 'touch' works with a large
         # timestamp, then we can presume the system supports wider time_t
@@ -202,19 +204,22 @@ AS_CASE([$ac_cv_sys_year2038_opts],
 # --enable-year2038, or a --disable-year2038, or no option at all to
 # the configure script.  Note that this is expanded very late and
 # therefore there cannot be any code in the AC_ARG_ENABLE.  The
-# default value for enable_year2038 is emitted unconditionally
+# default value for 'enable_year2038' is emitted unconditionally
 # because the generated code always looks at this variable.
 m4_define([_AC_SYS_YEAR2038_ENABLE],
 [m4_divert_text([DEFAULTS],
+  m4_provide_if([AC_SYS_YEAR2038_REQUIRED],
+    [enable_year2038=required],
   m4_provide_if([AC_SYS_YEAR2038],
     [enable_year2038=yes],
-    [enable_year2038=no]))]dnl
+    [enable_year2038=no])))]dnl
+[m4_provide_if([AC_SYS_YEAR2038_REQUIRED], [],
 [AC_ARG_ENABLE([year2038],
   m4_provide_if([AC_SYS_YEAR2038],
     [AS_HELP_STRING([--disable-year2038],
-      [do not support timestamps after 2038])],
+      [omit support for dates after Jan 2038])],
     [AS_HELP_STRING([--enable-year2038],
-      [support timestamps after 2038])]))])
+      [include support for dates after Jan 2038])]))])])
 
 # _AC_SYS_YEAR2038_OPT_IN
 # -----------------------
@@ -236,9 +241,25 @@ AC_DEFUN([_AC_SYS_YEAR2038_OPT_IN],
 # On systems where time_t is not always 64 bits, this probe can be
 # skipped by passing the --disable-year2038 option to configure.
 AC_DEFUN([AC_SYS_YEAR2038],
-[AC_REQUIRE([AC_SYS_LARGEFILE])]dnl
+[m4_provide_if([AC_SYS_LARGEFILE_REQUIRED], [],
+  [AC_REQUIRE([AC_SYS_LARGEFILE])])]dnl
 [m4_provide_if([_AC_SYS_YEAR2038_PROBE], [], [dnl
   AS_IF([test "$enable_year2038" != no], [_AC_SYS_YEAR2038_PROBE])
+  AC_CONFIG_COMMANDS_PRE([_AC_SYS_YEAR2038_ENABLE])
+])])
+
+# AC_SYS_YEAR2038_REQUIRED
+# ------------------------
+# Same as AC_SYS_YEAR2038, but declares that this program *requires*
+# support for large time_t.  If we cannot find any way to make time_t
+# capable of representing values larger than 2**31 - 1, configure will
+# error out.  Furthermore, no --enable-year2038 nor --disable-year2038
+# option will be available.
+AC_DEFUN([AC_SYS_YEAR2038_REQUIRED],
+[m4_provide_if([AC_SYS_LARGEFILE_REQUIRED], [],
+  [AC_REQUIRE([AC_SYS_LARGEFILE])])]dnl
+[m4_provide_if([_AC_SYS_YEAR2038_PROBE], [], [dnl
+  _AC_SYS_YEAR2038_PROBE
   AC_CONFIG_COMMANDS_PRE([_AC_SYS_YEAR2038_ENABLE])
 ])])
 
@@ -302,7 +323,9 @@ ac_have_largefile=yes
 AS_CASE([$ac_cv_sys_largefile_opts],
   ["none needed"], [],
   ["support not detected"],
-    [ac_have_largefile=no],
+    [ac_have_largefile=no
+     AS_IF([test $enable_largefile = required],
+       [AC_MSG_FAILURE([support for large files is required])])],
 
   ["-D_FILE_OFFSET_BITS=64"],
     [AC_DEFINE([_FILE_OFFSET_BITS], [64],
@@ -323,16 +346,21 @@ _AC_SYS_YEAR2038_OPT_IN
 
 # _AC_SYS_LARGEFILE_ENABLE
 # ------------------------
-# Subroutine of AC_SYS_LARGEFILE.  Note that this
+# Subroutine of AC_SYS_LARGEFILE.  If AC_SYS_LARGEFILE_REQUIRED was
+# not used at any point in this configure script, add a
+# --disable-largefile option to the configure script.  Note that this
 # is expanded very late and therefore there cannot be any code in the
-# AC_ARG_ENABLE.  The default value for enable_largefile is emitted
+# AC_ARG_ENABLE.  The default value for 'enable_largefile' is emitted
 # unconditionally because the generated shell code always looks at
 # this variable.
 m4_define([_AC_SYS_LARGEFILE_ENABLE],
 [m4_divert_text([DEFAULTS],
-  enable_largefile=yes)]dnl
+  m4_provide_if([AC_SYS_LARGEFILE_REQUIRED],
+    [enable_largefile=required],
+    [enable_largefile=yes]))]dnl
+[m4_provide_if([AC_SYS_LARGEFILE_REQUIRED], [],
 [AC_ARG_ENABLE([largefile],
-  [AS_HELP_STRING([--disable-largefile], [omit support for large files])])])
+  [AS_HELP_STRING([--disable-largefile], [omit support for large files])])])])
 
 # AC_SYS_LARGEFILE
 # ----------------
@@ -344,10 +372,25 @@ m4_define([_AC_SYS_LARGEFILE_ENABLE],
 # to have a 64-bit inode number cannot be accessed by 32-bit applications on
 # Linux x86/x86_64.  This can occur with file systems such as XFS and NFS.
 # This macro allows configuration to continue if the system doesn't support
-# large files.
+# large files; see also AC_SYS_LARGEFILE_REQUIRED.
 AC_DEFUN([AC_SYS_LARGEFILE],
 [m4_provide_if([_AC_SYS_LARGEFILE_PROBE], [], [dnl
   AS_IF([test "$enable_largefile" != no], [_AC_SYS_LARGEFILE_PROBE])
+  AC_CONFIG_COMMANDS_PRE([_AC_SYS_LARGEFILE_ENABLE])
+])])
+
+# AC_SYS_LARGEFILE_REQUIRED
+# -------------------------
+# Same as AC_SYS_LARGEFILE, but declares that this program *requires*
+# support for large files.  If we cannot find a combination of compiler
+# options and #defines that makes 'off_t' capable of representing 2**63 - 1,
+# 'configure' will error out.  Furthermore, 'configure' will not offer a
+# --disable-largefile command line option.
+# If both AC_SYS_LARGEFILE and AC_SYS_LARGEFILE_REQUIRED are used in the
+# same configure script -- in either order -- AC_SYS_LARGEFILE_REQUIRED wins.
+AC_DEFUN([AC_SYS_LARGEFILE_REQUIRED],
+[m4_provide_if([_AC_SYS_LARGEFILE_PROBE], [], [dnl
+  _AC_SYS_LARGEFILE_PROBE
   AC_CONFIG_COMMANDS_PRE([_AC_SYS_LARGEFILE_ENABLE])
 ])])
 
