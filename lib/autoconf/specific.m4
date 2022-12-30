@@ -286,8 +286,8 @@ m4_define([_AC_SYS_LARGEFILE_TEST_CODE],
 m4_define([_AC_SYS_LARGEFILE_OPTIONS], m4_normalize(
     ["none needed"]                   dnl Most current systems
     ["-D_FILE_OFFSET_BITS=64"]        dnl X/Open LFS spec
-    ["-D_LARGE_FILES=1"]              dnl AIX (which versions?)
-    ["-n32"]                          dnl Irix 6.2 w/ SGI compiler
+    ["-D_LARGE_FILES=1"]              dnl 32-bit AIX 4.2.1+, 32-bit z/OS
+    ["-n32"]                          dnl 32-bit IRIX 6, SGI cc (obsolete)
 ))
 
 # _AC_SYS_LARGEFILE_PROBE
@@ -591,7 +591,7 @@ dnl configure.ac when using autoheader 2.62.
 dnl The macros below are in alphabetical order ignoring leading _ or __
 dnl prefixes.
 AH_VERBATIM([USE_SYSTEM_EXTENSIONS],
-[/* Enable extensions on AIX 3, Interix.  */
+[/* Enable extensions on AIX, Interix, z/OS.  */
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE
 #endif
