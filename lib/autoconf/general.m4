@@ -2427,7 +2427,7 @@ m4_append_uniq([_AC_SUBST_FILES], [$1], [
 
 # 2020-10-06 / autoconf 2.70: Widely used third-party macros
 # (among others, from automake, libtool, and gettext) use AC_DIAGNOSE,
-# so we temporarily don't issue an obsoletion warning for it.
+# so we temporarily don't issue an obsolescence warning for it.
 # Revisit after third parties have had a chance to update their macros
 # and make releases.
 AU_DEFUN([AC_DIAGNOSE], [[m4_warn($@)]], [], [silent])

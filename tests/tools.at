@@ -1009,7 +1009,7 @@ AT_DATA([dst2], dst2
 AT_CHECK_AUTOUPDATE([], 0, [], ignore)
 
 # The replacement for AC_LINK_FILES includes a forced -Wobsolete
-# warning, becuause it needs to be manually adjusted afterward.
+# warning, because it needs to be manually adjusted afterward.
 # Look for it in the autoconf output.
 AT_CHECK_AUTOCONF([], 0, [], stderr)
 AT_CHECK([grep 'AC_LINK_FILES' stderr], 0, ignore, ignore)

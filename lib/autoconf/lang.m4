@@ -121,7 +121,7 @@ m4_popdef([$0 OLD])dnl
 # Save the current language, but don't change language.
 # XXX 2020-11-15: This macro is obsolete, but we do not define it with
 # AU_DEFUN because autoupdate can't fix it, and we don't issue an
-# obsoletion warning yet either, because it is used in the most
+# obsolescence warning yet either, because it is used in the most
 # recently released version of libtool.m4, which is not fair to expect
 # packagers to tinker with.  Revisit after libtool makes a release
 # with their code updated.
@@ -134,7 +134,7 @@ AC_DEFUN([AC_LANG_SAVE],
 # Restore the current language from the stack.
 # XXX 2020-11-15: This macro is obsolete, but we do not define it with
 # AU_DEFUN because autoupdate can't fix it properly, and we don't issue
-# an obsoletion warning because it, like AC_LANG_SAVE, is used by the
+# an obsolescence warning because it, like AC_LANG_SAVE, is used by the
 # most recently released version of libtool.m4.
 AC_DEFUN([AC_LANG_RESTORE],
 [AC_LANG_POP($@)])

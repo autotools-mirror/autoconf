@@ -1247,7 +1247,8 @@ GNU Autoconf NEWS - User visible changes.
   The documentation now says that the following macros are obsolescent,
   as they are superseded by Gnulib:
 
-    AC_FUNC_FNMATCH  AC_FUNC_FNMATCH_GNU  AC_FUNC_GETLOADVG  AC_REPLACE_FNMATCH
+    AC_FUNC_FNMATCH  AC_FUNC_FNMATCH_GNU  AC_FUNC_GETLOADAVG
+    AC_REPLACE_FNMATCH
 
   New programs should use the Gnulib counterparts of these macros.
   We have no current plans to remove them from Autoconf.
@@ -2039,7 +2040,7 @@ Release tips:
 - AC_F77_DUMMY_MAIN, AC_F77_MAIN: new macros to detect whether
   a main-like routine is required/possible when linking C/C++ with
   Fortran.  Users of e.g. AC_F77_WRAPPERS should be aware of these.
-- AC_FUNC_GETPGRG behaves better when cross-compiling.
+- AC_FUNC_GETPGRP behaves better when cross-compiling.
 
 * Major changes in Autoconf 2.51
 There was no release of Autoconf 2.51 since some packagers had used

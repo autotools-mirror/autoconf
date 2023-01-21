@@ -441,7 +441,7 @@ fi
 From: nennker@cs.tu-berlin.DE (Axel Nennker)
 
 (also look in the autoconf mailing list archives for the proposed
-CHECK_TARGET_TOOL macro from Natanael Nerode, a gcc configury guru).
+CHECK_TARGET_TOOL macro from Nathanael Nerode, a gcc configury guru).
 
 ------------------------------------------------------------------------------
 

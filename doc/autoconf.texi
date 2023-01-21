@@ -1576,7 +1576,7 @@ Treat all warnings as errors.
 Disable warnings falling into @var{category}.
 @end table
 
-The enviroment variable @env{WARNINGS} may also be set to a
+The environment variable @env{WARNINGS} may also be set to a
 comma-separated list of warning categories to enable or disable.
 It is interpreted exactly the same way as the argument of
 @option{--warnings}, but unknown categories are silently ignored.
@@ -1804,7 +1804,7 @@ Treat all warnings as errors.
 Disable warnings falling into @var{category}.
 @end table
 
-The enviroment variable @env{WARNINGS} may also be set to a
+The environment variable @env{WARNINGS} may also be set to a
 comma-separated list of warning categories to enable or disable.
 It is interpreted exactly the same way as the argument of
 @option{--warnings}, but unknown categories are silently ignored.
@@ -3612,7 +3612,7 @@ Treat all warnings as errors.
 Disable warnings falling into @var{category}.
 @end table
 
-The enviroment variable @env{WARNINGS} may also be set to a
+The environment variable @env{WARNINGS} may also be set to a
 comma-separated list of warning categories to enable or disable.
 It is interpreted exactly the same way as the argument of
 @option{--warnings}, but unknown categories are silently ignored.
@@ -9773,7 +9773,7 @@ Version
 
 @noindent
 Because preprocessors are allowed to insert white space, change escapes
-in string contants, insert backlash-newline pairs, or do any of a number
+in string constants, insert backlash-newline pairs, or do any of a number
 of things that do not change the meaning of the preprocessed program, it
 is better to rely on @code{AC_PREPROC_IFELSE} than to resort to
 @code{AC_EGREP_CPP} or @code{AC_EGREP_HEADER}.
@@ -11644,7 +11644,7 @@ Treat all warnings as errors.
 Disable warnings falling into @var{category}.
 @end table
 
-The enviroment variable @env{WARNINGS} may also be set to a
+The environment variable @env{WARNINGS} may also be set to a
 comma-separated list of warning categories to enable or disable.
 It is interpreted exactly the same way as the argument of
 @option{--warnings}, but unknown categories are silently ignored.
@@ -14956,7 +14956,7 @@ In particular, @samp{AC_REQUIRE([FOO])} is not replaced with the body of
 @example
 @group
 AC_DEFUN([TRAVOLTA],
-[test "$body_temperature_in_celsius" -gt 38 &&
+[test "$body_temperature_in_Celsius" -gt 38 &&
   dance_floor=occupied])
 AC_DEFUN([NEWTON_JOHN],
 [test "x$hair_style" = xcurly &&
@@ -25865,7 +25865,7 @@ If @var{commands} exit with unexpected status 77, then the rest of the
 test group is skipped.  If @var{commands} exit with unexpected status
 99, then the test group is immediately failed; this is called a
 @emph{hard failure}.  Otherwise, the test is considered to have
-succeeeded if all of the status, stdout, and stderr expectations were
+succeeded if all of the status, stdout, and stderr expectations were
 met.
 
 If @var{run-if-fail} is nonempty, it provides extra shell commands to

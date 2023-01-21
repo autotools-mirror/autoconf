@@ -1915,7 +1915,7 @@ AC_DEFUN([_AC_FUNC_FORK],
     [AC_RUN_IFELSE(
       [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
 	[
-	  /* By Ruediger Kuhlmann. */
+	  /* By R. Kuhlmann. */
 	  return fork () < 0;
 	])],
       [ac_cv_func_fork_works=yes],

@@ -189,7 +189,7 @@ my %test_parameters = (
                         ' cxx_cv_varies:cxx_vararrays]')
   },
 
-  # stdbool.h is supposed to be includeable from C++, per C++2011
+  # stdbool.h is supposed to be includable from C++, per C++2011
   # [support.runtime], but the type _Bool was not added to the C++
   # standard, so it may or may not be present depending on how much
   # the C++ compiler cares about C source compatibility.

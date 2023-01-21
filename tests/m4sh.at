@@ -678,7 +678,7 @@ AC@&t@_CACHE_CHECK([size of $1],
     [AS@&t@_TR_SH([ac_cv_sizeof_$1])],
     [AS@&t@_TR_SH(ac_cv_sizeof_$1)=1])
 
-# fake use of 's' for illustratve purposes:
+# fake use of 's' for illustrative purposes:
 s=42
 echo "s is defined as ${s}"
 

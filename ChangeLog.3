@@ -3641,7 +3641,7 @@
 	Fix AC_CHECK_HEADER infloop for gcc.
 	* lib/autoconf/headers.m4 (_AC_CHECK_HEADER_NEW)
 	(_AC_CHECK_HEADER_OLD): Give up on AU_DEFUN, and manually warn
-	about obsoletion, to avoid infinite loop in gcc.
+	about obsolescence, to avoid infinite loop in gcc.
 	Reported by Ralf Wildenhues.
 
 2009-06-15  Eric Blake  <ebb9@byu.net>
@@ -11243,7 +11243,7 @@
 
 2006-08-31  Paul Eggert  <eggert@cs.ucla.edu>
 
-	* NEWS: AC_FUNC_FNMATCH, AC_FUNC_FNMATCH_GNU, AC_FUNC_GETLOADVG,
+	* NEWS: AC_FUNC_FNMATCH, AC_FUNC_FNMATCH_GNU, AC_FUNC_GETLOADAVG,
 	and AC_REPLACE_FNMATCH are now obsolescent in Autoconf.  New
 	programs should use their Gnulib counterparts.
 	* doc/autoconf.texi (Particular Functions): Likewise.
@@ -11528,7 +11528,7 @@
 	Includes for AC_CHECK_SIZEOF and AC_CHECK_ALIGNOF.
 
 	* lib/autoconf/general.m4 (AC_COMPUTE_INT): New.
-	(_AC_COMPUTE_INT): Add obsoletion warnings.
+	(_AC_COMPUTE_INT): Add obsolescence warnings.
 	* lib/autoconf/types.m4 (AC_CHECK_SIZEOF, AC_CHECK_ALIGNOF): Use
 	AC_COMPUTE_INT.
 
@@ -13251,7 +13251,7 @@
 	AC_MSG_CHECKING over obsolete AC_CHECKING in autoupdated code.
 	Remove stray newline in output.
 	(AC_FOREACH): AU_DEFUN this as literal for autoupdate, and also
-	AC_DEFUN this for autoconf, including the obsoletion diagnose.
+	AC_DEFUN this for autoconf, including the obsolescence diagnose.
 	Fixes autoupdating of code where the replacement output contains
 	m4sugar macros.
 	* lib/autoconf/lang.m4 (AC_LANG_SAVE): Likewise.
@@ -22829,7 +22829,7 @@
 
 	* acfunctions.m4 (AC_FUNC_FORK): Fix typos.
 
-2001-06-18  Ruediger Kuhlmann  <info@ruediger-kuhlmann.de>
+2001-06-18  Rüdiger Kuhlmann  <info@ruediger-kuhlmann.de>
 
 	* acfunctions.m4: (AC_FUNC_VFORK) rename as...
 	(_AC_FUNC_VFORK): this.
