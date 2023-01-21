@@ -2,7 +2,7 @@
 # This Makefile fragment tries to be general-purpose enough to be
 # used by many projects via the gnulib maintainer-makefile module.
 
-## Copyright (C) 2001-2022 Free Software Foundation, Inc.
+## Copyright (C) 2001-2023 Free Software Foundation, Inc.
 ##
 ## This program is free software: you can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -468,15 +468,12 @@ sc_error_message_warn_fatal:
 	       exit 1; }						\
 	  || :
 
-# Error messages should not start with a capital letter;
-# however, if they start with an entire fully uppercased word, that's
-# probably a proper noun and it should stay that way.  We also exempt
-# known instances of proper nouns that should stay mixed-case.
+# Error messages should not start with a capital letter
 sc_error_message_uppercase:
 	@$(VC_LIST_EXCEPT)						\
 	  | xargs $(GREP) -nEA2 '[^rp]error *\(' /dev/null		\
 	  | $(GREP) -E '"[A-Z]'						\
-	  | $(GREP) -vE '"([A-Z0-9_]{2,}\>|Java|C#|(PRI|SCN)[dioux])'	\
+	  | $(GREP) -vE '"FATAL|"WARNING|"Java|"C#|"PRI'		\
 	  && { echo '$(ME): found capitalized error message' 1>&2;	\
 	       exit 1; }						\
 	  || :
@@ -768,7 +765,7 @@ sc_prohibit_dirent_without_use:
 # Prohibit the inclusion of verify.h without an actual use.
 sc_prohibit_verify_without_use:
 	@h='verify.h'							\
-	re='\<(verify(true|expr)?|assume|static_assert) *\('		\
+	re='\<(verify(_expr)?|assume) *\('				\
 	  $(_sc_header_without_use)
 
 # Don't include xfreopen.h unless you use one of its functions.
@@ -1259,6 +1256,12 @@ sc_makefile_path_separator_check:
 	halt=$(msg)							\
 	  $(_sc_search_regexp)
 
+sc_makefile_DISTCHECK_CONFIGURE_FLAGS:
+	@prohibit='^DISTCHECK_CONFIGURE_FLAGS'				\
+	in_vc_files='akefile|\.mk$$'					\
+	halt="use AM_DISTCHECK_CONFIGURE_FLAGS"				\
+	  $(_sc_search_regexp)
+
 # Check that 'make alpha' will not fail at the end of the process,
 # i.e., when pkg-M.N.tar.xz already exists (either in "." or in ../release)
 # and is read-only.
@@ -1289,7 +1292,7 @@ sc_copyright_check:
 	in_vc_files=$(sample-test)					\
 	halt='out of date copyright in $(sample-test); update it'	\
 	  $(_sc_search_regexp)
-	@require='Copyright @copyright\{\} .*'$$(date +%Y)		\
+	@require='Copyright @copyright\{} .*'$$(date +%Y)		\
 	in_vc_files=$(texi)						\
 	halt='out of date copyright in $(texi); update it'		\
 	  $(_sc_search_regexp)
@@ -1368,6 +1371,10 @@ sc_vulnerable_makefile_CVE-2012-3386:
 	  'the above files are vulnerable; beware of running'		\
 	  '  "make distcheck", and upgrade to fixed automake'		\
 	  '  see https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2012-3386 for details') \
+	  $(_sc_search_regexp)
+
+sc_unportable_grep_q:
+	@prohibit='grep -q' halt="unportable 'grep -q', use >/dev/null instead" \
 	  $(_sc_search_regexp)
 
 vc-diff-check:
@@ -1656,8 +1663,8 @@ indent: # Running indent once is not idempotent, but running it twice is.
 	indent $(indent_args) $(INDENT_SOURCES)
 
 sc_indent:
-	@if ! command -v indent > /dev/null; then			\
-	    echo 1>&2 '$(ME): sc_indent: indent is missing';		\
+	@if ! indent --version 2> /dev/null | grep 'GNU indent' > /dev/null; then \
+	    echo 1>&2 '$(ME): sc_indent: GNU indent is missing';	\
 	else								\
 	  fail=0; files="$(INDENT_SOURCES)";				\
 	  for f in $$files; do						\

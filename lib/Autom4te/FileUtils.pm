@@ -1,4 +1,4 @@
-# Copyright (C) 2003-2022 Free Software Foundation, Inc.
+# Copyright (C) 2003-2023 Free Software Foundation, Inc.
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ use strict;
 use warnings FATAL => 'all';
 
 use Exporter;
-use Time::HiRes qw(stat);
+use File::stat;
 use IO::File;
 
 use Autom4te::Channels;
@@ -115,16 +115,10 @@ sub mtime ($)
   return 0
     if $file eq '-' || ! -f $file;
 
-  my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
-    $atime,$mtime,$ctime,$blksize,$blocks) = stat ($file)
+  my $stat = stat ($file)
     or fatal "cannot stat $file: $!";
 
-  # Unfortunately Time::HiRes converts timestamps to floating-point, and the
-  # rounding error can be several nanoseconds for circa-2021 timestamps.
-  # Perhaps some day Perl will support accurate file timestamps.  For now, do
-  # the best we can without going outside Perl.
-
-  return $mtime;
+  return $stat->mtime;
 }
 
 
