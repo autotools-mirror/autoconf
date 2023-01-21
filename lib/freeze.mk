@@ -1,6 +1,6 @@
 # Freeze M4 files.
 
-# Copyright (C) 2002, 2004, 2006-2017, 2020-2022 Free Software
+# Copyright (C) 2002, 2004, 2006-2017, 2020-2023 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify

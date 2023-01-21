@@ -1,7 +1,7 @@
 # This file is part of Autoconf.			-*- Autoconf -*-
 # Macros that test for specific, unclassified, features.
 #
-# Copyright (C) 1992-1996, 1998-2017, 2020-2022 Free Software
+# Copyright (C) 1992-1996, 1998-2017, 2020-2023 Free Software
 # Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free

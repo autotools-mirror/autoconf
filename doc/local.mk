@@ -1,6 +1,6 @@
 # Make Autoconf documentation.
 
-# Copyright (C) 2000-2003, 2007-2017, 2020-2022 Free Software
+# Copyright (C) 2000-2003, 2007-2017, 2020-2023 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify

@@ -1,7 +1,7 @@
 AS_INIT[]dnl                                            -*- shell-script -*-
 # wrapper.as -- running '@wrap_program@' as if it were installed.
 # @configure_input@
-# Copyright (C) 2003-2004, 2007, 2009-2017, 2020-2022 Free Software
+# Copyright (C) 2003-2004, 2007, 2009-2017, 2020-2023 Free Software
 # Foundation, Inc.
 
 # This program is free software: you can redistribute it and/or modify
