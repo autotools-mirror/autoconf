@@ -120,9 +120,9 @@ sub mtime ($)
     or fatal "cannot stat $file: $!";
 
   # Unfortunately Time::HiRes converts timestamps to floating-point, and the
-  # rounding error can be several nanoseconds for circa-2021 timestamps.
-  # Perhaps some day Perl will support accurate file timestamps.  For now, do
-  # the best we can without going outside Perl.
+  # rounding error can be hundreds of nanoseconds for circa-2023 timestamps.
+  # Perhaps some day Perl will support accurate file timestamps.
+  # For now, do the best we can without going outside Perl.
 
   return $mtime;
 }
