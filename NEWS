@@ -51,7 +51,8 @@ GNU Autoconf NEWS - User visible changes.
 
 *** New macros AC_SYS_LARGEFILE_REQUIRED and AC_SYS_YEAR2038_REQUIRED.
   These act like AC_SYS_LARGEFILE and AC_SYS_YEAR2038 respectively,
-  except that they require large-file and year-2038 support respectively.
+  except that 'configure' fails if the target lacks support
+  for large files and for post-2038 timestamps, respectively.
   As with AC_SYS_YEAR2038, application and library builders should
   configure consistently.
 
@@ -91,9 +92,10 @@ GNU Autoconf NEWS - User visible changes.
   relative paths now seem to be a more important problem than the
   problems of ancient mkdir implementations with race condition bugs.
   See <https://savannah.gnu.org/support/?110740>.  The only ancient
-  mkdir still in common use is Solaris 10 /usr/bin/mkdir, and for that
+  mkdir still supported is Solaris 10 /usr/bin/mkdir, and for that
   platform AC_PROG_MKDIR_P falls back on /opt/sfw/bin/mkdir which
-  should work.
+  should work if it is installed; if not, you should avoid parallel
+  'make' on that platform.
 
 * Noteworthy changes in release 2.71 (2021-01-28) [stable]
 
