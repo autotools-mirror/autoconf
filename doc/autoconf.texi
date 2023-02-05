@@ -901,11 +901,11 @@ GPL or GNU LGPL.
 
 Gnulib modules typically contain C source code along with Autoconf
 macros used to configure the source code.  For example, the Gnulib
-@code{stdalign} module implements a @file{stdalign.h} header that nearly
-conforms to C11, even on old-fashioned hosts that lack @file{stdalign.h}.
+@code{stdckdint} module implements a @file{stdckdint.h} header that nearly
+conforms to C23, even on older hosts that lack @file{stdckdint.h}.
 This module contains a source file for the replacement header, along
 with an Autoconf macro that arranges to use the replacement header on
-old-fashioned systems.
+older systems.
 
 For more information, consult the Gnulib website,
 @uref{https://@/www.gnu.org/@/software/@/gnulib/}.
@@ -4050,10 +4050,11 @@ provide all of the headers specified in C89 (as amended in 1995):
 @file{setjmp.h}, @file{signal.h}, @file{stdarg.h}, @file{stddef.h},
 @file{stdio.h}, @file{stdlib.h}, @file{string.h}, @file{time.h},
 @file{wchar.h}, and @file{wctype.h}.  Most programs can safely include
-these headers unconditionally.  All other headers, including all headers
-from later revisions of the C standard, need to be tested for
-if your program is intended to be portable to C89
-(@pxref{Header Files}).
+these headers unconditionally.  A program not intended to be portable to
+C89 can also safely include the C99-specified header @file{stdbool.h}.
+Other headers, including headers from C99 and later revisions of the C
+standard, might need to be tested for (@pxref{Header Files}) or their
+bugs may need to be worked around (@pxref{Gnulib}).
 
 If your program needs to be portable to a @emph{freestanding}
 environment, such as an embedded OS that doesn't provide all of the
@@ -27410,7 +27411,7 @@ introduced in this document.
 @c  LocalWords:  LIBREADLINE lreadline lncurses libreadline vrindex SYS
 @c  LocalWords:  syncodeindex define'd caindex CAindex MacKenzie DIRS
 @c  LocalWords:  Runtime runtime Submakes submakes MAKEFLAGS whitespace
-@c  LocalWords:  Timestamps Unportability Canonicalizing stdalign dirN
+@c  LocalWords:  Timestamps Unportability Canonicalizing stdckdint dirN
 @c  LocalWords:  acinclude AMFLAGS LIBS OBJCXXFLAGS GOFLAGS runstatedir
 @c  LocalWords:  metacharacter EXPENSIVEP errno setjmp wctype sys mawk
 @c  LocalWords:  nawk ggrep egrep gegrep fgrep gfgrep LEX lex yytext nm
