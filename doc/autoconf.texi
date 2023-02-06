@@ -2352,8 +2352,8 @@ You are encouraged to use literals as @var{tags}.  In particular, you
 should avoid
 
 @example
-@dots{} && my_foos="$my_foos fooo"
-@dots{} && my_foos="$my_foos foooo"
+AS_IF([@dots{}], [my_foos="$my_foos fooo"])
+AS_IF([@dots{}], [my_foos="$my_foos foooo"])
 AC_CONFIG_@var{ITEMS}([$my_foos])
 @end example
 
@@ -2361,8 +2361,8 @@ AC_CONFIG_@var{ITEMS}([$my_foos])
 and use this instead:
 
 @example
-@dots{} && AC_CONFIG_@var{ITEMS}([fooo])
-@dots{} && AC_CONFIG_@var{ITEMS}([foooo])
+AS_IF([@dots{}], [AC_CONFIG_@var{ITEMS}([fooo])])
+AS_IF([@dots{}], [AC_CONFIG_@var{ITEMS}([foooo])])
 @end example
 
 The macros @code{AC_CONFIG_FILES} and @code{AC_CONFIG_HEADERS} use
@@ -3844,19 +3844,21 @@ displaying the options of the package @code{foo}.  Instead, you should
 write:
 
 @example
-if test "x$package_foo_enabled" = xyes; then
-  AC_CONFIG_SUBDIRS([foo])
-fi
+AS_IF([test "x$package_foo_enabled" = xyes],
+  [AC_CONFIG_SUBDIRS([foo])])
 @end example
 
 If a given @var{dir} is not found at @command{configure} run time, a
 warning is reported; if the subdirectory is optional, write:
 
 @example
-if test -d "$srcdir/foo"; then
-  AC_CONFIG_SUBDIRS([foo])
-fi
+AS_IF([test -d "$srcdir/foo"],
+  [AC_CONFIG_SUBDIRS([foo])])
 @end example
+
+These examples use @code{AS_IF} instead of ordinary shell @code{if} to
+avoid problems that Autoconf has with macro calls in shell conditionals
+outside macro definitions.  @xref{Common Shell Constructs}.
 
 If a given @var{dir} contains @command{configure.gnu}, it is run instead
 of @command{configure}.  This is for packages that might use a
@@ -4384,11 +4386,10 @@ historical Lex:
 
 @example
 AC_PROG_LEX
-if test "x$LEX" != xflex; then
-  LEX="$SHELL $missing_dir/missing flex"
-  AC_SUBST([LEX_OUTPUT_ROOT], [lex.yy])
-  AC_SUBST([LEXLIB], [''])
-fi
+AS_IF([test "x$LEX" != xflex],
+  [LEX="$SHELL $missing_dir/missing flex"
+   AC_SUBST([LEX_OUTPUT_ROOT], [lex.yy])
+   AC_SUBST([LEXLIB], [''])])
 @end example
 
 The shell script @command{missing} can be found in the Automake
@@ -10093,24 +10094,25 @@ AC_MSG_CHECKING([how to get file system type])
 fstype=no
 # The order of these tests is important.
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statvfs.h>
-#include <sys/fstyp.h>]])],
-                  [AC_DEFINE([FSTYPE_STATVFS], [1],
-                     [Define if statvfs exists.])
-                   fstype=SVR4])
-if test $fstype = no; then
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
-#include <sys/fstyp.h>]])],
-                  [AC_DEFINE([FSTYPE_USG_STATFS], [1],
-                     [Define if USG statfs.])
-                   fstype=SVR3])
-fi
-if test $fstype = no; then
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
-#include <sys/vmount.h>]])]),
-                  [AC_DEFINE([FSTYPE_AIX_STATFS], [1],
-                     [Define if AIX statfs.])
-                   fstype=AIX])
-fi
+                                     #include <sys/fstyp.h>
+                                   ]])],
+  [AC_DEFINE([FSTYPE_STATVFS], [1],
+     [Define if statvfs exists.])
+   fstype=SVR4])
+AS_IF([test $fstype = no],
+  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
+                                        #include <sys/fstyp.h>
+                                      ]])],
+     [AC_DEFINE([FSTYPE_USG_STATFS], [1],
+        [Define if USG statfs.])
+      fstype=SVR3])])
+AS_IF([test $fstype = no],
+  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/statfs.h>
+                                        #include <sys/vmount.h>
+                                      ]])],
+     [AC_DEFINE([FSTYPE_AIX_STATFS], [1],
+        [Define if AIX statfs.])
+      fstype=AIX])])
 # (more cases omitted here)
 AC_MSG_RESULT([$fstype])
 @end group
@@ -10151,12 +10153,13 @@ already defined a certain C preprocessor symbol, test the value of the
 appropriate cache variable, as in this example:
 
 @example
-AC_CHECK_FUNC([vprintf], [AC_DEFINE([HAVE_VPRINTF], [1],
-                          [Define if vprintf exists.])])
-if test "x$ac_cv_func_vprintf" != xyes; then
-  AC_CHECK_FUNC([_doprnt], [AC_DEFINE([HAVE_DOPRNT], [1],
-                            [Define if _doprnt exists.])])
-fi
+AC_CHECK_FUNC([vprintf],
+  [AC_DEFINE([HAVE_VPRINTF], [1],
+     [Define if vprintf exists.])])
+AS_IF([test "x$ac_cv_func_vprintf" != xyes],
+  [AC_CHECK_FUNC([_doprnt],
+     [AC_DEFINE([HAVE_DOPRNT], [1],
+        [Define if _doprnt exists.])])])
 @end example
 
 If @code{AC_CONFIG_HEADERS} has been called, then instead of creating
@@ -11351,7 +11354,8 @@ expansion of @code{my_case} results in expanding @code{AS_IF} with a
 truncated parameter, and the expansion is syntactically invalid:
 
 @example
-if :; then
+if :
+then :
   case $file_name in
   *.c
 fi echo "C source code";;
@@ -15002,7 +15006,6 @@ test "$body_temperature_in_Celsius" -gt 38 &&
   dance_floor=occupied
 test "x$hair_style" = xcurly &&
   dance_floor=occupied
-fi
 if test "x`date +%A`" = xSaturday; then
 
 
@@ -15802,20 +15805,19 @@ a single statement contains many here-documents.  For instance if your
 
 @example
 @group
-if <cross_compiling>; then
-  assume this and that
-else
-  check this
-  check that
-  check something else
-  @dots{}
-  on and on forever
-  @dots{}
-fi
+AS_IF([<cross_compiling>],
+  [assume this and that],
+  [check this
+   check that
+   check something else
+   @dots{}
+   on and on forever
+   @dots{}])
 @end group
 @end example
 
-A shell parses the whole @code{if}/@code{fi} construct, creating
+A shell parses the whole @code{if}/@code{fi} construct generated by
+@code{AS_IF}, creating
 temporary files for each here-document in it.  Some shells create links
 for such here-documents on every @code{fork}, so that the clean-up code
 they had installed correctly removes them.  It is creating the links
@@ -17754,6 +17756,7 @@ $ @kbd{zsh -c '. ./syntax; echo $?'}
 0
 @end example
 
+@anchor{!}
 @item @command{!}
 @c --------------
 @prindex @command{!}
@@ -17792,12 +17795,50 @@ cmp file1 file2 >/dev/null 2>&1 ||
   echo files differ or trouble
 @end example
 
+In M4sh, the @code{AS_IF} macro provides an easy way to write these kinds
+of conditionals:
+
+@example
+AS_IF([cmp -s file file.new], [],
+  [echo files differ or trouble])
+@end example
+
+This kind of rewriting is needed in code outside macro definitions that
+calls other macros.  @xref{Common Shell Constructs}.  It is also useful
+inside macro definitions, where the @dfn{then} and @dfn{else} branches
+might contain macro arguments.
+
 More generally, one can always rewrite @samp{! @var{command}} as:
 
 @example
-if @var{command}; then (exit 1); else :; fi
+AS_IF([@var{command}], [(exit 1)])
 @end example
 
+@item @command{&&} and @command{||}
+@c --------------------------------
+@prindex @command{&&}
+@prindex @command{||}
+If an AND-OR list is not inside @code{AC_DEFUN}, and it contains
+calls to Autoconf macros, it should be rewritten using @code{AS_IF}.
+@xref{Common Shell Constructs}.  The operators @code{&&} and @code{||}
+have equal precedence and are left associative, so instead of:
+
+@example
+# This is dangerous outside AC_DEFUN.
+cmp a b >/dev/null 2>&1 &&
+  AS_ECHO([files are same]) >$tmpfile ||
+    AC_MSG_NOTICE([files differ, or echo failed])
+@end example
+
+you can use:
+
+@example
+# This is OK outside AC_DEFUN.
+AS_IF([AS_IF([cmp a b >/dev/null 2>&1],
+         [AS_ECHO([files are same]) >$tmpfile],
+         [false])],
+  [AC_MSG_NOTICE([files differ, or echo failed])])
+@end example
 
 @item @command{@{...@}}
 @c --------------------
@@ -17851,6 +17892,26 @@ The use of @samp{break 2} etc.@: is safe.
 @item @command{case}
 @c -----------------
 @prindex @command{case}
+If a @code{case} command is not inside @code{AC_DEFUN}, and it contains
+calls to Autoconf macros, it should be rewritten using @code{AS_CASE}.
+@xref{Common Shell Constructs}.  Instead of:
+
+@example
+# This is dangerous outside AC_DEFUN.
+case $filename in
+  *.[ch]) AC_MSG_NOTICE([C source file]);;
+esac
+@end example
+
+@noindent
+use:
+
+@example
+# This is OK outside AC_DEFUN.
+AS_CASE([$filename],
+  [[*.[ch]]], [AC_MSG_NOTICE([C source file])])
+@end example
+
 You don't need to quote the argument; no splitting is performed.
 
 You don't need the final @samp{;;}, but you should use it.
@@ -18357,34 +18418,11 @@ c=d
 @item @command{if}
 @c ---------------
 @prindex @command{if}
-Using @samp{!} is not portable.  Instead of:
+If an @code{if} command is not inside @code{AC_DEFUN}, and it contains
+calls to Autoconf macros, it should be rewritten using @code{AS_IF}.
+@xref{Common Shell Constructs}.
 
-@example
-if ! cmp -s file file.new; then
-  mv file.new file
-fi
-@end example
-
-@noindent
-use:
-
-@example
-if cmp -s file file.new; then :; else
-  mv file.new file
-fi
-@end example
-
-@noindent
-Or, especially if the @dfn{else} branch is short, you can use @code{||}.
-In M4sh, the @code{AS_IF} macro provides an easy way to write these kinds
-of conditionals:
-
-@example
-AS_IF([cmp -s file file.new], [], [mv file.new file])
-@end example
-
-This is especially useful in other M4 macros, where the @dfn{then} and
-@dfn{else} branches might be macro arguments.
+Using @code{if ! @dots{}} is not portable.  @xref{!,,@command{!} notes}.
 
 Some very old shells did not reset the exit status from an @command{if}
 with no @command{else}:
@@ -18395,9 +18433,9 @@ $ @kbd{if (exit 42); then true; fi; echo $?}
 @end example
 
 @noindent
-whereas a proper shell should have printed @samp{0}.  But this is no
-longer a portability problem; any shell that supports functions gets it
-correct.  However, it explains why some makefiles have lengthy
+whereas a proper shell should have printed @samp{0}.  Although this is no
+longer a portability problem, as any shell that supports functions gets it
+correct, it explains why some makefiles have lengthy
 constructs:
 
 @example
@@ -18628,8 +18666,8 @@ $ @kbd{sh -c 'set -e; trap '\''echo $?'\'' 0; false'}
 
 @noindent
 Thus, when writing a script in M4sh, rather than trying to rely on
-@samp{set -e}, it is better to append @samp{|| AS_EXIT} to any
-statement where it is desirable to abort on failure.
+@samp{set -e}, it is better to use @samp{AS_EXIT}
+where it is desirable to abort on failure.
 
 @cindex @command{set -b}
 @cindex @command{set -m}
@@ -18812,9 +18850,8 @@ to take an action when a token matches a given pattern.  Such constructs
 should be avoided by using:
 
 @example
-case $ac_feature in
-  *[!-a-zA-Z0-9_]*) @var{action};;
-esac
+AS_CASE([$ac_feature],
+  [[*[!-a-zA-Z0-9_]*]], [@var{action}])
 @end example
 
 If the pattern is a complicated regular expression that cannot be
@@ -22517,8 +22554,7 @@ program or library.
 AS_CASE([$host],
   [alpha*-*-*], [CYCLE_OBJ=rpcc.o],
   [i?86-*-*],   [CYCLE_OBJ=rdtsc.o],
-  [CYCLE_OBJ=""]
-)
+  [CYCLE_OBJ=""])
 AC_SUBST([CYCLE_OBJ])
 @end example
 
@@ -22528,11 +22564,10 @@ CPUs.  The configured CPU type doesn't always indicate exact CPU types,
 so some runtime capability checks may be necessary too.
 
 @example
-case $host in
-  alpha*-*-*)   AC_CONFIG_LINKS([dither.c:alpha/dither.c]) ;;
-  powerpc*-*-*) AC_CONFIG_LINKS([dither.c:powerpc/dither.c]) ;;
-  *-*-*)        AC_CONFIG_LINKS([dither.c:generic/dither.c]) ;;
-esac
+AS_CASE([$host],
+  [alpha*-*-*],   [AC_CONFIG_LINKS([dither.c:alpha/dither.c])],
+  [powerpc*-*-*], [AC_CONFIG_LINKS([dither.c:powerpc/dither.c])],
+  [AC_CONFIG_LINKS([dither.c:generic/dither.c])])
 @end example
 
 The host system type can also be used to find cross-compilation tools
@@ -24902,13 +24937,13 @@ Here is a way to write it for version 2:
 
 @example
 AC_CHECK_FUNCS([syslog])
-if test "x$ac_cv_func_syslog" = xno; then
-  # syslog is not in the default libraries.  See if it's in some other.
-  for lib in bsd socket inet; do
-    AC_CHECK_LIB([$lib], [syslog], [AC_DEFINE([HAVE_SYSLOG])
-      LIBS="-l$lib $LIBS"; break])
-  done
-fi
+AS_IF([test "x$ac_cv_func_syslog" = xno],
+  [# syslog is not in the default libraries.  See if it's in some other.
+   for lib in bsd socket inet; do
+     AC_CHECK_LIB([$lib], [syslog],
+       [AC_DEFINE([HAVE_SYSLOG])
+        LIBS="-l$lib $LIBS"; break])
+   done])
 @end example
 
 If you were working around bugs in @code{AC_DEFINE_UNQUOTED} by adding
