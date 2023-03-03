@@ -20368,6 +20368,20 @@ $ @kbd{echo abc | coreutils/tr bc d}
 add
 @end example
 
+On platforms with the BusyBox tools, @command{tr} does not support the
+@code{[@var{x}*@var{n}]} option syntax.
+
+@example
+$ @kbd{echo abc | tr 'abcd' '[A*4]'}
+[A*
+$ @kbd{echo abc | coreutils/tr 'abcd' '[A*4]'}
+AAA
+$ @kbd{echo xyz | tr 'a-z' '[A*]'}
+]]]
+$ @kbd{echo xyz | coreutils/tr 'a-z' '[A*]'}
+AAA
+@end example
+
 Posix requires @command{tr} to operate on binary files.  But at least
 Solaris @command{/usr/ucb/tr} and @command{/usr/bin/tr} silently discard
 @code{NUL} in the input prior to doing any translation.  When using
