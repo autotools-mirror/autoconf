@@ -1445,8 +1445,16 @@ AT_SKIP_IF([${CONFIG_SHELL-$SHELL} -c 'test -z "${BASH_VERSION+set}]]dnl
 AT_CHECK([mkfifo fifo || exit 77])
 AT_CHECK([${CONFIG_SHELL-$SHELL} -c '(set -m && set +m) || exit 77'],
 	 [], [], [ignore])
+# Parallel tests malfunction with Guix's bash, as of this writing
+# (bash 5.1.8(1)-release, guix 9584b1d 2023-03-12).  I haven't been
+# able to figure out why.
+# It is *probably* safe to assume that if the shell is Bash and /gnu/store
+# exists, then we also have realpath and $(...).
+AT_SKIP_IF(
+  [${CONFIG_SHELL-$SHELL} -c 'test "${BASH_VERSION+set}" = set' &&
+   test -d /gnu/store &&
+   test "$(realpath "${CONFIG_SHELL-$SHELL}" | cut -c-10)" = /gnu/store])
 ])
-
 
 ## ----------------------- ##
 ## parallel test execution ##
