@@ -177,6 +177,7 @@ PACKAGE_TARNAME='<<not available>>'
 
 # Root for temporary partial installation tree.
 ACBOOTDIR=$(mktemp -d acboot.XXXXXXXXXX)
+ACBOOTDIR=$(realpath $ACBOOTDIR)
 
 # dosubst options infile outfile -- performs the substitutions that
 # config.status would perform on INFILE, creating OUTFILE.  INFILE is
