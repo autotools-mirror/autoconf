@@ -8830,7 +8830,7 @@ default to @code{--enable-year2038}; if and when that happens,
 @code{AC_SYS_LARGEFILE} and @code{AC_SYS_YEAR2038} will become equivalent.
 @xref{AC_SYS_YEAR2038}.
 
-Set the shell variable @code{ac_have_largefile} to to @samp{yes} or
+Set the shell variable @code{ac_have_largefile} to @samp{yes} or
 @code{no} depending on whether a wide @code{off_t} is available,
 regardless of whether arrangements were necessary.
 Similarly, set the shell variable @code{ac_have_year2038} to @code{yes}

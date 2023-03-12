@@ -418,7 +418,7 @@ AC_DEFUN([AC_PROG_GREP],
 
 
 # _AC_PROG_GREP(VARIABLE, PROGNAME-LIST, [PROG-ARGUMENTS],
-# 		[ACTION-IF-NOT-FOUND])
+#		[ACTION-IF-NOT-FOUND])
 # --------------------------------------------------------
 # Solaris 9 /usr/xpg4/bin/*grep is suitable, but /usr/bin/*grep lacks -e.
 # AIX silently truncates long lines before matching.

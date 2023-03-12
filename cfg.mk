@@ -63,8 +63,8 @@ local-checks-to-skip ?= \
   sc_prohibit_always_true_header_tests	\
   sc_prohibit_magic_number_exit		\
   sc_prohibit_stat_st_blocks		\
-  sc_unmarked_diagnostics
-
+  sc_unmarked_diagnostics		\
+  sc_unportable_grep_q
 
 # Always use shorthand copyrights.
 update-copyright-env = \
@@ -84,7 +84,7 @@ update-release-year:
 .PHONY: update-release-year
 
 # Prevent incorrect NEWS edits.
-old_NEWS_hash = 981169afdd2c97642125938f80a26b7f
+old_NEWS_hash = 18aef204e16f6fe9487ab79ca2556ab4
 
 # Update autoconf-latest.tar.* symlinks during 'make stable/beta'.
 GNUPLOADFLAGS = --symlink-regex

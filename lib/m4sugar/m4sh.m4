@@ -673,13 +673,15 @@ done[]_m4_popdef([$1])])
 # | fi
 # with simplifications when IF-TRUE1 and/or IF-FALSE are empty.
 #
-# Note: IF-TRUEn and IF-FALSE may be nonempty but, after further macro
-# expansion, leave no actual shell code.  We can't detect this, so
-# surround each clause with appropriate shell syntax so that it is valid
-# even if it is empty.  For the IF-TRUEn this can simply be ':' before
-# the clause.  IF-FALSE is harder because it might use the value of $?
-# from the conditional expression.  One way to do this is to write
-# 'case e in e) IF-FALSE ;; esac' which is valid even if IF-FALSE is empty.
+# Note: IF-TRUEn and IF-FALSE may be nonempty but, after further
+# macro expansion, leave no actual shell code.  We can't detect this,
+# so surround each clause with appropriate shell syntax so that it is
+# valid even if it is empty.  For the IF-TRUEn this can simply be ':'
+# before the clause.  However, we can't do the same for IF-FALSE
+# because the ':' would trash the value of $? from the conditional
+# expression, which the IF-FALSE code might use.  Instead we use
+# 'case e in e) IF-FALSE ;; esac' which is valid even when IF-FALSE
+# is empty.
 m4_define([_AS_IF],
 [elif $1
 then :
