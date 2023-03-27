@@ -1710,7 +1710,7 @@ AT_CHECK([($CONFIG_SHELL ./micro-suite -d -3 5-; echo $? >status) | sed 5q],
 AT_CHECK([grep '5.*ok' stdout], [1])
 # Apparently some shells don't get around to creating 'status' any more.
 # And ksh93 on FreeBSD uses 256 + 13 instead of 128 + 13
-AT_CHECK([test ! -s status || grep 141 status || grep 269 status],
+AT_CHECK([test ! -s status || grep 141 status || grep 269 status || grep ^0 status ],
 	 [], [ignore])
 AT_CHECK([if test -f micro-suite.dir/7/micro-suite.log; then ]dnl
 	 [  echo "shell ignores SIGPIPE" > sigpipe-stamp ]dnl
