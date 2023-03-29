@@ -39,8 +39,11 @@ use strict;
 use warnings FATAL => 'all';
 
 use Exporter;
-use Time::HiRes qw(stat);
 use IO::File;
+
+# use sub-second resolution timestamps if available,
+# carry on with one-second resolution timestamps if that is all we have
+BEGIN { eval { require Time::HiRes; import Time::HiRes qw(stat) } }
 
 use Autom4te::Channels;
 use Autom4te::ChannelDefs;
