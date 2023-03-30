@@ -1,0 +1,30 @@
+#! /bin/sh
+
+# From a pristine Git checkout, run
+#  guix shell --container --manifest=manifest.scm -- build-aux/test-build-guix
+# to perform a complete bootstrap and test build of Autoconf.
+
+set -ex
+
+# Guix bug? /bin/sh is usually *not* the shell specified in the manifest.
+SHELL="$(command -v sh)"
+export SHELL
+if [ "$(realpath /bin/sh)" != "$(realpath "$SHELL")" ]; then
+    (
+        cd /bin
+        rm sh
+        ln -s "$SHELL" sh
+    )
+    exec "$SHELL" "$0" "$@"
+fi
+
+./bootstrap
+if [ -d _build ]; then
+    rm -rf _build/*
+else
+    mkdir _build
+fi
+cd _build
+../configure
+make all info pdf dvi
+make distcheck
