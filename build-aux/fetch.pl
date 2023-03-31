@@ -240,7 +240,6 @@ sub fetch ($$$$$$)
   # don't use \s here or it will eat blank lines
   $content =~ s/[ \t]+$//gm;
   $content =~ s/\bAutomake::/Autom4te::/g if $edit;
-  $content =~ s/^use 5\.006;$/use 5.010;/mg if $edit;
 
   replace_if_change ($destpath, $content, $quiet);
 }

@@ -153,7 +153,14 @@ AM_MISSING_PROG([HELP2MAN], [help2man])
 ## ------ ##
 
 # We use an absolute name for perl so the #! line in autoscan will work.
-AC_PATH_PERL_WITH_TIME_HIRES_STAT
+AC_PATH_PROG([PERL], [perl], [no])
+AC_SUBST([PERL])dnl
+if test "$PERL" = no; then
+  AC_MSG_ERROR([perl is not found])
+fi
+$PERL -e 'require 5.006;' || {
+   AC_MSG_ERROR([Perl 5.006 or better is required])
+}
 
 # Find out whether the system supports flock
 # Note this test does not try to find out whether it works with this

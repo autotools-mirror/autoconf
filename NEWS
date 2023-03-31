@@ -10,8 +10,15 @@ GNU Autoconf NEWS - User visible changes.
   means Autoconf no longer supports pre-1989 C compilers, as they do
   not support function prototypes.
 
-*** Autoconf now requires perl 5.10 (2007) or later.
-  Generated 'configure' scripts continue to run without perl.
+*** Autoconf developers now need Perl 5.10 (2007) or later.
+  Generated 'configure' scripts continue to run without Perl.
+
+  Although Autoconf users still need only Perl 5.6 (2000) or later,
+  Perl 5.10 or later is recommended for users too, as it avoids some
+  trouble with files that have timestamps separated by less than 1 s.
+  Due to limitations in Perl's API this trouble is not entirely fixed
+  even with Perl 5.36, which cannot represent timestamps separated by
+  238 ns or less, for circa 2023 timestamps on typical platforms.
 
 *** Autoconf now requires GNU M4 1.4.8 (2006) or later.
   Generated 'configure' scripts continue to run without M4.

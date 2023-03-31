@@ -25,7 +25,7 @@ package Autom4te::Config;
 # and autoconf's build machinery is not prepared to do that.
 # Revisit after 2.70.
 
-use 5.010;
+use 5.006;
 use strict;
 use warnings FATAL => 'all';
 

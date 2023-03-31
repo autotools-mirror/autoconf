@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use 5.010;
+use 5.006;
 use strict;
 use warnings FATAL => 'all';
 

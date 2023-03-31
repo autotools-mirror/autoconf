@@ -32,7 +32,7 @@ used in several executables of the Autoconf package.
 
 =cut
 
-use 5.010;
+use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
