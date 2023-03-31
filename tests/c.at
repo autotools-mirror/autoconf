@@ -232,6 +232,30 @@ AT_CHECK_DEFINES(
 AT_CLEANUP
 
 
+## ----------------------------------- ##
+## AC_PROG_EGREP and AC_EGREP_HEADER.  ##
+## ----------------------------------- ##
+
+AT_SETUP([AC_PROG_EGREP and AC_EGREP_HEADER])
+
+_AT_CHECK_AC_MACRO(
+[[AC_PROG_CPP
+  AC_PROG_EGREP
+
+  # Although this code is incorrect (it should use AS_IF),
+  # it follows a too-common real world pattern.
+  # For now, test for it; we may remove this test later.
+  if false; then
+    AC_EGREP_HEADER([^], [limits.h])
+  fi
+
+  AC_EGREP_HEADER([$], [limits.h], [],
+    [AC_MSG_ERROR([[egrep-related macros do not tolerate misuse of 'if']])])
+]])
+
+AT_CLEANUP
+
+
 ## ------------------------------------ ##
 ## AC_NO_EXECUTABLES (working linker).  ##
 ## ------------------------------------ ##

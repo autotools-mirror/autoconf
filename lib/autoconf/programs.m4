@@ -371,6 +371,16 @@ AC_CACHE_CHECK([for egrep], ac_cv_path_EGREP,
    fi])
  EGREP="$ac_cv_path_EGREP"
  AC_SUBST([EGREP])
+ dnl
+ dnl Also set EGREP_TRADITIONAL even though unnecessary here,
+ dnl for wrong but too-common code with the following pattern:
+ dnl   AC_PROG_EGREP
+ dnl   if false; then
+ dnl      AC_EGREP_HEADER([printf], [stdio.h], [has_printf=yes])
+ dnl   fi
+ dnl   AC_EGREP_HEADER([malloc], [stdlib.h], [has_malloc=yes])
+ EGREP_TRADITIONAL=$EGREP
+ ac_cv_path_EGREP_TRADITIONAL=$EGREP
 ])# AC_PROG_EGREP
 
 # _AC_PROG_EGREP_TRADITIONAL
