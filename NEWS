@@ -5,9 +5,7 @@ GNU Autoconf NEWS - User visible changes.
 ** Backward incompatibilities
 
 *** AC_CHECK_FUNC and similar macros now use function prototypes.
-  AC_CHECK_FUNC and and similar macros now use C declarations with
-  function prototypes, a feature introduced in C89.  The new approach
-  should work better with C23, which removed the non-prototyped K&R
+  This should work better with C23, which removed the non-prototyped K&R
   style that AC_CHECK_FUNC previously used.  However, this change
   means Autoconf no longer supports pre-1989 C compilers, as they do
   not support function prototypes.
