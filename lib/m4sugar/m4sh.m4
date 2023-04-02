@@ -1389,7 +1389,7 @@ m4_if([$1], m4_translit([[$1]], [:;]),
 for as_dir in $as_dummy])
 do
   IFS=$as_save_IFS
-  case $as_dir in #(((
+  case $as_dir in @%:@(((
     '') as_dir=./ ;;
     */) ;;
     *) as_dir=$as_dir/ ;;
