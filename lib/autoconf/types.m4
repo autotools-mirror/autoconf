@@ -589,25 +589,29 @@ AC_DEFUN([AC_TYPE_MBSTATE_T],
 
 # AC_TYPE_UID_T
 # -------------
-# FIXME: Rewrite using AC_CHECK_TYPE.
 AN_IDENTIFIER([gid_t], [AC_TYPE_UID_T])
 AN_IDENTIFIER([uid_t], [AC_TYPE_UID_T])
 AC_DEFUN([AC_TYPE_UID_T],
-[AC_CACHE_CHECK(for uid_t in sys/types.h, ac_cv_type_uid_t,
-[AC_EGREP_HEADER(uid_t, sys/types.h,
-  ac_cv_type_uid_t=yes, ac_cv_type_uid_t=no)])
-if test $ac_cv_type_uid_t = no; then
-  AC_DEFINE(uid_t, int, [Define to 'int' if <sys/types.h> doesn't define.])
-  AC_DEFINE(gid_t, int, [Define to 'int' if <sys/types.h> doesn't define.])
-fi
-])
+[AC_CHECK_TYPE([uid_t], [],
+  [AC_DEFINE([uid_t], [int],
+    [Define as 'int' if <sys/types.h> doesn't define.])])
+AC_CHECK_TYPE([gid_t], [],
+  [AC_DEFINE([gid_t], [int],
+    [Define as 'int' if <sys/types.h> doesn't define.])])])
 
-
+# This should be obsoleted, size_t is in C90.
 AN_IDENTIFIER([size_t], [AC_TYPE_SIZE_T])
-AC_DEFUN([AC_TYPE_SIZE_T], [AC_CHECK_TYPE(size_t, unsigned int)])
+AC_DEFUN([AC_TYPE_SIZE_T],
+[AC_CHECK_TYPE([size_t], [],
+  [AC_DEFINE([size_t], [unsigned int],
+    [Define as 'unsigned int' if <stddef.h> doesn't define.])])])
 
 AN_IDENTIFIER([ssize_t], [AC_TYPE_SSIZE_T])
-AC_DEFUN([AC_TYPE_SSIZE_T], [AC_CHECK_TYPE(ssize_t, int)])
+AC_DEFUN([AC_TYPE_SSIZE_T],
+[AC_CHECK_TYPE([ssize_t], [],
+  [AC_DEFINE([ssize_t], [int],
+    [Define as 'int' if <sys/types.h> doesn't define.])])])
+
 
 AN_IDENTIFIER([pid_t], [AC_TYPE_PID_T])
 AC_DEFUN([AC_TYPE_PID_T],
