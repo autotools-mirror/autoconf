@@ -754,9 +754,9 @@ dnl it should only be defined when necessary.
 ## Checks for UNIX variants.  ##
 ## -------------------------- ##
 
-
-# These are kludges which should be replaced by a single POSIX check.
-# They aren't cached, to discourage their use.
+# These macros are all obsolete, from the early days of Autoconf,
+# before the invention of AC_CANONICAL_SYSTEM.  Autoupdate will
+# replace each with inline code for a more modern feature check.
 
 # AC_AIX
 # ------
@@ -776,19 +776,15 @@ AU_DEFUN([AC_ISC_POSIX], [AC_SEARCH_LIBS([strerror], [cposix])])
 # AC_XENIX_DIR
 # ------------
 AU_DEFUN([AC_XENIX_DIR],
-[AC_MSG_CHECKING([for Xenix])
-AC_EGREP_CPP([yes],
-[#if defined M_XENIX && ! defined M_UNIX
-  yes
-@%:@endif],
-	     [AC_MSG_RESULT([yes]); XENIX=yes],
-	     [AC_MSG_RESULT([no]); XENIX=])
-
-AC_HEADER_DIRENT[]dnl
+[AC_HEADER_DIRENT
+# Autoupdate added the next two lines to ensure that your configure
+# script's behavior did not change.  They are safe to remove unless
+# you have code that depends on the XENIX shell variable.
+AC_CANONICAL_HOST
+AS_CASE([$host_os], [xenix*], [XENIX=yes], [XENIX=no])
+# End of code added by autoupdate
 ],
-[You shouldn't need to depend upon XENIX.  Remove the
-'AC_MSG_CHECKING', 'AC_EGREP_CPP', and this warning if this part
-of the test is useless.])
+[Check for code depending on the XENIX shell variable.])
 
 
 # AC_DYNIX_SEQ
