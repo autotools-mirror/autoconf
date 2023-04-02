@@ -258,44 +258,69 @@ AN_IDENTIFIER([ptrdiff_t], [AC_CHECK_TYPES])
 # AC_TYPE_GETGROUPS
 # -----------------
 AC_DEFUN([AC_TYPE_GETGROUPS],
+dnl We now unconditionally assume that if <unistd.h> has a prototype for
+dnl getgroups, it is accurate; and that if <unistd.h> does _not_ declare
+dnl getgroups with a prototype, the second argument is an array of int.
+dnl (Older versions of Autoconf made these assumptions only when cross
+dnl compiling.)  See AC_FUNC_GETGROUPS, over in functions.m4, for why
+dnl this uses AC_COMPILE_IFELSE rather than AC_LINK_IFELSE.
 [AC_REQUIRE([AC_TYPE_UID_T])dnl
-AC_CACHE_CHECK(type of array argument to getgroups, ac_cv_type_getgroups,
-[AC_RUN_IFELSE([AC_LANG_SOURCE(
-[[/* Thanks to Mike Rendell for this test.  */
-]AC_INCLUDES_DEFAULT[
-#define NGID 256
-#undef MAX
-#define MAX(x, y) ((x) > (y) ? (x) : (y))
+AC_CACHE_CHECK([type of array argument to getgroups], ac_cv_type_getgroups,
+[# If AC_TYPE_UID_T says there isn't any gid_t typedef, then we can skip
+# everything below.
+AS_IF([test $ac_cv_type_gid_t = no],
+  [ac_cv_type_getgroups=int],
+  [# Test programs below rely on strict type checking of extern declarations:
+  # 'extern int getgroups(int, int *); extern int getgroups(int, pid_t *);'
+  # is valid in C89 if and only if pid_t is a typedef for int.  Unlike
+  # anything involving either an assignment or a function call, compilers
+  # tend to make this kind of type mismatch a hard error, not just an
+  # "incompatible pointer types" warning.
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+[AC_INCLUDES_DEFAULT
+[extern int getgroups(int, gid_t *);]],
+[[return !(getgroups(0, 0) >= 0);]])],
+    [ac_getgroups_gidarray=yes],
+    [ac_getgroups_gidarray=no])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+[AC_INCLUDES_DEFAULT
+[extern int getgroups(int, int *);]],
+[[return !(getgroups(0, 0) >= 0);]])],
+    [ac_getgroups_intarray=yes],
+    [ac_getgroups_intarray=no])
 
-int
-main (void)
-{
-  gid_t gidset[NGID];
-  int i, n;
-  union { gid_t gval; long int lval; }  val;
-
-  val.lval = -1;
-  for (i = 0; i < NGID; i++)
-    gidset[i] = val.gval;
-  n = getgroups (sizeof (gidset) / MAX (sizeof (int), sizeof (gid_t)) - 1,
-		 gidset);
-  /* Exit non-zero if getgroups seems to require an array of ints.  This
-     happens when gid_t is short int but getgroups modifies an array
-     of ints.  */
-  return n > 0 && gidset[n] != val.gval;
-}]])],
-	       [ac_cv_type_getgroups=gid_t],
-	       [ac_cv_type_getgroups=int],
-	       [ac_cv_type_getgroups=cross])
-if test $ac_cv_type_getgroups = cross; then
-  dnl When we can't run the test program (we are cross compiling), presume
-  dnl that <unistd.h> has either an accurate prototype for getgroups or none.
-  dnl Old systems without prototypes probably use int.
-  AC_EGREP_HEADER([getgroups.*int.*gid_t], unistd.h,
-		  ac_cv_type_getgroups=gid_t, ac_cv_type_getgroups=int)
-fi])
+  AS_CASE([int:$ac_getgroups_intarray,gid:$ac_getgroups_gidarray],
+    [int:yes,gid:no], [ac_cv_type_getgroups=int],
+    [int:no,gid:yes], [ac_cv_type_getgroups=gid_t],
+    [int:yes,gid:yes], [
+      # Both programs compiled - this means *either* that getgroups
+      # was declared with no prototype, in which case we should use int,
+      # or that it was declared prototyped but gid_t is a typedef for int,
+      # in which case we should use gid_t.  Distinguish the two cases
+      # by testing if the compiler catches a blatantly incorrect function
+      # signature for getgroups.
+      AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+[AC_INCLUDES_DEFAULT
+[extern int getgroups(int, float);]],
+[[return !(getgroups(0, 0) >= 0);]])], [
+        # Compiler did not catch incorrect argument list;
+        # getgroups is unprototyped.
+        ac_cv_type_getgroups=int
+      ], [
+        # Compiler caught incorrect argument list;
+        # gid_t is a typedef for int.
+        ac_cv_type_getgroups=gid_t
+      ])
+    ], [
+      # Both programs failed to compile - this probably means getgroups
+      # wasn't declared at all.  Use 'int', as this is probably a very
+      # old system where the type _would have been_ int.
+      ac_cv_type_getgroups=int
+    ])
+  ])
+])dnl AC_CACHE_CHECK
 AC_DEFINE_UNQUOTED(GETGROUPS_T, $ac_cv_type_getgroups,
-		   [Define to the type of elements in the array set by
+		   [Define to the type of elements in the array argument to
 		    'getgroups'. Usually this is either 'int' or 'gid_t'.])
 ])# AC_TYPE_GETGROUPS
 

@@ -698,46 +698,45 @@ AS_IF([test "$ac_cv_func_fseeko_ftello" = "need _LARGEFILE_SOURCE"],
 # When cross-compiling, assume getgroups is broken.
 AN_FUNCTION([getgroups], [AC_FUNC_GETGROUPS])
 AC_DEFUN([AC_FUNC_GETGROUPS],
-[AC_REQUIRE([AC_TYPE_GETGROUPS])dnl
-AC_REQUIRE([AC_TYPE_SIZE_T])dnl
-AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
-AC_CHECK_FUNC(getgroups)
+[AC_REQUIRE([AC_CANONICAL_HOST])dnl
+AC_REQUIRE([AC_TYPE_GETGROUPS])dnl
 
-# If we don't yet have getgroups, see if it's in -lbsd.
+# On older systems getgroups might be in -lbsd.
 # This is reported to be necessary on an ITOS 3000WS running SEIUX 3.1.
 ac_save_LIBS=$LIBS
-if test $ac_cv_func_getgroups = no; then
-  AC_CHECK_LIB(bsd, getgroups, [GETGROUPS_LIB=-lbsd])
-fi
+LIBS=
+GETGROUPS_LIB=
+AC_SEARCH_LIBS([getgroups], [bsd],
+  [test "$ac_res" = "none required" || GETGROUPS_LIB="$ac_res"
+   ac_cv_func_getgroups=yes],
+  [ac_cv_func_getgroups=no])
+LIBS=$ac_save_LIBS
+AC_SUBST([GETGROUPS_LIB])
 
-# Run the program to test the functionality of the system-supplied
-# getgroups function only if there is such a function.
+# Known severe bugs in getgroups on particular systems.
+#  - On Ultrix 4.3 and NextSTEP 3.2, getgroups (0, 0) is reported to
+#    fail, rather than returning the number of supplementary groups as
+#    it ought to.  We do not know the exact range of releases affected
+#    in either case.
+# We currently reject all versions of the systems with known bugs, and
+# no other systems.  Please send corrections to bug-autoconf@gnu.org.
 if test $ac_cv_func_getgroups = yes; then
+  # This AC_CACHE_CHECK exists so that one may override an incorrect
+  # guess by setting ac_cv_func_getgroups_works in a config.site file.
   AC_CACHE_CHECK([for working getgroups], ac_cv_func_getgroups_works,
-   [AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
-      [[/* On Ultrix 4.3, getgroups (0, 0) always fails.  */
-       return getgroups (0, 0) == -1;]])],
-		  [ac_cv_func_getgroups_works=yes],
-		  [ac_cv_func_getgroups_works=no],
-		  [case "$host_os" in # ((
-			     # Guess yes on glibc systems.
-		     *-gnu*) ac_cv_func_getgroups_works="guessing yes" ;;
-			     # If we don't know, assume the worst.
-		     *)      ac_cv_func_getgroups_works="guessing no" ;;
-		   esac])
-   ])
+   [AS_CASE([$host_os],
+     [ultrix* | nextstep*],
+      [ac_cv_func_getgroups_works=no # getgroups(0,0) fails
+],
+      [ac_cv_func_getgroups_works=yes])])
 else
   ac_cv_func_getgroups_works=no
 fi
-case "$ac_cv_func_getgroups_works" in
-  *yes)
-    AC_DEFINE(HAVE_GETGROUPS, 1,
-	      [Define to 1 if your system has a working 'getgroups' function.])
-    ;;
-esac
-LIBS=$ac_save_LIBS
+if test $ac_cv_func_getgroups_works = yes; then
+  AC_DEFINE(HAVE_GETGROUPS, 1,
+            [Define to 1 if your system has a working 'getgroups' function.])
+fi
 ])# AC_FUNC_GETGROUPS
-
 
 # _AC_LIBOBJ_GETLOADAVG
 # ---------------------

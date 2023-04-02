@@ -5257,17 +5257,26 @@ and also contains workarounds for other portability problems of
 @defmac AC_FUNC_GETGROUPS
 @acindex{FUNC_GETGROUPS}
 @cvindex HAVE_GETGROUPS
-@ovindex GETGROUPS_LIBS
+@ovindex GETGROUPS_LIB
 @c @fuindex getgroups
 @prindex @code{getgroups}
 @caindex func_getgroups_works
-If the @code{getgroups} function is available and works,
-define @code{HAVE_GETGROUPS}.  Set @code{GETGROUPS_LIBS} to any libraries
-needed to get that function.  This macro runs @code{AC_TYPE_GETGROUPS}.
+Perform all the checks performed by @code{AC_TYPE_GETGROUPS}
+(@pxref{AC_TYPE_GETGROUPS}).
+Then, if the @code{getgroups} function is available
+and known to work correctly, define @code{HAVE_GETGROUPS}.
+Set the output variable @code{GETGROUPS_LIB} to any libraries
+needed to get that function.
 
-This macro is obsolescent. New programs need not use this macro.  But
-they may want to use the Gnulib module @code{getgroups}, which provides
-workarounds to other portability problems of this function.
+This macro relies on a list of systems with known, serious bugs in
+@code{getgroups}.  If this list mis-identifies your system's
+@code{getgroups} as buggy, or as not buggy, you can override it by
+setting the cache variable @code{ac_cv_func_getgroups_works} in a
+@file{config.site} file (@pxref{Site Defaults}).  Please also report the
+error to @email{bug-autoconf@@gnu.org, the Autoconf Bugs mailing list}.
+
+The Gnulib module @code{getgroups} provides workarounds for additional,
+less severe portability problems with this function.
 @end defmac
 
 @anchor{AC_FUNC_GETLOADAVG}

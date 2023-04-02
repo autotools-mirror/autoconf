@@ -38,6 +38,17 @@ GNU Autoconf NEWS - User visible changes.
   This matters only for uses that, contrary to the documentation
   and despite warnings, use m4_divert with numbered diversions.
 
+*** AC_FUNC_GETGROUPS and AC_TYPE_GETGROUPS no longer run test programs.
+  These macros were testing for OS bugs that we believe are at least
+  twenty years in the past.  Most operating systems are now trusted to
+  provide an accurate prototype for getgroups in unistd.h, and to
+  implement it as specified in POSIX.
+
+  AC_FUNC_GETGROUPS still includes a short blacklist of OSes with
+  known, severe bugs in getgroups.  It can be overridden using
+  config.site.  If you encounter a mistake in this blacklist
+  please report it to bug-autoconf.
+
 ** New features
 
 *** New macro AC_SYS_YEAR2038.
