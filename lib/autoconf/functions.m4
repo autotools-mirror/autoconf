@@ -842,11 +842,11 @@ AC_CHECK_FUNCS(getloadavg, [],
 # Some definitions of getloadavg require that the program be installed setgid.
 AC_CACHE_CHECK(whether getloadavg requires setgid,
 	       ac_cv_func_getloadavg_setgid,
-[AC_EGREP_CPP([Yowza Am I SETGID yet],
-[#include "$srcdir/$ac_config_libobj_dir/getloadavg.c"
-#ifdef LDAV_PRIVILEGED
-Yowza Am I SETGID yet
-@%:@endif],
+[AC_PREPROC_IFELSE([AC_LANG_SOURCE(
+[[#include "$srcdir/$ac_config_libobj_dir/getloadavg.c"
+#ifndef LDAV_PRIVILEGED
+#error setgid not needed
+@%:@endif]])],
 	      ac_cv_func_getloadavg_setgid=yes,
 	      ac_cv_func_getloadavg_setgid=no)])
 if test $ac_cv_func_getloadavg_setgid = yes; then

@@ -2197,11 +2197,11 @@ AC_DEFUN([AC_C_VARARRAYS],
 [
   AC_CACHE_CHECK([for variable-length arrays],
     ac_cv_c_vararrays,
-    [AC_EGREP_CPP([defined],
-       [#ifdef __STDC_NO_VLA__
-	defined
+    [AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+[[	#ifndef __STDC_NO_VLA__
+	#error __STDC_NO_VLA__ not defined
 	#endif
-       ],
+]])],
        [ac_cv_c_vararrays='no: __STDC_NO_VLA__ is defined'],
        [AC_COMPILE_IFELSE(
 	  [AC_LANG_PROGRAM(

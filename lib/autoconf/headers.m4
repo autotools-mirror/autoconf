@@ -721,13 +721,11 @@ you to include it and time.h simultaneously.])
 m4_define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
 [AC_CACHE_CHECK([whether termios.h defines TIOCGWINSZ],
 		ac_cv_sys_tiocgwinsz_in_termios_h,
-[AC_EGREP_CPP([yes],
-	      [#include <sys/types.h>
-#include <termios.h>
-#ifdef TIOCGWINSZ
-  yes
-#endif
-],
+[AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+[AC_INCLUDES_DEFAULT
+[#include <termios.h>
+const int tiocgwinsz = TIOCGWINSZ;
+]])],
 		ac_cv_sys_tiocgwinsz_in_termios_h=yes,
 		ac_cv_sys_tiocgwinsz_in_termios_h=no)])
 ])# _AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H
@@ -738,13 +736,11 @@ m4_define([_AC_HEADER_TIOCGWINSZ_IN_TERMIOS_H],
 m4_define([_AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL],
 [AC_CACHE_CHECK([whether sys/ioctl.h defines TIOCGWINSZ],
 		ac_cv_sys_tiocgwinsz_in_sys_ioctl_h,
-[AC_EGREP_CPP([yes],
-	      [#include <sys/types.h>
-#include <sys/ioctl.h>
-#ifdef TIOCGWINSZ
-  yes
-#endif
-],
+[AC_COMPILE_IFELSE([AC_LANG_SOURCE(
+[AC_INCLUDES_DEFAULT
+[#include <sys/ioctl.h>
+const int tiocgwinsz = TIOCGWINSZ;
+]])],
 		ac_cv_sys_tiocgwinsz_in_sys_ioctl_h=yes,
 		ac_cv_sys_tiocgwinsz_in_sys_ioctl_h=no)])
 ])# _AC_HEADER_TIOCGWINSZ_IN_SYS_IOCTL
