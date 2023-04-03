@@ -277,6 +277,8 @@ m4_define([_AC_SYS_LARGEFILE_TEST_CODE],
 		       && LARGE_OFF_T % 2147483647 == 1)
 		      ? 1 : -1]];[]dnl
 ])
+# Defined by Autoconf 2.71 and circa 2022 Gnulib unwisely depended on it.
+m4_define([_AC_SYS_LARGEFILE_TEST_INCLUDES], [_AC_SYS_LARGEFILE_TEST_CODE])
 
 # _AC_SYS_LARGEFILE_OPTIONS
 # -------------------------
