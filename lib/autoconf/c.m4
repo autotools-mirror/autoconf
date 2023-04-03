@@ -1143,6 +1143,21 @@ static char *f (char * (*g) (char **, int), char **p, ...)
   return s;
 }
 
+/* C89 style stringification. */
+#define noexpand_stringify(a) #a
+const char *stringified = noexpand_stringify(arbitrary+token=sequence);
+
+/* C89 style token pasting.  Exercises some of the corner cases that
+   e.g. old MSVC gets wrong, but not very hard. */
+#define noexpand_concat(a,b) a##b
+#define expand_concat(a,b) noexpand_concat(a,b)
+extern int vA;
+extern int vbee;
+#define aye A
+#define bee B
+int *pvA = &expand_concat(v,aye);
+int *pvbee = &noexpand_concat(v,bee);
+
 /* OSF 4.0 Compaq cc is some sort of almost-ANSI by default.  It has
    function prototypes and stuff, but not \xHH hex character constants.
    These do not provoke an error unfortunately, instead are silently treated
@@ -2112,16 +2127,10 @@ fi
 # --------------
 # Checks if '#' can be used to glue strings together at the CPP level.
 # Defines HAVE_STRINGIZE if positive.
+# Obsolete - new code should assume C89 compliance.
 AC_DEFUN([AC_C_STRINGIZE],
-[AC_CACHE_CHECK([for preprocessor stringizing operator],
-		[ac_cv_c_stringize],
-[AC_EGREP_CPP([@%:@teststring],
-	      [@%:@define x(y) #y
-
-char *s = x(teststring);],
-	      [ac_cv_c_stringize=no],
-	      [ac_cv_c_stringize=yes])])
-if test $ac_cv_c_stringize = yes; then
+[AC_REQUIRE([AC_PROG_CC])
+if test "$ac_prog_cc_stdc" != no; then
   AC_DEFINE(HAVE_STRINGIZE, 1,
 	    [Define to 1 if cpp supports the ANSI @%:@ stringizing operator.])
 fi
@@ -2130,8 +2139,8 @@ fi
 
 # AC_C_PROTOTYPES
 # ---------------
-# Check if the C compiler supports prototypes, included if it needs
-# options.
+# Check if the C compiler supports prototypes.
+# Obsolete - new code should assume C89 compliance.
 AC_DEFUN([AC_C_PROTOTYPES],
 [AC_REQUIRE([AC_PROG_CC])dnl
 if test "$ac_prog_cc_stdc" != no; then
