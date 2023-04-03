@@ -2766,8 +2766,6 @@ AU_DEFUN([AC_TRY_CPP],
 # AC_EGREP_CPP(PATTERN, PROGRAM,
 #              [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
 # ------------------------------------------------------
-# Because this macro is used by AC_PROG_GCC_TRADITIONAL, which must
-# come early, it is not included in AC_BEFORE checks.
 AC_DEFUN([AC_EGREP_CPP],
 [AC_LANG_PREPROC_REQUIRE()dnl
 AC_REQUIRE([_AC_PROG_EGREP_TRADITIONAL])dnl

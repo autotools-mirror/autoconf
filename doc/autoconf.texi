@@ -7764,20 +7764,6 @@ This macro is obsolescent, as current C compilers support prototypes.
 New programs need not use this macro.
 @end defmac
 
-@anchor{AC_PROG_GCC_TRADITIONAL}
-@defmac AC_PROG_GCC_TRADITIONAL
-@acindex{PROG_GCC_TRADITIONAL}
-@ovindex CC
-Add @option{-traditional} to output variable @code{CC} if using a
-GNU C compiler and @code{ioctl} does not work properly without
-@option{-traditional}.  That usually happens when the fixed header files
-have not been installed on an old system.
-
-This macro is obsolescent, since current versions of the GNU C
-compiler fix the header files automatically when installed.
-@end defmac
-
-
 @node C++ Compiler
 @subsection C++ Compiler Characteristics
 
@@ -23986,7 +23972,8 @@ These days portable programs should use @code{waitpid}, not
 
 @defmac AC_GCC_TRADITIONAL
 @acindex{GCC_TRADITIONAL}
-Replaced by @code{AC_PROG_GCC_TRADITIONAL} (@pxref{AC_PROG_GCC_TRADITIONAL}).
+Replaced by @code{AC_PROG_GCC_TRADITIONAL} (@pxref{AC_PROG_GCC_TRADITIONAL}),
+which is itself obsolete.
 @end defmac
 
 @defmac AC_GETGROUPS_T
@@ -24367,6 +24354,18 @@ Now done by @code{AC_PROG_CC} (@pxref{AC_PROG_CC}).
 @defmac AC_PROG_CC_STDC
 @acindex{PROG_CC_STDC}
 Now done by @code{AC_PROG_CC} (@pxref{AC_PROG_CC}).
+@end defmac
+
+@anchor{AC_PROG_GCC_TRADITIONAL}
+@defmac AC_PROG_GCC_TRADITIONAL
+@acindex{PROG_GCC_TRADITIONAL}
+Used to put GCC into ``traditional'' (pre-ISO C) compilation mode,
+on systems with headers that did not work correctly with a
+standard-compliant compiler.  GCC has not supported traditional
+compilation in many years, and all of the systems that required this are
+long obsolete themselves.  This macro is now a compatibility synonym for
+@code{AC_PROG_CC} (@pxref{AC_PROG_CC}).
+
 @end defmac
 
 @defmac AC_PROGRAMS_CHECK

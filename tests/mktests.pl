@@ -112,7 +112,7 @@ my @ac_exclude_list = (
 # Check all AU_DEFUN'ed macros with AT_CHECK_AU_MACRO, except these.
 my @au_exclude_list = (
   # Empty.
-  qr/^AC_(C_CROSS|PROG_CC_(C[89]9|STDC))$/,
+  qr/^AC_(C_CROSS|PROG_(CC_(C[89]9|STDC)|GCC_TRADITIONAL))$/,
 
   # Use AC_REQUIRE.
   qr/^AC_(CYGWIN|MINGW32|EMXOS2)$/,

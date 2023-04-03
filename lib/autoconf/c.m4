@@ -551,30 +551,6 @@ fi[]dnl
 ])# _AC_PROG_CC_G
 
 
-# AC_PROG_GCC_TRADITIONAL
-# -----------------------
-AC_DEFUN([AC_PROG_GCC_TRADITIONAL],
-[AC_REQUIRE([AC_PROG_CC])dnl
-if test $ac_cv_c_compiler_gnu = yes; then
-    AC_CACHE_CHECK(whether $CC needs -traditional,
-      ac_cv_prog_gcc_traditional,
-[  ac_pattern="Autoconf.*'x'"
-  AC_EGREP_CPP($ac_pattern, [#include <sgtty.h>
-Autoconf TIOCGETP],
-  ac_cv_prog_gcc_traditional=yes, ac_cv_prog_gcc_traditional=no)
-
-  if test $ac_cv_prog_gcc_traditional = no; then
-    AC_EGREP_CPP($ac_pattern, [#include <termio.h>
-Autoconf TCGETA],
-    ac_cv_prog_gcc_traditional=yes)
-  fi])
-  if test $ac_cv_prog_gcc_traditional = yes; then
-    CC="$CC -traditional"
-  fi
-fi
-])# AC_PROG_GCC_TRADITIONAL
-
-
 # AC_PROG_CC_C_O
 # --------------
 AC_DEFUN([AC_PROG_CC_C_O],
@@ -1675,6 +1651,12 @@ AU_DEFUN([AC_PROG_CC_STDC],
   [$0 is obsolete; use AC_PROG_CC]
 )
 
+# AC_PROG_GCC_TRADITIONAL
+# -----------------------
+AU_DEFUN([AC_PROG_GCC_TRADITIONAL],
+  [AC_REQUIRE([AC_PROG_CC])],
+  [$0 is obsolete; use AC_PROG_CC]
+)
 
 # AC_C_BACKSLASH_A
 # ----------------

@@ -81,6 +81,13 @@ GNU Autoconf NEWS - User visible changes.
   with plain apostrophes instead of the older GNU style `like this'
   with grave accent and apostrophe.
 
+*** AC_PROG_GCC_TRADITIONAL no longer does anything.
+
+  This macro has had no useful effect since GCC dropped support for
+  traditional-mode compilation in version 3.3 (released in 2003), and
+  the systems that needed it are also long obsolete.  It is now a
+  compatibility synonym for AC_PROG_CC.
+
 ** Notable bug fixes
 
 *** Autoconf caches now use finer-grained timestamps.
