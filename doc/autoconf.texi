@@ -8808,18 +8808,20 @@ if possible.  These types may include @code{blkcnt_t}, @code{dev_t},
 
 Also, arrange for a @command{configure} option @code{--enable-year2038}
 to request widening the type @code{time_t} as needed to represent file
-wand other timestamps after January 2038.  This widening is possible
+wand other timestamps after mid-January 2038.  This widening is possible
 only on 32-bit GNU/Linux x86 and ARM systems with glibc 2.34 or later.
 If year-2038 support is requested but @command{configure} fails to find a way
 to widen @code{time_t} and inspection of the system suggests that
 this feature is available somehow, @command{configure} will error out.
 If you want the default to be @code{--enable-year2038}, you can use
-@code{AC_SYS_YEAR2038} instead of @code{AC_SYS_LARGEFILE}.
+@code{AC_SYS_YEAR2038} or @code{AC_SYS_YEAR2038_RECOMMENDED}
+instead of @code{AC_SYS_LARGEFILE}.
 In other words, older packages that have long used @code{AC_SYS_LARGEFILE}
 can have year-2038 support on 32-bit GNU/Linux x86 and ARM systems either by
 regenerating @file{configure} with current Autoconf and configuring with
-@option{--enable-year2038}, or by using @code{AC_SYS_YEAR2038} and
-configuring without @option{--disable-year2038}.
+@option{--enable-year2038}, or by using @code{AC_SYS_YEAR2038} or
+@code{AC_SYS_YEAR2038_RECOMMENDED} and configuring without
+@option{--disable-year2038}.
 A future version of Autoconf might change the @code{AC_SYS_LARGEFILE}
 default to @code{--enable-year2038}; if and when that happens,
 @code{AC_SYS_LARGEFILE} and @code{AC_SYS_YEAR2038} will become equivalent.
@@ -8886,19 +8888,6 @@ library, enabling or disabling the application's large-file support may
 break binary compatibility with that library.
 @end defmac
 
-@defmac AC_SYS_LARGEFILE_REQUIRED
-@acindex{SYS_LARGEFILE_REQUIRED}
-This macro has the same effect as @code{AC_SYS_LARGEFILE},
-but also declares that the program being configured
-requires support for large files.
-If a large @code{off_t} is unavailable,
-@command{configure} will error out.
-The @option{--disable-largefile} option will not be available.
-
-Large-file and year-2038 support for applications and libraries should
-be configured compatibly.  @xref{AC_SYS_LARGEFILE}.
-@end defmac
-
 @anchor{AC_SYS_LONG_FILE_NAMES}
 @defmac AC_SYS_LONG_FILE_NAMES
 @acindex{SYS_LONG_FILE_NAMES}
@@ -8927,14 +8916,13 @@ applications and libraries should be configured compatibly.
 @xref{AC_SYS_LARGEFILE}.
 @end defmac
 
-@defmac AC_SYS_YEAR2038_REQUIRED
-@acindex{SYS_YEAR2038_REQUIRED}
+@defmac AC_SYS_YEAR2038_RECOMMENDED
+@acindex{SYS_YEAR2038_RECOMMENDED}
 This macro has the same effect as @code{AC_SYS_YEAR2038},
 but also declares that the program being configured
-requires support for timestamps after mid-January of 2038.
-If a large @code{time_t} is unavailable,
-@command{configure} will unconditionally error out.
-The @option{--disable-year2038} option will not be available.
+should support timestamps after mid-January 2038.
+If a large @code{time_t} is unavailable, @command{configure} will error
+out unless the @option{--disable-year2038} option is specified.
 
 Year-2038 support for applications and libraries should be configured
 compatibly.  @xref{AC_SYS_YEAR2038}.

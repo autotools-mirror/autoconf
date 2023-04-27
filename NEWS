@@ -51,7 +51,7 @@ GNU Autoconf NEWS - User visible changes.
 
 ** New features
 
-*** New macro AC_SYS_YEAR2038.
+*** New macros AC_SYS_YEAR2038 and AC_SYS_YEAR2038_RECOMMENDED.
   This causes 'configure' to widen time_t if possible on systems where
   time_t by default cannot represent file and other timestamps after
   January 2038.  Widening is possible only on 32-bit GNU/Linux x86 and
@@ -67,18 +67,14 @@ GNU Autoconf NEWS - User visible changes.
   This is similar to longstanding consistency requirements with
   --enable-largefile and --disable-largefile.
 
+  AC_SYS_YEAR2038_RECOMMENDED acts like AC_SYS_YEAR2038 except that
+  'configure' fails if the target lacks support for post-2038
+  timestamps and --disable-year2038 is not given.
+
 *** AC_SYS_LARGEFILE now optionally arranges to widen time_t.
   It now acts like AC_SYS_YEAR2038, except 'configure' defaults to
-  --disable-year2038 unless AC_SYS_YEAR2038 is also present.
-  As with AC_SYS_YEAR2038, application and library builders should
-  configure consistently.
-
-*** New macros AC_SYS_LARGEFILE_REQUIRED and AC_SYS_YEAR2038_REQUIRED.
-  These act like AC_SYS_LARGEFILE and AC_SYS_YEAR2038 respectively,
-  except that 'configure' fails if the target lacks support
-  for large files and for post-2038 timestamps, respectively.
-  As with AC_SYS_YEAR2038, application and library builders should
-  configure consistently.
+  --disable-year2038 unless either AC_SYS_YEAR2038 or
+  AC_SYS_YEAR2038_RECOMMENDED is also present.
 
 *** AC_USE_SYSTEM_EXTENSIONS now enables C23 Annex F extensions
   by defining __STDC_WANT_IEC_60559_EXT__.
