@@ -1283,7 +1283,6 @@ AU_ALIAS([AM_FUNC_MKTIME], [AC_FUNC_MKTIME])
 AN_FUNCTION([mmap], [AC_FUNC_MMAP])
 AC_DEFUN([AC_FUNC_MMAP],
 [AC_REQUIRE([AC_CANONICAL_HOST])dnl for cross-compiles
-dnl FIXME: Remove the unnecessary checks for unistd.h, sys/param.h, getpagesize.
 AC_CHECK_HEADERS_ONCE([unistd.h sys/param.h])
 AC_CHECK_FUNCS_ONCE([getpagesize])
 AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
@@ -1311,17 +1310,49 @@ AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
 #include <fcntl.h>
 #include <sys/mman.h>
 
+#ifndef getpagesize
+# ifdef _SC_PAGESIZE
+#  define getpagesize() sysconf (_SC_PAGESIZE)
+# elif defined _SC_PAGE_SIZE
+#  define getpagesize() sysconf (_SC_PAGE_SIZE)
+# elif HAVE_GETPAGESIZE
+int getpagesize ();
+# else
+#  ifdef HAVE_SYS_PARAM_H
+#   include <sys/param.h>
+#   ifdef EXEC_PAGESIZE
+#    define getpagesize() EXEC_PAGESIZE
+#   else /* no EXEC_PAGESIZE */
+#    ifdef NBPG
+#     define getpagesize() NBPG * CLSIZE
+#     ifndef CLSIZE
+#      define CLSIZE 1
+#     endif /* no CLSIZE */
+#    else /* no NBPG */
+#     ifdef NBPC
+#      define getpagesize() NBPC
+#     else /* no NBPC */
+#      ifdef PAGESIZE
+#       define getpagesize() PAGESIZE
+#      endif /* PAGESIZE */
+#     endif /* no NBPC */
+#    endif /* no NBPG */
+#   endif /* no EXEC_PAGESIZE */
+#  else /* no HAVE_SYS_PARAM_H */
+#   define getpagesize() 8192	/* punt totally */
+#  endif /* no HAVE_SYS_PARAM_H */
+# endif
+#endif
+
 int
 main (void)
 {
   char *data, *data2, *data3;
   const char *cdata2;
-  int i, pagesize;
+  long i, pagesize;
   int fd, fd2;
 
-  /* The "page size" need not equal the system page size,
-     and need not even be a power of 2.  */
-  pagesize = 8192;
+  pagesize = getpagesize ();
 
   /* First, make a file with some known garbage in it. */
   data = (char *) malloc (pagesize);
