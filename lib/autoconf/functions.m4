@@ -1311,6 +1311,8 @@ AC_CACHE_CHECK([for working mmap], [ac_cv_func_mmap_fixed_mapped],
 #include <sys/mman.h>
 
 #ifndef getpagesize
+/* Prefer sysconf to the legacy getpagesize function, as getpagesize has
+   been removed from POSIX and is limited to page sizes that fit in 'int'.  */
 # ifdef _SC_PAGESIZE
 #  define getpagesize() sysconf (_SC_PAGESIZE)
 # elif defined _SC_PAGE_SIZE
