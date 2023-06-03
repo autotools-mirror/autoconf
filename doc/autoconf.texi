@@ -11917,16 +11917,32 @@ This macro kept its original name: no @code{m4_dnl} is defined.
 
 @defmac m4_bpatsubst (@var{string}, @var{regexp}, @ovar{replacement})
 @msindex{bpatsubst}
-This macro corresponds to @code{patsubst}.  The name @code{m4_patsubst}
-is kept for future versions of M4sugar, once GNU M4 2.0 is
-released and supports extended regular expression syntax.
+@anchor{m4_bpatsubst}
+This is the M4sugar name for the M4 native macro @code{patsubst}.
+
+It uses the same regular expression syntax as @code{m4_bregexp}; see
+@ref{m4_bregexp}.  Also see @ref{Patsubst,,Substituting text by regular
+expression,m4,GNU m4 macro processor}, for details of how the
+@var{replacement} is processed.
+
+The name @code{m4_patsubst} is reserved for use by a future version of
+M4sugar, when there is a version of GNU M4 that supports POSIX extended
+regular expression syntax.
 @end defmac
 
 @defmac m4_bregexp (@var{string}, @var{regexp}, @ovar{replacement})
 @msindex{bregexp}
-This macro corresponds to @code{regexp}.  The name @code{m4_regexp}
-is kept for future versions of M4sugar, once GNU M4 2.0 is
-released and supports extended regular expression syntax.
+@anchor{m4_bregexp}
+This is the M4sugar name for the M4 native macro @code{regexp}.
+
+The only regular expression syntax understood by GNU M4 is similar to,
+but not the same as, POSIX basic regular expression syntax.
+@xref{Regexp,,Searching for regular expressions,m4,GNU m4 macro
+processor}, for the precise syntax.
+
+The name @code{m4_regexp} is reserved for use by a future version of
+M4sugar, when there is a version of GNU M4 that supports POSIX extended
+regular expression syntax.
 @end defmac
 
 @defmac m4_copy (@var{source}, @var{dest})
@@ -12393,6 +12409,12 @@ The string @var{string} is repeatedly compared against a series of
 corresponding @var{value}, otherwise, the macro moves on to the next
 @var{regex}.  If no @var{regex} match, then the result is the optional
 @var{default}, or nothing.
+
+The regular expression syntax understood by @code{m4_bmatch} is the same as
+that understood by @code{m4_bregexp}; see @ref{m4_bregexp}.  The name
+@code{m4_match} is reserved for use by a future version of M4sugar, when
+there is a version of GNU M4 that supports POSIX extended
+regular expression syntax.
 @end defmac
 
 @defmac m4_bpatsubsts (@var{string}, @var{regex-1}, @var{subst-1}, @
@@ -12414,6 +12436,12 @@ However, it means that anchors (@samp{^} and @samp{$} in the @var{regex}
 will line up with the extra quotations, and not the characters of the
 original string.  The overquoting is removed after the final
 substitution.
+
+The regular expression and replacement syntax understood by
+@code{m4_bpatsubsts} is the same as that understood by @code{m4_bpatsubst};
+see @ref{m4_bpatsubst}.  The name @code{m4_patsubsts} is reserved for use by
+future version of M4sugar, when there is a version of GNU M4 that
+supports POSIX extended regular expression syntax.
 @end defmac
 
 @defmac m4_case (@var{string}, @var{value-1}, @var{if-value-1}, @
@@ -21903,10 +21931,9 @@ potential portability problem, e.g., by allocating an extra unused array
 element at the start or end.
 
 @uref{https://@/www.valgrind.org/, Valgrind} can catch many overruns.
-GCC users might also consider using the @option{-fsanitize=} options
-to catch overruns.
-@xref{Instrumentation Options, , Program Instrumentation Options,
-      gcc, Using the GNU Compiler Collection (GCC)}.
+GCC users might also consider using the @option{-fsanitize=} options to
+catch overruns.  @xref{Instrumentation Options,,Program Instrumentation
+Options,gcc,Using the GNU Compiler Collection (GCC)}.
 
 Buffer overruns are usually caused by off-by-one errors, but there are
 more subtle ways to get them.
