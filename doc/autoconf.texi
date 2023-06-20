@@ -604,7 +604,6 @@ Running @command{configure} Scripts
 * Multiple Architectures::      Compiling for multiple architectures at once
 * Installation Names::          Installing in different directories
 * Optional Features::           Selecting optional features
-* Particular Systems::          Particular systems
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @command{configure}
 * Defining Variables::          Specifying the compiler etc.
@@ -23304,7 +23303,6 @@ may use comes with Autoconf.
 * Multiple Architectures::      Compiling for multiple architectures at once
 * Installation Names::          Installing in different directories
 * Optional Features::           Selecting optional features
-* Particular Systems::          Particular systems
 * System Type::                 Specifying the system type
 * Sharing Defaults::            Setting site-wide defaults for @command{configure}
 * Defining Variables::          Specifying the compiler etc.
@@ -26990,8 +26988,7 @@ for simple differences.
 @item
 Most tests which produce their result in a substituted variable allow to
 override the test by setting the variable on the @command{configure}
-command line (@pxref{Compilers and Options}, @pxref{Defining Variables},
-@pxref{Particular Systems}).
+command line (@pxref{Compilers and Options}, @pxref{Defining Variables}).
 
 @item
 Many tests store their result in a cache variable (@pxref{Caching

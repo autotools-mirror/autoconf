@@ -385,7 +385,7 @@ for more details, including other options available for fine-tuning
 the installation locations.
 
 @item --build=@var{type}
-Build for architecture @var{type}.  @ref{Specifying the System Type}
+Build for architecture @var{type}.  @ref{System Type}.
 for more details, including other system type options.
 
 @item --enable-@var{feature}
