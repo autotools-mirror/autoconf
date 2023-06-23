@@ -604,7 +604,7 @@ Running @command{configure} Scripts
 * Multiple Architectures::      Compiling for multiple architectures at once
 * Installation Names::          Installing in different directories
 * Optional Features::           Selecting optional features
-* System Type::                 Specifying the system type
+* System Types::                Specifying a system type
 * Sharing Defaults::            Setting site-wide defaults for @command{configure}
 * Defining Variables::          Specifying the compiler etc.
 * configure Invocation::        Changing how @command{configure} runs
@@ -22383,7 +22383,7 @@ system it's running on.  To do so it runs a script called
 command or symbols predefined by the C preprocessor.
 
 Alternately, the user can specify the system type with command line
-arguments to @command{configure} (@pxref{System Type}.  Doing so is
+arguments to @command{configure} (@pxref{System Types}.  Doing so is
 necessary when
 cross-compiling.  In the most complex case of cross-compiling, three
 system types are involved.  The options to specify them are:
@@ -23303,7 +23303,7 @@ may use comes with Autoconf.
 * Multiple Architectures::      Compiling for multiple architectures at once
 * Installation Names::          Installing in different directories
 * Optional Features::           Selecting optional features
-* System Type::                 Specifying the system type
+* System Types::                Specifying a system type
 * Sharing Defaults::            Setting site-wide defaults for @command{configure}
 * Defining Variables::          Specifying the compiler etc.
 * configure Invocation::        Changing how @command{configure} runs

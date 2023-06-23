@@ -157,8 +157,16 @@ Here is an example:
 ./configure CC=gcc CFLAGS=-g LIBS=-lposix
 @end example
 
-@xref{Defining Variables}, for more details.
-
+See
+@ref{Defining Variables} and
+@ifset autoconf
+@ref{Preset Output Variables}
+@end ifset
+@ifclear autoconf
+@ref{Preset Output Variables,,, autoconf, Autoconf}
+@c (@url{https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.71/html_node/Preset-Output-Variables.html})
+@end ifclear
+for more details.
 
 @node Multiple Architectures
 @section Compiling For Multiple Architectures
@@ -263,18 +271,17 @@ output, which can be overridden with @code{make V=1}; while running
 @samp{./configure --disable-silent-rules} sets the default to verbose,
 which can be overridden with @code{make V=0}.
 
-@node System Type
-@section Specifying the System Type
+@node System Types
+@section Specifying a System Type
 
-There may be some features @command{configure} cannot figure out
-automatically, but needs to determine by the type of machine the package
-will run on.  Usually, assuming the package is built to be run on the
-@emph{same} architectures, @command{configure} can figure that out, but
-if it prints a message saying it cannot guess the machine type, give it
-the @option{--build=@var{type}} option.  @var{type} can either be a
-short name like @samp{mingw64} for the system type, or a canonical name
-like @samp{x86_64-pc-linux-gnu}
-which has the form:
+The following sections go into details regarding situations where you
+may have to specify a system type, either through the option
+@option{--host=@var{type}}, or through the option
+@option{--build=@var{type}}, or -- in the case of compilers -- through
+@option{--target=@var{type}}.
+
+A system type @var{type} can either be a short name like @samp{mingw64},
+or a canonical name like @samp{x86_64-pc-linux-gnu} which has the form:
 
 @example
 @var{cpu}-@var{company}-@var{system}
@@ -291,16 +298,93 @@ where @var{system} can have one of these forms:
 @noindent
 See the file @file{config.sub} for the possible values of each field.
 If @file{config.sub} isn't included in this package, then this package
-doesn't need to know the machine type.
+doesn't need to know any machine type.
 
-If you are @emph{building} compiler tools for cross-compiling, you
-should use the option @option{--target=@var{type}} to select the type of
-system they will produce code for.
+The file @file{config.sub} is a program that validates and canonicalizes
+a system type.
+It can do canonicalization, as in
 
-If you want to @emph{use} a cross compiler, that generates code for a
-platform different from the build platform, you should specify the
-@dfn{host} platform (i.e., that on which the generated programs will
-eventually be run) with @option{--host=@var{type}}.
+@example
+$ sh config.sub x86_64-linux
+x86_64-pc-linux-gnu
+$ sh config.sub arm64-linux
+aarch64-unknown-linux-gnu
+@end example
+
+@noindent
+It also validates the parts.  For example, this interaction tells you
+that ``crusoe'' is not a valid cpu architecture name:
+
+@example
+$ sh config.sub crusoe-linux
+Invalid configuration `crusoe-linux': machine `crusoe-unknown' not recognized
+@end example
+
+@node Building for a different system type
+@section Creating binaries for a different system type
+
+When you want to create binaries that will run on a different machine
+type than the one you are building on, you need to specify both
+@itemize @bullet
+@item
+a @option{--host=@var{type}} option, specifying the machine type on
+which the binaries shall run,
+@item
+compiler variables (@code{CC} for the C compiler, @code{CXX} for the C++
+compiler, and so on), pointing to compilers that generate object code
+for that machine type.
+@end itemize
+
+For example, to create binaries intended to run on a 64-bit ARM
+processor:
+@example
+./configure --host=aarch64-linux-gnu \
+            CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++
+@end example
+
+If you do this on a machine that can execute such binaries (e.g.@: by
+virtue of the @code{qemu-aarch64} program, system libraries for that
+architecture under @code{$QEMU_LD_PREFIX}, and a Linux
+@code{binfmt_misc} configuration), the build behaves like a native
+build.
+If not, the build is a cross-build, in the sense that @code{configure}
+will make cross-compilation guesses instead of running test programs,
+and ``make check'' will not work.
+
+@node Troubleshooting the Build Type
+@section Fixing a ``cannot guess build type'' error
+
+In rare cases, it may happen that @code{configure} fails with the error
+message ``cannot guess build type''.
+This error means that the files @file{config.guess} and
+@file{config.sub} don't recognize the type of the system on which you
+are building.
+In this case, first fetch the newest versions of these files, from
+@url{https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess}
+and
+@url{https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub},
+respectively, and use these as drop-in replacement for the files
+@file{config.guess} and @file{config.sub} that were shipped with this
+package.
+
+If this resolves the problem, feel free to report the solution to the
+maintainers of this package.
+
+Otherwise, it means that your system is not yet supported by
+@file{config.guess} and @file{config.sub}.
+As a workaround, you can use a configure option
+@option{--build=@var{type}}, where @var{type} comes closest to your
+system type.
+Also, you're welcome to file a report to
+@email{config-patches@@gnu.org}.
+
+@node Configuring a Compiler
+@section Configuration options specific to a compiler
+
+If you are building a compiler, and this compiler should generate code
+for a system type that is different from the one on which the compiler
+binaries shall run on, use the option @option{--target=@var{type}} to
+select the type of system for which the compiler should produce code.
 
 @node Sharing Defaults
 @section Sharing Defaults
@@ -384,9 +468,9 @@ Use @var{dir} as the installation prefix.  @ref{Installation Names}
 for more details, including other options available for fine-tuning
 the installation locations.
 
-@item --build=@var{type}
-Build for architecture @var{type}.  @ref{System Type}.
-for more details, including other system type options.
+@item --host=@var{type}
+Build binaries for architecture @var{type}.  @ref{System Types} and
+@ref{Building for a different system type} for more details.
 
 @item --enable-@var{feature}
 @itemx --disable-@var{feature}
