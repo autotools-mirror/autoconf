@@ -114,6 +114,8 @@ $2
 m4_define([_AC_LANG_IO_PROGRAM(C)],
 [AC_LANG_PROGRAM([@%:@include <stdio.h>],
 [FILE *f = fopen ("conftest.out", "w");
+ if (!f)
+  return 1;
  return ferror (f) || fclose (f) != 0;
 ])])
 
