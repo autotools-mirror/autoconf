@@ -304,7 +304,7 @@ AC_DEFUN([_AC_SYS_LARGEFILE_PROBE],
     AC_REQUIRE([AC_CANONICAL_HOST])
     if test $ac_opt_found != yes; then
       AS_CASE([$host_os],
-        [mingw*],
+        [mingw* | windows*],
           [ac_cv_sys_largefile_opts="supported through gnulib"
            ac_opt_found=yes]
       )
