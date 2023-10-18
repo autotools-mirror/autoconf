@@ -41,12 +41,12 @@ AC_PATH_PROGS_FEATURE_CHECK([M4], [m4 gm4 gnum4],
       ac_snip2=change'quote(<,>)def''ine(<T>,<>)d'nl
       ac_snip2=${ac_snip2}${as_nl}def'ine(<F>,<T(<traced>)>)d'nl
       ac_snip2=${ac_snip2}${as_nl}m4'wrap(<F>)d'nl
-      AS_ECHO("$as_me:${as_lineno-$LINENO}: trying $ac_path_M4") \
+      AS_ECHO(["$as_me:${as_lineno-$LINENO}: trying $ac_path_M4"]) \
           >&AS_MESSAGE_LOG_FD
       test -z "`$ac_path_M4 -F conftest.m4f </dev/null 2>&1`" \
-      && test -z "`AS_ECHO([$ac_snippet]) | $ac_path_M4 --trace=mac 2>&1`" \
+      && test -z "`AS_ECHO(["$ac_snippet"]) | $ac_path_M4 --trace=mac 2>&1`" \
       && test -f conftest.m4f \
-      && test x"`AS_ECHO([$ac_snip2]) | \
+      && test x"`AS_ECHO(["$ac_snip2"]) | \
                 $ac_path_M4 --trace=T --debug=aflq 2>&1`" = \
               x'm4trace:stdin:3: -1- T(<traced>)' \
       && ac_cv_path_M4=$ac_path_M4 ac_path_M4_found=:
