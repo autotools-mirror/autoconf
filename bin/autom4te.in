@@ -222,6 +222,52 @@ Written by Akim Demaille.
 ## Routines.  ##
 ## ---------- ##
 
+# tempfile_with_mode ($dir, $mode)
+# --------------------------------
+# Create a temporary file in $dir with access control bits $mode.
+# Returns a list ($fh, $fname) where $fh is a filehandle open for
+# writing to the file, and $fname is the name of the file.
+sub tempfile_with_mode ($$)
+{
+  my ($dir, $mode) = @_;
+
+  require File::Temp;
+  my $template = "actmp." . File::Temp::TEMPXXX;
+
+  # The PERMS argument was added to File::Temp::tempfile in version
+  # 0.2310 of the File::Temp module; it will be silently ignored if
+  # passed to an older version of the function.  This is the simplest
+  # way to do a non-fatal version check without features of Perl 5.10.
+  local $@;
+  if (eval { File::Temp->VERSION("0.2310"); 1 })
+    {
+      # Can use PERMS argument to tempfile().
+      return File::Temp::tempfile ($template, DIR => $dir, PERMS => $mode,
+                                   UNLINK => 0);
+    }
+  else
+    {
+      # PERMS is not available.
+      # This is functionally equivalent to what it would do.
+      require Fcntl;
+      my $openflags = Fcntl::O_RDWR | Fcntl::O_CREAT | Fcntl::O_EXCL;
+
+      require File::Spec;
+      $template = File::Spec->catfile($dir, $template);
+
+      # 50 = $MAX_GUESS in File::Temp (not an exported constant).
+      for (my $i = 0; $i < 50; $i++)
+        {
+          my $filename = File::Temp::mktemp($template);
+          my $fh;
+          my $success = sysopen ($fh, $filename, $openflags, $mode);
+          return ($fh, $filename) if $success;
+          fatal "Could not create temp file $filename: $!"
+            unless $!{EEXIST};
+        }
+      fatal "Could not create any temp file from $template: $!";
+    }
+}
 
 # $OPTION
 # files_to_options (@FILE)
@@ -563,15 +609,7 @@ sub handle_output ($$)
   else
     {
       my (undef, $outdir, undef) = fileparse ($output);
-
-      use File::Temp qw (tempfile);
-      ($out, $scratchfile) = tempfile (UNLINK => 0, DIR => $outdir);
-      fatal "cannot create a file in $outdir: $!"
-        unless $out;
-
-      # File::Temp doesn't give us access to 3-arg open(2), unfortunately.
-      chmod (oct ($mode) & ~(umask), $scratchfile)
-        or fatal "setting mode of " . $scratchfile . ": $!";
+      ($out, $scratchfile) = tempfile_with_mode ($outdir, oct($mode));
     }
 
   my $in = new Autom4te::XFile ($ocache . $req->id, "<");
