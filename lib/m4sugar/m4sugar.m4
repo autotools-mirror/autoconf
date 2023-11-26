@@ -3257,30 +3257,8 @@ m4_define([_m4_set_union],
 [m4_ifdef([_m4_set([$1],$2)], [], [,[$2]])])
 
 
-## ------------------- ##
-## 16. File handling.  ##
-## ------------------- ##
-
-
-# It is a real pity that M4 comes with no macros to bind a diversion
-# to a file.  So we have to deal without, which makes us a lot more
-# fragile than we should.
-
-
-# m4_file_append(FILE-NAME, CONTENT)
-# ----------------------------------
-m4_define([m4_file_append],
-[m4_syscmd([cat >>$1 <<_m4eof
-$2
-_m4eof
-])
-m4_if(m4_sysval, [0], [],
-      [m4_fatal([$0: cannot write: $1])])])
-
-
-
 ## ------------------------ ##
-## 17. Setting M4sugar up.  ##
+## 16. Setting up M4sugar.  ##
 ## ------------------------ ##
 
 # _m4_divert_diversion should be defined.
