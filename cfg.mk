@@ -84,7 +84,7 @@ update-release-year:
 .PHONY: update-release-year
 
 # Prevent incorrect NEWS edits.
-old_NEWS_hash = 18aef204e16f6fe9487ab79ca2556ab4
+old_NEWS_hash = 81984f33d5e88cf9bfc962b22a2156f4
 
 # Update autoconf-latest.tar.* symlinks during 'make stable/beta'.
 GNUPLOADFLAGS = --symlink-regex
