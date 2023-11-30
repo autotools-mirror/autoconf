@@ -1,28 +1,38 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Noteworthy changes in release ?.? (????-??-??) [?]
+* Noteworthy changes in release 2.72d (2023-11-30) [beta]
 
 ** Backward incompatibilities
 
-*** AC_CHECK_FUNC and similar macros now use function prototypes.
-  This should work better with C23, which removed the non-prototyped K&R
-  style that AC_CHECK_FUNC previously used.  However, this change
-  means Autoconf no longer supports pre-1989 C compilers, as they do
-  not support function prototypes.
+*** Configure scripts no longer support pre-1989 C compilers.
+  Specifically, compilers that *only* implement the original “K&R”
+  function definition syntax, and not the newer “prototyped” syntax,
+  will not be able to parse the test programs now emitted by
+  AC_CHECK_FUNC, AC_LANG_CALL, and similar macros.  AC_PROG_CC still
+  accepts such compilers, but this may change in the near future.
+
+  This change was necessary in order to support the upcoming 2024
+  edition of the C standard (often referred to as “C23”), which will
+  officially remove the function declaration syntax used by
+  AC_CHECK_FUNC in Autoconf 2.71 and earlier.  We feel that support
+  for compilers that support only C 2024 is more useful, nowadays,
+  than support for compilers that don’t implement a core feature of
+  C 1989.
 
 *** Autoconf developers now need Perl 5.10 (2007) or later.
+  “Autoconf developers” means specifically people hacking on Autoconf
+  itself.  Autoconf *users*, i.e. authors of configure.ac files and
+  add-on M4 macros, still need only Perl 5.6 (2000) or later.
+
+  We do recommend all Autoconf users upgrade to Perl 5.10 or later if
+  possible, as this version significantly improves Perl’s ability to
+  handle files with last-modification timestamps separated by less
+  than a second.  (Note: even in the most recent release, Perl cannot
+  always match the file system’s timestamp resolution.)
+
   Generated 'configure' scripts continue to run without Perl.
 
-  Although Autoconf users still need only Perl 5.6 (2000) or later,
-  Perl 5.10 or later is recommended for users too, as it avoids some
-  trouble with files that have timestamps separated by less than 1 s.
-  Due to limitations in Perl's API this trouble is not entirely fixed
-  even with Perl 5.36, which cannot represent timestamps separated by
-  238 ns or less, for circa 2023 timestamps on typical platforms.
-
-*** Autoconf now requires GNU M4 1.4.8 (2006) or later.
-  Generated 'configure' scripts continue to run without M4.
-
+*** Autoconf users now need GNU M4 1.4.8 (2006) or later.
   Use of GNU M4 1.4.16 or later is recommended, as all earlier versions
   are known to have had serious bugs in the text-processing builtins
   on some, but not all, operating systems.  Autoconf’s own configure
@@ -34,9 +44,12 @@ GNU Autoconf NEWS - User visible changes.
   that you will get a confusing error message if you run autoconf on
   a configure.ac that neglects to use AC_INIT or AC_OUTPUT.
 
-*** m4sh diversions like BINSH have been renumbered.
-  This matters only for uses that, contrary to the documentation
-  and despite warnings, use m4_divert with numbered diversions.
+  Generated 'configure' scripts continue to run without M4.
+
+*** Some m4sh diversions have been renumbered.
+  This will only affect macros that use m4_divert with numbered rather
+  than named diversions, which has always been strongly discouraged
+  both by the documentation and with warnings.
 
 *** AC_FUNC_GETGROUPS and AC_TYPE_GETGROUPS no longer run test programs.
   These macros were testing for OS bugs that we believe are at least
@@ -49,32 +62,67 @@ GNU Autoconf NEWS - User visible changes.
   config.site.  If you encounter a mistake in this blacklist
   please report it to bug-autoconf.
 
+*** All internal uses of AC_EGREP_CPP and AC_EGREP_HEADER have been removed.
+  These macros look for text matching a regular expression in the
+  output of the C preprocessor.  Their use has been discouraged for
+  many years, as they tend to be unreliable; it is better to find a
+  way to use AC_COMPILE_IFELSE or AC_PREPROC_IFELSE instead.  We have
+  finally gotten around to taking our own advice.
+
+  This change might break configure scripts that expected probes for
+  ‘grep’ and/or the C preprocessor to happen as a side effect of an
+  unrelated operation.  Such scripts can be fixed by adding
+  AC_PROG_EGREP and/or AC_PROG_CPP in an appropriate place.
+
+  The macros affected by this change are AC_C_STRINGIZE,
+  AC_C_VARARRAYS, AC_FUNC_GETGROUPS, AC_FUNC_GETLOADAVG,
+  AC_HEADER_TIOCGWINSZ, AC_PROG_GCC_TRADITIONAL, AC_TYPE_GETGROUPS,
+  AC_TYPE_UID_T, and AC_XENIX_DIR. Many of these macros are themselves
+  obsolete; if your configure script uses any of them, check whether
+  it is actually needed.
+
 ** New features
 
-*** New macros AC_SYS_YEAR2038 and AC_SYS_YEAR2038_RECOMMENDED.
-  This causes 'configure' to widen time_t if possible on systems where
-  time_t by default cannot represent file and other timestamps after
-  January 2038.  Widening is possible only on 32-bit GNU/Linux x86 and
-  ARM systems with glibc 2.34 or later.  To prevent widening,
-  configure with --disable-year2038.
+*** Support for ensuring time_t is Y2038-safe
+  'configure' can now ensure that time_t can represent moments in time
+  after 18 January 2038, i.e. 2**31 - 1 seconds after the Unix epoch.
+  On most “64-bit” systems this is true by default; the new feature
+  is detection of systems where time_t is a 32-bit signed integer by
+  default, *and* there is an alternative mode in which it is larger,
+  in which case that mode will be enabled.
 
-  This macro also has the effects as AC_SYS_LARGEFILE, because in
-  practice time_t cannot be widened without large-file sypport.
+  In this release, all configure scripts that use AC_SYS_LARGEFILE
+  gain a new command line option --enable-year2038.  When this option
+  is used, the configure script will check for and enable support for
+  a large time_t.
 
-  Application and library builders should take care that packages
-  configured with --enable-year2038 and --disable-year2038 options
-  are configured consistently, to avoid breaking binary compatibility.
-  This is similar to longstanding consistency requirements with
-  --enable-largefile and --disable-largefile.
+  This release also adds two new macros, AC_SYS_YEAR2038 and
+  AC_SYS_YEAR2038_RECOMMENDED.  Both have all the effects of
+  AC_SYS_LARGEFILE.  (This is because it is not possible to enlarge
+  time_t without also enlarging off_t, on any system we are aware of.)
 
-  AC_SYS_YEAR2038_RECOMMENDED acts like AC_SYS_YEAR2038 except that
-  'configure' fails if the target lacks support for post-2038
-  timestamps and --disable-year2038 is not given.
+  AC_SYS_YEAR2038 additionally flips the default for --enable-year2038;
+  a configure script that uses this macro will check for and enable
+  support for a large time_t by default, but this can be turned off by
+  using --disable-year2038.  AC_SYS_YEAR2038_RECOMMENDED goes even
+  further, and makes the configure script fail on systems that do not
+  seem to support timestamps after 18 January 2038 at all.  This
+  failure can be suppressed by using --disable-year2038.
 
-*** AC_SYS_LARGEFILE now optionally arranges to widen time_t.
-  It now acts like AC_SYS_YEAR2038, except 'configure' defaults to
-  --disable-year2038 unless either AC_SYS_YEAR2038 or
-  AC_SYS_YEAR2038_RECOMMENDED is also present.
+  Changing the size of time_t can change a library’s ABI.  Therefore,
+  application and library builders should take care that all packages
+  are configured with consistent use of --enable-year2038 or
+  --disable-year2038, to ensure binary compatibility.  This is similar
+  to longstanding consistency requirements with --enable-largefile and
+  --disable-largefile.
+
+  In this release, these macros only know how to enlarge time_t on two
+  classes of systems: 32-bit MinGW, and any system where time_t can be
+  enlarged by defining the preprocessor macro _TIME_BITS with the
+  value 64.  At the time this NEWS entry was written, only GNU libc
+  (version 2.34 and later) supported the latter macro.  Authors of
+  other C libraries with a 32-bit time_t are encouraged to adopt
+  _TIME_BITS, rather than inventing a different way to enlarge time_t.
 
 *** AC_USE_SYSTEM_EXTENSIONS now enables C23 Annex F extensions
   by defining __STDC_WANT_IEC_60559_EXT__.
@@ -123,6 +171,9 @@ GNU Autoconf NEWS - User visible changes.
   platform AC_PROG_MKDIR_P falls back on /opt/sfw/bin/mkdir which
   should work if it is installed; if not, you should avoid parallel
   'make' on that platform.
+
+* Releases 2.72a,b,c were snapshots that did not get their own
+  NEWS entries.
 
 * Noteworthy changes in release 2.71 (2021-01-28) [stable]
 
