@@ -180,7 +180,7 @@ no-vc-detected:
 endif
 .PHONY: $(local-checks-available)
 
-# Arrange to print the name of each syntax-checking rule just before running it.
+# Arrange to prine the name of each syntax-checking rule just before running it.
 $(syntax-check-rules): %: %.m
 sc_m_rules_ = $(patsubst %, %.m, $(syntax-check-rules))
 .PHONY: $(sc_m_rules_)
@@ -598,23 +598,14 @@ sc_prohibit_error_without_use:
 	re='\<error(_at_line|_print_progname|_one_per_line|_message_count)? *\('\
 	  $(_sc_header_without_use)
 
-# Don't include xalloc.h unless you use one of its functions.
+# Don't include xalloc.h unless you use one of its symbols.
 # Consider these symbols:
 # perl -lne '/^# *define (\w+)\(/ and print $1' lib/xalloc.h|grep -v '^__';
-# perl -lne '/^(?:extern )?(?:void|char) \*?(\w+) *\(/ and print $1' lib/xalloc.h
+# perl -lne 'm{^(?:_Noreturn )?(?:void|char) \*?(\w+) *\(} and print $1' lib/xalloc.h
 # Divide into two sets on case, and filter each through this:
 # | sort | perl -MRegexp::Assemble -le \
 #  'print Regexp::Assemble->new(file => "/dev/stdin")->as_string'|sed 's/\?://g'
-# Note this was produced by the above:
-# _xa1 = \
-#x(((2n?)?re|c(har)?|n(re|m)|z)alloc|alloc_(oversized|die)|m(alloc|emdup)|strdup)
-# But we can do better, in at least two ways:
-# 1) take advantage of two "dup"-suffixed strings:
-# x(((2n?)?re|c(har)?|n(re|m)|[mz])alloc|alloc_(oversized|die)|(mem|str)dup)
-# 2) notice that "c(har)?|[mz]" is equivalent to the shorter and more readable
-# "char|[cmz]"
-# x(((2n?)?re|char|n(re|m)|[cmz])alloc|alloc_(oversized|die)|(mem|str)dup)
-_xa1 = x(((2n?)?re|char|n(re|m)|[cmz])alloc|alloc_(oversized|die)|(mem|str)dup)
+_xa1 = x(i(m(emdup0?|alloc)|realloc(array)?|([cz]|nm)alloc)|([pz]|c(har)?|2n?re|nm)alloc|realloc(array)?|m(alloc|emdup)|alloc_die|strdup)
 _xa2 = X([CZ]|N?M)ALLOC
 sc_prohibit_xalloc_without_use:
 	@h='xalloc.h' \
@@ -745,7 +736,8 @@ sc_prohibit_intprops_without_use:
 	re='\<($(_intprops_syms_re)) *\('				\
 	  $(_sc_header_without_use)
 
-_stddef_syms_re = NULL|offsetof|ptrdiff_t|size_t|wchar_t
+_stddef_syms_re = \
+  NULL|max_align_t|nullptr_t|offsetof|ptrdiff_t|size_t|unreachable|wchar_t
 # Prohibit the inclusion of stddef.h without an actual use.
 sc_prohibit_stddef_without_use:
 	@h='stddef.h'							\
@@ -1006,12 +998,12 @@ sc_prohibit_empty_lines_at_EOF:
 	       exit 1; }						\
 	  || :
 
-# Make sure we don't use st_blocks.  Use ST_NBLOCKS instead.
+# Make sure we don't use st_blocks.  Use ST_NBLOCKS or STP_NBLOCKS instead.
 # This is a bit of a kludge, since it prevents use of the string
 # even in comments, but for now it does the job with no false positives.
 sc_prohibit_stat_st_blocks:
 	@prohibit='[.>]st_blocks'					\
-	halt='do not use st_blocks; use ST_NBLOCKS'			\
+	halt='do not use st_blocks; use ST_NBLOCKS or STP_NBLOCKS'	\
 	  $(_sc_search_regexp)
 
 # Make sure we don't define any S_IS* macros in src/*.c files.
@@ -1375,6 +1367,22 @@ sc_vulnerable_makefile_CVE-2012-3386:
 
 sc_unportable_grep_q:
 	@prohibit='grep -q' halt="unportable 'grep -q', use >/dev/null instead" \
+	  $(_sc_search_regexp)
+
+# The GNU Coding standards say that README should refer to both
+# INSTALL and the file that contains the copying conditions.  This
+# shall be COPYING for GPL and COPYING.LESSER for LGPL.
+
+sc_readme_link_install:
+	@require='INSTALL'					\
+	in_vc_files='^README$$'					\
+	halt='The README file should refer to INSTALL'          \
+	  $(_sc_search_regexp)
+
+sc_readme_link_copying:
+	@require='COPYING'					\
+	in_vc_files='^README$$'					\
+	halt='The README file should refer to COPYING[.LESSER]' \
 	  $(_sc_search_regexp)
 
 vc-diff-check:
