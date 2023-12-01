@@ -948,11 +948,11 @@ sub up_to_date ($)
   return 0
     if ! -f $tfile || ! -f $ofile;
 
-  # The younger of the cache files must be older than the oldest of
-  # the dependencies.
+  # Both cache files must be younger than all dependencies,
+  # so use the minimum of the two cache files' timestamps.
   my $tmtime = mtime ($tfile);
   my $omtime = mtime ($ofile);
-  my ($file, $mtime) = ($tmtime < $omtime
+  my ($file, $mtime) = ($omtime < $tmtime
 			? ($ofile, $omtime) : ($tfile, $tmtime));
 
   # stdin is always out of date.
