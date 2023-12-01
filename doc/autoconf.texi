@@ -9031,7 +9031,7 @@ ISO/IEC TR 24732:2009 was superseded by ISO/IEC TS 18661-2:2015.
 
 @cvindex __STDC_WANT_LIB_EXT1__
 The C preprocessor macro @code{__STDC_WANT_LIB_EXT1__} is not defined,
-as C11 Annex K is problematic.  See: O'Donell C, Sebor M.
+as the C standard's Annex K is problematic.  See: O'Donell C, Sebor M.
 @uref{http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1967.htm, Field
 Experience With Annex K---Bounds Checking Interfaces}.
 
