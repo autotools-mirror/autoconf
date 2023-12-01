@@ -944,7 +944,7 @@ sub up_to_date ($)
 
   # We can't answer properly if the traces are not computed since we
   # need to know what other files were included.  Actually, if any of
-  # the cache files is missing, we are not up to date.
+  # the cache files are missing, we are not up to date.
   return 0
     if ! -f $tfile || ! -f $ofile;
 
@@ -1075,7 +1075,7 @@ $icache_file->lock (LOCK_EX)
   if ($flock_implemented eq "yes");
 
 # Read the cache index if available and younger than autom4te itself.
-# If autom4te is younger, then some structures such as C4che might
+# If the cache index is not younger, some structures such as C4che might
 # have changed, which would corrupt its processing.
 Autom4te::C4che->load ($icache_file)
   if (-f $icache && mtime ($icache) > mtime ($0)
