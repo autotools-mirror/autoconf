@@ -738,9 +738,9 @@ AC_DEFUN([AC_PROG_LEX],
   [0], [],
   [1], [],
   [m4_fatal([too many arguments to $0])])]dnl
-[_$0(m4_normalize([$1]))])
+[_AC_PROG_LEX_1(m4_normalize([$1]))])
 
-AC_DEFUN([_AC_PROG_LEX],
+AC_DEFUN([_AC_PROG_LEX_1],
 [m4_case([$1],
   [yywrap], [],
   [noyywrap], [],
@@ -761,24 +761,19 @@ dnl warn if they don't.
 [dnl
 dnl _AC_PROG_LEX_options not defined: first use
 m4_define([_AC_PROG_LEX_options], [$1])dnl
-AC_CHECK_PROGS(LEX, flex lex, :)
-  if test "x$LEX" != "x:"; then
-    _AC_PROG_LEX_YYTEXT_DECL([$1])
-fi])])
+_AC_PROG_LEX_2(_AC_PROG_LEX_LIBL_[]m4_toupper(m4_default([$1], [compat])))])])
 
+AC_DEFUN([_AC_PROG_LEX_2],
+[AC_CHECK_PROGS([LEX], [flex lex], [:])
+AS_IF([test "x$LEX" != "x:"], [_AC_PROG_LEX_OUTPUT_ROOT])
+AS_IF([test "x$LEX" != "x:"], [AS_VAR_SET_IF([LEXLIB], [], [$1])])
+AS_IF([test "x$LEX" != "x:"], [_AC_PROG_LEX_YYTEXT_DECL])
+rm -f conftest.l $LEX_OUTPUT_ROOT.c])
 
-# _AC_PROG_LEX_YYTEXT_DECL
-# ------------------------
-# Check for the Lex output root, the Lex library, and whether Lex
-# declares yytext as a char * by default.
-AC_DEFUN([_AC_PROG_LEX_YYTEXT_DECL],
-[cat >conftest.l <<_ACEOF[
-%{
-#ifdef __cplusplus
-extern "C"
-#endif
-int yywrap(void);
-%}
+AC_DEFUN([_AC_PROG_LEX_TEST_COMMON],
+[m4_divert_text([INIT_PREPARE],
+[[# Test code for probing (f)lex, base version.
+ac_prog_lex_conftest_l_common='
 %%
 a { ECHO; }
 b { REJECT; }
@@ -798,89 +793,159 @@ f { unput (yytext[0]); }
 extern char *yytext;
 #endif
 int
-yywrap (void)
-{
-  return 1;
-}
-int
 main (void)
 {
   return ! yylex ();
 }
-]_ACEOF
-AC_CACHE_CHECK([for lex output file root], [ac_cv_prog_lex_root], [
+'
+]])])
+
+AC_DEFUN([_AC_PROG_LEX_TEST_YYWRAP],
+[AC_REQUIRE([_AC_PROG_LEX_TEST_COMMON])]dnl
+[m4_divert_text([INIT_PREPARE],
+[[# Test code for lex (yywrap needed from -ll)
+ac_prog_lex_conftest_l_yywrap='
+%{
+#ifdef __cplusplus
+extern "C"
+#endif
+int yywrap(void);
+%}
+'"$ac_prog_lex_conftest_l_common"
+]])])
+
+AC_DEFUN([_AC_PROG_LEX_TEST_NOYYWRAP],
+[AC_REQUIRE([_AC_PROG_LEX_TEST_COMMON])]dnl
+[m4_divert_text([INIT_PREPARE],
+[[# Test code for lex (yywrap defined by .l file)
+ac_prog_lex_conftest_l_noyywrap="$ac_prog_lex_conftest_l_common"'
+int
+yywrap (void)
+{
+  return 1;
+}
+'
+]])])
+
+# _AC_PROG_LEX_OUTPUT_ROOT
+# ------------------------
+# Determine what the name of the Lex output file is.
+AC_DEFUN([_AC_PROG_LEX_OUTPUT_ROOT],
+[AC_REQUIRE([_AC_PROG_LEX_TEST_COMMON])]dnl
+[AC_CACHE_CHECK([for lex output file root], [ac_cv_prog_lex_root], [
 ac_cv_prog_lex_root=unknown
+cat >conftest.l <<_ACEOF
+$ac_prog_lex_conftest_l_common
+_ACEOF
 _AC_DO_VAR(LEX conftest.l) &&
 if test -f lex.yy.c; then
   ac_cv_prog_lex_root=lex.yy
 elif test -f lexyy.c; then
   ac_cv_prog_lex_root=lexyy
 fi])
-AS_IF([test "$ac_cv_prog_lex_root" = unknown],
+AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])]dnl
+[AS_IF([test "$ac_cv_prog_lex_root" = unknown],
   [AC_MSG_WARN([cannot find output from $LEX; giving up on $LEX])
-   LEX=: LEXLIB=])
-AC_SUBST([LEX_OUTPUT_ROOT], [$ac_cv_prog_lex_root])dnl
+   LEX=: LEXLIB=])])
 
-AS_VAR_SET_IF([LEXLIB], [], [
-  AC_CACHE_CHECK([for lex library], [ac_cv_lib_lex], [
+# _AC_PROG_LEX_SEARCH_LIBL(CACHE-VAR, LEX-INPUT-VAR, MESSAGE,
+#    ACTION-IF-NOT-FOUND)
+# -----------------------------------------------------------
+# Subroutine of _AC_PROG_LEX_LIBL_*, does the actual search for the library.
+m4_define([_AC_PROG_LEX_SEARCH_LIBL],
+[AC_CACHE_CHECK([for lex library ($3)], [$1], [
+  cat >conftest.l <<_ACEOF
+$[]$2
+_ACEOF
+  AS_IF([_AC_DO_VAR(LEX conftest.l)], [
     ac_save_LIBS="$LIBS"
     ac_found=false
-    for ac_cv_lib_lex in 'none needed' -lfl -ll 'not found'; do
-      AS_CASE([$ac_cv_lib_lex],
-        ['none needed'], [],
-        ['not found'],   [break],
-        [*],             [LIBS="$ac_cv_lib_lex $ac_save_LIBS"])
-
-      AC_LINK_IFELSE([AC_LANG_DEFINES_PROVIDED[`cat $LEX_OUTPUT_ROOT.c`]],
+    for $1 in 'none needed' -lfl -ll 'not found'; do
+    AS_CASE([$[]$1],
+      ['not found'],   [break],
+      ['none needed'], [],
+      [*],             [LIBS="$[]$1 $ac_save_LIBS"])
+    AC_LINK_IFELSE([AC_LANG_DEFINES_PROVIDED[`cat $LEX_OUTPUT_ROOT.c`]],
 	[ac_found=:])
-      if $ac_found; then
-        break
-      fi
+    if $ac_found; then
+      break
+    fi
     done
     LIBS="$ac_save_LIBS"
-  ])
-  AS_IF(
-     [test "$ac_cv_lib_lex" = 'not found'],
-	[AC_MSG_WARN([required lex library not found; giving up on $LEX])
-	 LEX=: LEXLIB=],
-     [test "$ac_cv_lib_lex" = 'none needed'],
-        [LEXLIB=''],
-	[LEXLIB=$ac_cv_lib_lex])
-dnl
-dnl For compatibility with autoconf 2.69 and prior, if $1 is not 'noyywrap',
-dnl and we didn't already set LEXLIB to -ll or -lfl, see if one of those
-dnl libraries provides yywrap and set LEXLIB to it if so.  If $1 is 'yywrap',
-dnl and we don't find a library that provides yywrap, we fail.
-  m4_case([$1],
-    [noyywrap],
-      [],
-    [yywrap],
-      [ac_save_LIBS="$LIBS"
-      AS_IF([test -n "$LEXLIB"],
-        [LIBS="$LEXLIB"
-        AC_CHECK_FUNC([yywrap],
-          [:],
-          [AC_MSG_WARN([$LEXLIB does not contain yywrap; giving up on $LEX])
-          LEX=: LEXLIB=])
-        ],
-        [LIBS=
-        AC_SEARCH_LIBS([yywrap], [fl l], [LEXLIB="$LIBS"])
-        AS_IF([test x"$ac_cv_search_yywrap" = xno],
-          [AC_MSG_WARN([yywrap not found; giving up on $LEX])
-          LEX=: LEXLIB=])])
-      LIBS="$ac_save_LIBS"],
-    [],
-      [ac_save_LIBS="$LIBS"
-      LIBS=
-      AC_SEARCH_LIBS([yywrap], [fl l], [LEXLIB="$LIBS"])
-      LIBS="$ac_save_LIBS"])dnl
+  ],
+  [$1='lex error'])])
+AS_CASE([$[]$1],
+  ['not found'],
+    [m4_default([$4],
+    [AC_MSG_WARN([required lex library not found; giving up on $LEX])
+    LEX=:
+    LEXLIB=''])],
+  ['lex error'],
+    [AC_MSG_WARN([$LEX rejected the test program; giving up on it])
+    LEX=:
+    LEXLIB=''],
+  ['none needed'],
+    [LEXLIB=''],
+  [*],
+    [LEXLIB="$[]$1"])
 ])
-AC_SUBST(LEXLIB)
 
-dnl This test is done last so that we don't define YYTEXT_POINTER if
-dnl any of the above tests gave up on lex.
-AS_IF([test "$LEX" != :], [
-AC_CACHE_CHECK(whether yytext is a pointer, ac_cv_prog_lex_yytext_pointer,
+# _AC_PROG_LEX_LIBL_NOYYWRAP
+# --------------------------
+# If it is necessary to link a simple lex scanner, that defines yywrap
+# itself, with a library, then set LEXLIB to that library.  If a library
+# is needed but not found, set LEXLIB to be empty and pretend we couldn't
+# find a lex program.  Assumes _AC_PROG_LEX_OUTPUT_ROOT has already executed.
+
+AC_DEFUN([_AC_PROG_LEX_LIBL_NOYYWRAP],
+[AC_REQUIRE([_AC_PROG_LEX_TEST_NOYYWRAP])]dnl
+[_AC_PROG_LEX_SEARCH_LIBL(
+  [ac_cv_lib_lex_noyywrap],
+  [ac_prog_lex_conftest_l_noyywrap],
+  [yywrap not needed])])
+
+# _AC_PROG_LEX_LIBL_YYWRAP
+# ------------------------
+# If it is necessary to link a simple lex scanner, that doesn't define
+# yywrap, with a library, then set LEXLIB to that library.  If a library
+# is needed but not found, set LEXLIB to be empty and pretend we couldn't
+# find a lex program.  Assumes _AC_PROG_LEX_OUTPUT_ROOT has already executed.
+AC_DEFUN([_AC_PROG_LEX_LIBL_YYWRAP],
+[AC_REQUIRE([_AC_PROG_LEX_TEST_YYWRAP])]dnl
+[_AC_PROG_LEX_SEARCH_LIBL(
+  [ac_cv_lib_lex_yywrap],
+  [ac_prog_lex_conftest_l_yywrap],
+  [with yywrap])])
+
+
+# _AC_PROG_LEX_LIBL_COMPAT
+# ------------------------
+# If it is necessary to link a simple lex scanner, that doesn't define
+# yywrap, with a library, then set LEXLIB to that library.  However,
+# if that library is needed and not found, and a simple lex scanner that
+# defines yywrap itself *doesn't* need the library, then set LEXLIB to
+# the empty string.  Assumes _AC_PROG_LEX_OUTPUT_ROOT has already executed.
+AC_DEFUN([_AC_PROG_LEX_LIBL_COMPAT],
+[AC_REQUIRE([_AC_PROG_LEX_TEST_YYWRAP])]dnl
+[AC_REQUIRE([_AC_PROG_LEX_TEST_NOYYWRAP])]dnl
+[_AC_PROG_LEX_SEARCH_LIBL(
+  [ac_cv_lib_lex_yywrap],
+  [ac_prog_lex_conftest_l_yywrap],
+  [with yywrap],
+  [_AC_PROG_LEX_SEARCH_LIBL(
+    [ac_cv_lib_lex_noyywrap],
+    [ac_prog_lex_conftest_l_noyywrap],
+    [yywrap not needed])])])
+
+# _AC_PROG_LEX_YYTEXT_DECL
+# ------------------------
+# Determine whether Lex declares yytext as a char * by default.
+# Assumes that _AC_PROG_LEX_OUTPUT_ROOT and one of the
+# _AC_PROG_LEX_LIBL macros have executed *immediately* prior.
+# This test is done last so that we don't define YYTEXT_POINTER if
+# any of the preceding tests gave up on lex.
+AC_DEFUN([_AC_PROG_LEX_YYTEXT_DECL],
+[AC_CACHE_CHECK([whether yytext is a pointer], [ac_cv_prog_lex_yytext_pointer],
 [# POSIX says lex can declare yytext either as a pointer or an array; the
 # default is implementation-dependent.  Figure out which it is, since
 # not all implementations provide the %pointer and %array declarations.
@@ -888,20 +953,15 @@ ac_cv_prog_lex_yytext_pointer=no
 AC_COMPILE_IFELSE([AC_LANG_DEFINES_PROVIDED
   [#define YYTEXT_POINTER 1
 `cat $LEX_OUTPUT_ROOT.c`]],
-  [ac_cv_prog_lex_yytext_pointer=yes])
-])
-dnl
-if test $ac_cv_prog_lex_yytext_pointer = yes; then
-  AC_DEFINE(YYTEXT_POINTER, 1,
+  [ac_cv_prog_lex_yytext_pointer=yes])])
+AS_IF([test $ac_cv_prog_lex_yytext_pointer = yes],
+  [AC_DEFINE(YYTEXT_POINTER, 1,
 	    [Define to 1 if 'lex' declares 'yytext' as a 'char *' by default,
-	     not a 'char[]'.])
-fi
-])
-rm -f conftest.l $LEX_OUTPUT_ROOT.c
-])# _AC_PROG_LEX_YYTEXT_DECL
+	     not a 'char []'.])])])
 
-
-# Require AC_PROG_LEX in case some people were just calling this macro.
+# Former name of an internal macro that did most, but not all, of what
+# AC_PROG_LEX does.  Map to AC_PROG_LEX in case any configure scripts
+# were using it.
 AU_DEFUN([AC_DECL_YYTEXT],  [AC_PROG_LEX])
 
 
