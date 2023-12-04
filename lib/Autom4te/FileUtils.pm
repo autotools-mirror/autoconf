@@ -38,23 +38,44 @@ use 5.006;
 use strict;
 use warnings FATAL => 'all';
 
-use Exporter;
+BEGIN
+{
+  require Exporter;
+  our @ISA = qw (Exporter);
+  our @EXPORT = qw (&contents
+		    &find_file &mtime
+		    &update_file
+		    &xsystem &xsystem_hint &xqx
+		    &dir_has_case_matching_file &reset_dir_cache
+		    &set_dir_cache_file);
+}
+
+# Use sub-second resolution file timestamps if available, carry on
+# with one-second resolution timestamps if Time::HiRes is not available.
+#
+# Unfortunately, even if Time::HiRes is available, we don't get
+# timestamps to the full precision recorded by the operating system,
+# because Time::HiRes converts timestamps to floating-point, and the
+# rounding error is hundreds of nanoseconds for circa-2023 timestamps
+# in IEEE double precision.  But this is the best we can do without
+# dropping down to C.
+#
+# $subsecond_mtime is not exported, but is intended for external
+# consumption, as $Autom4te::FileUtils::subsecond_mtime.
+BEGIN
+{
+  our $subsecond_mtime = 0;
+  eval
+    {
+      require Time::HiRes;
+      import Time::HiRes qw(stat);
+      $subsecond_mtime = 1;
+    }
+}
+
 use IO::File;
-
-# use sub-second resolution timestamps if available,
-# carry on with one-second resolution timestamps if that is all we have
-BEGIN { eval { require Time::HiRes; import Time::HiRes qw(stat) } }
-
 use Autom4te::Channels;
 use Autom4te::ChannelDefs;
-
-our @ISA = qw (Exporter);
-our @EXPORT = qw (&contents
-		  &find_file &mtime
-		  &update_file
-		  &xsystem &xsystem_hint &xqx
-		  &dir_has_case_matching_file &reset_dir_cache
-		  &set_dir_cache_file);
 
 =over 4
 
@@ -121,11 +142,6 @@ sub mtime ($)
   my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
     $atime,$mtime,$ctime,$blksize,$blocks) = stat ($file)
     or fatal "cannot stat $file: $!";
-
-  # Unfortunately Time::HiRes converts timestamps to floating-point, and the
-  # rounding error can be hundreds of nanoseconds for circa-2023 timestamps.
-  # Perhaps some day Perl will support accurate file timestamps.
-  # For now, do the best we can without going outside Perl.
 
   return $mtime;
 }
@@ -394,3 +410,20 @@ sub set_dir_cache_file ($$)
 =cut
 
 1; # for require
+
+### Setup "GNU" style for perl-mode and cperl-mode.
+## Local Variables:
+## perl-indent-level: 2
+## perl-continued-statement-offset: 2
+## perl-continued-brace-offset: 0
+## perl-brace-offset: 0
+## perl-brace-imaginary-offset: 0
+## perl-label-offset: -2
+## cperl-indent-level: 2
+## cperl-brace-offset: 0
+## cperl-continued-brace-offset: 0
+## cperl-label-offset: -2
+## cperl-extra-newline-before-brace: t
+## cperl-merge-trailing-else: nil
+## cperl-continued-statement-offset: 2
+## End:

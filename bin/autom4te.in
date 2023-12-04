@@ -207,8 +207,10 @@ General help using GNU software: <https://www.gnu.org/gethelp/>.
 
 # $VERSION
 # --------
-$version = "autom4te (@PACKAGE_NAME@) @VERSION@
-Copyright (C) @RELEASE_YEAR@ Free Software Foundation, Inc.
+$version = "autom4te (@PACKAGE_NAME@) @VERSION@\n"
+  . ($Autom4te::FileUtils::subsecond_mtime
+     ? "Features: subsecond-mtime\n" : "")
+  . "\nCopyright (C) @RELEASE_YEAR@ Free Software Foundation, Inc.
 License GPLv3+/Autoconf: GNU GPL version 3 or later
 <https://gnu.org/licenses/gpl.html>, <https://gnu.org/licenses/exceptions.html>
 This is free software: you are free to change and redistribute it.

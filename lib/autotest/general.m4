@@ -186,6 +186,21 @@ m4_define([_AT_DEFINE_SETUP],
 [m4_define([$1], [m4_ifndef([AT_ingroup],
  [m4_fatal([$1: missing AT_SETUP detected])])$2])])
 
+# AS_MESSAGE_LOG_FD
+# -----------------
+# File descriptor open on the log file.  This needs to be defined
+# unconditionally, so that AT_TESTS_PREPARE code can use it.  Usage
+# prior to the point where the log file is opened will crash the
+# testsuite.
+m4_define([AS_MESSAGE_LOG_FD], [5])
+
+# AT_JOB_FIFO_{IN,OUT}_FD
+# -----------------
+# Used by the parallel test driver.
+# The parent needs two fds to the same fifo, otherwise, there is a race
+# where the parent can read the fifo before a child opens it for writing
+_AT_DEFINE_INIT([AT_JOB_FIFO_IN_FD], [6])
+_AT_DEFINE_INIT([AT_JOB_FIFO_OUT_FD], [7])
 
 # AT_INIT([TESTSUITE-NAME])
 # -------------------------
@@ -943,11 +958,6 @@ PATH=$at_new_path
 export PATH
 
 # Setting up the FDs.
-m4_define([AS_MESSAGE_LOG_FD], [5])
-dnl The parent needs two fds to the same fifo, otherwise, there is a race
-dnl where the parent can read the fifo before a child opens it for writing
-m4_define([AT_JOB_FIFO_IN_FD], [6])
-m4_define([AT_JOB_FIFO_OUT_FD], [7])
 [#] AS_MESSAGE_LOG_FD is the log file.  Not to be overwritten if '-d'.
 if $at_debug_p; then
   at_suite_log=/dev/null

@@ -48,6 +48,81 @@ export CONFIG_SITE
 # our command line.
 : "${MAKE=make}"
 export MAKE
+
+# Determine how long we need to delay in between operations that might
+# modify autom4te.cache.  This depends on three factors: whether the
+# 'sleep' utility supports fractional seconds in its argument; what
+# the resolution of last-modification timestamps is on the filesystem
+# hosting the build; and whether autom4te and automake can both make
+# use of high-resolution file timestamps (this is not entirely under
+# our control because it depends on the capabilities of the Perl
+# installation).
+#
+# This series of tests mostly cribbed from automake/m4/sanity.m4.
+# We cannot rely on the execution of that code inside autoconf's own
+# configure script, because (depending on what version of automake was
+# used to generate the configure script) it might not be there at all,
+# or might be buggy.  Also, even if it's present and correct, it didn't
+# probe the autom4te we just built, which is the one we care about.
+#
+# The coarsest filesystem we know of is FAT, with a resolution
+# of only two seconds, even with the most recent "exFAT" extensions.
+# The finest (e.g. ext4 with large inodes, XFS, ZFS) is one
+# nanosecond, matching clock_gettime.  However, it is probably not
+# possible to delay execution of a shell script for less than one
+# millisecond, due to process creation overhead and scheduling
+# granularity, so we don't check for anything finer than that.
+
+# Default to the coarsest case.
+at_ts_resolution=2
+
+# Only try to go finer than 1s if sleep, autom4te, and automake
+# can all handle it.
+at_try_resolutions=1
+if sleep 0.001 2>/dev/null &&
+   autom4te --version 2>&1 |
+     grep 'Features:.*subsecond-mtime' > /dev/null 2>&1 &&
+   automake --version 2>&1 |
+     grep 'Features:.*subsecond-mtime' > /dev/null 2>&1
+then
+  at_try_resolutions="0.001 0.01 0.1 $at_try_resolutions"
+fi
+
+# In order to catch current-generation FAT out, we must *modify* files
+# that already exist; the *creation* timestamp is finer.  Use names
+# that make ls -t sort them differently when they have equal
+# timestamps than when they have distinct timestamps, keeping
+# in mind that ls -t prints the *newest* file first.
+rm -f conftest.ts?
+: > conftest.ts1
+: > conftest.ts2
+: > conftest.ts3
+
+for at_try_res in $at_try_resolutions; do
+  # Any one fine-grained sleep might happen to cross the boundary
+  # between two values of a coarser actual resolution, but if we do
+  # two fine-grained sleeps in a row, at least one of them will fall
+  # entirely within a coarse interval.
+  echo alpha > conftest.ts1
+  sleep $at_try_res
+  echo beta > conftest.ts2
+  sleep $at_try_res
+  echo gamma > conftest.ts3
+
+  # We assume that 'ls -t' will make use of high-resolution
+  # timestamps if the operating system supports them at all.
+  set X `ls -t conftest.ts?`
+  if test "$[]2" = conftest.ts3 &&
+     test "$[]3" = conftest.ts2 &&
+     test "$[]4" = conftest.ts1; then
+    at_ts_resolution=$at_try_res
+    break
+  fi
+done
+rm -f conftest.ts?
+
+AS_ECHO(["$at_srcdir/AT_LINE: using ${at_ts_resolution}s as timestamp resolution
+"]) >&AS_MESSAGE_LOG_FD
 ])
 
 
@@ -60,10 +135,15 @@ export MAKE
 # ----------------------
 # Check FILE-1 and FILE-2 for equality, like 'cmp FILE-1 FILE-2'.
 m4_define([AT_CMP],
-[m4_ifval([$2],, [m4_fatal([AT_CMP takes two arguments.])])[]dnl
-AT_CHECK([$at_diff "$1" "$2"])
-])# AT_CMP
+[m4_ifval([$2],, [m4_fatal([AT_CMP takes two arguments.])])]dnl
+[AT_CHECK([$at_diff "$1" "$2"])])
 
+# AT_MTIME_DELAY
+# --------------
+# Wait for a short time, to ensure that files created before this
+# command are considered to be older than files created afterward.
+m4_define([AT_MTIME_DELAY],
+[sleep $at_ts_resolution])
 
 ## ---------------- ##
 ## Testing syntax.  ##
