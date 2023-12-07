@@ -186,7 +186,7 @@ sub update_file ($$;$)
       msg 'note', "'$to' is unchanged";
       unlink ($from)
         or fatal "cannot remove $from: $!";
-      return
+      return;
     }
 
   if (-f "$to")

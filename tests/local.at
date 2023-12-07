@@ -159,7 +159,7 @@ m4_define([AT_CHECK_SHELL_SYNTAX],
 AT_CHECK(["$SHELL_N" -n $1], [], [], [ignore])])
 
 m4_define([AT_CHECK_PERL_SYNTAX],
-[AT_CHECK([autom4te_perllibdir=$abs_top_srcdir/lib $PERL -c "$abs_top_builddir"/bin/$1],
+[AT_CHECK([autom4te_perllibdir=$abs_top_srcdir/lib $PERL -c "$abs_top_builddir/$1"],
           0, [], [ignore])])
 
 ## ------------------ ##

@@ -314,6 +314,7 @@ $out->close;
 }
 
 update_file ("$tmp/config.hin", "$config_h_in", $force);
+exit 0;
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:

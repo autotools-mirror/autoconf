@@ -23,7 +23,7 @@ EXTRA_DIST += \
   tests/local.at \
   tests/mktests.pl \
   tests/atlocal.in \
-  tests/wrapper.as \
+  tests/wrapper.in \
   tests/statesave.m4
 
 # Running the uninstalled scripts.  Build them upon 'all', for the manpages.
@@ -60,13 +60,10 @@ wrappers = \
 
 CLEANFILES += \
   tests/package.m4 \
-  tests/wrapper.in \
   $(wrappers)
 
-tests/wrapper.in: $(srcdir)/tests/wrapper.as $(m4sh_m4f_dependencies)
-	$(MY_AUTOM4TE) --language=M4sh $(srcdir)/tests/wrapper.as -o $@
-
 edit_wrapper = sed \
+	-e 's|@PERL[@]|$(PERL)|g' \
 	-e 's|@wrap_program[@]|$(@F)|g' \
 	-e 's|@abs_top_srcdir[@]|$(abs_top_srcdir)|g' \
 	-e 's|@abs_top_builddir[@]|$(abs_top_builddir)|g' \
@@ -75,7 +72,7 @@ edit_wrapper = sed \
 $(wrappers): tests/wrapper.in
 	rm -f $@ $@.tmp
 	input=tests/wrapper.in \
-	  && $(edit_wrapper) tests/wrapper.in >$@.tmp
+	  && $(edit_wrapper) $(srcdir)/tests/wrapper.in >$@.tmp
 	chmod +x $@.tmp
 	chmod a-w $@.tmp
 	mv -f $@.tmp $@

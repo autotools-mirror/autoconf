@@ -50,7 +50,6 @@ AT_CHECK([test "$SHELL_N" != none || exit 77])
 # Specify the absolute name of the tool, as some shells don't honor PATH when
 # running 'sh PROG'.
 
-AT_CHECK_SHELL_SYNTAX(["$abs_top_builddir/tests/autoconf"])
 AT_CHECK_SHELL_SYNTAX(["$abs_top_builddir/tests/testsuite"])
 
 # These are not built, they are in the src tree.
@@ -68,13 +67,21 @@ AT_CLEANUP
 
 AT_SETUP([Syntax of the Perl scripts])
 
-AT_CHECK_PERL_SYNTAX([autoconf])
-AT_CHECK_PERL_SYNTAX([autoheader])
-AT_CHECK_PERL_SYNTAX([autom4te])
-AT_CHECK_PERL_SYNTAX([autoreconf])
-AT_CHECK_PERL_SYNTAX([autoscan])
-AT_CHECK_PERL_SYNTAX([autoupdate])
-AT_CHECK_PERL_SYNTAX([ifnames])
+AT_CHECK_PERL_SYNTAX([bin/autoconf])
+AT_CHECK_PERL_SYNTAX([bin/autoheader])
+AT_CHECK_PERL_SYNTAX([bin/autom4te])
+AT_CHECK_PERL_SYNTAX([bin/autoreconf])
+AT_CHECK_PERL_SYNTAX([bin/autoscan])
+AT_CHECK_PERL_SYNTAX([bin/autoupdate])
+AT_CHECK_PERL_SYNTAX([bin/ifnames])
+
+AT_CHECK_PERL_SYNTAX([tests/autoconf])
+AT_CHECK_PERL_SYNTAX([tests/autoheader])
+AT_CHECK_PERL_SYNTAX([tests/autom4te])
+AT_CHECK_PERL_SYNTAX([tests/autoreconf])
+AT_CHECK_PERL_SYNTAX([tests/autoscan])
+AT_CHECK_PERL_SYNTAX([tests/autoupdate])
+AT_CHECK_PERL_SYNTAX([tests/ifnames])
 
 AT_CLEANUP
 

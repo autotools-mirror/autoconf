@@ -193,7 +193,8 @@ print {*STDERR} $me,
   "\n"
   if $verbose;
 
-exec {$autom4te_command[0]} @autom4te_command;
+exec {$autom4te_command[0]} @autom4te_command
+  or fatal "$autom4te_command[0]: $!\n";
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:

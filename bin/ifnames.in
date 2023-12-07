@@ -138,6 +138,7 @@ foreach (sort keys %occurrence)
   {
     print "$_ ", join (' ', sort keys %{$occurrence{$_}}), "\n";
   }
+exit 0;
 
 ### Setup "GNU" style for perl-mode and cperl-mode.
 ## Local Variables:

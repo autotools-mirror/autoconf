@@ -1,0 +1,80 @@
+#! @PERL@
+# wrapper.in -- running '@wrap_program@' as if it were installed.
+# @configure_input@
+# Copyright (C) 2003-2004, 2007, 2009-2017, 2020-2023 Free Software
+# Foundation, Inc.
+
+eval 'case $# in 0) exec @PERL@ -S "$0";; *) exec @PERL@ -S "$0" "$@";; esac'
+  if 0;
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+use 5.006;
+use strict;
+use warnings FATAL => 'all';
+
+my $src_libdir               = '@abs_top_srcdir@/lib';
+$ENV{'autom4te_perllibdir'}  = $src_libdir;
+$ENV{'autom4te_buildauxdir'} = '@abs_top_srcdir@/build-aux';
+$ENV{'trailer_m4'}           = '@abs_top_srcdir@/lib/autoconf/trailer.m4';
+
+my $wrapped_program          = '@wrap_program@';
+my $abs_wrapped_program      = '@abs_top_builddir@/bin/@wrap_program@';
+my $build_testdir            = '@abs_top_builddir@/tests';
+my $build_libdir             = '@abs_top_builddir@/lib';
+$ENV{'AUTOM4TE_CFG'}         = '@abs_top_builddir@/lib/autom4te.cfg';
+
+$ENV{'AUTOCONF'}             = 'autoconf';
+$ENV{'AUTOHEADER'}           = 'autoheader';
+$ENV{'AUTOM4TE'}             = 'autom4te';
+
+# Prepend $build_testdir to the path if it isn't there already.
+if (!defined $ENV{'PATH'} || $ENV{'PATH'} eq '')
+{
+  $ENV{'PATH'} = $build_testdir;
+}
+elsif ($ENV{'PATH'} !~ /^\Q$build_testdir\E[\\\/]?(?:[:;]|$)/)
+{
+  no warnings 'once';
+  require Config;
+  $ENV{'PATH'} = $build_testdir . $Config::Config{'path_sep'} . $ENV{'PATH'};
+}
+
+# All the wrapped programs *except* ifnames might need to load
+# .m4 and .m4f files from both the build and source libdirs.
+unshift (@ARGV, '-B', $build_libdir, '-B', $src_libdir)
+  if $wrapped_program ne 'ifnames';
+
+my $status = do $abs_wrapped_program;
+exit $status if defined $status;
+die "couldn't parse ${wrapped_program}: $@\n" if $@;
+die "error reading ${wrapped_program}: $!\n";
+
+### Setup "GNU" style for perl-mode and cperl-mode.
+## Local Variables:
+## mode: perl
+## perl-indent-level: 2
+## perl-continued-statement-offset: 2
+## perl-continued-brace-offset: 0
+## perl-brace-offset: 0
+## perl-brace-imaginary-offset: 0
+## perl-label-offset: -2
+## cperl-indent-level: 2
+## cperl-brace-offset: 0
+## cperl-continued-brace-offset: 0
+## cperl-label-offset: -2
+## cperl-extra-newline-before-brace: t
+## cperl-merge-trailing-else: nil
+## cperl-continued-statement-offset: 2
+## End:
