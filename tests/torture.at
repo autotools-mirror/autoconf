@@ -1093,6 +1093,35 @@ AT_CHECK_DEFINES([[#define foo one
 
 AT_CLEANUP
 
+## ------------------- ##
+## CRLF line endings.  ##
+## ------------------- ##
+
+AT_SETUP([CRLF line endings in .in files])
+
+AT_CONFIGURE_AC([[
+AC_DEFINE([MACRO], [1], [Define MACRO as 1 always.])
+AC_SUBST([VARIABLE], [value])
+AC_CONFIG_FILES([config.out:config.oin])
+]])
+
+# Shell `printf` should understand \r.
+AT_CHECK([printf '%s\r\n' \
+  '/* Define MACRO as 1 always. */' \
+  '#undef MACRO' \
+  > config.hin])
+AT_CHECK([printf '%s\r\n' \
+  'VARIABLE=@VARIABLE@' \
+  > config.oin])
+
+AT_SKIP_IF([grep '\\r' config.hin > /dev/null])
+
+AT_CHECK_AUTOCONF
+AT_CHECK_CONFIGURE
+AT_CHECK([grep '#define MACRO 1' config.h > /dev/null])
+AT_CHECK([grep 'VARIABLE=value' config.out > /dev/null])
+
+AT_CLEANUP
 
 ## ------------------------------------ ##
 ## AC_SUBST: variable name validation.  ##
