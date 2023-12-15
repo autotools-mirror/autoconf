@@ -64,6 +64,7 @@ Operation modes:
   -f, --force               consider all files obsolete
   -o, --output=FILE         save output in FILE (stdout is the default)
   -W, --warnings=CATEGORY   report the warnings falling in CATEGORY
+                            (comma-separated list accepted)
 
 " . Autom4te::ChannelDefs::usage . "
 

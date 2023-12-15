@@ -84,20 +84,18 @@ Operation modes:
       --no-recursive       don't rebuild sub-packages
   -s, --symlink            with -i, install symbolic links instead of copies
   -m, --make               when applicable, re-run ./configure && make
-  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY [syntax]
+  -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
+                           (comma-separated list accepted)
 
 " . Autom4te::ChannelDefs::usage . "
-
-The environment variable 'WARNINGS' is honored.  Some subtools might
-support other warning types, using 'all' is encouraged.
 
 Library directories:
   -B, --prepend-include=DIR  prepend directory DIR to search path
   -I, --include=DIR          append directory DIR to search path
 
 The environment variables AUTOCONF, ACLOCAL, AUTOHEADER, AUTOM4TE,
-AUTOMAKE, AUTOPOINT, GTKDOCIZE, INTLTOOLIZE, LIBTOOLIZE, M4, and MAKE
-are honored.
+AUTOMAKE, AUTOPOINT, GTKDOCIZE, INTLTOOLIZE, LIBTOOLIZE, M4, MAKE,
+and WARNINGS are honored.
 
 Report bugs to <bug-autoconf\@gnu.org>.
 GNU Autoconf home page: <https://www.gnu.org/software/autoconf/>.

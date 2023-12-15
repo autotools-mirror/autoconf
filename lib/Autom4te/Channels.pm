@@ -628,7 +628,13 @@ sub msg ($$;$%)
       $location = '';
     }
 
-  confess "unknown channel $channel" unless exists $channels{$channel};
+  if (!exists $channels{$channel})
+    {
+      # This can happen as a result of e.g. m4_warn([nonsense], [message])
+      # so it should not crash.
+      report_bad_channel($channel, $location);
+      $channel = 'syntax';
+    }
 
   my %opts = %{$channels{$channel}};
   _merge_options (%opts, %options);
@@ -660,6 +666,45 @@ sub msg ($$;$%)
 	  exit $exit_code;
 	}
     }
+}
+
+sub report_bad_channel ($$)
+{
+  my ($channel, $location) = @_;
+  my $message;
+  my $report_as = 'error';
+
+  # quotemeta is both too aggressive (e.g. it escapes '-') and
+  # too generous (it turns control characters into \ + themselves,
+  # not into symbolic escapes).
+  my $q_channel = $channel;
+  $q_channel =~ s/(?=[\"\$\'\@\`\\])/\\/g;
+  $q_channel =~ s/([^\x20-\x7e])/sprintf('\\x%02X', ord $1)/eg;
+  $q_channel = '"' . $q_channel . '"';
+
+  if ($channel eq '' || $channel eq 'all')
+    {
+      # Prior to version 2.70, the Autoconf manual said it was valid to use
+      # "all" and the empty string as the category argument to m4_warn, so
+      # don't treat those cases as errors.
+      $report_as = 'obsolete';
+      $message = "use of $q_channel as a diagnostic category is obsolete\n";
+      $message .= "(see autom4te --help for a list of valid categories)";
+    }
+  elsif ($channel eq 'none'
+         || ($channel =~ /^no-/ && exists $channels{substr($channel, 3)}))
+    {
+      # Also recognize "none" and "no-[category]", as someone might have
+      # thought anything acceptable to -W is also acceptable to m4_warn.
+      # Note: m4_warn([error], [...]) does actually issue an error.
+      $message = "-W accepts $q_channel, but it is not a diagnostic category";
+    }
+  else
+    {
+      $message = "unknown diagnostic category " . $q_channel;
+    }
+
+  msg $report_as, $location, $message;
 }
 
 

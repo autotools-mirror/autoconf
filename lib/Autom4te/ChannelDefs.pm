@@ -197,7 +197,7 @@ Return the warning category descriptions.
 
 sub usage ()
 {
-  return "Warning categories include:
+  return "Warning categories are:
   cross                  cross compilation issues
   gnu                    GNU coding standards (default in gnu and gnits modes)
   obsolete               obsolete features or constructions (default)
@@ -207,10 +207,12 @@ sub usage ()
   extra-portability      extra portability issues related to obscure tools
   syntax                 dubious syntactic constructs (default)
   unsupported            unsupported or incomplete features (default)
-  all                    all the warnings
-  no-CATEGORY            turn off warnings in CATEGORY
+
+-W also understands:
+  all                    turn on all the warnings
   none                   turn off all the warnings
-  error                  treat warnings as errors";
+  no-CATEGORY            turn off warnings in CATEGORY
+  error                  treat all enabled warnings as errors";
 }
 
 =item C<prog_error ($MESSAGE, [%OPTIONS])>

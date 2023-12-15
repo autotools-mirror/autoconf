@@ -160,6 +160,7 @@ Operation modes:
   -o, --output=FILE        save output in FILE (defaults to '-', stdout)
   -f, --force              don't rely on cached values
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
+                           (comma-separated list accepted)
   -l, --language=LANG      specify the set of M4 macros to use
   -C, --cache=DIRECTORY    preserve results for future runs in DIRECTORY
       --no-cache           disable the cache

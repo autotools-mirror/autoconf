@@ -244,6 +244,7 @@ AT_CLEANUP
 ## --------- ##
 
 AT_SETUP([m4@&t@_warn])
+AT_KEYWORDS([m4@&t@_warn])
 
 AT_DATA_M4SUGAR([script.4s],
 [[m4_init
@@ -297,6 +298,68 @@ script.4s:8: the top level
 
 AT_CLEANUP
 
+## ----------------------------------------------- ##
+## Bad m4_warn categories (Autoconf bug #110872).  ##
+## ----------------------------------------------- ##
+
+AT_SETUP([m4@&t@_warn (bad categories)])
+AT_KEYWORDS([m4@&t@_warn])
+
+AT_DATA_M4SUGAR([script.4s],
+[[m4_init
+m4_warn([],            [empty category])dnl
+m4_warn([bogus],       [invalid category])dnl
+m4_warn([!"\	%^&*], [line noise category])dnl " unconfuse editor
+m4_warn([all],         ['all' used as a category])dnl
+m4_warn([none],        ['none' used as a category])dnl
+m4_warn([no-syntax],   ['no-syntax' used as a category])dnl
+m4_warn([no-bogus],    ['no-bogus' used as a category])dnl
+m4_warn([error],       [oddly enough, this works])dnl
+]])
+
+AT_CHECK_M4SUGAR([-o- -Wnone], 1, [],
+[script.4s:3: error: unknown diagnostic category "bogus"
+script.4s:4: error: unknown diagnostic category "!\"\\\x09%^&*"
+script.4s:6: error: -W accepts "none", but it is not a diagnostic category
+script.4s:7: error: -W accepts "no-syntax", but it is not a diagnostic category
+script.4s:8: error: unknown diagnostic category "no-bogus"
+script.4s:9: error: oddly enough, this works
+])
+
+AT_CHECK_M4SUGAR([-o- -Wnone,obsolete], 1, [],
+[script.4s:2: warning: use of "" as a diagnostic category is obsolete
+script.4s:2: (see autom4te --help for a list of valid categories)
+script.4s:3: error: unknown diagnostic category "bogus"
+script.4s:4: error: unknown diagnostic category "!\"\\\x09%^&*"
+script.4s:5: warning: use of "all" as a diagnostic category is obsolete
+script.4s:5: (see autom4te --help for a list of valid categories)
+script.4s:6: error: -W accepts "none", but it is not a diagnostic category
+script.4s:7: error: -W accepts "no-syntax", but it is not a diagnostic category
+script.4s:8: error: unknown diagnostic category "no-bogus"
+script.4s:9: error: oddly enough, this works
+])
+
+AT_CHECK_M4SUGAR([-o- -Wnone,obsolete,syntax], 1, [],
+[script.4s:2: warning: use of "" as a diagnostic category is obsolete
+script.4s:2: (see autom4te --help for a list of valid categories)
+script.4s:2: warning: empty category
+script.4s:3: error: unknown diagnostic category "bogus"
+script.4s:3: warning: invalid category
+script.4s:4: error: unknown diagnostic category "!\"\\\x09%^&*"
+script.4s:4: warning: line noise category
+script.4s:5: warning: use of "all" as a diagnostic category is obsolete
+script.4s:5: (see autom4te --help for a list of valid categories)
+script.4s:5: warning: 'all' used as a category
+script.4s:6: error: -W accepts "none", but it is not a diagnostic category
+script.4s:6: warning: 'none' used as a category
+script.4s:7: error: -W accepts "no-syntax", but it is not a diagnostic category
+script.4s:7: warning: 'no-syntax' used as a category
+script.4s:8: error: unknown diagnostic category "no-bogus"
+script.4s:8: warning: 'no-bogus' used as a category
+script.4s:9: error: oddly enough, this works
+])
+
+AT_CLEANUP
 
 ## ----------------- ##
 ## m4_divert_stack.  ##

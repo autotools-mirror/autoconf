@@ -74,6 +74,7 @@ or else 'configure.in'.
   -d, --debug              don\'t remove temporary files
   -f, --force              consider all files obsolete
   -W, --warnings=CATEGORY  report the warnings falling in CATEGORY
+                           (comma-separated list accepted)
 
 " . Autom4te::ChannelDefs::usage . "
 
