@@ -1385,8 +1385,7 @@ main (void)
     if (*(data2 + i))
       return 7;
   close (fd2);
-  if (munmap (data2, pagesize))
-    return 8;
+  /* 'return 8;' not currently used.  */
 
   /* Next, try to mmap the file at a fixed address which already has
      something else allocated at it.  If we can, also make sure that
