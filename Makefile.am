@@ -86,8 +86,8 @@ gen_start_date = 2012-01-15 18:00:00 UTC
 .PHONY: gen-ChangeLog
 gen-ChangeLog:
 	if test -d $(top_srcdir)/.git; then \
-	  $(top_srcdir)/build-aux/gitlog-to-changelog \
-	    --since='$(gen_start_date)' > $(distdir)/cl-t \
+	  (cd $(top_srcdir) && ./build-aux/gitlog-to-changelog \
+	    --since='$(gen_start_date)') > $(distdir)/cl-t \
 	    && rm -f $(distdir)/ChangeLog \
 	    && mv $(distdir)/cl-t $(distdir)/ChangeLog; \
 	fi
