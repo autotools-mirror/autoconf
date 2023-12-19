@@ -202,8 +202,9 @@ SEP can be empty for the default (comma for \@ and *, colon for %),
 a single character for that character, or {STRING} to use a string.
 
 Report bugs to <bug-autoconf\@gnu.org>.
-GNU Autoconf home page: <https://www.gnu.org/software/autoconf/>.
-General help using GNU software: <https://www.gnu.org/gethelp/>.
+
+The full documentation for Autoconf can be read via 'info autoconf',
+or on the Web at <https://www.gnu.org/software/autoconf/manual/>.
 ";
 
 # $VERSION

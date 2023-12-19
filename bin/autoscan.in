@@ -120,8 +120,9 @@ Library directories:
   -I, --include=DIR          append directory DIR to search path
 
 Report bugs to <bug-autoconf\@gnu.org>.
-GNU Autoconf home page: <https://www.gnu.org/software/autoconf/>.
-General help using GNU software: <https://www.gnu.org/gethelp/>.
+
+The full documentation for Autoconf can be read via 'info autoconf',
+or on the Web at <https://www.gnu.org/software/autoconf/manual/>.
 ";
 
 # $version
