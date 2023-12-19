@@ -901,6 +901,57 @@ AT_CHECK_DEFINES(
 
 AT_CLEANUP
 
+## -------------------------------------------------------------------- ##
+## AC_SYS_LARGEFILE, AC_SYS_YEAR2038, and AC_SYS_YEAR2038_RECOMMENDED.  ##
+## -------------------------------------------------------------------- ##
+
+AT_CHECK_MACRO([AC_SYS_LARGEFILE], [],
+[AT_CHECK([./configure --help |
+    $EGREP -e '-(dis|en)able-(largefile|year2038)\>'],
+  [0],
+[  --disable-largefile     omit support for large files
+  --enable-year2038       support timestamps after 2038
+],
+[])])
+
+AT_CHECK_MACRO([AC_SYS_YEAR2038], [],
+[AT_CHECK([./configure --help |
+    $EGREP -e '-(dis|en)able-(largefile|year2038)\>'],
+  [0],
+[  --disable-largefile     omit support for large files
+  --disable-year2038      don't support timestamps after 2038
+],
+[])])
+
+AT_CHECK_MACRO([AC_SYS_YEAR2038_RECOMMENDED], [],
+[AT_CHECK([./configure --help |
+    $EGREP -e '-(dis|en)able-(largefile|year2038)\>'],
+  [0],
+[  --disable-largefile     omit support for large files
+  --disable-year2038      don't support timestamps after 2038
+],
+[])],
+[], [],
+[dnl Skip this test on systems that do not support 64-bit time_t at
+dnl all.  AC_SYS_YEAR2038_RECOMMENDED will make configure fail on
+dnl those systems.  I'd like to make this be a test that it *does*
+dnl make configure fail on those systems, but that would require
+dnl adding features to AT_CHECK_MACRO.
+AT_DATA([configure.ac],
+[[AC_INIT
+AC_PROG_CC
+AC_SYS_YEAR2038
+AC_COMPUTE_INT([sizeof_time_t], [sizeof(time_t)],
+  [@%:@include <time.h>],
+  [sizeof_time_t=0])
+AS@&t@_IF([test $sizeof_time_t -lt 8],
+  [AC_MSG_FAILURE([could not widen time_t])])
+AC_OUTPUT
+]])
+AT_CHECK_AUTOCONF
+AT_CAPTURE_FILE([config.log])
+AT_CHECK([./configure $configure_options || exit 77], [0], [ignore], [])
+])
 
 ## ------------------------------- ##
 ## Obsolete non-updatable macros.  ##

@@ -2,6 +2,18 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** Known bugs
+
+*** AC_SYS_LARGEFILE and AC_SYS_YEAR2038 only work correctly in C mode.
+
+  This is only a problem for configure scripts that invoke either
+  macro while AC_LANG([something other than C]) is in effect, and
+  will only be a *visible* problem on systems where support
+  for large files and/or time stamps after 2038 are *available*
+  but not enabled by default.
+
+  See <https://savannah.gnu.org/support/index.php?110983> for details
+  and a workaround.
 
 * Noteworthy changes in release 2.72d (2023-11-30) [beta]
 

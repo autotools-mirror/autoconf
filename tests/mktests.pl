@@ -88,6 +88,7 @@ my @ac_exclude_list = (
   # Checked in semantics.
   qr/^AC_(PROG_CC|C_CONST|C_VOLATILE)$/,
   qr/^AC_PATH_XTRA$/,
+  qr/^AC_SYS_(LARGEFILE|YEAR2038(_RECOMMENDED)?)$/,
 
   # Use without an argument is obsolete.
   # Checked in semantics.
