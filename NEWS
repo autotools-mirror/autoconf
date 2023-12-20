@@ -1,6 +1,26 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Noteworthy changes in release ?.? (????-??-??) [?]
+* Noteworthy changes in release 2.72e (2023-12-20) [release candidate]
+
+** Further improvements to subsecond timestamp handling
+
+  Two subtle bugs were fixed.  Also, ‘autom4te --version’ now reports
+  whether autom4te is capable of reading subsecond timestamps from
+  the file system, enabling other programs (notably Automake) to
+  adjust their own behavior appropriately.
+
+  There may still be problems with subsecond timestamps (see below).
+  Because timestamp comparison is only used for autom4te’s cache,
+  the only practical effect of these problems is to cause spurious
+  failures in Autoconf and Automake’s test suites, in tests of the
+  cache itself.
+
+** Significant bug fixes
+
+*** autom4te works with perl 5.6.x again
+*** BusyBox ‘mkdir’ is correctly identified
+*** AC_FUNC_MMAP successfully detects mmap on CheriBSD
+*** Better error message for calling m4_warn() with a bad first argument
 
 ** Known bugs
 
@@ -9,11 +29,27 @@ GNU Autoconf NEWS - User visible changes.
   This is only a problem for configure scripts that invoke either
   macro while AC_LANG([something other than C]) is in effect, and
   will only be a *visible* problem on systems where support
-  for large files and/or time stamps after 2038 are *available*
+  for large files and/or timestamps after 2038 are *available*
   but not enabled by default.
 
   See <https://savannah.gnu.org/support/index.php?110983> for details
   and a workaround.
+
+*** “autoconf: forbidden tokens, basic” testsuite failure
+
+  We believe this is another subtle bug in autom4te’s handling of
+  timestamps that are very close together.  It only happens on some
+  operating systems and/or some file systems.  It can safely be ignored.
+  See <https://savannah.gnu.org/support/index.php?110986> for more detail.
+
+*** “Substitute and define special characters” testsuite failure
+
+  We believe this to be a bug in some versions of NetBSD /bin/sh.
+  If you see this failure on any system besides *-unknown-netbsd9*,
+  please post a comment on <https://savannah.gnu.org/support/index.php?110985>
+  and attach a tarball of the failed test’s scratch directory
+  (${builddir}/tests/testsuite.dir/270 in version 2.72; the number
+  may change in the future as tests are added or removed).
 
 * Noteworthy changes in release 2.72d (2023-11-30) [beta]
 
