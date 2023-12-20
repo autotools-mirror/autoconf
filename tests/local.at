@@ -52,7 +52,7 @@ export MAKE
 # Determine how long we need to delay in between operations that might
 # modify autom4te.cache.  This depends on three factors: whether the
 # 'sleep' utility supports fractional seconds in its argument; what
-# the resolution of last-modification timestamps is on the filesystem
+# the resolution of last-modification timestamps is on the file system
 # hosting the build; and whether autom4te and automake can both make
 # use of high-resolution file timestamps (this is not entirely under
 # our control because it depends on the capabilities of the Perl
@@ -65,7 +65,7 @@ export MAKE
 # or might be buggy.  Also, even if it's present and correct, it didn't
 # probe the autom4te we just built, which is the one we care about.
 #
-# The coarsest filesystem we know of is FAT, with a resolution
+# The coarsest file system we know of is FAT, with a resolution
 # of only two seconds, even with the most recent "exFAT" extensions.
 # The finest (e.g. ext4 with large inodes, XFS, ZFS) is one
 # nanosecond, matching clock_gettime.  However, it is probably not
