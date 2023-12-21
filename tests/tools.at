@@ -1461,13 +1461,7 @@ AT_CLEANUP
 # ----------------------------------------
 AT_SETUP([autoupdating with aclocal and m4@&t@_include])
 
-# We use aclocal.
-AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
-
-# Prevent aclocal from reading third-party macros, in case they are buggy.
-mkdir empty
-ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
-export ACLOCAL
+AT_REQUIRE_ACLOCAL
 
 mkdir m4 aclocal
 AT_DATA([configure.ac],
@@ -1495,16 +1489,12 @@ AT_CLEANUP
 # -----------------------------
 
 AT_SETUP([autom4te preselections])
-# We use aclocal and automake.  Skip broken automake wrappers.
-AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
-AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
-AT_CHECK([test ! -f $HOME/.autom4te.cfg || exit 77], [], [ignore], [ignore])
 
-# Prevent aclocal from reading third-party macros, in case they are buggy.
-# (AM_INIT_AUTOMAKE will still be available via the default --automake-acdir.)
-mkdir empty
-ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
-export ACLOCAL
+AT_REQUIRE_AUTOMAKE
+AT_REQUIRE_ACLOCAL
+
+# This user configuration file will interfere with this test.
+AT_CHECK([test ! -f $HOME/.autom4te.cfg || exit 77], [], [ignore], [ignore])
 
 AT_DATA([configure.ac],
 [[AC_INIT(GNU foo, 1.0)
@@ -1640,10 +1630,7 @@ AT_CLEANUP
 
 AT_SETUP([autotools and whitespace in file names])
 
-# Prevent autoreconf from running aclocal, which might not exist,
-# or could barf over warnings in third-party macro files.
-ACLOCAL=true
-export ACLOCAL
+AT_SUPPRESS_ACLOCAL
 
 x=
 export x
@@ -1686,8 +1673,6 @@ END
   AT_CHECK([autoscan --force -I "$dir"], [], [], [ignore])
   # autoreconf requires a sane input file name.
   mv -f "$file.ac" configure.ac
-  # Since aclocal is disabled, provide a stub aclocal.m4.
-  AT_DATA([aclocal.m4])
   AT_CHECK([autoreconf -B "$dir"])
   AT_CHECK([autoreconf --force -I "$dir"])
 
@@ -1707,13 +1692,7 @@ AT_CLEANUP
 
 AT_SETUP([autotools and relative TMPDIR])
 
-# We use aclocal.
-AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
-
-# Prevent aclocal from reading third-party macros, in case they are buggy.
-mkdir empty
-ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
-export ACLOCAL
+AT_REQUIRE_ACLOCAL
 
 mkdir _tmp
 TMPDIR=_tmp

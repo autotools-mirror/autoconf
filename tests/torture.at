@@ -1456,17 +1456,7 @@ AT_BANNER([autoreconf.])
 AT_SETUP([Configuring subdirectories])
 AT_KEYWORDS(autoreconf)
 
-# We use aclocal (via autoreconf).
-AT_CHECK([aclocal --version || exit 77], [], [stdout], [ignore])
-AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
-
-# It should understand configure.ac.
-AT_CHECK([[grep '[^0-9]1\.[01234][^0-9]' stdout && exit 77]], [1], [ignore])
-
-# Prevent aclocal from reading third-party macros, in case they are buggy.
-mkdir empty
-ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
-export ACLOCAL
+AT_REQUIRE_ACLOCAL
 
 # The contents of 'inner/', and 'inner/innermost/'.
 AS_MKDIR_P([inner/innermost])
@@ -1584,13 +1574,7 @@ AT_CLEANUP
 AT_SETUP([Deep Package])
 AT_KEYWORDS(autoreconf)
 
-# We use aclocal (via autoreconf).
-AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
-
-# Prevent aclocal from reading third-party macros, in case they are buggy.
-mkdir empty
-ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
-export ACLOCAL
+AT_REQUIRE_ACLOCAL
 
 # The contents of '.'
 AT_DATA([install-sh], [])
@@ -1724,12 +1708,7 @@ AT_SETUP([Non-Autoconf AC_CONFIG_SUBDIRS])
 AT_KEYWORDS([autoreconf])
 
 # We use aclocal (via autoreconf).
-AT_CHECK([aclocal --version || exit 77], [], [ignore], [ignore])
-
-# Prevent aclocal from reading third-party macros, in case they are buggy.
-mkdir empty
-ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
-export ACLOCAL
+AT_REQUIRE_ACLOCAL
 
 AT_DATA([install-sh], [])
 AT_DATA([configure.ac],
@@ -1784,12 +1763,7 @@ AC_CONFIG_SUBDIRS([$my_subdirs])
 AC_OUTPUT
 ]])
 
-# Prevent autoreconf from running aclocal, which might not exist,
-# or could barf over warnings in third-party macro files.
-AT_DATA([aclocal.m4])
-ACLOCAL=true
-export ACLOCAL
-
+AT_SUPPRESS_ACLOCAL
 AS_MKDIR_P([foo])
 
 AT_DATA([foo/configure],
@@ -1830,12 +1804,7 @@ AC_CONFIG_SUBDIRS()
 AC_OUTPUT
 ]])
 
-# Prevent autoreconf from running aclocal, which might not exist,
-# or could barf over warnings in third-party macro files.
-AT_DATA([aclocal.m4])
-ACLOCAL=true
-export ACLOCAL
-
+AT_SUPPRESS_ACLOCAL
 # autoreconf should have no complaints, and the generated configure
 # script should run fine with or without --no-recursion.
 AT_CHECK([autoreconf -Werror], [0], [ignore])
@@ -1851,10 +1820,9 @@ AT_CLEANUP
 AT_SETUP([Empty directory])
 AT_KEYWORDS([autoreconf])
 
-# Prevent autoreconf from running aclocal, which might not exist,
-# or could barf over warnings in third-party macro files.
+# Prevent autoreconf from running aclocal, which might not be available.
+dnl We can't use AT_SUPPRESS_ACLOCAL here because it creates an aclocal.m4.
 ACLOCAL=true
-export ACLOCAL
 
 # The test group directory is not necessarily _empty_, but it does not contain
 # files meaningful to 'autoreconf'.
@@ -1874,15 +1842,8 @@ AT_CLEANUP
 AT_SETUP([Unusual Automake input files])
 AT_KEYWORDS([autoreconf])
 
-# We use aclocal and automake via autoreconf.
-AT_CHECK([automake --version || exit 77], [], [stdout], [ignore])
-AT_CHECK([[grep '[1-9]\.[0-9]' stdout || exit 77]], [], [ignore])
-
-# Prevent aclocal from reading third-party macros, in case they are buggy.
-# (AM_INIT_AUTOMAKE will still be available via the default --automake-acdir.)
-mkdir empty
-ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
-export ACLOCAL
+AT_REQUIRE_AUTOMAKE
+AT_REQUIRE_ACLOCAL
 
 AT_DATA([configure.ac],
 [[AC_INIT(GNU foo, 1.0)
@@ -1913,14 +1874,8 @@ AT_KEYWORDS([autoreconf])
 # --help output, that option should not cause errors, even if some
 # of the subsidiary programs don't support it.
 
-# We use aclocal and automake via autoreconf.
-AT_CHECK([automake --version || exit 77], [], [ignore], [ignore])
-
-# Prevent aclocal from reading third-party macros, in case they are buggy.
-# (AM_INIT_AUTOMAKE will still be available via the default --automake-acdir.)
-mkdir empty
-ACLOCAL="aclocal --system-acdir=`cd empty && pwd`"
-export ACLOCAL
+AT_REQUIRE_AUTOMAKE
+AT_REQUIRE_ACLOCAL
 
 AT_DATA([configure.ac],
 [[AC_INIT(GNU foo, 1.0)
@@ -1962,12 +1917,7 @@ AT_CLEANUP
 AT_SETUP([Missing auxiliary files (config.*)])
 AT_KEYWORDS([autoreconf])
 
-# Prevent autoreconf from running aclocal, which might not exist,
-# or could barf over warnings in third-party macro files.
-AT_DATA([aclocal.m4])
-ACLOCAL=true
-export ACLOCAL
-
+AT_SUPPRESS_ACLOCAL
 AT_DATA([configure.ac],
 [[AC_INIT([GNU foo], [1.0])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -2028,12 +1978,7 @@ AT_KEYWORDS([autoreconf])
 # configure script _doesn't_ need config.{sub,guess} but does need
 # install-sh.
 
-# Prevent autoreconf from running aclocal, which might not exist,
-# or could barf over warnings in third-party macro files.
-AT_DATA([aclocal.m4])
-ACLOCAL=true
-export ACLOCAL
-
+AT_SUPPRESS_ACLOCAL
 AT_DATA([configure.ac],
 [[AC_INIT([GNU foo], [1.0])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -2078,12 +2023,7 @@ AT_KEYWORDS([autoreconf])
 # usage in some automake recipes, but which was broken in autoconf
 # beta 2.69d (see https://savannah.gnu.org/support/?110363).
 
-# Prevent autoreconf from running aclocal, which might not exist,
-# or could barf over warnings in third-party macro files.
-AT_DATA([aclocal.m4])
-ACLOCAL=true
-export ACLOCAL
-
+AT_SUPPRESS_ACLOCAL
 AT_DATA([configure.ac],
 [[AC_INIT([GNU foo], [1.0])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -2123,12 +2063,7 @@ AT_KEYWORDS([autoreconf])
 # Additional wrinkle: in case automake got to the files we install
 # first, we need to *not* overwrite a newer copy supplied by them.
 
-# Prevent autoreconf from running aclocal, which might not exist,
-# or could barf over warnings in third-party macro files.
-AT_DATA([aclocal.m4])
-ACLOCAL=true
-export ACLOCAL
-
+AT_SUPPRESS_ACLOCAL
 AT_DATA([configure.ac],
 [[AC_INIT([GNU foo], [1.0])
 AC_CONFIG_AUX_DIR([build-aux])
