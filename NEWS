@@ -32,15 +32,10 @@ GNU Autoconf NEWS - User visible changes.
   for large files and/or timestamps after 2038 are *available*
   but not enabled by default.
 
+  This is the cause of the AC_SYS_LARGEFILE, AC_SYS_YEAR2038, and/or
+  AC_SYS_YEAR2038_RECOMMENDED testsuite failures on some systems.
   See <https://savannah.gnu.org/support/index.php?110983> for details
   and a workaround.
-
-*** “autoconf: forbidden tokens, basic” testsuite failure
-
-  We believe this is another subtle bug in autom4te’s handling of
-  timestamps that are very close together.  It only happens on some
-  operating systems and/or some file systems.  It can safely be ignored.
-  See <https://savannah.gnu.org/support/index.php?110986> for more detail.
 
 *** “Substitute and define special characters” testsuite failure
 

@@ -474,11 +474,17 @@ configure.ac:5: error: possibly undefined macro: _AS@&t@_BAR
 configure.ac:6: error: possibly undefined macro: d@&t@nl
 ]])
 
+# On a file system with coarse timestamp resolution (1 or 2s),
+# configure and autom4te's cache files can easily have equal
+# timestamps, in which case autom4te will consider the cache
+# to be stale.  Ensure configure's timestamp is newer.
 AT_MTIME_DELAY
+touch configure
 
-# A second run (without --force) should succeed and yield only the
-# warnings about AC_INIT and AC_OUTPUT.
-AT_CHECK_M4([autoconf], 0, [],
+# Since warnings are replicated from the cache but "possibly undefined
+# macro" errors are not, a second run, without --force, should succeed
+# and should yield only the warnings about AC_INIT and AC_OUTPUT.
+AT_CHECK_M4([autoconf --verbose], 0, [],
 [[trailer.m4: warning: AC_INIT was never used
 trailer.m4: warning: AC_OUTPUT was never used
 ]])
