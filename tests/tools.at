@@ -484,7 +484,7 @@ touch configure
 # Since warnings are replicated from the cache but "possibly undefined
 # macro" errors are not, a second run, without --force, should succeed
 # and should yield only the warnings about AC_INIT and AC_OUTPUT.
-AT_CHECK_M4([autoconf --verbose], 0, [],
+AT_CHECK_M4([autoconf], 0, [],
 [[trailer.m4: warning: AC_INIT was never used
 trailer.m4: warning: AC_OUTPUT was never used
 ]])
