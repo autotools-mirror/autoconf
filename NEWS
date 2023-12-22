@@ -1,52 +1,6 @@
 GNU Autoconf NEWS - User visible changes.
 
-* Noteworthy changes in release 2.72e (2023-12-20) [release candidate]
-
-** Further improvements to subsecond timestamp handling
-
-  Two subtle bugs were fixed.  Also, ‘autom4te --version’ now reports
-  whether autom4te is capable of reading subsecond timestamps from
-  the file system, enabling other programs (notably Automake) to
-  adjust their own behavior appropriately.
-
-  There may still be problems with subsecond timestamps (see below).
-  Because timestamp comparison is only used for autom4te’s cache,
-  the only practical effect of these problems is to cause spurious
-  failures in Autoconf and Automake’s test suites, in tests of the
-  cache itself.
-
-** Significant bug fixes
-
-*** autom4te works with perl 5.6.x again
-*** BusyBox ‘mkdir’ is correctly identified
-*** AC_FUNC_MMAP successfully detects mmap on CheriBSD
-*** Better error message for calling m4_warn() with a bad first argument
-
-** Known bugs
-
-*** AC_SYS_LARGEFILE and AC_SYS_YEAR2038 only work correctly in C mode.
-
-  This is only a problem for configure scripts that invoke either
-  macro while AC_LANG([something other than C]) is in effect, and
-  will only be a *visible* problem on systems where support
-  for large files and/or timestamps after 2038 are *available*
-  but not enabled by default.
-
-  This is the cause of the AC_SYS_LARGEFILE, AC_SYS_YEAR2038, and/or
-  AC_SYS_YEAR2038_RECOMMENDED testsuite failures on some systems.
-  See <https://savannah.gnu.org/support/index.php?110983> for details
-  and a workaround.
-
-*** “Substitute and define special characters” testsuite failure
-
-  We believe this to be a bug in some versions of NetBSD /bin/sh.
-  If you see this failure on any system besides *-unknown-netbsd9*,
-  please post a comment on <https://savannah.gnu.org/support/index.php?110985>
-  and attach a tarball of the failed test’s scratch directory
-  (${builddir}/tests/testsuite.dir/270 in version 2.72; the number
-  may change in the future as tests are added or removed).
-
-* Noteworthy changes in release 2.72d (2023-11-30) [beta]
+* Noteworthy changes in release 2.72 (2023-12-22) [release]
 
 ** Backward incompatibilities
 
@@ -76,7 +30,7 @@ GNU Autoconf NEWS - User visible changes.
   than a second.  (Note: even in the most recent release, Perl cannot
   always match the file system’s timestamp resolution.)
 
-  Generated 'configure' scripts continue to run without Perl.
+  Generated configure scripts continue to run without Perl.
 
 *** Autoconf users now need GNU M4 1.4.8 (2006) or later.
   Use of GNU M4 1.4.16 or later is recommended, as all earlier versions
@@ -103,9 +57,9 @@ GNU Autoconf NEWS - User visible changes.
   provide an accurate prototype for getgroups in unistd.h, and to
   implement it as specified in POSIX.
 
-  AC_FUNC_GETGROUPS still includes a short blacklist of OSes with
+  AC_FUNC_GETGROUPS still includes a short block-list of OSes with
   known, severe bugs in getgroups.  It can be overridden using
-  config.site.  If you encounter a mistake in this blacklist
+  config.site.  If you encounter a mistake in this list,
   please report it to bug-autoconf.
 
 *** All internal uses of AC_EGREP_CPP and AC_EGREP_HEADER have been removed.
@@ -113,7 +67,7 @@ GNU Autoconf NEWS - User visible changes.
   output of the C preprocessor.  Their use has been discouraged for
   many years, as they tend to be unreliable; it is better to find a
   way to use AC_COMPILE_IFELSE or AC_PREPROC_IFELSE instead.  We have
-  finally gotten around to taking our own advice.
+  finally taken our own advice.
 
   This change might break configure scripts that expected probes for
   ‘grep’ and/or the C preprocessor to happen as a side effect of an
@@ -130,7 +84,7 @@ GNU Autoconf NEWS - User visible changes.
 ** New features
 
 *** Support for ensuring time_t is Y2038-safe
-  'configure' can now ensure that time_t can represent moments in time
+  configure can now ensure that time_t can represent moments in time
   after 18 January 2038, i.e. 2**31 - 1 seconds after the Unix epoch.
   On most “64-bit” systems this is true by default; the new feature
   is detection of systems where time_t is a 32-bit signed integer by
@@ -176,14 +130,12 @@ GNU Autoconf NEWS - User visible changes.
 ** Obsolete features and new warnings
 
 *** Autoconf now quotes 'like this' instead of `like this'.
-
   Autoconf’s diagnostics now follow current GNU coding standards,
   which say that diagnostics in the C locale should quote 'like this'
   with plain apostrophes instead of the older GNU style `like this'
   with grave accent and apostrophe.
 
 *** AC_PROG_GCC_TRADITIONAL no longer does anything.
-
   This macro has had no useful effect since GCC dropped support for
   traditional-mode compilation in version 3.3 (released in 2003), and
   the systems that needed it are also long obsolete.  It is now a
@@ -191,22 +143,21 @@ GNU Autoconf NEWS - User visible changes.
 
 ** Notable bug fixes
 
-*** Autoconf caches now use finer-grained timestamps.
-
-  Autoconf now uses floating-point numbers rather than integers to
-  represent cache file timestamps, thus avoiding some problems where
-  automake incorrectly decides not to regenerate stale caches.
+*** autom4te now uses fine-grained file timestamps
+  Autoconf’s internal “autom4te” utility is now able to compare file
+  modification timestamps with sub-second precision, when available.
+  This eliminates a class of bugs where autom4te fails to regenerate
+  an outdated file.  Automake 1.17 (forthcoming) is required for a
+  complete fix.
 
 *** AC_HEADER_STDBOOL, AC_CHECK_HEADER_STDBOOL are obsolescent and less picky.
-
-  These macros are now obsolescent, as programs can simply include
+  These macros are now obsolescent, as most programs can simply include
   stdbool.h unconditionally.  If you use these macros, they now accept
   a stdbool.h that exists but does nothing, so long as ‘bool’, ‘true’,
   and ‘false’ work anyway.  This is for compatibility with C23 and
   with C++.
 
 *** AC_PROG_MKDIR_P now falls back on plain 'mkdir -p'.
-
   When AC_PROG_MKDIR_P cannot find a mkdir implementation that is
   known to lack race condition bugs, it now falls back on 'mkdir -p'
   instead of falling back on a relative path to install-sh, as the
@@ -218,8 +169,37 @@ GNU Autoconf NEWS - User visible changes.
   should work if it is installed; if not, you should avoid parallel
   'make' on that platform.
 
-* Releases 2.72a,b,c were snapshots that did not get their own
-  NEWS entries.
+*** Better diagnostics for calling m4_warn() with a bad first argument
+  Calling m4_warn with a first argument that doesn’t match any of the
+  official warning categories now produces a sensible error message,
+  instead of something that makes it look like there’s a bug in the
+  guts of autom4te.  Also, the documentation has been adjusted in
+  several places to make it clearer what the official warning
+  categories are.
+
+  Note: In Autoconf 2.69 and earlier, the manual said that [] and [all]
+  could be used as the first argument to m4_warn.  This was incorrect,
+  even at the time.
+
+*** Improved compatibility with a wide variety of systems and tools
+  including CheriBSD, Darwin (macOS), GNU Guix, OS/2, z/OS, Bash 5.2,
+  the BusyBox shell and utilities, Clang/LLVM version 16, the upcoming
+  GCC version 14, etc.
+
+** Known bugs
+
+*** AC_SYS_LARGEFILE and AC_SYS_YEAR2038 only work correctly in C mode.
+
+  This is only a problem for configure scripts that invoke either
+  macro while AC_LANG([something other than C]) is in effect, and
+  will only be a *visible* problem on systems where support
+  for large files and/or timestamps after 2038 are *available*
+  but not enabled by default.
+
+  This is the cause of the AC_SYS_LARGEFILE, AC_SYS_YEAR2038, and/or
+  AC_SYS_YEAR2038_RECOMMENDED testsuite failures on some systems.
+  See <https://savannah.gnu.org/support/index.php?110983> for details
+  and a workaround.
 
 * Noteworthy changes in release 2.71 (2021-01-28) [stable]
 
