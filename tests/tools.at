@@ -1521,14 +1521,23 @@ AT_CHECK([$ACLOCAL || { ret=$?; test $ret -eq 63 && ret=77; exit $ret; }],
 AT_CHECK([test -d autom4te.cache || exit 77])
 AT_CHECK([autoconf])
 
+# On a file system with coarse timestamp resolution (1 or 2s),
+# configure and autom4te's cache files can easily have equal
+# timestamps, in which case autom4te will consider the cache
+# to be stale.  Ensure configure's timestamp is newer.
+AT_MTIME_DELAY
+touch configure
+
 # If this test fails due to missing entries in lib/autom4te.in, then
 # comparing the old and new requests is a good place to start debugging:
 sort autom4te.cache/requests >old-requests
-echo newer >newer
+
 # if 'configure' is regenerated, we want it to be strictly newer,
 # to catch the error consistently.
+echo newer >newer
 AT_MTIME_DELAY
-AT_CHECK([$ACLOCAL], [],[], [ignore])
+
+AT_CHECK([$ACLOCAL], [], [], [ignore])
 AT_CHECK([automake --no-force --add-missing], [], [], [ignore])
 AT_CHECK([autoconf])
 AT_CHECK([test "`find configure -newer newer`" = "" ||
