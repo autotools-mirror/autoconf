@@ -291,7 +291,21 @@ AT_CHECK_CONFIG_CREATION(command)
 # Create a link
 AT_CHECK_CONFIG_CREATION(link)
 
-# Now check for write errors
+# Now check for write errors.
+# Depending on the shell, 'printf' might or might not report write
+# errors on stdout.  Check /bin/sh regardless of $SHELL, because
+# config.status always uses /bin/sh.
+# Note: another way to force a write error is with ulimit -f, but
+# depending on the OS it might not be possible to set that limit
+# lower than one disk block, so we'd have to make the tests below
+# produce much more output.
+test_write_errors=false
+if test -w /dev/full && test -c /dev/full; then
+  if /bin/sh -c 'printf "write errors detected?\\n"' > /dev/full 2> /dev/null
+  then :
+  else test_write_errors=:
+  fi
+fi
 
 # Create a file
 AT_CHECK_CONFIG_CREATION_NOWRITE(file)
@@ -301,7 +315,7 @@ AT_CHECK([echo from-stdin | ./config.status --file=file:-],
 AT_CHECK([grep from-stdin file], [], [from-stdin
 ])
 # Force write error creating a file on stdout
-if test -w /dev/full && test -c /dev/full; then
+if $test_write_errors; then
   AT_CHECK([./config.status --file=-:input </dev/null >/dev/full || exit 1],
 	   [1], [ignore], [ignore])
 fi
@@ -320,7 +334,7 @@ AT_CHECK([./config.status --header=-:input </dev/null],
 AT_CHECK([grep OK stdout], [], [OK
 ])
 # Force write error creating a header on stdout
-if test -w /dev/full && test -c /dev/full; then
+if $test_write_errors; then
   AT_CHECK([./config.status --header=-:input </dev/null >/dev/full || exit 1],
 	   [1], [ignore], [ignore])
 fi
