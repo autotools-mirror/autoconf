@@ -62,7 +62,7 @@ AS_CASE([$at_automake_version_1],
 export AUTOMAKE
 
 # Used in the code below that decides delay intervals.
-if test "$AUTOMAKE" == false
+if test "$AUTOMAKE" = false
 then
   # If automake is unavailable, then whether it supports subsecond
   # mtime is moot.
