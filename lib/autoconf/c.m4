@@ -557,6 +557,7 @@ fi[]dnl
 # --------------
 AC_DEFUN([AC_PROG_CC_C_O],
 [AC_REQUIRE([AC_PROG_CC])dnl
+AC_LANG_PUSH([C])
 if test "x$CC" != xcc; then
   AC_MSG_CHECKING([whether $CC and cc understand -c and -o together])
 else
@@ -603,6 +604,7 @@ else
   AC_DEFINE(NO_MINUS_C_MINUS_O, 1,
 	   [Define to 1 if your C compiler doesn't accept -c and -o together.])
 fi
+AC_LANG_POP([C])
 ])# AC_PROG_CC_C_O
 
 
