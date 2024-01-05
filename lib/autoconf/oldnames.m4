@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                           -*- Autoconf -*-
 # Support old macros, and provide automated updates.
-# Copyright (C) 1994, 1999-2001, 2003, 2009-2017, 2020-2023 Free
+# Copyright (C) 1994, 1999-2001, 2003, 2009-2017, 2020-2024 Free
 # Software Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free

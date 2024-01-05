@@ -1,6 +1,6 @@
 # m4.m4 serial 13
 
-# Copyright (C) 2000, 2006-2017, 2020-2023 Free Software Foundation,
+# Copyright (C) 2000, 2006-2017, 2020-2024 Free Software Foundation,
 # Inc.
 
 # Copying and distribution of this file, with or without modification,

@@ -1,6 +1,6 @@
 # This file is part of Autoconf.                       -*- Autoconf -*-
 # Programming languages support.
-# Copyright (C) 2000-2002, 2004-2017, 2020-2023 Free Software
+# Copyright (C) 2000-2002, 2004-2017, 2020-2024 Free Software
 # Foundation, Inc.
 
 # This file is part of Autoconf.  This program is free
