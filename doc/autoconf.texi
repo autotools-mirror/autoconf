@@ -10001,18 +10001,26 @@ provides some variants of traditional implementations of Unix utilities.
 @table @asis
 @item Darwin
 @cindex Darwin
-Darwin is also known as Mac OS X@.  Beware that the file system @emph{can} be
-case-preserving, but case insensitive.  This can cause nasty problems,
-since for instance the installation attempt for a package having an
-@file{INSTALL} file can result in @samp{make install} report that
-nothing was to be done!
+@cindex macOS
+@cindex Mac OS X
+Darwin is a partially proprietary operating system maintained by Apple
+Computer and used by most of their products.  It is also known as macOS,
+iOS, etc.@: depending on the exact variant.  Older versions were called
+``Mac OS X'', the X being intended as the Roman numeral for 10.
 
-That's all dependent on whether the file system is a UFS (case
-sensitive) or HFS+ (case preserving).  By default Apple wants you to
-install the OS on HFS+.  Unfortunately, there are some pieces of
-software which really need to be built on UFS@.  We may want to rebuild
-Darwin to have both UFS and HFS+ available (and put the /local/build
-tree on the UFS).
+It is derived from FreeBSD, but presents some unusual portability
+hazards.  Most importantly, by default the filesystem will be case
+insensitive, albeit case preserving.  This can cause nasty problems:
+for instance, the installation attempt for a package having an
+@file{INSTALL} file can result in @samp{make install} reporting that
+nothing is to be done!
+
+Darwin does support case-sensitive file systems, but they must be
+formatted specially as such, and Apple discourages use of a
+case-sensitive volume for the base operating system.  To build software
+that expects case-sensitive filenames, it is best to create a separate
+disk volume or disk image formatted as case sensitive; this can be done
+using the @command{diskutil} command or the Disk Utility application.
 
 @item QNX 4.25
 @cindex QNX 4.25
