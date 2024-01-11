@@ -19705,6 +19705,11 @@ On NetBSD, @command{join -a 1 file1 file2} mistakenly behaves like
 @command{join -a 1 -a 2 1 file1 file2}, resulting in a usage warning;
 the workaround is to use @command{join -a1 file1 file2} instead.
 
+On some circa-2020 BSD-based systems @command{join} mishandles inputs
+with missing fields.  For example, an empty line is not treated as
+containing an empty join field.  As a workaround, input lines should
+always have a join field.
+
 On platforms with the BusyBox tools, the @command{join} command is
 entirely missing.  As a workaround, you can simulate special cases of the
 @command{join} command using an @command{awk} script.  For an example,
