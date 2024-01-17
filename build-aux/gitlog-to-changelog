@@ -3,7 +3,7 @@
 
 # Convert git log output to ChangeLog format.
 
-# Copyright (C) 2008-2023 Free Software Foundation, Inc.
+# Copyright (C) 2008-2024 Free Software Foundation, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 #
 # Written by Jim Meyering
 
-# This is a prologue that allows to run a perl script as an executable
+# This is a prologue that allows running a perl script as an executable
 # on systems that are compliant to a POSIX version before POSIX:2017.
 # On such systems, the usual invocation of an executable through execlp()
 # or execvp() fails with ENOEXEC if it is a script that does not start
