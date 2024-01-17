@@ -533,7 +533,6 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
      [ac_cv_type_long_long_int=yes
       case $ac_prog_cc_stdc in
 	no | c89) ;;
-	*)
 	  ac_cv_type_long_long_int=$ac_cv_type_unsigned_long_long_int
 	  if test $ac_cv_type_long_long_int = yes; then
 	    dnl Catch a bug in Tandem NonStop Kernel (OSS) cc -O circa 2004.
@@ -579,7 +578,6 @@ AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
     [ac_cv_type_unsigned_long_long_int=yes
      case $ac_prog_cc_stdc in
        no | c89) ;;
-       *)
 	 AC_LINK_IFELSE(
 	   [_AC_TYPE_LONG_LONG_SNIPPET],
 	   [],
