@@ -19288,28 +19288,9 @@ newline encoding.
 @item @command{cp}
 @c ---------------
 @prindex @command{cp}
-Avoid the @option{-r} option, since Posix 1003.1-2004 marks it as
-obsolescent and its behavior on special files is implementation-defined.
-Use @option{-R} instead.  On GNU hosts the two options
-are equivalent, but on Solaris hosts (for example) @code{cp -r}
-reads from pipes instead of replicating them.  AIX 5.3 @code{cp -R} may
-corrupt its own memory with some directory hierarchies and error out or
-dump core:
-
-@example
-@kbd{mkdir -p 12345678/12345678/12345678/12345678}
-@kbd{touch 12345678/12345678/x}
-@kbd{cp -R 12345678 t}
-cp: 0653-440 12345678/12345678/: name too long.
-@end example
-
-Some @command{cp} implementations (e.g., BSD/OS 4.2) do not allow
-trailing slashes at the end of nonexistent destination directories.  To
-avoid this problem, omit the trailing slashes.  For example, use
-@samp{cp -R source /tmp/newdir} rather than @samp{cp -R source
-/tmp/newdir/} if @file{/tmp/newdir} does not exist.
-
-The @option{-f} option is portable nowadays.
+The @option{-i}, @option{-f}, @option{-p} and @option{-R} options are
+widely used.  POSIX also specifies @option{-H}, @option{-L}, and
+@option{-P}.  Avoid other options in portable scripts.
 
 @cindex timestamp resolution
 Traditionally, file timestamps had 1-second resolution, and @samp{cp
