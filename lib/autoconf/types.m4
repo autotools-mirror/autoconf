@@ -837,11 +837,7 @@ AC_DEFUN([AC_CHECK_SIZEOF],
 _AC_CACHE_CHECK_INT([size of $1], [AS_TR_SH([ac_cv_sizeof_$1])],
   [(long int) (sizeof ($1))],
   [AC_INCLUDES_DEFAULT([$3])],
-  [if test "$AS_TR_SH([ac_cv_type_$1])" = yes; then
-     AC_MSG_FAILURE([cannot compute sizeof ($1)], 77)
-   else
-     AS_TR_SH([ac_cv_sizeof_$1])=0
-   fi])
+  [AS_TR_SH([ac_cv_sizeof_$1])=0])
 
 AC_DEFINE_UNQUOTED(AS_TR_CPP(sizeof_$1), $AS_TR_SH([ac_cv_sizeof_$1]),
 		   [The size of '$1', as computed by sizeof.])
@@ -866,11 +862,7 @@ _AC_CACHE_CHECK_INT([alignment of $1], [AS_TR_SH([ac_cv_alignof_$3])],
   [(long int) offsetof (ac__type_alignof_, y)],
   [AC_INCLUDES_DEFAULT([$2])
 typedef struct { char x; $1 y; } ac__type_alignof_;],
-  [if test "$AS_TR_SH([ac_cv_type_$3])" = yes; then
-     AC_MSG_FAILURE([cannot compute alignment of $1], 77)
-   else
-     AS_TR_SH([ac_cv_alignof_$3])=0
-   fi])
+  [AS_TR_SH([ac_cv_alignof_$3])=0])
 
 AC_DEFINE_UNQUOTED(AS_TR_CPP(alignof_$3), $AS_TR_SH([ac_cv_alignof_$3]),
 		   [The normal alignment of '$1', in bytes.])
