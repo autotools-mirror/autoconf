@@ -192,7 +192,7 @@ END
   rm -rf "$outfile" "$cachedir"
   AT_CHECK_AUTOM4TE([-C "$cachedir" -I "$dir" --language=m4sugar -o "$outfile" "$file"],
 		    [1], [], [stderr])
-  AT_CHECK([grep 'possibly undefined macro' stderr], [], [ignore])
+  AT_CHECK([grep 'undefined or overquoted macro' stderr], [], [ignore])
 
   cat >"$file" <<'END'
 [m4@&t@_init[]m4@&t@_include(foo.m4)
@@ -465,13 +465,13 @@ AT_MTIME_DELAY
 AT_CHECK_AUTOCONF([], 1, [],
 [[trailer.m4: warning: AC_INIT was never used
 trailer.m4: warning: AC_OUTPUT was never used
-configure.ac:2: error: possibly undefined macro: m4@&t@_foo
+configure.ac:2: error: undefined or overquoted macro: m4@&t@_foo
       If this token and others are legitimate, please use m4@&t@_pattern_allow.
       See the Autoconf documentation.
-configure.ac:3: error: possibly undefined macro: _m4@&t@_bar
-configure.ac:4: error: possibly undefined macro: AS@&t@_FOO
-configure.ac:5: error: possibly undefined macro: _AS@&t@_BAR
-configure.ac:6: error: possibly undefined macro: d@&t@nl
+configure.ac:3: error: undefined or overquoted macro: _m4@&t@_bar
+configure.ac:4: error: undefined or overquoted macro: AS@&t@_FOO
+configure.ac:5: error: undefined or overquoted macro: _AS@&t@_BAR
+configure.ac:6: error: undefined or overquoted macro: d@&t@nl
 ]])
 
 # On a file system with coarse timestamp resolution (1 or 2s),
@@ -481,7 +481,7 @@ configure.ac:6: error: possibly undefined macro: d@&t@nl
 AT_MTIME_DELAY
 touch configure
 
-# Since warnings are replicated from the cache but "possibly undefined
+# Since warnings are replicated from the cache but "undefined or overquoted
 # macro" errors are not, a second run, without --force, should succeed
 # and should yield only the warnings about AC_INIT and AC_OUTPUT.
 AT_CHECK_M4([autoconf], 0, [],
@@ -521,13 +521,13 @@ It would be very bad if Autoconf forgot to expand [AS_]INIT!
 AT_CHECK_AUTOCONF([], 1, [],
 [[trailer.m4: warning: AC_INIT was never used
 trailer.m4: warning: AC_OUTPUT was never used
-configure.ac:1: error: possibly undefined macro: AS@&t@_INIT
+configure.ac:1: error: undefined or overquoted macro: AS@&t@_INIT
       If this token and others are legitimate, please use m4@&t@_pattern_allow.
       See the Autoconf documentation.
-configure.ac:7: error: possibly undefined macro: AS@&t@_ALLOWED_NOT
-configure.ac:10: error: possibly undefined macro: FORBIDDEN
-configure.ac:14: error: possibly undefined macro: AS@&t@_THIS_IS_INVALID
-configure.ac:14: error: possibly undefined macro: _AS@&t@_THIS_IS_INVALID_TOO
+configure.ac:7: error: undefined or overquoted macro: AS@&t@_ALLOWED_NOT
+configure.ac:10: error: undefined or overquoted macro: FORBIDDEN
+configure.ac:14: error: undefined or overquoted macro: AS@&t@_THIS_IS_INVALID
+configure.ac:14: error: undefined or overquoted macro: _AS@&t@_THIS_IS_INVALID_TOO
 ]])
 
 AT_CLEANUP
