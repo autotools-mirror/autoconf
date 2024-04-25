@@ -328,11 +328,11 @@ script.4s:9: error: oddly enough, this works
 
 AT_CHECK_M4SUGAR([-o- -Wnone,obsolete], 1, [],
 [script.4s:2: warning: use of "" as a diagnostic category is obsolete
-script.4s:2: (see autom4te --help for a list of valid categories)
+script.4s:2: (see automake --help for a list of valid categories)
 script.4s:3: error: unknown diagnostic category "bogus"
 script.4s:4: error: unknown diagnostic category "!\"\\\x09%^&*"
 script.4s:5: warning: use of "all" as a diagnostic category is obsolete
-script.4s:5: (see autom4te --help for a list of valid categories)
+script.4s:5: (see automake --help for a list of valid categories)
 script.4s:6: error: -W accepts "none", but it is not a diagnostic category
 script.4s:7: error: -W accepts "no-syntax", but it is not a diagnostic category
 script.4s:8: error: unknown diagnostic category "no-bogus"
@@ -341,14 +341,14 @@ script.4s:9: error: oddly enough, this works
 
 AT_CHECK_M4SUGAR([-o- -Wnone,obsolete,syntax], 1, [],
 [script.4s:2: warning: use of "" as a diagnostic category is obsolete
-script.4s:2: (see autom4te --help for a list of valid categories)
+script.4s:2: (see automake --help for a list of valid categories)
 script.4s:2: warning: empty category
 script.4s:3: error: unknown diagnostic category "bogus"
 script.4s:3: warning: invalid category
 script.4s:4: error: unknown diagnostic category "!\"\\\x09%^&*"
 script.4s:4: warning: line noise category
 script.4s:5: warning: use of "all" as a diagnostic category is obsolete
-script.4s:5: (see autom4te --help for a list of valid categories)
+script.4s:5: (see automake --help for a list of valid categories)
 script.4s:5: warning: 'all' used as a category
 script.4s:6: error: -W accepts "none", but it is not a diagnostic category
 script.4s:6: warning: 'none' used as a category
