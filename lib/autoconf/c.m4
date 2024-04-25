@@ -1120,12 +1120,8 @@ AC_DEFUN([_AC_C_C89_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
 [[# Test code for whether the C compiler supports C89 (global declarations)
 ac_c_conftest_c89_globals='
-/* Does the compiler advertise C89 conformance?
-   Do not test the value of __STDC__, because some compilers set it to 0
-   while being otherwise adequately conformant. */
-#if !defined __STDC__
-# error "Compiler does not advertise C89 conformance"
-#endif
+/* Do not test the value of __STDC__, because some compilers define it to 0
+   or do not define it, while otherwise adequately conforming.  */
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -1337,13 +1333,12 @@ ac_c_conftest_c99_main='
 
   ni.number = 58;
 
-  int dynamic_array[ni.number];
-  dynamic_array[0] = argv[0][0];
-  dynamic_array[ni.number - 1] = 543;
+  // Do not test for VLAs, as some otherwise-conforming compilers lack them.
+  // C code should instead use __STDC_NO_VLA__; see Autoconf manual.
 
   // work around unused variable warnings
   ok |= (!success || bignum == 0LL || ubignum == 0uLL || newvar[0] == '\''x'\''
-	 || dynamic_array[ni.number - 1] != 543);
+	 || ni.number != 58);
 '
 ]])])
 
@@ -1553,6 +1548,7 @@ m4_define([_AC_C_C99_OPTIONS], [
 # shell quotes around the group.
 #
 # GCC, Clang    -std=gnu11
+# MSVC          -std:c11
 #
 # For IBM XL C for AIX V16.1 or later, '-std=gnu11' should work if
 # the user configured with CC='xlclang'.  Otherwise, do not try
@@ -1562,6 +1558,7 @@ m4_define([_AC_C_C99_OPTIONS], [
 # _Noreturn, which is a win.
 m4_define([_AC_C_C11_OPTIONS], [
     -std=gnu11
+    -std:c11
 ])
 
 

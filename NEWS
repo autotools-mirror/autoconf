@@ -2,6 +2,13 @@ GNU Autoconf NEWS - User visible changes.
 
 * Noteworthy changes in release ?.? (????-??-??) [?]
 
+** Backward incompatibilities
+
+*** AC_PROG_CC no longer tests for VLAs, or whether __STDC__ is defined.
+  This ports better to MSVC, which does not support variable length
+  arrays and does not define __STDC__.  Although C99 requires VLAs,
+  they are optional in C11 and later.  Programs can use AC_C_VARARRAYS
+  and __STDC_NO_VLA__ to use VLAs if available.
 
 * Noteworthy changes in release 2.72 (2023-12-22) [release]
 

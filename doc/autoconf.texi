@@ -7444,9 +7444,14 @@ the C standard, and @samp{no} if the compiler does not support compiling
 standard C at all.
 
 The tests for standard conformance are not comprehensive.  They test the
-values of @code{__STDC__} and @code{__STDC_VERSION__}, and a
+value of @code{__STDC_VERSION__}, and a
 representative sample of the language features added in each version of
-the C standard.  They do not test the C standard library, because the C
+the C standard.  They do not examine @code{__STDC__}
+because some compilers by default leave it undefined.
+They do not test for variable-length arrays,
+a C99 feature that was made optional in C11;
+if you need to use this feature when available, use @code{AC_C_VARARRAYS}.
+They do not test the C standard library, because the C
 compiler might be generating code for a ``freestanding environment''
 (in which most of the standard library is optional).  If you need to know
 whether a particular C standard header exists, use @code{AC_CHECK_HEADER}.
