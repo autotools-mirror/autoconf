@@ -2,7 +2,7 @@
 # gendocs.sh -- generate a GNU manual in many formats.  This script is
 #   mentioned in maintain.texi.  See the help message below for usage details.
 
-scriptversion=2024-01-01.00
+scriptversion=2024-01-27.16
 
 # Copyright 2003-2024 Free Software Foundation, Inc.
 #
@@ -66,7 +66,7 @@ generate_html=true
 generate_info=true
 generate_tex=true
 outdir=manual
-source_extra=
+unset source_extra
 split=node
 srcfile=
 texarg="-t @finalout"
@@ -167,7 +167,7 @@ while test $# -gt 0; do
     --html)      shift; default_htmlarg=false; htmlarg=$1;;
     --info)      shift; infoarg=$1;;
     --no-ascii)  generate_ascii=false;;
-    --no-html)   generate_ascii=false;;
+    --no-html)   generate_html=false;;
     --no-info)   generate_info=false;;
     --no-tex)    generate_tex=false;;
     --source)    shift; source_extra=$1;;
@@ -416,11 +416,49 @@ fi # end html
 printf "\nMaking .tar.gz for sources...\n"
 d=`dirname $srcfile`
 (
-  cd "$d"
-  srcfiles=`ls -d *.texinfo *.texi *.txi *.eps $source_extra 2>/dev/null` || true
-  tar czfh "$abs_outdir/$PACKAGE.texi.tar.gz" $srcfiles
-  ls -l "$abs_outdir/$PACKAGE.texi.tar.gz"
-)
+  cd "$d" || exit
+
+  # Set PATS to a list of globbing patterns that expand to
+  # file names to be put into the .tar.gz for sources.
+  # Omit patterns that do not expand to file names.
+  pats=
+
+  if case `$MAKEINFO --version | sed -e 's/^[^0-9]*//' -e 1q` in \
+       [1-6]* | 7.[01]*) false;; \
+       *) true;; \
+     esac \
+  ; then
+
+    for pat in '*.eps'; do
+      for file in $pat; do
+        test "$file" = "$pat" && test ! -e "$file" || pats="$pats $pat"
+        break
+      done
+    done
+
+    # if $MAKEINFO is recent enough, use --trace-includes on the
+    # $srcfile to get the included files of the targetted manual only
+    base=`basename "$srcfile"`
+
+    cmd="$SETLANG $MAKEINFO $commonarg --trace-includes \"$base\""
+    eval "$cmd" \
+    | tar -czhf "$abs_outdir/$PACKAGE.texi.tar.gz" \
+        --verbatim-files-from -T- -- "$base" $pats \
+        ${source_extra+"$source_extra"} \
+    && ls -l "$abs_outdir/$PACKAGE.texi.tar.gz"
+  else
+    for pat in '*.texinfo' '*.texi' '*.txi' '*.eps'; do
+     for file in $pat; do
+       test "$file" = "$pat" && test ! -e "$file" || pats="$pats $pat"
+       break
+      done
+    done
+
+    tar -czhf "$abs_outdir/$PACKAGE.texi.tar.gz" \
+       -- $pats ${source_extra+"$source_extra"} \
+    && ls -l "$abs_outdir/$PACKAGE.texi.tar.gz"
+  fi
+) || exit
 texi_tgz_size=`calcsize "$outdir/$PACKAGE.texi.tar.gz"`
 
 # 

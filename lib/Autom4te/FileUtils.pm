@@ -13,10 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-###############################################################
-# The main copy of this file is in Automake's git repository. #
-# Updates should be sent to automake-patches@gnu.org.         #
-###############################################################
+##################################################################
+# The master copy of this file is in Automake's source repository.
+# Please send updates to automake-patches@gnu.org.
+##################################################################
 
 package Autom4te::FileUtils;
 

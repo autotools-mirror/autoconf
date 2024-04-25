@@ -13,6 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+##################################################################
+# The master copy of this file is in Automake's source repository.
+# Please send updates to automake-patches@gnu.org.
+##################################################################
+
 package Autom4te::ChannelDefs;
 
 =head1 NAME
@@ -69,7 +74,7 @@ our @EXPORT = qw (&prog_error &error &fatal &verb
 =head2 CHANNELS
 
 The following channels can be used as the first argument of
-C<Autom4te::Channel::msg>.  For some of them we list a shorthand
+C<Autom4te::Channels::msg>.  For some of them we list a shorthand
 function that makes the code more readable.
 
 =over 4
