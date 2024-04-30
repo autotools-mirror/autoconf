@@ -7434,14 +7434,15 @@ person building the package.  @xref{Preset Output Variables}.)
 If necessary, options are added to @code{CC} to enable support for
 ISO Standard C features with extensions, preferring the newest edition
 of the C standard for which detection is supported.  Currently the
-newest edition Autoconf knows how to detect support for is C11, as there is
-little reason to prefer C17 to C11, and C23 is still too new.  After calling
+newest edition Autoconf knows how to detect support for is C23.  After calling
 this macro you can check whether the C compiler has been set to accept
 standard C by inspecting the shell variable @code{ac_prog_cc_stdc}.
-Its value will be @samp{c11}, @samp{c99}, or @samp{c89}, respectively,
-if the C compiler has been set to use the 2011, 1999, or 1990 edition of
+Its value is @samp{c23}, @samp{c11}, @samp{c99}, or @samp{c89}, respectively,
+if the C compiler has been set to use the 2023, 2011, 1999, or 1990 edition of
 the C standard, and @samp{no} if the compiler does not support compiling
 standard C at all.
+(There is no special value for the 2017 edition of the C standard,
+as it is a minor revision that does not introduce new language features.)
 
 The tests for standard conformance are not comprehensive.  They test the
 value of @code{__STDC_VERSION__}, and a
@@ -9704,8 +9705,8 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to enable C11 features... -std=gnu11
-checking how to run the C preprocessor... gcc -std=gnu11 -E
+checking for gcc option to enable C23 features... -std=gnu23
+checking how to run the C preprocessor... gcc -std=gnu23 -E
 OK
 @end example
 
@@ -26725,7 +26726,7 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to enable C11 features... -std=gnu11
+checking for gcc option to enable C23 features... -std=gnu23
 checking for sys/types.h... yes
 checking for sys/stat.h... yes
 checking for strings.h... yes
@@ -26757,7 +26758,7 @@ checking whether we are cross compiling... no
 checking for suffix of object files... o
 checking whether the compiler supports GNU C... yes
 checking whether gcc accepts -g... yes
-checking for gcc option to enable C11 features... -std=gnu11
+checking for gcc option to enable C23 features... -std=gnu23
 checking for number.h... yes
 checking for pi.h... yes
 @end example

@@ -1103,7 +1103,7 @@ fi[]dnl
 # Warning: each test program may only use the headers required to
 # exist in the relevant standard's *freestanding* environment, in case
 # the C compiler targets such an environment.  (Therefore, almost no
-# features of the C89/C99/C11 standard *library* are probed.  Use
+# features of the C89/C99/C11/C23 standard *library* are probed.  Use
 # AC_CHECK_HEADER, AC_CHECK_FUNC, etc. for that.)  However, these
 # programs are only compiled and not linked, so it is ok to declare
 # external functions and then call them without worrying about whether
@@ -1115,6 +1115,8 @@ fi[]dnl
 #     <iso646.h> <stdbool.h> <stdint.h>
 # C11 adds:
 #     <stdalign.h> <stdnoreturn.h>
+# C23 adds:
+#     <stdbit.h>
 
 AC_DEFUN([_AC_C_C89_TEST_GLOBALS],
 [m4_divert_text([INIT_PREPARE],
@@ -1412,6 +1414,97 @@ ac_c_conftest_c11_main='
 '
 ]])])
 
+AC_DEFUN([_AC_C_C23_TEST_GLOBALS],
+[m4_divert_text([INIT_PREPARE],
+[[# Test code for whether the C compiler supports C23 (global declarations)
+ac_c_conftest_c23_globals='
+/* Does the compiler advertise conformance to C17 or earlier?
+   Although GCC 14 does not do that, even with -std=gnu23,
+   it is close enough, and defines __STDC_VERSION == 202000L.  */
+#if !defined __STDC_VERSION__ || __STDC_VERSION__ <= 201710L
+# error "Compiler advertises conformance to C17 or earlier"
+#endif
+
+// Check alignas.
+char alignas (double) c23_aligned_as_double;
+char alignas (0) c23_no_special_alignment;
+extern char c23_aligned_as_int;
+char alignas (0) alignas (int) c23_aligned_as_int;
+
+// Check alignof.
+enum
+{
+  c23_int_alignment = alignof (int),
+  c23_int_array_alignment = alignof (int[100]),
+  c23_char_alignment = alignof (char)
+};
+static_assert (0 < -alignof (int), "alignof is signed");
+
+int function_with_unnamed_parameter (int) { return 0; }
+
+void c23_noreturn ();
+
+bool use_u8 = !u8"\xFF" == u8'\''x'\'';
+
+bool check_that_bool_works = true | false | !nullptr;
+#if !true
+# error "true does not work in #if"
+#endif
+#if false
+#elifdef __STDC_VERSION__
+#else
+# error "#elifdef does not work"
+#endif
+
+#ifndef __has_c_attribute
+# error "__has_c_attribute not defined"
+#endif
+
+#ifndef __has_include
+# error "__has_include not defined"
+#endif
+
+#define LPAREN() (
+#define FORTY_TWO(x) 42
+#define VA_OPT_TEST(r, x, ...) __VA_OPT__ (FORTY_TWO r x))
+static_assert (VA_OPT_TEST (LPAREN (), 0, <:-) == 42);
+
+static_assert (0b101010 == 42);
+static_assert (0B101010 == 42);
+static_assert (0xDEAD'\''BEEF == 3'\''735'\''928'\''559);
+static_assert (0.500'\''000'\''000 == 0.5);
+
+enum unsignedish : unsigned int { uione = 1 };
+static_assert (0 < -uione);
+
+#include <stddef.h>
+constexpr nullptr_t null_pointer = nullptr;
+
+#include <stdbit.h>
+static_assert (__STDC_ENDIAN_LITTLE__ != __STDC_ENDIAN_BIG__);
+
+static typeof (1 + 1L) two () { return 2; }
+static long int three () { return 3; }
+'
+]])])
+
+AC_DEFUN([_AC_C_C23_TEST_MAIN],
+[m4_divert_text([INIT_PREPARE],
+[[# Test code for whether the C compiler supports C23 (body of main).
+ac_c_conftest_c23_main='
+  {
+    label_before_declaration:
+      int arr[10] = {};
+      if (arr[0])
+        goto label_before_declaration;
+      if (!arr[0])
+        goto label_at_end_of_block;
+    label_at_end_of_block:
+  }
+  ok |= two != three;
+'
+]])])
+
 AC_DEFUN([_AC_C_C89_TEST_PROGRAM],
 [AC_REQUIRE([_AC_C_C89_TEST_GLOBALS])dnl
 AC_REQUIRE([_AC_C_C89_TEST_MAIN])dnl
@@ -1470,6 +1563,23 @@ main (int argc, char **argv)
   ${ac_c_conftest_c89_main}
   ${ac_c_conftest_c99_main}
   ${ac_c_conftest_c11_main}
+  return ok;
+}
+"
+]])])
+
+AC_DEFUN([_AC_C_C23_TEST_PROGRAM],
+[AC_REQUIRE([_AC_C_C23_TEST_GLOBALS])dnl
+AC_REQUIRE([_AC_C_C23_TEST_MAIN])dnl
+m4_divert_text([INIT_PREPARE],
+[[# Test code for whether the C compiler supports C23 (complete).
+ac_c_conftest_c23_program="${ac_c_conftest_c23_globals}
+
+int
+main (int, char **)
+{
+  int ok = 0;
+  ${ac_c_conftest_c23_main}
   return ok;
 }
 "
@@ -1561,13 +1671,26 @@ m4_define([_AC_C_C11_OPTIONS], [
     -std:c11
 ])
 
+# _AC_C_C23_OPTIONS
+# -----------------
+# Whitespace-separated list of options that might put the C compiler
+# into a mode conforming to ISO C 2023 with extensions.  Do not try
+# "strictly conforming" modes (e.g. gcc's -std=c23); they break some
+# systems' header files.  If more than one option is needed, put
+# shell quotes around the group.
+#
+# GCC, Clang    -std=gnu23
+m4_define([_AC_C_C23_OPTIONS], [
+    -std=gnu23
+])
+
 
 # _AC_PROG_CC_STDC_EDITION_TRY(EDITION)
 # -------------------------------------
 # Subroutine of _AC_PROG_CC_STDC_EDITION.  Not to be called directly.
 #
 # Check whether the C compiler accepts features of EDITION of the
-# C standard.  EDITION should be a two-digit year (e.g. 89, 99, 11).
+# C standard.  EDITION should be a two-digit year (e.g. 89, 99, 11, 23).
 # (FIXME: Switch to four-digit years for futureproofing.)
 # This is done by compiling the test program defined by
 # _AC_C_C{EDITION}_TEST_PROGRAM, first with no additional
@@ -1623,7 +1746,7 @@ AS_IF([test "x$ac_cv_prog_cc_c$1" = xno],
 # variable ac_prog_cc_stdc to indicate the edition.
 AC_DEFUN([_AC_PROG_CC_STDC_EDITION],
 [ac_prog_cc_stdc=no
-m4_map([_AC_PROG_CC_STDC_EDITION_TRY], [[11], [99], [89]])])
+m4_map([_AC_PROG_CC_STDC_EDITION_TRY], [[23], [11], [99], [89]])])
 
 
 # _AC_PROG_CC_C89(ACTION-IF-SUPPORTED, ACTION-IF-NOT-SUPPORTED)
