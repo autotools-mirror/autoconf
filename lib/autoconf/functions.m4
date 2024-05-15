@@ -984,7 +984,7 @@ AC_CACHE_CHECK([for GNU libc compatible malloc], ac_cv_func_malloc_0_nonnull,
 	       [ac_cv_func_malloc_0_nonnull=no],
 	       [case "$host_os" in # ((
 		  # Guess yes on platforms where we know the result.
-		  *-gnu* | freebsd* | netbsd* | openbsd* | bitrig* \
+		  *-gnu* | *-musl* | freebsd* | netbsd* | openbsd* | bitrig* \
 		  | hpux* | solaris* | cygwin* | mingw* | windows* | msys* )
 		    ac_cv_func_malloc_0_nonnull=yes ;;
 		  # If we don't know, assume the worst.
