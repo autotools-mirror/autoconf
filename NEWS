@@ -16,6 +16,11 @@ GNU Autoconf NEWS - User visible changes.
   C11 and later.  Programs can use AC_C_VARARRAYS and __STDC_NO_VLA__
   to use VLAs if available.
 
+** Notable bug fixes
+
+*** AC_PROG_CXX no longer rejects C++20 compilers
+merely because C++20 is not upward-compatible with C++11.
+
 * Noteworthy changes in release 2.72 (2023-12-22) [release]
 
 ** Backward incompatibilities
