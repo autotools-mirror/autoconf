@@ -7825,11 +7825,12 @@ person building the package.  @xref{Preset Output Variables}.)
 If necessary, options are added to @code{CXX} to enable support for
 ISO Standard C++ features with extensions, preferring the newest edition
 of the C++ standard that is supported.  Currently the newest edition
-Autoconf knows how to detect support for is C++11.  After calling
+Autoconf knows how to detect support for is C++23.  After calling
 this macro, you can check whether the C++ compiler has been set to
 accept standard C++ by inspecting the shell variable @code{ac_prog_cxx_stdcxx}.
-Its value will be @samp{cxx11} or @samp{cxx98}, respectively,
-if the C++ compiler has been set to use the 2011 or 1990 edition of the
+Its value will be @samp{cxx23}, @samp{cxx20}, @samp{cxx17},
+@samp{cxx14}, @samp{cxx11} or @samp{cxx98},
+if the C++ compiler has been set to use the corresponding edition of the
 C++ standard, and @samp{no} if the compiler does not support compiling
 standard C++ at all.
 
@@ -21714,6 +21715,8 @@ standard.  K&R C compilers are no longer of practical interest, though,
 and Autoconf assumes at least C89, the first C standard,
 which is sometimes called ``C90'' due to a delay in standardization.
 C has since gone through the standards C99, C11, C17, and C23, and
+C++ has evolved in a similar way, with the standards
+C++98, C++11, C++14, C++17, C++20, and C++23.
 Autoconf is compatible with all these standards.
 
 Program portability is a huge topic, and this section can only briefly

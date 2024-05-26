@@ -2802,6 +2802,68 @@ main (int argc, char **argv)
 "
 ]])])
 
+AC_DEFUN([_AC_CXX_CXX14_TEST_PROGRAM],
+[m4_divert_text([INIT_PREPARE],
+[[ac_cxx_conftest_cxx14_program='
+#if __cplusplus < 201402
+# error "Compiler does not advertise C++14 conformance"
+#endif
+
+int
+main ()
+{
+  auto floating_point_literal_with_single_quotes = 0.123'\''456;
+}
+'
+]])])
+
+AC_DEFUN([_AC_CXX_CXX17_TEST_PROGRAM],
+[m4_divert_text([INIT_PREPARE],
+[[ac_cxx_conftest_cxx17_program='
+#if __cplusplus < 201707
+# error "Compiler does not advertise C++17 conformance"
+#endif
+
+int
+main ()
+{
+  auto u8_expression_with_u8_character_literals = u8'\''x'\'' == u8'\''x'\'';
+}
+'
+]])])
+
+AC_DEFUN([_AC_CXX_CXX20_TEST_PROGRAM],
+[m4_divert_text([INIT_PREPARE],
+[[ac_cxx_conftest_cxx20_program='
+#if __cplusplus < 202002
+# error "Compiler does not advertise C++20 conformance"
+#endif
+
+#include <compare>
+
+int
+main ()
+{
+  auto expression_with_three_way_comparison = 1 <=> 2;
+}
+'
+]])])
+
+AC_DEFUN([_AC_CXX_CXX23_TEST_PROGRAM],
+[m4_divert_text([INIT_PREPARE],
+[[ac_cxx_conftest_cxx23_program='
+#if __cplusplus < 202302
+# error "Compiler does not advertise C++23 conformance"
+#endif
+
+int
+main ()
+{
+  auto expression_with_signed_size_literal = -1z < 0;
+}
+'
+]])])
+
 # _AC_CXX_CXX98_OPTIONS
 # ---------------------
 # Whitespace-separated list of options that might put the C++ compiler
@@ -2849,6 +2911,13 @@ m4_define([_AC_CXX_CXX11_OPTIONS], [
     -qlanglvl=extended0x
     -AA
 ])
+
+# Similarly for C++14, C++17, C++20, C++23,
+# where -std=gnu++XX should be good enough.
+m4_define([_AC_CXX_CXX14_OPTIONS], [-std=gnu++14])
+m4_define([_AC_CXX_CXX17_OPTIONS], [-std=gnu++17])
+m4_define([_AC_CXX_CXX20_OPTIONS], [-std=gnu++20])
+m4_define([_AC_CXX_CXX23_OPTIONS], [-std=gnu++23])
 
 # _AC_PROG_CXX_STDCXX_EDITION_TRY(EDITION)
 # ----------------------------------------
@@ -2910,4 +2979,4 @@ AS_IF([test "x$ac_cv_prog_cxx_cxx$1" = xno],
 # variable ac_prog_cxx_stdcxx to indicate the edition.
 AC_DEFUN([_AC_PROG_CXX_STDCXX_EDITION],
 [ac_prog_cxx_stdcxx=no
-m4_map([_AC_PROG_CXX_STDCXX_EDITION_TRY], [[11], [98]])])
+m4_map([_AC_PROG_CXX_STDCXX_EDITION_TRY], [23, 20, 17, 14, 11, 98])])
