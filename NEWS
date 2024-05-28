@@ -16,14 +16,11 @@ GNU Autoconf NEWS - User visible changes.
   C11 and later.  Programs can use AC_C_VARARRAYS and __STDC_NO_VLA__
   to use VLAs if available.
 
-*** AC_PROG_CXX now prefers C++23, C++20, C++17, C++14 if available.
-  Older code may need to be updated, as some older features of C++ are
-  removed in later standards.
-
-** Notable bug fixes
-
-*** AC_PROG_CXX no longer rejects C++20 compilers
-merely because C++20 is not upward-compatible with C++11.
+*** AC_PROG_CXX no longer attempts to switch to C++98 or C++11.
+  Instead, it uses the compiler's default, which you can override
+  by configuring with something like CXX='g++ -std=gnu++11'.
+  This reverts to Autoconf 2.69 behavior, and also fixes a bug where
+  AC_PROG_CXX rejected C++20 compilers.
 
 * Noteworthy changes in release 2.72 (2023-12-22) [release]
 
