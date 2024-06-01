@@ -527,7 +527,8 @@ Portable Make Programming
 
 * $< in Ordinary Make Rules::   $< in ordinary rules
 * Failure in Make Rules::       Failing portably in rules
-* Special Chars in Names::      Special Characters in Macro Names
+* Command Line Prefixes::       What's at the start of makefile command lines
+* Special Chars in Names::      Special characters in macro names
 * Backslash-Newline-Empty::     Empty lines after backslash-newline
 * Backslash-Newline Comments::  Spanning comments across line boundaries
 * Long Lines in Makefiles::     Line length limitations
@@ -20379,7 +20380,8 @@ itself.
 @menu
 * $< in Ordinary Make Rules::   $< in ordinary rules
 * Failure in Make Rules::       Failing portably in rules
-* Special Chars in Names::      Special Characters in Macro Names
+* Command Line Prefixes::       What's at the start of makefile command lines
+* Special Chars in Names::      Special characters in macro names
 * Backslash-Newline-Empty::     Empty lines after backslash-newline
 * Backslash-Newline Comments::  Spanning comments across line boundaries
 * Long Lines in Makefiles::     Line length limitations
@@ -20411,10 +20413,13 @@ later) @command{make} diagnoses these uses and errors out.
 @node Failure in Make Rules
 @section Failure in Make Rules
 
+Unless errors are being ignored
+(e.g., because a makefile command line is preceded by a @samp{-} prefix),
 Posix 2008 requires that @command{make} must invoke each command with
 the equivalent of a @samp{sh -e -c} subshell, which causes the
 subshell to exit immediately if a subsidiary simple-command fails,
-although not all @command{make} implementations have historically
+with some complicated exceptions.
+Historically not all @command{make} implementations
 followed this rule.  For
 example, the command @samp{touch T; rm -f U} may attempt to
 remove @file{U} even if the @command{touch} fails, although this is not
@@ -20427,6 +20432,24 @@ implementations of the @option{-e} option of @command{sh} and
 are worried
 about porting to buggy BSD shells it may be simpler to migrate
 complicated @command{make} actions into separate scripts.
+
+@node Command Line Prefixes
+@section Makefile Command Line Prefixes
+
+Makefile command lines can be preceded by zero or more of
+the command line prefixes @samp{-}, @samp{@@}, and @samp{+},
+which modify how @command{make} processes the command.
+Although Posix says these are the only command line prefixes,
+some @command{make} implementations, such as Solaris @command{make},
+support the additional prefixes @samp{!} and @samp{?}.
+Portable makefiles should therefore avoid using these two characters at
+the start of a makefile command line.
+For example:
+
+@example
+mishandled-by-Solaris-make:; ! grep FIXME foo.c
+portable-to-Solaris-make:; :;! grep FIXME foo.c
+@end example
 
 @node Special Chars in Names
 @section Special Characters in Make Macro Names
