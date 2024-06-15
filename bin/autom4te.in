@@ -636,7 +636,7 @@ sub handle_output ($$)
       # Don't complain in comments.  Well, until we have something
       # better, don't consider '#include' etc. are comments.
       s/\#.*//
-	unless /^\#\s*(if|include|endif|ifdef|ifndef|define)\b/;
+	unless /^\#\s*(include|endif|(el)?if(n?def)?|define)\b/;
       foreach (split (/\W+/))
 	{
 	  $prohibited{$_} = $.
@@ -673,7 +673,7 @@ sub handle_output ($$)
 	  # Don't complain in comments.  Well, until we have something
 	  # better, don't consider '#include' etc. to be comments.
 	  s/\#.*//
-	    unless /^\#(if|include|endif|ifdef|ifndef|define)\b/;
+	    unless /^\#(include|endif|(el)?if(n?def)?|define)\b/;
 
 	  # Complain once per word, but possibly several times per line.
 	  while (/$prohibited/)

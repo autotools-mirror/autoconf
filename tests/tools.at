@@ -732,6 +732,8 @@ LINE2
 
 AT_DATA([iftest2.c],
 [[#ifdef IFTEST2
+#elifdef IFTEST3
+#elifndef IFTEST4
 #if VAL1
 ]])
 
@@ -741,6 +743,8 @@ DEF2 iftest1.c
 DEF3 iftest1.c
 DEF4 iftest1.c
 IFTEST2 iftest2.c
+IFTEST3 iftest2.c
+IFTEST4 iftest2.c
 LINE1 iftest1.c
 LINE2 iftest1.c
 SPACES iftest1.c

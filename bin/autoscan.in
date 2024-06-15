@@ -276,7 +276,7 @@ sub scan_c_file ($)
 	    {
 	      used ('header', $1);
 	    }
-	  if (s/^(if|ifdef|ifndef|elif)\s+//)
+	  if (s/^(el)?if(n?def)?\s+//)
 	    {
 	      foreach my $word (split (/\W+/))
 		{

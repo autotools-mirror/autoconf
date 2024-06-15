@@ -55,9 +55,10 @@ $help = "Usage: $0 [OPTION]... [FILE]...
 
 Scan all of the C source FILES (or the standard input, if none are
 given) and write to the standard output a sorted list of all the
-identifiers that appear in those files in '#if', '#elif', '#ifdef', or
-'#ifndef' directives.  Print each identifier on a line, followed by a
-space-separated list of the files in which that identifier occurs.
+identifiers that appear in those files in '#if', '#ifdef', '#ifndef',
+'#elif', '#elifdef', or '#elifndef' directives.  Print each identifier
+on a line, followed by a space-separated list of the files in which
+that identifier occurs.
 
   -h, --help      print this help, then exit
   -V, --version   print version number, then exit
@@ -109,7 +110,7 @@ sub scan_file ($)
 	while (s/\\$//);
 
       # Preprocessor directives.
-      if (s/^\s*\#\s*(if|ifdef|ifndef|elif)\s+//)
+      if (s/^\s*\#\s*(el)?if(n?def)?\s+//)
 	{
 	  # Remove comments.  Not perfect, but close enough.
 	  s(/\*.*?\*/)();

@@ -22,6 +22,12 @@ GNU Autoconf NEWS - User visible changes.
   This reverts to Autoconf 2.69 behavior, and also fixes a bug where
   AC_PROG_CXX rejected C++20 compilers.
 
+** New features
+
+*** Programs now recognize #elifdef and #elifndef.
+  The autom4te, autoscan and ifnames programs now recognize the two
+  preprocessor directives, which were introduced in C23 and C++23.
+
 * Noteworthy changes in release 2.72 (2023-12-22) [release]
 
 ** Backward incompatibilities

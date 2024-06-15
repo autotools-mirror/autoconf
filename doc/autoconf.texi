@@ -1478,8 +1478,9 @@ Invocation}).
 @command{ifnames} scans all of the C source files named on the command line
 (or the standard input, if none are given) and writes to the standard
 output a sorted list of all the identifiers that appear in those files
-in @code{#if}, @code{#elif}, @code{#ifdef}, or @code{#ifndef}
-directives.  It prints each identifier on a line, followed by a
+in @code{#if}, @code{#ifdef}, @code{#ifndef}, @code{#elif},
+@code{#elifdef}, or @code{#elifndef} directives.
+It prints each identifier on a line, followed by a
 space-separated list of the files in which that identifier occurs.
 
 @noindent
