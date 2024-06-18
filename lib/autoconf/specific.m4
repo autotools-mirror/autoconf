@@ -132,7 +132,7 @@ m4_define([_AC_SYS_YEAR2038_OPTIONS], m4_normalize(
 # If you change this macro you may also need to change
 # _AC_SYS_YEAR2038_OPTIONS.
 AC_DEFUN([_AC_SYS_YEAR2038_PROBE],
-[AC_CACHE_CHECK([for $CPPFLAGS option for timestamps after 2038],
+[AC_CACHE_CHECK([for $CC option to support timestamps after 2038],
   [ac_cv_sys_year2038_opts],
   [ac_save_CPPFLAGS="$CPPFLAGS"
   ac_opt_found=no
@@ -278,7 +278,7 @@ m4_define([_AC_SYS_LARGEFILE_OPTIONS], m4_normalize(
 # If you change this macro you may also need to change
 # _AC_SYS_LARGEFILE_OPTIONS.
 AC_DEFUN([_AC_SYS_LARGEFILE_PROBE],
-[AC_CACHE_CHECK([for $CPPFLAGS option for large files],
+[AC_CACHE_CHECK([for $CC option to support large files],
   [ac_cv_sys_largefile_opts],
   [ac_save_CPPFLAGS=$CPPFLAGS
   ac_opt_found=no
