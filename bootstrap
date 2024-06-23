@@ -92,6 +92,10 @@ done
 : ${PERL=perl}
 export ACLOCAL AUTOMAKE M4 PERL
 
+# Allow 'ln -s' to be overridden by the user.
+: ${LN_S="ln -s"}
+export LN_S
+
 # $PERL needs to be an absolute path because we're going to substitute it
 # into #! lines.
 set fnord $PERL
@@ -221,7 +225,7 @@ mkdir "$ACBOOTDIR"/bin "$ACBOOTDIR"/lib "$ACBOOTDIR"/tmp
         if [ -n "$verbose" ]; then
             printf '%s: creating %s\n' "$me" "$ACBOOTDIR/lib/$sub"
         fi
-        ln -s ../../lib/$sub .
+        $LN_S ../../lib/$sub .
     done
 )
 
