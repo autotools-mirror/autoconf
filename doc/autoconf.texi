@@ -440,6 +440,7 @@ Results of Tests
 * Special Chars in Variables::  Characters to beware of in variables
 * Caching Results::             Speeding up subsequent @command{configure} runs
 * Printing Messages::           Notifying @command{configure} users
+* Logging::                     Recording test details in @file{config.log}
 
 Caching Results
 
@@ -9164,6 +9165,11 @@ write new ones.  These macros are the building blocks.  They provide
 ways for other macros to check whether various kinds of features are
 available and report the results.
 
+The macros described in this chapter are mainly useful for tests that
+involve compiling code.  To write tests that simply probe the shell
+environment, use M4sh; see @ref{Programming in M4sh}.  Take care to
+log errors output by such tests; see @ref{Logging}.
+
 This chapter contains some suggestions and some of the reasons why the
 existing tests are written the way they are.  You can also learn a lot
 about how to write Autoconf tests by looking at the existing ones.  If
@@ -10037,6 +10043,7 @@ print a message letting the user know the result of the test.
 * Special Chars in Variables::  Characters to beware of in variables
 * Caching Results::             Speeding up subsequent @command{configure} runs
 * Printing Messages::           Notifying @command{configure} users
+* Logging::                     Recording test details in @file{config.log}
 @end menu
 
 @node Defining Symbols
@@ -10687,6 +10694,58 @@ make hard links}.
 @end defmac
 
 
+@node Logging
+@section Logging Details of Tests
+
+It is helpful to record details of @emph{why} each test got the result
+that it did, in @file{config.log}.  The macros that compile test
+programs (@code{AC_COMPILE_IFELSE} etc.; @pxref{Writing Tests}) do this
+automatically, but if you write a test that only involves M4sh and basic
+shell commands, you will need to do it yourself, using the following macros.
+
+@anchor{AC_LOG_CMD}
+@defmac AC_LOG_CMD (@var{shell-command})
+Execute @var{shell-command}.
+Record @var{shell-command} in @file{config.log}, along with any error
+messages it printed (specifically, everything it wrote to its standard
+error) and its exit code.
+
+This macro may be used within a command substitution, or as the test
+argument of @code{AS_IF} or a regular shell @code{if} statement.
+@end defmac
+
+@anchor{AC_LOG_FILE}
+@defmac AC_LOG_FILE (@var{file}, @var{label})
+Record the contents of @var{file} in @file{config.log}, labeled with
+@var{label}.
+@end defmac
+
+Here is an example of how to use these macros to test for a feature of
+the system `awk'.
+
+@smallexample
+AC_PROG_AWK
+AC_MSG_CHECKING([whether $AWK supports 'asort'])
+cat > conftest.awk <<\EOF
+[@{ lines[NR] = $0 @}
+END @{
+  ORS=" "
+  asort(lines)
+  for (i in lines) @{
+    print lines[i]
+  @}
+@}]
+EOF
+
+AS_IF([result=`AC_LOG_CMD([printf 'z\ny\n' | $AWK -f conftest.awk])` &&
+       test x"$result" = x"y z"],
+  [AWK_HAS_ASORT=yes],
+  [AWK_HAS_ASORT=no
+   AC_LOG_FILE([conftest.awk], [test awk script])])
+AC_MSG_RESULT([$AWK_HAS_ASORT])
+AC_SUBST([AWK_HAS_ASORT])
+rm -f conftest.awk
+@end smallexample
 
 @c ====================================================== Programming in M4.
 
