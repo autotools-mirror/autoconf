@@ -425,7 +425,6 @@ Writing Tests
 * Running the Compiler::        Detecting language or header features
 * Running the Linker::          Detecting library features
 * Runtime::                     Testing for runtime features
-* Systemology::                 A zoology of operating systems
 * Multiple Cases::              Tests for several possible values
 
 Writing Test Programs
@@ -507,6 +506,7 @@ Dependencies Between Macros
 
 Portable Shell Programming
 
+* Systemology::                 A zoology of operating systems
 * Shellology::                  A zoology of shells
 * Invoking the Shell::          Invoking the shell as a command
 * Here-Documents::              Quirks and tricks
@@ -9191,7 +9191,6 @@ software package, the best thing to do is encapsulate it in a new macro.
 * Running the Compiler::        Detecting language or header features
 * Running the Linker::          Detecting library features
 * Runtime::                     Testing for runtime features
-* Systemology::                 A zoology of operating systems
 * Multiple Cases::              Tests for several possible values
 @end menu
 
@@ -9975,75 +9974,6 @@ AC_RUN_IFELSE(
   [echo "code:lib_dir() returned: `cat conftest.out`"],
   [AC_MSG_FAILURE([test Erlang program execution failed])])
 @end example
-
-
-@node Systemology
-@section Systemology
-@cindex Systemology
-
-This section aims at presenting some systems and pointers to
-documentation.  It may help you addressing particular problems reported
-by users.
-
-@uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, Posix-conforming
-systems} are derived from the
-@uref{https://@/en.wikipedia.org/@/wiki/@/Unix, Unix operating system}.
-
-The @uref{http://@/bhami.com/@/rosetta.html, Rosetta Stone for Unix}
-contains a table correlating the features of various Posix-conforming
-systems.  @uref{https://@/www.levenez.com/@/unix/, Unix History} is a
-simplified diagram of how many Unix systems were derived from each
-other.
-
-@uref{http://@/heirloom.sourceforge.net/, The Heirloom Project}
-provides some variants of traditional implementations of Unix utilities.
-
-@table @asis
-@item Darwin
-@cindex Darwin
-@cindex macOS
-@cindex Mac OS X
-Darwin is a partially proprietary operating system maintained by Apple
-Computer and used by most of their products.  It is also known as macOS,
-iOS, etc.@: depending on the exact variant.  Older versions were called
-``Mac OS X'', the X being intended as the Roman numeral for 10.
-
-It is derived from FreeBSD, but presents some unusual portability
-hazards.  Most importantly, by default the filesystem will be case
-insensitive, albeit case preserving.  This can cause nasty problems:
-for instance, the installation attempt for a package having an
-@file{INSTALL} file can result in @samp{make install} reporting that
-nothing is to be done!
-
-Darwin does support case-sensitive file systems, but they must be
-formatted specially as such, and Apple discourages use of a
-case-sensitive volume for the base operating system.  To build software
-that expects case-sensitive filenames, it is best to create a separate
-disk volume or disk image formatted as case sensitive; this can be done
-using the @command{diskutil} command or the Disk Utility application.
-
-@item QNX 4.25
-@cindex QNX 4.25
-@c FIXME: Please, if you feel like writing something more precise,
-@c it'd be great.  In particular, I can't understand the difference with
-@c QNX Neutrino.
-QNX is a realtime operating system running on Intel architecture
-meant to be scalable from the small embedded systems to the hundred
-processor super-computer.  It claims to be Posix certified.  More
-information is available on the
-@uref{https://@/blackberry.qnx.com/@/en, QNX home page}.
-
-@item Unix version 7
-@cindex Unix version 7
-@cindex V7
-Officially this was called the ``Seventh Edition'' of ``the UNIX
-time-sharing system'' but we use the more-common name ``Unix version 7''.
-Documentation is available in the
-@uref{https://@/s3.amazonaws.com/@/plan9-bell-labs/@/7thEdMan/@/index.html,
-Unix Seventh Edition Manual}.
-Previous versions of Unix are called ``Unix version 6'', etc., but
-they were not as widely used.
-@end table
 
 
 @node Multiple Cases
@@ -15542,6 +15472,7 @@ subset described above, is fairly portable nowadays.  Also please see
 @uref{http://@/www.faqs.org/@/faqs/@/unix-faq/@/shell/, the Shell FAQs}.
 
 @menu
+* Systemology::                 A zoology of operating systems
 * Shellology::                  A zoology of shells
 * Invoking the Shell::          Invoking the shell as a command
 * Here-Documents::              Quirks and tricks
@@ -15558,6 +15489,76 @@ subset described above, is fairly portable nowadays.  Also please see
 * Limitations of Builtins::     Portable use of not so portable /bin/sh
 * Limitations of Usual Tools::  Portable use of portable tools
 @end menu
+
+
+@node Systemology
+@section Systemology
+@cindex Systemology
+
+This section aims at presenting some systems and pointers to
+documentation.  It may help you addressing particular problems reported
+by users.
+
+@uref{https://@/en.wikipedia.org/@/wiki/@/POSIX, Posix-conforming
+systems} are derived from the
+@uref{https://@/en.wikipedia.org/@/wiki/@/Unix, Unix operating system}.
+
+The @uref{http://@/bhami.com/@/rosetta.html, Rosetta Stone for Unix}
+contains a table correlating the features of various Posix-conforming
+systems.  @uref{https://@/www.levenez.com/@/unix/, Unix History} is a
+simplified diagram of how many Unix systems were derived from each
+other.
+
+@uref{http://@/heirloom.sourceforge.net/, The Heirloom Project}
+provides some variants of traditional implementations of Unix utilities.
+
+@table @asis
+@item Darwin
+@cindex Darwin
+@cindex macOS
+@cindex Mac OS X
+Darwin is a partially proprietary operating system maintained by Apple
+Computer and used by most of their products.  It is also known as macOS,
+iOS, etc.@: depending on the exact variant.  Older versions were called
+``Mac OS X'', the X being intended as the Roman numeral for 10.
+
+It is derived from FreeBSD, but presents some unusual portability
+hazards.  Most importantly, by default the filesystem will be case
+insensitive, albeit case preserving.  This can cause nasty problems:
+for instance, the installation attempt for a package having an
+@file{INSTALL} file can result in @samp{make install} reporting that
+nothing is to be done!
+
+Darwin does support case-sensitive file systems, but they must be
+formatted specially as such, and Apple discourages use of a
+case-sensitive volume for the base operating system.  To build software
+that expects case-sensitive filenames, it is best to create a separate
+disk volume or disk image formatted as case sensitive; this can be done
+using the @command{diskutil} command or the Disk Utility application.
+
+@item QNX 4.25
+@cindex QNX 4.25
+@c FIXME: Please, if you feel like writing something more precise,
+@c it'd be great.  In particular, I can't understand the difference with
+@c QNX Neutrino.
+QNX is a realtime operating system running on Intel architecture
+meant to be scalable from the small embedded systems to the hundred
+processor super-computer.  It claims to be Posix certified.  More
+information is available on the
+@uref{https://@/blackberry.qnx.com/@/en, QNX home page}.
+
+@item Unix version 7
+@cindex Unix version 7
+@cindex V7
+Officially this was called the ``Seventh Edition'' of ``the UNIX
+time-sharing system'' but we use the more-common name ``Unix version 7''.
+Documentation is available in the
+@uref{https://@/s3.amazonaws.com/@/plan9-bell-labs/@/7thEdMan/@/index.html,
+Unix Seventh Edition Manual}.
+Previous versions of Unix are called ``Unix version 6'', etc., but
+they were not as widely used.
+@end table
+
 
 @node Shellology
 @section Shellology
