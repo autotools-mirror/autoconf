@@ -365,7 +365,6 @@ _AS_BASENAME_PREPARE
 _AS_DIRNAME_PREPARE
 _AS_ME_PREPARE
 _AS_CR_PREPARE
-_AS_ECHO_N_PREPARE
 _AS_LN_S_PREPARE
 _AS_MKDIR_P_PREPARE
 _AS_TEST_PREPARE
@@ -389,7 +388,6 @@ AS_REQUIRE([_AS_DIRNAME_PREPARE])
 AS_REQUIRE([_AS_ME_PREPARE])
 AS_REQUIRE([_AS_CR_PREPARE])
 AS_REQUIRE([_AS_LINENO_PREPARE])
-AS_REQUIRE([_AS_ECHO_N_PREPARE])
 AS_REQUIRE([_AS_EXIT_PREPARE])
 AS_REQUIRE([_AS_LN_S_PREPARE])
 AS_REQUIRE([_AS_MKDIR_P_PREPARE])
@@ -852,47 +850,6 @@ m4_defun_init([_AS_ECHO_LOG],
 [_AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], AS_MESSAGE_LOG_FD)])
 
 
-# _AS_ECHO_N_PREPARE
-# ------------------
-# Check whether to use -n, \c, or newline-tab to separate
-# checking messages from result messages.
-# Don't try to cache, since the results of this macro are needed to
-# display the checking message.  In addition, caching something used once
-# has little interest.
-# Idea borrowed from dist 3.0.  Use '*c*,', not '*c,' because if '\c'
-# failed there is also a newline to match.  Use 'xy' because '\c' echoed
-# in a command substitution prints only the first character of the output
-# with ksh version M-11/16/88f on AIX 6.1; it needs to be reset by another
-# backquoted echo.
-m4_defun([_AS_ECHO_N_PREPARE], [
-# Determine whether it's possible to make 'echo' print without a newline.
-# These variables are no longer used directly by Autoconf, but are AC_SUBSTed
-# for compatibility with existing Makefiles.
-ECHO_C= ECHO_N= ECHO_T=
-case `echo -n x` in @%:@(((((
--n*)
-  case `echo 'xy\c'` in
-  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
-  xy)  ECHO_C='\c';;
-  *)   echo `echo ksh88 bug on AIX 6.1` > /dev/null
-       ECHO_T='	';;
-  esac;;
-*)
-  ECHO_N='-n';;
-esac
-
-# For backward compatibility with old third-party macros, we provide
-# the shell variables $as_echo and $as_echo_n.  New code should use
-# AS_ECHO(["message"]) and AS_ECHO_N(["message"]), respectively.
-dnl The @&t@ prevents a spurious deprecation diagnostic.
-dnl Extra quoting in case 's' or 'n' are user-defined macros when this
-dnl is expanded; they almost certainly aren't meant to be used here.
-dnl See bug 110377.
-as_@&t@echo='printf [%s\n]'
-as_@&t@echo_n='printf [%s]'
-])# _AS_ECHO_N_PREPARE
-
-
 # _AS_ECHO_N(STRING, [FD = AS_MESSAGE_FD])
 # ----------------------------------------
 # Same as _AS_ECHO, but echo doesn't return to a new line.
@@ -976,6 +933,59 @@ m4_defun([AS_LINENO_PUSH],
 # No need to use AS_UNSET, since as_lineno is necessarily set.
 m4_defun([AS_LINENO_POP],
 [eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno])
+
+
+# as_echo
+# -------
+# Define the obsolete internal shell variable as_echo if necessary.
+# It is known to be used by some third party macros.  New code should
+# use AS_ECHO(["message"]).
+#
+# This macro will typically be used like
+#   $as_echo "message"
+# and that line of the script must not be changed by the expansion;
+# especially, we cannot introduce whitespace between '$' and 'a'.
+# This means we cannot use m4_require and we need to invoke
+# _as_echo_var_prepare with call parentheses.
+m4_defun([as_echo],
+[m4_provide_if([_as_echo_var_prepare], [], [_as_echo_var_prepare()])]dnl
+[as@&t@_echo])
+
+# _as_echo_var_prepare
+# --------------------
+# The @&t@ prevents recursive expansion.
+# Extra quoting in case 's' or 'n' are user-defined macros when this
+# is expanded; they almost certainly aren't meant to be used here.
+# See bug 110377.
+m4_defun([_as_echo_var_prepare],
+[m4_warn([obsolete],
+   [$as_echo is obsolete; use AS_ECHO(["message"]) instead])]dnl
+[m4_divert_once([M4SH-INIT], [
+# Provided for backward compatibility.  Change uses to AS_ECHO(["message"]).
+as@&t@_echo='printf [%s\n]'])])
+
+# as_echo_n
+# ---------
+# Define the obsolete internal shell variable as_echo_n if necessary.
+# It is known to be used by some third party macros.  New code should
+# use AS_ECHO_N(["message"]).
+# See as_echo for implementation notes.
+m4_defun([as_echo_n],
+[m4_provide_if([_as_echo_n_var_prepare], [], [_as_echo_n_var_prepare()])]dnl
+[as@&t@_echo_n])
+
+# _as_echo_n_var_prepare
+# ----------------------
+# The @&t@ prevents recursive expansion.
+# Extra quoting in case 's' or 'n' are user-defined macros when this
+# is expanded; they almost certainly aren't meant to be used here.
+# See bug 110377.
+m4_defun([_as_echo_n_var_prepare],
+[m4_warn([obsolete],
+   [$as_echo_n is obsolete; use AS_ECHO_N(["message"]) instead])]dnl
+[m4_divert_once([M4SH-INIT], [
+# Provided for backward compatibility.  Change uses to AS_ECHO_N(["message"]).
+as@&t@_echo_n='printf [%s]'])])
 
 
 
@@ -1102,11 +1112,6 @@ dnl is expanded; they almost certainly aren't meant to be used here.
 dnl See bug 110377.
 [printf "[%s\n]" $1])
 
-# Deprecation warning for the former internal shell variable $as_echo.
-m4_define([as_echo],
-[m4_warn([obsolete],
-   [$as_echo is obsolete; use AS_ECHO(["message"]) instead])as_@&t@echo])
-
 
 # AS_ECHO_N(WORD)
 # ---------------
@@ -1116,11 +1121,6 @@ dnl Extra quoting in case 's' is a user-defined macro when this
 dnl is expanded; it almost certainly isn't meant to be used here.
 dnl See bug 110377.
 [printf [%s] $1])
-
-# Deprecation warning for the former internal shell variable $as_echo_n.
-m4_define([as_echo_n],
-[m4_warn([obsolete],
-   [$as_echo_n is obsolete; use AS_ECHO_N(["message"]) instead])as_@&t@echo_n])
 
 
 # AS_TEST_X
