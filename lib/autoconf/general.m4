@@ -1401,6 +1401,44 @@ m4_divert_pop([INIT_PREPARE])dnl
 ])# _AC_INIT_PREPARE
 
 
+# _AC_INIT_ECHO_N
+# ---------------
+# Emit code for backward compatibility with Makefiles that use the
+# ECHO_C, ECHO_N, and ECHO_T substitution variables.  From Autoconf's
+# perspective, these were undocumented internals of the old definition
+# of AS_ECHO_N, before that was changed to use 'printf' instead of
+# 'echo', but they were AC_SUBSTed and Makefiles were written to use
+# them.  We don't have any way to know whether substitution variables
+# are actually used in the project being configured, and the cost of
+# this test is minimal.
+#
+# Test logic borrowed from dist 3.0.  Use '*c*,', not '*c,' because if '\c'
+# failed there is also a newline to match.  Use 'xy' because '\c' echoed
+# in a command substitution prints only the first character of the output
+# with ksh version M-11/16/88f on AIX 6.1; it needs to be reset by another
+# backquoted echo.
+m4_define([_AC_INIT_ECHO_N], [
+# Determine whether it's possible to make 'echo' print without a newline.
+# These variables are no longer used directly by Autoconf, but are AC_SUBSTed
+# for compatibility with existing Makefiles.
+ECHO_C= ECHO_N= ECHO_T=
+case `echo -n x` in @%:@(((((
+-n*)
+  case `echo 'xy\c'` in
+  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+  xy)  ECHO_C='\c';;
+  *)   echo `echo ksh88 bug on AIX 6.1` > /dev/null
+       ECHO_T='	';;
+  esac;;
+*)
+  ECHO_N='-n';;
+esac
+AC_SUBST([ECHO_C])dnl
+AC_SUBST([ECHO_N])dnl
+AC_SUBST([ECHO_T])dnl
+])
+
+
 # AU::AC_INIT([UNIQUE-FILE-IN-SOURCE-DIR])
 # ----------------------------------------
 # This macro is used only for Autoupdate.
@@ -1457,13 +1495,13 @@ m4_ifval([$2], , [m4_ifval([$1], [AC_CONFIG_SRCDIR([$1])])])dnl
 dnl
 dnl Substitute for predefined variables.
 AC_SUBST([DEFS])dnl
-AC_SUBST([ECHO_C])dnl
-AC_SUBST([ECHO_N])dnl
-AC_SUBST([ECHO_T])dnl
 AC_SUBST([LIBS])dnl
 _AC_ARG_VAR_PRECIOUS([build_alias])AC_SUBST([build_alias])dnl
 _AC_ARG_VAR_PRECIOUS([host_alias])AC_SUBST([host_alias])dnl
 _AC_ARG_VAR_PRECIOUS([target_alias])AC_SUBST([target_alias])dnl
+dnl
+dnl Backward compatibility with old Makefiles and old macros.
+_AC_INIT_ECHO_N
 dnl
 AC_LANG_PUSH(C)
 dnl

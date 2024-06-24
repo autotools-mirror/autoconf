@@ -564,7 +564,6 @@ AT_KEYWORDS([m4sh])
 
 AT_DATA_M4SH([script.as],
 [[AS_INIT
-AS_REQUIRE([_AS_ECHO_N_PREPARE])
 
 m4_define([ECHO_TEST],
 [echo=`$as_echo '$1'`
@@ -598,36 +597,14 @@ AS_EXIT(0)
 ]])
 
 AT_CHECK_M4SH([], 0, [],
-[[script.as:13: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:13: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:14: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:14: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:15: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:15: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:16: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:16: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:17: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:17: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:18: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:18: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:19: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:19: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:20: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:20: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:21: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:21: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:22: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:22: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:23: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:23: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:24: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:24: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:25: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:25: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:28: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:28: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
-script.as:30: warning: $as@&t@_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
-script.as:30: warning: $as@&t@_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+[[script.as:12: warning: $as_echo is obsolete; use AS@&t@_ECHO(["message"]) instead
+m4sh.m4: _as_echo_var_prepare is expanded from...
+m4sh.m4: as_echo is expanded from...
+script.as:12: the top level
+script.as:12: warning: $as_echo_n is obsolete; use AS@&t@_ECHO_N(["message"]) instead
+m4sh.m4: _as_echo_n_var_prepare is expanded from...
+m4sh.m4: as_echo_n is expanded from...
+script.as:12: the top level
 ]])
 AT_CHECK([$CONFIG_SHELL ./script])
 
@@ -645,17 +622,19 @@ AT_SETUP([Redefining AS@&t@_ECHO internals])
 # this file to exist anyway.
 AT_DATA([config.hin])
 
-# Defining a macro named 's' or 'n' should not affect AS_ECHO or
+# Defining a macro named 's', 'n', or 'c' should not affect AS_ECHO or
 # macros that use it.
 
 AT_CONFIGURE_AC(
 [[m4@&t@_pushdef([s], [z])
 m4@&t@_pushdef([n], [u])
+m4@&t@_pushdef([c], [d])
 AC_MSG_NOTICE([checking whether m4sugar echo works... yes])
 AC_MSG_CHECKING([whether m4sugar echo_n works])
 AC_MSG_RESULT([yes])
 m4@&t@_popdef([s])
 m4@&t@_popdef([n])
+m4@&t@_popdef([c])
 ]])
 
 AT_CHECK_AUTOCONF
@@ -668,8 +647,32 @@ config.status: creating config.h
 AT_CHECK_ENV
 rm config.h
 
-# More elaborate version of the above; derived from actual code in
-# ruby 2.7.2's configure script.
+# Defining 's', 'n', or 'c' also should not affect use of the
+# obsolete $as_echo and $as_echo_n macros.
+AT_CONFIGURE_AC(
+[[m4@&t@_pushdef([s], [z])
+m4@&t@_pushdef([n], [u])
+m4@&t@_pushdef([c], [d])
+$as_echo "checking whether obsolete \$as_echo works... yes"
+$as_echo_n "checking whether obsolete \$as_echo_n works... "
+$as_echo yes
+m4@&t@_popdef([s])
+m4@&t@_popdef([n])
+m4@&t@_popdef([c])
+]])
+
+AT_CHECK_AUTOCONF([-Wno-obsolete])
+AT_CHECK_CONFIGURE([], [],
+[[checking whether obsolete $as@&t@_echo works... yes
+checking whether obsolete $as@&t@_echo_n works... yes
+configure: creating ./config.status
+config.status: creating config.h
+]], [])
+AT_CHECK_ENV
+rm config.h
+
+# A more realistic scenario, derived from actual code in ruby 2.7.2's
+# configure script.
 
 AT_CONFIGURE_AC(
 [[AC@&t@_DEFUN([RUBY_CHECK_SIZEOF],[
@@ -688,6 +691,8 @@ AS@&t@_VAR_POPDEF([s])
 RUBY_CHECK_SIZEOF(int)
 echo "ac_cv_sizeof_int=${ac_cv_sizeof_int}"
 ]])
+
+
 
 AT_CHECK_AUTOCONF
 AT_CHECK_CONFIGURE([], [],
