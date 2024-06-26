@@ -2359,7 +2359,7 @@ m4_define([AC_DEFINE], [_AC_DEFINE_Q([_$0], $@)])
 # Append the pre-expanded STRING and a newline to confdefs.h, as if by
 # a quoted here-doc.
 m4_define([_AC_DEFINE],
-[AS_ECHO(["AS_ESCAPE([[$1]])"]) >>confdefs.h])
+[AS_ECHO([AS_QUOTE_D([[$1]])]) >>confdefs.h])
 
 
 # AC_DEFINE_UNQUOTED(VARIABLE, [VALUE], [DESCRIPTION])
@@ -2377,11 +2377,11 @@ m4_define([AC_DEFINE_UNQUOTED], [_AC_DEFINE_Q([_$0], $@)])
 # avoid AS_ECHO if "#" is present to avoid confusing m4 with comments,
 # but quadrigraphs are fine in that case.
 m4_define([_AC_DEFINE_UNQUOTED],
-[m4_if(m4_bregexp([$1], [#\|\\\|`\|\(\$\|@S|@\)\((|{|@{:@\)]), [-1],
-       [AS_ECHO(["AS_ESCAPE([$1], [""])"]) >>confdefs.h],
+[m4_bmatch([$1], [#\|\\\|`\|\(\$\|@S|@\)\((|{|@{:@\)],
        [cat >>confdefs.h <<_ACEOF
 [$1]
-_ACEOF])])
+_ACEOF],
+       [AS_ECHO([AS_QUOTE_D([$1])]) >>confdefs.h])])
 
 
 # _AC_DEFINE_Q(MACRO, VARIABLE, [VALUE], [DESCRIPTION])
@@ -2738,7 +2738,7 @@ AC_DEFUN([AC_TRY_COMMAND],
 # -------------------
 AC_DEFUN([AC_RUN_LOG],
 [_AC_RUN_LOG([$1],
-	     [AS_ECHO(["$as_me:${as_lineno-$LINENO}: AS_ESCAPE([$1])"])])])
+	     [AS_ECHO(["$as_me:${as_lineno-$LINENO}: "AS_QUOTE_D([$1])])])])
 
 
 
@@ -3187,7 +3187,8 @@ dnl Initialize each $ac_[]_AC_LANG_ABBREV[]_undeclared_builtin_options once.
 [AC_REQUIRE([_AC_UNDECLARED_BUILTIN_]_AC_LANG_ABBREV)]dnl
 [AS_VAR_PUSHDEF([ac_Symbol], [ac_cv_have_decl_$1])]dnl
 [ac_fn_check_decl ]dnl
-["$LINENO" "$1" "ac_Symbol" "AS_ESCAPE([AC_INCLUDES_DEFAULT([$4])], [""])" ]dnl
+["$LINENO" "$1" "ac_Symbol" ]dnl
+[AS_QUOTE_D([AC_INCLUDES_DEFAULT([$4])], [allow-commands,allow-vars]) ]dnl
 ["$ac_[]_AC_LANG_ABBREV[]_undeclared_builtin_options" "_AC_LANG_PREFIX[]FLAGS"]
 [AS_VAR_IF([ac_Symbol], [yes], [$2], [$3])]dnl
 [AS_VAR_POPDEF([ac_Symbol])]dnl
@@ -3401,7 +3402,7 @@ AC_DEFUN([AC_COMPUTE_INT],
      be computed])],
     [_$0_BODY])]dnl
 [AS_IF([ac_fn_[]_AC_LANG_ABBREV[]_compute_int "$LINENO" "$2" "$1" ]dnl
-       ["AS_ESCAPE([$3], [""])"],
+       [AS_QUOTE_D([$3], [allow-commands,allow-vars])],
        [], [$4])
 ])# AC_COMPUTE_INT
 

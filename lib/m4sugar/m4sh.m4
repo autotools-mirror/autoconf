@@ -222,7 +222,7 @@ dnl Remove any tests from suggested that are also required
 [m4_set_map([_AS_DETECT_SUGGESTED_BODY], [_AS_DETECT_SUGGESTED_PRUNE])]dnl
 [m4_pushdef([AS_EXIT], [exit m4_default(]m4_dquote([$][1])[, 1)])]dnl
 [if test "x$CONFIG_SHELL" = x; then
-  as_bourne_compatible="AS_ESCAPE(_m4_expand([_AS_BOURNE_COMPATIBLE]))"
+  as_bourne_compatible=AS_QUOTE_D([_AS_BOURNE_COMPATIBLE])
   _AS_DETECT_EXPAND([as_required], [_AS_DETECT_REQUIRED_BODY])
   _AS_DETECT_EXPAND([as_suggested], [_AS_DETECT_SUGGESTED_BODY])
   AS_IF([_AS_RUN(["$as_required"])],
@@ -763,69 +763,109 @@ m4_define([AS_MESSAGE_LOG_FD])
 # shuffle fd's.
 m4_define([AS_ORIGINAL_STDIN_FD], [0])
 
+# AS_QUOTE_S(TEXT)
+# ----------------
+# Quote TEXT for the shell, using single quotes.  Expand macros within
+# the text prior to quotation.
+#
+# With GNU m4 1.4.19, avoiding a call to m4_bpatsubst when it would
+# have nothing to do is good for a ~2.5x speedup.
+m4_define([AS_QUOTE_S], ['_$0(m4_dquote(m4_expand([$1])))'])
+m4_define([_AS_QUOTE_S],
+[m4_if([m4_index([$1], ['])], [-1],
+  [$1],
+  [m4_bpatsubst([$1], ['], ['\''])])])
 
-# AS_ESCAPE(STRING, [CHARS = `\"$])
+# AS_QUOTE_D(TEXT, [INTERPOLATION])
 # ---------------------------------
-# Add backslash escaping to the CHARS in STRING.  In an effort to
-# optimize use of this macro inside double-quoted shell constructs,
-# the behavior is intentionally undefined if CHARS is longer than 4
-# bytes, or contains bytes outside of the set [`\"$].  However,
-# repeated bytes within the set are permissible (AS_ESCAPE([$1], [""])
-# being a common way to be nice to syntax highlighting).
+# Quote TEXT for the shell, using double quotes.  Expand macros within
+# the text prior to quotation.  INTERPOLATION says what kinds of
+# interpolations to allow:
 #
-# Avoid the m4_bpatsubst if there are no interesting characters to escape.
-# _AS_ESCAPE bypasses argument defaulting.
+#  - blank/absent:   no interpolation
+#  - allow-vars:     allow interpolation of $var ${var} $((expr))
+#  - allow-commands: allow interpolation of `command` $(command)
+#  - allow-commands,allow-vars
+#    allow-vars,allow-commands
+#      allow both the above kinds of interpolation
+#      (there is intentionally no 'allow-all' because we want
+#      people to be able to find all cases where command interpolation
+#      is enabled by grepping for 'allow-commands').
+m4_define([AS_QUOTE_D],
+["_$0_QUOTE(m4_dquote(m4_expand([$1])), _$0_IARGCHECK([$2]))"])
+
+# _AS_QUOTE_D_IARGCHECK(INTERPOLATION)
+# ------------------------------------
+# Evaluate the INTERPOLATION argument to AS_QUOTE_D.  If it is valid,
+# return a list of the second, third, fourth, and fifth arguments to
+# _AS_QUOTE_D_QUOTE, otherwise issue an error.
+m4_define([_AS_QUOTE_D_ARGCHECK],
+[m4_case(m4_translit([[$1]], [	][ ][
+]),
+  [],                          [[$], [\"`], [$$$], [[\"$`]]],
+  [allow-vars],                [[$], [\"`], [$$$], [[\"`]|\$(\($|[^(]\)]],
+  [allow-commands],            [[$], [\"], [$$], [[\"]\|\$[a-zA-Z_{]\|\$((]],
+  [allow-commands,allow-vars], [["], [\], ["], [[\"]]],
+  [allow-vars,allow-commands], [["], [\], ["], [[\"]]],
+  [m4_fatal([invalid INTERPOLATION argument '$1' to AS_QUOTE_D])])])
+
+# _AS_QUOTE_D_QUOTE(STRING, C, HARS, CCCC, REGEX)
+# -----------------------------------------------
+# Insert a backslash in STRING before every match for REGEX.
+# C, HARS, and CCCC are hints for a performance hack: if C is not
+# present in STRING after transliterating HARS to CCCC, then
+# REGEX is assumed not to match anywhere within STRING.
+# (As noted for AS_QUOTE_S, avoiding calls to m4_bpatsubst is good
+# for a ~2.5x speedup even when the overhead of the translit and index
+# are accounted for.
+m4_define([_AS_QUOTE_D_QUOTE],
+[m4_if(m4_index(m4_if([$3], [], [$1], [m4_translit([[$1]], [$3], [$4])]), [$2]),
+       [-1],
+       [$1],
+       [m4_bpatsubst([$1], [$5], [\\\&])])])
+
+# AS_ESCAPE(STRING, [CHARS])
+# --------------------------
+# Superseded by AS_QUOTE_D.  The differences are:
+#  - Does not wrap " ... " around the result.
+#  - Does not pre-expand the string.
+#  - CHARS is a much clumsier way to specify what interpolation to allow.
+#    Almost all existing uses of AS_ESCAPE with a non-default CHARS
+#    argument are incorrect per the original implementation.
+#    This compat stub attempts to map each possible value of CHARS
+#    (plus one more that wasn't supposed to happen at all) to an
+#    AS_QUOTE_D/S invocation that will do what was intended.
 m4_define([AS_ESCAPE],
-[_$0([$1], m4_if([$2], [], [[`], [\"$]], [m4_substr([$2], [0], [1]), [$2]]))])
+[m4_warn([obsolete], [AS_ESCAPE is deprecated, change to AS_QUOTE_D or _S])]dnl
+dnl Handle the most common case without going through _AS_ESCAPE_MAPCHARS,
+dnl which is expensive.
+dnl AS_ESCAPE was never intended to produce single-quoted strings but
+dnl someone tried to use it that way anyway!
+dnl https://sources.debian.org/src/fakechroot/2.20.1+ds-17/m4/check_func_argtypes.m4/?hl=111#L111
+[m4_case([$2],
+  [],   [_AS_QUOTE_D_QUOTE([$1], _AS_QUOTE_D_ARGCHECK([]))],
+  ['],  [_AS_QUOTE_S([$1])],
+  [''], [_AS_QUOTE_S([$1])],
+  [_AS_QUOTE_D_QUOTE([$1], _AS_QUOTE_D_ARGCHECK([]))])])
+#  [_AS_QUOTE_D_QUOTE([$1], _AS_QUOTE_D_IARGCHECK(_AS_ESCAPE_MAPCHARS([$2])))])])
 
-# _AS_ESCAPE(STRING, KEY, SET)
-# ----------------------------
-# Backslash-escape all instances of the single byte KEY or up to four
-# bytes in SET occurring in STRING.  Although a character can occur
-# multiple times, optimum efficiency occurs when KEY and SET are
-# distinct, and when SET does not exceed two bytes.  These particular
-# semantics allow for the fewest number of parses of STRING, as well
-# as taking advantage of the optimizations in m4 1.4.13+ when
-# m4_translit is passed SET of size 2 or smaller.
-m4_define([_AS_ESCAPE],
-[m4_if(m4_index(m4_translit([[$1]], [$3], [$2$2$2$2]), [$2]), [-1],
-       [$0_], [m4_bpatsubst])([$1], [[$2$3]], [\\\&])])
-m4_define([_AS_ESCAPE_], [$1])
-
-
-# _AS_QUOTE(STRING)
-# -----------------
-# If there are quoted (via backslash) backquotes, output STRING
-# literally and warn; otherwise, output STRING with ` and " quoted.
-#
-# Compatibility glue between the old AS_MSG suite which did not
-# quote anything, and the modern suite which quotes the quotes.
-# If STRING contains '\\' or '\$', it's modern.
-# If STRING contains '\"' or '\`', it's old.
-# Otherwise it's modern.
-#
-# Profiling shows that m4_index is 5 to 8x faster than m4_bregexp.  The
-# slower implementation used:
-# m4_bmatch([$1],
-#	    [\\[\\$]], [$2],
-#	    [\\[`"]], [$3],
-#	    [$2])
-# The current implementation caters to the common case of no backslashes,
-# to minimize m4_index expansions (hence the nested if).
-m4_define([_AS_QUOTE],
-[m4_cond([m4_index([$1], [\])], [-1], [_AS_QUOTE_MODERN],
-	 [m4_eval(m4_index(m4_translit([[$1]], [$], [\]), [\\]) >= 0)],
-[1], [_AS_QUOTE_MODERN],
-	 [m4_eval(m4_index(m4_translit([[$1]], ["], [`]), [\`]) >= 0)],dnl"
-[1], [_AS_QUOTE_OLD],
-	 [_AS_QUOTE_MODERN])([$1])])
-
-m4_define([_AS_QUOTE_MODERN],
-[_AS_ESCAPE([$1], [`], [""])])
-
-m4_define([_AS_QUOTE_OLD],
-[m4_warn([obsolete],
-   [back quotes and double quotes must not be escaped in: $1])$1])
+# The characters could be in any order and they could also be
+# duplicated.  M4 + M4sugar does have a "remove duplicate from list"
+# mechanism, but it doesn't have "sort list" at all.
+# m4_define([_AS_ESCAPE_MAPCHARS],
+# [__AS_ESCAPE_MAPCHARS(m4_join_uniq([], m4_bpatsubst([$1], [.], [[\&],])))])
+# m4_define([__AS_ESCAPE_MAPCHARS],
+# [[[$1]] m4_bmatch([$1],
+#   [^\([$`][$`]\|[$`"][$`"][$`"]\|[$\`][$\`][$\`]\|[$`\"][$`\"][$`\"][$`\"]\)$],
+#     [],
+#   [^\([$]\|[\$][\$]\|["$]["$]\|[\"$][\"$][\"$]\)$],
+#     [allow-commands],
+#   [^\([`]\|[\`][\`]\|["`]["`]\|[\"`][\"`][\"`]\)$],
+#     [allow-vars],
+#   [^\([\\]|["]|[\"][\"]\)$],
+#     [allow-commands,allow-vars],
+#     [invalid])])
+#  [m4_fatal([invalid CHARS argument '$1' to AS_ESCAPE])])])
 
 
 # _AS_ECHO_UNQUOTED(STRING, [FD = AS_MESSAGE_FD])
@@ -837,9 +877,17 @@ m4_define([_AS_ECHO_UNQUOTED],
 
 # _AS_ECHO(STRING, [FD = AS_MESSAGE_FD])
 # --------------------------------------
-# Protect STRING from backquote expansion, echo the result to FD.
+# Protect STRING from backquote expansion but not variable expansion,
+# echo the result to FD.
 m4_define([_AS_ECHO],
-[_AS_ECHO_UNQUOTED([_AS_QUOTE([$1])], [$2])])
+[AS_ECHO([AS_QUOTE_D([$1], [allow-vars])]) >&m4_default([$2], [AS_MESSAGE_FD])])
+
+
+# _AS_ECHO_N(STRING, [FD = AS_MESSAGE_FD])
+# ----------------------------------------
+# Same as _AS_ECHO, but echo doesn't return to a new line.
+m4_define([_AS_ECHO_N],
+[AS_ECHO_N([AS_QUOTE_D([$1], [allow-vars])]) >&m4_default([$2], [AS_MESSAGE_FD])])
 
 
 # _AS_ECHO_LOG(STRING)
@@ -848,13 +896,6 @@ m4_define([_AS_ECHO],
 m4_defun_init([_AS_ECHO_LOG],
 [AS_REQUIRE([_AS_LINENO_PREPARE])],
 [_AS_ECHO([$as_me:${as_lineno-$LINENO}: $1], AS_MESSAGE_LOG_FD)])
-
-
-# _AS_ECHO_N(STRING, [FD = AS_MESSAGE_FD])
-# ----------------------------------------
-# Same as _AS_ECHO, but echo doesn't return to a new line.
-m4_define([_AS_ECHO_N],
-[AS_ECHO_N(["_AS_QUOTE([$1])"]) >&m4_default([$2], [AS_MESSAGE_FD])])
 
 
 # AS_MESSAGE(STRING, [FD = AS_MESSAGE_FD])
@@ -913,7 +954,7 @@ _m4_popdef([AS_MESSAGE_LOG_FD])dnl
 m4_defun_init([AS_ERROR],
 [m4_append_uniq([_AS_CLEANUP],
   [m4_divert_text([M4SH-INIT-FN], [_AS_ERROR_PREPARE[]])])],
-[as_fn_error m4_default([$2], [$?]) "_AS_QUOTE([$1])"m4_ifval(AS_MESSAGE_LOG_FD,
+[as_fn_error m4_default([$2], [$?]) AS_QUOTE_D([$1], [allow-vars])m4_ifval(AS_MESSAGE_LOG_FD,
   [ "$LINENO" AS_MESSAGE_LOG_FD])])
 
 
@@ -1462,8 +1503,7 @@ m4_define([_AS_BOX],
 # _AS_BOX_LITERAL(MESSAGE, [FRAME-CHARACTER = '-'])
 # -------------------------------------------------
 m4_define([_AS_BOX_LITERAL],
-[AS_ECHO(["_AS_ESCAPE(m4_dquote(m4_expand([m4_text_box($@)])), [`], [\"$])"])])
-
+[AS_ECHO([AS_QUOTE_D([m4_text_box($@)])])])
 
 # _AS_BOX_INDIR(MESSAGE, [FRAME-CHARACTER = '-'])
 # -----------------------------------------------
@@ -1886,7 +1926,7 @@ m4_define([_AS_TR_SH_LITERAL],
   [pp[]]]m4_dquote(m4_for(,1,255,,[[_]]))[)])
 
 m4_define([_AS_TR_SH_INDIR],
-[`AS_ECHO(["_AS_ESCAPE([[$1]], [`], [\])"]) | sed "$as_sed_sh"`])
+[`AS_ECHO([AS_QUOTE_D([$1], [allow-vars])]) | sed "$as_sed_sh"`])
 
 
 # _AS_TR_CPP_PREPARE
@@ -1920,7 +1960,7 @@ m4_define([_AS_TR_CPP_LITERAL],
   [P[]]]m4_dquote(m4_defn([m4_cr_LETTERS])m4_for(,1,255,,[[_]]))[)])
 
 m4_define([_AS_TR_CPP_INDIR],
-[`AS_ECHO(["_AS_ESCAPE([[$1]], [`], [\])"]) | sed "$as_sed_cpp"`])
+[`AS_ECHO([AS_QUOTE_D([$1], [allow-vars])]) | sed "$as_sed_cpp"`])
 
 
 # _AS_TR_PREPARE
@@ -1959,7 +1999,7 @@ m4_defun([_AS_VAR_APPEND_PREPARE],
 VAR.  Take advantage of any shell optimizations that allow amortized
 linear growth over repeated appends, instead of the typical quadratic
 growth present in naive implementations.])
-AS_IF([_AS_RUN(["AS_ESCAPE(m4_quote(_AS_VAR_APPEND_WORKS))"])],
+AS_IF([_AS_RUN([AS_QUOTE_D([_AS_VAR_APPEND_WORKS])])],
 [eval 'as_fn_append ()
   {
     eval $[]1+=\$[]2
@@ -2000,7 +2040,7 @@ m4_defun([_AS_VAR_ARITH_PREPARE],
 [Perform arithmetic evaluation on the ARGs, and store the result in
 the global $as_val.  Take advantage of shells that can avoid forks.
 The arguments must be portable across $(()) and expr.])
-AS_IF([_AS_RUN(["AS_ESCAPE(m4_quote(_AS_VAR_ARITH_WORKS))"])],
+AS_IF([_AS_RUN([AS_QUOTE_D([_AS_VAR_ARITH_WORKS])])],
 [eval 'as_fn_arith ()
   {
     as_val=$(( $[]* ))
@@ -2048,7 +2088,7 @@ m4_define([AS_VAR_COPY],
 m4_define([AS_VAR_GET],
 [AS_LITERAL_WORD_IF([$1],
 	       [$$1],
-  [`eval 'as_val=${'_AS_ESCAPE([[$1]], [`], [\])'};AS_ECHO(["$as_val"])'`])])
+  [`eval 'as_val=\$$2;AS_ECHO(["$as_val"])'`])])
 
 
 # AS_VAR_IF(VARIABLE, VALUE, IF-TRUE, IF-FALSE)
@@ -2061,7 +2101,7 @@ m4_define([AS_VAR_IF],
   [AS_VAR_COPY([as_val], [$1])
    AS_IF(m4_ifval([$2], [[test "x$as_val" = x[]$2]], [[${as_val:+false} :]])],
   [AS_IF(m4_ifval([$2],
-    [[eval test \"x\$"$1"\" = x"_AS_ESCAPE([$2], [`], [\"$])"]],
+    [[eval test \"x\$"$1"\" = x[]AS_QUOTE_D([$2])]],
     [[eval \${$1:+false} :]])]),
 [$3], [$4])])
 
@@ -2128,7 +2168,7 @@ m4_pushdef([$1], [$as_[$1]])],
 m4_define([AS_VAR_SET],
 [AS_LITERAL_WORD_IF([$1],
 	       [$1=$2],
-	       [eval "$1=_AS_ESCAPE([$2], [`], [\"$])"])])
+	       [eval "$1="AS_QUOTE_D([$2])])])
 
 
 # AS_VAR_SET_IF(VARIABLE, IF-TRUE, IF-FALSE)

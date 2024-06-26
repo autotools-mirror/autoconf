@@ -153,7 +153,7 @@ m4_defn([_AT_LINE_base]):__line__])
 # _AT_LINE_ESCAPED
 # ----------------
 # Same as AT_LINE, but already escaped for the shell.
-m4_define([_AT_LINE_ESCAPED], ["AS_ESCAPE(m4_dquote(AT_LINE))"])
+m4_define([_AT_LINE_ESCAPED], [AS_QUOTE_D([AT_LINE])])
 
 
 # _AT_NORMALIZE_TEST_GROUP_NUMBER(SHELL-VAR)
@@ -449,7 +449,7 @@ at_color=m4_ifdef([AT_color], [AT_color], [no])
 # numerical order.
 at_format='m4_bpatsubst(m4_defn([AT_ordinal]), [.], [?])'
 # Description of all the test groups.
-at_help_all="AS_ESCAPE(m4_dquote(m4_defn([AT_help_all])))"
+at_help_all=AS_QUOTE_D(m4_defn([AT_help_all]))
 # List of the all the test groups.
 at_groups_all=`AS_ECHO(["$at_help_all"]) | sed 's/;.*//'`
 
@@ -1891,7 +1891,7 @@ m4_define([AT_ordinal], m4_incr(AT_ordinal))
 m4_divert_push([TEST_GROUPS])dnl
 [#AT_START_]AT_ordinal
 at_fn_group_banner AT_ordinal 'm4_defn([AT_line])' \
-  "AS_ESCAPE(m4_dquote(m4_defn([AT_description])))" m4_format(["%*s"],
+  AS_QUOTE_D(m4_dquote(m4_defn([AT_description]))) m4_format(["%*s"],
   m4_max(0, m4_eval(47 - m4_qlen(m4_defn([AT_description])))), [])m4_if(
   AT_banner_ordinal, [0], [], [ AT_banner_ordinal])
 m4_ifset([AT_prepare_each_test], [AT_prepare_each_test
@@ -2001,7 +2001,7 @@ m4_define([AT_banner_ordinal], m4_incr(AT_banner_ordinal))
 m4_divert_text([BANNERS],
 [@%:@ Banner AT_banner_ordinal. AT_LINE
 @%:@ Category starts at test group m4_incr(AT_ordinal).
-at_banner_text_[]AT_banner_ordinal="AS_ESCAPE([$1])"])dnl
+at_banner_text_[]AT_banner_ordinal=AS_QUOTE_D([$1])])dnl
 ])# AT_BANNER
 
 
@@ -2076,17 +2076,21 @@ $2[]_ATEOF
 # This may cause spurious failures when the test suite is run with '-x'.
 #
 _AT_DEFINE_SETUP([AT_CHECK],
-[_AT_CHECK(m4_expand([$1]), [$2], AS_ESCAPE(m4_dquote(m4_expand([$3]))),
-  AS_ESCAPE(m4_dquote(m4_expand([$4]))), [$5], [$6])])
+[_AT_CHECK(m4_expand([$1]), [$2],
+  AS_QUOTE_D([$3]),
+  AS_QUOTE_D([$4]),
+  [$5], [$6])])
 
 # AT_CHECK_UNQUOTED(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #                   [RUN-IF-FAIL], [RUN-IF-PASS])
 # ---------------------------------------------------------
-# Like AT_CHECK, but do not AS_ESCAPE shell metacharacters in the STDOUT
+# Like AT_CHECK, but perform string interpolations in the STDOUT
 # and STDERR arguments before running the comparison.
 _AT_DEFINE_SETUP([AT_CHECK_UNQUOTED],
-[_AT_CHECK(m4_expand([$1]), [$2], AS_ESCAPE(m4_dquote(m4_expand([$3])), [""]),
-  AS_ESCAPE(m4_dquote(m4_expand([$4])), [""]), [$5], [$6])])
+[_AT_CHECK(m4_expand([$1]), [$2],
+  AS_QUOTE_D([$3], [allow-commands,allow-vars]),
+  AS_QUOTE_D([$4], [allow-commands,allow-vars]),
+  [$5], [$6])])
 
 # AT_CHECK_NOESCAPE(COMMANDS, [STATUS = 0], STDOUT, STDERR,
 #                   [RUN-IF-FAIL], [RUN-IF-PASS])
@@ -2194,7 +2198,7 @@ dnl We know at build time that tracing COMMANDS is never safe.
 dnl We know at build time that tracing COMMANDS is always safe.
 [[at_fn_check_prepare_trace],]dnl
 dnl COMMANDS may contain parameter expansions; expand them at runtime.
-[[at_fn_check_prepare_dynamic "AS_ESCAPE([[$1]], [`\"])"])[]]dnl
+[[at_fn_check_prepare_dynamic AS_QUOTE_D([[$1]], [allow-vars])])[]]dnl
 [_m4_popdef([at_reason])])
 
 
@@ -2202,28 +2206,28 @@ dnl COMMANDS may contain parameter expansions; expand them at runtime.
 # -----------------------------
 # These are subroutines of AT_CHECK.  Using indirect dispatch is a tad
 # faster than using m4_case, and these are called very frequently.
-m4_define([AT_DIFF_STDERR(stderr)],
+m4_define([AT_DIFF_STDERR("stderr")],
 	  [echo stderr:; tee stderr <"$at_stderr"])
-m4_define([AT_DIFF_STDERR(stderr-nolog)],
+m4_define([AT_DIFF_STDERR("stderr-nolog")],
 	  [echo stderr captured; cp "$at_stderr" stderr])
-m4_define([AT_DIFF_STDERR(ignore)],
+m4_define([AT_DIFF_STDERR("ignore")],
 	  [echo stderr:; cat "$at_stderr"])
-m4_define([AT_DIFF_STDERR(ignore-nolog)])
-m4_define([AT_DIFF_STDERR(experr)],
+m4_define([AT_DIFF_STDERR("ignore-nolog")])
+m4_define([AT_DIFF_STDERR("experr")],
 	  [$at_diff experr "$at_stderr" || at_failed=:])
-m4_define([AT_DIFF_STDERR()],
+m4_define([AT_DIFF_STDERR("")],
 	  [at_fn_diff_devnull "$at_stderr" || at_failed=:])
 
-m4_define([AT_DIFF_STDOUT(stdout)],
+m4_define([AT_DIFF_STDOUT("stdout")],
 	  [echo stdout:; tee stdout <"$at_stdout"])
-m4_define([AT_DIFF_STDOUT(stdout-nolog)],
+m4_define([AT_DIFF_STDOUT("stdout-nolog")],
 	  [echo stdout captured; cp "$at_stdout" stdout])
-m4_define([AT_DIFF_STDOUT(ignore)],
+m4_define([AT_DIFF_STDOUT("ignore")],
 	  [echo stdout:; cat "$at_stdout"])
-m4_define([AT_DIFF_STDOUT(ignore-nolog)])
-m4_define([AT_DIFF_STDOUT(expout)],
+m4_define([AT_DIFF_STDOUT("ignore-nolog")])
+m4_define([AT_DIFF_STDOUT("expout")],
 	  [$at_diff expout "$at_stdout" || at_failed=:])
-m4_define([AT_DIFF_STDOUT()],
+m4_define([AT_DIFF_STDOUT("")],
 	  [at_fn_diff_devnull "$at_stdout" || at_failed=:])
 
 # _AT_CHECK(COMMANDS, [STATUS = 0], STDOUT, STDERR,
@@ -2263,17 +2267,17 @@ m4_define([AT_DIFF_STDOUT()],
 m4_define([_AT_CHECK],
 [m4_define([AT_ingroup])]dnl
 [{ set +x
-AS_ECHO(["$at_srcdir/AT_LINE: AS_ESCAPE([[$1]])"])
+AS_ECHO(["$at_srcdir/AT_LINE: "AS_QUOTE_D([[$1]])])
 _AT_DECIDE_TRACEABLE([$1]) _AT_LINE_ESCAPED
 ( $at_check_trace; [$1]
 ) >>"$at_stdout" 2>>"$at_stderr" AS_MESSAGE_LOG_FD>&-
 at_status=$? at_failed=false
 $at_check_filter
 m4_ifdef([AT_DIFF_STDERR($4)], [m4_indir([AT_DIFF_STDERR($4)])],
-  [echo >>"$at_stderr"; AS_ECHO([["$4"]]) | \
+  [echo >>"$at_stderr"; AS_ECHO([[$4]]) | \
   $at_diff - "$at_stderr" || at_failed=:])
 m4_ifdef([AT_DIFF_STDOUT($3)], [m4_indir([AT_DIFF_STDOUT($3)])],
-  [echo >>"$at_stdout"; AS_ECHO([["$3"]]) | \
+  [echo >>"$at_stdout"; AS_ECHO([[$3]]) | \
   $at_diff - "$at_stdout" || at_failed=:])
 m4_if([$2], [ignore], [at_fn_check_skip],
   [at_fn_check_status m4_default([$2], [0])]) $at_status "$at_srcdir/AT_LINE"
