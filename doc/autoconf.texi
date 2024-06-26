@@ -13299,13 +13299,16 @@ pairs, and replace all remaining newlines with a space.  The result is
 still a quoted string.
 @end defmac
 
-@defmac m4_join (@ovar{separator}, @var{args}@dots{})
-@defmacx m4_joinall (@ovar{separator}, @var{args}@dots{})
+@defmac m4_join (@var{separator}, @var{args}@dots{})
+@defmacx m4_joinall (@var{separator}, @var{args}@dots{})
+@defmacx m4_join_uniq (@var{separator}, @var{args}@dots{})
 @msindex{join}
 @msindex{joinall}
 Concatenate each @var{arg}, separated by @var{separator}.
 @code{joinall} uses every argument, while @code{join} omits empty
 arguments so that there are no back-to-back separators in the output.
+@code{join_uniq} omits empty arguments and also omits each argument
+that is already included in the string so far.
 The result is a quoted string.
 @example
 m4_define([active], [ACTIVE])dnl
@@ -13313,11 +13316,20 @@ m4_join([|], [one], [], [active], [two])
 @result{}one|active|two
 m4_joinall([|], [one], [], [active], [two])
 @result{}one||active|two
+m4_join([|], [onethree], [one], [], [two])
+@result{}onethree|one|two
+m4_join_uniq([|], [onethree], [one], [], [two])
+@result{}onethree|two
 @end example
 
 Note that if all you intend to do is join @var{args} with commas between
 them, to form a quoted list suitable for @code{m4_foreach}, it is more
 efficient to use @code{m4_dquote}.
+
+@code{m4_join_uniq} was introduced in Autoconf 2.73.
+Like @code{m4_append_uniq} it is inherently quadratic in the total
+length of the @var{args}; when this is large it is more efficient to use
+the @samp{m4_set_} functions instead (@pxref{Set manipulation Macros}).
 @end defmac
 
 @defmac m4_newline (@ovar{text})

@@ -2467,6 +2467,23 @@ m4_define([m4_joinall], [[$2]_$0([$1], m4_shift($@))])
 m4_define([_m4_joinall],
 [m4_if([$#], [2], [], [[$1$3]$0([$1], m4_shift2($@))])])
 
+# m4_join_uniq(SEP, ARG1, ARG2...)
+# ------------------------------------------
+# Same as m4_join, but also if any argument is already a substring of the
+# concatenation-so-far it is dropped.  No expansion is performed on SEP
+# or ARGS.  See m4_join for implementation notes.
+m4_define([m4_join_uniq],
+[m4_if([$#], [1], [],
+       [$#], [2], [[$2]],
+       [m4_if([$2], [], [], m4_index([$2], [$3]), [-1], [_], []
+        )$0([$1], [[$2]], m4_shift3($@))])])
+m4_define([_m4_join_uniq],
+[m4_if([$#$2], [2], [],
+       
+       [m4_if([$2], [], [], m4_index([$2], [$3]), [-1], [[$1$2]],
+              [])$0([$1], m4_shift2($@))])])
+
+
 # m4_combine([SEPARATOR], PREFIX-LIST, [INFIX], SUFFIX...)
 # --------------------------------------------------------
 # Produce the pairwise combination of every element in the quoted,
