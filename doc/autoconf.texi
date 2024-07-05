@@ -1821,7 +1821,8 @@ If you want @command{autoreconf} to pass flags that are not listed here
 on to @command{aclocal}, set @code{ACLOCAL_AMFLAGS} in your @file{Makefile.am}.
 Due to a limitation in the Autoconf implementation these flags currently
 must be set on a single line in @file{Makefile.am}, without any
-backslash-newlines.  Also, be aware that future Automake releases might
+backslash-newlines or makefile comments.
+Also, be aware that future Automake releases might
 start flagging @code{ACLOCAL_AMFLAGS} as obsolescent, or even remove
 support for it.
 
@@ -2171,7 +2172,7 @@ Note that if you use @command{aclocal} from an Automake release prior to
 in your top-level @file{Makefile.am}.  Due to a limitation in
 the Autoconf implementation of @command{autoreconf}, these include
 directives currently must be set on a single line in @file{Makefile.am},
-without any backslash-newlines.
+without any backslash-newlines or makefile comments.
 @end defmac
 
 @prindex @command{config.guess}
