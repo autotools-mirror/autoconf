@@ -1160,43 +1160,78 @@ AT_SETUP([m4@&t@_join])
 AT_KEYWORDS([m4@&t@_joinall])
 
 AT_CHECK_M4SUGAR_TEXT(
-[[m4_define([active], [ACTIVE])
+[[m4_define([active], [ACTIVE])dnl
 m4_join
 m4_join([|])
+m4_join([|], [one])
+m4_join([|], [one], [two])
+m4_join([|], [one], [], [two])
+m4_join([], [one], [two])
+m4_join([], [one], [], [two])
 m4_join([, ], [one], [two])
 m4_dquote(m4_join([, ], [one], [two]))
 m4_join([|], [active], [active])
+m4_join([|], [active], [], [active])
+m4_join([ active ], [one], , [two])
 m4_join([|], ,,,[one])
 m4_join([|], [one],,,)
 m4_join([], ,,,[two])
 m4_join([], [two],,,)
-m4_join([ active ], [one], , [two])
-m4_join([], [one], [two])
-m4_joinall([-], [one], [], [two])
-m4_joinall([-], [], [], [three], [], [])
-m4_joinall([], [one], [], [two])
+m4_join([|], [], [], [three], [], [])
+----
 m4_joinall
 m4_joinall([-])
 m4_joinall([-], [one])
+m4_joinall([-], [one], [two])
+m4_joinall([-], [one], [], [two])
+m4_joinall([], [one], [two])
+m4_joinall([], [one], [], [two])
+m4_joinall([, ], [one], [two])
+m4_dquote(m4_joinall([, ], [one], [two]))
+m4_joinall([-], [active], [active])
+m4_joinall([-], [active], [], [active])
+m4_joinall([ active ], [one], , [two])
+m4_joinall([-], ,,,[one])
+m4_joinall([-], [one],,,)
+m4_joinall([], ,,,[two])
+m4_joinall([], [two],,,)
+m4_joinall([-], [], [], [three], [], [])
 ]],
 [[
 
-
+one
+one|two
+one|two
+onetwo
+onetwo
 one, two
 [one, two]
 active|active
-one
-one
-two
-two
+active|active
 one active two
-onetwo
-one--two
---three--
-onetwo
+one
+one
+two
+two
+three
+----
 
 
 one
+one-two
+one--two
+onetwo
+onetwo
+one, two
+[one, two]
+active-active
+active--active
+one active  active two
+---one
+one---
+two
+two
+--three--
 ]])
 
 AT_CLEANUP

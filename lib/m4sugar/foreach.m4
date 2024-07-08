@@ -292,7 +292,7 @@ m4_define([_m4_join],
 # A bit easier than m4_join.  _m4_foreach to the rescue.
 m4_define([m4_joinall],
 [[$2]m4_if(m4_eval([$# <= 2]), [1], [],
-	   [_m4_foreach([$1], [], m4_shift($@))])])
+	   [_m4_foreach([[$1]], [], m4_shift($@))])])
 
 # m4_list_cmp(A, B)
 # -----------------
