@@ -2964,6 +2964,43 @@ m4_ifdef([m4_PACKAGE_VERSION],
 # supply the value via _m4_defn([_m4_set([name])]) without needing any
 # quote manipulation.
 
+
+# _m4_set_add(SET, VALUE, [IF-UNIQ], [IF-DUP])
+# --------------------------------------------
+# Subroutine of m4_set_add and m4_set_add_all.
+# Add VALUE as an element of SET, but do not update the size of SET.
+# Expand IF-UNIQ on the first addition, and IF-DUP if it is already in
+# the set.
+#
+# Three cases must be handled:
+#  - _m4_set([$1],$2) is not defined:
+#      define _m4_set([$1],$2) to 1, push $2 as a definition of _m4_set([$1]),
+#      expand IF-UNIQ.
+#  - _m4_set([$1],$2) is defined with value 0:
+#      define _m4_set([$1],$2) to 1, *don't* modify _m4_set([$1]),
+#      expand IF-UNIQ.
+#  - _m4_set([$1],$2) is defined with value 1:
+#      do nothing but expand IF-DUP.
+m4_define([_m4_set_add],
+[m4_ifndef([_m4_set([$1],$2)],
+  [m4_pushdef([_m4_set([$1])],[$2])m4_define([_m4_set([$1],$2)],[1])$3],
+  [m4_if(m4_indir([_m4_set([$1],$2)]), [0],
+    [m4_define([_m4_set([$1],$2)],[1])$3],
+    [$4])])])
+
+# _m4_set_add_clean(SET, VALUE, [IF-UNIQ], [IF-DUP])
+# --------------------------------------------------
+# Subroutine of m4_set_add_all.
+# Add VALUE as an element of SET, but do not update the size of SET.
+# It is safe to assume that VALUE is not a tombstone, i.e. either
+# _m4_set([$1],$2) is not defined or it is defined with value 1.
+# Expand IF-UNIQ on the first addition, and IF-DUP if it is already in
+# the set.
+m4_define([_m4_set_add_clean],
+[m4_ifndef([_m4_set([$1],$2)],
+  [m4_pushdef([_m4_set([$1])],[$2])m4_define([_m4_set([$1],$2)],[1])$3],
+  [$4])])
+
 # m4_set_add(SET, VALUE, [IF-UNIQ], [IF-DUP])
 # -------------------------------------------
 # Add VALUE as an element of SET.  Expand IF-UNIQ on the first
@@ -2974,13 +3011,7 @@ m4_ifdef([m4_PACKAGE_VERSION],
 # unpruned element, but it is just as easy to check existence directly
 # as it is to query _m4_set_cleanup($1).
 m4_define([m4_set_add],
-[m4_ifdef([_m4_set([$1],$2)],
-	  [m4_if(m4_indir([_m4_set([$1],$2)]), [0],
-		 [m4_define([_m4_set([$1],$2)],
-			    [1])_m4_set_size([$1], [m4_incr])$3], [$4])],
-	  [m4_define([_m4_set([$1],$2)],
-		     [1])m4_pushdef([_m4_set([$1])],
-				    [$2])_m4_set_size([$1], [m4_incr])$3])])
+[_m4_set_add([$1], [$2], [_m4_set_size([$1], [m4_incr])$3], [$4])])
 
 # m4_set_add_all(SET, VALUE...)
 # -----------------------------
@@ -2995,18 +3026,19 @@ m4_define([m4_set_add],
 #
 # Please keep foreach.m4 in sync with any adjustments made here.
 m4_define([m4_set_add_all],
-[m4_define([_m4_set_size($1)], m4_eval(m4_set_size([$1])
-  + m4_len(m4_ifdef([_m4_set_cleanup($1)], [_$0_check], [_$0])([$1], $@))))])
+[m4_case([$#], [0], [], [1], [],
+  [m4_define([_m4_set_size($1)],
+    m4_eval(m4_set_size([$1])
+    + m4_len(m4_ifdef([_m4_set_cleanup($1)],
+                      [_$0_check], [_$0_clean])([$1], $@))))])])
 
-m4_define([_m4_set_add_all],
+m4_define([_m4_set_add_all_clean],
 [m4_if([$#], [2], [],
-       [m4_ifdef([_m4_set([$1],$3)], [],
-		 [m4_define([_m4_set([$1],$3)], [1])m4_pushdef([_m4_set([$1])],
-	   [$3])-])$0([$1], m4_shift2($@))])])
+  [_m4_set_add_clean([$1], [$3], [-], [])$0([$1], m4_shift2($@))])])
 
 m4_define([_m4_set_add_all_check],
 [m4_if([$#], [2], [],
-       [m4_set_add([$1], [$3])$0([$1], m4_shift2($@))])])
+  [_m4_set_add([$1], [$3], [-], [])$0([$1], m4_shift2($@))])])
 
 # m4_set_contains(SET, VALUE, [IF-PRESENT], [IF-ABSENT])
 # ------------------------------------------------------

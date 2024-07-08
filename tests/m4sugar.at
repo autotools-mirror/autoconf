@@ -2261,6 +2261,59 @@ m4_count(m4_shift(m4_set_intersection([a], [b])))
 3334
 ]])
 
+# Implementation corner cases.
+
+# m4_set_add_all dispatches to one of two different helper macros
+# depending on whether the set has any tombstones; verify their
+# effects are equivalent.  N.B. m4_set_dump, m4_set_list, etc. produce
+# elements in an arbitrary order, so this test is more brittle than
+# I'd like.
+AT_CHECK_M4SUGAR_TEXT([[dnl
+m4_define([echo_if_member], [m4_set_contains([$1], [$2], [$2])])dnl
+m4_set_add_all([a], [1])dnl
+m4_set_add_all([a], [2], [3])dnl
+m4_set_add_all([a], [4], [5], [6])dnl
+m4_set_size([a])
+m4_map_args_sep([echo_if_member([a],], [)], [,],
+                [1], [2], [3], [4], [5], [6], [x], [y])
+m4_set_dump([a], [,])
+
+m4_set_add([b], [x])dnl
+m4_set_add([b], [y])dnl
+m4_set_remove([b], [x])dnl
+m4_set_add_all([b], [1])dnl
+m4_set_add_all([b], [2], [3])dnl
+m4_set_add_all([b], [4], [5], [6])dnl
+m4_set_remove([b], [y])dnl
+m4_set_size([b])
+m4_map_args_sep([echo_if_member([b],], [)], [,],
+                [1], [2], [3], [4], [5], [6], [x], [y])
+m4_set_dump([b], [,])
+
+m4_set_add([c], [x])dnl
+m4_set_add([c], [y])dnl
+m4_set_remove([c], [y])dnl
+m4_set_add_all([c], [1])dnl
+m4_set_add_all([c], [2], [3])dnl
+m4_set_add_all([c], [4], [5], [6])dnl
+m4_set_remove([c], [x])dnl
+m4_set_size([c])
+m4_map_args_sep([echo_if_member([c],], [)], [,],
+                [1], [2], [3], [4], [5], [6], [x], [y])
+m4_set_dump([c], [,])
+]], [[6
+1,2,3,4,5,6,,
+6,5,4,3,2,1
+
+6
+1,2,3,4,5,6,,
+6,5,4,3,2,1
+
+6
+1,2,3,4,5,6,,
+6,5,4,3,2,1
+]])
+
 AT_CLEANUP
 
 

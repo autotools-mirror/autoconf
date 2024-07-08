@@ -350,13 +350,10 @@ m4_define([_m4_minmax],
 #
 # _m4_foreach to the rescue.  If no deletions have occurred, then
 # avoid the speed penalty of m4_set_add.
-m4_define([m4_set_add_all],
-[m4_if([$#], [0], [], [$#], [1], [],
-       [m4_define([_m4_set_size($1)], m4_eval(m4_set_size([$1])
-	  + m4_len(_m4_foreach(m4_ifdef([_m4_set_cleanup($1)],
-  [[m4_set_add]], [[_$0]])[([$1],], [)], $@))))])])
+m4_define([_m4_set_add_all_clean],
+[m4_if([$#], [2], [],
+ [_m4_foreach([_m4_set_add_clean([$1],], [, [-])], m4_shift($@))])])
 
-m4_define([_m4_set_add_all],
-[m4_ifdef([_m4_set([$1],$2)], [],
-	  [m4_define([_m4_set([$1],$2)],
-		     [1])m4_pushdef([_m4_set([$1])], [$2])-])])
+m4_define([_m4_set_add_all_check],
+[m4_if([$#], [2], [],
+ [_m4_foreach([_m4_set_add([$1],], [, [-])], m4_shift($@))])])
