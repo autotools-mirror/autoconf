@@ -854,10 +854,13 @@ AC_DEFUN([AC_LANG_COMPILER(Objective C)],
 # search for (if not specified, a default list is used).  This just gives
 # the user an opportunity to specify an alternative search list for the
 # Objective C compiler.
-# objcc StepStone Objective-C compiler (also "standard" name for OBJC)
-# objc  David Stes' POC.  If you installed this, you likely want it.
-# cc    Native C compiler (for instance, Apple).
-# CC    You never know.
+# gobjc  GNU Objective-C compiler packaged in EPEL (for systems where gcc
+#        does not support Objective-C)
+# gcc    GNU Objective-C compiler on most systems
+# objcc  StepStone Objective-C compiler (also "standard" name for OBJC)
+# objc   David Stes' POC.  If you installed this, you likely want it.
+# cc     Native C compiler (for instance, Apple).
+# CC     You never know.
 AN_MAKEVAR([OBJC],  [AC_PROG_OBJC])
 AN_PROGRAM([objcc],  [AC_PROG_OBJC])
 AN_PROGRAM([objc],  [AC_PROG_OBJC])
@@ -870,7 +873,7 @@ _AC_ARG_VAR_LIBS()dnl
 _AC_ARG_VAR_CPPFLAGS()dnl
 _AC_ARG_VAR_PRECIOUS([OBJC])dnl
 AC_CHECK_TOOLS(OBJC,
-	       [m4_default([$1], [gcc objcc objc cc CC clang])],
+	       [m4_default([$1], [gobjc gcc objcc objc cc CC clang])],
 	       gcc)
 # Provide some information about the compiler.
 _AS_ECHO_LOG([checking for _AC_LANG compiler version])
