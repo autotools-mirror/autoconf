@@ -4966,6 +4966,11 @@ can detect which is in use (@pxref{Particular Functions}).
 @item @code{strnlen}
 @c @fuindex strnlen
 @prindex @code{strnlen}
+Android 5.0's strnlen was broken, because it assumed the addressed array
+always had at least the specified number of bytes.  For example,
+@code{strnlen ("", SIZE_MAX)} should return 0 but on Android 5.0 it
+crashed.
+
 AIX 4.3 provided a broken version which produces the
 following results:
 
@@ -5734,7 +5739,7 @@ problems of this function.
 @prindex @code{strnlen}
 @caindex func_strnlen_working
 If the @code{strnlen} function is not available, or is buggy (like the one
-from AIX 4.3), require an @code{AC_LIBOBJ} replacement for it.
+from Android 5.0 or AIX 4.3), require an @code{AC_LIBOBJ} replacement for it.
 
 This macro caches its result in the @code{ac_cv_func_strnlen_working}
 variable.

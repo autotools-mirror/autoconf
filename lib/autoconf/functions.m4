@@ -1751,31 +1751,45 @@ LIBS="-lintl $LIBS"])])dnl
 AN_FUNCTION([strnlen], [AC_FUNC_STRNLEN])
 AC_DEFUN([AC_FUNC_STRNLEN],
 [AC_REQUIRE([AC_USE_SYSTEM_EXTENSIONS])dnl
-AC_REQUIRE([AC_CANONICAL_HOST]) dnl for cross-compiles
-AC_CACHE_CHECK([for working strnlen], ac_cv_func_strnlen_working,
-[AC_RUN_IFELSE([AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT], [[
-#define S "foobar"
-#define S_LEN (sizeof S - 1)
+AC_CACHE_CHECK([for working strnlen], [ac_cv_func_strnlen_working],
+[AC_RUN_IFELSE(
+   [AC_LANG_PROGRAM(
+      [AC_INCLUDES_DEFAULT
+       [/* Use pstrnlen to test; 'volatile' prevents the compiler
+	   from optimizing the strnlen calls away.  */
+	size_t (*volatile pstrnlen) (char const *, size_t) = strnlen;
+	char const s[] = "foobar";
+	int s_len = sizeof s - 1;
+       ]],
+      [[
+	/* AIX 4.3 is buggy: strnlen (S, 1) == 3.  */
+	int i;
+	for (i = 0; i < s_len + 1; ++i)
+	  {
+	    int expected = i <= s_len ? i : s_len;
+	    if (pstrnlen (s, i) != expected)
+	      return 1;
+	  }
 
-  /* At least one implementation is buggy: that of AIX 4.3 would
-     give strnlen (S, 1) == 3.  */
-
-  int i;
-  for (i = 0; i < S_LEN + 1; ++i)
-    {
-      int expected = i <= S_LEN ? i : S_LEN;
-      if (strnlen (S, i) != expected)
-	return 1;
-    }
-  return 0;
-]])],
-	       [ac_cv_func_strnlen_working=yes],
-	       [ac_cv_func_strnlen_working=no],
-	       [# Guess no on AIX systems, yes otherwise.
-		case "$host_os" in
-		  aix*) ac_cv_func_strnlen_working=no;;
-		  *)    ac_cv_func_strnlen_working=yes;;
-		esac])])
+	/* Android 5.0 (API 21) strnlen ("", SIZE_MAX) incorrectly crashes.  */
+	if (pstrnlen ("", -1) != 0)
+	  return 1;]])],
+   [ac_cv_func_strnlen_working=yes],
+   [ac_cv_func_strnlen_working=no],
+   [AC_COMPILE_IFELSE(
+      [AC_LANG_PROGRAM([AC_INCLUDES_DEFAULT],
+	 [[#if defined _AIX && !defined _AIX51
+	    #error "AIX pre 5.1 is buggy"
+	   #endif
+	   #ifdef __ANDROID__
+	    #include <android/api-level.h>
+	    #if __ANDROID_API__ < 22
+	     #error "Android API < 22 is buggy"
+	    #endif
+	   #endif
+	 ]])],
+      [ac_cv_func_strnlen_working=yes],
+      [ac_cv_func_strnlen_working=no])])])
 test $ac_cv_func_strnlen_working = no && AC_LIBOBJ([strnlen])
 ])# AC_FUNC_STRNLEN
 
