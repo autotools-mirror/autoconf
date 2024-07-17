@@ -63,6 +63,7 @@ local-checks-to-skip ?= \
   sc_prohibit_always_true_header_tests	\
   sc_prohibit_magic_number_exit		\
   sc_prohibit_stat_st_blocks		\
+  sc_two_space_separator_in_usage	\
   sc_unmarked_diagnostics		\
   sc_unportable_grep_q
 

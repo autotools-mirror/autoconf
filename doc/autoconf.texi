@@ -15528,7 +15528,7 @@ Computer and used by most of their products.  It is also known as macOS,
 iOS, etc.@: depending on the exact variant.  Older versions were called
 ``Mac OS X.''
 
-By default the filesystem will be case insensitive, albeit case
+By default the file system will be case insensitive, albeit case
 preserving.  This can cause nasty problems: for instance, the
 installation attempt for a package having an @file{INSTALL} file can
 result in @samp{make install} reporting that nothing is to be done!
