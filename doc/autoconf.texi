@@ -16466,7 +16466,7 @@ persists for any length of time.
 You may see usages like @samp{$@{1+"$@@"@}} in older shell scripts
 designed to work around a portability problem in ancient shells.
 Unfortunately this runs afoul of bugs in more-recent shells, and
-nowadays it is better to use plain @samp{"$@@"} insteadl.
+nowadays it is better to use plain @samp{"$@@"} instead.
 
 The portability problem with ancient shells was significant.
 When there are no positional arguments @samp{"$@@"} should be discarded,
@@ -16477,7 +16477,7 @@ For many years shell scripts worked around this portability problem by
 using @samp{$@{1+"$@@"@}} instead of @samp{"$@@"}, and you may see this
 usage in older scripts.  Unfortunately, @samp{$@{1+"$@@"@}} does not
 work with @command{ksh93} M 93t+ (2009) as shipped in AIX 7.2 (2015),
-as this shell drops trailing arguments:
+as this shell drops a trailing empty argument:
 
 @example
 $ @kbd{set a b c ""}
