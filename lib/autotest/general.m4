@@ -378,11 +378,13 @@ at_fn_create_debugging_script ()
 {
   {
     echo "#! /bin/sh" &&
-    echo 'test ${ZSH_VERSION+y} dnl
-&& alias -g '\''${1+"$[@]"}'\''='\''"$[@]"'\''' &&
     AS_ECHO(["cd '$at_dir'"]) &&
-    AS_ECHO(["exec \${CONFIG_SHELL-$SHELL} \"$at_myself\" -v -d ]dnl
-[$at_debug_args $at_group \${1+\"\$[@]\"}"]) &&
+    AS_ECHO(['case $[#] in']) &&
+    AS_ECHO(["  0) exec \${CONFIG_SHELL-$SHELL} \"$at_myself\" -v -d ]dnl
+[$at_debug_args $at_group ;;"]) &&
+    AS_ECHO(["  *) exec \${CONFIG_SHELL-$SHELL} \"$at_myself\" -v -d ]dnl
+[$at_debug_args $at_group \"\$[@]\" ;;"]) &&
+    AS_ECHO([esac]) &&
     echo 'exit 1'
   } >"$at_group_dir/run" &&
   chmod +x "$at_group_dir/run"

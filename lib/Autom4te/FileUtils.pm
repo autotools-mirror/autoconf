@@ -359,7 +359,7 @@ same file).
 our %_directory_cache;
 sub dir_has_case_matching_file ($$)
 {
-  # Note that print File::Spec->case_tolerant returns 0 even on MacOS
+  # Note that print File::Spec->case_tolerant returns 0 even on Mac OS
   # X (with Perl v5.8.1-RC3 at least), so do not try to shortcut this
   # function using that.
 

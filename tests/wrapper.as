@@ -29,16 +29,15 @@ trailer_m4='@abs_top_srcdir@/lib/autoconf/trailer.m4'
 export AUTOCONF AUTOHEADER AUTOM4TE AUTOM4TE_CFG
 export autom4te_buildauxdir autom4te_perllibdir trailer_m4
 
-case '@wrap_program@' in
-  ifnames)
-     # Does not have lib files.
-     exec '@abs_top_builddir@/bin/@wrap_program@' ${1+"$@"}
-     ;;
-  *)
-     # We might need files from the build tree (frozen files), in
-     # addition of src files.
-     exec '@abs_top_builddir@/bin/@wrap_program@' \
-	  -B '@abs_top_builddir@'/lib \
-	  -B '@abs_top_srcdir@'/lib ${1+"$@"}
+# Programs other than ifnames might need files from the build tree
+# (frozen files), in addition to src files.
+prog='@abs_top_builddir@/bin/@wrap_program@'
+buildlib='@abs_top_builddir@/lib'
+srclib='@abs_top_srcdir@/lib'
+case $#,'@wrap_program@' in
+  0,ifnames) exec "$prog" ;;
+  *,ifnames) exec "$prog" "$@" ;;
+  0,*)       exec "$prog" -B "$buildlib" -B "$srclib" ;;
+  *)         exec "$prog" -B "$buildlib" -B "$srclib" "$@" ;;
 esac
 exit 1

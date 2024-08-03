@@ -35,6 +35,9 @@ GNU Autoconf NEWS - User visible changes.
 *** AC_PROG_OBJC now finds the GNU Objective-C compiler, as packaged in
   EPEL 9, by default, without the user having to set the OBJC variable.
 
+*** Autoconf no longer generates ${1+"$@"} in scripts, working around
+  a bug in AIX 7.2 ksh93.
+
 * Noteworthy changes in release 2.72 (2023-12-22) [release]
 
 ** Backward incompatibilities

@@ -108,7 +108,7 @@ m4_define([_AS_BOURNE_COMPATIBLE],
  [emulate sh
   NULLCMD=:
   [#] Pre-4.2 versions of Zsh do word splitting on ${1+"$[@]"}, which
-  # is contrary to our usage.  Disable this feature.
+  # contradicts POSIX and common usage.  Disable this.
   alias -g '${1+"$[@]"}'='"$[@]"'
   setopt NO_GLOB_SUBST],
  [AS_CASE([`(set -o) 2>/dev/null`], [*posix*], [set -o posix])])
@@ -294,7 +294,10 @@ case $- in @%:@ ((((
   *x* ) as_opts=-x ;;
   * ) as_opts= ;;
 esac
-exec $1 $as_opts "$as_myself" ${1+"$[@]"}
+case [$]@%:@ in @%:@ ((
+  0) exec $1 $as_opts "$as_myself" ;;
+  *) exec $1 $as_opts "$as_myself" "$[@]" ;;
+esac
 # Admittedly, this is quite paranoid, since all the known shells bail
 # out after a failed 'exec'.
 AS_ECHO(["$[]0: could not re-execute with $1"]) >&2

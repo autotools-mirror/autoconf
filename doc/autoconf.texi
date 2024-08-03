@@ -15302,9 +15302,7 @@ breaking the bracket-matching highlighting from Emacsen.  Note the
 preferred style to escape from M4: @samp{$[1]}, @samp{$[@@]}, etc.  Do
 not escape when it is unnecessary.  Common examples of useless quotation
 are @samp{[$]$1} (write @samp{$$1}), @samp{[$]var} (use @samp{$var}),
-etc.  If you add portability issues to the picture, you'll prefer
-@samp{$@{1+"$[@@]"@}} to @samp{"[$]@@"}, and you'll prefer do something
-better than hacking Autoconf @code{:-)}.
+etc.
 
 When using @command{sed}, don't use @option{-e} except for indenting
 purposes.  With the @code{s} and @code{y} commands, the preferred
@@ -15685,7 +15683,7 @@ set @code{NULLCMD} to @samp{:}.  @xref{Compatibility, , Compatibility,
 zsh, The Z Shell Manual}, for details.
 
 The default Mac OS X @command{sh} was originally Zsh; it was changed to
-Bash in Mac OS X 10.2.
+Bash in Mac OS X 10.2 (2002) and changed back to Zsh in macOS 10.15 (2019).
 @end table
 
 @node Invoking the Shell
@@ -16460,17 +16458,37 @@ There are also portability pitfalls with particular expansions:
 @table @code
 @item $@@
 @cindex @code{"$@@"}
-One of the most famous shell-portability issues is related to
-@samp{"$@@"}.  When there are no positional arguments, Posix says
-that @samp{"$@@"} is supposed to be equivalent to nothing, but the
-original Unix version 7 Bourne shell treated it as equivalent to
-@samp{""} instead, and this behavior survives in later implementations
-like Digital Unix 5.0.
+Autoconf macros often use the @command{set} command to update
+@samp{$@@}, so if you are writing shell code intended for
+@command{configure} you should not assume that the value of @samp{$@@}
+persists for any length of time.
 
-The traditional way to work around this portability problem is to use
-@samp{$@{1+"$@@"@}}.  Unfortunately this method does not work with
-Zsh (3.x and 4.x), which is used on Mac OS X@.  When emulating
-the Bourne shell, Zsh performs word splitting on @samp{$@{1+"$@@"@}}:
+You may see usages like @samp{$@{1+"$@@"@}} in older shell scripts
+designed to work around a portability problem in ancient shells.
+Unfortunately this runs afoul of bugs in more-recent shells, and
+nowadays it is better to use plain @samp{"$@@"} insteadl.
+
+The portability problem with ancient shells was significant.
+When there are no positional arguments @samp{"$@@"} should be discarded,
+but the original Unix version 7 Bourne shell mistakenly treated it as
+equivalent to @samp{""} instead, and many ancient shells followed its lead.
+
+For many years shell scripts worked around this portability problem by
+using @samp{$@{1+"$@@"@}} instead of @samp{"$@@"}, and you may see this
+usage in older scripts.  Unfortunately, @samp{$@{1+"$@@"@}} does not
+work with @command{ksh93} M 93t+ (2009) as shipped in AIX 7.2 (2015),
+as this shell drops trailing arguments:
+
+@example
+$ @kbd{set a b c ""}
+$ @kbd{set $@{1+"$@@"@}}
+$ @kbd{echo $#}
+3
+@end example
+
+Also, @samp{$@{1+"$@@"@}} does not work with Zsh 4.2.6 (2005) and
+earlier, as shipped in Mac OS X releases before 10.5, as this old Zsh
+incorrectly word splits the result:
 
 @example
 zsh $ @kbd{emulate sh}
@@ -16483,42 +16501,40 @@ World
 !
 @end example
 
+To work around these problems Autoconf does two things.  First, in the
+shell code that it generates Autoconf avoids @samp{"$@@"} if it is
+possible that there may be no positional arguments.  You can use this
+workaround in your own code, too, if you want it to be portable to
+ancient shells.  For example, instead of:
+
+@example
+cat conftest.c "$@@"
+@end example
+
+you can use this:
+
+@example
+case $# in
+  0) cat conftest.c;;
+  *) cat conftest.c "$@@";;
+esac
+@end example
+
 @noindent
-Zsh handles plain @samp{"$@@"} properly, but we can't use plain
-@samp{"$@@"} because of the portability problems mentioned above.
-One workaround relies on Zsh's ``global aliases'' to convert
+Second, Autoconf-generated @command{configure} scripts work around most
+of the old Zsh problem by using Zsh's ``global aliases'' to convert
 @samp{$@{1+"$@@"@}} into @samp{"$@@"} by itself:
 
 @example
 test $@{ZSH_VERSION+y@} && alias -g '$@{1+"$@@"@}'='"$@@"'
 @end example
 
-Zsh only recognizes this alias when a shell word matches it exactly;
-@samp{"foo"$@{1+"$@@"@}} remains subject to word splitting.  Since this
-case always yields at least one shell word, use plain @samp{"$@@"}.
-
-A more conservative workaround is to avoid @samp{"$@@"} if it is
-possible that there may be no positional arguments.  For example,
-instead of:
-
-@example
-cat conftest.c "$@@"
-@end example
-
-you can use this instead:
-
-@example
-case $# in
-0) cat conftest.c;;
-*) cat conftest.c "$@@";;
-esac
-@end example
-
-Autoconf macros often use the @command{set} command to update
-@samp{$@@}, so if you are writing shell code intended for
-@command{configure} you should not assume that the value of @samp{$@@}
-persists for any length of time.
-
+This workaround is for the benefit of any instances of
+@samp{$@{1+"$@@"@}} in user-written code appearing in
+@command{configure} scripts.  However, it is not a complete solution, as
+Zsh recognizes the alias only when a shell word matches it exactly,
+which means older Zsh still mishandles more-complicated cases like
+@samp{"foo"$@{1+"$@@"@}}.
 
 @item $@{10@}
 @cindex positional parameters
@@ -18317,19 +18333,13 @@ for arg; do
 done
 @end example
 
-If you want to explicitly refer to the positional arguments, given the
-@samp{$@@} bug (@pxref{Shell Substitutions}), use:
+If you want to explicitly refer to the positional arguments, use:
 
 @example
-for arg in $@{1+"$@@"@}; do
+for arg in "$@@"; do
   echo "$arg"
 done
 @end example
-
-@noindent
-But keep in mind that Zsh, even in Bourne shell emulation mode, performs
-word splitting on @samp{$@{1+"$@@"@}}; see @ref{Shell Substitutions},
-item @samp{$@@}, for more.
 
 Posix requires support for a @command{for} loop with no list after
 @code{in}.  However, Solaris 10 @command{/bin/sh} treats that as a syntax
@@ -19730,7 +19740,7 @@ was equivalent to @samp{sources='*.c not found'} in the absence of
 The behavior of @command{ls} on a directory that is being concurrently
 modified is not always predictable, because of a data race where cached
 information returned by @code{readdir} does not match the current
-directory state.  In fact, MacOS 10.5 has an intermittent bug where
+directory state.  In fact, Mac OS X 10.5 had an intermittent bug where
 @code{readdir}, and thus @command{ls}, sometimes lists a file more than
 once if other files were added or removed from the directory immediately
 prior to the @command{ls} call.  Since @command{ls} already sorts its
@@ -19856,7 +19866,7 @@ perfectly portable among Posix hosts.
 @c ---------------
 @prindex @command{od}
 
-In MacOS X versions prior to 10.4.3, @command{od} does not support the
+In Mac OS X versions prior to 10.4.3, @command{od} does not support the
 standard Posix options @option{-A}, @option{-j}, @option{-N}, or
 @option{-t}, or the XSI option, @option{-s}.  The only
 supported Posix option is @option{-v}, and the only supported
@@ -19962,7 +19972,7 @@ than to rely on @samp{[A-Z]}.
 
 Additionally, Posix states that regular expressions are only
 well-defined on characters.  Unfortunately, there exist platforms such
-as MacOS X 10.5 where not all 8-bit byte values are valid characters,
+as Mac OS X 10.5 where not all 8-bit byte values are valid characters,
 even though that platform has a single-byte @samp{C} locale.  And Posix
 allows the existence of a multi-byte @samp{C} locale, although that does
 not yet appear to be a common implementation.  At any rate, it means
@@ -20107,7 +20117,7 @@ should be followed by a newline.  Otherwise some @command{sed}
 implementations (e.g., OpenBSD 3.9) do not append a newline to the
 inserted text.
 
-Many @command{sed} implementations (e.g., MacOS X 10.4,
+Many @command{sed} implementations (e.g., Mac OS X 10.4,
 OpenBSD 3.9, Solaris 10
 @command{/usr/ucb/sed}) strip leading white space from the text of
 @samp{a}, @samp{c}, and @samp{i} commands.  Prepend a backslash to

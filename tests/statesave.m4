@@ -23,7 +23,7 @@
 # that tests have the same side effects regardless of caching.
 #
 # The sed script duplicates uniq functionality (thanks to 'info sed
-# uniq' for the recipe), in order to avoid a MacOS 10.5 bug where
+# uniq' for the recipe), in order to avoid a Mac OS 10.5 bug where
 # readdir can list a file multiple times in a rapidly changing
 # directory, while avoiding yet another fork.
 m4_defun([AC_STATE_SAVE],
