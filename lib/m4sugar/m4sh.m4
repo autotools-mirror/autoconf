@@ -1113,7 +1113,7 @@ m4_define([AS_ECHO],
 dnl Extra quoting in case 's' or 'n' are user-defined macros when this
 dnl is expanded; they almost certainly aren't meant to be used here.
 dnl See bug 110377.
-[printf "[%s\n]" $1])
+[printf '[%s\n]' $1])
 
 
 # AS_ECHO_N(WORD)
@@ -2051,7 +2051,7 @@ m4_define([AS_VAR_COPY],
 m4_define([AS_VAR_GET],
 [AS_LITERAL_WORD_IF([$1],
 	       [$$1],
-  [`eval 'as_val=${'_AS_ESCAPE([[$1]], [`], [\])'};AS_ECHO(["$as_val"])'`])])
+  [`eval 'as_val=${'_AS_ESCAPE([[$1]], [`], [\])'};printf "[%s\\n]" "$as_val"'`])])
 
 
 # AS_VAR_IF(VARIABLE, VALUE, IF-TRUE, IF-FALSE)

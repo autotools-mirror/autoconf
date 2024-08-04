@@ -264,7 +264,7 @@ do
     _AC_CHECK_HEADER_COMPILE_FN()ac_fn_$1_check_header_compile "$LINENO" ]dnl
 [$ac_header ac_cv_header_$ac_cache "$ac_includes_default"
     if eval test \"x\$ac_cv_header_$ac_cache\" = xyes; then
-      printf "%s\n" "[#]define $ac_item 1" >> confdefs.h
+      printf '%s\n' "[#]define $ac_item 1" >> confdefs.h
     fi
     ac_header= ac_cache=
   elif test $ac_header; then
