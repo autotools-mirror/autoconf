@@ -930,7 +930,7 @@ Try '$[0] --help' for more information])
 done
 
 if test -n "$ac_prev"; then
-  ac_option=--`echo $ac_prev | sed 's/_/-/g'`
+  ac_option=--`printf '%s\n' $ac_prev | sed 's/_/-/g'`
   AC_MSG_ERROR([missing argument to $ac_option])
 fi
 
@@ -1699,8 +1699,14 @@ for ac_var in $ac_precious_vars; do
     *)
       if test "x$ac_old_val" != "x$ac_new_val"; then
 	# differences in whitespace do not lead to failure.
-	ac_old_val_w=`echo x $ac_old_val`
-	ac_new_val_w=`echo x $ac_new_val`
+	ac_old_val_w=
+	for ac_val in x $ac_old_val; do
+	  ac_old_val_w="$ac_old_val_w $ac_val"
+	done
+	ac_new_val_w=
+	for ac_val in x $ac_new_val; do
+	  ac_new_val_w="$ac_new_val_w $ac_val"
+	done
 	if test "$ac_old_val_w" != "$ac_new_val_w"; then
 	  AS_MESSAGE([error: '$ac_var' has changed since the previous run:], 2)
 	  ac_cache_corrupted=:
@@ -2689,7 +2695,8 @@ AC_DEFUN([_AC_DO_LIMIT],
 # _AC_EVAL(COMMAND)
 # -----------------
 # Eval COMMAND, save the exit status in ac_status, and log it.
-# Unlike _AC_DO, this macro mishandles quoted arguments in some cases.
+# Unlike _AC_DO, this macro mishandles quoted arguments
+# and backslashes in some cases.
 # It is present only for backward compatibility with previous Autoconf versions.
 AC_DEFUN([_AC_EVAL],
 [_AC_RUN_LOG([eval $1],
@@ -2699,7 +2706,8 @@ AC_DEFUN([_AC_EVAL],
 # _AC_EVAL_STDERR(COMMAND)
 # ------------------------
 # Like _AC_RUN_LOG_STDERR, but eval (instead of running) COMMAND.
-# Unlike _AC_DO_STDERR, this macro mishandles quoted arguments in some cases.
+# Unlike _AC_DO_STDERR, this macro mishandles quoted arguments
+# and backslashes in some cases.
 # It is present only for backward compatibility with previous Autoconf versions.
 AC_DEFUN([_AC_EVAL_STDERR],
 [_AC_RUN_LOG_STDERR([eval $1],
