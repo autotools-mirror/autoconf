@@ -170,11 +170,11 @@ if mkdir conftest.dir; then
   cd conftest.dir
   cat >Imakefile <<'_ACEOF'
 incroot:
-	@echo incroot='${INCROOT}'
+	@printf '%s\n' incroot='${INCROOT}'
 usrlibdir:
-	@echo usrlibdir='${USRLIBDIR}'
+	@printf '%s\n' usrlibdir='${USRLIBDIR}'
 libdir:
-	@echo libdir='${LIBDIR}'
+	@printf '%s\n' libdir='${LIBDIR}'
 _ACEOF
   if (export CC; ${XMKMF-xmkmf}) >/dev/null 2>/dev/null && test -f Makefile; then
     # GNU make sometimes prints "make[1]: Entering ...", which would confuse us.

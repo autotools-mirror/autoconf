@@ -936,7 +936,7 @@ AC_CACHE_VAL(ac_cv_prog_make_${ac_make}_set,
 [cat >conftest.make <<\_ACEOF
 SHELL = /bin/sh
 all:
-	@echo '@@@%%%=$(MAKE)=@@@%%%'
+	@printf '%s\n' '@@@%%%=$(MAKE)=@@@%%%'
 _ACEOF
 # GNU make sometimes prints "make[1]: Entering ...", which would confuse us.
 case `${MAKE-make} -f conftest.make 2>/dev/null` in
